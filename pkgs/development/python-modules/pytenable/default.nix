@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pytenable";
-  version = "1.4.3";
+  version = "1.4.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "tenable";
     repo = "pyTenable";
     rev = version;
-    hash = "sha256-p9d3wZkOMhNQWJN6tCNUlW15A3irU8QN/nm7PLGTE/M=";
+    hash = "sha256-0isXHh0b2l8Br4XXR1y8A+zu8vkJjEsJ6faNNEx12lM=";
   };
 
   propagatedBuildInputs = [

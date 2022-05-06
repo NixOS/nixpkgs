@@ -1,9 +1,9 @@
-{ buildPythonApplication
+{ lib
+, buildPythonApplication
 , click
 , fetchPypi
 , git
 , httpretty
-, lib
 , qrcode
 , pygments
 , pyopenssl
@@ -11,17 +11,38 @@
 , requests
 , rollbar
 , stripe
+, pythonOlder
 , sure
 }:
 
 buildPythonApplication rec {
   pname = "gigalixir";
   version = "1.2.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-P70xsI/zwsoSgK1XCPzJSI5NQ58M431kmgo5gHXbaNw=";
+    hash = "sha256-P70xsI/zwsoSgK1XCPzJSI5NQ58M431kmgo5gHXbaNw=";
   };
+
+  propagatedBuildInputs = [
+    click
+    pygments
+    pyopenssl
+    qrcode
+    requests
+    rollbar
+    stripe
+  ];
+
+  checkInputs = [
+    git
+    httpretty
+    pytestCheckHook
+    sure
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -29,24 +50,14 @@ buildPythonApplication rec {
       --replace "cryptography==" "cryptography>="
   '';
 
-  propagatedBuildInputs = [
-    click
-    requests
-    stripe
-    rollbar
-    pygments
-    qrcode
-    pyopenssl
+  disabledTests = [
+    # Test requires network access
+    "test_rollback_without_version"
   ];
 
-  checkInputs = [
-    httpretty
-    sure
-    pytestCheckHook
-    git
+  pythonImportsCheck = [
+    "gigalixir"
   ];
-
-  pythonImportsCheck = [ "gigalixir" ];
 
   meta = with lib; {
     description = "Gigalixir Command-Line Interface";

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       exec = "logisim-evolution";
       icon = "logisim-evolution";
       comment = meta.description;
-      categories = "Education;";
+      categories = [ "Education" ];
     })
   ];
 

@@ -4,19 +4,23 @@
 , attrs
 , flake8
 , pytestCheckHook
+, pythonOlder
 , hypothesis
 , hypothesmith
 }:
 
 buildPythonPackage rec {
   pname = "flake8-bugbear";
-  version = "22.1.11";
+  version = "22.4.25";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-sTg69Hgvi77wtLWEH4JtcIAMFk7exr5CBXmyS0nE5Vc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-y/hpBlIQ3aJj3Y1snpArOCIv2w1ncQNMSYJ+G0CeM84=";
   };
 
   propagatedBuildInputs = [
@@ -32,9 +36,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    description = "Plugin for Flake8 to find bugs and design problems";
     homepage = "https://github.com/PyCQA/flake8-bugbear";
     changelog = "https://github.com/PyCQA/flake8-bugbear/blob/${version}/README.rst#change-log";
-    description = ''
+    longDescription = ''
       A plugin for flake8 finding likely bugs and design problems in your
       program.
     '';

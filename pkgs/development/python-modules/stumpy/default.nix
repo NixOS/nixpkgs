@@ -34,6 +34,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # whole testsuite is very CPU intensive, only run core tests
+    # TODO: move entire test suite to passthru.tests
+    "tests/test_core.py"
+  ];
+
   meta = with lib; {
     description = "A powerful and scalable library that can be used for a variety of time series data mining tasks";
     homepage = "https://github.com/TDAmeritrade/stumpy";

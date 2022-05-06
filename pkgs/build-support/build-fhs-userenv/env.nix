@@ -45,7 +45,7 @@ let
   basePkgs = with pkgs;
     [ glibcLocales
       (if isMultiBuild then glibc_multi else glibc)
-      (toString gcc.cc.lib) bashInteractive coreutils less shadow su
+      (toString gcc.cc.lib) bashInteractiveFHS coreutils less shadow su
       gawk diffutils findutils gnused gnugrep
       gnutar gzip bzip2 xz
     ];
@@ -59,6 +59,9 @@ let
     export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export PATH="/run/wrappers/bin:/usr/bin:/usr/sbin:$PATH"
     export TZDIR='/etc/zoneinfo'
+
+    # XDG_DATA_DIRS is used by pressure-vessel (steam proton) and vulkan loaders to find the corresponding icd
+    export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}/run/opengl-driver/share:/run/opengl-driver-32/share
 
     # Force compilers and other tools to look in default search paths
     unset NIX_ENFORCE_PURITY
@@ -134,6 +137,35 @@ let
     paths = [ etcPkg ] ++ basePkgs ++ targetPaths;
     extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
+    postBuild = ''
+      if [[ -d  $out/share/gsettings-schemas/ ]]; then
+          # Recreate the standard schemas directory if its a symlink to make it writable
+          if [[ -L $out/share/glib-2.0 ]]; then
+              target=$(readlink $out/share/glib-2.0)
+              rm $out/share/glib-2.0
+              mkdir $out/share/glib-2.0
+              ln -fs $target/* $out/share/glib-2.0
+          fi
+
+          if [[ -L $out/share/glib-2.0/schemas ]]; then
+              target=$(readlink $out/share/glib-2.0/schemas)
+              rm $out/share/glib-2.0/schemas
+              mkdir $out/share/glib-2.0/schemas
+              ln -fs $target/* $out/share/glib-2.0/schemas
+          fi
+
+          mkdir -p $out/share/glib-2.0/schemas
+
+          for d in $out/share/gsettings-schemas/*; do
+              # Force symlink, in case there are duplicates
+              ln -fs $d/glib-2.0/schemas/*.xml $out/share/glib-2.0/schemas
+              ln -fs $d/glib-2.0/schemas/*.gschema.override $out/share/glib-2.0/schemas
+          done
+
+          # and compile them
+          ${pkgs.glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+      fi
+    '';
   };
 
   staticUsrProfileMulti = buildEnv {

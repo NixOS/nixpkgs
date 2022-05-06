@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-about";
-  version = "0.4.7";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
     rev = version;
-    sha256 = "sha256-KrUb71/wEQnAD2VVkufw12kXrz35sU5fNciSJsMyGrc=";
+    sha256 = "sha256-T8Hhody0jMmZb6/xMkSvKCv4STZPbcrf/UB3APspYDM=";
   };
 
   # enable pkg-config feature of zstd
   cargoPatches = [ ./zstd-pkg-config.patch ];
 
-  cargoSha256 = "sha256-JewI+23eNrMHfSUwsA3CaeTvG61/ZOFFLpm7rKZKsoU=";
+  cargoSha256 = "sha256-x/HzDYNy0FDxJmhjSUUEiyahM7Sw27aC+ULP/Ii0X/8=";
 
   nativeBuildInputs = [ pkg-config ];
 

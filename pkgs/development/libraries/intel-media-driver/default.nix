@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
-  version = "22.1.1";
+  version = "22.3.0";
 
   outputs = [ "out" "dev" ];
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "media-driver";
     rev = "intel-media-${version}";
-    sha256 = "1gv89k48s03hwvlcg484li0dznqg93z82xv9lpv3gkncvwfvh9c8";
+    sha256 = "sha256-TQmXU/Roij6U6NTt3oywhjpPJzaFeR4hhVor11mgaRE=";
   };
 
   patches = [
@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/intel/media-driver/releases/tag/intel-media-${version}";
     license = with licenses; [ bsd3 mit ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos jfrankenau SuperSandro2000 ];
+    maintainers = with maintainers; [ jfrankenau SuperSandro2000 ];
   };
 }

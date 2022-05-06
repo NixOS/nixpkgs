@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     homepage = "https://pivx.org";
-    maintainers = with maintainers; [ wucke13 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

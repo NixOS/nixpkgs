@@ -5,8 +5,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-canned-replies";
-    rev = "598946bc92171426792f120f0a68ad4ecaae1c91";
-    sha256 = "sha256-HLrmj/dHj6wWUEqsFAh8gIPaZCIaXN1kZo17UHJwP70=";
+    rev = "18af3367d9eda8842e8ff0de96c90aa2f0bdb0a3";
+    sha256 = "sha256-v8QOR0/9RUJ1zFmzhKYe/GEev3Jl4AlXWkQyuquyuJY=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-canned-replies";

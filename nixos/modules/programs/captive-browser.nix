@@ -1,8 +1,12 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 let
   cfg = config.programs.captive-browser;
+
+  inherit (lib)
+    concatStringsSep escapeShellArgs optionalString
+    literalExpression mkEnableOption mkIf mkOption mkOptionDefault types;
+
   browserDefault = chromium: concatStringsSep " " [
     ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
     ''${chromium}/bin/chromium''
@@ -15,6 +19,15 @@ let
     ''-no-default-browser-check''
     ''http://cache.nixos.org/''
   ];
+
+  desktopItem = pkgs.makeDesktopItem {
+    name = "captive-browser";
+    desktopName = "Captive Portal Browser";
+    exec = "/run/wrappers/bin/captive-browser";
+    icon = "nix-snowflake";
+    categories = [ "Network" ];
+  };
+
 in
 {
   ###### interface
@@ -84,6 +97,11 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [
+      (pkgs.runCommandNoCC "captive-browser-desktop-item" { } ''
+        install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*.desktop
+      '')
+    ];
 
     programs.captive-browser.dhcp-dns =
       let

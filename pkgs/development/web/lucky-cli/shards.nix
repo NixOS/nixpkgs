@@ -2,19 +2,19 @@
   ameba = {
     owner = "crystal-ameba";
     repo = "ameba";
-    rev = "v0.14.2";
-    sha256 = "1l1q1icpzg1zvhfj8948w36j7ikaj7w816677zi29vi6y2d1dmf2";
+    rev = "v0.14.3";
+    sha256 = "1cfr95xi6hsyxw1wlrh571hc775xhwmssk3k14i8b7dgbwfmm5x1";
   };
-  future = {
-    owner = "crystal-community";
-    repo = "future.cr";
-    rev = "v0.1.0";
-    sha256 = "1p88mfn1ab5hz4r81vjfm1vn9rww0lbbii8lyzfx9pkxanh9rp98";
+  lucky_task = {
+    owner = "luckyframework";
+    repo = "lucky_task";
+    rev = "v0.1.1";
+    sha256 = "0w0rnf22pvj3lp5z8c4sshzwhqgwpbjpm7nry9mf0iz3fa0v48f7";
   };
   teeplate = {
     owner = "luckyframework";
     repo = "teeplate";
-    rev = "v0.8.2";
-    sha256 = "1v7njslcpir52nnyd30mfnxvqmb7ycqnlq80qnx6myw20iy9dcww";
+    rev = "v0.8.5";
+    sha256 = "1kr05qrp674rph1324wry57gzvgvcvlz0w27brlvdgd3gi4s8sdj";
   };
 }

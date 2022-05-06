@@ -7,7 +7,7 @@ let
   # how many passwords have been made. In this env, we'll always be on
   # the 0th counter, so the password is static.
   #
-  # Generated in nix-shell -p oathToolkit
+  # Generated in nix-shell -p oath-toolkit
   # via: oathtool -v -d6 -w10 cdd4083ef8ff1fa9178c6d46bfb1a3
   # and picking a the first 4:
   oathSnakeOilPassword1 = "143349";
@@ -21,7 +21,7 @@ in
 {
   name = "pam-oath-login";
 
-  machine =
+  nodes.machine =
     { ... }:
     {
       security.pam.oath = {

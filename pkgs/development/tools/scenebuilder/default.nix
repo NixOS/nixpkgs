@@ -64,13 +64,13 @@ let
   '';
 
   desktopItem = makeDesktopItem {
-    name = "Scene Builder";
+    name = "scenebuilder";
     exec = "scenebuilder";
     icon = "scenebuilder";
     comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
-    desktopName = pname;
-    mimeType = "application/java;application/java-vm;application/java-archive";
-    categories = "Development";
+    desktopName = "Scene Builder";
+    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+    categories = [ "Development" ];
   };
 
 in stdenv.mkDerivation rec {

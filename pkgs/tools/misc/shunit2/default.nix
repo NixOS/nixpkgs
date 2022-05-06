@@ -1,5 +1,5 @@
 { lib
-, resholvePackage
+, resholve
 , fetchFromGitHub
 , bash
 , coreutils
@@ -9,7 +9,7 @@
 , ncurses
 }:
 
-resholvePackage rec {
+resholve.mkDerivation rec {
   pname = "shunit2";
   version = "2.1.8";
 
@@ -63,7 +63,7 @@ resholvePackage rec {
         interpreter, we can pre-test this. But if we go fiddle
         the interpreter later, I guess we _could_ break it.
         */
-        "$__SHUNIT_CMD_ECHO_ESC" = [ "'echo -e'" ];
+        "$__SHUNIT_CMD_ECHO_ESC" = [ "echo -e" ];
         "$SHUNIT_CMD_TPUT" = [ "tput" ]; # from ncurses
       };
       keep = {

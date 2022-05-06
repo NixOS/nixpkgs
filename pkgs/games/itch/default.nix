@@ -24,14 +24,12 @@ stdenvNoCC.mkDerivation rec{
     (makeDesktopItem {
       name = pname;
       exec = pname;
+      tryExec = "itch %U";
       icon = pname;
       desktopName = pname;
-      mimeType = "x-scheme-handler/itchio;x-scheme-handler/itch";
+      mimeTypes = [ "x-scheme-handler/itchio" "x-scheme-handler/itch" ];
       comment = "Install and play itch.io games easily";
-      extraDesktopEntries = {
-        TryExec = "itch %U";
-        Categories = "Game;";
-      };
+      categories = [ "Game" ];
     })
   ];
 

@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-simplejwt";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchPypi {
     pname = "djangorestframework_simplejwt";
     inherit version;
-    sha256 = "30b10e7732395c44d21980f773214d2b9bdeadf2a6c6809cd1a7c9abe272873c";
+    sha256 = "sha256-dTI1KKe5EIQ7h5GUdG8OvDSBxK2fNU3i3RYhYGYvuVo=";
   };
 
   nativeBuildInputs = [

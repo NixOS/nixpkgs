@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , nix-update-script
 , # base build deps
   meson
@@ -27,7 +26,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wireplumber";
-  version = "0.4.8";
+  version = "0.4.9";
 
   outputs = [ "out" "dev" ] ++ lib.optional enableDocs "doc";
 
@@ -36,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "pipewire";
     repo = "wireplumber";
     rev = version;
-    sha256 = "sha256-xwfggrjKHh5mZdvH6dKqQo6o1ltxuYdjoGYaWl31C/Y=";
+    sha256 = "sha256-U92ozuEUFJA416qKnalVowJuBjLRdORHfhmznGf1IFU=";
   };
 
   nativeBuildInputs = [
@@ -67,6 +66,9 @@ stdenv.mkDerivation rec {
     "-Delogind=disabled"
     "-Ddoc=${mesonEnableFeature enableDocs}"
     "-Dintrospection=${mesonEnableFeature enableGI}"
+    "-Dsystemd-system-service=true"
+    "-Dsystemd-system-unit-dir=${placeholder "out"}/lib/systemd/system"
+    "-Dsysconfdir=/etc"
   ];
 
   passthru.updateScript = nix-update-script {

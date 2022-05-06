@@ -117,7 +117,8 @@ let
 
     src = srcDepsSet."java_tools_javac11_${system}-v10.0.zip";
 
-    nativeBuildInputs = [ autoPatchelfHook unzip ];
+    nativeBuildInputs = [ unzip ]
+      ++ lib.optional stdenv.isLinux autoPatchelfHook;
     buildInputs = [ gcc-unwrapped ];
 
     sourceRoot = ".";
@@ -184,6 +185,8 @@ stdenv.mkDerivation rec {
     # compile without automatic reference counting. Caveat: this leaks memory, but
     # we accept this fact because xcode_locator is only a short-lived process used during the build.
     ./no-arc.patch
+
+    ./gcc11.patch
 
     # --experimental_strict_action_env (which may one day become the default
     # see bazelbuild/bazel#2574) hardcodes the default
@@ -300,12 +303,7 @@ stdenv.mkDerivation rec {
       # fixed-output hashes of the fetch phase need to be spot-checked manually
       downstream = recurseIntoAttrs ({
         inherit bazel-watcher;
-      }
-          # dm-sonnet is only packaged for linux
-      // (lib.optionalAttrs stdenv.isLinux {
-          # TODO(timokau) dm-sonnet is broken currently
-          # dm-sonnet-linux = python3.pkgs.dm-sonnet;
-      }));
+      });
     };
 
   # update the list of workspace dependencies

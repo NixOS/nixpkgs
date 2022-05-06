@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "parse-type";
-  version = "0.5.6";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "jenisys";
     repo = "parse_type";
     rev = "v${version}";
-    sha256 = "sha256-CJroqJIi5DpmR8i1lr8OJ+234615PhpVUsqK91XOT3E=";
+    sha256 = "sha256-v79zzAAwXYoK2N8ZPl1L90qOwMRexAV2wCTMvo4vrSc=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pytest.ini \
       --replace "--metadata PACKAGE_UNDER_TEST parse_type" "" \
-      --replace "--metadata PACKAGE_VERSION 0.5.6" "" \
+      --replace "--metadata PACKAGE_VERSION ${version}" "" \
       --replace "--html=build/testing/report.html --self-contained-html" "" \
       --replace "--junit-xml=build/testing/report.xml" ""
   '';

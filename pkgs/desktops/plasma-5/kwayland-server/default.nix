@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kwayland-server";
+  pname = "kwayland-server";
   nativeBuildInputs = [
     cmake
     extra-cmake-modules #kdoctools

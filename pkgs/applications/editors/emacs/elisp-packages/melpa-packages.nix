@@ -6,6 +6,7 @@ To update the list of packages from MELPA,
 
 1. Run `./update-melpa`
 2. Check for evaluation errors:
+     # "../../../../../" points to the default.nix from root of Nixpkgs tree
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaStablePackages
      env NIXPKGS_ALLOW_BROKEN=1 nix-instantiate --show-trace ../../../../../ -A emacs.pkgs.melpaPackages
 3. Run `git commit -m "melpa-packages $(date -Idate)" recipes-archive-melpa.json`
@@ -545,6 +546,13 @@ let
                 'defcustom w3m-command "${w3m}"'
               '';
           });
+        });
+
+        mozc = super.mozc.overrideAttrs (attrs: {
+          postPatch = attrs.postPatch or "" + ''
+            substituteInPlace src/unix/emacs/mozc.el \
+              --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+          '';
         });
       };
 

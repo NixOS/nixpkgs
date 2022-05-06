@@ -1,22 +1,24 @@
-{ resholvePackage
+{ resholve
 , lib
+, stdenv
 , fetchFromGitHub
 , bash
 , coreutils
 , gnugrep
 , ncurses
+, lsof
 , doInstallCheck ? true
 }:
 
-resholvePackage rec {
+resholve.mkDerivation rec {
   pname = "bats";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
     rev = "v${version}";
-    sha256 = "sha256-MEkMi2w8G9FZhE3JvzzbqObcErQ9WFXy5mtKwQOoxbk=";
+    sha256 = "sha256-s+SAqX70WeTz6s5ObXYFBVPVUEqvD1d7AX2sGHkjVQ4=";
   };
 
   patchPhase = ''
@@ -45,7 +47,7 @@ resholvePackage rec {
   };
 
   inherit doInstallCheck;
-  installCheckInputs = [ ncurses ];
+  installCheckInputs = [ ncurses ] ++ lib.optionals stdenv.isDarwin [ lsof ];
   installCheckPhase = ''
     # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
     sed -i '/test works even if PATH is reset/a skip' test/bats.bats

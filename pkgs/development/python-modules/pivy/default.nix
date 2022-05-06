@@ -35,7 +35,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace \$'{SoQt_INCLUDE_DIRS}' \
+    substituteInPlace distutils_cmake/CMakeLists.txt --replace \$'{SoQt_INCLUDE_DIRS}' \
       \$'{Coin_INCLUDE_DIR}'\;\$'{SoQt_INCLUDE_DIRS}'
   '';
 

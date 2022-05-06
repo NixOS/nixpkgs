@@ -10,7 +10,21 @@
 }:
 
 let
-  pythonEnv = python3.withPackages(ps: with ps; [
+
+  python = python3.override {
+    packageOverrides = final: prev: {
+      sabyenc3 = prev.sabyenc3.overridePythonAttrs (oldAttrs: rec {
+        version = "4.0.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-PwwQ2jChKIqh7jJ6E2hkqPquTDSN4MklghfJ+MkM0n0=";
+        };
+      });
+    };
+    self = python;
+  };
+
+  pythonEnv = python.withPackages(ps: with ps; [
     chardet
     cheetah3
     cherrypy
@@ -24,14 +38,14 @@ let
   ]);
   path = lib.makeBinPath [ par2cmdline unrar unzip p7zip ];
 in stdenv.mkDerivation rec {
-  version = "3.5.0";
+  version = "3.5.3";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ay+y02kvFuwefT6f/8orClMiBK201AwSEWnPKgoeOFQ=";
+    sha256 = "sha256-pdYTTahdn9YVFreU5KhMGlUzQxHviN5G4TxWKKRBxOc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-wMWzj+qLRaSvzUNkh/Knb9VSUJLQN4gTputVQsIScTk=";
   };
 
+  separateDebugInfo = true;
+
   postPatch = ''
     sed -i -e '/chown root:mail/d' \
            -e 's/chmod [24]755/chmod 0755/' \

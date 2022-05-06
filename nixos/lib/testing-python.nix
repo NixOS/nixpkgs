@@ -146,26 +146,28 @@ rec {
 
   # Make a full-blown test
   makeTest =
-    { testScript
+    { machine ? null
+    , nodes ? {}
+    , testScript
     , enableOCR ? false
     , name ? "unnamed"
       # Skip linting (mainly intended for faster dev cycles)
     , skipLint ? false
     , passthru ? {}
+    , meta ? {}
     , # For meta.position
       pos ? # position used in error messages and for meta.position
-        (if t.meta.description or null != null
-          then builtins.unsafeGetAttrPos "description" t.meta
+        (if meta.description or null != null
+          then builtins.unsafeGetAttrPos "description" meta
           else builtins.unsafeGetAttrPos "testScript" t)
-    , ...
     } @ t:
     let
-      nodes = qemu_pkg:
+      mkNodes = qemu_pkg:
         let
           testScript' =
             # Call the test script with the computed nodes.
             if lib.isFunction testScript
-            then testScript { nodes = nodes qemu_pkg; }
+            then testScript { nodes = mkNodes qemu_pkg; }
             else testScript;
 
           build-vms = import ./build-vms.nix {
@@ -204,34 +206,31 @@ rec {
             )];
           };
         in
+          lib.warnIf (t?machine) "In test `${name}': The `machine' attribute in NixOS tests (pkgs.nixosTest / make-test-pyton.nix / testing-python.nix / makeTest) is deprecated. Please use the equivalent `nodes.machine'."
           build-vms.buildVirtualNetwork (
-              t.nodes or (if t ? machine then { machine = t.machine; } else { })
+              nodes // lib.optionalAttrs (machine != null) { inherit machine; }
           );
 
       driver = setupDriverForTest {
         inherit testScript enableOCR skipLint passthru;
         testName = name;
         qemu_pkg = pkgs.qemu_test;
-        nodes = nodes pkgs.qemu_test;
+        nodes = mkNodes pkgs.qemu_test;
       };
       driverInteractive = setupDriverForTest {
         inherit testScript enableOCR skipLint passthru;
         testName = name;
         qemu_pkg = pkgs.qemu;
-        nodes = nodes pkgs.qemu;
+        nodes = mkNodes pkgs.qemu;
         interactive = true;
       };
 
-      test =
-        let
-          passMeta = drv: drv // lib.optionalAttrs (t ? meta) {
-            meta = (drv.meta or { }) // t.meta;
-          };
-        in passMeta (runTests { inherit driver pos driverInteractive; });
+      test = lib.addMetaAttrs meta (runTests { inherit driver pos driverInteractive; });
 
     in
       test // {
-        inherit test driver driverInteractive nodes;
+        inherit test driver driverInteractive;
+        inherit (driver) nodes;
       };
 
   abortForFunction = functionName: abort ''The ${functionName} function was

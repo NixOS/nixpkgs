@@ -1,4 +1,4 @@
-{ appimageTools, lib, fetchurl, gtk3, gsettings-desktop-schemas, version }:
+{ appimageTools, lib, fetchurl, gtk3, gsettings-desktop-schemas, version, sha256 }:
 
 let
   pname = "losslesscut";
@@ -11,7 +11,7 @@ let
   src = fetchurl {
     url = "https://github.com/${owner}/${nameRepo}/releases/download/v${version}/${nameSource}";
     name = nameSource;
-    sha256 = "0aqz5ijl5japfzzbcdcd2mmihkb8b2fc2hs9kkm3211yb37c5ygv";
+    inherit sha256;
   };
   extracted = appimageTools.extractType2 {
     inherit name src;

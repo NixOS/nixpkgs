@@ -7,14 +7,13 @@
 , version
 , oildev
 , binlore
+, resholve-utils
 }:
 
 python27Packages.buildPythonApplication {
   pname = "resholve";
   inherit version;
   src = rSrc;
-  format = "other";
-  dontBuild = true;
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,13 +31,12 @@ python27Packages.buildPythonApplication {
   ];
 
   patchPhase = ''
-    for file in resholve; do
+    for file in setup.cfg _resholve/version.py; do
       substituteInPlace $file --subst-var-by version ${version}
     done
   '';
 
-  installPhase = ''
-    install -Dm755 resholve $out/bin/resholve
+   postInstall = ''
     installManPage resholve.1
   '';
 
@@ -48,7 +46,10 @@ python27Packages.buildPythonApplication {
     rm $out/nix-support/propagated-build-inputs
   '';
 
-  passthru.tests = callPackage ./test.nix { inherit rSrc; inherit binlore; };
+  passthru = {
+    inherit (resholve-utils) mkDerivation phraseSolution writeScript writeScriptBin;
+    tests = callPackage ./test.nix { inherit rSrc binlore; };
+  };
 
   meta = with lib; {
     description = "Resolve external shell-script dependencies";

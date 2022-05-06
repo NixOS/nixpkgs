@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "svt-av1";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${version}";
-    sha256 = "sha256-kmFyJ5b0EiesWUN71rbULF2cQt2pICF0P/MeZ+h7W9U=";
+    sha256 = "sha256-PIr2bCEKj1dXKiGWloZv2v+ed6JdHK3z+p11ugWGzAk=";
   };
 
   nativeBuildInputs = [ cmake nasm ];
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.unix;
     broken = stdenv.isAarch64; # undefined reference to `cpuinfo_arm_linux_init'
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
   };
 }

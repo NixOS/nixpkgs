@@ -1,13 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, dbus, nettle, fetchpatch
-, libidn, libnetfilter_conntrack, buildPackages }:
+{ lib, stdenv, fetchurl, pkg-config, nettle, fetchpatch
+, libidn, libnetfilter_conntrack, buildPackages
+, dbusSupport ? stdenv.isLinux
+, dbus
+}:
 
 with lib;
 let
   copts = concatStringsSep " " ([
     "-DHAVE_IDN"
     "-DHAVE_DNSSEC"
-  ] ++ optionals stdenv.isLinux [
+  ] ++ optionals dbusSupport [
     "-DHAVE_DBUS"
+  ] ++ optionals stdenv.isLinux [
     "-DHAVE_CONNTRACK"
   ]);
 in
@@ -52,11 +56,12 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/Library/LaunchDaemons/uk.org.thekelleys.dnsmasq.plist \
       --replace "/usr/local/sbin" "$out/bin"
   '' + optionalString stdenv.isLinux ''
-    install -Dm644 dbus/dnsmasq.conf $out/share/dbus-1/system.d/dnsmasq.conf
     install -Dm755 contrib/lease-tools/dhcp_lease_time $out/bin/dhcp_lease_time
     install -Dm755 contrib/lease-tools/dhcp_release $out/bin/dhcp_release
     install -Dm755 contrib/lease-tools/dhcp_release6 $out/bin/dhcp_release6
 
+  '' + optionalString dbusSupport ''
+    install -Dm644 dbus/dnsmasq.conf $out/share/dbus-1/system.d/dnsmasq.conf
     mkdir -p $out/share/dbus-1/system-services
     cat <<END > $out/share/dbus-1/system-services/uk.org.thekelleys.dnsmasq.service
     [D-BUS Service]
@@ -69,7 +74,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ nettle libidn ]
-    ++ optionals stdenv.isLinux [ dbus libnetfilter_conntrack ];
+    ++ optionals dbusSupport [ dbus ]
+    ++ optionals stdenv.isLinux [ libnetfilter_conntrack ];
 
   meta = {
     description = "An integrated DNS, DHCP and TFTP server for small networks";

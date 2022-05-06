@@ -17,7 +17,7 @@ let
     name = "${name}-automysqlbackup";
     meta.maintainers = [ lib.maintainers.aanderse ];
 
-    machine = {
+    nodes.machine = {
       services.mysql = {
         inherit package;
         enable = true;

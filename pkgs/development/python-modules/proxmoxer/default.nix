@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "proxmoxer";
-  version = "1.2.0";
+  version = "1.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-ElHocXrazwK+b5vdjYSJAYB4ajs2n+V8koj4QKkdDMQ=";
+    sha256 = "sha256-3EpId20WVVjXA/wxwy1peyHPcXdiT3fprABkcNBpZtE=";
   };
 
   propagatedBuildInputs = [

@@ -1,34 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi
-, coverage
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , mock
 , ply
-, pytest-runner
 , pytestCheckHook
 , six
 }:
 
 buildPythonPackage rec {
   pname = "stone";
-  version = "3.2.1";
+  version = "3.3.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0xby5mpsms7b2rv8j6mvxzmzz5i9ii01brb9ylxz6kiv2i08piwv";
+  # pypi sdist misses requirements.txt
+  src = fetchFromGitHub {
+    owner = "dropbox";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-0FWdYbv+paVU3Wj6g9OrSNUB0pH8fLwTkhVIBPeFB/U=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner == 5.2.0" "pytest-runner" \
-      --replace "pytest < 5" "pytest"
-    substituteInPlace test/requirements.txt \
-      --replace "coverage==5.3" "coverage"
+    sed -i '/pytest-runner/d' setup.py
   '';
-
-  nativeBuildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [ ply six ];
 
-  checkInputs = [ pytestCheckHook coverage mock ];
+  checkInputs = [ pytestCheckHook mock ];
 
   # try to import from `test` directory, which is exported by the python interpreter
   # and cannot be overriden without removing some py3 to py2 support

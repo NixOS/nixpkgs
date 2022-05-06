@@ -1,25 +1,3 @@
-diff -r -u irods-4.2.0.orig/lib/core/src/irods_default_paths.cpp irods-4.2.0/lib/core/src/irods_default_paths.cpp
---- irods-4.2.0.orig/lib/core/src/irods_default_paths.cpp	2016-11-15 06:23:55.000000000 +0000
-+++ irods-4.2.0/lib/core/src/irods_default_paths.cpp	2016-12-20 18:03:17.156883399 +0000
-@@ -18,7 +18,7 @@
-         try {
-             boost::filesystem::path path{dl_info.dli_fname};
-             path = boost::filesystem::canonical(path);
--            path.remove_filename().remove_filename().remove_filename(); // Removes filename and the two directories (usr and lib) between libirods_common.so and base of irods install
-+            path.remove_filename().remove_filename(); // Removes filename and the two directories (usr and lib) between libirods_common.so and base of irods install
-             return path;
-         } catch(const boost::filesystem::filesystem_error& e) {
-             THROW(-1, e.what());
-@@ -27,8 +27,7 @@
- 
-     boost::filesystem::path
-     get_irods_config_directory() {
--        boost::filesystem::path path{get_irods_root_directory()};
--        path.append("etc").append("irods");
-+        boost::filesystem::path path("/etc/irods");
-         return path;
-     }
- 
 diff -r -u irods-4.2.0.orig/scripts/irods/paths.py irods-4.2.0/scripts/irods/paths.py
 --- irods-4.2.0.orig/scripts/irods/paths.py	2016-11-15 06:23:55.000000000 +0000
 +++ irods-4.2.0/scripts/irods/paths.py	2016-12-21 15:17:07.437864606 +0000

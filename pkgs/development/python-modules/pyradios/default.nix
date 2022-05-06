@@ -3,6 +3,7 @@
 , fetchPypi
 , appdirs
 , requests
+, setuptools
 , pythonOlder
 }:
 
@@ -21,6 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     appdirs
     requests
+    setuptools
   ];
 
   # Tests and pythonImportsCheck require network access

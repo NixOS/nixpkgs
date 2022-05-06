@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.62.3";
+  version = "4.63.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d359de7217506c9851b7869f3708d8ee53ed70a1b8edbba4dbcb47442592920d";
+    sha256 = "sha256-QjCkkRmkFsiMxH0NLTLV2Q8aKC1eSX1JgBlQcE5Jhj0=";
   };
 
   nativeBuildInputs = [

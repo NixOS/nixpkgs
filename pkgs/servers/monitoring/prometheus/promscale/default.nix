@@ -2,25 +2,25 @@
 , buildGoModule
 , fetchFromGitHub
 , promscale
-, testVersion
+, testers
 }:
 
 buildGoModule rec {
   pname = "promscale";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "timescale";
     repo = pname;
     rev = version;
-    sha256 = "sha256-snbQVkJ4J5ElVNfHuSfb7VCZ64TqJ8Lx5uUaJPqBHl4=";
+    sha256 = "sha256-KF+aD9vJYqNJkJftx27ZsxmOIXZ/2ciKwjwcTw0GBvY=";
   };
 
   patches = [
     ./0001-remove-jaeger-test-dep.patch
   ];
 
-  vendorSha256 = "sha256-1t4WNoJrfKTtrpwi9p+L1WQR7mTsD70CRW+RYT7E9Lo=";
+  vendorSha256 = "sha256-/cjRM8CrOKnx0BcRu2+MLV28MYLOrG5x1DN24mRUJzQ=";
 
   ldflags = [
     "-s"
@@ -40,7 +40,7 @@ buildGoModule rec {
     runHook postCheck
   '';
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = promscale;
     command = "promscale -version";
   };

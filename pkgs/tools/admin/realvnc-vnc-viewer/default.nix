@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "realvnc-vnc-viewer";
-  version = "6.21.1109";
+  version = "6.22.207";
 
   src = {
     "x86_64-linux" = fetchurl {
       url = "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x64.rpm";
-      sha256 = "12zxp9kvi070nzxbrnrfsyla38ryb69zlidw6cvypmsgqnylfxj7";
+      sha256 = "0jybfqj1svkb297ahyp07xf4b8qyb5h1l2kp50a50ivb6flqd3jr";
     };
     "i686-linux" = fetchurl {
       url = "https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-${version}-Linux-x86.rpm";
-      sha256 = "03vhdmzyd16r0kdxpkq9azyy1h705lk4sbgnbw5fr8gkifwng60f";
+      sha256 = "06jmkd474nql6p3hnqwnwj5ac29m2021flnvf44mfhrhaa5wnpz6";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 

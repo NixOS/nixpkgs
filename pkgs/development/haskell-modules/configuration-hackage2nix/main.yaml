@@ -1,38 +1,39 @@
 # pkgs/development/haskell-modules/configuration-hackage2nix.yaml
 
-compiler: ghc-8.10.7
+compiler: ghc-9.0.2
 
 core-packages:
   - array-0.5.4.0
-  - base-4.14.1.0
+  - base-4.15.1.0
   - binary-0.8.8.0
-  - bytestring-0.10.12.0
-  - Cabal-3.2.1.0
-  - containers-0.6.2.1
-  - deepseq-1.4.4.0
-  - directory-1.3.6.0
+  - bytestring-0.10.12.1
+  - Cabal-3.4.1.0
+  - containers-0.6.4.1
+  - deepseq-1.4.5.0
+  - directory-1.3.6.2
   - exceptions-0.10.4
   - filepath-1.4.2.1
-  - ghc-8.10.4
-  - ghc-boot-8.10.4
-  - ghc-boot-th-8.10.4
+  - ghc-9.0.2
+  - ghc-bignum-1.1
+  - ghc-boot-9.0.2
+  - ghc-boot-th-9.0.2
   - ghc-compact-0.1.0.0
-  - ghc-heap-8.10.4
-  - ghc-prim-0.6.1
-  - ghci-8.10.4
-  - haskeline-0.8.0.1
+  - ghc-heap-9.0.2
+  - ghc-prim-0.7.0
+  - ghci-9.0.2
+  - haskeline-0.8.2
   - hpc-0.6.1.0
-  - integer-gmp-1.0.3.0
-  - libiserv-8.10.4
+  - integer-gmp-1.1
+  - libiserv-9.0.2
   - mtl-2.2.2
   - parsec-3.1.14.0
   - pretty-1.1.3.6
-  - process-1.6.9.0
-  - rts-1.0
+  - process-1.6.13.2
+  - rts-1.0.2
   - stm-2.5.0.0
-  - template-haskell-2.16.0.0
-  - terminfo-0.4.1.4
-  - text-1.2.4.1
+  - template-haskell-2.17.0.0
+  - terminfo-0.4.1.5
+  - text-1.2.5.0
   - time-1.9.3
   - transformers-0.5.6.2
   - unix-2.7.2.2
@@ -67,75 +68,26 @@ core-packages:
 # tracked in stackage.yaml. Adding conflicting overrides with stackage here will
 # not work.
 default-package-overrides:
-  # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
-  # not yet available in Nixpkgs
+  # gi-gdkx11-4.x requires gtk-4.x, but stackage still restricts gi-gtk to 3.*
   - gi-gdkx11 < 4
-  # streamly-* packages which are not in stackage and to be constrained
-  # as long as we have streamly < 0.8.0
-  - streamly-archive < 0.1.0
-  - streamly-bytestring < 0.1.3
-  - streamly-lmdb < 0.3.0
-  - streamly-process
-  # dhall-nix is not part of stackage, remove if dhall >= 1.40
-  - dhall-nix < 1.1.22
   # reflex-dom-pandoc is only used by neuron which needs a version < 1.0.0.0
   - reflex-dom-pandoc < 1.0.0.0
-  # 2021-09-07: pin to our current GHC version
-  - ghc-api-compat == 8.10.7
-  # 2021-10-13: weeder 2.3.0 require GHC == 9.0.*; remove pin when GHC version changes
-  - weeder < 2.3.0
-  # 2021-10-10: taskwarrior 0.4 requires aeson > 2.0.1.0
-  - taskwarrior < 0.4.0.0
-  # 2021-10-19: autoapply 0.4.1.1 requires th-desugar 1.12
-  - autoapply < 0.4.1.1
-  # 2021-10-22: 1.8 breaks shake-bench
-  - SVGFonts < 1.8
-  # 2021-11-09: 0.20.6 can't be built with aeson < 2.0 which is a pain to override at the moment
-  - futhark < 0.20.6
+  # 2022-02-18: pin to our current GHC version
+  - ghc-api-compat == 9.0.*
   # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
   - ghc-bignum == 1.0
-  # 2021-11-18: lucid-{alpine, htmx} are not in stackage, so we need to downgrade them
-  - lucid-alpine == 0.1.0.2
-  - lucid-htmx == 0.1.0.2
-  # 2021-11-21: restrict haskell-gi-related packages to match stackage version (0.25)
-  - gi-girepository < 1.0.25
-  - gi-ggit < 1.0.11
-  - gi-gst < 1.0.25
-  - gi-gstaudio < 1.0.24
-  - gi-gstbase < 1.0.25
-  - gi-gstvideo < 1.0.25
-  - gi-gtksource < 3.0.25
-  - gi-ibus < 1.5.4
-  - gi-javascriptcore < 4.0.24
-  - gi-ostree < 1.0.15
-  - gi-notify < 0.7.24
-  - gi-pangocairo < 1.0.26
-  - gi-poppler < 0.18.26
-  - gi-secret < 0.0.14
-  - gi-soup < 2.4.25
-  - gi-vte < 2.91.29
-  - gi-webkit2 < 4.0.28
-  - gi-webkit2webextension < 4.0.27
-  - gi-wnck < 3.0.11
-  # gi-cogl, gi-coglpango, gi-clutter, gi-json, gi-rsvg are only available for haskell-gi >= 0.26
-  # 1.2.1.0 needs opaleye >= 0.8 which stackage doesn't provide
-  - rel8 < 1.2.1.0
-  # 0.14.0.0 drops support for every GHC < 9.0.1
-  - brittany < 0.14
   # 1.2.0.0: “Dropped support for GHC <9.2 (might readd it later)”
   - retrie < 1.2.0.0
-  # Compat with polysemy in Stackage LTS 18
-  - polysemy-resume < 0.1.0.2
-  - polysemy-conc < 0.5
-  - polysemy-mocks < 0.2
-  # Pinning patch because it is mainly used by the reflex-frp ecosystem which is not yet compatible with it.
-  # https://github.com/reflex-frp/reflex-dom/issues/431
-  - patch < 0.0.5.0
   # On the recommendation of hnix author:
   # https://github.com/NixOS/nixpkgs/pull/154461#issuecomment-1015511883
   - hnix < 0.15
+  # needs http-client >= 0.7.11 which isn't part of Stackage LTS 18
+  - http-client-restricted < 0.0.5
+  # Needs dhall 1.41.*, Stackage Nightly has 1.40
+  - dhall-nix < 1.1.24
 
 extra-packages:
+  - aeson < 2                           # required by pantry-0.5.2
   - base16-bytestring < 1               # required for cabal-install etc.
   - Cabal == 2.2.*                      # required for jailbreak-cabal etc.
   - Cabal == 2.4.*                      # required for cabal-install etc.
@@ -156,19 +108,30 @@ extra-packages:
   - mmorph == 1.1.3                     # Newest working version of mmorph on ghc 8.6.5. needed for hls
   - network == 2.6.3.1                  # required by pkgs/games/hedgewars/default.nix, 2020-11-15
   - optparse-applicative < 0.16         # needed for niv-0.2.19
+  - pantry == 0.5.2.1                   # needed for stack-2.7.3
   - resolv == 0.1.1.2                   # required to build cabal-install-3.0.0.0 with pre ghc-8.8.x
   - sbv == 7.13                         # required for pkgs.petrinizer
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
-  - ghc-lib == 9.0.*                    # 2021-11-05: Need one GHC 9.0.2 compatible version
-  - ghc-lib-parser == 9.0.*             # 2021-11-05: Need one GHC 9.0.2 compatible version
-  - ghc-lib-parser-ex == 9.0.*          # 2021-11-05: Need one GHC 9.0.2 compatible version
+  - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
+  - ghc-lib == 8.10.7.*                 # 2022-02-17: preserve for GHC 8.10.7
+  - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
+  - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
   - brick == 0.64.*                     # 2021-12-03: matterhorn depends on brick < 0.65
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
-  - ormolu == 0.3.*                     # 2021-12-03: for HLS with GHC 9.0.2
-  - fourmolu == 0.4.*                   # 2022-02-05: for HLS with GHC 9.0.2
-  - ghc-exactprint == 1.4.*             # 2022-02-07: preserve for now, 1.5.0 has a breaking change without type changes
+  - ormolu == 0.2.*                     # 2022-02-21: For ghc 8.8 and 8.10
+  - ShellCheck == 0.7.2                 # 2022-02-20: haskell-ci 0.14 needs this
+  - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
+  - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
+  - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
+  - SVGFonts < 1.8                      # 2022-03-19: Needed for Chart-diagrams 1.9.3
+  - clay < 0.14                         # 2022-03-20: Needed for neuron 1.0.0.0
+  - hspec-golden == 0.1.*               # 2022-04-07: Needed for elm-format
+  - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format
+  - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
+  - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
+  - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
 
 package-maintainers:
   abbradar:
@@ -189,6 +152,7 @@ package-maintainers:
     - pretty-simple
     - purenix
     - spago
+    - stack
     - termonad
   dalpd:
     - ghc-vis
@@ -267,6 +231,8 @@ package-maintainers:
     - total
     - turtle
     - typed-spreadsheet
+  gebner:
+    - wstunnel
   gridaphobe:
     - located-base
   jb55:
@@ -284,11 +250,12 @@ package-maintainers:
     - mattermost-api
     - mattermost-api-qc
     - Unique
+  libjared:
+    - sensei
   maralorn:
     - cabal-fmt
     - ema
     - generic-optics
-    - ghcup
     - ghcid
     - ghcide
     - haskell-language-server
@@ -359,6 +326,7 @@ package-maintainers:
     - shakespeare
   roberth:
     - arion-compose
+    - cabal-pkg-config-version-hook
     - hercules-ci-agent
     - hercules-ci-api
     - hercules-ci-api-agent
@@ -366,6 +334,8 @@ package-maintainers:
     - hercules-ci-cli
     - hercules-ci-cnix-expr
     - hercules-ci-cnix-store
+    - inline-c
+    - inline-c-cpp
   rvl:
     - taffybar
     - arbtt
@@ -434,6 +404,7 @@ unsupported-platforms:
   bindings-sane:                                [ x86_64-darwin, aarch64-darwin ]
   btrfs:                                        [ x86_64-darwin, aarch64-darwin ] # depends on linux
   bustle:                                       [ x86_64-darwin, aarch64-darwin ] # uses glibc-specific ptsname_r
+  camfort:                                      [ aarch64-linux ]
   charsetdetect:                                [ aarch64-linux ] # not supported by vendored lib / not configured properly https://github.com/batterseapower/libcharsetdetect/issues/3
   cut-the-crap:                                 [ x86_64-darwin, aarch64-darwin ]
   d3d11binding:                                 [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-darwin, aarch64-linux, armv7l-linux ]
@@ -442,6 +413,7 @@ unsupported-platforms:
   dx9d3d:                                       [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-darwin, aarch64-linux, armv7l-linux ]
   dx9d3dx:                                      [ i686-linux, x86_64-linux, x86_64-darwin, aarch64-darwin, aarch64-linux, armv7l-linux ]
   Euterpea:                                     [ x86_64-darwin, aarch64-darwin ]
+  essence-of-live-coding-PortMidi:              [ x86_64-darwin, aarch64-darwin ]
   follow-file:                                  [ x86_64-darwin, aarch64-darwin ]
   freenect:                                     [ x86_64-darwin, aarch64-darwin ]
   FTGL:                                         [ x86_64-darwin, aarch64-darwin ]
@@ -451,20 +423,24 @@ unsupported-platforms:
   gi-dbusmenugtk3:                              [ x86_64-darwin, aarch64-darwin ]
   gi-dbusmenu:                                  [ x86_64-darwin, aarch64-darwin ]
   gi-ggit:                                      [ x86_64-darwin, aarch64-darwin ]
+  gi-gtkosxapplication:                         [ x86_64-linux, aarch64-linux ]
   gi-ibus:                                      [ x86_64-darwin, aarch64-darwin ]
   gi-javascriptcore:                            [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   gi-ostree:                                    [ x86_64-darwin, aarch64-darwin ]
   gi-vte:                                       [ x86_64-darwin, aarch64-darwin ]
-  gi-webkit2:                                   [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   gi-webkit2webextension:                       [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
+  gi-webkit2:                                   [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   gi-wnck:                                      [ x86_64-darwin, aarch64-darwin ]
   gnome-keyring:                                [ x86_64-darwin, aarch64-darwin ]
+  grid-proto:                                   [ x86_64-darwin, aarch64-darwin ]
+  gtk3-mac-integration:                         [ x86_64-linux, aarch64-linux ]
   gtk-mac-integration:                          [ i686-linux, x86_64-linux, aarch64-linux, armv7l-linux ]
   gtk-sni-tray:                                 [ x86_64-darwin, aarch64-darwin ]
   haskell-snake:                                [ x86_64-darwin, aarch64-darwin ]
-  hbro:                                         [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hbro-contrib:                                 [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
+  hbro:                                         [ x86_64-darwin, aarch64-darwin ] # webkitgtk marked broken on darwin
   hcwiid:                                       [ x86_64-darwin, aarch64-darwin ]
+  HDRUtils:                                     [ x86_64-darwin, aarch64-darwin ]
   HFuse:                                        [ x86_64-darwin, aarch64-darwin ]
   hidapi:                                       [ x86_64-darwin, aarch64-darwin ]
   hinotify-bytestring:                          [ x86_64-darwin, aarch64-darwin ]
@@ -476,6 +452,11 @@ unsupported-platforms:
   iwlib:                                        [ x86_64-darwin, aarch64-darwin ]
   Jazzkell:                                     [ x86_64-darwin, aarch64-darwin ] # depends on Euterpea
   jsaddle-webkit2gtk:                           [ x86_64-darwin, aarch64-darwin ]
+  keid-core:                                    [ aarch64-linux ]
+  keid-geometry:                                [ aarch64-linux ]
+  keid-render-basic:                            [ aarch64-linux ]
+  keid-sound-openal:                            [ aarch64-linux ]
+  keid-ui-dearimgui:                            [ aarch64-linux ]
   kqueue:                                       [ x86_64-linux, aarch64-linux, i686-linux, armv7l-linux ] # BSD / Darwin only API
   Kulitta:                                      [ x86_64-darwin, aarch64-darwin ] # depends on Euterpea
   LambdaHack:                                   [ x86_64-darwin, aarch64-darwin ]
@@ -483,6 +464,7 @@ unsupported-platforms:
   libmodbus:                                    [ x86_64-darwin, aarch64-darwin ]
   libsystemd-journal:                           [ x86_64-darwin, aarch64-darwin ]
   libtelnet:                                    [ x86_64-darwin, aarch64-darwin ]
+  libvirt-hs:                                   [ x86_64-darwin ] # spidermonkey is not supported on darwin
   libzfs:                                       [ x86_64-darwin, aarch64-darwin ]
   linearEqSolver:                               [ aarch64-linux ]
   linux-evdev:                                  [ x86_64-darwin, aarch64-darwin ]
@@ -492,6 +474,8 @@ unsupported-platforms:
   linux-namespaces:                             [ x86_64-darwin, aarch64-darwin ]
   lio-fs:                                       [ x86_64-darwin, aarch64-darwin ]
   logging-facade-journald:                      [ x86_64-darwin, aarch64-darwin ]
+  longshot:                                     [ aarch64-linux ]
+  lxc:                                          [ x86_64-darwin, aarch64-darwin ]
   midi-alsa:                                    [ x86_64-darwin, aarch64-darwin ]
   mpi-hs:                                       [ aarch64-linux, x86_64-darwin, aarch64-darwin ]
   mpi-hs-binary:                                [ aarch64-linux, x86_64-darwin, aarch64-darwin ]
@@ -523,6 +507,7 @@ unsupported-platforms:
   scrypt:                                       [ aarch64-linux, armv7l-linux ] # https://github.com/informatikr/scrypt/issues/8
   sdl2-mixer:                                   [ x86_64-darwin, aarch64-darwin ]
   sdl2-ttf:                                     [ x86_64-darwin, aarch64-darwin ]
+  sensei:                                       [ x86_64-darwin ]
   synthesizer-alsa:                             [ x86_64-darwin, aarch64-darwin ]
   taffybar:                                     [ x86_64-darwin, aarch64-darwin ]
   termonad:                                     [ x86_64-darwin, aarch64-darwin ]

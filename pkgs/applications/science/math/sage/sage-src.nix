@@ -13,9 +13,14 @@ let
   # Fetch a diff between `base` and `rev` on sage's git server.
   # Used to fetch trac tickets by setting the `base` to the last release and the
   # `rev` to the last commit of the ticket.
-  fetchSageDiff = { base, name, rev, sha256, squashed ? false, ...}@args: (
+  #
+  # We don't use sage's own build system (which builds all its
+  # dependencies), so we exclude changes to "build/" from patches by
+  # default to avoid conflicts.
+  fetchSageDiff = { base, name, rev, sha256, squashed ? false, excludes ? [ "build/*" ]
+                  , ...}@args: (
     fetchpatch ({
-      inherit name sha256;
+      inherit name sha256 excludes;
 
       # There are three places to get changes from:
       #
@@ -49,11 +54,7 @@ let
                "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
              ]
              else [ "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}" ];
-
-      # We don't care about sage's own build system (which builds all its dependencies).
-      # Exclude build system changes to avoid conflicts.
-      excludes = [ "build/*" ];
-    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" ])
+    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" "excludes" ])
   );
 in
 stdenv.mkDerivation rec {
@@ -119,15 +120,13 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/32959
     ./patches/linbox-1.7-upgrade.patch
 
-    # To emit better tracebacks, IPython 8 parses Python files using the ast
-    # module (via the stack_data package). Since Cython is a superset of Python,
-    # this results in no Cython code being printed in tracebacks. Fixing this
-    # properly is tracked in https://github.com/alexmojaki/stack_data/issues/21,
-    # but for now we just disable the corresponding test. An alternative would
-    # be to revert IPython's IPython/core/ultratb.py, but this would need to be
-    # Sage-specific (since it would worsen tracebacks for pure Python code).
-    # Sage tracks this at https://trac.sagemath.org/ticket/33170
-    ./patches/no-cython-sources-in-tracebacks-on-ipython8.patch
+    # https://trac.sagemath.org/ticket/33170
+    (fetchSageDiff {
+      base = "9.6.beta5";
+      name = "ipython-8.1-update.patch";
+      rev = "4d2b53f1541375861310af3a7f7109c1c2ed475d";
+      sha256 = "sha256-ELda/VBzsQH7NdFas69fQ35QPUoJCeLx/gxT1j7qGR8=";
+    })
 
     # https://trac.sagemath.org/ticket/32968
     (fetchSageDiff {
@@ -144,6 +143,59 @@ stdenv.mkDerivation rec {
       rev = "53532ddd4e2dc92469c1590ebf0c40f8f69bf579";
       sha256 = "sha256-6SoSBvIlqvNwZV3jTB6uPdUtaWIOeNmddi2poK/WvGs=";
     })
+
+    # TODO: This will not be necessary when Sphinx 4.4.1 is released,
+    # since some warnings introduced in 4.4.0 will be disabled by then
+    # (https://github.com/sphinx-doc/sphinx/pull/10126).
+    # https://trac.sagemath.org/ticket/33272
+    (fetchSageDiff {
+      base = "9.5";
+      name = "sphinx-4.4-warnings.patch";
+      rev = "97d7958bed441cf2ccc714d88f83d3a8426bc085";
+      sha256 = "sha256-y1STE0oxswnijGCsBw8eHWWqpmT1XMznIfA0vvX9pFA=";
+    })
+
+    # adapted from https://trac.sagemath.org/ticket/23712#comment:22
+    ./patches/tachyon-renamed-focallength.patch
+
+    # https://trac.sagemath.org/ticket/33336
+    (fetchSageDiff {
+      base = "9.6.beta2";
+      name = "scipy-1.8-update.patch";
+      rev = "9c8235e44ffb509efa8a3ca6cdb55154e2b5066d";
+      sha256 = "sha256-bfc4ljNOxVnhlmxIuNbjbKl4vJXYq2tlF3Z8bbC8PWw=";
+    })
+
+    # https://trac.sagemath.org/ticket/33495
+    (fetchSageDiff {
+      base = "9.6.beta5";
+      name = "networkx-2.7-update.patch";
+      rev = "8452003846a7303100847d8d0ed642fc642c11d6";
+      sha256 = "sha256-A/XMouPlc2sjFp30L+56fBGJXydS2EtzfPOV98FCDqI=";
+    })
+
+    # https://trac.sagemath.org/ticket/33226
+    (fetchSageDiff {
+      base = "9.6.beta0";
+      name = "giac-1.7.0-45-update.patch";
+      rev = "33ea2adf01e9e2ce9f1e33779f0b1ac0d9d1989c";
+      sha256 = "sha256-DOyxahf3+IaYdkgmAReNDCorRzMgO8+yiVrJ5TW1km0=";
+    })
+
+    # https://trac.sagemath.org/ticket/33398
+    (fetchSageDiff {
+      base = "9.6.beta4";
+      name = "sympy-1.10-update.patch";
+      rev = "6b7c3a28656180e42163dc10f7b4a571b93e5f27";
+      sha256 = "sha256-fnUyM2yjHkCykKRfzQQ4glcUYmCS/fYzDzmCf0nuebk=";
+      # The patch contains a whitespace change to a file that didn't exist in Sage 9.5.
+      excludes = [ "build/*" "src/sage/manifolds/vector_bundle_fiber_element.py" ];
+    })
+
+    # docutils 0.18.1 now triggers Sphinx warnings. tolerate them for
+    # now, because patching Sphinx is not feasible.
+    # https://github.com/sphinx-doc/sphinx/issues/9777#issuecomment-1104481271
+    ./patches/docutils-0.18.1-deprecation.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

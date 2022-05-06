@@ -82,11 +82,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.16";
+  version = "3.0.17.3";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
-    sha256 = "sha256-/641/GT2JcF1Vx0jRrxfYge+mXYlF/FUI+dPGDmUEPY=";
+    sha256 = "sha256-b36Q74lz0x2W3mTbgXFz40UVCClxepQISxu4MhzeIBQ=";
   };
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
@@ -187,11 +187,6 @@ stdenv.mkDerivation rec {
   BUILDCC = "${stdenv.cc}/bin/gcc";
 
   patches = [
-    # Required in order to run newer srt plugin. Remove it when next release arrives
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/4250fe8f28c220d883db454cec2b2c76a07473eb/trunk/vlc-3.0.11.1-srt_1.4.2.patch";
-      sha256 = "53poWjZfwq/6l316sqiCp0AtcGweyXBntcLDFPSokHQ=";
-    })
     # patches to build with recent live555
     # upstream issue: https://code.videolan.org/videolan/vlc/-/issues/25473
     (fetchpatch {

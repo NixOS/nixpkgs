@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "pacman";
+  pname = "pacman";
   version = "2017-11-10";
 
   idrisDeps = [ contrib sdl2 ];

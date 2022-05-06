@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [];
+  buildInputs = [ topkg ];
   propagatedBuildInputs = [ astring bos cmdliner rresult ];
+
+  strictDeps = true;
 
   inherit (topkg) buildPhase installPhase;
 

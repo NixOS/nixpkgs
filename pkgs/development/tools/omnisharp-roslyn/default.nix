@@ -63,18 +63,23 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-
   pname = "omnisharp-roslyn";
-  version = "1.38.0";
+  version = "1.38.2";
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00V+7Z1IoCSuSM0RClM81IslzCzC/FNYxHIKtnI9QDg=";
+    sha256 = "7XJIdotfffu8xo+S6xlc1zcK3oY9QIg1CJhCNJh5co0=";
   };
 
   nativeBuildInputs = [ makeWrapper dotnet-sdk ];
+
+  postPatch = ''
+    # Relax the version requirement
+    substituteInPlace global.json \
+      --replace '6.0.100' '${dotnet-sdk.version}'
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -90,6 +95,11 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -r bin/Release/OmniSharp.Stdio.Driver/net6.0 $out/src
+
+    # Delete files to mimick hacks in https://github.com/OmniSharp/omnisharp-roslyn/blob/bdc14ca/build.cake#L594
+    rm $out/src/NuGet.*.dll
+    rm $out/src/System.Configuration.ConfigurationManager.dll
+
     makeWrapper $out/src/OmniSharp $out/bin/omnisharp \
       --prefix DOTNET_ROOT : ${dotnet-sdk} \
       --suffix PATH : ${dotnet-sdk}/bin
@@ -98,9 +108,10 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OmniSharp based on roslyn workspaces";
     homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.mit;
     maintainers = with maintainers; [ tesq0 ericdallo corngood ];
+    mainProgram = "omnisharp";
   };
 
 }

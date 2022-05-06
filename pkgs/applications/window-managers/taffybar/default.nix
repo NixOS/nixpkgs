@@ -5,7 +5,8 @@ let
     self.taffybar
   ] ++ packages self);
 in stdenv.mkDerivation {
-  name = "taffybar-with-packages-${taffybarEnv.version}";
+  pname = "taffybar-with-packages";
+  inherit (taffybarEnv) version;
 
   nativeBuildInputs = [ makeWrapper ];
 

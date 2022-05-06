@@ -7,18 +7,17 @@
 , openssl
 , bottle
 , pytestCheckHook
-, nose
 , flaky
 }:
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.44.1";
+  version = "7.45.1";
   disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5bcef4d988b74b99653602101e17d8401338d596b9234d263c728a0c3df003e8";
+    sha256 = "sha256-qGOtGP9Hj1VFkkBXiHza5CLhsnRuQWdGFfaHSY6luIo=";
   };
 
   preConfigure = ''
@@ -28,7 +27,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     curl
-    openssl.out
+    openssl
   ];
 
   nativeBuildInputs = [
@@ -38,7 +37,6 @@ buildPythonPackage rec {
   checkInputs = [
     bottle
     pytestCheckHook
-    nose
     flaky
   ];
 
@@ -52,16 +50,6 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
-    # libcurl stopped passing the reason phrase from the HTTP status line
-    # https://github.com/pycurl/pycurl/issues/679
-    "test_failonerror"
-    "test_failonerror_status_line_invalid_utf8_python3"
-    # bottle>=0.12.17 escapes utf8 properly, so these test don't work anymore
-    # https://github.com/pycurl/pycurl/issues/669
-    "test_getinfo_content_type_invalid_utf8_python3"
-    "test_getinfo_cookie_invalid_utf8_python3"
-    "test_getinfo_raw_content_type_invalid_utf8"
-    "test_getinfo_raw_cookie_invalid_utf8"
     # tests that require network access
     "test_keyfunction"
     "test_keyfunction_bogus_return"
@@ -76,9 +64,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "http://pycurl.sourceforge.net/";
-    description = "Python wrapper for libcurl";
-    license = licenses.lgpl2Only;
-    maintainers = with maintainers; [];
+    homepage = "http://pycurl.io/";
+    description = "Python Interface To The cURL library";
+    license = with licenses; [ lgpl2Only mit ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

@@ -1,27 +1,29 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, nix-update-script
+, gitUpdater
+, common-updater-scripts
 , makeWrapper
 , rr
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-rr";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "danielzfranklin";
     repo = pname;
-    rev = version;
-    sha256 = "01m8fdz9as2fxnzs9csvbc76qxzbb98a66dh7w4a5q855v38g0zy";
+    rev = "v${version}";
+    sha256 = "sha256-lQS+bp1u79iO8WGrkZSFEuonr1eYjxIQYhUvM/kBao4";
   };
 
-  cargoSha256 = "0fjs76n6bbbv83s213h2dgsszgxy4hbjsclyk9m81b3bfbmmb9sa";
+  cargoSha256 = "sha256-PdKqWMxTtBJbNqITs3IjNcpijXy6MHitEY4jDp4jZro=";
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = gitUpdater {
+      inherit pname version;
+      rev-prefix = "v";
     };
   };
 

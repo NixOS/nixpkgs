@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "peewee";
-  version = "3.14.8";
+  version = "3.14.10";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coleifer";
     repo = pname;
     rev = version;
-    sha256 = "sha256-BJSM+7+VdW6SxN4/AXsX8NhQPdIFoYrVRVwR9OsJ3QE=";
+    hash = "sha256-k3kKAImE1aVlmsSPXpaIkAVspAsAo5Hz6/n7u6+zTzA=";
   };
 
   buildInputs = [
@@ -31,8 +31,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     apsw
-  ] ++ lib.optional withPostgres psycopg2
-  ++ lib.optional withMysql mysql-connector;
+  ] ++ lib.optional withPostgres [
+    psycopg2
+  ] ++ lib.optional withMysql [
+    mysql-connector
+  ];
 
   checkInputs = [
     flask

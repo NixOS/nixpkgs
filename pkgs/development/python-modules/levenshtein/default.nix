@@ -2,14 +2,17 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, cmake
+, cython
 , pytestCheckHook
 , rapidfuzz
+, scikit-build
 }:
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.17.0";
-  format = "setuptools";
+  version = "0.18.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -17,13 +20,18 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "Levenshtein";
     rev = "v${version}";
-    sha256 = "1a14cw2314jb5lrm979zipzk3av4630lxdr4jzj2wl5qh3yw4w52";
+    # https://github.com/maxbachmann/Levenshtein/issues/22
+    fetchSubmodules = true;
+    sha256 = "sha256-WREYdD5MFOpCzH4BSceRpzQZdpi3Xxxn0DpMvDsNlGo=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "rapidfuzz >= 1.8.2, < 1.9" "rapidfuzz"
-  '';
+  nativeBuildInputs = [
+    cmake
+    cython
+    scikit-build
+  ];
+
+  dontUseCmakeConfigure = true;
 
   propagatedBuildInputs = [
     rapidfuzz

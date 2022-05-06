@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pyramid_exclog";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d05ced5c12407507154de6750036bc83861b85c11be70b3ec3098c929652c14b";
+    sha256 = "sha256-Tl2rYH/GifNfB9w4nG9UIqAQz0O6kujCED/4iZnPKDw=";
   };
 
   propagatedBuildInputs = [ pyramid ];

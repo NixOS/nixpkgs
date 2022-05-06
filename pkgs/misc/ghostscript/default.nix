@@ -29,11 +29,11 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "ghostscript";
+  pname = "ghostscript${lib.optionalString (x11Support) "-with-X"}";
   version = "9.55.0";
 
   src = fetchurl {
-    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/${pname}-${version}.tar.xz";
+    url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs9${lib.versions.minor version}${lib.versions.patch version}/ghostscript-${version}.tar.xz";
     sha512 = "27g72152mlwlalg232jxdhaf3ykgmqwi2pccbkwfygql1h9iz40plfbwbs1n0fkvm4zwzg5r9cr8g7w2dxih4jldiidv7rflxdy1is2";
   };
 

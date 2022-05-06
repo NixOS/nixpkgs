@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, piqi, stdlib-shims }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, piqi, stdlib-shims, num }:
 
 stdenv.mkDerivation rec {
   version = "0.7.7";
@@ -12,7 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "1913jpsb8mvqi8609j4g4sm5jhg50dq0xqxgy8nmvknfryyc89nm";
   };
 
-  buildInputs = [ ocaml findlib piqi stdlib-shims ];
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ piqi stdlib-shims ];
+
+  checkInputs  = [ num ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

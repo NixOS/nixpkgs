@@ -18,11 +18,11 @@
 stdenv.mkDerivation rec {
 
   pname = "quilt";
-  version = "0.66";
+  version = "0.67";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "01vfvk4pqigahx82fhaaffg921ivd3k7rylz1yfvy4zbdyd32jri";
+    sha256 = "sha256-O+O+CYfnKmw2Rni7gn4+H8wQMitWvF8CtXZpj1UBPMI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

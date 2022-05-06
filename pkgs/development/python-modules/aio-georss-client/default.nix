@@ -15,14 +15,16 @@
 
 buildPythonPackage rec {
   pname = "aio-georss-client";
-  version = "0.8";
+  version = "0.10";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-aio-georss-client";
     rev = "v${version}";
-    sha256 = "0447scp5n906p8kfzy0lwdq06f6hkq71r2zala6g3vr6b3kla6h8";
+    sha256 = "sha256-g/BlRRBImJihVlAfSMsPIPV0GJns0/pStF8TKSxpDI4=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +42,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "aio_georss_client" ];
+  pythonImportsCheck = [
+    "aio_georss_client"
+  ];
 
   meta = with lib; {
     description = "Python library for accessing GeoRSS feeds";

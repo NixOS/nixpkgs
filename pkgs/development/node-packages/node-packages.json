@@ -7,12 +7,17 @@
 , "@bitwarden/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
+, "@google/clasp"
 , "@hyperspace/cli"
 , "@medable/mdctl-cli"
 , "@nerdwallet/shepherd"
 , "@nestjs/cli"
 , "@squoosh/cli"
+, "@tailwindcss/aspect-ratio"
+, "@tailwindcss/forms"
 , "@tailwindcss/language-server"
+, "@tailwindcss/line-clamp"
+, "@tailwindcss/typography"
 , "@uppy/companion"
 , "@vue/cli"
 , "@webassemblyjs/cli"
@@ -50,8 +55,10 @@
 , "coc-emmet"
 , "coc-eslint"
 , "coc-explorer"
+, "coc-flutter"
 , "coc-git"
 , "coc-go"
+, "coc-haxe"
 , "coc-highlight"
 , "coc-html"
 , "coc-imselect"
@@ -109,6 +116,7 @@
 , "emoj"
 , "emojione"
 , {"epgstation": "../../applications/video/epgstation"}
+, {"epgstation-client": "../../applications/video/epgstation/client"}
 , "escape-string-regexp"
 , "eslint"
 , "eslint_d"
@@ -123,7 +131,7 @@
 , "flood"
 , "forever"
 , "fx"
-, "ganache-cli"
+, "ganache"
 , "gatsby-cli"
 , "generator-code"
 , "get-graphql-schema"
@@ -159,7 +167,7 @@
 , "insect"
 , "intelephense"
 , "ionic"
-, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v11.0.1.tar.gz"}
+, {"iosevka": "https://github.com/be5invis/Iosevka/archive/v14.0.1.tar.gz"}
 , "jake"
 , "javascript-typescript-langserver"
 , "joplin"
@@ -193,7 +201,7 @@
 , "markdownlint-cli"
 , "markdownlint-cli2"
 , "markdown-link-check"
-, {"markdown-preview-nvim": "../../misc/vim-plugins/markdown-preview-nvim"}
+, {"markdown-preview-nvim": "../../applications/editors/vim/plugins/markdown-preview-nvim"}
 , "mastodon-bot"
 , "mathjax"
 , "meat"
@@ -215,10 +223,10 @@
 , "npm"
 , "npm-check-updates"
 , "npm-merge-driver"
-, {"npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0"}
 , "nrm"
 , "ocaml-language-server"
 , "parcel-bundler"
+, "parcel"
 , "parsoid"
 , "patch-package"
 , "peerflix"
@@ -231,6 +239,7 @@
 , "postcss-cli"
 , "prebuild-install"
 , "prettier"
+, "prettier_d_slim"
 , "prettier-plugin-toml"
 , "prisma"
 , "@prisma/language-server"
@@ -252,7 +261,7 @@
 , "reveal-md"
 , "rimraf"
 , "rollup"
-, { "rust-analyzer-build-deps": "../../misc/vscode-extensions/rust-analyzer/build-deps" }
+, { "rust-analyzer-build-deps": "../../applications/editors/vscode/extensions/rust-analyzer/build-deps" }
 , "rtlcss"
 , "s3http"
 , "sass"
@@ -339,6 +348,7 @@
 , "titanium"
 , "triton"
 , "tsun"
+, "ts-node"
 , "ttf2eot"
 , "typescript"
 , "typescript-language-server"
@@ -356,7 +366,7 @@
 , "vscode-json-languageserver"
 , "vscode-json-languageserver-bin"
 , "vscode-langservers-extracted"
-, { "vscode-lldb-build-deps": "../../misc/vscode-extensions/vscode-lldb/build-deps" }
+, { "vscode-lldb-build-deps": "../../applications/editors/vscode/extensions/vscode-lldb/build-deps" }
 , "vue-cli"
 , "vue-language-server"
 , "wavedrom-cli"

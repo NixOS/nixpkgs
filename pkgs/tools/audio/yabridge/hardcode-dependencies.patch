@@ -1,5 +1,5 @@
 diff --git a/meson.build b/meson.build
-index 95ecb728..cb30f3af 100644
+index c71d4fdb..b3f381ba 100644
 --- a/meson.build
 +++ b/meson.build
 @@ -201,6 +201,7 @@ if with_32bit_libraries or with_bitbridge
@@ -20,7 +20,7 @@ index 95ecb728..cb30f3af 100644
  
  # These are all headers-only libraries, and thus won't require separate 32-bit
 diff --git a/src/plugin/utils.cpp b/src/plugin/utils.cpp
-index 1a457f03..20ca1e63 100644
+index fc2c8b25..c73249e3 100644
 --- a/src/plugin/utils.cpp
 +++ b/src/plugin/utils.cpp
 @@ -107,7 +107,7 @@ std::string PluginInfo::wine_version() const {

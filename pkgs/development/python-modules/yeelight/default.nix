@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "yeelight";
-  version = "0.7.9";
+  version = "0.7.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "stavros";
     repo = "python-yeelight";
     rev = "v${version}";
-    sha256 = "sha256-8N+HOhUX3BXecS/kaAfLoge+NYzKLKPyoTthu+useJA=";
+    sha256 = "sha256-vUsL1CvhYRtv75gkmiPe/UkAtBDZPy1iK2BPUupMXz8=";
   };
 
   propagatedBuildInputs = [

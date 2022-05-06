@@ -16,7 +16,6 @@
 , pango
 , bash
 , bison
-, fetchpatch
 , xorg
 , ApplicationServices
 , python3
@@ -28,25 +27,15 @@ let
 in
 stdenv.mkDerivation {
   pname = "graphviz";
-  version = "2.49.3";
+  version = "2.50.0";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     # use rev as tags have disappeared before
-    rev = "3425dae078262591d04fec107ec71ab010651852";
-    sha256 = "1qvyjly7r1ihacdvxq0r59l4csr09sc05palpshzqsiz2wb1izk0";
+    rev = "ca43e4c6a217650447e2928c2e9cb493c73ebd7d";
+    sha256 = "1psfgr8y4hh9yyzl04f7xbqb2y9k1xbja051j6b06q9dx7bmkmky";
   };
-
-  patches = [
-    # Fix cross.
-    # https://gitlab.com/graphviz/graphviz/-/merge_requests/2281
-    # Remove when version > 2.49.3.
-    (fetchpatch {
-      url = "https://gitlab.com/graphviz/graphviz/-/commit/0cdb89acbb0caf5baf3d04a8821c9d0dfe065ea8.patch";
-      sha256 = "130mqlxzhzaz3vp4ccaq7z7fd9q6vjxmimz70g8y818igsbb13rf";
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook

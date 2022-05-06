@@ -16,25 +16,32 @@
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
-  version = "2.1";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ytfzf";
     rev = "v${version}";
-    hash = "sha256-NJLXXam7FmBWj9sM+S71e5o5e6OtVpw0m32kUo3Fbec=";
+    hash = "sha256-zfoICi1VChmrRHZ3dSHGTcXkVf/zirQTycFz98xj+QY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   dontBuild = true;
 
-  installFlags = [ "PREFIX=${placeholder "out"}" "doc" ];
+  installFlags = [
+    "PREFIX="
+    "DESTDIR=${placeholder "out"}"
+    "doc"
+    "addons"
+  ];
 
   postInstall = ''
-    wrapProgram "$out/bin/ytfzf" --prefix PATH : ${lib.makeBinPath [
-      chafa coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
-    ]}
+    wrapProgram "$out/bin/ytfzf" \
+      --prefix PATH : ${lib.makeBinPath [
+        chafa coreutils curl dmenu fzf gnused jq mpv ueberzug yt-dlp
+      ]} \
+      --set YTFZF_SYSTEM_ADDON_DIR "$out/share/ytfzf/addons"
   '';
 
   meta = with lib; {

@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
 
+  # This patch is upstream; remove it in 5.9.
+  patches = [ ./fix-6324.patch ];
+
   buildInputs = [
     pixman libpthreadstubs gtkmm3 libXau libXdmcp
     lcms2 libiptcdata libcanberra-gtk3 fftw expat pcre libsigcxx lensfun librsvg

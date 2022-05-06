@@ -4,16 +4,16 @@ let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.19.0";
+      version = "1.19.2";
 
       src = fetchFromGitHub {
         owner  = "syncthing";
         repo   = "syncthing";
         rev    = "v${version}";
-        sha256 = "sha256-jQoY0mA/vAOCaCMR8Aapt49AF7HAmjPsr3MKLoaa24g=";
+        sha256 = "sha256-Zday5lBsRCl00vnnXNKu6VMlq8zmwgI0I+73Pir7ss4=";
       };
 
-      vendorSha256 = "sha256-hZcMt3LlK5FuhhlwCmYtlDAJv1QNK+YY7NvZaWMBuys=";
+      vendorSha256 = "sha256-2yK0eE34cA7U1nDWRp/JigFpeveipmCuL4jP+94T3Sg=";
 
       doCheck = false;
 
@@ -45,6 +45,7 @@ let
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = licenses.mpl20;
         maintainers = with maintainers; [ joko peterhoeg andrew-d ];
+        mainProgram = target;
         platforms = platforms.unix;
       };
     };

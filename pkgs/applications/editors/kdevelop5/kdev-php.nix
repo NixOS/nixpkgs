@@ -1,14 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, threadweaver, ktexteditor, kdevelop-unwrapped, kdevelop-pg-qt }:
+{ stdenv, lib, fetchurl, cmake, extra-cmake-modules, threadweaver, ktexteditor, kdevelop-unwrapped, kdevelop-pg-qt }:
 
 stdenv.mkDerivation rec {
   pname = "kdev-php";
   version = "5.6.2";
 
-  src = fetchFromGitHub {
-    owner = "KDE";
-    repo = "kdev-php";
-    rev = "v${version}";
-    sha256 = "sha256-hEumH7M6yAuH+jPShOmbKjHmuPRg2djaVy9Xt28eK38=";
+  src = fetchurl {
+    url = "mirror://kde/stable/kdevelop/${version}/src/${pname}-${version}.tar.xz";
+    hash = "sha256-8Qg9rsK4x1LeGgRB0Pn3InSx4tKccjAF7Xjc+Lpxfgw=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];

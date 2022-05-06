@@ -1,40 +1,59 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, setuptools
-, packaging
-, tomli
-, structlog
-, appdirs
-, pytest-asyncio
-, flaky
-, tornado
-, pycurl
 , aiohttp
-, pytest-httpbin
+, appdirs
+, buildPythonPackage
 , docutils
+, fetchFromGitHub
+, flaky
 , installShellFiles
+, packaging
+, pycurl
+, pytest-asyncio
+, pytest-httpbin
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, structlog
+, tomli
+, tornado
 }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.6.1";
+  version = "2.8";
+  format = "setuptools";
 
-  # Tests not included in PyPI tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Lfo/VzsklEbv/kiKV5GbzvycwekqykRLrZBhehC1MjY=";
+    hash = "sha256-ikpjR1fEZBsSOE20jxTyarb9Pqn3Fz+TYOzXp0g4G9c=";
   };
 
-  nativeBuildInputs = [ installShellFiles docutils ];
-  propagatedBuildInputs = [ setuptools packaging tomli structlog appdirs tornado pycurl aiohttp ];
-  checkInputs = [ pytestCheckHook pytest-asyncio flaky pytest-httpbin ];
+  nativeBuildInputs = [
+    docutils
+    installShellFiles
+  ];
 
-  disabled = pythonOlder "3.7";
+  propagatedBuildInputs = [
+    aiohttp
+    appdirs
+    packaging
+    pycurl
+    setuptools
+    structlog
+    tomli
+    tornado
+  ];
+
+  checkInputs = [
+    flaky
+    pytest-asyncio
+    pytest-httpbin
+    pytestCheckHook
+  ];
 
   postBuild = ''
     patchShebangs docs/myrst2man.py
@@ -45,7 +64,13 @@ buildPythonPackage rec {
     installManPage docs/_build/man/nvchecker.1
   '';
 
-  pytestFlagsArray = [ "-m 'not needs_net'" ];
+  pythonImportsCheck = [
+    "nvchecker"
+  ];
+
+  pytestFlagsArray = [
+    "-m 'not needs_net'"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/lilydjwg/nvchecker";

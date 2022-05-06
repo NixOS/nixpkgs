@@ -556,6 +556,10 @@ in rec {
     };
   };
 
+  tmux-thumbs = pkgs.callPackage ./tmux-thumbs {
+    inherit mkTmuxPlugin;
+  };
+
   urlview = mkTmuxPlugin {
     pluginName = "urlview";
     version = "unstable-2016-01-06";

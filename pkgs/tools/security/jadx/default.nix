@@ -2,13 +2,13 @@
 
 let
   pname = "jadx";
-  version = "1.3.2";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5meBBBijX49EQc9VejySwiIKsyCBEKGKIXvH7en6XuU=";
+    hash = "sha256-uDNHjajGqEeXOIC5SaluhHWOkA2j3LUvB6O3MHB2+YA=";
   };
 
   deps = stdenv.mkDerivation {
@@ -40,7 +40,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-t+CkjoZqWqphxbg/4E3/7U8nKoV0AlITyRScLN8x6yY=";
+    outputHash = "sha256-SFj3VPCIxEA2mj/xsibXZ1MDmV/BnmvQJUBav1gfEGM=";
   };
 in stdenv.mkDerivation {
   inherit pname version src;

@@ -30,8 +30,6 @@ with self; with super; {
 
   cryptography = callPackage ../development/python2-modules/cryptography { };
 
-  cryptography_vectors = callPackage ../development/python2-modules/cryptography-vectors { };
-
   decorator = callPackage ../development/python2-modules/decorator { };
 
   enum = callPackage ../development/python2-modules/enum { };
@@ -45,6 +43,8 @@ with self; with super; {
   futures = callPackage ../development/python2-modules/futures { };
 
   google-apputils = callPackage ../development/python2-modules/google-apputils { };
+
+  gtkme = callPackage ../development/python2-modules/gtkme { };
 
   httpretty = callPackage ../development/python2-modules/httpretty { };
 

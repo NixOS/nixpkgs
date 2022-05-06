@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fioctl";
-  version = "0.23";
+  version = "0.24";
 
   src = fetchFromGitHub {
     owner = "foundriesio";
     repo = "fioctl";
     rev = "v${version}";
-    sha256 = "sha256-00HWby1LwKEz4BgwD3yv0IMW9mzkTj4FMFgYAn7kLac=";
+    sha256 = "sha256-nlSJ6JxC5MTS/ltSB9qnhtoRjDL1A5NlXWM/2A4duGU=";
   };
 
-  vendorSha256 = "sha256-oA8/9LjMRM1RXKKDWhcbt2qr/4T7YgOq92U2mF9E+sw=";
+  vendorSha256 = "sha256-Cr9etq9E16vj2AL9OkIQom/gATjj9QT9+keUR1WQJR0=";
 
   ldflags = [
     "-s" "-w" "-X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}"

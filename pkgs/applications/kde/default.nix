@@ -86,6 +86,7 @@ let
       dragon = callPackage ./dragon.nix {};
       elisa = callPackage ./elisa.nix {};
       eventviews = callPackage ./eventviews.nix {};
+      falkon = callPackage ./falkon.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
       granatier = callPackage ./granatier.nix {};
@@ -97,7 +98,7 @@ let
       kaccounts-providers = callPackage ./kaccounts-providers.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
-      kalarmcal = callPackage ./kalarmcal.nix {};
+      kalendar = callPackage ./kalendar.nix {};
       kalzium = callPackage ./kalzium.nix {};
       kamoso = callPackage ./kamoso.nix {};
       kapman = callPackage ./kapman.nix {};
@@ -153,6 +154,7 @@ let
       kmime = callPackage ./kmime.nix {};
       kmines = callPackage ./kmines.nix {};
       kmix = callPackage ./kmix.nix {};
+      kmousetool = callPackage ./kmousetool.nix {};
       kmplot = callPackage ./kmplot.nix {};
       knavalbattle = callPackage ./knavalbattle.nix {};
       knetwalk = callPackage ./knetwalk.nix {};
@@ -186,6 +188,7 @@ let
       kteatime = callPackage ./kteatime.nix {};
       ktimer = callPackage ./ktimer.nix {};
       ktnef = callPackage ./ktnef.nix {};
+      ktorrent = callPackage ./ktorrent.nix {};
       ktouch = callPackage ./ktouch.nix {};
       kturtle = callPackage ./kturtle.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
@@ -203,6 +206,7 @@ let
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
       libksane = callPackage ./libksane.nix {};
       libksieve = callPackage ./libksieve.nix {};
+      libktorrent = callPackage ./libktorrent.nix {};
       mailcommon = callPackage ./mailcommon.nix {};
       mailimporter = callPackage ./mailimporter.nix {};
       marble = callPackage ./marble.nix {};
@@ -216,8 +220,11 @@ let
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       print-manager = callPackage ./print-manager.nix {};
       rocs = callPackage ./rocs.nix {};
+      skanlite = callPackage ./skanlite.nix {};
+      skanpage = callPackage ./skanpage.nix {};
       spectacle = callPackage ./spectacle.nix {};
       yakuake = callPackage ./yakuake.nix {};
+      zanshin = callPackage ./zanshin.nix {};
     };
 
 in lib.makeScope libsForQt5.newScope packages

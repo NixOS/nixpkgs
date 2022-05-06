@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-gmmlib";
-  version = "22.0.2";
+  version = "22.1.2";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
     rev = "intel-gmmlib-${version}";
-    sha256 = "001kkm1l4s9i7ikaqpf78l5h0a5dy1m9w5r5g0yrlqpi54h6ph28";
+    sha256 = "sha256-5exS0B2iRbmFkKtoHzL4NnZ7L3DaukthUYkoj2tpZuE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
       OpenCL(TM) and the Intel(R) Media Driver for VAAPI.
     '';
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ primeos SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

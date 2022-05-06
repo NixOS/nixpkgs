@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "2.6.4";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-oUIgEWLcpEZHtL1wvTAezLtz2PecddtwhzbLhGqso/k=";
+    sha256 = "sha256-rxferVxTWmclviDshHhBmbCezOI+FvcfUW3gAkBQNHQ=";
     fetchSubmodules = true;
   };
 
@@ -23,6 +23,13 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Foundation
   ];
+
+  # Disable cwd support on darwin, because it requires macOS>=10.15
+  preConfigure = lib.optionalString stdenv.isDarwin ''
+    for file in 3rd/bee.lua/bee/subprocess/subprocess_posix.cpp 3rd/luamake/3rd/bee.lua/bee/subprocess/subprocess_posix.cpp; do
+      substituteInPlace $file --replace '#define SUPPORT_CWD 1' ""
+    done
+  '';
 
   preBuild = ''
     cd 3rd/luamake
@@ -73,10 +80,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Lua Language Server coded by Lua ";
+    description = "Lua Language Server coded by Lua";
     homepage = "https://github.com/sumneko/lua-language-server";
     license = licenses.mit;
-    maintainers = with maintainers; [ mjlbach ];
+    maintainers = with maintainers; [ sei40kr ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "lua-language-server";
   };

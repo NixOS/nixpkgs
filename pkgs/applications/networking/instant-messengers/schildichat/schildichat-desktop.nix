@@ -2,7 +2,7 @@
 , element-desktop # for seshat and keytar
 , schildichat-web
 , stdenv
-, fetchgit
+, fetchFromGitHub
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -25,9 +25,10 @@ stdenv.mkDerivation rec {
   pname = "schildichat-desktop";
   inherit (pinData) version;
 
-  src = fetchgit {
-    url = "https://github.com/SchildiChat/schildichat-desktop/";
-    rev = "v${version}";
+  src = fetchFromGitHub {
+    owner = "SchildiChat";
+    repo = "schildichat-desktop";
+    inherit (pinData) rev;
     sha256 = pinData.srcHash;
     fetchSubmodules = true;
   };
@@ -108,11 +109,9 @@ stdenv.mkDerivation rec {
       desktopName = "SchildiChat";
       genericName = "Matrix Client";
       comment = meta.description;
-      categories = "Network;InstantMessaging;Chat;";
-      extraEntries = ''
-        StartupWMClass=schildichat
-        MimeType=x-scheme-handler/element;
-      '';
+      categories = [ "Network" "InstantMessaging" "Chat" ];
+      startupWMClass = "schildichat";
+      mimeTypes = [ "x-scheme-handler/element" ];
     })
   ];
 
@@ -122,7 +121,7 @@ stdenv.mkDerivation rec {
     description = "Matrix client / Element Desktop fork";
     homepage = "https://schildi.chat/";
     changelog = "https://github.com/SchildiChat/schildichat-desktop/releases";
-    maintainers = lib.teams.matrix.members;
+    maintainers = lib.teams.matrix.members ++ [ lib.maintainers.kloenk ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;
   };

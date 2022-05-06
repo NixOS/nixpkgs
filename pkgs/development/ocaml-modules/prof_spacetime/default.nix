@@ -7,7 +7,7 @@
 , cohttp
 , ocaml_lwt
 , cohttp-lwt-unix
-, lambdaTerm
+, lambda-term
 , stdlib-shims
 }:
 
@@ -30,7 +30,7 @@ buildDunePackage rec {
     cohttp
     ocaml_lwt
     cohttp-lwt-unix
-    lambdaTerm
+    lambda-term
     stdlib-shims
   ];
 

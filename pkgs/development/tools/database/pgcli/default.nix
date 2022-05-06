@@ -5,7 +5,6 @@
 , cli-helpers
 , click
 , configobj
-, humanize
 , prompt-toolkit
 , psycopg2
 , pygments
@@ -15,25 +14,23 @@
 , keyring
 , pendulum
 , pytestCheckHook
+, sshtunnel
 , mock
 }:
 
 buildPythonApplication rec {
   pname = "pgcli";
-  version = "3.3.1";
-
-  disabled = !isPy3k;
+  version = "3.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/MyeVcpopK0Ih6z6KZGvs7ivk/PM6a2iSeatiYeZM6E=";
+    sha256 = "sha256-8DkwGH4n1g32WMqKBPtgHsXXR2xzXysVQsat7Fysj+I=";
   };
 
   propagatedBuildInputs = [
     cli-helpers
     click
     configobj
-    humanize
     prompt-toolkit
     psycopg2
     pygments
@@ -42,6 +39,7 @@ buildPythonApplication rec {
     setproctitle
     keyring
     pendulum
+    sshtunnel
   ];
 
   checkInputs = [ pytestCheckHook mock ];

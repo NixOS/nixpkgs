@@ -23,7 +23,7 @@ index 8e0b5ff..48959b4 100644
 @@ -57,6 +57,8 @@ libc = "0.2.112"
  [dev-dependencies]
  more-asserts = "0.2"
- paste = "1.0.6"
+ paste = "1.0.7"
 +# Specify that the indirect dependency ztsd-sys should pick up the system zstd C library
 +zstd-sys = { version = "1", features = [ "pkg-config" ] }
  

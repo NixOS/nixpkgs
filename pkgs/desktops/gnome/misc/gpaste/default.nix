@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , fetchpatch
 , appstream-glib
@@ -7,6 +8,8 @@
 , glib
 , gobject-introspection
 , gtk3
+, gtk4
+, libadwaita
 , meson
 , mutter
 , ninja
@@ -17,14 +20,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.42.2";
+  version = "42.1";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "sha256-VWtq1jPwUHHIDpVaSYQ0FiihlfulRofFmacMyv/buMw=";
+    sha256 = "sha256-A5NZ4NiPVZUr7vPdDuNywLsLrejZ4SCg7+3//ZNRmLY=";
   };
 
   patches = [
@@ -38,7 +41,7 @@ stdenv.mkDerivation rec {
       --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
     substituteInPlace src/gnome-shell/prefs.js \
       --subst-var-by typelibPath "${placeholder "out"}/lib/girepository-1.0"
-    substituteInPlace src/libgpaste/settings/gpaste-settings.c \
+    substituteInPlace src/libgpaste/gpaste/gpaste-settings.c \
       --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${pname}-${version}"}
   '';
 
@@ -57,6 +60,8 @@ stdenv.mkDerivation rec {
     gjs
     glib
     gtk3
+    gtk4
+    libadwaita
     mutter
     pango
   ];

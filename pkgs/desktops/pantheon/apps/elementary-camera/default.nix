@@ -13,7 +13,6 @@
 , python3
 , vala
 , wrapGAppsHook
-, elementary-icon-theme
 , glib
 , granite
 , gst_all_1
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     glib
     granite
     gtk3

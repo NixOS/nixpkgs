@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex ]
     ++ lib.optional stdenv.buildPlatform.isDarwin gettext;
 
-  buildInputs = [ cracklib db4 audit ]
+  buildInputs = [ cracklib db4 ]
+    ++ lib.optional stdenv.buildPlatform.isLinux audit
     ++ lib.optional withLibxcrypt libxcrypt;
 
   enableParallelBuilding = true;

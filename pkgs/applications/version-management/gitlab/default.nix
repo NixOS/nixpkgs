@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, fetchpatch, fetchFromGitLab, bundlerEnv
 , ruby, tzdata, git, nettools, nixosTests, nodejs, openssl
 , gitlabEnterprise ? false, callPackage, yarn
-, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps
+, fixup_yarn_lock, replace, file, cacert, fetchYarnDeps, makeWrapper
 }:
 
 let
@@ -120,7 +120,7 @@ stdenv.mkDerivation {
   inherit src;
 
   buildInputs = [
-    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools
+    rubyEnv rubyEnv.wrappedRuby rubyEnv.bundler tzdata git nettools makeWrapper
   ];
 
   patches = [
@@ -174,6 +174,9 @@ stdenv.mkDerivation {
     # rake tasks to mitigate CVE-2017-0882
     # see https://about.gitlab.com/2017/03/20/gitlab-8-dot-17-dot-4-security-release/
     cp ${./reset_token.rake} $out/share/gitlab/lib/tasks/reset_token.rake
+
+    # manually patch the shebang line in generate-loose-foreign-key
+    wrapProgram $out/share/gitlab/scripts/decomposition/generate-loose-foreign-key --set ENABLE_SPRING 0 --add-flags 'runner -e test'
   '';
 
   passthru = {

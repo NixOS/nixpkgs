@@ -10,7 +10,6 @@
 # Runtime dependencies
 , appnope
 , backcall
-, black
 , decorator
 , jedi
 , matplotlib-inline
@@ -28,13 +27,13 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.0.1";
+  version = "8.2.0";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x19sj4dlq7r4p1mqnpx9245r8dwvpjwd8n34snfm37a452lsmmb";
+    sha256 = "sha256-cOXrEyysWUo0tfeZvSUliQCZBfBRBHKK6mpAPsJRncE=";
   };
 
   buildInputs = [
@@ -43,7 +42,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     backcall
-    black
     decorator
     jedi
     matplotlib-inline
@@ -76,9 +74,14 @@ buildPythonPackage rec {
     testpath
   ];
 
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
+    "test_clipboard_get"
+  ];
+
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
-    homepage = "http://ipython.org/";
+    homepage = "https://ipython.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bjornfor fridh ];
   };

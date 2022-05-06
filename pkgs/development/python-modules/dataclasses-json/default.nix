@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "dataclasses-json";
-  version = "0.5.6";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "lidatong";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09253p0zjqfaqap7jgfgjl1jswwnz7mb6x7dqix09id92mnb89mf";
+    sha256 = "1xv9br6mm5pcwfy10ykbc1c0n83fqyj1pa81z272kqww7wpkkp6j";
   };
 
   propagatedBuildInputs = [
@@ -28,11 +28,6 @@ buildPythonPackage rec {
     hypothesis
     mypy
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # AssertionError: Type annotations check failed
-    "test_type_hints"
   ];
 
   pythonImportsCheck = [ "dataclasses_json" ];

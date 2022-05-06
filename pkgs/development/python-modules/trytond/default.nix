@@ -1,5 +1,6 @@
 { lib
 , buildPythonApplication
+, fetchpatch
 , fetchPypi
 , pythonOlder
 , mock
@@ -24,15 +25,23 @@
 
 buildPythonApplication rec {
   pname = "trytond";
-  version = "6.2.3";
+  version = "6.2.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9be5d27aff9ae9b0ab73a8805145b2cc89900b9b513e6d5bfce89e9b7167f8f4";
+    sha256 = "sha256-Sof6A9lxU70YnCbboJr56CAdTL0cRbaRNxdvG5Tnqnw=";
   };
+
+  patches = [
+    (fetchpatch {
+      # werkzeug 2.1 compatibility for the tests
+      url = "https://github.com/tryton/trytond/commit/86a50ca06cf0d79404dbd731141ed29f8e9fcb9d.patch";
+      hash = "sha256-xY5Sdhkd0lEgscV7NHwX2YWxobWqQFElY5BJvDT+we8=";
+    })
+  ];
 
   # Tells the tests which database to use
   DB_NAME = ":memory:";

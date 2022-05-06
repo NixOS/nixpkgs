@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   pname = "byzanz";
 
   src = fetchgit {
-    url = "git://github.com/GNOME/byzanz";
+    url = "https://gitlab.gnome.org/Archive/byzanz";
     rev = "1875a7f6a3903b83f6b1d666965800f47db9286a";
     sha256 = "0a72fw2mxl8vdcdnzy0bwis4jk28pd7nc8qgr4vhyw5pd48dynvh";
   };

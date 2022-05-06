@@ -21,5 +21,6 @@ buildRustPackage rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = [lib.maintainers.nthorne];
+    mainProgram = "clog";
   };
 }

@@ -91,11 +91,6 @@ in
     virtualisation.docker = mkIf cfg.docker {
       enable = mkDefault true;
     };
-
-    # TODO: disable this once k3s supports cgroupsv2, either by docker
-    # supporting it, or their bundled containerd
-    systemd.enableUnifiedCgroupHierarchy = false;
-
     environment.systemPackages = [ config.services.k3s.package ];
 
     systemd.services.k3s = {
@@ -119,6 +114,7 @@ in
           [
             "${cfg.package}/bin/k3s ${cfg.role}"
           ] ++ (optional cfg.docker "--docker")
+          ++ (optional (cfg.docker && config.systemd.enableUnifiedCgroupHierarchy) "--kubelet-arg=cgroup-driver=systemd")
           ++ (optional cfg.disableAgent "--disable-agent")
           ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
           ++ (optional (cfg.token != "") "--token ${cfg.token}")

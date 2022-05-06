@@ -1,5 +1,6 @@
 { lib
 , fetchurl
+, fetchpatch
 , gettext
 , itstool
 , python3
@@ -26,6 +27,23 @@ python3.pkgs.buildPythonApplication rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "cP6Y65Ms4h1nFw47D2pzF+gT6GLemJM+pROYLpoDMgI=";
   };
+
+  patches = [
+    # Pull upstream fix for meson-0.60:
+    #  https://gitlab.gnome.org/GNOME/meld/-/merge_requests/78
+    (fetchpatch {
+      name = "meson-0.60.patch";
+      url  = "https://gitlab.gnome.org/GNOME/meld/-/commit/cc7746c141d976a4779cf868774fae1fe7627a6d.patch";
+      sha256 = "sha256-4uJZyF00Z6svzrOebByZV1hutCZRkIQYC4rUxQr5fdQ=";
+    })
+
+    # Fix view not rendering with adwaita-icon-theme 42 due to removed icons.
+    # https://gitlab.gnome.org/GNOME/meld/-/merge_requests/83
+    (fetchpatch {
+      url  = "https://gitlab.gnome.org/GNOME/meld/-/commit/f850cdf3eaf0f08abea003d5fae118a5e92a3d61.patch";
+      sha256 = "PaK8Rpv79UwMUligm9pIY16JW/dm7eVXntAwTV4hnbE=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson

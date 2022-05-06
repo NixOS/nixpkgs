@@ -13,21 +13,23 @@
 , sphinx
 , pytestCheckHook
 , glibcLocales
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.29.0";
+  version = "4.33.3";
 
-  # Bump to 3.7 when https://github.com/fonttools/fonttools/pull/2417 is merged
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "LnkpTEpZbbRAyqGPJXdfpHjh4t7n6LkjZGLhirVNl7E=";
+    sha256 = "MUIZGnYwlfTat9655AOYgK5r6AvHj/xXghUvOZR8HIM=";
   };
+
+  nativeBuildInputs = [ setuptools-scm ];
 
   # all dependencies are optional, but
   # we run the checks with them
@@ -52,6 +54,8 @@ buildPythonPackage rec {
     unicodedata2
   ];
 
+  pythonImportsCheck = [ "fontTools" ];
+
   preCheck = ''
     # tests want to execute the "fonttools" executable from $PATH
     export PATH="$out/bin:$PATH"
@@ -72,7 +76,6 @@ buildPythonPackage rec {
     "Tests/pens"
     "Tests/ufoLib"
   ];
-
 
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";

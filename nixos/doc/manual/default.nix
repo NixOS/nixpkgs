@@ -14,6 +14,10 @@ with pkgs;
 let
   lib = pkgs.lib;
 
+  docbook_xsl_ns = pkgs.docbook-xsl-ns.override {
+    withManOptDedupPatch = true;
+  };
+
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
   # or else the build will fail.

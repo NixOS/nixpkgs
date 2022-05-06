@@ -9,17 +9,27 @@
 , pynacl
 , pytest-relaxed
 , pytestCheckHook
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.9.2";
+  version = "2.10.4";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "944a9e5dbdd413ab6c7951ea46b0ab40713235a9c4c5ca81cfe45c6f14fa677b";
+    sha256 = "sha256-PS5lC2gSzm0WCr/3AdbvRDTsl5NLE+lc8a09pw/7XFg=";
   };
+
+  patches = [
+    # Fix usage of dsa keys
+    # https://github.com/paramiko/paramiko/pull/1606/
+    (fetchpatch {
+      url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
+      sha256 = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
+    })
+  ];
 
   propagatedBuildInputs = [
     bcrypt
@@ -37,6 +47,8 @@ buildPythonPackage rec {
 
   # with python 3.9.6+, the deprecation warnings will fail the test suite
   # see: https://github.com/pyinvoke/invoke/issues/829
+  # pytest-relaxed does not work with pytest 6
+  # see: https://github.com/bitprophet/pytest-relaxed/issues/12
   doCheck = false;
 
   disabledTestPaths = [
@@ -60,6 +72,6 @@ buildPythonPackage rec {
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

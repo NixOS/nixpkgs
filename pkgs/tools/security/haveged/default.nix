@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "haveged";
-  version = "1.9.15";
+  version = "1.9.17";
 
   src = fetchFromGitHub {
     owner = "jirka-h";
     repo = "haveged";
     rev = "v${version}";
-    sha256 = "sha256-bU+/lRx0RAqHheNQ9CWT/V0oZnZd0W9EHhhX3RRIZ/0=";
+    sha256 = "sha256-uVl+TZVMsf+9aRATQndYMK4l4JfOBvstd1O2nTHyMYU=";
   };
 
   strictDeps = true;
@@ -34,8 +34,10 @@ stdenv.mkDerivation rec {
       the barriers to using haveged for other tasks.
     '';
     homepage = "https://github.com/jirka-h/haveged";
-    license = licenses.gpl3;
+    changelog = "https://raw.githubusercontent.com/jirka-h/haveged/v${version}/ChangeLog";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
+    badPlatforms = platforms.darwin; # fails to build since v1.9.15
   };
 }

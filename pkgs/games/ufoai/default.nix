@@ -24,7 +24,13 @@ stdenv.mkDerivation rec {
     curl libjpeg libpng gettext cunit
   ];
 
-  NIX_CFLAGS_LINK = "-lgcc_s"; # to avoid occasional runtime error in finding libgcc_s.so.1
+  NIX_CFLAGS_LINK = [
+    # to avoid occasional runtime error in finding libgcc_s.so.1
+    "-lgcc_s"
+    # tests are underlinked against libm:
+    # ld: release-linux-x86_64/testall/client/sound/s_mix.c.o: undefined reference to symbol 'acos@@GLIBC_2.2.5'
+    "-lm"
+  ];
 
   meta = {
     homepage = "http://ufoai.org";

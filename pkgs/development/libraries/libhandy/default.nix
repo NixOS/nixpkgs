@@ -6,18 +6,16 @@
 , pkg-config
 , gobject-introspection
 , vala
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
+, gi-docgen
 , glib
 , gsettings-desktop-schemas
 , gtk3
 , enableGlade ? false
 , glade
 , xvfb-run
-, libxml2
 , gdk-pixbuf
 , librsvg
+, libxml2
 , hicolor-icon-theme
 , at-spi2-atk
 , at-spi2-core
@@ -28,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "1.5.0";
+  version = "1.6.2";
 
   outputs = [
     "out"
@@ -41,25 +39,23 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-RmueAmwfnrO2WWb1MNl3A6ghLar5EXSMFF6cuEPb1v4=";
+    sha256 = "sha256-f6iaqoeWa20PX0700+/a9lTisB6ix84r1wMB0fn0LKM=";
   };
 
   nativeBuildInputs = [
-    docbook_xml_dtd_43
-    docbook-xsl-nons
     gobject-introspection
-    gtk-doc
-    libxml2
+    gi-docgen
     meson
     ninja
     pkg-config
     vala
+  ] ++ lib.optionals enableGlade [
+    libxml2 # for xmllint
   ];
 
   buildInputs = [
     gdk-pixbuf
     gtk3
-    libxml2
   ] ++ lib.optionals enableGlade [
     glade
   ];
@@ -104,6 +100,11 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
 
     runHook postCheck
+  '';
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

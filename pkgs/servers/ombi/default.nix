@@ -10,14 +10,14 @@ let
     "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-BLtoT6UHsur+jFp4KBlE10/Z/V6RDy0k16H10IC98WQ=";
-    arm64-linux_hash = "sha256-s8EV/VqiUXWRTNxacx4sy6r+TIAqkqhESAYYa9s0uAQ=";
-    x64-osx_hash = "sha256-woXFYmX+499NTtWmmGBpZ12PxTUazJ8klA6IPQIDjLE=";
+    x64-linux_hash = "sha256-O/dfLZst7RFnqDZj8UX6ejL2EBjGnCBY3e8JB3peRgY=";
+    arm64-linux_hash = "sha256-DkCOK1A7L1gMqY/XPIJFFz7qvUvxA6aJa24Hrh3dT/U=";
+    x64-osx_hash = "sha256-4N0/FTVhxUooauhh+7u527aViSBILiCb+a4cI17QTAg=";
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "ombi";
-  version = "4.3.3";
+  version = "4.10.2";
 
   sourceRoot = ".";
 
@@ -26,7 +26,8 @@ in stdenv.mkDerivation rec {
     sha256 = hash;
   };
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ]
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   propagatedBuildInputs = [ stdenv.cc.cc zlib krb5 ];
@@ -37,7 +38,7 @@ in stdenv.mkDerivation rec {
 
     makeWrapper $out/share/${pname}-${version}/Ombi $out/bin/Ombi \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl icu ]} \
-      --run "cd $out/share/${pname}-${version}"
+      --chdir "$out/share/${pname}-${version}"
   '';
 
   passthru = {

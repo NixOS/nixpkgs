@@ -22,7 +22,6 @@
 , sqlite
 , zeitgeist
 , glib-networking
-, elementary-icon-theme
 , libcloudproviders
 , libgit2-glib
 , wrapGAppsHook
@@ -57,7 +56,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     elementary-dock
-    elementary-icon-theme
     glib
     granite
     gtk3

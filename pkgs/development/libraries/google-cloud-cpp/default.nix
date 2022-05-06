@@ -11,6 +11,7 @@
 , gtest
 , ninja
 , nlohmann_json
+, openssl
 , pkg-config
 , protobuf
   # default list of APIs: https://github.com/googleapis/google-cloud-cpp/blob/v1.32.1/CMakeLists.txt#L173
@@ -18,29 +19,29 @@
 , staticOnly ? stdenv.hostPlatform.isStatic
 }:
 let
-  googleapisRev = "ed739492993c4a99629b6430affdd6c0fb59d435";
+  googleapisRev = "d4f3468ef85278428005ed555b3a85db91551ee6";
   googleapis = fetchFromGitHub {
     owner = "googleapis";
     repo = "googleapis";
     rev = googleapisRev;
-    hash = "sha256:1xrnh77vb8hxmf1ywqsifzd39kylhbdyah0b0b9bm7nw0mnahssl";
+    hash = "sha256-sIQVFQhE3Ae6ia45apzdgtwzglMM4hFZ8efNAhMO5ZY=";
   };
   excludedTests = builtins.fromTOML (builtins.readFile ./skipped_tests.toml);
 in
 stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
-  version = "1.32.1";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     rev = "v${version}";
-    sha256 = "0g720sni70nlncv4spm4rlfykdkpjnv81axfz2jd1arpdajm0mg9";
+    sha256 = "sha256-kobOkohWIDTQaaihhoh/25tZUNv+CjKFwj2xQqO52bA=";
   };
 
   postPatch = ''
     substituteInPlace external/googleapis/CMakeLists.txt \
-      --replace "https://github.com/googleapis/googleapis/archive/${googleapisRev}.tar.gz" "file://${googleapis}"
+      --replace "https://github.com/googleapis/googleapis/archive/\''${GOOGLE_CLOUD_CPP_GOOGLEAPIS_COMMIT_SHA}.tar.gz" "file://${googleapis}"
   '';
 
   nativeBuildInputs = [
@@ -48,7 +49,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
   ] ++ lib.optionals (!doInstallCheck) [
-    # enable these dependencies when doInstallCheck failse because we're
+    # enable these dependencies when doInstallCheck is false because we're
     # unconditionally building tests and benchmarks
     #
     # when doInstallCheck is true, these deps are added to installCheckInputs
@@ -63,6 +64,7 @@ stdenv.mkDerivation rec {
     curl
     grpc
     nlohmann_json
+    openssl
     protobuf
   ];
 

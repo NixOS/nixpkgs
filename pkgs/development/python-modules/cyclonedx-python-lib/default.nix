@@ -6,27 +6,28 @@
 , lxml
 , packageurl-python
 , poetry-core
-, pytestCheckHook
+, python
 , pythonOlder
 , requirements-parser
 , setuptools
 , toml
 , types-setuptools
 , types-toml
+, xmldiff
 }:
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "1.3.0";
+  version = "2.3.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-/1kWvhTUS0JT0RwodiivJSUiWIDwQyXxdjF/KUlCNds=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-eZy+m6AkSlZM/i64FyFL+ZgeW86MOSM6sDYPT4ckaHE=";
   };
 
   nativeBuildInputs = [
@@ -46,12 +47,20 @@ buildPythonPackage rec {
   checkInputs = [
     jsonschema
     lxml
-    pytestCheckHook
+    xmldiff
   ];
 
   pythonImportsCheck = [
     "cyclonedx"
   ];
+
+ checkPhase = ''
+   runHook preCheck
+   # Tests require network access
+   rm tests/test_output_json.py
+   ${python.interpreter} -m unittest discover -s tests -v
+   runHook postCheck
+ '';
 
   meta = with lib; {
     description = "Python library for generating CycloneDX SBOMs";

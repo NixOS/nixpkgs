@@ -1,9 +1,11 @@
-{ lib, fetchFromGitHub, rustPlatform, clang, rustfmt, writeTextFile
+{ lib, fetchFromGitHub, rustPlatform, clang, rustfmt
 , runtimeShell
 , bash
 }:
-
-rustPlatform.buildRustPackage rec {
+let
+  # bindgen hardcodes rustfmt outputs that use nightly features
+  rustfmt-nightly = rustfmt.override { asNightly = true; };
+in rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen-unwrapped";
   version = "0.59.2";
 
@@ -25,23 +27,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doCheck = true;
-  checkInputs =
-    let fakeRustup = writeTextFile {
-      name = "fake-rustup";
-      executable = true;
-      destination = "/bin/rustup";
-      text = ''
-        #!${runtimeShell}
-        shift
-        shift
-        exec "$@"
-      '';
-    };
-  in [
-    rustfmt
-    fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`
-    clang
-  ];
+  checkInputs = [ clang ];
+
+  RUSTFMT = "${rustfmt-nightly}/bin/rustfmt";
+
   preCheck = ''
     # for the ci folder, notably
     patchShebangs .
@@ -57,7 +46,8 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/rust-lang/rust-bindgen";
     license = with licenses; [ bsd3 ];
-    platforms = platforms.unix;
     maintainers = with maintainers; [ johntitor ralith ];
+    mainProgram = "bindgen";
+    platforms = platforms.unix;
   };
 }

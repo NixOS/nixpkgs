@@ -15,7 +15,7 @@ with lib; mkCoqDerivation {
   ] null;
 
   propagatedBuildInputs =
-    [ mathcomp.ssreflect mathcomp.algebra ];
+    [ mathcomp.ssreflect mathcomp.algebra mathcomp.fingroup ];
 
   meta = {
     description = "Implementation of books from Bourbaki's Elements of Mathematics in Coq";

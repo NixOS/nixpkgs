@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, pythonAtLeast
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -11,15 +12,15 @@
 
 buildPythonPackage rec {
   pname = "hyperion-py";
-  version = "0.7.4";
-  disabled = pythonOlder "3.8";
+  version = "0.7.5";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.10";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dermotduffy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00x12ppmvlxs3qbdxq06wnzakvwm2m39qhmpp27qfpl137b0qqyj";
+    sha256 = "sha256-arcnpCQsRuiWCrAz/t4TCjTe8DRDtRuzYp8k7nnjGDk=";
   };
 
   nativeBuildInputs = [

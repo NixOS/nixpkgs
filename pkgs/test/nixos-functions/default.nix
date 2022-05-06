@@ -24,16 +24,18 @@ in lib.optionalAttrs stdenv.hostPlatform.isLinux (
       system.nixos = dummyVersioning;
       boot.loader.grub.enable = false;
       fileSystems."/".device = "/dev/null";
+      system.stateVersion = lib.trivial.release;
     }).toplevel;
 
-    nixosTest-test = pkgs.nixosTest ({ lib, pkgs, ... }: {
+    nixosTest-test = pkgs.nixosTest ({ lib, pkgs, figlet, ... }: {
       name = "nixosTest-test";
-      machine = { pkgs, ... }: {
+      nodes.machine = { pkgs, ... }: {
         system.nixos = dummyVersioning;
-        environment.systemPackages = [ pkgs.hello ];
+        environment.systemPackages = [ pkgs.hello figlet ];
+        system.stateVersion = lib.trivial.release;
       };
       testScript = ''
-        machine.succeed("hello")
+        machine.succeed("hello | figlet >/dev/console")
       '';
     });
 

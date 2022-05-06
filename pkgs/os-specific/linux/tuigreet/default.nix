@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-H5xqk7Yd3M8sFGHlmhAS0fhh3eM4dkvkNQGVxRSXUJs=";
 
   meta = with lib; {
-    description = "Graphical console greter for greetd";
+    description = "Graphical console greeter for greetd";
     homepage = "https://github.com/apognu/tuigreet";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ivar ];

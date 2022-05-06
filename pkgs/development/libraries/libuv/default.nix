@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.43.0";
+  version = "1.44.1";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AsXJb2AGNx+SARPmY8uRFRLfX5vqTPNjwL8njSw/e7o=";
+    sha256 = "sha256-12uveSEavRxQW4xVrB4Rkkj+eHZ71Qy8dRG+95ldz50=";
   };
 
   postPatch = let
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
       "threadpool_multiple_event_loops" # times out on slow machines
       "get_passwd" # passed on NixOS but failed on other Linuxes
       "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" # times out sometimes
+      "fs_fstat" # https://github.com/libuv/libuv/issues/2235#issuecomment-1012086927
     ] ++ lib.optionals stdenv.isDarwin [
         # Sometimes: timeout (no output), failed uv_listen. Someone
         # should report these failures to libuv team. There tests should

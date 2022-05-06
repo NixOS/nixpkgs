@@ -1,7 +1,6 @@
 { lib
 , multiStdenv
 , fetchFromGitHub
-, fetchpatch
 , substituteAll
 , pkgsi686Linux
 , libnotify
@@ -49,14 +48,14 @@ let
   };
 in multiStdenv.mkDerivation rec {
   pname = "yabridge";
-  version = "3.8.0";
+  version = "3.8.1";
 
   # NOTE: Also update yabridgectl's cargoHash when this is updated
   src = fetchFromGitHub {
     owner = "robbert-vdh";
     repo = pname;
     rev = version;
-    sha256 = "sha256-XacJjHxsp60/l36pFPGonUyOsyFF2lmqplAaisHXZDY=";
+    sha256 = "sha256-5Mi/aIjOKbn7guTj+AKGQRv+k7w4gzfdA9Mw4ocUlOE=";
   };
 
   # Unpack subproject sources
@@ -78,14 +77,6 @@ in multiStdenv.mkDerivation rec {
       libxcb32 = pkgsi686Linux.xorg.libxcb;
       inherit libnotify wine;
     })
-    # Remove with next yabridge update
-   (fetchpatch {
-      name = "fix-for-wine-7.1.patch";
-      url = "https://github.com/robbert-vdh/yabridge/commit/de470d345ab206b08f6d4a147b6af1d285a4211f.patch";
-      sha256 = "sha256-xJx1zvxD+DIjbkm7Ovoy4RaAvjx936/j/7AYUPh/kOo=";
-      includes = [ "src/wine-host/xdnd-proxy.cpp" ];
-    })
-
   ];
 
   postPatch = ''

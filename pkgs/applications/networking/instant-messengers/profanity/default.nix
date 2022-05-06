@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoconf-archive
 , autoreconfHook
 , cmocka
@@ -10,7 +9,7 @@
 , expect
 , glib
 , glibcLocales
-, libmesode
+, libstrophe
 , libmicrohttpd
 , libotr
 , libuuid
@@ -36,34 +35,17 @@ assert omemoSupport        -> libsignal-protocol-c != null && libgcrypt != null;
 
 stdenv.mkDerivation rec {
   pname = "profanity";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
-    hash = "sha256-8WGHOy0fSW8o7vMCYZqqpvDsn81JZefM6wGfjQ5iKbU=";
+    hash = "sha256-kmixWp9Q2tMVp+tk5kbTdBfgRNghKk3+48L582hqlm8=";
   };
 
   patches = [
     ./patches/packages-osx.patch
-
-    # pullupstream fixes for ncurses-6.3
-    (fetchpatch {
-      name = "ncurses-6.3-p1.patch";
-      url = "https://github.com/profanity-im/profanity/commit/e5b6258c997d4faf36e2ffb8a47b386c5629b4eb.patch";
-      sha256 = "sha256-4rwpvsgfIQ60GcLS0O7Hyn7ZidREjYT+dVND54z0zrw=";
-    })
-    (fetchpatch {
-      name = "ncurses-6.3-p2.patch";
-      url = "https://github.com/profanity-im/profanity/commit/fd9ccec8dc604902bbb1d444dba4223ccee0a092.patch";
-      sha256 = "sha256-4gZaXoDNulBIR+e6y/9bJKXVactCHWS8H8lPJaJwVwE=";
-    })
-    (fetchpatch {
-      name = "ncurses-6.3-p3.patch";
-      url = "https://github.com/profanity-im/profanity/commit/242696f09a49c8446ba6aef8bdad65fb58a77715.patch";
-      sha256 = "sha256-BOYHkae9aIA7HaVM23Yu25TTK9e3SuV+u0FEi7Sn62I=";
-    })
   ];
 
   enableParallelBuilding = true;
@@ -81,7 +63,7 @@ stdenv.mkDerivation rec {
     expat
     expect
     glib
-    libmesode
+    libstrophe
     libmicrohttpd
     libotr
     libuuid

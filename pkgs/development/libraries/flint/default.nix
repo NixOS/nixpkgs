@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     "--with-blas=${openblas}"
   ];
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   meta = with lib; {

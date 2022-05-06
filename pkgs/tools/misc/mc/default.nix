@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mc";
-  version = "4.8.27";
+  version = "4.8.28";
 
   src = fetchurl {
     url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "sha256-Mb5ZIl/6mSCBbpqLO+CrIloW0Z5Pr0aJDyW9/6AqT/Q=";
+    sha256 = "sha256-6ZTZvppxcumsSkrWIQeSH2qjEuZosFbf5bi867r1OAM=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook unzip ]
@@ -46,14 +46,13 @@ stdenv.mkDerivation rec {
     libX11
     libssh2
     openssl
-    perl
     slang
     zip
   ] ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--enable-vfs-smb" ];
+  configureFlags = [ "PERL=${perl}/bin/perl" ];
 
   postPatch = ''
     substituteInPlace src/filemanager/ext.c \
@@ -93,6 +92,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux ++ darwin;
-    repositories.git = "https://github.com/MidnightCommander/mc.git";
   };
 }

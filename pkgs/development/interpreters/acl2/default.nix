@@ -36,8 +36,8 @@ in stdenv.mkDerivation rec {
   patches = [(substituteAll {
     src = ./0001-Fix-some-paths-for-Nix-build.patch;
     libipasir = "${libipasir}/lib/${libipasir.libname}";
-    libssl = "${openssl.out}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
-    libcrypto = "${openssl.out}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";
+    libssl = "${lib.getLib openssl}/lib/libssl${stdenv.hostPlatform.extensions.sharedLibrary}";
+    libcrypto = "${lib.getLib openssl}/lib/libcrypto${stdenv.hostPlatform.extensions.sharedLibrary}";
   })];
 
   buildInputs = [
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
     # To build community books, we need Perl and a couple of utilities:
     which perl hostname makeWrapper
     # Some of the books require one or more of these external tools:
-    openssl.out glucose minisat abc-verifier libipasir
+    glucose minisat abc-verifier libipasir
     z3 (python2.withPackages (ps: [ ps.z3 ]))
   ];
 

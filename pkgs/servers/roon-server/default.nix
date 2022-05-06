@@ -9,13 +9,14 @@
 , krb5
 , lib
 , libtasn1
+, lttng-ust_2_12
 , makeWrapper
-, stdenv
 , openssl
+, stdenv
 }:
 stdenv.mkDerivation rec {
   pname = "roon-server";
-  version = "1.8-898";
+  version = "1.8-935";
 
   src =
     let
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
     in
     fetchurl {
       url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-      sha256 = "sha256-khp2E5BYb7bGEW6xfCKEqYDqAdElOFLbAkaHjILfyqo=";
+      hash = "sha256-6I612imOCqxVlNu6zCXWS/Yy8bnot+0723t3Se4DjLg=";
     };
 
   dontConfigure = true;
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     freetype
     krb5
     libtasn1
+    lttng-ust_2_12
     stdenv.cc.cc.lib
   ];
 
@@ -61,7 +63,7 @@ stdenv.mkDerivation rec {
             --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ alsa-lib icu66 ffmpeg openssl ]}" \
             --prefix PATH : "$dotnetDir" \
             --prefix PATH : "${lib.makeBinPath [ alsa-utils cifs-utils ffmpeg ]}" \
-            --run "cd $binDir" \
+            --chdir "$binDir" \
             --set DOTNET_ROOT "$dotnetDir"
         )
       '';
@@ -80,11 +82,7 @@ stdenv.mkDerivation rec {
       ${wrapBin "$out/Server/RoonServer"}
 
       mkdir -p $out/bin
-      makeWrapper "$out/Server/RoonServer" "$out/bin/RoonServer" --run "cd $out"
-
-      # This is unused and depends on an ancient version of lttng-ust, so we
-      # just patch it out
-      patchelf --remove-needed liblttng-ust.so.0 $out/RoonDotnet/shared/Microsoft.NETCore.App/5.0.0/libcoreclrtraceptprovider.so
+      makeWrapper "$out/Server/RoonServer" "$out/bin/RoonServer" --chdir "$out"
 
       runHook postInstall
     '';

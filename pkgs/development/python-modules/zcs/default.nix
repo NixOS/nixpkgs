@@ -15,6 +15,10 @@ buildPythonPackage rec {
     sha256 = "sha256-ZoQgAaJy3kKHLljyKA0Oo/D1kefE8X9FlsGDSNt1nPw=";
   };
 
+  patches = [
+    ./fix-test-yaml.patch
+  ];
+
   propagatedBuildInputs = [ yacs ];
 
   pythonImportsCheck = [ "zcs" ];

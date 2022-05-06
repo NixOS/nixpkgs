@@ -10,6 +10,7 @@
 , openssl
 , swig
 , meson-tools
+, which
 , armTrustedFirmwareAllwinner
 , armTrustedFirmwareAllwinnerH616
 , armTrustedFirmwareRK3328
@@ -19,10 +20,10 @@
 }:
 
 let
-  defaultVersion = "2021.10";
+  defaultVersion = "2022.01";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "1m0bvwv8r62s4wk4w3cmvs888dhv9gnfa98dczr4drk2jbhj7ryd";
+    hash = "sha256-gbRUMifbIowD+KG/XdvIE7C7j2VVzkYGTvchpvxoBBM=";
   };
   buildUBoot = {
     version ? null
@@ -66,10 +67,13 @@ let
         p.setuptools # for pkg_resources
       ]))
       swig
+      which # for scripts/dtc-version.sh
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
     hardeningDisable = [ "all" ];
+
+    enableParallelBuilding = true;
 
     makeFlags = [
       "DTC=dtc"
@@ -102,16 +106,13 @@ let
       runHook postInstall
     '';
 
-    # make[2]: *** No rule to make target 'lib/efi_loader/helloworld.efi', needed by '__build'.  Stop.
-    enableParallelBuilding = false;
-
     dontStrip = true;
 
     meta = with lib; {
       homepage = "http://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
+      maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" ]);
 in {
@@ -135,6 +136,12 @@ in {
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootA20OlinuxinoLime2EMMC = buildUBoot {
+    defconfig = "A20-OLinuXino-Lime2-eMMC_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
@@ -367,14 +374,6 @@ in {
       CONFIG_USB_EHCI_GENERIC=y
       CONFIG_USB_XHCI_HCD=y
     '';
-    extraPatches = [
-      # https://patchwork.ozlabs.org/project/uboot/list/?series=268007&state=%2A&archive=both
-      # Remove when upgrading to 2022.01
-      (fetchpatch {
-        url = "https://patchwork.ozlabs.org/series/268007/mbox/";
-        sha256 = "sha256-xn4Q959dgoB63zlmJepI41AXAf1kCycIGcmu4IIVjmE=";
-      })
-    ];
     extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
     filesToInstall = [ "u-boot.rom" ];
   };

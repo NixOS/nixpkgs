@@ -2,7 +2,7 @@
 , freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver, libxcb, nss, nspr
 , alsa-lib, cups, expat, udev, libpulseaudio, at-spi2-atk, at-spi2-core, libxshmfence
-, libdrm, libxkbcommon, mesa }:
+, libdrm, libxkbcommon, mesa, nixosTests}:
 
 let
   libPath = lib.makeLibraryPath [
@@ -15,11 +15,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hyper";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://github.com/vercel/hyper/releases/download/v${version}/hyper_${version}_amd64.deb";
-    sha256 = "1ryw3315x0lb60j8nzz78h7zd36r2l1j39hnlfav0p7nq8dhqbpm";
+    sha256 = "sha256-nwaJ+lnuHv+Qb/QkKF/9jG8cvq1Z+urz8CPwxSsMmuA=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/hyper.desktop \
       --replace "/opt/Hyper/hyper" "hyper"
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.hyper;
 
   dontPatchELF = true;
   meta = with lib; {

@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pango";
-  version = "1.50.3";
+  version = "1.50.6";
 
   outputs = [ "bin" "out" "dev" ]
     ++ lib.optionals withDocs [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "St0F7fUcH7N1oczedJiRQSDiPLKA3XOVsa60QfGDikw=";
+    sha256 = "qZi882iBw6wgSV1AvOswT06qkXW9KWfIVlZDTL2v6Go=";
   };
 
   strictDeps = !withIntrospection;
@@ -84,12 +84,9 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # test-font: FAIL
 
-  postInstall = lib.optionalString withDocs ''
-    # So that devhelp can find this.
-    # https://gitlab.gnome.org/GNOME/pango/merge_requests/293/diffs#note_1058448
-    mkdir -p "$devdoc/share/devhelp"
-    mv "$out/share/doc/pango/reference" "$devdoc/share/devhelp/books"
-    rmdir -p --ignore-fail-on-non-empty "$out/share/doc/pango"
+  postFixup = lib.optionalString withDocs ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {

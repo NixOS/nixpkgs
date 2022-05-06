@@ -2,16 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , bitlist
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "fountains";
-  version = "1.2.0";
+  version = "1.3.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6de6bc117c376f40a26e111111d638159a2e8a25cfe32f946db0d779decbb70a";
+    sha256 = "sha256-c6nw22UtAREYZp0XCEZE6p7GpRvSLukq5y0c9KvVf9w=";
   };
 
   propagatedBuildInputs = [

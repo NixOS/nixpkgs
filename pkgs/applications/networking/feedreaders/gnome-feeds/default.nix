@@ -11,6 +11,7 @@
 , wrapGAppsHook
 
 , glib
+, glib-networking
 , gtk3
 , libhandy
 , listparser ? callPackage ./listparser.nix { }
@@ -44,6 +45,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
+    glib-networking
     gtk3
     libhandy
     webkitgtk

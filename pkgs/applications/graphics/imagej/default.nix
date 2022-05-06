@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
       name = "ImageJ";
       desktopName = "ImageJ";
       icon = "imagej";
-      categories = "Science;Utility;Graphics;";
+      categories = [ "Science" "Utility" "Graphics" ];
       exec = "imagej";
     })
   ];

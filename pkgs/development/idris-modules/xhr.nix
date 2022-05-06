@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "xhr";
+  pname = "xhr";
   version = "2017-04-22";
 
   idrisDeps = [ idrisscript ];

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "amberelectric";
-  version = "1.0.3";
+  version = "1.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hsbk2v7j1nsa083j28jb7b3rv76flan0g9wav97qccp1gjds5b0";
+    sha256 = "sha256-5SWJnTxRm6mzP0RxrgA+jnV+Gp23WjqQA57wbT2V9Dk=";
   };
 
   propagatedBuildInputs = [

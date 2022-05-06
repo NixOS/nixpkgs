@@ -1,6 +1,8 @@
-{ buildPythonPackage
-, lib
+{ lib
+, buildPythonPackage
 , fetchPypi
+, psutil
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -8,15 +10,25 @@ buildPythonPackage rec {
   version = "1.5.0";
   format = "pyproject";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e13b148008adeb2793cf8b55bcd20fdcec4f763f2d3bf3c45f5e5e5d1df7d228";
+    hash = "sha256-4TsUgAit6yeTz4tVvNIP3OxPdj8tO/PEX15eXR330ig=";
   };
 
-  meta = {
-    description = "A library to choose unique available network ports.";
+  propagatedBuildInputs = [
+    psutil
+  ];
+
+  pythonImportsCheck = [
+    "portpicker"
+  ];
+
+  meta = with lib; {
+    description = "Library to choose unique available network ports";
     homepage = "https://github.com/google/python_portpicker";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ danharaj ];
+    license = licenses.asl20;
+    maintainers = with maintainers; [ danharaj ];
   };
 }

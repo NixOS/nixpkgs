@@ -13,7 +13,7 @@
 , librevenge, libe-book, libmwaw, glm, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
 , gnome, glib, ncurses, libepoxy, gpgme
-, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
+, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "uk" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
 , ki18n ? null, kconfig ? null, kcoreaddons ? null, kio ? null, kwindowsystem ? null
@@ -25,7 +25,7 @@ assert builtins.elem variant [ "fresh" "still" ];
 
 let
   jre' = jre_minimal.override {
-    modules = [ "java.base" "java.desktop" ];
+    modules = [ "java.base" "java.desktop" "java.logging" ];
   };
 
   importVariant = f: import (./. + "/src-${variant}/${f}");
@@ -82,7 +82,18 @@ in (mkDrv rec {
     tar -xf ${srcs.translations}
   '';
 
-  patches = [ ./skip-failed-test-with-icu70.patch ];
+  patches = [
+    ./skip-failed-test-with-icu70.patch
+
+    # Fix build with poppler 22.03
+    (fetchurl {
+      url = "https://github.com/archlinux/svntogit-packages/raw/f82958b9538f86e41b51f1ba7134968d2f3788d1/trunk/poppler-22.03.0.patch";
+      sha256 = "5h4qJmx6Q3Q3dHUlSi8JXBziN2mAswGVWk5aDTLTwls=";
+    })
+
+    # Fix build with poppler 22.04
+    ./poppler-22-04-0.patch
+  ];
 
   ### QT/KDE
   #
@@ -110,6 +121,7 @@ in (mkDrv rec {
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
   '' + lib.optionalString kdeIntegration ''
       substituteInPlace configure.ac \
+        --replace kcoreaddons_version.h KCoreAddons/kcoreaddons_version.h \
         --replace '$QT5INC'             ${qtbase.dev}/include \
         --replace '$QT5LIB'             ${qtbase.out}/lib \
         --replace '-I$qt5_incdir '      '-I${qtx11extras.dev}/include '\

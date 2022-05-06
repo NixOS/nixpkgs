@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.gnome.org/GNOME/gnome-user-share/commit/8772980d4732c15505b15dccff2ca3c97e96d49d.patch";
       sha256 = "03clzhrx72pq1cbmg2y24hvw4i1xsvrg9ip113fi5bc3w4gcji7p";
     })
+    # fix compilation with meson >=0.61
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-user-share/-/commit/c31b0a8f33b95c0077cd5ee2102a71a49bee8abe.patch";
+      hash = "sha256-kH+cPBmSErWxsw+IyyjWgENi4I3ZcKjSA9+em8u4DYs=";
+    })
   ];
 
   postPatch = ''

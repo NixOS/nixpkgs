@@ -2,19 +2,19 @@
 
 buildGoModule rec {
   pname = "ginkgo";
-  version = "2.1.2";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "onsi";
     repo = "ginkgo";
     rev = "v${version}";
-    sha256 = "sha256-/VJ1r1t/V2YkZGJUrJR3S6NPVP6EADIH9E6jmki8QRI=";
+    sha256 = "sha256-5MVOJingEJojJA79nHJDWwso3eunjox/d+JzX11X46Q=";
   };
-  vendorSha256 = "sha256-kMQ60HdsorZU27qoOY52DpwFwP+Br2bp8mRx+ZwnQlI=";
+  vendorSha256 = "sha256-RFI87HCw+/4J8YKLZ7Kt7D2PNmwr1qXEiHCCLlBHtPA=";
 
   # integration tests expect more file changes
   # types tests are missing CodeLocation
-  excludedPackages = "\\(integration\\|types\\)";
+  excludedPackages = [ "integration" "types" ];
 
   meta = with lib; {
     homepage = "https://onsi.github.io/ginkgo/";

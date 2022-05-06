@@ -26,16 +26,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "wl-mirror";
-  version = "0.8.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
     rev = "v${version}";
-    hash = "sha256-P5rvZPpIStlOSGj3PaiXAMPWqgWpkC+4IrixEMwoGJU=";
+    hash = "sha256-D5uUKaepcSW9v2x6uBeLGXAyuLorlt4Lb6lZD/prfp8=";
   };
 
-  patchPhase = ''
+  postPatch = ''
+    echo 'v${version}' > version.txt
     substituteInPlace CMakeLists.txt \
       --replace 'WL_PROTOCOL_DIR "/usr' 'WL_PROTOCOL_DIR "${wayland-protocols}' \
       --replace 'WLR_PROTOCOL_DIR "/usr' 'WLR_PROTOCOL_DIR "${wlr-protocols}'

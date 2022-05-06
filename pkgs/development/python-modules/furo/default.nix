@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "furo";
-  version = "2022.1.2";
+  version = "2022.4.7";
   format = "wheel";
   disable = pythonOlder "3.6";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    sha256 = "sha256-lYAWv+E4fB6N31udcWlracTqpc2K/JSSq/sAirotMAw=";
+    sha256 = "sha256-fz49L7l3SDWQ+Oyyws1RG9gmYbecGO+yTelVi8nN8tc=";
   };
 
   propagatedBuildInputs = [

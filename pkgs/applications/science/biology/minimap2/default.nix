@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
+  makeFlags = lib.optionals stdenv.isAarch64 [ "arm_neon=1" "aarch64=1" ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp minimap2 $out/bin
@@ -25,7 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://lh3.github.io/minimap2";
     license = licenses.mit;
     platforms = platforms.all;
-    badPlatforms = platforms.aarch64;
     maintainers = [ maintainers.arcadio ];
   };
 }

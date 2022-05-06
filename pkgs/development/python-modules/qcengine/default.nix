@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "qcengine";
-  version = "0.22.0";
+  version = "0.23.0";
 
   checkInputs = [ pytestCheckHook ];
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "685a08247b561ed1c7a7b42e68293f90b412e83556626304a3f826a15be51308";
+    sha256 = "sha256-gDn0Nu6ALTr3KyZnYDSA6RE3S5JQj562FP2RI9U3Gxs=";
   };
 
   doCheck = true;

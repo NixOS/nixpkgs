@@ -255,20 +255,22 @@ let
             else defaultListen;
 
         listenString = { addr, port, ssl, extraParameters ? [], ... }:
-          "listen ${addr}:${toString port} "
-          + optionalString ssl "ssl "
-          + optionalString (ssl && vhost.http2) "http2 "
-          + optionalString vhost.default "default_server "
-          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
-          + ";"
-          + (if ssl && vhost.http3 then ''
+          (if ssl && vhost.http3 then "
           # UDP listener for **QUIC+HTTP/3
-          listen ${addr}:${toString port} http3 reuseport;
-          # Advertise that HTTP/3 is available
-          add_header Alt-Svc 'h3=":443"';
-          # Sent when QUIC was used
-          add_header QUIC-Status $quic;
-          '' else "");
+          listen ${addr}:${toString port} http3 "
+          + optionalString vhost.default "default_server "
+          + optionalString vhost.reuseport "reuseport "
+          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
+          + ";" else "")
+          + "
+
+            listen ${addr}:${toString port} "
+          + optionalString (ssl && vhost.http2) "http2 "
+          + optionalString ssl "ssl "
+          + optionalString vhost.default "default_server "
+          + optionalString vhost.reuseport "reuseport "
+          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
+          + ";";
 
         redirectListen = filter (x: !x.ssl) defaultListen;
 
@@ -319,6 +321,11 @@ let
           ''}
           ${optionalString (hasSSL && vhost.kTLS) ''
             ssl_conf_command Options KTLS;
+          ''}
+
+          ${optionalString (hasSSL && vhost.http3) ''
+            # Advertise that HTTP/3 is available
+            add_header Alt-Svc 'h3=":443"; ma=86400' always;
           ''}
 
           ${mkBasicAuth vhostName vhost}
@@ -924,7 +931,8 @@ in
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" ] ++ optionals (cfg.package != pkgs.tengine) [ "~@ipc" ];
+        SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" ]
+          ++ optionals ((cfg.package != pkgs.tengine) && (!lib.any (mod: (mod.disableIPC or false)) cfg.package.modules)) [ "~@ipc" ];
       };
     };
 
@@ -988,5 +996,14 @@ in
       nginx.gid = config.ids.gids.nginx;
     };
 
+    services.logrotate.settings.nginx = mapAttrs (_: mkDefault) {
+      files = "/var/log/nginx/*.log";
+      frequency = "weekly";
+      su = "${cfg.user} ${cfg.group}";
+      rotate = 26;
+      compress = true;
+      delaycompress = true;
+      postrotate = "[ ! -f /var/run/nginx/nginx.pid ] || kill -USR1 `cat /var/run/nginx/nginx.pid`";
+    };
   };
 }

@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "renault-api";
-  version = "0.1.8";
+  version = "0.1.11";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "hacf-fr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-gGr9yzcEgcte2uYhHzgmqT80JRJyRia31bK/v+42teU=";
+    sha256 = "sha256-71UFVXfww3wgSO2qoRCuV80+33B91Bjl2+nuuCbQRLg=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "renault_api" ];
+  pythonImportsCheck = [
+    "renault_api"
+  ];
 
   meta = with lib; {
     description = "Python library to interact with the Renault API";

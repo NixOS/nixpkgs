@@ -63,10 +63,10 @@ let
           kalbasit
           marsam
           maxeaubrey
+          techknowlogick
           timstott
-          zimbatm
           zowoq
-        ];
+        ] ++ teams.numtide.members;
       };
     } // attrs');
 
@@ -84,7 +84,7 @@ let
           passthru = {
             withPlugins = newplugins:
               withPlugins (x: newplugins x ++ actualPlugins);
-            full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p));
+            full = withPlugins (p: lib.filter lib.isDerivation (lib.attrValues p.actualProviders));
 
             # Expose wrappers around the override* functions of the terraform
             # derivation.
@@ -191,9 +191,9 @@ rec {
   };
 
   terraform_1 = mkTerraform {
-    version = "1.1.5";
-    sha256 = "sha256-zIerP8v6ovIx+xwLsSmMFH41l140W9IwQMvomb/pk8E=";
-    vendorSha256 = "sha256-4ctuErxZIaESfIkS7BXI+eQcdatXE/1p20P9f890twM=";
+    version = "1.1.9";
+    sha256 = "sha256-6dyP3Y5cK+/qLoC2QPZW3QNgqOeVXegC06Pa7pSv1iE=";
+    vendorSha256 = "sha256-YI/KeoOIxgCAS3Q6SXaW8my0PyFD+pyksshQEAknsz4=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = { inherit plugins; };
   };

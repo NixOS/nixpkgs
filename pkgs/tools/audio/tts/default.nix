@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, espeak-ng
 }:
 
 # USAGE:
@@ -30,14 +31,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.5.0";
+  version = "0.6.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-9fNYNhHS9wqrk2bZnrkkGU1OaDu/16RA8fz+Zj9xsyQ=";
+    sha256 = "sha256-YzMR/Tl1UvjdSqV/h4lYR6DuarEqEIM7RReqYznFU4Q=";
   };
 
   postPatch = let
@@ -48,7 +49,7 @@ python.pkgs.buildPythonApplication rec {
       "numba"
       "numpy"
       "umap-learn"
-      "torch"
+      "unidic-lite"
     ];
   in ''
     sed -r -i \
@@ -56,6 +57,7 @@ python.pkgs.buildPythonApplication rec {
         ''-e 's/${package}.*[<>=]+.*/${package}/g' \''
       ) relaxedConstraints)}
     requirements.txt
+    sed -i '/tensorboardX/d' requirements.txt
   '';
 
   nativeBuildInputs = with python.pkgs; [
@@ -65,6 +67,7 @@ python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     anyascii
     coqpit
+    coqui-trainer
     flask
     fsspec
     gdown
@@ -82,7 +85,6 @@ python.pkgs.buildPythonApplication rec {
     pyworld
     scipy
     soundfile
-    tensorboardx
     tensorflow
     torchaudio-bin
     tqdm
@@ -92,27 +94,17 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    cp -r TTS/server/templates/ $out/${python3.sitePackages}/TTS/server
+    cp -r TTS/server/templates/ $out/${python.sitePackages}/TTS/server
     # cython modules are not installed for some reasons
     (
       cd TTS/tts/utils/monotonic_align
-      ${python3.interpreter} setup.py install --prefix=$out
+      ${python.interpreter} setup.py install --prefix=$out
     )
   '';
 
-  checkInputs = with python3.pkgs; [
-    pytest-sugar
+  checkInputs = with python.pkgs; [
+    espeak-ng
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # RuntimeError: fft: ATen not compiled with MKL support
-    "test_torch_stft"
-    "test_stft_loss"
-    "test_multiscale_stft_loss"
-    # Requires network acccess to download models
-    "test_synthesize"
-    "test_run_all_models"
   ];
 
   preCheck = ''
@@ -125,22 +117,49 @@ python.pkgs.buildPythonApplication rec {
 
     for file in $(grep -rl 'python TTS/bin' tests); do
       substituteInPlace "$file" \
-        --replace "python TTS/bin" "${python3.interpreter} $out/lib/${python3.libPrefix}/site-packages/TTS/bin"
+        --replace "python TTS/bin" "${python.interpreter} $out/lib/${python.libPrefix}/site-packages/TTS/bin"
     done
   '';
 
+  disabledTests = [
+    # Requires network acccess to download models
+    "test_synthesize"
+    "test_run_all_models"
+    # Mismatch between phonemes
+    "test_text_to_ids_phonemes_with_eos_bos_and_blank"
+    # Takes too long
+    "test_parametrized_wavernn_dataset"
+  ];
+
   disabledTestPaths = [
-    # requires tensorflow
-    "tests/vocoder_tests/test_vocoder_tf_pqmf.py"
-    "tests/vocoder_tests/test_vocoder_tf_melgan_generator.py"
-    "tests/tts_tests/test_tacotron2_tf_model.py"
-    # RuntimeError: fft: ATen not compiled with MKL support
+    # phonemes mismatch between espeak-ng and gruuts phonemizer
+    "tests/text_tests/test_phonemizer.py"
+    # no training, it takes too long
+    "tests/aux_tests/test_speaker_encoder_train.py"
+    "tests/tts_tests/test_align_tts_train.py"
+    "tests/tts_tests/test_fast_pitch_speaker_emb_train.py"
+    "tests/tts_tests/test_fast_pitch_train.py"
+    "tests/tts_tests/test_glow_tts_d-vectors_train.py"
+    "tests/tts_tests/test_glow_tts_speaker_emb_train.py"
+    "tests/tts_tests/test_glow_tts_train.py"
+    "tests/tts_tests/test_speedy_speech_train.py"
+    "tests/tts_tests/test_tacotron2_d-vectors_train.py"
+    "tests/tts_tests/test_tacotron2_speaker_emb_train.py"
+    "tests/tts_tests/test_tacotron2_train.py"
+    "tests/tts_tests/test_tacotron2_train_fsspec_path.py"
+    "tests/tts_tests/test_tacotron_train.py"
+    "tests/tts_tests/test_vits_d-vectors_train.py"
+    "tests/tts_tests/test_vits_multilingual_speaker_emb_train.py"
+    "tests/tts_tests/test_vits_multilingual_train-d_vectors.py"
+    "tests/tts_tests/test_vits_speaker_emb_train.py"
     "tests/tts_tests/test_vits_train.py"
+    "tests/vocoder_tests/test_wavegrad_train.py"
+    "tests/vocoder_tests/test_parallel_wavegan_train.py"
     "tests/vocoder_tests/test_fullband_melgan_train.py"
     "tests/vocoder_tests/test_hifigan_train.py"
-    "tests/vocoder_tests/test_melgan_train.py"
     "tests/vocoder_tests/test_multiband_melgan_train.py"
-    "tests/vocoder_tests/test_parallel_wavegan_train.py"
+    "tests/vocoder_tests/test_melgan_train.py"
+    "tests/vocoder_tests/test_wavernn_train.py"
   ];
 
   meta = with lib; {
@@ -148,6 +167,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/coqui-ai/TTS/releases/tag/v${version}";
     description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ hexa mic92 ];
+    maintainers = teams.tts.members;
   };
 }

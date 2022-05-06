@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snarkos";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "AleoHQ";
     repo = "snarkOS";
     rev = "v${version}";
-    sha256 = "sha256-BbCcdz0/oAEA+v9O8yQOpBb0/rXttn94tKS9tzRQ78w=";
+    sha256 = "sha256-sS8emB+uhWuoq5ISuT8FgSSzX7/WDoOY8hHzPE/EX3o=";
   };
 
-  cargoSha256 = "sha256-+N1X3D+XSz3SoZJEy9SNmYWt9yZPdaumWUUYhwbD+0w=";
+  cargoSha256 = "sha256-XS6dw6BIoJdigEso/J1dUaAp7AIAda3HrKnCoBynRv8=";
 
   # buildAndTestSubdir = "cli";
 
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
-  OPENSSL_LIB_DIR = "${openssl.out}/lib";
+  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
   OPENSSL_DIR="${lib.getDev openssl}";
 
   LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";

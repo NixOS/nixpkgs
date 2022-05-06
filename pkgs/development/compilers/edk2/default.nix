@@ -33,7 +33,7 @@ buildType = if stdenv.isDarwin then
 
 edk2 = buildStdenv.mkDerivation {
   pname = "edk2";
-  version = "202108";
+  version = "202202";
 
   # submodules
   src = fetchFromGitHub {
@@ -41,20 +41,8 @@ edk2 = buildStdenv.mkDerivation {
     repo = "edk2";
     rev = "edk2-stable${edk2.version}";
     fetchSubmodules = true;
-    sha256 = "1ps244f7y43afxxw6z95xscy24f9mpp8g0mfn90rd4229f193ba2";
+    sha256 = "0srmhi6c27n5vyl01nhh0fq8k4vngbwn79siyjvcacjbj2ivhh8d";
   };
-
-  patches = [
-    # Pull upstream fix for gcc-11 build.
-    (fetchpatch {
-      name = "gcc-11-vla.patch";
-      url = "https://github.com/google/brotli/commit/0a3944c8c99b8d10cc4325f721b7c273d2b41f7b.patch";
-      sha256 = "10c6ibnxh4f8lrh9i498nywgva32jxy2c1zzvr9mcqgblf9d19pj";
-      # Apply submodule patch to subdirectory: "a/" -> "BaseTools/Source/C/BrotliCompress/brotli/"
-      stripLen = 1;
-      extraPrefix = "BaseTools/Source/C/BrotliCompress/brotli/";
-    })
-  ];
 
   buildInputs = [ libuuid pythonEnv ];
 
@@ -75,7 +63,7 @@ edk2 = buildStdenv.mkDerivation {
 
   meta = with lib; {
     description = "Intel EFI development kit";
-    homepage = "https://sourceforge.net/projects/edk2/";
+    homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     license = licenses.bsd2;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
   };

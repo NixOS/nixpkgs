@@ -12,6 +12,11 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [ pyudev xlib ];
 
+  postInstall = ''
+    # autostart file
+    ln -s $out/${python3.sitePackages}/etc $out/etc
+  '';
+
   meta = with lib; {
     description = "A joystick-aware screen waker";
     longDescription = ''

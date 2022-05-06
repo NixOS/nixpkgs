@@ -1,20 +1,22 @@
-{ lib, rustPlatform, fetchFromGitea, testVersion, garage }:
+{ lib, rustPlatform, fetchFromGitea, protobuf, testers, garage }:
 rustPlatform.buildRustPackage rec {
   pname = "garage";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitea {
     domain = "git.deuxfleurs.fr";
     owner = "Deuxfleurs";
     repo = "garage";
     rev = "v${version}";
-    sha256 = "sha256-NNjqDOkMMRyXce+Z7RQpuffCuVhA1U3qH30rSv939ks=";
+    sha256 = "sha256-gs0TW431YUrdsdJ+PYrJgnLiBmDPYnUR0iVnQ/YqIfU=";
   };
 
-  cargoSha256 = "sha256-eKJxRcC43D8qVLORer34tlmsWhELTbcJbZLyf0MB618=";
+  cargoSha256 = "sha256-XGSenT2q3VXNcIT1Lg1e5HTOkEdOb1o3H07ahteQM/o=";
+
+  nativeBuildInputs = [ protobuf ];
 
   passthru = {
-    tests.version = testVersion { package = garage; };
+    tests.version = testers.testVersion { package = garage; };
   };
 
   meta = {

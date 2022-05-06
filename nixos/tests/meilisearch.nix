@@ -12,7 +12,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     name = "meilisearch";
     meta.maintainers = with lib.maintainers; [ Br1ght0ne ];
 
-    machine = { ... }: {
+    nodes.machine = { ... }: {
       environment.systemPackages = with pkgs; [ curl jq ];
       services.meilisearch = {
         enable = true;

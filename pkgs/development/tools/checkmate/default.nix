@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "checkmate";
-  version = "0.5.7";
+  version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "adedayo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RCGJ7Xa5HLzcngv79NyocbNGoYZMAKyv/svRScM1vq0=";
+    sha256 = "sha256-V7b8NEKzS4wDIhFJkAve94Tl3tzYtnbG01GzyRj8yfA=";
   };
 
-  vendorSha256 = "sha256-ZURtNED8gb0QsuXxJd9oBSx68ABcwlvVpkbd7lhiA9s=";
+  vendorSha256 = "sha256-uQRAVbLnzY+E3glMJ3AvmbtmwD2LkuqCh2mUpqZbmaA=";
 
   subPackages = [ "." ];
 

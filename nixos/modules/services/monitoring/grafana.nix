@@ -214,6 +214,11 @@ let
           type = types.path;
           description = "Path grafana will watch for dashboards.";
         };
+        foldersFromFilesStructure = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Use folder names from filesystem to create folders in Grafana.";
+        };
       };
     };
   };

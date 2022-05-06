@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ lib, ... }: {
     maintainers = [ freezeboy ];
   };
 
-  machine = { pkgs, ... }: let
+  nodes.machine = { pkgs, ... }: let
   in {
     services.plikd.enable = true;
     environment.systemPackages = [ pkgs.plik ];

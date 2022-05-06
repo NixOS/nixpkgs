@@ -672,7 +672,7 @@ let
             basicAuth.nextcloud-exporter = "snakeoilpw";
             locations."/" = {
               root = "${pkgs.prometheus-nextcloud-exporter.src}/serverinfo/testdata";
-              tryFiles = "/negative-space.xml =404";
+              tryFiles = "/negative-space.json =404";
             };
           };
         };
@@ -933,6 +933,27 @@ let
       '';
     };
 
+    pve = let
+      pveExporterEnvFile = pkgs.writeTextFile {
+        name = "pve.env";
+        text = ''
+          PVE_USER="test_user@pam"
+          PVE_PASSWORD="hunter3"
+          PVE_VERIFY_SSL="false"
+        '';
+      };
+    in {
+      exporterConfig = {
+        enable = true;
+        environmentFile = pveExporterEnvFile;
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-pve-exporter.service")
+        wait_for_open_port(9221)
+        wait_until_succeeds("curl localhost:9221")
+      '';
+    };
+
     py-air-control = {
       nodeName = "py_air_control";
       exporterConfig = {
@@ -1156,6 +1177,10 @@ let
     systemd = {
       exporterConfig = {
         enable = true;
+
+        extraFlags = [
+          "--collector.enable-restart-count"
+        ];
       };
       metricProvider = { };
       exporterTest = ''
@@ -1164,6 +1189,11 @@ let
         succeed(
             "curl -sSf localhost:9558/metrics | grep '{}'".format(
                 'systemd_unit_state{name="basic.target",state="active",type="target"} 1'
+            )
+        )
+        succeed(
+            "curl -sSf localhost:9558/metrics | grep '{}'".format(
+                'systemd_service_restart_total{state="prometheus-systemd-exporter.service"} 0'
             )
         )
       '';

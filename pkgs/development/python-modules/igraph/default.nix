@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.9.9";
+  version = "0.9.10";
 
   disabled = pythonOlder "3.6";
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "igraph";
     repo = "python-igraph";
     rev = version;
-    hash = "sha256-jHK8whCg+WitRSL5LmkqfdqiAdi9vZPicygzKThnW2U=";
+    hash = "sha256-c20N8BtbQGxAK7ykQvyfqWYu7wVOlYfeGpNOwWPlGxs=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "High performance graph data structures and algorithms";
     homepage = "https://igraph.org/python/";
+    changelog = "https://github.com/igraph/python-igraph/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
   };

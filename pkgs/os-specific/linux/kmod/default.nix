@@ -16,6 +16,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0am54mi5rk72g5q7k6l6f36gw3r9vwgjmyna43ywcjhqmakyx00b";
   };
 
+  outputs = [ "out" "dev" "lib" ];
+
   nativeBuildInputs = [ autoreconfHook pkg-config libxslt ];
   buildInputs = [ xz zstd ] ++ lib.optional stdenv.isDarwin elf-header;
 

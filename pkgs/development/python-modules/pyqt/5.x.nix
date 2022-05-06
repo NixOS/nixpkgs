@@ -7,6 +7,7 @@
 , lndir
 , dbus-python
 , sip
+, pyqt5_sip
 , pyqt-builder
 , libsForQt5
 , withConnectivity ? false
@@ -16,21 +17,7 @@
 , withLocation ? false
 }:
 
-let
-  pyqt5_sip = buildPythonPackage rec {
-    pname = "PyQt5_sip";
-    version = "12.9.0";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0cmfxb7igahxy74qkq199l6zdxrr75bnxris42fww3ibgjflir6k";
-    };
-
-    # There is no test code and the check phase fails with:
-    # > error: could not create 'PyQt5/sip.cpython-38-x86_64-linux-gnu.so': No such file or directory
-    doCheck = false;
-  };
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "PyQt5";
   version = "5.15.4";
   format = "pyproject";
@@ -88,7 +75,7 @@ in buildPythonPackage rec {
   ];
 
   passthru = {
-    inherit sip;
+    inherit sip pyqt5_sip;
     multimediaEnabled = withMultimedia;
     webKitEnabled = withWebKit;
     WebSocketsEnabled = withWebSockets;

@@ -52,7 +52,7 @@ let
   };
 
 in buildBazelPackage rec {
-  name = "gvisor-${version}";
+  pname = "gvisor";
   version = "20210518.0";
 
   src = fetchFromGitHub {

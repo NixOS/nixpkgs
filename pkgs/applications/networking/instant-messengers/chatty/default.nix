@@ -3,6 +3,7 @@
 , fetchFromGitLab
 , appstream-glib
 , desktop-file-utils
+, itstool
 , meson
 , ninja
 , pkg-config
@@ -11,7 +12,7 @@
 , evolution-data-server
 , feedbackd
 , glibmm
-, gnome
+, gnome-desktop
 , gspell
 , gtk3
 , json-glib
@@ -28,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "chatty";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     repo = "chatty";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-AufxwuOibTx5OvLBVbJqay/mYLmcDpE2BgwVv6Y5IlY=";
+    hash = "sha256-BILi3+i7SCiK7dVbckv3cNMNyEwgKMf0ct0z/J1xysI=";
   };
 
   postPatch = ''
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
+    itstool
     meson
     ninja
     pkg-config
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     feedbackd
     glibmm
-    gnome.gnome-desktop
+    gnome-desktop
     gspell
     gtk3
     json-glib

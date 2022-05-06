@@ -51,11 +51,8 @@ class CthonTest(ClientXMPP):
         log.info('Message sent')
 
         # Test http upload (XEP_0363)
-        def timeout_callback(arg):
-            log.error("ERROR: Cannot upload file. XEP_0363 seems broken")
-            sys.exit(1)
         try:
-            url = await self['xep_0363'].upload_file("${dummyFile}",timeout=10, timeout_callback=timeout_callback)
+            url = await self['xep_0363'].upload_file("${dummyFile}",timeout=10)
         except:
             log.error("ERROR: Cannot run upload command. XEP_0363 seems broken")
             sys.exit(1)

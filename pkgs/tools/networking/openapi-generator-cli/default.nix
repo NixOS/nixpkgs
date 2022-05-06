@@ -1,7 +1,7 @@
 { callPackage, lib, stdenv, fetchurl, jre, makeWrapper }:
 
 let this = stdenv.mkDerivation rec {
-  version = "5.2.1";
+  version = "5.4.0";
   pname = "openapi-generator-cli";
 
   jarfilename = "${pname}-${version}.jar";
@@ -12,7 +12,7 @@ let this = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://maven/org/openapitools/${pname}/${version}/${jarfilename}";
-    sha256 = "sha256-stRtSZCvPUQuTiKOHmJ7k8o3Gtly9Up+gicrDOeWjIs=";
+    sha256 = "sha256-8+0xIxDjkDJLM7ov//KQzoEpNSB6FJPsXAmNCkQb5Rw=";
   };
 
   dontUnpack = true;

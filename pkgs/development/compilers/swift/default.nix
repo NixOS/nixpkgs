@@ -10,7 +10,6 @@
 , pkg-config
 , sqlite
 , swig
-, bash
 , libxml2
 , clang_10
 , python3
@@ -29,7 +28,6 @@
 , libgit2
 , fetchFromGitHub
 , fetchpatch
-, findutils
 , makeWrapper
 , gnumake
 , file
@@ -52,7 +50,7 @@ let
   # - integration-tests
 
   versions = {
-    swift = "5.5.2";
+    swift = "5.5.3";
     yams = "4.0.2";
     argumentParser = "0.4.3";
     format = "swift-5.5-branch";
@@ -79,7 +77,7 @@ let
 
     swift = fetchSwiftRelease {
       repo = "swift";
-      sha256 = "1a9ja3r6ap4cappbvlk18krlvwi0q75z21j5yx5rhbnw4ihh7lda";
+      sha256 = "0ma96sfvwiv2f4qhzrvcwxi9igzd80930gnaw4r7ra4w190cnag7";
     };
     cmark = fetchSwiftRelease {
       repo = "swift-cmark";
@@ -99,7 +97,7 @@ let
     };
     swiftpm = fetchSwiftRelease {
       repo = "swift-package-manager";
-      sha256 = "0hdjvb2asfi6h3x9bjssxkc3bgjn3idlmyga3dl3lscfq88hjxr9";
+      sha256 = "0z90mg837jzwh516pypn48r3wsjf0lqymsyigdhgr7j2sgcckrr1";
     };
     syntax = fetchSwiftRelease {
       repo = "swift-syntax";
@@ -111,7 +109,7 @@ let
     };
     corelibsFoundation = fetchSwiftRelease {
       repo = "swift-corelibs-foundation";
-      sha256 = "1f7qcdx8597gwqa9pwl38d31w6w4d84c5hadj4ycj99msrm2f32x";
+      sha256 = "06gkdliihl1l86jx5khzwkjmjk45fq290x033rscramzcdxh7d1b";
     };
     corelibsLibdispatch = fetchSwiftRelease {
       repo = "swift-corelibs-libdispatch";
@@ -128,7 +126,7 @@ let
     };
     llvmProject = fetchSwiftRelease {
       repo = "llvm-project";
-      sha256 = "1gvqps5f9jh6lbhcjh1fyzp3bc0h9chbljzaspcrdi2qp878prlx";
+      sha256 = "18rn5xg5hpxxsacs0ygjmjpzpc8pq85898kknzc0s0z5m55h45z8";
     };
 
     # Projects that have their own versions during each release
@@ -182,17 +180,14 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "swift-${versions.swift}";
+  pname = "swift";
+  version = versions.swift;
 
   nativeBuildInputs = [
     autoconf
     automake
-    bash
     cmake
-    coreutils
-    findutils
     git
-    gnumake
     libtool
     makeWrapper
     ninja

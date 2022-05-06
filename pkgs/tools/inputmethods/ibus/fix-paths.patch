@@ -1,6 +1,8 @@
+diff --git a/configure.ac b/configure.ac
+index a3cdb2da..cade9466 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -429,11 +429,11 @@
+@@ -469,11 +469,11 @@ PKG_CHECK_EXISTS([pygobject-3.0 >= $PYGOBJECT_REQUIRED],
  if test "x$enable_pygobject" = "xyes"; then
      PKG_CHECK_MODULES(PYTHON, [pygobject-3.0 >= $PYGOBJECT_REQUIRED])
  
@@ -14,7 +16,7 @@
          AC_SUBST(py2overridesdir)
      fi
  fi
-@@ -462,7 +462,7 @@
+@@ -502,7 +502,7 @@ if test x"$enable_python_library" = x"yes"; then
      PYTHON2_VERSION=`$PYTHON2 -c "import sys; sys.stdout.write(sys.version[[:3]])"`
      PYTHON2_LIBDIR="$PYTHON2_PREFIX/lib/python$PYTHON2_VERSION"
      python2dir="$PYTHON2_LIBDIR/site-packages"
@@ -23,9 +25,11 @@
      AC_SUBST(pkgpython2dir)
  else
      enable_python_library="no (disabled, use --enable-python-library to enable)"
+diff --git a/data/dconf/Makefile.am b/data/dconf/Makefile.am
+index 5360f033..6d5e726f 100644
 --- a/data/dconf/Makefile.am
 +++ b/data/dconf/Makefile.am
-@@ -50,7 +50,7 @@
+@@ -50,7 +50,7 @@ man_5dir = $(mandir)/man5
  
  install-data-hook:
  	if test -z "$(DESTDIR)"; then \
@@ -34,12 +38,14 @@
  	fi
  
  EXTRA_DIST = \
+diff --git a/setup/ibus-setup.in b/setup/ibus-setup.in
+index 474ce8a8..ee30808e 100644
 --- a/setup/ibus-setup.in
 +++ b/setup/ibus-setup.in
-@@ -27,5 +27,5 @@
+@@ -27,5 +27,5 @@ export IBUS_PREFIX=@prefix@
  export IBUS_DATAROOTDIR=@datarootdir@
  export IBUS_LOCALEDIR=@localedir@
  export IBUS_LIBEXECDIR=${libexecdir}
--exec ${PYTHON:-@PYTHON@} @prefix@/share/ibus/setup/main.py $@
-+exec @pythonInterpreter@ @prefix@/share/ibus/setup/main.py $@
+-exec ${PYTHON:-@PYTHON@} @prefix@/share/ibus/setup/main.py "$@"
++exec @pythonInterpreter@ @prefix@/share/ibus/setup/main.py "$@"
  

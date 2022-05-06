@@ -15,6 +15,9 @@
 # Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
 
+# Write out info about included extraComponents and extraPackages
+, writeText
+
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
@@ -26,7 +29,48 @@
 let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
-    (mkOverride "python-slugify" "4.0.1" "69a517766e00c1268e5bbfc0d010a0a8508de0b18d30ad5a1ff357f8ae724270")
+    (mkOverride "python-slugify" "4.0.1" "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=")
+
+    # pytest-aiohttp>0.3.0 breaks home-assistant tests
+    (self: super: {
+      pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-ySmFQzljeXc3WDhwO2L+9jUoWYvAqdRRY566lfSqpE8=";
+        };
+        propagatedBuildInputs = with python3.pkgs; [ aiohttp pytest ];
+        doCheck = false;
+        patches = [];
+      });
+      aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      gcal-sync = super.gcal-sync.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      pynws = super.pynws.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      pytomorrowio = super.pytomorrowio.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      rtsp-to-webrtc = super.rtsp-to-webrtc.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      snitun = super.snitun.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      zwave-js-server-python = super.zwave-js-server-python.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+    })
 
     (self: super: {
       huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
@@ -55,7 +99,7 @@ let
     })
 
     # Pinned due to API changes in 0.1.0
-    (mkOverride "poolsense" "0.0.8" "09y4fq0gdvgkfsykpxnvmfv92dpbknnq5v82spz43ak6hjnhgcyp")
+    (mkOverride "poolsense" "0.0.8" "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=")
 
     # Pinned due to API changes >0.3.5.3
     (self: super: {
@@ -77,7 +121,7 @@ let
         src = fetchFromGitHub {
           owner = "ManneW";
           repo = "vilfo-api-client-python";
-          rev = "v$version}";
+          rev = "v${version}";
           sha256 = "1gy5gpsg99rcm1cc3m30232za00r9i46sp74zpd12p3vzz1wyyqf";
         };
       });
@@ -102,12 +146,12 @@ let
     })
   ];
 
-  mkOverride = attrName: version: sha256:
+  mkOverride = attrName: version: hash:
     self: super: {
       ${attrName} = super.${attrName}.overridePythonAttrs (oldAttrs: {
         inherit version;
         src = oldAttrs.src.override {
-          inherit version sha256;
+          inherit version hash;
         };
       });
     };
@@ -130,8 +174,12 @@ let
   # Ensure that we are using a consistent package set
   extraBuildInputs = extraPackages python.pkgs;
 
+  # Create info about included packages and components
+  extraComponentsFile = writeText "home-assistant-components" (lib.concatStringsSep "\n" extraComponents);
+  extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
+
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.2.6";
+  hassVersion = "2022.5.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -149,7 +197,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-UUiYp1YP+ak/2MncnGB0kE9+l2zQAyGjfD5srb5ArSI=";
+    hash = "sha256-xlotye/8oeCs/ntNV4osGjcl7fo05ke7nFLQeee/USY=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -158,7 +206,6 @@ in python.pkgs.buildPythonApplication rec {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg}/bin/ffmpeg";
     })
-    ./patches/tests-ignore-OSErrors-in-hass-fixture.patch
   ];
 
   postPatch = let
@@ -170,8 +217,8 @@ in python.pkgs.buildPythonApplication rec {
       "bcrypt"
       "cryptography"
       "httpx"
+      "jinja2"
       "pip"
-      "PyJWT"
       "requests"
       "yarl"
     ];
@@ -211,6 +258,8 @@ in python.pkgs.buildPythonApplication rec {
     yarl
     # Not in setup.py, but used in homeassistant/util/package.py
     setuptools
+    # Not in setup.py, but uncounditionally imported via tests/conftest.py
+    paho-mqtt
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
@@ -245,8 +294,6 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    # parallelize test run
-    "--numprocesses $NIX_BUILD_CORES"
     # assign tests grouped by file to workers
     "--dist loadfile"
     # retry racy tests that end in "RuntimeError: Event loop is closed"
@@ -272,6 +319,8 @@ in python.pkgs.buildPythonApplication rec {
     "test_merge"
     # Tests are flaky
     "test_config_platform_valid"
+    # Test requires pylint>=2.13.0
+    "test_invalid_discovery_info"
   ];
 
   preCheck = ''
@@ -282,6 +331,11 @@ in python.pkgs.buildPythonApplication rec {
 
     # put ping binary into PATH, e.g. for wake_on_lan tests
     export PATH=${inetutils}/bin:$PATH
+  '';
+
+  postInstall = ''
+    cp -v ${extraComponentsFile} $out/extra_components
+    cp -v ${extraPackagesFile} $out/extra_packages
   '';
 
   passthru = {

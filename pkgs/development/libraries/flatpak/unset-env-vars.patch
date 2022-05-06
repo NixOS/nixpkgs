@@ -1,11 +1,11 @@
 diff --git a/common/flatpak-run.c b/common/flatpak-run.c
-index 8d52d3a5..81700183 100644
+index 146c4f87..bcdad2bc 100644
 --- a/common/flatpak-run.c
 +++ b/common/flatpak-run.c
-@@ -1232,6 +1232,7 @@ static const ExportData default_exports[] = {
-   {"PERLLIB", NULL},
-   {"PERL5LIB", NULL},
-   {"XCURSOR_PATH", NULL},
+@@ -1710,6 +1710,7 @@ static const ExportData default_exports[] = {
+   {"GST_PTP_HELPER", NULL},
+   {"GST_PTP_HELPER_1_0", NULL},
+   {"GST_INSTALL_PLUGINS_HELPER", NULL},
 +  {"GDK_PIXBUF_MODULE_FILE", NULL},
  };
  

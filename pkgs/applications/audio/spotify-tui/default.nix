@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Rigellute/spotify-tui/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ jwijenbergh ];
+    mainProgram = "spt";
   };
 }

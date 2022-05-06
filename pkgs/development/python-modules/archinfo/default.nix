@@ -8,8 +8,8 @@
 
 buildPythonPackage rec {
   pname = "archinfo";
-  version = "9.1.11752";
-  format = "setuptools";
+  version = "9.2.2";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-D1YssHa14q2jxn4HtOYZlTdwGPkiiMhWuOh08fj87ic=";
+    hash = "sha256-wJEipAlqBsP2tgsRDVDe1ZtiEg1uhpP+1P1VGU7tBBw=";
   };
 
   checkInputs = [
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Classes with architecture-specific information";
     homepage = "https://github.com/angr/archinfo";
     license = with licenses; [ bsd2 ];
-    maintainers = [ maintainers.fab ];
+    maintainers = with maintainers; [ fab ];
   };
 }

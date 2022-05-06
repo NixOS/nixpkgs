@@ -3,6 +3,7 @@
 , fetchurl
 , xlibsWrapper
 , makeWrapper
+, imagemagick
 , libXpm
 , libXmu
 , libXi
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fndgbm1mkqb1sn2v2kj3nx9mxj70jbp31y2bjvzcmmkry0q3k5j";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ imagemagick makeWrapper ];
 
   buildInputs = [
     xlibsWrapper
@@ -34,7 +35,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    sed -i 's:"fig2dev":"${fig2dev}/bin/fig2dev":' src/main.c
+    substituteInPlace src/main.c --replace '"fig2dev"' '"${fig2dev}/bin/fig2dev"'
+    substituteInPlace xfig.desktop --replace "/usr/bin/" "$out/bin/"
   '';
 
   postInstall = ''
@@ -43,6 +45,15 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/xfig \
       --set XAPPLRESDIR $out/share/X11/app-defaults
+
+    mkdir -p $out/share/icons/hicolor/{16x16,22x22,48x48,64x64}/apps
+
+    for dimension in 16x16 22x22 48x48; do
+      convert doc/html/images/xfig-logo.png -geometry $dimension\
+        $out/share/icons/hicolor/16x16/apps/xfig.png
+    done
+    install doc/html/images/xfig-logo.png \
+      $out/share/icons/hicolor/64x64/apps/xfig.png
   '';
 
   enableParallelBuilding = true;

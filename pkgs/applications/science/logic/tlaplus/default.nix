@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tlaplus";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchurl {
     url = "https://github.com/tlaplus/tlaplus/releases/download/v${version}/tla2tools.jar";
-    sha256 = "d532ba31aafe17afba1130f92410d9257454ff7393d1eb2fe032f0c07f352da5";
+    sha256 = "sha256-+hhUPkTtWXSoW9LGDA3BZiCuEXaA6o5pPSaRmZ7ZCyI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

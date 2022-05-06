@@ -14,7 +14,6 @@ fontconfig,
 freetype,
 gdk-pixbuf,
 glib,
-gnome2,
 gtk3,
 lib,
 libdrm,
@@ -34,7 +33,7 @@ xorg,
 }:
 
 let
-  version = "1.30.1";
+  version = "1.31.2";
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -50,7 +49,6 @@ let
     freetype
     gdk-pixbuf
     glib
-    gnome2.GConf
     gtk3
     libdrm
     libnotify
@@ -84,7 +82,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
-        sha256 = "sha256-MwkYgkDZmzZsthJxSK6c+0us0D4cPuDfuV1XBbeTNXE=";
+        sha256 = "sha256-ij5lOP3xaty9YjKPionfUhZTcuumlFHt46MUMkjO2yA=";
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";

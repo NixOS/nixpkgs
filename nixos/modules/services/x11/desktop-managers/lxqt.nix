@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -9,6 +9,10 @@ let
 in
 
 {
+  meta = {
+    maintainers = teams.lxqt.members;
+  };
+
   options = {
 
     services.xserver.desktopManager.lxqt.enable = mkOption {
@@ -51,7 +55,7 @@ in
     environment.systemPackages =
       pkgs.lxqt.preRequisitePackages ++
       pkgs.lxqt.corePackages ++
-      (pkgs.gnome.removePackagesByName
+      (utils.removePackagesByName
         pkgs.lxqt.optionalPackages
         config.environment.lxqt.excludePackages);
 
@@ -62,6 +66,11 @@ in
     services.gvfs.enable = true;
 
     services.upower.enable = config.powerManagement.enable;
+
+    services.xserver.libinput.enable = mkDefault true;
+
+    xdg.portal.enable = true;
+    xdg.portal.extraPortals = [ pkgs.lxqt.xdg-desktop-portal-lxqt ];
   };
 
 }

@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "gomapenum";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "GoMapEnum";
     rev = "v${version}";
-    sha256 = "sha256-AjHqD9r4ZU5NCqXEovvQuV4eeMLBy2jO/uqZQiCTyNI=";
+    sha256 = "sha256-a0JpHk5pUe+MkcmJl871JwkOfFDg3S4yOzFIeXCReLE=";
   };
 
-  vendorSha256 = "sha256-65NF814w1IUgSDuLLIqfbsf22va4AUC2E05ZgmuOHGY=";
+  vendorSha256 = "sha256-5C0dDY/42H8oHNdQaKYiuqpi2QqqgHC7VMO/0kFAofY=";
 
   postInstall = ''
     mv $out/bin/src $out/bin/$pname

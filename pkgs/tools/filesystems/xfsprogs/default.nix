@@ -1,14 +1,14 @@
 { lib, stdenv, buildPackages, fetchurl, autoconf, automake, gettext, libtool, pkg-config
-, icu, libuuid, readline, inih
+, icu, libuuid, readline, inih, liburcu
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "5.13.0";
+  version = "5.16.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    sha256 = "sha256-ThQtS6vghq35AW2MYGyAWCnaCORjiaRDP0A0YgT5DNs=";
+    hash = "sha256-eLjImZmb1pBEHLU9fAKrZxKUlAMZxpT/fILiPo5Gu58=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     autoconf automake libtool gettext pkg-config
     libuuid # codegen tool uses libuuid
   ];
-  buildInputs = [ readline icu inih ];
+  buildInputs = [ readline icu inih liburcu ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
 
   enableParallelBuilding = true;

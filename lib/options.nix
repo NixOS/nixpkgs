@@ -79,8 +79,6 @@ rec {
     visible ? null,
     # Whether the option can be set only once
     readOnly ? null,
-    # Deprecated, used by types.optionSet.
-    options ? null
     } @ attrs:
     attrs // { _type = "option"; };
 
@@ -122,7 +120,7 @@ rec {
      Example:
        mkPackageOption pkgs "GHC" {
          default = [ "ghc" ];
-         example = "pkgs.haskell.package.ghc921.ghc.withPackages (hkgs: [ hkgs.primes ])";
+         example = "pkgs.haskell.package.ghc922.ghc.withPackages (hkgs: [ hkgs.primes ])";
        }
        => { _type = "option"; default = «derivation /nix/store/jxx55cxsjrf8kyh3fp2ya17q99w7541r-ghc-8.10.7.drv»; defaultText = { ... }; description = "The GHC package to use."; example = { ... }; type = { ... }; }
   */
@@ -231,7 +229,7 @@ rec {
             then true
             else opt.visible or true;
           readOnly = opt.readOnly or false;
-          type = opt.type.description or null;
+          type = opt.type.description or "unspecified";
         }
         // optionalAttrs (opt ? example) { example = scrubOptionValue opt.example; }
         // optionalAttrs (opt ? default) { default = scrubOptionValue opt.default; }

@@ -5,10 +5,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jotta-cli";
-  version = "0.13.53591";
+  version = "0.13.55213";
   src = fetchzip {
       url = "https://repo.jotta.us/archives/linux/${arch}/jotta-cli-${version}_linux_${arch}.tar.gz";
-      sha256 = "sha256-sffJks3/QfAJJumaE61q4fiiXa/BNFF2TKjZmDOuMkc=";
+      sha256 = "sha256-u5DmpKvmgTqwtXLFMdz0dhtPc/2rzEX492OKxyFBqzY=";
       stripRoot = false;
     };
 

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -16,7 +17,6 @@
 , libgdata
 , sqlite
 , granite
-, elementary-icon-theme
 , evolution-data-server
 , appstream
 , wrapGAppsHook
@@ -34,6 +34,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ooqVNMgeAqGlFcfachPPfhSiKTEEcNGv5oWdM7VLWOc=";
   };
 
+  patches = [
+    # Fix build with vala 0.56
+    # https://github.com/elementary/mail/pull/765
+    (fetchpatch {
+      url = "https://github.com/elementary/mail/commit/c3aa61d226f49147d7685cc00013469ff4df369a.patch";
+      sha256 = "sha256-OxNBGIC1hrEaFSufQ59Wb0AMfdzqPt6diL4g3hbL/Ig=";
+    })
+  ];
+
   nativeBuildInputs = [
     appstream
     desktop-file-utils
@@ -47,7 +56,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     evolution-data-server
     folks
     granite

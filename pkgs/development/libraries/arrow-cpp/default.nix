@@ -19,7 +19,6 @@
 , grpc
 , gtest
 , jemalloc
-, libnsl
 , lz4
 , minio
 , ninja
@@ -39,7 +38,7 @@
 , zlib
 , zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
-, enableFlight ? !stdenv.isDarwin # libnsl is not supported on darwin
+, enableFlight ? true
 , enableJemalloc ? !(stdenv.isAarch64 && stdenv.isDarwin)
   # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
   # non-existent in older versions
@@ -129,7 +128,6 @@ stdenv.mkDerivation rec {
     python3.pkgs.numpy
   ] ++ lib.optionals enableFlight [
     grpc
-    libnsl
     openssl
     protobuf
   ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ]
@@ -162,6 +160,7 @@ stdenv.mkDerivation rec {
     "-DARROW_ENGINE=ON"
     "-DARROW_FILESYSTEM=ON"
     "-DARROW_FLIGHT_SQL=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_HDFS=ON"
     "-DARROW_IPC=ON"
     "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
     "-DARROW_JSON=ON"

@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
+#!@runtimeShell@
 
 set -euo pipefail
+
+export PATH="@binPath@"
 
 if [ $# -eq 0 ]; then
   >&2 echo "Usage: $0 [packages directory] > deps.nix"
@@ -8,6 +10,8 @@ if [ $# -eq 0 ]; then
 fi
 
 pkgs=$1
+tmpfile=$(mktemp /tmp/nuget-to-nix.XXXXXX)
+trap "rm -f ${tmpfile}" EXIT
 
 echo "{ fetchNuGet }: ["
 
@@ -17,7 +21,9 @@ while read pkg_spec; do
     sed -nE 's/.*<id>([^<]*).*/\1/p; s/.*<version>([^<+]*).*/\1/p' "$pkg_spec")
   pkg_sha256="$(nix-hash --type sha256 --flat --base32 "$(dirname "$pkg_spec")"/*.nupkg)"
 
-  echo "  (fetchNuGet { pname = \"$pkg_name\"; version = \"$pkg_version\"; sha256 = \"$pkg_sha256\"; })"
-done < <(find $1 -name '*.nuspec' | sort)
+  echo "  (fetchNuGet { pname = \"$pkg_name\"; version = \"$pkg_version\"; sha256 = \"$pkg_sha256\"; })" >> ${tmpfile}
+done < <(find $1 -name '*.nuspec')
+
+LC_ALL=C sort --ignore-case ${tmpfile}
 
 echo "]"

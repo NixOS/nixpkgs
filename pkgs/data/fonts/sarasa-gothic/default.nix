@@ -1,14 +1,14 @@
 { lib, fetchurl, libarchive }:
 
 let
-  version = "0.35.8";
+  version = "0.36.2";
 in fetchurl {
   name = "sarasa-gothic-${version}";
 
   # Use the 'ttc' files here for a smaller closure size.
   # (Using 'ttf' files gives a closure size about 15x larger, as of November 2021.)
   url = "https://github.com/be5invis/Sarasa-Gothic/releases/download/v${version}/sarasa-gothic-ttc-${version}.7z";
-  sha256 = "sha256-22q+FdTh9Dex+tEo/HCBK14ZlJFtFM7SrE6K1/iVBY0=";
+  sha256 = "sha256-hUQi8mbtQC+peslaz+AVINjELVXseuVi44qbDBtJ+fc=";
 
   recursiveHash = true;
   downloadToTemp = true;

@@ -203,6 +203,8 @@ with self;
     meta.description = "Trivial metaprogramming tool";
     propagatedBuildInputs = [ re ];
     checkInputs = [ ppx_jane ];
+    # This currently fails with dune
+    strictDeps = false;
   };
 
   core = janePackage {
@@ -237,6 +239,13 @@ with self;
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ base_bigstring sexplib ];
     doCheck = false; # we don't have quickcheck_deprecated
+  };
+
+  core_unix = janePackage {
+    pname = "core_unix";
+    hash = "0irfmpx6iksxk2r8mdizjn75h71qh4p2f1s9x2ggckzqj9y904ck";
+    meta.description = "Unix-specific portions of Core";
+    propagatedBuildInputs = [ core ];
   };
 
   csvfields = janePackage {
@@ -304,6 +313,7 @@ with self;
     meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ js_of_ocaml-ppx ];
     propagatedBuildInputs = [ async_js incr_map incr_select virtual_dom ];
+    patches = [ ./incr_dom_jsoo_4_0.patch ];
   };
 
   incr_map = janePackage {
@@ -664,6 +674,7 @@ with self;
     pname = "pythonlib";
     hash = "0qr0mh9jiv1ham5zlz9i4im23a1vh6x1yp6dp2db2s4icmfph639";
     meta.description = "A library to help writing wrappers around ocaml code for python";
+    meta.broken = lib.versionAtLeast ocaml.version "4.13";
     propagatedBuildInputs = [ ppx_expect ppx_let ppx_python stdio typerep ];
   };
 
@@ -761,6 +772,8 @@ with self;
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
     checkInputs = [ ounit ];
+    # This currently fails with dune
+    strictDeps = false;
   };
 
   shexp = janePackage {

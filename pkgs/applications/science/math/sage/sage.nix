@@ -6,6 +6,7 @@
 , jupyter-kernel
 , sagedoc
 , withDoc
+, requireSageTests
 }:
 
 # A wrapper that makes sure sage finds its docs (if they were build) and the
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     makeWrapper
-
+  ] ++ lib.optionals requireSageTests [
     # This is a hack to make sure sage-tests is evaluated. It doesn't acutally
     # produce anything of value, it just decouples the tests from the build.
     sage-tests

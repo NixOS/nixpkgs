@@ -2,6 +2,7 @@
 , autoreconfHook, bison, flex, pkg-config
 , curl, geoip, libmaxminddb, libxml2, lmdb, lua, pcre
 , ssdeep, valgrind, yajl
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -49,6 +50,10 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests = {
+    nginx-modsecurity = nixosTests.nginx-modsecurity;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/SpiderLabs/ModSecurity";

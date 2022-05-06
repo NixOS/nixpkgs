@@ -1,19 +1,19 @@
-{ stdenv, lib, makeWrapper, fetchFromGitHub
-, bc, coreutils, file, gawk, ghostscript, gnused, imagemagick, zip }:
+{ lib
+, resholve
+, fetchFromGitHub
+, bc
+, coreutils
+, file
+, gawk
+, ghostscript
+, gnused
+, imagemagick
+, zip
+, bash
+, findutils
+}:
 
-let
-  path = lib.makeBinPath [
-    bc
-    coreutils
-    file
-    gawk
-    ghostscript
-    gnused
-    imagemagick
-    zip
-  ];
-
-in stdenv.mkDerivation rec {
+resholve.mkDerivation rec {
   pname = "pdf2odt";
   version = "20170207";
 
@@ -24,8 +24,6 @@ in stdenv.mkDerivation rec {
     sha256 = "14f9r5f0g6jzanl54jv86ls0frvspka1p9c8dy3fnriqpm584j0r";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
   patches = [ ./use_mktemp.patch ];
 
   installPhase = ''
@@ -33,10 +31,24 @@ in stdenv.mkDerivation rec {
     install -Dm0644 README.md LICENSE -t $out/share/doc/pdf2odt
 
     ln -rs $out/bin/pdf2odt $out/bin/pdf2ods
-
-    wrapProgram $out/bin/pdf2odt \
-      --prefix PATH : ${path}
   '';
+  solutions = {
+    default = {
+      scripts = [ "bin/pdf2odt" ];
+      interpreter = "${bash}/bin/bash";
+      inputs = [
+        coreutils
+        bc
+        file
+        imagemagick
+        gawk
+        gnused
+        ghostscript
+        zip
+        findutils
+      ];
+    };
+  };
 
   meta = with lib; {
     description = "PDF to ODT format converter";

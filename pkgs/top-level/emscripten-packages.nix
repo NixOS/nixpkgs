@@ -83,8 +83,8 @@ rec {
     pname = "xmlmirror";
     version = "unstable-2016-06-05";
 
-    buildInputs = [ pkg-config autoconf automake libtool gnumake libxml2 nodejs openjdk json_c ];
-    nativeBuildInputs = [ pkg-config zlib ];
+    buildInputs = [ pkg-config libtool gnumake libxml2 nodejs openjdk json_c ];
+    nativeBuildInputs = [ pkg-config zlib autoconf automake ];
 
     src = pkgs.fetchgit {
       url = "https://gitlab.com/odfplugfest/xmlmirror.git";

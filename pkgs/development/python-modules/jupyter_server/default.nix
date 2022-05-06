@@ -10,6 +10,7 @@
 , jinja2
 , tornado
 , pyzmq
+, ipykernel
 , ipython_genutils
 , traitlets
 , jupyter_core
@@ -62,6 +63,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    ipykernel
     pytestCheckHook
     pytest-tornasync
     requests

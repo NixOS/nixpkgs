@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
   # linux 3.12
   NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    strip -S ena.ko
+    $STRIP -S ena.ko
     dest=$out/lib/modules/${kernel.modDirVersion}/misc
     mkdir -p $dest
     cp ena.ko $dest/
@@ -41,6 +42,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.5" || kernel.kernelAtLeast "5.15";
+    broken = kernel.kernelAtLeast "5.15";
   };
 }

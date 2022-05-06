@@ -64,7 +64,8 @@ let
         filter =
           builtins.filterSource
             (n: t:
-              (t == "directory" -> baseNameOf n != "tests")
+              cleanSourceFilter n t
+              && (t == "directory" -> baseNameOf n != "tests")
               && (t == "file" -> hasSuffix ".nix" n)
             );
       in
@@ -129,7 +130,7 @@ let
       genericName = "View NixOS documentation in a web browser";
       icon = "nix-snowflake";
       exec = "nixos-help";
-      categories = "System";
+      categories = ["System"];
     };
 
     in pkgs.symlinkJoin {

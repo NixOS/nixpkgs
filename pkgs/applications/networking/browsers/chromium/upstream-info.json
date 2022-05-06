@@ -1,63 +1,63 @@
 {
   "stable": {
-    "version": "98.0.4758.80",
-    "sha256": "0wa1jhsw7qrym4x8wxmdvdvbilb8jdv0mizzib2342l61zi6cwn8",
-    "sha256bin64": "0p2bh45ffgfhyh18bxw8fz4691g25s44lxxj4igk8b0bn71v1pgi",
+    "version": "101.0.4951.41",
+    "sha256": "0dzsbr309n70jg7fpq2qfnrgcm4553akvdmnzhss1fc85s467609",
+    "sha256bin64": "12nzzsp4040mwc7jah5w0p58ckv8s16wv6ylf6vlmfby06a4xlkq",
     "deps": {
       "gn": {
-        "version": "2021-12-07",
+        "version": "2022-03-14",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "fc295f3ac7ca4fe7acc6cb5fb052d22909ef3a8f",
-        "sha256": "02bx3bp85kkis704gndb6jvjph7gv3ij746bq4anl30kfrkpcifh"
+        "rev": "bd99dbf98cbdefe18a4128189665c5761263bcfb",
+        "sha256": "0nql15ckjqkm001xajq3qyn4h4q80i7x6dm9zinxxr1a8q5lppx3"
       }
     },
     "chromedriver": {
-      "version": "98.0.4758.48",
-      "sha256_linux": "1nk3vki803b30mc7ww911l68jfxmpp6mddyq02a3f68893qa2mcf",
-      "sha256_darwin": "09m5vsqfn6qyn3faf2p0dldll6fracjg6z81xzpyp2bh9zp8vk82",
-      "sha256_darwin_aarch64": "04lnbm9wiaz8dlc4qigxakcwghhjc3wvahvl5j80k8agkbv7fdvi"
+      "version": "101.0.4951.15",
+      "sha256_linux": "1i8ay83gh1q6nd0v14qv7gjar9h4fccb50a8b6fg671pg0l6vn24",
+      "sha256_darwin": "0ldxy1dxb99xps0h1d1264njc55q4bd000bdnaaks9kyx2djn54b",
+      "sha256_darwin_aarch64": "14awsldpqz2y187jwbcli8v7f1r6gsybk8yx8jqg26y8iyg3lrx9"
     }
   },
   "beta": {
-    "version": "99.0.4844.27",
-    "sha256": "07srkycb92sajbxcjbwgjcj0xgb17k9i4b7cg50dvz3pwdvm7y8y",
-    "sha256bin64": "1a3a66kmcim3f8wvi19330m2iixxngsfiwv44g8zz51qk4rg4wx3",
+    "version": "102.0.5005.27",
+    "sha256": "0fznry72w50dpijg55yxkaz1hv1zkvvxini3yxadwpfa5y0mpn3m",
+    "sha256bin64": "0k543zz3njsn5kh1wf90hqywll9s6g4xrnh2zqph066l91gj17rx",
     "deps": {
       "gn": {
-        "version": "2022-01-10",
+        "version": "2022-04-14",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "80a40b07305373617eba2d5878d353532af77da3",
-        "sha256": "1103lf38h7412949j6nrk48m2vv2rrxacn42sjg33lg88nyv7skv"
+        "rev": "fd9f2036f26d83f9fcfe93042fb952e5a7fe2167",
+        "sha256": "0b5xs0chcv3hfhy71rycsmgxnqbm375a333hwav8929k9cbi5p9h"
       }
     }
   },
   "dev": {
-    "version": "100.0.4878.0",
-    "sha256": "0ac8fdbh3f66wq3y1l4s1i906zriajff84hpx9df9cwavj6r9svr",
-    "sha256bin64": "1q37q02v6aaqkxwyavljga0h60cclklxj8adr1jc1fqs0irks8a8",
+    "version": "103.0.5028.0",
+    "sha256": "06i6kgsdril5gfbjl1sh0z5hqvq64bchhb2z8w0h8cw9977bvqk6",
+    "sha256bin64": "09hxvcv5n1kd4qnwh6pxzmrlnc8xijm7rwb1c8c57v0jjb32x9ry",
     "deps": {
       "gn": {
-        "version": "2022-01-21",
+        "version": "2022-04-26",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "0725d7827575b239594fbc8fd5192873a1d62f44",
-        "sha256": "1dzdvcn2r5c9giknvasf3y5y4901kav7igivjvrpww66ywsj8fzr"
+        "rev": "ced9fbfe6943854e65ada4ac1849d1fa4cb19348",
+        "sha256": "14fgjsfqihmma1cr8n30n37vxkf20paa6swq2yxn1agjvfr9cdvl"
       }
     }
   },
   "ungoogled-chromium": {
-    "version": "98.0.4758.80",
-    "sha256": "0wa1jhsw7qrym4x8wxmdvdvbilb8jdv0mizzib2342l61zi6cwn8",
-    "sha256bin64": "0p2bh45ffgfhyh18bxw8fz4691g25s44lxxj4igk8b0bn71v1pgi",
+    "version": "101.0.4951.54",
+    "sha256": "1d808a7mvg0nd0mm20c1ny5kdvb2xvrs8vz4nnk456ix8pywcv62",
+    "sha256bin64": "1m6s6xf2wvz535w6jskk3pnibvsjpzmbxvd9rlxmqr08y219gp5y",
     "deps": {
       "gn": {
-        "version": "2021-12-07",
+        "version": "2022-03-14",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "fc295f3ac7ca4fe7acc6cb5fb052d22909ef3a8f",
-        "sha256": "02bx3bp85kkis704gndb6jvjph7gv3ij746bq4anl30kfrkpcifh"
+        "rev": "bd99dbf98cbdefe18a4128189665c5761263bcfb",
+        "sha256": "0nql15ckjqkm001xajq3qyn4h4q80i7x6dm9zinxxr1a8q5lppx3"
       },
       "ungoogled-patches": {
-        "rev": "98.0.4758.80-1",
-        "sha256": "0a8y9yz6xyh025gk3dr0ndrdwmrslhd1ph2f8nivmqk61j7c2g8h"
+        "rev": "101.0.4951.54-1",
+        "sha256": "0zhzy7llqddvym992pwhkgqh2f6ywjqqg0bhahl6c0np95gzhpbs"
       }
     }
   }

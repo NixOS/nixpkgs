@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 61b21e59fe8f4f65fba27f88d49782dece0aad00
-  ref: refs/tags/6.1.29
+  revision: 82d111481b8f46bf50473770673305b0ec0eb5d2
+  ref: refs/tags/6.1.40
   specs:
-    metasploit-framework (6.1.29)
+    metasploit-framework (6.1.40)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -31,13 +31,14 @@ GIT
       metasploit-concern
       metasploit-credential
       metasploit-model
-      metasploit-payloads (= 2.0.72)
+      metasploit-payloads (= 2.0.83)
       metasploit_data_models
       metasploit_payloads-mettle (= 1.0.18)
       mqtt
       msgpack
       nessus_rest
       net-ldap
+      net-smtp
       net-ssh
       network_interface
       nexpose
@@ -75,7 +76,7 @@ GIT
       rex-text
       rex-zip
       ruby-macho
-      ruby_smb (~> 3.0)
+      ruby_smb (~> 3.1.0)
       rubyntlm
       rubyzip
       sinatra
@@ -98,25 +99,25 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.0)
-    actionpack (6.1.4.4)
-      actionview (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
+    actionpack (6.1.5.1)
+      actionview (= 6.1.5.1)
+      activesupport (= 6.1.5.1)
       rack (~> 2.0, >= 2.0.9)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actionview (6.1.4.4)
-      activesupport (= 6.1.4.4)
+    actionview (6.1.5.1)
+      activesupport (= 6.1.5.1)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    activemodel (6.1.4.4)
-      activesupport (= 6.1.4.4)
-    activerecord (6.1.4.4)
-      activemodel (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
-    activesupport (6.1.4.4)
+    activemodel (6.1.5.1)
+      activesupport (= 6.1.5.1)
+    activerecord (6.1.5.1)
+      activemodel (= 6.1.5.1)
+      activesupport (= 6.1.5.1)
+    activesupport (6.1.5.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -128,36 +129,37 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.554.0)
-    aws-sdk-core (3.126.0)
+    aws-partitions (1.581.0)
+    aws-sdk-core (3.130.2)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.298.0)
-      aws-sdk-core (~> 3, >= 3.126.0)
+    aws-sdk-ec2 (1.309.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-iam (1.66.0)
-      aws-sdk-core (~> 3, >= 3.126.0)
+    aws-sdk-iam (1.68.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.54.0)
-      aws-sdk-core (~> 3, >= 3.126.0)
+    aws-sdk-kms (1.56.0)
+      aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.112.0)
-      aws-sdk-core (~> 3, >= 3.126.0)
+    aws-sdk-s3 (1.113.2)
+      aws-sdk-core (~> 3, >= 3.127.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
-    aws-sigv4 (1.4.0)
+    aws-sigv4 (1.5.0)
       aws-eventstream (~> 1, >= 1.0.2)
-    bcrypt (3.1.16)
+    bcrypt (3.1.17)
     bcrypt_pbkdf (1.1.0)
     bindata (2.4.10)
-    bson (4.14.1)
+    bson (4.15.0)
     builder (3.2.4)
     concurrent-ruby (1.0.5)
     cookiejar (0.3.3)
     crass (1.0.6)
     daemons (1.4.1)
+    digest (3.1.0)
     dnsruby (1.61.9)
       simpleidn (~> 0.1)
     domain_name (0.5.20190701)
@@ -173,9 +175,9 @@ GEM
       eventmachine (>= 1.0.0.beta.4)
     erubi (1.10.0)
     eventmachine (1.2.7)
-    faker (2.19.0)
-      i18n (>= 1.6, < 2)
-    faraday (1.9.3)
+    faker (2.20.0)
+      i18n (>= 1.8.11, < 2)
+    faraday (1.10.0)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -205,8 +207,9 @@ GEM
     filesize (0.2.0)
     gssapi (1.3.1)
       ffi (>= 1.0.1)
-    gyoku (1.3.1)
+    gyoku (1.4.0)
       builder (>= 2.1.2)
+      rexml (~> 3.0)
     hashery (2.1.2)
     hrr_rb_ssh (0.4.2)
     hrr_rb_ssh-ed25519 (0.4.2)
@@ -216,12 +219,12 @@ GEM
       domain_name (~> 0.5)
     http_parser.rb (0.8.0)
     httpclient (2.8.3)
-    i18n (1.9.1)
+    i18n (1.10.0)
       concurrent-ruby (~> 1.0)
     io-console (0.5.11)
     irb (1.3.6)
       reline (>= 0.2.5)
-    jmespath (1.5.0)
+    jmespath (1.6.1)
     jsobfu (0.4.2)
       rkelly-remix
     json (2.6.1)
@@ -229,15 +232,15 @@ GEM
     logging (2.3.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.14)
-    loofah (2.13.0)
+    loofah (2.17.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     metasm (1.0.5)
-    metasploit-concern (4.0.3)
+    metasploit-concern (4.0.4)
       activemodel (~> 6.0)
       activesupport (~> 6.0)
       railties (~> 6.0)
-    metasploit-credential (5.0.5)
+    metasploit-credential (5.0.7)
       metasploit-concern
       metasploit-model
       metasploit_data_models (>= 5.0.0)
@@ -247,12 +250,12 @@ GEM
       rex-socket
       rubyntlm
       rubyzip
-    metasploit-model (4.0.3)
+    metasploit-model (4.0.4)
       activemodel (~> 6.0)
       activesupport (~> 6.0)
       railties (~> 6.0)
-    metasploit-payloads (2.0.72)
-    metasploit_data_models (5.0.4)
+    metasploit-payloads (2.0.83)
+    metasploit_data_models (5.0.5)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
       arel-helpers
@@ -264,22 +267,28 @@ GEM
       webrick
     metasploit_payloads-mettle (1.0.18)
     method_source (1.0.0)
-    mini_portile2 (2.7.1)
+    mini_portile2 (2.8.0)
     minitest (5.15.0)
     mqtt (0.5.0)
-    msgpack (1.4.4)
+    msgpack (1.5.1)
     multi_json (1.15.0)
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     nessus_rest (0.1.6)
     net-ldap (0.17.0)
+    net-protocol (0.1.3)
+      timeout
+    net-smtp (0.3.1)
+      digest
+      net-protocol
+      timeout
     net-ssh (6.1.0)
     network_interface (0.0.2)
     nexpose (7.3.0)
     nio4r (2.5.8)
-    nokogiri (1.13.1)
-      mini_portile2 (~> 2.7.0)
+    nokogiri (1.13.4)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     nori (2.6.0)
     octokit (4.22.0)
@@ -292,19 +301,19 @@ GEM
       pcaprub
     patch_finder (1.0.2)
     pcaprub (0.13.1)
-    pdf-reader (2.9.1)
+    pdf-reader (2.9.2)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
-    pg (1.3.1)
-    public_suffix (4.0.6)
-    puma (5.6.1)
+    pg (1.3.5)
+    public_suffix (4.0.7)
+    puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
-    rack-protection (2.1.0)
+    rack-protection (2.2.0)
       rack
     rack-test (1.1.0)
       rack (>= 1.0, < 3)
@@ -313,15 +322,15 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
-    railties (6.1.4.4)
-      actionpack (= 6.1.4.4)
-      activesupport (= 6.1.4.4)
+    railties (6.1.5.1)
+      actionpack (= 6.1.5.1)
+      activesupport (= 6.1.5.1)
       method_source
-      rake (>= 0.13)
+      rake (>= 12.2)
       thor (~> 1.0)
     rake (13.0.6)
     rb-readline (0.5.5)
-    recog (2.3.22)
+    recog (2.3.23)
       nokogiri
     redcarpet (3.5.1)
     reline (0.2.5)
@@ -334,12 +343,12 @@ GEM
       rex-core
       rex-struct2
       rex-text
-    rex-core (0.1.25)
+    rex-core (0.1.28)
     rex-encoder (0.1.6)
       metasm
       rex-arch
       rex-text
-    rex-exploitation (0.1.28)
+    rex-exploitation (0.1.30)
       jsobfu
       metasm
       rex-arch
@@ -347,13 +356,13 @@ GEM
       rex-text
       rexml
     rex-java (0.1.6)
-    rex-mime (0.1.6)
+    rex-mime (0.1.7)
       rex-text
     rex-nop (0.1.2)
       rex-arch
     rex-ole (0.1.7)
       rex-text
-    rex-powershell (0.1.94)
+    rex-powershell (0.1.96)
       rex-random_identifier
       rex-text
       ruby-rc4
@@ -364,7 +373,7 @@ GEM
       metasm
       rex-core
       rex-text
-    rex-socket (0.1.34)
+    rex-socket (0.1.35)
       rex-core
     rex-sslscan (0.1.7)
       rex-core
@@ -379,12 +388,12 @@ GEM
     ruby-macho (3.0.0)
     ruby-rc4 (0.1.5)
     ruby2_keywords (0.0.5)
-    ruby_smb (3.0.2)
+    ruby_smb (3.1.1)
       bindata
       openssl-ccm
       openssl-cmac
       rubyntlm
-      windows_error (>= 0.1.3)
+      windows_error (>= 0.1.4)
     rubyntlm (0.6.3)
     rubyzip (2.3.2)
     sawyer (0.8.2)
@@ -392,10 +401,10 @@ GEM
       faraday (> 0.8, < 2.0)
     simpleidn (0.2.1)
       unf (~> 0.1.4)
-    sinatra (2.1.0)
+    sinatra (2.2.0)
       mustermann (~> 1.0)
       rack (~> 2.2)
-      rack-protection (= 2.1.0)
+      rack-protection (= 2.2.0)
       tilt (~> 2.0)
     sqlite3 (1.4.2)
     sshkey (2.0.0)
@@ -406,14 +415,15 @@ GEM
       rack (>= 1, < 3)
     thor (1.2.1)
     tilt (2.0.10)
+    timeout (0.2.0)
     ttfunk (1.7.0)
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2021.5)
+    tzinfo-data (1.2022.1)
       tzinfo (>= 1.0.0)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.8)
+    unf_ext (0.0.8.1)
     unix-crypt (1.3.0)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -422,7 +432,7 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     win32api (0.1.0)
-    windows_error (0.1.3)
+    windows_error (0.1.4)
     winrm (2.3.6)
       builder (>= 2.1.2)
       erubi (~> 1.8)
@@ -432,9 +442,9 @@ GEM
       logging (>= 1.6.1, < 3.0)
       nori (~> 2.0)
       rubyntlm (~> 0.6.0, >= 0.6.3)
-    xdr (3.0.2)
-      activemodel (>= 4.2, < 7.0)
-      activesupport (>= 4.2, < 7.0)
+    xdr (3.0.3)
+      activemodel (>= 4.2, < 8.0)
+      activesupport (>= 4.2, < 8.0)
     xmlrpc (0.3.2)
       webrick
     zeitwerk (2.5.4)
@@ -446,4 +456,4 @@ DEPENDENCIES
   metasploit-framework!
 
 BUNDLED WITH
-   2.3.6
+   2.3.9

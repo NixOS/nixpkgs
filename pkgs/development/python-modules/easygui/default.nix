@@ -2,16 +2,12 @@
 
 buildPythonPackage rec {
   pname = "easygui";
-  version = "0.98.2";
+  version = "0.98.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "073f728ca88a77b74f404446fb8ec3004945427677c5618bd00f70c1b999fef2";
+    sha256 = "sha256-1lP/ee4fQvY7WgkPL5jOAjNdhq2JY7POJmGAXK/pmgQ=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py --replace README.md README.txt
-  '';
 
   propagatedBuildInputs = [
     tkinter

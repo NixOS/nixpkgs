@@ -1,18 +1,8 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper }:
-let
-  version = "0.10";
-  name = "chibi-scheme-${version}";
-in
-stdenv.mkDerivation {
-  inherit name;
 
-  meta = {
-    homepage = "https://github.com/ashinn/chibi-scheme";
-    description = "Small Footprint Scheme for use as a C Extension Language";
-    platforms = lib.platforms.all;
-    license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.DerGuteMoritz ];
-  };
+stdenv.mkDerivation rec {
+  version = "0.10";
+  pname = "chibi-scheme";
 
   src = fetchFromGitHub {
     owner = "ashinn";
@@ -36,4 +26,12 @@ stdenv.mkDerivation {
         --replace "/usr/bin/env chibi-scheme" "$out/bin/chibi-scheme"
     done
   '';
+
+  meta = {
+    homepage = "https://github.com/ashinn/chibi-scheme";
+    description = "Small Footprint Scheme for use as a C Extension Language";
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.DerGuteMoritz ];
+  };
 }

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "jsonpickle";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0be49cba80ea6f87a168aa8168d717d00c6ca07ba83df3cec32d3b30bfe6fb9a";
+    sha256 = "sha256-hGhM/FM4pTQXPI3WmAnkDyhl0L4fiit6+EZeW5aNz6k=";
   };
 
   checkInputs = [ pytest ];

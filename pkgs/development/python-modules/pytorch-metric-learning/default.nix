@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname   = "pytorch-metric-learning";
-  version = "1.1.0";
+  version = "1.2.0";
 
   disabled = isPy27;
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "KevinMusgrave";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0qvlxgdml22fzrs47yzqpfzak8lfdrzayvapawfz93cq8903h7qp";
+    sha256 = "sha256-M/iH+pIuamOmvxLtKMzWXiuMCnMXzpVFRb/HfYfCKdc=";
   };
 
   propagatedBuildInputs = [
@@ -59,5 +59,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/KevinMusgrave/pytorch-metric-learning/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+    broken = true;  # requires faiss which is unpackaged
   };
 }

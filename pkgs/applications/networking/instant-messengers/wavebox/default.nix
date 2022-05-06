@@ -16,7 +16,7 @@ let
     icon = "wavebox";
     desktopName = name;
     genericName = name;
-    categories = "Network;";
+    categories = [ "Network" ];
   };
 
   tarball = "Wavebox_${replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";

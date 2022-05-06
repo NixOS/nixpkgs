@@ -1,29 +1,51 @@
-{ lib, stdenv, fetchurl, makeWrapper, autoPatchelfHook
-, jdk8_headless, jdk11_headless
-, bash, coreutils, which
-, bzip2, cyrus_sasl , protobuf3_7, snappy, zlib, zstd
+{ lib
+, stdenv
+, fetchurl
+, makeWrapper
+, autoPatchelfHook
+, jdk8_headless
+, jdk11_headless
+, bash
+, coreutils
+, which
+, bzip2
+, cyrus_sasl
+, protobuf3_7
+, snappy
+, zlib
+, zstd
 , openssl
+, glibc
+, nixosTests
+, sparkSupport ? true
+, spark
 }:
 
 with lib;
 
+assert elem stdenv.system [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+
 let
-  common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl, nativeLibs ? [ ], libPatches ? "" }:
+  common = { pname, version, untarDir ? "${pname}-${version}", sha256, jdk, openssl ? null, nativeLibs ? [ ], libPatches ? "", tests }:
     stdenv.mkDerivation rec {
       inherit pname version jdk libPatches untarDir openssl;
       src = fetchurl {
-        url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}.tar.gz";
-        inherit sha256;
+        url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}" + optionalString stdenv.isAarch64 "-aarch64" + ".tar.gz";
+        sha256 = sha256.${stdenv.system};
       };
+      doCheck = true;
 
       nativeBuildInputs = [ makeWrapper ]
-        ++ optional (nativeLibs != [] || libPatches != "") [ autoPatchelfHook ];
+        ++ optional (stdenv.isLinux && (nativeLibs != [ ] || libPatches != "")) [ autoPatchelfHook ];
       buildInputs = [ openssl ] ++ nativeLibs;
 
       installPhase = ''
         mkdir -p $out/{lib/${untarDir}/conf,bin,lib}
         mv * $out/lib/${untarDir}
-
+      '' + optionalString stdenv.isLinux ''
+        # All versions need container-executor, but some versions can't use autoPatchelf because of broken SSL versions
+        patchelf --set-interpreter ${glibc.out}/lib64/ld-linux-x86-64.so.2 $out/lib/${untarDir}/bin/container-executor
+      '' + ''
         for n in $(find $out/lib/${untarDir}/bin -type f ! -name "*.*"); do
           makeWrapper "$n" "$out/bin/$(basename $n)"\
             --set-default JAVA_HOME ${jdk.home}\
@@ -32,7 +54,12 @@ let
             --prefix PATH : "${makeBinPath [ bash coreutils which]}"\
             --prefix JAVA_LIBRARY_PATH : "${makeLibraryPath buildInputs}"
         done
+      '' + optionalString sparkSupport ''
+        # Add the spark shuffle service jar to YARN
+        cp ${spark.src}/yarn/spark-${spark.version}-yarn-shuffle.jar $out/lib/${untarDir}/share/hadoop/yarn/
       '' + libPatches;
+
+      passthru = { inherit tests; };
 
       meta = {
         homepage = "https://hadoop.apache.org/";
@@ -51,9 +78,8 @@ let
           computers, each of which may be prone to failures.
         '';
         maintainers = with maintainers; [ volth illustris ];
-        platforms = [ "x86_64-linux" ];
+        platforms = attrNames sha256;
       };
-
     };
 in
 {
@@ -62,8 +88,13 @@ in
   hadoop_3_3 = common rec {
     pname = "hadoop";
     version = "3.3.1";
-    sha256 = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
     untarDir = "${pname}-${version}";
+    sha256 = rec {
+      x86_64-linux = "1b3v16ihysqaxw8za1r5jlnphy8dwhivdx2d0z64309w57ihlxxd";
+      x86_64-darwin = x86_64-linux;
+      aarch64-linux = "00ln18vpi07jq2slk3kplyhcj8ad41n0yl880q5cihilk7daclxz";
+      aarch64-darwin = aarch64-linux;
+    };
     jdk = jdk11_headless;
     inherit openssl;
     # TODO: Package and add Intel Storage Acceleration Library
@@ -74,23 +105,28 @@ in
       ln -s ${getLib zlib}/lib/libz.so.1 $out/lib/${untarDir}/lib/native/
       ln -s ${getLib zstd}/lib/libzstd.so.1 $out/lib/${untarDir}/lib/native/
       ln -s ${getLib bzip2}/lib/libbz2.so.1 $out/lib/${untarDir}/lib/native/
+    '' + optionalString stdenv.isLinux ''
+      # libjvm.so for Java >=11
       patchelf --add-rpath ${jdk.home}/lib/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0
+      # Java 8 has libjvm.so at a different path
+      patchelf --add-rpath ${jdk.home}/jre/lib/amd64/server $out/lib/${untarDir}/lib/native/libnativetask.so.1.0.0
     '';
+    tests = nixosTests.hadoop;
   };
   hadoop_3_2 = common rec {
     pname = "hadoop";
     version = "3.2.2";
-    sha256 = "1hxq297cqvkfgz2yfdiwa3l28g44i2abv5921k2d6b4pqd33prwp";
+    sha256.x86_64-linux = "1hxq297cqvkfgz2yfdiwa3l28g44i2abv5921k2d6b4pqd33prwp";
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
     # can be manually overriden
-    openssl = null;
+    tests = nixosTests.hadoop_3_2;
   };
   hadoop2 = common rec {
     pname = "hadoop";
     version = "2.10.1";
-    sha256 = "1w31x4bk9f2swnx8qxx0cgwfg8vbpm6cy5lvfnbbpl3rsjhmyg97";
+    sha256.x86_64-linux = "1w31x4bk9f2swnx8qxx0cgwfg8vbpm6cy5lvfnbbpl3rsjhmyg97";
     jdk = jdk8_headless;
-    openssl = null;
+    tests = nixosTests.hadoop2;
   };
 }

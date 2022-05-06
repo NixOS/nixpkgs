@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [];
 
-  buildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ libtool ];
 
   preConfigure = ''
     sh autogen.sh

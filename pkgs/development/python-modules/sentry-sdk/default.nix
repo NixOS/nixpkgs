@@ -28,6 +28,7 @@
 , pytest-forked
 , pytest-localserver
 , pytestCheckHook
+, pythonOlder
 , rq
 , sanic
 , sanic-testing
@@ -40,14 +41,16 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.5.4";
+  version = "1.5.11";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
     rev = version;
-    sha256 = "sha256-MZ1J2Stq+pRoeJ05hv8cSpxtaeRGaJEWAtidbr8YP88=";
+    hash = "sha256-2WN18hzOn/gomNvQNbm9R8CcxN6G1XxoodBHqsG6es0=";
   };
 
   propagatedBuildInputs = [
@@ -56,10 +59,12 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    aiohttp
     asttokens
     blinker
     botocore
     bottle
+    celery
     chalice
     django
     executing
@@ -67,25 +72,22 @@ buildPythonPackage rec {
     falcon
     flask_login
     gevent
+    httpx
     jsonschema
     pure-eval
+    pyramid
+    pyspark
     pytest-django
     pytest-forked
     pytest-localserver
     pytestCheckHook
     rq
+    sanic
+    sanic-testing
     sqlalchemy
     tornado
     trytond
     werkzeug
-  ] ++ lib.optionals isPy3k [
-    aiohttp
-    celery
-    httpx
-    pyramid
-    pyspark
-    sanic
-    sanic-testing
   ];
 
   doCheck = !stdenv.isDarwin;
@@ -107,10 +109,13 @@ buildPythonPackage rec {
     "test_start_sentry_listener"
     # Failing threading test
     "test_circular_references"
-    # Failing wsgi test
+    # Failing wsgi tests
     "test_session_mode_defaults_to_request_mode_in_wsgi_handler"
+    "test_auto_session_tracking_with_aggregates"
     # Network requests to public web
     "test_crumb_capture"
+    # TypeError: cannot unpack non-iterable TestResponse object
+    "test_rpc_error_page"
   ];
 
   disabledTestPaths = [
@@ -125,6 +130,18 @@ buildPythonPackage rec {
     "tests/integrations/chalice/"
     # broken since rq-1.10.1: https://github.com/getsentry/sentry-python/issues/1274
     "tests/integrations/rq/"
+    # broken since pytest 7.0.1; AssertionError: previous item was not torn down properly
+    "tests/utils/test_contextvars.py"
+    # broken since Flask and Werkzeug update to 2.1.0 (different error messages)
+    "tests/integrations/flask/test_flask.py"
+    "tests/integrations/bottle/test_bottle.py"
+    "tests/integrations/django/test_basic.py"
+    "tests/integrations/pyramid/test_pyramid.py"
+  ]
+  # test crashes on aarch64
+  ++ lib.optionals (stdenv.buildPlatform != "x86_64-linux") [
+    "tests/test_transport.py"
+    "tests/integrations/threading/test_threading.py"
   ];
 
   pythonImportsCheck = [

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , meson
 , ninja
@@ -27,7 +28,6 @@
 , libwebp
 , appstream
 , wrapGAppsHook
-, elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +41,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NhF/WgS6IOwgALSCNyFNxz8ROVTb+mUX+lBtnWEyhEI=";
   };
 
+  patches = [
+    # Fix build with vala 0.56
+    # https://github.com/elementary/photos/pull/711
+    (fetchpatch {
+      url = "https://github.com/elementary/photos/commit/6594f1323726fb0d38519a7bdafe16f9170353cb.patch";
+      sha256 = "sha256-Ie9ULC8Xw4KLQJANPXh4LDywMjWfniPX/P76eHW8LHc=";
+    })
+  ];
+
   nativeBuildInputs = [
     appstream
     desktop-file-utils
@@ -53,7 +62,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     geocode-glib
     gexiv2
     granite

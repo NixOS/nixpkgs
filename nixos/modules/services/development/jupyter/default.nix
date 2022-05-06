@@ -194,6 +194,7 @@ in {
         extraGroups = [ cfg.group ];
         home = "/var/lib/jupyter";
         createHome = true;
+        isSystemUser = true;
         useDefaultShell = true; # needed so that the user can start a terminal.
       };
     })

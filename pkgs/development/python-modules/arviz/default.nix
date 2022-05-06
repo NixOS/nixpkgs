@@ -25,13 +25,13 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.11.4";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
     rev = "v${version}";
-    sha256 = "0vindadyxhxhrhbalys6kzrda2d4qpqbqbsbwfprp8pxkldgk548";
+    sha256 = "sha256-ClARxgfji/CavEy8g5oeYK7pwSZS1yUIZnBiyTbZ/zU=";
   };
 
   propagatedBuildInputs = [

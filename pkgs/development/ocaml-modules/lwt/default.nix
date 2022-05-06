@@ -4,7 +4,7 @@
 , ocaml-syntax-shims
 }:
 
-let inherit (lib) optional versionAtLeast; in
+let inherit (lib) optional versionOlder; in
 
 buildDunePackage rec {
   pname = "lwt";
@@ -19,9 +19,12 @@ buildDunePackage rec {
     sha256 = "sha256-XpoRKcdNo2j05Gxm5wmKSdwqimFDSWvmLyooPYTHAjM=";
   };
 
-  nativeBuildInputs = [ pkg-config cppo dune-configurator ];
-  buildInputs = optional (!versionAtLeast ocaml.version "4.08") ocaml-syntax-shims
-   ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
+  strictDeps = true;
+
+  nativeBuildInputs = [ pkg-config cppo ]
+    ++ optional (versionOlder ocaml.version "4.08") ocaml-syntax-shims;
+  buildInputs = [ dune-configurator ]
+    ++ optional (versionOlder ocaml.version "4.07") ncurses;
   propagatedBuildInputs = [ libev mmap ocplib-endian seq result ];
 
   meta = {

@@ -1,29 +1,29 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest-localserver
 , pytestCheckHook
 , pythonOlder
 , requests
-, six
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.17.0";
+  version = "0.20.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7GdeCA0Gv40fteWmih5c0N9GsJx4IwMV9lCvXkA2vsc=";
+  src = fetchFromGitHub {
+    owner = "getsentry";
+    repo = pname;
+    rev = version;
+    hash = "sha256-dhIKMQXBJfZGIanJN1bFmlr/FYL1UYgYKGYaSznKhZs=";
   };
 
   propagatedBuildInputs = [
     requests
-    six
     urllib3
   ];
 

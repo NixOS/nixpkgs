@@ -53,8 +53,8 @@ in
 , confDir
 , stateDir
 , storeDir
-}:
-stdenv.mkDerivation {
+}: let
+self = stdenv.mkDerivation {
   pname = "nix";
 
   version = "${version}${suffix}";
@@ -101,15 +101,17 @@ stdenv.mkDerivation {
     lowdown
   ] ++ lib.optionals (atLeast24 && stdenv.isx86_64) [
     libcpuid
-  ] ++ lib.optional (atLeast27) [
-    nlohmann_json
   ] ++ lib.optionals withLibseccomp [
     libseccomp
   ] ++ lib.optionals withAWS [
     aws-sdk-cpp
   ];
 
-  propagatedBuildInputs = [ boehmgc ];
+  propagatedBuildInputs = [
+    boehmgc
+  ] ++ lib.optional (atLeast27) [
+    nlohmann_json
+  ];
 
   NIX_LDFLAGS = lib.optionals (!atLeast24) [
     # https://github.com/NixOS/nix/commit/3e85c57a6cbf46d5f0fe8a89b368a43abd26daba
@@ -199,14 +201,15 @@ stdenv.mkDerivation {
     '';
     homepage = "https://nixos.org/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ eelco lovesegfault ];
+    maintainers = with maintainers; [ eelco lovesegfault artturin ];
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
   };
 
   passthru = {
-    inherit boehmgc;
+    inherit aws-sdk-cpp boehmgc;
 
-    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { inherit src version;  });
+    perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; });
   };
-}
+};
+in self

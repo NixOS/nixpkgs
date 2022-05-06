@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "http://pmt.sourceforge.net/pngcrush";
     description = "Verifies the integrity of PNG, JNG and MNG files";
     license = licenses.free;
-    platforms = with platforms; [ unix ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ starcraft66 ];
   };
 }

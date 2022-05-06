@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, which }:
+{ lib, stdenv, fetchurl, pkg-config, glib, which, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "nbd";
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    test = nixosTests.nbd;
+  };
 
   # Glib calls `clock_gettime', which is in librt. Linking that library
   # here ensures that a proper rpath is added to the executable so that

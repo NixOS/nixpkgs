@@ -7,6 +7,7 @@
 , jaxlib
 , jmp
 , lib
+, pytest-xdist
 , pytestCheckHook
 , tabulate
 , tensorflow
@@ -14,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "dm-haiku";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1mdqjcka0m1div63ngba8w8z94id4c1h8xqmnq1xpmgkc79224wa";
+    hash = "sha256-qvKMeGPiWXvvyV+GZdTWdsC6Wp08AmP8nDtWk7sZtqM=";
   };
 
   propagatedBuildInputs = [
@@ -31,8 +32,10 @@ buildPythonPackage rec {
   checkInputs = [
     chex
     cloudpickle
+    dill
     dm-tree
     jaxlib
+    pytest-xdist
     pytestCheckHook
     tensorflow
   ];
@@ -50,6 +53,13 @@ buildPythonPackage rec {
     # likely that's the reason the upstream uses TF-nightly for tests?
     # `nixpkgs` doesn't have the corresponding TF version packaged.
     "haiku/_src/integration/jax2tf_test.py"
+    # `TypeError: lax.conv_general_dilated requires arguments to have the same dtypes, got float32, float16`.
+    "haiku/_src/integration/numpy_inputs_test.py"
+  ];
+
+  disabledTests = [
+    # See https://github.com/deepmind/dm-haiku/issues/366.
+    "test_jit_Recurrent"
   ];
 
   meta = with lib; {

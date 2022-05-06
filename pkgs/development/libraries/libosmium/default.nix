@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     description = "Fast and flexible C++ library for working with OpenStreetMap data";
     homepage = "https://osmcode.org/libosmium/";
     license = licenses.boost;
+    changelog = [
+      "https://github.com/osmcode/libosmium/releases/tag/v${version}"
+      "https://github.com/osmcode/libosmium/blob/v${version}/CHANGELOG.md"
+    ];
     maintainers = with maintainers; [ das-g ];
   };
 }

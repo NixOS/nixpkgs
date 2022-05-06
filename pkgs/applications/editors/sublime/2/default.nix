@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Sublime Text";
     genericName = "Text Editor";
-    categories = "TextEditor;Development;";
+    categories = [ "TextEditor" "Development" ];
     icon = "sublime_text";
   };
 

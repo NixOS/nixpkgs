@@ -8,7 +8,7 @@ let
   doCheck = true;
 in
 
-if !(lib.versionAtLeast ocaml.version minimumOCamlVersion)
+if lib.versionOlder ocaml.version minimumOCamlVersion
 then builtins.throw "${pname} needs at least OCaml ${minimumOCamlVersion}"
 else
 
@@ -21,9 +21,12 @@ stdenv.mkDerivation {
     sha256 = "sha256:1yx9nih3d9prb9zizq8fzmmqylf24a6yifhf81h33znrj5xn1mpj";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg uutf uunf ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg uutf uunf uucd ];
 
   propagatedBuildInputs = [ uchar ];
+
+  strictDeps = true;
 
   buildPhase = ''
     runHook preBuild

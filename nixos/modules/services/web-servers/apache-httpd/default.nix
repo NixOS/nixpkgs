@@ -710,20 +710,15 @@ in
 
     services.logrotate = optionalAttrs (cfg.logFormat != "none") {
       enable = mkDefault true;
-      paths.httpd = {
-        path = "${cfg.logDir}/*.log";
-        user = cfg.user;
-        group = cfg.group;
+      settings.httpd = {
+        files = "${cfg.logDir}/*.log";
+        su = "${cfg.user} ${cfg.group}";
         frequency = "daily";
-        keep = 28;
-        extraConfig = ''
-          sharedscripts
-          compress
-          delaycompress
-          postrotate
-            systemctl reload httpd.service > /dev/null 2>/dev/null || true
-          endscript
-        '';
+        rotate = 28;
+        sharedscripts = true;
+        compress = true;
+        delaycompress = true;
+        postrotate = "systemctl reload httpd.service > /dev/null 2>/dev/null || true";
       };
     };
 

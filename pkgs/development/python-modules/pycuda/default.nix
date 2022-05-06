@@ -10,7 +10,7 @@
 , decorator
 , appdirs
 , six
-, cudatoolkit
+, cudaPackages
 , python
 , mkDerivation
 , lib
@@ -19,6 +19,8 @@ let
   compyte = import ./compyte.nix {
     inherit mkDerivation fetchFromGitHub;
   };
+
+  inherit (cudaPackages) cudatoolkit;
 in
 buildPythonPackage rec {
   pname = "pycuda";

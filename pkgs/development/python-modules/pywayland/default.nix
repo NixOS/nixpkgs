@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pywayland";
-  version = "0.4.10";
+  version = "0.4.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3fVAJXiIS6sFUj8riHg7LJ4VLLpjZEK8qTJNYSaXtOw=";
+    sha256 = "sha256-IAwBzV+wvQYgoJK1+GjAHm2aXWE2iVaMV2cduMtCkx8=";
   };
 
   nativeBuildInputs = [ pkg-config ];

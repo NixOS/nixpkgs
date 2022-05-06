@@ -3,14 +3,14 @@ let
   package = (import ./node.nix { inherit pkgs; inherit (stdenv.hostPlatform) system; }).package;
 in
 package.override rec {
-  version = "1.23.0";
+  version = "1.25.0";
   reconstructLock = true;
 
   src = pkgs.fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     rev = version;
-    sha256 = "0mf6ya5pw5gh0ld0j5dlsicx3ndhfrm3q683faqcm4ks7c5kjhax";
+    sha256 = "Wp3+N3np/biNw2xaR79PpQ/S7o3FftjH6AgyMLM+ya8=";
   };
 
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;

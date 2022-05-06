@@ -44,13 +44,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.6.0";
+  version = "5.6.8";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "sha256-AhO7Ev/4M9dtogNIMWOc03ARD5H2gdlRXR4Qpnkf7bw=";
+    sha256 = "0fpz63dfac1i6wwf5wp3v1vs3r5yzh05g95m5vidx56h0g4dcp44";
   };
 
   preBuild = ''
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    for file in $out/bin/rasm2 $out/bin/ragg2 $out/bin/rabin2 $out/lib/libr_asm.${version}.dylib; do
+    for file in $out/bin/rasm2 $out/bin/ragg2 $out/bin/rabin2 $out/lib/libr_asm.${version}.dylib $out/lib/libr_anal.${version}.dylib; do
       install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $file
     done
   '';

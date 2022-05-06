@@ -15,20 +15,14 @@ buildPythonPackage rec {
   version = "1.1.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "klaasnicolaas";
     repo = "python-p1monitor";
     rev = "v${version}";
-    sha256 = "1ciaclgq4aknldjqlqa08jcab28sbqrjxy5nqqwlnb2wlprg5ijz";
+    hash = "sha256-X8by8qVcLEs5xrb4LjNeGomlmERAYYplo3Yqgh9lKrI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '"0.0.0"' '"${version}"' \
-      --replace 'addopts = "--cov"' ""
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -45,10 +39,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "p1monitor" ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace '"0.0.0"' '"${version}"' \
+      --replace 'addopts = "--cov"' ""
+  '';
+
+  pythonImportsCheck = [
+    "p1monitor"
+  ];
 
   meta = with lib; {
-    description = "Python client for the P1 Monitor";
+    description = "Module for interacting with the P1 Monitor";
     homepage = "https://github.com/klaasnicolaas/python-p1monitor";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

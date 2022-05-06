@@ -486,7 +486,7 @@ rec {
   cross = let
     # Cross compile for x86_64 if on aarch64
     crossPkgs =
-      if pkgs.system == "aarch64-linux" then pkgsCross.gnu64
+      if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then pkgsCross.gnu64
       else pkgsCross.aarch64-multiplatform;
   in crossPkgs.dockerTools.buildImage {
     name = "hello-cross";

@@ -179,7 +179,7 @@ let
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
-          --run 'cd ${cfg.packages.gitlab}/share/gitlab'
+          --chdir '${cfg.packages.gitlab}/share/gitlab'
      '';
   };
 
@@ -193,7 +193,7 @@ let
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
-          --run 'cd ${cfg.packages.gitlab}/share/gitlab'
+          --chdir '${cfg.packages.gitlab}/share/gitlab'
      '';
   };
 
@@ -848,10 +848,7 @@ in {
 
         extraConfig = mkOption {
           type = types.lines;
-          default = ''
-            copytruncate
-            compress
-          '';
+          default = "";
           description = ''
             Extra logrotate config options for this path. Refer to
             <link xlink:href="https://linux.die.net/man/8/logrotate"/> for details.
@@ -977,13 +974,14 @@ in {
     # Enable rotation of log files
     services.logrotate = {
       enable = cfg.logrotate.enable;
-      paths = {
+      settings = {
         gitlab = {
-          path = "${cfg.statePath}/log/*.log";
-          user = cfg.user;
-          group = cfg.group;
+          files = "${cfg.statePath}/log/*.log";
+          su = "${cfg.user} ${cfg.group}";
           frequency = cfg.logrotate.frequency;
-          keep = cfg.logrotate.keep;
+          rotate = cfg.logrotate.keep;
+          copytruncate = true;
+          compress = true;
           extraConfig = cfg.logrotate.extraConfig;
         };
       };

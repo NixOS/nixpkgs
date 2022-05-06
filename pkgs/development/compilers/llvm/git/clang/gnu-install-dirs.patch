@@ -1,9 +1,9 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 9e74014134a0..976e6a1757fd 100644
+index 7ea37850ad60..ac0f2d4f60b4 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -5,6 +5,8 @@ cmake_minimum_required(VERSION 3.13.4)
- if( CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR )
+ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
    project(Clang)
  
 +  include(GNUInstallDirs)
@@ -11,7 +11,7 @@ index 9e74014134a0..976e6a1757fd 100644
    set(CMAKE_CXX_STANDARD 14 CACHE STRING "C++ standard to conform to")
    set(CMAKE_CXX_STANDARD_REQUIRED YES)
    set(CMAKE_CXX_EXTENSIONS NO)
-@@ -416,7 +418,7 @@ include_directories(BEFORE
+@@ -424,7 +426,7 @@ include_directories(BEFORE
  
  if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
    install(DIRECTORY include/clang include/clang-c
@@ -20,7 +20,7 @@ index 9e74014134a0..976e6a1757fd 100644
      COMPONENT clang-headers
      FILES_MATCHING
      PATTERN "*.def"
-@@ -425,7 +427,7 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+@@ -433,7 +435,7 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
      )
  
    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/clang
@@ -29,7 +29,7 @@ index 9e74014134a0..976e6a1757fd 100644
      COMPONENT clang-headers
      FILES_MATCHING
      PATTERN "CMakeFiles" EXCLUDE
-@@ -445,7 +447,7 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+@@ -453,7 +455,7 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
  
    add_custom_target(bash-autocomplete DEPENDS utils/bash-autocomplete.sh)
    install(PROGRAMS utils/bash-autocomplete.sh
@@ -39,10 +39,10 @@ index 9e74014134a0..976e6a1757fd 100644
    if(NOT LLVM_ENABLE_IDE)
      add_llvm_install_targets(install-bash-autocomplete
 diff --git a/cmake/modules/AddClang.cmake b/cmake/modules/AddClang.cmake
-index 704278a0e93b..d25c8d325c71 100644
+index 5752f4277444..5bf08dbf5e83 100644
 --- a/cmake/modules/AddClang.cmake
 +++ b/cmake/modules/AddClang.cmake
-@@ -123,9 +123,9 @@ macro(add_clang_library name)
+@@ -118,9 +118,9 @@ macro(add_clang_library name)
          install(TARGETS ${lib}
            COMPONENT ${lib}
            ${export_to_clangtargets}
@@ -55,8 +55,8 @@ index 704278a0e93b..d25c8d325c71 100644
  
          if (NOT LLVM_ENABLE_IDE)
            add_llvm_install_targets(install-${lib}
-@@ -170,7 +170,7 @@ macro(add_clang_tool name)
- 
+@@ -159,7 +159,7 @@ macro(add_clang_tool name)
+     get_target_export_arg(${name} Clang export_to_clangtargets)
      install(TARGETS ${name}
        ${export_to_clangtargets}
 -      RUNTIME DESTINATION bin
@@ -64,7 +64,7 @@ index 704278a0e93b..d25c8d325c71 100644
        COMPONENT ${name})
  
      if(NOT LLVM_ENABLE_IDE)
-@@ -185,7 +185,7 @@ endmacro()
+@@ -174,7 +174,7 @@ endmacro()
  macro(add_clang_symlink name dest)
    add_llvm_tool_symlink(${name} ${dest} ALWAYS_GENERATE)
    # Always generate install targets
@@ -74,10 +74,10 @@ index 704278a0e93b..d25c8d325c71 100644
  
  function(clang_target_link_libraries target type)
 diff --git a/lib/Headers/CMakeLists.txt b/lib/Headers/CMakeLists.txt
-index b2c0ce8dd4a0..19e5443d8c25 100644
+index 078988980c52..14b58614b40a 100644
 --- a/lib/Headers/CMakeLists.txt
 +++ b/lib/Headers/CMakeLists.txt
-@@ -215,7 +215,7 @@ set_target_properties(clang-resource-headers PROPERTIES
+@@ -234,7 +234,7 @@ set_target_properties(clang-resource-headers PROPERTIES
    FOLDER "Misc"
    RUNTIME_OUTPUT_DIRECTORY "${output_dir}")
  
@@ -87,10 +87,10 @@ index b2c0ce8dd4a0..19e5443d8c25 100644
  install(
    FILES ${files} ${generated_files}
 diff --git a/tools/c-index-test/CMakeLists.txt b/tools/c-index-test/CMakeLists.txt
-index ceef4b08637c..8efad5520ca4 100644
+index 99c6081db2d6..0887102febb3 100644
 --- a/tools/c-index-test/CMakeLists.txt
 +++ b/tools/c-index-test/CMakeLists.txt
-@@ -54,7 +54,7 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
+@@ -49,7 +49,7 @@ if (NOT LLVM_INSTALL_TOOLCHAIN_ONLY)
      set_property(TARGET c-index-test APPEND PROPERTY INSTALL_RPATH
         "@executable_path/../../lib")
    else()
@@ -146,10 +146,10 @@ index cda8e29ec5b1..0134d8ccd70b 100644
 +  DESTINATION ${CMAKE_INSTALL_DATADIR}/clang
    COMPONENT clang-rename)
 diff --git a/tools/libclang/CMakeLists.txt b/tools/libclang/CMakeLists.txt
-index 51ff2e7e1565..1ed5f8a079a1 100644
+index bf88dca0a34b..7a10181e7738 100644
 --- a/tools/libclang/CMakeLists.txt
 +++ b/tools/libclang/CMakeLists.txt
-@@ -166,7 +166,7 @@ endif()
+@@ -186,7 +186,7 @@ endif()
  if(INTERNAL_INSTALL_PREFIX)
    set(LIBCLANG_HEADERS_INSTALL_DESTINATION "${INTERNAL_INSTALL_PREFIX}/include")
  else()
@@ -158,7 +158,7 @@ index 51ff2e7e1565..1ed5f8a079a1 100644
  endif()
  
  install(DIRECTORY ../../include/clang-c
-@@ -196,7 +196,7 @@ foreach(PythonVersion ${CLANG_PYTHON_BINDINGS_VERSIONS})
+@@ -216,7 +216,7 @@ foreach(PythonVersion ${CLANG_PYTHON_BINDINGS_VERSIONS})
            COMPONENT
              libclang-python-bindings
            DESTINATION
@@ -168,7 +168,7 @@ index 51ff2e7e1565..1ed5f8a079a1 100644
  if(NOT LLVM_ENABLE_IDE)
    add_custom_target(libclang-python-bindings)
 diff --git a/tools/scan-build/CMakeLists.txt b/tools/scan-build/CMakeLists.txt
-index ec0702d76f18..d25d982f51da 100644
+index 74334e53c9b1..ebaae33e4324 100644
 --- a/tools/scan-build/CMakeLists.txt
 +++ b/tools/scan-build/CMakeLists.txt
 @@ -47,7 +47,7 @@ if(CLANG_INSTALL_SCANBUILD)
@@ -199,10 +199,10 @@ index ec0702d76f18..d25d982f51da 100644
    endforeach()
  
 diff --git a/tools/scan-view/CMakeLists.txt b/tools/scan-view/CMakeLists.txt
-index dd3d33439299..fea19c12ce70 100644
+index eccc6b83195b..ff72d9cf0666 100644
 --- a/tools/scan-view/CMakeLists.txt
 +++ b/tools/scan-view/CMakeLists.txt
-@@ -19,7 +19,7 @@ if(CLANG_INSTALL_SCANVIEW)
+@@ -20,7 +20,7 @@ if(CLANG_INSTALL_SCANVIEW)
                         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/bin/${BinFile})
      list(APPEND Depends ${CMAKE_BINARY_DIR}/bin/${BinFile})
      install(PROGRAMS bin/${BinFile}
@@ -211,7 +211,7 @@ index dd3d33439299..fea19c12ce70 100644
              COMPONENT scan-view)
    endforeach()
  
-@@ -33,7 +33,7 @@ if(CLANG_INSTALL_SCANVIEW)
+@@ -34,7 +34,7 @@ if(CLANG_INSTALL_SCANVIEW)
                         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/share/${ShareFile})
      list(APPEND Depends ${CMAKE_BINARY_DIR}/share/scan-view/${ShareFile})
      install(FILES share/${ShareFile}

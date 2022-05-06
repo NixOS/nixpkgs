@@ -14,7 +14,10 @@
 , libobjc
 , rustPlatform
 , rustc
+, rust
 , cargo
+, gi-docgen
+, python3
 , gnome
 , vala
 , withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -24,13 +27,15 @@
 
 stdenv.mkDerivation rec {
   pname = "librsvg";
-  version = "2.52.5";
+  version = "2.54.0";
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = [ "out" "dev" "installedTests" ] ++ lib.optionals withIntrospection [
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "QHy7q1GBN+oYo/MiC+oYD77nXz5b1roQp6hiwab3TYI=";
+    sha256 = "uvjrwUfxRrQmG7PQzQ+slEv427Sx8jR9IzQfl03MMIU=";
   };
 
   cargoVendorDir = "vendor";
@@ -44,10 +49,12 @@ stdenv.mkDerivation rec {
     pkg-config
     rustc
     cargo
+    python3.pkgs.docutils
     vala
     rustPlatform.cargoSetupHook
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
+    gi-docgen
   ];
 
   buildInputs = [
@@ -78,7 +85,8 @@ stdenv.mkDerivation rec {
 
     "--enable-installed-tests"
     "--enable-always-build-tests"
-  ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic";
+  ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${rust.toRustTarget stdenv.hostPlatform}";
 
   makeFlags = [
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/RSVG"
@@ -117,6 +125,11 @@ stdenv.mkDerivation rec {
     mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
@@ -133,6 +146,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/LibRsvg";
     license = licenses.lgpl2Plus;
     maintainers = teams.gnome.members;
+    mainProgram = "rsvg-convert";
     platforms = platforms.unix;
   };
 }

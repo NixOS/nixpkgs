@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, autoreconfHook, removeReferencesTo
-, file, openssl, perl, perlPackages, nettools, gnused
+, file, openssl, perl, perlPackages, nettools
 , withPerlTools ? false }: let
 
   perlWithPkgs = perl.withPackages (ps: with ps; [
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
   '';
 
-  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo gnused file ];
+  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo file ];
   buildInputs = [ openssl ]
     ++ lib.optional withPerlTools perlWithPkgs;
 
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     for f in "$lib/lib/"*.la $bin/bin/net-snmp-config $bin/bin/net-snmp-create-v3-user; do
-      sed 's|-L${openssl.dev}|-L${openssl.out}|g' -i $f
+      sed 's|-L${openssl.dev}|-L${lib.getLib openssl}|g' -i $f
     done
     mkdir $dev/bin
     mv $bin/bin/net-snmp-config $dev/bin

@@ -1,27 +1,77 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, zlib, libpng, cairo, freetype
-, json_c, fontconfig, gtkmm3, pangomm, glew, libGLU, xorg, pcre, wrapGAppsHook
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wrapGAppsHook
+, at-spi2-core
+, cairo
+, dbus
+, freetype
+, fontconfig
+, glew
+, gtkmm3
+, json_c
+, libdatrie
+, libepoxy
+, libGLU
+, libpng
+, libselinux
+, libsepol
+, libthai
+, libxkbcommon
+, pangomm
+, pcre
+, util-linuxMinimal # provides libmount
+, xorg
+, zlib
 }:
+
 stdenv.mkDerivation rec {
   pname = "solvespace";
-  version = "v3.0";
+  version = "3.0";
+
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "04aympdsjp37vp0p13mb8nwkc080hp9cdrjpyy5m1mhwkm8jm9k9";
+    rev = "v${version}";
+    hash = "sha256-aaYqUZ0c1lCL91fmxtKFAAE2uUWrjnDB3WdcqdutXhE=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    pkg-config cmake wrapGAppsHook
-  ];
-  buildInputs = [
-    zlib libpng cairo freetype
-    json_c fontconfig gtkmm3 pangomm glew libGLU
-    xorg.libpthreadstubs xorg.libXdmcp pcre
+    cmake
+    pkg-config
+    wrapGAppsHook
   ];
 
-  preConfigure = ''
+  buildInputs = [
+    at-spi2-core
+    cairo
+    dbus
+    freetype
+    fontconfig
+    glew
+    gtkmm3
+    json_c
+    libdatrie
+    libepoxy
+    libGLU
+    libpng
+    libselinux
+    libsepol
+    libthai
+    libxkbcommon
+    pangomm
+    pcre
+    util-linuxMinimal
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    xorg.libXtst
+    zlib
+  ];
+
+  postPatch = ''
     patch CMakeLists.txt <<EOF
     @@ -20,9 +20,9 @@
      # NOTE TO PACKAGERS: The embedded git commit hash is critical for rapid bug triage when the builds
@@ -35,16 +85,14 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  postInstall = ''
-    substituteInPlace $out/share/applications/solvespace.desktop \
-      --replace /usr/bin/ $out/bin/
-  '';
+  cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
 
   meta = with lib; {
     description = "A parametric 3d CAD program";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.edef ];
     platforms = platforms.linux;
-    homepage = "http://solvespace.com";
+    homepage = "https://solvespace.com";
+    changelog = "https://github.com/solvespace/solvespace/raw/v${version}/CHANGELOG.md";
   };
 }

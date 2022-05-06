@@ -9,6 +9,7 @@
       rev = "9bce425c3304173548d8e822029644bb51d35263";
       sha256 = "sha256-tGzwKNW/odtAYcazWA9bPVSmVXMGKfXsqCA1UYaaxmU=";
     };
+    patches = [ ./eval.patch ];
     nix = nixVersions.unstable;
 
     tests = {

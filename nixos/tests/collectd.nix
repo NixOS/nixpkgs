@@ -2,12 +2,15 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   name = "collectd";
   meta = { };
 
-  machine =
-    { pkgs, ... }:
+  nodes.machine =
+    { pkgs, lib, ... }:
 
     {
       services.collectd = {
         enable = true;
+        extraConfig = lib.mkBefore ''
+          Interval 30
+        '';
         plugins = {
           rrdtool = ''
             DataDir "/var/lib/collectd/rrd"
@@ -26,6 +29,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed(f"rrdinfo {file} | logger")
     # check that this file contains a shortterm metric
     machine.succeed(f"rrdinfo {file} | grep -F 'ds[shortterm].min = '")
+    # check that interval was set before the plugins
+    machine.succeed(f"rrdinfo {file} | grep -F 'step = 30'")
     # check that there are frequent updates
     machine.succeed(f"cp {file} before")
     machine.wait_until_fails(f"cmp before {file}")

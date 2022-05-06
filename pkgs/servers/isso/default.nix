@@ -16,13 +16,13 @@ in
 with python3Packages; buildPythonApplication rec {
 
   pname = "isso";
-  version = "0.12.5";
+  version = "0.12.6.1";
 
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
     rev = version;
-    sha256 = "12ccfba2kwbfm9h4zhlxrcigi98akbdm4qi89iglr4z53ygzpay5";
+    sha256 = "sha256-b2iJmOOsaI4lqJ5//jmHflXRx4yFDaAoKZixXoWIyZg=";
   };
 
   propagatedBuildInputs = [
@@ -47,10 +47,13 @@ with python3Packages; buildPythonApplication rec {
     make js
   '';
 
-  checkInputs = [ nose ];
+  checkInputs = [
+    pytest
+    pytest-cov
+  ];
 
   checkPhase = ''
-    ${python.interpreter} setup.py nosetests
+    pytest
   '';
 
   passthru.tests = { inherit (nixosTests) isso; };

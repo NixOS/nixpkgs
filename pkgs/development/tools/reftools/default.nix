@@ -12,7 +12,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  excludedPackages = "\\(cmd/fillswitch/test-fixtures\\)";
+  excludedPackages = "cmd/fillswitch/test-fixtures";
 
   src = fetchFromGitHub {
     inherit rev;

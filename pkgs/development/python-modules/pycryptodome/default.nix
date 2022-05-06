@@ -6,13 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pycryptodome";
-  version = "3.12.0";
+  version = "3.14.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Esc0OuxaOz31xHJlKBsSthHybsk2e2EpGZ1n2lS3aME=";
-    extension = "zip";
+    hash = "sha256-4E5Ap/jBZpGVU2o3l53YfaLDLb3HPW/jXwB3sMF8gDs=";
   };
 
   pythonImportsCheck = [

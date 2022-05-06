@@ -12,7 +12,7 @@ let configAwkScript = runCommand "why3-conf.awk" { inherit provers; }
   '';
 in
 stdenv.mkDerivation {
-  name = "${why3.name}-with-provers";
+  pname = "${why3.pname}-with-provers";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ why3 ] ++ provers;

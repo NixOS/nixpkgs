@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "debtcollector";
-  version = "2.3.0";
+  version = "2.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c7a9fac814ab5904e23905516b18356cc907e7d27c05da58d37103f001967846";
+    sha256 = "sha256-3J0a0/dFxD9LvtvKMPn/6JBajAKMmSbmEHeEfV6iV6s=";
   };
 
   nativeBuildInputs = [ pbr ];

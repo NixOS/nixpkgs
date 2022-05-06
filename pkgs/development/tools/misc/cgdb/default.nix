@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
 
     homepage = "https://cgdb.github.io/";
 
-    repositories.git = "git://github.com/cgdb/cgdb.git";
-
     license = licenses.gpl2Plus;
 
     platforms = with platforms; linux ++ cygwin;

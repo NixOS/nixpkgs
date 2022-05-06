@@ -65,7 +65,7 @@ let
 in {
   name = "os-prober";
 
-  machine = { config, pkgs, ... }: (simpleConfig // {
+  nodes.machine = { config, pkgs, ... }: (simpleConfig // {
       imports = [ ../modules/profiles/installation-device.nix
                   ../modules/profiles/base.nix ];
       virtualisation.memorySize = 1300;

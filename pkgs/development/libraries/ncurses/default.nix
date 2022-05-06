@@ -13,7 +13,7 @@
 stdenv.mkDerivation rec {
   # Note the revision needs to be adjusted.
   version = "6.3";
-  name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
+  pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   # We cannot use fetchFromGitHub (which calls fetchzip)
   # because we need to be able to use fetchurlBoot.

@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "neuron";
+  pname = "neuron${lib.optionalString useMpi "-mpi"}";
   version = "7.5";
 
   nativeBuildInputs = [ which pkg-config automake autoconf libtool ];

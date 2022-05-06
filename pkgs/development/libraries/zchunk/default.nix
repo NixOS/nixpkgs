@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zchunk";
-  version = "1.1.16";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "zchunk";
     repo = pname;
     rev = version;
-    hash = "sha256-+8FkivLTZXdu0+1wu+7T98y6rQzIHbG9l15Abrbln1o=";
+    hash = "sha256-7H1WF5VkpA65xCdEa0Sw4r4jj+kGhDVCMr5AeE+3Ii4=";
   };
 
   nativeBuildInputs = [
@@ -47,5 +47,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin; # does not find argp-standalone
   };
 }

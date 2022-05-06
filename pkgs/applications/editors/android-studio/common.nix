@@ -52,6 +52,7 @@
 , xkeyboard_config
 , zlib
 , makeDesktopItem
+, tiling_wm # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
 }:
 
 let
@@ -80,6 +81,7 @@ let
         --set-default JAVA_HOME "$out/jre" \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
+        ${lib.optionalString tiling_wm "--set _JAVA_AWT_WM_NONREPARENTING 1"} \
         --set FONTCONFIG_FILE ${fontsConf} \
         --prefix PATH : "${lib.makeBinPath [
 
@@ -159,14 +161,14 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = drvName;
+    name = pname;
     exec = pname;
-    icon = drvName;
+    icon = pname;
     desktopName = "Android Studio (${channel} channel)";
     comment = "The official Android IDE";
-    categories = "Development;IDE;";
-    startupNotify = "true";
-    extraEntries="StartupWMClass=jetbrains-studio";
+    categories = [ "Development" "IDE" ];
+    startupNotify = true;
+    startupWMClass = "jetbrains-studio";
   };
 
   # Android Studio downloads prebuilt binaries as part of the SDK. These tools
@@ -216,9 +218,9 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ meutraa fabianhjr ];
-        beta = [ meutraa fabianhjr ];
-        canary = [ meutraa fabianhjr ];
+        stable = [ ];
+        beta = [ ];
+        canary = [ ];
         dev = canary;
       }."${channel}";
     };
@@ -229,6 +231,6 @@ in runCommand
     echo -n "$startScript" > $out/bin/${pname}
     chmod +x $out/bin/${pname}
 
-    ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${drvName}.png
+    ln -s ${androidStudio}/bin/studio.png $out/share/pixmaps/${pname}.png
     ln -s ${desktopItem}/share/applications $out/share/applications
   ''

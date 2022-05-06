@@ -1,0 +1,41 @@
+From 9d76d183a97cb667a1ab6d95af69d6db745215df Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Milan=20P=C3=A4ssler?= <milan@petabyte.dev>
+Date: Tue, 1 Jun 2021 16:55:45 +0200
+Subject: [PATCH] adjust socket paths for nixos
+
+The original unscd would crash, because it is not allowed to create its
+legacy socket at /var/run/.nscd_socket.
+
+This socket is only required for very old glibc versions, but removing it
+is currently non-trivial, so we just move it somewhere, where it is
+allowed to be created. A patch has been submitted upstream to make this
+hack unnecessary.
+
+Also change /var/run to /run, since we shouldn't be using /var/run
+anymore.
+---
+ nscd.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/nscd.c b/nscd.c
+index a71e474..0cd7106 100644
+--- a/nscd.c
++++ b/nscd.c
+@@ -2100,10 +2100,10 @@ static void main_loop(void)
+ ** Initialization
+ */
+ 
+-#define NSCD_PIDFILE    "/var/run/nscd/nscd.pid"
+-#define NSCD_DIR        "/var/run/nscd"
+-#define NSCD_SOCKET     "/var/run/nscd/socket"
+-#define NSCD_SOCKET_OLD "/var/run/.nscd_socket"
++#define NSCD_PIDFILE    "/run/nscd/nscd.pid"
++#define NSCD_DIR        "/run/nscd"
++#define NSCD_SOCKET     "/run/nscd/socket"
++#define NSCD_SOCKET_OLD "/run/nscd/socket_legacy"
+ 
+ static smallint wrote_pidfile;
+ 
+-- 
+2.31.1
+

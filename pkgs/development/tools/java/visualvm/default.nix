@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       comment = "Java Troubleshooting Tool";
       desktopName = "VisualVM";
       genericName = "Java Troubleshooting Tool";
-      categories = "Development;";
+      categories = [ "Development" ];
   };
 
   nativeBuildInputs = [ makeWrapper ];

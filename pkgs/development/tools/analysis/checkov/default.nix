@@ -32,13 +32,13 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.833";
+  version = "2.0.1118";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-82jeUrFIQgTBJ1GApPoSXnq6cuY8bGjAP+sTzfE+XHQ=";
+    hash = "sha256-8zhCyIHI3Pl5fTqQGSe8l6+7DZQsI6YgyTSCs1BNe94=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -53,6 +53,7 @@ buildPythonApplication rec {
     bc-python-hcl2
     boto3
     cachetools
+    charset-normalizer
     cloudsplaining
     colorama
     configargparse
@@ -71,6 +72,7 @@ buildPythonApplication rec {
     packaging
     policyuniverse
     prettytable
+    pycep-parser
     pyyaml
     semantic-version
     tabulate
@@ -87,12 +89,14 @@ buildPythonApplication rec {
     pytest-mock
     pytest-xdist
     pytestCheckHook
+    responses
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace "cyclonedx-python-lib>=0.11.0,<1.0.0" "cyclonedx-python-lib>=0.11.0" \
-      --replace "prettytable>=3.0.0" "prettytable"
+      --replace "prettytable>=3.0.0" "prettytable" \
+      --replace "pycep-parser==0.3.4" "pycep-parser"
   '';
 
   preCheck = ''
@@ -106,11 +110,14 @@ buildPythonApplication rec {
     "TestSarifReport"
     # Will probably be fixed in one of the next releases
     "test_valid_cyclonedx_bom"
-    "test_record_relative_path_with_direct_oberlay"
-    "test_record_relative_path_with_direct_prod2_oberlay"
+    "test_record_relative_path_with"
+    "test_record_relative_path_with_relative_dir"
     # Requires prettytable release which is only available in staging
     "test_skipped_check_exists"
-    "test_record_relative_path_with_relative_dir"
+    # AssertionError: 0 not greater than 0
+    "test_skip_mapping_default"
+    # Test is failing
+    "test_SQLServerAuditingEnabled"
   ];
 
   disabledTestPaths = [

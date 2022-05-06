@@ -34,6 +34,14 @@ in
         Repository to add the runner to.
 
         Changing this option triggers a new runner registration.
+
+        IMPORTANT: If your token is org-wide (not per repository), you need to
+        provide a github org link, not a single repository, so do it like this
+        <literal>https://github.com/nixos</literal>, not like this
+        <literal>https://github.com/nixos/nixpkgs</literal>.
+        Otherwise, you are going to get a <literal>404 NotFound</literal>
+        from <literal>POST https://api.github.com/actions/runner-registration</literal>
+        in the configure script.
       '';
       example = "https://github.com/nixos/nixpkgs";
     };
@@ -291,6 +299,16 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         UMask = "0066";
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        SystemCallFilter = [
+          "~@debug"
+          "~@mount"
+          "~@privileged"
+          "~@cpu-emulation"
+          "~@obsolete"
+        ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" "AF_NETLINK" ];
 
         # Needs network access
         PrivateNetwork = false;

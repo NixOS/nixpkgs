@@ -38,6 +38,7 @@ stdenv.mkDerivation (attrs // {
     installPhase;
 
   meta = meta // {
+    platforms = meta.platforms or nim.meta.platforms;
     maintainers = (meta.maintainers or [ ]) ++ [ lib.maintainers.ehmry ];
   };
 })

@@ -117,7 +117,7 @@ in
     '';
   };
 
-  config = lib.mkIf (!config.system.disableInstallerTools) {
+  config = lib.mkIf (config.nix.enable && !config.system.disableInstallerTools) {
 
     system.nixos-generate-config.configuration = mkDefault ''
       # Edit this configuration file to define what should be installed on
@@ -205,6 +205,11 @@ in
         # networking.firewall.allowedUDPPorts = [ ... ];
         # Or disable the firewall altogether.
         # networking.firewall.enable = false;
+
+        # Copy the NixOS configuration file and link it from the resulting system
+        # (/run/current-system/configuration.nix). This is useful in case you
+        # accidentally delete configuration.nix.
+        # system.copySystemConfiguration = true;
 
         # This value determines the NixOS release from which the default
         # settings for stateful data, like file locations and database versions

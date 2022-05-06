@@ -1,12 +1,15 @@
 { lib, stdenv
 , fetchurl
 , addOpenGLRunpath
-, cudaSupport ? false, symlinkJoin, cudatoolkit, cudnn
+, cudaSupport ? false, cudaPackages ? {}
+, symlinkJoin
 }:
 
 with lib;
 let
   broken = !stdenv.isLinux && !stdenv.isDarwin;
+
+  inherit (cudaPackages) cudatoolkit cudnn;
 
   tfType = if cudaSupport then "gpu" else "cpu";
 

@@ -1,28 +1,23 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, talloc, finger_bsd, perl
-, openssl
-, linkOpenssl? true
-, openldap
-, withLdap ? true
-, sqlite
-, withSqlite ? true
-, libpcap
-, withPcap ? true
-, libcap
-, withCap ? true
-, libmemcached
-, withMemcached ? false
-, hiredis
-, withRedis ? false
-, libmysqlclient
-, withMysql ? false
-, json_c
-, withJson ? false
-, libyubikey
-, withYubikey ? false
-, collectd
-, withCollectd ? false
-, curl
-, withRest ? false
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, bsd-finger
+, perl
+, talloc
+, linkOpenssl? true, openssl
+, withCap ? true, libcap
+, withCollectd ? false, collectd
+, withJson ? false, json_c
+, withLdap ? true, openldap
+, withMemcached ? false, libmemcached
+, withMysql ? false, libmysqlclient
+, withPcap ? true, libpcap
+, withRedis ? false, hiredis
+, withRest ? false, curl
+, withSqlite ? true, sqlite
+, withYubikey ? false, libyubikey
 }:
 
 assert withSqlite -> sqlite != null;
@@ -36,43 +31,38 @@ assert withYubikey -> libyubikey != null;
 assert withCollectd -> collectd != null;
 assert withRest -> curl != null && withJson;
 
-## TODO: include windbind optionally (via samba?)
-## TODO: include oracle optionally
-## TODO: include ykclient optionally
-
-with lib;
 stdenv.mkDerivation rec {
   pname = "freeradius";
   version = "3.0.25";
 
   src = fetchurl {
     url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    sha256 = "SIOmi7PO5GAlNZqXwWkc5lXour/W3DwCHQDhCaL/TBA=";
+    hash = "sha256-SIOmi7PO5GAlNZqXwWkc5lXour/W3DwCHQDhCaL/TBA=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ openssl talloc finger_bsd perl ]
-    ++ optional withLdap openldap
-    ++ optional withSqlite sqlite
-    ++ optional withPcap libpcap
-    ++ optional withCap libcap
-    ++ optional withMemcached libmemcached
-    ++ optional withRedis hiredis
-    ++ optional withMysql libmysqlclient
-    ++ optional withJson json_c
-    ++ optional withYubikey libyubikey
-    ++ optional withCollectd collectd
-    ++ optional withRest curl;
-
+  buildInputs = [ openssl talloc bsd-finger perl ]
+    ++ lib.optional withCap libcap
+    ++ lib.optional withCollectd collectd
+    ++ lib.optional withJson json_c
+    ++ lib.optional withLdap openldap
+    ++ lib.optional withMemcached libmemcached
+    ++ lib.optional withMysql libmysqlclient
+    ++ lib.optional withPcap libpcap
+    ++ lib.optional withRedis hiredis
+    ++ lib.optional withRest curl
+    ++ lib.optional withSqlite sqlite
+    ++ lib.optional withYubikey libyubikey;
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ] ++ optional (!linkOpenssl) "--with-openssl=no";
+  ] ++ lib.optional (!linkOpenssl) "--with-openssl=no";
 
   postPatch = ''
-    substituteInPlace src/main/checkrad.in --replace "/usr/bin/finger" "${finger_bsd}/bin/finger"
+    substituteInPlace src/main/checkrad.in \
+      --replace "/usr/bin/finger" "${bsd-finger}/bin/finger"
   '';
 
   # By default, freeradius will generate Diffie-Hellman parameters and
@@ -99,6 +89,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ sheenobu willibutz fpletz lheckemann elseym ];
     platforms = with platforms; linux;
   };
-
 }
-
+## TODO: include windbind optionally (via samba?)
+## TODO: include oracle optionally
+## TODO: include ykclient optionally

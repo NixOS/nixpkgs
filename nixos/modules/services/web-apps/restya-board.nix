@@ -235,7 +235,7 @@ in
       locations."~ \\.php$" = {
         tryFiles = "$uri =404";
         extraConfig = ''
-          include ${pkgs.nginx}/conf/fastcgi_params;
+          include ${config.services.nginx.package}/conf/fastcgi_params;
           fastcgi_pass    unix:${fpm.socket};
           fastcgi_index   index.php;
           fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -294,7 +294,7 @@ in
         ln -sf "${cfg.dataDir}/client/img" "${runDir}/client/img"
 
         chmod g+w "${runDir}/tmp/cache"
-        chown -R "${cfg.user}"."${cfg.group}" "${runDir}"
+        chown -R "${cfg.user}":"${cfg.group}" "${runDir}"
 
 
         mkdir -m 0750 -p "${cfg.dataDir}"
@@ -302,9 +302,9 @@ in
         mkdir -m 0750 -p "${cfg.dataDir}/client/img"
         cp -r "${pkgs.restya-board}/media/"* "${cfg.dataDir}/media"
         cp -r "${pkgs.restya-board}/client/img/"* "${cfg.dataDir}/client/img"
-        chown "${cfg.user}"."${cfg.group}" "${cfg.dataDir}"
-        chown -R "${cfg.user}"."${cfg.group}" "${cfg.dataDir}/media"
-        chown -R "${cfg.user}"."${cfg.group}" "${cfg.dataDir}/client/img"
+        chown "${cfg.user}":"${cfg.group}" "${cfg.dataDir}"
+        chown -R "${cfg.user}":"${cfg.group}" "${cfg.dataDir}/media"
+        chown -R "${cfg.user}":"${cfg.group}" "${cfg.dataDir}/client/img"
 
         ${optionalString (cfg.database.host == null) ''
           if ! [ -e "${cfg.dataDir}/.db-initialized" ]; then

@@ -21,14 +21,11 @@ buildDunePackage rec {
     sed -i 's|yes ".\+"|& 2> /dev/null|' test/*.t
   '';
 
-  nativeBuildInputs = [
-    dune-configurator
-  ];
-
   propagatedBuildInputs = lib.optional withLwt lwt;
 
   buildInputs = [
     cmdliner
+    dune-configurator
   ];
 
   doCheck = true;

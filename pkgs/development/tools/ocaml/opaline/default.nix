@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, ocamlPackages }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.2";
+  version = "0.3.3";
   pname = "opaline";
 
   src = fetchFromGitHub {
     owner = "jaapb";
     repo = "opaline";
     rev = "v${version}";
-    sha256 = "1aj1fdqymq3pnr39h47hn3kxk5v9pnwx0jap1z2jzh78x970z21m";
+    sha256 = "sha256-6htaiFIcRMUYWn0U7zTNfCyDaTgDEvPch2q57qzvND4=";
   };
 
   nativeBuildInputs = with ocamlPackages; [ ocaml findlib ocamlbuild ];

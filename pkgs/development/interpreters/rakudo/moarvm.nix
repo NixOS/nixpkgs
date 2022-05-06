@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
-  version = "2021.12";
+  version = "2022.03";
 
   src = fetchurl {
     url = "https://moarvm.org/releases/MoarVM-${version}.tar.gz";
-    sha256 = "sha256-1Ju+sQ2WFsLYen+t0ca7elzhHBnHxEu7i+928ltQXE8=";
+    sha256 = "sha256-+3HNE5EkZEgrmbM/DAbp/XxRoVHG5jKpIgz5PFhV/a8=";
   };
 
   postPatch = ''
@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
     homepage = "https://moarvm.org";
     license = licenses.artistic2;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    mainProgram = "moar";
+    platforms = platforms.unix;
   };
 }

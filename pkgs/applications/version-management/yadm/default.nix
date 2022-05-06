@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, resholvePackage
+, resholve
 , fetchFromGitHub
 , git
 , bash
@@ -27,7 +27,7 @@ to support their use in yadm.
 , yadm
 }:
 
-resholvePackage rec {
+resholve.mkDerivation rec {
   pname = "yadm";
   version = "3.1.1";
 

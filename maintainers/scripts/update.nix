@@ -147,7 +147,7 @@ let
 
     to run update script for specific package, or
 
-        % nix-shell maintainers/scripts/update.nix --arg predicate '(path: pkg: builtins.isList pkg.updateScript && builtins.length pkg.updateScript >= 1 && (let script = builtins.head pkg.updateScript; in builtins.isAttrs script && script.name == "gnome-update-script"))'
+        % nix-shell maintainers/scripts/update.nix --arg predicate '(path: pkg: pkg.updateScript.name or null == "gnome-update-script")'
 
     to run update script for all packages matching given predicate, or
 

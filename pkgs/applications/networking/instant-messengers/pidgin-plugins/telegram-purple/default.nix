@@ -1,16 +1,14 @@
-{ lib, stdenv, fetchgit, pkg-config, pidgin, libwebp, libgcrypt, gettext } :
+{ lib, stdenv, fetchFromGitHub, pkg-config, pidgin, libwebp, libgcrypt, gettext } :
 
-let
-  version = "1.3.1";
-in
 stdenv.mkDerivation rec {
   pname = "telegram-purple";
-  inherit version;
+  version = "1.3.1";
 
-  src = fetchgit {
-    url = "https://github.com/majn/telegram-purple";
+  src = fetchFromGitHub {
+    owner = "majn";
+    repo = "telegram-purple";
     rev = "v${version}";
-    sha256 = "0p93jpjpx7hszwffzgixw04zkrpsiyzz4za3gfr4j07krc4771fp";
+    sha256 = "sha256-14VzCMvzAEmye0N98r+P+ub5CeA9vu8c/xqefuWVI10=";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";

@@ -2,45 +2,48 @@
 , buildPythonPackage
 , fetchFromGitHub
 , bitbox02
+, cbor
 , ecdsa
 , hidapi
 , libusb1
 , mnemonic
 , pyaes
+, pyserial
 , typing-extensions
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "hwi";
-  version = "2.0.2";
+  version = "2.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "HWI";
     rev = version;
-    sha256 = "sha256-s0pKYqesZjHE6YndqsMwCuqLK7eE82oRiSXxBdUtEX4=";
+    sha256 = "sha256-ih4k58OdH5taf/7fvqLeWLrMzR38uPpDSGE4KU8sEAk=";
   };
 
   propagatedBuildInputs = [
     bitbox02
+    cbor
     ecdsa
     hidapi
     libusb1
     mnemonic
     pyaes
+    pyserial
     typing-extensions
   ];
 
-  # make compatible with libusb1 2.x
+  # relax required dependencies:
+  # libusb1           - https://github.com/bitcoin-core/HWI/issues/579
+  # typing-extensions - https://github.com/bitcoin-core/HWI/issues/572
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'libusb1>=1.7,<2.0' 'libusb1>=1.7' \
-      --replace "'python_requires': '>=3.6,<3.10'," "'python_requires': '>=3.6,<4'," \
-      --replace 'typing-extensions>=3.7,<4.0' 'typing-extensions>=3.7'
+      --replace 'libusb1>=1.7,<3' 'libusb1>=1.7,<4' \
+      --replace 'typing-extensions>=3.7,<4.0' 'typing-extensions>=3.7,<5.0'
   '';
 
   # tests require to clone quite a few firmwares

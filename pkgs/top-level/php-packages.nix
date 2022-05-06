@@ -140,6 +140,12 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     deployer = callPackage ../development/php-packages/deployer { };
 
+    grumphp = callPackage ../development/php-packages/grumphp { };
+
+    phing = callPackage ../development/php-packages/phing { };
+
+    phive = callPackage ../development/php-packages/phive { };
+
     php-cs-fixer = callPackage ../development/php-packages/php-cs-fixer { };
 
     php-parallel-lint = callPackage ../development/php-packages/php-parallel-lint { };
@@ -175,6 +181,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     couchbase = callPackage ../development/php-packages/couchbase { };
 
+    datadog_trace = callPackage ../development/php-packages/datadog_trace { };
+
     ds = callPackage ../development/php-packages/ds { };
 
     event = callPackage ../development/php-packages/event { };
@@ -200,6 +208,8 @@ lib.makeScope pkgs.newScope (self: with self; {
       version = "3.0.1";
       sha256 = "108ds92620dih5768z19hi0jxfa7wfg5hdvyyvpapir87c0ap914";
     });
+
+    openswoole = callPackage ../development/php-packages/openswoole { };
 
     pdlib = callPackage ../development/php-packages/pdlib { };
 
@@ -453,7 +463,7 @@ lib.makeScope pkgs.newScope (self: with self; {
             '')
           ];
           zendExtension = true;
-          doCheck = !(lib.versionOlder php.version "7.4");
+          doCheck = lib.versionAtLeast php.version "7.4";
           # Tests launch the builtin webserver.
           __darwinAllowLocalNetworking = true;
         }
@@ -517,7 +527,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           '';
           doCheck = false;
         }
-        { name = "session"; doCheck = !(lib.versionAtLeast php.version "8.0"); }
+        { name = "session"; doCheck = lib.versionOlder php.version "8.0"; }
         { name = "shmop"; }
         {
           name = "simplexml";
@@ -545,11 +555,6 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "sockets";
           doCheck = false;
-          patches = lib.optional (php.version == "8.1.2")
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/07aaa34cd418c44f7bc653fafbf49f07fc71b2bf.patch";
-              sha256 = "sha256-EwVb09/zV2vJ8PuyLpKFCovxe6yKct0UBvishZaordM=";
-            });
         }
         { name = "sodium"; buildInputs = [ libsodium ]; }
         { name = "sqlite3"; buildInputs = [ sqlite ]; }

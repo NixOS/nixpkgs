@@ -6,16 +6,16 @@
 
 buildPythonPackage rec {
   pname = "elementpath";
-  version = "2.4.0";
+  version = "2.5.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "elementpath";
-    rev = "v${version}";
-    sha256 = "1f3w5zyvrkl4gab81i5z9b41ybs54b37znj5r7hrcf25x8hrqgvv";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tejsQ6m9XyMGDIEDzWYwSav5Iqa9S/DIYShOpoSlTWo=";
   };
 
   # avoid circular dependency with xmlschema which directly depends on this

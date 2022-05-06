@@ -22,7 +22,8 @@ let
 in
 
 edk2.mkDerivation projectDscPath {
-  name = "OVMF-${version}";
+  pname = "OVMF";
+  inherit version;
 
   outputs = [ "out" "fd" ];
 

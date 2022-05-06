@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     comment = "Visually query and analyse your XML data";
     desktopName = "BaseX XML Database";
     genericName = "XML database tool";
-    categories = "Development;Utility;Database";
-    mimeType = "text/xml";
+    categories = [ "Development" "Utility" "Database" ];
+    mimeTypes = [ "text/xml" ];
   });
 
   dontBuild = true;

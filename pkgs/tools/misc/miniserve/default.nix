@@ -11,19 +11,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.19.0";
+  version = "0.19.4";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    sha256 = "sha256-2/LBldSIiAFMY8ytMurbPfLQoKn1FNn6hfMozD48LaI=";
+    hash = "sha256-vpLa0ipRV+JZoRa7jKn9ZNITvoQ8ABG2Qw1SyMZayK0=";
   };
 
-  cargoSha256 = "sha256-0EuYYaH0Quy6wvuUsy9u/ayf/8zToTtTJzvYCWNk8ac=";
+  cargoSha256 = "sha256-zBBU55VlXWYISMbKv07UfOPZ3vWRlpp4estuCcDBDDY=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config zlib ];
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    zlib
+  ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    Security
+  ];
 
   checkFlags = [
     "--skip=bind_ipv4_ipv6::case_2"
@@ -31,6 +39,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    $out/bin/miniserve --print-manpage >miniserve.1
+    installManPage miniserve.1
+
     installShellCompletion --cmd miniserve \
       --bash <($out/bin/miniserve --print-completions bash) \
       --fish <($out/bin/miniserve --print-completions fish) \
@@ -38,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "For when you really just want to serve some files over HTTP right now!";
+    description = "CLI tool to serve files and directories over HTTP";
     homepage = "https://github.com/svenstaro/miniserve";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ ];

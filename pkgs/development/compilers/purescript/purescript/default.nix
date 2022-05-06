@@ -1,4 +1,4 @@
-{ stdenv, pkgs, fetchurl, zlib, gmp, ncurses5, lib }:
+{ stdenv, pkgs, fetchurl, zlib, gmp, lib }:
 
 # from justinwoo/easy-purescript-nix
 # https://github.com/justinwoo/easy-purescript-nix/blob/d383972c82620a712ead4033db14110497bc2c9c/purs.nix
@@ -18,7 +18,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
-  version = "0.14.5";
+  version = "0.15.0";
 
   # These hashes can be updated automatically by running the ./update.sh script.
   src =
@@ -26,18 +26,16 @@ in stdenv.mkDerivation rec {
     then
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "1brvbpzr3cwls809fl0sjrm9cbh8v7maf5d7ic2mha0xapabgfpv";
+      sha256 = "09d9pwba6fzc08m3nkc7xni29yr12gw5fj00aa77n9kxmsba0fkb";
     }
     else
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "1mvxvn30iyrq0ck6g08f925gxnnhbfgl29b2gjjsmm3m9mpll7ws";
+      sha256 = "1ygp6wvbgl3y15wq1q41j9kg2ndaxr32rpgbzfzyd9zb8n9z8lpx";
     };
 
 
-  buildInputs = [ zlib
-                  gmp
-                  ncurses5 ];
+  buildInputs = [ zlib gmp ];
   libPath = lib.makeLibraryPath buildInputs;
   dontStrip = true;
 

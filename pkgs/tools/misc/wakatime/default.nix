@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "wakatime";
-  version = "1.35.4";
+  version = "1.38.0";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime-cli";
     rev = "v${version}";
-    sha256 = "sha256-MG2ROWQh8A7LrdOnDWLG9AsHjzfv84KjmjZXhJlMrLQ=";
+    sha256 = "sha256-nlv0NOvUi/yf2lQytdfRE7YwcSpRHQRlI0zzeKAA760=";
   };
 
-  vendorSha256 = "sha256-8FaM83+d1VQ/9le2hD0nqErhH/jOHMxbNz2o4D3qWb8=";
+  vendorSha256 = "sha256-WKay4/bsy8jCOTQ2jHQPMBNfIuTI3QzdmhG1aOHNK0Y=";
 
   meta = with lib; {
     inherit (src.meta) homepage;
@@ -23,5 +23,6 @@ buildGoModule rec {
       to install the wakatime CLI interface manually.
     '';
     license = licenses.bsd3;
+    mainProgram = "wakatime-cli";
   };
 }

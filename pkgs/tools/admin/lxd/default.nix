@@ -1,4 +1,4 @@
-{ lib, hwdata, pkg-config, lxc, buildGoPackage, fetchurl, fetchpatch
+{ lib, hwdata, pkg-config, lxc, buildGo118Package, fetchurl, fetchpatch
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
 , squashfsTools, iproute2, iptables, libcap
 , dqlite, raft-canonical, sqlite-replication, udev
@@ -9,21 +9,23 @@
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGo118Package rec {
   pname = "lxd";
-  version = "4.23";
+  version = "5.1";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
     url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "sha256-bPzH9MRirgl3b/wkkYIRhEvryvy/5M2Y9LLPqD4IL8U=";
+    sha256 = "sha256-MZ9Ok1BuIUTtqigLAYX7N8Q3TPfXRopeXIwbZ4GJJQo=";
   };
 
   postPatch = ''
     substituteInPlace shared/usbid/load.go \
       --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
   '';
+
+  excludedPackages = [ "test" "lxd/db/generate" ];
 
   preBuild = ''
     # required for go-dqlite. See: https://github.com/lxc/lxd/pull/8939
@@ -33,9 +35,6 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    # test binaries, code generation
-    rm $out/bin/{deps,macaroon-identity,generate}
-
     wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
       [ iptables ]
       ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
@@ -49,6 +48,7 @@ buildGoPackage rec {
   '';
 
   passthru.tests.lxd = nixosTests.lxd;
+  passthru.tests.lxd-nftables = nixosTests.lxd-nftables;
 
   nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
   buildInputs = [ lxc acl libcap dqlite.dev raft-canonical.dev
@@ -58,7 +58,7 @@ buildGoPackage rec {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz wucke13 marsam ];
+    maintainers = with maintainers; [ fpletz marsam ];
     platforms = platforms.linux;
   };
 }

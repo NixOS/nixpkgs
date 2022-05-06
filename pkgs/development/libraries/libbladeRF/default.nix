@@ -10,23 +10,14 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "libbladeRF";
-  version = "2.2.1";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "Nuand";
     repo = "bladeRF";
     rev = "libbladeRF_v${version}";
-    sha256 = "0g89al4kwfbx1l3zjddgb9ay4mhr7zk0ndchca3sm1vq2j47nf4l";
+    sha256 = "05axh51lrzxpz2qfswnjwxpfk3mlsv2wc88dd12gfr1karn5jwz9";
   };
-
-  # This patch is required for version 2.2.1. As the patch is already part of
-  # upstream master, it will be incorporated into the next release. The patch
-  # fixes a (well-justified) compiler warning which breaks the build because
-  # we compile with -Werror.
-  patches = [ (fetchpatch {
-    url = "https://github.com/Nuand/bladeRF/commit/163425d48a3b7d8c100d7295220d3648c050d0dd.patch";
-    sha256 = "1swsymlyxm3yk2k8l71z1fv0a5k2rmab02f0c7xkrvk683mq6yxw";
-  }) ];
 
   nativeBuildInputs = [ cmake pkg-config git doxygen help2man ];
   # ncurses used due to https://github.com/Nuand/bladeRF/blob/ab4fc672c8bab4f8be34e8917d3f241b1d52d0b8/host/utilities/bladeRF-cli/CMakeLists.txt#L208

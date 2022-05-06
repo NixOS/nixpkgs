@@ -22,6 +22,7 @@ with lib; mkCoqDerivation {
     };
   };
 
+  extraBuildInputs = [ mathcomp.ssreflect mathcomp.fingroup ];
   propagatedBuildInputs = [ mathcomp.algebra ];
 
   installPhase = ''

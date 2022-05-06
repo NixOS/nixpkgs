@@ -72,7 +72,7 @@ in self // {
         name = desktopName;
         exec = pname;
         genericName = pname;
-        categories = "Game;";
+        categories = [ "Game" ];
         comment = meta.description;
         inherit desktopName icon;
       };
@@ -91,10 +91,10 @@ in self // {
         makeWrapper ${alephone}/bin/alephone $out/bin/$pname \
           --add-flags $out/data/$pname
       '';
-
+    } // extraArgs // {
       meta = alephone.meta // {
         license = lib.licenses.free;
         hydraPlatforms = [ ];
       } // meta;
-    } // extraArgs);
+    });
 }

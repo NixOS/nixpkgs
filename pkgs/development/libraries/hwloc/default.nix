@@ -8,11 +8,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "hwloc";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/hwloc/v${versions.majorMinor version}/downloads/hwloc-${version}.tar.bz2";
-    sha256 = "1q440fwvhnxz6j8k5bn3bxj86b3lzbr8fgib78l4iq6gxd9yx302";
+    sha256 = "sha256-DU4dNsOnLF1hkBv9R3M39aTH4Kl12lcWUjfQDjXvUo0=";
   };
 
   configureFlags = [

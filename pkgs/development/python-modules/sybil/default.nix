@@ -7,14 +7,14 @@
 
 buildPythonApplication rec {
   pname = "sybil";
-  version = "3.0.0";
+  version = "3.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dpLtZueT5eea5qcM8s+GGRftSOr/DYrfgl5k2Fgg8lE=";
+    hash = "sha256-bwLcIgSvflohIDeSTZdPcngfbcGP08RMx85GOhIPUw0=";
   };
 
   checkInputs = [
@@ -22,7 +22,7 @@ buildPythonApplication rec {
   ];
 
   disabledTests = [
-    # sensitive to output of other commands
+    # Sensitive to output of other commands
     "test_namespace"
     "test_unittest"
   ];

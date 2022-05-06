@@ -9,7 +9,7 @@
 }:
 
 mkDerivation {
-  name = "kdelibs4support";
+  pname = "kdelibs4support";
   patches = [
     ./nix-kde-include-dir.patch
   ];

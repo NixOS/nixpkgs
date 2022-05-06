@@ -10,7 +10,7 @@
 , installShellFiles
 , libsass
 , zola
-, testVersion
+, testers
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
       --bash completions/zola.bash
   '';
 
-  passthru.tests.version = testVersion { package = zola; };
+  passthru.tests.version = testers.testVersion { package = zola; };
 
   meta = with lib; {
     description = "A fast static site generator with everything built-in";

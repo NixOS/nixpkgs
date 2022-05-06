@@ -64,6 +64,7 @@ runCommand "make-wrapper-test"
     (mkWrapperBinary { name = "test-run-and-set"; args = [ "--run" "export VAR=foo" "--set" "VAR" "bar" ]; })
     (mkWrapperBinary { name = "test-args"; args = [ "--add-flags" "abc" ]; wrapped = wrappedBinaryArgs; })
     (mkWrapperBinary { name = "test-prefix"; args = [ "--prefix" "VAR" ":" "abc" ]; })
+    (mkWrapperBinary { name = "test-prefix-noglob"; args = [ "--prefix" "VAR" ":" "./*" ]; })
     (mkWrapperBinary { name = "test-suffix"; args = [ "--suffix" "VAR" ":" "abc" ]; })
     (mkWrapperBinary { name = "test-prefix-and-suffix"; args = [ "--prefix" "VAR" ":" "foo" "--suffix" "VAR" ":" "bar" ]; })
     (mkWrapperBinary { name = "test-prefix-multi"; args = [ "--prefix" "VAR" ":" "abc:foo:foo" ]; })
@@ -112,6 +113,8 @@ runCommand "make-wrapper-test"
     # Only append the value once when given multiple times in a parameter
     # to makeWrapper
     + mkTest "test-prefix" "VAR=abc"
+    # --prefix doesn't expand globs
+    + mkTest "VAR=f?oo test-prefix-noglob" "VAR=./*:f?oo"
 
 
     # --suffix works

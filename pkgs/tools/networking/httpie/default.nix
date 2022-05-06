@@ -1,19 +1,20 @@
 { lib
 , fetchFromGitHub
 , installShellFiles
-, python3Packages
+, python3
 , pandoc
 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "httpie";
-  version = "3.0.2";
+  version = "3.1.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
     rev = version;
-    sha256 = "sha256-s3IFzEUQmPBocgspVGx1nINkUamsi7tzwW37IqdBMxo=";
+    hash = "sha256-x7Zucb2i8D4Xbn77eBzSxOAcc2fGg5MFKFiyJhytQ0s=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +22,7 @@ python3Packages.buildPythonApplication rec {
     pandoc
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     charset-normalizer
     defusedxml
     multidict
@@ -31,10 +32,11 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = with python3Packages; [
+  checkInputs = with python3.pkgs; [
     mock
     pytest
     pytest-httpbin
+    pytest-lazy-fixture
     pytestCheckHook
     responses
   ];
@@ -65,7 +67,9 @@ python3Packages.buildPythonApplication rec {
     "httpie.encoding.detect_encoding"
   ];
 
-  pythonImportsCheck = [ "httpie" ];
+  pythonImportsCheck = [
+    "httpie"
+  ];
 
   meta = with lib; {
     description = "A command line HTTP client whose goal is to make CLI human-friendly";

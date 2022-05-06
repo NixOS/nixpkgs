@@ -1,4 +1,4 @@
-From 7ea935a5ac4f31106ce9347227d4eb59b77b02cd Mon Sep 17 00:00:00 2001
+From 85f0ad0cb7b4f0cfd482c9611f9cbc2dacbba33a Mon Sep 17 00:00:00 2001
 From: Andreas Rammhold <andreas@rammhold.de>
 Date: Fri, 2 Nov 2018 21:15:42 +0100
 Subject: [PATCH 12/19] inherit systemd environment when calling generators.
@@ -16,10 +16,10 @@ executables that are being called from managers.
  1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/src/core/manager.c b/src/core/manager.c
-index b9b4789720..79239afe4a 100644
+index 5b0bdb1bc7..1538a5200a 100644
 --- a/src/core/manager.c
 +++ b/src/core/manager.c
-@@ -4149,10 +4149,15 @@ static int manager_run_generators(Manager *m) {
+@@ -3653,10 +3653,15 @@ static int manager_run_generators(Manager *m) {
          argv[4] = NULL;
  
          RUN_WITH_UMASK(0022)
@@ -40,5 +40,5 @@ index b9b4789720..79239afe4a 100644
  
  finish:
 -- 
-2.33.1
+2.34.0
 

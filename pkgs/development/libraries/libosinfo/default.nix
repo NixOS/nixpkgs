@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libosinfo";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchurl {
     url = "https://releases.pagure.org/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-tPNBgVTvP0PZQggnKUkWrqGCcCGvwG4WRPxWlRgwo1k=";
+    sha256 = "sha256-olLgD8WA3rIdoNqMCqA7jDHoRAuESMi5gUP6tHfTIwU=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -77,6 +77,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support";
     homepage = "https://libosinfo.org/";
+    changelog = "https://gitlab.com/libosinfo/libosinfo/-/blob/v${version}/NEWS";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

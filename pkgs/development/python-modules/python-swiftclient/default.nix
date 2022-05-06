@@ -10,11 +10,11 @@
 
 buildPythonApplication rec {
   pname = "python-swiftclient";
-  version = "3.13.0";
+  version = "3.13.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b200dcfbc6842bd4cac29efd0ea9ef34d3b8625957472ba7aa3ae0242437e2cc";
+    sha256 = "sha256-LSbJC2OS9r76f7sW/Np75Eqibiropb7icF0dHIE4M/A=";
   };
 
   propagatedBuildInputs = [ pbr python-keystoneclient ];

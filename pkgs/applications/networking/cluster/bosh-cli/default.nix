@@ -8,13 +8,13 @@
 buildGoModule rec {
   pname = "bosh-cli";
 
-  version = "6.4.15";
+  version = "6.4.17";
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3JPnXOpjHjBZMdOtggjSns4cKc7uffJS1RkTAKGxAVI=";
+    sha256 = "sha256-oVL7tBtdFJt6ktctSZiNZMd6g1LEWQ/Hra4rcGM6BnQ=";
   };
   vendorSha256 = null;
 
@@ -39,5 +39,6 @@ buildGoModule rec {
     changelog = "https://github.com/cloudfoundry/bosh-cli/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ris ];
+    mainProgram = "bosh";
   };
 }

@@ -17,6 +17,8 @@ in lib.mapAttrs (n: make) (with lib.systems.examples; {
   armv6l-musl  = muslpi;
   aarch64-musl = aarch64-multiplatform-musl;
   riscv64 = riscv64;
+  mips64el-linux-gnuabin32 = mips64el-linux-gnuabin32;
+  mips64el-linux-gnuabi64  = mips64el-linux-gnuabi64;
   powerpc64 = ppc64;
   powerpc64-musl = ppc64-musl;
   powerpc64le = powernv;

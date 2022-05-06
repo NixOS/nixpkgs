@@ -1,25 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, bison, libressl, libevent }:
+{ lib, stdenv, fetchFromGitHub, bison, libressl, libevent }:
 
 stdenv.mkDerivation rec {
   pname = "gmid";
-  version = "1.8";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CwJPaZefRDyn2fliOd9FnOLXq70HFu2RsUZhzWQdE3E";
+    hash = "sha256-vghoPsyGspPn22Kl61qiaALS2R243JSuS80uKFBHc9k=";
   };
 
   nativeBuildInputs = [ bison ];
 
   buildInputs = [ libressl libevent ];
 
-  configurePhase = ''
-    runHook preConfigure
-    ./configure PREFIX=$out
-    runHook postConfigure
-  '';
+  configureFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   meta = with lib; {
     description = "Simple and secure Gemini server";

@@ -1,15 +1,14 @@
-{ lib, stdenv, fetchurl, bison, flex, libffi, coreutils }:
+{ lib, stdenv, fetchurl, libffi, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "txr";
-  version = "273";
+  version = "274";
 
   src = fetchurl {
     url = "http://www.kylheku.com/cgit/txr/snapshot/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-l0o60NktIsKn720kO8xzySQBMAVrfYhhWZ8L5K8QrUg=";
+    sha256 = "sha256-bWgz0kmPLN0V0rkFRiCqxkBjhN8FV9fL+Vu8GSw9Ja4=";
   };
 
-  nativeBuildInputs = [ bison flex ];
   buildInputs = [ libffi ];
 
   enableParallelBuilding = true;

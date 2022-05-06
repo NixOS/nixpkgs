@@ -28,8 +28,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ perlPackages.FileSlurp ];
 
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   buildInputs = [
-    perl libjpeg_turbo makeWrapper
+    perl libjpeg_turbo
   ];
 
   meta = with lib; {

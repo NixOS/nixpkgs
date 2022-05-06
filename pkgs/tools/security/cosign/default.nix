@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cosign";
-  version = "1.5.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-hQFkbHOmtk0SqFSPw1+5nCvjq9cKsGzFPtK4jXDrubQ=";
+    sha256 = "sha256-9zA50tnUWR8dglPvMagiGcJDkPHs7yXuqYV2jnRdWqA=";
   };
 
   buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
@@ -16,19 +16,36 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorSha256 = "sha256-d3aOX4iMlhlxgYbqCHCIFKXunVha0Fw4ZBmy4OA6EhI=";
+  vendorSha256 = "sha256-buOdutDZUFu+GbjyF0Ql8QAXpNEv2ej0mwjSZMHDmdA=";
 
-  excludedPackages = "\\(sample\\|webhook\\|help\\)";
+  subPackages = [
+    "cmd/cosign"
+    "cmd/cosign/webhook"
+    "cmd/sget"
+  ];
 
   tags = [] ++ lib.optionals pivKeySupport [ "pivkey" ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/sigstore/cosign/pkg/version.GitVersion=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
+  ];
 
-  postPatch = ''
-    rm pkg/cosign/tuf/client_test.go # Require network access
-    rm internal/pkg/cosign/fulcio/signer_test.go # Require network access
-    rm internal/pkg/cosign/rekor/signer_test.go # Require network access
+  postBuild = ''
+    # cmd/cosign/webhook should be called cosigned
+    mv $GOPATH/bin/{webhook,cosigned}
+  '';
+
+  preCheck = ''
+    # test all paths
+    unset subPackages
+
+    rm cmd/cosign/cli/fulcio/fulcioroots/fulcioroots_test.go # Require network access
     rm pkg/cosign/kubernetes/webhook/validator_test.go # Require network access
+    rm pkg/cosign/tlog_test.go # Require network access
+    rm pkg/cosign/tuf/client_test.go # Require network access
   '';
 
   postInstall = ''

@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchurl
 , meson
 , ninja
@@ -13,16 +14,15 @@
 , gettext
 , itstool
 , desktop-file-utils
-, adwaita-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "hitori";
-  version = "3.38.3";
+  version = "3.38.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/hitori/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "99cQPLBjP7ATcwExqYw646IWK5+5SZ/H8ZUS1YG/ZWk=";
+    sha256 = "iZPMkfuSN4jjieA+wqp4dtFcErrZIEz2Wy/6DtOSL30=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     cairo
-    adwaita-icon-theme
   ];
 
   postPatch = ''

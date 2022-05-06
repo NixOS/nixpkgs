@@ -1,15 +1,28 @@
-{ lib, fetchFromGitHub, python3, python3Packages, mypy, glib, pango, pkg-config, xcbutilcursor }:
+{ lib
+, fetchFromGitHub
+, python3
+, python3Packages
+, mypy
+, glib
+, pango
+, pkg-config
+, libinput
+, libxkbcommon
+, wayland
+, wlroots
+, xcbutilcursor
+}:
 
 let
   unwrapped = python3Packages.buildPythonPackage rec {
     pname = "qtile";
-    version = "0.20.0";
+    version = "0.21.0";
 
     src = fetchFromGitHub {
       owner = "qtile";
       repo = "qtile";
       rev = "v${version}";
-      sha256 = "TRmul3t//izJRdViTvxFz29JZeGYsWc7WsJjagQ35nw=";
+      sha256 = "3QCI1TZIh1LcWuklVQkqgR1MQphi6CzZKc1UZcytV0k=";
     };
 
     patches = [
@@ -48,6 +61,13 @@ let
       xkbcommon
     ];
 
+    buildInputs = [
+      libinput
+      wayland
+      wlroots
+      libxkbcommon
+    ];
+
     # for `qtile check`, needs `stubtest` and `mypy` commands
     makeWrapperArgs = [
       "--suffix PATH : ${lib.makeBinPath [ mypy ]}"
@@ -69,4 +89,7 @@ in
   name = "${unwrapped.pname}-${unwrapped.version}";
   # export underlying qtile package
   passthru = { inherit unwrapped; };
+
+  # restore original qtile attrs
+  inherit (unwrapped) pname version meta;
 })

@@ -50,6 +50,14 @@ buildPythonPackage rec {
     "test_change_env"
     "test_dictlike"
     "test_local"
+    # incompatible with pytest 7
+    "test_incorrect_login"
+  ];
+
+  disabledTestPaths = [
+    # incompatible with pytest7
+    # https://github.com/tomerfiliba/plumbum/issues/594
+    "tests/test_remote.py"
   ];
 
   meta = with lib; {

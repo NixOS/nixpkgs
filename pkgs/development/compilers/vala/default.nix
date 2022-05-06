@@ -18,9 +18,9 @@ let
       {
         "0.48" = ./disable-graphviz-0.46.1.patch;
 
-        "0.52" = ./disable-graphviz-0.46.1.patch;
-
         "0.54" = ./disable-graphviz-0.46.1.patch;
+
+        "0.56" = ./disable-graphviz-0.46.1.patch;
 
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
@@ -70,7 +70,10 @@ let
 
     passthru = {
       updateScript = gnome.updateScript {
-        attrPath = "${pname}_${lib.versions.major version}_${lib.versions.minor version}";
+        attrPath =
+          let
+            roundUpToEven = num: num + lib.mod num 2;
+          in "${pname}_${lib.versions.major version}_${builtins.toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
         packageName = pname;
         freeze = true;
       };
@@ -87,18 +90,18 @@ let
 
 in rec {
   vala_0_48 = generic {
-    version = "0.48.22";
-    sha256 = "sha256-27NHjEvjZvCTFkrGHNOu29zz5EQE2eNkFK4VEk525os=";
-  };
-
-  vala_0_52 = generic {
-    version = "0.52.10";
-    sha256 = "sha256-nCAb+BLZh04hveU/jZwU9lF0ixqBRB/1ySkSJESQEAg=";
+    version = "0.48.24";
+    sha256 = "NknvhFc7aGX8NHBkDuYDcgCZ65FbOfqtGbdJjeGn3yQ=";
   };
 
   vala_0_54 = generic {
-    version = "0.54.6";
-    sha256 = "SdYNlqP99sQoc5dEK8bW2Vv0CqffZ47kkSjEsRum5Gk=";
+    version = "0.54.8";
+    sha256 = "7fs+eUhqS/SM666pKR5X/HfakyK2lh6VSd9tlz0EvIA=";
+  };
+
+  vala_0_56 = generic {
+    version = "0.56.1";
+    sha256 = "xRi4Hf3agtHN9Yaz+bIyMWLLlr08taLANlDOoCXZH7k=";
   };
 
   vala = vala_0_54;

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pythonfinder";
-  version = "1.2.9";
+  version = "1.2.10";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sarugaku";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tPMqVKbYwBRvb8/GyYNxO8lwJLcUUQyRoCoF5tg6rxs=";
+    sha256 = "sha256-4a648wOh+ASeocevFVh/4Fkq0CEhkFbt+2mWVmb9Bhw=";
   };
 
   propagatedBuildInputs = [

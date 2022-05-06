@@ -3,22 +3,23 @@
 , fetchFromGitHub
 , protobuf
 , git
-, testVersion
+, testers
 , buf
 , installShellFiles
 }:
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.0.0-rc12";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UqyWQdlCDTSjW348f87W7g2kwB5nzIOviSE5/1T1soY=";
+    sha256 = "sha256-cKb9pZYEsO1thgtl/8XFJHpNrO6P3OR8Lox/Gf9ccYk=";
   };
-  vendorSha256 = "sha256-qBgGZTok3G0Pgku76uiV9bZperhiSNoWSrzxrHe4QXw=";
+
+  vendorSha256 = "sha256-zXLvKEdiIFnmwWQBgbJHCEBe2i7FobgeUOnA3LvHl8w=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -27,11 +28,14 @@ buildGoModule rec {
     ./skip_test_requiring_dotgit.patch
   ];
 
-  nativeBuildInputs = [ protobuf installShellFiles ];
-  # Required for TestGitCloner
-  checkInputs = [ git ];
+  nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [ "-s" "-w" ];
+
+  checkInputs = [
+    git # Required for TestGitCloner
+    protobuf # Required for buftesting.GetProtocFilePaths
+  ];
 
   preCheck = ''
     # The tests need access to some of the built utilities
@@ -55,9 +59,9 @@ buildGoModule rec {
 
     # Completions
     installShellCompletion --cmd buf \
-      --bash <($GOPATH/bin/buf bash-completion) \
-      --fish <($GOPATH/bin/buf fish-completion) \
-      --zsh <($GOPATH/bin/buf zsh-completion)
+      --bash <($GOPATH/bin/buf completion bash) \
+      --fish <($GOPATH/bin/buf completion fish) \
+      --zsh <($GOPATH/bin/buf completion zsh)
 
     # Man Pages
     mkdir man && $GOPATH/bin/buf manpages man
@@ -66,7 +70,7 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testVersion { package = buf; };
+  passthru.tests.version = testers.testVersion { package = buf; };
 
   meta = with lib; {
     homepage = "https://buf.build";

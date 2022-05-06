@@ -21,10 +21,16 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
+# for passthru.tests
+, gimp
+, gtk3
+, gtk4
+, mapnik
+, qt5
 }:
 
 let
-  version = "3.2.0";
+  version = "3.3.2";
   inherit (lib) optional optionals optionalString;
   mesonFeatureFlag = opt: b:
     "-D${opt}=${if b then "enabled" else "disabled"}";
@@ -39,7 +45,7 @@ stdenv.mkDerivation {
     owner = "harfbuzz";
     repo = "harfbuzz";
     rev = version;
-    sha256 = "sha256-iNYp/hyJTaaF6e09YpUL7ktBhq2wRN9zKiEH59WLbYU=";
+    sha256 = "sha256-UbYqV7Ch9ugTIwSsCpjnS8H7tcv4P3OVpFDFDZtQCk0=";
   };
 
   postPatch = ''
@@ -98,6 +104,11 @@ stdenv.mkDerivation {
       ln -s {'${harfbuzz.out}',"$out"}/lib/libharfbuzz.0.dylib
     ''}
   '';
+
+  passthru.tests = {
+    inherit gimp gtk3 gtk4 mapnik;
+    inherit (qt5) qtbase;
+  };
 
   meta = with lib; {
     description = "An OpenType text shaping engine";

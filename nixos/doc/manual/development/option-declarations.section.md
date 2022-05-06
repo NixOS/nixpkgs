@@ -27,9 +27,10 @@ The function `mkOption` accepts the following arguments.
 
 `type`
 
-:   The type of the option (see [](#sec-option-types)). It may be
-    omitted, but that's not advisable since it may lead to errors that
-    are hard to diagnose.
+:   The type of the option (see [](#sec-option-types)). This
+    argument is mandatory for nixpkgs modules. Setting this is highly
+    recommended for the sake of documentation and type checking. In case it is
+    not set, a fallback type with unspecified behavior is used.
 
 `default`
 
@@ -119,14 +120,14 @@ lib.mkOption {
 ```nix
 lib.mkPackageOption pkgs "GHC" {
   default = [ "ghc" ];
-  example = "pkgs.haskell.package.ghc921.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  example = "pkgs.haskell.package.ghc922.ghc.withPackages (hkgs: [ hkgs.primes ])";
 }
 # is like
 lib.mkOption {
   type = lib.types.package;
   default = pkgs.ghc;
   defaultText = lib.literalExpression "pkgs.ghc";
-  example = lib.literalExpression "pkgs.haskell.package.ghc921.ghc.withPackages (hkgs: [ hkgs.primes ])";
+  example = lib.literalExpression "pkgs.haskell.package.ghc922.ghc.withPackages (hkgs: [ hkgs.primes ])";
   description = "The GHC package to use.";
 }
 ```
@@ -145,26 +146,26 @@ As an example, we will take the case of display managers. There is a
 central display manager module for generic display manager options and a
 module file per display manager backend (sddm, gdm \...).
 
-There are two approach to this module structure:
+There are two approaches we could take with this module structure:
 
--   Managing the display managers independently by adding an enable
+-   Configuring the display managers independently by adding an enable
     option to every display manager module backend. (NixOS)
 
--   Managing the display managers in the central module by adding an
-    option to select which display manager backend to use.
+-   Configuring the display managers in the central module by adding
+    an option to select which display manager backend to use.
 
 Both approaches have problems.
 
 Making backends independent can quickly become hard to manage. For
-display managers, there can be only one enabled at a time, but the type
-system can not enforce this restriction as there is no relation between
-each backend `enable` option. As a result, this restriction has to be
-done explicitely by adding assertions in each display manager backend
-module.
+display managers, there can only be one enabled at a time, but the
+type system cannot enforce this restriction as there is no relation
+between each backend's `enable` option. As a result, this restriction
+has to be done explicitly by adding assertions in each display manager
+backend module.
 
-On the other hand, managing the display managers backends in the central
-module will require to change the central module option every time a new
-backend is added or removed.
+On the other hand, managing the display manager backends in the
+central module will require changing the central module option every
+time a new backend is added or removed.
 
 By using extensible option types, it is possible to create a placeholder
 option in the central module
@@ -175,7 +176,7 @@ and to extend it in each backend module
 
 As a result, `displayManager.enable` option values can be added without
 changing the main service module file and the type system automatically
-enforce that there can only be a single display manager enabled.
+enforces that there can only be a single display manager enabled.
 
 ::: {#ex-option-declaration-eot-service .example}
 ::: {.title}

@@ -1,10 +1,11 @@
-{stdenv, fetchurl, pkg-config, gtk2, gettext, libxml2 }:
+{ lib, stdenv, fetchurl, pkg-config, gtk2, gettext, libxml2 }:
 
-stdenv.mkDerivation {
-  name = "libgtkhtml-2.11.1";
+stdenv.mkDerivation rec {
+  pname = "libgtkhtml";
+  version = "2.11.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libgtkhtml/2.11/libgtkhtml-2.11.1.tar.bz2";
+    url = "mirror://gnome/sources/libgtkhtml/${lib.versions.majorMinor version}/libgtkhtml-${version}.tar.bz2";
     sha256 = "0msajafd42545dxzyr5zqka990cjrxw2yz09ajv4zs8m1w6pm9rw";
   };
 

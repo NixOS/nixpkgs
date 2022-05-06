@@ -8,7 +8,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "robotframework";
     repo = "statuschecker";
-    rev = version;
+    rev = "refs/tags/v${version}";
     sha256 = "0hy1390j3l4kkfna9x9xax4y5mqaa3hdndv3fiyg9wr5f7sx3wnz";
   };
 

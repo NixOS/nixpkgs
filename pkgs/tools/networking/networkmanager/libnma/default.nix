@@ -15,6 +15,8 @@
 , mobile-broadband-provider-info
 , gobject-introspection
 , gtk3
+, withGtk4 ? false
+, gtk4
 , withGnome ? true
 , gcr
 , glib
@@ -24,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnma";
-  version = "1.8.34";
+  version = "1.8.38";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "9eLnOOD8p/KlSQeSkLLYAXUR1IWoMiDDbfOAo7R1MwQ=";
+    sha256 = "Xtk+rhhFb/WopPQIF4we4ZjcjTpGxl+QdbEBkW5k6LQ=";
   };
 
   patches = [
@@ -56,6 +58,8 @@ stdenv.mkDerivation rec {
     networkmanager
     isocodes
     mobile-broadband-provider-info
+  ] ++ lib.optionals withGtk4 [
+    gtk4
   ] ++ lib.optionals withGnome [
     # advanced certificate chooser
     gcr
@@ -63,6 +67,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgcr=${lib.boolToString withGnome}"
+    "-Dlibnma_gtk4=${lib.boolToString withGtk4}"
   ];
 
   postPatch = ''

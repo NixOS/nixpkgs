@@ -1,11 +1,11 @@
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 let
   # look for GO_LDFLAGS getting set in the Makefile
-  version = "0.14.2";
-  sha256 = "sha256-sQtry94T5cDO+836D/p/8ptQi3WYKDBLr1QZyEXdLQI=";
-  vendorSha256 = "sha256-cd2iNMxWmkSWqqkPLYocUG+fCUXoeUXEuGQxjUWQnXk=";
-  pkgsVersion = "0.9.0-4-gc875fbe";
-  extrasVersion = "0.7.0-2-gb4c9d21";
+  version = "1.0.4";
+  sha256 = "sha256-kO48MRQDQGDUvFfsxAt+CAHn2EGU44NMpSKDWnNwAdk=";
+  vendorSha256 = "sha256-QcD5MKQO51ZZ/NvVIiAmDsN6wLI2N8YkhA387KB77W8=";
+  pkgsVersion = "v1.0.0-10-gbf81bd2";
+  extrasVersion = "v1.0.0-2-gc5d3ab0";
 in
 buildGoModule rec {
   pname = "talosctl";
@@ -13,7 +13,7 @@ buildGoModule rec {
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
-    owner = "talos-systems";
+    owner = "siderolabs";
     repo = "talos";
     rev = "v${version}";
     inherit sha256;
@@ -26,14 +26,16 @@ buildGoModule rec {
       mgmtHelpersPkg = "github.com/talos-systems/talos/cmd/talosctl/pkg/mgmt/helpers"; #MGMT_HELPERS_PKG
     in
     [
-      "-X ${versionPkg}.Name=Talos"
+      "-X ${versionPkg}.Name=Client"
       "-X ${versionPkg}.SHA=${src.rev}" # should be the hash, but as we build from tags, this needs to do
       "-X ${versionPkg}.Tag=${src.rev}"
-      "-X ${versionPkg}.PkgsVersion=v${pkgsVersion}" # PKGS
-      "-X ${versionPkg}.ExtrasVersion=v${extrasVersion}" # EXTRAS
-      "-X ${imagesPkgs}.Username=talos-systems" # USERNAME
+      "-X ${versionPkg}.PkgsVersion=${pkgsVersion}" # PKGS
+      "-X ${versionPkg}.ExtrasVersion=${extrasVersion}" # EXTRAS
+      "-X ${imagesPkgs}.Username=siderolabs" # USERNAME
       "-X ${imagesPkgs}.Registry=ghcr.io" # REGISTRY
       "-X ${mgmtHelpersPkg}.ArtifactsPath=_out" # ARTIFACTS
+      "-s"
+      "-w"
     ];
 
   subPackages = [ "cmd/talosctl" ];
@@ -51,7 +53,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A CLI for out-of-band management of Kubernetes nodes created by Talos";
-    homepage = "https://github.com/talos-systems/talos";
+    homepage = "https://www.talos.dev/";
     license = licenses.mpl20;
     maintainers = with maintainers; [ flokli ];
   };

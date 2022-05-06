@@ -4,7 +4,7 @@
 }:
 
 mkDerivation {
-  name = "kconfigwidgets";
+  pname = "kconfigwidgets";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kguiaddons ki18n qtbase qttools ];
   propagatedBuildInputs = [ kauth kcodecs kconfig kwidgetsaddons ];

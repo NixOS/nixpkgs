@@ -9,23 +9,23 @@
 , glib
 , gnome
 , gobject-introspection
-, gtk3
+, gtk4
 , libxml2
 , pkg-config
 , python3Packages
-, wrapGAppsHook }:
+, wrapGAppsHook4 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bada-bib";
-  version = "0.4.1";
+  version = "0.6.2";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchFromGitHub {
     owner = "RogerCrocker";
     repo = "BadaBib";
-    rev = "v${version}";
-    sha256 = "sha256-kub2lLauru2RrinzxMDyBVC0htPx0Niv/M6bbmTS7Hk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-3dXtBwqEqiXLjntmqLYeuwLv0RDb774+yOXc7vdf8+Y=";
   };
 
   nativeBuildInputs = [
@@ -35,13 +35,13 @@ python3Packages.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
     gdk-pixbuf
     glib
-    gtk3
+    gtk4
   ];
 
   checkInputs = [
@@ -52,7 +52,6 @@ python3Packages.buildPythonApplication rec {
   pythonPath = with python3Packages; [
     bibtexparser
     pygobject3
-    watchgod
   ];
 
   postPatch = ''

@@ -3,38 +3,33 @@
 , fetchFromGitHub
 , installShellFiles
 , git
-, stestr
 , nix-update-script
-, testVersion
+, testers
 , git-machete
 }:
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.5.0";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "virtuslab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kR37TClFMkoe4e46g/omfwZCrQFr7gukW7I70WI9+dw=";
+    sha256 = "sha256-AuF4KUayMRQ2TsvjzpMHpppM+0e6igs7MrAXzGP9yp0=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ git stestr ];
-
-  postCheck = ''
-    stestr run
-  '';
+  checkInputs = [ git ];
 
   postInstall = ''
     installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
     installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
+    installShellCompletion --fish completion/git-machete.fish
   '';
 
   postInstallCheck = ''
-    git init
     test "$($out/bin/git-machete version)" = "git-machete version ${version}"
   '';
 

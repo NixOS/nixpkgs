@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lziprecover";
-  version = "1.22";
+  version = "1.23";
 
   src = fetchurl {
     url = "mirror://savannah/lzip/lziprecover/${pname}-${version}.tar.gz";
-    sha256 = "sha256-/ZWKCXX3cpxE87eE5WaJH3NsPcaDdNvSFJ7mkqFtCGI=";
+    sha256 = "sha256-8pgEF38G3VHD+lJhWuGYp2ACts6Nlhw1dVRsN0D0tXI=";
   };
 
   configureFlags = [

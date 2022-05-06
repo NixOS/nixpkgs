@@ -60,16 +60,16 @@ let
     };
 
     power-management = {
+      CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
+      CPU_FREQ_GOV_SCHEDUTIL           = yes;
       PM_ADVANCED_DEBUG                = yes;
+      PM_WAKELOCKS                     = yes;
+      POWERCAP                         = yes;
+    } // optionalAttrs (stdenv.hostPlatform.isx86) {
+      INTEL_IDLE                       = yes;
+      INTEL_RAPL                       = whenAtLeast "5.3" module;
       X86_INTEL_LPSS                   = yes;
       X86_INTEL_PSTATE                 = yes;
-      INTEL_IDLE                       = yes;
-      CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
-      CPU_FREQ_GOV_SCHEDUTIL           = whenAtLeast "4.9" yes;
-      PM_WAKELOCKS                     = yes;
-      # Power-capping framework and support for INTEL RAPL
-      POWERCAP                         = yes;
-      INTEL_RAPL                       = whenAtLeast "5.3" module;
     };
 
     external-firmware = {
@@ -148,12 +148,12 @@ let
       IPV6_MROUTE                 = yes;
       IPV6_MROUTE_MULTIPLE_TABLES = yes;
       IPV6_PIMSM_V2               = yes;
-      IPV6_FOU_TUNNEL             = whenAtLeast "4.7" module;
+      IPV6_FOU_TUNNEL             = module;
       IPV6_SEG6_LWTUNNEL          = whenAtLeast "4.10" yes;
       IPV6_SEG6_HMAC              = whenAtLeast "4.10" yes;
       IPV6_SEG6_BPF               = whenAtLeast "4.18" yes;
-      NET_CLS_BPF                 = whenAtLeast "4.4" module;
-      NET_ACT_BPF                 = whenAtLeast "4.4" module;
+      NET_CLS_BPF                 = module;
+      NET_ACT_BPF                 = module;
       NET_SCHED                   = yes;
       L2TP_V3                     = yes;
       L2TP_IP                     = module;
@@ -168,7 +168,7 @@ let
       PPP_FILTER    = yes;
 
       # needed for iwd WPS support (wpa_supplicant replacement)
-      KEY_DH_OPERATIONS = whenAtLeast "4.7" yes;
+      KEY_DH_OPERATIONS = yes;
 
       # needed for nftables
       # Networking Options
@@ -208,7 +208,7 @@ let
       INET_TCP_DIAG     = mkDefault module;
       INET_UDP_DIAG     = mkDefault module;
       INET_RAW_DIAG     = whenAtLeast "4.14" (mkDefault module);
-      INET_DIAG_DESTROY = whenAtLeast "4.9" (mkDefault yes);
+      INET_DIAG_DESTROY = mkDefault yes;
 
       # enable multipath-tcp
       MPTCP           = whenAtLeast "5.6" yes;
@@ -218,6 +218,11 @@ let
       # Kernel TLS
       TLS         = whenAtLeast "4.13" module;
       TLS_DEVICE  = whenAtLeast "4.18" yes;
+
+      # infiniband
+      INFINIBAND = module;
+      INFINIBAND_IPOIB = module;
+      INFINIBAND_IPOIB_CM = yes;
     };
 
     wireless = {
@@ -264,14 +269,12 @@ let
       DRM_GMA600             = whenOlder "5.13" yes;
       DRM_GMA3600            = whenOlder "5.12" yes;
       DRM_VMWGFX_FBCON       = yes;
-      # necessary for amdgpu polaris support
-      DRM_AMD_POWERPLAY = whenBetween "4.5" "4.9" yes;
       # (experimental) amdgpu support for verde and newer chipsets
-      DRM_AMDGPU_SI = whenAtLeast "4.9" yes;
+      DRM_AMDGPU_SI = yes;
       # (stable) amdgpu support for bonaire and newer chipsets
-      DRM_AMDGPU_CIK = whenAtLeast "4.9" yes;
+      DRM_AMDGPU_CIK = yes;
       # Allow device firmware updates
-      DRM_DP_AUX_CHARDEV = whenAtLeast "4.6" yes;
+      DRM_DP_AUX_CHARDEV = yes;
       # amdgpu display core (DC) support
       DRM_AMD_DC_DCN1_0 = whenBetween "4.15" "5.6" yes;
       DRM_AMD_DC_PRE_VEGA = whenBetween "4.15" "4.18" yes;
@@ -378,7 +381,7 @@ let
 
       EXT4_FS_POSIX_ACL = yes;
       EXT4_FS_SECURITY  = yes;
-      EXT4_ENCRYPTION   = { optional = true; tristate = if (versionOlder version "4.8") then "m" else "y"; };
+      EXT4_ENCRYPTION   = option yes;
 
       REISERFS_FS_XATTR     = option yes;
       REISERFS_FS_POSIX_ACL = option yes;
@@ -403,7 +406,6 @@ let
       F2FS_FS_COMPRESSION = whenAtLeast "5.6" yes;
       UDF_FS              = module;
 
-      NFSD_PNFS              = whenBetween "4.0" "4.6" yes;
       NFSD_V2_ACL            = yes;
       NFSD_V3                = yes;
       NFSD_V3_ACL            = yes;
@@ -446,6 +448,9 @@ let
       NLS_CODEPAGE_437 = module; # VFAT default for the codepage= mount option
       NLS_ISO8859_1    = module; # VFAT default for the iocharset= mount option
 
+      # Needed to use the installation iso image. Not included in all defconfigs (e.g. arm64)
+      ISO9660_FS = module;
+
       DEVTMPFS = yes;
 
       UNICODE = whenAtLeast "5.2" yes; # Casefolding support for filesystems
@@ -457,10 +462,10 @@ let
       # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
       DEBUG_LIST                       = yes;
       # Detect writes to read-only module pages
-      DEBUG_SET_MODULE_RONX            = { optional = true; tristate = whenOlder "4.11" "y"; };
+      DEBUG_SET_MODULE_RONX            = whenOlder "4.11" (option yes);
       RANDOMIZE_BASE                   = option yes;
       STRICT_DEVMEM                    = mkDefault yes; # Filter access to /dev/mem
-      IO_STRICT_DEVMEM                 = whenAtLeast "4.5" (mkDefault yes);
+      IO_STRICT_DEVMEM                 = mkDefault yes;
       SECURITY_SELINUX_BOOTPARAM_VALUE = whenOlder "5.1" (freeform "0"); # Disable SELinux by default
       # Prevent processes from ptracing non-children processes
       SECURITY_YAMA                    = option yes;
@@ -475,6 +480,7 @@ let
       DEFAULT_SECURITY_APPARMOR        = yes;
 
       RANDOM_TRUST_CPU                 = whenAtLeast "4.19" yes; # allow RDRAND to seed the RNG
+      RANDOM_TRUST_BOOTLOADER          = whenAtLeast "5.4" yes; # allow the bootloader to seed the RNG
 
       MODULE_SIG            = no; # r13y, generates a random key during build and bakes it in
       # Depends on MODULE_SIG and only really helps when you sign your modules
@@ -515,10 +521,9 @@ let
       MEMCG                    = yes;
       MEMCG_SWAP               = yes;
 
-      DEVPTS_MULTIPLE_INSTANCES = whenOlder "4.7" yes;
       BLK_DEV_THROTTLING        = yes;
       CFQ_GROUP_IOSCHED         = whenOlder "5.0" yes; # Removed in 5.0-RC1
-      CGROUP_PIDS               = whenAtLeast "4.3" yes;
+      CGROUP_PIDS               = yes;
     };
 
     staging = {
@@ -543,9 +548,9 @@ let
       STACK_TRACER          = yes;
       UPROBE_EVENT          = { optional = true; tristate = whenOlder "4.11" "y";};
       UPROBE_EVENTS         = { optional = true; tristate = whenAtLeast "4.11" "y";};
-      BPF_SYSCALL           = whenAtLeast "4.4" yes;
-      BPF_UNPRIV_DEFAULT_OFF = whenBetween "5.10" "5.15" yes;
-      BPF_EVENTS            = whenAtLeast "4.4" yes;
+      BPF_SYSCALL           = yes;
+      BPF_UNPRIV_DEFAULT_OFF = whenBetween "5.10" "5.16" yes;
+      BPF_EVENTS            = yes;
       FUNCTION_PROFILER     = yes;
       RING_BUFFER_BENCHMARK = no;
     };
@@ -556,11 +561,10 @@ let
       HYPERVISOR_GUEST = yes;
       PARAVIRT_SPINLOCKS  = option yes;
 
-      KVM_APIC_ARCHITECTURE             = whenOlder "4.8" yes;
       KVM_ASYNC_PF                      = yes;
-      KVM_COMPAT = { optional = true; tristate = whenBetween "4.0" "4.12" "y"; };
-      KVM_DEVICE_ASSIGNMENT  = { optional = true; tristate = whenBetween "3.10" "4.12" "y"; };
-      KVM_GENERIC_DIRTYLOG_READ_PROTECT = whenAtLeast "4.0"  yes;
+      KVM_COMPAT                        = whenOlder "4.12" (option yes);
+      KVM_DEVICE_ASSIGNMENT             = whenOlder "4.12" (option yes);
+      KVM_GENERIC_DIRTYLOG_READ_PROTECT = yes;
       KVM_GUEST                         = yes;
       KVM_MMIO                          = yes;
       KVM_VFIO                          = yes;
@@ -722,7 +726,12 @@ let
 
       HID_ACRUX_FF       = yes;
       DRAGONRISE_FF      = yes;
+      GREENASIA_FF       = yes;
       HOLTEK_FF          = yes;
+      JOYSTICK_PSXPAD_SPI_FF = whenAtLeast "4.14" yes;
+      LOGIG940_FF        = yes;
+      NINTENDO_FF        = whenAtLeast "5.16" yes;
+      PLAYSTATION_FF     = whenAtLeast "5.12" yes;
       SONY_FF            = yes;
       SMARTJOYPLUS_FF    = yes;
       THRUSTMASTER_FF    = yes;
@@ -762,7 +771,6 @@ let
       AIC79XX_DEBUG_ENABLE = no;
       AIC7XXX_DEBUG_ENABLE = no;
       AIC94XX_DEBUG = no;
-      B43_PCMCIA = { optional=true; tristate = whenOlder "4.4" "y";};
 
       BLK_DEV_INTEGRITY       = yes;
 
@@ -774,16 +782,18 @@ let
       SERIAL_DEV_CTRL_TTYPORT = whenAtLeast "4.11" yes; # enables support for TTY serial devices
 
       BT_HCIBTUSB_MTK = whenAtLeast "5.3" yes; # MediaTek protocol support
-      BT_HCIUART_QCA = whenAtLeast "4.3" yes; # Qualcomm Atheros protocol support
+      BT_HCIUART_QCA = yes; # Qualcomm Atheros protocol support
       BT_HCIUART_SERDEV = whenAtLeast "4.12" yes; # required by BT_HCIUART_QCA
-      BT_HCIUART = whenAtLeast "2.5.45" module; # required for BT devices with serial port interface (QCA6390)
+      BT_HCIUART = module; # required for BT devices with serial port interface (QCA6390)
       BT_HCIUART_BCSP = option yes;
       BT_HCIUART_H4   = option yes; # UART (H4) protocol support
       BT_HCIUART_LL   = option yes;
       BT_RFCOMM_TTY   = option yes; # RFCOMM TTY support
-      BT_QCA = whenAtLeast "4.3" module; # enables QCA6390 bluetooth
+      BT_QCA = module; # enables QCA6390 bluetooth
 
-      CLEANCACHE = option yes;
+      # Removed on 5.17 as it was unused
+      # upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0a4ee518185e902758191d968600399f3bc2be31
+      CLEANCACHE = whenOlder "5.17" (option yes);
       CRASH_DUMP = option no;
 
       DVB_DYNAMIC_MINORS = option yes; # we use udev
@@ -820,14 +830,12 @@ let
       MEDIA_ATTACH          = yes;
       MEGARAID_NEWGEN       = yes;
 
-      MLX4_EN_VXLAN = whenOlder "4.8" yes;
       MLX5_CORE_EN       = option yes;
 
       NVME_MULTIPATH = whenAtLeast "4.15" yes;
 
       PSI = whenAtLeast "4.20" yes;
 
-      MODVERSIONS        = whenOlder "4.9" yes;
       MOUSE_ELAN_I2C_SMBUS = yes;
       MOUSE_PS2_ELANTECH = yes; # Elantech PS/2 protocol extension
       MOUSE_PS2_VMMOUSE  = yes;
@@ -901,6 +909,11 @@ let
       ANDROID_BINDER_IPC =     { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDERFS =       { optional = true; tristate = whenAtLeast "5.0" "y";};
       ANDROID_BINDER_DEVICES = { optional = true; freeform = whenAtLeast "5.0" "binder,hwbinder,vndbinder";};
+
+      TASKSTATS = yes;
+      TASK_DELAY_ACCT = yes;
+      TASK_XACCT = yes;
+      TASK_IO_ACCOUNTING = yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

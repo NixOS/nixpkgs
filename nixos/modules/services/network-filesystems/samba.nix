@@ -224,6 +224,7 @@ in
           targets.samba = {
             description = "Samba Server";
             after = [ "network.target" ];
+            wants = [ "network-online.target" ];
             wantedBy = [ "multi-user.target" ];
           };
           # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd

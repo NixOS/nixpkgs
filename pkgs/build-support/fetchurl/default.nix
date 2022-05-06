@@ -95,9 +95,10 @@ in
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that by default
 , preferLocalBuild ? true
-}:
 
-assert sha512 != "" -> builtins.compareVersions "1.11" builtins.nixVersion <= 0;
+  # Additional packages needed as part of a fetch
+, nativeBuildInputs ? [ ]
+}:
 
 let
   urls_ =
@@ -128,7 +129,7 @@ stdenvNoCC.mkDerivation {
 
   builder = ./builder.sh;
 
-  nativeBuildInputs = [ curl ];
+  nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
 
   urls = urls_;
 
@@ -159,5 +160,5 @@ stdenvNoCC.mkDerivation {
   '';
 
   inherit meta;
-  inherit passthru;
+  passthru = { inherit url; } // passthru;
 }

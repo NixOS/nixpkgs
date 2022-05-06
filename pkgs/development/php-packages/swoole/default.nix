@@ -3,8 +3,8 @@
 buildPecl {
   pname = "swoole";
 
-  version = "4.8.5";
-  sha256 = "sha256-FCda91vO79Y1O1Pojv710VLzwwVUPHwn0O1kliOyKPg=";
+  version = "4.8.8";
+  sha256 = "sha256-SnhDRC7/a7BTHn87c6YCz/R8jI6aES1ibSD6YAl6R+I=";
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
   internalDeps = lib.optionals (lib.versionOlder php.version "7.4") [ php.extensions.hash ];

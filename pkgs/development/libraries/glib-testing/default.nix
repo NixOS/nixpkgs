@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "glib-testing";
-  version = "0.1.0";
+  version = "0.1.1";
 
   outputs = [ "out" "dev" "devdoc" "installedTests" ];
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "pwithnall";
     repo = "libglib-testing";
     rev = version;
-    sha256 = "0xmycsrlqyji6sc2i4wvp2gxf3897z65a57ygihfnpjpyl7zlwkr";
+    sha256 = "U3epLDdLES7MA71z7Q1WXMjzySTFERWBU0u8poObbEo=";
   };
 
   patches = [

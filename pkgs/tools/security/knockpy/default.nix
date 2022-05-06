@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "knockpy";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "guelfoweb";
     repo = "knock";
     rev = version;
-    hash = "sha256-QPOIpgJt+09zRvSavRxuVEN+GGk4Z1CYCXti37YaO7o=";
+    hash = "sha256-aM78If4/zW/0CqVjZHDbHrrWDuU1VSVhX7dfy9FR098=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -45,22 +45,27 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.70.2";
+  version = "2.72.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "BVFFnIXNPaPVjdyQFv0ovlr1A/XhYVpxultRKslFgG8=";
+    sha256 = "wH5XFHslTO+SzoCgN43AwCpDWOfeRwLp9AMGl4EJX+I=";
   };
 
   patches = optionals stdenv.isDarwin [
     ./darwin-compilation.patch
-    ./link-with-coreservices.patch
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
   ] ++ [
     ./glib-appinfo-watch.patch
     ./schema-override-variable.patch
+
+    # Add support for the GNOME’s default terminal emulator.
+    # https://gitlab.gnome.org/GNOME/glib/-/issues/2618
+    ./gnome-console-support.patch
+    # Do the same for Pantheon’s terminal emulator.
+    ./elementary-terminal-support.patch
 
     # GLib contains many binaries used for different purposes;
     # we will install them to different outputs:
@@ -116,7 +121,10 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    meson ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
+    (buildPackages.meson.override {
+      withDarwinFrameworksGtkDocPatch = stdenv.isDarwin;
+    })
+    ninja pkg-config perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45 libxml2
   ];
 
   propagatedBuildInputs = [ zlib libffi gettext libiconv ];
@@ -142,8 +150,8 @@ stdenv.mkDerivation rec {
     chmod +x docs/reference/gio/concat-files-helper.py
     patchShebangs docs/reference/gio/concat-files-helper.py
     patchShebangs glib/gen-unicode-tables.pl
-    patchShebangs tests/gen-casefold-txt.py
-    patchShebangs tests/gen-casemap-txt.py
+    patchShebangs glib/tests/gen-casefold-txt.py
+    patchShebangs glib/tests/gen-casemap-txt.py
   '' + lib.optionalString stdenv.hostPlatform.isWindows ''
     substituteInPlace gio/win32/meson.build \
       --replace "libintl, " ""

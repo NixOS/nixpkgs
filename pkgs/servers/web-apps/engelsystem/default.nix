@@ -42,9 +42,10 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description =
       "Coordinate your volunteers in teams, assign them to work shifts or let them decide for themselves when and where they want to help with what";
-    license = licenses.gpl2;
     homepage = "https://engelsystem.de";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ kloenk ];
+    mainProgram = "migrate";
     platforms = platforms.all;
   };
 }

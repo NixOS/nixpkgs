@@ -7,11 +7,12 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, six
 }:
 
 buildPythonPackage rec {
   pname = "setupmeta";
-  version = "3.3.0";
+  version = "3.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "codrsquad";
     repo = pname;
     rev = "v${version}";
-    sha256 = "21hABRiY8CTKkpFjePgBAtjs4/G5eFS3aPNMCBC41CY=";
+    sha256 = "sha256-3QUI3AjouuGa9sWXH97GSvpimVsws3q5Xgq6lls/wBU=";
   };
 
   preBuild = ''
@@ -36,6 +37,7 @@ buildPythonPackage rec {
     mock
     pep440
     pytestCheckHook
+    six
   ];
 
   preCheck = ''
@@ -45,6 +47,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Tests want to scan site-packages
     "test_check_dependencies"
+    "test_clean"
     "test_scenario"
     "test_git_versioning"
   ];

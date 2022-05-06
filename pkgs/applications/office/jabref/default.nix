@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     name = "jabref";
     desktopName = "JabRef";
     genericName = "Bibliography manager";
-    categories = "Office;";
+    categories = [ "Office" ];
     icon = "jabref";
     exec = "jabref";
   };

@@ -3,6 +3,7 @@
 , freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
 , leveldb, postgresql, hiredis, libiconv, zlib, libXrandr, libX11, ninja, prometheus-cpp
 , OpenGL, OpenAL ? openal, Carbon, Cocoa
+, Kernel
 }:
 
 with lib;
@@ -20,7 +21,8 @@ let
       sha256 = "sha256-YlXn9LrfGkjdb8+zQGDgrInolUYj9nVSF2AXWFpEEkw=";
     };
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ zlib libjpeg libpng libGLU libGL libXrandr libX11 libXxf86vm ];
+    buildInputs = [ zlib libjpeg libpng libGLU libGL libXrandr libX11 libXxf86vm ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel ];
     outputs = [ "out" "dev" ];
     meta = irrlicht.meta;
   };

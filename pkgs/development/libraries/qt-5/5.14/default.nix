@@ -96,6 +96,12 @@ let
         stripLen = 1;
         extraPrefix = "src/3rdparty/";
       })
+
+      # glibc 2.34 compat
+      (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt5-qtwebengine/raw/4cef673b2dd01ce85ce7a841cf352104bbe79668/f/qtwebengine-everywhere-5.15.2-SIGSTKSZ.patch";
+        sha256 = "sha256-2D0/FL4PBL4p6ccd6JoDAGqNtLs2aeE1OdM+PJItock=";
+      })
     ] ++ lib.optional stdenv.isDarwin ./qtwebengine-darwin-no-platform-check.patch;
     qtwebkit = [
       (fetchpatch {
@@ -120,7 +126,6 @@ let
       ./qtwebkit-darwin-no-qos-classes.patch
     ];
     qttools = [ ./qttools.patch ];
-    qtwayland = [ ./qtwayland-libdrm-build.patch ];
   };
 
   addPackages = self: with self;
@@ -139,7 +144,7 @@ let
         }
         { inherit self srcs patches; };
 
-      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs; };
+      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
     in {
 
       inherit callPackage qtCompatVersion qtModule srcs;
@@ -182,6 +187,7 @@ let
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
+      qtserialbus = callPackage ../modules/qtserialbus.nix {};
       qtserialport = callPackage ../modules/qtserialport.nix {};
       qtspeech = callPackage ../modules/qtspeech.nix {};
       qtsvg = callPackage ../modules/qtsvg.nix {};

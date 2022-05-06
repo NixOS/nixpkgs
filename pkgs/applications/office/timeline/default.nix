@@ -8,22 +8,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "timeline";
-  version = "2.4.0";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/thetimelineproj/${pname}-${version}.zip";
-    sha256 = "1pa0whqci6c2p20xf7gbndrrpr1xg42ixhql595ibdd4p3l37v23";
+    sha256 = "sha256-qwH2mt3Va62QJKJGOpt5WV3QksqQaRGEif4CcPC5F2E=";
   };
 
   nativeBuildInputs = [ python3.pkgs.wrapPython copyDesktopItems ];
 
   pythonPath = with python3.pkgs; [
-    wxPython_4_1
+    wxPython_4_0
     humblewx
     icalendar
     markdown
-    pysvg-py3
-    pillow
   ];
 
   checkInputs = [
@@ -37,9 +35,8 @@ python3.pkgs.buildPythonApplication rec {
       name = "timeline";
       comment = "Display and navigate information on a timeline";
       icon = "timeline";
-      terminal = false;
       exec = "timeline";
-      categories = "Office;Calendar;";
+      categories = [ "Office" "Calendar" ];
     })
   ];
 

@@ -48,7 +48,7 @@ buildDunePackage {
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
-  ] ++ lib.optional (!lib.versionAtLeast ocaml.version "4.12")
+  ] ++ lib.optional (lib.versionOlder ocaml.version "4.12")
     # This fixes the test-suite on macOS
     # See https://github.com/ocaml/merlin/pull/1399
     # Fixed in 4.4 for OCaml ≥ 4.12
@@ -57,11 +57,19 @@ buildDunePackage {
 
   useDune2 = true;
 
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    menhir
+    jq
+  ];
   buildInputs = [
     dot-merlin-reader
     yojson
     csexp
     result
+    menhirSdk
+    menhirLib
   ];
 
   doCheck = true;
@@ -71,12 +79,6 @@ buildDunePackage {
     dune runtest # filtering with -p disables tests
     runHook postCheck
   '';
-  checkInputs = [
-    jq
-    menhir
-    menhirLib
-    menhirSdk
-  ];
 
   meta = with lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";

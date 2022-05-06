@@ -131,6 +131,26 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
+      # Dirty hack to make sure the kernel properly loads modules
+      # such as ext4 on demand (e.g. on a `mount(2)` syscall). This is necessary
+      # because `kmod` isn't linked against `libpthread.so.0` anymore (since
+      # it was merged into `libc.so.6` since version `2.34`), but still needs
+      # to access it for some reason. This is not an issue in stage-1 itself
+      # because of the `LD_LIBRARY_PATH`-variable and anytime later because the rpath of
+      # kmod/modprobe points to glibc's `$out/lib` where `libpthread.so.6` exists.
+      # However, this is a problem when the kernel calls `modprobe` inside
+      # the initial ramdisk because it doesn't know about the
+      # `LD_LIBRARY_PATH` and the rpath was nuked.
+      #
+      # Also, we can't use `makeWrapper` here because `kmod` only does
+      # `modprobe` functionality if `argv[0] == "modprobe"`.
+      cat >$out/bin/modprobe-kernel <<EOF
+      #!$out/bin/ash
+      export LD_LIBRARY_PATH=$out/lib
+      exec $out/bin/modprobe "\$@"
+      EOF
+      chmod +x $out/bin/modprobe-kernel
+
       # Copy resize2fs if any ext* filesystems are to be resized
       ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
         # We need mke2fs in the initrd.
@@ -335,11 +355,8 @@ let
       [ { object = bootStage1;
           symlink = "/init";
         }
-        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
+        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.services.swraid.mdadmConf;
           symlink = "/etc/mdadm.conf";
-        }
-        { object = config.environment.etc."modprobe.d/nixos-initrd.conf".source;
-          symlink = "/etc/modprobe.d/nixos-initrd.conf";
         }
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
               src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
@@ -403,7 +420,7 @@ let
         ${lib.optionalString (config.boot.initrd.secrets == {})
             "exit 0"}
 
-        export PATH=${pkgs.coreutils}/bin:${pkgs.cpio}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
+        export PATH=${pkgs.coreutils}/bin:${pkgs.libarchive}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
 
         function cleanup {
           if [ -n "$tmp" -a -d "$tmp" ]; then
@@ -423,7 +440,7 @@ let
           ) config.boot.initrd.secrets)
          }
 
-        (cd "$tmp" && find . -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null) | \
+        (cd "$tmp" && find . -print0 | sort -z | bsdtar --uid 0 --gid 0 -cnf - -T - | bsdtar --null -cf - --format=newc @-) | \
           ${compressorExe} ${lib.escapeShellArgs initialRamdisk.compressorArgs} >> "$1"
       '';
 
@@ -485,14 +502,6 @@ in
       type = types.bool;
       description = ''
         Whether to run <command>fsck</command> on journaling filesystems such as ext3.
-      '';
-    };
-
-    boot.initrd.mdadmConf = mkOption {
-      default = "";
-      type = types.lines;
-      description = ''
-        Contents of <filename>/etc/mdadm.conf</filename> in stage 1.
       '';
     };
 
@@ -581,7 +590,7 @@ in
         else "gzip"
       );
       defaultText = literalDocBook "<literal>zstd</literal> if the kernel supports it (5.9+), <literal>gzip</literal> if not";
-      type = types.unspecified; # We don't have a function type...
+      type = types.either types.str (types.functionTo types.str);
       description = ''
         The compressor to use on the initrd image. May be any of:
 
@@ -706,8 +715,12 @@ in
       }
     ];
 
-    system.build =
-      { inherit bootStage1 initialRamdisk initialRamdiskSecretAppender extraUtils; };
+    system.build = mkMerge [
+      { inherit bootStage1 initialRamdiskSecretAppender extraUtils; }
+
+      # generated in nixos/modules/system/boot/systemd/initrd.nix
+      (mkIf (!config.boot.initrd.systemd.enable) { inherit initialRamdisk; })
+    ];
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "TMPFS")
@@ -715,6 +728,9 @@ in
     ];
 
     boot.initrd.supportedFilesystems = map (fs: fs.fsType) fileSystems;
-
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "initrd" "services" "swraid" "mdadmConf" ])
+  ];
 }
