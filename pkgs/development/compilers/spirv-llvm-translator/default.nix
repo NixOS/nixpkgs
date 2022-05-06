@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ lit ];
 
-  makeFlags = [ "llvm-spirv" ];
-
   cmakeFlags = [
     "-DLLVM_INCLUDE_TESTS=ON"
     "-DLLVM_DIR=${llvm_11.dev}"
