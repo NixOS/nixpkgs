@@ -62,7 +62,7 @@ let
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
 
-    inherit (self.flakes) callLocklessFlake;
+    inherit (self.flakes) callLocklessFlake forSystems;
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isString length
