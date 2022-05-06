@@ -46,6 +46,7 @@ makeWrapper() {
     makeDocumentedCWrapper "$original" "$@" | \
       @CC@ \
         -Wall -Werror -Wpedantic \
+        -Wno-overlength-strings \
         -Os \
         -x c \
         -o "$wrapper" -
