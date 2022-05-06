@@ -120,7 +120,7 @@ stdenv.mkDerivation rec {
       having a black belt in shell scripting.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ afldcr Br1ght0ne fortuneteller2k ];
+    maintainers = with maintainers; [ afldcr Br1ght0ne fortuneteller2k ckie ];
     platforms = platforms.linux;
   };
 }
