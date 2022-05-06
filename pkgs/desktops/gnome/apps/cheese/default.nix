@@ -80,8 +80,6 @@ stdenv.mkDerivation rec {
     pipewire # PipeWire provides a gstreamer plugin for using PipeWire for video
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=overlength-strings";
-
   postPatch = ''
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
