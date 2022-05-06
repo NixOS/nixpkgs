@@ -1,11 +1,22 @@
-{ lib, stdenvNoLibs, buildPackages
+{ lib, fetchurl, stdenvNoLibs, buildPackages
 , gcc, glibc
 , libiberty
 }:
 
-stdenvNoLibs.mkDerivation rec {
+with
+  # Avoid issues on x86_64-darwin, and on aarch64-darwin it's 11.2.0 anyway.
+  if stdenvNoLibs.isDarwin then rec {
+    version = "11.2.0";
+    src = fetchurl {
+      url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
+      sha256 = "sha256-0I7cU2tUw3KhAQ/2YZ3SdMDxYDqkkhK6IPeqLNo2+os=";
+    };
+  } else {
+    inherit (gcc.cc) src version;
+  };
+stdenvNoLibs.mkDerivation {
   pname = "libgcc";
-  inherit (gcc.cc) src version;
+  inherit src version;
 
   outputs = [ "out" "dev" ];
 
