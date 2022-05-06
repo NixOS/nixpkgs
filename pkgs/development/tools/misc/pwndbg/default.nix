@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , makeWrapper
 , gdb
+, glibc # for debug symbols that pwndbg uses for heap commands
 }:
 
 let
@@ -40,7 +41,8 @@ in stdenv.mkDerivation rec {
     chmod +x $out/share/pwndbg/gdbinit.py
     makeWrapper ${gdb}/bin/gdb $out/bin/pwndbg \
       --add-flags "-q -x $out/share/pwndbg/gdbinit.py" \
-      --set NIX_PYTHONPATH ${pythonPath}
+      --set NIX_PYTHONPATH ${pythonPath} \
+      --prefix NIX_DEBUG_INFO_DIRS : ${glibc.debug}/lib/debug
   '';
 
   meta = with lib; {
