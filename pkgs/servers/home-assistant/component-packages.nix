@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.4.7";
+  version = "2022.5.0";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -156,10 +156,6 @@
       arcam-fmj
     ];
     "arest" = ps: with ps; [
-    ];
-    "arlo" = ps: with ps; [
-      ha-ffmpeg
-      pyarlo
     ];
     "arris_tg2492lg" = ps: with ps; [
       arris-tg2492lg
@@ -554,8 +550,6 @@
     "digital_ocean" = ps: with ps; [
       digital-ocean
     ];
-    "digitalloggers" = ps: with ps; [
-    ]; # missing inputs: dlipower
     "directv" = ps: with ps; [
       directv
     ];
@@ -993,8 +987,7 @@
     ];
     "google" = ps: with ps; [
       aiohttp-cors
-      google-api-python-client
-      httplib2
+      gcal-sync
       oauth2client
     ];
     "google_assistant" = ps: with ps; [
@@ -1248,9 +1241,15 @@
     ];
     "insteon" = ps: with ps; [
       aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      insteon-frontend-home-assistant
+      lru-dict
+      pillow
       pyinsteon
       pyserial
       pyudev
+      sqlalchemy
     ];
     "integration" = ps: with ps; [
     ];
@@ -1391,8 +1390,10 @@
       life360
     ];
     "lifx" = ps: with ps; [
+      aiohttp-cors
       aiolifx
       aiolifx-effects
+      ifaddr
     ];
     "lifx_cloud" = ps: with ps; [
     ];
@@ -1513,6 +1514,9 @@
     ];
     "mazda" = ps: with ps; [
       pymazda
+    ];
+    "meater" = ps: with ps; [
+      meater-python
     ];
     "media_extractor" = ps: with ps; [
       aiohttp-cors
@@ -1787,7 +1791,8 @@
     "notify" = ps: with ps; [
     ];
     "notify_events" = ps: with ps; [
-    ]; # missing inputs: notify-events
+      notify-events
+    ];
     "notion" = ps: with ps; [
       aionotion
     ];
@@ -2087,7 +2092,11 @@
       georss-qld-bushfire-alert-client
     ];
     "qnap" = ps: with ps; [
-    ]; # missing inputs: qnapstats
+      qnapstats
+    ];
+    "qnap_qsw" = ps: with ps; [
+      aioqsw
+    ];
     "qrcode" = ps: with ps; [
       pillow
       pyzbar
@@ -2115,9 +2124,11 @@
       radiotherm
     ];
     "rainbird" = ps: with ps; [
-    ]; # missing inputs: pyrainbird
+      pyrainbird
+    ];
     "raincloud" = ps: with ps; [
-    ]; # missing inputs: raincloudy
+      raincloudy
+    ];
     "rainforest_eagle" = ps: with ps; [
       aioeagle
       ueagle
@@ -2309,6 +2320,10 @@
     "sentry" = ps: with ps; [
       sentry-sdk
     ];
+    "senz" = ps: with ps; [
+      aiohttp-cors
+      aiosenz
+    ];
     "serial" = ps: with ps; [
       pyserial-asyncio
     ];
@@ -2382,6 +2397,10 @@
     ];
     "slide" = ps: with ps; [
     ]; # missing inputs: goslide-api
+    "slimproto" = ps: with ps; [
+      aiohttp-cors
+      aioslimproto
+    ];
     "sma" = ps: with ps; [
       pysma
     ];
@@ -2420,7 +2439,7 @@
       paho-mqtt
     ];
     "snmp" = ps: with ps; [
-      pysnmp
+      pysnmplib
     ];
     "solaredge" = ps: with ps; [
       solaredge
@@ -2747,6 +2766,9 @@
       pytradfri
     ]
     ++ pytradfri.extras-require.async;
+    "trafikverket_ferry" = ps: with ps; [
+      pytrafikverket
+    ];
     "trafikverket_train" = ps: with ps; [
       pytrafikverket
     ];
@@ -2828,11 +2850,10 @@
     ];
     "update" = ps: with ps; [
     ];
-    "updater" = ps: with ps; [
-    ];
     "upnp" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
+      getmac
       ifaddr
       zeroconf
     ];
@@ -3168,7 +3189,6 @@
     "apprise"
     "aprs"
     "arcam_fmj"
-    "arlo"
     "aseko_pool_live"
     "asuswrt"
     "atag"
@@ -3436,6 +3456,7 @@
     "manual_mqtt"
     "maxcube"
     "mazda"
+    "meater"
     "media_player"
     "media_source"
     "melcloud"
@@ -3486,6 +3507,7 @@
     "nina"
     "no_ip"
     "notify"
+    "notify_events"
     "notion"
     "nsw_rural_fire_service_feed"
     "nuki"
@@ -3540,6 +3562,7 @@
     "pvpc_hourly_pricing"
     "python_script"
     "qld_bushfire"
+    "qnap_qsw"
     "rachio"
     "radarr"
     "radio_browser"
@@ -3582,6 +3605,7 @@
     "sensibo"
     "sensor"
     "sentry"
+    "senz"
     "seventeentrack"
     "shell_command"
     "shelly"
@@ -3595,6 +3619,7 @@
     "siren"
     "slack"
     "sleepiq"
+    "slimproto"
     "sma"
     "smappee"
     "smart_meter_texas"
@@ -3648,6 +3673,7 @@
     "tailscale"
     "tankerkoenig"
     "tasmota"
+    "tautulli"
     "tcp"
     "telegram"
     "telegram_bot"
@@ -3671,6 +3697,7 @@
     "trace"
     "tractive"
     "tradfri"
+    "trafikverket_ferry"
     "trafikverket_train"
     "trafikverket_weatherstation"
     "transmission"
@@ -3689,7 +3716,6 @@
     "upb"
     "upcloud"
     "update"
-    "updater"
     "upnp"
     "uptime"
     "uptimerobot"
