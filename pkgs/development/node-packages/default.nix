@@ -15,6 +15,10 @@ let
       '';
     };
 
+    "@electron-forge/cli" = super."@electron-forge/cli".override {
+      buildInputs = [ self.node-pre-gyp self.rimraf ];
+    };
+
     autoprefixer = super.autoprefixer.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
@@ -38,6 +42,11 @@ let
       '';
     };
 
+    bitwarden-cli = super."@bitwarden/cli".override (drv: {
+      name = "bitwarden-cli-${drv.version}";
+      meta.mainProgram = "bw";
+    });
+
     bower2nix = super.bower2nix.override {
       buildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
@@ -58,9 +67,40 @@ let
       '';
     };
 
+    coc-imselect = super.coc-imselect.override {
+      meta.broken = since "10";
+    };
+
+    dat = super.dat.override {
+      buildInputs = [ self.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
+      meta.broken = since "12";
+    };
+
     deltachat-desktop = super."deltachat-desktop-../../applications/networking/instant-messengers/deltachat-desktop".override {
       meta.broken = true; # use the top-level package instead
     };
+
+    # NOTE: this is a stub package to fetch npm dependencies for
+    # ../../applications/video/epgstation
+    epgstation = super."epgstation-../../applications/video/epgstation".override (drv: {
+      buildInputs = [ self.node-pre-gyp self.node-gyp-build ];
+      meta = drv.meta // {
+        platforms = pkgs.lib.platforms.none;
+      };
+    });
+
+    # NOTE: this is a stub package to fetch npm dependencies for
+    # ../../applications/video/epgstation/client
+    epgstation-client = super."epgstation-client-../../applications/video/epgstation/client".override (drv: {
+      meta = drv.meta // {
+        platforms = pkgs.lib.platforms.none;
+      };
+    });
+
+    expo-cli = super."expo-cli".override (attrs: {
+      # The traveling-fastlane-darwin optional dependency aborts build on Linux.
+      dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") attrs.dependencies;
+    });
 
     fast-cli = super.fast-cli.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -71,6 +111,20 @@ let
         wrapProgram $out/bin/fast \
           --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
       '';
+    };
+
+    flood = super.flood.override {
+      buildInputs = [ self.node-pre-gyp ];
+      meta.mainProgram = "flood";
+    };
+
+    git-ssb = super.git-ssb.override {
+      buildInputs = [ self.node-gyp-build ];
+      meta.broken = since "10";
+    };
+
+    hsd = super.hsd.override {
+      buildInputs = [ self.node-gyp-build pkgs.unbound ];
     };
 
     hyperspace-cli = super."@hyperspace/cli".override {
@@ -91,76 +145,6 @@ let
       '';
     };
 
-    mdctl-cli = super."@medable/mdctl-cli".override {
-      nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
-        glib
-        libsecret
-        pkg-config
-      ] ++ lib.optionals stdenv.isDarwin [
-        AppKit
-        Security
-      ];
-      buildInputs = with pkgs; [
-        nodePackages.node-gyp-build
-        nodePackages.node-pre-gyp
-        nodejs
-      ];
-    };
-
-    coc-imselect = super.coc-imselect.override {
-      meta.broken = since "10";
-    };
-
-    dat = super.dat.override {
-      buildInputs = [ self.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
-      meta.broken = since "12";
-    };
-
-    # NOTE: this is a stub package to fetch npm dependencies for
-    # ../../applications/video/epgstation
-    epgstation = super."epgstation-../../applications/video/epgstation".override (drv: {
-      buildInputs = [ self.node-pre-gyp self.node-gyp-build ];
-      meta = drv.meta // {
-        platforms = pkgs.lib.platforms.none;
-      };
-    });
-
-    # NOTE: this is a stub package to fetch npm dependencies for
-    # ../../applications/video/epgstation/client
-    epgstation-client = super."epgstation-client-../../applications/video/epgstation/client".override (drv: {
-      meta = drv.meta // {
-        platforms = pkgs.lib.platforms.none;
-      };
-    });
-
-    bitwarden-cli = super."@bitwarden/cli".override (drv: {
-      name = "bitwarden-cli-${drv.version}";
-      meta.mainProgram = "bw";
-    });
-
-    flood = super.flood.override {
-      buildInputs = [ self.node-pre-gyp ];
-      meta.mainProgram = "flood";
-    };
-
-    expo-cli = super."expo-cli".override (attrs: {
-      # The traveling-fastlane-darwin optional dependency aborts build on Linux.
-      dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") attrs.dependencies;
-    });
-
-    "@electron-forge/cli" = super."@electron-forge/cli".override {
-      buildInputs = [ self.node-pre-gyp self.rimraf ];
-    };
-
-    git-ssb = super.git-ssb.override {
-      buildInputs = [ self.node-gyp-build ];
-      meta.broken = since "10";
-    };
-
-    hsd = super.hsd.override {
-      buildInputs = [ self.node-gyp-build pkgs.unbound ];
-    };
-
     ijavascript = super.ijavascript.override (oldAttrs: {
       preRebuild = ''
         export NPM_CONFIG_ZMQ_EXTERNAL=true
@@ -174,6 +158,22 @@ let
 
     intelephense = super.intelephense.override {
       meta.license = pkgs.lib.licenses.unfree;
+    };
+
+    joplin = super.joplin.override {
+      nativeBuildInputs = [ pkgs.pkg-config ];
+      buildInputs = with pkgs; [
+        # required by sharp
+        # https://sharp.pixelplumbing.com/install
+        vips
+
+        libsecret
+        self.node-gyp-build
+        self.node-pre-gyp
+      ] ++ lib.optionals stdenv.isDarwin [
+        darwin.apple_sdk.frameworks.AppKit
+        darwin.apple_sdk.frameworks.Security
+      ];
     };
 
     jsonplaceholder = super.jsonplaceholder.override (drv: {
@@ -218,15 +218,35 @@ let
       meta.mainProgram = "markdownlint";
     };
 
-    node-gyp = super.node-gyp.override {
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-      # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
-      # This is important when build nodejs packages in sandbox.
-      postInstall = ''
-        wrapProgram "$out/bin/node-gyp" \
-          --set npm_config_nodedir ${nodejs}
-      '';
+    mdctl-cli = super."@medable/mdctl-cli".override {
+      nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
+        glib
+        libsecret
+        pkg-config
+      ] ++ lib.optionals stdenv.isDarwin [
+        AppKit
+        Security
+      ];
+      buildInputs = with pkgs; [
+        nodePackages.node-gyp-build
+        nodePackages.node-pre-gyp
+        nodejs
+      ];
     };
+
+    mermaid-cli = super."@mermaid-js/mermaid-cli".override (
+    if stdenv.isDarwin
+    then {}
+    else {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      prePatch = ''
+        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
+      '';
+      postInstall = ''
+        wrapProgram $out/bin/mmdc \
+        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
+      '';
+    });
 
     near-cli = super.near-cli.override {
       nativeBuildInputs = with pkgs; [
@@ -237,9 +257,23 @@ let
       ];
     };
 
+    node-gyp = super.node-gyp.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      # Teach node-gyp to use nodejs headers locally rather that download them form https://nodejs.org.
+      # This is important when build nodejs packages in sandbox.
+      postInstall = ''
+        wrapProgram "$out/bin/node-gyp" \
+          --set npm_config_nodedir ${nodejs}
+      '';
+    };
+
     node-inspector = super.node-inspector.override {
       buildInputs = [ self.node-pre-gyp ];
       meta.broken = since "10";
+    };
+
+    node-red = super.node-red.override {
+      buildInputs = [ self.node-pre-gyp ];
     };
 
     node2nix = super.node2nix.override {
@@ -257,23 +291,12 @@ let
       '';
     };
 
-    node-red = super.node-red.override {
-      buildInputs = [ self.node-pre-gyp ];
+    parcel = super.parcel.override {
+      buildInputs = [ self.node-gyp-build ];
+      preRebuild = ''
+        sed -i -e "s|#!/usr/bin/env node|#! ${pkgs.nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
+      '';
     };
-
-    mermaid-cli = super."@mermaid-js/mermaid-cli".override (
-    if stdenv.isDarwin
-    then {}
-    else {
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-      prePatch = ''
-        export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
-      '';
-      postInstall = ''
-        wrapProgram $out/bin/mmdc \
-        --set PUPPETEER_EXECUTABLE_PATH ${pkgs.chromium.outPath}/bin/chromium
-      '';
-    });
 
     pnpm = super.pnpm.override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -291,13 +314,6 @@ let
         for prog in $out/bin/*; do
           wrapProgram "$prog" --prefix PATH : ${pnpmLibPath}
         done
-      '';
-    };
-
-    parcel = super.parcel.override {
-      buildInputs = [ self.node-gyp-build ];
-      preRebuild = ''
-        sed -i -e "s|#!/usr/bin/env node|#! ${pkgs.nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
       '';
     };
 
@@ -401,12 +417,27 @@ let
       };
     });
 
+    teck-programmer = super.teck-programmer.override {
+      nativeBuildInputs = [ self.node-gyp-build ];
+      buildInputs = [ pkgs.libusb1 ];
+    };
+
     tedicross = super."tedicross-git+https://github.com/TediCross/TediCross.git#v0.8.7".override {
       nativeBuildInputs = [ pkgs.makeWrapper ];
       postInstall = ''
         makeWrapper '${nodejs}/bin/node' "$out/bin/tedicross" \
           --add-flags "$out/lib/node_modules/tedicross/main.js"
       '';
+    };
+
+    thelounge = super.thelounge.override {
+      buildInputs = [ self.node-pre-gyp ];
+      postInstall = ''
+        echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
+        patch -d $out/lib/node_modules/thelounge -p1 < ${./thelounge-packages-path.patch}
+      '';
+      passthru.tests = { inherit (nixosTests) thelounge; };
+      meta = super.thelounge.meta // { maintainers = with lib.maintainers; [ winter ]; };
     };
 
     thelounge-plugin-closepms = super.thelounge-plugin-closepms.override {
@@ -421,18 +452,25 @@ let
       nativeBuildInputs = [ self.node-pre-gyp ];
     };
 
-    tsun = super.tsun.overrideAttrs (oldAttrs: {
-      buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
+    triton = super.triton.override {
+      nativeBuildInputs = [ pkgs.installShellFiles ];
       postInstall = ''
-        wrapProgram "$out/bin/tsun" \
-        --prefix NODE_PATH : ${self.typescript}/lib/node_modules
+        installShellCompletion --cmd triton --bash <($out/bin/triton completion)
       '';
-    });
+    };
 
     ts-node = super.ts-node.overrideAttrs (oldAttrs: {
       buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
       postInstall = ''
         wrapProgram "$out/bin/ts-node" \
+        --prefix NODE_PATH : ${self.typescript}/lib/node_modules
+      '';
+    });
+
+    tsun = super.tsun.overrideAttrs (oldAttrs: {
+      buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/tsun" \
         --prefix NODE_PATH : ${self.typescript}/lib/node_modules
       '';
     });
@@ -447,11 +485,6 @@ let
         wrapProgram "$out/bin/typescript-language-server" \
           --suffix PATH : ${pkgs.lib.makeBinPath [ self.typescript ]}
       '';
-    };
-
-    teck-programmer = super.teck-programmer.override {
-      nativeBuildInputs = [ self.node-gyp-build ];
-      buildInputs = [ pkgs.libusb1 ];
     };
 
     uppy-companion = super."@uppy/companion".override {
@@ -485,51 +518,6 @@ let
         };
     };
 
-    webtorrent-cli = super.webtorrent-cli.override {
-      buildInputs = [ self.node-gyp-build ];
-    };
-
-    joplin = super.joplin.override {
-      nativeBuildInputs = [ pkgs.pkg-config ];
-      buildInputs = with pkgs; [
-        # required by sharp
-        # https://sharp.pixelplumbing.com/install
-        vips
-
-        libsecret
-        self.node-gyp-build
-        self.node-pre-gyp
-      ] ++ lib.optionals stdenv.isDarwin [
-        darwin.apple_sdk.frameworks.AppKit
-        darwin.apple_sdk.frameworks.Security
-      ];
-    };
-
-    thelounge = super.thelounge.override {
-      buildInputs = [ self.node-pre-gyp ];
-      postInstall = ''
-        echo /var/lib/thelounge > $out/lib/node_modules/thelounge/.thelounge_home
-        patch -d $out/lib/node_modules/thelounge -p1 < ${./thelounge-packages-path.patch}
-      '';
-      passthru.tests = { inherit (nixosTests) thelounge; };
-      meta = super.thelounge.meta // { maintainers = with lib.maintainers; [ winter ]; };
-    };
-
-    triton = super.triton.override {
-      nativeBuildInputs = [ pkgs.installShellFiles ];
-      postInstall = ''
-        installShellCompletion --cmd triton --bash <($out/bin/triton completion)
-      '';
-    };
-
-    yaml-language-server = super.yaml-language-server.override {
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-      postInstall = ''
-        wrapProgram "$out/bin/yaml-language-server" \
-        --prefix NODE_PATH : ${self.prettier}/lib/node_modules
-      '';
-    };
-
     wavedrom-cli = super.wavedrom-cli.override {
       nativeBuildInputs = [ pkgs.pkg-config self.node-pre-gyp ];
       # These dependencies are required by
@@ -539,6 +527,18 @@ let
         cairo
         pango
       ];
+    };
+
+    webtorrent-cli = super.webtorrent-cli.override {
+      buildInputs = [ self.node-gyp-build ];
+    };
+
+    yaml-language-server = super.yaml-language-server.override {
+      nativeBuildInputs = [ pkgs.makeWrapper ];
+      postInstall = ''
+        wrapProgram "$out/bin/yaml-language-server" \
+        --prefix NODE_PATH : ${self.prettier}/lib/node_modules
+      '';
     };
   };
 in self
