@@ -1,20 +1,33 @@
 { lib
+, astroid
+, beautifulsoup4
+, buildPythonPackage
 , fetchFromGitHub
-, python3
+, jproperties
+, luhn
+, lxml
+, pytest-mock
+, pytestCheckHook
+, python-Levenshtein
+, pythonOlder
+, pyyaml
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "whispers";
   version = "1.5.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = pname;
     rev = version;
-    sha256 = "sha256-jruUGyoZCyMu015QKtlvfx5WRMfxo/eYUue9wUIWb6o=";
+    hash = "sha256-jruUGyoZCyMu015QKtlvfx5WRMfxo/eYUue9wUIWb6o=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     astroid
     beautifulsoup4
     jproperties
@@ -24,7 +37,7 @@ python3.pkgs.buildPythonApplication rec {
     pyyaml
   ];
 
-  checkInputs = with python3.pkgs; [
+  checkInputs = [
     pytest-mock
     pytestCheckHook
   ];
