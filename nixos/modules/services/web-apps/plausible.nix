@@ -225,6 +225,11 @@ in {
             SMTP_HOST_SSL_ENABLED = boolToString cfg.mail.smtp.enableSSL;
 
             SELFHOST = "true";
+
+            # Don't bind a port for distribution features and don't start epmd
+            # If not set up very carefully these can be a security risk
+            RELEASE_DISTRIBUTION = "none";
+
           } // (optionalAttrs (cfg.mail.smtp.user != null) {
             SMTP_USER_NAME = cfg.mail.smtp.user;
           });
@@ -233,8 +238,6 @@ in {
             ++ optional cfg.database.postgres.setup config.services.postgresql.package;
           script = ''
             export CONFIG_DIR=$CREDENTIALS_DIRECTORY
-
-            export RELEASE_COOKIE="$(< $CREDENTIALS_DIRECTORY/RELEASE_COOKIE )"
 
             # setup
             ${pkgs.plausible}/createdb.sh
@@ -256,7 +259,6 @@ in {
             LoadCredential = [
               "ADMIN_USER_PWD:${cfg.adminUser.passwordFile}"
               "SECRET_KEY_BASE:${cfg.server.secretKeybaseFile}"
-              "RELEASE_COOKIE:${cfg.releaseCookiePath}"
             ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"];
           };
         };
