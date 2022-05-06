@@ -4567,6 +4567,8 @@ with pkgs;
 
   cfdg = callPackage ../tools/graphics/cfdg { };
 
+  cgns = callPackage ../development/libraries/cgns { };
+
   cglm = callPackage ../development/libraries/cglm { };
 
   cgreen = callPackage ../development/libraries/cgreen { };
