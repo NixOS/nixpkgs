@@ -1,6 +1,6 @@
 {
   "name": "meshcentral",
-  "version": "0.9.98",
+  "version": "1.0.18",
   "keywords": [
     "Remote Device Management",
     "Remote Device Monitoring",
@@ -25,6 +25,7 @@
     "*.js",
     "amt",
     "bin",
+    "rdp",
     "views",
     "emails",
     "agents",
@@ -67,6 +68,7 @@
     "passport-reddit": "*",
     "passport-azure-oauth2": "*",
     "jwt-simple": "*",
+    "@mstrhakr/passport-generic-oidc": "*",
     "passport-saml": "*",
     "ws": "5.2.3",
     "cbor": "5.2.0",
@@ -87,7 +89,6 @@
     "loadavg-windows": "*",
     "node-sspi": "*",
     "ldapauth-fork": "*",
-    "node-rdpjs-2": "*",
     "ssh2": "*",
     "image-size": "*",
     "acme-client": "*",
