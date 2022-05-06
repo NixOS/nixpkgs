@@ -27,6 +27,17 @@ let
     ${cfg.seahubExtraConf}
   '';
 
+  # Most official settings are irrelevant since seafdav is run via Gunicorn
+  # as WSGI application. Thus Gunicorn params are given inline.
+  # Only the share_name is actually consumed by seafdav itself. `enabled`
+  # is set simply to avoid confusion; seafdav doesn't act upon it.
+  seafdavConf = settingsFormat.generate "seafdav.conf" {
+    WEBDAV = {
+      enabled = cfg.webdav.enable;
+      share_name = cfg.webdav.shareName;
+    };
+  };
+
   seafRoot = "/var/lib/seafile"; # hardcode it due to dynamicuser
   ccnetDir = "${seafRoot}/ccnet";
   dataDir = "${seafRoot}/data";
@@ -137,6 +148,42 @@ in {
         for all available options.
       '';
     };
+
+    webdav = mkOption {
+      type = types.submodule {
+        options = {
+          enable = mkEnableOption "Seafile WebDAV Extension";
+          shareName = mkOption {
+            type = types.str;
+            default = "/";
+            example = "/webdav";
+            description = ''
+              Public path in URI under which the WebDAV server can be reached.
+            '';
+          };
+          workers = mkOption {
+            type = types.int;
+            default = 5;
+            example = 10;
+            description = ''
+              The number of gunicorn worker processes for handling requests.
+            '';
+          };
+          timeout = mkOption {
+            type = types.int;
+            default = 1200;
+            example = 920;
+            description = ''
+              Timeout for gunicorn in seconds. Affects large file uploads.
+            '';
+          };
+        };
+      };
+      default = { };
+      description = ''
+        Optional WebDAV extension.
+      '';
+    };
   };
 
   ###### Implementation
@@ -146,6 +193,7 @@ in {
     environment.etc."seafile/ccnet.conf".source = ccnetConf;
     environment.etc."seafile/seafile.conf".source = seafileConf;
     environment.etc."seafile/seahub_settings.py".source = seahubSettings;
+    environment.etc."seafile/seafdav.conf".source = seafdavConf;
 
     systemd.targets.seafile = {
       wantedBy = [ "multi-user.target" ];
@@ -291,6 +339,43 @@ in {
               echo "${pkgs.seahub.version}-sqlite" > "${seafRoot}/seahub-setup"
           fi
         '';
+      };
+
+      seafdav = mkIf cfg.webdav.enable {
+        description = "Seafile WebDAV Extension";
+        wantedBy = [ "seafile.target" ];
+        partOf = [ "seafile.target" ];
+        after = [ "network.target" "seaf-server.service" ];
+        requires = [ "seaf-server.service" ];
+        restartTriggers = [ seahubSettings ];
+        environment = {
+          # needs /etc/seafile to access seahub_settings.py
+          PYTHONPATH = "${pkgs.seafdav.pythonPath}:${pkgs.seafdav}:/etc/seafile";
+          CCNET_CONF_DIR = ccnetDir;
+          SEAFILE_CONF_DIR = dataDir;
+          SEAFILE_CENTRAL_CONF_DIR = "/etc/seafile";
+          SEAFILE_RPC_PIPE_PATH = "/run/seafile";
+          SEAHUB_LOG_DIR = "/var/log/seafile";
+          SEAFDAV_CONF = "/etc/seafile/seafdav.conf";
+        };
+        serviceConfig = securityOptions // {
+          User = "seafile";
+          Group = "seafile";
+          DynamicUser = true;
+          RuntimeDirectory = "seafdav";
+          StateDirectory = "seafile";
+          LogsDirectory = "seafile";
+          ConfigurationDirectory = "seafile";
+          ExecStart = ''
+            ${pkgs.seafdav.python.pkgs.gunicorn}/bin/gunicorn seafdav:application \
+            --name seafdav \
+            --workers ${toString cfg.webdav.workers} \
+            --log-level=info \
+            --preload \
+            --timeout=${toString cfg.webdav.timeout} \
+            --bind unix:/run/seafdav/gunicorn.sock
+           '';
+        };
       };
     };
   };

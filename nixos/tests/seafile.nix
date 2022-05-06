@@ -16,6 +16,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
           ccnetSettings.General.SERVICE_URL = "http://server";
           adminEmail = "admin@example.com";
           initialAdminPassword = "seafile_password";
+          webdav = {
+            enable = true;
+            shareName = "/webdav";
+          };
         };
         services.nginx = {
           enable = true;
@@ -33,6 +37,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
                 proxy_http_version 1.1;
               '';
             };
+            locations."/webdav".proxyPass = "http://unix:/run/seafdav/gunicorn.sock:/webdav";
           };
         };
         networking.firewall = { allowedTCPPorts = [ 80 ]; };
@@ -117,5 +122,15 @@ import ./make-test-python.nix ({ pkgs, ... }:
           client2.succeed("ls -la test01 >&2")
 
           client2.succeed('[ `cat test01/first_file` = "bla" ]')
+
+      with subtest("start webdav-server"):
+          server.wait_for_unit("seafdav.service")
+          server.wait_for_file("/run/seafdav/gunicorn.sock")
+
+      with subtest("webdav download file"):
+          client2.succeed(
+            "curl http://server/webdav/test01/first_file -u admin\@example.com -p seafile_password -o first_file.webdav"
+          )
+          client2.succeed('[ `cat first_file.webdav` = "bla" ]')
     '';
   })
