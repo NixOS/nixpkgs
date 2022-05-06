@@ -200,7 +200,7 @@ in
       # That way, tickets would be seen immediately
       systemd.services."${user}-cron" = mkIf cfg.enablePolling {
         description = "osTicket email polling";
-        script = "${pkg}/bin/osticket_cron";
+        serviceConfig.ExecStart = "${myPhp}/bin/php ${pkg}/api/cron.php";
         # We run this every minute but osTicket has its own timers
         startAt = "*:0/1";
         serviceConfig = {
