@@ -10397,6 +10397,8 @@ in {
 
   ttp = callPackage ../development/python-modules/ttp { };
 
+  ttp-templates = callPackage ../development/python-modules/ttp-templates { };
+
   tubes = callPackage ../development/python-modules/tubes { };
 
   tunigo = callPackage ../development/python-modules/tunigo { };
