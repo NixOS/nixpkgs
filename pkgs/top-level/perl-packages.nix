@@ -24476,6 +24476,19 @@ let
     };
   };
 
+  UUID4Tiny = buildPerlPackage {
+    pname = "UUID4-Tiny";
+    version = "0.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CV/CVLIBRARY/UUID4-Tiny-0.002.tar.gz";
+      sha256 = "e7535b31e386d432dec7adde214348389e1d5cf753e7ed07f1ae04c4360840cf";
+    };
+    meta = {
+      description = "Cryptographically secure v4 UUIDs for Linux x64";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   UUIDTiny = buildPerlPackage {
     pname = "UUID-Tiny";
     version = "1.04";
