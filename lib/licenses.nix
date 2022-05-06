@@ -653,6 +653,11 @@ in mkLicense lset) ({
     fullName = "Non-Profit Open Software License 3.0";
   };
 
+  nvidia-warp = {
+    fullName = "NVIDIA Source Code License for Warp";
+    url = "https://github.com/NVIDIA/warp/blob/main/LICENSE.md";
+  };
+
   obsidian = {
     fullName = "Obsidian End User Agreement";
     url = "https://obsidian.md/eula";
