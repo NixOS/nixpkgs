@@ -118,10 +118,10 @@ in {
         # Better be safe than sorry migration-wise.
         ExecStartPre =
           let preScript = pkgs.writers.writeBashBin "pleromaStartPre" ''
-            if [ ! -f /var/lib/pleroma/.cookie ]
+            if [ ! -f /var/lib/pleroma/.cookie ] || [ ! -s /var/lib/pleroma/.cookie ]
             then
               echo "Creating cookie file"
-              dd if=/dev/urandom bs=1 count=16 | hexdump -e '16/1 "%02x"' > /var/lib/pleroma/.cookie
+              dd if=/dev/urandom bs=1 count=16 | ${pkgs.hexdump}/bin/hexdump -e '16/1 "%02x"' > /var/lib/pleroma/.cookie
             fi
             ${cfg.package}/bin/pleroma_ctl migrate
           '';
