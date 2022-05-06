@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonPackage
 , cssselect
 , feedparser
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    Babel
+    babel
     cssselect
     python-dateutil
     feedparser

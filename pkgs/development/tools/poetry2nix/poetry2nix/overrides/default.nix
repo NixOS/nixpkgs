@@ -2379,7 +2379,7 @@ lib.composeManyExtensions [
       });
 
       wtforms = super.wtforms.overridePythonAttrs (old: {
-        buildInputs = (old.buildInputs or [ ]) ++ [ self.Babel ];
+        buildInputs = (old.buildInputs or [ ]) ++ [ self.babel ];
       });
 
     }

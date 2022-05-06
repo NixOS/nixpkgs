@@ -2,7 +2,7 @@
 , buildPythonApplication
 , fetchPypi
 , pbr
-, Babel
+, babel
 , cliff
 , iso8601
 , osc-lib
@@ -31,7 +31,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     pbr
-    Babel
+    babel
     cliff
     iso8601
     osc-lib
