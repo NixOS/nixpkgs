@@ -23,13 +23,21 @@ let
         net.listen(${addrSpec}, ${port}, { kind = '${kind}', freebind = true })
       '';
 
-  configFile = pkgs.writeText "kresd.conf" (
-    ""
-    + concatMapStrings (mkListen "dns") cfg.listenPlain
-    + concatMapStrings (mkListen "tls") cfg.listenTLS
-    + concatMapStrings (mkListen "doh2") cfg.listenDoH
-    + cfg.extraConfig
-  );
+  configFile = if cfg.settings == {}
+    then pkgs.writeText "kresd.lua" (
+      ""
+      + concatMapStrings (mkListen "dns") cfg.listenPlain
+      + concatMapStrings (mkListen "tls") cfg.listenTLS
+      + concatMapStrings (mkListen "doh2") cfg.listenDoH
+      + cfg.extraConfig
+    )
+    else let
+      json = pkgs.writeText "kresd.json" (builtins.toJSON cfg.settings);
+      manager = pkgs.python3.withPackages (_: [ pkgs.knot-resolver-manager ]);
+      in pkgs.runCommandLocal "kresd.lua" {} ''
+        ${manager}/bin/python3 -m knot_resolver_manager.client gen-lua '${json}' > "$out"
+        echo '${cfg.extraConfig}' >> "$out"
+      '';
 in {
   meta.maintainers = [ maintainers.vcunat /* upstream developer */ ];
 
@@ -65,6 +73,23 @@ in {
       default = pkgs.knot-resolver;
       defaultText = literalExpression "pkgs.knot-resolver";
       example = literalExpression "pkgs.knot-resolver.override { extraFeatures = true; }";
+    };
+    settings = mkOption { # see RFC 42
+      type = types.submodule {
+        freeformType = (pkgs.formats.yaml {}).type;
+      };
+      default = {};
+      description = ''
+        Highly experimental!!!
+        Nix-based (RFC 42) configuration for Knot Resolver.
+
+        FIXME many issues, e.g.:
+         - instances still need to be configured the old way
+         - old listen{Plain,TLS,DoH} config gets silently ignored
+
+        <link xlink:href="https://example.com/docs/foo"/>
+        for supported values.
+      '';
     };
     extraConfig = mkOption {
       type = types.lines;
@@ -114,7 +139,7 @@ in {
 
   ###### implementation
   config = mkIf cfg.enable {
-    environment.etc."knot-resolver/kresd.conf".source = configFile; # not required
+    environment.etc."knot-resolver/kresd.lua".source = configFile; # not required
 
     networking.resolvconf.useLocalResolver = mkDefault true;
 
