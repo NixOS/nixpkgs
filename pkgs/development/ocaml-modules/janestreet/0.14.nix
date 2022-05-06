@@ -313,6 +313,7 @@ with self;
     meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ js_of_ocaml-ppx ];
     propagatedBuildInputs = [ async_js incr_map incr_select virtual_dom ];
+    patches = [ ./incr_dom_jsoo_4_0.patch ];
   };
 
   incr_map = janePackage {

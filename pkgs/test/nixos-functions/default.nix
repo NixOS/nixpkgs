@@ -24,6 +24,7 @@ in lib.optionalAttrs stdenv.hostPlatform.isLinux (
       system.nixos = dummyVersioning;
       boot.loader.grub.enable = false;
       fileSystems."/".device = "/dev/null";
+      system.stateVersion = lib.trivial.release;
     }).toplevel;
 
     nixosTest-test = pkgs.nixosTest ({ lib, pkgs, figlet, ... }: {
@@ -31,6 +32,7 @@ in lib.optionalAttrs stdenv.hostPlatform.isLinux (
       nodes.machine = { pkgs, ... }: {
         system.nixos = dummyVersioning;
         environment.systemPackages = [ pkgs.hello figlet ];
+        system.stateVersion = lib.trivial.release;
       };
       testScript = ''
         machine.succeed("hello | figlet >/dev/console")
