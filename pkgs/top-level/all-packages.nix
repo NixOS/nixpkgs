@@ -17107,6 +17107,8 @@ with pkgs;
 
   fflas-ffpack = callPackage ../development/libraries/fflas-ffpack { };
 
+  ffs = callPackage ../development/libraries/ffs { };
+
   forge = callPackage ../development/libraries/forge {
     cudatoolkit = buildPackages.cudatoolkit_11;
   };
