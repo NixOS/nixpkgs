@@ -6,19 +6,20 @@
 , aws-c-compression
 , aws-c-http
 , aws-c-io
+, aws-checksums
 , cmake
 , s2n-tls
 }:
 
 stdenv.mkDerivation rec {
   pname = "aws-c-s3";
-  version = "0.1.33";
+  version = "0.1.39";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-s3";
     rev = "v${version}";
-    sha256 = "sha256-lP5Luh/jFmlbb11rE5qYev+DMXjyMNwni0LcNvQGY4o=";
+    sha256 = "sha256-UbYh3awI7Y3mJnVQrltU+rZ1TI1TDaMF5TOcvxbzNa8=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ stdenv.mkDerivation rec {
     aws-c-compression
     aws-c-http
     aws-c-io
+    aws-checksums
     s2n-tls
   ];
 
