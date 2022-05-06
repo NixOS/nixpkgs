@@ -36,7 +36,7 @@ buildGoModule rec {
     description = "Build automation for the container era";
     homepage = "https://earthly.dev/";
     changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
-    license = licenses.bsl11;
+    license = licenses.mpl20;
     maintainers = with maintainers; [ zoedsoupe ];
   };
 }

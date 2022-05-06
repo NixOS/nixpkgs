@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.5.0";
+  version = "2022.5.1";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -2244,10 +2244,6 @@
     "russound_rnet" = ps: with ps; [
     ]; # missing inputs: russound
     "sabnzbd" = ps: with ps; [
-      aiohttp-cors
-      ifaddr
-      netdisco
-      zeroconf
     ]; # missing inputs: pysabnzbd
     "safe_mode" = ps: with ps; [
       pyturbojpeg

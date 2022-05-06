@@ -63,11 +63,10 @@ let
           kalbasit
           marsam
           maxeaubrey
-          timstott
-          zimbatm
-          zowoq
           techknowlogick
-        ];
+          timstott
+          zowoq
+        ] ++ teams.numtide.members;
       };
     } // attrs');
 
