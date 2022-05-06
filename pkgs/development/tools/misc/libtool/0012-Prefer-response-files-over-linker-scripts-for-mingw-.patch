@@ -1,0 +1,83 @@
+From ec15841963ca3aab3bc88fb0932c014337284bfc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Martin=20Storsj=C3=B6?= <martin@martin.st>
+Date: Wed, 10 Oct 2018 10:47:21 +0300
+Subject: [PATCH 2/2] Prefer response files over linker scripts for mingw tools
+
+The GCC/binutils tools support response files just fine, while
+lld (impersonating GNU ld) only supports response files, not
+linker scripts. Using a linker script as input just to pass a
+list of files is overkill for cases when a response file is enough.
+---
+ build-aux/ltmain.in | 28 ++++++++++++++--------------
+ m4/libtool.m4       |  2 ++
+ 2 files changed, 16 insertions(+), 14 deletions(-)
+
+diff --git a/build-aux/ltmain.in b/build-aux/ltmain.in
+index e2fb263..db5d590 100644
+--- a/build-aux/ltmain.in
++++ b/build-aux/ltmain.in
+@@ -7932,20 +7932,7 @@ EOF
+ 	  last_robj=
+ 	  k=1
+ 
+-	  if test -n "$save_libobjs" && test : != "$skipped_export" && test yes = "$with_gnu_ld"; then
+-	    output=$output_objdir/$output_la.lnkscript
+-	    func_verbose "creating GNU ld script: $output"
+-	    echo 'INPUT (' > $output
+-	    for obj in $save_libobjs
+-	    do
+-	      func_to_tool_file "$obj"
+-	      $ECHO "$func_to_tool_file_result" >> $output
+-	    done
+-	    echo ')' >> $output
+-	    func_append delfiles " $output"
+-	    func_to_tool_file "$output"
+-	    output=$func_to_tool_file_result
+-	  elif test -n "$save_libobjs" && test : != "$skipped_export" && test -n "$file_list_spec"; then
++	  if test -n "$save_libobjs" && test : != "$skipped_export" && test -n "$file_list_spec"; then
+ 	    output=$output_objdir/$output_la.lnk
+ 	    func_verbose "creating linker input file list: $output"
+ 	    : > $output
+@@ -7964,6 +7951,19 @@ EOF
+ 	    func_append delfiles " $output"
+ 	    func_to_tool_file "$output"
+ 	    output=$firstobj\"$file_list_spec$func_to_tool_file_result\"
++	  elif test -n "$save_libobjs" && test : != "$skipped_export" && test yes = "$with_gnu_ld"; then
++	    output=$output_objdir/$output_la.lnkscript
++	    func_verbose "creating GNU ld script: $output"
++	    echo 'INPUT (' > $output
++	    for obj in $save_libobjs
++	    do
++	      func_to_tool_file "$obj"
++	      $ECHO "$func_to_tool_file_result" >> $output
++	    done
++	    echo ')' >> $output
++	    func_append delfiles " $output"
++	    func_to_tool_file "$output"
++	    output=$func_to_tool_file_result
+ 	  else
+ 	    if test -n "$save_libobjs"; then
+ 	      func_verbose "creating reloadable object files..."
+diff --git a/m4/libtool.m4 b/m4/libtool.m4
+index d9322d0..9046a84 100644
+--- a/m4/libtool.m4
++++ b/m4/libtool.m4
+@@ -5130,6 +5130,7 @@ _LT_EOF
+       _LT_TAGVAR(enable_shared_with_static_runtimes, $1)=yes
+       _LT_TAGVAR(export_symbols_cmds, $1)='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[[BCDGRS]][[ ]]/s/.*[[ ]]\([[^ ]]*\)/\1 DATA/;s/^.*[[ ]]__nm__\([[^ ]]*\)[[ ]][[^ ]]*/\1 DATA/;/^I[[ ]]/d;/^[[AITW]][[ ]]/s/.* //'\'' | sort | uniq > $export_symbols'
+       _LT_TAGVAR(exclude_expsyms, $1)=['[_]+GLOBAL_OFFSET_TABLE_|[_]+GLOBAL__[FID]_.*|[_]+head_[A-Za-z0-9_]+_dll|[A-Za-z0-9_]+_dll_iname']
++      _LT_TAGVAR(file_list_spec, $1)='@'
+ 
+       if $LD --help 2>&1 | $GREP 'auto-import' > /dev/null; then
+         _LT_TAGVAR(archive_cmds, $1)='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
+@@ -6706,6 +6707,7 @@ if test yes != "$_lt_caught_CXX_error"; then
+ 	  _LT_TAGVAR(allow_undefined_flag, $1)=unsupported
+ 	  _LT_TAGVAR(always_export_symbols, $1)=no
+ 	  _LT_TAGVAR(enable_shared_with_static_runtimes, $1)=yes
++	  _LT_TAGVAR(file_list_spec, $1)='@'
+ 
+ 	  if $LD --help 2>&1 | $GREP 'auto-import' > /dev/null; then
+ 	    _LT_TAGVAR(archive_cmds, $1)='$CC -shared -nostdlib $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags -o $output_objdir/$soname $wl--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
+-- 
+2.7.4
+
