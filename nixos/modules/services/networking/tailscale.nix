@@ -4,7 +4,7 @@ with lib;
 
 let cfg = config.services.tailscale;
 in {
-  meta.maintainers = with maintainers; [ danderson mbaillie ];
+  meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 ];
 
   options.services.tailscale = {
     enable = mkEnableOption "Tailscale client daemon";
@@ -40,7 +40,11 @@ in {
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.openresolv pkgs.procps ];
+      path = [
+        pkgs.openresolv # for configuring DNS in some configs
+        pkgs.procps     # for collecting running services (opt-in feature)
+        pkgs.glibc      # for `getent` to look up user shells
+      ];
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
         ''"FLAGS=--tun ${lib.escapeShellArg cfg.interfaceName}"''
