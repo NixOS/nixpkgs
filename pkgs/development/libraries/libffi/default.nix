@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
 
   checkInputs = [ dejagnu ];
 
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isWindows autoreconfHook;
+
   meta = with lib; {
     description = "A foreign function call interface library";
     longDescription = ''
