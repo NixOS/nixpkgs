@@ -1,6 +1,6 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
 let
-  version = "2.5.0";
+  version = "2.5.1";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
@@ -18,7 +18,7 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     rev = "v${version}";
-    sha256 = "sha256-V9iIz/93n6EBJZ9v3MDKD6FivtplRFN9a/e0o7YX0/w=";
+    sha256 = "sha256-Y4GAx/8XcW7+6eXCQ6k4e/3WZ/6MkTr5za1AXp6El9o=";
   };
 
   vendorSha256 = "sha256-xu3klc9yb4Ws8fvXRV286IDhi/zQVN1PKCiFKb8VJBo=";
