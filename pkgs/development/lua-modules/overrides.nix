@@ -240,7 +240,9 @@ with prev;
     ];
   });
 
-  luasystem = prev.lib.overrideLuarocks prev.luasystem (drv: { buildInputs = [ pkgs.glibc.out ]; });
+  luasystem = prev.lib.overrideLuarocks prev.luasystem (drv: pkgs.lib.optionalAttrs pkgs.stdenv.isLinux {
+    buildInputs = [ pkgs.glibc.out ];
+  });
 
   luazip = prev.lib.overrideLuarocks prev.luazip (drv: {
     buildInputs = [
