@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.kitware.com/diatomic/diy";
     license = licenses.bsd3; # Actually BSD-3-Clause-LBNL
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ jtojnar ];
   };
 }
