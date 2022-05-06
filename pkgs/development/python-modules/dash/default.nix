@@ -9,6 +9,7 @@
 , dash-table
 , pytest-mock
 , mock
+, pyyaml
 , pytestCheckHook
 , pythonOlder
 }:
@@ -40,6 +41,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-mock
     mock
+    pyyaml
   ];
 
   disabledTestPaths = [
