@@ -76,11 +76,11 @@ in
 
 buildPerlPackage rec {
   pname = "public-inbox";
-  version = "unstable-2022-04-05";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "https://public-inbox.org/public-inbox.git/snapshot/public-inbox-961690bae47c90a4a6960952587c6f4463fb4b19.tar.gz";
-    sha256 = "sha256-dvo+0kCZZQlXudtWyv8Npf3KhSC8pg95CmP7fMFqgww=";
+    url = "https://public-inbox.org/public-inbox.git/snapshot/public-inbox-${version}.tar.gz";
+    sha256 = "sha256-laJOOCk5NecIGWesv4D30cLGfijQHVkeo55eNqNKzew=";
   };
 
   outputs = [ "out" "devdoc" "sa_config" ];
