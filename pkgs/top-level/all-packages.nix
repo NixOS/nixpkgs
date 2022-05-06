@@ -29022,7 +29022,7 @@ with pkgs;
 
   protonmail-bridge = callPackage ../applications/networking/protonmail-bridge { };
 
-  protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
+  protonvpn-cli = python3Packages.callPackage ../applications/networking/protonvpn-cli { };
 
   protonvpn-gui = python3Packages.callPackage ../applications/networking/protonvpn-gui { };
 
