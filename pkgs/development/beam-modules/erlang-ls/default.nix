@@ -1,7 +1,7 @@
 { fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
 , stdenv, writeScript, lib }:
 let
-  version = "0.31.0";
+  version = "0.32.0";
   owner = "erlang-ls";
   repo = "erlang_ls";
   deps = import ./rebar-deps.nix {
@@ -19,7 +19,7 @@ rebar3Relx {
   inherit version;
   src = fetchFromGitHub {
     inherit owner repo;
-    sha256 = "sha256-tpJUCHrSFNEzNrln7nKwav0GSBW+4fwjSB3WI1MKW9A=";
+    sha256 = "sha256-aYMfsaqdsxlWatvXBWIxKJ7baruH1kqp2nrXL+/IrUQ=";
     rev = version;
   };
   releaseType = "escript";
