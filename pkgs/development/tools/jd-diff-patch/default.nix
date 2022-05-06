@@ -23,5 +23,6 @@ buildGoModule rec {
     homepage = "https://github.com/josephburnett/jd";
     license = licenses.mit;
     maintainers = with maintainers; [ bryanasdev000 blaggacao ];
+    mainProgram = "jd";
   };
 }

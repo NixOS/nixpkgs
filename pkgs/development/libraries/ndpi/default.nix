@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.ntop.org/products/deep-packet-inspection/ndpi/";
     license = with licenses; [ lgpl3Plus bsd3 ];
     maintainers = with maintainers; [ takikawa ];
+    mainProgram = "ndpiReader";
     platforms = with platforms; unix;
   };
 }

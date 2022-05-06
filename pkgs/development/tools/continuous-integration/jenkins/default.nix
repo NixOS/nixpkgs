@@ -69,7 +69,8 @@ stdenv.mkDerivation rec {
     description = "An extendable open source continuous integration server";
     homepage = "https://jenkins-ci.org";
     license = licenses.mit;
-    platforms = platforms.all;
     maintainers = with maintainers; [ coconnor fpletz earldouglas nequissimus ];
+    mainProgram = "jenkins-cli";
+    platforms = platforms.all;
   };
 }

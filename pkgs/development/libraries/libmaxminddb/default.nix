@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     description = "C library for working with MaxMind geolocation DB files";
     homepage = "https://github.com/maxmind/libmaxminddb";
     license = licenses.asl20;
-    platforms = platforms.all;
     maintainers = [ maintainers.vcunat ];
+    mainProgram = "mmdblookup";
+    platforms = platforms.all;
   };
 }

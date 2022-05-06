@@ -28,5 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/hisbaan/didyoumean";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ evanjs ];
+    mainProgram = "dym";
   };
 }

@@ -39,16 +39,17 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/libimobiledevice/libirecovery";
     description = "Library and utility to talk to iBoot/iBSS via USB on Mac OS X, Windows, and Linux";
     longDescription = ''
       libirecovery is a cross-platform library which implements communication to
       iBoot/iBSS found on Apple's iOS devices via USB. A command-line utility is also
       provided.
     '';
+    homepage = "https://github.com/libimobiledevice/libirecovery";
     license = licenses.lgpl21;
+    maintainers = with maintainers; [ nh2 ];
+    mainProgram = "irecovery";
     # Upstream description says it works on more platforms, but packager hasn't tried that yet
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ nh2 ];
   };
 }

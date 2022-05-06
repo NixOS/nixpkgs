@@ -25,10 +25,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "preCICE stands for Precise Code Interaction Coupling Environment";
-    license = with lib.licenses; [ gpl3 ];
     homepage = "https://precice.org/";
-    platforms = lib.platforms.unix;
+    license = with lib.licenses; [ gpl3 ];
     maintainers = with lib.maintainers; [ Scriptkiddi ];
+    mainProgram = "binprecice";
+    platforms = lib.platforms.unix;
   };
 }
 

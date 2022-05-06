@@ -29,10 +29,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.commanderx16.com/forum/index.php?/home/";
     description = "The official emulator of CommanderX16 8-bit computer";
+    homepage = "https://www.commanderx16.com/forum/index.php?/home/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
+    mainProgram = "x16emu";
     inherit (SDL2.meta) platforms;
   };
 

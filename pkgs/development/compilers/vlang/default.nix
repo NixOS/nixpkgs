@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     description = "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;
     maintainers = with maintainers; [ Madouura ];
+    mainProgram = "v";
     platforms = platforms.all;
   };
 }

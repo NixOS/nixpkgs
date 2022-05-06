@@ -17,9 +17,10 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    homepage = "https://goa.design";
     description = "A framework for building microservices in Go using a unique design-first approach";
+    homepage = "https://goa.design";
     license = licenses.mit;
     maintainers = [ maintainers.rushmorem ];
+    mainProgram = "goagen";
   };
 }

@@ -22,10 +22,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://miniupnp.free.fr/libnatpmp.html";
     description = "NAT-PMP client";
+    homepage = "http://miniupnp.free.fr/libnatpmp.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ orivej ];
+    mainProgram = "natpmpc";
     platforms = platforms.all;
   };
 }

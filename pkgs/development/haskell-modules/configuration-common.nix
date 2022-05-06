@@ -1667,19 +1667,6 @@ self: super: {
 
   lsp = assert super.lsp.version == "1.4.0.0"; dontCheck super.lsp;
 
-  hls-test-utils = assert super.hls-test-utils.version == "1.2.0.0"; appendPatches [
-    (fetchpatch {
-      url = "https://github.com/haskell/haskell-language-server/commit/074593987e9086e308b89ecde336de2c64861dc0.patch";
-      sha256 = "sha256-uTlIbGQKulP3963UPL2V9cqMoIvPscK+s2W/HtBmMWc=";
-      relative = "hls-test-utils";
-    })
-    (fetchpatch {
-      url = "https://github.com/haskell/haskell-language-server/commit/78305f21783807b04baebca4860c255bfe84d4ab.patch";
-      sha256 = "sha256-oe8Q8kBJBkel+pR5imFj43NVpm4afcyLgAUCWhrIoPk=";
-      relative = "hls-test-utils";
-    })
-   ] super.hls-test-utils;
-
   # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
   hls-eval-plugin = dontCheck super.hls-eval-plugin;
 
@@ -2321,6 +2308,10 @@ self: super: {
   # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
   hls-stylish-haskell-plugin = doJailbreak super.hls-stylish-haskell-plugin;
 
+  # Necesssary .txt files are not included in sdist.
+  # https://github.com/haskell/haskell-language-server/pull/2887
+  hls-change-type-signature-plugin = dontCheck super.hls-change-type-signature-plugin;
+
   # Too strict bounds on hspec
   # https://github.com/haskell-works/hw-hspec-hedgehog/issues/62
   # https://github.com/haskell-works/hw-prim/issues/132
@@ -2656,5 +2647,10 @@ self: super: {
     url = "https://github.com/erebe/wstunnel/pull/107/commits/47c1f62bdec1dbe77088d9e3ceb6d872f922ce34.patch";
     sha256 = "sha256-fW5bVbAGQxU/gd9zqgVNclwKraBtUjkKDek7L0c4+O0=";
   }) super.wstunnel;
+
+  # Adjustment of bounds on servant is unreleased
+  # https://github.com/haskell-servant/servant-cassava/commit/66617547851d38d48f5f1d1b786db1286bdafa9d
+  servant-cassava = assert super.servant-cassava.version == "0.10.1";
+    doJailbreak super.servant-cassava;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
