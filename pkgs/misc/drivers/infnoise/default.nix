@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
     substituteInPlace init_scripts/infnoise.service --replace "/usr/local" "$out"
   '';
 
+  postInstall = ''
+    make -C tools
+    find ./tools/ -executable -type f -exec \
+      sh -c "install -Dm755 {} $out/bin/infnoise-\$(basename {})" \;
+  '';
+
   passthru = {
     tests.version = testers.testVersion { package = infnoise; };
   };
