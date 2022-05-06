@@ -5,7 +5,7 @@
 
 { lib, stdenv, pkg-config, pango, perl, python3, zip
 , libjpeg, zlib, dbus, dbus-glib, bzip2, xorg
-, freetype, fontconfig, file, nspr, nss
+, freetype, fontconfig, file, nspr, nss, nss_latest
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
 , libvpx
@@ -156,8 +156,9 @@ buildStdenv.mkDerivation ({
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
     # https://groups.google.com/forum/#!msg/mozilla.dev.platform/o-8levmLU80/SM_zQvfzCQAJ
-    nspr nss
+    nspr
   ]
+  ++ [ (if (lib.versionAtLeast version "92") then nss_latest else nss) ]
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optional  gssSupport libkrb5

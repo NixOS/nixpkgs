@@ -2623,10 +2623,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0cgrr3pc0y11gas6k2js33qghj7rpdh99vavda712wbq3hz42jx2";
+      sha256 = "1r1pl4imiqi75bksh17r2j3w74x561z4bx1mpgv6cin1fcrzw9zy";
       type = "gem";
     };
-    version = "0.4.4";
+    version = "0.4.5";
   };
   jaeger-client = {
     dependencies = ["opentracing" "thrift"];

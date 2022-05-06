@@ -2856,6 +2856,10 @@ with pkgs;
 
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
 
+  easycrypt = callPackage ../applications/science/logic/easycrypt { };
+
+  easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
+
   EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };
 
   ecasound = callPackage ../applications/audio/ecasound { };
@@ -18875,6 +18879,7 @@ with pkgs;
   };
 
   nss = lowPrio (callPackage ../development/libraries/nss { });
+  nss_latest = callPackage ../development/libraries/nss/latest.nix { };
   nssTools = nss.tools;
 
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
