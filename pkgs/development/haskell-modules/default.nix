@@ -9,6 +9,7 @@
 , configurationNix ? import ./configuration-nix.nix
 , configurationArm ? import ./configuration-arm.nix
 , configurationDarwin ? import ./configuration-darwin.nix
+, mainProgramOverrides ? import ./main-program-overrides.nix
 }:
 
 let
@@ -36,6 +37,8 @@ let
     compilerConfig
     packageSetConfig
     overrides
+  ] ++ [
+    (mainProgramOverrides { inherit pkgs; })
   ]);
 
   extensible-self = makeExtensible (extends extensions haskellPackages);
