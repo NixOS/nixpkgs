@@ -7032,6 +7032,8 @@ with pkgs;
 
   deco = callPackage ../applications/misc/deco { };
 
+  icloudpd = python3Packages.callPackage ../applications/misc/icloudpd { };
+
   icoutils = callPackage ../tools/graphics/icoutils { };
 
   idutils = callPackage ../tools/misc/idutils { };
