@@ -1,9 +1,12 @@
-{ lib
+{ config
+, lib
 , stdenv
+, addOpenGLRunpath
 , autoPatchelfHook
-, buildEnv
+, lndir
 , makeWrapper
 , requireFile
+, runCommand
 , alsa-lib
 , cups
 , dbus
@@ -35,19 +38,29 @@
 , xorg
 , zlib
 , lang ? "en"
+, cudaSupport ? config.cudaSupport or false
+, cudatoolkit ? null
 }:
 
 let
   l10n = import ./l10ns.nix {
     inherit lib requireFile lang;
   };
+
+  cudaEnv = runCommand "mathematica-cuda" {} ''
+    mkdir -p $out
+    ${lndir}/bin/lndir ${cudatoolkit} $out
+    ${lndir}/bin/lndir ${cudatoolkit.lib} $out
+    ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib64
+  '';
+
 in stdenv.mkDerivation {
   inherit (l10n) version name src;
 
   nativeBuildInputs = [
     autoPatchelfHook
     makeWrapper
-  ];
+  ] ++ lib.optional cudaSupport addOpenGLRunpath;
 
   buildInputs = [
     alsa-lib
@@ -94,7 +107,7 @@ in stdenv.mkDerivation {
     libXrender
     libXtst
     libxcb
-  ]);
+  ]) ++ lib.optional cudaSupport cudatoolkit;
 
   wrapProgramFlags = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib zlib ]}"
@@ -103,6 +116,10 @@ in stdenv.mkDerivation {
     "--set USE_WOLFRAM_LD_LIBRARY_PATH 1"
     # Fix xkeyboard config path for Qt
     "--set QT_XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb"
+  ] ++ lib.optionals cudaSupport [
+    "--set CUDA_PATH ${cudaEnv}"
+    "--set NVIDIA_DRIVER_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib/libnvidia-tls.so"
+    "--set CUDA_LIBRARY_PATH ${addOpenGLRunpath.driverLink}/lib/libcuda.so"
   ];
 
   unpackPhase = ''
