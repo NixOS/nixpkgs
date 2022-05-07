@@ -2,12 +2,12 @@
 
 let
   buildMongoDB = callPackage ./mongodb.nix {
-    inherit sasl boost Security CoreFoundation cctools;
+    inherit sasl boost Security CoreFoundation cctools stdenv;
   };
   variants = if stdenv.isLinux then
     {
-      version = "5.0.7";
-      sha256 = "sha256-1PeDBZJNqJXHH/cSh2e+WR0PfS/b7XuJEzkkbrRT/gc=";
+      version = "5.0.8";
+      sha256 = "sha256-ku8ZQ4VZfwSbymBNT/aG9jAn5JSEMdWJzsXNYDKGRZE=";
     }
   else
     {

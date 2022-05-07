@@ -32,8 +32,7 @@ in
       enable = mkEnableOption "the MongoDB server";
 
       package = mkOption {
-        default = pkgs.mongodb;
-        defaultText = literalExpression "pkgs.mongodb";
+        example = literalExpression "pkgs.mongodb-5_0";
         type = types.package;
         description = "
           Which MongoDB derivation to use.
@@ -120,6 +119,15 @@ in
         message = "`enableAuth` requires `initialRootPassword` to be set.";
       }
     ];
+
+    services.mongodb.package =
+     # Note: when changing the default, make it conditional on
+     # ‘system.stateVersion’ to maintain compatibility with existing
+     # systems!
+     # Remember to change the default version at pkgs/top-level/all-packages.nix too between NixOS versions
+     mkDefault (if versionAtLeast config.system.stateVersion "22.05" then pkgs.mongodb-5_0
+           else if versionAtLeast config.system.stateVersion "21.11" then pkgs.mongodb-3_4
+           else throw "please set your desired package for state version ${config.system.stateVersion}");
 
     users.users.mongodb = mkIf (cfg.user == "mongodb")
       { name = "mongodb";

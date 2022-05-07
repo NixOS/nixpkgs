@@ -133,7 +133,7 @@ in stdenv.mkDerivation rec {
     description = "A scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
     inherit license;
-
+    knownVulnerabilities =  if (versionAtLeast version "4.0") then [] else [ "EOLed version, please check https://www.mongodb.com/support-policy/lifecycles and official docs on how to upgrade" ];
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
   };

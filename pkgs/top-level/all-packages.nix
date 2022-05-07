@@ -22564,7 +22564,7 @@ with pkgs;
   ;
   mariadb = mariadb_106;
 
-  mongodb = hiPrio mongodb-3_4;
+  mongodb = hiPrio mongodb-5_0;
 
   mongodb-3_4 = callPackage ../servers/nosql/mongodb/v3_4.nix {
     sasl = cyrus_sasl;
@@ -22594,16 +22594,17 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
-  mongodb-4_4 = callPackage ../servers/nosql/mongodb/4.4.nix {
+  mongodb-4_4 = callPackage ../servers/nosql/mongodb/v4_4.nix {
     sasl = cyrus_sasl;
     boost = boost17x.override { enableShared = false; };
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
-  mongodb-5_0 = callPackage ../servers/nosql/mongodb/5.0.nix {
+  mongodb-5_0 = callPackage ../servers/nosql/mongodb/v5_0.nix {
     sasl = cyrus_sasl;
     boost = boost17x.override { enableShared = false; };
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
