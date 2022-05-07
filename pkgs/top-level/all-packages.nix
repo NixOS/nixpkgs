@@ -1117,6 +1117,8 @@ with pkgs;
 
   bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
 
+  cidrgrep = callPackage ../tools/text/cidrgrep { };
+
   cope = callPackage ../tools/misc/cope { };
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
@@ -24392,6 +24394,8 @@ with pkgs;
 
   kde-rounded-corners = libsForQt5.callPackage ../data/themes/kwin-decorations/kde-rounded-corners { };
 
+  khmeros = callPackage ../data/fonts/khmeros {};
+
   kochi-substitute = callPackage ../data/fonts/kochi-substitute {};
 
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 {};
@@ -24457,6 +24461,8 @@ with pkgs;
   line-awesome = callPackage ../data/fonts/line-awesome { };
 
   linux-manual = callPackage ../data/documentation/linux-manual { };
+
+  lklug-sinhala = callPackage ../data/fonts/lklug-sinhala {};
 
   lmmath = callPackage ../data/fonts/lmmath {};
 
@@ -24563,6 +24569,8 @@ with pkgs;
   myrica = callPackage ../data/fonts/myrica { };
 
   nafees = callPackage ../data/fonts/nafees { };
+
+  nanum = callPackage ../data/fonts/nanum {  };
 
   nanum-gothic-coding = callPackage ../data/fonts/nanum-gothic-coding {  };
 
@@ -24761,6 +24769,8 @@ with pkgs;
 
   sierra-gtk-theme = callPackage ../data/themes/sierra { };
 
+  sil-padauk = callPackage ../data/fonts/sil-padauk { };
+
   snap7 = callPackage ../development/libraries/snap7 {};
 
   snowblind = callPackage ../data/themes/snowblind { };
@@ -24860,6 +24870,8 @@ with pkgs;
 
   inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
+  takao = callPackage ../data/fonts/takao { };
+
   taskspooler = callPackage ../tools/system/taskspooler { };
 
   tamsyn = callPackage ../data/fonts/tamsyn { inherit (buildPackages.xorg) mkfontscale; };
@@ -24902,6 +24914,8 @@ with pkgs;
   tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
 
   theme-vertex = callPackage ../data/themes/vertex { };
+
+  tibetan-machine = callPackage ../data/fonts/tibetan-machine { };
 
   times-newer-roman = callPackage ../data/fonts/times-newer-roman { };
 
@@ -29039,7 +29053,8 @@ with pkgs;
 
   protonmail-bridge = callPackage ../applications/networking/protonmail-bridge { };
 
-  protonvpn-cli = callPackage ../applications/networking/protonvpn-cli { };
+  protonvpn-cli = python3Packages.callPackage ../applications/networking/protonvpn-cli { };
+  protonvpn-cli_2 = python3Packages.callPackage ../applications/networking/protonvpn-cli/2.nix { };
 
   protonvpn-gui = python3Packages.callPackage ../applications/networking/protonvpn-gui { };
 

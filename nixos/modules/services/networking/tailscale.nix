@@ -2,7 +2,11 @@
 
 with lib;
 
-let cfg = config.services.tailscale;
+let
+  cfg = config.services.tailscale;
+  firewallOn = config.networking.firewall.enable;
+  rpfMode = config.networking.firewall.checkReversePath;
+  rpfIsStrict = rpfMode == true || rpfMode == "strict";
 in {
   meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 ];
 
@@ -36,6 +40,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    warnings = optional (firewallOn && rpfIsStrict) "Strict reverse path filtering breaks Tailscale exit node use and some subnet routing setups. Consider setting `networking.firewall.checkReversePath` = 'loose'";
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
