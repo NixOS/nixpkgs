@@ -34,7 +34,7 @@ in
 
     vt = mkOption  {
       type = types.int;
-      default = 1;
+      default = 7;
       description = ''
         The virtual console (tty) that greetd should use. This option also disables getty on that tty.
       '';
