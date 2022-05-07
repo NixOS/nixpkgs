@@ -17989,6 +17989,8 @@ with pkgs;
 
   ios-cross-compile = callPackage ../development/compilers/ios-cross-compile/9.2.nix {};
 
+  ioss = callPackage ../development/libraries/ioss { };
+
   ip2location-c = callPackage ../development/libraries/ip2location-c { };
 
   irrlicht = if !stdenv.isDarwin then
