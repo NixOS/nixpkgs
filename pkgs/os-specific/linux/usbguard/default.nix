@@ -14,6 +14,7 @@
 , libcap_ng
 , libqb
 , libseccomp
+, pegtl
 , polkit
 , protobuf
 , audit
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     libcap_ng
     libqb
     libseccomp
+    pegtl
     polkit
     protobuf
     audit
@@ -60,7 +62,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-bundled-catch"
-    "--with-bundled-pegtl"
     "--with-dbus"
     "--with-polkit"
   ]
