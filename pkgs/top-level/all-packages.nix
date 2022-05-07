@@ -11921,7 +11921,9 @@ with pkgs;
 
   zerofree = callPackage ../tools/filesystems/zerofree { };
 
-  zfp = callPackage ../tools/compression/zfp {};
+  zfp = callPackage ../tools/compression/zfp {
+    pythonPackages = python3Packages;
+  };
 
   zfs-autobackup = callPackage ../tools/backup/zfs-autobackup { };
 
