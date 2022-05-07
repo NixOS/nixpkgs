@@ -44,7 +44,7 @@ in python.pkgs.buildPythonPackage rec {
     sqlalchemy
     CommonMark
     ruamel-yaml
-    python_magic
+    python-magic
     tulir-telethon
     telethon-session-sqlalchemy
     pillow

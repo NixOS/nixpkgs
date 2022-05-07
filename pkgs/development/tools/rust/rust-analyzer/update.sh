@@ -3,7 +3,7 @@
 # shellcheck shell=bash
 set -euo pipefail
 cd "$(dirname "$0")"
-owner=rust-analyzer
+owner=rust-lang
 repo=rust-analyzer
 nixpkgs=../../../../..
 
