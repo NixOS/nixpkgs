@@ -2,6 +2,8 @@
 
 lib.makeScope pkgs.newScope (self: with self; {
 
+  inherit (pkgs) gtk2-x11;
+
   lxappearance = callPackage ./core/lxappearance { };
 
   lxappearance-gtk2 = callPackage ./core/lxappearance {
