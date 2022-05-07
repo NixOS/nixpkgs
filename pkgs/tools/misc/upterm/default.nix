@@ -1,18 +1,18 @@
 { lib
-, buildGoModule
+, buildGo118Module
 , fetchFromGitHub
 , installShellFiles
 }:
 
-buildGoModule rec {
+buildGo118Module rec {
   pname = "upterm";
-  version = "0.7.3";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "owenthereal";
     repo = "upterm";
     rev = "v${version}";
-    hash = "sha256-eEzFqKYhsG5e1DVLWJq08NM9xyfn1yPNV0NIgOErj4E=";
+    hash = "sha256-JcUFsj7+Hu++izyxozttyxTGW51vBfgNSvAa/AIrsvs=";
   };
 
   vendorSha256 = null;
