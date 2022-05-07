@@ -24,6 +24,15 @@
 , wolfsslSupport ? false, wolfssl ? null
 , zlibSupport ? true, zlib ? null
 , zstdSupport ? false, zstd ? null
+
+# for passthru.tests
+, coeurl
+, curlcpp
+, curlpp
+, haskellPackages
+, ocamlPackages
+, phpExtensions
+, python3
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -159,6 +168,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit opensslSupport openssl;
+    tests = {
+      inherit curlpp curlcpp coeurl;
+      haskell-curl = haskellPackages.curl;
+      ocaml-curly = ocamlPackages.curly;
+      php-curl = phpExtensions.curl;
+      pycurl = python3.pkgs.pycurl;
+    };
   };
 
   meta = with lib; {
