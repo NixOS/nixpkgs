@@ -33534,6 +33534,8 @@ with pkgs;
 
   why3 = callPackage ../applications/science/logic/why3 { };
 
+  wayback-machine-archiver = callPackage ../tools/misc/wayback-machine-archiver { };
+
   workcraft = callPackage ../applications/science/logic/workcraft {};
 
   yices = callPackage ../applications/science/logic/yices {
