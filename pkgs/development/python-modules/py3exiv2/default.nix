@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   # work around python distutils compiling C++ with $CC (see issue #26709)
-  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin [ 
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin [
     "-I${lib.getDev libcxx}/include/c++/v1"
   ];
 
