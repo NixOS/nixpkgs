@@ -13543,6 +13543,12 @@
     github = "wintrmvte";
     githubId = 41823252;
   };
+  wiredhikari = {
+    name = "Atharva Amritkar";
+    email = "atharvaamritkar@protonmail.com";
+    github = "wiredhikari";
+    githubID = 81508805;
+  };
   wirew0rm = {
     email = "alex@wirew0rm.de";
     github = "wirew0rm";
