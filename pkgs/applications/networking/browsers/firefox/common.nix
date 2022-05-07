@@ -131,16 +131,12 @@ assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
 
 assert !drmSupport -> throw ''
-It appears that you have selected the drmSupport=false option, which
-used to pass the --disable-eme flag to Firefox.  Firefox removed the
-ability to disable DRM (EME) support at compile time in this commit:
+Mozilla silently changed this compile time option to a no-op in 2016
+with this commit:
 
   https://hg.mozilla.org/releases/mozilla-aurora/rev/afc827378c1075c2d849f07f64a4021235a51586
 
-Ever since that commit, Firefox's configuration machinery has silently
-ignored this compile-time flag on x86_64, and produces a compile
-failure on aarch64.  In order to reliably block DRM you must now use
-"Enterprise Policies":
+Your best bet at this point is to use "Enterprise Policies":
 
   https://github.com/mozilla/policy-templates/blob/master/README.md#encryptedmediaextensions
 '';
