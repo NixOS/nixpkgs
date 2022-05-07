@@ -231,8 +231,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # needed for tests
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
-  ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF"
-  ++ lib.optional enableS3 "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp}/include/aws/core/Aws.h";
+  ] ++ lib.optionals (!stdenv.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
+  ++ lib.optionals enableS3 [ "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp}/include/aws/core/Aws.h" ];
 
   doInstallCheck = true;
   ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";
@@ -255,7 +255,7 @@ stdenv.mkDerivation rec {
       ];
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
-  installCheckInputs = [ perl which sqlite ] ++ lib.optional enableS3 minio;
+  installCheckInputs = [ perl which sqlite ] ++ lib.optionals enableS3 [ minio ];
 
   postBuild = lib.optionalString (doInstallCheck && cudaSupport) ''
     for file in ./*/arrow-{cuda,flight}-test ./*/plasma-*-tests; do
