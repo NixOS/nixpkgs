@@ -6,13 +6,22 @@
 , pythonOlder
 , pytestCheckHook
 , pandas
+, jinja2
+, numpy
+, traitlets
 }:
 
 buildPythonPackage rec {
   pname = "pydeck";
   version = "0.7.1";
+  format = "setuptools";
 
   disabled = pythonOlder "3.7";
+
+  preBuild = ''
+    # unused
+    rm pyproject.toml
+  '';
 
   src = fetchPypi {
     inherit pname version;
@@ -22,12 +31,16 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pydeck" ];
 
   checkInputs = [ pytestCheckHook pandas ];
+
   # tries to start a jupyter server
   disabledTests = [ "test_nbconvert" ];
 
   propagatedBuildInputs = [
     ipykernel
     ipywidgets
+    jinja2
+    numpy
+    traitlets
   ];
 
   meta = with lib; {
