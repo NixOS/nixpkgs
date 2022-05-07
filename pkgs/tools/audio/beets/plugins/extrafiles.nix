@@ -1,6 +1,6 @@
-{ lib, fetchFromGitHub, beets, pythonPackages }:
+{ lib, fetchFromGitHub, beets, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "beets-extrafiles";
   version = "unstable-2020-12-13";
 
@@ -19,7 +19,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = [ beets ];
 
-  propagatedBuildInputs = with pythonPackages; [ mediafile ];
+  propagatedBuildInputs = with python3Packages; [ mediafile ];
 
   preCheck = ''
     HOME=$TEMPDIR

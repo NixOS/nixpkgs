@@ -107,6 +107,7 @@ mapAliases ({
   bazaar = throw "bazaar has been deprecated by breezy"; # Added 2020-04-19
   bazaarTools = throw "bazaar has been deprecated by breezy"; # Added 2020-04-19
   bcat = throw "bcat has been removed because upstream is dead"; # Added 2021-08-22
+  beetsExternalPlugins = throw "beetsExternalPlugins has been deprecated, use beetsPackages.beets-$pluginname"; # Added 2022-05-07
   beret = throw "beret has been removed"; # Added 2021-11-16
   bin_replace_string = throw "bin_replace_string has been removed: deleted by upstream"; # Added 2022-01-07
   bird2 = bird; # Added 2022-02-21
