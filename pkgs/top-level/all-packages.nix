@@ -20054,6 +20054,8 @@ with pkgs;
 
   pe-parse = callPackage ../development/libraries/pe-parse { };
 
+  pegtl = callPackage ../development/libraries/pegtl { };
+
   inherit (callPackage ../development/libraries/physfs {
     inherit (darwin.apple_sdk.frameworks) Foundation Carbon;
   })
