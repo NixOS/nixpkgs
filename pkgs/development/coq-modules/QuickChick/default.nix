@@ -1,10 +1,7 @@
-{ lib, mkCoqDerivation, coq, ssreflect, coq-ext-lib, simple-io, version ? null }:
+{ lib, mkCoqDerivation, coq, ssreflect, coq-ext-lib, simple-io, version ? null, ocamlBuildFilePatch ? null }:
 
-let recent = lib.versions.isGe "8.7" coq.coq-version; in
-mkCoqDerivation {
-  pname = "QuickChick";
-  owner = "QuickChick";
-  inherit version;
+let
+  recent = lib.versions.isGe "8.7" coq.coq-version;
   defaultVersion = with lib; with versions; lib.switch [ coq.coq-version ssreflect.version ] [
       { cases = [ "8.13" pred.true  ]; out = "1.5.0"; }
       { cases = [ "8.12" pred.true  ]; out = "1.4.0"; }
@@ -16,6 +13,12 @@ mkCoqDerivation {
       { cases = [ "8.6"  pred.true  ];  out = "20171102"; }
       { cases = [ "8.5"  pred.true  ];  out = "20170512"; }
     ] null;
+in
+mkCoqDerivation {
+  pname = "QuickChick";
+  owner = "QuickChick";
+  inherit version;
+  inherit defaultVersion;
   release."1.5.0".sha256    = "1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dcw7hyfkw";
   release."1.4.0".sha256    = "068p48pm5yxjc3yv8qwzp25bp9kddvxj81l31mjkyx3sdrsw3kyc";
   release."1.3.2".sha256    = "0lciwaqv288dh2f13xk2x0lrn6zyrkqy6g4yy927wwzag2gklfrs";
@@ -30,8 +33,42 @@ mkCoqDerivation {
   release."20170512".sha256 = "033ch10i5wmqyw8j6wnr0dlbnibgfpr1vr0c07q3yj6h23xkmqpg";
   releaseRev = v: "v${v}";
 
-  preConfigure = lib.optionalString recent
-    "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
+  preConfigure =
+    let
+      ocamlBuildFileSwitch =
+        lib.switch [ (if isNull version then defaultVersion else version) ] [
+          { cases = [ "1.6.1" ];    out = { doPatch = true; file = "plugin/quickChick.mlg.cppo"; }; }
+          { cases = [ "1.6.0" ];    out = { doPatch = true; file = "plugin/quickChick.mlg.cppo"; }; }
+          { cases = [ "1.5.1" ];    out = { doPatch = true; file = "plugin/quickChick.mlg"; }; }
+          { cases = [ "1.5.0" ];    out = { doPatch = true; file = "src/quickChick.mlg"; }; }
+          { cases = [ "1.4.0" ];    out = { doPatch = true; file = "src/quickChick.mlg"; }; }
+          { cases = [ "1.3.2" ];    out = { doPatch = true; file = "src/quickChick.mlg"; }; }
+          { cases = [ "1.2.1" ];    out = { doPatch = true; file = "src/quickChick.mlg"; }; }
+          { cases = [ "1.1.0" ];    out = { doPatch = true; file = "src/quickChick.mlg"; }; }
+          { cases = [ "1.0.0" ];    out = { doPatch = false; }; }
+          { cases = [ "" ];         out = { doPatch = false; }; }
+          { cases = [ "20190311" ]; out = { doPatch = false; }; }
+          { cases = [ "20171102" ]; out = { doPatch = false; }; }
+          { cases = [ "20170512" ]; out = { doPatch = false; }; }
+        ] { doPatch = true; file = "plugin/quickChick.mlg.cppo"; };
+
+      ocamlBuildFile =
+        if isNull ocamlBuildFilePatch
+        then ocamlBuildFileSwitch
+        else ocamlBuildFilePatch;
+
+      oldBuildLine = "; ocamlbuild ";
+      newBuildLine = "; ocamlbuild -use-ocamlfind ";
+
+      # Patch ocamlbuild call in QuickChick so it uses ocamlfind to find libraries in nix.
+      patchOcamlBuild =
+        "substituteInPlace ${ocamlBuildFile.file} --replace \"${oldBuildLine}\" \"${newBuildLine}\"";
+
+      patchNative =
+        lib.optionalString recent
+          "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
+    in
+      lib.concatStringsSep "\n" [ patchNative patchOcamlBuild ];
 
   mlPlugin = true;
   extraNativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
