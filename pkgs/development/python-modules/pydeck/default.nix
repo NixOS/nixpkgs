@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, ipykernel, ipywidgets, pythonOlder, pytestCheckHook, pandas }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, ipykernel
+, ipywidgets
+, pythonOlder
+, pytestCheckHook
+, pandas
+}:
 
 buildPythonPackage rec {
   pname = "pydeck";
