@@ -1239,6 +1239,17 @@
       </listitem>
       <listitem>
         <para>
+          <literal>firefox</literal> no longer allows the
+          <literal>drmSupport</literal> argument to be set to
+          <literal>false</literal>; this had previously passed the
+          <literal>--disable-eme</literal> configuration flag, which
+          Firefox
+          <link xlink:href="https://hg.mozilla.org/releases/mozilla-aurora/rev/afc827378c1075c2d849f07f64a4021235a51586">began
+          silently ignoring</link> in September of 2016.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs._7zz</literal> is now correctly licensed as
           LGPL3+ and BSD3 with optional unfree unRAR licensed code
         </para>

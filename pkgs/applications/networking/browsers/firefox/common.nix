@@ -100,12 +100,7 @@
 
 # digital rights managemewnt
 
-# This flag controls whether Firefox will show the nagbar, that allows
-# users at runtime the choice to enable Widevine CDM support when a site
-# requests it.
-# Controlling the nagbar and widevine CDM at runtime is possible by setting
-# `browser.eme.ui.enabled` and `media.gmp-widevinecdm.enabled` accordingly
-, drmSupport ? true
+, drmSupport ? true   # see assert below
 
 ## other
 
@@ -134,6 +129,21 @@
 
 assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
+
+assert !drmSupport -> throw ''
+It appears that you have selected the drmSupport=false option, which
+used to pass the --disable-eme flag to Firefox.  Firefox removed the
+ability to disable DRM (EME) support at compile time in this commit:
+
+  https://hg.mozilla.org/releases/mozilla-aurora/rev/afc827378c1075c2d849f07f64a4021235a51586
+
+Ever since that commit, Firefox's configuration machinery has silently
+ignored this compile-time flag on x86_64, and produces a compile
+failure on aarch64.  In order to reliably block DRM you must now use
+"Enterprise Policies":
+
+  https://github.com/mozilla/policy-templates/blob/master/README.md#encryptedmediaextensions
+'';
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
@@ -310,7 +320,6 @@ buildStdenv.mkDerivation ({
   ++ flag gssSupport "negotiateauth"
   ++ flag webrtcSupport "webrtc"
   ++ flag crashreporterSupport "crashreporter"
-  ++ lib.optional (!drmSupport) "--disable-eme"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                     else [ "--disable-debug" "--enable-optimize" ])
