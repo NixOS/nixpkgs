@@ -80,11 +80,13 @@
 , alsaSupport ? stdenv.isLinux, alsa-lib
 , ffmpegSupport ? true
 , gssSupport ? true, libkrb5
+, jackSupport ? stdenv.isLinux, libjack2
 , jemallocSupport ? true, jemalloc
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
 , pgoSupport ? (stdenv.isLinux && stdenv.isx86_64 && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
+, sndioSupport ? stdenv.isLinux, sndio
 , waylandSupport ? true, libxkbcommon, libdrm
 
 ## privacy-related options
@@ -303,7 +305,9 @@ buildStdenv.mkDerivation ({
   ++ lib.optional (lib.versionAtLeast version "95") "--with-wasi-sysroot=${wasiSysRoot}"
 
   ++ flag alsaSupport "alsa"
+  ++ flag jackSupport "jack"
   ++ flag pulseaudioSupport "pulseaudio"
+  ++ lib.optional (lib.versionAtLeast version "100") (flag sndioSupport "sndio")
   ++ flag ffmpegSupport "ffmpeg"
   ++ flag jemallocSupport "jemalloc"
   ++ flag geolocationSupport "necko-wifi"
@@ -363,7 +367,9 @@ buildStdenv.mkDerivation ({
   ]
   ++ [ (if (lib.versionAtLeast version "92") then nss_latest else nss_esr) ]
   ++ lib.optional  alsaSupport alsa-lib
+  ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
+  ++ lib.optional  (sndioSupport && lib.versionAtLeast version "100") sndio
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ++ lib.optional  jemallocSupport jemalloc
@@ -464,7 +470,9 @@ buildStdenv.mkDerivation ({
     inherit version;
     inherit alsaSupport;
     inherit binaryName;
+    inherit jackSupport;
     inherit pipewireSupport;
+    inherit sndioSupport;
     inherit nspr;
     inherit ffmpegSupport;
     inherit gssSupport;
