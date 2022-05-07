@@ -5,6 +5,10 @@
 , libid3tag, librsvg, libheif
 , freetype , bzip2, pkg-config
 , x11Support ? true, xlibsWrapper ? null
+# Compilation error on Darwin with librsvg. For more information see:
+# https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
+, svgSupport ? !stdenv.isDarwin
+, heifSupport ? !stdenv.isDarwin
 }:
 
 let
@@ -21,11 +25,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libjpeg libtiff giflib libpng libwebp
-    bzip2 freetype libid3tag libheif
+    bzip2 freetype libid3tag
   ] ++ optional x11Support xlibsWrapper
-  # Compilation error on Darwin with librsvg. For more information see:
-  # https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
-  ++ optional (!stdenv.isDarwin) librsvg;
+    ++ optional heifSupport libheif
+    ++ optional svgSupport librsvg;
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -34,6 +37,8 @@ stdenv.mkDerivation rec {
   # Do not build amd64 assembly code on Darwin, because it fails to compile
   # with unknow directive errors
   configureFlags = optional stdenv.isDarwin "--enable-amd64=no"
+    ++ optional (!svgSupport) "--without-svg"
+    ++ optional (!heifSupport) "--without-heif"
     ++ optional (!x11Support) "--without-x";
 
   outputs = [ "bin" "out" "dev" ];
