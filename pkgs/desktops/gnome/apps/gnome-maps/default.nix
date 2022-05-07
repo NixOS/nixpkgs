@@ -69,8 +69,6 @@ stdenv.mkDerivation rec {
     webkitgtk
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=overlength-strings";
-
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py

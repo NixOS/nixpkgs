@@ -67,13 +67,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "42.0";
+  version = "42.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "M9QE+zyTud5CmE8BEKKWnWpKckfCf+f14kxn7P7HUJQ=";
+    sha256 = "9e6KYVj6EiYnQScmy4gATn4tBGrcMiFQViROWbdAY+o=";
   };
 
   patches = [
@@ -174,8 +174,6 @@ stdenv.mkDerivation rec {
     # for tools
     pythonEnv
   ];
-
-  NIX_CFLAGS_COMPILE = "-Wno-error=overlength-strings";
 
   mesonFlags = [
     "-Dgtk_doc=true"
