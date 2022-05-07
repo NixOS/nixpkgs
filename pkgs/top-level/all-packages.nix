@@ -12375,7 +12375,7 @@ with pkgs;
 
   comby = callPackage ../development/tools/comby { };
 
-  compcert = coqPackages.compcert.override { version = "3.9"; };
+  inherit (coqPackages) compcert;
 
   computecpp-unwrapped = callPackage ../development/compilers/computecpp {};
   computecpp = wrapCCWith rec {
