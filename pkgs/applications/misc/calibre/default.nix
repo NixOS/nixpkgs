@@ -28,11 +28,11 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.37.0";
+  version = "5.42.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-x2u4v0k05WMATSsuo76NnqChIz8BcTuZfPkZa0uLnMY=";
+    hash = "sha256-pob9GZl3Wiky5aMGGvcNQdDrKh19bo+n5ihdS45X+Vg=";
   };
 
   # https://sources.debian.org/patches/calibre/${version}+dfsg-1
