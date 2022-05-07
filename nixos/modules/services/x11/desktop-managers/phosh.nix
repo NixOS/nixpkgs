@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.programs.phosh;
+  cfg = config.services.xserver.desktopManager.phosh;
 
   # Based on https://source.puri.sm/Librem5/librem5-base/-/blob/4596c1056dd75ac7f043aede07887990fd46f572/default/sm.puri.OSK0.desktop
   oskItem = pkgs.makeDesktopItem {
@@ -118,12 +118,39 @@ let
     [cursor]
     theme = ${phoc.cursorTheme}
   '';
-in {
+in
+
+{
   options = {
-    programs.phosh = {
-      enable = mkEnableOption ''
-        Whether to enable, Phosh, related packages and default configurations.
-      '';
+    services.xserver.desktopManager.phosh = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Enable the Phone Shell.";
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.phosh;
+        defaultText = literalExpression "pkgs.phosh";
+        example = literalExpression "pkgs.phosh";
+        description = ''
+          Package that should be used for Phosh.
+        '';
+      };
+
+      user = mkOption {
+        description = "The user to run the Phosh service.";
+        type = types.str;
+        example = "alice";
+      };
+
+      group = mkOption {
+        description = "The group to run the Phosh service.";
+        type = types.str;
+        example = "users";
+      };
+
       phocConfig = mkOption {
         description = ''
           Configurations for the Phoc compositor.
@@ -135,14 +162,42 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.defaultUnit = "graphical.target";
+    # Inspired by https://gitlab.gnome.org/World/Phosh/phosh/-/blob/main/data/phosh.service
+    systemd.services.phosh = {
+      wantedBy = [ "graphical.target" ];
+      serviceConfig = {
+        ExecStart = "${cfg.package}/bin/phosh";
+        User = cfg.user;
+        Group = cfg.group;
+        PAMName = "login";
+        WorkingDirectory = "~";
+        Restart = "always";
+
+        TTYPath = "/dev/tty7";
+        TTYReset = "yes";
+        TTYVHangup = "yes";
+        TTYVTDisallocate = "yes";
+
+        # Fail to start if not controlling the tty.
+        StandardInput = "tty-fail";
+        StandardOutput = "journal";
+        StandardError = "journal";
+
+        # Log this user with utmp, letting it show up with commands 'w' and 'who'.
+        UtmpIdentifier = "tty7";
+        UtmpMode = "user";
+      };
+    };
+
     environment.systemPackages = [
       pkgs.phoc
-      pkgs.phosh
+      cfg.package
       pkgs.squeekboard
       oskItem
     ];
 
-    systemd.packages = [ pkgs.phosh ];
+    systemd.packages = [ cfg.package ];
 
     programs.feedbackd.enable = true;
 
@@ -152,7 +207,7 @@ in {
 
     services.gnome.core-shell.enable = true;
     services.gnome.core-os-services.enable = true;
-    services.xserver.displayManager.sessionPackages = [ pkgs.phosh ];
+    services.xserver.displayManager.sessionPackages = [ cfg.package ];
 
     environment.etc."phosh/phoc.ini".source =
       if builtins.isPath cfg.phocConfig then cfg.phocConfig

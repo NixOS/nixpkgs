@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, ninja, libevdev, libev, udev }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, ninja, libevdev, libev, udev }:
 
 stdenv.mkDerivation rec {
   pname = "illum";
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "S4lUBeRnZlRUpIxFdN/bh979xvdS7roF6/6Dk0ZUrnM=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      name = "prevent-unplug-segfault"; # See https://github.com/jmesmon/illum/issues/19
+      url = "https://github.com/jmesmon/illum/commit/47b7cd60ee892379e5d854f79db343a54ae5a3cc.patch";
+      sha256 = "sha256-hIBBCIJXAt8wnZuyKye1RiEfOCelP3+4kcGrM43vFOE=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ninja libevdev libev udev ];
