@@ -18,7 +18,7 @@
 }:
 
 let
-  release_version = "14.0.1";
+  release_version = "14.0.3";
   candidate = ""; # empty or "rcN"
   dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
   rev = ""; # When using a Git commit
