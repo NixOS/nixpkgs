@@ -37,9 +37,10 @@ stdenv.mkDerivation rec {
       mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
   meta = with lib; {
-    homepage = "https://github.com/soabase/exhibitor";
     description = "ZooKeeper co-process for instance monitoring, backup/recovery, cleanup and visualization";
+    homepage = "https://github.com/soabase/exhibitor";
     license = licenses.asl20;
+    mainProgram = "startExhibitor.sh";
     platforms = platforms.unix;
   };
 

@@ -222,16 +222,16 @@ index de920d714c6..665fb74bd6b 100644
 +#ifdef __USING_MCFGTHREAD__
 +
 +#include <mcfgthread/gthread.h>
-+
++namespace __cxxabiv1 {
 +extern "C" int
-+__cxxabiv1::__cxa_thread_atexit (void (*dtor)(void *),
++__cxa_thread_atexit (void (_GLIBCXX_CDTOR_CALLABI *dtor)(void *),
 +				 void *obj, void *dso_handle)
 +  _GLIBCXX_NOTHROW
 +{
 +  return ::_MCFCRT_AtThreadExit((void (*)(_MCFCRT_STD intptr_t))dtor, (_MCFCRT_STD intptr_t)obj) ? 0 : -1;
 +  (void)dso_handle;
 +}
-+
++}
 +#else // __USING_MCFGTHREAD__
 +
  #ifdef _GLIBCXX_THREAD_ATEXIT_WIN32

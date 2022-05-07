@@ -16,5 +16,6 @@ buildGoModule rec {
     description = "A pluggable transport proxy";
     homepage = "https://www.torproject.org/projects/obfsproxy";
     maintainers = with maintainers; [ thoughtpolice ];
+    mainProgram = "obfs4proxy";
   };
 }

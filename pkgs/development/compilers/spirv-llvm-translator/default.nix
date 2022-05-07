@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/vUyL6Wh8hykoGz1QmT1F7lfGDEmG4U3iqmqrJxizOg=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake llvm_11.dev ];
+  nativeBuildInputs = [ pkg-config cmake llvm_11.dev spirv-tools ];
 
-  buildInputs = [ spirv-headers spirv-tools llvm_11 ];
+  buildInputs = [ spirv-headers llvm_11 ];
 
   checkInputs = [ lit ];
 
@@ -33,12 +33,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=YES"
     "-DLLVM_SPIRV_BUILD_EXTERNAL=YES"
   ];
-
-  prePatch = ''
-    substituteInPlace ./test/CMakeLists.txt \
-      --replace 'SPIRV-Tools' 'SPIRV-Tools-shared'
-  '';
-
 
   # FIXME: CMake tries to run "/llvm-lit" which of course doesn't exist
   doCheck = false;

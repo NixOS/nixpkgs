@@ -1388,6 +1388,8 @@ in {
 
   browser-cookie3 = callPackage ../development/python-modules/browser-cookie3 { };
 
+  brunt = callPackage ../development/python-modules/brunt { };
+
   bsddb3 = callPackage ../development/python-modules/bsddb3 { };
 
   bsdiff4 = callPackage ../development/python-modules/bsdiff4 { };
@@ -3999,6 +4001,8 @@ in {
   hypothesmith = callPackage ../development/python-modules/hypothesmith { };
 
   hyppo = callPackage ../development/python-modules/hyppo { };
+
+  hyrule = callPackage ../development/python-modules/hyrule { };
 
   i2c-tools = callPackage ../development/python-modules/i2c-tools {
     inherit (pkgs) i2c-tools;
@@ -10395,6 +10399,8 @@ in {
 
   ttp = callPackage ../development/python-modules/ttp { };
 
+  ttp-templates = callPackage ../development/python-modules/ttp-templates { };
+
   tubes = callPackage ../development/python-modules/tubes { };
 
   tunigo = callPackage ../development/python-modules/tunigo { };
@@ -10934,6 +10940,8 @@ in {
   whirlpool-sixth-sense = callPackage ../development/python-modules/whirlpool-sixth-sense { };
 
   whisper = callPackage ../development/python-modules/whisper { };
+
+  whispers = callPackage ../development/python-modules/whispers { };
 
   whitenoise = callPackage ../development/python-modules/whitenoise { };
 

@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
     homepage = "https://moarvm.org";
     license = licenses.artistic2;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
+    mainProgram = "moar";
+    platforms = platforms.unix;
   };
 }

@@ -2471,6 +2471,21 @@
           hosts.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The option
+          <link xlink:href="options.html#opt-networking.useDHCP">networking.useDHCP</link>
+          isn’t deprecated anymore. When using
+          <link xlink:href="options.html#opt-networking.useNetworkd"><literal>systemd-networkd</literal></link>,
+          a generic <literal>.network</literal>-unit is added which
+          enables DHCP for each interface matching
+          <literal>en*</literal>, <literal>eth*</literal> or
+          <literal>wl*</literal> with priority 99 (which means that it
+          doesn’t have any effect if such an interface is matched by a
+          <literal>.network-</literal>unit with a lower priority). In
+          case of scripted networking, no behavior was changed.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>

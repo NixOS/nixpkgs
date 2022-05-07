@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
 
     maintainers = [ ];
+    mainProgram = "iconv";
 
     # This library is not needed on GNU platforms.
     hydraPlatforms = with lib.platforms; cygwin ++ darwin ++ freebsd;

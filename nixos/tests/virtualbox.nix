@@ -222,7 +222,7 @@ let
               machine.execute(ru("VBoxManage controlvm ${name} poweroff"))
           machine.succeed("rm -rf ${sharePath}")
           machine.succeed("mkdir -p ${sharePath}")
-          machine.succeed("chown alice.users ${sharePath}")
+          machine.succeed("chown alice:users ${sharePath}")
 
 
       def create_vm_${name}():

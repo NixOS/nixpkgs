@@ -31,6 +31,8 @@
 buildPythonPackage rec {
   pname = "scrapy";
   version = "2.6.1";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -92,6 +94,7 @@ buildPythonPackage rec {
     "test_nested_xpath"
     "test_flavor_detection"
     # Requires network access
+    "AnonymousFTPTestCase"
     "FTPFeedStorageTest"
     "FeedExportTest"
     "test_custom_asyncio_loop_enabled_true"
@@ -99,6 +102,7 @@ buildPythonPackage rec {
     "test_custom_loop_asyncio_deferred_signal"
     "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
     "test_timeout_download_from_spider_nodata_rcvd"
+    "test_timeout_download_from_spider_server_hangs"
     # Fails with AssertionError
     "test_peek_fifo"
     "test_peek_one_element"

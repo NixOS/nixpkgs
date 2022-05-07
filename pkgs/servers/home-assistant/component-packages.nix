@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.5.0";
+  version = "2022.5.2";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -311,7 +311,8 @@
     "browser" = ps: with ps; [
     ];
     "brunt" = ps: with ps; [
-    ]; # missing inputs: brunt
+      brunt
+    ];
     "bsblan" = ps: with ps; [
       bsblan
     ];
@@ -2243,10 +2244,6 @@
     "russound_rnet" = ps: with ps; [
     ]; # missing inputs: russound
     "sabnzbd" = ps: with ps; [
-      aiohttp-cors
-      ifaddr
-      netdisco
-      zeroconf
     ]; # missing inputs: pysabnzbd
     "safe_mode" = ps: with ps; [
       pyturbojpeg
@@ -3218,6 +3215,7 @@
     "braviatv"
     "broadlink"
     "brother"
+    "brunt"
     "bsblan"
     "buienradar"
     "button"

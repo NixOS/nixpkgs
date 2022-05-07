@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/nix-community/nixos-generators";
     license     = licenses.mit;
     maintainers = with maintainers; [ lassulus ];
+    mainProgram = "nixos-generate";
     platforms   = platforms.unix;
   };
 }

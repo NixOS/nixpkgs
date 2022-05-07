@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     description = "A tool for squential logic synthesis and formal verification";
     homepage    = "https://people.eecs.berkeley.edu/~alanmi/abc";
     license     = licenses.mit;
-    platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
+    mainProgram = "abc";
+    platforms   = platforms.unix;
   };
 }

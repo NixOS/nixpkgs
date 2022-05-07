@@ -46,5 +46,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ happysalada ];
+    mainProgram = "lemmy_server";
   };
 }

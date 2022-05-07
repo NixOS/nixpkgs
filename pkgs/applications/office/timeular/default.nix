@@ -7,31 +7,26 @@
 }:
 
 let
-  version = "4.7.1";
+  version = "4.8.0";
   pname = "timeular";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/timeular-desktop-packages/linux/production/Timeular-${version}.AppImage";
-    sha256 = "sha256:0k8ywbdb41imq10ya9y27zks67a6drjb1h0hn8ycd7a6z6703rjz";
+    sha256 = "sha256:0y2asw3jf2n4c7y0yr669jfqw4frp5nzzv3lffimfdr78gihma66";
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 in appimageTools.wrapType2 rec {
-  inherit name src;
-
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
+  inherit pname version src;
 
   extraPkgs = pkgs: with pkgs; [
     libsecret
   ];
 
   extraInstallCommands = ''
-    mv $out/bin/{${name},${pname}}
+    mv $out/bin/{${pname}-${version},${pname}}
     install -m 444 -D ${appimageContents}/timeular.desktop $out/share/applications/timeular.desktop
     install -m 444 -D ${appimageContents}/timeular.png $out/share/icons/hicolor/512x512/apps/timeular.png
     substituteInPlace $out/share/applications/timeular.desktop \
