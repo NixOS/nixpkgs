@@ -51,7 +51,8 @@ let
           makeWrapper "$n" "$out/bin/$(basename $n)"\
             --set-default JAVA_HOME ${jdk.home}\
             --set-default HADOOP_HOME $out/lib/${untarDir}\
-            --set-default HADOOP_CONF_DIR /etc/hadoop-conf/\
+            --run "test -d /etc/hadoop-conf && export HADOOP_CONF_DIR=\''${HADOOP_CONF_DIR-'/etc/hadoop-conf/'}"\
+            --set-default HADOOP_CONF_DIR $out/lib/${untarDir}/etc/hadoop/\
             --prefix PATH : "${makeBinPath [ bash coreutils which]}"\
             --prefix JAVA_LIBRARY_PATH : "${makeLibraryPath buildInputs}"
         done
