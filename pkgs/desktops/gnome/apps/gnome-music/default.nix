@@ -76,8 +76,6 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-ugly
   ]);
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=overlength-strings";
-
   pythonPath = with python3.pkgs; [
     pycairo
     dbus-python
