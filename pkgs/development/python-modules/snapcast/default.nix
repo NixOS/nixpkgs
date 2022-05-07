@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "snapcast";
-  version = "2.1.3";
+  version = "2.2.0";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "happyleavesaoc";
     repo = "python-snapcast";
-    rev = version;
-    sha256 = "1jigdccdd7bffszim942mxcwxyznfjx7y3r5yklz3psl7zgbzd6c";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-H41X5bfRRu+uE7eUsmUkONm6hugNs43+O7MvVPH0e+8=";
   };
 
   propagatedBuildInputs = [
