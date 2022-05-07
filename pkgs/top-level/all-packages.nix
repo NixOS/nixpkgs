@@ -20999,6 +20999,8 @@ with pkgs;
 
   vcg = callPackage ../development/libraries/vcg { };
 
+  verdict = callPackage ../development/libraries/verdict { };
+
   vid-stab = callPackage ../development/libraries/vid-stab {
     inherit (llvmPackages) openmp;
   };
