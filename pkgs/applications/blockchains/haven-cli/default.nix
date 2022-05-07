@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libsodium hidapi randomx rapidjson
     protobuf
     readline easyloggingpp
-  ] 
+  ]
     ++ lib.optionals trezorSupport [ libusb1 protobuf python3 ];
 
   cmakeFlags = [
