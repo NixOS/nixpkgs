@@ -206,6 +206,44 @@ in
           description = "Create the database and database user locally.";
         };
       };
+
+      components = {
+        subversion = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Subversion integration.";
+        };
+
+        mercurial = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Mercurial integration.";
+        };
+
+        git = mkOption {
+          type = types.bool;
+          default = false;
+          description = "git integration.";
+        };
+
+        cvs = mkOption {
+          type = types.bool;
+          default = false;
+          description = "cvs integration.";
+        };
+
+        breezy = mkOption {
+          type = types.bool;
+          default = false;
+          description = "bazaar integration.";
+        };
+
+        imagemagick = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Allows exporting Gant diagrams as PNG.";
+        };
+      };
     };
   };
 
@@ -229,11 +267,11 @@ in
 
     services.redmine.settings = {
       production = {
-        scm_subversion_command = "${pkgs.subversion}/bin/svn";
-        scm_mercurial_command = "${pkgs.mercurial}/bin/hg";
-        scm_git_command = "${pkgs.git}/bin/git";
-        scm_cvs_command = "${pkgs.cvs}/bin/cvs";
-        scm_bazaar_command = "${pkgs.breezy}/bin/bzr";
+        scm_subversion_command = if cfg.components.subversion then "${pkgs.subversion}/bin/svn" else "";
+        scm_mercurial_command = if cfg.components.mercurial then "${pkgs.mercurial}/bin/hg" else "";
+        scm_git_command = if cfg.components.git then "${pkgs.git}/bin/git" else "";
+        scm_cvs_command = if cfg.components.cvs then "${pkgs.cvs}/bin/cvs" else "";
+        scm_bazaar_command = if cfg.components.breezy then "${pkgs.breezy}/bin/bzr" else "";
       };
     };
 
@@ -295,13 +333,14 @@ in
       environment.REDMINE_LANG = "en";
       environment.SCHEMA = "${cfg.stateDir}/cache/schema.db";
       path = with pkgs; [
-        imagemagick
-        breezy
-        cvs
-        git
-        mercurial
-        subversion
-      ];
+      ]
+      ++ optional cfg.components.subversion subversion
+      ++ optional cfg.components.mercurial mercurial
+      ++ optional cfg.components.git git
+      ++ optional cfg.components.cvs cvs
+      ++ optional cfg.components.breezy breezy
+      ++ optional cfg.components.imagemagick imagemagick;
+
       preStart = ''
         rm -rf "${cfg.stateDir}/plugins/"*
         rm -rf "${cfg.stateDir}/public/themes/"*
