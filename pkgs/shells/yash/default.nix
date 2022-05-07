@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:1jdmj4cyzwxxyyqf20y1zi578h7md860ryffp02qi143zpppn4sm";
   };
 
+  strictDeps = true;
   buildInputs = [ gettext ncurses ];
 
   meta = with lib; {

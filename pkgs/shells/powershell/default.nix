@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
+  strictDeps = true;
   buildInputs = [ less ] ++ libraries;
   nativeBuildInputs = [ makeWrapper ]
     ++ lib.optional stdenv.isLinux autoPatchelfHook;

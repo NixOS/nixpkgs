@@ -13,6 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "h/3XP/BiNnUgQI29gEBl6RFee77WDhFyvsnTi1eRbKg=";
   };
 
+  strictDeps = true;
   buildInputs = [ ncurses ];
 
   patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
