@@ -513,6 +513,17 @@
     github = "alexnortung";
     githubId = 1552267;
   };
+  alexshpilkin = {
+    email = "ashpilkin@gmail.com";
+    github = "alexshpilkin";
+    githubId = 1010468;
+    keys = [{
+      longkeyid = "rsa4096/0x73E9AA114B3A894B";
+      fingerprint = "B595 D74D 6615 C010 469F  5A13 73E9 AA11 4B3A 894B";
+    }];
+    matrix = "@alexshpilkin:matrix.org";
+    name = "Alexander Shpilkin";
+  };
   alexvorobiev = {
     email = "alexander.vorobiev@gmail.com";
     github = "alexvorobiev";

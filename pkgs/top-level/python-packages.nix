@@ -3793,6 +3793,8 @@ in {
 
   hatchling = callPackage ../development/python-modules/hatchling { };
 
+  hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
+
   haversine = callPackage ../development/python-modules/haversine { };
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
@@ -6369,6 +6371,8 @@ in {
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
+
+  py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
 
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
 

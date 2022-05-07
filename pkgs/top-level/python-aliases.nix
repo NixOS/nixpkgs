@@ -108,7 +108,7 @@ mapAliases ({
   pytestrunner = pytest-runner; # added 2021-01-04
   python-igraph = igraph; # added 2021-11-11
   python-lz4 = lz4; # added 2018-06-01
-  python-magic = python-magic; # added 2022-05-07
+  python_magic = python-magic; # added 2022-05-07
   python_mimeparse = python-mimeparse; # added 2021-10-31
   python-subunit = subunit; # added 2021-09-10
   pytest_xdist = pytest-xdist; # added 2021-01-04

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "yte";
-  version = "1.2.2";
+  version = "1.2.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "koesterlab";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-x0CmPiV/6zTnawPW9lgrZ9NsUhmK8fhafwqOP9o3Mdc=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-xu88zupT0/kIzTd56IbKYKBM5+EDI1d+QIEq8zOBWWo=";
   };
 
   nativeBuildInputs = [

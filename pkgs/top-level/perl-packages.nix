@@ -18989,6 +18989,20 @@ let
     };
   };
 
+  POSIXAtFork = buildPerlPackage {
+    pname = "POSIX-AtFork";
+    version = "0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors//id/N/NI/NIKOLAS/POSIX-AtFork-0.04.tar.gz";
+      sha256 = "sha256-wuIpOobUhxRLyPe6COfEt2sRsOTf3EGAmEXTDvoH5g4=";
+    };
+    buildInputs = [ TestSharedFork ];
+    meta = {
+      description = "Hook registrations at fork(2)";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   POSIXstrftimeCompiler = buildPerlModule {
     pname = "POSIX-strftime-Compiler";
     version = "0.44";
