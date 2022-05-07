@@ -17,7 +17,11 @@ buildGoModule rec {
 
   subPackages = [ "roxctl" ];
 
-  ldflags = [ "-X github.com/stackrox/rox/pkg/version/internal.MainVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/stackrox/rox/pkg/version/internal.MainVersion=${version}"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd roxctl \
