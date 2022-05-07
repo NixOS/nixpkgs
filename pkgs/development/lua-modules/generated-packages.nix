@@ -684,6 +684,32 @@ buildLuarocksPackage {
   };
 }) {};
 
+lmpfrlib = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchurl, lua
+}:
+buildLuarocksPackage {
+  pname = "lmpfrlib";
+  version = "20170112-2";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/lmpfrlib-20170112-2.rockspec";
+    sha256 = "1x7qiwmk5b9fi87fn7yvivdsis8h9fk9r3ipqiry5ahx72vzdm7d";
+  }).outPath;
+  src = fetchurl {
+    url    = "http://www.circuitwizard.de/lmpfrlib/lmpfrlib.c";
+    sha256 = "00d32cwvk298k3vyrjkdmfjgc69x1fwyks3hs7dqr2514zdhgssm";
+  };
+
+  disabled = with lua; (luaOlder "5.3") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "http://www.circuitwizard.de/lmpfrlib/lmpfrlib.html";
+    description = "Lua API for the GNU MPFR library";
+    maintainers = with lib.maintainers; [ alexshpilkin ];
+    license.fullName = "LGPL";
+  };
+}) {};
+
 lpeg = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchurl, lua
 }:

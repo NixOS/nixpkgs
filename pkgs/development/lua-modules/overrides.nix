@@ -161,6 +161,16 @@ with prev;
       '';
     });
 
+  lmpfrlib = prev.lib.overrideLuarocks prev.lmpfrlib (drv: {
+    externalDeps = [
+      { name = "GMP"; dep = pkgs.gmp; }
+      { name = "MPFR"; dep = pkgs.mpfr; }
+    ];
+    unpackPhase = ''
+      cp $src $(stripHash $src)
+    '';
+  });
+
   lrexlib-gnu = prev.lib.overrideLuarocks prev.lrexlib-gnu (drv: {
     buildInputs = [
       pkgs.gnulib
