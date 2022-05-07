@@ -1,8 +1,51 @@
 { majorVersion, minorVersion, sourceSha256, patchesToFetch ? [] }:
-{ stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt, libpng, libtiff
+{ stdenv, lib, fetchurl, cmake, libGLU, libGL, libX11, xorgproto, libXt
 , fetchpatch
 , enableQt ? false, wrapQtAppsHook, qtbase, qtx11extras, qttools
 , enablePython ? false, pythonInterpreter ? throw "vtk: Python support requested, but no python interpreter was given."
+, cgns
+, cli11
+, diy
+, double-conversion
+, eigen
+, exodusII
+, expat
+, exprtk
+, fides
+, fmt_8
+, freetype
+, gl2ps
+, glew
+# , h5part
+, hdf5
+, ioss
+, libjpeg
+, jsoncpp
+, kissfft
+# , kwiml
+# , kwsys
+, libharu
+, proj
+, libxml2
+# , loguru
+, lz4
+, xz
+# , metaio
+# , mpi4py
+, netcdf
+, nlohmann_json
+, libogg
+, pegtl
+, libpng
+, pugixml
+, sqlite
+, libtheora
+, libtiff
+, utf8cpp
+# , verdict
+# , xdmf3
+, zfp
+, zlib
 # Darwin support
 , Cocoa, CoreServices, DiskArbitration, IOKit, CFNetwork, Security, GLUT, OpenGL
 , ApplicationServices, CoreText, IOSurface, ImageIO, xpc, libobjc
@@ -32,6 +75,50 @@ in stdenv.mkDerivation rec {
       libX11
       xorgproto
       libXt
+    ] ++ optionals (lib.versionAtLeast version "9.0") [
+      cgns
+      cli11
+      diy
+      double-conversion
+      eigen
+      exodusII # Does not support non-vendored use
+      expat
+      exprtk
+      fides
+      fmt_8
+      freetype
+      gl2ps
+      glew
+      # h5part
+      hdf5
+      ioss
+      libjpeg
+      jsoncpp
+      # kissfft # Does not support non-vendored use
+      # kwiml
+      # kwsys # Does not support non-vendored use
+      libharu
+      proj
+      libxml2
+      # loguru
+      lz4
+      xz # for lzma
+      # metaio
+      # mpi4py
+      netcdf
+      nlohmann_json
+      libogg
+      pegtl
+      libpng
+      pugixml
+      sqlite
+      libtheora
+      libtiff
+      utf8cpp
+      # verdict # Does not support non-vendored use
+      # xdmf3
+      zfp
+      zlib
     ] ++ optionals stdenv.isDarwin [
       xpc
       Cocoa
@@ -67,8 +154,12 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_C_FLAGS=-fPIC"
     "-DCMAKE_CXX_FLAGS=-fPIC"
-    "-D${if lib.versionOlder version "9.0" then "VTK_USE_SYSTEM_PNG" else "VTK_MODULE_USE_EXTERNAL_vtkpng"}=ON"
-    "-D${if lib.versionOlder version "9.0" then "VTK_USE_SYSTEM_TIFF" else "VTK_MODULE_USE_EXTERNAL_vtktiff"}=1"
+  ] ++ optionals (lib.versionOlder version "9.0") [
+    "-DVTK_USE_SYSTEM_PNG=ON"
+    "-DVTK_USE_SYSTEM_TIFF=1"
+  ] ++ optionals (lib.versionAtLeast version "9.0") [
+    "-DVTK_USE_EXTERNAL:BOOL=ON"
+  ] ++ [
     "-DOPENGL_INCLUDE_DIR=${libGL}/include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
@@ -88,6 +179,12 @@ in stdenv.mkDerivation rec {
     sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
+  '' + optionalString (lib.versionAtLeast version "9.0") ''
+    # libharu 2.4.0 has not been released yet, probably never will be, and there
+    # do not appear to be important fixes in the dev branch VTK uses.
+    # https://github.com/libharu/libharu/compare/RELEASE_2_3_0...master
+    substituteInPlace ThirdParty/libharu/CMakeLists.txt \
+      --replace '2.4.0' '2.3.0'
   '';
 
   preFixup = ''
