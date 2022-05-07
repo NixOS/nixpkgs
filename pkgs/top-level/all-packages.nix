@@ -21048,6 +21048,8 @@ with pkgs;
   vtk = vtk_8;
   vtkWithQt5 = vtk_8_withQt5;
 
+  vtk-m = callPackage ../development/libraries/vtk-m { };
+
   vulkan-extension-layer = callPackage ../tools/graphics/vulkan-extension-layer { };
   vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
   vulkan-loader = callPackage ../development/libraries/vulkan-loader { inherit (darwin) moltenvk; };
