@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, addOpenGLRunpath
 , fetchurl
 , fetchFromGitHub
 , fixDarwinDylibNames
@@ -11,6 +12,7 @@
 , c-ares
 , cmake
 , crc32c
+, cudaPackages
 , curl
 , flatbuffers
 , gflags
@@ -20,11 +22,13 @@
 , gtest
 , jemalloc
 , libbacktrace
+, linkFarm
 , lz4
 , minio
 , ninja
 , nlohmann_json
 , openssl
+, patchelf
 , perl
 , protobuf
 , python3
@@ -38,6 +42,7 @@
 , which
 , zlib
 , zstd
+, symlinkJoin
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? true
 , enableJemalloc ? !(stdenv.isAarch64 && stdenv.isDarwin)
@@ -46,6 +51,7 @@
   # see https://github.com/boostorg/process/issues/55
 , enableS3 ? (!stdenv.isDarwin) || (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
 , enableGcs ? !stdenv.isDarwin # google-cloud-cpp is not supported on darwin
+, cudaSupport ? false
 }:
 
 assert lib.asserts.assertMsg
@@ -67,6 +73,25 @@ let
     hash = "sha256-z/kmi+4dBO/dsVkJA4NgUoxl0pXi8RWIGvI8MGu/gcc=";
   };
 
+  cudatoolkit = symlinkJoin {
+    name = "cudatoolkit";
+    paths = with cudaPackages; [
+      cuda_cudart
+      cuda_nvcc
+      libcublas
+    ];
+  };
+
+  # stub for tests that link to libcuda but don't call cuInit
+  cudaStubs = symlinkJoin {
+    name = "cudaStubs";
+    paths = [
+      (linkFarm "cuda-stub" [{
+        name = "libcuda.so.1";
+        path = "${cudaPackages.cuda_cudart}/lib/stubs/libcuda.so";
+      }])
+    ];
+  };
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
@@ -114,7 +139,11 @@ stdenv.mkDerivation rec {
     ninja
     autoconf # for vendored jemalloc
     flatbuffers
-  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optionals cudaSupport [
+    addOpenGLRunpath
+    cudaPackages.autoAddOpenGLRunpathHook
+  ]
+  ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
   buildInputs = [
     boost
     brotli
@@ -134,8 +163,7 @@ stdenv.mkDerivation rec {
     zlib
     zstd
   ] ++ lib.optionals enableShared [
-    python3.pkgs.python
-    python3.pkgs.numpy
+    (python3.withPackages (p: [ p.numpy ]))
   ] ++ lib.optionals enableFlight [
     grpc
     openssl
@@ -147,7 +175,7 @@ stdenv.mkDerivation rec {
     curl
     google-cloud-cpp
     nlohmann_json
-  ];
+  ] ++ lib.optionals cudaSupport [ cudatoolkit ];
 
   preConfigure = ''
     patchShebangs build-support/
@@ -190,14 +218,14 @@ stdenv.mkDerivation rec {
     "-DARROW_WITH_ZLIB=ON"
     "-DARROW_WITH_ZSTD=ON"
     "-DARROW_MIMALLOC=ON"
-    # Parquet options:
-    "-DARROW_PARQUET=ON"
     "-DARROW_SUBSTRAIT=ON"
+    "-DARROW_PARQUET=ON"
     "-DPARQUET_BUILD_EXECUTABLES=ON"
     "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
     "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
+    "-DARROW_CUDA=${if cudaSupport then "ON" else "OFF"}"
   ] ++ lib.optionals (!enableShared) [
     "-DARROW_TEST_LINKAGE=static"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -228,6 +256,17 @@ stdenv.mkDerivation rec {
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
   installCheckInputs = [ perl which sqlite ] ++ lib.optional enableS3 minio;
+
+  postBuild = lib.optionalString (doInstallCheck && cudaSupport) ''
+    for file in ./*/arrow-{cuda,flight}-test ./*/plasma-*-tests; do
+      addOpenGLRunpath "$file"
+    done
+
+    for file in ./*/arrow-flight-internals-test; do
+      ${patchelf}/bin/patchelf --add-rpath "${cudaStubs}" "$file"
+    done
+  '';
+
   installCheckPhase =
     let
       excludedTests = lib.optionals stdenv.isDarwin [
@@ -235,7 +274,14 @@ stdenv.mkDerivation rec {
         # path on Darwin. See https://github.com/NixOS/nix/pull/1085
         "plasma-external-store-tests"
         "plasma-client-tests"
-      ] ++ [ "arrow-gcsfs-test" ];
+      ] ++ [
+        "arrow-gcsfs-test"
+      ] ++ lib.optionals cudaSupport [
+        # these tests fail when cudaSupport is enabled, but in theory they
+        # should work with the GPU
+        "plasma-external-store-tests"
+        "plasma-client-tests"
+      ];
     in
     ''
       runHook preInstallCheck
@@ -254,6 +300,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ tobim veprbl cpcloud ];
   };
   passthru = {
-    inherit enableFlight enableJemalloc enableS3 enableGcs;
+    inherit enableFlight enableJemalloc enableS3 enableGcs cudaSupport;
   };
 }
