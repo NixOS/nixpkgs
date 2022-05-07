@@ -15,13 +15,15 @@
 buildPythonPackage rec {
   pname = "malduck";
   version = "4.2.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-UgpblcZ/Jxl3U4256YIHzly7igNXwhTdFN4HOqZBVbM=";
+    hash = "sha256-UgpblcZ/Jxl3U4256YIHzly7igNXwhTdFN4HOqZBVbM=";
   };
 
   propagatedBuildInputs = [
@@ -43,7 +45,9 @@ buildPythonPackage rec {
   # Project has no tests. They will come with the next release
   doCheck = false;
 
-  pythonImportsCheck = [ "malduck" ];
+  pythonImportsCheck = [
+    "malduck"
+  ];
 
   meta = with lib; {
     description = "Helper for malware analysis";
