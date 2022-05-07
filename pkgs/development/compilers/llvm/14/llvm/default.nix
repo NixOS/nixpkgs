@@ -209,6 +209,9 @@ in stdenv.mkDerivation (rec {
 
   checkTarget = "check-all";
 
+  # For the update script:
+  passthru.monorepoSrc = monorepoSrc;
+
   requiredSystemFeatures = [ "big-parallel" ];
   meta = llvm_meta // {
     homepage = "https://llvm.org/";
