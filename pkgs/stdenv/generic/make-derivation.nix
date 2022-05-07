@@ -131,7 +131,7 @@ let
 
   checkDependencyList = checkDependencyList' [];
   checkDependencyList' = positions: name: deps: lib.flip lib.imap1 deps (index: dep:
-    if lib.isDerivation dep || isNull dep || builtins.typeOf dep == "path" then dep
+    if lib.isDerivation dep || isNull dep || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
     else if lib.isList dep then checkDependencyList' ([index] ++ positions) name dep
     else throw "Dependency is not of a valid type: ${lib.concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
