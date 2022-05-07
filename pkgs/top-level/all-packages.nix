@@ -16486,6 +16486,8 @@ with pkgs;
 
   activemq = callPackage ../development/libraries/apache-activemq { };
 
+  adios2 = callPackage ../development/libraries/adios2 { };
+
   adns = callPackage ../development/libraries/adns { };
 
   adslib = callPackage ../development/libraries/adslib { };
