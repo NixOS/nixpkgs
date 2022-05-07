@@ -6369,6 +6369,8 @@ in {
 
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
 
+  py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
+
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
