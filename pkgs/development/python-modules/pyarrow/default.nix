@@ -11,6 +11,7 @@
 , fsspec
 , hypothesis
 , numpy
+, numba
 , pandas
 , pytestCheckHook
 , pytest-lazy-fixture
@@ -35,7 +36,8 @@ buildPythonPackage rec {
   sourceRoot = "apache-arrow-${version}/python";
 
   nativeBuildInputs = [ cmake cython pkg-config setuptools-scm ];
-  propagatedBuildInputs = [ numpy six cloudpickle scipy fsspec cffi ];
+  propagatedBuildInputs = [ numpy six cloudpickle scipy fsspec cffi ]
+    ++ lib.optionals _arrow-cpp.cudaSupport [ numba ];
   checkInputs = [
     hypothesis
     pandas
@@ -45,6 +47,7 @@ buildPythonPackage rec {
 
   PYARROW_BUILD_TYPE = "release";
 
+  PYARROW_WITH_CUDA = zero_or_one _arrow-cpp.cudaSupport;
   PYARROW_WITH_DATASET = zero_or_one true;
   PYARROW_WITH_FLIGHT = zero_or_one _arrow-cpp.enableFlight;
   PYARROW_WITH_HDFS = zero_or_one true;
