@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, genshi, lxml, python_magic }:
+{ lib, fetchPypi, buildPythonPackage, genshi, lxml, python-magic }:
 
 buildPythonPackage rec {
   pname = "relatorio";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     genshi
     lxml
-    python_magic
+    python-magic
   ];
 
   meta = {
