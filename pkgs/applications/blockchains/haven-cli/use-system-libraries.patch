@@ -28,6 +28,19 @@ index fb71d2d..3a710a4 100644
  
  if(APPLE)
    include_directories(SYSTEM /usr/include/malloc)
+diff --git a/cmake/FindMiniupnpc.cmake b/cmake/FindMiniupnpc.cmake
+index ad2004a..7f4bb68 100644
+--- a/cmake/FindMiniupnpc.cmake
++++ b/cmake/FindMiniupnpc.cmake
+@@ -37,7 +37,7 @@ set(MINIUPNP_STATIC_LIBRARIES ${MINIUPNP_STATIC_LIBRARY})
+ 
+ include(FindPackageHandleStandardArgs)
+ find_package_handle_standard_args(
+-  MiniUPnPc DEFAULT_MSG
++  Miniupnpc DEFAULT_MSG
+   MINIUPNP_INCLUDE_DIR
+   MINIUPNP_LIBRARY
+ )
 diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
 index 71b165f..10189ce 100644
 --- a/external/CMakeLists.txt
