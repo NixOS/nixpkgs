@@ -9558,6 +9558,8 @@ self: super: with self; {
 
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
+  qemu = callPackage ../development/python-modules/qemu { };
+
   qiling = callPackage ../development/python-modules/qiling { };
 
   qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
