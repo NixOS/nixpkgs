@@ -6,6 +6,7 @@
 , inotify-tools
 , installShellFiles
 , libcloudproviders
+, librsvg
 , libsecret
 , openssl
 , pcre
@@ -20,7 +21,6 @@
 , plasma5Packages
 , sphinx
 , sqlite
-, inkscape
 , xdg-utils
 }:
 
@@ -50,18 +50,15 @@ mkDerivation rec {
     done
   '';
 
-  # required to not include inkscape in the wrapper
-  strictDeps = true;
-
   nativeBuildInputs = [
     pkg-config
     cmake
-    inkscape
+    extra-cmake-modules
+    librsvg
     sphinx
   ];
 
   buildInputs = [
-    extra-cmake-modules
     inotify-tools
     libcloudproviders
     libsecret
