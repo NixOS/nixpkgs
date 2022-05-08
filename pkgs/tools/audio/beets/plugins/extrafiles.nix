@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, beets, python3Packages }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "beets-extrafiles";
   version = "unstable-2020-12-13";
 
@@ -17,17 +17,21 @@ python3Packages.buildPythonApplication rec {
     sed -i -e 's/mediafile~=0.6.0/mediafile>=0.6.0/' setup.py
   '';
 
-  nativeBuildInputs = [ beets ];
-
   propagatedBuildInputs = with python3Packages; [ mediafile ];
 
+  checkInputs = [
+    python3Packages.pytestCheckHook
+    beets
+  ];
+
   preCheck = ''
-    HOME=$TEMPDIR
+    HOME="$(mktemp -d)"
   '';
 
   meta = {
     homepage = "https://github.com/Holzhaus/beets-extrafiles";
     description = "A plugin for beets that copies additional files and directories during the import process";
     license = lib.licenses.mit;
+    inherit (beets.meta) platforms;
   };
 }
