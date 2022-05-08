@@ -1,11 +1,11 @@
 { lib
 , stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchPypi
-, exiv2
 , boost
+, buildPythonPackage
+, exiv2
+, fetchPypi
 , libcxx
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -25,17 +25,20 @@ buildPythonPackage rec {
     exiv2
   ];
 
-  # work around python distutils compiling C++ with $CC (see issue #26709)
+  # Work around Python distutils compiling C++ with $CC (see issue #26709)
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin [
     "-I${lib.getDev libcxx}/include/c++/v1"
   ];
 
   pythonImportsCheck = [
-    "py3exiv2"
+    "pyexiv2"
   ];
 
+  # Tests are not shipped
+  doCheck = false;
+
   meta = with lib; {
-    description = "A Python3 binding to the library exiv2";
+    description = "Python binding to the library exiv2";
     homepage = "https://launchpad.net/py3exiv2";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vinymeuh ];
