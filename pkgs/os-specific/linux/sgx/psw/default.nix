@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
         hash = "sha256-JriA9UGYFkAPuCtRizk8RMM1YOYGR/eO9ILnx47A40s=";
       };
       dcap = rec {
-        version = "1.12.1";
+        version = "1.13";
         filename = "prebuilt_dcap_${version}.tar.gz";
         prebuilt = fetchurl {
           url = "https://download.01.org/intel-sgx/sgx-dcap/${version}/linux/${filename}";
-          hash = "sha256-V/XHva9Sq3P36xSW+Sd0G6Dnk4H0ANO1Ns/u+FI1eGI=";
+          hash = "sha256-0kD6hxN8qZ/7/H99aboQx7Qg7ewmYPEexoU6nqczAik=";
         };
       };
     in
@@ -64,19 +64,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # https://github.com/intel/linux-sgx/pull/730
-    substituteInPlace buildenv.mk --replace '/bin/cp' 'cp'
-    substituteInPlace psw/ae/aesm_service/source/CMakeLists.txt \
-      --replace '/usr/bin/getconf' 'getconf'
-
-    # https://github.com/intel/SGXDataCenterAttestationPrimitives/pull/205
-    substituteInPlace ./external/dcap_source/QuoteGeneration/buildenv.mk \
-      --replace '/bin/cp' 'cp'
-    substituteInPlace external/dcap_source/tools/SGXPlatformRegistration/Makefile \
-      --replace '/bin/cp' 'cp'
-    substituteInPlace external/dcap_source/tools/SGXPlatformRegistration/buildenv.mk \
-      --replace '/bin/cp' 'cp'
-
     patchShebangs \
       linux/installer/bin/build-installpkg.sh \
       linux/installer/common/psw/createTarball.sh \
@@ -166,14 +153,6 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/systemd/system/remount-dev-exec.service \
       --replace '/bin/mount' \
                 "${util-linux}/bin/mount"
-
-    header "Fixing linksgx.sh"
-    # https://github.com/intel/linux-sgx/pull/736
-    substituteInPlace $out/aesm/linksgx.sh \
-      --replace '/usr/bin/getent' \
-                '${glibc.bin}/bin/getent' \
-      --replace '/usr/sbin/usermod' \
-                '${shadow}/bin/usermod'
   '';
 
   passthru.tests = {
