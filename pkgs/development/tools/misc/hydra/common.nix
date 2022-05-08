@@ -149,7 +149,7 @@ in stdenv.mkDerivation rec {
         wrapProgram $i \
             --prefix PERL5LIB ':' $out/libexec/hydra/lib:$PERL5LIB \
             --prefix PATH ':' $out/bin:$hydraPath \
-            --set HYDRA_RELEASE ${version} \
+            --set-default HYDRA_RELEASE ${version} \
             --set HYDRA_HOME $out/libexec/hydra \
             --set NIX_RELEASE ${nix.name or "unknown"}
     done
