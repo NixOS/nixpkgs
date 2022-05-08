@@ -45,8 +45,12 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dm755 bb.sh $out/bin/bashblog
+
+    runHook postInstall
   '';
 
   meta = with lib; {
