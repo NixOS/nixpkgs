@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python3
-, fetchpatch, texinfo, gnused, usePython ? true }:
+, fetchpatch, installShellFiles, texinfo, gnused, usePython ? true }:
 
 stdenv.mkDerivation rec {
   pname = "ledger";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     gmp mpfr libedit gnused
   ] ++ lib.optional usePython python3;
 
-  nativeBuildInputs = [ cmake texinfo ];
+  nativeBuildInputs = [ cmake texinfo installShellFiles ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -44,6 +44,10 @@ stdenv.mkDerivation rec {
   ];
 
   installTargets = [ "doc" "install" ];
+
+  postInstall = ''
+    installShellCompletion --cmd ledger --bash $src/contrib/ledger-completion.bash
+  '';
 
   meta = with lib; {
     homepage = "https://ledger-cli.org/";
