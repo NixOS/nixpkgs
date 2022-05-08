@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchurl, fetchpatch
 , updateAutotoolsGnuConfigScriptsHook, autoreconfHook
 , IOKit, Carbon
 }:
@@ -12,18 +12,24 @@ stdenv.mkDerivation rec {
     sha256 = "1pv4zrajm46za0f6lv162iqffih57a8ly4pc69f7y0gfyigb8p80";
   };
 
-  patches = [
-    ./fix_private_keyword.patch
-    ./configure.patch
-  ] ++ lib.optionals stdenv.isDarwin [
-    (fetchurl {
+  patches = lib.optionals stdenv.isDarwin [
+    (fetchpatch {
       url = "https://trac.macports.org/export/70964/trunk/dports/audio/cdparanoia/files/osx_interface.patch";
-      sha256 = "1n86kzm2ssl8fdf5wlhp6ncb2bf6b9xlb5vg0mhc85r69prqzjiy";
+      sha256 = "0hq3lvfr0h1m3p0r33jij0s1aspiqlpy533rwv19zrfllb39qvr8";
+      # Our configure patch will subsume it, but we want our configure
+      # patch to be used on all platforms so we cannot just start where
+      # this leaves off.
+      excludes = [ "configure.in" ];
     })
     (fetchurl {
       url = "https://trac.macports.org/export/70964/trunk/dports/audio/cdparanoia/files/patch-paranoia_paranoia.c.10.4.diff";
       sha256 = "17l2qhn8sh4jy6ryy5si6ll6dndcm0r537rlmk4a6a8vkn852vad";
     })
+  ] ++ [
+    # Has to come after darwin patches
+    ./fix_private_keyword.patch
+    # Order does not matter
+    ./configure.patch
   ] ++ lib.optional stdenv.hostPlatform.isMusl ./utils.patch;
 
   nativeBuildInputs = [
