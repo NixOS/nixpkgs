@@ -22,8 +22,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ m4 perl texinfo ];
   buildInputs = [ m4 ];
-  postBuild = "make html";
-  postInstall = "make install-html";
+  postBuild = "
+    make html
+  ";
+
+  postInstall = "
+    make install-html
+  ";
 
   # Work around a known issue in Cygwin.  See
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
