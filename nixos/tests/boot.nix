@@ -114,8 +114,15 @@ in {
       cdrom = "${iso}/iso/${iso.isoName}";
     };
 
-    biosUsb = makeBootTest "bios-usb" {
+    biosUsb = let
+      # disable the TSC timer to prevent https://github.com/NixOS/nixpkgs/issues/170803
+      seabiosNoTSC = pkgs.seabios.override {
+        csm = false;
+        tsc = false;
+      };
+    in makeBootTest "bios-usb" {
       usb = "${iso}/iso/${iso.isoName}";
+      bios = "${seabiosNoTSC}/bios.bin";
     };
 
     biosNetboot = makeNetbootTest "bios" {};
