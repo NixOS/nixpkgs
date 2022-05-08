@@ -8,7 +8,6 @@
 buildGoModule rec {
   pname = "kubevirt";
   version = "0.52.0";
-  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "kubevirt";
