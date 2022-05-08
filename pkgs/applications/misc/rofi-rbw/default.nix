@@ -1,4 +1,4 @@
-{ lib, buildPythonApplication, fetchFromGitHub, configargparse, }:
+{ lib, buildPythonApplication, fetchFromGitHub, configargparse }:
 
 buildPythonApplication rec {
   pname = "rofi-rbw";
@@ -12,8 +12,9 @@ buildPythonApplication rec {
     hash = "sha256-1RDwb8lKls6+X/XtARbi4F7sK4nT03Iy3Wb9N1LEa5o=";
   };
 
-  pythonImportsCheck = [ "rofi_rbw" ];
   propagatedBuildInputs = [ configargparse ];
+  
+  pythonImportsCheck = [ "rofi_rbw" ];  
 
   meta = with lib; {
     description = "Rofi frontend for Bitwarden";
