@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "py-canary";
-  version = "0.5.1";
+  version = "0.5.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "snjoetw";
     repo = pname;
-    rev = version;
-    sha256 = "0j743cc0wv7im3anx1vvdm79zyvw67swhc3zwwc1r8626dgnmxjr";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-PE31J82Uc6mErnh7nQ1pkIjnMbuCnlYEX2R0azknMHQ=";
   };
 
   propagatedBuildInputs = [
