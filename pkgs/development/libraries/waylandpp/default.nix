@@ -15,7 +15,6 @@
 
 assert docSupport -> doxygen != null;
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "waylandpp";
   version = "1.0.0";
@@ -34,12 +33,12 @@ stdenv.mkDerivation rec {
   ];
 
   # Complains about not being able to find the fontconfig config file otherwise
-  FONTCONFIG_FILE = optional docSupport (makeFontsConf { fontDirectories = [ ]; });
+  FONTCONFIG_FILE = lib.optional docSupport (makeFontsConf { fontDirectories = [ ]; });
 
-  nativeBuildInputs = [ cmake pkg-config ] ++ optionals docSupport [ doxygen graphviz ];
+  nativeBuildInputs = [ cmake pkg-config ] ++ lib.optionals docSupport [ doxygen graphviz ];
   buildInputs = [ pugixml wayland libGL libffi ];
 
-  outputs = [ "bin" "dev" "lib" "out" ] ++ optionals docSupport [ "doc" "devman" ];
+  outputs = [ "bin" "dev" "lib" "out" ] ++ lib.optionals docSupport [ "doc" "devman" ];
 
   # Resolves the warning "Fontconfig error: No writable cache directories"
   preBuild = ''
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Wayland C++ binding";
     homepage = "https://github.com/NilsBrause/waylandpp/";
-    license = with licenses; [ bsd2 hpnd ];
-    maintainers = with maintainers; [ minijackson ];
+    license = with lib.licenses; [ bsd2 hpnd ];
+    maintainers = with lib.maintainers; [ minijackson ];
   };
 }
