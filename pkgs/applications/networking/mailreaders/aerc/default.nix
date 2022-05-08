@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromSourcehut {
     owner = "~rjarry";
     repo = pname;
     rev = version;
-    sha256 = "sha256-D4cZVNh3YFaVRHGFn5Nt6kMSRCShj0w5n7pTxgYik2s=";
+    sha256 = "sha256-v1+12UCgBbH/2PxZ9QdDN30LmyzVcfGlYiVNVPYO3zs=";
   };
 
   proxyVendor = true;
