@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python2 }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "opencc";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-q/y4tRov/BYCAiE4i7fT6ysTerxxOHMZUWT2Jlo/0rI=";
   };
 
-  nativeBuildInputs = [ cmake python2 ];
+  nativeBuildInputs = [ cmake python3 ];
 
   # let intermediate tools find intermediate library
   preBuild = lib.optionalString stdenv.isLinux ''

@@ -161,7 +161,9 @@ with pkgs;
     autoconf = autoconf269;
   };
 
-  autorestic = callPackage ../tools/backup/autorestic { };
+  autorestic = callPackage ../tools/backup/autorestic {
+    buildGoModule = buildGo118Module;
+  };
 
   autoPatchelfHook = makeSetupHook {
     name = "auto-patchelf-hook";
@@ -1091,6 +1093,8 @@ with pkgs;
   airspy = callPackage ../applications/radio/airspy { };
 
   airspyhf = callPackage ../applications/radio/airspyhf { };
+
+  airwindows-lv2 = callPackage ../applications/audio/airwindows-lv2 { };
 
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
@@ -5583,9 +5587,7 @@ with pkgs;
     elasticsearch = elasticsearch7;
   };
 
-  elasticsearch-curator = callPackage ../tools/admin/elasticsearch-curator {
-    python = python3;
-  };
+  elasticsearch-curator = callPackage ../tools/admin/elasticsearch-curator { };
 
   embree = callPackage ../development/libraries/embree { };
   embree2 = callPackage ../development/libraries/embree/2.x.nix { };
@@ -32500,24 +32502,17 @@ with pkgs;
 
   ### DESKTOPS/LXDE
 
-  lxappearance = callPackage ../desktops/lxde/core/lxappearance { };
-
-  lxappearance-gtk2 = callPackage ../desktops/lxde/core/lxappearance {
-    gtk2 = gtk2-x11;
-    withGtk3 = false;
-  };
-
-  lxmenu-data = callPackage ../desktops/lxde/core/lxmenu-data.nix { };
-
-  lxpanel = callPackage ../desktops/lxde/core/lxpanel {
-    gtk2 = gtk2-x11;
-  };
-
-  lxrandr = callPackage ../desktops/lxde/core/lxrandr { };
-
-  lxsession = callPackage ../desktops/lxde/core/lxsession { };
-
-  lxtask = callPackage ../desktops/lxde/core/lxtask { };
+  lxde = recurseIntoAttrs (callPackage ../desktops/lxde { });
+  # Backwards compatibility aliases
+  inherit (lxde)
+    lxappearance
+    lxappearance-gtk2
+    lxmenu-data
+    lxpanel
+    lxrandr
+    lxsession
+    lxtask
+  ;
 
   lxqt = recurseIntoAttrs (import ../desktops/lxqt {
     inherit pkgs;
