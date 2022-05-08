@@ -1,10 +1,11 @@
-{ stdenv, lib
+{ stdenv
 , aacgain ? null
 , essentia-extractor ? null
 , ffmpeg ? null
 , flac ? null
 , imagemagick ? null
 , keyfinder-cli ? null
+, lib
 , mp3gain ? null
 , mp3val ? null
 , python3Packages

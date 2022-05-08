@@ -1,9 +1,10 @@
-{ stdenv, lib
+{ stdenv
 , bashInteractive
 , diffPlugins
 , glibcLocales
 , gobject-introspection
 , gst_all_1
+, lib
 , python3Packages
 , runtimeShell
 , writeScript
