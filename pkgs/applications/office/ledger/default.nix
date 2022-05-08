@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python3
-, texinfo, gnused, usePython ? true }:
+, fetchpatch, texinfo, gnused, usePython ? true }:
 
 stdenv.mkDerivation rec {
   pname = "ledger";
@@ -33,6 +33,15 @@ stdenv.mkDerivation rec {
     substituteInPlace src/CMakeLists.txt \
       --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${python3.sitePackages}"'
   '';
+
+  patches = [
+    # Add support for $XDG_CONFIG_HOME. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/ledger/ledger/commit/c79674649dee7577d6061e3d0776922257520fd0.patch";
+      sha256 = "sha256-vwVQnY9EUCXPzhDJ4PSOmQStb9eF6H0yAOiEmL6sAlk=";
+      excludes = [ "doc/NEWS.md" ];
+    })
+  ];
 
   installTargets = [ "doc" "install" ];
 
