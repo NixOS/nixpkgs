@@ -221,6 +221,29 @@ in rec {
 
   );
 
+  # KVM image for proxmox in VMA format
+  proxmoxImage = forMatchingSystems [ "x86_64-linux" ] (system:
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ./modules/virtualisation/proxmox-image.nix
+      ];
+    }).config.system.build.VMA)
+  );
+
+  # LXC tarball for proxmox
+  proxmoxLXC = forMatchingSystems [ "x86_64-linux" ] (system:
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules = [
+        ./modules/virtualisation/proxmox-lxc.nix
+      ];
+    }).config.system.build.tarball)
+  );
 
   # A disk image that can be imported to Amazon EC2 and registered as an AMI
   amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
