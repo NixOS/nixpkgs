@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/{AUTHORS,COPYING}
   '';
 
-  passthru.updateScript = gitUpdater {inherit pname version; };
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "Flat Design theme for GTK based desktop environments";
