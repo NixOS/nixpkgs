@@ -1213,6 +1213,8 @@ with pkgs;
 
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
 
+  kubevirt = callPackage ../tools/virtualization/kubevirt { };
+
   vopono = callPackage ../tools/networking/vopono { };
 
   winbox = callPackage ../tools/admin/winbox {
