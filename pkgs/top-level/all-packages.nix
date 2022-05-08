@@ -32160,6 +32160,8 @@ with pkgs;
 
   srb2 = callPackage ../games/srb2 { };
 
+  srb2kart = callPackage ../games/srb2kart { };
+
   ssl-cert-check = callPackage ../tools/admin/ssl-cert-check { };
 
   stardust = callPackage ../games/stardust { };
