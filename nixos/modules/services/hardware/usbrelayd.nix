@@ -40,4 +40,8 @@ in
     };
     users.groups.usbrelay = { };
   };
+
+  meta = {
+    maintainers = with lib.maintainers; [ wentasah ];
+  };
 }
