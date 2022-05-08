@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchgit, acpica-tools, python3 }:
+{ lib, stdenv, fetchgit, acpica-tools, python3
+, csm ? true # whether to build SeaBIOS as an UEFI Compatibility Support Module
+, tsc ? true # whether to enable the TSC timer
+}:
+
+let
+  toYesNo = b: if b then "y" else "n";
+in
 
 stdenv.mkDerivation rec {
 
@@ -20,19 +27,18 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pic" "stackprotector" "fortify" ];
 
   configurePhase = ''
-    # build SeaBIOS for CSM
     cat > .config << EOF
-    CONFIG_CSM=y
+    CONFIG_CSM=${toYesNo csm}
+    CONFIG_TSC_TIMER=${toYesNo tsc}
     CONFIG_QEMU_HARDWARE=y
-    CONFIG_PERMIT_UNALIGNED_PCIROM=y
     EOF
 
     make olddefconfig
   '';
 
   installPhase = ''
-    mkdir $out
-    cp out/Csm16.bin $out/Csm16.bin
+    mkdir "$out"
+    cp out/${if csm then "Csm16.bin" else "bios.bin"} "$out"/
   '';
 
   meta = with lib; {
