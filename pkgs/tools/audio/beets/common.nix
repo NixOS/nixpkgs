@@ -131,7 +131,7 @@ python3Packages.buildPythonApplication rec {
       fi
     done
 
-    eval "python $args"
+    python $args
 
     runHook postCheck
   '';
