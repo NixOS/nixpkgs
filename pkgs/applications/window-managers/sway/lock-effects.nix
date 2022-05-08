@@ -8,6 +8,7 @@
 , scdoc
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libxkbcommon
 , cairo
 , gdk-pixbuf
@@ -36,7 +37,8 @@ stdenv.mkDerivation rec {
     sed -iE "s/version: '1\.3',/version: '${version}',/" meson.build
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config scdoc ];
+  strictDeps = true;
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner];
   buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
 
   mesonFlags = [
