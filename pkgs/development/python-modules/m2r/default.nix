@@ -1,11 +1,5 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, docutils
-, mistune
-, pygments
-}:
-
+{ lib, buildPythonPackage, fetchPypi,
+  mistune, docutils } :
 buildPythonPackage rec {
   pname = "m2r";
   version = "0.2.1";
@@ -15,19 +9,16 @@ buildPythonPackage rec {
     sha256 = "bf90bad66cda1164b17e5ba4a037806d2443f2a4d5ddc9f6a5554a0322aaed99";
   };
 
-  postPatch = ''
-    substituteInPlace tests/test_cli.py \
-      --replace "optional" "positional"
-  '';
-
   propagatedBuildInputs = [ mistune docutils ];
 
-  checkInputs = [ pygments ];
+  # Some tests interfeere with each other (test.md and test.rst are
+  # deleted by some tests and not properly regenerated)
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/miyakogi/m2r";
-    description = "Markdown to reStructuredText converter";
+    description = "converts a markdown file including reST markups to a valid reST format";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = [ ];
   };
 }
