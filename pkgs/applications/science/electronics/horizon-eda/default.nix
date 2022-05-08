@@ -8,10 +8,11 @@
 , glm
 , gtkmm3
 , lib
+, libarchive
 , libgit2
 , librsvg
+, libspnav
 , libuuid
-, libzip
 , opencascade
 , pkg-config
 , podofo
@@ -23,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "horizon-eda";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "horizon-eda";
     repo = "horizon";
     rev = "v${version}";
-    sha256 = "sha256-MUS1dIsULDJ5DahCtDpbHZq56nltHShli7+uoW1/Tqw=";
+    sha256 = "0lw5j1zqd2wdafgxl4ahcphaabs7vlw4kaa1c566hwfjxs46dmg9";
   };
 
   buildInputs = [
@@ -38,10 +39,11 @@ stdenv.mkDerivation rec {
     libepoxy
     glm
     gtkmm3
+    libarchive
     libgit2
     librsvg
+    libspnav
     libuuid
-    libzip
     opencascade
     podofo
     python3
