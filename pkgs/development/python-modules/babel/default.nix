@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
-    homepage = "http://babel.pocoo.org/";
+    homepage = "https://babel.pocoo.org/";
     description = "Collection of internationalizing tools";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SuperSandro2000 ];
