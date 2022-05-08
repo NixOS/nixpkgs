@@ -190,6 +190,7 @@ while (<>) {
     }
 
     if ($isFont) {
+        push @requires, "fontutil";
         push @{$extraAttrs{$pkg}}, "configureFlags = [ \"--with-fontrootdir=\$(out)/lib/X11/fonts\" ];";
     }
 
@@ -293,10 +294,22 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     my $nativeBuildInputsStr = join "", map { $_ . " " } @nativeBuildInputs;
     my $buildInputsStr = join "", map { $_ . " " } @buildInputs;
 
+    sub uniq {
+        my %seen;
+        my @res = ();
+        foreach my $s (@_) {
+            if (!defined $seen{$s}) {
+                $seen{$s} = 1;
+                push @res, $s;
+            }
+        }
+        return @res;
+    }
+
     my @arguments = @buildInputs;
     push @arguments, @nativeBuildInputs;
     unshift @arguments, "stdenv", "pkg-config", "fetchurl";
-    my $argumentsStr = join ", ", @arguments;
+    my $argumentsStr = join ", ", uniq @arguments;
 
     my $extraAttrsStr = "";
     if (defined $extraAttrs{$pkg}) {
@@ -314,6 +327,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       sha256 = "$pkgHashes{$pkg}";
     };
     hardeningDisable = [ "bindnow" "relro" ];
+    strictDeps = true;
     nativeBuildInputs = [ pkg-config $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
     meta.platforms = lib.platforms.unix;
