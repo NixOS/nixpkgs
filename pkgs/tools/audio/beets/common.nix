@@ -49,7 +49,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     confuse
-    enum34
     gobject-introspection
     gst-python
     jellyfish
