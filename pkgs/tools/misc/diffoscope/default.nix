@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ (with python3Packages; [
       argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python_magic progressbar33 pypdf2 rpm tlsh
+      python-magic progressbar33 pypdf2 rpm tlsh
     ])
     ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
     ++ lib.optionals enableBloat ([

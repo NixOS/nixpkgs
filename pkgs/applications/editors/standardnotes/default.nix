@@ -49,6 +49,7 @@ in appimageTools.wrapType2 rec {
     # fixup and install desktop file
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
       --set-key Exec --set-value ${pname} standard-notes.desktop
+    mv usr/share/icons share
 
     rm usr/lib/* AppRun standard-notes.desktop .so*
   '';

@@ -1753,7 +1753,8 @@
       nexia
     ];
     "nextbus" = ps: with ps; [
-    ]; # missing inputs: py_nextbusnext
+      py-nextbusnext
+    ];
     "nextcloud" = ps: with ps; [
       nextcloudmonitor
     ];
@@ -3501,6 +3502,7 @@
     "netgear"
     "network"
     "nexia"
+    "nextbus"
     "nightscout"
     "nina"
     "no_ip"

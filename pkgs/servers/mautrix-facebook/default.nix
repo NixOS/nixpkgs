@@ -26,7 +26,7 @@ python3.pkgs.buildPythonPackage rec {
     prometheus-client
     pycryptodome
     python-olm
-    python_magic
+    python-magic
     ruamel-yaml
     unpaddedbase64
     yarl

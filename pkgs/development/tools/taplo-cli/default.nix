@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "taplo-cli";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-0U7qoRnId3gKTQYPwbvrt/vzGfiSX6kcGwgRNc1uZ/I=";
+    sha256 = "sha256-vz3ClC2PI0ti+cItuVdJgP8KLmR2C+uGUzl3DfVuTrY=";
   };
 
-  cargoSha256 = "sha256-FIcq8wwJrZRxATDr+jo4KOX4l6auriNg+rSpMNsG+Tk=";
+  cargoSha256 = "sha256-m6wsca/muGPs58myQH7ZLPPM+eGP+GL2sC5suu+vWU0=";
 
-  nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
+  OPENSSL_LIB_DIR = "${lib.getLib openssl}/lib";
+  OPENSSL_INCLUDE_DIR = "${openssl.dev}/include";
 
-  buildInputs = lib.optional stdenv.isLinux openssl
-    ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "A TOML toolkit written in Rust";

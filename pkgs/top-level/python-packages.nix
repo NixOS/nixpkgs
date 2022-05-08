@@ -2399,6 +2399,8 @@ in {
 
   django-taggit = callPackage ../development/python-modules/django-taggit { };
 
+  django-tastypie = callPackage ../development/python-modules/django-tastypie { };
+
   django-timezone-field = callPackage ../development/python-modules/django-timezone-field { };
 
   django_treebeard = callPackage ../development/python-modules/django_treebeard { };
@@ -3791,6 +3793,8 @@ in {
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
   hatchling = callPackage ../development/python-modules/hatchling { };
+
+  hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
   haversine = callPackage ../development/python-modules/haversine { };
 
@@ -6369,6 +6373,8 @@ in {
 
   proxy_tools = callPackage ../development/python-modules/proxy_tools { };
 
+  py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
+
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
@@ -8360,7 +8366,7 @@ in {
     inherit (pkgs) lzo;
   };
 
-  python_magic = callPackage ../development/python-modules/python-magic { };
+  python-magic = callPackage ../development/python-modules/python-magic { };
 
   python-manilaclient = callPackage ../development/python-modules/python-manilaclient { };
 
@@ -9290,6 +9296,8 @@ in {
   scikit-survival = callPackage ../development/python-modules/scikit-survival { };
 
   scs = callPackage ../development/python-modules/scs { };
+
+  sdds = callPackage ../development/python-modules/sdds { };
 
   sdnotify = callPackage ../development/python-modules/sdnotify { };
 
