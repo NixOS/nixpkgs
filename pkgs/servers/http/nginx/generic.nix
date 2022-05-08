@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+, fetchhg
 
 , nixosTests
 , substituteAll, gd, geoip, perl
@@ -16,6 +17,19 @@
 , nginxVersion ? version
 , src ? null # defaults to upstream nginx ${version}
 , sha256 ? null # when not specifying src
+
+# Upstream maintains documentation (sources of https://nginx.org) in separate
+# mercurial repository, which do not correspond to particular git commit, but at
+# least has "introduced in version X.Y" comments.
+#
+# In other words, documentation does not necessary matches capabilities of
+# $out/bin/nginx, but we have no better options.
+, srcDoc ? fetchhg {
+    url = "https://hg.nginx.org/nginx.org";
+    sha256 = "029n4mnmjw94h01qalmjgf1c2h3h7wm798xv5knk3padxiy4m28b";
+    rev = "a3aee2697d4e";
+  }
+, extraPatchesDoc ? [ ./nginx-doc.patch ]
 , configureFlags ? []
 , buildInputs ? []
 , extraPatches ? []
@@ -23,6 +37,7 @@
 , preConfigure ? ""
 , postInstall ? null
 , meta ? null
+, nginx-doc ? outer.nginx-doc
 , passthru ? { tests = {}; }
 }:
 
@@ -37,12 +52,39 @@ let
         if supports nginxVersion then mod.${attrPath} or []
         else throw "Module at ${toString mod.src} does not support nginx version ${nginxVersion}!");
 
+  # Output of this derivation is copied into $doc of resulting nginx to save on
+  # building time, since we have multiple nginx versions, but only one version
+  # of documentation.
+  #
+  # As such, this derivation never appears in user profile, so its name and
+  # compliance to conventions is not important.
+  documentation = stdenv.mkDerivation {
+    name = "nginx-doc";
+    src = srcDoc;
+    patches = extraPatchesDoc;
+    nativeBuildInputs = [ libxslt libxml2 ];
+
+    # Generated documentation is not local-friendly, since it assumes that link to directory
+    # is the same as link to index.html in that directory, which is not how browsers behave
+    # with local filesystem.
+    #
+    # TODO: patch all relative links that do not end with .html.
+
+    # /en subdirectory must exist, relative links expect it.
+    installPhase = ''
+      mkdir -p $out/share/doc/nginx
+      mv libxslt/en $out/share/doc/nginx
+    '';
+  };
+
 in
 
 stdenv.mkDerivation {
   inherit pname;
   inherit version;
   inherit nginxVersion;
+
+  outputs = ["out" "doc"];
 
   src = if src != null then src else fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
@@ -114,8 +156,12 @@ stdenv.mkDerivation {
 
   configurePlatforms = [];
 
-  preConfigure = preConfigure
-    + concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
+  # Disable _multioutConfig hook which adds --bindir=$out/bin into configureFlags,
+  # which breaks build, since nginx does not actually use autoconf.
+  preConfigure = ''
+    setOutputFlags=
+  '' + preConfigure
+     + concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
 
   patches = map fixPatch ([
     (substituteAll {
@@ -144,6 +190,11 @@ stdenv.mkDerivation {
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
 
   enableParallelBuilding = true;
+
+  preInstall = ''
+    mkdir -p $doc
+    cp -r ${documentation}/* $doc
+  '';
 
   postInstall = if postInstall != null then postInstall else ''
     mv $out/sbin $out/bin
