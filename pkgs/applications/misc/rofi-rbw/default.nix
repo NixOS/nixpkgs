@@ -13,8 +13,8 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [ configargparse ];
-  
-  pythonImportsCheck = [ "rofi_rbw" ];  
+
+  pythonImportsCheck = [ "rofi_rbw" ];
 
   meta = with lib; {
     description = "Rofi frontend for Bitwarden";
