@@ -22912,7 +22912,9 @@ with pkgs;
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
-  dropwatch = callPackage ../os-specific/linux/dropwatch { };
+  dropwatch = callPackage ../os-specific/linux/dropwatch {
+    readline = readline81;
+  };
 
   dsd = callPackage ../applications/radio/dsd { };
 
