@@ -10254,7 +10254,9 @@ with pkgs;
 
   silc_server = callPackage ../servers/silc-server { };
 
-  sile = callPackage ../tools/typesetting/sile { };
+  sile = callPackage ../tools/typesetting/sile {
+    lua = lua5_4;
+  };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
 
