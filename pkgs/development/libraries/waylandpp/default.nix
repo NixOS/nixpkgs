@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchFromGitHub
 , cmake
+, makeFontsConf
 , pkg-config
 , pugixml
 , wayland
@@ -32,10 +33,18 @@ stdenv.mkDerivation rec {
     "-DWAYLAND_SCANNERPP=${buildPackages.waylandpp}/bin/wayland-scanner++"
   ];
 
+  # Complains about not being able to find the fontconfig config file otherwise
+  FONTCONFIG_FILE = optional docSupport (makeFontsConf { fontDirectories = [ ]; });
+
   nativeBuildInputs = [ cmake pkg-config ] ++ optionals docSupport [ doxygen graphviz ];
   buildInputs = [ pugixml wayland libGL libffi ];
 
   outputs = [ "bin" "dev" "lib" "out" ] ++ optionals docSupport [ "doc" "devman" ];
+
+  # Resolves the warning "Fontconfig error: No writable cache directories"
+  preBuild = ''
+    export XDG_CACHE_HOME="$(mktemp -d)"
+  '';
 
   meta = with lib; {
     description = "Wayland C++ binding";
