@@ -530,9 +530,9 @@
     githubId = 782180;
     name = "Alex Vorobiev";
   };
-  alex-eyre = {
+  alexeyre = {
     email = "A.Eyre@sms.ed.ac.uk";
-    github = "alex-eyre";
+    github = "alexeyre";
     githubId = 38869148;
     name = "Alex Eyre";
   };
