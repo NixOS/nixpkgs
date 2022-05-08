@@ -10254,7 +10254,9 @@ with pkgs;
 
   silc_server = callPackage ../servers/silc-server { };
 
-  sile = callPackage ../tools/typesetting/sile { };
+  sile = callPackage ../tools/typesetting/sile {
+    lua = lua5_4;
+  };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
 
@@ -10368,7 +10370,9 @@ with pkgs;
     jdk = jdk11;
   };
 
-  spglib = callPackage ../development/libraries/spglib { };
+  spglib = callPackage ../development/libraries/spglib {
+    inherit (llvmPackages) openmp;
+  };
 
   spicy = callPackage ../development/tools/spicy { };
 
@@ -34019,6 +34023,8 @@ with pkgs;
   kmon = callPackage ../tools/system/kmon { };
 
   kompose = callPackage ../applications/networking/cluster/kompose { };
+
+  kompute = callPackage ../development/libraries/kompute { };
 
   kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
 
