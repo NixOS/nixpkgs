@@ -24,7 +24,7 @@ buildPythonPackage rec {
     sha256 = "eb612994b7f364e872301b4569b544648e95e587d803284ddb5610efc8f2170f";
   };
 
-  nativeBuildInputs = [ flit ];
+  buildInputs = [ flit ];
 
   propagatedBuildInputs = [
     jinja2
