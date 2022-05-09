@@ -21598,6 +21598,8 @@ with pkgs;
 
   bird = callPackage ../servers/bird { };
 
+  bird-lg = callPackage ../servers/bird-lg { };
+
   bloat = callPackage ../servers/bloat { };
 
   bosun = callPackage ../servers/monitoring/bosun { };
