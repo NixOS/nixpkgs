@@ -19,7 +19,6 @@ lib.recurseIntoAttrs {
     nodes.machine = { pkgs, ... }: {
       system.nixos = dummyVersioning;
       environment.systemPackages = [ pkgs.proof-of-overlay-hello figlet ];
-      system.stateVersion = lib.trivial.release;
     };
     testScript = ''
       machine.succeed("hello | figlet >/dev/console")
