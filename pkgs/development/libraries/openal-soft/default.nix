@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config
 , alsaSupport ? !stdenv.isDarwin, alsa-lib
 , dbusSupport ? !stdenv.isDarwin, dbus
 , pipewireSupport ? !stdenv.isDarwin, pipewire
@@ -17,9 +17,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Y2KhPkwtG6tBzUhSqwV2DVnOjZwxPihidLKahjaIvyU=";
   };
 
-  # this will make it find its own data files (e.g. HRTF profiles)
-  # without any other configuration
-  patches = [ ./search-out.patch ];
+  patches = [
+    # this will make it find its own data files (e.g. HRTF profiles)
+    # without any other configuration
+    ./search-out.patch
+    # https://github.com/kcat/openal-soft/pull/696
+    (fetchpatch {
+      url = "https://github.com/kcat/openal-soft/commit/61a32d2d447a48993bf7c8feeb4fe4b3e0ed8036.patch";
+      sha256 = "1fhjjy7nrhrj3a0wlmsqpf8h3ss6s487vz5jrhamyv04nbcahn20";
+    })
+  ];
   postPatch = ''
     substituteInPlace core/helpers.cpp \
       --replace "@OUT@" $out
