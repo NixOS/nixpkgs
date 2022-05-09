@@ -659,6 +659,57 @@ buildLuarocksPackage {
   };
 }) {};
 
+lmathx = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchurl, lua
+}:
+buildLuarocksPackage {
+  pname = "lmathx";
+  version = "20150624-1";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/lmathx-20150624-1.rockspec";
+    sha256 = "181wzsj1mxjyia43y8zwaydxahnl7a70qzcgc8jhhgic7jyi9pgv";
+  }).outPath;
+  src = fetchurl {
+    url    = "http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/5.3/lmathx.tar.gz";
+    sha256 = "1r0ax3lq4xx6469aqc6qlfl3jynlghzhl5j65mpdj0kyzv4nknzf";
+  };
+
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "http://www.tecgraf.puc-rio.br/~lhf/ftp/lua/#lmathx";
+    description = "C99 extensions for the math library";
+    maintainers = with lib.maintainers; [ alexshpilkin ];
+    license.fullName = "Public domain";
+  };
+}) {};
+
+lmpfrlib = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchurl, lua
+}:
+buildLuarocksPackage {
+  pname = "lmpfrlib";
+  version = "20170112-2";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/lmpfrlib-20170112-2.rockspec";
+    sha256 = "1x7qiwmk5b9fi87fn7yvivdsis8h9fk9r3ipqiry5ahx72vzdm7d";
+  }).outPath;
+  src = fetchurl {
+    url    = "http://www.circuitwizard.de/lmpfrlib/lmpfrlib.c";
+    sha256 = "00d32cwvk298k3vyrjkdmfjgc69x1fwyks3hs7dqr2514zdhgssm";
+  };
+
+  disabled = with lua; (luaOlder "5.3") || (luaAtLeast "5.5");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "http://www.circuitwizard.de/lmpfrlib/lmpfrlib.html";
+    description = "Lua API for the GNU MPFR library";
+    maintainers = with lib.maintainers; [ alexshpilkin ];
+    license.fullName = "LGPL";
+  };
+}) {};
+
 lpeg = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchurl, lua
 }:
