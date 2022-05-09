@@ -106,6 +106,13 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs ./mach
+
+    # https://github.com/NixOS/nixpkgs/issues/172249
+    export CC=${stdenv.cc}/bin/$CC
+    export CXX=${stdenv.cc}/bin/$CXX
+    export AS=${stdenv.cc}/bin/$AS
+    export LD=${stdenv.cc}/bin/$LD
+    export STRIP=${stdenv.cc}/bin/$STRIP
   '';
 
   configurePhase = ''
