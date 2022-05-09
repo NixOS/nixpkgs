@@ -2198,7 +2198,9 @@ with pkgs;
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
-  gbl = callPackage ../tools/archivers/gbl { };
+  gbl = callPackage ../tools/archivers/gbl {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   genann = callPackage ../development/libraries/genann { };
 
