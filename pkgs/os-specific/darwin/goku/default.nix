@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "goku";
-  version = "0.3.6";
+  version = "0.5.1";
 
   src = fetchurl {
     url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${version}/goku.tar.gz";
-    sha256 = "1pss1k2slbqzpfynik50pdk4jsaiag4abhmr6kadmaaj18mfz7ai";
+    sha256 = "7c9304a5b4265575ca154bc0ebc04fcf812d14981775966092946cf82f65c782";
   };
 
   sourceRoot = ".";
