@@ -4,7 +4,7 @@ with lib;
 
 {
   name = "prowlarr";
-  meta.maintainers = with maintainers; [ jdreaver ];
+  meta.maintainers = with maintainers; [ cmacrae jdreaver ];
 
   nodes.machine =
     { pkgs, ... }:
