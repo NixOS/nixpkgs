@@ -22,6 +22,8 @@ ldoc,https://github.com/stevedonovan/LDoc.git,,,,,
 lgi,,,,,,
 linenoise,https://github.com/hoelzro/lua-linenoise.git,,,,,
 ljsyscall,,,,,lua5_1,lblasc
+lmathx,,,,,lua5_3,alexshpilkin
+lmpfrlib,,,,,lua5_3,alexshpilkin
 lpeg,,,,,,vyp
 lpeg_patterns,,,,,,
 lpeglabel,,,,,,

@@ -111,10 +111,6 @@ let
       meta.broken = since "10";
     };
 
-    jshint = super.jshint.override {
-      buildInputs = [ pkgs.phantomjs2 ];
-    };
-
     dat = super.dat.override {
       buildInputs = [ self.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
       meta.broken = since "12";

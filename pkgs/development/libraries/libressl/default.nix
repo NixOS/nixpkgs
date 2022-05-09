@@ -71,10 +71,8 @@ let
       moveToOutput "bin/nc" "$nc"
       moveToOutput "bin/openssl" "$bin"
       moveToOutput "bin/ocspcheck" "$bin"
-      moveToOutput "share/man/man1/nc.1${lib.optionalString (dontGzipMan==null) ".gz"}" "$nc"
+      moveToOutput "share/man/man1/nc.1.gz" "$nc"
     '';
-
-    dontGzipMan = if stdenv.isDarwin then true else null; # not sure what's wrong
 
     meta = with lib; {
       description = "Free TLS/SSL implementation";

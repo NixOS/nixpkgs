@@ -106,6 +106,10 @@ mapAliases ({
   bashburn = throw "bashburn has been removed: deleted by upstream"; # Added 2022-01-07
   bazaar = throw "bazaar has been deprecated by breezy"; # Added 2020-04-19
   bazaarTools = throw "bazaar has been deprecated by breezy"; # Added 2020-04-19
+  bazel_0 = throw "bazel 0 is past end of life as it is not an lts version"; # Added 2022-05-09
+  bazel_0_27 = throw "bazel 0.27 is past end of life as it is not an lts version"; # Added 2022-05-09
+  bazel_0_29 = throw "bazel 0.29 is past end of life as it is not an lts version"; # Added 2022-05-09
+  bazel_1 = throw "bazel 1 is past end of life as it is not an lts version"; # Added 2022-05-09
   bcat = throw "bcat has been removed because upstream is dead"; # Added 2021-08-22
   beret = throw "beret has been removed"; # Added 2021-11-16
   bin_replace_string = throw "bin_replace_string has been removed: deleted by upstream"; # Added 2022-01-07
@@ -941,8 +945,8 @@ mapAliases ({
   pgp-tools = throw "'pgp-tools' has been renamed to/replaced by 'signing-party'"; # Converted to throw 2022-02-22
   pg_tmp = throw "'pg_tmp' has been renamed to/replaced by 'ephemeralpg'"; # Converted to throw 2022-02-22
   phantomjs = throw "phantomjs 1.9.8 has been dropped due to lack of maintenance and security issues"; # Added 2022-02-20
+  phantomjs2 = throw "phantomjs2 has been dropped due to lack of maintenance"; # Added 2022-04-22
   philter = throw "philter has been removed: abandoned by upstream"; # Added 2022-04-26
-
   # Obsolete PHP version aliases
   php73 = throw "php73 has been dropped due to the lack of maintanence from upstream for future releases"; # Added 2021-06-03
   php73Packages = php73; # Added 2021-06-03
@@ -1061,6 +1065,7 @@ mapAliases ({
   pulseaudioLight = throw "'pulseaudioLight' has been renamed to/replaced by 'pulseaudio'"; # Converted to throw 2022-02-22
   pulseeffects = throw "Use pulseeffects-legacy if you use PulseAudio and easyeffects if you use PipeWire"; # Added 2021-02-13
   pulseeffects-pw = easyeffects; # Added 2021-07-07
+  py-wmi-client = throw "py-wmi-client has been removed: abandoned by upstream"; # Added 2022-04-26
   pydb = throw "pydb has been removed: abandoned by upstream"; # Added 2022-04-22
   pyIRCt = throw "pyIRCt has been removed from nixpkgs as it is unmaintained and python2-only";
   pyMAILt = throw "pyMAILt has been removed from nixpkgs as it is unmaintained and python2-only";
