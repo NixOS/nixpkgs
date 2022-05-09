@@ -28439,6 +28439,8 @@ with pkgs;
 
   qemacs = callPackage ../applications/editors/qemacs { };
 
+  roxctl = callPackage ../applications/networking/cluster/roxctl { };
+
   rqbit = callPackage ../applications/networking/p2p/rqbit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
