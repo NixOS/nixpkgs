@@ -1,12 +1,22 @@
-{ lib, fetchurl, buildDunePackage }:
+{ lib, fetchurl, ocaml, buildDunePackage }:
+
+let params =
+  if lib.versionAtLeast ocaml.version "4.08" then {
+    version = "1.3.3";
+    sha256 = "sha256:05n4mm1yz33h9gw811ivjw7x4m26lpmf7kns9lza4v6227lwmz7a";
+  } else {
+    version = "1.3.2";
+    sha256 = "sha256:09hrikx310pac2sb6jzaa7k6fmiznnmhdsqij1gawdymhawc4h1l";
+  };
+in
 
 buildDunePackage rec {
   pname = "easy-format";
-  version = "1.3.2";
+  inherit (params) version;
 
   src = fetchurl {
     url = "https://github.com/ocaml-community/easy-format/releases/download/${version}/easy-format-${version}.tbz";
-    sha256 = "sha256:09hrikx310pac2sb6jzaa7k6fmiznnmhdsqij1gawdymhawc4h1l";
+    inherit (params) sha256;
   };
 
   doCheck = true;
