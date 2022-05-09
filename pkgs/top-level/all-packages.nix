@@ -34470,8 +34470,6 @@ with pkgs;
 
   qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
 
-  py-wmi-client = callPackage ../tools/networking/py-wmi-client { };
-
   qdl = callPackage ../tools/misc/qdl { };
 
   rates = callPackage ../tools/misc/rates {
