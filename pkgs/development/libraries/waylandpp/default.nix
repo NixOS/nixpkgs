@@ -9,11 +9,9 @@
 , libffi
 , buildPackages
 , docSupport ? true
-, doxygen ? null
-, graphviz ? null
+, doxygen
+, graphviz
 }:
-
-assert docSupport -> doxygen != null;
 
 stdenv.mkDerivation rec {
   pname = "waylandpp";
