@@ -20,16 +20,7 @@
 , withYubikey ? false, libyubikey
 }:
 
-assert withSqlite -> sqlite != null;
-assert withLdap -> openldap != null;
-assert withPcap -> libpcap != null;
-assert withCap -> libcap != null;
-assert withMemcached -> libmemcached != null;
-assert withRedis -> hiredis != null;
-assert withMysql -> libmysqlclient != null;
-assert withYubikey -> libyubikey != null;
-assert withCollectd -> collectd != null;
-assert withRest -> curl != null && withJson;
+assert withRest -> withJson;
 
 stdenv.mkDerivation rec {
   pname = "freeradius";
