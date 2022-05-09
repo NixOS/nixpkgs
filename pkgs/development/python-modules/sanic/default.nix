@@ -125,15 +125,14 @@ buildPythonPackage rec {
     "test_raw_headers"
     # noisy_exceptions sometimes missing from sanic stdout
     "test_noisy_exceptions"
-    # test fail on aarch64
   ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    # test fail on aarch64
     "test_tls_wrong_options"
     "test_cookie_expires"
     "test_gunicorn_worker"
     "test_gunicorn_worker_no_logs"
     "test_gunicorn_worker_with_logs"
   ];
-
 
   disabledTestPaths = [
     # unable to create async loop
