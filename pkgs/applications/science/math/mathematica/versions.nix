@@ -5,84 +5,84 @@ let versions = [
     version = "13.0.1";
     lang = "en";
     language = "English";
-    sha256 = "3672a920c1b4af1afd480733f6d67665baf8258757dfe59a6ed6d7440cf26dba";
+    sha256 = "sha256-NnKpIMG0rxr9SAcz9tZ2Zbr4JYdX3+WabtbXRAzybbo=";
     installer = "Mathematica_13.0.1_BNDL_LINUX.sh";
   }
   {
     version = "13.0.0";
     lang = "en";
     language = "English";
-    sha256 = "15bbad39a5995031325d1d178f63b00e71706d3ec9001eba6d1681fbc991d3e1";
+    sha256 = "sha256-FbutOaWZUDEyXR0Xj2OwDnFwbT7JAB66bRaB+8mR0+E=";
     installer = "Mathematica_13.0.0_BNDL_LINUX.sh";
   }
   {
     version = "12.3.1";
     lang = "en";
     language = "English";
-    sha256 = "51b9cab12fd91b009ea7ad4968a2c8a59e94dc55d2e6cc1d712acd5ba2c4d509";
+    sha256 = "sha256-UbnKsS/ZGwCep61JaKLIpZ6U3FXS5swdcSrNW6LE1Qk=";
     installer = "Mathematica_12.3.1_LINUX.sh";
   }
   {
     version = "12.3.0";
     lang = "en";
     language = "English";
-    sha256 = "045df045f6e796ded59f64eb2e0f1949ac88dcba1d5b6e05fb53ea0a4aed7215";
+    sha256 = "sha256-BF3wRfbnlt7Vn2TrLg8ZSayI3LodW24F+1PqCkrtchU=";
     installer = "Mathematica_12.3.0_LINUX.sh";
   }
   {
     version = "12.2.0";
     lang = "en";
     language = "English";
-    sha256 = "3b6676a203c6adb7e9c418a5484b037974287b5be09c64e7dfea74ddc0e400d7";
+    sha256 = "sha256-O2Z2ogPGrbfpxBilSEsDeXQoe1vgnGTn3+p03cDkANc=";
     installer = "Mathematica_12.2.0_LINUX.sh";
   }
   {
     version = "12.1.1";
     lang = "en";
     language = "English";
-    sha256 = "02mk8gmv8idnakva1nc7r7mx8ld02lk7jgsj1zbn962aps3bhixd";
+    sha256 = "sha256-rUe4hr5KmGTXD1I/eSYVoFHU68mH2aD2VLZFtOtDswo=";
     installer = "Mathematica_12.1.1_LINUX.sh";
   }
   {
     version = "12.1.0";
     lang = "en";
     language = "English";
-    sha256 = "15m9l20jvkxh5w6mbp81ys7mx2lx5j8acw5gz0il89lklclgb8z7";
+    sha256 = "sha256-56P1KKOTJkQj+K9wppAsnYpej/YB3VUNL7DPLYGgqZY=";
     installer = "Mathematica_12.1.0_LINUX.sh";
   }
   {
     version = "12.0.0";
     lang = "en";
     language = "English";
-    sha256 = "b9fb71e1afcc1d72c200196ffa434512d208fa2920e207878433f504e58ae9d7";
+    sha256 = "sha256-uftx4a/MHXLCABlv+kNFEtII+ikg4geHhDP1BOWK6dc=";
     installer = "Mathematica_12.0.0_LINUX.sh";
   }
   {
     version = "11.3.0";
     lang = "en";
     language = "English";
-    sha256 = "0fcfe208c1eac8448e7be3af0bdb84370b17bd9c5d066c013928c8ee95aed10e";
+    sha256 = "sha256-D8/iCMHqyESOe+OvC9uENwsXvZxdBmwBOSjI7pWu0Q4=";
     installer = "Mathematica_11.3.0_LINUX.sh";
   }
   {
     version = "11.2.0";
     lang = "ja";
     language = "Japanese";
-    sha256 = "916392edd32bed8622238df435dd8e86426bb043038a3336f30df10d819b49b1";
+    sha256 = "sha256-kWOS7dMr7YYiI430Nd2OhkJrsEMDijM28w3xDYGbSbE=";
     installer = "Mathematica_11.2.0_ja_LINUX.sh";
   }
   {
     version = "9.0.0";
     lang = "en";
     language = "English";
-    sha256 = "106zfaplhwcfdl9rdgs25x83xra9zcny94gb22wncbfxvrsk3a4q";
+    sha256 = "sha256-mKgxdd7dLWa5EOuR5C37SeU+UC9Cv5YTbY5xSK9y34A=";
     installer = "Mathematica_9.0.0_LINUX.sh";
   }
   {
     version = "10.0.2";
     lang = "en";
     language = "English";
-    sha256 = "1d2yaiaikzcacjamlw64g3xkk81m3pb4vz4an12cv8nb7kb20x9l";
+    sha256 = "sha256-NHUg1jzLos1EsIr8TdYdNaA5+3jEcFqVZIr9GVVUXrQ=";
     installer = "Mathematica_10.0.2_LINUX.sh";
   }
 ];
