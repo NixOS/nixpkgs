@@ -66,5 +66,6 @@ buildPythonApplication rec {
     description = "Simple text to phones converter for multiple languages";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ];
+    broken = true;
   };
 }
