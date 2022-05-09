@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchPypi
 , buildPythonPackage
 , requests
@@ -26,6 +27,11 @@ buildPythonPackage rec {
     httpbin
     twisted
   ];
+
+  preCheck = lib.optionalString (stdenv.hostPlatform.system == "aarch64-darwin") ''
+    # fails with: Cannot allocate write+execute memory for ffi.callback().
+    rm src/treq/test/test_treq_integration.py
+  '';
 
   checkPhase = ''
     trial treq
