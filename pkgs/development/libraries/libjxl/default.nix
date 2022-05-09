@@ -109,6 +109,16 @@ stdenv.mkDerivation rec {
     # "-DJPEGXL_ENABLE_PLUGINS=ON"
   ];
 
+  # https://github.com/libjxl/libjxl/issues/1400
+  postPatch = ''
+    substituteInPlace lib/jxl/libjxl.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    substituteInPlace lib/threads/libjxl_threads.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
   doCheck = !stdenv.hostPlatform.isi686;
