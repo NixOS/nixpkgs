@@ -28749,7 +28749,9 @@ with pkgs;
 
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
-  palemoon = callPackage ../applications/networking/browsers/palemoon { };
+  palemoon = callPackage ../applications/networking/browsers/palemoon {
+    stdenv = gcc10Stdenv;
+  };
 
   pamix = callPackage ../applications/audio/pamix { };
 
