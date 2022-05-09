@@ -49,8 +49,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config meson ninja makeWrapper perlPackages.perl perlPackages.XMLParser m4 ]
-    ++ lib.optionals stdenv.isLinux [ glib ]
+  nativeBuildInputs = [ pkg-config meson ninja makeWrapper perlPackages.perl perlPackages.XMLParser m4 glib ]
     # gstreamer plugin discovery requires wrapping
     ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook;
 
@@ -58,8 +57,7 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libtool libsndfile soxr speexdsp fftwFloat check ]
-    ++ lib.optionals stdenv.isLinux [ glib dbus ]
+    [ libtool libsndfile soxr speexdsp fftwFloat check dbus glib ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices libintl ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
@@ -105,8 +103,10 @@ stdenv.mkDerivation rec {
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
   ]
-    ++ lib.optional (stdenv.isLinux && useSystemd) "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
-    ;
+  ++ lib.optional (stdenv.isLinux && useSystemd) "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+  ++ lib.optionals (stdenv.isDarwin) [
+    "-Doss-output=disabled"
+  ];
 
   doCheck = true;
   preCheck = ''
