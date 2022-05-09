@@ -3,7 +3,7 @@
 , fetchPypi
 , flit
 , jinja2
-, ruamel_yaml
+, ruamel-yaml
 , matplotlib
 , pandas
 , pandoc
