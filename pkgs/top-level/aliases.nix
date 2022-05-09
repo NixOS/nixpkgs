@@ -1506,6 +1506,7 @@ mapAliases ({
   qt512 = throw "Qt 5 versions prior to 5.15 are no longer supported upstream and have been removed";  # Added 2022-11-24
   qt514 = throw "Qt 5 versions prior to 5.15 are no longer supported upstream and have been removed";  # Added 2022-11-24
   qt515 = qt5;  # Added 2022-11-24
+  qt4 = throw "qt4 has been removed from nixpkgs, because it's been EOL since the end of 2015"; # Added 2022-05-09
   qt5ct = libsForQt5.qt5ct; # Added 2021-12-27
   qt6ct = qt6Packages.qt6ct; # Added 2023-03-07
   qtcurve = libsForQt5.qtcurve; # Added 2020-11-07

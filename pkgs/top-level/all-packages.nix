@@ -24758,34 +24758,6 @@ with pkgs;
 
   quartoMinimal = callPackage ../development/libraries/quarto { rWrapper = null; python3 = null; };
 
-  qt4 = qt48;
-
-  qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
-    # GNOME dependencies are not used unless gtkStyle == true
-    inherit (gnome2) libgnomeui GConf gnome_vfs;
-    cups = if stdenv.isLinux then cups else null;
-
-    # XXX: mariadb doesn't built on fbsd as of nov 2015
-    libmysqlclient = if (!stdenv.isFreeBSD) then libmysqlclient else null;
-
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) ApplicationServices OpenGL Cocoa AGL;
-  };
-
-  qmake48Hook = makeSetupHook {
-    name = "qmake4.8-hook";
-    substitutions = { qt4 = qt48; };
-  } ../development/libraries/qt-4.x/4.8/qmake-hook.sh;
-
-  qmake4Hook = qmake48Hook;
-
-  qt48Full = qt48.override {
-    docs = true;
-    demos = true;
-    examples = true;
-    developerBuild = true;
-  };
-
   qt5 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.15) {
       inherit (__splicedPackages)
