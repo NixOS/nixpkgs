@@ -14075,8 +14075,6 @@ with pkgs;
 
   tunwg = callPackage ../tools/networking/tunwg { };
 
-  omapd = callPackage ../tools/security/omapd { };
-
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
   ttfautohint = libsForQt5.callPackage ../tools/misc/ttfautohint {
