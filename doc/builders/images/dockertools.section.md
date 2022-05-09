@@ -394,3 +394,142 @@ buildImage {
   };
 }
 ```
+
+## buildNixShellImage {#ssec-pkgs-dockerTools-buildNixShellImage}
+
+Create a Docker image that sets up an environment similar to that of running `nix-shell` on a derivation.
+When run in Docker, this environment somewhat resembles the Nix sandbox typically used by `nix-build`, with a major difference being that access to the internet is allowed.
+It additionally also behaves like an interactive `nix-shell`, running things like `shellHook` and setting an interactive prompt.
+If the derivation is fully buildable (i.e. `nix-build` can be used on it), running `buildDerivation` inside such a Docker image will build the derivation, with all its outputs being available in the correct `/nix/store` paths, pointed to by the respective environment variables like `$out`, etc.
+
+::: {.warning}
+The behavior doesn't match `nix-shell` or `nix-build` exactly and this function is known not to work correctly for e.g. fixed-output derivations, content-addressed derivations, impure derivations and other special types of derivations.
+:::
+
+### Arguments
+
+`drv`
+
+: The derivation on which to base the Docker image.
+
+    Adding packages to the Docker image is possible by e.g. extending the list of `nativeBuildInputs` of this derivation like
+
+    ```nix
+    buildNixShellImage {
+      drv = someDrv.overrideAttrs (old: {
+        nativeBuildInputs = old.nativeBuildInputs or [] ++ [
+          somethingExtra
+        ];
+      });
+      # ...
+    }
+    ```
+
+    Similarly, you can extend the image initialization script by extending `shellHook`
+
+`name` _optional_
+
+: The name of the resulting image.
+
+    *Default:* `drv.name + "-env"`
+
+`tag` _optional_
+
+: Tag of the generated image.
+
+    *Default:* the resulting image derivation output path's hash
+
+`uid`/`gid` _optional_
+
+: The user/group ID to run the container as. This is like a `nixbld` build user.
+
+    *Default:* 1000/1000
+
+`homeDirectory` _optional_
+
+: The home directory of the user the container is running as
+
+    *Default:* `/build`
+
+`shell` _optional_
+
+: The path to the `bash` binary to use as the shell. This shell is started when running the image.
+
+    *Default:* `pkgs.bashInteractive + "/bin/bash"`
+
+`command` _optional_
+
+: Run this command in the environment of the derivation, in an interactive shell. See the `--command` option in the [`nix-shell` documentation](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html?highlight=nix-shell#options).
+
+    *Default:* (none)
+
+`run` _optional_
+
+: Same as `command`, but runs the command in a non-interactive shell instead. See the `--run` option in the [`nix-shell` documentation](https://nixos.org/manual/nix/stable/command-ref/nix-shell.html?highlight=nix-shell#options).
+
+    *Default:* (none)
+
+### Example
+
+The following shows how to build the `pkgs.hello` package inside a Docker container built with `buildNixShellImage`.
+
+```nix
+with import <nixpkgs> {};
+dockerTools.buildNixShellImage {
+  drv = hello;
+}
+```
+
+Build the derivation:
+
+```console
+nix-build hello.nix
+```
+
+    these 8 derivations will be built:
+      /nix/store/xmw3a5ln29rdalavcxk1w3m4zb2n7kk6-nix-shell-rc.drv
+    ...
+    Creating layer 56 from paths: ['/nix/store/crpnj8ssz0va2q0p5ibv9i6k6n52gcya-stdenv-linux']
+    Creating layer 57 with customisation...
+    Adding manifests...
+    Done.
+    /nix/store/cpyn1lc897ghx0rhr2xy49jvyn52bazv-hello-2.12-env.tar.gz
+
+Load the image:
+
+```console
+docker load -i result
+```
+
+    0d9f4c4cd109: Loading layer [==================================================>]   2.56MB/2.56MB
+    ...
+    ab1d897c0697: Loading layer [==================================================>]  10.24kB/10.24kB
+    Loaded image: hello-2.12-env:pgj9h98nal555415faa43vsydg161bdz
+
+Run the container:
+
+```console
+docker run -it hello-2.12-env:pgj9h98nal555415faa43vsydg161bdz
+```
+
+    [nix-shell:/build]$
+
+In the running container, run the build:
+
+```console
+buildDerivation
+```
+
+    unpacking sources
+    unpacking source archive /nix/store/8nqv6kshb3vs5q5bs2k600xpj5bkavkc-hello-2.12.tar.gz
+    ...
+    patching script interpreter paths in /nix/store/z5wwy5nagzy15gag42vv61c2agdpz2f2-hello-2.12
+    checking for references to /build/ in /nix/store/z5wwy5nagzy15gag42vv61c2agdpz2f2-hello-2.12...
+
+Check the build result:
+
+```console
+$out/bin/hello
+```
+
+    Hello, world!
