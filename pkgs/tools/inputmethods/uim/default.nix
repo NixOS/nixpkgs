@@ -7,8 +7,7 @@
 , withGtk2 ? withGtk, gtk2 ? null
 , withGtk3 ? withGtk, gtk3 ? null
 , withQt ? true
-, withQt4 ? withQt, qt4 ? null
-, withQt5 ? false, qt5 ? null
+, withQt5 ? withQt, qt5 ? null
 , withLibnotify ? true, libnotify ? null
 , withSqlite ? true, sqlite ? null
 , withNetworking ? true, curl ? null, openssl ? null
@@ -22,13 +21,6 @@ with lib;
 
 assert withGtk2 -> gtk2 != null;
 assert withGtk3 -> gtk3 != null;
-
-# TODO(@oxij): ./configure can't find both qmakes at the same time
-# this can be fixed by adding an alias qmake -> qmaka${version} in qmake derivation
-assert withQt4 -> !withQt5 && qt4 != null;
-assert withQt5 -> !withQt4 && qt5 != null;
-
-assert !withQt5; # fails to build with "Makefile.qmake: No such file or directory"
 
 assert withAnthy -> anthy != null;
 assert withLibnotify -> libnotify != null;
@@ -62,8 +54,7 @@ stdenv.mkDerivation rec {
   ++ optional withAnthy anthy
   ++ optional withGtk2 gtk2
   ++ optional withGtk3 gtk3
-  ++ optional withQt4 qt4
-  ++ optionals withQt5 [ qt5.qtbase.bin qt5.qtbase.dev ]
+  ++ optionals withQt5 (with qt5; [ qtbase.bin qtbase.dev qtx11extras wrapQtAppsHook ])
   ++ optional withLibnotify libnotify
   ++ optional withSqlite sqlite
   ++ optionals withNetworking [
@@ -102,10 +93,6 @@ stdenv.mkDerivation rec {
   ++ optional withAnthy "--with-anthy-utf8"
   ++ optional withGtk2 "--with-gtk2"
   ++ optional withGtk3 "--with-gtk3"
-  ++ optionals withQt4 [
-    "--with-qt4"
-    "--with-qt4-immodule"
-  ]
   ++ optionals withQt5 [
     "--with-qt5"
     "--with-qt5-immodule"
