@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gtk-doc, intltool
 , audit, glib, libusb1, libxml2
 , wrapGAppsHook
-, gstreamer ? null
-, gst-plugins-base ? null
-, gst-plugins-good ? null
-, gst-plugins-bad ? null
-, libnotify ? null
-, gnome ? null
-, gtk3 ? null
+, gstreamer
+, gst-plugins-base
+, gst-plugins-good
+, gst-plugins-bad
+, libnotify
+, gnome
+, gtk3
 , enableUsb ? true
 , enablePacketSocket ? true
 , enableViewer ? true
@@ -23,11 +23,7 @@ let
       (pkg: pkg != null && lib.versionAtLeast (lib.getVersion pkg) "1.0")
       [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ];
 in
-  assert enableGstPlugin -> lib.all (pkg: pkg != null) [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ];
   assert enableViewer -> enableGstPlugin;
-  assert enableViewer -> libnotify != null;
-  assert enableViewer -> gnome != null;
-  assert enableViewer -> gtk3 != null;
   assert enableViewer -> gstreamerAtLeastVersion1;
 
   stdenv.mkDerivation rec {
@@ -87,4 +83,3 @@ in
       platforms = lib.platforms.unix;
     };
   }
-
