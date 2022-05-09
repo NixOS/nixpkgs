@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX="
   ];
 
+  # https://github.com/Matroska-Org/libmatroska/issues/62
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '\$\{prefix\}/$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$\{prefix\}/$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
   meta = with lib; {
     description = "A library to parse Matroska files";
     homepage = "https://matroska.org/";
