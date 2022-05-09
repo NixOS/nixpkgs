@@ -28,7 +28,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   disabled = pythonOlder "3.7" ||
-    pythonAtLeast "3.10";  # see GHSA-7p79-6x2v-5h88
+    pythonAtLeast "3.10"; # see GHSA-7p79-6x2v-5h88
 
   src = fetchFromGitHub {
     owner = "sanic-org";
@@ -125,7 +125,17 @@ buildPythonPackage rec {
     "test_raw_headers"
     # noisy_exceptions sometimes missing from sanic stdout
     "test_noisy_exceptions"
-  ];
+    # test fail on aarch64
+  ] ++ (if stdenv.hostPlatform.system == "aarch64-linux"
+  then [
+    "test_tls_wrong_options"
+    "test_cookie_expires"
+    "test_gunicorn_worker"
+    "test_gunicorn_worker_no_logs"
+    "test_gunicorn_worker_with_logs"
+  ]
+  else [ ]);
+
 
   disabledTestPaths = [
     # unable to create async loop
