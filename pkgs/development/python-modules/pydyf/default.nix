@@ -24,6 +24,13 @@ buildPythonPackage rec {
       --replace "--isort --flake8 --cov --no-cov-on-fail" ""
   '';
 
+
+  disabledTests =
+    [
+      "test_transform"
+      "test_text"
+    ];
+
   checkInputs = [
     pytestCheckHook
     coverage
