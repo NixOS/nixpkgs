@@ -59,6 +59,8 @@ buildPythonPackage rec {
     "test_patcher_existing_locks_locked"
     # broken with pyopenssl 22.0.0
     "test_sendall_timeout"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    "test_fork_after_monkey_patch"
   ];
 
   disabledTestPaths = [
