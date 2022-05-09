@@ -27,9 +27,10 @@ let versions = callPackage ./versions.nix { };
                else ./generic.nix;
 
     compareVersions = v1: v2:
-      let a = lib.versions.major v1.version;
-          b = lib.versions.major v2.version;
-      in lib.toInt a > lib.toInt b;
+      let f  = v: map lib.toInt (lib.versions.splitVersion v.version);
+          as = f v1;
+          bs = f v2;
+      in as > bs;
 
     isMatching = v1: v2:
       let as = lib.versions.splitVersion v1;
