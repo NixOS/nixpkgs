@@ -12,7 +12,7 @@
 , libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
 , librevenge, libe-book, libmwaw, glm, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, gnome, glib, ncurses, libepoxy, gpgme
+, gnome, glib, ncurses, libepoxy, gpgme, abseil-cpp
 , langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "uk" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
@@ -177,7 +177,6 @@ in (mkDrv rec {
       # this I actually hate, this should be a data consistency test!
       sed -e '/CPPUNIT_TEST(testTdf115013);/d' -i sw/qa/extras/uiwriter/uiwriter.cxx
       # rendering-dependent test
-      sed -e '/CPPUNIT_ASSERT_EQUAL(11148L, pOleObj->GetLogicRect().getWidth());/d ' -i sc/qa/unit/subsequent_filters-test.cxx
       # tilde expansion in path processing checks the existence of $HOME
       sed -e 's@OString sSysPath("~/tmp");@& return ; @' -i sal/qa/osl/file/osl_File.cxx
       # fails on systems using ZFS, see https://github.com/NixOS/nixpkgs/issues/19071
@@ -190,9 +189,6 @@ in (mkDrv rec {
       # one more fragile test?
       sed -e '/CPPUNIT_TEST(testTdf77014);/d' -i sw/qa/extras/uiwriter/uiwriter.cxx
       # rendering-dependent tests
-      sed -e '/CPPUNIT_TEST(testCustomColumnWidthExportXLSX)/d' -i sc/qa/unit/subsequent_export-test.cxx
-      sed -e '/CPPUNIT_TEST(testColumnWidthExportFromODStoXLSX)/d' -i sc/qa/unit/subsequent_export-test.cxx
-      sed -e '/CPPUNIT_TEST(testChartImportXLS)/d' -i sc/qa/unit/subsequent_filters-test.cxx
       sed -e '/CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape)/d' -i sc/qa/unit/filters-test.cxx
       sed -zre 's/DesktopLOKTest::testGetFontSubset[^{]*[{]/& return; /' -i desktop/qa/desktop_lib/test_desktop_lib.cxx
       sed -z -r -e 's/DECLARE_OOXMLEXPORT_TEST[(]testFlipAndRotateCustomShape,[^)]*[)].[{]/& return;/' -i sw/qa/extras/ooxmlexport/ooxmlexport7.cxx
@@ -223,37 +219,6 @@ in (mkDrv rec {
       sed -e '/CPPUNIT_TEST(testTdf113818);/d' -i './sd/qa/unit/export-tests.cxx'
       sed -e '/CPPUNIT_TEST(testTdf119629);/d' -i './sd/qa/unit/export-tests.cxx'
       sed -e '/CPPUNIT_TEST(testTdf113822);/d' -i './sd/qa/unit/export-tests.cxx'
-      sed -e '/CPPUNIT_TEST(test);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testConditionalFormatExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF16LErtlSHA1);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA1);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA256ODF12);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA256W3C);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_XL_SHA1);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testColorScaleExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testDataBarExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testNamedRangeBugfdo62729);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testRichTextExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testFormulaRefSheetNameODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCellValuesExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCellNoteExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testFormatExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testEmbeddedChartODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCellAnchoredGroupXLS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCeilingFloorODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testRelativePathsODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testSheetProtectionODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testSwappedOutImageExport);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testLinkedGraphicRT);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testImageWithSpecialID);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testAbsNamedRangeHTML);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testMoveCellAnchoredShapesODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testRefStringUnspecified);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testHeaderImageODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testTdf88657ODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testExponentWithoutSignFormatXLSX);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testHiddenRepeatedRowsODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testHyperlinkTargetFrameODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
       sed -e '/CPPUNIT_TEST(testTdf105739);/d' -i './sd/qa/unit/export-tests-ooxml2.cxx'
       sed -e '/CPPUNIT_TEST(testPageBitmapWithTransparency);/d' -i './sd/qa/unit/export-tests-ooxml2.cxx'
       sed -e '/CPPUNIT_TEST(testTdf115005);/d' -i './sd/qa/unit/export-tests-ooxml2.cxx'
@@ -412,7 +377,7 @@ in (mkDrv rec {
       mdds bluez5 libwps libabw libzmf
       libxshmfence libatomic_ops graphite2 harfbuzz gpgme util-linux
       librevenge libe-book libmwaw glm ncurses libepoxy
-      libodfgen CoinMP librdf_rasqal gnome.adwaita-icon-theme gettext
+      libodfgen CoinMP librdf_rasqal gnome.adwaita-icon-theme gettext abseil-cpp
     ]
     ++ (with gst_all_1; [
       gstreamer
