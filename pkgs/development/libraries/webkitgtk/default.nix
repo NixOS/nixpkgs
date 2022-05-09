@@ -208,6 +208,7 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_MALLOC=ON"
   ] ++ lib.optionals (!systemdSupport) [
     "-DUSE_SYSTEMD=OFF"
+    "-DENABLE_JOURNALD_LOG=OFF"
   ] ++ lib.optionals (stdenv.isLinux && enableGLES) [
     "-DENABLE_GLES2=ON"
   ];
