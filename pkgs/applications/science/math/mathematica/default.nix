@@ -28,7 +28,7 @@ let versions = callPackage ./versions.nix { };
 
     compareVersions = v1: v2:
       let f = v: map lib.toInt (lib.versions.splitVersion v.version);
-      in f v1 > f v2;
+      in lib.compareLists lib.compare (f v1) (f v2) > 0;
 
     isMatching = v1: v2:
       let n = lib.min (builtins.stringLength v1) (builtins.stringLength v2);
