@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osrmt";
-  version = "1.8";
+  version = "unstable-2020-04-24";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = version;
-    sha256 = "sha256-A+QkXH/XZEqQs+8jT1RA5rO6iKxRAsxRtQ7EPpbRtfo=";
+    rev = "b4909cd81e53244c15fe4e1a9218a91e37f2965a";
+    sha256 = "sha256-MS8CkuhXrwaQqJKcNL9tDybZ/YdNpINaR5mT35xRTFs=";
   };
 
   nativeBuildInputs = [
