@@ -126,15 +126,13 @@ buildPythonPackage rec {
     # noisy_exceptions sometimes missing from sanic stdout
     "test_noisy_exceptions"
     # test fail on aarch64
-  ] ++ (if stdenv.hostPlatform.system == "aarch64-linux"
-  then [
+  ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
     "test_tls_wrong_options"
     "test_cookie_expires"
     "test_gunicorn_worker"
     "test_gunicorn_worker_no_logs"
     "test_gunicorn_worker_with_logs"
-  ]
-  else [ ]);
+  ];
 
 
   disabledTestPaths = [
