@@ -24,10 +24,11 @@ buildPythonPackage rec {
     sha256 = "eb612994b7f364e872301b4569b544648e95e587d803284ddb5610efc8f2170f";
   };
 
-  buildInputs = [ flit ];
+  nativeBuildInputs = [ flit ];
+
   propagatedBuildInputs = [
     jinja2
-    ruamel_yaml
+    ruamel-yaml
     matplotlib
     pandas
     pygments
@@ -35,12 +36,13 @@ buildPythonPackage rec {
     curio
   ];
 
-  pythonImportsCheck = [ "reportengine" ];
   checkInputs = [
     hypothesis
     pandoc
     pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "reportengine" ];
 
   meta = with lib; {
     description = "A framework for declarative data analysis";
