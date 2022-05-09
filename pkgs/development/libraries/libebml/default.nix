@@ -27,6 +27,13 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_PREFIX="
   ];
 
+  # https://github.com/Matroska-Org/libebml/issues/97
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '\$\{prefix\}/$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$\{prefix\}/$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
   meta = with lib; {
     description = "Extensible Binary Meta Language library";
     homepage = "https://dl.matroska.org/downloads/libebml/";
