@@ -5194,8 +5194,6 @@ in {
 
   meld3 = callPackage ../development/python-modules/meld3 { };
 
-  memcached = callPackage ../development/python-modules/memcached { };
-
   memory-allocator = callPackage ../development/python-modules/memory-allocator { };
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
@@ -6477,6 +6475,8 @@ in {
   python-keystoneclient = callPackage ../development/python-modules/python-keystoneclient { };
 
   python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
+
+  python-memcached = callPackage ../development/python-modules/python-memcached { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
@@ -10581,6 +10581,8 @@ in {
   ukkonen = callPackage ../development/python-modules/ukkonen { };
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
+
+  ukrainealarm = callPackage ../development/python-modules/ukrainealarm { };
 
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 

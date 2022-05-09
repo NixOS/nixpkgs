@@ -58,7 +58,7 @@ buildPythonApplication rec {
   ] ++ lib.optionals stdenv.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
-    wayland-protocols wayland dbus
+    wayland-protocols wayland dbus libGL
   ];
 
   nativeBuildInputs = [
@@ -74,8 +74,6 @@ buildPythonApplication rec {
     imagemagick
     libicns  # For the png2icns tool.
   ];
-
-  propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
 
   outputs = [ "out" "terminfo" "shell_integration" ];
 

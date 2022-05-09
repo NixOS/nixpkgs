@@ -26,8 +26,7 @@ in
 
   config = mkIf cfg.enable {
 
-    # TODO: Rename to .conf in upcomming release
-    environment.etc."usbrelayd.ini".text = ''
+    environment.etc."usbrelayd.conf".text = ''
       [MQTT]
       BROKER = ${cfg.broker}
       CLIENTNAME = ${cfg.clientName}
@@ -40,5 +39,9 @@ in
       group = "usbrelay";
     };
     users.groups.usbrelay = { };
+  };
+
+  meta = {
+    maintainers = with lib.maintainers; [ wentasah ];
   };
 }

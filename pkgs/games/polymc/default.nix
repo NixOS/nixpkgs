@@ -18,13 +18,13 @@
 
 mkDerivation rec {
   pname = "polymc";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "PolyMC";
     repo = "PolyMC";
     rev = version;
-    sha256 = "sha256-pnMmmeIKAaX+z1YzzowotjaG/HKdiqcz2tJ5eGRR77I=";
+    sha256 = "sha256-lxiMz7vuq+BkNVjWWJbPUk68DSe8zVZPcvZ1iXDsfCY=";
     fetchSubmodules = true;
   };
 

@@ -83,7 +83,7 @@ makeOverlayable (overrideAttrs:
 # * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
 #   Details on how to use this mkDerivation function
 #
-# * https://nixos.org/nix/manual/#ssec-derivation
+# * https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations
 #   Explanation about derivations in general
 {
 
