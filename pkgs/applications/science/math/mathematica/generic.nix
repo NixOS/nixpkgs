@@ -1,12 +1,15 @@
-{ config
-, lib
+{ lib
 , stdenv
 , addOpenGLRunpath
 , autoPatchelfHook
 , lndir
 , makeWrapper
+, meta
+, name
 , requireFile
 , runCommand
+, src
+, version
 , alsa-lib
 , cups
 , dbus
@@ -38,24 +41,20 @@
 , xorg
 , zlib
 , lang ? "en"
-, cudaSupport ? config.cudaSupport or false
+, cudaSupport ? false
 , cudatoolkit ? null
+, ...
 }:
 
-let
-  l10n = import ./l10ns.nix {
-    inherit lib requireFile lang;
-  };
-
-  cudaEnv = runCommand "mathematica-cuda" {} ''
-    mkdir -p $out
-    ${lndir}/bin/lndir ${cudatoolkit} $out
-    ${lndir}/bin/lndir ${cudatoolkit.lib} $out
-    ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib64
-  '';
+let cudaEnv = runCommand "mathematica-cuda" {} ''
+  mkdir -p $out
+  ${lndir}/bin/lndir ${cudatoolkit} $out
+  ${lndir}/bin/lndir ${cudatoolkit.lib} $out
+  ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib64
+'';
 
 in stdenv.mkDerivation {
-  inherit (l10n) version name src;
+  inherit meta name src version;
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -184,12 +183,4 @@ in stdenv.mkDerivation {
 
   # NOTE: Some deps are still not found; ignore for now
   autoPatchelfIgnoreMissingDeps = true;
-
-  meta = with lib; {
-    description = "Wolfram Mathematica computational software system";
-    homepage = "http://www.wolfram.com/mathematica/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ herberteuler ];
-    platforms = [ "x86_64-linux" ];
-  };
 }

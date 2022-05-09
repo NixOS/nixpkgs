@@ -2,6 +2,7 @@
 , coreutils
 , patchelf
 , requireFile
+, src, version
 , alsa-lib
 , fontconfig
 , freetype
@@ -14,6 +15,7 @@
 , xorg
 , libxml2
 , libuuid
+, ...
 }:
 
 let
@@ -24,19 +26,9 @@ let
       throw "Mathematica requires i686-linux or x86_64 linux";
 in
 stdenv.mkDerivation rec {
-  version = "10.0.2";
+  inherit src version;
 
   pname = "mathematica";
-
-  src = requireFile rec {
-    name = "Mathematica_${version}_LINUX.sh";
-    message = ''
-      This nix expression requires that ${name} is
-      already part of the store. Find the file on your Mathematica CD
-      and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
-    '';
-    sha256 = "1d2yaiaikzcacjamlw64g3xkk81m3pb4vz4an12cv8nb7kb20x9l";
-  };
 
   buildInputs = [
     coreutils

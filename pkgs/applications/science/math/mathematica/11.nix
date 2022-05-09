@@ -3,6 +3,10 @@
 , patchelf
 , requireFile
 , callPackage
+, meta
+, name
+, src
+, version
 , alsa-lib
 , dbus
 , fontconfig
@@ -21,18 +25,11 @@
 , lang ? "en"
 , libGL
 , libGLU
+, ...
 }:
 
-let
-  l10n =
-    import ./l10ns.nix {
-      lib = lib;
-      inherit requireFile lang;
-      majorVersion = "11";
-    };
-in
 stdenv.mkDerivation rec {
-  inherit (l10n) version name src;
+  inherit meta name src version;
 
   buildInputs = [
     coreutils
@@ -141,10 +138,4 @@ stdenv.mkDerivation rec {
 
   # we did this in prefixup already
   dontPatchELF = true;
-
-  meta = {
-    description = "Wolfram Mathematica computational software system";
-    homepage = "http://www.wolfram.com/mathematica/";
-    license = lib.licenses.unfree;
-  };
 }

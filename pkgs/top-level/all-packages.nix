@@ -32926,7 +32926,24 @@ with pkgs;
   magma = callPackage ../development/libraries/science/math/magma { };
   clmagma = callPackage ../development/libraries/science/math/clmagma { };
 
-  mathematica = callPackage ../applications/science/math/mathematica/generic.nix { };
+  mathematica = callPackage ../applications/science/math/mathematica { };
+
+  mathematica-cuda = callPackage ../applications/science/math/mathematica {
+    cudaSupport = true;
+    cudatoolkit = cudatoolkit;
+  };
+
+  mathematica9 = callPackage ../applications/science/math/mathematica {
+    version = "9";
+  };
+
+  mathematica10 = callPackage ../applications/science/math/mathematica {
+    version = "10";
+  };
+
+  mathematica11 = callPackage ../applications/science/math/mathematica {
+    version = "11";
+  };
 
   metis = callPackage ../development/libraries/science/math/metis {};
 
