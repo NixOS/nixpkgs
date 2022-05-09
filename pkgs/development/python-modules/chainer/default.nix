@@ -30,6 +30,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/chainer_tests/utils_tests" ];
 
+  # cf. https://github.com/chainer/chainer/issues/8621
+  preCheck = ''
+    export CHAINER_WARN_VERSION_MISMATCH=0
+  '';
+
   disabledTests = [
     "gpu"
     "cupy"
@@ -39,8 +44,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A flexible framework of neural networks for deep learning";
     homepage = "https://chainer.org/";
-    # Un-break me when updating chainer next time!
-    broken = cudaSupport && (lib.versionAtLeast cupy.version "8.0.0");
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];
   };
