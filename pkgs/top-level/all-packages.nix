@@ -32926,18 +32926,23 @@ with pkgs;
   magma = callPackage ../development/libraries/science/math/magma { };
   clmagma = callPackage ../development/libraries/science/math/clmagma { };
 
-  mathematica = callPackage ../applications/science/math/mathematica { };
+  mathematica = callPackage ../applications/science/math/mathematica {
+    inherit callPackage;
+  };
 
   mathematica-cuda = callPackage ../applications/science/math/mathematica {
+    inherit callPackage;
     cudaSupport = true;
     cudaPackages = cudaPackages;
   };
 
   mathematica9 = callPackage ../applications/science/math/mathematica {
+    inherit callPackage;
     version = "9";
   };
 
   mathematica10 = callPackage ../applications/science/math/mathematica {
+    inherit callPackage;
     version = "10";
   };
 

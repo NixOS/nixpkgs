@@ -43,7 +43,6 @@
 , lang ? "en"
 , cudaSupport ? false
 , cudaPackages ? null
-, ...
 }:
 
 let cudatoolkit = cudaPackages.cudatoolkit;

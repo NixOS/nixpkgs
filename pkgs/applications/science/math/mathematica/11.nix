@@ -25,7 +25,6 @@
 , lang ? "en"
 , libGL
 , libGLU
-, ...
 }:
 
 stdenv.mkDerivation rec {

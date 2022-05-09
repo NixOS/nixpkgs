@@ -1,6 +1,5 @@
 { lib, requireFile }:
 
-with lib;
 let versions = [
   {
     version = "13.0.1";
@@ -90,7 +89,7 @@ let versions = [
 
 in
 
-flip map versions ({ version, lang, language, sha256, installer }: {
+lib.flip map versions ({ version, lang, language, sha256, installer }: {
   inherit version lang;
   src = requireFile {
     name = installer;

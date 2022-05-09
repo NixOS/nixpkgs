@@ -2,7 +2,7 @@
 , coreutils
 , patchelf
 , requireFile
-, src, version
+, meta, src, version
 , alsa-lib
 , fontconfig
 , freetype
@@ -15,7 +15,6 @@
 , xorg
 , libxml2
 , libuuid
-, ...
 }:
 
 let
@@ -26,7 +25,7 @@ let
       throw "Mathematica requires i686-linux or x86_64 linux";
 in
 stdenv.mkDerivation rec {
-  inherit src version;
+  inherit meta src version;
 
   pname = "mathematica";
 
@@ -119,10 +118,4 @@ stdenv.mkDerivation rec {
 
   # we did this in prefixup already
   dontPatchELF = true;
-
-  meta = {
-    description = "Wolfram Mathematica computational software system";
-    homepage = "http://www.wolfram.com/mathematica/";
-    license = lib.licenses.unfree;
-  };
 }
