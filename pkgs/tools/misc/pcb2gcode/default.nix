@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost glibmm gtkmm2 gerbv librsvg ];
 
+  enableParallelBuilding = true;
+
   postPatch = ''
     substituteInPlace ./Makefile.am \
     --replace '`git describe --dirty --always --tags`' '${version}'
