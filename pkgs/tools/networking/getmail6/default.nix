@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "getmail6";
-  version = "6.18.6";
+  version = "6.18.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "08a5yw6ll1kmd1ardj8rzhsw4wl48zzdc87g5lh4p5snv8w2m4ja";
+    hash = "sha256-JghiV0zC9xtOGuGcf0lY5e73/04n6Bat/xOGgXyDWJk=";
   };
 
   # needs a Docker setup
@@ -28,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "A program for retrieving mail";
     homepage = "https://getmail6.org";
+    changelog = "https://github.com/getmail6/getmail6/blob/${src.rev}/docs/CHANGELOG";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ abbe dotlambda ];
   };

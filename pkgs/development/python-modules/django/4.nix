@@ -22,7 +22,7 @@
 , docutils
 , geoip2
 , jinja2
-, memcached
+, python-memcached
 , numpy
 , pillow
 , pylibmc
@@ -76,7 +76,7 @@ buildPythonPackage rec {
     docutils
     geoip2
     jinja2
-    memcached
+    python-memcached
     numpy
     pillow
     pylibmc

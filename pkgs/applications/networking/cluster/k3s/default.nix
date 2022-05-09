@@ -46,17 +46,15 @@ with lib;
 # Those pieces of software we entirely ignore upstream's handling of, and just
 # make sure they're in the path if desired.
 let
-  k3sVersion = "1.23.5+k3s1";     # k3s git tag
-  k3sCommit = "313aaca547f030752788dce696fdf8c9568bc035"; # k3s git commit at the above version
-  k3sRepoSha256 = "0vk72609cyyh64irp14jp2zspnxw34jm710cbwgklx0ch6kiz88d";
-  k3sVendorSha256 = "sha256-d7kQsJi/eQbaTUDglp3gFpc5Im6CyD9coKeM3kMrbjI=";
-
-  k3sServerVendorSha256 = "sha256-E3USXNuXY0lzZH+t3O7BOQ8rKNNQ6avOMItgOEi1cEg=";
+  k3sVersion = "1.23.6+k3s1";     # k3s git tag
+  k3sCommit = "418c3fa858b69b12b9cefbcff0526f666a6236b9"; # k3s git commit at the above version
+  k3sRepoSha256 = "0fmw491dn5mpi058mr7sij51i5m4qg2grx30cnl3h2v4s0sdkx2i";
+  k3sVendorSha256 = "sha256-iHg5ySMaiSWXs98YGmxPwdZr4zdBIFma12dNEuf30Hs=";
 
   # taken from ./manifests/traefik.yaml, extracted from '.spec.chart' https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/download#L9
   # The 'patch' and 'minor' versions are currently hardcoded as single digits only, so ignore the trailing two digits. Weird, I know.
-  traefikChartVersion = "10.14.1";
-  traefikChartSha256 = "09a6cialx7nrh7nwi1gkkh8zcsasxcgb52dyx0r8bjq9ng29simj";
+  traefikChartVersion = "10.19.3";
+  traefikChartSha256 = "04zg5li957svgscdmkzmzjkwljaljyav68rzxmhakkwgav6q9058";
 
   # taken from ./scripts/version.sh VERSION_ROOT https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/version.sh#L47
   k3sRootVersion = "0.11.0";
@@ -68,8 +66,8 @@ let
 
   # taken from go.mod, the 'github.com/containerd/containerd' line
   # run `grep github.com/containerd/containerd go.mod | head -n1 | awk '{print $4}'`
-  containerdVersion = "1.5.10-k3s1";
-  containerdSha256 = "1ff2sfaqpjimq7w0lprci6ibyi6v65ap6b9sr6b0j12gqr2sqwa5";
+  containerdVersion = "1.5.11-k3s2";
+  containerdSha256 = "16132snvrg8r0vwm6c0lz0q6fx686s2ix53nm3aka9a83xs75vf2";
 
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
   criCtlVersion = "1.22.0-k3s1";
@@ -175,7 +173,7 @@ let
     version = k3sVersion;
 
     src = k3sRepo;
-    vendorSha256 = k3sServerVendorSha256;
+    vendorSha256 = k3sVendorSha256;
 
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ libseccomp ];
@@ -223,7 +221,6 @@ buildGoModule rec {
   version = k3sVersion;
 
   src = k3sRepo;
-  proxyVendor = true;
   vendorSha256 = k3sVendorSha256;
 
   patches = [
