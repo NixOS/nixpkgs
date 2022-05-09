@@ -2,7 +2,7 @@
 , coreutils
 , patchelf
 , requireFile
-, meta, src, version
+, lang, meta, name, src, version
 , alsa-lib
 , fontconfig
 , freetype
@@ -15,6 +15,7 @@
 , xorg
 , libxml2
 , libuuid
+, cudaSupport, cudaPackages
 }:
 
 let

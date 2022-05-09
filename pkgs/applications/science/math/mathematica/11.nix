@@ -3,6 +3,7 @@
 , patchelf
 , requireFile
 , callPackage
+, lang
 , meta
 , name
 , src
@@ -25,6 +26,7 @@
 , lang ? "en"
 , libGL
 , libGLU
+, cudaSupport, cudaPackages
 }:
 
 stdenv.mkDerivation rec {

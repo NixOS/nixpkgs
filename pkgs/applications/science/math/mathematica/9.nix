@@ -1,6 +1,8 @@
 { lib
 , stdenv
+, lang
 , meta
+, name
 , src
 , version
 , coreutils
@@ -16,6 +18,8 @@
 , openssl
 , unixODBC
 , xorg
+, cudaSupport
+, cudaPackages
 }:
 
 let
