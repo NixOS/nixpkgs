@@ -513,15 +513,26 @@
     github = "alexnortung";
     githubId = 1552267;
   };
+  alexshpilkin = {
+    email = "ashpilkin@gmail.com";
+    github = "alexshpilkin";
+    githubId = 1010468;
+    keys = [{
+      longkeyid = "rsa4096/0x73E9AA114B3A894B";
+      fingerprint = "B595 D74D 6615 C010 469F  5A13 73E9 AA11 4B3A 894B";
+    }];
+    matrix = "@alexshpilkin:matrix.org";
+    name = "Alexander Shpilkin";
+  };
   alexvorobiev = {
     email = "alexander.vorobiev@gmail.com";
     github = "alexvorobiev";
     githubId = 782180;
     name = "Alex Vorobiev";
   };
-  alex-eyre = {
+  alexeyre = {
     email = "A.Eyre@sms.ed.ac.uk";
-    github = "alex-eyre";
+    github = "alexeyre";
     githubId = 38869148;
     name = "Alex Eyre";
   };
@@ -811,6 +822,16 @@
     githubId = 1771266;
     name = "Vo Anh Duy";
   };
+  Anillc = {
+    name = "Anillc";
+    email = "i@anillc.cn";
+    github = "Anillc";
+    githubId = 23411248;
+    keys = [{
+      longkeyid = "ed25519/0x0BE8A88F47B2145C";
+      fingerprint = "6141 1E4F FE10 CE7B 2E14  CD76 0BE8 A88F 47B2 145C";
+    }];
+  };
   anirrudh = {
     email = "anik597@gmail.com";
     github = "anirrudh";
@@ -971,6 +992,12 @@
     github = "arkivm";
     githubId = 1118815;
     name = "Vikram Narayanan";
+  };
+  armeenm = {
+    email = "mahdianarmeen@gmail.com";
+    github = "armeenm";
+    githubId = 29145250;
+    name = "Armeen Mahdian";
   };
   armijnhemel = {
     email = "armijn@tjaldur.nl";
@@ -5023,6 +5050,12 @@
     githubId = 222664;
     name = "Matthew Leach";
   };
+  hexchen = {
+    email = "nix@lilwit.ch";
+    github = "hexchen";
+    githubId = 41522204;
+    name = "hexchen";
+  };
   hh = {
     email = "hh@m-labs.hk";
     github = "HarryMakes";
@@ -9002,6 +9035,12 @@
   nfjinjing = {
     email = "nfjinjing@gmail.com";
     name = "Jinjing Wang";
+  };
+  ngiger = {
+    email = "niklaus.giger@member.fsf.org";
+    github = "ngiger";
+    githubId = 265800;
+    name = "Niklaus Giger";
   };
   nh2 = {
     email = "mail@nh2.me";
@@ -13975,6 +14014,13 @@
     github = "zakkor";
     githubId = 6191421;
     name = "Edward d'Albon";
+  };
+  zebreus = {
+    matrix = "@lennart:cicen.net";
+    email = "lennarteichhorn+nixpkgs@gmail.com";
+    github = "Zebreus";
+    githubId = 1557253;
+    name = "Lennart Eichhorn";
   };
   zef = {
     email = "zef@zef.me";

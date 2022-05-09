@@ -183,6 +183,14 @@ in {
       install -Dt $out/bin src/nimble
       runHook postBuild
     '';
+
+    meta = with lib; {
+      description = "Package manager for the Nim programming language";
+      homepage = "https://github.com/nim-lang/nimble";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ ehmry ];
+      mainProgram = "nimble";
+    };
   };
 
   nim = let

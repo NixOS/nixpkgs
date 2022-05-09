@@ -53,7 +53,7 @@ let
       unidiff
     ]
       # tls
-      ++ twisted.extras.tls;
+      ++ twisted.extras-require.tls;
 
     checkInputs = [
       treq

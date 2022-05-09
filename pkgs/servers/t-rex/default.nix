@@ -23,6 +23,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/t-rex-tileserver/t-rex/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];
+    mainProgram = "t_rex";
     platforms = platforms.unix;
   };
 }

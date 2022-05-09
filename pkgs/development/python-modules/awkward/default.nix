@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Manipulate JSON-like data with NumPy-like idioms";
-    homepage = "https://github.com/scikit-hep/awkward-1.0";
+    homepage = "https://github.com/scikit-hep/awkward";
     license = licenses.bsd3;
     maintainers = with maintainers; [ veprbl ];
   };

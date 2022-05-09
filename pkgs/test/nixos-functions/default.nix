@@ -24,6 +24,7 @@ in lib.optionalAttrs stdenv.hostPlatform.isLinux (
       system.nixos = dummyVersioning;
       boot.loader.grub.enable = false;
       fileSystems."/".device = "/dev/null";
+      system.stateVersion = lib.trivial.release;
     }).toplevel;
 
   }

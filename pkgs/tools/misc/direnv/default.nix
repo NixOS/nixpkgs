@@ -49,6 +49,6 @@ buildGoModule rec {
     '';
     homepage = "https://direnv.net";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = teams.numtide.members;
   };
 }

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "python-trovo";
-  version = "0.1.5";
+  version = "0.1.6";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JUJax9nk4NqpMMrbDmQhcy22GIqPha+K4tudQ98PvlE=";
+    sha256 = "sha256-g1RDHSNGbGT1G2ej7A8WzyR17FaNPySfsAuKbHddmtQ=";
   };
 
   propagatedBuildInputs = [ requests ];

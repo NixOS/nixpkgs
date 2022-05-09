@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     homepage = "http://perso.b2b2c.ca/~sarrazip/dev/boolstuff.html";
     license = "GPL";
     maintainers = [ lib.maintainers.marcweber ];
+    mainProgram = "booldnf";
     platforms = lib.platforms.all;
   };
 }

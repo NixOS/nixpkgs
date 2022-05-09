@@ -64,7 +64,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UYQf+cBi2FmyZxIbQJo7vLjPuoePIMC8FugvoG1Ebj0=";
+    hash = "sha256-UYQf+cBi2FmyZxIbQJo7vLjPuoePIMC8FugvoG1Ebj0=";
   };
 
   dontConfigure = true;
@@ -134,7 +134,8 @@ buildPythonPackage rec {
       --replace "pdfminer.six >= 20200101" "pdfminer.six" \
       --replace "pluggy >= 0.12.0, < 1.0" "pluggy" \
       --replace "pygmars >= 0.7.0" "pygmars" \
-      --replace "license_expression >= 21.6.14" "license_expression"
+      --replace "license_expression >= 21.6.14" "license_expression" \
+      --replace "intbitset >= 2.3.0,  < 3.0" "intbitset"
   '';
 
   # Importing scancode needs a writeable home, and preCheck happens in between

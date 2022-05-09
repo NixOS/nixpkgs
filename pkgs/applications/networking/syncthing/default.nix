@@ -4,21 +4,21 @@ let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.19.2";
+      version = "1.20.1";
 
       src = fetchFromGitHub {
-        owner  = "syncthing";
-        repo   = "syncthing";
-        rev    = "v${version}";
-        sha256 = "sha256-Zday5lBsRCl00vnnXNKu6VMlq8zmwgI0I+73Pir7ss4=";
+        owner = "syncthing";
+        repo = "syncthing";
+        rev = "v${version}";
+        hash = "sha256-QJevD/meVPEHnfwT1Eu3cwfVFU+ab/16eJBl6cuhGdA=";
       };
 
-      vendorSha256 = "sha256-2yK0eE34cA7U1nDWRp/JigFpeveipmCuL4jP+94T3Sg=";
+      vendorSha256 = "sha256-NuiT2GytWaGkgSyl+qoe9DjCCL7wSHc6FU8C6rsy6Vc=";
 
       doCheck = false;
 
-      BUILD_USER="nix";
-      BUILD_HOST="nix";
+      BUILD_USER = "nix";
+      BUILD_HOST = "nix";
 
       buildPhase = ''
         runHook preBuild
@@ -45,11 +45,13 @@ let
         changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = licenses.mpl20;
         maintainers = with maintainers; [ joko peterhoeg andrew-d ];
+        mainProgram = target;
         platforms = platforms.unix;
       };
     };
 
-in {
+in
+{
   syncthing = common {
     stname = "syncthing";
     target = "syncthing";

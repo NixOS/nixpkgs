@@ -18,6 +18,10 @@ buildPythonPackage rec {
     pyzmq
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "ipython>=7.31.1,<8" "ipython"
+  '';
+
   # No tests
   doCheck = false;
 

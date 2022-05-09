@@ -31,7 +31,7 @@
 , pyyaml
 , requests
 , keyring
-, python_magic
+, python-magic
 
   # commands that lutris needs
 , xrandr
@@ -104,7 +104,7 @@ buildPythonApplication rec {
     libnotify
     pango
     webkitgtk
-    python_magic
+    python-magic
   ] ++ gstDeps;
 
   propagatedBuildInputs = [
@@ -117,7 +117,7 @@ buildPythonApplication rec {
     pillow
     dbus-python
     keyring
-    python_magic
+    python-magic
   ];
 
   postPatch = ''

@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.5.0";
+  version = "2022.5.3";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -311,7 +311,8 @@
     "browser" = ps: with ps; [
     ];
     "brunt" = ps: with ps; [
-    ]; # missing inputs: brunt
+      brunt
+    ];
     "bsblan" = ps: with ps; [
       bsblan
     ];
@@ -1516,7 +1517,8 @@
       pymazda
     ];
     "meater" = ps: with ps; [
-    ]; # missing inputs: meater-python
+      meater-python
+    ];
     "media_extractor" = ps: with ps; [
       aiohttp-cors
       youtube-dl-light
@@ -1751,7 +1753,8 @@
       nexia
     ];
     "nextbus" = ps: with ps; [
-    ]; # missing inputs: py_nextbusnext
+      py-nextbusnext
+    ];
     "nextcloud" = ps: with ps; [
       nextcloudmonitor
     ];
@@ -1790,7 +1793,8 @@
     "notify" = ps: with ps; [
     ];
     "notify_events" = ps: with ps; [
-    ]; # missing inputs: notify-events
+      notify-events
+    ];
     "notion" = ps: with ps; [
       aionotion
     ];
@@ -2090,7 +2094,8 @@
       georss-qld-bushfire-alert-client
     ];
     "qnap" = ps: with ps; [
-    ]; # missing inputs: qnapstats
+      qnapstats
+    ];
     "qnap_qsw" = ps: with ps; [
       aioqsw
     ];
@@ -2121,9 +2126,11 @@
       radiotherm
     ];
     "rainbird" = ps: with ps; [
-    ]; # missing inputs: pyrainbird
+      pyrainbird
+    ];
     "raincloud" = ps: with ps; [
-    ]; # missing inputs: raincloudy
+      raincloudy
+    ];
     "rainforest_eagle" = ps: with ps; [
       aioeagle
       ueagle
@@ -2238,10 +2245,6 @@
     "russound_rnet" = ps: with ps; [
     ]; # missing inputs: russound
     "sabnzbd" = ps: with ps; [
-      aiohttp-cors
-      ifaddr
-      netdisco
-      zeroconf
     ]; # missing inputs: pysabnzbd
     "safe_mode" = ps: with ps; [
       pyturbojpeg
@@ -2820,6 +2823,9 @@
     ];
     "uk_transport" = ps: with ps; [
     ];
+    "ukraine_alarm" = ps: with ps; [
+      ukrainealarm
+    ];
     "unifi" = ps: with ps; [
       aiounifi
     ];
@@ -3213,6 +3219,7 @@
     "braviatv"
     "broadlink"
     "brother"
+    "brunt"
     "bsblan"
     "buienradar"
     "button"
@@ -3451,6 +3458,7 @@
     "manual_mqtt"
     "maxcube"
     "mazda"
+    "meater"
     "media_player"
     "media_source"
     "melcloud"
@@ -3497,10 +3505,12 @@
     "netgear"
     "network"
     "nexia"
+    "nextbus"
     "nightscout"
     "nina"
     "no_ip"
     "notify"
+    "notify_events"
     "notion"
     "nsw_rural_fire_service_feed"
     "nuki"
@@ -3703,6 +3713,7 @@
     "twinkly"
     "twitch"
     "uk_transport"
+    "ukraine_alarm"
     "unifi"
     "unifi_direct"
     "universal"

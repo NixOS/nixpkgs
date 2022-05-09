@@ -2,11 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
-  version = "2.17.1";
+  version = "2.29.2";
 
+  # includes stanc binaries needed to build cmdstand
   src = fetchurl {
     url = "https://github.com/stan-dev/cmdstan/releases/download/v${version}/cmdstan-${version}.tar.gz";
-    sha256 = "1vq1cnrkvrvbfl40j6ajc60jdrjcxag1fi6kff5pqmadfdz9564j";
+    sha256 = "sha256-VntTH6c//fcGyqF+szROHftB6GmTyvi6QIdf+RAzUVM=";
   };
 
   buildFlags = [ "build" ];
@@ -14,7 +15,16 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkInputs = [ python3 ];
-  checkPhase = "python ./runCmdStanTests.py src/test/interface"; # see #5368
+
+  postPatch = ''
+    substituteInPlace stan/lib/stan_math/make/libraries \
+      --replace "/usr/bin/env bash" "bash"
+    patchShebangs .
+  '';
+
+  checkPhase = ''
+    ./runCmdStanTests.py -j$NIX_BUILD_CORES src/test/interface
+  '';
 
   installPhase = ''
     mkdir -p $out/opt $out/bin
@@ -27,6 +37,9 @@ stdenv.mkDerivation rec {
     EOF
     chmod a+x $out/bin/stan
   '';
+
+  # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
+  preFixup = "rm -rf $(pwd)";
 
   meta = {
     description = "Command-line interface to Stan";

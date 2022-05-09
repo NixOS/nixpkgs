@@ -52,7 +52,13 @@ with lib;
 with builtins;
 
 let majorVersion = "11";
-    version = "${majorVersion}.2.0";
+    # The patch below for aarch64-darwin does not apply to 11.3.0 and an
+    # updated version is not available. Keep aarch64-darwin on 11.2.0 so the
+    # large body of packages which depend on gfortran are still functional
+    # until GCC 12 is the default.
+    # On x86_64-darwin, building libgcc suffers from some different issues with 11.3.0.
+    version = if stdenv.isDarwin then
+      "${majorVersion}.2.0" else "${majorVersion}.3.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -91,7 +97,9 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "sha256-0I7cU2tUw3KhAQ/2YZ3SdMDxYDqkkhK6IPeqLNo2+os=";
+    sha256 = if stdenv.isDarwin
+      then "sha256-0I7cU2tUw3KhAQ/2YZ3SdMDxYDqkkhK6IPeqLNo2+os="
+      else "sha256-tHzygYaR9bHiHfK7OMeV+sLPvWQO3i0KXhyJ4zijrDk=";
   };
 
   inherit patches;

@@ -253,6 +253,7 @@ in
   k3s-single-node = handleTest ./k3s-single-node.nix {};
   k3s-single-node-docker = handleTest ./k3s-single-node-docker.nix {};
   kafka = handleTest ./kafka.nix {};
+  kanidm = handleTest ./kanidm.nix {};
   kbd-setfont-decompress = handleTest ./kbd-setfont-decompress.nix {};
   kbd-update-search-paths-patch = handleTest ./kbd-update-search-paths-patch.nix {};
   kea = handleTest ./kea.nix {};

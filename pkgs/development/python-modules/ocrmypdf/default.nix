@@ -83,7 +83,7 @@ buildPythonPackage rec {
   postPatch = ''
     # https://github.com/ocrmypdf/OCRmyPDF/issues/933
     substituteInPlace setup.cfg \
-      --replace "pdfminer.six!=20200720,>=20191110,<=20211012" "pdfminer.six!=20200720,>=20191110,<=20220319"
+      --replace "pdfminer.six!=20200720,>=20191110,<=20220319" "pdfminer.six!=20200720,>=20191110"
   '';
 
   pythonImportsCheck = [

@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-uZCUruIBTNTKYWYb8xQgJ6FsKlRi+Sh5n7m7aVk+hHQ=";
 
   src = fetchFromGitHub {
-    owner = "rust-analyzer";
+    owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
     sha256 = "sha256-5kAbd/tTc9vkr27ar44hnpXdS0vQg0OLJUMlp0FBjqA=";
@@ -61,5 +61,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://rust-analyzer.github.io";
     license = with licenses; [ mit asl20 ];
     maintainers = with maintainers; [ oxalica ];
+    mainProgram = "rust-analyzer";
   };
 }

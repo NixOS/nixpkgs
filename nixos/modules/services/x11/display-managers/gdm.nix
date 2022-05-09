@@ -298,7 +298,7 @@ in
 
         session  required       pam_succeed_if.so audit quiet_success user = gdm
         session  required       pam_env.so conffile=/etc/pam/environment readenv=0
-        session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
+        session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke
         session  optional       pam_permit.so
       '';

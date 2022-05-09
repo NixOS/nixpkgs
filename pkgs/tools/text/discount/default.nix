@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.pell.portland.or.us/~orc/Code/discount/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ shell ];
+    mainProgram = "markdown";
     platforms = platforms.unix;
   };
 }

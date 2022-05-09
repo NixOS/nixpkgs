@@ -360,7 +360,14 @@ in {
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    assertions = [
+      {
+        assertion = cfg.openFirewall -> !isNull cfg.config;
+        message = "openFirewall can only be used with a declarative config";
+      }
+    ];
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.config.http.server_port ];
 
     systemd.services.home-assistant = {
       description = "Home Assistant";

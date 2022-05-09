@@ -9,8 +9,8 @@ mkCoqDerivation {
   release."itp22".sha256 = "sha256-CdPfgDfeJy8Q6ZlQeVCSR/x8ZlJ2kSEF6F5UnAespnQ=";
 
   inherit version;
-  defaultVersion = with versions; switch [ coq.version mathcomp.version ] [
-    { cases = [ (isGe "8.13") ]; out = "itp22"; }
+  defaultVersion = with versions; switch coq.version [
+    { case = isEq "8.13"; out = "itp22"; }
   ] null;
 
   propagatedBuildInputs = [ trakt cvc4 ] ++ lib.optionals (!stdenv.isDarwin) [ veriT ];

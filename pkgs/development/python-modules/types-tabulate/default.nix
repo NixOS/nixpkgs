@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "types-tabulate";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CzGcfhDdVh98FfVt7DR8MZP9hl9Ovl/x7LAg6vp5O8M=";
+    hash = "sha256-L8P6T+GFOsmHz1Do1FmeP+RG3VMGT+hqRqQHqY6fwE8=";
   };
 
   # Module doesn't have tests
