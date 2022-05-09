@@ -62,6 +62,9 @@
           "application.process.binary": "teams"
         },
         {
+          "application.process.binary": "teams-insiders"
+        },
+        {
           "application.process.binary": "skypeforlinux"
         }
       ],
