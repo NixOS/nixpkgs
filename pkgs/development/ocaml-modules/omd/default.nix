@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ocaml/omd";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "omd";
     inherit (ocaml.meta) platforms;
   };
 }
