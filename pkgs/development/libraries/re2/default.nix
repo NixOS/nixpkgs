@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, nix-update-script }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+
+# for passthru.tests
+, bazel
+, chromium
+, grpc
+, haskellPackages
+, mercurial
+, ninja
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "re2";
@@ -38,6 +51,16 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = nix-update-script {
       attrPath = pname;
+    };
+    tests = {
+      inherit
+        chromium
+        grpc
+        mercurial;
+      inherit (python3.pkgs)
+        fb-re2
+        google-re2;
+      haskellPackages-re2 = haskellPackages.re2;
     };
   };
 

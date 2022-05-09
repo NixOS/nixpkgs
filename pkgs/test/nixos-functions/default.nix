@@ -1,7 +1,7 @@
 /*
 
 This file is a test that makes sure that the `pkgs.nixos` and
-`pkgs.nixosTest` functions work. It's far from a perfect test suite,
+`pkgs.testers.nixosTest` functions work. It's far from a perfect test suite,
 but better than not checking them at all on hydra.
 
 To run this test:
@@ -26,18 +26,6 @@ in lib.optionalAttrs stdenv.hostPlatform.isLinux (
       fileSystems."/".device = "/dev/null";
       system.stateVersion = lib.trivial.release;
     }).toplevel;
-
-    nixosTest-test = pkgs.nixosTest ({ lib, pkgs, figlet, ... }: {
-      name = "nixosTest-test";
-      nodes.machine = { pkgs, ... }: {
-        system.nixos = dummyVersioning;
-        environment.systemPackages = [ pkgs.hello figlet ];
-        system.stateVersion = lib.trivial.release;
-      };
-      testScript = ''
-        machine.succeed("hello | figlet >/dev/console")
-      '';
-    });
 
   }
 )

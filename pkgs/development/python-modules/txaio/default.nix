@@ -5,7 +5,6 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, six
 , twisted
 , zope_interface
 }:

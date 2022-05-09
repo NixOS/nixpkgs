@@ -9499,6 +9499,8 @@ in {
 
   six = callPackage ../development/python-modules/six { };
 
+  sjcl = callPackage ../development/python-modules/sjcl { };
+
   skein = callPackage ../development/python-modules/skein { };
 
   skidl = callPackage ../development/python-modules/skidl { };
