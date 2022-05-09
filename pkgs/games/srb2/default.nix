@@ -31,13 +31,13 @@ assets_optional = fetchurl {
 
 in stdenv.mkDerivation rec {
   pname = "srb2";
-  version = "2.2.8";
+  version = "2.2.10";
 
   src = fetchFromGitHub {
     owner = "STJr";
     repo = "SRB2";
     rev = "SRB2_release_${version}";
-    sha256 = "10prk617pbxkpiyybwwjzv425pkjczfqdb8pxwfyq91aa2rg0kl8";
+    sha256 = "03388n094d2yr5si6ngnggbqhm8b2l0s0qvfnkz49li9bd6a81gg";
   };
 
   nativeBuildInputs = [
