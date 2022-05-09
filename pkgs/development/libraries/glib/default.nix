@@ -169,6 +169,9 @@ stdenv.mkDerivation rec {
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
   '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     cp -r ${buildPackages.glib.devdoc} $devdoc
+
+    # Remove references to build dependencies from closure
+    rm $dev/bin/*
   '';
 
   checkInputs = [ tzdata desktop-file-utils shared-mime-info ];
