@@ -12023,6 +12023,8 @@ with pkgs;
 
   zxing = callPackage ../tools/graphics/zxing {};
 
+  zkar = callPackage ../tools/security/zkar { };
+
   zmap = callPackage ../tools/security/zmap { };
 
   zpool-iostat-viz = callPackage ../tools/filesystems/zpool-iostat-viz { };
