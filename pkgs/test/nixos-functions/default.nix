@@ -26,16 +26,5 @@ in lib.optionalAttrs stdenv.hostPlatform.isLinux (
       fileSystems."/".device = "/dev/null";
     }).toplevel;
 
-    nixosTest-test = pkgs.testers.nixosTest ({ lib, pkgs, figlet, ... }: {
-      name = "nixosTest-test";
-      nodes.machine = { pkgs, ... }: {
-        system.nixos = dummyVersioning;
-        environment.systemPackages = [ pkgs.hello figlet ];
-      };
-      testScript = ''
-        machine.succeed("hello | figlet >/dev/console")
-      '';
-    });
-
   }
 )

@@ -67,6 +67,8 @@ with pkgs;
 
   writers = callPackage ../build-support/writers/test.nix {};
 
+  testers = callPackage ../build-support/testers/test/default.nix {};
+
   dhall = callPackage ./dhall { };
 
   makeWrapper = callPackage ./make-wrapper {};
