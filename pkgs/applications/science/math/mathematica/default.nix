@@ -27,16 +27,12 @@ let versions = callPackage ./versions.nix { };
                else ./generic.nix;
 
     compareVersions = v1: v2:
-      let f  = v: map lib.toInt (lib.versions.splitVersion v.version);
-          as = f v1;
-          bs = f v2;
-      in as > bs;
+      let f = v: map lib.toInt (lib.versions.splitVersion v.version);
+      in f v1 > f v2;
 
     isMatching = v1: v2:
-      let as = lib.versions.splitVersion v1;
-          bs = lib.versions.splitVersion v2;
-          n  = lib.min (lib.length as) (lib.length bs);
-      in lib.take n as == lib.take n bs;
+      let n = lib.min (builtins.stringLength v1) (builtins.stringLength v2);
+      in builtins.substring 0 n v1 == builtins.substring 0 n v2;
 
 in
 
