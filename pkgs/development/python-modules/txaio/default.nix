@@ -21,7 +21,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    six
     twisted
     zope_interface
   ];

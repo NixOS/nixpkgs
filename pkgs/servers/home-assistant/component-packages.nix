@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.5.2";
+  version = "2022.5.3";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -2823,6 +2823,9 @@
     ];
     "uk_transport" = ps: with ps; [
     ];
+    "ukraine_alarm" = ps: with ps; [
+      ukrainealarm
+    ];
     "unifi" = ps: with ps; [
       aiounifi
     ];
@@ -3710,6 +3713,7 @@
     "twinkly"
     "twitch"
     "uk_transport"
+    "ukraine_alarm"
     "unifi"
     "unifi_direct"
     "universal"

@@ -146,6 +146,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   mauikit = callPackage ../development/libraries/mauikit { };
 
+  mauikit-accounts = callPackage ../development/libraries/mauikit-accounts { };
+
   mauikit-filebrowsing = callPackage ../development/libraries/mauikit-filebrowsing { };
 
   mauikit-texteditor = callPackage ../development/libraries/mauikit-texteditor { };

@@ -120,6 +120,7 @@ in {
     pythonImportsCheckHook
     pythonNamespacesHook
     pythonRecompileBytecodeHook
+    pythonRelaxDepsHook
     pythonRemoveBinBytecodeHook
     pythonRemoveTestsDirHook
     setuptoolsBuildHook
@@ -2399,6 +2400,8 @@ in {
 
   django-taggit = callPackage ../development/python-modules/django-taggit { };
 
+  django-tastypie = callPackage ../development/python-modules/django-tastypie { };
+
   django-timezone-field = callPackage ../development/python-modules/django-timezone-field { };
 
   django_treebeard = callPackage ../development/python-modules/django_treebeard { };
@@ -3791,6 +3794,8 @@ in {
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
   hatchling = callPackage ../development/python-modules/hatchling { };
+
+  hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
   haversine = callPackage ../development/python-modules/haversine { };
 
@@ -5189,8 +5194,6 @@ in {
 
   meld3 = callPackage ../development/python-modules/meld3 { };
 
-  memcached = callPackage ../development/python-modules/memcached { };
-
   memory-allocator = callPackage ../development/python-modules/memory-allocator { };
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
@@ -6470,6 +6473,8 @@ in {
   python-keystoneclient = callPackage ../development/python-modules/python-keystoneclient { };
 
   python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
+
+  python-memcached = callPackage ../development/python-modules/python-memcached { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
@@ -9293,6 +9298,8 @@ in {
 
   scs = callPackage ../development/python-modules/scs { };
 
+  sdds = callPackage ../development/python-modules/sdds { };
+
   sdnotify = callPackage ../development/python-modules/sdnotify { };
 
   seaborn = callPackage ../development/python-modules/seaborn { };
@@ -10573,6 +10580,8 @@ in {
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
+  ukrainealarm = callPackage ../development/python-modules/ukrainealarm { };
+
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 
   umap-learn = callPackage ../development/python-modules/umap-learn { };
@@ -11185,7 +11194,6 @@ in {
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
     ffmpegSupport = false;
-    phantomjsSupport = false;
   };
 
   yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
@@ -11195,7 +11203,6 @@ in {
   yt-dlp-light = callPackage ../tools/misc/yt-dlp {
     atomicparsleySupport = false;
     ffmpegSupport = false;
-    phantomjsSupport = false;
     rtmpSupport = false;
   };
 
