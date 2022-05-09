@@ -31,6 +31,13 @@
 
 # Darwin code signing support utilities
 , postLinkSignHook ? null, signingUtils ? null
+
+# Linker type
+, isLld ? bintools.isLld or false
+, isCctools ? bintools.isCctools or false
+, isGNU ? bintools.isGNU or false
+, isGold ? bintools.isGold or false
+, isBfd ? bintools.isBfd or false
 }:
 
 with lib;
@@ -112,6 +119,8 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit bintools libc nativeTools nativeLibc nativePrefix;
+
+    inherit isLld isCctools isGNU isGold isBfd;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too

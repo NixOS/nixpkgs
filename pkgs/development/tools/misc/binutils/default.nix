@@ -197,6 +197,11 @@ stdenv.mkDerivation {
     inherit targetPrefix;
     hasGold = enableGold;
     isGNU = true;
+    # TODO Currently platform.linker == "gold" has no effect outside
+    # of building GHC. If/when that's fixed, these flags should
+    # probably move to the invocations of bintools-wrapper
+    isGold = false;
+    isBfd = true;
   };
 
   meta = with lib; {
