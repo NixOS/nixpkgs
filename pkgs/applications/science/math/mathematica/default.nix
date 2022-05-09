@@ -44,7 +44,7 @@
 , zlib
 # settings and optional packages
 , cudaSupport ? false
-, cudatoolkit ? null
+, cudaPackages ? null
 , lang ? "en"
 , version ? null
 }:
@@ -129,7 +129,7 @@ import real-drv {
     xorg
     zlib;
 
-  inherit cudaSupport cudatoolkit;
+  inherit cudaSupport cudaPackages;
 
   inherit (found-version) version lang src;
 

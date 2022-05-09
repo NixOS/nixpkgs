@@ -42,16 +42,18 @@
 , zlib
 , lang ? "en"
 , cudaSupport ? false
-, cudatoolkit ? null
+, cudaPackages ? null
 , ...
 }:
 
-let cudaEnv = runCommand "mathematica-cuda" {} ''
-  mkdir -p $out
-  ${lndir}/bin/lndir ${cudatoolkit} $out
-  ${lndir}/bin/lndir ${cudatoolkit.lib} $out
-  ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib64
-'';
+let cudatoolkit = cudaPackages.cudatoolkit;
+
+    cudaEnv = runCommand "mathematica-cuda" {} ''
+      mkdir -p $out
+      ${lndir}/bin/lndir ${cudatoolkit} $out
+      ${lndir}/bin/lndir ${cudatoolkit.lib} $out
+      ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib64
+    '';
 
 in stdenv.mkDerivation {
   inherit meta name src version;

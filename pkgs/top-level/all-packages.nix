@@ -32930,7 +32930,7 @@ with pkgs;
 
   mathematica-cuda = callPackage ../applications/science/math/mathematica {
     cudaSupport = true;
-    cudatoolkit = cudatoolkit;
+    cudaPackages = cudaPackages;
   };
 
   mathematica9 = callPackage ../applications/science/math/mathematica {
