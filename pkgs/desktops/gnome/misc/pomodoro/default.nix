@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , substituteAll
-, fetchpatch
 , meson
 , ninja
 , pkg-config
