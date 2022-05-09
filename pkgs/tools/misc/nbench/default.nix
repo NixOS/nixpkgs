@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-static" ""
   '';
 
+  buildInputs = [ stdenv.glibc.static ];
+
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
