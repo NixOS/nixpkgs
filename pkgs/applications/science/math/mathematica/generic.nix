@@ -2,15 +2,16 @@
 , stdenv
 , addOpenGLRunpath
 , autoPatchelfHook
-, lndir
 , makeWrapper
 , meta
 , name
 , requireFile
 , runCommand
 , src
+, symlinkJoin
 , version
 , alsa-lib
+, cudaPackages
 , cups
 , dbus
 , flite
@@ -40,19 +41,20 @@
 , xkeyboard_config
 , xorg
 , zlib
-, lang ? "en"
 , cudaSupport ? false
-, cudaPackages ? null
+, lang ? "en"
 }:
 
-let cudatoolkit = cudaPackages.cudatoolkit;
-
-    cudaEnv = runCommand "mathematica-cuda" {} ''
-      mkdir -p $out
-      ${lndir}/bin/lndir ${cudatoolkit} $out
-      ${lndir}/bin/lndir ${cudatoolkit.lib} $out
-      ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib64
-    '';
+let cudaEnv = symlinkJoin {
+      name = "mathematica-cuda-env";
+      paths = with cudaPackages; [
+        cuda_cudart cuda_nvcc libcublas libcufft libcurand libcusparse
+      ];
+      postBuild = ''
+        ln -s ${addOpenGLRunpath.driverLink}/lib/libcuda.so $out/lib
+        ln -s lib $out/lib64
+      '';
+    };
 
 in stdenv.mkDerivation {
   inherit meta name src version;
@@ -107,7 +109,7 @@ in stdenv.mkDerivation {
     libXrender
     libXtst
     libxcb
-  ]) ++ lib.optional cudaSupport cudatoolkit;
+  ]) ++ lib.optional cudaSupport cudaEnv;
 
   wrapProgramFlags = [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib zlib ]}"

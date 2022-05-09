@@ -1,7 +1,7 @@
 { callPackage
 , lib
+, cudaPackages
 , cudaSupport ? false
-, cudaPackages ? null
 , lang ? "en"
 , version ? null
 }:
