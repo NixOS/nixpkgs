@@ -10,14 +10,14 @@
 , writeScript
 
   # plugin deps
-, aacgain ? null
-, essentia-extractor ? null
-, ffmpeg ? null
-, flac ? null
-, imagemagick ? null
-, keyfinder-cli ? null
-, mp3gain ? null
-, mp3val ? null
+, aacgain
+, essentia-extractor
+, ffmpeg
+, flac
+, imagemagick
+, keyfinder-cli
+, mp3gain
+, mp3val
 
 , src
 , version
