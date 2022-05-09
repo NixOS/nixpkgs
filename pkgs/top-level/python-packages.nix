@@ -3218,6 +3218,8 @@ in {
 
   ftputil = callPackage ../development/python-modules/ftputil { };
 
+  func-timeout = callPackage ../development/python-modules/func-timeout { };
+
   funcparserlib = callPackage ../development/python-modules/funcparserlib { };
 
   funcsigs = callPackage ../development/python-modules/funcsigs { };
