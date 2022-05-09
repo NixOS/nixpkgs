@@ -29864,6 +29864,8 @@ with pkgs;
     abseil-cpp = abseil-cpp_202111;
   };
 
+  telegram-bot-api = callPackage ../servers/telegram-bot-api { };
+
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
