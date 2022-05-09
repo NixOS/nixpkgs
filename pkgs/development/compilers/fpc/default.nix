@@ -1,30 +1,32 @@
-{ lib, stdenv, fetchurl, gawk }:
+{ callPackage, lib, stdenv, fetchurl, fetchFromGitLab, gawk }:
 
-let startFPC = import ./binary.nix { inherit stdenv fetchurl; }; in
+let startFPC = callPackage ./binary.nix { inherit stdenv; }; in
 
 stdenv.mkDerivation rec {
-  version = "3.2.0";
   pname = "fpc";
+  version = "unstable-2022-05-09";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/freepascal/fpcbuild-${version}.tar.gz";
-    sha256 = "0f38glyn3ffmqww432snhx2b8wyrq0yj1njkp4zh56lqrvm19fgr";
+  src = fetchFromGitLab {
+    owner = "freepascal.org";
+    repo = "fpc/source";
+    rev = "4add05c625395fec0a2eda897f3f3dec67f760bd";
+    sha256 = "sha256-kDR3pgV8IAK8NOJReUbXR28PHS3dyfj5EHYoWZZnX4Y=";
   };
 
-  buildInputs = [ startFPC gawk ];
-  glibc = stdenv.cc.libc.out;
-
-  # Patch paths for linux systems. Other platforms will need their own patches.
   patches = [
-    ./mark-paths.patch # mark paths for later substitution in postPatch
+    ./patches/0001-mark-paths-for-substitution-in-postPatch.patch
   ];
+
+  glibc = stdenv.cc.libc.out;
   postPatch = ''
     # substitute the markers set by the mark-paths patch
-    substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by dynlinker-prefix "${glibc}"
-    substituteInPlace fpcsrc/compiler/systems/t_linux.pas --subst-var-by syslibpath "${glibc}/lib"
+    substituteInPlace compiler/systems/t_linux.pas --subst-var-by dynlinker-prefix "${glibc}"
+    substituteInPlace compiler/systems/t_linux.pas --subst-var-by syslibpath "${glibc}/lib"
   '';
 
   makeFlags = [ "NOGDB=1" "FPC=${startFPC}/bin/fpc" ];
+
+  buildInputs = [ startFPC gawk ];
 
   installFlags = [ "INSTALL_PREFIX=\${out}" ];
 
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Free Pascal Compiler from a source distribution";
     homepage = "https://www.freepascal.org";
-    maintainers = [ maintainers.raskin ];
+    maintainers = with maintainers; [ raskin superherointj ];
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
   };

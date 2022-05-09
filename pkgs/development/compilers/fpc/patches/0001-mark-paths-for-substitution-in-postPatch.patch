@@ -1,34 +1,23 @@
-diff --git a/fpcsrc/compiler/systems/t_linux.pas b/fpcsrc/compiler/systems/t_linux.pas
-index a7398fb9..8e46fec0 100644
---- a/fpcsrc/compiler/systems/t_linux.pas
-+++ b/fpcsrc/compiler/systems/t_linux.pas
-@@ -135,13 +135,13 @@ begin
-       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib64',true);
-       { /lib64 should be the really first, so add it before everything else }
-       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib',true);
--      LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib64',true);
+From e902698a4ff414fff1a1086a60e40387aa561dd4 Mon Sep 17 00:00:00 2001
+From: superherointj <5861043+superherointj@users.noreply.github.com>
+Date: Mon, 9 May 2022 12:01:18 -0300
+Subject: [PATCH] fpc: mark paths for substitution in postPatch
+
+
+diff --git a/compiler/systems/t_linux.pas b/compiler/systems/t_linux.pas
+index febd93d8ac..dc03f02b52 100644
+--- a/compiler/systems/t_linux.pas
++++ b/compiler/systems/t_linux.pas
+@@ -126,6 +126,8 @@ procedure SetupLibrarySearchPath;
+ begin
+   if not Dontlinkstdlibpath Then
+     begin
 +      LibrarySearchPath.AddLibraryPath(sysrootpath,'=@syslibpath@',true);
- {$else}
- {$ifdef powerpc64}
-       if target_info.abi<>abi_powerpc_elfv2 then
--        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib64;=/usr/lib64;=/usr/X11R6/lib64',true)
-+        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/@syslibpath@;=/usr/lib64;=/usr/X11R6/lib64',true)
-       else
--        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib64;=/usr/lib/powerpc64le-linux-gnu;=/usr/X11R6/powerpc64le-linux-gnu',true);
-+        LibrarySearchPath.AddLibraryPath(sysrootpath,'=/@syslibpath@;=/usr/lib/powerpc64le-linux-gnu;=/usr/X11R6/powerpc64le-linux-gnu',true);
- {$else powerpc64}
-       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/lib;=/usr/lib;=/usr/X11R6/lib',true);
- {$endif powerpc64}
-@@ -164,7 +164,7 @@ begin
-       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/i386-linux-gnu',true);
- {$endif i386}
- {$ifdef aarch64}
--      LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/aarch64-linux-gnu',true);
-+      LibrarySearchPath.AddLibraryPath(sysrootpath,'=@syslibpath@',true);
- {$endif aarch64}
- {$ifdef powerpc}
-       LibrarySearchPath.AddLibraryPath(sysrootpath,'=/usr/lib/powerpc-linux-gnu',true);
-@@ -185,53 +185,53 @@ begin
++
+ {$ifdef x86_64}
+       { some linuxes might not have the lib64 variants (Arch, LFS }
+       { don't use PathExists checks, as we need to take sysroots and
+@@ -210,65 +212,65 @@ procedure SetupLibrarySearchPath;
  end;
  
  {$ifdef m68k}
@@ -94,8 +83,23 @@ index a7398fb9..8e46fec0 100644
 +  const defdynlinker='@dynlinker-prefix@/lib64/ld-linux.so.2';
  {$endif sparc64}
  
+ {$ifdef riscv32}
+-  const defdynlinker='/lib32/ld.so.1';
++  const defdynlinker='@dynlinker-prefix@/lib32/ld.so.1';
+ {$endif riscv32}
  
-@@ -266,9 +266,9 @@ begin
+ {$ifdef riscv64}
+-  const defdynlinker='/lib/ld-linux-riscv64-lp64d.so.1';
++  const defdynlinker='@dynlinker-prefix@/lib/ld-linux-riscv64-lp64d.so.1';
+ {$endif riscv64}
+ 
+ {$ifdef xtensa}
+-  const defdynlinker='/lib/ld.so.1';
++  const defdynlinker='@dynlinker-prefix@/lib/ld.so.1';
+ {$endif xtensa}
+ 
+ 
+@@ -303,9 +305,9 @@ procedure SetupDynlinker(out DynamicLinker:string;out libctype:TLibcType);
        libctype:=uclibc;
      end
  {$ifdef i386}
@@ -107,3 +111,6 @@ index a7398fb9..8e46fec0 100644
        libctype:=glibc2;
      end
  {$endif i386}
+-- 
+2.36.0
+
