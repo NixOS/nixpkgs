@@ -53,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProtonVPN/protonvpn-nm-lib";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];
+    platforms = platforms.linux;
   };
 }
