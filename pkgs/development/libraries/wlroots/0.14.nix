@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   # $out for the library and $examples for the example programs (in examples):
   outputs = [ "out" "examples" ];
 
+  strictDeps = true;
   depsBuildBuild = [ pkg-config ];
 
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
