@@ -43,6 +43,8 @@ rustPlatform.buildRustPackage rec {
       files targeting the Silicon Labs Gecko Bootloader.
     '';
     homepage = "https://github.com/dac-gmbh/gbl";
+    # https://github.com/dac-gmbh/gbl/issues/63
+    platforms = platforms.linux;
     license = licenses.mit;
     maintainers = [ maintainers.raboof ];
   };
