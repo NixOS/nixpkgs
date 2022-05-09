@@ -56,13 +56,12 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/saltstack/salt/commit/070597e525bb7d56ffadede1aede325dfb1b73a4
     # https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=259279
     # https://github.com/saltstack/salt/pull/61163
-    substituteInPlace requirements/zeromq.txt \
-      --replace 'pyzmq>=17.0.0,<22.0.0 ; python_version < "3.9"' 'pyzmq>=17.0.0 ; python_version < "3.9"'
-    substituteInPlace requirements/zeromq.txt \
+    substituteInPlace "requirements/zeromq.txt" \
+      --replace 'pyzmq>=17.0.0,<22.0.0 ; python_version < "3.9"' 'pyzmq>=17.0.0 ; python_version < "3.9"' \
       --replace 'pyzmq>19.0.2,<22.0.0 ; python_version >= "3.9"' 'pyzmq>19.0.2 ; python_version >= "3.9"'
   '';
 
-  # Don't fix dependencies on Darwin
+  # Don't use fixed dependencies on Darwin
   USE_STATIC_REQUIREMENTS = "0";
 
   # The tests fail due to socket path length limits at the very least;
