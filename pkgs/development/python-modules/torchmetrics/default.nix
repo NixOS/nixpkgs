@@ -10,6 +10,7 @@
 , pytorch
 , pytestCheckHook
 , torchmetrics
+, pytorch-lightning
 }:
 
 let
@@ -37,6 +38,7 @@ buildPythonPackage {
   ];
 
   checkInputs = [
+    pytorch-lightning
     scikit-learn
     scikitimage
     cloudpickle

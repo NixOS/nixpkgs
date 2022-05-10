@@ -3,10 +3,13 @@
 , fetchFromGitHub
 , isPy27
 , future
+, fsspec
+, packaging
 , pytestCheckHook
 , pytorch
 , pyyaml
 , tensorboard
+, torchmetrics
 , tqdm }:
 
 buildPythonPackage rec {
@@ -22,11 +25,19 @@ buildPythonPackage rec {
     sha256 = "sha256-GP6/VZuRv8dS5wKQW7RbtOSa2vV9Af2Jp+ioEW3bIgc=";
   };
 
+  postPatch = ''
+    sed -i '/setuptools==/d' requirements.txt
+    sed -i 's/pyDeprecate==/pyDeprecate>=/' requirements.txt
+  '';
+
   propagatedBuildInputs = [
+    packaging
     future
+    fsspec
     pytorch
     pyyaml
     tensorboard
+    torchmetrics
     tqdm
   ];
 
