@@ -30163,6 +30163,8 @@ with pkgs;
     channel = "ungoogled-chromium";
   });
 
+  uni = callPackage ../applications/misc/uni { };
+
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
   unigine-heaven = callPackage ../applications/graphics/unigine-heaven { };
