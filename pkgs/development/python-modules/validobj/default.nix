@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "430b0b56931a2cebdb857a9fe9da2467c06a3b4db37b728e7f1a8706e8887705";
   };
 
-  buildInputs = [ flit ];
+  nativeBuildInputs = [ flit ];
 
   checkInputs = [ hypothesis pytestCheckHook ];
 
