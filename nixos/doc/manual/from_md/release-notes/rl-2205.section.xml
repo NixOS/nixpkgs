@@ -240,6 +240,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://snipeitapp.com">Snipe-IT</link>, a
+          free open source IT asset/license management system. Available
+          as
+          <link xlink:href="options.html#opt-services.snipe-it.enable">services.snipe-it</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
           a web interface for the PowerDNS server. Available at
           <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
@@ -1444,6 +1452,16 @@
           <literal>pkgs.pgadmin</literal> now refers to
           <literal>pkgs.pgadmin4</literal>. <literal>pgadmin3</literal>
           has been removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.minetestclient_4</literal> and
+          <literal>pkgs.minetestserver_4</literal> have been removed, as
+          the last 4.x release was in 2018.
+          <literal>pkgs.minetestclient</literal> (equivalent to
+          <literal>pkgs.minetest</literal> ) and
+          <literal>pkgs.minetestserver</literal> can be used instead.
         </para>
       </listitem>
       <listitem>

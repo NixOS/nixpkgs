@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   version = "1.04";
 
   src = fetchurl {
-    url = "https://invisible-island.net/datafiles/release/rcshist.tar.gz";
+    url = "https://web.archive.org/web/20220508220019/https://invisible-island.net/datafiles/release/rcshist.tar.gz";
     sha256 = "01ab3xwgm934lxr8bm758am3vxwx4hxx7cc9prbgqj5nh30vdg1n";
   };
 

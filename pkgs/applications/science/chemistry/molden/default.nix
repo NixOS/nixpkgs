@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
                                   --replace '-I/usr/X11R6/include' "" \
                                   --replace '/usr/local/' $out/ \
                                   --replace 'sudo' "" \
-                                  --replace '-C surf depend' '-C surf'
+                                  --replace '-C surf depend' '-C surf' \
+                                  --replace 'FFLAGS =' 'FFLAGS = -fallow-argument-mismatch'
+
+     substituteInPlace ambfor/makefile --replace 'FFLAGS =' 'FFLAGS = -fallow-argument-mismatch'
+
      sed -in '/^# DO NOT DELETE THIS LINE/q;' surf/Makefile
   '';
 
