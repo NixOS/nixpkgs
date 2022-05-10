@@ -26753,8 +26753,6 @@ with pkgs;
 
   moe =  callPackage ../applications/editors/moe { };
 
-  multibootusb = libsForQt514.callPackage ../applications/misc/multibootusb { qt5 = qt514; };
-
   praat = callPackage ../applications/audio/praat { };
 
   quvi = callPackage ../applications/video/quvi/tool.nix {
