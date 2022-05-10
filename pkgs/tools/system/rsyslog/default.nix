@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
 , libkrb5 ? null, systemd ? null, jemalloc ? null, libmysqlclient ? null, postgresql ? null
 , libdbi ? null, net-snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
@@ -21,7 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-P5BOwTfKZBLoJz94ltli7LWJ99DFib3xaxcJ7CfiTzE=";
   };
 
-  #patches = [ ./fix-gnutls-detection.patch ];
+  patches = [
+    #./fix-gnutls-detection.patch
+
+    (fetchpatch {
+      # https://github.com/rsyslog/rsyslog/security/advisories/GHSA-ggw7-xr6h-mmr8
+      name = "CVE-2022-24903.patch";
+      url = "https://github.com/rsyslog/rsyslog/commit/89955b0bcb1ff105e1374aad7e0e993faa6a038f.patch";
+      sha256 = "sha256-G4emQdagSZKVoFq3fN69EABSWXSRdycCi7Q3Jte6EDU=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
