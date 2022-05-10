@@ -1,4 +1,4 @@
-{ lib, stdenv, lua, buildEnv, makeWrapper
+{ lib, stdenv, lua, buildEnv, makeBinaryWrapper
 , extraLibs ? []
 , extraOutputsToInstall ? []
 , postBuild ? ""
@@ -19,7 +19,7 @@ let
     extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
     nativeBuildInputs = [
-      makeWrapper
+      makeBinaryWrapper
       (lua.pkgs.lua-setup-hook lua.LuaPathSearchPaths lua.LuaCPathSearchPaths)
     ];
 

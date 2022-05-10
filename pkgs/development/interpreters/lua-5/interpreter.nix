@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, readline
 , compat ? false
 , callPackage
-, makeWrapper
+, makeBinaryWrapper
 , packageOverrides ? (final: prev: {})
 , sourceVersion
 , hash
@@ -40,7 +40,7 @@ self = stdenv.mkDerivation rec {
   LuaCPathSearchPaths   = luaPackages.lib.luaCPathList;
   setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
   buildInputs = [ readline ];
 
   inherit patches;
