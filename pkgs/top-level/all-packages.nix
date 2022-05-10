@@ -4235,6 +4235,8 @@ with pkgs;
 
   rav1e = callPackage ../tools/video/rav1e { };
 
+  raven-reader = callPackage ../applications/networking/newsreaders/raven-reader { };
+
   razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
 
   replay-sorcery = callPackage ../tools/video/replay-sorcery { };
