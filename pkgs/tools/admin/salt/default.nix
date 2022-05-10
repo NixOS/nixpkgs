@@ -57,6 +57,7 @@ python3.pkgs.buildPythonApplication rec {
     # https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=259279
     # https://github.com/saltstack/salt/pull/61163
     substituteInPlace "requirements/zeromq.txt" \
+      --replace 'pyzmq<=20.0.0 ; python_version < "3.6"' "" \
       --replace 'pyzmq>=17.0.0,<22.0.0 ; python_version < "3.9"' 'pyzmq>=17.0.0 ; python_version < "3.9"' \
       --replace 'pyzmq>19.0.2,<22.0.0 ; python_version >= "3.9"' 'pyzmq>19.0.2 ; python_version >= "3.9"'
   '';
