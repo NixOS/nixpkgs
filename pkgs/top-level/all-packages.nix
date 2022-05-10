@@ -8533,8 +8533,6 @@ with pkgs;
 
   ndisc6 = callPackage ../tools/networking/ndisc6 { };
 
-  neopg = callPackage ../tools/security/neopg { };
-
   netboot = callPackage ../tools/networking/netboot {};
 
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
