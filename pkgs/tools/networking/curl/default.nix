@@ -27,7 +27,6 @@
 
 # for passthru.tests
 , coeurl
-, curlcpp
 , curlpp
 , haskellPackages
 , ocamlPackages
@@ -177,7 +176,7 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit opensslSupport openssl;
     tests = {
-      inherit curlpp curlcpp coeurl;
+      inherit curlpp coeurl;
       haskell-curl = haskellPackages.curl;
       ocaml-curly = ocamlPackages.curly;
       php-curl = phpExtensions.curl;

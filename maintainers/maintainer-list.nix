@@ -5726,7 +5726,7 @@
     githubId = 35612334;
   };
   jceb = {
-    name = "jceb";
+    name = "Jan Christoph Ebersbach";
     email = "jceb@e-jc.de";
     github = "jceb";
     githubId = 101593;
