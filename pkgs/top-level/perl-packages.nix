@@ -4764,6 +4764,10 @@ let
     NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
     NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
+    meta = {
+      # errors with: 74366 Abort trap: 6
+      broken = stdenv.isDarwin && stdenv.isAarch64;
+    };
   };
 
   CryptOpenSSLRSA = buildPerlPackage {
