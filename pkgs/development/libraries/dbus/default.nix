@@ -8,16 +8,14 @@
 , systemd
 , audit
 , libapparmor
-, libX11 ? null
-, libICE ? null
-, libSM ? null
-, x11Support ? (stdenv.isLinux || stdenv.isDarwin)
 , dbus
 , docbook_xml_dtd_44
 , docbook-xsl-nons
 , xmlto
 , autoreconfHook
 , autoconf-archive
+, x11Support ? (stdenv.isLinux || stdenv.isDarwin)
+, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -82,11 +80,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optionals x11Support [
+    lib.optionals x11Support (with xorg; [
       libX11
       libICE
       libSM
-    ] ++ lib.optional enableSystemd systemd
+    ]) ++ lib.optional enableSystemd systemd
     ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
 
