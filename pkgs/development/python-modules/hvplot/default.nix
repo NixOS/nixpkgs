@@ -5,21 +5,20 @@
 , fetchPypi
 , holoviews
 , pandas
-, pythonImportsCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "hvplot";
   version = "0.8.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-hjDbo0lpsQXiZ8vhQjfi1W2ZacgBmArl5RkLwYsnktY=";
   };
-
-  nativeBuildInputs = [
-    pythonImportsCheckHook
-  ];
 
   propagatedBuildInputs = [
     bokeh
