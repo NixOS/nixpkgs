@@ -8799,10 +8799,10 @@
     githubId = 5047140;
     name = "Victor Collod";
   };
-  musfay = {
-    email = "musfay@protonmail.com";
-    github = "musfay";
-    githubId = 33374965;
+  muscaln = {
+    email = "muscaln@protonmail.com";
+    github = "muscaln";
+    githubId = 96225281;
     name = "Mustafa Çalışkan";
   };
   mupdt = {
