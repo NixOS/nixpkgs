@@ -18333,8 +18333,6 @@ with pkgs;
 
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
-  libdap = callPackage ../development/libraries/libdap { };
-
   libdatrie = callPackage ../development/libraries/libdatrie { };
 
   libdazzle = callPackage ../development/libraries/libdazzle { };
