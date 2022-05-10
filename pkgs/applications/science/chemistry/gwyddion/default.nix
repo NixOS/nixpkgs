@@ -1,36 +1,22 @@
 { lib, stdenv, fetchurl, gtk2, pkg-config, fftw, file,
-  pythonSupport ? false, pythonPackages ? null,
-  gnome2 ? null,
-  openexrSupport ? true, openexr ? null,
-  libzipSupport ? true, libzip ? null,
-  libxml2Support ? true, libxml2 ? null,
-  libwebpSupport ? true, libwebp ? null,
+  pythonSupport ? false, python2Packages,
+  gnome2,
+  openexrSupport ? true, openexr,
+  libzipSupport ? true, libzip,
+  libxml2Support ? true, libxml2,
+  libwebpSupport ? true, libwebp,
   # libXmu is not used if libunique is.
-  libXmuSupport ? false, xorg ? null,
-  libxsltSupport ? true, libxslt ? null,
-  fitsSupport ? true, cfitsio ? null,
-  zlibSupport ? true, zlib ? null,
-  libuniqueSupport ? true, libunique ? null,
-  libpngSupport ? true, libpng ? null,
+  libXmuSupport ? false, xorg,
+  libxsltSupport ? true, libxslt,
+  fitsSupport ? true, cfitsio,
+  zlibSupport ? true, zlib,
+  libuniqueSupport ? true, libunique,
+  libpngSupport ? true, libpng,
   openglSupport ? !stdenv.isDarwin
 }:
 
-assert openexrSupport -> openexr != null;
-assert libzipSupport -> libzip != null;
-assert libxml2Support -> libxml2 != null;
-assert libwebpSupport -> libwebp != null;
-assert libXmuSupport -> xorg != null;
-assert libxsltSupport -> libxslt != null;
-assert fitsSupport -> cfitsio != null;
-assert zlibSupport -> zlib != null;
-assert libuniqueSupport -> libunique != null;
-assert libpngSupport -> libpng != null;
-assert openglSupport -> gnome2 != null;
-assert pythonSupport -> (pythonPackages != null && gnome2 != null);
-
 let
-    inherit (pythonPackages) pygtk pygobject2 python;
-
+    inherit (python2Packages) pygtk pygobject2 python;
 in
 
 stdenv.mkDerivation rec {
