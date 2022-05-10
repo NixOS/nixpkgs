@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/smpeg-config \
       --prefix PATH ":" "${pkg-config}/bin" \
-      --prefix PKG_CONFIG_PATH ":" "${SDL.dev}/lib/pkgconfig"
+      --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL}/lib/pkgconfig"
   '';
 
   NIX_LDFLAGS = "-lX11";
