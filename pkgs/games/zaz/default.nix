@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = [
-    SDL.dev
+    (lib.getDev SDL)
     SDL_image
     mesa
     libtheora
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Fix SDL include problems
-  NIX_CFLAGS_COMPILE="-I${SDL.dev}/include/SDL -I${SDL_image}/include/SDL";
+  NIX_CFLAGS_COMPILE="-I${lib.getDev SDL}/include/SDL -I${SDL_image}/include/SDL";
   # Fix linking errors
   makeFlags = [
     "ZAZ_LIBS+=-lSDL"
