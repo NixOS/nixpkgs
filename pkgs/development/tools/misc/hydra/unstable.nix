@@ -1,11 +1,44 @@
 { stdenv
 , lib
-, nix, perlPackages, buildEnv
-, makeWrapper, autoconf, automake, libtool, unzip, pkg-config, sqlite, libpqxx_6
-, top-git, mercurial, darcs, subversion, breezy, openssl, bzip2, libxslt
-, perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
-, docbook_xsl, openssh, gnused, coreutils, findutils, gzip, xz, gnutar
-, rpm, dpkg, cdrkit, pixz, boost, autoreconfHook
+, nix
+, perlPackages
+, buildEnv
+, makeWrapper
+, autoconf
+, automake
+, libtool
+, unzip
+, pkg-config
+, sqlite
+, libpqxx_6
+, top-git
+, mercurial
+, darcs
+, subversion
+, breezy
+, openssl
+, bzip2
+, libxslt
+, perl
+, postgresql
+, nukeReferences
+, git
+, boehmgc
+, nlohmann_json
+, docbook_xsl
+, openssh
+, gnused
+, coreutils
+, findutils
+, gzip
+, xz
+, gnutar
+, rpm
+, dpkg
+, cdrkit
+, pixz
+, boost
+, autoreconfHook
 , mdbook
 , foreman
 , python3
@@ -21,7 +54,8 @@ let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
     paths = with perlPackages; lib.closePropagation
-      [ ModulePluggable
+      [
+        ModulePluggable
         AuthenSASL
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -90,7 +124,8 @@ let
         git
       ];
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "hydra";
   version = "2022-02-07";
 
@@ -102,9 +137,24 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ makeWrapper libtool unzip nukeReferences sqlite libpqxx_6
-      top-git mercurial darcs subversion breezy openssl bzip2 libxslt
-      perlDeps perl nix
+    [
+      makeWrapper
+      libtool
+      unzip
+      nukeReferences
+      sqlite
+      libpqxx_6
+      top-git
+      mercurial
+      darcs
+      subversion
+      breezy
+      openssl
+      bzip2
+      libxslt
+      perlDeps
+      perl
+      nix
       postgresql # for running the tests
       nlohmann_json
       boost
@@ -112,9 +162,26 @@ in stdenv.mkDerivation rec {
     ];
 
   hydraPath = lib.makeBinPath (
-    [ sqlite subversion openssh nix coreutils findutils pixz
-      gzip bzip2 xz gnutar unzip git top-git mercurial /*darcs*/ gnused breezy
-    ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
+    [
+      sqlite
+      subversion
+      openssh
+      nix
+      coreutils
+      findutils
+      pixz
+      gzip
+      bzip2
+      xz
+      gnutar
+      unzip
+      git
+      top-git
+      mercurial /*darcs*/
+      gnused
+      breezy
+    ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ]
+  );
 
   nativeBuildInputs = [ autoreconfHook pkg-config mdbook autoconf automake ];
 
