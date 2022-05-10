@@ -2245,7 +2245,8 @@
     "russound_rnet" = ps: with ps; [
     ]; # missing inputs: russound
     "sabnzbd" = ps: with ps; [
-    ]; # missing inputs: pysabnzbd
+      pysabnzbd
+    ];
     "safe_mode" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
@@ -3594,6 +3595,7 @@
     "rss_feed_template"
     "rtsp_to_webrtc"
     "ruckus_unleashed"
+    "sabnzbd"
     "safe_mode"
     "samsungtv"
     "scene"
