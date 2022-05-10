@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-static" ""
   '';
 
+  buildInputs = lib.optionals stdenv.hostPlatform.isGnu [
+    stdenv.glibc.static
+  ];
+
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "http-sfv";
-  version = "0.9.5";
+  version = "0.9.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "mnot";
     repo = "http_sfv";
     rev = "http_sfv-${version}";
-    hash = "sha256-hzg5vRX0vNKS/hYLF6n8mLK5qiwP7do4M8YMlBAA66I=";
+    hash = "sha256-S+cbcDx+cXwN2TpfiUpr6xK1GFRxSYgfHdUavfzeyAE=";
   };
 
   propagatedBuildInputs = [
