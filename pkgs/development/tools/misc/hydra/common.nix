@@ -13,8 +13,6 @@
 , glibcLocales
 }:
 
-with stdenv;
-
 let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
