@@ -548,7 +548,9 @@ rec {
 
   # TODO placeholder to ease working on automatic plugin detection
   # this should be a luarocks "flat" install with appropriate vim hooks
-  buildNeovimPluginFrom2Nix = buildVimPluginFrom2Nix;
+  buildNeovimPluginFrom2Nix = attrs: let drv = (buildVimPluginFrom2Nix attrs); in drv.overrideAttrs(oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ neovimRequireCheckHook ];
+  });
 
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {

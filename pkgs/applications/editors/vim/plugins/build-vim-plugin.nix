@@ -7,11 +7,6 @@
 }:
 
 rec {
-  addRtp = path: attrs: derivation:
-    derivation // { rtp = "${derivation}"; } // {
-      overrideAttrs = f: buildVimPlugin (attrs // f attrs);
-    };
-
   buildVimPlugin = attrs@{
     name ? "${attrs.pname}-${attrs.version}",
     namePrefix ? "vimplugin-",
@@ -25,14 +20,14 @@ rec {
     addonInfo ? null,
     ...
   }:
-    addRtp "${rtpPath}/${path}" attrs (stdenv.mkDerivation (attrs // {
+    (stdenv.mkDerivation (attrs // {
       name = namePrefix + name;
 
       # dont move the doc folder since vim expects it
       forceShare= [ "man" "info" ];
 
       nativeBuildInputs = attrs.nativeBuildInputs or []
-      ++ [ vimCommandCheckHook neovimRequireCheckHook ]
+      ++ [ vimCommandCheckHook ]
       ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) vimGenDocHook;
       inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
 

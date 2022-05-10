@@ -9,7 +9,7 @@ neovimRequireCheckHook () {
 
 		# editorconfig-checker-disable
         export HOME="$TMPDIR"
-        @nvimBinary@ -es -n -u NONE -i NONE --clean -V1 \
+        @nvimBinary@ -es --headless -n -u NONE -i NONE --clean -V1 \
             --cmd "set rtp+=$out" \
             --cmd "lua require('$nvimRequireCheck')"
     fi
