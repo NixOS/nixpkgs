@@ -40104,7 +40104,7 @@ with pkgs;
 
   dapper = callPackage ../development/tools/dapper { };
 
-  kube3d =  callPackage ../applications/networking/cluster/kube3d {
+  k3d = callPackage ../applications/networking/cluster/k3d {
     buildGoModule = buildGo118Module; # tests fail with 1.19
   };
 

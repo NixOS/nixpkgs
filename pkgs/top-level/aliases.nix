@@ -769,7 +769,9 @@ mapAliases ({
 
   ### K ###
 
-  k3d = throw "k3d has been removed because it was broken and has seen no release since 2016"; # Added 2022-01-04
+  # k3d was a 3d editing software k-3d - "k3d has been removed because it was broken and has seen no release since 2016" Added 2022-01-04
+  # now kube3d/k3d will take it's place
+  kube3d = k3d; # Added 2022-0705
   k9copy = throw "k9copy has been removed from nixpkgs, as there is no upstream activity"; # Added 2020-11-06
   kafkacat = kcat; # Added 2021-10-07
   kbdKeymaps = throw "kbdKeymaps is not needed anymore since dvp and neo are now part of kbd"; # Added 2021-04-11
