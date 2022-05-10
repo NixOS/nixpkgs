@@ -43,11 +43,11 @@ let
   '';
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "4.3.2";
+  version = "4.3.3";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    hash = "sha256-CIHVpxZ2qC7Ct5Kmc6dxEzxH9s+63/sI07f9SbCh4a4=";
+    hash = "sha256-J6zzkho0A1faCVzS/0wDlbgLtJmyPrnBkEcR7kDld7A=";
   };
 
   patches = [
