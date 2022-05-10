@@ -31,8 +31,11 @@ let versions = callPackage ./versions.nix { };
       in lib.compareLists lib.compare (f v1) (f v2) > 0;
 
     isMatching = v1: v2:
-      let n = lib.min (builtins.stringLength v1) (builtins.stringLength v2);
-      in builtins.substring 0 n v1 == builtins.substring 0 n v2;
+      let as      = lib.splitVersion v1;
+          bs      = lib.splitVersion v2;
+          n       = lib.min (lib.length as) (lib.length bs);
+          sublist = l: lib.sublist 0 n l;
+      in lib.compareLists lib.compare (sublist as) (sublist bs) == 0;
 
 in
 
