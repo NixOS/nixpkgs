@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-YwFZKwAgwUtFZ1fvXUNNSfYCe45fOkmdEzYvIFxIbg4=";
   };
 
+  hardeningDisable = lib.optional stdenv.cc.isClang "format";
+
   buildInputs = [
     curl
   ];
