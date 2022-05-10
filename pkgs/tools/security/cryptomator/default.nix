@@ -65,7 +65,7 @@ in stdenv.mkDerivation rec {
     rm $out/share/cryptomator/libs/jff*.jar
     cp -f ${jffi}/share/java/jffi-complete.jar $out/share/cryptomator/libs/
 
-    makeWrapper ${jre}/bin/java $out/bin/cryptomator \
+    makeShellWrapper ${jre}/bin/java $out/bin/cryptomator \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \
       --add-flags "--module-path '$out/share/cryptomator/mods'" \
       --add-flags "-Dcryptomator.logDir='~/.local/share/Cryptomator/logs'" \
@@ -102,7 +102,7 @@ in stdenv.mkDerivation rec {
     autoPatchelfHook
     maven
     makeWrapper
-    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
+    wrapGAppsHook
     jdk
   ];
   buildInputs = [ fuse jre glib jffi ];

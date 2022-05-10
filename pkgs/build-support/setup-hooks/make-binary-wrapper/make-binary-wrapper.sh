@@ -32,7 +32,8 @@ assertExecutable() {
 
 # To troubleshoot a binary wrapper after you compiled it,
 # use the `strings` command or open the binary file in a text editor.
-makeWrapper() {
+makeWrapper() { makeBinaryWrapper "$@"; }
+makeBinaryWrapper() {
     local NIX_CFLAGS_COMPILE= NIX_CFLAGS_LINK=
     local original="$1"
     local wrapper="$2"
@@ -52,7 +53,8 @@ makeWrapper() {
 }
 
 # Syntax: wrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>
-wrapProgram() {
+wrapProgram() { wrapProgramBinary "$@"; }
+wrapProgramBinary() {
     local prog="$1"
     local hidden
 

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
+    wrapGAppsHook
   ];
 
   dontWrapGApps = true;
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       "$(find "$out/toolbox" -name jspawnhelper)"
 
-    makeWrapper $out/toolbox/toolbox $out/bin/tla-toolbox \
+    makeShellWrapper $out/toolbox/toolbox $out/bin/tla-toolbox \
       --chdir "$out/toolbox" \
       --add-flags "-data ~/.tla-toolbox" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3 libXtst glib zlib ]}"  \

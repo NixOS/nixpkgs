@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     libxshmfence
     mesa
     nss
-    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
+    wrapGAppsHook
+    makeWrapper
   ];
 
   dontWrapGApps = true;
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
         $out/opt/${binaryName}/${binaryName}
 
-    wrapProgram $out/opt/${binaryName}/${binaryName} \
+    wrapProgramShell $out/opt/${binaryName}/${binaryName} \
         "''${gappsWrapperArgs[@]}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}" \
         --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \

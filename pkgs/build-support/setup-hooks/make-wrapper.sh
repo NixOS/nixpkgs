@@ -29,7 +29,8 @@ assertExecutable() {
 # --prefix-contents ENV SEP FILES : like --suffix-each, but contents of FILES
 #                                   are read first and used as VALS
 # --suffix-contents
-makeWrapper() {
+makeWrapper() { makeShellWrapper "$@"; }
+makeShellWrapper() {
     local original="$1"
     local wrapper="$2"
     local params varName value command separator n fileNames
@@ -193,7 +194,8 @@ filterExisting() {
 }
 
 # Syntax: wrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>
-wrapProgram() {
+wrapProgram() { wrapProgramShell "$@"; }
+wrapProgramShell() {
     local prog="$1"
     local hidden
 
