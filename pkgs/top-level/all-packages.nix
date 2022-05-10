@@ -30892,9 +30892,7 @@ with pkgs;
 
   zerobin = callPackage ../applications/networking/zerobin { };
 
-  zeroc-ice = callPackage ../development/libraries/zeroc-ice {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  zeroc-ice = callPackage ../development/libraries/zeroc-ice {};
 
   zeroc-ice-cpp11 = zeroc-ice.override { cpp11 = true; };
 
