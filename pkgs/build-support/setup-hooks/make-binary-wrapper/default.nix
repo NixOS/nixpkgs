@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, darwin
 , makeSetupHook
 , dieHook
 , tests
@@ -8,7 +9,9 @@
 }:
 
 makeSetupHook {
-  deps = [ dieHook cc ];
+  deps = [ dieHook ]
+    # https://github.com/NixOS/nixpkgs/issues/148189
+    ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) darwin.cctools;
 
   substitutions = {
     cc = let
