@@ -1,5 +1,4 @@
 { fetchurl
-, glibc
 , fontconfig
 , freetype
 , glib
@@ -58,7 +57,7 @@ stdenv.mkDerivation rec {
     mv mat $out
 
     # Patch binaries.
-    interpreter=$(echo ${glibc.out}/lib/ld-linux*.so.2)
+    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/mat/MemoryAnalyzer
     [ -f $libCairo ] && patchelf --set-rpath ${

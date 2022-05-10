@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb-compat-0_1, glibc }:
+{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb-compat-0_1 }:
 let
   myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
-      ${glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
+      ${stdenv.cc.libc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
 

@@ -1,5 +1,4 @@
 { lib
-, glibc
 , stdenv
 , fetchFromGitHub
 , alsa-lib
@@ -59,7 +58,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${glibc.out}/lib/libm.so" ];
+  cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.cc.libc}/lib/libm.so" ];
 
   meta = with lib; {
     description = "High quality software synthesizer based on ZynAddSubFX";

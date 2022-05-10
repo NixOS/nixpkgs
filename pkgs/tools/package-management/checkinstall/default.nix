@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, gettext, glibc }:
+{lib, stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "checkinstall";
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     substituteInPlace checkinstallrc-dist --replace /usr/local $out
 
     substituteInPlace installwatch/create-localdecls \
-      --replace /usr/include/unistd.h ${glibc.dev}/include/unistd.h
+      --replace /usr/include/unistd.h ${stdenv.cc.libc.dev}/include/unistd.h
   '';
 
   postInstall =

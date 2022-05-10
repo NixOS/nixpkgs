@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gettext, gawk, bash, glibc }:
+{ lib, stdenv, fetchurl, gettext, gawk, bash }:
 
 stdenv.mkDerivation rec {
   pname = "m17n-db";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  configureFlags = [ "--with-charmaps=${glibc.out}/share/i18n/charmaps" ]
+  configureFlags = [ "--with-charmaps=${stdenv.cc.libc}/share/i18n/charmaps" ]
   ;
 
   meta = {

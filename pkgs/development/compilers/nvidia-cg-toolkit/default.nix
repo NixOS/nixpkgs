@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glibc }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   version = "3.1";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     for b in cgc cgfxcat cginfo
     do
-        patchelf --set-interpreter ${glibc.out}/lib/ld-linux*.so.? "bin/$b"
+        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux*.so.? "bin/$b"
     done
     # FIXME: cgfxcat and cginfo need more patchelf
     mkdir -p "$out/bin/"
