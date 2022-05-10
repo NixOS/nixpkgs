@@ -2,24 +2,18 @@
 
 buildGoModule rec {
   pname = "goawk";
-  version = "1.16.0";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "benhoyt";
     repo = "goawk";
     rev = "v${version}";
-    sha256 = "sha256-ALzCcSZHnzidj4tQzZWXT8WDPIE147KWbn7n1JHCTRE=";
+    sha256 = "sha256-aZc9HxTbC+u6JnJixSjcKUipwzkwq8DpaJuQv4spXDY=";
   };
 
   vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
 
   postPatch = ''
-    substituteInPlace goawk_test.go \
-      --replace "TestCommandLine" "SkipCommandLine" \
-      --replace "TestDevStdout" "SkipDevStdout" \
-      --replace "TestFILENAME" "SkipFILENAME" \
-      --replace "TestWildcards" "SkipWildcards"
-
     substituteInPlace interp/interp_test.go \
       --replace "TestShellCommand" "SkipShellCommand"
   '';
