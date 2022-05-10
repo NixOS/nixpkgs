@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     description = "Numerical Utilities for Finite Element Analysis";
     homepage = "https://www.nutils.org/";
     license = licenses.mit;
+    broken = stdenv.hostPlatform.isAarch64;
     maintainers = with maintainers; [ Scriptkiddi ];
   };
 }
