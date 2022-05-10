@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-Wno-dev" ];
 
+  postPatch = ''
+    substituteInPlace Constants.h \
+      --replace "UNKNOWN = -1" "// UNKNOWN removed since it doesn't fit in char"
+  '';
+
   installPhase = ''
     runHook preInstall
     install -Dm755 -t $out/bin SonyHeadphonesClient
