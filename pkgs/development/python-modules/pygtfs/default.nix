@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pygtfs";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nx2idgza07kmvj7pcgpj3pqhw53v5rq63paw2ly51cjas2fv5pr";
+    sha256 = "sha256-sGJwtf8DVIrE4hcU3IksnyAAt8yf67UBJIiVILDSsv8=";
   };
 
   nativeBuildInputs = [
