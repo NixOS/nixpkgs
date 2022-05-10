@@ -792,7 +792,8 @@ with pkgs;
       '';
     in
       makeSetupHook {
-        deps = [ dieHook cc ];
+        deps = [ dieHook ]
+          ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) darwin.cctools;
         substitutions.passthru.tests = callPackage ../test/make-binary-wrapper {
           makeBinaryWrapper = makeBinaryWrapper.override {
             sanitizers = (if stdenv.isDarwin && stdenv.isAarch64
