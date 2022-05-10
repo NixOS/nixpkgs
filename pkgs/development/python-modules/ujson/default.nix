@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "ujson";
   version = "5.1.0";
-  disabled = isPyPy || pythonOlder "3.5";
+  disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,9 +28,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ujson" ];
 
   meta = with lib; {
-    description = "Ultra fast JSON encoder and decoder for Python";
-    homepage = "https://pypi.python.org/pypi/ujson";
+    description = "Ultra fast JSON encoder and decoder";
+    homepage = "https://github.com/ultrajson/ultrajson";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
