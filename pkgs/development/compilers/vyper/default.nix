@@ -1,6 +1,19 @@
-{ lib, buildPythonPackage, fetchPypi, writeText, asttokens
-, pycryptodome, pytest-xdist, pytest-cov, recommonmark, semantic-version, sphinx
-, sphinx_rtd_theme, pytest-runner, setuptools-scm }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pythonAtLeast
+, pythonRelaxDepsHook
+, writeText
+, asttokens
+, pycryptodome
+, recommonmark
+, semantic-version
+, sphinx
+, sphinx_rtd_theme
+, pytest-runner
+, setuptools-scm
+}:
 
 let
   sample-contract = writeText "example.vy" ''
@@ -10,18 +23,27 @@ let
     def __init__(foo: address):
         self.count = 1
   '';
-in
 
+in
 buildPythonPackage rec {
   pname = "vyper";
   version = "0.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.10";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-fXug5v3zstz19uexMWokHBVsfcl2ZCdIOIXKeLVyh/Q=";
   };
 
-  nativeBuildInputs = [ pytest-runner setuptools-scm ];
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+    pytest-runner
+    setuptools-scm
+  ];
+
+  pythonRelaxDeps = [ "semantic-version" ];
 
   propagatedBuildInputs = [
     asttokens
