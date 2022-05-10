@@ -126,6 +126,7 @@ self = stdenv.mkDerivation rec {
   passthru = rec {
     buildEnv = callPackage ./wrapper.nix {
       lua = self;
+      inherit makeWrapper;
       inherit (luaPackages) requiredLuaModules;
     };
     withPackages = import ./with-packages.nix { inherit buildEnv luaPackages;};
