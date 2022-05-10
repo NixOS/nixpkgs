@@ -8660,6 +8660,8 @@ with pkgs;
 
   notable = callPackage ../applications/misc/notable { };
 
+  nth = with python3Packages; toPythonApplication name-that-hash;
+
   ntlmrecon = callPackage ../tools/security/ntlmrecon { };
 
   numberstation = callPackage ../applications/misc/numberstation { };
