@@ -30377,8 +30377,6 @@ with pkgs;
 
   vocal = callPackage ../applications/audio/vocal { };
 
-  vogl = libsForQt5.callPackage ../development/tools/vogl { };
-
   volnoti = callPackage ../applications/misc/volnoti { };
 
   vorbis-tools = callPackage ../applications/audio/vorbis-tools {
