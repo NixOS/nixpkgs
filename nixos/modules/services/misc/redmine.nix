@@ -278,6 +278,7 @@ in
         scm_git_command = if cfg.components.git then "${pkgs.git}/bin/git" else "";
         scm_cvs_command = if cfg.components.cvs then "${pkgs.cvs}/bin/cvs" else "";
         scm_bazaar_command = if cfg.components.breezy then "${pkgs.breezy}/bin/bzr" else "";
+        imagemagick_convert_command = if cfg.components.imagemagick then "${pkgs.imagemagick}/bin/convert" else "";
         gs_command = if cfg.components.ghostscript then "${pkgs.ghostscript}/bin/gs" else "";
       };
     };
