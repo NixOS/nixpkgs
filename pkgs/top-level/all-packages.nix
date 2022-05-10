@@ -14334,8 +14334,6 @@ with pkgs;
 
   octavePackages = recurseIntoAttrs octave.pkgs;
 
-  ocropus = callPackage ../applications/misc/ocropus { };
-
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
 
