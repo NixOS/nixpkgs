@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook
+{ lib, stdenv, fetchurl, wrapGAppsHook, makeWrapper
 , dpkg
 , alsa-lib
 , at-spi2-atk
@@ -102,7 +102,10 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   doInstallCheck = true;
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook ];
+  nativeBuildInputs = [
+    dpkg
+    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
+  ];
 
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
