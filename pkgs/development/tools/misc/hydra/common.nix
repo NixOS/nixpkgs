@@ -15,10 +15,6 @@
 
 with stdenv;
 
-if lib.versions.major nix.version == "1"
-  then throw "This Hydra version doesn't support Nix 1.x"
-else
-
 let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
