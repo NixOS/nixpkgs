@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
-  version = "unstable-2022-01-03";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
-    owner = "AndrewGaspar";
+    owner = "corrosion-rs";
     repo = "corrosion";
-    rev = "ba253b381e99bd87b514db9cee299b849c7625b5";
-    hash = "sha256-r1chLXvWbHtUYSRJis8RNvjDdWERSkqeM4ik30vlfHQ=";
+    rev = "v${version}";
+    hash = "sha256-nJ4ercNykECDBqecuL8cdCl4DHgbgIUmbiFBG/jiOaA=";
   };
 
   cargoRoot = "generator";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-xUDmUj73ja8feEh0yyjgkjm7alPaYxucG6sL59mSECg=";
+    hash = "sha256-4JVbHYlMOKztWPYW7tXQdvdNh/ygfpi0CY6Ly93VxsI=";
   };
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool for integrating Rust into an existing CMake project";
-    homepage = "https://github.com/AndrewGaspar/corrosion";
+    homepage = "https://github.com/corrosion-rs/corrosion";
+    changelog = "https://github.com/corrosion-rs/corrosion/blob/${src.rev}/RELEASES.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
