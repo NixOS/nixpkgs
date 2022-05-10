@@ -43,7 +43,7 @@ makeWrapper() {
     mkdir -p "$(dirname "$wrapper")"
 
     makeDocumentedCWrapper "$original" "$@" | \
-      @CC@ \
+      @cc@ \
         -Wall -Werror -Wpedantic \
         -Wno-overlength-strings \
         -Os \

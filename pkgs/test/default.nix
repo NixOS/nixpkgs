@@ -71,7 +71,13 @@ with pkgs;
 
   dhall = callPackage ./dhall { };
 
-  makeWrapper = callPackage ./make-wrapper {};
+  makeWrapper = callPackage ./make-wrapper { };
+  makeBinaryWrapper = callPackage ./make-binary-wrapper {
+    makeBinaryWrapper = pkgs.makeBinaryWrapper.override {
+      sanitizers = pkgs.lib.optionals (! (pkgs.stdenv.isDarwin && pkgs.stdenv.isAarch64))
+        [ "undefined" "address" ];
+    };
+  };
 
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
 }
