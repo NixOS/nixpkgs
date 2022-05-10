@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     # Install sysconfdir files inside of the nix store,
     # but use a conventional runtime sysconfdir outside the store
     ./add-option-for-installation-sysconfdir.patch
-
+  ] ++ lib.optionals stdenv.isDarwin [
     # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/merge_requests/654
     ./0001-Make-gio-2.0-optional-when-gsettings-is-disabled.patch
 
@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libtool libsndfile soxr speexdsp fftwFloat check libintl ]
+    [ libtool libsndfile soxr speexdsp fftwFloat check ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
-    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit Cocoa CoreServices libintl ]
     ++ lib.optionals (!libOnly) (
       [ libasyncns webrtc-audio-processing ]
       ++ lib.optional jackaudioSupport libjack2
@@ -96,9 +96,7 @@ stdenv.mkDerivation rec {
     "-Dbluez5-gstreamer=${if (!libOnly && bluetoothSupport && advancedBluetoothCodecs) then "enabled" else "disabled"}"
     "-Ddatabase=simple"
     "-Ddoxygen=false"
-    "-Ddbus=${if stdenv.isLinux then "enabled" else "disabled"}"
     "-Delogind=disabled"
-    "-Dglib=${if stdenv.isLinux then "enabled" else "disabled"}"
     # gsettings does not support cross-compilation
     "-Dgsettings=${if stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
     "-Dgstreamer=disabled"
@@ -107,7 +105,6 @@ stdenv.mkDerivation rec {
     "-Dlirc=${if remoteControlSupport then "enabled" else "disabled"}"
     "-Dopenssl=${if airtunesSupport then "enabled" else "disabled"}"
     "-Dorc=disabled"
-    "-Doss-output=${if stdenv.isLinux then "enabled" else "disabled"}"
     "-Dsystemd=${if useSystemd && !libOnly then "enabled" else "disabled"}"
     "-Dtcpwrap=disabled"
     "-Dudev=${if !libOnly then "enabled" else "disabled"}"
@@ -119,13 +116,16 @@ stdenv.mkDerivation rec {
     "-Dsysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
-
-    # tests fail on Darwin because of timeouts
-    "-Dtests=${if stdenv.isLinux then "true" else "false"}"
   ]
-  ++ lib.optional (stdenv.isLinux && useSystemd) "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user";
+  ++ lib.optional (stdenv.isLinux && useSystemd) "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
+  ++ lib.optionals (stdenv.isDarwin) [
+    "-Ddbus=disabled"
+    "-Dglib=disabled"
+    "-Doss-output=disabled"
+  ];
 
-  doCheck = true;
+  # tests fail on Darwin because of timeouts
+  doCheck = !stdenv.isDarwin;
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
