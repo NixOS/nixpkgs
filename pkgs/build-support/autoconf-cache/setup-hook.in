@@ -1,0 +1,8 @@
+autoconfCacheFiles+=(@cache@)
+preConfigureHooks+=(_autoconfCache)
+
+_autoconfCache() {
+	local cache=$(mktemp)
+	cat ${autoconfCacheFiles[@]} > "$cache"
+	configureFlagsArray+=("--cache-file=$cache")
+}
