@@ -469,7 +469,10 @@ stdenv.mkDerivation ({
   # `--test-option`, so Cabal passes it to the underlying test suite binary.
   checkPhase = ''
     runHook preCheck
-    checkFlagsArray+=(${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)})
+    checkFlagsArray+=(
+      "--show-details=streaming"
+      ${lib.escapeShellArgs (builtins.map (opt: "--test-option=${opt}") testFlags)}
+    )
     ${setupCommand} test ${testTarget} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '';
