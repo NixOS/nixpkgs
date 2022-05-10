@@ -243,6 +243,12 @@ in
           default = false;
           description = "Allows exporting Gant diagrams as PNG.";
         };
+
+        ghostscript = mkOption {
+          type = types.bool;
+          default = false;
+          description = "Allows exporting Gant diagrams as PDF.";
+        };
       };
     };
   };
@@ -272,6 +278,7 @@ in
         scm_git_command = if cfg.components.git then "${pkgs.git}/bin/git" else "";
         scm_cvs_command = if cfg.components.cvs then "${pkgs.cvs}/bin/cvs" else "";
         scm_bazaar_command = if cfg.components.breezy then "${pkgs.breezy}/bin/bzr" else "";
+        gs_command = if cfg.components.ghostscript then "${pkgs.ghostscript}/bin/gs" else "";
       };
     };
 
@@ -339,7 +346,8 @@ in
       ++ optional cfg.components.git git
       ++ optional cfg.components.cvs cvs
       ++ optional cfg.components.breezy breezy
-      ++ optional cfg.components.imagemagick imagemagick;
+      ++ optional cfg.components.imagemagick imagemagick
+      ++ optional cfg.components.ghostscript ghostscript;
 
       preStart = ''
         rm -rf "${cfg.stateDir}/plugins/"*
