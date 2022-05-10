@@ -11243,6 +11243,8 @@ with pkgs;
 
   tarssh = callPackage ../servers/tarssh { };
 
+  tart = callPackage ../tools/virtualization/tart { };
+
   tartan = callPackage ../development/tools/analysis/tartan {};
 
   tartube = callPackage ../applications/video/tartube { };
