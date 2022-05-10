@@ -20,28 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.12.20";
+  version = "1.14.0";
 
   src = fetchurl {
-    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "1zp5gpx61v1cpqf2zwb1cidhp9xylvw49d3zydkxqk6b1qa20xpp";
+    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
+    sha256 = "sha256-zNfM43WW4KGVWP1mSNEnKrQ/AR2AyGNa6o/QutWK69Q=";
   };
 
   patches = [
-    # 'generate.consistent.ids=1' ensures reproducible docs, for further details see
-    # http://docbook.sourceforge.net/release/xsl/current/doc/html/generate.consistent.ids.html
-    # Also applied upstream in https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/189,
-    # expected in version 1.14
-    ./docs-reproducible-ids.patch
-    # AC_PATH_XTRA doesn't seem to find X11 libs even though libX11 seems
-    # to provide valid pkg-config files. This replace AC_PATH_XTRA with
-    # PKG_CHECK_MODULES.
-    # MR merged cf https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/212/diffs?commit_id=23880a181e82ee7f
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/dbus/dbus/-/commit/6bfaea0707ba1a7788c4b6d30c18fb094f3a1dd4.patch";
-      sha256 = "1d8ay55n2ksw5faqx3hsdpfni3xl3gq9hnjl65073xcfnx67x8d2";
-    })
-
     # Fix dbus-daemon crashing when running tests due to long XDG_DATA_DIRS.
     # https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/302
     (fetchpatch {
