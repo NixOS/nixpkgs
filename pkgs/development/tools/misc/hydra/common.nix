@@ -81,7 +81,6 @@ let
         TermSizeAny
         TermReadKey
         Test2Harness
-        TestMore
         TestPostgreSQL
         TextDiff
         TextTable
