@@ -20512,8 +20512,6 @@ with pkgs;
   };
   valgrind-light = res.valgrind.override { gdb = null; };
 
-  valkyrie = callPackage ../development/tools/analysis/valkyrie { };
-
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind { };
 
   visualvm = callPackage ../development/tools/java/visualvm { };

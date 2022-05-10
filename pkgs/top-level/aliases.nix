@@ -1803,6 +1803,7 @@ mapAliases ({
   ### V ###
 
   v4l_utils = v4l-utils; # Added 2019-08-07
+  valkyrie = throw "valkyrie was removed from nixpkgs, because it is unmaintained upstream"; # Added 2022-05-10
   vamp = { vampSDK = vamp-plugin-sdk; }; # Added 2020-03-26
   vaapiIntel = intel-vaapi-driver; # Added 2023-05-31
   vapor = throw "vapor was removed because it was unmaintained and upstream service no longer exists";
