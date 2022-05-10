@@ -182,6 +182,7 @@ let
     meta = {
       description = "Perl extension to generate and test check digits";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "checkdigits.pl";
     };
   };
 
@@ -476,6 +477,9 @@ let
     };
     propagatedBuildInputs = [ AnyEvent commonsense ];
     meta = {
+      description = "Quickly ping a large number of hosts";
+      license = with lib.licenses; [ artistic1 gpl2Plus ];
+      mainProgram = "fastping";
     };
   };
 
@@ -724,6 +728,7 @@ let
      meta = {
        description = "pack your dependencies onto your script file";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "fatpack";
      };
   };
 
@@ -747,6 +752,7 @@ let
       homepage = "https://github.com/miyagawa/cpanminus";
       description = "Get, unpack, build and install modules from CPAN";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "cpanm";
     };
   };
 
@@ -768,6 +774,7 @@ let
       description = "A fast CPAN module installer";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.zakame ];
+      mainProgram = "cpm";
     };
   };
 
@@ -805,6 +812,7 @@ let
       homepage = "https://www.chordpro.org";
       description = "A lyrics and chords formatting program";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "chordpro";
     };
   };
 
@@ -836,6 +844,7 @@ let
     meta = {
       description = "Manage perl installations in your $HOME";
       license = lib.licenses.mit;
+      mainProgram = "perlbrew";
     };
   };
 
@@ -868,6 +877,7 @@ let
       homepage = "https://sqitch.org/";
       description = "Sane database change management";
       license = lib.licenses.mit;
+      mainProgram = "sqitch";
     };
   };
 
@@ -887,6 +897,7 @@ let
       license = lib.licenses.mit;
       homepage = "https://github.com/nferraz/st";
       maintainers = [ maintainers.eelco ];
+      mainProgram = "st";
     };
   };
 
@@ -985,6 +996,7 @@ let
       description = "Module for manipulations of cpio archives";
       # See https://rt.cpan.org/Public/Bug/Display.html?id=43597#txn-569710
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "cpio-filter";
     };
   };
 
@@ -1038,6 +1050,7 @@ let
     meta = {
       description = "Provide an interface to ZIP archive files";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "crc32";
     };
   };
 
@@ -1173,6 +1186,7 @@ let
     meta = {
       description = "Generate Tickets (Signed HTTP Cookies) for mod_auth_pubtkt protected websites";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "mod_auth_pubtkt.pl";
     };
   };
 
@@ -1338,6 +1352,7 @@ let
 
       homepage = "http://www.aarontrevena.co.uk/opensource/autodia/";
       license = lib.licenses.gpl2Plus;
+      mainProgram = "autodia.pl";
     };
     buildInputs = [ DBI ];
   };
@@ -1554,6 +1569,7 @@ let
       homepage = "https://metacpan.org/release/Bot-Training";
       description = "Plain text training material for bots like Hailo and AI::MegaHAL";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "bot-training";
     };
   };
 
@@ -1997,6 +2013,7 @@ let
       homepage = "https://github.com/perl-carton/carton";
       description = "Perl module dependency manager (aka Bundler for Perl)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "carton";
     };
   };
 
@@ -2203,6 +2220,7 @@ let
       homepage = "http://wiki.catalystframework.org/wiki/";
       description = "The Catalyst Framework Runtime";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "catalyst.pl";
     };
   };
 
@@ -2630,6 +2648,7 @@ let
       description = "a data toolkit";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       homepage = "https://github.com/LibreCat/Catmandu";
+      mainProgram = "catmandu";
     };
   };
 
@@ -2644,6 +2663,7 @@ let
       description = "Get the CDDB info for an audio cd";
       license = lib.licenses.artistic1;
       maintainers = [ maintainers.endgame ];
+      mainProgram = "cddb.pl";
     };
   };
 
@@ -3004,6 +3024,11 @@ let
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSCHLUE/Class-Classgen-classgen-3.03.tar.gz";
       sha256 = "9b65d41b991538992e816b32cc4fa9b4a4a0bb3e9c10e7eebeff82658dbbc8f6";
+    };
+    meta = {
+      description = "Simplifies creation, manipulation and usage of complex objects.";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "classgen";
     };
   };
 
@@ -3450,6 +3475,7 @@ let
      meta = {
        description = "Engine for tidyall, your all-in-one code tidier and validator";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "tidyall";
      };
   };
 
@@ -3847,6 +3873,7 @@ let
     meta = {
       description = "Simple, versioned access to configuration data";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "cfgver";
     };
   };
 
@@ -4075,6 +4102,7 @@ let
      meta = {
        description = "Coro based PSGI web server";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "corona";
      };
   };
 
@@ -4110,6 +4138,7 @@ let
       description = "Create a minimal mirror of CPAN";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+      mainProgram = "minicpan";
     };
   };
 
@@ -4123,6 +4152,7 @@ let
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "cpanel_json_xs";
     };
   };
 
@@ -4153,6 +4183,7 @@ let
     meta = {
       description = "Read and write Changes files";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "tidy_changelog";
     };
   };
 
@@ -4253,6 +4284,7 @@ let
       homepage = "https://github.com/rjbs/cpan-uploader";
       description = "Upload things to the CPAN";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "cpan-upload";
     };
   };
 
@@ -4536,6 +4568,7 @@ let
     meta = {
       description = "Interface to /dev/random and /dev/urandom";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "makerandom";
     };
   };
 
@@ -4725,6 +4758,7 @@ let
       description = "Pure-Perl OpenPGP implementation";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+      mainProgram = "pgplet";
     };
     doCheck = false; /* test fails with 'No random source available!' */
   };
@@ -5064,6 +5098,7 @@ let
     meta = {
       description = "Dump with recursive encoding";
       license = lib.licenses.artistic2;
+      mainProgram = "edumper";
     };
   };
 
@@ -5139,6 +5174,7 @@ let
     meta = {
       description = "Hexadecimal Dumper";
       maintainers = with maintainers; [ AndersonTorres ];
+      mainProgram = "hexdump";
     };
   };
 
@@ -5773,6 +5809,7 @@ let
     meta = {
       description = "Create machine readable date/time with natural parsing logic";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "dateparse";
     };
   };
 
@@ -6038,6 +6075,7 @@ let
       homepage = "https://github.com/bingos/devel-patchperl";
       description = "Patch perl source a la Devel::PPPort's buildperl.pl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "patchperl";
     };
   };
 
@@ -6381,6 +6419,7 @@ let
       homepage = "https://metacpan.org/pod/DBIx::Class";
       description = "Extensible and flexible object <-> relational mapper";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "dbicadmin";
     };
   };
 
@@ -6501,6 +6540,7 @@ let
     meta = {
       description = "Create a DBIx::Class::Schema based on a database";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "dbicdump";
     };
   };
 
@@ -6925,6 +6965,7 @@ let
       description = "Perl extension for SHA-3";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+      mainProgram = "sha3sum";
     };
   };
 
@@ -7016,6 +7057,7 @@ let
       homepage = "http://dzil.org/";
       description = "Distribution builder; installer not included!";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "dzil";
     };
     doCheck = false;
   };
@@ -7372,6 +7414,7 @@ let
       description = "More reliable benchmarking with the least amount of thinking";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       homepage = "https://github.com/briandfoy/dumbbench";
+      mainProgram = "dumbbench";
     };
   };
 
@@ -7563,6 +7606,7 @@ let
       description = "A .MSG to mbox converter";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ peterhoeg ];
+      mainProgram = "msgconvert";
     };
   };
 
@@ -7809,6 +7853,11 @@ let
       url = "mirror://cpan/authors/id/D/DS/DSB/Env-Path-0.19.tar.gz";
       sha256 = "1qhmj15a66h90pjl2dgnxsb9jj3b1r5mpvnr87cafcl8g69z0jr4";
     };
+    meta = {
+      description = "Advanced operations on path variables";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "envpath";
+    };
   };
 
   EnvSanctify = buildPerlPackage {
@@ -7871,9 +7920,9 @@ let
     };
     propagatedBuildInputs = [ ArchiveZip ];
     meta = {
-      homepage = "http://jmcnamara.github.com/excel-writer-xlsx/";
       description = "Create a new file in the Excel 2007+ XLSX format";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "extract_vba";
     };
   };
 
@@ -8146,6 +8195,7 @@ let
     meta = {
       description = "Create a module Makefile";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "instmodsh";
     };
   };
 
@@ -8232,6 +8282,11 @@ let
       sha256 = "1zx84f93lkymqz7qa4d63gzlnhnkxm5i3gvsrwkvvqr9cxjasxli";
     };
     buildInputs = [ TestBase TestDifferences ];
+    meta = {
+      description = "XS++ is just a thin layer over plain XS";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "xspp";
+    };
   };
 
   FatalException = buildPerlModule {
@@ -8498,6 +8553,7 @@ let
       homepage = "https://www.shlomifish.org/open-source/projects/File-Find-Object/";
       description = "Alternative interface to File::Find::Object";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "findorule";
     };
   };
 
@@ -8509,6 +8565,11 @@ let
       sha256 = "1znachnhmi1w5pdqx8dzgfa892jb7x8ivrdy4pzjj7zb6g61cvvy";
     };
     propagatedBuildInputs = [ NumberCompare TextGlob ];
+    meta = {
+      description = "File::Find::Rule is a friendlier interface to File::Find";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "findrule";
+    };
   };
 
   FileFindRulePerl = buildPerlPackage {
@@ -8887,6 +8948,7 @@ let
     meta = {
       description = "Estimate file space usage (similar to `du`)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "fdu";
     };
   };
 
@@ -9224,6 +9286,12 @@ let
     hardeningDisable = [ "format" ];
 
     makeMakerFlags = "--lib_png_path=${pkgs.libpng.out} --lib_jpeg_path=${pkgs.libjpeg.out} --lib_zlib_path=${pkgs.zlib.out} --lib_ft_path=${pkgs.freetype.out} --lib_fontconfig_path=${pkgs.fontconfig.lib} --lib_xpm_path=${pkgs.xorg.libXpm.out}";
+
+    meta = {
+      description = "Interface to Gd Graphics Library";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "bdf2gdfont.pl";
+    };
   };
 
   GDGraph = buildPerlPackage {
@@ -9291,6 +9359,7 @@ let
     meta = {
       description = "Perl API for MaxMind's GeoIP2 web services and databases";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "web-service-request";
     };
   };
 
@@ -9368,9 +9437,10 @@ let
       shortenPerlShebang $out/bin/git-autofixup
     '';
     meta = {
-      maintainers = [ maintainers.DamienCassou ];
       description = "Create fixup commits for topic branches";
       license = lib.licenses.artistic2;
+      maintainers = [ maintainers.DamienCassou ];
+      mainProgram = "git-autofixup";
     };
   };
 
@@ -9532,6 +9602,10 @@ let
     };
     buildInputs = [ pkgs.gnupg1orig ];
     doCheck = false;
+    meta = {
+      description = "Perl interface to the GNU Privacy Guard";
+      mainProgram = "gpgmailtunl";
+    };
   };
 
   GnuPGInterface = buildPerlPackage {
@@ -9620,6 +9694,7 @@ let
     meta = {
       description = "Simple interface to Google Protocol Buffers";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "protoc-perl";
     };
   };
 
@@ -9922,6 +9997,7 @@ let
       homepage = "https://github.com/hailo/hailo";
       description = "A pluggable Markov engine analogous to MegaHAL";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "hailo";
     };
   };
 
@@ -10082,6 +10158,7 @@ let
     meta = {
       description = "Cleans up HTML code for web browsers, not humans";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "htmlclean";
     };
   };
 
@@ -10121,6 +10198,9 @@ let
     };
     propagatedBuildInputs = [ HTMLParser TermVT102Boundless ];
     meta = {
+      description = "Mark up ANSI sequences as HTML";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "ansi2html";
     };
   };
 
@@ -10437,6 +10517,11 @@ let
       sed -i "s#/usr/lib#${pkgs.tidyp}/lib#" Makefile.PL
     '';
     buildInputs = [ TestException ];
+    meta = {
+      description = "HTML::Tidy is an HTML checker in a handy dandy object";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "webtidy";
+    };
   };
 
   HTMLTiny = buildPerlPackage {
@@ -10474,6 +10559,7 @@ let
     meta = {
       description = "Work with HTML in a DOM-like tree structure";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "htmltree";
     };
   };
 
@@ -10618,6 +10704,8 @@ let
     };
     meta = {
       description = "WebDAV client library.";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "dave";
     };
     propagatedBuildInputs = [ XMLDOM ];
   };
@@ -10879,6 +10967,7 @@ let
     meta = {
       description = "Perl interface to the C library \"libpng\"";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "pnginspect";
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.ImagePNGLibpng.x86_64-darwin
     };
   };
@@ -10970,6 +11059,7 @@ let
     meta = {
       description = "Read the dimensions of an image in several popular formats";
       license = with lib.licenses; [ artistic1 lgpl21Plus ];
+      mainProgram = "imgsize";
     };
   };
 
@@ -10993,6 +11083,7 @@ let
     meta = {
       description = "Read an image with tesseract ocr and get output";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "ocr";
     };
   };
 
@@ -11063,6 +11154,7 @@ let
     meta = {
       description = "Asynchronous/Advanced Input/Output";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "treescan";
     };
   };
 
@@ -11242,6 +11334,10 @@ let
       sha256 = "15dimh3i61y6kybhbap91kwh9837xfww072rh95h7j40sb1did5w";
     };
     propagatedBuildInputs = [ pkgs.more FileWhich TermReadKey ]; # `more` used in tests
+    meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "tp";
+    };
   };
 
   IOPty = buildPerlModule {
@@ -11429,6 +11525,7 @@ let
     meta = {
       description = "Fast lookup of country codes from IP addresses";
       license = lib.licenses.mit;
+      mainProgram = "ip2cc";
     };
   };
 
@@ -11539,8 +11636,6 @@ let
       description = "A tool to read, write and edit EXIF meta information";
       homepage = "https://exiftool.org/";
 
-      mainProgram = "exiftool";
-
       longDescription = ''
         ExifTool is a platform-independent Perl library plus a command-line
         application for reading, writing and editing meta information in a wide
@@ -11554,8 +11649,8 @@ let
       '';
 
       license = with licenses; [ gpl1Plus /* or */ artistic2 ];
-
       maintainers = [ maintainers.kiloreux ];
+      mainProgram = "exiftool";
     };
   };
 
@@ -11741,6 +11836,7 @@ let
     meta = {
       description = "JSON::XS compatible pure-Perl module";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "json_pp";
     };
   };
 
@@ -11767,6 +11863,7 @@ let
     meta = {
       description = "Read JSON into a Perl variable";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "validjson";
     };
   };
 
@@ -11812,6 +11909,11 @@ let
     };
     propagatedBuildInputs = [ TypesSerialiser ];
     buildInputs = [ CanaryStability ];
+    meta = {
+      description = "JSON serialising/deserialising, done correctly and fast";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "json_xs";
+    };
   };
 
   JSONXSVersionOneAndTwo = buildPerlPackage {
@@ -12203,6 +12305,11 @@ let
       sha256 = "113f91d8fc2c630437153a49fb7a52b023af8f6278ed96c070b1f60824b8eae1";
     };
     doCheck = false;
+    meta = {
+      description = "Transliterates text between writing systems";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "translit";
+    };
   };
 
   LinkEmbedder = buildPerlPackage {
@@ -12487,6 +12594,7 @@ let
     meta = {
       description = "Use other catalog formats in Maketext";
       license = "mit";
+      mainProgram = "xgettext.pl";
     };
   };
 
@@ -12796,6 +12904,7 @@ let
       homepage = "https://mschilli.github.io/log4perl/";
       description = "Log4j implementation for Perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "l4p-tmpl";
     };
   };
 
@@ -13049,12 +13158,13 @@ let
       url = "mirror://cpan/authors/id/W/WY/WYANT/Mac-Pasteboard-0.011.tar.gz";
       sha256 = "1a82pacp6pph3y2agdihzr4vc0phx85mq5am9czc81g8n484b35x";
     };
+    buildInputs = [ pkgs.darwin.apple_sdk.frameworks.ApplicationServices ];
     meta = with lib; {
       description = "Manipulate Mac OS X pasteboards";
       license = with licenses; [ artistic1 gpl1Plus ];
       platforms = platforms.darwin;
+      mainProgram = "pbtool";
     };
-    buildInputs = [ pkgs.darwin.apple_sdk.frameworks.ApplicationServices ];
   };
 
   MailAuthenticationResults = buildPerlPackage {
@@ -13311,6 +13421,7 @@ let
     meta = {
       description = "Human-readable unit-aware calculator";
       license = with lib.licenses; [ artistic1 gpl2 ];
+      mainProgram = "ucalc";
     };
   };
 
@@ -13845,6 +13956,10 @@ let
     };
     outputs = [ "out" ];
     buildInputs = [ ProcWaitStat ];
+    meta = {
+      description = "Construct and optionally mail MIME messages";
+      license = lib.licenses.gpl2Plus;
+    };
   };
 
   MIMEEncWords = buildPerlPackage {
@@ -14009,8 +14124,9 @@ let
      };
      meta = {
        description = "Micro Objects. Mo is less.";
-       license = with lib.licenses; [ artistic1 gpl1Plus ];
        homepage = "https://github.com/ingydotnet/mo-pm";
+       license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "mo-inline";
      };
   };
 
@@ -14069,6 +14185,7 @@ let
     meta = {
       description = "Build and install Perl modules";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "config_data";
     };
   };
 
@@ -14413,6 +14530,7 @@ let
       homepage = "https://github.com/neilbowers/Module-Path";
       description = "Get the full path to a locally installed module";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "mpath";
     };
   };
 
@@ -14497,6 +14615,7 @@ let
     meta = {
       description = "Recursively scan Perl code for dependencies";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "scandeps.pl";
     };
   };
 
@@ -14511,6 +14630,7 @@ let
     meta = {
       description = "Module signature file manipulation";
       license = lib.licenses.cc0;
+      mainProgram = "cpansign";
     };
   };
 
@@ -14524,6 +14644,7 @@ let
     meta = {
       description = "Module name tools and transformations";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "pm_which";
     };
   };
 
@@ -14583,6 +14704,7 @@ let
     meta = {
       description = "Embed a Perl interpreter in the Apache HTTP server";
       license = lib.licenses.asl20;
+      mainProgram = "mp2bug";
     };
 
     passthru.tests = nixosTests.mod_perl;
@@ -14964,6 +15086,7 @@ let
       description = "A postmodern object system for Perl 5";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.eelco ];
+      mainProgram = "moose-outdated";
     };
   };
 
@@ -15627,6 +15750,7 @@ let
       homepage = "https://github.com/moose/MooseX-Runnable";
       description = "Tag a class as a runnable application";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "mx-run";
     };
   };
 
@@ -16040,6 +16164,7 @@ let
       description = "Generates a database upgrade instruction set";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+      mainProgram = "mysqldiff";
     };
   };
 
@@ -16167,6 +16292,7 @@ let
     meta = {
       description = "Use the Amazon S3 - Simple Storage Service";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "s3cl";
     };
   };
 
@@ -16313,10 +16439,10 @@ let
     propagatedBuildInputs = [ XMLTwig ];
 
     # https://gitlab.com/berrange/perl-net-dbus/-/merge_requests/19
-    patches = (fetchpatch {
+    patches = fetchpatch {
       url = "https://gitlab.com/berrange/perl-net-dbus/-/commit/6bac8f188fb06e5e5edd27aee672d66b7c28caa4.patch";
       sha256 = "19nf4xn9xhyd0sd2az9iliqldjj0k6ah2dmkyqyvq4rp2d9k5jgb";
-    });
+    };
 
     postPatch = ''
       substituteInPlace Makefile.PL --replace pkg-config $PKG_CONFIG
@@ -16526,6 +16652,9 @@ let
       sha256 = "1zk3591822dg187sgkwjjvg18qmvkn3yib1c34mq8z5i617xwi9q";
     };
     meta = {
+      description = "Perl extension for manipulating IPv4 addresses";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "ipv4calc";
     };
   };
 
@@ -16691,6 +16820,8 @@ let
     doCheck = false; # seems to hang waiting for connections
     meta = {
       description = "Extensible, general Perl server engine";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "net-server";
     };
   };
 
@@ -16781,6 +16912,11 @@ let
       sha256 = "0hdpn1cw52x8cw24m9ayzpf4rwarm0khygn1sv3wvwxkrg0pphql";
     };
     doCheck = false; # The test suite fails, see https://rt.cpan.org/Public/Bug/Display.html?id=85799
+    meta = {
+      description = "Object oriented interface to SNMP";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "snmpkey";
+    };
   };
 
   NetSNPP = buildPerlPackage rec {
@@ -16862,6 +16998,7 @@ let
     meta = {
       description = "Sends statistics to the stats daemon over UDP";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "benchmark.pl";
     };
   };
 
@@ -17298,6 +17435,7 @@ let
     meta = {
       description = "Routines for manipulating stashes";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "package-stash-conflicts";
     };
   };
 
@@ -17475,8 +17613,9 @@ let
      buildInputs = [ PathTiny ];
      meta = {
        description = "interface to PAUSE's module permissions file (06perms.txt)";
-       license = with lib.licenses; [ artistic1 gpl1Plus ];
        homepage = "https://github.com/neilb/PAUSE-Permissions";
+       license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "pause-permissions";
      };
   };
 
@@ -17607,6 +17746,7 @@ let
     meta = {
       description = "Perl extension for generating and using LALR parsers";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "yapp";
     };
   };
 
@@ -17849,14 +17989,15 @@ let
     buildInputs = [ TestDeep ];
     nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
     propagatedBuildInputs = [ BKeywords ConfigTiny FileWhich ListMoreUtils ModulePluggable PPIxQuoteLike PPIxRegexp PPIxUtilities PerlTidy PodSpell StringFormat ];
+    postInstall = lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang $out/bin/perlcritic
+    '';
     meta = {
       homepage = "http://perlcritic.com";
       description = "Critique Perl source code for best-practices";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "perlcritic";
     };
-    postInstall = lib.optionalString stdenv.isDarwin ''
-      shortenPerlShebang $out/bin/perlcritic
-    '';
   };
 
   PerlCriticCommunity = buildPerlModule {
@@ -18063,6 +18204,7 @@ let
     meta = {
       description = "Indent and reformat perl scripts";
       license = lib.licenses.gpl2Plus;
+      mainProgram = "perltidy";
     };
   };
 
@@ -18111,6 +18253,7 @@ let
       homepage = "https://github.com/plack/Plack";
       description = "Perl Superglue for Web frameworks and Web Servers (PSGI toolkit)";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "plackup";
     };
   };
 
@@ -18313,6 +18456,7 @@ let
       description = "Perl Language Server";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.artturin ];
+      mainProgram = "pls";
     };
   };
 
@@ -18330,6 +18474,7 @@ let
       homepage = "http://user42.tuxfamily.org/pod-minimumversion/index.html";
       description = "Determine minimum Perl version of POD directives";
       license = lib.licenses.free;
+      mainProgram = "pod-minimumversion";
     };
   };
 
@@ -18375,9 +18520,10 @@ let
       sha256 = "0yx4wsljfmdzsiv0ni98x6lw975cm82ahngbwqvzv60wx5pwkl5y";
     };
     meta = {
-      maintainers = teams.deshaw.members;
       description = "Reusable tests for POE::Loop authors";
       license = lib.licenses.artistic2;
+      maintainers = teams.deshaw.members;
+      mainProgram = "poe-gen-tests";
     };
   };
 
@@ -18467,6 +18613,9 @@ let
       sha256 = "91b6a5aeb841b1c313498c78fad08e37d17595702dc6205b5ad38ef69949b7ee";
     };
     meta = {
+      description = "Provides a generic interface to running background processes";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "timed-process";
     };
   };
 
@@ -18664,6 +18813,7 @@ let
       homepage = "https://github.com/neilbowers/Perl-MinimumVersion";
       description = "Find a minimum required version of perl for Perl code";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "perlver";
     };
   };
 
@@ -18694,6 +18844,7 @@ let
     meta = {
       description = "a tool to scan your Perl code for its prerequisites";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "scan-perl-prereqs-nqlite";
     };
   };
 
@@ -18708,6 +18859,7 @@ let
     meta = {
       description = "Parse and manipulate Perl version strings";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "perl-reversion";
     };
   };
 
@@ -18722,6 +18874,7 @@ let
     meta = {
       description = "An abstract, tree-based interface to perl POD documents";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "paf";
     };
   };
 
@@ -18731,6 +18884,11 @@ let
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAREKR/Pod-Checker-1.74.tar.gz";
       sha256 = "12559997r7wbhhs0p6cdxdzv7rzviv0nx1hq0dby8q481apn489f";
+    };
+    meta = {
+      description = "Check POD documents for syntax errors";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "podchecker";
     };
   };
 
@@ -18742,6 +18900,11 @@ let
       sha256 = "01xifj83dv492lxixijmg6va02rf3ydlxly0a9slmx22r6qa1drh";
     };
     propagatedBuildInputs = [ DevelSymdump PodParser ];
+    meta = {
+      description = "Checks if the documentation of a module is comprehensive";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "pod_cover";
+    };
   };
 
   PodCoverageTrustPod = buildPerlPackage {
@@ -18816,6 +18979,7 @@ let
     meta = {
       description = "Modules for parsing/translating POD format documents";
       license = lib.licenses.artistic1;
+      mainProgram = "podselect";
     };
   };
 
@@ -18860,6 +19024,7 @@ let
       homepage = "https://github.com/ktat/Pod-Section";
       description = "Select specified section from Module's POD";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "podsection";
     };
   };
 
@@ -18875,6 +19040,7 @@ let
       homepage = "https://github.com/timj/perl-Pod-LaTeX/tree/master";
       description = "Convert Pod data to formatted Latex";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "pod2latex";
     };
   };
 
@@ -18933,6 +19099,7 @@ let
     meta = {
       description = "Look up Perl documentation in Pod format";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "perldoc";
     };
   };
 
@@ -18962,6 +19129,7 @@ let
       homepage = "https://github.com/rwstauner/Pod-Markdown";
       description = "Convert POD to Markdown";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "pod2markdown";
     };
     propagatedBuildInputs = [ URI ];
   };
@@ -18978,6 +19146,7 @@ let
      meta = {
        description = "Convert POD to Github's specific markdown";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "pod2github";
      };
   };
 
@@ -18999,6 +19168,11 @@ let
     };
     propagatedBuildInputs = [ ClassTiny FileShareDir LinguaENInflect PathTiny PodParser ];
     buildInputs = [ FileShareDirInstall TestDeep ];
+    meta = {
+      description = "A formatter for spellchecking Pod";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "podspell";
+    };
   };
 
   PodStrip = buildPerlModule {
@@ -19026,6 +19200,7 @@ let
      meta = {
        description = "a reformatting Pod Processor";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "podtidy";
      };
   };
 
@@ -19055,6 +19230,7 @@ let
      propagatedBuildInputs = [ PodParser ];
      meta = {
        license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "podwrap";
      };
   };
 
@@ -19113,6 +19289,7 @@ let
       homepage = "https://github.com/creaktive/rainbarf";
       description = "CPU/RAM/battery stats chart bar for tmux (and GNU screen)";
       license = with lib.licenses; [ artistic1 gpl1Plus  ];
+      mainProgram = "rainbarf";
     };
   };
 
@@ -19344,6 +19521,11 @@ let
     };
     propagatedBuildInputs = [ XMLParser ];
     doCheck = false;
+    meta = {
+      description = "An implementation of XML-RPC";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "make_method";
+    };
   };
 
   ReturnValue = buildPerlPackage {
@@ -19627,6 +19809,7 @@ let
     meta = with lib; {
       description = "Linux/POSIX emulation of Win32::SerialPort functions.";
       license = with licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "modemtest";
     };
   };
 
@@ -19642,6 +19825,7 @@ let
       homepage = "https://github.com/kazuho/p5-Server-Starter";
       description = "A superdaemon for hot-deploying server programs";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "start_server";
     };
   };
 
@@ -19732,6 +19916,11 @@ let
       url = "mirror://cpan/authors/id/R/RA/RAAB/SGMLSpm-1.1.tar.gz";
       sha256 = "1gdjf3mcz2bxir0l9iljxiz6qqqg3a9gg23y5wjg538w552r432m";
     };
+    meta = {
+      description = "Library for parsing the output from SGMLS and NSGMLS parsers";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "sgmlspl.pl";
+    };
   };
 
   SignalMask = buildPerlPackage {
@@ -19758,6 +19947,7 @@ let
      meta = {
        description = "Porters stemming algorithm for norwegian.";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "stemmer-no.pl";
      };
   };
 
@@ -19771,6 +19961,7 @@ let
      meta = {
        description = "Porters stemming algorithm for swedish.";
        license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "stemmer-se.pl";
      };
   };
 
@@ -19939,6 +20130,7 @@ let
     meta = {
       description = "Write to a cross platform Excel binary file";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "chartex";
     };
   };
 
@@ -19992,6 +20184,11 @@ let
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon SQLTokenizer ];
+    meta = {
+      description = "Split any SQL code into atomic statements";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "sql-split";
+    };
   };
 
   SQLStatement = buildPerlPackage {
@@ -20100,6 +20297,7 @@ let
       homepage = "https://github.com/miyagawa/Starman";
       description = "High-performance preforking PSGI/Plack web server";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "starman";
     };
   };
 
@@ -20363,6 +20561,11 @@ let
       url = "mirror://cpan/authors/id/C/CG/CGRAU/String-MkPasswd-0.05.tar.gz";
       sha256 = "15lvcc8c9hp6mg3jx02wd3b85aphn8yl5db62q3pam04c0sgh42k";
     };
+    meta = {
+      description = "Random password generator";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "mkpasswd.pl";
+    };
   };
 
   StringRandom = buildPerlModule {
@@ -20398,7 +20601,9 @@ let
     doCheck = !stdenv.isDarwin;
     meta = {
       # http://cpansearch.perl.org/src/ROSCH/String-ShellQuote-1.04/README
+      description = "Quote strings for passing through the shell";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "shell-quote";
     };
   };
 
@@ -20744,6 +20949,7 @@ let
       homepage = "https://github.com/ingydotnet/swim-pm";
       description = "See What I Mean?!";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "swin";
     };
   };
 
@@ -21321,6 +21527,7 @@ let
       homepage = "https://sourceforge.net/projects/perl-trg/";
       description = "Perl extension for the GNU Readline/History Library";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "perlsh";
     };
   };
 
@@ -21500,6 +21707,7 @@ let
     meta = {
       description = "A new and improved test harness with better Test2 integration";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "yath";
       broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/perl534Packages.Test2Harness.x86_64-darwin
     };
   };
@@ -22110,8 +22318,9 @@ let
      buildInputs = [ CPANMetaCheck TestDeep TestWarnings ];
      meta = {
        description = "Test the Kwalitee of a distribution before you release it";
-       license = with lib.licenses; [ artistic1 gpl1Plus ];
        homepage = "https://github.com/karenetheridge/Test-Kwalitee";
+       license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "kwalitee-metrics";
      };
   };
 
@@ -22328,6 +22537,7 @@ let
       homepage = "https://github.com/creaktive/Test-Mojibake";
       description = "Check your source for encoding misbehavior";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "scan_mojibake";
     };
   };
 
@@ -22650,6 +22860,7 @@ let
       homepage = "http://web-cpan.berlios.de/modules/Test-Run/";
       description = "Analyze tests from the command line using Test::Run";
       license = lib.licenses.mit;
+      mainProgram = "runprove";
     };
    };
 
@@ -23087,6 +23298,11 @@ let
       sha256 = "0pwrrnwi1qaiy3c5522vy0kzncxc9g02r4b056wqqaa69w1hsc0z";
     };
     buildInputs = [ TestBase ];
+    meta = {
+      description = "Testing Module for YAML Implementations";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "test-yaml";
+    };
   };
 
   TextAligner = buildPerlModule {
@@ -23398,6 +23614,7 @@ let
       description = "Generate random Latin looking text";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.sgo ];
+      mainProgram = "lorem";
     };
   };
 
@@ -23426,6 +23643,11 @@ let
     postInstall = ''
       shortenPerlShebang $out/bin/Markdown.pl
     '';
+    meta = {
+      description = "Convert Markdown syntax to (X)HTML";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "Markdown.pl";
+    };
   };
 
   TextMarkdownHoedown = buildPerlModule {
@@ -23484,6 +23706,7 @@ let
     meta = {
       description = "Convert MultiMarkdown syntax to (X)HTML";
       license = lib.licenses.bsd3;
+      mainProgram = "MultiMarkdown.pl";
     };
   };
 
@@ -24310,8 +24533,9 @@ let
      buildInputs = [ TestRequires TestSharedFork TestTCP ];
      meta = {
        description = "AnyEvent HTTP server for PSGI (like Thin)";
-       license = with lib.licenses; [ artistic1 gpl1Plus ];
        homepage = "https://github.com/miyagawa/Twiggy";
+       license = with lib.licenses; [ artistic1 gpl1Plus ];
+       mainProgram = "twiggy";
      };
   };
 
@@ -24523,6 +24747,7 @@ let
     meta = {
       description = "Find URIs in arbitrary text";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "urifind";
     };
   };
 
@@ -24730,9 +24955,10 @@ let
     };
     outputs = [ "out" ];
     meta = {
-      maintainers = [ maintainers.chreekat ];
       description = "Edit a directory in $EDITOR";
       license = with lib.licenses; [ gpl1 ];
+      maintainers = [ maintainers.chreekat ];
+      mainProgram = "vidir";
     };
   };
 
@@ -24777,6 +25003,7 @@ let
       homepage = "https://validator.w3.org/checklink";
       description = "A tool to check links and anchors in Web pages or full Web sites";
       license = lib.licenses.w3c;
+      mainProgram = "checklink";
     };
   };
 
@@ -24826,6 +25053,7 @@ let
       homepage = "https://github.com/libwww-perl/WWW-Mechanize";
       description = "Handy web browsing in a Perl object";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "mech-dump";
     };
     buildInputs = [ CGI HTTPServerSimple PathTiny TestDeep TestFatal TestOutput TestWarnings ];
   };
@@ -25125,6 +25353,11 @@ let
     postInstall = lib.optionalString stdenv.isDarwin ''
       shortenPerlShebang $out/bin/xmlsort
     '';
+    meta = {
+      description = "SAX filter for sorting elements in XML";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "xmlsort";
+    };
   };
 
   XMLGrove = buildPerlPackage {
@@ -25154,6 +25387,7 @@ let
     propagatedBuildInputs = [ libxml_perl ];
     meta = {
       description = "Yet another Perl SAX XML Writer";
+      mainProgram = "xmlpretty";
     };
   };
 
@@ -25259,6 +25493,7 @@ let
     meta = {
       description = "Modules for parsing and evaluating XPath statements";
       license = lib.licenses.artistic2;
+      mainProgram = "xpath";
     };
   };
 
@@ -25448,6 +25683,11 @@ let
     '';
     propagatedBuildInputs = [ XMLParser ];
     doCheck = false;  # requires lots of extra packages
+    meta = {
+      description = "A Perl module for processing huge XML documents in tree mode";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "xml_grep";
+    };
   };
 
   XMLValidatorSchema = buildPerlPackage {
