@@ -23661,6 +23661,8 @@ with pkgs;
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
+  rt-tests = callPackage ../os-specific/linux/rt-tests { };
+
   rt5677-firmware = callPackage ../os-specific/linux/firmware/rt5677 { };
 
   rtl8192su-firmware = callPackage ../os-specific/linux/firmware/rtl8192su-firmware { };
