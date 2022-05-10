@@ -173,7 +173,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     inherit perlDeps;
-    tests.basic = nixosTests.hydra.hydra-unstable;
+    tests.basic = nixosTests.hydra.hydra_unstable;
   };
 
   meta = with lib; {
