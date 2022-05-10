@@ -5647,7 +5647,7 @@ in {
   });
 
   nghttp2 = (toPythonModule (pkgs.nghttp2.override {
-    inherit (self) python cython setuptools;
+    python3Packages = self;
     inherit (pkgs) ncurses;
     enableApp = false; # build only libnghttp2 ...
     enablePython = true; # ... and its Python bindings
