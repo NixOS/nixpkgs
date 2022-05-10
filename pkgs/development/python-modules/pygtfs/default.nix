@@ -4,6 +4,7 @@
 , fetchPypi
 , nose
 , pytz
+, pythonOlder
 , setuptools-scm
 , six
 , sqlalchemy
@@ -12,10 +13,13 @@
 buildPythonPackage rec {
   pname = "pygtfs";
   version = "0.1.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sGJwtf8DVIrE4hcU3IksnyAAt8yf67UBJIiVILDSsv8=";
+    hash = "sha256-sGJwtf8DVIrE4hcU3IksnyAAt8yf67UBJIiVILDSsv8=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +37,9 @@ buildPythonPackage rec {
     nose
   ];
 
-  pythonImportsCheck = [ "pygtfs" ];
+  pythonImportsCheck = [
+    "pygtfs"
+  ];
 
   meta = with lib; {
     description = "Python module for GTFS";
