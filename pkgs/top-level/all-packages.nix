@@ -31784,8 +31784,6 @@ with pkgs;
     inherit (haskellPackages) ghcWithPackages;
   };
 
-  holdingnuts = callPackage ../games/holdingnuts { };
-
   hyperrogue = callPackage ../games/hyperrogue { };
 
   icbm3d = callPackage ../games/icbm3d { };
