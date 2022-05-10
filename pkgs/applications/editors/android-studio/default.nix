@@ -18,8 +18,8 @@ let
     sha256Hash = "0in8x6v957y9hsnz5ak845pdpvgvnvlm0s6r9y8f27zkm947vbjd";
   };
   latestVersion = { # canary & dev
-    version = "2021.3.1.7"; # "Android Studio Dolphin (2021.3.1) Canary 7"
-    sha256Hash = "02jwy3q2ccs7l3snm8w40znzk54v2h1sljdr3d0yh7sy0qyn32k1";
+    version = "2021.3.1.9"; # "Android Studio Dolphin (2021.3.1) Canary 9"
+    sha256Hash = "0nx26xwy67mnbkz37m3nw354siv152sa6zx94pxrvbnxxgppigfb";
   };
 in {
   # Attributes are named by their corresponding release channels
