@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/AOMediaCodec/SVT-AV1/-/blob/v${version}/CHANGELOG.md";
     license = with licenses; [
       aom
-      bsd2
       bsd3
     ];
     platforms = platforms.unix;
