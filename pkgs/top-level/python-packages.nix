@@ -2514,6 +2514,8 @@ in {
 
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
 
+  ducc0 = callPackage ../development/python-modules/ducc0 { };
+
   duckdb = callPackage ../development/python-modules/duckdb {
     inherit (pkgs) duckdb;
   };
