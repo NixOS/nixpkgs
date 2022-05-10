@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, nixosTests
+{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, makeWrapper, nixosTests
 , gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    wrapGAppsHook
+    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
   ];
 
   buildInputs = [
