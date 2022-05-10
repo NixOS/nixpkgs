@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, unzip, patchelf, xorg, openal, glibc }:
+{ lib, stdenv, fetchurl, unzip, patchelf, xorg, openal }:
 
 let
   urls = file:
@@ -24,7 +24,7 @@ let
         cd $out
         unzip $src
 
-        interpreter=$(echo ${glibc.out}/lib/ld-linux*.so.2)
+        interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
         binary=$(find . -executable -type f)
         patchelf \
           --set-interpreter $interpreter \

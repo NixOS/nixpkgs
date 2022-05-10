@@ -1,4 +1,4 @@
-{ lib, stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender, glibc
+{ lib, stdenv, makeDesktopItem, freetype, fontconfig, libX11, libXrender
 , zlib, jdk, glib, glib-networking, gtk, libXtst, libsecret, gsettings-desktop-schemas, webkitgtk
 , makeWrapper, perl, ... }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     tar xfvz $src -C $out
 
     # Patch binaries.
-    interpreter=$(echo ${glibc.out}/lib/ld-linux*.so.2)
+    interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
     libCairo=$out/eclipse/libcairo-swt.so
     patchelf --set-interpreter $interpreter $out/eclipse/eclipse
     [ -f $libCairo ] && patchelf --set-rpath ${lib.makeLibraryPath [ freetype fontconfig libX11 libXrender zlib ]} $libCairo

@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, requireFile, gcc, unzip, glibc }:
+{ lib, stdenv, makeWrapper, requireFile, gcc, unzip }:
 with lib;
 
 # v2.1: last version with NHM/WSM arch support
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
   preFixup = let libPath = makeLibraryPath [ stdenv.cc.cc.lib gcc ]; in ''
     patchelf \
-        --set-interpreter ${glibc}/lib/ld-linux-x86-64.so.2 \
+        --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \
         --set-rpath $out/lib:"${libPath}" \
         $out/bin/iaca
   '';

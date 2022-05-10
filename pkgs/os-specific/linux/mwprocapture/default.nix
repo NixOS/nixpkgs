@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, kernel, alsa-lib, glibc }:
+{ lib, stdenv, fetchurl, kernel, alsa-lib }:
 
 with lib;
 
@@ -7,7 +7,7 @@ let
     if stdenv.is64bit then "64"
     else "32";
 
-  libpath = makeLibraryPath [ stdenv.cc.cc glibc alsa-lib ];
+  libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc alsa-lib ];
 
 in
 stdenv.mkDerivation rec {

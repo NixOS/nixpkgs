@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, glibc }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "nbench-byte";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isGnu [
-    glibc.static
+    stdenv.cc.libc.static
   ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

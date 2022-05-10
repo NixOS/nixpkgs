@@ -1,7 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
 , fetchPypi
-, glibc
 }:
 
 buildPythonPackage rec {
@@ -17,7 +16,7 @@ buildPythonPackage rec {
 
   patchPhase = lib.optionalString stdenv.isLinux ''
     substituteInPlace monotonic.py --replace \
-      "ctypes.util.find_library('c')" "'${glibc.out}/lib/libc.so.6'"
+      "ctypes.util.find_library('c')" "'${stdenv.cc.libc}/lib/libc.so'"
   '';
 
   meta = with lib; {
