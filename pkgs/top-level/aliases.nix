@@ -896,6 +896,7 @@ mapAliases ({
   OVMF-CSM = throw "OVMF-CSM has been removed in favor of OVMFFull"; # Added 2021-10-16
   OVMF-secureBoot = throw "OVMF-secureBoot has been removed in favor of OVMFFull"; # Added 2021-10-16
   oauth2_proxy = oauth2-proxy; # Added 2021-04-18
+  ocropus = throw "ocropus has been removed: abandoned by upstream"; # Added 2022-04-24
   octoprint-plugins = throw "octoprint-plugins are now part of the octoprint.python.pkgs package set"; # Added 2021-01-24
   ocz-ssd-guru = throw "ocz-ssd-guru has been removed due to there being no source available"; # Added 2021-07-12
   odpdown = throw "odpdown has been removed because it lacks python3 support"; # Added 2022-04-25
