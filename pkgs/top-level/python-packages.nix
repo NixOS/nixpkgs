@@ -2083,6 +2083,8 @@ in {
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
+  datapoint = callPackage ../development/python-modules/datapoint { };
+
   dataset = callPackage ../development/python-modules/dataset { };
 
   datasets = callPackage ../development/python-modules/datasets { };
