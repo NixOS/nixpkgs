@@ -31,7 +31,7 @@ buildPythonPackage {
 
   # this test is known to fail on darwin
   checkPhase = ''
-    nosetests ${lib.optionalString stdenv.isDarwin " --exclude=test_tv2_1d"}
+    nosetests --exclude=test_tvp_1d ${lib.optionalString stdenv.isDarwin " --exclude=test_tv2_1d"}
   '';
 
   propagatedNativeBuildInputs = [ cffi ];
