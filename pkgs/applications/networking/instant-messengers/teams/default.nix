@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, runtimeShell
 , fetchurl
 , autoPatchelfHook
 , wrapGAppsHook
@@ -57,8 +58,6 @@ let
 
     preFixup = ''
       gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin")
-      gappsWrapperArgs+=(--add-flags --disable-namespace-sandbox)
-      gappsWrapperArgs+=(--add-flags --disable-setuid-sandbox)
     '';
 
 
@@ -121,9 +120,13 @@ let
       done;
 
       # fix for https://docs.microsoft.com/en-us/answers/questions/298724/open-teams-meeting-link-on-linux-doens39t-work.html?childToView=309406#comment-309406
-      # while we create the wrapper ourselves, gappsWrapperArgs leads to the same issue
-      # another option would be to introduce gappsWrapperAppendedArgs, to allow control of positioning
-      substituteInPlace "$out/bin/teams" --replace '.teams-wrapped"  --disable-namespace-sandbox --disable-setuid-sandbox "$@"' '.teams-wrapped" "$@" --disable-namespace-sandbox --disable-setuid-sandbox'
+      wrapped=$out/bin/.teams-old
+      mv "$out/bin/teams" "$wrapped"
+      cat > "$out/bin/teams" << EOF
+      #! ${runtimeShell}
+      exec $wrapped "\$@" --disable-namespace-sandbox --disable-setuid-sandbox
+      EOF
+      chmod +x "$out/bin/teams"
     '';
   };
 
