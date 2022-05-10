@@ -15,17 +15,17 @@ assertExecutable() {
 # makeWrapper EXECUTABLE OUT_PATH ARGS
 
 # ARGS:
-# --argv0       NAME    : set name of executed process to NAME
-#                         (otherwise it’s called …-wrapped)
+# --argv0       NAME    : set the name of the executed process to NAME
+#                         (if unset or empty, defaults to EXECUTABLE)
 # --inherit-argv0       : the executable inherits argv0 from the wrapper.
 #                         (use instead of --argv0 '$0')
-# --set         VAR VAL : add VAR with value VAL to the executable’s
-#                         environment
+# --set         VAR VAL : add VAR with value VAL to the executable's environment
 # --set-default VAR VAL : like --set, but only adds VAR if not already set in
 #                         the environment
 # --unset       VAR     : remove VAR from the environment
 # --chdir       DIR     : change working directory (use instead of --run "cd DIR")
 # --add-flags   FLAGS   : add FLAGS to invocation of executable
+# TODO(@ncfavier): --append-flags
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
@@ -65,8 +65,6 @@ wrapProgramBinary() {
       hidden="${hidden}_"
     done
     mv "$prog" "$hidden"
-    # Silence warning about unexpanded $0:
-    # shellcheck disable=SC2016
     makeWrapper "$hidden" "$prog" --inherit-argv0 "${@:2}"
 }
 

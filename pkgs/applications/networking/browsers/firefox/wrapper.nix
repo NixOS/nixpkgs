@@ -237,10 +237,7 @@ let
           parseMakeCWrapperCall() {
             shift # makeCWrapper
             oldExe=$1; shift
-            for arg do case $arg in
-              --inherit-argv0) oldWrapperArgs+=(--argv0 '$0');; # makeWrapper doesn't understand --inherit-argv0
-              *) oldWrapperArgs+=("$arg");;
-            esac done
+            oldWrapperArgs=("$@")
           }
           eval "parseMakeCWrapperCall ''${wrapperCmd//"${browser}"/"$out"}"
           rm "$executablePath"
