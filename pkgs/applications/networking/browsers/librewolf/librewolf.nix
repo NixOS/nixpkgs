@@ -1,4 +1,4 @@
-{ callPackage, git }:
+{ callPackage }:
 let
   src = callPackage ./src.nix { };
 in
