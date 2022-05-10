@@ -36,7 +36,7 @@ let
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
         CatalystPluginStackTrace
-        CatalystPluginUnicodeEncoding
+        CatalystRuntime
         CatalystTraitForRequestProxyBase
         CatalystViewDownload
         CatalystViewJSON
