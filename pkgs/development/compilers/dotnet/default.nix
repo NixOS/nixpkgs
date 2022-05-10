@@ -5,7 +5,7 @@ dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_3_1 sdk_5_0 aspn
 Hashes and urls below are retrieved from:
 https://dotnet.microsoft.com/download/dotnet
 */
-{ callPackage }:
+{ callPackage, icu70, icu }:
 let
   buildDotnet = attrs: callPackage (import ./build-dotnet.nix attrs) {};
   buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
@@ -22,6 +22,7 @@ rec {
 
   # v3.1 (lts)
   aspnetcore_3_1 = buildAspNetCore {
+    icu = icu70;
     version = "3.1.21";
     srcs = {
       x86_64-linux = {
@@ -40,6 +41,7 @@ rec {
   };
 
   runtime_3_1 = buildNetRuntime {
+    icu = icu70;
     version = "3.1.21";
     srcs = {
       x86_64-linux = {
@@ -58,6 +60,7 @@ rec {
   };
 
   sdk_3_1 = buildNetSdk {
+    icu = icu70;
     version = "3.1.415";
     srcs = {
       x86_64-linux = {
@@ -77,6 +80,7 @@ rec {
 
   # v5.0 (current)
   aspnetcore_5_0 = buildAspNetCore {
+    inherit icu;
     version = "5.0.12";
     srcs = {
       x86_64-linux = {
@@ -95,6 +99,7 @@ rec {
   };
 
   runtime_5_0 = buildNetRuntime {
+    inherit icu;
     version = "5.0.12";
     srcs = {
       x86_64-linux = {
@@ -113,6 +118,7 @@ rec {
   };
 
   sdk_5_0 = buildNetSdk {
+    inherit icu;
     version = "5.0.403";
     srcs = {
       x86_64-linux = {
@@ -132,6 +138,7 @@ rec {
 
   # v6.0 (lts)
   aspnetcore_6_0 = buildAspNetCore {
+    inherit icu;
     version = "6.0.4";
     srcs = {
       x86_64-linux = {
@@ -154,6 +161,7 @@ rec {
   };
 
   runtime_6_0 = buildNetRuntime {
+    inherit icu;
     version = "6.0.4";
     srcs = {
       x86_64-linux = {
@@ -176,6 +184,7 @@ rec {
   };
 
   sdk_6_0 = buildNetSdk {
+    inherit icu;
     version = "6.0.202";
     srcs = {
       x86_64-linux = {
