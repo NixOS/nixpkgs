@@ -10776,6 +10776,8 @@ in {
 
   vine = callPackage ../development/python-modules/vine { };
 
+  virt-backup = callPackage ../development/python-modules/virt-backup { };
+
   virtkey = callPackage ../development/python-modules/virtkey { };
 
   virtual-display = callPackage ../development/python-modules/virtual-display { };
