@@ -2,18 +2,19 @@
 
 buildGoModule rec {
   pname = "datree";
-  version = "0.15.22";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
     rev = version;
-    hash = "sha256-g5u2QQtVmNp01KtUKwC8uoEIuoBDLHsOlRz1Mv0n/y8=";
+    hash = "sha256-vixfKipsWVPz12J93t90DDNA8rBfCIDgNRgeKq67ok4=";
   };
 
-  vendorSha256 = "1cvlvlwdk41f145kzifg7rv7ymwhc9k0ck91bn106240rq1igcr0";
+  vendorSha256 = "sha256-nUu2xMFi1y6kkB076Bm+ZwFWh5ccyYy+wCP585zWGRw=";
 
   ldflags = [
+    "-extldflags '-static'"
     "-s"
     "-w"
     "-X github.com/datreeio/datree/cmd.CliVersion=${version}"
@@ -22,7 +23,8 @@ buildGoModule rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "CLI tool to ensure K8s manifests and Helm charts follow best practices as well as your organization’s policies";
+    description =
+      "CLI tool to ensure K8s manifests and Helm charts follow best practices as well as your organization’s policies";
     homepage = "https://datree.io/";
     license = [ licenses.asl20 ];
     maintainers = [ maintainers.jceb ];
