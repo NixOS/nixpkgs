@@ -880,7 +880,9 @@ with pkgs;
 
   findXMLCatalogs = makeSetupHook { } ../build-support/setup-hooks/find-xml-catalogs.sh;
 
-  wrapGAppsHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook { };
+  wrapGAppsHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook {
+    makeWrapper = makeBinaryWrapper;
+  };
 
   wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = gtk4; };
 

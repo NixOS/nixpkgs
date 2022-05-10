@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
+    (wrapGAppsHook.override { inherit makeWrapper; })
   ];
 
   buildInputs = [
