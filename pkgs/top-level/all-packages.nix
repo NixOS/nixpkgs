@@ -14334,8 +14334,6 @@ with pkgs;
 
   octavePackages = recurseIntoAttrs octave.pkgs;
 
-  ocropus = callPackage ../applications/misc/ocropus { };
-
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
 
@@ -17971,6 +17969,10 @@ with pkgs;
     callPackage ../development/libraries/irrlicht { }
   else callPackage ../development/libraries/irrlicht/mac.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL IOKit;
+  };
+
+  irrlichtmt = callPackage ../development/libraries/irrlichtmt {
+    inherit  (darwin.apple_sdk.frameworks) Cocoa Kernel;
   };
 
   isocodes = callPackage ../development/libraries/iso-codes { };
@@ -22565,6 +22567,8 @@ with pkgs;
 
   smcroute = callPackage ../servers/smcroute { };
 
+  snipe-it = callPackage ../servers/web-apps/snipe-it { };
+
   sogo = callPackage ../servers/web-apps/sogo { };
 
   spacecookie =
@@ -25604,6 +25608,8 @@ with pkgs;
 
   communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
 
+  communicator = libsForQt5.callPackage ../tools/misc/communicator { };
+
   complete-alias = callPackage ../tools/misc/complete-alias { };
 
   confclerk = callPackage ../applications/misc/confclerk { };
@@ -28215,6 +28221,8 @@ with pkgs;
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  maui-nota = libsForQt5.callPackage ../applications/editors/maui-nota { };
+
   pragha = libsForQt5.callPackage ../applications/audio/pragha { };
 
   rofi-mpd = callPackage ../applications/audio/rofi-mpd { };
@@ -30418,6 +30426,8 @@ with pkgs;
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
+  vvave = libsForQt5.callPackage ../applications/video/vvave { };
+
   vwm = callPackage ../applications/window-managers/vwm { };
 
   yeahwm = callPackage ../applications/window-managers/yeahwm { };
@@ -31887,7 +31897,7 @@ with pkgs;
 
   inherit (callPackages ../games/minetest {
     inherit (darwin) libiconv;
-    inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa Kernel;
+    inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa;
   })
     minetestclient_5 minetestserver_5;
 
