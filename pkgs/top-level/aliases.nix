@@ -1766,6 +1766,7 @@ mapAliases ({
   turbo-geth = throw "turbo-geth has been renamed to erigon"; # Added 2021-08-08
   tvbrowser-bin = tvbrowser; # Added 2023-03-02
   twister = throw "twister has been removed: abandoned by upstream and python2-only"; # Added 2022-04-26
+  tworld2 = throw "tworld2 has been removed, as it was unmaintained"; # Added 2022-05-09
   tychus = throw "tychus has been dropped due to the lack of maintenance from upstream since 2018"; # Added 2022-06-03
   typora = throw "Newer versions of typora use anti-user encryption and refuse to start. As such it has been removed"; # Added 2021-09-11
   typst-fmt = typstfmt; # Added 2023-07-15

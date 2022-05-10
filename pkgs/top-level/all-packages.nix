@@ -38689,8 +38689,6 @@ with pkgs;
 
   tuxtype = callPackage ../games/tuxtype { };
 
-  tworld2 = callPackage ../games/tworld2 { };
-
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
