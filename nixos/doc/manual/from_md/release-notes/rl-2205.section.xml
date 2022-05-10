@@ -274,6 +274,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>wakeonwlan</literal>, a service to enable Wake on
+          Wireless LAN similar to the <literal>wakeonlan</literal>
+          service for ethernet Wake on LAN. Available as
+          <link linkend="opt-services.wakeonwlan.interfaces">services.wakeonwlan</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/mbrubeck/agate">agate</link>,
           a very simple server for the Gemini hypertext protocol.
           Available as
