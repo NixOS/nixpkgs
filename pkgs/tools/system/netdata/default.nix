@@ -27,7 +27,9 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
   buildInputs = [ curl.dev zlib.dev protobuf ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
@@ -80,6 +82,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+    "--disable-ebpf"
   ] ++ optionals withCloud [
     "--enable-cloud"
     "--with-aclk-ng"

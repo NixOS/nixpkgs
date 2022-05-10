@@ -47,6 +47,12 @@ stdenv.mkDerivation rec {
     # Upstream fix https://github.com/netblue30/firejail/pull/5131
     # Upstream hopefully fixed in later versions > 0.9.68
    ./whitelist-nix-profile.patch
+
+    # Fix OpenGL support for various applications including Firefox
+    # Issue: https://github.com/NixOS/nixpkgs/issues/55191
+    # Upstream fix: https://github.com/netblue30/firejail/pull/5132
+    # Hopefully fixed upstream in version > 0.9.68
+    ./fix-opengl-support.patch
   ];
 
   prePatch = ''
