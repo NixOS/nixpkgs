@@ -97,5 +97,7 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
+    # no match for 'operator!='
+    broken = true;
   };
 }

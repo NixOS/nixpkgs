@@ -2,6 +2,7 @@
 , buildPythonPackage
 , isPyPy
 , fetchPypi
+, fetchpatch
 , pythonOlder
 , curl
 , openssl
@@ -19,6 +20,16 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-qGOtGP9Hj1VFkkBXiHza5CLhsnRuQWdGFfaHSY6luIo=";
   };
+
+  patches = [
+    # Pull upstream patch for curl-3.83:
+    #  https://github.com/pycurl/pycurl/pull/753
+    (fetchpatch {
+      name = "curl-3.83.patch";
+      url = "https://github.com/pycurl/pycurl/commit/d47c68b1364f8a1a45ab8c584c291d44b762f7b1.patch";
+      sha256 = "sha256-/lGq7O7ZyytzBAxWJPigcWdvypM7OHLBcp9ItmX7z1g=";
+    })
+  ];
 
   preConfigure = ''
     substituteInPlace setup.py --replace '--static-libs' '--libs'

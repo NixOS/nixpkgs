@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , fetchpatch
@@ -6,6 +7,7 @@
 , openssl
 , testers
 , gbl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-RUZ6wswRtV8chq3+bY9LTRf6IYMbZ9/GPl2X5UcF7d8=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   passthru.tests.version =
     testers.testVersion { package = gbl; };

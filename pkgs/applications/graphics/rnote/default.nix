@@ -22,20 +22,20 @@
 
 stdenv.mkDerivation rec {
   pname = "rnote";
-  version = "0.5.0-hotfix-2";
+  version = "0.5.1-hotfix-1";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-8sv7GQopUbKv8JS1/UXRFeK++UZKk3CJBOzUMx9vZDU=";
+    hash = "sha256-Oq/RKeKICyImSPr4GSNjPXZWtuRQ7+9nRfl9MmC+UYI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-N0qsph68FAkwOpyr9QUw0bDQKn7t22Hbz9BYYOs4pCM=";
+    hash = "sha256-gdVy+7xSQVkI84Ta6KLOLR9UUsDoD2Cd0cuNU+OXf2M=";
   };
 
   nativeBuildInputs = [

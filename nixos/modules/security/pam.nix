@@ -626,7 +626,7 @@ let
             session optional ${pkgs.otpw}/lib/security/pam_otpw.so
           '' +
           optionalString cfg.startSession ''
-            session optional ${pkgs.systemd}/lib/security/pam_systemd.so
+            session optional ${config.systemd.package}/lib/security/pam_systemd.so
           '' +
           optionalString cfg.forwardXAuth ''
             session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99
@@ -1242,7 +1242,7 @@ in
         mr ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so,
       '' +
       optionalString (isEnabled (cfg: cfg.startSession)) ''
-        mr ${pkgs.systemd}/lib/security/pam_systemd.so,
+        mr ${config.systemd.package}/lib/security/pam_systemd.so,
       '' +
       optionalString (isEnabled (cfg: cfg.enableAppArmor)
                      && config.security.apparmor.enable) ''

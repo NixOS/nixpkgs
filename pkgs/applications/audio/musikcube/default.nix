@@ -1,6 +1,5 @@
 { cmake
 , pkg-config
-, alsa-lib
 , boost
 , curl
 , fetchFromGitHub
@@ -11,12 +10,17 @@
 , libev
 , libmicrohttpd
 , ncurses
-, pulseaudio
 , lib
 , stdenv
 , taglib
+# Linux Dependencies
+, alsa-lib
+, pulseaudio
 , systemdSupport ? stdenv.isLinux
 , systemd
+# Darwin Dependencies
+, Cocoa
+, SystemConfiguration
 }:
 
 stdenv.mkDerivation rec {
@@ -38,14 +42,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/clangen/musikcube/commit/1240720e27232fdb199a4da93ca6705864442026.patch";
       sha256 = "0bhjgwnj6d24wb1m9xz1vi1k9xk27arba1absjbcimggn54pinid";
     })
+    ./0001-apple-cmake.patch
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
+
   buildInputs = [
-    alsa-lib
     boost
     curl
     ffmpeg
@@ -54,9 +59,14 @@ stdenv.mkDerivation rec {
     libev
     libmicrohttpd
     ncurses
-    pulseaudio
     taglib
-  ] ++ lib.optional systemdSupport systemd;
+  ] ++ lib.optional systemdSupport [
+    systemd
+  ] ++ lib.optional stdenv.isLinux [
+    alsa-lib pulseaudio
+  ] ++ lib.optional stdenv.isDarwin [
+    Cocoa SystemConfiguration
+  ];
 
   cmakeFlags = [
     "-DDISABLE_STRIP=true"
