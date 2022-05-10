@@ -2530,6 +2530,39 @@ buildLuarocksPackage {
   };
 }) {};
 
+tl = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, compat53, argparse, luafilesystem
+}:
+buildLuarocksPackage {
+  pname = "tl";
+  version = "0.13.2-1";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/tl-0.13.2-1.rockspec";
+    sha256 = "0a9nr03q6w1689drd0r2y8m7qbyxm8n6bkgjplwkr6c6abvbis3f";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/teal-language/tl",
+  "rev": "473fef59f21e836e1337a0e3da3c759a1e3556bd",
+  "date": "2021-07-30T21:02:34-03:00",
+  "path": "/nix/store/29dm1abr2cc9zqs9n9lymg92gaxqh09g-tl",
+  "sha256": "1cj7ihw1kz1n1jkha6q0mq0qmlw1vi04i6pcbw3w1cdf2i4fcglh",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  propagatedBuildInputs = [ compat53 argparse luafilesystem ];
+
+  meta = {
+    homepage = "https://github.com/teal-language/tl";
+    description = "Teal, a typed dialect of Lua";
+    maintainers = with lib.maintainers; [ mephistophiles ];
+    license.fullName = "MIT";
+  };
+}) {};
+
 vstruct = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchgit, lua
 }:
