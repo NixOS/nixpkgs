@@ -39,6 +39,7 @@ lib.makeExtensible (self: {
       hash = "sha256-yWwxYSzSSmx2UfCn0EBH23hQGZKSRn/c8ryvxLUeHdM=";
     };
     pluginOverrides = {
+      # unstable has a new plugin, so we register it here.
       limit = { };
     };
   };
