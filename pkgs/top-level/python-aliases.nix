@@ -273,6 +273,7 @@ mapAliases ({
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   PyMVGLive = pymvglive; # added 2023-02-19
+  pyqt4 = throw "pyqt4 has been removed, because it depended on the long EOL qt4"; # added 2022-06-09
   pyramid_hawkauth = throw "pyramid_hawkauth has been removed because it is no longer maintained"; # added 2023-02-2
   pyramid_jinja2 = pyramid-jinja2; # added 2023-06-06
   pyreadability = readability-lxml; # added 2022-05-24

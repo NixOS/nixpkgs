@@ -9691,8 +9691,6 @@ self: super: with self; {
 
   pyqt-builder = callPackage ../development/python-modules/pyqt-builder { };
 
-  pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix { };
-
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { };
 
   pyqt5_sip = callPackage ../development/python-modules/pyqt/sip.nix { };
