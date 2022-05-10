@@ -2,6 +2,7 @@
 , mkDerivation
 
 , extra-cmake-modules
+, gcc11
 
 , kcoreaddons
 , kcrash
@@ -17,6 +18,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     extra-cmake-modules
+    gcc11 # doesn't build with GCC 9 from stdenv on aarch64
     python3Packages.wrapPython
     python3Packages.pybind11
   ];
