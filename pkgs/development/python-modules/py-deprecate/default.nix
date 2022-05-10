@@ -28,7 +28,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "deprecate" ];
 
   meta = with lib; {
-    description = "A python module for marking deprecated functions or classes and re-routing to the new successors' instance. Used by torchmetrics";
+    description = "A module for marking deprecated functions or classes and re-routing to the new successors' instance. Used by torchmetrics";
     homepage = "https://borda.github.io/pyDeprecate/";
     license = licenses.asl20;
     maintainers = with maintainers; [

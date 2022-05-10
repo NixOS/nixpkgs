@@ -10362,6 +10362,8 @@ in {
 
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
 
+  torchmetrics = callPackage ../development/python-modules/torchmetrics { };
+
   torchinfo = callPackage ../development/python-modules/torchinfo { };
 
   torchvision = callPackage ../development/python-modules/torchvision { };
