@@ -10,8 +10,8 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2021.1.1.23"; # "Android Studio Bumblebee (2021.1.1 Patch 3)"
-    sha256Hash = "1kxb19qf7bs5lyfgr8vamakp1nf2wlxlwwni1kihza67ib6hcxdk";
+    version = "2021.2.1.14"; # "Android Studio Chipmunk (2021.2.1)"
+    sha256Hash = "1cy7ngm160w819ikrd459kg6lnk1k16jjnjm3d0aksmlws5b12z9";
   };
   betaVersion = {
     version = "2021.2.1.11"; # "Android Studio Chipmunk (2021.2.1) Beta 4"
