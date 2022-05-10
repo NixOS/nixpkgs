@@ -120,6 +120,7 @@ in {
     pythonImportsCheckHook
     pythonNamespacesHook
     pythonRecompileBytecodeHook
+    pythonRelaxDepsHook
     pythonRemoveBinBytecodeHook
     pythonRemoveTestsDirHook
     setuptoolsBuildHook
@@ -2081,6 +2082,8 @@ in {
   datafusion = callPackage ../development/python-modules/datafusion { };
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
+
+  datapoint = callPackage ../development/python-modules/datapoint { };
 
   dataset = callPackage ../development/python-modules/dataset { };
 
@@ -5193,8 +5196,6 @@ in {
 
   meld3 = callPackage ../development/python-modules/meld3 { };
 
-  memcached = callPackage ../development/python-modules/memcached { };
-
   memory-allocator = callPackage ../development/python-modules/memory-allocator { };
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
@@ -5646,7 +5647,7 @@ in {
   });
 
   nghttp2 = (toPythonModule (pkgs.nghttp2.override {
-    inherit (self) python cython setuptools;
+    python3Packages = self;
     inherit (pkgs) ncurses;
     enableApp = false; # build only libnghttp2 ...
     enablePython = true; # ... and its Python bindings
@@ -6431,6 +6432,8 @@ in {
 
   pyrogram = callPackage ../development/python-modules/pyrogram { };
 
+  pysabnzbd = callPackage ../development/python-modules/pysabnzbd { };
+
   pysbd = callPackage ../development/python-modules/pysbd { };
 
   pyshark = callPackage ../development/python-modules/pyshark { };
@@ -6474,6 +6477,8 @@ in {
   python-keystoneclient = callPackage ../development/python-modules/python-keystoneclient { };
 
   python-lsp-black = callPackage ../development/python-modules/python-lsp-black { };
+
+  python-memcached = callPackage ../development/python-modules/python-memcached { };
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
@@ -9494,6 +9499,8 @@ in {
 
   six = callPackage ../development/python-modules/six { };
 
+  sjcl = callPackage ../development/python-modules/sjcl { };
+
   skein = callPackage ../development/python-modules/skein { };
 
   skidl = callPackage ../development/python-modules/skidl { };
@@ -10579,6 +10586,8 @@ in {
 
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
+  ukrainealarm = callPackage ../development/python-modules/ukrainealarm { };
+
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 
   umap-learn = callPackage ../development/python-modules/umap-learn { };
@@ -11191,7 +11200,6 @@ in {
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
     ffmpegSupport = false;
-    phantomjsSupport = false;
   };
 
   yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
@@ -11201,7 +11209,6 @@ in {
   yt-dlp-light = callPackage ../tools/misc/yt-dlp {
     atomicparsleySupport = false;
     ffmpegSupport = false;
-    phantomjsSupport = false;
     rtmpSupport = false;
   };
 

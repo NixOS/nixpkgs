@@ -351,6 +351,10 @@ self: super:
     outputs = [ "out" "dev" ];
   });
 
+  xcbutilerrors = super.xcbutilerrors.overrideAttrs (attrs: {
+    outputs = [ "out" "dev" ]; # mainly to get rid of propagating others
+  });
+
   xcbutilcursor = super.xcbutilcursor.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
     meta = attrs.meta // { maintainers = [ lib.maintainers.lovek323 ]; };

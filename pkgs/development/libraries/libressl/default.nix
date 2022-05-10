@@ -71,10 +71,8 @@ let
       moveToOutput "bin/nc" "$nc"
       moveToOutput "bin/openssl" "$bin"
       moveToOutput "bin/ocspcheck" "$bin"
-      moveToOutput "share/man/man1/nc.1${lib.optionalString (dontGzipMan==null) ".gz"}" "$nc"
+      moveToOutput "share/man/man1/nc.1.gz" "$nc"
     '';
-
-    dontGzipMan = if stdenv.isDarwin then true else null; # not sure what's wrong
 
     meta = with lib; {
       description = "Free TLS/SSL implementation";
@@ -89,5 +87,10 @@ in {
   libressl_3_4 = generic {
     version = "3.4.3";
     sha256 = "sha256-/4i//jVIGLPM9UXjyv5FTFAxx6dyFwdPUzJx1jw38I0=";
+  };
+
+  libressl_3_5 = generic {
+    version = "3.5.2";
+    sha256 = "sha256-Vv6rjiHD+mVJ+LfXURZYuOmFGBYoOKeVMUcyZUrfPl8=";
   };
 }

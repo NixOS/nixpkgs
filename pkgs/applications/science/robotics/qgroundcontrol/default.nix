@@ -68,6 +68,12 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # fix build problems caused by https://github.com/mavlink/qgroundcontrol/pull/10132
+    # remove once updated past 4.2.0
+    ./fix-10132.patch
+  ];
+
   meta = with lib; {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
     homepage = "http://qgroundcontrol.com/";

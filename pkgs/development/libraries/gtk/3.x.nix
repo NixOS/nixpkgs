@@ -30,7 +30,7 @@
 , gnome
 , gsettings-desktop-schemas
 , sassc
-, trackerSupport ? stdenv.isLinux
+, trackerSupport ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
 , tracker
 , x11Support ? stdenv.isLinux
 , waylandSupport ? stdenv.isLinux
@@ -39,12 +39,13 @@
 , wayland-protocols
 , xineramaSupport ? stdenv.isLinux
 , cupsSupport ? stdenv.isLinux
-, withGtkDoc ? stdenv.isLinux
+, withGtkDoc ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
 , cups
 , AppKit
 , Cocoa
 , QuartzCore
 , broadwaySupport ? true
+, wayland-scanner
 }:
 
 let
@@ -85,6 +86,9 @@ stdenv.mkDerivation rec {
     ./patches/3.0-darwin-x11.patch
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
   nativeBuildInputs = [
     gettext
     gobject-introspection
@@ -94,12 +98,15 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     sassc
+    gdk-pixbuf
   ] ++ setupHooks ++ lib.optionals withGtkDoc [
     docbook_xml_dtd_43
     docbook-xsl-nons
     gtk-doc
     # For xmllint
     libxml2
+  ] ++ lib.optionals waylandSupport [
+    wayland-scanner
   ];
 
   buildInputs = [
@@ -151,6 +158,7 @@ stdenv.mkDerivation rec {
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
     "-Dx11_backend=${lib.boolToString x11Support}"
     "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   doCheck = false; # needs X11

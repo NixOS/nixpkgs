@@ -530,9 +530,9 @@
     githubId = 782180;
     name = "Alex Vorobiev";
   };
-  alex-eyre = {
+  alexeyre = {
     email = "A.Eyre@sms.ed.ac.uk";
-    github = "alex-eyre";
+    github = "alexeyre";
     githubId = 38869148;
     name = "Alex Eyre";
   };
@@ -821,6 +821,16 @@
     github = "voanhduy1512";
     githubId = 1771266;
     name = "Vo Anh Duy";
+  };
+  Anillc = {
+    name = "Anillc";
+    email = "i@anillc.cn";
+    github = "Anillc";
+    githubId = 23411248;
+    keys = [{
+      longkeyid = "ed25519/0x0BE8A88F47B2145C";
+      fingerprint = "6141 1E4F FE10 CE7B 2E14  CD76 0BE8 A88F 47B2 145C";
+    }];
   };
   anirrudh = {
     email = "anik597@gmail.com";
@@ -1587,6 +1597,12 @@
     github = "binarin";
     githubId = 185443;
     name = "Alexey Lebedeff";
+  };
+  binsky = {
+    email = "timo@binsky.org";
+    github = "binsky08";
+    githubId = 30630233;
+    name = "Timo Triebensky";
   };
   bjg = {
     email = "bjg@gnu.org";
@@ -5710,7 +5726,7 @@
     githubId = 35612334;
   };
   jceb = {
-    name = "jceb";
+    name = "Jan Christoph Ebersbach";
     email = "jceb@e-jc.de";
     github = "jceb";
     githubId = 101593;
@@ -9025,6 +9041,12 @@
   nfjinjing = {
     email = "nfjinjing@gmail.com";
     name = "Jinjing Wang";
+  };
+  ngiger = {
+    email = "niklaus.giger@member.fsf.org";
+    github = "ngiger";
+    githubId = 265800;
+    name = "Niklaus Giger";
   };
   nh2 = {
     email = "mail@nh2.me";

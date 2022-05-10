@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnotify";
-  version = "0.7.9";
+  version = "0.7.11";
 
   outputs = [ "out" "man" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0qa7cx6ra5hwqnxw95b9svgjg5q6ynm8y843iqjszxvds5z53h36";
+    sha256 = "3VaC7GgiAznhHFFZt+ASIEoxjdGzaDoJxILKQhqwc3U=";
   };
 
   mesonFlags = [

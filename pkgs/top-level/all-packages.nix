@@ -750,27 +750,12 @@ with pkgs;
 
   installShellFiles = callPackage ../build-support/install-shell-files {};
 
-  # See doc/builders/testers.chapter.md or
-  # https://nixos.org/manual/nixpkgs/unstable/#tester-invalidateFetcherByDrvHash
-  invalidateFetcherByDrvHash = f: args:
-    let
-      drvPath = (f args).drvPath;
-      # It's safe to discard the context, because we don't access the path.
-      salt = builtins.unsafeDiscardStringContext (lib.substring 0 12 (baseNameOf drvPath));
-      # New derivation incorporating the original drv hash in the name
-      salted = f (args // { name = "${args.name or "source"}-salted-${salt}"; });
-      # Make sure we did change the derivation. If the fetcher ignores `name`,
-      # `invalidateFetcherByDrvHash` doesn't work.
-      checked =
-        if salted.drvPath == drvPath
-        then throw "invalidateFetcherByDrvHash: Adding the derivation hash to the fixed-output derivation name had no effect. Make sure the fetcher's name argument ends up in the derivation name. Otherwise, the fetcher will not be re-run when its implementation changes. This is important for testing."
-        else salted;
-    in checked;
-
   lazydocker = callPackage ../tools/misc/lazydocker { };
 
   ld-is-cc-hook = makeSetupHook { name = "ld-is-cc-hook"; }
     ../build-support/setup-hooks/ld-is-cc-hook.sh;
+
+  libgtkflow = callPackage ../development/libraries/libgtkflow { };
 
   libredirect = callPackage ../build-support/libredirect { };
 
@@ -1212,6 +1197,8 @@ with pkgs;
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
+
+  kubevirt = callPackage ../tools/virtualization/kubevirt { };
 
   vopono = callPackage ../tools/networking/vopono { };
 
@@ -2212,7 +2199,9 @@ with pkgs;
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 
-  gbl = callPackage ../tools/archivers/gbl { };
+  gbl = callPackage ../tools/archivers/gbl {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   genann = callPackage ../development/libraries/genann { };
 
@@ -2628,6 +2617,8 @@ with pkgs;
   bdf2psf = callPackage ../tools/misc/bdf2psf { };
 
   bdf2sfd = callPackage ../tools/misc/bdf2sfd { };
+
+  bdfresize = callPackage ../tools/misc/bdfresize { };
 
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
 
@@ -5792,8 +5783,6 @@ with pkgs;
 
   featherpad = qt5.callPackage ../applications/editors/featherpad {};
 
-  feedreader = callPackage ../applications/networking/feedreaders/feedreader {};
-
   fend = callPackage ../tools/misc/fend { };
 
   ferm = callPackage ../tools/networking/ferm { };
@@ -7637,6 +7626,7 @@ with pkgs;
   lagrange = callPackage ../applications/networking/browsers/lagrange {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
+  lagrange-tui = lagrange.override { enableTUI = true; };
 
   kzipmix = pkgsi686Linux.callPackage ../tools/compression/kzipmix { };
 
@@ -8555,6 +8545,8 @@ with pkgs;
 
   netcat-gnu = callPackage ../tools/networking/netcat { };
 
+  netcat-openbsd = callPackage ../tools/networking/netcat-openbsd { };
+
   netdiscover = callPackage ../tools/networking/netdiscover { };
 
   nethogs = callPackage ../tools/networking/nethogs { };
@@ -9095,6 +9087,8 @@ with pkgs;
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
+  ovftool = callPackage ../tools/virtualization/ovftool { };
+
   overcommit = callPackage ../development/tools/overcommit { };
 
   overmind = callPackage ../applications/misc/overmind { };
@@ -9577,6 +9571,8 @@ with pkgs;
   pydf = callPackage ../applications/misc/pydf { };
 
   pyinfra = with python3Packages; toPythonApplication pyinfra;
+
+  pylint = with python3Packages; toPythonApplication pylint;
 
   pympress = callPackage ../applications/office/pympress { };
 
@@ -10254,7 +10250,9 @@ with pkgs;
 
   silc_server = callPackage ../servers/silc-server { };
 
-  sile = callPackage ../tools/typesetting/sile { };
+  sile = callPackage ../tools/typesetting/sile {
+    lua = lua5_4;
+  };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
 
@@ -10368,7 +10366,9 @@ with pkgs;
     jdk = jdk11;
   };
 
-  spglib = callPackage ../development/libraries/spglib { };
+  spglib = callPackage ../development/libraries/spglib {
+    inherit (llvmPackages) openmp;
+  };
 
   spicy = callPackage ../development/tools/spicy { };
 
@@ -11138,6 +11138,10 @@ with pkgs;
   uget-integrator = callPackage ../tools/networking/uget-integrator { };
 
   ugrep = callPackage ../tools/text/ugrep { };
+
+  uhk-agent = callPackage ../os-specific/linux/uhk-agent { };
+
+  uhk-udev-rules = callPackage ../os-specific/linux/uhk-udev-rules { };
 
   uif2iso = callPackage ../tools/cd-dvd/uif2iso { };
 
@@ -12019,6 +12023,8 @@ with pkgs;
 
   zxing = callPackage ../tools/graphics/zxing {};
 
+  zkar = callPackage ../tools/security/zkar { };
+
   zmap = callPackage ../tools/security/zmap { };
 
   zpool-iostat-viz = callPackage ../tools/filesystems/zpool-iostat-viz { };
@@ -12516,6 +12522,7 @@ with pkgs;
   gcc9Stdenv = overrideCC gccStdenv buildPackages.gcc9;
   gcc10Stdenv = overrideCC gccStdenv buildPackages.gcc10;
   gcc11Stdenv = overrideCC gccStdenv buildPackages.gcc11;
+  gcc12Stdenv = overrideCC gccStdenv buildPackages.gcc12;
 
   # This is not intended for use in nixpkgs but for providing a faster-running
   # compiler to nixpkgs users by building gcc with reproducibility-breaking
@@ -12711,7 +12718,19 @@ with pkgs;
     isl = if !stdenv.isDarwin then isl_0_20 else null;
   }));
 
-  gcc_latest = gcc11;
+  gcc12 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/12 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
+
+    isl = if !stdenv.isDarwin then isl_0_20 else null;
+  }));
+
+  gcc_latest = gcc12;
 
   # Use the same GCC version as the one from stdenv by default
   gfortran = wrapCC (gcc.cc.override {
@@ -12779,6 +12798,14 @@ with pkgs;
   });
 
   gfortran11 = wrapCC (gcc11.cc.override {
+    name = "gfortran";
+    langFortran = true;
+    langCC = false;
+    langC = false;
+    profiledCompiler = false;
+  });
+
+  gfortran12 = wrapCC (gcc12.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -12873,6 +12900,22 @@ with pkgs;
          && stdenv.buildPlatform == stdenv.hostPlatform
       then buildPackages.gnat6
       else buildPackages.gnat11;
+  });
+
+  gnat12 = wrapCC (gcc12.cc.override {
+    name = "gnat";
+    langC = true;
+    langCC = false;
+    langAda = true;
+    profiledCompiler = false;
+    # As per upstream instructions building a cross compiler
+    # should be done with a (native) compiler of the same version.
+    # If we are cross-compiling GNAT, we may as well do the same.
+    gnatboot =
+      if stdenv.hostPlatform == stdenv.targetPlatform
+         && stdenv.buildPlatform == stdenv.hostPlatform
+      then buildPackages.gnat6
+      else buildPackages.gnat12;
   });
 
   gnatboot = wrapCC (callPackage ../development/compilers/gnatboot { });
@@ -14831,37 +14874,6 @@ with pkgs;
 
   bazel = bazel_3;
 
-  bazel_0 = bazel_0_26;
-
-  bazel_0_26 = callPackage ../development/tools/build-managers/bazel/bazel_0_26 {
-    inherit (darwin) cctools;
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    buildJdk = jdk8_headless;
-    buildJdkName = "jdk8";
-    runJdk = jdk11_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  };
-
-  bazel_0_29 = callPackage ../development/tools/build-managers/bazel/bazel_0_29 {
-    inherit (darwin) cctools;
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    buildJdk = jdk8_headless;
-    buildJdkName = "jdk8";
-    runJdk = jdk11_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-    bazel_self = bazel_0_29;
-  };
-
-  bazel_1 = callPackage ../development/tools/build-managers/bazel/bazel_1 {
-    inherit (darwin) cctools;
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
-    buildJdk = jdk8_headless;
-    buildJdkName = "jdk8";
-    runJdk = jdk11_headless;
-    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-    bazel_self = bazel_1;
-  };
-
   bazel_3 = callPackage ../development/tools/build-managers/bazel/bazel_3 {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
@@ -15915,8 +15927,6 @@ with pkgs;
 
   pgcli = pkgs.python3Packages.pgcli;
 
-  phantomjs2 = libsForQt514.callPackage ../development/tools/phantomjs2 { };
-
   picotool = callPackage ../development/tools/picotool { };
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
@@ -16883,8 +16893,6 @@ with pkgs;
   csdr = callPackage ../applications/radio/csdr { };
 
   ctypes_sh = callPackage ../development/libraries/ctypes_sh { };
-
-  curlcpp = callPackage ../development/libraries/curlcpp { };
 
   curlpp = callPackage ../development/libraries/curlpp { };
 
@@ -17893,8 +17901,13 @@ with pkgs;
   } // (lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
     }));
+  icu71 = callPackage ../development/libraries/icu/71.nix ({
+    nativeBuildRoot = buildPackages.icu71.override { buildRootOnly = true; };
+  } // (lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
 
-  icu = icu70;
+  icu = icu71;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
@@ -19942,7 +19955,8 @@ with pkgs;
   openvdb = callPackage ../development/libraries/openvdb {};
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_3_4;
+    libressl_3_4
+    libressl_3_5;
 
   libressl = libressl_3_4;
 
@@ -20117,7 +20131,6 @@ with pkgs;
   protobuf3_8 = callPackage ../development/libraries/protobuf/3.8.nix { };
   protobuf3_7 = callPackage ../development/libraries/protobuf/3.7.nix { };
   protobuf3_6 = callPackage ../development/libraries/protobuf/3.6.nix { };
-  protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
@@ -20478,6 +20491,8 @@ with pkgs;
 
   selinux-sandbox = callPackage ../os-specific/linux/selinux-sandbox { };
 
+  sealcurses = callPackage ../development/libraries/sealcurses { };
+
   seasocks = callPackage ../development/libraries/seasocks { };
 
   serd = callPackage ../development/libraries/serd {};
@@ -20829,6 +20844,8 @@ with pkgs;
   tevent = callPackage ../development/libraries/tevent { };
 
   tet = callPackage ../development/tools/misc/tet { };
+
+  the-foundation = callPackage ../development/libraries/the-foundation { };
 
   theft = callPackage ../development/libraries/theft { };
 
@@ -22435,10 +22452,7 @@ with pkgs;
 
   pypolicyd-spf = python3.pkgs.callPackage ../servers/mail/pypolicyd-spf { };
 
-  qpid-cpp = callPackage ../servers/amqp/qpid-cpp {
-    boost = boost155;
-    inherit (python2Packages) buildPythonPackage qpid-python;
-  };
+  qpid-cpp = callPackage ../servers/amqp/qpid-cpp { };
 
   qremotecontrol-server = callPackage ../servers/misc/qremotecontrol-server { };
 
@@ -22905,7 +22919,9 @@ with pkgs;
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
-  dropwatch = callPackage ../os-specific/linux/dropwatch { };
+  dropwatch = callPackage ../os-specific/linux/dropwatch {
+    readline = readline81;
+  };
 
   dsd = callPackage ../applications/radio/dsd { };
 
@@ -25552,6 +25568,8 @@ with pkgs;
 
   clightd = callPackage ../applications/misc/clight/clightd.nix { };
 
+  clip = libsForQt5.callPackage ../applications/video/clip { };
+
   clipgrab = libsForQt5.callPackage ../applications/video/clipgrab { };
 
   clipcat = callPackage ../applications/misc/clipcat { };
@@ -27028,7 +27046,9 @@ with pkgs;
 
   marker = callPackage ../applications/editors/marker { };
 
-  musikcube = callPackage ../applications/audio/musikcube {};
+  musikcube = callPackage ../applications/audio/musikcube {
+    inherit (darwin.apple_sdk.frameworks) Cocoa SystemConfiguration;
+  };
 
   libmt32emu = callPackage ../applications/audio/munt/libmt32emu.nix { };
 
@@ -27055,6 +27075,8 @@ with pkgs;
   pixinsight = libsForQt5.callPackage ../applications/graphics/pixinsight { };
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
+
+  shelf = libsForQt5.callPackage ../applications/office/shelf { };
 
   shepherd = nodePackages."@nerdwallet/shepherd";
 
@@ -28207,6 +28229,8 @@ with pkgs;
 
   rofi-pulse-select = callPackage ../applications/audio/rofi-pulse-select { };
 
+  rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw { };
+
   rofi-vpn = callPackage ../applications/networking/rofi-vpn { };
 
   ympd = callPackage ../applications/audio/ympd { };
@@ -28453,6 +28477,8 @@ with pkgs;
   qbec = callPackage ../applications/networking/cluster/qbec { };
 
   qemacs = callPackage ../applications/editors/qemacs { };
+
+  roxctl = callPackage ../applications/networking/cluster/roxctl { };
 
   rqbit = callPackage ../applications/networking/p2p/rqbit {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -29019,8 +29045,6 @@ with pkgs;
   procmail = callPackage ../applications/misc/procmail { };
 
   profanity = callPackage ../applications/networking/instant-messengers/profanity ({
-    gtk = gtk3;
-    python = python3;
   } // (config.profanity or {}));
 
   properties-cpp = callPackage ../development/libraries/properties-cpp { };
@@ -29264,6 +29288,8 @@ with pkgs;
   rclone-browser = libsForQt5.callPackage ../applications/networking/sync/rclone/browser.nix { };
 
   rcs = callPackage ../applications/version-management/rcs { };
+
+  rcshist = callPackage ../applications/version-management/rcshist { };
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
 
@@ -29843,6 +29869,8 @@ with pkgs;
   tdesktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
     abseil-cpp = abseil-cpp_202111;
   };
+
+  telegram-bot-api = callPackage ../servers/telegram-bot-api { };
 
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
 
@@ -31142,6 +31170,10 @@ with pkgs;
   lndmanage = callPackage ../applications/blockchains/lndmanage { };
 
   monero-cli = callPackage ../applications/blockchains/monero-cli {
+    inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
+  };
+
+  haven-cli = callPackage ../applications/blockchains/haven-cli {
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
   };
 
@@ -34013,6 +34045,8 @@ with pkgs;
 
   kompose = callPackage ../applications/networking/cluster/kompose { };
 
+  kompute = callPackage ../development/libraries/kompute { };
+
   kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
 
   # In general we only want keep the last three minor versions around that
@@ -34173,58 +34207,6 @@ with pkgs;
         _module.args.pkgs = pkgs;
       };
   };
-
-  /*
-   * Run a NixOS VM network test using this evaluation of Nixpkgs.
-   *
-   * It is mostly equivalent to `import ./make-test-python.nix` from the
-   * NixOS manual[1], except that your `pkgs` will be used instead of
-   * letting NixOS invoke Nixpkgs again. If a test machine needs to
-   * set NixOS options under `nixpkgs`, it must set only the
-   * `nixpkgs.pkgs` option. For the details, see the Nixpkgs
-   * `pkgs.nixos` documentation.
-   *
-   * Parameter:
-   *   A NixOS VM test network, or path to it. Example:
-   *
-   *      { lib, ... }:
-   *      { name = "my-test";
-   *        nodes = {
-   *          machine-1 = someNixOSConfiguration;
-   *          machine-2 = ...;
-   *        }
-   *      }
-   *
-   * Result:
-   *   A derivation that runs the VM test.
-   *
-   * [1]: For writing NixOS tests, see
-   *      https://nixos.org/nixos/manual/index.html#sec-nixos-tests
-   */
-  nixosTest =
-    let
-      /* The nixos/lib/testing-python.nix module, preapplied with arguments that
-       * make sense for this evaluation of Nixpkgs.
-       */
-      nixosTesting =
-        (import ../../nixos/lib/testing-python.nix {
-          inherit (stdenv.hostPlatform) system;
-          inherit pkgs;
-          extraConfigurations = [(
-            { lib, ... }: {
-              config.nixpkgs.pkgs = lib.mkDefault pkgs;
-            }
-          )];
-        });
-    in
-      test:
-        let
-          loadedTest = if builtins.typeOf test == "path"
-            then import test
-            else test;
-          calledTest = lib.toFunction loadedTest pkgs;
-        in
-          nixosTesting.makeTest calledTest;
 
   nixosOptionsDoc = attrs:
     (import ../../nixos/lib/make-options-doc)
@@ -34440,8 +34422,6 @@ with pkgs;
   qMasterPassword = libsForQt5.callPackage ../applications/misc/qMasterPassword { };
 
   qtrvsim = libsForQt5.callPackage ../applications/science/computer-architecture/qtrvsim { };
-
-  py-wmi-client = callPackage ../tools/networking/py-wmi-client { };
 
   qdl = callPackage ../tools/misc/qdl { };
 
