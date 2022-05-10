@@ -25604,6 +25604,8 @@ with pkgs;
 
   communi = libsForQt5.callPackage ../applications/networking/irc/communi { };
 
+  communicator = libsForQt5.callPackage ../tools/misc/communicator { };
+
   complete-alias = callPackage ../tools/misc/complete-alias { };
 
   confclerk = callPackage ../applications/misc/confclerk { };
