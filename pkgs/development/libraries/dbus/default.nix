@@ -52,6 +52,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "lib" "doc" "man" ];
 
+  strictDeps = true;
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
@@ -88,7 +89,8 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
   ] ++ lib.optional (!x11Support) "--without-x"
-  ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ];
+  ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ]
+  ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemd}/bin/systemctl" ];
 
   NIX_CFLAGS_LINK = lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed";
 
