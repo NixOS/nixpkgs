@@ -28217,6 +28217,8 @@ with pkgs;
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  maui-nota = libsForQt5.callPackage ../applications/editors/maui-nota { };
+
   pragha = libsForQt5.callPackage ../applications/audio/pragha { };
 
   rofi-mpd = callPackage ../applications/audio/rofi-mpd { };
