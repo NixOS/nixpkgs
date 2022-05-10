@@ -6432,6 +6432,8 @@ in {
 
   pyrogram = callPackage ../development/python-modules/pyrogram { };
 
+  pysabnzbd = callPackage ../development/python-modules/pysabnzbd { };
+
   pysbd = callPackage ../development/python-modules/pysbd { };
 
   pyshark = callPackage ../development/python-modules/pyshark { };
