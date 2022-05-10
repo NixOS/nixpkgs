@@ -666,7 +666,7 @@ dont-distribute-packages:
  - ascii
  - ascii-cows
  - ascii-table
- - ascii_1_2_2_0
+ - ascii_1_2_3_0
  - asic
  - asif
  - assert4hs-hspec
