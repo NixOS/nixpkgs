@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , lib
+, coreutils
 , autoPatchelfHook
 , cmake
 , llvmPackages_latest
@@ -29,6 +30,35 @@ stdenv.mkDerivation rec {
   EXTRA_LDFLAGS = "-fuse-ld=${llvmPackages_latest.lld}/bin/ld.lld";
   LTO = 1;
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  suffixSalt = lib.replaceStrings ["-" "."] ["_" "_"] stdenv.targetPlatform.config;
+  wrapperName = "MOLD_WRAPPER";
+  coreutils_bin = lib.getBin coreutils;
+  postInstall = let
+    targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+                                          (stdenv.targetPlatform.config + "-");
+  in ''
+    mkdir -p $out/nix-support
+
+    mv $out/bin/mold $out/bin/.mold
+
+    export prog=$out/bin/.mold
+    substituteAll \
+      ${../../../build-support/bintools-wrapper/ld-wrapper.sh} \
+      "$out/bin/${targetPrefix}mold"
+    chmod +x "$out/bin/${targetPrefix}mold"
+    ln -s $out/bin/${targetPrefix}mold $out/bin/${targetPrefix}ld
+
+    substituteAll \
+      ${../../../build-support/bintools-wrapper/add-flags.sh} \
+      $out/nix-support/add-flags.sh
+    substituteAll \
+      ${../../../build-support/bintools-wrapper/add-hardening.sh} \
+      $out/nix-support/add-hardening.sh
+    substituteAll \
+      ${../../../build-support/wrapper-common/utils.bash} \
+      $out/nix-support/utils.bash
+  '';
 
   passthru = {
     updateScript = nix-update-script {
