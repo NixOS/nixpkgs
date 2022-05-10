@@ -176,8 +176,6 @@ let
       # default to python's platforms
       platforms = python.meta.platforms;
       isBuildPythonPackage = python.meta.platforms;
-    } // lib.optionalAttrs (attrs?pname) {
-      mainProgram = attrs.pname;
     } // meta;
   } // lib.optionalAttrs (attrs?checkPhase) {
     # If given use the specified checkPhase, otherwise use the setup hook.
