@@ -4,6 +4,7 @@
 , cmake
 , extra-cmake-modules
 
+, callaudiod
 , kcontacts
 , kcoreaddons
 , kdbusaddons
@@ -12,11 +13,10 @@
 , knotifications
 , kpeople
 , libphonenumber
-, libpulseaudio
 , modemmanager-qt
 , protobuf
-, pulseaudio-qt
 , qtfeedback
+, qtmpris
 , qtquickcontrols2
 }:
 
@@ -29,6 +29,7 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+    callaudiod
     kcontacts
     kcoreaddons
     kdbusaddons
@@ -37,11 +38,10 @@ mkDerivation rec {
     knotifications
     kpeople
     libphonenumber
-    libpulseaudio
     modemmanager-qt
     protobuf # Needed by libphonenumber
-    pulseaudio-qt
     qtfeedback
+    qtmpris
     qtquickcontrols2
   ];
 
