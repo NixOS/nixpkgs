@@ -1,4 +1,4 @@
-{ lib, fetchzip, buildGoModule, go-bindata, nixosTests }:
+{ lib, fetchzip, buildGoModule, go-bindata, nixosTests, fetchpatch }:
 
 buildGoModule rec {
   pname = "traefik";
@@ -11,6 +11,14 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-NyIPT2NmJFB1wjNNteAEpTPYSYQZtEWJBOvG0YtxUGc=";
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-23632.patch";
+      url = "https://github.com/traefik/traefik/commit/0c83ee736ca4aa93bba2d4cce4c00fd247785915.patch";
+      sha256 = "0sjd9mvkilnihs5y43gh4lijxkkrf4l9kx8jf89wzs1dy5jm6fl8";
+    })
+  ];
 
   doCheck = false;
 

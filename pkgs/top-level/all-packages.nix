@@ -6601,6 +6601,8 @@ with pkgs;
 
   jadx = callPackage ../tools/security/jadx { };
 
+  jasmin-compiler = callPackage ../development/compilers/jasmin-compiler { };
+
   jazzy = callPackage ../development/tools/jazzy { };
 
   jc = with python3Packages; toPythonApplication jc;
