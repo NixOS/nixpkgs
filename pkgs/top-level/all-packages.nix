@@ -8535,8 +8535,6 @@ with pkgs;
 
   ndisc6 = callPackage ../tools/networking/ndisc6 { };
 
-  neopg = callPackage ../tools/security/neopg { };
-
   netboot = callPackage ../tools/networking/netboot {};
 
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
@@ -18331,8 +18329,6 @@ with pkgs;
 
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
-  libdap = callPackage ../development/libraries/libdap { };
-
   libdatrie = callPackage ../development/libraries/libdatrie { };
 
   libdazzle = callPackage ../development/libraries/libdazzle { };
@@ -19155,8 +19151,6 @@ with pkgs;
   libssh = callPackage ../development/libraries/libssh { };
 
   libssh2 = callPackage ../development/libraries/libssh2 { };
-  #FIXME: temporary attribute
-  libssh2_1_10 = callPackage ../development/libraries/libssh2/1_10.nix { };
 
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
@@ -20074,13 +20068,6 @@ with pkgs;
   portaudio = callPackage ../development/libraries/portaudio {
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreAudio CoreServices Carbon;
   };
-
-  portaudio2014 = portaudio.overrideAttrs (_: {
-    src = fetchurl {
-      url = "http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz";
-      sha256 = "0mwddk4qzybaf85wqfhxqlf0c5im9il8z03rd4n127k8y2jj9q4g";
-    };
-  });
 
   portmidi = callPackage ../development/libraries/portmidi {
     inherit (darwin.apple_sdk.frameworks) Carbon CoreAudio CoreFoundation CoreMIDI CoreServices;
@@ -24255,9 +24242,10 @@ with pkgs;
   flat-remix-gtk = callPackage ../data/themes/flat-remix-gtk { };
   flat-remix-gnome = callPackage ../data/themes/flat-remix-gnome { };
 
-  font-awesome_4 = (callPackage ../data/fonts/font-awesome-5 { }).v4;
-  font-awesome_5 = (callPackage ../data/fonts/font-awesome-5 { }).v5;
-  font-awesome = font-awesome_5;
+  font-awesome_4 = (callPackage ../data/fonts/font-awesome { }).v4;
+  font-awesome_5 = (callPackage ../data/fonts/font-awesome { }).v5;
+  font-awesome_6 = (callPackage ../data/fonts/font-awesome { }).v6;
+  font-awesome = font-awesome_6;
 
   fraunces = callPackage ../data/fonts/fraunces { };
 
@@ -24760,6 +24748,8 @@ with pkgs;
   signwriting = callPackage ../data/fonts/signwriting { };
 
   sierra-gtk-theme = callPackage ../data/themes/sierra { };
+
+  sil-abyssinica = callPackage ../data/fonts/sil-abyssinica { };
 
   sil-padauk = callPackage ../data/fonts/sil-padauk { };
 
@@ -25731,7 +25721,6 @@ with pkgs;
 
   deadbeefPlugins = {
     headerbar-gtk3 = callPackage ../applications/audio/deadbeef/plugins/headerbar-gtk3.nix { };
-    infobar = callPackage ../applications/audio/deadbeef/plugins/infobar.nix { };
     lyricbar = callPackage ../applications/audio/deadbeef/plugins/lyricbar.nix { };
     mpris2 = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
     statusnotifier = callPackage ../applications/audio/deadbeef/plugins/statusnotifier.nix { };
@@ -26752,8 +26741,6 @@ with pkgs;
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
   moe =  callPackage ../applications/editors/moe { };
-
-  multibootusb = libsForQt514.callPackage ../applications/misc/multibootusb { qt5 = qt514; };
 
   praat = callPackage ../applications/audio/praat { };
 
@@ -28863,7 +28850,6 @@ with pkgs;
   pdftk = callPackage ../tools/typesetting/pdftk {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
-  pdftk-legacy = lowPrio (callPackage ../tools/typesetting/pdftk/legacy.nix { });
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
   pdfpc = callPackage ../applications/misc/pdfpc {
@@ -29273,8 +29259,6 @@ with pkgs;
 
   raiseorlaunch = callPackage ../applications/misc/raiseorlaunch {};
 
-  rapcad = libsForQt514.callPackage ../applications/graphics/rapcad { boost = boost159; };
-
   rapid-photo-downloader = libsForQt5.callPackage ../applications/graphics/rapid-photo-downloader { };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
@@ -29501,10 +29485,6 @@ with pkgs;
   tensorman = callPackage ../tools/misc/tensorman { };
 
   spideroak = callPackage ../applications/networking/spideroak { };
-
-  split2flac = callPackage ../applications/audio/split2flac {
-    inherit (python3.pkgs) mutagen;
-  };
 
   spotify-qt = libsForQt5.callPackage ../applications/audio/spotify-qt { };
 
@@ -30383,8 +30363,6 @@ with pkgs;
   vnstat = callPackage ../applications/networking/vnstat { };
 
   vocal = callPackage ../applications/audio/vocal { };
-
-  vogl = libsForQt5.callPackage ../development/tools/vogl { };
 
   volnoti = callPackage ../applications/misc/volnoti { };
 
@@ -32403,8 +32381,6 @@ with pkgs;
   xcowsay = callPackage ../games/xcowsay { };
 
   xjump = callPackage ../games/xjump { };
-  # TODO: the corresponding nix file is missing
-  # xracer = callPackage ../games/xracer { };
 
   xmoto = callPackage ../games/xmoto { };
 
@@ -34524,7 +34500,6 @@ with pkgs;
 
   samsung-unified-linux-driver_1_00_36 = callPackage ../misc/cups/drivers/samsung/1.00.36 { };
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung/1.00.37.nix { };
-  samsung-unified-linux-driver_4_00_39 = callPackage ../misc/cups/drivers/samsung/4.00.39 { };
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
   samsung-unified-linux-driver = res.samsung-unified-linux-driver_4_01_17;
 

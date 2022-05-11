@@ -96,6 +96,7 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
+, crashreporterSupport ? !privacySupport
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , webrtcSupport ? !privacySupport
@@ -108,10 +109,6 @@
 # Controlling the nagbar and widevine CDM at runtime is possible by setting
 # `browser.eme.ui.enabled` and `media.gmp-widevinecdm.enabled` accordingly
 , drmSupport ? true
-
-## other
-
-, crashreporterSupport ? false
 
 # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
 # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we

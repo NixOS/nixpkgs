@@ -124,7 +124,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "http://xmlsoft.org/";
+    homepage = "https://gitlab.gnome.org/GNOME/libxml2";
     description = "XML parsing library for C";
     license = licenses.mit;
     platforms = platforms.all;
