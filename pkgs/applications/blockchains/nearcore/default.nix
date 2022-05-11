@@ -50,6 +50,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/near/nearcore";
     license = licenses.gpl3;
     maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.unix;
+    # only x86_64 is supported in nearcore because of sse4+ support, macOS might
+    # be also possible
+    platforms = [ "x86_64-linux" ];
   };
 }
