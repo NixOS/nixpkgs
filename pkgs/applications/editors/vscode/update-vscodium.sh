@@ -27,7 +27,11 @@ update_vscodium () {
 # VSCodium
 
 VSCODIUM_VER=$(curl -Ls -w %{url_effective} -o /dev/null https://github.com/VSCodium/vscodium/releases/latest | awk -F'/' '{print $NF}')
-sed -i "s/version = \".*\"/version = \"${VSCODIUM_VER}\"/" "$ROOT/vscodium.nix"
+
+# TODO: update this as soon as the armv7l-linux build is fixed
+# https://github.com/VSCodium/vscodium/issues/1072
+# sed -i "s/version = \".*\"/version = \"${VSCODIUM_VER}\"/" "$ROOT/vscodium.nix"
+sed -i "s/version = .*/version = if stdenv.isAarch32 then \"1.66.2\" else \"${VSCODIUM_VER}\";/" "$ROOT/vscodium.nix"
 
 update_vscodium $VSCODIUM_VER linux-x64 x86_64-linux tar.gz
 
@@ -37,4 +41,4 @@ update_vscodium $VSCODIUM_VER linux-arm64 aarch64-linux tar.gz
 
 update_vscodium $VSCODIUM_VER darwin-arm64 aarch64-darwin zip
 
-update_vscodium $VSCODIUM_VER linux-armhf armv7l-linux tar.gz
+# update_vscodium $VSCODIUM_VER linux-armhf armv7l-linux tar.gz

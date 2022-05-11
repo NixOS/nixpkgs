@@ -14,10 +14,10 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "1i76ix318y6b2dcfnisg13bp5d7nzvcx7zcpl94mkrn974db30pn";
-    x86_64-darwin = "1qk1vykl838vwsffyjpazx7x9ajwxczpgz5vhch16iikfz2vh1vk";
-    aarch64-linux = "13jifiqn2v17d6vwacq6aib1lzyp2021kjdswkp7wpx6ck5lkm21";
-    aarch64-darwin = "1jgmvw52hp2zfvk6z51yni4vn7wfq63gsih42mzadg5a1b2fr9rx";
+    x86_64-linux = "0hsq3b8j58xjl8pkrd5x3qh0lsl9gwbd9wgvhzlnx2h94iasr1v5";
+    x86_64-darwin = "04fbl8kp3af7xcicx17ay2piwy4y3yiyn9723hlmmf7s359rr1wn";
+    aarch64-linux = "0jljsa61zr3symfdsjx9jj4s3y1kqslxh8gc1gqx45zlm5rzr7k8";
+    aarch64-darwin = "1swkc0qb1xif8hj6cjp3jq1iqdfqsa681hhp7mxvrpqg0i2zppk3";
     armv7l-linux = "1zhriscsmfcsagsp2ds0fn316fybs5f2f2r3w5q29jwczgcnlam4";
   }.${system};
 
@@ -28,7 +28,10 @@ in
 
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
-    version = "1.66.2";
+    #
+    # No new release for armv7l-linux
+    # https://github.com/VSCodium/vscodium/issues/1072
+    version = if stdenv.isAarch32 then "1.66.2" else "1.67.1";
     pname = "vscodium";
 
     executableName = "codium";
@@ -62,5 +65,8 @@ in
       maintainers = with maintainers; [ synthetica turion bobby285271 ];
       mainProgram = "codium";
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" "armv7l-linux" ];
+      knownVulnerabilities = lib.optionals (lib.versionOlder version "1.67.1") [
+        "CVE-2022-30129"
+      ];
     };
   }
