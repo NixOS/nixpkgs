@@ -1,0 +1,32 @@
+By default, commit displays something along of "git config core.editors /nix/store/[...]/bin/re.sonny.Commit"
+as command to set it as git editor. Since this would break on upgrades, just use the non-versioned binary
+diff --git a/src/welcome.js b/src/welcome.js
+index c410e2d..62e46ba 100644
+--- a/src/welcome.js
++++ b/src/welcome.js
+@@ -70,24 +70,7 @@ export default function Welcome({ application }) {
+ }
+ 
+ function getCommand() {
+-  const FLATPAK_ID = GLib.getenv("FLATPAK_ID");
+-  const { programInvocationName } = system;
+-
+-  if (FLATPAK_ID) {
+-    return `flatpak run --file-forwarding ${FLATPAK_ID} @@`;
+-  }
+-
+-  // re.sonny.Commit
+-  if (programInvocationName === GLib.path_get_basename(programInvocationName)) {
+-    return programInvocationName;
+-  }
+-
+-  // ./re.sonny.commit
+-  // /home/sonny/re.sonny.Commit
+-  return GLib.canonicalize_filename(
+-    programInvocationName,
+-    GLib.get_current_dir(),
+-  );
++  return "re.sonny.Commit";
+ }
+ 
+ function getRange(key) {

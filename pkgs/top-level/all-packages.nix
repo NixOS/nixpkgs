@@ -35152,6 +35152,8 @@ with pkgs;
 
   mmark = callPackage ../tools/typesetting/mmark { };
 
+  commit = callPackage ../applications/editors/commit { };
+
   wire-desktop = callPackage ../applications/networking/instant-messengers/wire-desktop { };
 
   teseq = callPackage ../applications/misc/teseq {  };
