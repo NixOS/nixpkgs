@@ -1941,6 +1941,8 @@ in {
 
   croniter = callPackage ../development/python-modules/croniter { };
 
+  crossplane = callPackage ../development/python-modules/crossplane { };
+
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
 
   crownstone-core = callPackage ../development/python-modules/crownstone-core { };

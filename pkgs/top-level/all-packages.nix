@@ -3151,6 +3151,8 @@ with pkgs;
 
   crosvm = callPackage ../applications/virtualization/crosvm { };
 
+  crossplane = with python3Packages; toPythonApplication crossplane;
+
   crunch = callPackage ../tools/security/crunch { };
 
   crudini = callPackage ../tools/misc/crudini { };
