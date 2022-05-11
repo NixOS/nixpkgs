@@ -6,6 +6,7 @@
 , pkg-config
 , wayland
 , wayland-protocols
+, fetchurl
 }:
 
 stdenv.mkDerivation {
@@ -24,12 +25,11 @@ stdenv.mkDerivation {
   buildInputs = [ wayland ];
 
   patches = [
-    # A recent change to xdg-shell-client-protocol causes a build
-    # failure.  This was reported upstream as GH #5.  User @AlexBMJ
-    # posted the following two-line fix in that issue, but the
-    # developer has not yet responded:
-    # https://github.com/progandy/wdomirror/issues/5#issuecomment-1103265438
-    ./configure-bounds.patch
+    # https://github.com/progandy/wdomirror/pull/7
+    (fetchurl {
+      url = "https://github.com/progandy/wdomirror/commit/142632208e9ea2b4a4ebd784532efdb8cad7b87c.patch";
+      hash = "sha256-z6/8q2vOtmlGFbDVG5BVWWbLQT8kBvJXT9/oZkWS9gw=";
+    })
   ];
 
   installPhase = ''
