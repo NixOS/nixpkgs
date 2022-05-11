@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib, testers, flyctl }:
 
 buildGoModule rec {
   pname = "flyctl";
@@ -32,8 +32,14 @@ buildGoModule rec {
   '';
 
   postCheck = ''
-    go test ./... -ldflags="-X 'github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00+0000'"
+    go test ./... -ldflags="-X 'github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z'"
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = flyctl;
+    command = "HOME=$(mktemp -d) flyctl version";
+    version = "v${flyctl.version}";
+  };
 
   meta = with lib; {
     description = "Command line tools for fly.io services";
