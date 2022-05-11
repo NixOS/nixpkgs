@@ -37,6 +37,7 @@
 , trytond
 , urllib3
 , werkzeug
+, multidict
 }:
 
 buildPythonPackage rec {
@@ -88,6 +89,7 @@ buildPythonPackage rec {
     tornado
     trytond
     werkzeug
+    multidict
   ];
 
   doCheck = !stdenv.isDarwin;
