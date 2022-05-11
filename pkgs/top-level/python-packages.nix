@@ -6355,6 +6355,8 @@ in {
 
   pip-tools = callPackage ../development/python-modules/pip-tools { };
 
+  pip-requirements-parser = callPackage ../development/python-modules/pip-requirements-parser { };
+
   pipx = callPackage ../development/python-modules/pipx { };
 
   pivy = callPackage ../development/python-modules/pivy {
