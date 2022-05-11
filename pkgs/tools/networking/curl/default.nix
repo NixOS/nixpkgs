@@ -65,6 +65,11 @@ stdenv.mkDerivation rec {
     ./CVE-2022-27774-2.patch
     # https://curl.se/docs/CVE-2022-27775.html
     ./CVE-2022-27775.patch
+    # https://curl.se/docs/CVE-2022-27781.html
+    ./CVE-2022-27781.patch
+    # https://curl.se/docs/CVE-2022-27782.html
+    ./CVE-2022-27782.tls.patch
+    ./CVE-2022-27782.ssh.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
