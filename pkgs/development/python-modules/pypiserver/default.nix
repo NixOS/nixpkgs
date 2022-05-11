@@ -1,7 +1,6 @@
 { buildPythonPackage
 , fetchFromGitHub
 , lib
-, httpx
 , passlib
 , pytestCheckHook
 , setuptools
