@@ -2,15 +2,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "snazy";
-  version = "0.4.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Pv+vLdbMTbDbdUVQhA07WY+o1PwtCiqdAXCj+UlP/ZQ=";
+    sha256 = "sha256-SoyGvy1F39kvMLuT9QFXiGEpN0DWS3X9ZDZhFocymCw=";
   };
-  cargoSha256 = "sha256-96xgpkkWHsyb3kxEXM5f5jFSjbO+VEmX2uHltGJUPGk=";
+  cargoSha256 = "sha256-vz2bXmuRWFCx7dH0u2zVJLurtUAQ51ZqWVAcuUrm6d8=";
 
   doInstallCheck = true;
   installCheckPhase = ''
