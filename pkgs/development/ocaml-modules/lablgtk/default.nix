@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   meta = with lib; {
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = with maintainers; [
       maggesi roconnor vbgl
     ];

@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # See https://github.com/trailofbits/pe-parse/issues/169
+  NIX_CFLAGS_COMPILE = "-Wno-sign-conversion";
+
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/dump-pe ../tests/assets/example.exe

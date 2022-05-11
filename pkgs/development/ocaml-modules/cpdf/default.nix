@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.coherentpdf.com/";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     description = "PDF Command Line Tools";
     license = licenses.unfree;
     maintainers = [ maintainers.vbgl ];

@@ -193,6 +193,12 @@ let
     else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
   # hardeningDisable additionally supports "all".
   erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
+
+  checkDependencyList = checkDependencyList' [];
+  checkDependencyList' = positions: name: deps: lib.flip lib.imap1 deps (index: dep:
+    if lib.isDerivation dep || isNull dep || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
+    else if lib.isList dep then checkDependencyList' ([index] ++ positions) name dep
+    else throw "Dependency is not of a valid type: ${lib.concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
 then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
   inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
@@ -208,34 +214,34 @@ else let
 
   dependencies = map (map lib.chooseDevOutputs) [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
-      (map (drv: drv.nativeDrv or drv) nativeBuildInputs
+      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
+      (map (drv: drv.nativeDrv or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs
          ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
          ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
          ++ lib.optionals doCheck checkInputs
-         ++ lib.optionals doInstallCheck' installCheckInputs)
-      (map (drv: drv.__spliced.buildTarget or drv) depsBuildTarget)
+         ++ lib.optionals doInstallCheck' installCheckInputs))
+      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
-      (map (drv: drv.crossDrv or drv) buildInputs)
+      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
+      (map (drv: drv.crossDrv or drv) (checkDependencyList "buildInputs" buildInputs))
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
+      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
     ]
   ];
   propagatedDependencies = map (map lib.chooseDevOutputs) [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuildPropagated)
-      (map (drv: drv.nativeDrv or drv) propagatedNativeBuildInputs)
-      (map (drv: drv.__spliced.buildTarget or drv) depsBuildTargetPropagated)
+      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
+      (map (drv: drv.nativeDrv or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
+      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) depsHostHostPropagated)
-      (map (drv: drv.crossDrv or drv) propagatedBuildInputs)
+      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
+      (map (drv: drv.crossDrv or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) depsTargetTargetPropagated)
+      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
     ]
   ];
 
