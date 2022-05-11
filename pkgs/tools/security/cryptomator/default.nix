@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , autoPatchelfHook
 , fuse, jffi
-, maven, jdk, jre, makeWrapper, glib, wrapGAppsHook
+, maven, jdk, jre, makeShellWrapper, glib, wrapGAppsHook
 }:
 
 let
@@ -101,7 +101,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     maven
-    makeWrapper
+    makeShellWrapper
     wrapGAppsHook
     jdk
   ];

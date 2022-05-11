@@ -1,5 +1,5 @@
 { pname, version, src, meta, binaryName, desktopName, autoPatchelfHook
-, makeDesktopItem, lib, stdenv, wrapGAppsHook, makeWrapper, alsa-lib, at-spi2-atk
+, makeDesktopItem, lib, stdenv, wrapGAppsHook, makeShellWrapper, alsa-lib, at-spi2-atk
 , at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
 , glib, gtk3, libcxx, libdrm, libnotify, libpulseaudio, libuuid, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mesa
     nss
     wrapGAppsHook
-    makeWrapper
+    makeShellWrapper
   ];
 
   dontWrapGApps = true;

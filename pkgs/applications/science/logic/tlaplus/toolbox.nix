@@ -1,6 +1,6 @@
 { lib
 , fetchzip
-, makeWrapper
+, makeShellWrapper
 , makeDesktopItem
 , stdenv
 , gtk3
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 ];
 
   nativeBuildInputs = [
-    makeWrapper
+    makeShellWrapper
     wrapGAppsHook
   ];
 
