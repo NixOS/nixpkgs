@@ -3,11 +3,15 @@
 , fetchPypi
 , azure-core
 , uamqp
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-eventhub";
   version = "5.9.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
