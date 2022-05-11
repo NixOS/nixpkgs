@@ -86,6 +86,8 @@ buildPythonPackage rec {
     # sensitive to sandbox environments
     "test_tab_size"
     "test_tabulation_character"
+    "test_linear_gradients_5"
+    "test_linear_gradients_12"
   ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";

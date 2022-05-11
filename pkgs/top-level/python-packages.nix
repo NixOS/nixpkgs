@@ -1871,6 +1871,8 @@ in {
 
   consul = callPackage ../development/python-modules/consul { };
 
+  container-inspector = callPackage ../development/python-modules/container-inspector { };
+
   contexter = callPackage ../development/python-modules/contexter { };
 
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
@@ -1938,6 +1940,8 @@ in {
   criticality-score = callPackage ../development/python-modules/criticality-score { };
 
   croniter = callPackage ../development/python-modules/croniter { };
+
+  crossplane = callPackage ../development/python-modules/crossplane { };
 
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
 
@@ -6069,6 +6073,8 @@ in {
 
   pandoc-attributes = callPackage ../development/python-modules/pandoc-attributes { };
 
+  pandoc-xnos = callPackage ../development/python-modules/pandoc-xnos { };
+
   pandocfilters = callPackage ../development/python-modules/pandocfilters { };
 
   panel = callPackage ../development/python-modules/panel { };
@@ -6355,6 +6361,8 @@ in {
 
   pip-tools = callPackage ../development/python-modules/pip-tools { };
 
+  pip-requirements-parser = callPackage ../development/python-modules/pip-requirements-parser { };
+
   pipx = callPackage ../development/python-modules/pipx { };
 
   pivy = callPackage ../development/python-modules/pivy {
@@ -6369,6 +6377,8 @@ in {
   pkgconfig = callPackage ../development/python-modules/pkgconfig { };
 
   pkginfo = callPackage ../development/python-modules/pkginfo { };
+
+  pkginfo2 = callPackage ../development/python-modules/pkginfo2 { };
 
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
@@ -9710,6 +9720,8 @@ in {
   spiderpy = callPackage ../development/python-modules/spiderpy { };
 
   spinners = callPackage ../development/python-modules/spinners { };
+
+  sphinx-better-theme = callPackage ../development/python-modules/sphinx-better-theme { };
 
   sphinxcontrib-actdiag = callPackage ../development/python-modules/sphinxcontrib-actdiag { };
 
