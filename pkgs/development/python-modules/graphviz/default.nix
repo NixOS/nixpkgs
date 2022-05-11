@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.19.2";
+  version = "0.20";
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    hash = "sha256-LxXi0Es6ZJT/nSS6SjGg/3stmR25T4R7TZC34mbT+EA=";
+    hash = "sha256-QyZwXxRbcMushxh/Ypy+v4FOTM4H1u5b7IZMSVgLyEs=";
   };
 
   patches = [
