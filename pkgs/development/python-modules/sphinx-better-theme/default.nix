@@ -11,8 +11,9 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "07lhfmsjcfzcchsjzh6kxdq5s47j2a6lb5wv3m1kmv2hcm3gvddh";
   };
-  propagatedBuildInputs = [ ];
+
   nativeBuildInputs = [ sphinxHook ];
+
   pythonImportsCheck = [ "better" ];
 
   meta = with lib; {
