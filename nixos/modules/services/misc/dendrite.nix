@@ -222,6 +222,13 @@ in
         for available options with which to populate settings.
       '';
     };
+    openRegistration = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Allow open registration without secondary verification (reCAPTCHA).
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -263,6 +270,8 @@ in
           "--https-bind-address :${builtins.toString cfg.httpsPort}"
           "--tls-cert ${cfg.tlsCert}"
           "--tls-key ${cfg.tlsKey}"
+        ] ++ lib.optionals cfg.openRegistration [
+          "--really-enable-open-registration"
         ]);
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-failure";
