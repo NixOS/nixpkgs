@@ -20729,6 +20729,8 @@ with pkgs;
 
   cayley = callPackage ../servers/cayley { };
 
+  cgiserver = callPackage ../servers/http/cgiserver { };
+
   charybdis = callPackage ../servers/irc/charybdis {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
