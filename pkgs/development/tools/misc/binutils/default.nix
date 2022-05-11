@@ -82,6 +82,12 @@ stdenv.mkDerivation {
     # override this behavior, forcing ld to search DT_RPATH even when
     # cross-compiling.
     ./always-search-rpath.patch
+
+    # Fixed in 2.39
+    # https://sourceware.org/bugzilla/show_bug.cgi?id=28885
+    # https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=99852365513266afdd793289813e8e565186c9e6
+    # https://github.com/NixOS/nixpkgs/issues/170946
+    ./deterministic-temp-prefixes.patch
   ]
   ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   # This patch was suggested by Nick Clifton to fix
