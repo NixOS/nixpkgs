@@ -1871,6 +1871,8 @@ in {
 
   consul = callPackage ../development/python-modules/consul { };
 
+  container-inspector = callPackage ../development/python-modules/container-inspector { };
+
   contexter = callPackage ../development/python-modules/contexter { };
 
   contextlib2 = callPackage ../development/python-modules/contextlib2 { };
