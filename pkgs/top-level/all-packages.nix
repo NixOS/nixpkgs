@@ -4235,6 +4235,8 @@ with pkgs;
 
   rav1e = callPackage ../tools/video/rav1e { };
 
+  raven-reader = callPackage ../applications/networking/newsreaders/raven-reader { };
+
   razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
 
   replay-sorcery = callPackage ../tools/video/replay-sorcery { };
@@ -10813,9 +10815,7 @@ with pkgs;
 
   thc-ipv6 = callPackage ../tools/security/thc-ipv6 { };
 
-  thedesk = callPackage ../applications/misc/thedesk {
-    electron = electron_14;
-  };
+  thedesk = callPackage ../applications/misc/thedesk { };
 
   theharvester = callPackage ../tools/security/theharvester { };
 
@@ -14251,10 +14251,6 @@ with pkgs;
   davmail = callPackage ../applications/networking/davmail {};
 
   kanif = callPackage ../applications/networking/cluster/kanif { };
-
-  lumo = callPackage ../development/interpreters/clojurescript/lumo {
-    nodejs = nodejs_latest;
-  };
 
   kona = callPackage ../development/interpreters/kona {};
 
@@ -25630,7 +25626,9 @@ with pkgs;
 
   csa = callPackage ../applications/audio/csa { };
 
-  csound = callPackage ../applications/audio/csound { };
+  csound = callPackage ../applications/audio/csound {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AudioUnit CoreAudio CoreMIDI;
+  };
 
   csound-manual = callPackage ../applications/audio/csound/csound-manual {
     python = python27;
@@ -30525,9 +30523,7 @@ with pkgs;
 
   weston = callPackage ../applications/window-managers/weston { };
 
-  whalebird = callPackage ../applications/misc/whalebird {
-    electron = electron_14;
-  };
+  whalebird = callPackage ../applications/misc/whalebird { };
 
   wio = callPackage ../applications/window-managers/wio {
     wlroots = wlroots_0_14;
