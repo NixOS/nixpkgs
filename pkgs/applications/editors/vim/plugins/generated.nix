@@ -4666,6 +4666,18 @@ final: prev:
     meta.homepage = "https://github.com/RRethy/nvim-base16/";
   };
 
+  nvim-biscuits = buildVimPluginFrom2Nix {
+    pname = "nvim-biscuits";
+    version = "2021-11-12";
+    src = fetchFromGitHub {
+      owner = "code-biscuits";
+      repo = "nvim-biscuits";
+      rev = "15a0cb1273bd36d5a734210cdc3406fb4bcfb733";
+      sha256 = "15incx76ps8k4bra3s6ml66ckjhzjgbc7q2njs61yzfg46vdbhsd";
+    };
+    meta.homepage = "https://github.com/code-biscuits/nvim-biscuits/";
+  };
+
   nvim-bqf = buildVimPluginFrom2Nix {
     pname = "nvim-bqf";
     version = "2022-04-30";
