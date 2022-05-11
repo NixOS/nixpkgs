@@ -6355,6 +6355,8 @@ in {
 
   pkginfo = callPackage ../development/python-modules/pkginfo { };
 
+  pkginfo2 = callPackage ../development/python-modules/pkginfo2 { };
+
   pkuseg = callPackage ../development/python-modules/pkuseg { };
 
   pmsensor = callPackage ../development/python-modules/pmsensor { };
