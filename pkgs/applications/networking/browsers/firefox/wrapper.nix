@@ -13,6 +13,8 @@
 , mesa # firefox wants gbm for drm+dmabuf
 , cups
 , pciutils
+, sndio
+, libjack2
 }:
 
 ## configurability of the wrapper itself
@@ -53,6 +55,8 @@ let
       gssSupport = browser.gssSupport or false;
       alsaSupport = browser.alsaSupport or false;
       pipewireSupport = browser.pipewireSupport or false;
+      sndioSupport = browser.sndioSupport or false;
+      jackSupport = browser.jackSupport or false;
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
@@ -76,6 +80,8 @@ let
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsa-lib zlib ])
             ++ lib.optional (config.pulseaudio or true) libpulseaudio
             ++ lib.optional alsaSupport alsa-lib
+            ++ lib.optional sndioSupport sndio
+            ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
             ++ pkcs11Modules;
       gtk_modules = [ libcanberra-gtk3 ];

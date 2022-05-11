@@ -2083,6 +2083,8 @@ in {
 
   datamodeldict = callPackage ../development/python-modules/datamodeldict { };
 
+  datapoint = callPackage ../development/python-modules/datapoint { };
+
   dataset = callPackage ../development/python-modules/dataset { };
 
   datasets = callPackage ../development/python-modules/datasets { };
@@ -5645,7 +5647,7 @@ in {
   });
 
   nghttp2 = (toPythonModule (pkgs.nghttp2.override {
-    inherit (self) python cython setuptools;
+    python3Packages = self;
     inherit (pkgs) ncurses;
     enableApp = false; # build only libnghttp2 ...
     enablePython = true; # ... and its Python bindings
@@ -6429,6 +6431,8 @@ in {
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
 
   pyrogram = callPackage ../development/python-modules/pyrogram { };
+
+  pysabnzbd = callPackage ../development/python-modules/pysabnzbd { };
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 

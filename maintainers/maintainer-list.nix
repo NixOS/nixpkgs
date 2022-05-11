@@ -5726,7 +5726,7 @@
     githubId = 35612334;
   };
   jceb = {
-    name = "jceb";
+    name = "Jan Christoph Ebersbach";
     email = "jceb@e-jc.de";
     github = "jceb";
     githubId = 101593;
@@ -8799,10 +8799,10 @@
     githubId = 5047140;
     name = "Victor Collod";
   };
-  musfay = {
-    email = "musfay@protonmail.com";
-    github = "musfay";
-    githubId = 33374965;
+  muscaln = {
+    email = "muscaln@protonmail.com";
+    github = "muscaln";
+    githubId = 96225281;
     name = "Mustafa Çalışkan";
   };
   mupdt = {
