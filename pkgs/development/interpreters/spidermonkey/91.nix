@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     python3
-    rust-cbindgen
     rustc
     rustc.llvmPackages.llvm # for llvm-objdump
     which
