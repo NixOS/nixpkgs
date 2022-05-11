@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub }:
 let
-  font-awesome = { version, sha256, rev ? version}: fetchFromGitHub {
+  font-awesome = { version, sha256, rev ? version }: fetchFromGitHub {
     name = "font-awesome-${version}";
 
 
@@ -21,18 +21,20 @@ let
         Font Awesome gives you scalable vector icons that can instantly be customized.
         This package includes only the OTF font. For full CSS etc. see the project website.
       '';
-      homepage = "http://fortawesome.github.io/Font-Awesome/";
+      homepage = "https://fontawesome.com/";
       license = licenses.ofl;
       platforms = platforms.all;
       maintainers = with maintainers; [ abaldeau johnazoidberg ];
     };
   };
-in {
-  # Keeping version 4 because version 5 is incompatible for some icons. That
+in
+{
+  # Keeping version 4 and 5 because version 6 is incompatible for some icons. That
   # means that projects which depend on it need to actively convert the
   # symbols. See:
   # https://github.com/greshake/i3status-rust/issues/130
   # https://fontawesome.com/how-to-use/on-the-web/setup/upgrading-from-version-4
+  # https://fontawesome.com/v6/docs/web/setup/upgrade/
   v4 = font-awesome {
     version = "4.7.0";
     rev = "v4.7.0";
@@ -41,5 +43,9 @@ in {
   v5 = font-awesome {
     version = "5.15.3";
     sha256 = "sha256-EDxk/yO3nMmtM/ytrAEgPYSBbep3rA3NrKkiqf3OsU0=";
+  };
+  v6 = font-awesome {
+    version = "6.1.1";
+    sha256 = "sha256-BjK1PJQFWtKDvfQ2Vh7BoOPqYucyvOG+2Pu/Kh+JpAA";
   };
 }
