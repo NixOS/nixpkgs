@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, sptlrx }:
 
 buildGoModule rec {
   pname = "sptlrx";
@@ -14,6 +14,12 @@ buildGoModule rec {
   vendorSha256 = "sha256-/fqWnRQBpLNoTwqrFDKqQuv1r9do1voysBhLuj223S0=";
 
   ldflags = [ "-s" "-w" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = sptlrx;
+    # TODO Wrong version in `0.2.0`. Has been fixed upstream.
+    version = "v0.1.0";
+  };
 
   meta = with lib; {
     description = "Spotify lyrics in your terminal";
