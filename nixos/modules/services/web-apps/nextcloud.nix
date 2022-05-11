@@ -368,11 +368,6 @@ in {
         type = types.nullOr types.str;
         example = "DE";
         description = ''
-          <warning>
-           <para>This option exists since Nextcloud 21! If older versions are used,
-            this will throw an eval-error!</para>
-          </warning>
-
           <link xlink:href="https://www.iso.org/iso-3166-country-codes.html">ISO 3611-1</link>
           country codes for automatic phone-number detection without a country code.
 
@@ -386,11 +381,6 @@ in {
         type = types.nullOr types.str;
         example = "de_CH";
         description = ''
-          <warning>
-           <para>This option exists since Nextcloud 21! If older versions are used,
-            this will throw an eval-error!</para>
-          </warning>
-
           Default locale to use when Nextcloud fails to detect the user's
           locale.
 
