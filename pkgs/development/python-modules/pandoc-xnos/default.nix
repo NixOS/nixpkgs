@@ -19,8 +19,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pandocfilters psutil ];
 
-  doCheck = true;
-
   pythonImportsCheck = [ "pandocxnos" ];
 
   meta = with lib; {
