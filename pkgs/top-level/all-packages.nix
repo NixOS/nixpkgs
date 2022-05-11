@@ -8535,8 +8535,6 @@ with pkgs;
 
   ndisc6 = callPackage ../tools/networking/ndisc6 { };
 
-  neopg = callPackage ../tools/security/neopg { };
-
   netboot = callPackage ../tools/networking/netboot {};
 
   netbootxyz-efi = callPackage ../tools/misc/netbootxyz-efi { };
@@ -18331,8 +18329,6 @@ with pkgs;
 
   libdaemon = callPackage ../development/libraries/libdaemon { };
 
-  libdap = callPackage ../development/libraries/libdap { };
-
   libdatrie = callPackage ../development/libraries/libdatrie { };
 
   libdazzle = callPackage ../development/libraries/libdazzle { };
@@ -25725,7 +25721,6 @@ with pkgs;
 
   deadbeefPlugins = {
     headerbar-gtk3 = callPackage ../applications/audio/deadbeef/plugins/headerbar-gtk3.nix { };
-    infobar = callPackage ../applications/audio/deadbeef/plugins/infobar.nix { };
     lyricbar = callPackage ../applications/audio/deadbeef/plugins/lyricbar.nix { };
     mpris2 = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
     statusnotifier = callPackage ../applications/audio/deadbeef/plugins/statusnotifier.nix { };
@@ -26746,8 +26741,6 @@ with pkgs;
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
   moe =  callPackage ../applications/editors/moe { };
-
-  multibootusb = libsForQt514.callPackage ../applications/misc/multibootusb { qt5 = qt514; };
 
   praat = callPackage ../applications/audio/praat { };
 
@@ -28857,7 +28850,6 @@ with pkgs;
   pdftk = callPackage ../tools/typesetting/pdftk {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
-  pdftk-legacy = lowPrio (callPackage ../tools/typesetting/pdftk/legacy.nix { });
   pdfgrep  = callPackage ../tools/typesetting/pdfgrep { };
 
   pdfpc = callPackage ../applications/misc/pdfpc {
@@ -29266,8 +29258,6 @@ with pkgs;
   railcar = callPackage ../applications/virtualization/railcar {};
 
   raiseorlaunch = callPackage ../applications/misc/raiseorlaunch {};
-
-  rapcad = libsForQt514.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
   rapid-photo-downloader = libsForQt5.callPackage ../applications/graphics/rapid-photo-downloader { };
 
@@ -30373,8 +30363,6 @@ with pkgs;
   vnstat = callPackage ../applications/networking/vnstat { };
 
   vocal = callPackage ../applications/audio/vocal { };
-
-  vogl = libsForQt5.callPackage ../development/tools/vogl { };
 
   volnoti = callPackage ../applications/misc/volnoti { };
 
@@ -34512,7 +34500,6 @@ with pkgs;
 
   samsung-unified-linux-driver_1_00_36 = callPackage ../misc/cups/drivers/samsung/1.00.36 { };
   samsung-unified-linux-driver_1_00_37 = callPackage ../misc/cups/drivers/samsung/1.00.37.nix { };
-  samsung-unified-linux-driver_4_00_39 = callPackage ../misc/cups/drivers/samsung/4.00.39 { };
   samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
   samsung-unified-linux-driver = res.samsung-unified-linux-driver_4_01_17;
 
