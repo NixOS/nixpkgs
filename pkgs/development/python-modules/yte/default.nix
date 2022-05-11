@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, dpath
 , fetchFromGitHub
 , plac
 , poetry-core
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "yte";
-  version = "1.2.3";
+  version = "1.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "koesterlab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-xu88zupT0/kIzTd56IbKYKBM5+EDI1d+QIEq8zOBWWo=";
+    sha256 = "sha256-G3TjIs/EeCqpNuFdb/WZ7PaPtnUdTvbH41OtRypfptg=";
   };
 
   nativeBuildInputs = [
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    dpath
     plac
     pyyaml
   ];
