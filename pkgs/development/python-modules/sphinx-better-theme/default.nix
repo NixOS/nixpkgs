@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "better" ];
 
   meta = with lib; {
-    homepage = "http://github.com/irskep/sphinx-better-theme";
+    homepage = "https://github.com/irskep/sphinx-better-theme";
     description = "Better Sphinx Theme";
     longDescription = ''
       This is a modified version of the default Sphinx theme with the following
