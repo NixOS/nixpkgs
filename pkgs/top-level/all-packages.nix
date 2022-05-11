@@ -19155,8 +19155,6 @@ with pkgs;
   libssh = callPackage ../development/libraries/libssh { };
 
   libssh2 = callPackage ../development/libraries/libssh2 { };
-  #FIXME: temporary attribute
-  libssh2_1_10 = callPackage ../development/libraries/libssh2/1_10.nix { };
 
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
@@ -20074,13 +20072,6 @@ with pkgs;
   portaudio = callPackage ../development/libraries/portaudio {
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AudioUnit CoreAudio CoreServices Carbon;
   };
-
-  portaudio2014 = portaudio.overrideAttrs (_: {
-    src = fetchurl {
-      url = "http://www.portaudio.com/archives/pa_stable_v19_20140130.tgz";
-      sha256 = "0mwddk4qzybaf85wqfhxqlf0c5im9il8z03rd4n127k8y2jj9q4g";
-    };
-  });
 
   portmidi = callPackage ../development/libraries/portmidi {
     inherit (darwin.apple_sdk.frameworks) Carbon CoreAudio CoreFoundation CoreMIDI CoreServices;
@@ -32402,8 +32393,6 @@ with pkgs;
   xcowsay = callPackage ../games/xcowsay { };
 
   xjump = callPackage ../games/xjump { };
-  # TODO: the corresponding nix file is missing
-  # xracer = callPackage ../games/xracer { };
 
   xmoto = callPackage ../games/xmoto { };
 
