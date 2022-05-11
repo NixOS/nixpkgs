@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     # Fix the installation script
     patchShebangs MathInstaller
     substituteInPlace MathInstaller \
-      --replace "`hostname`" "" \
+      --replace '`hostname`' "" \
       --replace "chgrp" "# chgrp" \
       --replace "chown" ": # chown"
 
