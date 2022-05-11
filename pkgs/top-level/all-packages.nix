@@ -6736,7 +6736,7 @@ with pkgs;
 
   gtdialog = callPackage ../development/libraries/gtdialog {};
 
-  gtkd = callPackage ../development/libraries/gtkd { };
+  gtkd = callPackage ../development/libraries/gtkd { dcompiler = ldc; };
 
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
