@@ -2143,7 +2143,7 @@ final: prev:
     meta.homepage = "https://github.com/nvim-lua/diagnostic-nvim/";
   };
 
-  diffview-nvim = buildVimPluginFrom2Nix {
+  diffview-nvim = buildNeovimPluginFrom2Nix {
     pname = "diffview.nvim";
     version = "2022-05-09";
     src = fetchFromGitHub {
