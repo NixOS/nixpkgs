@@ -33,6 +33,11 @@ buildPythonPackage rec {
     twisted
   ];
 
+  # Test creates an excessive amount of temporary files (order of millions).
+  # Cleaning up those files already took over 15 hours already on my zfs
+  # filesystem and is not finished yet.
+  doCheck = false;
+
   checkPhase = ''
     trial -j$NIX_BUILD_CORES ldaptor
   '';
@@ -42,7 +47,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/ldaptor";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    # tests hang or fail with "no space left on device"
-    broken = true;
   };
 }
