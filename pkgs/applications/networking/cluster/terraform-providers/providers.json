@@ -212,10 +212,10 @@
     "owner": "cloudamqp",
     "provider-source-address": "registry.terraform.io/cloudamqp/cloudamqp",
     "repo": "terraform-provider-cloudamqp",
-    "rev": "v1.15.3",
-    "sha256": "sha256-aQVv/4shdh3AQFTbw1iayNBSGuwDAQ7WUixMeUvAJ0U=",
-    "vendorSha256": "sha256-Anrcj23MvAk5m3LrGTANBhY6zB46U0st6vMZy2g7Gag=",
-    "version": "1.15.3"
+    "rev": "v1.16.0",
+    "sha256": "sha256-swE4Nr1cQzNQOq8q6o0nZhhYRtgAwTfx6Epm76Jjjqg=",
+    "vendorSha256": "sha256-oPeldPn30uS5Yl6IfXVPy2R7/wsAdZsEbbhVnVHQVwk=",
+    "version": "1.16.0"
   },
   "cloudflare": {
     "owner": "cloudflare",
@@ -453,6 +453,15 @@
     "sha256": "sha256-Dr3G7KskfL+4WNOPL3SZCKf+Lo6wP3XS1JrlC6Mv3O8=",
     "vendorSha256": "sha256-l2OviwplP/Sg2ShaEA88pMwVTkREnLkFAzterjr2kvU=",
     "version": "4.20.0"
+  },
+  "googleworkspace": {
+    "owner": "hashicorp",
+    "provider-source-address": "registry.terraform.io/hashicorp/googleworkspace",
+    "repo": "terraform-provider-googleworkspace",
+    "rev": "v0.6.0",
+    "sha256": "06cbwkrqrsshnv8ccsnl424l2sq0shi18kxwvrnwg88xvm8qpcfi",
+    "vendorSha256": "1zid2f8c9yfl6zwqiacngaf2rvvgs4w9phqjamgzibz41ijk6655",
+    "version": "0.6.0"
   },
   "grafana": {
     "owner": "grafana",
