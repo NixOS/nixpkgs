@@ -23,6 +23,15 @@ stdenv.mkDerivation {
 
   buildInputs = [ wayland ];
 
+  patches = [
+    # A recent change to xdg-shell-client-protocol causes a build
+    # failure.  This was reported upstream as GH #5.  User @AlexBMJ
+    # posted the following two-line fix in that issue, but the
+    # developer has not yet responded:
+    # https://github.com/progandy/wdomirror/issues/5#issuecomment-1103265438
+    ./configure-bounds.patch
+  ];
+
   installPhase = ''
     runHook preInstall
     install -m755 -D wdomirror $out/bin/wdomirror
