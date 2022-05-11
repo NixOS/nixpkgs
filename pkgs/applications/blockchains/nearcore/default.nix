@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
-  CARGO_PROFILE_RELEASE_LTO = "thin";
+  CARGO_PROFILE_RELEASE_LTO = "fat";
   NEAR_RELEASE_BUILD = "release";
 
   OPENSSL_NO_VENDOR = 1; # we want to link to OpenSSL provided by Nix
@@ -41,6 +41,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     protobuf
   ];
+
+  # fat LTO requires ~3.4GB RAM
+  requiredSystemFeatures = [ "big-parallel" ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${llvmPackages.libclang.lib}/lib/clang/${lib.getVersion llvmPackages.clang}/include";
