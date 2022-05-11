@@ -24762,6 +24762,8 @@ with pkgs;
 
   sierra-gtk-theme = callPackage ../data/themes/sierra { };
 
+  sil-abyssinica = callPackage ../data/fonts/sil-abyssinica { };
+
   sil-padauk = callPackage ../data/fonts/sil-padauk { };
 
   snap7 = callPackage ../development/libraries/snap7 {};
