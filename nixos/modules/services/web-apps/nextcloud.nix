@@ -272,7 +272,7 @@ in {
       uiClashWarning = ''
         <warning>
           <para>Setting this option will prevent changing this via the
-          Nextcloud UI, but it wil still appear editable in the UI.</para>
+          Nextcloud UI, but it will still appear editable in the UI.</para>
         </warning>
         '';
     in {
