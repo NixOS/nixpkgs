@@ -399,10 +399,10 @@ in {
         '';
       };
 
-      twofactorEnforced = let
+      twofactorEnforcement = let
         twoFactorAuthUpstreamManualUrl = "https://docs.nextcloud.com/server/latest/admin_manual/configuration_user/two_factor-auth.html";
       in {
-        enabled = mkOption {
+        enable = mkOption {
           default = null;
           type = types.nullOr types.bool;
           example = true;
@@ -942,9 +942,9 @@ in {
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
               ${optionalString (c.defaultLocale != null) "'default_locale' => '${c.defaultLocale}',"}
-              ${optionalString (c.twofactorEnforced.enabled != null) "'twofactor_enforced' => '${lib.boolToString c.twofactorEnforced.enabled}',"}
-              ${optionalString (c.twofactorEnforced.groups != null) "'twofactor_enforced_groups' => ${writePhpArrary c.twofactorEnforced.groups},"}
-              ${optionalString (c.twofactorEnforced.excludedGroups != null) "'twofactor_enforced_excluded_groups' => ${writePhpArrary c.twofactorEnforced.excludedGroups},"}
+              ${optionalString (c.twofactorEnforcement.enable != null) "'twofactor_enforced' => '${lib.boolToString c.twofactorEnforcement.enable}',"}
+              ${optionalString (c.twofactorEnforcement.groups != null) "'twofactor_enforced_groups' => ${writePhpArrary c.twofactorEnforcement.groups},"}
+              ${optionalString (c.twofactorEnforcement.excludedGroups != null) "'twofactor_enforced_excluded_groups' => ${writePhpArrary c.twofactorEnforcement.excludedGroups},"}
               ${optionalString (c.mail.mode != null) "'mail_smtpmode' => '${c.mail.mode}',"}
               ${optionalString (c.mail.host != null) "'mail_smtphost' => '${c.mail.host}',"}
               ${optionalString (c.mail.port != null) "'mail_smtpport' => '${toString c.mail.port}',"}
