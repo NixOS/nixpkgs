@@ -6,6 +6,7 @@
 , ansible-core
 , enrich
 , flaky
+, jsonschema
 , pyyaml
 , rich
 , ruamel-yaml
@@ -18,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "6.0.2";
+  version = "6.1.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tTm8ItE+beDMLiV1jh0osrwBVhpBSuN87aNwi1oqee0=";
+    sha256 = "sha256-NEkSQNPlQF7uJkcfOgCrDVRyTrYKNZ4kJIZKVE5gl9Q=";
   };
 
   postPatch = ''
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     ansible-compat
     ansible-core
     enrich
+    jsonschema
     pyyaml
     rich
     ruamel-yaml
@@ -90,7 +92,7 @@ buildPythonPackage rec {
   makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-core ]}" ];
 
   meta = with lib; {
-    homepage = "https://github.com/ansible-community/ansible-lint";
+    homepage = "https://github.com/ansible/ansible-lint";
     description = "Best practices checker for Ansible";
     license = licenses.mit;
     maintainers = with maintainers; [ sengaya SuperSandro2000 ];
