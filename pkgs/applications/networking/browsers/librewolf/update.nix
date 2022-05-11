@@ -20,7 +20,7 @@ writeScript "update-librewolf" ''
   latestTag=$(curl https://gitlab.com/api/v4/projects/librewolf-community%2Fbrowser%2Fsource/repository/tags?per_page=1 | jq -r .[0].name)
   echo "latestTag=$latestTag"
 
-  srcJson=pkgs/applications/networking/browsers/firefox/librewolf/src.json
+  srcJson=pkgs/applications/networking/browsers/librewolf/src.json
   localRev=$(jq -r .source.rev < $srcJson)
   echo "localRev=$localRev"
 

@@ -26444,11 +26444,13 @@ with pkgs;
 
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
 
-  firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {
-    callPackage = newScope {
+  buildMozillaMach =
+    let callPackage = newScope {
       inherit (rustPackages) cargo rustc;
     };
-  });
+    in opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) {};
+
+  firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {});
 
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-esr-91-unwrapped = firefoxPackages.firefox-esr-91;
@@ -26493,7 +26495,7 @@ with pkgs;
     desktopName = "Firefox DevEdition";
   };
 
-  librewolf-unwrapped = firefoxPackages.librewolf;
+  librewolf-unwrapped = callPackage ../applications/networking/browsers/librewolf {};
 
   librewolf = wrapFirefox librewolf-unwrapped {
     inherit (librewolf-unwrapped) extraPrefsFiles extraPoliciesFiles;
