@@ -121,13 +121,10 @@ in (mkDrv rec {
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
   '' + lib.optionalString kdeIntegration ''
       substituteInPlace configure.ac \
-        --replace kcoreaddons_version.h KCoreAddons/kcoreaddons_version.h \
         --replace '$QT5INC'             ${qtbase.dev}/include \
         --replace '$QT5LIB'             ${qtbase.out}/lib \
         --replace '-I$qt5_incdir '      '-I${qtx11extras.dev}/include '\
         --replace '-L$qt5_libdir '      '${libs [ qtbase qtx11extras ]} ' \
-        --replace '$KF5INC'             ${kcoreaddons.dev}/include \
-        --replace '$KF5LIB'             ${kcoreaddons.out}/lib \
         --replace '$kf5_incdir/KCore'   ${inc kcoreaddons "KCore"} \
         --replace '$kf5_incdir/KI18n'   ${inc ki18n "KI18n"} \
         --replace '$kf5_incdir/KConfig' ${inc kconfig "KConfig"} \

@@ -1,6 +1,12 @@
-{ lib, kdeIntegration, commonsLogging, ... }:
+{ lib, kdeIntegration, commonsLogging, kcoreaddons ? null, ... }:
 attrs:
 {
+  postPatch = attrs.postPatch + lib.optionalString kdeIntegration ''
+    substituteInPlace configure.ac \
+      --replace kcoreaddons_version.h KCoreAddons/kcoreaddons_version.h \
+      --replace '$KF5INC'             ${kcoreaddons.dev}/include \
+      --replace '$KF5LIB'             ${kcoreaddons.out}/lib
+  '';
   postConfigure = attrs.postConfigure + ''
     sed -e '/CPPUNIT_TEST(Import_Export_Import);/d' -i './sw/qa/inc/swmodeltestbase.hxx'
     sed -e '/CPPUNIT_ASSERT_EQUAL(11148L, pOleObj->GetLogicRect().getWidth());/d ' -i sc/qa/unit/subsequent_filters-test.cxx
