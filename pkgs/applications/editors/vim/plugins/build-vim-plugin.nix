@@ -20,7 +20,7 @@ rec {
     addonInfo ? null,
     ...
   }:
-    (stdenv.mkDerivation (attrs // {
+    let drv = stdenv.mkDerivation (attrs // {
       name = namePrefix + name;
 
       # dont move the doc folder since vim expects it
@@ -40,7 +40,10 @@ rec {
 
         runHook postInstall
       '';
-    }));
+    });
+    in  drv.overrideAttrs(oa: {
+      rtp = "${drv}";
+    });
 
   buildVimPluginFrom2Nix = attrs: buildVimPlugin ({
     # vim plugins may override this
