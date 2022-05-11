@@ -38,7 +38,7 @@ stdenv.mkDerivation {
 
   meta = {
     inherit (libllvm.meta) license homepage;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     description = "OCaml bindings distributed with LLVM";
     maintainers = with lib.maintainers; [ vbgl ];
   };

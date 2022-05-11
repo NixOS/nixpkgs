@@ -300,9 +300,9 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "dom";
           buildInputs = [ libxml2 ];
-          configureFlags = [ "--enable-dom" ]
-            # Required to build on darwin.
-            ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+          configureFlags = [
+            "--enable-dom"
+          ];
         }
         {
           name = "enchant";
@@ -313,7 +313,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           doCheck = false;
         }
         { name = "exif"; doCheck = false; }
-        { name = "ffi"; buildInputs = [ libffi ]; enable = lib.versionAtLeast php.version "7.4"; }
+        { name = "ffi"; buildInputs = [ libffi ]; }
         { name = "fileinfo"; buildInputs = [ pcre2 ]; }
         { name = "filter"; buildInputs = [ pcre2 ]; }
         { name = "ftp"; buildInputs = [ openssl ]; }
@@ -326,33 +326,10 @@ lib.makeScope pkgs.newScope (self: with self; {
             "--enable-gd-jis-conv"
           ];
           doCheck = false;
-          enable = lib.versionAtLeast php.version "7.4";
-        }
-        {
-          name = "gd";
-          buildInputs = [ zlib gd libXpm ];
-          configureFlags = [
-            "--with-gd=${gd.dev}"
-            "--with-freetype-dir=${freetype.dev}"
-            "--with-jpeg-dir=${libjpeg.dev}"
-            "--with-png-dir=${libpng.dev}"
-            "--with-webp-dir=${libwebp}"
-            "--with-xpm-dir=${libXpm.dev}"
-            "--with-zlib-dir=${zlib.dev}"
-            "--enable-gd-jis-conv"
-          ];
-          doCheck = false;
-          enable = lib.versionOlder php.version "7.4";
         }
         {
           name = "gettext";
           buildInputs = [ gettext ];
-          patches = lib.optionals (lib.versionOlder php.version "7.4") [
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/632b6e7aac207194adc3d0b41615bfb610757f41.patch";
-              sha256 = "0xn3ivhc4p070vbk5yx0mzj2n7p04drz3f98i77amr51w0vzv046";
-            })
-          ];
           postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
           configureFlags = [ "--with-gettext=${gettext}" ];
         }
@@ -361,7 +338,6 @@ lib.makeScope pkgs.newScope (self: with self; {
           buildInputs = [ gmp ];
           configureFlags = [ "--with-gmp=${gmp.dev}" ];
         }
-        { name = "hash"; enable = lib.versionOlder php.version "7.4"; }
         {
           name = "iconv";
           configureFlags = [
@@ -386,12 +362,6 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "intl";
           buildInputs = [ icu64 ];
-          patches = lib.optionals (lib.versionOlder php.version "7.4") [
-            (fetchpatch {
-              url = "https://github.com/php/php-src/commit/93a9b56c90c334896e977721bfb3f38b1721cec6.patch";
-              sha256 = "055l40lpyhb0rbjn6y23qkzdhvpp7inbnn6x13cpn4inmhjqfpg4";
-            })
-          ];
         }
         { name = "json"; enable = lib.versionOlder php.version "8.0"; }
         {
@@ -442,24 +412,7 @@ lib.makeScope pkgs.newScope (self: with self; {
                  +----------------------------------------------------------------------+
                  | Copyright (c) The PHP Group                                          |
             '')
-          ] ++ lib.optionals (lib.versionOlder php.version "7.4.8") [
-            (pkgs.writeText "mysqlnd_fix_compression.patch" ''
-              --- a/ext/mysqlnd/mysqlnd.h
-              +++ b/ext/mysqlnd/mysqlnd.h
-              @@ -48,7 +48,7 @@
-               #define MYSQLND_DBG_ENABLED 0
-               #endif
-
-              -#if defined(MYSQLND_COMPRESSION_WANTED) && defined(HAVE_ZLIB)
-              +#if defined(MYSQLND_COMPRESSION_WANTED)
-               #define MYSQLND_COMPRESSION_ENABLED 1
-               #endif
-            '')
           ];
-          postPhpize = lib.optionalString (lib.versionOlder php.version "7.4") ''
-            substituteInPlace configure --replace '$OPENSSL_LIBDIR' '${openssl}/lib' \
-                                        --replace '$OPENSSL_INCDIR' '${openssl.dev}/include'
-          '';
         }
         # oci8 (7.4, 7.3, 7.2)
         # odbc (7.4, 7.3, 7.2)
@@ -468,25 +421,7 @@ lib.makeScope pkgs.newScope (self: with self; {
           buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin && lib.versionAtLeast php.version "8.0") [
             valgrind.dev
           ];
-          patches = lib.optionals (lib.versionOlder php.version "7.4") [
-            (pkgs.writeText "zend_file_cache_config.patch" ''
-              --- a/ext/opcache/zend_file_cache.c
-              +++ b/ext/opcache/zend_file_cache.c
-              @@ -27,9 +27,9 @@
-               #include "ext/standard/md5.h"
-               #endif
-
-              +#include "ZendAccelerator.h"
-               #ifdef HAVE_OPCACHE_FILE_CACHE
-
-              -#include "ZendAccelerator.h"
-               #include "zend_file_cache.h"
-               #include "zend_shared_alloc.h"
-               #include "zend_accelerator_util_funcs.h"
-            '')
-          ];
           zendExtension = true;
-          doCheck = lib.versionAtLeast php.version "7.4";
           # Tests launch the builtin webserver.
           __darwinAllowLocalNetworking = true;
         }
@@ -568,9 +503,9 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "simplexml";
           buildInputs = [ libxml2 pcre2 ];
-          configureFlags = [ "--enable-simplexml" ]
-            # Required to build on darwin.
-            ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+          configureFlags = [
+            "--enable-simplexml"
+          ];
         }
         {
           name = "snmp";
@@ -583,9 +518,9 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "soap";
           buildInputs = [ libxml2 ];
-          configureFlags = [ "--enable-soap" ]
-            # Required to build on darwin.
-            ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+          configureFlags = [
+            "--enable-soap"
+          ];
           doCheck = false;
         }
         {
@@ -604,19 +539,11 @@ lib.makeScope pkgs.newScope (self: with self; {
             ../development/interpreters/php/fix-tokenizer-php81.patch;
         }
         {
-          name = "wddx";
-          buildInputs = [ libxml2 ];
-          internalDeps = [ php.extensions.session ];
-          configureFlags = [ "--enable-wddx" "--with-libxml-dir=${libxml2.dev}" ];
-          # Removed in php 7.4.
-          enable = lib.versionOlder php.version "7.4";
-        }
-        {
           name = "xml";
           buildInputs = [ libxml2 ];
-          configureFlags = [ "--enable-xml" ]
-            # Required to build on darwin.
-            ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+          configureFlags = [
+            "--enable-xml"
+          ];
           doCheck = false;
         }
         {
@@ -625,25 +552,25 @@ lib.makeScope pkgs.newScope (self: with self; {
           internalDeps = [ php.extensions.dom ];
           NIX_CFLAGS_COMPILE = [ "-I../.." "-DHAVE_DOM" ];
           doCheck = false;
-          configureFlags = [ "--enable-xmlreader" ]
-            # Required to build on darwin.
-            ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+          configureFlags = [
+            "--enable-xmlreader"
+          ];
         }
         {
           name = "xmlrpc";
           buildInputs = [ libxml2 libiconv ];
           # xmlrpc was unbundled in 8.0 https://php.watch/versions/8.0/xmlrpc
           enable = lib.versionOlder php.version "8.0";
-          configureFlags = [ "--with-xmlrpc" ]
-            # Required to build on darwin.
-            ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+          configureFlags = [
+            "--with-xmlrpc"
+          ];
         }
         {
           name = "xmlwriter";
           buildInputs = [ libxml2 ];
-          configureFlags = [ "--enable-xmlwriter" ]
-            # Required to build on darwin.
-            ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+          configureFlags = [
+            "--enable-xmlwriter"
+          ];
         }
         {
           name = "xsl";
@@ -655,20 +582,17 @@ lib.makeScope pkgs.newScope (self: with self; {
         {
           name = "zip";
           buildInputs = [ libzip pcre2 ];
-          configureFlags = [ "--with-zip" ]
-            ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]
-            ++ lib.optionals (lib.versionOlder php.version "7.3") [ "--with-libzip" ];
+          configureFlags = [
+            "--with-zip"
+          ];
           doCheck = false;
         }
         {
           name = "zlib";
           buildInputs = [ zlib ];
-          patches = lib.optionals (lib.versionOlder php.version "7.4") [
-            # Derived from https://github.com/php/php-src/commit/f16b012116d6c015632741a3caada5b30ef8a699
-            ../development/interpreters/php/zlib-darwin-tests.patch
+          configureFlags = [
+            "--with-zlib"
           ];
-          configureFlags = [ "--with-zlib" ]
-            ++ lib.optionals (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ];
         }
       ];
 
