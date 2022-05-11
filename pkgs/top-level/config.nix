@@ -36,6 +36,10 @@ let
       feature = "set <literal>strictDeps</literal> to true by default";
     };
 
+    enableParallelBuildingByDefault = mkMassRebuild {
+      feature = "set <literal>enableParallelBuilding</literal> to true by default";
+    };
+
     contentAddressedByDefault = mkMassRebuild {
       feature = "set <literal>__contentAddressed</literal> to true by default";
     };
