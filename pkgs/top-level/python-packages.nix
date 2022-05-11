@@ -6181,6 +6181,8 @@ in {
 
   pc-ble-driver-py = toPythonModule (callPackage ../development/python-modules/pc-ble-driver-py { });
 
+  pcapy-ng = callPackage ../development/python-modules/pcapy-ng { };
+
   pcodedmp = callPackage ../development/python-modules/pcodedmp { };
 
   pcpp = callPackage ../development/python-modules/pcpp { };
