@@ -5350,6 +5350,8 @@ in {
 
   mohawk = callPackage ../development/python-modules/mohawk { };
 
+  moku = callPackage ../development/python-modules/moku { };
+
   monero = callPackage ../development/python-modules/monero { };
 
   mongomock = callPackage ../development/python-modules/mongomock { };
@@ -6180,6 +6182,8 @@ in {
   pbr = callPackage ../development/python-modules/pbr { };
 
   pc-ble-driver-py = toPythonModule (callPackage ../development/python-modules/pc-ble-driver-py { });
+
+  pcapy-ng = callPackage ../development/python-modules/pcapy-ng { };
 
   pcodedmp = callPackage ../development/python-modules/pcodedmp { };
 
@@ -10725,6 +10729,8 @@ in {
   validators = callPackage ../development/python-modules/validators { };
 
   validictory = callPackage ../development/python-modules/validictory { };
+
+  validobj = callPackage ../development/python-modules/validobj { };
 
   variants = callPackage ../development/python-modules/variants { };
 

@@ -154,8 +154,6 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
 
-  openbr = callPackage ../development/libraries/openbr { };
-
   phonon = callPackage ../development/libraries/phonon { };
 
   phonon-backend-gstreamer = callPackage ../development/libraries/phonon/backends/gstreamer.nix { };
