@@ -9403,6 +9403,8 @@ with pkgs;
 
   plowshare = callPackage ../tools/misc/plowshare { };
 
+  pls = callPackage ../tools/misc/pls { };
+
   pm2 = nodePackages.pm2;
 
   pngcheck = callPackage ../tools/graphics/pngcheck { };
