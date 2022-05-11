@@ -4,58 +4,38 @@
 , rustPlatform
 , pythonOlder
 , openssl
+, maturin
 , perl
-, pkgs
 }:
-
-let
-  # clvm-rs does not work with maturin 0.12
-  # https://github.com/Chia-Network/clvm_rs/commit/32fba40178a5440a1306623f47d8b0684ae2339a#diff-50c86b7ed8ac2cf95bd48334961bf0530cdc77b5a56f852c5c61b89d735fd711
-  maturin_0_11 = with pkgs; rustPlatform.buildRustPackage rec {
-    pname = "maturin";
-    version = "0.11.5";
-    src = fetchFromGitHub {
-      owner = "PyO3";
-      repo = "maturin";
-      rev = "v${version}";
-      hash = "sha256-hwc6WObcJa6EXf+9PRByUtiupMMYuXThA8i/K4rl0MA=";
-    };
-    cargoHash = "sha256-qGCEfKpQwAC57LKonFnUEgLW4Cc7HFJgSyUOzHkKN9c=";
-
-
-    nativeBuildInputs = [ pkg-config ];
-
-    buildInputs = lib.optionals stdenv.isLinux [ dbus ]
-      ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
-
-    # Requires network access, fails in sandbox.
-    doCheck = false;
-  };
-in
 
 buildPythonPackage rec {
   pname = "clvm_tools_rs";
-  version = "0.1.8";
+  version = "0.1.9";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "clvm_tools_rs";
     rev = version;
-    sha256 = "sha256-laECT+EkUMAvpVc/yuXT1wPyP9hTE492IgOZ5T1brtk=";
+    sha256 = "sha256-nEsiuTRvzXQO2W7jCf3/XuEPfVRqlPBy513xG+E+0+8=";
   };
 
+  patches = [
+    ./bump-cargo-lock.patch
+  ];
+
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
+    inherit src patches;
     name = "${pname}-${version}";
-    sha256 = "sha256-mlHi+WOmUIwAJIV4uA6+H2o1enmPWhAFVscJZaolf8Q=";
+
+    sha256 = "sha256-7wF4goWcPmfMufZi9D8tupHTHcNRAM472LIPylIB2z4=";
   };
 
   format = "pyproject";
 
   nativeBuildInputs = [
+    maturin
     perl # used by openssl-sys to configure
-    maturin_0_11
   ] ++ (with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
