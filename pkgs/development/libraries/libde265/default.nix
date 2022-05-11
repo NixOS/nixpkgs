@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # CVE-2022-1253
     (fetchpatch {
+      name = "CVE-2022-1253.patch"
       url = "https://github.com/strukturag/libde265/commit/8e89fe0e175d2870c39486fdd09250b230ec10b8.patch";
       sha256 = "sha256-F1BOWFx9oXR2trM22atyD3AJ5x6vVfURQ/PTlYP2Ibg=";
     })
