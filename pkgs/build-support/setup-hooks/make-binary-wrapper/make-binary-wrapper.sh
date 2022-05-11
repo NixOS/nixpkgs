@@ -311,8 +311,9 @@ void set_env_suffix(char *env, char *sep, char *suffix) {
 "
 }
 
-# Embed a C string which shows up as readable text in the compiled binary wrapper
-# documentationString ARGS
+# Embed a C string which shows up as readable text in the compiled binary wrapper,
+# giving instructions for recreating the wrapper.
+# Keep in sync with makeBinaryWrapper.extractCmd
 docstring() {
     printf '%s' "const char * DOCSTRING = \"$(escapeStringLiteral "
 
@@ -333,7 +334,7 @@ makeCWrapper $(formatArgs "$@")
 
 # formatArgs EXECUTABLE ARGS
 formatArgs() {
-    printf '%s' "$1"
+    printf '%s' "${1@Q}"
     shift
     while [ $# -gt 0 ]; do
         case "$1" in
