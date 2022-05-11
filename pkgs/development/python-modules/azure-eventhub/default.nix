@@ -4,6 +4,7 @@
 , azure-core
 , uamqp
 , pythonOlder
+, typing-extensions
 }:
 
 buildPythonPackage rec {
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     azure-core
     uamqp
+    typing-extensions
   ];
 
   # too complicated to set up
