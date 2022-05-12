@@ -442,7 +442,7 @@
           account name to <literal>pam_unix</literal>. The LDAP and SSSD
           NixOS modules already add their NSS modules when enabled. In
           case your setup breaks due to some later PAM account module
-          previosuly shadowed, or failing NSS lookups, please file a
+          previously shadowed, or failing NSS lookups, please file a
           bug. You can get back the old behaviour by manually setting
           <literal>security.pam.services.&lt;name?&gt;.text</literal>.
         </para>
