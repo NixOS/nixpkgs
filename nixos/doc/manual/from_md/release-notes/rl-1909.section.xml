@@ -654,7 +654,7 @@
         <para>
           Furthermore, the acme module will not automatically add a
           dependency on <literal>lighttpd.service</literal> anymore. If
-          you are using certficates provided by letsencrypt for
+          you are using certificates provided by letsencrypt for
           lighttpd, then you should depend on the certificate service
           <literal>acme-${cert}.service&gt;</literal> manually.
         </para>
