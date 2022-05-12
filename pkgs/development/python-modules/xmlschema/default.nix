@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   # Ignore broken fixtures, and tests for files which don't exist.
-  # For darwin, we need to explicity say we can't reach network
+  # For darwin, we need to explicitly say we can't reach network
   disabledTests = [
     "export_remote"
     "element_tree_import_script"

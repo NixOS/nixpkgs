@@ -70,7 +70,7 @@ let
 
   mkDerivation = makeOverridable mkDerivationImpl;
 
-  # manualArgs are the arguments that were explictly passed to `callPackage`, like:
+  # manualArgs are the arguments that were explicitly passed to `callPackage`, like:
   #
   # callPackage foo { bar = null; };
   #

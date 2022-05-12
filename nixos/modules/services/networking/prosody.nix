@@ -489,7 +489,7 @@ in
 
           Setting this option to true will prevent you from building a
           NixOS configuration which won't comply with this standard.
-          You can explicitely decide to ignore this standard if you
+          You can explicitly decide to ignore this standard if you
           know what you are doing by setting this option to false.
 
           [1] https://xmpp.org/extensions/xep-0423.html

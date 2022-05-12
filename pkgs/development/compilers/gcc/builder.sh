@@ -82,7 +82,7 @@ if test "$noSysDirs" = "1"; then
         extraFlags=("-I${!curFIXINC}" "${extraFlags[@]}")
 
         # BOOT_CFLAGS defaults to `-g -O2'; since we override it below, make
-        # sure to explictly add them so that files compiled with the bootstrap
+        # sure to explicitly add them so that files compiled with the bootstrap
         # compiler are optimized and (optionally) contain debugging information
         # (info "(gccinstall) Building").
         if test -n "${dontStrip-}"; then

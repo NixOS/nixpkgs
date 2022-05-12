@@ -71,7 +71,7 @@ let
   allowUnfreePredicate = config.allowUnfreePredicate or (x: false);
 
   # Check whether unfree packages are allowed and if not, whether the
-  # package has an unfree license and is not explicitely allowed by the
+  # package has an unfree license and is not explicitly allowed by the
   # `allowUnfreePredicate` function.
   hasDeniedUnfreeLicense = attrs:
     hasUnfreeLicense attrs &&

@@ -40,7 +40,7 @@ in
           (each time the service starts).
 
           See <link xlink:href="https://github.com/transmission/transmission/wiki/Editing-Configuration-Files">Transmission's Wiki</link>
-          for documentation of settings not explicitely covered by this module.
+          for documentation of settings not explicitly covered by this module.
         '';
         default = {};
         type = types.submodule {
