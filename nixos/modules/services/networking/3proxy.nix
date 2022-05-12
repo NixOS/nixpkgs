@@ -189,9 +189,10 @@ in {
                   example = [ "127.0.0.1" "192.168.1.0/24" ];
                   description = ''
                     List of target IP ranges, use empty list for any.
-                    May also contain host names instead of addresses.
-                    It's possible to use wildmask in the begginning and in the the end of hostname, e.g. *badsite.com or *badcontent*.
-                    Hostname is only checked if hostname presents in request.
+                    May also contain hostnames instead of IP addresses or ranges.
+                    It is possible to use a wildcard at the beginning or end of the hostname,
+                    e.g. <literal>"*badsite.com"</literal> or <literal>"*badcontent*"</literal>.
+                    The hostname is checked only when a hostname is present in the request.
                   '';
                 };
                 targetPorts = mkOption {
