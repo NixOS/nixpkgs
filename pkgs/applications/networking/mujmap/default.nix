@@ -2,6 +2,8 @@
 , fetchFromGitHub
 , rustPlatform
 , notmuch
+, stdenv
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,8 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-nrLorxdJdQvCG8WhfsvHtWizrkzD38XqgeNyksKbvN4=";
 
-  buildInputs = [ notmuch ];
-  propagatedUserEnvPkgs = [ notmuch ];
+  buildInputs = [
+    notmuch
+  ] ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
     description = "Bridge for synchronizing email and tags between JMAP and notmuch";

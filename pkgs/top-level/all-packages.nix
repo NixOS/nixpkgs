@@ -7782,7 +7782,9 @@ with pkgs;
 
   mtail = callPackage ../servers/monitoring/mtail { };
 
-  mujmap = callPackage ../applications/networking/mujmap {};
+  mujmap = callPackage ../applications/networking/mujmap {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   multitail = callPackage ../tools/misc/multitail { };
 
