@@ -16158,7 +16158,7 @@ let
     buildInputs = [ TestFatal ];
     preCheck = "rm t/icmp_ps.t t/icmpv6_ps.t"; # ping socket tests fail
     meta = {
-      description = "asyncronously check remote host for reachability";
+      description = "asynchronously check remote host for reachability";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       homepage = "https://github.com/frioux/Net-Async-Ping";
     };
