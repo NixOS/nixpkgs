@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, pkgs }:
+{ stdenv
+, lib
+, makeWrapper
+, fetchurl
+, numactl
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "rt-tests";
@@ -9,8 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "Q+rNdpRdsmW2gcsrfwg12EzpvO6qlEP/Mb/OWQMNmr8=";
   };
 
-  buildInputs = with pkgs;[ numactl python3 makeWrapper];
-  makeFlags = [ "prefix=$(out)" "DESTDIR=" "PYLIB=$(out)/lib/python" ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ numactl python3 ];
+
+  makeFlags = [ "prefix=$(out)" "DESTDIR=" "PYLIB=$(out)/${pkgs.python3.sitePackages}" ];
 
   postInstall = ''
     wrapProgram "$out/bin/determine_maximum_mpps.sh" --prefix PATH : $out/bin
