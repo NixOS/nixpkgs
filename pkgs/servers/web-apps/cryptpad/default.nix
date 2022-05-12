@@ -48,7 +48,7 @@ let
   ;
 
   # The cryptpad package attribute key changes for each release. Get it out
-  # programatically instead.
+  # programmatically instead.
   cryptpad = findValue
     (k: v: v.packageName == "cryptpad")
     (throw "cryptpad not found")

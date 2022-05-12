@@ -33,7 +33,7 @@ in
       description = ''
         If enabled, starts the ArchisSteamFarm service.
         For configuring the SteamGuard token you will need to use the web-ui, which is enabled by default over on 127.0.0.1:1242.
-        You cannot configure ASF in any way outside of nix, since all the config files get wiped on restart and replaced with the programatically set ones by nix.
+        You cannot configure ASF in any way outside of nix, since all the config files get wiped on restart and replaced with the programmatically set ones by nix.
       '';
       default = false;
     };
