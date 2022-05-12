@@ -1,18 +1,19 @@
 { rust, rustPlatform, stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook
-, makeWrapper, cargo, pkg-config, curl, coreutils, boost178, db62, hexdump
-, libsodium, libevent, utf8cpp, util-linux, withDaemon ? true, withMining ? true
-, withUtils ? true, withWallet ? true, withZmq ? true, zeromq
+, makeWrapper, cargo, pkg-config, curl, coreutils, boost179, db62, hexdump
+, libsodium, libevent, testers, utf8cpp, util-linux, withDaemon ? true
+, withMining ? true, withUtils ? true, withWallet ? true, withZmq ? true, zcash
+, zeromq
 }:
 
 rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
   pname = "zcash";
-  version = "4.7.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "sha256-yF+/QepSiZwsdZydWjvxDIFeFyJbJyqZmCdMyQHmrzI=";
+    sha256 = "sha256-5PlqFs2njqNeZgmNz0VKMWcRY5lPaF9oTsoh/uLEWi8=";
   };
 
   prePatch = lib.optionalString stdenv.isAarch64 ''
@@ -21,17 +22,10 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
       --replace "linker = \"aarch64-linux-gnu-gcc\"" ""
   '';
 
-  cargoPatches = [
-    (fetchpatch {
-      url = "https://github.com/zcash/zcash/commit/61cd19a52d41d60c1987ecf269f7aa8e4d527310.diff";
-      sha256 = "sha256-/7T2yCSVlRN7qfFjrZlfBNMlbVHb/KRjtUBY2xFr0mo=";
-    })
-  ];
-
-  cargoSha256 = "sha256-+BLfO5OnCBqQTIqMXKJdoPCRgtENa+m0WOHKG9gkdMk=";
+  cargoSha256 = "sha256-eRRRjUbOieRC88wf+f1jAYvqGFmogBEla67NnImicEc=";
 
   nativeBuildInputs = [ autoreconfHook cargo hexdump makeWrapper pkg-config ];
-  buildInputs = [ boost178 libevent libsodium utf8cpp ]
+  buildInputs = [ boost179 libevent libsodium utf8cpp ]
     ++ lib.optional withWallet db62
     ++ lib.optional withZmq zeromq;
 
@@ -50,7 +44,7 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
 
   configureFlags = [
     "--disable-tests"
-    "--with-boost-libdir=${lib.getLib boost178}/lib"
+    "--with-boost-libdir=${lib.getLib boost179}/lib"
     "CXXFLAGS=-I${lib.getDev utf8cpp}/include/utf8cpp"
     "RUST_TARGET=${rust.toRustTargetSpec stdenv.hostPlatform}"
   ] ++ lib.optional (!withWallet) "--disable-wallet"
@@ -62,6 +56,12 @@ rustPlatform.buildRustPackage.override { stdenv = stdenv; } rec {
 
   # Requires hundreds of megabytes of zkSNARK parameters.
   doCheck = false;
+
+  passthru.tests.version = testers.testVersion {
+    package = zcash;
+    command = "zcashd --version";
+    version = "v${zcash.version}";
+  };
 
   postInstall = ''
     wrapProgram $out/bin/zcash-fetch-params \
