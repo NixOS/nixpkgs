@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib;{
     homepage = "https://github.com/elFarto/nvidia-vaapi-driver";
-    description = "A VA-API implemention using NVIDIA's NVDEC";
+    description = "A VA-API implementation using NVIDIA's NVDEC";
     license = licenses.mit;
     maintainers = with maintainers;[ nickcao ];
   };
