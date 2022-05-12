@@ -31,7 +31,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # Removing unecessary dependencies
+    # Removing unnecessary dependencies
     sed -e "s/flake8.*//g" \
         -e "s/codecov.*//g" \
         -e "s/pytest.*//g" \

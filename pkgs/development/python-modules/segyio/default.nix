@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Removing unecessary build dependency
+    # Removing unnecessary build dependency
     substituteInPlace python/setup.py --replace "'pytest-runner'," ""
 
     # Fixing bug making one test fail in the python 3.10 build

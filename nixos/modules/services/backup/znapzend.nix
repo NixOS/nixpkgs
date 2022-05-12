@@ -372,7 +372,7 @@ in
         compressed feature which adds the options <literal>-Lce</literal> to
         the <command>zfs send</command> command. When this is enabled, make
         sure that both the sending and receiving pool have the same relevant
-        features enabled. Using <literal>-c</literal> will skip unneccessary
+        features enabled. Using <literal>-c</literal> will skip unnecessary
         decompress-compress stages, <literal>-L</literal> is for large block
         support and -e is for embedded data support. see
         <citerefentry><refentrytitle>znapzend</refentrytitle><manvolnum>1</manvolnum></citerefentry>

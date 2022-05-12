@@ -137,7 +137,7 @@ let
       "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
     ];
 
-    # unnecesarry
+    # unnecessary
     dontFixup = true;
 
     outputHashAlgo = if self ? vendorHash then null else "sha256";

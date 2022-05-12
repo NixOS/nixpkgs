@@ -126,7 +126,7 @@ in
         description = ''
           Whether to run searx in uWSGI as a "vassal", instead of using its
           built-in HTTP server. This is the recommended mode for public or
-          large instances, but is unecessary for LAN or local-only use.
+          large instances, but is unnecessary for LAN or local-only use.
           <warning>
             <para>
               The built-in HTTP server logs all queries by default.
