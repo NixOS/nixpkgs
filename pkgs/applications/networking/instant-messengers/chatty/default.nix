@@ -19,6 +19,7 @@
 , libgcrypt
 , libhandy
 , libphonenumber
+, makeWrapper
 , modemmanager
 , olm
 , pidgin
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
   ];
 
   buildInputs = [
