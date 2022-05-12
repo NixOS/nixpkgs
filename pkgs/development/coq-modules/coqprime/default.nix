@@ -20,7 +20,6 @@ with lib; mkCoqDerivation {
   release."8.7.2".sha256 = "15zlcrx06qqxjy3nhh22wzy0rb4npc8l4nx2bbsfsvrisbq1qb7k";
   releaseRev = v: "v${v}";
 
-  extraBuildInputs = [ which ];
   propagatedBuildInputs = [ bignums ];
 
   meta = with lib; {

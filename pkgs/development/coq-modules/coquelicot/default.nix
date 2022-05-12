@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, which, autoconf,
+{ lib, mkCoqDerivation, autoconf,
   coq, ssreflect, version ? null }:
 
 with lib; mkCoqDerivation {
@@ -16,7 +16,7 @@ with lib; mkCoqDerivation {
   release."3.0.2".sha256 = "1rqfbbskgz7b1bcpva8wh3v3456sq2364y804f94sc8y5sij23nl";
   releaseRev = v: "coquelicot-${v}";
 
-  extraNativeBuildInputs = [ which autoconf ];
+  nativeBuildInputs = [ autoconf ];
   propagatedBuildInputs = [ ssreflect ];
   useMelquiondRemake.logpath = "Coquelicot";
 
