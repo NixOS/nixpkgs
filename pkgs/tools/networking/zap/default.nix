@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   # From https://github.com/zaproxy/zaproxy/blob/master/zap/src/main/java/org/parosproxy/paros/Constant.java
   version_tag = "2010000";
 
-  # Copying config and adding version tag before first use to avoid permission
-  # issues if zap tries to copy config on it's own.
+  # Copy the config and add the version tag before first use, to prevent
+  # zap from trying to copy the config itself and causing a permission error.
   installPhase = ''
     mkdir -p "$out/bin" "$out/share"
     cp -pR . "$out/share/${pname}/"
