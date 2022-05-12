@@ -26266,7 +26266,7 @@ with pkgs;
         sphinx = false;
         doxygen = false;
         # Doesn't make it reference python eventually, but makes reverse
-        # depdendencies require python to use cmake files of GR.
+        # dependencies require python to use cmake files of GR.
         gr-ctrlport = false;
       };
     };
@@ -26298,7 +26298,7 @@ with pkgs;
         sphinx = false;
         doxygen = false;
         # Doesn't make it reference python eventually, but makes reverse
-        # depdendencies require python to use cmake files of GR.
+        # dependencies require python to use cmake files of GR.
         gr-ctrlport = false;
       };
     };
@@ -26328,7 +26328,7 @@ with pkgs;
         sphinx = false;
         doxygen = false;
         # Doesn't make it reference python eventually, but makes reverse
-        # depdendencies require python to use cmake files of GR.
+        # dependencies require python to use cmake files of GR.
         gr-ctrlport = false;
       };
     };

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace 'ifndef UCOMMON_SYSRUNTIME' 'if 0'
   '';
 
-  # ucommon.pc has link time depdendencies on -lssl, -lcrypto, -lz, -lgnutls
+  # ucommon.pc has link time dependencies on -lssl, -lcrypto, -lz, -lgnutls
   propagatedBuildInputs = [ openssl zlib gnutls ];
 
   doCheck = true;

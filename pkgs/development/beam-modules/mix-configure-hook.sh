@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 # this hook will symlink all dependencies found in ERL_LIBS
 # since Elixir 1.12.2 elixir does not look into ERL_LIBS for
-# elixir depencencies anymore, so those have to be symlinked to the _build directory
+# elixir dependencies anymore, so those have to be symlinked to the _build directory
 mkdir -p _build/"$MIX_ENV"/lib
 while read -r -d ':' lib; do
     for dir in "$lib"/*; do

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   # Rather than let cmake extract version information from LLVM or
   # clang source control repositories, we generate the wanted
   # `VCSVersion.inc` file ourselves and remove it from the
-  # depencencies of the `clangBasic` target.
+  # dependencies of the `clangBasic` target.
   preConfigure = ''
     sed 's/  ''${version_inc}//' -i lib/Basic/CMakeLists.txt
     sed 's|sys::path::parent_path(BundlerExecutable)|StringRef("${llvm}/bin")|' -i tools/clang-offload-bundler/ClangOffloadBundler.cpp

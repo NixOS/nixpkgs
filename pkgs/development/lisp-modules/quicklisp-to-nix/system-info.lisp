@@ -122,7 +122,7 @@ For example, translates (:version :foo \"1.0\") into \"foo\"."
 
 (defvar *track-dependencies* nil
   "When this variable is nil, found-new-dependency will not record
-depdendencies.")
+dependencies.")
 
 (defun parasitic-relationship-p (potential-host potential-parasite)
   "Returns t if potential-host and potential-parasite have a parasitic relationship.

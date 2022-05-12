@@ -81,7 +81,7 @@ let
       Please note that the Cargo.lock format where checksums used to be listed
       under [metadata] is not supported.
       If that is the case, running `cargo update` with a recent toolchain will
-      automatically update the format along with the crate's depenendencies.
+      automatically update the format along with the crate's dependencies.
     '';
     fetchurl {
       name = "crate-${pkg.name}-${pkg.version}.tar.gz";
