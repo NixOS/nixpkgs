@@ -38,7 +38,7 @@ in
             /etc/X11/imwheelrc is generated based on this config
             which means this config is global for all users.
             See <link xlink:href="http://imwheel.sourceforge.net/imwheel.1.html">offical man pages</link>
-            for more informations.
+            for more information.
           '';
         };
       };

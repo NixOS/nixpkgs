@@ -20,7 +20,7 @@ buildGoModule rec {
     longDescription = ''
       Motion is a tool that was designed to work with editors. It is providing
       contextual information for a given offset(option) from a file or
-      directory of files. Editors can use these informations to implement
+      directory of files. Editors can use this information to implement
       navigation, text editing, etc... that are specific to a Go source code.
 
       It's optimized and created to work with vim-go, but it's designed to work

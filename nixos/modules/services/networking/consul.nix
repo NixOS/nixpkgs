@@ -142,7 +142,7 @@ in
         };
 
         consulAddr = mkOption {
-          description = "Consul api listening adddress";
+          description = "Consul api listening address";
           default = "localhost:8500";
           type = types.str;
         };

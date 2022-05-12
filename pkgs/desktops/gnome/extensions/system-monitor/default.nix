@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Display system informations in gnome shell status bar";
+    description = "Display system information in gnome shell status bar";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ andersk ];
     homepage = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet";

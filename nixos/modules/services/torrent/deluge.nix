@@ -117,7 +117,7 @@ in {
             when <option>services.deluge.declarative</option> is set to
             <literal>true</literal>.
             See <link xlink:href="https://dev.deluge-torrent.org/wiki/UserGuide/Authentication"/> for
-            more informations.
+            more information.
           '';
         };
 

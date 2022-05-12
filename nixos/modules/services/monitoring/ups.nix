@@ -228,7 +228,7 @@ in
           "}
         '';
       "nut/upssched.conf".source = cfg.schedulerRules;
-      # These file are containing private informations and thus should not
+      # These file are containing private information and thus should not
       # be stored inside the Nix store.
       /*
       "nut/upsd.conf".source = "";

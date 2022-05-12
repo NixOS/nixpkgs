@@ -52,7 +52,7 @@ in {
           the right place to store any secret
 
           Have a look to Pleroma section in the NixOS manual for more
-          informations.
+          information.
           '';
       };
 
