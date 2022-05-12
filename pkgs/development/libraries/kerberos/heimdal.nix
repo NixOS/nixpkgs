@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     "--enable-hdb-openldap-module"
     "--with-sqlite3=${sqlite.dev}"
 
-  # ugly, --with-libedit is not enought, it fall back to bundled libedit
+  # ugly, --with-libedit is not enough, it falls back to the bundled libedit
     "--with-libedit-include=${libedit.dev}/include"
     "--with-libedit-lib=${libedit}/lib"
     "--with-openssl=${openssl.dev}"

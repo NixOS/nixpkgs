@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       Some backstory: Bluez 5 removed built-in support for ALSA in favor of a
       generic interface for 3rd party appliations. Thereafter, PulseAudio
       implemented a backend for that interface and became the only way to get
-      Bluetooth audio with Bluez 5. Users prefering ALSA stayed on Bluez 4.
+      Bluetooth audio with Bluez 5. Users preferring ALSA stayed on Bluez 4.
       However, Bluez 4 eventually became deprecated.
 
       This package is a rebirth of a direct interface between ALSA and Bluez 5,

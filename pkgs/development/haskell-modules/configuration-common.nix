@@ -1967,7 +1967,7 @@ self: super: {
   # Issue reported upstream, no bug tracker url yet.
   darcs = doJailbreak super.darcs;
 
-  # Too strict verion bounds on cryptonite and github.
+  # Too strict version bounds on cryptonite and github.
   # PRs are merged, will be fixed next release or Hackage revision.
   nix-thunk = appendPatches [
     (fetchpatch {
@@ -1985,10 +1985,10 @@ self: super: {
     librarySystemDepends = [ pkgs.libmodbus ];
   }) super.libmodbus;
 
-  # 2021-04-02: Outdated optparse-applicative bound is fixed but not realeased on upstream.
+  # 2021-04-02: Outdated optparse-applicative bound is fixed but not released upstream.
   trial-optparse-applicative = assert super.trial-optparse-applicative.version == "0.0.0.0"; doJailbreak super.trial-optparse-applicative;
 
-  # 2021-04-02: Outdated optparse-applicative bound is fixed but not realeased on upstream.
+  # 2021-04-02: Outdated optparse-applicative bound is fixed but not released upstream.
   extensions = assert super.extensions.version == "0.0.0.1"; doJailbreak super.extensions;
 
   # 2021-04-02: iCalendar is basically unmaintained.

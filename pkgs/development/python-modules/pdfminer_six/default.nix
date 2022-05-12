@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   postPatch = ''
-    # Verion is not stored in repo, gets added by a GitHub action after tag is created
+    # Version is not stored in repo, gets added by a GitHub action after tag is created
     # https://github.com/pdfminer/pdfminer.six/pull/727
     substituteInPlace pdfminer/__init__.py --replace "__VERSION__" ${version}
   '';

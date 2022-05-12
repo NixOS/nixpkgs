@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A fork of Monero and a truely fungible cryptocurrency";
+    description = "A fork of Monero and a truly fungible cryptocurrency";
     homepage = "https://www.sumokoin.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fpletz ];

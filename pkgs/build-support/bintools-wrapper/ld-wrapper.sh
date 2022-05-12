@@ -21,7 +21,7 @@ if [ -z "${NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@:-}" ]; then
 fi
 
 
-# Optionally filter out paths not refering to the store.
+# Optionally filter out paths not referring to the store.
 expandResponseParams "$@"
 
 # NIX_LINK_TYPE is set if ld has been called through our cc wrapper. We take

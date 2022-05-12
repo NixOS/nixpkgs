@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "sha256-6UK1SRY2Pse4tw6urs0OtOQe8bz0ojl7KabXFfzN+SU=";
   };
 
-  doCheck = false; # Tests require internet connection which wont work
+  doCheck = false; # Tests require internet connection which won't work
 
   pythonImportsCheck = [ "pyasn" ];
 

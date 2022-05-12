@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libffi ] ;
 
   buildPhase = ''
-    # The pkg-config script in the build.xml doesn't work propery
+    # The pkg-config script in the build.xml doesn't work properly
     # set the lib path manually to work around this.
     export LIBFFI_LIBS="${libffi}/lib/libffi.so"
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkPhase = ''
-    # The pkg-config script in the build.xml doesn't work propery
+    # The pkg-config script in the build.xml doesn't work properly
     # set the lib path manually to work around this.
     export LIBFFI_LIBS="${libffi}/lib/libffi.so"
 

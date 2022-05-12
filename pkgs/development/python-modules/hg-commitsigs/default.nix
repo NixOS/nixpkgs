@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       This packages provides a Mercurial extension that lets you sign
       the changeset hash when you commit.  The signature is embedded
-      directly in the changeset itself; there wont be any extra
+      directly in the changeset itself; there won't be any extra
       commits.  Either GnuPG or OpenSSL can be used to sign the hashes.
     '';
     homepage = "https://foss.heptapod.net/mercurial/commitsigs";

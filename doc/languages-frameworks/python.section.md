@@ -1638,7 +1638,7 @@ no maintainer, so maintenance falls back to the package set maintainers.
 
 ### Updating packages in bulk
 
-There is a tool to update alot of python libraries in bulk, it exists at
+There is a tool to update a lot of Python libraries in bulk, it exists at
 `maintainers/scripts/update-python-libraries` with this repository.
 
 It can quickly update minor or major versions for all packages selected

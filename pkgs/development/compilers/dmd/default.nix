@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # many tests are disbled because they are failing
+  # many tests are disabled because they are failing
 
   # NOTE: Purity check is disabled for checkPhase because it doesn't fare well
   # with the DMD linker. See https://github.com/NixOS/nixpkgs/issues/97420

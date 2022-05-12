@@ -18,7 +18,7 @@
 # own level of binary diffing.
 #
 # For an example, Docker Images. If each store path is a separate layer
-# then Docker Images can be very efficiently transfered between systems,
+# then Docker Images can be very efficiently transferred between systems,
 # and we get very good cache reuse between images built with the same
 # version of Nixpkgs. However, since Docker only reliably supports a
 # small number of layers (42) it is important to pick the individual

@@ -63,9 +63,9 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Normal CMake install phase on Darwin only installs the binary, the user is expected to use CPack to build a
-    # bundle. That adds alot of overhead for not much benefit (CPack is currently abit broken, and needs impure access
-    # to /usr/bin/hdiutil). So we'll manually assemble & install everything instead.
+    # The normal CMake install phase on Darwin only installs the binary, the user is expected to use CPack to build a
+    # bundle. That adds a lot of overhead for not much benefit (CPack is currently a bit broken, and needs impure access
+    # to /usr/bin/hdiutil). So we manually assemble and install everything instead.
 
     mkdir -p $out/{Applications/Furnace.app/Contents/{MacOS,Resources},share/{,doc,licenses}/furnace}
     mv $out/{bin,Applications/Furnace.app/Contents/MacOS}/furnace

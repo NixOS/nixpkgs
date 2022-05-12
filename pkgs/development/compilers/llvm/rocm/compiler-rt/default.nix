@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '';
 
-  # Hack around weird upsream RPATH bug
+  # Hack around weird upstream RPATH bug
   postInstall = ''
     ln -s "$out/lib"/*/* "$out/lib"
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o

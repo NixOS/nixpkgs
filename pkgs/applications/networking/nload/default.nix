@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       nload is a console application which monitors network traffic and
       bandwidth usage in real time. It visualizes the in- and outgoing traffic
       using two graphs and provides additional info like total amount of
-      transfered data and min/max network usage.
+      transferred data and min/max network usage.
     '';
     homepage = "http://www.roland-riegel.de/nload/index.html";
     license = lib.licenses.gpl2;

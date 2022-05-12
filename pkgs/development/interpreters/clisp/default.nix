@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   # First, replace port 9090 (rather low, can be used)
   # with 64237 (much higher, IANA private area, not
-  # anything rememberable).
+  # anything memorable).
   # Also remove reference to a type that disappeared from recent glibc
   # (seems the correct thing to do, found no reference to any solution)
   postPatch = ''

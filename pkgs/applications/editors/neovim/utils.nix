@@ -16,8 +16,8 @@ let
   # arguments (["-u" writeText "init.vim" GENERATEDRC)]).
   # This makes it possible to write the config anywhere: on a per-project basis
   # .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
-  # Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
-  # anymore, $MYVIMRC wont be set etc
+  # Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc won't be loaded
+  # anymore, $MYVIMRC won't be set etc
   makeNeovimConfig =
     {
     withPython2 ? false

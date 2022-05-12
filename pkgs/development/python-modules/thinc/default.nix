@@ -83,7 +83,7 @@ buildPythonPackage rec {
   preCheck = ''
     export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
 
-    # avoid local paths, relative imports wont resolve correctly
+    # avoid local paths, relative imports won't resolve correctly
     mv thinc/tests tests
     rm -r thinc
   '';

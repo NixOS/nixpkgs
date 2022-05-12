@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "A nice bitmap font, readable even at small sizes";
     longDescription = ''
       Tewi is a bitmap font, readable even at very small font sizes. This is
-      particularily useful while programming, to fit a lot of code on your
+      particularly useful while programming, to fit a lot of code on your
       screen.
     '';
     homepage = "https://github.com/lucy/tewi-font";

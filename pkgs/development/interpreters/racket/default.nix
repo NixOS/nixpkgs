@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   ;
 
   preBuild = lib.optionalString stdenv.isDarwin ''
-    # Cannot set DYLD_LIBRARY_PATH as an attr of this drv, becasue dynamic
+    # Cannot set DYLD_LIBRARY_PATH as an attr of this drv, because dynamic
     # linker environment variables like this are purged.
     # See: https://apple.stackexchange.com/a/212954/167199
 

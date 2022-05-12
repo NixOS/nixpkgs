@@ -79,7 +79,7 @@ if [ "$nonFlagArgs" = 0 ]; then
     dontLink=1
 fi
 
-# Optionally filter out paths not refering to the store.
+# Optionally filter out paths not referring to the store.
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
     rest=()
     nParams=${#params[@]}

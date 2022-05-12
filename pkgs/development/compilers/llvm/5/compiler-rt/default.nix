@@ -78,7 +78,7 @@ stdenv.mkDerivation {
       --replace "#include <assert.h>" ""
   '';
 
-  # Hack around weird upsream RPATH bug
+  # Hack around weird upstream RPATH bug
   postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWasm) ''
     ln -s "$out/lib"/*/* "$out/lib"
   '' + lib.optionalString (useLLVM) ''

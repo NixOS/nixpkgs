@@ -49,7 +49,7 @@ function getTargetRoleEnvHook() {
     getRole "$depTargetOffset"
 }
 
-# This variant is inteneded specifically for code-prodocing tool wrapper scripts
+# This variant is intended specifically for code-prodocing tool wrapper scripts
 # `NIX_@wrapperName@_TARGET_*_@suffixSalt@` tracks this (needs to be an exported
 # env var so can't use fancier data structures).
 function getTargetRoleWrapper() {
