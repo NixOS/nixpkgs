@@ -1,25 +1,30 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
-, version
-, sha256
-, patches ? [ ]
-, preConfigure ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
-  inherit version;
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    inherit sha256;
+    sha256 = "1zbf6bdpps8369r1ql00irxrp58jnalycc8jcapb8iqg654vlfz8";
   };
 
-  inherit patches preConfigure;
+  patches = [
+    # Pull patch pending upstream inclustion for gcc-12 support:
+    # https://github.com/google/flatbuffers/pull/6946
+    (fetchpatch {
+      name = "gcc-12.patch";
+      url = "https://github.com/google/flatbuffers/commit/17d9f0c4cf47a9575b4f43a2ac33eb35ba7f9e3e.patch";
+      sha256 = "0sksk47hi7camja9ppnjr88jfdgj0nxqxy8976qs1nx73zkgbpf9";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

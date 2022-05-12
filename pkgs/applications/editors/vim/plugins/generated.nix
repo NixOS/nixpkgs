@@ -2566,6 +2566,18 @@ final: prev:
     meta.homepage = "https://github.com/gfanto/fzf-lsp.nvim/";
   };
 
+  fzf-lua = buildVimPluginFrom2Nix {
+    pname = "fzf-lua";
+    version = "2022-05-07";
+    src = fetchFromGitHub {
+      owner = "ibhagwan";
+      repo = "fzf-lua";
+      rev = "b614a9d315512ec4ce9c1df41474e5ab8e12f7df";
+      sha256 = "0gb7q4fbv3754ck44h6dd93dcy8j4czhhna1d2kgq21614xs303k";
+    };
+    meta.homepage = "https://github.com/ibhagwan/fzf-lua/";
+  };
+
   fzf-vim = buildVimPluginFrom2Nix {
     pname = "fzf.vim";
     version = "2022-04-07";
