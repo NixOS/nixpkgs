@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "bitarray";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Wr7QStzSAx9ucUmT2VIjv5roU1TGQMJwsu1vRrg1c7o=";
+    sha256 = "sha256-jTj2B1EAgJmmWdWs+zXvQVAYPv/Vsr+mwQGZJw3fTJw=";
   };
 
   checkPhase = ''
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Efficient arrays of booleans";
     homepage = "https://github.com/ilanschnell/bitarray";
-    changelog = "https://github.com/ilanschnell/bitarray/blob/master/CHANGE_LOG";
+    changelog = "https://github.com/ilanschnell/bitarray/raw/${version}/CHANGE_LOG";
     license = licenses.psfl;
     maintainers = [ maintainers.bhipple ];
   };
