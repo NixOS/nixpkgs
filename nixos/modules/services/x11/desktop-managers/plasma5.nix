@@ -261,8 +261,7 @@ in
       '';
 
       environment.systemPackages =
-        with libsForQt5;
-        with plasma5; with kdeGear; with kdeFrameworks;
+        with plasma5;
         [
           frameworkintegration
           kactivities
@@ -455,8 +454,7 @@ in
       services.xserver.displayManager.defaultSession = mkDefault "plasma";
 
       environment.systemPackages =
-        with libsForQt5;
-        with plasma5; with kdeGear; with kdeFrameworks;
+        with plasma5;
         [
           ksystemstats
           kinfocenter
