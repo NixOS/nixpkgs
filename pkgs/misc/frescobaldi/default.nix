@@ -38,14 +38,14 @@ buildPythonApplication rec {
     description = "A LilyPond sheet music text editor";
     longDescription = ''
       Powerful text editor with syntax highlighting and automatic completion,
-      Music view with advanced Point & Click, Midi player to proof-listen
-      LilyPond-generated MIDI files, Midi capturing to enter music,
+      Music view with advanced Point & Click, MIDI player to proof-listen
+      LilyPond-generated MIDI files, MIDI capturing to enter music,
       Powerful Score Wizard to quickly setup a music score, Snippet Manager
       to store and apply text snippets, templates or scripts, Use multiple
       versions of LilyPond, automatically selects the correct version, Built-in
       LilyPond documentation browser and built-in User Guide, Smart
       layout-control functions like coloring specific objects in the PDF,
-      MusicXML import, Modern user iterface with configurable colors,
+      MusicXML import, Modern user interface with configurable colors,
       fonts and keyboard shortcuts
     '';
     license = licenses.gpl2Plus;

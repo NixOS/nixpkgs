@@ -35,6 +35,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/shinh/maloader";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
-    broken = true; # 2018-09-08, no succesful build since 2017-08-21
+    broken = true; # 2018-09-08, no successful build since 2017-08-21
   };
 }

@@ -41,7 +41,7 @@ python3Packages.buildPythonApplication rec {
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  # build the rust library independantly
+  # build the rust library independently
   prePatch = ''
     substituteInPlace setup.py \
       --replace "from setuptools_rust import Binding, RustExtension" "" \

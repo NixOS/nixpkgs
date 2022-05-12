@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   installTargets = [ "install" "install.man" ];
 
   meta = {
-    description = "X11 brigthness and gamma software control";
+    description = "X11 brightness and gamma software control";
     homepage = "http://shallowsky.com/software";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

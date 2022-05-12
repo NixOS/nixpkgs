@@ -31,8 +31,8 @@ let
     sha256 = "sha256-AE7iuSNnW1SAtBMplReGzXKcqD4GG23i10MIAWnlcPo=";
   };
 
-  # sonic pi uses it's own aubioonset with hardcoded parameters but will compile a whole aubio for it
-  # let's just build the aubioonset instead and link against aubio from nixpkgs
+  # sonic pi uses its own aubioonset with hardcoded parameters but will compile a whole aubio for it.
+  # Let's just build the aubioonset instead and link against aubio from nixpkgs.
   aubioonset = mkDerivation {
     name = "aubioonset";
     src = src;

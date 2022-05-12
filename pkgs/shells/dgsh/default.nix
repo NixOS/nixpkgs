@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     find . -name \*.diff | xargs rm -f
     rm -rf unix-tools/*/gnulib
     patchShebangs unix-tools/diffutils/man/help2man
-    export RSYNC=true # set to rsync binary, eventhough it is not used.
+    export RSYNC=true # set to rsync binary, even though it is not used.
     make PREFIX=$out config
   '';
 

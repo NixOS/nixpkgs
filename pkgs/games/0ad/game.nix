@@ -12,7 +12,7 @@
 let
   # the game requires a special version 78.6.0 of spidermonkey, otherwise
   # we get compilation errors. We override the src attribute of spidermonkey_78
-  # in order to reuse that declartion, while giving it a different source input.
+  # in order to reuse that declaration, while giving it a different source input.
   spidermonkey_78_6 = spidermonkey_78.overrideAttrs(old: rec {
     version = "78.6.0";
     src = fetchurl {

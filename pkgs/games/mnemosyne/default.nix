@@ -33,7 +33,7 @@ python.pkgs.buildPythonApplication rec {
     find . -type f -exec grep -H sys.exec_prefix {} ';' | cut -d: -f1 | xargs sed -i s,sys.exec_prefix,\"$out\",
   '';
 
-  # No tests/ directrory in tarball
+  # No tests/ directory in tarball
   doCheck = false;
 
   postInstall = ''

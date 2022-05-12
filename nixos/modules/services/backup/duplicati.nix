@@ -45,7 +45,7 @@ in
         default = "duplicati";
         type = types.str;
         description = ''
-          Duplicati runs as it's own user. It will only be able to backup world-readable files.
+          Duplicati runs as its own user. It will only be able to backup world-readable files.
           Run as root with special care.
         '';
       };

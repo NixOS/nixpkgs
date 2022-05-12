@@ -25,7 +25,7 @@ buildOctavePackage rec {
     maintainers = with maintainers; [ KarlJoad ];
     description = "Functions to capture images from connected devices";
     longDescription = ''
-      The Octave-forge Image Aquisition package provides functions to
+      The Octave-forge Image Acquisition package provides functions to
       capture images from connected devices. Currently only v4l2 is supported.
     '';
   };

@@ -658,7 +658,7 @@ roughly translates to:
     python -c "import requests; import urllib"
   '';
 ```
-However, this is done in it's own phase, and not dependent on whether `doCheck = true;`
+However, this is done in its own phase, and not dependent on whether `doCheck = true;`
 
 This can also be useful in verifying that the package doesn't assume commonly
 present packages (e.g. `setuptools`)

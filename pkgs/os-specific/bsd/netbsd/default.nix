@@ -657,7 +657,7 @@ in lib.makeScopeWithSplicing
   };
 
   # The full kernel. We do the funny thing of overridding the headers to the
-  # full kernal and not vice versa to avoid infinite recursion -- the headers
+  # full kernel and not vice versa to avoid infinite recursion -- the headers
   # come earlier in the bootstrap.
   sys = self.sys-headers.override {
     pname = "sys";

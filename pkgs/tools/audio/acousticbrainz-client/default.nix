@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = [ essentia-extractor python3Packages.requests ];
 
   postPatch = ''
-    # The installer needs the streaming_extractor_music binary in the source directoy,
+    # The installer needs the streaming_extractor_music binary in the source directory,
     # so we provide a symlink to it.
     ln -s ${essentia-extractor}/bin/streaming_extractor_music streaming_extractor_music
   '';
