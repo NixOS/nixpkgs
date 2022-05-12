@@ -44,8 +44,8 @@ with lib;
         Note: this option overrides <literal>addSSL</literal>
         and <literal>onlySSL</literal>.
 
-        If you only want to set the addresses manually and not
-        the ports, take a look at <literal>listenAddresses</literal>
+        If you want to set the addresses manually but not
+        the ports, use <literal>listenAddresses</literal> instead.
       '';
     };
 
@@ -54,10 +54,10 @@ with lib;
 
       description = ''
         Listen addresses for this virtual host.
-        Compared to <literal>listen</literal> this only sets the addreses
-        and the ports are choosen automatically.
+        Unlike <literal>listen</literal>, this sets the addresses
+        but not the ports, which are chosen automatically.
 
-        Note: This option overrides <literal>enableIPv6</literal>
+        Note: This option overrides <literal>enableIPv6</literal>.
       '';
       default = [];
       example = [ "127.0.0.1" "::1" ];
