@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "1.5.10";
+  version = "1.6.3";
 
   disabled = isPy27;
 
@@ -22,13 +22,8 @@ buildPythonPackage rec {
     owner = "PyTorchLightning";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GP6/VZuRv8dS5wKQW7RbtOSa2vV9Af2Jp+ioEW3bIgc=";
+    hash = "sha256-MEUFrj84y5lQfwbC9s9fJNOKo+Djeh+E/eDc8KeX7V4=";
   };
-
-  postPatch = ''
-    sed -i '/setuptools==/d' requirements.txt
-    sed -i 's/pyDeprecate==/pyDeprecate>=/' requirements.txt
-  '';
 
   propagatedBuildInputs = [
     packaging
