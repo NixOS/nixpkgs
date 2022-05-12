@@ -5366,7 +5366,7 @@ in {
 
   monosat = pkgs.monosat.python {
     inherit buildPythonPackage;
-    inherit (self) cython;
+    inherit (self) cython pytestCheckHook;
   };
 
   monotonic = callPackage ../development/python-modules/monotonic { };
