@@ -25866,6 +25866,8 @@ with pkgs;
 
   alegreya-sans = callPackage ../data/fonts/alegreya-sans { };
 
+  alkalami = callPackage ../data/fonts/alkalami { };
+
   amber-theme = callPackage ../data/themes/amber { };
 
   amiri = callPackage ../data/fonts/amiri { };
