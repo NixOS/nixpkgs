@@ -939,6 +939,7 @@
   ./services/video/rtsp-simple-server.nix
   ./services/networking/v2ray.nix
   ./services/networking/vsftpd.nix
+  ./services/networking/wakeonwlan.nix
   ./services/networking/wasabibackend.nix
   ./services/networking/websockify.nix
   ./services/networking/wg-netmanager.nix
