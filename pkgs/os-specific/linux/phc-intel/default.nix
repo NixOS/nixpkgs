@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
     longDescription = ''
       PHC is a Linux kernel patch to undervolt processors. This can divide the
       power consumption of the CPU by two or more, increasing battery life
-      while noticably reducing fan noise. This driver works only on supported
+      while noticeably reducing fan noise. This driver works only on supported
       Intel architectures.
     '';
     homepage = "https://github.com/danielw86dev/phc-intel-dkms";

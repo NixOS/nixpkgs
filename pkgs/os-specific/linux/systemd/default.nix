@@ -516,7 +516,7 @@ stdenv.mkDerivation {
   ];
   preConfigure =
     let
-      # A list of all the runtime binaries that the systemd exectuables, tests and libraries are referencing in their source code, scripts and unit files.
+      # A list of all the runtime binaries that the systemd executables, tests and libraries are referencing in their source code, scripts and unit files.
       # As soon as a dependency isn't required anymore we should remove it from the list. The `where` attribute for each of the replacement patterns must be exhaustive. If another (unhandled) case is found in the source code the build fails with an error message.
       binaryReplacements = [
         { search = "/usr/bin/getent"; replacement = "${getent}/bin/getent"; where = [ "src/nspawn/nspawn-setuid.c" ]; }
