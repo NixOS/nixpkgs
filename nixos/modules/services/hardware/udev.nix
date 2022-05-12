@@ -171,6 +171,11 @@ let
       mv etc/udev/hwdb.bin $out
     '';
 
+  compressFirmware = if config.boot.kernelPackages.kernelAtLeast "5.3" then
+    pkgs.compressFirmwareXz
+  else
+    id;
+
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.
   udevPath = pkgs.buildEnv {
@@ -267,7 +272,7 @@ in
       '';
       apply = list: pkgs.buildEnv {
         name = "firmware";
-        paths = list;
+        paths = map compressFirmware list;
         pathsToLink = [ "/lib/firmware" ];
         ignoreCollisions = true;
       };
