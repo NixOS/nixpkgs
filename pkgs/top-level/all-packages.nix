@@ -21996,6 +21996,8 @@ with pkgs;
 
   nginx = nginxStable;
 
+  nginx-doc = callPackage ../data/documentation/nginx-doc { };
+
   nginxQuic = callPackage ../servers/http/nginx/quic.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
