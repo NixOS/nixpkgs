@@ -1,6 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, installShellFiles
-, bash, git
-}:
+{ stdenv, lib, fetchFromGitHub, installShellFiles }:
 stdenv.mkDerivation rec {
   version = "6.10.1";
   pname = "nb";
@@ -12,7 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "00c0k12yc2vqx0am1mhcjbn7fh3dab2zixslyh1smzcww275rk59";
   };
 
-  buildInputs = [ bash git ];
   nativeBuildInputs = [ installShellFiles ];
 
   dontBuild = true;
