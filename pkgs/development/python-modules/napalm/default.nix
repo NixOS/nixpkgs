@@ -1,14 +1,10 @@
 { lib, buildPythonPackage, fetchFromGitHub, callPackage, setuptools, cffi
 , paramiko, requests, future, textfsm, jinja2, netaddr, pyyaml, pyeapi, netmiko
-, junos-eznc, ciscoconfparse, scp, lxml, ncclient, pytestCheckHook, ddt, mock
-, pythonOlder, pythonAtLeast }:
+, junos-eznc, ciscoconfparse, scp, lxml, ncclient, pytestCheckHook, ddt, mock }:
 
 buildPythonPackage rec {
   pname = "napalm";
   version = "3.3.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.9";
 
   src = fetchFromGitHub {
     owner = "napalm-automation";
