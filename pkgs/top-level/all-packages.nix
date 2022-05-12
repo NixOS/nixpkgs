@@ -2143,7 +2143,9 @@ with pkgs;
 
   doona = callPackage ../tools/security/doona { };
 
-  dotter = callPackage ../tools/misc/dotter { };
+  dotter = callPackage ../tools/misc/dotter {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   droidcam = callPackage ../applications/video/droidcam { };
 
