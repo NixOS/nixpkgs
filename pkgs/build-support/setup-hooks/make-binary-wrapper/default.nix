@@ -15,9 +15,7 @@ makeSetupHook {
     ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) darwin.cctools;
 
   substitutions = {
-    cc = let
-      san = lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers);
-    in "${cc}/bin/cc ${san}";
+    cc = "${cc}/bin/cc ${lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers)}";
 
     # Extract the function call used to create a binary wrapper from its embedded docstring
     passthru.extractCmd = writeShellScript "extract-binary-wrapper-cmd" ''
