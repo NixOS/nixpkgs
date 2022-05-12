@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  # For compatability with XFree86.
+  # For compatibility with XFree86.
   passthru.buildClientLibs = true;
 
   meta = {

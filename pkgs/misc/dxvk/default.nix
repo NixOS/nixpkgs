@@ -81,7 +81,7 @@ let
     passthru.patchMoltenVK = moltenvk:
       moltenvk.overrideAttrs (old: {
         patches = old.patches or [ ] ++ [
-          # Apply MoltenVK’s DXVK compatability patch. This is needed to fake support for certain
+          # Apply MoltenVK’s DXVK compatibility patch. This is needed to fake support for certain
           # extensions. There is no package for a patched MoltenVK to avoid any confusion by users
           # whether they should use it. Except with DXVK, the answer is always no.
           old.passthru.dxvkPatch

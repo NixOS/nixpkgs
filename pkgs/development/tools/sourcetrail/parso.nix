@@ -9,7 +9,7 @@
 buildPythonPackage rec {
   pname = "parso";
 
-  # TODO: Remove along with ./jedi.nix when version compatiblity issue is
+  # TODO: Remove along with ./jedi.nix when version compatibility issue is
   # resolved.
   version = "0.7.0";
 

@@ -486,7 +486,7 @@
           commonly used files in <literal>nix-support</literal> are now
           split between the two wrappers. Some commonly used ones, like
           <literal>nix-support/dynamic-linker</literal>, are duplicated
-          for backwards compatability, even though they rightly belong
+          for backwards compatibility, even though they rightly belong
           only in <literal>bintools-wrapper</literal>. Other more
           obscure ones are just moved.
         </para>

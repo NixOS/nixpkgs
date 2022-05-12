@@ -279,7 +279,7 @@ stdenv.mkDerivation {
       touch "$out/nix-support/cc-ldflags"
     ''
 
-    # Backwards compatability for packages expecting this file, e.g. with
+    # Backwards compatibility for packages expecting this file, e.g. with
     # `$NIX_CC/nix-support/dynamic-linker`.
     #
     # TODO(@Ericson2314): Remove this after stable release and force

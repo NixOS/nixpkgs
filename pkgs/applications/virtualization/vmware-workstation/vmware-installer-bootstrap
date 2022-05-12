@@ -1,5 +1,5 @@
 VMWARE_INSTALLER="@@INSTALLERDIR@@"
-VERSION="@@IVERSION@@" # For backwards compability
+VERSION="@@IVERSION@@" # For backwards compatibility
 VMISVERSION="@@IVERSION@@"
 VMISBUILDNUM="@@BUILD@@"
 VMISPYVERSION="39"

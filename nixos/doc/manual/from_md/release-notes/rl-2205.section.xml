@@ -1918,7 +1918,7 @@
           <literal>influxdb2-cli</literal>, matching the split that took
           place upstream. A combined <literal>influxdb2</literal>
           package is still provided in this release for backwards
-          compatibilty, but will be removed at a later date.
+          compatibility, but will be removed at a later date.
         </para>
       </listitem>
       <listitem>

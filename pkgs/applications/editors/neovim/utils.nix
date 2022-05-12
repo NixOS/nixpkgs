@@ -39,7 +39,7 @@ let
     # same values as in vimUtils.vimrcContent
     , configure ? { }
 
-    # for forward compability, when adding new environments, haskell etc.
+    # for forward compatibility, when adding new environments, haskell etc.
     , ...
     }@args:
     let

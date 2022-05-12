@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     (if ncurses == null then "--without-curses" else "--with-curses")
   ];
 
-  # Provide libgpm.so for compatability
+  # Provide libgpm.so for compatibility
   postInstall = ''
     ln -sv $out/lib/libgpm.so.2 $out/lib/libgpm.so
   '';

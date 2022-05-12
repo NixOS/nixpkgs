@@ -76,7 +76,7 @@ let
 
   # The configuration file for syslinux.
 
-  # Notes on syslinux configuration and UNetbootin compatiblity:
+  # Notes on syslinux configuration and UNetbootin compatibility:
   #   * Do not use '/syslinux/syslinux.cfg' as the path for this
   #     configuration. UNetbootin will not parse the file and use it as-is.
   #     This results in a broken configuration if the partition label does

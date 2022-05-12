@@ -714,7 +714,7 @@ in {
         default = false;
         description = ''
           Whether to use the root user when generating certs. This is not recommended
-          for security + compatiblity reasons. If a service requires root owned certificates
+          for security + compatibility reasons. If a service requires root owned certificates
           consider following the guide on "Using ACME with services demanding root
           owned certificates" in the NixOS manual, and only using this as a fallback
           or for testing.
