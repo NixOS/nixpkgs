@@ -7397,7 +7397,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
-  kdash = callPackage ../development/tools/kdash { };
+  kdash = callPackage ../development/tools/kdash {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
 
