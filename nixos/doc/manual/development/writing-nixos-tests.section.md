@@ -248,7 +248,7 @@ The following methods are available on machine objects:
 
 :   Wait until the supplied regular expressions match a line of the
     serial console output. This method is useful when OCR is not
-    possibile or accurate enough.
+    possible or accurate enough.
 
 `wait_for_window`
 

@@ -666,7 +666,7 @@ self: super: builtins.intersectAttrs super {
     disableCabalFlag "build-readme" (doJailbreak super.aeson-gadt-th);
 
   neuron = overrideCabal (drv: {
-    # neuron expects the neuron-search script to be in PATH at built-time.
+    # neuron expects the neuron-search script to be in PATH at build time.
     buildTools = [ pkgs.buildPackages.makeWrapper ];
     preConfigure = ''
       mkdir -p $out/bin

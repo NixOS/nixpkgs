@@ -19,7 +19,7 @@ _cygwinWrapExesToFindDlls() {
             _TARGET="${TARGET}.exe"
         fi
 
-        # check if sould create complementary link
+        # check if we should create complementary link
         DOLINK=1
         if [[ ${_TARGET} == *.exe ]]; then
             # the canonical target has to be a .exe

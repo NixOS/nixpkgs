@@ -465,7 +465,7 @@ start_all()
           <para>
             Wait until the supplied regular expressions match a line of
             the serial console output. This method is useful when OCR is
-            not possibile or accurate enough.
+            not possible or accurate enough.
           </para>
         </listitem>
       </varlistentry>

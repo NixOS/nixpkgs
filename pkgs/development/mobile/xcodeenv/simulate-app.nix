@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
     if [ "$1" = "" ]
     then
-        # Show the user the possibile UDIDs and let him pick one, if none is provided as a command-line parameter
+        # Show the user the possible UDIDs and let them pick one, if none are provided as a command-line parameter
         xcrun simctl list
 
         echo "Please provide a UDID of a simulator:"

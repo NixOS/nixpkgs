@@ -17,7 +17,7 @@ in lib.init bootStages ++ [
 
   # Regular native packages
   (somePrevStage: lib.last bootStages somePrevStage // {
-    # It's OK to change the built-time dependencies
+    # It's OK to change the build-time dependencies
     allowCustomOverrides = true;
   })
 
@@ -30,7 +30,7 @@ in lib.init bootStages ++ [
       assert vanillaPackages.stdenv.hostPlatform == localSystem;
       assert vanillaPackages.stdenv.targetPlatform == localSystem;
       vanillaPackages.stdenv.override { targetPlatform = crossSystem; };
-    # It's OK to change the built-time dependencies
+    # It's OK to change the build-time dependencies
     allowCustomOverrides = true;
   })
 
