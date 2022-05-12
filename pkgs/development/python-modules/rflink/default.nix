@@ -8,6 +8,7 @@
 , pyserial-asyncio
 , setuptools
 , pytestCheckHook
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,11 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.10") [
+    # https://github.com/aequitas/python-rflink/issues/65
+    "tests/test_proxy.py"
   ];
 
   postPatch = ''
