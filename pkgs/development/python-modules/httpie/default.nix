@@ -1,11 +1,29 @@
 { lib
+, buildPythonPackage
 , fetchFromGitHub
 , installShellFiles
-, python3
 , pandoc
+, pythonOlder
+# BuildInputs
+, charset-normalizer
+, defusedxml
+, multidict
+, pygments
+, requests
+, requests-toolbelt
+, setuptools
+, rich
+, pysocks
+# CheckInputs
+, pytest-httpbin
+, pytest-lazy-fixture
+, pytest-mock
+, pytestCheckHook
+, responses
+, werkzeug
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "httpie";
   version = "3.2.1";
   format = "setuptools";
@@ -22,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     pandoc
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     charset-normalizer
     defusedxml
     multidict
@@ -34,8 +52,7 @@ python3.pkgs.buildPythonApplication rec {
     pysocks
   ];
 
-  checkInputs = with python3.pkgs; [
-    pytest
+  checkInputs = [
     pytest-httpbin
     pytest-lazy-fixture
     pytest-mock

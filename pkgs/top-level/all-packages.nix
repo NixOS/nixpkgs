@@ -6966,7 +6966,7 @@ with pkgs;
 
   httpdump = callPackage ../tools/security/httpdump { };
 
-  httpie = callPackage ../tools/networking/httpie { };
+  httpie = with python3Packages; toPythonApplication httpie;
 
   httping = callPackage ../tools/networking/httping {};
 
