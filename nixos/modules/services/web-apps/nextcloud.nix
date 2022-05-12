@@ -329,7 +329,7 @@ in {
         default = [];
         description = ''
           Trusted domains, from which the nextcloud installation will be
-          acessible.  You don't need to add
+          accessible.  You don't need to add
           <literal>services.nextcloud.hostname</literal> here.
         '';
       };

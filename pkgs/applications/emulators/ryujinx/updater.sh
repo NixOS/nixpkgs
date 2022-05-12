@@ -16,7 +16,7 @@ if [ -z "${GITHUB_TOKEN:-}" ]; then
 fi
 
 # or provide the new version manually
-# manually modify and uncomment or export these env vars in your shell so they're accessable within the script
+# manually modify and uncomment or export these env vars in your shell so they're accessible within the script
 # make sure you don't commit your changes here
 #
 # NEW_VERSION=""
