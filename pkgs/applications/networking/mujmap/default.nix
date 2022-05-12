@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Bridge for synchronizing email and tags between JMAP and notmuch";
     homepage = "https://github.com/elizagamedev/mujmap/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ elizagamedev ];
     mainProgram = "mujmap";
   };
