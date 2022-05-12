@@ -15,24 +15,25 @@ assertExecutable() {
 # makeWrapper EXECUTABLE OUT_PATH ARGS
 
 # ARGS:
-# --argv0       NAME    : set name of executed process to NAME
-#                         (otherwise it’s called …-wrapped)
+# --argv0       NAME    : set the name of the executed process to NAME
+#                         (if unset or empty, defaults to EXECUTABLE)
 # --inherit-argv0       : the executable inherits argv0 from the wrapper.
 #                         (use instead of --argv0 '$0')
-# --set         VAR VAL : add VAR with value VAL to the executable’s
-#                         environment
+# --set         VAR VAL : add VAR with value VAL to the executable's environment
 # --set-default VAR VAL : like --set, but only adds VAR if not already set in
 #                         the environment
 # --unset       VAR     : remove VAR from the environment
 # --chdir       DIR     : change working directory (use instead of --run "cd DIR")
 # --add-flags   FLAGS   : add FLAGS to invocation of executable
+# TODO(@ncfavier): --append-flags
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
 
 # To troubleshoot a binary wrapper after you compiled it,
 # use the `strings` command or open the binary file in a text editor.
-makeWrapper() {
+makeWrapper() { makeBinaryWrapper "$@"; }
+makeBinaryWrapper() {
     local NIX_CFLAGS_COMPILE= NIX_CFLAGS_LINK=
     local original="$1"
     local wrapper="$2"
@@ -43,7 +44,7 @@ makeWrapper() {
     mkdir -p "$(dirname "$wrapper")"
 
     makeDocumentedCWrapper "$original" "$@" | \
-      @CC@ \
+      @cc@ \
         -Wall -Werror -Wpedantic \
         -Wno-overlength-strings \
         -Os \
@@ -52,7 +53,8 @@ makeWrapper() {
 }
 
 # Syntax: wrapProgram <PROGRAM> <MAKE-WRAPPER FLAGS...>
-wrapProgram() {
+wrapProgram() { wrapProgramBinary "$@"; }
+wrapProgramBinary() {
     local prog="$1"
     local hidden
 
@@ -63,8 +65,6 @@ wrapProgram() {
       hidden="${hidden}_"
     done
     mv "$prog" "$hidden"
-    # Silence warning about unexpanded $0:
-    # shellcheck disable=SC2016
     makeWrapper "$hidden" "$prog" --inherit-argv0 "${@:2}"
 }
 
@@ -311,8 +311,9 @@ void set_env_suffix(char *env, char *sep, char *suffix) {
 "
 }
 
-# Embed a C string which shows up as readable text in the compiled binary wrapper
-# documentationString ARGS
+# Embed a C string which shows up as readable text in the compiled binary wrapper,
+# giving instructions for recreating the wrapper.
+# Keep in sync with makeBinaryWrapper.extractCmd
 docstring() {
     printf '%s' "const char * DOCSTRING = \"$(escapeStringLiteral "
 
@@ -333,7 +334,7 @@ makeCWrapper $(formatArgs "$@")
 
 # formatArgs EXECUTABLE ARGS
 formatArgs() {
-    printf '%s' "$1"
+    printf '%s' "${1@Q}"
     shift
     while [ $# -gt 0 ]; do
         case "$1" in

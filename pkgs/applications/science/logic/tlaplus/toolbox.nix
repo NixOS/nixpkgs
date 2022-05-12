@@ -1,6 +1,6 @@
 { lib
 , fetchzip
-, makeWrapper
+, makeShellWrapper
 , makeDesktopItem
 , stdenv
 , gtk3
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk3 ];
 
   nativeBuildInputs = [
-    makeWrapper
-    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
+    makeShellWrapper
+    wrapGAppsHook
   ];
 
   dontWrapGApps = true;
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       "$(find "$out/toolbox" -name jspawnhelper)"
 
-    makeWrapper $out/toolbox/toolbox $out/bin/tla-toolbox \
+    makeShellWrapper $out/toolbox/toolbox $out/bin/tla-toolbox \
       --chdir "$out/toolbox" \
       --add-flags "-data ~/.tla-toolbox" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk3 libXtst glib zlib ]}"  \

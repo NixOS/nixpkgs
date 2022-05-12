@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , makeSetupHook
-, makeBinaryWrapper
+, makeWrapper
 , gobject-introspection
 , isGraphical ? true
 , gtk3
@@ -34,7 +34,7 @@ makeSetupHook {
   ] ++ [
 
     # We use the wrapProgram function.
-    makeBinaryWrapper
+    makeWrapper
   ];
   substitutions = {
     passthru.tests = let
