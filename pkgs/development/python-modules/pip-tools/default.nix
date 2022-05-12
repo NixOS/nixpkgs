@@ -8,6 +8,7 @@
 , click
 , setuptools-scm
 , pep517
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
   ];
+
+  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
+    export no_proxy='*';
+  '';
 
   nativeBuildInputs = [
     setuptools-scm

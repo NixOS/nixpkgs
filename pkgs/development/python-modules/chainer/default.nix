@@ -8,18 +8,12 @@ buildPythonPackage rec {
   version = "7.8.1";
   disabled = !isPy3k; # python2.7 abandoned upstream
 
-  # no tests in Pypi tarball
   src = fetchFromGitHub {
     owner = "chainer";
     repo = "chainer";
     rev = "v${version}";
     sha256 = "1n07zjzc4g92m1sbgxvnansl0z00y4jnhma2mw06vnahs7s9nrf6";
   };
-
-  checkInputs = [
-    pytestCheckHook
-    mock
-  ];
 
   propagatedBuildInputs = [
     filelock
@@ -28,11 +22,19 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals cudaSupport [ cupy ];
 
+  checkInputs = [
+    pytestCheckHook
+    mock
+  ];
+
   pytestFlagsArray = [ "tests/chainer_tests/utils_tests" ];
 
-  # cf. https://github.com/chainer/chainer/issues/8621
   preCheck = ''
+    # cf. https://github.com/chainer/chainer/issues/8621
     export CHAINER_WARN_VERSION_MISMATCH=0
+
+    # ignore pytest warnings not listed
+    rm setup.cfg
   '';
 
   disabledTests = [
