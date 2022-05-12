@@ -2,7 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
-, argon2_cffi
+, argon2-cffi
 , nose
 , nose_warnings_filters
 , glibcLocales
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
     jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
-    prometheus-client argon2_cffi
+    prometheus-client argon2-cffi
   ];
 
   # disable warning_filters

@@ -13,13 +13,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "argon2_cffi";
+  pname = "argon2-cffi";
   version = "21.3.0";
   format = "flit";
 
   src = fetchPypi {
-    pname = "argon2-cffi";
-    inherit version;
+    inherit pname version;
     sha256 = "d384164d944190a7dd7ef22c6aa3ff197da12962bd04b17f64d4e93d934dba5b";
   };
 
