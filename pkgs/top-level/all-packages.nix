@@ -10777,7 +10777,9 @@ with pkgs;
 
   telegraf = callPackage ../servers/monitoring/telegraf { };
 
-  teleport = callPackage ../servers/teleport {};
+  teleport = callPackage ../servers/teleport {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
 
   telepresence = callPackage ../tools/networking/telepresence {
     pythonPackages = python3Packages;
