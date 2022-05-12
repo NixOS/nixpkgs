@@ -22027,7 +22027,7 @@ with pkgs;
 
   nginxModules = recurseIntoAttrs (callPackage ../servers/http/nginx/modules.nix { });
 
-  # We should move to dynmaic modules and create a nginxFull package with all modules
+  # We should move to dynamic modules and create a nginxFull package with all modules
   nginxShibboleth = nginxStable.override {
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders nginxModules.shibboleth ];
   };
