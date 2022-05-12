@@ -14,9 +14,7 @@ stdenv.mkDerivation {
 
     longDescription = ''
       LiE is a computer algebra system that is specialised in computations
-      involving (reductive) Lie groups and their representations. It is
-      publically available for free in source code. For a description of its
-      characteristics, we refer to the following sources of information.
+      involving (reductive) Lie groups and their representations.
     ''; # take from the website
 
     platforms = lib.platforms.linux;
