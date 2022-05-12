@@ -165,7 +165,7 @@
           should give users of the NixOS integration framework a
           transitory period to rewrite their tests to use the Python
           implementation. Users of the Perl driver will see this warning
-          everytime they use it:
+          every time they use it:
         </para>
         <programlisting>
 $ warning: Perl VM tests are deprecated and will be removed for 20.09.

@@ -193,7 +193,7 @@ stdenv.mkDerivation rec {
       allowPgo = false;
     };
 
-    # By changing name, this will get rebuilt everytime we change version,
+    # By changing name, this will get rebuilt every time we change version,
     # even if the hash stays the same. Consequently it'll fail if we introduce
     # a hash mismatch when updating.
     stimulus-script-is-current = stimulusGenerator.src.overrideAttrs (_: {

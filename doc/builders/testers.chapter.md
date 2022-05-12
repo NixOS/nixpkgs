@@ -55,7 +55,7 @@ Use the derivation hash to invalidate the output via name, for testing.
 Type: `(a@{ name, ... } -> Derivation) -> a -> Derivation`
 
 Normally, fixed output derivations can and should be cached by their output
-hash only, but for testing we want to re-fetch everytime the fetcher changes.
+hash only, but for testing we want to re-fetch every time the fetcher changes.
 
 Changes to the fetcher become apparent in the drvPath, which is a hash of
 how to fetch, rather than a fixed store path.

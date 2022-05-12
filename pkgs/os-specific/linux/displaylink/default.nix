@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/DisplayLinkManager \
       --chdir "$out/lib/displaylink"
 
-    # We introduce a dependency on the source file so that it need not be redownloaded everytime
+    # We introduce a dependency on the source file so that it need not be redownloaded every time
     echo $src >> "$out/share/workspace_dependencies.pin"
   '';
 

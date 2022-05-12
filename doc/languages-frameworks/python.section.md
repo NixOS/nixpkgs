@@ -602,7 +602,7 @@ been removed, in this case, it's recommended to use `pytestCheckHook`.
 `test` command for a checkPhase which runs `pytest`. This is also beneficial
 when a package may need many items disabled to run the test suite.
 
-Using the example above, the analagous pytestCheckHook usage would be:
+Using the example above, the analogous pytestCheckHook usage would be:
 
 ```
   checkInputs = [ pytestCheckHook ];
@@ -621,7 +621,7 @@ Using the example above, the analagous pytestCheckHook usage would be:
   ];
 ```
 
-This is expecially useful when tests need to be conditionallydisabled,
+This is especially useful when tests need to be conditionallydisabled,
 for example:
 
 ```
@@ -643,7 +643,7 @@ are disabled.
 
 #### Using pythonImportsCheck {#using-pythonimportscheck}
 
-Although unit tests are highly prefered to validate correctness of a package, not
+Although unit tests are highly preferred to validate correctness of a package, not
 all packages have test suites that can be ran easily, and some have none at all.
 To help ensure the package still works, `pythonImportsCheck` can attempt to import
 the listed modules.

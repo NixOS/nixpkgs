@@ -303,7 +303,7 @@ One of the compiler flags that GCC uses for this compiler is called X_CFLAGS.
 This is used by the Nix build process to set the dynamic linker, glibc
 in the case of i686-linux using the default Nix packages collection.
 
-Obiously, since we need to compile libstc++ for arm-linux with uClibc linking
+Obviously, since we need to compile libstc++ for arm-linux with uClibc linking
 will not be done correctly: you can't link object files built for arm-linux
 with a glibc built for i686-linux.
 
