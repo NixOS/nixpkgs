@@ -1,13 +1,40 @@
 { lib
 , fetchurl
-, substituteAll, python3, pkg-config, runCommand, writeText
-, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk, pandoc
-, wrapGAppsHook, xorgserver, getopt, xauth, util-linux, which
-, ffmpeg, x264, libvpx, libwebp, x265, librsvg
+, substituteAll
+, pkg-config
+, runCommand
+, writeText
+, wrapGAppsHook
+, withNvenc ? false
+, atk
+, cairo
+, cudatoolkit
+, ffmpeg
+, gdk-pixbuf
+, getopt
+, glib
+, gobject-introspection
+, gst_all_1
+, gtk3
 , libfakeXinerama
-, gst_all_1, pulseaudio, gobject-introspection
-, withNvenc ? false, cudatoolkit, nv-codec-headers-10, nvidia_x11 ? null
-, pam }:
+, librsvg
+, libvpx
+, libwebp
+, nv-codec-headers-10
+, nvidia_x11 ? null
+, pam
+, pandoc
+, pango
+, pulseaudio
+, python3
+, util-linux
+, which
+, x264
+, x265
+, xauth
+, xorg
+, xorgserver
+}:
 
 with lib;
 
@@ -60,37 +87,76 @@ in buildPythonApplication rec {
 
   INCLUDE_DIRS = "${pam}/include";
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook pandoc ]
-    ++ lib.optional withNvenc cudatoolkit;
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook
+    pandoc
+  ] ++ lib.optional withNvenc cudatoolkit;
+
   buildInputs = with xorg; [
-    libX11 xorgproto libXrender libXi libXres
-    libXtst libXfixes libXcomposite libXdamage
-    libXrandr libxkbfile
-    ] ++ [
+    libX11
+    libXcomposite
+    libXdamage
+    libXfixes
+    libXi
+    libxkbfile
+    libXrandr
+    libXrender
+    libXres
+    libXtst
+    xorgproto
+  ] ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]) ++ [
+    atk.out
+    cairo
     cython
-    librsvg
-
-    pango cairo gdk-pixbuf atk.out gtk3 glib
-
-    ffmpeg libvpx x264 libwebp x265
-
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-libav
-
-    pam
+    ffmpeg
+    gdk-pixbuf
+    glib
     gobject-introspection
+    gtk3
+    librsvg
+    libvpx
+    libwebp
+    pam
+    pango
+    x264
+    x265
   ] ++ lib.optional withNvenc nvencHeaders;
-  propagatedBuildInputs = with python3.pkgs; [
-    pillow rencode pycrypto cryptography pycups lz4 dbus-python
-    netifaces numpy pygobject3 pycairo gst-python pam
-    pyopengl paramiko opencv4 python-uinput pyxdg
-    ipaddress idna pyinotify
-  ] ++ lib.optionals withNvenc (with python3.pkgs; [pynvml pycuda]);
 
-    # error: 'import_cairo' defined but not used
+  propagatedBuildInputs = with python3.pkgs; ([
+    cryptography
+    dbus-python
+    gst-python
+    idna
+    ipaddress
+    lz4
+    netifaces
+    numpy
+    opencv4
+    pam
+    paramiko
+    pillow
+    pycairo
+    pycrypto
+    pycups
+    pygobject3
+    pyinotify
+    pyopengl
+    python-uinput
+    pyxdg
+    rencode
+  ] ++ lib.optionals withNvenc [
+    pycuda
+    pynvml
+  ]);
+
+  # error: 'import_cairo' defined but not used
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
   setupPyBuildFlags = [
@@ -104,6 +170,7 @@ in buildPythonApplication rec {
   ] ++ lib.optional withNvenc "--with-nvenc";
 
   dontWrapGApps = true;
+
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
