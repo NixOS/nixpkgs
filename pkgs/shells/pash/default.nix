@@ -11,6 +11,7 @@ buildDotnetPackage {
     sha256 = "0c4wa8qi1zs01p9ck171jkw0n1rsymsrhpsb42gl7warwhpmv59f";
   };
 
+  strictDeps = true;
   preConfigure = "rm -rvf $src/Source/PashConsole/bin/*";
 
   outputFiles = [ "Source/PashConsole/bin/Release/*" ];

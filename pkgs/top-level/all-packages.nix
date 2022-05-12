@@ -14489,6 +14489,8 @@ with pkgs;
 
   poetry2conda = python3Packages.callPackage ../development/python-modules/poetry2conda { };
 
+  pip-audit = callPackage ../development/tools/pip-audit {};
+
   pipenv = callPackage ../development/tools/pipenv {};
 
   pipewire = callPackage ../development/libraries/pipewire {

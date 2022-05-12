@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-q5RiY9/xEFCk+oHlxgNwDOB+TNjRWHKzU2kQH2LjCWY=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     meson
     ninja
@@ -47,4 +48,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-
