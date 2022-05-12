@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       of them.
     '';
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];
   };

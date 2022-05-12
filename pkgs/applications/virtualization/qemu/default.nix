@@ -103,6 +103,12 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
       revert = true;
     })
+    # make nixos tests that boot from USB more stable
+    # https://lists.nongnu.org/archive/html/qemu-devel/2022-05/msg01484.html
+    (fetchpatch {
+      url = "https://gitlab.com/raboof/qemu/-/commit/3fb5e8fe4434130b1167a995b2a01c077cca2cd5.patch";
+      sha256 = "sha256-evzrN3i4ntc/AFG0C0rezQpQbWcnx74nXO+5DLErX8o=";
+    })
   ]
     ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 

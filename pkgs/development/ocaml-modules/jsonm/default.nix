@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://erratique.ch/software/jsonm";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    mainProgram = "jsontrip";
+    inherit (ocaml.meta) platforms;
   };
 }
