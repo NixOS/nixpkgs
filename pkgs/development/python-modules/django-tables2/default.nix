@@ -29,7 +29,7 @@ buildPythonPackage rec {
     # Requested setting DJANGO_TABLES2_TEMPLATE, but settings are not configured.
   ];
 
-  doCheck = false; # needs django-boostrap{3,4} packages
+  doCheck = false; # needs django-bootstrap{3,4} packages
 
   # Leave this in! Discovering how to run tests is annoying in Django apps
   checkPhase = ''

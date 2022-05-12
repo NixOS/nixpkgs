@@ -1717,7 +1717,7 @@ with pkgs;
   appimage-run = callPackage ../tools/package-management/appimage-run { };
   appimage-run-tests = callPackage ../tools/package-management/appimage-run/test.nix {
     appimage-run = appimage-run.override {
-      appimage-run-tests = null; /* break boostrap cycle for passthru.tests */
+      appimage-run-tests = null; /* break bootstrap cycle for passthru.tests */
     };
   };
 
