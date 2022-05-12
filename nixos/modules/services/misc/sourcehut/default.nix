@@ -83,7 +83,7 @@ let
   python = pkgs.sourcehut.python.withPackages (ps: with ps; [
     gunicorn
     eventlet
-    # For monitoring Celery: sudo -u listssrht celery --app listssrht.process -b redis+socket:///run/redis-sourcehut/redis.sock?virtual_host=5 flower
+    # For monitoring Celery: sudo -u listssrht celery --app listssrht.process -b redis+socket:///run/redis-sourcehut/redis.sock?virtual_host=1 flower
     flower
     # Sourcehut services
     srht

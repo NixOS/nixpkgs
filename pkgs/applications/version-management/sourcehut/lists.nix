@@ -30,10 +30,6 @@ buildPythonPackage rec {
     vendorSha256 = "sha256-xnmMkRSokbhWD+kz0XQ9AinYdm6/50FRBISURPvlzD0=";
   } // import ./fix-gqlgen-trimpath.nix {inherit unzip;});
 
-  patches = [
-    # Revert change breaking Unix socket support for Redis
-    patches/redis-socket/lists/0001-Revert-Add-webhook-queue-monitoring.patch
-  ];
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api" ""

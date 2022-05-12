@@ -58,10 +58,6 @@ buildPythonPackage rec {
   inherit src version;
   pname = "gitsrht";
 
-  patches = [
-    # Revert change breaking Unix socket support for Redis
-    patches/redis-socket/git/0001-Revert-Add-webhook-queue-monitoring.patch
-  ];
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api gitsrht-dispatch gitsrht-keys gitsrht-shell gitsrht-update-hook" ""
