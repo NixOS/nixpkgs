@@ -72,7 +72,7 @@ stdenv.mkDerivation {
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
   # That is a bit more cumbersome. But the debian repository only keeps the last
-  # two versions, while snapcraft should provide versions indefinately:
+  # two versions, while snapcraft should provide versions indefinitely:
   # https://forum.snapcraft.io/t/how-can-a-developer-remove-her-his-app-from-snap-store/512
 
   # This is the next-best thing, since we're not allowed to re-distribute

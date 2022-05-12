@@ -211,7 +211,7 @@ sub GrubFs {
                 $search .= $matches[0];
             }
 
-            # BTRFS is a special case in that we need to fix the referrenced path based on subvolumes
+            # BTRFS is a special case in that we need to fix the referenced path based on subvolumes
             if ($fs->type eq 'btrfs') {
                 my ($status, @id_info) = runCommand("@btrfsprogs@/bin/btrfs subvol show @{[$fs->mount]}");
                 if ($status != 0) {
@@ -608,7 +608,7 @@ sub getEfiTarget {
         if (($grubTarget eq "") || ($grubTargetEfi eq "")) { die }
         else { return "both" }
     } elsif (($grub ne "") && ($grubEfi eq "")) {
-        # TODO: It would be safer to disallow non-EFI grub installation if no taget is given.
+        # TODO: It would be safer to disallow non-EFI grub installation if no target is given.
         #       If no target is given, then grub auto-detects the target which can lead to errors.
         #       E.g. it seems as if grub would auto-detect a EFI target based on the availability
         #       of a EFI partition.

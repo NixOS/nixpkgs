@@ -163,7 +163,7 @@ let cfg = config.services.xserver.libinput;
           ''
             Enables or disables drag lock during tapping behavior. When enabled, a finger up during tap-
             and-drag will not immediately release the button. If the finger is set down again within the
-            timeout, the draging process continues.
+            timeout, the dragging process continues.
           '';
       };
 

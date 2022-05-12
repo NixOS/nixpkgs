@@ -130,7 +130,7 @@ let
     ''}
 
     # Disable all input echo for the whole stage. We could use read -s
-    # instead but that would ocasionally leak characters between read
+    # instead but that would occasionally leak characters between read
     # invocations.
     stty -echo
   '';
@@ -799,7 +799,7 @@ in
             '';
             description = ''
               Commands that should be run right before we try to mount our LUKS device.
-              This can be useful, if the keys needed to open the drive is on another partion.
+              This can be useful, if the keys needed to open the drive is on another partition.
             '';
           };
 

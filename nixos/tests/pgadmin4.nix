@@ -94,7 +94,7 @@ import ./make-test-python.nix ({ pkgs, lib, buildDeps ? [ ], pythonEnv ? [ ], ..
 
       # adapt chrome config to run within a sandbox without GUI
       # see https://stackoverflow.com/questions/50642308/webdriverexception-unknown-error-devtoolsactiveport-file-doesnt-exist-while-t#50642913
-      # add chrome binary path. use spaces to satisfy python indention (tabs throw an error)
+      # add chrome binary path. use spaces to satisfy Python indentation (tabs throw an error)
       # this works for selenium 3 (currently used), but will need to be updated
       # to work with "from selenium.webdriver.chrome.service import Service" in selenium 4
       machine.succeed(
