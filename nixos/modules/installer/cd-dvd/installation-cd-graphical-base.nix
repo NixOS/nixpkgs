@@ -35,8 +35,13 @@ with lib;
   # Enable sound in graphical iso's.
   hardware.pulseaudio.enable = true;
 
-  # Spice guest additions
+  # VM guest additions to improve host-guest interaction
   services.spice-vdagentd.enable = true;
+  services.qemuGuest.enable = true;
+  virtualisation.virtualbox.guest.enable = true;
+  virtualisation.vmware.guest.enable = true;
+  virtualisation.hypervGuest.enable = true;
+  services.xe-guest-utilities.enable = true;
 
   # Enable plymouth
   boot.plymouth.enable = true;
