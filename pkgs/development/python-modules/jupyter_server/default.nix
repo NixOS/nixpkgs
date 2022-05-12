@@ -6,7 +6,7 @@
 , pythonOlder
 , pytestCheckHook
 , pytest-tornasync
-, argon2_cffi
+, argon2-cffi
 , jinja2
 , tornado
 , pyzmq
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    argon2_cffi
+    argon2-cffi
     jinja2
     tornado
     pyzmq

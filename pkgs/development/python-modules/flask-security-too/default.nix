@@ -32,7 +32,7 @@
 , passlib
 
 # tests
-, argon2_cffi
+, argon2-cffi
 , flask-mongoengine
 , mongoengine
 , mongomock
@@ -86,7 +86,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    argon2_cffi
+    argon2-cffi
     flask-mongoengine
     mongoengine
     mongomock

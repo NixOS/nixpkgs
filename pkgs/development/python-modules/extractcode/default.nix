@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "extractcode";
-  version = "30.0.0";
+  version = "31.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a660d1b9e3bae4aa87828e6947dc3b31dc2fa6705acb28a514874602b40bc90";
+    sha256 = "sha256-gIGTkum8+BKfdNiQT+ipjA3+0ngjVoQnNygsAoMRPYg=";
   };
 
   dontConfigure = true;

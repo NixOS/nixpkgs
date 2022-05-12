@@ -6,6 +6,7 @@
 , pkg-config
 , wayland
 , wayland-protocols
+, fetchurl
 }:
 
 stdenv.mkDerivation {
@@ -22,6 +23,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ meson ninja pkg-config wayland-protocols ];
 
   buildInputs = [ wayland ];
+
+  patches = [
+    # https://github.com/progandy/wdomirror/pull/7
+    (fetchurl {
+      url = "https://github.com/progandy/wdomirror/commit/142632208e9ea2b4a4ebd784532efdb8cad7b87c.patch";
+      hash = "sha256-z6/8q2vOtmlGFbDVG5BVWWbLQT8kBvJXT9/oZkWS9gw=";
+    })
+  ];
 
   installPhase = ''
     runHook preInstall

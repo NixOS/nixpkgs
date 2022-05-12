@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup = ''
+  postFixup = optionalString ffmpegSupport ''
     wrapProgram $out/bin/navidrome \
-      --prefix PATH : ${makeBinPath (optional ffmpegSupport ffmpeg)}
+      --prefix PATH : ${makeBinPath [ ffmpeg ]}
   '';
 
   passthru.tests.navidrome = nixosTests.navidrome;

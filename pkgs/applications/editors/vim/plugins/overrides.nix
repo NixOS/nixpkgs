@@ -41,6 +41,8 @@
 , ycmd
 , zoxide
 , nodejs
+, xdotool
+, xorg
 
 # test dependencies
 , neovim-unwrapped
@@ -289,6 +291,10 @@ self: super: {
     prePatch = ''
       rm Makefile
     '';
+  });
+
+  fzf-lua = super.fzf-lua.overrideAttrs (old: {
+    propagatedBuildInputs = [ fzf ];
   });
 
   fzf-vim = super.fzf-vim.overrideAttrs (old: {
@@ -605,6 +611,14 @@ self: super: {
       substituteInPlace plugin/statix.vim --replace statix ${statix}/bin/statix
     '';
   };
+
+  stylish-nvim = super.stylish-nvim.overrideAttrs (old: {
+      postPatch = ''
+        substituteInPlace lua/stylish/common/mouse_hover_handler.lua --replace xdotool ${xdotool}/bin/xdotool
+        substituteInPlace lua/stylish/components/menu.lua --replace xdotool ${xdotool}/bin/xdotool
+        substituteInPlace lua/stylish/components/menu.lua --replace xwininfo ${xorg.xwininfo}/bin/xwininfo
+      '';
+  });
 
   sved =
     let

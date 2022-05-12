@@ -1384,6 +1384,18 @@ final: prev:
     meta.homepage = "https://github.com/neoclide/coc.nvim/";
   };
 
+  coconut-vim = buildVimPluginFrom2Nix {
+    pname = "coconut.vim";
+    version = "2017-10-10";
+    src = fetchFromGitHub {
+      owner = "manicmaniac";
+      repo = "coconut.vim";
+      rev = "cea47739aab9f163d240d1609e7eea326fd55072";
+      sha256 = "03rq3lpplgywvm620jzx085l74180163q8gls4gjrad2fgm9n96n";
+    };
+    meta.homepage = "https://github.com/manicmaniac/coconut.vim/";
+  };
+
   codi-vim = buildVimPluginFrom2Nix {
     pname = "codi.vim";
     version = "2022-04-30";
@@ -2564,6 +2576,18 @@ final: prev:
       sha256 = "16n78ylicrd7lh41g5hvd9vnnhkwbvj28c190k5zvrblyyhipn93";
     };
     meta.homepage = "https://github.com/gfanto/fzf-lsp.nvim/";
+  };
+
+  fzf-lua = buildVimPluginFrom2Nix {
+    pname = "fzf-lua";
+    version = "2022-05-07";
+    src = fetchFromGitHub {
+      owner = "ibhagwan";
+      repo = "fzf-lua";
+      rev = "b614a9d315512ec4ce9c1df41474e5ab8e12f7df";
+      sha256 = "0gb7q4fbv3754ck44h6dd93dcy8j4czhhna1d2kgq21614xs303k";
+    };
+    meta.homepage = "https://github.com/ibhagwan/fzf-lua/";
   };
 
   fzf-vim = buildVimPluginFrom2Nix {
@@ -6324,6 +6348,18 @@ final: prev:
       sha256 = "1i1ygdqwhz4jqmz9lzjnx1a7s5chdqjsvgkmnd9x0s8ixqa41bpr";
     };
     meta.homepage = "https://github.com/darfink/starsearch.vim/";
+  };
+
+  stylish-nvim = buildVimPluginFrom2Nix {
+    pname = "stylish.nvim";
+    version = "2022-02-11";
+    src = fetchFromGitHub {
+      owner = "teto";
+      repo = "stylish.nvim";
+      rev = "ea745ebf446410ef3d75f9890b2e7fd59be42e19";
+      sha256 = "1kl2g32ls4s7kpr6395rdmsa7gdzkpfiypphmnxg8n75n0b0mwb3";
+    };
+    meta.homepage = "https://github.com/teto/stylish.nvim/";
   };
 
   suda-vim = buildVimPluginFrom2Nix {

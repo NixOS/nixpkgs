@@ -240,6 +240,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://snipeitapp.com">Snipe-IT</link>, a
+          free open source IT asset/license management system. Available
+          as
+          <link xlink:href="options.html#opt-services.snipe-it.enable">services.snipe-it</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
           a web interface for the PowerDNS server. Available at
           <link xlink:href="options.html#opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
@@ -1167,6 +1175,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>teleport</literal> has been upgraded to major version
+          9. Please see upstream
+          <link xlink:href="https://goteleport.com/docs/setup/operations/upgrading/">upgrade
+          instructions</link> and
+          <link xlink:href="https://goteleport.com/docs/changelog/#900">release
+          notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           For <literal>pkgs.python3.pkgs.ipython</literal>, its direct
           dependency
           <literal>pkgs.python3.pkgs.matplotlib-inline</literal> (which
@@ -1444,6 +1462,16 @@
           <literal>pkgs.pgadmin</literal> now refers to
           <literal>pkgs.pgadmin4</literal>. <literal>pgadmin3</literal>
           has been removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>pkgs.minetestclient_4</literal> and
+          <literal>pkgs.minetestserver_4</literal> have been removed, as
+          the last 4.x release was in 2018.
+          <literal>pkgs.minetestclient</literal> (equivalent to
+          <literal>pkgs.minetest</literal> ) and
+          <literal>pkgs.minetestserver</literal> can be used instead.
         </para>
       </listitem>
       <listitem>
@@ -2277,6 +2305,14 @@
         <para>
           The <literal>vscode-extensions.ionide.ionide-fsharp</literal>
           package has been updated to 6.0.0 and now requires .NET 6.0.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>phpPackages.box</literal> package has been
+          updated from 2.7.5 to 3.16.0. See the
+          <link xlink:href="https://github.com/box-project/box/blob/master/UPGRADE.md#from-27-to-30">upgrade
+          guide</link> for more details.
         </para>
       </listitem>
       <listitem>

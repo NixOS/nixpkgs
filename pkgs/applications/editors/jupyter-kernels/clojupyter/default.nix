@@ -20,7 +20,7 @@ let
   '';
 
   pname = "clojupyter";
-  version = "0.3.2";
+  version = "0.3.3";
 
   meta = with lib; {
     description = "A Jupyter kernel for Clojure";
@@ -36,8 +36,8 @@ let
     src = fetchFromGitHub {
       owner = "clojupyter";
       repo = "clojupyter";
-      rev = "0.3.2";
-      sha256 = "1wphc7h74qlm9bcv5f95qhq1rq9gmcm5hvjblb01vffx996vr6jz";
+      rev = version;
+      sha256 = "sha256-BCzcPnLSonm+ELFU4JIIzLPlVnP0VzlrRSGxOd/LFow=";
     };
 
     buildInputs = [ imagemagick ];

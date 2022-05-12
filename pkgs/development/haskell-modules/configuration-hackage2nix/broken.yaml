@@ -117,6 +117,7 @@ broken-packages:
   - alerta
   - alex-prelude
   - alfred
+  - alfred-margaret
   - alga
   - algebra-dag
   - algebraic-classes
@@ -1013,6 +1014,7 @@ broken-packages:
   - dbf
   - DBlimited
   - dbm
+  - dbmigrations
   - dbmigrations-mysql
   - dbmigrations-postgresql
   - dbmigrations-sqlite
@@ -1914,6 +1916,7 @@ broken-packages:
   - HandlerSocketClient
   - handsy
   - Hangman
+  - HangmanAscii
   - hannahci
   - hans
   - hanspell
@@ -2905,6 +2908,7 @@ broken-packages:
   - layers
   - layout
   - layout-bootstrap
+  - layout-rules
   - lazify
   - lazyarray
   - lazyboy
@@ -3913,6 +3917,7 @@ broken-packages:
   - plzwrk
   - pngload-fixed
   - pocket
+  - podenv
   - pointedalternative
   - pointfree-fancy
   - pointful
@@ -4628,6 +4633,7 @@ broken-packages:
   - simple-templates
   - simple-ui
   - simple-units
+  - simple-vec3
   - simplexmq
   - simple-zipper
   - simplistic-generics

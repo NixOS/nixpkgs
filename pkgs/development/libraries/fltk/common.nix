@@ -37,7 +37,7 @@
 , doxygen
 , graphviz
 
-, withExamples ? true
+, withExamples ? (stdenv.buildPlatform == stdenv.hostPlatform)
 , withShared ? true
 }:
 
@@ -139,6 +139,7 @@ stdenv.mkDerivation rec {
 
     # Examples & Tests
     "-DFLTK_BUILD_EXAMPLES=${onOff withExamples}"
+    "-DFLTK_BUILD_TEST=${onOff withExamples}"
 
     # Docs
     "-DOPTION_BUILD_HTML_DOCUMENTATION=${onOff withDocs}"

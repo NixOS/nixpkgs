@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "0lz8rfl5xwdj17zn7a30ipi7cgjwqki21a7wg9rdg7iwx27bpnmg";
   };
 
+  postPatch = ''
+    substituteInPlace Src/siesta_init.F --replace '/bin/rm' 'rm'
+  '';
+
   passthru = {
     inherit mpi;
   };

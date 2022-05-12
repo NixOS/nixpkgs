@@ -8799,10 +8799,10 @@
     githubId = 5047140;
     name = "Victor Collod";
   };
-  musfay = {
-    email = "musfay@protonmail.com";
-    github = "musfay";
-    githubId = 33374965;
+  muscaln = {
+    email = "muscaln@protonmail.com";
+    github = "muscaln";
+    githubId = 96225281;
     name = "Mustafa Çalışkan";
   };
   mupdt = {
@@ -9572,8 +9572,8 @@
     githubId = 14816024;
     name = "oxalica";
     keys = [{
-      longkeyid = "rsa4096/0xCED392DE0C483D00";
-      fingerprint = "5CB0 E9E5 D5D5 71F5 7F54  0FEA CED3 92DE 0C48 3D00";
+      longkeyid = "ed25519/0x7571654CF88E31C2";
+      fingerprint = "F90F FD6D 585C 2BA1 F13D  E8A9 7571 654C F88E 31C2";
     }];
   };
   oxij = {
@@ -9694,6 +9694,12 @@
     github = "parasrah";
     githubId = 14935550;
     name = "Brad Pfannmuller";
+  };
+  parras = {
+    email = "c@philipp-arras.de";
+    github = "phiadaarr";
+    githubId = 33826198;
+    name = "Philipp Arras";
   };
   pashashocky = {
     email = "pashashocky@gmail.com";

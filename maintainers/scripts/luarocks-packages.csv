@@ -6,6 +6,7 @@ basexx,https://github.com/teto/basexx.git,,,,,
 binaryheap,https://github.com/Tieske/binaryheap.lua,,,,,vcunat
 busted,,,,,,
 cassowary,,,,,,marsam alerque
+cldr,,,,,,alerque
 compat53,,,,0.7-1,,vcunat
 cosmo,,,,,,marsam
 coxpcall,,,,1.17.0-1,,
@@ -14,6 +15,7 @@ cyrussasl,https://github.com/JorjBauer/lua-cyrussasl.git,,,,,
 digestif,https://github.com/astoff/digestif.git,,,0.2-1,lua5_3,
 dkjson,,,,,,
 fifo,,,,,,
+fluent,,,,,,alerque
 gitsigns.nvim,https://github.com/lewis6991/gitsigns.nvim.git,,,,lua5_1,
 http,,,,0.3-0,,vcunat
 inspect,,,,,,
@@ -24,6 +26,7 @@ linenoise,https://github.com/hoelzro/lua-linenoise.git,,,,,
 ljsyscall,,,,,lua5_1,lblasc
 lmathx,,,,,lua5_3,alexshpilkin
 lmpfrlib,,,,,lua5_3,alexshpilkin
+loadkit,,,,,,alerque
 lpeg,,,,,,vyp
 lpeg_patterns,,,,,,
 lpeglabel,,,,,,
@@ -86,4 +89,5 @@ say,https://github.com/Olivine-Labs/say.git,,,,,
 std._debug,https://github.com/lua-stdlib/_debug.git,,,,,
 std.normalize,https://github.com/lua-stdlib/normalize.git,,,,,
 stdlib,,,,41.2.2,,vyp
+tl,,,,,,mephistophiles
 vstruct,https://github.com/ToxicFrog/vstruct.git,,,,,

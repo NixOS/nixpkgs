@@ -27,8 +27,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'jinja2 = "^2.10"' 'jinja2 = "*"' \
-      --replace 'graphviz = ">=0.13.2,<0.17.0"' 'graphviz = "*"'
+      --replace 'graphviz = ">=0.13.2,<0.20.0"' 'graphviz = "*"'
   '';
 
   preConfigure = ''

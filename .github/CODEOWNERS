@@ -192,8 +192,8 @@
 /nixos/tests/knot.nix @mweinelt
 
 # Dhall
-/pkgs/development/dhall-modules      @Gabriel439 @Profpatsch @ehmry
-/pkgs/development/interpreters/dhall @Gabriel439 @Profpatsch @ehmry
+/pkgs/development/dhall-modules      @Gabriella439 @Profpatsch @ehmry
+/pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch @ehmry
 
 # Idris
 /pkgs/development/idris-modules @Infinisil

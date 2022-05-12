@@ -182,17 +182,17 @@ cassowary = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 }:
 buildLuarocksPackage {
   pname = "cassowary";
-  version = "2.3.1-2";
+  version = "2.3.2-1";
   knownRockspec = (fetchurl {
-    url    = "https://luafr.org/luarocks/cassowary-2.3.1-2.rockspec";
-    sha256 = "04y882f9ai1jhk0zwla2g0fvl56a75rwnxhsl9r3m0qa5i0ia1i5";
+    url    = "https://luarocks.org/cassowary-2.3.2-1.rockspec";
+    sha256 = "0c6sflm8zpgbcdj47s3rd34h69h3nqcciaaqd1wdx5m0lwc3mii0";
   }).outPath;
   src = fetchgit ( removeAttrs (builtins.fromJSON ''{
   "url": "https://github.com/sile-typesetter/cassowary.lua",
-  "rev": "c022a120dee86979d18e4c4613e55e721c632d80",
-  "date": "2021-07-19T14:37:34+03:00",
-  "path": "/nix/store/rzsbr6gqg8vhchl24ma3p1h4slhk0xp7-cassowary.lua",
-  "sha256": "1r668qcvd2a1rx17xp7ajp5wjhyvh2fwn0c60xmw0mnarjb5w1pq",
+  "rev": "e33195f08438c15d725d283979165fda7c6c3321",
+  "date": "2022-04-22T11:23:46+03:00",
+  "path": "/nix/store/51mb376xh9pnh2krk08ljmy01zhr9y3z-cassowary.lua",
+  "sha256": "1lvl40dhzmbqqjrqpjgqlg2kl993fpdy1mpc6d1610zpa9znx1f0",
   "fetchLFS": false,
   "fetchSubmodules": true,
   "deepClone": false,
@@ -208,6 +208,40 @@ buildLuarocksPackage {
     description = "The cassowary constraint solver";
     maintainers = with lib.maintainers; [ marsam alerque ];
     license.fullName = "Apache 2";
+  };
+}) {};
+
+cldr = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua, penlight
+}:
+buildLuarocksPackage {
+  pname = "cldr";
+  version = "0.2.0-0";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/cldr-0.2.0-0.rockspec";
+    sha256 = "1vjwrlrdy10bacn0324fvs4sx85xryyg7npw2mp1k9kmasfr8r1s";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/alerque/cldr-lua.git",
+  "rev": "51e4760838c0a83ef1a76d0a0fb2e9f964069a50",
+  "date": "2022-04-16T14:46:14+03:00",
+  "path": "/nix/store/7jziz15bjm27zw9i3arrxprglakz8n4d-cldr-lua",
+  "sha256": "1i22mcs50z99850j47gkgwyf0ahl4yh1732b4x3davjwy2fwak1x",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = with lua; (luaOlder "5.1");
+  propagatedBuildInputs = [ lua penlight ];
+
+  meta = {
+    homepage = "https://github.com/alerque/cldr-lua";
+    description = "Lua interface to Unicode CLDR data";
+    maintainers = with lib.maintainers; [ alerque ];
+    license.fullName = "MIT/ICU";
   };
 }) {};
 
@@ -432,6 +466,40 @@ buildLuarocksPackage {
     homepage = "https://github.com/daurnimator/fifo.lua";
     description = "A lua library/'class' that implements a FIFO";
     license.fullName = "MIT/X11";
+  };
+}) {};
+
+fluent = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua, cldr, luaepnf, penlight
+}:
+buildLuarocksPackage {
+  pname = "fluent";
+  version = "0.2.0-0";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/fluent-0.2.0-0.rockspec";
+    sha256 = "1x3nk8xdf923rvdijr0jx8v6w3wxxfch7ri3kxca0pw80b5bc2fa";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/alerque/fluent-lua.git",
+  "rev": "e1cd4130e460bcd52f9118b7d9f9a72d2e8b902c",
+  "date": "2022-04-16T23:08:20+03:00",
+  "path": "/nix/store/flxlnrzg6rx75qikiggmy494npx59p0b-fluent-lua",
+  "sha256": "12js8l4hcxhziza0sry0f01kfm8f8m6kx843dmcky36z1y2mccmq",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = with lua; (luaOlder "5.1");
+  propagatedBuildInputs = [ lua cldr luaepnf penlight ];
+
+  meta = {
+    homepage = "https://github.com/alerque/fluent-lua";
+    description = "Lua implementation of Project Fluent";
+    maintainers = with lib.maintainers; [ alerque ];
+    license.fullName = "MIT";
   };
 }) {};
 
@@ -707,6 +775,40 @@ buildLuarocksPackage {
     description = "Lua API for the GNU MPFR library";
     maintainers = with lib.maintainers; [ alexshpilkin ];
     license.fullName = "LGPL";
+  };
+}) {};
+
+loadkit = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua
+}:
+buildLuarocksPackage {
+  pname = "loadkit";
+  version = "1.1.0-1";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/loadkit-1.1.0-1.rockspec";
+    sha256 = "08fx0xh90r2zvjlfjkyrnw2p95xk1a0qgvlnq4siwdb2mm6fq12l";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/leafo/loadkit.git",
+  "rev": "c6c712dab45f6c568821f9ed7b49c790a44d12e7",
+  "date": "2021-01-07T14:41:10-08:00",
+  "path": "/nix/store/xvwq7b2za8ciww1gjw7vnspg9183xmfa-loadkit",
+  "sha256": "15znriijs7izf9f6vmhr6dnvw3pzr0yr0mh6ah41fmdwjqi7jzcz",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = with lua; (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = {
+    homepage = "https://github.com/leafo/loadkit";
+    description = "Loadkit allows you to load arbitrary files within the Lua package path";
+    maintainers = with lib.maintainers; [ alerque ];
+    license.fullName = "MIT";
   };
 }) {};
 
@@ -2527,6 +2629,39 @@ buildLuarocksPackage {
     description = "General Lua Libraries";
     maintainers = with lib.maintainers; [ vyp ];
     license.fullName = "MIT/X11";
+  };
+}) {};
+
+tl = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, compat53, argparse, luafilesystem
+}:
+buildLuarocksPackage {
+  pname = "tl";
+  version = "0.13.2-1";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/tl-0.13.2-1.rockspec";
+    sha256 = "0a9nr03q6w1689drd0r2y8m7qbyxm8n6bkgjplwkr6c6abvbis3f";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/teal-language/tl",
+  "rev": "473fef59f21e836e1337a0e3da3c759a1e3556bd",
+  "date": "2021-07-30T21:02:34-03:00",
+  "path": "/nix/store/29dm1abr2cc9zqs9n9lymg92gaxqh09g-tl",
+  "sha256": "1cj7ihw1kz1n1jkha6q0mq0qmlw1vi04i6pcbw3w1cdf2i4fcglh",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  propagatedBuildInputs = [ compat53 argparse luafilesystem ];
+
+  meta = {
+    homepage = "https://github.com/teal-language/tl";
+    description = "Teal, a typed dialect of Lua";
+    maintainers = with lib.maintainers; [ mephistophiles ];
+    license.fullName = "MIT";
   };
 }) {};
 

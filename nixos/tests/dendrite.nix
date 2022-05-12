@@ -17,6 +17,7 @@ import ./make-test-python.nix (
           homeserver = { pkgs, ... }: {
             services.dendrite = {
               enable = true;
+              openRegistration = true;
               settings = {
                 global.server_name = "test-dendrite-server.com";
                 global.private_key = private_key;

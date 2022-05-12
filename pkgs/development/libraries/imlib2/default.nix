@@ -9,6 +9,15 @@
 # https://github.com/NixOS/nixpkgs/pull/166452#issuecomment-1090725613
 , svgSupport ? !stdenv.isDarwin
 , heifSupport ? !stdenv.isDarwin
+
+# for passthru.tests
+, libcaca
+, diffoscopeMinimal
+, feh
+, icewm
+, openbox
+, fluxbox
+, enlightenment
 }:
 
 let
@@ -42,6 +51,17 @@ stdenv.mkDerivation rec {
     ++ optional (!x11Support) "--without-x";
 
   outputs = [ "bin" "out" "dev" ];
+
+  passthru.tests = {
+    inherit
+      libcaca
+      diffoscopeMinimal
+      feh
+      icewm
+      openbox
+      fluxbox
+      enlightenment;
+  };
 
   meta = with lib; {
     description = "Image manipulation library";

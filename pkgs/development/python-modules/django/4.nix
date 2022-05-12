@@ -17,7 +17,7 @@
 
 # tests
 , aiosmtpd
-, argon2_cffi
+, argon2-cffi
 , bcrypt
 , docutils
 , geoip2
@@ -70,7 +70,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     aiosmtpd
-    argon2_cffi
+    argon2-cffi
     asgiref
     bcrypt
     docutils
