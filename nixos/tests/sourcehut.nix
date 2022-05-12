@@ -195,6 +195,7 @@ in
     # Testing metasrht
     machine.wait_for_unit("metasrht-api.service")
     machine.wait_for_unit("metasrht.service")
+    machine.wait_for_unit("metasrht-webhooks.service")
     machine.wait_for_open_port(5000)
     machine.succeed("curl -sL http://localhost:5000 | grep meta.${domain}")
     machine.succeed("curl -sL http://meta.${domain} | grep meta.${domain}")

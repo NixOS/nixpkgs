@@ -39,10 +39,6 @@ buildPythonPackage rec {
   inherit src version;
   pname = "buildsrht";
 
-  patches = [
-    # Revert change breaking Unix socket support for Redis
-    patches/redis-socket/build/0001-Revert-Add-build-submission-and-queue-monitoring.patch
-  ];
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api worker" ""

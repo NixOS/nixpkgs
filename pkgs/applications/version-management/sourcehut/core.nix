@@ -48,6 +48,8 @@ buildPythonPackage rec {
   patches = [
     # Disable check for npm
     ./disable-npm-install.patch
+    # Fix Unix socket support in RedisQueueCollector
+    patches/redis-socket/core/0001-Fix-Unix-socket-support-in-RedisQueueCollector.patch
   ];
 
   nativeBuildInputs = [

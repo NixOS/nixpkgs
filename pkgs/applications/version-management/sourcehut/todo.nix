@@ -23,15 +23,10 @@ buildPythonPackage rec {
     sha256 = "sha256-m7FY+jXpwPnK1+b1iQiDGe8JPfAFQp65BzGH6WvNwhM=";
   };
 
-  patches = [
-    # Revert change breaking Unix socket support for Redis
-    patches/redis-socket/todo/0001-Revert-Add-webhook-queue-monitoring.patch
-  ];
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api" ""
   '';
-
 
   todosrht-api = buildGoModule ({
     inherit src version;
