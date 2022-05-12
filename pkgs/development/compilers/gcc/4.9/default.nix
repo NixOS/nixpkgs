@@ -265,7 +265,7 @@ stdenv.mkDerivation ({
   ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
-  # library headers and binaries, regarless of the language being compiled.
+  # library headers and binaries, regardless of the language being compiled.
   #
   # Note: When building the Java AWT GTK peer, the build system doesn't honor
   # `--with-gmp' et al., e.g., when building
