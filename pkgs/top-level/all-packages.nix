@@ -7329,7 +7329,7 @@ with pkgs;
   jo = callPackage ../development/tools/jo { };
 
   joshuto = callPackage ../applications/misc/joshuto {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
   };
 
   jrnl = callPackage ../applications/misc/jrnl { };
