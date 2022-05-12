@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "puremagic";
-  version = "1.12";
+  version = "1.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jAuuwImSExc2KjD6yi6WeMkdXpfOAE3Gp8HGaeBUeDg=";
+    sha256 = "sha256-yaHw/pOqWLUtYoM3l/JB0JToLXdi04n0BSccRdbCVDw=";
   };
 
   # test data not included on pypi

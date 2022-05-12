@@ -1,5 +1,5 @@
 { lib, fetchzip, mkCoqDerivation, coq, flocq, compcert
-, ocamlPackages, fetchpatch, makeWrapper, coq2html
+, fetchpatch, makeWrapper, coq2html
 , stdenv, tools ? stdenv.cc
 , version ? null
 }:
@@ -15,9 +15,9 @@ let compcert = mkCoqDerivation rec {
   releaseRev = v: "v${v}";
 
   defaultVersion =  with versions; switch coq.version [
-      { case = range "8.8" "8.11"; out = "3.8"; }
+      { case = range "8.13" "8.15"; out = "3.10"; }
       { case = isEq "8.12"       ; out = "3.9"; }
-      { case = range "8.12" "8.15"; out = "3.10"; }
+      { case = range "8.8" "8.11"; out = "3.8"; }
     ] null;
 
   release = {
@@ -26,8 +26,9 @@ let compcert = mkCoqDerivation rec {
     "3.10".sha256 = "sha256:19rmx8r8v46101ij5myfrz60arqjy7q3ra3fb8mxqqi3c8c4l4j6";
   };
 
+  mlPlugin = true;
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = with ocamlPackages; [ ocaml findlib menhir menhirLib ] ++ [ coq coq2html ];
+  buildInputs = with coq.ocamlPackages; [ menhir menhirLib ] ++ [ coq2html ];
   propagatedBuildInputs = [ flocq ];
 
   enableParallelBuilding = true;
@@ -48,9 +49,13 @@ let compcert = mkCoqDerivation rec {
   '';
 
   installTargets = "documentation install";
+  installFlags = []; # trust ./configure
+  preInstall = ''
+    mkdir -p $out/share/man
+    mkdir -p $man/share
+  '';
   postInstall = ''
     # move man into place
-    mkdir -p $man/share
     mv $out/share/man/ $man/share/
 
     # move docs into place

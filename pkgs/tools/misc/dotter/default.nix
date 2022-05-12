@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, which }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, which }:
 
 rustPlatform.buildRustPackage rec {
   pname = "dotter";
@@ -12,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-JpMEC2HjAQLQiXHSE6L0HBDc0vLhd465wDK2+35aBXA=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   checkInputs = [ which ];
 

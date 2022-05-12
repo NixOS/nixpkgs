@@ -2299,6 +2299,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>phpPackages.box</literal> package has been
+          updated from 2.7.5 to 3.16.0. See the
+          <link xlink:href="https://github.com/box-project/box/blob/master/UPGRADE.md#from-27-to-30">upgrade
+          guide</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>zrepl</literal> package has been updated from
           0.4.0 to 0.5:
         </para>

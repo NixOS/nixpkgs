@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-ql",
-  "rev": "8e7fd7e638d4a0ec7a792ee16b19dbc6407aa810",
-  "date": "2021-06-02T18:46:47+02:00",
-  "path": "/nix/store/yhyi9y09shv1fm87gka43vnv9clvyd92-tree-sitter-ql",
-  "sha256": "0x5f9989ymqvw3g8acckyk4j7zpmnc667qishbgly9icl9rkmv7w",
+  "rev": "b2c2364e833cc9f1afa243ac367f1475330fef63",
+  "date": "2022-05-04T13:16:04-04:00",
+  "path": "/nix/store/8c01j930llm5wacj2727k8igwwyhbcz4-tree-sitter-ql",
+  "sha256": "1a4k4rmyqqcj94y57sf2h27bbkn921p1ifl2xwcqpmk6dr6n5bbr",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

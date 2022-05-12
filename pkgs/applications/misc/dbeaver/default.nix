@@ -73,6 +73,7 @@
       productTargetPath = "product/community/target/products/org.jkiss.dbeaver.core.product";
 
       platformMap = {
+        aarch64-darwin = "aarch64";
         aarch64-linux = "aarch64";
         x86_64-darwin = "x86_64";
         x86_64-linux  = "x86_64";
@@ -127,7 +128,7 @@
       Teradata, Firebird, Derby, etc.
     '';
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     maintainers = with maintainers; [ jojosch mkg20001 ];
   };
 }

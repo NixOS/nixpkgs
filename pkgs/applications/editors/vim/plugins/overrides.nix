@@ -293,6 +293,10 @@ self: super: {
     '';
   });
 
+  fzf-lua = super.fzf-lua.overrideAttrs (old: {
+    propagatedBuildInputs = [ fzf ];
+  });
+
   fzf-vim = super.fzf-vim.overrideAttrs (old: {
     dependencies = with self; [ fzfWrapper ];
   });

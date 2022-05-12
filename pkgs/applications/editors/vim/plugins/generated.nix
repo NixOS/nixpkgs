@@ -1384,6 +1384,18 @@ final: prev:
     meta.homepage = "https://github.com/neoclide/coc.nvim/";
   };
 
+  coconut-vim = buildVimPluginFrom2Nix {
+    pname = "coconut.vim";
+    version = "2017-10-10";
+    src = fetchFromGitHub {
+      owner = "manicmaniac";
+      repo = "coconut.vim";
+      rev = "cea47739aab9f163d240d1609e7eea326fd55072";
+      sha256 = "03rq3lpplgywvm620jzx085l74180163q8gls4gjrad2fgm9n96n";
+    };
+    meta.homepage = "https://github.com/manicmaniac/coconut.vim/";
+  };
+
   codi-vim = buildVimPluginFrom2Nix {
     pname = "codi.vim";
     version = "2022-04-30";
@@ -2564,6 +2576,18 @@ final: prev:
       sha256 = "16n78ylicrd7lh41g5hvd9vnnhkwbvj28c190k5zvrblyyhipn93";
     };
     meta.homepage = "https://github.com/gfanto/fzf-lsp.nvim/";
+  };
+
+  fzf-lua = buildVimPluginFrom2Nix {
+    pname = "fzf-lua";
+    version = "2022-05-07";
+    src = fetchFromGitHub {
+      owner = "ibhagwan";
+      repo = "fzf-lua";
+      rev = "b614a9d315512ec4ce9c1df41474e5ab8e12f7df";
+      sha256 = "0gb7q4fbv3754ck44h6dd93dcy8j4czhhna1d2kgq21614xs303k";
+    };
+    meta.homepage = "https://github.com/ibhagwan/fzf-lua/";
   };
 
   fzf-vim = buildVimPluginFrom2Nix {
