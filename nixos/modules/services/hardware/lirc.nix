@@ -19,7 +19,7 @@ in {
           [lircd]
           nodaemon = False
         '';
-        description = "LIRC default options descriped in man:lircd(8) (<filename>lirc_options.conf</filename>)";
+        description = "LIRC default options described in man:lircd(8) (<filename>lirc_options.conf</filename>)";
       };
 
       configs = mkOption {

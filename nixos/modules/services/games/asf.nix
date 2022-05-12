@@ -122,7 +122,7 @@ respectively `0` because NixOS takes care of updating everything.
           passwordFile = mkOption {
             type = types.path;
             description =
-              "Path to a file containig the password. The file must be readable by the <literal>asf</literal> user/group.";
+              "Path to a file containing the password. The file must be readable by the <literal>asf</literal> user/group.";
           };
           enabled = mkOption {
             type = types.bool;
