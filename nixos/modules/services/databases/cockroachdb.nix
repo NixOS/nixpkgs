@@ -164,7 +164,7 @@ in
         example = [ "--advertise-addr" "[fe80::f6f2:::]" ];
         description = ''
           Extra CLI arguments passed to <command>cockroach start</command>.
-          For the full list of supported argumemnts, check <link xlink:href="https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags"/>
+          For the full list of supported arguments, check <link xlink:href="https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags"/>
         '';
       };
     };

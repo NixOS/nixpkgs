@@ -54,7 +54,7 @@ in {
             InterceptUnknown = mkOption {
               type = types.bool;
               description = ''
-                Wheter to intercept spare connections.
+                Whether to intercept spare connections.
               '';
             };
 

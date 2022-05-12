@@ -684,7 +684,7 @@ http://some.json-exporter.host:7979/probe?target=https://example.com/some/json/e
           by all derivations affects by this change. Note that all
           packages that have used <literal>mpi ? null</literal> in the
           input for optional MPI builds, have been changed to the
-          boolean input paramater <literal>useMpi</literal> to enable
+          boolean input parameter <literal>useMpi</literal> to enable
           building with MPI. Building all packages with
           <literal>mpich</literal> instead of the default
           <literal>openmpi</literal> can now be achived like this:
@@ -1341,7 +1341,7 @@ self: super:
         <para>
           The <literal>security.apparmor</literal> module, for the
           <link xlink:href="https://gitlab.com/apparmor/apparmor/-/wikis/Documentation">AppArmor</link>
-          Mandatory Access Control system, has been substantialy
+          Mandatory Access Control system, has been substantially
           improved along with related tools, so that module maintainers
           can now more easily write AppArmor profiles for NixOS. The
           most notable change on the user-side is the new option

@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-RXBMb43BBiJ23X0eKC1kqgLw8iFKJnP5iejY0AWcUrU=";
   };
 
-  # Upstream splitted the project into gitlint and gitlint-core to
+  # Upstream split the project into gitlint and gitlint-core to
   # simplify the dependency handling
   sourceRoot = "source/gitlint-core";
 

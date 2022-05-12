@@ -26,7 +26,7 @@ in
 
         Can be overriden by setting <envar>NIXOS_LABEL</envar>.
 
-        Useful for not loosing track of configurations built from different
+        Useful for not losing track of configurations built from different
         nixos branches/revisions, e.g.:
 
         <screen>
@@ -47,7 +47,7 @@ in
         Strings to prefix to the default
         <option>system.nixos.label</option>.
 
-        Useful for not loosing track of configurations built with
+        Useful for not losing track of configurations built with
         different options, e.g.:
 
         <screen>
