@@ -7,7 +7,17 @@ rec {
     hash = "1yxvjvnbg4nyrdv10bq42gz6dr66pyan28lgzfygqfwy2rv24qgq";
     makeWrapper = makeBinaryWrapper;
 
-    patches = lib.optional stdenv.isDarwin ./5.4.darwin.patch;
+    patches = lib.optional stdenv.isDarwin ./5.4.darwin.patch
+      ++ [
+        (fetchpatch {
+          name = "CVE-2022-28805.patch";
+          url = "https://github.com/lua/lua/commit/1f3c6f4534c6411313361697d98d1145a1f030fa.patch";
+          sha256 = "sha256-YTwoolSnRNJIHFPVijSO6ZDw35BG5oWYralZ8qOb9y8=";
+          stripLen = 1;
+          extraPrefix = "src/";
+          excludes = [ "src/testes/*" ];
+        })
+      ];
   };
 
   lua5_4_compat = lua5_4.override({
