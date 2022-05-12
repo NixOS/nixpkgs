@@ -238,12 +238,16 @@ buildStdenv.mkDerivation ({
     # Set consistent remoting name to ensure wmclass matches with desktop file
     export MOZ_APP_REMOTINGNAME="${binaryName}"
 
-    # Use our own python
-    export MACH_USE_SYSTEM_PYTHON=1
-
     # AS=as in the environment causes build failure
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
     unset AS
+
+  '' + lib.optionalString (lib.versionAtLeast version "100.0") ''
+    # Use our own python
+    export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
+  '' + lib.optionalString (lib.versionOlder version "100.0") ''
+    # Use our own python
+    export MACH_USE_SYSTEM_PYTHON=1
 
   '' + lib.optionalString (lib.versionAtLeast version "95.0") ''
     # RBox WASM Sandboxing
