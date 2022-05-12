@@ -12,6 +12,7 @@
 , makeWrapper
 , procps
 , nixosTests
+, fetchpatch
 }:
 
 buildGoModule rec {
@@ -27,6 +28,15 @@ buildGoModule rec {
 
   vendorSha256 = null;
   outputs = [ "out" "man" ];
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/opencontainers/runc/security/advisories/GHSA-f3fp-gc8g-vw66
+      name = "CVE-2022-29162.patch";
+      url = "https://github.com/opencontainers/runc/commit/364ec0f1b4fa188ad96049c590ecb42fa70ea165.patch";
+      sha256 = "sha256-NXnM3XO+rMXIC57Gh9ovOxkfXCTsuv9MAXi2CajFurs=";
+    })
+  ];
 
   nativeBuildInputs = [ go-md2man installShellFiles makeWrapper pkg-config which ];
 
