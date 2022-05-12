@@ -21233,6 +21233,8 @@ with pkgs;
 
   yubikey-touch-detector = callPackage ../tools/security/yubikey-touch-detector { };
 
+  yubihsm-shell = callPackage ../tools/security/yubihsm-shell { };
+
   zchunk = callPackage ../development/libraries/zchunk { };
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
