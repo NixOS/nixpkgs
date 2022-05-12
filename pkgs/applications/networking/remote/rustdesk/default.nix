@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     ./cargo.patch
   ];
 
-  # Manually simulate a vcpkg installation so that it can link the libaries
+  # Manually simulate a vcpkg installation so that it can link the libraries
   # properly.
   postUnpack = let
     vcpkg_target = "x64-linux";

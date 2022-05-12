@@ -2,7 +2,7 @@ commit 164ba50fc74b980f77047080b2ae1ea099ae9b27
 Author: Emery Hemingway <ehmry@posteo.net>
 Date:   Mon Sep 7 14:09:22 2020 +0200
 
-    Load libaries by absolute path on NixOS
+    Load libraries by absolute path on NixOS
     
     If "nixbuild" is defined then choose dynamic runtime libraries by
     searching $NIX_LDFLAGS at compile-time.

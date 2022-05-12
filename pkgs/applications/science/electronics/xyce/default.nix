@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   version = "7.4.0";
 
   srcs = [
-    # useing fetchurl or fetchFromGitHub doesn't include the manuals
+    # using fetchurl or fetchFromGitHub doesn't include the manuals
     # due to .gitattributes files
     (fetchgit {
       url = "https://github.com/Xyce/Xyce.git";
