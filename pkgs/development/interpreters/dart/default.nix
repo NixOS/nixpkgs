@@ -2,7 +2,7 @@
 , lib
 , fetchurl
 , unzip
-, version ? "2.15.1"
+, version ? "2.15.2"
 , sources ? let
     base = "https://storage.googleapis.com/dart-archive/channels";
     x86_64 = "x64";
@@ -10,7 +10,7 @@
     aarch64 = "arm64";
     # Make sure that if the user overrides version parameter they're
     # also need to override sources, to avoid mistakes
-    version = "2.15.1";
+    version = "2.15.2";
   in
   {
     "${version}-aarch64-darwin" = fetchurl {
