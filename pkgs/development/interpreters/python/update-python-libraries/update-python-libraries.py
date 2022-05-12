@@ -248,7 +248,7 @@ FORMATS = {
 }
 
 def _determine_fetcher(text):
-    # Count occurences of fetchers.
+    # Count occurrences of fetchers.
     nfetchers = sum(text.count('src = {}'.format(fetcher)) for fetcher in FETCHERS.keys())
     if nfetchers == 0:
         raise ValueError("no fetcher.")

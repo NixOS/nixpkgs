@@ -3,7 +3,7 @@ addCMakeParams() {
 }
 
 fixCmakeFiles() {
-    # Replace occurences of /usr and /opt by /var/empty.
+    # Replace occurrences of /usr and /opt by /var/empty.
     echo "fixing cmake files..."
     find "$1" \( -type f -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
         while read fn; do

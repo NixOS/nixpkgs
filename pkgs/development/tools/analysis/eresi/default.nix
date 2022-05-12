@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Two occurences of fprintf() with only two arguments, which should really
+    # Two occurrences of fprintf() with only two arguments, which should really
     # be fputs().
     #
     # Upstream pull request: https://github.com/thorkill/eresi/pull/162
