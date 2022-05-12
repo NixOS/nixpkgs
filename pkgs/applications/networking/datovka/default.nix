@@ -23,7 +23,7 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
-    description = "Client application for operating Czech government-provided Databox infomation system";
+    description = "Client application for operating Czech government-provided Databox information system";
     homepage = "https://www.datovka.cz/";
     license = licenses.lgpl3;
     maintainers = [ maintainers.mmahut ];
