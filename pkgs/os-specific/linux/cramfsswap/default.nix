@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Swap endianess of a cram filesystem (cramfs)";
+    description = "Swap endianness of a cram filesystem (cramfs)";
     homepage = "https://packages.debian.org/sid/utils/cramfsswap";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
