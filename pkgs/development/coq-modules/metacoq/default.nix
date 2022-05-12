@@ -1,4 +1,4 @@
-{ lib, which, fetchzip,
+{ lib, fetchzip,
   mkCoqDerivation, recurseIntoAttrs,  single ? false,
   coqPackages, coq, equations, version ? null }@args:
 with builtins // lib;
@@ -36,10 +36,8 @@ let
       derivation = mkCoqDerivation ({
         inherit version pname defaultVersion release releaseRev repo owner;
 
-        extraNativeBuildInputs = [ which ];
         mlPlugin = true;
-        extraBuildInputs = [ coq.ocamlPackages.zarith ];
-        propagatedBuildInputs = [ equations ] ++ metacoq-deps;
+        propagatedBuildInputs = [ equations coq.ocamlPackages.zarith ] ++ metacoq-deps;
 
         patchPhase =  ''
           patchShebangs ./configure.sh
