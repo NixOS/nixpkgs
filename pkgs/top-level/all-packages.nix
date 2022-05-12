@@ -7782,6 +7782,8 @@ with pkgs;
 
   mtail = callPackage ../servers/monitoring/mtail { };
 
+  mujmap = callPackage ../applications/networking/mujmap {};
+
   multitail = callPackage ../tools/misc/multitail { };
 
   mx-puppet-discord = callPackage ../servers/mx-puppet-discord { };
