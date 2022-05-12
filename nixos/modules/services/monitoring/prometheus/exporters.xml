@@ -37,7 +37,7 @@
    by default</link>, via http under <literal>/metrics</literal>. In this
    example the firewall should just allow incoming connections to the
    exporter's port on the bridge interface <literal>br0</literal> (this would
-   have to be configured seperately of course). For more information about
+   have to be configured separately of course). For more information about
    configuration see <literal>man configuration.nix</literal> or search through
    the
    <link xlink:href="https://nixos.org/nixos/options.html#prometheus.exporters">available

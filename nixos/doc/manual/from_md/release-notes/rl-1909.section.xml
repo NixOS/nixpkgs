@@ -524,7 +524,7 @@
         <para>
           By default, prometheus exporters are now run with
           <literal>DynamicUser</literal> enabled. Exporters that need a
-          real user, now run under a seperate user and group which
+          real user, now run under a separate user and group which
           follow the pattern
           <literal>&lt;exporter-name&gt;-exporter</literal>, instead of
           the previous default <literal>nobody</literal> and
