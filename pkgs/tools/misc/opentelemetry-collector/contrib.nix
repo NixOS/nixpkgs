@@ -14,7 +14,7 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-IbpQd01uU6/Ihli+gVDjTB8T8cj//XHoZYcDjXD635Q=";
   };
-  # proxy vendor to avoid hash missmatches between linux and macOS
+  # proxy vendor to avoid hash mismatches between linux and macOS
   proxyVendor = true;
   vendorSha256 = "sha256-1svBCXfutjXfXfVqVHUTAt9T1ON/qbiS+VCt5kP/YIc=";
 
@@ -38,7 +38,7 @@ buildGoModule rec {
       need to run, operate and maintain multiple agents/collectors in order to
       support open-source telemetry data formats (e.g. Jaeger, Prometheus, etc.)
       sending to multiple open-source or commercial back-ends. The Contrib
-      edition provides aditional vendor specific receivers/exporters and/or
+      edition provides additional vendor-specific receivers/exporters and/or
       components that are only useful to a relatively small number of users and
       is multiple times larger as a result.
     '';

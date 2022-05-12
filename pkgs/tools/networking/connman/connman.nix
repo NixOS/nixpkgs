@@ -9,7 +9,7 @@
 , libmnl
 , gnutls
 , readline
-# configureable options
+# configurable options
 , firewallType ? "iptables" # or "nftables"
 , iptables ? null
 , libnftnl ? null # for nftables
