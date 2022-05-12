@@ -1,4 +1,4 @@
-# Javascript {#language-javascript}
+# JavaScript {#language-javascript}
 
 ## Introduction {#javascript-introduction}
 
@@ -85,7 +85,7 @@ you will still need to commit the modified version of the lock files, but at lea
 
 each tool has an abstraction to just build the node_modules (dependencies) directory. you can always use the stdenv.mkDerivation with the node_modules to build the package (symlink the node_modules directory and then use the package build command). the node_modules abstraction can be also used to build some web framework frontends. For an example of this see how [plausible](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix) is built. mkYarnModules to make the derivation containing node_modules. Then when building the frontend you can just symlink the node_modules directory
 
-## Javascript packages inside nixpkgs {#javascript-packages-nixpkgs}
+## JavaScript packages inside nixpkgs {#javascript-packages-nixpkgs}
 
 The `pkgs/development/node-packages` folder contains a generated collection of
 [NPM packages](https://npmjs.com/) that can be installed with the Nix package
@@ -121,7 +121,7 @@ requires `node-gyp-build`, so [we override](https://github.com/NixOS/nixpkgs/blo
     };
 ```
 
-### Adding and Updating Javascript packages in nixpkgs
+### Adding and Updating JavaScript packages in nixpkgs
 
 To add a package from NPM to nixpkgs:
 

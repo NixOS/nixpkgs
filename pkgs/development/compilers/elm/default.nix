@@ -205,7 +205,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
       elm-optimize-level-2 = nodePkgs."elm-optimize-level-2" // {
         meta = with lib; nodePkgs."elm-optimize-level-2".meta // {
-          description = "A second level of optimization for the Javascript that the Elm Compiler produces";
+          description = "A second level of optimization for the JavaScript that the Elm Compiler produces";
           homepage = "https://github.com/mdgriffith/elm-optimize-level-2";
           license = licenses.bsd3;
           maintainers = [ maintainers.turbomack ];

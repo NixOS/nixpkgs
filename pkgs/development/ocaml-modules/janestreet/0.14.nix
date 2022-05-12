@@ -881,7 +881,7 @@ with self;
     pname = "zarith_stubs_js";
     hash = "16p4bn5spkrx31fr4np945v9mwdq55706v3wl19s5fy6x83gvb86";
     minimumOCamlVersion = "4.04.2";
-    meta.description = "Javascripts stubs for the Zarith library";
+    meta.description = "JavaScript stubs for the Zarith library";
     doCheck = false; # requires workspace with zarith
   };
 

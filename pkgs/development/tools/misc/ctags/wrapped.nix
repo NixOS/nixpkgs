@@ -53,7 +53,7 @@ with pkgs.lib;
     "--regex-PHP=/function[ \\t]+([^ (]*)/\\1/f/"
   ];
 
-  # Javascript: also find unnamed functions and funtions beeing passed within a dict.
+  # JavaScript: also find unnamed functions and functions beeing passed within a dict.
   # the dict properties is used to implement duck typing in frameworks
   # var foo = function () { ... }
   # {

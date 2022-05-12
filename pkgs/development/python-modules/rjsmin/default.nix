@@ -15,6 +15,6 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "http://opensource.perlig.de/rjsmin/";
     license = licenses.asl20;
-    description = "Javascript minifier written in python";
+    description = "JavaScript minifier written in Python";
   };
 }

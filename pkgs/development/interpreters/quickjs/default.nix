@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A small and embeddable Javascript engine";
+    description = "A small and embeddable JavaScript engine";
     homepage = "https://bellard.org/quickjs/";
     maintainers = with maintainers; [ stesie AndersonTorres ];
     platforms = platforms.linux;

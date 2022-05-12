@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/cisco/cjose";
     changelog = "https://github.com/cisco/cjose/blob/${version}/CHANGELOG.md";
-    description = "C library for Javascript Object Signing and Encryption";
+    description = "C library for JavaScript Object Signing and Encryption";
     license = licenses.mit;
     maintainers = with maintainers; [ midchildan ];
     platforms = platforms.all;

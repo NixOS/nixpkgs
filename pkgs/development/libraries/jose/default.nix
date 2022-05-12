@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "C-language implementation of Javascript Object Signing and Encryption";
+    description = "C-language implementation of JavaScript Object Signing and Encryption";
     homepage = "https://github.com/latchset/jose";
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.asl20;

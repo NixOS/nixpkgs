@@ -244,14 +244,14 @@ in {
       };
 
       blacklist = mkOption {
-        description = "Any metrics received which match one of the experssions will be dropped.";
+        description = "Any metrics received which match one of the expressions will be dropped.";
         default = null;
         type = types.nullOr types.str;
         example = "^some\\.noisy\\.metric\\.prefix\\..*";
       };
 
       whitelist = mkOption {
-        description = "Only metrics received which match one of the experssions will be persisted.";
+        description = "Only metrics received which match one of the expressions will be persisted.";
         default = null;
         type = types.nullOr types.str;
         example = ".*";

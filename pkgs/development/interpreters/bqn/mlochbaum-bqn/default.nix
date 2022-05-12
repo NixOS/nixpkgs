@@ -55,7 +55,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/mlochbaum/BQN/";
-    description = "The original BQN implementation in Javascript";
+    description = "The original BQN implementation in JavaScript";
     license = licenses.isc;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.all;

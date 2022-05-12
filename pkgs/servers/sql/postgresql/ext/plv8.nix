@@ -78,7 +78,7 @@ let self = stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
+    description = "V8 Engine JavaScript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
     maintainers = with maintainers; [ volth marsam ];
     platforms = [ "x86_64-linux" ];

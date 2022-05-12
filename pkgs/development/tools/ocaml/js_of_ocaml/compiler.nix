@@ -20,7 +20,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ menhirLib yojson ];
 
   meta = {
-    description = "Compiler from OCaml bytecode to Javascript";
+    description = "Compiler from OCaml bytecode to JavaScript";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://ocsigen.org/js_of_ocaml/";
