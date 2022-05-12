@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-kXspbXySY5ridLUvAjv49Rm0RGt1fNsfNw9a3vd4hyI=";
 
-  # Test depend on git configuration that would likly exist in a normal user enviroment
+  # Test depend on git configuration that would likly exist in a normal user environment
   # and might be failing to create the test repository it works in.
   doCheck = false;
 

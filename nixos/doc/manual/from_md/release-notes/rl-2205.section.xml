@@ -675,7 +675,7 @@
           <literal>git</literal> no longer hardcodes the path to
           openssh’ ssh binary to reduce the amount of rebuilds. If you
           are using git with ssh remotes and do not have a ssh binary in
-          your enviroment consider adding <literal>openssh</literal> to
+          your environment consider adding <literal>openssh</literal> to
           it or switching to <literal>gitFull</literal>.
         </para>
       </listitem>
@@ -1487,7 +1487,7 @@
         <para>
           Some top-level settings under
           <link linkend="opt-services.epgstation.enable">services.epgstation</link>
-          is now deprecated because it was redudant due to the same
+          is now deprecated because it was redundant due to the same
           options being present in
           <link linkend="opt-services.epgstation.settings">services.epgstation.settings</link>.
         </para>
@@ -1521,7 +1521,7 @@
           Existing data for the
           <link linkend="opt-services.epgstation.enable">services.epgstation</link>
           module would have to be backed up prior to the upgrade. To
-          back up exising data to
+          back up existing data to
           <literal>/tmp/epgstation.bak</literal>, run
           <literal>sudo -u epgstation epgstation run backup /tmp/epgstation.bak</literal>.
           To import that data after to the upgrade, run
