@@ -4825,7 +4825,7 @@ with pkgs;
   agebox = callPackage ../tools/security/agebox { };
 
   age-plugin-yubikey = callPackage ../tools/security/age-plugin-yubikey {
-    inherit (pkgs.darwin.apple_sdk.frameworks) PCSC;
+    inherit (pkgs.darwin.apple_sdk.frameworks) Foundation PCSC;
   };
 
   artim-dark = callPackage ../data/themes/artim-dark {};
