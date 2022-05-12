@@ -18,9 +18,9 @@ let
       accept = mkOption {
         type = types.either types.str types.int;
         description = ''
-          On which [host:]port stunnel should listen for incoming TLS connections.
-          Note that unlike other softwares stunnel ipv6 address need no brackets,
-          so to listen on all IPv6 addresses on port 1234 one would use ':::1234'.
+          The [host:]port on which stunnel should listen for incoming TLS connections.
+          Note that stunnel does not need brackets on an IPv6 address, so to listen on
+          all IPv6 addresses on port 1234, use <literal>":::1234"</literal>.
         '';
       };
 
