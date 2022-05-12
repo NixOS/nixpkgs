@@ -30,7 +30,7 @@
   # `self` as second, and returns a set of haskell packages
   package-set
 
-, # The final, fully overriden package set usable with the nixpkgs fixpoint
+, # The final, fully overridden package set usable with the nixpkgs fixpoint
   # overriding functionality
   extensible-self
 }:

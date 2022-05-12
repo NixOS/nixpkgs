@@ -28,7 +28,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook mock ];
 
   # try to import from `test` directory, which is exported by the python interpreter
-  # and cannot be overriden without removing some py3 to py2 support
+  # and cannot be overridden without removing some py3 to py2 support
   disabledTestPaths = [
     "test/test_tsd_types.py"
     "test/test_js_client.py"

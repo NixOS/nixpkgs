@@ -839,7 +839,7 @@ rec {
         contentsList = if builtins.isList contents then contents else [ contents ];
 
         # We store the customisation layer as a tarball, to make sure that
-        # things like permissions set on 'extraCommands' are not overriden
+        # things like permissions set on 'extraCommands' are not overridden
         # by Nix. Then we precompute the sha256 for performance.
         customisationLayer = symlinkJoin {
           name = "${baseName}-customisation-layer";

@@ -631,7 +631,7 @@ _addRpathPrefix "$out"
 export TZ=UTC
 
 
-# Set the prefix.  This is generally $out, but it can be overriden,
+# Set the prefix.  This is generally $out, but it can be overridden,
 # for instance if we just want to perform a test build/install to a
 # temporary location and write a build report to $out.
 if [ -z "${prefix:-}" ]; then

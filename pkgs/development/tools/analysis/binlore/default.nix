@@ -78,7 +78,7 @@ let
       while [[ $i > 0 ]] && [[ -z "$filter" ]]; do
         if [[ -f "${overrides}/''${identifier:0:$i}" ]]; then
           filter="${overrides}/''${identifier:0:$i}"
-          echo using "${overrides}/''${identifier:0:$i}" to generate overriden binlore for $drv
+          echo using "${overrides}/''${identifier:0:$i}" to generate overridden binlore for $drv
           break
         fi
         ((i--)) || true # don't break build

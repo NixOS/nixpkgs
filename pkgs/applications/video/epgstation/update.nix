@@ -45,7 +45,7 @@ in writers.writeBash "update-epgstation" ''
     "$SRC/client/package.json" \
     > client/package.json
 
-  # Regenerate node packages to update the pre-overriden epgstation derivation.
+  # Regenerate node packages to update the pre-overridden epgstation derivation.
   # This must come *after* package.json has been regenerated.
   pushd ../../../development/node-packages
   ./generate.sh

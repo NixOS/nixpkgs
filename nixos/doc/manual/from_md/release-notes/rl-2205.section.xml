@@ -1264,7 +1264,7 @@
               derivation if <literal>name</literal> is
               <literal>&quot;vim&quot;</literal> (the default). This
               makes the <literal>wrapManual</literal> argument obsolete,
-              but this behavior can be overriden by setting the
+              but this behavior can be overridden by setting the
               <literal>standalone</literal> argument.
             </para>
           </listitem>

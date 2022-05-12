@@ -417,7 +417,7 @@ elsif ($action eq "status") {
 
 elsif ($action eq "update") {
 
-    # Unless overriden on the command line, rebuild the flake recorded
+    # Unless overridden on the command line, rebuild the flake recorded
     # in the container config file. FIXME: read the container config
     # in a more sensible way.
     if (!defined $flake && !defined $configFile && !defined $extraConfig) {

@@ -39,7 +39,7 @@ in
       '';
 
       description = ''
-        The package which contains roundcube's sources. Can be overriden to create
+        The package which contains roundcube's sources. Can be overridden to create
         an environment which contains roundcube and third-party plugins.
       '';
     };

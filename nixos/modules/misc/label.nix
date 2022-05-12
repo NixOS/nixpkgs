@@ -24,7 +24,7 @@ in
         variable (defaults to the value of
         <option>system.nixos.version</option>).
 
-        Can be overriden by setting <envar>NIXOS_LABEL</envar>.
+        Can be overridden by setting <envar>NIXOS_LABEL</envar>.
 
         Useful for not losing track of configurations built from different
         nixos branches/revisions, e.g.:

@@ -194,7 +194,7 @@ in
       internal    = true;
       description = ''
         This option defines the path to the wrapper programs. It
-        should not be overriden.
+        should not be overridden.
       '';
     };
   };

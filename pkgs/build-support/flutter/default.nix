@@ -137,7 +137,7 @@ let
       "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
     ];
 
-    # unnecessary
+    # unnecessarycode
     dontFixup = true;
 
     outputHashAlgo = if self ? vendorHash then null else "sha256";
@@ -193,7 +193,7 @@ let
   configurePhase = ''
     runHook preConfigure
 
-    # for some reason fluffychat build breaks without this - seems file gets overriden by some tool
+    # for some reason fluffychat build breaks without this - seems file gets overridden by some tool
     cp pubspec.yaml pubspec-backup
 
     # we get this from $depsFolder so disabled for now, but we might need it again once deps are fetched properly
@@ -236,7 +236,7 @@ let
   buildPhase = ''
     runHook preBuild
 
-    # for some reason fluffychat build breaks without this - seems file gets overriden by some tool
+    # for some reason fluffychat build breaks without this - seems file gets overridden by some tool
     mv pubspec-backup pubspec.yaml
     mkdir -p build/flutter_assets/fonts
 

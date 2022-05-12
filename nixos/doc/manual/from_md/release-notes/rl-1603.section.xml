@@ -545,7 +545,7 @@ nginx.override {
         <literal>services.udev.extraRules</literal> option now writes
         rules to <literal>99-local.rules</literal> instead of
         <literal>10-local.rules</literal>. This makes all the user rules
-        apply after others, so their results wouldn't be overriden by
+        apply after others, so their results wouldn't be overridden by
         anything else.
       </para>
     </listitem>

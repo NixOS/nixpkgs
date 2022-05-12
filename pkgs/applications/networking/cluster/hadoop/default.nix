@@ -119,7 +119,7 @@ in
     sha256.x86_64-linux = "1hxq297cqvkfgz2yfdiwa3l28g44i2abv5921k2d6b4pqd33prwp";
     jdk = jdk8_headless;
     # not using native libs because of broken openssl_1_0_2 dependency
-    # can be manually overriden
+    # can be manually overridden
     tests = nixosTests.hadoop_3_2;
   };
   hadoop2 = common rec {

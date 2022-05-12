@@ -7,7 +7,7 @@
 , features
 , versionAttr
 , sourceSha256
-# If overriden. No need to set default values, as they are given defaults in
+# If overridden. No need to set default values, as they are given defaults in
 # the main expressions
 , overrideSrc
 , fetchFromGitHub

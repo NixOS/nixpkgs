@@ -23850,7 +23850,7 @@ let
       sha256 = "d513fbb51413f7ca1e64a1bdce6194df7ec6076dea55066d67b950191eec32a9";
     };
     meta = {
-      description = "Tied hash with specific methods overriden by callbacks";
+      description = "Tied hash with specific methods overridden by callbacks";
       license = with lib.licenses; [ artistic1 ];
     };
   };

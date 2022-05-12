@@ -296,7 +296,7 @@ stdenv.mkDerivation rec {
   # Script to create deps.nix file for dotnet dependencies. Run it with
   # $(nix-build -A github-runner.passthru.createDepsFile)/bin/create-deps-file
   #
-  # Default output path is /tmp/${pname}-deps.nix, but can be overriden with cli argument.
+  # Default output path is /tmp/${pname}-deps.nix, but can be overridden with cli argument.
   #
   # Inspired by passthru.fetch-deps in pkgs/build-support/build-dotnet-module/default.nix
   passthru.createDepsFile = writeShellApplication {

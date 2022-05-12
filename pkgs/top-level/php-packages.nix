@@ -62,7 +62,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # source, based on the php version.
   #
   # Name passed is the name of the extension and is automatically used
-  # to add the configureFlag "--enable-${name}", which can be overriden.
+  # to add the configureFlag "--enable-${name}", which can be overridden.
   #
   # Build inputs is used for extra deps that may be needed. And zendExtension
   # will mark the extension as a zend extension or not.
