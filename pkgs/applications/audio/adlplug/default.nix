@@ -117,9 +117,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withJack jack;
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir $out/Applications
+    mkdir -p $out/{Applications,Library/Audio/Plug-Ins/{VST,Components}}
+
     mv $out/bin/${mainProgram}.app $out/Applications/
     ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}/${mainProgram}
+
+    mv vst2/${mainProgram}.vst $out/Library/Audio/Plug-Ins/VST/
+    mv au/${mainProgram}.component $out/Library/Audio/Plug-Ins/Components/
   '';
 
   meta = with lib; {
