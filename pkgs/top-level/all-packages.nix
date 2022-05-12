@@ -21165,6 +21165,8 @@ with pkgs;
 
   xgboost = callPackage ../development/libraries/xgboost { };
 
+  xgboostWithCuda = xgboost.override { cudaSupport = true; };
+
   xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
 
   # Avoid using this. It isn't really a wrapper anymore, but we keep the name.
