@@ -17,7 +17,7 @@ buildPythonPackage rec {
   # no tests
   doCheck = false;
 
-  # circular depedency with ruamel-yaml
+  # circular dependency with ruamel-yaml
   # pythonImportsCheck = [ "_ruamel_yaml" ];
 
   meta = with lib; {

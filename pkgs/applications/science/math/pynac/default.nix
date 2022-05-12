@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     description = "Python is Not a CAS -- modified version of Ginac";
     longDescription = ''
       Pynac -- "Python is Not a CAS" is a modified version of Ginac that
-      replaces the depency of GiNaC on CLN by a dependency instead of Python.
+      replaces the dependency of GiNaC on CLN by a dependency instead of Python.
       It is a lite version of GiNaC as well, not implementing all the features
       of the full GiNaC, and it is *only* meant to be used as a Python library.
     '';

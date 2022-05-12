@@ -29,7 +29,7 @@ EOF
   '';
 
   meta = with lib; {
-    description = "Toolkit to provide interface for various SAT (without optional dependancy py-aiger-cnf)";
+    description = "Toolkit to provide interface for various SAT (without optional dependency py-aiger-cnf)";
     homepage = "https://github.com/pysathq/pysat";
     license = licenses.mit;
     maintainers = [ maintainers.marius851000 ];
