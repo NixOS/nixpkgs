@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitLab, libcap_ng, libseccomp }:
+{ lib, stdenv, rustPlatform, fetchFromGitLab, libcap_ng, libseccomp }:
 
 rustPlatform.buildRustPackage rec {
   pname = "virtiofsd";
@@ -12,6 +12,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0ma3kaaa4bl11015gxijwzyxhixz947k8byaypmmw0dj9m1vhv77";
+
+  LIBCAPNG_LIB_PATH = "${lib.getLib libcap_ng}/lib";
+  LIBCAPNG_LINK_TYPE =
+    if stdenv.hostPlatform.isStatic then "static" else "dylib";
 
   buildInputs = [ libcap_ng libseccomp ];
 
