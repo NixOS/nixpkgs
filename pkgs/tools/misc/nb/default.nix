@@ -1,7 +1,8 @@
 { stdenv, lib, fetchFromGitHub, installShellFiles }:
+
 stdenv.mkDerivation rec {
-  version = "6.10.1";
   pname = "nb";
+  version = "6.10.1";
 
   src = fetchFromGitHub {
     owner = "xwmx";
@@ -17,7 +18,6 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin/
     mv nb $out/bin/
-    
     runHook postInstall
   '';
 
