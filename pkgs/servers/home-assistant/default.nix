@@ -326,7 +326,7 @@ in python.pkgs.buildPythonApplication rec {
   preCheck = ''
     export HOME="$TEMPDIR"
 
-    # the tests require the existance of a media dir
+    # the tests require the existence of a media dir
     mkdir /build/media
 
     # put ping binary into PATH, e.g. for wake_on_lan tests

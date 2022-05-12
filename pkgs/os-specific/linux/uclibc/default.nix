@@ -103,7 +103,7 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    # Derivations may check for the existance of this attribute, to know what to link to.
+    # Derivations may check for the existence of this attribute, to know what to link to.
     libiconv = libiconvReal;
   };
 

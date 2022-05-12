@@ -51,7 +51,7 @@ rec {
       linker =
         /**/ if final.useLLVM or false      then "lld"
         else if final.isDarwin              then "cctools"
-        # "bfd" and "gold" both come from GNU binutils. The existance of Gold
+        # "bfd" and "gold" both come from GNU binutils. The existence of Gold
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
