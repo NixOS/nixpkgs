@@ -23,6 +23,7 @@
 # build time
 , autoconf
 , cargo
+, dump_syms
 , makeWrapper
 , nodejs
 , perl
@@ -168,6 +169,11 @@ buildStdenv.mkDerivation ({
 
   inherit src unpackPhase meta;
 
+  outputs = [
+    "out"
+    "symbols"
+  ];
+
   # Add another configure-build-profiling run before the final configure phase if we build with pgo
   preConfigurePhases = lib.optionals pgoSupport [
     "configurePhase"
@@ -196,6 +202,7 @@ buildStdenv.mkDerivation ({
   nativeBuildInputs = [
     autoconf
     cargo
+    dump_syms
     llvmPackages.llvm # llvm-objdump
     makeWrapper
     nodejs
@@ -408,7 +415,13 @@ buildStdenv.mkDerivation ({
   # tests were disabled in configureFlags
   doCheck = false;
 
+  # Generate build symbols once after the final build
+  # https://firefox-source-docs.mozilla.org/crash-reporting/uploading_symbol.html
   preInstall = ''
+    ./mach buildsymbols
+    mkdir -p $symbols/
+    cp mozobj/dist/*.crashreporter-symbols.zip $symbols/
+
     cd mozobj
   '';
 
