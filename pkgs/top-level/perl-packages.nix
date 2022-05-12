@@ -20790,7 +20790,7 @@ let
       sha256 = "0786319d3a3a8bae5d727939244bf17e140b714f52734d5e9f627203e4cf3e3b";
     };
     meta = {
-      description = "Memory informations";
+      description = "Query the total free and used physical memory";
       maintainers = [ maintainers.pSub ];
       license = with lib.licenses; [ gpl2Plus ];
     };
