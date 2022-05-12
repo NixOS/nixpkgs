@@ -20135,9 +20135,7 @@ with pkgs;
 
   protozero = callPackage ../development/libraries/protozero { };
 
-  flatbuffers = flatbuffers_2_0;
-  flatbuffers_2_0 = callPackage ../development/libraries/flatbuffers/2.0.nix { };
-  flatbuffers_1_12 = callPackage ../development/libraries/flatbuffers/1.12.nix { };
+  flatbuffers = callPackage ../development/libraries/flatbuffers { };
 
   nanopb = callPackage ../development/libraries/nanopb { };
 
