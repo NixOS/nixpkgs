@@ -15,15 +15,26 @@
 , nixosTests
 }:
 
-buildGoModule rec {
+let
+  # requires >= 10.13 SDK https://github.com/NixOS/nixpkgs/issues/101229
+  # Undefined symbols for architecture x86_64: "_utimensat"
+  attrs = if stdenv.isDarwin then {
+    version = "4.0.3";
+    sha256 = "sha256-o/CIs+3LnbaUUpOQI1hijrxH7f1qBnrQw56TJ18jKQw=";
+  } else {
+    version = "4.1.0";
+    sha256 = "sha256-3MR4ZhkhMLAK3KHu7JEV9z1/wlyCkxfx1i267TGxwt8=";
+  };
+
+in buildGoModule {
   pname = "podman";
-  version = "4.1.0";
+  inherit (attrs) version;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
-    rev = "v${version}";
-    sha256 = "sha256-3MR4ZhkhMLAK3KHu7JEV9z1/wlyCkxfx1i267TGxwt8=";
+    rev = "v${attrs.version}";
+    inherit (attrs) sha256;
   };
 
   vendorSha256 = null;
@@ -97,8 +108,5 @@ buildGoModule rec {
     changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
-    # requires >= 10.13 SDK https://github.com/NixOS/nixpkgs/issues/101229
-    # Undefined symbols for architecture x86_64: "_utimensat"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
