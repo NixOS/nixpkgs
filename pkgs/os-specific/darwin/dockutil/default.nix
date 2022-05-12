@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "dockutil";
@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     rev    = version;
     sha256 = "sha256-8tDkueCTCtvxc7owp3K9Tsrn4hL79CM04zBNv7AcHgA=";
   };
+
+  postPatch = ''
+    substituteInPlace scripts/dockutil \
+      --replace '/usr/bin/python' '${python2}/bin/python'
+  '';
 
   dontBuild = true;
 
