@@ -123,7 +123,7 @@ in
           };
         };
         description = ''
-          Extra settings merged in and overwritting defaults in sddm.conf.
+          Extra settings merged in, overwriting the defaults in sddm.conf.
         '';
       };
 

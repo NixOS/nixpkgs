@@ -362,7 +362,7 @@ in {
     };
 
     systemd.services.bookstack-setup = {
-      description = "Preperation tasks for BookStack";
+      description = "Preparation tasks for BookStack";
       before = [ "phpfpm-bookstack.service" ];
       after = optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];

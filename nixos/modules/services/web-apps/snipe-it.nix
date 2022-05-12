@@ -384,7 +384,7 @@ in {
     };
 
     systemd.services.snipe-it-setup = {
-      description = "Preperation tasks for snipe-it";
+      description = "Preparation tasks for snipe-it";
       before = [ "phpfpm-snipe-it.service" ];
       after = optional db.createLocally "mysql.service";
       wantedBy = [ "multi-user.target" ];

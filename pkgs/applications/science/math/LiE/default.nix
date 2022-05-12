@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   pname = "lie";
 
   meta = {
-    description = "A Computer algebra package for Lie group computations";
+    description = "A computer algebra package for Lie group computations";
     homepage = "http://wwwmathlabo.univ-poitiers.fr/~maavl/LiE/";
     license = lib.licenses.lgpl3; # see the website
 

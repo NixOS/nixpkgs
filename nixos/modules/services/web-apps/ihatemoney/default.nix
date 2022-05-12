@@ -68,7 +68,7 @@ in
         example = {
           http = ":8000";
         };
-        description = "Additionnal configuration of the UWSGI vassal running ihatemoney. It should notably specify on which interfaces and ports the vassal should listen.";
+        description = "Additional configuration of the UWSGI vassal running ihatemoney. It should notably specify on which interfaces and ports the vassal should listen.";
       };
       defaultSender = {
         name = mkOption {
