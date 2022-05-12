@@ -6470,6 +6470,8 @@ in {
 
   palettable = callPackage ../development/python-modules/palettable { };
 
+  pallets-sphinx-themes = callPackage ../development/python-modules/pallets-sphinx-themes { };
+
   pamela = callPackage ../development/python-modules/pamela { };
 
   pamqp = callPackage ../development/python-modules/pamqp { };
