@@ -1304,7 +1304,7 @@ self: super:
       <listitem>
         <para>
           In the ACME module, the data used to build the hash for the
-          account directory has changed to accomodate new features to
+          account directory has changed to accommodate new features to
           reduce account rate limit issues. This will trigger new
           account creation on the first rebuild following this update.
           No issues are expected to arise from this, thanks to the new

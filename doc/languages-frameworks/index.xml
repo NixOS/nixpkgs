@@ -3,7 +3,7 @@
          xml:id="chap-language-support">
  <title>Languages and frameworks</title>
  <para>
-  The <link linkend="chap-stdenv">standard build environment</link> makes it easy to build typical Autotools-based packages with very little code. Any other kind of package can be accomodated by overriding the appropriate phases of <literal>stdenv</literal>. However, there are specialised functions in Nixpkgs to easily build packages for other programming languages, such as Perl or Haskell. These are described in this chapter.
+  The <link linkend="chap-stdenv">standard build environment</link> makes it easy to build typical Autotools-based packages with very little code. Any other kind of package can be accommodated by overriding the appropriate phases of <literal>stdenv</literal>. However, there are specialised functions in Nixpkgs to easily build packages for other programming languages, such as Perl or Haskell. These are described in this chapter.
  </para>
  <xi:include href="agda.section.xml" />
  <xi:include href="android.section.xml" />

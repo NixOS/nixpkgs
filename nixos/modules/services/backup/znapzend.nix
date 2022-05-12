@@ -268,7 +268,7 @@ let
 
   mkSrcAttrs = srcCfg: with srcCfg; {
     enabled = onOff enable;
-    # mbuffer is not referenced by its full path to accomodate non-NixOS systems or differing mbuffer versions between source and target
+    # mbuffer is not referenced by its full path to accommodate non-NixOS systems or differing mbuffer versions between source and target
     mbuffer = with mbuffer; if enable then "mbuffer"
         + optionalString (port != null) ":${toString port}" else "off";
     mbuffer_size = mbuffer.size;

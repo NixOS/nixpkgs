@@ -13,7 +13,7 @@
 assert qt4Support -> qt4 != null;
 
 let
-  # despite the configure script claiming it supports $PKG_CONFIG, it doesnt respect it
+  # despite the configure script claiming it supports $PKG_CONFIG, it doesn't respect it
   pkg-config-helper = writeShellScriptBin "pkg-config" ''exec $PKG_CONFIG "$@"'';
 in
 

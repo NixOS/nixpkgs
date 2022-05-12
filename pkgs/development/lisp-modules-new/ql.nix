@@ -68,7 +68,7 @@ let
       nativeLibs = [ libuv ];
     };
     cl-liballegro = pkg: {
-      # build doesnt fail without this, but fails on runtime
+      # build doesn't fail without this, but fails on runtime
       # weird...
       nativeLibs = [ allegro5 ];
     };
