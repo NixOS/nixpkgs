@@ -2432,6 +2432,8 @@ in {
     inherit (pkgs) dlib;
   };
 
+  dlinfo = callPackage ../development/python-modules/dlinfo { };
+
   dlx = callPackage ../development/python-modules/dlx { };
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
