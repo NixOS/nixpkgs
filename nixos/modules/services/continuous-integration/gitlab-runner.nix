@@ -218,8 +218,8 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Finish all remaining jobs before stopping.
-        If not set gitlab-runner will stop immediatly without waiting
+        Whether to finish all remaining jobs before stopping.
+        If false, gitlab-runner will stop immediately without waiting
         for jobs to finish, which will lead to failed builds.
       '';
     };
