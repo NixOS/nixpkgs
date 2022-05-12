@@ -107,7 +107,7 @@ let
       # installPhase. This prevents asdf from referring to uncompiled
       # systems on run time.
       #
-      # Also useful when the pname is differrent than the system name,
+      # Also useful when the pname is different than the system name,
       # such as when using reverse domain naming.
       systems ? [ pname ],
 

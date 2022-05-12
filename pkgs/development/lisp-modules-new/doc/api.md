@@ -76,7 +76,7 @@ Some libraries have multiple systems under one project, for example,
 to the Nix store. This prevents ASDF from referring to uncompiled
 systems on run time.
 
-Also useful when the `pname` is differrent than the system name, such
+Also useful when the `pname` is different than the system name, such
 as when using [reverse domain naming]. (see `jzon` ->
 `com.inuoe.jzon`)
 

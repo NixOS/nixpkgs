@@ -16,7 +16,7 @@ let
   # Used by builds that would otherwise attempt to write into storeDir.
   #
   # Will run build two times, keeping all files created during the
-  # first run, exept the FASL's. Then using that directory tree as the
+  # first run, except the FASL's. Then using that directory tree as the
   # source of the second run.
   #
   # E.g. cl-unicode creating .txt files during compilation

@@ -744,7 +744,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "realtime collaborative visual editor with zero knowlege server";
+      description = "realtime collaborative visual editor with zero knowledge server";
       license = "AGPL-3.0+";
     };
     production = true;
