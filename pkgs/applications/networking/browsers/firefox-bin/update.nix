@@ -31,16 +31,16 @@ in writeScript "update-${pname}" ''
   tmpfile=`mktemp`
   url=${baseUrl}
 
-  # retriving latest released version
-  #  - extracts all links from the $url
-  #  - removes . and ..
-  #  - this line remove everything not starting with a number
-  #  - this line sorts everything with semver in mind
-  #  - we remove lines that are mentioning funnelcake
-  #  - this line removes beta version if we are looking for final release
-  #    versions or removes release versions if we are looking for beta
+  # retrieve latest released version
+  #  - extract all links from the $url
+  #  - remove . and ..
+  #  - remove everything not starting with a number
+  #  - sort everything with semver in mind
+  #  - remove lines that mention funnelcake
+  #  - remove beta version if we are looking for the final release
+  #    versions, or remove release versions if we are looking for beta
   #    versions
-  # - this line pick up latest release
+  # - pick the latest release
   version=`xidel -s $url --extract "//a" | \
            sed s"/.$//" | \
            grep "^[0-9]" | \
@@ -63,11 +63,11 @@ in writeScript "update-${pname}" ''
     sources = [
   EOF
   for arch in linux-x86_64 linux-i686; do
-    # retriving a list of all tarballs for each arch
+    # retrieve a list of all tarballs for each arch
     #  - only select tarballs for current arch
     #  - only select tarballs for current version
-    #  - rename space with colon so that for loop doesnt
-    #  - inteprets sha and path as 2 lines
+    #  - replace space with colon so that for loop doesn't
+    #    intepret sha and path as 2 lines
     for line in `echo "$shasums" | \
                  grep $arch | \
                  grep "${baseName}-$version.tar.bz2$" | \
