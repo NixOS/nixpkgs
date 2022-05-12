@@ -39,7 +39,7 @@ bundlerApp {
 
   postBuild = ''
     wrapProgram $out/bin/image_optim \
-      --prefix PATH : ${makeBinPath optionalDepsPath}
+      --prefix PATH : ${lib.escapeShellArg (makeBinPath optionalDepsPath)}
   '';
 
   passthru.updateScript = bundlerUpdateScript "image_optim";
