@@ -130,7 +130,7 @@ in
 
 
       servers = mkOption {
-        description = "Define the server configuations.";
+        description = "Define the server configurations.";
         type = with types; attrsOf (submodule serverConfig);
         example = {
           fancyWebserver = {
