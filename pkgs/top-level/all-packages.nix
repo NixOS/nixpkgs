@@ -26246,7 +26246,7 @@ with pkgs;
     };
   };
   gnuradioPackages = lib.recurseIntoAttrs gnuradio.pkgs;
-  # A build without gui components and other utilites not needed for end user
+  # A build without gui components and other utilities not needed for end user
   # libraries
   gnuradioMinimal = gnuradio.override {
     doWrap = false;
@@ -26278,7 +26278,7 @@ with pkgs;
     };
   };
   gnuradio3_9Packages = lib.recurseIntoAttrs gnuradio.pkgs;
-  # A build without gui components and other utilites not needed for end user
+  # A build without gui components and other utilities not needed for end user
   # libraries
   gnuradio3_9Minimal = gnuradio.override {
     doWrap = false;
@@ -26310,7 +26310,7 @@ with pkgs;
     };
   };
   gnuradio3_8Packages = lib.recurseIntoAttrs gnuradio3_8.pkgs;
-  # A build without gui components and other utilites not needed if gnuradio is
+  # A build without gui components and other utilities not needed if gnuradio is
   # used as a c++ library.
   gnuradio3_8Minimal = gnuradio3_8.override {
     doWrap = false;
