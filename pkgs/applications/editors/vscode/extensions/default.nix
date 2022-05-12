@@ -1657,7 +1657,6 @@ let
           version = "2.4.3";
           sha256 = "a4f3ee915d0b67f645a7943e3bb321b822b93f1d453f2d44373976d51a3b2850";
         };
-        buildInputs = [];
         meta = {
           license = lib.licenses.asl20;
         };
