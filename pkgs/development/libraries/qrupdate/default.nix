@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # Check that blas and lapack are compatible
     assert (blas.isILP64 == lapack.isILP64);
   # We don't have structuredAttrs yet implemented, and we need to use space
-  # seprated values in makeFlags, so only this works.
+  # separated values in makeFlags, so only this works.
   ''
     makeFlagsArray+=(
       "LAPACK=-L${lapack}/lib -llapack"
