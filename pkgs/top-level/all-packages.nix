@@ -6079,7 +6079,9 @@ with pkgs;
 
   gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
 
-  garage = callPackage ../tools/filesystems/garage { };
+  garage = callPackage ../tools/filesystems/garage {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin {};
 
@@ -14146,7 +14148,9 @@ with pkgs;
 
   clips = callPackage ../development/interpreters/clips { };
 
-  cliscord = callPackage ../misc/cliscord { };
+  cliscord = callPackage ../misc/cliscord {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   clisp = callPackage ../development/interpreters/clisp { };
   clisp-tip = callPackage ../development/interpreters/clisp/hg.nix { };
