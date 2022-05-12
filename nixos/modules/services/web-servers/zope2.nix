@@ -95,7 +95,7 @@ in
           };
         }
       '';
-      description = "zope2 instances to be created automaticaly by the system.";
+      description = "zope2 instances to be created automatically by the system.";
     };
   };
 
