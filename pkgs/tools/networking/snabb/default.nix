@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Snabb Switch is a LuaJIT-based toolkit for writing high-speed
       packet networking code (such as routing, switching, firewalling,
-      and so on). It includes both a scripting inteface for creating
+      and so on). It includes both a scripting interface for creating
       new applications and also some built-in applications that are
       ready to run.
       It is especially intended for ISPs and other network operators.

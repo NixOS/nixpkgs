@@ -63,7 +63,7 @@ in
 
       description = ''
         Listen addresses for this virtual host.
-        Compared to <literal>listen</literal> this only sets the addreses
+        Compared to <literal>listen</literal> this only sets the addresses
         and the ports are chosen automatically.
       '';
       default = [ "*" ];

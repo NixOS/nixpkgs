@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/wangyu-/tinyfecVPN";
-    description = "A VPN Designed for Lossy Links, with Build-in Forward Error Correction(FEC) Support";
+    description = "A VPN designed for lossy links, with built-in forward error correction (FEC) support";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ petabyteboy ];
