@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+, nginx-doc
 
 , nixosTests
 , substituteAll, gd, geoip, perl
@@ -23,6 +24,7 @@
 , preConfigure ? ""
 , postInstall ? null
 , meta ? null
+, nginx-doc ? outer.nginx-doc
 , passthru ? { tests = {}; }
 }:
 
@@ -43,6 +45,8 @@ stdenv.mkDerivation {
   inherit pname;
   inherit version;
   inherit nginxVersion;
+
+  outputs = ["out" "doc"];
 
   src = if src != null then src else fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
@@ -114,8 +118,12 @@ stdenv.mkDerivation {
 
   configurePlatforms = [];
 
-  preConfigure = preConfigure
-    + concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
+  # Disable _multioutConfig hook which adds --bindir=$out/bin into configureFlags,
+  # which breaks build, since nginx does not actually use autoconf.
+  preConfigure = ''
+    setOutputFlags=
+  '' + preConfigure
+     + concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules;
 
   patches = map fixPatch ([
     (substituteAll {
@@ -144,6 +152,11 @@ stdenv.mkDerivation {
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
 
   enableParallelBuilding = true;
+
+  preInstall = ''
+    mkdir -p $doc
+    cp -r ${nginx-doc}/* $doc
+  '';
 
   postInstall = if postInstall != null then postInstall else ''
     mv $out/sbin $out/bin

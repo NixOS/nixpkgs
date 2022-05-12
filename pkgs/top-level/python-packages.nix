@@ -2514,6 +2514,8 @@ in {
 
   dparse = callPackage ../development/python-modules/dparse { };
 
+  dparse2 = callPackage ../development/python-modules/dparse2 { };
+
   dpath = callPackage ../development/python-modules/dpath { };
 
   dpkt = callPackage ../development/python-modules/dpkt { };
@@ -5368,7 +5370,7 @@ in {
 
   monosat = pkgs.monosat.python {
     inherit buildPythonPackage;
-    inherit (self) cython;
+    inherit (self) cython pytestCheckHook;
   };
 
   monotonic = callPackage ../development/python-modules/monotonic { };
@@ -5526,6 +5528,8 @@ in {
   nameparser = callPackage ../development/python-modules/nameparser { };
 
   names = callPackage ../development/python-modules/names { };
+
+  name-that-hash = callPackage ../development/python-modules/name-that-hash { };
 
   nampa = callPackage ../development/python-modules/nampa { };
 
@@ -8477,6 +8481,8 @@ in {
   python-pushover = callPackage ../development/python-modules/pushover { };
 
   python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
+
+  python-rabbitair = callPackage ../development/python-modules/python-rabbitair { };
 
   python-redis-lock = callPackage ../development/python-modules/python-redis-lock { };
 

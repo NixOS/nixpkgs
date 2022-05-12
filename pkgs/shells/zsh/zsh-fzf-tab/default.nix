@@ -16,8 +16,6 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
   buildInputs = [ ncurses ];
 
-  patches = lib.optionals stdenv.isDarwin [ ./darwin.patch ];
-
   postConfigure = ''
     pushd modules
     ./configure --disable-gdbm --without-tcsetpgrp
