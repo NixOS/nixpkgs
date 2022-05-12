@@ -193,7 +193,7 @@ lib.attrsets.setAttrByPath [ "a" "b" ] 3
   </variablelist>
 
   <example xml:id="function-library-lib.attrsets.getAttrPath-example-success">
-   <title>Succesfully getting a value from an attribute set</title>
+   <title>Successfully getting a value from an attribute set</title>
 <programlisting><![CDATA[
 lib.attrsets.getAttrFromPath [ "a" "b" ] { a = { b = 3; }; }
 => 3

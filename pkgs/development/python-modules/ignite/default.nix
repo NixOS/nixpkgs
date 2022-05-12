@@ -26,7 +26,7 @@ buildPythonPackage rec {
   checkInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];
   propagatedBuildInputs = [ pytorch scikit-learn tqdm ];
 
-  # runs succesfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
+  # runs successfully in 3.9, however, async isn't correctly closed so it will fail after test suite.
   doCheck = pythonOlder "3.9";
 
   # Some packages are not in NixPkgs; other tests try to build distributed

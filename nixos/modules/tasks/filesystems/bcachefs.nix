@@ -16,7 +16,7 @@ let
         local path="$2"
         if bcachefs unlock -c $path > /dev/null 2> /dev/null; then    # test for encryption
             prompt $name
-            until bcachefs unlock $path 2> /dev/null; do              # repeat until sucessfully unlocked
+            until bcachefs unlock $path 2> /dev/null; do              # repeat until successfully unlocked
                 printf "unlocking failed!\n"
                 prompt $name
             done

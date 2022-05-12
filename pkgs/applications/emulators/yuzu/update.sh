@@ -57,7 +57,7 @@ updateMainline() {
 
     NEW_MAINLINE_HASH="$(nix-prefetch-git --quiet --fetch-submodules --rev "mainline-0-${NEW_MAINLINE_VERSION}" "https://github.com/yuzu-emu/yuzu-mainline" | jq -r '.sha256')"
 
-    echo "  Succesfully fetched. hash: ${NEW_MAINLINE_HASH}"
+    echo "  Successfully fetched. hash: ${NEW_MAINLINE_HASH}"
 
     sed -i "s/${OLD_MAINLINE_VERSION}/${NEW_MAINLINE_VERSION}/" ./default.nix
     sed -i "s/${OLD_MAINLINE_HASH}/${NEW_MAINLINE_HASH}/" ./default.nix
@@ -82,7 +82,7 @@ updateEarlyAccess() {
 
     NEW_EA_HASH="$(nix-prefetch-git --quiet --fetch-submodules --rev "EA-${NEW_EA_VERSION}" "https://github.com/pineappleEA/pineapple-src" | jq -r '.sha256')"
 
-    echo "  Succesfully fetched. hash: ${NEW_EA_HASH}"
+    echo "  Successfully fetched. hash: ${NEW_EA_HASH}"
 
     sed -i "s/${OLD_EA_VERSION}/${NEW_EA_VERSION}/" ./default.nix
     sed -i "s/${OLD_EA_HASH}/${NEW_EA_HASH}/" ./default.nix

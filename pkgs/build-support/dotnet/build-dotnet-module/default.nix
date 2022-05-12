@@ -140,7 +140,7 @@ in stdenvNoCC.mkDerivation (args // {
 
       echo "Writing lockfile..."
       ${nuget-to-nix}/bin/nuget-to-nix "$HOME/nuget_pkgs" > "$deps_file"
-      echo "Succesfully wrote lockfile to: $deps_file"
+      echo "Successfully wrote lockfile to: $deps_file"
     '';
   } // args.passthru or {};
 })

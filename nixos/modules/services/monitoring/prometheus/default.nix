@@ -1621,7 +1621,7 @@ in
 
         The following property holds: switching to a configuration
         (<literal>switch-to-configuration</literal>) that changes the prometheus
-        configuration only finishes successully when prometheus has finished
+        configuration only finishes successfully when prometheus has finished
         loading the new configuration.
       '';
     };
