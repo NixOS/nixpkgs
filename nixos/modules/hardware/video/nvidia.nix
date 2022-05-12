@@ -231,6 +231,11 @@ in
         );
         message = "Required files for driver based power management don't exist.";
       }
+
+      {
+        assertion = cfg.open -> (cfg.package ? open && cfg.package ? firmware);
+        message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver";
+      }
     ];
 
     # If Optimus/PRIME is enabled, we:
