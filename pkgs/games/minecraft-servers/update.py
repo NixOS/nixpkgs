@@ -67,7 +67,7 @@ class Version(DataClassJsonMixin):
         """
         If the version has a server download available, return the Download
         object for the server download. If the version does not have a server
-        download avilable, return None.
+        download available, return None.
         """
         downloads = self.get_downloads()
         if "server" in downloads:

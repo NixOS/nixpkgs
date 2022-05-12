@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ flex bison qt4 libX11 gperf adms ] ++ kernels;
 
   preConfigure = ''
-    # Make custom kernels avaible from qucs-s
+    # Make custom kernels available from qucs-s
     gappsWrapperArgs+=(--prefix PATH ":" ${lib.makeBinPath kernels})
   '';
 

@@ -34,7 +34,7 @@
 , buildPackages
 }:
 
-assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is avaliable
+assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is available
 assert gbmSupport || waylandSupport || x11Support;
 
 let

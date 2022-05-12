@@ -97,7 +97,7 @@ let
       done <   <(find . -type d -print0)
 
       pushd ..
-      # IPC tests need aleth avaliable, so we disable it
+      # IPC tests need aleth available, so we disable it
       sed -i "s/IPC_ENABLED=true/IPC_ENABLED=false\nIPC_FLAGS=\"--no-ipc\"/" ./scripts/tests.sh
       for i in ./scripts/*.sh ./scripts/*.py ./test/*.sh ./test/*.py; do
         patchShebangs "$i"

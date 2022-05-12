@@ -21,7 +21,7 @@ let
   homepage = "http://www.bay12games.com/dwarves/";
 
   # Map Dwarf Fortress platform names to Nixpkgs platform names.
-  # Other srcs are avilable like 32-bit mac & win, but I have only
+  # Other srcs are available like 32-bit mac & win, but I have only
   # included the ones most likely to be needed by Nixpkgs users.
   platforms = {
     x86_64-linux = "linux";

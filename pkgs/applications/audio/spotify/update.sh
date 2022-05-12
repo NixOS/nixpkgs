@@ -3,7 +3,7 @@
 
 
 # executing this script without arguments will
-# - find the newest stable spotify version avaiable on snapcraft (https://snapcraft.io/spotify)
+# - find the newest stable spotify version available on snapcraft (https://snapcraft.io/spotify)
 # - read the current spotify version from the current nix expression
 # - update the nix expression if the versions differ
 # - try to build the updated version, exit if that fails
@@ -24,7 +24,7 @@ spotify_nix="$nixpkgs/pkgs/applications/audio/spotify/default.nix"
 
 
 #
-# find the newest stable spotify version avaiable on snapcraft
+# find the newest stable spotify version available on snapcraft
 #
 
 # create bash array from snap info

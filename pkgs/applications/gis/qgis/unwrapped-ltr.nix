@@ -137,7 +137,7 @@ in mkDerivation rec {
     ++ lib.optional withGrass "-DGRASS_PREFIX7=${grass}/grass78";
 
   postFixup = lib.optionalString withGrass ''
-    # grass has to be availble on the command line even though we baked in
+    # grass has to be available on the command line even though we baked in
     # the path at build time using GRASS_PREFIX
     wrapProgram $out/bin/qgis \
       --prefix PATH : ${lib.makeBinPath [ grass ]}

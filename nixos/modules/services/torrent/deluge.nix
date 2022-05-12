@@ -66,7 +66,7 @@ in {
             <literal>true</literal>. String values must be quoted, integer and
             boolean values must not. See
             <link xlink:href="https://git.deluge-torrent.org/deluge/tree/deluge/core/preferencesmanager.py#n41"/>
-            for the availaible options.
+            for the available options.
           '';
         };
 
