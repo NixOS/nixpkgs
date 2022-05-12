@@ -399,8 +399,8 @@ in {
 
       passwordFile = mkOption {
         description = ''
-          File that containts the database password.
-          This option is mutual exclusive with the password option.
+          File that contains the database password.
+          This option is mutually exclusive with the password option.
         '';
         default = null;
         type = types.nullOr types.path;

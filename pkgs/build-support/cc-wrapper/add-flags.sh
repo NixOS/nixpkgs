@@ -76,7 +76,7 @@ if [ -e @out@/nix-support/cc-cflags-before ]; then
 fi
 
 # Only add darwin min version flag if a default darwin min version is set,
-# which is a signal that we're targetting darwin.
+# which is a signal that we're targeting darwin.
 if [ "@darwinMinVersion@" ]; then
     mangleVarSingle @darwinMinVersionVariable@ ${role_suffixes[@]+"${role_suffixes[@]}"}
 

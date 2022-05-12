@@ -55,7 +55,7 @@ in
             passwordFile = mkOption {
               type = types.str;
               default = "";
-              description = "File that containts password";
+              description = "File that contains password";
             };
 
           };
@@ -92,7 +92,7 @@ in
         passwordFile = mkOption {
           type = types.str;
           default = "";
-          description = "File that containts password";
+          description = "File that contains password";
         };
       };
 
