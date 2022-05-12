@@ -223,16 +223,12 @@ let
 
       # Run patchelf to make the programs refer to the copied libraries.
       find $out/bin $out/lib -type f | while read i; do
-        if ! test -L $i; then
-          nuke-refs -e $out $i
-        fi
+        nuke-refs -e $out $i
       done
 
       find $out/bin -type f | while read i; do
-        if ! test -L $i; then
-          echo "patching $i..."
-          patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
-        fi
+        echo "patching $i..."
+        patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
       done
 
       if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
