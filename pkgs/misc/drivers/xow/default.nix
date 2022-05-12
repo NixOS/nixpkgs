@@ -1,4 +1,4 @@
-{ lib, stdenv, cabextract, fetchurl, fetchFromGitHub, libusb1 }:
+{ lib, stdenv, fetchFromGitHub, libusb1, xow_dongle-firmware }:
 
 stdenv.mkDerivation rec {
   pname = "xow";
@@ -11,11 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "0q5nr21p4dlx2a99hiivwz6qj9anrqqsdhiz6xi375yqkxis4251";
   };
 
-  firmware = fetchurl {
-    url = "http://download.windowsupdate.com/c/msdownload/update/driver/drvs/2017/07/1cd6a87c-623f-4407-a52d-c31be49e925c_e19f60808bdcbfbd3c3df6be3e71ffc52e43261e.cab";
-    sha256 = "013g1zngxffavqrk5jy934q3bdhsv6z05ilfixdn8dj0zy26lwv5";
-  };
-
   makeFlags = [
     "BUILD=RELEASE"
     "VERSION=${version}-${src.rev}"
@@ -24,15 +19,10 @@ stdenv.mkDerivation rec {
     "MODLDIR=${placeholder "out"}/lib/modules-load.d"
     "MODPDIR=${placeholder "out"}/lib/modprobe.d"
     "SYSDDIR=${placeholder "out"}/lib/systemd/system"
+    "FIRMWARE=${xow_dongle-firmware}/lib/firmware/xow_dongle.bin"
   ];
 
-  postUnpack = ''
-    cabextract -F FW_ACC_00U.bin ${firmware}
-    mv FW_ACC_00U.bin source/firmware.bin
-  '';
-
   enableParallelBuilding = true;
-  nativeBuildInputs = [ cabextract ];
   buildInputs = [ libusb1 ];
 
   meta = with lib; {
