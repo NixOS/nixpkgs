@@ -61,16 +61,16 @@ stdenv.mkDerivation rec {
     # rabbitmq-env calls to sed/coreutils, so provide everything early
     sed -i $out/sbin/rabbitmq-env -e '2s|^|PATH=${runtimePath}\''${PATH:+:}\$PATH/\n|'
 
-    # We know exactly where rabbitmq is gonna be, so we patch that into the env-script.
+    # We know the output directory, so we patch that into the env-script.
     # By doing it early we make sure that auto-detection for this will
     # never be executed (somewhere below in the script).
     sed -i $out/sbin/rabbitmq-env -e "2s|^|RABBITMQ_SCRIPTS_DIR=$out/sbin\n|"
 
-    # there’s a few stray files that belong into share
+    # there are a few stray files that belong in share/
     mkdir -p $doc/share/doc/rabbitmq-server
     mv $out/LICENSE* $doc/share/doc/rabbitmq-server
 
-    # and an unecessarily copied INSTALL file
+    # and an unnecessarily copied INSTALL file
     rm $out/INSTALL
   '';
 
