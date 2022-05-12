@@ -8666,6 +8666,8 @@ with pkgs;
 
   nomino = callPackage ../tools/misc/nomino { };
 
+  nb = callPackage ../tools/misc/nb { };
+
   notable = callPackage ../applications/misc/notable { };
 
   nth = with python3Packages; toPythonApplication name-that-hash;
