@@ -10,6 +10,7 @@ buildGoModule rec {
     rev = version;
     sha256 = "FQ64tSZN55QpXjMZITzlWOPTKSgnoCpkRngQUQHVavc=";
   };
+
   vendorSha256 = "kVBzdJk/1LvjdUtLqHAw9ZxDfCo3mBWVMYG/nQXpDrk=";
 
   patches = [
@@ -18,12 +19,12 @@ buildGoModule rec {
     ./lockfile-fix.patch
   ];
 
-  buildInputs = [
-    libusb1
-  ];
-
   nativeBuildInputs = [
     pkg-config
+  ];
+
+  buildInputs = [
+    libusb1
   ];
 
   preBuild = ''
