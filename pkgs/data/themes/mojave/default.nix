@@ -16,6 +16,7 @@
 , opacityVariants ? [] # default to all
 , themeVariants ? [] # default to MacOS blue
 , wallpapers ? false
+, gitUpdater
 }:
 
 let
@@ -113,6 +114,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {inherit pname version; };
 
   meta = with lib; {
     description = "Mac OSX Mojave like theme for GTK based desktop environments";
