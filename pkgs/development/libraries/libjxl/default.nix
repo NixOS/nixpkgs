@@ -32,6 +32,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # present in master, see https://github.com/libjxl/libjxl/pull/1403
+    (fetchpatch {
+      name = "prefixless-pkg-config.patch";
+      url = "https://github.com/libjxl/libjxl/commit/0b906564bfbfd8507d61c5d6a447f545f893227c.patch";
+      sha256 = "1g5c6lrsmgxb9j64pjy8lbdgbvw834m5jyfivy9ppmd8iiv0kkq4";
+    })
+
     # present in master, remove after 0.7?
     (fetchpatch {
       name = "fix-link-lld-macho.patch";
@@ -108,16 +115,6 @@ stdenv.mkDerivation rec {
     # * the `gimp` one, which allows GIMP to load jpeg-xl files
     # "-DJPEGXL_ENABLE_PLUGINS=ON"
   ];
-
-  # https://github.com/libjxl/libjxl/issues/1400
-  postPatch = ''
-    substituteInPlace lib/jxl/libjxl.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-    substituteInPlace lib/threads/libjxl_threads.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-  '';
 
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 
