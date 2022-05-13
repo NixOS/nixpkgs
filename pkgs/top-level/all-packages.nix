@@ -16220,6 +16220,8 @@ with pkgs;
 
   spruce = callPackage ../development/tools/misc/spruce {};
 
+  sqlc = callPackage ../development/tools/database/sqlc { };
+
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
 
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
