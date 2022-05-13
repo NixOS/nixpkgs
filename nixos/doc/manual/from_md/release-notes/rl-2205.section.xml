@@ -2446,6 +2446,14 @@ cp /var/lib/redis/dump.rdb &quot;/var/lib/redis-mastodon/dump.rdb&quot;
       </listitem>
       <listitem>
         <para>
+          <literal>mercury</literal> was updated to 22.01.1, which has
+          some breaking changes
+          (<link xlink:href="https://dl.mercurylang.org/release/release-notes-22.01.html">Mercury
+          22.01 news</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           xfsprogs was update to version 5.15, which enables inobtcount
           and bigtime by default on filesystem creation. Support for
           these features was added in kernel 5.10 and deemed stable in
