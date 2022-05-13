@@ -997,6 +997,7 @@ with pkgs;
 
   arc_unpacker = callPackage ../tools/archivers/arc_unpacker {
     boost = boost16x; # checkPhase fails with Boost 1.77
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
   };
 
   adminer = callPackage ../servers/adminer { };
