@@ -1,5 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
+, installShellFiles
 , lib
 , testers
 , kubevirt
@@ -7,13 +8,13 @@
 
 buildGoModule rec {
   pname = "kubevirt";
-  version = "0.52.0";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "kubevirt";
     repo = "kubevirt";
     rev = "v${version}";
-    sha256 = "0ldc13nypbk3r9ihbdfibpyvzyzz4m68zzb7g6cq551ks9qdiyma";
+    sha256 = "11581mp4fjqmpy3zn9mjq651ijsxmffz9vpvbn4b5gcs9xzgr1fw";
   };
 
   vendorSha256 = null;
@@ -27,6 +28,15 @@ buildGoModule rec {
     "-X kubevirt.io/client-go/version.gitTreeState=clean"
     "-X kubevirt.io/client-go/version.gitVersion=v${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd virtctl \
+      --bash <($out/bin/virtctl completion bash) \
+      --fish <($out/bin/virtctl completion fish) \
+      --zsh <($out/bin/virtctl completion zsh)
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = kubevirt;

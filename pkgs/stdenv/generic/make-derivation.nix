@@ -135,6 +135,8 @@ makeOverlayable (overrideAttrs:
 , # TODO(@Ericson2314): Make always true and remove
   strictDeps ? if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform
 
+, enableParallelBuilding ? config.enableParallelBuildingByDefault
+
 , meta ? {}
 , passthru ? {}
 , pos ? # position used in error messages and for meta.position
@@ -383,7 +385,7 @@ else let
           llvm-config = 'llvm-config-native'
         '';
       in [ "--cross-file=${crossFile}" ] ++ mesonFlags;
-    } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
+    } // lib.optionalAttrs (enableParallelBuilding) {
       enableParallelChecking = attrs.enableParallelChecking or true;
     } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
