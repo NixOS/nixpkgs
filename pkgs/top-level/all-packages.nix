@@ -2967,6 +2967,8 @@ with pkgs;
 
   cli-visualizer = callPackage ../applications/misc/cli-visualizer { };
 
+  cliam = callPackage ../tools/security/cliam { };
+
   clickclack = callPackage ../tools/misc/clickclack { };
 
   clickgen = with python3Packages; toPythonApplication clickgen;
