@@ -20136,19 +20136,10 @@ with pkgs;
   protobuf = protobuf3_19;
 
   protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix { };
-  protobuf3_18 = callPackage ../development/libraries/protobuf/3.18.nix { };
   protobuf3_17 = callPackage ../development/libraries/protobuf/3.17.nix { };
-  protobuf3_16 = callPackage ../development/libraries/protobuf/3.16.nix { };
-  protobuf3_15 = callPackage ../development/libraries/protobuf/3.15.nix { };
-  protobuf3_14 = callPackage ../development/libraries/protobuf/3.14.nix { };
-  protobuf3_13 = callPackage ../development/libraries/protobuf/3.13.nix { };
-  protobuf3_12 = callPackage ../development/libraries/protobuf/3.12.nix { };
   protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };
-  protobuf3_10 = callPackage ../development/libraries/protobuf/3.10.nix { };
-  protobuf3_9 = callPackage ../development/libraries/protobuf/3.9.nix { };
   protobuf3_8 = callPackage ../development/libraries/protobuf/3.8.nix { };
   protobuf3_7 = callPackage ../development/libraries/protobuf/3.7.nix { };
-  protobuf3_6 = callPackage ../development/libraries/protobuf/3.6.nix { };
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
