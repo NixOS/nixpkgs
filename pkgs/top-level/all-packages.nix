@@ -33190,7 +33190,9 @@ with pkgs;
 
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {};
 
-  aspino = callPackage ../applications/science/logic/aspino {};
+  aspino = callPackage ../applications/science/logic/aspino {
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+  };
 
   beluga = callPackage ../applications/science/logic/beluga {};
 
