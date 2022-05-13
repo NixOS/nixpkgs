@@ -6,7 +6,8 @@
 , pkg-config
 , wayland
 , wayland-protocols
-, fetchurl
+, fetchpatch
+, wayland-scanner
 }:
 
 stdenv.mkDerivation {
@@ -20,17 +21,18 @@ stdenv.mkDerivation {
     sha256 = "1fz0sajhdjqas3l6mpik8w1k15wbv65hgh9r9vdgfqvw5l6cx7jv";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-protocols ];
-
-  buildInputs = [ wayland ];
-
   patches = [
     # https://github.com/progandy/wdomirror/pull/7
-    (fetchurl {
+    (fetchpatch {
       url = "https://github.com/progandy/wdomirror/commit/142632208e9ea2b4a4ebd784532efdb8cad7b87c.patch";
-      hash = "sha256-z6/8q2vOtmlGFbDVG5BVWWbLQT8kBvJXT9/oZkWS9gw=";
+      hash = "sha256-MG71IEwRAjjacAkRoB7Tn45+FbY7LAqTDkVJkoWuQUU=";
     })
   ];
+
+  strictDeps = true;
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+
+  buildInputs = [ wayland wayland-protocols ];
 
   installPhase = ''
     runHook preInstall

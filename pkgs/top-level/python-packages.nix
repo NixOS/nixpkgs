@@ -2773,6 +2773,8 @@ in {
 
   evohome-async = callPackage ../development/python-modules/evohome-async { };
 
+  evtx = callPackage ../development/python-modules/evtx { };
+
   ewmh = callPackage ../development/python-modules/ewmh { };
 
   exdown = callPackage ../development/python-modules/exdown { };

@@ -11,9 +11,11 @@ with lib; mkCoqDerivation {
   ] null;
   release."1.7.0".sha256 = "sha256:1a1q9x2abx71hqvjdai3n12jxzd49mhf3nqqh3ya2ssl2lj609ci";
   release."1.3.0".sha256 = "1yp7ca36jyl9kz35ghxig45x6cd0bny2bpmy058359p94wc617ax";
+  extraNativeBuildInputs = (with coq.ocamlPackages; [ cppo zarith ]);
+  propagatedBuildInputs = [ coq-ext-lib ]
+  ++ (with coq.ocamlPackages; [ ocaml ocamlbuild ]);
+
   mlPlugin = true;
-  nativeBuildInputs = [ coq.ocamlPackages.cppo ];
-  propagatedBuildInputs = [ coq-ext-lib coq.ocamlPackages.ocamlbuild ];
 
   doCheck = true;
   checkTarget = "test";

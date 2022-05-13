@@ -21,6 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/maximbaz/yubikey-touch-detector";
     maintainers = with maintainers; [ sumnerevans ];
     license = licenses.isc;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
