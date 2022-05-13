@@ -65,6 +65,7 @@
 , xorg
 , zip
 , zlib
+, pkgsBuildBuild
 
 # optionals
 
@@ -139,16 +140,21 @@ let
 
   # Target the LLVM version that rustc is built with for LTO.
   llvmPackages0 = rustc.llvmPackages;
+  llvmPackagesBuildBuild0 = pkgsBuildBuild.rustc.llvmPackages;
 
   # Force the use of lld and other llvm tools for LTO
   llvmPackages = llvmPackages0.override {
     bootBintoolsNoLibc = null;
     bootBintools = null;
   };
+  llvmPackagesBuildBuild = llvmPackagesBuildBuild0.override {
+    bootBintoolsNoLibc = null;
+    bootBintools = null;
+  };
 
   # LTO requires LLVM bintools including ld.lld and llvm-ar.
   buildStdenv = overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
-    inherit (llvmPackages) bintools;
+    bintools = if ltoSupport then buildPackages.rustc.llvmPackages.bintools else stdenv.cc.bintools;
   });
 
   # Compile the wasm32 sysroot to build the RLBox Sandbox
@@ -193,10 +199,15 @@ buildStdenv.mkDerivation ({
   # two patches.
   patchFlags = [ "-p1" "-l" ];
 
+  # if not explicitly set, wrong cc from buildStdenv would be used
+  HOST_CC = "${llvmPackagesBuildBuild.stdenv.cc}/bin/cc";
+  HOST_CXX = "${llvmPackagesBuildBuild.stdenv.cc}/bin/c++";
+
   nativeBuildInputs = [
     autoconf
     cargo
-    llvmPackages.llvm # llvm-objdump
+    gnum4
+    llvmPackagesBuildBuild.bintools
     makeWrapper
     nodejs
     perl
@@ -273,13 +284,16 @@ buildStdenv.mkDerivation ({
     export MOZILLA_OFFICIAL=1
   '';
 
+  # firefox has a different definition of configurePlatforms from nixpkgs, see configureFlags
+  configurePlatforms = [ ];
+
   configureFlags = [
     "--disable-tests"
     "--disable-updater"
     "--enable-application=${application}"
     "--enable-default-toolkit=cairo-gtk3${lib.optionalString waylandSupport "-wayland"}"
     "--enable-system-pixman"
-    "--with-libclang-path=${llvmPackages.libclang.lib}/lib"
+    "--with-libclang-path=${llvmPackagesBuildBuild.libclang.lib}/lib"
     "--with-system-ffi"
     "--with-system-icu"
     "--with-system-jpeg"
@@ -290,6 +304,9 @@ buildStdenv.mkDerivation ({
     "--with-system-png" # needs APNG support
     "--with-system-webp"
     "--with-system-zlib"
+    # for firefox, host is buildPlatform, target is hostPlatform
+    "--host=${buildStdenv.buildPlatform.config}"
+    "--target=${buildStdenv.hostPlatform.config}"
   ]
   # LTO is done using clang and lld on Linux.
   ++ lib.optionals ltoSupport [
@@ -332,7 +349,6 @@ buildStdenv.mkDerivation ({
     fontconfig
     freetype
     glib
-    gnum4
     gtk3
     icu
     libffi
