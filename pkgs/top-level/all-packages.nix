@@ -2311,6 +2311,8 @@ with pkgs;
 
   harvid = callPackage ../tools/video/harvid { };
 
+  headset = callPackage ../applications/audio/headset { };
+
   hilbish = callPackage ../shells/hilbish { };
 
   hime = callPackage ../tools/inputmethods/hime {};
