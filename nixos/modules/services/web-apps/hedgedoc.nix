@@ -1023,6 +1023,7 @@ in
       '';
       serviceConfig = {
         WorkingDirectory = cfg.workDir;
+        StateDirectory = [ cfg.workDir cfg.configuration.uploadsPath ];
         ExecStart = "${cfg.package}/bin/hedgedoc";
         EnvironmentFile = mkIf (cfg.environmentFile != null) [ cfg.environmentFile ];
         Environment = [
