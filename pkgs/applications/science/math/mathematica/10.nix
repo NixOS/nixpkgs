@@ -1,21 +1,30 @@
-{ lib, stdenv
-, coreutils
+{ lib
 , patchelf
 , requireFile
-, lang, meta, name, src, version
+, stdenv
+# arguments from default.nix
+, lang
+, meta
+, name
+, src
+, version
+# dependencies
 , alsa-lib
+, coreutils
+, cudaPackages
 , fontconfig
 , freetype
 , gcc
 , glib
+, libuuid
+, libxml2
 , ncurses
 , opencv2
 , openssl
 , unixODBC
 , xorg
-, libxml2
-, libuuid
-, cudaSupport, cudaPackages
+# options
+, cudaSupport
 }:
 
 let

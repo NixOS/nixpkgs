@@ -1,14 +1,17 @@
 { lib
+, patchelf
+, requireFile
 , stdenv
+# arguments from default.nix
 , lang
 , meta
 , name
 , src
 , version
-, coreutils
-, patchelf
-, requireFile
+# dependencies
 , alsa-lib
+, coreutils
+, cudaPackages
 , fontconfig
 , freetype
 , gcc
@@ -18,8 +21,8 @@
 , openssl
 , unixODBC
 , xorg
+# options
 , cudaSupport
-, cudaPackages
 }:
 
 let

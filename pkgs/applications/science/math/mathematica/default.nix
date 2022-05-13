@@ -1,7 +1,8 @@
 { callPackage
+, config
 , lib
 , cudaPackages
-, cudaSupport ? false
+, cudaSupport ? config.cudaSupport or false
 , lang ? "en"
 , version ? null
 }:
@@ -9,7 +10,7 @@
 let versions = callPackage ./versions.nix { };
 
     matching-versions =
-      lib.sort compareVersions (lib.filter
+      lib.sort (v1: v2: lib.versionAtLeast v1.version v2.version) (lib.filter
         (v: v.lang == lang
             && (if version == null then true else isMatching v.version version))
         versions);
@@ -25,10 +26,6 @@ let versions = callPackage ./versions.nix { };
     real-drv = if lib.pathExists specific-drv
                then specific-drv
                else ./generic.nix;
-
-    compareVersions = v1: v2:
-      let f = v: map lib.toInt (lib.versions.splitVersion v.version);
-      in lib.compareLists lib.compare (f v1) (f v2) > 0;
 
     isMatching = v1: v2:
       let as      = lib.splitVersion v1;

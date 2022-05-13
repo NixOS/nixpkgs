@@ -1,19 +1,26 @@
-{ lib, stdenv
-, coreutils
+{ lib
 , patchelf
 , requireFile
-, callPackage
+, stdenv
+# arguments from default.nix
 , lang
 , meta
 , name
 , src
 , version
+# dependencies
 , alsa-lib
+, coreutils
+, cudaPackages
 , dbus
 , fontconfig
 , freetype
 , gcc
 , glib
+, libGL
+, libGLU
+, libuuid
+, libxml2
 , ncurses
 , opencv2
 , openssl
@@ -21,12 +28,8 @@
 , xkeyboard_config
 , xorg
 , zlib
-, libxml2
-, libuuid
-, lang ? "en"
-, libGL
-, libGLU
-, cudaSupport, cudaPackages
+# options
+, cudaSupport
 }:
 
 stdenv.mkDerivation rec {

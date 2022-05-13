@@ -1,15 +1,18 @@
-{ lib
-, stdenv
-, addOpenGLRunpath
+{ addOpenGLRunpath
 , autoPatchelfHook
+, lib
 , makeWrapper
-, meta
-, name
 , requireFile
 , runCommand
-, src
+, stdenv
 , symlinkJoin
+# arguments from default.nix
+, lang
+, meta
+, name
+, src
 , version
+# dependencies
 , alsa-lib
 , cudaPackages
 , cups
@@ -41,8 +44,8 @@
 , xkeyboard_config
 , xorg
 , zlib
-, cudaSupport ? false
-, lang ? "en"
+# options
+, cudaSupport
 }:
 
 let cudaEnv = symlinkJoin {
