@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "karton-core";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-TwTq44l/Nx+FQ6tFZHat4SPGOmHSwYfg7ShbGnxpkVw=";
+    sha256 = "sha256-smgKrFexuL0bgt/1Ikm1tpSGPJNJm7Ko68iZn3AQw5E=";
   };
 
   propagatedBuildInputs = [ minio redis ];
