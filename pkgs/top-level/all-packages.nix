@@ -967,8 +967,7 @@ with pkgs;
   addlicense = callPackage ../tools/misc/addlicense { };
 
   adlplug = callPackage ../applications/audio/adlplug {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreServices WebKit DiscRecording;
+    inherit (darwin.apple_sdk.frameworks) Foundation Cocoa Carbon CoreServices ApplicationServices CoreAudio CoreMIDI AudioToolbox Accelerate CoreImage IOKit AudioUnit QuartzCore WebKit DiscRecording CoreAudioKit;
     jack = libjack2;
   };
   opnplug = adlplug.override {
@@ -2559,6 +2558,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  bao = callPackage ../tools/security/bao {};
+
   bar = callPackage ../tools/system/bar {};
 
   base16-shell-preview = callPackage ../misc/base16-shell-preview { };
@@ -2946,6 +2947,8 @@ with pkgs;
   cli53 = callPackage ../tools/admin/cli53 { };
 
   cli-visualizer = callPackage ../applications/misc/cli-visualizer { };
+
+  cliam = callPackage ../tools/security/cliam { };
 
   clickclack = callPackage ../tools/misc/clickclack { };
 
@@ -5362,6 +5365,8 @@ with pkgs;
   epubcheck = callPackage ../tools/text/epubcheck { };
 
   evil-winrm = callPackage ../tools/security/evil-winrm { };
+
+  evtx = callPackage ../tools/security/evtx { };
 
   luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
     ssh = openssh;
@@ -16199,6 +16204,8 @@ with pkgs;
 
   spruce = callPackage ../development/tools/misc/spruce {};
 
+  sqlc = callPackage ../development/tools/database/sqlc { };
+
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
 
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
@@ -17834,8 +17841,7 @@ with pkgs;
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
-  inherit (callPackage ../development/tools/misc/hydra { })
-    hydra-unstable;
+  hydra_unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nixVersions.nix_2_6; };
 
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
@@ -31077,8 +31083,6 @@ with pkgs;
   charge-lnd = callPackage ../applications/blockchains/charge-lnd { };
 
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
-
-  dashpay = callPackage ../applications/blockchains/dashpay { };
 
   dcrd = callPackage ../applications/blockchains/dcrd { };
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };

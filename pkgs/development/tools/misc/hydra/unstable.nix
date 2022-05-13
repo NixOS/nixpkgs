@@ -1,29 +1,61 @@
-{ stdenv, nix, perlPackages, buildEnv
-, makeWrapper, autoconf, automake, libtool, unzip, pkg-config, sqlite, libpqxx_6
-, top-git, mercurial, darcs, subversion, breezy, openssl, bzip2, libxslt
-, perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
-, docbook_xsl, openssh, gnused, coreutils, findutils, gzip, xz, gnutar
-, rpm, dpkg, cdrkit, pixz, lib, boost, autoreconfHook, src ? null, version ? null
-, migration ? false, patches ? []
-, tests ? {}, mdbook
+{ stdenv
+, lib
+, nix
+, perlPackages
+, buildEnv
+, makeWrapper
+, autoconf
+, automake
+, libtool
+, unzip
+, pkg-config
+, sqlite
+, libpqxx_6
+, top-git
+, mercurial
+, darcs
+, subversion
+, breezy
+, openssl
+, bzip2
+, libxslt
+, perl
+, postgresql
+, nukeReferences
+, git
+, boehmgc
+, nlohmann_json
+, docbook_xsl
+, openssh
+, gnused
+, coreutils
+, findutils
+, gzip
+, xz
+, gnutar
+, rpm
+, dpkg
+, cdrkit
+, pixz
+, boost
+, autoreconfHook
+, mdbook
 , foreman
 , python3
 , libressl
 , cacert
 , glibcLocales
+, fetchFromGitHub
+, fetchpatch
+, nixosTests
 }:
-
-with stdenv;
-
-if lib.versions.major nix.version == "1"
-  then throw "This Hydra version doesn't support Nix 1.x"
-else
 
 let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
     paths = with perlPackages; lib.closePropagation
-      [ ModulePluggable
+      [
+        ModulePluggable
         AuthenSASL
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -92,15 +124,37 @@ let
         git
       ];
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "hydra";
+  version = "2022-02-07";
 
-  inherit stdenv src version patches;
+  src = fetchFromGitHub {
+    owner = "NixOS";
+    repo = "hydra";
+    rev = "517dce285a851efd732affc084c7083aed2e98cd";
+    sha256 = "sha256-abWhd/VLNse3Gz7gcVbFANJLAhHV4nbOKjhVDmq/Zmg=";
+  };
 
   buildInputs =
-    [ makeWrapper libtool unzip nukeReferences sqlite libpqxx_6
-      top-git mercurial darcs subversion breezy openssl bzip2 libxslt
-      perlDeps perl nix
+    [
+      makeWrapper
+      libtool
+      unzip
+      nukeReferences
+      sqlite
+      libpqxx_6
+      top-git
+      mercurial
+      darcs
+      subversion
+      breezy
+      openssl
+      bzip2
+      libxslt
+      perlDeps
+      perl
+      nix
       postgresql # for running the tests
       nlohmann_json
       boost
@@ -108,9 +162,26 @@ in stdenv.mkDerivation rec {
     ];
 
   hydraPath = lib.makeBinPath (
-    [ sqlite subversion openssh nix coreutils findutils pixz
-      gzip bzip2 xz gnutar unzip git top-git mercurial /*darcs*/ gnused breezy
-    ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
+    [
+      sqlite
+      subversion
+      openssh
+      nix
+      coreutils
+      findutils
+      pixz
+      gzip
+      bzip2
+      xz
+      gnutar
+      unzip
+      git
+      top-git
+      mercurial /*darcs*/
+      gnused
+      breezy
+    ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ]
+  );
 
   nativeBuildInputs = [ autoreconfHook pkg-config mdbook autoconf automake ];
 
@@ -120,6 +191,15 @@ in stdenv.mkDerivation rec {
     glibcLocales
     python3
     libressl.nc
+  ];
+
+  patches = [
+    ./eval.patch
+    ./missing-std-string.patch
+    (fetchpatch {
+      url = "https://github.com/NixOS/hydra/commit/5ae26aa7604f714dcc73edcb74fe71ddc8957f6c.patch";
+      sha256 = "sha256-wkbWo8SFbT3qwVxwkKQWpQT5Jgb1Bb51yiLTlFdDN/I=";
+    })
   ];
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
@@ -158,7 +238,10 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru = { inherit perlDeps migration tests; };
+  passthru = {
+    inherit perlDeps;
+    tests.basic = nixosTests.hydra.hydra_unstable;
+  };
 
   meta = with lib; {
     description = "Nix-based continuous build system";

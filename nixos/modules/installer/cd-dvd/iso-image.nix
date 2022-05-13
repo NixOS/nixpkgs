@@ -369,10 +369,10 @@ let
     ${lib.optionalString (refindBinary != null) ''
     # GRUB apparently cannot do "chainloader" operations on "CD".
     if [ "\$root" != "cd0" ]; then
-      # Force root to be the FAT partition
-      # Otherwise it breaks rEFInd's boot
-      search --set=root --no-floppy --fs-uuid 1234-5678
       menuentry 'rEFInd' --class refind {
+        # Force root to be the FAT partition
+        # Otherwise it breaks rEFInd's boot
+        search --set=root --no-floppy --fs-uuid 1234-5678
         chainloader (\$root)/EFI/boot/${refindBinary}
       }
     fi
@@ -400,10 +400,8 @@ let
     #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
     ''
       mkdir ./contents && cd ./contents
-      cp -rp "${efiDir}"/EFI .
-      mkdir ./boot
-      cp -p "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}" \
-        "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
+      mkdir -p ./EFI/boot
+      cp -rp "${efiDir}"/EFI/boot/{grub.cfg,*.efi} ./EFI/boot
 
       # Rewrite dates for everything in the FS
       find . -exec touch --date=2000-01-01 {} +
@@ -421,11 +419,11 @@ let
       faketime "2000-01-01 00:00:00" mkfs.vfat -i 12345678 -n EFIBOOT "$out"
 
       # Force a fixed order in mcopy for better determinism, and avoid file globbing
-      for d in $(find EFI boot -type d | sort); do
+      for d in $(find EFI -type d | sort); do
         faketime "2000-01-01 00:00:00" mmd -i "$out" "::/$d"
       done
 
-      for f in $(find EFI boot -type f | sort); do
+      for f in $(find EFI -type f | sort); do
         mcopy -pvm -i "$out" "$f" "::/$f"
       done
 

@@ -10,9 +10,9 @@
 # See the documentation at doc/languages-frameworks/coq.section.md.        #
 ############################################################################
 
-{ lib, ncurses, graphviz, lua, fetchzip,
+{ lib, ncurses, which, graphviz, lua, fetchzip,
   mkCoqDerivation, recurseIntoAttrs, withDoc ? false, single ? false,
-  coqPackages, coq, version ? null }@args:
+  coqPackages, coq, ocamlPackages, version ? null }@args:
 with builtins // lib;
 let
   repo  = "math-comp";
@@ -60,9 +60,8 @@ let
         inherit version pname defaultVersion release releaseRev repo owner;
 
         mlPlugin = versions.isLe "8.6" coq.coq-version;
-        nativeBuildInputs = optionals withDoc [ graphviz lua ];
-        buildInputs = [ ncurses ];
-        propagatedBuildInputs = mathcomp-deps;
+        extraNativeBuildInputs = [ which ] ++ optionals withDoc [ graphviz lua ];
+        extraBuildInputs = [ ncurses ] ++ mathcomp-deps;
 
         buildFlags = optional withDoc "doc";
 
