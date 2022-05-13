@@ -1132,6 +1132,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-cmdline/";
   };
 
+  cmp-cmdline-history = buildVimPluginFrom2Nix {
+    pname = "cmp-cmdline-history";
+    version = "2022-05-04";
+    src = fetchFromGitHub {
+      owner = "dmitmel";
+      repo = "cmp-cmdline-history";
+      rev = "003573b72d4635ce636234a826fa8c4ba2895ffe";
+      sha256 = "1v2xyspm7k9jmnzbfg0js15c6sha7ravf4lddsk85icdw16fxji1";
+    };
+    meta.homepage = "https://github.com/dmitmel/cmp-cmdline-history/";
+  };
+
   cmp-conjure = buildVimPluginFrom2Nix {
     pname = "cmp-conjure";
     version = "2021-10-09";
