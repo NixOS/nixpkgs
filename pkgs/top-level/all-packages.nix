@@ -31103,8 +31103,6 @@ with pkgs;
 
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
 
-  dashpay = callPackage ../applications/blockchains/dashpay { };
-
   dcrd = callPackage ../applications/blockchains/dcrd { };
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
 

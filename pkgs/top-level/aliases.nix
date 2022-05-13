@@ -285,6 +285,7 @@ mapAliases ({
   dart_old = throw "Non-stable versions of Dart have been removed"; # Added 2020-01-15
   dart_stable = dart; # Added 2020-01-15
   dat = nodePackages.dat;
+  dashpay = throw "'dashpay' has been removed because it was unmaintained"; # Added 2022-05-12
   dbus_daemon = throw "'dbus_daemon' has been renamed to/replaced by 'dbus.daemon'"; # Converted to throw 2022-02-22
   dbus_glib = throw "'dbus_glib' has been renamed to/replaced by 'dbus-glib'"; # Converted to throw 2022-02-22
   dbus_libs = throw "'dbus_libs' has been renamed to/replaced by 'dbus'"; # Converted to throw 2022-02-22
