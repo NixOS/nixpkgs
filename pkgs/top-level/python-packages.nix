@@ -10596,6 +10596,8 @@ in {
 
   uarray = callPackage ../development/python-modules/uarray { };
 
+  uasiren = callPackage ../development/python-modules/uasiren { };
+
   uc-micro-py = callPackage ../development/python-modules/uc-micro-py { };
 
   udatetime = callPackage ../development/python-modules/udatetime { };
