@@ -42,7 +42,7 @@ let
     production = false;
 
     buildInputs = [ bash ];
-    nativeBuildInputs = drv.nativeBuildInputs ++ [
+    nativeBuildInputs = (drv.nativeBuildInputs or [ ]) ++ [
       makeWrapper
     ];
 
