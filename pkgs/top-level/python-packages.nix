@@ -9885,6 +9885,8 @@ in {
 
   sseclient-py = callPackage ../development/python-modules/sseclient-py { };
 
+  ssh-mitm = callPackage ../development/python-modules/ssh-mitm { };
+
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };

@@ -2469,6 +2469,8 @@ with pkgs;
 
   ssh-key-confirmer = callPackage ../tools/networking/ssh-key-confirmer { };
 
+  ssh-mitm = with python3Packages; toPythonApplication ssh-mitm;
+
   sshchecker = callPackage ../tools/security/sshchecker { };
 
   titaniumenv = callPackage ../development/mobile/titaniumenv { };
