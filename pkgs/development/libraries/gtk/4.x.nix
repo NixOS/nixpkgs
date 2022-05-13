@@ -2,6 +2,7 @@
 , stdenv
 , substituteAll
 , fetchurl
+, fetchpatch
 , pkg-config
 , gettext
 , graphene
@@ -76,6 +77,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
     sha256 = "pXrNDkSCmBcA/fhllsdBPLYe9H915HR/2oCegjG42Ww=";
   };
+
+  patches = [
+    # Fix GNOME Control Center crash.
+    # https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/4670
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/ae0166973795e750f08b89f9f0ef974d7ac48bc7.patch";
+      sha256 = "qPOplocE+RcTFIEveJe8YLKiUpe7o6CiA834rZpS0Fs=";
+    })
+  ];
 
   nativeBuildInputs = [
     gettext
