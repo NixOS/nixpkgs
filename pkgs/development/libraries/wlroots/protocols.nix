@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vw8b10d1pwsj6f4sr3imvwsy55d3435sp068sj4hdszkxc6axsr";
   };
 
+  strictDeps = true;
   checkInputs = [ wayland-scanner ];
 
   patchPhase = ''
