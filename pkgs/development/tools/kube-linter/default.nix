@@ -26,6 +26,6 @@ buildGoModule rec {
     description = "A static analysis tool that checks Kubernetes YAML files and Helm charts";
     homepage = "https://kubelinter.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mtesseract ];
+    maintainers = with maintainers; [ mtesseract stehessel ];
   };
 }
