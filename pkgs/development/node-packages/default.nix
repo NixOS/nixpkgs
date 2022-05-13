@@ -119,6 +119,7 @@ let
     # NOTE: this is a stub package to fetch npm dependencies for
     # ../../applications/video/epgstation
     epgstation = super."epgstation-../../applications/video/epgstation".override (drv: {
+      nativeBuildInputs = [ self.node-pre-gyp self.node-gyp-build ];
       meta = drv.meta // {
         platforms = pkgs.lib.platforms.none;
       };
