@@ -627,7 +627,7 @@ in {
 
   argh = callPackage ../development/python-modules/argh { };
 
-  argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
+  argon2-cffi = callPackage ../development/python-modules/argon2-cffi { };
 
   argon2-cffi-bindings = callPackage ../development/python-modules/argon2-cffi-bindings { };
 
@@ -2432,6 +2432,8 @@ in {
     inherit (pkgs) dlib;
   };
 
+  dlinfo = callPackage ../development/python-modules/dlinfo { };
+
   dlx = callPackage ../development/python-modules/dlx { };
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
@@ -2543,6 +2545,8 @@ in {
   dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
+
+  ducc0 = callPackage ../development/python-modules/ducc0 { };
 
   duckdb = callPackage ../development/python-modules/duckdb {
     inherit (pkgs) duckdb;
@@ -3937,7 +3941,11 @@ in {
 
   httpcore = callPackage ../development/python-modules/httpcore { };
 
+  httpie = callPackage ../development/python-modules/httpie { };
+
   http-ece = callPackage ../development/python-modules/http-ece { };
+
+  httpie-ntlm = callPackage ../development/python-modules/httpie-ntlm { };
 
   httplib2 = callPackage ../development/python-modules/httplib2 { };
 

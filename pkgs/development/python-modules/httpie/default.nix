@@ -1,20 +1,38 @@
 { lib
+, buildPythonPackage
 , fetchFromGitHub
 , installShellFiles
-, python3
 , pandoc
+, pythonOlder
+# BuildInputs
+, charset-normalizer
+, defusedxml
+, multidict
+, pygments
+, requests
+, requests-toolbelt
+, setuptools
+, rich
+, pysocks
+# CheckInputs
+, pytest-httpbin
+, pytest-lazy-fixture
+, pytest-mock
+, pytestCheckHook
+, responses
+, werkzeug
 }:
 
-python3.pkgs.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "httpie";
-  version = "3.1.0";
+  version = "3.2.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
     rev = version;
-    hash = "sha256-x7Zucb2i8D4Xbn77eBzSxOAcc2fGg5MFKFiyJhytQ0s=";
+    hash = "sha256-WEe8zSlNckl7bPBi6u8mHQ1/xPw3kE81F8Xr15TchgM=";
   };
 
   nativeBuildInputs = [
@@ -22,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
     pandoc
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = [
     charset-normalizer
     defusedxml
     multidict
@@ -30,15 +48,17 @@ python3.pkgs.buildPythonApplication rec {
     requests
     requests-toolbelt
     setuptools
+    rich
+    pysocks
   ];
 
-  checkInputs = with python3.pkgs; [
-    mock
-    pytest
+  checkInputs = [
     pytest-httpbin
     pytest-lazy-fixture
+    pytest-mock
     pytestCheckHook
     responses
+    werkzeug
   ];
 
   postInstall = ''
@@ -56,15 +76,6 @@ python3.pkgs.buildPythonApplication rec {
   pytestFlagsArray = [
     "httpie"
     "tests"
-  ];
-
-  disabledTests = [
-    "test_chunked"
-    "test_verbose_chunked"
-    "test_multipart_chunked"
-    "test_request_body_from_file_by_path_chunked"
-    # Part of doctest
-    "httpie.encoding.detect_encoding"
   ];
 
   pythonImportsCheck = [
