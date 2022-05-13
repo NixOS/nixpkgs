@@ -1372,6 +1372,18 @@ final: prev:
     meta.homepage = "https://github.com/lukas-reineke/cmp-under-comparator/";
   };
 
+  cmp-vim-lsp = buildVimPluginFrom2Nix {
+    pname = "cmp-vim-lsp";
+    version = "2021-10-26";
+    src = fetchFromGitHub {
+      owner = "dmitmel";
+      repo = "cmp-vim-lsp";
+      rev = "b13312a8c1a74a8747e64117f26f17390e8abfa8";
+      sha256 = "1f43qwxr8l2qj4mq1lfk5z3c0bqs8dlgyy1yj1acpnknrgi8572p";
+    };
+    meta.homepage = "https://github.com/dmitmel/cmp-vim-lsp/";
+  };
+
   cmp-vsnip = buildVimPluginFrom2Nix {
     pname = "cmp-vsnip";
     version = "2021-11-10";
