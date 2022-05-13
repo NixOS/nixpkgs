@@ -72,8 +72,7 @@ let
     ] ocamlPackages_4_12;
   ocamlNativeBuildInputs = [ ocamlPackages.ocaml ]
     ++ optional (coqAtLeast "8.14") ocamlPackages.dune_2;
-  ocamlPropagatedNativeBuildInputs = [ ocamlPackages.findlib ];
-  ocamlPropagatedBuildInputs = [ ]
+  ocamlBuildInputs = [ ocamlPackages.findlib ]
     ++ optional (!coqAtLeast "8.10") ocamlPackages.camlp5
     ++ optional (!coqAtLeast "8.13") ocamlPackages.num
     ++ optional (coqAtLeast "8.13") ocamlPackages.zarith;
@@ -83,8 +82,7 @@ self = stdenv.mkDerivation {
 
   passthru = {
     inherit coq-version;
-    inherit ocamlPackages ocamlNativeNuildInputs;
-    inherit ocamlPropagatedBuildInputs ocamlPropagatedNativeBuildInputs;
+    inherit ocamlPackages ocamlBuildInputs ocamlNativeBuildInputs;
     # For compatibility
     inherit (ocamlPackages) ocaml camlp5 findlib num ;
     emacsBufferSetup = pkgs: ''
@@ -145,8 +143,7 @@ self = stdenv.mkDerivation {
        else [ ocamlPackages.lablgtk ])
   ;
 
-  propagatedNativeBuildInputs = ocamlPropagatedNativeBuildInputs;
-  propagatedBuildInputs = ocamlPropagatedBuildInputs;
+  propagatedBuildInputs = ocamlBuildInputs;
 
   postPatch = ''
     UNAME=$(type -tp uname)
