@@ -1120,6 +1120,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-calc/";
   };
 
+  cmp-clippy = buildVimPluginFrom2Nix {
+    pname = "cmp-clippy";
+    version = "2021-10-24";
+    src = fetchFromGitHub {
+      owner = "vappolinario";
+      repo = "cmp-clippy";
+      rev = "9f8dd021f7b9326407a439105b0c646983191a49";
+      sha256 = "02k0zwjbd98f76f3v46lvd8wfm8wibkh703g8vxr26yv1fwghs4n";
+    };
+    meta.homepage = "https://github.com/vappolinario/cmp-clippy/";
+  };
+
   cmp-cmdline = buildVimPluginFrom2Nix {
     pname = "cmp-cmdline";
     version = "2022-05-02";
