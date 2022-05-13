@@ -5566,6 +5566,18 @@ final: prev:
     meta.homepage = "https://github.com/dstein64/nvim-scrollview/";
   };
 
+  nvim-snippy = buildVimPluginFrom2Nix {
+    pname = "nvim-snippy";
+    version = "2022-05-01";
+    src = fetchFromGitHub {
+      owner = "dcampos";
+      repo = "nvim-snippy";
+      rev = "a4512c9a9c0de83494fac66d02e04ff4f0805cae";
+      sha256 = "0vaabj2m84ba3ryl6n5s5rryjg06kjk571z6cmdgccff4lvq9d4v";
+    };
+    meta.homepage = "https://github.com/dcampos/nvim-snippy/";
+  };
+
   nvim-solarized-lua = buildVimPluginFrom2Nix {
     pname = "nvim-solarized-lua";
     version = "2022-05-13";
