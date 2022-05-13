@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   preFixup = optionalString (tiffSupport || jpgSupport) ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${runtimePath}
+      --prefix PATH : ${lib.escapeShellArg runtimePath}
     )
   '';
 

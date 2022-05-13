@@ -219,6 +219,8 @@ let
           ln -sfT "$target" "$out/$l"
         done
 
+        cd "$out"
+
         # create the wrapper
 
         executablePrefix="$out/bin"

@@ -1,25 +1,49 @@
 { lib
-, argon2_cffi
 , buildPythonPackage
-, cbor
+, fetchPypi
+, attrs
+, argon2-cffi
+, base58
 , cbor2
 , cffi
+, click
 , cryptography
-, fetchPypi
+, ecdsa
+  # , eth-abi
 , flatbuffers
+, jinja2
+, hkdf
+, hyperlink
+, mnemonic
 , mock
 , msgpack
 , passlib
+  # , py-ecc
+  # , py-eth-sig-utils
+, py-multihash
+, py-ubjson
 , pynacl
+, pygobject3
+, pyopenssl
+, pyqrcode
 , pytest-asyncio
+, python-snappy
 , pytestCheckHook
 , pythonOlder
+  # , pytrie
+, rlp
+, service-identity
+, spake2
 , twisted
-, py-ubjson
 , txaio
 , ujson
+  # , web3
+  # , wsaccel
+  # , xbr
+, yapf
+  # , zlmdb
 , zope_interface
-}:
+}@args:
 
 buildPythonPackage rec {
   pname = "autobahn";
@@ -34,27 +58,18 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    argon2_cffi
-    cbor
-    cbor2
-    cffi
     cryptography
-    flatbuffers
-    msgpack
-    passlib
-    py-ubjson
+    hyperlink
     pynacl
-    twisted
     txaio
-    ujson
-    zope_interface
   ];
 
   checkInputs = [
     mock
     pytest-asyncio
     pytestCheckHook
-  ];
+  ] ++ passthru.extras-require.scram
+  ++ passthru.extras-require.serialization;
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -74,10 +89,23 @@ buildPythonPackage rec {
     "autobahn"
   ];
 
+  passthru.extras-require = rec {
+    all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui ++ xbr;
+    accelerate = [ /* wsaccel */ ];
+    compress = [ python-snappy ];
+    encryption = [ pynacl pyopenssl pyqrcode /* pytrie */ service-identity ];
+    nvx = [ cffi ];
+    scram = [ argon2-cffi cffi passlib ];
+    serialization = [ cbor2 flatbuffers msgpack ujson py-ubjson ];
+    twisted = [ attrs args.twisted zope_interface ];
+    ui = [ pygobject3 ];
+    xbr = [ base58 cbor2 click ecdsa /* eth-abi */ jinja2 hkdf mnemonic /* py-ecc py-eth-sig-utils */ py-multihash rlp spake2 twisted /* web3 xbr */ yapf /* zlmdb */ ];
+  };
+
   meta = with lib; {
     description = "WebSocket and WAMP in Python for Twisted and asyncio";
     homepage = "https://crossbar.io/autobahn";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

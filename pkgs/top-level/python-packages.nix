@@ -627,7 +627,7 @@ in {
 
   argh = callPackage ../development/python-modules/argh { };
 
-  argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
+  argon2-cffi = callPackage ../development/python-modules/argon2-cffi { };
 
   argon2-cffi-bindings = callPackage ../development/python-modules/argon2-cffi-bindings { };
 
@@ -2431,6 +2431,8 @@ in {
   dlib = callPackage ../development/python-modules/dlib {
     inherit (pkgs) dlib;
   };
+
+  dlinfo = callPackage ../development/python-modules/dlinfo { };
 
   dlx = callPackage ../development/python-modules/dlx { };
 

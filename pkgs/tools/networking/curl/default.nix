@@ -157,6 +157,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # bad interaction with sandbox if enabled?
     rm tests/data/test1453
+    rm tests/data/test1086
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # different resolving behaviour?
     rm tests/data/test1592

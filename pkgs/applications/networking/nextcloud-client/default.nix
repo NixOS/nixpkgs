@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , extra-cmake-modules
 , inotify-tools
@@ -41,6 +42,11 @@ mkDerivation rec {
     # Explicitly move dbus configuration files to the store path rather than `/etc/dbus-1/services`.
     ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
     ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
+    # don't write cacheDir into home directory
+    (fetchpatch {
+      url = "https://github.com/nextcloud/desktop/commit/3a8aa8a2a88bc9b68098b7866e2a07aa23d3a33c.patch";
+      sha256 = "sha256-OviPANvXap3mg4haxRir/CK1aq8maWZDM/IVsN+OHgk=";
+    })
   ];
 
   postPatch = ''

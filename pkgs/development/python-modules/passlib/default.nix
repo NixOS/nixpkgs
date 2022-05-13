@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, argon2_cffi
+, argon2-cffi
 , bcrypt
 , cryptography
 , pytestCheckHook
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   passthru.extras-require = {
-    argon2 = [ argon2_cffi ];
+    argon2 = [ argon2-cffi ];
     bcrypt = [ bcrypt ];
     totp = [ cryptography ];
   };
