@@ -2679,6 +2679,8 @@ in {
 
   enamlx = callPackage ../development/python-modules/enamlx { };
 
+  enhancements = callPackage ../development/python-modules/enhancements { };
+
   enlighten = callPackage ../development/python-modules/enlighten { };
 
   enocean = callPackage ../development/python-modules/enocean { };
