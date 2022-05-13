@@ -1180,6 +1180,18 @@ final: prev:
     meta.homepage = "https://github.com/davidsierradz/cmp-conventionalcommits/";
   };
 
+  cmp-copilot = buildVimPluginFrom2Nix {
+    pname = "cmp-copilot";
+    version = "2022-04-11";
+    src = fetchFromGitHub {
+      owner = "hrsh7th";
+      repo = "cmp-copilot";
+      rev = "1f3f31c54bd71e41ed157430702bc2837ea582ab";
+      sha256 = "14nza4r8vr58s74f3fpzlmvrv9lcxzvfvizkz71p47f1zgddhgfs";
+    };
+    meta.homepage = "https://github.com/hrsh7th/cmp-copilot/";
+  };
+
   cmp-dictionary = buildVimPluginFrom2Nix {
     pname = "cmp-dictionary";
     version = "2022-05-04";
