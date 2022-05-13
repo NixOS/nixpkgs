@@ -1,0 +1,23 @@
+diff --git a/doc/Makefile.am b/doc/Makefile.am
+index 626017bf9..91e525c12 100644
+--- a/doc/Makefile.am
++++ b/doc/Makefile.am
+@@ -177,15 +177,15 @@ clean-local:
+ 	/bin/rm -f plural.tex letterplace.tex plulibs.tex sca.tex pyobject.tex
+ 
+ all-local:
+-	$(MAKE) -j1 -f Makefile-docbuild all
++	$(MAKE) -f Makefile-docbuild all
+ 
+ singular.info:
+-	$(MAKE) -j1 -f Makefile-docbuild $@
++	$(MAKE) -f Makefile-docbuild $@
+ 
+ if ENABLE_DOC_BUILD
+ EXTRA_DIST += doc.tbz2
+ doc.tbz2:
+-	$(MAKE) -j1 -f Makefile-docbuild singular.info html
++	$(MAKE) -f Makefile-docbuild singular.info html
+ 	chmod -R a+rX singular.info html
+ 	$(AMTAR) jcf $@ singular.info html
+ dist-hook:

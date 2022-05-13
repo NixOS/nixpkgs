@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
+  patches = [ ./parallel-docbuild.patch ];
+
   # For reference (last checked on commit 75f460d):
   # https://github.com/Singular/Singular/blob/spielwiese/doc/Building-Singular-from-source.md
   # https://github.com/Singular/Singular/blob/spielwiese/doc/external-packages-dynamic-modules.md
