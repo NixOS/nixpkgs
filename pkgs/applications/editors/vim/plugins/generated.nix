@@ -1360,6 +1360,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lua/";
   };
 
+  cmp-nvim-tags = buildVimPluginFrom2Nix {
+    pname = "cmp-nvim-tags";
+    version = "2022-03-31";
+    src = fetchFromGitHub {
+      owner = "quangnguyen30192";
+      repo = "cmp-nvim-tags";
+      rev = "98b15fee0cd64760345be3a30f1a592b5a9abb20";
+      sha256 = "19fgzaxapazrl07q0ikximgm8k77vasz5fras3xnbax7r3bln127";
+    };
+    meta.homepage = "https://github.com/quangnguyen30192/cmp-nvim-tags/";
+  };
+
   cmp-nvim-ultisnips = buildVimPluginFrom2Nix {
     pname = "cmp-nvim-ultisnips";
     version = "2022-04-22";
