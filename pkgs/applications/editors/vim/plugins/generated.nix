@@ -1192,6 +1192,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-copilot/";
   };
 
+  cmp-dap = buildVimPluginFrom2Nix {
+    pname = "cmp-dap";
+    version = "2022-04-27";
+    src = fetchFromGitHub {
+      owner = "rcarriga";
+      repo = "cmp-dap";
+      rev = "69f22863739482120f9240919db1ac7d4dea3278";
+      sha256 = "03cxmnbr4sn69dzg1fg4r7rgja4invzfgpid123mhahq6sn7jir9";
+    };
+    meta.homepage = "https://github.com/rcarriga/cmp-dap/";
+  };
+
   cmp-dictionary = buildVimPluginFrom2Nix {
     pname = "cmp-dictionary";
     version = "2022-05-04";
