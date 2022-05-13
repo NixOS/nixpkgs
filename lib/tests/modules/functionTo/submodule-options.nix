@@ -10,7 +10,7 @@ in
       options = {
         fun = lib.mkOption {
           type = types.functionTo (types.submodule {
-            options.a = lib.mkOption { };
+            options.a = lib.mkOption { default = "a"; };
           });
         };
       };
@@ -21,7 +21,7 @@ in
       options = {
         fun = lib.mkOption {
           type = types.functionTo (types.submodule {
-            options.b = lib.mkOption { };
+            options.b = lib.mkOption { default = "b"; };
           });
         };
       };
@@ -30,6 +30,12 @@ in
 
   options = {
     result = lib.mkOption
+      {
+        type = types.str;
+        default = lib.concatStringsSep " " (lib.attrValues (config.fun (throw "shouldn't use input param")));
+      };
+
+    optionsResult = lib.mkOption
       {
         type = types.str;
         default = lib.concatStringsSep " "
@@ -50,10 +56,6 @@ in
 
   config.fun = lib.mkMerge
     [
-      (input: { inherit (input) a; })
-      (input: { inherit (input) b; })
-      (input: {
-        b = lib.mkForce input.c;
-      })
+      (input: { b = "bee"; })
     ];
 }
