@@ -5210,8 +5210,6 @@ with pkgs;
 
   wgetpaste = callPackage ../tools/text/wgetpaste { };
 
-  dirmngr = callPackage ../tools/security/dirmngr { };
-
   dismap = callPackage ../tools/security/dismap { };
 
   dirvish  = callPackage ../tools/backup/dirvish { };
