@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "6.5";
 
   src = fetchurl {
-    url = "https://github.com/Pinegrow/PinegrowReleases/releases/download/pg${version}/PinegrowLinux64.${version}.zip";
+    url = "https://download.pinegrow.com/PinegrowLinux64.${version}.zip";
     sha256 = "1l7cf5jgidpykaf68mzf92kywl1vxwl3fg43ibgr2rg4cnl1g82b";
   };
 
