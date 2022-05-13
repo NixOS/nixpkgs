@@ -1216,6 +1216,18 @@ final: prev:
     meta.homepage = "https://github.com/tzachar/cmp-fuzzy-buffer/";
   };
 
+  cmp-fuzzy-path = buildVimPluginFrom2Nix {
+    pname = "cmp-fuzzy-path";
+    version = "2022-05-08";
+    src = fetchFromGitHub {
+      owner = "tzachar";
+      repo = "cmp-fuzzy-path";
+      rev = "8c1ecaaf8bf16bc4af4eaaaac73ff5a29174406b";
+      sha256 = "0c607vljcf5zwxvfj4s1vmqridwpwql7zynwc38zx9lafv7l2djb";
+    };
+    meta.homepage = "https://github.com/tzachar/cmp-fuzzy-path/";
+  };
+
   cmp-git = buildVimPluginFrom2Nix {
     pname = "cmp-git";
     version = "2022-05-11";
