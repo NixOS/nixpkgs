@@ -1,7 +1,7 @@
 { lib, stdenv, buildGoPackage, fetchurl
 , cmake, xz, which, autoconf
 , ncurses6, libedit, libunwind
-, installShellFiles
+, installShellFiles, nixosTests
 , removeReferencesTo, go
 }:
 
@@ -59,6 +59,10 @@ buildGoPackage rec {
   preFixup = ''
     find $out -type f -exec ${removeReferencesTo}/bin/remove-references-to -t ${go} '{}' +
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) cockroachdb-single-node;
+  };
 
   meta = with lib; {
     homepage    = "https://www.cockroachlabs.com";

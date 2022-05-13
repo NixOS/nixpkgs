@@ -10,7 +10,7 @@ let
     ([
       # Basic startup
       "${crdb}/bin/cockroach"
-      "start"
+      (if cfg.singleNode then "start-single-node" else "start")
       "--logtostderr"
       "--store=/var/lib/cockroachdb"
 
@@ -81,6 +81,12 @@ in
         type = types.nullOr types.str;
         default = null;
         description = "The addresses for connecting the node to a cluster.";
+      };
+
+      singleNode = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Run in single-node mode rather than as a cluster member";
       };
 
       insecure = mkOption {
