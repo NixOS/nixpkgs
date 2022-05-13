@@ -1480,6 +1480,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-vsnip/";
   };
 
+  cmp-zsh = buildVimPluginFrom2Nix {
+    pname = "cmp-zsh";
+    version = "2022-01-18";
+    src = fetchFromGitHub {
+      owner = "tamago324";
+      repo = "cmp-zsh";
+      rev = "1d8133e5637c73b3eb392682ae9661d521738268";
+      sha256 = "0122lf44yqjp01znp7gnc682yx7fikjkzc5njp73lmys76321lz3";
+    };
+    meta.homepage = "https://github.com/tamago324/cmp-zsh/";
+  };
+
   cmp_luasnip = buildVimPluginFrom2Nix {
     pname = "cmp_luasnip";
     version = "2022-05-01";
