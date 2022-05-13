@@ -118,6 +118,11 @@
       </listitem>
       <listitem>
         <para>
+          PostgreSQL now defaults to major version 14.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The new
           <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook"><literal>postgresqlTestHook</literal></link>
           runs a PostgreSQL server for the duration of package checks.
