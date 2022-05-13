@@ -1552,6 +1552,18 @@ final: prev:
     meta.homepage = "https://github.com/dmitmel/cmp-vim-lsp/";
   };
 
+  cmp-vimwiki-tags = buildVimPluginFrom2Nix {
+    pname = "cmp-vimwiki-tags";
+    version = "2022-04-25";
+    src = fetchFromGitHub {
+      owner = "pontusk";
+      repo = "cmp-vimwiki-tags";
+      rev = "a9e631c8f4d64e009d253f741b035eb5d1bd404f";
+      sha256 = "0j75bdcxbzm24mkq3lynm1crv5rqhw966aa7l27y12dlp6rbfvn0";
+    };
+    meta.homepage = "https://github.com/pontusk/cmp-vimwiki-tags/";
+  };
+
   cmp-vsnip = buildVimPluginFrom2Nix {
     pname = "cmp-vsnip";
     version = "2021-11-10";
