@@ -5875,7 +5875,9 @@ with pkgs;
 
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
-  libbtbb = callPackage ../development/libraries/libbtbb { };
+  libbtbb = callPackage ../development/libraries/libbtbb {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   lp_solve = callPackage ../applications/science/math/lp_solve {
     inherit (darwin) cctools;
