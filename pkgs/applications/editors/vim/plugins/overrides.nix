@@ -298,6 +298,10 @@ self: super: {
       '';
     });
 
+  fuzzy-nvim = super.fuzzy-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-fzy-native-nvim ];
+  });
+
   fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs (old: {
     # The plugin has a makefile which tries to run tests in a docker container.
     # This prevents it.

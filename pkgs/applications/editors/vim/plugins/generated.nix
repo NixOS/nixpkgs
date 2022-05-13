@@ -2938,6 +2938,18 @@ final: prev:
     meta.homepage = "https://github.com/BeneCollyridam/futhark-vim/";
   };
 
+  fuzzy-nvim = buildVimPluginFrom2Nix {
+    pname = "fuzzy.nvim";
+    version = "2022-02-20";
+    src = fetchFromGitHub {
+      owner = "tzachar";
+      repo = "fuzzy.nvim";
+      rev = "d5fee69b54ef400f0ccedf37917c4782e8929424";
+      sha256 = "1xnmwmbrjsfj3v4vk57gcf4l3wl9n8jks50ds8gaawz5bpy54yff";
+    };
+    meta.homepage = "https://github.com/tzachar/fuzzy.nvim/";
+  };
+
   fwatch-nvim = buildVimPluginFrom2Nix {
     pname = "fwatch.nvim";
     version = "2021-07-25";
