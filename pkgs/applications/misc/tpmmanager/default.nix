@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "Rohde-Schwarz";
     repo = "TPMManager";
     rev = "v${version}";
-    sha256 = "sha256-JKYG+I/tZ+0NDmHcIgKV6eGrjbPvPQKPo0sE/zBlLY4=";
+    sha256 = "sha256-UZYn4ssbvLpdB0DssT7MXqQZCu1KkLf/Bsb45Rvgm+E=";
   };
 
   nativeBuildInputs = [ qmake4Hook ];
