@@ -72,7 +72,7 @@ in
         apply = map (d: d // {
           manage = "desktop";
           start = d.start
-          + optionalString (needBGCond d) ''
+          + optionalString (needBGCond d) ''\n\n
             if [ -e $HOME/.background-image ]; then
               ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
             fi
