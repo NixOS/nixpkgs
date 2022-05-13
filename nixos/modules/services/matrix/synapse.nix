@@ -285,7 +285,7 @@ in {
 
             log_config = mkOption {
               type = types.path;
-              default = ./matrix-synapse-log_config.yaml;
+              default = ./synapse-log_config.yaml;
               description = ''
                 The file that holds the logging configuration.
               '';
@@ -767,7 +767,7 @@ in {
 
   meta = {
     buildDocsInSandbox = false;
-    doc = ./matrix-synapse.xml;
+    doc = ./synapse.xml;
     maintainers = teams.matrix.members;
   };
 
