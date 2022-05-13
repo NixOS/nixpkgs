@@ -4019,6 +4019,8 @@ with pkgs;
 
   notify = callPackage ../tools/misc/notify { };
 
+  npins = callPackage ../tools/nix/npins { };
+
   nrsc5 = callPackage ../applications/misc/nrsc5 { };
 
   nsync = callPackage ../development/libraries/nsync { };
