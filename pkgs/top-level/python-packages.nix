@@ -5841,6 +5841,8 @@ in {
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
+  py-deprecate = callPackage ../development/python-modules/py-deprecate { };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   oasatelematics = callPackage ../development/python-modules/oasatelematics { };
@@ -10359,6 +10361,8 @@ in {
   torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
 
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
+
+  torchmetrics = callPackage ../development/python-modules/torchmetrics { };
 
   torchinfo = callPackage ../development/python-modules/torchinfo { };
 
