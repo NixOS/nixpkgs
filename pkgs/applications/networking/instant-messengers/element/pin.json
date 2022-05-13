@@ -2,5 +2,6 @@
   "version": "1.10.13",
   "desktopSrcHash": "tTvpjSIipvmJIfZF1RiRtlDjsKJYHoPQ6XSqI8TGH14=",
   "desktopYarnHash": "105bphn4ga4f0n60cvrlppf8wim2c1qy09g8arraadcxymds98n6",
-  "webHash": "1zxjlzlxh2gbswa1063zbw6ahwlcnvyqkvbwj92vk873c3g8ba72"
+  "webSrcHash": "+imju7ojpjttmOeDnA2L4QdBi1zzfRBoUdMMTA4Lba0=",
+  "webYarnHash": "19b1w2mrcn3mzw40d023wx1jxvr0jacn2ryzxlh7zsyj8w0v1dv7"
 }
