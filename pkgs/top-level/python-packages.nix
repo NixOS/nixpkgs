@@ -2679,6 +2679,8 @@ in {
 
   enamlx = callPackage ../development/python-modules/enamlx { };
 
+  enhancements = callPackage ../development/python-modules/enhancements { };
+
   enlighten = callPackage ../development/python-modules/enlighten { };
 
   enocean = callPackage ../development/python-modules/enocean { };
@@ -9884,6 +9886,8 @@ in {
   sseclient = callPackage ../development/python-modules/sseclient { };
 
   sseclient-py = callPackage ../development/python-modules/sseclient-py { };
+
+  ssh-mitm = callPackage ../development/python-modules/ssh-mitm { };
 
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
 
