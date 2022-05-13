@@ -1156,6 +1156,18 @@ final: prev:
     meta.homepage = "https://github.com/uga-rosa/cmp-dictionary/";
   };
 
+  cmp-digraphs = buildVimPluginFrom2Nix {
+    pname = "cmp-digraphs";
+    version = "2021-12-13";
+    src = fetchFromGitHub {
+      owner = "dmitmel";
+      repo = "cmp-digraphs";
+      rev = "5efc1f0078d7c5f3ea1c8e3aad04da3fd6e081a9";
+      sha256 = "061rf7c4lfghsryldmgk5inmwa1994imp1j0l94qgaig6s6hb0kg";
+    };
+    meta.homepage = "https://github.com/dmitmel/cmp-digraphs/";
+  };
+
   cmp-emoji = buildVimPluginFrom2Nix {
     pname = "cmp-emoji";
     version = "2021-09-28";
