@@ -32,9 +32,10 @@ buildDunePackage rec {
 
   meta = with lib; {
     description = "SSH implementation in OCaml";
-    license = licenses.isc;
     homepage = "https://github.com/mirage/awa-ssh";
     changelog = "https://github.com/mirage/awa-ssh/raw/v${version}/CHANGES.md";
+    license = licenses.isc;
     maintainers = [ maintainers.sternenseemann ];
+    mainProgram = "awa_lwt_server";
   };
 }
