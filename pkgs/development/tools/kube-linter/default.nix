@@ -7,7 +7,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = pname;
-    rev = "${version}";
+    rev = version;
     sha256 = "ZqnD9zsh+r1RL34o1nAkvO1saKe721ZJ2+DgBjmsH58=";
   };
 
