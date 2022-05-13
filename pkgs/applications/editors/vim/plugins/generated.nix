@@ -1300,6 +1300,18 @@ final: prev:
     meta.homepage = "https://github.com/kdheepak/cmp-latex-symbols/";
   };
 
+  cmp-look = buildVimPluginFrom2Nix {
+    pname = "cmp-look";
+    version = "2022-03-21";
+    src = fetchFromGitHub {
+      owner = "octaltree";
+      repo = "cmp-look";
+      rev = "58dd22adc34d21f95b93407719aa8a894c52c235";
+      sha256 = "107nvm4xgd3bhz0sqxx4bj19xjli4c52r6jyajw50bv0my2afihq";
+    };
+    meta.homepage = "https://github.com/octaltree/cmp-look/";
+  };
+
   cmp-neosnippet = buildVimPluginFrom2Nix {
     pname = "cmp-neosnippet";
     version = "2022-01-06";
