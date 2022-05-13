@@ -2578,6 +2578,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  bao = callPackage ../tools/security/bao {};
+
   bar = callPackage ../tools/system/bar {};
 
   base16-shell-preview = callPackage ../misc/base16-shell-preview { };
