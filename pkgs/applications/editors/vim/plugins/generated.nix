@@ -1168,6 +1168,18 @@ final: prev:
     meta.homepage = "https://github.com/kdheepak/cmp-latex-symbols/";
   };
 
+  cmp-neosnippet = buildVimPluginFrom2Nix {
+    pname = "cmp-neosnippet";
+    version = "2022-01-06";
+    src = fetchFromGitHub {
+      owner = "notomo";
+      repo = "cmp-neosnippet";
+      rev = "2d14526af3f02dcea738b4cea520e6ce55c09979";
+      sha256 = "0xf3nfkgbrfhac8nadkzq22pzi9gsidax4ddavqkqqivlcgllrgf";
+    };
+    meta.homepage = "https://github.com/notomo/cmp-neosnippet/";
+  };
+
   cmp-nvim-lsp = buildVimPluginFrom2Nix {
     pname = "cmp-nvim-lsp";
     version = "2022-05-16";

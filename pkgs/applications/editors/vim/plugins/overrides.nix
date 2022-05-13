@@ -133,6 +133,10 @@ self: super: {
     '';
   });
 
+  cmp-neosnippet = super.cmp-neosnippet.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp neosnippet ];
+  });
+
   cmp-tabnine = super.cmp-tabnine.overrideAttrs (old: {
     buildInputs = [ tabnine ];
 
