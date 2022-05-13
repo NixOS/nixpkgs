@@ -23,8 +23,32 @@ final: prev: {
   };
 
   "@electron-forge/cli" = prev."@electron-forge/cli".override {
-    buildInputs = [ final.node-pre-gyp final.rimraf ];
+    buildInputs = [ final.node-gyp-build ];
   };
+
+  "@hyperspace/cli" = prev."@hyperspace/cli".override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    buildInputs = [ final.node-gyp-build ];
+    postInstall = ''wrapProgram "$out/bin/hyp" --prefix PATH : ${ lib.makeBinPath [ nodejs ] }'';
+  };
+  hyperspace-cli = final."@hyperspace/cli";
+
+  "@medable/mdctl-cli" = prev."@medable/mdctl-cli".override {
+    nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
+      glib
+      libsecret
+      pkg-config
+    ] ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      Security
+    ];
+    buildInputs = [
+      final.node-gyp-build
+      final.node-pre-gyp
+      nodejs
+    ];
+  };
+  mdctl-cli = final."@medable/mdctl-cli";
 
   autoprefixer = prev.autoprefixer.override {
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -54,7 +78,7 @@ final: prev: {
   };
 
   bower2nix = prev.bower2nix.override {
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
       for prog in bower2nix fetch-bower; do
         wrapProgram "$out/bin/$prog" --prefix PATH : ${lib.makeBinPath [ pkgs.git pkgs.nix ]}
@@ -128,21 +152,6 @@ final: prev: {
     buildInputs = [ final.node-gyp-build pkgs.unbound ];
   };
 
-  hyperspace-cli = prev."@hyperspace/cli".override {
-    nativeBuildInputs = with pkgs; [
-      makeWrapper
-      libtool
-      autoconf
-      automake
-    ];
-    buildInputs = [ final.node-gyp-build nodejs ];
-    postInstall = ''
-      wrapProgram "$out/bin/hyp" --prefix PATH : ${
-        lib.makeBinPath [ nodejs ]
-      }
-    '';
-  };
-
   ijavascript = prev.ijavascript.override (oldAttrs: {
     preRebuild = ''
       export NPM_CONFIG_ZMQ_EXTERNAL=true
@@ -188,7 +197,7 @@ final: prev: {
   };
 
   makam =  prev.makam.override {
-    buildInputs = [ nodejs pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     postFixup = ''
       wrapProgram "$out/bin/makam" --prefix PATH : ${lib.makeBinPath [ nodejs ]}
       ${
@@ -210,22 +219,6 @@ final: prev: {
         installShellCompletion --cmd $cmd --bash <(./bin/$cmd --completion)
       done
     '';
-  };
-
-  mdctl-cli = prev."@medable/mdctl-cli".override {
-    nativeBuildInputs = with pkgs; with darwin.apple_sdk.frameworks; [
-      glib
-      libsecret
-      pkg-config
-    ] ++ lib.optionals stdenv.isDarwin [
-      AppKit
-      Security
-    ];
-    buildInputs = [
-      final.node-gyp-build
-      final.node-pre-gyp
-      nodejs
-    ];
   };
 
   mermaid-cli = prev."@mermaid-js/mermaid-cli".override (
@@ -271,7 +264,7 @@ final: prev: {
   };
 
   node2nix = prev.node2nix.override {
-    buildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     # We need to use master because of a fix that replaces git:// url to https://.
     src = fetchFromGitHub {
       owner = "svanderburg";
@@ -437,6 +430,10 @@ final: prev: {
     nativeBuildInputs = [ final.node-pre-gyp ];
   };
 
+  thelounge-plugin-giphy = prev.thelounge-plugin-giphy.override {
+    nativeBuildInputs = [ final.node-pre-gyp ];
+  };
+
   thelounge-theme-flat-blue = prev.thelounge-theme-flat-blue.override {
     nativeBuildInputs = [ final.node-pre-gyp ];
   };
@@ -452,21 +449,21 @@ final: prev: {
     '';
   };
 
-  ts-node = prev.ts-node.override (oldAttrs: {
-    buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
+  ts-node = prev.ts-node.override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
       wrapProgram "$out/bin/ts-node" \
       --prefix NODE_PATH : ${final.typescript}/lib/node_modules
     '';
-  });
+  };
 
-  tsun = prev.tsun.override (oldAttrs: {
-    buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
+  tsun = prev.tsun.override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
       wrapProgram "$out/bin/tsun" \
       --prefix NODE_PATH : ${final.typescript}/lib/node_modules
     '';
-  });
+  };
 
   typescript-language-server = prev.typescript-language-server.override {
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -483,11 +480,13 @@ final: prev: {
   vega-cli = prev.vega-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config ];
     buildInputs = with pkgs; [
-      prev.node-pre-gyp
+      final.node-pre-gyp
       pixman
       cairo
       pango
       libjpeg
+    ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreText
     ];
   };
 
@@ -515,6 +514,8 @@ final: prev: {
       pixman
       cairo
       pango
+    ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreText
     ];
   };
 
