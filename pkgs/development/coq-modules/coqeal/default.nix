@@ -1,6 +1,6 @@
 { coq, mkCoqDerivation, mathcomp, bignums, paramcoq, multinomials,
   mathcomp-real-closed,
-  lib, version ? null }:
+  lib, which, version ? null }:
 
 with lib;
 
@@ -22,6 +22,7 @@ with lib;
   release."1.0.4".sha256 = "1g5m26lr2lwxh6ld2gykailhay4d0ayql4bfh0aiwqpmmczmxipk";
   release."1.0.3".sha256 = "0hc63ny7phzbihy8l7wxjvn3haxx8jfnhi91iw8hkq8n29i23v24";
 
+  extraBuildInputs = [ which ];
   propagatedBuildInputs = [ mathcomp.algebra bignums paramcoq multinomials ];
 
   meta = {
