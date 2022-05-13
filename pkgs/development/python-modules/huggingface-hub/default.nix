@@ -41,7 +41,7 @@ buildPythonPackage rec {
    meta = with lib; {
     homepage = "https://github.com/huggingface/huggingface_hub";
     description = "Download and publish models and other files on the huggingface.co hub";
-    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/${version}";
+    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
