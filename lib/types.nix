@@ -529,6 +529,8 @@ rec {
       getSubOptions = elemType.getSubOptions;
       getSubModules = elemType.getSubModules;
       substSubModules = m: functionTo (elemType.substSubModules m);
+      functor = (defaultFunctor "functionTo") // { wrapped = elemType; };
+      nestedTypes.elemType = elemType;
     };
 
     # A submodule (like typed attribute set). See NixOS manual.
