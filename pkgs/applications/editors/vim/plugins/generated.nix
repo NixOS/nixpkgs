@@ -1432,6 +1432,18 @@ final: prev:
     meta.homepage = "https://github.com/jc-doyle/cmp-pandoc-references/";
   };
 
+  cmp-pandoc-nvim = buildVimPluginFrom2Nix {
+    pname = "cmp-pandoc.nvim";
+    version = "2022-05-03";
+    src = fetchFromGitHub {
+      owner = "aspeddro";
+      repo = "cmp-pandoc.nvim";
+      rev = "cb2980263e14fb3c1b776edbd2c7a312b67c65ae";
+      sha256 = "0d439njzdnm1qhnig2qr9ywq3q72vpb6wqxwil9czhqzn80swrj9";
+    };
+    meta.homepage = "https://github.com/aspeddro/cmp-pandoc.nvim/";
+  };
+
   cmp-path = buildVimPluginFrom2Nix {
     pname = "cmp-path";
     version = "2022-02-02";
