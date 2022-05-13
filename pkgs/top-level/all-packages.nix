@@ -10982,7 +10982,7 @@ with pkgs;
 
   toybox = callPackage ../tools/misc/toybox { };
 
-  tpmmanager = callPackage ../applications/misc/tpmmanager { };
+  tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
   tpm-quote-tools = callPackage ../tools/security/tpm-quote-tools { };
 
