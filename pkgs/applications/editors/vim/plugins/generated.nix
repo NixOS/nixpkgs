@@ -1144,6 +1144,18 @@ final: prev:
     meta.homepage = "https://github.com/PaterJason/cmp-conjure/";
   };
 
+  cmp-conventionalcommits = buildVimPluginFrom2Nix {
+    pname = "cmp-conventionalcommits";
+    version = "2021-10-28";
+    src = fetchFromGitHub {
+      owner = "davidsierradz";
+      repo = "cmp-conventionalcommits";
+      rev = "5518362bc4f5dfbc9d242d9379fdec48b6278c5e";
+      sha256 = "02jvz8sjrr4xw0wg5y03gnv5sc78gqvmblmqi02y748qgsd5grb6";
+    };
+    meta.homepage = "https://github.com/davidsierradz/cmp-conventionalcommits/";
+  };
+
   cmp-dictionary = buildVimPluginFrom2Nix {
     pname = "cmp-dictionary";
     version = "2022-05-04";
