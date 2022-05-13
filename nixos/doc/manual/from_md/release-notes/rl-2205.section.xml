@@ -333,6 +333,14 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://upterm.dev">uptermd</link>, an
+          open-source solution for sharing terminal sessions instantly
+          over the public internet via secure tunnels. Available at
+          <link linkend="opt-services.uptermd.enable">services.uptermd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/mbrubeck/agate">agate</link>,
           a very simple server for the Gemini hypertext protocol.
           Available as
@@ -1881,6 +1889,37 @@
       </listitem>
       <listitem>
         <para>
+          Mastodon now uses <literal>services.redis.servers</literal> to
+          start a new redis server, instead of using a global redis
+          server. This improves compatibility with other services that
+          use redis.
+        </para>
+        <para>
+          Note that this will recreate the redis database, although
+          according to the
+          <link xlink:href="https://docs.joinmastodon.org/admin/backups/">Mastodon
+          docs</link>, this is almost harmless:
+        </para>
+        <blockquote>
+          <para>
+            Losing the Redis database is almost harmless: The only
+            irrecoverable data will be the contents of the Sidekiq
+            queues and scheduled retries of previously failed jobs. The
+            home and list feeds are stored in Redis, but can be
+            regenerated with tootctl.
+          </para>
+        </blockquote>
+        <para>
+          If you do want to save the redis database, you can use the
+          following commands:
+        </para>
+        <programlisting language="bash">
+redis-cli save
+cp /var/lib/redis/dump.rdb &quot;/var/lib/redis-mastodon/dump.rdb&quot;
+</programlisting>
+      </listitem>
+      <listitem>
+        <para>
           If you are using Wayland you can choose to use the Ozone
           Wayland support in Chrome and several Electron apps by setting
           the environment variable <literal>NIXOS_OZONE_WL=1</literal>
@@ -2411,6 +2450,14 @@
           <literal>security.polkit.enable</literal>, is now disabled by
           default. It will automatically be enabled through services and
           desktop environments as needed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>mercury</literal> was updated to 22.01.1, which has
+          some breaking changes
+          (<link xlink:href="https://dl.mercurylang.org/release/release-notes-22.01.html">Mercury
+          22.01 news</link>).
         </para>
       </listitem>
       <listitem>

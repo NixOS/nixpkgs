@@ -145,9 +145,10 @@ let
         export CRYSTAL_CACHE_DIR=$TMP
       '';
 
-      buildInputs = commonBuildInputs extraBuildInputs;
 
+      strictDeps = true;
       nativeBuildInputs = [ binary makeWrapper which pkg-config llvmPackages.llvm ];
+      buildInputs = commonBuildInputs extraBuildInputs;
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"

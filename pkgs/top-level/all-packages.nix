@@ -1153,6 +1153,8 @@ with pkgs;
 
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
 
+  kubevirt = callPackage ../tools/virtualization/kubevirt { };
+
   license-generator = callPackage ../tools/misc/license-generator { };
 
   linux-router = callPackage ../tools/networking/linux-router { };
@@ -1196,8 +1198,6 @@ with pkgs;
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
-
-  kubevirt = callPackage ../tools/virtualization/kubevirt { };
 
   vopono = callPackage ../tools/networking/vopono { };
 
@@ -2467,6 +2467,8 @@ with pkgs;
   ssh-import-id = python3Packages.callPackage ../tools/admin/ssh-import-id { };
 
   ssh-key-confirmer = callPackage ../tools/networking/ssh-key-confirmer { };
+
+  ssh-mitm = with python3Packages; toPythonApplication ssh-mitm;
 
   sshchecker = callPackage ../tools/security/sshchecker { };
 
@@ -5880,7 +5882,9 @@ with pkgs;
 
   libbladeRF = callPackage ../development/libraries/libbladeRF { };
 
-  libbtbb = callPackage ../development/libraries/libbtbb { };
+  libbtbb = callPackage ../development/libraries/libbtbb {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   lp_solve = callPackage ../applications/science/math/lp_solve {
     inherit (darwin) cctools;
@@ -13756,6 +13760,7 @@ with pkgs;
   };
   cargo-binutils = callPackage ../development/tools/rust/cargo-binutils { };
   cargo-bloat = callPackage ../development/tools/rust/cargo-bloat { };
+  cargo-bolero = callPackage ../development/tools/rust/cargo-bolero { };
   cargo-cache = callPackage ../development/tools/rust/cargo-cache {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -16702,6 +16707,7 @@ with pkgs;
     boost175
     boost177
     boost178
+    boost179
   ;
 
   boost15x = boost159;
@@ -20138,19 +20144,10 @@ with pkgs;
   protobuf = protobuf3_19;
 
   protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix { };
-  protobuf3_18 = callPackage ../development/libraries/protobuf/3.18.nix { };
   protobuf3_17 = callPackage ../development/libraries/protobuf/3.17.nix { };
-  protobuf3_16 = callPackage ../development/libraries/protobuf/3.16.nix { };
-  protobuf3_15 = callPackage ../development/libraries/protobuf/3.15.nix { };
-  protobuf3_14 = callPackage ../development/libraries/protobuf/3.14.nix { };
-  protobuf3_13 = callPackage ../development/libraries/protobuf/3.13.nix { };
-  protobuf3_12 = callPackage ../development/libraries/protobuf/3.12.nix { };
   protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };
-  protobuf3_10 = callPackage ../development/libraries/protobuf/3.10.nix { };
-  protobuf3_9 = callPackage ../development/libraries/protobuf/3.9.nix { };
   protobuf3_8 = callPackage ../development/libraries/protobuf/3.8.nix { };
   protobuf3_7 = callPackage ../development/libraries/protobuf/3.7.nix { };
-  protobuf3_6 = callPackage ../development/libraries/protobuf/3.6.nix { };
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
@@ -33012,9 +33009,22 @@ with pkgs;
   clmagma = callPackage ../development/libraries/science/math/clmagma { };
 
   mathematica = callPackage ../applications/science/math/mathematica { };
-  mathematica9 = callPackage ../applications/science/math/mathematica/9.nix { };
-  mathematica10 = callPackage ../applications/science/math/mathematica/10.nix { };
-  mathematica11 = callPackage ../applications/science/math/mathematica/11.nix { };
+
+  mathematica-cuda = callPackage ../applications/science/math/mathematica {
+    cudaSupport = true;
+  };
+
+  mathematica9 = callPackage ../applications/science/math/mathematica {
+    version = "9";
+  };
+
+  mathematica10 = callPackage ../applications/science/math/mathematica {
+    version = "10";
+  };
+
+  mathematica11 = callPackage ../applications/science/math/mathematica {
+    version = "11";
+  };
 
   metis = callPackage ../development/libraries/science/math/metis {};
 
@@ -33183,7 +33193,9 @@ with pkgs;
 
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {};
 
-  aspino = callPackage ../applications/science/logic/aspino {};
+  aspino = callPackage ../applications/science/logic/aspino {
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+  };
 
   beluga = callPackage ../applications/science/logic/beluga {};
 

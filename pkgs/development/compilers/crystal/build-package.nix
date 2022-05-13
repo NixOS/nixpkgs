@@ -72,16 +72,17 @@ stdenv.mkDerivation (mkDerivationArgs // {
 
   PREFIX = placeholder "out";
 
-  buildInputs = args.buildInputs or [ ] ++ [ crystal ]
-    ++ lib.optional (format != "crystal") shards;
+  strictDeps = true;
+  buildInputs = args.buildInputs or [ ] ++ [ crystal ];
 
   nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
+    crystal
     git
     installShellFiles
     removeReferencesTo
     pkg-config
     which
-  ];
+  ] ++ lib.optional (format != "crystal") shards;
 
   buildPhase = args.buildPhase or (lib.concatStringsSep "\n" ([
     "runHook preBuild"
