@@ -1360,6 +1360,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-path/";
   };
 
+  cmp-rg = buildVimPluginFrom2Nix {
+    pname = "cmp-rg";
+    version = "2022-01-13";
+    src = fetchFromGitHub {
+      owner = "lukas-reineke";
+      repo = "cmp-rg";
+      rev = "fd92d70ff36b30924401b0cf7d4ce7344c8235f7";
+      sha256 = "0z8knl4l5a7miw081h290s0g4icqqvn6qibr6jx4x71qwqb21w2y";
+    };
+    meta.homepage = "https://github.com/lukas-reineke/cmp-rg/";
+  };
+
   cmp-snippy = buildVimPluginFrom2Nix {
     pname = "cmp-snippy";
     version = "2021-09-20";
