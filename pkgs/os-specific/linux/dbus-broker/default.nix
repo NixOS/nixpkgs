@@ -1,16 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, docutils, meson, ninja, pkg-config
+{ lib, stdenv, fetchzip, docutils, meson, ninja, pkg-config
 , dbus, linuxHeaders, systemd }:
 
 stdenv.mkDerivation rec {
   pname = "dbus-broker";
-  version = "29";
+  version = "30";
 
-  src = fetchFromGitHub {
-    owner  = "bus1";
-    repo   = "dbus-broker";
-    rev    = "v${version}";
-    sha256 = "1abbi8c0mgdqjidlp2wnmy0a88xv173hq88sh5m966c5r1h6alkq";
-    fetchSubmodules = true;
+  src = fetchzip {
+    url = "https://github.com/bus1/dbus-broker/releases/download/v${version}/dbus-broker-${version}.tar.xz";
+    sha256 = "1bgn90kprcmx7pr4fc2g9v9vsz73x35c3x0vipirq5gcrcy97pmd";
   };
 
   nativeBuildInputs = [ docutils meson ninja pkg-config ];
