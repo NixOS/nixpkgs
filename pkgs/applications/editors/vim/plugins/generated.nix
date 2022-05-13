@@ -1276,6 +1276,18 @@ final: prev:
     meta.homepage = "https://github.com/notomo/cmp-neosnippet/";
   };
 
+  cmp-npm = buildVimPluginFrom2Nix {
+    pname = "cmp-npm";
+    version = "2021-10-27";
+    src = fetchFromGitHub {
+      owner = "David-Kunz";
+      repo = "cmp-npm";
+      rev = "4b6166c3feeaf8dae162e33ee319dc5880e44a29";
+      sha256 = "0lkrbj5pswyb161hi424bii394qfdhm7v86x18a5fs2cmkwi0222";
+    };
+    meta.homepage = "https://github.com/David-Kunz/cmp-npm/";
+  };
+
   cmp-nvim-lsp = buildVimPluginFrom2Nix {
     pname = "cmp-nvim-lsp";
     version = "2022-05-16";
