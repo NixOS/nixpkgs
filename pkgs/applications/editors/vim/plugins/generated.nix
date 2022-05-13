@@ -1264,6 +1264,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-path/";
   };
 
+  cmp-snippy = buildVimPluginFrom2Nix {
+    pname = "cmp-snippy";
+    version = "2021-09-20";
+    src = fetchFromGitHub {
+      owner = "dcampos";
+      repo = "cmp-snippy";
+      rev = "9af1635fe40385ffa3dabf322039cb5ae1fd7d35";
+      sha256 = "1ag31kvd2q1awasdrc6pbbbsf0l3c99crz4h03337wj1kcssiixy";
+    };
+    meta.homepage = "https://github.com/dcampos/cmp-snippy/";
+  };
+
   cmp-spell = buildVimPluginFrom2Nix {
     pname = "cmp-spell";
     version = "2021-10-19";
