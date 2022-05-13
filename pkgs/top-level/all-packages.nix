@@ -808,6 +808,8 @@ with pkgs;
       sanitizers = [ ];
     };
 
+  compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware-xz.nix { };
+
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
       inherit kernel firmware rootModules allowMissing;
