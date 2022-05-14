@@ -2368,6 +2368,8 @@ with pkgs;
 
   pass = callPackage ../tools/security/pass { };
 
+  passage = callPackage ../tools/security/passage { };
+
   passphrase2pgp = callPackage ../tools/security/passphrase2pgp { };
 
   pass-git-helper = python3Packages.callPackage ../applications/version-management/git-and-tools/pass-git-helper { };
