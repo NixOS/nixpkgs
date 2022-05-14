@@ -20115,7 +20115,7 @@ with pkgs;
 
   primecount = callPackage ../development/libraries/science/math/primecount { };
 
-  primesieve = callPackage ../development/libraries/science/math/primesieve { };
+  primesieve = callPackage ../applications/science/math/primesieve { };
 
   prison = callPackage ../development/libraries/prison { };
 
