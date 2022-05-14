@@ -4,6 +4,7 @@
 , zlib
 , libX11
 , libpng
+, libjpeg
 , gd
 , freetype
 }:
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     libpng
     gd
     freetype
+    libjpeg
   ];
 
   hardeningDisable = [ "format" ];
