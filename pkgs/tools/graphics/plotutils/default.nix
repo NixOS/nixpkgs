@@ -1,4 +1,4 @@
-{ fetchurl, lib, stdenv, libpng, autoreconfHook }:
+{ fetchurl, lib, stdenv, libpng, libjpeg, autoreconfHook }:
 
 # debian splits this package into plotutils and libplot2c2
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libpng ];
+  buildInputs = [ libpng libjpeg.dev ];
   patches = map fetchurl (import ./debian-patches.nix);
 
   preBuild = ''
