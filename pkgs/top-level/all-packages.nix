@@ -376,6 +376,8 @@ with pkgs;
 
   c-stdaux = callPackage ../development/libraries/c-util/c-stdaux { };
 
+  c-list = callPackage ../development/libraries/c-util/c-list { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
