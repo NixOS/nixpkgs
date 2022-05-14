@@ -2,7 +2,7 @@ xdtEnvHook() {
     addToSearchPath ACLOCAL_PATH $1/share/aclocal
 }
 
-envHooks+=(xdtEnvHook)
+addEnvHooks "$hostOffset" xdtEnvHook
 
 xdtAutogenPhase() {
     mkdir -p m4
