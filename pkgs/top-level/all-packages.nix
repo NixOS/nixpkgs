@@ -1998,7 +1998,9 @@ with pkgs;
 
   bonnmotion = callPackage ../development/tools/misc/bonnmotion { };
 
-  bonnie = callPackage ../tools/filesystems/bonnie { };
+  bonnie = callPackage ../tools/filesystems/bonnie {
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+  };
 
   botamusique = callPackage ../tools/audio/botamusique { };
 
@@ -2560,17 +2562,6 @@ with pkgs;
 
   axel = callPackage ../tools/networking/axel {
     libssl = openssl;
-  };
-
-  axoloti = callPackage ../applications/audio/axoloti {
-    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
-    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-  dfu-util-axoloti = callPackage ../applications/audio/axoloti/dfu-util.nix { };
-  libusb1-axoloti = callPackage ../applications/audio/axoloti/libusb1.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
   b3sum = callPackage ../tools/security/b3sum {};
@@ -5211,8 +5202,6 @@ with pkgs;
   picotts = callPackage ../tools/audio/picotts { };
 
   wgetpaste = callPackage ../tools/text/wgetpaste { };
-
-  dirmngr = callPackage ../tools/security/dirmngr { };
 
   dismap = callPackage ../tools/security/dismap { };
 
@@ -16831,7 +16820,9 @@ with pkgs;
 
   classads = callPackage ../development/libraries/classads { };
 
-  clfft = callPackage ../development/libraries/clfft { };
+  clfft = callPackage ../development/libraries/clfft {
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+  };
 
   clipp  = callPackage ../development/libraries/clipp { };
 
@@ -16883,8 +16874,6 @@ with pkgs;
   cosmopolitan = callPackage ../development/libraries/cosmopolitan { };
 
   python-cosmopolitan = callPackage ../development/interpreters/python-cosmopolitan { };
-
-  ctl = callPackage ../development/libraries/ctl { };
 
   ctpp2 = callPackage ../development/libraries/ctpp2 { };
 
