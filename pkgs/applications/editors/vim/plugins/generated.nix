@@ -9380,6 +9380,18 @@ final: prev:
     meta.homepage = "https://github.com/google/vim-jsonnet/";
   };
 
+  vim-jsonpath = buildVimPluginFrom2Nix {
+    pname = "vim-jsonpath";
+    version = "2020-06-16";
+    src = fetchFromGitHub {
+      owner = "mogelbrod";
+      repo = "vim-jsonpath";
+      rev = "af9c07b87765fc5aee176a894bc91fb04a5e3c47";
+      sha256 = "0l59c6xl4rly7xbfgsqam1rwcyvqhr7lzi3g2jpwirarm823rla9";
+    };
+    meta.homepage = "https://github.com/mogelbrod/vim-jsonpath/";
+  };
+
   vim-jsx-pretty = buildVimPluginFrom2Nix {
     pname = "vim-jsx-pretty";
     version = "2021-01-12";
