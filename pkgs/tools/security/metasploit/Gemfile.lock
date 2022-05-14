@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 4ecb04311be0dd55fbf66e6d05fa8b37135c5573
-  ref: refs/tags/6.1.41
+  revision: 70ec8a21b90103f8405c1bb0e3990a783a5467bc
+  ref: refs/tags/6.1.42
   specs:
-    metasploit-framework (6.1.41)
+    metasploit-framework (6.1.42)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -99,25 +99,25 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.0)
-    actionpack (6.1.5.1)
-      actionview (= 6.1.5.1)
-      activesupport (= 6.1.5.1)
+    actionpack (6.1.6)
+      actionview (= 6.1.6)
+      activesupport (= 6.1.6)
       rack (~> 2.0, >= 2.0.9)
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.2.0)
-    actionview (6.1.5.1)
-      activesupport (= 6.1.5.1)
+    actionview (6.1.6)
+      activesupport (= 6.1.6)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
-    activemodel (6.1.5.1)
-      activesupport (= 6.1.5.1)
-    activerecord (6.1.5.1)
-      activemodel (= 6.1.5.1)
-      activesupport (= 6.1.5.1)
-    activesupport (6.1.5.1)
+    activemodel (6.1.6)
+      activesupport (= 6.1.6)
+    activerecord (6.1.6)
+      activemodel (= 6.1.6)
+      activesupport (= 6.1.6)
+    activesupport (6.1.6)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
@@ -129,13 +129,13 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.586.0)
+    aws-partitions (1.587.0)
     aws-sdk-core (3.130.2)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
-    aws-sdk-ec2 (1.312.0)
+    aws-sdk-ec2 (1.315.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.68.0)
@@ -232,7 +232,7 @@ GEM
     logging (2.3.0)
       little-plugger (~> 1.1)
       multi_json (~> 1.14)
-    loofah (2.17.0)
+    loofah (2.18.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     metasm (1.0.5)
@@ -287,7 +287,7 @@ GEM
     network_interface (0.0.2)
     nexpose (7.3.0)
     nio4r (2.5.8)
-    nokogiri (1.13.5)
+    nokogiri (1.13.6)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     nori (2.6.0)
@@ -301,7 +301,7 @@ GEM
       pcaprub
     patch_finder (1.0.2)
     pcaprub (0.13.1)
-    pdf-reader (2.9.2)
+    pdf-reader (2.10.0)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
@@ -322,9 +322,9 @@ GEM
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.4.2)
       loofah (~> 2.3)
-    railties (6.1.5.1)
-      actionpack (= 6.1.5.1)
-      activesupport (= 6.1.5.1)
+    railties (6.1.6)
+      actionpack (= 6.1.6)
+      activesupport (= 6.1.6)
       method_source
       rake (>= 12.2)
       thor (~> 1.0)
@@ -373,7 +373,7 @@ GEM
       metasm
       rex-core
       rex-text
-    rex-socket (0.1.38)
+    rex-socket (0.1.39)
       rex-core
     rex-sslscan (0.1.7)
       rex-core

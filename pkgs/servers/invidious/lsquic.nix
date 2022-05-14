@@ -1,9 +1,11 @@
-{ lib, boringssl, stdenv, fetchgit, fetchFromGitHub, cmake, zlib, perl, libevent }:
+{ lib, boringssl, stdenv, fetchgit, fetchFromGitHub, cmake, zlib, perl, libevent, gcc10Stdenv, buildGoModule }:
 let
   versions = builtins.fromJSON (builtins.readFile ./versions.json);
 
+  buildGoModuleGcc10 = buildGoModule.override { stdenv = gcc10Stdenv; };
+
   # lsquic requires a specific boringssl version (noted in its README)
-  boringssl' = boringssl.overrideAttrs (old: {
+  boringssl' = (boringssl.overrideAttrs (old: {
     version = versions.boringssl.rev;
     src = fetchgit {
       url = "https://boringssl.googlesource.com/boringssl";
@@ -14,7 +16,9 @@ let
       # Use /etc/ssl/certs/ca-certificates.crt instead of /etc/ssl/cert.pem
       ./use-etc-ssl-certs.patch
     ];
-  });
+  })).override {
+    buildGoModule = buildGoModuleGcc10;
+  };
 in
 stdenv.mkDerivation rec {
   pname = "lsquic";
