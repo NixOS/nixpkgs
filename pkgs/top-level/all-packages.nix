@@ -378,6 +378,8 @@ with pkgs;
 
   c-list = callPackage ../development/libraries/c-util/c-list { };
 
+  c-utf8 = callPackage ../development/libraries/c-util/c-utf8 { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
