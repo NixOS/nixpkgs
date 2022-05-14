@@ -63,6 +63,7 @@ let
   electronLibPath = with lib; makeLibraryPath (
     [ libuuid at-spi2-atk at-spi2-core libappindicator-gtk3 ]
     ++ optionals (! versionOlder version "9.0.0") [ libdrm mesa ]
+    ++ optionals (versionOlder version "10.0.0") [ libXScrnSaver ]
     ++ optionals (! versionOlder version "11.0.0") [ libxkbcommon ]
     ++ optionals (! versionOlder version "12.0.0") [ libxshmfence ]
     ++ optionals (! versionOlder version "17.0.0") [ libglvnd ]
@@ -95,9 +96,7 @@ let
         $out/lib/electron/electron \
         ${lib.optionalString (! lib.versionOlder version "15.0.0") "$out/lib/electron/chrome_crashpad_handler" }
 
-      wrapProgram $out/lib/electron/electron \
-        --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1 \
-        "''${gappsWrapperArgs[@]}"
+      wrapProgram $out/lib/electron/electron "''${gappsWrapperArgs[@]}"
     '';
   };
 
