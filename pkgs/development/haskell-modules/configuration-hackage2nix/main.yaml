@@ -118,7 +118,6 @@ extra-packages:
   - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
-  - brick == 0.64.*                     # 2021-12-03: matterhorn depends on brick < 0.65
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - ormolu == 0.2.*                     # 2022-02-21: For ghc 8.8 and 8.10
   - ShellCheck == 0.7.2                 # 2022-02-20: haskell-ci 0.14 needs this
