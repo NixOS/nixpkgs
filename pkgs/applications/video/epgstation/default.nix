@@ -41,7 +41,7 @@ let
     # dependencies are pruned afterwards.
     production = false;
 
-    buildInputs = [ bash ];
+    buildInputs = (drv.buildInputs or [ ]) ++ [ bash ];
     nativeBuildInputs = (drv.nativeBuildInputs or [ ]) ++ [
       makeWrapper
     ];
