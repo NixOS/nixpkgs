@@ -1,4 +1,6 @@
-{ lib, fetchFromGitHub, buildDunePackage
+{ lib
+, fetchFromGitHub
+, buildDunePackage
 , menhir
 , menhirLib
 , uutf
@@ -6,7 +8,7 @@
 
 buildDunePackage rec {
   pname = "otoml";
-  version = "0.9.0";
+  version = "1.0.1";
 
   useDune2 = true;
 
@@ -16,7 +18,7 @@ buildDunePackage rec {
     owner = "dmbaturin";
     repo = pname;
     rev = version;
-    sha256 = "0l0c60rzgk11y8xq05kr8q9hkzb3c8vi995mq84x98ys73wb42j3";
+    sha256 = "sha256-2WGuq4ZLbLvfG6WZ3iimiSMqMYHCuruZc1EttZ/5rBE=";
   };
 
   strictDeps = true;
