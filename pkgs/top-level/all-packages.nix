@@ -999,6 +999,7 @@ with pkgs;
 
   arc_unpacker = callPackage ../tools/archivers/arc_unpacker {
     boost = boost16x; # checkPhase fails with Boost 1.77
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
   };
 
   adminer = callPackage ../servers/adminer { };
@@ -5430,7 +5431,7 @@ with pkgs;
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-    electron = electron_15;
+    electron = electron_17;
   };
   schildichat-desktop-wayland = writeScriptBin "schildichat-desktop" ''
     #!/bin/sh
@@ -6152,7 +6153,9 @@ with pkgs;
 
   gfbgraph = callPackage ../development/libraries/gfbgraph { };
 
-  gfold = callPackage ../applications/version-management/git-and-tools/gfold { };
+  gfold = callPackage ../applications/version-management/git-and-tools/gfold {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ggobi = callPackage ../tools/graphics/ggobi { };
 
@@ -20115,9 +20118,9 @@ with pkgs;
 
   prime-server = callPackage ../development/libraries/prime-server { };
 
-  primecount = callPackage ../development/libraries/science/math/primecount { };
+  primecount = callPackage ../applications/science/math/primecount { };
 
-  primesieve = callPackage ../development/libraries/science/math/primesieve { };
+  primesieve = callPackage ../applications/science/math/primesieve { };
 
   prison = callPackage ../development/libraries/prison { };
 
