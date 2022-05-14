@@ -151,6 +151,23 @@ rec {
     # Argument to check for null before passing it to `f`
     a: if a == null then a else f a;
 
+
+  /*
+    Convert derivation to path of main executable
+
+    Type: exec :: Derivation -> Path
+
+    Example:
+      exec pkgs.bash
+      => /nix/store/...-bash-x-x-x/bin/bash
+      exec pkgs.libnotify
+      => /nix/store/...-libnotify-x-x-x/bin/notify-send
+      exec (pkgs.writeShellScriptBin "abc.sh" "")
+      => /nix/store/...-abc.sh/bin/abc.sh
+  */
+  exec = pkg: "${pkg}/bin/${pkg.meta.mainProgram or pkg.pname or pkg.name}";
+
+
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
     pathExists readFile isBool
