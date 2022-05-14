@@ -240,7 +240,6 @@ let
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/ash -c 'echo hello world' | grep "hello world"
-      export LD_LIBRARY_PATH=$out/lib
       ${if zfsRequiresMountHelper then ''
         $out/bin/mount -V 1>&1 | grep -q "mount from util-linux"
         $out/bin/mount.zfs -h 2>&1 | grep -q "Usage: mount.zfs"
@@ -284,8 +283,6 @@ let
       preferLocalBuild = true;
     } ''
       mkdir -p $out
-
-      echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 
       cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
       cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
