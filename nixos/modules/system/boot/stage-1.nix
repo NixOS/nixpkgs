@@ -231,6 +231,11 @@ let
         patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
       done
 
+      find $out/lib -type f \! -name 'ld*.so.?' | while read i; do
+        echo "patching $i..."
+        patchelf --set-rpath $out/lib $i
+      done
+
       if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
