@@ -44,7 +44,7 @@ let
 
   meta = with lib; {
     inherit (anki.meta) license homepage description longDescription;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ atemu ];
   };
 
