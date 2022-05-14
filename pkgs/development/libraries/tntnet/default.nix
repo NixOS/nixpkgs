@@ -1,20 +1,30 @@
-{ lib, stdenv, fetchurl, cxxtools, zlib, openssl, zip }:
+{ lib, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, cxxtools
+, openssl
+, zip
+, zlib
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tntnet";
-  version = "2.2.1";
+  version = "unstable-2021-03-29";
 
-  src = fetchurl {
-    url = "http://www.tntnet.org/download/${pname}-${version}.tar.gz";
-    sha256 = "08bmak9mpbamwwl3h9p8x5qzwqlm9g3jh70y0ml5hk7hiv870cf8";
+  src = fetchFromGitHub {
+    owner = "maekitalo";
+    repo = "tntnet";
+    rev = "725bc4dffea94525e6722c625bb6720e4bb470a0";
+    hash = "sha256-GaCodhg7GKK2qKolQJ+RxlhUuAKOYcrtrNjvFx9k+KA=";
   };
 
-  buildInputs = [ cxxtools zlib openssl zip ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ cxxtools openssl zip zlib ];
 
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "http://www.tntnet.org/tntnet.html";
+    homepage = "https://github.com/maekitalo/tntnet";
     description = "Web server which allows users to develop web applications using C++";
     platforms = platforms.linux ;
     license = licenses.lgpl21;
