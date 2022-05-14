@@ -1650,6 +1650,22 @@ let
         };
       };
 
+      piousdeer.adwaita-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "adwaita-theme";
+          publisher = "piousdeer";
+          version = "1.0.5";
+          sha256 = "";
+        };
+        meta = with lib; {
+          description = "VS Code theme for the GNOME desktop";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=piousdeer.adwaita-theme";
+          homepage = "https://github.com/piousdeer/vscode-adwaita";
+          license = licenses.gpl3;
+          maintainers = with maintainers; [ vanilla ];
+        };
+      };
+
       redhat.java = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "java";
