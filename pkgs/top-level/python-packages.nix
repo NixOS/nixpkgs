@@ -10776,6 +10776,8 @@ in {
 
   validobj = callPackage ../development/python-modules/validobj { };
 
+  validphys2 = callPackage ../development/python-modules/validphys2 { };
+
   vallox-websocket-api = callPackage ../development/python-modules/vallox-websocket-api { };
 
   variants = callPackage ../development/python-modules/variants { };
