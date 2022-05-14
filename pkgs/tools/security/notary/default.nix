@@ -1,39 +1,29 @@
-{ lib, fetchFromGitHub, buildGoPackage, libtool }:
+{ lib, fetchFromGitHub, buildGoModule, pkcs11Support ? true }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "notary";
-  version = "0.6.1";
-  gitcommit = "d6e1431f";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
-    owner = "theupdateframework";
+    owner = "notaryproject";
     repo = "notary";
     rev = "v${version}";
-    sha256 = "1ak9dk6vjny5069hp3w36dbjawcnaq82l3i2qvf7mn7zfglbsnf9";
+    sha256 = "sha256-jTf9CwyUgDWY2lmi+6HWOOc4rNWfNke0CfL3VEbHRVY=";
   };
 
-  patches = [ ./no-git-usage.patch ];
+  vendorSha256 = null;
 
-  buildInputs = [ libtool ];
-  buildPhase = ''
-    runHook preBuild
-    cd go/src/github.com/theupdateframework/notary
-    SKIPENVCHECK=1 make client GITCOMMIT=${gitcommit}
-    runHook postBuild
-  '';
+  excludedPackages = [ "cmd/escrow" ];
 
-  goPackagePath = "github.com/theupdateframework/notary";
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/theupdateframework/notary/version.NotaryVersion=${version}"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    install -D bin/notary $out/bin/notary
-    runHook postInstall
-  '';
+  tags = [ ] ++ lib.optionals pkcs11Support [ "pkcs11key" ];
 
-  #doCheck = true; # broken by tzdata: 2018g -> 2019a
-  checkPhase = ''
-    make test PKGS=github.com/theupdateframework/notary/cmd/notary
-  '';
+  checkFlags = [ "-short" ];
 
   meta = with lib; {
     description = "A project that allows anyone to have trust over arbitrary collections of data";
@@ -58,8 +48,7 @@ buildGoPackage rec {
       integrity of the received content.
     '';
     license = licenses.asl20;
-    homepage = "https://github.com/theupdateframework/notary";
+    homepage = "https://github.com/notaryproject/notary";
     maintainers = with maintainers; [ vdemeester ];
-    platforms = platforms.unix;
   };
 }

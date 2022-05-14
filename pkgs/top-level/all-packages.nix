@@ -8781,7 +8781,9 @@ with pkgs;
 
   noisetorch = callPackage ../applications/audio/noisetorch { };
 
-  notary = callPackage ../tools/security/notary { };
+  notary = callPackage ../tools/security/notary {
+    buildGoModule = buildGo116Module;
+  };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
 
