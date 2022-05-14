@@ -472,7 +472,7 @@ stdenv.mkDerivation {
     ''
 
     # TODO: categorize these and figure out a better place for them
-    + optionalString hostPlatform.isCygwin ''
+    + optionalString (hostPlatform.isCygwin || (hostPlatform.isx86_32 && hostPlatform.useLLVM or false)) ''
       hardening_unsupported_flags+=" pic"
     '' + optionalString targetPlatform.isMinGW ''
       hardening_unsupported_flags+=" stackprotector fortify"

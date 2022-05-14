@@ -43,6 +43,7 @@ let
       mkdir "$rsrc"
       ln -s "${cc.lib}/lib/clang/${release_version}/include" "$rsrc"
       echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+      echo "-B $rsrc/lib" >> $out/nix-support/cc-cflags
     '';
     mkExtraBuildCommands = cc: mkExtraBuildCommands0 cc + ''
       ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"

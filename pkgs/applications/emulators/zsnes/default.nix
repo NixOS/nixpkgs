@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, nasm, SDL, zlib, libpng, ncurses, libGLU, libGL
-, makeDesktopItem }:
+{ lib, stdenv, fetchFromGitHub
+, nasm, pkg-config, autoreconfHook
+, SDL, zlib, libpng, ncurses, libGLU, libGL
+, makeDesktopItem
+}:
 
 let
   desktopItem = makeDesktopItem {
@@ -23,7 +26,9 @@ in stdenv.mkDerivation {
     sha256 = "1gy79d5wdaacph0cc1amw7mqm7i0716n6mvav16p1svi26iz193v";
   };
 
-  buildInputs = [ nasm SDL zlib libpng ncurses libGLU libGL ];
+  nativeBuildInputs = [ nasm pkg-config autoreconfHook ];
+
+  buildInputs = [ SDL zlib libpng ncurses libGLU libGL ];
 
   prePatch = ''
     for i in $(cat debian/patches/series); do
@@ -32,13 +37,30 @@ in stdenv.mkDerivation {
     done
   '';
 
-  preConfigure = ''
+  patches = [
+    # Use pkg-config to find zlib so cross-configure works.
+    ./zlib-pkg-config.diff
+  ];
+
+  preAutoreconf = ''
     cd src
+  '';
+
+  autoreconfFlags = [
+    "--install" "--force" "--verbose"
+    "-I${lib.getDev SDL}/share/aclocal"
+  ];
+
+  preConfigure = ''
     sed -i "/^STRIP/d" configure
     sed -i "/\$STRIP/d" configure
   '';
 
   configureFlags = [ "--enable-release" ];
+
+  strictDeps = true;
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     function installIcon () {

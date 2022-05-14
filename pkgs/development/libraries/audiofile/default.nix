@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   # fix build with gcc9
-  NIX_CFLAGS_LINK = lib.optional (stdenv.system == "i686-linux") "-lgcc";
+  NIX_CFLAGS_LINK = lib.optional (stdenv.system == "i686-linux" && !(stdenv.hostPlatform.useLLVM or false)) "-lgcc";
 
   # Even when statically linking, libstdc++.la is put in dependency_libs here,
   # and hence libstdc++.so passed to the linker, just pass -lstdc++ and let the

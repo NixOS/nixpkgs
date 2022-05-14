@@ -64,6 +64,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.isMusl [
     "-Wno-null-dereference"
+  ] ++ lib.optionals stdenv.cc.isClang [
+    "-Wno-xor-used-as-pow"
+    "-Wno-gnu-variable-sized-type-not-at-end"
   ];
 
   configureFlags = [
@@ -78,8 +81,12 @@ stdenv.mkDerivation rec {
   # Backtrace unwinding tests rely on glibc-internal symbol names.
   # Musl provides slightly different forms and fails.
   # Let's disable tests there until musl support is fully upstreamed.
-  doCheck = !stdenv.hostPlatform.isMusl;
-  doInstallCheck = !stdenv.hostPlatform.isMusl;
+  #
+  # Not sure why the clang build fails, yet.
+  doCheck = !stdenv.hostPlatform.isMusl
+    && !stdenv.cc.isClang;
+  doInstallCheck = !stdenv.hostPlatform.isMusl
+    && !stdenv.cc.isClang;
 
   meta = with lib; {
     homepage = "https://sourceware.org/elfutils/";

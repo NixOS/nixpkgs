@@ -4,7 +4,11 @@
 , alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
 , libXext, libICE, libXrandr
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+    && !stdenv.hostPlatform.isAndroid
+    # Avoid Fortran until we can use Flang instead of GFortran
+    && !(stdenv.hostPlatform.useLLVM or false)
+, libpulseaudio
 , OpenGL, GLUT, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 }:
 
@@ -103,6 +107,17 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/libsdl-org/SDL-1.2/commit/7933032ad4d57c24f2230db29f67eb7d21bb5654.patch";
       sha256 = "1by16firaxyr0hjvn35whsgcmq6bl0nwhnpjf75grjzsw9qvwyia";
+    })
+    # pkg-config support in in sdl.m4.
+	# Using unofficial mirror because git import issue:
+	# https://github.com/libsdl-org/SDL/issues/5220
+    (fetchpatch {
+	  url = "https://github.com/spurious/SDL-mirror/commit/b8e0d8078eef79701d0a03a2d6e244212a658b5e.patch";
+      sha256 = "1xqx7ib68c2qzrx5rv662hf3pqn2f57xzglgdgp4xdzx3qkv1b6l";
+    })
+    (fetchpatch {
+      url = "https://github.com/spurious/SDL-mirror/commit/c7ec74595965a872d077a0e20377cbdb0c0e694f.patch";
+      sha256 = "0mdf1zpk99qr8ksw6nmlqdv9px4szncpjdam3c702qlab979vlqq";
     })
   ];
 

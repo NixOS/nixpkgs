@@ -218,17 +218,22 @@ let
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
-    pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFun {
-      overlays = [ (self': super': {
-        pkgsi686Linux = super';
-      })] ++ overlays;
-      ${if stdenv.hostPlatform == stdenv.buildPlatform
-        then "localSystem" else "crossSystem"} = {
-        parsed = stdenv.hostPlatform.parsed // {
-          cpu = lib.systems.parse.cpuTypes.i686;
-        };
-      };
-    } else throw "i686 Linux package set can only be used with the x86 family.";
+    pkgsi686Linux =
+      if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_32
+        then self
+      else if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86
+        then nixpkgsFun {
+          overlays = [ (self': super': {
+            pkgsi686Linux = super';
+          })] ++ overlays;
+          ${if stdenv.hostPlatform == stdenv.buildPlatform
+            then "localSystem" else "crossSystem"} = {
+            parsed = stdenv.hostPlatform.parsed // {
+              cpu = lib.systems.parse.cpuTypes.i686;
+            };
+          };
+        }
+      else throw "i686 Linux package set can only be used with the x86 family.";
 
     # Extend the package set with zero or more overlays. This preserves
     # preexisting overlays. Prefer to initialize with the right overlays

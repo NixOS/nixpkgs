@@ -37,6 +37,7 @@ let
       then "i386"
       else null;
 
+  enableShared = !(stdenv.hostPlatform.isx86_32 && stdenv.hostPlatform.useLLVM);
 in
 stdenv.mkDerivation rec {
   pname = "musl";
@@ -72,7 +73,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.hostPlatform.isPower "-mlong-double-64";
 
   configureFlags = [
-    "--enable-shared"
+    (lib.enableFeature enableShared "shared")
     "--enable-static"
     "--enable-debug"
     "--enable-wrapper=all"
@@ -130,9 +131,10 @@ stdenv.mkDerivation rec {
       -L$out/lib -Wl,-rpath=$out/lib \
       -lc \
       -B $out/lib \
-      -Wl,-dynamic-linker=$(ls $out/lib/ld-*)
-  '' + lib.optionalString (arch != null) ''
-    # Create 'libc.musl-$arch' symlink
+      ${lib.optionalString (enableShared) "-Wl,-dynamic-linker=$(ls $out/lib/ld-*)"}
+  ''
+  # Create 'libc.musl-$arch' symlink
+  + lib.optionalString (arch != null && enableShared) ''
     ln -rs $out/lib/libc.so $out/lib/libc.musl-${arch}.so.1
   '' + lib.optionalString useBSDCompatHeaders ''
     install -D ${queue_h} $dev/include/sys/queue.h
