@@ -1,23 +1,32 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, openssl
+}:
 
 stdenv.mkDerivation rec {
-  version = "2.2.1";
   pname = "cxxtools";
+  version = "unstable-2021-12-23";
 
-  src = fetchurl {
-    url = "http://www.tntnet.org/download/${pname}-${version}.tar.gz";
-    sha256 = "0hp3qkyhidxkdf8qgkwrnqq5bpahink55mf0yz23rjd7rpbbdswc";
+  src = fetchFromGitHub {
+    owner = "maekitalo";
+    repo = "cxxtools";
+    rev = "31a212fe400b36cc5b9ea0dd76d9b5facfde914d";
+    hash = "sha256-h7/G5aPnEsGjOL2NrKAnw4VfWTr8o4u574albdqFdjg=";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl.dev ];
 
   configureFlags = lib.optional stdenv.isAarch64 "--with-atomictype=pthread";
 
   enableParallelBuilding = true;
 
-  meta = {
-    homepage = "http://www.tntnet.org/cxxtools.html";
+  meta = with lib; {
+    homepage = "https://github.com/maekitalo/cxxtools";
     description = "Comprehensive C++ class library for Unix and Linux";
-    platforms = lib.platforms.linux ;
-    license = lib.licenses.lgpl21;
-    maintainers = [ lib.maintainers.juliendehos ];
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ juliendehos ];
   };
 }
