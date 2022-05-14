@@ -62,7 +62,7 @@ let
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
 
-    inherit (self.flakes) callLocklessFlake;
+    inherit (self.flakes) callLocklessFlake eachSystem mkApp mkApp';
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isString length
@@ -74,7 +74,7 @@ let
       info showWarnings nixpkgsVersion version isInOldestRelease
       mod compare splitByAndCompare
       functionArgs setFunctionArgs isFunction toFunction
-      toHexString toBaseDigits;
+      toHexString toBaseDigits exec;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
