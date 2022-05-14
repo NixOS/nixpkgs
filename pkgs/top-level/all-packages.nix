@@ -374,6 +374,8 @@ with pkgs;
 
   datalad = callPackage ../applications/version-management/datalad { };
 
+  c-stdaux = callPackage ../development/libraries/c-util/c-stdaux { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
