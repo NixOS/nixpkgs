@@ -2562,17 +2562,6 @@ with pkgs;
     libssl = openssl;
   };
 
-  axoloti = callPackage ../applications/audio/axoloti {
-    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
-    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
-    jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
-  dfu-util-axoloti = callPackage ../applications/audio/axoloti/dfu-util.nix { };
-  libusb1-axoloti = callPackage ../applications/audio/axoloti/libusb1.nix {
-    inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) IOKit;
-  };
-
   b3sum = callPackage ../tools/security/b3sum {};
 
   backblaze-b2 = callPackage ../development/tools/backblaze-b2 { };
