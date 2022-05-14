@@ -6152,7 +6152,9 @@ with pkgs;
 
   gfbgraph = callPackage ../development/libraries/gfbgraph { };
 
-  gfold = callPackage ../applications/version-management/git-and-tools/gfold { };
+  gfold = callPackage ../applications/version-management/git-and-tools/gfold {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ggobi = callPackage ../tools/graphics/ggobi { };
 
