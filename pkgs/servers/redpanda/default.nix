@@ -4,13 +4,21 @@ let
   version = "21.11.15";
   platform = if stdenv.isLinux then "linux" else "darwin";
   arch = if stdenv.isAarch64 then "arm" else "amd";
+  sha256s = {
+    darwin.amd = "sha256-Yf4O7lVcf+nmb0wFTx7jLjUSmdAItoUfPlkhHveI9UY=";
+    # TODO if you have this aarch, feel free to submit a PR for the sha256
+    darwin.arm = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    linux.amd = "sha256:0vpxn7kcpqylk0nc74m6yxgwwf8ns8pyb6kxnmnmv2x58f8x4c8n";
+    # TODO if you have this aarch, feel free to submit a PR for the sha256
+    linux.arm = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+  };
 in stdenv.mkDerivation rec {
   pname = "redpanda";
   inherit version;
 
   src = fetchzip {
     url = "https://github.com/redpanda-data/redpanda/releases/download/v${version}/rpk-${platform}-${arch}64.zip";
-    sha256 = "sha256-Yf4O7lVcf+nmb0wFTx7jLjUSmdAItoUfPlkhHveI9UY=";
+    sha256 = sha256s.${platform}.${arch};
   };
 
   installPhase = ''
