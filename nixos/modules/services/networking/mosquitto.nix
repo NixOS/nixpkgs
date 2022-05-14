@@ -199,6 +199,7 @@ let
     allow_anonymous = 1;
     allow_zero_length_clientid = 1;
     auto_id_prefix = 1;
+    bind_interface = 1;
     cafile = 1;
     capath = 1;
     certfile = 1;
@@ -629,9 +630,10 @@ in
                ]));
         RemoveIPC = true;
         RestrictAddressFamilies = [
-          "AF_UNIX"  # for sd_notify() call
+          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
+          "AF_NETLINK"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
