@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libelf zlib ];
+  # Requested by pkg-config.
+  propagatedBuildInputs = [ libelf zlib ];
 
   enableParallelBuilding = true;
   makeFlags = [ "PREFIX=$(out)" "-C src" ];
