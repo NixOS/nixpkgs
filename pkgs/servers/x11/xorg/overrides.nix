@@ -15,6 +15,10 @@ let
   malloc0ReturnsNullCrossFlag = lib.optional
     (stdenv.hostPlatform != stdenv.buildPlatform)
     "--enable-malloc0returnsnull";
+
+  brokenOnDarwin = pkg: pkg.overrideAttrs (attrs: {
+    meta = attrs.meta // { broken = isDarwin; };
+  });
 in
 self: super:
 {
@@ -388,13 +392,21 @@ self: super:
     configureFlags = [
       "--with-sdkdir=${placeholder "out"}/include/xorg"
     ];
+    meta = attrs.meta // {
+      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputmouse.x86_64-darwin
+    };
   });
 
   xf86inputjoystick = super.xf86inputjoystick.overrideAttrs (attrs: {
     configureFlags = [
       "--with-sdkdir=${placeholder "out"}/include/xorg"
     ];
+    meta = attrs.meta // {
+      broken = isDarwin; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputjoystick.x86_64-darwin
+    };
   });
+
+  xf86inputkeyboard = brokenOnDarwin super.xf86inputkeyboard; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputkeyboard.x86_64-darwin
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
@@ -422,6 +434,12 @@ self: super:
       platforms = ["i686-linux" "x86_64-linux"];
     };
   });
+
+  xf86inputvoid = brokenOnDarwin super.xf86inputvoid; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputvoid.x86_64-darwin
+  xf86videodummy = brokenOnDarwin super.xf86videodummy; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videodummy.x86_64-darwin
+  xf86videosuncg6 = brokenOnDarwin super.xf86videosuncg6; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosuncg6.x86_64-darwin
+  xf86videosunffb = brokenOnDarwin super.xf86videosunffb; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunffb.x86_64-darwin
+  xf86videosunleo = brokenOnDarwin super.xf86videosunleo; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86videosunleo.x86_64-darwin
 
   # Obsolete drivers that don't compile anymore.
   xf86videoark     = super.xf86videoark.overrideAttrs     (attrs: { meta = attrs.meta // { broken = true; }; });

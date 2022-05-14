@@ -808,6 +808,8 @@ with pkgs;
       sanitizers = [ ];
     };
 
+  compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware-xz.nix { };
+
   makeModulesClosure = { kernel, firmware, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
       inherit kernel firmware rootModules allowMissing;
@@ -5310,6 +5312,8 @@ with pkgs;
   duff = callPackage ../tools/filesystems/duff {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
+
+  dump_syms = callPackage ../development/tools/dump_syms { };
 
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
 

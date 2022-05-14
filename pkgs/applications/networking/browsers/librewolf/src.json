@@ -1,8 +1,8 @@
 {
-  "packageVersion": "100.0-2",
+  "packageVersion": "100.0-3",
   "source": {
-    "rev": "100.0-2",
-    "sha256": "0pr7fb91zw5qlnfvaavzksd3c2xzgn1344mmfnz9yx2g42vcyi7d"
+    "rev": "100.0-3",
+    "sha256": "1n99amk6ngxa7wipc402gffqjv4qmgbaahpz3xydfarxw8gk37pl"
   },
   "firefox": {
     "version": "100.0",

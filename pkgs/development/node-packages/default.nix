@@ -339,6 +339,12 @@ let
           --set PRISMA_INTROSPECTION_ENGINE_BINARY ${prisma-engines}/bin/introspection-engine \
           --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
       '';
+
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/prisma.nix {
+          inherit (self) prisma;
+        };
+      };
     };
 
     pulp = super.pulp.override {

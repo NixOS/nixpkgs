@@ -26,7 +26,10 @@ stdenv.mkDerivation rec {
     patchShebangs src/proto/nanopb/generator/*
   '';
 
-  cmakeFlags = [ "-DCDOGS_DATA_DIR=${placeholder "out"}/" ];
+  cmakeFlags = [
+    "-DCDOGS_DATA_DIR=${placeholder "out"}/"
+    "-DCMAKE_C_FLAGS=-Wno-error=array-bounds"
+  ];
 
   nativeBuildInputs = [
     pkg-config
