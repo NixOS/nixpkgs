@@ -24596,6 +24596,8 @@ with pkgs;
 
   nordic = callPackage ../data/themes/nordic { };
 
+  colloid = callPackage ../data/themes/colloid { };
+
   nordzy-cursor-theme = callPackage ../data/icons/nordzy-cursor-theme { };
 
   nordzy-icon-theme = callPackage ../data/icons/nordzy-icon-theme { };
