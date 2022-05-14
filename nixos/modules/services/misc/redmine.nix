@@ -249,6 +249,13 @@ in
           default = false;
           description = "Allows exporting Gant diagrams as PDF.";
         };
+
+        minimagick_font_path = mkOption {
+          type = types.str;
+          default = "";
+          description = "";
+          example = "/run/current-system/sw/share/X11/fonts/LiberationSans-Regular.ttf";
+        };
       };
     };
   };
@@ -269,6 +276,9 @@ in
       { assertion = cfg.database.createLocally -> cfg.database.host == "localhost";
         message = "services.redmine.database.host must be set to localhost if services.redmine.database.createLocally is set to true";
       }
+      { assertion = cfg.components.imagemagick -> cfg.components.minimagick_font_path != "";
+        message = "services.redmine.components.minimagick_font_path must be configured with a path to a font file if services.redmine.components.imagemagick is set to true.";
+      }
     ];
 
     services.redmine.settings = {
@@ -280,6 +290,7 @@ in
         scm_bazaar_command = if cfg.components.breezy then "${pkgs.breezy}/bin/bzr" else "";
         imagemagick_convert_command = if cfg.components.imagemagick then "${pkgs.imagemagick}/bin/convert" else "";
         gs_command = if cfg.components.ghostscript then "${pkgs.ghostscript}/bin/gs" else "";
+        minimagick_font_path = "${cfg.components.minimagick_font_path}";
       };
     };
 
