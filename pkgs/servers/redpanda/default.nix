@@ -9,8 +9,7 @@ let
     # TODO if you have this aarch, feel free to submit a PR for the sha256
     darwin.arm = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
     linux.amd = "sha256:0vpxn7kcpqylk0nc74m6yxgwwf8ns8pyb6kxnmnmv2x58f8x4c8n";
-    # TODO if you have this aarch, feel free to submit a PR for the sha256
-    linux.arm = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    linux.arm = "sha256-1AQSB2V5zGivU0UinTST2kOydQf/bmLbpjdW0Yo4ptE=";
   };
 in stdenv.mkDerivation rec {
   pname = "redpanda";
