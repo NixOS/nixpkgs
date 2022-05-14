@@ -234,7 +234,6 @@ in
         scm_git_command = "${pkgs.git}/bin/git";
         scm_cvs_command = "${pkgs.cvs}/bin/cvs";
         scm_bazaar_command = "${pkgs.breezy}/bin/bzr";
-        scm_darcs_command = "${pkgs.darcs}/bin/darcs";
       };
     };
 
@@ -299,7 +298,6 @@ in
         imagemagick
         breezy
         cvs
-        darcs
         git
         mercurial
         subversion
