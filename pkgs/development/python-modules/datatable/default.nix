@@ -6,6 +6,7 @@
 , llvm
 , pytestCheckHook
 , typesentry
+, isPy310
 }:
 
 buildPythonPackage rec {
@@ -63,6 +64,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ abbradar ];
     # uses custom build system and adds -Wunused-variable -Werror
     # warning: ‘dt::expr::doc_first’ defined but not used [-Wunused-variable]
-    broken = true;
+    broken = isPy310;
   };
 }
