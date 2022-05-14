@@ -8878,8 +8878,6 @@ with pkgs;
     buildGoModule = buildGo116Module;
   };
 
-  oci-image-tool = callPackage ../tools/misc/oci-image-tool { };
-
   ocproxy = callPackage ../tools/networking/ocproxy { };
 
   ocserv = callPackage ../tools/networking/ocserv { };
