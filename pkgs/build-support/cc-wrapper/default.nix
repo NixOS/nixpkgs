@@ -162,6 +162,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
   dontConfigure = true;
+  enableParallelBuilding = true;
 
   unpackPhase = ''
     src=$PWD

@@ -164,6 +164,7 @@ in
         pname = "bootstrap-stage0-${localSystem.libc}";
         strictDeps = true;
         version = "bootstrap";
+        enableParallelBuilding = true;
         buildCommand = ''
           mkdir -p $out
           ln -s ${bootstrapTools}/lib $out/lib
@@ -268,6 +269,7 @@ in
         # apparently the interpreter needs to match libc, too.
         bintools = self.stdenvNoCC.mkDerivation {
           inherit (prevStage.bintools.bintools) name;
+          enableParallelBuilding = true;
           dontUnpack = true;
           dontBuild = true;
           strictDeps = true;

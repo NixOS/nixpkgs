@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+  enableParallelBuilding = true;
+
   buildInputs = [ gmp mpfr ];
 
   doCheck = true; # not cross;

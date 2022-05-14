@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   setupHook = [ ./setup-hook.sh ];
 
+  enableParallelBuilding = true;
+
   # fails 8 out of 24 tests, problems when loading libc.so.6
   doCheck = stdenv.name == "stdenv-linux";
 

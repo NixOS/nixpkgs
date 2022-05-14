@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+  enableParallelBuilding = true;
+
   buildInputs = [ xz ];
 
   meta = with lib; {
