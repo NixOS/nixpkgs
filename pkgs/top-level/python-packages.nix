@@ -755,6 +755,8 @@ in {
 
   aubio = callPackage ../development/python-modules/aubio { };
 
+  audible = callPackage ../development/python-modules/audible { };
+
   audio-metadata = callPackage ../development/python-modules/audio-metadata { };
 
   audioread = callPackage ../development/python-modules/audioread { };
