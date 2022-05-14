@@ -577,6 +577,8 @@ in {
 
   apispec = callPackage ../development/python-modules/apispec { };
 
+  apispec-webframeworks = callPackage ../development/python-modules/apispec-webframeworks { };
+
   aplpy = callPackage ../development/python-modules/aplpy { };
 
   appdirs = callPackage ../development/python-modules/appdirs { };
@@ -2078,6 +2080,8 @@ in {
   dataclasses = callPackage ../development/python-modules/dataclasses { };
 
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
+
+  dataclasses-jsonschema = callPackage ../development/python-modules/dataclasses-jsonschema { };
 
   datadiff = callPackage ../development/python-modules/datadiff { };
 
@@ -8988,6 +8992,8 @@ in {
 
   repoze_who = callPackage ../development/python-modules/repoze_who { };
 
+  reprint = callPackage ../development/python-modules/reprint { };
+
   reproject = callPackage ../development/python-modules/reproject { };
 
   requests-aws4auth = callPackage ../development/python-modules/requests-aws4auth { };
@@ -10094,6 +10100,8 @@ in {
   tailscale = callPackage ../development/python-modules/tailscale { };
 
   tappy = callPackage ../development/python-modules/tappy { };
+
+  taskcat = callPackage ../development/python-modules/taskcat { };
 
   tasklib = callPackage ../development/python-modules/tasklib { };
 
