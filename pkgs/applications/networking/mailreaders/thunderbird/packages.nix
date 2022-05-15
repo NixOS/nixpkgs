@@ -12,6 +12,7 @@ rec {
     pname = "thunderbird";
     version = "91.9.0";
     application = "comm/mail";
+    applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
