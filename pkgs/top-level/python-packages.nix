@@ -2129,6 +2129,8 @@ in {
 
   ddt = callPackage ../development/python-modules/ddt { };
 
+  deal = callPackage ../development/python-modules/deal { };
+
   deal-solver = callPackage ../development/python-modules/deal-solver { };
 
   deap = callPackage ../development/python-modules/deap { };
