@@ -3,17 +3,17 @@
 , useSteamRun ? true }:
 
 let
-  rev = "e6412d9b837bfd71bb413b4c6e5fa52c9ce60a57";
+  rev = "6a1a59f687ac7b98698e2ebb97d82a94865e50f6";
 in
   buildDotnetModule rec {
     pname = "XIVLauncher";
-    version = "1.0.0.4";
+    version = "1.0.0.9";
 
     src = fetchFromGitHub {
       owner = "goatcorp";
       repo = "FFXIVQuickLauncher";
       inherit rev;
-      sha256 = "sha256-seHO/NNJdWhxWRnyjBN7+m1X0JP/qWAMfF86XMhYN/4=";
+      sha256 = "sha256-jRyYeTg73W58OH2fWmuVkjxEdyPNqDGRbEZwxBMfdCo=";
     };
 
     nativeBuildInputs = [ copyDesktopItems ];
