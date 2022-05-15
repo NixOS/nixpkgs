@@ -122,7 +122,7 @@ in
         options.app_service_api.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            example = "file:federationapi.db";
+            example = "file:appserviceapi.db";
             description = ''
               Database for the Appservice API.
             '';
