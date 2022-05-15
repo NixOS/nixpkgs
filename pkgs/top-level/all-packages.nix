@@ -380,6 +380,8 @@ with pkgs;
 
   c-utf8 = callPackage ../development/libraries/c-util/c-utf8 { };
 
+  c-rbtree = callPackage ../development/libraries/c-util/c-rbtree { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
