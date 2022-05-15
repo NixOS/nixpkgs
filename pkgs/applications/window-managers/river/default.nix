@@ -52,6 +52,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     zig build -Drelease-safe -Dcpu=baseline ${lib.optionalString xwaylandSupport "-Dxwayland"} -Dman-pages --prefix $out install
+    mkdir -p $out/share/wayland-sessions
+    cp ./contrib/river.desktop $out/share/wayland-sessions
     runHook postInstall
   '';
 
@@ -60,6 +62,8 @@ stdenv.mkDerivation rec {
     See https://github.com/riverwm/river/blob/7ffa2f4b9e7abf7d152134f555373c2b63ccfc1d/river/main.zig#L56
   */
   installFlags = [ "DESTDIR=$(out)" ];
+  
+  passthru.providedSessions = [ "river" ];
 
   meta = with lib; {
     homepage = "https://github.com/ifreund/river";
