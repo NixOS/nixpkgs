@@ -6470,6 +6470,8 @@ in {
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 
+  pyschemes = callPackage ../development/python-modules/pyschemes { };
+
   pyshark = callPackage ../development/python-modules/pyshark { };
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
