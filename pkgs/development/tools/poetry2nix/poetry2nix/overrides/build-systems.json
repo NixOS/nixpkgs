@@ -801,6 +801,9 @@
   "notebook-shim": [
     "jupyter-packaging"
   ],
+  "notify-py": [
+    "poetry-core"
+  ],
   "notus-scanner": [
     "poetry-core"
   ],

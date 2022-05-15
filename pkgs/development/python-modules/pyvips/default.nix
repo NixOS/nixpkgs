@@ -1,15 +1,22 @@
-{ buildPythonPackage, fetchFromGitHub, pytestCheckHook, glib, vips, cffi
-, pkgconfig, lib }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, glib
+, vips
+, cffi
+, pkgconfig
+, lib }:
 
 buildPythonPackage rec {
   pname = "pyvips";
-  version = "2.1.16";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "pyvips";
     rev = "v${version}";
-    sha256 = "sha256-8CeQbx3f2i0lEU0wxPeUwHlUGtzOztzTOdFNjIDy8s0=";
+    sha256 = "sha256-qMVoVzqXALhPWVKLzu+VqihHPN7J+pMhKnXdb+ow0zw=";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -19,6 +26,14 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ cffi ];
 
   checkInputs = [ pytestCheckHook ];
+
+  postPatch = ''
+    substituteInPlace pyvips/__init__.py \
+      --replace 'libvips.so.42' '${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}' \
+      --replace 'libvips.42.dylib' '${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}' \
+      --replace 'libgobject-2.0.so.0' '${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}' \
+      --replace 'libgobject-2.0.dylib' '${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}' \
+  '';
 
   pythonImportsCheck = [ "pyvips" ];
 
