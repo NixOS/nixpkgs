@@ -33417,6 +33417,8 @@ with pkgs;
 
   symfpu = callPackage ../applications/science/logic/symfpu {};
 
+  uhdm = callPackage ../applications/science/logic/uhdm {};
+
   mcy = callPackage ../applications/science/logic/mcy {};
 
   lingeling = callPackage ../applications/science/logic/lingeling {};
