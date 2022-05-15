@@ -5,7 +5,7 @@
 , ninja
 
 , pkg-config
-, python3
+, python
 , pygobject3
 , gobject-introspection
 , gst-plugins-base
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     meson
     ninja
     pkg-config
-    python3
+    python
     gobject-introspection
     gst-plugins-base
   ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   ];
 
   mesonFlags = [
-    "-Dpygi-overrides-dir=${placeholder "out"}/${python3.sitePackages}/gi/overrides"
+    "-Dpygi-overrides-dir=${placeholder "out"}/${python.sitePackages}/gi/overrides"
   ];
 
   doCheck = true;
