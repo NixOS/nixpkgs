@@ -5176,6 +5176,8 @@ with pkgs;
     inherit (python2Packages) mutagen python wrapPython;
   };
 
+  dsp = callPackage ../tools/audio/dsp { };
+
   dirdiff = callPackage ../tools/text/dirdiff {
     tcl = tcl-8_5;
     tk = tk-8_5;
@@ -17550,7 +17552,7 @@ with pkgs;
 
   grpc = callPackage ../development/libraries/grpc {
     # grpc builds with c++14 so abseil must also be built that way
-    abseil-cpp = abseil-cpp.override {
+    abseil-cpp = abseil-cpp_202111.override {
       cxxStandard = "14";
     };
   };
