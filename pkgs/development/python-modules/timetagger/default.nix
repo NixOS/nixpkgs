@@ -1,13 +1,18 @@
 { lib
-, python3Packages
+, buildPythonPackage
 , fetchFromGitHub
+, asgineer
+, itemdb
+, jinja2
+, markdown
+, pscript
+, pyjwt
+, uvicorn
 , pytestCheckHook
 , requests
-, pytest
-, pythonOlder
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "timetagger";
   version = "22.4.2";
 
@@ -18,7 +23,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "sha256-CWY+5O4Y1dvKQNy1Cclqj4+U6q5vVVj9hZq41MYqXKs=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     asgineer
     itemdb
     jinja2
@@ -35,11 +40,7 @@ python3Packages.buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     requests
-    pytest
   ];
-
-  # fails with `No module named pytest` on python version 3.10
-  doCheck = pythonOlder "3.10";
 
   meta = with lib; {
     homepage = "https://timetagger.app";

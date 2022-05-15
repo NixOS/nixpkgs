@@ -2,17 +2,21 @@
 , buildPythonPackage
 , fetchPypi
 , matchpy
-, pytools
 , pytestCheckHook
+, pythonOlder
+, pytools
 }:
 
 buildPythonPackage rec {
   pname = "pymbolic";
   version = "2022.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-tS9FHdC5gD4D3jMgrzt85XIwcAYcbSMcACFvbaQlkBI=";
+    hash = "sha256-tS9FHdC5gD4D3jMgrzt85XIwcAYcbSMcACFvbaQlkBI=";
   };
 
   propagatedBuildInputs = [
@@ -24,10 +28,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    # pytest is a test requirement not a run-time one
+      substituteInPlace setup.py \
+        --replace '"pytest>=2.3",' ""
+  '';
+
+  pythonImportsCheck = [
+    "pymbolic"
+  ];
+
   meta = with lib; {
     description = "A package for symbolic computation";
     homepage = "https://documen.tician.de/pymbolic/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

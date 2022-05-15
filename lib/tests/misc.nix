@@ -22,16 +22,6 @@ in
 
 runTests {
 
-# FLAKES
-
-  testCallLocklessFlake = {
-    expr = callLocklessFlake {
-      path = ./flakes/subflakeTest;
-      inputs = { subflake = ./flakes/subflakeTest/subflake; inherit callLocklessFlake; };
-    };
-    expected = { x = 1; outPath = ./flakes/subflakeTest; };
-  };
-
 # TRIVIAL
 
   testId = {
