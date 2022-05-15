@@ -3,6 +3,6 @@
 fetchFromGitHub {
   owner = "guzba";
   repo = "supersnappy";
-  rev = "1.1.5";
-  sha256 = "1y26sgnszvdf5sn7j0jx2dpd4i03mvbk9i9ni9kbyrs798bjwi6z";
+  rev = "2.1.1";
+  sha256 = "03df1qgrbp84swhqy12ansyn951lkaw0kf1arbnki4fkgdnqdamf";
 }
