@@ -208,6 +208,7 @@ self: super: {
   persistent-zookeeper = dontCheck super.persistent-zookeeper;
   pocket-dns = dontCheck super.pocket-dns;
   postgresql-simple = dontCheck super.postgresql-simple;
+  squeal-postgresql = dontCheck super.squeal-postgresql;
   postgrest = dontCheck super.postgrest;
   postgrest-ws = dontCheck super.postgrest-ws;
   snowball = dontCheck super.snowball;
@@ -2644,5 +2645,11 @@ self: super: {
   # https://github.com/haskell-servant/servant-cassava/commit/66617547851d38d48f5f1d1b786db1286bdafa9d
   servant-cassava = assert super.servant-cassava.version == "0.10.1";
     doJailbreak super.servant-cassava;
+
+  # Raise version bounds for hspec
+  records-sop = appendPatch (fetchpatch {
+    url = "https://github.com/kosmikus/records-sop/pull/11/commits/d88831388ab3041190130fec3cdd679a4217b3c7.patch";
+    sha256 = "sha256-O+v/OxvqnlWX3HaDvDIBZnJ+Og3xs/SJqI3gaouU3ZI=";
+  }) super.records-sop;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

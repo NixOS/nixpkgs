@@ -188,6 +188,7 @@ package-maintainers:
     - hakyll
     - hakyll-contrib-hyphenation
     - webify
+    - squeal-postgresql
   Gabriel439:
     - annah
     - bench

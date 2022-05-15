@@ -4217,7 +4217,6 @@ broken-packages:
   - record
   - record-encode
   - records
-  - records-sop
   - record-wrangler
   - recursion-schemes-ext
   - recursion-schemes-ix
