@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ fftwFloat gtk2 ladspaPlugins libjack2 liblo libxml2 ]
     ++ (with perlPackages; [ perl XMLParser ]);
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #     ld: jamin-preferences.o:/build/jamin-0.95.0/src/hdeq.h:64: multiple definition of
+  #       `l_notebook1'; jamin-callbacks.o:/build/jamin-0.95.0/src/hdeq.h:64: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   NIX_LDFLAGS = "-ldl";
 
   postInstall = ''
