@@ -5,7 +5,8 @@
 , glib
 , vips
 , cffi
-, pkgconfig
+, pkgconfig  # from pythonPackages
+, pkg-config  # from pkgs
 , lib }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "sha256-qMVoVzqXALhPWVKLzu+VqihHPN7J+pMhKnXdb+ow0zw=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig pkg-config ];
 
   buildInputs = [ glib vips ];
 
