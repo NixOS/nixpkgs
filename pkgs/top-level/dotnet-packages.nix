@@ -53,8 +53,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   SharpZipLib = fetchNuGet {
     pname = "SharpZipLib";
-    version = "0.86.0";
-    sha256 = "01w2038gckfnq31pncrlgm7d0c939pwr1x4jj5450vcqpd4c41jr";
+    version = "1.3.3";
+    sha256 = "sha256-HWEQTKh9Ktwg/zIl079dAiH+ob2ShWFAqLgG6XgIMr4=";
     outputFiles = [ "lib/*" ];
   };
 
