@@ -1921,6 +1921,8 @@ with pkgs;
 
   checkip = callPackage ../tools/networking/checkip { };
 
+  cyberchef = callPackage ../tools/misc/cyberchef { };
+
   ec2-api-tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
   ec2-ami-tools = callPackage ../tools/virtualization/ec2-ami-tools { };
