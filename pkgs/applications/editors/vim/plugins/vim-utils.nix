@@ -531,14 +531,26 @@ rec {
       };
     } ./vim-command-check-hook.sh) {};
 
+  neovimRequireCheckHook = callPackage ({ neovim-unwrapped }:
+    makeSetupHook {
+      name = "neovim-require-check-hook";
+      deps = [ neovim-unwrapped ];
+      substitutions = {
+        nvimBinary = "${neovim-unwrapped}/bin/nvim";
+        inherit rtpPath;
+      };
+    } ./neovim-require-check-hook.sh) {};
+
   inherit (import ./build-vim-plugin.nix {
-    inherit lib stdenv rtpPath vim vimGenDocHook vimCommandCheckHook;
+    inherit lib stdenv rtpPath vim vimGenDocHook vimCommandCheckHook neovimRequireCheckHook;
   }) buildVimPlugin buildVimPluginFrom2Nix;
 
 
   # TODO placeholder to ease working on automatic plugin detection
   # this should be a luarocks "flat" install with appropriate vim hooks
-  buildNeovimPluginFrom2Nix = buildVimPluginFrom2Nix;
+  buildNeovimPluginFrom2Nix = attrs: let drv = (buildVimPluginFrom2Nix attrs); in drv.overrideAttrs(oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [ neovimRequireCheckHook ];
+  });
 
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {

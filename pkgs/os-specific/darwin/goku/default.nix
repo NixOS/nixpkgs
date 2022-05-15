@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "goku";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchurl {
     url = "https://github.com/yqrashawn/GokuRakuJoudo/releases/download/v${version}/goku.zip";
-    sha256 = "7c9304a5b4265575ca154bc0ebc04fcf812d14981775966092946cf82f65c782";
+    sha256 = "506eccdabedc68c112778b13ded65099327267c2e3fd488916e3a340bc312954";
   };
 
   nativeBuildInputs = [

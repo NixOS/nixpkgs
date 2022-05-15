@@ -119,6 +119,7 @@ let
     # NOTE: this is a stub package to fetch npm dependencies for
     # ../../applications/video/epgstation
     epgstation = super."epgstation-../../applications/video/epgstation".override (drv: {
+      buildInputs = [ self.node-pre-gyp self.node-gyp-build ];
       meta = drv.meta // {
         platforms = pkgs.lib.platforms.none;
       };
@@ -339,6 +340,12 @@ let
           --set PRISMA_INTROSPECTION_ENGINE_BINARY ${prisma-engines}/bin/introspection-engine \
           --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
       '';
+
+      passthru.tests = {
+        simple-execution = pkgs.callPackage ./package-tests/prisma.nix {
+          inherit (self) prisma;
+        };
+      };
     };
 
     pulp = super.pulp.override {

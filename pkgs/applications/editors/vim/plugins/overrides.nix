@@ -327,6 +327,9 @@ self: super: {
       sed -Ei lua/plenary/curl.lua \
           -e 's@(command\s*=\s*")curl(")@\1${curl}/bin/curl\2@'
     '';
+
+    doInstallCheck = true;
+    nvimRequireCheck = "plenary";
   });
 
   gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
@@ -842,7 +845,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "035v8mm8v7aj8qwhvxsp6k0afn05gi2xb1achzsvm0m4a8a9xs65";
+          cargoSha256 = "0l1x7kprnxa95pbf8ml9ixmj0cmbnnv6nd0v6qry8j67rx8plpmp";
         };
       in
       ''
@@ -971,7 +974,7 @@ self: super: {
       vim-markdown-composer-bin = rustPlatform.buildRustPackage rec {
         pname = "vim-markdown-composer-bin";
         inherit (super.vim-markdown-composer) src version;
-        cargoSha256 = "03d7kap6vha1jmyfrjqaja5439x6mhnvjjbz3rmxb3x4dpppbpj1";
+        cargoSha256 = "0q0i6kyihswrjrfdj4p3z54b779sdg2wz38z943ypj6dqphhcklx";
       };
     in
     super.vim-markdown-composer.overrideAttrs (oldAttrs: rec {

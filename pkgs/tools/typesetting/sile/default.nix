@@ -18,7 +18,6 @@ let
   luaEnv = lua.withPackages(ps: with ps; [
     cassowary
     cosmo
-    compat53
     linenoise
     lpeg
     lua-zlib
@@ -33,6 +32,10 @@ let
     penlight
     stdlib
     vstruct
+  ] ++ lib.optionals (lib.versionOlder lua.luaversion "5.2") [
+    bit32
+  ] ++ lib.optionals (lib.versionOlder lua.luaversion "5.3") [
+    compat53
   ]);
 in
 

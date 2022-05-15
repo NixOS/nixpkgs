@@ -405,7 +405,10 @@ with self;
     pname = "ppx_base";
     hash = "1wv3q0qyghm0c5izq03y97lv3czqk116059mg62wx6valn22a000";
     minimumOCamlVersion = "4.04.2";
-    meta.description = "Base set of ppx rewriters";
+    meta = {
+      description = "Base set of ppx rewriters";
+      mainProgram = "ppx-base";
+    };
     propagatedBuildInputs = [ ppx_cold ppx_enumerate ppx_hash ppx_js_style ];
   };
 
@@ -519,7 +522,10 @@ with self;
     pname = "ppx_jane";
     hash = "1kk238fvrcylymwm7xwc7llbyspmx1y662ypq00vy70g112rir7j";
     minimumOCamlVersion = "4.04.2";
-    meta.description = "Standard Jane Street ppx rewriters";
+    meta = {
+      description = "Standard Jane Street ppx rewriters";
+      mainProgram = "ppx-jane";
+    };
     propagatedBuildInputs = [ base_quickcheck ppx_bin_prot ppx_expect ppx_fixed_literal ppx_module_timer ppx_optcomp ppx_optional ppx_pipebang ppx_stable ppx_string ppx_typerep_conv ppx_variants_conv ];
   };
 

@@ -23,6 +23,7 @@
 # build time
 , autoconf
 , cargo
+, dump_syms
 , makeWrapper
 , nodejs
 , perl
@@ -174,6 +175,11 @@ buildStdenv.mkDerivation ({
 
   inherit src unpackPhase meta;
 
+  outputs = [
+    "out"
+    "symbols"
+  ];
+
   # Add another configure-build-profiling run before the final configure phase if we build with pgo
   preConfigurePhases = lib.optionals pgoSupport [
     "configurePhase"
@@ -206,6 +212,7 @@ buildStdenv.mkDerivation ({
   nativeBuildInputs = [
     autoconf
     cargo
+    dump_syms
     gnum4
     llvmPackagesBuildBuild.bintools
     makeWrapper
@@ -242,12 +249,16 @@ buildStdenv.mkDerivation ({
     # Set consistent remoting name to ensure wmclass matches with desktop file
     export MOZ_APP_REMOTINGNAME="${binaryName}"
 
-    # Use our own python
-    export MACH_USE_SYSTEM_PYTHON=1
-
     # AS=as in the environment causes build failure
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
     unset AS
+
+  '' + lib.optionalString (lib.versionAtLeast version "100.0") ''
+    # Use our own python
+    export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
+  '' + lib.optionalString (lib.versionOlder version "100.0") ''
+    # Use our own python
+    export MACH_USE_SYSTEM_PYTHON=1
 
   '' + lib.optionalString (lib.versionAtLeast version "95.0") ''
     # RBox WASM Sandboxing
@@ -424,7 +435,13 @@ buildStdenv.mkDerivation ({
   # tests were disabled in configureFlags
   doCheck = false;
 
+  # Generate build symbols once after the final build
+  # https://firefox-source-docs.mozilla.org/crash-reporting/uploading_symbol.html
   preInstall = ''
+    ./mach buildsymbols
+    mkdir -p $symbols/
+    cp mozobj/dist/*.crashreporter-symbols.zip $symbols/
+
     cd mozobj
   '';
 

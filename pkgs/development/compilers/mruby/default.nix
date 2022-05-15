@@ -1,23 +1,15 @@
-{ lib, stdenv, ruby, bison, rake, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, ruby, bison, rake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "mruby";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner   = "mruby";
     repo    = "mruby";
     rev     = version;
-    sha256  = "sha256-C3K7ZooaOMa+V2HjxwiKxrrMb7ffl4QAgPsftRtb60c=";
+    sha256  = "0gnzip7qfadnl0r1k8bpc9a6796sy503h77ggds02wrz7mpq32nf";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2022-1212.patch";
-      url = "https://github.com/mruby/mruby/commit/3cf291f72224715942beaf8553e42ba8891ab3c6.patch";
-      sha256  = "1bl8wm6v7v18zgxqvm4kbn8g97a75phzrdah279xqw1qvplbd2w7";
-    })
-  ];
 
   nativeBuildInputs = [ ruby bison rake ];
 

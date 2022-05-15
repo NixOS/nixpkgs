@@ -1544,6 +1544,12 @@
     githubId = 410028;
     name = "Tobias Bergkvist";
   };
+  berryp = {
+    email = "berryphillips@gmail.com";
+    github = "berryp";
+    githubId = 19911;
+    name = "Berry Phillips";
+  };
   betaboon = {
     email = "betaboon@0x80.ninja";
     github = "betaboon";

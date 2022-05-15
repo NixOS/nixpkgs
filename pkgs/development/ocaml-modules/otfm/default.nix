@@ -34,8 +34,9 @@ stdenv.mkDerivation {
       of them.
     '';
     homepage = webpage;
-    inherit (ocaml.meta) platforms;
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];
+    mainProgram = "otftrip";
+    inherit (ocaml.meta) platforms;
   };
 }
