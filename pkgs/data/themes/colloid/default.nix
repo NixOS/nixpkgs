@@ -7,6 +7,7 @@
 , sassc
 , tweaks ? [ ] 
 , jdupes
+, bash
 }:
 let
   validTweaks = [ "compact" "nord" "rimless" "normal" "dracula" ];
@@ -24,17 +25,18 @@ in
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
-      rev = "release_${version}";
-      sha256 = "1fbj9c3n749na214b707xyh3ya9fw57q80g0xllgj36fgzy06h13";
+      rev = "2c674203ab19776dd8b8dd74d88e239d89fbcf61";
+      sha256 = "pdc5lRFT3xiLCGLxhBXTUGkbqEqr5/e3nrQrlx2qIOg=";
       name = "pname";
       };
 
   nativeBuildInputs = [ jdupes sassc ];
-  buildInputs = [ gnome-themes-extra ];
+  buildInputs = [ bash gnome-themes-extra ];
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   preInstall = ''
     mkdir -p $out/share/themes
+    patchShebangs ./install.sh ./gtkrc.sh ./build.sh ./clean-old-theme.sh
   '';
 
   installPhase = ''
