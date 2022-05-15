@@ -2645,4 +2645,11 @@ self: super: {
   servant-cassava = assert super.servant-cassava.version == "0.10.1";
     doJailbreak super.servant-cassava;
 
+  # Fix tests failure for ghc 9 (https://github.com/clinty/debian-haskell/pull/3)
+  debian = appendPatch (fetchpatch {
+    name = "debian-haskell.3.patch";
+    url = "https://github.com/clinty/debian-haskell/pull/3/commits/47441c8e4a7a00a3c8825eec98bf7a823594f9be.patch";
+    sha256 = "0wxpqazjnal9naibapg63nm7x6qz0lklcfw2m5mzjrh2q9x2cvnd";
+  }) super.debian;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
