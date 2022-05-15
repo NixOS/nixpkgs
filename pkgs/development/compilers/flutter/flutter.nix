@@ -61,7 +61,7 @@ let
                  # path is relative otherwise it's replaced by /build/flutter
 
       pushd "$FLUTTER_TOOLS_DIR"
-      ${dart}/bin/pub get --offline
+      ${dart}/bin/dart pub get --offline
       popd
 
       local revision="$(cd "$FLUTTER_ROOT"; git rev-parse HEAD)"
