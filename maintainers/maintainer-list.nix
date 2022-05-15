@@ -14542,4 +14542,10 @@
     github = "bryanhonof";
     githubId = 5932804;
   };
+  pbar1 = {
+    name = "Pierce Bartine";
+    email = "piercebartine@gmail.com";
+    github = "pbar1";
+    githubId = 26949935;
+  };
 }
