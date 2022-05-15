@@ -1,19 +1,22 @@
 { lib, stdenv, fetchFromGitHub, docutils, meson, ninja, pkg-config
-, dbus, linuxHeaders, systemd }:
+, dbus, linuxHeaders, systemd
+, c-stdaux, c-list, c-utf8, c-rbtree, c-shquote, c-ini, c-dvar }:
 
 stdenv.mkDerivation rec {
   pname = "dbus-broker";
-  version = "29";
+  version = "31";
 
   src = fetchFromGitHub {
-    owner  = "bus1";
-    repo   = "dbus-broker";
-    rev    = "v${version}";
-    sha256 = "1abbi8c0mgdqjidlp2wnmy0a88xv173hq88sh5m966c5r1h6alkq";
-    fetchSubmodules = true;
+    owner = "bus1";
+    repo = "dbus-broker";
+    rev = "v${version}";
+    sha256 = "1v904wcf4wsysagbg02177slwaqh1ps1qqa2ayab8ljxdv0bbnvx";
   };
 
-  nativeBuildInputs = [ docutils meson ninja pkg-config ];
+  nativeBuildInputs = [
+    docutils meson ninja pkg-config
+    c-stdaux c-list c-utf8 c-rbtree c-shquote c-ini c-dvar
+  ];
 
   buildInputs = [ dbus linuxHeaders systemd ];
 
