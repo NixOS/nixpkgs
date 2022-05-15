@@ -13,8 +13,6 @@ buildPecl rec {
 
   internalDeps = [
     php.extensions.session
-  ] ++ lib.optionals (lib.versionOlder php.version "7.4") [
-    php.extensions.hash
   ];
 
   configureFlags = [
