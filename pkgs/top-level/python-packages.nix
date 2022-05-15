@@ -8980,6 +8980,8 @@ in {
 
   repocheck = callPackage ../development/python-modules/repocheck { };
 
+  reportengine = callPackage ../development/python-modules/reportengine { };
+
   reportlab = callPackage ../development/python-modules/reportlab { };
 
   repoze_lru = callPackage ../development/python-modules/repoze_lru { };
