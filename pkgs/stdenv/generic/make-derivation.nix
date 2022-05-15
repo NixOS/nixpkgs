@@ -331,8 +331,8 @@ else let
 
       # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
       configureFlags = let inherit (lib) optional elem; in
-        (/**/ if lib.isString configureFlags then [configureFlags]
-         else if configureFlags == null      then []
+        (/**/ if lib.isString configureFlags then lib.warn "String 'configureFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}" [configureFlags]
+         else if configureFlags == null      then lib.warn "Null 'configureFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}" []
          else                                     configureFlags)
         ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
         ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
