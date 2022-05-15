@@ -10189,6 +10189,8 @@ in {
 
   tern = callPackage ../development/python-modules/tern { };
 
+  tesla-powerwall = callPackage ../development/python-modules/tesla-powerwall { };
+
   tesla-wall-connector = callPackage ../development/python-modules/tesla-wall-connector { };
 
   teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
