@@ -7,7 +7,6 @@ buildPecl {
   sha256 = "sha256-SnhDRC7/a7BTHn87c6YCz/R8jI6aES1ibSD6YAl6R+I=";
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
-  internalDeps = lib.optionals (lib.versionOlder php.version "7.4") [ php.extensions.hash ];
 
   doCheck = true;
   checkTarget = "tests";
