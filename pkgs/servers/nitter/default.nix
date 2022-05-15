@@ -29,6 +29,7 @@ nimPackages.buildNimPackage rec {
 
   postBuild = ''
     nim c --hint[Processing]:off -r tools/gencss
+    nim c --hint[Processing]:off -r tools/rendermd
   '';
 
   postInstall = ''
