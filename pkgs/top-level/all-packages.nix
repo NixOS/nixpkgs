@@ -21772,6 +21772,8 @@ with pkgs;
 
   redis = callPackage ../servers/nosql/redis { };
 
+  redli = callPackage ../tools/networking/redli { };
+
   redstore = callPackage ../servers/http/redstore { };
 
   reproxy = callPackage ../servers/reproxy { };
