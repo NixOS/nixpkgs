@@ -12,13 +12,15 @@
 buildPythonPackage rec {
   pname = "proxmoxer";
   version = "1.3.1";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-FY0JLDBoKmh85VoKh3UuPPRbMAIjs3l/fZM4owniH1c=";
+    hash = "sha256-FY0JLDBoKmh85VoKh3UuPPRbMAIjs3l/fZM4owniH1c=";
   };
 
   propagatedBuildInputs = [
@@ -32,9 +34,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  # Tests require openssh_wrapper which is outdated and not available
-  pytestFlagsArray = [ "tests/paramiko_tests.py" ];
-  pythonImportsCheck = [ "proxmoxer" ];
+  pytestFlagsArray = [
+    # Tests require openssh_wrapper which is outdated and not available
+    "tests/paramiko_tests.py"
+  ];
+
+  pythonImportsCheck = [
+    "proxmoxer"
+  ];
 
   meta = with lib; {
     description = "Python wrapper for Proxmox API v2";
