@@ -6628,6 +6628,8 @@ with pkgs;
 
   grin = callPackage ../tools/text/grin { };
 
+  gyb = callPackage ../tools/backup/gyb { };
+
   igrep = callPackage ../tools/text/igrep {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
