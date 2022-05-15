@@ -2032,7 +2032,8 @@
       poolsense
     ];
     "powerwall" = ps: with ps; [
-    ]; # missing inputs: tesla-powerwall
+      tesla-powerwall
+    ];
     "profiler" = ps: with ps; [
       guppy3
       objgraph
@@ -2884,7 +2885,8 @@
     "vacuum" = ps: with ps; [
     ];
     "vallox" = ps: with ps; [
-    ]; # missing inputs: vallox-websocket-api
+      vallox-websocket-api
+    ];
     "vasttrafik" = ps: with ps; [
     ]; # missing inputs: vtjp
     "velbus" = ps: with ps; [
@@ -3557,6 +3559,7 @@
     "plugwise"
     "point"
     "poolsense"
+    "powerwall"
     "profiler"
     "prometheus"
     "prosegur"
@@ -3732,6 +3735,7 @@
     "utility_meter"
     "uvc"
     "vacuum"
+    "vallox"
     "velbus"
     "venstar"
     "vera"

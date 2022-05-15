@@ -8984,6 +8984,8 @@ in {
 
   repocheck = callPackage ../development/python-modules/repocheck { };
 
+  reportengine = callPackage ../development/python-modules/reportengine { };
+
   reportlab = callPackage ../development/python-modules/reportlab { };
 
   repoze_lru = callPackage ../development/python-modules/repoze_lru { };
@@ -10193,6 +10195,8 @@ in {
 
   tern = callPackage ../development/python-modules/tern { };
 
+  tesla-powerwall = callPackage ../development/python-modules/tesla-powerwall { };
+
   tesla-wall-connector = callPackage ../development/python-modules/tesla-wall-connector { };
 
   teslajsonpy = callPackage ../development/python-modules/teslajsonpy { };
@@ -10771,6 +10775,8 @@ in {
   validictory = callPackage ../development/python-modules/validictory { };
 
   validobj = callPackage ../development/python-modules/validobj { };
+
+  vallox-websocket-api = callPackage ../development/python-modules/vallox-websocket-api { };
 
   variants = callPackage ../development/python-modules/variants { };
 
