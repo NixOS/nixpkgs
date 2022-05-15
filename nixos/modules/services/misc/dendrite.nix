@@ -109,11 +109,20 @@ in
               numbers and email addresses
             '';
           };
+          database.connection_string = lib.mkOption {
+            type = lib.types.str;
+            example = "postgres://user:password@hostname/database?sslmode=disable";
+            description = ''
+              Global database connection pool, for postgresql monolith deployments only.
+              If this is set, you can omit all the other database connection strings.
+              For postgresql polylith or SQLite deployments, you must configure those instead of this one. 
+            '';
+          };
         };
         options.app_service_api.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:federationapi.db";
+            example = "file:federationapi.db";
             description = ''
               Database for the Appservice API.
             '';
@@ -132,7 +141,7 @@ in
         options.federation_api.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:federationapi.db";
+            example = "file:federationapi.db";
             description = ''
               Database for the Federation API.
             '';
@@ -141,7 +150,7 @@ in
         options.key_server.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:keyserver.db";
+            example = "file:keyserver.db";
             description = ''
               Database for the Key Server (for end-to-end encryption).
             '';
@@ -151,7 +160,7 @@ in
           database = {
             connection_string = lib.mkOption {
               type = lib.types.str;
-              default = "file:mediaapi.db";
+              example = "file:mediaapi.db";
               description = ''
                 Database for the Media API.
               '';
@@ -168,7 +177,7 @@ in
         options.room_server.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:roomserver.db";
+            example = "file:roomserver.db";
             description = ''
               Database for the Room Server.
             '';
@@ -177,7 +186,7 @@ in
         options.sync_api.database = {
           connection_string = lib.mkOption {
             type = lib.types.str;
-            default = "file:syncserver.db";
+            example = "file:syncserver.db";
             description = ''
               Database for the Sync API.
             '';
@@ -187,7 +196,7 @@ in
           account_database = {
             connection_string = lib.mkOption {
               type = lib.types.str;
-              default = "file:userapi_accounts.db";
+              example = "file:userapi_accounts.db";
               description = ''
                 Database for the User API, accounts.
               '';
@@ -196,7 +205,7 @@ in
           device_database = {
             connection_string = lib.mkOption {
               type = lib.types.str;
-              default = "file:userapi_devices.db";
+              example = "file:userapi_devices.db";
               description = ''
                 Database for the User API, devices.
               '';
@@ -207,7 +216,7 @@ in
           database = {
             connection_string = lib.mkOption {
               type = lib.types.str;
-              default = "file:mscs.db";
+              example = "file:mscs.db";
               description = ''
                 Database for exerimental MSC's.
               '';
