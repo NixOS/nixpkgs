@@ -39,10 +39,8 @@ in
 
   installPhase = ''
     runHook preInstall
-    
     HOME=./tmp
     bash install.sh -d $out/share/themes -t all ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks}
-
     runHook postInstall
   '';
 
@@ -50,7 +48,6 @@ in
     jdupes -L -r $out/share
     rm -rf ./tmp
   '';
-
 
   meta = with lib; {
     description = "Gtk MacOS and Nord inspired gtk theme";
