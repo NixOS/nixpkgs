@@ -386,6 +386,8 @@ with pkgs;
 
   c-ini = callPackage ../development/libraries/c-util/c-ini { };
 
+  c-dvar = callPackage ../development/libraries/c-util/c-dvar { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
