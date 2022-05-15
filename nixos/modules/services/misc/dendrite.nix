@@ -115,7 +115,7 @@ in
             description = ''
               Global database connection pool, for postgresql monolith deployments only.
               If this is set, you can omit all the other database connection strings.
-              For postgresql polylith or SQLite deployments, you must configure those instead of this one. 
+              For postgresql polylith or SQLite deployments, you must configure those instead of this one.
             '';
           };
         };
