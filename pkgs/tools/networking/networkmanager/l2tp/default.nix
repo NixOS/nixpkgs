@@ -3,11 +3,9 @@
 , substituteAll
 , fetchFromGitHub
 , autoreconfHook
-, libtool
-, intltool
 , pkg-config
-, file
 , gtk3
+, gtk4
 , networkmanager
 , ppp
 , xl2tpd
@@ -15,19 +13,22 @@
 , libsecret
 , withGnome ? true
 , libnma
+, libnma-gtk4
 , glib
+, openssl
+, nss
 }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-l2tp";
-  version = "1.2.12";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = "nm-l2tp";
     repo = "network-manager-l2tp";
     rev = version;
-    sha256 = "0cq07kvlm98s8a7l4a3zmqnif8x3307kv7n645zx3f1r7x72b8m4";
+    sha256 = "VoqPjMQILBYemRE5VD/XwhWi9zL9QxxHZJ2JKtGglFo=";
   };
 
   patches = [
@@ -39,35 +40,31 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    libtool
-    intltool
     pkg-config
-    file
   ];
 
   buildInputs = [
     networkmanager
     ppp
     glib
+    openssl
+    nss
   ] ++ lib.optionals withGnome [
     gtk3
+    gtk4
     libsecret
     libnma
+    libnma-gtk4
   ];
 
   configureFlags = [
-    "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--with-gtk4=${if withGnome then "yes" else "no"}"
     "--localstatedir=/var"
-    "--sysconfdir=$(out)/etc"
     "--enable-absolute-paths"
   ];
 
   enableParallelBuilding = true;
-
-  preConfigure = ''
-    intltoolize -f
-  '';
 
   passthru = {
     networkManagerPlugin = "VPN/nm-l2tp-service.name";
