@@ -4067,6 +4067,8 @@ in {
 
   idasen = callPackage ../development/python-modules/idasen { };
 
+  icontract = callPackage ../development/python-modules/icontract { };
+
   identify = callPackage ../development/python-modules/identify { };
 
   idna = callPackage ../development/python-modules/idna { };
