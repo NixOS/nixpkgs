@@ -384,6 +384,8 @@ with pkgs;
 
   c-shquote = callPackage ../development/libraries/c-util/c-shquote { };
 
+  c-ini = callPackage ../development/libraries/c-util/c-ini { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
