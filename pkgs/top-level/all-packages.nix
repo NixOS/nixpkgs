@@ -10281,7 +10281,7 @@ with pkgs;
   silc_server = callPackage ../servers/silc-server { };
 
   sile = callPackage ../tools/typesetting/sile {
-    lua = lua5_4;
+    lua = lua5_3;
   };
 
   silver-searcher = callPackage ../tools/text/silver-searcher { };
@@ -34913,6 +34913,8 @@ with pkgs;
   x2x = callPackage ../tools/X11/x2x { };
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
+
+  xivlauncher = callPackage ../games/xivlauncher { };
 
   xortool = python3Packages.callPackage ../tools/security/xortool { };
 
