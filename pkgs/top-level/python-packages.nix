@@ -10770,6 +10770,8 @@ in {
 
   validobj = callPackage ../development/python-modules/validobj { };
 
+  vallox-websocket-api = callPackage ../development/python-modules/vallox-websocket-api { };
+
   variants = callPackage ../development/python-modules/variants { };
 
   varint = callPackage ../development/python-modules/varint { };
