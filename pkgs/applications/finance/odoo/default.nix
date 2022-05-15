@@ -4,6 +4,7 @@
 , python3
 , nodePackages
 , wkhtmltopdf
+, nixosTests
 }:
 
 let
@@ -141,6 +142,9 @@ in python.pkgs.buildPythonApplication rec {
 
   passthru = {
     updateScript = ./update.sh;
+    tests = {
+      inherit (nixosTests) odoo;
+    };
   };
 
   meta = with lib; {
