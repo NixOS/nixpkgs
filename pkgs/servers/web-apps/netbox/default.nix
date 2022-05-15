@@ -9,36 +9,7 @@
 let
   py = python3.override {
     packageOverrides = self: super: {
-      django = super.django_3;
-      jsonschema = super.jsonschema.overridePythonAttrs (old: rec {
-        version = "3.2.0";
-        src = self.fetchPypi {
-          pname = old.pname;
-          inherit version;
-          sha256 = "c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a";
-        };
-      });
-      lxml = super.lxml.overridePythonAttrs (old: rec {
-        version = "4.6.5";
-        src = self.fetchPypi {
-          pname = old.pname;
-          inherit version;
-          sha256 = "6e84edecc3a82f90d44ddee2ee2a2630d4994b8471816e226d2b771cda7ac4ca";
-        };
-      });
-      werkzeug = super.werkzeug.overridePythonAttrs (old: rec {
-        version = "2.0.3";
-        src = self.fetchPypi {
-          pname = "Werkzeug";
-          inherit version;
-          sha256 = "sha256-uGP4/wV8UiFktgZ8niiwQRYbS+W6TQ2s7qpQoWOCLTw=";
-        };
-      });
-      sentry-sdk = super.sentry-sdk.overridePythonAttrs (old: rec {
-        disabledTestPaths = old.disabledTestPaths ++ [
-          "tests/integrations/flask/test_flask.py"
-        ];
-      });
+      django = super.django_4;
     };
   };
 
@@ -64,7 +35,7 @@ py.pkgs.buildPythonApplication rec {
     ];
 
     propagatedBuildInputs = with py.pkgs; [
-      django_3
+      django_4
       django-cors-headers
       django-debug-toolbar
       django-filter
