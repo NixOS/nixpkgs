@@ -2,23 +2,21 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, aiohttp
 , requests
 }:
 
 buildPythonPackage rec {
   pname = "starline";
-  version = "0.1.5";
+  version = "0.2.0";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1753f5fcd2a6976aed775afb03f8392159f040c673917cc0c634510d95c13cb9";
+    sha256 = "550b00ab95cf59d933f7708abab40a4e41e5790e62b653471afe86a3af3320e6";
   };
 
   propagatedBuildInputs = [
-    aiohttp
     requests
   ];
 
