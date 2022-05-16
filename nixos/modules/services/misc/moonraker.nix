@@ -123,9 +123,9 @@ in {
           host = cfg.address;
           port = cfg.port;
           klippy_uds_address = cfg.klipperSocket;
-          config_path = cfg.configDir;
-          database_path = "${cfg.stateDir}/database";
         };
+        file_manager.config_path = cfg.configDir;
+        database.database_path = "${cfg.stateDir}/database";
       };
       fullConfig = recursiveUpdate cfg.settings forcedConfig;
     in format.generate "moonraker.cfg" fullConfig;
