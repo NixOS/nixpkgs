@@ -12434,6 +12434,16 @@
     githubId = 66133083;
     name = "Tomas Bravo";
   };
+  tchekda = {
+    email = "contact@tchekda.fr";
+    github = "tchekda";
+    githubId = 23559888;
+    keys = [{
+      longkeyid = "rsa4096/0xD0A007EDA4EADA0F";
+      fingerprint = "44CE A8DD 3B31 49CD 6246  9D8F D0A0 07ED A4EA DA0F";
+    }];
+    name = "David Tchekachev";
+  };
   tckmn = {
     email = "andy@tck.mn";
     github = "tckmn";
