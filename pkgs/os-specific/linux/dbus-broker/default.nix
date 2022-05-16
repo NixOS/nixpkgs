@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/bus1/dbus-broker/wiki";
     license     = licenses.asl20;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg xaverdh ];
   };
 }
