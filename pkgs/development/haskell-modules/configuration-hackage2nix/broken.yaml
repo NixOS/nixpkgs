@@ -5121,7 +5121,6 @@ broken-packages:
   - thorn
   - th-pprint
   - threadmanager
-  - threadscope
   - thread-supervisor
   - threepenny-editors
   - threepenny-gui-contextmenu
