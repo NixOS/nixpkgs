@@ -14,10 +14,10 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook byacc ];
 
   # acinclude.m4 wants headers for tgetent().
-  buildInputs = [ byacc ncurses ]
+  buildInputs = [ ncurses ]
     ++ lib.optionals readlineSupport [ readline ];
 
   configureFlags = [
