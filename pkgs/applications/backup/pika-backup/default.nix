@@ -5,35 +5,34 @@
 , rustPlatform
 , substituteAll
 , desktop-file-utils
+, itstool
 , meson
 , ninja
 , pkg-config
 , python3
-, wrapGAppsHook
+, wrapGAppsHook4
 , borgbackup
-, dbus
-, gdk-pixbuf
-, glib
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
+, libsecret
 }:
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
-  version = "0.3.5";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
     rev = "v${version}";
-    sha256 = "sha256-8jT3n+bTNjhm64AMS24Ju+San75ytfqFXloH/TOgO1g=";
+    hash = "sha256-vQ0hlwsrY0WOUc/ppleE+kKRGHPt/ScEChXrkukln3U=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    sha256 = "198bs4z7l22sh8ck7v46s45mj8zpfbg03n1xzc6pnafdd8hf3q15";
+    hash = "sha256-IKUh5gkXTpmMToDaec+CpCIQqJjwJM2ZrmGQhZeTDsg=";
   };
 
   patches = [
@@ -41,12 +40,10 @@ stdenv.mkDerivation rec {
       src = ./borg-path.patch;
       borg = "${borgbackup}/bin/borg";
     })
-    # Fix build with meson 0.61, can be removed on next release.
-    # https://gitlab.gnome.org/World/pika-backup/-/issues/156
-    # https://github.com/mesonbuild/meson/issues/9441
     (fetchpatch {
-      url = "https://gitlab.gnome.org/World/pika-backup/-/commit/54be149c88fd69fb9e74b7362fe7182863237869.patch";
-      sha256 = "sha256-Tffxo5hlf/gSkp1GfyL4eHthX49tuTq6B+S53N8oA2M=";
+      name = "use-gtk4-update-icon-cache.patch";
+      url = "https://gitlab.gnome.org/World/pika-backup/-/merge_requests/64.patch";
+      hash = "sha256-AttGQGWealvTIvPwBl5M6FiC4Al/UD4/XckUAxM38SE=";
     })
   ];
 
@@ -56,11 +53,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
+    itstool
     meson
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    wrapGAppsHook4
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo
@@ -68,16 +66,14 @@ stdenv.mkDerivation rec {
   ]);
 
   buildInputs = [
-    dbus
-    gdk-pixbuf
-    glib
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
+    libsecret
   ];
 
   meta = with lib; {
     description = "Simple backups based on borg";
-    homepage = "https://wiki.gnome.org/Apps/PikaBackup";
+    homepage = "https://apps.gnome.org/app/org.gnome.World.PikaBackup";
     changelog = "https://gitlab.gnome.org/World/pika-backup/-/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
