@@ -14,10 +14,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # https://github.com/libgeos/geos/issues/608
   postPatch = ''
-    substituteInPlace tools/geos-config.in \
-      --replace "@libdir@" "@prefix@/lib" \
-      --replace "@includedir@" "@prefix@/include"
+    substituteInPlace tools/CMakeLists.txt \
+      --replace '$\{exec_prefix\}/$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '$\{prefix\}/$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
   '';
 
   meta = with lib; {
