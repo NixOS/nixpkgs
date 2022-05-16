@@ -171,8 +171,8 @@ buildStdenv.mkDerivation ({
 
   outputs = [
     "out"
-    "symbols"
-  ];
+  ]
+  ++ lib.optionals crashreporterSupport [ "symbols" ];
 
   # Add another configure-build-profiling run before the final configure phase if we build with pgo
   preConfigurePhases = lib.optionals pgoSupport [
@@ -202,7 +202,6 @@ buildStdenv.mkDerivation ({
   nativeBuildInputs = [
     autoconf
     cargo
-    dump_syms
     llvmPackages.llvm # llvm-objdump
     makeWrapper
     nodejs
@@ -216,6 +215,7 @@ buildStdenv.mkDerivation ({
     which
     wrapGAppsHook
   ]
+  ++ lib.optionals crashreporterSupport [ dump_syms ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
   ++ extraNativeBuildInputs;
 
@@ -421,11 +421,11 @@ buildStdenv.mkDerivation ({
 
   # Generate build symbols once after the final build
   # https://firefox-source-docs.mozilla.org/crash-reporting/uploading_symbol.html
-  preInstall = ''
+  preInstall = lib.optionalString crashreporterSupport ''
     ./mach buildsymbols
     mkdir -p $symbols/
     cp mozobj/dist/*.crashreporter-symbols.zip $symbols/
-
+  '' + ''
     cd mozobj
   '';
 
