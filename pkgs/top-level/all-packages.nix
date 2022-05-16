@@ -5644,6 +5644,8 @@ with pkgs;
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
+  ets = callPackage ../tools/misc/ets { };
+
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
 
   eventstat = callPackage ../os-specific/linux/eventstat { };
@@ -22503,6 +22505,8 @@ with pkgs;
 
   redis = callPackage ../servers/nosql/redis { };
 
+  redli = callPackage ../tools/networking/redli { };
+
   redstore = callPackage ../servers/http/redstore { };
 
   reproxy = callPackage ../servers/reproxy { };
@@ -22706,7 +22710,9 @@ with pkgs;
 
   webmetro = callPackage ../servers/webmetro { };
 
-  wishlist = callPackage ../servers/wishlist { };
+  wishlist = callPackage ../servers/wishlist {
+    buildGoModule = buildGo118Module;
+  };
 
   wsdd = callPackage ../servers/wsdd { };
 
