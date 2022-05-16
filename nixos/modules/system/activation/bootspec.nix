@@ -19,25 +19,29 @@ let
               initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
               initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
               label = "NixOS ${config.system.nixos.codeName} ${config.system.nixos.label} (Linux ${config.boot.kernelPackages.kernel.modDirVersion})";
-
-              specialisation = lib.mapAttrs
-                (childName: childToplevel: {
-                  bootspec = "${childToplevel}/${filename}";
-                })
-                children;
             });
 
-      generator = ''
-        ${pkgs.jq}/bin/jq '
-          .toplevel = $toplevel |
-          .init = $init
-          ' \
-          --sort-keys \
-          --arg toplevel "$out" \
-          --arg init "$out/init" \
-          < ${json} \
-          > $out/${filename}
-      '';
+      generator =
+        let
+          specialisationLoader = (lib.mapAttrsToList
+            (childName: childToplevel: lib.escapeShellArgs [ "--slurpfile" childName "${childToplevel}/${filename}" ])
+            children);
+        in
+        ''
+          ${pkgs.jq}/bin/jq '
+            .toplevel = $toplevel |
+            .init = $init
+            ' \
+            --sort-keys \
+            --arg toplevel "$out" \
+            --arg init "$out/init" \
+            < ${json} \
+            | ${pkgs.jq}/bin/jq \
+              --sort-keys \
+              '.specialisation = ($ARGS.named | map_values(. | first))' \
+              ${lib.concatStringsSep " " specialisationLoader} \
+            > $out/${filename}
+        '';
     };
   };
 in
