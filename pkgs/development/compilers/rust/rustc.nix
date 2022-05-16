@@ -129,6 +129,19 @@ in stdenv.mkDerivation rec {
 
     # Useful debugging parameter
     # export VERBOSE=1
+  '' +
+  # From Arch/Debian: prevent SSE2 instructions in i686 output.
+  # While the rest of the userspace is built for the P6 instruction set
+  # architecture (Pentium Pro and later), Rust arbitrarily redefines i686 to
+  # include SSE2 instructions as introduced by the P68 instruction set
+  # architecture (Pentium 4 and later). To be able to run NixOS i686-linux
+  # on all 686 processors, we have to tell Rust to exclude SSE2 instructions,
+  # as GCC does for the rest of userspace.
+  optionalString stdenv.targetPlatform.isx86_32 ''
+    substituteInPlace vendor/rustc-ap-rustc_target/src/spec/i686_unknown_linux_gnu.rs \
+      --replace "pentium4" "pentiumpro"
+    substituteInPlace compiler/rustc_target/src/spec/i686_unknown_linux_gnu.rs \
+      --replace "pentium4" "pentiumpro"
   '';
 
   # rustc unfortunately needs cmake to compile llvm-rt but doesn't
