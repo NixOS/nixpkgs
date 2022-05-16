@@ -125,7 +125,9 @@ stdenv.mkDerivation rec {
     done
 
     # ZoomLauncher sets LD_LIBRARY_PATH before execing zoom
-    wrapProgram $out/opt/zoom/zoom \
+    # IPC breaks if the executable name does not end in 'zoom'
+    mv $out/opt/zoom/zoom $out/opt/zoom/.zoom
+    makeWrapper $out/opt/zoom/.zoom $out/opt/zoom/zoom \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
     rm $out/bin/zoom
