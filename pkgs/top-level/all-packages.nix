@@ -7179,6 +7179,8 @@ with pkgs;
   ipfs-migrator-unwrapped = callPackage ../applications/networking/ipfs-migrator/unwrapped.nix { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
+  ipfs-upload-client = callPackage ../applications/networking/ipfs-upload-client { };
+
   ipget = callPackage ../applications/networking/ipget { };
 
   i-pi = with python3Packages; toPythonApplication i-pi;
