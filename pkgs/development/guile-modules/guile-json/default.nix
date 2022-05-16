@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://savannah.nongnu.org/projects/guile-json";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
