@@ -764,6 +764,12 @@
     githubId = 7112447;
     name = "Andre S. Ramos";
   };
+  andrevmatos = {
+    email = "andre.vmatos@gmail.com";
+    github = "andrevmatos";
+    githubId = 587021;
+    name = "André Vitor de Lima Matos";
+  };
   andrew-d = {
     email = "andrew@du.nham.ca";
     github = "andrew-d";
