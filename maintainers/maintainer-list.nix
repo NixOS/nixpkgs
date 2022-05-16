@@ -1953,6 +1953,12 @@
     githubId = 7435854;
     name = "Victor Calvert";
   };
+  cameronfyfe = {
+    email = "cameron.j.fyfe@gmail.com";
+    github = "cameronfyfe";
+    githubId = 21013281;
+    name = "Cameron Fyfe";
+  };
   cameronnemo = {
     email = "cnemo@tutanota.com";
     github = "cameronnemo";
@@ -12428,6 +12434,16 @@
     githubId = 66133083;
     name = "Tomas Bravo";
   };
+  tchekda = {
+    email = "contact@tchekda.fr";
+    github = "tchekda";
+    githubId = 23559888;
+    keys = [{
+      longkeyid = "rsa4096/0xD0A007EDA4EADA0F";
+      fingerprint = "44CE A8DD 3B31 49CD 6246  9D8F D0A0 07ED A4EA DA0F";
+    }];
+    name = "David Tchekachev";
+  };
   tckmn = {
     email = "andy@tck.mn";
     github = "tckmn";
@@ -14541,5 +14557,17 @@
     email = "bryanhonof@gmail.com";
     github = "bryanhonof";
     githubId = 5932804;
+  };
+  bbenne10 = {
+    email = "Bryan.Bennett@protonmail.com";
+    matrix = "@bryan.bennett:matrix.org";
+    github = "bbenne10";
+    githubId = 687376;
+    name = "Bryan Bennett";
+    keys = [{
+      # compare with https://keybase.io/bbenne10
+      longkeyid = "rsa2048/0xEF90E3E98B8F5C0B";
+      fingerprint = "41EA 00B4 00F9 6970 1CB2  D3AF EF90 E3E9 8B8F 5C0B";
+    }];
   };
 }

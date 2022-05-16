@@ -1,14 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, python3Packages
-, pkgs
-, fetchzip
 , mouseinfo
 , pygetwindow
 , pymsgbox
 , pyperclip
-, pyrect
 , pyscreeze
 , pytweening
 , tkinter
