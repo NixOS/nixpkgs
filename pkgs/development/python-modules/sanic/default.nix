@@ -82,6 +82,9 @@ buildPythonPackage rec {
 
     # needed for relative paths for some packages
     cd tests
+  '' + lib.optionalString stdenv.isDarwin  ''
+    # OSError: [Errno 24] Too many open files
+    ulimit -n 1024
   '';
 
   # uvloop usage is buggy
