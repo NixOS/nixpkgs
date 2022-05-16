@@ -397,7 +397,7 @@ rec {
 
     listOf = elemType: mkOptionType rec {
       name = "listOf";
-      description = "list of ${elemType.description}s";
+      description = "list of ${elemType.description}";
       check = isList;
       merge = loc: defs:
         map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
@@ -426,7 +426,7 @@ rec {
 
     attrsOf = elemType: mkOptionType rec {
       name = "attrsOf";
-      description = "attribute set of ${elemType.description}s";
+      description = "attribute set of ${elemType.description}";
       check = isAttrs;
       merge = loc: defs:
         mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
@@ -449,7 +449,7 @@ rec {
     # error that it's not defined. Use only if conditional definitions don't make sense.
     lazyAttrsOf = elemType: mkOptionType rec {
       name = "lazyAttrsOf";
-      description = "lazy attribute set of ${elemType.description}s";
+      description = "lazy attribute set of ${elemType.description}";
       check = isAttrs;
       merge = loc: defs:
         zipAttrsWith (name: defs:
