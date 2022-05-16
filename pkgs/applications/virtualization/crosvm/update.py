@@ -7,7 +7,6 @@ import json
 import re
 import shlex
 import subprocess
-from codecs import iterdecode
 from os.path import abspath, dirname, splitext
 from lxml import etree
 from lxml.etree import HTMLParser
