@@ -8876,8 +8876,6 @@ with pkgs;
     buildGoModule = buildGo116Module;
   };
 
-  oci-image-tool = callPackage ../tools/misc/oci-image-tool { };
-
   ocproxy = callPackage ../tools/networking/ocproxy { };
 
   ocserv = callPackage ../tools/networking/ocserv { };
@@ -23454,6 +23452,8 @@ with pkgs;
   nvmet-cli = callPackage ../os-specific/linux/nvmet-cli { };
 
   system76-firmware = callPackage ../os-specific/linux/firmware/system76-firmware { };
+
+  system76-keyboard-configurator = callPackage ../applications/misc/system76-keyboard-configurator { };
 
   ocf-resource-agents = callPackage ../os-specific/linux/ocf-resource-agents { };
 
