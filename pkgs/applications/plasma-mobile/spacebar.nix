@@ -13,6 +13,9 @@
 , libqofono
 , protobuf
 , telepathy
+, modemmanager-qt
+, qtquickcontrols2
+, qcoro
 }:
 
 mkDerivation rec {
@@ -33,6 +36,9 @@ mkDerivation rec {
     libqofono
     protobuf # Needed by libphonenumber
     telepathy
+    modemmanager-qt
+    qtquickcontrols2
+    qcoro
   ];
 
   meta = with lib; {

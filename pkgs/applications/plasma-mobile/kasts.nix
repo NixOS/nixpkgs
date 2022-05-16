@@ -6,6 +6,7 @@
 , wrapGAppsHook
 
 , gst_all_1
+, taglib
 , kconfig
 , kcoreaddons
 , ki18n
@@ -13,6 +14,8 @@
 , qtmultimedia
 , qtquickcontrols2
 , syndication
+, qtkeychain
+, networkmanager-qt
 }:
 
 let
@@ -32,6 +35,7 @@ mkDerivation rec {
     gst-plugins-base
     gst-plugins-good
     gstreamer
+    taglib
 
     kconfig
     kcoreaddons
@@ -40,6 +44,8 @@ mkDerivation rec {
     qtquickcontrols2
     qtmultimedia
     syndication
+    qtkeychain
+    networkmanager-qt
   ];
 
   preFixup = ''

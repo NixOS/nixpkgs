@@ -9,6 +9,7 @@
 , kirigami2
 , qtmultimedia
 , qtquickcontrols2
+, kcoreaddons
 }:
 
 mkDerivation rec {
@@ -25,6 +26,7 @@ mkDerivation rec {
     kirigami2
     qtmultimedia
     qtquickcontrols2
+    kcoreaddons
   ];
 
   meta = with lib; {

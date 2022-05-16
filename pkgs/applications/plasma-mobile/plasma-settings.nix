@@ -12,6 +12,8 @@
 , ki18n
 , kitemmodels
 , plasma-framework
+, networkmanager-qt
+, modemmanager-qt
 }:
 
 mkDerivation rec {
@@ -30,6 +32,8 @@ mkDerivation rec {
     ki18n
     kitemmodels
     plasma-framework
+    networkmanager-qt
+    modemmanager-qt
   ];
 
   meta = with lib; {

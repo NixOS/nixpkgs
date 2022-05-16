@@ -18,6 +18,9 @@
 , pulseaudio-qt
 , qtquickcontrols2
 , telepathy
+, modemmanager-qt
+, qtfeedback
+, qtmpris
 }:
 
 mkDerivation rec {
@@ -43,6 +46,9 @@ mkDerivation rec {
     pulseaudio-qt
     qtquickcontrols2
     telepathy
+    modemmanager-qt
+    qtfeedback
+    qtmpris
   ];
 
   meta = with lib; {
