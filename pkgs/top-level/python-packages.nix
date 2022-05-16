@@ -4998,6 +4998,8 @@ in {
 
   losant-rest = callPackage ../development/python-modules/losant-rest { };
 
+  lrcalc-python = callPackage ../development/python-modules/lrcalc-python { };
+
   lru-dict = callPackage ../development/python-modules/lru-dict { };
 
   lsassy = callPackage ../development/python-modules/lsassy { };
