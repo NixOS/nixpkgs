@@ -80,7 +80,7 @@ let
 in
 rec {
   examples = callPackage ./examples.nix {
-    inherit buildImage buildLayeredImage fakeNss pullImage shadowSetup buildImageWithNixDb;
+    inherit buildImage buildLayeredImage fakeNss pullImage shadowSetup buildImageWithNixDb streamNixShellImage;
   };
 
   tests = {
