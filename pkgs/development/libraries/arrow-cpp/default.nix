@@ -143,6 +143,16 @@ stdenv.mkDerivation rec {
     patchShebangs build-support/
     substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \
       --replace 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
+
+    # https://issues.apache.org/jira/browse/ARROW-16585
+    substituteInPlace src/parquet/parquet.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    substituteInPlace src/plasma/plasma.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_BINDIR@ @CMAKE_INSTALL_FULL_BINDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+    substituteInPlace src/plasma/PlasmaConfig.cmake.in \
+      --replace @CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_BINDIR@ @CMAKE_INSTALL_FULL_BINDIR@
   '';
 
   cmakeFlags = [
