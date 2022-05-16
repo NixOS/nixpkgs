@@ -44,6 +44,11 @@ buildGoPackage rec {
       url = "https://github.com/go-gitea/gitea/commit/e3d8e92bdc67562783de9a76b5b7842b68daeb48.patch";
       sha256 = "0vvaqqhmx3gkw8fa64ifk2x546zsvlmf65grk29lhzsw1y148sy9";
     })
+    (fetchpatch {
+      name = "CVE-2022-30781.patch";
+      url = "https://github.com/go-gitea/gitea/commit/42e37e686b90216c6ba96f531deeda6d7361d093.patch";
+      sha256 = "sha256-9Js7cWjM3Vn+Y36mJ8V2EeIy4SooAipawNVP8nCobFQ=";
+    })
   ];
 
   postPatch = ''
