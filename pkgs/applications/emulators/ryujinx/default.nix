@@ -26,9 +26,6 @@ buildDotnetModule rec {
     sha256 = "09wjygkdr9sr0hwv77czi0x5xw8y585k9pghdm5s3iqjn9gbb45k";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-
   projectFile = "Ryujinx.sln";
   nugetDeps = ./deps.nix;
 

@@ -21,9 +21,6 @@ in
     projectFile = "src/XIVLauncher.Core/XIVLauncher.Core.csproj";
     nugetDeps = ./deps.nix; # File generated with `nuget-to-nix path/to/src > deps.nix`
 
-    dotnet-sdk = dotnetCorePackages.sdk_6_0;
-    dotnet-runtime = dotnetCorePackages.runtime_6_0;
-
     dotnetFlags = [
       "--runtime linux-x64"
       "-p:BuildHash=${rev}"

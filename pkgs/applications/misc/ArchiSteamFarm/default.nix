@@ -22,7 +22,6 @@ buildDotnetModule rec {
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
   nugetDeps = if stdenvNoCC.isAarch64 then ./deps-aarch64-linux.nix else ./deps-x86_64-linux.nix;
 
