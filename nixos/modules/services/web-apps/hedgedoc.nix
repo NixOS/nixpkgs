@@ -1020,6 +1020,7 @@ in
         ${pkgs.envsubst}/bin/envsubst \
           -o ${cfg.workDir}/config.json \
           -i ${prettyJSON cfg.configuration}
+        mkdir -p ${cfg.configuration.uploadsPath}
       '';
       serviceConfig = {
         WorkingDirectory = cfg.workDir;
