@@ -250,7 +250,7 @@ in
     };
 
     warnings = optional (isMorPLocate && cfg.localuser != null)
-      "mlocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
+      "mlocate/plocate does not support the services.locate.localuser option; updatedb will run as root. (Silence with services.locate.localuser = null.)"
     ++ optional (isFindutils && cfg.pruneNames != [ ])
       "findutils locate does not support pruning by directory component"
     ++ optional (isFindutils && cfg.pruneBindMounts)
