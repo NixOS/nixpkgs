@@ -2657,4 +2657,17 @@ self: super: {
     sha256 = "sha256-O+v/OxvqnlWX3HaDvDIBZnJ+Og3xs/SJqI3gaouU3ZI=";
   }) super.records-sop;
 
+  # Fix build failures for ghc 9 (https://github.com/mokus0/polynomial/pull/20)
+  polynomial = appendPatch (fetchpatch {
+    name = "haskell-polynomial.20.patch";
+    url = "https://github.com/mokus0/polynomial/pull/20.diff";
+    sha256 = "1bwivimpi2hiil3zdnl5qkds1inyn239wgxbn3y8l2pwyppnnfl0";
+  })
+  (overrideCabal (drv: {
+    revision = null;
+    editedCabalFile = null;
+    doCheck = false; # Source dist doesn't include the checks
+  })
+  super.polynomial);
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
