@@ -719,10 +719,10 @@
     "owner": "equinix",
     "provider-source-address": "registry.terraform.io/equinix/metal",
     "repo": "terraform-provider-metal",
-    "rev": "v3.3.0-alpha.3",
-    "sha256": "sha256-wuZp0Be8a84y7JqpCGnBDPXgNG8JJcNWsIICP3ZjSVk=",
-    "vendorSha256": "sha256-Ln9EyycPduVuj+JefH9f+Q5KlNGvbcwcEDgaqH2M0So=",
-    "version": "3.3.0-alpha.3"
+    "rev": "v3.2.2",
+    "sha256": "193897farpyb3zxz6p79mfaf04ccin7xdirbkclqb3x3c56jy0xi",
+    "vendorSha256": null,
+    "version": "3.2.2"
   },
   "minio": {
     "owner": "aminueza",
