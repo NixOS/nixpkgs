@@ -6,8 +6,6 @@ stdenv.mkDerivation rec {
   pname = "libpcap";
   version = "1.10.1";
 
-  outputs = [ "out" "dev" ];
-
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
     sha256 = "sha256-7ShfSsyvBTRPkJdXV7Pb/ncrpB0cQBwmSLf6RbcRvdQ=";
@@ -29,8 +27,6 @@ stdenv.mkDerivation rec {
     if [ "$dontDisableStatic" -ne "1" ]; then
       rm -f $out/lib/libpcap.a
     fi
-
-    moveToOutput "bin/pcap-config" "$dev"
   '';
 
   meta = {
