@@ -48,7 +48,7 @@ chromeos_tip_build = re.match(r'\d+', platform_version)[0]
 with urlopen(f'{buildspecs_url}{chrome_major_version}/?format=TEXT') as resp:
     listing = base64.decodebytes(resp.read()).decode('utf-8')
     buildspecs = [(line.split('\t', 1)[1]) for line in listing.splitlines()]
-    buildspecs = [s for s in buildspecs if s.startswith(chromeos_tip_build)]
+    buildspecs = [s for s in buildspecs if s.startswith(f"{chromeos_tip_build}.")]
     buildspecs.sort(reverse=True)
     buildspec = splitext(buildspecs[0])[0]
 
