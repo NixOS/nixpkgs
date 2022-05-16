@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, django, isPy27 }:
+{ lib, buildPythonPackage, fetchFromGitHub, django, pytz, isPy27 }:
 
 buildPythonPackage rec {
   version = "3.12.4";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # Test settings are missing
   doCheck = false;
 
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [ django pytz ];
 
   meta = with lib; {
     description = "Web APIs for Django, made easy";
