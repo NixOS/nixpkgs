@@ -3,13 +3,12 @@
 #! nix-shell -i python
 
 import base64
+import csv
 import json
 import re
 import shlex
 import subprocess
 from os.path import abspath, dirname, splitext
-from lxml import etree
-from lxml.etree import HTMLParser
 from urllib.request import urlopen
 
 git_path = 'chromiumos/platform/crosvm'
@@ -25,19 +24,22 @@ buildspecs_url = f'{manifest_versions}/+/refs/heads/master/full/buildspecs/'
 # branch branches are used for fixes for specific devices.  So for
 # Chromium OS they will always be 0.  This is a best guess, and is not
 # documented.
-with urlopen('https://cros-updates-serving.appspot.com/') as resp:
-    document = etree.parse(resp, HTMLParser())
-    # bgcolor="lightgreen" is set on the most up-to-date version for
-    # each channel, so find a lightgreen cell in the "Stable" column.
-    (platform_version, chrome_version) = document.xpath("""
-        (//table[@id="cros-updates"]/tr/td[1 + count(
-            //table[@id="cros-updates"]/thead/tr[1]/th[text() = "Stable"]
-            /preceding-sibling::*)
-        ][@bgcolor="lightgreen"])[1]/text()
-    """)
+with urlopen('https://chromiumdash.appspot.com/cros/download_serving_builds_csv?deviceCategory=ChromeOS') as resp:
+    reader = csv.reader(map(bytes.decode, resp))
+    header = reader.__next__()
+    cr_stable_index = header.index('cr_stable')
+    cros_stable_index = header.index('cros_stable')
+    chrome_version = []
+    platform_version = []
 
-chrome_major_version = re.match(r'\d+', chrome_version)[0]
-chromeos_tip_build = re.match(r'\d+', platform_version)[0]
+    for line in reader:
+        this_chrome_version = list(map(int, line[cr_stable_index].split('.')))
+        this_platform_version = list(map(int, line[cros_stable_index].split('.')))
+        chrome_version = max(chrome_version, this_chrome_version)
+        platform_version = max(platform_version, this_platform_version)
+
+chrome_major_version = chrome_version[0]
+chromeos_tip_build = str(platform_version[0])
 
 # Find the most recent buildspec for the stable Chrome version and
 # Chromium OS build number.  Its branch build and branch branch build
