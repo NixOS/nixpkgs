@@ -1953,6 +1953,12 @@
     githubId = 7435854;
     name = "Victor Calvert";
   };
+  cameronfyfe = {
+    email = "cameron.j.fyfe@gmail.com";
+    github = "cameronfyfe";
+    githubId = 21013281;
+    name = "Cameron Fyfe";
+  };
   cameronnemo = {
     email = "cnemo@tutanota.com";
     github = "cameronnemo";
