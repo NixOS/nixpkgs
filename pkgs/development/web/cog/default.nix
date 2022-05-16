@@ -53,6 +53,12 @@ stdenv.mkDerivation rec {
     "-DCOG_USE_WEBKITGTK=ON"
   ];
 
+  # https://github.com/Igalia/cog/issues/438
+  postPatch = ''
+    substituteInPlace core/cogcore.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
+
   # not ideal, see https://github.com/WebPlatformForEmbedded/libwpe/issues/59
   preFixup = ''
     wrapProgram $out/bin/cog \
