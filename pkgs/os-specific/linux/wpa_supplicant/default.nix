@@ -4,6 +4,7 @@
 , withReadline ? true, readline
 , withPcsclite ? true, pcsclite
 , readOnlyModeSSIDs ? false
+, wheelDbusAccess ? false
 }:
 
 with lib;
@@ -23,6 +24,9 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals readOnlyModeSSIDs [
     # Allow read-only networks
     ./0001-Implement-read-only-mode-for-ssids.patch
+  ] ++ lib.optionals wheelDbusAccess [
+    # allow wheel to interact with wpa_supplicanat over dbus
+    ./wheel_dbus_access.patch
   ];
 
   # TODO: Patch epoll so that the dbus actually responds
