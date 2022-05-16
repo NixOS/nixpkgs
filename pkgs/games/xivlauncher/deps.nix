@@ -12,7 +12,7 @@
   (fetchNuGet { pname = "goaaats.Veldrid.SDL2"; version = "4.9.0-beta1-g70f642e82e"; sha256 = "14xj3z0yc25vq17bvv2193cbqxj7k9iimxbaqk2rpvlpmrbg20xi"; })
   (fetchNuGet { pname = "goaaats.Veldrid.StartupUtilities"; version = "4.9.0-beta1-g70f642e82e"; sha256 = "03r3x9h0fyb07d6d28ny6r5s688m50xc0lgc6zf2cy684kfnvmp5"; })
   (fetchNuGet { pname = "ImGui.NET"; version = "1.87.2"; sha256 = "0rv0n18fvz1gbh45crhzn1f8xw8zkc8qyiyj91vajjcry8mq1x7q"; })
-  (fetchNuGet { pname = "KeySharp"; version = "1.0.4"; sha256 = "1xkgrsm0h4ycbc7qnj0dzknx0rqlx3168vrdrdgsi30xki02z323"; })
+  (fetchNuGet { pname = "KeySharp"; version = "1.0.5"; sha256 = "1ic10v0a174fw6w89iyg4yzji36bsj15573y676cj5n09n6s75d4"; })
   (fetchNuGet { pname = "Microsoft.AspNetCore.App.Runtime.linux-x64"; version = "6.0.4"; sha256 = "1fvv5ri32pbl43628zqnim6fbv6hjxf66p0v793xdh57dzkdyh0j"; })
   (fetchNuGet { pname = "Microsoft.CodeAnalysis.Analyzers"; version = "3.3.3"; sha256 = "09m4cpry8ivm9ga1abrxmvw16sslxhy2k5sl14zckhqb1j164im6"; })
   (fetchNuGet { pname = "Microsoft.CodeAnalysis.BannedApiAnalyzers"; version = "3.3.3"; sha256 = "1z6x0d8lpcfjr3sxy25493i17vvcg5bsay6c03qan6mnj5aqzw2k"; })
