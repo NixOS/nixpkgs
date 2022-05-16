@@ -9,7 +9,6 @@ buildPecl {
   sha256 = "sha256-Rhoa4ny86dwB3e86/1W30AlDGRUDYjK8RusquKF5Izg=";
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
-  internalDeps = lib.optionals (lib.versionOlder php.version "7.4") [ php.extensions.hash ];
 
   meta = with lib; {
     changelog = "https://pecl.php.net/package/openswoole/${version}";
