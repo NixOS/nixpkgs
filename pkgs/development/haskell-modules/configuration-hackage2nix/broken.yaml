@@ -1031,7 +1031,6 @@ broken-packages:
   - dead-code-detection
   - Deadpan-DDP
   - dead-simple-json
-  - debian
   - debug-me
   - debug-tracy
   - decepticons
