@@ -382,6 +382,8 @@ with pkgs;
 
   c-rbtree = callPackage ../development/libraries/c-util/c-rbtree { };
 
+  c-shquote = callPackage ../development/libraries/c-util/c-shquote { };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
