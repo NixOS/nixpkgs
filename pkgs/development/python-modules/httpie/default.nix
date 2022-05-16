@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , installShellFiles
@@ -80,6 +81,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "httpie"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # flaky
+    "tests/test_plugins_cli.py"
+  ];
+
+  disabledTests = [
+    # flaky
+    "test_stdin_read_warning"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # flaky
+    "test_daemon_runner"
   ];
 
   meta = with lib; {

@@ -5721,6 +5721,10 @@ in {
 
   nltk = callPackage ../development/python-modules/nltk { };
 
+  nnpdf = toPythonModule (pkgs.nnpdf.override {
+    python3 = python;
+  });
+
   nmapthon2 = callPackage ../development/python-modules/nmapthon2 { };
 
   amaranth-boards = callPackage ../development/python-modules/amaranth-boards { };
@@ -10775,6 +10779,8 @@ in {
   validictory = callPackage ../development/python-modules/validictory { };
 
   validobj = callPackage ../development/python-modules/validobj { };
+
+  validphys2 = callPackage ../development/python-modules/validphys2 { };
 
   vallox-websocket-api = callPackage ../development/python-modules/vallox-websocket-api { };
 
