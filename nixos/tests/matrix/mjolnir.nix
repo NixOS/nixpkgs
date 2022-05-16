@@ -44,6 +44,7 @@ import ../make-test-python.nix (
             tls_private_key_path = "${key}";
             enable_registration = true;
             registration_shared_secret = "supersecret-registration";
+            enable_registration_without_verification = true;
 
             listeners = [ {
               # The default but tls=false
