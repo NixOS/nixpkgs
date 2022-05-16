@@ -36,12 +36,14 @@ with lib;
   hardware.pulseaudio.enable = true;
 
   # VM guest additions to improve host-guest interaction
-  services.spice-vdagentd.enable = true;
-  services.qemuGuest.enable = true;
-  virtualisation.virtualbox.guest.enable = true;
-  virtualisation.vmware.guest.enable = true;
-  virtualisation.hypervGuest.enable = true;
-  services.xe-guest-utilities.enable = true;
+  services.spice-vdagentd.enable = mkDefault true;
+  services.qemuGuest.enable = mkDefault true;
+  virtualisation.vmware.guest.enable = mkDefault true;
+  virtualisation.hypervGuest.enable = mkDefault true;
+  services.xe-guest-utilities.enable = mkDefault true;
+  # The VirtualBox guest additions rely on an out-of-tree kernel module
+  # which lags behind kernel releases, potentially causing broken builds.
+  virtualisation.virtualbox.guest.enable = mkDefault false;
 
   # Enable plymouth
   boot.plymouth.enable = true;
