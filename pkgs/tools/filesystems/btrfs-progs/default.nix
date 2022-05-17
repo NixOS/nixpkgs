@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = lib.optionals stdenv.hostPlatform.isGnu [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
+  installFlags = [ "install_python" ];
+
   enableParallelBuilding = true;
 
   passthru.tests = {
