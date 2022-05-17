@@ -9915,6 +9915,8 @@ in {
 
   srsly = callPackage ../development/python-modules/srsly { };
 
+  srt = callPackage ../development/python-modules/srt { };
+
   srvlookup = callPackage ../development/python-modules/srvlookup { };
 
   ssdeep = callPackage ../development/python-modules/ssdeep {
