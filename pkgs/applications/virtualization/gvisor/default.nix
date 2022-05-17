@@ -43,7 +43,7 @@ let
     repo = "rules_proto";
     rev = "f7a30f6f80006b591fa7c437fe5a951eb10bcbcf";
     sha256 = "10bcw0ir0skk7h33lmqm38n9w4nfs24mwajnngkbs6jb5wsvkqv8";
-    extraPostFetch = ''
+    postFetch = ''
       sed -i 's|name = "protoc"|name = "_protoc_original"|' $out/proto/private/BUILD.release
       cat <<EOF >>$out/proto/private/BUILD.release
       alias(name = "protoc", actual = "@com_github_protocolbuffers_protobuf//:protoc", visibility = ["//visibility:public"])

@@ -32,7 +32,7 @@ let
       # without making a new release. We simply substitute the possibly changed fields
       # with their content from when we last updated, and thus get a deterministic output
       # hash.
-      extraPostFetch = ''
+      postFetch = ''
         echo "${metadata}" | base64 --decode > $out/metadata.json
       '';
     };

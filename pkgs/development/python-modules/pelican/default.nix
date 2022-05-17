@@ -38,7 +38,7 @@ buildPythonPackage rec {
     hash = "sha256-ZBGzsyCtFt5uj9mpOpGdTzGJET0iwOAgDTy80P6anRU=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
-    extraPostFetch = ''
+    postFetch = ''
       rm -r $out/pelican/tests/output/custom_locale/posts
     '';
   };
