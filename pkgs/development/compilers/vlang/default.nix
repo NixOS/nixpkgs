@@ -2,21 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "vlang";
-  version = "weekly.2022.19";
+  version = "weekly.2022.20";
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
-    sha256 = "1bl91j3ip3i84jq3wg03sflllxv38sv4dc072r302rl2g9f4dbg6";
+    sha256 = "1isbyfs98bdbm2qjf7q4bqbpsmdiqlavn3gznwr12bkvhnsf4j3x";
   };
 
   # Required for bootstrap.
   vc = fetchFromGitHub {
     owner = "vlang";
     repo = "vc";
-    rev = "a298ad7069f6333ef8ab59a616654fc74e04c847";
-    sha256 = "168cgq6451hcgsxzyd8vq11g01642bs5kkwxqh6rz3rnc86ajic0";
+    rev = "167f262866090493650f58832d62d910999dd5a4";
+    sha256 = "1xax8355qkrccjcmx24gcab88xnrqj15mhqy0bgp3v2rb1hw1n3a";
   };
 
   # Required for vdoc.
@@ -26,11 +26,6 @@ stdenv.mkDerivation rec {
     rev = "bbbd324a361e404ce0682fc00666df3a7877b398";
     sha256 = "0cawzizr3rjz81blpvxvxrcvcdai1adj66885ss390444qq1fnv7";
   };
-
-  # vcreate_test.v requires git, so we must disable it.
-  patches = [
-    ./disable_vcreate_test.patch
-  ];
 
   propagatedBuildInputs = [ glfw freetype openssl ]
     ++ lib.optional stdenv.hostPlatform.isUnix upx;
@@ -42,9 +37,16 @@ stdenv.mkDerivation rec {
     "VC=${vc}"
   ];
 
-  prePatch = ''
+  preBuild = ''
     export HOME=$(mktemp -d)
-    cp cmd/tools/vcreate_test.v $HOME/vcreate_test.v
+  '';
+
+  # vcreate_test.v requires git, so we must remove it when building the tools.
+  # vtest.v fails on Darwin, so let's just disable it for now.
+  preInstall = ''
+    mv cmd/tools/vcreate_test.v $HOME/vcreate_test.v
+  '' + lib.optionalString stdenv.isDarwin ''
+    mv cmd/tools/vtest.v $HOME/vtest.v
   '';
 
   installPhase = ''
@@ -64,10 +66,14 @@ stdenv.mkDerivation rec {
     $out/lib/v -v $out/lib/cmd/tools/vast
     $out/lib/v -v $out/lib/cmd/tools/vvet
 
-    # Return the pre-patch vcreate_test.v now that we no longer need the alteration.
-    cp $HOME/vcreate_test.v $out/lib/cmd/tools/vcreate_test.v
-
     runHook postInstall
+  '';
+
+  # Return vcreate_test.v and vtest.v, so the user can use it.
+  postInstall = ''
+    cp $HOME/vcreate_test.v $out/lib/cmd/tools/vcreate_test.v
+  '' + lib.optionalString stdenv.isDarwin ''
+    cp $HOME/vtest.v $out/lib/cmd/tools/vtest.v
   '';
 
   meta = with lib; {
