@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, callPackage
 , fetchFromGitHub
 , rustPlatform
 , CoreServices
@@ -54,7 +55,11 @@ rustPlatform.buildRustPackage rec {
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    updateScript = ./update.sh;
+    # FIXME: Pass overrided `rust-analyzer` once `buildRustPackage` also implements #119942
+    tests.neovim-lsp = callPackage ./test-neovim-lsp.nix { };
+  };
 
   meta = with lib; {
     description = "A modular compiler frontend for the Rust language";
