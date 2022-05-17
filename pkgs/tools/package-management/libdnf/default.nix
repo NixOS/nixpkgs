@@ -41,11 +41,15 @@ stdenv.mkDerivation rec {
     cp ${libsolv}/share/cmake/Modules/FindLibSolv.cmake cmake/modules/
   '';
 
-  # See https://github.com/NixOS/nixpkgs/issues/107428
   postPatch = ''
+    # See https://github.com/NixOS/nixpkgs/issues/107428
     substituteInPlace CMakeLists.txt \
       --replace "enable_testing()" "" \
       --replace "add_subdirectory(tests)" ""
+
+    # https://github.com/rpm-software-management/libdnf/issues/1518
+    substituteInPlace libdnf/libdnf.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
   cmakeFlags = [
