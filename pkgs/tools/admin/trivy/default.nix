@@ -1,6 +1,9 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
+, CoreFoundation
+, Security
 }:
 
 buildGoModule rec {
@@ -13,10 +16,12 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-zyTUGAxUAfrigRNiw03ZXFK+UkpuxwuU2xviZmAPuR8=";
   };
-
   vendorSha256 = "sha256-dgiKWHSm49/CB4dWrNWIzkkmj6Aw4l+9iLa6xe/umq0=";
 
   excludedPackages = "misc";
+
+  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64)
+    [ CoreFoundation Security ];
 
   ldflags = [
     "-s"
