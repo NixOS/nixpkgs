@@ -49,6 +49,27 @@ python3Packages.buildPythonApplication rec {
       --replace "set preview_images false" "set preview_images true"
   '';
 
+  # Adds support for doing `source ranger` in bash
+  postFixup = ''
+    substituteInPlace $out/bin/ranger \
+      --replace 'exec' '#exec '
+    cat >> $out/bin/ranger << EOF
+      if [[ "\$(basename "\$0")" == "ranger" ]]
+      then
+        exec -a "\$0" "$out/bin/.ranger-wrapped" "\$@"
+      else
+        temp_file="\$(mktemp -t "ranger_cd.XXXXXXXXXX")"
+        "$out/bin/ranger" --choosedir="\$temp_file" "\$@"
+        return_value="\$?"
+        if chosen_dir="\$(cat -- "\$temp_file")" && [ -n "\$chosen_dir" ] && [ "\$chosen_dir" != "\$PWD" ]; then
+            cd -- "\$chosen_dir"
+        fi
+        rm -f -- "\$temp_file"
+        return "\$return_value"
+      fi
+    EOF
+  '';
+
   meta =  with lib; {
     description = "File manager with minimalistic curses interface";
     homepage = "https://ranger.github.io/";
