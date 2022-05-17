@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , nix-update-script
 , substituteAll
 , meson
@@ -38,19 +37,6 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit ibus onboard libgnomekbd;
-    })
-
-    # Revert schema key change that requires new GSD and Gala.
-    # TODO(@bobby285271): drop these in #196511.
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-keyboard/commit/555e9650bb8f74a7664e2393c589fe6664954a88.patch";
-      sha256 = "sha256-koSTYLPRh9rOyxmJPtrj/fPuu2jb1SKZu6BwKsMvAmc=";
-      revert = true;
-    })
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-keyboard/commit/6ebd57673b45cc64e1caf895134efc0d5f6cf2be.patch";
-      sha256 = "sha256-Ezsh0t1/909MHCB2EJEnl4kcnXngshNYgrmqUQsfsaY=";
-      revert = true;
     })
   ];
 
