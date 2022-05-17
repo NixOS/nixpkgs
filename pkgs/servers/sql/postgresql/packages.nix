@@ -65,4 +65,6 @@ self: super: {
     repmgr = super.callPackage ./ext/repmgr.nix { };
 
     rum = super.callPackage ./ext/rum.nix { };
+
+    wal2json = super.callPackage ./ext/wal2json.nix { };
 }
