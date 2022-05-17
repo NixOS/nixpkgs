@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
   outputs = [ "out" "dev" ];
 
+  # https://github.com/nats-io/nats.c/issues/542
+  postPatch = ''
+    substituteInPlace src/libnats.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
+
   meta = with lib; {
     description = "C API for the NATS messaging system";
     homepage    = "https://github.com/nats-io/nats.c";
