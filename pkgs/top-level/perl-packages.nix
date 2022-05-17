@@ -683,9 +683,10 @@ let
          --replace 'sed' '${pkgs.gnused}/bin/sed'
     '';
     meta = {
+      homepage = "https://github.com/duncs/clusterssh/wiki";
       description = "A container for functions of the ClusterSSH programs";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
-      homepage = "https://github.com/duncs/clusterssh/wiki";
+      mainProgram = "cssh";
     };
   };
 
@@ -1023,6 +1024,7 @@ let
     meta = {
       description = "Manipulates TAR archives";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "ptar";
     };
   };
 
@@ -1402,6 +1404,7 @@ let
       homepage = "https://github.com/rurban/perl-compiler";
       description = "Perl compiler";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "perlcc";
     };
     doCheck = false; /* test fails */
   };
@@ -4117,6 +4120,7 @@ let
     meta = {
       description = "Query, download and build perl modules from CPAN sites";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "cpan";
     };
   };
 
@@ -4269,6 +4273,7 @@ let
       homepage = "https://github.com/jib/cpanplus-devel";
       description = "Ameliorated interface to the CPAN";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "cpanp";
     };
   };
 
@@ -7699,6 +7704,7 @@ let
     meta = {
       description = "Character encodings in Perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "piconv";
     };
   };
 
@@ -9269,6 +9275,7 @@ let
     meta = {
       description = "Verify solutions for solitaire games";
       license = lib.licenses.mit;
+      mainProgram = "verify-solitaire-solution";
     };
   };
 
@@ -11241,6 +11248,7 @@ let
     meta = {
       description = "IO Interface to compressed data files/buffers";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "streamzip";
     };
     # Same as CompressRawZlib
     doCheck = false && !stdenv.isDarwin;
@@ -11976,6 +11984,7 @@ let
       homepage = "https://dlmf.nist.gov/LaTeXML/";
       license = lib.licenses.publicDomain;
       maintainers = with maintainers; [ xworld21 ];
+      mainProgram = "latexml";
     };
     passthru = {
       tlType = "run";
@@ -13332,6 +13341,7 @@ let
     meta = {
       description = "An object-oriented implementation of Sender Policy Framework";
       license = lib.licenses.bsd3;
+      mainProgram = "spfquery";
     };
   };
 
@@ -13930,6 +13940,7 @@ let
       homepage = "https://www.mhonarc.org/";
       description = "A mail-to-HTML converter";
       maintainers = with maintainers; [ lovek323 ];
+      mainProgram = "mhonarc";
       license = licenses.gpl2;
     };
   };
@@ -14391,6 +14402,7 @@ let
     meta = {
       description = "Information about Perl modules";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "module_info";
     };
     propagatedBuildInputs = [ BUtils ];
   };
@@ -14722,6 +14734,7 @@ let
       description = "Real-time web framework";
       license = lib.licenses.artistic2;
       maintainers = with maintainers; [ thoughtpolice sgo ];
+      mainProgram = "mojo";
     };
   };
 
@@ -17935,6 +17948,7 @@ let
       homepage = "http://pdl.perl.org/";
       description = "Perl Data Language";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "pdl2";
       platforms = lib.platforms.linux;
     };
   };
@@ -18237,6 +18251,7 @@ let
       description = "Pure-Perl Core-Only replacement for pkg-config";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = teams.deshaw.members;
+      mainProgram = "ppkg-config";
     };
   };
 
@@ -18829,6 +18844,7 @@ let
       homepage = "https://github.com/rjbs/Perl-PrereqScanner";
       description = "A tool to scan your Perl code for its prerequisites";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "scan-perl-prereqs";
     };
   };
 
@@ -18995,6 +19011,7 @@ let
       homepage = "https://github.com/neilb/Pod-POM";
       description = "POD Object Model";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "pom2";
     };
   };
 
@@ -20235,6 +20252,7 @@ let
     meta = {
       description = "SQL DDL transformations and more";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      mainProgram = "sqlt";
     };
   };
 
