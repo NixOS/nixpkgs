@@ -112,3 +112,5 @@ or "hg"), `domain` and `fetchSubmodules`.
 If `fetchSubmodules` is `true`, `fetchFromSourcehut` uses `fetchgit`
 or `fetchhg` with `fetchSubmodules` or `fetchSubrepos` set to `true`,
 respectively. Otherwise, the fetcher uses `fetchzip`.
+
+For git hashes, unlike `fetchFromGithub`, a `v` is not required before the hash.
