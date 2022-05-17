@@ -15,8 +15,13 @@ stdenv.mkDerivation rec {
     substituteInPlace src/GridPDF.cc --replace '#include <locale>' '#include <xlocale.h>'
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ lib.optionals (lib.versionAtLeast python.version "3.10") [ python.pkgs.cython ];
   buildInputs = [ python ];
+
+  preBuild = lib.optionalString (lib.versionAtLeast python.version "3.10") ''
+    rm wrappers/python/lhapdf.cpp
+  '';
 
   enableParallelBuilding = true;
 
