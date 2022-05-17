@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.Foundation
   ];
 
-  # Disable cwd support on darwin, because it requires macOS>=10.15
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  # Disable cwd support on x86 darwin, because it requires macOS>=10.15
+  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     for file in 3rd/bee.lua/bee/subprocess/subprocess_posix.cpp 3rd/luamake/3rd/bee.lua/bee/subprocess/subprocess_posix.cpp; do
       substituteInPlace $file --replace '#define USE_POSIX_SPAWN 1' ""
     done
