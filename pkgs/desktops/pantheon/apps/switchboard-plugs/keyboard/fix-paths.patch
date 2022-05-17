@@ -24,3 +24,16 @@ index 75d2d805..b86252a4 100644
                      appinfo.launch (null, null);
                  } catch (Error e) {
                      warning ("Unable to launch onboard-settings: %s", e.message);
+diff --git a/src/Dialogs/AddLayoutDialog.vala b/src/Dialogs/AddLayoutDialog.vala
+index 7c2efda3..de77094f 100644
+--- a/src/Dialogs/AddLayoutDialog.vala
++++ b/src/Dialogs/AddLayoutDialog.vala
+@@ -197,7 +197,7 @@ public class Pantheon.Keyboard.LayoutPage.AddLayoutDialog : Granite.Dialog {
+         });
+ 
+         keyboard_map_button.clicked.connect (() => {
+-            string command = "gkbd-keyboard-display \"--layout=" + layout_id + "\"";
++            string command = "@libgnomekbd@/bin/gkbd-keyboard-display \"--layout=" + layout_id + "\"";
+             try {
+                 AppInfo.create_from_commandline (command, null, AppInfoCreateFlags.NONE).launch (null, null);
+             } catch (Error e) {
