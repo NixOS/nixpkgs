@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  # https://github.com/cntools/libsurvive/issues/272
+  postPatch = ''
+    substituteInPlace survive.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
+
   meta = with lib; {
     description = "Open Source Lighthouse Tracking System";
     homepage = "https://github.com/cntools/libsurvive";
