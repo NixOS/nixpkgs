@@ -19009,8 +19009,6 @@ with pkgs;
 
   libnftnl = callPackage ../development/libraries/libnftnl { };
 
-  libnih = callPackage ../development/libraries/libnih { };
-
   libnova = callPackage ../development/libraries/science/astronomy/libnova { };
 
   libnxml = callPackage ../development/libraries/libnxml { };
