@@ -14,8 +14,17 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/include/stb
+    mkdir -p $out/include/stb $out/lib/pkgconfig
     cp *.h $out/include/stb/
+
+    cat << EOF > $out/lib/pkgconfig/stb.pc
+    prefix=''${out}
+    includedir=\''${prefix}/include/stb
+    Cflags: -I\''${includedir}
+    Name: stb
+    Version: ''${version}
+    Description: stb
+    EOF
   '';
 
   meta = with lib; {
