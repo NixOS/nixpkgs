@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20220430";
+  version = "20220517";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = pname;
     rev = version;
-    sha256 = "sha256-clG0B7PgtlpsSnZgglkv7y7SOtMTBvwJMnvMrcTWXdI=";
+    sha256 = "sha256-6jKsdilgWm6oDAuzE1aToMg9oV9BmTgQrOvvlwPA5gc=";
   };
 
   # Remove when Apple SDK is >= 10.13
