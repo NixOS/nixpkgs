@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchFromGitLab
 , cmake
 , extra-cmake-modules
 , kconfig
@@ -8,17 +7,8 @@
 , mauikit
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "mauikit-filebrowsing";
-  version = "2.1.1";
-
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "maui";
-    repo = "mauikit-filebrowsing";
-    rev = "v${version}";
-    hash = "sha256-2LzGvjh2t4RVZS9Js7ky3hM51L7bx0SHmDlKKPjl3LM=";
-  };
 
   nativeBuildInputs = [
     cmake
@@ -34,7 +24,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://invent.kde.org/maui/mauikit-filebrowsing";
     description = "MauiKit File Browsing utilities and controls";
-    license = licenses.lgpl2Plus;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ dotlambda ];
   };
 }
