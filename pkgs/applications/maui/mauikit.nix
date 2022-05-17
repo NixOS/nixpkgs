@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchFromGitLab
 , cmake
 , extra-cmake-modules
 , kconfig
@@ -12,17 +11,8 @@
 , qtx11extras
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "mauikit";
-  version = "2.1.1";
-
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "maui";
-    repo = "mauikit";
-    rev = "v${version}";
-    hash = "sha256-INvh+J484xkAsNGtYdf8NGGpFGp2AG7s9UYESoem3QY=";
-  };
 
   nativeBuildInputs = [
     cmake
@@ -41,8 +31,7 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://mauikit.org/";
     description = "Free and modular front-end framework for developing fast and compelling user experiences";
-    license = licenses.lgpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
-    broken = versionOlder qtbase.version "5.15.0";
   };
 }

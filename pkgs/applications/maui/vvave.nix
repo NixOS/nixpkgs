@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchFromGitLab
 , cmake
 , extra-cmake-modules
 , applet-window-buttons
@@ -10,24 +9,15 @@
 , kio
 , kirigami2
 , mauikit
-, mauikit-filebrowsing
 , mauikit-accounts
-, mauikit-texteditor
+, mauikit-filebrowsing
 , qtmultimedia
 , qtquickcontrols2
+, taglib
 }:
 
-mkDerivation rec {
-  pname = "buho";
-  version = "2.1.1";
-
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "maui";
-    repo = "buho";
-    rev = "v${version}";
-    sha256 = "sha256-rHjjvjRY2WsyZfj3fzp46copZ1g2ae6PVv9lBNZDzcI=";
-  };
+mkDerivation {
+  pname = "vvave";
 
   nativeBuildInputs = [
     cmake
@@ -42,17 +32,18 @@ mkDerivation rec {
     kio
     kirigami2
     mauikit
-    mauikit-filebrowsing
     mauikit-accounts
-    mauikit-texteditor
+    mauikit-filebrowsing
     qtmultimedia
     qtquickcontrols2
+    taglib
   ];
 
   meta = with lib; {
-    description = "Task and Note Keeper";
-    homepage = "https://invent.kde.org/maui/buho";
+    description = "Multi-platform media player";
+    homepage = "https://invent.kde.org/maui/vvave";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];
   };
 }
+
