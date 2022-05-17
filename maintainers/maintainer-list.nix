@@ -12156,6 +12156,12 @@
     githubId = 12984845;
     name = "Subhrajyoti Sen";
   };
+  sudosubin = {
+    email = "sudosubin@gmail.com";
+    github = "sudosubin";
+    githubId = 32478597;
+    name = "Subin Kim";
+  };
   suhr = {
     email = "suhr@i2pmail.org";
     github = "suhr";
