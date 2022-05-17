@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-d64WZaM38cSMYda5Yds+UhGbOOWIhNHIloSvMfh7xQY=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     installShellFiles
   ];

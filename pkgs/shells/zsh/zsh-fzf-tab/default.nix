@@ -13,6 +13,7 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-ixUnuNtxxmiigeVjzuV5uG6rIBPY/1vdBZF2/Qv0Trs=";
   };
 
+  strictDeps = true;
   buildInputs = [ ncurses ];
 
   postConfigure = ''

@@ -54,11 +54,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.17.9";
+  version = "1.17.10";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-djrUuvuAqSBEWMX6K45zJ/qXGu5FQlLA42LBEjYVaBM=";
+    sha256 = "sha256-KZ5VrzDxVpGwFdjc+OyuckEkElaeWy7OIDYXU6RW8vk=";
   };
 
   # perl is used for testing go vet
@@ -167,7 +167,6 @@ stdenv.mkDerivation rec {
     ./remove-test-pie-1.15.patch
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
-    ./go-1.9-skip-flaky-20072.patch
     ./skip-chown-tests-1.16.patch
     ./skip-external-network-tests-1.16.patch
     ./skip-nohup-tests.patch

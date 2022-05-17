@@ -16,7 +16,7 @@
 , pyyaml-env-tag
 , watchdog
   # testing deps
-, Babel
+, babel
 , mock
 , pytestCheckHook
 }:
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    Babel
+    babel
     mock
   ];
 

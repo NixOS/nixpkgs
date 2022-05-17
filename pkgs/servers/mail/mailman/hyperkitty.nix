@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , pythonOlder
 
@@ -39,6 +40,15 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "sha256-gmkiK8pIHfubbbxNdm/D6L2o722FptxYgINYdIUOn4Y=";
   };
+
+  patches = [
+    # FIXME: backport Python 3.10 support fix, remove for next release
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/551a44a76e46931fc5c1bcb341235d8f579820be.patch";
+      sha256 = "sha256-5XCrvyrDEqH3JryPMoOXSlVVDLQ+PdYBqwGYxkExdvk=";
+      includes = [ "hyperkitty/*" ];
+    })
+  ];
 
   postPatch = ''
     # isort is a development dependency

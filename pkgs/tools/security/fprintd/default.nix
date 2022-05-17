@@ -44,16 +44,7 @@ stdenv.mkDerivation rec {
     gettext
     gtk-doc
     libxslt
-    # TODO: apply this to D-Bus so that other packages can benefit.
-    # https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/202
-    (dbus.overrideAttrs (attrs: {
-      postInstall = attrs.postInstall or "" + ''
-        ln -s ${fetchurl {
-          url = "https://gitlab.freedesktop.org/dbus/dbus/-/raw/b207135dbd8c09cf8da28f7e3b0a18bb11483663/doc/catalog.xml";
-          sha256 = "1/43XwAIcmRXfM4OXOPephyQyUnW8DSveiZbiPvW72I=";
-        }} $out/share/xml/dbus-1/catalog.xml
-      '';
-    }))
+    dbus
     docbook-xsl-nons
     docbook_xml_dtd_412
   ];
