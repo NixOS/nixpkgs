@@ -23,6 +23,8 @@ buildRustPackage rec {
 
   postInstall = ''
     installManPage assets/git-ignore.1
+    # There's also .elv and .ps1 completion files but I don't know where to install those
+    installShellCompletion assets/git-ignore.{bash,fish} --zsh assets/_git-ignore
   '';
 
   meta = with lib; {
