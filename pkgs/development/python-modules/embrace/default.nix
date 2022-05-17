@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "embrace";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchFromSourcehut {
     vc = "hg";
     owner = "~olly";
     repo = "embrace-sql";
     rev = "v${version}-release";
-    sha256 = "sha256-G/7FeKlMbOWobQOpD7/0JiTFpf8oWZ1TxPpDS9wrKMo=";
+    sha256 = "sha256-R6Ug4f8KFZNzaNWqWZkLvOwtsawCuerzvHlysr7bd6M=";
   };
 
   propagatedBuildInputs = [ sqlparse wrapt ];
