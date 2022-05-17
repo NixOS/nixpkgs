@@ -96,7 +96,7 @@ let
       # Disable platform specific features if needed
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
       # is probably a solution, but I'm disabling it for now
-      platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smbclient" ]
+      platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "smbclient" ]
                   ++ lib.optionals (!stdenv.isLinux) [ "alsa" "pipewire" "io_uring" "systemd" "syslog" ];
 
       knownFeatures = builtins.attrNames featureDependencies ++ builtins.attrNames nativeFeatureDependencies;
@@ -193,7 +193,7 @@ in
 {
   mpd = run { };
   mpd-small = run { features = [
-    "webdav" "curl" "mms" "bzip2" "zzip"
+    "webdav" "curl" "mms" "bzip2" "zzip" "nfs"
     "audiofile" "faad" "flac" "gme"
     "mpg123" "opus" "vorbis" "vorbisenc"
     "lame" "libsamplerate" "shout"
@@ -203,7 +203,7 @@ in
   ] ++ lib.optionals stdenv.isLinux [
     "alsa" "systemd" "syslog" "io_uring"
   ] ++ lib.optionals (!stdenv.isDarwin) [
-    "mad" "jack" "nfs"
+    "mad" "jack"
   ]; };
   mpdWithFeatures = run;
 }
