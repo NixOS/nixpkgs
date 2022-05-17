@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchgit, autoPatchelfHook, makeWrapper, libcxx, libX11
+{ stdenv, lib, fetchurl, fetchFromGitHub, autoPatchelfHook, makeWrapper, libcxx, libX11
 , libXt, libXdamage, glib, gtk3, dbus-glib, openssl, nodejs, zlib }:
 let metadata = lib.importJSON ./meta.json;
 in rec {
@@ -90,8 +90,7 @@ in rec {
     '';
 
     meta = with lib; {
-      description =
-        "Event-driven I/O framework for the V8 JavaScript engine, patched for replay";
+      description = "Event-driven I/O framework for the V8 JavaScript engine, patched for replay";
       homepage = "https://github.com/RecordReplay/node";
       license = licenses.mit;
       maintainers = with maintainers; [ phryneas ];
@@ -104,8 +103,9 @@ in rec {
     pname = "replay-node-cli";
     version = "0.1.7-" + builtins.head
       (builtins.match ".*/linux-node-(.*)" metadata.replay-node.url);
-    src = fetchgit {
-      url = "https://github.com/RecordReplay/replay-node-cli";
+    src = fetchFromGitHub {
+      owner = "RecordReplay";
+      repo = "replay-node-cli";
       rev = "5269c8b8e7c5c7a9618a68f883d19c11a68be837";
       sha256 = "04d22q3dvs9vxpb9ps64pdxq9ziwgvnzdgsn6p9p0lzjagh0f5n0";
     };
@@ -125,8 +125,7 @@ in rec {
     '';
 
     meta = with lib; {
-      description =
-        "The Time Travel Debugger for Web Development - Node Command Line";
+      description = "The Time Travel Debugger for Web Development - Node Command Line";
       longDescription = ''
         The Replay Node Command Line allows you to record node applications and debug them
         with familiar browser dev tools.

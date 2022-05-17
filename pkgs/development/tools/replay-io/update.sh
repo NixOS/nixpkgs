@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p curl jq gnused
 
-set -euxo pipefail
+set -euo pipefail
 
 # e.g. linux-gecko-20220331-59d0a686993f-ffd8d6280276
 BUILD_ID=$(curl https://static.replay.io/downloads/linux-replay.json | jq .buildId -r)
