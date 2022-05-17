@@ -21,7 +21,8 @@ cat >"${BASH_SOURCE%/*}/meta.json" <<EOF
   },
   "recordreplay": {
      "url": "${LIB_DL}",
-     "sha256": "$(nix-prefetch-url --type sha256 "${LIB_DL}")"
+     "sha256": "$(nix-prefetch-url --type sha256 --unpack "${LIB_DL}")",
+     "stripRoot": false
   },
   "replay-node": {
       "url": "${NODE_DL}",

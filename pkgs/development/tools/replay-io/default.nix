@@ -1,5 +1,6 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, autoPatchelfHook, makeWrapper, libcxx, libX11
-, libXt, libXdamage, glib, gtk3, dbus-glib, openssl, nodejs, zlib }:
+{ stdenv, lib, fetchurl, fetchFromGitHub, autoPatchelfHook, makeWrapper, libcxx
+, libX11, libXt, libXdamage, glib, gtk3, dbus-glib, openssl, nodejs, zlib
+, fetchzip }:
 let metadata = lib.importJSON ./meta.json;
 in rec {
   replay-recordreplay = stdenv.mkDerivation rec {
@@ -9,10 +10,7 @@ in rec {
     nativeBuildInputs = [ autoPatchelfHook ];
     buildInputs = [ stdenv.cc.cc.lib openssl zlib ];
 
-    src = (fetchurl metadata.recordreplay);
-    unpackPhase = ''
-      tar xzf $src
-    '';
+    src = (fetchzip metadata.recordreplay);
     dontBuild = true;
     installPhase = ''
       runHook preInstall

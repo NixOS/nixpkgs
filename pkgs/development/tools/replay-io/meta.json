@@ -5,7 +5,8 @@
   },
   "recordreplay": {
      "url": "https://static.replay.io/downloads/linux-recordreplay-a9c63f38ea9b.tgz",
-     "sha256": "09wilv2za2kj00gwqzrhjckj464j9sjhijvg7a8lgpsz6djnd9l4"
+     "sha256": "032x9wiw4jcdkn0wjgr5j3pc4parrdy5n4r8bgmfxsldg5j48hmk",
+     "stripRoot": false
   },
   "replay-node": {
       "url": "https://static.replay.io/downloads/linux-node-20220506-096c12cb47eb-a1d05f422dff",
