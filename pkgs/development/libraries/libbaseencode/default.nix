@@ -13,6 +13,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # https://github.com/paolostivanin/libbaseencode/issues/25
+  postPatch = ''
+    substituteInPlace baseencode.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
     description = "Library written in C for encoding and decoding data using base32 or base64 (RFC-4648)";
     homepage = "https://github.com/paolostivanin/libbaseencode";
