@@ -853,7 +853,7 @@ self: super: {
     hspec-meta = self.hspec-meta_2_9_3;
     hspec = self.hspec_2_10_0;
     hspec-core = dontCheck self.hspec-core_2_10_0;
-    hspec-discover = self.hspec-discover_2_9_7;
+    hspec-discover = self.hspec-discover_2_10_0;
   }));
 
   # Depends on broken fluid.
