@@ -27,6 +27,8 @@ stdenvNoCC.mkDerivation rec {
     })
   ];
 
+  outputs = [ "out" "man" ];
+
   strictDeps = true;
   buildInputs = [ bash ];
   nativeBuildInputs = [ makeWrapper ];
