@@ -13,6 +13,7 @@
 , systemd
 , go-md2man
 , nixosTests
+, fetchpatch
 }:
 
 buildGoModule rec {
@@ -25,6 +26,15 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-SZHonZdUTJisFMjvUBst1HErvKWEcYZYhK++G+S4sEg=";
   };
+
+  patches = [
+    # Fix for capabilities bug: https://github.com/advisories/GHSA-qvf8-p83w-v58j
+    (fetchpatch {
+      name = "CVE-2022-27649.patch";
+      url = "https://github.com/containers/podman/commit/aafa80918a245edcbdaceb1191d749570f1872d0.patch";
+      sha256 = "sha256-d/5PGQ8yjLaE+6Sqo8p0yHe+mbrENFsbsaDXOF7cMsU=";
+    })
+  ];
 
   vendorSha256 = null;
 
