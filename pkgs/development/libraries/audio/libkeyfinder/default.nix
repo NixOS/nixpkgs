@@ -22,6 +22,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # https://github.com/mixxxdj/libkeyfinder/issues/21
+  postPatch = ''
+    substituteInPlace packaging/libkeyfinder.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
     description = "Musical key detection for digital audio (C++ library)";
     homepage = "https://mixxxdj.github.io/libkeyfinder/";
