@@ -38,6 +38,6 @@ buildPythonApplication rec {
       readable diffs in those situations.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres anpryl ];
   };
 }
