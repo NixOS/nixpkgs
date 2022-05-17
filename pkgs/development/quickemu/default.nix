@@ -11,7 +11,7 @@
 , cdrtools
 , usbutils
 , util-linux
-, spicy
+, spice-gtk
 , swtpm
 , wget
 , xdg-user-dirs
@@ -32,7 +32,7 @@ let
     cdrtools
     usbutils
     util-linux
-    spicy
+    spice-gtk
     swtpm
     wget
     xdg-user-dirs
@@ -43,13 +43,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
-  version = "3.14";
+  version = "3.15";
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = version;
-    sha256="sha256-7zaXazGzb36Nwk/meJ3lGD+l+fylWZYnhttDL1CXN9s=";
+    sha256="sha256-ako/eh8cMWKvdrgm9VTgSH67nA2igKUlJZtBeH1bu4Y=";
   };
 
   patches = [

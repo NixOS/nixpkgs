@@ -12,9 +12,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libestr];
 
   meta = {
-    homepage = "http://www.libee.org/";
     description = "An Event Expression Library inspired by CEE";
-    platforms = lib.platforms.unix;
+    homepage = "http://www.libee.org/";
     license = lib.licenses.lgpl21Plus;
+    mainProgram = "libee-convert";
+    platforms = lib.platforms.unix;
   };
 }

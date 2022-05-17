@@ -1,6 +1,6 @@
 { stdenv, lib, ocaml, findlib, zarith, z3 }:
 
-if !lib.versionAtLeast ocaml.version "4.07"
+if lib.versionOlder ocaml.version "4.07"
 then throw "z3 is not available for OCaml ${ocaml.version}"
 else
 

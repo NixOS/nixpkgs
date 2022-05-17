@@ -117,6 +117,7 @@ broken-packages:
   - alerta
   - alex-prelude
   - alfred
+  - alfred-margaret
   - alga
   - algebra-dag
   - algebraic-classes
@@ -357,7 +358,6 @@ broken-packages:
   - binary-communicator
   - binary-derive
   - binary-ext
-  - binary-generic-combinators
   - binary-indexed-tree
   - binary-protocol
   - binary-tree
@@ -456,6 +456,7 @@ broken-packages:
   - bower-json
   - bowntz
   - bpath
+  - BPS
   - braid
   - brain-bleep
   - Bravo
@@ -512,6 +513,7 @@ broken-packages:
   - bytestring-substring
   - bytestring-time
   - bytestring-typenats
+  - bzlib-conduit-jappie
   - c10k
   - c2ats
   - cab
@@ -524,6 +526,7 @@ broken-packages:
   - cabal-constraints
   - cabal-db
   - cabal-dependency-licenses
+  - cabal-detailed-quickcheck
   - cabal-dev
   - cabal-dir
   - cabal-edit
@@ -669,6 +672,8 @@ broken-packages:
   - citeproc-hs
   - cjk
   - cj-token
+  - cl3-hmatrix-interface
+  - cl3-linear-interface
   - clang-compilation-database
   - clang-pure
   - clanki
@@ -853,6 +858,7 @@ broken-packages:
   - CoreDump
   - CoreErlang
   - core-haskell
+  - core-webserver-warp
   - Coroutine
   - coroutine-object
   - CouchDB
@@ -1008,6 +1014,7 @@ broken-packages:
   - dbf
   - DBlimited
   - dbm
+  - dbmigrations
   - dbmigrations-mysql
   - dbmigrations-postgresql
   - dbmigrations-sqlite
@@ -1048,6 +1055,7 @@ broken-packages:
   - dense-int-set
   - dependent-hashmap
   - dependent-monoidal-map
+  - dep-t
   - dep-t-dynamic
   - deptrack-core
   - derangement
@@ -1208,6 +1216,7 @@ broken-packages:
   - dynamic-object
   - dynamic-pipeline
   - DynamicTimeWarp
+  - dyna-processing
   - dynloader
   - DysFRP
   - dywapitchtrack
@@ -1233,6 +1242,7 @@ broken-packages:
   - ede
   - edenmodules
   - edis
+  - EdisonAPI
   - EdisonCore
   - edit
   - edit-lenses
@@ -1600,6 +1610,7 @@ broken-packages:
   - gegl
   - gelatin
   - gemcap
+  - gemini-exports
   - gemstone
   - gencheck
   - gender
@@ -1736,6 +1747,7 @@ broken-packages:
   - gli
   - glicko
   - glider-nlp
+  - glirc
   - GLMatrix
   - global-variables
   - glob-posix
@@ -1774,6 +1786,7 @@ broken-packages:
   - gpah
   - GPipe
   - GPipe-GLFW4
+  - gpmf
   - gpx-conduit
   - graceful
   - grafana
@@ -1890,6 +1903,7 @@ broken-packages:
   - hakyll-typescript
   - HaLeX
   - halfs
+  - half-space
   - halipeto
   - halive
   - halma
@@ -1902,6 +1916,7 @@ broken-packages:
   - HandlerSocketClient
   - handsy
   - Hangman
+  - HangmanAscii
   - hannahci
   - hans
   - hanspell
@@ -2093,6 +2108,7 @@ broken-packages:
   - hdo
   - hdph-closure
   - hdr-histogram
+  - HDRUtils
   - headergen
   - heap-console
   - heapsort
@@ -2103,6 +2119,7 @@ broken-packages:
   - hedgehog-checkers
   - hedgehog-generic
   - hedgehog-golden
+  - hedgehog-lens
   - hedgehog-servant
   - hedis-config
   - hedis-namespace
@@ -2891,9 +2908,11 @@ broken-packages:
   - layers
   - layout
   - layout-bootstrap
+  - layout-rules
   - lazify
   - lazyarray
   - lazyboy
+  - lazy-bracket
   - lazy-priority-queue
   - lazyset
   - LazyVault
@@ -3063,6 +3082,7 @@ broken-packages:
   - LTS
   - lua-bc
   - luautils
+  - lucid2
   - lucid-htmx
   - lucid-hyperscript
   - luis-client
@@ -3334,7 +3354,6 @@ broken-packages:
   - msgpack
   - msgpack-binary
   - msgpack-persist
-  - msgpack-types
   - msh
   - msi-kb-backlit
   - MTGBuilder
@@ -3600,7 +3619,6 @@ broken-packages:
   - open-signals
   - opensoundcontrol-ht
   - openssh-protocol
-  - opentelemetry-extra
   - opentelemetry-http-client
   - opentheory-char
   - opentok
@@ -3900,6 +3918,7 @@ broken-packages:
   - plzwrk
   - pngload-fixed
   - pocket
+  - podenv
   - pointedalternative
   - pointfree-fancy
   - pointful
@@ -3925,6 +3944,7 @@ broken-packages:
   - polysemy-mocks
   - polysemy-readline
   - polysemy-req
+  - polysemy-scoped-fs
   - polysemy-zoo
   - polytypeable
   - polyvariadic
@@ -4214,6 +4234,7 @@ broken-packages:
   - Referees
   - references
   - refined-http-api-data
+  - refined-with
   - reflection-extras
   - reflex-basic-host
   - reflex-dom-ace
@@ -4337,7 +4358,6 @@ broken-packages:
   - robin
   - robots-txt
   - roc-cluster
-  - roc-id
   - roku-api
   - rollbar-client
   - rollbar-hs
@@ -4467,7 +4487,6 @@ broken-packages:
   - semigroups-actions
   - sendgrid-haskell
   - sendgrid-v3
-  - sensei
   - sensu-run
   - sentry
   - separated
@@ -4481,7 +4500,6 @@ broken-packages:
   - servant-auth-hmac
   - servant-avro
   - servant-benchmark
-  - servant-cassava
   - servant-client-js
   - servant-db
   - servant-dhall
@@ -4616,6 +4634,7 @@ broken-packages:
   - simple-templates
   - simple-ui
   - simple-units
+  - simple-vec3
   - simplexmq
   - simple-zipper
   - simplistic-generics
@@ -5264,6 +5283,7 @@ broken-packages:
   - typalyze
   - typeable-mock
   - typeable-th
+  - typecheck-plugin-nat-simple
   - type-combinators
   - typed-digits
   - typed-encoding
@@ -5383,6 +5403,7 @@ broken-packages:
   - utf8-prelude
   - utf8-validator
   - UTFTConverter
+  - util
   - util-logict
   - util-plus
   - util-primitive
@@ -5799,3 +5820,4 @@ broken-packages:
   - Zwaluw
   - zxcvbn-hs
   - zydiskell
+  - zyre2

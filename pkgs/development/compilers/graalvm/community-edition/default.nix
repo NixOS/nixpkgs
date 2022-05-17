@@ -12,11 +12,11 @@ let
   /*
     Looks a bit ugly but makes version update in the update script using sed
     much easier
+
+    Don't change these values! They will be updated by the update script, see ./update.nix.
   */
-  graalvm11-ce-release-version = "22.0.0.2";
-  graalvm17-ce-release-version = "22.0.0.2";
-  graalvm11-ce-dev-version = "22.2.0-dev-20220415_1945";
-  graalvm17-ce-dev-version = "22.2.0-dev-20220415_1945";
+  graalvm11-ce-release-version = "22.1.0";
+  graalvm17-ce-release-version = "22.1.0";
 
   products = [
     "graalvm-ce"
@@ -40,7 +40,6 @@ in
       aarch64-darwin = {
         inherit products;
         arch = "darwin-aarch64";
-        version = graalvm11-ce-dev-version;
       };
       aarch64-linux = {
         inherit products;
@@ -64,7 +63,6 @@ in
       aarch64-darwin = {
         inherit products;
         arch = "darwin-aarch64";
-        version = graalvm17-ce-dev-version;
       };
       aarch64-linux = {
         inherit products;

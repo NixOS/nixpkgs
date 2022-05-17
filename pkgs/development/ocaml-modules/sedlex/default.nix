@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, ocaml, findlib, gen, ppx_tools_versioned, ocaml-migrate-parsetree }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "sedlex is not available for OCaml ${ocaml.version}"
 else
 

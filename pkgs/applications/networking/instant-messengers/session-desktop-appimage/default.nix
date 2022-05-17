@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "1.7.9";
+  version = "1.8.4";
   pname = "session-desktop-appimage";
 
   src = fetchurl {
     url = "https://github.com/oxen-io/session-desktop/releases/download/v${version}/session-desktop-linux-x86_64-${version}.AppImage";
-    sha256 = "ca7754e59146633b71e66b02a90cff87e4f2574e57ff831ca4a5f983b7e2fbef";
+    sha256 = "Az9NEsqU4ZcmuSno38zflT4M4lI6/4ShEh3FVTcyRJg=";
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;

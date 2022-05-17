@@ -46,13 +46,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "github-runner";
-  version = "2.290.1";
+  version = "2.291.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-YUV66yiUdS2/ORZS7a7coqyzoXM/tnK0egEeXWLPNl0=";
+    hash = "sha256-0Eijq2vXY+Y2g3bhEhIGnFxTCLXpw7k3iXpgj3x8nL4=";
   };
 
   nativeBuildInputs = [
@@ -104,6 +104,8 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     runHook preConfigure
+
+    export HOME=$(mktemp -d)
 
     # Never use nuget.org
     nuget sources Disable -Name "nuget.org"

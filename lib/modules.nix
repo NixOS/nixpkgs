@@ -113,6 +113,10 @@ rec {
                   args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
                   check ? true
+                  # Internal variable to avoid `_key` collisions regardless
+                  # of `extendModules`. Used in `submoduleWith`.
+                  # Test case: lib/tests/modules, "168767"
+                , extensionOffset ? 0
                 }:
     let
       withWarnings = x:
@@ -156,7 +160,10 @@ rec {
             type = types.lazyAttrsOf types.raw;
             # Only render documentation once at the root of the option tree,
             # not for all individual submodules.
-            internal = prefix != [];
+            # Allow merging option decls to make this internal regardless.
+            ${if prefix == []
+              then null  # unset => visible
+              else "internal"} = true;
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
@@ -338,15 +345,17 @@ rec {
         modules ? [],
         specialArgs ? {},
         prefix ? [],
+        extensionOffset ? length modules,
         }:
           evalModules (evalModulesArgs // {
             modules = regularModules ++ modules;
             specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
             prefix = extendArgs.prefix or evalModulesArgs.prefix;
+            inherit extensionOffset;
           });
 
       type = lib.types.submoduleWith {
-        inherit modules specialArgs;
+        inherit modules specialArgs extensionOffset;
       };
 
       result = withWarnings {

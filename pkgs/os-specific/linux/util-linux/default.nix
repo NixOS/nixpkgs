@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
 , ncursesSupport ? true
 , ncurses, pam
-, systemdSupport ? stdenv.isLinux
+, systemdSupport ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
 , systemd
 , nlsSupport ? true
 }:

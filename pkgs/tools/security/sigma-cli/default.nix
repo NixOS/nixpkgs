@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
-  version = "0.4.2";
+  version = "0.4.3";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-UA28A/C7RyIs96a/U98WpkgeCotT4qmpZwvO3HYUE9Q=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3LFakeS3aQaacm7HqeAJPMJhi3Wf8zbJc//SEWUA1Rg=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -48,5 +48,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/SigmaHQ/sigma-cli";
     license = with licenses; [ lgpl21Plus ];
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sigma";
   };
 }

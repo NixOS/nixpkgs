@@ -1,20 +1,17 @@
 { lib, fetchFromGitHub, fetchpatch, python3 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
-  version = "1.10.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "hifi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-c+YP4pEGvLi7wZsDXrkoqR/isuYfXQmTwQp9gN5jHkQ=";
+    sha256 = "sha256-10y0sWpOLbjbGBpOjr1/tJrhcOsCwcm2sSO5kHfmJZA=";
   };
 
   postPatch = ''
     echo "${version}" > heisenbridge/version.txt
-
-    substituteInPlace setup.cfg \
-      --replace "irc >=19.0.0, <20.0" "irc"
   '';
 
   propagatedBuildInputs = with python3.pkgs; [

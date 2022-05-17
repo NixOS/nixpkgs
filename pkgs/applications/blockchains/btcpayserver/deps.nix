@@ -31,18 +31,18 @@
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.All";
-    version = "1.3.2";
-    sha256 = "0xcfba8n9zf5m1nb48ilggp03kpki4nv4kx7k7a5w1gxgm6k6j9z";
+    version = "1.3.6";
+    sha256 = "0jdpqy6kxg0lyh4n88wsvrcqc0kk7s7zn5lw7ivwys716m69qrdl";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.Charge";
-    version = "1.3.1";
-    sha256 = "1xakwnb839dl0qnhqprsnfq8png31iyb0fsngljis5jc8yvb4353";
+    version = "1.3.2";
+    sha256 = "0v5rss6dg7297kq1frhn2pj9gd0rd8g1p5d316x5wkd4w7pmrm2w";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.CLightning";
-    version = "1.3.1";
-    sha256 = "0a79p6i3xiq6svv08c4hhihkvqa2ac7fphi3g9i0cwh47ak0k5h2";
+    version = "1.3.2";
+    sha256 = "0qs5p6pm54il23j8yysw0pzvrki37y6z8cd2gdknpz2f3wg7slm9";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.Common";
@@ -51,23 +51,23 @@
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.Common";
-    version = "1.3.1";
-    sha256 = "165p1246fn628hlwdrx7sanlxa6qqpn480rq1asn5r1602w21844";
+    version = "1.3.2";
+    sha256 = "119zplkc7iy9wc95iz1qnyi42fr99ar4hp8a11p708a22w941yi0";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.Eclair";
-    version = "1.3.1";
-    sha256 = "1vlwm5mw8wffp00xhkx19yavk59b5x540sg81vis3q7hjvvgca5c";
+    version = "1.3.2";
+    sha256 = "08gw1gqng1khxzvvhlwsg6lw1w56ylilg738wi6cbcwy7vl7f6bb";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.LNBank";
-    version = "1.3.1";
-    sha256 = "0qga34vi4fzfr0g4qk0ad8xkqdig2ishmdj9i32s5yrrjrkx7c8d";
+    version = "1.3.4";
+    sha256 = "1vyz63pi5j31y8pz0b4hp9c4j249rszzfcymk3z3b2clwq32s4i4";
   })
   (fetchNuGet {
     pname = "BTCPayServer.Lightning.LND";
-    version = "1.3.1";
-    sha256 = "1b70jlyzy9xjvfywzi6i3l3sd4mkknxpni9akdi0phsfqysmy0wl";
+    version = "1.3.3";
+    sha256 = "137azpxxmp2q69bp07ky1jsgnfy9lf0dg5ba8l654flvvrgxaq6y";
   })
   (fetchNuGet {
     pname = "BuildBundlerMinifier";
@@ -88,6 +88,11 @@
     pname = "CsvHelper";
     version = "15.0.5";
     sha256 = "01y8bhsnxghn3flz0pr11vj6wjrpmia8rpdrsp7kjfc1zmhqlgma";
+  })
+  (fetchNuGet {
+    pname = "Dapper";
+    version = "2.0.123";
+    sha256 = "15hxrchfgiqnmgf8fqhrf4pb4c8l9igg5qnkw9yk3rkagcqfkk91";
   })
   (fetchNuGet {
     pname = "DigitalRuby.ExchangeSharp";
@@ -373,11 +378,6 @@
     pname = "Microsoft.DotNet.PlatformAbstractions";
     version = "3.1.6";
     sha256 = "0b9myd7gqbpaw9pkd2bx45jhik9mwj0f1ss57sk2cxmag2lkdws5";
-  })
-  (fetchNuGet {
-    pname = "Microsoft.EntityFrameworkCore.Abstractions";
-    version = "6.0.0";
-    sha256 = "1aw13qjkpglc1mm3cv7s73s8fschy8lzdnigsp346b7mycpg7v92";
   })
   (fetchNuGet {
     pname = "Microsoft.EntityFrameworkCore.Abstractions";
@@ -831,8 +831,8 @@
   })
   (fetchNuGet {
     pname = "NBitcoin";
-    version = "6.0.15";
-    sha256 = "038dcl2k88w4cijws3pdnjflgy4lmqx70z0l7yqz355kmxjz8ain";
+    version = "6.0.18";
+    sha256 = "1dr669h68cx6yfzr3n97yzzwbgnsv5g2008diyxngdjm55nh3q9s";
   })
   (fetchNuGet {
     pname = "NBitcoin";
@@ -856,8 +856,8 @@
   })
   (fetchNuGet {
     pname = "NBXplorer.Client";
-    version = "4.1.3";
-    sha256 = "1nh4jj7yg81825hr7cc99qlnfmdm6jibap81qqi8a968b61z4251";
+    version = "4.2.0";
+    sha256 = "1adbn5cbr42cjfvijaf1lffhcrcn0ws1arfi7mrg3kjshbzfgims";
   })
   (fetchNuGet {
     pname = "NETStandard.Library";
@@ -931,13 +931,13 @@
   })
   (fetchNuGet {
     pname = "Npgsql.EntityFrameworkCore.PostgreSQL";
-    version = "6.0.1";
-    sha256 = "108sc62dqdb6ym2ck651kamcv6qf93cmaqzygfblmiglwzi6frnx";
+    version = "6.0.3";
+    sha256 = "0mgwm9psxvrq6vs2cy7m72wnknydgrs71hir2jqal5wbdh8g01np";
   })
   (fetchNuGet {
     pname = "Npgsql";
-    version = "6.0.1";
-    sha256 = "150paiwqxp6zsy5v7vl2a9h3ikzfv3pd04whxifmamq0h1ghw0ld";
+    version = "6.0.3";
+    sha256 = "1crzgi4dfbn8r381m9rvkma5xi2q7gqdzgxhc36hy3r0y63v1l8q";
   })
   (fetchNuGet {
     pname = "NSec.Cryptography";
@@ -1086,8 +1086,8 @@
   })
   (fetchNuGet {
     pname = "Selenium.WebDriver.ChromeDriver";
-    version = "98.0.4758.10200";
-    sha256 = "10mc50gm78zbxrwvxlygzmj2a29liiacv8haax0534c26vj9dwkl";
+    version = "100.0.4896.6000";
+    sha256 = "1pfdvxjy4xiw1j7787lf07w9nr0dmj589vf6p4aqmk2cfz8j35c6";
   })
   (fetchNuGet {
     pname = "Selenium.WebDriver";

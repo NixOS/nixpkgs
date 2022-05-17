@@ -63,12 +63,9 @@ stdenv.mkDerivation {
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
-      --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"'
-    substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
-      --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"'
-    substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
-      --replace '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"'
-    substituteInPlace src/modules/desktop_capture/linux/egl_dmabuf.cc \
+      --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \
+      --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
+      --replace '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"' \
       --replace '"libdrm.so.2"' '"${libdrm}/lib/libdrm.so.2"'
   '';
 

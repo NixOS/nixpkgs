@@ -79,6 +79,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libg15 libg15render ];
 
+  # Workaround build failure on -fno-common toolchains like upstream gcc-10:
+  #  ld: g15_plugins.o:/build/g15daemon-1.9.5.3/g15daemon/./g15daemon.h:218:
+  #   multiple definition of `lcdlist_mutex'; utility_funcs.o:g15daemon.h:218: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   enableParallelBuilding = true;
 
   meta = {

@@ -8,13 +8,14 @@ let
     { self
     , drv
     , attr
+    , extraAttrs ? [ ]
     }:
     let
       buildSystem = if attr == "cython" then self.python.pythonForBuild.pkgs.cython else self.${attr};
     in
     (
       # Flit only works on Python3
-      if (attr == "flit-core" || attr == "flit") && !self.isPy3k then drv
+      if (attr == "flit-core" || attr == "flit" || attr == "hatchling") && !self.isPy3k then drv
       else
         drv.overridePythonAttrs (
           old:
@@ -23,7 +24,7 @@ let
             { }
           else
             {
-              nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.${attr} ];
+              nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.${attr} ] ++ map (a: self.${a}) extraAttrs;
             }
         )
     );
@@ -55,6 +56,16 @@ lib.composeManyExtensions [
         systems)
       buildSystems)
 
+  # Build systems with conditionals
+  (self: super: {
+
+    platformdirs =
+      if lib.versionAtLeast super.platformdirs.version "2.5.2"
+      then addBuildSystem { inherit self; drv = super.platformdirs; attr = "hatchling"; extraAttrs = [ "hatch-vcs" ]; }
+      else super.platformdirs;
+
+  })
+
   # Build fixes
   (self: super:
     let
@@ -62,6 +73,12 @@ lib.composeManyExtensions [
       inherit (pkgs.buildPackages) pkg-config;
       inherit (pkgs) buildPackages;
       pyBuildPackages = self.python.pythonForBuild.pkgs;
+
+      selectQt5 = version:
+        let
+          selector = builtins.concatStringsSep "" (lib.take 2 (builtins.splitVersion version));
+        in
+          pkgs."qt${selector}" or pkgs.qt5;
 
     in
 
@@ -276,6 +293,7 @@ lib.composeManyExtensions [
             "36.0.0" = "sha256-Y6TuW7AryVgSvZ6G8WNoDIvi+0tvx8ZlEYF5qB0jfNk=";
             "36.0.1" = "sha256-kozYXkqt1Wpqyo9GYCwN08J+zV92ZWFJY/f+rulxmeQ=";
             "36.0.2" = "1a0ni1a3dbv2dvh6gx2i54z8v5j9m6asqg97kkv7gqb1ivihsbp8";
+            "37.0.2" = "sha256-qvrxvneoBXjP96AnUPyrtfmCnZo+IriHR5HbtWQ5Gk8=";
           }.${version} or null;
           sha256 = getCargoHash super.cryptography.version;
           scrypto =
@@ -437,6 +455,17 @@ lib.composeManyExtensions [
         }
       );
 
+      # Setuptools >= 60 broke build_py_2to3
+      docutils =
+        if lib.versionOlder super.docutils.version "0.16" && lib.versionAtLeast super.setuptools.version "60" then
+          (
+            super.docutils.overridePythonAttrs (
+              old: {
+                SETUPTOOLS_USE_DISTUTILS = "stdlib";
+              }
+            )
+          ) else super.docutils;
+
       # Environment markers are not always included (depending on how a dep was defined)
       enum34 = if self.pythonAtLeast "3.4" then null else super.enum34;
 
@@ -492,6 +521,14 @@ lib.composeManyExtensions [
       fastparquet = super.fastparquet.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
+        }
+      );
+
+      file-magic = super.file-magic.overridePythonAttrs (
+        old: {
+          postPatch = ''
+            substituteInPlace magic.py --replace "find_library('magic')" "'${pkgs.file}/lib/libmagic${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}'"
+          '';
         }
       );
 
@@ -713,6 +750,14 @@ lib.composeManyExtensions [
         }
       );
 
+      jinja2-ansible-filters = super.jinja2-ansible-filters.overridePythonAttrs (
+        old: {
+          preBuild = (old.preBuild or "") + ''
+            echo "${old.version}" > VERSION
+          '';
+        }
+      );
+
       jira = super.jira.overridePythonAttrs (
         old: {
           inherit (pkgs.python3Packages.jira) patches;
@@ -843,6 +888,17 @@ lib.composeManyExtensions [
           passthru = old.passthru // { llvm = llvm; };
         }
       );
+
+      lsassy =
+        if super.lsassy.version == "3.1.1" then
+          super.lsassy.overridePythonAttrs
+            (old: {
+              # pyproject.toml contains a constraint `rich = "^10.6.0"` which is not replicated in setup.py
+              # hence pypi misses it and poetry pins rich to 11.0.0
+              preConfigure = (old.preConfigure or "") + ''
+                rm pyproject.toml
+              '';
+            }) else super.lsassy;
 
       lxml = super.lxml.overridePythonAttrs (
         old: {
@@ -1023,6 +1079,18 @@ lib.composeManyExtensions [
 
       mypy = super.mypy.overridePythonAttrs (
         old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [
+            self.types-typed-ast
+          ];
+          # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled
+          # version is also the default in the wheels on Pypi that include binaries.
+          # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
+          MYPY_USE_MYPYC = stdenv.buildPlatform.is64bit;
+
+          # when testing reduce optimisation level to drastically reduce build time
+          # (default is 3)
+          # MYPYC_OPT_LEVEL = 1;
+        } // lib.optionalAttrs (old.format != "wheel") {
           # FIXME: Remove patch after upstream has decided the proper solution.
           #        https://github.com/python/mypy/pull/11143
           patches = (old.patches or [ ]) ++ lib.optionals ((lib.strings.versionAtLeast old.version "0.900") && lib.strings.versionOlder old.version "0.940") [
@@ -1036,17 +1104,6 @@ lib.composeManyExtensions [
               sha256 = "sha256-waIZ+m3tfvYE4HJ8kL6rN/C4fMjvLEe9UoPbt9mHWIM=";
             })
           ];
-          buildInputs = (old.buildInputs or [ ]) ++ [
-            self.types-typed-ast
-          ];
-          # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled
-          # version is also the default in the wheels on Pypi that include binaries.
-          # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
-          MYPY_USE_MYPYC = stdenv.buildPlatform.is64bit;
-
-          # when testing reduce optimisation level to drastically reduce build time
-          # (default is 3)
-          # MYPYC_OPT_LEVEL = 1;
         }
       );
 
@@ -1143,12 +1200,55 @@ lib.composeManyExtensions [
         }
       );
 
+      orjson =
+        let
+          getCargoHash = version: {
+            "3.6.7" = "sha256-sz2k9podPB6QSptkyOu7+BoVTrKhefizRtYU+MICPt4=";
+            "3.6.8" = "sha256-vpfceVtYkU09xszNIihY1xbqGWieqDquxwsAmDH8jd4=";
+          }.${version} or null;
+        in
+        super.orjson.overridePythonAttrs (old: {
+          cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+            inherit (old) src;
+            name = "${old.pname}-${old.version}";
+            hash = getCargoHash old.version;
+          };
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
+            pkgs.rustPlatform.cargoSetupHook
+            pkgs.rustPlatform.maturinBuildHook
+          ];
+          buildInputs = (old.buildInputs or [ ]) ++ lib.optional pkgs.stdenv.isDarwin pkgs.libiconv;
+        });
+
       osqp = super.osqp.overridePythonAttrs (
         old: {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.cmake ];
           dontUseCmakeConfigure = true;
         }
       );
+
+
+      pandas = super.pandas.overridePythonAttrs (old: {
+
+        buildInputs = old.buildInputs or [ ] ++ lib.optional stdenv.isDarwin pkgs.libcxx;
+
+        # Doesn't work with -Werror,-Wunused-command-line-argument
+        # https://github.com/NixOS/nixpkgs/issues/39687
+        hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+
+        # For OSX, we need to add a dependency on libcxx, which provides
+        # `complex.h` and other libraries that pandas depends on to build.
+        postPatch = lib.optionalString stdenv.isDarwin ''
+          cpp_sdk="${lib.getDev pkgs.libcxx}/include/c++/v1";
+          echo "Adding $cpp_sdk to the setup.py common_include variable"
+          substituteInPlace setup.py \
+            --replace "['pandas/src/klib', 'pandas/src']" \
+                      "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
+        '';
+
+
+        enableParallelBuilding = true;
+      });
 
       pantalaimon = super.pantalaimon.overridePythonAttrs (old: {
         nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ pkgs.installShellFiles ];
@@ -1196,8 +1296,12 @@ lib.composeManyExtensions [
 
       pillow = super.pillow.overridePythonAttrs (
         old: {
-          nativeBuildInputs = [ pkg-config self.pytest-runner ] ++ (old.nativeBuildInputs or [ ]);
-          buildInputs = with pkgs; [ freetype libjpeg zlib libtiff libwebp tcl lcms2 ] ++ (old.buildInputs or [ ]);
+          nativeBuildInputs = (old.nativeBuildInputs or [ ])
+            ++ [ pkg-config self.pytest-runner ];
+          buildInputs = with pkgs; (old.buildInputs or [ ])
+            ++ [ freetype libjpeg zlib libtiff libwebp tcl lcms2 ]
+            ++ lib.optionals (lib.versionAtLeast old.version "7.1.0") [ xorg.libxcb ]
+            ++ lib.optionals (self.isPyPy) [ tk xorg.libX11 ];
         }
       );
 
@@ -1239,6 +1343,14 @@ lib.composeManyExtensions [
       );
 
       psycopg2-binary = super.psycopg2-binary.overridePythonAttrs (
+        old: {
+          buildInputs = (old.buildInputs or [ ])
+            ++ lib.optional stdenv.isDarwin pkgs.openssl;
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.postgresql ];
+        }
+      );
+
+      psycopg2cffi = super.psycopg2cffi.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ])
             ++ lib.optional stdenv.isDarwin pkgs.openssl;
@@ -1478,106 +1590,35 @@ lib.composeManyExtensions [
 
       pyqt5 =
         let
-          drv = super.pyqt5;
-          withConnectivity = drv.passthru.args.withConnectivity or false;
-          withMultimedia = drv.passthru.args.withMultimedia or false;
-          withWebKit = drv.passthru.args.withWebKit or false;
-          withWebSockets = drv.passthru.args.withWebSockets or false;
+          qt5 = selectQt5 super.pyqt5.version;
         in
         super.pyqt5.overridePythonAttrs (
           old: {
-            format = "other";
-
+            dontConfigure = true;
             dontWrapQtApps = true;
-
-            nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
-              pkg-config
-              pkgs.qt5.qmake
-              pkgs.xorg.lndir
-              pkgs.qt5.qtbase
-              pkgs.qt5.qtsvg
-              pkgs.qt5.qtdeclarative
-              pkgs.qt5.qtwebchannel
-              pkgs.qt5.qt3d
-              # self.pyqt5-sip
+            nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+              self.pyqt-builder
               self.sip
-            ]
-              ++ lib.optional withConnectivity pkgs.qt5.qtconnectivity
-              ++ lib.optional withMultimedia pkgs.qt5.qtmultimedia
-              ++ lib.optional withWebKit pkgs.qt5.qtwebkit
-              ++ lib.optional withWebSockets pkgs.qt5.qtwebsockets
-            ;
+              qt5.full
+            ];
+          }
+        );
 
-            buildInputs = (old.buildInputs or [ ]) ++ [
-              pkgs.dbus
-              pkgs.qt5.qtbase
-              pkgs.qt5.qtsvg
-              pkgs.qt5.qtdeclarative
-              self.sip
-            ]
-              ++ lib.optional withConnectivity pkgs.qt5.qtconnectivity
-              ++ lib.optional withWebKit pkgs.qt5.qtwebkit
-              ++ lib.optional withWebSockets pkgs.qt5.qtwebsockets
-            ;
-
-            # Fix dbus mainloop
-            patches = pkgs.python3.pkgs.pyqt5.patches or [ ];
-
-            configurePhase = ''
-              runHook preConfigure
-
-              export PYTHONPATH=$PYTHONPATH:$out/${self.python.sitePackages}
-
-              mkdir -p $out/${self.python.sitePackages}/dbus/mainloop
-              ${self.python.executable} configure.py  -w \
-                --confirm-license \
-                --no-qml-plugin \
-                --bindir=$out/bin \
-                --destdir=$out/${self.python.sitePackages} \
-                --stubsdir=$out/${self.python.sitePackages}/PyQt5 \
-                --sipdir=$out/share/sip/PyQt5 \
-                --designer-plugindir=$out/plugins/designer
-
-              runHook postConfigure
-            '';
-
-            postInstall = ''
-              ln -s ${self.pyqt5-sip}/${self.python.sitePackages}/PyQt5/sip.* $out/${self.python.sitePackages}/PyQt5/
-              for i in $out/bin/*; do
-                wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
-              done
-
-              # Let's make it a namespace package
-              cat << EOF > $out/${self.python.sitePackages}/PyQt5/__init__.py
-              from pkgutil import extend_path
-              __path__ = extend_path(__path__, __name__)
-              EOF
-            '';
-
-            installCheckPhase =
-              let
-                modules = [
-                  "PyQt5"
-                  "PyQt5.QtCore"
-                  "PyQt5.QtQml"
-                  "PyQt5.QtWidgets"
-                  "PyQt5.QtGui"
-                ]
-                ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
-                ++ lib.optional withWebKit "PyQt5.QtWebKit"
-                ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
-                ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
-                ;
-                imports = lib.concatMapStrings (module: "import ${module};") modules;
-              in
-              ''
-                echo "Checking whether modules can be imported..."
-                ${self.python.interpreter} -c "${imports}"
-              '';
-
-            doCheck = true;
-
-            enableParallelBuilding = true;
+      pyqt5-qt5 =
+        let
+          qt5 = selectQt5 super.pyqt5-qt5.version;
+        in
+        super.pyqt5-qt5.overridePythonAttrs (
+          old: {
+            dontWrapQtApps = true;
+            propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
+              qt5.full
+              qt5.qtgamepad # As of 2022-05-13 not a port of qt5.full
+              pkgs.gtk3
+              pkgs.speechd
+              pkgs.postgresql
+              pkgs.unixODBC
+            ];
           }
         );
 
@@ -1593,7 +1634,10 @@ lib.composeManyExtensions [
         old: {
           # Fixes https://github.com/pytest-dev/pytest/issues/7891
           postPatch = old.postPatch or "" + ''
-            sed -i '/\[metadata\]/aversion = ${old.version}' setup.cfg
+            # sometimes setup.cfg doesn't exist
+            if [ -f setup.cfg ]; then
+              sed -i '/\[metadata\]/aversion = ${old.version}' setup.cfg
+            fi
           '';
         }
       );
@@ -1669,6 +1713,10 @@ lib.composeManyExtensions [
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.snappy ];
         }
       );
+
+      python-twitter = super.python-twitter.overridePythonAttrs (old: {
+        buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
+      });
 
       pythran = super.pythran.overridePythonAttrs (old: {
         buildInputs = (old.buildInputs or [ ]) ++ [ self.pytest-runner ];
@@ -1837,7 +1885,14 @@ lib.composeManyExtensions [
       shapely = super.shapely.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.geos ];
-          inherit (pkgs.python3.pkgs.shapely) patches GEOS_LIBRARY_PATH;
+          inherit (pkgs.python3.pkgs.shapely) GEOS_LIBRARY_PATH;
+
+          GEOS_LIBC = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
+
+          # Fix library paths
+          postPatch = old.postPatch or "" + ''
+            ${pkgs.python3.interpreter} ${./shapely-rewrite.py} shapely/geos.py
+          '';
         }
       );
 
@@ -1858,6 +1913,12 @@ lib.composeManyExtensions [
           pkgs.shellcheck
         ];
 
+      });
+
+      soundfile = super.soundfile.overridePythonAttrs (old: {
+        postPatch = ''
+          substituteInPlace soundfile.py --replace "_find_library('sndfile')" "'${pkgs.libsndfile.out}/lib/libsndfile${stdenv.hostPlatform.extensions.sharedLibrary}'"
+        '';
       });
 
       systemd-python = super.systemd-python.overridePythonAttrs (old: {
@@ -2285,7 +2346,7 @@ lib.composeManyExtensions [
       });
 
       wtforms = super.wtforms.overridePythonAttrs (old: {
-        buildInputs = (old.buildInputs or [ ]) ++ [ self.Babel ];
+        buildInputs = (old.buildInputs or [ ]) ++ [ self.babel ];
       });
 
     }

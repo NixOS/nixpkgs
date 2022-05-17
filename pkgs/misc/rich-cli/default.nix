@@ -1,17 +1,23 @@
-{ lib, python3 }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "rich-cli";
-  version = "1.5.1";
-
-  src = python3.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "18qpdaw4drkwq71xikngwaarkjxhfc0nrb1zm36rw31b8dz0ij2k";
-  };
-
+  version = "1.8.0";
   format = "pyproject";
 
-  nativeBuildInputs = [ python3.pkgs.poetry-core ];
+  src = fetchFromGitHub {
+    owner = "Textualize";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-mV5b/J9wX9niiYtlmAUouaAm9mY2zTtDmex7FNWcezQ=";
+  };
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     rich
@@ -21,11 +27,18 @@ python3.pkgs.buildPythonApplication rec {
     rich-rst
   ];
 
-  buildInputs = [ python3 ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'rich = "^12.4.0"' 'rich = "*"'
+  '';
+
+  pythonImportsCheck = [
+    "rich_cli"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/Textualize/rich-cli";
     description = "Command Line Interface to Rich";
+    homepage = "https://github.com/Textualize/rich-cli";
     license = licenses.mit;
     maintainers = with maintainers; [ jyooru ];
   };

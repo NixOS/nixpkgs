@@ -4,7 +4,7 @@
   https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
 
   To debug this expression you can use `hydra-eval-jobs` from
-  `pkgs.hydra-unstable` which prints the jobset description
+  `pkgs.hydra_unstable` which prints the jobset description
   to `stdout`:
 
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
@@ -203,6 +203,7 @@ let
         koka
         krank
         lambdabot
+        lhs2tex
         madlang
         matterhorn
         mueval
@@ -304,27 +305,31 @@ let
       # Test some statically linked packages to catch regressions
       # and get some cache going for static compilation with GHC.
       # Use integer-simple to avoid GMP linking problems (LGPL)
-      pkgsStatic.haskell.packages =
+      pkgsStatic =
         removePlatforms
           [
             "aarch64-linux" # times out on Hydra
             "x86_64-darwin" # TODO: reenable when static libiconv works on darwin
           ] {
-            integer-simple.ghc8107 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.integer-simple.ghc8107)
+            haskellPackages = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskellPackages)
                 hello
                 lens
                 random
                 QuickCheck
+                cabal2nix
+                xhtml # isn't bundled for cross
               ;
             };
 
-            native-bignum.ghc902 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc902)
+            haskell.packages.native-bignum.ghc922 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc922)
                 hello
                 lens
                 random
                 QuickCheck
+                cabal2nix
+                xhtml # isn't bundled for cross
               ;
             };
           };
@@ -361,6 +366,9 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
+      spectacle = [
+        compilerNames.ghc8107
+      ];
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
@@ -446,12 +454,8 @@ let
           ];
         };
         constituents = accumulateDerivations [
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.hello
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.lens
-          jobs.pkgsStatic.haskell.packages.integer-simple.ghc8107.random
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.hello
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.lens
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc902.random
+          jobs.pkgsStatic.haskellPackages
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc922
         ];
       };
     }

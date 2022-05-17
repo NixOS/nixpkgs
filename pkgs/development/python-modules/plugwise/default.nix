@@ -13,26 +13,24 @@
 , pytest-asyncio
 , pytestCheckHook
 , python-dateutil
+, pythonOlder
 , pytz
 , semver
 }:
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "0.17.7";
+  version = "0.18.3";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "python-plugwise";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-PZoxI7s3LTb60oXFfsOi5mCaLOKzq6ed2yFKap0Q1Ng=";
+    sha256 = "sha256-aNlPOgUChLFkPPZtb3o4A49uoSBjxKaq3WtuupHlmi8=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "aiohttp==3.8.0" "aiohttp>=3.8.0"
-  '';
 
   propagatedBuildInputs = [
     aiohttp
@@ -54,16 +52,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "plugwise" ];
+  pythonImportsCheck = [
+    "plugwise"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Python module for Plugwise Smiles, Stretch and USB stick";
-    longDescription = ''
-      XKNX is an asynchronous Python library for reading and writing KNX/IP
-      packets. It provides support for KNX/IP routing and tunneling devices.
-    '';
     homepage = "https://github.com/plugwise/python-plugwise";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];

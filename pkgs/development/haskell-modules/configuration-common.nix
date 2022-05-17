@@ -99,7 +99,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "066gs2lkkiz9z9n6rjg33wmgi04qmn6xpnx86j0x3d56r1110id4";
+      sha256 = "sha256-NYe34bsq2v0rlmcSMgYvU9ec94meXFFJoWo0sIjX/bY=";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -334,15 +334,7 @@ self: super: {
   matplotlib = dontCheck super.matplotlib;
 
   # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
-  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
-    brick = self.brick_0_64_2;
-    # Doesn't support aeson 2.0
-    # https://github.com/matterhorn-chat/matterhorn/issues/759
-    aeson = self.aeson_1_5_6_0;
-  }));
-  mattermost-api = super.mattermost-api.override {
-    aeson = self.aeson_1_5_6_0;
-  };
+  matterhorn = doJailbreak super.matterhorn;
 
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
@@ -687,9 +679,6 @@ self: super: {
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
-  # 2022-03-24: Strict aeson bound: https://github.com/berberman/nvfetcher/pull/63
-  nvfetcher = throwIfNot (super.nvfetcher.version == "0.4.0.0") "nvfetcher: remove jailbreak after update" doJailbreak super.nvfetcher;
-
   # 2022-03-24: Strict aeson bound:
   arch-web = throwIfNot (super.arch-web.version == "0.1.0") "arch-web: remove jailbreak after update"  doJailbreak super.arch-web;
 
@@ -853,6 +842,18 @@ self: super: {
 
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
+
+  # requires git at test-time *and* runtime, but we'll just rely on users to
+  # bring their own git at runtime
+  sensei = overrideCabal (drv: {
+    testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_9_3 ];
+    testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
+  }) (super.sensei.overrideScope (self: super: {
+    hspec-meta = self.hspec-meta_2_9_3;
+    hspec = self.hspec_2_9_7;
+    hspec-core = dontCheck self.hspec-core_2_9_7;
+    hspec-discover = self.hspec-discover_2_9_7;
+  }));
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
@@ -1153,6 +1154,16 @@ self: super: {
 
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
+
+  # Causes Test.QuickCheck.resize: negative size crashes e.g. in test suites
+  # https://github.com/typeable/generic-arbitrary/issues/14
+  generic-arbitrary = appendPatches [
+    (pkgs.fetchpatch {
+      name = "generic-arbitrary-no-negative-resize.patch";
+      url = "https://github.com/typeable/generic-arbitrary/commit/c13d119d8ad0d43860ecdb93b357b0239e366a6c.patch";
+      sha256 = "1jgbd2jn575icqw9nfdzh57nacm3pn8n53ka52129pnfjqfzyhsi";
+    })
+  ] super.generic-arbitrary;
 
   # https://github.com/DanielG/cabal-helper/pull/123
   cabal-helper = doJailbreak super.cabal-helper;
@@ -1647,19 +1658,6 @@ self: super: {
   ];
 
   lsp = assert super.lsp.version == "1.4.0.0"; dontCheck super.lsp;
-
-  hls-test-utils = assert super.hls-test-utils.version == "1.2.0.0"; appendPatches [
-    (fetchpatch {
-      url = "https://github.com/haskell/haskell-language-server/commit/074593987e9086e308b89ecde336de2c64861dc0.patch";
-      sha256 = "sha256-uTlIbGQKulP3963UPL2V9cqMoIvPscK+s2W/HtBmMWc=";
-      relative = "hls-test-utils";
-    })
-    (fetchpatch {
-      url = "https://github.com/haskell/haskell-language-server/commit/78305f21783807b04baebca4860c255bfe84d4ab.patch";
-      sha256 = "sha256-oe8Q8kBJBkel+pR5imFj43NVpm4afcyLgAUCWhrIoPk=";
-      relative = "hls-test-utils";
-    })
-   ] super.hls-test-utils;
 
   # 2021-05-08: Tests fail: https://github.com/haskell/haskell-language-server/issues/1809
   hls-eval-plugin = dontCheck super.hls-eval-plugin;
@@ -2302,6 +2300,10 @@ self: super: {
   # 2021-09-18: https://github.com/haskell/haskell-language-server/issues/2205
   hls-stylish-haskell-plugin = doJailbreak super.hls-stylish-haskell-plugin;
 
+  # Necesssary .txt files are not included in sdist.
+  # https://github.com/haskell/haskell-language-server/pull/2887
+  hls-change-type-signature-plugin = dontCheck super.hls-change-type-signature-plugin;
+
   # Too strict bounds on hspec
   # https://github.com/haskell-works/hw-hspec-hedgehog/issues/62
   # https://github.com/haskell-works/hw-prim/issues/132
@@ -2584,15 +2586,6 @@ self: super: {
   # 2022-03-16: Upstream stopped updating bounds https://github.com/haskell-hvr/base-noprelude/pull/15
   base-noprelude = doJailbreak super.base-noprelude;
 
-  # Manually upgrade cryptostore to work around
-  # https://github.com/ocheron/cryptostore/issues/7
-  cryptostore = assert super.cryptostore.version == "0.2.1.0"; overrideCabal {
-    version = "0.2.2.0";
-    sha256 = "0n70amg7y2qwfjhj4xaqjia46fbabba9l2g19ry191m7c4zp1skx";
-    revision = null;
-    editedCabalFile = null;
-  } super.cryptostore;
-
   # 2022-03-16: Bounds need to be loosened https://github.com/obsidiansystems/dependent-sum-aeson-orphans/issues/10
   dependent-sum-aeson-orphans = doJailbreak super.dependent-sum-aeson-orphans;
 
@@ -2646,5 +2639,10 @@ self: super: {
     url = "https://github.com/erebe/wstunnel/pull/107/commits/47c1f62bdec1dbe77088d9e3ceb6d872f922ce34.patch";
     sha256 = "sha256-fW5bVbAGQxU/gd9zqgVNclwKraBtUjkKDek7L0c4+O0=";
   }) super.wstunnel;
+
+  # Adjustment of bounds on servant is unreleased
+  # https://github.com/haskell-servant/servant-cassava/commit/66617547851d38d48f5f1d1b786db1286bdafa9d
+  servant-cassava = assert super.servant-cassava.version == "0.10.1";
+    doJailbreak super.servant-cassava;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

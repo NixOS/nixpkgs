@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.26.0";
+  version = "1.27.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-niXqE6W3/Mg7AmBR18bk3NUiHpUOvlOT3nFaP+oVJ9M=";
+    sha256 = "sha256-1qWDg0hZM0TyDrNa2kcqdy0yFFgm8u/ljb4bZeqZ6JA=";
   };
 
   propagatedBuildInputs = [

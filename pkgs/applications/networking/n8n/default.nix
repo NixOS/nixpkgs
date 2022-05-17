@@ -1,9 +1,8 @@
-{ pkgs, nodejs-14_x, stdenv, lib }:
+{ pkgs, nodejs-16_x, stdenv, lib, nixosTests }:
 
 let
   nodePackages = import ./node-composition.nix {
     inherit pkgs;
-    nodejs = nodejs-14_x;
     inherit (stdenv.hostPlatform) system;
   };
 in
@@ -12,7 +11,17 @@ nodePackages.n8n.override {
     node-pre-gyp
   ];
 
-  passthru.updateScript = ./generate-dependencies.sh;
+  dontNpmInstall = true;
+
+  postInstall = ''
+    mkdir -p $out/bin
+    ln -s $out/lib/node_modules/n8n/bin/n8n $out/bin/n8n
+  '';
+
+  passthru = {
+    updateScript = ./generate-dependencies.sh;
+    tests = nixosTests.n8n;
+  };
 
   meta = with lib; {
     description = "Free and open fair-code licensed node based Workflow Automation Tool";

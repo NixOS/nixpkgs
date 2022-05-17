@@ -35,22 +35,28 @@ with lib;
   # Enable sound in graphical iso's.
   hardware.pulseaudio.enable = true;
 
-  environment.systemPackages = [
+  # Spice guest additions
+  services.spice-vdagentd.enable = true;
+
+  # Enable plymouth
+  boot.plymouth.enable = true;
+
+  environment.defaultPackages = with pkgs; [
     # Include gparted for partitioning disks.
-    pkgs.gparted
+    gparted
 
     # Include some editors.
-    pkgs.vim
-    pkgs.bvi # binary editor
-    pkgs.joe
+    vim
+    nano
 
     # Include some version control tools.
-    pkgs.git
+    git
+    rsync
 
     # Firefox for reading the manual.
-    pkgs.firefox
+    firefox
 
-    pkgs.glxinfo
+    glxinfo
   ];
 
 }

@@ -10,6 +10,7 @@
 , slurp
 , grim
 , jq
+, bash
 
 , python3Packages
 }:
@@ -27,8 +28,9 @@ grimshot = stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
+  strictDeps = true;
   nativeBuildInputs = [ makeWrapper installShellFiles ];
-
+  buildInputs = [ bash ];
   installPhase = ''
     installManPage contrib/grimshot.1
 

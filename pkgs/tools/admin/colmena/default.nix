@@ -1,19 +1,24 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, colmena, testers }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, nix-eval-jobs
+, colmena, testers }:
 
 rustPlatform.buildRustPackage rec {
   pname = "colmena";
-  version = "0.2.2";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "colmena";
     rev = "v${version}";
-    sha256 = "sha256-VsqFiqZUjGpDZfw6ws1rvqm/NGUfFBXHa0N8ZkBaMh8=";
+    sha256 = "sha256-aGpMiY9pS2616AfAVWA87tULKatDYF2kCKxwYstK8V0=";
   };
 
-  cargoSha256 = "sha256-NVvPh0+53YIm5Kb/lNyXb7M3bbADBVdsTaPptyb37lw=";
+  cargoSha256 = "sha256-ckCArDFjVwVWWK0Ffj0AYe411b9xU33CBc1zeCh2kns=";
 
   nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = [ nix-eval-jobs ];
+
+  NIX_EVAL_JOBS = "${nix-eval-jobs}/bin/nix-eval-jobs";
 
   postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     installShellCompletion --cmd colmena \
@@ -37,6 +42,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://zhaofengli.github.io/colmena/${passthru.apiVersion}";
     license = licenses.mit;
     maintainers = with maintainers; [ zhaofengli ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

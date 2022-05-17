@@ -10,16 +10,19 @@
 , typecode-libmagic
 , pytestCheckHook
 , pytest-xdist
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "typecode";
-  version = "21.6.1";
+  version = "30.0.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3a82859df5607c900972e08e1bca31e3fe2daed37afd1b8231cad2ef613d8d6";
+    hash = "sha256-pRGLU/xzQQqDZMIsrq1Fy7VgGIpFjnHtpmO+yL7t4g8=";
   };
 
   dontConfigure = true;

@@ -77,6 +77,7 @@ let
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
+      metacoq = callPackage ../development/coq-modules/metacoq { };
       metalib = callPackage ../development/coq-modules/metalib { };
       multinomials = callPackage ../development/coq-modules/multinomials {};
       odd-order = callPackage ../development/coq-modules/odd-order { };
@@ -159,7 +160,7 @@ in rec {
   coqPackages_8_13 = mkCoqPackages coq_8_13;
   coqPackages_8_14 = mkCoqPackages coq_8_14;
   coqPackages_8_15 = mkCoqPackages coq_8_15;
-  coqPackages = recurseIntoAttrs coqPackages_8_13;
+  coqPackages = recurseIntoAttrs coqPackages_8_15;
   coq = coqPackages.coq;
 
 }

@@ -28,11 +28,11 @@
 
 mkDerivation rec {
   pname = "calibre";
-  version = "5.37.0";
+  version = "5.42.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-x2u4v0k05WMATSsuo76NnqChIz8BcTuZfPkZa0uLnMY=";
+    hash = "sha256-pob9GZl3Wiky5aMGGvcNQdDrKh19bo+n5ihdS45X+Vg=";
   };
 
   # https://sources.debian.org/patches/calibre/${version}+dfsg-1
@@ -104,7 +104,6 @@ mkDerivation rec {
       pillow
       pyqt-builder
       pyqt5
-      pyqtwebengine
       python
       regex
       sip
@@ -114,6 +113,11 @@ mkDerivation rec {
       pycryptodome
       # the following are distributed with calibre, but we use upstream instead
       odfpy
+    ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqtwebengine.meta.platforms) [
+      # much of calibre's functionality is usable without a web
+      # browser, so we enable building on platforms which qtwebengine
+      # does not support by simply omitting qtwebengine.
+      pyqtwebengine
     ] ++ lib.optional (unrarSupport) unrardll
   );
 

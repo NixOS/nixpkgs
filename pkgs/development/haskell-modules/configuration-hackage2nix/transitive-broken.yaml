@@ -436,12 +436,14 @@ dont-distribute-packages:
  - adp-multi-monadiccp
  - aeson-native
  - aeson-result
+ - affine
  - afv
  - agda-server
  - agda-snippets-hakyll
  - agentx
  - aip
  - aivika-distributed
+ - alg
  - algebra-checkers
  - algebra-driven-design
  - algebra-sql
@@ -647,6 +649,7 @@ dont-distribute-packages:
  - apiary-websockets
  - apis
  - apotiki
+ - appendful-persistent
  - approx-rand-test
  - arbor-monad-metric-datadog
  - archive-tar-bytestring
@@ -663,6 +666,7 @@ dont-distribute-packages:
  - ascii
  - ascii-cows
  - ascii-table
+ - ascii_1_2_3_0
  - asic
  - asif
  - assert4hs-hspec
@@ -769,6 +773,7 @@ dont-distribute-packages:
  - berp
  - bff
  - bglib
+ - bifunctor
  - billboard-parser
  - billeksah-forms
  - billeksah-main
@@ -783,6 +788,7 @@ dont-distribute-packages:
  - bindings-ppdev
  - bindynamic
  - binembed-example
+ - binrep
  - bioace
  - bioalign
  - biofasta
@@ -863,6 +869,7 @@ dont-distribute-packages:
  - bytelog
  - bytestring-builder-varword
  - bytestring-read
+ - ca
  - cabal-bounds
  - cabal-cache
  - cabal-cargs
@@ -912,6 +919,7 @@ dont-distribute-packages:
  - cassy
  - casui
  - categorical-algebra
+ - category
  - category-extras
  - cautious-gen
  - cctools-workqueue
@@ -1067,7 +1075,9 @@ dont-distribute-packages:
  - configifier
  - configurator-ng
  - conic-graphs
+ - constraint
  - constraint-manip
+ - constraint-reflection
  - constructible
  - consumers
  - container
@@ -1094,6 +1104,7 @@ dont-distribute-packages:
  - copilot-libraries
  - copilot-sbv
  - copilot-theorem
+ - core-webserver-servant
  - coroutine-enumerator
  - coroutine-iteratee
  - couch-simple
@@ -1203,6 +1214,8 @@ dont-distribute-packages:
  - delimiter-separated
  - delta
  - delta-h
+ - dep-t-advice
+ - dep-t-value
  - dependent-literals-plugin
  - dependent-state
  - depends
@@ -1386,6 +1399,8 @@ dont-distribute-packages:
  - exinst-deepseq
  - exinst-hashable
  - exinst-serialise
+ - exist
+ - exist-instances
  - expand
  - expat-enumerator
  - expiring-containers
@@ -1401,6 +1416,7 @@ dont-distribute-packages:
  - extract-dependencies
  - factual-api
  - fadno
+ - fair
  - fallingblocks
  - family-tree
  - fast-arithmetic
@@ -1481,6 +1497,7 @@ dont-distribute-packages:
  - fluent-logger
  - fluent-logger-conduit
  - fmt-for-rio
+ - foldable1
  - follower
  - foo
  - formal
@@ -1562,6 +1579,7 @@ dont-distribute-packages:
  - geniconvert
  - geniserver
  - genvalidity-aeson
+ - genvalidity-appendful
  - genvalidity-hspec-aeson
  - genvalidity-mergeful
  - genvalidity-mergeless
@@ -2376,6 +2394,7 @@ dont-distribute-packages:
  - iteratee-parsec
  - iteratee-stm
  - iterio-server
+ - ival
  - ivor
  - ivory-avr-atmega328p-registers
  - ivory-backend-c
@@ -2388,6 +2407,7 @@ dont-distribute-packages:
  - ivory-serialize
  - ivory-stdlib
  - ivy-web
+ - ix
  - ixset
  - ixset-typed-binary-instance
  - ixset-typed-cassava
@@ -2471,6 +2491,7 @@ dont-distribute-packages:
  - keid-sound-openal
  - keid-ui-dearimgui
  - kevin
+ - key-vault
  - keyring
  - keysafe
  - keystore
@@ -2811,11 +2832,9 @@ dont-distribute-packages:
  - mptcp-pm
  - mptcpanalyzer
  - msgpack-aeson
- - msgpack-arbitrary
  - msgpack-idl
  - msgpack-rpc
  - msgpack-rpc-conduit
- - msgpack-testsuite
  - mtgoxapi
  - mu-avro
  - mu-graphql
@@ -2967,8 +2986,6 @@ dont-distribute-packages:
  - openpgp-Crypto
  - openpgp-crypto-api
  - openssh-github-keys
- - opentelemetry-lightstep
- - opentelemetry-lightstep_0_8_0
  - optima-for-hasql
  - optimal-blocks
  - optimusprime
@@ -3059,7 +3076,6 @@ dont-distribute-packages:
  - phonetic-languages-simplified-base
  - phonetic-languages-simplified-common
  - phonetic-languages-simplified-examples-array
- - phonetic-languages-simplified-examples-common
  - phonetic-languages-simplified-generalized-examples-array
  - phonetic-languages-simplified-generalized-examples-common
  - phonetic-languages-simplified-generalized-properties-array
@@ -3155,6 +3171,7 @@ dont-distribute-packages:
  - process-streaming
  - procrastinating-structure
  - producer
+ - product
  - product-isomorphic
  - prof2dot
  - profiterole
@@ -3250,9 +3267,11 @@ dont-distribute-packages:
  - raketka
  - rallod
  - random-access-file
+ - random-class
  - random-effin
  - random-hypergeometric
  - range-space
+ - ranged-list
  - rasa
  - rasa-example-config
  - rasa-ext-bufs
@@ -3325,6 +3344,7 @@ dont-distribute-packages:
  - regions-mtl
  - registry-hedgehog
  - registry-hedgehog-aeson
+ - registry-messagepack
  - regular-extras
  - regular-web
  - regular-xmlpickler
@@ -3414,6 +3434,7 @@ dont-distribute-packages:
  - roundtrip-xml
  - route-generator
  - route-planning
+ - row
  - rpc
  - rpf
  - rsagl
@@ -3602,6 +3623,7 @@ dont-distribute-packages:
  - smcdel
  - smith-cli
  - smith-client
+ - smt
  - smtlib2-debug
  - smtlib2-pipe
  - smtlib2-quickcheck
@@ -3764,6 +3786,9 @@ dont-distribute-packages:
  - sydtest-servant
  - sydtest-typed-process
  - sydtest-wai
+ - sydtest-webdriver
+ - sydtest-webdriver-screenshot
+ - sydtest-webdriver-yesod
  - sydtest-yesod
  - sylvia
  - sym-plot
@@ -3933,6 +3958,7 @@ dont-distribute-packages:
  - twitter-conduit
  - twitter-enumerator
  - twitter-types-lens
+ - txt
  - type-assertions
  - type-cache
  - type-cereal
@@ -3978,6 +4004,7 @@ dont-distribute-packages:
  - uniqueness-periods-vector-filters
  - uniqueness-periods-vector-general
  - uniqueness-periods-vector-properties
+ - universal
  - universe
  - universe-dependent-sum
  - universe-th
@@ -4018,6 +4045,7 @@ dont-distribute-packages:
  - vacuum-graphviz
  - vacuum-opengl
  - vacuum-ubigraph
+ - valid
  - variable-precision
  - vault-tool-server
  - vault-trans

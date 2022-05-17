@@ -105,6 +105,9 @@ let
         opts = options ++ optional autoFormat "x-systemd.makefs" ++ optional autoResize "x-systemd.growfs";
       in "${device} /sysroot${mountPoint} ${fsType} ${lib.concatStringsSep "," opts}") fileSystems);
 
+  needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
+  needGrowfs = lib.any (fs: fs.autoResize) fileSystems;
+
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
   firmware = config.hardware.firmware;
@@ -155,37 +158,7 @@ in {
       '';
       visible = false;
       default = {};
-      type = types.attrsOf (types.submodule ({ config, options, name, ... }: {
-        options = {
-          enable = mkEnableOption "copying of this file to initrd and symlinking it" // { default = true; };
-
-          target = mkOption {
-            type = types.path;
-            description = ''
-              Path of the symlink.
-            '';
-            default = name;
-          };
-
-          text = mkOption {
-            default = null;
-            type = types.nullOr types.lines;
-            description = "Text of the file.";
-          };
-
-          source = mkOption {
-            type = types.path;
-            description = "Path of the source file.";
-          };
-        };
-
-        config = {
-          source = mkIf (config.text != null) (
-            let name' = "initrd-" + baseNameOf name;
-            in mkDerivedConfig options.text (pkgs.writeText name')
-          );
-        };
-      }));
+      type = utils.systemdUtils.types.initrdContents;
     };
 
     storePaths = mkOption {
@@ -369,6 +342,7 @@ in {
         "/etc/fstab".source = fstab;
 
         "/lib/modules".source = "${modulesClosure}/lib/modules";
+        "/lib/firmware".source = "${modulesClosure}/lib/firmware";
 
         "/etc/modules-load.d/nixos.conf".text = concatStringsSep "\n" config.boot.initrd.kernelModules;
 
@@ -390,18 +364,22 @@ in {
       storePaths = [
         # systemd tooling
         "${cfg.package}/lib/systemd/systemd-fsck"
-        "${cfg.package}/lib/systemd/systemd-growfs"
+        (lib.mkIf needGrowfs "${cfg.package}/lib/systemd/systemd-growfs")
         "${cfg.package}/lib/systemd/systemd-hibernate-resume"
         "${cfg.package}/lib/systemd/systemd-journald"
-        "${cfg.package}/lib/systemd/systemd-makefs"
+        (lib.mkIf needMakefs "${cfg.package}/lib/systemd/systemd-makefs")
         "${cfg.package}/lib/systemd/systemd-modules-load"
         "${cfg.package}/lib/systemd/systemd-remount-fs"
         "${cfg.package}/lib/systemd/systemd-shutdown"
         "${cfg.package}/lib/systemd/systemd-sulogin-shell"
         "${cfg.package}/lib/systemd/systemd-sysctl"
 
-        # additional systemd directories
-        "${cfg.package}/lib/systemd/system-generators"
+        # generators
+        "${cfg.package}/lib/systemd/system-generators/systemd-debug-generator"
+        "${cfg.package}/lib/systemd/system-generators/systemd-fstab-generator"
+        "${cfg.package}/lib/systemd/system-generators/systemd-gpt-auto-generator"
+        "${cfg.package}/lib/systemd/system-generators/systemd-hibernate-resume-generator"
+        "${cfg.package}/lib/systemd/system-generators/systemd-run-generator"
 
         # utilities needed by systemd
         "${cfg.package.util-linux}/bin/mount"
@@ -439,8 +417,8 @@ in {
         mkdir -p $out/etc/systemd/system
         touch $out/etc/systemd/system/systemd-{makefs,growfs}@.service
       '')];
-      services."systemd-makefs@".unitConfig.IgnoreOnIsolate = true;
-      services."systemd-growfs@".unitConfig.IgnoreOnIsolate = true;
+      services."systemd-makefs@" = lib.mkIf needMakefs { unitConfig.IgnoreOnIsolate = true; };
+      services."systemd-growfs@" = lib.mkIf needGrowfs { unitConfig.IgnoreOnIsolate = true; };
 
       services.initrd-nixos-activation = {
         after = [ "initrd-fs.target" ];
@@ -501,6 +479,21 @@ in {
           ""
           ''systemctl --no-block switch-root /sysroot "''${NEW_INIT}"''
         ];
+      };
+
+      services.panic-on-fail = {
+        wantedBy = ["emergency.target"];
+        unitConfig = {
+          DefaultDependencies = false;
+          ConditionKernelCommandLine = [
+            "|boot.panic_on_fail"
+            "|stage1panic"
+          ];
+        };
+        script = ''
+          echo c > /proc/sysrq-trigger
+        '';
+        serviceConfig.Type = "oneshot";
       };
     };
 

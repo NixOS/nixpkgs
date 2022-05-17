@@ -53,6 +53,7 @@ let
   getArchString = nixArchString:
     {
       "aarch64-linux" = "linux-aarch64";
+      "aarch64-darwin" = "darwin-aarch64";
       "x86_64-linux" = "linux-amd64";
       "x86_64-darwin" = "darwin-amd64";
     }.${nixArchString};

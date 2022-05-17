@@ -9,7 +9,71 @@ let
     # to build it. This is a bit confusing for cross compilation.
     inherit (stdenv) hostPlatform;
   };
+
+  makeOverlayable = mkDerivationSimple:
+    fnOrAttrs:
+      if builtins.isFunction fnOrAttrs
+      then makeDerivationExtensible mkDerivationSimple fnOrAttrs
+      else makeDerivationExtensibleConst mkDerivationSimple fnOrAttrs;
+
+  # Based off lib.makeExtensible, with modifications:
+  makeDerivationExtensible = mkDerivationSimple: rattrs:
+    let
+      # NOTE: The following is a hint that will be printed by the Nix cli when
+      # encountering an infinite recursion. It must not be formatted into
+      # separate lines, because Nix would only show the last line of the comment.
+
+      # An infinite recursion here can be caused by having the attribute names of expression `e` in `.overrideAttrs(finalAttrs: previousAttrs: e)` depend on `finalAttrs`. Only the attribute values of `e` can depend on `finalAttrs`.
+      args = rattrs (args // { inherit finalPackage; });
+      #              ^^^^
+
+      finalPackage =
+        mkDerivationSimple
+          (f0:
+            let
+              f = self: super:
+                # Convert f0 to an overlay. Legacy is:
+                #   overrideAttrs (super: {})
+                # We want to introduce self. We follow the convention of overlays:
+                #   overrideAttrs (self: super: {})
+                # Which means the first parameter can be either self or super.
+                # This is surprising, but far better than the confusion that would
+                # arise from flipping an overlay's parameters in some cases.
+                let x = f0 super;
+                in
+                  if builtins.isFunction x
+                  then
+                    # Can't reuse `x`, because `self` comes first.
+                    # Looks inefficient, but `f0 super` was a cheap thunk.
+                    f0 self super
+                  else x;
+            in
+              makeDerivationExtensible mkDerivationSimple
+                (self: let super = rattrs self; in super // f self super))
+          args;
+    in finalPackage;
+
+  # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
+  # but pre-evaluated for a slight improvement in performance.
+  makeDerivationExtensibleConst = mkDerivationSimple: attrs:
+    mkDerivationSimple
+      (f0:
+        let
+          f = self: super:
+            let x = f0 super;
+            in
+              if builtins.isFunction x
+              then
+                f0 self super
+              else x;
+        in
+          makeDerivationExtensible mkDerivationSimple (self: attrs // f self attrs))
+      attrs;
+
 in
+
+makeOverlayable (overrideAttrs:
+
 
 # `mkDerivation` wraps the builtin `derivation` function to
 # produce derivations that use this stdenv and its shell.
@@ -19,7 +83,7 @@ in
 # * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
 #   Details on how to use this mkDerivation function
 #
-# * https://nixos.org/nix/manual/#ssec-derivation
+# * https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations
 #   Explanation about derivations in general
 {
 
@@ -69,7 +133,10 @@ in
 , doInstallCheck ? config.doCheckByDefault or false
 
 , # TODO(@Ericson2314): Make always true and remove
-  strictDeps ? stdenv.hostPlatform != stdenv.buildPlatform
+  strictDeps ? if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform
+
+, enableParallelBuilding ? config.enableParallelBuildingByDefault
+
 , meta ? {}
 , passthru ? {}
 , pos ? # position used in error messages and for meta.position
@@ -93,7 +160,7 @@ in
 
 , __contentAddressed ?
   (! attrs ? outputHash) # Fixed-output drvs can't be content addressed too
-  && (config.contentAddressedByDefault or false)
+  && config.contentAddressedByDefault
 
 , ... } @ attrs:
 
@@ -128,6 +195,12 @@ let
     else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
   # hardeningDisable additionally supports "all".
   erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
+
+  checkDependencyList = checkDependencyList' [];
+  checkDependencyList' = positions: name: deps: lib.flip lib.imap1 deps (index: dep:
+    if lib.isDerivation dep || isNull dep || builtins.typeOf dep == "string" || builtins.typeOf dep == "path" then dep
+    else if lib.isList dep then checkDependencyList' ([index] ++ positions) name dep
+    else throw "Dependency is not of a valid type: ${lib.concatMapStrings (ix: "element ${toString ix} of ") ([index] ++ positions)}${name} for ${attrs.name or attrs.pname}");
 in if builtins.length erroneousHardeningFlags != 0
 then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
   inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
@@ -143,34 +216,34 @@ else let
 
   dependencies = map (map lib.chooseDevOutputs) [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuild)
-      (map (drv: drv.nativeDrv or drv) nativeBuildInputs
+      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuild" depsBuildBuild))
+      (map (drv: drv.nativeDrv or drv) (checkDependencyList "nativeBuildInputs" nativeBuildInputs
          ++ lib.optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
          ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
          ++ lib.optionals doCheck checkInputs
-         ++ lib.optionals doInstallCheck' installCheckInputs)
-      (map (drv: drv.__spliced.buildTarget or drv) depsBuildTarget)
+         ++ lib.optionals doInstallCheck' installCheckInputs))
+      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTarget" depsBuildTarget))
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) depsHostHost)
-      (map (drv: drv.crossDrv or drv) buildInputs)
+      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHost" depsHostHost))
+      (map (drv: drv.crossDrv or drv) (checkDependencyList "buildInputs" buildInputs))
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) depsTargetTarget)
+      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTarget" depsTargetTarget))
     ]
   ];
   propagatedDependencies = map (map lib.chooseDevOutputs) [
     [
-      (map (drv: drv.__spliced.buildBuild or drv) depsBuildBuildPropagated)
-      (map (drv: drv.nativeDrv or drv) propagatedNativeBuildInputs)
-      (map (drv: drv.__spliced.buildTarget or drv) depsBuildTargetPropagated)
+      (map (drv: drv.__spliced.buildBuild or drv) (checkDependencyList "depsBuildBuildPropagated" depsBuildBuildPropagated))
+      (map (drv: drv.nativeDrv or drv) (checkDependencyList "propagatedNativeBuildInputs" propagatedNativeBuildInputs))
+      (map (drv: drv.__spliced.buildTarget or drv) (checkDependencyList "depsBuildTargetPropagated" depsBuildTargetPropagated))
     ]
     [
-      (map (drv: drv.__spliced.hostHost or drv) depsHostHostPropagated)
-      (map (drv: drv.crossDrv or drv) propagatedBuildInputs)
+      (map (drv: drv.__spliced.hostHost or drv) (checkDependencyList "depsHostHostPropagated" depsHostHostPropagated))
+      (map (drv: drv.crossDrv or drv) (checkDependencyList "propagatedBuildInputs" propagatedBuildInputs))
     ]
     [
-      (map (drv: drv.__spliced.targetTarget or drv) depsTargetTargetPropagated)
+      (map (drv: drv.__spliced.targetTarget or drv) (checkDependencyList "depsTargetTargetPropagated" depsTargetTargetPropagated))
     ]
   ];
 
@@ -312,7 +385,7 @@ else let
           llvm-config = 'llvm-config-native'
         '';
       in [ "--cross-file=${crossFile}" ] ++ mesonFlags;
-    } // lib.optionalAttrs (attrs.enableParallelBuilding or false) {
+    } // lib.optionalAttrs (enableParallelBuilding) {
       enableParallelChecking = attrs.enableParallelChecking or true;
     } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != [] || stdenv.hostPlatform.isMusl) {
       NIX_HARDENING_ENABLE = enabledHardeningOptions;
@@ -370,7 +443,7 @@ else let
     } // {
       # Expose the result of the checks for everyone to see.
       inherit (validity) unfree broken unsupported insecure;
-      available = validity.valid
+      available = validity.valid != "no"
                && (if config.checkMetaRecursively or false
                    then lib.all (d: d.meta.available or true) references
                    else true);
@@ -381,8 +454,6 @@ in
 lib.extendDerivation
   validity.handled
   ({
-     overrideAttrs = f: stdenv.mkDerivation (attrs // (f attrs));
-
      # A derivation that always builds successfully and whose runtime
      # dependencies are the original derivations build time dependencies
      # This allows easy building and distributing of all derivations
@@ -408,10 +479,12 @@ lib.extendDerivation
        args = [ "-c" "export > $out" ];
      });
 
-     inherit meta passthru;
+     inherit meta passthru overrideAttrs;
    } //
    # Pass through extra attributes that are not inputs, but
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
    passthru)
   (derivation derivationArg)
+
+)

@@ -8,9 +8,11 @@ if [ -z "${GITHUB_TOKEN}" ]; then
   exit 1
 fi
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.30.0"
+VERSION="3.31.0"
 
 # An array of plugin names. The respective repository inside Pulumi's
 # Github organization is called pulumi-$name by convention.
@@ -157,4 +159,4 @@ EOF
   echo "  };"
   echo "}"
 
-} > data.nix
+} > "${SCRIPT_DIR}/data.nix"

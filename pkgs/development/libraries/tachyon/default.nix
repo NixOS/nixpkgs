@@ -1,15 +1,11 @@
 { lib, stdenv
 , fetchurl
-, Carbon ? null
-, libjpeg ? null
-, libpng ? null
+, Carbon
+, libjpeg
+, libpng
 , withJpegSupport ? true # support jpeg output
 , withPngSupport ? true # support png output
 }:
-
-assert withJpegSupport -> libjpeg != null;
-assert withPngSupport -> libpng != null;
-assert stdenv.isDarwin -> Carbon != null;
 
 stdenv.mkDerivation rec {
   pname = "tachyon";

@@ -1,36 +1,48 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pillow
-, nose_progressive
-, nose
+, fetchFromGitHub
 , mock
-, blessings
+, pillow
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pilkit";
-  version = "2.0";
+  version = "unstable-2022-02-17";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "ddb30c2f0198a147e56b151476c3bb9fe045fbfd5b0a0fa2a3148dba62d1559f";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "matthewwithanm";
+    repo = pname;
+    rev = "09ffa2ad33318ae5fd3464655c14c7f01ffc2097";
+    hash = "sha256-jtnFffKr0yhSv2jBmXzPa6iP2r41MbmGukfmnvgABhk=";
   };
 
-  preConfigure = ''
-    substituteInPlace setup.py --replace 'nose==1.2.1' 'nose'
+  buildInputs = [
+    pillow
+  ];
+
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace " --cov --cov-report term-missing:skip-covered" ""
   '';
 
-  # tests fail, see https://github.com/matthewwithanm/pilkit/issues/9
-  doCheck = false;
-
-  buildInputs = [ pillow nose_progressive nose mock blessings ];
+  pythonImportsCheck = [
+    "pilkit"
+  ];
 
   meta = with lib; {
-    homepage = "https://github.com/matthewwithanm/pilkit/";
     description = "A collection of utilities and processors for the Python Imaging Libary";
+    homepage = "https://github.com/matthewwithanm/pilkit/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

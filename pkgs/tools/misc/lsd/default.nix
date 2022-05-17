@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
+, pandoc
 , testers
 , lsd
 }:
@@ -19,8 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-P0HJVp2ReJuLSZrArw/EAfLFDOZqswI0nD1SCHwegoE=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles pandoc ];
   postInstall = ''
+    pandoc --standalone --to man doc/lsd.md -o lsd.1
+    installManPage lsd.1
+
     installShellCompletion $releaseDir/build/lsd-*/out/{_lsd,lsd.{bash,fish}}
   '';
 

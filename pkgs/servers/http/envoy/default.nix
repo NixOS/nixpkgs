@@ -12,6 +12,9 @@
 , python3
 , linuxHeaders
 , nixosTests
+
+# v8 (upstream default), wavm, wamr, wasmtime, disabled
+, wasmRuntime ? "wamr"
 }:
 
 let
@@ -31,7 +34,7 @@ buildBazelPackage rec {
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
-    inherit (srcVer) rev ;
+    inherit (srcVer) rev;
     hash = "sha256:11mm72zmb479ss585jzqzhklyyqmdadnvr91ghzvjxc0j2a1hrr4";
 
     extraPostFetch = ''
@@ -58,6 +61,13 @@ buildBazelPackage rec {
       url = "https://github.com/envoyproxy/envoy/commit/68448aae7a78a3123097b6ea96016b270457e7b8.patch";
       sha256 = "123kv3x37p8fgfp29jhw5xg5js5q5ipibs8hsm7gzfd5bcllnpfh";
     })
+
+    # fix issues with brotli and GCC 11.2.0+ (-Werror=vla-parameter)
+    ./bump-brotli.patch
+
+    # fix linux-aarch64 WAMR builds
+    # (upstream WAMR only detects aarch64 on Darwin, not Linux)
+    ./fix-aarch64-wamr.patch
   ];
 
   nativeBuildInputs = [
@@ -75,8 +85,8 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
-      x86_64-linux = "0f7mls2zrpjjvbz6pgkzrvr55bv05xn2l76j9i1r0cf367qqfkz8";
-      aarch64-linux = "1l3ls47z20xrw6x9qps5jm7vq50xb1acv9gczfdrj9hw6jybgwgg";
+      x86_64-linux = "sha256-23Z6SbKnbah/NCrdMrXhrNFFASd/8xRH3fSyIE++heA=";
+      aarch64-linux = "sha256-dMOu0HYUIUJ+XEtctjaZZ1jGGQq+cHbay8+KwR5XqP0=";
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -128,6 +138,11 @@ buildBazelPackage rec {
     "--cxxopt=-Wno-maybe-uninitialized"
     "--cxxopt=-Wno-uninitialized"
     "--cxxopt=-Wno-error=type-limits"
+
+    "--define=wasm=${wasmRuntime}"
+  ];
+  bazelFetchFlags = [
+    "--define=wasm=${wasmRuntime}"
   ];
 
   passthru.tests = {

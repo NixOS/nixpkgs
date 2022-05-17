@@ -52,6 +52,7 @@ buildGoModule rec {
     homepage = "https://vikunja.io/";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ em0lar ];
+    mainProgram = "vikunja";
     platforms = lib.platforms.all;
   };
 }

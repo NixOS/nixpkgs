@@ -315,10 +315,10 @@ rec {
       allowSubstitutes = false;
     }
     ''
-    n=$out/bin/$name
-    mkdir -p "$(dirname "$n")"
-    mv "$codePath" code.c
-    $CC -x c code.c -o "$n"
+      n=$out/bin/$name
+      mkdir -p "$(dirname "$n")"
+      mv "$codePath" code.c
+      $CC -x c code.c -o "$n"
     '';
 
 
@@ -477,7 +477,7 @@ rec {
       cd $out
       ${lib.concatMapStrings (x: ''
           mkdir -p "$(dirname ${lib.escapeShellArg x.name})"
-          ln -s ${lib.escapeShellArg x.path} ${lib.escapeShellArg x.name}
+          ln -s ${lib.escapeShellArg "${x.path}"} ${lib.escapeShellArg x.name}
       '') entries}
     '';
 

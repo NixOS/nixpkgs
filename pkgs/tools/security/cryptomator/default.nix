@@ -6,13 +6,13 @@
 
 let
   pname = "cryptomator";
-  version = "1.6.8";
+  version = "1.6.10";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
-    sha256 = "sha256-2bvIjfutxfTPBtYiSXpgdEh63Eg74uqSf8CDo/Oma0U=";
+    sha256 = "sha256-klNkMCgXC0gGqNV7S5EObHYCcgN4SayeNHXF9bq+20s=";
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
@@ -37,7 +37,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "sha256-quYUJX/JErtWuUQBYXXee/uZGkO0UBr4qxcGticxGUc=";
+    outputHash = "sha256-biQBP0rV94+Hoqte36Xmzm1XWtWC+1ne5lgpUj0GPak=";
 
     doCheck = false;
   };
@@ -98,7 +98,13 @@ in stdenv.mkDerivation rec {
     cp ${src}/dist/linux/common/application-vnd.cryptomator.vault.xml $out/share/mime/packages/application-vnd.cryptomator.vault.xml
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook maven makeWrapper wrapGAppsHook jdk ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    maven
+    makeWrapper
+    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
+    jdk
+  ];
   buildInputs = [ fuse jre glib jffi ];
 
   meta = with lib; {

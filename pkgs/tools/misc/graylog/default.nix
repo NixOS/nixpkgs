@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     description = "Open source log management solution";
     homepage    = "https://www.graylog.org/";
     license     = licenses.gpl3;
-    platforms   = platforms.unix;
     maintainers = [ maintainers.fadenb ];
+    mainProgram = "graylogctl";
+    platforms   = platforms.unix;
   };
 }

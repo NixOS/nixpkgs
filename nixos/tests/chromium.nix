@@ -45,12 +45,14 @@ mapAttrs (channel: chromiumPkg: makeTest {
 
   enableOCR = true;
 
-  machine.imports = [ ./common/user-account.nix ./common/x11.nix ];
-  machine.virtualisation.memorySize = 2047;
-  machine.test-support.displayManager.auto.user = user;
-  machine.environment = {
-    systemPackages = [ chromiumPkg ];
-    variables."XAUTHORITY" = "/home/alice/.Xauthority";
+  nodes.machine = { ... }: {
+    imports = [ ./common/user-account.nix ./common/x11.nix ];
+    virtualisation.memorySize = 2047;
+    test-support.displayManager.auto.user = user;
+    environment = {
+      systemPackages = [ chromiumPkg ];
+      variables."XAUTHORITY" = "/home/alice/.Xauthority";
+    };
   };
 
   testScript = let

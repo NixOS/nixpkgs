@@ -24,6 +24,14 @@
 , wolfsslSupport ? false, wolfssl ? null
 , zlibSupport ? true, zlib ? null
 , zstdSupport ? false, zstd ? null
+
+# for passthru.tests
+, coeurl
+, curlpp
+, haskellPackages
+, ocamlPackages
+, phpExtensions
+, python3
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -54,19 +62,21 @@ assert zstdSupport -> zstd != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.82.0";
+  version = "7.83.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "sha256-RtmgQAozQI/ZkncLBKRKdDSzA28ugImsKLV1c9WdNx8=";
+    sha256 = "sha256-9Tmjb7RKgmDsXZd+Tg290u7intkPztqpvDyfeKETv/A=";
   };
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
-    ./7.82.0-openssl-fix-CN-check.patch
+    # quiche: support ca-fallback
+    # https://github.com/curl/curl/commit/fdb5e21b4dd171a96cf7c002ee77bb08f8e58021
+    ./7.83.1-quiche-support-ca-fallback.patch
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -108,11 +118,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
       # Build without manual
       "--disable-manual"
-      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
-      # to nss-cacert from the default profile.
-      # https://github.com/curl/curl/issues/8696 - fallback is not supported by HTTP3
-      (if http3Support then "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" else "--without-ca-bundle")
-      "--without-ca-path"
       (lib.enableFeature c-aresSupport "ares")
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
@@ -136,12 +141,27 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--disable-shared"
       "--enable-static"
+    ] ++ lib.optionals stdenv.isDarwin [
+      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback to nss-cacert from the default profile.
+      # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
+      "--without-ca-bundle"
+      "--without-ca-path"
     ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
   CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
 
-  doCheck = false; # expensive, fails
+  doCheck = true;
+  preCheck = ''
+    patchShebangs tests/
+  '' + lib.optionalString stdenv.isDarwin ''
+    # bad interaction with sandbox if enabled?
+    rm tests/data/test1453
+    rm tests/data/test1086
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # different resolving behaviour?
+    rm tests/data/test1592
+  '';
 
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
@@ -158,6 +178,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit opensslSupport openssl;
+    tests = {
+      inherit curlpp coeurl;
+      haskell-curl = haskellPackages.curl;
+      ocaml-curly = ocamlPackages.curly;
+      php-curl = phpExtensions.curl;
+      pycurl = python3.pkgs.pycurl;
+    };
   };
 
   meta = with lib; {

@@ -108,7 +108,7 @@ with lib;
         #username	pptpd	password	*
         EOF
 
-        chown root.root "$secrets"
+        chown root:root "$secrets"
         chmod 600 "$secrets"
       '';
 

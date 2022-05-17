@@ -1,5 +1,5 @@
-{ antlr3_4
-, bctoolbox
+{ bctoolbox
+, belr
 , cmake
 , fetchFromGitLab
 , lib
@@ -11,18 +11,18 @@
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
-  version = "4.5.14";
+  version = "linphone-4.4.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-L6dhgBJrzYgBuMNd2eMZJCqB/GIZjKipfn1SffxBFWw=";
+    rev = "44d5977570280763ee1fecdb920736715bad58a3";
+    sha256 = "sha256-w++v3YlDZfpCHAbUQA/RftjRNGkz9J/zYoxZqRgtvnA=";
   };
 
-  nativeBuildInputs = [ antlr3_4 cmake ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ zlib ];
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     "-Wno-error=stringop-overflow"
   ];
 
-  propagatedBuildInputs = [ libantlr3c mbedtls bctoolbox ];
+  propagatedBuildInputs = [ libantlr3c mbedtls bctoolbox belr ];
 
   meta = with lib; {
     homepage = "https://linphone.org/technical-corner/belle-sip";
-    description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers";
+    description = "Modern library implementing SIP (RFC 3261) transport, transaction and dialog layers. Part of the Linphone project.";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ jluttine ];

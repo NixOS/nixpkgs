@@ -181,6 +181,10 @@ let
       orga = "bkegley";
       repo = "tree-sitter-graphql";
     };
+    "tree-sitter-pgn" = {
+      orga = "rolandwalker";
+      repo = "tree-sitter-pgn";
+    };
     "tree-sitter-perl" = {
       orga = "ganezdragon";
       repo = "tree-sitter-perl";
@@ -276,6 +280,10 @@ let
     "tree-sitter-cmake" = {
       orga = "uyha";
       repo = "tree-sitter-cmake";
+    };
+    "tree-sitter-janet-simple" = {
+      orga = "sogaiu";
+      repo = "tree-sitter-janet-simple";
     };
     "tree-sitter-json5" = {
       orga = "joakker";

@@ -47,8 +47,10 @@ buildPythonPackage rec {
 
   PYARROW_WITH_DATASET = zero_or_one true;
   PYARROW_WITH_FLIGHT = zero_or_one _arrow-cpp.enableFlight;
-  PYARROW_WITH_PARQUET = zero_or_one true;
   PYARROW_WITH_HDFS = zero_or_one true;
+  PYARROW_WITH_PARQUET = zero_or_one true;
+  PYARROW_WITH_PLASMA = zero_or_one (!stdenv.isDarwin);
+  PYARROW_WITH_S3 = zero_or_one _arrow-cpp.enableS3;
 
   PYARROW_CMAKE_OPTIONS = [
     "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
@@ -73,6 +75,11 @@ buildPythonPackage rec {
     # enabled in nixpkgs.
     # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11393
     "--deselect=pyarrow/tests/test_memory.py::test_env_var"
+    # these tests require access to s3 via the internet
+    "--deselect=pyarrow/tests/test_fs.py::test_resolve_s3_region"
+    "--deselect=pyarrow/tests/test_fs.py::test_s3_real_aws"
+    "--deselect=pyarrow/tests/test_fs.py::test_s3_real_aws_region_selection"
+    "--deselect=pyarrow/tests/test_fs.py::test_s3_options"
   ] ++ lib.optionals stdenv.isDarwin [
     # Requires loopback networking
     "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
@@ -84,16 +91,17 @@ buildPythonPackage rec {
     rm -r pyarrow/!(tests)
   '';
 
-  pythonImportsCheck = map (module: "pyarrow.${module}") [
+  pythonImportsCheck = [ "pyarrow" ] ++ map (module: "pyarrow.${module}") ([
     "compute"
     "csv"
     "dataset"
+    "feather"
     "flight"
     "fs"
     "hdfs"
     "json"
     "parquet"
-  ];
+  ] ++ lib.optionals (!stdenv.isDarwin) [ "plasma" ]);
 
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";

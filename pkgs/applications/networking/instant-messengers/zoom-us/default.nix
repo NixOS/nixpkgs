@@ -2,6 +2,8 @@
 , lib
 , fetchurl
 , makeWrapper
+, xar
+, cpio
   # Dynamic libraries
 , alsa-lib
 , atk
@@ -28,8 +30,27 @@
 }:
 
 let
-  version = "5.9.6.2225";
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
+
+  # Zoom versions are released at different times for each platform and linux
+  # is stuck on 5.9.6 until https://github.com/NixOS/nixpkgs/pull/166085 is
+  # resolved
+  version = {
+    aarch64-darwin = "5.10.4.6592";
+    x86_64-darwin = "5.10.4.6592";
+    x86_64-linux = "5.9.6.2225";
+   }.${system} or throwSystem;
+
   srcs = {
+    aarch64-darwin = fetchurl {
+       url = "https://zoom.us/client/${version}/Zoom.pkg?archType=arm64";
+       sha256 = "0jg5f9hvb67hhfnifpx5fzz65fcijldy1znlia6pqflxwci3m5rq";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://zoom.us/client/${version}/Zoom.pkg";
+      sha256 = "1p83691bid8kz5mw09x6l9zvjglfszi5vbhfmbbpiqhiqcxlfz83";
+    };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
       sha256 = "0rynpw2fjn9j75f34rk0rgqn9wzyzgzmwh1a3xcx7hqingv45k53";
@@ -69,23 +90,41 @@ stdenv.mkDerivation rec {
   pname = "zoom";
   inherit version;
 
-  src = srcs.${stdenv.hostPlatform.system};
+  src = srcs.${system} or throwSystem;
 
-  dontUnpack = true;
+  dontUnpack = stdenv.isLinux;
+  unpackPhase = lib.optionalString stdenv.isDarwin ''
+    xar -xf $src
+    zcat < zoomus.pkg/Payload | cpio -i
+  '';
 
   nativeBuildInputs = [
     makeWrapper
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    xar
+    cpio
   ];
 
   installPhase = ''
     runHook preInstall
-    mkdir $out
-    tar -C $out -xf $src
-    mv $out/usr/* $out/
+    ${rec {
+      aarch64-darwin = ''
+        mkdir -p $out/Applications
+        cp -R zoom.us.app $out/Applications/
+      '';
+      # darwin steps same on both architectures
+      x86_64-darwin = aarch64-darwin;
+      x86_64-linux = ''
+        mkdir $out
+        tar -C $out -xf $src
+        mv $out/usr/* $out/
+      '';
+    }.${system} or throwSystem}
     runHook postInstall
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     # Desktop File
     substituteInPlace $out/share/applications/Zoom.desktop \
         --replace "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"

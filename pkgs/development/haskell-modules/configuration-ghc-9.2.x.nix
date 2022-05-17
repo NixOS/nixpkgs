@@ -44,7 +44,9 @@ self: super: {
   time = null;
   transformers = null;
   unix = null;
-  xhtml = null;
+  # GHC only bundles the xhtml library if haddock is enabled, check if this is
+  # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
@@ -80,6 +82,7 @@ self: super: {
   constraints = doJailbreak super.constraints;
   cpphs = overrideCabal (drv: { postPatch = "sed -i -e 's,time >=1.5 && <1.11,time >=1.5 \\&\\& <1.12,' cpphs.cabal";}) super.cpphs;
   data-fix = doJailbreak super.data-fix;
+  dbus = super.dbus_1_2_24;
   dec = doJailbreak super.dec;
   ed25519 = doJailbreak super.ed25519;
   ghc-byteorder = doJailbreak super.ghc-byteorder;
@@ -89,7 +92,7 @@ self: super: {
     # causing the build-depends to be skipped. Since the dependency
     # list hasn't changed much since 0.6.4, we can just reuse the
     # normal expression.
-    inherit (self.ghc-exactprint_1_4_1) src version;
+    inherit (self.ghc-exactprint_1_5_0) src version;
     revision = null; editedCabalFile = null;
     libraryHaskellDepends = [
       self.fail
@@ -170,7 +173,7 @@ self: super: {
   ];
 
   # lens >= 5.1 supports 9.2.1
-  lens = super.lens_5_1;
+  lens = doDistribute self.lens_5_1;
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;
@@ -194,17 +197,7 @@ self: super: {
   } super.memory);
 
   # Use hlint from git for GHC 9.2.1 support
-  hlint = doDistribute (
-    overrideSrc {
-      version = "unstable-2021-12-12";
-      src = pkgs.fetchFromGitHub {
-        owner = "ndmitchell";
-        repo = "hlint";
-        rev = "77a9702e10b772a7695c08682cd4f450fd0e9e46";
-        sha256 = "0hpp3iw7m7w2abr8vb86gdz3x6c8lj119zxln933k90ia7bmk8jc";
-      };
-    } super.hlint
-  );
+  hlint = self.hlint_3_4;
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
@@ -215,7 +208,7 @@ self: super: {
   some = doJailbreak super.some;
   fourmolu = super.fourmolu_0_6_0_0;
   # hls-fourmolu-plugin in this version has a to strict upper bound of fourmolu <= 0.5.0.0
-  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.2.0"; doJailbreak super.hls-fourmolu-plugin;
+  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.3.0"; doJailbreak super.hls-fourmolu-plugin;
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
@@ -225,18 +218,11 @@ self: super: {
   # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html
   haskell-language-server = overrideCabal (old: {libraryHaskellDepends = builtins.filter (x: x != super.hls-tactics-plugin) old.libraryHaskellDepends;})
     (appendConfigureFlags [
-    "-f-alternateNumberFormat"
-    "-f-class"
-    "-f-eval"
     "-f-haddockComments"
-    "-f-hlint"
     "-f-retrie"
     "-f-splice"
     "-f-tactics"
   ] (super.haskell-language-server.override {
-    hls-alternate-number-format-plugin = null;
-    hls-class-plugin = null;
-    hls-eval-plugin = null;
     hls-haddock-comments-plugin = null;
     hls-hlint-plugin = null;
     hls-retrie-plugin = null;

@@ -2,7 +2,7 @@
 , stdenvNoCC
 , fetchurl
 , installShellFiles
-, testVersion
+, testers
 , mas
 }:
 
@@ -25,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru.tests = {
-    version = testVersion {
+    version = testers.testVersion {
       package = mas;
       command = "mas version";
     };

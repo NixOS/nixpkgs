@@ -20,6 +20,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
 
               enable_registration = true;
 
+              # don't use this in production, always use some form of verification
+              enable_registration_without_verification = true;
+
               listeners = [ {
                 # The default but tls=false
                 bind_addresses = [

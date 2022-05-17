@@ -62,7 +62,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
         machine.send_key("tab")
         machine.send_chars("/home/alice/foo.keyfile")
         machine.send_key("ret")
-        # Passwords folder is displayed
-        machine.wait_for_text("Passwords")
+        # Database is unlocked (doesn't have "[Locked]" in the title anymore)
+        machine.wait_for_text("foo.kdbx - KeePassXC")
   '';
 })

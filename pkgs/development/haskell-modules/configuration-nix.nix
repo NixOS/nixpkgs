@@ -866,7 +866,7 @@ self: super: builtins.intersectAttrs super {
       buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
       postInstall = drv.postInstall or "" + ''
         wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
-          pkgs.lib.makeBinPath [ pkgs.nvchecker pkgs.nix-prefetch-git ]
+          pkgs.lib.makeBinPath [ pkgs.nvchecker pkgs.nix-prefetch ]
         }"
       '';
     }) super.nvfetcher);

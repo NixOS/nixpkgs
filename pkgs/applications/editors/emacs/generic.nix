@@ -13,6 +13,7 @@
 , sigtool, jansson, harfbuzz, sqlite, nixosTests
 , dontRecurseIntoAttrs, emacsPackagesFor
 , libgccjit, targetPlatform, makeWrapper # native-comp params
+, fetchFromSavannah
 , systemd ? null
 , withX ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
@@ -23,7 +24,7 @@
 , withSQLite3 ? false
 , withCsrc ? true
 , withWebP ? false
-, srcRepo ? false, autoreconfHook ? null, texinfo ? null
+, srcRepo ? true, autoreconfHook ? null, texinfo ? null
 , siteStart ? ./site-start.el
 , nativeComp ? false
 , withAthena ? false
@@ -59,8 +60,9 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
 
   patches = patches fetchpatch;
 
-  src = fetchurl {
-    url = "mirror://gnu/emacs/${name}.tar.xz";
+  src = fetchFromSavannah {
+    repo = "emacs";
+    rev = version;
     inherit sha256;
   };
 

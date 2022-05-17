@@ -11,6 +11,7 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-+UziTYsjgpiumSulrLojuqHtDrgvuG91+XNiaMD7wIs=";
   };
 
+  strictDeps = true;
   installPhase = ''
     install -D zsh-autocomplete.plugin.zsh $out/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
     cp -R scripts $out/share/zsh-autocomplete/scripts

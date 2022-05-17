@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "http://dypgen.free.fr";
     description = "Dypgen GLR self extensible parser generator";
     license = lib.licenses.cecill-b;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

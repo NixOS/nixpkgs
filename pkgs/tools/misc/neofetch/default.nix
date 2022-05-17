@@ -4,13 +4,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "neofetch";
-  version = "unstable-2020-11-26";
+  version = "unstable-2020-12-10";
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = "neofetch";
-    rev = "6dd85d67fc0d4ede9248f2df31b2cd554cca6c2f";
-    sha256 = "sha256-PZjFF/K7bvPIjGVoGqaoR8pWE6Di/qJVKFNcIz7G8xE=";
+    rev = "ccd5d9f52609bbdcd5d8fa78c4fdb0f12954125f";
+    sha256 = "sha256-9MoX6ykqvd2iB0VrZCfhSyhtztMpBTukeKejfAWYW1w=";
   };
 
   patches = [

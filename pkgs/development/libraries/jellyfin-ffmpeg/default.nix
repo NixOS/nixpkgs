@@ -1,7 +1,7 @@
 { ffmpeg_4, ffmpeg-full, fetchFromGitHub, lib }:
 
 (ffmpeg-full.override { ffmpeg = ffmpeg_4; }).overrideAttrs (old: rec {
-  name = "jellyfin-ffmpeg";
+  pname = "jellyfin-ffmpeg";
   version = "4.4.1-4";
 
   src = fetchFromGitHub {

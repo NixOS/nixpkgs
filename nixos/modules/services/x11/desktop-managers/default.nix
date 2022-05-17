@@ -18,7 +18,7 @@ in
   # determines the default: later modules (if enabled) are preferred.
   # E.g., if Plasma 5 is enabled, it supersedes xterm.
   imports = [
-    ./none.nix ./xterm.nix ./xfce.nix ./plasma5.nix ./lumina.nix
+    ./none.nix ./xterm.nix ./phosh.nix ./xfce.nix ./plasma5.nix ./lumina.nix
     ./lxqt.nix ./enlightenment.nix ./gnome.nix ./retroarch.nix ./kodi.nix
     ./mate.nix ./pantheon.nix ./surf-display.nix ./cde.nix
     ./cinnamon.nix
@@ -72,7 +72,7 @@ in
         apply = map (d: d // {
           manage = "desktop";
           start = d.start
-          + optionalString (needBGCond d) ''
+          + optionalString (needBGCond d) ''\n\n
             if [ -e $HOME/.background-image ]; then
               ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
             fi

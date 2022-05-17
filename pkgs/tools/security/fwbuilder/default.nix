@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, cmake, qtbase, wrapQtAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, qtbase
+, wrapQtAppsHook
+, wayland
+, wayland-protocols
+, qtwayland
+}:
 
 stdenv.mkDerivation rec {
   pname = "fwbuilder";
@@ -14,6 +23,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    wayland
+    wayland-protocols
+    qtwayland
   ];
 
   NIX_CFLAGS_COMPILE = [

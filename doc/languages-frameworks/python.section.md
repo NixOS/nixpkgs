@@ -288,7 +288,7 @@ self: super: {
         ps: with ps; [
           pyflakes
           pytest
-          python-language-server
+          black
         ]
       ))
 

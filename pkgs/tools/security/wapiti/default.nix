@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.1.1";
+  version = "3.1.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = pname;
     rev = version;
-    sha256 = "1xyvyan5gz7fz8wa2fbgvma59pr79arqra2gvx861szn2njkf272";
+    sha256 = "sha256-nGAG+7FqEktc55i5Q2urKh52vm/i6kX4kvS2AVUAUjA=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -29,20 +29,18 @@ python3.pkgs.buildPythonApplication rec {
     dnspython
     httpcore
     httpx
-    httpx-ntlm
-    httpx-socks
     humanize
     loguru
     Mako
     markupsafe
-    pysocks
     six
     sqlalchemy
     tld
     yaswfp
   ] ++ lib.optionals (python3.pythonOlder "3.8") [
     importlib-metadata
-  ];
+  ] ++ httpx.extras-require.brotli
+    ++ httpx.extras-require.socks;
 
   checkInputs = with python3.pkgs; [
     respx
@@ -52,8 +50,6 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     # Ignore pinned versions
-    substituteInPlace setup.py \
-      --replace "httpx-socks[asyncio] == 0.6.0" "httpx-socks[asyncio]"
     sed -i -e "s/==[0-9.]*//;s/>=[0-9.]*//" setup.py
     substituteInPlace setup.cfg \
       --replace " --cov --cov-report=xml" ""

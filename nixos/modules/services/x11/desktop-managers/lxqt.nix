@@ -9,6 +9,10 @@ let
 in
 
 {
+  meta = {
+    maintainers = teams.lxqt.members;
+  };
+
   options = {
 
     services.xserver.desktopManager.lxqt.enable = mkOption {
@@ -62,6 +66,11 @@ in
     services.gvfs.enable = true;
 
     services.upower.enable = config.powerManagement.enable;
+
+    services.xserver.libinput.enable = mkDefault true;
+
+    xdg.portal.enable = true;
+    xdg.portal.extraPortals = [ pkgs.lxqt.xdg-desktop-portal-lxqt ];
   };
 
 }

@@ -248,7 +248,7 @@ $ nix-env -p /nix/var/nix/profiles/system -f '&lt;nixpkgs/nixos&gt;' -I nixos-co
         (since your Nix install was probably single user):
       </para>
       <programlisting>
-$ sudo chown -R 0.0 /nix
+$ sudo chown -R 0:0 /nix
 </programlisting>
     </listitem>
     <listitem>

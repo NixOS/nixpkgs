@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "1.7.1";
+  version = "1.7.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fCxLobQuCnUzfFS3d78GcQVrRWllDj/5J+S5s4WvyOw=";
+    hash = "sha256-STdcYwmB3UBF2akuJwn81Edskfkn4CKEk+76Yl5wUTM=";
   };
 
   postPatch = ''

@@ -194,8 +194,6 @@
 
   control-lock = callPackage ./control-lock { };
 
-  plz = callPackage ./plz { };
-
   pod-mode = callPackage ./pod-mode { };
 
   power-mode = callPackage ./power-mode { };

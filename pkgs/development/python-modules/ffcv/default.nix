@@ -5,7 +5,7 @@
 , numba
 , opencv4
 , pandas
-, pkgconfig
+, pkg-config
 , pytorch-pfn-extras
 , terminaltables
 , tqdm
@@ -35,7 +35,7 @@ buildPythonPackage rec {
       --replace "'webdataset'," ""
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjpeg ];
   propagatedBuildInputs = [ opencv4 numba pandas pytorch-pfn-extras terminaltables tqdm ];
 

@@ -1,21 +1,28 @@
-{ lib, callPackage, buildPythonApplication, fetchFromGitHub
+{ lib
+, callPackage
+, buildPythonApplication
+, fetchFromGitHub
 , jinja2
 , markdown
 , mkdocs
 , mkdocs-material-extensions
 , pygments
 , pymdown-extensions
+, pythonOlder
 }:
 
 buildPythonApplication rec {
   pname = "mkdocs-material";
-  version = "8.2.9";
+  version = "8.2.15";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-lrklTQWWsP1rjixqu5/S7XMN+K095NRGv3JkjRQ4brM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-6x3ENFPGmtRDMV6YRGlTLCYusmX49LrGBDwicg8sDB0=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +37,9 @@ buildPythonApplication rec {
   # No tests for python
   doCheck = false;
 
-  pythonImportsCheck = [ "mkdocs" ];
+  pythonImportsCheck = [
+    "mkdocs"
+  ];
 
   meta = with lib; {
     description = "Material for mkdocs";

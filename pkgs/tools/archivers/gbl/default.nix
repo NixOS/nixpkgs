@@ -1,11 +1,13 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , fetchpatch
 , pkg-config
 , openssl
-, testVersion
+, testers
 , gbl
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,10 +33,10 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-RUZ6wswRtV8chq3+bY9LTRf6IYMbZ9/GPl2X5UcF7d8=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   passthru.tests.version =
-    testVersion { package = gbl; };
+    testers.testVersion { package = gbl; };
 
   meta = with lib; {
     description = "GBL Firmware file manipulation";

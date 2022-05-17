@@ -18,30 +18,23 @@
 , pkg-config
 , readline
 , sqlite
-, autoAwaySupport ? true,       libXScrnSaver ? null, libX11
+, autoAwaySupport ? true,       libXScrnSaver, libX11
 , notifySupport ? true,         libnotify, gdk-pixbuf
 , omemoSupport ? true,          libsignal-protocol-c, libgcrypt
 , pgpSupport ? true,            gpgme
-, pythonPluginSupport ? true,   python
-, traySupport ? true,           gtk
+, pythonPluginSupport ? true,   python3
+, traySupport ? true,           gtk3
 }:
-
-assert autoAwaySupport     -> libXScrnSaver != null && libX11 != null;
-assert notifySupport       -> libnotify != null && gdk-pixbuf != null;
-assert traySupport         -> gtk != null;
-assert pgpSupport          -> gpgme != null;
-assert pythonPluginSupport -> python != null;
-assert omemoSupport        -> libsignal-protocol-c != null && libgcrypt != null;
 
 stdenv.mkDerivation rec {
   pname = "profanity";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
-    hash = "sha256-kmixWp9Q2tMVp+tk5kbTdBfgRNghKk3+48L582hqlm8=";
+    hash = "sha256-yUiiww8yhymdqR6CITRnItxZhfpZiEbu1WyD8bDW+vc=";
   };
 
   patches = [
@@ -75,8 +68,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals notifySupport       [ libnotify gdk-pixbuf ]
     ++ lib.optionals omemoSupport        [ libsignal-protocol-c libgcrypt ]
     ++ lib.optionals pgpSupport          [ gpgme ]
-    ++ lib.optionals pythonPluginSupport [ python ]
-    ++ lib.optionals traySupport         [ gtk ];
+    ++ lib.optionals pythonPluginSupport [ python3 ]
+    ++ lib.optionals traySupport         [ gtk3 ];
 
   # Enable feature flags, so that build fail if libs are missing
   configureFlags = [

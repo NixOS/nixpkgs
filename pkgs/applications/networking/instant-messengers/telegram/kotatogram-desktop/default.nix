@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./kf594.patch
     ./shortcuts-binary-path.patch
     # let it build with nixpkgs 10.12 sdk
     ./kotato-10.12-sdk.patch

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./darwin-rpath-universal.patch ];
 
-  configureFlags = [ "--with-bzip2=${bzip2.out}" ];
+  configureFlags = [ "--with-bzip2=${bzip2.out}" "--enable-reentrant" ];
 
   hardeningDisable = [ "format" ];
 

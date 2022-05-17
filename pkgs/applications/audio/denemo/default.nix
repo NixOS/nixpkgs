@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "denemo";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "https://ftp.gnu.org/gnu/denemo/denemo-${version}.tar.gz";
-    sha256 = "sha256-B6GbBL/o/z0emT+Iw6XvWmAsJCmIwSGCyV1DkhDyfBY=";
+    sha256 = "sha256-S+WXDGmEf5fx+HYnXJdE5QNOfJg7EqEEX7IMI2SUtV0=";
   };
 
   buildInputs = [

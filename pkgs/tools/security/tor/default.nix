@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.6.10";
+  version = "0.4.7.7";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "lMzWDgTlWPM75zAyvITqJBZg+S9Yz7iHib2miTc54xw=";
+    sha256 = "sha256-PhMRWLUrlDXX5D0cR+8oi5bQBTQsxEuMlQu0A4UaW0Q=";
   };
 
   outputs = [ "out" "geoip" ];
@@ -45,9 +45,13 @@ stdenv.mkDerivation rec {
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
-  # cross compiles correctly but needs the following
-  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    "--disable-tool-name-check";
+  configureFlags =
+    # cross compiles correctly but needs the following
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
+    ++
+    # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
+    lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "--disable-seccomp" ]
+  ;
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 

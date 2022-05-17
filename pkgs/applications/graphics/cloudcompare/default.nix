@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , fetchpatch
@@ -114,5 +115,6 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nh2 ];
     platforms = with platforms; linux; # only tested here; might work on others
+    broken = stdenv.isLinux; # plugins/core/IO/qPDALIO/CMakeFiles/QPDAL_IO_PLUGIN.dir/src/LASFilter.cpp.o] Error 1
   };
 }

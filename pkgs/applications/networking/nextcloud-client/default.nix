@@ -1,11 +1,13 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , extra-cmake-modules
 , inotify-tools
 , installShellFiles
 , libcloudproviders
+, librsvg
 , libsecret
 , openssl
 , pcre
@@ -20,13 +22,12 @@
 , plasma5Packages
 , sphinx
 , sqlite
-, inkscape
 , xdg-utils
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.4.4";
+  version = "3.5.0";
 
   outputs = [ "out" "dev" ];
 
@@ -34,13 +35,18 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-e4me4mpK0N3UyM5MuJP3jxwM5h1dGBd+JzAr5f3BOGQ=";
+    sha256 = "sha256-eFtBdnwHaLirzZaHDw6SRfmsqO3dmBB8Y9csJuiTf1A=";
   };
 
   patches = [
     # Explicitly move dbus configuration files to the store path rather than `/etc/dbus-1/services`.
     ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
     ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
+    # don't write cacheDir into home directory
+    (fetchpatch {
+      url = "https://github.com/nextcloud/desktop/commit/3a8aa8a2a88bc9b68098b7866e2a07aa23d3a33c.patch";
+      sha256 = "sha256-OviPANvXap3mg4haxRir/CK1aq8maWZDM/IVsN+OHgk=";
+    })
   ];
 
   postPatch = ''
@@ -54,7 +60,7 @@ mkDerivation rec {
     pkg-config
     cmake
     extra-cmake-modules
-    inkscape
+    librsvg
     sphinx
   ];
 
@@ -95,7 +101,7 @@ mkDerivation rec {
     description = "Nextcloud themed desktop client";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kranzes ];
+    maintainers = with maintainers; [ kranzes SuperSandro2000 ];
     platforms = platforms.linux;
   };
 }

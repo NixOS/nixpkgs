@@ -58,6 +58,10 @@ buildDotnetModule rec {
     pulseaudio
   ];
 
+  makeWrapperArgs = [
+    "--suffix PATH : ${lib.getBin ffmpeg}"
+  ];
+
   patches = [
     ./appdir.patch # Ryujinx attempts to write to the nix store. This patch redirects it to "~/.config/Ryujinx" on Linux.
   ];
@@ -66,11 +70,6 @@ buildDotnetModule rec {
     # workaround for https://github.com/Ryujinx/Ryujinx/issues/2349
     mkdir -p $out/lib/sndio-6
     ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6
-
-    # Ryujinx tries to use ffmpeg from PATH
-    makeWrapperArgs+=(
-      --suffix PATH : ${lib.makeBinPath [ ffmpeg ]}
-    )
   '';
 
   preFixup = ''

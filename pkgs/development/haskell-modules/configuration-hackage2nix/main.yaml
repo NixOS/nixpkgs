@@ -83,7 +83,7 @@ default-package-overrides:
   - hnix < 0.15
   # needs http-client >= 0.7.11 which isn't part of Stackage LTS 18
   - http-client-restricted < 0.0.5
-  # Needs dhall 1.41.*, Stackage Nightly has 1.40
+  # Needs dhall 1.41.*, Stackage LTS 19 has 1.40
   - dhall-nix < 1.1.24
 
 extra-packages:
@@ -118,10 +118,8 @@ extra-packages:
   - ghc-lib-parser == 8.10.7.*          # 2022-02-17: preserve for GHC 8.10.7
   - ghc-lib-parser-ex == 8.10.*         # 2022-02-17: preserve for GHC 8.10.7
   - doctest == 0.18.*                   # 2021-11-19: closest to stackage version for GHC 9.*
-  - brick == 0.64.*                     # 2021-12-03: matterhorn depends on brick < 0.65
   - path == 0.9.0                       # 2021-12-03: path version building with stackage genvalidity and GHC 9.0.2
   - ormolu == 0.2.*                     # 2022-02-21: For ghc 8.8 and 8.10
-  - ghc-exactprint == 1.4.*             # 2022-02-07: preserve for now, 1.5.0 has a breaking change without type changes
   - ShellCheck == 0.7.2                 # 2022-02-20: haskell-ci 0.14 needs this
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
@@ -251,6 +249,8 @@ package-maintainers:
     - mattermost-api
     - mattermost-api-qc
     - Unique
+  libjared:
+    - sensei
   maralorn:
     - cabal-fmt
     - ema
@@ -288,6 +288,7 @@ package-maintainers:
     - candid
     - leb128-cereal
     - tasty-expected-failure
+    - lhs2tex
   pacien:
     - ldgallery-compiler
   peti:
@@ -463,6 +464,7 @@ unsupported-platforms:
   libmodbus:                                    [ x86_64-darwin, aarch64-darwin ]
   libsystemd-journal:                           [ x86_64-darwin, aarch64-darwin ]
   libtelnet:                                    [ x86_64-darwin, aarch64-darwin ]
+  libvirt-hs:                                   [ x86_64-darwin ] # spidermonkey is not supported on darwin
   libzfs:                                       [ x86_64-darwin, aarch64-darwin ]
   linearEqSolver:                               [ aarch64-linux ]
   linux-evdev:                                  [ x86_64-darwin, aarch64-darwin ]
@@ -505,6 +507,7 @@ unsupported-platforms:
   scrypt:                                       [ aarch64-linux, armv7l-linux ] # https://github.com/informatikr/scrypt/issues/8
   sdl2-mixer:                                   [ x86_64-darwin, aarch64-darwin ]
   sdl2-ttf:                                     [ x86_64-darwin, aarch64-darwin ]
+  sensei:                                       [ x86_64-darwin ]
   synthesizer-alsa:                             [ x86_64-darwin, aarch64-darwin ]
   taffybar:                                     [ x86_64-darwin, aarch64-darwin ]
   termonad:                                     [ x86_64-darwin, aarch64-darwin ]

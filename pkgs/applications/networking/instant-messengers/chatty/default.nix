@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "chatty";
-  version = "0.6.3";
+  version = "0.6.4";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     repo = "chatty";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-BILi3+i7SCiK7dVbckv3cNMNyEwgKMf0ct0z/J1xysI=";
+    hash = "sha256-uDuSx+tWv6DV93/99QUcUKZaWA9kNW8phHZhetYlG/M=";
   };
 
   postPatch = ''
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PURPLE_PLUGIN_PATH : ${pidgin.makePluginPath plugins}
+      --prefix PURPLE_PLUGIN_PATH : ${lib.escapeShellArg (pidgin.makePluginPath plugins)}
       ${lib.concatMapStringsSep " " (p: p.wrapArgs or "") plugins}
     )
   '';

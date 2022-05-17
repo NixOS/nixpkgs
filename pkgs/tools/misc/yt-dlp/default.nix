@@ -5,14 +5,13 @@
 , certifi
 , ffmpeg
 , rtmpdump
-, phantomjs2
 , atomicparsley
 , pycryptodomex
 , websockets
 , mutagen
+, atomicparsleySupport ? true
 , ffmpegSupport ? true
 , rtmpSupport ? true
-, phantomjsSupport ? false
 , withAlias ? false # Provides bin/youtube-dl for backcompat
 }:
 
@@ -37,11 +36,11 @@ buildPythonPackage rec {
   # - atomicparsley: embedding thumbnails
   makeWrapperArgs =
     let
-      packagesToBinPath = [ atomicparsley ]
+      packagesToBinPath = []
+        ++ lib.optional atomicparsleySupport atomicparsley
         ++ lib.optional ffmpegSupport ffmpeg
-        ++ lib.optional rtmpSupport rtmpdump
-        ++ lib.optional phantomjsSupport phantomjs2;
-    in
+        ++ lib.optional rtmpSupport rtmpdump;
+    in lib.optionalString (packagesToBinPath != [])
     [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
   setupPyBuildFlags = [

@@ -58,6 +58,13 @@ python3.pkgs.buildPythonApplication rec {
     # unsandboxed non-NixOS builds, see:
     # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
     ./boost-Do-not-add-system-paths-on-nix.patch
+
+    # https://github.com/mesonbuild/meson/pull/9841
+    # cross-compilation fix
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/266e8acb5807b38a550cb5145cea0e19545a21d7.patch";
+      sha256 = "sha256-1GdKsm2xvq2GxTNeTyBH5O73hxboL0YI+w2BCoUeWXM=";
+    })
   ] ++ lib.optionals withDarwinFrameworksGtkDocPatch [
     # Fix building gtkdoc for GLib
     # https://github.com/mesonbuild/meson/pull/10186

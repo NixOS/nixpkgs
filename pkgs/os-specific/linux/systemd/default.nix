@@ -178,6 +178,13 @@ stdenv.mkDerivation {
     # need (AFAICT).
     # See https://github.com/systemd/systemd/pull/20479 for upstream discussion.
     ./0019-core-handle-lookup-paths-being-symlinks.patch
+
+    # fixes reproducability of dbus xml files
+    # Should no longer be necessary with v251.
+    (fetchpatch {
+      url = "https://github.com/systemd/systemd/pull/22174.patch";
+      sha256 = "sha256-RVhxUEUiISgRlIP/AhU+w1VHfDQw2W16cFl2TXXyxno=";
+    })
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -641,12 +648,6 @@ stdenv.mkDerivation {
   '';
 
   postInstall = ''
-    # sysinit.target: Don't depend on
-    # systemd-tmpfiles-setup.service. This interferes with NixOps's
-    # send-keys feature (since sshd.service depends indirectly on
-    # sysinit.target).
-    mv $out/lib/systemd/system/sysinit.target.wants/systemd-tmpfiles-setup-dev.service $out/lib/systemd/system/multi-user.target.wants/
-
     mkdir -p $out/example/systemd
     mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
     mv $out/lib/systemd/{system,user} $out/example/systemd
@@ -664,6 +665,18 @@ stdenv.mkDerivation {
     find $out -name "*kernel-install*" -exec rm {} \;
   '' + lib.optionalString (!withDocumentation) ''
     rm -rf $out/share/doc
+  '';
+
+  # Avoid *.EFI binary stripping. At least on aarch64-linux strip
+  # removes too much from PE32+ files:
+  #   https://github.com/NixOS/nixpkgs/issues/169693
+  # The hack is to move EFI file out of lib/ before doStrip
+  # run and return it after doStrip run.
+  preFixup = lib.optionalString withEfi ''
+    mv $out/lib/systemd/boot/efi $out/dont-strip-me
+  '';
+  postFixup = lib.optionalString withEfi ''
+    mv $out/dont-strip-me $out/lib/systemd/boot/efi
   '';
 
   passthru = {
@@ -687,6 +700,8 @@ stdenv.mkDerivation {
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+    # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965
+    broken = stdenv.hostPlatform.isStatic;
     priority = 10;
     maintainers = with maintainers; [ flokli kloenk mic92 ];
   };
