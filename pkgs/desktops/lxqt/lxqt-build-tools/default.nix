@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , mkDerivation
+, fetchpatch
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -21,6 +22,14 @@ mkDerivation rec {
     rev = version;
     sha256 = "vzppKTDwADBG5pOaluT858cWCKFFRaSbHz2Qhe6799E=";
   };
+
+  patches = [
+    # https://github.com/lxqt/lxqt-build-tools/pull/76
+    (fetchpatch {
+      url = "https://github.com/lxqt/lxqt-build-tools/pull/76/commits/fa9672b671ede3f46b004f81580f9afb50fedf00.patch";
+      sha256 = "0dl7n1afcc6ky9vd9lpc65p9grpszpql7lfjq2vlzlilixnv8xv1";
+    })
+  ];
 
   postPatch = ''
     # Nix clang on darwin identifies as 'Clang', not 'AppleClang'
