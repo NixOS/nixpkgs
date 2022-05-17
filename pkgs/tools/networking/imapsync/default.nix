@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     EncodeIMAPUTF7
     FileCopyRecursive
     FileTail
-    IOSocketInet6
+    IOSocketINET6
     IOTee
     JSONWebToken
     LWP
