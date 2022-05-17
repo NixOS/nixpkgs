@@ -13,7 +13,14 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  NIX_CFLAGS_COMPILE = [ "-lm" ];
+  NIX_CFLAGS_COMPILE = [
+    # Workaround build failure on -fno-common toolchains like upstream
+    # gcc-10. Otherwise build fails as:
+    #   ld: random.o:(.bss+0x0): multiple definition of `LW_RANDOM_ON'; game.o:(.bss+0x4): first defined here
+    "-fcommon"
+
+    "-lm"
+  ];
 
   meta = with lib; {
     description = "The classic version of a quick tactics game LiquidWar";
