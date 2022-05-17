@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "konstraint";
-  version = "0.19.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "plexsystems";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MQ9Rb8U1CGbEgNtkOdK879dr8uOro6CAl4wGMbuT+wo=";
+    sha256 = "sha256-xSJxBJzLfZhBcXqKs8EZRHTpgb1YeKDTzrOiBtGBwTI=";
   };
   vendorSha256 = "sha256-gUuceNwOI+ss2YDiIF+zxyOj53iV6kGtVhNCd5KQomo=";
 
