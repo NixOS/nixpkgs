@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "syft";
-  version = "0.45.1";
+  version = "0.46.1";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-oexsu52x9rAqwTVxTVHzKPuaIfvg5lvvuBmKcnb2Yew=";
+    sha256 = "sha256-ojjudnS0yJZ6YoHmq4m0YKyCqq9Ge+AFU7ejlPop71w=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -20,11 +20,11 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-d6ZBWX4/lgh610fBLTE1EUqZmpctLfxi2PSRifH+1jg=";
+  vendorSha256 = "sha256-nb7QcdmwAfYDTzCFNjs7uKwK/gng2iMD36ANaFSsftk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  subPackages = [ "." ];
+  subPackages = [ "cmd/syft" ];
 
   ldflags = [
     "-s"
@@ -50,6 +50,17 @@ buildGoModule rec {
       --bash <($out/bin/syft completion bash) \
       --fish <($out/bin/syft completion fish) \
       --zsh <($out/bin/syft completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export SYFT_CHECK_FOR_APP_UPDATE=false
+    $out/bin/syft --help
+    $out/bin/syft version | grep "${version}"
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {
