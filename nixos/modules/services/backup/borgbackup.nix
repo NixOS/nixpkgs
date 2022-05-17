@@ -82,6 +82,7 @@ let
       ];
       script = mkBackupScript cfg;
       serviceConfig = {
+        Type = "oneshot";
         User = cfg.user;
         Group = cfg.group;
         # Only run when no other process is using CPU or disk
