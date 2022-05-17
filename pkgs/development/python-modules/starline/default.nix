@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "starline";
-  version = "0.1.5";
+  version = "0.2.0";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1753f5fcd2a6976aed775afb03f8392159f040c673917cc0c634510d95c13cb9";
+    sha256 = "sha256-VQsAq5XPWdkz93CKurQKTkHleQ5itlNHGv6Go68zIOY=";
   };
 
   propagatedBuildInputs = [
