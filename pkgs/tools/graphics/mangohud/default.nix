@@ -26,6 +26,7 @@
 , vulkan-loader
 , libXNVCtrl
 , wayland
+, spdlog
 , addOpenGLRunpath
 }:
 
@@ -46,14 +47,14 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "mangohud";
-  version = "0.6.5";
+  version = "0.6.7-1";
 
   src = fetchFromGitHub {
     owner = "flightlessmango";
     repo = "MangoHud";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-RRtti0VnB6SXrpFYaEqANvpgvP/Dkvc+x/I40AXaspU=";
+    sha256 = "sha256-60cZYo+d679KRggLBGbpLYM5Iu1XySEEGp+MxZs6wF0=";
   };
 
   outputs = [ "out" "doc" "man" ];
@@ -103,6 +104,7 @@ in stdenv.mkDerivation rec {
     "-Duse_system_vulkan=enabled"
     "-Dvulkan_datadir=${vulkan-headers}/share"
     "-Dwith_wayland=enabled"
+    "-Duse_system_spdlog=enabled"
   ];
 
   nativeBuildInputs = [
@@ -122,6 +124,7 @@ in stdenv.mkDerivation rec {
     libX11
     libXNVCtrl
     wayland
+    spdlog
   ];
 
   # Support 32bit Vulkan applications by linking in 32bit Vulkan layer
