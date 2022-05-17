@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mujmap";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "elizagamedev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G5CPH6CmQtw7pegBR6B/WBOZXUvFzEPBBvgqYEIF2OI=";
+    sha256 = "sha256-O5CbLgs+MkATPtess0gocgPB9kwD8FMR/urwm6jo2rA=";
   };
 
-  cargoSha256 = "sha256-nrLorxdJdQvCG8WhfsvHtWizrkzD38XqgeNyksKbvN4=";
+  cargoSha256 = "sha256-nOZ+HnzXhVp+tLrNMZO1NmZIhIqlWz0fRMbHVIQkOxI=";
 
   buildInputs = [
     notmuch
