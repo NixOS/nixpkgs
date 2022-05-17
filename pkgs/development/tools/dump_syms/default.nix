@@ -1,8 +1,12 @@
 { lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
 , openssl
+
+# darwin
+, Security
 }:
 
 let
@@ -27,6 +31,8 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    Security
   ];
 
   checkFlags = [
