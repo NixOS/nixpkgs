@@ -467,7 +467,6 @@ in {
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
-              'log_level' => '${builtins.toString cfg.logLevel}',
               'loglevel' => '${builtins.toString cfg.logLevel}',
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
