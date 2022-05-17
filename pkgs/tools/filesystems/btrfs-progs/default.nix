@@ -23,9 +23,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ acl attr e2fsprogs libuuid lzo python3 zlib zstd ] ++ lib.optionals stdenv.hostPlatform.isGnu [ udev ];
 
-  # for python cross-compiling
-  _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
-
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
   postPatch = "sed -i s/-O1/-O2/ configure";
