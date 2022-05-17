@@ -13,6 +13,8 @@ customFlags=$3
 : ${getVersionFromTags:=}
 : ${refetch:=}
 
+trap 'echo "Error at ${BASH_SOURCE[0]}:$LINENO"' ERR
+
 scriptDir=$(cd "${BASH_SOURCE[0]%/*}" && pwd)
 nixpkgs=$(realpath "$scriptDir"/../../../../..)
 
@@ -50,8 +52,10 @@ repo=$tmpdir/repo
 trap "rm -rf $tmpdir" EXIT
 git clone --depth 1 --branch v${newVersion} -c advice.detachedHead=false https://github.com/$(getRepo) $repo
 export GNUPGHOME=$tmpdir
-# Fetch Nicolas Dorier's key (64-bit key ID: 6618763EF09186FE)
+# Add Nicolas Dorier's key (64-bit key ID: 6618763EF09186FE)
 gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys AB4CFA9895ACA0DBE27F6B346618763EF09186FE 2> /dev/null
+# Add Andrew Camilleri's key (64-bit key ID: 8E5530D9D1C93097)
+gpg --keyserver hkps://keyserver.ubuntu.com --recv-keys 836C08CF3F523BB7A8CB8ECF8E5530D9D1C93097 2> /dev/null
 echo
 echo "Verifying commit"
 git -C $repo verify-commit HEAD
