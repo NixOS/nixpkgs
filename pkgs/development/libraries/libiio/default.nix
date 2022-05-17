@@ -50,6 +50,11 @@ stdenv.mkDerivation rec {
 
     substituteInPlace libiio.rules.cmakein \
       --replace /bin/sh ${runtimeShell}
+
+    # https://github.com/analogdevicesinc/libiio/issues/848
+    substituteInPlace libiio.pc.cmakein \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
   postInstall = ''
