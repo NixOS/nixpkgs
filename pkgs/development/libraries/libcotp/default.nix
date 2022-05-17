@@ -14,6 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ libbaseencode libgcrypt ];
   nativeBuildInputs = [ cmake pkg-config ];
 
+  # https://github.com/paolostivanin/libcotp/issues/32
+  postPatch = ''
+    substituteInPlace cotp.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
     description = "C library that generates TOTP and HOTP";
     homepage = "https://github.com/paolostivanin/libcotp";
