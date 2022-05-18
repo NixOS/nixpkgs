@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = ''
+    # https://github.com/RigsOfRods/socketw/issues/16
+    substituteInPlace SocketW.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/Makefile \
         --replace -Wl,-soname, -Wl,-install_name,$out/lib/
   '';
