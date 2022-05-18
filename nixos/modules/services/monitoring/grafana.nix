@@ -14,6 +14,7 @@ let
     PATHS_PLUGINS = if builtins.isNull cfg.declarativePlugins then "${cfg.dataDir}/plugins" else declarativePlugins;
     PATHS_LOGS = "${cfg.dataDir}/log";
 
+    SERVER_SERVE_FROM_SUBPATH = boolToString cfg.server.serveFromSubPath;
     SERVER_PROTOCOL = cfg.protocol;
     SERVER_HTTP_ADDR = cfg.addr;
     SERVER_HTTP_PORT = cfg.port;
@@ -493,6 +494,14 @@ in {
         description = "Secret key used for signing.";
         default = null;
         type = types.nullOr types.path;
+      };
+    };
+
+    server = {
+      serveFromSubPath = mkOption {
+        description = "Serve Grafana from subpath specified in rootUrl setting";
+        default = false;
+        type = types.bool;
       };
     };
 
