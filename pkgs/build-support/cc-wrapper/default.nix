@@ -18,7 +18,6 @@
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
-, isCompilerRT ? false
 }:
 
 with lib;
@@ -147,7 +146,7 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang isCompilerRT;
+    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -480,8 +479,6 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" pic"
     '' + optionalString targetPlatform.isMinGW ''
       hardening_unsupported_flags+=" stackprotector fortify"
-    '' + optionalString (targetPlatform.isWindows && isClang) ''
-      hardening_unsupported_flags+=" pic"
     '' + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" stackprotector pic"
     '' + optionalString (targetPlatform.libc == "newlib") ''

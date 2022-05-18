@@ -1,7 +1,7 @@
 { lib, stdenv, llvm_meta
 , monorepoSrc, runCommand
 , cmake, python3, fixDarwinDylibNames, version
-, libcxxabi, libunwind
+, libcxxabi
 , enableShared ? !stdenv.hostPlatform.isStatic
 
 # If headersOnly is true, the resulting package would only include the headers.
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optionals (!headersOnly) ([ libcxxabi ] ++ lib.optional libcxxabi.useLLVMUnwinder libunwind);
+  buildInputs = lib.optionals (!headersOnly) [ libcxxabi ];
 
   cmakeFlags = [ "-DLIBCXX_CXX_ABI=libcxxabi" ]
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
@@ -57,14 +57,7 @@ stdenv.mkDerivation rec {
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
-    ]
-    ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF"
-    ++ lib.optionals (!headersOnly && libcxxabi.semi-static) [
-      "-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=TRUE"
-      "-DLIBCXX_CXX_ABI_LIBRARY_PATH=${libcxxabi}/lib"
-    ] ++ lib.optional (!headersOnly && libcxxabi.useLLVMUnwinder)
-      "-DLIBCXXABI_USE_LLVM_UNWINDER=ON";
-
+    ] ++ lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
   buildFlags = lib.optional headersOnly "generate-cxx-headers";
   installTargets = lib.optional headersOnly "install-cxx-headers";
