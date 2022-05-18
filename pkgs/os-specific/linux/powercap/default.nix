@@ -17,6 +17,13 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=On"
   ];
 
+  # https://github.com/powercap/powercap/issues/8
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
+      --replace '\$'{prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
+  '';
+
   meta = with lib; {
     description = "Tools and library to read/write to the Linux power capping framework (sysfs interface)";
     license = licenses.bsd3;
