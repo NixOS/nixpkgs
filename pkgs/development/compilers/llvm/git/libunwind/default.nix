@@ -31,7 +31,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF";
+  cmakeFlags =
+     lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF"
+  ++ lib.optional stdenv.cc.isCompilerRT "-DLIBUNWIND_USE_COMPILER_RT=TRUE";
 
   meta = llvm_meta // {
     # Details: https://github.com/llvm/llvm-project/blob/main/libunwind/docs/index.rst

@@ -31,6 +31,13 @@
 
 # Darwin code signing support utilities
 , postLinkSignHook ? null, signingUtils ? null
+
+# Linker type
+, isLld ? bintools.isLld or false
+, isCctools ? bintools.isCctools or false
+, isGNU ? bintools.isGNU or false
+, isGold ? bintools.isGold or false
+, isBfd ? bintools.isBfd or false
 }:
 
 with lib;
@@ -112,6 +119,8 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit bintools libc nativeTools nativeLibc nativePrefix;
+
+    inherit isLld isCctools isGNU isGold isBfd;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -293,6 +302,11 @@ stdenv.mkDerivation {
       echo "-arch ${targetPlatform.darwinArch}" >> $out/nix-support/libc-ldflags
     ''
 
+    # lld's MinGW driver (e.g. `ld.lld -m i386pep`) does not support the `-z` flag.
+    + optionalString (targetPlatform.isWindows && isLld) ''
+      hardening_unsupported_flags+=" relro bindnow"
+    ''
+
     ##
     ## GNU specific extra strip flags
     ##
@@ -336,6 +350,24 @@ stdenv.mkDerivation {
         substituteAll ${./add-darwin-ldflags-before.sh} $out/nix-support/add-local-ldflags-before.sh
       ''
     )
+
+    ##
+    ## Set the default machine type so that $prefix-ld.lld uses the COFF driver for --help
+    ##
+    ## Needed because autotools parses --help for linker features...
+    ##
+    + optionalString (isLld && stdenv.targetPlatform.isWindows) (let
+      mtype =
+        /**/ if targetPlatform.isx86_32 then "i386pe"
+        else if targetPlatform.isx86_64 then "i386pep"
+        else if targetPlatform.isAarch32 then "thumb2pe"
+        else if targetPlatform.isAarch64 then "arm64pe"
+        else throw "unsupported target arch for lld";
+    in ''
+      export mtype=${mtype}
+      substituteAll ${./add-lld-ldflags-before.sh} add-local-ldflags-before.sh
+      cat add-local-ldflags-before.sh >> $out/nix-support/add-local-ldflags-before.sh
+    '')
 
     ##
     ## Code signing on Apple Silicon

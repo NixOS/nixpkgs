@@ -1,0 +1,24 @@
+[PATCH 5/6] Fix "seems to be moved"
+* build-aux/ltmain.in (func_mode_link): Compare files by inode
+to fix "seems to be moved" warning.
+---
+ build-aux/ltmain.in |    4 +++-
+ 1 files changed, 3 insertions(+), 1 deletions(-)
+
+diff --git a/build-aux/ltmain.in b/build-aux/ltmain.in
+index af46cb8..244bb5b 100644
+--- a/build-aux/ltmain.in
++++ b/build-aux/ltmain.in
+@@ -6283,7 +6283,9 @@ func_mode_link ()
+ 		  eval libdir=`$SED -n -e 's/^libdir=\(.*\)$/\1/p' $deplib`
+ 		  test -z "$libdir" && \
+ 		    func_fatal_error "'$deplib' is not a valid libtool archive"
+-		  test "$absdir" != "$libdir" && \
++		  abs_inode=`ls -i "$deplib" | awk '{print $1}'`
++		    lib_inode=`ls -i "$libdir/$(basename $deplib)" | awk '{print $1}'`
++		  test "$abs_inode" != "$lib_inode" && \
+ 		    func_warning "'$deplib' seems to be moved"
+ 
+ 		  path=-L$absdir
+-- 
+1.7.0.2.msysgit.0

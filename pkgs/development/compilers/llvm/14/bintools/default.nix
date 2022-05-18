@@ -1,11 +1,17 @@
-{ runCommand, stdenv, llvm, lld, version }:
+{ runCommand, stdenv, llvm, lld, version, lib }:
 
 let
   prefix =
     if stdenv.hostPlatform != stdenv.targetPlatform
     then "${stdenv.targetPlatform.config}-"
     else "";
-in runCommand "llvm-binutils-${version}" { preferLocalBuild = true; } ''
+in runCommand "llvm-binutils-${version}" {
+  preferLocalBuild = true;
+  passthru = {
+    isLld = true;
+    targetPrefix = prefix;
+  };
+} (''
    mkdir -p $out/bin
    for prog in ${lld}/bin/*; do
      ln -s $prog $out/bin/${prefix}$(basename $prog)
@@ -26,4 +32,7 @@ in runCommand "llvm-binutils-${version}" { preferLocalBuild = true; } ''
    ln -s ${llvm}/bin/llvm-strip $out/bin/${prefix}strip
 
    ln -s ${lld}/bin/lld $out/bin/${prefix}ld
-''
+'' + lib.optionalString stdenv.targetPlatform.isWindows ''
+   ln -s ${llvm}/bin/llvm-windres $out/bin/${prefix}windres
+   ln -s ${llvm}/bin/llvm-dlltool $out/bin/${prefix}dlltool
+'')

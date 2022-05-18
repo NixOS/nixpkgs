@@ -1,0 +1,22 @@
+--- libtool-2.4.2/configure.orig	2011-10-17 10:18:58.000000000 +0000
++++ libtool-2.4.2/configure	2013-08-04 19:01:30.220494400 +0000
+@@ -28825,7 +28825,7 @@
+ fi
+ ac_cs_awk_cr=`$AWK 'BEGIN { print "a\rb" }' </dev/null 2>/dev/null`
+ if test "$ac_cs_awk_cr" = "a${ac_cr}b"; then
+-  ac_cs_awk_cr='\\r'
++  ac_cs_awk_cr='\r'
+ else
+   ac_cs_awk_cr=$ac_cr
+ fi
+--- libtool-2.4.2/libltdl/configure.orig	2011-10-17 10:19:47.000000000 +0000
++++ libtool-2.4.2/libltdl/configure	2013-08-05 11:49:24.990792500 +0000
+@@ -13574,7 +13574,7 @@
+ fi
+ ac_cs_awk_cr=`$AWK 'BEGIN { print "a\rb" }' </dev/null 2>/dev/null`
+ if test "$ac_cs_awk_cr" = "a${ac_cr}b"; then
+-  ac_cs_awk_cr='\\r'
++  ac_cs_awk_cr='\r'
+ else
+   ac_cs_awk_cr=$ac_cr
+ fi

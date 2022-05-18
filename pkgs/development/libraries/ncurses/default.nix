@@ -46,7 +46,13 @@ stdenv.mkDerivation rec {
     ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
-  CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
+  CFLAGS =
+    # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
+    /**/ if stdenv.isSunOS then "-D_XOPEN_SOURCE_EXTENDED"
+    # ucrt doesn't support X_OK to access() without this flag
+    else if stdenv.hostPlatform.libc == "ucrt" then "-D__USE_MINGW_ACCESS"
+    else "";
+
 
   depsBuildBuild = [
     buildPackages.stdenv.cc
