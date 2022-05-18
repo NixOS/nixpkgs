@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "python-barcode";
-  version = "0.13.1";
+  version = "0.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-+vukqiTp2Wl3e+UhwpT/GPbCs2rWO1/C8hCNly4jslI=";
+    sha256 = "sha256-JBs0qlxctqmImIL5QJsBgpA6LF0ZtCGL42Cc271f/fk=";
   };
 
   propagatedBuildInputs = [
