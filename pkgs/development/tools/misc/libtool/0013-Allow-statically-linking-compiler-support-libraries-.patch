@@ -1,0 +1,38 @@
+From b9f77cae8cfbe850e58cac686fcb4d246b5bfc51 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Martin=20Storsj=C3=B6?= <martin@martin.st>
+Date: Mon, 19 Aug 2019 13:34:51 +0300
+Subject: [PATCH] Allow statically linking compiler support libraries when
+ linking a library
+
+For cases with deplibs_check_method="file_magic ..." (as it is for mingw),
+there were previously no way that a static library could be accepted
+here.
+---
+ build-aux/ltmain.in | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/build-aux/ltmain.in b/build-aux/ltmain.in
+index e2fb2633..db4d775c 100644
+--- a/build-aux/ltmain.in
++++ b/build-aux/ltmain.in
+@@ -5870,8 +5870,15 @@ func_mode_link ()
+ 	  fi
+ 	  case $linkmode in
+ 	  lib)
+-	    # Linking convenience modules into shared libraries is allowed,
+-	    # but linking other static libraries is non-portable.
++	    # Linking convenience modules and compiler provided static libraries
++	    # into shared libraries is allowed, but linking other static
++	    # libraries is non-portable.
++	    case $deplib in
++	      */libgcc*.$libext | */libclang_rt*.$libext)
++		deplibs="$deplib $deplibs"
++		continue
++	      ;;
++	    esac
+ 	    case " $dlpreconveniencelibs " in
+ 	    *" $deplib "*) ;;
+ 	    *)
+-- 
+2.17.1
+

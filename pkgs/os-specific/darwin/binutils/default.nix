@@ -65,6 +65,7 @@ stdenv.mkDerivation {
 
   passthru = {
     inherit targetPrefix;
+    isCctools = true;
   };
 
   meta = {

@@ -169,6 +169,7 @@ let
           (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
+      isCompilerRT = true;
     };
 
     clangNoLibcxx = wrapCCWith rec {
@@ -184,6 +185,7 @@ let
         "-B${targetLlvmLibraries.compiler-rt}/lib"
         "-nostdlib++"
       ];
+      isCompilerRT = true;
     };
 
     clangNoLibc = wrapCCWith rec {
@@ -198,6 +200,7 @@ let
         "-rtlib=compiler-rt"
         "-B${targetLlvmLibraries.compiler-rt}/lib"
       ];
+      isCompilerRT = true;
     };
 
     clangNoCompilerRt = wrapCCWith rec {

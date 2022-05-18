@@ -32,7 +32,9 @@ stdenv.mkDerivation rec {
     # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/6155
     # https://gitlab.gnome.org/GNOME/gobject-introspection/-/merge_requests/283
     "--disable-exec-static-tramp"
-  ];
+  ] ++
+    # ld.lld on Windows doesn't support --version-script.
+    lib.optional (stdenv.hostPlatform.isWindows && stdenv.cc.bintools.isLld) "--disable-symvers";
 
   preCheck = ''
     # The tests use -O0 which is not compatible with -D_FORTIFY_SOURCE.
@@ -44,6 +46,8 @@ stdenv.mkDerivation rec {
   inherit doCheck;
 
   checkInputs = [ dejagnu ];
+
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isWindows autoreconfHook;
 
   meta = with lib; {
     description = "A foreign function call interface library";
