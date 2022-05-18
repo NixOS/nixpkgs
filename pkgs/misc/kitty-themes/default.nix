@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kitty-themes";
-  version = "unstable-2022-02-03";
+  version = "unstable-2022-05-04";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = pname;
-    rev = "337d6fcb3ad7e38544edfb8d0f6447894b7e5f58";
-    sha256 = "ZP5GrT2QCdXtC5swqI0SXzIlqIcQNsxBlzEplj/hpz4=";
+    rev = "fb48041b0ff5ce60e8f10e7067a407ad99a4862e";
+    sha256 = "/JCLty73YHsTkNxZP6EwhhoiHi2HjtyMZphAPhHe5h0=";
   };
 
   installPhase = ''
