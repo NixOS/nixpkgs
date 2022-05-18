@@ -12,7 +12,7 @@
  </para>
  <para>
   The current default by NixOS is <package>nextcloud22</package>, the latest version available
-  is <package>nextcloud23</package>.
+  is <package>nextcloud24</package>.
  </para>
  <section xml:id="module-services-nextcloud-basic-usage">
   <title>Basic usage</title>
