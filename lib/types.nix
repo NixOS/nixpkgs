@@ -544,7 +544,7 @@ rec {
       name = "deferredModule";
       description = "module";
       check = t: isAttrs t || isFunction t;
-      merge = loc: defs: map (def: lib.setDefaultModuleLocation "${showOption loc} from ${def.file}" def.value) defs;
+      merge = loc: defs: map (def: lib.setDefaultModuleLocation "${def.file}, via option ${showOption loc}" def.value) defs;
     };
 
     # The type of a type!

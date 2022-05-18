@@ -198,7 +198,7 @@ checkConfigOutput '^true$' config.submodule.enable ./declare-submoduleWith-path.
 # default module is merged into nodes.foo
 checkConfigOutput '"beta"' config.nodes.foo.settingsDict.c ./deferred-module.nix
 # errors from the default module are reported with accurate location
-checkConfigError 'In `default from the-file-that-contains-the-bad-config.nix'\'': "bogus"' config.nodes.foo.bottom ./deferred-module.nix
+checkConfigError 'In `the-file-that-contains-the-bad-config.nix, via option default'\'': "bogus"' config.nodes.foo.bottom ./deferred-module.nix
 
 # Check the file location information is propagated into submodules
 checkConfigOutput the-file.nix config.submodule.internalFiles.0 ./submoduleFiles.nix
