@@ -30,6 +30,12 @@ let
         # spdlog <1.4 is header only, no need to split libraries and headers
         ++ lib.optional (lib.versionAtLeast version "1.4") "dev";
 
+      # https://github.com/gabime/spdlog/issues/2380
+      postPatch = lib.optionalString (lib.versionAtLeast version "1.4.1") ''
+        substituteInPlace cmake/spdlog.pc.in \
+          --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+      '';
+
       postInstall = ''
         mkdir -p $out/share/doc/spdlog
         cp -rv ../example $out/share/doc/spdlog
