@@ -28,6 +28,8 @@ let
             children);
         in
         ''
+          mkdir -p $out/bootspec
+
           ${pkgs.jq}/bin/jq '
             .toplevel = $toplevel |
             .init = $init
@@ -40,7 +42,7 @@ let
               --sort-keys \
               '.specialisation = ($ARGS.named | map_values(. | first))' \
               ${lib.concatStringsSep " " specialisationLoader} \
-            > $out/${filename}
+            > $out/bootspec/${filename}
         '';
     };
   };
