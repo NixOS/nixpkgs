@@ -15,7 +15,6 @@
 , build
 , python
 , requests
-, tomli
 , virtualenv
 }:
 
