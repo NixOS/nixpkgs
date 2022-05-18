@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "cpp-ipfs-http-client";
-  version = "2022-01-30";
+  version = "unstable-2022-01-30";
 
   src = fetchFromGitHub {
     owner = "vasild";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   patches = [ ./unvendor-nlohmann-json.patch ];
 
   postPatch = ''
-  substituteInPlace CMakeLists.txt \
+    substituteInPlace CMakeLists.txt \
       --replace '# Fetch "JSON for Modern C++"' "include_directories(${nlohmann_json}/include)"
   '';
 
