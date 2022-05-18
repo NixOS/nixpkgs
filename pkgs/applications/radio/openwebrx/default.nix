@@ -47,6 +47,13 @@ let
       soapysdr-with-plugins
     ];
 
+    # https://github.com/jketterl/owrx_connector/issues/15
+    postPatch = ''
+      substituteInPlace src/lib/owrx-connector.pc.in \
+        --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+        --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    '';
+
     meta = with lib; {
       homepage = "https://github.com/jketterl/owrx_connector";
       description = "A set of connectors that are used by OpenWebRX to interface with SDR hardware";
