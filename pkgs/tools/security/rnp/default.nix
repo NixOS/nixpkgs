@@ -42,6 +42,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
+  # https://github.com/rnpgp/rnp/issues/1835
+  postPatch = ''
+    substituteInPlace cmake/librnp.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
+
   preConfigure = ''
     echo "v${version}" > version.txt
   '';
