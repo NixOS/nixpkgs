@@ -5,6 +5,7 @@
 , pythonOlder
 , pytz
 , simplejson
+, packaging
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,10 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-ZqMrMNfP/RKW2jQDNPgfhyeqmSc40pZbnrcXHbw2emc=";
   };
+
+  propagatedBuildInputs = [
+    packaging
+  ];
 
   checkInputs = [
     pytestCheckHook
