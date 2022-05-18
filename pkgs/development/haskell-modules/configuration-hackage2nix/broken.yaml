@@ -3935,7 +3935,6 @@ broken-packages:
   - poly-control
   - polydata-core
   - polynom
-  - polynomial
   - polynomial-algebra
   - polysemy-check
   - polysemy-keyed-state
