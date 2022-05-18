@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, glibc, augeas, dnsutils, c-ares, curl,
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, makeWrapper, glibc, augeas, dnsutils, c-ares, curl,
   cyrus_sasl, ding-libs, libnl, libunistring, nss, samba, nfs-utils, doxygen,
   python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
   pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config doxygen ];
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
                   samba nfs-utils p11-kit python3 popt
                   talloc tdb tevent ldb pam openldap pcre2 libkrb5
@@ -86,6 +86,11 @@ stdenv.mkDerivation rec {
     rm -rf "$out"/rc.d
     rm -f "$out"/modules/ldb/memberof.la
     find "$out" -depth -type d -exec rmdir --ignore-fail-on-non-empty {} \;
+  '';
+  postFixup = ''
+    for f in $out/bin/sss{ctl,_cache,_debuglevel,_override,_seed}; do
+      wrapProgram $f --prefix LDB_MODULES_PATH : $out/modules/ldb
+    done
   '';
 
   passthru.tests = { inherit (nixosTests) sssd sssd-ldap; };
