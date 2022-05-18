@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
     # this will make it find its own data files (e.g. HRTF profiles)
     # without any other configuration
     ./search-out.patch
-    # https://github.com/kcat/openal-soft/pull/696
+    # merged after 1.22.0 in https://github.com/kcat/openal-soft/pull/696
     (fetchpatch {
-      url = "https://github.com/kcat/openal-soft/commit/61a32d2d447a48993bf7c8feeb4fe4b3e0ed8036.patch";
+      url = "https://github.com/kcat/openal-soft/commit/0bf2abae9b2121c3bc5a56dab30eca308136bc29.patch";
       sha256 = "1fhjjy7nrhrj3a0wlmsqpf8h3ss6s487vz5jrhamyv04nbcahn20";
     })
   ];
