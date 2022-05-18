@@ -2,7 +2,13 @@
 # executable that matches that packages name, so that they'll work with `nix run`.
 {
   # Packages that provide multiple executables where one is clearly the `mainProgram`.
+  "@antfu/ni" = "ni";
+  "@electron-forge/cli" = "electron-forge";
+  "@squoosh/cli" = "squoosh-cli";
+  "@webassemblyjs/cli" = "wasm2wast";
+  coffee-script = "coffee";
   typescript = "tsc";
+  vue-cli = "vue";
 
   # Packages that provide a single executable whose name differs from the package's `name`.
   "@angular/cli" = "ng";
