@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # Building the documentation has many dependencies, because all documented
   # modules are imported and because matplotlib is used to produce plots.
   buildInputs = [
-    sage-with-env.env.lib
+    sage-with-env
     python3
     maxima
     tachyon
