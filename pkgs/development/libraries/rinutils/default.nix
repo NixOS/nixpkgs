@@ -18,4 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake perl ];
+
+  # https://github.com/shlomif/rinutils/issues/5
+  postPatch = ''
+    substituteInPlace librinutils.pc.in \
+      --replace '$'{exec_prefix}/@RINUTILS_INSTALL_MYLIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
 }
