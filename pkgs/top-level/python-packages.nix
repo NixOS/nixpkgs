@@ -1405,6 +1405,8 @@ in {
 
   btrfs = callPackage ../development/python-modules/btrfs { };
 
+  btrfsutil = toPythonModule (pkgs.btrfs-progs.override { python3 = self.python; });
+
   bugsnag = callPackage ../development/python-modules/bugsnag { };
 
   bugwarrior = callPackage ../development/python-modules/bugwarrior { };

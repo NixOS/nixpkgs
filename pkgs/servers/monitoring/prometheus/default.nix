@@ -55,6 +55,7 @@ buildGoModule rec {
 
     # Enable only select service discovery to shrink binaries.
     (
+      true  # prevent bash syntax error when all plugins are disabled
     ${lib.optionalString (enableAWS)
       "echo - github.com/prometheus/prometheus/discovery/aws"}
     ${lib.optionalString (enableAzure)
