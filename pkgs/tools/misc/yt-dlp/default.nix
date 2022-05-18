@@ -69,6 +69,6 @@ buildPythonPackage rec {
       you can modify it, redistribute it or use it however you like.
     '';
     license = licenses.unlicense;
-    maintainers = with maintainers; [ mkg20001 SuperSandro2000 ];
+    maintainers = with maintainers; [ mkg20001 SuperSandro2000 marsam ];
   };
 }
