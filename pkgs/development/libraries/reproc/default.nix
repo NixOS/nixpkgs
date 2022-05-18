@@ -22,6 +22,16 @@ stdenv.mkDerivation rec {
     "-DREPROC_TEST=ON"
   ];
 
+  # https://github.com/DaanDeMeyer/reproc/issues/81
+  postPatch = ''
+    substituteInPlace reproc++/reproc++.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    substituteInPlace reproc/reproc.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/DaanDeMeyer/reproc";
     description = "A cross-platform (C99/C++11) process library";
