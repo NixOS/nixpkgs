@@ -872,7 +872,7 @@ in {
         # FIXME(@Ma27) Nextcloud isn't compatible with mariadb 10.6,
         # this is a workaround.
         # See https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/22
-        settings = {
+        settings = mkIf (versionOlder cfg.package.version "24") {
           mysqld = {
             innodb_read_only_compressed = 0;
           };
