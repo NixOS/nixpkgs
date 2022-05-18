@@ -42,6 +42,8 @@ let
     USERS_AUTO_ASSIGN_ORG = boolToString cfg.users.autoAssignOrg;
     USERS_AUTO_ASSIGN_ORG_ROLE = cfg.users.autoAssignOrgRole;
 
+    AUTH_DISABLE_LOGIN_FORM = boolToString cfg.auth.disableLoginForm;
+
     AUTH_ANONYMOUS_ENABLED = boolToString cfg.auth.anonymous.enable;
     AUTH_ANONYMOUS_ORG_NAME = cfg.auth.anonymous.org_name;
     AUTH_ANONYMOUS_ORG_ROLE = cfg.auth.anonymous.org_role;
@@ -567,6 +569,12 @@ in {
     };
 
     auth = {
+      disableLoginForm = mkOption {
+        description = "Set to true to disable (hide) the login form, useful if you use OAuth";
+        default = false;
+        type = types.bool;
+      };
+
       anonymous = {
         enable = mkOption {
           description = "Whether to allow anonymous access.";
