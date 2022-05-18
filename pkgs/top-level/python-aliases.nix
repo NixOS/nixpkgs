@@ -57,6 +57,7 @@ mapAliases ({
   django_appconf = django-appconf; # added 2022-03-03
   django_environ = django-environ; # added 2021-12-25
   django_extensions = django-extensions; # added 2022-01-09
+  django_guardian = django-guardian; # added 2022-05-19
   django_modelcluster = django-modelcluster; # added 2022-04-02
   django_redis = django-redis; # added 2021-10-11
   django_taggit = django-taggit; # added 2021-10-11
