@@ -16805,6 +16805,8 @@ with pkgs;
 
   spin = callPackage ../development/tools/analysis/spin { };
 
+  spin-framework = callPackage ../development/web/spin-framework { };
+
   spirv-headers = callPackage ../development/libraries/spirv-headers { };
   spirv-tools = callPackage ../development/tools/spirv-tools { };
 
