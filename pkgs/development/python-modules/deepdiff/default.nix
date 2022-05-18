@@ -12,16 +12,15 @@
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "5.7.0";
+  version = "5.8.2";
   format = "setuptools";
 
   # pypi source does not contain all fixtures required for tests
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "deepdiff";
-    # 5.7.0 release not tagged https://github.com/seperman/deepdiff/issues/300
-    rev = "f2ffdb83b2993f4f0bb7e854620f0acd0bf6339e";
-    hash = "sha256-0UBx7sH2iMrLVl5FtHNTwoecLHi8GbInn75G3FSg4gk=";
+    rev = "v${version}";
+    hash = "sha256:0hpys88vj0c7srd1ghpss4d4xcgc78nxz542zzf9czsym6xs1rpd";
   };
 
   postPatch = ''
