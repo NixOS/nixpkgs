@@ -17138,6 +17138,10 @@ with pkgs;
       VideoDecodeAcceleration;
   };
 
+  ffmpeg_5-full = ffmpeg-full.override {
+    ffmpeg = ffmpeg_5;
+  };
+
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
 
   ffmpeg-normalize = python3Packages.callPackage ../applications/video/ffmpeg-normalize { };
