@@ -9,12 +9,13 @@
 , packaging
 , pathspec
 , pluggy
-, tomli
+, tomli # < 3.11
 
 # tests
 , build
 , python
 , requests
+, tomli
 , virtualenv
 }:
 
@@ -37,9 +38,10 @@ buildPythonPackage {
     packaging
     pathspec
     pluggy
-    tomli
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
   ];
 
   pythonImportsCheck = [
@@ -55,6 +57,7 @@ buildPythonPackage {
     build
     packaging
     requests
+    tomli
     virtualenv
   ];
 
