@@ -153,11 +153,11 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud22" "nextcloud23" "nextcloud24"];
+      relatedPackages = [ "nextcloud22" "nextcloud23" "nextcloud24" ];
     };
     phpPackage = mkOption {
       type = types.package;
-      relatedPackages = [ "php74" "php80" "php81"];
+      relatedPackages = [ "php74" "php80" "php81" ];
       defaultText = "pkgs.php";
       description = ''
         PHP package to use for Nextcloud.
