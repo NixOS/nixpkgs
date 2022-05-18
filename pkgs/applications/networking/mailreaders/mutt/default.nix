@@ -28,6 +28,7 @@ with lib;
 stdenv.mkDerivation rec {
   pname = "mutt";
   version = "2.2.4";
+  outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "12.3.0";
+  version = "12.4.1";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "Textualize";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/BPJcFjUldbTa/M3i9jGGU7apbrTcWbF+yrrFuLXcHY=";
+    sha256 = "sha256-6fr5mtZwXdZihoHEjF1jJxOLH3ajPX1tF2N/ZCV9g50=";
   };
 
   nativeBuildInputs = [ poetry-core ];

@@ -5,6 +5,9 @@ with lib;
 let
   json = pkgs.formats.json { };
   cfg = config.services.prometheus;
+  checkConfigEnabled =
+    (lib.isBool cfg.checkConfig && cfg.checkConfig)
+      || cfg.checkConfig == "syntax-only";
 
   workingDir = "/var/lib/" + cfg.stateDir;
 
@@ -27,7 +30,7 @@ let
 
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file:
-    if cfg.checkConfig then
+    if checkConfigEnabled then
       pkgs.runCommandLocal
         "${name}-${replaceStrings [" "] [""] what}-checked"
         { buildInputs = [ cfg.package ]; } ''
@@ -58,7 +61,7 @@ let
           pkgs.writeText "prometheus.yml" cfg.configText
         else generatedPrometheusYml;
     in
-    promtoolCheck "check config" "prometheus.yml" yml;
+    promtoolCheck "check config ${lib.optionalString (cfg.checkConfig == "syntax-only") "--syntax-only"}" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
     "--storage.tsdb.path=${workingDir}/data/"
@@ -1726,16 +1729,20 @@ in
     };
 
     checkConfig = mkOption {
-      type = types.bool;
+      type = with types; either bool (enum [ "syntax-only" ]);
       default = true;
+      example = "syntax-only";
       description = ''
         Check configuration with <literal>promtool
         check</literal>. The call to <literal>promtool</literal> is
-        subject to sandboxing by Nix. When credentials are stored in
-        external files (<literal>password_file</literal>,
-        <literal>bearer_token_file</literal>, etc), they will not be
-        visible to <literal>promtool</literal> and it will report
-        errors, despite a correct configuration.
+        subject to sandboxing by Nix.
+
+        If you use credentials stored in external files
+        (<literal>password_file</literal>, <literal>bearer_token_file</literal>, etc),
+        they will not be visible to <literal>promtool</literal>
+        and it will report errors, despite a correct configuration.
+        To resolve this, you may set this option to <literal>"syntax-only"</literal>
+        in order to only syntax check the Prometheus configuration.
       '';
     };
 

@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-iuLi0o++e0PqK81AKWfIbCV0CTIxq2Oki6U2oEYsr68=";
   };
 
+  strictDeps = true;
   installPhase = ''
     OUTDIR="$out/share/zsh/site-functions"
     mkdir -p "$OUTDIR"

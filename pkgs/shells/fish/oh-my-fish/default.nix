@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , fish
+, bash
 , runtimeShell
 , writeShellScript
 }:
@@ -17,8 +18,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-lwMo4+PcYR9kYJPWK+ALiMfBdxFSgB2vjtSn8QrmmEA=";
   };
 
+  strictDeps = true;
   buildInputs = [
     fish
+    bash
   ];
 
   dontConfigure = true;

@@ -420,10 +420,10 @@
     "owner": "integrations",
     "provider-source-address": "registry.terraform.io/integrations/github",
     "repo": "terraform-provider-github",
-    "rev": "v4.25.0-alpha",
-    "sha256": "sha256-9BE19VywtNIeDfjBKzle5nGFPmpS8lHV60w0h2xTztU=",
+    "rev": "v4.24.1",
+    "sha256": "sha256-1fwHMN2HIVl+8ZL7OtP1U5ORc41e7Tm3qEpMqIgWL20=",
     "vendorSha256": null,
-    "version": "4.25.0-alpha"
+    "version": "4.24.1"
   },
   "gitlab": {
     "owner": "gitlabhq",
@@ -719,10 +719,10 @@
     "owner": "equinix",
     "provider-source-address": "registry.terraform.io/equinix/metal",
     "repo": "terraform-provider-metal",
-    "rev": "v3.3.0-alpha.3",
-    "sha256": "sha256-wuZp0Be8a84y7JqpCGnBDPXgNG8JJcNWsIICP3ZjSVk=",
-    "vendorSha256": "sha256-Ln9EyycPduVuj+JefH9f+Q5KlNGvbcwcEDgaqH2M0So=",
-    "version": "3.3.0-alpha.3"
+    "rev": "v3.2.2",
+    "sha256": "193897farpyb3zxz6p79mfaf04ccin7xdirbkclqb3x3c56jy0xi",
+    "vendorSha256": null,
+    "version": "3.2.2"
   },
   "minio": {
     "owner": "aminueza",

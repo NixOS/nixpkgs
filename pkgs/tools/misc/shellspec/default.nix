@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, bash }:
 
 stdenv.mkDerivation rec {
   pname = "shellspec";
@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ib5qp29f2fmivwnv6hq35qhvdxz42xgjlkvy0i3qn758riyqf46";
   };
 
+  strictDeps = true;
+  buildInputs = [ bash ];
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   checkPhase = ''

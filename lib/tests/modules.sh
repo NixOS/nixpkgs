@@ -290,6 +290,8 @@ checkConfigOutput '^"a b"$' config.result ./functionTo/merging-list.nix
 checkConfigError 'A definition for option .fun.\[function body\]. is not of type .string.. Definition values:\n\s*- In .*wrong-type.nix' config.result ./functionTo/wrong-type.nix
 checkConfigOutput '^"b a"$' config.result ./functionTo/list-order.nix
 checkConfigOutput '^"a c"$' config.result ./functionTo/merging-attrs.nix
+checkConfigOutput '^"a bee"$' config.result ./functionTo/submodule-options.nix
+checkConfigOutput '^"fun.\[function body\].a fun.\[function body\].b"$' config.optionsResult ./functionTo/submodule-options.nix
 
 # moduleType
 checkConfigOutput '^"a b"$' config.resultFoo ./declare-variants.nix ./define-variant.nix

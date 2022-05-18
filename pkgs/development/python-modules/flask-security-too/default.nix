@@ -3,7 +3,7 @@
 , fetchPypi
 
 # extras: babel
-, Babel
+, babel
 , flask-babel
 
 # extras: common
@@ -65,7 +65,7 @@ buildPythonPackage rec {
 
   passthru.extras-require = {
     babel = [
-      Babel
+      babel
       flask-babel
     ];
     common = [

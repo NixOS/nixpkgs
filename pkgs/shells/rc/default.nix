@@ -13,10 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0744ars6y9zzsjr9xazms91qy6bi7msg2gg87526waziahfh4s4z";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook byacc ];
 
   # acinclude.m4 wants headers for tgetent().
-  buildInputs = [ byacc ncurses ]
+  buildInputs = [ ncurses ]
     ++ lib.optionals readlineSupport [ readline ];
 
   configureFlags = [

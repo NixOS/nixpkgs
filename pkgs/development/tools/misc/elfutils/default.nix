@@ -2,16 +2,17 @@
 , musl-obstack, m4, zlib, zstd, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs
 , argp-standalone
 , enableDebuginfod ? false, sqlite, curl, libmicrohttpd_0_9_70, libarchive
+, gitUpdater
 }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   pname = "elfutils";
-  version = "0.186";
+  version = "0.187";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-f2+5FJsWc9ONkXig0+D7ih7E9TqfTC/4lGlgmHlkEXc=";
+    sha256 = "sha256-5wsN++YQ+QxNH+DXGvFCpOJcPE7566uNLXK2UVnUVMg=";
   };
 
   patches = [
@@ -62,10 +63,6 @@ stdenv.mkDerivation rec {
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.hostPlatform.isMusl [
-    "-Wno-null-dereference"
-  ];
-
   configureFlags = [
     "--program-prefix=eu-" # prevent collisions with binutils
     "--enable-deterministic-archives"
@@ -80,6 +77,12 @@ stdenv.mkDerivation rec {
   # Let's disable tests there until musl support is fully upstreamed.
   doCheck = !stdenv.hostPlatform.isMusl;
   doInstallCheck = !stdenv.hostPlatform.isMusl;
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    url = "https://sourceware.org/git/elfutils.git";
+    rev-prefix = "elfutils-";
+  };
 
   meta = with lib; {
     homepage = "https://sourceware.org/elfutils/";

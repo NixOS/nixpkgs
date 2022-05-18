@@ -2516,6 +2516,16 @@ cp /var/lib/redis/dump.rdb &quot;/var/lib/redis-mastodon/dump.rdb&quot;
       </listitem>
       <listitem>
         <para>
+          The Nextcloud module now allows setting the value of the
+          <literal>max-age</literal> directive of the
+          <literal>Strict-Transport-Security</literal> HTTP header,
+          which is now controlled by the
+          <literal>services.nextcloud.https</literal> option, rather
+          than <literal>services.nginx.recommendedHttpHeaders</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>spark3</literal> package has been updated from
           3.1.2 to 3.2.1
           (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/160075">#160075</link>):

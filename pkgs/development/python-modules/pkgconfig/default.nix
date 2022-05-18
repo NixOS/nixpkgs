@@ -26,12 +26,9 @@ buildPythonPackage rec {
     sha256 = "sha256-uuLUGRNLCR3NS9g6OPCI+qG7tPWsLhI3OE5WmSI3vm8=";
   };
 
-  patches = [ ./executable.patch ];
-
   postPatch = ''
-    rm pkgconfig/pkgconfig.py.orig
     substituteInPlace pkgconfig/pkgconfig.py \
-      --replace 'PKG_CONFIG_EXE = "pkg-config"' 'PKG_CONFIG_EXE = "${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config"'
+      --replace "pkg_config_exe = os.environ.get('PKG_CONFIG', None) or 'pkg-config'" "pkg_config_exe = '${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config'"
 
     # those pc files are missing and pkg-config validates that they exist
     substituteInPlace data/fake-openssl.pc \
@@ -39,8 +36,6 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ poetry-core ];
-
-  propagatedNativeBuildInputs = [ pkg-config ];
 
   checkInputs = [ pytestCheckHook ];
 
