@@ -194,8 +194,11 @@ checkConfigOutput '^"submodule"$' options.submodule.type.description ./declare-s
 ## Paths should be allowed as values and work as expected
 checkConfigOutput '^true$' config.submodule.enable ./declare-submoduleWith-path.nix
 
-## Deferred module
+## deferredModule
+# default module is merged into nodes.foo
 checkConfigOutput '"beta"' config.nodes.foo.settingsDict.c ./deferred-module.nix
+# errors from the default module are reported with accurate location
+checkConfigError 'In `default from the-file-that-contains-the-bad-config.nix'\'': "bogus"' config.nodes.foo.bottom ./deferred-module.nix
 
 # Check the file location information is propagated into submodules
 checkConfigOutput the-file.nix config.submodule.internalFiles.0 ./submoduleFiles.nix

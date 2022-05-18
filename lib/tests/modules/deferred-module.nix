@@ -1,7 +1,7 @@
 { lib, ... }:
 let
   inherit (lib) types mkOption setDefaultModuleLocation;
-  inherit (types) deferredModule lazyAttrsOf submodule str raw;
+  inherit (types) deferredModule lazyAttrsOf submodule str raw enum;
 in
 {
   imports = [
@@ -28,6 +28,7 @@ in
       _file = "default-1.nix";
       default = { config, ... }: {
         options.settingsDict = lib.mkOption { type = lazyAttrsOf str; default = {}; };
+        options.bottom = lib.mkOption { type = enum []; };
       };
     }
 
@@ -41,6 +42,11 @@ in
     {
       _file = "nodes-foo.nix";
       nodes.foo.settingsDict.b = "beta";
+    }
+
+    {
+      _file = "the-file-that-contains-the-bad-config.nix";
+      default.bottom = "bogus";
     }
 
     {
