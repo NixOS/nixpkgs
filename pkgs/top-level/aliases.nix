@@ -112,6 +112,7 @@ mapAliases ({
   bazel_0_29 = throw "bazel 0.29 is past end of life as it is not an lts version"; # Added 2022-05-09
   bazel_1 = throw "bazel 1 is past end of life as it is not an lts version"; # Added 2022-05-09
   bcat = throw "bcat has been removed because upstream is dead"; # Added 2021-08-22
+  beetsExternalPlugins = throw "beetsExternalPlugins has been deprecated, use beetsPackages.$pluginname"; # Added 2022-05-07
   beret = throw "beret has been removed"; # Added 2021-11-16
   bin_replace_string = throw "bin_replace_string has been removed: deleted by upstream"; # Added 2022-01-07
   bird2 = bird; # Added 2022-02-21
@@ -871,6 +872,7 @@ mapAliases ({
   navit = throw "navit has been removed from nixpkgs, due to being unmaintained"; # Added 2021-06-07
   ncat = throw "'ncat' has been renamed to/replaced by 'nmap'"; # Converted to throw 2022-02-22
   neap = throw "neap was removed from nixpkgs, as it relies on python2"; # Added 2022-01-12
+  neochat = libsForQt5.plasmaMobileGear.neochat; # added 2022-05-10
   netease-cloud-music = throw "netease-cloud-music has been removed together with deepin"; # Added 2020-08-31
   networkmanager_fortisslvpn = throw "'networkmanager_fortisslvpn' has been renamed to/replaced by 'networkmanager-fortisslvpn'"; # Converted to throw 2022-02-22
   networkmanager_iodine = throw "'networkmanager_iodine' has been renamed to/replaced by 'networkmanager-iodine'"; # Converted to throw 2022-02-22

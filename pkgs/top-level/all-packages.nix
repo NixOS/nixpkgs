@@ -4409,28 +4409,8 @@ with pkgs;
 
   bee-clef = callPackage ../applications/networking/bee/bee-clef.nix { };
 
-  beets = callPackage ../tools/audio/beets {
-    pythonPackages = python3Packages;
-  };
-
-  beetsExternalPlugins =
-    let
-      pluginArgs = {
-        # This is a stripped down beets for testing of the external plugins.
-        beets = (beets.override {
-          enableAlternatives = false;
-          enableCopyArtifacts = false;
-          enableExtraFiles = false;
-        }).overrideAttrs (lib.const {
-          doInstallCheck = false;
-        });
-        pythonPackages = python3Packages;
-      };
-    in lib.recurseIntoAttrs {
-      alternatives = callPackage ../tools/audio/beets/plugins/alternatives.nix pluginArgs;
-      copyartifacts = callPackage ../tools/audio/beets/plugins/copyartifacts.nix pluginArgs;
-      extrafiles = callPackage ../tools/audio/beets/plugins/extrafiles.nix pluginArgs;
-    };
+  beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
+  inherit (beetsPackages) beets beets-unstable;
 
   bento4 = callPackage ../tools/video/bento4 { };
 
@@ -8523,8 +8503,6 @@ with pkgs;
   nemiver = callPackage ../development/tools/nemiver { };
 
   neo-cowsay = callPackage ../tools/misc/neo-cowsay { };
-
-  neochat = libsForQt5.callPackage ../applications/networking/instant-messengers/neochat { };
 
   neofetch = callPackage ../tools/misc/neofetch { };
 
@@ -16580,10 +16558,7 @@ with pkgs;
 
   arrayfire = callPackage ../development/libraries/arrayfire {};
 
-  arrow-cpp = callPackage ../development/libraries/arrow-cpp ({
-  } // lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
-    stdenv = overrideCC stdenv buildPackages.gcc6; # hidden symbol `__divmoddi4'
-  });
+  arrow-cpp = callPackage ../development/libraries/arrow-cpp {};
 
   arsenal = callPackage ../tools/security/arsenal { };
 

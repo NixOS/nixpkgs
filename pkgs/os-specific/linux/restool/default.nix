@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
     "VERSION=${version}"
   ];
 
+  postPatch = ''
+    # -Werror makes this derivation fragile on compiler version upgrades, patch
+    # it out.
+    sed -i /-Werror/d Makefile
+  '';
+
   preFixup = ''
     # wrapProgram interacts badly with the ls-main tool, which relies on the
     # shell's $0 argument to figure out which operation to run (busybox-style
