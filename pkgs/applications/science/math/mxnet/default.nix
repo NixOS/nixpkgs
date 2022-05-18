@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ opencv3 gtest blas.provider ]
     ++ lib.optional stdenv.cc.isGNU gomp
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
+    # FIXME: when cuda build is fixed, remove nvidia_x11, and use /run/opengl-driver/lib
     ++ lib.optionals cudaSupport [ cudatoolkit nvidia_x11 ]
     ++ lib.optional cudnnSupport cudnn;
 
@@ -78,5 +79,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ abbradar ];
     license = licenses.asl20;
     platforms = platforms.unix;
+    # Build failures when linking mxnet_unit_tests: https://gist.github.com/6d17447ee3557967ec52c50d93b17a1d
+    broken = cudaSupport;
   };
 }
