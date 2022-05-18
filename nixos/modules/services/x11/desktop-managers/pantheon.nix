@@ -212,12 +212,10 @@ in
         elementary-capnet-assist
         elementary-notifications
         elementary-settings-daemon
+        gnome-settings-daemon
         pantheon-agent-geoclue2
         pantheon-agent-polkit
-      ]) ++ (utils.removePackagesByName [
-        gnome.gnome-font-viewer
-        pantheon.gnome-settings-daemon
-      ] config.environment.pantheon.excludePackages);
+      ]);
 
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
@@ -272,7 +270,9 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      environment.systemPackages = with pkgs.pantheon; utils.removePackagesByName ([
+      environment.systemPackages = utils.removePackagesByName ([
+        pkgs.gnome.gnome-font-viewer
+      ] ++ (with pkgs.pantheon; [
         elementary-calculator
         elementary-calendar
         elementary-camera
@@ -290,7 +290,7 @@ in
         # Only install appcenter if flatpak is enabled before
         # https://github.com/NixOS/nixpkgs/issues/15932 is resolved.
         appcenter
-      ]) config.environment.pantheon.excludePackages;
+      ])) config.environment.pantheon.excludePackages;
 
       # needed by screenshot
       fonts.fonts = [
