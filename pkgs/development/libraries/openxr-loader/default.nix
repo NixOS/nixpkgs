@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "layers" ];
 
+  # https://github.com/KhronosGroup/OpenXR-SDK-Source/issues/305
+  postPatch = ''
+    substituteInPlace src/loader/openxr.pc.in \
+      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
+  '';
+
   postInstall = ''
     mkdir -p "$layers/share"
     mv "$out/share/openxr" "$layers/share"
