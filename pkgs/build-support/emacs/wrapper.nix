@@ -228,7 +228,7 @@ runCommand
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp:" \
-        --subst-var-by autoloadExpression "-l cl-loaddefs -l nix-generated-autoload" \
+        --subst-var-by autoloadExpression \
         --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
       chmod +x $out/Applications/Emacs.app/Contents/MacOS/Emacs
     fi
