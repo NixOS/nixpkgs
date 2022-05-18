@@ -39,6 +39,13 @@ stdenv.mkDerivation rec {
   # TODO Investigate this: Python and GPU tests fail to load libOpenColorIO.so.2.0
   # doCheck = true;
 
+  # https://github.com/AcademySoftwareFoundation/OpenColorIO/issues/1649
+  postPatch = ''
+    substituteInPlace src/OpenColorIO/CMakeLists.txt \
+      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR} \
+      --replace '\$'{exec_prefix}/'$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR}
+  '';
+
   meta = with lib; {
     homepage = "https://opencolorio.org";
     description = "A color management framework for visual effects and animation";
