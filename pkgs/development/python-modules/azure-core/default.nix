@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchpatch, fetchPypi, isPy27
+{ lib, stdenv, buildPythonPackage, fetchpatch, fetchPypi, pythonOlder
 , aiodns
 , aiohttp
 , flask
@@ -17,7 +17,7 @@
 buildPythonPackage rec {
   version = "1.24.0";
   pname = "azure-core";
-  disabled = isPy27;
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;

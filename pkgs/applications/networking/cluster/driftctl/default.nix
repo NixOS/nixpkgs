@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "driftctl";
-  version = "0.29.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "driftctl";
     rev = "v${version}";
-    sha256 = "sha256-cn0PhumDaOhTm1vZCj0h9XehnQCDc+mXtne7QQNSbBk=";
+    sha256 = "sha256-kjXqkaBF3rAaGnDDVmAoFmvH4t8/seC+KF7K78eKZco=";
   };
 
   vendorSha256 = "sha256-bsIPEjD/kCUvkRKP85CjW3JJf1Hyx9b2pMY9S4HlKrA=";

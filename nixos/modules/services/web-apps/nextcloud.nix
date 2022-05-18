@@ -546,10 +546,23 @@ in {
       '';
     };
 
-    nginx.recommendedHttpHeaders = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enable additional recommended HTTP response headers";
+    nginx = {
+      recommendedHttpHeaders = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable additional recommended HTTP response headers";
+      };
+      hstsMaxAge = mkOption {
+        type = types.ints.positive;
+        default = 15552000;
+        description = ''
+          Value for the <code>max-age</code> directive of the HTTP
+          <code>Strict-Transport-Security</code> header.
+
+          See section 6.1.1 of IETF RFC 6797 for detailed information on this
+          directive and header.
+        '';
+      };
     };
   };
 
@@ -702,7 +715,7 @@ in {
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
-              'log_level' => '${builtins.toString cfg.logLevel}',
+              'loglevel' => '${builtins.toString cfg.logLevel}',
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
               ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
@@ -983,7 +996,9 @@ in {
             add_header X-Permitted-Cross-Domain-Policies none;
             add_header X-Frame-Options sameorigin;
             add_header Referrer-Policy no-referrer;
-            add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+          ''}
+          ${optionalString (cfg.https) ''
+            add_header Strict-Transport-Security "max-age=${toString cfg.nginx.hstsMaxAge}; includeSubDomains" always;
           ''}
           client_max_body_size ${cfg.maxUploadSize};
           fastcgi_buffers 64 4K;

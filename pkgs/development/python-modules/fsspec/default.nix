@@ -7,6 +7,8 @@
 , numpy
 , aiohttp
 , pytest-vcr
+, pytest-mock
+, pytest-asyncio
 , requests
 , paramiko
 , smbprotocol
@@ -14,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2022.01.0";
+  version = "2022.3.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "intake";
     repo = "filesystem_spec";
     rev = version;
-    sha256 = "sha256-iPe2q9hY3ZRIKQGpxrHda3t9G0AtbtohVcWdnAzlzCo=";
+    sha256 = "sha256-jTF8R0kaHMsCYg+7YFi21Homn63K+ulp9NDZC/jkIXM=";
   };
 
   propagatedBuildInputs = [
@@ -34,6 +36,8 @@ buildPythonPackage rec {
   checkInputs = [
     numpy
     pytest-vcr
+    pytest-mock
+    pytest-asyncio
     pytestCheckHook
   ];
 
@@ -59,6 +63,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/intake/filesystem_spec";
     description = "A specification that Python filesystems should adhere to";
+    changelog = "https://github.com/fsspec/filesystem_spec/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };
