@@ -55,6 +55,24 @@ mkDerivation rec {
     wayland-protocols
   ];
 
+  # https://github.com/maliit/framework/issues/106
+  postPatch = ''
+    substituteInPlace common/maliit-framework.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    substituteInPlace maliit-glib/maliit-glib.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+    substituteInPlace src/maliit-plugins.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_DATADIR@ @CMAKE_INSTALL_FULL_DATADIR@
+    substituteInPlace src/maliit-server.pc.in \
+      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
+      --replace '$'{prefix}/@CMAKE_INSTALL_DATADIR@ @CMAKE_INSTALL_FULL_DATADIR@
+  '';
+
   preConfigure = ''
     cmakeFlags+="-DQT5_PLUGINS_INSTALL_DIR=$out/$qtPluginPrefix"
   '';
