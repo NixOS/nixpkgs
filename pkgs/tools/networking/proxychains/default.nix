@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-Werror" "-Werror -Wno-stringop-truncation"
   '';
 
+  installFlags = [
+    "install-config"
+  ];
+
   meta = with lib; {
     description = "Proxifier for SOCKS proxies";
     homepage = "http://proxychains.sourceforge.net";
