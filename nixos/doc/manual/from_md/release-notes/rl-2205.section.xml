@@ -679,6 +679,18 @@
       </listitem>
       <listitem>
         <para>
+          <literal>openldap</literal> (and therefore the slapd LDAP
+          server) were updated to version 2.6.2. The project introduced
+          backwards-incompatible changes, namely the removal of the bdb,
+          hdb, ndb, and shell backends in slapd. Therefore before
+          updating, dump your database <literal>slapcat -n 1</literal>
+          in LDIF format, and reimport it after updating your
+          <literal>services.openldap.settings</literal>, which
+          represents your <literal>cn=config</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>openssh</literal> has been update to 8.9p1, changing
           the FIDO security key middleware interface.
         </para>
