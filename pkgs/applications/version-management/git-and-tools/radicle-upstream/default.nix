@@ -1,4 +1,4 @@
-{ lib, stdenv, appimageTools, gsettings-desktop-schemas, gtk3, autoPatchelfHook, zlib, fetchurl, undmg }:
+{ lib, stdenv, appimageTools, autoPatchelfHook, zlib, fetchurl, undmg }:
 
 let
   pname = "radicle-upstream";
@@ -38,10 +38,6 @@ let
   # this time. See this PR for discussion: https://github.com/NixOS/nixpkgs/pull/105674
   linux = appimageTools.wrapType2 {
     inherit name src meta;
-
-    profile = ''
-      export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-    '';
 
     extraInstallCommands = ''
       mv $out/bin/${name} $out/bin/${pname}
