@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "tilt";
@@ -24,5 +24,13 @@ buildGoModule rec {
     homepage = "https://tilt.dev/";
     license = licenses.asl20;
     maintainers = with maintainers; [ anton-dessiatov ];
+
+    # TODO: Remove once nixpkgs uses macOS SDK 10.14+ for x86_64-darwin
+    # Undefined symbols for architecture x86_64:
+    # "_SecTrustEvaluateWithError", referenced from:
+    #     _crypto/x509/internal/macos.x509_SecTrustEvaluateWithError_trampoline.abi0 in go.o
+    # "_utimensat", referenced from:
+    #     _syscall.libc_utimensat_trampoline.abi0 in go.o
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
