@@ -28,5 +28,6 @@ buildDunePackage rec {
     homepage = "https://github.com/gildor478/ocaml-gettext";
     license = licenses.lgpl21;
     maintainers = [ maintainers.volth ];
+    mainProgram = "ocaml-gettext";
   };
 }

@@ -37,12 +37,11 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   meta = with lib; {
-    inherit (ocaml.meta) platforms;
-    maintainers = with maintainers; [
-      maggesi roconnor vbgl
-    ];
-    homepage = "http://lablgtk.forge.ocamlcore.org/";
     description = "An OCaml interface to GTK";
+    homepage = "http://lablgtk.forge.ocamlcore.org/";
     license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ maggesi roconnor vbgl ];
+    mainProgram = "lablgtk2";
+    inherit (ocaml.meta) platforms;
   };
 }
