@@ -19,5 +19,5 @@ callPackage (import ./common.nix rec {
 
   homepage = "https://git.causal.agency/cgit-pink/about/";
   description = "cgit fork aiming for better maintenance";
-  maintainers = with lib.maintainers; [ qyliss sternenseemann ];
+  maintainers = with lib.maintainers; [ sternenseemann ];
 }) {}
