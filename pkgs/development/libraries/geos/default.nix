@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , cmake }:
 
 stdenv.mkDerivation rec {
@@ -12,14 +13,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ULvFmaw4a0wrOWLcxBHwBAph8gSq7066ciXs3Qz0VxU=";
   };
 
-  nativeBuildInputs = [ cmake ];
-
   # https://github.com/libgeos/geos/issues/608
-  postPatch = ''
-    substituteInPlace tools/CMakeLists.txt \
-      --replace '$\{exec_prefix\}/$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-      --replace '$\{prefix\}/$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
-  '';
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/libgeos/geos/commit/11faa4db672ed61d64fd8a6f1a59114f5b5f2406.patch";
+      sha256 = "1mvyg633xm21wd0ap7v7hd1kqmh2yh03shd81dvrzmdxdb02n050";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
     description = "C++ port of the Java Topology Suite (JTS)";
