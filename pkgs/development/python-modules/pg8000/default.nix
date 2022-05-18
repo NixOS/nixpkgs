@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, importlib-metadata
 , passlib
 , pythonOlder
 , scramp
@@ -8,19 +9,21 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.28.2";
+  version = "1.28.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-4aJLqJobQeLSCVuf188W2vm1vf8g85WNmX3fg2GkyLU=";
+    sha256 = "sha256-1hA3s/Iff8fVz+TupoN4klnnzLnu9fcinLxi8x6mujI=";
   };
 
   propagatedBuildInputs = [
     passlib
     scramp
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   # Tests require a running PostgreSQL instance
