@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.20.12";
+  version = "0.20.14";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-api-client-python";
     rev = "v${version}";
-    hash = "sha256-4462T2WIBdWjtd51YfslYZOcJg9f0nrSOKTi2ed6WvI=";
+    hash = "sha256-5xRjjy+4i2JgYOXK35d4uqAyJhQgm6VUx72YoooXgSk=";
   };
 
   nativeBuildInputs = [
@@ -75,6 +75,9 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Test is outdated
     "tests/test_client/test_client.py"
+    "tests/test_client/test_additional_properties.py"
+    "tests/test_client/test_datetime.py"
+    "tests/test_imports.py"
   ];
 
   pythonImportsCheck = [
@@ -83,7 +86,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for accessing the Rigetti QCS API";
-    homepage = "https://pypi.org/project/qcs-api-client/";
+    homepage = "https://qcs-api-client-python.readthedocs.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
