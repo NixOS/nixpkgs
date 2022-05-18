@@ -3,7 +3,7 @@
   python3, pam, popt, talloc, tdb, tevent, pkg-config, ldb, openldap,
   pcre2, libkrb5, cifs-utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
   libuuid, systemd, nspr, check, cmocka, uid_wrapper, p11-kit,
-  nss_wrapper, ncurses, Po4a, http-parser, jansson,
+  nss_wrapper, ncurses, Po4a, http-parser, jansson, jose,
   docbook_xsl, docbook_xml_dtd_44,
   nixosTests,
   withSudo ? false }:
@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sssd";
-  version = "2.6.3";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = pname;
     rev = version;
-    sha256 = "sha256-m0ArsN9xopfBPnHTiPDEOPuhQHQ2zoICGwVM7P05k3U=";
+    sha256 = "sha256-aGPt2ZXMnd8TXC+YhVGYZKbsl3YYkjmYF2yDQB4t/BY=";
   };
 
   postPatch = ''
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
                   talloc tdb tevent ldb pam openldap pcre2 libkrb5
                   cifs-utils glib keyutils dbus fakeroot libxslt libxml2
                   libuuid python3.pkgs.ldap systemd nspr check cmocka uid_wrapper
-                  nss_wrapper ncurses Po4a http-parser jansson ];
+                  nss_wrapper ncurses Po4a http-parser jansson jose ];
 
   makeFlags = [
     "SGML_CATALOG_FILES=${docbookFiles}"
