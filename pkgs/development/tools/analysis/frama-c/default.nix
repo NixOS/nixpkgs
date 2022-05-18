@@ -4,6 +4,15 @@
 , gdk-pixbuf, wrapGAppsHook
 }:
 
+let why3_1_5 = why3; in
+let why3 = why3_1_5.overrideAttrs (o: rec {
+  version = "1.4.1";
+  src = fetchurl {
+    url = "https://why3.gitlabpages.inria.fr/releases/${o.pname}-${version}.tar.gz";
+    sha256 = "sha256:1rqyypzlvagrn43ykl0c5wxyvnry5fl1ykn3xcvlzgghk96yq3jq";
+  };
+}); in
+
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
   runtimeDeps = with ocamlPackages; [
