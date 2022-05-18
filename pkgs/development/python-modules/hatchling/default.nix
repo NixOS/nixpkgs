@@ -15,7 +15,6 @@
 , build
 , python
 , requests
-, tomli
 , virtualenv
 }:
 
@@ -29,7 +28,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "d235a5fa8aff89e8d9d6d4033594aa4c3bc00ec5e31d3e80c153bfcf951b4f98";
+    sha256 = "d235a5fa8aff89e8d9d6d4033594aa4c3bc00ec5e31d3e80c153bfcf951b4f98";
   };
 
   # listed in backend/src/hatchling/ouroboros.py
@@ -56,7 +55,6 @@ buildPythonPackage {
     build
     packaging
     requests
-    tomli
     virtualenv
   ];
 
