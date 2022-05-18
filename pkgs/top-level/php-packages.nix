@@ -212,6 +212,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     gnupg = callPackage ../development/php-packages/gnupg { };
 
+    grpc = callPackage ../development/php-packages/grpc { };
+
     igbinary = callPackage ../development/php-packages/igbinary { };
 
     imagick = callPackage ../development/php-packages/imagick { };
