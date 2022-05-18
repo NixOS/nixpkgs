@@ -168,7 +168,6 @@ let
       '' + lib.optionalString stdenv.targetPlatform.isWasm ''
         echo "-fno-exceptions" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
-      isCompilerRT = true;
     };
 
     clangNoLibcxx = wrapCCWith rec {
@@ -183,7 +182,6 @@ let
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
         echo "-nostdlib++" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
-      isCompilerRT = true;
     };
 
     clangNoLibc = wrapCCWith rec {
@@ -197,7 +195,6 @@ let
         echo "-rtlib=compiler-rt" >> $out/nix-support/cc-cflags
         echo "-B${targetLlvmLibraries.compiler-rt}/lib" >> $out/nix-support/cc-cflags
       '' + mkExtraBuildCommands cc;
-      isCompilerRT = true;
     };
 
     clangNoCompilerRt = wrapCCWith rec {

@@ -2,14 +2,9 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , standalone ? stdenv.hostPlatform.useLLVM or false
 , withLibunwind ? !stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm
-}: let
-  # lld doesn't support unresolved references on Windows https://github.com/llvm/llvm-project/issues/55245
-  semi-static = enableShared && stdenv.hostPlatform.isWindows && stdenv.cc.bintools.isLld;
+}:
 
-  enableShared' = enableShared && !semi-static;
-
-  useLLVMUnwinder = standalone && withLibunwind;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "libcxxabi";
   inherit version;
 
@@ -31,24 +26,18 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ];
   buildInputs = lib.optional withLibunwind libunwind;
 
-  passthru = { inherit semi-static useLLVMUnwinder; };
-
   cmakeFlags = [
     "-DLIBCXXABI_LIBCXX_INCLUDES=${cxx-headers}/include/c++/v1"
   ] ++ lib.optionals standalone [
     "-DLLVM_ENABLE_LIBCXX=ON"
-  ] ++ lib.optionals useLLVMUnwinder [
+  ] ++ lib.optionals (standalone && withLibunwind) [
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXXABI_ENABLE_THREADS=OFF"
     "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
-  ] ++ lib.optionals (!enableShared') [
+  ] ++ lib.optionals (!enableShared) [
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
-  ] ++ lib.optionals semi-static [
-    "-DLIBCXX_ENABLE_SHARED=ON"
-    "-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON"
-  ] ++ lib.optional stdenv.cc.isCompilerRT
-    "-DLIBCXXABI_USE_COMPILER_RT=ON";
+  ];
 
   installPhase = if stdenv.isDarwin
     then ''
@@ -67,7 +56,7 @@ in stdenv.mkDerivation rec {
       install -d -m 755 $out/include $out/lib
       install -m 644 lib/libc++abi.a $out/lib
       install -m 644 ../include/cxxabi.h $out/include
-    '' + lib.optionalString enableShared' ''
+    '' + lib.optionalString enableShared ''
       install -m 644 lib/libc++abi.so.1.0 $out/lib
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1
