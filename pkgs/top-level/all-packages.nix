@@ -20292,6 +20292,8 @@ with pkgs;
 
   rinutils = callPackage ../development/libraries/rinutils { };
 
+  rtrlib = callPackage ../development/libraries/rtrlib { };
+
   kissfft = callPackage ../development/libraries/kissfft { };
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
