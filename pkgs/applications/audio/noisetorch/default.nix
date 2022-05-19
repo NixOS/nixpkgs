@@ -33,6 +33,8 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    insecure = true;
+    knownVulnerabilities = [ "https://github.com/lawl/NoiseTorch/releases/tag/0.11.6" ];
     description = "Virtual microphone device with noise supression for PulseAudio";
     homepage = "https://github.com/lawl/NoiseTorch";
     license = licenses.gpl3Plus;
