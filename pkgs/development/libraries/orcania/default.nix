@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, check, subunit }:
+{ lib, stdenv, fetchpatch, fetchFromGitHub, cmake, check, subunit }:
 stdenv.mkDerivation rec {
   pname = "orcania";
   version = "2.2.2";
@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lrc4VEqmCp/P/h0+5/ix6tx4pjfkLy9BLBZtKYLlyGI=";
   };
 
+  # in master post 2.2.2, see https://github.com/babelouest/orcania/issues/27
+  patches = [
+    (fetchpatch {
+      name = "fix-pkg-config.patch";
+      url = "https://github.com/babelouest/orcania/commit/4eac7d5ff76bb3bec8250fef300b723c8891552a.patch";
+      sha256 = "01bsxay1ca8d08ac3ddcqyvjwgz5mgs68jz5y3gzq4qnzl3q1i54";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   checkInputs = [ check subunit ];
@@ -17,13 +26,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_ORCANIA_TESTING=on" ];
 
   doCheck = true;
-
-  # https://github.com/babelouest/orcania/issues/27
-  postPatch = ''
-    substituteInPlace liborcania.pc.in \
-      --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-  '';
 
   preCheck = ''
     export LD_LIBRARY_PATH="$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
