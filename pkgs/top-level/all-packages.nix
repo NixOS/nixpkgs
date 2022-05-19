@@ -1188,6 +1188,8 @@ with pkgs;
 
   sx-go = callPackage ../tools/security/sx-go { };
 
+  systeroid = callPackage ../tools/system/systeroid { };
+
   tauon = callPackage ../applications/audio/tauon { };
 
   termusic = callPackage ../applications/audio/termusic { };
