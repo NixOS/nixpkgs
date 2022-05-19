@@ -356,6 +356,16 @@ in {
         '';
       };
 
+      overwriteWebroot = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Serve Nextcloud at a subdir of the NGINX webroot.
+          If not null, the option must have an initial slash and no trailing slash.
+        '';
+        example = "/next/cloud";
+      };
+
       defaultPhoneRegion = mkOption {
         default = null;
         type = types.nullOr types.str;
@@ -567,6 +577,12 @@ in {
   };
 
   config = mkIf cfg.enable (mkMerge [
+    { assertions = [
+        { assertion = builtins.match "/.+[^/]" cfg.config.overwriteWebroot != null;
+          message = "overwriteWebroot must have an initial slash and no trailing slash";
+        }
+      ];
+    }
     { warnings = let
         latest = 24;
         upgradeWarning = major: nixos:
@@ -723,6 +739,7 @@ in {
               'log_type' => 'syslog',
               'loglevel' => '${builtins.toString cfg.logLevel}',
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
+              ${optionalString (c.overwriteWebroot != null) "'overwritewebroot' => '${c.overwriteWebroot}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
               ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
               ${optionalString (c.dbport != null) "'dbport' => '${toString c.dbport}',"}
@@ -907,7 +924,23 @@ in {
 
       services.nginx.enable = mkDefault true;
 
-      services.nginx.virtualHosts.${cfg.hostName} = {
+      services.nginx.virtualHosts.${cfg.hostName} = let
+        webroot = if cfg.config.overwriteWebroot == null then "" else cfg.config.overwriteWebroot;
+        webrootOrSlash = if webroot != "" then webroot else "/";
+        mkRoot = name: root: pkgs.stdenv.mkDerivation {
+          inherit name;
+          dontUnpack = true;
+          dontBuild = true;
+          dontFixup = true;
+          installPhase = ''
+            export target=$out${webroot}
+            mkdir -p $(dirname $target)
+            ln -s ${root} $target
+          '';
+        };
+        root = mkRoot "nextcloud-webroot" cfg.package;
+        approot = mkRoot "nextcloud-approot" cfg.home;
+      in {
         locations = {
           "= /robots.txt" = {
             priority = 100;
@@ -933,10 +966,10 @@ in {
               try_files $uri $uri/ =404;
             '';
           };
-          "^~ /" = {
-            root = cfg.package;
+          "^~ ${webrootOrSlash}" = {
+            inherit root;
             extraConfig = ''
-              index index.php index.html /index.php$request_uri;
+              index index.php index.html ${webroot}/index.php$request_uri;
               ${optionalString (cfg.nginx.recommendedHttpHeaders) ''
                 add_header X-Content-Type-Options nosniff;
                 add_header X-XSS-Protection "1; mode=block";
@@ -960,33 +993,32 @@ in {
               gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
 
               ${optionalString cfg.webfinger ''
-                rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
-                rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
+                rewrite ^/.well-known/host-meta ${webroot}/public.php?service=host-meta last;
+                rewrite ^/.well-known/host-meta.json ${webroot}/public.php?service=host-meta-json last;
               ''}
-
-              location ~ ^/store-apps {
-                root ${cfg.home};
+              location ~ ^${webroot}/store-apps {
+                root ${approot};
               }
 
-              location ~ ^/nix-apps {
-                root ${cfg.home};
+              location ~ ^${webroot}/nix-apps {
+                root ${approot};
               }
 
-              location = / {
+              location = ${webrootOrSlash} {
                 if ( $http_user_agent ~ ^DavClnt ) {
-                  return 302 /remote.php/webdav/$is_args$args;
+                  return 302 ${webroot}/remote.php/webdav/$is_args$args;
                 }
               }
 
-              location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/) {
+              location ~ ^${webroot}/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/) {
                 return 404;
               }
 
-              location ~ ^/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console) {
+              location ~ ^${webroot}/(?:\\.(?!well-known)|autotest|occ|issue|indie|db_|console) {
                 return 404;
               }
 
-              location ~ ^/(?:index|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|oc[ms]-provider/.+|.+/richdocumentscode/proxy)\\.php(?:$|/) {
+              location ~ ^${webroot}/(?:index|remote|public|cron|core/ajax/update|status|ocs/v[12]|updater/.+|oc[ms]-provider/.+|.+/richdocumentscode/proxy)\\.php(?:$|/) {
                 include ${config.services.nginx.package}/conf/fastcgi.conf;
                 fastcgi_split_path_info ^(.+?\\.php)(/.*)$;
                 set $path_info $fastcgi_path_info;
@@ -1003,23 +1035,23 @@ in {
               }
 
               location ~ \\.(?:css|js|woff2?|svg|gif|map)$ {
-                try_files $uri /index.php$request_uri;
+                try_files $uri ${webroot}/index.php$request_uri;
                 expires 6M;
                 access_log off;
               }
 
-              location ~ ^/(?:updater|ocs-provider|ocm-provider)(?:$|/) {
+              location ~ ^${webroot}/(?:updater|ocs-provider|ocm-provider)(?:$|/) {
                 try_files $uri/ =404;
                 index index.php;
               }
 
               location ~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$ {
-                try_files $uri /index.php$request_uri;
+                try_files $uri ${webroot}/index.php$request_uri;
                 access_log off;
               }
 
-              location / {
-                try_files $uri $uri/ /index.php$request_uri;
+              location ${webrootOrSlash} {
+                try_files $uri $uri/ ${webroot}/index.php$request_uri;
               }
             '';
           };
