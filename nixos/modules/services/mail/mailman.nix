@@ -6,9 +6,8 @@ let
 
   cfg = config.services.mailman;
 
-  pythonEnv = pkgs.mailmanPackages.buildEnv {
-    withHyperkitty = cfg.hyperkitty.enable;
-  };
+  inherit (pkgs.mailmanPackages.buildEnvs { withHyperkitty = cfg.hyperkitty.enable; })
+    mailmanEnv webEnv;
 
   withPostgresql = config.services.postgresql.enable;
 
@@ -291,9 +290,12 @@ in {
       name = "mailman-tools";
       # We don't want to pollute the system PATH with a python
       # interpreter etc. so let's pick only the stuff we actually
-      # want from pythonEnv
+      # want from {web,mailman}Env
       pathsToLink = ["/bin"];
-      paths = [pythonEnv];
+      paths = [ mailmanEnv webEnv ];
+      # Only mailman-related stuff is installed, the rest is removed
+      # in `postBuild`.
+      ignoreCollisions = true;
       postBuild = ''
         find $out/bin/ -mindepth 1 -not -name "mailman*" -delete
       '';
@@ -322,8 +324,8 @@ in {
         requires = optional withPostgresql "postgresql.service";
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          ExecStart = "${pythonEnv}/bin/mailman start";
-          ExecStop = "${pythonEnv}/bin/mailman stop";
+          ExecStart = "${mailmanEnv}/bin/mailman start";
+          ExecStop = "${mailmanEnv}/bin/mailman stop";
           User = "mailman";
           Group = "mailman";
           Type = "forking";
@@ -381,9 +383,9 @@ in {
         restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
         script = ''
           [[ -e "${webSettings.STATIC_ROOT}" ]] && find "${webSettings.STATIC_ROOT}/" -mindepth 1 -delete
-          ${pythonEnv}/bin/mailman-web migrate
-          ${pythonEnv}/bin/mailman-web collectstatic
-          ${pythonEnv}/bin/mailman-web compress
+          ${webEnv}/bin/mailman-web migrate
+          ${webEnv}/bin/mailman-web collectstatic
+          ${webEnv}/bin/mailman-web compress
         '';
         serviceConfig = {
           User = cfg.webUser;
@@ -397,7 +399,7 @@ in {
         uwsgiConfig.uwsgi = {
           type = "normal";
           plugins = ["python3"];
-          home = pythonEnv;
+          home = webEnv;
           module = "mailman_web.wsgi";
           http = "127.0.0.1:18507";
         };
@@ -424,7 +426,7 @@ in {
         startAt = "daily";
         restartTriggers = [ config.environment.etc."mailman.cfg".source ];
         serviceConfig = {
-          ExecStart = "${pythonEnv}/bin/mailman digests --send";
+          ExecStart = "${mailmanEnv}/bin/mailman digests --send";
           User = "mailman";
           Group = "mailman";
         };
@@ -436,7 +438,7 @@ in {
         restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
         wantedBy = [ "mailman.service" "multi-user.target" ];
         serviceConfig = {
-          ExecStart = "${pythonEnv}/bin/mailman-web qcluster";
+          ExecStart = "${webEnv}/bin/mailman-web qcluster";
           User = cfg.webUser;
           Group = "mailman";
           WorkingDirectory = "/var/lib/mailman-web";
@@ -455,7 +457,7 @@ in {
         inherit startAt;
         restartTriggers = [ config.environment.etc."mailman3/settings.py".source ];
         serviceConfig = {
-          ExecStart = "${pythonEnv}/bin/mailman-web runjobs ${name}";
+          ExecStart = "${webEnv}/bin/mailman-web runjobs ${name}";
           User = cfg.webUser;
           Group = "mailman";
           WorkingDirectory = "/var/lib/mailman-web";

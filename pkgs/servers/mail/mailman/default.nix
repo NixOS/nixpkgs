@@ -16,15 +16,18 @@ let
 
     web = callPackage ./web.nix { };
 
-    buildEnv = { web ? self.web
-               , mailman ? self.mailman
-               , mailman-hyperkitty ? self.mailman-hyperkitty
-               , withHyperkitty ? false
-               }:
-      self.python3.withPackages
-        (ps:
-          [ web mailman ps.psycopg2 ]
-          ++ lib.optional withHyperkitty mailman-hyperkitty);
+    buildEnvs = { web ? self.web
+                , mailman ? self.mailman
+                , mailman-hyperkitty ? self.mailman-hyperkitty
+                , withHyperkitty ? false
+                }:
+      {
+        mailmanEnv = self.python3.withPackages
+          (ps: [ mailman ps.psycopg2 ]
+            ++ lib.optional withHyperkitty mailman-hyperkitty);
+        webEnv = self.python3.withPackages
+          (ps: [ web ps.psycopg2 ]);
+      };
   });
 
 in self
