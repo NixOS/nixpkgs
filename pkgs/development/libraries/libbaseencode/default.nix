@@ -2,23 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libbaseencode";
-  version = "1.0.12";
+  version = "1.0.14";
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TKmM2BPzas9qbWI8n63lfR8OvsSj+BKC12NXpfe9aow=";
+    sha256 = "sha256-cSiinuIc/qONuy9ZVsmsF4DiN1VUL43ZAXffCiIGgkY=";
   };
 
   nativeBuildInputs = [ cmake ];
-
-  # https://github.com/paolostivanin/libbaseencode/issues/25
-  postPatch = ''
-    substituteInPlace baseencode.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-  '';
 
   meta = with lib; {
     description = "Library written in C for encoding and decoding data using base32 or base64 (RFC-4648)";
