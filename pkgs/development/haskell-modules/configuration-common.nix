@@ -863,6 +863,7 @@ self: super: {
     hspec = self.hspec_2_10_0;
     hspec-core = dontCheck self.hspec-core_2_10_0;
     hspec-discover = self.hspec-discover_2_10_0;
+    shelly = dontCheck super.shelly; # disable checks, because the newer hspec in this overrideScope doesn‘t work with newest hspec-contrib
   }));
 
   # Depends on broken fluid.
