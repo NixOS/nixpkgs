@@ -67,5 +67,7 @@ buildPythonPackage rec {
     description = "A tool for searching a given binary image for embedded files";
     maintainers = [ maintainers.koral ];
     license = licenses.mit;
+    # Signature Exception: [Errno 1] Operation not permitted: '/testing/tests/input-vectors/_dirtraversal.tar.extracted'
+    broken = (stdenv.isDarwin && stdenv.isx86_64); # broken on hydra since 2021-11-02
   };
 }
