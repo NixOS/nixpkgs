@@ -225,7 +225,7 @@ let
     homepage = either (listOf str) str;
     downloadPage = str;
     changelog = either (listOf str) str;
-    license = either (listOf lib.types.attrs) (either lib.types.attrs str);
+    license = let license = either lib.types.attrs str; in either license (listOf license);
     maintainers = listOf (attrsOf str);
     priority = int;
     platforms = listOf str;

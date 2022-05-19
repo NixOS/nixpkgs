@@ -172,7 +172,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://ghidra-sre.org/";
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     license = licenses.asl20;
-    maintainers = [ "roblabla" ];
+    maintainers = with maintainers; [ roblabla ];
   };
 
 }

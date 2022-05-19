@@ -62,8 +62,8 @@ grimshot = stdenv.mkDerivation rec {
     homepage = "https://github.com/swaywm/sway/tree/master/contrib";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [
-      sway-unwrapped.meta.maintainers
+    maintainers = with maintainers;
+      sway-unwrapped.meta.maintainers ++ [
       evils
     ];
   };
