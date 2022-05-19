@@ -2577,6 +2577,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  badrobot = callPackage ../tools/security/badrobot {};
+
   bao = callPackage ../tools/security/bao {};
 
   bar = callPackage ../tools/system/bar {};
