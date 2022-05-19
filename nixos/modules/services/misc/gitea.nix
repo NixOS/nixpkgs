@@ -85,7 +85,7 @@ in
 
         port = mkOption {
           type = types.port;
-          default = (if !usePostgresql then 3306 else pg.port);
+          default = if !usePostgresql then 3306 else pg.port;
           defaultText = literalExpression ''
             if config.${opt.database.type} != "postgresql"
             then 3306
@@ -502,7 +502,7 @@ in
         replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
       in ''
         # copy custom configuration and generate a random secret key if needed
-        ${optionalString (cfg.useWizard == false) ''
+        ${optionalString (!cfg.useWizard) ''
           function gitea_setup {
             cp -f ${configFile} ${runConfig}
 
@@ -622,10 +622,10 @@ in
 
     # Create database passwordFile default when password is configured.
     services.gitea.database.passwordFile =
-      (mkDefault (toString (pkgs.writeTextFile {
+      mkDefault (toString (pkgs.writeTextFile {
         name = "gitea-database-password";
         text = cfg.database.password;
-      })));
+      }));
 
     systemd.services.gitea-dump = mkIf cfg.dump.enable {
        description = "gitea dump";
