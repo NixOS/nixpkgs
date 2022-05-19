@@ -12,12 +12,25 @@
   <xsl:output method='xml' encoding="UTF-8" />
 
   <xsl:param name="revision" />
+  <xsl:param name="documentType" />
   <xsl:param name="program" />
 
 
   <xsl:template match="/expr/list">
-    <appendix xml:id="appendix-configuration-options">
-      <title>Configuration Options</title>
+    <xsl:choose>
+      <xsl:when test="$documentType = 'appendix'">
+        <appendix xml:id="appendix-configuration-options">
+          <title>Configuration Options</title>
+          <xsl:call-template name="variable-list"/>
+        </appendix>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="variable-list"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="variable-list">
       <variablelist xml:id="configuration-variable-list">
         <xsl:for-each select="attrs">
           <xsl:variable name="id" select="
@@ -102,7 +115,6 @@
         </xsl:for-each>
 
       </variablelist>
-    </appendix>
   </xsl:template>
 
 
