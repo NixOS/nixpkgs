@@ -15,12 +15,14 @@
 , ninja
 , numba
 , pybind11
+, scikit-build
 }:
 
 buildPythonPackage rec {
   pname = "phik";
   version = "0.12.2";
   disabled = !isPy3k;
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -50,10 +52,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     ninja
+    scikit-build
   ];
 
+  pythonImportCheck = [ "phik" ];
+
   postInstall = ''
-  rm -r $out/bin
+    rm -r $out/bin
   '';
 
   meta = with lib; {

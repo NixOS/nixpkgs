@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-tabling=yes" ];
 
-  NIX_CFLAGS_COMPILE = "-fpermissive";
+  # -fcommon: workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: libYap.a(pl-dtoa.o):/build/yap-6.3.3/H/pl-yap.h:230: multiple definition of `ATOM_';
+  #     libYap.a(pl-buffer.o):/build/yap-6.3.3/H/pl-yap.h:230: first defined here
+  NIX_CFLAGS_COMPILE = "-fpermissive -fcommon";
 
   meta = {
     homepage = "http://www.dcc.fc.up.pt/~vsc/Yap/";

@@ -518,6 +518,15 @@
       </listitem>
       <listitem>
         <para>
+          The update of the haskell package set brings with it a new
+          version of the <literal>xmonad</literal> module, which will
+          break your configuration if you use <literal>launch</literal>
+          as entrypoint. The example code the corresponding nixos module
+          was adjusted, you way want to have a look at it.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>home-assistant</literal> module now requires
           users that don’t want their configuration to be managed
           declaratively to set
