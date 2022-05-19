@@ -29971,6 +29971,8 @@ with pkgs;
 
   tig = callPackage ../applications/version-management/git-and-tools/tig { };
 
+  tilemaker = callPackage ../applications/misc/tilemaker { };
+
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
     fftw = fftwSinglePrec;
   };
