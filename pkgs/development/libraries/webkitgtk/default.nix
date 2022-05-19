@@ -19,6 +19,8 @@
 , gtk3
 , wayland
 , libwebp
+, libwpe
+, libwpe-fdo
 , enchant2
 , xorg
 , libxkbcommon
@@ -82,7 +84,15 @@ stdenv.mkDerivation rec {
       inherit (builtins) storeDir;
       inherit (addOpenGLRunpath) driverLink;
     })
+
     ./libglvnd-headers.patch
+
+    # Hardcode path to WPE backend
+    # https://github.com/NixOS/nixpkgs/issues/110468
+    (substituteAll {
+      src = ./fdo-backend-path.patch;
+      wpebackend_fdo = libwpe-fdo;
+    })
   ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -160,6 +170,8 @@ stdenv.mkDerivation rec {
     libseccomp
     libmanette
     wayland
+    libwpe
+    libwpe-fdo
     xdg-dbus-proxy
   ] ++ lib.optionals systemdSupport [
     systemd
@@ -180,7 +192,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_INTROSPECTION=ON"
     "-DPORT=GTK"
     "-DUSE_LIBHYPHEN=OFF"
-    "-DUSE_WPE_RENDERER=OFF"
     "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
     "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
   ] ++ lib.optionals stdenv.isDarwin [
