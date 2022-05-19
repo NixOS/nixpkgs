@@ -112,7 +112,7 @@ rec {
     , checkPhase ? ""    # syntax checks, e.g. for scripts
     , meta ? { }
     }:
-    runCommand name
+    (runCommand name
       { inherit text executable checkPhase meta;
         passAsFile = [ "text" ];
         # Pointless to do this on a remote machine.
@@ -132,7 +132,11 @@ rec {
         eval "$checkPhase"
 
         (test -n "$executable" && chmod +x "$target") || true
-      '';
+      '').overrideAttrs(finalAttrs: prevAttrs: {
+        passthru = lib.optionalAttrs finalAttrs.executable {
+          exe = finalAttrs.finalPackage + destination;
+        };
+      });
 
   /*
    * Writes a text file to nix store with no optional parameters available.

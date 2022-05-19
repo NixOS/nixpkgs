@@ -139,5 +139,5 @@ rec {
        => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
   */
   getExe = x:
-    "${lib.getBin x}/bin/${x.meta.mainProgram or (lib.getName x)}";
+    x.exe or "${lib.getBin x}/bin/${x.meta.mainProgram or (lib.getName x)}";
 }
