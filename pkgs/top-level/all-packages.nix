@@ -23259,6 +23259,8 @@ with pkgs;
   linuxPackages_xanmod_latest = linuxKernel.packages.linux_xanmod_latest;
   linux_xanmod_latest = linuxKernel.kernels.linux_xanmod_latest;
 
+  linux-doc = callPackage ../os-specific/linux/kernel/htmldocs.nix { };
+
   cryptodev = linuxKernel.packages.linux_4_9.cryptodev;
 
   dpdk = callPackage ../os-specific/linux/dpdk {
