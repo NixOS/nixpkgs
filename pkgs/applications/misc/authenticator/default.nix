@@ -9,7 +9,7 @@
 , ninja
 , pkg-config
 , rustPlatform
-, wrapGAppsHook
+, wrapGAppsHook4
 , gdk-pixbuf
 , glib
 , gst_all_1
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ] ++ (with rustPlatform; [
     cargoSetupHook
     rust.cargo

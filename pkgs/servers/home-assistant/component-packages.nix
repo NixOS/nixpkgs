@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.5.4";
+  version = "2022.5.5";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -2440,7 +2440,7 @@
       paho-mqtt
     ];
     "snmp" = ps: with ps; [
-      pysnmplib
+      pysnmp
     ];
     "solaredge" = ps: with ps; [
       solaredge
