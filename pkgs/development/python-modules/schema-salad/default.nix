@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.2.20220204150214";
+  version = "8.3.20220518163624";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PlPb/nE3eWueUTWSDpa7JxPe2ee+KFna5VTR3IsClwQ=";
+    hash = "sha256-um3w+6v6chfZW8wE+LNHF8cZzF9GjABph6hg1fF2mGE=";
   };
 
   propagatedBuildInputs = [
