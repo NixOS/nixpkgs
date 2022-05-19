@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     rev = "v${version}";
-    hash = "sha256-0UBx7sH2iMrLVl5FtHNTwoecLHi8GbInn75G3FSg4gk=";
+    hash = "sha256-7eagu6lef5bc/4KU3y067LFOGtH6whda1ocBuRHS/kI=";
   };
 
   postPatch = ''
@@ -47,11 +47,6 @@ buildPythonPackage rec {
     numpy
     pytestCheckHook
     pyyaml
-  ];
-
-  disabledTests = [
-    # Assertion issue with the decimal places
-    "test_get_numeric_types_distance"
   ];
 
   meta = with lib; {
