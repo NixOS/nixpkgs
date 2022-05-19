@@ -144,7 +144,14 @@ let
 
       tests.haskell = packagePlatforms pkgs.tests.haskell;
 
-      nixosTests.agda = (packagePlatforms pkgs.nixosTests).agda;
+      nixosTests = {
+        inherit (packagePlatforms pkgs.nixosTests)
+          agda
+          xmonad
+          xmonad-xdg-autostart
+        ;
+      };
+
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
       # top-level packages that depend on haskellPackages
