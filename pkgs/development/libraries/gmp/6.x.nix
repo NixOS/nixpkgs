@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, m4
 , cxx ? !stdenv.hostPlatform.useAndroidPrebuilt && !stdenv.hostPlatform.isWasm
-, buildPackages, autoreconfHook
+, buildPackages
 , withStatic ? stdenv.hostPlatform.isStatic
 }:
 
@@ -29,7 +29,7 @@ let self = stdenv.mkDerivation rec {
   passthru.static = self.out;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ m4 ] ++ lib.optional stdenv.hostPlatform.isWindows autoreconfHook;
+  nativeBuildInputs = [ m4 ];
 
   configureFlags = [
     "--with-pic"

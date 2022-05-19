@@ -88,7 +88,7 @@ stdenv.mkDerivation (rec {
   ''
     # Non-typical naming confuses libtool which then refuses to use zlib's DLL
     # in some cases, e.g. when compiling libpng.
-  + lib.optionalString (stdenv.hostPlatform.isMinGW && shared) ''
+  + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt" && shared) ''
     ln -s zlib1.dll $out/bin/libz.dll
   '';
 
@@ -101,7 +101,7 @@ stdenv.mkDerivation (rec {
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform && static;
   configurePlatforms = [];
 
-  installFlags = lib.optionals (stdenv.hostPlatform.isMinGW) [
+  installFlags = lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "BINARY_PATH=$(out)/bin"
     "INCLUDE_PATH=$(dev)/include"
     "LIBRARY_PATH=$(out)/lib"
@@ -112,7 +112,7 @@ stdenv.mkDerivation (rec {
 
   makeFlags = [
     "PREFIX=${stdenv.cc.targetPrefix}"
-  ] ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+  ] ++ lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "-f" "win32/Makefile.gcc"
   ] ++ lib.optionals shared [
     # Note that as of writing (zlib 1.2.11), this flag only has an effect
@@ -134,6 +134,6 @@ stdenv.mkDerivation (rec {
   preConfigure = ''
     export CHOST=${stdenv.hostPlatform.config}
   '';
-} // lib.optionalAttrs (stdenv.hostPlatform.isMinGW) {
+} // lib.optionalAttrs (stdenv.hostPlatform.libc == "msvcrt") {
   dontConfigure = true;
 })

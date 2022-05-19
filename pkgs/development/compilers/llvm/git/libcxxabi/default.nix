@@ -2,17 +2,7 @@
 , monorepoSrc, runCommand
 , cxx-headers, libunwind, version
 , enableShared ? !stdenv.hostPlatform.isStatic
-}: let
-  withLibunwind = !stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm;
-
-  semi-static = enableShared && stdenv.hostPlatform.isWindows && stdenv.cc.bintools.isLld;
-
-  enableShared' = enableShared && !semi-static;
-
-  standalone = stdenv.hostPlatform.useLLVM or false;
-
-  useLLVMUnwinder = standalone && withLibunwind;
-in
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcxxabi";
@@ -45,27 +35,19 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake python3 ];
-  buildInputs = lib.optional withLibunwind libunwind;
-
-  passthru = { inherit semi-static useLLVMUnwinder; };
-
+  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm) libunwind;
 
   cmakeFlags = [
     "-DLIBCXXABI_LIBCXX_INCLUDES=${cxx-headers}/include/c++/v1"
-  ] ++ lib.optionals standalone [
+  ] ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DLLVM_ENABLE_LIBCXX=ON"
-  ] ++ lib.optionals useLLVMUnwinder [
     "-DLIBCXXABI_USE_LLVM_UNWINDER=ON"
   ] ++ lib.optionals stdenv.hostPlatform.isWasm [
     "-DLIBCXXABI_ENABLE_THREADS=OFF"
     "-DLIBCXXABI_ENABLE_EXCEPTIONS=OFF"
-  ] ++ lib.optionals (!enableShared') [
+  ] ++ lib.optionals (!enableShared) [
     "-DLIBCXXABI_ENABLE_SHARED=OFF"
-  ] ++ lib.optionals semi-static [
-    "-DLIBCXX_ENABLE_SHARED=ON"
-    "-DLIBCXX_ENABLE_STATIC_ABI_LIBRARY=ON"
-  ] ++ lib.optional stdenv.cc.isCompilerRT
-    "-DLIBCXXABI_USE_COMPILER_RT=ON";
+  ];
 
   installPhase = if stdenv.isDarwin
     then ''
@@ -84,7 +66,7 @@ stdenv.mkDerivation rec {
       install -d -m 755 $out/include $out/lib
       install -m 644 lib/libc++abi.a $out/lib
       install -m 644 ../include/cxxabi.h $out/include
-    '' + lib.optionalString enableShared' ''
+    '' + lib.optionalString enableShared ''
       install -m 644 lib/libc++abi.so.1.0 $out/lib
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so
       ln -s libc++abi.so.1.0 $out/lib/libc++abi.so.1

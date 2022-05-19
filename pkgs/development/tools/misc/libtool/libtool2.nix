@@ -23,20 +23,6 @@ stdenv.mkDerivation rec {
   #   https://lists.gnu.org/archive/html/autotools-announce/2022-03/msg00000.html
   FILECMD = "${file}/bin/file";
 
-  patches = [
-    # Patches from msys2 fixing various bugs with useClang platforms
-    # targeting Windows. Especially https://debbugs.gnu.org/cgi/bugreport.cgi?bug=27866
-    ./0002-cygwin-mingw-Create-UAC-manifest-files.mingw.patch
-    ./0005-Fix-seems-to-be-moved.patch
-    ./0006-Fix-strict-ansi-vs-posix.patch
-    ./0007-fix-cr-for-awk-in-configure.all.patch
-    ./0010-libtool-2.4.2-include-process-h.patch
-    ./0011-Pick-up-clang_rt-static-archives-compiler-internal-l.patch
-    ./0012-Prefer-response-files-over-linker-scripts-for-mingw-.patch
-    ./0013-Allow-statically-linking-compiler-support-libraries-.patch
-    ./0014-Support-llvm-objdump-f-output.patch
-  ];
-
   # Normally we'd use autoreconfHook, but that includes libtoolize.
   postPatch = ''
     aclocal -I m4

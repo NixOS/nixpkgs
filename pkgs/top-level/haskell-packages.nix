@@ -145,6 +145,7 @@ in {
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
+      libffi = pkgs.libffi;
     };
 
     ghcjs = compiler.ghcjs810;
