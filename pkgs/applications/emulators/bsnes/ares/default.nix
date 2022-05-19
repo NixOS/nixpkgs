@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+, wrapGAppsHook
 , SDL2
 , alsa-lib
 , gtk3
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ares";
-  version = "127";
+  version = "128";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     rev = "v${version}";
-    sha256 = "0rhq39w41j9yr1fkyfmf4n6fjxnq1cglj98rp4wys12kwqv7smvx";
+    sha256 = "sha256-Ojf1kyColBK0S3DwXjGaAZSl0ljhgiXkfKC11BL2fEc=";
   };
 
   patches = [
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    wrapGAppsHook
   ];
 
   buildInputs = [
