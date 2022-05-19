@@ -4717,6 +4717,11 @@ in {
 
   leb128 = callPackage ../development/python-modules/leb128 { };
 
+  ledger = (toPythonModule (pkgs.ledger.override {
+    usePython = true;
+    python3 = python;
+  })).py;
+
   ledger_agent = callPackage ../development/python-modules/ledger_agent { };
 
   ledgerblue = callPackage ../development/python-modules/ledgerblue { };
