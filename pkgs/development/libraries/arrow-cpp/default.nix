@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , fetchFromGitHub
 , fixDarwinDylibNames
 , abseil-cpp
@@ -100,6 +101,14 @@ stdenv.mkDerivation rec {
   patches = [
     # patch to fix python-test
     ./darwin.patch
+    # in master post 8.0.0, see https://github.com/apache/arrow/pull/13182
+    (fetchpatch {
+      name = "fix-pkg-config.patch";
+      stripLen = 1;
+      excludes = [ "src/arrow/engine/arrow-substrait.pc.in" ]; # for < 8.0.0
+      url = "https://github.com/apache/arrow/commit/a242eb17362c0352fc3291213542c48abfe18669.patch";
+      sha256 = "15gz13f8q75l7d4z5blyvxd805hwfcvrbrxs2kbfal9vcbnirycx";
+    })
   ];
 
   nativeBuildInputs = [
@@ -143,16 +152,6 @@ stdenv.mkDerivation rec {
     patchShebangs build-support/
     substituteInPlace "src/arrow/vendored/datetime/tz.cpp" \
       --replace 'discover_tz_dir();' '"${tzdata}/share/zoneinfo";'
-
-    # https://issues.apache.org/jira/browse/ARROW-16585
-    substituteInPlace src/parquet/parquet.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-    substituteInPlace src/plasma/plasma.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_BINDIR@ @CMAKE_INSTALL_FULL_BINDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
-    substituteInPlace src/plasma/PlasmaConfig.cmake.in \
-      --replace @CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_BINDIR@ @CMAKE_INSTALL_FULL_BINDIR@
   '';
 
   cmakeFlags = [
