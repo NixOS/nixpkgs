@@ -191,7 +191,6 @@
   ./programs/nm-applet.nix
   ./programs/nncp.nix
   ./programs/npm.nix
-  ./programs/noisetorch.nix
   ./programs/oblogout.nix
   ./programs/pantheon-tweaks.nix
   ./programs/partition-manager.nix
