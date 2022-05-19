@@ -7173,10 +7173,13 @@ with pkgs;
   nodejs-slim-17_x = callPackage ../development/web/nodejs/v17.nix {
     enableNpm = false;
   };
+  nodejs-18_x = callPackage ../development/web/nodejs/v18.nix { };
+  nodejs-slim-18_x = callPackage ../development/web/nodejs/v18.nix {
+    enableNpm = false;
+  };
   # Update this when adding the newest nodejs major version!
-  # Do not set to nodejs-17_x because it requires 10.13 SDK on Darwin
-  nodejs_latest = nodejs-16_x;
-  nodejs-slim_latest = nodejs-slim-16_x;
+  nodejs_latest = nodejs-18_x;
+  nodejs-slim_latest = nodejs-slim-18_x;
 
   nodePackages_latest = dontRecurseIntoAttrs nodejs_latest.pkgs;
 
