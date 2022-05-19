@@ -1,24 +1,41 @@
 { lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
   pname = "mox";
-  version = "0.5.3";
+  version = "0.7.8";
+  format = "setuptools";
 
-  src = fetchurl {
-    url = "http://pymox.googlecode.com/files/${pname}-${version}.tar.gz";
-    sha256 = "4d18a4577d14da13d032be21cbdfceed302171c275b72adaa4c5997d589a5030";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "ivancrneto";
+    repo = "pymox";
+    rev = "v${version}";
+    hash = "sha256-gODE9IGDk3WtO8iPOlp98fGp6Ih2laA3YlOHmq62m8Y=";
   };
 
-  # error: invalid command 'test'
-  doCheck = false;
+  propagatedBuildInputs = [
+    six
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "mox"
+  ];
 
   meta = with lib; {
-    homepage = "https://pymox.readthedocs.io/";
-    description = "A mock object framework for Python";
+    description = "Mock object framework";
+    homepage = "https://github.com/ivancrneto/pymox";
     license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
-
 }
