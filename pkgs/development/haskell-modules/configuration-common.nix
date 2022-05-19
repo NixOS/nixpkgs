@@ -20,6 +20,9 @@ with haskellLib;
 
 self: super: {
 
+  # tests failure pending https://github.com/elaforge/fast-tags/issues/61
+  fast-tags = dontCheck super.fast-tags;
+
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
 
