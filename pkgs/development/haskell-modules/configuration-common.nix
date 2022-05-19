@@ -176,6 +176,15 @@ self: super: {
   vector = doJailbreak (if pkgs.stdenv.isi686 then appendConfigureFlag "--ghc-options=-msse2" super.vector else super.vector);
 
   inline-c-cpp = overrideCabal (drv: {
+    patches = drv.patches or [] ++ [
+      (fetchpatch {
+        # awaiting release >0.5.0.0
+        url = "https://github.com/fpco/inline-c/commit/e176b8e8c3c94e7d8289a8b7cc4ce8e737741730.patch";
+        name = "inline-c-cpp-pr-132-1.patch";
+        sha256 = "sha256-CdZXAT3Ar4KKDGyAUu8A7hzddKe5/AuMKoZSjt3o0UE=";
+        stripLen = 1;
+      })
+    ];
     postPatch = (drv.postPatch or "") + ''
       substituteInPlace inline-c-cpp.cabal --replace "-optc-std=c++11" ""
     '';

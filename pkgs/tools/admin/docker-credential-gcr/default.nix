@@ -1,16 +1,31 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, docker-credential-gcr }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "docker-credential-gcr";
-  version = "2.0.5";
-
-  goPackagePath = "github.com/GoogleCloudPlatform/docker-credential-gcr";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
     rev = "v${version}";
-    sha256 = "sha256-WrcGTXy5SMWDHJWddXUuvUvEWjOsJcoB1zBg02p5ggY=";
+    sha256 = "sha256-gb9c8qTHQWUOlaXAKfpwm0Pwa/N4iu48jWIwPYXD00k=";
+  };
+
+  vendorSha256 = "sha256-e7XNTizZYp/tS7KRvB9KxY3Yurphnm6Ehz4dHZNReK8=";
+
+  CGO_ENABLED = 0;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/GoogleCloudPlatform/docker-credential-gcr/config.Version=${version}"
+  ];
+
+  checkFlags = [ "-short" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = docker-credential-gcr;
+    command = "docker-credential-gcr version";
   };
 
   meta = with lib; {
