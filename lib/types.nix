@@ -397,8 +397,8 @@ rec {
 
     listOf = elemType: mkOptionType rec {
       name = "listOf";
-      description = "list of ${elemType.description}";
-      check = isList;
+      description = "list of ${elemType.description}s";
+      check = v: isList v && all (elemType.check) v;
       merge = loc: defs:
         map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
           imap1 (m: def':
