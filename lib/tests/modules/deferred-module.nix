@@ -34,9 +34,7 @@ in
 
     {
       _file = "default-a-is-b.nix";
-      default = { config, ... }: {
-        settingsDict.a = config.settingsDict.b;
-      };
+      default = ./define-settingsDict-a-is-b.nix;
     }
 
     {

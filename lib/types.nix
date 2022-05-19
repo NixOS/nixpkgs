@@ -543,7 +543,7 @@ rec {
     deferredModule = mkOptionType {
       name = "deferredModule";
       description = "module";
-      check = t: isAttrs t || isFunction t;
+      check = x: isAttrs x || isFunction x || path.check x;
       merge = loc: defs: map (def: lib.setDefaultModuleLocation "${def.file}, via option ${showOption loc}" def.value) defs;
     };
 
