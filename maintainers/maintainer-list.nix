@@ -10128,6 +10128,12 @@
     githubId = 81340136;
     name = "polykernel";
   };
+  poelzi = {
+    email = "nix@poelzi.org";
+    github = "poelzi";
+    githubId = 66107;
+    name = "Daniel Poelzleithner";
+  };
   polyrod = {
     email = "dc1mdp@gmail.com";
     github = "polyrod";
