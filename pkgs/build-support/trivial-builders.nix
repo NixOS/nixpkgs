@@ -69,11 +69,14 @@ rec {
     # name of the resulting derivation
     # TODO(@Artturin): enable strictDeps always
     }: buildCommand:
-    stdenv.mkDerivation ({
+    stdenv.mkDerivation (finalAttrs: {
       enableParallelBuilding = true;
       inherit buildCommand name;
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);
+      passthru = lib.optionalAttrs (finalAttrs.executable or false == true) {
+        exe = finalAttrs.finalPackage + finalAttrs.destination or "";
+      };
     }
     // (lib.optionalAttrs runLocal {
           preferLocalBuild = true;
