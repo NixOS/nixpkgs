@@ -29864,6 +29864,10 @@ with pkgs;
     buildGoModule = buildGo118Module;
   };
 
+  temporal-cli = callPackage ../applications/networking/cluster/temporal-cli {
+    buildGoModule = buildGo118Module;
+  };
+
   tenacity = callPackage ../applications/audio/tenacity { wxGTK = wxGTK31-gtk3; };
 
   tendermint = callPackage ../tools/networking/tendermint { };
