@@ -7,18 +7,27 @@
   # Dynamic libraries
 , alsa-lib
 , atk
+, at-spi2-atk
+, at-spi2-core
 , cairo
+, cups
 , dbus
+, expat
+, libdrm
 , libGL
 , fontconfig
 , freetype
 , gtk3
 , gdk-pixbuf
 , glib
+, mesa
+, nspr
+, nss
 , pango
 , wayland
 , xorg
 , libxkbcommon
+, udev
 , zlib
   # Runtime
 , coreutils
@@ -33,13 +42,11 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  # Zoom versions are released at different times for each platform and linux
-  # is stuck on 5.9.6 until https://github.com/NixOS/nixpkgs/pull/166085 is
-  # resolved
+  # Zoom versions are released at different times for each platform
   version = {
     aarch64-darwin = "5.10.4.6592";
     x86_64-darwin = "5.10.4.6592";
-    x86_64-linux = "5.9.6.2225";
+    x86_64-linux = "5.10.4.2845";
    }.${system} or throwSystem;
 
   srcs = {
@@ -53,7 +60,7 @@ let
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "0rynpw2fjn9j75f34rk0rgqn9wzyzgzmwh1a3xcx7hqingv45k53";
+      sha256 = "9gspydrGaEjzAM0nK1u0XNm07HTupJ2wnPxCFWy+Nts=";
     };
   };
 
@@ -61,28 +68,40 @@ let
     # $ LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$PWD ldd zoom | grep 'not found'
     alsa-lib
     atk
+    at-spi2-atk
+    at-spi2-core
     cairo
+    cups
     dbus
+    expat
+    libdrm
     libGL
     fontconfig
     freetype
     gtk3
     gdk-pixbuf
     glib
+    mesa
+    nspr
+    nss
     pango
     stdenv.cc.cc
     wayland
     xorg.libX11
     xorg.libxcb
     xorg.libXcomposite
+    xorg.libXdamage
     xorg.libXext
     libxkbcommon
+    xorg.libXrandr
     xorg.libXrender
-    zlib
+    xorg.libxshmfence
     xorg.xcbutilimage
     xorg.xcbutilkeysyms
     xorg.libXfixes
     xorg.libXtst
+    udev
+    zlib
   ] ++ lib.optional (pulseaudioSupport) libpulseaudio);
 
 in
@@ -134,7 +153,9 @@ stdenv.mkDerivation rec {
     done
 
     # ZoomLauncher sets LD_LIBRARY_PATH before execing zoom
-    wrapProgram $out/opt/zoom/zoom \
+    # IPC breaks if the executable name does not end in 'zoom'
+    mv $out/opt/zoom/zoom $out/opt/zoom/.zoom
+    makeWrapper $out/opt/zoom/.zoom $out/opt/zoom/zoom \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
     rm $out/bin/zoom

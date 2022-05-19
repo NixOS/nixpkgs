@@ -1,8 +1,6 @@
 { appimageTools
 , lib
 , fetchurl
-, gtk3
-, gsettings-desktop-schemas
 , texlive
 , pandoc
 }:
@@ -22,10 +20,6 @@ let
 in
 appimageTools.wrapType2 rec {
   inherit name src;
-
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
 
   multiPkgs = null; # no 32bit needed
   extraPkgs = pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ [ texlive pandoc ];

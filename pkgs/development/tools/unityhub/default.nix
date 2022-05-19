@@ -1,4 +1,4 @@
-{ lib, fetchurl, appimageTools, gsettings-desktop-schemas, gtk3 }:
+{ lib, fetchurl, appimageTools  }:
 
 appimageTools.wrapType2 rec {
   pname = "unityhub";
@@ -30,10 +30,6 @@ appimageTools.wrapType2 rec {
       install -m 444 -D ${appimageContents}/unityhub.png \
         $out/share/icons/hicolor/64x64/apps/unityhub.png
     '';
-
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
 
   meta = with lib; {
     homepage = "https://unity3d.com/";

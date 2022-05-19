@@ -9,10 +9,19 @@
       version ? package.version,
     }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
       if output=$(${command} 2>&1); then
-        grep -Fw "${version}" - <<< "$output"
-        touch $out
+        if grep -Fw "${version}" - <<< "$output"; then
+          touch $out
+        else
+          echo "Version string '${version}' not found!" >&2
+          echo "The output was:" >&2
+          echo "$output" >&2
+          exit 1
+        fi
       else
-        echo "$output" >&2 && exit 1
+        echo -n ${lib.escapeShellArg command} >&2
+        echo " returned a non-zero exit code." >&2
+        echo "$output" >&2
+        exit 1
       fi
     '';
 

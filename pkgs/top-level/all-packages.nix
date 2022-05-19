@@ -5457,6 +5457,7 @@ with pkgs;
 
   trivy = callPackage ../tools/admin/trivy {
     buildGoModule = buildGo118Module;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
   trompeloeil = callPackage ../development/libraries/trompeloeil { };
@@ -7841,10 +7842,6 @@ with pkgs;
   nodejs-slim-16_x = callPackage ../development/web/nodejs/v16.nix {
     enableNpm = false;
   };
-  nodejs-17_x = callPackage ../development/web/nodejs/v17.nix { };
-  nodejs-slim-17_x = callPackage ../development/web/nodejs/v17.nix {
-    enableNpm = false;
-  };
   nodejs-18_x = callPackage ../development/web/nodejs/v18.nix { };
   nodejs-slim-18_x = callPackage ../development/web/nodejs/v18.nix {
     enableNpm = false;
@@ -8607,7 +8604,7 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
-    nextcloud21 nextcloud22 nextcloud23;
+    nextcloud21 nextcloud22 nextcloud23 nextcloud24;
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
@@ -10975,7 +10972,7 @@ with pkgs;
 
   toybox = callPackage ../tools/misc/toybox { };
 
-  tpmmanager = callPackage ../applications/misc/tpmmanager { };
+  tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
   tpm-quote-tools = callPackage ../tools/security/tpm-quote-tools { };
 
@@ -14791,7 +14788,14 @@ with pkgs;
   autoadb = callPackage ../misc/autoadb { };
 
   ansible = ansible_2_12;
-  ansible_2_12 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_13 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_12 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.12.5";
+    src = oldAttrs.src.override {
+      inherit version;
+      hash = "sha256-HMyZRPEBMxra0e1A1axmqBSRMwUq402wJnp0qnO+67M=";
+    };
+  }));
 
   ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
 
@@ -29878,7 +29882,9 @@ with pkgs;
 
   tempo = callPackage ../servers/tracing/tempo {};
 
-  temporal = callPackage ../applications/networking/cluster/temporal { };
+  temporal = callPackage ../applications/networking/cluster/temporal {
+    buildGoModule = buildGo118Module;
+  };
 
   tenacity = callPackage ../applications/audio/tenacity { wxGTK = wxGTK31-gtk3; };
 

@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
     libmicrohttpd
     ncurses
     taglib
-  ] ++ lib.optional systemdSupport [
+  ] ++ lib.optionals systemdSupport [
     systemd
-  ] ++ lib.optional stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     alsa-lib pulseaudio
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     Cocoa SystemConfiguration
   ];
 
