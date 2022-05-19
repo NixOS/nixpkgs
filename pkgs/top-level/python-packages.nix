@@ -2528,6 +2528,8 @@ in {
 
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
 
+  drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
+
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
 
   drivelib = callPackage ../development/python-modules/drivelib { };
