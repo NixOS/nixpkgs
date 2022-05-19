@@ -36876,6 +36876,12 @@ with pkgs;
 
   wordpress = callPackage ../servers/web-apps/wordpress { };
 
+  wordpressPackages = ( callPackage ../servers/web-apps/wordpress/packages {
+    plugins = lib.importJSON ../servers/web-apps/wordpress/packages/plugins.json;
+    themes = lib.importJSON ../servers/web-apps/wordpress/packages/themes.json;
+    languages = lib.importJSON ../servers/web-apps/wordpress/packages/languages.json;
+  });
+
   wprecon = callPackage ../tools/security/wprecon { };
 
   wraith = callPackage ../applications/networking/irc/wraith {
