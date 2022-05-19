@@ -665,7 +665,7 @@ in {
 
         nextcloud-setup = let
           c = cfg.config;
-          writePhpArrary = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
+          writePhpArray = a: "[${concatMapStringsSep "," (val: ''"${toString val}"'') a}]";
           requiresReadSecretFunction = c.dbpassFile != null || c.objectstore.s3.enable;
           objectstoreConfig = let s3 = c.objectstore.s3; in optionalString s3.enable ''
             'objectstore' => [
@@ -730,8 +730,8 @@ in {
               ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
               ${optionalString (c.dbpassFile != null) "'dbpassword' => nix_read_secret('${c.dbpassFile}'),"}
               'dbtype' => '${c.dbtype}',
-              'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
-              'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
+              'trusted_domains' => ${writePhpArray ([ cfg.hostName ] ++ c.extraTrustedDomains)},
+              'trusted_proxies' => ${writePhpArray (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
               ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles},"}
               ${objectstoreConfig}
