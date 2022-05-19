@@ -19533,7 +19533,7 @@ let
       url = "mirror://cpan/authors/id/Y/YV/YVES/Sereal-4.018.tar.gz";
       sha256 = "0pqygrl88jp2w73jd9cw4k22fhvh5vcwqbiwl9wpxm67ql95cwwa";
     };
-    buildInputs = [ TestDeep TestLongString TestMemoryGrowth TestWarn ];
+    buildInputs = [ TestDeep TestLongString TestWarn ];
     propagatedBuildInputs = [ SerealDecoder SerealEncoder ];
     meta = {
       homepage = "https://github.com/Sereal/Sereal";
