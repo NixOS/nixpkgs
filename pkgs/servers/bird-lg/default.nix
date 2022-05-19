@@ -3,7 +3,14 @@ let
   generic = { modRoot, vendorSha256 }:
     buildGoModule rec {
       pname = "bird-lg-${modRoot}";
-      version = "2022-05-08";
+      version = "unstable-2022-05-08";
+
+      src = fetchFromGitHub {
+        owner = "xddxdd";
+        repo = "bird-lg-go";
+        rev = "348295b9aa954a92df2cf6b1179846a9486dafc0";
+        sha256 = "sha256-2t8ZP9Uc0sJlqWiJMq3MVoARfMKsuTXJkuOid0oWgyY=";
+      };
 
       doDist = false;
 
@@ -12,15 +19,7 @@ let
         "-w"
       ];
 
-      inherit modRoot;
-      inherit vendorSha256;
-
-      src = fetchFromGitHub {
-        owner = "xddxdd";
-        repo = "bird-lg-go";
-        rev = "348295b9aa954a92df2cf6b1179846a9486dafc0";
-        sha256 = "sha256-2t8ZP9Uc0sJlqWiJMq3MVoARfMKsuTXJkuOid0oWgyY=";
-      };
+      inherit modRoot vendorSha256;
 
       meta = with lib; {
         description = "Bird Looking Glass";
