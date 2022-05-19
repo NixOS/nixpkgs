@@ -9,13 +9,13 @@
 
 buildPythonApplication rec {
   pname = "nix-update";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
     rev = version;
-    sha256 = "sha256-D1N7ISLZJ3A8G9X5dvtCbRse5h0MRJoeZM3CHkFpqlE=";
+    sha256 = "sha256-d2S18cBkFJOIGFKrwj9U4bRvdPjrbuWfRUVug1JEw0s=";
   };
 
   makeWrapperArgs = [
