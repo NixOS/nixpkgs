@@ -7,25 +7,26 @@
 , enrich
 , flaky
 , jsonschema
+, pythonOlder
+, pytest
+, pytest-xdist
+, pytestCheckHook
 , pyyaml
 , rich
 , ruamel-yaml
 , wcmatch
 , yamllint
-, pythonOlder
-, pytest-xdist
-, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "ansible-lint";
-  version = "6.1.0";
+  version = "6.2.1";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-NEkSQNPlQF7uJkcfOgCrDVRyTrYKNZ4kJIZKVE5gl9Q=";
+    sha256 = "sha256-yg3u5YNcv6+buhgnWGiKiKC5xoUrMrFed+SwN2whvB8=";
   };
 
   postPatch = ''
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     ansible-core
     enrich
     jsonschema
+    pytest # yes, this is an actual runtime dependency
     pyyaml
     rich
     ruamel-yaml
