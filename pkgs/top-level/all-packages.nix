@@ -25860,6 +25860,7 @@ with pkgs;
   drawing = callPackage ../applications/graphics/drawing { };
 
   drawio = callPackage ../applications/graphics/drawio {};
+  drawio-headless = callPackage ../applications/graphics/drawio/headless.nix { };
 
   drawpile = libsForQt5.callPackage ../applications/graphics/drawpile { };
   drawpile-server-headless = libsForQt5.callPackage ../applications/graphics/drawpile {
