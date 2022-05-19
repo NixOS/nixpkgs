@@ -7767,6 +7767,10 @@ with pkgs;
 
   mtail = callPackage ../servers/monitoring/mtail { };
 
+  mujmap = callPackage ../applications/networking/mujmap {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   multitail = callPackage ../tools/misc/multitail { };
 
   mx-puppet-discord = callPackage ../servers/mx-puppet-discord { };
