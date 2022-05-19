@@ -32,6 +32,7 @@ toPythonModule (stdenv.mkDerivation rec {
     description = "CGAL bindings using SWIG";
     homepage = "https://github.com/CGAL/cgal-swig-bindings";
     license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jcomcl ];
   };
 })
 

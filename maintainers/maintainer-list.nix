@@ -5749,6 +5749,10 @@
     githubId = 938744;
     name = "John Chadwick";
   };
+  jcomcl = {
+    name = "J. CoMcL";
+    email = "jordan.conwaymcl@gmail.com";
+  };
   jcouyang = {
     email = "oyanglulu@gmail.com";
     github = "jcouyang";
