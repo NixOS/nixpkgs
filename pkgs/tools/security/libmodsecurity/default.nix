@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub
 , autoreconfHook, bison, flex, pkg-config
 , curl, geoip, libmaxminddb, libxml2, lmdb, lua, pcre
-, ssdeep, valgrind, yajl
+, ssdeep, yajl
 , nixosTests
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook bison flex pkg-config ];
-  buildInputs = [ curl geoip libmaxminddb libxml2 lmdb lua pcre ssdeep valgrind yajl ];
+  buildInputs = [ curl geoip libmaxminddb libxml2 lmdb lua pcre ssdeep yajl ];
 
   outputs = [ "out" "dev" ];
 
