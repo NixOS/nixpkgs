@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem
 , libX11, libXext, qttools, wrapQtAppsHook
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +29,12 @@ stdenv.mkDerivation rec {
     substituteInPlace style/style.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    attrPath = "libsForQt5.${pname}";
+    rev-prefix = "V";
+  };
 
   meta = with lib; {
     description = "SVG-based Qt5 theme engine plus a config tool and extra themes";
