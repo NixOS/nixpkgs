@@ -16941,6 +16941,22 @@ let
      };
   };
 
+  NumberPhone = buildPerlPackage {
+    pname = "Number-Phone";
+    version = "3.8004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Number-Phone-3.8004.tar.gz";
+      sha256 = "sha256-ZY7hyNGXTvSwV+B4L0mTi/PelA6QY/2bYecY6siwO+8=";
+    };
+    buildInputs = [ DevelHide FileShareDirInstall ParallelForkManager TestDifferences TestMore TestPod TestPodCoverage TestWarnings ];
+    propagatedBuildInputs = [ DataDumperConcise DBMDeep DevelCheckOS FileFindRule FileShareDir ];
+    meta = {
+      homepage = "https://github.com/DrHyde/perl-modules-Number-Phone";
+      description = "Large suite of perl modules for parsing and dealing with phone numbers";
+      license = with lib.licenses; [ artistic1 gpl2 ];
+    };
+  };
+
   NumberWithError = buildPerlPackage {
     pname = "Number-WithError";
     version = "1.01";
