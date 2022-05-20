@@ -12,15 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3V40SG8aSD/3vnMAzBa01rJGkJh4d8MnjXl1NNZzjwI=";
   };
 
-  patches = [
-    # Fix tests on Musl.
-    # https://bugs.kde.org/show_bug.cgi?id=445300
-    (fetchpatch {
-      url = "https://bugsfiles.kde.org/attachment.cgi?id=143535";
-      sha256 = "036zyk30rixjvpylw3c7n171n4gpn6zcp7h6ya2dz4h5r478l9i6";
-    })
-  ];
-
   outputs = [ "out" "dev" "man" "doc" ];
 
   hardeningDisable = [ "pie" "stackprotector" ];
