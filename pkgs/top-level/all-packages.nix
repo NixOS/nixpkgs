@@ -9821,6 +9821,8 @@ with pkgs;
 
   rst2html5 = callPackage ../tools/text/rst2html5 { };
 
+  rstcheck = with python3Packages; toPythonApplication rstcheck;
+
   rt = callPackage ../servers/rt { };
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
