@@ -6715,13 +6715,13 @@
     name = "Jim Fowler";
   };
   kittywitch = {
-    email = "kat@kittywit.ch";
+    email = "kat@inskip.me";
     github = "kittywitch";
     githubId = 67870215;
-    name = "kat witch";
+    name = "Kat Inskip";
     keys = [{
-      longkeyid = "rsa4096/0x7248991EFA8EFBEE";
-      fingerprint = "01F5 0A29 D4AA 9117 5A11  BDB1 7248 991E FA8E FBEE";
+      longkeyid = "rsa4096/0xE8DDE3ED1C90F3A0";
+      fingerprint = "9CC6 44B5 69CD A59B C874  C4C9 E8DD E3ED 1C90 F3A0";
     }];
   };
   kiwi = {
