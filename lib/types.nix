@@ -163,7 +163,7 @@ rec {
 
 
   # When adding new types don't forget to document them in
-  # nixos/doc/manual/development/option-types.xml!
+  # nixos/doc/manual/development/option-types.section.md!
   types = rec {
 
     raw = mkOptionType rec {
@@ -395,10 +395,12 @@ rec {
       merge = mergeEqualOption;
     };
 
-    listOf = elemType: mkOptionType rec {
+    # NixOS apparently has a different notion of "type" than nix(lang)
+    # does; see discussion in GH #173568
+    listOfGeneralized = isNixOS: elemType: mkOptionType rec {
       name = "listOf";
       description = "list of ${elemType.description}s";
-      check = v: isList v && all (e: elemType.check e || e ? _type ) v;
+      check = v: isList v && (isNixOS || all elemType.check v);
       merge = loc: defs:
         map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
           imap1 (m: def':
@@ -416,6 +418,9 @@ rec {
       functor = (defaultFunctor name) // { wrapped = elemType; };
       nestedTypes.elemType = elemType;
     };
+
+    listOf  = listOfGeneralized true;
+    listOf' = listOfGeneralized false;
 
     nonEmptyListOf = elemType:
       let list = addCheck (types.listOf elemType) (l: l != []);

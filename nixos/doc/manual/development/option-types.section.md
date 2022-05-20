@@ -227,8 +227,14 @@ Composed types are types that take a type as parameter. `listOf
 
 `types.listOf` *`t`*
 
-:   A list of *`t`* type, e.g. `types.listOf
-          int`. Multiple definitions are merged with list concatenation.
+: A list, probably but not certainly of *`t`* type, e.g. `types.listOf
+  int`. Multiple definitions are merged with list concatenation.  The
+  `check` method will not examine the types of the list elements.
+
+`types.listOf'` *`t`*
+
+: A list of *`t`* type, e.g. `types.listOf' int`. Multiple definitions
+  are merged with list concatenation.
 
 `types.attrsOf` *`t`*
 

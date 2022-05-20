@@ -222,14 +222,14 @@ let
     mainProgram = str;
     longDescription = str;
     branch = str;
-    homepage = either (listOf str) str;
+    homepage = either (listOf' str) str;
     downloadPage = str;
-    changelog = either (listOf str) str;
-    license = let license = either lib.types.attrs str; in either license (listOf license);
-    maintainers = listOf (attrsOf str);
+    changelog = either (listOf' str) str;
+    license = let license = either lib.types.attrs str; in either license (listOf' license);
+    maintainers = listOf' (attrsOf str);
     priority = int;
-    platforms = listOf str;
-    hydraPlatforms = listOf str;
+    platforms = listOf' str;
+    hydraPlatforms = listOf' str;
     broken = bool;
     unfree = bool;
     unsupported = bool;
@@ -248,12 +248,12 @@ let
 
     # Weirder stuff that doesn't appear in the documentation?
     maxSilent = int;
-    knownVulnerabilities = listOf str;
+    knownVulnerabilities = listOf' str;
     name = str;
     version = str;
     tag = str;
-    executables = listOf str;
-    outputsToInstall = listOf str;
+    executables = listOf' str;
+    outputsToInstall = listOf' str;
     position = str;
     available = bool;
     isBuildPythonPackage = platforms;

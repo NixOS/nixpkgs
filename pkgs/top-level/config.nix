@@ -21,7 +21,7 @@ let
     /* Internal stuff */
 
     warnings = mkOption {
-      type = types.listOf types.str;
+      type = types.listOf' types.str;
       default = [];
       internal = true;
     };
@@ -99,7 +99,7 @@ let
     };
 
     showDerivationWarnings = mkOption {
-      type = types.listOf (types.enum [ "maintainerless" ]);
+      type = types.listOf' (types.enum [ "maintainerless" ]);
       default = [];
       description = ''
         Which warnings to display for potentially dangerous

@@ -44,7 +44,7 @@ rec {
         str
         path
         (attrsOf valueType)
-        (listOf valueType)
+        (listOf' valueType)
       ]) // {
         description = "JSON value";
       };
@@ -78,7 +78,7 @@ rec {
         str
         path
         (attrsOf valueType)
-        (listOf valueType)
+        (listOf' valueType)
       ]) // {
         description = "YAML value";
       };
@@ -110,7 +110,7 @@ rec {
 
       iniAtom =
         if listsAsDuplicateKeys then
-          coercedTo singleIniAtom lib.singleton (listOf singleIniAtom) // {
+          coercedTo singleIniAtom lib.singleton (listOf' singleIniAtom) // {
             description = singleIniAtom.description + " or a list of them for duplicate keys";
           }
         else if listToValue != null then
@@ -155,7 +155,7 @@ rec {
         str
         path
         (attrsOf valueType)
-        (listOf valueType)
+        (listOf' valueType)
       ] // {
         description = "TOML value";
       };
@@ -269,7 +269,7 @@ rec {
             float
             str
             (attrsOf valueType)
-            (listOf valueType)
+            (listOf' valueType)
           ]) // {
           description = "Elixir value";
         };
