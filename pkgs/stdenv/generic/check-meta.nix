@@ -103,7 +103,7 @@ let
   # {pkgs, ...}:
   # {
   #   allowNonSource = false;
-  #   allowNonSourcePredicate = (x: pkgs.lib.hasPrefix "pulumi" x.name);
+  #   allowNonSourcePredicate = with lib.lists; pkg: !(any (p: !p.isSource && p!=lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
   # }
   allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
 
