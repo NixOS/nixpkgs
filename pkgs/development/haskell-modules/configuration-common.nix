@@ -217,6 +217,7 @@ self: super: {
   persistent-zookeeper = dontCheck super.persistent-zookeeper;
   pocket-dns = dontCheck super.pocket-dns;
   postgresql-simple = dontCheck super.postgresql-simple;
+  squeal-postgresql = dontCheck super.squeal-postgresql;
   postgrest = dontCheck super.postgrest;
   postgrest-ws = dontCheck super.postgrest-ws;
   snowball = dontCheck super.snowball;
@@ -859,9 +860,10 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.overrideScope (self: super: {
     hspec-meta = self.hspec-meta_2_9_3;
-    hspec = self.hspec_2_9_7;
-    hspec-core = dontCheck self.hspec-core_2_9_7;
-    hspec-discover = self.hspec-discover_2_9_7;
+    hspec = self.hspec_2_10_0;
+    hspec-core = dontCheck self.hspec-core_2_10_0;
+    hspec-discover = self.hspec-discover_2_10_0;
+    shelly = dontCheck super.shelly; # disable checks, because the newer hspec in this overrideScope doesn‘t work with newest hspec-contrib
   }));
 
   # Depends on broken fluid.
@@ -2012,8 +2014,6 @@ self: super: {
   haveibeenpwned = doJailbreak super.haveibeenpwned;
 
   # Too strict version bounds on ghc-events
-  # https://github.com/haskell/ThreadScope/issues/118
-  threadscope = doJailbreak super.threadscope;
   # https://github.com/mpickering/hs-speedscope/issues/16
   hs-speedscope = doJailbreak super.hs-speedscope;
 
@@ -2653,5 +2653,40 @@ self: super: {
   # https://github.com/haskell-servant/servant-cassava/commit/66617547851d38d48f5f1d1b786db1286bdafa9d
   servant-cassava = assert super.servant-cassava.version == "0.10.1";
     doJailbreak super.servant-cassava;
+
+  # Fix tests failure for ghc 9 (https://github.com/clinty/debian-haskell/pull/3)
+  debian = appendPatch (fetchpatch {
+    name = "debian-haskell.3.patch";
+    url = "https://github.com/clinty/debian-haskell/pull/3/commits/47441c8e4a7a00a3c8825eec98bf7a823594f9be.patch";
+    sha256 = "0wxpqazjnal9naibapg63nm7x6qz0lklcfw2m5mzjrh2q9x2cvnd";
+  }) super.debian;
+
+  # Raise version bounds for hspec
+  records-sop = appendPatch (fetchpatch {
+    url = "https://github.com/kosmikus/records-sop/pull/11/commits/d88831388ab3041190130fec3cdd679a4217b3c7.patch";
+    sha256 = "sha256-O+v/OxvqnlWX3HaDvDIBZnJ+Og3xs/SJqI3gaouU3ZI=";
+  }) super.records-sop;
+
+  # Fix build failures for ghc 9 (https://github.com/mokus0/polynomial/pull/20)
+  polynomial = appendPatch (fetchpatch {
+    name = "haskell-polynomial.20.patch";
+    url = "https://github.com/mokus0/polynomial/pull/20.diff";
+    sha256 = "1bwivimpi2hiil3zdnl5qkds1inyn239wgxbn3y8l2pwyppnnfl0";
+  })
+  (overrideCabal (drv: {
+    revision = null;
+    editedCabalFile = null;
+    doCheck = false; # Source dist doesn't include the checks
+  })
+  super.polynomial);
+
+  fast-tags = appendPatches [
+    (fetchpatch {
+      name = "fast-tags-ghc-9.0-fix-test-nondeterminism.patch";
+      url = "https://github.com/elaforge/fast-tags/commit/af861acc2dd239fedd8b169ddc5e3fa694e7af57.patch";
+      sha256 = "0ml678q1n29daqnxsb5p94s5lf7a6dk4lqbbgmiayxrbyxnlbi4f";
+      excludes = [ ".github/**" ];
+    })
+  ] super.fast-tags;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
