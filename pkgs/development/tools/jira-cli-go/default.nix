@@ -31,8 +31,8 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
     installShellCompletion --cmd jira \
-    --bash <($out/bin/jira completion bash) \
-    --zsh <($out/bin/jira completion zsh)
+      --bash <($out/bin/jira completion bash) \
+      --zsh <($out/bin/jira completion zsh)
   '';
 
   meta = with lib; {
