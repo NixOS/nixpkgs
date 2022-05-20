@@ -1,17 +1,11 @@
 { lib }:
 
-lib.mapAttrs (tname: tset: let
-  defaultSourceType = {
+let
+  defaultSourceType = tname: {
     shortName = tname;
     isSource = false;
   };
-
-  mkSourceType = sourceTypeDeclaration: let
-    applyDefaults = sourceType: defaultSourceType // sourceType;
-  in lib.pipe sourceTypeDeclaration [
-    applyDefaults
-  ];
-in mkSourceType tset) {
+in lib.mapAttrs (tname: tset: defaultSourceType tname // tset) {
 
   fromSource = {
     isSource = true;
