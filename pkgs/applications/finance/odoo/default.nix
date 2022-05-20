@@ -4,6 +4,7 @@
 , python3
 , nodePackages
 , wkhtmltopdf
+, nixosTests
 }:
 
 let
@@ -72,19 +73,18 @@ let
 in python.pkgs.buildPythonApplication rec {
   pname = "odoo";
 
-  major = "15";
-  minor = "0";
-  patch = "20220126";
+  odoo_version = "15.0";
+  odoo_release = "20220506";
 
-  version = "${major}.${minor}.${patch}";
+  version = "${odoo_version}.${odoo_release}";
 
   format = "setuptools";
 
   # latest release is at https://github.com/odoo/docker/blob/master/15.0/Dockerfile
   src = fetchurl {
-    url = "https://nightly.odoo.com/${major}.${minor}/nightly/src/odoo_${version}.tar.gz";
+    url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.tar.gz";
     name = "${pname}-${version}";
-    hash = "sha256-mofV0mNCdyzJecp0XegZBR/5NzHjis9kbpsUA/KJbZg=";
+    sha256 = "0mwlmfz5nhvg483ldrmlrjhwaf284c0c0pxf0fb0sfx2dnjjj3ib"; # odoo
   };
 
   # needs some investigation
@@ -139,6 +139,13 @@ in python.pkgs.buildPythonApplication rec {
     tar xfz $src
     cd odoo*
   '';
+
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      inherit (nixosTests) odoo;
+    };
+  };
 
   meta = with lib; {
     description = "Open Source ERP and CRM";

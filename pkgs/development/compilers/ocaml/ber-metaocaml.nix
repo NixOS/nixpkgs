@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl
 , ncurses
 , libX11, xorgproto, buildEnv
+, fetchpatch
 }:
 
 let
@@ -40,6 +41,17 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
   buildInputs = [ ncurses ] ++ optionals useX11 x11deps;
+
+  patches = [
+    # glibc 2.34 changed SIGSTKSZ from a #define'd integer to an
+    # expression involving a function call.  This broke all code that
+    # used SIGSTKSZ as the size of a statically-allocated array.  This
+    # patch is also applied by the ocaml/4.07.nix expression.
+    (fetchpatch {
+      url = "https://github.com/ocaml/ocaml/commit/00b8c4d503732343d5d01761ad09650fe50ff3a0.patch";
+      sha256 = "sha256:02cfya5ff5szx0fsl5x8ax76jyrla9zmf3qxavf3adhwq5ssrfcv";
+    })
+  ];
 
   postConfigure = ''
     tar -xvzf $metaocaml
