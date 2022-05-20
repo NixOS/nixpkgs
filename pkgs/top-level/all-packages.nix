@@ -7277,6 +7277,8 @@ with pkgs;
 
   jira-cli = callPackage ../development/tools/jira_cli { };
 
+  jira-cli-go = callPackage ../development/tools/jira-cli-go { };
+
   jirafeau = callPackage ../servers/web-apps/jirafeau { };
 
   jitterentropy = callPackage ../development/libraries/jitterentropy { };
