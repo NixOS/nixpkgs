@@ -32,6 +32,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'xmltodict = "^0.12.0"' 'xmltodict = ">=0.12.0"' \
       --replace "--cov=aiosteamist" ""
   '';
 
