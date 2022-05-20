@@ -1003,10 +1003,6 @@ self: super: {
   # https://github.com/haskell-hvr/resolv/pull/6
   resolv_0_1_1_2 = dontCheck super.resolv_0_1_1_2;
 
-  # Too strict bounds on base and Cabal, fixed on master
-  # Occasional test failures: https://github.com/phadej/spdx/issues/27
-  spdx = assert super.spdx.version == "1.0.0.2"; doJailbreak (dontCheck super.spdx);
-
   # The test suite does not know how to find the 'alex' binary.
   alex = overrideCabal (drv: {
     testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
@@ -2351,22 +2347,16 @@ self: super: {
       "--skip" "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/repeatedBy: simple test/"
     ] ++ drv.testFlags or [];
   }) super.Unique;
+
   # https://github.com/AndrewRademacher/aeson-casing/issues/8
   aeson-casing = assert super.aeson-casing.version == "0.2.0.0"; overrideCabal (drv: {
     testFlags = [
       "-p" "! /encode train/"
     ] ++ drv.testFlags or [];
   }) super.aeson-casing;
-  # https://github.com/Soostone/katip/issues/134
-  katip = assert super.katip.version == "0.8.7.0"; overrideCabal (drv: {
-    testFlags = [
-      "-p" "!/Text-golden/&&!/respects payloadKeys for each constituent payload/"
-    ] ++ drv.testFlags or [];
-  }) super.katip;
+
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
   # 2021-12-22: https://github.com/snapframework/heist/issues/131
-
-
   heist = assert super.heist.version == "1.1.0.1";
     # aeson 2.0 compat https://github.com/snapframework/heist/pull/132
     # not merged in master yet
