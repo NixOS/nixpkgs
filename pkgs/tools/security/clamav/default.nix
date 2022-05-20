@@ -13,8 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JwIDpUxFgEnbVPzZNoP/Wy2xkVHzY8SOgs7O/d4rNdQ=";
   };
 
-  # Flaky test, remove this when https://github.com/Cisco-Talos/clamav/issues/343 is fixed
-  patches = [ ./remove-freshclam-test.patch ];
+  patches = [
+    # Flaky test, remove this when https://github.com/Cisco-Talos/clamav/issues/343 is fixed
+    ./remove-freshclam-test.patch
+    ./sample-cofiguration-file-install-location.patch
+  ];
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkg-config rustc rust-bindgen rustfmt cargo python3 ];
@@ -25,6 +28,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"
+    "-DAPP_CONFIG_DIRECTORY=/etc/clamav"
   ];
 
   doCheck = true;
