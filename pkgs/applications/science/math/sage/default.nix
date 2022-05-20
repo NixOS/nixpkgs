@@ -78,8 +78,7 @@ let
 
   # The documentation for sage, building it takes a lot of ram.
   sagedoc = callPackage ./sagedoc.nix {
-    inherit sage-with-env;
-    inherit python3 maxima jupyter-kernel-specs;
+    inherit sage-with-env jupyter-kernel-specs;
   };
 
   # sagelib with added wrappers and a dependency on sage-tests to make sure thet tests were run.
