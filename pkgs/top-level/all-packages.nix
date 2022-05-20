@@ -2607,6 +2607,8 @@ with pkgs;
 
   awsls = callPackage ../tools/admin/awsls { };
 
+  awsrm = callPackage ../tools/admin/awsrm { };
+
   awstats = callPackage ../tools/system/awstats { };
 
   awsweeper = callPackage ../tools/admin/awsweeper { };
