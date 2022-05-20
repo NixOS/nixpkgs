@@ -29,6 +29,7 @@ rec {
   firefox-esr-91 = buildMozillaMach rec {
     pname = "firefox-esr";
     version = "91.9.0esr";
+    applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
       sha512 = "fd69d489429052013d2c1b8b766a47920ecee62f0688505758f593b27ae66d6343b9107163749406251aedebdf836147e4d562415a811b04d7ab2ae31e32f133";
