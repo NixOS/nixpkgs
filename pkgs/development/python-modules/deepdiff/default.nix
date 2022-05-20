@@ -45,6 +45,11 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  disabledTests = [
+    # https://github.com/seperman/deepdiff/issues/255
+    "test_get_numeric_types_distance"
+  ];
+
   meta = with lib; {
     description = "Deep Difference and Search of any Python object/data";
     homepage = "https://github.com/seperman/deepdiff";
