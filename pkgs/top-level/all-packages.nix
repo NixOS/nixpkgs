@@ -8730,6 +8730,8 @@ with pkgs;
 
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
+  pffft = callPackage ../development/libraries/pffft { };
+
   phash = callPackage ../development/libraries/phash { };
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
