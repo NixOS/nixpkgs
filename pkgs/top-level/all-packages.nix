@@ -26173,6 +26173,7 @@ with pkgs;
   rasdaemon = callPackage ../os-specific/linux/rasdaemon { };
 
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
+  raspberrypifw-master = callPackage ../os-specific/linux/firmware/raspberrypi/master.nix {};
   raspberrypiWirelessFirmware = callPackage ../os-specific/linux/firmware/raspberrypi-wireless { };
 
   raspberrypi-eeprom = callPackage ../os-specific/linux/raspberrypi-eeprom {};
