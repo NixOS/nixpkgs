@@ -89,13 +89,11 @@ let
     allowInsecurePredicate attrs ||
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
-  hasSourceProvenance = attrs:
-    attrs ? meta.sourceProvenance;
 
   isNonSource = sourceTypes: lib.lists.any (t: !t.isSource) sourceTypes;
 
   hasNonSourceProvenance = attrs:
-    hasSourceProvenance attrs &&
+    (attrs ? meta.sourceProvenance) &&
     isNonSource (lib.lists.toList attrs.meta.sourceProvenance);
 
   # Allow granular checks to allow only some non-source-built packages
