@@ -2,7 +2,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nginx-doc
 
 , nixosTests
-, substituteAll, gd, geoip, perl
+, substituteAll, removeReferencesTo, gd, geoip, perl
 , withDebug ? false
 , withKTLS ? false
 , withStream ? true
@@ -158,9 +158,16 @@ stdenv.mkDerivation {
     cp -r ${nginx-doc}/* $doc
   '';
 
-  postInstall = if postInstall != null then postInstall else ''
-    mv $out/sbin $out/bin
-  '';
+  nativeBuildInputs = [ removeReferencesTo ];
+
+  disallowedReferences = map (m: m.src) modules;
+
+  postInstall =
+    let
+      noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $out/sbin/nginx\n") modules;
+    in noSourceRefs + (if postInstall != null then postInstall else ''
+      mv $out/sbin $out/bin
+    '');
 
   passthru = {
     modules = modules;
