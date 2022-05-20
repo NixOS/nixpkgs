@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git;
+    homepage = "https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git";
     description = "Suite of real-time tests - cyclictest, hwlatdetect, pip_stress, pi_stress, pmqtest, ptsematest, rt-migrate-test, sendme, signaltest, sigwaittest, svsematest";
     platforms = platforms.linux;
     maintainers = with maintainers; [ poelzi ];
