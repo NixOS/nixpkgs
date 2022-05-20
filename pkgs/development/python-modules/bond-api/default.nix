@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "bond-api";
-  version = "0.1.17";
+  version = "0.1.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "prystupa";
     repo = "bond-api";
-    rev = "v${version}";
-    hash = "sha256-fuVYyDy3fG+XobFe2GCzMWRWPk8VDPLU4RHJzcF5MLg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+87/j94eHyW3EMMBK+aXaNTVoNxsixeLusyBsPWa9yM=";
   };
 
   propagatedBuildInputs = [
