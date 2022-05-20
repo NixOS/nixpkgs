@@ -305,7 +305,7 @@ stdenv.mkDerivation ({
     '';
 
     maintainers = lib.teams.gcc.members;
-
+    broken = langAda && gnatboot.meta.broken;
     platforms = lib.platforms.unix;
     badPlatforms = [ "aarch64-darwin" ];
   };
