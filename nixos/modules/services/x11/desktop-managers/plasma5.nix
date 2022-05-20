@@ -234,11 +234,11 @@ in
     (mkIf (cfg.enable || cfg.mobile.enable) {
 
       security.wrappers = {
-        kcheckpass = {
+        kscreenlocker_greet = {
           setuid = true;
           owner = "root";
           group = "root";
-          source = "${getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
+          source = "${getBin libsForQt5.kscreenlocker}/libexec/kscreenlocker_greet";
         };
         start_kdeinit = {
           setuid = true;
