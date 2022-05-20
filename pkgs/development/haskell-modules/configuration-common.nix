@@ -165,6 +165,9 @@ self: super: {
     })
   ] super.flat;
 
+  # Too strict bounds on base, optparse-applicative: https://github.com/edsko/friendly/issues/5
+  friendly = doJailbreak super.friendly;
+
   # Too strict bound on hspec: https://github.com/ivan-m/graphviz/issues/55
   graphviz = doJailbreak super.graphviz;
 
