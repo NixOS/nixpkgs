@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "periodictable";
-  version = "1.6.0";
+  version = "1.6.1";
 
   propagatedBuildInputs = [numpy pyparsing];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52e925220005c20e97601e7b04ad6cebc271680947ab9adcbb1a796ddbaa0f23";
+    sha256 = "sha256-fFAcn3PXex+yjLUehbKEKcLESpnOPRJ0iUVkxy1xJgM=";
   };
 
   checkInputs = [ pytest-cov pytestCheckHook ];
