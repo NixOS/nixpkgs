@@ -92,7 +92,7 @@ let
   hasSourceProvenance = attrs:
     attrs ? meta.sourceProvenance;
 
-  isNonSource = sourceTypes: lib.lists.any (t: !t.isSource or true) sourceTypes;
+  isNonSource = sourceTypes: lib.lists.any (t: !t.isSource) sourceTypes;
 
   hasNonSourceProvenance = attrs:
     hasSourceProvenance attrs &&
@@ -260,7 +260,7 @@ let
     downloadPage = str;
     changelog = either (listOf str) str;
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
-    sourceProvenance = either (listOf lib.types.attrs) (either lib.types.attrs str);
+    sourceProvenance = either (listOf lib.types.attrs) lib.types.attrs;
     maintainers = listOf (attrsOf str);
     priority = int;
     platforms = listOf str;
