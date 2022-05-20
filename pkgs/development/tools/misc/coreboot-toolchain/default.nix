@@ -9,6 +9,7 @@ let
     , getopt
     , git
     , gnat11
+    , gcc11
     , lib
     , perl
     , stdenvNoCC
@@ -33,7 +34,16 @@ let
       };
 
       nativeBuildInputs = [ bison curl git perl ];
-      buildInputs = [ flex gnat11 zlib ];
+      buildInputs = [
+        flex zlib
+
+        # gnat requires a long and increasingly-fragile bootstrapping
+        # chain; it broke days before ZHF 22.05, which risked causing
+        # coreboot-tools to be marked broken.  To guard against this
+        # in the future, we fall back to omitting ada support (and
+        # therefore libgfxinit) rather than failing completely.
+        (if gnat11.meta.broken then gcc11 else gnat11)
+      ];
 
       enableParallelBuilding = true;
       dontConfigure = true;
