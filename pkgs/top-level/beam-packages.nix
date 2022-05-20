@@ -20,6 +20,20 @@ with beam; {
 
     # Standard Erlang versions, using the generic builder.
 
+    # R25
+    erlangR25 = lib.callErlang ../development/interpreters/erlang/R25.nix {
+      wxGTK = wxGTK30;
+      parallelBuild = true;
+      autoconf = buildPackages.autoconf269;
+      inherit wxSupport systemdSupport;
+    };
+    erlangR25_odbc = erlangR25.override { odbcSupport = true; };
+    erlangR25_javac = erlangR25.override { javacSupport = true; };
+    erlangR25_odbc_javac = erlangR25.override {
+      javacSupport = true;
+      odbcSupport = true;
+    };
+
     # R24
     erlangR24 = lib.callErlang ../development/interpreters/erlang/R24.nix {
       wxGTK = wxGTK30;
@@ -106,6 +120,7 @@ with beam; {
     # Packages built with default Erlang version.
     erlang = packages.${defaultVersion};
 
+    erlangR25 = packagesWith interpreters.erlangR25;
     erlangR24 = packagesWith interpreters.erlangR24;
     erlangR23 = packagesWith interpreters.erlangR23;
     erlangR22 = packagesWith interpreters.erlangR22;

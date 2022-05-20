@@ -15,7 +15,7 @@ buildDunePackage rec {
     sha256 = "1v2hfq0ra9j07yz6pj6m03hrvgys4vmx0gclchv94yywpb2wc7ik";
   };
 
-  inherit (js_of_ocaml-compiler) meta;
-
   buildInputs = [ camlp4 ocsigen_deriving ];
+
+  meta = builtins.removeAttrs js_of_ocaml-compiler.meta [ "mainProgram" ];
 }

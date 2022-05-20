@@ -36,6 +36,5 @@ buildDunePackage rec {
     changelog = "https://github.com/mirage/awa-ssh/raw/v${version}/CHANGES.md";
     license = licenses.isc;
     maintainers = [ maintainers.sternenseemann ];
-    mainProgram = "awa_lwt_server";
   };
 }

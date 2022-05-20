@@ -13974,8 +13974,9 @@ with pkgs;
   tinycc = callPackage ../development/compilers/tinycc { };
 
   tinygo = callPackage ../development/compilers/tinygo {
-    inherit (llvmPackages_10) llvm clang-unwrapped lld;
+    llvmPackages = llvmPackages_14;
     avrgcc = pkgsCross.avr.buildPackages.gcc;
+    wasi-libc = pkgsCross.wasi32.wasilibc;
   };
 
   tinyscheme = callPackage ../development/interpreters/tinyscheme {
@@ -14202,7 +14203,7 @@ with pkgs;
   };
 
   inherit (beam.interpreters)
-    erlang erlangR24 erlangR23 erlangR22 erlangR21
+    erlang erlangR25 erlangR24 erlangR23 erlangR22 erlangR21
     erlang_odbc erlang_javac erlang_odbc_javac erlang_basho_R16B02
     elixir elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10 elixir_1_9
     elixir_ls;
