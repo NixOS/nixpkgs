@@ -61,6 +61,8 @@ in {
       kernelPatches = linux_4_19.kernelPatches;
     };
 
+    linux_pine64 = callPackage ../os-specific/linux/kernel/linux-pine64.nix {};
+
     linux_rpi1 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
       kernelPatches = with kernelPatches; [
         bridge_stp_helper
