@@ -444,8 +444,24 @@
         </term>
         <listitem>
           <para>
+            A list, probably but not certainly of
+            <emphasis><literal>t</literal></emphasis> type, e.g.
+            <literal>types.listOf int</literal>. Multiple definitions
+            are merged with list concatenation. The
+            <literal>check</literal> method will not examine the types
+            of the list elements.
+          </para>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
+          <literal>types.listOf'</literal>
+          <emphasis><literal>t</literal></emphasis>
+        </term>
+        <listitem>
+          <para>
             A list of <emphasis><literal>t</literal></emphasis> type,
-            e.g. <literal>types.listOf int</literal>. Multiple
+            e.g. <literal>types.listOf' int</literal>. Multiple
             definitions are merged with list concatenation.
           </para>
         </listitem>
