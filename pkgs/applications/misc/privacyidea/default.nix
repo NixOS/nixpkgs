@@ -11,6 +11,11 @@ let
           inherit version;
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
+        doCheck = false;
+      });
+      # fails with `no tests ran in 1.75s`
+      alembic = super.alembic.overridePythonAttrs (lib.const {
+        doCheck = false;
       });
       flask_migrate = super.flask_migrate.overridePythonAttrs (oldAttrs: rec {
         version = "2.7.0";
@@ -20,33 +25,70 @@ let
           sha256 = "ae2f05671588762dd83a21d8b18c51fe355e86783e24594995ff8d7380dffe38";
         };
       });
-      werkzeug = self.callPackage ../../../development/python2-modules/werkzeug { };
+      # Taken from by https://github.com/NixOS/nixpkgs/pull/173090/commits/d2c0c7eb4cc91beb0a1adbaf13abc0a526a21708
+      werkzeug = super.werkzeug.overridePythonAttrs (old: rec {
+        version = "1.0.1";
+        src = old.src.override {
+          inherit version;
+          sha256 = "6c80b1e5ad3665290ea39320b91e1be1e0d5f60652b964a3070216de83d2e47c";
+        };
+        checkInputs = old.checkInputs ++ (with self; [
+          requests
+        ]);
+        disabledTests = old.disabledTests ++ [
+          # ResourceWarning: unclosed file
+          "test_basic"
+          "test_date_to_unix"
+          "test_easteregg"
+          "test_file_rfc2231_filename_continuations"
+          "test_find_terminator"
+          "test_save_to_pathlib_dst"
+        ];
+        disabledTestPaths = old.disabledTestPaths ++ [
+          # ResourceWarning: unclosed file
+          "tests/test_http.py"
+        ];
+      });
+      # Required by flask-1.1
+      jinja2 = super.jinja2.overridePythonAttrs (old: rec {
+        version = "2.11.3";
+        src = old.src.override {
+          inherit version;
+          sha256 = "sha256-ptWEM94K6AA0fKsfowQ867q+i6qdKeZo8cdoy4ejM8Y=";
+        };
+      });
+      # Required by jinja2-2.11.3
+      markupsafe = super.markupsafe.overridePythonAttrs (old: rec {
+        version = "2.0.1";
+        src = old.src.override {
+          inherit version;
+          sha256 = "sha256-WUxngH+xYjizDES99082wCzfItHIzake+KDtjav1Ygo=";
+        };
+      });
+      # Required by flask-babel
+      itsdangerous = super.itsdangerous.overridePythonAttrs (old: rec {
+        version = "2.0.1";
+        src = old.src.override {
+          inherit version;
+          sha256 = "sha256-nnJNaPwikCoUNTUfhMP7hiPzA//8xWaky5Ut+MVyz/A=";
+        };
+      });
       flask = self.callPackage ../../../development/python2-modules/flask { };
       sqlsoup = super.sqlsoup.overrideAttrs ({ meta ? {}, ... }: {
         meta = meta // { broken = false; };
-      });
-      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-        version = "1.7.1";
-        src = python3.pkgs.fetchPypi {
-          pname = "PyJWT";
-          inherit version;
-          sha256 = "sha256-jVmpdvt3Pz5qOchWNjV8Tw4kJwc5TK2t2YFPXLqiDpY=";
-        };
-        # requires different testing dependencies, and privacyIDEA will test this as well
-        doCheck = false;
       });
     };
   };
 in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
-  version = "3.6.3";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SsOEmbyEAKU3pdzsyqi5SwDgJMGEAzyCywoio9iFQAA=";
+    sha256 = "sha256-c5pWbBaOFQd7z3BvtYgrnZBiknLBDCE6So76Q68AptA=";
     fetchSubmodules = true;
   };
 
@@ -55,7 +97,7 @@ python3'.pkgs.buildPythonPackage rec {
     defusedxml croniter flask_migrate pyjwt configobj sqlsoup pillow
     python-gnupg passlib pyopenssl beautifulsoup4 smpplib flask-babel
     ldap3 huey pyyaml qrcode oauth2client requests lxml cbor2 psycopg2
-    pydash ecdsa google-auth importlib-metadata
+    pydash ecdsa google-auth importlib-metadata argon2-cffi bcrypt
   ];
 
   passthru.tests = { inherit (nixosTests) privacyidea; };
