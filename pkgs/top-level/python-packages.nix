@@ -2380,6 +2380,8 @@ in {
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
+  djangorestframework-dataclasses = callPackage ../development/python-modules/djangorestframework-dataclasses { };
+
   djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
 
   django_reversion = callPackage ../development/python-modules/django_reversion { };
