@@ -9,7 +9,7 @@
 , packaging
 , pathspec
 , pluggy
-, tomli # < 3.11
+, tomli
 
 # tests
 , build
@@ -56,7 +56,6 @@ buildPythonPackage {
     build
     packaging
     requests
-    tomli
     virtualenv
   ];
 
