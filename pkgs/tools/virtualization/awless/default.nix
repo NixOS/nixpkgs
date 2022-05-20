@@ -16,7 +16,7 @@ buildGoPackage rec {
   meta = with lib; {
     homepage = "https://github.com/wallix/awless/";
     description = "A Mighty CLI for AWS";
-    platforms = with platforms; linux ++ darwin;
+    platforms = with platforms; [ "i686-linux" "x86_64-linux" ]++ darwin;
     license = licenses.asl20;
     maintainers = with maintainers; [ pradeepchhetri swdunlop ];
   };
