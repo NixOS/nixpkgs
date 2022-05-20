@@ -135,6 +135,15 @@
     "vendorSha256": null,
     "version": "0.10.0"
   },
+  "b2": {
+    "owner": "Backblaze",
+    "provider-source-address": "registry.terraform.io/Backblaze/b2",
+    "repo": "terraform-provider-b2",
+    "rev": "v0.8.0",
+    "sha256": "sha256-2yyAKrDO7X5yujfrHhYuvXbuKk3yY1sCXRZ8U/9OnrM=",
+    "vendorSha256": "sha256-f5bvk0p7AU1i/xeapxyVRXIUARju6mNQokejaDnT/GI=",
+    "version": "0.8.0"
+  },
   "baiducloud": {
     "owner": "baidubce",
     "provider-source-address": "registry.terraform.io/baidubce/baiducloud",
