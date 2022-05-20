@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchFromGitLab
 , cmake
 , extra-cmake-modules
 , applet-window-buttons
@@ -11,23 +10,16 @@
 , kirigami2
 , mauikit
 , mauikit-filebrowsing
-, mauikit-accounts
-, mauikit-texteditor
+, mauikit-imagetools
 , qtmultimedia
 , qtquickcontrols2
+, qtlocation
+, exiv2
+, kquickimageedit
 }:
 
-mkDerivation rec {
-  pname = "buho";
-  version = "2.1.1";
-
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "maui";
-    repo = "buho";
-    rev = "v${version}";
-    sha256 = "sha256-rHjjvjRY2WsyZfj3fzp46copZ1g2ae6PVv9lBNZDzcI=";
-  };
+mkDerivation {
+  pname = "pix";
 
   nativeBuildInputs = [
     cmake
@@ -43,15 +35,17 @@ mkDerivation rec {
     kirigami2
     mauikit
     mauikit-filebrowsing
-    mauikit-accounts
-    mauikit-texteditor
+    mauikit-imagetools
     qtmultimedia
     qtquickcontrols2
+    qtlocation
+    exiv2
+    kquickimageedit
   ];
 
   meta = with lib; {
-    description = "Task and Note Keeper";
-    homepage = "https://invent.kde.org/maui/buho";
+    description = "Image gallery application";
+    homepage = "https://invent.kde.org/maui/pix";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];
   };

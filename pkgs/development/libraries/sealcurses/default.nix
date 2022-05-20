@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sealcurses";
-  version = "unstable-2022-04-28"; # No release yet
+  version = "unstable-2022-05-18"; # No release yet
 
   src = fetchFromGitea {
     domain = "git.skyjake.fi";
     owner = "skyjake";
     repo = pname;
-    rev = "abf27cfd2567a0765aaa115cabab0abb7f862253";
-    hash = "sha256-c4zi/orHyr1hkuEisqZ9V8SaiH1IoxIbeGMrLBEkZ0A=";
+    rev = "417d77d790ede990b4c149f21c58fd13b8f273cc";
+    hash = "sha256-yOrJYy9vBv5n8yK6u7tfMq56LBBw5rmhUjORINW8gxo=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

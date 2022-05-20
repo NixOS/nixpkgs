@@ -1,6 +1,5 @@
 { lib
 , mkDerivation
-, fetchFromGitLab
 , cmake
 , extra-cmake-modules
 , applet-window-buttons
@@ -10,24 +9,15 @@
 , kio
 , kirigami2
 , mauikit
-, mauikit-accounts
 , mauikit-filebrowsing
 , qtmultimedia
 , qtquickcontrols2
 , taglib
+, ffmpeg
 }:
 
-mkDerivation rec {
-  pname = "vvave";
-  version = "2.1.1";
-
-  src = fetchFromGitLab {
-    domain = "invent.kde.org";
-    owner = "maui";
-    repo = "vvave";
-    rev = "v${version}";
-    sha256 = "sha256-ykX1kd3106KTDTJQIGk6miSgbj+oROiXQl/nkCjTphE=";
-  };
+mkDerivation {
+  pname = "clip";
 
   nativeBuildInputs = [
     cmake
@@ -42,18 +32,17 @@ mkDerivation rec {
     kio
     kirigami2
     mauikit
-    mauikit-accounts
     mauikit-filebrowsing
     qtmultimedia
     qtquickcontrols2
     taglib
+    ffmpeg
   ];
 
   meta = with lib; {
-    description = "Multi-platform media player";
-    homepage = "https://invent.kde.org/maui/vvave";
+    description = "Video player and video collection manager";
+    homepage = "https://invent.kde.org/maui/clip";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ onny ];
   };
 }
-

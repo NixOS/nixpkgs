@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
     sha256 = "SrTNEYk13JXAcJuogm9fZ7CrzJIDRc0aziGdjRNv96I=";
   };
 
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    substituteInPlace src/util/genfsimg --replace "	syslinux " "	true "
+  ''; # calling syslinux on a FAT image isn't going to work
+
   # not possible due to assembler code
   hardeningDisable = [ "pic" "stackprotector" ];
 
