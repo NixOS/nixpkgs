@@ -22559,6 +22559,8 @@ with pkgs;
       # see also openssl, which has/had this same trick
   };
 
+  stash = callPackage ../servers/stash { };
+
   sickgear = callPackage ../servers/sickbeard/sickgear.nix { };
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
