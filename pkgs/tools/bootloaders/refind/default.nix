@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gnu-efi }:
+{ lib, stdenv, fetchurl, gnu-efi, nixosTests }:
 
 let
   archids = {
@@ -14,11 +14,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "refind";
-  version = "0.13.2";
+  version = "0.13.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "0w6990ggns4xsdmgj3aq527q15frrxfmxwa3m6igabd4ai498n6x";
+    sha256 = "1lfgqqiyl6isy25wrxzyi3s334ii057g88714igyjjmxh47kygks";
   };
 
   patches = [
@@ -106,6 +106,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    uefiCdrom = nixosTests.boot.uefiCdrom;
+  };
 
   meta = with lib; {
     description = "A graphical {,U}EFI boot manager";

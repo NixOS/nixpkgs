@@ -57,6 +57,7 @@
   ./hardware/sensor/hddtemp.nix
   ./hardware/sensor/iio.nix
   ./hardware/keyboard/teck.nix
+  ./hardware/keyboard/uhk.nix
   ./hardware/keyboard/zsa.nix
   ./hardware/ksm.nix
   ./hardware/ledger.nix
@@ -196,7 +197,6 @@
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
   ./programs/proxychains.nix
-  ./programs/phosh.nix
   ./programs/qt5ct.nix
   ./programs/screen.nix
   ./programs/sedutil.nix
@@ -505,6 +505,7 @@
   ./services/mail/postfixadmin.nix
   ./services/mail/postsrsd.nix
   ./services/mail/postgrey.nix
+  ./services/mail/public-inbox.nix
   ./services/mail/spamassassin.nix
   ./services/mail/rspamd.nix
   ./services/mail/rss2email.nix
@@ -936,6 +937,7 @@
   ./services/networking/unifi.nix
   ./services/video/unifi-video.nix
   ./services/video/rtsp-simple-server.nix
+  ./services/networking/uptermd.nix
   ./services/networking/v2ray.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wasabibackend.nix
@@ -1079,6 +1081,7 @@
   ./services/web-apps/trilium.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix
+  ./services/web-apps/snipe-it.nix
   ./services/web-apps/vikunja.nix
   ./services/web-apps/virtlyst.nix
   ./services/web-apps/wiki-js.nix

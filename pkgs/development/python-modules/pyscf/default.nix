@@ -1,5 +1,4 @@
 { buildPythonPackage
-, python3
 , lib
 , fetchFromGitHub
 , cmake

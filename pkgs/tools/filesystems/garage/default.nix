@@ -1,4 +1,5 @@
-{ lib, rustPlatform, fetchFromGitea, protobuf, testers, garage }:
+{ lib, stdenv, rustPlatform, fetchFromGitea, protobuf, testers, Security, garage }:
+
 rustPlatform.buildRustPackage rec {
   pname = "garage";
   version = "0.7.0";
@@ -14,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-XGSenT2q3VXNcIT1Lg1e5HTOkEdOb1o3H07ahteQM/o=";
 
   nativeBuildInputs = [ protobuf ];
+
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   passthru = {
     tests.version = testers.testVersion { package = garage; };

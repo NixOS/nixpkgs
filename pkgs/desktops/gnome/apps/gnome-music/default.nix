@@ -74,6 +74,7 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
+    gst-libav
   ]);
 
   pythonPath = with python3.pkgs; [

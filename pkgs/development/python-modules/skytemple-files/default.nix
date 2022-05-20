@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, appdirs, dungeon-eos, explorerscript
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, appdirs, dungeon-eos, explorerscript
 , ndspy, pillow, setuptools, skytemple-rust, tilequant, armips
 }:
 
@@ -31,5 +31,6 @@ buildPythonPackage rec {
     description = "Python library to edit the ROM of Pokémon Mystery Dungeon Explorers of Sky";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ xfix marius851000 ];
+    broken = stdenv.isDarwin; # pyobjc is missing
   };
 }

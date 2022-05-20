@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "itemadapter";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BbanndMaepk9+y6Dhqkcl+O4xs8otyVT6AjmJeC4fCA=";
+    hash = "sha256-Px9g69bJGwAiKCDzi/USaqSaj7bkZ9NR8DZEIflToV0=";
   };
 
   # Infinite recursion with Scrapy

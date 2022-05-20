@@ -112,7 +112,7 @@ in
 
     services.mysql.ensureUsers = optional (config.services.mysql.enable && cfg.config.mysql_dump_host == "localhost") {
       name = user;
-      ensurePermissions = { "*.*" = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES"; };
+      ensurePermissions = { "*.*" = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES, EVENT"; };
     };
 
   };

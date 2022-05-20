@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     homepage    = "https://github.com/andersson/qdl";
     description = "Tool for flashing images to Qualcomm devices";
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ musfay ];
+    maintainers = with maintainers; [ muscaln ];
     platforms   = platforms.linux;
   };
 }

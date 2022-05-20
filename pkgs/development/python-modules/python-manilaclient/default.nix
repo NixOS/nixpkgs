@@ -13,7 +13,7 @@
 , simplejson
 , sphinx
 , sphinxcontrib-programoutput
-, Babel
+, babel
 , osc-lib
 , python-keystoneclient
 , debtcollector
@@ -45,7 +45,7 @@ buildPythonApplication rec {
     prettytable
     requests
     simplejson
-    Babel
+    babel
     osc-lib
     python-keystoneclient
     debtcollector

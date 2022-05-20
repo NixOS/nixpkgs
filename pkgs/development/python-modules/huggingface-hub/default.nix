@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
-    rev = "v${version}";
-    sha256 = "sha256-rrkubNy60e/1VcGacYQang4yWxUzIBGySxZyq6G1arw=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-jR4aqMAAQJ5a7pOe3RpCtLgdm5JVVSPsBQtube6FeqM=";
   };
 
   nativeBuildInputs = [ packaging ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
    meta = with lib; {
     homepage = "https://github.com/huggingface/huggingface_hub";
     description = "Download and publish models and other files on the huggingface.co hub";
-    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/${version}";
+    changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

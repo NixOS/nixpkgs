@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pytest-cases";
-  version = "3.6.11";
+  version = "3.6.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9rcXPoGxR3sxX3tFbv1O/T7kfrKnIB2XV1mJvSH5WQ4=";
+    sha256 = "sha256-pZ7GGqc+Nd71V+3I2LYVMYbaLBPG5+Ze+d7Mb5CONCI=";
   };
 
   nativeBuildInputs = [

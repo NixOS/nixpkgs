@@ -273,9 +273,6 @@ in
 
         boot.kernelModules = [ "loop" "atkbd" ];
 
-        # The Linux kernel >= 2.6.27 provides firmware.
-        hardware.firmware = [ kernel ];
-
         # Create /etc/modules-load.d/nixos.conf, which is read by
         # systemd-modules-load.service to load required kernel modules.
         environment.etc =

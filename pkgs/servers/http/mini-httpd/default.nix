@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  NIX_CFLAGS_COMPILE = [ "-std=c++14" ];
+
   meta = {
     homepage = "http://mini-httpd.nongnu.org/";
     description = "minimalistic high-performance web server";

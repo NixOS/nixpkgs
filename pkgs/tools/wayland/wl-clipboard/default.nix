@@ -6,6 +6,7 @@
 , pkg-config
 , wayland
 , wayland-protocols
+, wayland-scanner
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "0c4w87ipsw09aii34szj9p0xfy0m00wyjpll0gb0aqmwa60p0c5d";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config wayland-protocols ];
-  buildInputs = [ wayland ];
+  strictDeps = true;
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
+  buildInputs = [ wayland wayland-protocols ];
 
   meta = with lib; {
     homepage = "https://github.com/bugaevc/wl-clipboard";
@@ -30,4 +32,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-# TODO: is wayland-protocols a nativeBuildInput or a buildInput?

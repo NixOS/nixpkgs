@@ -1,20 +1,27 @@
-{ fetchFromGitHub, ocamlPackages, lib }:
+{ lib
+, fetchFromGitea
+, ocamlPackages
+}:
 
 ocamlPackages.buildDunePackage rec {
   pname = "soupault";
-  version = "3.2.0";
+  version = "4.0.0";
 
   useDune2 = true;
 
-  src = fetchFromGitHub {
-    owner = "dmbaturin";
+  minimalOCamlVersion = "4.08";
+
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "PataphysicalSociety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-T1K/ntCK19LfPmMtaAa9c1JjSL+5dax2SNhM4yUFln4=";
+    sha256 = "sha256-txNKAZMd3LReFoAtf6iaoDF+Ku3IUNDzBWUqGC2ePKw=";
   };
 
   buildInputs = with ocamlPackages; [
     base64
+    camomile
     containers
     ezjsonm
     fileutils
@@ -32,11 +39,10 @@ ocamlPackages.buildDunePackage rec {
     yaml
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A tool that helps you create and manage static websites";
     homepage = "https://soupault.app/";
-    license = licenses.mit;
-    maintainers = [ maintainers.toastal ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ toastal ];
   };
 }
-

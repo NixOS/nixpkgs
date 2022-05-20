@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "alps";
-  version = "2021-09-29";
+  version = "2022-03-01";
 
   src = fetchFromSourcehut {
     owner = "~migadu";
     repo = "alps";
-    rev = "d4c35f3c3157bece8e50fd95f2ee1081be30d7ae";
-    sha256 = "sha256-xKfRLdfeD7lWdmC0iiq4dOIv2SmzbKH7HcAISCJgdug=";
+    rev = "f4523b51af0787795973b403b978ff74737a47ef";
+    hash = "sha256-un1RGIABFhHKeXPXtLnGayyoGzfo5PZc8VBSHA0PAaw=";
   };
 
   vendorSha256 = "sha256-Vg0k+YSMg6Ree/jkVV2VQ8RbSbQFUhmUN2MeTBxPeLo=";

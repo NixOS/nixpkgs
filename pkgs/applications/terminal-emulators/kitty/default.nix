@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, python3Packages, libunistring
-, harfbuzz, fontconfig, pkg-config, ncurses, imagemagick, xsel
+, harfbuzz, fontconfig, pkg-config, ncurses, imagemagick
 , libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor
 , libxkbcommon, libXi, libXext, wayland-protocols, wayland
 , lcms2
@@ -58,7 +58,7 @@ buildPythonApplication rec {
   ] ++ lib.optionals stdenv.isLinux [
     fontconfig libunistring libcanberra libX11
     libXrandr libXinerama libXcursor libxkbcommon libXi libXext
-    wayland-protocols wayland dbus
+    wayland-protocols wayland dbus libGL
   ];
 
   nativeBuildInputs = [
@@ -74,8 +74,6 @@ buildPythonApplication rec {
     imagemagick
     libicns  # For the png2icns tool.
   ];
-
-  propagatedBuildInputs = lib.optional stdenv.isLinux libGL;
 
   outputs = [ "out" "terminfo" "shell_integration" ];
 
@@ -159,7 +157,7 @@ buildPythonApplication rec {
     '' else ''
     cp -r linux-package/{bin,share,lib} $out
     ''}
-    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick xsel ncurses.dev ]}"
+    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
 
     installShellCompletion --cmd kitty \
       --bash <("$out/bin/kitty" +complete setup bash) \

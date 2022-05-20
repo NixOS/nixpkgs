@@ -4,6 +4,7 @@
 , buildPackages
 , sharutils
 , file
+, getconf
 , flint
 , ntl
 , cddlib
@@ -87,7 +88,7 @@ stdenv.mkDerivation rec {
     latex2html
     texinfo4
     texlive.combined.scheme-small
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ getconf ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   preAutoreconf = ''

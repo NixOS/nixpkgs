@@ -28,7 +28,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   disabled = pythonOlder "3.7" ||
-    pythonAtLeast "3.10";  # see GHSA-7p79-6x2v-5h88
+    pythonAtLeast "3.10"; # see GHSA-7p79-6x2v-5h88
 
   src = fetchFromGitHub {
     owner = "sanic-org";
@@ -82,6 +82,9 @@ buildPythonPackage rec {
 
     # needed for relative paths for some packages
     cd tests
+  '' + lib.optionalString stdenv.isDarwin  ''
+    # OSError: [Errno 24] Too many open files
+    ulimit -n 1024
   '';
 
   # uvloop usage is buggy
@@ -125,6 +128,13 @@ buildPythonPackage rec {
     "test_raw_headers"
     # noisy_exceptions sometimes missing from sanic stdout
     "test_noisy_exceptions"
+  ] ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    # test fail on aarch64
+    "test_tls_wrong_options"
+    "test_cookie_expires"
+    "test_gunicorn_worker"
+    "test_gunicorn_worker_no_logs"
+    "test_gunicorn_worker_with_logs"
   ];
 
   disabledTestPaths = [

@@ -26,8 +26,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An OCaml library for segmenting Unicode text";
     homepage = webpage;
-    inherit (ocaml.meta) platforms;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
+    mainProgram = "usegtrip";
+    inherit (ocaml.meta) platforms;
   };
 }

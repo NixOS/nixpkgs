@@ -118,7 +118,11 @@ stdenv.mkDerivation {
     python3 scripts/utils/import_languages.py --qt_path '${lib.getDev qttools}/bin'
   '';
 
-  qmakeFlags = [ "USRPATH=$(out)" "ETCPATH=$(out)/etc" ];
+  qmakeFlags = [
+    "USRPATH=$(out)"
+    "ETCPATH=$(out)/etc"
+    "CONFIG-=debug" # https://github.com/mozilla-mobile/mozilla-vpn-client/pull/3539
+  ];
   qtWrapperArgs =
     [ "--prefix" "PATH" ":" (lib.makeBinPath [ wireguard-tools ]) ];
 

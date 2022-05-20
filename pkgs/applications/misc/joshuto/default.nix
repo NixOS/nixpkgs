@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, SystemConfiguration }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, SystemConfiguration, Foundation }:
 
 rustPlatform.buildRustPackage rec {
   pname = "joshuto";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-vhTfAoAwDJ9BjhgUEkV2H+KAetJR1YqwaZ7suF6yMXA=";
 
-  buildInputs = lib.optional stdenv.isDarwin SystemConfiguration;
+  buildInputs = lib.optionals stdenv.isDarwin [ SystemConfiguration Foundation ];
 
   meta = with lib; {
     description = "Ranger-like terminal file manager written in Rust";

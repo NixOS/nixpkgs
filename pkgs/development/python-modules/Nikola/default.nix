@@ -1,6 +1,6 @@
 { lib
 , aiohttp
-, Babel
+, babel
 , blinker
 , buildPythonPackage
 , python-dateutil
@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
-    Babel
+    babel
     blinker
     python-dateutil
     docutils

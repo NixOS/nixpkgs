@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -41,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/harfbuzz/uharfbuzz";
     license = licenses.asl20;
     maintainers = with maintainers; [ wolfangaukang ];
+    broken = stdenv.isDarwin;
   };
 }

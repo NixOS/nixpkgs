@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libkqueue";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "mheily";
     repo = "libkqueue";
     rev = "v${version}";
-    sha256 = "sha256-qh1r95A/ngg4KWSVYlC8ldv2ClV+rRPNcJDH+aAGxHs=";
+    sha256 = "sha256-YKKBHOxjUS7+/ib4gcR7EYjjVOwhHVksYasLhErdV8s=";
   };
 
   nativeBuildInputs = [ cmake ];

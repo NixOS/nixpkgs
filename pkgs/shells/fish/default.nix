@@ -186,6 +186,7 @@ let
       rm tests/pexpects/exit_handlers.py
     '';
 
+    strictDeps = true;
     nativeBuildInputs = [
       cmake
       gettext

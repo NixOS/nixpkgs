@@ -12,15 +12,34 @@
   <xsl:output method='xml' encoding="UTF-8" />
 
   <xsl:param name="revision" />
+  <xsl:param name="documentType" />
   <xsl:param name="program" />
 
 
   <xsl:template match="/expr/list">
-    <appendix xml:id="appendix-configuration-options">
-      <title>Configuration Options</title>
+    <xsl:choose>
+      <xsl:when test="$documentType = 'appendix'">
+        <appendix xml:id="appendix-configuration-options">
+          <title>Configuration Options</title>
+          <xsl:call-template name="variable-list"/>
+        </appendix>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="variable-list"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="variable-list">
       <variablelist xml:id="configuration-variable-list">
         <xsl:for-each select="attrs">
-          <xsl:variable name="id" select="concat('opt-', str:replace(str:replace(str:replace(str:replace(attr[@name = 'name']/string/@value, '*', '_'), '&lt;', '_'), '>', '_'), ':', '_'))" />
+          <xsl:variable name="id" select="
+            concat('opt-',
+              translate(
+                attr[@name = 'name']/string/@value,
+                '*&lt; >[]:',
+                '_______'
+            ))" />
           <varlistentry>
             <term xlink:href="#{$id}">
               <xsl:attribute name="xml:id"><xsl:value-of select="$id"/></xsl:attribute>
@@ -96,7 +115,6 @@
         </xsl:for-each>
 
       </variablelist>
-    </appendix>
   </xsl:template>
 
 

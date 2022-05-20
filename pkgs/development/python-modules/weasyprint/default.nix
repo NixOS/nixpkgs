@@ -48,6 +48,12 @@ buildPythonPackage rec {
       pangocairo = "${pango.out}/lib/libpangocairo-1.0${stdenv.hostPlatform.extensions.sharedLibrary}";
       harfbuzz = "${harfbuzz.out}/lib/libharfbuzz${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
+    # Disable tests for new Ghostscript
+    # Remove when next version is released
+    (fetchpatch {
+      url = "https://github.com/Kozea/WeasyPrint/commit/e544398b00d76bc0317ea7e2abe40dc46b380910.patch";
+      sha256 = "sha256-oQO3j9Mo1x98WaLPROxsOn0qkeYRJrCx5QWWKoHvabE=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -80,6 +86,8 @@ buildPythonPackage rec {
     # sensitive to sandbox environments
     "test_tab_size"
     "test_tabulation_character"
+    "test_linear_gradients_5"
+    "test_linear_gradients_12"
   ];
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";

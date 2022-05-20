@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "manuel";
-  version = "1.10.1";
+  version = "1.11.2";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bdzay7j70fly5fy6wbdi8fbrxjrrlxnxnw226rwry1c8a351rpy";
+    sha256 = "sha256-nJt3WMQ66oa3VlW5InJCzOea96Wf7WwxSbBp9WIfzqc=";
   };
 
   propagatedBuildInputs = [ six ];

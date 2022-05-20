@@ -1,6 +1,7 @@
 { type
 , version
 , srcs
+, icu #passing icu as an argument, because dotnet 3.1 has troubles with icu71
 }:
 
 assert builtins.elem type [ "aspnetcore" "runtime" "sdk"];
@@ -11,7 +12,6 @@ assert builtins.elem type [ "aspnetcore" "runtime" "sdk"];
 , writeText
 , libunwind
 , openssl
-, icu
 , libuuid
 , zlib
 , curl
@@ -38,7 +38,6 @@ in stdenv.mkDerivation rec {
   rpath = lib.makeLibraryPath ([
     stdenv.cc.cc
     zlib
-
     curl
     icu
     libunwind

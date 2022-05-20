@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonPackage
 , click
 , cryptography
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    Babel
+    babel
     installShellFiles
   ];
 

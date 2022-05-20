@@ -153,11 +153,11 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud22" "nextcloud23" ];
+      relatedPackages = [ "nextcloud22" "nextcloud23" "nextcloud24" ];
     };
     phpPackage = mkOption {
       type = types.package;
-      relatedPackages = [ "php74" "php80" ];
+      relatedPackages = [ "php74" "php80" "php81" ];
       defaultText = "pkgs.php";
       description = ''
         PHP package to use for Nextcloud.
@@ -546,16 +546,29 @@ in {
       '';
     };
 
-    nginx.recommendedHttpHeaders = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enable additional recommended HTTP response headers";
+    nginx = {
+      recommendedHttpHeaders = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable additional recommended HTTP response headers";
+      };
+      hstsMaxAge = mkOption {
+        type = types.ints.positive;
+        default = 15552000;
+        description = ''
+          Value for the <code>max-age</code> directive of the HTTP
+          <code>Strict-Transport-Security</code> header.
+
+          See section 6.1.1 of IETF RFC 6797 for detailed information on this
+          directive and header.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 23;
+        latest = 24;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -591,6 +604,7 @@ in {
         ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
         ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
         ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
+        ++ (optional (versionOlder cfg.package.version "24") (upgradeWarning 23 "22.05"))
         ++ (optional isUnsupportedMariadb ''
             You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
             Please note that this isn't supported officially by Nextcloud. You can either
@@ -613,14 +627,15 @@ in {
             ''
           else if versionOlder stateVersion "21.11" then nextcloud21
           else if versionOlder stateVersion "22.05" then nextcloud22
-          else nextcloud23
+          else nextcloud24
         );
 
       services.nextcloud.datadir = mkOptionDefault config.services.nextcloud.home;
 
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "21" then pkgs.php74
-        else pkgs.php80;
+        else if versionOlder cfg.package.version "24" then pkgs.php80
+        else pkgs.php81;
     }
 
     { assertions = [
@@ -702,7 +717,7 @@ in {
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
-              'log_level' => '${builtins.toString cfg.logLevel}',
+              'loglevel' => '${builtins.toString cfg.logLevel}',
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
               ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
@@ -871,7 +886,7 @@ in {
         # FIXME(@Ma27) Nextcloud isn't compatible with mariadb 10.6,
         # this is a workaround.
         # See https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/22
-        settings = {
+        settings = mkIf (versionOlder cfg.package.version "24") {
           mysqld = {
             innodb_read_only_compressed = 0;
           };
@@ -983,7 +998,9 @@ in {
             add_header X-Permitted-Cross-Domain-Policies none;
             add_header X-Frame-Options sameorigin;
             add_header Referrer-Policy no-referrer;
-            add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+          ''}
+          ${optionalString (cfg.https) ''
+            add_header Strict-Transport-Security "max-age=${toString cfg.nginx.hstsMaxAge}; includeSubDomains" always;
           ''}
           client_max_body_size ${cfg.maxUploadSize};
           fastcgi_buffers 64 4K;

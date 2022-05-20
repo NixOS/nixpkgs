@@ -5,6 +5,7 @@
 , dill
 , fastavro
 , fetchFromGitHub
+, fetchpatch
 , freezegun
 , grpcio
 , grpcio-tools
@@ -50,6 +51,15 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-FmfTxRLqXUHhhAZIxCRx2+phX0bmU5rIHaftBU4yBJY=";
   };
+
+  patches = [
+    # patch in the pyarrow.Table.to_batches(max_chunksize=...) argument fix
+    (fetchpatch {
+      url = "https://github.com/apache/beam/commit/2418a14ee99ff490d1c82944043f97f37ec97a85.patch";
+      sha256 = "sha256-G8ARBBf7nmF46P2ncnlteGFnPWq5iCqZDfuaosre9jY=";
+      stripLen = 2;
+    })
+  ];
 
   # See https://github.com/NixOS/nixpkgs/issues/156957.
   postPatch = ''

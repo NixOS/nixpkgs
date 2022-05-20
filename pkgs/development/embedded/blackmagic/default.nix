@@ -1,40 +1,37 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch
-, gcc-arm-embedded, libftdi1, libusb-compat-0_1, pkg-config
+{ stdenv, lib
+, fetchFromGitHub
+, gcc-arm-embedded
+, pkg-config
 , python3
+, hidapi
+, libftdi1
+, libusb1
 }:
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "blackmagic";
-  version = "unstable-2020-08-05";
+  version = "unstable-2022-04-16";
   # `git describe --always`
-  firmwareVersion = "v1.6.1-539-gdd74ec8";
+  firmwareVersion = "v1.7.1-415-gc4869a5";
 
   src = fetchFromGitHub {
     owner = "blacksphere";
     repo = "blackmagic";
-    rev = "dd74ec8e6f734302daa1ee361af88dfb5043f166";
-    sha256 = "18w8y64fs7wfdypa4vm3migk5w095z8nbd8qp795f322mf2bz281";
+    rev = "c4869a54733ae92099a7316954e34d1ab7b6097c";
+    hash = "sha256-0MC1v/5u/txSshxkOI5TErMRRrYCcHly3qbVTAk9Vc0=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    # Fix deprecation warning with libftdi 1.5
-    (fetchpatch {
-      url = "https://github.com/blacksphere/blackmagic/commit/dea4be2539c5ea63836ec78dca08b52fa8b26ab5.patch";
-      sha256 = "0f81simij1wdhifsxaavalc6yxzagfbgwry969dbjmxqzvrsrds5";
-    })
-  ];
-
   nativeBuildInputs = [
-    gcc-arm-embedded pkg-config
+    gcc-arm-embedded
+    pkg-config
     python3
   ];
 
   buildInputs = [
+    hidapi
     libftdi1
-    libusb-compat-0_1
+    libusb1
   ];
 
   strictDeps = true;
@@ -50,12 +47,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildPhase = "${stdenv.shell} ${./helper.sh}";
+  buildPhase = ''
+    runHook preBuild
+    ${stdenv.shell} ${./helper.sh}
+    runHook postBuild
+  '';
+
   dontInstall = true;
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "In-application debugger for ARM Cortex microcontrollers";
     longDescription = ''
       The Black Magic Probe is a modern, in-application debugging tool

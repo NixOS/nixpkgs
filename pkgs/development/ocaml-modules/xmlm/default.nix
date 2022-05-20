@@ -27,8 +27,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An OCaml streaming codec to decode and encode the XML data format";
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
-    maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
+    mainProgram = "xmltrip";
+    inherit (ocaml.meta) platforms;
   };
 }

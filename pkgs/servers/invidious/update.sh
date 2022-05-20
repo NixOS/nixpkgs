@@ -41,7 +41,7 @@ git -C "$git_dir" fetch origin "$git_branch"
 # because there might still be commits coming
 # use the day of the latest commit we picked as version
 new_rev=$(git -C "$git_dir" log -n 1 --format='format:%H' --before="${today}T00:00:00Z" "origin/$git_branch")
-new_version="unstable-$(git -C "$git_dir" log -n 1 --format='format:%cs' "$new_rev")"
+new_version="unstable-$(TZ=UTC git -C "$git_dir" log -n 1 --date='format-local:%Y-%m-%d' --format='%cd' "$new_rev")"
 info "latest commit before $today: $new_rev"
 
 if [ "$new_rev" = "$old_rev" ]; then

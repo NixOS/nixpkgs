@@ -17,7 +17,7 @@ in
 let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-lib";
   inherit version src useDune2;
-  configureFlags = pname;
+  configureFlags = [ pname ];
   nativeBuildInputs = [ which ];
   buildInputs = with ocamlPackages; [ dune-configurator ];
   propagatedBuildInputs = with ocamlPackages; [ num ocplib-simplex stdlib-shims zarith ];
@@ -26,7 +26,7 @@ let alt-ergo-lib = ocamlPackages.buildDunePackage rec {
 let alt-ergo-parsers = ocamlPackages.buildDunePackage rec {
   pname = "alt-ergo-parsers";
   inherit version src useDune2;
-  configureFlags = pname;
+  configureFlags = [ pname ];
   nativeBuildInputs = [ which ocamlPackages.menhir ];
   propagatedBuildInputs = [ alt-ergo-lib ] ++ (with ocamlPackages; [ camlzip psmt2-frontend ]);
 }; in
@@ -35,7 +35,7 @@ ocamlPackages.buildDunePackage {
 
   inherit pname version src useDune2;
 
-  configureFlags = pname;
+  configureFlags = [ pname ];
 
   nativeBuildInputs = [ which ocamlPackages.menhir ];
   buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner ];

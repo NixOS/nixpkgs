@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, makeWrapper, pcsclite, pkg-config, darwin }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, pcsclite, pkg-config, darwin }:
 
 buildGoModule rec {
   pname = "yubikey-agent";
@@ -15,7 +15,7 @@ buildGoModule rec {
     lib.optional stdenv.isLinux (lib.getDev pcsclite)
     ++ lib.optional stdenv.isDarwin (darwin.apple_sdk.frameworks.PCSC);
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace main.go --replace 'notify-send' ${libnotify}/bin/notify-send
@@ -26,6 +26,8 @@ buildGoModule rec {
   doCheck = false;
 
   subPackages = [ "." ];
+
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
   postInstall = lib.optionalString stdenv.isLinux ''
     mkdir -p $out/lib/systemd/user

@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JeSxFXSFxcTwJz9EaLb18wtD4ZIT+ATeYM5OyDTJhDQ=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
   buildInputs = [ wayland ];
 

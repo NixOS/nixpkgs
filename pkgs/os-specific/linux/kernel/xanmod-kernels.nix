@@ -2,15 +2,15 @@
 
 let
   stableVariant = {
-    version = "5.15.34";
+    version = "5.15.40";
     suffix = "xanmod1";
-    hash = "sha256-sfrcaFhrdvupygXvajGyl6ruuBu+vFsAKjLyINyV3pw=";
+    hash = "sha256-P9pRPfzBVQNhWp6ulDiBgV/ki2C0CTbIRV6KRhUD+vQ=";
   };
 
   edgeVariant = {
-    version = "5.17.2";
+    version = "5.17.8";
     suffix = "xanmod1";
-    hash = "sha256-DK6yFZewqmr/BXFW5tqKXtWb1OLfqokZRQLOQxvBg6Q=";
+    hash = "sha256-Q8YmBeocolr6Ds2inwV299Td6/zE8RTA1SWve5ZykAs=";
   };
 
   xanmodKernelFor = { version, suffix, hash }: buildLinux (args // rec {
@@ -69,7 +69,7 @@ let
 
     extraMeta = {
       branch = lib.versions.majorMinor version;
-      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault ];
+      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu ];
       description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
       broken = stdenv.isAarch64;
     };

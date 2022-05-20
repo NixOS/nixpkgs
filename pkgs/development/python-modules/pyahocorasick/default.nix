@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pyahocorasick";
-  version = "1.4.4";
+  version = "2.0.0b1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,15 +17,11 @@ buildPythonPackage rec {
     owner = "WojciechMula";
     repo = pname;
     rev = version;
-    hash = "sha256-X6ifwOwf7GAaNUxInKhR3NX6hKhvFMkvfbK6XpH8CBo=";
+    hash = "sha256-APpL99kOwzIQjePvRDeJ0FDm1kjBi6083JMKuBqtaRk=";
   };
 
   checkInputs = [
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "unittests.py"
   ];
 
   pythonImportsCheck = [

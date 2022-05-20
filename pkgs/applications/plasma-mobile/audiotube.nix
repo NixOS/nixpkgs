@@ -1,8 +1,8 @@
 { lib
 , mkDerivation
-, fetchpatch
 
 , extra-cmake-modules
+, gcc11
 
 , kcoreaddons
 , kcrash
@@ -16,16 +16,9 @@
 mkDerivation rec {
   pname = "audiotube";
 
-  patches = [
-    # Fix compatibility with ytmusicapi 0.19.1
-    (fetchpatch {
-      url = "https://invent.kde.org/plasma-mobile/audiotube/-/commit/734caa02805988200f923b88d1590b3f7dac8ac2.patch";
-      sha256 = "0zq4f0w84dv0630bpvmqkfmhxbvibr2fxhzy6d2mnf098028gzyd";
-    })
-  ];
-
   nativeBuildInputs = [
     extra-cmake-modules
+    gcc11 # doesn't build with GCC 9 from stdenv on aarch64
     python3Packages.wrapPython
     python3Packages.pybind11
   ];
@@ -37,13 +30,11 @@ mkDerivation rec {
     kirigami2
     qtmultimedia
     qtquickcontrols2
-    python3Packages.youtube-dl
-    python3Packages.ytmusicapi
-  ];
+  ] ++ pythonPath;
 
-  pythonPath = [
-    python3Packages.youtube-dl
-    python3Packages.ytmusicapi
+  pythonPath = with python3Packages; [
+    yt-dlp
+    ytmusicapi
   ];
 
   preFixup = ''

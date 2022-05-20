@@ -17,7 +17,7 @@
 , rust
 , cargo
 , gi-docgen
-, python3
+, python3Packages
 , gnome
 , vala
 , withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "librsvg";
-  version = "2.54.0";
+  version = "2.54.1";
 
   outputs = [ "out" "dev" "installedTests" ] ++ lib.optionals withIntrospection [
     "devdoc"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "uvjrwUfxRrQmG7PQzQ+slEv427Sx8jR9IzQfl03MMIU=";
+    sha256 = "1VV++9zEFaQYDhEWt/c2y3EbJT0RDZX6huyDD3ACZiU=";
   };
 
   cargoVendorDir = "vendor";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     pkg-config
     rustc
     cargo
-    python3.pkgs.docutils
+    python3Packages.docutils
     vala
     rustPlatform.cargoSetupHook
   ] ++ lib.optionals withIntrospection [
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString withIntrospection ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';

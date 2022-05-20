@@ -31,14 +31,10 @@
 , CoreServices
 , developer_cmds
 , DarwinTools
-, mysql-shell
 }:
 
 let
-  pythonDeps = [
-    python3.pkgs.certifi
-    python3.pkgs.paramiko
-  ];
+  pythonDeps = [ python3.pkgs.certifi python3.pkgs.paramiko ];
   site = ''
 
     import sys; sys.path.extend([${lib.concatStringsSep ", " (map (x: ''"${x}/${python3.sitePackages}"'') pythonDeps)}])
@@ -46,24 +42,22 @@ let
 in
 stdenv.mkDerivation rec{
   pname = "mysql-shell";
-  version = "8.0.28";
+  version = "8.0.29";
 
   srcs = [
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${version}-src.tar.gz";
-      sha256 = "sha256-xm2sepVgI0MPs25vu+BcRQeksaVhHcQlymreN1myu6c=";
+      sha256 = "sha256-ijwyamQgMoUEcMNpIJjJxH/dRuRFpdcXGmQqpD+WrmA=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor version}/mysql-${version}.tar.gz";
-      sha256 = "sha256-2Gk2nrbeTyuy2407Mbe3OWjjVuX/xDVPS5ZlirHkiyI=";
+      sha256 = "sha256-USFw+m94ppTW8Y0ZfpmdJxbuaNxUHXZE3ZIqNmNAcmY=";
     })
   ];
 
   sourceRoot = "mysql-shell-${version}-src";
 
   postPatch = ''
-    patch ../mysql-${version}/cmake/fido2.cmake ${./fido2.cmake.patch}
-
     substituteInPlace ../mysql-${version}/cmake/libutils.cmake --replace /usr/bin/libtool libtool
     substituteInPlace ../mysql-${version}/cmake/os/Darwin.cmake --replace /usr/bin/libtool libtool
 
@@ -73,12 +67,7 @@ stdenv.mkDerivation rec{
     echo '${site}' >> python/packages/mysqlsh/__init__.py
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    git
-    bison
-  ] ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
+  nativeBuildInputs = [ pkg-config cmake git bison ] ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
 
   buildInputs = [
     boost
@@ -99,30 +88,21 @@ stdenv.mkDerivation rec{
     cyrus_sasl
     openldap
     v8
+    python3
   ] ++ pythonDeps ++ lib.optionals stdenv.isLinux [
     numactl
     libtirpc
-  ] ++ lib.optionals stdenv.isDarwin [
-    cctools
-    CoreServices
-    developer_cmds
-    DarwinTools
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ cctools CoreServices developer_cmds DarwinTools ];
 
   preConfigure = ''
     # Build MySQL
-    cmake -DWITH_BOOST=system \
-      -DWITH_SYSTEM_LIBS=ON \
-      -DWITH_ROUTER=OFF \
-      -DWITH_UNIT_TESTS=OFF \
-      -DFORCE_UNSUPPORTED_COMPILER=1 \
-      -S ../mysql-${version} -B ../mysql-${version}/build
+    cmake -DWITH_BOOST=system -DWITH_SYSTEM_LIBS=ON -DWITH_ROUTER=OFF -DWITH_UNIT_TESTS=OFF \
+      -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql-${version} -B ../mysql-${version}/build
 
     cmake --build ../mysql-${version}/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient
 
     # Get libv8_monolith
-    mkdir -p ../v8/lib
-    ln -s ${v8}/lib/libv8.a ../v8/lib/libv8_monolith.a
+    mkdir -p ../v8/lib && ln -s ${v8}/lib/libv8.a ../v8/lib/libv8_monolith.a
   '';
 
   cmakeFlags = [
@@ -139,10 +119,7 @@ stdenv.mkDerivation rec{
     "-DHAVE_PYTHON=1"
   ];
 
-  CXXFLAGS = [
-    "-DV8_COMPRESS_POINTERS=1"
-    "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1"
-  ];
+  CXXFLAGS = [ "-DV8_COMPRESS_POINTERS=1" "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1" ];
 
   meta = with lib; {
     homepage = "https://dev.mysql.com/doc/mysql-shell/${lib.versions.majorMinor version}/en/";

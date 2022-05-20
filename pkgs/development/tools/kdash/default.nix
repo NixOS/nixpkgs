@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , pkg-config
@@ -6,6 +7,7 @@
 , python3
 , openssl
 , xorg
+, AppKit
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +23,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ perl python3 pkg-config ];
 
-  buildInputs = [ openssl xorg.xcbutil ];
+  buildInputs = [ openssl xorg.xcbutil ]
+    ++ lib.optional stdenv.isDarwin AppKit;
 
   cargoSha256 = "0nb554y8r7gvw7ls6gnrg98xxbws0mc6zdsc6ss3p2x9z8xwx204";
 

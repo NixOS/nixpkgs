@@ -44,6 +44,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace "dateparser~=1.0" "dateparser>=0.7" \
       --replace "docker~=4.2.0" "docker>=4.2.0" \
       --replace "Flask~=1.1.2" "Flask~=2.0" \
+      --replace "jmespath~=0.10.0" "jmespath" \
       --replace "PyYAML~=5.3" "PyYAML #" \
       --replace "regex==" "regex #" \
       --replace "requests==" "requests #" \

@@ -23,6 +23,10 @@ buildPythonPackage rec {
     sha256 = "sha256-guhfOMvddC4E+oOmvpeG8GsXEfqLcSHVdtj3w8fF2Vs=";
   };
 
+  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ./darwin-azure-c-shared-utility-corefoundation.patch
+  ];
+
   nativeBuildInputs = [
     cmake
   ];

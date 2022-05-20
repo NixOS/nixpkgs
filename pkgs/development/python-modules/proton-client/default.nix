@@ -56,5 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProtonMail/proton-python-client";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];
+    platforms = platforms.linux;
   };
 }

@@ -84,6 +84,11 @@ Examples:
     aspnetcore_files="$(release_files "$release_content" "aspnetcore-runtime")"
     runtime_files="$(release_files "$release_content" "runtime")"
     sdk_files="$(release_files "$release_content" "sdk")"
+    if [ $major_minor = "3.1" ]; then
+      icu_attr="icu = icu70;"
+    else
+      icu_attr="inherit icu;"
+    fi
 
     major_minor_underscore=${major_minor/./_}
     channel_version=$(jq -r '."channel-version"' <<< "$content")
@@ -91,16 +96,19 @@ Examples:
     echo "
   # v$channel_version ($support_phase)
   aspnetcore_$major_minor_underscore = buildAspNetCore {
+    $icu_attr
     version = \"${aspnetcore_version}\";
     $(platform_sources "$aspnetcore_files")
   };
 
   runtime_$major_minor_underscore = buildNetRuntime {
+    $icu_attr
     version = \"${runtime_version}\";
     $(platform_sources "$runtime_files")
   };
 
   sdk_$major_minor_underscore = buildNetSdk {
+    $icu_attr
     version = \"${sdk_version}\";
     $(platform_sources "$sdk_files")
   }; "

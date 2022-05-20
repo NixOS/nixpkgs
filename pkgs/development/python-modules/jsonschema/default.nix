@@ -4,9 +4,7 @@
 , fetchPypi
 , importlib-metadata
 , importlib-resources
-, pyperf
 , pyrsistent
-, pytestCheckHook
 , pythonOlder
 , setuptools-scm
 , twisted
@@ -15,15 +13,19 @@
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.4.0";
+  version = "4.5.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "636694eb41b3535ed608fe04129f26542b59ed99808b4f688aa32dcf55317a83";
+    sha256 = "sha256-fG2IJhk0DDNHob9zFeFH5tPa5DkDOuY4PWrLkIwQHfw=";
   };
+
+  postPatch = ''
+    patchShebangs json/bin/jsonschema_suite
+  '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -42,10 +44,13 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pyperf
-    pytestCheckHook
     twisted
   ];
+
+  checkPhase = ''
+    export JSON_SCHEMA_TEST_SUITE=json
+    trial jsonschema
+  '';
 
   pythonImportsCheck = [
     "jsonschema"
@@ -53,7 +58,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An implementation of JSON Schema validation for Python";
-    homepage = "https://github.com/Julian/jsonschema";
+    homepage = "https://github.com/python-jsonschema/jsonschema";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
   };

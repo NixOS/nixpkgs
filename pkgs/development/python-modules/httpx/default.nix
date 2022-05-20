@@ -3,12 +3,19 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, brotlicffi
 , certifi
 , charset-normalizer
 , httpcore
 , rfc3986
 , sniffio
+, h2
+, socksio
+, isPyPy
+, brotli
+, brotlicffi
+, click
+, rich
+, pygments
 , python
 , pytestCheckHook
 , pytest-asyncio
@@ -33,7 +40,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    brotlicffi
     certifi
     charset-normalizer
     httpcore
@@ -43,6 +49,13 @@ buildPythonPackage rec {
     async_generator
   ];
 
+  passthru.extras-require = {
+    http2 = [ h2 ];
+    socks = [ socksio ];
+    brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
+    cli = [ click rich pygments ];
+  };
+
   checkInputs = [
     pytestCheckHook
     pytest-asyncio
@@ -50,7 +63,9 @@ buildPythonPackage rec {
     trustme
     typing-extensions
     uvicorn
-  ];
+  ] ++ passthru.extras-require.http2
+    ++ passthru.extras-require.brotli
+    ++ passthru.extras-require.socks;
 
   postPatch = ''
     substituteInPlace setup.py \

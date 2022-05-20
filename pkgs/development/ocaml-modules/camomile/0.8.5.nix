@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     homepage = "https://github.com/yoriyuki/Camomile/tree/master/Camomile";
     description = "A comprehensive Unicode library for OCaml";
     license = lib.licenses.lgpl21;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [
       lib.maintainers.maggesi
     ];

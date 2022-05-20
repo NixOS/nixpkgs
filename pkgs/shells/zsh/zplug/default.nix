@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hci1pbs3k5icwfyfw5pzcgigbh9vavprxxvakg1xm19n8zb61b3";
   };
 
+  strictDeps = true;
   dontConfigure = true;
   dontBuild = true;
   dontPatch = true;

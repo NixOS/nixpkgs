@@ -5,7 +5,7 @@
 , fetchPypi
 , alembic
 , aniso8601
-, Babel
+, babel
 , blinker
 , cachetools
 , click
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aniso8601
-    Babel
+    babel
     blinker
     cachetools
     click

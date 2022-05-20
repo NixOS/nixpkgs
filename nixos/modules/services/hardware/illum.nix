@@ -28,6 +28,7 @@ in {
       description = "Backlight Adjustment Service";
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${pkgs.illum}/bin/illum-d";
+      serviceConfig.Restart = "on-failure";
     };
 
   };

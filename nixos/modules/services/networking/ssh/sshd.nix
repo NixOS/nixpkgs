@@ -293,6 +293,7 @@ in
       kexAlgorithms = mkOption {
         type = types.listOf types.str;
         default = [
+          "sntrup761x25519-sha512@openssh.com"
           "curve25519-sha256"
           "curve25519-sha256@libssh.org"
           "diffie-hellman-group-exchange-sha256"
@@ -301,7 +302,7 @@ in
           Allowed key exchange algorithms
           </para>
           <para>
-          Defaults to recommended settings from both
+          Uses the lower bound recommended in both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
           <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />

@@ -4,13 +4,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sumneko-lua-language-server";
-  version = "3.2.1";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "sumneko";
     repo = "lua-language-server";
     rev = version;
-    sha256 = "sha256-rxferVxTWmclviDshHhBmbCezOI+FvcfUW3gAkBQNHQ=";
+    sha256 = "sha256-n54PWkiB+vXAqIOZ5FOTUNgGhAdBs81Q1WYxJ2XIb8o=";
     fetchSubmodules = true;
   };
 
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     darwin.apple_sdk.frameworks.Foundation
   ];
 
-  # Disable cwd support on darwin, because it requires macOS>=10.15
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  # Disable cwd support on x86 darwin, because it requires macOS>=10.15
+  preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
     for file in 3rd/bee.lua/bee/subprocess/subprocess_posix.cpp 3rd/luamake/3rd/bee.lua/bee/subprocess/subprocess_posix.cpp; do
-      substituteInPlace $file --replace '#define SUPPORT_CWD 1' ""
+      substituteInPlace $file --replace '#define USE_POSIX_SPAWN 1' ""
     done
   '';
 

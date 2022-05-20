@@ -44,6 +44,7 @@ let
       "invalid-env"
       "prefix"
       "suffix"
+      "overlength-strings"
     ];
     f = name: lib.nameValuePair name (makeGoldenTest name);
   in builtins.listToAttrs (builtins.map f names);

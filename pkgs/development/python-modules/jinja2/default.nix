@@ -3,24 +3,24 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
-, Babel
+, babel
 , markupsafe
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "3.1.1";
+  version = "3.1.2";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ZAvtS7UBy9FxlLPKzh3CEm9bYZzwaKcmuYGSoP3nSuk=";
+    sha256 = "sha256-MTUacCpAip51laj8YVD8P0O7a/fjGXcMvA2535Q36FI=";
   };
 
   propagatedBuildInputs = [
-    Babel
+    babel
     markupsafe
   ];
 

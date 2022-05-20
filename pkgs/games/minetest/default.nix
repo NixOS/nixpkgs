@@ -1,9 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
+{ lib, stdenv, fetchFromGitHub, cmake, irrlichtmt, libpng, bzip2, curl, libogg, jsoncpp
 , libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
 , freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
 , leveldb, postgresql, hiredis, libiconv, zlib, libXrandr, libX11, ninja, prometheus-cpp
-, OpenGL, OpenAL ? openal, Carbon, Cocoa
-, Kernel
+, OpenGL, OpenAL ? openal, Carbon, Cocoa, withTouchSupport ? false
 }:
 
 with lib;
@@ -11,21 +10,7 @@ with lib;
 let
   boolToCMake = b: if b then "ON" else "OFF";
 
-  irrlichtMt = stdenv.mkDerivation rec {
-    pname = "irrlichtMt";
-    version = "1.9.0mt4";
-    src = fetchFromGitHub {
-      owner = "minetest";
-      repo = "irrlicht";
-      rev = version;
-      sha256 = "sha256-YlXn9LrfGkjdb8+zQGDgrInolUYj9nVSF2AXWFpEEkw=";
-    };
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [ zlib libjpeg libpng libGLU libGL libXrandr libX11 libXxf86vm ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel ];
-    outputs = [ "out" "dev" ];
-    meta = irrlicht.meta;
-  };
+  irrlichtmtInput = irrlichtmt.override { inherit withTouchSupport; };
 
   generic = { version, rev ? version, sha256, dataRev ? version, dataSha256, buildClient ? true, buildServer ? false }: let
     sources = {
@@ -54,7 +39,7 @@ let
       "-DENABLE_GETTEXT=1"
       "-DENABLE_SPATIAL=1"
       "-DENABLE_SYSTEM_JSONCPP=1"
-      "-DIRRLICHT_INCLUDE_DIR=${irrlichtMt.dev}/include/irrlicht"
+      "-DIRRLICHT_INCLUDE_DIR=${irrlichtmtInput.dev}/include/irrlichtmt"
 
       # Remove when https://github.com/NixOS/nixpkgs/issues/144170 is fixed
       "-DCMAKE_INSTALL_BINDIR=bin"
@@ -68,6 +53,8 @@ let
       "-DOpenGL_GL_PREFERENCE=GLVND"
     ] ++ optionals buildServer [
       "-DENABLE_PROMETHEUS=1"
+    ] ++ optionals withTouchSupport [
+      "-DENABLE_TOUCH=TRUE"
     ];
 
     NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
@@ -75,7 +62,7 @@ let
     nativeBuildInputs = [ cmake doxygen graphviz ninja ];
 
     buildInputs = [
-      irrlichtMt luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
+      irrlichtmtInput luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
       gmp libspatialindex
     ] ++ optionals stdenv.isDarwin [
       libiconv OpenGL OpenAL Carbon Cocoa

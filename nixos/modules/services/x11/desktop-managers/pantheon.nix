@@ -136,6 +136,7 @@ in
       services.colord.enable = mkDefault true;
       services.fwupd.enable = mkDefault true;
       services.packagekit.enable = mkDefault true;
+      services.power-profiles-daemon.enable = mkDefault true;
       services.touchegg.enable = mkDefault true;
       services.touchegg.package = pkgs.pantheon.touchegg;
       services.tumbler.enable = mkDefault true;
@@ -167,10 +168,10 @@ in
         isSystem = true;
       };
       services.udev.packages = [
-        pkgs.gnome.gnome-settings-daemon338
+        pkgs.pantheon.gnome-settings-daemon
       ];
       systemd.packages = [
-        pkgs.gnome.gnome-settings-daemon338
+        pkgs.pantheon.gnome-settings-daemon
       ];
       programs.dconf.enable = true;
       networking.networkmanager.enable = mkDefault true;
@@ -212,12 +213,10 @@ in
         elementary-capnet-assist
         elementary-notifications
         elementary-settings-daemon
+        gnome-settings-daemon
         pantheon-agent-geoclue2
         pantheon-agent-polkit
-      ]) ++ (utils.removePackagesByName [
-        gnome.gnome-font-viewer
-        gnome.gnome-settings-daemon338
-      ] config.environment.pantheon.excludePackages);
+      ]);
 
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
@@ -272,7 +271,9 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
-      environment.systemPackages = with pkgs.pantheon; utils.removePackagesByName ([
+      environment.systemPackages = utils.removePackagesByName ([
+        pkgs.gnome.gnome-font-viewer
+      ] ++ (with pkgs.pantheon; [
         elementary-calculator
         elementary-calendar
         elementary-camera
@@ -290,7 +291,7 @@ in
         # Only install appcenter if flatpak is enabled before
         # https://github.com/NixOS/nixpkgs/issues/15932 is resolved.
         appcenter
-      ]) config.environment.pantheon.excludePackages;
+      ])) config.environment.pantheon.excludePackages;
 
       # needed by screenshot
       fonts.fonts = [

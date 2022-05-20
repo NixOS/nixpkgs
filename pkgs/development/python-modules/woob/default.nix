@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonPackage
 , colorama
 , cssselect
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    Babel
+    babel
     colorama
     cssselect
     python-dateutil

@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , markupsafe
-, Babel
+, babel
 , pytestCheckHook
 , email_validator
 }:
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "1g654ghavds387hqxmhg9s8x222x89wbq1ggzxbsyn6x2axindbb";
   };
 
-  propagatedBuildInputs = [ markupsafe Babel ];
+  propagatedBuildInputs = [ markupsafe babel ];
 
 
   checkInputs = [

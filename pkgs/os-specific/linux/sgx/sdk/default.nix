@@ -29,15 +29,15 @@
 stdenv.mkDerivation rec {
   pname = "sgx-sdk";
   # Version as given in se_version.h
-  version = "2.15.101.1";
+  version = "2.16.100.4";
   # Version as used in the Git tag
-  versionTag = "2.15.1";
+  versionTag = "2.16";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-sgx";
     rev = "sgx_${versionTag}";
-    hash = "sha256-e11COTR5eDPMB81aPRKatvIkAOeX+OZgnvn2utiv78M=";
+    hash = "sha256-qgXuJJWiqmcU11umCsE3DnlK4VryuTDAsNf53YPw6UY=";
     fetchSubmodules = true;
   };
 
@@ -53,18 +53,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/intel/linux-sgx/commit/254b58f922a6bd49c308a4f47f05f525305bd760.patch";
       sha256 = "sha256-sHU++K7NJ+PdITx3y0PwstA9MVh10rj2vrLn01N9F4w=";
     })
-    # Commit to add missing sgx_ippcp.h not yet part of this release
-    (fetchpatch {
-      name = "add-missing-sgx_ippcp-header.patch";
-      url = "https://github.com/intel/linux-sgx/commit/51d1087b707a47e18588da7bae23e5f686d44be6.patch";
-      sha256 = "sha256-RZC14H1oEuGp0zn8CySDPy1KNqP/POqb+KMYoQt2A7M=";
-    })
   ];
 
   postPatch = ''
-    # https://github.com/intel/linux-sgx/pull/730
-    substituteInPlace buildenv.mk --replace '/bin/cp' 'cp'
-
     patchShebangs linux/installer/bin/build-installpkg.sh \
       linux/installer/common/sdk/createTarball.sh \
       linux/installer/common/sdk/install.sh

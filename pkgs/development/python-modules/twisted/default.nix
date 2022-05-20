@@ -1,5 +1,6 @@
 { lib, stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , python
 , zope_interface
@@ -14,10 +15,23 @@
 , setuptools
 , idna
 , typing-extensions
+, pyasn1
+, cryptography
+, appdirs
+, bcrypt
+, pynacl
+, pyserial
+, h2
+, priority
+, contextvars
 }:
 buildPythonPackage rec {
   pname = "Twisted";
   version = "22.4.0";
+
+  disabled = pythonOlder "3.6";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,7 +41,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools typing-extensions ];
 
-  passthru.extras.tls = [ pyopenssl service-identity idna ];
+  passthru.extras-require = rec {
+    tls = [ pyopenssl service-identity idna ];
+    conch = [ pyasn1 cryptography appdirs bcrypt ];
+    conch_nacl = conch ++ [ pynacl ];
+    serial = [ pyserial ];
+    http2 = [ h2 priority ];
+    contextvars = lib.optionals (pythonOlder "3.7") [ contextvars ];
+  };
 
   # Patch t.p._inotify to point to libc. Without this,
   # twisted.python.runtime.platform.supportsINotify() == False

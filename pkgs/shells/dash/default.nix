@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
   # configure.ac patched; remove on next release
   nativeBuildInputs = [ autoreconfHook ];
 

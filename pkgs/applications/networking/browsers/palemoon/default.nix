@@ -6,7 +6,7 @@
 , dbus
 , dbus-glib
 , desktop-file-utils
-, fetchzip
+, fetchFromGitea
 , ffmpeg
 , fontconfig
 , freetype
@@ -39,19 +39,21 @@
 # https://developer.palemoon.org/build/linux/
 assert stdenv.cc.isGNU;
 assert with lib.strings; (
-  versionAtLeast stdenv.cc.version "4.9"
-  && !hasPrefix "6" stdenv.cc.version
-  && versionOlder stdenv.cc.version "11"
+  versionAtLeast stdenv.cc.version "7.1"
+  && versionOlder stdenv.cc.version "12"
 );
 
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "29.4.6";
+  version = "31.0.0";
 
-  src = fetchzip {
-    name = "${pname}-${version}";
-    url = "http://archive.palemoon.org/source/${pname}-${version}.source.tar.xz";
-    sha256 = "sha256-6bI3AnIhp0x3BCgTvmbOXDBGrJXg3cN+AmwI8XCKD8g=";
+  src = fetchFromGitea {
+    domain = "repo.palemoon.org";
+    owner = "MoonchildProductions";
+    repo = "Pale-Moon";
+    rev = "${version}_Release";
+    fetchSubmodules = true;
+    sha256 = "sha256-fIQAQCtjA/9Otft3e9Z4xWgE09sqsdArYQtZqmEgfTc=";
   };
 
   nativeBuildInputs = [
@@ -139,14 +141,9 @@ stdenv.mkDerivation rec {
 
     ./mach install
 
-    # Fix missing icon due to wrong WMClass
-    # https://forum.palemoon.org/viewtopic.php?f=3&t=26746&p=214221#p214221
-    substituteInPlace ./palemoon/branding/official/palemoon.desktop \
-      --replace 'StartupWMClass="pale moon"' 'StartupWMClass=Pale moon'
+    # Install official branding stuff
     desktop-file-install --dir=$out/share/applications \
       ./palemoon/branding/official/palemoon.desktop
-
-    # Install official branding icons
     for iconname in default{16,22,24,32,48,256} mozicon128; do
       n=''${iconname//[^0-9]/}
       size=$n"x"$n
@@ -155,7 +152,7 @@ stdenv.mkDerivation rec {
 
     # Remove unneeded SDK data from installation
     # https://forum.palemoon.org/viewtopic.php?f=37&t=26796&p=214676#p214729
-    rm -rf $out/{include,share/idl,lib/palemoon-devel-${version}}
+    rm -r $out/{include,share/idl,lib/palemoon-devel-${version}}
 
     runHook postInstall
   '';

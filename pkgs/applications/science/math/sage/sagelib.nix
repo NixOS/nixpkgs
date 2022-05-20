@@ -67,7 +67,9 @@
 , pillow
 , ipykernel
 , networkx
-, sphinx # TODO: this is in setup.cfg, bug should we override it?
+, ptyprocess
+, lrcalc-python
+, sphinx # TODO: this is in setup.cfg, should we override it?
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -157,6 +159,8 @@ buildPythonPackage rec {
     networkx
     jupyter-client
     ipywidgets
+    ptyprocess
+    lrcalc-python
     sphinx
   ];
 
@@ -188,7 +192,7 @@ buildPythonPackage rec {
     # Sage tests already catch any relevant API breakage.
     # according to the discussion at https://trac.sagemath.org/ticket/33520,
     # upper bounds will be less noisy starting from Sage 9.6.
-    sed -i 's/==2.1.0rc1/>=2.1.1/' ../gmpy2/install-requires.txt
+    sed -i 's/==0.5.1/>=0.5.1/' ../ptyprocess/install-requires.txt
     sed -i 's/, <[^, ]*//' ../*/install-requires.txt
 
     for infile in src/*.m4; do

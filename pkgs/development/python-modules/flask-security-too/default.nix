@@ -3,7 +3,7 @@
 , fetchPypi
 
 # extras: babel
-, Babel
+, babel
 , flask-babel
 
 # extras: common
@@ -32,6 +32,7 @@
 , passlib
 
 # tests
+, argon2-cffi
 , flask-mongoengine
 , mongoengine
 , mongomock
@@ -64,7 +65,7 @@ buildPythonPackage rec {
 
   passthru.extras-require = {
     babel = [
-      Babel
+      babel
       flask-babel
     ];
     common = [
@@ -85,6 +86,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
+    argon2-cffi
     flask-mongoengine
     mongoengine
     mongomock

@@ -30,7 +30,8 @@ stdenv.mkDerivation {
     ./tz_completion.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook perl groff texinfo ]
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook perl groff texinfo pcre]
                       ++ lib.optionals stdenv.isLinux [ util-linux yodl ];
 
   buildInputs = [ ncurses pcre ];

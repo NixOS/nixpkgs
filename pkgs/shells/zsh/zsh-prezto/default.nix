@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, unstableGitUpdater }:
+{ lib, stdenv, fetchFromGitHub, unstableGitUpdater, bash }:
 
 stdenv.mkDerivation rec {
   pname = "zsh-prezto";
@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "05n2801xqdxc5nx0709mak1pr73l7aq5azd9adm0ym7si3vl59sj";
     fetchSubmodules = true;
   };
+
+  strictDeps = true;
+  buildInputs = [ bash ];
 
   postPatch = ''
     # make zshrc aware of where zsh-prezto is installed

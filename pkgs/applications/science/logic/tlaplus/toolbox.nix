@@ -34,7 +34,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 ];
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
+  ];
 
   dontWrapGApps = true;
 

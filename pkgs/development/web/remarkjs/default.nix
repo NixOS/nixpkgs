@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, nodejs, phantomjs2, pkgs }:
+{ stdenv, lib, fetchFromGitHub, nodejs, pkgs }:
 
 with lib;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zhHuW4pBqXQEBlSxuyvHKh+ftyIdcqpYgIZZHArUtns=";
   };
 
-  buildInputs = [ nodejs phantomjs2 ] ++ (with nodePackages; [
+  buildInputs = [ nodejs ] ++ (with nodePackages; [
     marked
     browserify
     uglify-js

@@ -17,5 +17,6 @@ buildDunePackage rec {
 
   meta = lsp.meta // {
     description = "OCaml Language Server Protocol implementation";
+    mainProgram = "ocamllsp";
   };
 }

@@ -37,6 +37,6 @@ stdenv.mkDerivation {
     homepage = webpage;
     description = "Thin bindings to the cross-platform SDL library";
     license = licenses.isc;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

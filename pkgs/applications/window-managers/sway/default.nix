@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     ./sway-config-nixos-paths.patch
   ];
 
+  strictDeps = true;
   depsBuildBuild = [
     pkg-config
   ];

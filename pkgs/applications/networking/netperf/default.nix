@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "netperf";
-  version = "20180613";
+  version = "20210121";
 
   src = fetchFromGitHub {
     owner = "HewlettPackard";
     repo = "netperf";
-    rev = "bcb868bde7f0203bbab69609f65d4088ba7398db";
-    sha256 = "1wbbgdvhadd3qs3afv6i777argdpcyxkwz4yv6aqp223n8ki6dm8";
+    rev = "3bc455b23f901dae377ca0a558e1e32aa56b31c4";
+    sha256 = "s4G1ZN+6LERdEMDkc+12ZQgTi6K+ppUYUCGn4faCS9c=";
   };
 
   buildInputs = lib.optional (with stdenv.hostPlatform; isx86 && isLinux) libsmbios;
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Benchmark to measure the performance of many different types of networking";
     homepage = "http://www.netperf.org/netperf/";
-    license = "Hewlett-Packard BSD-like license";
+    license = lib.licenses.mit;
 
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.mmlb ];

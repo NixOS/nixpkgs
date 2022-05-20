@@ -28,16 +28,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
-  version = "0.0.12";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ZFQjQ5+G0b0Fgg3+du/drt+62rC/TCNR5MIdJXAkTrE=";
+    sha256 = "sha256-KSumy7M7VNUib4CZ0ikBboEFMzDQt4xW+aUFHOi+0pA=";
   };
 
-  cargoSha256 = "sha256-sMTootPsenaWzLLFImo6HWC1pcm2uFupPhVWsUJp1Ak=";
+  cargoSha256 = "sha256-7SVTcH9/Ilq8HcpJJI0KFiQA076lR2CAIBwmTVgmnjE=";
 
   nativeBuildInputs = [
     cmake

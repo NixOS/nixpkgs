@@ -17,12 +17,12 @@
 
 # tests
 , aiosmtpd
-, argon2_cffi
+, argon2-cffi
 , bcrypt
 , docutils
 , geoip2
 , jinja2
-, memcached
+, python-memcached
 , numpy
 , pillow
 , pylibmc
@@ -70,13 +70,13 @@ buildPythonPackage rec {
 
   checkInputs = [
     aiosmtpd
-    argon2_cffi
+    argon2-cffi
     asgiref
     bcrypt
     docutils
     geoip2
     jinja2
-    memcached
+    python-memcached
     numpy
     pillow
     pylibmc

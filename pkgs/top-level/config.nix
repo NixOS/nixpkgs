@@ -20,6 +20,11 @@ let
 
     /* Internal stuff */
 
+    # Hide built-in module system options from docs.
+    _module.args = mkOption {
+      internal = true;
+    };
+
     warnings = mkOption {
       type = types.listOf types.str;
       default = [];
@@ -34,6 +39,10 @@ let
 
     strictDepsByDefault = mkMassRebuild {
       feature = "set <literal>strictDeps</literal> to true by default";
+    };
+
+    enableParallelBuildingByDefault = mkMassRebuild {
+      feature = "set <literal>enableParallelBuilding</literal> to true by default";
     };
 
     contentAddressedByDefault = mkMassRebuild {

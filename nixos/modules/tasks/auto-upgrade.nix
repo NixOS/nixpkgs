@@ -190,7 +190,7 @@ in {
         nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
         date     = "${pkgs.coreutils}/bin/date";
         readlink = "${pkgs.coreutils}/bin/readlink";
-        shutdown = "${pkgs.systemd}/bin/shutdown";
+        shutdown = "${config.systemd.package}/bin/shutdown";
         upgradeFlag = optional (cfg.channel == null) "--upgrade";
       in if cfg.allowReboot then ''
         ${nixos-rebuild} boot ${toString (cfg.flags ++ upgradeFlag)}

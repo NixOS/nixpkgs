@@ -1,8 +1,8 @@
-diff --git a/ement.el b/ement.el
-index c9596a7..1b33045 100644
---- a/ement.el
-+++ b/ement.el
-@@ -682,14 +682,15 @@ can cause undesirable underlining."
+diff --git a/ement-lib.el b/ement-lib.el
+index f0b2738..025a191 100644
+--- a/ement-lib.el
++++ b/ement-lib.el
+@@ -644,14 +644,15 @@ can cause undesirable underlining."
    "Return a copy of IMAGE set to MAX-WIDTH and MAX-HEIGHT.
  IMAGE should be one as created by, e.g. `create-image'."
    ;; It would be nice if the image library had some simple functions to do this sort of thing.
@@ -24,5 +24,5 @@ index c9596a7..1b33045 100644
 +            (image-property new-image :max-height) max-height)
 +      new-image)))
  
- ;;;;; Reading/writing sessions
- 
+ (defun ement--room-alias (room)
+   "Return latest m.room.canonical_alias event in ROOM."

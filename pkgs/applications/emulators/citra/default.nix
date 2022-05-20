@@ -77,9 +77,11 @@ stdenv.mkDerivation {
     chmod -R a+w externals/zstd
   '';
 
-  # Todo: cubeb audio backend (the default one) doesn't work on the SDL interface.
-  # This seems to be a problem with libpulseaudio, other applications have similar problems (e.g Duckstation).
-  # Note that the two interfaces have two separate configuration files.
+  # Fixes https://github.com/NixOS/nixpkgs/issues/171173
+  postInstall = lib.optionalString (enableCubeb && enableSdl2) ''
+    wrapProgram "$out/bin/citra" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio ]}
+  '';
 
   meta = with lib; {
     homepage = "https://citra-emu.org";

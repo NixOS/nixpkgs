@@ -5,13 +5,13 @@
 
 trivialBuild {
   pname = "header-file-mode";
-  version = "unstable-2022-04-19";
+  version = "unstable-2022-05-13";
 
   src = fetchFromGitHub {
-    owner = "0x4b";
+    owner = "aidalgol";
     repo = "header-file-mode";
-    rev = "fdf1930730e1b0c3f82490099a1325805491eff5";
-    sha256 = "sha256-FJgRI6RLQk9osh7d+YRfrV5CoGCDx2cZvsjAWlm969c=";
+    rev = "bcfd19a2c70030ebf5fa68e87aca4b3db8fad13e";
+    sha256 = "sha256-XMXOU+vWJ/0e0ny4Dz3DxWpdEfSNXGzm03sBke32Dwc=";
   };
 
   postUnpack = ''

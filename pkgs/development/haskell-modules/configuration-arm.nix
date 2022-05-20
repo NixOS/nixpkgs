@@ -105,12 +105,9 @@ self: super: {
   # We disable profiling on aarch64, so tests naturally fail
   ghc-prof = dontCheck super.ghc-prof;
 
-} // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isAarch64 && builtins.compareVersions super.ghc.version "9.2" < 0) {
-  # Some aarch64 issues have been fixed since 9.2
-
   # Similar RTS issue in test suite:
   # rts/linker/elf_reloc_aarch64.c:98: encodeAddendAarch64: Assertion `isInt64(21+12, addend)' failed.
-  # Fixed since 9.2
+  # These still fail sporadically on ghc 9.2
   hls-ormolu-plugin = dontCheck super.hls-ormolu-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
   hls-rename-plugin = dontCheck super.hls-rename-plugin;

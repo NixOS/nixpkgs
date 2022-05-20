@@ -18,7 +18,11 @@
 , buildPackages
 , pkgsBuildTarget
 , callPackage
+, threadsCross ? null # for MinGW
 }:
+
+# threadsCross is just for MinGW
+assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
 let
   go_bootstrap = buildPackages.callPackage ./bootstrap.nix { };
@@ -50,15 +54,17 @@ let
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
+
+  isCross = stdenv.buildPlatform != stdenv.targetPlatform;
 in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.17.9";
+  version = "1.17.10";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "sha256-djrUuvuAqSBEWMX6K45zJ/qXGu5FQlLA42LBEjYVaBM=";
+    sha256 = "sha256-KZ5VrzDxVpGwFdjc+OyuckEkElaeWy7OIDYXU6RW8vk=";
   };
 
   # perl is used for testing go vet
@@ -70,6 +76,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ xcbuild ];
 
   depsTargetTargetPropagated = lib.optionals stdenv.isDarwin [ Security Foundation ];
+
+  depsBuildTarget = lib.optional isCross targetCC;
+
+  depsTargetTarget = lib.optional (threadsCross != null) threadsCross;
 
   hardeningDisable = [ "all" ];
 
@@ -167,7 +177,6 @@ stdenv.mkDerivation rec {
     ./remove-test-pie-1.15.patch
     ./creds-test.patch
     ./go-1.9-skip-flaky-19608.patch
-    ./go-1.9-skip-flaky-20072.patch
     ./skip-chown-tests-1.16.patch
     ./skip-external-network-tests-1.16.patch
     ./skip-nohup-tests.patch
@@ -195,12 +204,12 @@ stdenv.mkDerivation rec {
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
   CC_FOR_TARGET =
-    if (stdenv.buildPlatform != stdenv.targetPlatform) then
+    if isCross then
       "${targetCC}/bin/${targetCC.targetPrefix}cc"
     else
       null;
   CXX_FOR_TARGET =
-    if (stdenv.buildPlatform != stdenv.targetPlatform) then
+    if isCross then
       "${targetCC}/bin/${targetCC.targetPrefix}c++"
     else
       null;
@@ -224,7 +233,7 @@ stdenv.mkDerivation rec {
 
     export PATH=$(pwd)/bin:$PATH
 
-    ${lib.optionalString (stdenv.buildPlatform != stdenv.targetPlatform) ''
+    ${lib.optionalString isCross ''
     # Independent from host/target, CC should produce code for the building system.
     # We only set it when cross-compiling.
     export CC=${buildPackages.stdenv.cc}/bin/cc

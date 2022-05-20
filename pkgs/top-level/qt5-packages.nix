@@ -146,11 +146,13 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   mauikit = callPackage ../development/libraries/mauikit { };
 
+  mauikit-accounts = callPackage ../development/libraries/mauikit-accounts { };
+
   mauikit-filebrowsing = callPackage ../development/libraries/mauikit-filebrowsing { };
 
-  mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
+  mauikit-texteditor = callPackage ../development/libraries/mauikit-texteditor { };
 
-  openbr = callPackage ../development/libraries/openbr { };
+  mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
 
   phonon = callPackage ../development/libraries/phonon { };
 
@@ -200,6 +202,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
   qtkeychain = callPackage ../development/libraries/qtkeychain {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
+
+  qtmpris = callPackage ../development/libraries/qtmpris { };
 
   qtpbfimageplugin = callPackage ../development/libraries/qtpbfimageplugin { };
 

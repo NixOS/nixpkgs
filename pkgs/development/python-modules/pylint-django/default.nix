@@ -1,24 +1,25 @@
 { lib
 , buildPythonPackage
-, coverage
 , django
 , factory_boy
 , fetchFromGitHub
-, isPy3k
 , pylint-plugin-utils
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.5.2";
-  disabled = !isPy3k;
+  version = "2.5.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-VgGdV1T154LauclGo6jpLPUrYn5vTOWwvO4IXQ9se7c=";
+    hash = "sha256-5xEXjNMkOetRM9NDz0S4DsC6v39YQi34s2s+Fs56hYU=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +28,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    coverage
     factory_boy
     pytestCheckHook
   ];
@@ -38,6 +38,7 @@ buildPythonPackage rec {
     "external_factory_boy_noerror"
     "func_noerror_foreign_key_attributes"
     "func_noerror_foreign_key_key_cls_unbound"
+    "test_everything"
   ];
 
   pythonImportsCheck = [

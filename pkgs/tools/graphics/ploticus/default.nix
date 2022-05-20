@@ -4,6 +4,7 @@
 , zlib
 , libX11
 , libpng
+, libjpeg
 , gd
 , freetype
 }:
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     libpng
     gd
     freetype
+    libjpeg
   ];
 
   hardeningDisable = [ "format" ];
@@ -43,6 +45,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     cd src
   '';
+  makeFlags = [ "CC=cc" ];
 
   preInstall = ''
     mkdir -p "$out/bin"
@@ -72,6 +75,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     homepage = "http://ploticus.sourceforge.net/";
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

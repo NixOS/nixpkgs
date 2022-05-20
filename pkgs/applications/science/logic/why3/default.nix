@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "why3";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "https://why3.gitlabpages.inria.fr/releases/${pname}-${version}.tar.gz";
-    sha256 = "sha256:1rqyypzlvagrn43ykl0c5wxyvnry5fl1ykn3xcvlzgghk96yq3jq";
+    sha256 = "sha256:0qjh49pyqmg3xi09fn4lyzz23i6h18y9sgc8ayscvx3bwr3vcqhr";
   };
 
   buildInputs = with ocamlPackages; [

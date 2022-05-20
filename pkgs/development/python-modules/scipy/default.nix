@@ -35,7 +35,7 @@ buildPythonPackage rec {
     rm scipy/linalg/tests/test_lapack.py
   '';
 
-  doCheck = true;
+  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
     sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py

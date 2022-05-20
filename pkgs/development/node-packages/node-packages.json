@@ -194,7 +194,6 @@
 , "live-server"
 , "livedown"
 , "lodash"
-, {"lumo-build-deps": "../interpreters/clojurescript/lumo" }
 , "lua-fmt"
 , "madoko"
 , "manta"

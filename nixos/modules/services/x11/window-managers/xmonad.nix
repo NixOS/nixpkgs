@@ -128,33 +128,34 @@ in {
             [ ( (mod4Mask,xK_r), compileRestart True)
             , ( (mod4Mask,xK_q), restart "xmonad" True ) ]
 
+          compileRestart resume = do
+            dirs  <- asks directories
+            whenX (recompile dirs True) $ do
+              when resume writeStateToFile
+              catchIO
+                  ( do
+                      args <- getArgs
+                      executeFile (cacheDir dirs </> compiledConfig) False args Nothing
+                  )
+
+          main = getDirectories >>= launch myConfig
+
           --------------------------------------------
-          {- version 0.17.0 -}
+          {- For versions before 0.17.0 use this instead -}
           --------------------------------------------
           -- compileRestart resume =
-          --   dirs <- io getDirectories
-          --   whenX (recompile dirs True) $
+          --   whenX (recompile True) $
           --     when resume writeStateToFile
           --       *> catchIO
           --         ( do
+          --             dir <- getXMonadDataDir
           --             args <- getArgs
-          --             executeFile (cacheDir dirs </> compiledConfig) False args Nothing
+          --             executeFile (dir </> compiledConfig) False args Nothing
           --         )
           --
-          -- main = getDirectories >>= launch myConfig
+          -- main = launch myConfig
           --------------------------------------------
 
-          compileRestart resume =
-            whenX (recompile True) $
-              when resume writeStateToFile
-                *> catchIO
-                  ( do
-                      dir <- getXMonadDataDir
-                      args <- getArgs
-                      executeFile (dir </> compiledConfig) False args Nothing
-                  )
-
-          main = launch myConfig
         '';
       };
 

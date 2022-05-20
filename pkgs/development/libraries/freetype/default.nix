@@ -7,6 +7,21 @@
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.
   # This option allows it to be disabled. See http://www.freetype.org/patents.html.
   useEncumberedCode ? true
+
+# for passthru.tests
+, cairo
+, fontforge
+, ghostscript
+, graphicsmagick
+, gtk3
+, harfbuzz
+, imagemagick
+, pango
+, poppler
+, python3
+, qt5
+, texmacs
+, ttfautohint
 }:
 
 
@@ -51,6 +66,23 @@ stdenv.mkDerivation rec {
     wrapProgram "$dev/bin/freetype-config" \
       --set PKG_CONFIG_PATH "$PKG_CONFIG_PATH:$dev/lib/pkgconfig"
   '';
+
+  passthru.tests = {
+    inherit
+      cairo
+      fontforge
+      ghostscript
+      graphicsmagick
+      gtk3
+      harfbuzz
+      imagemagick
+      pango
+      poppler
+      texmacs
+      ttfautohint;
+    inherit (python3.pkgs) freetype-py;
+    inherit (qt5) qtbase;
+  };
 
   meta = with lib; {
     description = "A font rendering engine";

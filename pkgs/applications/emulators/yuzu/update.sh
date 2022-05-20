@@ -23,21 +23,6 @@ getLocalHash() {
     popd >/dev/null
 }
 
-updateCompatList() {
-    NEW_COMPAT_LIST="$(curl -s "https://api.yuzu-emu.org/gamedb")"
-
-    if [[ "$(cat ./compatibility-list.json)" = "${NEW_COMPAT_LIST}" ]]; then
-        echo "Compatibility list is already up to date!"
-    else
-        local TODAY="$(date +"%Y-%m-%d")"
-
-        echo "Compatibility list: updated to $TODAY"
-        echo "${NEW_COMPAT_LIST}" > ./compatibility-list.json
-
-        sed -i -e "s/last updated .*/last updated $TODAY./" ./default.nix
-    fi
-}
-
 updateMainline() {
     OLD_MAINLINE_VERSION="$(getLocalVersion "yuzu-mainline")"
     OLD_MAINLINE_HASH="$(getLocalHash "yuzu-mainline")"
@@ -90,13 +75,10 @@ updateEarlyAccess() {
 
 if [[ "$BRANCH" = "mainline" ]]; then
     updateMainline
-    updateCompatList
 elif [[ "$BRANCH" = "early-access" ]]; then
     updateEarlyAccess
-    updateCompatList
 else
     KEEP_GOING=1
     updateMainline
     updateEarlyAccess
-    updateCompatList
 fi

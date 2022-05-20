@@ -22,7 +22,7 @@ python3.pkgs.buildPythonPackage rec {
     prometheus-client
     pycryptodome
     python-olm
-    python_magic
+    python-magic
     qrcode
     ruamel-yaml
     unpaddedbase64

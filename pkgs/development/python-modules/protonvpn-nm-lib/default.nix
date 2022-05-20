@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, substituteAll
 , distro
 , jinja2
 , keyring
@@ -9,18 +10,19 @@
 , pygobject3
 , pyxdg
 , systemd
+, networkmanager
 }:
 
 buildPythonPackage rec {
   pname = "protonvpn-nm-lib";
-  version = "3.8.0";
+  version = "3.9.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = pname;
     rev = version;
-    sha256 = "sha256-fAaP9c66LcbZgezadGPUt400YRnrnFoBvpzlc1zxuc4=";
+    sha256 = "sha256-yV3xeIyPc2DJj5DOa5PA1MHt00bjJ/Y9zZK77s/XRAA=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +35,15 @@ buildPythonPackage rec {
     systemd
   ];
 
-  # Project has a dummy test.
+  patches = [
+    (substituteAll {
+      src = ./0001-Patching-GIRepository.patch;
+      networkmanager_path = "${networkmanager}/lib/girepository-1.0";
+    })
+  ];
+
+  # Checks cannot be run in the sandbox
+  # "Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory"
   doCheck = false;
 
   pythonImportsCheck = [ "protonvpn_nm_lib" ];
@@ -43,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProtonVPN/protonvpn-nm-lib";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];
+    platforms = platforms.linux;
   };
 }

@@ -37,11 +37,12 @@
 , trytond
 , urllib3
 , werkzeug
+, multidict
 }:
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
-  version = "1.5.11";
+  version = "1.5.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -50,7 +51,7 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = version;
-    hash = "sha256-2WN18hzOn/gomNvQNbm9R8CcxN6G1XxoodBHqsG6es0=";
+    hash = "sha256-8M0FWfvaGp74Fb+qJlhyiJPUVHN2ZdEleZf27d+bftE=";
   };
 
   propagatedBuildInputs = [
@@ -88,6 +89,7 @@ buildPythonPackage rec {
     tornado
     trytond
     werkzeug
+    multidict
   ];
 
   doCheck = !stdenv.isDarwin;

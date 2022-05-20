@@ -9,7 +9,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , gobject-introspection
 , libadwaita
 , librsvg
@@ -42,6 +42,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
+    substituteInPlace meson_post_install.py \
+      --replace gtk-update-icon-cache gtk4-update-icon-cache
+
     patchShebangs meson_post_conf.py meson_post_install.py
   '';
 
@@ -53,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [

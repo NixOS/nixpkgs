@@ -6,6 +6,7 @@
 , inotify-tools
 , installShellFiles
 , libcloudproviders
+, librsvg
 , libsecret
 , openssl
 , pcre
@@ -20,13 +21,12 @@
 , plasma5Packages
 , sphinx
 , sqlite
-, inkscape
 , xdg-utils
 }:
 
 mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.5.0";
+  version = "3.5.1";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +34,7 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
-    sha256 = "sha256-eFtBdnwHaLirzZaHDw6SRfmsqO3dmBB8Y9csJuiTf1A=";
+    sha256 = "sha256-/Bz3vkV4+ZFlGBNtkLIGsBk51a3wxy32U1KYcA3awcw=";
   };
 
   patches = [
@@ -50,18 +50,15 @@ mkDerivation rec {
     done
   '';
 
-  # required to not include inkscape in the wrapper
-  strictDeps = true;
-
   nativeBuildInputs = [
     pkg-config
     cmake
-    inkscape
+    extra-cmake-modules
+    librsvg
     sphinx
   ];
 
   buildInputs = [
-    extra-cmake-modules
     inotify-tools
     libcloudproviders
     libsecret

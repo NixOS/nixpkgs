@@ -98,7 +98,13 @@ in stdenv.mkDerivation rec {
     cp ${src}/dist/linux/common/application-vnd.cryptomator.vault.xml $out/share/mime/packages/application-vnd.cryptomator.vault.xml
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook maven makeWrapper wrapGAppsHook jdk ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    maven
+    makeWrapper
+    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
+    jdk
+  ];
   buildInputs = [ fuse jre glib jffi ];
 
   meta = with lib; {

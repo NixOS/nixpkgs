@@ -33,14 +33,15 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    async-timeout
-    curio
-    httpcore
     httpx
+    httpcore
     python-socks
-    sniffio
-    trio
   ];
+
+  passthru.extras-require = {
+    asyncio = [ async-timeout ];
+    trio = [ trio ];
+  };
 
   checkInputs = [
     flask

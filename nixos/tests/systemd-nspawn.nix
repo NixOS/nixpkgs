@@ -25,8 +25,15 @@ let
   nspawnImages = (pkgs.runCommand "localhost" { buildInputs = [ pkgs.coreutils pkgs.gnupg ]; } ''
     mkdir -p $out
     cd $out
+
+    # produce a testimage.raw
     dd if=/dev/urandom of=$out/testimage.raw bs=$((1024*1024+7)) count=5
-    sha256sum testimage.raw > SHA256SUMS
+
+    # produce a testimage2.tar.xz, containing the hello store path
+    tar cvJpf testimage2.tar.xz ${pkgs.hello}
+
+    # produce signature(s)
+    sha256sum testimage* > SHA256SUMS
     export GNUPGHOME="$(mktemp -d)"
     cp -R ${gpgKeyring}/* $GNUPGHOME
     gpg --batch --sign --detach-sign --output SHA256SUMS.gpg SHA256SUMS
@@ -55,6 +62,10 @@ in {
     client.succeed("machinectl pull-raw --verify=signature http://server/testimage.raw")
     client.succeed(
         "cmp /var/lib/machines/testimage.raw ${nspawnImages}/testimage.raw"
+    )
+    client.succeed("machinectl pull-tar --verify=signature http://server/testimage2.tar.xz")
+    client.succeed(
+        "cmp /var/lib/machines/testimage2/${pkgs.hello}/bin/hello ${pkgs.hello}/bin/hello"
     )
   '';
 })

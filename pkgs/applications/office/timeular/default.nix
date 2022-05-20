@@ -2,8 +2,6 @@
 , fetchurl
 , appimageTools
 , libsecret
-, gtk3
-, gsettings-desktop-schemas
 }:
 
 let

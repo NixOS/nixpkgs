@@ -119,6 +119,7 @@ rec {
         passthru = passthru // {
           inherit nodes;
         };
+        meta.mainProgram = "nixos-test-driver";
       }
       ''
         mkdir -p $out/bin

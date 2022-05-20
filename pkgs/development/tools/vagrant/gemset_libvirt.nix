@@ -14,10 +14,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1yff4s5b8wcrk9ldils2k84l46m9nxr0my0wxchzdmgjbjdfsvww";
+      sha256 = "1rv2hq29lx2337214a1p2qy70fi77ch6p0p77nw9h6x84q028qr0";
       type = "gem";
     };
-    version = "0.92.0";
+    version = "0.92.3";
   };
   fog-core = {
     dependencies = ["builder" "excon" "formatador" "mime-types"];
@@ -130,10 +130,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1p6b3q411h2mw4dsvhjrp1hh66hha5cm69fqg85vn2lizz71n6xz";
+      sha256 = "11w59ga9324yx6339dgsflz3dsqq2mky1qqdwcg6wi5s1bf2yldi";
       type = "gem";
     };
-    version = "1.13.3";
+    version = "1.13.6";
   };
   racc = {
     groups = ["default"];
@@ -171,9 +171,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "07fhsgqx9iyni41z1lhfmm4wq6cbiyydkmvmib28jbgyznlxjmzv";
+      sha256 = "1j31y6sjhslj5yr0ssvb36ngm7prfsbdfj6131757jl0l0ri8pyv";
       type = "gem";
     };
-    version = "0.7.0";
+    version = "0.8.2";
   };
 }

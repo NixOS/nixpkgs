@@ -1,4 +1,5 @@
-{ lib, buildPythonPackage, fetchFromSourcehut, sqlparse, wrapt, pytestCheckHook }:
+{ stdenv, lib, buildPythonPackage, fetchFromSourcehut,
+  sqlparse, wrapt, pytestCheckHook }:
 
 buildPythonPackage rec {
   pname = "embrace";
@@ -15,6 +16,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ sqlparse wrapt ];
   checkInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "embrace" ];
+
+  # Some test for hot-reload fails on Darwin, but the rest of the library
+  # should remain usable. (https://todo.sr.ht/~olly/embrace-sql/4)
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Embrace SQL keeps your SQL queries in SQL files";

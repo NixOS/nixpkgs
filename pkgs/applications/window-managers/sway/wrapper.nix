@@ -37,6 +37,7 @@ in symlinkJoin {
   paths = (optional withBaseWrapper baseWrapper)
     ++ [ sway ];
 
+  strictDeps = true;
   nativeBuildInputs = [ makeWrapper ]
     ++ (optional withGtkWrapper wrapGAppsHook);
 

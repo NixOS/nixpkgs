@@ -1,16 +1,24 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python }:
+{ lib
+, buildPythonPackage
+, django
+, dnspython
+, fetchFromGitHub
+, protobuf
+, pythonOlder
+}:
 
-let
-  py = python;
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "mysql-connector";
-  version = "8.0.24";
+  version = "8.0.29";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
-    sha256 = "1zb5wf65rnpbk0lw31i4piy0bq09hqa62gx7bh241zc5310zccc7";
+    hash = "sha256-X0qiXNYkNoR00ESUdByPj4dPnEnjLyopm25lm1JvkAk=";
   };
 
   patches = [
@@ -22,16 +30,19 @@ in buildPythonPackage rec {
     ./0001-Revert-Fix-MacOS-wheels-platform-tag.patch
   ];
 
-  propagatedBuildInputs = with py.pkgs; [ protobuf dnspython ];
+  propagatedBuildInputs = [
+    dnspython
+    protobuf
+  ];
 
-  # Tests are failing (TODO: unknown reason)
-  # TypeError: __init__() missing 1 required positional argument: 'string'
-  # But the library should be working as expected.
+  pythonImportsCheck = [
+    "mysql"
+  ];
+
+  # Tests require a running MySQL instance
   doCheck = false;
 
-  pythonImportsCheck = [ "mysql" ];
-
-  meta = {
+  meta = with lib; {
     description = "A MySQL driver";
     longDescription = ''
       A MySQL driver that does not depend on MySQL C client libraries and
@@ -39,7 +50,7 @@ in buildPythonPackage rec {
     '';
     homepage = "https://github.com/mysql/mysql-connector-python";
     changelog = "https://raw.githubusercontent.com/mysql/mysql-connector-python/${version}/CHANGES.txt";
-    license = [ lib.licenses.gpl2Only ];
-    maintainers = with lib.maintainers; [ neosimsim turion ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ neosimsim turion ];
   };
 }

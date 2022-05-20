@@ -31,11 +31,9 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [ copyDesktopItems ];
 
-  preConfigure = ''
-    dotnetFlags+=(
-      --runtime linux-x64
-    )
-  '';
+  dotnetFlags = [
+    "--runtime linux-x64"
+  ];
 
   runtimeDeps = [
     ffmpeg

@@ -50,6 +50,9 @@
   "aiokafka": [
     "cython"
   ],
+  "aiolimiter": [
+    "poetry-core"
+  ],
   "aiomultiprocess": [
     "flit-core"
   ],
@@ -229,6 +232,9 @@
     "flit-core",
     "flitBuildHook"
   ],
+  "copier": [
+    "poetry-core"
+  ],
   "cpyparsing": [
     "cython"
   ],
@@ -237,6 +243,9 @@
   ],
   "credis": [
     "cython",
+    "poetry-core"
+  ],
+  "cruft": [
     "poetry-core"
   ],
   "cssselect2": [
@@ -350,6 +359,9 @@
   "enumatch": [
     "poetry"
   ],
+  "envs": [
+    "poetry-core"
+  ],
   "exceptiongroup": [
     "flit-core",
     "flitBuildHook"
@@ -364,6 +376,9 @@
     "poetry"
   ],
   "fastavro": [
+    "cython"
+  ],
+  "fastbencode": [
     "cython"
   ],
   "fastdtw": [
@@ -429,6 +444,9 @@
   "gensim": [
     "cython"
   ],
+  "gidgethub": [
+    "flitBuildHook"
+  ],
   "glances-api": [
     "poetry-core"
   ],
@@ -479,6 +497,9 @@
   ],
   "hashids": [
     "flit-core"
+  ],
+  "hatch-vcs": [
+    "hatchling"
   ],
   "hdate": [
     "poetry-core"
@@ -711,6 +732,9 @@
   "monosat": [
     "cython"
   ],
+  "more-itertools": [
+    "flit-core"
+  ],
   "motioneye-client": [
     "poetry-core"
   ],
@@ -719,6 +743,9 @@
   ],
   "msgpack-numpy": [
     "cython"
+  ],
+  "msgpack-types": [
+    "poetry"
   ],
   "msoffcrypto-tool": [
     "poetry-core"
@@ -734,6 +761,9 @@
   ],
   "mypy-boto3-builder": [
     "poetry-core"
+  ],
+  "myst-parser": [
+    "flit-core"
   ],
   "nats-python": [
     "poetry-core"
@@ -771,6 +801,9 @@
   "notebook-shim": [
     "jupyter-packaging"
   ],
+  "notify-py": [
+    "poetry-core"
+  ],
   "notus-scanner": [
     "poetry-core"
   ],
@@ -806,6 +839,9 @@
   ],
   "openstacksdk": [
     "pbr"
+  ],
+  "openstep-plist": [
+    "cython"
   ],
   "openvino": [
     "cython"
@@ -889,6 +925,9 @@
   "pixelmatch": [
     "poetry-core"
   ],
+  "pkgconfig": [
+    "poetry-core"
+  ],
   "poetry": [
     "poetry-core"
   ],
@@ -924,6 +963,12 @@
   ],
   "prometheus-fastapi-instrumentator": [
     "poetry"
+  ],
+  "prospector": [
+    "poetry-core"
+  ],
+  "protoletariat": [
+    "poetry-core"
   ],
   "ptyprocess": [
     "flit-core"
@@ -1234,6 +1279,9 @@
   "python-swiftclient": [
     "pbr"
   ],
+  "python-trovo": [
+    "poetry"
+  ],
   "python_openzwave": [
     "cython"
   ],
@@ -1275,6 +1323,9 @@
   ],
   "qiskit-terra": [
     "cython"
+  ],
+  "qstylizer": [
+    "pbr"
   ],
   "questionary": [
     "poetry-core"
@@ -1330,6 +1381,9 @@
   "rich": [
     "poetry-core"
   ],
+  "rio-tiler": [
+    "flit-core"
+  ],
   "ripser": [
     "cython"
   ],
@@ -1366,6 +1420,9 @@
   ],
   "sarif-om": [
     "pbr"
+  ],
+  "sat-search": [
+    "pytest-runner"
   ],
   "scikit-bio": [
     "cython"
@@ -1429,6 +1486,9 @@
   ],
   "single-version": [
     "poetry-core"
+  ],
+  "skia-pathops": [
+    "cython"
   ],
   "slowapi": [
     "poetry-core"
@@ -1602,6 +1662,9 @@
   "toggl-cli": [
     "pbr"
   ],
+  "toml-cli": [
+    "poetry"
+  ],
   "toml-sort": [
     "poetry"
   ],
@@ -1619,6 +1682,9 @@
   ],
   "traceback2": [
     "pbr"
+  ],
+  "traitlets": [
+    "flit-core"
   ],
   "transmission-rpc": [
     "poetry-core"

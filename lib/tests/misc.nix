@@ -22,16 +22,6 @@ in
 
 runTests {
 
-# FLAKES
-
-  testCallLocklessFlake = {
-    expr = callLocklessFlake {
-      path = ./flakes/subflakeTest;
-      inputs = { subflake = ./flakes/subflakeTest/subflake; inherit callLocklessFlake; };
-    };
-    expected = { x = 1; outPath = ./flakes/subflakeTest; };
-  };
-
 # TRIVIAL
 
   testId = {
@@ -269,6 +259,15 @@ runTests {
           strings
           possibly newlines
         '';
+        drv = {
+          outPath = "/drv";
+          foo = "ignored attribute";
+        };
+        path = /path;
+        stringable = {
+          __toString = _: "hello toString";
+          bar = "ignored attribute";
+        };
       }}
     '';
     expected = ''
@@ -277,6 +276,9 @@ runTests {
       declare -A assoc=(['with some']='strings
       possibly newlines
       ')
+      drv='/drv'
+      path='/path'
+      stringable='hello toString'
     '';
   };
 

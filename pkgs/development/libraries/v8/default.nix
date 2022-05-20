@@ -165,5 +165,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ cstrahan proglodyte matthewbauer ];
     platforms = platforms.unix;
     license = licenses.bsd3;
+    # Fails to build on Darwin, see https://github.com/NixOS/nixpkgs/issues/158076
+    broken = stdenv.isDarwin;
   };
 }

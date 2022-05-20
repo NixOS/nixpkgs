@@ -1,28 +1,27 @@
 { lib, stdenv, fetchurl
-, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, pkg-config, python3, xmlto
+, pkg-config, python3, sphinx
 , zstd
 , acl, attr, e2fsprogs, libuuid, lzo, udev, zlib
 , runCommand, btrfs-progs
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "5.16.2";
+  version = "5.17";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "sha256-npswOh0P2c6q8gTudMHI+h/VV5TiI9n+K8Yodey9U9I=";
+    sha256 = "sha256-Y7d4/kwrrRjjcdzljtNUiOCPWDkhNnRU/diFB6PQ2J4=";
   };
 
   nativeBuildInputs = [
-    pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
+    pkg-config
     python3 python3.pkgs.setuptools
+    sphinx
   ];
 
   buildInputs = [ acl attr e2fsprogs libuuid lzo python3 zlib zstd ] ++ lib.optionals stdenv.hostPlatform.isGnu [ udev ];
-
-  # for python cross-compiling
-  _PYTHON_HOST_PLATFORM = stdenv.hostPlatform.config;
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
@@ -36,6 +35,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = lib.optionals stdenv.hostPlatform.isGnu [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
+  installFlags = [ "install_python" ];
+
   enableParallelBuilding = true;
 
   passthru.tests = {
@@ -47,6 +48,14 @@ stdenv.mkDerivation rec {
       [ -e $out/success ]
     '';
   };
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    # No nicer place to find latest release.
+    url = "https://github.com/kdave/btrfs-progs.git";
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
     description = "Utilities for the btrfs filesystem";
     homepage = "https://btrfs.wiki.kernel.org/";

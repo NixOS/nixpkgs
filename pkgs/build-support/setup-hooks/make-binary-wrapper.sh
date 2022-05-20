@@ -33,6 +33,7 @@ assertExecutable() {
 # To troubleshoot a binary wrapper after you compiled it,
 # use the `strings` command or open the binary file in a text editor.
 makeWrapper() {
+    local NIX_CFLAGS_COMPILE= NIX_CFLAGS_LINK=
     local original="$1"
     local wrapper="$2"
     shift 2
@@ -44,6 +45,7 @@ makeWrapper() {
     makeDocumentedCWrapper "$original" "$@" | \
       @CC@ \
         -Wall -Werror -Wpedantic \
+        -Wno-overlength-strings \
         -Os \
         -x c \
         -o "$wrapper" -

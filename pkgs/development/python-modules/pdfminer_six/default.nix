@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, cryptography, chardet, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, cryptography
+, charset-normalizer
+, pytestCheckHook
+, ocrmypdf
+}:
 
 buildPythonPackage rec {
   pname = "pdfminer_six";
-  version = "20220319";
+  version = "20220506";
 
   disabled = !isPy3k;
 
@@ -10,10 +18,10 @@ buildPythonPackage rec {
     owner = "pdfminer";
     repo = "pdfminer.six";
     rev = version;
-    sha256 = "sha256-sjO7jmHSe4EDmJ1rfiXx+lsHxc+DfKeMet37Nbg03WQ=";
+    sha256 = "sha256-Lq+ou7+Lmr1H69L8X/vuky+/tXDD3bBBaCysymeRuXA=";
   };
 
-  propagatedBuildInputs = [ chardet cryptography ];
+  propagatedBuildInputs = [ charset-normalizer cryptography ];
 
   postInstall = ''
     for file in $out/bin/*.py; do
@@ -27,7 +35,15 @@ buildPythonPackage rec {
     substituteInPlace pdfminer/__init__.py --replace "__VERSION__" ${version}
   '';
 
+  pythonImportsCheck = [ "pdfminer" ];
+
   checkInputs = [ pytestCheckHook ];
+
+  passthru = {
+    tests = {
+      inherit ocrmypdf;
+    };
+  };
 
   meta = with lib; {
     description = "PDF parser and analyzer";

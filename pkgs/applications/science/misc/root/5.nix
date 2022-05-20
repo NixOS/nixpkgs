@@ -104,6 +104,7 @@ stdenv.mkDerivation rec {
     "-Drpath=ON"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_CXX_FLAGS=-std=c++11"
     "-Dalien=OFF"
     "-Dbonjour=OFF"
     "-Dcastor=OFF"

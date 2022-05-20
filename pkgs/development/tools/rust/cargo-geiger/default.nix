@@ -1,7 +1,14 @@
-{ stdenv, lib, fetchFromGitHub
-, rustPlatform, pkg-config, openssl
-# darwin dependencies
-, Security, CoreFoundation, libiconv
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, openssl
+  # darwin dependencies
+, Security
+, CoreFoundation
+, libiconv
+, curl
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,15 +23,11 @@ rustPlatform.buildRustPackage rec {
   };
   cargoSha256 = "sha256-i7xDEzZAN2ubW1Q6MhY+xsb9XiUajNDHLdtDuO5r6jA=";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
-  nativeBuildInputs = [ pkg-config ];
-
-  # FIXME: Use impure version of CoreFoundation because of missing symbols.
-  # CFURLSetResourcePropertyForKey is defined in the headers but there's no
-  # corresponding implementation in the sources from opensource.apple.com.
-  preConfigure = lib.optionalString stdenv.isDarwin ''
-    export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
-  '';
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv curl ];
+  nativeBuildInputs = [ pkg-config ]
+    # curl-sys wants to run curl-config on darwin
+    ++ lib.optionals stdenv.isDarwin [ curl.dev ];
 
   # skip tests with networking or other failures
   checkFlags = [

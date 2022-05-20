@@ -1,4 +1,4 @@
-{ lib, stdenv, mkDerivation, fetchurl, cmake
+{ lib, stdenv, mkDerivation, fetchurl, fetchpatch, cmake
 , pkg-config, alsa-lib, libjack2, libsndfile, fftw
 , curl, gcc, libXt, qtbase, qttools, qtwebengine
 , readline, qtwebsockets, useSCEL ? false, emacs
@@ -18,6 +18,12 @@ mkDerivation rec {
   patches = [
     # add support for SC_DATA_DIR and SC_PLUGIN_DIR env vars to override compile-time values
     ./supercollider-3.12.0-env-dirs.patch
+
+    # fix issue with libsndfile >=1.1.0
+    (fetchpatch {
+      url = "https://github.com/supercollider/supercollider/commit/b9dd70c4c8d61c93d7a70645e0bd18fa76e6834e.patch";
+      hash = "sha256-6FhEHyY0rnE6d7wC+v0U9K+L0aun5LkTqaEFhr3eQNw=";
+    })
   ];
 
   nativeBuildInputs = [ cmake pkg-config qttools ];

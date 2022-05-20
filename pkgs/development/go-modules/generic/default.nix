@@ -79,12 +79,11 @@ let
     GO111MODULE = "on";
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND" "SOCKS_SERVER"
+      "GIT_PROXY_COMMAND" "SOCKS_SERVER" "GOPROXY"
     ];
 
     configurePhase = args.modConfigurePhase or ''
       runHook preConfigure
-
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
       cd "${modRoot}"

@@ -40,18 +40,19 @@ stdenv.mkDerivation {
   buildInputs = [
     avahi
     libgphoto2
-    libieee1284
     libjpeg
     libpng
     libtiff
     libusb1
-    libv4l
-    net-snmp
     curl
-    systemd
     libxml2
     poppler
     gawk
+  ] ++ lib.optionals stdenv.isLinux [
+    libieee1284
+    libv4l
+    net-snmp
+    systemd
   ];
 
   enableParallelBuilding = true;
@@ -113,6 +114,6 @@ stdenv.mkDerivation {
     '';
     homepage = "http://www.sane-project.org/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

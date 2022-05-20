@@ -11,9 +11,6 @@ let
     callLibs = file: import file { lib = self; };
   in {
 
-    # interacting with flakes
-    flakes = callLibs ./flakes.nix;
-
     # often used, or depending on very little
     trivial = callLibs ./trivial.nix;
     fixedPoints = callLibs ./fixed-points.nix;
@@ -62,7 +59,6 @@ let
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
 
-    inherit (self.flakes) callLocklessFlake;
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isString length

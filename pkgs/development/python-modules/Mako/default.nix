@@ -8,7 +8,7 @@
 , markupsafe
 
 # extras: Babel
-, Babel
+, babel
 
 # tests
 , mock
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   passthru.extras-require = {
     babel = [
-      Babel
+      babel
     ];
   };
 

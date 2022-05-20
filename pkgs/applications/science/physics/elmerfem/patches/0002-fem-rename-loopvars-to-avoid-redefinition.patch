@@ -1,0 +1,82 @@
+From 06634e5fd46a27dca11b87d4a38e9ead561de3d5 Mon Sep 17 00:00:00 2001
+From: grindhold <grindhold@gmx.net>
+Date: Thu, 28 Apr 2022 15:47:07 +0200
+Subject: [PATCH] fem: rename loopvars to avoid redefinition
+
+---
+ fem/src/modules/DCRComplexSolve.F90 | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/fem/src/modules/DCRComplexSolve.F90 b/fem/src/modules/DCRComplexSolve.F90
+index 469214ee..268591fd 100644
+--- a/fem/src/modules/DCRComplexSolve.F90
++++ b/fem/src/modules/DCRComplexSolve.F90
+@@ -502,14 +502,14 @@ CONTAINS
+ 
+       IF ( SIZE(Hwrk,1) == 1 ) THEN
+ 
+-         DO i=1,MIN(3,SIZE(Hwrk,2))
+-            Tensor( i,1:n ) = Hwrk( 1,1,1:n )
++         DO k=1,MIN(3,SIZE(Hwrk,2))
++            Tensor( k,1:n ) = Hwrk( 1,1,1:n )
+          END DO
+ 
+       ELSE
+ 
+-        DO i=1,MIN(3,SIZE(Hwrk,1))
+-           Tensor( i,1:n ) = Hwrk( i,1,1:n )
++        DO k=1,MIN(3,SIZE(Hwrk,1))
++           Tensor( k,1:n ) = Hwrk( k,1,1:n )
+         END DO
+ 
+       END IF
+@@ -1391,21 +1391,21 @@ contains
+ 
+       IF ( SIZE(Hwrk,1) == 1 ) THEN
+ 
+-         DO i=1,MIN(3,SIZE(Hwrk,2))
+-            Tensor( i,i,1:n ) = Hwrk( 1,1,1:n )
++         DO k=1,MIN(3,SIZE(Hwrk,2))
++            Tensor( k,k,1:n ) = Hwrk( 1,1,1:n )
+          END DO
+ 
+       ELSE IF ( SIZE(Hwrk,2) == 1 ) THEN
+ 
+-         DO i=1,MIN(3,SIZE(Hwrk,1))
+-            Tensor(i,i,1:n) = Hwrk(i,1,1:n)
++         DO k=1,MIN(3,SIZE(Hwrk,1))
++            Tensor(k,k,1:n) = Hwrk(k,1,1:n)
+          END DO
+ 
+       ELSE
+ 
+-        DO i=1,MIN(3,SIZE(Hwrk,1))
++        DO k=1,MIN(3,SIZE(Hwrk,1))
+            DO j=1,MIN(3,SIZE(Hwrk,2))
+-              Tensor( i,j,1:n ) = Hwrk(i,j,1:n)
++              Tensor( k,j,1:n ) = Hwrk(k,j,1:n)
+            END DO
+         END DO
+ 
+@@ -1443,14 +1443,14 @@ contains
+ 
+       IF ( SIZE(Hwrk,1) == 1 ) THEN
+ 
+-         DO i=1,MIN(3,SIZE(Hwrk,2))
+-            Tensor( i,1:n ) = Hwrk( 1,1,1:n )
++         DO k=1,MIN(3,SIZE(Hwrk,2))
++            Tensor( k,1:n ) = Hwrk( 1,1,1:n )
+          END DO
+ 
+       ELSE
+ 
+-        DO i=1,MIN(3,SIZE(Hwrk,1))
+-           Tensor( i,1:n ) = Hwrk( i,1,1:n )
++        DO k=1,MIN(3,SIZE(Hwrk,1))
++           Tensor( k,1:n ) = Hwrk( k,1,1:n )
+         END DO
+ 
+       END IF
+-- 
+2.33.3
+

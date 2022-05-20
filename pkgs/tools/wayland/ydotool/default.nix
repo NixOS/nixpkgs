@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-maXXGCqB8dkGO8956hsKSwM4HQdYn6z1jBFENQ9sKcA=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ cmake scdoc ];
 
   postInstall = ''

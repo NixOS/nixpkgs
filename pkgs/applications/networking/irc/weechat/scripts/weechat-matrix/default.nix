@@ -18,7 +18,7 @@ let
   scriptPython = python.withPackages (ps: with ps; [
     aiohttp
     requests
-    python_magic
+    python-magic
   ]);
 
   version = "0.3.0";

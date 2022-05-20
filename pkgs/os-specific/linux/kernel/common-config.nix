@@ -883,6 +883,8 @@ let
       # Disable the firmware helper fallback, udev doesn't implement it any more
       FW_LOADER_USER_HELPER_FALLBACK = option no;
 
+      FW_LOADER_COMPRESS = option yes;
+
       HOTPLUG_PCI_ACPI = yes; # PCI hotplug using ACPI
       HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 

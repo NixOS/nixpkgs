@@ -23,6 +23,7 @@
 # build time
 , autoconf
 , cargo
+, dump_syms
 , makeWrapper
 , nodejs
 , perl
@@ -80,11 +81,13 @@
 , alsaSupport ? stdenv.isLinux, alsa-lib
 , ffmpegSupport ? true
 , gssSupport ? true, libkrb5
+, jackSupport ? stdenv.isLinux, libjack2
 , jemallocSupport ? true, jemalloc
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
 , pgoSupport ? (stdenv.isLinux && stdenv.isx86_64 && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
+, sndioSupport ? stdenv.isLinux, sndio
 , waylandSupport ? true, libxkbcommon, libdrm
 
 ## privacy-related options
@@ -94,6 +97,7 @@
 # WARNING: NEVER set any of the options below to `true` by default.
 # Set to `!privacySupport` or `false`.
 
+, crashreporterSupport ? !privacySupport
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , webrtcSupport ? !privacySupport
@@ -106,10 +110,6 @@
 # Controlling the nagbar and widevine CDM at runtime is possible by setting
 # `browser.eme.ui.enabled` and `media.gmp-widevinecdm.enabled` accordingly
 , drmSupport ? true
-
-## other
-
-, crashreporterSupport ? false
 
 # As stated by Sylvestre Ledru (@sylvestre) on Nov 22, 2017 at
 # https://github.com/NixOS/nixpkgs/issues/31843#issuecomment-346372756 we
@@ -169,6 +169,11 @@ buildStdenv.mkDerivation ({
 
   inherit src unpackPhase meta;
 
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals crashreporterSupport [ "symbols" ];
+
   # Add another configure-build-profiling run before the final configure phase if we build with pgo
   preConfigurePhases = lib.optionals pgoSupport [
     "configurePhase"
@@ -210,6 +215,7 @@ buildStdenv.mkDerivation ({
     which
     wrapGAppsHook
   ]
+  ++ lib.optionals crashreporterSupport [ dump_syms ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
   ++ extraNativeBuildInputs;
 
@@ -232,12 +238,16 @@ buildStdenv.mkDerivation ({
     # Set consistent remoting name to ensure wmclass matches with desktop file
     export MOZ_APP_REMOTINGNAME="${binaryName}"
 
-    # Use our own python
-    export MACH_USE_SYSTEM_PYTHON=1
-
     # AS=as in the environment causes build failure
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1497286
     unset AS
+
+  '' + lib.optionalString (lib.versionAtLeast version "100.0") ''
+    # Use our own python
+    export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
+  '' + lib.optionalString (lib.versionOlder version "100.0") ''
+    # Use our own python
+    export MACH_USE_SYSTEM_PYTHON=1
 
   '' + lib.optionalString (lib.versionAtLeast version "95.0") ''
     # RBox WASM Sandboxing
@@ -303,7 +313,9 @@ buildStdenv.mkDerivation ({
   ++ lib.optional (lib.versionAtLeast version "95") "--with-wasi-sysroot=${wasiSysRoot}"
 
   ++ flag alsaSupport "alsa"
+  ++ flag jackSupport "jack"
   ++ flag pulseaudioSupport "pulseaudio"
+  ++ lib.optional (lib.versionAtLeast version "100") (flag sndioSupport "sndio")
   ++ flag ffmpegSupport "ffmpeg"
   ++ flag jemallocSupport "jemalloc"
   ++ flag geolocationSupport "necko-wifi"
@@ -363,7 +375,9 @@ buildStdenv.mkDerivation ({
   ]
   ++ [ (if (lib.versionAtLeast version "92") then nss_latest else nss_esr) ]
   ++ lib.optional  alsaSupport alsa-lib
+  ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
+  ++ lib.optional  (sndioSupport && lib.versionAtLeast version "100") sndio
   ++ lib.optional  gssSupport libkrb5
   ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ++ lib.optional  jemallocSupport jemalloc
@@ -405,7 +419,13 @@ buildStdenv.mkDerivation ({
   # tests were disabled in configureFlags
   doCheck = false;
 
-  preInstall = ''
+  # Generate build symbols once after the final build
+  # https://firefox-source-docs.mozilla.org/crash-reporting/uploading_symbol.html
+  preInstall = lib.optionalString crashreporterSupport ''
+    ./mach buildsymbols
+    mkdir -p $symbols/
+    cp mozobj/dist/*.crashreporter-symbols.zip $symbols/
+  '' + ''
     cd mozobj
   '';
 
@@ -464,7 +484,9 @@ buildStdenv.mkDerivation ({
     inherit version;
     inherit alsaSupport;
     inherit binaryName;
+    inherit jackSupport;
     inherit pipewireSupport;
+    inherit sndioSupport;
     inherit nspr;
     inherit ffmpegSupport;
     inherit gssSupport;

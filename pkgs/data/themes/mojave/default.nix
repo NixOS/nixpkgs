@@ -16,6 +16,7 @@
 , opacityVariants ? [] # default to all
 , themeVariants ? [] # default to MacOS blue
 , wallpapers ? false
+, gitUpdater
 }:
 
 let
@@ -29,14 +30,14 @@ lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink
 
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "unstable-2021-12-20";
+  version = "2022-05-12";
 
   srcs = [
     (fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
-      rev = "c148646ccab382f7a2d5fdc421fc32d843cb4172";
-      sha256 = "sha256-h4MSSh8cu9M81bM+WJSyl1SQ7CVth1DvjIVOUJXqpxs";
+      rev = version;
+      sha256 = "sha256-VrrxW16J+S21qBoAeVCWs0Q6bRL1jXAK7MOBpdSMJZY=";
     })
   ]
   ++
@@ -113,6 +114,8 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {inherit pname version; };
 
   meta = with lib; {
     description = "Mac OSX Mojave like theme for GTK based desktop environments";

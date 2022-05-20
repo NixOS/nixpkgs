@@ -78,7 +78,7 @@ mkDerivation rec {
     description = "An open source prototyping tool for Arduino-based projects";
     homepage = "https://fritzing.org/";
     license = with licenses; [ gpl3 cc-by-sa-30 ];
-    maintainers = with maintainers; [ robberer musfay ];
+    maintainers = with maintainers; [ robberer muscaln ];
     platforms = platforms.linux;
   };
 }
