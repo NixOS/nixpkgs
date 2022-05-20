@@ -18,13 +18,13 @@
 
 resholve.mkDerivation rec {
   pname = "bats";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
     rev = "v${version}";
-    sha256 = "sha256-s+SAqX70WeTz6s5ObXYFBVPVUEqvD1d7AX2sGHkjVQ4=";
+    sha256 = "sha256-joNne/dDVCNtzdTQ64rK8GimT+DOWUa7f410hml2s8Q=";
   };
 
   patchPhase = ''
@@ -77,6 +77,8 @@ resholve.mkDerivation rec {
           "${placeholder "out"}/lib/bats-core/common.bash"
           "${placeholder "out"}/lib/bats-core/semaphore.bash"
           "${placeholder "out"}/lib/bats-core/formatter.bash"
+          "${placeholder "out"}/lib/bats-core/warnings.bash"
+          "$setup_suite_file" # via cli arg
         ];
         "$report_formatter" = true;
         "$formatter" = true;
@@ -105,6 +107,7 @@ resholve.mkDerivation rec {
 
   passthru.tests.upstream = bats.unresholved.overrideAttrs (old: {
     name = "${bats.name}-tests";
+    dontInstall = true; # just need the build directory
     installCheckInputs = [
       ncurses
       parallel # skips some tests if it can't detect
@@ -115,8 +118,6 @@ resholve.mkDerivation rec {
     installCheckPhase = ''
       # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
       sed -i '/test works even if PATH is reset/a skip "disabled for nix build"' test/bats.bats
-      # TODO: cut when https://github.com/bats-core/bats-core/pull/554 allows
-      substituteInPlace test/parallel.bats --replace '&& type -p shlock' '|| type -p shlock'
 
       # skip tests that assume bats `install.sh` will be in BATS_ROOT
       rm test/root.bats
@@ -126,7 +127,6 @@ resholve.mkDerivation rec {
         "/usr/bin/env bash" "${bash}/bin/bash"
 
       ${bats}/bin/bats test
-      rm -rf $out
       touch $out
     '';
   });
