@@ -2849,6 +2849,7 @@ broken-packages:
   - lagrangian
   - lambda2js
   - lambdaBase
+  - lambdabot-telegram-plugins
   - lambdabot-utils
   - lambdabot-xmpp
   - lambda-bridge
