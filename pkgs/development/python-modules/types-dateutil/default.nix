@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "types-python-dateutil";
-  version = "2.8.15";
+  version = "2.8.16";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fbHk7UkWvRKMvuPuze4OBsxWhNoqHN/Vf5hUHN++CGE=";
+    sha256 = "sha256-OqrEwTjra47LwlUJluwl1uRbXTKIfR5pPQhC7i+mWdI=";
   };
 
   pythonImportsCheck = [ "dateutil-stubs" ];

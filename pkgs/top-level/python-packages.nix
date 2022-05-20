@@ -2380,6 +2380,8 @@ in {
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
+  djangorestframework-dataclasses = callPackage ../development/python-modules/djangorestframework-dataclasses { };
+
   djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
 
   django_reversion = callPackage ../development/python-modules/django_reversion { };
@@ -11320,9 +11322,9 @@ in {
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
 
-  zeek = toPythonModule (pkgs.zeek.override {
+  zeek = (toPythonModule (pkgs.zeek.override {
     python3 = python;
-  }).py;
+  })).py;
 
   zeep = callPackage ../development/python-modules/zeep { };
 

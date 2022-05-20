@@ -11,7 +11,7 @@ buildDunePackage {
   doCheck = true;
   checkInputs = [ alcotest atdgen-codec-runtime ];
 
-  meta = atd.meta // {
+  meta = (builtins.removeAttrs atd.meta [ "mainProgram" ]) // {
     description = "Generates efficient JSON serializers, deserializers and validators";
   };
 }

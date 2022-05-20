@@ -35,5 +35,6 @@ buildDunePackage rec {
     homepage = "https://github.com/dinosaure/hxd";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
+    mainProgram = "hxd.xxd";
   };
 }
