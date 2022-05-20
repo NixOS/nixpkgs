@@ -525,6 +525,7 @@ broken-packages:
   - cabal-bundle-clib
   - cabal-constraints
   - cabal-db
+  - cabal-debian
   - cabal-dependency-licenses
   - cabal-detailed-quickcheck
   - cabal-dev
@@ -1584,6 +1585,7 @@ broken-packages:
   - fused-effects-exceptions
   - fused-effects-mwc-random
   - fused-effects-resumable
+  - fused-effects-squeal
   - fusion
   - futhask
   - futun
@@ -3977,6 +3979,7 @@ broken-packages:
   - postgresql-simple-sop
   - postgresql-transactional
   - postgresql-tx-simple
+  - postgresql-tx-squeal
   - postgresql-typed-lifted
   - postgres-tmp
   - postgrest-ws
@@ -4771,6 +4774,7 @@ broken-packages:
   - spir-v
   - splay
   - splaytree
+  - splines
   - split-morphism
   - splitter
   - Spock-api-ghcjs

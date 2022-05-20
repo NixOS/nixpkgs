@@ -2717,6 +2717,7 @@ dont-distribute-packages:
  - mangrove
  - manifold-random
  - manifolds
+ - marionetta
  - markdown-pap
  - markdown2svg
  - markov-processes
@@ -3138,6 +3139,7 @@ dont-distribute-packages:
  - postgresql-simple-queue
  - postgresql-simple-typed
  - postgresql-tx-query
+ - postgresql-tx-squeal-compat-simple
  - postgrest
  - postmark
  - potoki
