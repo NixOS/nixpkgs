@@ -1,9 +1,6 @@
 { lib
 , python3
 , fetchFromGitHub
-, wrapGAppsHook
-, gobject-introspection
-, libnotify
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,28 +16,15 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     python3.pkgs.setuptools-scm
-    wrapGAppsHook
   ];
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  buildInputs = [
-    gobject-introspection
-    libnotify
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
     deltachat
     notify-py
-    pygobject3
     urwid-readline
   ];
-
-  dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
 
   doCheck = false; # no tests implemented
 
