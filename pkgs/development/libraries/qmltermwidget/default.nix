@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, qtbase, qtquick1, qmake, qtmultimedia, utmp, fetchpatch }:
 
 stdenv.mkDerivation {
-  version = "2018-11-24";
-  pname = "qmltermwidget-unstable";
+  version = "unstable-2018-11-24";
+  pname = "qmltermwidget";
 
   src = fetchFromGitHub {
     repo = "qmltermwidget";

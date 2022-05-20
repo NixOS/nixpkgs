@@ -3,8 +3,8 @@
 , darwin }:
 
 stdenv.mkDerivation rec {
-  pname = "liblastfm-unstable";
-  version = "2019-08-23";
+  pname = "liblastfm";
+  version = "unstable-2019-08-23";
 
   src = fetchFromGitHub {
     owner = "lastfm";

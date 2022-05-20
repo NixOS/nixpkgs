@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  pname = "lambda-mod-zsh-theme-unstable";
-  version = "2020-10-03";
+  pname = "lambda-mod-zsh-theme";
+  version = "unstable-2020-10-03";
 
   src = fetchFromGitHub {
     owner = "halfo";

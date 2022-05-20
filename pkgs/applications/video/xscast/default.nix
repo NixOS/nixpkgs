@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, ffmpeg, imagemagick, dzen2, xorg }:
 
 stdenv.mkDerivation {
-  pname = "xscast-unstable";
-  version = "2016-07-26";
+  pname = "xscast";
+  version = "unstable-2016-07-26";
 
   src = fetchFromGitHub {
     owner = "KeyboardFire";

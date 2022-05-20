@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, freerdp, openssl, libssh2 }:
 
 stdenv.mkDerivation rec {
-  pname = "medusa-unstable";
-  version = "2018-12-16";
+  pname = "medusa";
+  version = "unstable-2018-12-16";
 
   src = fetchFromGitHub {
     owner = "jmk-foofus";

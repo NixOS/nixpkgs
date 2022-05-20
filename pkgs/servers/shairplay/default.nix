@@ -2,8 +2,8 @@
 , avahi, libao }:
 
 stdenv.mkDerivation rec {
-  pname = "shairplay-unstable";
-  version = "2018-08-24";
+  pname = "shairplay";
+  version = "unstable-2018-08-24";
 
   src = fetchFromGitHub {
     owner  = "juhovh";

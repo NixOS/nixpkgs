@@ -6,8 +6,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "bzip2-unstable";
-  version = "2020-08-11";
+  pname = "bzip2";
+  version = "unstable-2020-08-11";
 
   src = fetchFromGitLab {
     owner = "federicomenaquintero";

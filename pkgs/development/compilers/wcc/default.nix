@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, capstone, libbfd, libelf, libiberty, readline }:
 
 stdenv.mkDerivation {
-  pname = "wcc-unstable";
-  version = "2018-04-05";
+  pname = "wcc";
+  version = "unstable-2018-04-05";
 
   src = fetchFromGitHub {
     owner = "endrazine";

@@ -3,8 +3,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "hello-wayland-unstable";
-  version = "2020-07-27";
+  pname = "hello-wayland";
+  version = "unstable-2020-07-27";
 
   src = fetchFromGitHub {
     owner = "emersion";

@@ -4,8 +4,8 @@
 }:
 
 buildGoModule rec {
-  pname = "reftools-unstable";
-  version = "2019-12-21";
+  pname = "reftools";
+  version = "unstable-2019-12-21";
   rev = "65925cf013156409e591f7a1be4df96f640d02f4";
 
   vendorSha256 = null;

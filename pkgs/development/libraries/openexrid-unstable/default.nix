@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, re2, openfx, zlib, ilmbase, libGLU, libGL, openexr }:
 
 stdenv.mkDerivation {
-  pname = "openexrid-unstable";
-  version = "2017-09-17";
+  pname = "openexrid";
+  version = "unstable-2017-09-17";
 
   src = fetchFromGitHub {
     owner = "MercenariesEngineering";

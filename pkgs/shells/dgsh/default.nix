@@ -4,8 +4,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "dgsh-unstable";
-  version = "2017-02-05";
+  pname = "dgsh";
+  version = "unstable-2017-02-05";
 
   src = fetchFromGitHub {
     owner = "dspinellis";

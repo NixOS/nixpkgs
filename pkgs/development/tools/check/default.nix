@@ -4,8 +4,8 @@
 }:
 
 buildGoPackage rec {
-  pname = "check-unstable";
-  version = "2018-09-12";
+  pname = "check";
+  version = "unstable-2018-09-12";
   rev = "88db195993f8e991ad402754accd0635490769f9";
 
   goPackagePath = "gitlab.com/opennota/check";

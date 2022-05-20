@@ -9,8 +9,8 @@
 }:
 
 buildGoModule rec {
-  pname = "hasmail-unstable";
-  version = "2019-08-24";
+  pname = "hasmail";
+  version = "unstable-2019-08-24";
 
   src = fetchFromGitHub {
     owner = "jonhoo";

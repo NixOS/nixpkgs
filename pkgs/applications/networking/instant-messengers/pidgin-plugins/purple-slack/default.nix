@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, pidgin, pkg-config }:
 
 stdenv.mkDerivation {
-  pname = "purple-slack-unstable";
-  version = "2020-09-22";
+  pname = "purple-slack";
+  version = "unstable-2020-09-22";
 
   src = fetchFromGitHub {
     owner = "dylex";

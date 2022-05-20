@@ -13,8 +13,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "shared-mime-info-unstable";
-  version = "2021-12-03";
+  pname = "shared-mime-info";
+  version = "unstable-2021-12-03";
 
   outputs = [ "out" "dev" ];
 

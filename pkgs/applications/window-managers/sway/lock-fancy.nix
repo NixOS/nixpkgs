@@ -15,8 +15,8 @@ let
     wmctrl
   ];
 in stdenv.mkDerivation rec {
-  pname = "swaylock-fancy-unstable";
-  version = "2021-10-11";
+  pname = "swaylock-fancy";
+  version = "unstable-2021-10-11";
 
   src = fetchFromGitHub {
     owner = "Big-B";

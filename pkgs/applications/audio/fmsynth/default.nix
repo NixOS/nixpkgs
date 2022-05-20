@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, gtkmm2, lv2, lvtk, pkg-config }:
 stdenv.mkDerivation {
-  pname = "fmsynth-unstable";
-  version = "2015-02-07";
+  pname = "fmsynth";
+  version = "unstable-2015-02-07";
   src = fetchFromGitHub {
     owner = "Themaister";
     repo = "libfmsynth";

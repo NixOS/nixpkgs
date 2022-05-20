@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  pname = "vndr-unstable";
-  version = "2020-07-28";
+  pname = "vndr";
+  version = "unstable-2020-07-28";
   rev = "f12b881cb8f081a5058408a58f429b9014833fc6";
 
   goPackagePath = "github.com/LK4D4/vndr";

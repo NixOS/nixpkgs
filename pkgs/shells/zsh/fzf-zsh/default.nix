@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fzf }:
 
 stdenv.mkDerivation rec {
-  pname = "fzf-zsh-unstable";
-  version = "2019-09-09";
+  pname = "fzf-zsh";
+  version = "unstable-2019-09-09";
 
   src = fetchFromGitHub {
     owner = "Wyntau";

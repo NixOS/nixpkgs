@@ -6,8 +6,8 @@ assert video -> capture != null;
 assert clipboard -> xclip != null;
 
 stdenv.mkDerivation rec {
-  pname = "pb_cli-unstable";
-  version = "2019-03-10";
+  pname = "pb_cli";
+  version = "unstable-2019-03-10";
 
   src = fetchFromGitHub {
     owner = "ptpb";

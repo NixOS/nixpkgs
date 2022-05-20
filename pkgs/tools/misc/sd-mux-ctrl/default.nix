@@ -1,8 +1,8 @@
 { lib, stdenv, fetchgit, cmake, pkg-config, libftdi1, popt}:
 
 stdenv.mkDerivation rec {
-  pname = "sd-mux-ctrl-unstable";
-  version = "2020-02-17";
+  pname = "sd-mux-ctrl";
+  version = "unstable-2020-02-17";
 
   src = fetchgit {
     url = "https://git.tizen.org/cgit/tools/testlab/sd-mux";

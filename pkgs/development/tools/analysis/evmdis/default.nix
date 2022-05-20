@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage {
-  pname = "evmdis-unstable";
-  version = "2018-03-23";
+  pname = "evmdis";
+  version = "unstable-2018-03-23";
   goPackagePath = "github.com/Arachnid/evmdis";
 
   src = fetchFromGitHub {

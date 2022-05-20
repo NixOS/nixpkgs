@@ -1,8 +1,8 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
-  pname = "prow-unstable";
-  version = "2020-04-01";
+  pname = "prow";
+  version = "unstable-2020-04-01";
   rev = "32e3b5ce7695fb622381421653db436cb57b47c5";
 
   src = fetchFromGitHub {

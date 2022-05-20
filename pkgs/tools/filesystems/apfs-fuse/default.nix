@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fuse3, bzip2, zlib, attr, cmake }:
 
 stdenv.mkDerivation {
-  pname = "apfs-fuse-unstable";
-  version = "2020-09-28";
+  pname = "apfs-fuse";
+  version = "unstable-2020-09-28";
 
   src = fetchFromGitHub {
     owner  = "sgan81";

@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fftw, installShellFiles }:
 
 stdenv.mkDerivation {
-  pname = "sonic-unstable";
-  version = "2020-12-27";
+  pname = "sonic";
+  version = "unstable-2020-12-27";
 
   src = fetchFromGitHub {
     owner = "waywardgeek";

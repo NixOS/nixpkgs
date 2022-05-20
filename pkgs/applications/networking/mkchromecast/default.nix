@@ -27,8 +27,8 @@ let packages = [
 
 in
 python3Packages.buildPythonApplication rec {
-  pname = "mkchromecast-unstable";
-  version = "2020-10-17";
+  pname = "mkchromecast";
+  version = "unstable-2020-10-17";
 
   src = fetchFromGitHub rec {
     owner = "muammar";

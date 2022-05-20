@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "scheme-manpages-unstable";
-  version = "2022-04-21";
+  pname = "scheme-manpages";
+  version = "unstable-2022-04-21";
 
   src = fetchFromGitHub {
     owner = "schemedoc";

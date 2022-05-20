@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, readline }:
 
 stdenv.mkDerivation rec {
-  pname = "mrsh-unstable";
-  version = "2021-01-10";
+  pname = "mrsh";
+  version = "unstable-2021-01-10";
 
   src = fetchFromGitHub {
     owner = "emersion";

@@ -8,8 +8,8 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "xprite-editor-unstable";
-  version = "2019-09-22";
+  pname = "xprite-editor";
+  version = "unstable-2019-09-22";
 
   src = fetchFromGitHub {
     owner = "rickyhan";

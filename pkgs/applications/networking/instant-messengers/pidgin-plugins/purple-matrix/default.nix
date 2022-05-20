@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, pidgin, json-glib, glib, http-parser, sqlite, olm, libgcrypt } :
 
 stdenv.mkDerivation rec {
-  pname = "purple-matrix-unstable";
-  version = "2019-06-06";
+  pname = "purple-matrix";
+  version = "unstable-2019-06-06";
 
   src = fetchFromGitHub {
     owner = "matrix-org";

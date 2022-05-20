@@ -30,8 +30,8 @@ let
 in
 
 stdenv.mkDerivation {
-  pname = "skk-dicts-unstable";
-  version = "2020-03-24";
+  pname = "skk-dicts";
+  version = "unstable-2020-03-24";
   srcs = [ small medium large edict assoc ];
   nativeBuildInputs = [ skktools ] ++ lib.optional stdenv.isDarwin libiconv;
 

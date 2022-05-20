@@ -8,8 +8,8 @@
 }:
 
 stdenvNoCC.mkDerivation {
-  pname = "optparse-bash-unstable";
-  version = "2021-06-13";
+  pname = "optparse-bash";
+  version = "unstable-2021-06-13";
 
   src = fetchFromGitHub {
     owner = "nk412";

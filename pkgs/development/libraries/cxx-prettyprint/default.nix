@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  pname = "cxx-prettyprint-unstable";
-  version = "2016-04-30";
+  pname = "cxx-prettyprint";
+  version = "unstable-2016-04-30";
   rev = "9ab26d228f2960f50b38ad37fe0159b7381f7533";
 
   src = fetchFromGitHub {

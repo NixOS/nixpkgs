@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, libX11, autoreconfHook }:
 
 stdenv.mkDerivation {
-  pname = "xsel-unstable";
-  version = "2020-05-27";
+  pname = "xsel";
+  version = "unstable-2020-05-27";
 
   src = fetchFromGitHub {
     owner = "kfish";

@@ -12,8 +12,8 @@ let
   };
 
 in buildPythonApplication rec {
-  pname = "sonota-unstable";
-  version = "2018-10-07";
+  pname = "sonota";
+  version = "unstable-2018-10-07";
 
   src = fetchFromGitHub {
     owner  = "mirko";

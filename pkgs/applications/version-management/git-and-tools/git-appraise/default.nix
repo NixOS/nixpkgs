@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  pname = "git-appraise-unstable";
-  version = "2018-02-26";
+  pname = "git-appraise";
+  version = "unstable-2018-02-26";
   rev = "2414523905939525559e4b2498c5597f86193b61";
 
   goPackagePath = "github.com/google/git-appraise";

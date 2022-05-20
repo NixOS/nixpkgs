@@ -1,7 +1,7 @@
 {callPackage, fetchFromGitHub, fetchpatch}:
 callPackage ./dvtm.nix {
-  pname = "dvtm-unstable";
-  version = "2018-03-31";
+  pname = "dvtm";
+  version = "unstable-2018-03-31";
 
   src = fetchFromGitHub {
     owner = "martanne";

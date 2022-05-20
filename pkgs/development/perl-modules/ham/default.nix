@@ -1,8 +1,8 @@
 { lib, buildPerlPackage, fetchFromGitHub, makeWrapper, openssh, GitRepository, URI, XMLMini }:
 
 buildPerlPackage {
-  pname = "ham-unstable";
-  version = "2020-09-09";
+  pname = "ham";
+  version = "unstable-2020-09-09";
 
   src = fetchFromGitHub {
     owner = "kernkonzept";

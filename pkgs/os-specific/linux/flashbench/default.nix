@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  pname = "flashbench-unstable";
-  version = "2020-01-23";
+  pname = "flashbench";
+  version = "unstable-2020-01-23";
 
   src = fetchFromGitHub {
     owner = "bradfa";

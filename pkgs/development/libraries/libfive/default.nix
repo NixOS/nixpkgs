@@ -14,8 +14,8 @@
 }:
 
 mkDerivation {
-  pname = "libfive-unstable";
-  version = "2020-02-15";
+  pname = "libfive";
+  version = "unstable-2020-02-15";
 
   src = fetchFromGitHub {
     owner = "libfive";

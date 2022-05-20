@@ -3,8 +3,8 @@
 let python = python27.withPackages (ps: with ps; [ cython ]);
 
 in stdenv.mkDerivation {
-  pname = "platypus-unstable";
-  version = "2018-07-22";
+  pname = "platypus";
+  version = "unstable-2018-07-22";
 
   src = fetchFromGitHub {
     owner = "andyrimmer";

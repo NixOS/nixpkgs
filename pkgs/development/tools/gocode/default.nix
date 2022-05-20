@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  pname = "gocode-unstable";
-  version = "2020-04-06";
+  pname = "gocode";
+  version = "unstable-2020-04-06";
   rev = "4acdcbdea79de6b3dee1c637eca5cbea0fdbe37c";
 
   goPackagePath = "github.com/mdempsky/gocode";
