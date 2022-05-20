@@ -3,6 +3,7 @@
 , llvmPackages
 , symlinkJoin, makeWrapper, substituteAll
 , mkYarnModules
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,10 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./0001-emulate-clang-sysroot-include-logic.patch;
       resourceDir = "${llvmEnv}/lib/clang/${llvmPackages.release_version}/";
+    })
+    (fetchpatch {
+      url = "https://github.com/emscripten-core/emscripten/pull/16986.patch";
+      sha256 = "0wbnvdy6gyizmrvqwbdz9k2cs9cmni49iqn1hggsfcnkwn2qlddp";
     })
   ];
 
