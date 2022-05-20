@@ -2,8 +2,6 @@
 , stdenv
 , buildGoModule
 , fetchFromGitHub
-, CoreFoundation
-, Security
 }:
 
 buildGoModule rec {
@@ -20,16 +18,13 @@ buildGoModule rec {
 
   excludedPackages = "misc";
 
-  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64)
-    [ CoreFoundation Security ];
-
   ldflags = [
     "-s"
     "-w"
     "-X main.version=v${version}"
   ];
 
-  # Tests requires network access
+  # Tests require network access
   doCheck = false;
 
   doInstallCheck = true;
@@ -54,5 +49,8 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
+    # Need updated macOS SDK
+    # https://github.com/NixOS/nixpkgs/issues/101229
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }
