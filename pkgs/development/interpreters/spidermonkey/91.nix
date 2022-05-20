@@ -1,20 +1,24 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-, pkg-config
-, perl
-, python3
-, zip
+
+# build time
 , buildPackages
+, cargo
+, m4
+, perl
+, pkg-config
+, python3
+, rust-cbindgen
+, rustc
 , which
+, zip
+
+# runtime
+, icu
+, nspr
 , readline
 , zlib
-, icu69
-, cargo
-, rustc
-, rust-cbindgen
-, yasm
-, nspr
-, m4
 }:
 
 stdenv.mkDerivation rec {
@@ -31,20 +35,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cargo
-    rustc.llvmPackages.llvm # for llvm-objdump
+    m4
     perl
     pkg-config
     python3
     rust-cbindgen
     rustc
+    rustc.llvmPackages.llvm # for llvm-objdump
     which
-    yasm # to buid icu? seems weird
     zip
-    m4
   ];
 
   buildInputs = [
-    icu69
+    icu
     nspr
     readline
     zlib
