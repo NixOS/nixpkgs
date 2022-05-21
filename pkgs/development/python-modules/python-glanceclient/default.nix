@@ -20,10 +20,13 @@
 buildPythonApplication rec {
   pname = "python-glanceclient";
   version = "4.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-a3tFLmSKuaKbBQy32EkU7sPIEQtN5gaDqoGT03gka+w=";
+    hash = "sha256-a3tFLmSKuaKbBQy32EkU7sPIEQtN5gaDqoGT03gka+w=";
   };
 
   postPatch = ''
@@ -54,7 +57,9 @@ buildPythonApplication rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "glanceclient" ];
+  pythonImportsCheck = [
+    "glanceclient"
+  ];
 
   meta = with lib; {
     description = "Python bindings for the OpenStack Images API";
