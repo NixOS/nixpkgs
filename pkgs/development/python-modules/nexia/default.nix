@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "nexia";
-  version = "1.0.0";
+  version = "1.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TMcRAQylZU7Jt0X9JpKh7h63QSmLc/cZ2gSyDbuipj8=";
+    sha256 = "sha256-f1IUyeOmRmnr7zWoMKF895FKsNgiiCbw7inmXDGZrVw=";
   };
 
   propagatedBuildInputs = [
