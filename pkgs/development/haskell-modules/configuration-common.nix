@@ -1165,16 +1165,6 @@ self: super: {
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
 
-  # Causes Test.QuickCheck.resize: negative size crashes e.g. in test suites
-  # https://github.com/typeable/generic-arbitrary/issues/14
-  generic-arbitrary = appendPatches [
-    (pkgs.fetchpatch {
-      name = "generic-arbitrary-no-negative-resize.patch";
-      url = "https://github.com/typeable/generic-arbitrary/commit/c13d119d8ad0d43860ecdb93b357b0239e366a6c.patch";
-      sha256 = "1jgbd2jn575icqw9nfdzh57nacm3pn8n53ka52129pnfjqfzyhsi";
-    })
-  ] super.generic-arbitrary;
-
   # https://github.com/DanielG/cabal-helper/pull/123
   cabal-helper = doJailbreak super.cabal-helper;
 
