@@ -8,8 +8,8 @@ buildPythonPackage rec {
   format = "pyproject";
 
   src = fetchFromGitHub {
-    repo = pname;
     owner = "madmaze";
+    repo = pname;
     rev = "v${version}";
     sha256 = "sha256-CyKXtaIE/8iPLqi0GHVUgTeJDYZyWBjkRvOKJJKCxZo=";
   };
