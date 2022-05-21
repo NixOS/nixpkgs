@@ -4778,6 +4778,8 @@ with pkgs;
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
 
+    stt = callPackage ../tools/inputmethods/ibus-engines/ibus-stt { };
+
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
 
     table-chinese = callPackage ../tools/inputmethods/ibus-engines/ibus-table-chinese {
