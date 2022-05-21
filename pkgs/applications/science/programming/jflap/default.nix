@@ -1,24 +1,36 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper }:
+{ lib
+, stdenvNoCC
+, fetchurl
+, jre8
+, makeWrapper
+}:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "jflap";
   version = "7.1";
 
   src = fetchurl {
-    url = "https://www.jflap.org/jflaptmp/july27-18/JFLAP7.1.jar";
+    url = "https://www.jflap.org/jflaptmp/july27-18/JFLAP${version}.jar";
     sha256 = "oiwJXdxWsYFj6Ovu7xZbOgTLVw8160a5YQUWbgbJlAY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    jre8
+  ];
 
   dontUnpack = true;
-  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/java
     cp -s $src $out/share/java/jflap.jar
-    makeWrapper ${jre}/bin/java $out/bin/jflap --add-flags "-jar $out/share/java/jflap.jar"
+    makeWrapper ${jre8}/bin/java $out/bin/jflap \
+      --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on" \
+      --add-flags "-jar $out/share/java/jflap.jar"
     runHook postInstall
   '';
 
@@ -28,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = [ maintainers.grnnja ];
-    platforms = platforms.all;
+    platforms = jre8.meta.platforms;
   };
 }
