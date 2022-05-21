@@ -2540,7 +2540,8 @@
       statsd
     ];
     "steam_online" = ps: with ps; [
-    ]; # missing inputs: steamodd
+      steamodd
+    ];
     "steamist" = ps: with ps; [
       aiohttp-cors
       aiosteamist
@@ -3661,6 +3662,7 @@
     "startca"
     "statistics"
     "statsd"
+    "steam_online"
     "steamist"
     "stookalert"
     "stream"
