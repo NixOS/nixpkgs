@@ -3,6 +3,8 @@
 , fetchurl
 , jre8
 , makeWrapper
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -16,6 +18,7 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -23,6 +26,28 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   dontUnpack = true;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "jflap";
+      desktopName = "jflap";
+      genericName = "Formal language application";
+      exec = "jflap";
+      icon = fetchurl {
+        url = "https://www.jflap.org/jflapLogo2.jpg";
+        sha256 = "sha256-IiworHI+GT6Fm6B0E+FXnKe+hN8nZYPrxHGZFAcsWDw=";
+      };
+      comment = meta.description;
+      categories = [
+        "Development"
+        "Education"
+        "ComputerScience"
+        "DataVisualization"
+        "Engineering"
+        "Java"
+      ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
