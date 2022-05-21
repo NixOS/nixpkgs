@@ -14582,4 +14582,15 @@
       fingerprint = "41EA 00B4 00F9 6970 1CB2  D3AF EF90 E3E9 8B8F 5C0B";
     }];
   };
+  gekoke = {
+    email = "gekoke@lazycantina.xyz";
+    matrix = "@gekoke:matrix.org";
+    github = "gekoke";
+    githubId = 63151928;
+    name = "gekoke";
+    keys = [{
+      longkeyid = "ed25519/B4BE4DE6F6F29B82";
+      fingerprint = "EE8A 78FE 4028 C843 C581  AFBC B4BE 4DE6 F6F2 9B82";
+    }];
+  };
 }
