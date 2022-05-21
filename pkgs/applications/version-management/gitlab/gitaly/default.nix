@@ -11,8 +11,9 @@ let
     gemdir = ./.;
   };
 
-  version = "14.10.2";
-  gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
+  version = "15.0.0";
+  package_version = "v14";
+  gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 in
 
 buildGoModule {
@@ -23,10 +24,10 @@ buildGoModule {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-hLTzkW5GDq1AgTwe1pVj6Tiyd0JpJ76ATFu3Q+m9MVg=";
+    sha256 = "sha256-ib/gGkXo6W6LZ6j92oUMhJWdDYZRnA1p+tsOK6ewemk=";
   };
 
-  vendorSha256 = "sha256-ZL61t+Ii2Ns3TmitiF93exinod54+RCqrbdpU67HeY0=";
+  vendorSha256 = "sha256-/tHKWo09ZV31TSIqlOk36V3y7gNikziUJHf+nS1gHEw=";
 
   passthru = {
     inherit rubyEnv;
@@ -42,7 +43,7 @@ buildGoModule {
   postInstall = ''
     mkdir -p $ruby
     cp -rv $src/ruby/{bin,lib,proto} $ruby
-    mv $out/bin/gitaly-git2go-v${lib.versions.major version} $out/bin/gitaly-git2go-${version}
+    mv $out/bin/gitaly-git2go-${package_version} $out/bin/gitaly-git2go-${version}
   '';
 
   outputs = [ "out" "ruby" ];
