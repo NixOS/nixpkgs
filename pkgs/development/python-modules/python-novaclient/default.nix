@@ -9,6 +9,7 @@
 , oslo-serialization
 , pbr
 , prettytable
+, pythonOlder
 , requests-mock
 , stestr
 , testscenarios
@@ -17,10 +18,13 @@
 buildPythonPackage rec {
   pname = "python-novaclient";
   version = "18.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6esqm9ukZNggwQB3XDwvZJMIjfZq8T37kyXMa4ZcjSM=";
+    hash = "sha256-6esqm9ukZNggwQB3XDwvZJMIjfZq8T37kyXMa4ZcjSM=";
   };
 
   propagatedBuildInputs = [
