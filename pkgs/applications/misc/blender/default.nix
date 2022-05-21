@@ -166,6 +166,8 @@ stdenv.mkDerivation rec {
     # OptiX, enabled with cudaSupport, is non-free.
     license = with licenses; [ gpl2Plus ] ++ optional cudaSupport unfree;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    # darwin.patch doesn't apply anymore, might need update
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
     maintainers = with maintainers; [ goibhniu veprbl ];
   };
 }
