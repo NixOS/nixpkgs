@@ -1647,6 +1647,19 @@
       </listitem>
       <listitem>
         <para>
+          The default version of <literal>nextcloud</literal> is
+          <emphasis role="strong">nextcloud24</emphasis>. Please note
+          that it’s <emphasis role="strong">not</emphasis> possible to
+          upgrade <literal>nextcloud</literal> across multiple major
+          versions! This means it’s e.g. not possible to upgrade from
+          <literal>nextcloud22</literal> to
+          <literal>nextcloud24</literal> in a single deploy and most
+          <literal>21.11</literal> users will have to upgrade to
+          <literal>nextcloud23</literal> first.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <literal>pkgs.vimPlugins.onedark-nvim</literal> now refers to
           <link xlink:href="https://github.com/navarasu/onedark.nvim">navarasu/onedark.nvim</link>
           (formerly refers to

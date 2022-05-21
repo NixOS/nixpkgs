@@ -153,7 +153,7 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud22" "nextcloud23" "nextcloud24" ];
+      relatedPackages = [ "nextcloud23" "nextcloud24" ];
     };
     phpPackage = mkOption {
       type = types.package;
@@ -625,7 +625,6 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "21.11" then nextcloud21
           else if versionOlder stateVersion "22.05" then nextcloud22
           else nextcloud24
         );
