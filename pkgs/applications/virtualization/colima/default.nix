@@ -14,12 +14,24 @@ buildGoModule rec {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-g7q2DmtyArtW7Ii2XF5umXQ0+BlCSa1Q7VNNuIuX65k=";
+    sha256 = "sha256-KYW3gxf21aWnuRHkysOjArzMSNH3m3XDoi6Sic3N+Po=";
+
+    # We need the git revision
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse HEAD > $out/.git-revision
+      rm -rf $out/.git
+    '';
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   vendorSha256 = "sha256-Z4+qwoX04VnLsUIYRfOowFLgcaA9w8oGRl77jzFigIc=";
+
+  preConfigure = ''
+    ldflags="-X github.com/abiosoft/colima/config.appVersion=${version}
+              -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/colima \
