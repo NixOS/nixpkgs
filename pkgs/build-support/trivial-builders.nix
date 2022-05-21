@@ -528,6 +528,7 @@ rec {
     runCommand name
       (substitutions // {
         inherit meta;
+        strictDeps = true;
       })
       (''
         mkdir -p $out/nix-support

@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   patches = [];
 
+  strictDeps = true;
   outputs = [ "out" "dev" "man" "info" ];
 
   configureFlags = [

@@ -18833,7 +18833,7 @@ with pkgs;
   glibcIconv = libc: let
     inherit (libc) pname version;
     libcDev = lib.getDev libc;
-  in runCommand "${pname}-iconv-${version}" {} ''
+  in runCommand "${pname}-iconv-${version}" { strictDeps = true; } ''
     mkdir -p $out/include
     ln -sv ${libcDev}/include/iconv.h $out/include
   '';

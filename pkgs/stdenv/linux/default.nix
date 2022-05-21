@@ -162,6 +162,7 @@ in
       # stage1.
       ${localSystem.libc} = self.stdenv.mkDerivation {
         pname = "bootstrap-stage0-${localSystem.libc}";
+        strictDeps = true;
         version = "bootstrap";
         buildCommand = ''
           mkdir -p $out
@@ -269,6 +270,7 @@ in
           inherit (prevStage.bintools.bintools) name;
           dontUnpack = true;
           dontBuild = true;
+          strictDeps = true;
           # We wouldn't need to *copy* all, but it's easier and the result is temporary anyway.
           installPhase = ''
             mkdir -p "$out"/bin

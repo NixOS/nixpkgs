@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uaRvKYkyLrifpPYjfiCDbFe0VapDoyVF6gk7Qx2YL1w=";
   };
 
+  strictDeps = true;
   setupHook = [ ./setup-hook.sh ];
 
   # fails 8 out of 24 tests, problems when loading libc.so.6
