@@ -30954,6 +30954,8 @@ with pkgs;
 
   zeronet = callPackage ../applications/networking/p2p/zeronet { };
 
+  zeronet-conservancy = callPackage ../applications/networking/p2p/zeronet-conservancy { };
+
   zexy = callPackage ../applications/audio/pd-plugins/zexy {
     autoconf = buildPackages.autoconf269;
   };
