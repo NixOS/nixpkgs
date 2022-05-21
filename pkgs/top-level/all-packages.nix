@@ -10544,6 +10544,8 @@ with pkgs;
 
   rrdtool = callPackage ../tools/misc/rrdtool { };
 
+  rscw = callPackage ../applications/radio/rscw { };
+
   rset = callPackage ../tools/admin/rset { };
 
   rshijack = callPackage ../tools/networking/rshijack { };
