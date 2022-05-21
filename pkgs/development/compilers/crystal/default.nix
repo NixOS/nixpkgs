@@ -9,11 +9,11 @@
 , git
 , gmp
 , hostname
-, libatomic_ops
 , libevent
 , libiconv
 , libxml2
 , libyaml
+, libffi
 , llvmPackages
 , makeWrapper
 , openssl
@@ -30,16 +30,16 @@
 let
   archs = {
     x86_64-linux = "linux-x86_64";
-    i686-linux = "linux-i686";
-    x86_64-darwin = "darwin-x86_64";
+    #i686-linux = "linux-i686";
+    #x86_64-darwin = "darwin-x86_64";
+    x86_64-darwin = "darwin-universal";
     aarch64-darwin = "darwin-universal";
     aarch64-linux = "linux-aarch64";
   };
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
-  isAarch64Darwin = stdenv.system == "aarch64-darwin";
 
-  checkInputs = [ git gmp openssl readline libxml2 libyaml ];
+  checkInputs = [ git gmp openssl readline libxml2 libyaml libffi ];
 
   binaryUrl = version: rel:
     if arch == archs.aarch64-linux then
@@ -62,13 +62,10 @@ let
         tar --strip-components=1 -C $out -xf ${src}
         patchShebangs $out/bin/crystal
       '';
-
-      meta.broken = lib.versionOlder version "1.2.0" && isAarch64Darwin;
     };
 
   commonBuildInputs = extraBuildInputs: [
     boehmgc
-    libatomic_ops
     pcre
     libevent
     libyaml
@@ -152,12 +149,13 @@ let
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
+        "release=1"
+        "progress=1"
       ];
 
       LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
       FLAGS = [
-        "--release"
         "--single-module" # needed for deterministic builds
       ];
 
@@ -209,6 +207,7 @@ let
         export PATH=${lib.makeBinPath checkInputs}:$PATH
       '';
 
+      passthru.buildBinary = binary;
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
         crystal = compiler;
       };
@@ -218,8 +217,7 @@ let
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
         maintainers = with maintainers; [ david50407 manveru peterhoeg ];
-        platforms = let archNames = builtins.attrNames archs; in
-          if (lib.versionOlder version "1.2.0") then remove "aarch64-darwin" archNames else archNames;
+        platforms = let archNames = builtins.attrNames archs; in archNames;
         broken = lib.versionOlder version "0.36.1" && stdenv.isDarwin;
       };
     })
@@ -227,40 +225,45 @@ let
 
 in
 rec {
-  binaryCrystal_1_0 = genericBinary {
-    version = "1.0.0";
+  #binaryCrystal_1_0 = genericBinary {
+  #  version = "1.0.0";
+  #  sha256s = {
+  #    x86_64-linux = "1949argajiyqyq09824yj3wjyv88gd8wbf20xh895saqfykiq880";
+  #    i686-linux = "0w0f4fwr2ijhx59i7ppicbh05hfmq7vffmgl7lal6im945m29vch";
+  #    x86_64-darwin = "01n0rf8zh551vv8wq3h0ifnsai0fz9a77yq87xx81y9dscl9h099";
+  #    aarch64-linux = "0sns7l4q3z82qi3dc2r4p63f4s8hvifqzgq56ykwyrvawynjhd53";
+  #  };
+  #};
+
+  #binaryCrystal_1_2 = genericBinary {
+  #  version = "1.2.0";
+  #  sha256s = {
+  #    aarch64-darwin = "1hrs8cpjxdkcf8mr9qgzilwbg6bakq87sd4yydfsk2f4pqd6g7nf";
+  #  };
+  #};
+
+  binaryCrystal_1_3 = genericBinary {
+    version = "1.3.2";
     sha256s = {
-      x86_64-linux = "1949argajiyqyq09824yj3wjyv88gd8wbf20xh895saqfykiq880";
-      i686-linux = "0w0f4fwr2ijhx59i7ppicbh05hfmq7vffmgl7lal6im945m29vch";
-      x86_64-darwin = "01n0rf8zh551vv8wq3h0ifnsai0fz9a77yq87xx81y9dscl9h099";
-      aarch64-linux = "0sns7l4q3z82qi3dc2r4p63f4s8hvifqzgq56ykwyrvawynjhd53";
+      x86_64-linux = "sha256-bhAuVdZY8swMVtI/y1C9LtvZiVmqa1m44SEMaGBlHtQ=";
+      #i686-linux = ""; no prebuilt binaries since 1.2.0
+      x86_64-darwin = "sha256-73xQnikxOtAkpUNSq8m5wwJp78LoHFeWt7ZKXyxoRw0=";
+      aarch64-linux = "sha256-UOB17UvqtWGp1S0bUe5jk4ph/DCazSQgmxjPIOwVXMY=";
+      aarch64-darwin = "sha256-73xQnikxOtAkpUNSq8m5wwJp78LoHFeWt7ZKXyxoRw0=";
     };
   };
 
-  binaryCrystal_1_2 = genericBinary {
-    version = "1.2.0";
-    sha256s = {
-      aarch64-darwin = "1hrs8cpjxdkcf8mr9qgzilwbg6bakq87sd4yydfsk2f4pqd6g7nf";
-    };
+  crystal_1_3 = generic {
+    version = "1.3.2";
+    sha256 = "sha256-dX7WPrtVs4emGUP4Vixl4U20pKfZm2CEnSd/t/iKxxw=";
+    binary = binaryCrystal_1_3;
   };
 
-  crystal_1_0 = generic {
-    version = "1.0.0";
-    sha256 = "sha256-RI+a3w6Rr+uc5jRf7xw0tOenR+q6qii/ewWfID6dbQ8=";
-    binary = binaryCrystal_1_0;
+  crystal_1_4 = generic {
+    version = "1.4.1";
+    sha256 = "sha256-QMHWKoHlF9TgIXfN/KUjR730X8YQVI8X7Uwxddzc1Tk=";
+    binary = binaryCrystal_1_3;
   };
 
-  crystal_1_1 = generic {
-    version = "1.1.1";
-    sha256 = "sha256-hhhT3reia8acZiPsflwfuD638Ll2JiXwMfES1TyGyNQ=";
-    binary = crystal_1_0;
-  };
-
-  crystal_1_2 = generic {
-    version = "1.2.2";
-    sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
-    binary = if isAarch64Darwin then binaryCrystal_1_2 else crystal_1_1;
-  };
-
-  crystal = crystal_1_2;
+  crystal = crystal_1_4;
 }
