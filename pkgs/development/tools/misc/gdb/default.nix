@@ -49,6 +49,10 @@ stdenv.mkDerivation rec {
     ./debug-info-from-env.patch
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
+  # Does not nave to be conditional. We apply it conditionally
+  # to speed up inclusion to nearby nixos release.
+  ] ++ lib.optionals stdenv.is32bit [
+    ./32-bit-BFD_VMA-format.patch
   ];
 
   nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
