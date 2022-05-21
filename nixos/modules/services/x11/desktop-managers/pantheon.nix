@@ -291,6 +291,7 @@ in
         # Only install appcenter if flatpak is enabled before
         # https://github.com/NixOS/nixpkgs/issues/15932 is resolved.
         appcenter
+        sideload
       ])) config.environment.pantheon.excludePackages;
 
       # needed by screenshot
