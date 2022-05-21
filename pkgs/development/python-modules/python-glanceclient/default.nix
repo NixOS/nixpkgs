@@ -11,6 +11,7 @@
 , oslo-i18n
 , wrapt
 , pyopenssl
+, pythonOlder
 , stestr
 , testscenarios
 , ddt
