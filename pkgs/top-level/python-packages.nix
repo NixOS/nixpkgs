@@ -2528,6 +2528,8 @@ in {
 
   dragonfly = callPackage ../development/python-modules/dragonfly { };
 
+  dremel3dpy = callPackage ../development/python-modules/dremel3dpy { };
+
   drf-jwt = callPackage ../development/python-modules/drf-jwt { };
 
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
