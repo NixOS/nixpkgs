@@ -15,14 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "mpris-scrobbler";
-  version = "0.4.95";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner  = "mariusor";
     repo   = "mpris-scrobbler";
     rev    = "v${version}";
-    sha256 = "sha256-Cqf0egS4XSDiKLdizNHPdS0Zt3jQxw9e78S7n23CuKI=";
+    sha256 = "sha256-HUEUkVL5d6FD698k8iSCJMNeSo8vGJCsExJW/E0EWpQ=";
   };
+
+  mesonFlags = [
+    "-Dwerror=false" "-Dversion=${version}"
+  ];
 
   postPatch = ''
     substituteInPlace src/signon.c \
