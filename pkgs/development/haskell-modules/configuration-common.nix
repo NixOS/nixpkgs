@@ -782,22 +782,6 @@ self: super: {
   # The tests spuriously fail
   libmpd = dontCheck super.libmpd;
 
-  # For template-haskell 2.16 and 2.17 support: https://github.com/JonasDuregard/sized-functors/pull/10
-  size-based = overrideCabal
-    (drv: {
-      # make all line endings unix, otherwise patching fails
-      prePatch = ''
-        find . -type f -print0 | xargs -0 ${pkgs.buildPackages.dos2unix}/bin/dos2unix
-      '' + (drv.prePatch or "");
-      patches = [
-        (fetchpatch {
-          url = "https://github.com/JonasDuregard/sized-functors/pull/10/commits/fe6bf78a1b97ff7429630d0e8974c9bc40945dcf.patch";
-          sha256 = "sha256-mMsXOqLqSbGl9Q0txiZiciPtGT7f12lnhlpFsnCwamk=";
-        })
-      ];
-    })
-    super.size-based;
-
   # https://github.com/diagrams/diagrams-braille/issues/1
   diagrams-braille = doJailbreak super.diagrams-braille;
 
