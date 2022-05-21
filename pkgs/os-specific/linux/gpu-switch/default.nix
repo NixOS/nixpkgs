@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  pname = "gpu-switch-unstable";
-  version = "2017-04-28";
+  pname = "gpu-switch";
+  version = "unstable-2017-04-28";
   src = fetchFromGitHub {
     owner = "0xbb";
     repo = "gpu-switch";

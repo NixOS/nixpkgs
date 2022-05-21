@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  pname = "SystemdJournal2Gelf-unstable";
-  version = "20200813";
+  pname = "SystemdJournal2Gelf";
+  version = "unstable-20200813";
 
   src = fetchFromGitHub {
     rev = "d389dc8583b752cbd37c389a55a6c82200e47394";

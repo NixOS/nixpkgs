@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, spotify, xorg, runtimeShell }:
 stdenv.mkDerivation {
-  pname = "spotifywm-unstable";
-  version = "2016-11-28";
+  pname = "spotifywm";
+  version = "unstable-2016-11-28";
 
   src = fetchFromGitHub {
     owner  = "dasJ";

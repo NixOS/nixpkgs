@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  pname = "tl-expected-unstable";
-  version = "2019-11-11"; # 5 commits ahead of version 1.0.0
+  pname = "tl-expected";
+  version = "unstable-2019-11-11"; # 5 commits ahead of version 1.0.0
 
   src = fetchFromGitHub {
     owner = "TartanLlama";

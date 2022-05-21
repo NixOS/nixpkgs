@@ -4,8 +4,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "dmenu-wayland-unstable";
-  version = "2020-07-06";
+  pname = "dmenu-wayland";
+  version = "unstable-2020-07-06";
 
   src = fetchFromGitHub {
     owner = "nyyManni";

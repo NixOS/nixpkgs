@@ -2,8 +2,8 @@
 , xorg, gnum4, libxcb, gperf }:
 
 stdenv.mkDerivation {
-  pname = "xcb-util-cursor-0.1.1-3-unstable";
-  version = "2017-04-05";
+  pname = "xcb-util-cursor-0.1.1-3";
+  version = "unstable-2017-04-05";
 
   src = fetchgit {
     url    = "http://anongit.freedesktop.org/git/xcb/util-cursor.git";

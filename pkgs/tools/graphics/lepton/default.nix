@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake, git, glibc }:
 
 stdenv.mkDerivation rec {
-  version = "2019-08-20";
-  pname = "lepton-unstable";
+  version = "unstable-2019-08-20";
+  pname = "lepton";
 
   src = fetchFromGitHub {
     repo = "lepton";

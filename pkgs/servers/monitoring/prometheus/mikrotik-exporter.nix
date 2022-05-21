@@ -1,8 +1,8 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
-  pname = "mikrotik-exporter-unstable";
-  version = "2021-08-10";
+  pname = "mikrotik-exporter";
+  version = "unstable-2021-08-10";
 
   src = fetchFromGitHub {
     owner = "nshttpd";

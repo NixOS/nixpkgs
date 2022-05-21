@@ -4,8 +4,8 @@
 }:
 
 buildGoPackage rec {
-  pname = "iferr-unstable";
-  version = "2018-06-15";
+  pname = "iferr";
+  version = "unstable-2018-06-15";
   rev = "bb332a3b1d9129b6486c7ddcb7030c11b05cfc88";
 
   goPackagePath = "github.com/koron/iferr";

@@ -1,9 +1,9 @@
 { stdenv, lib, fetchFromGitHub, libtool, pkg-config, perl, ncurses }:
 
 stdenv.mkDerivation rec {
-  pname = "unibilium-unstable";
+  pname = "unibilium";
 
-  version = "20190811";
+  version = "unstable-20190811";
 
   src = fetchFromGitHub {
     owner = "neovim";

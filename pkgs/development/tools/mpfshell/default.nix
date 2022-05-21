@@ -1,8 +1,8 @@
 { lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonPackage rec {
-  pname = "mpfshell-unstable";
-  version = "2020-04-11";
+  pname = "mpfshell";
+  version = "unstable-2020-04-11";
 
   src = fetchFromGitHub {
     owner = "wendlers";

@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, freetype, libX11, libXi, libXt, libXft }:
 
 stdenv.mkDerivation rec {
-  pname = "deadpixi-sam-unstable";
-  version = "2020-07-14";
+  pname = "deadpixi-sam";
+  version = "unstable-2020-07-14";
 
   src = fetchFromGitHub {
     owner = "deadpixi";

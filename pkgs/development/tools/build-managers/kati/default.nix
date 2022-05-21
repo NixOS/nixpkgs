@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  pname = "kati-unstable";
-  version = "2019-09-23";
+  pname = "kati";
+  version = "unstable-2019-09-23";
 
   src = fetchFromGitHub {
     owner = "google";

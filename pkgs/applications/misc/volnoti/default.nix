@@ -3,8 +3,8 @@
 , dbus-glib, autoreconfHook, wrapGAppsHook }:
 
 stdenv.mkDerivation {
-  pname = "volnoti-unstable";
-  version = "2013-09-23";
+  pname = "volnoti";
+  version = "unstable-2013-09-23";
 
   src = fetchFromGitHub {
     owner = "davidbrazdil";

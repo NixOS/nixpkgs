@@ -18,7 +18,7 @@
 rec {
   re2c = stdenv.mkDerivation rec {
     pname = "re2c";
-    version = "1.0.3";
+    version = "unstable-1.0.3";
     sourceRoot = "${src.name}/re2c";
     src = fetchFromGitHub {
       owner = "skvadrik";
@@ -33,8 +33,8 @@ rec {
   };
 
   py-yajl = python27Packages.buildPythonPackage rec {
-    pname = "oil-pyyajl-unstable";
-    version = "2019-12-05";
+    pname = "oil-pyyajl";
+    version = "unstable-2019-12-05";
     src = fetchFromGitHub {
       owner = "oilshell";
       repo = "py-yajl";
@@ -52,8 +52,8 @@ rec {
     This creates one without disturbing upstream too much.
   */
   oildev = python27Packages.buildPythonPackage rec {
-    pname = "oildev-unstable";
-    version = "2021-07-14";
+    pname = "oildev";
+    version = "unstable-2021-07-14";
 
     src = fetchFromGitHub {
       owner = "oilshell";

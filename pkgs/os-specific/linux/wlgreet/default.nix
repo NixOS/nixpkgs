@@ -4,8 +4,8 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "wlgreet-unstable";
-  version = "2022-01-25";
+  pname = "wlgreet";
+  version = "unstable-2022-01-25";
 
   src = fetchFromSourcehut {
     owner = "~kennylevinsen";

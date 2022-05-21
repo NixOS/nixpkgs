@@ -4,8 +4,8 @@
 }:
 
 buildGoModule rec {
-  pname = "gogetdoc-unstable";
-  version = "2019-02-28";
+  pname = "gogetdoc";
+  version = "unstable-2019-02-28";
   rev = "b37376c5da6aeb900611837098f40f81972e63e4";
 
   vendorSha256 = null;

@@ -3,8 +3,8 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "adb-sync-unstable";
-  version = "2019-01-01";
+  pname = "adb-sync";
+  version = "unstable-2019-01-01";
 
   src = fetchFromGitHub {
     owner = "google";

@@ -5,8 +5,8 @@
 }:
 
 buildPythonPackage {
-  pname = "openant-unstable";
-  version = "2017-02-11";
+  pname = "openant";
+  version = "unstable-2017-02-11";
 
   src = fetchFromGitHub {
     owner = "Tigge";

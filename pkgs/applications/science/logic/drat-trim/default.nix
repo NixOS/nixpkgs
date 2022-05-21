@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  pname = "drat-trim-unstable";
-  version = "2020-06-05";
+  pname = "drat-trim";
+  version = "unstable-2020-06-05";
 
   src = fetchFromGitHub {
     owner = "marijnheule";

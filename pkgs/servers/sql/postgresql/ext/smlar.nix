@@ -1,8 +1,8 @@
 { lib, stdenv, fetchgit, postgresql }:
 
 stdenv.mkDerivation rec {
-  pname = "smlar-unstable";
-  version = "2020-10-07";
+  pname = "smlar";
+  version = "unstable-2020-10-07";
 
   src = fetchgit {
     url = "git://sigaev.ru/smlar.git";

@@ -4,8 +4,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "wshowkeys-unstable";
-  version = "2021-08-01";
+  pname = "wshowkeys";
+  version = "unstable-2021-08-01";
 
   src = fetchFromGitHub {
     owner = "ammgws";

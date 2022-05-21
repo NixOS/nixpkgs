@@ -7,8 +7,8 @@
 # In other words, documentation does not necessary matches capabilities of
 # $out/bin/nginx, but we have no better options.
 stdenv.mkDerivation {
-  pname = "nginx-doc-unstable";
-  version = "2022-05-05";
+  pname = "nginx-doc";
+  version = "unstable-2022-05-05";
   src = fetchhg {
     url = "https://hg.nginx.org/nginx.org";
     rev = "a3aee2697d4e";

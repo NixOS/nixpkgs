@@ -14,8 +14,8 @@
  }:
 
 stdenv.mkDerivation rec {
-  pname = "gem-unstable";
-  version = "2020-09-22";
+  pname = "gem";
+  version = "unstable-2020-09-22";
 
   src = fetchFromGitHub {
     owner = "umlaeute";
