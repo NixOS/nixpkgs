@@ -33404,6 +33404,8 @@ with pkgs;
   };
   z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix {};
 
+  zchaff = callPackage ../applications/science/logic/zchaff { };
+
   tlaplus = callPackage ../applications/science/logic/tlaplus {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
