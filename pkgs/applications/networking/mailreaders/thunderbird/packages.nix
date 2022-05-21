@@ -1,17 +1,11 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests }:
-
-let
-  common = opts: callPackage (import ../../browsers/firefox/common.nix opts) {
-    webrtcSupport = false;
-    geolocationSupport = false;
-  };
-in
+{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests }:
 
 rec {
-  thunderbird = (common rec {
+  thunderbird = (buildMozillaMach rec {
     pname = "thunderbird";
     version = "91.9.0";
     application = "comm/mail";
+    applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
@@ -36,6 +30,9 @@ rec {
       attrPath = "thunderbird-unwrapped";
     };
   }).override {
+    geolocationSupport = false;
+    webrtcSupport = false;
+
     pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
   };
 }
