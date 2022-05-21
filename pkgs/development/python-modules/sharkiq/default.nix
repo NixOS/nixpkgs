@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "sharkiqpy";
-  version = "0.1.9";
+  pname = "sharkiq";
+  version = "0.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0nk1nbplyk28qadxc7rydjvdgbz3za0xjg6c95l95mhiz453q5sw";
+    sha256 = "e5efb0ad13a66cf6a097da5c128347ef7bd0b2abe53a8ca65cbc847ec1190c8b";
   };
 
   propagatedBuildInputs = [
@@ -21,12 +21,13 @@ buildPythonPackage rec {
 
   # Project has no tests
   doCheck = false;
-  pythonImportsCheck = [ "sharkiqpy" ];
+
+  pythonImportsCheck = [ "sharkiq" ];
 
   meta = with lib; {
-    description = "Python API for Shark IQ robot";
-    homepage = "https://github.com/ajmarks/sharkiq";
-    license = with licenses; [ mit ];
+    description = "Python API for Shark IQ robots";
+    homepage = "https://github.com/JeffResc/sharkiq";
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
