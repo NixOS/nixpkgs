@@ -2245,6 +2245,8 @@ in {
 
   directv = callPackage ../development/python-modules/directv { };
 
+  dirty-equals = callPackage ../development/python-modules/dirty-equals { };
+
   discid = callPackage ../development/python-modules/discid { };
 
   discogs-client = callPackage ../development/python-modules/discogs-client { };
