@@ -9820,6 +9820,12 @@
     githubId = 8641;
     name = "Pierre Carrier";
   };
+  pedrohlc = {
+    email = "root@pedrohlc.com";
+    github = "PedroHLC";
+    githubId = 1368952;
+    name = "Pedro Lara Campos";
+  };
   penguwin = {
     email = "penguwin@penguwin.eu";
     github = "penguwin";
