@@ -8,7 +8,6 @@
 , perlPackages
 , expat
 , gettext
-, intltool
 , glib
 , libiconv
 , libevent
@@ -81,10 +80,8 @@ stdenv.mkDerivation rec {
   ]);
 
   configureFlags = [
-    "--disable-qt3"
     "--disable-gdbm"
     "--disable-mono"
-    "--disable-gtk"
     "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
     (lib.enableFeature gtk3Support "gtk3")
     (lib.enableFeature qt4Support "qt4")
@@ -115,14 +112,10 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    # Maintain compat for mdnsresponder and howl
+    # Maintain compat for mdnsresponder
     lib.optionalString withLibdnssdCompat ''
       ln -s avahi-compat-libdns_sd/dns_sd.h "$out/include/dns_sd.h"
     '';
-  /*  # these don't exist (anymore?)
-    ln -s avahi-compat-howl $out/include/howl
-    ln -s avahi-compat-howl.pc $out/lib/pkgconfig/howl.pc
-  */
 
   passthru.tests = {
     smoke-test = nixosTests.avahi;
