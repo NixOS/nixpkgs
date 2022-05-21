@@ -19,6 +19,11 @@ buildGoModule rec {
     #
     # This appears to be some kind of test server for development purposes only.
     rm -f app/vmui/packages/vmui/web/{go.mod,main.go}
+
+    # Increase timeouts in tests to prevent failure on heavily loaded builders
+    substituteInPlace lib/storage/storage_test.go \
+      --replace "time.After(10 " "time.After(120 " \
+      --replace "time.After(30 " "time.After(120 "
   '';
 
   ldflags = [ "-s" "-w" "-X github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=${version}" ];
