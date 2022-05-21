@@ -2340,7 +2340,8 @@
       py17track
     ];
     "sharkiq" = ps: with ps; [
-    ]; # missing inputs: sharkiq
+      sharkiq
+    ];
     "shell_command" = ps: with ps; [
     ];
     "shelly" = ps: with ps; [
@@ -3618,6 +3619,7 @@
     "sentry"
     "senz"
     "seventeentrack"
+    "sharkiq"
     "shell_command"
     "shelly"
     "shopping_list"

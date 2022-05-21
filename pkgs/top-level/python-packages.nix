@@ -9471,7 +9471,7 @@ in {
 
   sharedmem = callPackage ../development/python-modules/sharedmem { };
 
-  sharkiqpy = callPackage ../development/python-modules/sharkiqpy { };
+  sharkiq = callPackage ../development/python-modules/sharkiq { };
 
   sh = callPackage ../development/python-modules/sh { };
 
