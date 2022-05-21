@@ -186,6 +186,18 @@ let
     };
   });
 
+  defaultPrefs = {
+    "geo.provider.network.url" = {
+      value = "https://location.services.mozilla.com/v1/geolocate?key=%MOZILLA_API_KEY%";
+      reason = "Use MLS by default for geolocation, since our Google API Keys are not working";
+    };
+  };
+
+  defaultPrefsFile = pkgs.writeText "nixos-default-prefs.js" (lib.concatStringsSep "\n" (lib.mapAttrsToList (key: value: ''
+    // ${value.reason}
+    pref("${key}", ${builtins.toJSON value.value});
+  '') defaultPrefs));
+
 in
 
 buildStdenv.mkDerivation ({
@@ -474,6 +486,7 @@ buildStdenv.mkDerivation ({
   postInstall = ''
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/lib/${binaryName}/distribution/distribution.ini
+    install -Dvm644 ${defaultPrefsFile} $out/lib/${binaryName}/browser/defaults/preferences/nixos-default-prefs.js
 
   '' + lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
