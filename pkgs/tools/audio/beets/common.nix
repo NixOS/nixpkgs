@@ -126,7 +126,7 @@ python3Packages.buildPythonApplication rec {
     eval "disabledTestPaths=($disabledTestPaths)"
     for path in ''${disabledTestPaths[@]}; do
       if [ -e "$path" ]; then
-        args+=" --ignore \"$path\""
+        args+=" --ignore $path"
       else
         echo "Skipping non-existent test path '$path'"
       fi
