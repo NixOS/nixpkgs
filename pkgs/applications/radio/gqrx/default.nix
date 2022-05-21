@@ -9,6 +9,7 @@
 , fftwFloat
 , alsa-lib
 , libjack2
+, wrapGAppsHook
 # drivers (optional):
 , rtl-sdr
 , hackrf
@@ -36,6 +37,7 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     cmake
     pkg-config
     qt5.wrapQtAppsHook
+    wrapGAppsHook
   ];
   buildInputs = [
     gnuradio3_8Minimal.unwrapped.log4cpp
@@ -66,6 +68,12 @@ gnuradio3_8Minimal.pkgs.mkDerivation rec {
     in [
       "-DLINUX_AUDIO_BACKEND=${audioBackend}"
     ];
+
+   # Prevent double-wrapping, inject wrapper args manually instead.
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = with lib; {
     description = "Software defined radio (SDR) receiver";
