@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "python-keystoneclient";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc17ca9a1aa493104b496ba347f12507f271b5b6e819f4de4aef6574918aa071";
+    sha256 = "sha256-bX8FxpLn2yaSd4KEx3mubOqLIVmRS0QXpfoL/qHinNw=";
   };
 
   propagatedBuildInputs = [
