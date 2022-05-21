@@ -4,6 +4,7 @@
 , updateScript ? null
 , binaryName ? "firefox"
 , application ? "browser"
+, applicationName ? "Mozilla Firefox"
 , src
 , unpackPhase ? null
 , extraPatches ? []
@@ -18,6 +19,7 @@
 
 
 { lib
+, pkgs
 , stdenv
 
 # build time
@@ -167,6 +169,22 @@ let
       ln -s $lib $out/lib/wasm32-wasi
     done
   '';
+
+  distributionIni = pkgs.writeText "distribution.ini" (lib.generators.toINI {} {
+    # Some light branding indicating this build uses our distro preferences
+    Global = {
+      id = "nixos";
+      version = "1.0";
+      about = "${applicationName} for NixOS";
+    };
+    Preferences = {
+      # These values are exposed through telemetry
+      "app.distributor" = "nixos";
+      "app.distributor.channel" = "nixpkgs";
+      "app.partner.nixos" = "nixos";
+    };
+  });
+
 in
 
 buildStdenv.mkDerivation ({
@@ -304,6 +322,7 @@ buildStdenv.mkDerivation ({
     "--enable-application=${application}"
     "--enable-default-toolkit=cairo-gtk3${lib.optionalString waylandSupport "-wayland"}"
     "--enable-system-pixman"
+    "--with-distribution-id=org.nixos"
     "--with-libclang-path=${llvmPackagesBuildBuild.libclang.lib}/lib"
     "--with-system-ffi"
     "--with-system-icu"
@@ -445,7 +464,11 @@ buildStdenv.mkDerivation ({
     cd mozobj
   '';
 
-  postInstall = lib.optionalString buildStdenv.isLinux ''
+  postInstall = ''
+    # Install distribution customizations
+    install -Dvm644 ${distributionIni} $out/lib/${binaryName}/distribution/distribution.ini
+
+  '' + lib.optionalString buildStdenv.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
 

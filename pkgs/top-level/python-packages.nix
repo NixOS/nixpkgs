@@ -2572,6 +2572,8 @@ in {
 
   dungeon-eos = callPackage ../development/python-modules/dungeon-eos { };
 
+  duo-client = callPackage ../development/python-modules/duo-client { };
+
   durus = callPackage ../development/python-modules/durus {  };
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
@@ -4981,6 +4983,8 @@ in {
   Logbook = callPackage ../development/python-modules/Logbook { };
 
   logfury = callPackage ../development/python-modules/logfury { };
+
+  logi-circle = callPackage ../development/python-modules/logi-circle { };
 
   logical-unification = callPackage ../development/python-modules/logical-unification { };
 
@@ -9471,7 +9475,7 @@ in {
 
   sharedmem = callPackage ../development/python-modules/sharedmem { };
 
-  sharkiqpy = callPackage ../development/python-modules/sharkiqpy { };
+  sharkiq = callPackage ../development/python-modules/sharkiq { };
 
   sh = callPackage ../development/python-modules/sh { };
 
@@ -9946,6 +9950,8 @@ in {
   stdiomask = callPackage ../development/python-modules/stdiomask { };
 
   stdlib-list = callPackage ../development/python-modules/stdlib-list { };
+
+  steamodd = callPackage ../development/python-modules/steamodd { };
 
   stem = callPackage ../development/python-modules/stem { };
 
@@ -10571,6 +10577,8 @@ in {
   types-dateutil = callPackage ../development/python-modules/types-dateutil { };
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
+
+  types-docutils = callPackage ../development/python-modules/types-docutils { };
 
   types-enum34 = callPackage ../development/python-modules/types-enum34 { };
 

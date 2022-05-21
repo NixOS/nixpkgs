@@ -873,7 +873,6 @@ dont-distribute-packages:
  - cabal-bounds
  - cabal-cache
  - cabal-cargs
- - cabal-debian
  - cabal-query
  - cabal-test
  - cabal2arch
@@ -1361,7 +1360,6 @@ dont-distribute-packages:
  - enumerator-tf
  - enumfun
  - ephemeral
- - erf-native
  - eros-client
  - eros-http
  - error-message
@@ -1546,7 +1544,6 @@ dont-distribute-packages:
  - funion
  - funnyprint
  - funsat
- - fused-effects-squeal
  - fwgl-glfw
  - fwgl-javascript
  - fxpak
@@ -2485,6 +2482,7 @@ dont-distribute-packages:
  - keera-hails-reactive-yampa
  - keera-hails-reactivelenses
  - keera-posture
+ - keid-frp-banana
  - keid-geometry
  - keid-render-basic
  - keid-resource-gltf
@@ -3141,7 +3139,6 @@ dont-distribute-packages:
  - postgresql-simple-queue
  - postgresql-simple-typed
  - postgresql-tx-query
- - postgresql-tx-squeal
  - postgresql-tx-squeal-compat-simple
  - postgrest
  - postmark
@@ -3691,7 +3688,6 @@ dont-distribute-packages:
  - sphinx-cli
  - spice
  - spike
- - splines
  - sprinkles
  - sql-simple-mysql
  - sql-simple-pool
@@ -3699,9 +3695,6 @@ dont-distribute-packages:
  - sql-simple-sqlite
  - sqlite-simple-typed
  - sqsd-local
- - squeal-postgresql
- - squeal-postgresql-ltree
- - squeal-postgresql-uuid-ossp
  - sr-extra
  - sscgi
  - sshd-lint
@@ -4063,7 +4056,6 @@ dont-distribute-packages:
  - viewprof
  - vigilance
  - vimeta
- - vinyl-generics
  - vinyl-operational
  - vision
  - visual-graphrewrite

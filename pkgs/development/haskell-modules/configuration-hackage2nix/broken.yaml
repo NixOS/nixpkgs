@@ -525,6 +525,7 @@ broken-packages:
   - cabal-bundle-clib
   - cabal-constraints
   - cabal-db
+  - cabal-debian
   - cabal-dependency-licenses
   - cabal-detailed-quickcheck
   - cabal-dev
@@ -1031,7 +1032,6 @@ broken-packages:
   - dead-code-detection
   - Deadpan-DDP
   - dead-simple-json
-  - debian
   - debug-me
   - debug-tracy
   - decepticons
@@ -1404,7 +1404,6 @@ broken-packages:
   - fast-nats
   - fastpbkdf2
   - FastPush
-  - fast-tags
   - FastxPipe
   - fathead-util
   - fb
@@ -1586,6 +1585,7 @@ broken-packages:
   - fused-effects-exceptions
   - fused-effects-mwc-random
   - fused-effects-resumable
+  - fused-effects-squeal
   - fusion
   - futhask
   - futun
@@ -2851,6 +2851,7 @@ broken-packages:
   - lagrangian
   - lambda2js
   - lambdaBase
+  - lambdabot-telegram-plugins
   - lambdabot-utils
   - lambdabot-xmpp
   - lambda-bridge
@@ -3936,7 +3937,6 @@ broken-packages:
   - poly-control
   - polydata-core
   - polynom
-  - polynomial
   - polynomial-algebra
   - polysemy-check
   - polysemy-keyed-state
@@ -3979,6 +3979,7 @@ broken-packages:
   - postgresql-simple-sop
   - postgresql-transactional
   - postgresql-tx-simple
+  - postgresql-tx-squeal
   - postgresql-typed-lifted
   - postgres-tmp
   - postgrest-ws
@@ -4217,7 +4218,6 @@ broken-packages:
   - record
   - record-encode
   - records
-  - records-sop
   - record-wrangler
   - recursion-schemes-ext
   - recursion-schemes-ix
@@ -4774,6 +4774,7 @@ broken-packages:
   - spir-v
   - splay
   - splaytree
+  - splines
   - split-morphism
   - splitter
   - Spock-api-ghcjs
@@ -5122,7 +5123,6 @@ broken-packages:
   - thorn
   - th-pprint
   - threadmanager
-  - threadscope
   - thread-supervisor
   - threepenny-editors
   - threepenny-gui-contextmenu

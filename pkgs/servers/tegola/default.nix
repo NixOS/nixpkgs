@@ -1,21 +1,21 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "tegola";
-  version = "0.14.0";
-
-  goPackagePath = "github.com/go-spatial/tegola";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "go-spatial";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-/1UhgcMLCB1/HtDX6HvVXybn3jOCRLuz2AF+M52Aye0=";
+    sha256 = "sha256-RSuTZHv3W2SVPAkydz5yB89Ioynp0DO0qaQKut5tokc=";
   };
 
-  ldflags = [ "-s" "-w" "-X ${goPackagePath}/cmd/tegola/cmd.Version=${version}" ];
+  vendorSha256 = null;
 
-  excludedPackages = [ "example" ];
+  subPackages = [ "cmd/tegola" ];
+
+  ldflags = [ "-s" "-w" "-X github.com/go-spatial/tegola/internal/build.Version=${version}" ];
 
   meta = with lib; {
     homepage = "https://www.tegola.io/";

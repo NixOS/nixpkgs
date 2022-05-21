@@ -117,9 +117,6 @@ stdenv.mkDerivation rec {
 
   checkPhase = phase "Check" "tests:run_unit";
 
-  CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
-  LDFLAGS = optional stdenv.cc.isClang "-lc++fs";
-
   dontWrapQtApps = true;
 
   postFixup = optionalString withGUI ''
