@@ -32210,6 +32210,8 @@ with pkgs;
 
   stt = callPackage ../tools/audio/stt { };
 
+  stt-models = recurseIntoAttrs (callPackages ../tools/audio/stt/models.nix { });
+
   stuntrally = callPackage ../games/stuntrally {
     ogre = ogre1_9;
     mygui = mygui.override {
