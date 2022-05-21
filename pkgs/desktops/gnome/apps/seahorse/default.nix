@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "41.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-5u7AnoEESClfVH8YwdV3K2XD7cHZ5aJZXxC13eaJKfU=";
+    hash = "sha256-xQys6/jeen4uXx2uC5gjIRR0Epar6NVD45I9YqFT1jA=";
   };
 
   nativeBuildInputs = [
