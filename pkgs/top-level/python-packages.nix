@@ -10954,6 +10954,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  watchfiles = callPackage ../development/python-modules/watchfiles { };
+
   watchgod = callPackage ../development/python-modules/watchgod { };
 
   waterfurnace = callPackage ../development/python-modules/waterfurnace { };
