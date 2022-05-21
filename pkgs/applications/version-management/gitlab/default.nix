@@ -74,7 +74,7 @@ let
       rm lib/tasks/yarn.rake
 
       # The rake tasks won't run without a basic configuration in place
-      mv config/database.yml.env config/database.yml
+      mv config/database.yml.postgresql config/database.yml
       mv config/gitlab.yml.example config/gitlab.yml
 
       # Yarn and bundler wants a real home directory to write cache, config, etc to

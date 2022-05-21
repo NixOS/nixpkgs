@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 6.1.4.7'
 
-gem 'bootsnap', '~> 1.9.1', require: false
+gem 'bootsnap', '~> 1.9.4', require: false
 
 # Responders respond_to and respond_with
 gem 'responders', '~> 3.0'
@@ -46,7 +46,6 @@ gem 'omniauth-facebook', '~> 4.0.0'
 gem 'omniauth-github', '~> 1.4'
 gem 'omniauth-gitlab', '~> 1.0.2'
 gem 'omniauth-google-oauth2', '~> 0.6.0'
-gem 'omniauth-kerberos', '~> 0.3.0', group: :kerberos
 gem 'omniauth-oauth2-generic', '~> 0.2.2'
 gem 'omniauth-saml', '~> 1.10'
 gem 'omniauth-shibboleth', '~> 1.3.0'
@@ -61,6 +60,7 @@ gem 'jwt', '~> 2.1.0'
 
 # Kerberos authentication. EE-only
 gem 'gssapi', group: :kerberos
+gem 'timfel-krb5-auth', '~> 0.8', group: :kerberos
 
 # Spam and anti-bot protection
 gem 'recaptcha', '~> 4.11', require: 'recaptcha/rails'
@@ -104,7 +104,7 @@ gem 'graphql', '~> 1.11.10'
 gem 'graphiql-rails', '~> 1.8'
 gem 'apollo_upload_server', '~> 2.1.0'
 gem 'graphql-docs', '~> 1.6.0', group: [:development, :test]
-gem 'graphlient', '~> 0.4.0' # Used by BulkImport feature (group::import)
+gem 'graphlient', '~> 0.5.0' # Used by BulkImport feature (group::import)
 
 gem 'hashie'
 # Disable strong_params so that Mash does not respond to :permitted?
@@ -142,9 +142,9 @@ gem 'unf', '~> 0.1.4'
 gem 'seed-fu', '~> 2.3.7'
 
 # Search
-gem 'elasticsearch-model', '~> 6.1'
-gem 'elasticsearch-rails', '~> 6.1', require: 'elasticsearch/rails/instrumentation'
-gem 'elasticsearch-api',   '~> 6.8.2'
+gem 'elasticsearch-model', '~> 7.2'
+gem 'elasticsearch-rails', '~> 7.2', require: 'elasticsearch/rails/instrumentation'
+gem 'elasticsearch-api',   '7.13.3'
 gem 'aws-sdk-core', '~> 3'
 gem 'aws-sdk-cloudformation', '~> 1'
 gem 'aws-sdk-s3', '~> 1'
@@ -345,6 +345,7 @@ gem 'warning', '~> 1.2.0'
 
 group :development do
   gem 'lefthook', '~> 0.7.0', require: false
+  gem 'rubocop'
   gem 'solargraph', '~> 0.44.3', require: false
 
   gem 'letter_opener_web', '~> 2.0.0'
@@ -543,4 +544,4 @@ gem 'ipaddress', '~> 0.8.3'
 
 gem 'parslet', '~> 1.8'
 
-gem 'ipynbdiff', '0.4.5'
+gem 'ipynbdiff', '0.4.7'
