@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pycep-parser";
-  version = "0.3.5";
+  version = "0.3.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "gruebel";
     repo = "pycep";
     rev = "refs/tags/${version}";
-    hash = "sha256-Nj/drNRSIBh8DaE+vzQRijQg8NVUK5qBClwU3aWiA48=";
+    hash = "sha256-v8GJHwkY4FFmqPzEfFdvYhxj9G/H74KkhyM40K+mQ3A=";
   };
 
   nativeBuildInputs = [
