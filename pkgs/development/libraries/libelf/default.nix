@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
        # on Darwin, so disable NLS for now.
     ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-nls";
 
+  strictDeps = true;
   nativeBuildInputs =
     if stdenv.hostPlatform.isNetBSD then [ netbsd.gencat ] else [ gettext ]
        # Need to regenerate configure script with newer version in order to pass

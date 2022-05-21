@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-95uPkEt0nj4NIK/q3s+CScVbLjLU67CJrjeN9HncryU=";
   };
 
+  strictDeps = true;
+
   outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";
 

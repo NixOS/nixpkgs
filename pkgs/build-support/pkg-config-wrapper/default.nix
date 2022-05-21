@@ -44,6 +44,7 @@ stdenv.mkDerivation {
     inherit pkg-config;
   };
 
+  strictDeps = true;
   dontBuild = true;
   dontConfigure = true;
 
@@ -79,8 +80,6 @@ stdenv.mkDerivation {
     + ''
       ln -s ${pkg-config}/share $out/share
     '';
-
-  strictDeps = true;
 
   wrapperName = "PKG_CONFIG_WRAPPER";
 

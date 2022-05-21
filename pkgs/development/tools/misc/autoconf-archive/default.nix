@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6KbrnSjdy6j/7z+iEWUyOem/I5q6agGmt8/Hzq7GnL0=";
   };
 
+  strictDeps = true;
   buildInputs = [ xz ];
 
   meta = with lib; {
