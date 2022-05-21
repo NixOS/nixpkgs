@@ -9947,6 +9947,8 @@ in {
 
   stdlib-list = callPackage ../development/python-modules/stdlib-list { };
 
+  steamodd = callPackage ../development/python-modules/steamodd { };
+
   stem = callPackage ../development/python-modules/stem { };
 
   stestr = callPackage ../development/python-modules/stestr { };
