@@ -24362,6 +24362,8 @@ with pkgs;
 
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
 
+  icomoon-feather-ttf = callPackage ../data/fonts/icomoon-feather-ttf { };
+
   iconpack-jade = callPackage ../data/icons/iconpack-jade { };
 
   iconpack-obsidian = callPackage ../data/icons/iconpack-obsidian { };
