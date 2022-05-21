@@ -176,6 +176,19 @@ rec {
     config = "s390x-unknown-linux-gnu";
   };
 
+  esp8266 = {
+    config = "xtensa-esp8266-elf";
+    libc = "newlib";
+  };
+  esp32 = {
+    config = "xtensa-esp32-elf";
+    libc = "newlib";
+  };
+  esp32s2 = {
+    config = "xtensa-esp32s2-elf";
+    libc = "newlib";
+  };
+
   arm-embedded = {
     config = "arm-none-eabi";
     libc = "newlib";

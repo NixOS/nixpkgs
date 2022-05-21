@@ -17,6 +17,7 @@ in
 , substitute
 , texinfo
 , zlib
+, espressifXtensaOverlays
 
 , enableGold ? execFormatIsELF stdenv.targetPlatform
 , enableShared ? !stdenv.hostPlatform.isStatic
@@ -44,6 +45,12 @@ let
       repo = "binutils-vc4";
       rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
       sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
+    };
+    xtensa-none = fetchFromGitHub {
+      owner = "espressif";
+      repo = "binutils-gdb";
+      rev = "esp-2020r3-binutils";
+      sha256 = "0az64lv5n52x2hkx43y0d82llfk61cxkblm32zzlk2a26lw4916b";
     };
   };
 
@@ -111,7 +118,7 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals targetPlatform.isiOS [ autoreconfHook ]
   ++ lib.optionals buildPlatform.isDarwin [ autoconf269 automake gettext libtool ]
-  ++ lib.optionals targetPlatform.isVc4 [ flex ]
+  ++ lib.optionals (targetPlatform.isVc4 || targetPlatform.isXtensa) [ flex ]
   ;
 
   buildInputs = [ zlib gettext ];
@@ -178,6 +185,9 @@ stdenv.mkDerivation {
   ++ (if enableShared
       then [ "--enable-shared" "--disable-static" ]
       else [ "--disable-shared" "--enable-static" ])
+  # Git-based builds default to building both binutils and gdb at once. 
+  # TODO: enable unconditionally
+  ++ lib.optional stdenv.targetPlatform.isXtensa "--disable-gdb"
   ;
 
   # Fails

@@ -16,6 +16,7 @@ in
       ]);
     in mkFlags libcCross langD
     ++ lib.optionals (!crossStageStatic) (mkFlags threadsCross langD)
+    ++ lib.optional targetPlatform.isXtensa "-mlongcalls"
     ;
 
   EXTRA_LDFLAGS_FOR_TARGET = let

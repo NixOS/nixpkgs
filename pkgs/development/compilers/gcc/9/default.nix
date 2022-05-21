@@ -178,8 +178,8 @@ stdenv.mkDerivation ({
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ texinfo which gettext ]
-    ++ (optional (perl != null) perl)
-    ++ (optional langAda gnatboot)
+    ++ optional (perl != null) perl
+    ++ optional langAda gnatboot
     ;
 
   # For building runtime libs
