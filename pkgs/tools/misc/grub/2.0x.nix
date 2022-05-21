@@ -90,6 +90,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "all" ];
 
+  separateDebugInfo = true;
+
   # Work around a bug in the generated flex lexer (upstream flex bug?)
   NIX_CFLAGS_COMPILE = "-Wno-error";
 

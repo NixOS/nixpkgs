@@ -6,6 +6,7 @@
 , ant
 , makeWrapper
 , makeDesktopItem
+, copyDesktopItems
 , nixosTests
 }:
 
@@ -41,14 +42,23 @@ in stdenv.mkDerivation {
     jdk8
     ant
     makeWrapper
+    copyDesktopItems
   ];
 
   buildPhase = ''
+    runHook preBuild
     cd swingUI
     ant
+    runHook postBuild
   '';
 
+  desktopItems = [
+    desktopItem
+    editorDesktopItem
+  ];
+
   installPhase = ''
+    runHook preInstall
     # Remove unnecessary files and launchers (they'd need to be wrapped anyway)
     rm -r \
       build/game/src.zip \
@@ -69,13 +79,8 @@ in stdenv.mkDerivation {
       --chdir "$out/share/domination" \
       --add-flags "-cp $out/share/domination/Domination.jar net.yura.domination.ui.swinggui.SwingGUIFrame"
 
-    install -Dm644 \
-      ${desktopItem}/share/applications/Domination.desktop \
-      $out/share/applications/Domination.desktop
-    install -Dm644 \
-      "${editorDesktopItem}/share/applications/Domination Map Editor.desktop" \
-      "$out/share/applications/Domination Map Editor.desktop"
     install -Dm644 build/game/resources/icon.png $out/share/pixmaps/domination.png
+    runHook postInstall
   '';
 
   passthru.tests = {
