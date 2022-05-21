@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchsvn
 , substituteAll
 , jdk
 , jre
@@ -13,11 +14,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "splitter";
-  version = "647";
+  version = "651";
 
-  src = fetchurl {
-    url = "https://www.mkgmap.org.uk/download/splitter-r${version}-src.tar.gz";
-    sha256 = "j9TJ+9WuItueztWjYoD9s9x8wfsga2QCIY5X2+s3Z1c=";
+  src = fetchsvn {
+    url = "https://svn.mkgmap.org.uk/mkgmap/splitter/trunk";
+    rev = version;
+    sha256 = "sha256-j6U+Wvxef151NEwkpuv4VdMac/cOT9YZUgkt+YPGCuk=";
   };
 
   patches = [
