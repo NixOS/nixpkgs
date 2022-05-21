@@ -2,7 +2,6 @@
 , stdenv
 , mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , boost
 , cgal_5
@@ -24,23 +23,15 @@
 
 mkDerivation rec {
   pname = "cloudcompare";
-  version = "2.12.0";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
     rev = "v${version}";
-    sha256 = "sha256-hu3ckVocExi9lvxelHAwKb/MZacH4CcCE+vIzElgP/A=";
+    sha256 = "sha256-gX07Km+DNnsz5eDAC2RueMHjmIfQvgGnNOujZ/yM/vE=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix issues compiling on aarch64. remove once upgraded past 2.12.0
-    (fetchpatch {
-      url = "https://github.com/CloudCompare/CloudCompare/commit/7e71861fdbd6ea704add5ba69343f47d8fc3d5ae.patch";
-      sha256 = "sha256-CRUPjxtKUbsqOyYsjKF+dRZ+E3rqrv5mS3ZaOay2wk8=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -115,6 +106,5 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nh2 ];
     platforms = with platforms; linux; # only tested here; might work on others
-    broken = stdenv.isLinux; # plugins/core/IO/qPDALIO/CMakeFiles/QPDAL_IO_PLUGIN.dir/src/LASFilter.cpp.o] Error 1
   };
 }
