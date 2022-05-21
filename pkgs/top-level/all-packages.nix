@@ -7766,7 +7766,9 @@ with pkgs;
 
   mmv-go = callPackage ../tools/misc/mmv-go { };
 
-  mob = callPackage ../applications/misc/mob { };
+  mob = callPackage ../applications/misc/mob {
+    buildGoModule = buildGo116Module;
+  };
 
   most = callPackage ../tools/misc/most { };
 
