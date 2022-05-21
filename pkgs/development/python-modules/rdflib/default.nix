@@ -43,7 +43,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  passthru.extra-requires = {
+  passthru.extras-require = {
     html = [
       html5lib
     ];
@@ -55,8 +55,8 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ]
-  ++ passthru.extra-requires.networkx
-  ++ passthru.extra-requires.html;
+  ++ passthru.extras-require.networkx
+  ++ passthru.extras-require.html;
 
   pytestFlagsArray = [
     # requires network access
