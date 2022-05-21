@@ -25,11 +25,6 @@
 
 assert qt4Support -> qt4 != null;
 
-let
-  # despite the configure script claiming it supports $PKG_CONFIG, it doesnt respect it
-  pkg-config-helper = writeShellScriptBin "pkg-config" ''exec $PKG_CONFIG "$@"'';
-in
-
 stdenv.mkDerivation rec {
   pname = "avahi${lib.optionalString withLibdnssdCompat "-compat"}";
   version = "0.8";
@@ -48,9 +43,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     pkg-config
-    pkg-config-helper
     gettext
     glib
   ];
@@ -99,11 +97,6 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = "-DAVAHI_SERVICE_DIR=\"/etc/avahi/services\"";
-
-  prePatch = ''
-    substituteInPlace configure \
-      --replace pkg-config "$PKG_CONFIG"
-  '';
 
   preBuild = lib.optionalString stdenv.isDarwin ''
     sed -i '20 i\
