@@ -104,8 +104,6 @@ let
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
 
-  strictDeps = true;
-
   nativeBuildInputs = optionals (!stdenv.isDarwin) [
     autoreconfHook
     pkg-config
@@ -186,7 +184,8 @@ in with passthru; stdenv.mkDerivation {
   pname = "python3";
   inherit version;
 
-  inherit buildInputs nativeBuildInputs;
+  inherit nativeBuildInputs;
+  buildInputs = [ bash ] ++ buildInputs; # bash is only for patchShebangs
 
   src = fetchurl {
     url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
@@ -465,7 +464,7 @@ in with passthru; stdenv.mkDerivation {
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     # Ensure patch-shebangs uses shebangs of host interpreter.
-    export PATH=${lib.makeBinPath [ "$out" bash ]}:$PATH
+    export PATH=${lib.makeBinPath [ "$out" ]}:$PATH
   '';
 
   # Add CPython specific setup-hook that configures distutils.sysconfig to
