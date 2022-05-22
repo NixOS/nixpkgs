@@ -62,6 +62,11 @@ patchShebangs() {
         fi
 
         if [[ "$oldPath" == *"/bin/env" ]]; then
+            # ignore -S
+            if [[ $arg0 == "-S" ]]; then
+               read -r oldPath argS arg0 args <<< "${oldInterpreterLine:3}"
+            fi
+
             # Check for unsupported 'env' functionality:
             # - options: something starting with a '-'
             # - environment variables: foo=bar
