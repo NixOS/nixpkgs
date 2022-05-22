@@ -4254,6 +4254,13 @@
       fingerprint = "2F93 661D AC17 EA98 A104  F780 ECC7 55EE 583C 1672";
     }];
   };
+  fleaz = {
+    email = "mail@felixbreidenstein.de";
+    matrix = "@fleaz:rainbownerds.de";
+    github = "fleaz";
+    githubId = 2489598;
+    name = "Felix Breidenstein";
+  };
   flexagoon = {
     email = "flexagoon@pm.me";
     github = "flexagoon";
