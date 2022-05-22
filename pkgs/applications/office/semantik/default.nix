@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitLab
+, fetchpatch
 , wafHook
 , pkg-config
 , cmake
@@ -33,7 +34,14 @@ mkDerivation rec {
     sha256 = "sha256-aXOokji6fYTpaeI/IIV+5RnTE2Cm8X3WfADf4Uftkss=";
   };
 
-  patches = [ ./qt5.patch ];
+  patches = [
+    (fetchpatch {
+      name = "fix-kdelibs4support.patch";
+      url = "https://gitlab.com/ita1024/semantik/-/commit/a991265bd6e3ed6541f8ec099420bc08cc62e30c.patch";
+      sha256 = "sha256-E4XjdWfUnqhmFJs9ORznHoXMDS9zHWNXvQIKKkN4AAo=";
+    })
+    ./qt5.patch
+  ];
 
   postPatch = ''
     echo "${lib.getDev qtwebengine}"
