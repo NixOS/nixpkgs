@@ -211,6 +211,7 @@ stdenv.mkDerivation ({
 
   outputs = [ "out" "bin" "dev" "static" ];
 
+  strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison python3Minimal ] ++ extraNativeBuildInputs;
   buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ] ++ extraBuildInputs;
