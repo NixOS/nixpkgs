@@ -22,7 +22,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , extraPatches ? []
 , fixPatch ? p: p
 , preConfigure ? ""
-, postInstall ? null
+, postInstall ? ""
 , meta ? null
 , nginx-doc ? outer.nginx-doc
 , passthru ? { tests = {}; }
@@ -165,9 +165,7 @@ stdenv.mkDerivation {
   postInstall =
     let
       noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $out/sbin/nginx\n") modules;
-    in noSourceRefs + (if postInstall != null then postInstall else ''
-      mv $out/sbin $out/bin
-    '');
+    in noSourceRefs + postInstall;
 
   passthru = {
     modules = modules;
