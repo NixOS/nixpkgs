@@ -10981,6 +10981,10 @@ with pkgs;
 
   tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
 
+  tor-browser-bundle-mutable = callPackage ../applications/networking/browsers/tor-browser-bundle-bin/mutable.nix {
+    buildFHSUserEnv = buildFHSUserEnvBubblewrap;
+  };
+
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
   torrent7z = callPackage ../tools/archivers/torrent7z { };
