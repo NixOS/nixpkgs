@@ -1,6 +1,8 @@
 { lib
 , buildBazelPackage
+, bazel_5
 , fetchFromGitHub
+, fetchzip
 , callPackage
 , bash
 , cacert
@@ -22,11 +24,6 @@ let
     substituteInPlace tools/defs.bzl \
       --replace "#!/bin/bash" "#!${bash}/bin/bash"
 
-    # Tell rules_go to use the Go binary found in the PATH
-    sed -E -i \
-      -e 's|go_version\s*=\s*"[^"]+"|go_version = "host"|g' \
-      WORKSPACE
-
     # The gazelle Go tooling needs CA certs
     export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
 
@@ -42,7 +39,7 @@ let
     owner = "bazelbuild";
     repo = "rules_proto";
     rev = "f7a30f6f80006b591fa7c437fe5a951eb10bcbcf";
-    sha256 = "10bcw0ir0skk7h33lmqm38n9w4nfs24mwajnngkbs6jb5wsvkqv8";
+    sha256 = "sha256-aOO5NS9LGr3ms1YqXonQzhKeLBoVVzoGPHNqkCPgbIE=";
     extraPostFetch = ''
       sed -i 's|name = "protoc"|name = "_protoc_original"|' $out/proto/private/BUILD.release
       cat <<EOF >>$out/proto/private/BUILD.release
@@ -51,16 +48,25 @@ let
     '';
   };
 
-in buildBazelPackage rec {
+  buildBazelPackage' = buildBazelPackage.override { bazel = bazel_5; };
+
+in buildBazelPackage' rec {
   pname = "gvisor";
-  version = "20210518.0";
+  version = "20220516.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo  = "gvisor";
     rev   = "release-${version}";
-    sha256 = "15a6mlclnyfc9mx3bjksnnf4vla0xh0rv9kxdp34la4gw3c4hksn";
+    sha256 = "sha256-ZG78fcoCpxQ9HbF+sNvywLq3nMZPLYTcBWdSCEDmHwM=";
   };
+
+  # Currently still fails at
+  # ERROR: /build/source/pkg/metric/BUILD:23:14: GoCompilePkg pkg/metric/metric_go_proto.a failed: (Exit 1): builder failed: error executing command bazel-out/k8-opt-exec-2B5CBBC6-ST-3ea255117c10/bin/external/go_sdk/builder compilepkg -sdk external/go_sdk -installsuffix linux_amd64 -src ... (remaining 51 arguments skipped)
+
+  patches = [
+    ./build-rule.patch
+  ];
 
   nativeBuildInputs = [ git glibcLocales go makeWrapper python3 ];
 
@@ -99,7 +105,7 @@ in buildBazelPackage rec {
       rm -f "$bazelOut"/java.log "$bazelOut"/java.log.*
     '';
 
-    sha256 = "13pahppm431m198v5bffrzq5iw8m79riplbfqp0afh384ln669hb";
+    sha256 = "sha256-44tbIb2stPgtXkMgRGyM4t0LZcAoi45xR+7MRWa0NKI=";
   };
 
   buildAttrs = {

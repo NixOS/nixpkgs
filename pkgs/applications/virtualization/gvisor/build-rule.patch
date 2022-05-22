@@ -1,0 +1,36 @@
+diff --git a/WORKSPACE b/WORKSPACE
+index 9fd92eda8..a212e4b12 100644
+--- a/WORKSPACE
++++ b/WORKSPACE
+@@ -58,20 +58,21 @@ http_archive(
+     ],
+ )
+ 
+-load("@io_bazel_rules_go//go:deps.bzl", "go_download_sdk", "go_rules_dependencies")
++load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+ load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
+ 
+ go_rules_dependencies()
+ 
+-go_download_sdk(
+-    name = "go_sdk",
+-    # This implements a fix in the types package which dramatically speeds up
+-    # analysis. Without this fix, the nogo rules will often fail to run in
+-    # time on our continuous integration.
+-    patch = "//tools:go_types_memoize.patch",
+-    patch_strip = 2,
+-    version = "1.17.6",
+-)
++#go_download_sdk(
++#    name = "go_sdk",
++#    # This implements a fix in the types package which dramatically speeds up
++#    # analysis. Without this fix, the nogo rules will often fail to run in
++#    # time on our continuous integration.
++#    patch = "//tools:go_types_memoize.patch",
++#    patch_strip = 2,
++#    version = "1.17.6",
++#)
++go_register_toolchains(go_version = "host")
+ 
+ gazelle_dependencies()
+ 
