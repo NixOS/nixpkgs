@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "shortuuid";
-  version = "1.0.8";
+  version = "1.0.9";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9435e87e5a64f3b92f7110c81f989a3b7bdb9358e22d2359829167da476cfc23";
+    sha256 = "sha256-RZ8S+hrMNP8hOxNxRnwDJRaWRaMe2YniaIcjOa91Y9U=";
   };
 
   checkInputs = [
