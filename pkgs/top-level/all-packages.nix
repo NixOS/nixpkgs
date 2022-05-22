@@ -20955,6 +20955,8 @@ with pkgs;
     hdf5 = hdf5.override { usev110Api = true; };
   };
 
+  vkdisplayinfo = callPackage ../tools/graphics/vkdisplayinfo { };
+
   vlock = callPackage ../misc/screensavers/vlock { };
 
   vmime = callPackage ../development/libraries/vmime { };
