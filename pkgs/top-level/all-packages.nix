@@ -29361,6 +29361,8 @@ with pkgs;
 
   rkdeveloptool = callPackage ../misc/rkdeveloptool { };
 
+  rkdeveloptool-pine64 = callPackage ../misc/rkdeveloptool-pine64 { };
+
   rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
