@@ -792,15 +792,27 @@ rec {
        => 1337
        toInt "-4"
        => -4
+       toInt " 123 "
+       => 123
+       toInt "00024"
+       => 24
        toInt "3.14"
        => error: floating point JSON numbers are not supported
   */
   # Obviously, it is a bit hacky to use fromJSON this way.
   toInt = str:
-    let may_be_int = fromJSON str; in
-    if isInt may_be_int
-    then may_be_int
-    else throw "Could not convert ${str} to int.";
+    let
+      strippedInput = match "[[:space:]]*(0*)(.*)" str;
+      isNonZeroEmpty = match "[[:space:]]*" (lib.last strippedInput) == [];
+      isZeroNonEmpty = head strippedInput != "";
+      mayBeInt = fromJSON (lib.last strippedInput);
+    in
+      if isNonZeroEmpty && isZeroNonEmpty
+      then 0
+      else
+      if isInt mayBeInt
+      then mayBeInt
+      else throw "Could not convert ${str} to int.";
 
   /* Read a list of paths from `file`, relative to the `rootPath`.
      Lines beginning with `#` are treated as comments and ignored.

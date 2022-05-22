@@ -327,6 +327,34 @@ runTests {
     expected = "Hello\\x20World";
   };
 
+  testToInt = testAllTrue [
+    # Naive
+    (123 == toInt "123")
+    (0 == toInt "0")
+    # Whitespace Padding
+    (123 == toInt " 123")
+    (123 == toInt "123 ")
+    (123 == toInt " 123 ")
+    (123 == toInt "   123   ")
+    (0 == toInt " 0")
+    (0 == toInt "0 ")
+    (0 == toInt " 0 ")
+    # Zero Padding
+    (123 == toInt "0123")
+    (123 == toInt "0000123")
+    (0 == toInt "000000")
+    # Whitespace and Zero Padding
+    (123 == toInt " 0123")
+    (123 == toInt "0123 ")
+    (123 == toInt " 0123 ")
+    (123 == toInt " 0000123")
+    (123 == toInt "0000123 ")
+    (123 == toInt " 0000123 ")
+    (0 == toInt " 000000")
+    (0 == toInt "000000 ")
+    (0 == toInt " 000000 ")
+  ];
+
 # LISTS
 
   testFilter = {
