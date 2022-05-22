@@ -99,7 +99,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-randomly
     pytest-xdist
-  ] ++ lib.concatMap (name: passthru.extras-require.${name}) testBackends;
+  ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
 
   preBuild = ''
     # setup.py exists only for developer convenience and is automatically generated
@@ -139,7 +139,7 @@ buildPythonPackage rec {
   ] ++ map (backend: "ibis.backends.${backend}") testBackends;
 
   passthru = {
-    extras-require = {
+    optional-dependencies = {
       clickhouse = [ clickhouse-cityhash clickhouse-driver lz4 ];
       dask = [ dask pyarrow ];
       datafusion = [ datafusion ];

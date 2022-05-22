@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink pyhamcrest attrs setuptools typing-extensions ];
 
-  passthru.extras-require = rec {
+  passthru.optional-dependencies = rec {
     tls = [ pyopenssl service-identity idna ];
     conch = [ pyasn1 cryptography appdirs bcrypt ];
     conch_nacl = conch ++ [ pynacl ];

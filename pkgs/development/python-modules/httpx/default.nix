@@ -49,7 +49,7 @@ buildPythonPackage rec {
     async_generator
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     http2 = [ h2 ];
     socks = [ socksio ];
     brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
@@ -63,9 +63,9 @@ buildPythonPackage rec {
     trustme
     typing-extensions
     uvicorn
-  ] ++ passthru.extras-require.http2
-    ++ passthru.extras-require.brotli
-    ++ passthru.extras-require.socks;
+  ] ++ passthru.optional-dependencies.http2
+    ++ passthru.optional-dependencies.brotli
+    ++ passthru.optional-dependencies.socks;
 
   postPatch = ''
     substituteInPlace setup.py \
