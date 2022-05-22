@@ -1,18 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, which, nixosTests }:
+{ lib, stdenv, fetchurl, pkg-config, glib, which, bison, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "nbd";
-  version = "3.21";
+  version = "3.24";
 
   src = fetchurl {
     url = "mirror://sourceforge/nbd/nbd-${version}.tar.xz";
-    sha256 = "sha256-52iK852Rczu80tsIBixE/lA9AE5RUodAE5xEr/amvvk=";
+    sha256 = "sha256-aHcVbSOnsz917uidL1wskcVCr8PNy2Nt6lqIU5pY0Qw=";
   };
 
   buildInputs = [ glib ]
     ++ lib.optional (stdenv ? glibc) stdenv.glibc.linuxHeaders;
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [ pkg-config which bison ];
 
   postInstall = ''
     mkdir -p "$out/share/doc/nbd-${version}"
