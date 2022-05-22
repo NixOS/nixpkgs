@@ -52,6 +52,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: types.o:(.bss+0x11b0): multiple definition of `current_file'; y.tab.o:(.bss+0x70): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "CFLAGS=-O2"
