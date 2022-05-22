@@ -120,5 +120,8 @@ in buildBazelPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ andrew-d ];
     platforms = [ "x86_64-linux" ];
+    # The version we have right now does not compile with go 1.17
+    # See https://github.com/NixOS/nixpkgs/pull/174003 if you want to upgrade gvisor
+    broken = true;
   };
 }
