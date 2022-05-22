@@ -1,0 +1,36 @@
+From 2a694bda325f84276d7bb0fa8e28cfd31ee10bd2 Mon Sep 17 00:00:00 2001
+From: edef <edef@edef.eu>
+Date: Sun, 15 May 2022 01:38:54 +0000
+Subject: [PATCH] agent: Support MD-less operation.
+
+---
+ agent/call-scd.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/agent/call-scd.c b/agent/call-scd.c
+index d1d6391e6..07ea83a39 100644
+--- a/agent/call-scd.c
++++ b/agent/call-scd.c
+@@ -448,6 +448,7 @@ hash_algo_option (int algo)
+ {
+   switch (algo)
+     {
++    case 0             : return "--hash=none";
+     case GCRY_MD_MD5   : return "--hash=md5";
+     case GCRY_MD_RMD160: return "--hash=rmd160";
+     case GCRY_MD_SHA1  : return "--hash=sha1";
+@@ -484,11 +485,6 @@ agent_card_pksign (ctrl_t ctrl,
+   if (rc)
+     return rc;
+ 
+-  /* FIXME: In the mdalgo case (INDATA,INDATALEN) might be long and
+-   * thus we can't convey it on a single Assuan line.  */
+-  if (!mdalgo)
+-    return gpg_error (GPG_ERR_NOT_IMPLEMENTED);
+-
+   size_t processed_data = 0;
+   while (processed_data < indatalen) {
+     size_t bytes = (DIM(line) - 50) / 2;
+-- 
+2.35.3
+

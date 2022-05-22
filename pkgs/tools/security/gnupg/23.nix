@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
     ./0001-agent-Fix-signing-messages-over-475-bytes.patch
     ./0002-scd-openpgp-Fix-signing-large-messages-with-EdDSA-ke.patch
+    ./0003-agent-Support-MD-less-operation.patch
+    ./0004-scd-app-openpgp-Permit-MD-less-do_sign.patch
   ];
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1

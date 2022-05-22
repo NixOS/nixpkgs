@@ -1,0 +1,49 @@
+From 1fd11aca9859675a4c3e79d6a26337906a598906 Mon Sep 17 00:00:00 2001
+From: edef <edef@edef.eu>
+Date: Sun, 15 May 2022 02:09:34 +0000
+Subject: [PATCH] scd/app-openpgp: Permit MD-less do_sign.
+
+---
+ scd/app-openpgp.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/scd/app-openpgp.c b/scd/app-openpgp.c
+index 0280923c8..fda5bb4dd 100644
+--- a/scd/app-openpgp.c
++++ b/scd/app-openpgp.c
+@@ -5230,6 +5230,8 @@ do_sign (app_t app, ctrl_t ctrl, const char *keyidstr, int hashalgo,
+             || indatalen == 48 || indatalen ==64)
+            && app->app_local->extcap.is_v2)
+     ;  /* Assume a plain SHA-3 digest has been given.  */
++  else if (!hashalgo)
++    ;
+   else
+     {
+       log_error (_("card does not support digest algorithm %s\n"),
+@@ -5273,6 +5275,8 @@ do_sign (app_t app, ctrl_t ctrl, const char *keyidstr, int hashalgo,
+       else
+         return gpg_error (GPG_ERR_UNSUPPORTED_ALGORITHM);
+     }
++  else if (!hashalgo)
++    ;
+   else
+     {
+       datalen = indatalen;
+@@ -5348,8 +5352,12 @@ do_sign (app_t app, ctrl_t ctrl, const char *keyidstr, int hashalgo,
+       exmode = 0;
+       le_value = 0;
+     }
+-  rc = iso7816_compute_ds (app_get_slot (app), exmode, data, datalen, le_value,
+-                           outdata, outdatalen);
++  if (hashalgo)
++    rc = iso7816_compute_ds (app_get_slot (app), exmode, data, datalen, le_value,
++                             outdata, outdatalen);
++  else
++    rc = iso7816_compute_ds (app_get_slot (app), exmode, indata, indatalen, le_value,
++                             outdata, outdatalen);
+   if (gpg_err_code (rc) == GPG_ERR_TIMEOUT)
+     clear_chv_status (app, ctrl, 1);
+   else if (!rc && app->force_chv1)
+-- 
+2.35.3
+
