@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "beautifultable";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "pri22296";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12ci6jy8qmbphsvzvj98466nlhclfzs0a0pmbsv3mf5bfcdwvbh7";
+    sha256 = "sha256-/SReCEvSwiNjBoz/3tGJ9zUNBAag4mLsHlUXwm47zCw=";
   };
 
   propagatedBuildInputs = [
