@@ -3,24 +3,24 @@
 , cmake
 , pkg-config
 , libffi
-, llvm_6
+, llvm_10
 , doCheck ? false
 , perl
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "dale";
-  version = "20181024";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "tomhrr";
     repo = "dale";
-    rev = "f5db8b486f4e7c423fc25941a8315f1209bc0e54";
-    sha256 = "0v4ajrzrqvf279kd7wsd9flrpsav57lzxlwwimk9vnfwh7xpzf9v";
+    rev = version;
+    sha256 = "sha256-sFAbJf8LIEj8WXONgE/9t/+woJ6SkbN++xIqqAyDpa4=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config llvm_6.dev ];
-  buildInputs = [ libffi llvm_6 ];
+  nativeBuildInputs = [ cmake pkg-config llvm_10.dev ];
+  buildInputs = [ libffi llvm_10 ];
 
   inherit doCheck;
   checkInputs = [ perl ];
