@@ -8,38 +8,34 @@
 , uchar
 }:
 
-if lib.versionOlder ocaml.version "4.08"
-then throw "sedlex is not available for OCaml ${ocaml.version}"
-else
-
 let
-  unicodeVersion = "13.0.0";
+  unicodeVersion = "14.0.0";
   baseUrl = "https://www.unicode.org/Public/${unicodeVersion}";
 
   DerivedCoreProperties = fetchurl {
     url = "${baseUrl}/ucd/DerivedCoreProperties.txt";
-    sha256 = "0j12x112cd8fpgazkc8izxnhhpia44p1m36ff8yapslxndcmzm55";
+    sha256 = "sha256:1g77s8g9443dd92f82pbkim7rk51s7xdwa3mxpzb1lcw8ryxvvg3";
   };
   DerivedGeneralCategory = fetchurl {
     url = "${baseUrl}/ucd/extracted/DerivedGeneralCategory.txt";
-    sha256 = "0w6mkz4w79k23bnmwgfxc4yqc2ypv8ilrjn6nk25hrafksbg00j5";
+    sha256 = "sha256:080l3bwwppm7gnyga1hzhd07b55viklimxpdsx0fsxhr8v47krnd";
   };
   PropList = fetchurl {
     url = "${baseUrl}/ucd/PropList.txt";
-    sha256 = "1ks0585wimygbk2wqi9hqg8gyl25iffvdad5vya1zgsxs8z5lns8";
+    sha256 = "sha256:08k75jzl7ws9l3sm1ywsj24qa4qvzn895wggdpp5nyj1a2wgvpbb";
   };
 in
 buildDunePackage rec {
   pname = "sedlex";
-  version = "2.4";
+  version = "2.5";
 
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
     owner = "ocaml-community";
     repo = "sedlex";
     rev = "v${version}";
-    sha256 = "13g8az4zqg6hrnxmy3qrasslppzlag13dd1dsr8vlpg2vpfmfv6i";
+    sha256 = "sha256:062a5dvrzvb81l3a9phljrhxfw9nlb61q341q0a6xn65hll3z2wy";
   };
 
   propagatedBuildInputs = [
