@@ -725,6 +725,7 @@ in
 
       systemd.services.postfix-setup =
         { description = "Setup for Postfix mail server";
+          serviceConfig.RemainAfterExit = true;
           serviceConfig.Type = "oneshot";
           script = ''
             # Backwards compatibility
