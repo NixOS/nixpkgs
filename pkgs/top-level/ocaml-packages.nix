@@ -1312,7 +1312,7 @@ let
 
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
-    sedlex_2 = callPackage ../development/ocaml-modules/sedlex/2.nix { };
+    sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
