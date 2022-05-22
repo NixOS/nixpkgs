@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl }:
+{ lib, clangStdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "zchaff";
   version = "2004.5.13";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./sat_solver.patch ];
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}c++" ];
+  makeFlags = [ "CC=${clangStdenv.cc.targetPrefix}c++" ];
   installPhase= ''
     runHook preInstall
     install -Dm755 -t $out/bin zchaff
