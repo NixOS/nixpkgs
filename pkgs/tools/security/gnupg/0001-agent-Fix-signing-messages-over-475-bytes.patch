@@ -1,0 +1,56 @@
+From e286d67461051a204d456f9d54514ed8066d4d4b Mon Sep 17 00:00:00 2001
+From: Puck Meerburg <puck@puckipedia.com>
+Date: Mon, 13 Jan 2020 17:08:37 +0000
+Subject: [PATCH] agent: Fix signing messages over 475 bytes.
+
+* agent/call-scd.c (agent_card_pksign): Use SETDATA --append.
+--
+
+EdDSA signatures require the actual message, rather than just the hash,
+so the data might not fit in a single SETDATA command. This patch
+implements the required changes.
+---
+ agent/call-scd.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
+
+diff --git a/agent/call-scd.c b/agent/call-scd.c
+index 154ea34d9..d1d6391e6 100644
+--- a/agent/call-scd.c
++++ b/agent/call-scd.c
+@@ -489,15 +489,26 @@ agent_card_pksign (ctrl_t ctrl,
+   if (!mdalgo)
+     return gpg_error (GPG_ERR_NOT_IMPLEMENTED);
+ 
+-  if (indatalen*2 + 50 > DIM(line))
+-    return unlock_scd (ctrl, gpg_error (GPG_ERR_GENERAL));
++  size_t processed_data = 0;
++  while (processed_data < indatalen) {
++    size_t bytes = (DIM(line) - 50) / 2;
++    if (indatalen - processed_data < bytes)
++        bytes = indatalen - processed_data;
+ 
+-  bin2hex (indata, indatalen, stpcpy (line, "SETDATA "));
++    char *start;
++    if (processed_data == 0)
++      start = stpcpy (line, "SETDATA ");
++    else
++      start = stpcpy (line, "SETDATA --append ");
+ 
+-  rc = assuan_transact (daemon_ctx (ctrl), line,
+-                        NULL, NULL, NULL, NULL, pincache_put_cb, NULL);
+-  if (rc)
+-    return unlock_scd (ctrl, rc);
++    bin2hex (indata + processed_data, bytes, start);
++    rc = assuan_transact (daemon_ctx (ctrl), line,
++                          NULL, NULL, NULL, NULL, pincache_put_cb, NULL);
++    if (rc)
++      return unlock_scd (ctrl, rc);
++
++    processed_data += bytes;
++  }
+ 
+   init_membuf (&data, 1024);
+   inqparm.ctx = daemon_ctx (ctrl);
+-- 
+2.35.3
+

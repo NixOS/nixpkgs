@@ -1,0 +1,31 @@
+From dac6de55652c5c181b02df1eebefefad2a467c81 Mon Sep 17 00:00:00 2001
+From: Puck Meerburg <puck@puckipedia.com>
+Date: Mon, 13 Jan 2020 17:09:38 +0000
+Subject: [PATCH] scd:openpgp: Fix signing large messages with EdDSA keys.
+
+* scd/app-openpgp.c (do_sign): Use exmode=1 for EdDSA.
+---
+ scd/app-openpgp.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/scd/app-openpgp.c b/scd/app-openpgp.c
+index 76a15d00e..0280923c8 100644
+--- a/scd/app-openpgp.c
++++ b/scd/app-openpgp.c
+@@ -5336,6 +5336,13 @@ do_sign (app_t app, ctrl_t ctrl, const char *keyidstr, int hashalgo,
+       exmode = 1;    /* Use extended length.  */
+       le_value = app->app_local->keyattr[0].rsa.n_bits / 8;
+     }
++  else if (app->app_local->cardcap.ext_lc_le
++           && app->app_local->keyattr[0].key_type == KEY_TYPE_ECC
++           && app->app_local->keyattr[0].ecc.flags & ECC_FLAG_DJB_TWEAK)
++    {
++      exmode = 1;
++      le_value = 0;
++    }
+   else
+     {
+       exmode = 0;
+-- 
+2.35.3
+
