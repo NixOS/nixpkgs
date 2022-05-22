@@ -450,6 +450,8 @@ let
 
     functory = callPackage ../development/ocaml-modules/functory { };
 
+    gd4o = callPackage ../development/ocaml-modules/gd4o { };
+
     gen = callPackage ../development/ocaml-modules/gen { };
 
     genspio = callPackage ../development/ocaml-modules/genspio { };
