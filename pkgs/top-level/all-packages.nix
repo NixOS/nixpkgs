@@ -24807,6 +24807,11 @@ with pkgs;
 
   poppler_data = callPackage ../data/misc/poppler-data { };
 
+  inherit (callPackages ../data/fonts/pretendard { })
+    pretendard
+    pretendard-jp
+    pretendard-std;
+
   quattrocento = callPackage ../data/fonts/quattrocento {};
 
   quattrocento-sans = callPackage ../data/fonts/quattrocento-sans {};
@@ -30252,6 +30257,7 @@ with pkgs;
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
   neovim-unwrapped = callPackage ../applications/editors/neovim {
+    CoreServices =  darwin.apple_sdk.frameworks.CoreServices;
     lua = luajit;
   };
 
