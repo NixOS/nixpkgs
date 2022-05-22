@@ -5439,6 +5439,12 @@
     githubId = 510202;
     name = "Ismaël Bouya";
   };
+  imsofi = {
+    email = "sofi+git@mailbox.org";
+    github = "imsofi";
+    githubId = 20756843;
+    name = "Sofi";
+  };
   imuli = {
     email = "i@imu.li";
     github = "imuli";
