@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   version = "0.7.0";
 
   outputs = [ "out" "dev" "devdoc" ];
+  outputBin = "devdoc"; # for demo
 
   src = fetchFromGitHub {
     owner = "wmww";
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Ddocs=true"
+    "-Dexamples=true"
   ];
 
   meta = with lib; {
