@@ -982,12 +982,13 @@ in python.withPackages(ps: [ps.blaze])).env
 #### Optional extra dependencies
 
 Some packages define optional dependencies for additional features. With
-`setuptools` this is called `extras_require` and `flit` calls it `extras-require`. A
+`setuptools` this is called `extras_require` and `flit` calls it
+`extras-require`, while PEP 621 calls these `optional-dependencies`. A
 method for supporting this is by declaring the extras of a package in its
 `passthru`, e.g. in case of the package `dask`
 
 ```nix
-passthru.extras-require = {
+passthru.optional-dependencies = {
   complete = [ distributed ];
 };
 ```
@@ -997,7 +998,7 @@ and letting the package requiring the extra add the list to its dependencies
 ```nix
 propagatedBuildInputs = [
   ...
-] ++ dask.extras-require.complete;
+] ++ dask.optional-dependencies.complete;
 ```
 
 Note this method is preferred over adding parameters to builders, as that can
