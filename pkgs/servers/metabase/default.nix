@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "metabase";
-  version = "0.42.1";
+  version = "0.43.1";
 
   src = fetchurl {
     url = "https://downloads.metabase.com/v${version}/metabase.jar";
-    hash = "sha256-PmcVVAS/5mDhmOSoFvkZeYkbvFD/KOcgVYuScwD4Olg=";
+    hash = "sha256-WGbIsmCWsSxgE7Ktr539qTt/o5cJrYi0yu3ZkfbxOV0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
