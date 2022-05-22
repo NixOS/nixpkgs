@@ -13,7 +13,7 @@
 # To not have to set the option in every repository it is needed in,
 # save the following script in your path with the name "git-bblame"
 # now you can run
-# $ git blame $FILE
+# $ git bblame $FILE
 # to use the .git-blame-ignore-revs file if it is present.
 #
 # #!/usr/bin/env bash
