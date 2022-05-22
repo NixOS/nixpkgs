@@ -61,6 +61,12 @@ patchShebangs() {
             fi
         fi
 
+        # ignore fancy shebangs like "#! -*- python -*-"
+        if [[ "$oldPath" == "-"* ]]; then
+            echo "$f: ignore unsupported interpreter directive \"$oldInterpreterLine\"" >&2
+            continue
+        fi
+
         if [[ "$oldPath" == *"/bin/env" ]]; then
             # ignore -S
             if [[ $arg0 == "-S" ]]; then
