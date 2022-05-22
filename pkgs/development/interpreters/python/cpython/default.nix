@@ -229,7 +229,7 @@ in with passthru; stdenv.mkDerivation {
     # * https://bugs.python.org/issue35523
     # * https://github.com/python/cpython/commit/e6b247c8e524
     ./3.7/no-win64-workaround.patch
-  ] ++ optionals (pythonAtLeast "3.7") [
+  ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.11") [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
   ] ++ optionals (pythonOlder "3.8") [
