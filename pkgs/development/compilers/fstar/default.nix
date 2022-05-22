@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     fileutils
     menhirLib
     pprint
-    sedlex_2
+    sedlex
     ppxlib
     ppx_deriving
     ppx_deriving_yojson
