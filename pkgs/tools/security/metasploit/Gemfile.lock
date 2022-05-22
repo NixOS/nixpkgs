@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/rapid7/metasploit-framework
-  revision: 70ec8a21b90103f8405c1bb0e3990a783a5467bc
-  ref: refs/tags/6.1.42
+  revision: c9fe91b3cd4e8738a0da5a23bf8f485d16961751
+  ref: refs/tags/6.1.43
   specs:
-    metasploit-framework (6.1.42)
+    metasploit-framework (6.1.43)
       actionpack (~> 6.0)
       activerecord (~> 6.0)
       activesupport (~> 6.0)
@@ -129,19 +129,19 @@ GEM
     arel-helpers (2.14.0)
       activerecord (>= 3.1.0, < 8)
     aws-eventstream (1.2.0)
-    aws-partitions (1.587.0)
-    aws-sdk-core (3.130.2)
+    aws-partitions (1.589.0)
+    aws-sdk-core (3.131.1)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.525.0)
       aws-sigv4 (~> 1.1)
-      jmespath (~> 1.0)
+      jmespath (~> 1, >= 1.6.1)
     aws-sdk-ec2 (1.315.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-iam (1.68.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.56.0)
+    aws-sdk-kms (1.57.0)
       aws-sdk-core (~> 3, >= 3.127.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.114.0)
@@ -150,7 +150,7 @@ GEM
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.5.0)
       aws-eventstream (~> 1, >= 1.0.2)
-    bcrypt (3.1.17)
+    bcrypt (3.1.18)
     bcrypt_pbkdf (1.1.0)
     bindata (2.4.10)
     bson (4.15.0)
@@ -175,7 +175,7 @@ GEM
       eventmachine (>= 1.0.0.beta.4)
     erubi (1.10.0)
     eventmachine (1.2.7)
-    faker (2.20.0)
+    faker (2.21.0)
       i18n (>= 1.8.11, < 2)
     faraday (1.10.0)
       faraday-em_http (~> 1.0)
@@ -227,7 +227,7 @@ GEM
     jmespath (1.6.1)
     jsobfu (0.4.2)
       rkelly-remix
-    json (2.6.1)
+    json (2.6.2)
     little-plugger (1.1.4)
     logging (2.3.0)
       little-plugger (~> 1.1)
