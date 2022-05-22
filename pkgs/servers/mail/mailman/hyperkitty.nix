@@ -1,33 +1,9 @@
 { lib
-, buildPythonPackage
+, python3
 , fetchpatch
-, fetchPypi
-, pythonOlder
-
-# dependencies
-, defusedxml
-, django
-, django-gravatar2
-, django-haystack
-, django-mailman3
-, django-paintstore
-, django-q
-, django_compressor
-, django-extensions
-, djangorestframework
-, flufl_lock
-, mistune_2_0
-, networkx
-, psycopg2
-, python-dateutil
-, robot-detection
-
-# tests
-, beautifulsoup4
-, elasticsearch
-, mock
-, whoosh
 }:
+
+with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "HyperKitty";

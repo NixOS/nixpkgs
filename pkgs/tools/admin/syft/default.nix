@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "syft";
@@ -74,5 +74,8 @@ buildGoModule rec {
     '';
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ jk ];
+    # Need updated macOS SDK
+    # https://github.com/NixOS/nixpkgs/issues/101229
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }

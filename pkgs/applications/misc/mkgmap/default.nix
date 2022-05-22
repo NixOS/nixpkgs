@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchsvn
 , substituteAll
 , jdk
 , jre
@@ -14,11 +15,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkgmap";
-  version = "4897";
+  version = "4902";
 
-  src = fetchurl {
-    url = "https://www.mkgmap.org.uk/download/mkgmap-r${version}-src.tar.gz";
-    sha256 = "RR8o8stOnL6nnEkCtRT9tgo8foSxd6ASTsRcGDgbQRk=";
+  src = fetchsvn {
+    url = "https://svn.mkgmap.org.uk/mkgmap/mkgmap/trunk";
+    rev = version;
+    sha256 = "sha256-djqa6loaFUYfAhgmF6Lm+4M4Xgzyiw1bXqK4XWqT/tY=";
   };
 
   patches = [

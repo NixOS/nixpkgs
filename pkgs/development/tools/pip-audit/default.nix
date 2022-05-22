@@ -25,15 +25,19 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.2.1";
-  format = "setuptools";
+  version = "2.3.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ji61783imVlvoBaDMTxQwbf1L1G4lJbOFZ1FjcNOT/8=";
+    hash = "sha256-OaWyBswqfzbo9pqN3oa92XNbfkMGARog2yH9kIyOzIk=";
   };
+
+  nativeBuildInputs = [
+    flit-core
+  ];
 
   propagatedBuildInputs = [
     cachecontrol

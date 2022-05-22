@@ -77,6 +77,7 @@ mapAliases ({
   HAP-python = hap-python; # added 2021-06-01
   hbmqtt = throw "hbmqtt was removed because it is no longer maintained"; # added 2021-11-07
   hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
+  hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
   IMAPClient = imapclient; # added 2021-10-28
   jupyter_client = jupyter-client; # added 2021-10-15
   Keras = keras; # added 2021-11-25
@@ -85,12 +86,16 @@ mapAliases ({
   Markups = markups; # added 2022-02-14
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   memcached = python-memcached; # added 2022-05-06
+  mailman = throw "Please use pkgs.mailman"; # added 2022-04-29
+  mailman-hyperkitty = throw "Please use pkgs.mailmanPackages.mailman-hyperkitty"; # added 2022-04-29
+  mailman-web = throw "Please use pkgs.mailman-web"; # added 2022-04-29
   net2grid = gridnet; # add 2022-04-22
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
   pam = python-pam; # added 2020-09-07.
   PasteDeploy = pastedeploy; # added 2021-10-07
   pathpy = path; # added 2022-04-12
   pep257 = pydocstyle; # added 2022-04-12
+  postorius = throw "Please use pkgs.mailmanPackages.postorius"; # added 2022-04-29
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
   privacyidea = throw "privacyidea has been renamed to pkgs.privacyidea"; # added 2021-06-20
   prometheus_client = prometheus-client; # added 2021-06-10
@@ -133,6 +138,7 @@ mapAliases ({
   scikitlearn = scikit-learn; # added 2021-07-21
   selectors34 = throw "selectors34 has been removed: functionality provided by Python itself; archived by upstream."; # added 2021-06-10
   setuptools_scm = setuptools-scm; # added 2021-06-03
+  sharkiqpy = sharkiq; # added 2022-05-21
   smart_open = smart-open; # added 2021-03-14
   smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
   SPARQLWrapper = sparqlwrapper;
