@@ -27,5 +27,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dm-vdo/kvdo";
     description = "A pair of kernel modules which provide pools of deduplicated and/or compressed block storage";
     platforms = platforms.linux;
+    # The module currently does not compile with any other kernel than the 5.15 series.
+    broken = !(lib.hasPrefix "5.15." kernel.version);
   };
 }
