@@ -84,6 +84,12 @@ with pkgs;
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
+  # For convenience, an empty package.
+  null = stdenvNoCC.mkDerivation {
+    name = "null";
+    installPhase = "mkdir $out";
+    dontUnpack = true;
+  };
 
   ### Helper functions.
   inherit lib config overlays;
