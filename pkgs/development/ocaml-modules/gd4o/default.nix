@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, ocaml, gd, freetype, findlib, zlib, libpng, libjpeg }:
 
 stdenv.mkDerivation rec {
-  pname = "gd4o";
+  pname = "ocaml${ocaml.version}-gd4o";
   version = "1.0a5";
 
   src = fetchurl {
