@@ -1,20 +1,20 @@
 { lib
-, buildGoModule
+, buildGo118Module
 , fetchFromGitHub
 , installShellFiles
 , lima
 , makeWrapper
 }:
 
-buildGoModule rec {
+buildGo118Module rec {
   pname = "colima";
-  version = "0.3.4";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-KYW3gxf21aWnuRHkysOjArzMSNH3m3XDoi6Sic3N+Po=";
+    sha256 = "sha256-66nKH5jxTzLB9bg2lH1E8Cc0GZ6C/N/+yPYhCVEKOBY=";
 
     # We need the git revision
     leaveDotGit = true;
@@ -26,7 +26,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  vendorSha256 = "sha256-Z4+qwoX04VnLsUIYRfOowFLgcaA9w8oGRl77jzFigIc=";
+  vendorSha256 = "sha256-91Ex3RPWxOHyZcR3Bo+bRdDAFw2mEGiC/uNKjdX2kuw=";
+
+  doCheck = false;
 
   preConfigure = ''
     ldflags="-X github.com/abiosoft/colima/config.appVersion=${version}
