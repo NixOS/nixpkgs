@@ -3,9 +3,6 @@
 
 set -euo pipefail
 
-export DOTNET_CLI_TELEMETRY_OPTOUT=1
-export DOTNET_NOLOGO=1
-
 latestVersion="$(curl -s "https://api.github.com/repos/jellyfin/jellyfin/releases?per_page=1" | jq -r ".[0].tag_name" | sed 's/^v//')"
 currentVersion=$(nix-instantiate --eval -E "with import ./. {}; jellyfin.version or (lib.getVersion jellyfin)" | tr -d '"')
 

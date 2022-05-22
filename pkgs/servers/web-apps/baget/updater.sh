@@ -31,9 +31,6 @@ chmod -R +w "$src"
 
 pushd "$src"
 
-export DOTNET_NOLOGO=1
-export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
 mkdir ./nuget_pkgs
 dotnet restore src/BaGet/BaGet.csproj --packages ./nuget_pkgs
 

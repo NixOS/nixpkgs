@@ -22,9 +22,6 @@ chmod -R +w "$src"
 
 pushd "$src"
 
-export DOTNET_NOLOGO=1
-export DOTNET_CLI_TELEMETRY_OPTOUT=1
-
 mkdir ./nuget_pkgs
 
 for project in src/Jackett.Server/Jackett.Server.csproj src/Jackett.Test/Jackett.Test.csproj; do
