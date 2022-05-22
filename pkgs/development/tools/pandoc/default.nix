@@ -13,6 +13,11 @@ in
       remove-references-to \
         -t ${haskellPackages.pandoc-types} \
         $out/bin/pandoc
+
+      # Add bash completions
+      exe=$out/bin/pandoc
+      mkdir -p $out/share/bash-completion/completions
+      $out/bin/pandoc --bash-completion > $out/share/bash-completion/completions/pandoc
     '';
   }) static).overrideAttrs (drv: {
     # These libraries are still referenced, because they generate
