@@ -16,8 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sumerc";
     repo = pname;
-    # https://github.com/sumerc/yappi/issues/102
-    rev = "1f41868a2cdfd1e935a5a60808f7bb09c871fa53";
+    rev = version;
     hash = "sha256-XxUAYrDQAY7fD9yTSmoRUmWJEs+L6KSQ0/bIVf/o9ag=";
   };
 
