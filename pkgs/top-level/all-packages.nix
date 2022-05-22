@@ -13368,7 +13368,6 @@ with pkgs;
   llvm_8  = llvmPackages_8.llvm;
   llvm_7  = llvmPackages_7.llvm;
   llvm_6  = llvmPackages_6.llvm;
-  llvm_5  = llvmPackages_5.llvm;
 
   llvmPackages = let
     latest_version = lib.toInt
