@@ -16948,7 +16948,7 @@ let
       url = "mirror://cpan/authors/id/D/DC/DCANTRELL/Number-Phone-3.8004.tar.gz";
       sha256 = "sha256-ZY7hyNGXTvSwV+B4L0mTi/PelA6QY/2bYecY6siwO+8=";
     };
-    buildInputs = [ DevelHide FileShareDirInstall ParallelForkManager TestDifferences TestMore TestPod TestPodCoverage TestWarnings ];
+    buildInputs = [ DevelHide FileShareDirInstall ParallelForkManager TestDifferences TestPod TestPodCoverage TestWarnings ];
     propagatedBuildInputs = [ DataDumperConcise DBMDeep DevelCheckOS FileFindRule FileShareDir ];
     meta = {
       homepage = "https://github.com/DrHyde/perl-modules-Number-Phone";
