@@ -1455,6 +1455,8 @@ let
 
     yuscii = callPackage ../development/ocaml-modules/yuscii { };
 
+    yuujinchou = callPackage ../development/ocaml-modules/yuujinchou { };
+
     z3 = callPackage ../development/ocaml-modules/z3 {
       inherit (pkgs) z3;
     };
