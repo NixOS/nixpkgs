@@ -145,6 +145,11 @@ rec {
     libc = "newlib";
   };
 
+  rx-embedded = {
+    config = "rx-none-elf";
+    libc = "newlib";
+  };
+
   msp430 = {
     config = "msp430-elf";
     libc = "newlib";

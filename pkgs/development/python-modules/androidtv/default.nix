@@ -28,19 +28,19 @@ buildPythonPackage rec {
     pure-python-adb
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     async = [
       aiofiles
     ];
-    inherit (adb-shell.extras-require) usb;
+    inherit (adb-shell.optional-dependencies) usb;
   };
 
   checkInputs = [
     mock
     pytestCheckHook
   ]
-  ++ passthru.extras-require.async
-  ++ passthru.extras-require.usb;
+  ++ passthru.optional-dependencies.async
+  ++ passthru.optional-dependencies.usb;
 
   disabledTests = [
     # Requires git but fails anyway

@@ -117,8 +117,9 @@ buildPythonPackage rec {
     git
     glibcLocales
     pyhamcrest
-  ] ++ passthru.extras-require.conch
-  ++ passthru.extras-require.tls;
+  ]
+  ++ passthru.optional-dependencies.conch
+  ++ passthru.optional-dependencies.tls;
 
   checkPhase = ''
     export SOURCE_DATE_EPOCH=315532800
@@ -128,8 +129,9 @@ buildPythonPackage rec {
   '';
 
   passthru = {
-    extras-require = {
+    optional-dependencies = rec {
       conch = [ appdirs bcrypt cryptography pyasn1 ];
+      conch_nacl = conch ++ [ pynacl ];
       contextvars = lib.optionals (pythonOlder "3.7") [ contextvars ];
       http2 = [ h2 priority ];
       serial = [ pyserial ];

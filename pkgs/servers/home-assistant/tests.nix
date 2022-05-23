@@ -71,7 +71,6 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
 
     meta = old.meta // {
       broken = lib.elem component [
-        "airtouch4"
         "bsblan"
         "dnsip"
         "efergy"

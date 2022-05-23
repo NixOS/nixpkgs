@@ -68,8 +68,8 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
-  ] ++ passthru.extras-require.scram
-  ++ passthru.extras-require.serialization;
+  ] ++ passthru.optional-dependencies.scram
+  ++ passthru.optional-dependencies.serialization;
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -89,7 +89,7 @@ buildPythonPackage rec {
     "autobahn"
   ];
 
-  passthru.extras-require = rec {
+  passthru.optional-dependencies = rec {
     all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui ++ xbr;
     accelerate = [ /* wsaccel */ ];
     compress = [ python-snappy ];

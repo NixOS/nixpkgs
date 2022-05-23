@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-12ol+2CnoPfkxmDGJJAkoafHGpQuWC4lh0N7lSvx2DE=";
   };
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     async = [
       aiocoap
       dtlssocket
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ]
-  ++ passthru.extras-require.async;
+  ++ passthru.optional-dependencies.async;
 
   pythonImportsCheck = [
     "pytradfri"

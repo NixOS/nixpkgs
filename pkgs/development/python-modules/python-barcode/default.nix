@@ -23,7 +23,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     images = [
       pillow
     ];
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-  ] ++ passthru.extras-require.images;
+  ] ++ passthru.optional-dependencies.images;
 
   pythonImportsCheck = [ "barcode" ];
 
