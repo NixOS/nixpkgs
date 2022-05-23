@@ -1257,6 +1257,8 @@ with pkgs;
 
   box64 = callPackage ../applications/emulators/box64 { };
 
+  box86 = callPackage ../applications/emulators/box86 { };
+
   caprice32 = callPackage ../applications/emulators/caprice32 { };
 
   ccemux = callPackage ../applications/emulators/ccemux { };
