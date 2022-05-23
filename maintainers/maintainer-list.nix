@@ -8129,6 +8129,12 @@
     githubId = 1377571;
     name = "Matthew S. Daiter";
   };
+  mdarocha = {
+    email = "marek@mdarocha.pl";
+    github = "mdarocha";
+    githubId = 11572618;
+    name = "Marek Darocha";
+  };
   mdevlamynck = {
     email = "matthias.devlamynck@mailoo.org";
     github = "mdevlamynck";
