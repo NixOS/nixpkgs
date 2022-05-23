@@ -355,6 +355,17 @@ runTests {
     (0 == toInt " 000000 ")
   ];
 
+  testToIntFails = testAllTrue [
+    ( builtins.tryEval (toInt "") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "123 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "0 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " 0d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo 123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo 00123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo00123 ") == { success = false; value = false; } )
+  ];
+
 # LISTS
 
   testFilter = {

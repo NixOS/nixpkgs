@@ -802,16 +802,22 @@ rec {
   # Obviously, it is a bit hacky to use fromJSON this way.
   toInt = str:
     let
-      strippedInput = match "[[:space:]]*(0*)(.*)" str;
-      isNonZeroEmpty = match "[[:space:]]*" (lib.last strippedInput) == [];
-      isZeroNonEmpty = head strippedInput != "";
-      mayBeInt = fromJSON (lib.last strippedInput);
+      # RegEx: Match any leading whitespace, then any zero padding, and capture any remaining
+      # digits after that, and finally match any trailing whitespace.
+      strippedInput = match "[[:space:]]*0*([[:digit:]]+)[[:space:]]*" str;
+
+      # RegEx: Match any leading whitespace, at least one '0', and any trailing whitespace.
+      isZero = match "[[:space:]]*0+[[:space:]]*" str == [];
+
+      # Attempt to parse input
+      parsedInput = fromJSON (elemAt strippedInput 0);
     in
-      if isNonZeroEmpty && isZeroNonEmpty
+      # Value is zero
+      if isZero
       then 0
       else
-      if isInt mayBeInt
-      then mayBeInt
+      if strippedInput != null && isInt parsedInput
+      then parsedInput
       else throw "Could not convert ${str} to int.";
 
   /* Read a list of paths from `file`, relative to the `rootPath`.
