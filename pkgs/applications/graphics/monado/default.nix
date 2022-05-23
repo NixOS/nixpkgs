@@ -120,5 +120,6 @@ stdenv.mkDerivation rec {
     license = licenses.boost;
     maintainers = with maintainers; [ expipiplus1 prusnak ];
     platforms = platforms.linux;
+    mainProgram = "monado-cli";
   };
 }
