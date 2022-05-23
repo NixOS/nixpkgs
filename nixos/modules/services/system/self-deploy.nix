@@ -143,12 +143,13 @@ in
       ] ++ lib.optionals (cfg.switchCommand == "boot") [ systemd ];
 
       script = ''
+        set -x
         if [ ! -e ${repositoryDirectory} ]; then
           mkdir --parents ${repositoryDirectory}
           git init ${repositoryDirectory}
         fi
 
-        ${gitWithRepo} fetch ${lib.escapeShellArg cfg.repository} ${lib.escapeShellArg cfg.branch}
+        ${gitWithRepo} fetch ${cfg.repository} ${lib.escapeShellArg cfg.branch}
 
         ${gitWithRepo} checkout FETCH_HEAD
 
