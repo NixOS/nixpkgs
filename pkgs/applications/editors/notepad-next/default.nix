@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, libsForQt5 }:
+{ mkDerivation, lib, fetchFromGitHub, qmake, libsForQt5, stdenv }:
 
 mkDerivation rec {
   pname = "notepad-next";
@@ -32,5 +32,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.sebtm ];
+    broken = stdenv.isAarch64;
   };
 }
