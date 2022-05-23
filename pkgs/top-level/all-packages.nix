@@ -723,7 +723,10 @@ with pkgs;
     inherit curl stdenv;
   };
 
-  fetchzip = callPackage ../build-support/fetchzip { };
+  fetchzip = callPackage ../build-support/fetchzip { }
+    // {
+      tests = pkgs.tests.fetchzip;
+    };
 
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
@@ -1236,6 +1239,8 @@ with pkgs;
     wxGTK = wxGTK30;
   };
 
+  box64 = callPackage ../applications/emulators/box64 { };
+
   caprice32 = callPackage ../applications/emulators/caprice32 { };
 
   ccemux = callPackage ../applications/emulators/ccemux { };
@@ -1246,7 +1251,13 @@ with pkgs;
 
   cen64 = callPackage ../applications/emulators/cen64 { };
 
-  citra = libsForQt5.callPackage ../applications/emulators/citra { };
+  citra-canary = callPackage ../applications/emulators/citra {
+    branch = "canary";
+  };
+
+  citra-nightly = callPackage ../applications/emulators/citra {
+    branch = "nightly";
+  };
 
   collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
 

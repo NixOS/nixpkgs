@@ -29,7 +29,7 @@ buildPythonPackage rec {
     # Upstream uses versioneer, which relies on git attributes substitution.
     # This leads to non-reproducible archives on github. Remove the substituted
     # file here, and recreate it later based on our version info.
-    extraPostFetch = ''
+    postFetch = ''
       rm "$out/limits/_version.py"
     '';
     hash = "sha256-ja+YbRHCcZ5tFnoofdR44jbkkdDroVUdKeDOt6yE0LI=";

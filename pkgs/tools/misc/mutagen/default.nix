@@ -18,7 +18,7 @@ buildGo118Module rec {
     # The package architecture does not matter since all packages contain identical mutagen-agents.tar.gz.
     url = "https://github.com/mutagen-io/mutagen/releases/download/v${version}/mutagen_linux_amd64_v${version}.tar.gz";
     stripRoot = false;
-    extraPostFetch = ''
+    postFetch = ''
       rm $out/mutagen # Keep only mutagen-agents.tar.gz.
     '';
     sha256 = "sha256-AlAo55/ewTE04WfS0beVonGA97AmpR1pAw/QxKAYjv8=";

@@ -51,7 +51,6 @@ let
 
       # Do a backup and wait for it to start
       master.start_job("mysql-backup.service")
-      master.wait_for_unit("mysql-backup.service")
 
       # wait for backup to fail, because of database 'doesnotexist'
       master.wait_until_fails("systemctl is-active -q mysql-backup.service")
