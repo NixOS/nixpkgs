@@ -68,6 +68,9 @@ stdenv.mkDerivation rec {
     # contrib modules require these
     "moduledir=${placeholder "out"}/lib/modules"
     "mandir=${placeholder "out"}/share/man"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # Can be unconditional, doing it like this to prevent a mass rebuild.
+    "STRIP_OPTS="
   ];
 
   extraContribModules = [
