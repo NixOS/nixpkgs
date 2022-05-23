@@ -213,6 +213,7 @@ stdenv.mkDerivation {
       else if targetPlatform.isM68k then "m68k"
       else if targetPlatform.isS390 then "s390"
       else if targetPlatform.isRiscV then "lriscv"
+      else if targetPlatform.isRx then "rx"
       else throw "unknown emulation for platform: ${targetPlatform.config}";
     in if targetPlatform.useLLVM or false then ""
        else targetPlatform.bfdEmulation or (fmt + sep + arch);
