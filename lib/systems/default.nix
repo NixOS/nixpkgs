@@ -34,8 +34,11 @@ rec {
       # Either of these can be losslessly-extracted from `parsed` iff parsing succeeds.
       system = parse.doubleFromSystem final.parsed;
       config = parse.tripleFromSystem final.parsed;
-      # Determine whether we are compatible with the provided CPU
-      isCompatible = platform: parse.isCompatible final.parsed.cpu platform.parsed.cpu;
+      # Determine whether we can execute binaries built for the provided platform.
+      canExecute = platform:
+        parse.isCompatible final.parsed.cpu platform.parsed.cpu
+        && final.parsed.kernel == platform.parsed.kernel;
+      isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
       # Derived meta-data
       libc =
         /**/ if final.isDarwin              then "libSystem"
