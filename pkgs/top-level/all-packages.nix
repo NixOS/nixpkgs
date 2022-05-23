@@ -31968,7 +31968,7 @@ with pkgs;
 
   opentyrian = callPackage ../games/opentyrian { };
 
-  openxcom = callPackage ../games/openxcom { };
+  openxcom = callPackage ../games/openxcom { SDL = SDL_compat; };
 
   openxray = callPackage ../games/openxray { };
 
