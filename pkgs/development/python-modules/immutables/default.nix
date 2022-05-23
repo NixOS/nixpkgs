@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "immutables";
-  version = "0.17";
+  version = "0.18";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "MagicStack";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-4VuB8eTWHD4hEDj11u/talfv38h2BhogSZmEVyUtnko=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-lXCoPTcpTOv9K0xCVjbrP3qlzP9tfk/e3Rk3oOmbS/Y=";
   };
 
   propagatedBuildInputs = [
