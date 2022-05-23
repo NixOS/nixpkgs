@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     install -Dm755 library/libevdi.so $out/lib/libevdi.so
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     description = "Extensible Virtual Display Interface";
     maintainers = with maintainers; [ eyjhb ];
