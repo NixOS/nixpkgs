@@ -143,7 +143,6 @@ in
       ] ++ lib.optionals (cfg.switchCommand == "boot") [ systemd ];
 
       script = ''
-        set -x
         if [ ! -e ${repositoryDirectory} ]; then
           mkdir --parents ${repositoryDirectory}
           git init ${repositoryDirectory}
