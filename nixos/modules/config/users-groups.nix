@@ -48,7 +48,7 @@ let
     services such as SSH, or indirectly via <command>su</command> or
     <command>sudo</command>). This should only be used for e.g. bootable
     live systems. Note: this is different from setting an empty password,
-    which ca be achieved using <option>users.users.&lt;name?&gt;.password</option>.
+    which can be achieved using <option>users.users.&lt;name?&gt;.password</option>.
 
     If set to <literal>null</literal> (default) this user will not
     be able to log in using a password (i.e. via <command>login</command>
