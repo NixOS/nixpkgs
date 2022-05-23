@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, glib, fuse, curl, glib-networking
-, asciidoc, libxml2, docbook_xsl, docbook_xml_dtd_45, libxslt, wrapGAppsNoGuiHook }:
+{ lib
+, stdenv
+, fetchgit
+, autoreconfHook
+, pkg-config
+, glib
+, fuse
+, curl
+, glib-networking
+, asciidoc
+, libxml2
+, docbook_xsl
+, docbook_xml_dtd_45
+, libxslt
+, wrapGAppsNoGuiHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "megatools";
@@ -12,11 +26,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config wrapGAppsNoGuiHook asciidoc libxml2
-    docbook_xsl docbook_xml_dtd_45 libxslt
+    asciidoc
+    autoreconfHook
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxml2
+    libxslt
+    pkg-config
+    wrapGAppsNoGuiHook
   ];
-  buildInputs = [ glib glib-networking curl ]
-  ++ lib.optionals stdenv.isLinux [ fuse ];
+
+  buildInputs = [
+    curl
+    glib
+    glib-networking
+  ] ++ lib.optionals stdenv.isLinux [ fuse ];
 
   enableParallelBuilding = true;
 
