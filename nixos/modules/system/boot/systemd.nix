@@ -35,11 +35,11 @@ let
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
-    ] ++ (optionals cfg.package.withCryptsetup [
+    ] ++ optionals cfg.package.withCryptsetup [
       "cryptsetup.target"
       "cryptsetup-pre.target"
       "remote-cryptsetup.target"
-    ]) ++ [
+    ] ++ [
       "sigpwr.target"
       "timers.target"
       "paths.target"
@@ -133,20 +133,27 @@ let
 
       # Slices / containers.
       "slices.target"
+    ] ++ optionals cfg.package.withImportd [
+      "systemd-importd.service"
+    ] ++ optionals cfg.package.withMachined [
       "machine.slice"
       "machines.target"
-      "systemd-importd.service"
       "systemd-machined.service"
+    ] ++ [
       "systemd-nspawn@.service"
 
       # Misc.
       "systemd-sysctl.service"
+    ] ++ optionals cfg.package.withTimedated [
       "dbus-org.freedesktop.timedate1.service"
-      "dbus-org.freedesktop.locale1.service"
-      "dbus-org.freedesktop.hostname1.service"
       "systemd-timedated.service"
+    ] ++ optionals cfg.package.withLocaled [
+      "dbus-org.freedesktop.locale1.service"
       "systemd-localed.service"
+    ] ++ optionals cfg.package.withHostnamed [
+      "dbus-org.freedesktop.hostname1.service"
       "systemd-hostnamed.service"
+    ] ++ [
       "systemd-exit.service"
       "systemd-update-done.service"
     ] ++ cfg.additionalUpstreamSystemUnits;
