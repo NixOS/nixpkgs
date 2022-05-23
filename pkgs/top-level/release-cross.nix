@@ -197,6 +197,7 @@ in
   x86_64-embedded = mapTestOnCross lib.systems.examples.x86_64-embedded embedded;
   riscv64-embedded = mapTestOnCross lib.systems.examples.riscv64-embedded embedded;
   riscv32-embedded = mapTestOnCross lib.systems.examples.riscv32-embedded embedded;
+  rx-embedded = mapTestOnCross lib.systems.examples.rx-embedded embedded;
 
   x86_64-netbsd = mapTestOnCross lib.systems.examples.x86_64-netbsd common;
 
