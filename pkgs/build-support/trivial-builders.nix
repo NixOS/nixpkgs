@@ -68,6 +68,7 @@ rec {
     # extra arguments to pass to stdenv.mkDerivation
     , name
     # name of the resulting derivation
+    # TODO(@Artturin): enable strictDeps always
     }: buildCommand:
     stdenv.mkDerivation ({
       inherit buildCommand name;
@@ -527,6 +528,7 @@ rec {
     runCommand name
       (substitutions // {
         inherit meta;
+        strictDeps = true;
       })
       (''
         mkdir -p $out/nix-support

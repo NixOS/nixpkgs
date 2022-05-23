@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-swapHA/ZO8QoDPwumMt6s5gf91oYe+oyk4EfRSyJqMg=";
   };
 
+  strictDeps = true;
   doCheck = false;
 
   configureFlags = [ "--with-syscmd-shell=${stdenv.shell}" ]

@@ -231,6 +231,8 @@ in {
     enableLTO = false;
     mimetypesSupport = false;
   } // sources.python39)).overrideAttrs(old: {
+    # TODO(@Artturin): Add this to the main cpython expr
+    strictDeps = true;
     pname = "python3-minimal";
     meta = old.meta // {
       maintainers = [];
