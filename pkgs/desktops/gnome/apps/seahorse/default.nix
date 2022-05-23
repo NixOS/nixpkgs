@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     gcr
     gsettings-desktop-schemas
     gnupg
-    gnome.adwaita-icon-theme
     gpgme
     libsecret
     avahi
@@ -76,6 +75,13 @@ stdenv.mkDerivation rec {
     addToSearchPath XDG_DATA_DIRS "${glib.getSchemaDataDirPath gcr}"
     # The same test also requires home directory so that it can store settings.
     export HOME=$TMPDIR
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Pick up icons from Gcr
+      --prefix XDG_DATA_DIRS : "${gcr}/share"
+    )
   '';
 
   passthru = {
