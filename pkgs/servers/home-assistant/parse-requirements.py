@@ -103,13 +103,13 @@ def repository_root() -> str:
     return os.path.abspath(sys.argv[0] + "/../../../..")
 
 
-# For a package attribute and and an extra, check if the package exposes it via passthru.extras-require
+# For a package attribute and and an extra, check if the package exposes it via passthru.optional-dependencies
 def has_extra(package: str, extra: str):
     cmd = [
         "nix-instantiate",
         repository_root(),
         "-A",
-        f"{package}.extras-require.{extra}",
+        f"{package}.optional-dependencies.{extra}",
     ]
     try:
         subprocess.run(
@@ -209,7 +209,7 @@ def main() -> None:
                 attr_paths.append(pname)
                 for extra in extras:
                     # Check if package advertises extra requirements
-                    extra_attr = f"{pname}.extras-require.{extra}"
+                    extra_attr = f"{pname}.optional-dependencies.{extra}"
                     if has_extra(attr_path, extra):
                         extra_attrs.append(extra_attr)
                     else:

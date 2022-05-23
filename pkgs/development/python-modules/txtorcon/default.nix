@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     incremental twisted automat zope_interface
-  ] ++ twisted.extras-require.tls
+  ] ++ twisted.optional-dependencies.tls
   ++ lib.optionals (!isPy3k) [ ipaddress ];
 
   checkInputs = [ pytestCheckHook mock lsof GeoIP ];

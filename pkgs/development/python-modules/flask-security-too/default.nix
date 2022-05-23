@@ -63,7 +63,7 @@ buildPythonPackage rec {
     passlib
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     babel = [
       babel
       flask-babel
@@ -95,10 +95,10 @@ buildPythonPackage rec {
     pytestCheckHook
     zxcvbn
   ]
-  ++ passthru.extras-require.babel
-  ++ passthru.extras-require.common
-  ++ passthru.extras-require.fsqla
-  ++ passthru.extras-require.mfa;
+  ++ passthru.optional-dependencies.babel
+  ++ passthru.optional-dependencies.common
+  ++ passthru.optional-dependencies.fsqla
+  ++ passthru.optional-dependencies.mfa;
 
 
   pythonImportsCheck = [ "flask_security" ];

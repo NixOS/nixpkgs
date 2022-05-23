@@ -33,7 +33,7 @@ buildPythonPackage rec {
     rsa
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     async = [
       aiofiles
     ];
@@ -47,8 +47,8 @@ buildPythonPackage rec {
     pycryptodome
     pytestCheckHook
   ]
-  ++ passthru.extras-require.async
-  ++ passthru.extras-require.usb;
+  ++ passthru.optional-dependencies.async
+  ++ passthru.optional-dependencies.usb;
 
   disabledTests = lib.optionals (pythonAtLeast "3.10") [
     # Tests are failing with Python 3.10

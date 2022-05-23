@@ -60,8 +60,8 @@ python3Packages.buildPythonApplication rec {
     html5lib magic-wormhole netifaces pyasn1 pycrypto pyutil pyyaml recommonmark
     service-identity simplejson sphinx_rtd_theme testtools treq twisted zfec
     zope_interface
-  ] ++ twisted.extras-require.tls
-    ++ twisted.extras-require.conch;
+  ] ++ twisted.optional-dependencies.tls
+    ++ twisted.optional-dependencies.conch;
 
   checkInputs = with python3Packages; [ mock hypothesis twisted ];
 
