@@ -1047,7 +1047,10 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  honggfuzz = callPackage ../tools/security/honggfuzz { };
+  honggfuzz = callPackage ../tools/security/honggfuzz {
+    clang = clang_12;
+    llvm = llvm_12;
+  };
 
   aflplusplus = callPackage ../tools/security/aflplusplus {
     clang = clang_9;
