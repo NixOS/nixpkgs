@@ -1,6 +1,5 @@
 { stdenv
 , lib
-, darwin
 , makeSetupHook
 , dieHook
 , writeShellScript
@@ -12,7 +11,7 @@
 makeSetupHook {
   deps = [ dieHook ]
     # https://github.com/NixOS/nixpkgs/issues/148189
-    ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) darwin.cctools;
+    ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) cc;
 
   substitutions = {
     cc = "${cc}/bin/cc ${lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers)}";
