@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, ghostscript }:
+{ lib, stdenv, fetchurl, ghostscript, glibc }:
 
 stdenv.mkDerivation rec {
   pname = "hmetis";
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     for binaryfile in $binaryFiles; do
       patchelf \
-        --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 \
-        --set-rpath ${stdenv.glibc}/lib \
+        --set-interpreter ${glibc}/lib/ld-linux.so.2 \
+        --set-rpath ${glibc}/lib \
         $binaryfile
     done
   '';

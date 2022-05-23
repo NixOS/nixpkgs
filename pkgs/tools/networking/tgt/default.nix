@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl
+{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl, glibc
 , docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
 }:
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile
     sed -i 's|/usr/include/libaio.h|${libaio}/include/libaio.h|' usr/Makefile
-    sed -i 's|/usr/include/sys/|${stdenv.glibc.dev}/include/sys/|' usr/Makefile
-    sed -i 's|/usr/include/linux/|${stdenv.glibc.dev}/include/linux/|' usr/Makefile
+    sed -i 's|/usr/include/sys/|${glibc.dev}/include/sys/|' usr/Makefile
+    sed -i 's|/usr/include/linux/|${glibc.dev}/include/linux/|' usr/Makefile
   '';
 
   postInstall = ''

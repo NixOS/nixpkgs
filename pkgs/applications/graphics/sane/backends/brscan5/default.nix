@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb1, avahi-compat, glib, libredirect, nixosTests }:
+{ stdenv, lib, fetchurl, callPackage, patchelf, makeWrapper, libusb1, avahi-compat, glib, libredirect, nixosTests, glibc }:
 let
   myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
-      ${stdenv.glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
+      ${glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
   system = stdenv.hostPlatform.system;

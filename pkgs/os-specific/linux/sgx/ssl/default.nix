@@ -1,4 +1,5 @@
 { stdenv
+, glibc
 , fetchFromGitHub
 , fetchpatch
 , fetchurl
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     sgx-sdk
-    stdenv.glibc
+    glibc
     which
   ];
 
