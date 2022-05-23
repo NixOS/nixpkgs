@@ -33,7 +33,7 @@ buildPythonPackage rec {
     aiohttp
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     console = [
       certifi
       docopt
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     asynctest
     pytest-asyncio
     pytestCheckHook
-  ] ++ passthru.extras-require.mqtt;
+  ] ++ passthru.optional-dependencies.mqtt;
 
   pythonImportsCheck = [ "volvooncall" ];
 

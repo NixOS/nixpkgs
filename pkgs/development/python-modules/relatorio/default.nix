@@ -27,14 +27,14 @@ buildPythonPackage rec {
     lxml
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     chart = [ /* pycha */ pyyaml ];
     fodt = [ python-magic ];
   };
 
   checkInputs = [
     pytestCheckHook
-  ] ++ passthru.extras-require.fodt;
+  ] ++ passthru.optional-dependencies.fodt;
 
   pythonImportsCheck = [ "relatorio" ];
 

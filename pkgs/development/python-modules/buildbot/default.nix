@@ -54,7 +54,7 @@ let
       pyyaml
     ]
       # tls
-      ++ twisted.extras-require.tls;
+      ++ twisted.optional-dependencies.tls;
 
     checkInputs = [
       treq

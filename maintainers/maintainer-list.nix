@@ -1412,6 +1412,12 @@
     githubId = 916366;
     name = "Brandon Elam Barker";
   };
+  bbenno = {
+    email = "nix@bbenno.com";
+    github = "bbenno";
+    githubId = 32938211;
+    name = "Benno Bielmeier";
+  };
   bbigras = {
     email = "bigras.bruno@gmail.com";
     github = "bbigras";
@@ -4248,6 +4254,13 @@
       fingerprint = "2F93 661D AC17 EA98 A104  F780 ECC7 55EE 583C 1672";
     }];
   };
+  fleaz = {
+    email = "mail@felixbreidenstein.de";
+    matrix = "@fleaz:rainbownerds.de";
+    github = "fleaz";
+    githubId = 2489598;
+    name = "Felix Breidenstein";
+  };
   flexagoon = {
     email = "flexagoon@pm.me";
     github = "flexagoon";
@@ -5444,6 +5457,12 @@
     github = "immae";
     githubId = 510202;
     name = "Ismaël Bouya";
+  };
+  imsofi = {
+    email = "sofi+git@mailbox.org";
+    github = "imsofi";
+    githubId = 20756843;
+    name = "Sofi";
   };
   imuli = {
     email = "i@imu.li";
@@ -12167,6 +12186,12 @@
     github = "SubhrajyotiSen";
     githubId = 12984845;
     name = "Subhrajyoti Sen";
+  };
+  sudosubin = {
+    email = "sudosubin@gmail.com";
+    github = "sudosubin";
+    githubId = 32478597;
+    name = "Subin Kim";
   };
   suhr = {
     email = "suhr@i2pmail.org";

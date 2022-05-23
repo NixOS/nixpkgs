@@ -42,7 +42,7 @@ buildPythonPackage rec {
     sniffio
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     http2 = [ h2 ];
     socks = [ socksio ];
   };
@@ -56,8 +56,8 @@ buildPythonPackage rec {
     trio
     trustme
     uvicorn
-  ] ++ passthru.extras-require.http2
-    ++ passthru.extras-require.socks;
+  ] ++ passthru.optional-dependencies.http2
+    ++ passthru.optional-dependencies.socks;
 
   pythonImportsCheck = [ "httpcore" ];
 

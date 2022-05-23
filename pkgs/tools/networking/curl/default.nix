@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkg-config, perl
+{ lib, stdenv, fetchurl, pkg-config, perl, nixosTests
 , brotliSupport ? false, brotli ? null
 , c-aresSupport ? false, c-ares ? null
 , gnutlsSupport ? false, gnutls ? null
@@ -177,6 +177,8 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    # Additional checking with support http3 protocol.
+    tests.nginx-http3 = nixosTests.nginx-http3;
     inherit opensslSupport openssl;
     tests = {
       inherit curlpp coeurl;
