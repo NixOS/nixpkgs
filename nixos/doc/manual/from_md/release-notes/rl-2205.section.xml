@@ -1,9 +1,5 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.05">
   <title>Release 22.05 (“Quokka”, 2022.05/??)</title>
-  <para>
-    In addition to numerous new and upgraded packages, this release has
-    the following highlights:
-  </para>
   <itemizedlist spacing="compact">
     <listitem>
       <para>
@@ -14,6 +10,10 @@
   </itemizedlist>
   <section xml:id="sec-release-22.05-highlights">
     <title>Highlights</title>
+    <para>
+      In addition to numerous new and upgraded packages, this release
+      has the following highlights:
+    </para>
     <itemizedlist>
       <listitem>
         <para>
@@ -586,6 +586,15 @@
           <literal>libcontainer</literal> based software such as Podman
           and Skopeo which assumes they have ownership over
           <literal>/etc/containers</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>lib.systems.supported</literal> has been removed, as
+          it was overengineered for determining the systems to support
+          in the nixpkgs flake. The list of systems exposed by the
+          nixpkgs flake can now be accessed as
+          <literal>lib.systems.flakeExposed</literal>.
         </para>
       </listitem>
       <listitem>

@@ -15,7 +15,7 @@ rec {
     sha256 = "1zw9azwmxr4991nq5kl527lbwlj7psrissgvrkl1kxxbfbdncbhh";
 
     stripRoot = false;
-    extraPostFetch = ''
+    postFetch = ''
       cd $out
       mv ring-project/* ./
       rm -r ring-project.rst ring-project client-android client-ios client-macosx client-uwp

@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
       "R-${fullVersion}/${pname}-${version}-${metadata.platform}.zip";
     inherit (metadata) sha256;
     stripRoot = false;
-    extraPostFetch = ''
+    postFetch = ''
       mkdir "$unpackDir"
       cd "$unpackDir"
 
