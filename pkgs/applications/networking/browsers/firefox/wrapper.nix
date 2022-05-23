@@ -1,4 +1,4 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
+{ stdenv, lib, makeDesktopItem, makeWrapper, makeBinaryWrapper, lndir, config
 , fetchurl, zip, unzip, jq, xdg-utils, writeText
 
 ## various stuff that can be plugged in
@@ -231,7 +231,7 @@ let
           # Symbolic link: wrap the link's target.
           oldExe="$(readlink -v --canonicalize-existing "$executablePath")"
           rm "$executablePath"
-        elif wrapperCmd=$(strings -dw "$executablePath" | sed -n '/^makeCWrapper/,/^$/ p'); [[ $wrapperCmd ]]; then
+        elif wrapperCmd=$(${makeBinaryWrapper.extractCmd} "$executablePath"); [[ $wrapperCmd ]]; then
           # If the executable is a binary wrapper, we need to update its target to
           # point to $out, but we can't just edit the binary in-place because of length
           # issues. So we extract the command used to create the wrapper and add the
@@ -239,10 +239,7 @@ let
           parseMakeCWrapperCall() {
             shift # makeCWrapper
             oldExe=$1; shift
-            for arg do case $arg in
-              --inherit-argv0) oldWrapperArgs+=(--argv0 '$0');; # makeWrapper doesn't understand --inherit-argv0
-              *) oldWrapperArgs+=("$arg");;
-            esac done
+            oldWrapperArgs=("$@")
           }
           eval "parseMakeCWrapperCall ''${wrapperCmd//"${browser}"/"$out"}"
           rm "$executablePath"
