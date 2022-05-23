@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, autoPatchelfHook, electron, git, curl, expat, gcc, openssl, zlib }:
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, autoPatchelfHook, electron, curl, expat, openssl, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "logseq";
@@ -38,7 +38,6 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --prefix PATH : ${lib.makeBinPath [ git ]} \
       --add-flags $out/share/${pname}/resources/app
   '';
 
