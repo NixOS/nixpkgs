@@ -18,6 +18,12 @@ buildGo117Module rec {
     sha256 = "1wi28v1xhav8p2jqkf2gmk1accfcf1w0d6h312d4pns6pkhdabxv";
   };
 
+  patches = [
+    # https://github.com/grafana/grafana/commit/2f756845006820de4ad2b33e4be8338b81217d41, but
+    # rebased onto 8.4.x
+    ./CVE-2022-29170.patch
+  ];
+
   vendorSha256 = "sha256-7ZeOncdiA/0Awg+olJvsLneLQH4zBQka4M81jsxwUdE=";
 
   nativeBuildInputs = [ wire ];
