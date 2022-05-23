@@ -282,9 +282,6 @@ in python.pkgs.buildPythonApplication rec {
     respx
     stdlib-list
     tqdm
-    # required by tests/pylint
-    astroid
-    pylint
     # required by tests/auth/mfa_modules
     pyotp
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
@@ -308,6 +305,8 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   disabledTestPaths = [
+    # we don't care about code quality
+    "tests/pylint"
     # don't bulk test all components
     "tests/components"
     # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0

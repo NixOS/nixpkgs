@@ -1105,6 +1105,10 @@ in {
 
   babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
+  pulumi = callPackage ../development/python-modules/pulumi { };
+
+  pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
+
   backcall = callPackage ../development/python-modules/backcall { };
 
   backoff = callPackage ../development/python-modules/backoff { };

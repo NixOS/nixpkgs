@@ -81,8 +81,11 @@ in
       "systemd-logind.service"
       "autovt@.service"
       "systemd-user-sessions.service"
+    ] ++ optionals config.systemd.package.withImportd [
       "dbus-org.freedesktop.import1.service"
+    ] ++ optionals config.systemd.package.withMachined [
       "dbus-org.freedesktop.machine1.service"
+    ] ++ [
       "dbus-org.freedesktop.login1.service"
       "user@.service"
       "user-runtime-dir@.service"
