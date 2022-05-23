@@ -4,8 +4,8 @@ with ocamlPackages;
 
 janePackage {
   pname = "patdiff";
-  hash = "1yslj6xxyv8rx8y5s1civ1zq8y6vvxmkszdds958zdm1p1ign54r";
-  buildInputs = [ core patience_diff ocaml_pcre ];
+  hash = "0623a7n5r659rkxbp96g361mvxkcgc6x9lcbkm3glnppplk5kxr9";
+  propagatedBuildInputs = [ core_unix patience_diff ocaml_pcre ];
   meta = {
     description = "File Diff using the Patience Diff algorithm";
   };
