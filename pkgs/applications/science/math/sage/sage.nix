@@ -2,6 +2,7 @@
 , makeWrapper
 , sage-tests
 , sage-with-env
+, jupyter-kernel-definition
 , jupyter-kernel-specs
 , sagedoc
 , withDoc
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     quicktest = sage-tests.override { longTests = false; timeLimit = 600; }; # as many tests as possible in ~10m
     doc = sagedoc;
     lib = sage-with-env.env.lib;
-    kernelspec = jupyter-kernel-specs.definition.sagemath;
+    kernelspec = jupyter-kernel-definition;
   };
 
   meta = with lib; {
