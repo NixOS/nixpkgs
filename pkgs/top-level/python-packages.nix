@@ -6338,6 +6338,8 @@ in {
 
   pencompy = callPackage ../development/python-modules/pencompy { };
 
+  phonemes2ids = callPackage ../development/python-modules/phonemes2ids { };
+
   pixcat = callPackage ../development/python-modules/pixcat { };
 
   pyprecice = callPackage ../development/python-modules/pyprecice { };
