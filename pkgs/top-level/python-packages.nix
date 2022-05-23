@@ -6322,6 +6322,8 @@ in {
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
+  larynx = callPackage ../development/python-modules/larynx { };
+
   micloud = callPackage ../development/python-modules/micloud { };
 
   netmap = callPackage ../development/python-modules/netmap { };

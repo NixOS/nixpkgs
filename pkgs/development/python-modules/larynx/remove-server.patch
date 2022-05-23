@@ -1,0 +1,41 @@
+diff --git a/requirements.txt b/requirements.txt
+index 9b091c4..9269d34 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,12 +1,9 @@
+ dataclasses-json~=0.5.0
+-gruut[de,es,fr,it,nl,ru,sv,sw]~=2.1.0
++gruut
+ numpy>=1.20.0
+-onnxruntime>=1.6.0,<2.0
+-phonemes2ids~=1.0.0
++onnxruntime
++phonemes2ids
+ python-pidfile~=3.0.0
+ psutil~=5.8.0
+-quart~=0.15.0
+-quart-cors~=0.5.0
+-swagger-ui-py~=21.9.28
+ torch~=1.8.0
+ tqdm~=4.48.2
+diff --git a/setup.py b/setup.py
+index 85fd07e..ad0e460 100644
+--- a/setup.py
++++ b/setup.py
+@@ -28,7 +28,7 @@ with open(version_path, "r", encoding="utf-8") as version_file:
+ 
+ data_files = [
+     str(f.relative_to(module_dir))
+-    for d in ["css", "templates", "wav"]
++    for d in ["wav"]
+     for f in (module_dir / d).rglob("*")
+     if f.is_file()
+ ]
+@@ -48,7 +48,6 @@ setuptools.setup(
+     entry_points={
+         "console_scripts": [
+             "larynx = larynx.__main__:main",
+-            "larynx-server = larynx.server.__main__:main",
+         ]
+     },
+     classifiers=[
