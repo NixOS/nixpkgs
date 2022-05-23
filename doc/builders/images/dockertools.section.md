@@ -336,7 +336,7 @@ It also provides a `/etc/nsswitch.conf`, configuring NSS host resolution to
 first check `/etc/hosts`, before checking DNS, as the default in the absence of
 a config file (`dns [!UNAVAIL=return] files`) is quite unexpected.
 
-You usually might to pair it with binSh, which provides `bin/sh` as a symlink
+You can pair it with `binSh`, which provides `bin/sh` as a symlink
 to `bashInteractive` (as `/bin/sh` is configured as a shell).
 
 ```nix
