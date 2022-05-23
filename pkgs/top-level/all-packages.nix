@@ -30499,6 +30499,7 @@ with pkgs;
     libwebp = null;
     xwayland = null;
     pipewire = null;
+    demo = null;
   };
 
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {};

@@ -3,7 +3,7 @@
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
 , colord, lcms2, pipewire ? null
 , pango ? null, libunwind ? null, freerdp ? null, vaapi ? null, libva ? null
-, libwebp ? null, xwayland ? null, wayland-protocols
+, libwebp ? null, xwayland ? null, demo ? true, wayland-protocols
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "-Dremoting=false" # TODO
     "-Dpipewire=${boolToString (pipewire != null)}"
     "-Dimage-webp=${boolToString (libwebp != null)}"
-    "-Ddemo-clients=false"
+    "-Ddemo-clients=${boolToString (demo != null)}"
     "-Dsimple-clients="
     "-Dtest-junit-xml=false"
     # TODO:
