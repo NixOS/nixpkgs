@@ -4519,6 +4519,12 @@
       fingerprint = "0200 3EF8 8D2B CF2D 8F00  FFDC BBB3 E40E 5379 7FD9";
     }];
   };
+  GaetanLepage = {
+    email = "gaetan@glepage.com";
+    github = "GaetanLepage";
+    githubId = 33058747;
+    name = "Gaetan Lepage";
+  };
   gal_bolle = {
     email = "florent.becker@ens-lyon.org";
     github = "FlorentBecker";
