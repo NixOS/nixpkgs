@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, numpy, pillow, zbar, pytestCheckHook }:
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, pillow, zbar, pytestCheckHook, stdenv }:
 
 buildPythonPackage rec {
   pname = "pyzbar";
@@ -36,5 +36,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/NaturalHistoryMuseum/pyzbar";
     license = licenses.mit;
     maintainers = with maintainers; [ gador ];
+    # zbar-0.23.90-lib/lib/libzbar.so.0, 6): image not found
+    broken = stdenv.isDarwin;
   };
 }
