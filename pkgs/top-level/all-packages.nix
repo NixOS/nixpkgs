@@ -12979,9 +12979,8 @@ with pkgs;
   gcc-arm-embedded-10 = callPackage ../development/compilers/gcc-arm-embedded/10 {};
   gcc-arm-embedded = gcc-arm-embedded-10;
 
-  # Has to match the default gcc so that there are no linking errors when
-  # using C/C++ libraries in D packages
-  gdc = wrapCC (gcc.cc.override {
+  gdc = gdc9;
+  gdc9 = wrapCC (gcc9.cc.override {
     name = "gdc";
     langCC = false;
     langC = false;
