@@ -64,5 +64,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
     maintainers = with maintainers; [ abbradar ];
     license = licenses.gpl2Plus;
+    broken = kernel.kernelAtLeast "5.18";
   };
 }
