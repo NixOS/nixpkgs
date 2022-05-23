@@ -418,6 +418,14 @@ in {
         '';
       };
 
+      extraSecrets = lib.mkOption {
+        type = lib.types.attrs;
+        default = {};
+        description = ''
+          Files containing extra secret environment variables to pass to all mastodon services.
+        '';
+      };
+
       automaticMigrations = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -463,7 +471,13 @@ in {
         DB_PASS="$(cat ${cfg.database.passwordFile})"
       '' + (if cfg.smtp.authenticate then ''
         SMTP_PASSWORD="$(cat ${cfg.smtp.passwordFile})"
-      '' else "") + ''
+      '' else "") +
+      lib.concatStringsSep "\n" (
+        lib.mapAttrsToList (
+          name: value: ''${name}="$(cat ${value})"''
+        ) cfg.extraSecrets
+      ) + ''
+
         EOF
       '';
       environment = env;
