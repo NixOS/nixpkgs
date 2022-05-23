@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, which, pkg-config, gtk2, pcre, glib, libxml2
+{ lib, stdenv, fetchurl, which, pkg-config, gtk2, pcre, glib, libxml2, glibc
 , libsoup ? null
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s/^CFLAGS = \(.*\)/CFLAGS = \1 -std=gnu89/" Makefile.in
 
     substituteInPlace ./arch/linux/common/modules.h --replace /sbin/modinfo modinfo
-    substituteInPlace ./arch/linux/common/os.h --replace /lib/libc.so.6 ${stdenv.glibc.out}/lib/libc.so.6
+    substituteInPlace ./arch/linux/common/os.h --replace /lib/libc.so.6 ${glibc.out}/lib/libc.so.6
   '';
 
   # Makefile supports DESTDIR but not PREFIX (it hardcodes $DESTDIR/usr/).

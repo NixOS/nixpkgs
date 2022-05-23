@@ -30,7 +30,7 @@
 let
   myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
-      ${stdenv.glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
+      ${glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
 in

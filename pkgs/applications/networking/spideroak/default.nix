@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper, patchelf
+{ lib, stdenv, fetchurl, makeWrapper, patchelf, glibc
 , fontconfig, freetype, glib, libICE, libSM
 , libX11, libXext, libXrender, zlib
 }:
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
 
     rm -f $out/opt/SpiderOakONE/lib/libz*
 
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2 \
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 \
       "$out/opt/SpiderOakONE/lib/SpiderOakONE"
 
     RPATH=$out/opt/SpiderOakONE/lib:${ldpath}

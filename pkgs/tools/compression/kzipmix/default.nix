@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, glibc }:
 
 stdenv.mkDerivation rec {
   pname = "kzipmix";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp amd64/{kzip,zipmix} $out/bin
 
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/bin/kzip
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/bin/zipmix
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux.so.2 $out/bin/kzip
+    patchelf --set-interpreter ${glibc.out}/lib/ld-linux.so.2 $out/bin/zipmix
   '';
 
   meta = with lib; {

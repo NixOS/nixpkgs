@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , unzip
+, glibc
 }:
 
 let
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ${platform.folder}/pngout $out/bin
   '' + lib.optionalString stdenv.isLinux ''
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/${platform.ld-linux} $out/bin/pngout
+    patchelf --set-interpreter ${glibc.out}/lib/${platform.ld-linux} $out/bin/pngout
   '';
 
   meta = {

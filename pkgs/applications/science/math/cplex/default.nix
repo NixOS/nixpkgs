@@ -1,4 +1,4 @@
-{ lib, stdenv, makeWrapper, openjdk, gtk2, xorg, glibcLocales, releasePath ? null }:
+{ lib, stdenv, makeWrapper, openjdk, gtk2, xorg, glibc, glibcLocales, releasePath ? null }:
 
 # To use this package, you need to download your own cplex installer from IBM
 # and override the releasePath attribute to point to the location of the file.
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   let
     libraryPath = lib.makeLibraryPath [ stdenv.cc.cc gtk2 xorg.libXtst ];
   in ''
-    interpreter=${stdenv.glibc}/lib/ld-linux-x86-64.so.2
+    interpreter=${glibc}/lib/ld-linux-x86-64.so.2
 
     for pgm in $out/opl/bin/x86-64_linux/oplrun $out/opl/bin/x86-64_linux/oplrunjava $out/opl/oplide/oplide;
     do
