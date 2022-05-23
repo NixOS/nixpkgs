@@ -7,6 +7,7 @@
 , version ? import ./version.nix
 , srcOverride ? null
 , dependenciesDir ? ./.  # Should contain gemset.nix, yarn.nix and package.json.
+, yarnSha256 ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    sha256 = "sha256-FCwyJJwZ3/CVPT8LUid+KJcWCmFQet8Cftl7DVYhZ6I=";
+    sha256 = if yarnSha256 != null then yarnSha256 else "sha256-FCwyJJwZ3/CVPT8LUid+KJcWCmFQet8Cftl7DVYhZ6I=";
   };
 
   mastodon-gems = bundlerEnv {
