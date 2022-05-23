@@ -16,6 +16,47 @@ args @ {
 , unshareUts ? true
 , unshareCgroup ? true
 , dieWithParent ? true
+, etcFiles ? [
+    # NixOS Compatibility
+    "static"
+    "nix" # mainly for nixUnstable users, but also for access to nix/netrc
+    # Shells
+    "bashrc"
+    "zshenv"
+    "zshrc"
+    "zinputrc"
+    "zprofile"
+    # Users, Groups, NSS
+    "passwd"
+    "group"
+    "shadow"
+    "hosts"
+    "resolv.conf"
+    "nsswitch.conf"
+    # User profiles
+    "profiles"
+    # Sudo & Su
+    "login.defs"
+    "sudoers"
+    "sudoers.d"
+    # Time
+    "localtime"
+    "zoneinfo"
+    # Other Core Stuff
+    "machine-id"
+    "os-release"
+    # PAM
+    "pam.d"
+    # Fonts
+    "fonts"
+    # ALSA
+    "alsa"
+    "asound.conf"
+    # SSL
+    "ssl/certs"
+    "ca-certificates"
+    "pki"
+  ]
 , ...
 }:
 
@@ -25,53 +66,11 @@ let
 
   env = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
-    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
+    "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc" "etcFiles"
   ]);
 
-  etcBindFlags = let
-    files = [
-      # NixOS Compatibility
-      "static"
-      "nix" # mainly for nixUnstable users, but also for access to nix/netrc
-      # Shells
-      "bashrc"
-      "zshenv"
-      "zshrc"
-      "zinputrc"
-      "zprofile"
-      # Users, Groups, NSS
-      "passwd"
-      "group"
-      "shadow"
-      "hosts"
-      "resolv.conf"
-      "nsswitch.conf"
-      # User profiles
-      "profiles"
-      # Sudo & Su
-      "login.defs"
-      "sudoers"
-      "sudoers.d"
-      # Time
-      "localtime"
-      "zoneinfo"
-      # Other Core Stuff
-      "machine-id"
-      "os-release"
-      # PAM
-      "pam.d"
-      # Fonts
-      "fonts"
-      # ALSA
-      "alsa"
-      "asound.conf"
-      # SSL
-      "ssl/certs"
-      "ca-certificates"
-      "pki"
-    ];
-  in concatStringsSep "\n  "
-  (map (file: "--ro-bind-try $(${coreutils}/bin/readlink -f /etc/${file}) /etc/${file}") files);
+  etcBindFlags = concatStringsSep "\n  "
+  (map (file: "--ro-bind-try $(${coreutils}/bin/readlink -f /etc/${file}) /etc/${file}") etcFiles);
 
   # Create this on the fly instead of linking from /nix
   # The container might have to modify it and re-run ldconfig if there are
