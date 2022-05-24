@@ -46,7 +46,7 @@ let
   version = {
     aarch64-darwin = "5.10.4.6592";
     x86_64-darwin = "5.10.4.6592";
-    x86_64-linux = "5.10.4.2845";
+    x86_64-linux = "5.10.6.3192";
    }.${system} or throwSystem;
 
   srcs = {
@@ -60,7 +60,7 @@ let
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "9gspydrGaEjzAM0nK1u0XNm07HTupJ2wnPxCFWy+Nts=";
+      sha256 = "8QIkF5+875VFoGK6T0CROsqML6bJDG934c1gkuz8Klk=";
     };
   };
 
