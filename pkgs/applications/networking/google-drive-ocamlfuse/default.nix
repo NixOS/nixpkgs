@@ -1,21 +1,21 @@
 { lib, buildDunePackage, fetchFromGitHub
 , ocaml_extlib, ocamlfuse, gapi_ocaml, ocaml_sqlite3
+, ounit
 }:
 
 buildDunePackage rec {
   pname = "google-drive-ocamlfuse";
-  version = "0.7.26";
-
-  useDune2 = true;
-
-  minimumOCamlVersion = "4.06";
+  version = "0.7.27";
 
   src = fetchFromGitHub {
     owner = "astrada";
     repo = "google-drive-ocamlfuse";
     rev = "v${version}";
-    sha256 = "sha256-8s3DnpdYIVyJj5rtsof3WpLvX9wCrWU47dp4D6c986s=";
+    sha256 = "sha256:0dnllnzdc1lg742a4rqhwscnhwm4kv0sqq35bmg59fyws08cj2z8";
   };
+
+  doCheck = true;
+  checkInputs = [ ounit ];
 
   buildInputs = [ ocaml_extlib ocamlfuse gapi_ocaml ocaml_sqlite3 ];
 
