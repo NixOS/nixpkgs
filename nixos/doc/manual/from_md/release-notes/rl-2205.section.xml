@@ -1282,6 +1282,11 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>i3-rounded</literal> package was added at version 4.20.1.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The iputils package, which is installed by default, no longer
           provides the legacy tools <literal>tftpd</literal> and
           <literal>traceroute6</literal>. More tools
