@@ -27,7 +27,7 @@
 , flask
 , flask_login
 , flask_principal
-, flask_wtf
+, flask-wtf
 , itsdangerous
 , passlib
 
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     flask
     flask_login
     flask_principal
-    flask_wtf
+    flask-wtf
     itsdangerous
     passlib
   ];
