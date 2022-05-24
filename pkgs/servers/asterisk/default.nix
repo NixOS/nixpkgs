@@ -4,6 +4,7 @@
   lua, speex, libopus, opusfile, libogg,
   srtp, wget, curl, iksemel, pkg-config,
   autoconf, libtool, automake,
+  python39, writeScript,
   withOpus ? true,
 }:
 
@@ -120,6 +121,12 @@ let
     };
   }) (lib.importJSON ./versions.json);
 
+  updateScript_python = python39.withPackages (p: with p; [ packaging beautifulsoup4 requests ]);
+  updateScript = writeScript "asterisk-update" ''
+    #!/usr/bin/env bash
+    exec ${updateScript_python}/bin/python ${toString ./update.py}
+  '';
+
 in {
   # Supported releases (as of 2022-04-05).
   # Source: https://wiki.asterisk.org/wiki/display/AST/Asterisk+Versions
@@ -131,6 +138,9 @@ in {
   # 19.x    Standard   2021-11-02  2022-11-02  2023-11-02
   asterisk-lts = versions.asterisk_18;
   asterisk-stable = versions.asterisk_19;
-  asterisk = versions.asterisk_19;
+  asterisk = versions.asterisk_19.overrideAttrs (o: let
+  in {
+    passthru = (o.passthru or {}) // { inherit updateScript; };
+  });
 
 } // versions
