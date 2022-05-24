@@ -6,7 +6,7 @@
 
 mkDerivation rec {
   pname = "qgroundcontrol";
-  version = "4.2.0";
+  version = "4.2.1";
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -64,7 +64,7 @@ mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TBnJQKO9cwxP9q+bIB1CaGnm9npymJ3iEAD9kPJi9JA=";
+    sha256 = "sha256-7POrc6RUm3GVx3KuPUBNbKRUvUmA2UkEL7ezQVQt/yo=";
     fetchSubmodules = true;
   };
 
