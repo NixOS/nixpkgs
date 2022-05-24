@@ -10,8 +10,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "ce979583dff5fc2f6cbce354c3e2dceafee454ca";
-    hash = "sha256-/hEytY5kbOgH/fatboOO5yDxVq6kUtGFQeF2UO7OX28=";
+    rev = "dbcc43c31a4576f90e1e468d3a85c2dfdb25ec42";
+    hash = "sha256-IDHolspYtwjV5r5WArWl1g4zgKLvPd4ydKKH/aE5NSg=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     license = with licenses; [ bsd3 gpl2Only ];
     maintainers = with maintainers; [ tvorog atila ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.14" || kernel.kernelAtLeast "5.14";
+    broken = kernel.kernelOlder "4.14";
     priority = -1;
   };
 }
