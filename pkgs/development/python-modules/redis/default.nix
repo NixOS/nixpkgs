@@ -40,7 +40,7 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     hidredis = [
       hiredis
     ];

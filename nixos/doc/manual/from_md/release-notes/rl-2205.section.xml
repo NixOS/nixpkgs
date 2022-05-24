@@ -1,9 +1,5 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.05">
   <title>Release 22.05 (“Quokka”, 2022.05/??)</title>
-  <para>
-    In addition to numerous new and upgraded packages, this release has
-    the following highlights:
-  </para>
   <itemizedlist spacing="compact">
     <listitem>
       <para>
@@ -14,6 +10,10 @@
   </itemizedlist>
   <section xml:id="sec-release-22.05-highlights">
     <title>Highlights</title>
+    <para>
+      In addition to numerous new and upgraded packages, this release
+      has the following highlights:
+    </para>
     <itemizedlist>
       <listitem>
         <para>
@@ -118,6 +118,11 @@
       </listitem>
       <listitem>
         <para>
+          PostgreSQL now defaults to major version 14.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The new
           <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook"><literal>postgresqlTestHook</literal></link>
           runs a PostgreSQL server for the duration of package checks.
@@ -126,13 +131,26 @@
       <listitem>
         <para>
           <link xlink:href="https://kops.sigs.k8s.io"><literal>kops</literal></link>
-          defaults to 1.22.4, which will enable
+          defaults to 1.23.2, which will enable
           <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html">Instance
           Metadata Service Version 2</link> and require tokens on new
-          clusters with Kubernetes 1.22. This will increase security by
-          default, but may break some types of workloads. See the
-          <link xlink:href="https://kops.sigs.k8s.io/releases/1.22-notes/">release
-          notes</link> for details.
+          clusters with Kubernetes &gt;= 1.22. This will increase
+          security by default, but may break some types of workloads.
+          The default behaviour for
+          <literal>spec.kubeDNS.nodeLocalDNS.forwardToKubeDNS</literal>
+          has changed from <literal>true</literal> to
+          <literal>false</literal>. Cilium now has
+          <literal>disable-cnp-status-updates: true</literal> by
+          default. Set this to false if you rely on the
+          CiliumNetworkPolicy status fields. Support for Kubernetes
+          1.17, the Lyft CNI, Weave CNI on Kubernetes &gt;= 1.23, CentOS
+          7 and 8, Debian 9, RHEL 7, and Ubuntu 16.05 (Xenial) has been
+          removed. See the
+          <link xlink:href="https://kops.sigs.k8s.io/releases/1.22-notes/">1.22
+          release notes</link> and
+          <link xlink:href="https://kops.sigs.k8s.io/releases/1.23-notes/">1.23
+          release notes</link> for more details, including other
+          significant changes.
         </para>
       </listitem>
       <listitem>
@@ -229,6 +247,14 @@
           <link xlink:href="https://snowflake.torproject.org/">snowflake-proxy</link>,
           a system to defeat internet censorship. Available as
           <link xlink:href="options.html#opt-services.snowflake-proxy.enable">services.snowflake-proxy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/fleaz/r53-ddns">r53-ddns</link>,
+          a small tool to run your own DDNS service via AWS Route53.
+          Available as
+          <link xlink:href="options.html#opt-services.r53-ddns.enable">services.r53-ddns</link>.
         </para>
       </listitem>
       <listitem>
@@ -577,6 +603,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>lib.systems.supported</literal> has been removed, as
+          it was overengineered for determining the systems to support
+          in the nixpkgs flake. The list of systems exposed by the
+          nixpkgs flake can now be accessed as
+          <literal>lib.systems.flakeExposed</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           For new installations
           <literal>virtualisation.oci-containers.backend</literal> is
           now set to <literal>podman</literal> by default. If you still
@@ -679,6 +714,18 @@
           In the ncdns module, the default value of
           <literal>services.ncdns.address</literal> has been changed to
           the IPv6 loopback address (<literal>::1</literal>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>openldap</literal> (and therefore the slapd LDAP
+          server) were updated to version 2.6.2. The project introduced
+          backwards-incompatible changes, namely the removal of the bdb,
+          hdb, ndb, and shell backends in slapd. Therefore before
+          updating, dump your database <literal>slapcat -n 1</literal>
+          in LDIF format, and reimport it after updating your
+          <literal>services.openldap.settings</literal>, which
+          represents your <literal>cn=config</literal>.
         </para>
       </listitem>
       <listitem>

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p gh
+#!nix-shell update-pulumi-shell.nix -i bash
 # shellcheck shell=bash
 # Bash 3 compatible for Darwin
 

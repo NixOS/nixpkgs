@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
     "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
+  CXXFLAGS = [ "-std=c++14" ];
+
   enableParallelBuilding = true;
 
   dontWrapQtApps = true;

@@ -1,26 +1,37 @@
-{lib, fetchPypi, buildPythonPackage, isPy27, six, lxml }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, lxml
+, pythonOlder
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "unittest-xml-reporting";
   version = "3.2.0";
-  disabled = isPy27;
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "xmlrunner";
+    repo = "unittest-xml-reporting";
+    rev = version;
+    sha256 = "sha256-lOJ/+8CVJUXdIaZLLF5PpPkG0DzlNgo46kRZ1Xy7Ju0=";
+  };
 
   propagatedBuildInputs = [
     lxml
-    six
   ];
 
-  # The tarball from Pypi doesn't actually contain the unit tests
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-7djTFwtAw6gbjPkQ9GxqMErihH7AEDbQLpwPm4V2LSg=";
-  };
+  pythonImportsCheck = [ "xmlrunner" ];
+
   meta = with lib; {
-    homepage = "https://github.com/xmlrunner/unittest-xml-reporting/tree/master/";
-    description = "A unittest runner that can save test results to XML files";
-    license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ rprospero ];
+    homepage = "https://github.com/xmlrunner/unittest-xml-reporting";
+    description = "unittest-based test runner with Ant/JUnit like XML reporting";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ rprospero SuperSandro2000 ];
   };
 }

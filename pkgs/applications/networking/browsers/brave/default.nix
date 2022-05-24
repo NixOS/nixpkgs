@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     dpkg
-    (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
+    (wrapGAppsHook.override { inherit makeWrapper; })
   ];
 
   buildInputs = [

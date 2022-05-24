@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytest-asyncio
     sqlalchemy
     trio
-  ] ++ passlib.extras-require.bcrypt;
+  ] ++ passlib.optional-dependencies.bcrypt;
 
   patches = [
     # Bump starlette, https://github.com/tiangolo/fastapi/pull/4483

@@ -53,9 +53,9 @@ buildPythonPackage rec {
     weasyprint
     gevent
     pillow
-  ] ++ relatorio.extras-require.fodt
-    ++ passlib.extras-require.bcrypt
-    ++ passlib.extras-require.argon2
+  ] ++ relatorio.optional-dependencies.fodt
+    ++ passlib.optional-dependencies.bcrypt
+    ++ passlib.optional-dependencies.argon2
     ++ lib.optional withPostgresql psycopg2;
 
   checkPhase = ''

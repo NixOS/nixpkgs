@@ -1,24 +1,24 @@
-{ rustPlatform, fetchFromGitHub, lib, v8 }:
+{ rustPlatform, fetchFromGitHub, lib, stdenv, v8 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "0.36.0";
+  version = "0.37.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nSA78eQRbJ5JTDquaRqRgFU0V8RVCzvWUONgHxGj+Mc=";
+    sha256 = "sha256-ZUr1v94If8ER4lTHLwuP+F3xfXU7IW4ZEztBA2TPvVg=";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "sha256-/+uioJRXiugsV7SUwsDNHGaPxrxrhscQUGyXOzzwG/g=";
+  cargoSha256 = "sha256-X+KDeWavFTBaxbSPlIiyuiBC7wg1/5C/NXp+VEY8Mk8=";
 
   # This environment variable is required so that when wasmtime tries
   # to run tests by using the rusty_v8 crate, it does not try to
   # download a static v8 build from the Internet, what would break
   # build hermetism.
-  RUSTY_V8_ARCHIVE = "${v8}/lib/libv8.a";
+  RUSTY_V8_ARCHIVE = lib.optionalString stdenv.isLinux "${v8}/lib/libv8.a";
 
   doCheck = true;
   checkFlags = [
@@ -36,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bytecodealliance/wasmtime";
     license = licenses.asl20;
     maintainers = [ maintainers.matthewbauer ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

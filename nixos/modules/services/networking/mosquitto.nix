@@ -199,6 +199,7 @@ let
     allow_anonymous = 1;
     allow_zero_length_clientid = 1;
     auto_id_prefix = 1;
+    bind_interface = 1;
     cafile = 1;
     capath = 1;
     certfile = 1;
@@ -295,7 +296,7 @@ let
   };
 
   listenerAsserts = prefix: listener:
-    assertKeysValid prefix freeformListenerKeys listener.settings
+    assertKeysValid "${prefix}.settings" freeformListenerKeys listener.settings
     ++ userAsserts prefix listener.users
     ++ imap0
       (i: v: authAsserts "${prefix}.authPlugins.${toString i}" v)
@@ -397,7 +398,7 @@ let
   };
 
   bridgeAsserts = prefix: bridge:
-    assertKeysValid prefix freeformBridgeKeys bridge.settings
+    assertKeysValid "${prefix}.settings" freeformBridgeKeys bridge.settings
     ++ [ {
       assertion = length bridge.addresses > 0;
       message = "Bridge ${prefix} needs remote broker addresses";
@@ -526,7 +527,7 @@ let
 
   globalAsserts = prefix: cfg:
     flatten [
-      (assertKeysValid prefix freeformGlobalKeys cfg.settings)
+      (assertKeysValid "${prefix}.settings" freeformGlobalKeys cfg.settings)
       (imap0 (n: l: listenerAsserts "${prefix}.listener.${toString n}" l) cfg.listeners)
       (mapAttrsToList (n: b: bridgeAsserts "${prefix}.bridge.${n}" b) cfg.bridges)
     ];
@@ -629,9 +630,10 @@ in
                ]));
         RemoveIPC = true;
         RestrictAddressFamilies = [
-          "AF_UNIX"  # for sd_notify() call
+          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
+          "AF_NETLINK"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;

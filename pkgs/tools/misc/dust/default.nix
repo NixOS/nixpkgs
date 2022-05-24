@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-qC8AlLyg8MU9ZON0hITTaM5AmRFZMOqJVt7PJ5fCtus=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
-    extraPostFetch = ''
+    postFetch = ''
       rm -r $out/tests/test_dir_unicode/
     '';
   };

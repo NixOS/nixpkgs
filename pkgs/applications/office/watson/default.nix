@@ -1,31 +1,16 @@
 { lib, fetchFromGitHub, python3, installShellFiles }:
 
-let
-  # Watson is currently not compatible with Click 8. See the following
-  # upstream issues / MRs:
-  #
-  # https://github.com/TailorDev/Watson/issues/430
-  # https://github.com/TailorDev/Watson/pull/432
-  #
-  # Workaround the issue by providing click 7 explicitly.
-  python = python3.override {
-    packageOverrides = self: super: {
-      # Use click 7
-      click = self.callPackage ../../../development/python2-modules/click/default.nix { };
-    };
-  };
-in with python.pkgs; buildPythonApplication rec {
-  pname = "watson";
+with python3.pkgs;
 
-  # When you update Watson, please check whether the Click 7
-  # workaround above can go away.
-  version = "2.0.1";
+buildPythonApplication rec {
+  pname = "watson";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "TailorDev";
     repo = "Watson";
     rev = version;
-    sha256 = "0radf5afyphmzphfqb4kkixahds2559nr3yaqvni4xrisdaiaymz";
+    sha256 = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
   };
 
   postInstall = ''

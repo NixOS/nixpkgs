@@ -11,7 +11,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "roon-bridge";
-  version = "1.8-918";
+  version = "1.8-943";
 
   src =
     let
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
       {
         x86_64-linux = fetchurl {
           url = "http://download.roonlabs.com/builds/RoonBridge_linuxx64_${urlVersion}.tar.bz2";
-          hash = "sha256-Tx8KmGKh6BNoo2RKJm0HfPHRXiFsz+FtX5gQZ1FCEEg=";
+          hash = "sha256-knmy2zlRh+ehvYKHC7UN60pMCt8bYPuo9kTz2m0pOW0";
         };
         aarch64-linux = fetchurl {
           url = "http://download.roonlabs.com/builds/RoonBridge_linuxarmv8_${urlVersion}.tar.bz2";
-          hash = "sha256-UkdAs+/l9c4j8PNlAZfNNCJogjxZItcDikS+tOjYjA0=";
+          hash = "sha256-urMhtBUjP4HpV9EDZOLLnfnMqhmsWPx0M2+Xdvc8YnU=";
         };
       }.${system} or (throw "Unsupposed system: ${system}");
 
