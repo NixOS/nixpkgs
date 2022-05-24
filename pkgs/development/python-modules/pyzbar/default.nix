@@ -1,4 +1,12 @@
-{ lib, buildPythonPackage, fetchFromGitHub, numpy, pillow, zbar, pytestCheckHook }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, pillow
+, zbar
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pyzbar";
@@ -19,7 +27,9 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/7307
   postPatch = ''
     substituteInPlace pyzbar/zbar_library.py \
-      --replace "find_library('zbar')" "'${lib.getLib zbar}/lib/libzbar.so.0'"
+      --replace \
+        "find_library('zbar')" \
+        '"${lib.getLib zbar}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
   disabledTests = [

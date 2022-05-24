@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "trailofbits";
     repo = "manticore";
     rev = version;
-    sha256 = "sha256-+17VBfAtkZZIi3SF5Num1Uqg3WjIpgbz3Jx65rD5zkM=";
+    hash = "sha256-+17VBfAtkZZIi3SF5Num1Uqg3WjIpgbz3Jx65rD5zkM=";
   };
 
   propagatedBuildInputs = [
@@ -52,9 +52,11 @@ buildPythonPackage rec {
     unicorn
   ];
 
-  # Python API is not used in the code, only z3 from PATH
   postPatch = ''
-    sed -ie s/z3-solver// setup.py
+    # Python API is not used in the code, only z3 from PATH
+    substituteInPlace setup.py \
+      --replace "z3-solver" "" \
+      --replace "crytic-compile==0.2.2" "crytic-compile>=0.2.2"
   '';
 
   checkInputs = [
@@ -128,5 +130,7 @@ buildPythonPackage rec {
     license = licenses.agpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ arturcygan ];
+    # m.c.manticore:WARNING: Manticore is only supported on Linux. Proceed at your own risk!
+    broken = stdenv.isDarwin;
   };
 }
