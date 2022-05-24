@@ -14629,10 +14629,11 @@
       longkeyid = "ed25519/B4BE4DE6F6F29B82";
       fingerprint = "EE8A 78FE 4028 C843 C581  AFBC B4BE 4DE6 F6F2 9B82";
     }];
-    snpschaaf = {
-      email = "philipe.schaaf@secunet.com";
-      name = "Philippe Schaaf";
-      github = "snpschaaf";
-      githubId = 105843013;
-    };
+  };
+  snpschaaf = {
+    email = "philipe.schaaf@secunet.com";
+    name = "Philippe Schaaf";
+    github = "snpschaaf";
+    githubId = 105843013;
+  };
 }
