@@ -26859,11 +26859,12 @@ with pkgs;
 
   gosmore = callPackage ../applications/misc/gosmore { };
 
-  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel {
-    inherit (darwin) IOKit;
-  };
+  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
 
-  gpsbabel-gui = libsForQt5.callPackage ../applications/misc/gpsbabel/gui.nix { };
+  gpsbabel-gui = gpsbabel.override {
+    withGUI = true;
+    withDoc = true;
+  };
 
   gpscorrelate = callPackage ../applications/misc/gpscorrelate { };
 
