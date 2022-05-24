@@ -171,7 +171,7 @@ rec {
         wine = (pkgs.winePackagesFor wine-name).minimal;
       in
         if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
-           pkgs.stdenv.hostPlatform.isCompatible final
+           pkgs.stdenv.hostPlatform.canExecute final
         then "${pkgs.runtimeShell} -c '\"$@\"' --"
         else if final.isWindows
         then "${wine}/bin/${wine-name}"
