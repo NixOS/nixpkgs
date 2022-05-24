@@ -23,12 +23,12 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "archivy";
-  version = "1.7.2";
+  version = "1.7.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o5dVJDbdKgo6hMMU9mKzoouSgVWl7xSAp+Aq61VcfeU=";
+    hash = "sha256-ns1Y0DqqnTAQMEt+oBJ/P2gqKqPsX9P3/Z4561qzuns";
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];
