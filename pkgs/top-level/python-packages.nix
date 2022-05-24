@@ -3122,7 +3122,7 @@ in {
 
   flask-versioned = callPackage ../development/python-modules/flask-versioned { };
 
-  flask_wtf = callPackage ../development/python-modules/flask-wtf { };
+  flask-wtf = callPackage ../development/python-modules/flask-wtf { };
 
   flatbuffers = callPackage ../development/python-modules/flatbuffers {
     inherit (pkgs) flatbuffers;

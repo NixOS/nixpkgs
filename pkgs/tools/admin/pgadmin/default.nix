@@ -34,7 +34,7 @@ let
     flask_mail
     flask_migrate
     flask_sqlalchemy
-    flask_wtf
+    flask-wtf
     flask-compress
     passlib
     pytz
