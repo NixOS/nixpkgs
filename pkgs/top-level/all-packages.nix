@@ -4779,6 +4779,8 @@ with pkgs;
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
 
+    stt = callPackage ../tools/inputmethods/ibus-engines/ibus-stt { };
+
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table { };
 
     table-chinese = callPackage ../tools/inputmethods/ibus-engines/ibus-table-chinese {
@@ -17571,6 +17573,8 @@ with pkgs;
     callPackage = newScope (gst_all_1 // { libav = pkgs.ffmpeg; });
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL VideoToolbox;
   });
+
+  gst-deepspeech = callPackage ../development/libraries/gst-deepspeech { };
 
   gusb = callPackage ../development/libraries/gusb { };
 
@@ -32236,6 +32240,8 @@ with pkgs;
   streamlit = python3Packages.callPackage ../applications/science/machine-learning/streamlit { };
 
   stt = callPackage ../tools/audio/stt { };
+
+  stt-models = recurseIntoAttrs (callPackages ../tools/audio/stt/models.nix { });
 
   stuntrally = callPackage ../games/stuntrally {
     ogre = ogre1_9;
