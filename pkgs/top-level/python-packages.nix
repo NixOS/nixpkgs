@@ -5865,6 +5865,8 @@ in {
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
+  nxt-python = callPackage ../development/python-modules/nxt-python { };
+
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
