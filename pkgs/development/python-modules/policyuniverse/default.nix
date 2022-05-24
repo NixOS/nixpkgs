@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    has = "sha256-gmcF8KdwGLMU5g1NYgxLKgBLk1yJrWi/dpVETDaY0Vo=";
+    hash = "sha256-gmcF8KdwGLMU5g1NYgxLKgBLk1yJrWi/dpVETDaY0Vo=";
   };
 
   # Tests are not shipped and there are no GitHub tags
