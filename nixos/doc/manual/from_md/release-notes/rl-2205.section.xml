@@ -131,13 +131,26 @@
       <listitem>
         <para>
           <link xlink:href="https://kops.sigs.k8s.io"><literal>kops</literal></link>
-          defaults to 1.22.4, which will enable
+          defaults to 1.23.2, which will enable
           <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html">Instance
           Metadata Service Version 2</link> and require tokens on new
-          clusters with Kubernetes 1.22. This will increase security by
-          default, but may break some types of workloads. See the
-          <link xlink:href="https://kops.sigs.k8s.io/releases/1.22-notes/">release
-          notes</link> for details.
+          clusters with Kubernetes &gt;= 1.22. This will increase
+          security by default, but may break some types of workloads.
+          The default behaviour for
+          <literal>spec.kubeDNS.nodeLocalDNS.forwardToKubeDNS</literal>
+          has changed from <literal>true</literal> to
+          <literal>false</literal>. Cilium now has
+          <literal>disable-cnp-status-updates: true</literal> by
+          default. Set this to false if you rely on the
+          CiliumNetworkPolicy status fields. Support for Kubernetes
+          1.17, the Lyft CNI, Weave CNI on Kubernetes &gt;= 1.23, CentOS
+          7 and 8, Debian 9, RHEL 7, and Ubuntu 16.05 (Xenial) has been
+          removed. See the
+          <link xlink:href="https://kops.sigs.k8s.io/releases/1.22-notes/">1.22
+          release notes</link> and
+          <link xlink:href="https://kops.sigs.k8s.io/releases/1.23-notes/">1.23
+          release notes</link> for more details, including other
+          significant changes.
         </para>
       </listitem>
       <listitem>
