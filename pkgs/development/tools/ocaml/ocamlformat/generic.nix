@@ -25,6 +25,7 @@ let src =
       "0.19.0" = "0ihgwl7d489g938m1jvgx8azdgq9f5np5mzqwwya797hx2m4dz32";
       "0.20.0" = "sha256-JtmNCgwjbCyUE4bWqdH5Nc2YSit+rekwS43DcviIfgk=";
       "0.20.1" = "sha256-fTpRZFQW+ngoc0T6A69reEUAZ6GmHkeQvxspd5zRAjU=";
+      "0.21.0" = "sha256-KhgX9rxYH/DM6fCqloe4l7AnJuKrdXSe6Y1XY3BXMy0=";
     }."${version}";
   };
   ocamlPackages =
@@ -60,7 +61,7 @@ buildDunePackage {
     if lib.versionAtLeast version "0.20.0"
     then [
       base
-      cmdliner
+      (if lib.versionAtLeast version "0.21.0" then cmdliner_1_1 else cmdliner_1_0)
       dune-build-info
       either
       fix
@@ -78,7 +79,7 @@ buildDunePackage {
     else if lib.versionAtLeast version "0.19.0"
     then [
       base
-      cmdliner
+      cmdliner_1_0
       fpath
       re
       stdio
@@ -94,7 +95,7 @@ buildDunePackage {
     else if lib.versionAtLeast version "0.18.0"
     then [
       base
-      cmdliner
+      cmdliner_1_0
       fpath
       odoc
       re
@@ -112,7 +113,7 @@ buildDunePackage {
     else if lib.versionAtLeast version "0.17.0"
     then [
       base
-      cmdliner
+      cmdliner_1_0
       fpath
       odoc
       re
@@ -131,7 +132,7 @@ buildDunePackage {
     else if lib.versionAtLeast version "0.15.1"
     then [
       base
-      cmdliner
+      cmdliner_1_0
       fpath
       odoc
       re
@@ -148,7 +149,7 @@ buildDunePackage {
     else if lib.versionAtLeast version "0.14"
     then [
       base
-      cmdliner
+      cmdliner_1_0
       fpath
       ocaml-migrate-parsetree
       odoc
@@ -161,7 +162,7 @@ buildDunePackage {
       menhirSdk
     ] else [
       base
-      cmdliner
+      cmdliner_1_0
       fpath
       ocaml-migrate-parsetree
       odoc
@@ -178,4 +179,3 @@ buildDunePackage {
     license = lib.licenses.mit;
   };
 }
-
