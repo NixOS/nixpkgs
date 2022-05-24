@@ -125,6 +125,7 @@ in {
     pythonRemoveTestsDirHook
     setuptoolsBuildHook
     setuptoolsCheckHook
+    twistedRemoveDropinCacheHook
     venvShellHook
     wheelUnpackHook;
 

@@ -4,6 +4,7 @@
 , pythonOlder
 , fetchPypi
 , python
+, twistedRemoveDropinCacheHook
 , appdirs
 , attrs
 , automat
@@ -56,6 +57,10 @@ buildPythonPackage rec {
     sha256 = "sha256-oEeZD1ffrh4L0rffJSbU8W3NyEN3TcEIt4xS8qXxNoA=";
   };
 
+  propagatedNativeBuildInputs = [
+    twistedRemoveDropinCacheHook
+  ];
+
   propagatedBuildInputs = [
     attrs
     automat
@@ -104,13 +109,6 @@ buildPythonPackage rec {
     # twisted.python.runtime.platform.supportsINotify() == False
     substituteInPlace src/twisted/python/_inotify.py --replace \
       "ctypes.util.find_library(\"c\")" "'${stdenv.glibc.out}/lib/libc.so.6'"
-  '';
-
-  # Generate Twisted's plug-in cache. Twisted users must do it as well. See
-  # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
-  # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for details.
-  postFixup = ''
-    $out/bin/twistd --help > /dev/null
   '';
 
   checkInputs = [

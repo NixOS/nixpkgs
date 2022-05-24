@@ -155,6 +155,14 @@ in rec {
       };
     } ./setuptools-build-hook.sh) {};
 
+  twistedRemoveDropinCacheHook = callPackage ({ }:
+    makeSetupHook {
+      name = "twisted-remove-dropin-cache-hook";
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./twisted-remove-dropin-cache-hook.sh) { };
+
   setuptoolsCheckHook = callPackage ({ setuptools }:
     makeSetupHook {
       name = "setuptools-check-hook";
