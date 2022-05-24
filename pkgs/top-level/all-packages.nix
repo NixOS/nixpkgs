@@ -1176,6 +1176,8 @@ with pkgs;
 
   sx-go = callPackage ../tools/security/sx-go { };
 
+  systeroid = callPackage ../tools/system/systeroid { };
+
   tauon = callPackage ../applications/audio/tauon { };
 
   termusic = callPackage ../applications/audio/termusic { };
@@ -23261,6 +23263,8 @@ with pkgs;
   linux_xanmod = linuxKernel.kernels.linux_xanmod;
   linuxPackages_xanmod_latest = linuxKernel.packages.linux_xanmod_latest;
   linux_xanmod_latest = linuxKernel.kernels.linux_xanmod_latest;
+
+  linux-doc = callPackage ../os-specific/linux/kernel/htmldocs.nix { };
 
   cryptodev = linuxKernel.packages.linux_4_9.cryptodev;
 
