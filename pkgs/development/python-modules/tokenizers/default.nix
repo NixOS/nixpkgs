@@ -12,6 +12,7 @@
 , pythonOlder
 , requests
 , rustPlatform
+, Security
 , setuptools-rust
 }:
 
@@ -89,6 +90,7 @@ buildPythonPackage rec {
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     libiconv
+    Security
   ];
 
   propagatedBuildInputs = [
