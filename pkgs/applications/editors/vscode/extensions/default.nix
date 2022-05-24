@@ -55,6 +55,18 @@ let
         };
       };
 
+      aaron-bond.better-comments = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "aaron-bond";
+          name = "better-comments";
+          version = "3.0.0";
+          sha256 = "sha256-bosv8zfta3TCskgmTqPWlPFX2fPGvq+QdnE58EGpZ50=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       alanz.vscode-hie-server = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-hie-server";
