@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: modules/.libs/libmodules.a(rocket_pad.o):/build/lincity-1.13.1/modules/../screen.h:23:
+  #     multiple definition of `monthgraph_style'; ldsvguts.o:/build/lincity-1.13.1/screen.h:23: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   meta = with lib; {
     description = "City simulation game";
     license = licenses.gpl2Plus;
