@@ -31555,7 +31555,7 @@ with pkgs;
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
   curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
 
-  cutemaze = libsForQt5.callPackage ../games/cutemaze { };
+  cutemaze = qt6Packages.callPackage ../games/cutemaze { };
 
   cuyo = callPackage ../games/cuyo { };
 
