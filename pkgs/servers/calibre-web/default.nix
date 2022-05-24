@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     flask-babel
     flask_login
     flask_principal
-    flask_wtf
+    flask-wtf
     iso-639
     lxml
     pypdf3

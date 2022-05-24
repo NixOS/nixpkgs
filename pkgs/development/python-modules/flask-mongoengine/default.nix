@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , flask
-, flask_wtf
+, flask-wtf
 , mongoengine
 , six
 , nose
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     email_validator
     flask
-    flask_wtf
+    flask-wtf
     mongoengine
     six
   ];
