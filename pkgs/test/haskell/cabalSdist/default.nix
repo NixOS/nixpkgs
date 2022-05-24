@@ -1,7 +1,7 @@
 { lib, haskellPackages, runCommand }:
 
 let
-  localRaw = haskellPackages.callCabal2nix "local" ./local {};
+  localRaw = haskellPackages.callPackage ./local/generated.nix {};
 in
 lib.recurseIntoAttrs rec {
 
