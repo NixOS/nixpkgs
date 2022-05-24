@@ -7800,8 +7800,6 @@ in {
 
   pyramid_multiauth = callPackage ../development/python-modules/pyramid_multiauth { };
 
-  pyreadability = callPackage ../development/python-modules/pyreadability { };
-
   pyrealsense2 = toPythonModule (pkgs.librealsense.override {
     enablePython = true;
     pythonPackages = self;
