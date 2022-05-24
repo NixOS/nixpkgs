@@ -7,7 +7,7 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      flask_wtf = super.flask_wtf.overridePythonAttrs (old: rec {
+      flask-wtf = super.flask-wtf.overridePythonAttrs (old: rec {
         version = "0.15.1";
         src = old.src.override {
           inherit version;
@@ -29,7 +29,7 @@ in python.pkgs.buildPythonApplication rec {
     etebase
     etesync
     flask
-    flask_wtf
+    flask-wtf
     (python.pkgs.toPythonModule (radicale3.override { python3 = python; }))
   ];
 
