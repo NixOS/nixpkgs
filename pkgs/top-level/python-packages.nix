@@ -2067,8 +2067,6 @@ in {
 
   dask-mpi = callPackage ../development/python-modules/dask-mpi { };
 
-  dask-xgboost = callPackage ../development/python-modules/dask-xgboost { };
-
   dask-yarn = callPackage ../development/python-modules/dask-yarn { };
 
   databases = callPackage ../development/python-modules/databases { };
