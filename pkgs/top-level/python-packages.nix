@@ -1105,6 +1105,10 @@ in {
 
   babelgladeextractor = callPackage ../development/python-modules/babelgladeextractor { };
 
+  pulumi = callPackage ../development/python-modules/pulumi { };
+
+  pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
+
   backcall = callPackage ../development/python-modules/backcall { };
 
   backoff = callPackage ../development/python-modules/backoff { };
@@ -2535,6 +2539,8 @@ in {
   drf-jwt = callPackage ../development/python-modules/drf-jwt { };
 
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
+
+  drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
 
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
 
@@ -5329,6 +5335,7 @@ in {
   mizani = callPackage ../development/python-modules/mizani { };
 
   mkdocs = callPackage ../development/python-modules/mkdocs { };
+  mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
   mkdocs-minify = callPackage ../development/python-modules/mkdocs-minify { };

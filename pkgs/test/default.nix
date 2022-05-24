@@ -28,6 +28,7 @@ with pkgs;
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
   fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
+  fetchzip = callPackages ../build-support/fetchzip/tests.nix { };
   fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
   fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
 
@@ -71,7 +72,15 @@ with pkgs;
 
   dhall = callPackage ./dhall { };
 
-  makeWrapper = callPackage ./make-wrapper {};
+  makeWrapper = callPackage ./make-wrapper { };
+  makeBinaryWrapper = callPackage ./make-binary-wrapper {
+    makeBinaryWrapper = pkgs.makeBinaryWrapper.override {
+      # Enable sanitizers in the tests only, to avoid the performance cost in regular usage.
+      # The sanitizers cause errors on aarch64-darwin, see https://github.com/NixOS/nixpkgs/pull/150079#issuecomment-994132734
+      sanitizers = pkgs.lib.optionals (! (pkgs.stdenv.isDarwin && pkgs.stdenv.isAarch64))
+        [ "undefined" "address" ];
+    };
+  };
 
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
 }

@@ -167,8 +167,8 @@ makeOverlayable (overrideAttrs:
 let
   # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
   # no package has `doCheck = true`.
-  doCheck' = doCheck && stdenv.hostPlatform == stdenv.buildPlatform;
-  doInstallCheck' = doInstallCheck && stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.useLLVM or false);
   outputs' = outputs ++ lib.optional separateDebugInfo' "debug";

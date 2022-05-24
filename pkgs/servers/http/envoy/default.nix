@@ -37,7 +37,7 @@ buildBazelPackage rec {
     inherit (srcVer) rev;
     hash = "sha256:11mm72zmb479ss585jzqzhklyyqmdadnvr91ghzvjxc0j2a1hrr4";
 
-    extraPostFetch = ''
+    postFetch = ''
       chmod -R +w $out
       rm $out/.bazelversion
       echo ${srcVer.rev} > $out/SOURCE_VERSION

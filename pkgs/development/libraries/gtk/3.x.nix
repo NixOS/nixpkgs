@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , substituteAll
-, fetchurl
+, fetchzip
 , pkg-config
 , gettext
 , docbook-xsl-nons
@@ -60,7 +60,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.33";
+  version = "3.24.33-2022-03-11";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -70,9 +70,9 @@ stdenv.mkDerivation rec {
     gtkCleanImmodulesCache
   ];
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-WIsGUi4l0VeemJtvnYob2/L+E83gGgTpBP80aiJeeAE=";
+  src = fetchzip {
+    url = "https://gitlab.gnome.org/GNOME/gtk/-/archive/9d1d2f0a6643570274121fc1473e46a6edc2e32d/gtk-9d1d2f0a6643570274121fc1473e46a6edc2e32d.tar.gz";
+    sha256 = "sha256-+K1Kp3Sklrj/Ly0pSktfQwfcrIKpbf05NQbMDhWJZNI=";
   };
 
   patches = [
@@ -201,6 +201,8 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
+  '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+    GTK_PATH="''${out:?}/lib/gtk-3.0/3.0.0/immodules/" ''${dev:?}/bin/gtk-query-immodules-3.0 > "''${out:?}/lib/gtk-3.0/3.0.0/immodules.cache"
   '';
 
   # Wrap demos

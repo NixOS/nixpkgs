@@ -282,18 +282,18 @@ in
       EOF
     '';
 
-    boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.enable) ''
+    boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
       $out/bin/plymouthd --help >/dev/null
       $out/bin/plymouth --help >/dev/null
     '';
 
-    boot.initrd.extraUdevRulesCommands = mkIf (!config.boot.initrd.enable) ''
+    boot.initrd.extraUdevRulesCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       cp ${config.systemd.package}/lib/udev/rules.d/{70-uaccess,71-seat}.rules $out
       sed -i '/loginctl/d' $out/71-seat.rules
     '';
 
     # We use `mkAfter` to ensure that LUKS password prompt would be shown earlier than the splash screen.
-    boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.enable) (mkAfter ''
+    boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkAfter ''
       mkdir -p /etc/plymouth
       mkdir -p /run/plymouth
       ln -s ${configFile} /etc/plymouth/plymouthd.conf
@@ -307,12 +307,12 @@ in
       plymouth show-splash
     '');
 
-    boot.initrd.postMountCommands = mkIf (!config.boot.initrd.enable) ''
+    boot.initrd.postMountCommands = mkIf (!config.boot.initrd.systemd.enable) ''
       plymouth update-root-fs --new-root-dir="$targetRoot"
     '';
 
     # `mkBefore` to ensure that any custom prompts would be visible.
-    boot.initrd.preFailCommands = mkIf (!config.boot.initrd.enable) (mkBefore ''
+    boot.initrd.preFailCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore ''
       plymouth quit --wait
     '');
 

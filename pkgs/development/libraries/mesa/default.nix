@@ -5,6 +5,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind
+, vulkan-loader
 , galliumDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
@@ -144,7 +145,9 @@ self = stdenv.mkDerivation {
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
     ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped ]
-    ++ lib.optional withValgrind valgrind-light;
+    ++ lib.optional withValgrind valgrind-light
+    # Mesa will not build zink when gallium-drivers=auto
+    ++ lib.optional (elem "zink" galliumDrivers) vulkan-loader;
 
   depsBuildBuild = [ pkg-config ];
 

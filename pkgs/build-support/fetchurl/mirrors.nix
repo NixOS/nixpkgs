@@ -165,6 +165,11 @@
     "https://ftp.postgresql.org/pub/"
   ];
 
+  # Qt
+  qt = [
+    "https://download.qt.io/"
+  ];
+
   # Roy marples mirrors
   roy = [
     "https://roy.marples.name/downloads/"

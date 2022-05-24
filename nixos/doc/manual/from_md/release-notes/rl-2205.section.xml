@@ -1,9 +1,5 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.05">
   <title>Release 22.05 (“Quokka”, 2022.05/??)</title>
-  <para>
-    In addition to numerous new and upgraded packages, this release has
-    the following highlights:
-  </para>
   <itemizedlist spacing="compact">
     <listitem>
       <para>
@@ -14,6 +10,10 @@
   </itemizedlist>
   <section xml:id="sec-release-22.05-highlights">
     <title>Highlights</title>
+    <para>
+      In addition to numerous new and upgraded packages, this release
+      has the following highlights:
+    </para>
     <itemizedlist>
       <listitem>
         <para>
@@ -114,6 +114,11 @@
           functionality, like <literal>pulseaudio-modules-bt</literal>
           or <literal>pulseaudio-hsphfpd</literal> are deprecated and
           have been removed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          PostgreSQL now defaults to major version 14.
         </para>
       </listitem>
       <listitem>
@@ -585,6 +590,15 @@
       </listitem>
       <listitem>
         <para>
+          <literal>lib.systems.supported</literal> has been removed, as
+          it was overengineered for determining the systems to support
+          in the nixpkgs flake. The list of systems exposed by the
+          nixpkgs flake can now be accessed as
+          <literal>lib.systems.flakeExposed</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           For new installations
           <literal>virtualisation.oci-containers.backend</literal> is
           now set to <literal>podman</literal> by default. If you still
@@ -687,6 +701,18 @@
           In the ncdns module, the default value of
           <literal>services.ncdns.address</literal> has been changed to
           the IPv6 loopback address (<literal>::1</literal>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>openldap</literal> (and therefore the slapd LDAP
+          server) were updated to version 2.6.2. The project introduced
+          backwards-incompatible changes, namely the removal of the bdb,
+          hdb, ndb, and shell backends in slapd. Therefore before
+          updating, dump your database <literal>slapcat -n 1</literal>
+          in LDIF format, and reimport it after updating your
+          <literal>services.openldap.settings</literal>, which
+          represents your <literal>cn=config</literal>.
         </para>
       </listitem>
       <listitem>

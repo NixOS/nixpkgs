@@ -251,6 +251,16 @@ rec {
     }:
       assert builtins.isInt depthLimit;
       let
+        specialAttrs = [
+          "__functor"
+          "__functionArgs"
+          "__toString"
+          "__pretty"
+        ];
+        stepIntoAttr = evalNext: name:
+          if builtins.elem name specialAttrs
+            then id
+            else evalNext;
         transform = depth:
           if depthLimit != null && depth > depthLimit then
             if throwOnDepthLimit
@@ -261,7 +271,7 @@ rec {
           let
             evalNext = x: mapAny (depth + 1) (transform (depth + 1) x);
           in
-            if isAttrs v then mapAttrs (const evalNext) v
+            if isAttrs v then mapAttrs (stepIntoAttr evalNext) v
             else if isList v then map evalNext v
             else transform (depth + 1) v;
       in

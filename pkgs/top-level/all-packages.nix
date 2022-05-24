@@ -723,7 +723,10 @@ with pkgs;
     inherit curl stdenv;
   };
 
-  fetchzip = callPackage ../build-support/fetchzip { };
+  fetchzip = callPackage ../build-support/fetchzip { }
+    // {
+      tests = pkgs.tests.fetchzip;
+    };
 
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
@@ -778,7 +781,9 @@ with pkgs;
   makeInitrdNG = callPackage ../build-support/kernel/make-initrd-ng.nix;
   makeInitrdNGTool = callPackage ../build-support/kernel/make-initrd-ng-tool.nix {};
 
-  makeWrapper = makeSetupHook
+  makeWrapper = makeShellWrapper;
+
+  makeShellWrapper = makeSetupHook
     { deps = [ dieHook ];
       substitutions = {
         shell = targetPackages.runtimeShell;
@@ -787,30 +792,7 @@ with pkgs;
     }
     ../build-support/setup-hooks/make-wrapper.sh;
 
-  makeBinaryWrapper = let
-    f = { cc, sanitizers }: let
-      san = lib.concatMapStringsSep " " (s: "-fsanitize=${s}") sanitizers;
-      script = runCommand "make-binary-wrapper.sh" {} ''
-        substitute ${../build-support/setup-hooks/make-binary-wrapper.sh} $out \
-          --replace " @CC@ " " ${cc}/bin/cc ${san} "
-      '';
-    in
-      makeSetupHook {
-        deps = [ dieHook cc ];
-        substitutions.passthru.tests = callPackage ../test/make-binary-wrapper {
-          makeBinaryWrapper = makeBinaryWrapper.override {
-            sanitizers = (if stdenv.isDarwin && stdenv.isAarch64
-              then [ ]
-              else [ "undefined" "address" ]
-            );
-          };
-        };
-      } script;
-  in
-    lib.makeOverridable f {
-      cc = stdenv.cc;
-      sanitizers = [ ];
-    };
+  makeBinaryWrapper = callPackage ../build-support/setup-hooks/make-binary-wrapper { };
 
   compressFirmwareXz = callPackage ../build-support/kernel/compress-firmware-xz.nix { };
 
@@ -909,7 +891,9 @@ with pkgs;
 
   findXMLCatalogs = makeSetupHook { } ../build-support/setup-hooks/find-xml-catalogs.sh;
 
-  wrapGAppsHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook { };
+  wrapGAppsHook = callPackage ../build-support/setup-hooks/wrap-gapps-hook {
+    makeWrapper = makeBinaryWrapper;
+  };
 
   wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = gtk4; };
 
@@ -1255,6 +1239,8 @@ with pkgs;
     wxGTK = wxGTK30;
   };
 
+  box64 = callPackage ../applications/emulators/box64 { };
+
   caprice32 = callPackage ../applications/emulators/caprice32 { };
 
   ccemux = callPackage ../applications/emulators/ccemux { };
@@ -1265,7 +1251,13 @@ with pkgs;
 
   cen64 = callPackage ../applications/emulators/cen64 { };
 
-  citra = libsForQt5.callPackage ../applications/emulators/citra { };
+  citra-canary = callPackage ../applications/emulators/citra {
+    branch = "canary";
+  };
+
+  citra-nightly = callPackage ../applications/emulators/citra {
+    branch = "nightly";
+  };
 
   collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
 
@@ -10443,6 +10435,10 @@ with pkgs;
 
   sozu = callPackage ../servers/sozu { };
 
+  sparrow = callPackage ../applications/blockchains/sparrow {
+    openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix {};
+  };
+
   sparsehash = callPackage ../development/libraries/sparsehash { };
 
   spectre-meltdown-checker = callPackage ../tools/security/spectre-meltdown-checker { };
@@ -13572,7 +13568,7 @@ with pkgs;
     ocamlformat_0_11_0 ocamlformat_0_12 ocamlformat_0_13_0 ocamlformat_0_14_0
     ocamlformat_0_14_1 ocamlformat_0_14_2 ocamlformat_0_14_3 ocamlformat_0_15_0
     ocamlformat_0_15_1 ocamlformat_0_16_0 ocamlformat_0_17_0 ocamlformat_0_18_0
-    ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1;
+    ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0;
 
   orc = callPackage ../development/compilers/orc { };
 
@@ -14040,6 +14036,7 @@ with pkgs;
       # default.
       libcxx ? null
     , extraPackages ? lib.optional (cc.isGNU or false && stdenv.targetPlatform.isMinGW) threadsCross
+    , nixSupport ? {}
     , ...
     } @ extraArgs:
       callPackage ../build-support/cc-wrapper (let self = {
@@ -14051,7 +14048,7 @@ with pkgs;
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
 
-    inherit cc bintools libc libcxx extraPackages zlib;
+    inherit cc bintools libc libcxx extraPackages nixSupport zlib;
   } // extraArgs; in self);
 
   wrapCC = cc: wrapCCWith {
@@ -20238,6 +20235,23 @@ with pkgs;
   qtEnv = qt5.env;
   qt5Full = qt5.full;
 
+  qt6 = recurseIntoAttrs (makeOverridable
+    (import ../development/libraries/qt-6) {
+      inherit newScope;
+      inherit lib stdenv fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper writeText;
+      inherit bison cups dconf harfbuzz libGL perl gtk3 ninja;
+      inherit (gst_all_1) gstreamer gst-plugins-base;
+      cmake = cmake.overrideAttrs (attrs: {
+        patches = attrs.patches ++ [
+          ../development/libraries/qt-6/cmake.patch
+        ];
+      });
+    });
+
+  qt6Packages = recurseIntoAttrs (import ./qt6-packages.nix {
+    inherit lib pkgs qt6;
+  });
+
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quark-engine = callPackage ../tools/security/quark-engine { };
@@ -22335,12 +22349,12 @@ with pkgs;
     postgresql_13
     postgresql_14
   ;
-  postgresql = postgresql_13.override { this = postgresql; };
+  postgresql = postgresql_14.override { this = postgresql; };
   postgresqlPackages = recurseIntoAttrs postgresql.pkgs;
   postgresql11Packages = recurseIntoAttrs postgresql_11.pkgs;
   postgresql12Packages = recurseIntoAttrs postgresql_12.pkgs;
-  postgresql13Packages = postgresqlPackages;
-  postgresql14Packages = recurseIntoAttrs postgresql_14.pkgs;
+  postgresql13Packages = recurseIntoAttrs postgresql_13.pkgs;
+  postgresql14Packages = postgresqlPackages;
 
   postgresql_jdbc = callPackage ../development/java-modules/postgresql_jdbc { };
 
@@ -26435,11 +26449,7 @@ with pkgs;
 
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
 
-  buildMozillaMach =
-    let callPackage = newScope {
-      inherit (rustPackages) cargo rustc;
-    };
-    in opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) {};
+  buildMozillaMach = opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) {};
 
   firefoxPackages = recurseIntoAttrs (callPackage ../applications/networking/browsers/firefox/packages.nix {});
 
@@ -29385,7 +29395,7 @@ with pkgs;
 
   scantailor = callPackage ../applications/graphics/scantailor { };
 
-  scantailor-advanced = libsForQt514.callPackage ../applications/graphics/scantailor/advanced.nix { };
+  scantailor-advanced = libsForQt515.callPackage ../applications/graphics/scantailor/advanced.nix { };
 
   sc-im = callPackage ../applications/misc/sc-im { };
 
@@ -29847,7 +29857,7 @@ with pkgs;
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
-  tdesktop = libsForQt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
+  tdesktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
     abseil-cpp = abseil-cpp_202111;
   };
 
