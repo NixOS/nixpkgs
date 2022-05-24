@@ -196,8 +196,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     apcu = callPackage ../development/php-packages/apcu { };
 
-    apcu_bc = callPackage ../development/php-packages/apcu_bc { };
-
     ast = callPackage ../development/php-packages/ast { };
 
     blackfire = pkgs.callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
