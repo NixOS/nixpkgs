@@ -16,7 +16,7 @@ i3.overrideAttrs (oldAttrs: rec {
     homepage = "https://github.com/LinoBigatti/i3-rounded";
     maintainers = with maintainers; [ marsupialgutz ];
     license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.netbsd ++ platforms.openbsd;
+    platforms = platforms.unix;
 
     longDescription = ''
       i3-rounded is a fork of i3-gaps that adds rounding to window corners.
