@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
-  version = "3.0.0";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-RS42Hh3Lwo8iCMCAXBp8usAwdkVWcD2XZW0FIYuTNwg=";
+    sha256 = "sha256-YjR2pdEWEWh84nixN/lDO4HssDlNN8CfhX1TOmBnsQs=";
   };
 
   postPatch = ''
