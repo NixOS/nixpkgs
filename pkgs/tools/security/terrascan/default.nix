@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "terrascan";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "accurics";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-up79ryjN9WciEl6fVgTLUZHhXSu7+utQB2ACPAx207E=";
+    sha256 = "sha256-4Yd+ifOW5T84hPv+tyEO5HPq2esSk8DkK0G5YSjY+V8=";
   };
 
   vendorSha256 = "sha256-EfHcCk2NkicSPeJYgHJT2kh9EwLldksET75ZQambrWA=";
