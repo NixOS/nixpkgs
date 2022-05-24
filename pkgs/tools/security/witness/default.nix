@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "witness";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "testifysec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-i76sw5ysWDZwuNt7CYtpVy9mEV643i4YaMxksglyPWw=";
+    sha256 = "sha256-oc6eYsLCDmXerTSD9KNeWDBPsw/CuwilObdFL5rRiY8=";
   };
   vendorSha256 = "sha256-A3fnAWEJ7SeUnDfIIOkbHIhUBRB8INcqMleOLL3LHF0=";
 
