@@ -1,0 +1,86 @@
+set qt paths without modifying the filesystem
+
+usage:
+makeWrapper --set QT_CONF /path/to/qt.conf
+
+limitations:
+same as qt.conf:
+* every key can have only one path, not a list of paths
+* with an empty qt.conf, Prefix defaults to $PWD
+
+docs:
+https://doc.qt.io/qt-6/qt-conf.html
+
+--- qtbase-everywhere-src-6.3.0/src/corelib/global/qlibraryinfo.cpp
++++ qtbase-everywhere-src-6.3.0/src/corelib/global/qlibraryinfo.cpp
+@@ -54,6 +54,9 @@
+ #include "archdetect.cpp"
+ #include "qconfig.cpp"
+ 
++#include <iostream> // std::cerr
++#include <iomanip> // std::setw std::left
++
+ #ifdef Q_OS_DARWIN
+ #  include "private/qcore_mac_p.h"
+ #endif // Q_OS_DARWIN
+@@ -126,6 +129,26 @@
+     if (QLibraryInfoPrivate::qtconfManualPath)
+         return new QSettings(*QLibraryInfoPrivate::qtconfManualPath, QSettings::IniFormat);
+ 
++    // use qt.conf path from environment variable NIXOS_QT_CONF
++    // otherwise, use dirname(argv[0])/qt.conf
++    QString qtconfigNixos = qgetenv("NIXOS_QT_CONF");
++    QString qtconfigNixosDebug = qgetenv("NIXOS_QT_CONF_DEBUG");
++    if (!qtconfigNixos.isEmpty()) {
++        if (QFile::exists(qtconfigNixos)) {
++            if (qtconfigNixosDebug == "1")
++                std::cerr << "NIXOS_QT_CONF_DEBUG: loading qt.conf from " << qtconfigNixos.toStdString() << std::endl;
++            return new QSettings(qtconfigNixos, QSettings::IniFormat);
++        }
++        else {
++            if (qtconfigNixosDebug == "1")
++                std::cerr << "NIXOS_QT_CONF_DEBUG: not found qt.conf in " << qtconfigNixos.toStdString() << " -> ignoring" << std::endl;
++        }
++    }
++    else {
++        if (qtconfigNixosDebug == "1")
++            std::cerr << "NIXOS_QT_CONF_DEBUG: NIXOS_QT_CONF is empty" << std::endl;
++    }
++
+     QString qtconfig = QStringLiteral(":/qt/etc/qt.conf");
+     if (QFile::exists(qtconfig))
+         return new QSettings(qtconfig, QSettings::IniFormat);
+@@ -628,6 +651,33 @@
+         }
+         ret = QDir::cleanPath(baseDir + QLatin1Char('/') + ret);
+     }
++
++#if QT_CONFIG(settings)
++    static bool qtconfigNixosDebugDone = false;
++    if (!qtconfigNixosDebugDone) {
++        qtconfigNixosDebugDone = true;
++        QString qtconfigNixosDebug = qgetenv("NIXOS_QT_CONF_DEBUG");
++        if (qtconfigNixosDebug == "1") {
++            std::cerr << "NIXOS_QT_CONF_DEBUG: QLibraryInfo paths:" << std::endl;
++            #define P(K) std::cout << "NIXOS_QT_CONF_DEBUG: " << std::left << std::setw(22) \
++                << #K << " = " << QLibraryInfo::path(QLibraryInfo::K).toStdString() << std::endl;
++            P(PrefixPath)
++            P(DocumentationPath)
++            P(HeadersPath)
++            P(LibrariesPath)
++            P(LibraryExecutablesPath)
++            P(BinariesPath)
++            P(PluginsPath)
++            P(QmlImportsPath)
++            P(ArchDataPath)
++            P(DataPath)
++            P(TranslationsPath)
++            P(ExamplesPath)
++            P(TestsPath)
++            P(SettingsPath) // not on windows
++        }
++    }
++#endif // settings
+     return ret;
+ }
+ 
