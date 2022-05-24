@@ -10457,6 +10457,8 @@ with pkgs;
 
   seexpr = callPackage ../development/compilers/seexpr { };
 
+  selectdefaultapplication = libsForQt5.callPackage ../applications/misc/selectdefaultapplication { };
+
   semgrep = python3.pkgs.callPackage ../tools/security/semgrep { };
   semgrep-core = callPackage ../tools/security/semgrep/semgrep-core.nix { };
 
