@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.0.152";
+  version = "2.0.155";
 
   src = fetchFromGitHub {
     owner = "armosec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-hibXmA2JerfnkGiSnBUCMHGPm4Tefnsl/x2VAS5z0Fo=";
+    hash = "sha256-ZBjwgrF0Pkour1yXMcY4cZt3W2biCzmPd+EYcY4Ppz0=";
   };
-  vendorSha256 = "sha256-HfsQfoz1n3FEd2eVBBz3Za2jYCSrozXpL34Z8CgQsTA=";
+  vendorSha256 = "sha256-zj2gDx5333AguLs1Gzu3bYXslDwvPFSbMmOTOFxmq6A=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,7 +37,17 @@ buildGoModule rec {
       go list ./... | grep -v httphandler
     }
 
-    rm core/pkg/resourcehandler/{repositoryscanner,urlloader}_test.go
+    # remove tests that use networking
+    rm core/pkg/resourcehandler/urlloader_test.go
+
+    # remove tests that use networking
+    substituteInPlace core/pkg/resourcehandler/repositoryscanner_test.go \
+      --replace "TestScanRepository" "SkipScanRepository" \
+      --replace "TestGit" "SkipGit"
+
+    # without networking the branch context can't be fetched and is empty
+    substituteInPlace core/cautils/scaninfo_test.go \
+      --replace 'assert.Equal(t, "master", ctx.RepoContextMetadata.Branch)' 'assert.Equal(t, "", ctx.RepoContextMetadata.Branch)'
   '';
 
   postInstall = ''
