@@ -4,18 +4,18 @@
 
 let
   pname = "signald";
-  version = "0.18.5";
+  version = "0.20.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-2cb1pyBOoOlFqJsNKXA0Q9x4wCE4yzzcfrDDtTp7HMk=";
+    hash = "sha256-OSZpZZ4Ia2dKiC2Btvnafa4nXezZSlvxlDrseJ6OKrk=";
   };
 
   jre' = jre_minimal.override {
     jdk = jdk17_headless;
-    # from https://gitlab.com/signald/signald/-/blob/0.18.5/build.gradle#L173
+    # from https://gitlab.com/signald/signald/-/blob/0.19.0/build.gradle#L173
     modules = [
       "java.base"
       "java.management"
@@ -54,8 +54,8 @@ let
     outputHashMode = "recursive";
     # Downloaded jars differ by platform
     outputHash = {
-      x86_64-linux = "sha256-q1gzauIL7aKalvPSfiK5IvkNkidCh+6jp5bpwxR+PZ0=";
-      aarch64-linux = "sha256-cM+7MaV0/4yAzobXX9FSdl/ZfLddwySayao96UdDgzk=";
+      x86_64-linux = "sha256-Z6mPFIxx3WomaHVi2YEp6KPCL47Fj6m17K/8COuif4c=";
+      aarch64-linux = "sha256-Kow+m5m0X8+lqrJnFfXcDyyXqjbIaQeMMRuRvR4dIi4=";
     }.${stdenv.system} or (throw "Unsupported platform");
   };
 
@@ -73,6 +73,7 @@ in stdenv.mkDerivation rec {
     runHook preBuild
 
     export GRADLE_USER_HOME=$(mktemp -d)
+    export VERSION="${version}"
 
     gradle --offline --no-daemon distTar
 

@@ -50,7 +50,7 @@ index eaa6e0e..9a2f4e2 100644
 @@ -104,6 +117,8 @@ dependencies {
      implementation 'io.prometheus:simpleclient_httpserver:0.15.0'
      implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
-     implementation 'io.sentry:sentry:5.7.3'
+     implementation 'io.sentry:sentry:6.1.2'
 +    implementation 'com.github.gmazzo.buildconfig:com.github.gmazzo.buildconfig.gradle.plugin:3.0.3'
 +    implementation 'org.jetbrains.kotlin:kotlin-scripting-jvm:1.4.31'
      testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
