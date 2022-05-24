@@ -633,8 +633,13 @@ in {
 
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "21" then pkgs.php74
-        else if versionOlder cfg.package.version "24" then pkgs.php80
-        else pkgs.php81;
+        # FIXME: Use PHP 8.1 with Nextcloud 24 and higher, once issues like this one are fixed:
+        #
+        # https://github.com/nextcloud/twofactor_totp/issues/1192
+        #
+        # else if versionOlder cfg.package.version "24" then pkgs.php80
+        # else pkgs.php81;
+        else pkgs.php80;
     }
 
     { assertions = [
