@@ -1,0 +1,80 @@
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.11">
+  <title>Release 22.11 (“Raccoon”, 2022.11/??)</title>
+  <para>
+    Support is planned until the end of June 2023, handing over to
+    23.05.
+  </para>
+  <section xml:id="sec-release-22.11-highlights">
+    <title>Highlights</title>
+    <para>
+      In addition to numerous new and upgraded packages, this release
+      has the following highlights:
+    </para>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          During cross-compilation, tests are now executed if the test
+          suite can be executed by the build platform. This is the case
+          when doing “native” cross-compilation where the build and host
+          platforms are largely the same, but the nixpkgs’ cross
+          compilation infrastructure is used, e.g.
+          <literal>pkgsStatic</literal> and <literal>pkgsLLVM</literal>.
+          Another possibility is that the build platform is a superset
+          of the host platform, e.g. when cross-compiling from
+          <literal>x86_64-unknown-linux</literal> to
+          <literal>i686-unknown-linux</literal>. The predicate gating
+          test suite execution is the newly added
+          <literal>canExecute</literal> predicate: You can e.g. check if
+          <literal>stdenv.buildPlatform</literal> can execute binaries
+          built for <literal>stdenv.hostPlatform</literal> (i.e.
+          produced by <literal>stdenv.cc</literal>) by evaluating
+          <literal>stdenv.buildPlatform.canExecute stdenv.hostPlatform</literal>.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.11-new-services">
+    <title>New Services</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Please remove this line when you add the first item since
+          docbook requires the section to be non-empty
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.11-incompatibilities">
+    <title>Backward Incompatibilities</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          The <literal>isCompatible</literal> predicate checking CPU
+          compatibility is no longer exposed by the platform sets
+          generated using <literal>lib.systems.elaborate</literal>. In
+          most cases you will want to use the new
+          <literal>canExecute</literal> predicate instead which also
+          considers the kernel / syscall interface. It is briefly
+          described in the release’s
+          <link linkend="sec-release-22.11-highlights">highlights
+          section</link>.
+          <literal>lib.systems.parse.isCompatible</literal> still
+          exists, but has changed semantically: Architectures with
+          differing endianness modes are <emphasis>no longer considered
+          compatible</emphasis>.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  <section xml:id="sec-release-22.11-notable-changes">
+    <title>Other Notable Changes</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Please remove this line when you add the first item since
+          docbook requires the section to be non-empty
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+</section>
