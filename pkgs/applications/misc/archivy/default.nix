@@ -43,7 +43,7 @@ buildPythonApplication rec {
     elasticsearch
     flask-compress
     flask_login
-    flask_wtf
+    flask-wtf
     html2text
     python-dotenv
     python-frontmatter
