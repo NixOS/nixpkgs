@@ -2,12 +2,12 @@
 
 i3.overrideAttrs (oldAttrs: rec {
   pname = "i3-rounded";
-  version = "524c9f7b50f8c540b2ae3480b242c30d8775f98e";
+  version = "unstable-4.20.1";
 
   src = fetchFromGitHub {
     owner = "LinoBigatti";
     repo = "i3-rounded";
-    rev = version;
+    rev = "524c9f7b50f8c540b2ae3480b242c30d8775f98e";
     sha256 = "0y7m1s1y8f9vgkp7byi33js8n4rigiykd71s936i5d4rwlzrxiwm";
   };
 
@@ -17,11 +17,5 @@ i3.overrideAttrs (oldAttrs: rec {
     maintainers = with maintainers; [ marsupialgutz ];
     license = licenses.bsd3;
     platforms = platforms.unix;
-
-    longDescription = ''
-      i3-rounded is a fork of i3-gaps that adds rounding to window corners.
-      It was originally made by resloved and this repo strives to keep it
-      (hopefully) up to date.
-    '';
   };
 })
