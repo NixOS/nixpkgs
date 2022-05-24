@@ -9557,6 +9557,8 @@ in {
 
   signify = callPackage ../development/python-modules/signify { };
 
+  siobrultech-protocols = callPackage ../development/python-modules/siobrultech-protocols { };
+
   siosocks = callPackage ../development/python-modules/siosocks { };
 
   sip = callPackage ../development/python-modules/sip { };
