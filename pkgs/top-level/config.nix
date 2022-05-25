@@ -1,6 +1,6 @@
 # This file defines the structure of the `config` nixpkgs option.
 
-{ lib, ... }:
+{ config, lib, ... }:
 
 with lib;
 
@@ -32,6 +32,11 @@ let
     };
 
     /* Config options */
+
+    warnUndeclaredOptions = mkOption {
+      description = "Whether to warn when <literal>config</literal> contains an unrecognized attribute.";
+      default = false;
+    };
 
     doCheckByDefault = mkMassRebuild {
       feature = "run <literal>checkPhase</literal> by default";
@@ -122,6 +127,20 @@ let
 
 in {
 
+  freeformType =
+    let t = lib.types.attrsOf lib.types.raw;
+    in t // {
+      merge = loc: defs:
+        let r = t.merge loc defs;
+        in r // { _undeclared = r; };
+    };
+
   inherit options;
+
+  config = {
+    warnings = lib.optionals config.warnUndeclaredOptions (
+      lib.mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared
+    );
+  };
 
 }
