@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "glyphslib";
-  version = "6.0.4";
+  version = "6.0.5";
 
   format = "pyproject";
 
   src = fetchPypi {
     pname = "glyphsLib";
     inherit version;
-    sha256 = "sha256-PT66n1WEO5FNcwov8GaXT1YNrAi22X4HN7iVNkuehKI=";
+    sha256 = "sha256-qs/SBzsXdHfcbFhihUpxvueINvjSIJxhXd+j8dz1Ujo=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
