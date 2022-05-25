@@ -4998,6 +4998,8 @@ with pkgs;
 
   curlMinimal = callPackage ../tools/networking/curl { };
 
+  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
+
   curl_unix_socket = callPackage ../tools/networking/curl-unix-socket { };
 
   curlie = callPackage ../tools/networking/curlie { };
@@ -29664,11 +29666,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  spotify-unwrapped = callPackage ../applications/audio/spotify {
-    curl = curl.override {
-      opensslSupport = false; gnutlsSupport = true;
-    };
-  };
+  spotify-unwrapped = callPackage ../applications/audio/spotify { };
 
   spotify = callPackage ../applications/audio/spotify/wrapper.nix { };
 
