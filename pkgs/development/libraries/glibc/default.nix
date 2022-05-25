@@ -2,6 +2,7 @@
 , withLinuxHeaders ? true
 , profilingLibraries ? false
 , withGd ? false
+, withFHS ? false
 , buildPackages
 }:
 
@@ -16,7 +17,7 @@ in
 callPackage ./common.nix { inherit stdenv; } {
     pname = "glibc" + lib.optionalString withGd "-gd";
 
-    inherit withLinuxHeaders profilingLibraries withGd;
+    inherit withLinuxHeaders profilingLibraries withGd withFHS;
 
     # Note:
     # Things you write here override, and do not add to,

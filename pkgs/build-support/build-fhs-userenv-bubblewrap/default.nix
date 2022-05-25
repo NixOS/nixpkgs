@@ -16,6 +16,7 @@ args @ {
 , unshareUts ? true
 , unshareCgroup ? true
 , dieWithParent ? true
+, extraLdConf ? ""
 , ...
 }:
 
@@ -26,6 +27,7 @@ let
   env = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc"
+    "extraLdConf"
   ]);
 
   etcBindFlags = let
@@ -78,6 +80,14 @@ let
   # issues running some binary with LD_LIBRARY_PATH
   createLdConfCache = ''
     cat > /etc/ld.so.conf <<EOF
+    /run/opengl-driver/lib
+    /run/opengl-driver/lib/dri
+    /run/opengl-driver/lib/gbm
+    /run/opengl-driver/lib/vdpau
+    /run/opengl-driver-32/lib
+    /run/opengl-driver-32/lib/dri
+    /run/opengl-driver-32/lib/gbm
+    /run/opengl-driver-32/lib/vdpau
     /lib
     /lib/x86_64-linux-gnu
     /lib64
@@ -88,6 +98,7 @@ let
     /lib32
     /usr/lib/i386-linux-gnu
     /usr/lib32
+  '' + extraLdConf + ''
     EOF
     ldconfig &> /dev/null
   '';
@@ -101,6 +112,8 @@ let
     blacklist=(/nix /dev /proc /etc)
     ro_mounts=()
     symlinks=()
+    graphics_share=()
+
     for i in ${env}/*; do
       path="/''${i##*/}"
       if [[ $path == '/etc' ]]; then
@@ -125,6 +138,13 @@ let
         ro_mounts+=(--ro-bind "$i" "/etc$path")
       done
     fi
+
+    declare -a graphics_share
+    for dir in /run/opengl-driver{,-32}/share/*; do
+      if [[ -d "$dir" ]]; then
+        graphics_share+=(--bind "$dir" "/usr/share/$(basename $dir)")
+      fi
+    done
 
     declare -a auto_mounts
     # loop through all directories in the root
@@ -156,18 +176,19 @@ let
       # settled on being mounting one via bwrap.
       # Also, the cache needs to go to both 32 and 64 bit glibcs, for games
       # of both architectures to work.
-      --tmpfs ${glibc}/etc \
-      --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf \
-      --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
-      --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
-      --remount-ro ${glibc}/etc \
-      --tmpfs ${pkgsi686Linux.glibc}/etc \
-      --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
-      --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
-      --ro-bind ${pkgsi686Linux.glibc}/etc/rpc ${pkgsi686Linux.glibc}/etc/rpc \
-      --remount-ro ${pkgsi686Linux.glibc}/etc \
+      --tmpfs ${glibc}/etc
+      --symlink /etc/ld.so.conf ${glibc}/etc/ld.so.conf
+      --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache
+      --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc
+      --remount-ro ${glibc}/etc
+      --tmpfs ${pkgsi686Linux.glibc}/etc
+      --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf
+      --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache
+      --ro-bind ${pkgsi686Linux.glibc}/etc/rpc ${pkgsi686Linux.glibc}/etc/rpc
+      --remount-ro ${pkgsi686Linux.glibc}/etc
       ${etcBindFlags}
       "''${ro_mounts[@]}"
+      "''${graphics_share[@]}"
       "''${symlinks[@]}"
       "''${auto_mounts[@]}"
       ${concatStringsSep "\n  " extraBwrapArgs}

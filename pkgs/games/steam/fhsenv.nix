@@ -85,6 +85,7 @@ in buildFHSUserEnv rec {
     harfbuzz
     libthai
     pango
+    libdbusmenu-gtk3 # system tray
 
     # Not formally in runtime but needed by some games
     at-spi2-atk
@@ -155,7 +156,7 @@ in buildFHSUserEnv rec {
     xorg.libSM
     xorg.libICE
     gnome2.GConf
-    (curl.override { gnutlsSupport = true; opensslSupport = false; })
+    curl
     nspr
     nss
     cups

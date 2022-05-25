@@ -17417,6 +17417,10 @@ with pkgs;
     withGd = true;
   };
 
+  glibc-fhs = hiPrio (callPackage ../development/libraries/glibc {
+    withFHS = true;
+  });
+
   # Being redundant to avoid cycles on boot. TODO: find a better way
   glibcCross = callPackage ../development/libraries/glibc {
     stdenv = gccCrossLibcStdenv; # doesn't compile without gcc
