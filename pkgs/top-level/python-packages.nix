@@ -2438,6 +2438,8 @@ in {
 
   djmail = callPackage ../development/python-modules/djmail { };
 
+  dj-rest-auth = callPackage ../development/python-modules/dj-rest-auth { };
+
   dj-search-url = callPackage ../development/python-modules/dj-search-url { };
 
   dkimpy = callPackage ../development/python-modules/dkimpy { };
