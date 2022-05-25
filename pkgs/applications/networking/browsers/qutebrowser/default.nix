@@ -61,7 +61,7 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     pyyaml backendPackage jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
-    pyreadability pykeepass stem
+    readability-lxml pykeepass stem
     pynacl
     # extensive ad blocking
     adblock
