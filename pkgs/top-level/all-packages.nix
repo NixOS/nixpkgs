@@ -3058,6 +3058,8 @@ with pkgs;
 
   slurp = callPackage ../tools/wayland/slurp { };
 
+  sov = callPackage ../tools/wayland/sov { };
+
   swaykbdd = callPackage ../tools/wayland/swaykbdd { };
 
   swaycwd = callPackage ../tools/wayland/swaycwd { };
