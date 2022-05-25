@@ -166,7 +166,7 @@ let
       ./patches/m102-fix-dawn_version_generator-failure.patch
     ];
 
-    postPatch = optionalString (chromiumVersionAtLeast "102") ''
+    postPatch = ''
       # Workaround/fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1313361:
       substituteInPlace BUILD.gn \
         --replace '"//infra/orchestrator:orchestrator_all",' ""
@@ -174,7 +174,6 @@ let
       substituteInPlace build/config/compiler/BUILD.gn \
         --replace '"-Xclang",' "" \
         --replace '"-no-opaque-pointers",' ""
-    '' + ''
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then
@@ -194,7 +193,7 @@ let
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
       chmod -x third_party/webgpu-cts/src/tools/run_deno
-      ${lib.optionalString (chromiumVersionAtLeast "102") "chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno"}
+      chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \
