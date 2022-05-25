@@ -7,6 +7,7 @@
 , fetchPypi
 , isPyPy
 , libgit2
+, pycparser
 , pytestCheckHook
 , pythonOlder
 }:
@@ -33,6 +34,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cached-property
+    pycparser
   ] ++ lib.optional (!isPyPy) [
     cffi
   ];
