@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , fetchurl
 , undmg
@@ -7,6 +7,7 @@
 
 let
   appName = "LibreOffice.app";
+  scriptName = "soffice";
   version = "7.2.5";
   baseUrl = "https://download.documentfoundation.org/libreoffice/stable";
   dist = {
@@ -25,25 +26,27 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   inherit version;
   pname = "libreoffice";
   src = fetchurl {
-    inherit (dist."${stdenv.hostPlatform.system}") url sha256;
+    inherit (dist.${stdenvNoCC.hostPlatform.system} or
+      (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}")) url sha256;
   };
 
   nativeBuildInputs = [ undmg ];
   sourceRoot = "${appName}";
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
 
   installPhase = ''
-    runHook preInstallPhase
+    runHook preInstall
     mkdir -p $out/{Applications/${appName},bin}
     cp -R . $out/Applications/${appName}
-    ln -s $out/Applications/${appName}/Contents/MacOS/soffice $out/bin
-    runHook postInstallPhase
+    cat > $out/bin/${scriptName} << EOF
+    #!${stdenvNoCC.shell}
+    open -na $out/Applications/${appName} --args "$@"
+    EOF
+    chmod +x $out/bin/${scriptName}
+    runHook postInstall
   '';
 
   passthru.updateScript =
@@ -63,7 +66,7 @@ stdenv.mkDerivation rec {
         set -o errexit
         set -o nounset
         set -o pipefail
-        
+
         # reset version first so that both platforms are always updated and in sync
         update-source-version libreoffice 0 ${nullHash} --system=aarch64-darwin
         update-source-version libreoffice ${newVersion} ${newAarch64Sha256} --system=aarch64-darwin
