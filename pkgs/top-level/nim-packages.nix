@@ -1,4 +1,4 @@
-{ lib, pkgs, stdenv, newScope, nim, fetchFromGitHub }:
+{ lib, pkgs, stdenv, newScope, nim, fetchFromGitHub, buildPackages }:
 
 lib.makeScope newScope (self:
   let callPackage = self.callPackage;
@@ -6,7 +6,9 @@ lib.makeScope newScope (self:
     inherit nim;
     nim_builder = callPackage ../development/nim-packages/nim_builder { };
     buildNimPackage =
-      callPackage ../development/nim-packages/build-nim-package { };
+      callPackage ../development/nim-packages/build-nim-package {
+        inherit (buildPackages.buildPackages.nimPackages) nim_builder;
+      };
     fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
 
     astpatternmatching =
