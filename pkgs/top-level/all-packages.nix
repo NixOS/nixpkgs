@@ -8284,6 +8284,8 @@ with pkgs;
 
   mencal = callPackage ../applications/misc/mencal { } ;
 
+  metamorphose2 = callPackage ../applications/misc/metamorphose2 { };
+
   metar = callPackage ../applications/misc/metar { };
 
   mfcuk = callPackage ../tools/security/mfcuk { };
