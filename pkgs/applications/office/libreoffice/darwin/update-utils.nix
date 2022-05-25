@@ -39,8 +39,6 @@ let
   getSha256Url = dmgUrl: oldVersion: newVersion:
     (builtins.replaceStrings [ oldVersion ] [ newVersion ] dmgUrl) + ".sha256";
 
-  # nullHash :: String
-  nullHash = "0000000000000000000000000000000000000000000000000000000000000000";
 in
 {
   inherit
@@ -49,6 +47,5 @@ in
     getLatestStableVersion
     extractSha256FromHtml
     getSha256
-    getSha256Url
-    nullHash;
+    getSha256Url;
 }
