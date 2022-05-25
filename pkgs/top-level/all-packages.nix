@@ -35134,8 +35134,6 @@ with pkgs;
 
   qmidinet = libsForQt5.callPackage ../applications/audio/qmidinet { };
 
-  qmidiroute = callPackage ../applications/audio/qmidiroute { };
-
   qmmp = qt6Packages.callPackage ../applications/audio/qmmp { };
 
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
