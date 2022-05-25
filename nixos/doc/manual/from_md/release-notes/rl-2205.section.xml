@@ -181,146 +181,25 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://userbase.kde.org/K3b">k3b</link>,
-          the KDE disk burning application. Available as
-          <link linkend="opt-programs.k3b.enable">programs.k3b</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="http://www.nncpgo.org">NNCP</link>, NNCP
-          (Node to Node copy) utilities and configuration, Available as
-          <link linkend="opt-programs.nncp.enable">programs.nncp</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://corosync.github.io/corosync/">Corosync</link>
-          and
-          <link xlink:href="https://clusterlabs.org/pacemaker/">Pacemaker</link>,
-          A open-source high availability resource manager. Available as
-          <link linkend="opt-services.corosync.enable">services.corosync</link>
-          and
-          <link linkend="opt-services.pacemaker.enable">services.pacemaker</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://zammad.org/">Zammad</link>, a
-          web-based, open source user support/ticketing solution.
-          Available as
-          <link linkend="opt-services.zammad.enable">services.zammad</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://hastebin.com/about.md">Haste</link>,
-          a pastebin written in node.js. Available as
-          <link linkend="opt-services.haste-server.enable">services.haste</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/darrylb123/usbrelay">usbrelayd</link>,
-          an USB Relay MQTT daemon. Available as
-          <link linkend="opt-services.usbrelayd.enable">services.usbrelayd</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://maddy.email/">Maddy</link>, a free
-          an open source mail server. Availabe as
-          <link linkend="opt-services.maddy.enable">services.maddy</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://public-inbox.org">Public
-          Inbox</link>, an <quote>archives first</quote> approach to
-          mailing lists. Available as
-          <link linkend="opt-services.public-inbox.enable">services.public-inbox</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://ddvk.github.io/rmfakecloud/">rmfakecloud</link>,
-          a clone of the cloud sync the remarkable tablet. Available as
-          <link linkend="opt-services.rmfakecloud.enable">services.rmfakecloud</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://grafana.com/oss/mimir/">Grafana
-          Mimir</link>, an open source, horizontally scalable, highly
-          available, multi-tenant, long-term storage for Prometheus.
-          Available as
-          <link linkend="opt-services.mimir.enable">services.mimir</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://moosefs.com/">Moosefs</link>, a
-          distributed filesystem. Available as
-          <link linkend="opt-services.moosefs.master.enable">services.moosefs</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/miquels/webdav-server-rs">webdav-server-rs</link>,
-          Webdav server in rust. Available as
-          <link linkend="opt-services.webdav-server-rs.enable">services.webdav-server-rs</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/kissgyorgy/cloudflare-dyndns">cloudflare-dyndns</link>,
-          CloudFlare Dynamic DNS client. Available as
-          <link linkend="opt-services.cloudflare-dyndns.enable">services.cloudflare-dyndns</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://www.envoyproxy.io/">Envoy</link>, a
-          high-performance reverse proxy. Available as
-          <link linkend="opt-services.envoy.enable">services.envoy</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/aarond10/https_dns_proxy">https-dns-proxy</link>,
-          DNS to DNS over HTTPS (DoH) proxy. Available as
-          <link linkend="opt-services.https-dns-proxy.enable">services.https-dns-proxy</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/aler9/rtsp-simple-server">rtsp-simple-server</link>,
-          ready-to-use RTSP / RTMP / HLS server and proxy that allows to
-          read, publish and proxy video and audio streams. Available as
-          <link linkend="opt-services.rtsp-simple-server.enable">services.rtsp-simple-server</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/gin66/wg_netmanager">wg-netmanager</link>,
-          the Wireguard network manager. Available as
-          <link linkend="opt-services.wg-netmanager.enable">services.wg-netmanager</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://sslmate.com/">sslmate-agent</link>,
-          a daemon for managing SSL/TLS certificates on a server.
-          Available as
-          <link xlink:href="services.sslmate-agent.enable">services.sslmate-agent</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           <link xlink:href="https://github.com/intel/linux-sgx#install-the-intelr-sgx-psw">aesmd</link>,
           the Intel SGX Architectural Enclave Service Manager. Available
           as
           <link linkend="opt-services.aesmd.enable">services.aesmd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/mbrubeck/agate">agate</link>,
+          a very simple server for the Gemini hypertext protocol.
+          Available as
+          <link linkend="opt-services.agate.enable">services.agate</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/xddxdd/bird-lg-go">bird-lg</link>,
+          a BGP looking glass for Bird Routing. Available as
+          <link linkend="opt-services.bird-lg.package">services.bird-lg</link>.
         </para>
       </listitem>
       <listitem>
@@ -362,32 +241,65 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://frrouting.org/">FRRouting</link>, a
-          popular suite of Internet routing protocol daemons (BGP, BFD,
-          OSPF, IS-IS, VRRP and others). Available as
-          <link linkend="opt-services.frr.babel.enable">services.frr</link>.
+          <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm">ArchiSteamFarm</link>,
+          a C# application with primary purpose of idling Steam cards
+          from multiple accounts simultaneously. Available as
+          <link linkend="opt-services.archisteamfarm.enable">services.archisteamfarm</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/hifi/heisenbridge">heisenbridge</link>,
-          a bouncer-style Matrix IRC bridge. Available as
-          <link linkend="opt-services.heisenbridge.enable">services.heisenbridge</link>.
+          <link xlink:href="https://loic-sharma.github.io/BaGet/">BaGet</link>,
+          a lightweight NuGet and symbol server. Available at
+          <link linkend="opt-services.baget.enable">services.baget</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://snowflake.torproject.org/">snowflake-proxy</link>,
-          a system to defeat internet censorship. Available as
-          <link linkend="opt-services.snowflake-proxy.enable">services.snowflake-proxy</link>.
+          <link xlink:href="https://github.com/xddxdd/bird-lg-go">bird-lg</link>,
+          a BGP looking glass for Bird Routing. Available as
+          <link linkend="opt-services.bird-lg.package">services.bird-lg</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/fleaz/r53-ddns">r53-ddns</link>,
-          a small tool to run your own DDNS service via AWS Route53.
-          Available as
-          <link linkend="opt-services.r53-ddns.enable">services.r53-ddns</link>.
+          <link xlink:href="https://0xerr0r.github.io/blocky/">blocky</link>,
+          fast and lightweight DNS proxy as ad-blocker for local network
+          with many features. Available as
+          <link linkend="opt-services.blocky.enable">services.blocky</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/kissgyorgy/cloudflare-dyndns">cloudflare-dyndns</link>,
+          CloudFlare Dynamic DNS client. Available as
+          <link linkend="opt-services.cloudflare-dyndns.enable">services.cloudflare-dyndns</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://corosync.github.io/corosync/">Corosync</link>
+          and
+          <link xlink:href="https://clusterlabs.org/pacemaker/">Pacemaker</link>,
+          A open-source high availability resource manager. Available as
+          <link linkend="opt-services.corosync.enable">services.corosync</link>
+          and
+          <link linkend="opt-services.pacemaker.enable">services.pacemaker</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/lakinduakash/linux-wifi-hotspot">create_ap</link>,
+          a module for creating wifi hotspots using the program
+          linux-wifi-hotspot. Available as
+          <link linkend="opt-services.create_ap.enable">services.create_ap</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.envoyproxy.io/">Envoy</link>, a
+          high-performance reverse proxy. Available as
+          <link linkend="opt-services.envoy.enable">services.envoy</link>.
         </para>
       </listitem>
       <listitem>
@@ -399,24 +311,64 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://snipeitapp.com">Snipe-IT</link>, a
-          free open source IT asset/license management system. Available
-          as
-          <link linkend="opt-services.snipe-it.enable">services.snipe-it</link>.
+          <link xlink:href="https://github.com/audreyt/ethercalc">ethercalc</link>,
+          an online collaborative spreadsheet. Available as
+          <link linkend="opt-services.ethercalc.enable">services.ethercalc</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
-          a web interface for the PowerDNS server. Available at
-          <link linkend="opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
+          <link xlink:href="https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-overview.html">filebeat</link>,
+          a lightweight shipper for forwarding and centralizing log
+          data. Available as
+          <link linkend="opt-services.filebeat.enable">services.filebeat</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/postgres/pgadmin4">pgadmin4</link>,
-          an admin interface for the PostgreSQL database. Available at
-          <link linkend="opt-services.pgadmin.enable">services.pgadmin</link>.
+          <link xlink:href="https://frrouting.org/">FRRouting</link>, a
+          popular suite of Internet routing protocol daemons (BGP, BFD,
+          OSPF, IS-IS, VRRP and others). Available as
+          <link linkend="opt-services.frr.babel.enable">services.frr</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://grafana.com/oss/mimir/">Grafana
+          Mimir</link>, an open source, horizontally scalable, highly
+          available, multi-tenant, long-term storage for Prometheus.
+          Available as
+          <link linkend="opt-services.mimir.enable">services.mimir</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://hastebin.com/about.md">Haste</link>,
+          a pastebin written in node.js. Available as
+          <link linkend="opt-services.haste-server.enable">services.haste</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/juanfont/headscale">headscale</link>,
+          an Open Source implementation of the
+          <link xlink:href="https://tailscale.io">Tailscale</link>
+          Control Server. Available as
+          <link linkend="opt-services.headscale.enable">services.headscale</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/hifi/heisenbridge">heisenbridge</link>,
+          a bouncer-style Matrix IRC bridge. Available as
+          <link linkend="opt-services.heisenbridge.enable">services.heisenbridge</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/aarond10/https_dns_proxy">https-dns-proxy</link>,
+          DNS to DNS over HTTPS (DoH) proxy. Available as
+          <link linkend="opt-services.https-dns-proxy.enable">services.https-dns-proxy</link>.
         </para>
       </listitem>
       <listitem>
@@ -437,17 +389,9 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://maddy.email">maddy</link>, a
-          composable all-in-one mail server. Available as
-          <link linkend="opt-services.maddy.enable">services.maddy</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://starship.rs">starship</link>, a
-          minimal, blazing-fast, and infinitely customizable prompt for
-          any shell. Available at
-          <link linkend="opt-programs.starship.enable">programs.startship</link>.
+          <link xlink:href="https://userbase.kde.org/K3b">k3b</link>,
+          the KDE disk burning application. Available as
+          <link linkend="opt-programs.k3b.enable">programs.k3b</link>.
         </para>
       </listitem>
       <listitem>
@@ -457,6 +401,42 @@
           <link linkend="opt-programs.k40-whisperer.enable">programs.k40-whisperer.enable</link>.
           Users must add themselves to the <literal>k40</literal> group
           to be able to access the device.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://kanidm.github.io/kanidm/stable/">kanidm</link>,
+          an identity management server written in Rust. Available as
+          <link linkend="opt-services.kanidm.enableServer">services.kanidm</link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://maddy.email">maddy</link>, a
+          composable all-in-one mail server. Available as
+          <link linkend="opt-services.maddy.enable">services.maddy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://maddy.email/">Maddy</link>, a free
+          an open source mail server. Availabe as
+          <link linkend="opt-services.maddy.enable">services.maddy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://conduit.rs/">matrix-conduit</link>,
+          a simple, fast and reliable chat server powered by matrix.
+          Available as
+          <link xlink:href="option.html#opt-services.matrix-conduit.enable">services.matrix-conduit</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://moosefs.com">Moosefs</link>, fault
+          tolerant petabyte distributed file system. Available as
+          <link linkend="opt-services.moosefs.master.enable">moosefs</link>.
         </para>
       </listitem>
       <listitem>
@@ -477,10 +457,9 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/prometheus-pve/prometheus-pve-exporter">prometheus-pve-exporter</link>,
-          a tool that exposes information from the Proxmox VE API for
-          use by Prometheus. Available as
-          <link linkend="opt-services.prometheus.exporters.pve">services.prometheus.exporters.pve</link>.
+          <link xlink:href="https://nbd.sourceforge.io/">nbd</link>, a
+          Network Block Device server. Available as
+          <link linkend="opt-services.nbd.server.enable">services.nbd</link>.
         </para>
       </listitem>
       <listitem>
@@ -488,6 +467,162 @@
           <link xlink:href="https://github.com/netbox-community/netbox">netbox</link>,
           infrastructure resource modeling (IRM) tool. Available as
           <link linkend="opt-services.netbox.enable">services.netbox</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/vvilhonen/nethoscope">nethoscope</link>,
+          listen to your network traffic. Available as
+          <link linkend="opt-programs.nethoscope.enable">programs.nethoscope</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://nifi.apache.org">nifi</link>, an
+          easy to use, powerful, and reliable system to process and
+          distribute data. Available as
+          <link linkend="opt-services.nifi.enable">services.nifi</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/Mic92/nix-ld">nix-ld</link>,
+          Run unpatched dynamic binaries on NixOS. Available as
+          <link linkend="opt-programs.nix-ld.enable">programs.nix-ld</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="http://www.nncpgo.org">NNCP</link>, NNCP
+          (Node to Node copy) utilities and configuration, Available as
+          <link linkend="opt-programs.nncp.enable">programs.nncp</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/postgres/pgadmin4">pgadmin4</link>,
+          an admin interface for the PostgreSQL database. Available at
+          <link linkend="opt-services.pgadmin.enable">services.pgadmin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/ngoduykhanh/PowerDNS-Admin">PowerDNS-Admin</link>,
+          a web interface for the PowerDNS server. Available at
+          <link linkend="opt-services.powerdns-admin.enable">services.powerdns-admin</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/prometheus-pve/prometheus-pve-exporter">prometheus-pve-exporter</link>,
+          a tool that exposes information from the Proxmox VE API for
+          use by Prometheus. Available as
+          <link linkend="opt-services.prometheus.exporters.pve.enable">services.prometheus.exporters.pve</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/ThomasLeister/prosody-filer">prosody-filer</link>,
+          a server for handling XMPP HTTP Upload requests. Available at
+          <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://public-inbox.org">Public
+          Inbox</link>, an <quote>archives first</quote> approach to
+          mailing lists. Available as
+          <link linkend="opt-services.public-inbox.enable">services.public-inbox</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/fleaz/r53-ddns">r53-ddns</link>,
+          a small tool to run your own DDNS service via AWS Route53.
+          Available as
+          <link linkend="opt-services.r53-ddns.enable">services.r53-ddns</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://ddvk.github.io/rmfakecloud/">rmfakecloud</link>,
+          a clone of the cloud sync the remarkable tablet. Available as
+          <link linkend="opt-services.rmfakecloud.enable">services.rmfakecloud</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://docs.docker.com/engine/security/rootless/">rootless
+          Docker</link>, a <literal>systemd --user</literal> Docker
+          service which runs without root permissions. Available as
+          <link xlink:href="options.html#opt-virtualisation.docker.rootless.enable">virtualisation.docker.rootless.enable</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.rstudio.com/products/rstudio/#rstudio-server">rstudio-server</link>,
+          a browser-based version of the RStudio IDE for the R
+          programming language. Available as
+          <link linkend="opt-services.rstudio-server.enable">services.rstudio-server</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/aler9/rtsp-simple-server">rtsp-simple-server</link>,
+          ready-to-use RTSP / RTMP / HLS server and proxy that allows to
+          read, publish and proxy video and audio streams. Available as
+          <link linkend="opt-services.rtsp-simple-server.enable">services.rtsp-simple-server</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://snipeitapp.com">Snipe-IT</link>, a
+          free open source IT asset/license management system. Available
+          as
+          <link linkend="opt-services.snipe-it.enable">services.snipe-it</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://snowflake.torproject.org/">snowflake-proxy</link>,
+          a system to defeat internet censorship. Available as
+          <link linkend="opt-services.snowflake-proxy.enable">services.snowflake-proxy</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://sslmate.com/">sslmate-agent</link>,
+          a daemon for managing SSL/TLS certificates on a server.
+          Available as
+          <link xlink:href="services.sslmate-agent.enable">services.sslmate-agent</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://starship.rs">starship</link>, a
+          minimal, blazing-fast, and infinitely customizable prompt for
+          any shell. Available at
+          <link linkend="opt-programs.starship.enable">programs.startship</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/rfjakob/systembus-notify">systembus-notify</link>,
+          allow system level notifications to reach the users. Available
+          as
+          <link xlink:href="opt-services.systembus-notify.enable">services.systembus-notify</link>.
+          Please keep in mind that this service should only be enabled
+          on machines with fully trusted users, as any local user is
+          able to DoS user sessions by spamming notifications.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://goteleport.com">teleport</link>,
+          allows engineers and security professionals to unify access
+          for SSH servers, Kubernetes clusters, web applications, and
+          databases across all environments. Available at
+          <link linkend="opt-services.teleport.enable">services.teleport</link>.
         </para>
       </listitem>
       <listitem>
@@ -508,128 +643,31 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/mbrubeck/agate">agate</link>,
-          a very simple server for the Gemini hypertext protocol.
+          <link xlink:href="https://github.com/darrylb123/usbrelay">usbrelayd</link>,
+          an USB Relay MQTT daemon. Available as
+          <link linkend="opt-services.usbrelayd.enable">services.usbrelayd</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/miquels/webdav-server-rs">webdav-server-rs</link>,
+          Webdav server in rust. Available as
+          <link linkend="opt-services.webdav-server-rs.enable">services.webdav-server-rs</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/gin66/wg_netmanager">wg-netmanager</link>,
+          the Wireguard network manager. Available as
+          <link linkend="opt-services.wg-netmanager.enable">services.wg-netmanager</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://zammad.org/">Zammad</link>, a
+          web-based, open source user support/ticketing solution.
           Available as
-          <link linkend="opt-services.agate.enable">services.agate</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm">ArchiSteamFarm</link>,
-          a C# application with primary purpose of idling Steam cards
-          from multiple accounts simultaneously. Available as
-          <link linkend="opt-services.archisteamfarm.enable">services.archisteamfarm</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://goteleport.com">teleport</link>,
-          allows engineers and security professionals to unify access
-          for SSH servers, Kubernetes clusters, web applications, and
-          databases across all environments. Available at
-          <link linkend="opt-services.teleport.enable">services.teleport</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://loic-sharma.github.io/BaGet/">BaGet</link>,
-          a lightweight NuGet and symbol server. Available at
-          <link linkend="opt-services.baget.enable">services.baget</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://moosefs.com">moosefs</link>, fault
-          tolerant petabyte distributed file system. Available as
-          <link linkend="opt-services.moosefs.client.enable">moosefs</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/ThomasLeister/prosody-filer">prosody-filer</link>,
-          a server for handling XMPP HTTP Upload requests. Available at
-          <link linkend="opt-services.prosody-filer.enable">services.prosody-filer</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/rfjakob/systembus-notify">systembus-notify</link>,
-          allow system level notifications to reach the users. Available
-          as
-          <link xlink:href="opt-services.systembus-notify.enable">services.systembus-notify</link>.
-          Please keep in mind that this service should only be enabled
-          on machines with fully trusted users, as any local user is
-          able to DoS user sessions by spamming notifications.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/audreyt/ethercalc">ethercalc</link>,
-          an online collaborative spreadsheet. Available as
-          <link linkend="opt-services.ethercalc.enable">services.ethercalc</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://nbd.sourceforge.io/">nbd</link>, a
-          Network Block Device server. Available as
-          <link linkend="opt-services.nbd.server.enable">services.nbd</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/Mic92/nix-ld">nix-ld</link>,
-          Run unpatched dynamic binaries on NixOS. Available as
-          <link linkend="opt-programs.nix-ld.enable">programs.nix-ld</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://www.rstudio.com/products/rstudio/#rstudio-server">rstudio-server</link>,
-          a browser-based version of the RStudio IDE for the R
-          programming language. Available as
-          <link linkend="opt-services.rstudio-server.enable">services.rstudio-server</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/juanfont/headscale">headscale</link>,
-          an Open Source implementation of the
-          <link xlink:href="https://tailscale.io">Tailscale</link>
-          Control Server. Available as
-          <link linkend="opt-services.headscale.enable">services.headscale</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/lakinduakash/linux-wifi-hotspot">create_ap</link>,
-          a module for creating wifi hotspots using the program
-          linux-wifi-hotspot. Available as
-          <link linkend="opt-services.create_ap.enable">services.create_ap</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://0xerr0r.github.io/blocky/">blocky</link>,
-          fast and lightweight DNS proxy as ad-blocker for local network
-          with many features. Available as
-          <link linkend="opt-services.blocky.enable">services.blocky</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://nifi.apache.org">nifi</link>, an
-          easy to use, powerful, and reliable system to process and
-          distribute data. Available as
-          <link linkend="opt-services.nifi.enable">services.nifi</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://kanidm.github.io/kanidm/stable/">kanidm</link>,
-          an identity management server written in Rust. Available as
-          <link linkend="opt-services.kanidm.enableServer">services.kanidm</link>
+          <link linkend="opt-services.zammad.enable">services.zammad</link>.
         </para>
       </listitem>
     </itemizedlist>
