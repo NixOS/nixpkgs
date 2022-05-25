@@ -11134,6 +11134,8 @@ in {
 
   xarray = callPackage ../development/python-modules/xarray { };
 
+  xarray-einstats = callPackage ../development/python-modules/xarray-einstats { };
+
   xattr = callPackage ../development/python-modules/xattr { };
 
   xbox-webapi = callPackage ../development/python-modules/xbox-webapi { };
