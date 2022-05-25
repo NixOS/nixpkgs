@@ -19,6 +19,8 @@
 , xorg
 , ApplicationServices
 , python3
+, fltk
+, exiv2
 , withXorg ? true
 }:
 
@@ -92,6 +94,11 @@ stdenv.mkDerivation {
       --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
       --replace /usr/bin/vimdot $out/bin/vimdot \
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) pygraphviz;
+    inherit fltk exiv2;
+  };
 
   meta = with lib; {
     homepage = "https://graphviz.org";
