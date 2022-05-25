@@ -16,7 +16,6 @@ let
   knownTreeSitterOrgGrammarRepos = [
     "tree-sitter-javascript"
     "tree-sitter-c"
-    "tree-sitter-swift"
     "tree-sitter-json"
     "tree-sitter-cpp"
     "tree-sitter-ruby"
@@ -70,6 +69,8 @@ let
     "tree-sitter-razor"
     # rust library for constructing arbitrary graph structures from source code
     "tree-sitter-graph"
+    # abandoned
+    "tree-sitter-swift"
   ];
   ignoredTreeSitterOrgReposJson = jsonFile "ignored-tree-sitter-org-repos" ignoredTreeSitterOrgRepos;
 
