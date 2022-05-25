@@ -24118,6 +24118,21 @@ let
     };
   };
 
+  TkToolBar = buildPerlPackage {
+    pname = "Tk-ToolBar";
+    version = "0.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AS/ASB/Tk-ToolBar-0.12.tar.gz";
+      sha256 = "sha256-Rj4oTsRxN+fEJclpGwKo3sXOJytY6h9jWa6AQaI53Q8=";
+    };
+    makeMakerFlags = "X11INC=${pkgs.xorg.libX11.dev}/include X11LIB=${pkgs.xorg.libX11.out}/lib";
+    buildInputs = [ Tk ];
+    doCheck = false;            # Expects working X11.
+    meta = {
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TreeDAGNode = buildPerlPackage {
     pname = "Tree-DAG_Node";
     version = "1.31";
