@@ -4,7 +4,8 @@
 let
   inherit (import ./update-utils.nix { inherit (pkgs) lib; })
     extractLatestVersionFromHtml
-    extractSha256FromHtml;
+    extractSha256FromHtml
+    getLatestStableVersion;
 in
 nixt.mkSuite "LibreOffice Updater"
 {
@@ -37,6 +38,8 @@ nixt.mkSuite "LibreOffice Updater"
 
     in
     "7.3.3" == actual;
+
+  "should extract latest stable version from website" = (builtins.compareVersions getLatestStableVersion "7.3.3") >= 0;
 
   "should extract sha256 from html" =
     let

@@ -52,8 +52,7 @@ stdenvNoCC.mkDerivation {
     let
       inherit (import ./update-utils.nix { inherit lib; })
         getLatestStableVersion
-        getSha256
-        nullHash;
+        getSha256;
       newVersion = getLatestStableVersion;
       newAarch64Sha256 = getSha256 dist."aarch64-darwin".url version newVersion;
       newX86_64Sha256 = getSha256 dist."x86_64-darwin".url version newVersion;
@@ -65,9 +64,9 @@ stdenvNoCC.mkDerivation {
         set -eou pipefail
 
         # reset version first so that both platforms are always updated and in sync
-        update-source-version libreoffice 0 ${nullHash} --system=aarch64-darwin
+        update-source-version libreoffice 0 ${lib.fakeSha256} --system=aarch64-darwin
         update-source-version libreoffice ${newVersion} ${newAarch64Sha256} --system=aarch64-darwin
-        update-source-version libreoffice 0 ${nullHash} --system=x86_64-darwin
+        update-source-version libreoffice 0 ${lib.fakeSha256} --system=x86_64-darwin
         update-source-version libreoffice ${newVersion} ${newX86_64Sha256} --system=x86_64-darwin
       '';
 
