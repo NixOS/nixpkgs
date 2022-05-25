@@ -9,19 +9,18 @@ let
   appName = "LibreOffice.app";
   scriptName = "soffice";
   version = "7.3.3";
-  baseUrl = "https://download.documentfoundation.org/libreoffice/stable";
   dist = {
     aarch64-darwin = rec {
       arch = "aarch64";
       archSuffix = arch;
-      url = "${baseUrl}/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
+      url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
       sha256 = "50ed3deb8d9c987516e2687ebb865bca15486c69da79f1b6d74381e43f2ec863";
     };
 
     x86_64-darwin = rec {
       arch = "x86_64";
       archSuffix = "x86-64";
-      url = "${baseUrl}/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
+      url = "https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${archSuffix}.dmg";
       sha256 = "fb2f9bb90eee34a22af3a2bf2854ef5b76098302b3c41d13d4f543f0d72b994f";
     };
   };
@@ -63,9 +62,7 @@ stdenvNoCC.mkDerivation {
       ''
         #!/usr/bin/env nix-shell
         #!nix-shell -i bash -p common-updater-scripts
-        set -o errexit
-        set -o nounset
-        set -o pipefail
+        set -eou pipefail
 
         # reset version first so that both platforms are always updated and in sync
         update-source-version libreoffice 0 ${nullHash} --system=aarch64-darwin
