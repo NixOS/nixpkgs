@@ -1,4 +1,4 @@
-outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
+outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre2, libxml2, libxslt
 , nginx-doc
 
 , nixosTests
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip perl ]
+  buildInputs = [ openssl zlib pcre2 libxml2 libxslt gd geoip perl ]
     ++ buildInputs
     ++ mapModules "inputs";
 
