@@ -25528,6 +25528,20 @@ let
     };
   };
 
+  WebServiceValidatorHTMLW3C = buildPerlModule {
+    pname = "WebService-Validator-HTML-W3C";
+    version = "0.28";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/ST/STRUAN/WebService-Validator-HTML-W3C-0.28.tar.gz";
+      sha256 = "sha256-zLB60zegOuyBob6gqJzSlUaR/1uzZ9+aMrnZEw8XURA=";
+    };
+    buildInputs = [ ClassAccessor LWP ];
+    meta = {
+      description = "Provides access to the W3C's online Markup validator";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
 } // lib.optionalAttrs config.allowAliases {
   autodie = null; # part of Perl
   AutoLoader = null; # part of Perl 5.22
