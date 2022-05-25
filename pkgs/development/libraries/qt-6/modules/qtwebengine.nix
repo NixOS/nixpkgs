@@ -63,7 +63,7 @@
 , libxslt
 , lcms2
 , re2
-, kerberos
+, libkrb5
 , enableProprietaryCodecs ? true
 }:
 
@@ -215,7 +215,7 @@ qtModule rec {
     # Pipewire
     pipewire
 
-    kerberos
+    libkrb5
   ];
 
   buildInputs = [
