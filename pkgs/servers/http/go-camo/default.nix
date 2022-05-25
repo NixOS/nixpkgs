@@ -15,6 +15,11 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X=main.ServerVersion=${version}" ];
 
+  preCheck = ''
+    # requires network access
+    rm pkg/camo/proxy_{,filter_}test.go
+  '';
+
   meta = with lib; {
     description = "A camo server is a special type of image proxy that proxies non-secure images over SSL/TLS";
     homepage = "https://github.com/cactus/go-camo";
