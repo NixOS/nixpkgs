@@ -17,74 +17,36 @@
     <itemizedlist>
       <listitem>
         <para>
-          The <literal>firefox</literal> browser on
-          <literal>x86_64-linux</literal> is now making use of
-          profile-guided optimization resulting in a much more
-          responsive browsing experience.
+          Nix has been updated from 2.3 to 2.8. This mainly brings
+          experimental support for Flakes, but also marks the
+          <literal>nix</literal> command as experimental which now has
+          to be enabled via the configuration explicitly. For more
+          information and instructions for upgrades, see the
+          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/release-notes.html">Release
+          Notes</link>.
         </para>
       </listitem>
       <listitem>
         <para>
-          <literal>security.acme.defaults</literal> has been added to
-          simplify configuring settings for many certificates at once.
-          This also opens up the the option to use DNS-01 validation
-          when using <literal>enableACME</literal> on web server virtual
-          hosts (e.g.
-          <literal>services.nginx.virtualHosts.*.enableACME</literal>).
+          The <literal>firefox</literal> browser on
+          <literal>x86_64-linux</literal> now makes use of
+          profile-guided optimisation, resulting in a much more
+          responsive browsing experience.
         </para>
       </listitem>
       <listitem>
         <para>
           GNOME has been upgraded to 42. Please take a look at their
           <link xlink:href="https://release.gnome.org/42/">Release
-          Notes</link> for details. Notably, it replaces gedit with
-          GNOME Text Editor, GNOME Terminal with GNOME Console (formerly
-          King’s Cross), and GNOME Screenshot with a tool built into the
-          Shell.
+          Notes</link> for details. In particular, it replaces gedit
+          with GNOME Text Editor, GNOME Terminal with GNOME Console
+          (formerly King’s Cross) and GNOME Screenshot by a tool
+          integrated into the Shell.
         </para>
       </listitem>
       <listitem>
         <para>
-          <literal>stdenv.mkDerivation</literal> now supports a
-          self-referencing <literal>finalAttrs:</literal> parameter
-          containing the final <literal>mkDerivation</literal> arguments
-          including overrides. <literal>drv.overrideAttrs</literal> now
-          supports two parameters
-          <literal>finalAttrs: previousAttrs:</literal>. This allows
-          packaging configuration to be overridden in a consistent
-          manner by providing an alternative to
-          <literal>rec {}</literal> syntax.
-        </para>
-        <para>
-          Additionally, <literal>passthru</literal> can now reference
-          <literal>finalAttrs.finalPackage</literal> containing the
-          final package, including attributes such as the output paths
-          and <literal>overrideAttrs</literal>.
-        </para>
-        <para>
-          New language integrations can be simplified by overriding a
-          <quote>prototype</quote> package containing the
-          language-specific logic. This removes the need for a extra
-          layer of overriding for the <quote>generic builder</quote>
-          arguments, thus removing a usability problem and source of
-          error.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          PHP 8.1 is now available
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          Mattermost has been updated to extended support release 6.3,
-          as the previously packaged extended support release 5.37 is
-          <link xlink:href="https://docs.mattermost.com/upgrade/extended-support-release.html">reaching
-          its end of life</link>. Migrations may take a while, see the
-          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6-3-extended-support-release">changelog</link>
-          and
-          <link xlink:href="https://docs.mattermost.com/upgrade/important-upgrade-notes.html">important
-          upgrade notes</link>.
+          PHP 8.1 is now available.
         </para>
       </listitem>
       <listitem>
@@ -102,42 +64,22 @@
       </listitem>
       <listitem>
         <para>
-          Pulseaudio has been upgraded to version 15.0 and now
-          optionally
+          Pulseaudio has been updated to version 15.0 and now optionally
           <link xlink:href="https://www.freedesktop.org/wiki/Software/PulseAudio/Notes/15.0/#supportforldacandaptxbluetoothcodecsplussbcxqsbcwithhigher-qualityparameters">supports
-          additional Bluetooth audio codecs</link> like aptX or LDAC,
-          with codec switching support being available in
+          additional Bluetooth audio codecs</link> such as aptX or LDAC,
+          with codec switching available in
           <literal>pavucontrol</literal>. This feature is disabled by
-          default but can be enabled by using
+          default, but can be enabled with the option
           <literal>hardware.pulseaudio.package = pkgs.pulseaudioFull;</literal>.
-          Existing 3rd party modules that provided similar
-          functionality, like <literal>pulseaudio-modules-bt</literal>
-          or <literal>pulseaudio-hsphfpd</literal> are deprecated and
-          have been removed.
+          Existing third-party modules that offered similar functions,
+          such as <literal>pulseaudio-modules-bt</literal> or
+          <literal>pulseaudio-hsphfpd</literal>, are obsolete and have
+          been removed.
         </para>
       </listitem>
       <listitem>
         <para>
           PostgreSQL now defaults to major version 14.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          The new
-          <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook"><literal>postgresqlTestHook</literal></link>
-          runs a PostgreSQL server for the duration of package checks.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://kops.sigs.k8s.io"><literal>kops</literal></link>
-          defaults to 1.22.4, which will enable
-          <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html">Instance
-          Metadata Service Version 2</link> and require tokens on new
-          clusters with Kubernetes 1.22. This will increase security by
-          default, but may break some types of workloads. See the
-          <link xlink:href="https://kops.sigs.k8s.io/releases/1.22-notes/">release
-          notes</link> for details.
         </para>
       </listitem>
       <listitem>
@@ -162,6 +104,16 @@
           <literal>pkgs.calamares</literal> and
           <literal>pkgs.calamares-nixos-extensions</literal> to allow
           users to easily install and set up NixOS with a GUI.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>security.acme.defaults</literal> has been added to
+          simplify the configuration of settings for many certificates
+          at once. This also opens up the option to use DNS-01
+          validation when using <literal>enableACME</literal> web server
+          virtual hosts (e.g.
+          <literal>services.nginx.virtualHosts.*.enableACME</literal>).
         </para>
       </listitem>
     </itemizedlist>
@@ -2087,6 +2039,43 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://kops.sigs.k8s.io"><literal>kops</literal></link>
+          defaults to 1.23.2, which will enable
+          <link xlink:href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-service.html">Instance
+          Metadata Service Version 2</link> and require tokens on new
+          clusters with Kubernetes &gt;= 1.22. This will increase
+          security by default, but may break some types of workloads.
+          The default behaviour for
+          <literal>spec.kubeDNS.nodeLocalDNS.forwardToKubeDNS</literal>
+          has changed from <literal>true</literal> to
+          <literal>false</literal>. Cilium now has
+          <literal>disable-cnp-status-updates: true</literal> by
+          default. Set this to false if you rely on the
+          CiliumNetworkPolicy status fields. Support for Kubernetes
+          1.17, the Lyft CNI, Weave CNI on Kubernetes &gt;= 1.23, CentOS
+          7 and 8, Debian 9, RHEL 7, and Ubuntu 16.05 (Xenial) has been
+          removed. See the
+          <link xlink:href="https://kops.sigs.k8s.io/releases/1.22-notes/">1.22
+          release notes</link> and
+          <link xlink:href="https://kops.sigs.k8s.io/releases/1.23-notes/">1.23
+          release notes</link> for more details, including other
+          significant changes.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Mattermost has been upgraded to extended support version 6.3
+          as the previously packaged extended support version 5.37 is
+          <link xlink:href="https://docs.mattermost.com/upgrade/extended-support-release.html">reaching
+          end of life</link>. Migration may take some time, see the
+          <link xlink:href="https://docs.mattermost.com/install/self-managed-changelog.html#release-v6-3-extended-support-release">changelog</link>
+          and
+          <link xlink:href="https://docs.mattermost.com/upgrade/important-upgrade-notes.html">important
+          upgrade notes</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The
           <literal>writers.writePyPy2</literal>/<literal>writers.writePyPy3</literal>
           and corresponding
@@ -2806,6 +2795,40 @@ cp /var/lib/redis/dump.rdb &quot;/var/lib/redis-mastodon/dump.rdb&quot;
           doesn’t have any effect if such an interface is matched by a
           <literal>.network-</literal>unit with a lower priority). In
           case of scripted networking, no behavior was changed.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The new
+          <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-postgresqlTestHook"><literal>postgresqlTestHook</literal></link>
+          runs a PostgreSQL server for the duration of package checks.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>stdenv.mkDerivation</literal> now supports a
+          self-referencing <literal>finalAttrs:</literal> parameter
+          containing the final <literal>mkDerivation</literal> arguments
+          including overrides. <literal>drv.overrideAttrs</literal> now
+          supports two parameters
+          <literal>finalAttrs: previousAttrs:</literal>. This allows
+          packaging configuration to be overridden in a consistent
+          manner by providing an alternative to
+          <literal>rec {}</literal> syntax.
+        </para>
+        <para>
+          Additionally, <literal>passthru</literal> can now reference
+          <literal>finalAttrs.finalPackage</literal> containing the
+          final package, including attributes such as the output paths
+          and <literal>overrideAttrs</literal>.
+        </para>
+        <para>
+          New language integrations can be simplified by overriding a
+          <quote>prototype</quote> package containing the
+          language-specific logic. This removes the need for a extra
+          layer of overriding for the <quote>generic builder</quote>
+          arguments, thus removing a usability problem and source of
+          error.
         </para>
       </listitem>
     </itemizedlist>
