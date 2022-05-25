@@ -270,7 +270,6 @@ in python.pkgs.buildPythonApplication rec {
   checkInputs = with python.pkgs; [
     # test infrastructure (selectively from requirement_test.txt)
     freezegun
-    jsonpickle
     pytest-aiohttp
     pytest-freezegun
     pytest-mock
@@ -281,7 +280,6 @@ in python.pkgs.buildPythonApplication rec {
     requests-mock
     respx
     stdlib-list
-    tqdm
     # required by tests/auth/mfa_modules
     pyotp
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
@@ -305,6 +303,8 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   disabledTestPaths = [
+    # we neither run nor distribute hassfest
+    "tests/hassfest"
     # we don't care about code quality
     "tests/pylint"
     # don't bulk test all components

@@ -12835,6 +12835,12 @@
       fingerprint = "556A 403F B0A2 D423 F656  3424 8489 B911 F9ED 617B";
     }];
   };
+  tljuniper = {
+    email = "tljuniper1@gmail.com";
+    github = "tljuniper";
+    githubId = 48209000;
+    name = "Anna Gillert";
+  };
   tmarkovski = {
     email = "tmarkovski@gmail.com";
     github = "tmarkovski";

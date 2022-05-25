@@ -3700,6 +3700,8 @@ in {
 
   green = callPackage ../development/python-modules/green { };
 
+  greeneye-monitor = callPackage ../development/python-modules/greeneye-monitor { };
+
   greenlet = callPackage ../development/python-modules/greenlet { };
 
   grequests = callPackage ../development/python-modules/grequests { };
@@ -5336,6 +5338,7 @@ in {
 
   mkdocs = callPackage ../development/python-modules/mkdocs { };
   mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
+  mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
   mkdocs-minify = callPackage ../development/python-modules/mkdocs-minify { };
@@ -6112,6 +6115,8 @@ in {
   pamqp = callPackage ../development/python-modules/pamqp { };
 
   panacotta = callPackage ../development/python-modules/panacotta { };
+
+  panasonic-viera = callPackage ../development/python-modules/panasonic-viera { };
 
   pandas = callPackage ../development/python-modules/pandas { };
 
@@ -9557,6 +9562,8 @@ in {
 
   signify = callPackage ../development/python-modules/signify { };
 
+  siobrultech-protocols = callPackage ../development/python-modules/siobrultech-protocols { };
+
   siosocks = callPackage ../development/python-modules/siosocks { };
 
   sip = callPackage ../development/python-modules/sip { };
@@ -10370,7 +10377,9 @@ in {
 
   token-bucket = callPackage ../development/python-modules/token-bucket { };
 
-  tokenizers = toPythonModule (callPackage ../development/python-modules/tokenizers { });
+  tokenizers = callPackage ../development/python-modules/tokenizers {
+    inherit (pkgs.darwin.apple_sdk.frameworks) Security;
+  };
 
   tokenize-rt = toPythonModule (callPackage ../development/python-modules/tokenize-rt { });
 

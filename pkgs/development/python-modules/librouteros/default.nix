@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "librouteros";
-  version = "3.2.0";
+  version = "3.2.1";
   format = "setuptools";
 
   disabled = !isPy3k;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "luqasz";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Zo9HCjYe9cCkqXhikAjDQKQXGkrMni3f+9KoqhZskNk=";
+    sha256 = "sha256-VwpZ1RY6Sul7xvWY7ZoOxZ7KgbRmKRwcVdF9e2b3f6Q=";
   };
 
   checkInputs = [
