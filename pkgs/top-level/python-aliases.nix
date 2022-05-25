@@ -58,7 +58,9 @@ mapAliases ({
   django_appconf = django-appconf; # added 2022-03-03
   django_environ = django-environ; # added 2021-12-25
   django_extensions = django-extensions; # added 2022-01-09
+  django_guardian = django-guardian; # added 2022-05-19
   django_modelcluster = django-modelcluster; # added 2022-04-02
+  django_polymorphic = django-polymorphic; # added 2022-05-24
   django_redis = django-redis; # added 2021-10-11
   django_taggit = django-taggit; # added 2021-10-11
   dns = dnspython; # added 2017-12-10
@@ -67,6 +69,7 @@ mapAliases ({
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
   flask_testing = flask-testing; # added 2022-04-25
+  flask_wtf = flask-wtf; # added 2022-05-24
   garminconnect-ha = garminconnect; # added 2022-02-05
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
@@ -105,6 +108,7 @@ mapAliases ({
   pycallgraph = throw "pycallgraph has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
+  pyreadability = readability-lxml; # added 2022-05-24
   pysmart-smartx = pysmart; # added 2021-10-22
   pytest_6 = pytest; # added 2022-02-10
   pytestcov = pytest-cov; # added 2021-01-04

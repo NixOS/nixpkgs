@@ -16,14 +16,14 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.33.1";
+  version = "1.34.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-4rx8EHtOSd/lHcSHZCtiXkjJjL7B175cVGvFOZ9Bzi8=";
+    sha256 = "sha256-MGXHIbmoPRyjjYHV/RD9sd8Dn74YVlET2V3d/wJ3blo=";
     fetchSubmodules = true;
   };
 
@@ -49,8 +49,6 @@ in stdenv.mkDerivation rec {
     # Therefore we put it into `/run/netdata`, which is owned
     # by netdata only.
     ./ipc-socket-in-run.patch
-    # This is only needed for 1.33.1, remove on the next release
-    ./fix-protobuf.patch
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
