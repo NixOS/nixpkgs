@@ -31049,6 +31049,8 @@ with pkgs;
 
   chia-plotter = callPackage ../applications/blockchains/chia-plotter { };
 
+  clboss = callPackage ../applications/blockchains/clboss { };
+
   clightning = callPackage ../applications/blockchains/clightning { };
 
   besu = callPackage ../applications/blockchains/besu { };
