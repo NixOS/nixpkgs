@@ -24,8 +24,6 @@
 , gobject-introspection
 , vala
 , fetchpatch
-, withQt4 ? false
-, qt4
 , withQt5 ? false
 , qtbase
 , yelp-tools
@@ -70,8 +68,7 @@ stdenv.mkDerivation rec {
     libxklavier
     pam
     polkit
-  ] ++ optional withQt4 qt4
-    ++ optional withQt5 qtbase;
+  ] ++ optional withQt5 qtbase;
 
   patches = [
     # Adds option to disable writing dmrc files
@@ -110,8 +107,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-tests"
     "--disable-dmrc"
-  ] ++ optional withQt4 "--enable-liblightdm-qt"
-    ++ optional withQt5 "--enable-liblightdm-qt5";
+  ] ++ optional withQt5 "--enable-liblightdm-qt5";
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
