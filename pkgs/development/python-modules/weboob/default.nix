@@ -12,7 +12,7 @@
 , lxml
 , mechanize
 , nose
-, pdfminer
+, pdfminer-six
 , pillow
 , prettytable
 , pyqt5
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     libyaml
     lxml
     mechanize
-    pdfminer
+    pdfminer-six
     pillow
     prettytable
     pyqt5

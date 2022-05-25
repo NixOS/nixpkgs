@@ -7,7 +7,7 @@
 , importlib-metadata
 , importlib-resources
 , jbig2enc
-, pdfminer
+, pdfminer-six
 , pikepdf
 , pillow
 , pluggy
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     coloredlogs
     img2pdf
-    pdfminer
+    pdfminer-six
     pikepdf
     pillow
     pluggy

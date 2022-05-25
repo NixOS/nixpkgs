@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pdfminer_six";
+  pname = "pdfminer-six";
   version = "20220524";
 
   disabled = !isPy3k;
