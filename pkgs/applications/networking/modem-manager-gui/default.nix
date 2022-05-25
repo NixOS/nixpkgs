@@ -57,6 +57,12 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/modem-manager-gui/-/raw/7c3e67a1cf7788d7a4b86be12803870d79aa27f2/debian/patches/meson0.61.patch";
       sha256 = "sha256-B+tBPIz5RxOwZWYEWttqSKGw2Wbfk0mnBY0Zy0evvAQ=";
     })
+    # Fix segfault on launch: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1004258
+    # Segmentation fault at address: 0x20
+    (fetchpatch {
+      url = "https://salsa.debian.org/debian/modem-manager-gui/-/commit/8ccffd6dd6b42625d09d5408f37f155d91411116.patch";
+      sha256 = "sha256-q+B+Bcm3uitJ2IfkCiMo3reFV1C06ekmy1vXWC0oHnw=";
+    })
   ];
 
   postPatch = ''

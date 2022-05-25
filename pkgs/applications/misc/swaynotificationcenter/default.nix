@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "SwayNotificationCenter";
-  version = "0.5";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayNotificationCenter";
     rev = "v${version}";
-    hash = "sha256-Jjbr6GJ0MHlO+T/simPNYQnB5b7Cr85j4GRjRGa5B6s=";
+    hash = "sha256-+vMlhBCLxvqfPRO2U9015srhY/2sd1DoV27kzNDjsqs=";
   };
 
   nativeBuildInputs = [ gobject-introspection meson ninja pkg-config scdoc vala wrapGAppsHook ];
