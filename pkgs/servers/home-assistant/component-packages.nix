@@ -1026,7 +1026,8 @@
       greeclimate
     ];
     "greeneye_monitor" = ps: with ps; [
-    ]; # missing inputs: greeneye_monitor
+      greeneye-monitor
+    ];
     "greenwave" = ps: with ps; [
     ]; # missing inputs: greenwavereality
     "group" = ps: with ps; [
@@ -3371,6 +3372,7 @@
     "gpslogger"
     "graphite"
     "gree"
+    "greeneye_monitor"
     "group"
     "growatt_server"
     "guardian"

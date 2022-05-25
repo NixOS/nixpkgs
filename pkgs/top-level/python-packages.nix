@@ -3700,6 +3700,8 @@ in {
 
   green = callPackage ../development/python-modules/green { };
 
+  greeneye-monitor = callPackage ../development/python-modules/greeneye-monitor { };
+
   greenlet = callPackage ../development/python-modules/greenlet { };
 
   grequests = callPackage ../development/python-modules/grequests { };
@@ -9558,6 +9560,8 @@ in {
   single-version = callPackage ../development/python-modules/single-version { };
 
   signify = callPackage ../development/python-modules/signify { };
+
+  siobrultech-protocols = callPackage ../development/python-modules/siobrultech-protocols { };
 
   siosocks = callPackage ../development/python-modules/siosocks { };
 
