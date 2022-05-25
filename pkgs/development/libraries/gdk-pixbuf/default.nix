@@ -19,6 +19,7 @@
 , doCheck ? false
 , makeWrapper
 , lib
+, callPackage
 , withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 , gobject-introspection
 }:
@@ -140,6 +141,7 @@ stdenv.mkDerivation rec {
 
     tests = {
       installedTests = nixosTests.installed-tests.gdk-pixbuf;
+      multiple-module-files = callPackage ./multiple-module-files-test {};
     };
 
     # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc
