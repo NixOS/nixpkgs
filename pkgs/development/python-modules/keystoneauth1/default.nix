@@ -11,6 +11,7 @@
 , oslo-utils
 , pbr
 , pycodestyle
+, pythonOlder
 , pyyaml
 , requests
 , requests-kerberos
@@ -24,11 +25,14 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "4.5.0";
+  version = "4.6.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SbNIiWakPusCAOpRG5l+ZAPCXVY6mExjMOgqDr/EVAw=";
+    hash = "sha256-Bm8a3diRFM1qG5yzVVyOqn0BNnPuEDS9/lBgaIBKngU=";
   };
 
   postPatch = ''
@@ -66,7 +70,9 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "keystoneauth1" ];
+  pythonImportsCheck = [
+    "keystoneauth1"
+  ];
 
   meta = with lib; {
     description = "Authentication Library for OpenStack Identity";
