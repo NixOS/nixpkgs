@@ -146,6 +146,10 @@ stdenv.mkDerivation {
   qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
   qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
 
+  # qmake is built during configure and it doesn't accept platforms flags
+  # 'ERROR: Unknown command line option '--build=x86_64-unknown-linux-gnu'.''
+  configurePlatforms = [ ];
+
   setOutputFlags = false;
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
