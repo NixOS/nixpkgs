@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-doctor";
-  version = "1.3.0";
+  version = "1.3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "ansible-doctor";
-    rev = "v${version}";
-    hash = "sha256-lJKJE9UccknQg8aqt/6qmjKKaICBxaCH5e8fdmie6u8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-49BKDdA+SodM4v1qARrEMRfUEFLxpT4XV7N5LVTPG0s=";
   };
 
   nativeBuildInputs = [
