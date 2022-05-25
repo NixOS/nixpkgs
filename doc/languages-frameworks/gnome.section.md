@@ -34,11 +34,11 @@ To allow software to use various virtual file systems, `gvfs` package can be als
 
 ### GdkPixbuf loaders {#ssec-gnome-gdk-pixbuf-loaders}
 
-GTK applications typically use [GdkPixbuf](https://developer.gnome.org/gdk-pixbuf/stable/) to load images. But `gdk-pixbuf` package only supports basic bitmap formats like JPEG, PNG or TIFF, requiring to use third-party loader modules for other formats. GTK itself includes SVG icons, which cannot be rendered without a loader provided by `librsvg`.
+GTK applications typically use [GdkPixbuf](https://developer.gnome.org/gdk-pixbuf/stable/) to load images. But `gdk-pixbuf` package only supports basic bitmap formats like JPEG, PNG or TIFF, requiring third-party loader modules for other formats. GTK itself includes SVG icons, which cannot be rendered without a loader provided by `librsvg`.
 
 Each loader package will contain a `lib/gdk-pixbuf-2.0/2.10.0/loaders.cache` file containing information about the available loaders. GdkPixbuf looks for these files in the `GDK_PIXBUF_MODULE_FILE` environment variable. Although upstream GdkPixbuf only supports a single file, in nixpkgs it is patched to accept multiple files, separated by `:`.
 
-[`wrapGAppsHook`]{#ssec-gnome-hooks-wrapgappshook} handles setting `GDK_PIXBUF_MODULE_FILE` for GTK apps. If you're manually constructing a wrapper, consider `--prefix`ing the variable rather than overwriting it, so that users can extend your program's capabilities through `services.xserver.gdk-pixbuf.modulePackages`.
+[`wrapGAppsHook`](#ssec-gnome-hooks-wrapgappshook) handles setting `GDK_PIXBUF_MODULE_FILE` for GTK apps. If you're manually constructing a wrapper, consider `--prefix`ing the variable rather than overwriting it, so that users can extend your program's capabilities through `services.xserver.gdk-pixbuf.modulePackages`.
 
 ### Icons {#ssec-gnome-icons}
 

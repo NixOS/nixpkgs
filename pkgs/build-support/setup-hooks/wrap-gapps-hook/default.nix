@@ -38,8 +38,8 @@ makeSetupHook {
     makeWrapper
   ];
   substitutions = {
-    STANDARD_GDK_PIXBUF_MODULES = lib.makeSearchPathOutput "lib" gdk-pixbuf.cacheFile [ gdk-pixbuf librsvg ];
-    GDK_PIXBUF_CACHE_FILE = gdk-pixbuf.cacheFile;
+    standardGdkPixbufModules = lib.makeSearchPathOutput "lib" gdk-pixbuf.cacheFile [ gdk-pixbuf librsvg ];
+    gdkPixbufCacheFile = gdk-pixbuf.cacheFile;
 
     passthru.tests = let
       sample-project = ./tests/sample-project;
@@ -71,11 +71,15 @@ makeSetupHook {
       # Stopgap as no modules have been packaged yet
       mock-pixbuf-module = stdenv.mkDerivation {
         name = "mock-gdk-pixbuf-module";
-        outputs = ["lib"];
-        builder = ''
+        outputs = ["out" "lib"];
+        dontUnpack = true;
+        buildPhase = ''
+          mkdir -p $out
           mkdir -p $lib/$(dirname ${gdk-pixbuf.cacheFile})
           touch $lib/${gdk-pixbuf.cacheFile}
         '';
+        dontInstall = true;
+        dontFixup = true;
       };
 
       pixbuf-modules = basic.overrideAttrs (old: {extraGdkPixbufModules = [mock-pixbuf-module];});
@@ -83,12 +87,12 @@ makeSetupHook {
       pixbuf-modules-check = let
         tested = pixbuf-modules;
       in testLib.runTest "pixbuf-modules-check" ''
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE=" "${gdk-pixbuf}/${gdk-pixbuf.cacheFile}"}
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE=" "${librsvg}/${gdk-pixbuf.cacheFile}"}
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE=" "${mock-pixbuf-module}/${gdk-pixbuf.cacheFile}"}
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE=" "${gdk-pixbuf}/${gdk-pixbuf.cacheFile}"}
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE=" "${librsvg}/${gdk-pixbuf.cacheFile}"}
-        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE=" "${mock-pixbuf-module}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE" "${gdk-pixbuf}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE" "${librsvg}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE" "${mock-pixbuf-module}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE" "${gdk-pixbuf}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE" "${librsvg}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE" "${mock-pixbuf-module}/${gdk-pixbuf.cacheFile}"}
       '';
 
       # Simple derivation containing a gobject-introspection typelib.
