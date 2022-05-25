@@ -1,7 +1,19 @@
-{ lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
-, bundlerEnv, pkg-config
-# libgit2 + dependencies
-, libgit2_1_3_0, openssl, zlib, pcre, http-parser }:
+{ lib
+, fetchFromGitLab
+, fetchFromGitHub
+, fetchurl
+, buildGoModule
+, ruby
+, bundlerEnv
+, pkg-config
+, git
+  # libgit2 + dependencies
+, libgit2_1_3_0
+, openssl
+, zlib
+, pcre
+, http-parser
+}:
 
 let
   rubyEnv = bundlerEnv rec {
@@ -15,7 +27,7 @@ let
   gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
 in
 
-buildGoModule {
+buildGoModule rec {
   pname = "gitaly";
   inherit version;
 
@@ -30,6 +42,19 @@ buildGoModule {
 
   passthru = {
     inherit rubyEnv;
+    git =
+      let
+        ver = "2.35.1";
+        patchDir = "${src}/_support/git-patches/v${ver}.gl1/";
+      in
+      git.overrideAttrs (oldAttrs: rec {
+        version = ver;
+        src = fetchurl {
+          url = "https://www.kernel.org/pub/software/scm/git/git-${ver}.tar.xz";
+          sha256 = "sha256-12hSjmRD9logMDYmbxylD50Se6iXUeMurTcRftkZEIA=";
+        };
+        patches = oldAttrs.patches ++ map (p: patchDir + p) (builtins.attrNames (builtins.readDir patchDir));
+      });
   };
 
   ldflags = "-X ${gitaly_package}/internal/version.version=${version} -X ${gitaly_package}/internal/version.moduleVersion=${version}";
