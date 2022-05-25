@@ -387,13 +387,6 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://maddy.email">maddy</link>, a
-          composable all-in-one mail server. Available as
-          <link linkend="opt-services.maddy.enable">services.maddy</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           <link xlink:href="https://maddy.email/">Maddy</link>, a free
           an open source mail server. Availabe as
           <link linkend="opt-services.maddy.enable">services.maddy</link>.
@@ -530,7 +523,7 @@
           <link xlink:href="https://docs.docker.com/engine/security/rootless/">rootless
           Docker</link>, a <literal>systemd --user</literal> Docker
           service which runs without root permissions. Available as
-          <link xlink:href="options.html#opt-virtualisation.docker.rootless.enable">virtualisation.docker.rootless.enable</link>.
+          <link linkend="opt-virtualisation.docker.rootless.enable">virtualisation.docker.rootless.enable</link>.
         </para>
       </listitem>
       <listitem>
