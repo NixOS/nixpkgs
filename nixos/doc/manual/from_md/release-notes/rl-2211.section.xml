@@ -10,7 +10,7 @@
       In addition to numerous new and upgraded packages, this release
       has the following highlights:
     </para>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           During cross-compilation, tests are now executed if the test
@@ -29,6 +29,11 @@
           built for <literal>stdenv.hostPlatform</literal> (i.e.
           produced by <literal>stdenv.cc</literal>) by evaluating
           <literal>stdenv.buildPlatform.canExecute stdenv.hostPlatform</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          PHP now defaults to PHP 8.1, updated from 8.0.
         </para>
       </listitem>
     </itemizedlist>
