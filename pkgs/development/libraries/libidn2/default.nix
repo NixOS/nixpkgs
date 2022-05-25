@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   patches = optional stdenv.isDarwin ./fix-error-darwin.patch;
 
+  enableParallelBuilding = true;
+
   # The above patch causes the documentation to be regenerated, so the
   # documentation tools are required.
   nativeBuildInputs = optionals stdenv.isDarwin [ help2man texinfo ];

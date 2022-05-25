@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+  enableParallelBuilding = true;
+
   doCheck = false;
 
   configureFlags = [ "--with-syscmd-shell=${stdenv.shell}" ]

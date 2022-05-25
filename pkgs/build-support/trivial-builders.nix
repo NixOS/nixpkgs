@@ -71,6 +71,7 @@ rec {
     # TODO(@Artturin): enable strictDeps always
     }: buildCommand:
     stdenv.mkDerivation ({
+      enableParallelBuilding = true;
       inherit buildCommand name;
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);

@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ]; # TODO: fix referrers
   outputBin = "dev";
 
+  enableParallelBuilding = true;
+
   configureFlags = lib.optional stdenv.isFreeBSD "--with-pic";
 
   outputMan = "dev"; # tiny page for a dev tool

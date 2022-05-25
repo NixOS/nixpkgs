@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     ./preprocessor-warnings.patch
   ];
 
+  enableParallelBuilding = true;
+
   doCheck = true;
 
   configureFlags = []

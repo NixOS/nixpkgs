@@ -32,6 +32,8 @@ stdenv.mkDerivation {
   pname = targetPrefix + pkg-config.pname + "-wrapper";
   inherit (pkg-config) version;
 
+  enableParallelBuilding = true;
+
   preferLocalBuild = true;
 
   shell = getBin stdenvNoCC.shell + stdenvNoCC.shell.shellPath or "";

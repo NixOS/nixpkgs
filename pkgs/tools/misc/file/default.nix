@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+  enableParallelBuilding = true;
+
   nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
   buildInputs = [ zlib ]
     ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;

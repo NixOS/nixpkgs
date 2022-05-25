@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/which/";

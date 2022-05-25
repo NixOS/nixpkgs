@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional enableStatic "--disable-shared";
 
+  enableParallelBuilding = true;
   doCheck = true;
 
   preCheck = ''
