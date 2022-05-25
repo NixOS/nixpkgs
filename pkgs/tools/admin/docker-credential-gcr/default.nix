@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "docker-credential-gcr";
-  version = "2.1.2";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "docker-credential-gcr";
     rev = "v${version}";
-    sha256 = "sha256-gb9c8qTHQWUOlaXAKfpwm0Pwa/N4iu48jWIwPYXD00k=";
+    sha256 = "sha256-1AUs8Gt2Qw8BJk2zwRcazVl+POkPSy9e1jW9Mk/0rx8=";
   };
 
   vendorSha256 = "sha256-e7XNTizZYp/tS7KRvB9KxY3Yurphnm6Ehz4dHZNReK8=";
