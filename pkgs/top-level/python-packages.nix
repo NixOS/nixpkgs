@@ -2384,6 +2384,8 @@ in {
 
   django-rest-auth = callPackage ../development/python-modules/django-rest-auth { };
 
+  django-rest-polymorphic = callPackage ../development/python-modules/django-rest-polymorphic { };
+
   django-rq = callPackage ../development/python-modules/django-rq { };
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
