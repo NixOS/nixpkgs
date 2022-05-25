@@ -67,9 +67,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-KZ5VrzDxVpGwFdjc+OyuckEkElaeWy7OIDYXU6RW8vk=";
   };
 
+  strictDeps = true;
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkg-config procps ];
-  buildInputs = [ cacert pcre ];
+  buildInputs = [ cacert pcre ]
+    ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+    ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ xcbuild ];
 
