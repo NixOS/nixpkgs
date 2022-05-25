@@ -408,12 +408,12 @@ in rec {
 
   resurrect = mkTmuxPlugin {
     pluginName = "resurrect";
-    version = "unstable-2020-09-18";
+    version = "unstable-2022-05-01";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-resurrect";
-      rev = "e4825055c92e54b0c6ec572afc9b6c4723aba6c8";
-      sha256 = "0a96drkx1kpadkbxabcnvb542p75xdh2dbizvlq2lac5ldpb4hmx";
+      rev = "ca6468e2deef11efadfe3a62832ae67742505432";
+      sha256 = "0d7jg5dy4jq64679rf2zqmqbvgiqvpcj5jxfljk7d7y86dnqhj3n";
     };
     meta = {
       homepage = "https://github.com/tmux-plugins/tmux-resurrect";
