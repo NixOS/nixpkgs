@@ -37,7 +37,7 @@
 , libdrm
 , libdatrie
 , lttng-ust
-, epoxy
+, libepoxy
 , libiconv
 , dbus
 , fontconfig
@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
     xorg.libXdmcp
     xorg.libXtst
     xorg.xcbutilcursor
-    epoxy
+    libepoxy
   ] ++ (with unixODBCDrivers; [
     psql
     sqlite

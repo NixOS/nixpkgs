@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp-tools";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "beSe9LN1uKFk90t2YWixGE4NKBlrawek9TQfCN/YXWw=";
+    sha256 = "RX9Nkjk1sHhBXNK6iNeNtgB5tyWSa37hBuRWXv4yBN4=";
   };
 
   nativeBuildInputs = [
