@@ -29,12 +29,6 @@ buildPythonPackage rec {
     six
   ];
 
-  postPatch = ''
-    # https://github.com/mediawiki-utilities/python-mwoauth/pull/43
-    substituteInPlace setup.py \
-      --replace "PyJWT>=1.0.1,<2.0.0" "PyJWT>=1.0.1"
-  '';
-
   # PyPI source has no tests included
   # https://github.com/mediawiki-utilities/python-mwoauth/issues/44
   doCheck = false;
