@@ -48,20 +48,28 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript =
     let
-      inherit (import ./update-utils.nix { inherit lib; }) getLatestStableVersion getSha256 nullHash;
+      inherit (import ./update-utils.nix { inherit lib; })
+        getLatestStableVersion
+        getSha256
+        nullHash;
       newVersion = getLatestStableVersion;
+      newAarch64Sha256 = getSha256 dist."aarch64-darwin".url version newVersion;
+      newX86_64Sha256 = getSha256 dist."x86_64-darwin".url version newVersion;
     in
     writeScript "update-libreoffice.sh"
-    ''
-      #!/usr/bin/env nix-shell
-      #!nix-shell -i bash -p common-updater-scripts
-      set -o errexit
-      set -o nounset
-      set -o pipefail
-      update-source-version libreoffice ${newVersion} ${getSha256 dist."aarch64-darwin".url version newVersion} --system=aarch64-darwin
-      update-source-version libreoffice 0 ${nullHash} --system=x86_64-darwin
-      update-source-version libreoffice ${newVersion} ${getSha256 dist."x86_64-darwin".url version newVersion} --system=x86_64-darwin
-    '';
+      ''
+        #!/usr/bin/env nix-shell
+        #!nix-shell -i bash -p common-updater-scripts
+        set -o errexit
+        set -o nounset
+        set -o pipefail
+        
+        # reset version first so that both platforms are always updated and in sync
+        update-source-version libreoffice 0 ${nullHash} --system=aarch64-darwin
+        update-source-version libreoffice ${newVersion} ${newAarch64Sha256} --system=aarch64-darwin
+        update-source-version libreoffice 0 ${nullHash} --system=x86_64-darwin
+        update-source-version libreoffice ${newVersion} ${newX86_64Sha256} --system=x86_64-darwin
+      '';
 
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
