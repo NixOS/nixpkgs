@@ -2394,6 +2394,8 @@ in {
 
   djangorestframework-camel-case = callPackage ../development/python-modules/djangorestframework-camel-case { };
 
+  djangorestframework-recursive = callPackage ../development/python-modules/djangorestframework-recursive { };
+
   djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
 
   django_reversion = callPackage ../development/python-modules/django_reversion { };
