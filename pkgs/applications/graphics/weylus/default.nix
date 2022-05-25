@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, makeWrapper
 , dbus
 , ffmpeg
 , x264
@@ -11,6 +12,7 @@
 , libdrm
 , pkg-config
 , pango
+, pipewire
 , cmake
 , autoconf
 , libtool
@@ -62,6 +64,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     cmake
     nodePackages.typescript
+    makeWrapper
   ] ++ lib.optionals stdenv.isLinux [
     pkg-config
     autoconf
@@ -72,6 +75,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--features=ffmpeg-system" ];
   cargoTestFlags = [ "--features=ffmpeg-system" ];
+
+  postFixup = let
+    GST_PLUGIN_PATH = lib.makeSearchPathOutput  "lib" "lib/gstreamer-1.0" [
+      gst_all_1.gst-plugins-base
+      pipewire
+    ];
+  in lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/weylus --prefix GST_PLUGIN_PATH : ${GST_PLUGIN_PATH}
+  '';
 
   postInstall = ''
     install -vDm755 weylus.desktop $out/share/applications/weylus.desktop
