@@ -18,35 +18,35 @@ let
     "8.1" = "blackfire-20210902";
   }.${phpMajor} or (throw "Unsupported PHP version.");
 
-  version = "1.77.0";
+  version = "1.78.0";
 
   hashes = {
     "x86_64-linux" = {
       system = "amd64";
-      sha256 = "oC4pANYT2XtF3ju+pT2TCb6iJSlNm6t+Xkawb88xWUo=";
+      sha256 = "67LeltpIDo4Izu1us8Hy0QIkuApJY9IMWWYfNEMNU1Y=";
     };
     "i686-linux" = {
       system = "i386";
-      sha256 = "zdebak5RWuPqCJ3eReKjtDLnCXtjtVFnSqvqC4U0+RE=";
+      sha256 = "1B65ENoUeCQIPO60wbOZYA3iCOHdae5VHCPQZjOUUzE=";
     };
     "aarch64-linux" = {
       system = "arm64";
-      sha256 = "5J1JcD/ZFxV0FWaySv037x1xjmCdM/zHiBfmRuCidjs=";
+      sha256 = "VEo86VFMgow8/pTu02st4LRn4BqI+RCTfGjOwmM0XgU=";
     };
     "aarch64-darwin" = {
       system = "arm64";
       sha256 = {
         "7.4" = {
-          normal = "vKOH+yPDyf8KxX0DoEnrp2HXYfDAxVD708MZrRGMEEk=";
-          zts = "cpeOtDRhPA35utai8G1Dosuqhf76hiqvwe+Em9cFhDo=";
+          normal = "fDECyGE8JVpE1SEuolk58rmx4Qk0kfvSegC9OGXCG6I=";
+          zts = "foDJbd69EMXGpzb078jSnVR22AderNp+5LjJYZ8J8Bg=";
         };
         "8.0" = {
-          normal = "v6PD1+Ghvtoq1wzAXwqi9elyC9/NwzX0EDdtQtCfeL4=";
-          zts = "Dqs0P8X7ScDJCPYKuqlumnLz4kB7cEOnVbDACQ02sko=";
+          normal = "0Kl+i9VRZ1UlClfdKF3LE381+SJGSwlUD9uv3S0kQBk=";
+          zts = "bg7OD2m53wFGIFwwzis4QHhwdXDUvqayH/bGjtBRORM=";
         };
         "8.1" = {
-          normal = "mCZ1avC8FsqYdGYNepeqWgSK2kqVo1E0VjhofxdaSyk=";
-          zts = "zliaM2VbaDEgNBr5ETe1GdYNyTZy5te92LedZiolx/8=";
+          normal = "cNI3u1qDHtJOfppDH6VUh02mmZq35krH0HCsidxqEfs=";
+          zts = "qMfTxxQJ8WgZAy20mevxSVJv6fuSwcmHGBzyNmTezs4=";
         };
       };
     };
@@ -54,16 +54,16 @@ let
       system = "amd64";
       sha256 = {
         "7.4" = {
-          normal = "nLsrpRnR9zo3d/a0+TFBlNcAebknpBQc101ysqPs+dU=";
-          zts = "o7R8zmhIOtiNDS8Se3Dog+cn9HyTHzS4jquXdzGQQOU=";
+          normal = "EtTQf6iHnfNsZqWcuXqd3qVBp3IRlSOqjcry0EX/b6A=";
+          zts = "RCTkRG5Iz/tj/ftRpxU/zM3b0kZoYNBC39xr7BY1sqQ=";
         };
         "8.0" = {
-          normal = "Pe2/GNDiS5DuSXCffO0jo5dRl0qkh1RgBVL3JzLwVkQ=";
-          zts = "zu7QgaKbBNQkby7bLv+NKLSIa79UXMONEf171EO+uNE=";
+          normal = "omS7QJrm3QzGJnguCpZWimORw6hIEJUGk6Hb8OIjhRQ=";
+          zts = "eKutEbe65NTx3xaBfs1fYcifaw7NwfWyxJ4jB6uN/+k=";
         };
         "8.1" = {
-          normal = "3SOlLeLCM4crWY6U+/zmtWmNYg2j0HC/3FWCmCi7lOo=";
-          zts = "GG8s+Pd0K6SEUzRV96Ba2mYfLgQMuGNzRoUtmz9m0NY=";
+          normal = "mlqygQMQkf/mC7xmdHDS8lWEkegcvpdwFVKz6oGAxD4=";
+          zts = "mg5CK3CQ/EsI+Z0aVRsoO0axM9BTRum3l/VVO7XNfpA=";
         };
       };
     };
