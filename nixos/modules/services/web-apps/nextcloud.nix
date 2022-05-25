@@ -157,7 +157,7 @@ in {
     };
     phpPackage = mkOption {
       type = types.package;
-      relatedPackages = [ "php74" "php80" "php81" ];
+      relatedPackages = [ "php80" "php81" ];
       defaultText = "pkgs.php";
       description = ''
         PHP package to use for Nextcloud.
@@ -632,7 +632,7 @@ in {
       services.nextcloud.datadir = mkOptionDefault config.services.nextcloud.home;
 
       services.nextcloud.phpPackage =
-        if versionOlder cfg.package.version "21" then pkgs.php74
+        if versionOlder cfg.package.version "24" then pkgs.php80
         # FIXME: Use PHP 8.1 with Nextcloud 24 and higher, once issues like this one are fixed:
         #
         # https://github.com/nextcloud/twofactor_totp/issues/1192
