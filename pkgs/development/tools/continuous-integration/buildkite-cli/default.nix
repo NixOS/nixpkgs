@@ -16,7 +16,7 @@ buildGoModule rec {
   doCheck = false;
 
   postPatch = ''
-    patchShebangs ".buildkite/steps/{lint,run-local}.sh"
+    patchShebangs .buildkite/steps/{lint,run-local}.sh
   '';
 
   subPackages = [ "cmd/bk" ];
