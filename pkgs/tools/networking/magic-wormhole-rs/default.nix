@@ -2,23 +2,22 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+, libxcb
 }:
 rustPlatform.buildRustPackage rec {
   pname = "magic-wormhole-rs";
-  version = "0.3.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole.rs";
     rev = version;
-    sha256 = "sha256-i4vJ6HmtM42m1x1UtOq9xlmhYIa5ZKXUm1rGFNRprmY=";
+    sha256 = "17nj0m1n90pk1r6h38ax7w8ldsh5nacml12rapa3w6v2rk6chzzq";
   };
 
-  # this patch serves as a workaround for the problems of cargo-vendor described in
-  # https://github.com/NixOS/nixpkgs/issues/30742
-  # and can probably be removed once the issue is resolved
-  cargoPatches = [ ./Cargo.toml.patch ];
-  cargoSha256 = "sha256-ujwvwr4GR/rQWnXFfL8sqPyz4QvGeOxwBrT+gf+vjsI=";
+  cargoSha256 = "0z92c8l82jizlqzl569gsknb6qqckgwnbnwv5gkf3fdaskj5n5x5";
+
+  buildInputs = [ libxcb ];
 
   # all tests involve networking and are bound fail
   doCheck = false;
