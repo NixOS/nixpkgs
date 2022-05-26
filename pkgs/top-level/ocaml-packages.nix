@@ -1165,6 +1165,8 @@ let
 
     tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
+    tiny_httpd = callPackage ../development/ocaml-modules/tiny_httpd { };
+
     tsort = callPackage ../development/ocaml-modules/tsort { };
 
     tuntap = callPackage ../development/ocaml-modules/tuntap { };

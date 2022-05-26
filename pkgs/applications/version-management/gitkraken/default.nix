@@ -1,4 +1,4 @@
-{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsa-lib
+{ lib, stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curlWithGnuTls, alsa-lib
 , libXfixes, atk, gtk3, libXrender, pango, gnome, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
 , nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
@@ -9,7 +9,6 @@
 with lib;
 
 let
-  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
   pname = "gitkraken";
   version = "8.5.0";
 
