@@ -55,13 +55,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "glusterfs";
-  version = "10.1";
+  version = "10.2";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vVFC2kQNneaOwrezPehOX32dpJb88ZhGHBApEXc9MOg=";
+    sha256 = "sha256-s40eQ7UM3v0GBhUWva376Ost0uPsjQCxPVl6IlVW1LE=";
   };
   inherit buildInputs propagatedBuildInputs;
 
@@ -76,9 +76,9 @@ in stdenv.mkDerivation rec {
   '';
 
   # Note that the VERSION file is something that is present in release tarballs
-  # but not in git tags (at least not as of writing in v3.10.1).
+  # but not in git tags (at least not as of writing in v3.10.2).
   # That's why we have to create it.
-  # Without this, gluster (at least 3.10.1) will fail very late and cryptically,
+  # Without this, gluster (at least 3.10.2) will fail very late and cryptically,
   # for example when setting up geo-replication, with a message like
   #   Staging of operation 'Volume Geo-replication Create' failed on localhost : Unable to fetch master volume details. Please check the master cluster and master volume.
   # What happens here is that the gverify.sh script tries to compare the versions,
@@ -135,7 +135,7 @@ in stdenv.mkDerivation rec {
 
     # Note that we only wrap the symlinks in $out/bin, not the actual executable scripts in $out/libexec/glusterfs.
     # This is because those scripts use `__file__` in their program logic
-    # (see https://github.com/gluster/glusterfs/blob/v3.10.1/extras/cliutils/cliutils.py#L116)
+    # (see https://github.com/gluster/glusterfs/blob/v3.10.2/extras/cliutils/cliutils.py#L116)
     # which would break if we changed the file name (which is what `wrapProgram` does).
     # Luckily, `libexec` scripts are never supposed to be invoked straight from PATH,
     # instead they are invoked directly from `gluster` or `glusterd`, which is why it is
