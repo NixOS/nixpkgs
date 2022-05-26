@@ -2478,6 +2478,8 @@ in {
 
   doc8 = callPackage ../development/python-modules/doc8 { };
 
+  docformatter = callPackage ../development/python-modules/docformatter { };
+
   docker = callPackage ../development/python-modules/docker { };
 
   dockerfile-parse = callPackage ../development/python-modules/dockerfile-parse { };
