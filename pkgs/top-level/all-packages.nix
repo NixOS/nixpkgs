@@ -30450,6 +30450,8 @@ with pkgs;
 
   waon = callPackage ../applications/audio/waon { };
 
+  warp = callPackage ../applications/networking/warp { };
+
   w3m = callPackage ../applications/networking/browsers/w3m { };
 
   # Should always be the version with the most features
