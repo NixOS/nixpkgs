@@ -628,6 +628,7 @@ mapAliases ({
   icu59 = throw "icu59 has been removed, use a more recent version instead"; # Added 2022-05-14
   icu65 = throw "icu65 has been removed, use a more recent version instead"; # Added 2022-05-14
   idea = throw "'idea' has been renamed to/replaced by 'jetbrains'"; # Converted to throw 2022-02-22
+  ike = throw "ike has been removed, because it was unmaintained"; # Added 2022-05-26
   imapproxy = throw "imapproxy has been removed because it did not support a supported openssl version"; # added 2021-12-15
   imagemagick7Big = imagemagickBig; # Added 2021-02-22
   imagemagick7 = imagemagick; # Added 2021-02-22
