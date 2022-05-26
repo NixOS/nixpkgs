@@ -40,8 +40,9 @@ stdenv.mkDerivation rec {
       resourceDir = "${llvmEnv}/lib/clang/${llvmPackages.release_version}/";
     })
     (fetchpatch {
-      url = "https://github.com/emscripten-core/emscripten/pull/16986.patch";
-      sha256 = "0wbnvdy6gyizmrvqwbdz9k2cs9cmni49iqn1hggsfcnkwn2qlddp";
+      # https://github.com/emscripten-core/emscripten/pull/16986
+      url = "https://github.com/emscripten-core/emscripten/commit/d5ef6937fe395488e23a82c1e582a7ea5c2dab83.patch";
+      sha256 = "sha256-YX5DG8i5x6S7XnU58etEapDd+o5SuzbFIGv8v/9+T3E=";
     })
   ];
 
