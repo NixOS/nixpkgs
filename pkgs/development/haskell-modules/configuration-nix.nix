@@ -994,7 +994,6 @@ self: super: builtins.intersectAttrs super {
     hls-module-name-plugin
     hls-ormolu-plugin
     hls-pragmas-plugin
-    hls-rename-plugin
     hls-splice-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
@@ -1002,6 +1001,7 @@ self: super: builtins.intersectAttrs super {
   # Flaky tests
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
   hls-class-plugin = dontCheck super.hls-class-plugin;
+  hls-rename-plugin = dontCheck super.hls-rename-plugin;
   hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
   hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
