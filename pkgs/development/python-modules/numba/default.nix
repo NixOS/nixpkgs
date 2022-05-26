@@ -22,13 +22,13 @@
 let
   inherit (cudaPackages) cudatoolkit;
 in buildPythonPackage rec {
-  version = "0.55.1";
+  version = "0.55.2";
   pname = "numba";
   disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-A+kGmiZm0chPk7ANvXFvuP7d6Lssbvr6LwSEKkZELqM=";
+    hash = "sha256-5CjZ4R2bpZKEnMyfegCQA+t9MGEgB+Nlr+dDznEYxvQ=";
   };
 
   postPatch = ''
