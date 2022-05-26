@@ -73,13 +73,13 @@
     "version": "2.2.0"
   },
   "auth0": {
-    "owner": "alexkappa",
-    "provider-source-address": "registry.terraform.io/alexkappa/auth0",
+    "owner": "auth0",
+    "provider-source-address": "registry.terraform.io/auth0/auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v0.26.2",
-    "sha256": "1n9gn7zsdygdr2ybki7xz2snp3fygls6myb1w5zndby497kgxrkw",
-    "vendorSha256": "1x61f7vz73m2q6pdb6ddy27j4npiwrrlgzvd90zrcc0yj22h6mms",
-    "version": "0.26.2"
+    "rev": "v0.30.2",
+    "sha256": "sha256-6+81QomUnKEbaqGHSRabLSb7O6lrrG+Fp9N8y8ZtS8A=",
+    "vendorSha256": "sha256-4o+/iB853zXcEYgPKVZ8CVHdIOEZW+/OX+LDBHSNjUk=",
+    "version": "0.30.2"
   },
   "avi": {
     "owner": "vmware",
