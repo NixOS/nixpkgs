@@ -20159,7 +20159,7 @@ with pkgs;
 
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
 
-  qjson = callPackage ../development/libraries/qjson { };
+  qjson = libsForQt5.callPackage ../development/libraries/qjson { };
 
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
