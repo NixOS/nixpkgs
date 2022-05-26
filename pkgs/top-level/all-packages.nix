@@ -28266,6 +28266,8 @@ with pkgs;
 
   mm-common = callPackage ../development/libraries/mm-common { };
 
+  MoniqueMonosynth = callPackage ../applications/audio/MoniqueMonosynth { };
+
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
 
   mps-youtube = callPackage ../applications/misc/mps-youtube { };
