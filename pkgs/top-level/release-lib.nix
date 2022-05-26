@@ -129,9 +129,10 @@ rec {
   mapTestOn = _mapTestOnHelper id null;
 
 
-  _mapTestOnHelper = f: crossSystem: mapAttrsRecursive
+  _mapTestOnHelper = f: crossSystem: packages: mapAttrsRecursive
     (path: metaPatterns: testOnCross crossSystem metaPatterns
-      (pkgs: f (getAttrFromPath path pkgs)));
+      (pkgs: f (getAttrFromPath path pkgs)))
+    (filterAttrsRecursive (name: _: name != "recurseForDerivations") packages);
 
 
   /* Similar to the testOn function, but with an additional 'crossSystem'
@@ -143,7 +144,7 @@ rec {
 
   /* Recursively map a (nested) set of derivations to an isomorphic
      set of meta.platforms values. */
-  packagePlatforms = mapAttrs (name: value:
+  packagePlatforms = packages: (mapAttrs (name: value:
       if isDerivation value then
         value.meta.hydraPlatforms
           or (value.meta.platforms or [ "x86_64-linux" ])
@@ -151,7 +152,9 @@ rec {
         packagePlatforms value
       else
         []
-    );
+    ) packages) // optionalAttrs (packages ? recurseForDerivations) {
+      inherit (packages) recurseForDerivations;
+    };
 
 
   /* Common platform groups on which to test packages. */
