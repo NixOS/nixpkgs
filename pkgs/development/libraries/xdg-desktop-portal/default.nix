@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

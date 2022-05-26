@@ -114,7 +114,7 @@ python3.pkgs.buildPythonApplication rec {
       code.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ jtojnar mbe AndersonTorres ];
+    maintainers = with maintainers; [ mbe AndersonTorres ];
     inherit (python3.meta) platforms;
   };
 }

@@ -112,6 +112,6 @@ stdenv.mkDerivation rec {
     # In Fedora twitter-twemoji-fonts source
     ## spec files are MIT: https://fedoraproject.org/wiki/Licensing:Main#License_of_Fedora_SPEC_Files
     license = with licenses; [ asl20 ofl cc-by-40 mit ];
-    maintainers = with maintainers; [ jtojnar emily ];
+    maintainers = with maintainers; [ emily ];
   };
 }

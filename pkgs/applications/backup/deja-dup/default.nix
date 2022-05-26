@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://wiki.gnome.org/Apps/DejaDup";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }
