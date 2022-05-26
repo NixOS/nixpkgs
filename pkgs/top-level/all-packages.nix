@@ -8717,6 +8717,8 @@ with pkgs;
   pandoc-secnos = python3Packages.callPackage ../tools/misc/pandoc-secnos { };
   pandoc-tablenos = python3Packages.callPackage ../tools/misc/pandoc-tablenos { };
 
+  panoply = callPackage ../tools/misc/panoply { };
+
   patray = callPackage ../tools/audio/patray { };
 
   pathvector = callPackage ../tools/networking/pathvector { };
