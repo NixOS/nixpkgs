@@ -5870,6 +5870,8 @@ in {
 
   numpy-stl = callPackage ../development/python-modules/numpy-stl { };
 
+  numpyro = callPackage ../development/python-modules/numpyro { };
+
   nunavut = callPackage ../development/python-modules/nunavut { };
 
   nutils = callPackage ../development/python-modules/nutils { };
@@ -11164,6 +11166,8 @@ in {
   };
 
   xarray = callPackage ../development/python-modules/xarray { };
+
+  xarray-einstats = callPackage ../development/python-modules/xarray-einstats { };
 
   xattr = callPackage ../development/python-modules/xattr { };
 

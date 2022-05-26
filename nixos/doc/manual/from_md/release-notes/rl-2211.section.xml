@@ -43,8 +43,9 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Please remove this line when you add the first item since
-          docbook requires the section to be non-empty
+          <link xlink:href="https://github.com/jollheef/appvm">appvm</link>,
+          Nix based app VMs. Available as
+          <link xlink:href="options.html#opt-virtualisation.appvm.enable">virtualisation.appvm</link>.
         </para>
       </listitem>
     </itemizedlist>

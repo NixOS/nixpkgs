@@ -181,6 +181,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qcsxcad = callPackage ../development/libraries/science/electronics/qcsxcad { };
 
+  qjson = callPackage ../development/libraries/qjson { };
+
   qmltermwidget = callPackage ../development/libraries/qmltermwidget {
     inherit (pkgs.darwin.apple_sdk.libs) utmp;
   };
