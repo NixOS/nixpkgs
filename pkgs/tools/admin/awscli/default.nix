@@ -15,6 +15,13 @@ let
           sha256 = "189n8hpijy14jfan4ha9f5n06mnl33cxz7ay92wjqgkr639s0vg9";
         };
       });
+      docutils = super.docutils.overridePythonAttrs (oldAttrs: rec {
+        version = "0.16";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "sha256-wt46YOnn0Hvia38rAMoDCcIH4GwQD5zCqUkx/HWkePw=";
+        };
+      });
       pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
         version = "5.4.1";
         src = fetchFromGitHub {
@@ -35,11 +42,11 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli";
-  version = "1.22.88"; # N.B: if you change this, change botocore and boto3 to a matching version too
+  version = "1.24.9"; # N.B: if you change this, change botocore and boto3 to a matching version too
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fwbejwcT4piC8Zr6+ubxMd+TuF9O4icOentI2GlhYrc=";
+    hash = "sha256-8tdymQX3j7pLkqE8FcABpBgHwhqXKj37diVe3n+fAsU=";
   };
 
   # https://github.com/aws/aws-cli/issues/4837
@@ -90,6 +97,6 @@ with py.pkgs; buildPythonApplication rec {
     homepage = "https://aws.amazon.com/cli/";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
-    maintainers = with maintainers; [ muflax ];
+    maintainers = with maintainers; [ muflax bryanasdev000 ];
   };
 }
