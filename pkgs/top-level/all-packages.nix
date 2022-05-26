@@ -2726,8 +2726,6 @@ with pkgs;
 
   py65 = with python3.pkgs; toPythonApplication py65;
 
-  resim = callPackage ../applications/emulators/resim { };
-
   retrofe = callPackage ../applications/emulators/retrofe { };
 
   ripes = libsForQt5.callPackage ../applications/emulators/ripes { };

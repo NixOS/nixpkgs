@@ -1523,6 +1523,7 @@ mapAliases ({
   redkite = throw "redkite was archived by upstream"; # Added 2021-04-12
   redis-desktop-manager = throw "'redis-desktop-manager' has been renamed to/replaced by 'resp-app'"; # Added 2022-11-10
   redshift-wlr = throw "redshift-wlr has been replaced by gammastep"; # Added 2021-12-25
+  resim = throw "resim has been removed, because it depended on qt4"; # Added 2022-05-26
   reicast = throw "reicast has been removed from nixpkgs as it is unmaintained, please use flycast instead"; # Added 2022-03-07
   residualvm = throw "residualvm was merged to scummvm code in 2018-06-15; consider using scummvm"; # Added 2021-11-27
   retroArchCores = throw "retroArchCores has been removed. Please use overrides instead, e.g.: `retroarch.override { cores = with libretro; [ ... ]; }`"; # Added 2021-11-19
