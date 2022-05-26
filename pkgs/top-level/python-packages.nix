@@ -9899,16 +9899,6 @@ self: super: with self; {
     inherit (pkgs) cmake ninja qt6;
   });
 
-  pyside = callPackage ../development/python-modules/pyside {
-    inherit (pkgs) mesa;
-  };
-
-  pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix {
-    inherit (pkgs) libxml2 libxslt;
-  };
-
-  pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
-
   pysigma = callPackage ../development/python-modules/pysigma { };
 
   pysigma-backend-elasticsearch = callPackage ../development/python-modules/pysigma-backend-elasticsearch { };
