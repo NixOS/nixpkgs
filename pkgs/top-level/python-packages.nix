@@ -1253,6 +1253,8 @@ in {
 
   bitcoinrpc = callPackage ../development/python-modules/bitcoinrpc { };
 
+  bite-parser = callPackage ../development/python-modules/bite-parser { };
+
   bitlist = callPackage ../development/python-modules/bitlist { };
 
   bitmath = callPackage ../development/python-modules/bitmath { };
