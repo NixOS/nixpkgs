@@ -5037,8 +5037,6 @@ with pkgs;
 
   apparix = callPackage ../tools/misc/apparix { };
 
-  appleseed = callPackage ../tools/graphics/appleseed { };
-
   apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
 
   arping = callPackage ../tools/networking/arping { };
