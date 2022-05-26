@@ -29,13 +29,13 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.5.6"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.7.3"; # N.B: if you change this, check if overrides are still up-to-date
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-NANdm2RK4U5sXPuGbC8KUGXsbYl/WwAoUep4JxJA5lI=";
+    sha256 = "sha256-CM20zBuby1X+XOiphDDtWHUB08Mw7IYf0aZUWIvEAqI=";
   };
 
   propagatedBuildInputs = [
@@ -100,6 +100,6 @@ with py.pkgs; buildPythonApplication rec {
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple davegallant ];
+    maintainers = with maintainers; [ bhipple davegallant bryanasdev000 ];
   };
 }
