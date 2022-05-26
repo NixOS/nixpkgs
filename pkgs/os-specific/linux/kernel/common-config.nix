@@ -38,8 +38,9 @@ let
       # Necessary for BTF
       DEBUG_INFO                = mkMerge [
         (whenOlder "5.2" (if (features.debug or false) then yes else no))
-        (whenAtLeast "5.2" yes)
+        (whenBetween "5.2" "5.18" yes)
       ];
+      DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
       DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
       BPF_LSM                   = whenAtLeast "5.7" (option yes);
       DEBUG_KERNEL              = yes;
@@ -407,7 +408,7 @@ let
       UDF_FS              = module;
 
       NFSD_V2_ACL            = yes;
-      NFSD_V3                = yes;
+      NFSD_V3                = whenOlder "5.18" yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;
       NFSD_V4_SECURITY_LABEL = yes;

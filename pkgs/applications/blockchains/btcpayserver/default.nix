@@ -15,7 +15,6 @@ buildDotnetModule rec {
   projectFile = "BTCPayServer/BTCPayServer.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
   buildType = if altcoinSupport then "Altcoins-Release" else "Release";

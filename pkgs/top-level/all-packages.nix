@@ -236,6 +236,8 @@ with pkgs;
 
   fission = callPackage ../development/tools/fission { };
 
+  apko = callPackage ../development/tools/apko { };
+
   appthreat-depscan = callPackage ../development/tools/appthreat-depscan { };
 
   activate-linux = callPackage ../applications/misc/activate-linux { };
@@ -3060,6 +3062,8 @@ with pkgs;
   oguri = callPackage  ../tools/wayland/oguri { };
 
   slurp = callPackage ../tools/wayland/slurp { };
+
+  sov = callPackage ../tools/wayland/sov { };
 
   swaykbdd = callPackage ../tools/wayland/swaykbdd { };
 
@@ -31049,6 +31053,8 @@ with pkgs;
 
   chia-plotter = callPackage ../applications/blockchains/chia-plotter { };
 
+  clboss = callPackage ../applications/blockchains/clboss { };
+
   clightning = callPackage ../applications/blockchains/clightning { };
 
   besu = callPackage ../applications/blockchains/besu { };
@@ -31789,8 +31795,6 @@ with pkgs;
   hedgewars = libsForQt514.callPackage ../games/hedgewars {
     inherit (haskellPackages) ghcWithPackages;
   };
-
-  holdingnuts = callPackage ../games/holdingnuts { };
 
   hyperrogue = callPackage ../games/hyperrogue { };
 
