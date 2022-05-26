@@ -30593,8 +30593,6 @@ with pkgs;
     (callPackage ../applications/editors/android-studio { });
   android-studio = androidStudioPackages.stable;
 
-  animbar = callPackage ../applications/graphics/animbar { };
-
   antfs-cli = callPackage ../applications/misc/antfs-cli { };
 
   antimony = libsForQt5.callPackage ../applications/graphics/antimony { };
