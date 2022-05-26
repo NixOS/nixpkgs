@@ -77,7 +77,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ perl xz.bin autoreconfHook ] # autoreconfHook is due to patch, normally only needed for cygwin
     ++ optionals stdenv.hostPlatform.isCygwin [ texinfo ];  # due to patch
-  configureFlags = [ "--with-packager=https://NixOS.org" ]
+  configureFlags = [ "--with-packager=https://nixos.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
     ++ optional withOpenssl "--with-openssl"
