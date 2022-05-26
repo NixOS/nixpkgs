@@ -22822,8 +22822,8 @@ with pkgs;
     fftw = fftwFloat;
   };
 
+  buildArmTrustedFirmware = callPackage ../misc/arm-trusted-firmware/build.nix {};
   inherit (callPackage ../misc/arm-trusted-firmware {})
-    buildArmTrustedFirmware
     armTrustedFirmwareTools
     armTrustedFirmwareAllwinner
     armTrustedFirmwareAllwinnerH616
