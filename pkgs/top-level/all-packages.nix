@@ -11974,6 +11974,8 @@ with pkgs;
 
   zpool-auto-expand-partitions = callPackage ../tools/filesystems/zpool-auto-expand-partitions { };
 
+  zxfer = callPackage ../tools/filesystems/zxfer { };
+
   zile = callPackage ../applications/editors/zile { };
 
   zinnia = callPackage ../tools/inputmethods/zinnia { };
