@@ -14807,10 +14807,10 @@ with pkgs;
   ansible = ansible_2_12;
   ansible_2_13 = python3Packages.toPythonApplication python3Packages.ansible-core;
   ansible_2_12 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.12.5";
+    version = "2.12.6";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-HMyZRPEBMxra0e1A1axmqBSRMwUq402wJnp0qnO+67M=";
+      hash = "sha256-XzZuhRFZ2Pcs5o0yuMDt2lbuU3wB6faOyjgr0VEK9l0=";
     };
   }));
 
