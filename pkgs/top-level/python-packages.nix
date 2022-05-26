@@ -1225,6 +1225,8 @@ in {
 
   bids-validator = callPackage ../development/python-modules/bids-validator { };
 
+  biliass = callPackage ../development/python-modules/biliass { };
+
   billiard = callPackage ../development/python-modules/billiard { };
 
   bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
