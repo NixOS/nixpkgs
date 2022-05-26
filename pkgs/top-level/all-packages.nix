@@ -29058,7 +29058,14 @@ with pkgs;
 
   pulseaudio-dlna = callPackage ../applications/audio/pulseaudio-dlna { };
 
-  pulseview = libsForQt514.callPackage ../applications/science/electronics/pulseview { };
+  pulseview = libsForQt514.callPackage ../applications/science/electronics/pulseview {
+    # use the same stdenv as libsForQt514 to fix build
+    boost = boost.override {
+      stdenv = if stdenv.cc.isGNU
+        then (if (stdenv.targetPlatform.isx86_64) then gcc10Stdenv else gcc9Stdenv)
+        else stdenv;
+      };
+  };
 
   puredata = callPackage ../applications/audio/puredata { };
   puredata-with-plugins = plugins: callPackage ../applications/audio/puredata/wrapper.nix { inherit plugins; };
