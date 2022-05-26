@@ -1,14 +1,14 @@
 { lib, stdenv, fetchzip }:
 
 let
-  version = "21.11.15";
+  version = "22.1.3";
   platform = if stdenv.isLinux then "linux" else "darwin";
   arch = if stdenv.isAarch64 then "arm" else "amd";
   sha256s = {
-    darwin.amd = "sha256-Yf4O7lVcf+nmb0wFTx7jLjUSmdAItoUfPlkhHveI9UY=";
-    darwin.arm = "sha256-vKfFBheDZtvcbg0zbj3rqUEQczZvySuGuM3RopnDJG8=";
-    linux.amd = "sha256:0vpxn7kcpqylk0nc74m6yxgwwf8ns8pyb6kxnmnmv2x58f8x4c8n";
-    linux.arm = "sha256-1AQSB2V5zGivU0UinTST2kOydQf/bmLbpjdW0Yo4ptE=";
+    darwin.amd = "sha256-AXk3aP1SGiHTfHTCBRTagX0DAVmdcVVIkxWaTnZxB8g=";
+    darwin.arm = "sha256-pvOVvNc8lZ2d2fVZVYWvumVWYpnLORNY/3o1t4BN2N4=";
+    linux.amd = "sha256-Uz7KjbsH3lKRL0iI73DxwS5rcIkPQiMFkIQsc06gF0k=";
+    linux.arm = "sha256-WHjYAbytiu747jFqN0KZ/CkIwAVI7fb32ywtRiQOBm8=";
   };
 in stdenv.mkDerivation rec {
   pname = "redpanda";
@@ -24,6 +24,12 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cp rpk $out/bin
+
+    ${lib.optionalString stdenv.isLinux ''
+        patchelf \
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+          $out/bin/rpk
+    ''}
 
     runHook postInstall
   '';

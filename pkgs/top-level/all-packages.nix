@@ -11726,6 +11726,8 @@ with pkgs;
 
   wg-bond = callPackage ../applications/networking/wg-bond { };
 
+  wgcf = callPackage ../applications/networking/wgcf { };
+
   which = callPackage ../tools/system/which { };
 
   whsniff = callPackage ../applications/networking/sniffers/whsniff { };
@@ -18577,8 +18579,6 @@ with pkgs;
     icu = icu67;
   };
 
-  libechonest = callPackage ../development/libraries/libechonest { };
-
   libemf2svg = callPackage ../development/libraries/libemf2svg { };
 
   libev = callPackage ../development/libraries/libev { };
@@ -20164,8 +20164,6 @@ with pkgs;
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
 
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
-
-  qjson = callPackage ../development/libraries/qjson { };
 
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
@@ -25094,6 +25092,8 @@ with pkgs;
   };
 
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
+
+  appvm = callPackage ../applications/virtualization/appvm { };
 
   masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
 

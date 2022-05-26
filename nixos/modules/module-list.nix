@@ -1236,6 +1236,7 @@
   ./tasks/powertop.nix
   ./testing/service-runner.nix
   ./virtualisation/anbox.nix
+  ./virtualisation/appvm.nix
   ./virtualisation/build-vm.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containerd.nix
