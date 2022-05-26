@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   # Disable Test because everything depends on open mpi which requires network
   doCheck = false;
-  
+
   # Do not use pythonImportsCheck because this will also initialize mpi which requires a network interface
 
   meta = with lib; {
