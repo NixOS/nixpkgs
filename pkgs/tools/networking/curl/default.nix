@@ -177,8 +177,6 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    # Additional checking with support http3 protocol.
-    tests.nginx-http3 = nixosTests.nginx-http3;
     inherit opensslSupport openssl;
     tests = {
       inherit curlpp coeurl;
@@ -186,6 +184,8 @@ stdenv.mkDerivation rec {
       ocaml-curly = ocamlPackages.curly;
       php-curl = phpExtensions.curl;
       pycurl = python3.pkgs.pycurl;
+      # Additional checking with support http3 protocol.
+      inherit (nixosTests) nginx-http3;
     };
   };
 
