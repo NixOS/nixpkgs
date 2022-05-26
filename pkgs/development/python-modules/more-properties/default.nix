@@ -40,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "A collection of property variants";
     homepage = "https://github.com/madman-bob/python-more-properties";
-    licenses = lib.licenses.mit;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
