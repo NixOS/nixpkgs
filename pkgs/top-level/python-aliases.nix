@@ -109,6 +109,7 @@ mapAliases ({
   pycallgraph = throw "pycallgraph has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
+  pyramid_jinja2 = pyramid-jinja2; # added 2022-05-26
   pyreadability = readability-lxml; # added 2022-05-24
   pysmart-smartx = pysmart; # added 2021-10-22
   pytest_6 = pytest; # added 2022-02-10

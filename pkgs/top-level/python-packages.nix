@@ -7811,7 +7811,7 @@ in {
 
   pyramid_hawkauth = callPackage ../development/python-modules/pyramid_hawkauth { };
 
-  pyramid_jinja2 = callPackage ../development/python-modules/pyramid_jinja2 { };
+  pyramid-jinja2 = callPackage ../development/python-modules/pyramid_jinja2 { };
 
   pyramid_mako = callPackage ../development/python-modules/pyramid_mako { };
 

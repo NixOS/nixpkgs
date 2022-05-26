@@ -4,6 +4,7 @@
 , webtest
 , jinja2
 , pyramid
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -15,8 +16,31 @@ buildPythonPackage rec {
     sha256 = "sha256-8nEGnZ6ay6x622kSGQqEj2M49+V6+68+lSN/6DzI9NI=";
   };
 
-  buildInputs = [ webtest ];
-  propagatedBuildInputs = [ jinja2 pyramid ];
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov" ""
+  '';
+
+  buildInputs = [
+    webtest
+  ];
+
+  propagatedBuildInputs = [
+    jinja2
+    pyramid
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # mismatch in the expected package path:
+    #   wants: pyramid_jinja2
+    #   gets:  pyramid_jinja2-2.10
+    "test_options"
+    "test_it_relative_to_package"
+  ];
 
   pythonImportsCheck = [ "pyramid_jinja2" ];
 
