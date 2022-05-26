@@ -1,11 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, six
-, pytest
 , mock
 , parameterized
+, pyelftools
+, pytestCheckHook
 , pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-EkAtRqUHwmH0LG/bkXBbZ3TMgXDtcqLfUBySPbrgWmc=";
+    hash = "sha256-EkAtRqUHwmH0LG/bkXBbZ3TMgXDtcqLfUBySPbrgWmc=";
   };
 
   propagatedBuildInputs = [
@@ -27,19 +28,36 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
     mock
     parameterized
+    pyelftools
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    export PATH=$out/bin:$PATH
-    pytest tests/functional -k 'not can_invoke_pip'
-  '';
+  disabledTests = [
+    # CLI don't work in the sandbox
+    "test_run_hello_workflow"
+    # Don't tests integrations
+    "TestCustomMakeWorkflow"
+    "TestDotnet31"
+    "TestDotnet6"
+    "TestGoWorkflow"
+    "TestJavaGradle"
+    "TestJavaMaven"
+    "TestNodejsNpmWorkflow"
+    "TestNodejsNpmWorkflowWithEsbuild"
+    "TestPipRunner"
+    "TestPythonPipWorkflow"
+    "TestRubyWorkflow"
+  ];
+
+  pythonImportsCheck = [
+    "aws_lambda_builders"
+  ];
 
   meta = with lib; {
+    description = "Tool to compile, build and package AWS Lambda functions";
     homepage = "https://github.com/awslabs/aws-lambda-builders";
-    description = "A tool to compile, build and package AWS Lambda functions";
     longDescription = ''
       Lambda Builders is a Python library to compile, build and package
       AWS Lambda functions for several runtimes & frameworks.
