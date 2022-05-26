@@ -1619,6 +1619,7 @@ let
       homepage = "https://github.com/mongodb-labs/mongo-perl-bson-xs";
       description = "XS implementation of MongoDB's BSON serialization (EOL)";
       license = lib.licenses.asl20;
+      platforms = lib.platforms.linux; # configure phase fails with "ld: unknown option: -mmacosx-version-min=10.12"
     };
   };
 
@@ -2066,6 +2067,7 @@ let
     };
     propagatedBuildInputs = [ perlldap CatalystPluginAuthentication ClassAccessor ];
     buildInputs = [ TestMockObject TestException NetLDAPServerTest ];
+    doCheck = !stdenv.isDarwin; # t/02-realms_api.t and t/50.auth.case.sensitivity.t
     meta = {
       description= "Authentication from an LDAP Directory";
       license = with lib.licenses; [ artistic1 ];
@@ -8034,6 +8036,7 @@ let
       url = "mirror://cpan/authors/id/E/ET/ETJ/ExtUtils-CppGuess-0.21.tar.gz";
       sha256 = "0ls1y9bb2nff9djli91s86541r7ajcjp22gqhcdmj7hs69w92qpz";
     };
+    doCheck = !stdenv.isDarwin;
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     propagatedBuildInputs = [ CaptureTiny ];
     buildInputs = [ ModuleBuild ];
@@ -9439,6 +9442,7 @@ let
     postCheck = ''
       rm -r $out/lib
     '';
+    doCheck = !stdenv.isDarwin;
     meta = {
       description = "Dynamically create Perl language bindings";
       license = lib.licenses.lgpl2Plus;
@@ -9474,6 +9478,7 @@ let
       license = lib.licenses.lgpl2Plus;
     };
     propagatedBuildInputs = [ Gtk2 ];
+    doCheck = !stdenv.isDarwin;
   };
 
   Gnome2VFS = buildPerlPackage {
@@ -10523,6 +10528,8 @@ let
     };
     propagatedBuildInputs = [ HTTPDate ];
     buildInputs = [ TestDeep TestRequires URI ];
+    # Broken on Hydra since 2021-06-17: https://hydra.nixos.org/build/146507373
+    doCheck = false;
     meta = {
       description = "A minimalist HTTP user agent cookie jar";
       license = with lib.licenses; [ asl20 ];
@@ -24541,6 +24548,7 @@ let
     meta = {
       description = "Cryptographically secure v4 UUIDs for Linux x64";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
+      platforms = lib.platforms.linux; # configure phase fails with "OS unsupported"
     };
   };
 
