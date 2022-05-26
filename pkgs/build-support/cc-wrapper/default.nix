@@ -492,6 +492,8 @@ stdenv.mkDerivation {
       hardening_unsupported_flags+=" format stackprotector strictoverflow"
     '' + optionalString cc.langD or false ''
       hardening_unsupported_flags+=" format"
+    '' + optionalString cc.langFortran or false ''
+      hardening_unsupported_flags+=" format"
     '' + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     ''
