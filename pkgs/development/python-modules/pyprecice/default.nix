@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "pyprecice";
-  version = "2.3.0.1";
+  version = "2.4.0.0";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = "python-bindings";
-    rev = "v${version}";
-    sha256 = "1yz96pif63ms797bzxbfrjba4mgz7cz5dqrqghn5sg0g1b9qxnn5";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Endy5oiC1OWdtZlVPUkIdkzoDTc1b5TaQ6VEUWq5iSg=";
   };
 
   nativeBuildInputs = [ cython ];
