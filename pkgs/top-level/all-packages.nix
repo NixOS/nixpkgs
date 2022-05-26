@@ -11726,6 +11726,8 @@ with pkgs;
 
   wg-bond = callPackage ../applications/networking/wg-bond { };
 
+  wgcf = callPackage ../applications/networking/wgcf { };
+
   which = callPackage ../tools/system/which { };
 
   whsniff = callPackage ../applications/networking/sniffers/whsniff { };
