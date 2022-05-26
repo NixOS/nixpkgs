@@ -37383,8 +37383,7 @@ with pkgs;
 
   nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
 
-  namecoin  = callPackage ../applications/blockchains/namecoin { withGui = true; };
-  namecoind = callPackage ../applications/blockchains/namecoin { withGui = false; };
+  namecoind = callPackage ../applications/blockchains/namecoin { };
 
   nbxplorer = callPackage ../applications/blockchains/nbxplorer { };
 
