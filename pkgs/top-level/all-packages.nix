@@ -1356,6 +1356,10 @@ with pkgs;
     python = python3;
   };
 
+  packwiz = callPackage ../tools/games/minecraft/packwiz {
+    buildGoModule = buildGo118Module;
+  };
+
   pcem = callPackage ../applications/emulators/pcem { };
 
   pcsx2 = callPackage ../applications/emulators/pcsx2 {
@@ -4850,6 +4854,8 @@ with pkgs;
   certstrap = callPackage ../tools/security/certstrap { };
 
   cfssl = callPackage ../tools/security/cfssl { };
+
+  cfs-zen-tweaks = callPackage ../os-specific/linux/cfs-zen-tweaks { };
 
   chafa = callPackage ../tools/misc/chafa {
     inherit (darwin.apple_sdk.frameworks) Foundation;
@@ -9277,7 +9283,7 @@ with pkgs;
 
   pdftoipe = callPackage ../tools/graphics/pdftoipe { };
 
-  pdfminer = with python3Packages; toPythonApplication pdfminer;
+  pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
@@ -11719,6 +11725,8 @@ with pkgs;
   wgpu-utils = callPackage ../tools/graphics/wgpu-utils { };
 
   wg-bond = callPackage ../applications/networking/wg-bond { };
+
+  wgcf = callPackage ../applications/networking/wgcf { };
 
   which = callPackage ../tools/system/which { };
 
@@ -18571,8 +18579,6 @@ with pkgs;
     icu = icu67;
   };
 
-  libechonest = callPackage ../development/libraries/libechonest { };
-
   libemf2svg = callPackage ../development/libraries/libemf2svg { };
 
   libev = callPackage ../development/libraries/libev { };
@@ -20158,8 +20164,6 @@ with pkgs;
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
 
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
-
-  qjson = callPackage ../development/libraries/qjson { };
 
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
@@ -25089,6 +25093,8 @@ with pkgs;
 
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
 
+  appvm = callPackage ../applications/virtualization/appvm { };
+
   masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
@@ -29429,11 +29435,12 @@ with pkgs;
 
   scli = callPackage ../applications/misc/scli { };
 
-  scribus = callPackage ../applications/office/scribus {
+  scribus_1_4 = callPackage ../applications/office/scribus/1_4.nix {
     inherit (gnome2) libart_lgpl;
   };
 
-  scribusUnstable = libsForQt5.callPackage ../applications/office/scribus/unstable.nix { };
+  scribus_1_5 = libsForQt5.callPackage ../applications/office/scribus/default.nix { };
+  scribus = scribus_1_5;
 
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 

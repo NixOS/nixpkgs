@@ -5494,6 +5494,12 @@
     githubId = 37965;
     name = "Léo Stefanesco";
   };
+  infinidoge = {
+    name = "Infinidoge";
+    email = "infinidoge@inx.moe";
+    github = "Infinidoge";
+    githubId = 22727114;
+  };
   infinisil = {
     email = "contact@infinisil.com";
     matrix = "@infinisil:matrix.org";
@@ -14005,6 +14011,12 @@
     github = "ysndr";
     githubId = 7040031;
     name = "Yannik Sander";
+  };
+  yureien = {
+    email = "contact@sohamsen.me";
+    github = "Yureien";
+    githubId = 17357089;
+    name = "Soham Sen";
   };
   yuriaisaka = {
     email = "yuri.aisaka+nix@gmail.com";
