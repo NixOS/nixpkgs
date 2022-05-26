@@ -21915,9 +21915,6 @@ with pkgs;
 
   qt-mobility = callPackage ../development/libraries/qt-mobility { };
 
-
-  qtstyleplugin-kvantum-qt4 = callPackage ../development/libraries/qtstyleplugin-kvantum-qt4 { };
-
   qxmpp = libsForQt5.callPackage ../development/libraries/qxmpp { };
 
   gnet = callPackage ../development/libraries/gnet { };
