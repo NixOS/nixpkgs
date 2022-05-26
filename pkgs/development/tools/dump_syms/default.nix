@@ -11,7 +11,7 @@
 
 let
   pname = "dump_syms";
-  version = "1.0.0";
+  version = "1.0.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage {
     owner = "mozilla";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cgLlCNNid7JIukdWKy3nPJwyZ84YpKrnCC4Rm6E7DDk=";
+    hash = "sha256-2OSni0PA0LfamOqdFQTRLgolF55z13owgFrqYYHuNX0=";
   };
 
-  cargoSha256 = "sha256-0qRaBgIoWXYnQkxY7hFkvj3v/7mEGGRzQV7JFib8JRk=";
+  cargoSha256 = "sha256-ggJWweulbSJ8Femzv7uHLcrn1HTenw79AYIydE6y4ag=";
 
   nativeBuildInputs = [
     pkg-config
