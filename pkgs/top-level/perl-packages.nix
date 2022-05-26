@@ -6,7 +6,7 @@
    be almost as much code as the function itself. */
 
 { config
-, stdenv, lib, buildPackages, pkgs
+, stdenv, lib, buildPackages, pkgs, darwin
 , fetchurl, fetchgit, fetchpatch, fetchFromGitHub, fetchFromGitLab
 , perl, overrides, buildPerl, shortenPerlShebang
 , nixosTests
@@ -21005,6 +21005,28 @@ let
     };
     meta = {
       description = "Ensure that a platform has weaken support";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  Tcl = buildPerlPackage {
+    pname = "Tcl";
+    version = "1.27";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VK/VKON/Tcl-1.27.tar.gz";
+      sha256 = "sha256-+DhYd6Sp7Z89OQPS0PfNcPrDzmgyxg9gCmghzuP7WHI=";
+    };
+    propagatedBuildInputs = [
+      pkgs.bwidget
+      pkgs.tcl
+      pkgs.tix
+      pkgs.tk
+    ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices ];
+    makeMakerFlags = lib.optionalString stdenv.isLinux
+      "--tclsh=${pkgs.tcl}/bin/tclsh --nousestubs";
+    meta = {
+      description = "Tcl extension module for perl";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
