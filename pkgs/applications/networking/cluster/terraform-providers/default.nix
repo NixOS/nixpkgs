@@ -70,6 +70,7 @@ let
       removed = date: throw "removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
+      opc = archived "2022/05";
     };
 
   # excluding aliases, used by terraform-full
