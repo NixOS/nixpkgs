@@ -27,10 +27,10 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "13.4.4";
+  version = "13.4.5";
 
   src = fetchFromGitHub {
-    owner = "jbarlow83";
+    owner = "ocrmypdf";
     repo = "OCRmyPDF";
     rev = "v${version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-uFKnohUxh17h6u0vwVB7EaTEh5NRowP8a6za63Ehodk=";
+    hash = "sha256-5IpJ55Vu9LjGgWJITkAH5fOr+MfovswWhwqbEs/RlzA=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -80,21 +80,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    # https://github.com/ocrmypdf/OCRmyPDF/issues/933
-    substituteInPlace setup.cfg \
-      --replace "pdfminer.six!=20200720,>=20191110,<=20220319" "pdfminer.six!=20200720,>=20191110"
-  '';
-
   pythonImportsCheck = [
     "ocrmypdf"
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/jbarlow83/OCRmyPDF";
+    homepage = "https://github.com/ocrmypdf/OCRmyPDF";
     description = "Adds an OCR text layer to scanned PDF files, allowing them to be searched";
     license = with licenses; [ mpl20 mit ];
     maintainers = with maintainers; [ kiwi dotlambda ];
-    changelog = "https://github.com/jbarlow83/OCRmyPDF/blob/v${version}/docs/release_notes.rst";
+    changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";
   };
 }
