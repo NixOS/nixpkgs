@@ -1,12 +1,27 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, libgit2, cached-property, pytestCheckHook, cffi, cacert }:
+{ lib
+, stdenv
+, buildPythonPackage
+, cacert
+, cached-property
+, cffi
+, fetchPypi
+, isPyPy
+, libgit2
+, pycparser
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "1.9.1";
+  version = "1.9.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-72R5w7YZKCUxawVjNtt36/9ueEmusfu4i3YAGsM3uck=";
+    hash = "sha256-IIlEM98RRkgarK434rDzu7/eoCbbL1UGEXC9mCPkCxk=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
@@ -19,14 +34,21 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cached-property
-  ] ++ lib.optional (!isPyPy) cffi;
+    pycparser
+  ] ++ lib.optional (!isPyPy) [
+    cffi
+  ];
 
-  propagatedNativeBuildInputs = lib.optional (!isPyPy) cffi;
+  propagatedNativeBuildInputs = lib.optional (!isPyPy) [
+    cffi
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
   disabledTestPaths = [
-    # disable tests that require networking
+    # Disable tests that require networking
     "test/test_repository.py"
     "test/test_credentials.py"
     "test/test_submodule.py"
@@ -44,10 +66,14 @@ buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582681068
   doCheck = false;
 
+  pythonImportsCheck = [
+    "pygit2"
+  ];
+
   meta = with lib; {
     description = "A set of Python bindings to the libgit2 shared library";
-    homepage = "https://pypi.python.org/pypi/pygit2";
-    license = licenses.gpl2;
+    homepage = "https://github.com/libgit2/pygit2";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ ];
   };
 }
