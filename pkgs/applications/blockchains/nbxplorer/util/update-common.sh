@@ -6,6 +6,8 @@ set -euo pipefail
 # getVersionFromTags
 # refetch
 
+trap 'echo "Error at ${BASH_SOURCE[0]}:$LINENO"' ERR
+
 pkgName=$1
 depsFile=$2
 customFlags=$3
