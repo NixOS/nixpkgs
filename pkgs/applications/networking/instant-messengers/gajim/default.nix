@@ -73,7 +73,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Jabber client written in PyGTK";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ raskin abbradar ];
-    downloadPage = "http://gajim.org/downloads.php";
+    downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;
   };
 }
