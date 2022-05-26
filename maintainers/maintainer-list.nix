@@ -9770,6 +9770,12 @@
     githubId = 6498458;
     name = "pebble kite";
   };
+  pbsds = {
+    name = "Peder Bergebakken Sundt";
+    email = "pbsds@hotmail.com";
+    github = "pbsds";
+    githubId = 140964;
+  };
   pcarrier = {
     email = "pc@rrier.ca";
     github = "pcarrier";
