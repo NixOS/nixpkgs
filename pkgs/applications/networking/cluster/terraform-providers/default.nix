@@ -71,6 +71,7 @@ let
     in
     lib.optionalAttrs config.allowAliases {
       opc = archived "2022/05";
+      oraclepaas = archived "2022/05";
     };
 
   # excluding aliases, used by terraform-full
