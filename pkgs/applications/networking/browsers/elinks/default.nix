@@ -4,7 +4,7 @@
 , # Incompatible licenses, LGPLv3 - GPLv2
   enableGuile        ? false,                                         guile ? null
 , enablePython       ? false,                                         python ? null
-, enablePerl         ? (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
+, enablePerl         ? (!stdenv.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
 # re-add javascript support when upstream supports modern spidermonkey
 }:
 

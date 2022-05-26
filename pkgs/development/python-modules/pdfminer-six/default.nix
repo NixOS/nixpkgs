@@ -9,8 +9,8 @@
 }:
 
 buildPythonPackage rec {
-  pname = "pdfminer_six";
-  version = "20220506";
+  pname = "pdfminer-six";
+  version = "20220524";
 
   disabled = !isPy3k;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "pdfminer";
     repo = "pdfminer.six";
     rev = version;
-    sha256 = "sha256-Lq+ou7+Lmr1H69L8X/vuky+/tXDD3bBBaCysymeRuXA=";
+    sha256 = "sha256-XO9sdHeS/8MgVW0mxbTe2AY5BDfnBSDNzZwLsSKmQh0=";
   };
 
   propagatedBuildInputs = [ charset-normalizer cryptography ];
