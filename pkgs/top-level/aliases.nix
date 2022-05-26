@@ -1156,6 +1156,7 @@ mapAliases ({
   ### N ###
 
   namecoin = throw "namecoin GUI has been removed, because it depended on qt4"; # Added 2022-05-26
+  navipowm = throw "navipowm has been removed, because it was unmaintained upstream"; # Added 2022-05-26
   ncdu_2 = ncdu; # Added 2022-07-22
   nccl = throw "nccl has been renamed to cudaPackages.nccl"; # Added 2022-04-04
   nccl_cudatoolkit_10 = throw "nccl_cudatoolkit_10 has been renamed to cudaPackages_10.nccl"; # Added 2022-04-04
