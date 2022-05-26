@@ -980,8 +980,8 @@ self: super: {
     super.vim-markdown-composer.overrideAttrs (oldAttrs: rec {
       preFixup = ''
         substituteInPlace "$out"/after/ftplugin/markdown/composer.vim \
-          --replace "let l:args = [s:plugin_root . '/target/release/markdown-composer']" \
-          "let l:args = ['${vim-markdown-composer-bin}/bin/markdown-composer']"
+          --replace "s:plugin_root . '/target/release/markdown-composer'" \
+          "'${vim-markdown-composer-bin}/bin/markdown-composer'"
       '';
     });
 
