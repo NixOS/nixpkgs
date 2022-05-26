@@ -48,7 +48,7 @@ buildPythonPackage rec {
     "test_hpdi"
     "test_kl_univariate"
     "test_mean_var"
-    # Tests want to download data 
+    # Tests want to download data
     "data_load"
     "test_jsb_chorales"
   ];
