@@ -15,14 +15,16 @@ in fetchFromGitHub {
 
     install -Dm444 -t $out/share/fonts/opentype/ xkcd/build/xkcd.otf
     install -Dm444 -t $out/share/fonts/truetype/ xkcd-script/font/xkcd-script.ttf
-    for f in *; do
-      [[ "$f" == share ]] && continue
-      rm -rf "$f"
+    for f in * .*; do
+      case "$f" in
+        share|.|..) ;;
+        *) rm -rf "$f" ;;
+      esac
     done
 
     popd
   '';
-  sha256 = "sha256-oBDP4LG8csjvzSk1+EcPH6hcp44dWtPzVFSifzBq8lU=";
+  sha256 = "sha256-ITsJPs+ZXwUWYe2AmwyVZib8RV7bpiWHOUD8qEZRHHY=";
 
   meta = with lib; {
     description = "The xkcd font";
