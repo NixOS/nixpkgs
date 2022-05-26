@@ -87,6 +87,11 @@ buildPythonPackage rec {
     # Fails to parse cmdline arguments
     "test_dev"
     "test_auto_reload"
+    "test_host_port_ipv6_loopback"
+    "test_num_workers"
+    "test_debug"
+    "test_access_logs"
+    "test_noisy_exceptions"
     # OSError: foo
     "test_bad_headers"
     "test_create_server_trigger_events"
@@ -100,6 +105,8 @@ buildPythonPackage rec {
     "test_keep_alive_connection_context"
     # Racy tests
     "test_keep_alive_client_timeout"
+    "test_keep_alive_server_timeout"
+    "test_zero_downtime"
   ];
 
   disabledTestPaths = [
