@@ -117,6 +117,10 @@ stdenv.mkDerivation (rec {
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
+  NIX_CFLAGS_COMPILE = []
+    # Work around a bogus warning in conjunction with musl.
+    ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
+    ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0";
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
@@ -147,9 +151,4 @@ stdenv.mkDerivation (rec {
     priority = 10;
     maintainers = [ maintainers.das_j ];
   };
-} // optionalAttrs stdenv.hostPlatform.isMusl {
-  # Work around a bogus warning in conjunction with musl.
-  NIX_CFLAGS_COMPILE = "-Wno-error";
-} // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
-  NIX_CFLAGS_COMPILE = "-D__USE_FORTIFY_LEVEL=0";
 })
