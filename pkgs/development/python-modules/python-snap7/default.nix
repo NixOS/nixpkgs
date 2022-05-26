@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "python-snap7";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "gijzelaerr";
     repo = "python-snap7";
-    rev = version;
-    sha256 = "18z13wb2q5q3msp9w3wddg1byp7picczw4ng8w1ccj4npidxsqv8";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-xkkJE3wTqS6spwEmQ+HBY1Szao1VFoqmQ041vnAYuqQ=";
   };
 
   propagatedBuildInputs = [ setuptools six ];
