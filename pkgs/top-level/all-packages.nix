@@ -18577,8 +18577,6 @@ with pkgs;
     icu = icu67;
   };
 
-  libechonest = callPackage ../development/libraries/libechonest { };
-
   libemf2svg = callPackage ../development/libraries/libemf2svg { };
 
   libev = callPackage ../development/libraries/libev { };
@@ -20164,8 +20162,6 @@ with pkgs;
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
 
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
-
-  qjson = callPackage ../development/libraries/qjson { };
 
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
