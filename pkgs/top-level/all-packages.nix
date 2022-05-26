@@ -18429,6 +18429,7 @@ with pkgs;
 
   inherit (callPackage ../development/libraries/libdwarf { })
     libdwarf dwarfdump;
+  libdwarf_0_4 = callPackage ../development/libraries/libdwarf/0.4.nix { };
 
   libe57format = callPackage ../development/libraries/libe57format { };
 
