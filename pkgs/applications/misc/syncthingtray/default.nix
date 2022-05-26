@@ -7,6 +7,7 @@
 , extra-cmake-modules
 , cpp-utilities
 , qtutilities
+, boost
 , cmake
 , kio
 , plasma-framework
@@ -29,7 +30,13 @@ mkDerivation rec {
     sha256 = "sha256-T0ddAROwVSh+IKGZZNDMC7YB2IfQZal2pAQ5ArirtjI=";
   };
 
-  buildInputs = [ qtbase cpp-utilities qtutilities ]
+  buildInputs = [
+    qtbase
+    cpp-utilities
+    qtutilities
+    boost
+    qtforkawesome
+  ]
     ++ lib.optionals webviewSupport [ qtwebengine ]
     ++ lib.optionals jsSupport [ qtdeclarative ]
     ++ lib.optionals kioPluginSupport [ kio ]
