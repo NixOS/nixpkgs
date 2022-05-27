@@ -66,6 +66,7 @@
   ./hardware/network/ath-user-regd.nix
   ./hardware/network/b43.nix
   ./hardware/network/intel-2200bg.nix
+  ./hardware/new-lg4ff.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/openrazer.nix

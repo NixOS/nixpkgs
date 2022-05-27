@@ -23057,6 +23057,10 @@ with pkgs;
     stdenv = gcc11Stdenv;
   };
 
+  new-lg4ff = callPackage ../os-specific/linux/new-lg4ff {
+    inherit (linuxPackages) kernel;
+  };
+
   nmon = callPackage ../os-specific/linux/nmon { };
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
