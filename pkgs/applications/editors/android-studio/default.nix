@@ -10,8 +10,8 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2021.2.1.14"; # "Android Studio Chipmunk (2021.2.1)"
-    sha256Hash = "1cy7ngm160w819ikrd459kg6lnk1k16jjnjm3d0aksmlws5b12z9";
+    version = "2021.2.1.15"; # "Android Studio Chipmunk (2021.2.1) Patch 1"
+    sha256Hash = "1gj50wqb9v23aajb0zysi1vmaz1p8g2a5xqn0mq22afxq3gy0600";
   };
   betaVersion = {
     version = "2021.2.1.11"; # "Android Studio Chipmunk (2021.2.1) Beta 4"
