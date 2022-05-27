@@ -15,6 +15,8 @@ in fetchFromGitHub {
 
     install -Dm444 -t $out/share/fonts/opentype/ xkcd/build/xkcd.otf
     install -Dm444 -t $out/share/fonts/truetype/ xkcd-script/font/xkcd-script.ttf
+
+    # remove unrelated files
     for f in * .*; do
       case "$f" in
         share|.|..) ;;
