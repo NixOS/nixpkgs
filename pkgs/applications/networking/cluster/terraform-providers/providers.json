@@ -1068,13 +1068,13 @@
     "version": "0.14.5"
   },
   "snowflake": {
-    "owner": "chanzuckerberg",
-    "provider-source-address": "registry.terraform.io/chanzuckerberg/snowflake",
+    "owner": "Snowflake-Labs",
+    "provider-source-address": "registry.terraform.io/Snowflake-Labs/snowflake",
     "repo": "terraform-provider-snowflake",
-    "rev": "v0.33.1",
-    "sha256": "sha256-xFtk1WbMe2/UFGB/ej6QEL07+dZTsWFmqvyVCa2YBw8=",
-    "vendorSha256": "sha256-l++IzY3/W4qsdFJY7ik0xF6tZWluLb4EcW5KQtBVY5s=",
-    "version": "0.33.1"
+    "rev": "v0.34.0",
+    "sha256": "sha256-7FQp5lDm6WKFmtk9V8Sf+e5J4tLpAOfgMKpbcQRcfIE=",
+    "vendorSha256": "sha256-HGukjbPQyQpFnVkgUnreQlNAW9nhLirnQnYIpBfFe+M=",
+    "version": "0.34.0"
   },
   "sops": {
     "owner": "carlpett",
