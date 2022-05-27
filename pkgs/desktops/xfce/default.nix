@@ -64,7 +64,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   #### APPLICATIONS
 
-  catfish = callPackage ./applications/catfish { };
+  catfish = callPackage ./applications/catfish {
+    inherit (pkgs) dconf; # remove this line when the dconf alias is removed
+  };
 
   gigolo = callPackage ./applications/gigolo { };
 
@@ -80,7 +82,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   xfce4-dict = callPackage ./applications/xfce4-dict { };
 
-  xfce4-terminal = callPackage ./applications/xfce4-terminal { };
+  xfce4-terminal = callPackage ./applications/xfce4-terminal {
+    inherit (pkgs) vte; # remove this line when the vte alias is removed
+  };
 
   xfce4-screensaver = callPackage ./applications/xfce4-screensaver { };
 
