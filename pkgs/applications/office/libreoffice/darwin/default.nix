@@ -69,9 +69,9 @@ stdenvNoCC.mkDerivation {
         set -eou pipefail
 
         # reset version first so that both platforms are always updated and in sync
-        update-source-version libreoffice 0 ${lib.fakeSha256} --file ${currentFile} --system=aarch64-darwin
-        update-source-version libreoffice ${newVersion} ${newAarch64Sha256} --file ${currentFile} --system=aarch64-darwin
-        update-source-version libreoffice 0 ${lib.fakeSha256} --file ${currentFile} --system=x86_64-darwin
-        update-source-version libreoffice ${newVersion} ${newX86_64Sha256} --file ${currentFile} --system=x86_64-darwin
+        update-source-version libreoffice 0 ${lib.fakeSha256} --file=${currentFile} --system=aarch64-darwin
+        update-source-version libreoffice ${newVersion} ${newAarch64Sha256} --file=${currentFile} --system=aarch64-darwin
+        update-source-version libreoffice 0 ${lib.fakeSha256} --file=${currentFile} --system=x86_64-darwin
+        update-source-version libreoffice ${newVersion} ${newX86_64Sha256} --file=${currentFile} --system=x86_64-darwin
       '';
 }
