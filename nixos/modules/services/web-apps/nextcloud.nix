@@ -830,7 +830,7 @@ in {
             ${occ}/bin/nextcloud-occ config:system:delete trusted_domains
 
             ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
-                # Try to enable apps (don't fail when one of them cannot be enabled , eg. due to incompatible version)
+                # Try to enable apps
                 ${occ}/bin/nextcloud-occ app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
             ''}
 
