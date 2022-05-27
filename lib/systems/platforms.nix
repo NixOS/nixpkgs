@@ -242,13 +242,6 @@ rec {
     };
   };
 
-  scaleway-c1 = armv7l-hf-multiplatform // {
-    gcc = {
-      cpu = "cortex-a9";
-      fpu = "vfpv3";
-    };
-  };
-
   utilite = {
     linux-kernel = {
       name = "utilite";

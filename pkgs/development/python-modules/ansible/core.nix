@@ -51,7 +51,7 @@ buildPythonPackage rec {
     jinja2
     packaging
     pyyaml
-    resolvelib
+    resolvelib # This library is a PITA, since ansible requires a very old version of it
     # optional dependencies
     junit-xml
     lxml
@@ -73,9 +73,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }
