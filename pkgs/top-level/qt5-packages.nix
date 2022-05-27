@@ -197,6 +197,8 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   qtfeedback = callPackage ../development/libraries/qtfeedback { };
 
+  qtforkawesome = callPackage ../development/libraries/qtforkawesome { };
+
   qtutilities = callPackage ../development/libraries/qtutilities { };
 
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
