@@ -39,6 +39,46 @@
       </varlistentry>
       <varlistentry>
         <term>
+          <literal>types.secretFile</literal>
+        </term>
+        <listitem>
+          <para>
+            A string representing a filesystem path (starting with
+            <quote>/</quote>) to a file which is supposed to remain
+            secret. Depending on how the module is implemented, setting
+            an option of type <literal>types.path</literal> to the
+            literal value <literal>/etc/secret_file</literal> can make
+            nix copy the secret file at <literal>nixos-rebuild</literal>
+            time to the store and thus make it world readable. To avoid
+            this behavior, it is enough to quote the path:
+            <literal>&quot;/etc/secret_file&quot;</literal>. This
+            solution is simple, but it is easy to forget about it.
+            <literal>types.secretFile</literal> is design to prevent
+            such mistakes. Compared to <literal>types.path</literal>,
+            this type adds further restrictions:
+          </para>
+          <itemizedlist spacing="compact">
+            <listitem>
+              <para>
+                only strings (as opposed to unquoted paths) are accepted
+                as input.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                the string must not start by
+                <literal>/nix/store/</literal>. To bypass these
+                restrictions you can pass the value to the function
+                <literal>types.secretFile.makeWorldReadable</literal>.
+                This can be useful when writing NixOS tests, as in this
+                case the secret file is only an example value.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </varlistentry>
+      <varlistentry>
+        <term>
           <literal>types.package</literal>
         </term>
         <listitem>
