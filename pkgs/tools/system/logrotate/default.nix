@@ -14,6 +14,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-OJOV++rtN9ry+l0c0eanpu/Pwu8cOHfyEaDWp3FZjkw=";
   };
 
+  patches = [
+    # Fix CVE-2022-1348 by backporting two upstream commits
+    # - 1f76a381e2caa0603ae3dbc51ed0f1aa0d6658b9 and
+    # - addbd293242b0b78aa54f054e6c1d249451f137d
+    # in a custom patch, as cherry-picking directly failed.
+    ./fix-cve-2022-1348.diff
+  ];
+
   # Logrotate wants to access the 'mail' program; to be done.
   configureFlags = [
     "--with-compress-command=${gzip}/bin/gzip"
