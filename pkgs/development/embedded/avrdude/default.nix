@@ -7,11 +7,11 @@ assert docSupport -> texLive != null && texinfo != null && texi2html != null;
 
 stdenv.mkDerivation rec {
   pname = "avrdude";
-  version = "6.4";
+  version = "7.0";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-qb5wZvcKnc9L8HNvz1MdtqMlCu0aJMxkOt0nZBtxEPk=";
+    sha256 = "sha256-wO9l2Y1gQMoLTytwDVFGPCoflGZUQfOdFdl0Qtu3m1Q=";
   };
 
   configureFlags = lib.optionals docSupport "--enable-doc";

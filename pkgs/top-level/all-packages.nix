@@ -258,6 +258,8 @@ with pkgs;
 
   bingo = callPackage ../development/tools/bingo {};
 
+  bootstrap-studio = callPackage ../development/web/bootstrap-studio {};
+
   breakpad = callPackage ../development/misc/breakpad { };
 
   buf = callPackage ../development/tools/buf { };
@@ -9315,7 +9317,9 @@ with pkgs;
 
   pgcenter = callPackage ../tools/misc/pgcenter { };
 
-  pgmetrics = callPackage ../tools/misc/pgmetrics { };
+  pgmetrics = callPackage ../tools/misc/pgmetrics {
+    buildGoModule = buildGo118Module;
+  };
 
   pgsync = callPackage ../development/tools/database/pgsync { };
 
@@ -18437,6 +18441,7 @@ with pkgs;
 
   inherit (callPackage ../development/libraries/libdwarf { })
     libdwarf dwarfdump;
+  libdwarf_0_4 = callPackage ../development/libraries/libdwarf/0.4.nix { };
 
   libe57format = callPackage ../development/libraries/libe57format { };
 
@@ -20434,12 +20439,16 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  SDL = callPackage ../development/libraries/SDL ({
+  SDL_classic = callPackage ../development/libraries/SDL ({
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa GLUT;
   } // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
     # libGLU doesn’t work with Android’s SDL
     libGLU = null;
   });
+
+  SDL_compat = callPackage ../development/libraries/SDL_compat { };
+
+  SDL = SDL_classic;
 
   SDL_audiolib = callPackage ../development/libraries/SDL_audiolib { };
 
@@ -32029,7 +32038,7 @@ with pkgs;
 
   opentyrian = callPackage ../games/opentyrian { };
 
-  openxcom = callPackage ../games/openxcom { };
+  openxcom = callPackage ../games/openxcom { SDL = SDL_compat; };
 
   openxray = callPackage ../games/openxray { };
 
@@ -32133,7 +32142,7 @@ with pkgs;
 
   rocksndiamonds = callPackage ../games/rocksndiamonds { };
 
-  rott = callPackage ../games/rott { };
+  rott = callPackage ../games/rott { SDL = SDL_compat; };
 
   rott-shareware = rott.override {
     buildShareware = true;
