@@ -61,6 +61,9 @@ buildPythonPackage rec {
       --replace " --junit-xml=junit-results.xml" ""
     substituteInPlace setup.py \
       --replace '"oldest-supported-numpy", ' ""
+
+    # we don't need setup.py to find the macos sdk for us
+    sed -i '/sdk_path/d' setup.py
   '';
 
   # To prevent importing of an incomplete package from the build directory
