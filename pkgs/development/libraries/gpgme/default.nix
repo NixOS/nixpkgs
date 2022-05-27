@@ -18,6 +18,9 @@
 , pythonSupport ? false
 , swig2 ? null
 , python ? null
+# only for passthru.tests
+, libsForQt5
+, python3
 }:
 let
   inherit (stdenv.hostPlatform) system;
@@ -105,6 +108,11 @@ stdenv.mkDerivation rec {
   );
 
   doCheck = true;
+
+  passthru.tests = {
+    python = python3.pkgs.gpgme;
+    qt = libsForQt5.qgpgme;
+  };
 
   meta = with lib; {
     homepage = "https://gnupg.org/software/gpgme/index.html";
