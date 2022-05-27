@@ -11101,11 +11101,11 @@ in {
 
   vpk = callPackage ../development/python-modules/vpk { };
 
-  vpype = callPackage ../development/python-modules/vpype { };
+  vpype = callPackage ../applications/graphics/vpype { };
 
   vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
 
-  vsketch = callPackage ../development/python-modules/vsketch { };
+  vsketch = callPackage ../applications/graphics/vsketch { };
 
   vsts = callPackage ../development/python-modules/vsts { };
 
