@@ -6326,6 +6326,13 @@
     github = "jsierles";
     githubId = 82;
   };
+  jsimonetti = {
+    email = "jeroen+nixpkgs@simonetti.nl";
+    matrix = "@jeroen:simonetti.nl";
+    name = "Jeroen Simonetti";
+    github = "jsimonetti";
+    githubId = 5478838;
+  };
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
