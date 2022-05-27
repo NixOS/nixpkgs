@@ -6,8 +6,6 @@
 , callPackage
 }:
 
-assert stdenv ? glibc;
-
 # https://download.eclipse.org/eclipse/downloads/ is the main place to
 # find the downloads needed for new versions
 #
