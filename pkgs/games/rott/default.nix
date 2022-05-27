@@ -1,5 +1,26 @@
-{stdenv, lib, fetchurl, SDL, SDL_mixer, makeDesktopItem, copyDesktopItems, runtimeShell, buildShareware ? false}:
+{ stdenv
+, lib
+, fetchurl
+, writeShellScript
+, SDL
+, SDL_mixer
+, makeDesktopItem
+, copyDesktopItems
+, runtimeShell
+, buildShareware ? false
+}:
 
+let
+  # Allow the game to be launched from a user's PATH and load the game data from the user's home directory.
+  launcher = writeShellScript "rott" ''
+    set -eEuo pipefail
+    dir=$HOME/.rott/data
+    test -e $dir || mkdir -p $dir
+    cd $dir
+    exec @out@/libexec/rott "$@"
+  '';
+
+in
 stdenv.mkDerivation rec {
   pname = "rott";
   version = "1.1.2";
@@ -10,27 +31,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
+
   buildInputs = [ SDL SDL_mixer ];
 
-  preBuild = ''
-    cd rott
-    make clean
-    make SHAREWARE=${if buildShareware then "1" else "0"}
-  '';
+  sourceRoot = "rott-${version}/rott";
 
-  # Include a wrapper script to allow the game to be launched from a user's PATH and load the game data from the user's home directory.
+  makeFlags = [
+    "SHAREWARE=${if buildShareware then "1" else "0"}"
+  ];
+
+  # when using SDL_compat instead of SDL_classic, SDL_mixer isn't correctly
+  # detected, but there is no harm just specifying it
+  NIX_CFLAGS_COMPILE = [
+    "-I${lib.getDev SDL_mixer}/include/SDL"
+  ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp rott $out/bin
+    runHook preInstall
 
-    cat > $out/bin/launch-rott <<EOF
-    #! ${runtimeShell} -e
-    cd ~/.rott/data
-    exec $out/bin/rott
-    EOF
-
-    chmod +x $out/bin/launch-rott
+    install -Dm555 -t $out/libexec rott
+    install -Dm555 ${launcher} $out/bin/${launcher.name}
+    substituteInPlace $out/bin/rott --subst-var out
 
     runHook postInstall
   '';
@@ -38,7 +59,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "rott";
-      exec = "launch-rott";
+      exec = "rott";
       desktopName = "Rise of the Triad: ${if buildShareware then "The HUNT Begins" else "Dark War"}";
       categories = [ "Game" ];
     })

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zlib bzip2 libpng
     lua5_1 toluapp
-    SDL.dev SDL_image SDL_mixer libGL
+    (lib.getDev SDL) SDL_image SDL_mixer libGL
   ];
   cmakeFlags = [
     "-DCMAKE_CXX_FLAGS=-Wno-error=format-overflow"

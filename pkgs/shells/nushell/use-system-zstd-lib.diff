@@ -1,8 +1,8 @@
 diff --git a/Cargo.lock b/Cargo.lock
-index 4261c06..6d6e537 100644
+index 6cebf66d..b6e40cd9 100644
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -2166,6 +2166,7 @@ dependencies = [
+@@ -2443,6 +2443,7 @@ dependencies = [
   "rstest",
   "serial_test",
   "tempfile",
@@ -10,23 +10,23 @@ index 4261c06..6d6e537 100644
  ]
  
  [[package]]
-@@ -4962,4 +4963,5 @@ checksum = "fc49afa5c8d634e75761feda8c592051e7eeb4683ba827211eb0d731d3402ea8"
+@@ -5365,4 +5366,5 @@ checksum = "9fd07cbbc53846d9145dbffdf6dd09a7a0aa52be46741825f5c97bdd4f73f12b"
  dependencies = [
   "cc",
   "libc",
 + "pkg-config",
  ]
 diff --git a/Cargo.toml b/Cargo.toml
-index e214da1..b78919a 100644
+index 0791d462..d520d9ae 100644
 --- a/Cargo.toml
 +++ b/Cargo.toml
-@@ -67,6 +69,9 @@ hamcrest2 = "0.3.0"
- rstest = "0.12.0"
- itertools = "0.10.3"
+@@ -58,6 +58,9 @@ rayon = "1.5.1"
+ reedline = { version = "0.6.0", features = ["bashisms"]}
+ is_executable = "1.0.1"
  
 +# Specify that the indirect dependency ztsd-sys should pick up the system zstd C library
-+zstd-sys = { version = "1", features = [ "pkg-config" ] }
++zstd-sys = { version = "2", features = [ "pkg-config" ] }
 +
- [target.'cfg(windows)'.build-dependencies]
- embed-resource = "1"
- 
+ [dev-dependencies]
+ nu-test-support = { path="./crates/nu-test-support", version = "0.63.0"  }
+ tempfile = "3.2.0"
