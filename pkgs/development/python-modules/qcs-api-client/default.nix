@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.20.14";
+  version = "0.20.17";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-api-client-python";
     rev = "v${version}";
-    hash = "sha256-5xRjjy+4i2JgYOXK35d4uqAyJhQgm6VUx72YoooXgSk=";
+    hash = "sha256-5YGMBoykMtXZgdHubQJKwRqntDPnR6/qsWJc1cYk8CA=";
   };
 
   nativeBuildInputs = [
@@ -74,8 +74,9 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Test is outdated
-    "tests/test_client/test_client.py"
     "tests/test_client/test_additional_properties.py"
+    "tests/test_client/test_auth.py"
+    "tests/test_client/test_client.py"
     "tests/test_client/test_datetime.py"
     "tests/test_imports.py"
   ];
