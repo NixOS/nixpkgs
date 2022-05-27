@@ -6751,6 +6751,8 @@ in {
 
   Pmw = callPackage ../development/python-modules/Pmw { };
 
+  pnoise = callPackage ../development/python-modules/pnoise { };
+
   pocket = callPackage ../development/python-modules/pocket { };
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
