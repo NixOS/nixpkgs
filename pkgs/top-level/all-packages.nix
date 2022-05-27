@@ -28430,6 +28430,8 @@ with pkgs;
 
   odin2 = callPackage ../applications/audio/odin2 { };
 
+  okteto = callPackage ../development/tools/okteto { };
+
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
