@@ -29,12 +29,12 @@ let
     paths = [ exampleZone delegatedZone ];
   };
   # DO NOT USE pkgs.writeText IN PRODUCTION. This put secrets in the nix store!
-  tsigFile = pkgs.writeText "tsig.conf" ''
+  tsigFile = lib.types.secretFile.makeWorldReadable (pkgs.writeText "tsig.conf" ''
     key:
       - id: slave_key
         algorithm: hmac-sha256
         secret: zOYgOgnzx3TGe5J5I/0kxd7gTcxXhLYMEq3Ek3fY37s=
-  '';
+  '');
 in {
   name = "knot";
   meta = with pkgs.lib.maintainers; {

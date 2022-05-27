@@ -48,7 +48,7 @@ in {
       };
 
       keyFiles = mkOption {
-        type = types.listOf types.path;
+        type = types.listOf types.secretFile;
         default = [];
         description = ''
           A list of files containing additional configuration
