@@ -25,7 +25,7 @@ buildPythonPackage rec {
     sha256 = "sha256-Vkau8Nk2ssdhoQOT8DhO5rXH/guz5c1xCxcTTKHZnP8=";
   };
 
-  postPatch = lib.optionalString ''
+  postPatch = ''
     #substituteInPlace tests/test_completion/test_completion.py \
     #  --replace '"/bin/bash"' '"'"$SHELL"'"'
   '';
