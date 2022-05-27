@@ -60,6 +60,10 @@ buildPythonPackage rec {
     cd tests
   '';
 
+  postUnpack = ''
+    substituteInPlace source/watchfiles/version.py --replace "VERSION = '0.0.dev0'" "VERSION = '${version}'"
+  '';
+
   meta = with lib; {
     broken = stdenv.isDarwin;
     description = "Simple, modern file watching and code reload";
