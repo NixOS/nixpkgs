@@ -1,4 +1,4 @@
-#{ stdenv, lib, meson }: 
+#{ stdenv, lib, meson }:
 with import <nixpkgs> {};
 stdenv.mkDerivation rec {
   pname = "gnote";
