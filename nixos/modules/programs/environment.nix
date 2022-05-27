@@ -2,7 +2,7 @@
 
 # Most of the stuff here should probably be moved elsewhere sometime.
 
-{ config, lib, ... }:
+{ pkgs, config, lib, ... }:
 
 with lib;
 
@@ -38,7 +38,7 @@ in
       { PATH = [ "/bin" ];
         INFOPATH = [ "/info" "/share/info" ];
         KDEDIRS = [ "" ];
-        QT_PLUGIN_PATH = [ "/lib/qt4/plugins" "/lib/kde4/plugins" ];
+        QT_PLUGIN_PATH = [ "/lib/qt4/plugins" "/lib/kde4/plugins" "/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
         QTWEBKIT_PLUGIN_PATH = [ "/lib/mozilla/plugins/" ];
         GTK_PATH = [ "/lib/gtk-2.0" "/lib/gtk-3.0" "/lib/gtk-4.0" ];
         XDG_CONFIG_DIRS = [ "/etc/xdg" ];
