@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.28.3";
+  version = "1.29.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1hA3s/Iff8fVz+TupoN4klnnzLnu9fcinLxi8x6mujI=";
+    hash = "sha256-gLT03ksCVIMreUhRHg3UY0LRwERszU/diStj0C5PvHs=";
   };
 
   propagatedBuildInputs = [
@@ -25,6 +25,10 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
+
+  postPatch = ''
+    sed '/^\[metadata\]/a version = ${version}' setup.cfg
+  '';
 
   # Tests require a running PostgreSQL instance
   doCheck = false;
