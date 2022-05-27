@@ -39,7 +39,10 @@ in stdenv.mkDerivation rec {
     perl.pkgs.YAML
   ];
   cmakeFlags = [
-    "-DFORK_AWESOME_FONT_FILE=${fork_awesome_release}/fonts/forkawesome-webfont.woff2"
+    # Current freetype used by NixOS users doesn't support the `.woff2` font
+    # format, so we use ttf. See
+    # https://github.com/NixOS/nixpkgs/pull/174875#discussion_r883423881
+    "-DFORK_AWESOME_FONT_FILE=${fork_awesome_release}/fonts/forkawesome-webfont.ttf"
     "-DFORK_AWESOME_ICON_DEFINITIONS=${fork_awesome_release}/src/icons/icons.yml"
   ];
 
