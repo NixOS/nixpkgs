@@ -2594,6 +2594,8 @@ in {
 
   durus = callPackage ../development/python-modules/durus {  };
 
+  dvclive = callPackage ../development/python-modules/dvclive {  };
+
   dvc-render = callPackage ../development/python-modules/dvc-render {  };
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
