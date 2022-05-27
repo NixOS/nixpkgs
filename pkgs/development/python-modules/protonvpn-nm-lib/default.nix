@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , substituteAll
+, dbus-python
 , distro
 , jinja2
 , keyring
@@ -10,7 +11,10 @@
 , pygobject3
 , pyxdg
 , systemd
+, ncurses
 , networkmanager
+, pkgs-systemd
+, xdg-utils
 }:
 
 buildPythonPackage rec {
@@ -26,6 +30,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+    dbus-python
     distro
     jinja2
     keyring
@@ -33,6 +38,10 @@ buildPythonPackage rec {
     pygobject3
     pyxdg
     systemd
+    ncurses
+    networkmanager
+    pkgs-systemd
+    xdg-utils
   ];
 
   patches = [
