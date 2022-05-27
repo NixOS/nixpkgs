@@ -10250,6 +10250,8 @@ in {
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
+  svgelements = callPackage ../development/python-modules/svgelements { };
+
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
