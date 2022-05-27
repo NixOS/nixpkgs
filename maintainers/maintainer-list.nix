@@ -1170,6 +1170,12 @@
     githubId = 706854;
     name = "Etienne Laurin";
   };
+  atry = {
+    name = "Bo Yang";
+    email = "atry@fb.com";
+    github = "Atry";
+    githubId = 601530;
+  };
   attila-lendvai = {
     name = "Attila Lendvai";
     email = "attila@lendvai.name";
