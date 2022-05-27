@@ -9,6 +9,12 @@ let
   };
   interfaceOptions = {
     options = {
+      autoStart = mkOption {
+        default = true;
+        description = "Whether this VPN connection should be started automatically.";
+        type = types.bool;
+      };
+
       gateway = mkOption {
         description = "Gateway server to connect to.";
         example = "gateway.example.com";
@@ -95,7 +101,7 @@ let
     description = "OpenConnect Interface - ${name}";
     requires = [ "network-online.target" ];
     after = [ "network.target" "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = optional icfg.autoStart "multi-user.target";
 
     serviceConfig = {
       Type = "simple";
