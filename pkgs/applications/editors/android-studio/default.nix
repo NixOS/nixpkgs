@@ -14,8 +14,8 @@ let
     sha256Hash = "1gj50wqb9v23aajb0zysi1vmaz1p8g2a5xqn0mq22afxq3gy0600";
   };
   betaVersion = {
-    version = "2021.2.1.11"; # "Android Studio Chipmunk (2021.2.1) Beta 4"
-    sha256Hash = "0in8x6v957y9hsnz5ak845pdpvgvnvlm0s6r9y8f27zkm947vbjd";
+    version = "2021.3.1.10"; # "Android Studio Dolphin (2021.3.1) Beta 1"
+    sha256Hash = "04d0vjw3icc60h1w58i71dicf905g17syz43sqbw6nd2ck5k139s";
   };
   latestVersion = { # canary & dev
     version = "2021.3.1.9"; # "Android Studio Dolphin (2021.3.1) Canary 9"
