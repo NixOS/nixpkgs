@@ -2143,7 +2143,7 @@ final: prev:
     meta.homepage = "https://github.com/nvim-lua/diagnostic-nvim/";
   };
 
-  diffview-nvim = buildVimPluginFrom2Nix {
+  diffview-nvim = buildNeovimPluginFrom2Nix {
     pname = "diffview.nvim";
     version = "2022-05-09";
     src = fetchFromGitHub {
@@ -4664,6 +4664,18 @@ final: prev:
       sha256 = "0p53l747hnjrz7wzcyh08vnx3pfdk5gbqmb9vpf4hq2x3lyx1a57";
     };
     meta.homepage = "https://github.com/RRethy/nvim-base16/";
+  };
+
+  nvim-biscuits = buildVimPluginFrom2Nix {
+    pname = "nvim-biscuits";
+    version = "2021-11-12";
+    src = fetchFromGitHub {
+      owner = "code-biscuits";
+      repo = "nvim-biscuits";
+      rev = "15a0cb1273bd36d5a734210cdc3406fb4bcfb733";
+      sha256 = "15incx76ps8k4bra3s6ml66ckjhzjgbc7q2njs61yzfg46vdbhsd";
+    };
+    meta.homepage = "https://github.com/code-biscuits/nvim-biscuits/";
   };
 
   nvim-bqf = buildVimPluginFrom2Nix {
