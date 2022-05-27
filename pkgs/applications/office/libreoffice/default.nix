@@ -581,11 +581,5 @@ in
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with lib; {
-    description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
-    homepage = "https://libreoffice.org/";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-  };
+  inherit (import ../common.nix { inherit lib; }) meta;
 }).overrideAttrs ((importVariant "override.nix") (args // { inherit kdeIntegration; }))
