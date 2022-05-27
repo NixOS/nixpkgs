@@ -5,10 +5,10 @@
 
 stdenv.mkDerivation rec {
   pname = "emacs";
-  version = "27.2";
+  version = "28.1";
 
   emacsName = "emacs-${version}";
-  macportVersion = "8.3";
+  macportVersion = "9.0";
   name = "emacs-mac-${version}-${macportVersion}";
 
   src = fetchurl {
