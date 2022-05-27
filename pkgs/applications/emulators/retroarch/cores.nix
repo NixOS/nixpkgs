@@ -672,7 +672,7 @@ in
     license = "MAME";
 
     extraBuildInputs = [ libpng SDL ];
-    SDL_CONFIG = "${SDL.dev}/bin/sdl-config";
+    SDL_CONFIG = "${lib.getDev SDL}/bin/sdl-config";
     dontAddPrefix = true;
     configurePlatforms = [ ];
     makeFlags = lib.optional stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];

@@ -1170,6 +1170,12 @@
     githubId = 706854;
     name = "Etienne Laurin";
   };
+  atry = {
+    name = "Bo Yang";
+    email = "atry@fb.com";
+    github = "Atry";
+    githubId = 601530;
+  };
   attila-lendvai = {
     name = "Attila Lendvai";
     email = "attila@lendvai.name";
@@ -6680,7 +6686,7 @@
   };
   khushraj = {
     email = "khushraj.rathod@gmail.com";
-    github = "KhushrajRathod";
+    github = "khrj";
     githubId = 44947946;
     name = "Khushraj Rathod";
     keys = [{
