@@ -5,8 +5,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    inherit url;
-    inherit sha512;
+    inherit url sha512;
   };
 
   configureFlags = [ "--enable-shared" "--disable-nonshared" ];
