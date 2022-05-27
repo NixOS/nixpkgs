@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "irpf";
-  version = "2022-1.5";
+  version = "2022-1.6";
 
   src = let
     year = lib.head (lib.splitVersion version);
