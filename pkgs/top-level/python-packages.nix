@@ -2548,6 +2548,8 @@ in {
 
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
 
+  drf-spectacular = callPackage ../development/python-modules/drf-spectacular { };
+
   drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
 
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
