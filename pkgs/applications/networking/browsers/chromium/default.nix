@@ -3,6 +3,7 @@
 , glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
+, fontconfig, roboto, twitter-color-emoji, makeFontsConf
 , lib
 
 # package customization
@@ -13,6 +14,7 @@
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
+, withDefaultFonts ? false
 , commandLineArgs ? ""
 }:
 
@@ -176,12 +178,15 @@ in stdenv.mkDerivation {
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
     libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 ];
+    defaultFonts = "${makeFontsConf { fontDirectories = [ twitter-color-emoji roboto ]; }}";
+    useDefaultFonts = (lib.optionalString withDefaultFonts "'FONTCONFIG_FILE' '${defaultFonts}'");
 
   in with lib; ''
     mkdir -p "$out/bin"
 
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
       --add-flags ${escapeShellArg commandLineArgs} \
+      --set ${useDefaultFonts} \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     ed -v -s "$out/bin/chromium" << EOF
