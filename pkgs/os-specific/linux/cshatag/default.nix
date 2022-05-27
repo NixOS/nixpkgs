@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-BX7jbYhs3+yeOUvPvz08aV2p14bXNGTag4QYkCHr5DQ=";
 
-  ldflags = [ "-s" "-w"];
+  ldflags = [ "-s" "-w" ];
 
   postInstall = ''
     # Install man page
