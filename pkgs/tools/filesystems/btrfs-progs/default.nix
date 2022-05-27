@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sphinx
   ];
 
-  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 zlib zstd ] ++ lib.optionals stdenv.hostPlatform.isGnu [ udev ];
+  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 udev zlib zstd ];
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace --disable-libudev";
+  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
 
-  makeFlags = lib.optionals stdenv.hostPlatform.isGnu [ "udevruledir=$(out)/lib/udev/rules.d" ];
+  makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
   installFlags = [ "install_python" ];
 

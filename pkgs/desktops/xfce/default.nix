@@ -161,6 +161,13 @@ lib.makeScope pkgs.newScope (self: with self; {
 } // lib.optionalAttrs config.allowAliases {
   #### ALIASES
 
+  xinitrc = xfce4-session.xinitrc; # added 2019-11-04
+
+  thunar-bare = thunar.override { thunarPlugins = []; };  # added 2019-11-04
+
+}) // lib.optionalAttrs config.allowAliases {
+  #### Legacy aliases. They need to be outside the scope or they will shadow the attributes from parent scope.
+
   terminal = throw "xfce.terminal has been removed, use xfce.xfce4-terminal instead"; # added 2022-05-24
   thunar-build = throw "xfce.thunar-build has been removed, use xfce.thunar-bare instead"; # added 2022-05-24
   thunarx-2-dev = throw "xfce.thunarx-2-dev has been removed, use xfce.thunar-bare instead"; # added 2022-05-24
@@ -209,8 +216,4 @@ lib.makeScope pkgs.newScope (self: with self; {
   gtksourceview = throw "xfce.gtksourceview has been removed, use gtksourceview instead"; # added 2022-05-24
   dconf = throw "xfce.dconf has been removed, use dconf instead"; # added 2022-05-24
   vte = throw "xfce.vte has been removed, use vte instead"; # added 2022-05-24
-
-  xinitrc = xfce4-session.xinitrc; # added 2019-11-04
-
-  thunar-bare = thunar.override { thunarPlugins = []; };  # added 2019-11-04
-})
+}
