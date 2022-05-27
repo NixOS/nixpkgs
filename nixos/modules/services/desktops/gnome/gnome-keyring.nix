@@ -43,6 +43,8 @@ with lib;
 
   config = mkIf config.services.gnome.gnome-keyring.enable {
 
+    programs.dconf.enable = true; # crashes without it
+
     environment.systemPackages = [ pkgs.gnome.gnome-keyring ];
 
     services.dbus.packages = [ pkgs.gnome.gnome-keyring pkgs.gcr ];
