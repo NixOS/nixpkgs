@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
@@ -44,8 +43,9 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
     # likely related to https://github.com/sarugaku/shellingham/issues/35
+    # update: these seem to cause problems on all platforms now
     "test_show_completion"
     "test_install_completion"
   ];
