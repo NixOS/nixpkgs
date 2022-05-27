@@ -8,7 +8,7 @@
 , libtiff
 , pam
 , dbus
-, enableSystemd ? stdenv.isLinux
+, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
 , systemd
 , acl
 , gmp
