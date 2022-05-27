@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.16.2";
+  version = "4.19.2";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-XF29JKIaOqZ/PdU+zu+wX7TAl1TKz+HcOutHDABc/PY=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-9r/1vW7Rhv9+Swxdzu5PTnlQlT8ofJeZamHf5X4ql8w=";
   };
 
   nativeBuildInputs = [ packaging ];

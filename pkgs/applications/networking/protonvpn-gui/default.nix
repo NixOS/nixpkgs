@@ -2,9 +2,10 @@
 , buildPythonApplication
 , fetchFromGitHub
 , wrapGAppsHook
+, gdk-pixbuf
 , gobject-introspection
 , imagemagick
-, networkmanager
+, librsvg
 , pango
 , webkitgtk
 # Python libs
@@ -26,6 +27,7 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
+    gdk-pixbuf
     gobject-introspection
     imagemagick
     wrapGAppsHook
@@ -39,7 +41,7 @@ buildPythonApplication rec {
   buildInputs = [
     # To avoid enabling strictDeps = false (#56943)
     gobject-introspection
-    networkmanager
+    librsvg
     pango
     webkitgtk
   ] ++ lib.optionals withIndicator [ libappindicator-gtk3 ];

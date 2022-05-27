@@ -32,12 +32,13 @@
 , setproctitle
 , setuptools
 , shortuuid
+, substituteAll
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.12.16";
+  version = "0.12.17";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -46,8 +47,15 @@ buildPythonPackage rec {
     owner = pname;
     repo = "client";
     rev = "v${version}";
-    hash = "sha256-ZY7nTj93piTEeHhW+H+nQ+ws2dDmmY6u3p7uz296PbA=";
+    hash = "sha256-hY01cql/j3ieL1zJoPOM/QZiF0X/ivekFRfX+TvZhyM=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./hardcode-git-path.patch;
+      git = "${lib.getBin git}/bin/git";
+    })
+  ];
 
   # setuptools is necessary since pkg_resources is required at runtime.
   propagatedBuildInputs = [
@@ -66,16 +74,6 @@ buildPythonPackage rec {
     setuptools
     shortuuid
   ];
-
-  # wandb expects git to be in PATH. See https://gist.github.com/samuela/57aeee710e41ab2bf361b7ed8fbbeabf
-  # for the error message, and an example usage here: https://github.com/wandb/client/blob/d5f655b7ca7e3eac2f3a67a84bc5c2a664a31baf/wandb/sdk/internal/meta.py#L128.
-  # See https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621 as to
-  # why we don't put it in propagatedBuildInputs. Note that this is difficult to
-  # test offline due to https://github.com/wandb/client/issues/3519.
-  postInstall = ''
-    mkdir -p $out/bin
-    ln -s ${git}/bin/git $out/bin/git
-  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)

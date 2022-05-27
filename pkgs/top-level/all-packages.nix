@@ -1033,7 +1033,10 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  honggfuzz = callPackage ../tools/security/honggfuzz { };
+  honggfuzz = callPackage ../tools/security/honggfuzz {
+    clang = clang_12;
+    llvm = llvm_12;
+  };
 
   aflplusplus = callPackage ../tools/security/aflplusplus {
     clang = clang_9;
@@ -1898,6 +1901,8 @@ with pkgs;
   betterdiscordctl = callPackage ../tools/misc/betterdiscordctl { };
 
   betterdiscord-installer = callPackage ../tools/misc/betterdiscord-installer { };
+
+  binocle = callPackage ../applications/misc/binocle { };
 
   bitwise = callPackage ../tools/misc/bitwise { };
 
@@ -8297,6 +8302,8 @@ with pkgs;
   memo = callPackage ../applications/misc/memo { };
 
   mencal = callPackage ../applications/misc/mencal { } ;
+
+  metamorphose2 = callPackage ../applications/misc/metamorphose2 { };
 
   metar = callPackage ../applications/misc/metar { };
 
@@ -14811,11 +14818,12 @@ with pkgs;
   ansible = ansible_2_12;
   ansible_2_13 = python3Packages.toPythonApplication python3Packages.ansible-core;
   ansible_2_12 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.12.5";
+    version = "2.12.6";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-HMyZRPEBMxra0e1A1axmqBSRMwUq402wJnp0qnO+67M=";
+      hash = "sha256-XzZuhRFZ2Pcs5o0yuMDt2lbuU3wB6faOyjgr0VEK9l0=";
     };
+    meta.changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
   }));
 
   ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
@@ -15736,7 +15744,7 @@ with pkgs;
 
   kcov = callPackage ../development/tools/analysis/kcov { };
 
-  kind = callPackage ../development/tools/kind {  };
+  kind = callPackage ../development/tools/kind { buildGoModule = buildGo118Module; };
 
   khronos-ocl-icd-loader = callPackage ../development/libraries/khronos-ocl-icd-loader {  };
 
@@ -20997,6 +21005,8 @@ with pkgs;
   vigra = callPackage ../development/libraries/vigra {
     hdf5 = hdf5.override { usev110Api = true; };
   };
+
+  vkdisplayinfo = callPackage ../tools/graphics/vkdisplayinfo { };
 
   vlock = callPackage ../misc/screensavers/vlock { };
 
@@ -28430,6 +28440,8 @@ with pkgs;
 
   odin2 = callPackage ../applications/audio/odin2 { };
 
+  okteto = callPackage ../development/tools/okteto { };
+
   onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
@@ -29112,7 +29124,14 @@ with pkgs;
 
   pulseaudio-dlna = callPackage ../applications/audio/pulseaudio-dlna { };
 
-  pulseview = libsForQt514.callPackage ../applications/science/electronics/pulseview { };
+  pulseview = libsForQt514.callPackage ../applications/science/electronics/pulseview {
+    # use the same stdenv as libsForQt514 to fix build
+    boost = boost.override {
+      stdenv = if stdenv.cc.isGNU
+        then (if (stdenv.targetPlatform.isx86_64) then gcc10Stdenv else gcc9Stdenv)
+        else stdenv;
+      };
+  };
 
   puredata = callPackage ../applications/audio/puredata { };
   puredata-with-plugins = plugins: callPackage ../applications/audio/puredata/wrapper.nix { inherit plugins; };
@@ -30469,6 +30488,8 @@ with pkgs;
   whispers = with python3Packages; toPythonApplication whispers;
 
   waon = callPackage ../applications/audio/waon { };
+
+  warp = callPackage ../applications/networking/warp { };
 
   w3m = callPackage ../applications/networking/browsers/w3m { };
 

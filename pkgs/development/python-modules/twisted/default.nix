@@ -54,7 +54,7 @@ buildPythonPackage rec {
   # twisted.python.runtime.platform.supportsINotify() == False
   postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace src/twisted/python/_inotify.py --replace \
-      "ctypes.util.find_library(\"c\")" "'${stdenv.glibc.out}/lib/libc.so.6'"
+      "ctypes.util.find_library(\"c\")" "'${stdenv.cc.libc}/lib/libc.so.6'"
   '';
 
   # Generate Twisted's plug-in cache.  Twisted users must do it as well.  See

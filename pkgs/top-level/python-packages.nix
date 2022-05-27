@@ -209,6 +209,8 @@ in {
 
   aenum = callPackage ../development/python-modules/aenum { };
 
+  aeppl = callPackage ../development/python-modules/aeppl { };
+
   aesara = callPackage ../development/python-modules/aesara { };
 
   aesedb = callPackage ../development/python-modules/aesedb { };
@@ -2070,8 +2072,6 @@ in {
   dask-ml = callPackage ../development/python-modules/dask-ml { };
 
   dask-mpi = callPackage ../development/python-modules/dask-mpi { };
-
-  dask-xgboost = callPackage ../development/python-modules/dask-xgboost { };
 
   dask-yarn = callPackage ../development/python-modules/dask-yarn { };
 
@@ -5862,6 +5862,8 @@ in {
 
   numcodecs = callPackage ../development/python-modules/numcodecs { };
 
+  numdifftools = callPackage ../development/python-modules/numdifftools { };
+
   numericalunits = callPackage ../development/python-modules/numericalunits { };
 
   numexpr = callPackage ../development/python-modules/numexpr { };
@@ -6797,7 +6799,9 @@ in {
 
   protonup = callPackage ../development/python-modules/protonup { };
 
-  protonvpn-nm-lib = callPackage ../development/python-modules/protonvpn-nm-lib { };
+  protonvpn-nm-lib = callPackage ../development/python-modules/protonvpn-nm-lib {
+    pkgs-systemd = pkgs.systemd;
+  };
 
   prov = callPackage ../development/python-modules/prov { };
 
@@ -9462,7 +9466,7 @@ in {
 
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
-  service-identity = callPackage ../development/python-modules/service_identity { };
+  service-identity = callPackage ../development/python-modules/service-identity { };
 
   setproctitle = callPackage ../development/python-modules/setproctitle { };
 

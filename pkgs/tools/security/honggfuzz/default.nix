@@ -45,7 +45,7 @@ let
       homepage = "https://honggfuzz.dev/";
       license = lib.licenses.asl20;
       platforms = [ "x86_64-linux" ];
-      maintainers = with lib.maintainers; [ cpu ];
+      maintainers = with lib.maintainers; [ cpu chivay ];
     };
   };
 in honggfuzz
