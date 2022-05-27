@@ -56,6 +56,7 @@ let
     concatStringsSep
     escapeNixString
     isCoercibleToString
+    hasPrefix
     ;
   inherit (lib.trivial)
     boolToString
@@ -394,6 +395,30 @@ rec {
       check = x: isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
       merge = mergeEqualOption;
     };
+
+    secretFile = let
+      type = mkOptionType {
+        name = "secretFile";
+        description = "quoted path to a secret file";
+        # either the return value of makeWorldReadable or a proper string. We
+        # deliberately refuse paths, because toString x and "${x}" behave
+        # differently. Some modules might handle paths correctly, others will
+        # not, and anyway users can either quote the path or use makeWorldReadable.
+        check = x: ((isCoercibleToString x && (x.canBePublic or false)) || (isString x && !(hasPrefix "/nix/store" x))) && (hasPrefix "/" "${x}");
+        merge = mergeEqualOption;
+      };
+      makeWorldReadable = path:
+        # to make "${returnValue}" work, but still being able to store an attribute in it
+        if lib.isAttrs path then
+          path // { canBePublic = true; }
+        else
+          let res = {
+            toString = _: "${path}";
+            canBePublic = true;
+          };
+        in res;
+    in
+      type // { inherit makeWorldReadable; };
 
     listOf = elemType: mkOptionType rec {
       name = "listOf";
