@@ -2672,6 +2672,14 @@ cp /var/lib/redis/dump.rdb &quot;/var/lib/redis-mastodon/dump.rdb&quot;
       </listitem>
       <listitem>
         <para>
+          The default <literal>scribus</literal> version is now 1.5,
+          while version 1.4 is still available as
+          <literal>scribus_1_4</literal>
+          (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/172700">#172700</link>).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The Nextcloud module now supports to create a Mysql database
           automatically with
           <literal>services.nextcloud.database.createLocally</literal>
