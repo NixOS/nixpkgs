@@ -33,11 +33,9 @@ buildPythonPackage rec {
   format = "pyproject";
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
-  propagatedNativeBuildInputs = [
-    shapely numpy pyside2 qasync watchfiles
-  ];
   propagatedBuildInputs = [
-    vpype pnoise 
+    vpype pnoise qasync watchfiles
+    shapely numpy pyside2 
     colorama cookiecutter matplotlib multiprocess 
 
     poetry-core
