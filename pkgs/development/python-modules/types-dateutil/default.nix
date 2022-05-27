@@ -4,16 +4,19 @@
 }:
 
 buildPythonPackage rec {
-  pname = "types-python-dateutil";
-  version = "2.8.17";
+  pname = "types-dateutil";
+  version = "2.8.16";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-bFQmWiIWgd2H9h32dDvV6rBgzxtAhv9lwaj9dj7WNw4=";
+    pname = "types-python-dateutil";
+    inherit version;
+    hash = "sha256-OqrEwTjra47LwlUJluwl1uRbXTKIfR5pPQhC7i+mWdI=";
   };
 
-  pythonImportsCheck = [ "dateutil-stubs" ];
+  pythonImportsCheck = [
+    "dateutil-stubs"
+  ];
 
   meta = with lib; {
     description = "Typing stubs for python-dateutil";
