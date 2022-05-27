@@ -20411,6 +20411,8 @@ with pkgs;
 
   rover = callPackage ../development/tools/rover { };
 
+  rqlite = callPackage ../servers/sql/rqlite { };
+
   rshell = python3.pkgs.callPackage ../development/embedded/rshell { };
 
   rttr = callPackage ../development/libraries/rttr { };

@@ -362,6 +362,7 @@
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/riak.nix
+  ./services/databases/rqlite.nix
   ./services/databases/victoriametrics.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
