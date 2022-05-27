@@ -581,5 +581,5 @@ in
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  inherit (import ../common.nix { inherit lib; }) meta;
+  inherit (import ./common.nix { inherit lib; }) meta;
 }).overrideAttrs ((importVariant "override.nix") (args // { inherit kdeIntegration; }))
