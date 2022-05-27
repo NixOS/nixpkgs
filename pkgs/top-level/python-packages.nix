@@ -209,6 +209,8 @@ in {
 
   aenum = callPackage ../development/python-modules/aenum { };
 
+  aeppl = callPackage ../development/python-modules/aeppl { };
+
   aesara = callPackage ../development/python-modules/aesara { };
 
   aesedb = callPackage ../development/python-modules/aesedb { };
@@ -5859,6 +5861,8 @@ in {
   numba-scipy = callPackage ../development/python-modules/numba-scipy { };
 
   numcodecs = callPackage ../development/python-modules/numcodecs { };
+
+  numdifftools = callPackage ../development/python-modules/numdifftools { };
 
   numericalunits = callPackage ../development/python-modules/numericalunits { };
 
