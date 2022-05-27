@@ -212,6 +212,25 @@ in lib.makeScope pkgs.newScope (self: with self; {
         };
       };
 
+      elm-pages = nodePkgs."elm-pages".overrideAttrs (
+        old: {
+          buildInputs = old.buildInputs ++ [ pkgs.makeWrapper ];
+
+          postFixup = ''
+            wrapProgram $out/bin/elm-pages --prefix PATH : ${
+              with pkgs.elmPackages; lib.makeBinPath [ elm elm-review ]
+            }
+          '';
+
+          meta = with lib; nodePkgs."elm-pages".meta // {
+            description = "A statically typed site generator for Elm.";
+            homepage = "https://github.com/dillonkearns/elm-pages";
+            license = licenses.bsd3;
+            maintainers = [ maintainers.turbomack ];
+          };
+        }
+      );
+
       inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse elm-git-install;
     })
   )
