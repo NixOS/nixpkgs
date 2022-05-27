@@ -258,6 +258,8 @@ with pkgs;
 
   bingo = callPackage ../development/tools/bingo {};
 
+  bootstrap-studio = callPackage ../development/web/bootstrap-studio {};
+
   breakpad = callPackage ../development/misc/breakpad { };
 
   buf = callPackage ../development/tools/buf { };

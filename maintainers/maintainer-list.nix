@@ -6686,7 +6686,7 @@
   };
   khushraj = {
     email = "khushraj.rathod@gmail.com";
-    github = "KhushrajRathod";
+    github = "khrj";
     githubId = 44947946;
     name = "Khushraj Rathod";
     keys = [{
