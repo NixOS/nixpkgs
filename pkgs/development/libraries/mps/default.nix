@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, autoreconfHook, sqlite }:
+{ lib, gcc10Stdenv, fetchurl, autoreconfHook, sqlite }:
 
-stdenv.mkDerivation rec {
+gcc10Stdenv.mkDerivation rec {
   pname = "mps";
   version = "1.117.0";
 
