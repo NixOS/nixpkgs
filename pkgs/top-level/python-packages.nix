@@ -11105,6 +11105,8 @@ in {
 
   vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
 
+  vsketch = callPackage ../development/python-modules/vsketch { };
+
   vsts = callPackage ../development/python-modules/vsts { };
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
