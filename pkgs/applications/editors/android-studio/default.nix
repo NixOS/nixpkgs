@@ -18,8 +18,8 @@ let
     sha256Hash = "04d0vjw3icc60h1w58i71dicf905g17syz43sqbw6nd2ck5k139s";
   };
   latestVersion = { # canary & dev
-    version = "2021.3.1.9"; # "Android Studio Dolphin (2021.3.1) Canary 9"
-    sha256Hash = "0nx26xwy67mnbkz37m3nw354siv152sa6zx94pxrvbnxxgppigfb";
+    version = "2022.1.1.2"; # "Android Studio Electric Eel (2022.2.1) Canary 2"
+    sha256Hash = "061s6dypsbfzfckg7ph8ibv38jq5fxmpql8w68v9aan0x228sgmm";
   };
 in {
   # Attributes are named by their corresponding release channels
