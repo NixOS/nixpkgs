@@ -4,7 +4,7 @@
 , fetchurl
 , pkg-config
 , expat
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isMusl
 , systemd
 , audit
 , libapparmor
