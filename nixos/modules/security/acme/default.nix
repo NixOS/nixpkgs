@@ -554,7 +554,7 @@ let
       };
 
       credentialsFile = mkOption {
-        type = types.path;
+        type = types.secretFile;
         inherit (defaultAndText "credentialsFile" null) default defaultText;
         description = ''
           Path to an EnvironmentFile for the cert's service containing any required and

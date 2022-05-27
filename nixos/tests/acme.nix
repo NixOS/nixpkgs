@@ -18,12 +18,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
   dnsConfig = nodes: {
     dnsProvider = "exec";
     dnsPropagationCheck = false;
-    credentialsFile = pkgs.writeText "wildcard.env" ''
+    credentialsFile = lib.types.secretFile.makeWorldReadable (pkgs.writeText "wildcard.env" ''
       EXEC_PATH=${dnsScript nodes}
       EXEC_POLLING_INTERVAL=1
       EXEC_PROPAGATION_TIMEOUT=1
       EXEC_SEQUENCE_INTERVAL=1
-    '';
+    '');
   };
 
   documentRoot = pkgs.runCommand "docroot" {} ''
