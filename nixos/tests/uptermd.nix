@@ -55,7 +55,7 @@ in
     client2.execute("ssh-keygen -t ed25519 -N \"\" -f /root/.ssh/id_ed25519")
 
     # Grep the ssh connect command from the output of 'upterm host'
-    ssh_command = client1.succeed("grep 'SSH Session' /tmp/session-details | cut -d':' -f2-").strip()
+    ssh_command = client1.wait_until_succeeds("set -o pipefail; grep 'SSH Session' /tmp/session-details | cut -d':' -f2-").strip()
 
     # Connect with client2. Because we used '--force-command hostname' we should get "client1" as the output
     output = client2.succeed(ssh_command)
