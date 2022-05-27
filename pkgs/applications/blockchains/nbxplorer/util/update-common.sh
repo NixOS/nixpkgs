@@ -1,10 +1,12 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p coreutils curl jq common-updater-scripts dotnet-sdk_3 git gnupg nixFlakes
+#!nix-shell -i bash -p coreutils curl jq common-updater-scripts dotnet-sdk_6 git gnupg nixFlakes
 set -euo pipefail
 
 # This script uses the following env vars:
 # getVersionFromTags
 # refetch
+
+trap 'echo "Error at ${BASH_SOURCE[0]}:$LINENO"' ERR
 
 pkgName=$1
 depsFile=$2

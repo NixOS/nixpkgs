@@ -23,12 +23,11 @@
 , libpulseaudio
 , gvfs
 , libcdio
-, libechonest
 , libspotify
 , pcre
 , projectm
 , protobuf
-, qca2
+, qca-qt5
 , pkg-config
 , sparsehash
 , config
@@ -87,13 +86,12 @@ let
     gst_all_1.gst-plugins-bad
     gst_all_1.gstreamer
     gvfs
-    libechonest
     liblastfm
     libpulseaudio
     pcre
     projectm
     protobuf
-    qca2
+    qca-qt5
     qjson
     qtbase
     qtx11extras

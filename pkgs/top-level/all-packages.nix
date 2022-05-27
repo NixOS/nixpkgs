@@ -1356,6 +1356,10 @@ with pkgs;
     python = python3;
   };
 
+  packwiz = callPackage ../tools/games/minecraft/packwiz {
+    buildGoModule = buildGo118Module;
+  };
+
   pcem = callPackage ../applications/emulators/pcem { };
 
   pcsx2 = callPackage ../applications/emulators/pcsx2 {
@@ -4850,6 +4854,8 @@ with pkgs;
   certstrap = callPackage ../tools/security/certstrap { };
 
   cfssl = callPackage ../tools/security/cfssl { };
+
+  cfs-zen-tweaks = callPackage ../os-specific/linux/cfs-zen-tweaks { };
 
   chafa = callPackage ../tools/misc/chafa {
     inherit (darwin.apple_sdk.frameworks) Foundation;
@@ -9277,7 +9283,7 @@ with pkgs;
 
   pdftoipe = callPackage ../tools/graphics/pdftoipe { };
 
-  pdfminer = with python3Packages; toPythonApplication pdfminer;
+  pdfminer = with python3Packages; toPythonApplication pdfminer-six;
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
@@ -9309,7 +9315,9 @@ with pkgs;
 
   pgcenter = callPackage ../tools/misc/pgcenter { };
 
-  pgmetrics = callPackage ../tools/misc/pgmetrics { };
+  pgmetrics = callPackage ../tools/misc/pgmetrics {
+    buildGoModule = buildGo118Module;
+  };
 
   pgsync = callPackage ../development/tools/database/pgsync { };
 
@@ -11719,6 +11727,8 @@ with pkgs;
   wgpu-utils = callPackage ../tools/graphics/wgpu-utils { };
 
   wg-bond = callPackage ../applications/networking/wg-bond { };
+
+  wgcf = callPackage ../applications/networking/wgcf { };
 
   which = callPackage ../tools/system/which { };
 
@@ -18571,8 +18581,6 @@ with pkgs;
     icu = icu67;
   };
 
-  libechonest = callPackage ../development/libraries/libechonest { };
-
   libemf2svg = callPackage ../development/libraries/libemf2svg { };
 
   libev = callPackage ../development/libraries/libev { };
@@ -20159,8 +20167,6 @@ with pkgs;
 
   qimageblitz = callPackage ../development/libraries/qimageblitz {};
 
-  qjson = callPackage ../development/libraries/qjson { };
-
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
   qt4 = qt48;
@@ -20430,12 +20436,16 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  SDL = callPackage ../development/libraries/SDL ({
+  SDL_classic = callPackage ../development/libraries/SDL ({
     inherit (darwin.apple_sdk.frameworks) OpenGL CoreAudio CoreServices AudioUnit Kernel Cocoa GLUT;
   } // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
     # libGLU doesn’t work with Android’s SDL
     libGLU = null;
   });
+
+  SDL_compat = callPackage ../development/libraries/SDL_compat { };
+
+  SDL = SDL_classic;
 
   SDL_audiolib = callPackage ../development/libraries/SDL_audiolib { };
 
@@ -25089,6 +25099,8 @@ with pkgs;
 
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
 
+  appvm = callPackage ../applications/virtualization/appvm { };
+
   masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
@@ -29427,11 +29439,12 @@ with pkgs;
 
   scli = callPackage ../applications/misc/scli { };
 
-  scribus = callPackage ../applications/office/scribus {
+  scribus_1_4 = callPackage ../applications/office/scribus/1_4.nix {
     inherit (gnome2) libart_lgpl;
   };
 
-  scribusUnstable = libsForQt5.callPackage ../applications/office/scribus/unstable.nix { };
+  scribus_1_5 = libsForQt5.callPackage ../applications/office/scribus/default.nix { };
+  scribus = scribus_1_5;
 
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
@@ -32020,7 +32033,7 @@ with pkgs;
 
   opentyrian = callPackage ../games/opentyrian { };
 
-  openxcom = callPackage ../games/openxcom { };
+  openxcom = callPackage ../games/openxcom { SDL = SDL_compat; };
 
   openxray = callPackage ../games/openxray { };
 
@@ -32124,7 +32137,7 @@ with pkgs;
 
   rocksndiamonds = callPackage ../games/rocksndiamonds { };
 
-  rott = callPackage ../games/rott { };
+  rott = callPackage ../games/rott { SDL = SDL_compat; };
 
   rott-shareware = rott.override {
     buildShareware = true;

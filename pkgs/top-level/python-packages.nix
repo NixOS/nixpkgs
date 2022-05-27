@@ -2548,6 +2548,8 @@ in {
 
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
 
+  drf-spectacular = callPackage ../development/python-modules/drf-spectacular { };
+
   drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
 
   drf-yasg = callPackage ../development/python-modules/drf-yasg { };
@@ -5870,6 +5872,8 @@ in {
 
   numpy-stl = callPackage ../development/python-modules/numpy-stl { };
 
+  numpyro = callPackage ../development/python-modules/numpyro { };
+
   nunavut = callPackage ../development/python-modules/nunavut { };
 
   nutils = callPackage ../development/python-modules/nutils { };
@@ -6256,7 +6260,7 @@ in {
 
   pdfkit = callPackage ../development/python-modules/pdfkit { };
 
-  pdfminer = callPackage ../development/python-modules/pdfminer_six { };
+  pdfminer-six = callPackage ../development/python-modules/pdfminer-six { };
 
   pdfposter = callPackage ../development/python-modules/pdfposter { };
 
@@ -11164,6 +11168,8 @@ in {
   };
 
   xarray = callPackage ../development/python-modules/xarray { };
+
+  xarray-einstats = callPackage ../development/python-modules/xarray-einstats { };
 
   xattr = callPackage ../development/python-modules/xattr { };
 

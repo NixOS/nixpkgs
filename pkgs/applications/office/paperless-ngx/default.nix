@@ -92,7 +92,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     numpy
     ocrmypdf
     pathvalidate
-    pdfminer
+    pdfminer-six
     pikepdf
     pillow
     pluggy
