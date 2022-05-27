@@ -104,5 +104,5 @@ in rec {
     sha256 = "xRi4Hf3agtHN9Yaz+bIyMWLLlr08taLANlDOoCXZH7k=";
   };
 
-  vala = vala_0_54;
+  vala = vala_0_56;
 }
