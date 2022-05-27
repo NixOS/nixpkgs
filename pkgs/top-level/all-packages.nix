@@ -27720,9 +27720,8 @@ with pkgs;
     boost = boost175;
   };
 
-  libreoffice = if stdenv.isDarwin
-    then callPackage ../applications/office/libreoffice/darwin/darwin.nix {}
-    else hiPrio libreoffice-still;
+  libreoffice-darwin = callPackage ../applications/office/libreoffice/darwin {};
+  libreoffice = hiPrio libreoffice-still;
   libreoffice-unwrapped = (hiPrio libreoffice-still).libreoffice;
 
   libreoffice-args = {
