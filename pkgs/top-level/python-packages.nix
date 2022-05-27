@@ -11013,6 +11013,8 @@ in {
 
   webassets = callPackage ../development/python-modules/webassets { };
 
+  webauthn = callPackage ../development/python-modules/webauthn { };
+
   web = callPackage ../development/python-modules/web { };
 
   web-cache = callPackage ../development/python-modules/web-cache { };
