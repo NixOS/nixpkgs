@@ -40,7 +40,7 @@ in
       };
 
       adminCredentialsFile = mkOption  {
-        type = types.path;
+        type = types.secretFile;
         description = ''
           File containing the ADMIN_USERNAME and
           ADMIN_PASSWORD (length >= 6) in the format of
