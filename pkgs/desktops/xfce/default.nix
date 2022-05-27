@@ -207,10 +207,11 @@ lib.makeScope pkgs.newScope (self: with self; {
   xfce4_power_manager_gtk3 = throw "xfce.xfce4_power_manager_gtk3 has been removed, use xfce.xfce4-power-manager instead"; # added 2022-05-24
   gtk = throw "xfce.gtk has been removed, use gtk2 instead"; # added 2022-05-24
   gtksourceview = throw "xfce.gtksourceview has been removed, use gtksourceview instead"; # added 2022-05-24
-  dconf = throw "xfce.dconf has been removed, use dconf instead"; # added 2022-05-24
-  vte = throw "xfce.vte has been removed, use vte instead"; # added 2022-05-24
 
   xinitrc = xfce4-session.xinitrc; # added 2019-11-04
 
   thunar-bare = thunar.override { thunarPlugins = []; };  # added 2019-11-04
+
+  # added 2019-11-30
+  inherit (pkgs) dconf vte;
 })
