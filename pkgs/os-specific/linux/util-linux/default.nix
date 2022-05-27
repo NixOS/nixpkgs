@@ -5,7 +5,7 @@
 , ncurses
 , pamSupport ? true
 , pam
-, systemdSupport ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, systemdSupport ? stdenv.isLinux && !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isMusl
 , systemd
 , nlsSupport ? true
 }:
