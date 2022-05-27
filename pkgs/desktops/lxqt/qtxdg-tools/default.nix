@@ -3,20 +3,20 @@
 , fetchFromGitHub
 , cmake
 , qtbase
-, qtsvg
+, libqtxdg
 , lxqt-build-tools
 , lxqtUpdateScript
 }:
 
 mkDerivation rec {
-  pname = "libqtxdg";
+  pname = "qtxdg-tools";
   version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "zrlaOiIsfbwjHFjqhYZ9lCo+oTsddICxl2UAum9Xoi4=";
+    sha256 = "sha256-NUSeXEJ6zjTz6p/8R6YTVfPQEnk1ukZ2ikdDdkaPeSw=";
   };
 
   nativeBuildInputs = [
@@ -26,22 +26,14 @@ mkDerivation rec {
 
   buildInputs = [
     qtbase
-    qtsvg
+    libqtxdg
   ];
-
-  preConfigure = ''
-    cmakeFlagsArray+=(
-      "-DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=$out/$qtPluginPrefix/iconengines"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-    )
-  '';
 
   passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
-    homepage = "https://github.com/lxqt/libqtxdg";
-    description = "Qt implementation of freedesktop.org xdg specs";
+    homepage = "https://github.com/lxqt/qtxdg-tools";
+    description = "libqtxdg user tools";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = teams.lxqt.members;
