@@ -1,8 +1,8 @@
 { lib
 , config
 , stdenv
-, fetchurl
-, fetchpatch
+, fetchFromGitHub
+, autoreconfHook
 , boost
 , ffmpeg
 , ffms
@@ -16,7 +16,9 @@
 , libX11
 , libass
 , libiconv
+, libuchardet
 , pkg-config
+, which
 , wxGTK
 , zlib
 
@@ -24,7 +26,7 @@
 , hunspell ? null
 
 , automationSupport ? true
-, lua ? null
+, luajit ? null
 
 , openalSupport ? false
 , openal ? null
@@ -37,64 +39,39 @@
 
 , portaudioSupport ? false
 , portaudio ? null
+
 }:
 
 assert spellcheckSupport -> (hunspell != null);
-assert automationSupport -> (lua != null);
+assert automationSupport -> (luajit != null);
 assert openalSupport -> (openal != null);
 assert alsaSupport -> (alsa-lib != null);
 assert pulseaudioSupport -> (libpulseaudio != null);
 assert portaudioSupport -> (portaudio != null);
 
 let
+  luajit52 = luajit.override { enable52Compat = true; };
   inherit (lib) optional;
 in
 stdenv.mkDerivation rec {
   pname = "aegisub";
-  version = "3.2.2";
+  version = "3.3.2";
 
-  src = fetchurl {
-    url = "http://ftp.aegisub.org/pub/releases/${pname}-${version}.tar.xz";
-    hash = "sha256-xV4zlFuC2FE8AupueC8Ncscmrc03B+lbjAAi9hUeaIU=";
+  src = fetchFromGitHub {
+    owner = "wangqr";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-Er0g8fJyx7zjNVpKw7zUHE40hU10BdYlZohlqJq2LE0=";
   };
 
-  patches = [
-    # Compatibility with ICU 59
-    (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/dd67db47cb2203e7a14058e52549721f6ff16a49.patch";
-      sha256 = "sha256-R2rN7EiyA5cuBYIAMpa0eKZJ3QZahfnRp8R4HyejGB8=";
-    })
-
-    # Compatbility with Boost 1.69
-    (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/c3c446a8d6abc5127c9432387f50c5ad50012561.patch";
-      sha256 = "sha256-7nlfojrb84A0DT82PqzxDaJfjIlg5BvWIBIgoqasHNk=";
-    })
-
-    # Compatbility with make 4.3
-    (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/6bd3f4c26b8fc1f76a8b797fcee11e7611d59a39.patch";
-      sha256 = "sha256-rG8RJokd4V4aSYOQw2utWnrWPVrkqSV3TAvnGXNhLOk=";
-    })
-
-    # Compatibility with ffms2
-    (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/1aa9215e7fc360de05da9b7ec2cd68f1940af8b2.patch";
-      sha256 = "sha256-JsuI4hQTcT0TEqHHoSsGbuiTg4hMCH3Cxp061oLk8Go=";
-    })
-
-    ./update-ffms2.patch
-
-    # Compatibility with X11
-    (fetchpatch {
-      url = "https://github.com/Aegisub/Aegisub/commit/7a6da26be6a830f4e1255091952cc0a1326a4520.patch";
-      sha256 = "sha256-/aTcIjFlZY4N9+IyHL4nwR0hUR4HTJM7ibbdKmNxq0w=";
-    })
-  ];
+  patches = [ ./no-git.patch ];
 
   nativeBuildInputs = [
+    autoreconfHook
     intltool
+    luajit52
     pkg-config
+    which
   ];
   buildInputs = [
     boost
@@ -109,16 +86,23 @@ stdenv.mkDerivation rec {
     libX11
     libass
     libiconv
+    libuchardet
     wxGTK
     zlib
   ]
   ++ optional alsaSupport alsa-lib
-  ++ optional automationSupport lua
+  ++ optional automationSupport luajit52
   ++ optional openalSupport openal
   ++ optional portaudioSupport portaudio
   ++ optional pulseaudioSupport libpulseaudio
   ++ optional spellcheckSupport hunspell
   ;
+
+  configureFlags = [
+    "--with-boost-libdir=${boost.out}/lib"
+    "--with-system-luajit"
+    "FORCE_GIT_VERSION=${version}"
+  ];
 
   enableParallelBuilding = true;
 
@@ -127,22 +111,10 @@ stdenv.mkDerivation rec {
     "relro"
   ];
 
-  postPatch = ''
-    sed -i 's/-Wno-c++11-narrowing/-Wno-narrowing/' configure.ac src/Makefile
-  '';
-
-  # compat with icu61+
-  # https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
-  CXXFLAGS = [ "-DU_USING_ICU_NAMESPACE=1" ];
-
-  # this is fixed upstream though not yet in an officially released version,
-  # should be fine remove on next release (if one ever happens)
-  NIX_LDFLAGS = "-lpthread";
-
   postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
 
   meta = with lib; {
-    homepage = "https://github.com/Aegisub/Aegisub";
+    homepage = "https://github.com/wangqr/Aegisub";
     description = "An advanced subtitle editor";
     longDescription = ''
       Aegisub is a free, cross-platform open source tool for creating and
@@ -157,4 +129,3 @@ stdenv.mkDerivation rec {
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
-# TODO [ AndersonTorres ]: update to fork release
