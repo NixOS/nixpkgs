@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pysqueezebox";
-  version = "0.5.5";
+  version = "0.6.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "93e6a3824b560d4ea2b2e5f0a67fdf3b309b6194fbf9927e44fc0d12c7fdc6c0";
+    sha256 = "sha256-qc6ffWk62EF+IOLb2XVWtDrrZ0LVs7VtxJG1qrrUPPg=";
   };
 
   propagatedBuildInputs = [
