@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     substituteInPlace build-aux/ltmain.in --replace '#! /usr/bin/env sh' '#!${runtimeShell}'
   '';
 
+  strictDeps = true;
   nativeBuildInputs = [ autoconf automake help2man m4 perl ];
   propagatedBuildInputs = [ m4 file ];
 

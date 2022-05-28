@@ -27,6 +27,7 @@ let
       inherit sha256;
     };
 
+    strictDeps = true;
     # TODO: Add a "dev" output containing the header files.
     outputs = [ "out" "man" "devdoc" ] ++
       optional crossCompiling "mini";

@@ -1,6 +1,6 @@
 { version, sha256, patches ? [] }:
 
-{ lib, stdenv, buildPackages, fetchurl, perl, xz, gettext
+{ lib, stdenv, buildPackages, fetchurl, perl, xz, libintl, bash
 
 # we are a dependency of gcc, this simplifies bootstraping
 , interactive ? false, ncurses, procps
@@ -33,13 +33,15 @@ stdenv.mkDerivation {
   NATIVE_TOOLS_CFLAGS = if crossBuildTools then "-I${getDev buildPackages.ncurses}/include" else null;
   NATIVE_TOOLS_LDFLAGS = if crossBuildTools then "-L${getLib buildPackages.ncurses}/lib" else null;
 
+  strictDeps = true;
+  enableParallelBuilding = true;
+
   # We need a native compiler to build perl XS extensions
   # when cross-compiling.
   depsBuildBuild = [ buildPackages.stdenv.cc perl ];
 
-  buildInputs = [ xz.bin ]
+  buildInputs = [ xz.bin bash libintl ]
     ++ optionals stdenv.isSunOS [ libiconv gawk ]
-    ++ optionals stdenv.isDarwin [ gettext ]
     ++ optional interactive ncurses;
 
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]

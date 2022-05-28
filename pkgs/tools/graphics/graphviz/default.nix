@@ -19,6 +19,8 @@
 , xorg
 , ApplicationServices
 , python3
+, fltk
+, exiv2
 , withXorg ? true
 }:
 
@@ -27,14 +29,14 @@ let
 in
 stdenv.mkDerivation {
   pname = "graphviz";
-  version = "2.50.0";
+  version = "3.0.0";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     # use rev as tags have disappeared before
-    rev = "ca43e4c6a217650447e2928c2e9cb493c73ebd7d";
-    sha256 = "1psfgr8y4hh9yyzl04f7xbqb2y9k1xbja051j6b06q9dx7bmkmky";
+    rev = "24cf7232bb8728823466e0ef536862013893e567";
+    sha256 = "sha256-qqrpCJ9WP8wadupp4YRJMMaSCeFIDuFDQvEOpbG/wGM=";
   };
 
   nativeBuildInputs = [
@@ -88,10 +90,15 @@ stdenv.mkDerivation {
   postFixup = optionalString withXorg ''
     substituteInPlace $out/bin/dotty --replace '`which lefty`' $out/bin/lefty
     substituteInPlace $out/bin/vimdot \
-      --replace /usr/bin/vi '$(command -v vi)' \
-      --replace /usr/bin/vim '$(command -v vim)' \
+      --replace '"/usr/bin/vi"' '"$(command -v vi)"' \
+      --replace '"/usr/bin/vim"' '"$(command -v vim)"' \
       --replace /usr/bin/vimdot $out/bin/vimdot \
   '';
+
+  passthru.tests = {
+    inherit (python3.pkgs) pygraphviz;
+    inherit fltk exiv2;
+  };
 
   meta = with lib; {
     homepage = "https://graphviz.org";

@@ -22,21 +22,12 @@ with lib;
 
 stdenv.mkDerivation (rec {
   pname = "coreutils${optionalString (!minimal) "-full"}";
-  version = "9.0";
+  version = "9.1";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
-    sha256 = "sha256-zjCs30pBvFuzDdlV6eqnX6IWtOPesIiJ7TJDPHs7l84=";
+    sha256 = "sha256:08q4b0w7mwfxbqjs712l6wrwl2ijs7k50kssgbryg9wbsw8g98b1";
   };
-
-  patches = [
-    ./fix-chmod-exit-code.patch
-    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
-    ./disable-seek-hole.patch
-    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=52330
-    # This patch can be dropped, once we upgrade to the next coreutils version after 9.0
-    ./fix-arm64-macos.patch
-  ];
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -86,7 +77,7 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ perl xz.bin autoreconfHook ] # autoreconfHook is due to patch, normally only needed for cygwin
     ++ optionals stdenv.hostPlatform.isCygwin [ texinfo ];  # due to patch
-  configureFlags = [ "--with-packager=https://NixOS.org" ]
+  configureFlags = [ "--with-packager=https://nixos.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
     ++ optional withOpenssl "--with-openssl"
@@ -126,6 +117,10 @@ stdenv.mkDerivation (rec {
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
+  NIX_CFLAGS_COMPILE = []
+    # Work around a bogus warning in conjunction with musl.
+    ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
+    ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0";
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
@@ -154,11 +149,6 @@ stdenv.mkDerivation (rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix ++ platforms.windows;
     priority = 10;
-    maintainers = [ maintainers.eelco maintainers.das_j ];
+    maintainers = [ maintainers.das_j ];
   };
-} // optionalAttrs stdenv.hostPlatform.isMusl {
-  # Work around a bogus warning in conjunction with musl.
-  NIX_CFLAGS_COMPILE = "-Wno-error";
-} // lib.optionalAttrs stdenv.hostPlatform.isAndroid {
-  NIX_CFLAGS_COMPILE = "-D__USE_FORTIFY_LEVEL=0";
 })
