@@ -1,4 +1,4 @@
-{ lib, buildGo118Module, fetchFromGitHub, fetchzip }:
+{ stdenv, lib, buildGo118Module, fetchFromGitHub, fetchzip }:
 
 buildGo118Module rec {
   pname = "mutagen";
@@ -34,6 +34,7 @@ buildGo118Module rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Make remote development work with your local tools";
     homepage = "https://mutagen.io/";
     changelog = "https://github.com/mutagen-io/mutagen/releases/tag/v${version}";
