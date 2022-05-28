@@ -28,14 +28,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.24.4";
+  version = "0.25.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-c6XM/xeGZ68srf8xQJA1iYCUR3kXNceTMxsZAnbFmug=";
+    sha256 = "sha256-RYQVcbyKIv/FlrtROoQywWR+iF+4KYiYrrzErUrOCWM=";
   };
 
   buildInputs = [
@@ -78,21 +78,26 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" "shell_integration" ];
 
   patches = [
+    # Required to get `test_ssh_env_vars` to pass.
     (fetchpatch {
-      name = "fix-zsh-completion-test-1.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/297592242c290a81ca4ba08802841f4c33a4de25.patch";
-      sha256 = "sha256-/V6y/4AaJsZvx1KS5UFZ+0zyAoZuLgbgFORZ1dX/1qE=";
+      name = "increase-pty-lines.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/eb84990f5a8edc458e04d24cc1cda05316d74ceb.patch";
+      sha256 = "sha256-eOANfhGPMoN4FqxtIGDBu5X0O3RPLABDnL+LKqSLROI=";
     })
-    (fetchpatch {
-      name = "fix-zsh-completion-test-2.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/d8ed42ae8e014d9abf9550a65ae203468f8bfa43.patch";
-      sha256 = "sha256-Azgzqf5atW999FVn9rSGKMyZLsI692dYXhJPx07GBO0=";
-    })
-    (fetchpatch {
-      name = "fix-build-with-non-framework-python-on-darwin.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/57cffc71b78244e6a9d49f4c9af24d1a88dbf537.patch";
-      sha256 = "sha256-1IGONSVCVo5SmLKw90eqxaI5Mwc764O1ur+aMsc7h94=";
-    })
+    # Fix to ensure that files in tar files used by SSH kitten have write permissions.
+    ./tarball-restore-write-permissions.patch
+
+    # Needed on darwin
+
+    # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
+    # permissions.
+    ./zsh-compinit.patch
+    # Skip `test_ssh_login_shell_detection` in some cases, build users have their shell set to
+    # `/sbin/nologin` which causes issues.
+    ./disable-test_ssh_login_shell_detection.patch
+    # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
+    # OSError: master_fd is in error condition
+    ./disable-test_ssh_bootstrap_with_different_launchers.patch
   ];
 
   # Causes build failure due to warning
@@ -141,6 +146,9 @@ buildPythonApplication rec {
       # Fontconfig error: Cannot load default config file: No such file: (null)
       export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
 
+      # Required for `test_ssh_shell_integration` to pass.
+      export TERM=kitty
+
       env PATH="${buildBinPath}:$PATH" ${python.interpreter} test.py
     '';
 
@@ -179,6 +187,18 @@ buildPythonApplication rec {
 
     runHook postInstall
   '';
+
+  # Patch shebangs that Nix can't automatically patch
+  preFixup =
+    let
+      pathComponent = if stdenv.isDarwin then "Applications/kitty.app/Contents/Resources" else "lib";
+    in
+    ''
+      substituteInPlace $out/${pathComponent}/kitty/shell-integration/ssh/askpass.py \
+        --replace '/usr/bin/env -S ' $out/bin/
+      substituteInPlace $shell_integration/ssh/askpass.py \
+        --replace '/usr/bin/env -S ' $out/bin/
+    '';
 
   passthru.tests.test = nixosTests.terminal-emulators.kitty;
 
