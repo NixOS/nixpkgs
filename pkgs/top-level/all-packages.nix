@@ -4726,7 +4726,12 @@ with pkgs;
 
   usbview = callPackage ../tools/misc/usbview { };
 
-  usbimager = callPackage ../tools/misc/usbimager { };
+  usbimager-x11 = callPackage ../tools/misc/usbimager { };
+  usbimager-x11-wo = callPackage ../tools/misc/usbimager { withWriteOnly = true; };
+  usbimager-gtk = callPackage ../tools/misc/usbimager { withLibui = true; withUdisks = true; };
+  usbimager-gtk-wo = callPackage ../tools/misc/usbimager { withLibui = true; withUdisks = true; withWriteOnly = true; };
+  usbimager = usbimager-x11;
+  usbimager-wo = usbimager-x11-wo;
 
   uwuify = callPackage ../tools/misc/uwuify { };
 
