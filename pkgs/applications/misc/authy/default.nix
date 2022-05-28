@@ -94,25 +94,16 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/
+    mkdir -p $out/bin $out/share/applications $out/share/pixmaps/apps
 
-    cp -r ./* $out/
-    rm -R ./*
-
-    # The snap package has the `ffmpeg.so` file which is copied over with other .so files
-    mv $out/*.so $out/lib/
+    # Copy only what is needed
+    cp -r resources* $out/
+    cp -r locales* $out/
+    cp meta/gui/authy.desktop $out/share/applications/
+    cp meta/gui/icon.png $out/share/pixmaps/authy.png
 
     # Replace icon name in Desktop file
-    sed -i 's|''${SNAP}/meta/gui/icon.png|authy|g' "$out/meta/gui/authy.desktop"
-
-    # Move the desktop file, icon, binary to their appropriate locations
-    mkdir -p $out/bin $out/share/applications $out/share/pixmaps/apps
-    cp $out/meta/gui/authy.desktop $out/share/applications/
-    cp $out/meta/gui/icon.png $out/share/pixmaps/authy.png
-    cp $out/${pname} $out/bin/${pname}
-
-    # Cleanup
-    rm -r $out/{data-dir,gnome-platform,meta,scripts,usr,*.sh,*.so}
+    sed -i 's|''${SNAP}/meta/gui/icon.png|authy|g' "$out/share/applications/authy.desktop"
 
     runHook postInstall
   '';
