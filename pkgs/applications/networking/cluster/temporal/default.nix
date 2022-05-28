@@ -17,7 +17,8 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  checkFlags = [ "-short" ];
+  # There too many integration tests.
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall

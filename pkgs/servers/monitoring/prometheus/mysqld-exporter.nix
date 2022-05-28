@@ -24,7 +24,9 @@ buildGoModule rec {
   ];
 
   # skips tests with external dependencies, e.g. on mysqld
-  checkFlags = [ "-short" ];
+  preCheck = ''
+    buildFlagsArray+="-short"
+  '';
 
   meta = with lib; {
     description = "Prometheus exporter for MySQL server metrics";
