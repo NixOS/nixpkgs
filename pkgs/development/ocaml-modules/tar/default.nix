@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildDunePackage
+, camlp-streams
 , ppx_cstruct
 , cstruct
 , re
@@ -9,17 +10,18 @@
 
 buildDunePackage rec {
   pname = "tar";
-  version = "1.1.0";
+  version = "2.0.1";
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "ocaml-tar";
     rev = "v${version}";
-    sha256 = "14k24vn3q5jl0iyrynb5vwg80670qsv12fsmc6cdgh4zwdpjh7zs";
+    sha256 = "1zr1ak164k1jm15xwqjf1iv77kdrrahak33wrxg7lifz9nnl0dms";
   };
 
   useDune2 = true;
 
   propagatedBuildInputs = [
+    camlp-streams
     ppx_cstruct
     cstruct
     re
