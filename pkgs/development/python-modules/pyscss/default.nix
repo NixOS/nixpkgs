@@ -5,7 +5,6 @@
 , six
 , enum34
 , pathlib
-, ordereddict
 , pythonOlder
 }:
 
@@ -23,8 +22,7 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   propagatedBuildInputs = [ six ]
-    ++ (lib.optionals (pythonOlder "3.4") [ enum34 pathlib ])
-    ++ (lib.optionals (pythonOlder "2.7") [ ordereddict ]);
+    ++ lib.optionals (pythonOlder "3.4") [ enum34 pathlib ];
 
   # Test suite is broken.
   # See https://github.com/Kronuz/pyScss/issues/415
