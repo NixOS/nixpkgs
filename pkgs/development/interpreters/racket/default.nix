@@ -137,6 +137,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A programmable programming language";
     longDescription = ''
       Racket is a full-spectrum programming language. It goes beyond
