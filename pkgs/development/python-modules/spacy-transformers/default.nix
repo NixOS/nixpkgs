@@ -33,6 +33,11 @@ buildPythonPackage rec {
     dataclasses
   ];
 
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "transformers>=3.4.0,<4.18.0" "transformers>=3.4.0 # ,<4.18.0"
+  '';
+
   # Test fails due to missing arguments for trfs2arrays().
   doCheck = false;
 
