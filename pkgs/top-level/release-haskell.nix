@@ -52,7 +52,7 @@ let
     ghc884
     ghc8107
     ghc902
-    ghc922
+    ghc923
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -329,8 +329,8 @@ let
               ;
             };
 
-            haskell.packages.native-bignum.ghc922 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc922)
+            haskell.packages.native-bignum.ghc923 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc923)
                 hello
                 lens
                 random
@@ -442,11 +442,11 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc922
+          jobs.pkgsMusl.haskell.compiler.ghc923
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc922
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc923
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
@@ -462,7 +462,7 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc922
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc923
         ];
       };
     }
