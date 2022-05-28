@@ -35,9 +35,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "webauthn" ];
 
   meta = with lib; {
-    homepage = "https://github.com/benoitc/gunicorn";
-    description = "gunicorn 'Green Unicorn' is a WSGI HTTP Server for UNIX, fast clients and sleepy applications";
-    license = licenses.mit;
+    homepage = "https://github.com/duo-labs/py_webauthn";
+    description = "Implementation of the WebAuthn API";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
