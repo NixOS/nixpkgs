@@ -168,6 +168,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "High-performance analog circuit simulator";
     longDescription = ''
       Xyce is a SPICE-compatible, high-performance analog circuit simulator,
