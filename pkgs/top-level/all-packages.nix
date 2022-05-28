@@ -18447,8 +18447,8 @@ with pkgs;
   libdvdread = callPackage ../development/libraries/libdvdread { };
   libdvdread_4_9_9 = callPackage ../development/libraries/libdvdread/4.9.9.nix { };
 
-  inherit (callPackage ../development/libraries/libdwarf { })
-    libdwarf dwarfdump;
+  libdwarf = callPackage ../development/libraries/libdwarf { };
+  dwarfdump = libdwarf.bin;
   libdwarf_0_4 = callPackage ../development/libraries/libdwarf/0.4.nix { };
 
   libe57format = callPackage ../development/libraries/libe57format { };
