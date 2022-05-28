@@ -32,7 +32,7 @@
 , channel ? "stable"
 
 # Necessary for USB audio devices.
-, pulseSupport ? true, libpulseaudio ? null
+, pulseSupport ? true, libpulseaudio
 
 # Only needed for getting information about upstream binaries
 , chromium
