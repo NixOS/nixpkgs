@@ -1,18 +1,17 @@
 { lib, stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "planarity";
-  version = "3.0.0.5";
+  version = "3.0.2.0";
 
   src = fetchFromGitHub {
     owner = "graph-algorithms";
     repo = "edge-addition-planarity-suite";
     rev = "Version_${version}";
-    sha256 = "01cm7ay1njkfsdnmnvh5zwc7wg7x189hq1vbfhh9p3ihrbnmqzh8";
+    sha256 = "sha256-cUAh2MXCSmtxFtV6iTHgSRgsq/26DjWwxhWJH1+367A=";
   };
 
   nativeBuildInputs = [
@@ -20,14 +19,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  patches = [
-    # declare variables declared in headers as extern, not yet merged upstream
-    (fetchpatch {
-      url = "https://github.com/graph-algorithms/edge-addition-planarity-suite/pull/3.patch";
-      sha256 = "1nqjc4clr326imz4jxqxcxv2hgh1sjgzll27k5cwkdin8lnmmil8";
-    })
-  ];
 
   meta = with lib; {
     homepage = "https://github.com/graph-algorithms/edge-addition-planarity-suite";
