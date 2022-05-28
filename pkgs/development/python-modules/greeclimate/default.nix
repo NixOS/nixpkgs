@@ -32,6 +32,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [
     "greeclimate"
     "greeclimate.device"
