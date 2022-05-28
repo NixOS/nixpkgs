@@ -15,7 +15,9 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-yxqLGDqdu9vX3ykHq7Kzf8oBH1ydltZkiWNWWM2l0Aw=";
 
-  checkFlags = [ "-short" ];
+  preCheck = ''
+    buildFlagsArray+="-short"
+  '';
 
   meta = with lib; {
     description = "An authenticating proxy for Second Generation Google Cloud SQL databases";
