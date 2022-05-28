@@ -6381,6 +6381,8 @@ with pkgs;
   genmap = callPackage ../applications/science/biology/genmap { };
 
   geonkick = callPackage ../applications/audio/geonkick {};
+    
+  geopard = callPackage ../applications/networking/browsers/geopard {};
 
   gerrit = callPackage ../applications/version-management/gerrit { };
 
