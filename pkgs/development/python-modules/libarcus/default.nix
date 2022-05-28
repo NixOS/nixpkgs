@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "4.12.0";
+  version = "5.0.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "sha256-X33ptwYj9YkVWqUDPP+Ic+hoIb+rwsLdQXvHLA9z+3w=";
+    sha256 = "0f871vx14hyjnqiqik36zmf7mi7dvzf08cqpryk8g1acj9mkh3ag";
   };
 
   patches = [
@@ -29,9 +29,15 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ];
 
-  postPatch = ''
-    sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
-  '';
+  cmakeFlags = [
+    # The upstream code checks for an exact python version and errors out
+    # if we don't have that and do not pass `Python_VERSION` explicitly:
+    #     https://github.com/Ultimaker/libArcus/commit/f867664e46144fed9ae9c4f4e6a29192163fb884#diff-1e7de1ae2d059d21e1dd75d5812d5a34b0222cef273b7c3a2af62eb747f9d20aR31
+    "-DPython_VERSION=${python.pythonVersion}"
+    # Set install location to not be the global Python install dir
+    # (which is read-only in the nix store); see:
+    "-DPython_SITELIB_LOCAL=${placeholder "out"}/${python.sitePackages}"
+  ];
 
   meta = with lib; {
     description = "Communication library between internal components for Ultimaker software";
