@@ -2360,6 +2360,8 @@ in {
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
+  django-otp = callPackage ../development/python-modules/django-otp { };
+
   django-paintstore = callPackage ../development/python-modules/django-paintstore { };
 
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
@@ -2393,6 +2395,8 @@ in {
   djangorestframework-dataclasses = callPackage ../development/python-modules/djangorestframework-dataclasses { };
 
   djangorestframework-camel-case = callPackage ../development/python-modules/djangorestframework-camel-case { };
+
+  djangorestframework-guardian = callPackage ../development/python-modules/djangorestframework-guardian { };
 
   djangorestframework-recursive = callPackage ../development/python-modules/djangorestframework-recursive { };
 
