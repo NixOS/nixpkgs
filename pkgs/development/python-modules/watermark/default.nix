@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "watermark";
-  version = "2.3.0";
+  version = "2.3.1";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rasbt";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1kl9yn1pkl84d3lcz7bvphqkydsgs0p5k0ja0msy3hrxxfzdzd16";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-E3UxdGlxTcvkiKa3RoG9as6LybyW+QrCUZvA9VHwxlk=";
   };
 
   propagatedBuildInputs = [
