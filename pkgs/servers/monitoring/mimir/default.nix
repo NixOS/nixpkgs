@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 buildGoModule rec {
   pname = "mimir";
   version = "2.1.0";
@@ -16,6 +16,10 @@ buildGoModule rec {
     "cmd/mimir"
     "cmd/mimirtool"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) grafana-mimir;
+  };
 
   ldflags = let t = "github.com/grafana/mimir/pkg/util/version";
   in [
