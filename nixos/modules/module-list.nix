@@ -771,6 +771,7 @@
   ./services/networking/ergo.nix
   ./services/networking/ergochat.nix
   ./services/networking/eternal-terminal.nix
+  ./services/networking/expressvpn.nix
   ./services/networking/fakeroute.nix
   ./services/networking/ferm.nix
   ./services/networking/fireqos.nix
