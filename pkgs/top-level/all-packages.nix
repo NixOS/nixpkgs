@@ -992,7 +992,7 @@ with pkgs;
 
   arc_unpacker = callPackage ../tools/archivers/arc_unpacker {
     boost = boost16x; # checkPhase fails with Boost 1.77
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   adminer = callPackage ../servers/adminer { };
@@ -2018,7 +2018,7 @@ with pkgs;
   bonnmotion = callPackage ../development/tools/misc/bonnmotion { };
 
   bonnie = callPackage ../tools/filesystems/bonnie {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   botamusique = callPackage ../tools/audio/botamusique { };
@@ -4964,7 +4964,7 @@ with pkgs;
   createrepo_c = callPackage ../tools/package-management/createrepo_c { };
 
   cromfs = callPackage ../tools/archivers/cromfs {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   cron = callPackage ../tools/system/cron { };
@@ -12565,6 +12565,8 @@ with pkgs;
   gcc11Stdenv = overrideCC gccStdenv buildPackages.gcc11;
   gcc12Stdenv = overrideCC gccStdenv buildPackages.gcc12;
 
+  gcc10StdenvCompat = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+
   # This is not intended for use in nixpkgs but for providing a faster-running
   # compiler to nixpkgs users by building gcc with reproducibility-breaking
   # profile-guided optimizations
@@ -14941,10 +14943,7 @@ with pkgs;
     buildJdk = jdk11_headless;
     buildJdkName = "java11";
     runJdk = jdk11_headless;
-    stdenv =
-      if stdenv.cc.isClang then llvmPackages.stdenv
-      else if stdenv.cc.isGNU then gcc10Stdenv
-      else stdenv;
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else gcc10StdenvCompat;
     bazel_self = bazel_4;
   };
 
@@ -16845,7 +16844,7 @@ with pkgs;
   classads = callPackage ../development/libraries/classads { };
 
   clfft = callPackage ../development/libraries/clfft {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   clipp  = callPackage ../development/libraries/clipp { };
@@ -25885,7 +25884,7 @@ with pkgs;
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
   drumgizmo = callPackage ../applications/audio/drumgizmo {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   dsf2flac = callPackage ../applications/audio/dsf2flac { };
@@ -31601,16 +31600,16 @@ with pkgs;
   cuyo = callPackage ../games/cuyo { };
 
   deliantra-server = callPackage ../games/deliantra/server.nix {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
   deliantra-arch = callPackage ../games/deliantra/arch.nix {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
   deliantra-maps = callPackage ../games/deliantra/maps.nix {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
   deliantra-data = callPackage ../games/deliantra/data.nix {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   ddnet = callPackage ../games/ddnet { };
@@ -32727,23 +32726,23 @@ with pkgs;
   };
 
   bpp-core = callPackage ../development/libraries/science/biology/bpp-core {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   bpp-phyl = callPackage ../development/libraries/science/biology/bpp-phyl {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   bpp-popgen = callPackage ../development/libraries/science/biology/bpp-popgen {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   bpp-seq = callPackage ../development/libraries/science/biology/bpp-seq {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   bppsuite = callPackage ../applications/science/biology/bppsuite {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   cd-hit = callPackage ../applications/science/biology/cd-hit {
@@ -33220,7 +33219,7 @@ with pkgs;
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {};
 
   aspino = callPackage ../applications/science/logic/aspino {
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    stdenv = gcc10StdenvCompat;
   };
 
   beluga = callPackage ../applications/science/logic/beluga {};
