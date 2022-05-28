@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   preFixup = "rm -rf $(pwd)";
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "Command-line interface to Stan";
     longDescription = ''
       Stan is a probabilistic programming language implementing full Bayesian
