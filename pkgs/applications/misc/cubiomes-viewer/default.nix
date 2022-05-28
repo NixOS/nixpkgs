@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/Cubitect/cubiomes-viewer";
     description = "A graphical Minecraft seed finder and map viewer";
     longDescription = ''

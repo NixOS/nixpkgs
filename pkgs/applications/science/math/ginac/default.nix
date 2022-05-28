@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-rpath" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "GiNaC is Not a CAS";
     homepage = "https://www.ginac.de/";
     maintainers = with maintainers; [ lovek323 ];
