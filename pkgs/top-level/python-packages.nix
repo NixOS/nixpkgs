@@ -2544,6 +2544,8 @@ in {
 
   dpath = callPackage ../development/python-modules/dpath { };
 
+  dpcontracts = callPackage ../development/python-modules/dpcontracts { };
+
   dpkt = callPackage ../development/python-modules/dpkt { };
 
   dragonfly = callPackage ../development/python-modules/dragonfly { };
@@ -4102,6 +4104,8 @@ in {
   ics = callPackage ../development/python-modules/ics { };
 
   idasen = callPackage ../development/python-modules/idasen { };
+
+  icontract = callPackage ../development/python-modules/icontract { };
 
   identify = callPackage ../development/python-modules/identify { };
 
