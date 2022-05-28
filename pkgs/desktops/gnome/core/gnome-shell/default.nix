@@ -104,6 +104,23 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/gnome-shell/raw/9a647c460b651aaec0b8a21f046cc289c1999416/f/0001-gdm-Work-around-failing-fingerprint-auth.patch";
       sha256 = "pFvZli3TilUt6YwdZztpB8Xq7O60XfuWUuPMMVSpqLw=";
     })
+    # Backport Oo-screen keyboard fixes to GNOME 42
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/a3bfe0ab560ed214c888b79daca89975fed9604e.patch";
+      sha256 = "sha256-JNNiW+bWeUnlwfvcmE4l8O10ZMjv0oWKaJZ/1fTgIgE=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/da3d4e82e359e7aca63652c6d8e4f4ba2c71b722.patch";
+      sha256 = "sha256-WzPJrPFPYf/YTaPviVXfmcz1xvZqUYQegLh4Y4yAo64=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/1fa5c63307e03d806eacdcf14d31e63afc27af20.patch";
+      sha256 = "sha256-2PEkIYkzSahzB31pO1nT/kJNnHKCrtnUSJsw65tWzK0=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/9a0935305d76e7e7c5c9d659b71609d873cfecbb.patch";
+      sha256 = "sha256-zON6P8wYK0wGnb8XXJsEBGs5pTSClNoYBS7wQJM5jzw=";
+    })
   ];
 
   nativeBuildInputs = [
