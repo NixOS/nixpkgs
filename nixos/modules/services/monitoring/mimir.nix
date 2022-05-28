@@ -56,6 +56,7 @@ in {
         ProtectSystem = "full";
         DevicePolicy = "closed";
         NoNewPrivileges = true;
+        WorkingDirectory = "/var/lib/mimir";
         StateDirectory = "mimir";
       };
     };
