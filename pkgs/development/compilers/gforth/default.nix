@@ -5,6 +5,7 @@
 let
   swig = callPackage ./swig.nix { };
   bootForth = callPackage ./boot-forth.nix { };
+  lispDir = "${placeholder "out"}/share/emacs/site-lisp";
 in stdenv.mkDerivation rec {
 
   pname = "gforth";
@@ -26,11 +27,14 @@ in stdenv.mkDerivation rec {
 
   passthru = { inherit bootForth; };
 
-  configureFlags = lib.optional stdenv.isDarwin [ "--build=x86_64-apple-darwin" ];
+  configureFlags = [
+    "--with-lispdir=${lispDir}"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    "--build=x86_64-apple-darwin"
+  ];
 
-  postInstall = ''
-    mkdir -p $out/share/emacs/site-lisp
-    cp gforth.el $out/share/emacs/site-lisp/
+  preConfigure = ''
+    mkdir -p ${lispDir}
   '';
 
   meta = {
