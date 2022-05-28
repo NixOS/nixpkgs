@@ -91,7 +91,7 @@ in stdenv.mkDerivation {
     changelog   = "https://smlnj.org/dist/working/${version}/HISTORY.html";
     license     = licenses.bsd3;
     platforms   = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice marsam ];
     mainProgram = "sml";
   };
 }
