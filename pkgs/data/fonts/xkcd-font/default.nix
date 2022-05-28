@@ -11,11 +11,22 @@ in fetchFromGitHub {
   rev = "5632fde618845dba5c22f14adc7b52bf6c52d46d";
 
   postFetch = ''
-    tar xf $downloadedFile --strip=1
+    pushd $out
+
     install -Dm444 -t $out/share/fonts/opentype/ xkcd/build/xkcd.otf
     install -Dm444 -t $out/share/fonts/truetype/ xkcd-script/font/xkcd-script.ttf
+
+    # remove unrelated files
+    for f in * .*; do
+      case "$f" in
+        share|.|..) ;;
+        *) rm -rf "$f" ;;
+      esac
+    done
+
+    popd
   '';
-  sha256 = "0xhwa53aiz20763jb9nvbr2zq9k6jl69p07dc4b0apwrrwz0jfr1";
+  sha256 = "sha256-ITsJPs+ZXwUWYe2AmwyVZib8RV7bpiWHOUD8qEZRHHY=";
 
   meta = with lib; {
     description = "The xkcd font";
