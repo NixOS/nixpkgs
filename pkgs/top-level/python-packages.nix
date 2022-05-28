@@ -209,6 +209,8 @@ in {
 
   aenum = callPackage ../development/python-modules/aenum { };
 
+  aeppl = callPackage ../development/python-modules/aeppl { };
+
   aesara = callPackage ../development/python-modules/aesara { };
 
   aesedb = callPackage ../development/python-modules/aesedb { };
@@ -5860,6 +5862,8 @@ in {
 
   numcodecs = callPackage ../development/python-modules/numcodecs { };
 
+  numdifftools = callPackage ../development/python-modules/numdifftools { };
+
   numericalunits = callPackage ../development/python-modules/numericalunits { };
 
   numexpr = callPackage ../development/python-modules/numexpr { };
@@ -9462,7 +9466,7 @@ in {
 
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
-  service-identity = callPackage ../development/python-modules/service_identity { };
+  service-identity = callPackage ../development/python-modules/service-identity { };
 
   setproctitle = callPackage ../development/python-modules/setproctitle { };
 

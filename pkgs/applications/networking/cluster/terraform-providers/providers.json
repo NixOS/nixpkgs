@@ -73,13 +73,13 @@
     "version": "2.2.0"
   },
   "auth0": {
-    "owner": "alexkappa",
-    "provider-source-address": "registry.terraform.io/alexkappa/auth0",
+    "owner": "auth0",
+    "provider-source-address": "registry.terraform.io/auth0/auth0",
     "repo": "terraform-provider-auth0",
-    "rev": "v0.26.2",
-    "sha256": "1n9gn7zsdygdr2ybki7xz2snp3fygls6myb1w5zndby497kgxrkw",
-    "vendorSha256": "1x61f7vz73m2q6pdb6ddy27j4npiwrrlgzvd90zrcc0yj22h6mms",
-    "version": "0.26.2"
+    "rev": "v0.30.2",
+    "sha256": "sha256-6+81QomUnKEbaqGHSRabLSb7O6lrrG+Fp9N8y8ZtS8A=",
+    "vendorSha256": "sha256-4o+/iB853zXcEYgPKVZ8CVHdIOEZW+/OX+LDBHSNjUk=",
+    "version": "0.30.2"
   },
   "avi": {
     "owner": "vmware",
@@ -860,15 +860,6 @@
     "vendorSha256": null,
     "version": "1.0.1"
   },
-  "opc": {
-    "owner": "terraform-providers",
-    "provider-source-address": "registry.terraform.io/hashicorp/opc",
-    "repo": "terraform-provider-opc",
-    "rev": "v1.4.1",
-    "sha256": "1kylnjy7s5bkx6zjksbz8sfx77pxcc9ycbi8kd8axnrcmj4q01xc",
-    "vendorSha256": null,
-    "version": "1.4.1"
-  },
   "opennebula": {
     "owner": "OpenNebula",
     "provider-source-address": "registry.terraform.io/OpenNebula/opennebula",
@@ -904,15 +895,6 @@
     "sha256": "1kxq66skal10nx5mgk8qj15chk01fi1pjamgakr1j56m1dgw03cw",
     "vendorSha256": null,
     "version": "0.6.10"
-  },
-  "oraclepaas": {
-    "owner": "terraform-providers",
-    "provider-source-address": "registry.terraform.io/hashicorp/oraclepaas",
-    "repo": "terraform-provider-oraclepaas",
-    "rev": "v1.5.3",
-    "sha256": "0xb03b5jgm06rgrllib6zj1nkh54zv2mqjnyfflgnazpf4c1ia15",
-    "vendorSha256": null,
-    "version": "1.5.3"
   },
   "ovh": {
     "owner": "ovh",
@@ -1068,13 +1050,13 @@
     "version": "0.14.5"
   },
   "snowflake": {
-    "owner": "chanzuckerberg",
-    "provider-source-address": "registry.terraform.io/chanzuckerberg/snowflake",
+    "owner": "Snowflake-Labs",
+    "provider-source-address": "registry.terraform.io/Snowflake-Labs/snowflake",
     "repo": "terraform-provider-snowflake",
-    "rev": "v0.33.1",
-    "sha256": "sha256-xFtk1WbMe2/UFGB/ej6QEL07+dZTsWFmqvyVCa2YBw8=",
-    "vendorSha256": "sha256-l++IzY3/W4qsdFJY7ik0xF6tZWluLb4EcW5KQtBVY5s=",
-    "version": "0.33.1"
+    "rev": "v0.34.0",
+    "sha256": "sha256-7FQp5lDm6WKFmtk9V8Sf+e5J4tLpAOfgMKpbcQRcfIE=",
+    "vendorSha256": "sha256-HGukjbPQyQpFnVkgUnreQlNAW9nhLirnQnYIpBfFe+M=",
+    "version": "0.34.0"
   },
   "sops": {
     "owner": "carlpett",
@@ -1120,15 +1102,6 @@
     "sha256": "sha256-27+ofT5p073s2kEk87P/Witw5x9sVKOYrlBXp6/xKxk=",
     "vendorSha256": "sha256-7DGY+L41bJJrtLwdWgu2aMCefgcmtR6tmH12foi68Kc=",
     "version": "2.16.0"
-  },
-  "template": {
-    "owner": "hashicorp",
-    "provider-source-address": "registry.terraform.io/hashicorp/template",
-    "repo": "terraform-provider-template",
-    "rev": "v2.2.0",
-    "sha256": "12pn1i06jz4xl50md94yfdggg3pg5bv1viwf35izizm5rnyksyv2",
-    "vendorSha256": null,
-    "version": "2.2.0"
   },
   "tencentcloud": {
     "owner": "tencentcloudstack",
