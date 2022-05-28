@@ -1,9 +1,12 @@
 { lib
+, stdenv
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
 , cffi
 , pytestCheckHook
+, AudioToolbox
+, CoreAudio
 }:
 
 buildPythonPackage rec {
@@ -18,6 +21,11 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "16llwmbbd9445rwhl4v66kf5zd7yl3a94zm9xyllq6ij7vnhg5jb";
   };
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    AudioToolbox
+    CoreAudio
+  ];
 
   propagatedNativeBuildInputs = [ cffi ];
   propagatedBuildInputs = [ cffi ];
