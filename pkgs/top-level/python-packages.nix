@@ -2135,6 +2135,10 @@ in {
 
   ddt = callPackage ../development/python-modules/ddt { };
 
+  deal = callPackage ../development/python-modules/deal { };
+
+  deal-solver = callPackage ../development/python-modules/deal-solver { };
+
   deap = callPackage ../development/python-modules/deap { };
 
   debian = callPackage ../development/python-modules/debian { };
@@ -6531,6 +6535,8 @@ in {
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 
+  pyschemes = callPackage ../development/python-modules/pyschemes { };
+
   pyshark = callPackage ../development/python-modules/pyshark { };
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
@@ -10838,6 +10844,8 @@ in {
   uvloop = callPackage ../development/python-modules/uvloop {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
+
+  vaa = callPackage ../development/python-modules/vaa { };
 
   validate-email = callPackage ../development/python-modules/validate-email { };
 
