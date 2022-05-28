@@ -1,6 +1,6 @@
 { mkDerivation, lib, fetchurl, fetchpatch, pkg-config, cmake, glib, boost, libsigrok
 , libsigrokdecode, libserialport, libzip, udev, libusb1, libftdi1, glibmm
-, pcre, librevisa, python3, qtbase, qtsvg
+, pcre, librevisa, python3, qtbase, qtsvg, gcc10StdenvCompat
 }:
 
 mkDerivation rec {
@@ -15,7 +15,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    glib boost libsigrok libsigrokdecode libserialport libzip udev libusb1 libftdi1 glibmm
+    glib (boost.override { stdenv = gcc10StdenvCompat; }) libsigrok libsigrokdecode libserialport libzip udev libusb1 libftdi1 glibmm
     pcre librevisa python3
     qtbase qtsvg
   ];
@@ -34,6 +34,6 @@ mkDerivation rec {
     homepage = "https://sigrok.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
