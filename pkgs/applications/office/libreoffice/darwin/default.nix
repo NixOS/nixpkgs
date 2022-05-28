@@ -10,7 +10,6 @@ let
   appName = "LibreOffice.app";
   scriptName = "soffice";
   version = "7.3.3";
-  common = import ../common.nix { inherit lib; };
 
   dist = {
     aarch64-darwin = rec {
@@ -30,7 +29,6 @@ let
 in
 stdenvNoCC.mkDerivation {
   inherit version;
-  inherit (import ../common.nix { inherit lib; }) meta;
   pname = "libreoffice";
   src = fetchurl {
     inherit (dist.${stdenvNoCC.hostPlatform.system} or
@@ -69,9 +67,16 @@ stdenvNoCC.mkDerivation {
         set -eou pipefail
 
         # reset version first so that both platforms are always updated and in sync
-        update-source-version libreoffice 0 ${lib.fakeSha256} --file=${currentFile} --system=aarch64-darwin
-        update-source-version libreoffice ${newVersion} ${newAarch64Sha256} --file=${currentFile} --system=aarch64-darwin
-        update-source-version libreoffice 0 ${lib.fakeSha256} --file=${currentFile} --system=x86_64-darwin
-        update-source-version libreoffice ${newVersion} ${newX86_64Sha256} --file=${currentFile} --system=x86_64-darwin
+        update-source-version libreoffice-bin 0 ${lib.fakeSha256} --file=${currentFile} --system=aarch64-darwin
+        update-source-version libreoffice-bin ${newVersion} ${newAarch64Sha256} --file=${currentFile} --system=aarch64-darwin
+        update-source-version libreoffice-bin 0 ${lib.fakeSha256} --file=${currentFile} --system=x86_64-darwin
+        update-source-version libreoffice-bin ${newVersion} ${newX86_64Sha256} --file=${currentFile} --system=x86_64-darwin
       '';
+  meta = with lib; {
+    description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
+    homepage = "https://libreoffice.org/";
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ tricktron ];
+    platforms = [ "x86_64-darwin" "aarch64-darwin" ];
+  };
 }
