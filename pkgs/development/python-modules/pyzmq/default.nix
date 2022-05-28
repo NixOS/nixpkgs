@@ -1,46 +1,68 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
+, py
 , pytestCheckHook
+, python
+, pythonOlder
 , tornado
 , zeromq
-, py
-, python
 }:
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "22.3.0";
+  version = "23.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8eddc033e716f8c91c6a2112f0a8ebc5e00532b4a6ae1eb0ccc48e027f9c671c";
+    hash = "sha256-pF9cBHfRLfBe8uKSK0m3wK6dD0/5trsNZmVY3w7zcSI=";
   };
+
+  buildInputs = [
+    zeromq
+  ];
+
+  propagatedBuildInputs = [
+    py
+  ];
 
   checkInputs = [
     pytestCheckHook
     tornado
   ];
-  buildInputs = [ zeromq ];
-  propagatedBuildInputs = [ py ];
 
-  # failing tests
-  disabledTests = [
-    "test_socket" # hangs
-    "test_current"
-    "test_instance"
-    "test_callable_check"
-    "test_on_recv_basic"
-    "test_on_recv_wake"
-    "test_monitor" # https://github.com/zeromq/pyzmq/issues/1272
-    "test_cython"
-    "test_asyncio" # hangs
-    "test_mockable" # fails
+  pythonImportsCheck = [
+    "zmq"
   ];
 
   pytestFlagsArray = [
     "$out/${python.sitePackages}/zmq/tests/" # Folder with tests
   ];
 
+  disabledTests = [
+    # Tests hang
+    "test_socket"
+    "test_monitor"
+    # https://github.com/zeromq/pyzmq/issues/1272
+    "test_cython"
+    # Test fails
+    "test_mockable"
+    # Issues with the sandbox
+    "TestFutureSocket"
+    "TestIOLoop"
+    "TestPubLog"
+  ];
+
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
+
+  meta = with lib; {
+    description = "Python bindings for ØMQ";
+    homepage = "https://pyzmq.readthedocs.io/";
+    license = with licenses; [ bsd3 /* or */ lgpl3Only ];
+    maintainers = with maintainers; [ ];
+  };
 }
