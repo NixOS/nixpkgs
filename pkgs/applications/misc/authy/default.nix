@@ -6,7 +6,7 @@
 , cairo
 , cups
 , dbus
-, electron_9
+, electron
 , expat
 , fetchurl
 , gdk-pixbuf
@@ -15,8 +15,10 @@
 , lib
 , libappindicator-gtk3
 , libdbusmenu-gtk3
+, libdrm
 , libuuid
 , makeWrapper
+, mesa
 , nspr
 , nss
 , pango
@@ -26,16 +28,11 @@
 , xorg
 }:
 
-let
-  # Currently only works with electron 9
-  electron = electron_9;
-in
-
 stdenv.mkDerivation rec {
   pname = "authy";
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/authy?channel=stable' | jq '.download_url,.version'
-  version = "2.1.0";
-  rev = "9";
+  version = "2.2.0";
+  rev = "10";
 
   buildInputs = [
     alsa-lib
@@ -51,7 +48,9 @@ stdenv.mkDerivation rec {
     gtk3
     libappindicator-gtk3
     libdbusmenu-gtk3
+    libdrm
     libuuid
+    mesa # for libgbm
     nspr
     nss
     pango
@@ -73,7 +72,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/H8ZpNgIoPyvmkgxOWw5MSzsXK1wRZiHn_${rev}.snap";
-    sha256 = "sha256-RxjxOYrbneVctyTJTMvoN/UdREohaZWb1kTdEeI6mUU=";
+    sha256 = "sha256-sB9/fVV/qp+DfjxpvzIUHsLkeEu35i2rEv1/JYMytG8=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper squashfsTools ];
