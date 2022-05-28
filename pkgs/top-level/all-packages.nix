@@ -28098,7 +28098,10 @@ with pkgs;
 
   mikmod = callPackage ../applications/audio/mikmod { };
 
-  miniaudicle = callPackage ../applications/audio/miniaudicle { };
+  miniaudicle = callPackage ../applications/audio/miniaudicle {
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
+    qscintilla-qt4 = if stdenv.cc.isGNU then qscintilla-qt4.override { stdenv = gcc10Stdenv; } else qscintilla-qt4;
+  };
 
   minicom = callPackage ../tools/misc/minicom { };
 
