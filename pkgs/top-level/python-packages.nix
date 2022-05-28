@@ -3260,6 +3260,8 @@ in {
 
   functools32 = callPackage ../development/python-modules/functools32 { };
 
+  functorch = callPackage ../development/python-modules/functorch { };
+
   funcy = callPackage ../development/python-modules/funcy { };
 
   furl = callPackage ../development/python-modules/furl { };
