@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ popt ];
 
+  propagatedBuildInputs = [ libiconv ];
+
   meta = with lib; {
     broken = stdenv.isDarwin;
     homepage = "http://natspec.sourceforge.net/";
@@ -20,6 +22,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.lgpl21;
   };
-} // lib.optionalAttrs (!stdenv.isLinux) {
-  propagatedBuildInputs = [ libiconv ];
 }
