@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
-  version = "5.17";
+  version = "5.18";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "sha256-Y7d4/kwrrRjjcdzljtNUiOCPWDkhNnRU/diFB6PQ2J4=";
+    sha256 = "sha256-HeYQdiKwvi9tdyYfl6K91AKR27aCqsfc4IYy0XH3oTQ=";
   };
 
   nativeBuildInputs = [
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sphinx
   ];
 
-  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 zlib zstd ] ++ lib.optionals stdenv.hostPlatform.isGnu [ udev ];
+  buildInputs = [ acl attr e2fsprogs libuuid lzo python3 udev zlib zstd ];
 
   # gcc bug with -O1 on ARM with gcc 4.8
   # This should be fine on all platforms so apply universally
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     install -v -m 444 -D btrfs-completion $out/share/bash-completion/completions/btrfs
   '';
 
-  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace --disable-libudev";
+  configureFlags = lib.optional stdenv.hostPlatform.isMusl "--disable-backtrace";
 
-  makeFlags = lib.optionals stdenv.hostPlatform.isGnu [ "udevruledir=$(out)/lib/udev/rules.d" ];
+  makeFlags = [ "udevruledir=$(out)/lib/udev/rules.d" ];
 
   installFlags = [ "install_python" ];
 

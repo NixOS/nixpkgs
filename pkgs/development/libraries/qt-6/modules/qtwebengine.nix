@@ -64,6 +64,7 @@
 , lcms2
 , re2
 , libkrb5
+, xkeyboard_config
 , enableProprietaryCodecs ? true
 }:
 
@@ -127,6 +128,13 @@ qtModule rec {
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
+
+    substituteInPlace src/3rdparty/chromium/ui/events/ozone/layout/xkb/xkb_keyboard_layout_engine.cc \
+      --replace "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
+
+    substituteInPlace src/core/web_engine_library_info.cpp \
+      --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
+      --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\""
   '';
 
   cmakeFlags = [

@@ -37,6 +37,8 @@ buildPythonPackage rec {
       --replace "--cov --cov-report term-missing " ""
     substituteInPlace setup.py \
       --replace '"pytest-runner"' ""
+    substituteInPlace requirements.txt \
+      --replace "pysnmplib==5.0.10" "pysnmplib>=5.0.10"
   '';
 
   pythonImportsCheck = [

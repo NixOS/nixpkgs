@@ -1,12 +1,12 @@
 { lib
 , buildPythonPackage
 , cmake
-, fetchPypi
+, fetchFromGitHub
 , isPy3k
-, pytest
-, pytest-pylint
+, pytestCheckHook
 , nbconvert
 , joblib
+, jupyter
 , jupyter-client
 , numpy
 , scipy
@@ -24,15 +24,17 @@ buildPythonPackage rec {
   disabled = !isPy3k;
   format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-sGdOuCnSMpBDP3GNI2ASK+gEsXDMyAetnZqNHBOYVTM=";
+  src = fetchFromGitHub {
+    owner = "KaveIO";
+    repo = "PhiK";
+    rev = "v${version}";
+    hash = "sha256-nr3804MLIBPFw/PlJ9B8xKFFGI5LDp8m2gLtJB7YcEE=";
   };
 
   checkInputs = [
-    pytest
-    pytest-pylint
+    pytestCheckHook
     nbconvert
+    jupyter
     jupyter-client
   ];
 
@@ -55,16 +57,22 @@ buildPythonPackage rec {
     scikit-build
   ];
 
-  pythonImportCheck = [ "phik" ];
+  pythonImportsCheck = [ "phik" ];
 
   postInstall = ''
     rm -r $out/bin
+  '';
+
+  preCheck = ''
+    # import from $out
+    rm -r phik
   '';
 
   meta = with lib; {
     description = "Phi_K correlation analyzer library";
     longDescription = "Phi_K is a new and practical correlation coefficient based on several refinements to Pearson’s hypothesis test of independence of two variables.";
     homepage = "https://phik.readthedocs.io/en/latest/";
+    changelog = "https://github.com/KaveIO/PhiK/blob/${src.rev}/CHANGES.rst";
     maintainers = with maintainers; [ melsigl ];
     license = licenses.asl20;
   };
