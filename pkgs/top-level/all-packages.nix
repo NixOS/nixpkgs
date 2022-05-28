@@ -13503,6 +13503,7 @@ with pkgs;
   mint = callPackage ../development/compilers/mint { };
 
   mitscheme = callPackage ../development/compilers/mit-scheme {
+    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
     texLive = texlive.combine { inherit (texlive) scheme-small epsf texinfo; };
   };
 
