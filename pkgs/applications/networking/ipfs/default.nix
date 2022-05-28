@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchurl, nixosTests }:
+{ lib, buildGoModule, fetchurl, nixosTests, openssl, pkg-config }:
 
 buildGoModule rec {
   pname = "ipfs";
@@ -24,6 +24,10 @@ buildGoModule rec {
   sourceRoot = ".";
 
   subPackages = [ "cmd/ipfs" ];
+
+  buildInputs = [ openssl ];
+  nativeBuildInputs = [ pkg-config ];
+  tags = [ "openssl" ];
 
   passthru.tests.ipfs = nixosTests.ipfs;
 
