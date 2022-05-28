@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, Libsystem, coreutils }:
+{ lib, stdenv, fetchurl, Libsystem, installShellFiles, coreutils }:
 let
   version = "110.99.2";
   baseurl = "http://smlnj.cs.uchicago.edu/dist/working/${version}";
@@ -56,7 +56,8 @@ in stdenv.mkDerivation {
     sed -i 's|XCODE_SDK_PATH=.*|XCODE_SDK_PATH=${Libsystem}|; s|XCODE_DEV_PATH=.*|XCODE_DEV_PATH=${Libsystem}|; s|INCLFILE=.*|INCLFILE=${Libsystem}/include/unistd.h|' base/runtime/config/gen-posix-names.sh
   '';
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ coreutils ];
+  nativeBuildInputs = [ installShellFiles ]
+    ++ lib.optionals stdenv.isLinux [ coreutils ];
 
   unpackPhase = ''
     for s in $sources; do
@@ -64,6 +65,7 @@ in stdenv.mkDerivation {
       cp $s ''${b#*-}
     done
     unpackFile config.tgz
+    unpackFile doc.tgz
     mkdir base
     ./config/unpack $TMP runtime
   '';
@@ -75,6 +77,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -pv $out
     cp -rv bin lib $out
+    installManPage doc/man/man*/*
 
     cd $out/bin
     for i in *; do
