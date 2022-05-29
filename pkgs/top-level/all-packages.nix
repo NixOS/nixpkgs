@@ -24662,6 +24662,8 @@ with pkgs;
 
   office-code-pro = callPackage ../data/fonts/office-code-pro { };
 
+  oh-my-posh = callPackage ../tools/misc/oh-my-posh { };
+
   oldstandard = callPackage ../data/fonts/oldstandard { };
 
   oldsindhi = callPackage ../data/fonts/oldsindhi { };
