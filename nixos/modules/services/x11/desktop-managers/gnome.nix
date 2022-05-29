@@ -189,7 +189,6 @@ in
 
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
-        apply = list: list ++ [ pkgs.gnome.gnome-shell pkgs.gnome.gnome-shell-extensions ];
       };
 
       favoriteAppsOverride = mkOption {
@@ -404,6 +403,11 @@ in
     })
 
     (mkIf serviceCfg.core-shell.enable {
+      services.xserver.desktopManager.gnome.sessionPath = [
+        pkgs.gnome.gnome-shell
+        pkgs.gnome.gnome-shell-extensions
+      ];
+
       services.colord.enable = mkDefault true;
       services.gnome.chrome-gnome-shell.enable = mkDefault true;
       services.gnome.glib-networking.enable = true;
