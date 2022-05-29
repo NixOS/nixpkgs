@@ -12496,6 +12496,8 @@ with pkgs;
 
   fennel = callPackage ../development/compilers/fennel { };
 
+  firrtl = callPackage ../development/compilers/firrtl { };
+
   flasm = callPackage ../development/compilers/flasm { };
 
   flyctl = callPackage ../development/web/flyctl { };
