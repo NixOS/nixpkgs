@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pqrs";
@@ -14,6 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0mjwazsnryhlfyzcik8052q0imz5f104x86k6b5rncbbbjaj17q1";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "CLI tool to inspect Parquet files";
     homepage = "https://github.com/manojkarthick/pqrs";
     license = with licenses; [ mit /* or */ asl20 ];
