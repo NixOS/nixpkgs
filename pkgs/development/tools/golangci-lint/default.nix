@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
+{ stdenv, buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
 buildGoModule rec {
   pname = "golangci-lint";
@@ -31,6 +31,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Fast linters Runner for Go";
     homepage = "https://golangci-lint.run/";
     license = licenses.gpl3Plus;

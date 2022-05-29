@@ -106,6 +106,7 @@ in stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
     homepage = "https://gluonhq.com/products/scene-builder/";
     license = licenses.bsd3;
