@@ -33,8 +33,6 @@ lib.makeScope newScope (self: with self; {
 
   mopidy-soundcloud = callPackage ./soundcloud.nix { };
 
-  mopidy-spotify = callPackage ./spotify.nix { };
-
   mopidy-tunein = callPackage ./tunein.nix { };
 
   mopidy-youtube = callPackage ./youtube.nix { };

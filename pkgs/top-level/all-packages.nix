@@ -28151,7 +28151,6 @@ with pkgs;
     mopidy-scrobbler
     mopidy-somafm
     mopidy-soundcloud
-    mopidy-spotify
     mopidy-subidy
     mopidy-tunein
     mopidy-youtube
