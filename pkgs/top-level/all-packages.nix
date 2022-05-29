@@ -16888,7 +16888,7 @@ with pkgs;
 
   uci = callPackage ../development/libraries/uci { };
 
-  uri = callPackage ../development/libraries/uri { };
+  uri = callPackage ../development/libraries/uri { stdenv = gcc10StdenvCompat; };
 
   cppcms = callPackage ../development/libraries/cppcms { };
 
