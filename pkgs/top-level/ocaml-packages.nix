@@ -1322,8 +1322,6 @@ let
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
-    sedlex_2 = callPackage ../development/ocaml-modules/sedlex/2.nix { };
-
     semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
     sha = callPackage ../development/ocaml-modules/sha { };

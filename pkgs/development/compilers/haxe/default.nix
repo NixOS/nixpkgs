@@ -6,7 +6,7 @@ let
     then with ocaml-ng.ocamlPackages_4_12; [
       ocaml
       findlib
-      sedlex_2
+      sedlex
       xml-light
       ptmap
       camlp5
@@ -18,7 +18,7 @@ let
     then with ocaml-ng.ocamlPackages_4_10; [
       ocaml
       findlib
-      sedlex_2
+      sedlex
       xml-light
       ptmap
       camlp5

@@ -3,6 +3,7 @@
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
+, langD ? false
 , langGo ? false
 , reproducibleBuild ? true
 , profiledCompiler ? false
@@ -41,6 +42,10 @@ assert stdenv.hostPlatform.isDarwin -> gnused != null;
 assert langGo -> langCC;
 assert langAda -> gnatboot != null;
 
+# TODO: fixup D bootstapping, probably by using gdc11 (and maybe other changes).
+#   error: GDC is required to build d
+assert !langD;
+
 # threadsCross is just for MinGW
 assert threadsCross != null -> stdenv.targetPlatform.isWindows;
 
@@ -68,6 +73,7 @@ let majorVersion = "12";
         url = "https://github.com/fxcoudert/gcc/compare/releases/gcc-11.1.0...gcc-11.1.0-arm-20210504.diff";
         sha256 = "sha256-JqCGJAfbOxSmkNyq49aFHteK/RFsCSLQrL9mzUCnaD0=";
       })
+      ++ optional langD ../libphobos.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch;
@@ -208,6 +214,7 @@ stdenv.mkDerivation ({
       enableShared
 
       langC
+      langD
       langCC
       langFortran
       langAda
@@ -248,14 +255,14 @@ stdenv.mkDerivation ({
 
   inherit
     (import ../common/extra-target-flags.nix {
-      inherit lib stdenv crossStageStatic libcCross threadsCross;
+      inherit lib stdenv crossStageStatic langD libcCross threadsCross;
     })
     EXTRA_FLAGS_FOR_TARGET
     EXTRA_LDFLAGS_FOR_TARGET
     ;
 
   passthru = {
-    inherit langC langCC langObjC langObjCpp langAda langFortran langGo version;
+    inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
   };
 
