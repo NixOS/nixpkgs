@@ -389,7 +389,7 @@ with pkgs;
 
   gpick = callPackage ../tools/misc/gpick { };
 
-  hobbes = callPackage ../development/tools/hobbes { };
+  hobbes = callPackage ../development/tools/hobbes { stdenv = gcc10StdenvCompat; };
 
   html5validator = python3Packages.callPackage ../applications/misc/html5validator { };
 
