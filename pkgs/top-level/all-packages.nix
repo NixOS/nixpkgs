@@ -1132,6 +1132,10 @@ with pkgs;
 
   gfshare = callPackage ../tools/security/gfshare { };
 
+  gh-cal = callPackage ../tools/misc/gh-cal {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   glooctl = callPackage ../applications/networking/cluster/glooctl { };
 
   gobgp = callPackage ../tools/networking/gobgp { };
