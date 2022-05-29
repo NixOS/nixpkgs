@@ -367,8 +367,9 @@ in
       services.upower.enable = config.powerManagement.enable;
       services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
 
-      # Explicitly enabled since GNOME will be severely broken without it.
+      # Explicitly enabled since GNOME will be severely broken without these.
       xdg.mime.enable = true;
+      xdg.icons.enable = true;
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
@@ -471,7 +472,6 @@ in
         pkgs.glib # for gsettings
         pkgs.gnome-menus
         pkgs.gtk3.out # for gtk-launch
-        pkgs.hicolor-icon-theme
         pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
       ];
     })
