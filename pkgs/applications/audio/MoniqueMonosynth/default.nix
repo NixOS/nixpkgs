@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , cmake
+, ninja
 , pkg-config
 , alsa-lib
 , curl
@@ -39,7 +40,7 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
 
   buildInputs = [
     alsa-lib
@@ -67,18 +68,16 @@ stdenv.mkDerivation {
   patches = [ ./no-lto-no-werror.patch ];
 
   # JUCE dlopen's these at runtime, crashes without them
-  NIX_LDFLAGS = (toString [
+  NIX_LDFLAGS = [
     "-lX11"
     "-lXext"
     "-lXcursor"
     "-lXinerama"
     "-lXrandr"
-  ]);
+  ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/lib/vst3
-    mkdir -p $out/lib/lv2
+    mkdir -p $out/bin $out/lib/vst3 $out/lib/lv2
 
     cp -r MoniqueMonosynth_artefacts/Release/LV2/MoniqueMonosynth.lv2 $out/lib/lv2
     cp -r MoniqueMonosynth_artefacts/Release/VST3/MoniqueMonosynth.vst3 $out/lib/vst3
@@ -89,7 +88,6 @@ stdenv.mkDerivation {
     description = "A monophonic synth from Thomas Arndt";
     homepage = "https://github.com/surge-synthesizer/monique-monosynth";
     license = with licenses; [ gpl3Only mit ];
-    # Assumed to be the same as for Surge-XT
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ minijackson ];
   };
