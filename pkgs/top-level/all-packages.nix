@@ -1628,7 +1628,7 @@ with pkgs;
 
   writefreely = callPackage ../applications/misc/writefreely { };
 
-  iqueue = callPackage ../development/libraries/iqueue { };
+  iqueue = callPackage ../development/libraries/iqueue { stdenv = gcc10StdenvCompat; };
 
   lifecycled = callPackage ../tools/misc/lifecycled { };
 
