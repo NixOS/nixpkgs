@@ -2242,7 +2242,7 @@ with pkgs;
 
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
-  gammy = qt5.callPackage ../tools/misc/gammy { };
+  gammy = qt5.callPackage ../tools/misc/gammy { stdenv = gcc10StdenvCompat; };
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
 
