@@ -1,7 +1,30 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf, gettext
-, which, xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp
-, libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig, pango
-, gitUpdater }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, expat
+, fontconfig
+, freetype
+, gettext
+, libX11
+, libXau
+, libXdmcp
+, libXext
+, libXft
+, libXinerama
+, libXmu
+, libXpm
+, libjpeg
+, libpng
+, librsvg
+, pango
+, pkg-config
+, which
+, xorg
+, xorgproto
+, gitUpdater
+}:
 
 stdenv.mkDerivation rec {
   pname = "jwm";
@@ -14,26 +37,32 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-rvuz2Pmon3XBqRMgDwZNrQlWDyLNSK30JPmmQTlN+Rs=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext which automake autoconf ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    gettext
+    pkg-config
+    which
+  ];
 
   buildInputs = [
+    expat
+    fontconfig
+    freetype
     libX11
-    libXext
-    libXinerama
-    libXpm
-    libXft
-    xorg.libXrender
     libXau
     libXdmcp
+    libXext
+    libXft
+    libXinerama
     libXmu
-    libpng
+    libXpm
     libjpeg
-    expat
-    xorgproto
+    libpng
     librsvg
-    freetype
-    fontconfig
     pango
+    xorg.libXrender
+    xorgproto
   ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
