@@ -28,6 +28,9 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # for mimirtool
+    environment.systemPackages = [ pkgs.mimir ];
+
     assertions = [{
       assertion = (
         (cfg.configuration == {} -> cfg.configFile != null) &&
@@ -56,6 +59,7 @@ in {
         ProtectSystem = "full";
         DevicePolicy = "closed";
         NoNewPrivileges = true;
+        WorkingDirectory = "/var/lib/mimir";
         StateDirectory = "mimir";
       };
     };
