@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Python interface to Escea fireplaces";
     homepage = "https://github.com/lazdavila/pescea";
     license = licenses.gpl3Plus;

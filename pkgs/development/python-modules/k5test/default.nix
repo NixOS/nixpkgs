@@ -36,7 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "k5test" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Library for setting up self-contained Kerberos 5 environment";
     homepage = "https://github.com/pythongssapi/k5test";
     license = licenses.mit;

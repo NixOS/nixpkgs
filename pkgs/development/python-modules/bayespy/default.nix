@@ -23,7 +23,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "http://www.bayespy.org";
     description = "Variational Bayesian inference tools for Python";
     license = licenses.mit;

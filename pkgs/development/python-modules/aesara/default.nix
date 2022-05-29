@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
@@ -56,6 +57,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aesara" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     homepage = "https://github.com/aesara-devs/aesara";
     changelog = "https://github.com/aesara-devs/aesara/releases";

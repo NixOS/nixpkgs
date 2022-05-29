@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = ["pulumi_aws"];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Pulumi python amazon web services provider";
     homepage = "https://github.com/pulumi/pulumi-aws";
     license = licenses.asl20;

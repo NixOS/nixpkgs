@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals isPy27 [ enum34 ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Library for adding Swagger support to clients and servers";
     homepage = "https://github.com/Yelp/bravado-core";
     license = licenses.bsd3;
