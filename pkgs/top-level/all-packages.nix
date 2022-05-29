@@ -6651,7 +6651,7 @@ with pkgs;
 
   robodoc = callPackage ../tools/text/robodoc { };
 
-  ucg = callPackage ../tools/text/ucg { };
+  ucg = callPackage ../tools/text/ucg { stdenv = gcc10StdenvCompat; };
 
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
