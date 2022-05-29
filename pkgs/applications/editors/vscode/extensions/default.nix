@@ -611,8 +611,8 @@ let
         mktplcRef = {
           name = "vscode-deno";
           publisher = "denoland";
-          version = "3.9.1";
-          sha256 = "sha256-OuGTjmJQFAWrYp7YnFpyo0NnnCcXYF8itYjGKMa3FCs=";
+          version = "3.12.0";
+          sha256 = "sha256-ZsHCWQtEQKkdZ3uk072ZBfHFRzk4Owf4h7+szHLgIeo=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/denoland.vscode-deno/changelog";
