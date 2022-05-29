@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "1.2.0";
+  version = "1.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
-    rev = version;
-    hash = "sha256-hKOZ5pTDwhM0lOXoatXXVvEVxiTfxIpBRe3fFcUfzwE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-9SC4q2iZN0/fEYS4Ii7Ndcx5UpLryGCe9ytIVDdjg0M=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace '"pytest-runner"' ""
     substituteInPlace requirements.txt \
-      --replace "pysnmplib==5.0.10" "pysnmplib>=5.0.10"
+      --replace "pysnmplib==" "pysnmplib>="
   '';
 
   pythonImportsCheck = [
