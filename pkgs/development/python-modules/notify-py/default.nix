@@ -54,11 +54,14 @@ buildPythonPackage rec {
     dbus
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   checkPhase = if stdenv.isDarwin then ''
     # Tests search for "afplay" binary which is built in to macOS and not available in nixpkgs
     mkdir $TMP/bin
     ln -s ${coreutils}/bin/true $TMP/bin/afplay
-    PATH="$TMP/bin:$PATH" pytest
+    ln -s ${coreutils}/bin/true $TMP/bin/osascript
+    PATH="$TMP/bin:$PATH" pytest -vvv -k "not test_non_blocking_notification"
   '' else if stdenv.isLinux then ''
     dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
