@@ -1538,8 +1538,8 @@ let
         mktplcRef = {
           name = "pyright";
           publisher = "ms-pyright";
-          version = "1.1.222";
-          sha256 = "sha256-QMX/SawDEnG1xVrug8mvN7EvRrRDkJffcXBUFpQi1XE=";
+          version = "1.1.250";
+          sha256 = "sha256-UHSY32F5wzqAHmmBWyCUkLL0z+LMWDwn/YvUOF3q87I=";
         };
         meta = with lib; {
           description = "VS Code static type checking for Python";
