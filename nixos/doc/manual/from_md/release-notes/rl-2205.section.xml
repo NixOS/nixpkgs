@@ -714,6 +714,13 @@
           <literal>services.openldap.settings</literal>, which
           represents your <literal>cn=config</literal>.
         </para>
+        <para>
+          Additionally with 2.5 the argon2 module was included in the
+          standard distrubtion and renamed from
+          <literal>pw-argon2</literal> to <literal>argon2</literal>.
+          Remember to update your <literal>olcModuleLoad</literal> entry
+          in <literal>cn=config</literal>.
+        </para>
       </listitem>
       <listitem>
         <para>
