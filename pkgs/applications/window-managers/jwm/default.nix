@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, gettext
+{ lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf, gettext
 , which, xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp
-, libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig }:
+, libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig, pango }:
 
 stdenv.mkDerivation rec {
   pname = "jwm";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
     rev = "v${version}";
-    sha256 = "sha256-7CEL2ddlABM7SYjMVUs3pu0O+2cVsz04slsdUIbgZuM=";
+    sha256 = "sha256-rvuz2Pmon3XBqRMgDwZNrQlWDyLNSK30JPmmQTlN+Rs=";
   };
 
-  nativeBuildInputs = [ pkg-config gettext which autoreconfHook ];
+  nativeBuildInputs = [ pkg-config gettext which automake autoconf ];
 
   buildInputs = [
     libX11
@@ -32,7 +32,10 @@ stdenv.mkDerivation rec {
     librsvg
     freetype
     fontconfig
+    pango
   ];
+
+  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   enableParallelBuilding = true;
 
