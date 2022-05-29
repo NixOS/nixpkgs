@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     # universal-ctags is preferred over emacs's ctags
     priority = 1;
+    mainProgram = "ctags";
     maintainers = [ maintainers.mimame ];
   };
 }
