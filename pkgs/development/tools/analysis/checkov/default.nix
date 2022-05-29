@@ -32,13 +32,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.1161";
+  version = "2.0.1162";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-EJpmJ6/Q5j8olY0hD2wX2zeF0cTwFQuaMsno2zXRfvI=";
+    hash = "sha256-WE0pND22DucKBSY4rtZfPH9AKgBslCoUOj45Rkd9qBc=";
   };
 
   nativeBuildInputs = with py.pkgs; [
@@ -63,6 +64,7 @@ buildPythonApplication rec {
     docker
     dockerfile-parse
     dpath
+    flake8
     GitPython
     jmespath
     jsonpath-ng
@@ -95,7 +97,6 @@ buildPythonApplication rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "bc-python-hcl2==" "bc-python-hcl2>=" \
-      --replace "cyclonedx-python-lib>=0.11.0,<1.0.0" "cyclonedx-python-lib>=0.11.0" \
       --replace "prettytable>=3.0.0" "prettytable" \
       --replace "pycep-parser==0.3.6" "pycep-parser"
   '';

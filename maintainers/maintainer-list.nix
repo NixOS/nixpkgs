@@ -3765,6 +3765,13 @@
     githubId = 11006031;
     name = "Leo Maroni";
   };
+  emmabastas = {
+    email = "emma.bastas@protonmail.com";
+    matrix = "@emmabastas:matrix.org";
+    github = "emmabastas";
+    githubId = 22533224;
+    name = "Emma Bastås";
+  };
   emmanuelrosa = {
     email = "emmanuelrosa@protonmail.com";
     matrix = "@emmanuelrosa:matrix.org";
