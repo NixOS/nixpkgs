@@ -9,7 +9,7 @@
 
 buildPythonApplication rec {
   pname = "protonvpn-cli";
-  version = "3.11.1";
+  version = "3.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -17,8 +17,8 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "protonvpn";
     repo = "linux-cli";
-    rev = version;
-    sha256 = "sha256-u+POtUz7NoGS23aOmvDCZPUp2HW1xXGtfbZR88cWCBc=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-z0ewAqf8hjyExqBN8KBsDwJ+SA/pIBYZhKtXF9M65HE=";
   };
 
   propagatedBuildInputs = [
