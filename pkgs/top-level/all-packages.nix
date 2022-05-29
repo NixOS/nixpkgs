@@ -13478,9 +13478,8 @@ with pkgs;
 
   mint = callPackage ../development/compilers/mint { };
 
-  mitscheme = callPackage ../development/compilers/mit-scheme {
-    texLive = texlive.combine { inherit (texlive) scheme-small epsf texinfo; };
-  };
+  mitscheme = callPackage ../development/compilers/mit-scheme
+    { stdenv = gcc10StdenvCompat; texLive = texlive.combine { inherit (texlive) scheme-small epsf texinfo; }; };
 
   mitschemeX11 = mitscheme.override {
     enableX11 = true;
