@@ -173,6 +173,7 @@ mapAliases ({
   citra = citra-nightly; # added 2022-05-17
   ckb = throw "'ckb' has been renamed to/replaced by 'ckb-next'"; # Converted to throw 2022-02-22
   inherit (libsForQt5.mauiPackages) clip; # added 2022-05-17
+  convoy = throw "convoy has been abandoned by upstream. See https://github.com/rancher/convoy/issues/225"; # Added 2022-05-29
   cpp-ipfs-api = cpp-ipfs-http-client; # Project has been renamed. Added 2022-05-15
   creddump = throw "creddump has been removed from nixpkgs as the upstream has abandoned the project"; # Added 2022-01-01
 

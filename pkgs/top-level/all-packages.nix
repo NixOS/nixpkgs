@@ -4946,8 +4946,6 @@ with pkgs;
 
   convmv = callPackage ../tools/misc/convmv { };
 
-  convoy = callPackage ../tools/filesystems/convoy { };
-
   cpcfs = callPackage ../tools/filesystems/cpcfs { };
 
   coreutils =  callPackage ../tools/misc/coreutils { };
