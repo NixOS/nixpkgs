@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Open source bibliography reference manager";
     homepage = "https://www.jabref.org";
     license = licenses.gpl2;
