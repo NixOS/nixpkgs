@@ -70,6 +70,7 @@ pythonPackages.buildPythonApplication rec {
 
   pythonPath = with pythonPackages; [
     b2sdk
+    boto
     boto3
     cffi
     cryptography
