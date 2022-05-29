@@ -1227,6 +1227,8 @@ in {
 
   bids-validator = callPackage ../development/python-modules/bids-validator { };
 
+  biliass = callPackage ../development/python-modules/biliass { };
+
   billiard = callPackage ../development/python-modules/billiard { };
 
   bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
@@ -5326,7 +5328,9 @@ in {
 
   minexr = callPackage ../development/python-modules/minexr { };
 
-  miniaudio = callPackage ../development/python-modules/miniaudio { };
+  miniaudio = callPackage ../development/python-modules/miniaudio {
+    inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox CoreAudio;
+  };
 
   minidb = callPackage ../development/python-modules/minidb { };
 
@@ -11374,6 +11378,8 @@ in {
   ytmusicapi = callPackage ../development/python-modules/ytmusicapi { };
 
   yubico-client = callPackage ../development/python-modules/yubico-client { };
+
+  yutto = callPackage ../tools/misc/yutto { };
 
   z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
 

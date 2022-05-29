@@ -2392,6 +2392,8 @@ with pkgs;
 
   pass = callPackage ../tools/security/pass { };
 
+  passage = callPackage ../tools/security/passage { };
+
   passphrase2pgp = callPackage ../tools/security/passphrase2pgp { };
 
   pass-git-helper = python3Packages.callPackage ../applications/version-management/git-and-tools/pass-git-helper { };
@@ -2670,6 +2672,8 @@ with pkgs;
   bibtex2html = callPackage ../tools/misc/bibtex2html { };
 
   bicon = callPackage ../applications/misc/bicon { };
+
+  biliass = with python3.pkgs; toPythonApplication biliass;
 
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
@@ -30974,6 +30978,8 @@ with pkgs;
   ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
 
   ytmdl = callPackage ../tools/misc/ytmdl { };
+
+  yutto = with python3.pkgs; toPythonApplication yutto;
 
   yuview = libsForQt5.yuview;
 
