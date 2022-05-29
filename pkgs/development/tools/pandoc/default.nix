@@ -1,4 +1,4 @@
-{ haskellPackages, fetchpatch, haskell, removeReferencesTo }:
+{ stdenv, lib, haskellPackages, fetchpatch, haskell, removeReferencesTo }:
 
 let
   static = haskell.lib.compose.justStaticExecutables haskellPackages.pandoc;
@@ -13,6 +13,9 @@ in
       remove-references-to \
         -t ${haskellPackages.pandoc-types} \
         $out/bin/pandoc
+    '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+      mkdir -p $out/share/bash-completion/completions
+      $out/bin/pandoc --bash-completion > $out/share/bash-completion/completions/pandoc
     '';
   }) static).overrideAttrs (drv: {
     # These libraries are still referenced, because they generate
