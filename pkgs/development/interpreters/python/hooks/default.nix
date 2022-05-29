@@ -93,7 +93,7 @@ in {
     makePythonHook {
       name = "python-imports-check-hook.sh";
       substitutions = {
-        inherit pythonCheckInterpreter;
+        inherit pythonCheckInterpreter pythonSitePackages;
       };
     } ./python-imports-check-hook.sh) {};
 
