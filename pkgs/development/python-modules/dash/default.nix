@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , plotly
@@ -51,6 +52,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dash" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = licenses.mit;

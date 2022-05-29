@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , buildPythonPackage
 , pkgconfig
@@ -53,6 +54,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A Python interface for fplll";
     changelog = "https://github.com/fplll/fpylll/releases/tag/${version}";
     homepage = "https://github.com/fplll/fpylll";

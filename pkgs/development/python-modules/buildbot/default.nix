@@ -107,6 +107,7 @@ let
     };
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       homepage = "https://buildbot.net/";
       description = "An open-source continuous integration framework for automating software build, test, and release processes";
       maintainers = with maintainers; [ ryansydnor lopsided98 ];

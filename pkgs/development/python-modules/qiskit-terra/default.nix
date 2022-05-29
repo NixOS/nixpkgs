@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
@@ -192,6 +193,7 @@ buildPythonPackage rec {
 
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Provides the foundations for Qiskit.";
     longDescription = ''
       Allows the user to write quantum circuits easily, and takes care of the constraints of real hardware.
