@@ -453,7 +453,6 @@ broken-packages:
   - botpp
   - bottom
   - boundingboxes
-  - bower-json
   - bowntz
   - bpath
   - BPS
@@ -1552,7 +1551,6 @@ broken-packages:
   - fresh
   - friday-devil
   - friday-scale-dct
-  - friendly
   - frown
   - frp-arduino
   - frpnow
@@ -4903,6 +4901,7 @@ broken-packages:
   - stripeapi
   - stripe-core
   - stripe-servant
+  - strongweak
   - structural-traversal
   - structures
   - stt

@@ -93,6 +93,8 @@ let
 
     brisk-reconciler = callPackage ../development/ocaml-modules/brisk-reconciler { };
 
+    bwd = callPackage ../development/ocaml-modules/bwd { };
+
     bz2 = callPackage ../development/ocaml-modules/bz2 { };
 
     ca-certs = callPackage ../development/ocaml-modules/ca-certs { };
@@ -1454,6 +1456,8 @@ let
     yojson = callPackage ../development/ocaml-modules/yojson { };
 
     yuscii = callPackage ../development/ocaml-modules/yuscii { };
+
+    yuujinchou = callPackage ../development/ocaml-modules/yuujinchou { };
 
     z3 = callPackage ../development/ocaml-modules/z3 {
       inherit (pkgs) z3;

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "9.0.0";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "r-darwish";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-D3yd5Xc+7VNBrRkkKW7BGxEXcZHmmESy2YOEKBf/k9M=";
+    sha256 = "sha256-9zP+rWhaK4fC2Qhd0oq9WVvCkvryooYo09k7016Rbxw=";
   };
 
-  cargoSha256 = "sha256-g3Efw8HQ/fvrACyM0sW0bNAVQDdGPLnARe8Uug3szj0=";
+  cargoSha256 = "sha256-otn0XvZ0wufD+4mCGSM0hevKM+wWSvFVCKtTu/5m1uA=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ Cocoa Foundation ];
 
