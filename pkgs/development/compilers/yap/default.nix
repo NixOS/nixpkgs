@@ -20,11 +20,12 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fpermissive -fcommon";
 
   meta = {
+    # the linux 32 bit build fails.
+    broken = (stdenv.isLinux && stdenv.isAarch64) || !stdenv.is64bit;
     homepage = "http://www.dcc.fc.up.pt/~vsc/Yap/";
     description = "A ISO-compatible high-performance Prolog compiler";
     license = lib.licenses.artistic2;
 
     platforms = lib.platforms.linux;
-    broken = !stdenv.is64bit;   # the linux 32 bit build fails.
   };
 }
