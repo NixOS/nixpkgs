@@ -100,9 +100,9 @@ self: super: {
       self.data-default
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
-  ghc-lib = self.ghc-lib_9_2_2_20220307;
-  ghc-lib-parser = self.ghc-lib-parser_9_2_2_20220307;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_3;
+  ghc-lib = self.ghc-lib_9_2_3_20220527;
+  ghc-lib-parser = self.ghc-lib-parser_9_2_3_20220527;
+  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_2;
   hashable-time = doJailbreak super.hashable-time;
