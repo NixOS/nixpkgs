@@ -1227,6 +1227,8 @@ in {
 
   bids-validator = callPackage ../development/python-modules/bids-validator { };
 
+  biliass = callPackage ../development/python-modules/biliass { };
+
   billiard = callPackage ../development/python-modules/billiard { };
 
   bimmer-connected = callPackage ../development/python-modules/bimmer-connected { };
@@ -11376,6 +11378,8 @@ in {
   ytmusicapi = callPackage ../development/python-modules/ytmusicapi { };
 
   yubico-client = callPackage ../development/python-modules/yubico-client { };
+
+  yutto = callPackage ../tools/misc/yutto { };
 
   z3c-checkversions = callPackage ../development/python-modules/z3c-checkversions { };
 
