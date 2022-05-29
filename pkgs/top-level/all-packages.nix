@@ -2671,6 +2671,8 @@ with pkgs;
 
   bicon = callPackage ../applications/misc/bicon { };
 
+  biliass = with python3.pkgs; toPythonApplication biliass;
+
   bindfs = callPackage ../tools/filesystems/bindfs { };
 
   binwalk = with python3Packages; toPythonApplication binwalk;
@@ -30976,6 +30978,8 @@ with pkgs;
   ytmdesktop = callPackage ../applications/audio/ytmdesktop { };
 
   ytmdl = callPackage ../tools/misc/ytmdl { };
+
+  yutto = with python3.pkgs; toPythonApplication yutto;
 
   yuview = libsForQt5.yuview;
 
