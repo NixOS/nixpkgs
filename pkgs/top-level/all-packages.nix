@@ -15920,6 +15920,8 @@ with pkgs;
     jre_headless = jre8_headless;
   };
 
+  nmrpflash = callPackage ../development/embedded/nmrpflash { };
+
   nwjs = callPackage ../development/tools/nwjs { };
 
   nwjs-sdk = callPackage ../development/tools/nwjs {
@@ -18447,8 +18449,8 @@ with pkgs;
   libdvdread = callPackage ../development/libraries/libdvdread { };
   libdvdread_4_9_9 = callPackage ../development/libraries/libdvdread/4.9.9.nix { };
 
-  inherit (callPackage ../development/libraries/libdwarf { })
-    libdwarf dwarfdump;
+  libdwarf = callPackage ../development/libraries/libdwarf { };
+  dwarfdump = libdwarf.bin;
   libdwarf_0_4 = callPackage ../development/libraries/libdwarf/0.4.nix { };
 
   libe57format = callPackage ../development/libraries/libe57format { };
@@ -22291,9 +22293,9 @@ with pkgs;
   mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
     inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
-    boost = boost173; # Configure checks for specific version.
-    protobuf = protobuf3_11;
-    icu =  icu67;
+    boost = boost177; # Configure checks for specific version.
+    protobuf = protobuf3_19;
+    icu = icu69;
   };
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
@@ -34253,11 +34255,11 @@ with pkgs;
     configuration:
       let
         c = import (path + "/nixos/lib/eval-config.nix") {
-              inherit (stdenv.hostPlatform) system;
               modules =
                 [(
                   { lib, ... }: {
                     config.nixpkgs.pkgs = lib.mkDefault pkgs;
+                    config.nixpkgs.localSystem = lib.mkDefault stdenv.hostPlatform;
                   }
                 )] ++ (
                   if builtins.isList configuration

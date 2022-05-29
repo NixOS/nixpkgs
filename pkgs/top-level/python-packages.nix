@@ -2135,6 +2135,10 @@ in {
 
   ddt = callPackage ../development/python-modules/ddt { };
 
+  deal = callPackage ../development/python-modules/deal { };
+
+  deal-solver = callPackage ../development/python-modules/deal-solver { };
+
   deap = callPackage ../development/python-modules/deap { };
 
   debian = callPackage ../development/python-modules/debian { };
@@ -2348,6 +2352,8 @@ in {
 
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
+  django-model-utils = callPackage ../development/python-modules/django-model-utils { };
+
   django-modelcluster = callPackage ../development/python-modules/django_modelcluster { };
 
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
@@ -2359,6 +2365,8 @@ in {
   django_nose = callPackage ../development/python-modules/django_nose { };
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
+
+  django-otp = callPackage ../development/python-modules/django-otp { };
 
   django-paintstore = callPackage ../development/python-modules/django-paintstore { };
 
@@ -2393,6 +2401,8 @@ in {
   djangorestframework-dataclasses = callPackage ../development/python-modules/djangorestframework-dataclasses { };
 
   djangorestframework-camel-case = callPackage ../development/python-modules/djangorestframework-camel-case { };
+
+  djangorestframework-guardian = callPackage ../development/python-modules/djangorestframework-guardian { };
 
   djangorestframework-recursive = callPackage ../development/python-modules/djangorestframework-recursive { };
 
@@ -2538,6 +2548,8 @@ in {
 
   dpath = callPackage ../development/python-modules/dpath { };
 
+  dpcontracts = callPackage ../development/python-modules/dpcontracts { };
+
   dpkt = callPackage ../development/python-modules/dpkt { };
 
   dragonfly = callPackage ../development/python-modules/dragonfly { };
@@ -2595,6 +2607,10 @@ in {
   duo-client = callPackage ../development/python-modules/duo-client { };
 
   durus = callPackage ../development/python-modules/durus {  };
+
+  dvclive = callPackage ../development/python-modules/dvclive {  };
+
+  dvc-render = callPackage ../development/python-modules/dvc-render {  };
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
 
@@ -4092,6 +4108,8 @@ in {
   ics = callPackage ../development/python-modules/ics { };
 
   idasen = callPackage ../development/python-modules/idasen { };
+
+  icontract = callPackage ../development/python-modules/icontract { };
 
   identify = callPackage ../development/python-modules/identify { };
 
@@ -6517,6 +6535,8 @@ in {
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 
+  pyschemes = callPackage ../development/python-modules/pyschemes { };
+
   pyshark = callPackage ../development/python-modules/pyshark { };
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
@@ -8292,6 +8312,8 @@ in {
   pytest-subtests = callPackage ../development/python-modules/pytest-subtests { };
 
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
+
+  pytest-test-utils = callPackage ../development/python-modules/pytest-test-utils { };
 
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
 
@@ -10823,6 +10845,8 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
 
+  vaa = callPackage ../development/python-modules/vaa { };
+
   validate-email = callPackage ../development/python-modules/validate-email { };
 
   validators = callPackage ../development/python-modules/validators { };
@@ -11016,6 +11040,8 @@ in {
   webapp2 = callPackage ../development/python-modules/webapp2 { };
 
   webassets = callPackage ../development/python-modules/webassets { };
+
+  webauthn = callPackage ../development/python-modules/webauthn { };
 
   web = callPackage ../development/python-modules/web { };
 

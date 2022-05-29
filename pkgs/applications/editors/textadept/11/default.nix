@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchurl, gtk2, glib, pkg-config, unzip, ncurses, zip }:
 
 stdenv.mkDerivation rec {
-  version = "11.1";
+  version = "11.3";
   pname = "textadept11";
 
   nativeBuildInputs = [ pkg-config unzip zip ];
@@ -9,12 +9,14 @@ stdenv.mkDerivation rec {
     gtk2 ncurses glib
   ];
 
+  enableParallelBuilding = true;
+
   src = fetchFromGitHub {
     name = "textadept11";
     owner = "orbitalquark";
     repo = "textadept";
-    rev = "1df99d561dd2055a01efa9183bb9e1b2ad43babc";
-    sha256 = "0g4bh5dp391vi32aa796vszpbxyl2dm5231v9dwc8l9v0b2786qn";
+    rev = "textadept_${version}";
+    sha256 = "sha256-C7J/Qr/58hLbyw39R+GU4wot1gbAXf51Cv6KGk3kg30=";
   };
 
   preConfigure =
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An extensible text editor based on Scintilla with Lua scripting. Version 11_beta";
+    description = "An extensible text editor based on Scintilla with Lua scripting.";
     homepage = "http://foicica.com/textadept";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin mirrexagon ];
