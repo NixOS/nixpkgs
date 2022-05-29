@@ -152,6 +152,7 @@ mapAliases ({
   tensorflow-tensorboard_2 = tensorflow-tensorboard; # added 2021-11-25
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
+  webapp2 = throw "webapp2 is unmaintained since 2012"; # added 2022-05-29
   websocket_client = websocket-client; # added 2021-06-15
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   zc-buildout221 = zc-buildout; # added 2021-07-21
