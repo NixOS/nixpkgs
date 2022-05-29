@@ -52,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "WRF postprocessing library for Python";
     homepage = "http://wrf-python.rtfd.org";
     license = licenses.asl20;

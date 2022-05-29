@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pkg-config, fuse3, trio, pytestCheckHook, pytest-trio, which }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pkg-config, fuse3, trio, pytestCheckHook, pytest-trio, which }:
 
 buildPythonPackage rec {
   pname = "pyfuse3";
@@ -26,6 +26,7 @@ buildPythonPackage rec {
   disabledTests = [ "test_listdir" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Python 3 bindings for libfuse 3 with async I/O support";
     homepage = "https://github.com/libfuse/pyfuse3";
     license = licenses.lgpl2Plus;
