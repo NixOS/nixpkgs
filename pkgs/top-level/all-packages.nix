@@ -32547,7 +32547,7 @@ with pkgs;
 
   ### DESKTOP ENVIRONMENTS
 
-  arcan = recurseIntoAttrs (callPackage ../desktops/arcan { });
+  arcanPackages = recurseIntoAttrs (callPackage ../desktops/arcan { });
 
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
 
