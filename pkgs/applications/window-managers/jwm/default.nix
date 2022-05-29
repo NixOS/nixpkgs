@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, automake, autoconf, gettext
 , which, xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp
-, libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig, pango }:
+, libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig, pango
+, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "jwm";
@@ -38,6 +39,11 @@ stdenv.mkDerivation rec {
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   enableParallelBuilding = true;
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    rev-prefix = "v";
+  };
 
   meta = {
     homepage = "http://joewing.net/projects/jwm/";
