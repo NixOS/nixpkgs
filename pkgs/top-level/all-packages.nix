@@ -8650,8 +8650,6 @@ with pkgs;
 
   ngrok-2 = callPackage ../tools/networking/ngrok-2 { };
 
-  ngrok-1 = callPackage ../tools/networking/ngrok-1 { };
-
   nifi = callPackage ../servers/web-apps/nifi { };
 
   nitter = callPackage ../servers/nitter { };
