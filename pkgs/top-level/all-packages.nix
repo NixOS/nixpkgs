@@ -29651,8 +29651,6 @@ with pkgs;
 
   spotify = callPackage ../applications/audio/spotify/wrapper.nix { };
 
-  libspotify = callPackage ../development/libraries/libspotify (config.libspotify or {});
-
   sourcetrail = let
     llvmPackages = llvmPackages_10;
   in libsForQt5.callPackage ../development/tools/sourcetrail {
