@@ -101,12 +101,11 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
     platforms = with platforms; unix;
-    # /nix/store/xxxxxxx-apple-framework-Security/Library/Frameworks/Security.framework/Headers/Authorization.h:192:7: error: variably modified 'bytes' at file scope
-    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "7" || lib.versions.major majorVersion == "8");
   };
 }
