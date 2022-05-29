@@ -20881,7 +20881,7 @@ with pkgs;
 
   tinyxml-2 = callPackage ../development/libraries/tinyxml-2 { };
 
-  tiscamera = callPackage ../os-specific/linux/tiscamera { };
+  tiscamera = callPackage ../os-specific/linux/tiscamera { stdenv = gcc10StdenvCompat; };
 
   tivodecode = callPackage ../applications/video/tivodecode { };
 
