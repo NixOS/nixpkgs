@@ -146,7 +146,7 @@ self: super: {
   shelly = doJailbreak super.shelly;
   splitmix = doJailbreak super.splitmix;
   tasty-hspec = doJailbreak super.tasty-hspec;
-  th-desugar = self.th-desugar_1_13;
+  th-desugar = self.th-desugar_1_13_1;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
