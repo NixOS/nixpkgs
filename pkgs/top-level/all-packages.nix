@@ -19748,7 +19748,7 @@ with pkgs;
 
   nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
 
-  non = callPackage ../applications/audio/non { };
+  non = callPackage ../applications/audio/non { stdenv = gcc10StdenvCompat; };
 
   ntl = callPackage ../development/libraries/ntl { };
 
