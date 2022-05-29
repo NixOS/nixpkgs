@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, makeWrapper, autoreconfHook
+{ stdenv, lib, fetchFromGitHub, makeWrapper, autoreconfHook
 , bash, fuse3, libmspack, openssl, pam, xercesc, icu, libdnet, procps, libtirpc, rpcsvc-proto
 , libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst
 , pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which
