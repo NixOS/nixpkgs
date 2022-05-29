@@ -21,7 +21,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = true;
     description = "Test data generator for Robot Framework";
     homepage = "https://github.com/mkorpela/RoboMachine";
     license = licenses.asl20;
