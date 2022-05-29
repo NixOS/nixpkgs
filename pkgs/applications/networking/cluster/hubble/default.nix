@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorSha256 = null;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Network, Service & Security Observability for Kubernetes using eBPF";
     license = licenses.asl20;
     homepage = "https://github.com/cilium/hubble/";
