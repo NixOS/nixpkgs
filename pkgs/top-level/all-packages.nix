@@ -34487,7 +34487,7 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  rss-glx = callPackage ../misc/screensavers/rss-glx { };
+  rss-glx = callPackage ../misc/screensavers/rss-glx { stdenv = gcc10StdenvCompat; };
 
   run-scaled = callPackage ../tools/X11/run-scaled { };
 
