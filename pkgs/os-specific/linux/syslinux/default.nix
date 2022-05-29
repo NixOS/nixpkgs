@@ -71,6 +71,12 @@ stdenv.mkDerivation {
 
   stripDebugList = [ "bin" "sbin" "share/syslinux/com32" ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: acpi/xsdt.o:/build/syslinux-b404870/com32/gpllib/../gplinclude/memory.h:40: multiple definition of
+  #     `e820_types'; memory.o:/build/syslinux-b404870/com32/gpllib/../gplinclude/memory.h:40: first defined here
+  NIX_CFLAGS_COMPILE="-fcommon";
+
   makeFlags = [
     "BINDIR=$(out)/bin"
     "SBINDIR=$(out)/sbin"
