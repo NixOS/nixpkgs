@@ -31868,7 +31868,7 @@ with pkgs;
 
   manaplus = callPackage ../games/manaplus { };
 
-  mars = callPackage ../games/mars { };
+  mars = callPackage ../games/mars { stdenv = gcc10StdenvCompat; };
 
   megaglest = callPackage ../games/megaglest { };
 
