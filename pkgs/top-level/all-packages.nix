@@ -33135,7 +33135,7 @@ with pkgs;
 
   ### SCIENCE/MOLECULAR-DYNAMICS
 
-  dl-poly-classic-mpi = callPackage ../applications/science/molecular-dynamics/dl-poly-classic { };
+  dl-poly-classic-mpi = callPackage ../applications/science/molecular-dynamics/dl-poly-classic { stdenv = gcc10StdenvCompat; };
 
   lammps = callPackage ../applications/science/molecular-dynamics/lammps {
     fftw = fftw;
