@@ -2135,6 +2135,10 @@ in {
 
   ddt = callPackage ../development/python-modules/ddt { };
 
+  deal = callPackage ../development/python-modules/deal { };
+
+  deal-solver = callPackage ../development/python-modules/deal-solver { };
+
   deap = callPackage ../development/python-modules/deap { };
 
   debian = callPackage ../development/python-modules/debian { };
@@ -2544,6 +2548,8 @@ in {
 
   dpath = callPackage ../development/python-modules/dpath { };
 
+  dpcontracts = callPackage ../development/python-modules/dpcontracts { };
+
   dpkt = callPackage ../development/python-modules/dpkt { };
 
   dragonfly = callPackage ../development/python-modules/dragonfly { };
@@ -2601,6 +2607,10 @@ in {
   duo-client = callPackage ../development/python-modules/duo-client { };
 
   durus = callPackage ../development/python-modules/durus {  };
+
+  dvclive = callPackage ../development/python-modules/dvclive {  };
+
+  dvc-render = callPackage ../development/python-modules/dvc-render {  };
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
 
@@ -4098,6 +4108,8 @@ in {
   ics = callPackage ../development/python-modules/ics { };
 
   idasen = callPackage ../development/python-modules/idasen { };
+
+  icontract = callPackage ../development/python-modules/icontract { };
 
   identify = callPackage ../development/python-modules/identify { };
 
@@ -6523,6 +6535,8 @@ in {
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 
+  pyschemes = callPackage ../development/python-modules/pyschemes { };
+
   pyshark = callPackage ../development/python-modules/pyshark { };
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
@@ -8298,6 +8312,8 @@ in {
   pytest-subtests = callPackage ../development/python-modules/pytest-subtests { };
 
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
+
+  pytest-test-utils = callPackage ../development/python-modules/pytest-test-utils { };
 
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
 
@@ -10828,6 +10844,8 @@ in {
   uvloop = callPackage ../development/python-modules/uvloop {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices CoreServices;
   };
+
+  vaa = callPackage ../development/python-modules/vaa { };
 
   validate-email = callPackage ../development/python-modules/validate-email { };
 
