@@ -2,16 +2,14 @@
 
 let
   pname = "chrysalis";
-  version = "0.9.4";
-in appimageTools.wrapAppImage rec {
+  version = "0.9.5";
+in
+appimageTools.wrapAppImage rec {
   name = "${pname}-${version}-binary";
 
-  src = appimageTools.extract {
-    inherit name;
-    src = fetchurl {
-      url = "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}.AppImage";
-      sha256 = "sha256-DAJGS1vKOOLMRgMczAiEfrT9awRNjz9r/MEr4ZFc3Bo=";
-    };
+  src = fetchurl {
+    url = "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}.AppImage";
+    sha256 = "35d3a740a5fb4583156d13117416329b68b8465142d11e432edd31073de34d0b";
   };
 
   multiPkgs = null;
@@ -39,4 +37,6 @@ in appimageTools.wrapAppImage rec {
     maintainers = with maintainers; [ aw ];
     platforms = [ "x86_64-linux" ];
   };
+
+
 }
