@@ -2841,6 +2841,8 @@ in {
 
   expects = callPackage ../development/python-modules/expects { };
 
+  expecttest = callPackage ../development/python-modules/expecttest { };
+
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
   explorerscript = callPackage ../development/python-modules/explorerscript { };
@@ -3285,6 +3287,8 @@ in {
   funcsigs = callPackage ../development/python-modules/funcsigs { };
 
   functools32 = callPackage ../development/python-modules/functools32 { };
+
+  functorch = callPackage ../development/python-modules/functorch { };
 
   funcy = callPackage ../development/python-modules/funcy { };
 
