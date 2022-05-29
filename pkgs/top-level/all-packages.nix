@@ -32859,7 +32859,7 @@ with pkgs;
 
   star = callPackage ../applications/science/biology/star { };
 
-  strelka = callPackage ../applications/science/biology/strelka { };
+  strelka = callPackage ../applications/science/biology/strelka { stdenv = gcc10StdenvCompat; };
 
   inherit (callPackages ../applications/science/biology/sumatools {})
       sumalibs
