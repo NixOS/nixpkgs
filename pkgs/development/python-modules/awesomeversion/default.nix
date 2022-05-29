@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "awesomeversion";
-  version = "22.4.1";
+  version = "22.5.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ludeeus";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gmmcTvP77jtj779j4mPGSG55ncQ+GHqQ/HP4q55GUyA=";
+    sha256 = "sha256-/La54qrejUhyoA1fRPEIItlKojTP5n5YmH+ovL6ASGk=";
   };
 
   nativeBuildInputs = [
