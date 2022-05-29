@@ -16295,7 +16295,7 @@ with pkgs;
 
   c3c = callPackage ../development/compilers/c3c { };
 
-  swfmill = callPackage ../tools/video/swfmill { };
+  swfmill = callPackage ../tools/video/swfmill { stdenv = gcc10StdenvCompat; };
 
   swftools = callPackage ../tools/video/swftools {
     stdenv = gccStdenv;
