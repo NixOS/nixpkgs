@@ -32256,6 +32256,10 @@ with pkgs;
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
 
+  srb2 = callPackage ../games/srb2 { };
+
+  srb2kart = callPackage ../games/srb2kart { };
+
   ssl-cert-check = callPackage ../tools/admin/ssl-cert-check { };
 
   stardust = callPackage ../games/stardust { };
