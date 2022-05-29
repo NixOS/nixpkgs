@@ -34030,7 +34030,7 @@ with pkgs;
 
   utsushi-networkscan = callPackage ../misc/drivers/utsushi/networkscan.nix { };
 
-  idsk = callPackage ../tools/filesystems/idsk { };
+  idsk = callPackage ../tools/filesystems/idsk { stdenv = gcc10StdenvCompat; };
 
   colima = callPackage ../applications/virtualization/colima { };
 
