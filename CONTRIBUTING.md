@@ -97,6 +97,12 @@ git push origin $(git branch --show-current) --force-with-lease
 
 Follow these steps to backport a change into a release branch in compliance with the [commit policy](https://nixos.org/nixpkgs/manual/#submitting-changes-stable-release-branches).
 
+You can add a label such as `backport release-22.05` to a PR, so that merging it will
+automatically create a backport (via [a GitHub Action](.github/workflows/backport.yml)).
+This also works for PR's that have already been merged, and might take a couple of minutes to trigger.
+
+You can also create the backport manually:
+
 1. Take note of the commits in which the change was introduced into `master` branch.
 2. Check out the target _release branch_, e.g. `release-21.11`. Do not use a _channel branch_ like `nixos-21.11` or `nixpkgs-21.11-darwin`.
 3. Create a branch for your change, e.g. `git checkout -b backport`.
