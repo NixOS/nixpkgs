@@ -159,6 +159,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    # darwin.patch doesn't apply anymore, needs update
+    broken = stdenv.isDarwin;
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they
@@ -166,8 +168,6 @@ stdenv.mkDerivation rec {
     # OptiX, enabled with cudaSupport, is non-free.
     license = with licenses; [ gpl2Plus ] ++ optional cudaSupport unfree;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    # darwin.patch doesn't apply anymore, might need update
-    broken = (stdenv.isDarwin && stdenv.isx86_64);
     maintainers = with maintainers; [ goibhniu veprbl ];
   };
 }
