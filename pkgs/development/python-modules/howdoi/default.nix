@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , appdirs
 , buildPythonPackage
 , cachelib
@@ -67,6 +68,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Instant coding answers via the command line";
     homepage = "https://github.com/gleitz/howdoi";
     license = licenses.mit;

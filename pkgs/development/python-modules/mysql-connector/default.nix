@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , django
 , dnspython
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A MySQL driver";
     longDescription = ''
       A MySQL driver that does not depend on MySQL C client libraries and

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , chameleon
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyramid_chameleon" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Chameleon template compiler for pyramid";
     homepage = "https://github.com/Pylons/pyramid_chameleon";
     license = licenses.bsd0;
