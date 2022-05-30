@@ -87,14 +87,15 @@ in lib.makeExtensible (self: {
 
   stable = self.nix_2_8;
 
+  # remember to backport updates to the stable branch!
   unstable = lib.lowPrio (common rec {
     version = "2.8";
-    suffix = "pre20220512_${lib.substring 0 7 src.rev}";
+    suffix = "pre20220530_${lib.substring 0 7 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "d354fc30b9768ea3dc737a88b57bf5e26d98135b";
-      sha256 = "sha256-wwhezwy3HKeHKJX48ps2qD46f6bL9GDxsFE2QJ+qPHQ=";
+      rev = "af23d38019a47e5bb4cd6585a1678b37c957130c";
+      sha256 = "sha256-RH77Y4IhbTofNYlLQSGKLL0fJAG9iHSwRNvMEZ4M0VQ=";
     };
   });
 })
