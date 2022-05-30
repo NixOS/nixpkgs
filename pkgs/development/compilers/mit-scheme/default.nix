@@ -74,6 +74,7 @@ stdenv.mkDerivation {
   doCheck = false;
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "MIT/GNU Scheme, a native code Scheme compiler";
 
     longDescription =
