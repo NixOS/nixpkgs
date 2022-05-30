@@ -32,15 +32,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov --cov-report term-missing " ""
-    substituteInPlace setup.py \
-      --replace '"pytest-runner"' ""
-    substituteInPlace requirements.txt \
-      --replace "pysnmplib==" "pysnmplib>="
-  '';
-
   pythonImportsCheck = [
     "brother"
   ];
