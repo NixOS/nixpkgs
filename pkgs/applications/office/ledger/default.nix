@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://ledger-cli.org/";
     description = "A double-entry accounting system with a command-line reporting interface";
     license = licenses.bsd3;

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonApplication
 , click
 , fetchPypi
@@ -60,6 +61,7 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Gigalixir Command-Line Interface";
     homepage = "https://github.com/gigalixir/gigalixir-cli";
     license = licenses.mit;

@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A cross-platform multimedia library - build SDL 1.2 applications against 2.0";
     homepage = "https://www.libsdl.org/";
     license = licenses.zlib;

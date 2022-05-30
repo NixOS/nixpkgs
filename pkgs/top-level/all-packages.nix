@@ -14836,6 +14836,8 @@ with pkgs;
 
   ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
 
+  ansible-later = with python3.pkgs; toPythonApplication ansible-later;
+
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix {
@@ -27222,6 +27224,8 @@ with pkgs;
   i3-auto-layout = callPackage ../applications/window-managers/i3/auto-layout.nix { };
 
   i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
+
+  i3-rounded = callPackage ../applications/window-managers/i3/rounded.nix { };
 
   i3altlayout = callPackage ../applications/window-managers/i3/altlayout.nix { };
 

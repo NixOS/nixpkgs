@@ -57,6 +57,7 @@ with python3.pkgs; buildPythonApplication rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "http://lostpackets.de/khal/";
     description = "CLI calendar application";
     license = licenses.mit;

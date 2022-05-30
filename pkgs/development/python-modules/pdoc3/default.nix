@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
@@ -39,6 +40,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Auto-generate API documentation for Python projects.";
     homepage = "https://pdoc3.github.io/pdoc/";
     license = with licenses; [ agpl3Plus ];

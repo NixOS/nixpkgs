@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     done
   '';
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "The physical modeling instruments included with faust, compiled as jack standalone and lv2 instruments";
     homepage = "https://ccrma.stanford.edu/~rmichon/faustSTK/";
     license = licenses.stk;

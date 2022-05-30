@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://lgames.sourceforge.io/LBreakoutHD/";
     description = "A widescreen Breakout clone";
     license = licenses.gpl2Plus;

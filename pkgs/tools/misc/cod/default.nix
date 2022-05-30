@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, python3 }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, python3 }:
 
 buildGoModule rec {
   pname = "cod";
@@ -27,6 +27,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Tool for generating Bash/Fish/Zsh autocompletions based on `--help` output";
     homepage = "https://github.com/dim-an/cod/";
     license = licenses.asl20;

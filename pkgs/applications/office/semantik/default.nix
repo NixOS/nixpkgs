@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , mkDerivation
 , fetchFromGitLab
 , fetchpatch
@@ -89,6 +90,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A mind-mapping application for KDE";
     license = licenses.mit;
     homepage = "https://waf.io/semantik.html";
