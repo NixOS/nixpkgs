@@ -53,7 +53,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "typer" ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Python library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
     license = licenses.mit;
