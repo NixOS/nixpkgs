@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Hot patching executables on Linux using .so file injection";
     homepage = src.meta.homepage;
     license = licenses.bsd3;
