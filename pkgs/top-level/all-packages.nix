@@ -3329,6 +3329,8 @@ with pkgs;
 
   wlogout = callPackage ../tools/wayland/wlogout { };
 
+  wlopm = callPackage ../tools/wayland/wlopm { };
+
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
 
   wlrctl = callPackage ../tools/wayland/wlrctl { };
