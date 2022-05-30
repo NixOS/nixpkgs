@@ -101,6 +101,7 @@ mapAliases ({
   pathpy = path; # added 2022-04-12
   pdfminer = pdfminer-six; # added 2022-05-25
   pep257 = pydocstyle; # added 2022-04-12
+  poster3 = throw "poster3 is unmaintained and source is no longer available"; # added 2023-05-29
   postorius = throw "Please use pkgs.mailmanPackages.postorius"; # added 2022-04-29
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
   privacyidea = throw "privacyidea has been renamed to pkgs.privacyidea"; # added 2021-06-20
