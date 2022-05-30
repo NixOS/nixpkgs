@@ -28,6 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     # When cross compiling `pkg-config` may have a prefix; we want to get its
     # name/path from `$PKG_CONFIG`.
     ./use-pkg-config-env-var.patch
+    # Build with `-O2`:
+    ./use-release-config-for-build.patch
+    # Have the `Makefile`s pass `pkg-config` the right flags when doing a
+    # static build.
+    #
+    # See the comment on `configurePhase` below.
+    ./pkg-config-static-build-support.patch
   ] ++ lib.optionals stdenv.hostPlatform.isWindows [
     # The minGW toolchain appends a `.exe` if it's not present which confuses
     # `install`.
@@ -35,6 +42,27 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (!buildLmicdiusb) [
     ./disable-lmicdiusb-build.patch
   ];
+
+  # We want to communicate to the `Makefile`s whether or not we are doing a
+  # static build so that it can pass `--static` to `pkg-config` if we are.
+  # If the `Makefile` does not do this, it will not include "private"
+  # dependencies from `libusb1` (some macOS frameworks) and the build will
+  # fail.
+  #
+  # There doesn't seem to be a canonical way to tell if the stdenv is
+  # configured to make static binaries. The `makeStatic` stdenv adapters,
+  # for example, do not set `stdenv.hostPlatform.isStatic` and add different
+  # flags for macOS/Linux/etc.
+  # See: https://github.com/NixOS/nixpkgs/blob/0c4d65b21efd3ae2fcdec54492cbaa6542352eb9/pkgs/stdenv/adapters.nix#L56-L135
+  #
+  # So, we look for the `--enable-static` configure flag as an indicator
+  # that we're linking statically (even though the `makeStaticDarwin` adapter
+  # in isolation does *not* add this configure flag):
+  configurePhase = ''
+    if [[ "$configureFlags" =~ "--enable-static" ]]; then
+      makeFlagsArray+=(STATIC_BUILD=1)
+    fi
+  '';
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ]
