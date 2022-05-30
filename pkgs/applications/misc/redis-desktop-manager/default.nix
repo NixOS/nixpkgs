@@ -75,7 +75,7 @@ EOF
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = true;
     description = "Cross-platform open source Redis DB management tool";
     homepage = "https://redisdesktop.com/";
     license = licenses.gpl3Only;
