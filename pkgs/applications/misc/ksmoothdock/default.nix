@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , mkDerivation
 , fetchFromGitHub
 , fetchpatch
@@ -39,6 +40,7 @@ mkDerivation rec {
   cmakeDir = "../src";
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "A cool desktop panel for KDE Plasma 5";
     license = licenses.mit;
     homepage = "https://dangvd.github.io/ksmoothdock/";
