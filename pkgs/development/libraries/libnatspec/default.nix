@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libiconv ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "http://natspec.sourceforge.net/";
     description = "A library intended to smooth national specificities in using of programs";
     platforms = platforms.unix;
