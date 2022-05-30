@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl.dev}"
     "--with-plugindir=${placeholder "out"}/lib/sasl2"
     "--with-saslauthd=/run/saslauthd"
+    "--with-configdir=/etc/sasl2"
     "--enable-login"
     "--enable-shared"
   ] ++ lib.optional enableLdap "--with-ldap=${openldap.dev}";
