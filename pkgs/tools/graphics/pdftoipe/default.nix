@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "A program that tries to convert arbitrary PDF documents to Ipe files";
     homepage = "https://github.com/otfried/ipe-tools";
     license = licenses.gpl3Plus;
