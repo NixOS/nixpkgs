@@ -138,6 +138,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     inherit (src.meta) homepage;
     description = "A minimal build of Rust";
     longDescription = ''
