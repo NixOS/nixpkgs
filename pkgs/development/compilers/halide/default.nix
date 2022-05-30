@@ -1,4 +1,5 @@
 { llvmPackages
+, stdenv
 , lib
 , fetchFromGitHub
 , cmake
@@ -56,6 +57,7 @@ llvmPackages.stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "C++ based language for image processing and computational photography";
     homepage = "https://halide-lang.org";
     license = licenses.mit;
