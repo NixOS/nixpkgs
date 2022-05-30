@@ -14671,4 +14671,10 @@
     github = "snpschaaf";
     githubId = 105843013;
   };
+  jali-clarke = {
+    email = "jinnah.ali-clarke@outlook.com";
+    name = "Jinnah Ali-Clarke";
+    github = "jali-clarke";
+    githubId = 17733984;
+  };
 }
