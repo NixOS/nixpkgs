@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p1" "--binary" ]; # patch has dos style eol
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "Open Street Map viewer";
     homepage = "https://sourceforge.net/projects/gosmore/";
     maintainers = with maintainers; [
