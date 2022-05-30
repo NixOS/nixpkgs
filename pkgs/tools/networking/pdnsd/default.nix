@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   CPPFLAGS = "-D__APPLE_USE_RFC_3542";
 
   meta = with lib; {
+    broken = true;
     description = "Permanent DNS caching";
     homepage = "http://members.home.nl/p.a.rombouts/pdnsd";
     license = licenses.gpl3Plus;
