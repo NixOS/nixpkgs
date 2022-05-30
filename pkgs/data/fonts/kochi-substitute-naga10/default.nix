@@ -13,12 +13,12 @@ fetchzip {
     mkdir -p $out/share/fonts/truetype
     mv $out/*/kochi-gothic-subst.ttf $out/share/fonts/truetype/kochi-gothic-subst-naga10.ttf
     mv $out/*/kochi-mincho-subst.ttf $out/share/fonts/truetype/kochi-mincho-subst-naga10.ttf
-    shopt -s extglob
+    shopt -s extglob dotglob
     rm -rf $out/!(share)
-    shopt -u extglob
+    shopt -u extglob dotglob
   '';
 
-  sha256 = "1bjb5cr3wf3d5y7xj1ly2mkv4ndwvg615rb1ql6lsqc2icjxk7j9";
+  sha256 = "sha256-SZ7ZJYuCYU0NxWHlEszbvFmyZxWeBtmPL204PjIrS64=";
 
   meta = {
     description = "Japanese font, non-free replacement for MS Gothic and MS Mincho";

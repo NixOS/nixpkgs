@@ -9,9 +9,9 @@ in fetchzip rec {
   postFetch = ''
     install -Dm644 $out/camingo-code/*.ttf -t $out/share/fonts/truetype
     install -Dm644 $out/camingo-code/*.txt -t $out/share/doc/${name}
-    shopt -s extglob
+    shopt -s extglob dotglob
     rm -rf $out/!(share)
-    shopt -u extglob
+    shopt -u extglob dotglob
   '';
   sha256 = "sha256-/vDNuR034stmiCZ9jUH5DlTQJn0WccLY5treoziXOJo=";
 
