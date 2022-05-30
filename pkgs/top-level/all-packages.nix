@@ -4625,8 +4625,6 @@ with pkgs;
     protobuf = protobuf3_19;
   };
 
-  clementineUnfree = clementine.unfree;
-
   mellowplayer = libsForQt5.callPackage ../applications/audio/mellowplayer { };
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
@@ -12336,6 +12334,8 @@ with pkgs;
 
   binaryen = callPackage ../development/compilers/binaryen { };
 
+  blueprint-compiler = callPackage ../development/compilers/blueprint { };
+
   bluespec = callPackage ../development/compilers/bluespec {
     gmp-static = gmp.override { withStatic = true; };
     tex = texlive.combined.scheme-full;
@@ -17342,6 +17342,8 @@ with pkgs;
 
   geoipjava = callPackage ../development/libraries/java/geoipjava { };
 
+  geomyidae = callPackage ../applications/networking/gopher/geomyidae { };
+
   geos = callPackage ../development/libraries/geos { };
 
   geos39 = callPackage ../development/libraries/geos/3.9.nix { };
@@ -22045,6 +22047,7 @@ with pkgs;
 
   nginxQuic = callPackage ../servers/http/nginx/quic.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
+    pcre = pcre2;
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -22055,6 +22058,8 @@ with pkgs;
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
+    openssl = openssl_3_0;
+    pcre = pcre2;
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -22063,6 +22068,8 @@ with pkgs;
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
+    openssl = openssl_3_0;
+    pcre = pcre2;
     withKTLS = true;
     withPerl = false;
     # We don't use `with` statement here on purpose!
@@ -28218,8 +28225,6 @@ with pkgs;
     mopidy-scrobbler
     mopidy-somafm
     mopidy-soundcloud
-    mopidy-spotify
-    mopidy-spotify-tunigo
     mopidy-subidy
     mopidy-tunein
     mopidy-youtube
@@ -29719,8 +29724,6 @@ with pkgs;
   spotify-unwrapped = callPackage ../applications/audio/spotify { };
 
   spotify = callPackage ../applications/audio/spotify/wrapper.nix { };
-
-  libspotify = callPackage ../development/libraries/libspotify (config.libspotify or {});
 
   sourcetrail = let
     llvmPackages = llvmPackages_10;

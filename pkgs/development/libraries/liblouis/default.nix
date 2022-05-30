@@ -1,5 +1,7 @@
 { fetchFromGitHub
-, lib, stdenv
+, lib
+, stdenv
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , gettext
@@ -20,6 +22,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-Hfn0dfXihtUfO3R+qJaetrPwupcIwblvi1DQdHCF1s8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "parenthesize-memcpy-calls-clang.patch";
+      url = "https://github.com/liblouis/liblouis/commit/528f38938e9f539a251d9de92ad1c1b90401c4d0.patch";
+      sha256 = "0hlhqsvd5wflg70bd7bmssnchk8znzbr93in0zpspzbyap6xz112";
+    })
+  ];
 
   outputs = [ "out" "dev" "man" "info" "doc" ];
 
