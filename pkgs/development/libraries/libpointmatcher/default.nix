@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     inherit (src.meta) homepage;
     description = "An \"Iterative Closest Point\" library for 2-D/3-D mapping in robotic";
     license = licenses.bsd3;
