@@ -1,5 +1,5 @@
-{ mkDerivation, fetchurl, lib, makeWrapper
-, extra-cmake-modules, kdoctools, wrapGAppsHook, wrapQtAppsHook
+{ mkDerivation, fetchurl, lib
+, extra-cmake-modules, kdoctools, wrapGAppsHook
 , kconfig, kcrash, kinit, kpmcore, polkit-qt
 , cryptsetup, lvm2, mdadm, smartmontools, systemdMinimal, util-linux
 , btrfs-progs, dosfstools, e2fsprogs, exfat, f2fs-tools, fatresize, hfsprogs
@@ -48,13 +48,16 @@ in mkDerivation rec {
     hash = "sha256-eChn3OkdLHC9pedDBBwszTeTj2l7ky2W79INqvjrkBo=";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook wrapQtAppsHook makeWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
 
   propagatedBuildInputs = [ kconfig kcrash kinit kpmcore polkit-qt ];
 
-  postFixup = ''
-    wrapProgram $out/bin/partitionmanager \
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       --prefix PATH : "${runtimeDeps}"
+    )
   '';
 
   meta = with lib; {
