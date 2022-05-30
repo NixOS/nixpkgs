@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = true;
     homepage = "http://npush.sourceforge.net/";
     description = "A Sokoban-like game";
     license = licenses.gpl2Plus;
