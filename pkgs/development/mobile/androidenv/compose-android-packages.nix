@@ -171,7 +171,7 @@ rec {
 
   cmake = map (version:
     import ./cmake.nix {
-      inherit deployAndroidPackage os autoPatchelfHook pkgs lib;
+      inherit deployAndroidPackage os autoPatchelfHook pkgs lib stdenv;
       package = packages.cmake.${version};
     }
   ) cmakeVersions;
@@ -179,7 +179,7 @@ rec {
   # Creates a NDK bundle.
   makeNdkBundle = ndkVersion:
     import ./ndk-bundle {
-      inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgsHostHost lib platform-tools;
+      inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgsHostHost lib platform-tools stdenv;
       package = packages.ndk-bundle.${ndkVersion};
     };
 
