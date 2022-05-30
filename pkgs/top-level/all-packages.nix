@@ -23811,6 +23811,8 @@ with pkgs;
 
   rapidxml = callPackage ../development/libraries/rapidxml { };
 
+  rapidyaml = callPackage ../development/libraries/rapidyaml {};
+
   raul = callPackage ../development/libraries/audio/raul { };
 
   raylib = callPackage ../development/libraries/raylib { };
