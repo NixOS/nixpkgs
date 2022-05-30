@@ -100,7 +100,7 @@ let
   # {pkgs, ...}:
   # {
   #   allowNonSource = false;
-  #   allowNonSourcePredicate = lib.lists.any (p: p!=lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance);
+  #   allowNonSourcePredicate = with lib.lists; pkg: any (p: p!=lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance);
   # }
   allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
 
