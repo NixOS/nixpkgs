@@ -173,6 +173,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Official reference compiler for the D language";
     homepage = "https://dlang.org/";
     # Everything is now Boost licensed, even the backend.

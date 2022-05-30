@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Fast python port of arc90's readability tool";
     homepage = "https://github.com/buriy/python-readability";
     license = licenses.apsl20;

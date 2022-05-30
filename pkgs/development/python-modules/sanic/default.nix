@@ -128,6 +128,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
     license = licenses.mit;
