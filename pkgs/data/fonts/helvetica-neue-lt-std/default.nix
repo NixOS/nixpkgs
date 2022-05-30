@@ -12,9 +12,9 @@ in fetchzip {
   postFetch = ''
     mkdir -p $out/share/fonts
     install -Dm644 $out/'Helvetica Neue LT Std'/*.otf -t $out/share/fonts/opentype
-    shopt -s extglob
+    shopt -s extglob dotglob
     rm -rf $out/!(share)
-    shopt -u extglob
+    shopt -u extglob dotglob
   '';
 
   sha256 = "sha256-gM/QXrKI2xrrCBYt4R+Fk5Tj0AIkrnCP/pwgh0A/MyI=";

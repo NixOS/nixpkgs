@@ -22,9 +22,9 @@ let
       mv $out/*.otf                -t "$out/share/fonts/opentype"
       mv $out/*.{odt,ods,pdf,xlsx}       -t "$out/share/doc/${name_}"  || true  # install docs if any
       find $out -type d -empty -delete
-      shopt -s extglob
+      shopt -s extglob dotglob
       rm -rf $out/!(share)
-      shopt -u extglob
+      shopt -u extglob dotglob
     '';
     inherit sha256;
 
