@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (variant == "qt5");
     description = "Flatpak portal library";
     homepage = "https://github.com/flatpak/libportal";
     license = licenses.lgpl3Plus;
