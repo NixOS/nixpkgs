@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "An extensible text editor based on Scintilla with Lua scripting. Version 11_beta";
     homepage = "http://foicica.com/textadept";
     license = licenses.mit;
