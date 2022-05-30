@@ -119,6 +119,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "OpenVINO™ Toolkit repository";
     longDescription = ''
       This toolkit allows developers to deploy pre-trained deep learning models through a high-level C++ Inference Engine API integrated with application logic.
@@ -130,7 +131,6 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Cannot find macos sdk
     maintainers = with maintainers; [ tfmoraes ];
   };
 }
