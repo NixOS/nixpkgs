@@ -600,7 +600,7 @@ rec {
           pkgs.pkgsModule
           ../../../nixos/modules/system/etc/etc.nix
         ];
-        environment.etc."hosts" = {
+        environment.etc."some-config-file" = {
           text = ''
             127.0.0.1 localhost
             ::1 localhost
@@ -619,7 +619,7 @@ rec {
       '';
       config.Cmd = pkgs.writeScript "etc-cmd" ''
         #!${pkgs.busybox}/bin/sh
-        ${pkgs.busybox}/bin/cat /etc/hosts
+        ${pkgs.busybox}/bin/cat /etc/some-config-file
       '';
     };
 
