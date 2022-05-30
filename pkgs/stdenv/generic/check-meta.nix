@@ -94,14 +94,14 @@ let
 
   hasNonSourceProvenance = attrs:
     (attrs ? meta.sourceProvenance) &&
-    isNonSource (lib.lists.toList attrs.meta.sourceProvenance);
+    isNonSource attrs.meta.sourceProvenance;
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
   # { pkgs, ... }:
   # {
   #   allowNonSource = false;
-  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
+  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) pkg.meta.sourceProvenance);
   # }
   allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
 
@@ -258,7 +258,7 @@ let
     downloadPage = str;
     changelog = either (listOf str) str;
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
-    sourceProvenance = either (listOf lib.types.attrs) lib.types.attrs;
+    sourceProvenance = listOf lib.types.attrs;
     maintainers = listOf (attrsOf str);
     priority = int;
     platforms = listOf str;
