@@ -4,7 +4,6 @@
 , buildPythonPackage
 , fetchPypi
 , isPy27
-, ipaddress
 , openssl
 , darwin
 , packaging
@@ -47,7 +46,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!isPyPy) [
     cffi
   ] ++ lib.optionals isPy27 [
-    ipaddress
     enum34
   ];
 
