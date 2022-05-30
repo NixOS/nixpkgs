@@ -97,6 +97,7 @@ buildPythonPackage rec {
     "--deselect=pyarrow/tests/test_fs.py::test_s3_options"
     # Flaky test
     "--deselect=pyarrow/tests/test_flight.py::test_roundtrip_errors"
+    "--deselect=pyarrow/tests/test_pandas.py::test_threaded_pandas_import"
   ] ++ lib.optionals stdenv.isDarwin [
     # Requires loopback networking
     "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
