@@ -1,4 +1,4 @@
-{ lib, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome, gtk3, gdk-pixbuf, librsvg,
+{ stdenv, lib, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome, gtk3, gdk-pixbuf, librsvg,
   tag ? "", xvfb-run, dbus, glibcLocales, glib, glib-networking, gobject-introspection, hicolor-icon-theme,
   gst_all_1, withGstPlugins ? true,
   xineBackend ? false, xine-lib,
@@ -63,6 +63,7 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
 
   meta = with lib; {
+    broken = !withGstPlugins && stdenv.isx86_64;
     description = "GTK-based audio player written in Python, using the Mutagen tagging library";
     license = licenses.gpl2Plus;
 
