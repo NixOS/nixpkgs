@@ -2998,6 +2998,8 @@ in {
 
   filebytes = callPackage ../development/python-modules/filebytes { };
 
+  filecheck = callPackage ../development/python-modules/filecheck { };
+
   filelock = callPackage ../development/python-modules/filelock { };
 
   filemagic = callPackage ../development/python-modules/filemagic { };
