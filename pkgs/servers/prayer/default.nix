@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lpam";
 
   meta = {
+    broken = true;
     homepage = "http://www-uxsup.csx.cam.ac.uk/~dpc22/prayer/";
     description = "Yet another Webmail interface for IMAP servers on Unix systems written in C";
     license = lib.licenses.gpl2Plus;
