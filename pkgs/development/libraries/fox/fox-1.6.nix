@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
+    broken = stdenv.isDarwin;
     branch = "1.6";
     description = "A C++ based class library for building Graphical User Interfaces";
     longDescription = ''

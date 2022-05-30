@@ -20,6 +20,7 @@
     };
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "Official PostgreSQL ODBC Driver";
       homepage = "https://odbc.postgresql.org/";
       license = licenses.lgpl2;
@@ -61,6 +62,7 @@
     };
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "MariaDB ODBC database driver";
       homepage = "https://downloads.mariadb.org/connector-odbc/";
       license = licenses.gpl2;
@@ -124,6 +126,7 @@
     };
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "ODBC driver for SQLite";
       homepage = "http://www.ch-werner.de/sqliteodbc";
       license = licenses.bsd2;
@@ -167,6 +170,7 @@
     };
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "ODBC Driver 17 for SQL Server";
       homepage = "https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017";
       license = licenses.unfree;
@@ -210,6 +214,7 @@
     };
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "Amazon Redshift ODBC driver";
       homepage = "https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html";
       license = licenses.unfree;

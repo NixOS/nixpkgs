@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_LINK = "-lopenal";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A compatible client of Ace of Spades 0.75";
     homepage    = "https://github.com/yvt/openspades/";
     license     = licenses.gpl3;

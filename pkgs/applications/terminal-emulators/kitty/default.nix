@@ -203,6 +203,7 @@ buildPythonApplication rec {
   passthru.tests.test = nixosTests.terminal-emulators.kitty;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3Only;

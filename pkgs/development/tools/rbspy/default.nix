@@ -1,4 +1,4 @@
-{rustPlatform, fetchFromGitHub, lib}:
+{ stdenv, rustPlatform, fetchFromGitHub, lib}:
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
   version = "0.11.1";
@@ -14,6 +14,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://rbspy.github.io/";
     description = ''
       A Sampling CPU Profiler for Ruby.
