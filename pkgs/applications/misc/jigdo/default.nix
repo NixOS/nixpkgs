@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--without-libdb" ];
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "Download utility that can fetch files from several sources simultaneously";
     homepage = "http://atterer.org/jigdo/";
     license = licenses.gpl2Only;
