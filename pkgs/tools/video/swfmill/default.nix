@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxslt freetype libpng libxml2 ];
 
   meta = {
+    broken = stdenv.isx86_64;
     description = "An xml2swf and swf2xml processor with import functionalities";
     homepage = "http://swfmill.org";
     license = lib.licenses.gpl2;
