@@ -1,31 +1,10 @@
-{ alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, autoPatchelfHook
-, cairo
-, cups
-, dbus
+{ autoPatchelfHook
 , electron
-, expat
 , fetchurl
-, gdk-pixbuf
-, glib
-, gtk3
 , lib
-, libappindicator-gtk3
-, libdbusmenu-gtk3
-, libdrm
-, libuuid
 , makeWrapper
-, mesa
-, nspr
-, nss
-, pango
 , squashfsTools
 , stdenv
-, systemd
-, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -33,42 +12,6 @@ stdenv.mkDerivation rec {
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/authy?channel=stable' | jq '.download_url,.version'
   version = "2.2.0";
   rev = "10";
-
-  buildInputs = [
-    alsa-lib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    gdk-pixbuf
-    glib
-    gtk3
-    libappindicator-gtk3
-    libdbusmenu-gtk3
-    libdrm
-    libuuid
-    mesa # for libgbm
-    nspr
-    nss
-    pango
-    stdenv.cc.cc
-    systemd
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
-  ];
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/H8ZpNgIoPyvmkgxOWw5MSzsXK1wRZiHn_${rev}.snap";
