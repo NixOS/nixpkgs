@@ -4,11 +4,30 @@
 , libelf, libbfd, libbpf, libopcodes, bcc
 , cereal, asciidoctor
 , nixosTests
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
   version = "0.14.1";
+
+  # Cherry-picked from merged PR, remove this hook on next update
+  # https://github.com/iovisor/bpftrace/pull/2242
+  # Cannot `fetchpatch` such pure renaming diff since
+  # https://github.com/iovisor/bpftrace/commit/2df807dbae4037aa8bf0afc03f52fb3f6321c62a.patch
+  # does not contain any diff in unified format but just this instead:
+  #   ...
+  #   man/man8/{bashreadline.8 => bashreadline.bt.8}     | 0
+  #   ...
+  #   35 files changed, 0 insertions(+), 0 deletions(-)
+  #   rename man/man8/{bashreadline.8 => bashreadline.bt.8} (100%)
+  #   ...
+  # on witch `fetchpatch` fails with
+  #   error: Normalized patch '/build/patch' is empty (while the fetched file was not)!
+  #   Did you maybe fetch a HTML representation of a patch instead of a raw patch?
+  postUnpack = ''
+    rename .8 .bt.8 "$sourceRoot"/man/man8/*.8
+  '';
 
   src = fetchFromGitHub {
     owner  = "iovisor";
@@ -29,7 +48,7 @@ stdenv.mkDerivation rec {
       cereal asciidoctor
     ];
 
-  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ];
+  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev util-linux ];
 
   # tests aren't built, due to gtest shenanigans. see:
   #
