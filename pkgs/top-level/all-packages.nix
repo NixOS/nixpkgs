@@ -32805,6 +32805,8 @@ with pkgs;
 
   inormalize = callPackage ../applications/science/biology/inormalize { };
 
+  iqtree = callPackage ../applications/science/biology/iqtree { };
+
   itsx = callPackage ../applications/science/biology/itsx { };
 
   iv = callPackage ../applications/science/biology/iv {
