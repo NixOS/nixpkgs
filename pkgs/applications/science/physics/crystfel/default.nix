@@ -207,6 +207,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = !withGui;
     description = "Data processing for serial crystallography";
     longDescription = ''
       CrystFEL is a suite of programs for processing (and simulating) Bragg diffraction data from "serial crystallography" experiments, often (but not always) performed using an X-ray Free-Electron Laser. Compared to rotation data, some of the particular characteristics of such data which call for a specialised software suite are:
