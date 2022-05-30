@@ -14,8 +14,8 @@
         fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
       }];
     };
-
     ```
+
     where
 
     - `handle` is the handle you are going to use in nixpkgs expressions,
