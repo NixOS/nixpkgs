@@ -17340,6 +17340,8 @@ with pkgs;
 
   geoipjava = callPackage ../development/libraries/java/geoipjava { };
 
+  geomyidae = callPackage ../applications/networking/gopher/geomyidae { };
+
   geos = callPackage ../development/libraries/geos { };
 
   geos39 = callPackage ../development/libraries/geos/3.9.nix { };
