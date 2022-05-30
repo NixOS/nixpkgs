@@ -18,4 +18,5 @@
       rev = "v${version}";
       sha256 = "sha256-rOTVThHOY/Q2IIu2RGiv26UE2V/JFfWWnfKZQfKl5Mg=";
     };
+    meta = oldAttrs.meta // { broken = true; };
   })
