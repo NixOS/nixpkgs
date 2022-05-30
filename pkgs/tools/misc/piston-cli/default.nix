@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = true;
     description = "Piston api tool";
     homepage = "https://github.com/Shivansh-007/piston-cli";
     license = licenses.mit;
