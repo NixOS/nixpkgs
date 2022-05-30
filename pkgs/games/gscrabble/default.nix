@@ -31,6 +31,7 @@ buildPythonApplication {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Golden Scrabble crossword puzzle game";
     homepage = "https://github.com/RaaH/gscrabble/";
     license = licenses.gpl2Plus;
