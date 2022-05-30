@@ -454,8 +454,8 @@ rec {
 
           mkdir -p "$out/bin"
           for exe in ${
-            if standalone then "{,g,r,rg,e}vim {,g}vimdiff"
-            else "{,g,r,rg,e}{vim,view} {,g}vimdiff ex"
+            if standalone then "{,g,r,rg,e}vim {,g}vimdiff vi"
+            else "{,g,r,rg,e}{vim,view} {,g}vimdiff ex vi"
           }; do
             if [[ -e ${vim}/bin/$exe ]]; then
               dest="$out/bin/${executableName}"

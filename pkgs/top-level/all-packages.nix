@@ -1132,6 +1132,10 @@ with pkgs;
 
   gfshare = callPackage ../tools/security/gfshare { };
 
+  gh-cal = callPackage ../tools/misc/gh-cal {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   glooctl = callPackage ../applications/networking/cluster/glooctl { };
 
   gobgp = callPackage ../tools/networking/gobgp { };
@@ -1183,6 +1187,8 @@ with pkgs;
   sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
 
   sdlookup = callPackage ../tools/security/sdlookup { };
+
+  spectre-cli = callPackage ../tools/security/spectre-cli { };
 
   sx-go = callPackage ../tools/security/sx-go { };
 
@@ -3453,6 +3459,8 @@ with pkgs;
   envconsul = callPackage ../tools/system/envconsul { };
 
   envsubst = callPackage ../tools/misc/envsubst { };
+
+  er-patcher = callPackage ../tools/games/er-patcher { };
 
   errcheck = callPackage ../development/tools/errcheck {
     buildGoModule = buildGo118Module;
@@ -12495,6 +12503,8 @@ with pkgs;
   fasmg = callPackage ../development/compilers/fasmg { };
 
   fennel = callPackage ../development/compilers/fennel { };
+
+  firrtl = callPackage ../development/compilers/firrtl { };
 
   flasm = callPackage ../development/compilers/flasm { };
 
@@ -32532,7 +32542,7 @@ with pkgs;
 
   ### DESKTOP ENVIRONMENTS
 
-  arcan = recurseIntoAttrs (callPackage ../desktops/arcan { });
+  arcanPackages = recurseIntoAttrs (callPackage ../desktops/arcan { });
 
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
 
