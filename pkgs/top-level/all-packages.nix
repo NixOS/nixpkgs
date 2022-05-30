@@ -25753,6 +25753,8 @@ with pkgs;
 
   curseradio = callPackage ../applications/audio/curseradio { };
 
+  curtail = callPackage ../applications/graphics/curtail { };
+
   cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
 
   cvs = callPackage ../applications/version-management/cvs { };
