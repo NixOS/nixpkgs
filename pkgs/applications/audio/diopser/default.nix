@@ -67,6 +67,7 @@ in  stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "A totally original phase rotation plugin";
     homepage = "https://github.com/robbert-vdh/diopser";
     license = licenses.gpl3Plus;
