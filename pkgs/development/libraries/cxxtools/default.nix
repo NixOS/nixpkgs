@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
+    broken = stdenv.isx86_64;
     homepage = "http://www.tntnet.org/cxxtools.html";
     description = "Comprehensive C++ class library for Unix and Linux";
     platforms = lib.platforms.linux ;
