@@ -7,11 +7,15 @@ fetchzip {
 
   url = "mirror://osdn/efont/5411/kochi-substitute-${version}.tar.bz2";
 
+  stripRoot = false;
+
   postFetch = ''
-    tar -xjf $downloadedFile --strip-components=1
     mkdir -p $out/share/fonts/truetype
-    cp ./kochi-gothic-subst.ttf $out/share/fonts/truetype/kochi-gothic-subst-naga10.ttf
-    cp ./kochi-mincho-subst.ttf $out/share/fonts/truetype/kochi-mincho-subst-naga10.ttf
+    mv $out/*/kochi-gothic-subst.ttf $out/share/fonts/truetype/kochi-gothic-subst-naga10.ttf
+    mv $out/*/kochi-mincho-subst.ttf $out/share/fonts/truetype/kochi-mincho-subst-naga10.ttf
+    shopt -s extglob
+    rm -rf $out/!(share)
+    shopt -u extglob
   '';
 
   sha256 = "1bjb5cr3wf3d5y7xj1ly2mkv4ndwvg615rb1ql6lsqc2icjxk7j9";
