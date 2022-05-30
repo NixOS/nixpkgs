@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "A dungeon management rogue-like";
     homepage = "https://keeperrl.com/";
     license = licenses.gpl2;
