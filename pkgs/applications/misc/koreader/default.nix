@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
       "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
     platforms = intersectLists platforms.x86_64 platforms.linux;
     license = licenses.agpl3Only;
-    sourceProvenance = with lib.source-types; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ contrun neonfuz];
   };
 }
