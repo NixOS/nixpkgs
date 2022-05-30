@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     ] ++ lib.optional withPython python3;
 
     meta = with lib; {
+      broken = true;
       description = "A free, open source raytracer";
       homepage = "http://www.yafaray.org";
       maintainers = with maintainers; [ hodapp ];
