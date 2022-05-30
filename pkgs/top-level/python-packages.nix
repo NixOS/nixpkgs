@@ -11043,8 +11043,6 @@ in {
 
   webargs = callPackage ../development/python-modules/webargs { };
 
-  webapp2 = callPackage ../development/python-modules/webapp2 { };
-
   webassets = callPackage ../development/python-modules/webassets { };
 
   webauthn = callPackage ../development/python-modules/webauthn { };
