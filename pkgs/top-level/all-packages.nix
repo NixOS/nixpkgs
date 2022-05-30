@@ -21481,6 +21481,7 @@ with pkgs;
 
   # Alternative lisp-modules implementation
   lispPackages_new = callPackage ../development/lisp-modules-new/lisp-packages.nix {};
+  sbclPackages_new = recurseIntoAttrs lispPackages_new.sbclPackages;
 
   ### DEVELOPMENT / PERL MODULES
 
