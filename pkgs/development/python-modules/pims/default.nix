@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pims";
-  version = "0.6.0";
+  version = "0.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "soft-matter";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-F4UWbD9fOfvaZwYcY1l7XOzVKZyqqTGTqVJoNPo1Ozg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QdllA1QTSJ8vWaSJ0XoUanX53sb4RaOmdXBCFEsoWMU=";
   };
 
   propagatedBuildInputs = [
