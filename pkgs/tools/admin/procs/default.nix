@@ -15,6 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  LIBCLANG_PATH = lib.optionals stdenv.isDarwin "${stdenv.cc.cc.lib}/lib/";
+
   postInstall = ''
     for shell in bash fish zsh; do
       $out/bin/procs --completion $shell
@@ -29,8 +31,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dalance/procs";
     changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne SuperSandro2000 ];
-    #   thread 'main' panicked at 'Unable to find libclang: "couldn't find any valid shared libraries matching: ['libclang.dylib'], set the `LIBCLANG_PATH` environment variable to a path where one of these files can be found (invalid: [])"', /private/tmp/nix-build-procs-0.12.3.drv-0/procs-0.12.3-vendor.tar.gz/bindgen/src/lib.rs:2144:31
-    broken = stdenv.isDarwin;
+    maintainers = with maintainers; [ Br1ght0ne SuperSandro2000 sciencentistguy ];
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
