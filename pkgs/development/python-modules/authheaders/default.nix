@@ -13,10 +13,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ authres dnspython dkimpy publicsuffix2 ];
 
-  meta = {
+  meta = with lib; {
     description = "Python library for the generation of email authentication headers";
     homepage = "https://github.com/ValiMail/authentication-headers";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
 }
