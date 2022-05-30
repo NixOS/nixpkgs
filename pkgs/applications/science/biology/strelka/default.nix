@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Germline and small variant caller";
     license = licenses.gpl3;
     homepage = "https://github.com/Illumina/strelka";
