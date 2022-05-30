@@ -159,7 +159,6 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     javaproperties
     jsondiff
     # urllib3[secure]
-    ipaddress
     # shell completion
     argcomplete
   ];
