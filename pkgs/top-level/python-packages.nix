@@ -8079,8 +8079,6 @@ in {
 
   pyspnego = callPackage ../development/python-modules/pyspnego { };
 
-  pyspotify = callPackage ../development/python-modules/pyspotify { };
-
   pysptk = callPackage ../development/python-modules/pysptk { };
 
   pysqlcipher3 = callPackage ../development/python-modules/pysqlcipher3 {

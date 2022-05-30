@@ -4625,8 +4625,6 @@ with pkgs;
     protobuf = protobuf3_19;
   };
 
-  clementineUnfree = clementine.unfree;
-
   mellowplayer = libsForQt5.callPackage ../applications/audio/mellowplayer { };
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
@@ -28218,8 +28216,6 @@ with pkgs;
     mopidy-scrobbler
     mopidy-somafm
     mopidy-soundcloud
-    mopidy-spotify
-    mopidy-spotify-tunigo
     mopidy-subidy
     mopidy-tunein
     mopidy-youtube
@@ -29719,8 +29715,6 @@ with pkgs;
   spotify-unwrapped = callPackage ../applications/audio/spotify { };
 
   spotify = callPackage ../applications/audio/spotify/wrapper.nix { };
-
-  libspotify = callPackage ../development/libraries/libspotify (config.libspotify or {});
 
   sourcetrail = let
     llvmPackages = llvmPackages_10;
