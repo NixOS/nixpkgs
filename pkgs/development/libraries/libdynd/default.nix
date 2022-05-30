@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   outputDoc = "dev";
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "C++ dynamic ndarray library, with Python exposure";
     homepage = "http://libdynd.org";
     license = licenses.bsd2;
