@@ -2841,6 +2841,8 @@ in {
 
   expects = callPackage ../development/python-modules/expects { };
 
+  expecttest = callPackage ../development/python-modules/expecttest { };
+
   expiringdict = callPackage ../development/python-modules/expiringdict { };
 
   explorerscript = callPackage ../development/python-modules/explorerscript { };
@@ -3285,6 +3287,8 @@ in {
   funcsigs = callPackage ../development/python-modules/funcsigs { };
 
   functools32 = callPackage ../development/python-modules/functools32 { };
+
+  functorch = callPackage ../development/python-modules/functorch { };
 
   funcy = callPackage ../development/python-modules/funcy { };
 
@@ -4728,6 +4732,8 @@ in {
   latexcodec = callPackage ../development/python-modules/latexcodec { };
 
   launchpadlib = callPackage ../development/python-modules/launchpadlib { };
+
+  laundrify-aio = callPackage ../development/python-modules/laundrify-aio { };
 
   lazr_config = callPackage ../development/python-modules/lazr/config.nix { };
 

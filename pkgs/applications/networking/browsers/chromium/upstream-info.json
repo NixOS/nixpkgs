@@ -19,28 +19,28 @@
     }
   },
   "beta": {
-    "version": "102.0.5005.61",
-    "sha256": "07vbi3gn9g4n04b2qi2hm34r122snrqaifa46yk3pyh1d79rfdqs",
-    "sha256bin64": "1cwfpjh060sm56bkgmpmmck0y3vrndrv6cbn8y3p26p3j06f2i3h",
-    "deps": {
-      "gn": {
-        "version": "2022-04-14",
-        "url": "https://gn.googlesource.com/gn",
-        "rev": "fd9f2036f26d83f9fcfe93042fb952e5a7fe2167",
-        "sha256": "0b5xs0chcv3hfhy71rycsmgxnqbm375a333hwav8929k9cbi5p9h"
-      }
-    }
-  },
-  "dev": {
     "version": "103.0.5060.24",
     "sha256": "1vdnq7vd0jdxkpc00xwvvk1mmyq2hcydms64l16nv3v8jgvizrha",
-    "sha256bin64": "0590ffrbpnd4v8z1wzn1baqvj59gx2yc3zp3qvhvmfrdmxz9i9b4",
+    "sha256bin64": "1rnjgb9v8dr74x0lj00xdkpvp2yx8d79h1kdzp7m7nvh4q34s32w",
     "deps": {
       "gn": {
         "version": "2022-05-11",
         "url": "https://gn.googlesource.com/gn",
         "rev": "578a7fe4c3c6b0bc2ae1fd2e37f14857d09895bf",
         "sha256": "03dqfrdpf5xxl64dby3qmbwpzdq2gsa8g7xl438py3a629rgxg63"
+      }
+    }
+  },
+  "dev": {
+    "version": "104.0.5083.0",
+    "sha256": "02viibc6n77lrlr1vfdyjknzcknnpvp58s4y1g6cbwy4pvajisd9",
+    "sha256bin64": "0g2kzabbg5g3kb0a6scjxslywrkrgpynws7i4lbw0j2gay40zqar",
+    "deps": {
+      "gn": {
+        "version": "2022-05-17",
+        "url": "https://gn.googlesource.com/gn",
+        "rev": "c547ca1497e3ff0dcbc0b2cb036b3d40380cbeeb",
+        "sha256": "0wk721sqz5s7bnrk1ar7c07ykxpdvwq01qi4na84m4b76nyzakwy"
       }
     }
   },
