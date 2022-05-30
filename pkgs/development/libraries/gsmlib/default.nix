@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ autoreconfHook ];
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "Library to access GSM mobile phones through GSM modems";
     homepage = "https://github.com/x-logLT/gsmlib";
     license = licenses.lgpl2;
