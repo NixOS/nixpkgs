@@ -1,0 +1,25 @@
+From 5b3c121dd238e3be427e9309faef9dfcae6c6a8e Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Mon, 13 Jun 2022 15:34:07 +0200
+Subject: [PATCH] fix: find dbus-python
+
+---
+ project.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/project.py b/project.py
+index 71800c4..c4875c1 100644
+--- a/project.py
++++ b/project.py
+@@ -248,7 +248,7 @@ del find_qt
+         dbus_lib_dirs = []
+         dbus_libs = []
+ 
+-        args = ['pkg-config', '--cflags-only-I', '--libs dbus-1']
++        args = ['pkg-config', '--cflags-only-I', '--libs', 'dbus-1', 'dbus-python']
+ 
+         for line in self.read_command_pipe(args, fatal=False):
+             for flag in line.strip().split():
+-- 
+2.36.1
+

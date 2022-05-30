@@ -1,0 +1,73 @@
+diff --git a/project.py b/project.py
+index c4875c1..e7698da 100644
+--- a/project.py
++++ b/project.py
+@@ -1,19 +1,19 @@
+ # This is the PyQt6 build script.
+ #
+ # Copyright (c) 2022 Riverbank Computing Limited <info@riverbankcomputing.com>
+-# 
++#
+ # This file is part of PyQt6.
+-# 
++#
+ # This file may be used under the terms of the GNU General Public License
+ # version 3.0 as published by the Free Software Foundation and appearing in
+ # the file LICENSE included in the packaging of this file.  Please review the
+ # following information to ensure the GNU General Public License version 3.0
+ # requirements will be met: http://www.gnu.org/copyleft/gpl.html.
+-# 
++#
+ # If you do not wish to use this file under the terms of the GPL version 3.0
+ # then you may purchase a commercial license.  For more information contact
+ # info@riverbankcomputing.com.
+-# 
++#
+ # This file is provided AS IS with NO WARRANTY OF ANY KIND, INCLUDING THE
+ # WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+ 
+@@ -167,9 +167,11 @@ del find_qt
+ 
+         # Automatically confirm the license if there might not be a command
+         # line option to do so.
+-        if tool == 'pep517':
++        if tool in {'pep517', 'wheel'}:
+             self.confirm_license = True
+ 
++        print(f"PyQt6 project.py: tool = {tool}")
++
+         self._check_license()
+ 
+         # Handle the platform tag.
+@@ -282,18 +284,31 @@ del find_qt
+         # Create the buildable.
+         sources_dir = os.path.join(self.root_dir, 'dbus')
+ 
++        print(f"PyQt6-6.3.0/project.py: dbus ...")
++        print(f"PyQt6-6.3.0/project.py: buildable = BuildableModule")
+         buildable = BuildableModule(self, 'dbus', 'dbus.mainloop.pyqt6',
+                 uses_limited_api=True)
++        print(f"PyQt6-6.3.0/project.py: buildable.builder_settings.append")
+         buildable.builder_settings.append('QT -= gui')
++        print(f"PyQt6-6.3.0/project.py: buildable.sources.extend")
+         buildable.sources.extend(glob.glob(os.path.join(sources_dir, '*.cpp')))
++        print(f"PyQt6-6.3.0/project.py: buildable.headers.extend")
+         buildable.headers.extend(glob.glob(os.path.join(sources_dir, '*.h')))
++        print(f"PyQt6-6.3.0/project.py: buildable.include_dirs.extend")
+         buildable.include_dirs.extend(dbus_inc_dirs)
++        print(f"PyQt6-6.3.0/project.py: buildable.library_dirs.extend")
+         buildable.library_dirs.extend(dbus_lib_dirs)
++        print(f"PyQt6-6.3.0/project.py: buildable.libraries.extend")
+         buildable.libraries.extend(dbus_libs)
++        print(f"PyQt6-6.3.0/project.py: buildable.debug")
+         buildable.debug = debug
+ 
++        print(f"PyQt6-6.3.0/project.py: self.buildables.append(buildable)")
+         self.buildables.append(buildable)
+ 
++        import traceback
++        traceback.print_stack()
++
+     def _add_plugin(self, name, user_name, target_name, target_subdir, debug):
+         """ Add a plugin to the project buildables. """
+ 
