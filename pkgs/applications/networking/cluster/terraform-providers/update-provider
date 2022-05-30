@@ -129,7 +129,7 @@ if [[ ${old_version} == "${version}" && ${force} != 1 && -z ${vendorSha256} && $
   echo_provider "already at version ${version}"
   exit
 fi
-if [[ ${version} =~ (alpha|beta|pre) && ${force} != 1 ]]; then
+if [[ ${version} =~ [[:alpha:]] && ${force} != 1 ]]; then
   echo_provider "not updating to unstable version ${version}"
   exit
 fi
