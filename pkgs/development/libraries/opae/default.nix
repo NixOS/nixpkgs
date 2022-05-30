@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_ASE=1" ];
 
   meta = with lib; {
+    broken = true;
     description = "Open Programmable Acceleration Engine SDK";
     homepage    = "https://01.org/opae";
     license     = licenses.bsd3;
