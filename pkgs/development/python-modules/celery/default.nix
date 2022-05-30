@@ -90,7 +90,6 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
     license = licenses.bsd3;
