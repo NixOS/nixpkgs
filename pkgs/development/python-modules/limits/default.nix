@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "2.6.1";
+  version = "2.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-ja+YbRHCcZ5tFnoofdR44jbkkdDroVUdKeDOt6yE0LI=";
+    hash = "sha256-1TfwGxEgf6LFYSaNLyVRtJVOnTVNxvswoKMFNWrNOv0=";
   };
 
   propagatedBuildInputs = [
