@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost miniupnpc openssl lmdb unbound readline ];
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "scalability-focused, untraceable, secure, and fungible cryptocurrency using the RingCT protocol";
     homepage = "https://www.getmasari.org/";
     license = licenses.bsd3;
