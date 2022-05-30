@@ -34,6 +34,7 @@ in stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   meta = with lib; {
+    broken = true;
     homepage = "http://grub4dos.chenall.net/";
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = with maintainers; [ abbradar ];
