@@ -1,14 +1,17 @@
-{ stdenv, lib, buildPythonPackage, pythonOlder, pythonAtLeast
+{ stdenv
+, lib
+, buildPythonPackage
+, pythonOlder
+, pythonAtLeast
 , fetchPypi
 , libmaxminddb
-, ipaddress
 , mock
 , nose
 }:
 
 buildPythonPackage rec {
-  version = "2.2.0";
   pname = "maxminddb";
+  version = "2.2.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -18,8 +21,6 @@ buildPythonPackage rec {
 
   buildInputs = [ libmaxminddb ];
 
-  propagatedBuildInputs = [ ipaddress ];
-
   checkInputs = [ nose mock ];
 
   # Tests are broken for macOS on python38
@@ -27,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Reader for the MaxMind DB format";
-    homepage = "https://www.maxmind.com/en/home";
+    homepage = "https://github.com/maxmind/MaxMind-DB-Reader-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };
