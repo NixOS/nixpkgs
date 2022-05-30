@@ -8,19 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
     rev    = "v${version}";
-    sha256 = "sha256-QDqHAEVM/XHCFMS0jMLdKJfDUOpkUqONOf8+Fbd5dCY=";
+    sha256 = "sha256-9adZAKSn00W2yNwVDbVB1/O5Y+10c4EkVJGCHyd4Tgg=";
   };
-
-  # libbpf 0.6.0 relies on typeof in bpf/btf.h to pick the right version of
-  # btf_dump__new() but that's not valid c++.
-  # see https://github.com/iovisor/bpftrace/issues/2068
-  patches = [ ./btf-dump-new-0.6.0.patch ];
 
   buildInputs = with llvmPackages;
     [ llvm libclang
