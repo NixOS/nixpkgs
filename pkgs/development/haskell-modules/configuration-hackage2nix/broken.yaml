@@ -772,7 +772,6 @@ broken-packages:
   - complex-generic
   - composable-associations-aeson
   - compose-trans
-  - composite-aeson
   - composite-opaleye
   - composition-tree
   - comprehensions-ghc
