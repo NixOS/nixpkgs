@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = stdenv.isx86_64;
     description = "Wallet for Nano cryptocurrency";
     homepage = "https://nano.org/en/wallet/";
     license = lib.licenses.bsd2;
