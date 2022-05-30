@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libinput zlib ];
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "Gebaar, A Super Simple WM Independent Touchpad Gesture Daemon for libinput";
     homepage = "https://github.com/Coffee2CodeNL/gebaar-libinput";
     license = licenses.gpl3;
