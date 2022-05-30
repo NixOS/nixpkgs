@@ -14,13 +14,19 @@ unpackFile() {
 
 buildPhase() {
     if [ -n "$bin" ]; then
-        # Create the module.
-        echo "Building linux driver against kernel: $kernel";
-        cd kernel
-        unset src # used by the nv makefile
-        make $makeFlags -j $NIX_BUILD_CORES module
-
-        cd ..
+        (if [ -n "$openModuleSrc" ]; then
+                cp --reflink=auto --preserve=mode -r $openModuleSrc/{src,Makefile,*.mk} .
+                chmod u+w -R src
+                target=modules
+            else
+                target=module
+                cd kernel
+            fi
+            # Create the module.
+            echo "Building linux driver against kernel: $kernel";
+            unset src # used by the nv makefile
+            make $makeFlags -j $NIX_BUILD_CORES $target
+        )
     fi
 }
 
@@ -133,11 +139,15 @@ installPhase() {
         cp -p libglx*.so* $bin/lib/xorg/modules/extensions
 
         # Install the kernel module.
-        mkdir -p $bin/lib/modules/$kernelVersion/misc
-        for i in $(find ./kernel -name '*.ko'); do
-            nuke-refs $i
-            cp $i $bin/lib/modules/$kernelVersion/misc/
-        done
+        if [ -n "$openModuleSrc" ]; then
+            make $makeFlags -j $NIX_BUILD_CORES modules_install
+        else
+            mkdir -p $bin/lib/modules/$kernelVersion/misc
+            for i in $(find ./kernel -name '*.ko'); do
+                nuke-refs $i
+                cp $i $bin/lib/modules/$kernelVersion/misc/
+            done
+        fi
 
         # Install application profiles.
         if [ "$useProfiles" = "1" ]; then

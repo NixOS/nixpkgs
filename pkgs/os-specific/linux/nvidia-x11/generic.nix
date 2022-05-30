@@ -6,6 +6,7 @@
 , settingsVersion ? version
 , persistencedSha256
 , persistencedVersion ? version
+, moduleSrcSha256 ? null
 , useGLVND ? true
 , useProfiles ? true
 , preferGtk2 ? false
@@ -16,8 +17,8 @@
 , broken ? false
 }@args:
 
-{ lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
-, kernel ? null, perl, nukeReferences, which
+{ lib, stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl, fetchFromGitHub
+, kernel ? null, perl, nukeReferences, which, symlinkJoin
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -36,6 +37,8 @@ assert versionOlder version "391" -> sha256_32bit != null;
 assert versionAtLeast version "391" -> stdenv.hostPlatform.system == "x86_64-linux";
 
 let
+  isOpen = versionAtLeast version "515.43.04";
+
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
   pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
   i686bundled = versionAtLeast version "391" && !disable32Bit;
@@ -46,7 +49,16 @@ let
     wayland mesa libGL
   ]);
 
-  self = stdenv.mkDerivation {
+  modDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}";
+
+  openModuleSrc = fetchFromGitHub {
+    owner = "NVIDIA";
+    repo = "open-gpu-kernel-modules";
+    rev = version;
+    hash = moduleSrcSha256;
+  };
+
+  self = stdenv.mkDerivation ({
     name = "nvidia-x11-${version}${nameSuffix}";
 
     builder = ./builder.sh;
@@ -63,6 +75,7 @@ let
           sha256 = sha256_32bit;
         }
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
+
 
     patches = if libsOnly then null else patches;
     inherit prePatch;
@@ -81,8 +94,10 @@ let
     makeFlags = optionals (!libsOnly) (kernel.makeFlags ++ [
       "IGNORE_PREEMPT_RT_PRESENCE=1"
       "NV_BUILD_SUPPORTS_HMM=1"
-      "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
-      "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      "SYSSRC=${modDir}/source"
+      "SYSOUT=${modDir}/build"
+    ] ++ lib.optionals isOpen [
+      "INSTALL_MOD_PATH=${placeholder "bin"}"
     ]);
 
     hardeningDisable = [ "pic" "format" ];
@@ -95,7 +110,8 @@ let
 
     buildInputs = [ which ];
     nativeBuildInputs = [ perl nukeReferences ]
-      ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
+      ++ optionals (!libsOnly) kernel.moduleBuildDependencies
+      ++ optionals isOpen (with pkgs; [ nettools ]);
 
     disallowedReferences = optional (!libsOnly) [ kernel.dev ];
 
@@ -119,6 +135,8 @@ let
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;
     };
-  };
+  } // lib.optionalAttrs isOpen { inherit openModuleSrc; });
 
-in self
+in
+  assert isOpen -> moduleSrcSha256 != null;
+  self
