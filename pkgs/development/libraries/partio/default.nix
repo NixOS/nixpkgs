@@ -35,6 +35,7 @@ stdenv.mkDerivation {
   strictDeps = true;
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "C++ (with python bindings) library for easily reading/writing/manipulating common animation particle formats such as PDB, BGEO, PTC";
     homepage = "https://www.disneyanimation.com/technology/partio.html";
     license = licenses.bsd3;
