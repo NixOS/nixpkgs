@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = false;
 
   meta =  {
+    broken = true;
     homepage = "https://github.com/SnabbCo/snabbswitch";
     description = "Simple and fast packet networking toolkit";
     longDescription = ''
