@@ -58,17 +58,18 @@
 , zstd
 , libadwaita
 , sassc
+, boost
 }:
 
 stdenv.mkDerivation rec {
   pname = "zrythm";
-  version = "1.0.0-alpha.28.1.3";
+  version = "1.0.0-beta.2.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ERE7I6E3+RmmpnZEtcJL/1v9a37IwFauVsbJvI9gsRQ=";
+    sha256 = "sha256-wYT/3R7XRZYUpx+qNc0iWfBPISYLGiZ6GpqqvsiYP10=";
   };
 
   nativeBuildInputs = [
@@ -132,6 +133,8 @@ stdenv.mkDerivation rec {
     zstd
     libadwaita
     sassc
+    libadwaita
+    boost
   ];
 
   mesonFlags = [
