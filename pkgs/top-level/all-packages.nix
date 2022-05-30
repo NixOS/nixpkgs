@@ -3460,6 +3460,8 @@ with pkgs;
 
   envsubst = callPackage ../tools/misc/envsubst { };
 
+  er-patcher = callPackage ../tools/games/er-patcher { };
+
   errcheck = callPackage ../development/tools/errcheck {
     buildGoModule = buildGo118Module;
   };
@@ -32542,7 +32544,7 @@ with pkgs;
 
   ### DESKTOP ENVIRONMENTS
 
-  arcan = recurseIntoAttrs (callPackage ../desktops/arcan { });
+  arcanPackages = recurseIntoAttrs (callPackage ../desktops/arcan { });
 
   cdesktopenv = callPackage ../desktops/cdesktopenv { };
 
