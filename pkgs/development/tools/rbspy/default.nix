@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = true;
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = true;
     homepage = "https://rbspy.github.io/";
     description = ''
       A Sampling CPU Profiler for Ruby.
