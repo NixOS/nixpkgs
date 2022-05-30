@@ -32715,6 +32715,8 @@ with pkgs;
 
   aragorn = callPackage ../applications/science/biology/aragorn { };
 
+  astral = callPackage ../applications/science/biology/astral { };
+
   archimedes = callPackage ../applications/science/electronics/archimedes {
     stdenv = gcc6Stdenv;
   };
