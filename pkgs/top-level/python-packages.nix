@@ -6392,8 +6392,6 @@ in {
 
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
-  pypsrp = callPackage ../development/python-modules/pypsrp { };
-
   phonopy = callPackage ../development/python-modules/phonopy { };
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
