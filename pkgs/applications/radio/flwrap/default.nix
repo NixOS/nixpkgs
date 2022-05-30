@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    broken = stdenv.isx86_64;
     description = "Digital modem file transfer program";
     homepage = "https://sourceforge.net/projects/fldigi/";
     license = lib.licenses.gpl3Plus;
