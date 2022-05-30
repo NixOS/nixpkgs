@@ -1,0 +1,26 @@
+From 67e4baafcb63bb016044bd8304db0bf9afdff40a Mon Sep 17 00:00:00 2001
+From: Timothy DeHerrera <tim@nrdxp.dev>
+Date: Thu, 2 Jun 2022 19:03:51 -0600
+Subject: [PATCH] [PATCH] Fix building with Nix
+
+Find dbus-python with pkg-config
+---
+ project.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/project.py b/project.py
+index 71800c4..c4875c1 100644
+--- a/project.py
++++ b/project.py
+@@ -248,7 +248,7 @@ del find_qt
+         dbus_lib_dirs = []
+         dbus_libs = []
+ 
+-        args = ['pkg-config', '--cflags-only-I', '--libs dbus-1']
++        args = ['pkg-config', '--cflags-only-I', '--libs', 'dbus-1', 'dbus-python']
+ 
+         for line in self.read_command_pipe(args, fatal=False):
+             for flag in line.strip().split():
+-- 
+2.36.0
+

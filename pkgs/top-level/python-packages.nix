@@ -8119,7 +8119,11 @@ in {
 
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { };
 
+  pyqt6 = callPackage ../development/python-modules/pyqt/6.x.nix { };
+
   pyqt5_sip = callPackage ../development/python-modules/pyqt/sip.nix { };
+
+  pyqt6_sip = callPackage ../development/python-modules/pyqt/sip6.nix { };
 
   pyqt5_with_qtmultimedia = self.pyqt5.override {
     withMultimedia = true;
