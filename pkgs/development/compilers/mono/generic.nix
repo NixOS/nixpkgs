@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
   inherit enableParallelBuilding;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://mono-project.com/";
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;

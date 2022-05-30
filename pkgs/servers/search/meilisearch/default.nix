@@ -26,6 +26,7 @@ rustPlatform.buildRustPackage {
   cargoSha256 = "sha256-dz+1IQZRSeMEagI2dnOtR3A8prg4UZ2Om0pd1BUhuhE=";
   buildInputs = lib.optionals stdenv.isDarwin [ Security DiskArbitration Foundation ];
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Powerful, fast, and an easy to use search engine ";
     homepage = "https://docs.meilisearch.com/";
     license = licenses.mit;

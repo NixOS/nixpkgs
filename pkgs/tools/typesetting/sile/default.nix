@@ -100,6 +100,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" "dev" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful
