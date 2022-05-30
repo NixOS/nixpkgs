@@ -89,8 +89,7 @@ let
     allowInsecurePredicate attrs ||
     builtins.getEnv "NIXPKGS_ALLOW_INSECURE" == "1";
 
-
-  isNonSource = sourceTypes: lib.lists.any (t: !t.isSource) sourceTypes;
+  isNonSource = sourceTypes: sourceTypes != [];
 
   hasNonSourceProvenance = attrs:
     (attrs ? meta.sourceProvenance) &&
@@ -101,7 +100,7 @@ let
   # {pkgs, ...}:
   # {
   #   allowNonSource = false;
-  #   allowNonSourcePredicate = with lib.lists; pkg: !(any (p: !p.isSource && p!=lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
+  #   allowNonSourcePredicate = lib.lists.any (p: p!=lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance);
   # }
   allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
 
