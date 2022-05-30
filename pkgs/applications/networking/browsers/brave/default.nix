@@ -201,7 +201,7 @@ stdenv.mkDerivation rec {
       contribute to your favorite creators automatically.
     '';
     license = licenses.mpl20;
-    sourceProvenance = with lib.source-types; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm ];
     platforms = [ "x86_64-linux" ];
   };
