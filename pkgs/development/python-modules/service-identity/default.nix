@@ -4,12 +4,10 @@
 , cryptography
 , fetchFromGitHub
 , idna
-, ipaddress
 , pyasn1
 , pyasn1-modules
 , six
 , pytestCheckHook
-, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -30,8 +28,6 @@ buildPythonPackage rec {
     pyasn1
     pyasn1-modules
     six
-  ] ++ lib.optionals (pythonOlder "3.3") [
-    ipaddress
   ];
 
   checkInputs = [

@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0csh307zfz666kkk5idrw3crj1x8q8vsqgwqil0r1n1hs4p7ica7";
   };
 
-  buildInputs = [ pyyaml ];
+  propagatedBuildInputs = [ pyyaml ];
 
   doCheck = false; # requires files from uap-core
 
