@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = true;
     description = "A modern Volume Mixer for PulseAudio";
     homepage = "https://github.com/Aurailus/Myxer";
     license = licenses.gpl3Only;
