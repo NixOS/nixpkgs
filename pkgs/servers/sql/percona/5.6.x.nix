@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   passthru.mysqlVersion = "5.6";
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     homepage = "https://www.percona.com";
     description = "a free, fully compatible, enhanced, open source drop-in replacement for MySQL that provides superior performance, scalability and instrumentation";
     platforms = platforms.linux;
