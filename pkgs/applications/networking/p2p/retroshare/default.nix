@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, cmake, pkg-config, miniupnpc, bzip2
+{ stdenv, lib, mkDerivation, fetchFromGitHub, qmake, cmake, pkg-config, miniupnpc, bzip2
 , speex, libmicrohttpd, libxml2, libxslt, sqlcipher, rapidjson, libXScrnSaver
 , qtbase, qtx11extras, qtmultimedia, libgnome-keyring3
 }:
@@ -44,6 +44,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "Decentralized peer to peer chat application.";
     homepage = "https://retroshare.cc/";
     license = licenses.gpl2Plus;
