@@ -26,7 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-zOxlC4NdSBkhOMhTKa4Dc15s7VjpstnCFG1shMBvpT4=";
   };
 
-  patches = lib.optionals (lib.versionAtLeast werkzeug.version "2.1.0") [
+  patches = [
     ./werkzeug-2.1.0-compat.patch
   ];
 
