@@ -57,11 +57,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace requirements/default.txt \
-      --replace "setuptools>=59.1.1,<59.7.0" "setuptools"
-  '';
-
   disabledTestPaths = [
     # test_eventlet touches network
     "t/unit/concurrency/test_eventlet.py"
