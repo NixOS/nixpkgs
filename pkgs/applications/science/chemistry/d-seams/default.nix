@@ -16,6 +16,7 @@ clangStdenv.mkDerivation rec {
   buildInputs = [ fmt rang libyamlcpp eigen catch2 boost gsl liblapack blas ];
 
   meta = with lib; {
+    broken = true;
     description =
       "d-SEAMS: Deferred Structural Elucidation Analysis for Molecular Simulations";
     longDescription = ''
