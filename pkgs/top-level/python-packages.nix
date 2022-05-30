@@ -6847,7 +6847,9 @@ in {
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
-  psutil = callPackage ../development/python-modules/psutil { };
+  psutil = callPackage ../development/python-modules/psutil {
+    inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
+  };
 
   psycopg2 = callPackage ../development/python-modules/psycopg2 { };
 
