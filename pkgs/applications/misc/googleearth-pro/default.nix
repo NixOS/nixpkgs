@@ -116,7 +116,7 @@ mkDerivation rec {
     description = "A world sphere viewer";
     homepage = "https://www.google.com/earth/";
     license = licenses.unfree;
-    sourceProvenance = with lib.source-types; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ friedelino shamilton ];
     platforms = platforms.linux;
     knownVulnerabilities = [ "Includes vulnerable bundled libraries." ];
