@@ -2399,9 +2399,7 @@ with pkgs;
 
   pcem = callPackage ../applications/emulators/pcem { };
 
-  pcsx2 = callPackage ../applications/emulators/pcsx2 {
-    wxGTK = wxGTK32;
-  };
+  pcsx2 = qt6Packages.callPackage ../applications/emulators/pcsx2 { };
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
