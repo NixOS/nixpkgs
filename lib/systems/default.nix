@@ -6,7 +6,7 @@ rec {
   parse = import ./parse.nix { inherit lib; };
   inspect = import ./inspect.nix { inherit lib; };
   platforms = import ./platforms.nix { inherit lib; };
-  examples = import ./examples.nix { inherit lib; };
+  examples = import ./all.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
   /* List of all Nix system doubles the nixpkgs flake will expose the package set
