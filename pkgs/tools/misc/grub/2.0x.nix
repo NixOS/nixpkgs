@@ -164,6 +164,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = xenSupport;
     description = "GNU GRUB, the Grand Unified Boot Loader (2.x beta)";
 
     longDescription =
