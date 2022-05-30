@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = stdenv.isx86_64;
     description = "C++ URI library";
     homepage = "https://cpp-netlib.org";
     license = lib.licenses.boost;
