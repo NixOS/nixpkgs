@@ -5,6 +5,10 @@
 , libusb1
 , darwin
 , testers
+# As per the README, `lmicdiusb` is not supported on Windows since it needs
+# `poll`:
+# https://github.com/utzig/lm4tools/blob/61a7d17b85e9b4b040fdaf84e02599d186f8b585/README.md#L15
+, buildLmicdiusb ? !stdenv.hostPlatform.isWindows
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,9 +23,17 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # We don't want the Makefile to assume `libusb` lives in
-    # /usr/local/lib.
+    # We don't want the Makefile to assume `libusb` lives in /usr/local/lib.
     ./macOS-use-pkg-config.patch
+    # When cross compiling `pkg-config` may have a prefix; we want to get its
+    # name/path from `$PKG_CONFIG`.
+    ./use-pkg-config-env-var.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
+    # The minGW toolchain appends a `.exe` if it's not present which confuses
+    # `install`.
+    ./windows-file-ext.patch
+  ] ++ lib.optionals (!buildLmicdiusb) [
+    ./disable-lmicdiusb-build.patch
   ];
 
   nativeBuildInputs = [ pkg-config ];

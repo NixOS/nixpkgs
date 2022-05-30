@@ -1,0 +1,12 @@
+diff --git a/Makefile b/Makefile
+index 25544fe..52c4c24 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,5 @@
+ all:
+-	@${MAKE} -C lmicdiusb all
+ 	@${MAKE} -C lm4flash all
+ 
+ install: all
+-	@${MAKE} -C lmicdiusb install
+ 	@${MAKE} -C lm4flash install
