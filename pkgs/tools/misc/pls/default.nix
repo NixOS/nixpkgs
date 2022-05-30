@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pls";
-  version = "4.0.3";
+  version = "5.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dhruvkb";
     repo = "pls";
     rev = version;
-    sha256 = "sha256-cVTIWSOx3FwF3QPak3eIIIgQ1O9JF5e5ILpcHQ4qI6k=";
+    sha256 = "sha256-9AY/xZhjowBRHRDevov677Ov4uJWxbVdB789KxA1dXQ=";
   };
 
   nativeBuildInputs = [ python3.pkgs.poetry-core ];
