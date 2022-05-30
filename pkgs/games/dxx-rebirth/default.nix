@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "Source Port of the Descent 1 and 2 engines";
     homepage = "https://www.dxx-rebirth.com/";
     license = licenses.gpl3;
