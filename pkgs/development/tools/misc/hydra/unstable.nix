@@ -239,7 +239,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    inherit perlDeps;
+    inherit nix perlDeps;
     tests.basic = nixosTests.hydra.hydra_unstable;
   };
 
