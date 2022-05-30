@@ -14,8 +14,10 @@ buildGoModule rec {
   vendorSha256 = "sha256-aRS+MwME72qIMyhnnIRqmrx5hcQ1V0pLIBJqSoR+Fkk=";
 
   installPhase = ''
+    mkdir -p $out/lib/viaduct.ai/v1/ksops/
     mkdir -p $out/lib/viaduct.ai/v1/ksops-exec/
-    mv $GOPATH/bin/kustomize-sops $out/lib/viaduct.ai/v1/ksops-exec/ksops-exec
+    mv $GOPATH/bin/kustomize-sops $out/lib/viaduct.ai/v1/ksops/ksops
+    ln -s $out/lib/viaduct.ai/v1/ksops/ksops $out/lib/viaduct.ai/v1/ksops-exec/ksops-exec
   '';
 
   # Tests are broken in a nix environment
