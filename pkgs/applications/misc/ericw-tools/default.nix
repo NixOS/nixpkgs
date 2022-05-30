@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     homepage = "https://ericwa.github.io/ericw-tools/";
     description = "Map compile tools for Quake and Hexen 2";
     license = licenses.gpl3Plus;
