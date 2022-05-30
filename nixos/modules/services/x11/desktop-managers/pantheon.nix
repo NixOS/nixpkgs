@@ -186,7 +186,6 @@ in
         hicolor-icon-theme
         onboard
         qgnomeplatform
-        shared-mime-info
         sound-theme-freedesktop
         xdg-user-dirs
       ] ++ (with pkgs.pantheon; [
@@ -223,6 +222,8 @@ in
 
       # Settings from elementary-default-settings
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
+
+      xdg.mime.enable = true;
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = with pkgs.pantheon; [
