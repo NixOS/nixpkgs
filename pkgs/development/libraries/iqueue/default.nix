@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libbsd microsoft_gsl ];
 
   meta = with lib; {
+    broken = true;
     homepage = "https://github.com/twosigma/iqueue";
     description = "Indexed queue";
     license = licenses.asl20;
