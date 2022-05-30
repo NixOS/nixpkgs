@@ -80,6 +80,7 @@ in stdenv.mkDerivation rec {
   ];
 
   meta = {
+    broken = true;
     description = "An open source implementation of Oz 3";
     maintainers = [ lib.maintainers.layus ];
     license = lib.licenses.bsd2;
