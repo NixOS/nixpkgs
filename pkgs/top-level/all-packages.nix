@@ -7673,11 +7673,11 @@ with pkgs;
 
   mani = callPackage ../development/tools/mani { };
 
-  mapcache = callPackage ../servers/mapcache { };
+  mapcache = callPackage ../servers/geospatial/mapcache { };
 
-  mapserver = callPackage ../servers/mapserver { };
+  mapserver = callPackage ../servers/geospatial/mapserver { };
 
-  martin = callPackage ../servers/martin {
+  martin = callPackage ../servers/geospatial/martin {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -10895,7 +10895,7 @@ with pkgs;
 
   tidy-viewer = callPackage ../tools/text/tidy-viewer { };
 
-  tile38 = callPackage ../servers/tile38 { };
+  tile38 = callPackage ../servers/geospatial/tile38 { };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
@@ -11511,7 +11511,7 @@ with pkgs;
 
   td = callPackage ../tools/misc/td { };
 
-  tegola = callPackage ../servers/tegola {};
+  tegola = callPackage ../servers/geospatial/tegola {};
 
   tftp-hpa = callPackage ../tools/networking/tftp-hpa {};
 
@@ -13088,7 +13088,7 @@ with pkgs;
 
   remarkable2-toolchain = callPackage ../development/tools/misc/remarkable/remarkable2-toolchain { };
 
-  t-rex = callPackage ../servers/t-rex {
+  t-rex = callPackage ../servers/geospatial/t-rex {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -21964,7 +21964,7 @@ with pkgs;
 
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
 
-  mbtileserver = callPackage ../servers/mbtileserver { };
+  mbtileserver = callPackage ../servers/geospatial/mbtileserver { };
 
   memcached = callPackage ../servers/memcached {};
 
@@ -22206,9 +22206,9 @@ with pkgs;
 
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
 
-  pg_featureserv = callPackage ../servers/pg_featureserv { };
+  pg_featureserv = callPackage ../servers/geospatial/pg_featureserv { };
 
-  pg_tileserv = callPackage ../servers/pg_tileserv { };
+  pg_tileserv = callPackage ../servers/geospatial/pg_tileserv { };
 
   pies = callPackage ../servers/pies { };
 
