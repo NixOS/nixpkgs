@@ -52,26 +52,24 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript =
     let
-      inherit (import ./update-utils.nix { inherit lib; })
-        getLatestStableVersion
-        getSha256;
-      newVersion = getLatestStableVersion;
-      newAarch64Sha256 = getSha256 dist."aarch64-darwin".url version newVersion;
-      newX86_64Sha256 = getSha256 dist."x86_64-darwin".url version newVersion;
-      currentFile = builtins.toString ./default.nix;
+      defaultNixFile = builtins.toString ./default.nix;
+      updateNix = builtins.toString ./update.nix;
+      aarch64Url = dist."aarch64-darwin".url;
+      x86_64Url = dist."x86_64-darwin".url;
     in
     writeScript "update-libreoffice.sh"
       ''
         #!/usr/bin/env nix-shell
-        #!nix-shell -i bash -p common-updater-scripts
+        #!nix-shell -i bash --argstr aarch64Url ${aarch64Url} --argstr x86_64Url ${x86_64Url} --argstr version ${version} ${updateNix}
         set -eou pipefail
 
         # reset version first so that both platforms are always updated and in sync
-        update-source-version libreoffice-bin 0 ${lib.fakeSha256} --file=${currentFile} --system=aarch64-darwin
-        update-source-version libreoffice-bin ${newVersion} ${newAarch64Sha256} --file=${currentFile} --system=aarch64-darwin
-        update-source-version libreoffice-bin 0 ${lib.fakeSha256} --file=${currentFile} --system=x86_64-darwin
-        update-source-version libreoffice-bin ${newVersion} ${newX86_64Sha256} --file=${currentFile} --system=x86_64-darwin
+        update-source-version libreoffice-bin 0 ${lib.fakeSha256} --file=${defaultNixFile} --system=aarch64-darwin
+        update-source-version libreoffice-bin $newVersion $newAarch64Sha256 --file=${defaultNixFile} --system=aarch64-darwin
+        update-source-version libreoffice-bin 0 ${lib.fakeSha256} --file=${defaultNixFile} --system=x86_64-darwin
+        update-source-version libreoffice-bin $newVersion $newX86_64Sha256 --file=${defaultNixFile} --system=x86_64-darwin
       '';
+
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = "https://libreoffice.org/";

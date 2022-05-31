@@ -1,4 +1,3 @@
-# Impure functions, for passthru.updateScript only
 { lib }:
 let
   # extractLatestVersionFromHtml :: String -> String
