@@ -5,13 +5,13 @@
 
 buildDunePackage rec {
   pname = "duff";
-  version = "0.4";
+  version = "0.5";
 
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/duff/releases/download/v${version}/duff-v${version}.tbz";
-    sha256 = "4795e8344a2c2562e0ef6c44ab742334b5cd807637354715889741b20a461da4";
+    url = "https://github.com/mirage/duff/releases/download/v${version}/duff-${version}.tbz";
+    sha256 = "sha256-0eqpfPWNOHYjkcjXRnZUTUFF0/L9E+TNoOqKCETN5hI=";
   };
 
   propagatedBuildInputs = [ stdlib-shims bigarray-compat fmt ];
