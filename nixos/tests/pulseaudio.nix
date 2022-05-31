@@ -13,7 +13,7 @@ let
           pkgs.writeScriptBin key ''
             set -euxo pipefail
             ${sox}/bin/play ${testFile}
-            ${sox}/bin/sox ${testFile} -t wav - | ${alsa-utils}/bin/aplay
+            # ${sox}/bin/sox ${testFile} -t wav - | ${alsa-utils}/bin/aplay
             touch /tmp/${key}_success
           '';
 
@@ -36,7 +36,7 @@ let
               support32Bit = true;
               inherit systemWide;
             };
-
+            virtualisation.audio = true;
             environment.systemPackages = [ testers.testPlay pkgs.pavucontrol ]
               ++ lib.optional pkgs.stdenv.isx86_64 testers.testPlay32;
           } // lib.optionalAttrs systemWide {
@@ -47,16 +47,22 @@ let
         enableOCR = true;
 
         testScript = { ... }: ''
+          import platform
+
+          tests = ['testPlay']
+          if platform.machine() == "x86_64":
+              tests.append('testPlay32')
+
           machine.wait_until_succeeds("pgrep xterm")
           machine.wait_for_text("alice@machine")
 
-          machine.send_chars("testPlay \n")
-          machine.wait_for_file("/tmp/testPlay_success")
-          ${lib.optionalString pkgs.stdenv.isx86_64 ''
-            machine.send_chars("testPlay32 \n")
-            machine.wait_for_file("/tmp/testPlay32_success")
-          ''}
-          machine.screenshot("testPlay")
+          for test in tests:
+              machine.send_chars(test)
+              with machine.record_audio(test):
+                  machine.send_key("ret")
+                  machine.wait_for_file(f"/tmp/{test}_success")
+              machine.screenshot(test)
+              machine.send_key("ctrl-l")
 
           # Pavucontrol only loads when Pulseaudio is running. If it isn't, the
           # text "Playback" (one of the tabs) will never show.

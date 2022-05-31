@@ -36,10 +36,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     };
 
     mkServer = { mpd, musicService, }:
-      { boot.kernelModules = [ "snd-dummy" ];
-        sound.enable = true;
+      { sound.enable = true;
         services.mpd = mpd;
         systemd.services.musicService = musicService;
+        virtualisation.audio = true;
       };
   in {
     name = "mpd";
@@ -97,28 +97,33 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
   testScript = ''
     mpc = "${pkgs.mpc-cli}/bin/mpc --wait"
+    start_all()
 
     # Connects to the given server and attempts to play a tune.
     def play_some_music(server):
         server.wait_for_unit("mpd.service")
         server.succeed(f"{mpc} update")
-        _, tracks = server.execute(f"{mpc} ls")
+        tracks = server.succeed(f"{mpc} ls")
 
         for track in tracks.splitlines():
             server.succeed(f"{mpc} add {track}")
 
-        _, added_tracks = server.execute(f"{mpc} playlist")
+        added_tracks = server.succeed(f"{mpc} playlist")
 
         # Check we succeeded adding audio tracks to the playlist
         assert len(added_tracks.splitlines()) > 0
 
-        server.succeed(f"{mpc} play")
+        with server.record_audio(server.name):
+            server.succeed(f"{mpc} play")
 
-        _, output = server.execute(f"{mpc} status")
-        # Assure audio track is playing
-        assert "playing" in output
+            output = server.succeed(f"{mpc} status")
+            # Assure audio track is playing
+            assert "playing" in output
 
-        server.succeed(f"{mpc} stop")
+            # Give it some time...
+            server.sleep(1)
+
+            server.succeed(f"{mpc} stop")
 
 
     play_some_music(serverALSA)

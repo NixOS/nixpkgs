@@ -1,7 +1,7 @@
-from contextlib import _GeneratorContextManager
+from contextlib import _GeneratorContextManager, contextmanager
 from pathlib import Path
 from queue import Queue
-from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple, Iterator
 import base64
 import io
 import os
@@ -129,6 +129,13 @@ def retry(fn: Callable, timeout: int = 900) -> None:
 
     if not fn(True):
         raise Exception(f"action timed out after {timeout} seconds")
+
+
+def add_extension_if_simple_name(filename: str, extension: str) -> str:
+    word_pattern = re.compile(r"^[\w\-]+$")
+    if word_pattern.match(filename):
+        filename = f"{filename}.{extension}"
+    return filename
 
 
 class StartCommand:
@@ -755,6 +762,77 @@ class Machine:
             os.unlink(tmp)
             if ret.returncode != 0:
                 raise Exception("Cannot convert screenshot")
+
+    @contextmanager
+    def record_audio(
+        self,
+        filename: str,
+        allow_silence: bool = False,
+        device: str = "audio_device",
+        sample_rate: int = 44100,
+        bit_depth: int = 16,
+        channels: int = 2,
+    ) -> Iterator[None]:
+        filename = add_extension_if_simple_name(filename, "wav")
+        out_path = self.out_dir / filename
+
+        info_capture_regex = re.compile(
+            r"^\[(\d+)\]: Capturing audio\(\d+,\d+,\d+\) to (.*): (\d+) bytes$",
+        )
+
+        def capture_info() -> Optional[Tuple[int, int]]:
+            output = self.send_monitor_command("info capture")
+            lines = output.splitlines()
+            for line in lines:
+                match = info_capture_regex.match(line)
+                if match is None:
+                    continue
+                if match[2] != str(out_path):
+                    continue
+                idx = int(match[1])
+                n_bytes = int(match[3])
+                return idx, n_bytes
+            return None
+
+        if capture_info() is not None:
+            raise Exception("Capture already running...?")
+
+        res = self.send_monitor_command(
+            f"wavcapture {out_path} {device} {sample_rate} {bit_depth} {channels}"
+        )
+
+        if f"Audiodev '{device}' not found" in res:
+            msg = f"Audio device {repr(device)} not found"
+            if device == "audio_device":
+                msg += " (is virtualisation.audio = true set?)"
+            raise Exception(msg)
+
+        r = capture_info()
+        if r is None:
+            raise Exception("Could not start capture...", res)
+
+        assert r is not None
+        capture_idx: int = r[0]
+
+        yield
+
+        r = capture_info()
+        if r is None:
+            raise Exception(
+                f"Recording {capture_idx} ({out_path}) stopped prematurely?"
+            )
+
+        assert r is not None
+        n_bytes = r[1]
+        if n_bytes == 0 and not allow_silence:
+            raise Exception("No audio recorded!")
+
+        self.send_monitor_command(f"stopcapture {capture_idx}")
+
+        if capture_info() is not None:
+            raise Exception(
+                f"Recording {capture_idx} ({out_path}) could not be stopped"
+            )
 
     def copy_from_host_via_shell(self, source: str, target: str) -> None:
         """Copy a file from the host into the guest by piping it over the

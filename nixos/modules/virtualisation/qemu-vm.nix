@@ -382,6 +382,17 @@ in
           '';
       };
 
+    virtualisation.audio =
+      mkOption {
+        type = types.bool;
+        default = false;
+        description =
+          ''
+            Whether to add an audio device to QEMU. This is just visible to
+            the guest, and not passed through to the host.
+          '';
+      };
+
     virtualisation.cores =
       mkOption {
         type = types.ints.positive;
@@ -876,6 +887,10 @@ in
       ])
       (mkIf (!cfg.graphics) [
         "-nographic"
+      ])
+      # TODO: ALSA driver might be preferred, but it's laggy as can be. Investigate?
+      (mkIf (cfg.audio) [
+        "-soundhw hda -audiodev id=audio_device,driver=pa"
       ])
     ];
 
