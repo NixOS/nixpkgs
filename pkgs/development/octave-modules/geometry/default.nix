@@ -18,6 +18,7 @@ buildOctavePackage rec {
   ];
 
   meta = with lib; {
+    broken = true;
     homepage = "https://octave.sourceforge.io/geometry/index.html";
     license = with licenses; [ gpl3Plus boost ];
     maintainers = with maintainers; [ KarlJoad ];
