@@ -23015,6 +23015,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost159;
     protobuf = protobuf3_7;
+    openssl = openssl_1_1;
   };
 
   mysql80 = callPackage ../servers/sql/mysql/8.0.x.nix {
