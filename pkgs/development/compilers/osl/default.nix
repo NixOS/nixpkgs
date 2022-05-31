@@ -1,4 +1,4 @@
-{ clangStdenv, lib, fetchFromGitHub, cmake, zlib, openexr,
+{ stdenv, clangStdenv, lib, fetchFromGitHub, cmake, zlib, openexr,
 openimageio, llvm, boost165, flex, bison, partio, pugixml,
 util-linux, python3
 }:
@@ -38,6 +38,7 @@ in clangStdenv.mkDerivation rec {
   ];
   # TODO: How important is partio? CMake doesn't seem to find it
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Advanced shading language for production GI renderers";
     homepage = "http://opensource.imageworks.com/?p=osl";
     maintainers = with maintainers; [ hodapp ];

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cloudflared";
-  version = "2022.5.1";
+  version = "2022.5.2";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    hash   = "sha256-yv4ulVkc7WX6T287kXecyE6lFlxh4YKAi2UCGkOf/lk=";
+    hash   = "sha256-xE/Bc+6Ob2u4tQQoykoaa8MhFH2czwz5rMABUqfXNMM=";
   };
 
   vendorSha256 = null;
@@ -29,6 +29,7 @@ buildGoModule rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "CloudFlare Tunnel daemon (and DNS-over-HTTPS client)";
     homepage    = "https://www.cloudflare.com/products/tunnel";
     license     = licenses.asl20;

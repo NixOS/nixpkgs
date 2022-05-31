@@ -4043,6 +4043,8 @@ in {
 
   hupper = callPackage ../development/python-modules/hupper { };
 
+  huum = callPackage ../development/python-modules/huum { };
+
   hvac = callPackage ../development/python-modules/hvac { };
 
   hvplot = callPackage ../development/python-modules/hvplot { };
@@ -6720,8 +6722,6 @@ in {
 
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
 
-  poster3 = callPackage ../development/python-modules/poster3 { };
-
   pot = callPackage ../development/python-modules/pot { };
 
   potentials = callPackage ../development/python-modules/potentials { };
@@ -8078,8 +8078,6 @@ in {
   pyspinel = callPackage ../development/python-modules/pyspinel { };
 
   pyspnego = callPackage ../development/python-modules/pyspnego { };
-
-  pyspotify = callPackage ../development/python-modules/pyspotify { };
 
   pysptk = callPackage ../development/python-modules/pysptk { };
 
@@ -11044,8 +11042,6 @@ in {
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
   webargs = callPackage ../development/python-modules/webargs { };
-
-  webapp2 = callPackage ../development/python-modules/webapp2 { };
 
   webassets = callPackage ../development/python-modules/webassets { };
 

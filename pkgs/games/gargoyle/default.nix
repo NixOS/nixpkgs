@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "http://ccxvii.net/gargoyle/";
     license = licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";

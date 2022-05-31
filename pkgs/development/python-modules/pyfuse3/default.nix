@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pkg-config, fuse3, trio, pytestCheckHook, pytest-trio, which }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, pkg-config, fuse3, trio, pytestCheckHook, pytest-trio, which, pythonAtLeast }:
 
 buildPythonPackage rec {
   pname = "pyfuse3";
@@ -8,6 +8,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "22d146dac59a8429115e9a93317975ea54b35e0278044a94d3fac5b4ad5f7e33";
   };
+
+  disabled = pythonAtLeast "3.10";
 
   nativeBuildInputs = [ pkg-config ];
 

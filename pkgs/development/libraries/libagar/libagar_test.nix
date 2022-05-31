@@ -18,6 +18,7 @@ stdenv.mkDerivation {
   buildInputs = [ perl bsdbuild libagar libjpeg libpng openssl ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Tests for libagar";
     homepage = "http://libagar.org/index.html";
     license = with licenses; bsd3;

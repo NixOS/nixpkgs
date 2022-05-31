@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tile38";
-  version = "1.27.1";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "tidwall";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CT611ZQmUYb6AclDEWXQsKDNxpwdJ+jqxIdDKGRo4/Q=";
+    sha256 = "sha256-Kac0iNqJFLLRR+Xu5GlxrsQqvim60uDlToe883++/7g=";
   };
 
-  vendorSha256 = "sha256-FeQbfnvdERg5jtiTaT7Uz1YvmYLDXCDEf4sAyr3+Avk=";
+  vendorSha256 = "sha256-/7dDPUXutyzkWq6EVVINFKzhuaiBCv5GrAF5pWG3ikc=";
 
   subPackages = [ "cmd/tile38-cli" "cmd/tile38-server" ];
 

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gmailctl";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "mbrt";
     repo = "gmailctl";
     rev = "v${version}";
-    sha256 = "sha256-tj+jKJuKwuqic/qfaUbf+Tao1X2FW0VVoGwqyx3q+go=";
+    sha256 = "sha256-NtmpXYC4JBbL5wW1yp5g7In8NZC4N6nvBaoUUcGs15Y=";
   };
 
-  vendorSha256 = "sha256-aBw9C488a3Wxde3QCCU0eiagiRYOS9mkjcCsB2Mrdr0=";
+  vendorSha256 = "sha256-+4HBWMaENG1NgUsFzN1uxyDbWOOiFba/ybWV7152g84=";
 
   nativeBuildInputs = [
     installShellFiles

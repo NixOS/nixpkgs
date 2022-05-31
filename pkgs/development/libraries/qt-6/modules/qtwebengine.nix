@@ -233,6 +233,7 @@ qtModule rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A web engine based on the Chromium web browser";
     platforms = platforms.linux;
     # This build takes a long time; particularly on slow architectures

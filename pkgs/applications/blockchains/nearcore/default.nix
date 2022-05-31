@@ -4,7 +4,7 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nearcore";
-  version = "1.26.0";
+  version = "1.26.1";
 
   # https://github.com/near/nearcore/tags
   src = fetchFromGitHub {
@@ -12,10 +12,10 @@ rustPlatform.buildRustPackage rec {
     repo = "nearcore";
     # there is also a branch for this version number, so we need to be explicit
     rev = "refs/tags/${version}";
-    sha256 = "sha256-N3A+hy5I1/yJ3IN9gDw3m1IZ9qK8LNhn3fuXLMn23bg=";
+    sha256 = "sha256-WoQtDdbFcvl6Wp5uv2tr/W/YYH8dyezF+LzSJ5oJcYY=";
   };
 
-  cargoSha256 = "sha256-g07liit048TSL73wFyDK+eKu33Z6fPJcJ+VeGgTtuS8=";
+  cargoSha256 = "sha256-7h14XzhhPmkPoTx0kkJl7I7CPqbRAtxa1zpplYxg4p4=";
 
   postPatch = ''
     substituteInPlace neard/build.rs \

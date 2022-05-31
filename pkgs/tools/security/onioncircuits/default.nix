@@ -1,4 +1,4 @@
-{ lib, fetchgit, python3, intltool, gtk3, gobject-introspection, gnome }:
+{ stdenv, lib, fetchgit, python3, intltool, gtk3, gobject-introspection, gnome }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "onioncircuits";
@@ -21,6 +21,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://tails.boum.org";
     description = "GTK application to display Tor circuits and streams";
     license = licenses.gpl3;

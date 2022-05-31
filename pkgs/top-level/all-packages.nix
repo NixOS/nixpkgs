@@ -4625,8 +4625,6 @@ with pkgs;
     protobuf = protobuf3_19;
   };
 
-  clementineUnfree = clementine.unfree;
-
   mellowplayer = libsForQt5.callPackage ../applications/audio/mellowplayer { };
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
@@ -12336,6 +12334,8 @@ with pkgs;
 
   binaryen = callPackage ../development/compilers/binaryen { };
 
+  blueprint-compiler = callPackage ../development/compilers/blueprint { };
+
   bluespec = callPackage ../development/compilers/bluespec {
     gmp-static = gmp.override { withStatic = true; };
     tex = texlive.combined.scheme-full;
@@ -14836,6 +14836,8 @@ with pkgs;
 
   ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
 
+  ansible-later = with python3.pkgs; toPythonApplication ansible-later;
+
   ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
 
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix {
@@ -14923,8 +14925,6 @@ with pkgs;
   automake115x = callPackage ../development/tools/misc/automake/automake-1.15.x.nix { };
 
   automake116x = callPackage ../development/tools/misc/automake/automake-1.16.x.nix { };
-
-  automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
   avrdude = callPackage ../development/embedded/avrdude { };
 
@@ -16114,6 +16114,9 @@ with pkgs;
   replace-secret = callPackage ../build-support/replace-secret/replace-secret.nix { };
 
   replacement = callPackage ../development/tools/misc/replacement { };
+
+  inherit (callPackage ../development/tools/replay-io { })
+    replay-io replay-node-cli;
 
   retdec = callPackage ../development/tools/analysis/retdec {
     stdenv = gcc8Stdenv;
@@ -17341,6 +17344,8 @@ with pkgs;
   geoip = callPackage ../development/libraries/geoip { };
 
   geoipjava = callPackage ../development/libraries/java/geoipjava { };
+
+  geomyidae = callPackage ../applications/networking/gopher/geomyidae { };
 
   geos = callPackage ../development/libraries/geos { };
 
@@ -22045,6 +22050,7 @@ with pkgs;
 
   nginxQuic = callPackage ../servers/http/nginx/quic.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
+    pcre = pcre2;
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -22055,6 +22061,8 @@ with pkgs;
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
+    openssl = openssl_3_0;
+    pcre = pcre2;
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -22063,6 +22071,8 @@ with pkgs;
 
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
+    openssl = openssl_3_0;
+    pcre = pcre2;
     withKTLS = true;
     withPerl = false;
     # We don't use `with` statement here on purpose!
@@ -25744,6 +25754,8 @@ with pkgs;
 
   curseradio = callPackage ../applications/audio/curseradio { };
 
+  curtail = callPackage ../applications/graphics/curtail { };
+
   cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
 
   cvs = callPackage ../applications/version-management/cvs { };
@@ -27090,6 +27102,8 @@ with pkgs;
 
   hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
+  hypnotix = callPackage ../applications/video/hypnotix { };
+
   indigenous-desktop = callPackage ../applications/networking/feedreaders/indigenous-desktop { };
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline { };
@@ -27215,6 +27229,8 @@ with pkgs;
   i3-auto-layout = callPackage ../applications/window-managers/i3/auto-layout.nix { };
 
   i3-gaps = callPackage ../applications/window-managers/i3/gaps.nix { };
+
+  i3-rounded = callPackage ../applications/window-managers/i3/rounded.nix { };
 
   i3altlayout = callPackage ../applications/window-managers/i3/altlayout.nix { };
 
@@ -27969,7 +27985,9 @@ with pkgs;
 
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
-  magic-wormhole-rs = callPackage ../tools/networking/magic-wormhole-rs/default.nix { };
+  magic-wormhole-rs = callPackage ../tools/networking/magic-wormhole-rs {
+    inherit (darwin.apple_sdk.frameworks) Security AppKit;
+  };
 
   magnetophonDSP = lib.recurseIntoAttrs {
     CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
@@ -28218,8 +28236,6 @@ with pkgs;
     mopidy-scrobbler
     mopidy-somafm
     mopidy-soundcloud
-    mopidy-spotify
-    mopidy-spotify-tunigo
     mopidy-subidy
     mopidy-tunein
     mopidy-youtube
@@ -29719,8 +29735,6 @@ with pkgs;
   spotify-unwrapped = callPackage ../applications/audio/spotify { };
 
   spotify = callPackage ../applications/audio/spotify/wrapper.nix { };
-
-  libspotify = callPackage ../development/libraries/libspotify (config.libspotify or {});
 
   sourcetrail = let
     llvmPackages = llvmPackages_10;
@@ -32721,6 +32735,8 @@ with pkgs;
 
   aragorn = callPackage ../applications/science/biology/aragorn { };
 
+  astral = callPackage ../applications/science/biology/astral { };
+
   archimedes = callPackage ../applications/science/electronics/archimedes {
     stdenv = gcc6Stdenv;
   };
@@ -35322,7 +35338,9 @@ with pkgs;
 
   webwormhole = callPackage ../tools/networking/webwormhole { };
 
-  werf = callPackage ../applications/networking/cluster/werf { };
+  werf = callPackage ../applications/networking/cluster/werf {
+    buildGoModule = buildGo118Module;
+  };
 
   wifi-password = callPackage ../os-specific/darwin/wifi-password {};
 
