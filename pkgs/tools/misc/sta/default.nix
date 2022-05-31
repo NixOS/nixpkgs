@@ -18,6 +18,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {
+    broken = true;
     description = "Simple statistics from the command line interface (CLI), fast";
     longDescription = ''
       This is a lightweight, fast tool for calculating basic descriptive
