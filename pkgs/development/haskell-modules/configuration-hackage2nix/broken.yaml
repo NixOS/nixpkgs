@@ -1744,7 +1744,6 @@ broken-packages:
   - gli
   - glicko
   - glider-nlp
-  - glirc
   - GLMatrix
   - global-variables
   - glob-posix
