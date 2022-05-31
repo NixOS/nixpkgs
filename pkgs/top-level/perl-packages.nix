@@ -21031,6 +21031,35 @@ let
     };
   };
 
+  TclpTk = buildPerlPackage {
+    pname = "Tcl-pTk";
+    version = "1.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CA/CAC/Tcl-pTk-1.09.tar.gz";
+      sha256 = "sha256-LR+YBlKS9+W7mBBy9/EkAOjxGVVe4MC5zToPr/pXl24=";
+    };
+    propagatedBuildInputs = [
+      ClassISA
+      SubName
+      Tcl
+      TestDeep
+    ];
+    buildPhase = ''
+      perl Makefile.PL --tclsh "${pkgs.tk.tcl}/bin/tclsh" INSTALL_BASE=$out --no-test-for-tk
+    '';
+    postInstall = ''
+      mkdir -p $out/lib/perl5/site_perl
+      mv $out/lib/perl5/Tcl $out/lib/perl5/site_perl/
+      mv $out/lib/perl5/auto $out/lib/perl5/site_perl/
+    '' + lib.optionalString stdenv.isDarwin ''
+      mv $out/lib/perl5/darwin-thread-multi-2level $out/lib/perl5/site_perl/
+    '';
+    meta = {
+      description = "Interface to Tcl/Tk with Perl/Tk compatible syntax";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TemplatePluginAutoformat = buildPerlPackage {
     pname = "Template-Plugin-Autoformat";
     version = "2.77";
