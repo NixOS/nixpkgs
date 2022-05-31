@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, automoc4
 , chromaprint
 , cmake
 , docbook_xml_dtd_45
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
   buildInputs = [
-    automoc4
     chromaprint
     ffmpeg
     flac
