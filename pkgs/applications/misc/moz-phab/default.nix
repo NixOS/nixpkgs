@@ -5,6 +5,7 @@
 # build inputs
 , distro
 , glean-sdk
+, pip
 , python-hglib
 , sentry-sdk
 , setuptools
@@ -30,6 +31,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     distro
     glean-sdk
+    pip
     python-hglib
     sentry-sdk
     setuptools
