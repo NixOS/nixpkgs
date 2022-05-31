@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   '' + extraPostInstall;
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "Non-blocking backup tool for MySQL";
     homepage = "http://www.percona.com/software/percona-xtrabackup";
     license = licenses.lgpl2;
