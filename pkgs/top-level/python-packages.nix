@@ -9260,6 +9260,8 @@ in {
 
   rlp = callPackage ../development/python-modules/rlp { };
 
+  rmrl = callPackage ../development/python-modules/rmrl { };
+
   rnc2rng = callPackage ../development/python-modules/rnc2rng { };
 
   rnginline = callPackage ../development/python-modules/rnginline { };
