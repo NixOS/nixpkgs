@@ -15100,7 +15100,7 @@ with pkgs;
 
   bump = callPackage ../development/tools/github/bump { };
 
-  libbpf = linuxPackages.libbpf;
+  libbpf = linuxPackages_latest.libbpf;
 
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
