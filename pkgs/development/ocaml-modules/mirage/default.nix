@@ -9,7 +9,12 @@ buildDunePackage rec {
 
   minimumOCamlVersion = "4.08";
 
-  useDune2 = true;
+  duneVersion = "3";
+
+  # needs opam-monorepo
+  postPatch = ''
+    rm -rf ./test/opam-monorepo
+  '';
 
   outputs = [ "out" "dev" ];
 
