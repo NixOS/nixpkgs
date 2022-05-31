@@ -13,6 +13,7 @@ buildOctavePackage rec {
   };
 
   meta = with lib; {
+    broken = true;
     homepage = "https://octave.sourceforge.io/image/index.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
