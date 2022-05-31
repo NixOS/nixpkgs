@@ -1,5 +1,5 @@
 { lib, buildDunePackage, fetchurl
-, ocaml, dune-configurator, cmdliner
+, ocaml, dune-configurator, cmdliner_1_0
 , lwt, withLwt ? lib.versionAtLeast ocaml.version "4.07"
 }:
 
@@ -24,7 +24,7 @@ buildDunePackage rec {
   propagatedBuildInputs = lib.optional withLwt lwt;
 
   buildInputs = [
-    cmdliner
+    cmdliner_1_0
     dune-configurator
   ];
 

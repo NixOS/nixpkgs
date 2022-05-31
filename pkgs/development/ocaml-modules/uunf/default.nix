@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, cmdliner }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf
+, cmdliner_1_0, cmdliner_1_1
+}:
+
+let
+  cmdliner = if lib.versionAtLeast ocaml.version "4.08" then  cmdliner_1_1 else cmdliner_1_0;
+in
+
 let
   pname = "uunf";
   webpage = "https://erratique.ch/software/${pname}";

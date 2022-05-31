@@ -1,7 +1,12 @@
 { lib, fetchurl, buildDunePackage, ocaml
-, astring, cmdliner, cppo, fpath, result, tyxml
+, astring, cppo, fpath, result, tyxml
 , markup, alcotest, yojson, sexplib, jq
+, cmdliner_1_0, cmdliner_1_1
 }:
+
+let
+  cmdliner = if lib.versionAtLeast ocaml.version "4.08" then  cmdliner_1_1 else cmdliner_1_0;
+in
 
 buildDunePackage rec {
   pname = "odoc";

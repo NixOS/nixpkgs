@@ -188,7 +188,7 @@ let
 
     # The 1.1.0 release broke a lot of packages and is not compatible with
     # OCaml < 4.08.
-    cmdliner = cmdliner_1_0;
+    cmdliner = cmdliner_1_1;
 
     cohttp = callPackage ../development/ocaml-modules/cohttp { };
 
@@ -819,6 +819,8 @@ let
     mezzo = callPackage ../development/compilers/mezzo { };
 
     mimic = callPackage ../development/ocaml-modules/mimic { };
+
+    mimic-happy-eyeballs = callPackage ../development/ocaml-modules/mimic/happy-eyeballs.nix { };
 
     minisat = callPackage ../development/ocaml-modules/minisat { };
 

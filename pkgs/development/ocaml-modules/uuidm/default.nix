@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg
+, cmdliner_1_0, cmdliner_1_1
+}:
+
+let
+  cmdliner = if lib.versionAtLeast ocaml.version "4.08" then  cmdliner_1_1 else cmdliner_1_0;
+in
 
 stdenv.mkDerivation rec {
   version = "0.9.7";

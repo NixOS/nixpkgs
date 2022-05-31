@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner, seq, stdlib-shims }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, seq, stdlib-shims
+, cmdliner_1_0, cmdliner_1_1
+}:
+
+let
+  cmdliner = if lib.versionAtLeast ocaml.version "4.08" then  cmdliner_1_1 else cmdliner_1_0;
+in
 
 if lib.versionOlder ocaml.version "4.05"
 then throw "fmt is not available for OCaml ${ocaml.version}"

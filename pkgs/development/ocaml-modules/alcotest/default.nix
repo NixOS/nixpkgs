@@ -1,6 +1,10 @@
-{ lib, buildDunePackage, fetchurl
-, astring, cmdliner, fmt, uuidm, re, stdlib-shims, uutf, ocaml-syntax-shims
+{ lib, buildDunePackage, fetchurl, ocaml
+, astring, cmdliner_1_0, cmdliner_1_1, fmt, uuidm, re, stdlib-shims, uutf, ocaml-syntax-shims
 }:
+
+let
+  cmdliner = if lib.versionAtLeast ocaml.version "4.08" then  cmdliner_1_1 else cmdliner_1_0;
+in
 
 buildDunePackage rec {
   pname = "alcotest";
@@ -15,9 +19,11 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ ocaml-syntax-shims ];
 
-  propagatedBuildInputs = [ astring cmdliner fmt uuidm re stdlib-shims uutf ];
+  buildInputs = [ cmdliner ];
 
-  doCheck = true;
+  propagatedBuildInputs = [ astring fmt uuidm re stdlib-shims uutf ];
+
+  doCheck = !lib.versionAtLeast ocaml.version "4.08"; # Broken with cmdliner 1.1
 
   meta = with lib; {
     homepage = "https://github.com/mirage/alcotest";

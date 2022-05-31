@@ -14,7 +14,11 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.08";
-  useDune2 = true;
+
+  # remove test that checks specific output of cmdliner
+  postPatch = ''
+    sed -i '23,30d' test/cli/dune
+  '';
 
   buildInputs = [
     stdlib-shims
@@ -37,6 +41,7 @@ buildDunePackage rec {
     crowbar
     re
   ];
+
   doCheck = true;
 
   meta = with lib; {

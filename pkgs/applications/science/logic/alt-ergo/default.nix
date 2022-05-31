@@ -42,7 +42,7 @@ ocamlPackages.buildDunePackage {
   configureFlags = [ pname ];
 
   nativeBuildInputs = [ which ocamlPackages.menhir ];
-  buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner ];
+  buildInputs = [ alt-ergo-parsers ocamlPackages.cmdliner_1_0 ];
 
   meta = {
     description = "High-performance theorem prover and SMT solver";

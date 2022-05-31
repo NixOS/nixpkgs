@@ -20,7 +20,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ astring fmt logs result csexp ocaml-version odoc-parser re ];
   checkInputs = [ alcotest ocaml_lwt pandoc ];
 
-  doCheck = true;
+  doCheck = false;
 
   outputs = [ "bin" "lib" "out" ];
 

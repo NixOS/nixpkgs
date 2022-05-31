@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, cmdliner , topkg, uchar }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild , topkg, uchar
+, cmdliner_1_0, cmdliner_1_1
+}:
+
 let
+  cmdliner = if lib.versionAtLeast ocaml.version "4.08" then  cmdliner_1_1 else cmdliner_1_0;
   pname = "uutf";
 in
 
