@@ -17,6 +17,7 @@
 
 # runtime
 , icu
+, libobjc
 , nspr
 , readline
 , zlib
@@ -48,8 +49,12 @@ stdenv.mkDerivation rec {
   ];
 =======
     m4
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isDarwin [ xcbuildHook ];
 >>>>>>> a199edf1da3 (xcbuild needed on darwin)
+=======
+  ] ++ lib.optionals stdenv.isDarwin [ xcbuildHook libobjc ];
+>>>>>>> c29bd5ea4b3 (add libobjc)
 
   buildInputs = [
     icu
