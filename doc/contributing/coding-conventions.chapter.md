@@ -663,3 +663,9 @@ stdenv.mkDerivation {
   ...
 }
 ```
+
+### Building offline documentation {#ssec-building-offline-documentation}
+
+Packages _should_ build and install offline documentation from, e.g Sphinx or TexInfo sources, if they are availabe in upstream release.Packages _should_ use version control checkout (e.g git or subversion) instead of release archive if later is missing documentation (often happens with archives on PyPi). Packages _should_ build documentation in html format and install it into `doc` output if html format is available. Packages _may_ build and install documentation in additional formats (e.g text, pdf, epub) into extra outputs; additional formats _should not_ be installed into `doc` output. Documentation outputs of different versions of same application _should_ be all co-insta llable; installing documentation into `share/doc/$name` (not `share/doc/$pname`) is an easy way to achieve it.
+
+If upstream maintains documentation separately with independent release process or if documentation is maintained by party other than primary maintainer, it is _optional_ for packages download and build said documentation.
