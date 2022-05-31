@@ -112,6 +112,7 @@ let
     };
 
     meta = llvm_meta // {
+      broken = enablePolly;
       homepage = "https://clang.llvm.org/";
       description = "A C language family frontend for LLVM";
       longDescription = ''
