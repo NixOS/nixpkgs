@@ -1,7 +1,7 @@
-{ fetchFromGitHub
-, fetchpatch
+{ kernel
 , libelf
 , pkg-config
+, python3
 , stdenv
 , zlib
 , lib
@@ -9,29 +9,20 @@
 }:
 
 stdenv.mkDerivation rec {
+  inherit (kernel) src version;
+
   pname = "libbpf";
-  version = "0.7.0";
 
-  src = fetchFromGitHub {
-    owner = "libbpf";
-    repo = "libbpf";
-    rev = "v${version}";
-    sha256 = "sha256-NFVJ8JquWVzu+QoaaOMzhnu6/IqdP1FPhtJFidXA4L4=";
-  };
-
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config python3 ];
   buildInputs = [ libelf zlib ];
 
   enableParallelBuilding = true;
-  makeFlags = [ "PREFIX=$(out)" "-C src" ];
+  makeFlags = [ "prefix=$(out)" ];
 
-  passthru.tests = {
-    bpf = nixosTests.bpf;
-  };
+  passthru.tests = { inherit (nixosTests) bpf; };
 
-  postInstall = ''
-    # install linux's libbpf-compatible linux/btf.h
-    install -Dm444 include/uapi/linux/*.h -t $out/include/linux
+  preConfigure = ''
+    cd tools/lib/bpf
   '';
 
   # FIXME: Multi-output requires some fixes to the way the pkg-config file is
@@ -41,7 +32,7 @@ stdenv.mkDerivation rec {
   # outputs = [ "out" "dev" ];
 
   meta = with lib; {
-    description = "Upstream mirror of libbpf";
+    description = "Common eBPF ELF object loading operations.";
     homepage = "https://github.com/libbpf/libbpf";
     license = with licenses; [ lgpl21 /* or */ bsd2 ];
     maintainers = with maintainers; [ thoughtpolice vcunat saschagrunert martinetd ];
