@@ -85,6 +85,11 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-zldZ4SiwkISFXxrbY/UdwooIZ3Z/I6qKxtpc3zD0T/o=";
   };
 
+  nix_2_9 = common {
+    version = "2.9.0";
+    sha256 = "sha256-W6aTsTpCTb+vXQEXDjnKqetOuJmEfSuK2CXvAMqwo74=";
+  };
+
   stable = self.nix_2_8;
 
   unstable = lib.lowPrio (common rec {
