@@ -12,6 +12,7 @@ let
             , extraMakeFlags ? []
             , extraMeta ? {}
             , version ? "2.6"
+            , _unfreeIncludeHDCPBlob ? unfreeIncludeHDCPBlob
             , ... } @ args:
            stdenv.mkDerivation ({
 
@@ -25,7 +26,7 @@ let
       sha256 = "sha256-qT9DdTvMcUrvRzgmVf2qmKB+Rb1WOB4p1rM+fsewGcg=";
     };
 
-    patches = lib.optionals (!unfreeIncludeHDCPBlob) [
+    patches = lib.optionals (!_unfreeIncludeHDCPBlob) [
       # this is a rebased version of https://gitlab.com/vicencb/kevinboot/-/blob/master/atf.patch
       ./remove-hdcp-blob.patch
     ];
@@ -60,7 +61,7 @@ let
     meta = with lib; {
       homepage = "https://github.com/ARM-software/arm-trusted-firmware";
       description = "A reference implementation of secure world software for ARMv8-A";
-      license = (if unfreeIncludeHDCPBlob then [ licenses.unfreeRedistributable ] else []) ++ [ licenses.bsd3 ];
+      license = (if _unfreeIncludeHDCPBlob then [ licenses.unfreeRedistributable ] else []) ++ [ licenses.bsd3 ];
       maintainers = with maintainers; [ lopsided98 ];
     } // extraMeta;
   } // builtins.removeAttrs args [ "extraMeta" ]);
@@ -88,12 +89,14 @@ in {
     platform = "sun50i_a64";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["build/${platform}/release/bl31.bin"];
+    _unfreeIncludeHDCPBlob = false;
   };
 
   armTrustedFirmwareAllwinnerH616 = buildArmTrustedFirmware rec {
     platform = "sun50i_h616";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["build/${platform}/release/bl31.bin"];
+    _unfreeIncludeHDCPBlob = false;
   };
 
   armTrustedFirmwareQemu = buildArmTrustedFirmware rec {
@@ -104,6 +107,7 @@ in {
       "build/${platform}/release/bl2.bin"
       "build/${platform}/release/bl31.bin"
     ];
+    _unfreeIncludeHDCPBlob = false;
   };
 
   armTrustedFirmwareRK3328 = buildArmTrustedFirmware rec {
@@ -125,5 +129,6 @@ in {
     platform = "gxbb";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31.bin"];
+    _unfreeIncludeHDCPBlob = false;
   };
 }
