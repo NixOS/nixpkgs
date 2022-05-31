@@ -376,6 +376,11 @@ let
       spectacle = [
         compilerNames.ghc8107
       ];
+      weeder = [
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc923
+      ];
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
