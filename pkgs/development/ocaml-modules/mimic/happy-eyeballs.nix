@@ -9,7 +9,7 @@ buildDunePackage {
 
   strictDeps = true;
 
-  buildInputs = [
+  propagatedBuildInputs = [
     mimic
     happy-eyeballs-mirage
   ];

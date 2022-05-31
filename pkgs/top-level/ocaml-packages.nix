@@ -578,9 +578,7 @@ let
       git-binary = pkgs.git;
     };
 
-    git-cohttp = callPackage ../development/ocaml-modules/git/cohttp.nix { };
-
-    git-cohttp-unix = callPackage ../development/ocaml-modules/git/cohttp-unix.nix { };
+    git-mirage = callPackage ../development/ocaml-modules/git/mirage.nix { };
 
     git-paf = callPackage ../development/ocaml-modules/git/paf.nix { };
 
