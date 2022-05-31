@@ -9345,6 +9345,8 @@ in {
 
   sanic-testing = callPackage ../development/python-modules/sanic-testing { };
 
+  sansio-multipart = callPackage ../development/python-modules/sansio-multipart { };
+
   sarif-om = callPackage ../development/python-modules/sarif-om { };
 
   sarge = callPackage ../development/python-modules/sarge { };
