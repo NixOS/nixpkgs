@@ -50,10 +50,6 @@ in
 
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
-        apply = list: list ++
-        [
-          pkgs.pantheon.pantheon-agent-geoclue2
-        ];
       };
 
       extraWingpanelIndicators = mkOption {
@@ -96,6 +92,9 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+      services.xserver.desktopManager.pantheon.sessionPath = utils.removePackagesByName [
+        pkgs.pantheon.pantheon-agent-geoclue2
+      ] config.environment.pantheon.excludePackages;
 
       services.xserver.displayManager.sessionPackages = [ pkgs.pantheon.elementary-session-settings ];
 
