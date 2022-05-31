@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, io-page, io-page-unix, mirage-block, alcotest
+{ lib, fetchurl, buildDunePackage, io-page, mirage-block, alcotest
 , mirage-block-combinators }:
 
 buildDunePackage rec {
@@ -25,7 +25,7 @@ buildDunePackage rec {
   propagatedBuildInputs = [ io-page mirage-block ];
 
   doCheck = true;
-  checkInputs = [ alcotest io-page-unix mirage-block-combinators ];
+  checkInputs = [ alcotest io-page mirage-block-combinators ];
 
   meta = with lib; {
     description = "In-memory BLOCK device for MirageOS";

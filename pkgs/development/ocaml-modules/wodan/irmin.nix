@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, io-page-unix, irmin-chunk, irmin-git, irmin-unix
+{ lib, buildDunePackage, io-page, irmin-chunk, irmin-git, irmin-unix
 , mirage-block-ramdisk, mirage-block-unix, wodan }:
 
 buildDunePackage rec {
@@ -6,7 +6,7 @@ buildDunePackage rec {
   inherit (wodan) version src useDune2;
 
   propagatedBuildInputs = [
-    io-page-unix
+    io-page
     irmin-chunk
     irmin-git
     irmin-unix
