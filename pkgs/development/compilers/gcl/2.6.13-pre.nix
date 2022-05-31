@@ -44,6 +44,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "pic" "bindnow" ];
 
   meta = {
+    broken = stdenv.isx86_64;
     description = "GNU Common Lisp compiler working via GCC";
     maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
