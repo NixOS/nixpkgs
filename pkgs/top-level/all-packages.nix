@@ -14926,8 +14926,6 @@ with pkgs;
 
   automake116x = callPackage ../development/tools/misc/automake/automake-1.16.x.nix { };
 
-  automoc4 = callPackage ../development/tools/misc/automoc4 { };
-
   avrdude = callPackage ../development/embedded/avrdude { };
 
   b4 = callPackage ../development/tools/b4 { };
