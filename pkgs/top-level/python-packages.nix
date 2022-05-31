@@ -209,6 +209,8 @@ in {
 
   aenum = callPackage ../development/python-modules/aenum { };
 
+  aeppl = callPackage ../development/python-modules/aeppl { };
+
   aesara = callPackage ../development/python-modules/aesara { };
 
   aesedb = callPackage ../development/python-modules/aesedb { };
@@ -5849,6 +5851,8 @@ in {
 
   numcodecs = callPackage ../development/python-modules/numcodecs { };
 
+  numdifftools = callPackage ../development/python-modules/numdifftools { };
+
   numericalunits = callPackage ../development/python-modules/numericalunits { };
 
   numexpr = callPackage ../development/python-modules/numexpr { };
@@ -5858,6 +5862,8 @@ in {
   numpy = callPackage ../development/python-modules/numpy { };
 
   numpy-stl = callPackage ../development/python-modules/numpy-stl { };
+
+  numpyro = callPackage ../development/python-modules/numpyro { };
 
   nunavut = callPackage ../development/python-modules/nunavut { };
 
@@ -11145,6 +11151,8 @@ in {
   };
 
   xarray = callPackage ../development/python-modules/xarray { };
+
+  xarray-einstats = callPackage ../development/python-modules/xarray-einstats { };
 
   xattr = callPackage ../development/python-modules/xattr { };
 
