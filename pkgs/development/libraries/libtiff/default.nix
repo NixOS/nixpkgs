@@ -80,6 +80,16 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/libtiff/libtiff/-/commit/a95b799f65064e4ba2e2dfc206808f86faf93e85.patch";
       sha256 = "0i61kkjaixdn2p933lpma9s6i0772vhxjxxcwyqagw96lmszrcm7";
     })
+    (fetchpatch {
+      name = "CVE-2022-1354.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/87f580f39011109b3bb5f6eca13fac543a542798.patch";
+      sha256 = "0171c662xiv3295x4wsq6qq0v90js51j54vsl7wm043kjkrp1fsb";
+    })
+    (fetchpatch {
+      name = "CVE-2022-1355.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/c1ae29f9ebacd29b7c3e0c7db671af7db3584bc2.patch";
+      sha256 = "1y75c72s41pl39d5zr5pmkiyfrancllv8fbl10zvc67pg3qjq4v8";
+    })
   ];
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
