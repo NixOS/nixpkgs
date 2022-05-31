@@ -17,6 +17,12 @@ buildDunePackage rec {
     sha256 = "sha256-t8dOMQQDpje0QbuOhjSIa3xnXuXcxMVTLENa/rwdgA4=";
   };
 
+  patches = [ ./cstruct-610.patch ];
+
+  postPatch = ''
+    substituteInPlace test/chacha_tests.ml --replace "Cstruct.len" "Cstruct.length"
+  '';
+
   useDune2 = true;
 
   minimumOCamlVersion = "4.02";

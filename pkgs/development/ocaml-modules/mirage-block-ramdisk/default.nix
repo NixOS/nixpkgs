@@ -16,6 +16,8 @@ buildDunePackage rec {
   # Make tests compatible with alcotest 1.4.0
   postPatch = ''
     substituteInPlace test/tests.ml --replace 'Fmt.kstrf Alcotest.fail' 'Fmt.kstrf (fun s -> Alcotest.fail s)'
+
+    substituteInPlace src/ramdisk.ml --replace 'Cstruct.len' 'Cstruct.length'
   '';
 
   minimumOCamlVersion = "4.06";

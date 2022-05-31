@@ -15,6 +15,13 @@ buildDunePackage rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace src/wodan/crc32c.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+    substituteInPlace src/wodan/wodan.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+  '';
+
   minimumOCamlVersion = "4.08";
 
   propagatedBuildInputs = [

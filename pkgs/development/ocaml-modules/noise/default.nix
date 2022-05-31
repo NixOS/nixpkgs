@@ -25,6 +25,27 @@ buildDunePackage rec {
     sha256 = "sha256-fe3pT7fsuF2hCvXpInsRg6OvARs/eAh1Un454s1osDs=";
   };
 
+  postPatch = ''
+    substituteInPlace tweetnacl/lib/tweetnacl.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+    substituteInPlace chacha20/lib/chacha20.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+    substituteInPlace lib/symmetric_state.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+    substituteInPlace lib/cipher_chacha_poly.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+    substituteInPlace lib/cipher_aes_gcm.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+    substituteInPlace lib/state.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+    substituteInPlace test/unit/test_cipher_aes_gcm.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+    substituteInPlace test/examples/noise_demo_two_way.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+    substituteInPlace test/examples/noise_demo_one_way.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+  '';
+
   useDune2 = true;
 
   minimumOCamlVersion = "4.04";

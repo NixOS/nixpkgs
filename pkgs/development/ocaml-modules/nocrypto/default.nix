@@ -55,6 +55,66 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # cstruct >= 6.0.0 compat
+  postPatch = ''
+    substituteInPlace src/uncommon.ml \
+      --replace ' len cs ' ' Cstruct.length cs ' \
+      --replace 'let n1 = len cs1 and n2 = len cs2 in' 'let n1 = Cstruct.length cs1 and n2 = Cstruct.length cs2 in' \
+      --replace 'let l1 = len cs1 and l2 = len cs2 in' 'let l1 = Cstruct.length cs1 and l2 = Cstruct.length cs2 in' \
+      --replace 'None off (len cs - off)' 'None off (Cstruct.length cs - off)' \
+      --replace '(len src) (len dst)' '(Cstruct.length src) (Cstruct.length dst)' \
+      --replace '(len cs1) (len cs2)' '(Cstruct.length cs1) (Cstruct.length cs2)' \
+      --replace '(len cs -' '(Cstruct.length cs -'
+
+    substituteInPlace src/base64.ml \
+      --replace ' len cs ' ' Cstruct.length cs '
+
+    substituteInPlace src/hash.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+
+    substituteInPlace src/cipher_stream.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+
+    substituteInPlace src/numeric.ml \
+      --replace 'Cstruct.len' 'Cstruct.length' \
+      --replace '(len cs -' '(Cstruct.length cs -'
+
+    substituteInPlace src/ccm.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+
+    substituteInPlace src/gcm.ml \
+      --replace ' len cs ' ' Cstruct.length cs ' \
+      --replace ' len iv ' ' Cstruct.length iv ' \
+      --replace '(len cs' '(Cstruct.length cs'
+
+    substituteInPlace src/cipher_block.ml \
+      --replace ' len cs ' ' Cstruct.length cs ' \
+      --replace ' len src ' ' Cstruct.length src ' \
+      --replace ' len iv ' ' Cstruct.length iv ' \
+      --replace '(len cs -' '(Cstruct.length cs -' \
+      --replace '(len msg' '(Cstruct.length msg' \
+      --replace '(len src' '(Cstruct.length src'
+
+    substituteInPlace src/fortuna.ml \
+      --replace 'Cstruct.len' 'Cstruct.length'
+
+    substituteInPlace src/rng.ml \
+      --replace ' Cstruct.len' ' Cstruct.length'
+
+    substituteInPlace src/rsa.ml \
+      --replace ' len msg' ' Cstruct.length msg' \
+      --replace ' len em' ' Cstruct.length em' \
+      --replace '(len db' '(Cstruct.length db' \
+      --replace '(len cs' '(Cstruct.length cs' \
+      --replace 'len signature' 'Cstruct.length signature'
+
+    substituteInPlace src/dsa.ml \
+      --replace ' Cstruct.len' ' Cstruct.length'
+
+    substituteInPlace unix/nocrypto_entropy_unix.ml \
+      --replace ' Cstruct.len' ' Cstruct.length'
+  '';
+
   nativeBuildInputs = [ ocaml findlib ocamlbuild cc-wrapper ];
   buildInputs = [ topkg cpuid ocb-stubblr ocamlbuild ];
   propagatedBuildInputs = [ cstruct ppx_deriving ppx_sexp_conv sexplib zarith ] ++ optional withLwt cstruct-lwt;

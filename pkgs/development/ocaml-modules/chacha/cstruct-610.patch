@@ -1,0 +1,56 @@
+From fbe4a0a808226229728a68f278adf370251196fd Mon Sep 17 00:00:00 2001
+From: Hannes Mehnert <hannes@mehnert.org>
+Date: Thu, 31 Mar 2022 14:25:43 +0200
+Subject: [PATCH] use Cstruct.length instead of deprecated Cstruct.len
+
+---
+ src/chacha.ml      | 10 +++++-----
+ src/chacha_core.ml |  2 +-
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/chacha.ml b/src/chacha.ml
+index 1f2e198..2e638ca 100644
+--- a/src/chacha.ml
++++ b/src/chacha.ml
+@@ -7,10 +7,10 @@ type t = {
+ }
+ 
+ let expand key nonce =
+-  if Cs.len nonce <> 8 then invalid_arg "nonce must be 8 byte long"
++  if Cs.length nonce <> 8 then invalid_arg "nonce must be 8 byte long"
+   else
+     let s, k0, k1 =
+-      match Cs.len key with
++      match Cs.length key with
+       | 32 ->
+           let k0, k1 = Cs.split key 16 in
+           ("expand 32-byte k", k0, k1)
+@@ -39,12 +39,12 @@ let hash state =
+     Cs.LE.set_uint32 state.state 52 nonce
+ 
+ let encrypt input state =
+-  let l = Cs.len input in
++  let l = Cs.length input in
+   let output = Cs.create l in
+   let i = ref 0 in
+   while !i < l do
+-    if Cs.len state.buffer = 0 then hash state ;
+-    let count = min (Cs.len state.buffer) (l - !i) in
++    if Cs.length state.buffer = 0 then hash state ;
++    let count = min (Cs.length state.buffer) (l - !i) in
+     let buffer = Cs.create count in
+     Cs.blit input !i buffer 0 count ;
+     Mirage_crypto.Uncommon.Cs.xor_into state.buffer buffer count ;
+diff --git a/src/chacha_core.ml b/src/chacha_core.ml
+index dc469f0..0273e0d 100644
+--- a/src/chacha_core.ml
++++ b/src/chacha_core.ml
+@@ -6,7 +6,7 @@ end
+ 
+ let chacha count i =
+   let l = 64 in
+-  if Cs.len i <> l then
++  if Cs.length i <> l then
+     invalid_arg "input must be 16 blocks of 32 bits"
+   else
+     let o = Cs.create l in

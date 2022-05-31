@@ -10,7 +10,10 @@ buildDunePackage rec {
     sha256 = "sha256-gWdUqOj5c50ObZjO1uULAmoo1ZIyRFxQUaZuQzLMVy0=";
   };
 
-  useDune2 = true;
+  postPatch = ''
+    substituteInPlace src/hacl_x25519.ml --replace "Cstruct.len" "Cstruct.length"
+    substituteInPlace src/hacl_ed25519.ml --replace "Cstruct.len" "Cstruct.length"
+  '';
   propagatedBuildInputs = [ eqaf cstruct ];
   checkInputs = [ alcotest benchmark hex ppx_blob ppx_deriving_yojson stdlib-shims yojson ];
   doCheck = true;
