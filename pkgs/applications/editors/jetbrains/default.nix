@@ -137,6 +137,7 @@ let
       inherit pname version src wmClass jdk product;
       productShort = "MPS";
       meta = with lib; {
+        broken = (stdenv.isLinux && stdenv.isAarch64);
         homepage = "https://www.jetbrains.com/mps/";
         inherit license description platforms;
         longDescription = ''
@@ -170,6 +171,7 @@ let
       inherit pname version src wmClass jdk product;
       productShort = "PyCharm";
       meta = with lib; {
+        broken = (stdenv.isLinux && stdenv.isAarch64);
         homepage = "https://www.jetbrains.com/pycharm/";
         inherit description license platforms;
         longDescription = ''

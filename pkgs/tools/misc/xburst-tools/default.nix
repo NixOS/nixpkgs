@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     lib.optional (gccCross != null) gccCross;
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "Qi tools to access the Ben Nanonote USB_BOOT mode";
     license = lib.licenses.gpl3;
     homepage = "http://www.linux-mtd.infradead.org/";

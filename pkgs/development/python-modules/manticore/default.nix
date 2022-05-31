@@ -122,6 +122,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    # m.c.manticore:WARNING: Manticore is only supported on Linux. Proceed at your own risk!
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Symbolic execution tool for analysis of smart contracts and binaries";
     homepage = "https://github.com/trailofbits/manticore";
     changelog = "https://github.com/trailofbits/manticore/releases/tag/${version}";

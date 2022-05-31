@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "GTK frontend to 7z,zip,rar,tar,bzip2, gzip,arj, lha, rpm and deb (open and extract only)";
     homepage = "https://github.com/ib/xarchiver";
     maintainers = [ lib.maintainers.domenkozar ];
