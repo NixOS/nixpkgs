@@ -9127,6 +9127,18 @@ final: prev:
     meta.homepage = "https://github.com/Twinside/vim-hoogle/";
   };
 
+  vim-horizon = buildVimPluginFrom2Nix {
+    pname = "vim-horizon";
+    version = "2022-05-04";
+    src = fetchFromGitHub {
+      owner = "ntk148v";
+      repo = "vim-horizon";
+      rev = "c98f2485622b24b565ae33f2f04b1966989cb8af";
+      sha256 = "0s4dl8kp03p73rm74hzd5fd2whcybm1mf6xqfaazgqmbc5bf26vp";
+    };
+    meta.homepage = "https://github.com/ntk148v/vim-horizon/";
+  };
+
   vim-html-template-literals = buildVimPluginFrom2Nix {
     pname = "vim-html-template-literals";
     version = "2021-06-03";
