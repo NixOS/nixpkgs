@@ -4096,8 +4096,7 @@ broken-packages:
   - purebred-email
   - pure-io
   - pure-priority-queue
-  - purescript-ast
-  - purescript-cst
+  - purenix
   - pure-zlib
   - pushbullet
   - pushbullet-types

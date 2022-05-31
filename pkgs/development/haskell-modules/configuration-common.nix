@@ -1069,44 +1069,6 @@ self: super: {
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
 
-  # The most recent version of purescript-cst (0.4.0.0) has version
-  # bounds for LTS-17, so we need to jailbreak it for LTS-18.
-  # doJailbreak can likely be removed when the next version of
-  # purescript-cst is released, since the version bounds have
-  # been updated for LTS-18.
-  purescript-cst = doJailbreak super.purescript-cst;
-
-  purescript =
-    lib.pipe
-      (super.purescript.overrideScope (self: super: {
-        # Purescript targets Stackage LTS 18, so we need to downgrade a few things
-        aeson = self.aeson_1_5_6_0;
-        bower-json = self.bower-json_1_0_0_1;
-        # As of 2021-11-08, the latest release of `language-javascript` is 0.7.1.0,
-        # but it has a problem with parsing the `async` keyword.  It doesn't allow
-        # `async` to be used as an object key:
-        # https://github.com/erikd/language-javascript/issues/131
-        language-javascript = self.language-javascript_0_7_0_0;
-      }))
-      [
-        # PureScript uses nodejs to run tests, so the tests have been disabled
-        # for now.  If someone is interested in figuring out how to get this
-        # working, it seems like it might be possible.
-        dontCheck
-        # The current version of purescript (0.14.5) has version bounds for LTS-17,
-        # but it compiles cleanly using deps in LTS-18 as well.  This jailbreak can
-        # likely be removed when purescript-0.14.6 is released.
-        doJailbreak
-        # Generate shell completions
-        (generateOptparseApplicativeCompletion "purs")
-        # Doesn't support GHC >= 9.0 (something related to instance resolution and TH)
-        (if lib.versionAtLeast self.ghc.version "9.0" then markBroken else lib.id)
-      ];
-
-  # purenix-1.0 has a strict version bound requiring purescript-0.14.4, but it
-  # works with later versions of purescript as well.
-  purenix = doJailbreak super.purenix;
-
   # Generate shell completion for spago
   spago = generateOptparseApplicativeCompletion "spago" super.spago;
 
@@ -2618,4 +2580,42 @@ self: super: {
     })
   ] super.fast-tags;
 
-} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
+} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
+  # We need to build purescript with these dependencies and thus also its reverse
+  # dependencies to avoid version mismatches in their dependency closure.
+  # TODO(@cdepillabout): maybe unify with the spago overlay in configuration-nix.nix?
+  purescriptOverlay = self: super: {
+    # Purescript targets Stackage LTS 18, so we need to downgrade a few things
+    aeson = self.aeson_1_5_6_0;
+    bower-json = self.bower-json_1_0_0_1;
+    # As of 2021-11-08, the latest release of `language-javascript` is 0.7.1.0,
+    # but it has a problem with parsing the `async` keyword.  It doesn't allow
+    # `async` to be used as an object key:
+    # https://github.com/erikd/language-javascript/issues/131
+    language-javascript = self.language-javascript_0_7_0_0;
+  };
+in {
+  purescript =
+    lib.pipe
+      (super.purescript.overrideScope purescriptOverlay)
+      [
+        # PureScript uses nodejs to run tests, so the tests have been disabled
+        # for now.  If someone is interested in figuring out how to get this
+        # working, it seems like it might be possible.
+        dontCheck
+        # The current version of purescript (0.14.5) has version bounds for LTS-17,
+        # but it compiles cleanly using deps in LTS-18 as well.  This jailbreak can
+        # likely be removed when purescript-0.14.6 is released.
+        doJailbreak
+        # Generate shell completions
+        (generateOptparseApplicativeCompletion "purs")
+        # Doesn't support GHC >= 9.0 (something related to instance resolution and TH)
+        (if lib.versionAtLeast self.ghc.version "9.0" then markBroken else lib.id)
+      ];
+
+  purescript-cst = super.purescript-cst.overrideScope purescriptOverlay;
+
+  purescript-ast = super.purescript-ast.overrideScope purescriptOverlay;
+
+  purenix = super.purenix.overrideScope purescriptOverlay;
+})

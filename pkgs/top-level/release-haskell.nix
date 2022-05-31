@@ -384,6 +384,12 @@ let
       purescript = [
         compilerNames.ghc8107
       ];
+      purescript-cst = [
+        compilerNames.ghc8107
+      ];
+      purescript-ast = [
+        compilerNames.ghc8107
+      ];
     })
     {
       mergeable = pkgs.releaseTools.aggregate {
