@@ -27,6 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = with python3.pkgs; [
+    cython
     setuptools-scm
     # For building documentation:
     sphinx
@@ -43,7 +44,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    cython
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
