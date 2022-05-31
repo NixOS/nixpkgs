@@ -529,6 +529,8 @@ let
 
     integers = callPackage ../development/ocaml-modules/integers { };
 
+    integers_stubs_js = callPackage ../development/ocaml-modules/integers_stubs_js { };
+
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
     io-page-unix = callPackage ../development/ocaml-modules/io-page/unix.nix { };
