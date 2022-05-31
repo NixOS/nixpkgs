@@ -1367,6 +1367,8 @@ let
 
     tsdl = callPackage ../development/ocaml-modules/tsdl { };
 
+    tsdl-image = callPackage ../development/ocaml-modules/tsdl-image { };
+
     twt = callPackage ../development/ocaml-modules/twt { };
 
     uchar = callPackage ../development/ocaml-modules/uchar { };
