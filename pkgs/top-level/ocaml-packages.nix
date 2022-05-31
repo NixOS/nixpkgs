@@ -510,6 +510,12 @@ let
 
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
+    happy-eyeballs = callPackage ../development/ocaml-modules/happy-eyeballs { };
+
+    happy-eyeballs-lwt = callPackage ../development/ocaml-modules/happy-eyeballs/lwt.nix { };
+
+    happy-eyeballs-mirage = callPackage ../development/ocaml-modules/happy-eyeballs/mirage.nix { };
+
     herelib = callPackage ../development/ocaml-modules/herelib { };
 
     hidapi = callPackage ../development/ocaml-modules/hidapi { };
