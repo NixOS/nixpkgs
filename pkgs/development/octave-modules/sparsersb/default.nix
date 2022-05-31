@@ -18,6 +18,7 @@ buildOctavePackage rec {
   ];
 
   meta = with lib; {
+    broken = true;
     homepage = "https://octave.sourceforge.io/sparsersb/index.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
