@@ -272,6 +272,7 @@ in stdenv.mkDerivation (rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
   meta = llvm_meta // {
+    broken = enablePolly;
     homepage = "https://llvm.org/";
     description = "A collection of modular and reusable compiler and toolchain technologies";
     longDescription = ''
