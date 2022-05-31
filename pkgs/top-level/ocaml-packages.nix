@@ -291,6 +291,8 @@ let
 
     dns =  callPackage ../development/ocaml-modules/dns { };
 
+    dnssec = callPackage ../development/ocaml-modules/dns/dnssec.nix { };
+
     dns-certify =  callPackage ../development/ocaml-modules/dns/certify.nix { };
 
     dns-cli =  callPackage ../development/ocaml-modules/dns/cli.nix { };

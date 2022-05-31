@@ -1,6 +1,6 @@
 { buildDunePackage, dns, dns-server, dns-mirage, lru, duration
 , randomconv, lwt, mirage-time, mirage-clock, mirage-random
-, alcotest
+, alcotest, tls-mirage, dnssec
 }:
 
 buildDunePackage {
@@ -19,6 +19,8 @@ buildDunePackage {
     mirage-time
     mirage-clock
     mirage-random
+    tls-mirage
+    dnssec
   ];
 
   doCheck = true;

@@ -1,4 +1,4 @@
-{ buildDunePackage, dns, mirage-stack, ipaddr, lwt }:
+{ buildDunePackage, dns, mirage-stack, ipaddr, lwt, tcpip }:
 
 buildDunePackage {
   pname = "dns-mirage";
@@ -9,6 +9,7 @@ buildDunePackage {
     dns
     mirage-stack
     ipaddr
+    tcpip
     lwt
   ];
 
