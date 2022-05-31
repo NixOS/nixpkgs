@@ -20,6 +20,7 @@ stdenv.mkDerivation {
   buildInputs = [ libXxf86vm ];
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "GUI tool for manual- of auto-adjusting of brightness/temperature";
     homepage = "https://github.com/Fushko/gammy";
     license = licenses.gpl3;
