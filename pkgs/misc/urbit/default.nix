@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "An operating function";
     homepage = "https://urbit.org";
     license = licenses.mit;
