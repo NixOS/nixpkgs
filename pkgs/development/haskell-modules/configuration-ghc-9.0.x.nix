@@ -130,4 +130,7 @@ self: super: {
   inline-c-cpp =
     (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
     super.inline-c-cpp;
+
+  # 2022-05-31: weeder 2.3.0 requires GHC 9.2
+  weeder = doDistribute self.weeder_2_3_1;
 }
