@@ -213,6 +213,9 @@ stdenv.mkDerivation rec {
       wrapProgram $dev/bin/$program \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
     done
+  '' + lib.optionalString stdenv.isDarwin ''
+    # a comment created a cycle between outputs
+    sed '/^# ModulesPath =/d' -i "$out"/lib/gtk-*/*/immodules.cache
   '';
 
   passthru = {
