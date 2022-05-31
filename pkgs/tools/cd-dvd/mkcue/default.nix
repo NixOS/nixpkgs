@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   postInstall = "chmod -v +w $out/bin/mkcue";
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "Generates CUE sheets from a CD TOC";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
