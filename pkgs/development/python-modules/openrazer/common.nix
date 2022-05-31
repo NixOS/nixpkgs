@@ -11,7 +11,7 @@
   meta = with lib; {
     homepage = "https://openrazer.github.io/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ roelvandijk evanjs ];
+    maintainers = with maintainers; [ evanjs ] ++ teams.lumiguide.members;
     platforms = platforms.linux;
   };
 }
