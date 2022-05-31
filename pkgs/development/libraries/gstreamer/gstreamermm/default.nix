@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "C++ interface for GStreamer";
     homepage = "https://gstreamer.freedesktop.org/bindings/cplusplus.html";
     license = licenses.lgpl21Plus;
