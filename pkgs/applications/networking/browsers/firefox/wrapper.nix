@@ -137,7 +137,7 @@ let
             };
           } // lib.optionalAttrs smartcardSupport {
             SecurityDevices = {
-              "OpenSC PKCS#11 Module" = "onepin-opensc-pkcs11.so";
+              "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
             };
           }
         // extraPolicies;
