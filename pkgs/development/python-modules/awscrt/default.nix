@@ -33,6 +33,11 @@ buildPythonPackage rec {
     "strictoverflow"
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "extra_link_args += ['-Wl,-fatal_warnings']" ""
+  '';
+
   # gcc <10 is not supported, LLVM on darwin is just fine
   nativeBuildInputs = [
     cmake
@@ -52,7 +57,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://github.com/awslabs/aws-crt-python";
     description = "Python bindings for the AWS Common Runtime";
     license = licenses.asl20;
