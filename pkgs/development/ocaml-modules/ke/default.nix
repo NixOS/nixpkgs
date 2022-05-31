@@ -5,16 +5,16 @@
 
 buildDunePackage rec {
   pname = "ke";
-  version = "0.4";
+  version = "0.6";
 
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/ke/releases/download/v${version}/ke-v${version}.tbz";
-    sha256 = "13c9xy60vmq29mnwpg3h3zgl6gjbjfwbx1s0crfc6xwvark0zxnx";
+    url = "https://github.com/mirage/ke/releases/download/v${version}/ke-${version}.tbz";
+    sha256 = "sha256-YSFyB+IgCwSxd1lzZhD/kggmmmR/hUy1rnLNrA1nIwU=";
   };
 
-  propagatedBuildInputs = [ bigarray-compat fmt ];
+  propagatedBuildInputs = [ fmt ];
 
   checkInputs = [ alcotest bigstringaf ];
   doCheck = true;
