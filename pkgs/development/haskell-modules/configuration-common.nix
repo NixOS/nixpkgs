@@ -1078,26 +1078,17 @@ self: super: {
 
   purescript =
     lib.pipe
-      (super.purescript.override {
-        # The latest version of language-javascript is 0.7.1.0,
-        # but it seems to have a bug with async support:
+      (super.purescript.overrideScope (self: super: {
+        # Purescript targets Stackage LTS 18, so we need to downgrade a few things
+        aeson = self.aeson_1_5_6_0;
+        bower-json = self.bower-json_1_0_0_1;
+        # As of 2021-11-08, the latest release of `language-javascript` is 0.7.1.0,
+        # but it has a problem with parsing the `async` keyword.  It doesn't allow
+        # `async` to be used as an object key:
         # https://github.com/erikd/language-javascript/issues/131
         language-javascript = self.language-javascript_0_7_0_0;
-      })
-      [ # This PR upgrades purescript from building with LTS-17 to building
-        # with LTS-18.  Aside from bumping dependency bounds, there is one
-        # minor change that needs to be made in app/Main.hs.
-        #
-        # This patch can likely be removed when purescript-0.14.6 is released.
-        (appendPatch
-          (fetchpatch {
-            url = "https://patch-diff.githubusercontent.com/raw/purescript/purescript/pull/4199.patch";
-            sha256 = "sha256-OeG30EfCHs7gttLME909WfKxkEZr7Ch3leYiw4lElGg=";
-            includes = [
-              "app/Main.hs"
-            ];
-          })
-        )
+      }))
+      [
         # PureScript uses nodejs to run tests, so the tests have been disabled
         # for now.  If someone is interested in figuring out how to get this
         # working, it seems like it might be possible.
@@ -1108,6 +1099,8 @@ self: super: {
         doJailbreak
         # Generate shell completions
         (generateOptparseApplicativeCompletion "purs")
+        # Doesn't support GHC >= 9.0 (something related to instance resolution and TH)
+        (if lib.versionAtLeast self.ghc.version "9.0" then markBroken else lib.id)
       ];
 
   # purenix-1.0 has a strict version bound requiring purescript-0.14.4, but it
