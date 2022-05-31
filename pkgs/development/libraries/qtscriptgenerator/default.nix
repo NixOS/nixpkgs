@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "QtScript bindings generator";
     homepage = "https://code.qt.io/cgit/qt-labs/qtscriptgenerator.git/";
     inherit (qt4.meta) platforms;

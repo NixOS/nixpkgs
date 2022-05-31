@@ -104,6 +104,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!stdenv.isDarwin) [ "plasma" ]);
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/";
     license = licenses.asl20;

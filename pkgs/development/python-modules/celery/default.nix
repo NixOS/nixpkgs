@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , billiard
 , boto3
 , buildPythonPackage
@@ -57,11 +58,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  postPatch = ''
-    substituteInPlace requirements/default.txt \
-      --replace "setuptools>=59.1.1,<59.7.0" "setuptools"
-  '';
-
   disabledTestPaths = [
     # test_eventlet touches network
     "t/unit/concurrency/test_eventlet.py"
@@ -73,6 +69,11 @@ buildPythonPackage rec {
   disabledTests = [
     "msgpack"
     "test_check_privileges_no_fchown"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # too many open files on hydra
+    "test_cleanup"
+    "test_with_autoscaler_file_descriptor_safety"
+    "test_with_file_descriptor_safety"
   ];
 
   pythonImportsCheck = [

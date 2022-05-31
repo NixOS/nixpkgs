@@ -68,6 +68,7 @@ mapAliases ({
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
+  fake_factory = throw "fake_factory has been removed because it is unused and deprecated by upstream since 2016."; # added 2022-05-30
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
   flask_testing = flask-testing; # added 2022-04-25
   flask_wtf = flask-wtf; # added 2022-05-24
@@ -100,6 +101,7 @@ mapAliases ({
   pathpy = path; # added 2022-04-12
   pdfminer = pdfminer-six; # added 2022-05-25
   pep257 = pydocstyle; # added 2022-04-12
+  poster3 = throw "poster3 is unmaintained and source is no longer available"; # added 2023-05-29
   postorius = throw "Please use pkgs.mailmanPackages.postorius"; # added 2022-04-29
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
   privacyidea = throw "privacyidea has been renamed to pkgs.privacyidea"; # added 2021-06-20
@@ -112,6 +114,7 @@ mapAliases ({
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pyreadability = readability-lxml; # added 2022-05-24
   pysmart-smartx = pysmart; # added 2021-10-22
+  pyspotify = throw "pyspotify has been removed because Spotify stopped supporting libspotify"; # added 2022-05-29
   pytest_6 = pytest; # added 2022-02-10
   pytestcov = pytest-cov; # added 2021-01-04
   pytest-pep8 = pytestpep8; # added 2021-01-04
@@ -158,6 +161,7 @@ mapAliases ({
   tensorflow-tensorboard_2 = tensorflow-tensorboard; # added 2021-11-25
   tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
   WazeRouteCalculator = wazeroutecalculator; # added 2021-09-29
+  webapp2 = throw "webapp2 is unmaintained since 2012"; # added 2022-05-29
   websocket_client = websocket-client; # added 2021-06-15
   xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
   zc-buildout221 = zc-buildout; # added 2021-07-21

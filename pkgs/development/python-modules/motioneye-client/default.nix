@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Python library for motionEye";
     homepage = "https://github.com/dermotduffy/motioneye-client";
     license = with licenses; [ mit ];

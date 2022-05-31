@@ -361,8 +361,13 @@ in
         ++ lib.optional cfg.enableSrunX11 slurm-spank-x11;
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-tmpfiles-clean.service" ];
-      requires = [ "network.target" ];
+      after = [
+        "systemd-tmpfiles-clean.service"
+        "munge.service"
+        "network-online.target"
+        "remote-fs.target"
+      ];
+      wants = [ "network-online.target" ];
 
       serviceConfig = {
         Type = "forking";
@@ -371,6 +376,7 @@ in
         PIDFile = "/run/slurmd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         LimitMEMLOCK = "infinity";
+        Delegate="Yes";
       };
     };
 

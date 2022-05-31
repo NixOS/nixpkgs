@@ -2891,8 +2891,6 @@ in {
 
   factory_boy = callPackage ../development/python-modules/factory_boy { };
 
-  fake_factory = callPackage ../development/python-modules/fake_factory { };
-
   fake-useragent = callPackage ../development/python-modules/fake-useragent { };
 
   faker = callPackage ../development/python-modules/faker { };
@@ -6722,8 +6720,6 @@ in {
 
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
 
-  poster3 = callPackage ../development/python-modules/poster3 { };
-
   pot = callPackage ../development/python-modules/pot { };
 
   potentials = callPackage ../development/python-modules/potentials { };
@@ -8080,8 +8076,6 @@ in {
   pyspinel = callPackage ../development/python-modules/pyspinel { };
 
   pyspnego = callPackage ../development/python-modules/pyspnego { };
-
-  pyspotify = callPackage ../development/python-modules/pyspotify { };
 
   pysptk = callPackage ../development/python-modules/pysptk { };
 
@@ -11046,8 +11040,6 @@ in {
   weasyprint = callPackage ../development/python-modules/weasyprint { };
 
   webargs = callPackage ../development/python-modules/webargs { };
-
-  webapp2 = callPackage ../development/python-modules/webapp2 { };
 
   webassets = callPackage ../development/python-modules/webassets { };
 

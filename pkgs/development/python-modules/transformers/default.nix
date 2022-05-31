@@ -17,7 +17,7 @@
 , scikit-learn
 , pillow
 , pyyaml
-, torch
+, pytorch
 , tokenizers
 , tqdm
 }:
@@ -67,7 +67,7 @@ buildPythonPackage rec {
       # tf2onnx
     ];
     torch = [
-      torch
+      pytorch
     ];
     tokenizers = [
       tokenizers

@@ -119,17 +119,15 @@ Anything that does not cause user or downstream dependency regressions can be ba
 - Services which require a client to be up-to-date regardless. (E.g. `spotify`, `steam`, or `discord`)
 - Security critical applications (E.g. `firefox`)
 
-## Generating 22.05 Release Notes
-
-(This section also applies to backporting 21.11 release notes: substitute "rl-2205" for "rl-2111".)
+## Generating 22.11 Release Notes
 
 Documentation in nixpkgs is transitioning to a markdown-centric workflow. Release notes now require a translation step to convert from markdown to a compatible docbook document.
 
-Steps for updating 22.05 Release notes:
+Steps for updating 22.11 Release notes:
 
-1. Edit `nixos/doc/manual/release-notes/rl-2205.section.md` with the desired changes
-2. Run `./nixos/doc/manual/md-to-db.sh` to render `nixos/doc/manual/from_md/release-notes/rl-2205.section.xml`
-3. Include changes to `rl-2205.section.md` and `rl-2205.section.xml` in the same commit.
+1. Edit `nixos/doc/manual/release-notes/rl-2211.section.md` with the desired changes
+2. Run `./nixos/doc/manual/md-to-db.sh` to render `nixos/doc/manual/from_md/release-notes/rl-2211.section.xml`
+3. Include changes to `rl-2211.section.md` and `rl-2211.section.xml` in the same commit.
 
 ## Reviewing contributions
 
