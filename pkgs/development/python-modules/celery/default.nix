@@ -69,6 +69,11 @@ buildPythonPackage rec {
   disabledTests = [
     "msgpack"
     "test_check_privileges_no_fchown"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # too many open files on hydra
+    "test_cleanup"
+    "test_with_autoscaler_file_descriptor_safety"
+    "test_with_file_descriptor_safety"
   ];
 
   pythonImportsCheck = [
@@ -80,7 +85,6 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
     license = licenses.bsd3;

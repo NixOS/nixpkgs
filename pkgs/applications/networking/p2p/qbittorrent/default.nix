@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, makeWrapper, pkg-config
+{ mkDerivation, lib, fetchFromGitHub, pkg-config
 , boost, libtorrent-rasterbar, qtbase, qttools, qtsvg
 , debugSupport ? false
 , guiSupport ? true, dbus ? null # GUI (disable to run headless)
@@ -24,7 +24,7 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ boost libtorrent-rasterbar qtbase qttools qtsvg ]
     ++ optional guiSupport dbus # D(esktop)-Bus depends on GUI support
@@ -40,11 +40,7 @@ mkDerivation rec {
     ++ optional (!webuiSupport) "--disable-webui"
     ++ optional debugSupport "--enable-debug";
 
-  postInstall = "wrapProgram $out/bin/${
-    if guiSupport
-    then "qbittorrent"
-    else "qbittorrent-nox"
-  } --prefix PATH : ${makeBinPath [ python3 ]}";
+  qtWrapperArgs = optional trackerSearch "--prefix PATH : ${makeBinPath [ python3 ]}";
 
   meta = {
     description = "Featureful free software BitTorrent client";
