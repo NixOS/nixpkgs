@@ -17,6 +17,7 @@
 , ounit
 , mirage-crypto
 , core
+, core_unix
 }:
 
 buildDunePackage {
@@ -45,6 +46,7 @@ buildDunePackage {
     uri
     uri-sexp
     ipaddr
+    core_unix
   ];
 
   doCheck = true;

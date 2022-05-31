@@ -30,6 +30,8 @@ buildDunePackage rec {
     sha256 = "sha256:1vzza33hd41740dqrx4854rqpyd8wv7kwpsvvmlpck841i9lh8h5";
   };
 
+  patches = [ ./cohttp_5.patch ];
+
   nativeBuildInputs = [ makeWrapper which ];
   buildInputs = [ lwt_react camlzip ];
 

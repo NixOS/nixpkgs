@@ -1,27 +1,27 @@
 { lib, fetchurl, buildDunePackage
 , ppx_sexp_conv, base64, jsonm, re, stringext, uri-sexp
-, ocaml, fmt, alcotest
+, ocaml, fmt, alcotest, uri, sexplib0, crowbar
 }:
 
 buildDunePackage rec {
   pname = "cohttp";
-  version = "4.0.0";
+  version = "5.0.0";
 
   useDune2 = true;
 
   minimumOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-v${version}.tbz";
-    sha256 = "bd7aa4cd2c82744990ed7c49e3ee7a40324c64cb3d8509804809155e2bacd1d2";
+    url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-${version}.tbz";
+    sha256 = "sha256-/W/0uGyBg1XWGzoIYoWW2/UX1qfabo7exIG7BlPKWgU=";
   };
 
   buildInputs = [ jsonm ppx_sexp_conv ];
 
-  propagatedBuildInputs = [ base64 re stringext uri-sexp ];
+  propagatedBuildInputs = [ base64 re stringext uri-sexp uri sexplib0 ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.05";
-  checkInputs = [ fmt alcotest ];
+  checkInputs = [ fmt alcotest crowbar ];
 
   meta = {
     description = "HTTP(S) library for Lwt, Async and Mirage";
