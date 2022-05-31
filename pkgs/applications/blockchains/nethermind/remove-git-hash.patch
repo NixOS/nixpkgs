@@ -1,0 +1,23 @@
+diff --git a/src/Nethermind/Nethermind.Runner/Nethermind.Runner.csproj b/src/Nethermind/Nethermind.Runner/Nethermind.Runner.csproj
+index 5864cff47..0f02b1be0 100644
+--- a/src/Nethermind/Nethermind.Runner/Nethermind.Runner.csproj
++++ b/src/Nethermind/Nethermind.Runner/Nethermind.Runner.csproj
+@@ -118,18 +118,6 @@
+     <_ContentIncludedByDefault Remove="Contracts\EntryPoint.json" />
+   </ItemGroup>
+ 
+-  <Target Name="StoreGitHashBeforeBuild" BeforeTargets="BeforeBuild">
+-    <Message Text="---&gt; Generating Git Hash file Before Build" Importance="High" />
+-    <Exec Command="git describe --tags --long --always &gt; git-hash" />
+-    <Copy SourceFiles="@(GitHash)" DestinationFiles="$(OutDir)\git-hash" />
+-  </Target>
+-
+-  <Target Name="StoreGitHashBeforePublish" BeforeTargets="BeforePublish">
+-    <Message Text="---&gt; Generating Git Hash file Before Publish" Importance="High" />
+-    <Exec Command="git describe --tags --long --always &gt; git-hash" />
+-    <Copy SourceFiles="@(GitHash)" DestinationFiles="$(PublishDir)\git-hash" />
+-  </Target>
+-
+   <Target Name="CopyPluginsAfterBuild" AfterTargets="AfterBuild">
+     <Message Text="---&gt; Copying Plugins After Build" Importance="High" />
+     <Copy SourceFiles="@(PluginsForBuild)" DestinationFolder="$(OutDir)\plugins" />
