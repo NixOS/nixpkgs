@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitLab
 , buildDunePackage
+, ocaml
 , ezjsonm
 , zarith
 , hex
@@ -8,19 +9,20 @@
 , json-data-encoding-bson
 , alcotest
 , crowbar
+, either
+, zarith_stubs_js
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "data-encoding";
-  version = "0.4.0";
+  version = "0.5.3";
 
   src = fetchFromGitLab {
     owner = "nomadic-labs";
-    repo = "data-encoding";
-    rev = "v0.4";
-    sha256 = "1f88l9azpfk730hps5v6zlg4yyyyhj1gl27qy3cbbkzjc82d2rhx";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-HMNpjh5x7vU/kXQNRjJtOvShEENoNuxjNNPBJfm+Rhg=";
   };
-  useDune2 = true;
 
   propagatedBuildInputs = [
     ezjsonm
@@ -28,6 +30,8 @@ buildDunePackage {
     hex
     json-data-encoding
     json-data-encoding-bson
+    either
+    zarith_stubs_js
   ];
 
   checkInputs = [
@@ -42,5 +46,6 @@ buildDunePackage {
     description = "Library of JSON and binary encoding combinators";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
+    inherit (ocaml.meta) platforms;
   };
 }
