@@ -1369,6 +1369,8 @@ let
 
     tsdl-image = callPackage ../development/ocaml-modules/tsdl-image { };
 
+    tsdl-mixer = callPackage ../development/ocaml-modules/tsdl-mixer { };
+
     tsdl-ttf = callPackage ../development/ocaml-modules/tsdl-ttf { };
 
     twt = callPackage ../development/ocaml-modules/twt { };
