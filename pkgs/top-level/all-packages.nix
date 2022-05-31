@@ -12847,6 +12847,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_13 = llvmPackages_13.libllvm;
   };
+  rust_1_60 = callPackage ../development/compilers/rust/1_60.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
+    llvm_14 = llvmPackages_14.libllvm;
+  };
+
   rust = rust_1_56;
 
   mrustc = callPackage ../development/compilers/mrustc { };
@@ -12855,6 +12860,7 @@ with pkgs;
 
   rustPackages_1_56 = rust_1_56.packages.stable;
   rustPackages_1_57 = rust_1_57.packages.stable;
+  rustPackages_1_60 = rust_1_60.packages.stable;
   rustPackages = rustPackages_1_56;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
@@ -17093,6 +17099,11 @@ with pkgs;
     }));
   icu70 = callPackage ../development/libraries/icu/70.nix ({
     nativeBuildRoot = buildPackages.icu70.override { buildRootOnly = true; };
+  } // (lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
+      stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
+    }));
+  icu71 = callPackage ../development/libraries/icu/71.nix ({
+    nativeBuildRoot = buildPackages.icu71.override { buildRootOnly = true; };
   } // (lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
     }));

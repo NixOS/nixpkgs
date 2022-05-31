@@ -9,8 +9,8 @@
 , yasm, libGLU, libGL, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification
 , libvpx
-, icu70, libpng, glib, pciutils
-, autoconf213, which, gnused, rustPackages_1_57
+, icu71, libpng, glib, pciutils
+, autoconf213, which, gnused, rustPackages_1_60
 , rust-cbindgen, nodejs, nasm, fetchpatch
 , gnum4
 , gtk3, wrapGAppsHook
@@ -95,7 +95,7 @@ let
             then "/Applications/${binaryNameCapitalized}.app/Contents/MacOS"
             else "/bin";
 
-  inherit (rustPackages_1_57) rustc cargo;
+  inherit (rustPackages_1_60) rustc cargo;
 
   # Darwin's stdenv provides the default llvmPackages version, match that since
   # clang LTO on Darwin is broken so the stdenv is not being changed.
@@ -151,7 +151,7 @@ buildStdenv.mkDerivation ({
     xorg.libXtst
     libevent libstartup_notification /* cairo */
     libpng glib
-    nasm icu70 libvpx
+    nasm icu71 libvpx
     # >= 66 requires nasm for the AV1 lib dav1d
     # yasm can potentially be removed in future versions
     # https://bugzilla.mozilla.org/show_bug.cgi?id=1501796
