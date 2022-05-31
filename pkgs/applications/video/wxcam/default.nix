@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "An open-source, wxGTK-based webcam app for Linux";
     longDescription = ''
     wxCam is a webcam application for linux. It supports video recording
