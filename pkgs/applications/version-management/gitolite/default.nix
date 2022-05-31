@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, git, lib, makeWrapper, nettools, perl, perlPackages }:
+{ stdenv, fetchFromGitHub, git, lib, makeWrapper, nettools, perl, perlPackages, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "gitolite";
@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     perl ./install -to $out/bin
     echo ${version} > $out/bin/VERSION
   '';
+
+  passthru.tests = {
+    gitolite = nixosTests.gitolite;
+  };
 
   meta = with lib; {
     description = "Finely-grained git repository hosting";
