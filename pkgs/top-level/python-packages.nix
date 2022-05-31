@@ -675,6 +675,8 @@ in {
 
   asgiref = callPackage ../development/python-modules/asgiref { };
 
+  asks = callPackage ../development/python-modules/asks { };
+
   asmog = callPackage ../development/python-modules/asmog { };
 
   asn1 = callPackage ../development/python-modules/asn1 { };
