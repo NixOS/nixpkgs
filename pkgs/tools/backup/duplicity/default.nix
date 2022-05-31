@@ -82,7 +82,7 @@ pythonPackages.buildPythonApplication rec {
     paramiko
     pyasn1
     pycrypto
-    pydrive
+    pydrive2
     future
   ] ++ lib.optionals (!isPy3k) [
     enum
