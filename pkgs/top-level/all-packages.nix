@@ -16115,6 +16115,9 @@ with pkgs;
 
   replacement = callPackage ../development/tools/misc/replacement { };
 
+  inherit (callPackage ../development/tools/replay-io { })
+    replay-io replay-node-cli;
+
   retdec = callPackage ../development/tools/analysis/retdec {
     stdenv = gcc8Stdenv;
   };
