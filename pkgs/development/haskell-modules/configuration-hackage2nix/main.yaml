@@ -85,6 +85,10 @@ default-package-overrides:
   - http-client-restricted < 0.0.5
   # Needs dhall 1.41.*, Stackage LTS 19 has 1.40
   - dhall-nix < 1.1.24
+  # glirc 2.39 is broken: https://github.com/glguy/irc-core/issues/99
+  - glirc == 2.38
+  # glirc 2.38 requires hookup 0.6
+  - hookup == 0.6
 
 extra-packages:
   - aeson < 2                           # required by pantry-0.5.2
