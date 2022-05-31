@@ -5857,6 +5857,7 @@ with pkgs;
   file = callPackage ../tools/misc/file {
     inherit (windows) libgnurx;
   };
+  libmagic = builtins.trace "Using alias libmagic for file" file;
 
   filegive = callPackage ../tools/networking/filegive { };
 
