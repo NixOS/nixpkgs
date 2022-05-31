@@ -6,13 +6,13 @@
 
 buildDunePackage rec {
   pname = "digestif";
-  version = "1.1.0";
+  version = "1.1.2";
 
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/digestif/releases/download/v${version}/digestif-v${version}.tbz";
-    sha256 = "01gwkbrznci4xdcbww4ysgsciz2qs0r8jsmhp0siwbcgcrf1jjv5";
+    url = "https://github.com/mirage/digestif/releases/download/v${version}/digestif-${version}.tbz";
+    sha256 = "sha256-edNM5ROxFIV+OAqr328UcyGPGwXdflHQOJB3ntAbRmY=";
   };
 
   nativeBuildInputs = [ findlib which ];
