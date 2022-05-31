@@ -50,7 +50,7 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    for output in $outputs; do
+    for output in $(getAllOutputNames); do
       if [ "$output" != "out" ]; then
         local outputDir="''${!output}"
         local iconsDir="$outputDir"/share/icons

@@ -68,7 +68,7 @@ let
   # The dynamic linker has different names on different platforms. This is a
   # shell glob that ought to match it.
   dynamicLinker =
-    /**/ if sharedLibraryLoader == null then null
+    /**/ if sharedLibraryLoader == null then ""
     else if targetPlatform.libc == "musl"             then "${sharedLibraryLoader}/lib/ld-musl-*"
     else if targetPlatform.libc == "uclibc"           then "${sharedLibraryLoader}/lib/ld*-uClibc.so.1"
     else if (targetPlatform.libc == "bionic" && targetPlatform.is32bit) then "/system/bin/linker"
@@ -87,7 +87,7 @@ let
     else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if targetPlatform.isFreeBSD                  then "/libexec/ld-elf.so.1"
     else if lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
-    else null;
+    else "";
 
   expand-response-params =
     if buildPackages ? stdenv && buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null"
