@@ -38,7 +38,7 @@ GTK applications typically use [GdkPixbuf](https://developer.gnome.org/gdk-pixbu
 
 Each loader package will contain a `lib/gdk-pixbuf-2.0/2.10.0/loaders.cache` file containing information about the available loaders. GdkPixbuf looks for these files in the `GDK_PIXBUF_MODULE_FILE` environment variable. Although upstream GdkPixbuf only supports a single file, in nixpkgs it is patched to accept multiple files, separated by `:`.
 
-[`wrapGAppsHook`](#ssec-gnome-hooks-wrapgappshook) handles setting `GDK_PIXBUF_MODULE_FILE` for GTK apps. If you're manually constructing a wrapper, consider `--prefix`ing the variable rather than overwriting it, so that users can extend your program's capabilities through `services.xserver.gdk-pixbuf.modulePackages`.
+[`wrapGAppsHook`](#ssec-gnome-hooks-wrapgappshook) handles setting `GDK_PIXBUF_MODULE_FILE` for GTK apps. If you're manually constructing a wrapper (`wrapGAppsHook` is preferred), consider `--prefix`ing the variable rather than overwriting it, so that users can extend your program's capabilities through `services.xserver.gdk-pixbuf.modulePackages`.
 
 ### Icons {#ssec-gnome-icons}
 
