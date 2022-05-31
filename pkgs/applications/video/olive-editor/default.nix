@@ -28,6 +28,7 @@ mkDerivation rec {
   ] ++ lib.optional stdenv.isDarwin CoreFoundation;
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     description = "Professional open-source NLE video editor";
     homepage = "https://www.olivevideoeditor.org/";
     downloadPage = "https://www.olivevideoeditor.org/download.php";
