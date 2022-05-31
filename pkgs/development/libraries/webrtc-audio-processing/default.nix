@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     homepage = "http://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing";
     description = "A more Linux packaging friendly copy of the AudioProcessing module from the WebRTC project";
     license = licenses.bsd3;
