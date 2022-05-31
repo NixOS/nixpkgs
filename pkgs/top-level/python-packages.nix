@@ -6380,6 +6380,8 @@ in {
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
+  overly = callPackage ../development/python-modules/overly { };
+
   pandas-stubs = callPackage ../development/python-modules/pandas-stubs { };
 
   parameterizedtestcase = callPackage ../development/python-modules/parameterizedtestcase { };
