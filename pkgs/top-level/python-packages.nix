@@ -4043,6 +4043,8 @@ in {
 
   hupper = callPackage ../development/python-modules/hupper { };
 
+  huum = callPackage ../development/python-modules/huum { };
+
   hvac = callPackage ../development/python-modules/hvac { };
 
   hvplot = callPackage ../development/python-modules/hvplot { };
