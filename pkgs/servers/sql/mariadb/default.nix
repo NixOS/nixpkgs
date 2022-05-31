@@ -2,7 +2,7 @@
 # Native buildInputs components
 , bison, boost, cmake, fixDarwinDylibNames, flex, makeWrapper, pkg-config
 # Common components
-, curl, libiconv, ncurses, openssl, pcre, pcre2
+, curl, libiconv, ncurses, openssl, openssl_1_1, pcre, pcre2
 , libkrb5, libaio, liburing, systemd
 , CoreServices, cctools, perl
 , jemalloc, less, libedit
@@ -39,13 +39,16 @@ commonOptions = packageSettings: rec { # attributes common to both builds
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
 
   buildInputs = [
-    curl libiconv ncurses openssl zlib
+    libiconv ncurses zlib
   ] ++ (packageSettings.extraBuildInputs or [])
     ++ lib.optionals stdenv.hostPlatform.isLinux ([ libkrb5 systemd ]
     ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
-    ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ]);
+    ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
+    ++ (if (lib.versionOlder version "10.8")
+      then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
+      else [ openssl curl ]);
 
   prePatch = ''
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
