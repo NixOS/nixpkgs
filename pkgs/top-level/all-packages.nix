@@ -8241,8 +8241,11 @@ with pkgs;
 
   nodejs-slim = nodejs-slim-16_x;
 
-  nodejs-14_x = callPackage ../development/web/nodejs/v14.nix { };
+  nodejs-14_x = callPackage ../development/web/nodejs/v14.nix {
+    openssl = openssl_1_1;
+  };
   nodejs-slim-14_x = callPackage ../development/web/nodejs/v14.nix {
+    openssl = openssl_1_1;
     enableNpm = false;
   };
   nodejs-16_x = callPackage ../development/web/nodejs/v16.nix { };
