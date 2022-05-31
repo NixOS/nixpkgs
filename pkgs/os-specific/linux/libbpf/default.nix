@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Common eBPF ELF object loading operations.";
-    homepage = "https://github.com/libbpf/libbpf";
+    homepage = "https://kernel.org/doc/html/latest/bpf/libbpf/index.html";
     license = with licenses; [ lgpl21 /* or */ bsd2 ];
     maintainers = with maintainers; [ thoughtpolice vcunat saschagrunert martinetd ];
     platforms = platforms.linux;
