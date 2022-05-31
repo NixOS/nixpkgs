@@ -6,22 +6,19 @@
 }:
 
 buildDunePackage rec {
-  version = "0.3.2";
+  version = "0.3.3";
   pname = "checkseum";
-
-  useDune2 = true;
 
   minimumOCamlVersion = "4.07";
 
   src = fetchurl {
-    url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-v${version}.tbz";
-    sha256 = "9cdd282ea1cfc424095d7284e39e4d0ad091de3c3f2580539d03f6966d45ccd5";
+    url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-${version}.tbz";
+    sha256 = "sha256-wqx/czLchr2vZ/945/1rxAFvX6VWsINRbbnQxA6uiBE=";
   };
 
   buildInputs = [ dune-configurator ];
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [
-    bigarray-compat
     optint
   ] ++ lib.optionals withFreestanding [
     ocaml-freestanding
