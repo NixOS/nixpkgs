@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage {
   cargoSha256 = "sha256-Q0SjVofl1+sex15sSU9s7PgKeHG2b0gJPSqz7YZFOVs=";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "cli for Apache Arrow DataFusion";
     homepage = "https://arrow.apache.org/datafusion";
     license = licenses.asl20;

@@ -60,6 +60,6 @@ buildDotnetModule rec {
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
     mainProgram = "OpenTracker";
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

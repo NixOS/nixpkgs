@@ -14,6 +14,7 @@ let
       };
       enableParallelBuilding = true;
       meta = with lib; {
+        broken = (stdenv.isLinux && stdenv.isAarch64);
         description = "Anonymous, taxable payment system.";
         homepage = "https://taler.net/";
         license = licenses.agpl3Plus;

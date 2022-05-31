@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
   preFixup = let libPath = makeLibraryPath [ stdenv.cc.cc.lib gcc ]; in ''
     patchelf \
-        --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
+        --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \
         --set-rpath $out/lib:"${libPath}" \
         $out/bin/iaca
   '';
