@@ -93,5 +93,6 @@ coq.ocamlPackages.buildDunePackage rec {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ ulrikstrid ];
+    broken = true; # at 2022-09-26; Must be updated to work with latest irmin
   };
 }
