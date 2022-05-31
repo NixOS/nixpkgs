@@ -92,10 +92,7 @@ mkYarnPackage rec {
   '';
 
   # Do not attempt generating a tarball for element-desktop again.
-  # note: `doDist = false;` does not work.
-  distPhase = ''
-    true
-  '';
+  doDist = false;
 
   # The desktop item properties should be kept in sync with data from upstream:
   # https://github.com/vector-im/element-desktop/blob/develop/package.json

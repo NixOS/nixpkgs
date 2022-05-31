@@ -72,10 +72,7 @@ mkYarnPackage rec {
   '';
 
   # Do not attempt generating a tarball for element-web again.
-  # note: `doDist = false;` does not work.
-  distPhase = ''
-    true
-  '';
+  doDist = false;
 
   meta = {
     description = "A glossy Matrix collaboration client for the web";
