@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ tbb ];
 
   meta = with lib; {
+    broken = stdenv.isx86_64;
     homepage = "https://openimagedenoise.github.io";
     description = "High-Performance Denoising Library for Ray Tracing";
     license = licenses.asl20;
