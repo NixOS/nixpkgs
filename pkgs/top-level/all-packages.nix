@@ -22640,7 +22640,9 @@ with pkgs;
     nodejs = nodejs-14_x;
   };
 
-  lighttpd = callPackage ../servers/http/lighttpd { };
+  lighttpd = callPackage ../servers/http/lighttpd {
+    openssl = openssl_1_1;
+  };
 
   listmonk = callPackage ../servers/mail/listmonk { };
 
