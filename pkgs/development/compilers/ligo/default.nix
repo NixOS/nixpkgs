@@ -7,25 +7,24 @@
 
 coq.ocamlPackages.buildDunePackage rec {
   pname = "ligo";
-  version = "0.36.0";
+  version = "0.43.0";
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
-    sha256 = "0zx8ai79ha3npm3aybzgisil27v9i052cqdllfri0fsc67dig78b";
+    sha256 = "sha256-HnfVrfypav9UxXJ9cuD1DF7vUFUiAc4nkApoLIgLsWA=";
     fetchSubmodules = true;
   };
 
   # The build picks this up for ligo --version
   LIGO_VERSION = version;
 
-  useDune2 = true;
-
   strictDeps = true;
 
   nativeBuildInputs = [
     git
     coq
+    coq.ocamlPackages.crunch
     coq.ocamlPackages.menhir
     coq.ocamlPackages.ocaml-recovery-parser
   ];
@@ -46,6 +45,7 @@ coq.ocamlPackages.buildDunePackage rec {
     yojson
     getopt
     core
+    crunch
     pprint
     linenoise
 
@@ -56,11 +56,13 @@ coq.ocamlPackages.buildDunePackage rec {
 
     # vendored tezos' deps
     ctypes
+    ctypes_stubs_js
+    dune-configurator
     hacl-star
     hacl-star-raw
     lwt-canceler
     ipaddr
-    bls12-381-unix
+    bls12-381
     bls12-381-legacy
     ptime
     mtime
@@ -74,6 +76,8 @@ coq.ocamlPackages.buildDunePackage rec {
     irmin-pack
     ezjsonm
     data-encoding
+    pure-splitmix
+    zarith_stubs_js
   ];
 
   checkInputs = [
@@ -88,7 +92,7 @@ coq.ocamlPackages.buildDunePackage rec {
     downloadPage = "https://ligolang.org/docs/intro/installation";
     description = "A friendly Smart Contract Language for Tezos";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = coq.ocaml.meta.platforms;
     maintainers = with maintainers; [ ulrikstrid ];
   };
 }
