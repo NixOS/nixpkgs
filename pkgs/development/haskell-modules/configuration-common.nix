@@ -2550,7 +2550,19 @@ self: super: {
 
   # attoparsec bump is on v2 branch, but not released yet
   irc-core = assert super.irc-core.version == "2.10"; doJailbreak super.irc-core;
-  glirc = assert super.irc-core.version == "2.10"; doJailbreak super.glirc;
+  glirc = assert super.irc-core.version == "2.10"; (super.glirc.override {
+    # glirc 2.39 depends on a future release of irc-core
+    irc-core = super.irc-core.overrideAttrs (_: {
+      src = pkgs.fetchFromGitHub {
+        owner = "glguy";
+        repo = "irc-core";
+        rev = "v2.39";
+        sha256 = "sha256-3a47Ivy7QPzx6FjxO+lGHojHqTf0aDwrpl5khLyfeYE=";
+      };
+      sourceRoot = "source/lib";
+    });
+    vty = super.vty_5_35_1;
+  });
   hookup = assert super.irc-core.version == "2.10"; doJailbreak super.hookup;
 
   # 2022-02-25: Unmaintained and to strict upper bounds
