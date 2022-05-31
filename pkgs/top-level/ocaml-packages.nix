@@ -838,6 +838,8 @@ let
 
     mimic = callPackage ../development/ocaml-modules/mimic { };
 
+    mimic-happy-eyeballs = callPackage ../development/ocaml-modules/mimic/happy-eyeballs.nix { };
+
     minisat = callPackage ../development/ocaml-modules/minisat { };
 
     mirage = callPackage ../development/ocaml-modules/mirage { };
