@@ -44,11 +44,9 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     cython
-    llfuse
     msgpack
     packaging
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    pyfuse3
+    (if stdenv.isLinux then pyfuse3 else llfuse)
   ];
 
   preConfigure = ''
