@@ -216,9 +216,6 @@ in
         pantheon-agent-polkit
       ])) config.environment.pantheon.excludePackages;
 
-      programs.evince.enable = mkDefault true;
-      programs.file-roller.enable = mkDefault true;
-
       # Settings from elementary-default-settings
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
 
@@ -272,6 +269,9 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
+      programs.evince.enable = mkDefault true;
+      programs.file-roller.enable = mkDefault true;
+
       environment.systemPackages = utils.removePackagesByName ([
         pkgs.gnome.gnome-font-viewer
       ] ++ (with pkgs.pantheon; [
