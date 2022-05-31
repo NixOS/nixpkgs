@@ -4,15 +4,15 @@
 
 buildDunePackage rec {
   pname = "mirage-console";
-  version = "4.0.0";
+  version = "5.1.0";
 
   minimumOCamlVersion = "4.08";
 
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-console/releases/download/v${version}/mirage-console-v${version}.tbz";
-    sha256 = "11nwfd4kmmdzkrkhbakdi3cxhk8vi98l17960rgcf85c602gw6vp";
+    url = "https://github.com/mirage/mirage-console/releases/download/v${version}/mirage-console-${version}.tbz";
+    sha256 = "sha256-mjYRisbNOJbYoSuWaGoPueXakmqAwmWh0ATvLLsvpNM=";
   };
 
   propagatedBuildInputs = [ lwt mirage-device mirage-flow ];
