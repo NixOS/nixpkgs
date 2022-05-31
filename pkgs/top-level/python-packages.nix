@@ -4273,8 +4273,6 @@ in {
 
   ipaddr = callPackage ../development/python-modules/ipaddr { };
 
-  ipaddress = callPackage ../development/python-modules/ipaddress { };
-
   ipdb = callPackage ../development/python-modules/ipdb { };
 
   ipdbplugin = callPackage ../development/python-modules/ipdbplugin { };
