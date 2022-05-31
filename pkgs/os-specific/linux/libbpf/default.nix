@@ -21,6 +21,12 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) bpf; };
 
+  postPatch = ''
+    substituteInPlace scripts/bpf_*.py \
+        --replace "/usr/bin/python3" "${python3}/bin/python3" \
+        --replace "/usr/bin/env python3" "${python3}/bin/python3"
+  '';
+
   preConfigure = ''
     cd tools/lib/bpf
   '';
