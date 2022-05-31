@@ -613,8 +613,6 @@ let
 
     irmin-http = callPackage ../development/ocaml-modules/irmin/http.nix { };
 
-    irmin-layers = callPackage ../development/ocaml-modules/irmin/layers.nix { };
-
     irmin-mirage = callPackage ../development/ocaml-modules/irmin/mirage.nix { };
 
     irmin-mirage-git = callPackage ../development/ocaml-modules/irmin/mirage-git.nix { };
@@ -624,6 +622,8 @@ let
     irmin-pack = callPackage ../development/ocaml-modules/irmin/pack.nix { };
 
     irmin-test = callPackage ../development/ocaml-modules/irmin/test.nix { };
+
+    irmin-tezos = callPackage ../development/ocaml-modules/irmin/tezos.nix { };
 
     irmin-unix = callPackage ../development/ocaml-modules/irmin/unix.nix { };
 

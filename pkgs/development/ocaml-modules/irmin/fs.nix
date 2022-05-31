@@ -4,12 +4,11 @@ buildDunePackage rec {
 
   pname = "irmin-fs";
 
-  inherit (irmin) version src;
+  inherit (irmin) version src strictDeps;
 
   propagatedBuildInputs = [ irmin ];
 
-  useDune2 = true;
-
+  buildInputs = checkInputs; # dune builds tests at build-time
   checkInputs = lib.optional doCheck irmin-test;
 
   doCheck = true;

@@ -3,10 +3,10 @@
 , alcotest, alcotest-lwt, cacert
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "irmin-containers";
 
-  inherit (ppx_irmin) src version useDune2;
+  inherit (ppx_irmin) src version strictDeps;
 
   nativeBuildInputs = [
     ppx_irmin
@@ -15,6 +15,9 @@ buildDunePackage {
   propagatedBuildInputs = [
     irmin irmin-unix irmin-git ppx_irmin lwt mtime
   ];
+
+
+  buildInputs = checkInputs; # dune builds tests at build-time
 
   doCheck = true;
   checkInputs = [

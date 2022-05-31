@@ -3,9 +3,11 @@
 buildDunePackage rec {
 
   pname = "irmin-chunk";
-  inherit (irmin) version src useDune2;
+  inherit (irmin) version src strictDeps;
 
   propagatedBuildInputs = [ irmin ];
+
+  buildInputs = checkInputs; # dune builds tests at build-time
 
   doCheck = true;
   checkInputs = [ alcotest irmin-test ];

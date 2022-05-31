@@ -1,17 +1,39 @@
 { buildDunePackage
-, alcotest, cmdliner, irmin, metrics-unix, mtime, irmin-layers
+, irmin
+, ppx_irmin
+, alcotest
+, mtime
+, astring
+, fmt
+, jsonm
+, logs
+, lwt
+, metrics-unix
+, ocaml-syntax-shims
+, cmdliner
+, metrics
 }:
 
 buildDunePackage {
 
   pname = "irmin-test";
 
-  inherit (irmin) version src;
-
-  useDune2 = true;
+  inherit (irmin) version src strictDeps;
 
   propagatedBuildInputs = [
-    alcotest cmdliner irmin metrics-unix mtime irmin-layers
+    irmin
+    ppx_irmin
+    alcotest
+    mtime
+    astring
+    fmt
+    jsonm
+    logs
+    lwt
+    metrics-unix
+    ocaml-syntax-shims
+    cmdliner
+    metrics
   ];
 
   meta = irmin.meta // {

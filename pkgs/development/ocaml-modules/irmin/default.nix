@@ -1,14 +1,13 @@
 { lib, buildDunePackage
 , astring, digestif, fmt, jsonm, logs, ocaml_lwt, ocamlgraph, uri
-, repr, ppx_irmin, bheap, uutf
+, repr, ppx_irmin, bheap, uutf, mtime
 }:
 
 buildDunePackage {
   pname = "irmin";
 
-  inherit (ppx_irmin) src version;
+  inherit (ppx_irmin) src version strictDeps;
 
-  useDune2 = true;
   minimumOCamlVersion = "4.08";
 
   propagatedBuildInputs = [
@@ -24,6 +23,7 @@ buildDunePackage {
     bheap
     ppx_irmin
     uutf
+    mtime
   ];
 
   # circular dependency on irmin-mem

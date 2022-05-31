@@ -1,21 +1,21 @@
 { lib, buildDunePackage
-, checkseum, cmdliner, git-unix, git-cohttp-unix, yaml, fpath
+, checkseum, cmdliner, git-unix, yaml, fpath
 , irmin, irmin-fs, irmin-git, irmin-graphql, irmin-http
-, irmin-pack, irmin-watcher, irmin-test, cacert
+, irmin-pack, irmin-watcher, irmin-test, irmin-tezos, cacert
+, mdx
 }:
 
 buildDunePackage rec {
-
   pname = "irmin-unix";
 
   inherit (irmin) version src;
 
-  useDune2 = true;
+  nativeBuildInputs = [ mdx ];
 
   propagatedBuildInputs = [
     checkseum cmdliner git-unix yaml fpath
     irmin irmin-fs irmin-git irmin-graphql irmin-http
-    irmin-pack irmin-watcher git-cohttp-unix
+    irmin-pack irmin-watcher irmin-tezos
   ];
 
   checkInputs = [

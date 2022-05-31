@@ -1,5 +1,5 @@
 { lib, buildDunePackage
-, alcotest-lwt, index, irmin, irmin-layers, irmin-test, ocaml_lwt, fpath, optint
+, alcotest-lwt, index, irmin, irmin-test, ocaml_lwt, fpath, optint
 }:
 
 buildDunePackage rec {
@@ -7,12 +7,10 @@ buildDunePackage rec {
 
   pname = "irmin-pack";
 
-  inherit (irmin) version src;
-
-  useDune2 = true;
+  inherit (irmin) version src strictDeps;
 
   buildInputs = [ fpath ];
-  propagatedBuildInputs = [ index irmin irmin-layers ocaml_lwt optint ];
+  propagatedBuildInputs = [ index irmin ocaml_lwt optint ];
 
   checkInputs = [ alcotest-lwt irmin-test ];
 
