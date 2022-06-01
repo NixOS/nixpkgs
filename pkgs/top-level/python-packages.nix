@@ -8847,6 +8847,8 @@ in {
 
   pywlroots = callPackage ../development/python-modules/pywlroots { };
 
+  pyws66i = callPackage ../development/python-modules/pyws66i { };
+
   pyxattr = callPackage ../development/python-modules/pyxattr { };
 
   pyworld = callPackage ../development/python-modules/pyworld { };
