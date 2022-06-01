@@ -321,6 +321,22 @@ let
         };
       };
 
+      badochov.ocaml-formatter = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "ocaml-formatter";
+          publisher = "badochov";
+          version = "1.14.0";
+          sha256 = "sha256-Iekh3vwu8iz53rPRsuu1Fx9iA/A97iMd8cPETWavnyA=";
+        };
+        meta = with lib; {
+          description = "VSCode Extension Formatter for OCaml language";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=badochov.ocaml-formatter";
+          homepage = "https://github.com/badochov/ocamlformatter-vscode";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+      };
+
       bbenoist.nix = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "Nix";
