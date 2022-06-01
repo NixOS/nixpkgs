@@ -1677,6 +1677,10 @@ self: super: {
   # Upstream issue: https://github.com/haskell-servant/servant-swagger/issues/129
   servant-swagger = dontCheck super.servant-swagger;
 
+  # Strange doctest problems
+  # https://github.com/biocad/servant-openapi3/issues/30
+  servant-openapi3 = dontCheck super.servant-openapi3;
+
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
