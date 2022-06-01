@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , attrs
 , argon2-cffi
@@ -47,15 +48,27 @@
 
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "22.3.2";
+  version = "22.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WKiHx6GWuwjYtmJMs2lfSTqeXJ8A/TUNjW+Cm0f/kDY=";
+    sha256 = "sha256-V7es8ijVDYPPMnNyuInioWioaSdbJuF5F+0LTPTYI6Y=";
   };
+
+  patches = [
+    # fix txaio compatibility
+    (fetchpatch {
+      url = "https://github.com/crossbario/autobahn-python/commit/2e2ee5f9775ed312db699f5c55fc0488311735a5.patch";
+      excludes = [
+        "setup.py"
+        "tox.ini"
+      ];
+      sha256 = "sha256-LQSusXZwDpxyQl4tphZovaYceg/JVG0SyoA9FUQlVWU=";
+    })
+  ];
 
   propagatedBuildInputs = [
     cryptography
