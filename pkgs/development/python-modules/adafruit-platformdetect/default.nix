@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , setuptools-scm
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -9,10 +10,12 @@ buildPythonPackage rec {
   version = "3.23.0";
   format = "setuptools";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     pname = "Adafruit-PlatformDetect";
     inherit version;
-    sha256 = "sha256-4OWDwvdQBtV+ZqpITr027z0jwfge5/yOof9Xm7QRtuM=";
+    hash = "sha256-4OWDwvdQBtV+ZqpITr027z0jwfge5/yOof9Xm7QRtuM=";
   };
 
   nativeBuildInputs = [
