@@ -2028,6 +2028,22 @@ let
         };
       };
 
+      stefanjarina.vscode-eex-snippets = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-eex-snippets";
+          publisher = "stefanjarina";
+          version = "0.0.8";
+          sha256 = "0j8pmrs1lk138vhqx594pzxvrma4yl3jh7ihqm2kgh0cwnkbj36m";
+        };
+        meta = with lib; {
+          description = "VSCode extension for Elixir EEx and HTML (EEx) code snippets";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=stefanjarina.vscode-eex-snippets";
+          homepage = "https://github.com/stefanjarina/vscode-eex-snippets";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+      };
+
       stephlin.vscode-tmux-keybinding = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-tmux-keybinding";
