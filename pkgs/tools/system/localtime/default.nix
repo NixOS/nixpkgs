@@ -1,6 +1,5 @@
 { buildGoModule
 , fetchFromGitHub
-, geoclue2-with-demo-agent
 , lib
 , m4
 }:
@@ -17,11 +16,6 @@ buildGoModule {
   };
 
   vendorSha256 = "sha256-12JnEU41sp9qRP07p502EYogveE+aNdfmLwlDRbIdxU=";
-
-  postPatch = ''
-    demoPath="${geoclue2-with-demo-agent}/libexec/geoclue-2.0/demos/agent"
-    sed -i localtimed.go -e "s#/usr/lib/geoclue-2.0/demos/agent#$demoPath#"
-  '';
 
   nativeBuildInputs = [ m4 ];
 
