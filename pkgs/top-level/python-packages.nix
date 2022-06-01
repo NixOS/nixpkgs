@@ -7412,6 +7412,8 @@ in {
 
   pyialarm = callPackage ../development/python-modules/pyialarm { };
 
+  pyialarmxr = callPackage ../development/python-modules/pyialarmxr { };
+
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
   PyICU = callPackage ../development/python-modules/pyicu { };
