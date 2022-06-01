@@ -1,47 +1,30 @@
-{ lib, buildPythonApplication, fetchPypi, pythonOlder
-, installShellFiles
-, mock, pytest, nose
-, pyyaml, backports_ssl_match_hostname, colorama, docopt
-, dockerpty, docker, ipaddress, jsonschema, requests
-, six, texttable, websocket-client, cached-property
-, enum34, functools32, paramiko, distro, python-dotenv
+{
+  buildGoModule
+, fetchFromGitHub
+, lib
 }:
-
-buildPythonApplication rec {
-  version = "1.29.2";
+buildGoModule rec {
   pname = "docker-compose";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "sha256-TIzZ0h0jdBJ5PRi9MxEASe6a+Nqz/iwhO70HM5WbCbc=";
+  version = "2.6.0";
+  src = fetchFromGitHub {
+    owner = "docker";
+    repo = "compose";
+    rev = "v${version}";
+    sha256 = "sha256-Fg99ugaqH/jL3KUZ5Vh/SJnqzEyOaR/KuPFwt2oqXxM=";
   };
+  ldflags = [
+    "-X github.com/docker/compose/v2/internal.Version=${version}"
+  ];
 
-  # lots of networking and other fails
-  doCheck = false;
-  nativeBuildInputs = [ installShellFiles ];
-  checkInputs = [ mock pytest nose ];
-  propagatedBuildInputs = [
-    pyyaml colorama dockerpty docker
-    ipaddress jsonschema requests six texttable websocket-client
-    docopt cached-property paramiko distro python-dotenv
-  ] ++ lib.optional (pythonOlder "3.7") backports_ssl_match_hostname
-  ++ lib.optional (pythonOlder "3.4") enum34
-  ++ lib.optional (pythonOlder "3.2") functools32;
-
-  postPatch = ''
-    # Remove upper bound on requires, see also
-    # https://github.com/docker/compose/issues/4431
-    sed -i "s/, < .*',$/',/" setup.py
+  postFixup = ''
+    mv $out/bin/{cmd,docker-compose}
+    rm $out/bin/main
   '';
-
-  postInstall = ''
-    installShellCompletion --bash contrib/completion/bash/docker-compose
-    installShellCompletion --zsh contrib/completion/zsh/_docker-compose
-  '';
-
+  doCheck = false; # requires docker
+  vendorSha256 = "sha256-7uNQNO+EI90J2Btz2tnumKqd+AtVWON+Csh6tkTNKNA=";
   meta = with lib; {
-    homepage = "https://docs.docker.com/compose/";
     description = "Multi-container orchestration for Docker";
+    homepage = "https://docs.docker.com/compose/";
     license = licenses.asl20;
     maintainers = with maintainers; [ Frostman ];
   };
