@@ -1681,6 +1681,18 @@ self: super: {
   # https://github.com/biocad/servant-openapi3/issues/30
   servant-openapi3 = dontCheck super.servant-openapi3;
 
+  # Give hspec 2.10.* correct dependency versions without overrideScope
+  hspec_2_10_0 = doDistribute (super.hspec_2_10_0.override {
+    hspec-discover = self.hspec-discover_2_10_0;
+    hspec-core = self.hspec-core_2_10_0;
+  });
+  hspec-discover_2_10_0 = super.hspec-discover_2_10_0.override {
+    hspec-meta = self.hspec-meta_2_9_3;
+  };
+  hspec-core_2_10_0 = super.hspec-core_2_10_0.override {
+    hspec-meta = self.hspec-meta_2_9_3;
+  };
+
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
