@@ -5,6 +5,7 @@
 , bzip2
 , cmake
 , fetchFromGitHub
+, fetchpatch
 , gnupg
 , gtest
 , json_c
@@ -24,6 +25,15 @@ stdenv.mkDerivation rec {
     sha256 = "u0etVslTBF9fBqnpVBofYsm0uC/eR6gO3lhwzqua5Qw=";
   };
 
+  # in master post 0.16.0, see https://github.com/rnpgp/rnp/issues/1835
+  patches = [
+    (fetchpatch {
+      name = "fix-pkg-config.patch";
+      url = "https://github.com/rnpgp/rnp/commit/de9856c94ea829cad277800ee03ec52e30993d8e.patch";
+      sha256 = "1vd83fva7lhmvqnvsrifqb2zdhfrbx84lf3l9i0hcph0k8h3ddx9";
+    })
+  ];
+
   buildInputs = [ zlib bzip2 json_c botan2 ];
 
   cmakeFlags = [
@@ -41,12 +51,6 @@ stdenv.mkDerivation rec {
   # checkInputs = [ gtest python3 ];
 
   outputs = [ "out" "lib" "dev" ];
-
-  # https://github.com/rnpgp/rnp/issues/1835
-  postPatch = ''
-    substituteInPlace cmake/librnp.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
-  '';
 
   preConfigure = ''
     echo "v${version}" > version.txt
