@@ -7190,8 +7190,6 @@ in {
     inherit (pkgs) graphviz;
   };
 
-  pydrive = callPackage ../development/python-modules/pydrive { };
-
   pydrive2 = callPackage ../development/python-modules/pydrive2 { };
 
   pydroid-ipcam = callPackage ../development/python-modules/pydroid-ipcam  { };
