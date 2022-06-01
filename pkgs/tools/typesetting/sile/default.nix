@@ -59,19 +59,23 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   buildInputs = [
+    luaEnv
     harfbuzz
     icu
     fontconfig
     libiconv
-    luaEnv
   ]
   ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
   checkInputs = [
     poppler_utils
   ];
+  passthru = {
+    # So it will be easier to inspect this environment, in comparison to others
+    inherit luaEnv;
+  };
 
-  preConfigure = ''
+  postPatch = ''
     patchShebangs build-aux/*.sh
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
