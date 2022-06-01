@@ -2596,6 +2596,18 @@ self: super: {
     })
   ] super.fast-tags;
 
+  # lucid-htmx has restrictive upper bounds on lucid and servant:
+  #
+  #   Setup: Encountered missing or private dependencies:
+  #   lucid >=2.9.12.1 && <=2.11, servant >=0.18.3 && <0.19
+  #
+  # Can be removed once
+  #
+  # > https://github.com/MonadicSystems/lucid-htmx/issues/6
+  #
+  # has been resolved.
+  lucid-htmx = doJailbreak super.lucid-htmx;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
   # dependencies to avoid version mismatches in their dependency closure.
