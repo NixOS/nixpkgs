@@ -2144,6 +2144,22 @@ let
         };
       };
 
+      theangryepicbanana.language-pascal = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "language-pascal";
+          publisher = "theangryepicbanana";
+          version = "0.1.6";
+          sha256 = "096wwmwpas21f03pbbz40rvc792xzpl5qqddzbry41glxpzywy6b";
+        };
+        meta = with lib; {
+          description = "VSCode extension for high-quality Pascal highlighting";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=theangryepicbanana.language-pascal";
+          homepage = "https://github.com/ALANVF/vscode-pascal-magic";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+      };
+
       tiehuis.zig = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "zig";
