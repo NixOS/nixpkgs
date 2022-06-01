@@ -1515,8 +1515,9 @@ self: super: {
   liquidhaskell = super.liquidhaskell.override { Diff = self.Diff_0_3_4; };
   Diff_0_3_4 = dontCheck super.Diff_0_3_4;
 
-  # jailbreaking pandoc-citeproc because it has not bumped upper bound on pandoc
-  pandoc-citeproc = doJailbreak super.pandoc-citeproc;
+  # jailbreaking pandoc-crossref because it has not bumped its upper bound on pandoc
+  # https://github.com/lierdakil/pandoc-crossref/issues/350
+  pandoc-crossref = doJailbreak super.pandoc-crossref;
 
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
