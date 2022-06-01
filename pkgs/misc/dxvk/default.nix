@@ -72,11 +72,6 @@ stdenvNoCC.mkDerivation (finalAttrs:
       done
     '';
 
-    # DXVK is patched to work with an unpatched MoltenVK. This function is kept to facilitate
-    # backporting of MoltenVK updates to 22.05. It should be removed for 22.11.
-    passthru.patchMoltenVK = moltenvk:
-      lib.warn "patchMoltenVK is deprecated, does nothing, and is no longer necessary. Use MoltenVK directly." moltenvk;
-
     meta = {
       description = "A Vulkan-based translation layer for Direct3D 9/10/11";
       homepage = "https://github.com/doitsujin/dxvk";
