@@ -1,6 +1,7 @@
 { lib
 , aiohttp
 , aresponses
+, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "omnikinverter";
-  version = "0.7.0";
+  version = "0.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-omnikinverter";
     rev = "v${version}";
-    sha256 = "sha256-IiU7nhwH0Mc6s+g9WtJugpORuL0qGNJFKDY5hvxIZAU=";
+    hash = "sha256-OQWk+ae+hSLLdH0uLVPauoNeQpXgxkvflXFyaiFe108=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     aresponses
+    asynctest
     pytest-asyncio
     pytestCheckHook
   ];
