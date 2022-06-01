@@ -204,21 +204,6 @@ def get_profiles() -> List[str]:
     else:
         return []
 
-def should_update(v_from: str, v_to: str) -> bool:
-    # see https://github.com/systemd/systemd/blob/main/src/boot/bootctl.c compare_product function
-
-    len_from = len(v_from)
-    len_to = len(v_to)
-
-    if len_from < len_to:
-        return False
-
-    if len_from > len_to:
-        return True
-
-    return v_from < v_to
-
-
 def main() -> None:
     parser = argparse.ArgumentParser(description='Update NixOS-related systemd-boot files')
     parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help='The default NixOS config to boot')
@@ -276,7 +261,7 @@ def main() -> None:
         installed_version = installed_match.group(1)
         available_version = available_match.group(1)
 
-        if should_update(installed_version, available_version):
+        if installed_version < available_version:
             print("updating systemd-boot from %s to %s" % (installed_version, available_version))
             subprocess.check_call(["@systemd@/bin/bootctl", "--path=@efiSysMountPoint@", "update"])
         else:
