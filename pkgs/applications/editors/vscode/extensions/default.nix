@@ -277,6 +277,23 @@ let
         };
       };
 
+      attilabuti.brainfuck-syntax = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "brainfuck-syntax";
+          publisher = "attilabuti";
+          version = "0.0.1";
+          sha256 = "sha256-ZcZlHoa2aoCeruMWbUUgfFHsPqyWmd2xFY6AKxJysYE=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/attilabuti.brainfuck-syntax/changelog";
+          description = "VSCode extension providing syntax highlighting support for Brainfuck";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=attilabuti.brainfuck-syntax";
+          homepage = "https://github.com/attilabuti/brainfuck-syntax";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+      };
+
       ms-python.vscode-pylance = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-pylance";
