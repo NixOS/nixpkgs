@@ -6693,8 +6693,6 @@ with pkgs;
     stdenv = overrideCC stdenv buildPackages.pkgsi686Linux.gcc6;
   } // (config.grub or {}));
 
-  grv = callPackage ../applications/version-management/git-and-tools/grv { };
-
   trustedGrub = pkgsi686Linux.callPackage ../tools/misc/grub/trusted.nix { };
 
   trustedGrub-for-HP = pkgsi686Linux.callPackage ../tools/misc/grub/trusted.nix { for_HP_laptop = true; };

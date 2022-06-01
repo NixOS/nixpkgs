@@ -534,6 +534,7 @@ mapAliases ({
   gr-nacl = gnuradio3_7.pkgs.nacl; # Added 2019-05-27, changed 2020-10-16
   gr-osmosdr = gnuradio3_7.pkgs.osmosdr; # Added 2019-05-27, changed 2020-10-16
   gr-rds = gnuradio3_7.pkgs.rds; # Added 2019-05-27, changed 2020-10-16
+  grv = "grv has been dropped due to the lack of maintanence from upstream since 2019"; # Added 2022-06-01
   gsettings_desktop_schemas = throw "'gsettings_desktop_schemas' has been renamed to/replaced by 'gsettings-desktop-schemas'"; # Converted to throw 2022-02-22
   gtk_doc = throw "'gtk_doc' has been renamed to/replaced by 'gtk-doc'"; # Converted to throw 2022-02-22
   gtklick = throw "gtklick has been removed from nixpkgs as the project is stuck on python2"; # Added 2022-01-01
