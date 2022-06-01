@@ -976,6 +976,22 @@ let
         };
       };
 
+      gitlab.gitlab-workflow = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gitlab-workflow";
+          publisher = "gitlab";
+          version = "3.44.2";
+          sha256 = "sha256-S2PI+r4LrHA7tW2EMfcAkP5jUnd0mCEV72oTXMa9Xkc=";
+        };
+        meta = with lib; {
+          description = "GitLab extension for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=gitlab.gitlab-workflow";
+          homepage = "https://gitlab.com/gitlab-org/gitlab-vscode-extension#readme";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+      };
+
       humao.rest-client = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "humao";
