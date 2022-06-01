@@ -4775,6 +4775,7 @@ in {
 
   ledger = (toPythonModule (pkgs.ledger.override {
     usePython = true;
+    boost = pkgs.boost179; # Current default boost (1.77) doesn’t work with Python 3.10.
     python3 = python;
   })).py;
 

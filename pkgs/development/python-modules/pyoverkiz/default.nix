@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.4.0";
+  version = "1.4.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iMicknl";
     repo = "python-overkiz-api";
-    rev = "v${version}";
-    hash = "sha256-uaeSyRtnokUJ3jWTioVMuo+T3jFoH+SYTBT3HPCPjm8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PVRNfpV6LwZNzSQaDJnDztNUdzosa2yIdXRLXpPMVW4=";
   };
 
   nativeBuildInputs = [
