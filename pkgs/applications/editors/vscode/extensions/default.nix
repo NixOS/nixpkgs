@@ -1650,6 +1650,22 @@ let
         };
       };
 
+      phoenixframework.phoenix = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "phoenix";
+          publisher = "phoenixframework";
+          version = "0.1.1";
+          sha256 = "sha256-AfCwU4FF8a8C9D6+lyUDbAOLlD5SpZZw8CZVGpzRoV0=";
+        };
+        meta = with lib; {
+          description = "Syntax highlighting support for HEEx / Phoenix templates";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=phoenixframework.phoenix";
+          homepage = "https://github.com/phoenixframework/vscode-phoenix";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+      };
+
       redhat.java = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "java";
