@@ -49,6 +49,10 @@ in stdenv.mkDerivation rec {
     # Therefore we put it into `/run/netdata`, which is owned
     # by netdata only.
     ./ipc-socket-in-run.patch
+
+    # Avoid build-only inputs in closure leaked by configure command:
+    #   https://github.com/NixOS/nixpkgs/issues/175693#issuecomment-1143344162
+    ./skip-CONFIGURE_COMMAND.patch
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
