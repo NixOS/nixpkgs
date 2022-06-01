@@ -6,29 +6,31 @@
 , pkgsCross
 }:
 
-let
-  inherit (hostPlatform.uname) system;
-
-  # DXVK needs to be a separate derivation because it’s actually a set of DLLs for Windows that
-  # needs to be built with a cross-compiler.
-  dxvk32 = pkgsCross.mingw32.callPackage ./dxvk.nix { inherit (self) src version dxvkPatches; };
-  dxvk64 = pkgsCross.mingwW64.callPackage ./dxvk.nix { inherit (self) src version dxvkPatches; };
-
-  # Split out by platform to make maintenance easy in case supported versions on Darwin and other
-  # platforms diverge (due to the need for Darwin-specific patches that would fail to apply).
-  # Should that happen, set `darwin` to the last working `rev` and `hash`.
-  srcs = rec {
-    darwin = { inherit (default) rev hash version; };
-    default = {
-      rev = "v${self.version}";
-      hash = "sha256-+6PkrkamSvhCaGj2tq+RXri/yQ7vs0cAqgdRAFtU8UA=";
-      version = "1.10.1";
+stdenvNoCC.mkDerivation (finalAttrs:
+  let
+    inherit (hostPlatform.uname) system;
+    # DXVK needs to be a separate derivation because it’s actually a set of DLLs for Windows that
+    # needs to be built with a cross-compiler.
+    dxvk32 = pkgsCross.mingw32.callPackage ./dxvk.nix {
+      inherit (finalAttrs) src version dxvkPatches;
     };
-  };
+    dxvk64 = pkgsCross.mingwW64.callPackage ./dxvk.nix {
+      inherit (finalAttrs) src version dxvkPatches;
+    };
 
-  # Use the self pattern to support overriding `src` and `version` via `overrideAttrs`. A recursive
-  # attrset wouldn’t work.
-  self = stdenvNoCC.mkDerivation {
+    # Split out by platform to make maintenance easy in case supported versions on Darwin and other
+    # platforms diverge (due to the need for Darwin-specific patches that would fail to apply).
+    # Should that happen, set `darwin` to the last working `rev` and `hash`.
+    srcs = rec {
+      darwin = { inherit (default) rev hash version; };
+      default = {
+        rev = "v${finalAttrs.version}";
+        hash = "sha256-+6PkrkamSvhCaGj2tq+RXri/yQ7vs0cAqgdRAFtU8UA=";
+        version = "1.10.1";
+      };
+    };
+  in
+  {
     name = "dxvk";
     inherit (srcs."${system}" or srcs.default) version;
 
@@ -83,6 +85,4 @@ let
       license = lib.licenses.zlib;
       platforms = lib.platforms.unix;
     };
-  };
-in
-self
+  })
