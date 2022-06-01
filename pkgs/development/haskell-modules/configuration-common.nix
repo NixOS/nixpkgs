@@ -2629,9 +2629,15 @@ in {
         (if lib.versionAtLeast self.ghc.version "9.0" then markBroken else lib.id)
       ];
 
-  purescript-cst = super.purescript-cst.overrideScope purescriptOverlay;
+  purescript-cst = overrideCabal (_: {
+    # Doesn't support GHC >= 9.0, see purescript
+    broken = lib.versionAtLeast self.ghc.version "9.0";
+  }) (super.purescript-cst.overrideScope purescriptOverlay);
 
-  purescript-ast = super.purescript-ast.overrideScope purescriptOverlay;
+  purescript-ast = overrideCabal (_: {
+    # Doesn't support GHC >= 9.0, see purescript
+    broken = lib.versionAtLeast self.ghc.version "9.0";
+  }) (super.purescript-ast.overrideScope purescriptOverlay);
 
   purenix = super.purenix.overrideScope purescriptOverlay;
 })
