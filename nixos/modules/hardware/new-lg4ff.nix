@@ -17,7 +17,7 @@ in {
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     boot = {
       extraModulePackages = [ pkgs.new-lg4ff ];
       kernelModules = [ "hid-logitech-new" ];
