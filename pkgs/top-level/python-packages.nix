@@ -5313,7 +5313,10 @@ in {
 
   lzstring = callPackage ../development/python-modules/lzstring { };
 
-  m2crypto = callPackage ../development/python-modules/m2crypto { };
+  m2crypto = callPackage ../development/python-modules/m2crypto {
+    # https://gitlab.com/m2crypto/m2crypto/-/issues/310
+    openssl = pkgs.openssl_1_1;
+  };
 
   m2r = callPackage ../development/python-modules/m2r { };
 
