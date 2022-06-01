@@ -129,6 +129,11 @@ compcert.overrideAttrs (o:
             url = "https://github.com/AbsInt/CompCert/commit/10a976994d7fd30d143354c289ae735d210ccc09.patch";
             sha256 = "sha256:0bg58gpkgxlmxzp6sg0dvybrfk0pxnm7qd6vxlrbsbm2w6wk03jv";
           })
+          # Support for Coq 8.15.2
+          (fetchpatch {
+            url = "https://github.com/AbsInt/CompCert/commit/283a5be7296c4c0a94d863b427c77007ab875733.patch";
+            sha256 = "sha256:1s7hvb5ii3p8kkcjlzwldvk8xc3iiibxi9935qjbrh25xi6qs66k";
+          })
         ];
       }
     ] [];
