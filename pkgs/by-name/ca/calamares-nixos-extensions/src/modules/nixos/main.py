@@ -565,7 +565,6 @@ def run():
                 "Variable '{key}' is not used.".format(key=key))
 
     # Check that all patterns exist
-    import re
     variable_pattern = re.compile("@@\w+@@")
     for match in variable_pattern.finditer(cfg):
         variable_name = cfg[match.start()+2:match.end()-2]
@@ -645,11 +644,18 @@ def run():
 
     # Install customizations
     try:
-        subprocess.check_output(["pkexec", "nixos-install", "--no-root-passwd",
-                                 "--root", root_mount_point], stderr=subprocess.STDOUT)
-    except subprocess.CalledProcessError as e:
-        if e.output != None:
-            libcalamares.utils.error(e.output.decode("utf8"))
-        return (_("nixos-install failed"), _(e.output.decode("utf8")))
+        output = ""
+        proc = subprocess.Popen(["pkexec", "nixos-install", "--no-root-passwd", "--root", root_mount_point], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        while True:
+            line = proc.stdout.readline().decode("utf-8")
+            output += line
+            libcalamares.utils.debug("nixos-install: {}".format(line.strip()))
+            if not line:
+                break
+        exit = proc.wait()
+        if exit != 0:
+            return (_("nixos-install failed"), _(output))
+    except:
+        return (_("nixos-install failed"), _("Installation failed to complete"))
 
     return None
