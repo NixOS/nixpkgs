@@ -22,6 +22,7 @@ bundlerApp {
       peterromfeldhk
       nicknovitski
       shahrukh330
+      marsam
     ];
   };
 }
