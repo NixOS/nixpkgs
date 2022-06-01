@@ -6391,6 +6391,8 @@ in {
 
   micloud = callPackage ../development/python-modules/micloud { };
 
+  msgraph-core = callPackage ../development/python-modules/msgraph-core { };
+
   netmap = callPackage ../development/python-modules/netmap { };
 
   openai = callPackage ../development/python-modules/openai { };
