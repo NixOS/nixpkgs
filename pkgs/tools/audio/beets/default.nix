@@ -40,7 +40,7 @@ lib.makeExtensible (self: {
     };
     pluginOverrides = {
       # unstable has a new plugin, so we register it here.
-      limit = { };
+      limit = { builtin = true; };
     };
   };
 
