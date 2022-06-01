@@ -3084,7 +3084,6 @@ broken-packages:
   - lua-bc
   - luautils
   - lucid2
-  - lucid-htmx
   - lucid-hyperscript
   - luis-client
   - luka
