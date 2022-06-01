@@ -70,23 +70,10 @@ let
       done
     '';
 
-    # DXVK with MoltenVK requires a patched MoltenVK in addition to its own patches. Provide a
-    # convenience function to handle the necessary patching.
-    #
-    # Usage:
-    # let
-    #   patchedMoltenVK = dxvk.patchMoltenVK darwin.moltenvk;
-    # in
-    # wine64Packages.full.override { moltenvk = patchedMoltenVK; vkd3dSupport = false; }
+    # DXVK is patched to work with an unpatched MoltenVK. This function is kept to facilitate
+    # backporting of MoltenVK updates to 22.05. It should be removed for 22.11.
     passthru.patchMoltenVK = moltenvk:
-      moltenvk.overrideAttrs (old: {
-        patches = old.patches or [ ] ++ [
-          # Apply MoltenVK’s DXVK compatability patch. This is needed to fake support for certain
-          # extensions. There is no package for a patched MoltenVK to avoid any confusion by users
-          # whether they should use it. Except with DXVK, the answer is always no.
-          old.passthru.dxvkPatch
-        ];
-      });
+      lib.warn "patchMoltenVK is deprecated, does nothing, and is no longer necessary. Use MoltenVK directly." moltenvk;
 
     meta = {
       description = "A Vulkan-based translation layer for Direct3D 9/10/11";
