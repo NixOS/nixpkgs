@@ -10188,6 +10188,12 @@
     githubId = 10473184;
     name = "Jia Xiaodong";
   };
+  polarmutex = {
+    email = "brian@brianryall.xyz";
+    github = "polarmutex";
+    githubId = 115141;
+    name = "Brian Ryall";
+  };
   polendri = {
     email = "paul@ijj.li";
     github = "polendri";
