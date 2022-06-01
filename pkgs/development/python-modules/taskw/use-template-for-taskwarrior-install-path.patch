@@ -8,7 +8,7 @@ Date:   Sun Nov 16 15:19:38 2014 +0100
 +++ b/taskw/warrior.py
 @@ -449 +449 @@ class TaskWarriorShellout(TaskWarriorBase):
 -                'task',
-+                '@@taskwarrior@@/bin/task',
++                '@taskwarrior@/bin/task',
 @@ -553 +553 @@ class TaskWarriorShellout(TaskWarriorBase):
 -                ['task', '--version'],
-+                ['@@taskwarrior@@/bin/task', '--version'],
++                ['@taskwarrior@/bin/task', '--version'],

@@ -10180,7 +10180,9 @@ in {
 
   tasklib = callPackage ../development/python-modules/tasklib { };
 
-  taskw = callPackage ../development/python-modules/taskw { };
+  taskw = callPackage ../development/python-modules/taskw {
+    inherit (pkgs) taskwarrior;
+  };
 
   tatsu = callPackage ../development/python-modules/tatsu { };
 
