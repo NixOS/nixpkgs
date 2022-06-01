@@ -78,7 +78,7 @@ let
         description = ''
           Display scaling factor.
         '';
-        type = types.nullOr types.ints.unsigned;
+        type = types.nullOr (types.either types.ints.unsigned types.float);
         default = null;
         example = 2;
       };
