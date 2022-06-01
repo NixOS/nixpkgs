@@ -5,13 +5,13 @@
 
 buildDunePackage rec {
   pname = "mirage-channel";
-  version = "4.0.1";
+  version = "4.1.0";
 
   useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-channel/releases/download/v${version}/mirage-channel-v${version}.tbz";
-    sha256 = "0wmb2zhiyp8n78xgcspcsyd19bhcml3kyli2caw3778wc1gyvfpc";
+    url = "https://github.com/mirage/mirage-channel/releases/download/v${version}/mirage-channel-${version}.tbz";
+    sha256 = "sha256-sBdoUdTd9ZeNcHK0IBGBeOYDDqULM7EYX+Pz2f2nIQA=";
   };
 
   # Make tests compatible with alcotest 1.4.0
