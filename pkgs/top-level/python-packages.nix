@@ -8452,6 +8452,8 @@ in {
 
   python-hglib = callPackage ../development/python-modules/python-hglib { };
 
+  python-homewizard-energy = callPackage ../development/python-modules/python-homewizard-energy { };
+
   python-hosts = callPackage ../development/python-modules/python-hosts { };
 
   python-hpilo = callPackage ../development/python-modules/python-hpilo { };
