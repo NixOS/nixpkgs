@@ -4862,8 +4862,8 @@ let
       sha256 = "4173403ad4cf76732192099f833fbfbf3cd8104e0246b3844187ae384d2c5436";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl}/lib -lcrypto";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_1.dev}/include";
+    NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.openssl_1_1}/lib -lcrypto";
     buildInputs = [ CryptOpenSSLGuess ];
   };
 
