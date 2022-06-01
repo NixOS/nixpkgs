@@ -118,28 +118,27 @@ let
         lib.optionalAttrs usesNixExtensions {
           ExtensionSettings = {
             "*" = {
-                blocked_install_message = "You can't have manual extension mixed with nix extensions";
-                installation_mode = "blocked";
-              };
-
+              blocked_install_message = "You can't have manual extension mixed with nix extensions";
+              installation_mode = "blocked";
+            };
           } // lib.foldr (e: ret:
-              ret // {
-                "${e.extid}" = {
-                  installation_mode = "allowed";
-                };
-              }
-            ) {} extensions;
-          } // lib.optionalAttrs usesNixExtensions {
-            Extensions = {
-              Install = lib.foldr (e: ret:
-                ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
-                ) [] extensions;
-            };
-          } // lib.optionalAttrs smartcardSupport {
-            SecurityDevices = {
-              "OpenSC PKCS#11 Module" = "onepin-opensc-pkcs11.so";
-            };
-          }
+            ret // {
+              "${e.extid}" = {
+                installation_mode = "allowed";
+              };
+            }
+          ) {} extensions;
+
+          Extensions = {
+            Install = lib.foldr (e: ret:
+              ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
+            ) [] extensions;
+          };
+        } // lib.optionalAttrs smartcardSupport {
+          SecurityDevices = {
+            "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
+          };
+        }
         // extraPolicies;
       };
 
