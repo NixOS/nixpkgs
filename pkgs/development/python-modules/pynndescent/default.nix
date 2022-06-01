@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.6";
+  version = "0.5.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YfsxiFuqxGnWeTPix8k1tu3rsG7kmOLw+d/JfFnTclw=";
+    hash = "sha256-7LOVJV+janSLWHC0ugMA6g99qLGWSGS47dYld6hN/X0=";
   };
 
   propagatedBuildInputs = [

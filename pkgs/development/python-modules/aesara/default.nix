@@ -1,31 +1,34 @@
 { stdenv
 , lib
 , buildPythonPackage
-, fetchFromGitHub
-, numpy
-, scipy
-, filelock
+, cons
+, cython
 , etuples
+, fetchFromGitHub
+, filelock
 , logical-unification
 , minikanren
-, cons
 , numba
 , numba-scipy
-, libgpuarray
-, sympy
-, cython
+, numpy
 , pytestCheckHook
+, pythonOlder
+, scipy
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "aesara";
-  version = "2.5.3";
+  version = "2.6.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "aesara-devs";
     repo = "aesara";
     rev = "refs/tags/rel-${version}";
-    sha256 = "sha256-20nc70gNdcGjtGxv2WxmYxmswNH8v7yGLkToP2iazjc=";
+    hash = "sha256-ChLMQCXw9EBR0hnNYGdkUbiLF+4oCqOxzsKsnsf22Jk=";
   };
 
   nativeBuildInputs = [
@@ -33,28 +36,41 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    numpy
-    scipy
-    filelock
+    cons
     etuples
+    filelock
     logical-unification
     minikanren
-    cons
-    numba
-    numba-scipy
-    libgpuarray
-    sympy
+    numpy
+    scipy
+    typing-extensions
   ];
 
   checkInputs = [
+    numba
+    numba-scipy
     pytestCheckHook
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--durations=50" ""
+  '';
 
   preBuild = ''
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [ "aesara" ];
+  pythonImportsCheck = [
+    "aesara"
+  ];
+
+  disabledTestPaths = [
+    # Don't run the most compute-intense tests
+    "tests/scan/"
+    "tests/tensor/"
+    "tests/sandbox/"
+  ];
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
