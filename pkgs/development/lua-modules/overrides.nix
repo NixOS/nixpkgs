@@ -31,8 +31,8 @@ with prev;
 
   cqueues = (prev.lib.overrideLuarocks prev.cqueues (drv: {
     externalDeps = [
-      { name = "CRYPTO"; dep = pkgs.openssl; }
-      { name = "OPENSSL"; dep = pkgs.openssl; }
+      { name = "CRYPTO"; dep = pkgs.openssl_1_1; }
+      { name = "OPENSSL"; dep = pkgs.openssl_1_1; }
     ];
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
   })).overrideAttrs(oa: rec {
@@ -271,14 +271,15 @@ with prev;
 
   luaossl = prev.lib.overrideLuarocks prev.luaossl (drv: {
     externalDeps = [
-      { name = "CRYPTO"; dep = pkgs.openssl; }
-      { name = "OPENSSL"; dep = pkgs.openssl; }
+      # https://github.com/wahern/luaossl/pull/199
+      { name = "CRYPTO"; dep = pkgs.openssl_1_1; }
+      { name = "OPENSSL"; dep = pkgs.openssl_1_1; }
     ];
   });
 
   luasec = prev.lib.overrideLuarocks prev.luasec (drv: {
     externalDeps = [
-      { name = "OPENSSL"; dep = pkgs.openssl; }
+      { name = "OPENSSL"; dep = pkgs.openssl_1_1; }
     ];
   });
 
