@@ -1,5 +1,4 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, colorama
 , hypothesis
 , poetry-core
 , pylama
@@ -23,7 +22,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    colorama
     hypothesis
     pylama
     pytestCheckHook
