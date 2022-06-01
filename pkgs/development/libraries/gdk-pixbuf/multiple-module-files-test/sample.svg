@@ -2,12 +2,12 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="500"
-   height="500"
-   viewBox="0 0 132.29166 132.29167"
+   width="100"
+   height="100"
+   viewBox="0 0 26.458332 26.458334"
    version="1.1"
    id="svg5"
-   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20)"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    sodipodi:docname="sample.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -25,9 +25,9 @@
      showgrid="false"
      units="px"
      width="500px"
-     inkscape:zoom="0.64052329"
-     inkscape:cx="272.4335"
-     inkscape:cy="254.47943"
+     inkscape:zoom="1.2433833"
+     inkscape:cx="149.99397"
+     inkscape:cy="154.41738"
      inkscape:window-width="1920"
      inkscape:window-height="1043"
      inkscape:window-x="0"
@@ -41,39 +41,39 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:none;stroke:#000000;stroke-width:0.529167"
+       style="fill:none;stroke:#000000;stroke-width:0.102516"
        id="path850"
-       cx="38.309357"
-       cy="-40.626446"
-       r="29.084583"
-       transform="scale(1,-1)" />
+       cx="8.4526052"
+       cy="-8.9160681"
+       transform="scale(1,-1)"
+       r="5.6345992" />
     <circle
-       style="fill:none;stroke:#000000;stroke-width:0.529167"
+       style="fill:none;stroke:#000000;stroke-width:0.102516"
        id="circle932"
-       cx="92.564011"
-       cy="-79.005188"
-       r="29.084583"
-       transform="scale(1,-1)" />
+       cx="18.96344"
+       cy="-16.351238"
+       transform="scale(1,-1)"
+       r="5.6345992" />
     <circle
-       style="fill:none;stroke:#000000;stroke-width:0.529167"
+       style="fill:none;stroke:#000000;stroke-width:0.102516"
        id="circle934"
-       cx="40.876545"
-       cy="-90.781021"
-       r="29.084583"
-       transform="scale(1,-1)" />
+       cx="8.9499512"
+       cy="-18.632587"
+       transform="scale(1,-1)"
+       r="5.6345992" />
     <circle
-       style="fill:none;stroke:#000000;stroke-width:0.529167"
+       style="fill:none;stroke:#000000;stroke-width:0.102516"
        id="circle936"
-       cx="81.925743"
-       cy="-43.756771"
-       r="29.084583"
-       transform="scale(1,-1)" />
+       cx="16.902472"
+       cy="-9.5225096"
+       transform="scale(1,-1)"
+       r="5.6345992" />
     <circle
-       style="fill:none;stroke:#000000;stroke-width:0.529167"
+       style="fill:none;stroke:#000000;stroke-width:0.102516"
        id="circle938"
-       cx="58.809753"
-       cy="-77.635269"
-       r="29.084583"
-       transform="scale(1,-1)" />
+       cx="12.424177"
+       cy="-16.085842"
+       transform="scale(1,-1)"
+       r="5.6345992" />
   </g>
 </svg>
