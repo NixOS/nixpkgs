@@ -2161,8 +2161,8 @@ let
         mktplcRef = {
           name = "shellcheck";
           publisher = "timonwong";
-          version = "0.18.4";
-          sha256 = "00cii58md6v028h0xfvbdjvg3r44451mi0lfmjwiwif5xcw3wnlx";
+          version = "0.19.3";
+          sha256 = "0l8fbim19jgcdgxxgidnhdczxvhls920vrffwrac8k1y34lgfl3v";
         };
         nativeBuildInputs = [ jq moreutils ];
         postInstall = ''
