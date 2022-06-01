@@ -665,8 +665,8 @@ present packages (e.g. `setuptools`)
 
 #### Using pythonRelaxDepsHook {#using-pythonrelaxdepshook}
 
-It is common for upstream to specifies a range of versions for its package
-dependencies. This makes sense, since it ensures that the package will be build
+It is common for upstream to specify a range of versions for its package
+dependencies. This makes sense, since it ensures that the package will be built
 with a subset of packages that is well tested. However, this commonly causes
 issues when packaging in Nixpkgs, because the dependencies that this package
 may need are too new or old for the package to build correctly. We also cannot
