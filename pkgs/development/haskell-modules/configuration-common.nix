@@ -2610,6 +2610,12 @@ self: super: {
     # https://github.com/erikd/language-javascript/issues/131
     language-javascript = self.language-javascript_0_7_0_0;
   };
+
+  # Doesn't support GHC >= 9.0 (something related to instance resolution and TH)
+  purescriptBrokenFlag = drv:
+    if lib.versionAtLeast self.ghc.version "9.0"
+    then dontDistribute (markBroken drv)
+    else drv;
 in {
   purescript =
     lib.pipe
@@ -2625,19 +2631,13 @@ in {
         doJailbreak
         # Generate shell completions
         (generateOptparseApplicativeCompletion "purs")
-        # Doesn't support GHC >= 9.0 (something related to instance resolution and TH)
-        (if lib.versionAtLeast self.ghc.version "9.0" then markBroken else lib.id)
+
+        purescriptBrokenFlag
       ];
 
-  purescript-cst = overrideCabal (_: {
-    # Doesn't support GHC >= 9.0, see purescript
-    broken = lib.versionAtLeast self.ghc.version "9.0";
-  }) (super.purescript-cst.overrideScope purescriptOverlay);
+  purescript-cst = purescriptBrokenFlag (super.purescript-cst.overrideScope purescriptOverlay);
 
-  purescript-ast = overrideCabal (_: {
-    # Doesn't support GHC >= 9.0, see purescript
-    broken = lib.versionAtLeast self.ghc.version "9.0";
-  }) (super.purescript-ast.overrideScope purescriptOverlay);
+  purescript-ast = purescriptBrokenFlag (super.purescript-ast.overrideScope purescriptOverlay);
 
   purenix = super.purenix.overrideScope purescriptOverlay;
 })
