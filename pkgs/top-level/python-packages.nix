@@ -1325,6 +1325,8 @@ in {
 
   bond-api = callPackage ../development/python-modules/bond-api { };
 
+  bond-async = callPackage ../development/python-modules/bond-async { };
+
   booleanoperations = callPackage ../development/python-modules/booleanoperations { };
 
   boolean-py = callPackage ../development/python-modules/boolean-py { };
