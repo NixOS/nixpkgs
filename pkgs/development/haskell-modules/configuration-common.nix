@@ -820,13 +820,12 @@ self: super: {
   sensei = overrideCabal (drv: {
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_9_3 ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
-  }) (super.sensei.overrideScope (self: super: {
-    hspec-meta = self.hspec-meta_2_9_3;
+  }) (super.sensei.override {
     hspec = self.hspec_2_10_0;
-    hspec-core = dontCheck self.hspec-core_2_10_0;
-    hspec-discover = self.hspec-discover_2_10_0;
-    shelly = dontCheck super.shelly; # disable checks, because the newer hspec in this overrideScope doesn‘t work with newest hspec-contrib
-  }));
+    hspec-wai = super.hspec-wai.override {
+      hspec = self.hspec_2_10_0;
+    };
+  });
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
