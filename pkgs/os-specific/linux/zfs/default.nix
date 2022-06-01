@@ -17,6 +17,7 @@
 
 # for determining the latest compatible linuxPackages
 , linuxPackages_5_17 ? pkgs.linuxKernel.packages.linux_5_17
+, linuxPackages_5_18 ? pkgs.linuxKernel.packages.linux_5_18
 }:
 
 let
@@ -227,17 +228,17 @@ in {
 
   zfsUnstable = common {
     # check the release notes for compatible kernels
-    kernelCompatible = kernel.kernelOlder "5.18";
-    latestCompatibleLinuxPackages = linuxPackages_5_17;
+    kernelCompatible = kernel.kernelOlder "5.19";
+    latestCompatibleLinuxPackages = linuxPackages_5_18;
 
     # this package should point to a version / git revision compatible with the latest kernel release
     # IMPORTANT: Always use a tagged release candidate or commits from the
     # zfs-<version>-staging branch, because this is tested by the OpenZFS
     # maintainers.
-    version = "2.1.4";
-    # rev = "0000000000000000000000000000000000000000";
+    version = "unstable-2022-05-17";
+    rev = "05147319b0821f61fcff743e20605e191d523906";
 
-    sha256 = "sha256-pHz1N2j+d9p1xleEBwwrmK9mN5gEyM69Suy0dsrkZT4=";
+    sha256 = "sha256-ZdUhmVswb2wKs55If6Z5hK6MiSdkjWde1WSe60AJalI=";
 
     isUnstable = true;
   };
