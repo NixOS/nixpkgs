@@ -1,4 +1,4 @@
-{ version, sha256 }:
+{ version, hash }:
 { lib
 , stdenv
 , fetchurl
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
-    inherit sha256;
+    inherit hash;
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
