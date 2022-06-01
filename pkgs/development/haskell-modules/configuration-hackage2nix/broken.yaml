@@ -772,6 +772,10 @@ broken-packages:
   - complex-generic
   - composable-associations-aeson
   - compose-trans
+  - composite-cassava
+  - composite-dhall
+  - composite-ekg
+  - composite-lens-extra
   - composite-opaleye
   - composition-tree
   - comprehensions-ghc
@@ -4095,8 +4099,8 @@ broken-packages:
   - Pup-Events-Server
   - purebred-email
   - pure-io
-  - pure-priority-queue
   - purenix
+  - pure-priority-queue
   - pure-zlib
   - pushbullet
   - pushbullet-types
@@ -4596,6 +4600,7 @@ broken-packages:
   - signable-haskell-protoc
   - signed-multiset
   - simd
+  - simfin
   - simple-actors
   - simpleargs
   - simple-atom
@@ -5076,6 +5081,7 @@ broken-packages:
   - text1
   - text-and-plots
   - text-ascii
+  - text-builder-linear
   - text-containers
   - text-format
   - text-format-heavy

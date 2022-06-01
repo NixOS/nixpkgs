@@ -1040,15 +1040,7 @@ dont-distribute-packages:
  - compdata-automata
  - compdata-dags
  - compdata-param
- - compdoc
- - compdoc-dhall-decoder
  - complexity
- - composite-aeson-cofree-list
- - composite-aeson-path
- - composite-aeson-refined
- - composite-aeson-throw
- - composite-aeson-writeonly
- - composite-swagger
  - compstrat
  - comptrans
  - computational-algebra
@@ -1294,6 +1286,7 @@ dont-distribute-packages:
  - doc-review
  - dom-parser
  - dormouse-client
+ - dotparse
  - doublezip
  - dovetail
  - dovetail-aeson
@@ -2620,7 +2613,7 @@ dont-distribute-packages:
  - list-witnesses
  - listenbrainz-client
  - liszt
- - little-rio_1_0_0
+ - little-rio_1_0_1
  - live-sequencer
  - llvm
  - llvm-analysis
@@ -3042,6 +3035,7 @@ dont-distribute-packages:
  - peparser
  - perdure
  - perf-analysis
+ - perf_0_10_0
  - perfecthash
  - periodic-client
  - periodic-client-exe
@@ -3189,6 +3183,7 @@ dont-distribute-packages:
  - protobuf-native
  - protocol-buffers-descriptor-fork
  - proton
+ - psc-ide
  - psql
  - ptera
  - ptera-core
@@ -3200,8 +3195,8 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
- - purenix
  - purescript-iso
+ - purescript-tsd-gen
  - pursuit-client
  - push-notify
  - push-notify-apn
@@ -3311,7 +3306,6 @@ dont-distribute-packages:
  - reduce-equations
  - refh
  - reflex-animation
- - reflex-backend-socket
  - reflex-backend-wai
  - reflex-dom-colonnade
  - reflex-dynamic-containers
@@ -3573,6 +3567,7 @@ dont-distribute-packages:
  - shapefile
  - shapely-data
  - shapes-demo
+ - sheets
  - shelduck
  - shellmate-extras
  - shine-varying
@@ -4233,6 +4228,7 @@ dont-distribute-packages:
  - yuuko
  - z85
  - zasni-gerna
+ - zephyr
  - zephyr-copilot
  - zeromq3-conduit
  - zeromq3-haskell
