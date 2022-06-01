@@ -7436,8 +7436,6 @@ with pkgs;
 
   keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
 
-  kexpand = callPackage ../development/tools/kexpand { };
-
   kent = callPackage ../applications/science/biology/kent { };
 
   keybase = callPackage ../tools/security/keybase {
