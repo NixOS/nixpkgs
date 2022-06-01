@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.archimatetool.com/";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ earldouglas SuperSandro2000 ];
+    maintainers = with maintainers; [ earldouglas ];
   };
 }
