@@ -1,4 +1,4 @@
-commit 105daa26f09034af58eb13ac7c5c4ff5420c1724
+commit 1ccbf21a67da0fdbaad881a1f5c2a4df915e8c57
 Author: sternenseemann <sternenseemann@systemli.org>
 Date:   Tue Oct 5 18:16:10 2021 +0200
 
@@ -9,19 +9,17 @@ Date:   Tue Oct 5 18:16:10 2021 +0200
     called antlr4-runtime, not antlr4_static).
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index d7f86fb6..c43c4456 100644
+index e9c8c08e..dc3a46da 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -36,13 +36,13 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
- # https://www.antlr.org/download/antlr4-cpp-runtime-4.9.2-source.zip
+@@ -36,11 +36,11 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+ # https://www.antlr.org/download/antlr4-cpp-runtime-4.9.3-source.zip
  # set(ANTLR4_ZIP_REPOSITORY "/path_to_antlr4_archive/a4.zip")
  
 -add_definitions(-DANTLR4CPP_STATIC)
  set(ANTLR4_WITH_STATIC_CRT OFF)
- # Use slightly more recent commit than 4.9.2 to deal with utfcpp test
- # compilation problems
- # set(ANTLR4_TAG tags/4.9.2)
- set(ANTLR4_TAG 916f03366edf15bf8b50010b11d479c189bf9f96)
+ # 4.9.3 is the latest ANTLR4 version
+ set(ANTLR4_TAG tags/4.9.3)
 -include(ExternalAntlr4Cpp)
 +find_path(ANTLR4_HEADER antlr4-runtime.h PATH_SUFFIXES antlr4-runtime)
 +set(ANTLR4_INCLUDE_DIRS ${ANTLR4_HEADER})

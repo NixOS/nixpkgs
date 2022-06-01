@@ -11944,7 +11944,7 @@ with pkgs;
 
   yle-dl = callPackage ../tools/misc/yle-dl {};
 
-  you-get = python3Packages.callPackage ../tools/misc/you-get { };
+  you-get = callPackage ../tools/misc/you-get { };
 
   zasm = callPackage ../development/compilers/zasm {};
 
@@ -15088,7 +15088,9 @@ with pkgs;
 
   bpkg = callPackage ../development/tools/build-managers/build2/bpkg.nix { };
 
-  buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
+  buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent {
+    buildGoModule = buildGo118Module;
+  };
 
   buildkite-agent-metrics = callPackage ../servers/monitoring/buildkite-agent-metrics { };
 
@@ -23095,6 +23097,10 @@ with pkgs;
     stdenv = gcc11Stdenv;
   };
 
+  new-lg4ff = callPackage ../os-specific/linux/new-lg4ff {
+    inherit (linuxPackages) kernel;
+  };
+
   nmon = callPackage ../os-specific/linux/nmon { };
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
@@ -26801,9 +26807,7 @@ with pkgs;
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
 
-  manim = python3Packages.callPackage ../applications/video/manim {
-    opencv = python3Packages.opencv3;
-  };
+  manim = callPackage ../applications/video/manim { };
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
@@ -31335,6 +31339,8 @@ with pkgs;
   scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
 
   beancount = with python3.pkgs; toPythonApplication beancount;
+
+  beancount-language-server = callPackage ../development/tools/beancount-language-server {};
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
 
