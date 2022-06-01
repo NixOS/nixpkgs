@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , imagemagickBig
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -19,8 +20,17 @@ buildPythonPackage rec {
       "magick_home = '${imagemagickBig}'"
   '';
 
-  # tests not included with pypi release
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/emcconville/wand/issues/558
+    "test_forward_fourier_transform"
+    "test_inverse_fourier_transform"
+    # our imagemagick doesn't set MagickReleaseDate
+    "test_configure_options"
+  ];
 
   passthru.imagemagick = imagemagickBig;
 
