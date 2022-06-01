@@ -1105,8 +1105,8 @@ let
         mktplcRef = {
           name = "Go";
           publisher = "golang";
-          version = "0.25.1";
-          sha256 = "sha256-ZDUWN9lzDnR77W7xcMFQaaFl/6Lf/x1jgaBkwZPqGGw=";
+          version = "0.33.1";
+          sha256 = "0dsjxs04dchw1dbzf45ryhxsb5xhalqwy40xw6cngxkp69lhf91g";
         };
         meta = {
           license = lib.licenses.mit;
