@@ -26,6 +26,7 @@ let src =
       "0.20.0" = "sha256-JtmNCgwjbCyUE4bWqdH5Nc2YSit+rekwS43DcviIfgk=";
       "0.20.1" = "sha256-fTpRZFQW+ngoc0T6A69reEUAZ6GmHkeQvxspd5zRAjU=";
       "0.21.0" = "sha256-KhgX9rxYH/DM6fCqloe4l7AnJuKrdXSe6Y1XY3BXMy0=";
+      "0.22.4" = "sha256-61TeK4GsfMLmjYGn3ICzkagbc3/Po++Wnqkb2tbJwGA=";
     }."${version}";
   };
   ocamlPackages =
@@ -75,7 +76,7 @@ buildDunePackage {
       stdio
       uuseg
       uutf
-    ]
+    ] ++ lib.optionals (lib.versionAtLeast version "0.22.4") [ csexp ]
     else if lib.versionAtLeast version "0.19.0"
     then [
       base
