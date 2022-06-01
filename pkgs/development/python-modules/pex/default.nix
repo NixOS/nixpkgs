@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "pex";
-  version = "2.1.91";
+  version = "2.1.92";
   format = "flit";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nlEdCdFxF/maOZtpUwNVExnmqUhdAfzlbrEMxAHvUxE=";
+    hash = "sha256-LEHbS6rSKQl1APWYjNS8y1edtXDRqSuhfftcuM67K44=";
   };
 
   nativeBuildInputs = [

@@ -7,15 +7,19 @@
 , fetchPypi
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "0.7.3";
   pname = "dask-jobqueue";
+  version = "0.7.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "682d7cc0e6b319b6ab83a7a898680c12e9c77ddc77df380b40041290f55d4e79";
+    hash = "sha256-aC18wOazGbarg6eomGgMEunHfdx33zgLQAQSkPVdTnk=";
   };
 
   propagatedBuildInputs = [
@@ -39,12 +43,14 @@ buildPythonPackage rec {
     "test_security"
   ];
 
-  pythonImportsCheck = [ "dask_jobqueue" ];
+  pythonImportsCheck = [
+    "dask_jobqueue"
+  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    homepage = "https://github.com/dask/dask-jobqueue";
     description = "Deploy Dask on job schedulers like PBS, SLURM, and SGE";
+    homepage = "https://github.com/dask/dask-jobqueue";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
   };

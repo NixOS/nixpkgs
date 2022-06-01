@@ -7995,6 +7995,12 @@
     githubId = 19036;
     name = "Matthew Bauer";
   };
+  matthiasbenaets = {
+    email = "matthias.benaets@gmail.com";
+    github = "MatthiasBenaets";
+    githubId = 89214559;
+    name = "Matthias Benaets";
+  };
   matthiasbeyer = {
     email = "mail@beyermatthias.de";
     matrix = "@musicmatze:beyermatthi.as";
@@ -10187,6 +10193,12 @@
     github = "podocarp";
     githubId = 10473184;
     name = "Jia Xiaodong";
+  };
+  polarmutex = {
+    email = "brian@brianryall.xyz";
+    github = "polarmutex";
+    githubId = 115141;
+    name = "Brian Ryall";
   };
   polendri = {
     email = "paul@ijj.li";
