@@ -7995,6 +7995,12 @@
     githubId = 19036;
     name = "Matthew Bauer";
   };
+  matthiasbenaets = {
+    email = "matthias.benaets@gmail.com";
+    github = "MatthiasBenaets";
+    githubId = 89214559;
+    name = "Matthias Benaets";
+  };
   matthiasbeyer = {
     email = "mail@beyermatthias.de";
     matrix = "@musicmatze:beyermatthi.as";
