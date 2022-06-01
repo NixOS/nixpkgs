@@ -1184,6 +1184,22 @@ let
         };
       };
 
+      irongeek.vscode-env = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vscode-env";
+          publisher = "irongeek";
+          version = "0.1.0";
+          sha256 = "sha256-URq90lOFtPCNfSIl2NUwihwRQyqgDysGmBc3NG7o7vk=";
+        };
+        meta = with lib; {
+          description = "Adds formatting and syntax highlighting support for env files (.env) to Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=IronGeek.vscode-env";
+          homepage = "https://github.com/IronGeek/vscode-env.git";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+      };
+
       jakebecker.elixir-ls = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "elixir-ls";
