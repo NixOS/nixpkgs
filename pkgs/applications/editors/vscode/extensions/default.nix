@@ -919,8 +919,8 @@ let
         mktplcRef = {
           name = "file-icons";
           publisher = "file-icons";
-          version = "1.0.28";
-          sha256 = "1lyx0l42xhi2f3rdnjddc3mw7m913kjnchawi98i6vqsx3dv7091";
+          version = "1.0.29";
+          sha256 = "05x45f9yaivsz8a1ahlv5m8gy2kkz71850dhdvwmgii0vljc8jc6";
         };
       };
 
