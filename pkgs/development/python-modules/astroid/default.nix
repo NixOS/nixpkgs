@@ -5,17 +5,18 @@
 , pythonOlder
 , isPyPy
 , lazy-object-proxy
-, wrapt
+, setuptools
+, setuptools-scm
 , typing-extensions
 , typed-ast
-, pytestCheckHook
-, setuptools-scm
 , pylint
+, pytestCheckHook
+, wrapt
 }:
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.11.2"; # Check whether the version is compatible with pylint
+  version = "2.11.5"; # Check whether the version is compatible with pylint
 
   disabled = pythonOlder "3.6.2";
 
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-adnvJCchsMWQxsIlenndUb6Mw1MgCNAanZcTmssmsEc=";
+    sha256 = "sha256-GKda3hNdOrsd11pi+6NpYodW4TAgSvqbv2hF4GaIvtM=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -34,19 +35,19 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     lazy-object-proxy
+    setuptools
     wrapt
   ] ++ lib.optionals (pythonOlder "3.10") [
     typing-extensions
-  ] ++ lib.optional (!isPyPy && pythonOlder "3.8") typed-ast;
+  ] ++ lib.optionals (!isPyPy && pythonOlder "3.8") [
+    typed-ast
+  ];
 
   checkInputs = [
     pytestCheckHook
   ];
 
   disabledTests = [
-    # assert (1, 1) == (1, 16)
-    "test_end_lineno_string"
-  ] ++ lib.optionals (pythonAtLeast "3.10") [
     # AssertionError: Lists differ: ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'Protocol', 'object'] != ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'object']
     "test_mro_typing_extensions"
   ];
@@ -59,7 +60,6 @@ buildPythonPackage rec {
     description = "An abstract syntax tree for Python with inference support";
     homepage = "https://github.com/PyCQA/astroid";
     license = licenses.lgpl21Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
