@@ -31345,7 +31345,7 @@ with pkgs;
   bench = haskell.lib.compose.justStaticExecutables haskellPackages.bench;
 
   cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
-  cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };
+  cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { buildGoModule = buildGo118Module; };
 
   confd = callPackage ../tools/system/confd { };
 
