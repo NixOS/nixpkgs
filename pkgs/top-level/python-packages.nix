@@ -1763,6 +1763,8 @@ in {
 
   cloudsplaining = callPackage ../development/python-modules/cloudsplaining { };
 
+  cloup = callPackage ../development/python-modules/cloup { };
+
   clustershell = callPackage ../development/python-modules/clustershell { };
 
   clvm = callPackage ../development/python-modules/clvm { };
@@ -4343,6 +4345,8 @@ in {
 
   isort = callPackage ../development/python-modules/isort { };
 
+  isosurfaces = callPackage ../development/python-modules/isosurfaces { };
+
   isounidecode = callPackage ../development/python-modules/isounidecode { };
 
   isoweek = callPackage ../development/python-modules/isoweek { };
@@ -5165,6 +5169,8 @@ in {
   };
 
   mapbox = callPackage ../development/python-modules/mapbox { };
+
+  mapbox-earcut = callPackage ../development/python-modules/mapbox-earcut { };
 
   mariadb = callPackage ../development/python-modules/mariadb { };
 
@@ -6384,6 +6390,8 @@ in {
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
   micloud = callPackage ../development/python-modules/micloud { };
+
+  msgraph-core = callPackage ../development/python-modules/msgraph-core { };
 
   netmap = callPackage ../development/python-modules/netmap { };
 
@@ -9968,6 +9976,8 @@ in {
   srptools = callPackage ../development/python-modules/srptools { };
 
   srsly = callPackage ../development/python-modules/srsly { };
+
+  srt = callPackage ../development/python-modules/srt { };
 
   srvlookup = callPackage ../development/python-modules/srvlookup { };
 
