@@ -1302,8 +1302,8 @@ let
         mktplcRef = {
           name = "nix-ide";
           publisher = "jnoortheen";
-          version = "0.1.19";
-          sha256 = "1ms96ij6z4bysdhqgdaxx2znvczyhzx57iifbqws50m1c3m7pkx7";
+          version = "0.1.20";
+          sha256 = "16mmivdssjky11gmih7zp99d41m09r0ii43n17d4i6xwivagi9a3";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";
