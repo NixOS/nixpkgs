@@ -83,6 +83,6 @@ stdenvNoCC.mkDerivation (finalAttrs:
       changelog = "https://github.com/doitsujin/dxvk/releases";
       maintainers = [ lib.maintainers.reckenrode ];
       license = lib.licenses.zlib;
-      platforms = lib.platforms.unix;
+      platforms = [ "x86_64-darwin" "i686-linux" "x86_64-linux" ];
     };
   })
