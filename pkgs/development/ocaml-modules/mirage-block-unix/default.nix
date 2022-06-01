@@ -3,14 +3,14 @@
 
 buildDunePackage rec {
   pname = "mirage-block-unix";
-  version = "2.12.1";
+  version = "2.14.0";
 
   useDune2 = true;
 
   src = fetchurl {
     url =
-      "https://github.com/mirage/mirage-block-unix/releases/download/v${version}/mirage-block-unix-v${version}.tbz";
-    sha256 = "4fc0ccea3c06c654e149c0f0e1c2a6f19be4e3fe1afd293c6a0dba1b56b3b8c4";
+      "https://github.com/mirage/mirage-block-unix/releases/download/v${version}/mirage-block-unix-${version}.tbz";
+    sha256 = "sha256-wyG5JGIeMGxx3XtbIl9ZrQ04nm9aPSvXf6CNdt9yPbU=";
   };
 
   minimumOCamlVersion = "4.06";
