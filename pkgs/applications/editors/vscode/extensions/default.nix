@@ -1009,6 +1009,22 @@ let
         };
       };
 
+      gencer.html-slim-scss-css-class-completion = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "html-slim-scss-css-class-completion";
+          publisher = "gencer";
+          version = "1.7.8";
+          sha256 = "18qws35qvnl0ahk5sxh4mzkw0ib788y1l97ijmpjszs0cd4bfsa6";
+        };
+        meta = with lib; {
+          description = "VSCode extension for SCSS";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=gencer.html-slim-scss-css-class-completion";
+          homepage = "https://github.com/gencer/SCSS-Everywhere";
+          license = licenses.mit;
+          maintainers = with maintainers; [ superherointj ];
+        };
+      };
+
       gitlab.gitlab-workflow = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gitlab-workflow";
