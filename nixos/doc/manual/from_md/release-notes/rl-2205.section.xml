@@ -615,7 +615,7 @@
           version of the <literal>xmonad</literal> module, which will
           break your configuration if you use <literal>launch</literal>
           as entrypoint. The example code the corresponding nixos module
-          was adjusted, you way want to have a look at it.
+          was adjusted, you may want to have a look at it.
         </para>
       </listitem>
       <listitem>

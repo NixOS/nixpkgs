@@ -41,6 +41,8 @@ stdenv.mkDerivation (common // {
     runHook postInstall
   '';
 
+  enableParallelBuilding = true;
+
   meta = common.meta // {
     description = "An entirely open source Linux driver that allows you to manage your Razer peripherals on GNU/Linux";
     broken = kernel.kernelOlder "4.19";

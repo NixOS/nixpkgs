@@ -66,13 +66,13 @@ let
   # Put all the providers we not longer support in this list.
   removed-providers =
     let
-      archived = date: throw "the provider has been archived by upstream on ${date}";
-      removed = date: throw "removed from nixpkgs on ${date}";
+      archived = name: date: throw "the ${name} terraform provider has been archived by upstream on ${date}";
+      removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      opc = archived "2022/05";
-      oraclepaas = archived "2022/05";
-      template = archived "2022/05";
+      opc = archived "opc" "2022/05";
+      oraclepaas = archived "oraclepaas" "2022/05";
+      template = archived "template" "2022/05";
     };
 
   # excluding aliases, used by terraform-full
