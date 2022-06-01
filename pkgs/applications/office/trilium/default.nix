@@ -15,6 +15,7 @@ let
     inherit description;
     homepage = "https://github.com/zadam/trilium";
     license = licenses.agpl3Plus;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ fliegendewurst ];
   };
