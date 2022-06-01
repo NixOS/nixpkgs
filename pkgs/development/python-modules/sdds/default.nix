@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "sdds";
-  version = "0.2.1";
+  version = "0.3.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pylhc";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-JcxcF0tDigZz3upzE7rPDynCH45dnLk/zpS0a2dOwRU=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-l9j+YJ5VNMzL6JW59kq0hQS7XIj53UxW5bNnfdURz/o=";
   };
 
   propagatedBuildInputs = [ numpy ];
