@@ -1,4 +1,6 @@
-{ unzip }:
+{ unzip
+, gqlgenVersion ? "0.17.2"
+}:
 {
   overrideModAttrs = (_: {
     # No need to workaround -trimpath: it's not used in go-modules,
@@ -21,7 +23,7 @@
   # https://github.com/99designs/gqlgen/issues/1537
   # This is to give `go generate ./graph` access to gqlgen's *.gotpl files
   # If it fails, the gqlgenVersion may have to be updated.
-  preBuild = let gqlgenVersion = "0.17.2"; in ''
+  preBuild = ''
     unzip ''${GOPROXY#"file://"}/github.com/99designs/gqlgen/@v/v${gqlgenVersion}.zip
     go generate ./loaders
     go generate ./graph
