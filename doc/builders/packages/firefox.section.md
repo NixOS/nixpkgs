@@ -26,10 +26,14 @@ The `wrapFirefox` function allows to pass policies, preferences and extensions t
         Pocket = false;
         Snippets = false;
       };
-       UserMessaging = {
-         ExtensionRecommendations = false;
-         SkipOnboarding = true;
-       };
+      UserMessaging = {
+        ExtensionRecommendations = false;
+        SkipOnboarding = true;
+      };
+      SecurityDevices = {
+        # Use a proxy module rather than `nixpkgs.config.firefox.smartcardSupport = true`
+        "PKCS#11 Proxy Module" = "${pkgs.p11-kit}/lib/p11-kit-proxy.so";
+      };
     };
 
     extraPrefs = ''

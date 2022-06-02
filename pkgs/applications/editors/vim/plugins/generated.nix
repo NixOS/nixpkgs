@@ -904,6 +904,18 @@ final: prev:
     meta.homepage = "https://github.com/akinsho/bufferline.nvim/";
   };
 
+  bullets-vim = buildVimPluginFrom2Nix {
+    pname = "bullets.vim";
+    version = "2022-06-01";
+    src = fetchFromGitHub {
+      owner = "dkarter";
+      repo = "bullets.vim";
+      rev = "f3b4ae71f60b5723077a77cfe9e8776a3ca553ac";
+      sha256 = "1dfgxdmvzjqjc1viqx2nmzzrjr2n7c6931d3iypv96p2zywld99s";
+    };
+    meta.homepage = "https://github.com/dkarter/bullets.vim/";
+  };
+
   calendar-vim = buildVimPluginFrom2Nix {
     pname = "calendar.vim";
     version = "2022-03-21";
