@@ -142,13 +142,6 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/xddxdd/bird-lg-go">bird-lg</link>,
-          a BGP looking glass for Bird Routing. Available as
-          <link linkend="opt-services.bird-lg.package">services.bird-lg</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           <link xlink:href="https://docs.docker.com/engine/security/rootless/">rootless
           Docker</link>, a <literal>systemd --user</literal> Docker
           service which runs without root permissions. Available as
@@ -197,13 +190,6 @@
           <link xlink:href="https://loic-sharma.github.io/BaGet/">BaGet</link>,
           a lightweight NuGet and symbol server. Available at
           <link linkend="opt-services.baget.enable">services.baget</link>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/xddxdd/bird-lg-go">bird-lg</link>,
-          a BGP looking glass for Bird Routing. Available as
-          <link linkend="opt-services.bird-lg.package">services.bird-lg</link>.
         </para>
       </listitem>
       <listitem>
