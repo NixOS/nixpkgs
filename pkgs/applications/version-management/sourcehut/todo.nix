@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "todosrht";
-  version = "0.71.2";
+  version = "0.72.2";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "todo.sr.ht";
     rev = version;
-    sha256 = "sha256-m7FY+jXpwPnK1+b1iQiDGe8JPfAFQp65BzGH6WvNwhM=";
+    sha256 = "sha256-FLjVO8Y/9s2gFfMXwcY7Rj3WNzPEBYs1AEjiVZFWsT8=";
   };
 
   postPatch = ''
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     inherit src version;
     pname = "todosrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-ttGT7lUh8O+9KvbaEGWUsthefXQ2ATeli0tnlXCjZFk=";
+    vendorSha256 = "sha256-LB1H4jwnvoEyaaYJ09NI/M6IkgZwRet/fkso6b9EPV0=";
   } // import ./fix-gqlgen-trimpath.nix {inherit unzip;});
 
   nativeBuildInputs = srht.nativeBuildInputs;
