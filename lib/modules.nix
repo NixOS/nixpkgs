@@ -157,7 +157,9 @@ rec {
             # support for that, in turn it's lazy in its values. This means e.g.
             # a `_module.args.pkgs = import (fetchTarball { ... }) {}` won't
             # start a download when `pkgs` wasn't evaluated.
-            type = types.lazyAttrsOf types.raw;
+            type = types.submodule {
+              freeformType = types.lazyAttrsOf types.raw;
+            };
             # Only render documentation once at the root of the option tree,
             # not for all individual submodules.
             # Allow merging option decls to make this internal regardless.

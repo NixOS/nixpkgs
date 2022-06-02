@@ -252,6 +252,8 @@ checkConfigOutput '/freeform-submodules.nix"$' config.fooDeclarations.0 ./freefo
 # freeformTypes can get merged using `types.type`, including submodules
 checkConfigOutput '^10$' config.free.xxx.foo ./freeform-submodules.nix
 checkConfigOutput '^10$' config.free.yyy.bar ./freeform-submodules.nix
+# _module.args (https://github.com/NixOS/nixpkgs/issues/53458#issuecomment-1144640686)
+checkConfigOutput '^\[ "one" "two" \]$' config.result ./issue-53458-module-args-freeformType.nix
 
 ## types.anything
 # Check that attribute sets are merged recursively
