@@ -411,6 +411,8 @@ in {
 
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
 
+  aiosmtplib = callPackage ../development/python-modules/aiosmtplib { };
+
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
 
   aiosteamist = callPackage ../development/python-modules/aiosteamist { };
