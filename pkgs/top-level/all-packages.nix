@@ -9860,8 +9860,6 @@ with pkgs;
 
   relic = callPackage ../development/tools/relic { };
 
-  remarkjs = callPackage ../development/web/remarkjs { };
-
   alarm-clock-applet = callPackage ../tools/misc/alarm-clock-applet { };
 
   remind = callPackage ../tools/misc/remind { };
