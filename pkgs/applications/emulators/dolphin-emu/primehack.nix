@@ -143,9 +143,7 @@ stdenv.mkDerivation rec {
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ MP2E ashkitten Madouura ];
-    # x86_32 is an unsupported platform.
-    # Enable generic build if you really want a JIT-less binary.
     broken = stdenv.isDarwin;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = platforms.unix;
   };
 }
