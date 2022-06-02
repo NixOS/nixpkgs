@@ -19,9 +19,9 @@
     }
   },
   "beta": {
-    "version": "103.0.5060.24",
-    "sha256": "1vdnq7vd0jdxkpc00xwvvk1mmyq2hcydms64l16nv3v8jgvizrha",
-    "sha256bin64": "1rnjgb9v8dr74x0lj00xdkpvp2yx8d79h1kdzp7m7nvh4q34s32w",
+    "version": "103.0.5060.33",
+    "sha256": "00s9nwy5y2vik08snqxv1wbajllb7d81bryl5v4miyihjs511zjb",
+    "sha256bin64": "1l1fmfsl6ms4ps6sixp6chq3p6spik2fsvz5njvj1zf84p90mx4l",
     "deps": {
       "gn": {
         "version": "2022-05-11",
