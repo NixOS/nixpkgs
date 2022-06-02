@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "hgsrht";
-  version = "0.31.2";
+  version = "0.31.3";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hg.sr.ht";
     rev = version;
-    sha256 = "F0dBykSSrlis+mumULLxvKNxD75DWR9+IDTYbmhkMDI=";
+    sha256 = "4Qe08gqsSTMQVQBchFPEUXuxM8ZAAQGJT1EOcDjkZa0=";
     vc = "hg";
   };
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     inherit src version;
     pname = "hgsrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-W7A22qSIgJgcfS7xYNrmbYKaZBXbDtPilM9I6DxmTeU=";
+    vendorSha256 = "sha256-uIP3W7UJkP68HJUF33kz5xfg/KBiaSwMozFYmQJQkys=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   hgsrht-keys = buildGoModule {
