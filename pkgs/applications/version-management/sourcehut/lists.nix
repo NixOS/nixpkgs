@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "listssrht";
-  version = "0.51.10";
+  version = "0.51.11";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "lists.sr.ht";
     rev = version;
-    sha256 = "sha256-f8KvMctDva31W5c6uAIDDZ0eUrRL5ha10ew2pLEnJtw=";
+    sha256 = "sha256-Qb70oOazZfmHpC5r0oMYCFdvfAeKbq3mQA8+M56YYnY=";
   };
 
   listssrht-api = buildGoModule ({
