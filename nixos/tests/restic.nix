@@ -7,6 +7,16 @@ import ./make-test-python.nix (
     repositoryFile = "${pkgs.writeText "repositoryFile" "/tmp/restic-backup-from-file"}";
     rcloneRepository = "rclone:local:/tmp/restic-rclone-backup";
 
+    backupPrepareCommand = ''
+      touch /opt/backupPrepareCommand
+      test ! -e /opt/backupCleanupCommand
+    '';
+
+    backupCleanupCommand = ''
+      rm /opt/backupPrepareCommand
+      touch /opt/backupCleanupCommand
+    '';
+
     passwordFile = "${pkgs.writeText "password" "correcthorsebatterystaple"}";
     initialize = true;
     paths = [ "/opt" ];
@@ -30,7 +40,7 @@ import ./make-test-python.nix (
         {
           services.restic.backups = {
             remotebackup = {
-              inherit repository passwordFile initialize paths pruneOpts;
+              inherit repository passwordFile initialize paths pruneOpts backupPrepareCommand backupCleanupCommand;
             };
             remotebackup-from-file = {
               inherit repositoryFile passwordFile initialize paths pruneOpts;
@@ -73,6 +83,7 @@ import ./make-test-python.nix (
           "mkdir -p /tmp/restic-rclone-backup",
           "timedatectl set-time '2016-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
+          "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-remotebackup-from-file.service",
           "systemctl start restic-backups-rclonebackup.service",
           '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
@@ -80,18 +91,23 @@ import ./make-test-python.nix (
           '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
           "timedatectl set-time '2017-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
+          "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
           "timedatectl set-time '2018-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
+          "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
           "timedatectl set-time '2018-12-14 13:45'",
           "systemctl start restic-backups-remotebackup.service",
+          "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
           "timedatectl set-time '2018-12-15 13:45'",
           "systemctl start restic-backups-remotebackup.service",
+          "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
           "timedatectl set-time '2018-12-16 13:45'",
           "systemctl start restic-backups-remotebackup.service",
+          "rm /opt/backupCleanupCommand",
           "systemctl start restic-backups-rclonebackup.service",
           '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
           '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^4 snapshot"',
