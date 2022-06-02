@@ -9773,8 +9773,6 @@ in {
 
   soco = callPackage ../development/python-modules/soco { };
 
-  softlayer = callPackage ../development/python-modules/softlayer { };
-
   solaredge = callPackage ../development/python-modules/solaredge { };
 
   solax = callPackage ../development/python-modules/solax { };
