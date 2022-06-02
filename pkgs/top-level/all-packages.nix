@@ -6216,8 +6216,6 @@ with pkgs;
     inherit (python3Packages) buildPythonApplication pyqt5 git-annex-adapter;
   };
 
-  git-annex-remote-b2 = callPackage ../applications/version-management/git-and-tools/git-annex-remote-b2 { };
-
   git-annex-remote-dbx = callPackage ../applications/version-management/git-and-tools/git-annex-remote-dbx {
     inherit (python3Packages)
     buildPythonApplication
