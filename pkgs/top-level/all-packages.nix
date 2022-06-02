@@ -27428,8 +27428,6 @@ with pkgs;
     lua5 = lua5_3;
   };
 
-  iptraf = callPackage ../applications/networking/iptraf { };
-
   iptraf-ng = callPackage ../applications/networking/iptraf-ng { };
 
   irccloud = callPackage ../applications/networking/irc/irccloud { };
