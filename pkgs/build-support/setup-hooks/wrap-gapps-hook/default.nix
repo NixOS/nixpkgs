@@ -43,6 +43,7 @@ makeSetupHook {
 
     passthru.tests = let
       sample-project = ./tests/sample-project;
+      mock-pixbuf-module = callPackage ./tests/sample-module.nix {};
 
       testLib = callPackage ./tests/lib.nix { };
       inherit (testLib) expectSomeLineContainingYInFileXToMentionZ;
@@ -67,20 +68,6 @@ makeSetupHook {
           ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GIO_EXTRA_MODULES" "${dconf.lib}/lib/gio/modules"}
         ''
       );
-
-      # Stopgap as no modules have been packaged yet
-      mock-pixbuf-module = stdenv.mkDerivation {
-        name = "mock-gdk-pixbuf-module";
-        outputs = ["out" "lib"];
-        dontUnpack = true;
-        buildPhase = ''
-          mkdir -p $out
-          mkdir -p $lib/$(dirname ${gdk-pixbuf.cacheFile})
-          touch $lib/${gdk-pixbuf.cacheFile}
-        '';
-        dontInstall = true;
-        dontFixup = true;
-      };
 
       pixbuf-modules = basic.overrideAttrs (old: {extraGdkPixbufModules = [mock-pixbuf-module];});
 
