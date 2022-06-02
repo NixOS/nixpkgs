@@ -255,7 +255,6 @@ in
         ''
           BusID "${pCfg.nvidiaBusId}"
           ${optionalString syncCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
-          ${optionalString cfg.powerManagement.finegrained "Option \"NVreg_DynamicPowerManagement=0x02\""}
         '';
       screenSection =
         ''
