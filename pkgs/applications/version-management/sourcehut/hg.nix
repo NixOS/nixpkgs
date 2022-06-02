@@ -1,5 +1,5 @@
 { lib
-, fetchhg
+, fetchFromSourcehut
 , buildGoModule
 , buildPythonPackage
 , srht
@@ -14,10 +14,12 @@ buildPythonPackage rec {
   pname = "hgsrht";
   version = "0.31.2";
 
-  src = fetchhg {
-    url = "https://hg.sr.ht/~sircmpwn/hg.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "hg.sr.ht";
     rev = version;
     sha256 = "F0dBykSSrlis+mumULLxvKNxD75DWR9+IDTYbmhkMDI=";
+    vc = "hg";
   };
   postPatch = ''
     substituteInPlace Makefile \
