@@ -1,10 +1,11 @@
 { lib, fetchzip }:
 
 let
-  version = "1.5.2";
+  version = "1.5.3";
 in
 fetchzip {
   name = "victor-mono-${version}";
+  stripRoot = false;
 
   # Upstream prefers we download from the website,
   # but we really insist on a more versioned resource.
@@ -17,11 +18,11 @@ fetchzip {
 
   postFetch = ''
     mkdir -p $out/share/fonts/
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+    cp --recursive $out/OTF $out/share/fonts/opentype
+    cp --recursive $out/TTF $out/share/fonts/truetype
   '';
 
-  sha256 = "sha256-cNDZh0P/enmoKL/6eHzkgl5ghtai2K9cTgWMVmm8GIA=";
+  sha256 = "sha256-vqsVD5GEzcBoYCCJU7b+ie/cHS2DarIBaGAZZEGSo+A=";
 
   meta = with lib; {
     description = "Free programming font with cursive italics and ligatures";
