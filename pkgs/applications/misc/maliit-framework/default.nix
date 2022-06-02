@@ -1,6 +1,7 @@
 { mkDerivation
 , lib
 , fetchFromGitHub
+, fetchpatch
 
 , at-spi2-atk
 , at-spi2-core
@@ -32,6 +33,15 @@ mkDerivation rec {
     sha256 = "138jyvw130kmrldksbk4l38gvvahh3x51zi4vyplad0z5nxmbazb";
   };
 
+  # in master post 2.2.1, see https://github.com/maliit/framework/issues/106
+  patches = [
+    (fetchpatch {
+      name = "fix-pkg-config.patch";
+      url = "https://github.com/maliit/framework/commit/1e20a4a5113f1c092295f5a5f04ab6e584f6fcff.patch";
+      sha256 = "0h7jfqnqvjka626wx2z2g150rch4air7q3zbq59gcb12g7x6gfyn";
+    })
+  ];
+
   buildInputs = [
     at-spi2-atk
     at-spi2-core
@@ -54,24 +64,6 @@ mkDerivation rec {
     pkg-config
     wayland-protocols
   ];
-
-  # https://github.com/maliit/framework/issues/106
-  postPatch = ''
-    substituteInPlace common/maliit-framework.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-    substituteInPlace maliit-glib/maliit-glib.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
-    substituteInPlace src/maliit-plugins.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_DATADIR@ @CMAKE_INSTALL_FULL_DATADIR@
-    substituteInPlace src/maliit-server.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_DATADIR@ @CMAKE_INSTALL_FULL_DATADIR@
-  '';
 
   preConfigure = ''
     cmakeFlags+="-DQT5_PLUGINS_INSTALL_DIR=$out/$qtPluginPrefix"
