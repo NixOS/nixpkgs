@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchurl, cmake, darkhttpd, gettext, makeWrapper
+{ lib, mkDerivation, fetchurl, cmake, gettext, makeWrapper
 , pkg-config, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase
 , qttranslations, qtsvg }:
 
@@ -17,7 +17,7 @@ mkDerivation rec {
     sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
 
-  nativeBuildInputs = [ cmake darkhttpd gettext makeWrapper pkg-config ];
+  nativeBuildInputs = [ cmake gettext makeWrapper pkg-config ];
 
   postPatch = ''
     substituteInPlace client/CMakeLists.txt \
