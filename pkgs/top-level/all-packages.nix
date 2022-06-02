@@ -1139,6 +1139,8 @@ with pkgs;
 
   asleap = callPackage ../tools/networking/asleap { };
 
+  butler = callPackage ../games/itch/butler.nix { };
+
   cf-vault = callPackage ../tools/admin/cf-vault { };
 
   bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
