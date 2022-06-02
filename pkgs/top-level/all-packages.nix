@@ -33612,8 +33612,6 @@ with pkgs;
 
   singular = callPackage ../applications/science/math/singular { };
 
-  scilab = callPackage ../applications/science/math/scilab { };
-
   scilab-bin = callPackage ../applications/science/math/scilab-bin {};
 
   scilla = callPackage ../tools/security/scilla { };
