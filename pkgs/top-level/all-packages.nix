@@ -13138,8 +13138,6 @@ with pkgs;
 
   go = go_1_17;
 
-  go-repo-root = callPackage ../development/tools/go-repo-root { };
-
   go-junit-report = callPackage ../development/tools/go-junit-report { };
 
   gobang = callPackage ../development/tools/database/gobang {
