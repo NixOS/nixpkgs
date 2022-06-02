@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , pkg-config
 , fetchFromGitHub
 , buildGoModule
@@ -11,25 +12,21 @@
 }:
 buildGoModule rec {
   pname = "podman-tui";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    sha256 = "sha256-Xc6F87evQiv4jRbxxRBzJBeI8653HvlQL+UwcVWY0wk=";
+    sha256 = "sha256-2WugN5JdTkz3OOt3ggzT7HwMXy1jxn85RwF7409D8m8=";
   };
 
   vendorSha256 = null;
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    btrfs-progs
-    gpgme
-    libassuan
-    lvm2
-  ];
+  buildInputs = [ gpgme libassuan ]
+    ++ lib.optionals stdenv.isLinux [ btrfs-progs lvm2 ];
 
   ldflags = [ "-s" "-w" ];
 
@@ -44,6 +41,5 @@ buildGoModule rec {
     description = "Podman Terminal UI";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
-    platforms = platforms.linux;
   };
 }
