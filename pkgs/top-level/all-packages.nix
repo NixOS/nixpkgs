@@ -23941,11 +23941,8 @@ with pkgs;
 
   libudev0-shim = callPackage ../os-specific/linux/libudev0-shim { };
 
-  udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
   udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
   udisks = udisks2;
-
-  udisks_glue = callPackage ../os-specific/linux/udisks-glue { };
 
   ugtrain = callPackage ../tools/misc/ugtrain { };
 
