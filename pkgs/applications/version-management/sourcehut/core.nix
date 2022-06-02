@@ -29,13 +29,13 @@
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.68.24";
+  version = "0.69.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "core.sr.ht";
     rev = version;
-    sha256 = "sha256-ipukga6vfBgDIXOQCejCkU/iTmBt5egIjB+NlJyL2yo=";
+    sha256 = "sha256-s/I0wxtPggjTkkTZnhm77PxdQjiT0Vq2MIk7JMvdupc=";
     fetchSubmodules = true;
   };
 
