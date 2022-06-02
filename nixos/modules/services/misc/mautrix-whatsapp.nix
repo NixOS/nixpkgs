@@ -75,7 +75,7 @@ in
       };
       example = {
         settings = {
-          homeserver.address = https://matrix.org;
+          homeserver.address = https://matrix.myhomeserver.org;
           bridge.permissions = {
             "@admin:myhomeserver.org" = "admin";
           };
