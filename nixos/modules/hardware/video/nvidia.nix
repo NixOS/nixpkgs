@@ -163,8 +163,19 @@ in
       '';
     };
 
+    hardware.nvidia.forceFullCompositionPipeline = lib.mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to force-enable the full composition pipeline.
+        This sometimes fixes screen tearing issues.
+        This has been reported to reduce the performance of some OpenGL applications and may produce issues in WebGL.
+        It also drastically increases the time the driver needs to clock down after load.
+      '';
+    };
+
     hardware.nvidia.package = lib.mkOption {
-      type = lib.types.package;
+      type = types.package;
       default = config.boot.kernelPackages.nvidiaPackages.stable;
       defaultText = literalExpression "config.boot.kernelPackages.nvidiaPackages.stable";
       description = ''
@@ -259,8 +270,14 @@ in
       screenSection =
         ''
           Option "RandRRotation" "on"
-          ${optionalString syncCfg.enable "Option \"AllowEmptyInitialConfiguration\""}
-        '';
+        '' + optionalString syncCfg.enable ''
+          Option "AllowEmptyInitialConfiguration"
+        '' + optionalString cfg.forceFullCompositionPipeline ''
+          Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+          Option         "AllowIndirectGLXProtocol" "off"
+          Option         "TripleBuffer" "on"
+        ''
+        ;
     };
 
     services.xserver.serverLayoutSection = optionalString syncCfg.enable ''
