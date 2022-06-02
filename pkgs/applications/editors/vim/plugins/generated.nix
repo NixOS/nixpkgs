@@ -1637,6 +1637,18 @@ final: prev:
     meta.homepage = "https://github.com/github/copilot.vim/";
   };
 
+  coq-artifacts = buildVimPluginFrom2Nix {
+    pname = "coq.artifacts";
+    version = "2022-06-02";
+    src = fetchFromGitHub {
+      owner = "ms-jpq";
+      repo = "coq.artifacts";
+      rev = "3ac315fd064d08dc726863387cff05dd692532d5";
+      sha256 = "1fc4g2q58r790bi2vnlaklfc3z836d5b96pd0m8f7r5hmhvpypaj";
+    };
+    meta.homepage = "https://github.com/ms-jpq/coq.artifacts/";
+  };
+
   coq-vim = buildVimPluginFrom2Nix {
     pname = "coq.vim";
     version = "2013-01-16";
