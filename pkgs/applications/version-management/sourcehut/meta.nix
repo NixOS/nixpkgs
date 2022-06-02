@@ -19,20 +19,20 @@
 , unzip
 }:
 let
-  version = "0.58.8";
+  version = "0.58.18";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "meta.sr.ht";
     rev = version;
-    sha256 = "sha256-lnEt5UoQBd5qlkD+nE6KL5DP4jf1FrAjgA06/mgRxTs=";
+    sha256 = "sha256-OjbQHAzG2nZwpJUIvhKaCJWZbhZDC2R6C+SkbKUpk8o=";
   };
 
   metasrht-api = buildGoModule ({
     inherit src version;
     pname = "metasrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-3s9PYUy4qS06zyTIRDvnAmhfrjVLBa/03Nu3tMcIReI=";
+    vendorSha256 = "sha256-kiEuEYZFbwJ6SbKFtxH4SiRaZmqYriRHPoHdTX28+d0=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
 in
