@@ -62,7 +62,7 @@ in
         };
         relay = {
           enabled = true;
-          management = "!whatsappbot:${toString(config.services.matrix-synapse.server_name)}";
+          management = "!whatsappbot:${toString(config.services.matrix-synapse.settings.server_name)}";
         };
         logging = {
           directory = "${dataDir}/logs";
