@@ -27232,8 +27232,6 @@ with pkgs;
 
   i3blocks-gaps = callPackage ../applications/window-managers/i3/blocks-gaps.nix { };
 
-  i3cat = callPackage ../tools/misc/i3cat { };
-
   i3ipc-glib = callPackage ../applications/window-managers/i3/i3ipc-glib.nix { };
 
   i3lock = callPackage ../applications/window-managers/i3/lock.nix {
