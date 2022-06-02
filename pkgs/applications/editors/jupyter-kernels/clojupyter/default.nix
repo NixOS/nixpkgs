@@ -25,6 +25,7 @@ let
   meta = with lib; {
     description = "A Jupyter kernel for Clojure";
     homepage = "https://github.com/clojupyter/clojupyter";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];  # deps from maven
     license = licenses.mit;
     maintainers = with maintainers; [ thomasjm ];
     platforms = jre.meta.platforms;

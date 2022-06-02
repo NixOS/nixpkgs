@@ -31,6 +31,7 @@ buildGraalvmNativeImage rec {
     homepage = "https://ehwiki.org/wiki/Hentai@Home";
     description =
       "Hentai@Home is an open-source P2P gallery distribution system which reduces the load on the E-Hentai Galleries";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     maintainers = with maintainers; [ terrorjack ];
   };
