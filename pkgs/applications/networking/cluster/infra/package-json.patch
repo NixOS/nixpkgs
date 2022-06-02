@@ -1,0 +1,10 @@
+diff --git a/package.json b/package.json
+index 6d2c81c3..72a68c18 100644
+--- a/package.json
++++ b/package.json
+@@ -1,4 +1,5 @@
+ {
++  "name": "@infrahq/ui",
+   "scripts": {
+     "dev": "concurrently 'npm run dev:ui' 'npm run dev:server'",
+     "dev:ui": "next dev",

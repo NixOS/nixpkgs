@@ -27398,6 +27398,8 @@ with pkgs;
 
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
 
+  infra = callPackage ../applications/networking/cluster/infra { buildGoModule = buildGo118Module; nodejs = nodejs-18_x; };
+
   inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
 
   inkscape = callPackage ../applications/graphics/inkscape {
