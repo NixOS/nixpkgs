@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
       sha256 = "1yd6rsds03kwx5jki4hihd2bpfh26g5l1pi82qzaqzarixdxwzvl";
       excludes = [ "ChangeLog" ];
     })
+    # in master post 1.4.2, see https://github.com/Matroska-Org/libebml/issues/97
+    (fetchpatch {
+      name = "fix-pkg-config.patch";
+      url = "https://github.com/Matroska-Org/libebml/commit/42fbae35d291b737f2bb4ad5d643fd0d48537a88.patch";
+      sha256 = "020qp4a3l60mcm4n310ynxbbv5qlpmybb9xy10pjvx4brp83pmy3";
+    })
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -26,13 +32,6 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=YES"
     "-DCMAKE_INSTALL_PREFIX="
   ];
-
-  # https://github.com/Matroska-Org/libebml/issues/97
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace '\$\{prefix\}/$'{CMAKE_INSTALL_LIBDIR} '$'{CMAKE_INSTALL_FULL_LIBDIR} \
-      --replace '\$\{prefix\}/$'{CMAKE_INSTALL_INCLUDEDIR} '$'{CMAKE_INSTALL_FULL_INCLUDEDIR}
-  '';
 
   meta = with lib; {
     description = "Extensible Binary Meta Language library";
