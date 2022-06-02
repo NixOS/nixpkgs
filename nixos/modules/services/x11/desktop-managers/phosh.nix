@@ -78,7 +78,13 @@ let
         description = ''
           Display scaling factor.
         '';
-        type = types.nullOr (types.either types.ints.unsigned types.float);
+        type = types.nullOr (
+          types.addCheck
+          (types.either types.int types.float)
+          (x : x > 0)
+        ) // {
+          description = "null or positive integer or float";
+        };
         default = null;
         example = 2;
       };
