@@ -8,14 +8,19 @@
 
 buildPythonPackage rec {
   pname = "pastesrht";
-  version = "0.13.7";
+  version = "0.13.8";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "paste.sr.ht";
     rev = version;
-    sha256 = "sha256-EzcS6Zbh+wJinC/GKJOSWUPORODpKEA3tLpLGqoVGBU=";
+    sha256 = "sha256-Zji9FyYUtsklYz4qyLbtduusteC7WujLCMmvZKcqYis=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "all: api" ""
+  '';
 
   nativeBuildInputs = srht.nativeBuildInputs;
 
