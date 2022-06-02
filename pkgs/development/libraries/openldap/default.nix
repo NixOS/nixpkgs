@@ -10,6 +10,7 @@
 , libtool
 , openssl
 , systemdMinimal
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +31,13 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/openldap/openldap/commit/d7c0417bcfba5400c0be2ce83eaf43ec97c97edd.patch";
+      sha256 = "sha256-l7b17j8Cm7zMotq7wBoNRNCaQgdoNAvf4h7XJ+Q1Le4=";
+    })
+  ];
 
   nativeBuildInputs = [
     groff
