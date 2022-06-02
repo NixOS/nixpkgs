@@ -33,7 +33,7 @@ let
     pname = "metasrht-api";
     modRoot = "api";
     vendorSha256 = "sha256-3s9PYUy4qS06zyTIRDvnAmhfrjVLBa/03Nu3tMcIReI=";
-  } // import ./fix-gqlgen-trimpath.nix {inherit unzip;});
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
 in
 buildPythonPackage rec {

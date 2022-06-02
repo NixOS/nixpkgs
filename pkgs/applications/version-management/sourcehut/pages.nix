@@ -30,4 +30,4 @@ buildGoModule (rec {
   };
   # There is no ./loaders but this does not cause troubles
   # to go generate
-} // import ./fix-gqlgen-trimpath.nix {inherit unzip;})
+} // import ./fix-gqlgen-trimpath.nix { inherit unzip; })

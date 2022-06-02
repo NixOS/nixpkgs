@@ -21,6 +21,7 @@ buildPythonPackage rec {
     sha256 = "F0dBykSSrlis+mumULLxvKNxD75DWR9+IDTYbmhkMDI=";
     vc = "hg";
   };
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: api hgsrht-keys" ""
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     pname = "hgsrht-api";
     modRoot = "api";
     vendorSha256 = "sha256-W7A22qSIgJgcfS7xYNrmbYKaZBXbDtPilM9I6DxmTeU=";
-  } // import ./fix-gqlgen-trimpath.nix {inherit unzip;});
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   hgsrht-keys = buildGoModule {
     inherit src version;
