@@ -48,13 +48,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu-primehack";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "shiiion";
     repo = "dolphin";
     rev = version;
-    sha256 = "011qghswgh9l7k993lfn1hrwhgyrv9m33smgspsjq50jww6r27fl";
+    sha256 = "sha256-ywCh6wiBjXY5baWfu7cBgwc8w8yJaLM3QQ0FATsrweQ=";
     fetchSubmodules = true;
   };
 
