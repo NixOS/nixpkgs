@@ -10831,8 +10831,6 @@ with pkgs;
 
   tetrd = callPackage ../applications/networking/tetrd { };
 
-  tewisay = callPackage ../tools/misc/tewisay { };
-
   texmacs = if stdenv.isDarwin
     then callPackage ../applications/editors/texmacs/darwin.nix {
       inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
