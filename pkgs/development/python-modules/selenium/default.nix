@@ -9,7 +9,6 @@
 , nixosTests
 }:
 
-
 let
   # Recompiling x_ignore_nofocus.so as the original one dlopen's libX11.so.6 by some
   # absolute paths. Replaced by relative path so it is found when used in nix.
@@ -31,15 +30,15 @@ buildPythonPackage rec {
     sha256 = "039hf9knvl4s3hp21bzwsp1g5ri9gxsh504dp48lc6nr1av35byy";
   };
 
-  buildInputs = [xorg.libX11];
+  buildInputs = [ xorg.libX11 ];
 
   propagatedBuildInputs = [
     geckodriver urllib3
   ];
 
-  patchPhase = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     cp "${x_ignore_nofocus}/cpp/linux-specific/"* .
-    substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${xorg.libX11.out}/lib/libX11.so.6"
+    substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${lib.getLib xorg.libX11}/lib/libX11.so.6"
     cc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
     cc -shared \
       -Wl,${if stdenv.isDarwin then "-install_name" else "-soname"},x_ignore_nofocus.so \
