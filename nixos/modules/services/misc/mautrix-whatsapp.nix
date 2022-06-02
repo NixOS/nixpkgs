@@ -124,7 +124,13 @@ in
       };
     };
 
-    users.users.mautrix-whatsapp = {};
+
+    users.groups.mautrix-whatsapp = { };
+    users.users.mautrix-whatsapp = {
+      isSystemUser = true;
+      group = "mautrix-whatsapp";
+      home = ${dataDir};
+    };
     services.matrix-synapse.settings.app_service_config_files = [ "${registrationFile}" ];
 
   };
