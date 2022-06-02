@@ -61,8 +61,9 @@ in python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-    --replace 'cloup = "^0.13.0"' 'cloup = "*"' \
-    --replace 'mapbox-earcut = "^0.12.10"' 'mapbox-earcut = "*"' \
+      --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" "" \
+      --replace 'cloup = "^0.13.0"' 'cloup = "*"' \
+      --replace 'mapbox-earcut = "^0.12.10"' 'mapbox-earcut = "*"' \
   '';
 
   buildInputs = [ cairo ];
@@ -106,7 +107,6 @@ in python3.pkgs.buildPythonApplication rec {
 
 
   checkInputs = [
-    python3.pkgs.pytest-cov
     python3.pkgs.pytest-xdist
     python3.pkgs.pytestCheckHook
 

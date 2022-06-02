@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchFromGitHub
 , numpy
 , packaging
@@ -11,21 +10,14 @@
 
 buildPythonPackage rec {
   pname = "db-dtypes";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-db-dtypes-pandas";
     rev = "v${version}";
-    hash = "sha256-7u/E0ICiz7LQfuplm/mkGlWrgGEPqeMwM3CUhfH6868=";
+    hash = "sha256-T/cyJ0PY5p/y8CKrmeAa9nvnuRs4hd2UKiYiMHLaa7A=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/googleapis/python-db-dtypes-pandas/commit/fb30adfd427d3df9919df00b096210ba1eb1b91d.patch";
-      sha256 = "sha256-39kZtYGbn3U1WXiDTczki5EM6SjUlSRXz8UMcdTU20g=";
-    })
-  ];
 
   propagatedBuildInputs = [
     numpy

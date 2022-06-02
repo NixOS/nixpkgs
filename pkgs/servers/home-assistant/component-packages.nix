@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.5.5";
+  version = "2022.6.0";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -140,6 +140,9 @@
       pyatv
       zeroconf
     ];
+    "application_credentials" = ps: with ps; [
+      aiohttp-cors
+    ];
     "apprise" = ps: with ps; [
       apprise
     ];
@@ -236,6 +239,8 @@
       aiohttp-cors
       securetar
     ];
+    "baf" = ps: with ps; [
+    ]; # missing inputs: aiobafi6
     "baidu" = ps: with ps; [
     ]; # missing inputs: baidu-aip
     "balboa" = ps: with ps; [
@@ -288,7 +293,7 @@
       bimmer-connected
     ];
     "bond" = ps: with ps; [
-      bond-api
+      bond-async
     ];
     "bosch_shc" = ps: with ps; [
       aiohttp-cors
@@ -952,6 +957,10 @@
     "geo_rss_events" = ps: with ps; [
       georss-generic-client
     ];
+    "geocaching" = ps: with ps; [
+      aiohttp-cors
+      geocachingapi
+    ];
     "geofency" = ps: with ps; [
       aiohttp-cors
     ];
@@ -1049,6 +1058,16 @@
     "hangouts" = ps: with ps; [
       hangups
     ];
+    "hardkernel" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "hardware" = ps: with ps; [
+    ];
     "harman_kardon_avr" = ps: with ps; [
       hkavr
     ];
@@ -1139,7 +1158,7 @@
       homematicip
     ];
     "homewizard" = ps: with ps; [
-      aiohwenergy
+      python-homewizard-energy
     ];
     "homeworks" = ps: with ps; [
       pyhomeworks
@@ -1186,6 +1205,9 @@
     ];
     "ialarm" = ps: with ps; [
       pyialarm
+    ];
+    "ialarm_xr" = ps: with ps; [
+      pyialarmxr
     ];
     "iammeter" = ps: with ps; [
     ]; # missing inputs: iammeter
@@ -1378,6 +1400,9 @@
     ];
     "launch_library" = ps: with ps; [
       pylaunches
+    ];
+    "laundrify" = ps: with ps; [
+      laundrify-aio
     ];
     "lcn" = ps: with ps; [
       pypck
@@ -1863,7 +1888,6 @@
       ondilo
     ];
     "onewire" = ps: with ps; [
-      pi1wire
       pyownet
     ];
     "onkyo" = ps: with ps; [
@@ -2138,12 +2162,20 @@
     ];
     "rainforest_eagle" = ps: with ps; [
       aioeagle
-      ueagle
+      eagle100
     ];
     "rainmachine" = ps: with ps; [
       regenmaschine
     ];
     "random" = ps: with ps; [
+    ];
+    "raspberry_pi" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
     ];
     "raspyrfm" = ps: with ps; [
     ]; # missing inputs: raspyrfm-client
@@ -2227,8 +2259,6 @@
     ];
     "rpi_camera" = ps: with ps; [
     ];
-    "rpi_gpio" = ps: with ps; [
-    ]; # missing inputs: RPi.GPIO
     "rpi_power" = ps: with ps; [
       rpi-bad-power
     ];
@@ -2287,6 +2317,7 @@
     "scrape" = ps: with ps; [
       beautifulsoup4
       jsonpath
+      lxml
       xmltodict
     ];
     "screenlogic" = ps: with ps; [
@@ -3035,6 +3066,9 @@
     ];
     "worxlandroid" = ps: with ps; [
     ];
+    "ws66i" = ps: with ps; [
+      pyws66i
+    ];
     "wsdot" = ps: with ps; [
     ];
     "x10" = ps: with ps; [
@@ -3102,6 +3136,10 @@
     "yi" = ps: with ps; [
       aioftp
       ha-ffmpeg
+    ];
+    "yolink" = ps: with ps; [
+      aiohttp-cors
+      yolink-api
     ];
     "youless" = ps: with ps; [
       youless-api
@@ -3182,6 +3220,7 @@
     "airtouch4"
     "airvisual"
     "airzone"
+    "aladdin_connect"
     "alarm_control_panel"
     "alarmdecoder"
     "alert"
@@ -3196,6 +3235,7 @@
     "apache_kafka"
     "api"
     "apple_tv"
+    "application_credentials"
     "apprise"
     "aprs"
     "arcam_fmj"
@@ -3353,6 +3393,7 @@
     "geo_json_events"
     "geo_location"
     "geo_rss_events"
+    "geocaching"
     "geofency"
     "geonetnz_quakes"
     "geonetnz_volcano"
@@ -3378,6 +3419,8 @@
     "guardian"
     "habitica"
     "hangouts"
+    "hardkernel"
+    "hardware"
     "harmony"
     "hassio"
     "hddtemp"
@@ -3407,6 +3450,7 @@
     "hvv_departures"
     "hyperion"
     "ialarm"
+    "ialarm_xr"
     "iaqualink"
     "icloud"
     "ifttt"
@@ -3447,6 +3491,7 @@
     "kulersky"
     "lastfm"
     "launch_library"
+    "laundrify"
     "lcn"
     "light"
     "litterrobot"
@@ -3586,6 +3631,7 @@
     "rainforest_eagle"
     "rainmachine"
     "random"
+    "raspberry_pi"
     "rdw"
     "recollect_waste"
     "recorder"
@@ -3778,6 +3824,7 @@
     "wled"
     "workday"
     "worldclock"
+    "ws66i"
     "wsdot"
     "xbox"
     "xiaomi"
@@ -3789,6 +3836,7 @@
     "yandex_transport"
     "yandextts"
     "yeelight"
+    "yolink"
     "youless"
     "zeroconf"
     "zerproc"

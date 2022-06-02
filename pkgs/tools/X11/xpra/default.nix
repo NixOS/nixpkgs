@@ -135,7 +135,6 @@ in buildPythonApplication rec {
     dbus-python
     gst-python
     idna
-    ipaddress
     lz4
     netifaces
     numpy

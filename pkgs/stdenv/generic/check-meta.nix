@@ -98,10 +98,10 @@ let
 
   # Allow granular checks to allow only some non-source-built packages
   # Example:
-  # {pkgs, ...}:
+  # { pkgs, ... }:
   # {
   #   allowNonSource = false;
-  #   allowNonSourcePredicate = with lib.lists; pkg: !(any (p: !p.isSource && p!=lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
+  #   allowNonSourcePredicate = with pkgs.lib.lists; pkg: !(any (p: !p.isSource && p != lib.sourceTypes.binaryFirmware) (toList pkg.meta.sourceProvenance));
   # }
   allowNonSourcePredicate = config.allowNonSourcePredicate or (x: false);
 
