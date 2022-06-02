@@ -26,7 +26,7 @@ let
     pname = "buildsrht-api";
     modRoot = "api";
     vendorSha256 = "sha256-roTwqtg4Y846PNtLdRN/LV3Jd0LVElqjFy3DJcrwoaI=";
-  } // import ./fix-gqlgen-trimpath.nix {inherit unzip;});
+  } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   buildsrht-worker = buildGoModule {
     inherit src version;
