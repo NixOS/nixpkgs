@@ -14584,7 +14584,9 @@ with pkgs;
 
   inherit (ocamlPackages) reason;
 
-  buildRubyGem = callPackage ../development/ruby-modules/gem { };
+  buildRubyGem = callPackage ../development/ruby-modules/gem {
+    inherit (darwin) libobjc;
+  };
   defaultGemConfig = callPackage ../development/ruby-modules/gem-config {
     inherit (darwin) DarwinTools cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
