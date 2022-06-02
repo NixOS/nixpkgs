@@ -5029,8 +5029,6 @@ with pkgs;
 
   curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
 
-  curl_unix_socket = callPackage ../tools/networking/curl-unix-socket { };
-
   curlie = callPackage ../tools/networking/curlie { };
 
   cunit = callPackage ../tools/misc/cunit { };
