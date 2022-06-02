@@ -12,7 +12,7 @@
 , rust-cbindgen
 , rustc
 , which
-, xcbuildHook
+, xcbuild
 , zip
 
 # runtime
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     rustc.llvmPackages.llvm # for llvm-objdump
     which
     zip
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuildHook libobjc ];
+  ] ++ lib.optionals stdenv.isDarwin [ xcbuild libobjc ];
 
   buildInputs = [
     icu
