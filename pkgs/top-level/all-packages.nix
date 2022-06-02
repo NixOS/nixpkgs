@@ -6132,8 +6132,6 @@ with pkgs;
 
   gawkInteractive = gawk.override { interactive = true; };
 
-  gawp = callPackage ../tools/misc/gawp { };
-
   gbdfed = callPackage ../tools/misc/gbdfed {
     gtk = gtk2-x11;
   };
