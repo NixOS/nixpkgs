@@ -9,7 +9,6 @@
 }:
 
 let
-
   pname = "pgadmin";
   version = "6.9";
 
@@ -112,12 +111,17 @@ pythonPackages.buildPythonApplication rec {
   postPatch = ''
     # patching Makefile, so it doesn't try to build sphinx documentation here
     # (will do so later)
-    substituteInPlace Makefile --replace 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
+    substituteInPlace Makefile \
+      --replace 'LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 $(MAKE) -C docs/en_US -f Makefile.sphinx html' "true"
+
     # fix document which refers a non-existing document and fails
-    substituteInPlace docs/en_US/contributions.rst --replace "code_snippets" ""
+    substituteInPlace docs/en_US/contributions.rst \
+      --replace "code_snippets" ""
     patchShebangs .
+
     # relax dependencies
     substituteInPlace requirements.txt \
+      --replace "eventlet==0.33.0" "eventlet>=0.33.0" \
       --replace "psycopg2==2.9.*" "psycopg2>=2.9" \
       --replace "cryptography==3.*" "cryptography>=3.0" \
       --replace "requests==2.25.*" "requests>=2.25.0" \
@@ -188,7 +192,7 @@ pythonPackages.buildPythonApplication rec {
   passthru.tests = {
     standalone = nixosTests.pgadmin4-standalone;
     # regression and function tests of the package itself
-    package = (import ../../../../nixos/tests/pgadmin4.nix ({ inherit pkgs; buildDeps = buildDeps; pythonEnv = pythonPackages; }));
+    package = import ../../../../nixos/tests/pgadmin4.nix { inherit pkgs buildDeps; pythonEnv = pythonPackages; };
   };
 
   meta = with lib; {

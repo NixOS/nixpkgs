@@ -262,7 +262,9 @@ with pkgs;
 
   breakpad = callPackage ../development/misc/breakpad { };
 
-  buf = callPackage ../development/tools/buf { };
+  buf = callPackage ../development/tools/buf {
+    buildGoModule = buildGo118Module;
+  };
 
   cfn-nag = callPackage ../development/tools/cfn-nag { };
 
@@ -332,8 +334,6 @@ with pkgs;
   };
 
   conftest = callPackage ../development/tools/conftest { };
-
-  corgi = callPackage ../development/tools/corgi { };
 
   colmena = callPackage ../tools/admin/colmena { };
 
@@ -909,8 +909,6 @@ with pkgs;
   setupDebugInfoDirs = makeSetupHook { } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
 
   useOldCXXAbi = makeSetupHook { } ../build-support/setup-hooks/use-old-cxx-abi.sh;
-
-  ical2org = callPackage ../tools/misc/ical2org {};
 
   iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
@@ -5033,8 +5031,6 @@ with pkgs;
 
   curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
 
-  curl_unix_socket = callPackage ../tools/networking/curl-unix-socket { };
-
   curlie = callPackage ../tools/networking/curlie { };
 
   cunit = callPackage ../tools/misc/cunit { };
@@ -6134,8 +6130,6 @@ with pkgs;
 
   gawkInteractive = gawk.override { interactive = true; };
 
-  gawp = callPackage ../tools/misc/gawp { };
-
   gbdfed = callPackage ../tools/misc/gbdfed {
     gtk = gtk2-x11;
   };
@@ -6217,8 +6211,6 @@ with pkgs;
   git-annex-metadata-gui = libsForQt5.callPackage ../applications/version-management/git-and-tools/git-annex-metadata-gui {
     inherit (python3Packages) buildPythonApplication pyqt5 git-annex-adapter;
   };
-
-  git-annex-remote-b2 = callPackage ../applications/version-management/git-and-tools/git-annex-remote-b2 { };
 
   git-annex-remote-dbx = callPackage ../applications/version-management/git-and-tools/git-annex-remote-dbx {
     inherit (python3Packages)
@@ -6536,8 +6528,6 @@ with pkgs;
   godot-headless = callPackage ../development/tools/godot/headless.nix { };
 
   godot-server = callPackage ../development/tools/godot/server.nix { };
-
-  goklp = callPackage ../tools/networking/goklp {};
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
@@ -13139,8 +13129,6 @@ with pkgs;
   };
 
   go = go_1_17;
-
-  go-repo-root = callPackage ../development/tools/go-repo-root { };
 
   go-junit-report = callPackage ../development/tools/go-junit-report { };
 
@@ -27246,8 +27234,6 @@ with pkgs;
 
   i3blocks-gaps = callPackage ../applications/window-managers/i3/blocks-gaps.nix { };
 
-  i3cat = callPackage ../tools/misc/i3cat { };
-
   i3ipc-glib = callPackage ../applications/window-managers/i3/i3ipc-glib.nix { };
 
   i3lock = callPackage ../applications/window-managers/i3/lock.nix {
@@ -29086,8 +29072,6 @@ with pkgs;
     electron = electron_9;
   };
 
-  pond = callPackage ../applications/networking/instant-messengers/pond { };
-
   ponymix = callPackage ../applications/audio/ponymix { };
 
   portfolio-filemanager = callPackage ../applications/misc/portfolio-filemanager { };
@@ -30875,8 +30859,6 @@ with pkgs;
   };
 
   xmountains = callPackage ../applications/graphics/xmountains { };
-
-  xmpp-client = callPackage ../applications/networking/instant-messengers/xmpp-client { };
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
