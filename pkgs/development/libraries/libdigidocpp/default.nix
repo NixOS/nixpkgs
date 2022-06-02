@@ -17,10 +17,12 @@ stdenv.mkDerivation rec {
     xml-security-c xsd zlib xalanc
   ];
 
+  outputs = [ "out" "lib" "dev" "bin" ];
+
   # replace this hack with a proper cmake variable or environment variable
   # once https://github.com/open-eid/cmake/pull/34 (or #35) gets merged.
   postInstall = ''
-    wrapProgram $out/bin/digidoc-tool \
+    wrapProgram $bin/bin/digidoc-tool \
       --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
   '';
 
