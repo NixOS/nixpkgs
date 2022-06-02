@@ -2907,6 +2907,8 @@ in {
 
   fastapi = callPackage ../development/python-modules/fastapi { };
 
+  fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
+
   fastavro = callPackage ../development/python-modules/fastavro { };
 
   fastbencode = callPackage ../development/python-modules/fastbencode { };
