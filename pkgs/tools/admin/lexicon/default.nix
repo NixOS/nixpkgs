@@ -6,7 +6,10 @@
 , poetrylock ? ./poetry.lock
 }:
 
-poetry2nix.mkPoetryApplication {
+let
+  pyprojectToml = lib.importTOML pyproject;
+  pyprojectVersion = pyprojectToml.tool.poetry.version;
+in poetry2nix.mkPoetryApplication {
 
   inherit pyproject poetrylock;
 
@@ -15,7 +18,7 @@ poetry2nix.mkPoetryApplication {
   projectDir = fetchFromGitHub {
     owner = "AnalogJ";
     repo = "lexicon";
-    rev = "v3.11.2";
+    rev = "v${pyprojectVersion}";
     hash = "sha256-z0GaA1O0ctP280QvhdzW7Cxonidz9dOnP6N4RJ+tqfw=";
   };
 
