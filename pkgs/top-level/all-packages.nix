@@ -333,8 +333,6 @@ with pkgs;
 
   conftest = callPackage ../development/tools/conftest { };
 
-  corgi = callPackage ../development/tools/corgi { };
-
   colmena = callPackage ../tools/admin/colmena { };
 
   colorz = callPackage ../tools/misc/colorz { };
