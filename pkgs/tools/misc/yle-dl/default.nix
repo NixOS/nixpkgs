@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://aajanki.github.io/yle-dl/";
     changelog = "https://github.com/aajanki/yle-dl/blob/${version}/ChangeLog";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg SuperSandro2000 ];
+    maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.unix;
   };
 }
