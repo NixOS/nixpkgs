@@ -29820,8 +29820,6 @@ with pkgs;
     syncthing-discovery
     syncthing-relay;
 
-  syncthing-gtk = python2Packages.callPackage ../applications/networking/syncthing-gtk { };
-
   syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
   syncthingtray = libsForQt5.callPackage ../applications/misc/syncthingtray { };
