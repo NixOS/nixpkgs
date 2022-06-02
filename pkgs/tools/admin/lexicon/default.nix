@@ -1,59 +1,23 @@
 { lib
-, python3
 , fetchFromGitHub
+, poetry2nix
+, python3
+, pyproject ? ./pyproject.toml
+, poetrylock ? ./poetry.lock
 }:
 
-with python3.pkgs;
+poetry2nix.mkPoetryApplication {
 
-buildPythonApplication rec {
-  pname = "lexicon";
-  version = "3.9.4";
-  format = "pyproject";
+  inherit pyproject poetrylock;
 
-  src = fetchFromGitHub {
+  python = python3;
+
+  projectDir = fetchFromGitHub {
     owner = "AnalogJ";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-TySgIxBEl2RolndAkEN4vCIDKaI48vrh2ocd+CTn7Ow=";
+    repo = "lexicon";
+    rev = "v3.11.2";
+    hash = "sha256-z0GaA1O0ctP280QvhdzW7Cxonidz9dOnP6N4RJ+tqfw=";
   };
-
-  nativeBuildInputs = [
-    poetry-core
-  ];
-
-  propagatedBuildInputs = [
-    beautifulsoup4
-    boto3
-    cryptography
-    dnspython
-    future
-    localzone
-    oci
-    pynamecheap
-    pyyaml
-    requests
-    softlayer
-    tldextract
-    transip
-    xmltodict
-    zeep
-  ];
-
-  checkInputs = [
-    mock
-    pytestCheckHook
-    pytest-xdist
-    vcrpy
-  ];
-
-  disabledTestPaths = [
-    # Tests require network access
-    "lexicon/tests/providers/test_auto.py"
-  ];
-
-  pythonImportsCheck = [
-    "lexicon"
-  ];
 
   meta = with lib; {
     description = "Manipulate DNS records of various DNS providers in a standardized way";

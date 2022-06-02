@@ -1,0 +1,88 @@
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+name = "dns-lexicon"
+version = "3.11.2"
+description = "Manipulate DNS records on various DNS providers in a standardized/agnostic way"
+license = "MIT"
+keywords = [
+    "dns", "lexicon", "dns-lexicon", "dehydrated", "letsencrypt",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: Name Service (DNS)",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+authors = [
+    "Jason Kulatunga", "Adrien Ferrand"
+]
+readme = "README.rst"
+repository = "https://github.com/AnalogJ/lexicon"
+packages = [
+    { include = "lexicon" },
+]
+exclude = [ "lexicon/tests/providers/" ]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+tldextract = ">=2"
+cryptography = ">=2"
+pyyaml = ">=3"
+requests = ">=2"
+beautifulsoup4 = ">=4"
+importlib-metadata = ">=4"
+# Optional dependencies required by some providers
+boto3 = { version = ">=1", optional = true }  # route53
+localzone = { version = ">=0.9.8", optional = true }  # localzone
+softlayer = {version = ">=5", optional = true}  # softlayer
+zeep = { version = ">=3", optional = true }  # gransy
+dnspython = { version = ">=2", optional = true }  # ddns
+oci = {version = ">=2", optional = true}  # oci
+
+[tool.poetry.extras]
+route53 = ["boto3"]
+localzone = ["localzone"]
+softlayer = ["softlayer"]
+gransy = ["zeep"]
+ddns = ["dnspython"]
+oci = ["oci"]
+# Extra "full" list must contain all other extras
+full = ["boto3", "localzone", "softlayer", "zeep", "dnspython", "oci"]
+
+[tool.poetry.dev-dependencies]
+pytest = "*"
+pytest-cov = "*"
+pytest-xdist = "*"
+vcrpy = "*"
+flake8 = "*"
+isort = "*"
+tox = "*"
+black = { version = "*", allow-prereleases = true }
+mypy = "*"
+types-PyYAML = "*"
+types-pytz = "*"
+types-requests = "*"
+types-six = "*"
+types-toml = "*"
+types-simplejson = "*"
+
+[tool.poetry.scripts]
+lexicon = "lexicon.cli:main"
+
+[tool.pytest.ini_options]
+junit_family = "xunit2"
+
+[tool.mypy]
+show_error_codes = true
