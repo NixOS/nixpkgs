@@ -30868,8 +30868,6 @@ with pkgs;
 
   xmountains = callPackage ../applications/graphics/xmountains { };
 
-  xmpp-client = callPackage ../applications/networking/instant-messengers/xmpp-client { };
-
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   xpra = callPackage ../tools/X11/xpra { };
