@@ -9,20 +9,20 @@
 , unzip
 }:
 let
-  version = "0.78.18";
+  version = "0.78.20";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "git.sr.ht";
     rev = version;
-    sha256 = "sha256-pGWphdFKaOIBIKWMxfNAFqXZQx/qHcrwb5Ylj9uag7s=";
+    sha256 = "sha256-rZsTtHobsgRVmMOjPa1fiKrPsNyFu/gOsmO0cTl5MqQ=";
   };
 
   gitApi = buildGoModule ({
     inherit src version;
     pname = "gitsrht-api";
     modRoot = "api";
-    vendorSha256 = "sha256-0YI20liP0X1McfiSUy29zJk2UqqAPBIfIfPLoJOE1uI=";
+    vendorSha256 = "sha256-cCs9FUBusaAou9w4TDOg8GKxhRcsPbSNcQpxvFH/+so=";
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   gitDispatch = buildGoModule {
