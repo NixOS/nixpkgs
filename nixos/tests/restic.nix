@@ -4,6 +4,7 @@ import ./make-test-python.nix (
   let
     password = "some_password";
     repository = "/tmp/restic-backup";
+    repositoryFile = "${pkgs.writeText "repositoryFile" "/tmp/restic-backup-from-file"}";
     rcloneRepository = "rclone:local:/tmp/restic-rclone-backup";
 
     passwordFile = "${pkgs.writeText "password" "correcthorsebatterystaple"}";
@@ -30,6 +31,9 @@ import ./make-test-python.nix (
           services.restic.backups = {
             remotebackup = {
               inherit repository passwordFile initialize paths pruneOpts;
+            };
+            remotebackup-from-file = {
+              inherit repositoryFile passwordFile initialize paths pruneOpts;
             };
             rclonebackup = {
               repository = rcloneRepository;
@@ -60,6 +64,7 @@ import ./make-test-python.nix (
       server.wait_for_unit("dbus.socket")
       server.fail(
           "${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots",
+          '${pkgs.restic}/bin/restic --repository-file ${repositoryFile} -p ${passwordFile} snapshots"',
           "${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots",
       )
       server.succeed(
@@ -68,8 +73,10 @@ import ./make-test-python.nix (
           "mkdir -p /tmp/restic-rclone-backup",
           "timedatectl set-time '2016-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
+          "systemctl start restic-backups-remotebackup-from-file.service",
           "systemctl start restic-backups-rclonebackup.service",
           '${pkgs.restic}/bin/restic -r ${repository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
+          '${pkgs.restic}/bin/restic --repository-file ${repositoryFile} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
           '${pkgs.restic}/bin/restic -r ${rcloneRepository} -p ${passwordFile} snapshots -c | grep -e "^1 snapshot"',
           "timedatectl set-time '2017-12-13 13:45'",
           "systemctl start restic-backups-remotebackup.service",
