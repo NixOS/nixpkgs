@@ -23571,6 +23571,8 @@ with pkgs;
 
   gore = callPackage ../development/tools/gore { };
 
+  goresym = callPackage ../development/tools/goresym { };
+
   gotests = callPackage ../development/tools/gotests { };
 
   gotestsum = callPackage ../development/tools/gotestsum { };
