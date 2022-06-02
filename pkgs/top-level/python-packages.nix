@@ -10526,8 +10526,6 @@ in {
 
   transforms3d = callPackage ../development/python-modules/transforms3d { };
 
-  transip = callPackage ../development/python-modules/transip { };
-
   transitions = callPackage ../development/python-modules/transitions { };
 
   translatepy = callPackage ../development/python-modules/translatepy { };
