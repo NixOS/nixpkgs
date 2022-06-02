@@ -46,4 +46,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ nyanloutre ];
   };
 }
-
