@@ -16,8 +16,6 @@ stdenv.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
 
-  patches = base.extraPatches;
-
   postPatch = ''
     substituteInPlace support/rrsync --replace /usr/bin/rsync ${rsync}/bin/rsync
   '';
