@@ -97,6 +97,7 @@ let
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs isValidPosixName toShellVar toShellVars
       escapeRegex escapeXML replaceChars lowerChars
+      escapeSystemdArg escapeSystemdArgs
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion

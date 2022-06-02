@@ -405,6 +405,26 @@ rec {
   */
   escapeRegex = escape (stringToCharacters "\\[{()^$?*+|.");
 
+  /* Escape argument as per systemd.syntax(7) to be safely used in systemd units.
+
+     Type: escapeSystemdArg :: string -> string
+
+     Example:
+       escapeSystemdArg "--regex=foo\.bar"
+       => "--regex=foo\\.bar"
+  */
+  escapeSystemdArg = escape ["\\"];
+
+  /* Escape all arguments as per systemd.syntax(7) to be safely used in systemd units.
+
+     Type: escapeSystemdArgs :: [string] -> string
+
+     Example:
+       escapeSystemdArg ["--regex" "foo\.bar"]
+       => "--regex foo\\.bar"
+  */
+  escapeSystemdArgs = concatMapStringsSep " " escapeSystemdArg;
+
   /* Quotes a string if it can't be used as an identifier directly.
 
      Type: string -> string
