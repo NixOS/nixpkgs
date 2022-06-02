@@ -6304,8 +6304,6 @@ with pkgs;
 
   git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
 
-  git-lfs1 = callPackage ../applications/version-management/git-lfs/1.nix { };
-
   git-ftp = callPackage ../development/tools/git-ftp { };
 
   git-machete = python3Packages.callPackage ../applications/version-management/git-and-tools/git-machete { };
