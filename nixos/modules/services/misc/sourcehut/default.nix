@@ -907,7 +907,7 @@ in
       port = 5002;
       extraServices.buildsrht-api = {
         serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = "2s";
+        serviceConfig.RestartSec = "5s";
         serviceConfig.ExecStart = "${pkgs.sourcehut.buildsrht}/bin/buildsrht-api -b ${cfg.listenAddress}:${toString (cfg.builds.port + 100)}";
       };
       # TODO: a celery worker on the master and worker are apparently needed
@@ -1088,7 +1088,7 @@ in
       ];
       extraServices.gitsrht-api = {
         serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = "2s";
+        serviceConfig.RestartSec = "5s";
         serviceConfig.ExecStart = "${pkgs.sourcehut.gitsrht}/bin/gitsrht-api -b ${cfg.listenAddress}:${toString (cfg.git.port + 100)}";
       };
       extraServices.gitsrht-fcgiwrap = mkIf cfg.nginx.enable {
@@ -1136,7 +1136,7 @@ in
       };
       extraServices.hgsrht-api = {
         serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = "2s";
+        serviceConfig.RestartSec = "5s";
         serviceConfig.ExecStart = "${pkgs.sourcehut.hgsrht}/bin/hgsrht-api -b ${cfg.listenAddress}:${toString (cfg.hg.port + 100)}";
       };
       extraConfig = mkMerge [
@@ -1201,7 +1201,7 @@ in
       webhooks = true;
       extraServices.listssrht-api = {
         serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = "2s";
+        serviceConfig.RestartSec = "5s";
         serviceConfig.ExecStart = "${pkgs.sourcehut.listssrht}/bin/listssrht-api -b ${cfg.listenAddress}:${toString (cfg.lists.port + 100)}";
       };
       # Receive the mail from Postfix and enqueue them into Redis and PostgreSQL
@@ -1258,7 +1258,7 @@ in
       };
       extraServices.metasrht-api = {
         serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = "2s";
+        serviceConfig.RestartSec = "5s";
         preStart = "set -x\n" + concatStringsSep "\n\n" (attrValues (mapAttrs (k: s:
           let srvMatch = builtins.match "^([a-z]*)\\.sr\\.ht$" k;
               srv = head srvMatch;
@@ -1370,7 +1370,7 @@ in
       webhooks = true;
       extraServices.todosrht-api = {
         serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = "2s";
+        serviceConfig.RestartSec = "5s";
         serviceConfig.ExecStart = "${pkgs.sourcehut.todosrht}/bin/todosrht-api -b ${cfg.listenAddress}:${toString (cfg.todo.port + 100)}";
       };
       extraServices.todosrht-lmtp = {
