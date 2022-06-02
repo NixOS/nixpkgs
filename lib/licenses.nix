@@ -312,6 +312,16 @@ in mkLicense lset) ({
     free = false;
   };
 
+  elastic20 = {
+    spdxId = "Elastic-2.0";
+    fullName = "Elastic License 2.0";
+    url = "https://github.com/elastic/elasticsearch/blob/master/licenses/ELASTIC-LICENSE-2.0.txt";
+    free = false;
+    # https://www.elastic.co/licensing/elastic-license/faq#can-you-summarize-what-is-allowed-with-the-elastic-license-2.0=
+    # "The license allows the free right to use, modify, create derivative works, and redistribute" ...
+    redistributable = true;
+  };
+
   epl10 = {
     spdxId = "EPL-1.0";
     fullName = "Eclipse Public License 1.0";
