@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     (fetchurl {
       name = "gcc-13.patch";
       url = "https://github.com/oneapi-src/oneTBB/pull/833/commits/c18342ba667d1f33f5e9a773aa86b091a9694b97.patch";
-      sha256 = "ZUExE3nsW80Z5GPWZnDNuDiHHaD1EF7qNl/G5M+Wcxg=";
+      sha256 = "sha256-ZUExE3nsW80Z5GPWZnDNuDiHHaD1EF7qNl/G5M+Wcxg=";
     })
   ];
 
