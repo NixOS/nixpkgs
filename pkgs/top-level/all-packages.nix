@@ -29914,8 +29914,6 @@ with pkgs;
 
   telepathy-mission-control = callPackage ../applications/networking/instant-messengers/telepathy/mission-control { };
 
-  telepathy-salut = callPackage ../applications/networking/instant-messengers/telepathy/salut {};
-
   telepathy-idle = callPackage ../applications/networking/instant-messengers/telepathy/idle {};
 
   teleprompter = callPackage ../applications/misc/teleprompter {};
