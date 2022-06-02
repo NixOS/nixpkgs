@@ -9215,8 +9215,6 @@ with pkgs;
 
   pell = callPackage ../applications/misc/pell { };
 
-  pepper = callPackage ../tools/admin/salt/pepper { };
-
   perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
 
   percona-xtrabackup = percona-xtrabackup_8_0;
