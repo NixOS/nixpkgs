@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   # Ensure that the bundled libraries are not used at all
   prePatch = "rm -rf Source/Lib* Source/OpenEXR Source/ZLib";
-  patches = [ ./unbundle.diff ];
+  patches = [ ./unbundle.diff ./libtiff-4.4.0.diff ];
 
   postPatch = ''
     # To support cross compilation, use the correct `pkg-config`.
