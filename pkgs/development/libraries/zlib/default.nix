@@ -44,6 +44,7 @@ stdenv.mkDerivation (rec {
     ./fix-configure-issue-cross.patch
   ];
 
+  strictDeps = true;
   outputs = [ "out" "dev" ]
     ++ lib.optional splitStaticOutput "static";
   setOutputFlags = false;
