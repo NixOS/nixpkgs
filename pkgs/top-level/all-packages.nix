@@ -30236,8 +30236,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   });
 
-  vimiv = callPackage ../applications/graphics/vimiv { };
-
   vimiv-qt = callPackage ../applications/graphics/vimiv-qt { };
 
   macvim = callPackage ../applications/editors/vim/macvim-configurable.nix { stdenv = clangStdenv; };
