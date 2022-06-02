@@ -163,8 +163,19 @@ in
       '';
     };
 
+    hardware.nvidia.forceFullCompositionPipeline = lib.mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Whether to force-enable the full composition pipeline.
+        This sometimes fixes screen tearing issues.
+        This has been reported to reduce the performance of some OpenGL applications and may produce issues in WebGL.
+        It also drastically increases the time the driver needs to clock down after load.
+      '';
+    };
+
     hardware.nvidia.package = lib.mkOption {
-      type = lib.types.package;
+      type = types.package;
       default = config.boot.kernelPackages.nvidiaPackages.stable;
       defaultText = literalExpression "config.boot.kernelPackages.nvidiaPackages.stable";
       description = ''
@@ -255,13 +266,18 @@ in
         ''
           BusID "${pCfg.nvidiaBusId}"
           ${optionalString syncCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
-          ${optionalString cfg.powerManagement.finegrained "Option \"NVreg_DynamicPowerManagement=0x02\""}
         '';
       screenSection =
         ''
           Option "RandRRotation" "on"
-          ${optionalString syncCfg.enable "Option \"AllowEmptyInitialConfiguration\""}
-        '';
+        '' + optionalString syncCfg.enable ''
+          Option "AllowEmptyInitialConfiguration"
+        '' + optionalString cfg.forceFullCompositionPipeline ''
+          Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+          Option         "AllowIndirectGLXProtocol" "off"
+          Option         "TripleBuffer" "on"
+        ''
+        ;
     };
 
     services.xserver.serverLayoutSection = optionalString syncCfg.enable ''
@@ -367,7 +383,8 @@ in
           RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia%c{3} c 195 %c{3}"
         KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
         KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
-      '' + optionalString cfg.powerManagement.finegrained ''
+      '' + optionalString cfg.powerManagement.finegrained (
+      optionalString (versionOlder config.boot.kernelPackages.kernel.version "5.5") ''
         # Remove NVIDIA USB xHCI Host Controller devices, if present
         ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x0c0330", ATTR{remove}="1"
 
@@ -376,7 +393,7 @@ in
 
         # Remove NVIDIA Audio devices, if present
         ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x040300", ATTR{remove}="1"
-
+      '' + ''
         # Enable runtime PM for NVIDIA VGA/3D controller devices on driver bind
         ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030000", TEST=="power/control", ATTR{power/control}="auto"
         ACTION=="bind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030200", TEST=="power/control", ATTR{power/control}="auto"
@@ -384,7 +401,7 @@ in
         # Disable runtime PM for NVIDIA VGA/3D controller devices on driver unbind
         ACTION=="unbind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030000", TEST=="power/control", ATTR{power/control}="on"
         ACTION=="unbind", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{class}=="0x030200", TEST=="power/control", ATTR{power/control}="on"
-      '';
+      '');
 
     boot.extraModprobeConfig = mkIf cfg.powerManagement.finegrained ''
       options nvidia "NVreg_DynamicPowerManagement=0x02"
