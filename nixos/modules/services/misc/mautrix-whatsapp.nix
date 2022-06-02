@@ -36,7 +36,7 @@ in
       '';
       default = {
         homeserver = {
-          domain = config.services.matrix-synapse.server_name;
+          domain = config.services.matrix-synapse.settings.server_name;
         };
         appservice = rec {
           address = http://localhost:29318;
