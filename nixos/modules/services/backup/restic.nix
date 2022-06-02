@@ -96,11 +96,20 @@ in
         };
 
         repository = mkOption {
-          type = types.str;
+          type = with types; nullOr str;
+          default = null;
           description = ''
             repository to backup to.
           '';
           example = "sftp:backup@192.168.1.100:/backups/${name}";
+        };
+
+        repositoryFile = mkOption {
+          type = with types; nullOr path;
+          default = null;
+          description = ''
+            Path to the file containing the repository location to backup to.
+          '';
         };
 
         paths = mkOption {
@@ -249,6 +258,7 @@ in
             environment = {
               RESTIC_PASSWORD_FILE = backup.passwordFile;
               RESTIC_REPOSITORY = backup.repository;
+              RESTIC_REPOSITORY_FILE = backup.repositoryFile;
             } // optionalAttrs (backup.rcloneOptions != null) (mapAttrs'
               (name: value:
                 nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
