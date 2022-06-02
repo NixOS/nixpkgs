@@ -206,6 +206,22 @@ in
           '';
           example = "find /home/matt/git -type d -name .git";
         };
+
+        backupPrepareCommand = mkOption {
+          type = with types; nullOr str;
+          default = null;
+          description = ''
+            A script that must run before starting the backup process.
+          '';
+        };
+
+        backupCleanupCommand = mkOption {
+          type = with types; nullOr str;
+          default = null;
+          description = ''
+            A script that must run after finishing the backup process.
+          '';
+        };
       };
     }));
     default = { };
@@ -283,8 +299,11 @@ in
             } // optionalAttrs (backup.environmentFile != null) {
               EnvironmentFile = backup.environmentFile;
             };
-          } // optionalAttrs (backup.initialize || backup.dynamicFilesFrom != null) {
+          } // optionalAttrs (backup.initialize || backup.dynamicFilesFrom != null || backup.backupPrepareCommand != null) {
             preStart = ''
+              ${optionalString (backup.backupPrepareCommand != null) ''
+                ${pkgs.writeScript "backupPrepareCommand" backup.backupPrepareCommand}
+              ''}
               ${optionalString (backup.initialize) ''
                 ${resticCmd} snapshots || ${resticCmd} init
               ''}
@@ -292,9 +311,14 @@ in
                 ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} > ${filesFromTmpFile}
               ''}
             '';
-          } // optionalAttrs (backup.dynamicFilesFrom != null) {
+          } // optionalAttrs (backup.dynamicFilesFrom != null || backup.backupCleanupCommand != null) {
             postStart = ''
-              rm ${filesFromTmpFile}
+              ${optionalString (backup.backupCleanupCommand != null) ''
+                ${pkgs.writeScript "backupCleanupCommand" backup.backupCleanupCommand}
+              ''}
+              ${optionalString (backup.dynamicFilesFrom != null) ''
+                rm ${filesFromTmpFile}
+              ''}
             '';
           })
         )
