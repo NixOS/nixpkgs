@@ -1649,6 +1649,18 @@ final: prev:
     meta.homepage = "https://github.com/ms-jpq/coq.artifacts/";
   };
 
+  coq-thirdparty = buildVimPluginFrom2Nix {
+    pname = "coq.thirdparty";
+    version = "2022-06-02";
+    src = fetchFromGitHub {
+      owner = "ms-jpq";
+      repo = "coq.thirdparty";
+      rev = "fe9d76743143c14f5d0395c180caca9976e6a753";
+      sha256 = "06jjk83bmmfbxbdb6v365wivq9dh1giqjnpblry80q2yznd646q3";
+    };
+    meta.homepage = "https://github.com/ms-jpq/coq.thirdparty/";
+  };
+
   coq-vim = buildVimPluginFrom2Nix {
     pname = "coq.vim";
     version = "2013-01-16";
