@@ -28618,10 +28618,6 @@ with pkgs;
 
   maxlib = callPackage ../applications/audio/pd-plugins/maxlib { };
 
-  maxscale = callPackage ../tools/networking/maxscale {
-    stdenv = gcc6Stdenv;
-  };
-
   pdfdiff = callPackage ../applications/misc/pdfdiff { };
 
   pdfsam-basic = callPackage ../applications/misc/pdfsam-basic { };
