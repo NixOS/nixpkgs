@@ -58,9 +58,9 @@ in
           username_template = "whatsapp_{{.}}";
           displayname_template = "{{if .Notify}}{{.Notify}}{{else}}{{.Jid}}{{end}}";
           command_prefix = "!wa";
-          permissions."*" = "relaybot";
+          permissions."*" = "relay";
         };
-        relaybot = {
+        relay = {
           enabled = true;
           management = "!whatsappbot:${toString(config.services.matrix-synapse.server_name)}";
         };
