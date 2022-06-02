@@ -30048,8 +30048,6 @@ with pkgs;
 
   todoman = callPackage ../applications/office/todoman { };
 
-  toggldesktop = libsForQt514.callPackage ../applications/misc/toggldesktop { };
-
   topydo = callPackage ../applications/misc/topydo {};
 
   torchat = callPackage ../applications/networking/instant-messengers/torchat { };
