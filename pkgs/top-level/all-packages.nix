@@ -32321,8 +32321,6 @@ with pkgs;
 
   trackballs = callPackage ../games/trackballs { };
 
-  tremulous = callPackage ../games/tremulous { };
-
   tumiki-fighters = callPackage ../games/tumiki-fighters { };
 
   tuxpaint = callPackage ../games/tuxpaint { };
