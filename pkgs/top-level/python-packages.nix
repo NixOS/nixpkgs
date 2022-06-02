@@ -1978,6 +1978,8 @@ in {
 
   croniter = callPackage ../development/python-modules/croniter { };
 
+  cronsim = callPackage ../development/python-modules/cronsim { };
+
   crossplane = callPackage ../development/python-modules/crossplane { };
 
   crownstone-cloud = callPackage ../development/python-modules/crownstone-cloud { };
