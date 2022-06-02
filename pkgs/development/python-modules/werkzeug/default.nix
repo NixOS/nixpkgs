@@ -1,26 +1,68 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, itsdangerous, hypothesis
-, pytest, requests, glibcLocales }:
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, watchdog
+, dataclasses
+, ephemeral-port-reserve
+, pytest-timeout
+, pytest-xprocess
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-  pname = "Werkzeug";
-  version = "0.15.1";
+  pname = "werkzeug";
+  version = "2.1.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "ca5c2dcd367d6c0df87185b9082929d255358f5391923269335782b213d52655";
+    pname = "Werkzeug";
+    inherit version;
+    sha256 = "sha256-HOCOgJPtZ9Y41jh5/Rujc1gX96gN42dNKT9ZhPJftuY=";
   };
 
-  propagatedBuildInputs = [ itsdangerous ];
-  checkInputs = [ pytest requests hypothesis ];
+  propagatedBuildInputs = lib.optionals (!stdenv.isDarwin) [
+    # watchdog requires macos-sdk 10.13+
+    watchdog
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    dataclasses
+  ];
 
-  checkPhase = ''
-    pytest ${stdenv.lib.optionalString stdenv.isDarwin "-k 'not test_get_machine_id'"}
-  '';
+  checkInputs = [
+    ephemeral-port-reserve
+    pytest-timeout
+    pytest-xprocess
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://werkzeug.pocoo.org/;
-    description = "A WSGI utility library for Python";
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_get_machine_id"
+  ];
+
+  disabledTestPaths = [
+    # ConnectionRefusedError: [Errno 111] Connection refused
+    "tests/test_serving.py"
+  ];
+
+  pytestFlagsArray = [
+    # don't run tests that are marked with filterwarnings, they fail with
+    # warnings._OptionError: unknown warning category: 'pytest.PytestUnraisableExceptionWarning'
+    "-m 'not filterwarnings'"
+  ];
+
+  meta = with lib; {
+    homepage = "https://palletsprojects.com/p/werkzeug/";
+    description = "The comprehensive WSGI web application library";
+    longDescription = ''
+      Werkzeug is a comprehensive WSGI web application library. It
+      began as a simple collection of various utilities for WSGI
+      applications and has become one of the most advanced WSGI
+      utility libraries.
+    '';
     license = licenses.bsd3;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

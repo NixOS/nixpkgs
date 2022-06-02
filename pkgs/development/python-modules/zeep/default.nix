@@ -1,95 +1,100 @@
-{ fetchPypi
-, lib
+{ lib
+, aiohttp
+, aioresponses
+, attrs
 , buildPythonPackage
-, python
-, isPy3k
-, appdirs
 , cached-property
 , defusedxml
+, fetchFromGitHub
+, fetchpatch
+, freezegun
+, httpx
 , isodate
 , lxml
-, pytz
-, requests_toolbelt
-, six
-# test dependencies
-, freezegun
 , mock
-, nose
+, platformdirs
 , pretend
-, pytest
-, pytestcov
+, pytest-asyncio
+, pytest-httpx
+, pytestCheckHook
+, pythonOlder
+, pytz
+, requests
+, requests-toolbelt
+, requests-file
 , requests-mock
-, tornado
-, attrs
+, xmlsec
 }:
 
 buildPythonPackage rec {
   pname = "zeep";
-  version = "3.2.0";
+  version = "4.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0bfpdy3hi8aa45piwg5gj0xxa187v13d66qr1ki73qn7c6rbizp5";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "mvantellingen";
+    repo = "python-zeep";
+    rev = version;
+    sha256 = "sha256-fJLr2LJpbNQTl183R56G7sJILfm04R39qpJxLogQLoo=";
   };
+
+  patches = [
+    (fetchpatch {
+      # fixes pytest_httpx test case; https://github.com/mvantellingen/python-zeep/pull/1293
+      url = "https://github.com/mvantellingen/python-zeep/commit/2907848185adcb4e6d8c093db6c617c64cb8c8bf.patch";
+      hash = "sha256-hpksgMfrBLvYtI1QIs1aHBtFq7C1PWpnAj8BW5ak1/4=";
+    })
+  ];
 
   propagatedBuildInputs = [
     attrs
-    appdirs
     cached-property
     defusedxml
+    httpx
     isodate
     lxml
+    platformdirs
     pytz
-    requests_toolbelt
-    six
+    requests
+    requests-file
+    requests-toolbelt
+    xmlsec
   ];
-
-  # testtools dependency not supported for py3k
-  doCheck = !isPy3k;
 
   checkInputs = [
-    tornado
-  ];
-
-  buildInputs = if isPy3k then [] else [
+    aiohttp
+    aioresponses
     freezegun
     mock
-    nose
     pretend
-    pytest
-    pytestcov
+    pytest-asyncio
+    pytest-httpx
+    pytestCheckHook
     requests-mock
   ];
 
-  patchPhase = ''
-    # remove overly strict bounds and lint requirements
-    sed -e "s/freezegun==.*'/freezegun'/" \
-        -e "s/pytest-cov==.*'/pytest-cov'/" \
-        -e "s/'isort.*//" \
-        -e "s/'flake8.*//" \
-        -i setup.py
-
-    # locale.preferredencoding() != 'utf-8'
-    sed -e "s/xsd', 'r')/xsd', 'r', encoding='utf-8')/" -i tests/*.py
-
-    # cache defaults to home directory, which doesn't exist
-    sed -e "s|SqliteCache()|SqliteCache(path='./zeeptest.db')|" \
-        -i tests/test_transports.py
-
-    # requires xmlsec python module
-    rm tests/test_wsse_signature.py
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m pytest tests
-    runHook postCheck
-  '';
+  disabledTests = [
+    # lxml.etree.XMLSyntaxError: Extra content at the end of the document, line 2, column 64
+    "test_mime_content_serialize_text_xml"
+    # Tests are outdated
+    "test_load"
+    "test_load_cache"
+    "test_post"
+  ];
+
+  pythonImportsCheck = [
+    "zeep"
+  ];
 
   meta = with lib; {
-    homepage = http://docs.python-zeep.org;
+    description = "Python SOAP client";
+    homepage = "http://docs.python-zeep.org";
     license = licenses.mit;
-    description = "A modern/fast Python SOAP client based on lxml / requests";
     maintainers = with maintainers; [ rvl ];
   };
 }

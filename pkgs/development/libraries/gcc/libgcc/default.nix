@@ -1,10 +1,10 @@
-{ stdenvNoLibs, buildPackages
+{ lib, stdenvNoLibs, buildPackages
 , gcc, glibc
 , libiberty
 }:
 
 stdenvNoLibs.mkDerivation rec {
-  name = "libgcc-${version}";
+  pname = "libgcc";
   inherit (gcc.cc) src version;
 
   outputs = [ "out" "dev" ];
@@ -21,6 +21,8 @@ stdenvNoLibs.mkDerivation rec {
   postPatch = ''
     sourceRoot=$(readlink -e "./libgcc")
   '';
+
+  hardeningDisable = [ "pie" ];
 
   preConfigure = ''
     cd "$buildRoot"
@@ -63,7 +65,7 @@ stdenvNoLibs.mkDerivation rec {
       export CPP_FOR_TARGET=${stdenvNoLibs.cc}/bin/$CPP
       export LD_FOR_TARGET=${stdenvNoLibs.cc.bintools}/bin/$LD
 
-      export NIX_BUILD_CFLAGS_COMPILE+=' -DGENERATOR_FILE=1'
+      export NIX_CFLAGS_COMPILE_FOR_BUILD+=' -DGENERATOR_FILE=1'
 
       "$sourceRoot/../gcc/configure" $gccConfigureFlags
 
@@ -128,7 +130,7 @@ stdenvNoLibs.mkDerivation rec {
     "--disable-vtable-verify"
 
     "--with-system-zlib"
-  ] ++ stdenvNoLibs.lib.optional (stdenvNoLibs.hostPlatform.libc == "glibc")
+  ] ++ lib.optional (stdenvNoLibs.hostPlatform.libc == "glibc")
        "--with-glibc-version=${glibc.version}";
 
   configurePlatforms = [ "build" "host" ];

@@ -1,32 +1,41 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2, hicolor-icon-theme
-, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, autoreconfHook, wrapGAppsHook
+, gtk3, hicolor-icon-theme, netpbm }:
 
 stdenv.mkDerivation rec {
-  name = "yad-0.40.0";
+  pname = "yad";
+  version = "11.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/yad-dialog/files/${name}.tar.xz";
-    sha256 = "1x0fsv8nfkm8lchdawnf3zw79jaqbnvhv87sk5r8g86knv8vgl62";
+  src = fetchFromGitHub {
+    owner = "v1cont";
+    repo = "yad";
+    rev = "v${version}";
+    sha256 = "sha256-I+3euq3qel9VCDVf0Bd4XdMOCt+g/CYlnnje50lbRr8=";
   };
 
   configureFlags = [
     "--enable-icon-browser"
+    "--with-gtk=gtk3"
+    "--with-rgb=${placeholder "out"}/share/yad/rgb.txt"
   ];
 
-  # for gcc5: c11 inline semantics breaks the build
-  NIX_CFLAGS_COMPILE = "-fgnu89-inline";
+  buildInputs = [ gtk3 hicolor-icon-theme ];
 
-  buildInputs = [ gtk2 hicolor-icon-theme ];
-
-  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config intltool wrapGAppsHook ];
 
   postPatch = ''
     sed -i src/file.c -e '21i#include <glib/gprintf.h>'
     sed -i src/form.c -e '21i#include <stdlib.h>'
+
+    # there is no point to bring in the whole netpbm package just for this file
+    install -Dm644 ${netpbm.out}/share/netpbm/misc/rgb.txt $out/share/yad/rgb.txt
   '';
 
-  meta = {
-    homepage = https://sourceforge.net/projects/yad-dialog/;
+  postAutoreconf = ''
+    intltoolize
+  '';
+
+  meta = with lib; {
+    homepage = "https://sourceforge.net/projects/yad-dialog/";
     description = "GUI dialog tool for shell scripts";
     longDescription = ''
       Yad (yet another dialog) is a GUI dialog tool for shell scripts. It is a
@@ -34,9 +43,8 @@ stdenv.mkDerivation rec {
       dialogs, pop-up menu in notification icon and more.
     '';
 
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ smironov ];
-    license = stdenv.lib.licenses.gpl3;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ smironov ];
+    platforms = with platforms; linux;
   };
 }
-

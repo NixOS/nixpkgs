@@ -1,15 +1,18 @@
-{stdenv, fetchurl, unzip, which, python}:
+{lib, stdenv, fetchFromGitHub, unzip, which, python3, perl}:
 
 stdenv.mkDerivation rec {
-  name = "hisat2-${version}";
-  version = "2.1.0";
+  pname = "hisat2";
+  version = "2.2.1";
 
-  src = fetchurl {
-    url = "ftp://ftp.ccb.jhu.edu/pub/infphilo/hisat2/downloads/hisat2-${version}-source.zip";
-    sha256 = "10g73sdf6vqqfhhd92hliw7bbpkb8v4pp5012r5l21zws7p7d8l9";
+  src = fetchFromGitHub {
+    owner = "DaehwanKimLab";
+    repo = "hisat2";
+    rev = "v${version}";
+    sha256 = "0lmzdhzjkvxw7n5w40pbv5fgzd4cz0f9pxczswn3d4cr0k10k754";
   };
 
-  buildInputs = [ unzip  which python ];
+  nativeBuildInputs = [ unzip which ];
+  buildInputs = [ python3 perl ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -29,19 +32,13 @@ stdenv.mkDerivation rec {
        hisat2_extract_snps_haplotypes_VCF.py \
        hisat2_extract_splice_sites.py \
        hisat2_simulate_reads.py \
-       hisatgenotype_build_genome.py \
-       hisatgenotype_extract_reads.py \
-       hisatgenotype_extract_vars.py \
-       hisatgenotype_hla_cyp.py \
-       hisatgenotype_locus.py \
-       hisatgenotype.py \
        $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graph based aligner";
-    license = licenses.gpl3;
-    homepage = https://ccb.jhu.edu/software/hisat2/index.shtml;
+    license = licenses.gpl3Plus;
+    homepage = "https://daehwankimlab.github.io/hisat2/";
     maintainers = with maintainers; [ jbedo ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

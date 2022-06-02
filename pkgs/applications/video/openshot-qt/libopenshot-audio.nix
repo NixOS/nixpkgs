@@ -1,28 +1,59 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, doxygen, alsaLib
-, libX11, libXft, libXrandr, libXinerama, libXext, libXcursor }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, alsa-lib
+, cmake
+, doxygen
+, libX11
+, libXcursor
+, libXext
+, libXft
+, libXinerama
+, libXrandr
+, pkg-config
+, zlib
+, AGL
+, Cocoa
+, Foundation
+}:
 
-with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libopenshot-audio-${version}";
-  version = "0.1.7";
+  pname = "libopenshot-audio";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot-audio";
     rev = "v${version}";
-    sha256 = "08a8wbi28kwrdz4h0rs1b9vsr28ldfi8g75q54rj676y1vwg3qys";
+    sha256 = "sha256-XtwTZsj/L/sw/28E7Qr5UyghGlBFFXvbmZLGXBB8vg0=";
   };
 
-  nativeBuildInputs =
-  [ pkgconfig cmake doxygen ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    pkg-config
+  ];
 
-  buildInputs =
-  [ alsaLib libX11 libXft libXrandr libXinerama libXext libXcursor ];
+  buildInputs = lib.optionals stdenv.isLinux [
+    alsa-lib
+  ] ++ (if stdenv.isDarwin then [
+      AGL
+      Cocoa
+      Foundation
+      zlib
+    ] else [
+      libX11
+      libXcursor
+      libXext
+      libXft
+      libXinerama
+      libXrandr
+    ]);
 
   doCheck = false;
 
-  meta = {
-    homepage = http://openshot.org/;
+  meta = with lib; {
+    homepage = "http://openshot.org/";
     description = "High-quality sound editing library";
     longDescription = ''
       OpenShot Audio Library (libopenshot-audio) is a program that allows the
@@ -31,6 +62,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
   };
 }

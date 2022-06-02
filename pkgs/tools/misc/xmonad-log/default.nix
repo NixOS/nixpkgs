@@ -1,7 +1,7 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "xmonad-log-${version}";
+  pname = "xmonad-log";
   version = "0.1.0";
 
   goPackagePath = "github.com/xintron/xmonad-log";
@@ -15,9 +15,9 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "xmonad DBus monitoring solution";
-    homepage = https://github.com/xintron/xmonad-log;
+    homepage = "https://github.com/xintron/xmonad-log";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ joko ];

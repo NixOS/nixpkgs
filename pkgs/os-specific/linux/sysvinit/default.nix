@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, withoutInitTools ? false }:
+{ lib, stdenv, fetchurl, withoutInitTools ? false }:
 
-let version = "2.94"; in
-
-stdenv.mkDerivation {
-  name = (if withoutInitTools then "sysvtools" else "sysvinit") + "-" + version;
+stdenv.mkDerivation rec {
+  pname = if withoutInitTools then "sysvtools" else "sysvinit";
+  version = "3.01";
 
   src = fetchurl {
     url = "mirror://savannah/sysvinit/sysvinit-${version}.tar.xz";
-    sha256 = "05wshfgrijp3pi9rpfsa0yx4w3bf5v6hlwjqw79nlhz53xjca2by";
+    sha256 = "sha256-aLEaR3LNrM5ftlpMvq0ySizjmZ0Ti0/2HcLVnlfvV5M=";
   };
 
   prePatch = ''
@@ -26,7 +25,7 @@ stdenv.mkDerivation {
     mv $out/sbin/killall5 $out/bin
     ln -sf killall5 $out/bin/pidof
   ''
-    + stdenv.lib.optionalString withoutInitTools
+    + lib.optionalString withoutInitTools
     ''
       shopt -s extglob
       rm -rf $out/sbin/!(sulogin)
@@ -37,9 +36,9 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    homepage = https://www.nongnu.org/sysvinit/;
+    homepage = "https://www.nongnu.org/sysvinit/";
     description = "Utilities related to booting and shutdown";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

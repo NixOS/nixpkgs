@@ -1,50 +1,78 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pantheon }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, nixos-artwork
+, glib
+, pkg-config
+, dbus
+, polkit
+, accountsservice
+, python3
+}:
 
 stdenv.mkDerivation rec {
-  pname = "default-settings";
-  version = "5.1.0";
-
-  name = "elementary-${pname}-${version}";
+  pname = "elementary-default-settings";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "default-settings";
     rev = version;
-    sha256 = "0l73py4rr56i4dalb2wh1c6qiwmcjkm0l1j75jp5agcnxldh5wym";
+    sha256 = "sha256-qaPj/Qp7RYzHgElFdM8bHV42oiPUbCMTC9Q+MUj4Q6Y=";
   };
 
+  nativeBuildInputs = [
+    accountsservice
+    dbus
+    glib # polkit requires
+    meson
+    ninja
+    pkg-config
+    polkit
+    python3
+  ];
+
+  mesonFlags = [
+    "--sysconfdir=${placeholder "out"}/etc"
+    "-Ddefault-wallpaper=${nixos-artwork.wallpapers.simple-dark-gray.gnomeFilePath}"
+    "-Dplank-dockitems=false"
+  ];
+
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
+
+  preInstall = ''
+    # Install our override for plank dockitems as the desktop file path is different.
+    schema_dir=$out/share/glib-2.0/schemas
+    install -D ${./overrides/plank-dockitems.gschema.override} $schema_dir/plank-dockitems.gschema.override
+
+    # Our launchers that use paths at /run/current-system/sw/bin
+    mkdir -p $out/etc/skel/.config/plank/dock1
+    cp -avr ${./launchers} $out/etc/skel/.config/plank/dock1/launchers
+  '';
+
+  postFixup = ''
+    # https://github.com/elementary/default-settings/issues/55
+    rm -r $out/share/cups
+    rm -r $out/share/applications
+  '';
+
   passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
     };
   };
 
-  patches = [
-    ./correct-override.patch
-  ];
-
-  dontBuild = true;
-
-  installPhase = ''
-    mkdir -p $out/etc/gtk-3.0
-    cp -av settings.ini $out/etc/gtk-3.0
-
-    mkdir -p $out/share/glib-2.0/schemas
-    cp -av overrides/default-settings.gschema.override $out/share/glib-2.0/schemas/20-io.elementary.desktop.gschema.override
-
-    mkdir $out/etc/wingpanel.d
-    cp -avr ${./io.elementary.greeter.whitelist} $out/etc/wingpanel.d/io.elementary.greeter.whitelist
-
-    mkdir -p $out/share/elementary/config/plank/dock1
-    cp -avr ${./launchers} $out/share/elementary/config/plank/dock1/launchers
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Default settings and configuration files for elementary";
-    homepage = https://github.com/elementary/default-settings;
+    homepage = "https://github.com/elementary/default-settings";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

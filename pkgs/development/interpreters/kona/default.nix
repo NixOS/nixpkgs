@@ -1,20 +1,24 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "kona-${version}";
-  version = "3.21";
-  src = fetchurl {
-    url = "https://github.com/kevinlawler/kona/archive/Win.${version}-64.tar.gz";
-    sha256 = "0c1yf3idqkfq593xgqb25r2ykmfmp83zzh3q7kb8095a069gvri3";
+  pname = "kona";
+  version = "20211225";
+
+  src = fetchFromGitHub {
+    owner = "kevinlawler";
+    repo = "kona";
+    rev = "Win64-${version}";
+    sha256 = "sha256-m3a9conyKN0qHSSAG8zAb3kx8ir+7dqgxm1XGjCQcfk=";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
   preInstall = ''mkdir -p "$out/bin"'';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interpreter of K, APL-like programming language";
-    homepage = https://github.com/kevinlawler/kona/;
+    homepage = "https://github.com/kevinlawler/kona/";
     maintainers = with maintainers; [ raskin ];
+    mainProgram = "k";
     platforms = platforms.all;
     license = licenses.isc;
   };

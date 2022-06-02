@@ -1,9 +1,11 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchurl
+, nixosTests
 , bash-completion
 , glib
 , polkit
-, pkgconfig
+, pkg-config
 , gettext
 , gusb
 , lcms2
@@ -14,7 +16,6 @@
 , argyllcms
 , meson
 , ninja
-, libxml2
 , vala
 , libgudev
 , wrapGAppsHook
@@ -25,18 +26,17 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , libxslt
-, substituteAll
 }:
 
 stdenv.mkDerivation rec {
   pname = "colord";
-  version = "1.4.4";
+  version = "1.4.6";
 
   outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/colord/releases/${pname}-${version}.tar.xz";
-    sha256 = "19f0938fr7nvvm3jr263dlknaq7md40zrac2npfyz25zc00yh3ws";
+    sha256 = "dAdjGie/5dG2cueuQndwAcEF2GC3tzkig8jGMA3ojm8=";
   };
 
   patches = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     libxslt
     meson
     ninja
-    pkgconfig
+    pkg-config
     shared-mime-info
     vala
     wrapGAppsHook
@@ -96,14 +96,20 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
   PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
   PKG_CONFIG_SYSTEMD_TMPFILESDIR = "${placeholder "out"}/lib/tmpfiles.d";
-  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
+  PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR = "${placeholder "out"}/share/bash-completion/completions";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
 
-  meta = with stdenv.lib; {
+  passthru = {
+    tests = {
+      installedTests = nixosTests.installed-tests.colord;
+    };
+  };
+
+  meta = with lib; {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
-    homepage = https://www.freedesktop.org/software/colord/;
+    homepage = "https://www.freedesktop.org/software/colord/";
     license = licenses.lgpl2Plus;
-    maintainers = [ maintainers.marcweber ];
+    maintainers = [ maintainers.marcweber ] ++ teams.freedesktop.members;
     platforms = platforms.linux;
   };
 }

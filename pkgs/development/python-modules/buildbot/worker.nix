@@ -1,26 +1,66 @@
-{ lib, buildPythonPackage, fetchPypi, python, setuptoolsTrial, mock, twisted, future }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, buildbot
+
+# patch
+, coreutils
+
+# propagates
+, autobahn
+, future
+, msgpack
+, twisted
+
+# tests
+, mock
+, parameterized
+, psutil
+, setuptoolsTrial
+
+# passthru
+, nixosTests
+}:
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
-  version = "2.1.0";
+  inherit (buildbot) version;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14qimaf513h2hklcpix8vscrawvr1qiyn1vy88ycpsbz9mcqbhps";
+    sha256 = "sha256-HZH3TdH5dhr3f6ev25O3SgPPNbiFGMmAp9DHwcb/2MA=";
   };
 
-  propagatedBuildInputs = [ twisted future ];
-
-  checkInputs = [ setuptoolsTrial mock ];
-
   postPatch = ''
-    substituteInPlace buildbot_worker/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+    substituteInPlace buildbot_worker/scripts/logwatcher.py \
+      --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
 
+  nativeBuildInputs = [
+    setuptoolsTrial
+  ];
+
+  propagatedBuildInputs = [
+    autobahn
+    future
+    msgpack
+    twisted
+  ];
+
+  checkInputs = [
+    mock
+    parameterized
+    psutil
+  ];
+
+  passthru.tests = {
+    smoke-test = nixosTests.buildbot;
+  };
+
   meta = with lib; {
-    homepage = http://buildbot.net/;
+    homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
-    maintainers = with maintainers; [ nand0p ryansydnor ];
+    maintainers = with maintainers; [ ryansydnor lopsided98 ];
     license = licenses.gpl2;
   };
 })

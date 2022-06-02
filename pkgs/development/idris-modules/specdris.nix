@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package {
-  name = "specdris";
+  pname = "specdris";
   version = "2018-01-23";
 
   src = fetchFromGitHub {
@@ -21,7 +21,7 @@ build-idris-package {
 
   meta = {
     description = "A testing library for Idris";
-    homepage = https://github.com/pheymann/specdris;
+    homepage = "https://github.com/pheymann/specdris";
     license = lib.licenses.mit;
   };
 }

@@ -1,35 +1,46 @@
-{ stdenv, fetchgit, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gtest
+, fetchpatch
+, pkg-config
 }:
 
-let
-  nativeBuild = stdenv.hostPlatform == stdenv.buildPlatform;
-in
 stdenv.mkDerivation rec {
-  name = "microsoft_gsl-${version}";
-  version = "2017-02-13";
+  pname = "microsoft_gsl";
+  version = "3.1.0";
 
-  src = fetchgit {
-    url = "https://github.com/Microsoft/GSL.git";
-    rev = "3819df6e378ffccf0e29465afe99c3b324c2aa70";
-    sha256 = "03d17mnx6n175aakin313308q14wzvaa9pd0m1yfk6ckhha4qf35";
+  src = fetchFromGitHub {
+    owner = "Microsoft";
+    repo = "GSL";
+    rev = "v${version}";
+    sha256 = "sha256-gIpyuNlp3mvR8r1Azs2r76ElEodykRLGAwMN4BDJez0=";
   };
 
+  patches = [
+    # Search for GoogleTest via pkg-config first, ref: https://github.com/NixOS/nixpkgs/pull/130525
+    (fetchpatch {
+      url = "https://github.com/microsoft/GSL/commit/f5cf01083baf7e8dc8318db3648bc6098dc32d67.patch";
+      sha256 = "sha256-HJxG87nVFo1CGNivCqt/JhjTj2xLzQe8bF5Km7/KG+Y=";
+    })
+  ];
 
-  # build phase just runs the unit tests, so skip it if
-  # we're doing a cross build
-  nativeBuildInputs = [ cmake ];
-  buildPhase = if nativeBuild then "make" else "true";
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ gtest ];
 
-  installPhase = ''
-    mkdir -p $out/include
-    mv ../include/ $out/
-  '';
+  doCheck = true;
 
-  meta = with stdenv.lib; {
-    description = "Functions and types that are suggested for use by the C++ Core Guidelines";
-    homepage    = https://github.com/Microsoft/GSL;
-    license     = licenses.mit;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice xwvvvvwx ];
+  meta = with lib; {
+    description = "C++ Core Guideline support library";
+    longDescription = ''
+      The Guideline Support Library (GSL) contains functions and types that are suggested for
+      use by the C++ Core Guidelines maintained by the Standard C++ Foundation.
+      This package contains Microsoft's implementation of GSL.
+    '';
+    homepage = "https://github.com/Microsoft/GSL";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice yuriaisaka ];
   };
 }

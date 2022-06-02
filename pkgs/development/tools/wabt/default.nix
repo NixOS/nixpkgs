@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake, python3 }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "wabt-${version}";
-  version = "1.0.10";
+  pname = "wabt";
+  version = "1.0.28";
 
   src = fetchFromGitHub {
-    owner  = "WebAssembly";
-    repo   = "wabt";
-    rev    = version;
-    sha256 = "0vki02317mbk5f2w9fxyslcrn5rl2sk845rrs318i37wsz6ismp3";
+    owner = "WebAssembly";
+    repo = "wabt";
+    rev = version;
+    sha256 = "sha256-nNR2r8jiS0XKru6IdSeTDeCp1izO0xORiupJRa+fhHY=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
-  buildInputs = [ python3 ];
+  cmakeFlags = [ "-DBUILD_TESTS=OFF" "-DCMAKE_PROJECT_VERSION=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The WebAssembly Binary Toolkit";
     longDescription = ''
       WABT (pronounced "wabbit") is a suite of tools for WebAssembly, including:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
          format
        * wasm2c: convert a WebAssembly binary file to a C source and header
     '';
-    homepage = https://github.com/WebAssembly/wabt;
+    homepage = "https://github.com/WebAssembly/wabt";
     license = licenses.asl20;
     maintainers = with maintainers; [ ekleog ];
     platforms = platforms.unix;

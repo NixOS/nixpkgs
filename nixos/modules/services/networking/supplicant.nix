@@ -39,26 +39,15 @@ let
         bindsTo = deps;
         after = deps;
         before = [ "network.target" ];
-        # Receive restart event after resume
-        partOf = [ "post-resume.target" ];
 
         path = [ pkgs.coreutils ];
 
         preStart = ''
-          ${optionalString (suppl.configFile.path!=null) ''
-            touch -a ${suppl.configFile.path}
-            chmod 600 ${suppl.configFile.path}
+          ${optionalString (suppl.configFile.path!=null && suppl.configFile.writable) ''
+            (umask 077 && touch -a "${suppl.configFile.path}")
           ''}
           ${optionalString suppl.userControlled.enable ''
-            if ! test -e ${suppl.userControlled.socketDir}; then
-                mkdir -m 0770 -p ${suppl.userControlled.socketDir}
-                chgrp ${suppl.userControlled.group} ${suppl.userControlled.socketDir}
-            fi
-
-            if test "$(stat --printf '%G' ${suppl.userControlled.socketDir})" != "${suppl.userControlled.group}"; then
-                echo "ERROR: bad ownership on ${suppl.userControlled.socketDir}" >&2
-                exit 1
-            fi
+            install -dm770 -g "${suppl.userControlled.group}" "${suppl.userControlled.socketDir}"
           ''}
         '';
 
@@ -78,20 +67,20 @@ in
     networking.supplicant = mkOption {
       type = with types; attrsOf (submodule {
         options = {
-  
+
           configFile = {
-  
+
             path = mkOption {
               type = types.nullOr types.path;
               default = null;
-              example = literalExample "/etc/wpa_supplicant.conf";
+              example = literalExpression "/etc/wpa_supplicant.conf";
               description = ''
                 External <literal>wpa_supplicant.conf</literal> configuration file.
                 The configuration options defined declaratively within <literal>networking.supplicant</literal> have
                 precedence over options defined in <literal>configFile</literal>.
               '';
             };
-  
+
             writable = mkOption {
               type = types.bool;
               default = false;
@@ -100,9 +89,9 @@ in
                 <literal>wpa_supplicant</literal>.
               '';
             };
-  
+
           };
-  
+
           extraConf = mkOption {
             type = types.lines;
             default = "";
@@ -128,29 +117,29 @@ in
               use the <literal>configFile</literal> instead.
             '';
           };
-  
+
           extraCmdArgs = mkOption {
             type = types.str;
             default = "";
-            example = "-e/var/run/wpa_supplicant/entropy.bin";
+            example = "-e/run/wpa_supplicant/entropy.bin";
             description =
               "Command line arguments to add when executing <literal>wpa_supplicant</literal>.";
           };
-  
+
           driver = mkOption {
             type = types.nullOr types.str;
             default = "nl80211,wext";
             description = "Force a specific wpa_supplicant driver.";
           };
-  
+
           bridge = mkOption {
             type = types.str;
             default = "";
             description = "Name of the bridge interface that wpa_supplicant should listen at.";
           };
-  
+
           userControlled = {
-  
+
             enable = mkOption {
               type = types.bool;
               default = false;
@@ -161,27 +150,27 @@ in
                 access points.
               '';
             };
-  
+
             socketDir = mkOption {
               type = types.str;
-              default = "/var/run/wpa_supplicant";
+              default = "/run/wpa_supplicant";
               description = "Directory of sockets for controlling wpa_supplicant.";
             };
-  
+
             group = mkOption {
               type = types.str;
               default = "wheel";
               example = "network";
               description = "Members of this group can control wpa_supplicant.";
             };
-  
+
           };
         };
       });
 
       default = { };
 
-      example = literalExample ''
+      example = literalExpression ''
         { "wlan0 wlan1" = {
             configFile.path = "/etc/wpa_supplicant.conf";
             userControlled.group = "network";
@@ -237,10 +226,10 @@ in
               ACTION=="add", SUBSYSTEM=="net", ENV{INTERFACE}=="${i}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="supplicant-${replaceChars [" "] ["-"] iface}.service", TAG+="SUPPLICANT_ASSIGNED"''))}
 
           ${optionalString (hasAttr "WLAN" cfg) ''
-            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="${pkgs.systemd}/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"
+            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"
           ''}
           ${optionalString (hasAttr "LAN" cfg) ''
-            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="lan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="${pkgs.systemd}/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
+            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="lan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
           ''}
         '';
       })];

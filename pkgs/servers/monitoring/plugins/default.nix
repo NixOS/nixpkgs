@@ -1,72 +1,120 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, coreutils, gnugrep, gnused, lm_sensors, net_snmp, openssh, openssl, perl
-, runtimeShell }:
-
-with stdenv.lib;
+{ lib
+, stdenv
+, fetchFromGitHub
+, writeShellScript
+, autoreconfHook
+, pkg-config
+, runCommand
+, coreutils
+, gnugrep
+, gnused
+, lm_sensors
+, net-snmp
+, openssh
+, openssl
+, perl
+, dnsutils
+, libdbi
+, libmysqlclient
+, uriparser
+, zlib
+, openldap
+, procps
+, runtimeShell
+}:
 
 let
-  majorVersion = "2.2";
-  minorVersion = ".0";
+  binPath = lib.makeBinPath [
+    (placeholder "out")
+    "/run/wrappers"
+    coreutils
+    gnugrep
+    gnused
+    lm_sensors
+    net-snmp
+    procps
+  ];
 
-  binPath = makeBinPath [ coreutils gnugrep gnused lm_sensors net_snmp ];
+  mailq = runCommand "mailq-wrapper" { preferLocalBuild = true; } ''
+    mkdir -p $out/bin
+    ln -s /run/wrappers/bin/sendmail $out/bin/mailq
+  '';
 
-in stdenv.mkDerivation rec {
-  name = "monitoring-plugins-${majorVersion}${minorVersion}";
+  # For unknown reasons the installer tries executing $out/share and fails so
+  # we create it and remove it again later.
+  share = writeShellScript "share" ''
+    exit 0
+  '';
+
+in
+stdenv.mkDerivation rec {
+  pname = "monitoring-plugins";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
-    owner  = "monitoring-plugins";
-    repo   = "monitoring-plugins";
-    rev    = "v${majorVersion}";
-    sha256 = "1pw7i6d2cnb5nxi2lbkwps2qzz04j9zd86fzpv9ka896b4aqrwv1";
+    owner = "monitoring-plugins";
+    repo = "monitoring-plugins";
+    rev = "v" + lib.versions.majorMinor version;
+    sha256 = "sha256-yLhHOSrPFRjW701aOL8LPe4OnuJxL6f+dTxNqm0evIg=";
   };
 
-  # !!! Awful hack. Grrr... this of course only works on NixOS.
+  # TODO: Awful hack. Grrr... this of course only works on NixOS.
   # Anyway the check that configure performs to figure out the ping
   # syntax is totally impure, because it runs an actual ping to
   # localhost (which won't work for ping6 if IPv6 support isn't
   # configured on the build machine).
-  preConfigure= ''
+  #
+  # --with-ping-command needs to be done here instead of in
+  # configureFlags due to the spaces in the argument
+  postPatch = ''
     substituteInPlace po/Makefile.in.in \
-      --replace /bin/sh ${stdenv.shell}
+      --replace /bin/sh ${runtimeShell}
 
     sed -i configure.ac \
-      -e 's|^DEFAULT_PATH=.*|DEFAULT_PATH=\"\$out/bin:/run/wrappers/bin:${binPath}\"|'
+      -e 's|^DEFAULT_PATH=.*|DEFAULT_PATH=\"${binPath}\"|'
 
-    configureFlagsArray=(
+    configureFlagsArray+=(
       --with-ping-command='/run/wrappers/bin/ping -4 -n -U -w %d -c %d %s'
       --with-ping6-command='/run/wrappers/bin/ping -6 -n -U -w %d -c %d %s'
     )
+
+    install -Dm555 ${share} $out/share
   '';
 
-  # !!! make openssh a runtime dependency only
-  buildInputs = [ net_snmp openssh openssl perl ];
+  configureFlags = [
+    "--libexecdir=${placeholder "out"}/bin"
+    "--with-mailq-command=${mailq}/bin/mailq"
+    "--with-sudo-command=/run/wrappers/bin/sudo"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [
+    dnsutils
+    libdbi
+    libmysqlclient
+    net-snmp
+    openldap
+    # TODO: make openssh a runtime dependency only
+    openssh
+    openssl
+    perl
+    procps
+    uriparser
+    zlib
+  ];
+
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   enableParallelBuilding = true;
 
-  # For unknown reasons the installer tries executing $out/share and fails if
-  # it doesn't succeed.
-  # So we create it and remove it again later.
-  preBuild = ''
-    mkdir -p $out
-    cat <<_EOF > $out/share
-#!${runtimeShell}
-exit 0
-_EOF
-    chmod 755 $out/share
-  '';
-
   postInstall = ''
     rm $out/share
-    ln -s libexec $out/bin
   '';
 
-  meta = {
-    description = "Official monitoring plugins for Nagios/Icinga/Sensu and others.";
-    homepage    = https://www.monitoring-plugins.org;
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+  meta = with lib; {
+    description = "Official monitoring plugins for Nagios/Icinga/Sensu and others";
+    homepage = "https://www.monitoring-plugins.org";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ thoughtpolice relrod ];
+    platforms = platforms.linux;
   };
 }

@@ -1,27 +1,39 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, udev, libusb
-, darwin }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, libusb1
+, udev
+, Cocoa
+, IOKit
+}:
 
 stdenv.mkDerivation rec {
-  name = "hidapi-0.8.0-rc1";
+  pname = "hidapi";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
-    owner = "signal11";
+    owner = "libusb";
     repo = "hidapi";
-    rev = name;
-    sha256 = "13d5jkmh9nh4c2kjch8k8amslnxapa9vkqzrk1z6rqmw8qgvzbkj";
+    rev = "${pname}-${version}";
+    sha256 = "sha256-zSAhnvnDI3+q8VwZ8fIx/YmvwTpL87PBJ2C1mTmD7Ko=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ udev libusb ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ IOKit Cocoa ]);
+  buildInputs = lib.optionals stdenv.isLinux [ libusb1 udev ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/signal11/hidapi;
+  enableParallelBuilding = true;
+
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ Cocoa IOKit ];
+
+  meta = with lib; {
     description = "Library for communicating with USB and Bluetooth HID devices";
-    # Actually, you can chose between GPLv3, BSD or HIDAPI license (more liberal)
-    license = licenses.bsd3;
+    homepage = "https://github.com/libusb/hidapi";
+    maintainers = with maintainers; [ prusnak ];
+    # You can choose between GPLv3, BSD or HIDAPI license (even more liberal)
+    license = with licenses; [ bsd3 /* or */ gpl3Only ] ;
     platforms = platforms.unix;
   };
 }

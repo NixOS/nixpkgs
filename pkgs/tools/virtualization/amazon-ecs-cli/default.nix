@@ -1,15 +1,23 @@
-{ stdenv, fetchurl}:
+{ lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "amazon-ecs-cli-${version}";
-  version = "1.12.1";
+  pname = "amazon-ecs-cli";
+  version = "1.21.0";
 
-  src = fetchurl {
-    url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-v${version}";
-    sha256 = "100iv4cchnxl1s02higga5v3hvawi4c7sqva97x34qigr4r7fxwm";
-  };
+  src =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      fetchurl {
+        url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-v${version}";
+        sha256 = "sEHwhirU2EYwtBRegiIvN4yr7VKtmy7e6xx5gZOkuY0=";
+      }
+    else if stdenv.hostPlatform.system == "x86_64-darwin" then
+      fetchurl {
+        url = "https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-darwin-amd64-v${version}";
+        sha256 = "1viala49sifpcmgn3jw24h5bkrlm4ffadjiqagbxj3lr0r78i9nm";
+      }
+    else throw "Architecture not supported";
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase =
     ''
@@ -18,13 +26,12 @@ stdenv.mkDerivation rec {
       chmod +x $out/bin/ecs-cli
     '';  # */
 
-  meta = with stdenv.lib; {
-    homepage = https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI.html;
+  meta = with lib; {
+    homepage = "https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI.html";
     description = "The Amazon ECS command line interface";
     longDescription = "The Amazon Elastic Container Service (Amazon ECS) command line interface (CLI) provides high-level commands to simplify creating, updating, and monitoring clusters and tasks from a local development environment.";
     license = licenses.asl20;
     maintainers = with maintainers; [ Scriptkiddi ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }
-

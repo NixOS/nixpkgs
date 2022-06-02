@@ -1,23 +1,23 @@
-{ fetchgit, pkgconfig, gettext, runCommand, makeWrapper
-, elfutils, kernel, gnumake, python2, python2Packages
+{ lib, fetchgit, pkg-config, gettext, runCommand, makeWrapper
+, cpio, elfutils, kernel, gnumake, python3
 }:
 
 let
   ## fetchgit info
-  url = git://sourceware.org/git/systemtap.git;
+  url = "git://sourceware.org/git/systemtap.git";
   rev = "release-${version}";
-  sha256 = "075p45ndr4pzrf5679hcsw1ws4x0xqvx3m037v04545762hki6la";
-  version = "4.0";
+  sha256 = "sha256-3LgqMBCnUG2UmsekaIvV43lBpSPEocEXmFV9WpE7wE0=";
+  version = "4.5";
 
   inherit (kernel) stdenv;
-  inherit (stdenv) lib;
 
   ## stap binaries
   stapBuild = stdenv.mkDerivation {
-    name = "systemtap-${version}";
+    pname = "systemtap";
+    inherit version;
     src = fetchgit { inherit url rev sha256; };
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ elfutils gettext python2 python2Packages.setuptools ];
+    nativeBuildInputs = [ pkg-config cpio python3 python3.pkgs.setuptools ];
+    buildInputs = [ elfutils gettext ];
     enableParallelBuilding = true;
   };
 
@@ -33,14 +33,13 @@ let
     done
   '';
 
-  pypkgs = with python2Packages; makePythonPath [ pyparsing ];
+  pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
 in runCommand "systemtap-${kernel.version}-${version}" {
   inherit stapBuild kernelBuildDir;
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
   meta = {
-    homepage = https://sourceware.org/systemtap/;
-    repositories.git = url;
+    homepage = "https://sourceware.org/systemtap/";
     description = "Provides a scripting language for instrumentation on a live kernel plus user-space";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

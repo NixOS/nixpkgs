@@ -1,18 +1,18 @@
-{ stdenv, makeWrapper, coreutils, gawk, gnused, gnugrep, diffutils, nix }:
+{ lib, stdenv, makeWrapper, coreutils, gnused, gnugrep, diffutils, nix, git, jq }:
 
 stdenv.mkDerivation {
   name = "common-updater-scripts";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin
     cp ${./scripts}/* $out/bin
 
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${stdenv.lib.makeBinPath [ coreutils gawk gnused gnugrep nix diffutils ]}
+      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ coreutils gnused gnugrep nix diffutils git jq ]}
     done
   '';
 }

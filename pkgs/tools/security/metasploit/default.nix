@@ -1,13 +1,11 @@
-{ stdenv, fetchFromGitHub, makeWrapper, ruby, bundlerEnv }:
-
-# Maintainer notes for updating:
-# 1. increment version number in expression and in Gemfile
-# 2. run $ nix-shell --command "bundler install && bundix"
-#    in metasploit in nixpkgs
-# 3. run $ sed -i '/[ ]*dependencies =/d' gemset.nix
-# 4. run $ nix-build -A metasploit ../../../../
-# 5. update sha256sum in expression
-# 6. run step 3 again
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, ruby
+, bundlerEnv
+, python3
+}:
 
 let
   env = bundlerEnv {
@@ -16,24 +14,27 @@ let
     gemdir = ./.;
   };
 in stdenv.mkDerivation rec {
-  name = "metasploit-framework-${version}";
-  version = "4.16.1";
+  pname = "metasploit-framework";
+  version = "6.1.43";
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
-    sha256 = "1vilyy0dqzp8kbbpvs2zrv2ac7s39w2vv7mrbzgcjgh2bj7c6bg1";
+    sha256 = "sha256-tw7WuBFSYWDh2saddei6xCQuhKX1O6EiuoKf4sfTYpo=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ (python3.withPackages (ps: [ ps.requests ])) ];
 
-  dontPatchelf = true; # stay away from exploit executables
+  dontPatchELF = true; # stay away from exploit executables
 
   installPhase = ''
     mkdir -p $out/{bin,share/msf}
 
     cp -r * $out/share/msf
+
+    grep -rl "^#\!.*python2$" $out/share/msf | xargs -d '\n' rm
 
     (
       cd $out/share/msf/
@@ -43,13 +44,22 @@ in stdenv.mkDerivation rec {
       done
     )
 
+    makeWrapper ${env}/bin/bundle $out/bin/msf-pattern_create \
+      --add-flags "exec ${ruby}/bin/ruby $out/share/msf/tools/exploit/pattern_create.rb"
+
+    makeWrapper ${env}/bin/bundle $out/bin/msf-pattern_offset \
+      --add-flags "exec ${ruby}/bin/ruby $out/share/msf/tools/exploit/pattern_offset.rb"
   '';
 
-  meta = with stdenv.lib; {
+  # run with: nix-shell maintainers/scripts/update.nix --argstr path metasploit
+  passthru.updateScript = ./update.sh;
+
+  meta = with lib; {
     description = "Metasploit Framework - a collection of exploits";
-    homepage = https://github.com/rapid7/metasploit-framework/wiki;
+    homepage = "https://github.com/rapid7/metasploit-framework/wiki";
     platforms = platforms.unix;
     license = licenses.bsd3;
-    maintainers = [ maintainers.makefu ];
+    maintainers = with maintainers; [ fab makefu ];
+    mainProgram = "msfconsole";
   };
 }

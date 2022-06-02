@@ -1,31 +1,40 @@
-{ buildPythonPackage, fetchPypi, lib, numpy, pytest, pytestpep8, pytestcov }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, numpy
+, pytestCheckHook
+, pythonOlder
+}:
+
 buildPythonPackage rec {
-  version = "2.3.2";
-  pname = "opt_einsum";
+  version = "3.3.0";
+  pname = "opt-einsum";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit version pname;
-    sha256 = "0ny3v8x83mzpwmqjdzqhzy2pzwyy4wx01r1h9i29xw3yvas69m6k";
+    pname = "opt_einsum";
+    inherit version;
+    hash = "sha256-WfZHX3e7w33PfNdIUZwOxgci6R5jyhFOaIIcDFSkZUk=";
   };
-
-  checkInputs = [
-    pytest
-    pytestpep8
-    pytestcov
-  ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   propagatedBuildInputs = [
     numpy
   ];
 
-  meta = {
-    description = "Optimizing NumPy's einsum function with order optimization and GPU support.";
-    homepage = http://optimized-einsum.readthedocs.io;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ teh ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "opt_einsum"
+  ];
+
+  meta = with lib; {
+    description = "Optimizing NumPy's einsum function with order optimization and GPU support";
+    homepage = "https://github.com/dgasmith/opt_einsum";
+    license = licenses.mit;
+    maintainers = with maintainers; [ teh ];
   };
 }

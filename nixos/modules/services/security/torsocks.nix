@@ -37,6 +37,7 @@ in
       enable = mkOption {
         type        = types.bool;
         default     = config.services.tor.enable && config.services.tor.client.enable;
+        defaultText = literalExpression "config.services.tor.enable && config.services.tor.client.enable";
         description = ''
           Whether to build <literal>/etc/tor/torsocks.conf</literal>
           containing the specified global torsocks configuration.
@@ -112,10 +113,9 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.torsocks (wrapTorsocks "torsocks-faster" cfg.fasterServer) ];
 
-    environment.etc =
-      [ { source = pkgs.writeText "torsocks.conf" (configFile cfg.server);
-          target = "tor/torsocks.conf";
-        }
-      ];
+    environment.etc."tor/torsocks.conf" =
+      {
+        source = pkgs.writeText "torsocks.conf" (configFile cfg.server);
+      };
   };
 }

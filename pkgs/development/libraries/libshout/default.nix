@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libvorbis, libtheora, speex }:
 
-# need pkgconfig so that libshout installs ${out}/lib/pkgconfig/shout.pc
+# need pkg-config so that libshout installs ${out}/lib/pkgconfig/shout.pc
 
 stdenv.mkDerivation rec {
-  name = "libshout-2.4.1";
+  pname = "libshout";
+  version = "2.4.5";
 
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/libshout/${name}.tar.gz";
-    sha256 = "0kgjpf8jkgyclw11nilxi8vyjk4s8878x23qyxnvybbgqbgbib7k";
+    url = "https://downloads.xiph.org/releases/libshout/${pname}-${version}.tar.gz";
+    sha256 = "sha256-2eVoZopnOZTr4/HrXyvuBuMjal25K40MSH4cD4hqaJA=";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libvorbis libtheora speex ];
 
   meta = {
@@ -25,9 +26,10 @@ stdenv.mkDerivation rec {
       bad data from getting to the icecast server.
     '';
 
-    homepage = http://www.icecast.org;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
-    platforms = with stdenv.lib.platforms; unix;
+    homepage = "https://www.icecast.org";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ jcumming ];
+    mainProgram = "shout";
+    platforms = with lib.platforms; unix;
   };
 }

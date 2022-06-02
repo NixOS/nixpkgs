@@ -1,11 +1,12 @@
 { lib, stdenv, fetchurl, unzip }:
 
-stdenv.mkDerivation {
-  name = "docbook5-5.0";
+stdenv.mkDerivation rec {
+  pname = "docbook5";
+  version = "5.0.1";
 
   src = fetchurl {
-    url = http://www.docbook.org/xml/5.0/docbook-5.0.zip;
-    sha256 = "13i04dkd709f0p5f2413sf2y9321pfi4y85ynf8wih6ryphnbk9x";
+    url = "http://www.docbook.org/xml/${version}/docbook-${version}.zip";
+    sha256 = "1iz3hq1lqgnshvlz4j9gvh4jy1ml74qf90vqf2ikbq0h4i2xzybs";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -28,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Schemas for DocBook 5.0, a semantic markup language for technical documentation";
-    homepage = https://docbook.org/xml/5.0/;
+    homepage = "https://docbook.org/xml/5.0/";
     maintainers = [ lib.maintainers.eelco ];
     platforms = lib.platforms.all;
   };

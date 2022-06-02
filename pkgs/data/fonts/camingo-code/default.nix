@@ -1,22 +1,22 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "1.0";
 in fetchzip rec {
   name = "camingo-code-${version}";
 
-  url = https://github.com/chrissimpkins/codeface/releases/download/font-collection/codeface-fonts.zip;
+  url = "https://github.com/chrissimpkins/codeface/releases/download/font-collection/codeface-fonts.zip";
   postFetch = ''
-    unzip $downloadedFile
-    mkdir -p $out/share/fonts/truetype
-    mkdir -p $out/share/doc/${name}
-    cp -v fonts/camingo-code/*.ttf $out/share/fonts/truetype/
-    cp -v fonts/camingo-code/*.txt $out/share/doc/${name}/
+    install -Dm644 $out/camingo-code/*.ttf -t $out/share/fonts/truetype
+    install -Dm644 $out/camingo-code/*.txt -t $out/share/doc/${name}
+    shopt -s extglob dotglob
+    rm -rf $out/!(share)
+    shopt -u extglob dotglob
   '';
-  sha256 = "035z2k6lwwy2bysw27pirn3vjxnj2h23nyx8jr213rb2bl0m21x1";
+  sha256 = "sha256-/vDNuR034stmiCZ9jUH5DlTQJn0WccLY5treoziXOJo=";
 
-  meta = with stdenv.lib; {
-    homepage = https://www.myfonts.com/fonts/jan-fromm/camingo-code/;
+  meta = with lib; {
+    homepage = "https://www.myfonts.com/fonts/jan-fromm/camingo-code/";
     description = "A monospaced typeface designed for source-code editors";
     platforms = platforms.all;
     license = licenses.cc-by-nd-30;

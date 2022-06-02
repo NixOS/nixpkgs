@@ -1,10 +1,11 @@
-{ stdenv, fetchFromGitHub
-, vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobject-introspection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
+{ lib, stdenv, fetchFromGitHub
+, vala, cmake, ninja, wrapGAppsHook, pkg-config, gettext
+, gobject-introspection, gnome, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
+, librsvg, libsignal-protocol-c
 , libgcrypt
-, epoxy
+, libepoxy
 , at-spi2-core
 , sqlite
 , dbus
@@ -12,24 +13,26 @@
 , pcre
 , qrencode
 , icu
+, gspell
+, srtp, libnice, gnutls, gstreamer, gst-plugins-base, gst-plugins-good
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2019-03-07";
+  pname = "dino";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "cc7b0aa7bd5b6599159f654fdd8a2fd111e16a3e";
-    sha256 = "1cq62vif92fz38si2bl49qwy4ys9gxdrvzkv25av6c6nwmyih4gv";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    sha256 = "sha256-L5a5QlF9qlr4X/hGTabbbvOE5J1x/UVneWl/BRAa29Q=";
   };
 
   nativeBuildInputs = [
     vala
     cmake
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
     gettext
   ];
@@ -40,32 +43,55 @@ stdenv.mkDerivation rec {
     glib-networking
     glib
     libgee
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     sqlite
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     libnotify
     gpgme
     libgcrypt
     libsoup
     pcre
+    libepoxy
+    at-spi2-core
+    dbus
+    icu
+    libsignal-protocol-c
+    librsvg
+    gspell
+    srtp
+    libnice
+    gnutls
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+  ] ++ lib.optionals (!stdenv.isDarwin) [
     xorg.libxcb
     xorg.libpthreadstubs
     libXdmcp
     libxkbcommon
-    epoxy
-    at-spi2-core
-    dbus
-    icu
   ];
 
-  enableParallelBuilding = true;
+  # Dino looks for plugins with a .so filename extension, even on macOS where
+  # .dylib is appropriate, and despite the fact that it builds said plugins with
+  # that as their filename extension
+  #
+  # Therefore, on macOS rename all of the plugins to use correct names that Dino
+  # will load
+  #
+  # See https://github.com/dino/dino/wiki/macOS
+  postFixup = lib.optionalString (stdenv.isDarwin) ''
+    cd "$out/lib/dino/plugins/"
+    for f in *.dylib; do
+      mv "$f" "$(basename "$f" .dylib).so"
+    done
+  '';
 
-  meta = with stdenv.lib; {
-    description = "Modern Jabber/XMPP Client using GTK+/Vala";
-    homepage = https://github.com/dino/dino;
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.mic92 ];
+  meta = with lib; {
+    description = "Modern Jabber/XMPP Client using GTK/Vala";
+    homepage = "https://github.com/dino/dino";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ qyliss tomfitzhenry ];
   };
 }

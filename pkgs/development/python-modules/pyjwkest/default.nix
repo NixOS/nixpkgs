@@ -4,17 +4,17 @@
 
 buildPythonPackage rec {
   pname = "pyjwkest";
-  version = "1.4.0";
+  version = "1.4.2";
 
   meta = {
     description = "Implementation of JWT, JWS, JWE and JWK";
-    homepage = https://github.com/rohe/pyjwkest;
+    homepage = "https://github.com/rohe/pyjwkest";
     license = lib.licenses.asl20;
   };
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "128e3c81d02993ac4cd7e29ef7aac767d91daa59380e6883ae589092945e4aad";
+    sha256 = "5560fd5ba08655f29ff6ad1df1e15dc05abc9d976fcbcec8d2b5167f49b70222";
   };
 
   buildInputs = [ pytest ];

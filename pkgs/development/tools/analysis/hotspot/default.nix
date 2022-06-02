@@ -1,42 +1,55 @@
-{ stdenv,
-  cmake,
-  elfutils,
-  extra-cmake-modules,
-  fetchFromGitHub,
-  kconfigwidgets,
-  ki18n,
-  kitemmodels,
-  kitemviews,
-  libelf,
-  qtbase,
-  threadweaver,
+{ lib
+, mkDerivation
+, cmake
+, elfutils
+, extra-cmake-modules
+, fetchFromGitHub
+, kconfigwidgets
+, ki18n
+, kio
+, kitemmodels
+, kitemviews
+, kwindowsystem
+, libelf
+, qtbase
+, threadweaver
+, qtx11extras
+, zstd
+, kddockwidgets
+, rustc-demangle
 }:
 
-stdenv.mkDerivation rec {
-  name = "hotspot-${version}";
-  version = "1.0.0"; # don't forget to bump `rev` below when you change this
+mkDerivation rec {
+  pname = "hotspot";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "KDAB";
     repo = "hotspot";
-    # TODO: For some reason, `fetchSubmodules` doesn't work when using `rev = "v${version}";`,
-    #       so using an explicit commit instead. See #15559
-    rev = "352687bf620529e9887616651f123f922cb421a4";
-    sha256 = "09ly15yafpk31p3w7h2xixf1xdmx803w9fyb2aq7mhmc7pcxqjsx";
+    rev = "v${version}";
+    sha256 = "1f68bssh3p387hkavfjkqcf7qf7w5caznmjfjldicxphap4riqr5";
     fetchSubmodules = true;
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     cmake
-    elfutils
     extra-cmake-modules
+  ];
+  buildInputs = [
+    elfutils
     kconfigwidgets
     ki18n
+    kio
     kitemmodels
     kitemviews
+    kwindowsystem
     libelf
     qtbase
     threadweaver
+    qtx11extras
+    zstd
+    kddockwidgets
+    rustc-demangle
   ];
 
   # hotspot checks for the presence of third party libraries'
@@ -44,10 +57,13 @@ stdenv.mkDerivation rec {
   # submodules; but Nix clones them and removes .git (for reproducibility).
   # So we need to fake their existence here.
   postPatch = ''
-    mkdir -p 3rdparty/perfparser/.git
+    mkdir -p 3rdparty/{perfparser,PrefixTickLabels}/.git
   '';
 
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    "-DRUSTC_DEMANGLE_INCLUDE_DIR=${rustc-demangle}/include"
+    "-DRUSTC_DEMANGLE_LIBRARY=${rustc-demangle}/lib/librustc_demangle.so"
+  ];
 
   meta = {
     description = "A GUI for Linux perf";
@@ -56,9 +72,9 @@ stdenv.mkDerivation rec {
       It takes a perf.data file, parses and evaluates its contents and
       then displays the result in a graphical way.
     '';
-    homepage = https://github.com/KDAB/hotspot;
-    license = with stdenv.lib.licenses; [ gpl2 gpl3 ];
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ nh2 ];
+    homepage = "https://github.com/KDAB/hotspot";
+    license = with lib.licenses; [ gpl2Only gpl3Only ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ nh2 ];
   };
 }

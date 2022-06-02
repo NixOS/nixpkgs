@@ -1,41 +1,47 @@
-{ stdenv, fetchurl, perl, zlib }:
+{ lib, stdenv
+, cmake
+, fetchurl
+, perl
+, zlib
+, groff
+, withBzip2 ? false
+, bzip2
+, withLZMA ? false
+, xz
+, withOpenssl ? false
+, openssl
+, withZstd ? false
+, zstd
+}:
 
 stdenv.mkDerivation rec {
-  name = "libzip-${version}";
-  version = "1.3.0";
+  pname = "libzip";
+  version = "1.8.0";
 
   src = fetchurl {
-    url = "https://www.nih.at/libzip/${name}.tar.gz";
-    sha256 = "1633dvjc08zwwhzqhnv62rjf1abx8y5njmm8y16ik9iwd07ka6d9";
+    url = "https://libzip.org/download/${pname}-${version}.tar.gz";
+    sha256 = "17l3ygrnbszm3b99dxmw94wcaqpbljzg54h4c0y8ss8aij35bvih";
   };
 
-  postPatch = ''
-    patchShebangs test-driver
-    patchShebangs man/handle_links
-  '';
+  outputs = [ "out" "dev" "man" ];
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ cmake perl groff ];
   propagatedBuildInputs = [ zlib ];
+  buildInputs = lib.optionals withLZMA [ xz ]
+    ++ lib.optionals withBzip2 [ bzip2 ]
+    ++ lib.optionals withOpenssl [ openssl ]
+    ++ lib.optionals withZstd [ zstd ];
 
   preCheck = ''
-    # regress/runtests is a generated file
+    # regress/runtest is a generated file
     patchShebangs regress
   '';
 
-  # At least mysqlWorkbench cannot find zipconf.h; I think also openoffice
-  # had this same problem.  This links it somewhere that mysqlworkbench looks.
-  postInstall = ''
-    mkdir -p $dev/lib
-    mv $out/lib/libzip $dev/lib/libzip
-    ( cd $dev/include ; ln -s ../lib/libzip/include/zipconf.h zipconf.h )
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://www.nih.at/libzip;
+  meta = with lib; {
+    homepage = "https://libzip.org/";
     description = "A C library for reading, creating and modifying zip archives";
     license = licenses.bsd3;
     platforms = platforms.unix;
+    changelog = "https://github.com/nih-at/libzip/blob/v${version}/NEWS.md";
   };
 }

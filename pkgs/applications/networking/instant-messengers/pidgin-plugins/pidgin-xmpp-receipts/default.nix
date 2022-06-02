@@ -1,10 +1,11 @@
-{ stdenv, fetchFromGitHub, pidgin } :
+{ lib, stdenv, fetchFromGitHub, pidgin } :
 
 let
   version = "0.8";
 in
-stdenv.mkDerivation rec {
-  name = "pidgin-xmpp-receipts-${version}";
+stdenv.mkDerivation {
+  pname = "pidgin-xmpp-receipts";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "noonien-d";
@@ -20,8 +21,8 @@ stdenv.mkDerivation rec {
     cp xmpp-receipts.so $out/lib/pidgin/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://devel.kondorgulasch.de/pidgin-xmpp-receipts/;
+  meta = with lib; {
+    homepage = "http://devel.kondorgulasch.de/pidgin-xmpp-receipts/";
     description = "Message delivery receipts (XEP-0184) Pidgin plugin";
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -1,26 +1,27 @@
-{ stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook, libmd }:
 
 stdenv.mkDerivation rec {
-  name = "libbsd-${version}";
-  version = "0.9.1";
+  pname = "libbsd";
+  version = "0.11.6";
 
   src = fetchurl {
-    url = "https://libbsd.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1957w2wi7iqar978qlfsm220dwywnrh5m58nrnn9zmi74ds3bn2n";
+    url = "https://libbsd.freedesktop.org/releases/${pname}-${version}.tar.xz";
+    sha256 = "sha256-GbOPMXLq9pPm4caHFGNhkMfkiFHkUiTXILO1vASZtd8=";
   };
+
+  outputs = [ "out" "dev" "man" ];
 
   # darwin changes configure.ac which means we need to regenerate
   # the configure scripts
   nativeBuildInputs = [ autoreconfHook ];
+  propagatedBuildInputs = [ libmd ];
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./darwin.patch
-    # Suitable for all but limited to musl to avoid rebuild
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMusl ./musl.patch;
+  patches = [ ./darwin.patch ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Common functions found on BSD systems";
-    homepage = https://libbsd.freedesktop.org/;
-    license = licenses.bsd3;
+    homepage = "https://libbsd.freedesktop.org/";
+    license = with licenses; [ beerware bsd2 bsd3 bsdOriginal isc mit ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];
   };

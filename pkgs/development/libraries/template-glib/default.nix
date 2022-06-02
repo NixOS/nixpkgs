@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobject-introspection, flex, bison, vala, gettext, gnome3, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, glib, gobject-introspection, flex, bison, vala, gettext, gnome, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
 let
-  version = "3.30.0";
+  version = "3.34.1";
   pname = "template-glib";
 in
 stdenv.mkDerivation {
@@ -9,28 +9,29 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0j9ndswl3fc0ymbqd6kk7yw3sniij3dgczc665p06wgw3cwhssfg";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "nsm3HgTU9csU91XveQYxzQtFwGA+Ecg2/Hz9niaM0Ho=";
   };
 
-  buildInputs = [ meson ninja pkgconfig gettext flex bison vala glib gtk-doc docbook_xsl docbook_xml_dtd_43 ];
-  nativeBuildInputs = [ glib gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext flex bison vala glib gtk-doc docbook_xsl docbook_xml_dtd_43 gobject-introspection ];
+  buildInputs = [ glib ];
 
   mesonFlags = [
     "-Denable_gtk_doc=true"
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for template expansion which supports calling into GObject Introspection from templates";
-    homepage = https://gitlab.gnome.org/GNOME/template-glib;
+    homepage = "https://gitlab.gnome.org/GNOME/template-glib";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

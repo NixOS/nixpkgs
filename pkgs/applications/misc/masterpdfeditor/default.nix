@@ -1,26 +1,19 @@
-{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, nss, autoPatchelfHook, lib, makeWrapper }:
+{ stdenv, fetchurl, sane-backends, qtbase, qtsvg, nss, autoPatchelfHook, lib, wrapQtAppsHook }:
 
-let
-  version = "5.3.22";
-
-in stdenv.mkDerivation {
-  name = "masterpdfeditor-${version}";
+stdenv.mkDerivation rec {
+  pname = "masterpdfeditor";
+  version = "5.8.46";
 
   src = fetchurl {
-    url = "https://code-industry.net/public/master-pdf-editor-${version}_qt5.amd64.tar.gz";
-    sha256 = "0cnw01g3j5l07f2lng604mx8qqm61i5sflryj1vya2gkjmrphkan";
+    url = "https://code-industry.net/public/master-pdf-editor-${version}-qt5.x86_64.tar.gz";
+    sha256 = "sha256-xms4aqIxYXR6v226RMf+abrFU1xz2aDIL6iQ+Yfff1k=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ autoPatchelfHook wrapQtAppsHook ];
 
   buildInputs = [ nss qtbase qtsvg sane-backends stdenv.cc.cc ];
 
   dontStrip = true;
-
-  # Please remove this when #44047 is fixed
-  postInstall = ''
-    wrapProgram $out/bin/masterpdfeditor5 --prefix QT_PLUGIN_PATH : ${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
-  '';
 
   installPhase = ''
     runHook preInstall
@@ -43,11 +36,11 @@ in stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Master PDF Editor";
     homepage = "https://code-industry.net/free-pdf-editor/";
     license = licenses.unfreeRedistributable;
     platforms = with platforms; [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cmcdragonkai flokli ];
+    maintainers = with maintainers; [ cmcdragonkai ];
   };
 }

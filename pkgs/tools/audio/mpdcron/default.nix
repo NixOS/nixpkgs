@@ -1,36 +1,62 @@
-{ stdenv, fetchgit, autoconf, automake, libtool, pkgconfig, glib, libdaemon
-, mpd_clientlib, curl, sqlite, ruby, bundlerEnv, libnotify, pandoc }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkg-config
+, glib
+, libdaemon
+, libmpdclient
+, curl
+, sqlite
+, bundlerEnv
+, libnotify
+, pandoc
+}:
 
 let
   gemEnv = bundlerEnv {
     name = "mpdcron-bundle";
     gemdir = ./.;
   };
-in stdenv.mkDerivation rec {
-  version = "20130809";
-  name    = "mpdcron-${version}";
+in stdenv.mkDerivation {
+  pname = "mpdcron";
+  version = "20161228";
 
-  src = fetchgit {
-    url    = https://github.com/alip/mpdcron.git;
-    rev    = "1dd16181c32f33e7754bbe21841c8e70b28f8ecd";
-    sha256 = "0ayr9a5f6i4z3wx486dp77ffzs61077b8w871pqr3yypwamcjg6b";
+  src = fetchFromGitHub {
+    owner = "alip";
+    repo = "mpdcron";
+    rev = "e49e6049b8693d31887c538ddc7b19f5e8ca476b";
+    sha256 = "0vdksf6lcgmizqr5mqp0bbci259k0dj7gpmhx32md41jlmw5skaw";
   };
 
-  meta = {
-    description = "A cron like daemon for mpd";
-    homepage    = http://alip.github.io/mpdcron/;
-    license     = stdenv.lib.licenses.gpl2;
-    platforms   = with stdenv.lib.platforms; unix;
-    maintainers = [ stdenv.lib.maintainers.lovek323 ];
-  };
-
-  buildInputs =
-    [ autoconf automake libtool pkgconfig glib libdaemon pandoc
-      mpd_clientlib curl sqlite ruby gemEnv libnotify ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [
+    libtool
+    pkg-config
+    glib
+    libdaemon
+    pandoc
+    libmpdclient
+    curl
+    sqlite
+    gemEnv.wrappedRuby
+    libnotify
+  ];
 
   preConfigure = ''
     ./autogen.sh
   '';
 
   configureFlags = [ "--enable-gmodule" "--with-standard-modules=all" ];
+
+  meta = with lib; {
+    description = "A cron like daemon for mpd";
+    homepage    = "http://alip.github.io/mpdcron/";
+    license     = licenses.gpl2Plus;
+    platforms   = platforms.unix;
+    maintainers = with maintainers; [ lovek323 manveru ];
+  };
 }
+# TODO: autoreconfHook this

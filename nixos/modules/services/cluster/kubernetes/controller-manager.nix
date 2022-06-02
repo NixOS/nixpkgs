@@ -1,12 +1,18 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.controllerManager;
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "kubernetes" "controllerManager" "address" ] ["services" "kubernetes" "controllerManager" "bindAddress"])
+    (mkRenamedOptionModule [ "services" "kubernetes" "controllerManager" "port" ] ["services" "kubernetes" "controllerManager" "insecurePort"])
+  ];
+
   ###### interface
   options.services.kubernetes.controllerManager = with lib.types; {
 
@@ -25,20 +31,22 @@ in
     clusterCidr = mkOption {
       description = "Kubernetes CIDR Range for Pods in cluster.";
       default = top.clusterCidr;
+      defaultText = literalExpression "config.${otop.clusterCidr}";
       type = str;
     };
 
-    enable = mkEnableOption "Kubernetes controller manager.";
+    enable = mkEnableOption "Kubernetes controller manager";
 
     extraOpts = mkOption {
       description = "Kubernetes controller manager extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
@@ -62,6 +70,7 @@ in
         service account's token secret.
       '';
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
@@ -141,6 +150,9 @@ in
         User = "kubernetes";
         Group = "kubernetes";
       };
+      unitConfig = {
+        StartLimitIntervalSec = 0;
+      };
       path = top.path;
     };
 
@@ -159,4 +171,6 @@ in
 
     services.kubernetes.controllerManager.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

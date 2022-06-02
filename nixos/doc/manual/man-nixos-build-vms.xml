@@ -8,24 +8,30 @@
 <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
  </refmeta>
  <refnamediv>
-  <refname><command>nixos-build-vms</command>
-  </refname><refpurpose>build a network of virtual machines from a network of NixOS configurations</refpurpose>
+  <refname><command>nixos-build-vms</command></refname>
+  <refpurpose>build a network of virtual machines from a network of NixOS configurations</refpurpose>
  </refnamediv>
  <refsynopsisdiv>
   <cmdsynopsis>
-   <command>nixos-build-vms</command> 
+   <command>nixos-build-vms</command>
    <arg>
     <option>--show-trace</option>
    </arg>
-    
+
    <arg>
     <option>--no-out-link</option>
    </arg>
-    
+
    <arg>
     <option>--help</option>
-   </arg>
-    
+  </arg>
+
+  <arg>
+    <option>--option</option>
+    <replaceable>name</replaceable>
+    <replaceable>value</replaceable>
+  </arg>
+
    <arg choice="plain">
     <replaceable>network.nix</replaceable>
    </arg>
@@ -112,6 +118,18 @@
     <listitem>
      <para>
       Shows the usage of this command to the user.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <option>--option</option> <replaceable>name</replaceable> <replaceable>value</replaceable>
+    </term>
+    <listitem>
+     <para>Set the Nix configuration option
+      <replaceable>name</replaceable> to <replaceable>value</replaceable>.
+      This overrides settings in the Nix configuration file (see
+      <citerefentry><refentrytitle>nix.conf</refentrytitle><manvolnum>5</manvolnum></citerefentry>).
      </para>
     </listitem>
    </varlistentry>

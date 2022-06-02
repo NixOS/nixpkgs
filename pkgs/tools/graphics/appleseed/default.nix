@@ -1,30 +1,42 @@
-{ stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, guile,
-eigen, libpng, python, libGLU, qt4, openexr, openimageio,
-opencolorio, xercesc, ilmbase, osl, seexpr
+{ lib, stdenv, fetchFromGitHub, cmake, boost165, pkg-config, guile,
+eigen, libpng, python3, libGLU, qt4, openexr, openimageio,
+opencolorio_1, xercesc, ilmbase, osl, seexpr, makeWrapper
 }:
 
 let boost_static = boost165.override {
   enableStatic = true;
   enablePython = true;
+  python = python3;
 };
 in stdenv.mkDerivation rec {
 
-  name = "appleseed-${version}";
-  version = "1.9.0-beta";
+  pname = "appleseed";
+  version = "2.0.5-beta";
 
   src = fetchFromGitHub {
     owner  = "appleseedhq";
     repo   = "appleseed";
-    rev    = "1.9.0-beta";
-    sha256 = "0m7zvfkdjfn48zzaxh2wa1bsaj4l876a05bzgmjlfq5dz3202anr";
+    rev    = version;
+    sha256 = "1sq9s0rzjksdn8ayp1g17gdqhp7fqks8v1ddd3i5rsl96b04fqx5";
   };
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
   buildInputs = [
-    cmake pkgconfig boost_static guile eigen libpng python
-    libGLU qt4 openexr openimageio opencolorio xercesc
+    boost_static guile eigen libpng python3
+    libGLU qt4 openexr openimageio opencolorio_1 xercesc
     osl seexpr
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${openexr.dev}/include/OpenEXR -I${ilmbase.dev}/include/OpenEXR -I${openimageio.dev}/include/OpenImageIO";
+  NIX_CFLAGS_COMPILE = toString [
+    "-I${openexr.dev}/include/OpenEXR"
+    "-I${ilmbase.dev}/include/OpenEXR"
+    "-I${openimageio.dev}/include/OpenImageIO"
+
+    "-Wno-unused-but-set-variable"
+    "-Wno-error=class-memaccess"
+    "-Wno-error=maybe-uninitialized"
+    "-Wno-error=catch-value"
+    "-Wno-error=stringop-truncation"
+  ];
 
   cmakeFlags = [
       "-DUSE_EXTERNAL_XERCES=ON" "-DUSE_EXTERNAL_OCIO=ON" "-DUSE_EXTERNAL_OIIO=ON"
@@ -36,11 +48,10 @@ in stdenv.mkDerivation rec {
       "-DUSE_SSE=ON"
       "-DUSE_SSE42=ON"
   ];
-  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source, physically-based global illumination rendering engine";
-    homepage = https://appleseedhq.net/;
+    homepage = "https://appleseedhq.net/";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.mit;
     platforms = platforms.linux;
@@ -49,6 +60,7 @@ in stdenv.mkDerivation rec {
   # Work around a bug in the CMake build:
   postInstall = ''
     chmod a+x $out/bin/*
+    wrapProgram $out/bin/appleseed.studio --set PYTHONHOME ${python3}
   '';
 }
 

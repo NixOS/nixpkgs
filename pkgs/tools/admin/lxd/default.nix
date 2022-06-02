@@ -1,62 +1,64 @@
-{ stdenv, pkgconfig, lxc, buildGoPackage, fetchurl, fetchpatch
-, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq
-, squashfsTools, iproute, iptables, ebtables, libcap, dqlite
-, sqlite-replication
+{ lib, hwdata, pkg-config, lxc, buildGo118Package, fetchurl, fetchpatch
+, makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
+, squashfsTools, iproute2, iptables, libcap
+, dqlite, raft-canonical, sqlite-replication, udev
 , writeShellScriptBin, apparmor-profiles, apparmor-parser
+, criu
 , bash
+, installShellFiles
+, nixosTests
 }:
 
-buildGoPackage rec {
+buildGo118Package rec {
   pname = "lxd";
-  version = "3.11";
+  version = "5.1";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://github.com/lxc/lxd/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "0xxzrwhyzzp23arj57vjs1yh91gy3r4wpd5qy9ksifzd390clf2x";
+    url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
+    sha256 = "sha256-MZ9Ok1BuIUTtqigLAYX7N8Q3TPfXRopeXIwbZ4GJJQo=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = https://github.com/CanonicalLtd/go-dqlite/commit/88a96df66e3e3bdc290fd4a0d41615d284d2c92c.patch;
-      sha256 = "0z6r4shh1rlf0in9xk1gi6ms2kcvplc3878106d2zzzfz7ad83a4";
-      extraPrefix = "dist/src/github.com/CanonicalLtd/go-dqlite/";
-      stripLen = 1;
-    })
-  ];
+  postPatch = ''
+    substituteInPlace shared/usbid/load.go \
+      --replace "/usr/share/misc/usb.ids" "${hwdata}/share/hwdata/usb.ids"
+  '';
+
+  excludedPackages = [ "test" "lxd/db/generate" ];
 
   preBuild = ''
-    # unpack vendor
-    pushd go/src/github.com/lxc/lxd
-    rm dist/src/github.com/lxc/lxd
-    cp -r dist/src/* ../../..
-    rm -r dist
-    popd
-  '';
+    # required for go-dqlite. See: https://github.com/lxc/lxd/pull/8939
+    export CGO_LDFLAGS_ALLOW="(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
 
-  buildFlags = [ "-tags libsqlite3" ];
+    makeFlagsArray+=("-tags libsqlite3")
+  '';
 
   postInstall = ''
-    # test binaries, code generation
-    rm $bin/bin/{deps,macaroon-identity,generate}
+    wrapProgram $out/bin/lxd --prefix PATH : ${lib.makeBinPath (
+      [ iptables ]
+      ++ [ acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute2 bash criu attr ]
+      ++ [ (writeShellScriptBin "apparmor_parser" ''
+             exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
+           '') ]
+      )
+    }
 
-    wrapProgram $bin/bin/lxd --prefix PATH : ${stdenv.lib.makeBinPath [
-      acl rsync gnutar xz btrfs-progs gzip dnsmasq squashfsTools iproute iptables ebtables bash
-      (writeShellScriptBin "apparmor_parser" ''
-        exec '${apparmor-parser}/bin/apparmor_parser' -I '${apparmor-profiles}/etc/apparmor.d' "$@"
-      '')
-    ]}
+    installShellCompletion --bash --name lxd go/src/github.com/lxc/lxd/scripts/bash/lxd-client
   '';
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ lxc acl libcap dqlite sqlite-replication ];
+  passthru.tests.lxd = nixosTests.lxd;
+  passthru.tests.lxd-nftables = nixosTests.lxd-nftables;
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ installShellFiles pkg-config makeWrapper ];
+  buildInputs = [ lxc acl libcap dqlite.dev raft-canonical.dev
+                  sqlite-replication udev.dev ];
+
+  meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
-    homepage = https://linuxcontainers.org/lxd/;
+    homepage = "https://linuxcontainers.org/lxd/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ globin fpletz ];
+    maintainers = with maintainers; [ fpletz marsam ];
     platforms = platforms.linux;
   };
 }

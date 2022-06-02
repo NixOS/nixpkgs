@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, SDL, SDL_image }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, SDL, SDL_image }:
 
 stdenv.mkDerivation rec {
-  name = "vp-${version}";
+  pname = "vp";
   version = "1.8";
 
   src = fetchFromGitHub {
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE="-I${SDL}/include/SDL -I${SDL_image}/include/SDL";
 
-  meta = with stdenv.lib; {
-    homepage = http://brlcad.org/~erik/;
+  meta = with lib; {
+    homepage = "https://brlcad.org/~erik/";
     description = "SDL based picture viewer/slideshow";
     platforms = platforms.unix;
     license  = licenses.gpl3;

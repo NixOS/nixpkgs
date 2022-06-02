@@ -1,22 +1,23 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "haproxy_exporter-${version}";
-  version = "0.8.0";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/prometheus/haproxy_exporter";
+buildGoModule rec {
+  pname = "haproxy_exporter";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "prometheus";
     repo = "haproxy_exporter";
-    sha256 = "0gx8pq67w71ch3g3c77xaz39msrd9graizc6d3shwabdjx35yc6q";
+    rev = "v${version}";
+    sha256 = "sha256-F0yYUIKTIGyhzL0QwmioQYnWBb0GeFOhBwL3IqDKoQA=";
   };
 
-  meta = with stdenv.lib; {
+  vendorSha256 = "sha256-iJ2doxsLqTitsKJg3PUFLzEtLlP5QckSdFZkXX3ALIE=";
+
+  ldflags = [ "-s" "-w" ];
+
+  meta = with lib; {
     description = "HAProxy Exporter for the Prometheus monitoring system";
-    homepage = https://github.com/prometheus/haproxy_exporter;
+    homepage = "https://github.com/prometheus/haproxy_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz ];
     platforms = platforms.unix;

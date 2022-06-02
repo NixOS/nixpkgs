@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "canvas";
+  pname = "canvas";
   version = "2017-11-09";
 
   ipkgName = "idriscanvas";
@@ -17,7 +17,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris FFI binding for html5 canvas 2d api";
-    homepage = https://github.com/JinWuZhao/idriscanvas;
+    homepage = "https://github.com/JinWuZhao/idriscanvas";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

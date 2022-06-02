@@ -1,0 +1,27 @@
+From 59f6876187da2c01b35e696e169ca98239c08a41 Mon Sep 17 00:00:00 2001
+From: Jason Felice <jason.m.felice@gmail.com>
+Date: Tue, 24 May 2022 07:54:25 -0400
+Subject: [PATCH] Restore write permissions in tarball
+
+In Nix, the source files are stored in an immutable store and
+therefore have been stripped of write permissions.  When the SSH
+kitten makes the tarfile, the files contained in it are also missing
+the write permissions, causing commands on the remote side to fail.
+---
+ kittens/ssh/main.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kittens/ssh/main.py b/kittens/ssh/main.py
+index 0b50d5ff..f80ac13d 100644
+--- a/kittens/ssh/main.py
++++ b/kittens/ssh/main.py
+@@ -123,6 +123,7 @@ def make_tarfile(ssh_opts: SSHOptions, base_env: Dict[str, str], compression: st
+     def normalize_tarinfo(tarinfo: tarfile.TarInfo) -> tarfile.TarInfo:
+         tarinfo.uname = tarinfo.gname = ''
+         tarinfo.uid = tarinfo.gid = 0
++        tarinfo.mode |= 0o200
+         return tarinfo
+
+     def add_data_as_file(tf: tarfile.TarFile, arcname: str, data: Union[str, bytes]) -> tarfile.TarInfo:
+--
+2.36.0

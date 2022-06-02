@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
-, gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libfixposix, libssh2 }:
+{ lib, stdenv, fetchFromGitHub, nix-update-script
+, vala, meson, ninja, pkg-config, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
+, gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libssh2 }:
 
 
 let
@@ -11,25 +11,31 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "sequeler";
-  version = "0.6.8";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1rx8h3bi86vk8j7c447pwm590z061js4w45nzrp66r41v0rnh5vk";
+    sha256 = "sha256-MsHHTYERe0v+u3KnVtx+jmJTKORJTJ7bNfJMZHV9Ly4=";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig pantheon.vala gettext wrapGAppsHook python3 desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja pkg-config vala gettext wrapGAppsHook python3 desktop-file-utils ];
 
-  buildInputs = [ gtk3 glib pantheon.granite libgee sqlGda gtksourceview libxml2 libsecret libfixposix libssh2 ];
+  buildInputs = [ gtk3 glib pantheon.granite libgee sqlGda gtksourceview libxml2 libsecret libssh2 ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py
     patchShebangs build-aux/meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+  meta = with lib; {
     description = "Friendly SQL Client";
     longDescription = ''
       Sequeler is a native Linux SQL client built in Vala and Gtk. It allows you
@@ -37,9 +43,10 @@ in stdenv.mkDerivation rec {
       editor with language recognition, and visualize SELECT results in a
       Gtk.Grid Widget.
     '';
-    homepage = https://github.com/Alecaddd/sequeler;
+    homepage = "https://github.com/Alecaddd/sequeler";
     license = licenses.gpl3;
-    maintainers = [ maintainers.etu ];
+    maintainers = with maintainers; [ etu ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.alecaddd.sequeler";
   };
 }

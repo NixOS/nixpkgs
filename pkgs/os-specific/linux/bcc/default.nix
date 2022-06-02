@@ -1,25 +1,28 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages, kernel
+{ lib, stdenv, fetchFromGitHub
+, makeWrapper, cmake, llvmPackages
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap
+, bash, libbpf, nixosTests
+, audit
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.8.0";
-  name = "bcc-${version}";
+  pname = "bcc";
+  version = "0.24.0";
+
+  disabled = !stdenv.isLinux;
 
   src = fetchFromGitHub {
-    owner  = "iovisor";
-    repo   = "bcc";
-    rev    = "v${version}";
-    sha256 = "15vvybllmh9hdj801v3psd671c0qq2a1xdv73kabb9r4fzgaknxk";
+    owner = "iovisor";
+    repo = "bcc";
+    rev = "v${version}";
+    sha256 = "sha256-5Nq6LmphiyiiIyru/P2rCCmA25cwJIWn08oK1+eM3cQ=";
   };
-
   format = "other";
 
-  buildInputs = [
-    llvmPackages.llvm llvmPackages.clang-unwrapped kernel
+  buildInputs = with llvmPackages; [
+    llvm llvm.dev libclang
     elfutils luajit netperf iperf
-    systemtap.stapBuild flex
+    flex bash libbpf
   ];
 
   patches = [
@@ -28,25 +31,28 @@ python.pkgs.buildPythonApplication rec {
     ./fix-deadlock-detector-import.patch
   ];
 
-  nativeBuildInputs = [ makeWrapper cmake flex bison ]
-    # libelf is incompatible with elfutils-libelf
-    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+  propagatedBuildInputs = [ python.pkgs.netaddr ];
+  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ];
 
   cmakeFlags = [
-    "-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules"
+    "-DBCC_KERNEL_MODULES_DIR=/run/booted-system/kernel-modules/lib/modules"
     "-DREVISION=${version}"
     "-DENABLE_USDT=ON"
     "-DENABLE_CPP_API=ON"
+    "-DCMAKE_USE_LIBBPF_PACKAGE=ON"
   ];
+
+  # to replace this executable path:
+  # https://github.com/iovisor/bcc/blob/master/src/python/bcc/syscall.py#L384
+  ausyscall = "${audit}/bin/ausyscall";
 
   postPatch = ''
     substituteAll ${./libbcc-path.patch} ./libbcc-path.patch
     patch -p1 < libbcc-path.patch
-  '';
 
-  propagatedBuildInputs = [
-    python.pkgs.netaddr
-  ];
+    substituteAll ${./absolute-ausyscall.patch} ./absolute-ausyscall.patch
+    patch -p1 < absolute-ausyscall.patch
+  '';
 
   postInstall = ''
     mkdir -p $out/bin $out/share
@@ -60,6 +66,8 @@ python.pkgs.buildPythonApplication rec {
       if [ ! -e $bin ]; then
         ln -s $f $bin
       fi
+      substituteInPlace "$f" \
+        --replace '$(dirname $0)/lib' "$out/share/bcc/tools/lib"
     done
 
     sed -i -e "s!lib=.*!lib=$out/bin!" $out/bin/{java,ruby,node,python}gc
@@ -69,10 +77,14 @@ python.pkgs.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
+
+  meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage = https://iovisor.github.io/bcc/;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 ];
+    homepage    = "https://iovisor.github.io/bcc/";
+    license     = licenses.asl20;
+    maintainers = with maintainers; [ ragge mic92 thoughtpolice martinetd ];
   };
 }

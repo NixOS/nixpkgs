@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, gdk_pixbuf, libGL, mesa }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gdk-pixbuf, libGL, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "blur-effect";
@@ -12,18 +12,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cmake
   ];
 
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     libGL
     mesa
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/sonald/blur-effect;
+  meta = with lib; {
+    homepage = "https://github.com/sonald/blur-effect";
     description = "Off-screen image blurring utility using OpenGL ES 3.0";
     license = licenses.gpl3;
     platforms = platforms.unix;

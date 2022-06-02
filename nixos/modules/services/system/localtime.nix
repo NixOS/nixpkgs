@@ -8,6 +8,7 @@ in {
   options = {
     services.localtime = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Enable <literal>localtime</literal>, simple daemon for keeping the system
@@ -20,35 +21,29 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.geoclue2.enable = true;
+    services.geoclue2 = {
+      enable = true;
+      appConfig.localtime = {
+        isAllowed = true;
+        isSystem = true;
+      };
+    };
 
-    # so polkit will pick up the rules
+    # Install the polkit rules.
     environment.systemPackages = [ pkgs.localtime ];
+    # Install the systemd unit.
+    systemd.packages = [ pkgs.localtime ];
 
-    users.users = [{
-      name = "localtimed";
-      description = "Taskserver user";
-    }];
+    users.users.localtimed = {
+      description = "localtime daemon";
+      isSystemUser = true;
+      group = "localtimed";
+    };
+    users.groups.localtimed = {};
 
     systemd.services.localtime = {
-      description = "localtime service";
       wantedBy = [ "multi-user.target" ];
-      partOf = [ "geoclue.service "];
-
-      serviceConfig = {
-        Restart                 = "on-failure";
-        # TODO: make it work with dbus
-        #DynamicUser             = true;
-        Nice                    = 10;
-        User                    = "localtimed";
-        PrivateTmp              = "yes";
-        PrivateDevices          = true;
-        PrivateNetwork          = "yes";
-        NoNewPrivileges         = "yes";
-        ProtectSystem           = "strict";
-        ProtectHome             = true;
-        ExecStart               = "${pkgs.localtime}/bin/localtimed";
-      };
+      serviceConfig.Restart = "on-failure";
     };
   };
 }

@@ -1,38 +1,50 @@
-{ stdenv, lib, fetchFromGitHub, go, removeReferencesTo }:
+{ lib, fetchFromGitHub, buildGoModule, nixosTests }:
 
-stdenv.mkDerivation rec {
-  name = "cni-plugins-${version}";
-  version = "0.7.4";
+buildGoModule rec {
+  pname = "cni-plugins";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "plugins";
     rev = "v${version}";
-    sha256 = "1sywllwnr6lc812sgkqjdd3y10r82shl88dlnwgnbgzs738q2vp2";
+    sha256 = "sha256-I9OmTO5obTwAj4hkecUfmRYR4Q3rdllMfbpESv66eEQ=";
   };
 
-  buildInputs = [ removeReferencesTo go ];
+  vendorSha256 = null;
 
-  buildPhase = ''
-    patchShebangs build.sh
-    export "GOCACHE=$TMPDIR/go-cache"
-    ./build.sh
-  '';
+  doCheck = false;
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mv bin/* $out/bin
-  '';
+  ldflags = [
+    "-X github.com/containernetworking/plugins/pkg/utils/buildversion.BuildVersion=v${version}"
+  ];
 
-  preFixup = ''
-    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
-  '';
+  subPackages = [
+    "plugins/ipam/dhcp"
+    "plugins/ipam/host-local"
+    "plugins/ipam/static"
+    "plugins/main/bridge"
+    "plugins/main/host-device"
+    "plugins/main/ipvlan"
+    "plugins/main/loopback"
+    "plugins/main/macvlan"
+    "plugins/main/ptp"
+    "plugins/main/vlan"
+    "plugins/meta/bandwidth"
+    "plugins/meta/firewall"
+    "plugins/meta/portmap"
+    "plugins/meta/sbr"
+    "plugins/meta/tuning"
+    "plugins/meta/vrf"
+  ];
+
+  passthru.tests = { inherit (nixosTests) cri-o podman; };
 
   meta = with lib; {
     description = "Some standard networking plugins, maintained by the CNI team";
-    homepage = https://github.com/containernetworking/plugins;
+    homepage = "https://www.cni.dev/plugins/";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cstrahan ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ cstrahan ] ++ teams.podman.members;
   };
 }

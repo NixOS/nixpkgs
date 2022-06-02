@@ -1,41 +1,49 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, jemalloc, nodejs }:
 
-buildGoPackage rec {
-  name = "dgraph-${version}";
-  version = "0.8.2";
-
-  goPackagePath = "github.com/dgraph-io/dgraph";
+buildGoModule rec {
+  pname = "dgraph";
+  version = "21.12.0";
 
   src = fetchFromGitHub {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "0zc5bda8m2srjbk0gy1nnm0bya8if0kmk1szqr1qv3xifdzmi4nf";
+    sha256 = "sha256-OYDWr+wJEIP7raIHsXSjvuFr2ENJOllufO5ff6lxoR4=";
   };
 
-  extraOutputsToInstall = [ "dashboard" ];
+  vendorSha256 = "sha256-YtU3Yeq/lNeq7cOB+KvHbvlH9g40WuJk1ovHxCQMG60=";
 
-  goDeps = ./deps.nix;
-  subPackages = [ "cmd/dgraph" "cmd/dgraphloader" "cmd/bulkloader"];
+  doCheck = false;
 
-  # let's move the dashboard to a different output, to prevent $bin from
-  # depending on $out
-  # TODO: provide a proper npm application for the dashboard.
-  postPatch = ''
-    mv dashboard/* $dashboard
+  ldflags = [
+    "-X github.com/dgraph-io/dgraph/x.dgraphVersion=${version}-oss"
+  ];
+
+  tags = [
+    "oss"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  # todo those dependencies are required in the makefile, but verify how they are used
+  # actually
+  buildInputs = [ jemalloc nodejs ];
+
+  subPackages = [ "dgraph" ];
+
+  postInstall = ''
+    for shell in bash zsh; do
+      $out/bin/dgraph completion $shell > dgraph.$shell
+      installShellCompletion dgraph.$shell
+    done
   '';
 
-  preBuild = ''
-    export buildFlagsArray="-ldflags=\
-      -X github.com/dgraph-io/dgraph/x.dgraphVersion=${version} \
-      -X github.com/dgraph-io/dgraph/cmd/dgraph/main.uiDir=$dashboard/src/assets/"
-  '';
-
-  meta = {
+  meta = with lib; {
     homepage = "https://dgraph.io/";
     description = "Fast, Distributed Graph DB";
-    maintainers = with stdenv.lib.maintainers; [ sigma ];
-    license = stdenv.lib.licenses.agpl3;
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ sigma ];
+    # Apache 2.0 because we use only build "oss"
+    license = licenses.asl20;
+    platforms = platforms.unix;
   };
 }

@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, unzip, ruby, openssl, makeWrapper }:
+{ lib, stdenv, fetchurl, unzip, ruby, openssl, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "ec2-ami-tools-${version}";
+  pname = "ec2-ami-tools";
 
   version = "1.5.7";
 
-  buildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ makeWrapper unzip ];
 
   src = fetchurl {
-    url = "https://s3.amazonaws.com/ec2-downloads/${name}.zip";
+    url = "https://s3.amazonaws.com/ec2-downloads/${pname}-${version}.zip";
     sha256 = "17xj7xmdbcwdbzalhfs6yyiwa64978mk3li39l949qfjjgrxjias";
   };
 
@@ -29,16 +29,16 @@ stdenv.mkDerivation rec {
       for i in $out/bin/*; do
           wrapProgram $i \
             --set EC2_HOME $out \
-            --prefix PATH : ${stdenv.lib.makeBinPath [ ruby openssl ]}
+            --prefix PATH : ${lib.makeBinPath [ ruby openssl ]}
       done
 
       sed -i 's|/bin/bash|${stdenv.shell}|' $out/lib/ec2/platform/base/pipeline.rb
     '';  # */
 
   meta = {
-    homepage = https://aws.amazon.com/developertools/Amazon-EC2/368;
+    homepage = "https://aws.amazon.com/developertools/Amazon-EC2/368";
     description = "Command-line tools to create and manage Amazon EC2 virtual machine images";
-    license = stdenv.lib.licenses.amazonsl;
+    license = lib.licenses.amazonsl;
   };
 
 }

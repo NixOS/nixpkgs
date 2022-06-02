@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "posix";
+  pname = "posix";
   version = "2017-11-18";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "System POSIX bindings for Idris.";
-    homepage = https://github.com/idris-hackers/idris-posix;
+    homepage = "https://github.com/idris-hackers/idris-posix";
     maintainers = [ lib.maintainers.brainrape ];
   };
 }

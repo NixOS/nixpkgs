@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, help2man, python3,
-  alsaLib, xlibsWrapper, libxslt, systemd, libusb, libftdi1 }:
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkg-config, help2man, python3,
+  alsa-lib, xlibsWrapper, libxslt, systemd, libusb-compat-0_1, libftdi1 }:
 
 stdenv.mkDerivation rec {
-  name = "lirc-0.10.1";
+  pname = "lirc";
+  version = "0.10.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lirc/${name}.tar.bz2";
+    url = "mirror://sourceforge/lirc/${pname}-${version}.tar.bz2";
     sha256 = "1whlyifvvc7w04ahq07nnk1h18wc8j7c6wnvlb6mszravxh3qxcb";
   };
 
@@ -23,6 +24,10 @@ stdenv.mkDerivation rec {
       Makefile.in
     sed -i 's,PYTHONPATH=,PYTHONPATH=$(PYTHONPATH):,' \
       doc/Makefile.in
+
+    # Pull fix for new pyyaml pending upstream inclusion
+    #   https://sourceforge.net/p/lirc/git/merge-requests/39/
+    substituteInPlace python-pkg/lirc/database.py --replace 'yaml.load(' 'yaml.safe_load('
   '';
 
   preConfigure = ''
@@ -30,10 +35,10 @@ stdenv.mkDerivation rec {
     touch lib/lirc/input_map.inc
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig help2man
+  nativeBuildInputs = [ autoreconfHook pkg-config help2man
     (python3.withPackages (p: with p; [ pyyaml setuptools ])) ];
 
-  buildInputs = [ alsaLib xlibsWrapper libxslt systemd libusb libftdi1 ];
+  buildInputs = [ alsa-lib xlibsWrapper libxslt systemd libusb-compat-0_1 libftdi1 ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -41,6 +46,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
     "--enable-uinput" # explicit activation because build env has no uinput
     "--enable-devinput" # explicit activation because build env has no /dev/input
+    "--with-lockdir=/run/lirc/lock" # /run/lock is not writable for 'lirc' user
   ];
 
   installFlags = [
@@ -48,9 +54,9 @@ stdenv.mkDerivation rec {
     "localstatedir=$TMPDIR"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allows to receive and send infrared signals";
-    homepage = http://www.lirc.org/;
+    homepage = "https://www.lirc.org/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pSub ];

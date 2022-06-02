@@ -1,4 +1,4 @@
-{stdenv, asdf, which, bash, lisp ? null}:
+{lib, stdenv, asdf, which, bash, lisp ? null}:
 stdenv.mkDerivation {
   name = "cl-wrapper-script";
 
@@ -15,6 +15,7 @@ stdenv.mkDerivation {
     chmod a+x "$out"/bin/*
 
     substituteAll "${./setup-hook.sh}" "setup-hook-parsed"
+    addEnvHooks(){ true; };
     source setup-hook-parsed
     setLisp "${lisp}"
     echo "$NIX_LISP"
@@ -41,7 +42,7 @@ stdenv.mkDerivation {
 
   setupHook = ./setup-hook.sh;
 
-  phases="installPhase fixupPhase";
+  dontUnpack = true;
 
   ASDF_OUTPUT_TRANSLATIONS="${builtins.storeDir}/:${builtins.storeDir}";
 
@@ -50,7 +51,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    description = ''Script used to wrap Common Lisp implementations'';
-    maintainers = [stdenv.lib.maintainers.raskin];
+    description = "Script used to wrap Common Lisp implementations";
+    maintainers = [lib.maintainers.raskin];
   };
 }

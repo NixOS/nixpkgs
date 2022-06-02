@@ -30,8 +30,8 @@ in
     package = mkOption {
       type        = types.package;
       default     = pkgs.i3;
-      defaultText = "pkgs.i3";
-      example     = "pkgs.i3-gaps";
+      defaultText = literalExpression "pkgs.i3";
+      example     = literalExpression "pkgs.i3-gaps";
       description = ''
         i3 package to use.
       '';
@@ -40,7 +40,7 @@ in
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [ dmenu i3status i3lock ];
-      example = literalExample ''
+      defaultText = literalExpression ''
         with pkgs; [
           dmenu
           i3status
@@ -60,12 +60,15 @@ in
         ${cfg.extraSessionCommands}
 
         ${cfg.package}/bin/i3 ${optionalString (cfg.configFile != null)
-          "-c \"${cfg.configFile}\""
+          "-c /etc/i3/config"
         } &
         waitPID=$!
       '';
     }];
     environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
+    environment.etc."i3/config" = mkIf (cfg.configFile != null) {
+      source = cfg.configFile;
+    };
   };
 
   imports = [

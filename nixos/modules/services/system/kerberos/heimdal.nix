@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkIf concatStringsSep concatMapStrings toList mapAttrs
-    mapAttrsToList attrValues;
+    mapAttrsToList;
   cfg = config.services.kerberos_server;
   kerberos = config.krb5.kerberos;
   stateDir = "/var/heimdal";
@@ -27,7 +27,7 @@ in
 {
   # No documentation about correct triggers, so guessing at them.
 
-  config = mkIf (cfg.enable && kerberos == pkgs.heimdalFull) {
+  config = mkIf (cfg.enable && kerberos == pkgs.heimdal) {
     systemd.services.kadmind = {
       description = "Kerberos Administration Daemon";
       wantedBy = [ "multi-user.target" ];

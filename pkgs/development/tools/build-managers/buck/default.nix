@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, jdk, ant, python2, python2Packages, watchman, bash, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, jdk8, ant, python3, watchman, bash, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "buck-${version}";
-  version = "2017.10.01.01";
+  pname = "buck";
+  version = "2021.05.05.01";
 
   src = fetchFromGitHub {
     owner = "facebook";
-    repo = "buck";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "05nyyb6f0hv1h67zzvdq8297yl8zjhpbasx35lxnrsjz0m1h8ngw";
+    sha256 = "sha256-mASJCLxW7320MXYUUWYfaxs9AbSdltxlae8OQsPUZJc=";
   };
 
   patches = [ ./pex-mtime.patch ];
@@ -17,32 +17,27 @@ stdenv.mkDerivation rec {
     grep -l -r '/bin/bash' --null | xargs -0 sed -i -e "s!/bin/bash!${bash}/bin/bash!g"
   '';
 
-  buildInputs = [ jdk ant python2 watchman python2Packages.pywatchman ];
-  nativeBuildInputs = [ makeWrapper ];
-
-  targets = [ "buck" "buckd" ];
+  nativeBuildInputs = [ makeWrapper python3 jdk8 ant watchman ];
 
   buildPhase = ''
+    # Set correct version, see https://github.com/facebook/buck/issues/2607
+    echo v${version} > .buckrelease
+
     ant
 
-    for exe in ${toString targets}; do
-      ./bin/buck build //programs:$exe
-    done
+    PYTHONDONTWRITEBYTECODE=true ./bin/buck build -c buck.release_version=${version} buck
   '';
 
   installPhase = ''
-    for exe in ${toString targets}; do
-      install -D -m755 buck-out/gen/programs/$exe.pex $out/bin/$exe
-      wrapProgram $out/bin/$exe \
-        --prefix PYTHONPATH : $PYTHONPATH \
-        --prefix PATH : "${stdenv.lib.makeBinPath [jdk watchman]}"
-    done
+    install -D -m755 buck-out/gen/*/programs/buck.pex $out/bin/buck
+    wrapProgram $out/bin/buck \
+      --prefix PATH : "${lib.makeBinPath [ jdk8 watchman python3 ]}"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://buckbuild.com/;
+  meta = with lib; {
+    homepage = "https://buck.build/";
     description = "A high-performance build tool";
-    maintainers = [ maintainers.jgertm ];
+    maintainers = [ maintainers.jgertm maintainers.marsam ];
     license = licenses.asl20;
     platforms = platforms.all;
   };

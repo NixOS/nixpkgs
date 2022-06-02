@@ -1,31 +1,31 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name    = "cointop-unstable-${version}";
-  version = "2018-05-03";
-  rev     = "08acd96082682347d458cd4f861e2debd3255745";
+buildGoModule rec {
+  pname = "cointop";
+  version = "1.6.10";
 
-  goPackagePath = "github.com/miguelmota/cointop";
-
-  src = fetchgit {
-    inherit rev;
-    url    = "https://github.com/miguelmota/cointop";
-    sha256 = "14savz48wzrfpm12fgnnndpl3mpzx7wsch4jrnm3rmrfdabdx7mi";
+  src = fetchFromGitHub {
+    owner = "miguelmota";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-NAw1uoBL/FnNLJ86L9aBCOY65aJn1DDGK0Cd0IO2kr0=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = null;
 
-  meta = {
+  ldflags = [ "-s" "-w" ];
+
+  meta = with lib; {
     description = "The fastest and most interactive terminal based UI application for tracking cryptocurrencies";
     longDescription = ''
-    cointop is a fast and lightweight interactive terminal based UI application
-    for tracking and monitoring cryptocurrency coin stats in real-time.
+      cointop is a fast and lightweight interactive terminal based UI
+      application for tracking and monitoring cryptocurrency coin stats in
+      real-time.
 
-    The interface is inspired by htop and shortcut keys are inspired by vim.
+      The interface is inspired by htop and shortcut keys are inspired by vim.
     '';
-    homepage  = https://cointop.sh;
-    platforms = stdenv.lib.platforms.unix; # cannot test others
-    maintainers = [ ];
-    license = stdenv.lib.licenses.asl20;
+    homepage = "https://cointop.sh";
+    maintainers = [ maintainers.marsam ];
+    license = licenses.asl20;
   };
 }

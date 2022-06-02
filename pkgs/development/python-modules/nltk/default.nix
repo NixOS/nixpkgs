@@ -1,17 +1,32 @@
-{ fetchurl, buildPythonPackage, lib, six, pythonAtLeast, pythonOlder }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, click
+, joblib
+, regex
+, tqdm
+}:
 
 buildPythonPackage rec {
-  version = "3.2.5";
   pname = "nltk";
+  version = "3.7";
+  format = "setuptools";
 
-  src = fetchurl {
-    url = "mirror://pypi/n/nltk/nltk-${version}.tar.gz";
-    sha256 = "2661f9971d983db314bbebd51ba770811a362c6597fd0f303bb1d3beadcb4834";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    extension = "zip";
+    hash = "sha256-1lB9ZGDOx21wr+pCQqImp1QvhcZpF3ucf1YrfPGwVQI=";
   };
 
-  propagatedBuildInputs = [ six ];
-
-  disabled = pythonOlder "2.7" || pythonOlder "3.4" && (pythonAtLeast "3.0");
+  propagatedBuildInputs = [
+    click
+    joblib
+    regex
+    tqdm
+  ];
 
   # Tests require some data, the downloading of which is impure. It would
   # probably make sense to make the data another derivation, but then feeding
@@ -21,10 +36,14 @@ buildPythonPackage rec {
   # best.
   doCheck = false;
 
-  meta = {
+  pythonImportsCheck = [
+    "nltk"
+  ];
+
+  meta = with lib; {
     description = "Natural Language Processing ToolKit";
-    homepage = http://nltk.org/;
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ lheckemann ];
+    homepage = "http://nltk.org/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ lheckemann ];
   };
 }

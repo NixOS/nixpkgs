@@ -1,23 +1,23 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "elfkickers-${version}";
-  version = "3.1";
+  pname = "elfkickers";
+  version = "3.2";
 
   src = fetchurl {
-    url = "http://www.muppetlabs.com/~breadbox/pub/software/ELFkickers-${version}.tar.gz";
-    sha256 = "0n0sypjrdm3ramv0sby4sdh3i3j9d0ihadr951wa08ypdnq3yrkd";
+    url = "https://www.muppetlabs.com/~breadbox/pub/software/ELFkickers-${version}.tar.gz";
+    sha256 = "sha256-m4HmxT4MlPwZjZiC63NxVvNtVlFS3DIRiJfHewaiaHw=";
   };
 
-  makeFlags = [ "CC=cc prefix=$(out)" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "prefix:=${placeholder "out"}" ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.muppetlabs.com/~breadbox/software/elfkickers.html;
+  meta = with lib; {
+    homepage = "https://www.muppetlabs.com/~breadbox/software/elfkickers.html";
     description = "A collection of programs that access and manipulate ELF files";
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.dtzWill ];
   };
 }

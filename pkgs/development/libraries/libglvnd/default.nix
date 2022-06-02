@@ -1,19 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, autoreconfHook, python2, pkgconfig, libX11, libXext, xorgproto }:
+{ stdenv, lib, fetchFromGitLab
+, autoreconfHook, pkg-config, python3, addOpenGLRunpath
+, libX11, libXext, xorgproto
+}:
 
-let
-  driverLink = "/run/opengl-driver" + lib.optionalString stdenv.isi686 "-32";
-in stdenv.mkDerivation rec {
-  name = "libglvnd-${version}";
-  version = "1.0.0";
+stdenv.mkDerivation rec {
+  pname = "libglvnd";
+  version = "1.4.0";
 
-  src = fetchFromGitHub {
-    owner = "NVIDIA";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "glvnd";
     repo = "libglvnd";
     rev = "v${version}";
-    sha256 = "1a126lzhd2f04zr3rvdl6814lfl0j077spi5dsf2alghgykn5iif";
+    sha256 = "06y7m486kgg566krbhb0gvmpzy6ayd98psnrmmkrnw8p513lg8k3";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig python2 ];
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 addOpenGLRunpath ];
   buildInputs = [ libX11 libXext xorgproto ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -21,32 +23,49 @@ in stdenv.mkDerivation rec {
       --replace "-Wl,-Bsymbolic " ""
     substituteInPlace src/EGL/Makefile.am \
       --replace "-Wl,-Bsymbolic " ""
+    substituteInPlace src/GLdispatch/Makefile.am \
+      --replace "-Xlinker --version-script=$(VERSION_SCRIPT)" "-Xlinker"
   '';
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString ([
     "-UDEFAULT_EGL_VENDOR_CONFIG_DIRS"
     # FHS paths are added so that non-NixOS applications can find vendor files.
-    "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
-  ] ++ lib.optional stdenv.cc.isClang "-Wno-error";
+    "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addOpenGLRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
 
-  # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
-  configureFlags  = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
+    "-Wno-error=array-bounds"
+  ] ++ lib.optional stdenv.cc.isClang "-Wno-error");
 
-  # Upstream patch fixing use of libdl, should be in next release.
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/NVIDIA/libglvnd/commit/0177ade40262e31a80608a8e8e52d3da7163dccf.patch";
-      sha256 = "1rnz5jw2gvx4i1lcp0k85jz9xgr3dgzsd583m2dlxkaf2a09j89d";
-    })
-  ];
+  configureFlags  = []
+    # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
+    ++ lib.optional stdenv.hostPlatform.isMusl "--disable-tls"
+    # Remove when aarch64-darwin asm support is upstream: https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/216
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "--disable-asm";
+
   outputs = [ "out" "dev" ];
 
-  passthru = { inherit driverLink; };
+  # Set RUNPATH so that libGLX can find driver libraries in /run/opengl-driver(-32)/lib.
+  # Note that libEGL does not need it because it uses driver config files which should
+  # contain absolute paths to libraries.
+  postFixup = ''
+    addOpenGLRunpath $out/lib/libGLX.so
+  '';
 
-  meta = with stdenv.lib; {
+  passthru = { inherit (addOpenGLRunpath) driverLink; };
+
+  meta = with lib; {
     description = "The GL Vendor-Neutral Dispatch library";
-    homepage = https://github.com/NVIDIA/libglvnd;
-    license = licenses.bsd2;
+    longDescription = ''
+      libglvnd is a vendor-neutral dispatch layer for arbitrating OpenGL API
+      calls between multiple vendors. It allows multiple drivers from different
+      vendors to coexist on the same filesystem, and determines which vendor to
+      dispatch each API call to at runtime.
+      Both GLX and EGL are supported, in any combination with OpenGL and OpenGL ES.
+    '';
+    inherit (src.meta) homepage;
+    # https://gitlab.freedesktop.org/glvnd/libglvnd#libglvnd:
+    changelog = "https://gitlab.freedesktop.org/glvnd/libglvnd/-/tags/v${version}";
+    license = with licenses; [ mit bsd1 bsd3 gpl3Only asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ primeos ];
   };
 }

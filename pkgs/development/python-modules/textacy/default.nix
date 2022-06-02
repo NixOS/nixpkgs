@@ -1,67 +1,70 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, isPy27
-, fetchPypi
 , cachetools
-, cld2-cffi
 , cytoolz
-, ftfy
-, ijson
+, fetchPypi
+, jellyfish
+, joblib
 , matplotlib
 , networkx
 , numpy
 , pyemd
 , pyphen
-, python-Levenshtein
+, pytestCheckHook
+, pythonOlder
 , requests
-, scikitlearn
+, scikit-learn
 , scipy
 , spacy
 , tqdm
-, unidecode
 }:
 
 buildPythonPackage rec {
   pname = "textacy";
-  version = "0.6.2";
+  version = "0.12.0";
+  disabled = pythonOlder "3.7";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6019f32719c0661f41fa93c2fdd9714504d443119bf4f6426ee690bdda90835b";
+    sha256 = "2c92bdd6b47305447b64e4cb6cc43c11675f021f910a8074bc8149dbf5325e5b";
   };
-
-  disabled = isPy27; # 2.7 requires backports.csv
 
   propagatedBuildInputs = [
     cachetools
-    cld2-cffi
     cytoolz
-    ftfy
-    ijson
+    jellyfish
+    joblib
     matplotlib
     networkx
     numpy
     pyemd
     pyphen
-    python-Levenshtein
     requests
-    scikitlearn
+    scikit-learn
     scipy
     spacy
     tqdm
-    unidecode
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'ftfy>=4.2.0,<5.0.0'," "'ftfy>=5.0.0',"
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  doCheck = false;  # tests want to download data files
+  pytestFlagsArray = [
+    # Almost all tests have to deal with downloading a dataset, only test pure tests
+    "tests/test_constants.py"
+    "tests/preprocessing/test_normalize.py"
+    "tests/similarity/test_edits.py"
+    "tests/preprocessing/test_resources.py"
+    "tests/preprocessing/test_replace.py"
+  ];
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "textacy" ];
+
+  meta = with lib; {
     description = "Higher-level text processing, built on spaCy";
-    homepage = "http://textacy.readthedocs.io/";
+    homepage = "https://textacy.readthedocs.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvl ];
   };

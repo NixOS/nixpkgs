@@ -1,4 +1,4 @@
-{ lib, fetchurl, runCommandCC, skawarePackages }:
+{ stdenv, lib, runCommandCC, skawarePackages }:
 
 with skawarePackages;
 
@@ -12,6 +12,7 @@ in runCommandCC "sdnotify-wrapper" {
    outputs = [ "bin" "doc" "out" ];
 
    meta = {
+     broken = stdenv.isDarwin;
      homepage = "https://skarnet.org/software/misc/sdnotify-wrapper.c";
      description = "Use systemd sd_notify without having to link against libsystemd";
      platforms = lib.platforms.all;
@@ -23,13 +24,13 @@ in runCommandCC "sdnotify-wrapper" {
   mkdir -p $bin/bin
   mkdir $out
 
-  # just dynamic for now
+  # the -lskarnet has to come at the end to support static builds
   $CC \
     -o $bin/bin/sdnotify-wrapper \
     -I${skalibs.dev}/include \
     -L${skalibs.lib}/lib \
-    -lskarnet \
-    ${src}
+    ${src} \
+    -lskarnet
 
   mkdir -p $doc/share/doc/sdnotify-wrapper
   # copy the documentation comment

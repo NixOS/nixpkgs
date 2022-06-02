@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, libGLU_combined, freeglut
+{ lib, stdenv, fetchFromGitHub, cmake, libGLU, libGL, freeglut
 , Cocoa,  OpenGL
 }:
 
-stdenv.mkDerivation rec {
-  name = "bullet-${version}";
+stdenv.mkDerivation {
+  pname = "bullet";
   version = "2019-03-27";
 
   src = fetchFromGitHub {
@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ libGLU_combined freeglut ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+  buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL freeglut ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
   patches = [ ./gwen-narrowing.patch ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt
     sed -i 's/FIND_LIBRARY(COCOA_LIBRARY Cocoa)//' CMakeLists.txt
   '';
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_CPU_DEMOS=OFF"
     "-DINSTALL_EXTRA_LIBS=ON"
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     "-DOPENGL_FOUND=true"
     "-DOPENGL_LIBRARIES=${OpenGL}/Library/Frameworks/OpenGL.framework"
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks/OpenGL.framework"
@@ -42,16 +42,17 @@ stdenv.mkDerivation rec {
     "-DBUILD_UNIT_TESTS=OFF"
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A professional free 3D Game Multiphysics Library";
     longDescription = ''
       Bullet 3D Game Multiphysics Library provides state of the art collision
       detection, soft body and rigid body dynamics.
     '';
-    homepage = http://bulletphysics.org;
+    homepage = "http://bulletphysics.org";
     license = licenses.zlib;
     platforms = platforms.unix;
+    # /tmp/nix-build-bullet-2019-03-27.drv-0/source/src/Bullet3Common/b3Vector3.h:297:7: error: argument value 10880 is outside the valid range [0, 255] [-Wargument-outside-range]
+    #                 y = b3_splat_ps(y, 0x80);
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }

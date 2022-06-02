@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, perl, zlib }:
+{ lib, stdenv, fetchurl, perl, zlib }:
 stdenv.mkDerivation rec {
-  name = "libeb-${version}";
+  pname = "libeb";
   version = "4.4.3";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   buildInputs = [ zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library for accessing Japanese CD-ROM books";
     longDescription = ''
       The EB library is a library for accessing CD-ROM books, which are a

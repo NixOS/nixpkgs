@@ -1,23 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi, requests, py, pytest, pytest-flakes }:
+{ lib, buildPythonPackage, fetchPypi
+, requests
+, py
+, pytest
+, pytest-flake8
+, lazy
+}:
 
 buildPythonPackage rec {
   pname = "devpi-common";
-  version = "3.3.1";
+  version = "3.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "30833581d03e07d7574b2ff698d213c984777dd44dd47c45c54d31858c694c94";
+    sha256 = "fc14aa6b74d4d9e27dc2e9cbff000ed9be5cd723d3ac9672e66e4e8fce797227";
   };
 
-  propagatedBuildInputs = [ requests py ];
-  checkInputs = [ pytest pytest-flakes ];
+  propagatedBuildInputs = [
+    requests
+    py
+    lazy
+  ];
+  checkInputs = [ pytest pytest-flake8 ];
 
   checkPhase = ''
     py.test
   '';
 
   meta = with lib; {
-    homepage = https://github.com/devpi/devpi;
+    homepage = "https://github.com/devpi/devpi";
     description = "Utilities jointly used by devpi-server and devpi-client";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];

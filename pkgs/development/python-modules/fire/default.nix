@@ -1,27 +1,28 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, six, hypothesis, mock
-, python-Levenshtein, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, six, hypothesis, mock
+, python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
 
 buildPythonPackage rec {
   pname = "fire";
-  version = "0.1.3";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "python-fire";
     rev = "v${version}";
-    sha256 = "0kdcmzr3sgzjsw5fmvdylgrn8akqjbs433jbgqzp498njl9cc6qx";
+    sha256 = "1caz6j2kdhj0kccrnqri6b4g2d6wzkkx8y9vxyvm7axvrwkv2vyn";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six termcolor ] ++ lib.optional isPy27 enum34;
 
   checkInputs = [ hypothesis mock python-Levenshtein pytest ];
 
+  # ignore test which asserts exact usage statement, default behavior
+  # changed in python3.8. This can likely be remove >=0.3.1
   checkPhase = ''
-    py.test
+    py.test -k 'not testInitRequiresFlag'
   '';
 
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for automatically generating command line interfaces";
     longDescription = ''
       Python Fire is a library for automatically generating command line

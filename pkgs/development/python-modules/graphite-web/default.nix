@@ -1,54 +1,71 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, which
-, django, django_tagging, whisper, pycairo, cairocffi, ldap, memcached, pytz, urllib3, scandir
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, django
+, python-memcached
+, txamqp
+, django_tagging
+, gunicorn
+, pytz
+, pyparsing
+, cairocffi
+, whisper
+, whitenoise
+, urllib3
+, six
 }:
-if django.version != "1.8.19"
-|| django_tagging.version != "0.4.3"
-then throw "graphite-web should be build with django_1_8 and django_tagging_0_4_3"
-else buildPythonPackage rec {
-  pname = "graphite-web";
-  version = "1.1.5";
 
-  disabled = isPy3k;
+buildPythonPackage rec {
+  pname = "graphite-web";
+  version = "1.1.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d43945d190f2b3a6d18daa6ace9a1bd3695e93dc593f50cd72c2af420883b99d";
+    sha256 = "54240b0f1e069b53e2ce92d4e534e21b195fb0ebd64b6ad8a49c44284e3eb0b1";
   };
 
-  propagatedBuildInputs = [
-    django django_tagging whisper pycairo cairocffi
-    ldap memcached pytz urllib3 scandir
+  patches = [
+    ./update-django-tagging.patch
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/run-graphite-devel-server.py \
-      --prefix PATH : ${which}/bin
+  postPatch = ''
+    # https://github.com/graphite-project/graphite-web/pull/2701
+    substituteInPlace setup.py \
+      --replace "'scandir'" "'scandir; python_version < \"3.5\"'"
   '';
 
-  preConfigure = ''
-    # graphite is configured by storing a local_settings.py file inside the
-    # graphite python package. Since that package is stored in the immutable
-    # Nix store we can't modify it. So how do we configure graphite?
-    #
-    # First of all we rename "graphite.local_settings" to
-    # "graphite_local_settings" so that the settings are not looked up in the
-    # graphite package anymore. Secondly we place a directory containing a
-    # graphite_local_settings.py on the PYTHONPATH in the graphite module
-    # <nixpkgs/nixos/modules/services/monitoring/graphite.nix>.
-    substituteInPlace webapp/graphite/settings.py \
-      --replace "graphite.local_settings" " graphite_local_settings"
+  propagatedBuildInputs = [
+    django
+    python-memcached
+    txamqp
+    django_tagging
+    gunicorn
+    pytz
+    pyparsing
+    cairocffi
+    whisper
+    whitenoise
+    urllib3
+    six
+  ];
 
+  # Carbon-s default installation is /opt/graphite. This env variable ensures
+  # carbon is installed as a regular python module.
+  GRAPHITE_NO_PREFIX="True";
+
+  preConfigure = ''
     substituteInPlace webapp/graphite/settings.py \
       --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
   '';
 
-  # error: invalid command 'test'
-  doCheck = false;
+  pythonImportsCheck = [ "graphite" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://graphite.wikidot.com/;
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    homepage = "http://graphiteapp.org/";
     description = "Enterprise scalable realtime graphing";
-    maintainers = with maintainers; [ rickynils offline basvandijk ];
+    maintainers = with maintainers; [ offline basvandijk ];
     license = licenses.asl20;
   };
 }

@@ -1,15 +1,14 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 }:
 
 stdenv.mkDerivation rec {
   pname = "graphs";
-  version = "20161026";
-  name = "${pname}-${version}";
+  version = "20210214";
 
   src = fetchurl {
     url = "mirror://sageupstream/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0a2b5lly9nifphvknz88rrhfbbc8vqnlqcv19zdpfq8h8nnyjbb2";
+    sha256 = "sha256-ByN8DZhTYRUFw4n9e7klAMh0P1YxurtND0Xf2DMvN0E=";
   };
 
   installPhase = ''
@@ -17,10 +16,10 @@ stdenv.mkDerivation rec {
     cp * "$out/share/graphs/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A database of graphs";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
   };
 }

@@ -1,53 +1,85 @@
 { lib
-, fetchurl
+, pythonOlder
 , buildPythonPackage
-, pycrypto
-, paramiko
-, jinja2
-, pyyaml
-, httplib2
-, boto
-, six
+, fetchPypi
+, jsonschema
+, jxmlease
+, ncclient
 , netaddr
-, dnspython
-, jmespath
-, dopy
-, windowsSupport ? false
-, pywinrm
+, paramiko
+, pynetbox
+, scp
+, textfsm
+, ttp
+, xmltodict
+
+# optionals
+, withJunos ? false
+, withNetbox ? false
 }:
 
-buildPythonPackage rec {
+let
   pname = "ansible";
-  version = "2.7.9";
+  version = "5.8.0";
+in
+buildPythonPackage {
+  inherit pname version;
+  format = "setuptools";
 
-  src = fetchurl {
-    url = "https://releases.ansible.com/ansible/${pname}-${version}.tar.gz";
-    sha256 = "19vyf60zfmnv7frwm96bzqzvia69dysy9apk8bl84vr03ib9vrbf";
+  disabled = pythonOlder "3.8";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-+gVkdiAfQGJfs22VxQQe9GOIC+GL5cc7mYtXtAGWeGM=";
   };
 
-  prePatch = ''
-    sed -i "s,/usr/,$out," lib/ansible/constants.py
+  postPatch = ''
+    # we make ansible-core depend on ansible, not the other way around
+    sed -Ei '/ansible-core/d' setup.py
   '';
 
-  postInstall = ''
-    for m in docs/man/man1/*; do
-      install -vD $m -t $out/share/man/man1
-    done
-  '';
+  propagatedBuildInputs = lib.unique ([
+    # Support ansible collections by default, make all others optional
+    # ansible.netcommon
+    jxmlease
+    ncclient
+    netaddr
+    paramiko
+    xmltodict
+    # ansible.posix
+    # ansible.utils
+    jsonschema
+    textfsm
+    ttp
+    xmltodict
+    # ansible.windows
 
-  propagatedBuildInputs = [
-    pycrypto paramiko jinja2 pyyaml httplib2 boto
-    six netaddr dnspython jmespath dopy
-  ] ++ lib.optional windowsSupport pywinrm;
+    # lots of collections with dedicated requirements.txt and pyproject.toml files,
+    # add the dependencies for the collections you need conditionally and install
+    # ansible using overrides to enable the collections you need.
+  ] ++ lib.optionals (withJunos) [
+    # ansible_collections/junipernetworks/junos/requirements.txt
+    jxmlease
+    ncclient
+    paramiko
+    scp
+    xmltodict
+  ] ++ lib.optionals (withNetbox) [
+    # ansible_collections/netbox/netbox/pyproject.toml
+    pynetbox
+  ]);
 
-  # dificult to test
+  # don't try and fail to strip 48000+ non strippable files, it takes >5 minutes!
+  dontStrip = true;
+
+  # difficult to test
   doCheck = false;
 
   meta = with lib; {
-    homepage = http://www.ansible.com;
     description = "Radically simple IT automation";
-    license = [ licenses.gpl3 ] ;
-    maintainers = with maintainers; [ joamaki costrouc ];
-    platforms = platforms.linux ++ platforms.darwin;
+    homepage = "https://www.ansible.com";
+    changelog = "https://github.com/ansible-community/ansible-build-data/blob/${version}/${lib.versions.major version}/CHANGELOG-v${lib.versions.major version}.rst";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ hexa ];
   };
 }

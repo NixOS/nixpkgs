@@ -14,12 +14,12 @@ ninjaBuildPhase() {
     )
 
     echoCmd 'build flags' "${flagsArray[@]}"
-    ninja "${flagsArray[@]}"
+    ninja "${flagsArray[@]}" | cat
 
     runHook postBuild
 }
 
-if [ -z "$dontUseNinjaBuild" -a -z "$buildPhase" ]; then
+if [ -z "${dontUseNinjaBuild-}" -a -z "${buildPhase-}" ]; then
     buildPhase=ninjaBuildPhase
 fi
 
@@ -33,12 +33,12 @@ ninjaInstallPhase() {
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
-    ninja "${flagsArray[@]}"
+    ninja "${flagsArray[@]}" | cat
 
     runHook postInstall
 }
 
-if [ -z "$dontUseNinjaInstall" -a -z "$installPhase" ]; then
+if [ -z "${dontUseNinjaInstall-}" -a -z "${installPhase-}" ]; then
     installPhase=ninjaInstallPhase
 fi
 
@@ -67,12 +67,12 @@ ninjaCheckPhase() {
         )
 
         echoCmd 'check flags' "${flagsArray[@]}"
-        ninja "${flagsArray[@]}"
+        ninja "${flagsArray[@]}" | cat
     fi
 
     runHook postCheck
 }
 
-if [ -z "$dontUseNinjaCheck" -a -z "$checkPhase" ]; then
+if [ -z "${dontUseNinjaCheck-}" -a -z "${checkPhase-}" ]; then
     checkPhase=ninjaCheckPhase
 fi

@@ -1,30 +1,32 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
-, autoreconfHook
-, pkgconfig
+, meson
+, ninja
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.0.10";
+  version = "0.2.0";
   pname = "libmicrodns";
 
   src = fetchFromGitHub {
     owner = "videolabs";
     repo = pname;
     rev = version;
-    sha256 = "1xvl9k49ng35wbsqmnjnyqvkyjf8dcq2ywsq3jp3wh0rgmxhq2fh";
+    sha256 = "05vgka45c1frnv4q7pbz0bggsn5xaykh4xpklh9yb6d6qj7dbx0b";
   };
 
   nativeBuildInputs = [
-    autoreconfHook
-    pkgconfig
+    meson
+    ninja
+    pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Minimal mDNS resolver library, used by VLC";
-    homepage = https://github.com/videolabs/libmicrodns;
+    homepage = "https://github.com/videolabs/libmicrodns";
     license = licenses.lgpl21;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.shazow ];
   };
 }

@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "extras";
+  pname = "extras";
   version = "2018-03-06";
 
   idrisDeps = [ contrib ];
@@ -18,7 +18,7 @@ build-idris-package  {
 
   meta = {
     description = "Some useful functions for Idris";
-    homepage = https://github.com/jheiling/idris-extras;
+    homepage = "https://github.com/jheiling/idris-extras";
     license = lib.licenses.unlicense;
     maintainers = [ lib.maintainers.brainrape ];
   };

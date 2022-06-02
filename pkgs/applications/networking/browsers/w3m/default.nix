@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , ncurses, boehmgc, gettext, zlib
 , sslSupport ? true, openssl ? null
 , graphicsSupport ? !stdenv.isDarwin, imlib2 ? null
 , x11Support ? graphicsSupport, libX11 ? null
 , mouseSupport ? !stdenv.isDarwin, gpm-ncurses ? null
-, perl, man, pkgconfig, buildPackages, w3m
+, perl, man, pkg-config, buildPackages, w3m
 }:
 
 assert sslSupport -> openssl != null;
@@ -12,26 +12,27 @@ assert graphicsSupport -> imlib2 != null;
 assert x11Support -> graphicsSupport && libX11 != null;
 assert mouseSupport -> gpm-ncurses != null;
 
-with stdenv.lib;
+with lib;
 
 let
-  mktable = buildPackages.stdenv.mkDerivation rec {
+  mktable = buildPackages.stdenv.mkDerivation {
     name = "w3m-mktable";
     inherit (w3m) src;
-    nativeBuildInputs = [ pkgconfig boehmgc ];
+    nativeBuildInputs = [ pkg-config boehmgc ];
     makeFlags = [ "mktable" ];
     installPhase = ''
       install -D mktable $out/bin/mktable
     '';
   };
 in stdenv.mkDerivation rec {
-  name = "w3m-0.5.3+git20180125";
+  pname = "w3m";
+  version = "0.5.3+git20190105";
 
   src = fetchFromGitHub {
     owner = "tats";
-    repo = "w3m";
-    rev = "v0.5.3+git20180125";
-    sha256 = "0dafdfx1yhrvhbqzslkcapj09dvf64m2jadz3wl2icni0k4msq90";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1fbg2p8qh2gvi3g4iz4q6vc0k70pf248r4yndi5lcn2m3mzvjx0i";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isSunOS "-lsocket -lnsl";
@@ -58,7 +59,7 @@ in stdenv.mkDerivation rec {
     sed -ie 's!mktable.*:.*!mktable:!' Makefile.in
   '';
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ pkg-config gettext ];
   buildInputs = [ ncurses boehmgc zlib ]
     ++ optional sslSupport openssl
     ++ optional mouseSupport gpm-ncurses
@@ -90,10 +91,10 @@ in stdenv.mkDerivation rec {
   LIBS = optionalString x11Support "-lX11";
 
   meta = {
-    homepage = http://w3m.sourceforge.net/;
+    homepage = "http://w3m.sourceforge.net/";
     description = "A text-mode web browser";
     maintainers = [ maintainers.cstrahan ];
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    license = lib.licenses.mit;
   };
 }

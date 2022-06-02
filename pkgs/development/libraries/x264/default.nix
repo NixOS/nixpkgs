@@ -1,36 +1,49 @@
-{stdenv, fetchurl, yasm, enable10bit ? false}:
+{ stdenv, lib, fetchFromGitLab, nasm
+, enableShared ? !stdenv.hostPlatform.isStatic
+ }:
 
 stdenv.mkDerivation rec {
-  version = "20170731-2245";
-  name = "x264-${version}";
+  pname = "x264";
+  version = "unstable-2021-06-13";
 
-  src = fetchurl {
-    url = "https://download.videolan.org/x264/snapshots/x264-snapshot-${version}-stable.tar.bz2";
-    sha256 = "01sgk1ps4qfifdnblwa3fxnd8ah6n6zbmfc1sy09cgqcdgzxgj0z";
+  src = fetchFromGitLab {
+    domain = "code.videolan.org";
+    owner = "videolan";
+    repo = pname;
+    rev = "5db6aa6cab1b146e07b60cc1736a01f21da01154";
+    sha256 = "0swyrkz6nvajivxvrr08py0jrfcsjvpxw78xm1k5gd9xbdrxvknh";
   };
 
-  patchPhase = ''
-    sed -i s,/bin/bash,${stdenv.shell}, configure version.sh
+  # Upstream ./configure greps for (-mcpu|-march|-mfpu) in CFLAGS, which in nix
+  # is put in the cc wrapper anyway.
+  patches = [ ./disable-arm-neon-default.patch ];
+
+  postPatch = ''
+    patchShebangs .
   '';
 
-  outputs = [ "out" "lib" ]; # leaving 52 kB of headers
+  enableParallelBuilding = true;
 
-  preConfigure = ''
-    # `AS' is set to the binutils assembler, but we need yasm
+  outputs = [ "out" "lib" "dev" ];
+
+  preConfigure = lib.optionalString (stdenv.buildPlatform.isx86_64 || stdenv.hostPlatform.isi686) ''
+    # `AS' is set to the binutils assembler, but we need nasm
     unset AS
+  '' + lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) ''
+    export AS=$CC
   '';
 
-  configureFlags = [ "--enable-shared" ]
-    ++ stdenv.lib.optional (!stdenv.isi686) "--enable-pic"
-    ++ stdenv.lib.optional (enable10bit) "--bit-depth=10";
+  configureFlags = lib.optional enableShared "--enable-shared"
+    ++ lib.optional (!stdenv.isi686) "--enable-pic"
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--cross-prefix=${stdenv.cc.targetPrefix}";
 
-  buildInputs = [ yasm ];
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isx86 nasm;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for encoding H264/AVC video streams";
-    homepage    = http://www.videolan.org/developers/x264.html;
-    license     = licenses.gpl2;
+    homepage    = "http://www.videolan.org/developers/x264.html";
+    license     = licenses.gpl2Plus;
     platforms   = platforms.unix;
-    maintainers = [ maintainers.spwhitt ];
+    maintainers = with maintainers; [ spwhitt tadeokondrak ];
   };
 }

@@ -1,25 +1,38 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, perl }:
+{ stdenv, lib, fetchFromGitHub, cmake, gflags, perl }:
 
 stdenv.mkDerivation rec {
-  name = "glog-${version}";
-  version = "0.3.5";
+  pname = "glog";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "glog";
     rev = "v${version}";
-    sha256 = "12v7j6xy0ghya6a0f6ciy4fnbdc486vml2g07j9zm8y5xc6vx3pq";
+    sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ cmake ];
 
+  propagatedBuildInputs = [ gflags ];
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    # Mak CMake place RPATHs such that tests will find the built libraries.
+    # See https://github.com/NixOS/nixpkgs/pull/144561#discussion_r742468811 and https://github.com/NixOS/nixpkgs/pull/108496
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+  ];
+
+  # TODO: Re-enable Darwin tests once we're on a release that has https://github.com/google/glog/issues/709#issuecomment-960381653 fixed
+  doCheck = !stdenv.isDarwin;
+  # There are some non-thread safe tests that can fail
+  enableParallelChecking = false;
   checkInputs = [ perl ];
-  doCheck = false; # fails with "Mangled symbols (28 out of 380) found in demangle.dm"
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/google/glog;
+  meta = with lib; {
+    homepage = "https://github.com/google/glog";
     license = licenses.bsd3;
     description = "Library for application-level logging";
     platforms = platforms.unix;
+    maintainers = with maintainers; [ nh2 r-burns ];
   };
 }

@@ -1,29 +1,80 @@
-{ stdenv, fetchurl, pkgconfig, meson, ninja, libusb, pixman, glib, nss, gtk3
-, coreutils, gtk-doc, docbook_xsl, docbook_xml_dtd_43 }:
+{ lib, stdenv
+, fetchFromGitLab
+, pkg-config
+, meson
+, python3
+, ninja
+, gusb
+, pixman
+, glib
+, nss
+, gobject-introspection
+, coreutils
+, cairo
+, libgudev
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+}:
 
 stdenv.mkDerivation rec {
-  name = "libfprint-${version}";
-  version = "0.99.0";
+  pname = "libfprint";
+  version = "1.94.3";
+  outputs = [ "out" "devdoc" ];
 
-  src = fetchurl {
-    url = "https://gitlab.freedesktop.org/libfprint/libfprint/uploads/82ba3cef5bdf72997df711eacdb13c0f/libfprint-${version}.tar.xz";
-    sha256 = "16r4nl40y0jri57jiqmdz4s87byblx22lbhyvqpljd6mqm5rg187";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "libfprint";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-uOFWF+CDyK4+fY+NhiDnRKaptAN/vfH32Vzj+LAxWqg=";
   };
 
-  buildInputs = [ libusb pixman glib nss gtk3 ];
-  nativeBuildInputs = [ pkgconfig meson ninja gtk-doc docbook_xsl docbook_xml_dtd_43 ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    gobject-introspection
+  ];
 
-  mesonFlags = [ "-Dudev_rules_dir=lib/udev/rules.d" "-Dx11-examples=false" ];
+  buildInputs = [
+    gusb
+    pixman
+    glib
+    nss
+    cairo
+    libgudev
+  ];
 
-  preConfigure = ''
-    substituteInPlace libfprint/meson.build \
-      --replace /bin/echo ${coreutils}/bin/echo
+  checkInputs = [
+    python3
+  ];
+
+  mesonFlags = [
+    "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
+    # Include virtual drivers for fprintd tests
+    "-Ddrivers=all"
+    "-Dudev_hwdb_dir=${placeholder "out"}/lib/udev/hwdb.d"
+  ];
+
+  doCheck = true;
+
+  postPatch = ''
+    patchShebangs \
+      tests/test-runner.sh \
+      tests/unittest_inspector.py \
+      tests/virtual-image.py \
+      tests/umockdev-test.py \
+      tests/test-generated-hwdb.sh
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://fprint.freedesktop.org/;
+  meta = with lib; {
+    homepage = "https://fprint.freedesktop.org/";
     description = "A library designed to make it easy to add support for consumer fingerprint readers";
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

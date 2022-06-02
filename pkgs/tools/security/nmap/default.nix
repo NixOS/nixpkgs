@@ -1,33 +1,33 @@
-{ stdenv, fetchurl, libpcap, pkgconfig, openssl, lua5_3
-, graphicalSupport ? false
+{ lib, stdenv, fetchurl, fetchpatch, libpcap, pkg-config, openssl, lua5_3
+, pcre, libssh2
 , libX11 ? null
 , gtk2 ? null
-, withPython ? false # required for the `ndiff` binary
-, python2Packages ? null
 , makeWrapper ? null
 , withLua ? true
 }:
 
-assert withPython -> python2Packages != null;
+with lib;
 
-with stdenv.lib;
-
-let
-
-  # Zenmap (the graphical program) also requires Python,
-  # so automatically enable pythonSupport if graphicalSupport is requested.
-  pythonSupport = withPython || graphicalSupport;
-
-in stdenv.mkDerivation rec {
-  name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
-  version = "7.70";
+stdenv.mkDerivation rec {
+  pname = "nmap";
+  version = "7.92";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "063fg8adx23l4irrh5kn57hsmi1xvjkar4vm4k6g94ppan4hcyw4";
+    sha256 = "sha256-pUefL4prCyUWdn0vcYnDhsHchY2ZcWfX7Fz8eYx1caE=";
   };
 
-  patches = ./zenmap.patch;
+  patches = [ ./zenmap.patch ]
+    ++ optionals stdenv.cc.isClang [(
+      # Fixes a compile error due an ambiguous reference to bind(2) in
+      # nping/EchoServer.cc, which is otherwise resolved to std::bind.
+      # https://github.com/nmap/nmap/pull/1363
+      fetchpatch {
+        url = "https://github.com/nmap/nmap/commit/5bbe66f1bd8cbd3718f5805139e2e8139e6849bb.diff";
+        includes = [ "nping/EchoServer.cc" ];
+        sha256 = "0xcph9mycy57yryjg253frxyz87c4135rrbndlqw1400c8jxq70c";
+      }
+    )];
 
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace libz/configure \
@@ -38,10 +38,10 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     (if withLua then "--with-liblua=${lua5_3}" else "--without-liblua")
-  ]
-    ++ optional (!pythonSupport) "--without-ndiff"
-    ++ optional (!graphicalSupport) "--without-zenmap"
-    ;
+    "--with-liblinear=included"
+    "--without-ndiff"
+    "--without-zenmap"
+  ];
 
   makeFlags = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "AR=${stdenv.cc.bintools.targetPrefix}ar"
@@ -49,24 +49,16 @@ in stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}gcc"
   ];
 
-  postInstall = optionalString pythonSupport ''
-      wrapProgram $out/bin/ndiff --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH"
-  '' + optionalString graphicalSupport ''
-      wrapProgram $out/bin/zenmap --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH" --prefix PYTHONPATH : $(toPythonPath $pygtk)/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath $pygobject)/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath $pycairo)/gtk-2.0
-  '';
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ pcre libssh2 libpcap openssl ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = with python2Packages; [ libpcap openssl ]
-    ++ optionals pythonSupport [ makeWrapper python ]
-    ++ optionals graphicalSupport [
-      libX11 gtk2 pygtk pysqlite pygobject2 pycairo
-    ];
+  enableParallelBuilding = true;
 
   doCheck = false; # fails 3 tests, probably needs the net
 
   meta = {
     description = "A free and open source utility for network discovery and security auditing";
-    homepage    = http://www.nmap.org;
+    homepage    = "http://www.nmap.org";
     license     = licenses.gpl2;
     platforms   = platforms.all;
     maintainers = with maintainers; [ thoughtpolice fpletz ];

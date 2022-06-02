@@ -1,28 +1,40 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, numpy, scipy, cython, networkx, joblib, nose }:
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, numpy
+, scipy
+, cython
+, networkx
+, joblib
+, pandas
+, nose
+, pyyaml
+}:
+
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "0.8.1";
-  
+  version = "0.14.8";
+
   src = fetchFromGitHub {
     repo = pname;
     owner = "jmschrei";
-    rev = "v${version}";
-    sha256 = "085nka5bh88bxbd5vl1azyv9cfpp6grz2ngclc85f9kgccac1djr";
+    # no tags for recent versions: https://github.com/jmschrei/pomegranate/issues/974
+    rev = "0652e955c400bc56df5661db3298a06854c7cce8";
+    sha256 = "16g49nl2bgnh6nh7bd21s393zbksdvgp9l13ww2diwhplj6hlly3";
   };
 
-  propagatedBuildInputs = [ numpy scipy cython networkx joblib ];
+  propagatedBuildInputs = [ numpy scipy cython networkx joblib pyyaml ];
 
-  checkInputs = [ nose ];
+  checkInputs = [ pandas nose ];  # as of 0.13.5, it depends explicitly on nose, rather than pytest.
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Probabilistic and graphical models for Python, implemented in cython for speed";
-    homepage = https://github.com/jmschrei/pomegranate;
+    homepage = "https://github.com/jmschrei/pomegranate";
     license = licenses.mit;
     maintainers = with maintainers; [ rybern ];
-
-    # "pomegranate does not yet work with networkx 2.0"
-    # see https://github.com/jmschrei/pomegranate/issues/209
-    broken = true; 
   };
 }

@@ -1,6 +1,6 @@
-{ appleDerivation, ed, unifdef }:
+{ appleDerivation', stdenvNoCC, ed, unifdef }:
 
-appleDerivation {
+appleDerivation' stdenvNoCC {
   nativeBuildInputs = [ ed unifdef ];
 
   installPhase = ''

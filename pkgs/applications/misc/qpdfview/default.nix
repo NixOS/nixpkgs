@@ -1,28 +1,45 @@
-{stdenv, fetchurl, qmake, qtbase, qtsvg, pkgconfig, poppler, djvulibre, libspectre, cups
-, file, ghostscript
+{ lib
+, mkDerivation
+, fetchurl
+, qmake
+, qtbase
+, qtsvg
+, pkg-config
+, poppler
+, djvulibre
+, libspectre
+, cups
+, file
+, ghostscript
 }:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="qpdfview";
-    version = "0.4.16";
-    name="${baseName}-${version}";
-    url="https://launchpad.net/qpdfview/trunk/${version}/+download/qpdfview-${version}.tar.gz";
-    sha256 = "0zysjhr58nnmx7ba01q3zvgidkgcqxjdj4ld3gx5fc7wzvl1dm7s";
-  };
-  nativeBuildInputs = [ qmake pkgconfig ];
-  buildInputs = [
-    qtbase qtsvg poppler djvulibre libspectre cups file ghostscript
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit nativeBuildInputs buildInputs;
+mkDerivation rec {
+  pname = "qpdfview";
+  version = "0.4.18";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "https://launchpad.net/qpdfview/trunk/${version}/+download/qpdfview-${version}.tar.gz";
+    sha256 = "0v1rl126hvblajnph2hkansgi0s8vjdc5yxrm4y3faa0lxzjwr6c";
   };
+
+  # apply upstream fix for qt5.15 https://bazaar.launchpad.net/~adamreichold/qpdfview/trunk/revision/2104
+  patches = [ ./qpdfview-qt515-compat.patch ];
+
+  nativeBuildInputs = [ qmake pkg-config ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    poppler
+    djvulibre
+    libspectre
+    cups
+    file
+    ghostscript
+  ];
+  preConfigure = ''
+    qmakeFlags+=(*.pro)
+  '';
+
   qmakeFlags = [
-    "*.pro"
     "TARGET_INSTALL_PATH=${placeholder "out"}/bin"
     "PLUGIN_INSTALL_PATH=${placeholder "out"}/lib/qpdfview"
     "DATA_INSTALL_PATH=${placeholder "out"}/share/qpdfview"
@@ -32,13 +49,11 @@ stdenv.mkDerivation {
     "APPDATA_INSTALL_PATH=${placeholder "out"}/share/appdata"
   ];
 
-  meta = {
-    inherit (s) version;
+  meta = with lib; {
     description = "A tabbed document viewer";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    homepage = https://launchpad.net/qpdfview;
-    updateWalker = true;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
+    homepage = "https://launchpad.net/qpdfview";
   };
 }

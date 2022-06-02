@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, nano }:
+{ lib, stdenv, fetchurl, fetchpatch, nano }:
 
-stdenv.mkDerivation {
-  name = "cvs-1.12.13";
+stdenv.mkDerivation rec {
+  pname = "cvs";
+  version = "1.12.13";
 
   src = fetchurl {
-    url = mirror://savannah/cvs/source/feature/1.12.13/cvs-1.12.13.tar.bz2;
+    url = "mirror://savannah/cvs/source/feature/${version}/cvs-${version}.tar.bz2";
     sha256 = "0pjir8cwn0087mxszzbsi1gyfc6373vif96cw4q3m1x6p49kd1bq";
   };
 
@@ -28,14 +29,23 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildInputs = [ nano ];
+  configureFlags = [
+    "--with-editor=${nano}/bin/nano"
+
+    # Required for cross-compilation.
+    "cvs_cv_func_printf_ptr=yes"
+  ];
+
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
 
   doCheck = false; # fails 1 of 1 tests
 
-  meta = with stdenv.lib; {
-    homepage = http://cvs.nongnu.org;
+  meta = with lib; {
+    homepage = "http://cvs.nongnu.org";
     description = "Concurrent Versions System - a source control system";
-    license = licenses.gpl2; # library is GPLv2, main is GPLv1
+    license = licenses.gpl2Plus; # library is GPLv2, main is GPLv1
     platforms = platforms.all;
   };
 }

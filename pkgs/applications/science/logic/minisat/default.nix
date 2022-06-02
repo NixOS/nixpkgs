@@ -1,32 +1,24 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "minisat-${version}";
-  version = "2.2.0";
+  pname = "minisat";
+  version = "2.2.1";
 
-  src = fetchurl {
-    url = "http://minisat.se/downloads/${name}.tar.gz";
-    sha256 = "023qdnsb6i18yrrawlhckm47q8x0sl7chpvvw3gssfyw3j2pv5cj";
+  src = fetchFromGitHub {
+    owner = "stp";
+    repo = pname;
+    rev = "releases/${version}";
+    sha256 = "14vcbjnlia00lpyv2fhbmw3wbc9bk9h7bln9zpyc3nwiz5cbjz4a";
   };
 
-  patches =
-    [ ./darwin.patch ]
-    ++ stdenv.lib.optionals stdenv.cc.isClang [ ./clang.diff ];
-
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  preBuild = "cd simp";
-  makeFlags = [ "r" "MROOT=.." ];
-  installPhase = ''
-    mkdir -p $out/bin
-    cp minisat_release $out/bin/minisat
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Compact and readable SAT solver";
     maintainers = with maintainers; [ gebner raskin ];
     platforms = platforms.unix;
     license = licenses.mit;
-    homepage = http://minisat.se/;
+    homepage = "http://minisat.se/";
   };
 }

@@ -5,12 +5,10 @@ with lib;
 let
   cfg = config.boot.loader.raspberryPi;
 
-  inherit (pkgs.stdenv.hostPlatform) platform;
-
   builderUboot = import ./uboot-builder.nix { inherit pkgs configTxt; inherit (cfg) version; };
   builderGeneric = import ./raspberrypi-builder.nix { inherit pkgs configTxt; };
 
-  builder = 
+  builder =
     if cfg.uboot.enable then
       "${builderUboot} -g ${toString cfg.uboot.configurationLimit} -t ${timeoutStr} -c"
     else
@@ -20,7 +18,7 @@ let
   timeoutStr = if blCfg.timeout == null then "-1" else toString blCfg.timeout;
 
   isAarch64 = pkgs.stdenv.hostPlatform.isAarch64;
-  optional = pkgs.stdenv.lib.optionalString;
+  optional = pkgs.lib.optionalString;
 
   configTxt =
     pkgs.writeText "config.txt" (''
@@ -59,9 +57,8 @@ in
 
       version = mkOption {
         default = 2;
-        type = types.enum [ 0 1 2 3 ];
-        description = ''
-        '';
+        type = types.enum [ 0 1 2 3 4 ];
+        description = "";
       };
 
       uboot = {
@@ -86,7 +83,7 @@ in
 
       firmwareConfig = mkOption {
         default = null;
-        type = types.nullOr types.string;
+        type = types.nullOr types.lines;
         description = ''
           Extra options that will be appended to <literal>/boot/config.txt</literal> file.
           For possible values, see: https://www.raspberrypi.org/documentation/configuration/config-txt/
@@ -97,12 +94,12 @@ in
 
   config = mkIf cfg.enable {
     assertions = singleton {
-      assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version == 3;
-      message = "Only Raspberry Pi 3 supports aarch64.";
+      assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version >= 3;
+      message = "Only Raspberry Pi >= 3 supports aarch64.";
     };
 
     system.build.installBootLoader = builder;
     system.boot.loader.id = "raspberrypi";
-    system.boot.loader.kernelFile = platform.kernelTarget;
+    system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
   };
 }

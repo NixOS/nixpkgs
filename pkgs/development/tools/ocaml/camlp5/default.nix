@@ -1,57 +1,46 @@
-{ stdenv, fetchzip, ocaml, legacy ? false }:
+{ lib, stdenv, fetchFromGitHub, ocaml, perl }:
 
-let params =
-  if legacy then {
-    minor-version = "06";
-    sha256 = "02zg6qjkzx58zmp79364s5jyqhh56nclcz1jzhh53hk37g9f96qf";
-  } else {
-    minor-version = "07";
-    sha256 = "1c8v45553ccbqha2ypfranqlgw06rr5wjr2hlnrx5bf9jfq0h0dn";
-  };
-  metafile = ./META;
-  opt = stdenv.lib.optionalString legacy;
-in
+if lib.versionOlder ocaml.version "4.02"
+|| lib.versionOlder "4.13" ocaml.version
+then throw "camlp5 is not available for OCaml ${ocaml.version}"
+else
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 
-  name = "camlp5-7.${params.minor-version}";
+  pname = "camlp5";
+  version = "7.14";
 
-  src = fetchzip {
-    url = "https://github.com/camlp5/camlp5/archive/rel7${params.minor-version}.tar.gz";
-    inherit (params) sha256;
+  src = fetchFromGitHub {
+    owner = "camlp5";
+    repo = "camlp5";
+    rev = "rel${builtins.replaceStrings [ "." ] [ "" ] version}";
+    sha256 = "1dd68bisbpqn5lq2pslm582hxglcxnbkgfkwhdz67z4w9d5nvr7w";
   };
 
-  buildInputs = [ ocaml ];
-
-  postPatch = opt ''
-    for p in compile/compile.sh config/Makefile.tpl test/Makefile test/check_ocaml_versions.sh
-    do
-      substituteInPlace $p --replace '/bin/rm' rm
-    done
-  '';
+  buildInputs = [ ocaml perl ];
 
   prefixKey = "-prefix ";
 
-  preConfigure = "configureFlagsArray=(--strict" +
-                  " --libdir $out/lib/ocaml/${ocaml.version}/site-lib)";
+  preConfigure = ''
+    configureFlagsArray=(--strict --libdir $out/lib/ocaml/${ocaml.version}/site-lib)
+    patchShebangs ./config/find_stuffversion.pl
+  '';
 
-  buildFlags = "world.opt";
-
-  postInstall = opt "cp ${metafile} $out/lib/ocaml/${ocaml.version}/site-lib/camlp5/META";
+  buildFlags = [ "world.opt" ];
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Preprocessor-pretty-printer for OCaml";
     longDescription = ''
       Camlp5 is a preprocessor and pretty-printer for OCaml programs.
       It also provides parsing and printing tools.
     '';
-    homepage = https://camlp5.github.io/;
+    homepage = "https://camlp5.github.io/";
     license = licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
-      z77z vbgl
+      maggesi vbgl
     ];
   };
 }

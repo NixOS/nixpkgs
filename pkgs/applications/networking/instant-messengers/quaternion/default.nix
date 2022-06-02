@@ -1,36 +1,53 @@
-{ stdenv, lib, fetchFromGitHub, qtbase, qtquickcontrols, cmake
-, qttools, libqmatrixclient }:
+{ mkDerivation
+, stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, qtquickcontrols
+, qtquickcontrols2
+, qtkeychain
+, qtmultimedia
+, qttools
+, libquotient
+, libsecret
+}:
 
-stdenv.mkDerivation rec {
-  name = "quaternion-${version}";
-  version = "0.0.9.3";
+mkDerivation rec {
+  pname = "quaternion";
+  version = "0.0.95.1";
 
   src = fetchFromGitHub {
-    owner  = "QMatrixClient";
-    repo   = "Quaternion";
-    rev    = "v${version}";
-    sha256 = "1hr9zqf301rg583n9jv256vzj7y57d8qgayk7c723bfknf1s6hh3";
+    owner = "QMatrixClient";
+    repo = "Quaternion";
+    rev = version;
+    sha256 = "sha256-6FLj/hVY13WO7sMgHCHV57eMJu39cwQHXQX7m0lmv4I=";
   };
 
-  buildInputs = [ qtbase qtquickcontrols qttools libqmatrixclient ];
+  buildInputs = [
+    qtmultimedia
+    qtquickcontrols2
+    qtkeychain
+    libquotient
+    libsecret
+  ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake qttools ];
 
-  postInstall = if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    mv $out/bin/quaternion.app $out/Applications
-    rmdir $out/bin || :
-  '' else ''
-    substituteInPlace $out/share/applications/quaternion.desktop \
-      --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
-  '';
+  postInstall =
+    if stdenv.isDarwin then ''
+      mkdir -p $out/Applications
+      mv $out/bin/quaternion.app $out/Applications
+      rmdir $out/bin || :
+    '' else ''
+      substituteInPlace $out/share/applications/com.github.quaternion.desktop \
+        --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
+    '';
 
   meta = with lib; {
     description = "Cross-platform desktop IM client for the Matrix protocol";
-    homepage    = https://matrix.org/docs/projects/client/quaternion.html;
-    license     = licenses.gpl3;
+    homepage = "https://matrix.org/docs/projects/client/quaternion.html";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    inherit (qtbase.meta) platforms;
-    inherit version;
+    inherit (qtquickcontrols2.meta) platforms;
   };
 }

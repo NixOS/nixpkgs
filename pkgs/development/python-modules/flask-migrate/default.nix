@@ -1,27 +1,51 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, glibcLocales, flask, flask_sqlalchemy, flask_script, alembic }:
-
-with stdenv.lib;
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, alembic
+, flask
+, flask_script
+, flask_sqlalchemy
+, python
+}:
 
 buildPythonPackage rec {
   pname = "Flask-Migrate";
-  version = "2.3.1";
+  version = "3.1.0";
+  format = "setuptools";
+  disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1awlb4q1l9iv794qjjxxyhcv4i69j77kh7nsg17a6kb909mglml3";
+  src = fetchFromGitHub {
+    owner = "miguelgrinberg";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0zj7qpknvlhrh4fsp5sx4fwyx3sp41ynclka992zympm3xym9zyq";
   };
 
-  checkInputs = optional isPy3k glibcLocales;
-  propagatedBuildInputs = [ flask flask_sqlalchemy flask_script alembic ];
+  propagatedBuildInputs = [
+    alembic
+    flask
+    flask_sqlalchemy
+  ];
 
-  # tests invoke the flask cli which uses click and therefore has py3k encoding troubles
-  preCheck = optionalString isPy3k ''
-    export LANG="en_US.UTF-8"
+  pythonImportsCheck = [
+    "flask_migrate"
+  ];
+
+  checkInputs = [
+    flask_script
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m unittest discover
+    runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "SQLAlchemy database migrations for Flask applications using Alembic";
+    homepage = "https://github.com/miguelgrinberg/Flask-Migrate";
     license = licenses.mit;
-    homepage = https://github.com/miguelgrinberg/Flask-Migrate;
+    maintainers = with maintainers; [ ];
   };
 }

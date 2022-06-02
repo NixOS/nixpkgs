@@ -1,29 +1,42 @@
-{ stdenv, autoreconfHook, pkgconfig, fetchFromGitHub, gupnp }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, gupnp
+}:
 
 stdenv.mkDerivation rec {
   pname = "dleyna-core";
-  name = "${pname}-${version}";
-  version = "0.6.0";
+  version = "0.7.0";
 
-  src = fetchFromGitHub {
-    owner = "01org";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1x5vj5zfk95avyg6g3nf6gar250cfrgla2ixj2ifn8pcick2d9vq";
-  };
+  outputs = [ "out" "dev" ];
 
   setupHook = ./setup-hook.sh;
 
-  patches = [ ./0001-Search-connectors-in-DLEYNA_CONNECTOR_PATH.patch ];
+  src = fetchFromGitHub {
+    owner = "phako";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "i4L9+iyAdBNtgImbD54jkjYL5hvzeZ2OaAyFrcFmuG0=";
+  };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  propagatedBuildInputs = [ gupnp ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    gupnp
+  ];
+
+  meta = with lib; {
     description = "Library of utility functions that are used by the higher level dLeyna";
-    homepage = https://01.org/dleyna;
-    maintainers = [ maintainers.jtojnar ];
+    homepage = "https://github.com/phako/dleyna-core";
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
   };
 }

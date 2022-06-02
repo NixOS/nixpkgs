@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "librarian-puppet-go-${version}";
+  pname = "librarian-puppet-go";
   version = "0.3.9";
 
   goPackagePath = "github.com/tmtk75/librarian-puppet-go";
@@ -17,7 +17,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "librarian-puppet implementation in go.";
+    description = "librarian-puppet implementation in go";
     license = licenses.mit;
     maintainers = with maintainers; [ womfoo ];
     platforms = [ "x86_64-linux" ];

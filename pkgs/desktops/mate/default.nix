@@ -5,13 +5,18 @@ let
 
   self = rec {
 
-    getRelease = version:
-      pkgs.stdenv.lib.concatStringsSep "." (pkgs.stdenv.lib.take 2 (pkgs.stdenv.lib.splitString "." version));
-  
+    # Update script tailored to mate packages from git repository
+    mateUpdateScript = { pname, version, odd-unstable ? true, url ? "https://pub.mate-desktop.org/releases" }:
+      pkgs.httpTwoLevelsUpdater {
+        inherit pname version odd-unstable url;
+        attrPath = "mate.${pname}";
+      };
+
     atril = callPackage ./atril { };
     caja = callPackage ./caja { };
     caja-dropbox = callPackage ./caja-dropbox { };
     caja-extensions = callPackage ./caja-extensions { };
+    caja-with-extensions = callPackage ./caja-with-extensions { };
     engrampa = callPackage ./engrampa { };
     eom = callPackage ./eom { };
     libmatekbd = callPackage ./libmatekbd { };
@@ -37,15 +42,17 @@ let
     mate-sensors-applet = callPackage ./mate-sensors-applet { };
     mate-session-manager = callPackage ./mate-session-manager { };
     mate-settings-daemon = callPackage ./mate-settings-daemon { };
+    mate-settings-daemon-wrapped = callPackage ./mate-settings-daemon/wrapped.nix { };
     mate-screensaver = callPackage ./mate-screensaver { };
     mate-system-monitor = callPackage ./mate-system-monitor { };
     mate-terminal = callPackage ./mate-terminal { };
     mate-themes = callPackage ./mate-themes { };
+    mate-tweak = callPackage ./mate-tweak { };
     mate-user-guide = callPackage ./mate-user-guide { };
     mate-user-share = callPackage ./mate-user-share { };
     mate-utils = callPackage ./mate-utils { };
     mozo = callPackage ./mozo { };
-    pluma = callPackage ./pluma { };
+    pluma = callPackage ./pluma { inherit (pkgs.gnome) adwaita-icon-theme; };
     python-caja = callPackage ./python-caja { };
 
     basePackages = [
@@ -64,6 +71,7 @@ let
       mate-polkit
       mate-session-manager
       mate-settings-daemon
+      mate-settings-daemon-wrapped
       mate-themes
     ];
 
@@ -75,7 +83,6 @@ let
       mate-applets
       mate-backgrounds
       mate-calc
-      mate-icon-theme-faenza
       mate-indicator-applet
       mate-media
       mate-netbook
@@ -90,7 +97,7 @@ let
       mozo
       pluma
     ];
-  
+
   };
 
 in self

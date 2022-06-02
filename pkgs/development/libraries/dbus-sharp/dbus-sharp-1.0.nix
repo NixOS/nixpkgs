@@ -1,7 +1,7 @@
-{stdenv, fetchFromGitHub, pkgconfig, mono, autoreconfHook }:
+{lib, stdenv, fetchFromGitHub, pkg-config, mono, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "dbus-sharp-${version}";
+  pname = "dbus-sharp";
   version = "0.7";
 
   src = fetchFromGitHub {
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "13qlqx9wqahfpzzl59157cjxprqcx2bd40w5gb2bs3vdx058p562";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ mono ];
 
   dontStrip = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "D-Bus for .NET";
     platforms = platforms.linux;
     license = licenses.mit;

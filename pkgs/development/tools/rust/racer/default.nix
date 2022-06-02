@@ -1,37 +1,50 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, substituteAll }:
+{ lib, rustPlatform, fetchCrate, makeWrapper, stdenv, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "racer-${version}";
-  version = "2.0.14";
+  pname = "racer";
+  version = "2.2.1";
 
-  src = fetchFromGitHub {
-    owner = "racer-rust";
-    repo = "racer";
-    rev = version;
-    sha256 = "0kgax74qa09axq7b175ph3psprgidwgsml83wm1qwdq16gpxiaif";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-uAVtJwOyhe1lPz+MUUFCgHJPVGuIk/lNUkQWiNdOZ5Y=";
   };
 
-  cargoSha256 = "1j3fviimdxn6xa75z0l9wkgdnznp8q20jjs42mql6ql782dga5lk";
+  cargoSha256 = "sha256-U2mI1y6t8CwxW/iPcPzxAafu61GNm/XLCKVGuyybV/4=";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
-  preCheck = ''
-    export RUST_SRC_PATH="${rustPlatform.rustcSrc}"
+  # a nightly compiler is required unless we use this cheat code.
+  RUSTC_BOOTSTRAP = 1;
+
+  RUST_SRC_PATH = rustPlatform.rustLibSrc;
+  postInstall = ''
+    wrapProgram $out/bin/racer --set-default RUST_SRC_PATH ${rustPlatform.rustLibSrc}
   '';
-  patches = [
-    (substituteAll {
-      src = ./rust-src.patch;
-      inherit (rustPlatform) rustcSrc;
-    })
-    ./ignore-tests.patch
-  ];
-  doCheck = true;
 
-  meta = with stdenv.lib; {
+  checkFlags = [
+    "--skip nameres::test_do_file_search_std"
+    "--skip util::test_get_rust_src_path_rustup_ok"
+    "--skip util::test_get_rust_src_path_not_rust_source_tree"
+    "--skip extern --skip completes_pub_fn --skip find_crate_doc"
+    "--skip follows_use_local_package --skip follows_use_for_reexport"
+    "--skip follows_rand_crate --skip get_completion_in_example_dir"
+    "--skip test_resolve_global_path_in_modules"
+  ];
+
+  # [2022-04-06] Its test suite contains two function calls with the
+  # wrong number of arguments, breaking its build.
+  doCheck = false;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/racer --version
+  '';
+
+  meta = with lib; {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
-    homepage = https://github.com/racer-rust/racer;
+    homepage = "https://github.com/racer-rust/racer";
     license = licenses.mit;
-    maintainers = with maintainers; [ jagajaga globin ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ jagajaga ];
   };
 }

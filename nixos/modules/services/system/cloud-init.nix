@@ -5,11 +5,11 @@ with lib;
 let cfg = config.services.cloud-init;
     path = with pkgs; [
       cloud-init
-      iproute
+      iproute2
       nettools
       openssh
       shadow
-      utillinux
+      util-linux
     ] ++ optional cfg.btrfs.enable btrfs-progs
       ++ optional cfg.ext4.enable e2fsprogs
     ;
@@ -52,11 +52,22 @@ in
         '';
       };
 
+      network.enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Allow the cloud-init service to configure network interfaces
+          through systemd-networkd.
+        '';
+      };
+
       config = mkOption {
         type = types.str;
         default = ''
           system_info:
             distro: nixos
+            network:
+              renderers: [ 'networkd' ]
           users:
              - root
 
@@ -98,7 +109,7 @@ in
            - final-message
            - power-state-change
           '';
-        description = ''cloud-init configuration.'';
+        description = "cloud-init configuration.";
       };
 
     };
@@ -109,11 +120,12 @@ in
 
     environment.etc."cloud/cloud.cfg".text = cfg.config;
 
+    systemd.network.enable = cfg.network.enable;
+
     systemd.services.cloud-init-local =
       { description = "Initial cloud-init job (pre-networking)";
         wantedBy = [ "multi-user.target" ];
-        wants = [ "local-fs.target" ];
-        after = [ "local-fs.target" ];
+        before = ["systemd-networkd.service"];
         path = path;
         serviceConfig =
           { Type = "oneshot";
@@ -127,11 +139,11 @@ in
     systemd.services.cloud-init =
       { description = "Initial cloud-init job (metadata service crawler)";
         wantedBy = [ "multi-user.target" ];
-        wants = [ "local-fs.target" "network-online.target" "cloud-init-local.service"
+        wants = [ "network-online.target" "cloud-init-local.service"
                   "sshd.service" "sshd-keygen.service" ];
-        after = [ "local-fs.target" "network-online.target" "cloud-init-local.service" ];
+        after = [ "network-online.target" "cloud-init-local.service" ];
         before = [ "sshd.service" "sshd-keygen.service" ];
-        requires = [ "network.target "];
+        requires = [ "network.target"];
         path = path;
         serviceConfig =
           { Type = "oneshot";

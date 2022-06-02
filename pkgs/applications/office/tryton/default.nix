@@ -1,46 +1,65 @@
-{ stdenv
-, python2Packages
-, pkgconfig
+{ lib
+, python3Packages
+, pkg-config
 , librsvg
 , gobject-introspection
 , atk
 , gtk3
 , gtkspell3
-, gnome3
+, gnome
+, glib
 , goocanvas2
+, gdk-pixbuf
+, pango
+, fontconfig
+, freetype
+, wrapGAppsHook
 }:
 
-with stdenv.lib;
+with lib;
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "4.8.5";
-  src = python2Packages.fetchPypi {
+  version = "5.4.2";
+
+  disabled = !python3Packages.isPy3k;
+
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "43759d22b061a7a392a534d19a045fafd442ce98a0e390ee830127367dcaf4b4";
+    sha256 = "1rca19krvmycdhmi1vb4ixwq0cagmrkhbqry4f19b725nlp8cv0q";
   };
-  nativeBuildInputs = [ pkgconfig gobject-introspection ];
-  propagatedBuildInputs = with python2Packages; [
-    chardet
-    dateutil
-    pygtk
-    librsvg
+
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    python-dateutil
     pygobject3
     goocalendar
-    cdecimal
+    pycairo
   ];
+
   buildInputs = [
     atk
-    gtk3
-    gnome3.adwaita-icon-theme
-    gtkspell3
+    gdk-pixbuf
+    glib
+    gnome.adwaita-icon-theme
     goocanvas2
+    fontconfig
+    freetype
+    gtk3
+    gtkspell3
+    librsvg
+    pango
   ];
-  makeWrapperArgs = [
-    ''--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"''
-    ''--set GI_TYPELIB_PATH "$GI_TYPELIB_PATH"''
-    ''--suffix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"''
-  ];
+
+  strictDeps = false;
+
+  doCheck = false;
+
   meta = {
     description = "The client of the Tryton application platform";
     longDescription = ''
@@ -51,7 +70,7 @@ python2Packages.buildPythonApplication rec {
       It is the core base of a complete business solution providing
       modularity, scalability and security.
     '';
-    homepage = http://www.tryton.org/;
+    homepage = "http://www.tryton.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ johbo udono ];
   };

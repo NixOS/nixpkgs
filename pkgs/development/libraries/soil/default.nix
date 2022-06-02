@@ -1,28 +1,46 @@
-{ stdenv, fetchurl, unzip, mesa_noglu, libX11 }:
+{ stdenv, lib
+, Carbon
+, fetchzip
+, libGL
+, libX11
+}:
 
-stdenv.mkDerivation rec {
-  name = "soil";
+stdenv.mkDerivation {
+  pname = "soil";
+  version = "unstable-2020-01-04";
 
-  src = fetchurl {
-    url    = "http://www.lonesock.net/files/soil.zip";
-    sha256 = "00gpwp9dldzhsdhksjvmbhsd2ialraqbv6v6dpikdmpncj6mnc52";
+  src = fetchzip {
+    url = "https://web.archive.org/web/20200104042737id_/http://www.lonesock.net/files/soil.zip";
+    sha256 = "1c05nwbnfdgwaz8ywn7kg2xrcvrcbpdyhcfkkiiwk69zvil0pbgd";
   };
 
-  buildInputs = [ unzip mesa_noglu libX11 ];
-  
-  sourceRoot = "Simple OpenGL Image Library/projects/makefile";
-  preBuild   = "mkdir obj";
-  preInstall = "mkdir -p $out/lib $out/include";
-  makeFlags  = [ "LOCAL=$(out)" ];
+  buildInputs = if stdenv.hostPlatform.isDarwin then [
+    Carbon
+  ] else [
+    libGL
+    libX11
+  ];
 
-  meta = {
-    description     = "Simple OpenGL Image Library";
+  buildPhase = ''
+    cd src
+    $CC $NIX_CFLAGS_COMPILE -c *.c
+    $AR rcs libSOIL.a *.o
+  '';
+  installPhase = ''
+    mkdir -p $out/lib $out/include/SOIL
+    cp libSOIL.a $out/lib/
+    cp SOIL.h $out/include/SOIL/
+  '';
+
+  meta = with lib; {
+    description = "Simple OpenGL Image Library";
     longDescription = ''
       SOIL is a tiny C library used primarily for uploading textures
       into OpenGL.
     '';
-    homepage  = https://www.lonesock.net/soil.html;
-    license   = stdenv.lib.licenses.publicDomain;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://www.lonesock.net/soil.html";
+    license = licenses.publicDomain;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ r-burns ];
   };
 }

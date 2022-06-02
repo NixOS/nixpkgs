@@ -1,27 +1,45 @@
-{ lib, buildPythonPackage, fetchPypi, pytest }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, freezegun
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "3.4";
   pname = "ftputil";
+  version = "5.0.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "374b01e174079e91babe2a462fbd6f6c00dbfbfa299dec04239ca4229fbf8762";
+    hash = "sha256-aInbhkndINm21ApsXw+EzPNAp9rB4L/A8AJAkPwq+zM=";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [
+    freezegun
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    touch Makefile
-    # Disable tests that require network access or access /home
-    py.test test \
-      -k "not test_public_servers and not test_real_ftp \
-          and not test_set_parser and not test_repr"
-  '';
+  disabledTests = [
+    # Tests require network access
+    "test_public_servers"
+    "test_real_ftp"
+    "test_set_parser"
+    "test_upload"
+  ];
+
+  pythonImportsCheck = [
+    "ftputil"
+  ];
 
   meta = with lib; {
     description = "High-level FTP client library (virtual file system and more)";
-    homepage    = http://ftputil.sschwarzer.net/;
-    license     = licenses.bsd2; # "Modified BSD license, says pypi"
+    homepage = "http://ftputil.sschwarzer.net/";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ ];
   };
 }

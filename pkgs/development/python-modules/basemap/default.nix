@@ -1,24 +1,30 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
+, pythonAtLeast
 , numpy
 , matplotlib
 , pillow
 , setuptools
+, pyproj
+, pyshp
+, six
 , pkgs
 }:
 
 buildPythonPackage rec {
   pname = "basemap";
-  version = "1.0.7";
+  version = "1.3.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/matplotlib/matplotlib-toolkits/basemap-1.0.7/basemap-1.0.7.tar.gz";
-    sha256 = "0ca522zirj5sj10vg3fshlmgi615zy5gw2assapcj91vsvhc4zp0";
+  src = fetchFromGitHub {
+    owner = "matplotlib";
+    repo = "basemap";
+    rev = "v${version}";
+    sha256 = "sha256-onNdOQL4i6GTcuCRel5yanJ2EQ5iYClp+imuBObXF2I=";
   };
 
-  propagatedBuildInputs = [ numpy matplotlib pillow ];
-  buildInputs = [ setuptools pkgs.geos pkgs.proj ];
+  propagatedBuildInputs = [ numpy matplotlib pillow pyproj pyshp six ];
+  buildInputs = [ setuptools pkgs.geos ];
 
   # Standard configurePhase from `buildPythonPackage` seems to break the setup.py script
   configurePhase = ''
@@ -29,7 +35,7 @@ buildPythonPackage rec {
   # TODO : do the post install checks (`cd examples && ${python.interpreter} run_all.py`)
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://matplotlib.org/basemap/";
     description = "Plot data on map projections with matplotlib";
     longDescription = ''
@@ -38,6 +44,7 @@ buildPythonPackage rec {
       http://matplotlib.github.com/basemap/users/examples.html for examples of what it can do.
     '';
     license = with licenses; [ mit gpl2 ];
+    broken = pythonAtLeast "3.9";
   };
 
 }

@@ -1,29 +1,40 @@
-{ stdenv, fetchurl, pkgconfig, ncurses, glib, openssl, perl, libintl }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, ncurses, glib, openssl, perl, libintl, libgcrypt, libotr, git }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.0";
-  name = "irssi-${version}";
+  pname = "irssi";
+  version = "1.2.3";
 
-  src = fetchurl {
-    url = "https://github.com/irssi/irssi/releases/download/${version}/${name}.tar.gz";
-    sha256 = "1sp3fc5fkdx0mmllvag94xaifnqbj1k09nl235pix26vv1gzq39m";
+
+  src = fetchFromGitHub {
+    "owner" = "irssi";
+    "repo" = "irssi";
+    "rev" = "91dc3e4dfa1a9558c5a7fe0ea982cb9df0e2de65";
+    "sha256" = "efnE4vuDd7TnOBxMPduiV0/nez1jVhTjbJ0vzN4ZMcg=";
+    "leaveDotGit" = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses glib openssl perl libintl ];
+  nativeBuildInputs = [ pkg-config autoconf automake libtool git ];
+  buildInputs = [ ncurses glib openssl perl libintl libgcrypt libotr ];
+
+  enableParallelBuilding = true;
+
+  preConfigure = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
   configureFlags = [
     "--with-proxy"
     "--with-bot"
     "--with-perl=yes"
+    "--with-otr=yes"
     "--enable-true-color"
   ];
 
   meta = {
-    homepage    = https://irssi.org;
+    homepage    = "https://irssi.org";
     description = "A terminal based IRC client";
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
-    license     = stdenv.lib.licenses.gpl2Plus;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    license     = lib.licenses.gpl2Plus;
   };
 }

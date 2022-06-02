@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, gobject-introspection, libappindicator-gtk3, libindicator-gtk3, polkit, mate }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, gtk3, gobject-introspection, libappindicator-gtk3, libindicator-gtk3, polkit, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
-  name = "mate-polkit-${version}";
-  version = "1.20.2";
+  pname = "mate-polkit";
+  version = "1.26.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0zajisavrxiynmp4qg7zamvkpnhy9nra01czwn21h6hm2yakbayr";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0kkjv025l1l8352m5ky1g7hmk7isgi3dnfnh7sqg9pyhml97i9dd";
   };
 
   nativeBuildInputs = [
     gobject-introspection
-    intltool
-    pkgconfig
+    gettext
+    pkg-config
   ];
 
   buildInputs = [
@@ -22,11 +22,15 @@ stdenv.mkDerivation rec {
     polkit
   ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "Integrates polkit authentication for MATE desktop";
-    homepage = http://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

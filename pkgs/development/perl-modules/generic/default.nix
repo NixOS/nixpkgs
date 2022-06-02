@@ -1,42 +1,60 @@
-{ lib, stdenv, perl }:
+{ lib, stdenv, perl, buildPerl, toPerlModule }:
 
-{ nativeBuildInputs ? [], name, ... } @ attrs:
+{ buildInputs ? []
+, nativeBuildInputs ? []
+, outputs ? [ "out" "devdoc" ]
+, src ? null
 
-stdenv.mkDerivation (
-  (
-  lib.recursiveUpdate
-  {
-    outputs = [ "out" "devdoc" ];
+, doCheck ? true
+, checkTarget ? "test"
 
-    doCheck = true;
+# Prevent CPAN downloads.
+, PERL_AUTOINSTALL ? "--skipdeps"
 
-    checkTarget = "test";
+# From http://wiki.cpantesters.org/wiki/CPANAuthorNotes: "allows
+# authors to skip certain tests (or include certain tests) when
+# the results are not being monitored by a human being."
+, AUTOMATED_TESTING ? true
 
-    # Prevent CPAN downloads.
-    PERL_AUTOINSTALL = "--skipdeps";
+# current directory (".") is removed from @INC in Perl 5.26 but many old libs rely on it
+# https://metacpan.org/pod/release/XSAWYERX/perl-5.26.0/pod/perldelta.pod#Removal-of-the-current-directory-%28%22.%22%29-from-@INC
+, PERL_USE_UNSAFE_INC ? "1"
 
-    # Avoid creating perllocal.pod, which contains a timestamp
-    installTargets = "pure_install";
+, ...
+}@attrs:
 
-    # From http://wiki.cpantesters.org/wiki/CPANAuthorNotes: "allows
-    # authors to skip certain tests (or include certain tests) when
-    # the results are not being monitored by a human being."
-    AUTOMATED_TESTING = true;
+assert attrs?pname -> attrs?version;
+assert attrs?pname -> !(attrs?name);
 
-    # current directory (".") is removed from @INC in Perl 5.26 but many old libs rely on it
-    # https://metacpan.org/pod/release/XSAWYERX/perl-5.26.0/pod/perldelta.pod#Removal-of-the-current-directory-%28%22.%22%29-from-@INC
-    PERL_USE_UNSAFE_INC = "1";
+lib.warnIf (attrs ? name) "builtPerlPackage: `name' (\"${attrs.name}\") is deprecated, use `pname' and `version' instead"
 
-    meta.homepage = "https://metacpan.org/release/${(builtins.parseDrvName name).name}";
-    meta.platforms = perl.meta.platforms;
-  }
-  attrs
-  )
-  //
-  {
-    name = "perl${perl.version}-${name}";
+(let
+  defaultMeta = {
+    homepage = "https://metacpan.org/release/${lib.getName attrs}"; # TODO: phase-out `attrs.name`
+    platforms = perl.meta.platforms;
+  };
+
+  cleanedAttrs = builtins.removeAttrs attrs [
+    "meta" "builder" "version" "pname" "fullperl"
+    "buildInputs" "nativeBuildInputs" "buildInputs"
+    "PERL_AUTOINSTALL" "AUTOMATED_TESTING" "PERL_USE_UNSAFE_INC"
+    ];
+
+  package = stdenv.mkDerivation ({
+    pname = "perl${perl.version}-${lib.getName attrs}"; # TODO: phase-out `attrs.name`
+    version = lib.getVersion attrs;                     # TODO: phase-out `attrs.name`
+
     builder = ./builder.sh;
-    nativeBuildInputs = nativeBuildInputs ++ [ (perl.dev or perl) ];
-    inherit perl;
-  }
-)
+
+    buildInputs = buildInputs ++ [ perl ];
+    nativeBuildInputs = nativeBuildInputs ++ [ (perl.mini or perl) ];
+
+    fullperl = buildPerl;
+
+    inherit outputs src doCheck checkTarget;
+    inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;
+
+    meta = defaultMeta // (attrs.meta or { });
+  } // cleanedAttrs);
+
+in toPerlModule package)

@@ -1,37 +1,28 @@
-{ stdenv, fetchFromGitHub, python2Packages, fontforge }:
+{ lib, stdenv, fetchFromGitHub, python3Packages}:
 
 stdenv.mkDerivation rec {
-  name = "xits-math-${version}";
-  version = "1.108";
+  pname = "xits-math";
+  version = "1.302";
 
   src = fetchFromGitHub {
-    owner = "khaledhosny";
-    repo = "xits-math";
+    owner = "alif-type";
+    repo = "xits";
     rev = "v${version}";
-    sha256 = "08nn676c41a7gmmhrzi8mm0g74z8aiaafjk48pqcwxvjj9av7xjg";
+    sha256 = "1x3r505dylz9rz8dj98h5n9d0zixyxmvvhnjnms9qxdrz9bxy9g1";
   };
 
-  nativeBuildInputs = [ fontforge ] ++ (with python2Packages; [ python fonttools ]);
+  nativeBuildInputs = (with python3Packages; [ python fonttools fontforge ]);
 
   postPatch = ''
     rm *.otf
-
-    substituteInPlace tools/postprocess.py --replace \
-      'font = ttLib.TTFont(sys.argv[1])' \
-      'font = ttLib.TTFont(sys.argv[1], recalcTimestamp=False)'
   '';
 
   installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    cp *.otf $out/share/fonts/opentype
+    install -m444 -Dt $out/share/fonts/opentype *.otf
   '';
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "00xycmb9ka67j5s66nkng53y8q6362igisxz04zb58r2717jk50m";
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/khaledhosny/xits-math;
+  meta = with lib; {
+    homepage = "https://github.com/alif-type/xits";
     description = "OpenType implementation of STIX fonts with math support";
     license = licenses.ofl;
     platforms = platforms.all;

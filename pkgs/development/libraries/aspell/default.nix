@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, fetchzip, perl
+{ lib, stdenv, fetchurl, fetchpatch, fetchzip, perl, ncurses
+
+  # for tests
+, aspell, glibc, runCommand
+
 , searchNixProfiles ? true
 }:
 
@@ -8,33 +12,36 @@ let
   # dictionary like Debian does.
   devaMapsSource = fetchzip {
     name = "aspell-u-deva";
-    url = "ftp://ftp.gnu.org/gnu/aspell/dict/mr/aspell6-mr-0.10-0.tar.bz2";
+    url = "https://ftp.gnu.org/gnu/aspell/dict/mr/aspell6-mr-0.10-0.tar.bz2";
     sha256 = "1v8cdl8x2j1d4vbvsq1xrqys69bbccd6mi03fywrhkrrljviyri1";
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "aspell-0.60.6.1";
+  pname = "aspell";
+  version = "0.60.8";
 
   src = fetchurl {
-    url = "mirror://gnu/aspell/${name}.tar.gz";
-    sha256 = "1qgn5psfyhbrnap275xjfrzppf5a83fb67gpql0kfqv37al869gm";
+    url = "mirror://gnu/aspell/aspell-${version}.tar.gz";
+    sha256 = "1wi60ankalmh8ds7nplz434jd7j94gdvbahdwsr539rlad8pxdzr";
   };
 
   patches = [
-    (fetchpatch { # remove in >= 0.60.7
-      name = "gcc-7.patch";
-      url = "https://github.com/GNUAspell/aspell/commit/8089fa02122fed0a.diff";
-      sha256 = "1b3p1zy2lqr2fknddckm58hyk95hw4scf6hzjny1v9iaic2p37ix";
+    (fetchpatch {
+      #  objstack: assert that the alloc size will fit within a chunk
+      name = "CVE-2019-25051.patch";
+      url = "https://github.com/gnuaspell/aspell/commit/0718b375425aad8e54e1150313b862e4c6fd324a.patch";
+      sha256 = "03z259xrk41x3j190gaprf3mqysyfgh3a04rjmch3h625vj95x39";
     })
-  ] ++ stdenv.lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
+  ] ++ lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
 
   postPatch = ''
     patch interfaces/cc/aspell.h < ${./clang.patch}
   '';
 
   nativeBuildInputs = [ perl ];
+  buildInputs = [ ncurses perl ];
 
   doCheck = true;
 
@@ -52,11 +59,24 @@ stdenv.mkDerivation rec {
     cp ${devaMapsSource}/u-deva.{cmap,cset} $out/lib/aspell/
   '';
 
+  passthru.tests = {
+    uses-curses = runCommand "${pname}-curses" {
+      buildInputs = [ glibc ];
+    } ''
+      if ! ldd ${aspell}/bin/aspell | grep -q ${ncurses}
+      then
+        echo "Test failure: It does not look like aspell picked up the curses dependency."
+        exit 1
+      fi
+      touch $out
+    '';
+  };
+
   meta = {
     description = "Spell checker for many languages";
-    homepage = http://aspell.net/;
-    license = stdenv.lib.licenses.lgpl2Plus;
+    homepage = "http://aspell.net/";
+    license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
-    platforms = with stdenv.lib.platforms; all;
+    platforms = with lib.platforms; all;
   };
 }

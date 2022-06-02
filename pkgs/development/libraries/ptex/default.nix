@@ -1,39 +1,29 @@
-{ stdenv, fetchFromGitHub, zlib, python, cmake }:
+{ lib, stdenv, fetchFromGitHub, zlib, cmake, pkg-config }:
 
 stdenv.mkDerivation rec
 {
-  name = "ptex-${version}";
-  version = "2.3.0";
+  pname = "ptex";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "wdas";
     repo = "ptex";
     rev = "v${version}";
-    sha256 = "0nfz0y66bmi6xckn1whi4sfd8i3ibln212fgm4img2z98b6vccyg";
+    sha256 = "sha256-TuwgZJHvQUqBEFeZYvzpi+tmXB97SkOairYnuUahtSA=";
   };
 
   outputs = [ "bin" "dev" "out" "lib" ];
 
-  buildInputs = [ zlib python cmake ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib pkg-config ];
 
-  enableParallelBuilding = true;
-
-  buildPhase = ''
-      mkdir -p $out
-
-      make prefix=$out
-
-      mkdir -p $bin/bin
-      mkdir -p $dev/include
-      mkdir -p $lib/lib
-      '';
-
-  installPhase = ''
-    make install
-    mv $out/bin $bin/
+  # Can be removed in the next release
+  # https://github.com/wdas/ptex/pull/42
+  patchPhase = ''
+    echo v${version} >version
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Per-Face Texture Mapping for Production Rendering";
     homepage = "http://ptex.us/";
     license = licenses.bsd3;

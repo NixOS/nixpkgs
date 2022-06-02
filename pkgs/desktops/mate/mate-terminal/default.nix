@@ -1,36 +1,40 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, gnome3, gtk3, vte, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, mate-desktop, dconf, vte, pcre2, wrapGAppsHook, mateUpdateScript, nixosTests }:
 
 stdenv.mkDerivation rec {
-  name = "mate-terminal-${version}";
-  version = "1.20.2";
+  pname = "mate-terminal";
+  version = "1.26.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0fqyi0az4ax1gyk5gymd7ssq2crdcd7slmqljc1b1pa283ql7p3q";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "08mgxbviik2dwwnbclp0518wlag2fhcr6c2yadgcbhwiq4aff9vp";
   };
 
-  buildInputs = [
-     glib
-     itstool
-     libxml2
-
-     mate.mate-desktop
-
-     vte
-     gtk3
-     gnome3.dconf
-  ];
-
   nativeBuildInputs = [
-    pkgconfig
-    intltool
+    gettext
+    itstool
+    pkg-config
     wrapGAppsHook
   ];
 
-  meta = with stdenv.lib; {
-    description = "The MATE Terminal Emulator";
-    homepage = http://mate-desktop.org;
-    license = licenses.gpl3;
+  buildInputs = [
+    dconf
+    libxml2
+    mate-desktop
+    pcre2
+    vte
+  ];
+
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  passthru.tests.test = nixosTests.terminal-emulators.mate-terminal;
+
+  meta = with lib; {
+    description = "MATE desktop terminal emulator";
+    homepage = "https://mate-desktop.org";
+    license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    maintainers = teams.mate.members;
   };
 }

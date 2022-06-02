@@ -1,32 +1,31 @@
-{ stdenv, fetchFromGitHub, fetchpatch, gtk3, pkgconfig, intltool, libxslt, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, pkg-config, intltool, libxslt, makeWrapper,
+  coreutils, zip, unzip, p7zip, unar, gnutar, bzip2, gzip, lhasa, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.4.12";
-  name = "xarchiver-${version}";
+  version = "0.5.4.17";
+  pname = "xarchiver";
 
   src = fetchFromGitHub {
     owner = "ib";
     repo = "xarchiver";
-    rev = "${version}";
-    sha256 = "13d8slcx3frz0dhl1w4llj7001n57cjjb8r7dlaw5qacaas3xfwi";
+    rev = version;
+    sha256 = "00adrjpxqlaccrwjf65w3vhxfswdj0as8aj263c6f9b85llypc5v";
   };
 
-  patches = [
-    # Fixes darwin build, remove with next update.
-    (fetchpatch {
-      url = https://github.com/ib/xarchiver/commit/8c69d066a827419feafd0bd047d19207ceadc7df.patch;
-      sha256 = "1ch1409hx1ynkm0mz93zy8h7wvcrsn56sz7lczsf6hznc8yzl0qg";
-    })
-  ];
+  nativeBuildInputs = [ intltool pkg-config makeWrapper wrapGAppsHook ];
+  buildInputs = [ gtk3 libxslt ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 intltool libxslt hicolor-icon-theme ];
+  postFixup = ''
+    wrapProgram $out/bin/xarchiver \
+    --prefix PATH : ${lib.makeBinPath [ zip unzip p7zip unar gnutar bzip2 gzip lhasa coreutils ]}
+  '';
 
   meta = {
-    description = "GTK+ frontend to 7z,zip,rar,tar,bzip2, gzip,arj, lha, rpm and deb (open and extract only)";
-    homepage = https://github.com/ib/xarchiver;
-    maintainers = [ stdenv.lib.maintainers.domenkozar ];
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    broken = stdenv.isDarwin;
+    description = "GTK frontend to 7z,zip,rar,tar,bzip2, gzip,arj, lha, rpm and deb (open and extract only)";
+    homepage = "https://github.com/ib/xarchiver";
+    maintainers = [ lib.maintainers.domenkozar ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }

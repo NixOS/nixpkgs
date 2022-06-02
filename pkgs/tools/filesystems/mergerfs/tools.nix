@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, coreutils, makeWrapper
-, rsync, python3, pythonPackages }:
+{ lib, stdenv, fetchFromGitHub, coreutils, makeWrapper
+, rsync, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "mergerfs-tools-${version}";
-  version = "20171221";
+  pname = "mergerfs-tools";
+  version = "20190411";
 
   src = fetchFromGitHub {
     owner = "trapexit";
-    repo = "mergerfs-tools";
-    rev = "9b4fe0097b5b51e1a7411a26eb344a24cc8ce1b4";
-    sha256 = "0qrixh3j58gzkmc8r2sgzgy56gm8bmhakwlc2gjb0yrpa1213na1";
+    repo = pname;
+    rev = "6e41fc5848c7cc4408caea86f3991c8cc2ac85a1";
+    sha256 = "0izswg6bya13scvb37l3gkl7mvi8q7l11p4hp4phdlcwh9jvdzcj";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -17,18 +17,18 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "INSTALL=${coreutils}/bin/install"
-    "PREFIX=$(out)"
+    "PREFIX=${placeholder "out"}"
   ];
 
-  postInstall = with stdenv.lib; ''
+  postInstall = with lib; ''
     wrapProgram $out/bin/mergerfs.balance --prefix PATH : ${makeBinPath [ rsync ]}
     wrapProgram $out/bin/mergerfs.dup --prefix PATH : ${makeBinPath [ rsync ]}
-    wrapProgram $out/bin/mergerfs.mktrash --prefix PATH : ${makeBinPath [ pythonPackages.xattr ]}
+    wrapProgram $out/bin/mergerfs.mktrash --prefix PATH : ${makeBinPath [ python3.pkgs.xattr ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Optional tools to help manage data in a mergerfs pool";
-    homepage = https://github.com/trapexit/mergerfs-tools;
+    homepage = "https://github.com/trapexit/mergerfs-tools";
     license = licenses.isc;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau ];

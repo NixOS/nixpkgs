@@ -1,19 +1,19 @@
-{ buildGoPackage, fetchFromGitHub, stdenv, docker }:
+{ buildGoModule, fetchFromGitHub, lib, docker }:
 
-buildGoPackage rec {
-  name = "docker-ls-${version}";
-  version = "0.3.1";
+buildGoModule rec {
+  pname = "docker-ls";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "mayflower";
     repo = "docker-ls";
     rev = "v${version}";
-    sha256 = "1dhadi1s3nm3r8q5a0m59fy4jdya8p7zvm22ci7ifm3mmw960xly";
+    sha256 = "sha256-4+REt0NH4S367qFsyJncVedUrC4t1zw5o0CLTiQfIz8=";
   };
 
-  goPackagePath = "github.com/mayflower/docker-ls";
+  vendorSha256 = "sha256-UulcjQOLEIP++eoYQTEIbCJW51jyE312dMxB8+AKcdU=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for browsing and manipulating docker registries";
     longDescription = ''
       Docker-ls is a set of CLI tools for browsing and manipulating docker registries.
@@ -21,7 +21,7 @@ buildGoPackage rec {
       with tags.
     '';
 
-    homepage = https://github.com/mayflower/docker-ls;
+    homepage = "https://github.com/mayflower/docker-ls";
     maintainers = with maintainers; [ ma27 ];
     platforms = docker.meta.platforms;
     license = licenses.mit;

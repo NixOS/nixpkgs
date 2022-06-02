@@ -1,47 +1,104 @@
-{ stdenv, fetchFromGitHub, pkgconfig
-, buildGoPackage, gpgme, lvm2, btrfs-progs, libseccomp
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, installShellFiles
+, buildGoModule
+, gpgme
+, lvm2
+, btrfs-progs
+, libapparmor
+, libseccomp
+, libselinux
+, systemd
 , go-md2man
+, nixosTests
 }:
 
-buildGoPackage rec {
-  name = "podman-${version}";
-  version = "1.1.2";
+buildGoModule rec {
+  pname = "podman";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = "libpod";
+    repo = "podman";
     rev = "v${version}";
-    sha256 = "180sv1a7k3866ilb0mxbhiysms9xy4v6xbpy4in6ch8m8qym9amh";
+    sha256 = "sha256-3MR4ZhkhMLAK3KHu7JEV9z1/wlyCkxfx1i267TGxwt8=";
   };
 
-  goPackagePath = "github.com/containers/libpod";
+  vendorSha256 = null;
 
-  outputs = [ "bin" "out" "man" ];
+  doCheck = false;
 
-  # Optimizations break compilation of libseccomp c bindings
-  hardeningDisable = [ "fortify" ];
-  nativeBuildInputs = [ pkgconfig go-md2man ];
+  outputs = [ "out" "man" ] ++ lib.optionals stdenv.isLinux [ "rootlessport" ];
 
-  buildInputs = [
-    btrfs-progs libseccomp gpgme lvm2
+  nativeBuildInputs = [ pkg-config go-md2man installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.isLinux [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libseccomp
+    libselinux
+    lvm2
+    systemd
   ];
 
   buildPhase = ''
-    pushd $NIX_BUILD_TOP/go/src/${goPackagePath}
+    runHook preBuild
     patchShebangs .
-    make binaries docs
+    ${if stdenv.isDarwin then ''
+      make podman-remote # podman-mac-helper uses FHS paths
+    '' else ''
+      make bin/podman bin/rootlessport
+    ''}
+    make docs
+    runHook postBuild
   '';
 
   installPhase = ''
-    install -Dm555 bin/podman $bin/bin/podman
+    runHook preInstall
+    mkdir -p {$out/{bin,etc,lib,share},$man} # ensure paths exist for the wrapper
+    ${if stdenv.isDarwin then ''
+      mv bin/{darwin/podman,podman}
+    '' else ''
+      install -Dm644 cni/87-podman-bridge.conflist -t $out/etc/cni/net.d
+      install -Dm644 contrib/tmpfile/podman.conf -t $out/lib/tmpfiles.d
+      for s in contrib/systemd/**/*.in; do
+        substituteInPlace "$s" --replace "@@PODMAN@@" "podman" # don't use unwrapped binary
+      done
+      PREFIX=$out make install.systemd
+      install -Dm555 bin/rootlessport -t $rootlessport/bin
+    ''}
+    install -Dm555 bin/podman -t $out/bin
+    PREFIX=$out make install.completions
     MANDIR=$man/share/man make install.man
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://podman.io/;
+  postFixup = lib.optionalString stdenv.isLinux ''
+    RPATH=$(patchelf --print-rpath $out/bin/podman)
+    patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/podman
+  '';
+
+  passthru.tests = {
+    inherit (nixosTests) podman;
+    # related modules
+    inherit (nixosTests)
+      podman-tls-ghostunnel
+      podman-dnsname
+      ;
+    oci-containers-podman = nixosTests.oci-containers.podman;
+  };
+
+  meta = with lib; {
+    homepage = "https://podman.io/";
     description = "A program for managing pods, containers and container images";
+    changelog = "https://github.com/containers/podman/blob/v${version}/RELEASE_NOTES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ marsam ] ++ teams.podman.members;
+    # requires >= 10.13 SDK https://github.com/NixOS/nixpkgs/issues/101229
+    # Undefined symbols for architecture x86_64: "_utimensat"
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

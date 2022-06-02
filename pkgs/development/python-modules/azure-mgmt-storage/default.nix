@@ -1,37 +1,44 @@
-{ pkgs
+{ lib
 , buildPythonPackage
 , fetchPypi
-, python
 , azure-mgmt-common
+, azure-mgmt-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "3.1.1";
+  version = "20.0.0";
   pname = "azure-mgmt-storage";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "22a779cae5e09712b7d62ef9bc3d8907a5666893a8a113b6d9348e933170236f";
+    hash = "sha256-buR2tWIv9vWVTt7m6w2N1CezIXAihVrfHshjPKBM3uI=";
   };
 
-  preConfigure = ''
-    # Patch to make this package work on requests >= 2.11.x
-    # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-    sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/storage/storagemanagement.py
-  '';
+  propagatedBuildInputs = [
+    azure-mgmt-common
+    azure-mgmt-core
+  ];
 
-  postInstall = ''
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-  '';
+  pythonNamespaces = [
+    "azure.mgmt"
+  ];
 
-  propagatedBuildInputs = [ azure-mgmt-common ];
+  pythonImportsCheck = [
+    "azure.mgmt.storage"
+  ];
 
-  meta = with pkgs.lib; {
-    description = "Microsoft Azure SDK for Python";
-    homepage = "https://azure.microsoft.com/en-us/develop/python/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ olcai ];
+  # has no tests
+  doCheck = false;
+
+  meta = with lib; {
+    description = "This is the Microsoft Azure Storage Management Client Library";
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jonringer olcai maxwilson ];
   };
 }

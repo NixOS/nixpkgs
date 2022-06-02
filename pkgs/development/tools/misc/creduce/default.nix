@@ -1,47 +1,44 @@
-{ stdenv, fetchurl, cmake, makeWrapper
-, llvm, clang-unwrapped
+{ lib, stdenv, fetchurl, cmake, makeWrapper
+, llvm, libclang
 , flex
 , zlib
 , perlPackages
-, utillinux
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
-  name = "creduce-${version}";
-  version = "2.8.0";
+  pname = "creduce";
+  version = "2.10.0";
 
   src = fetchurl {
-    url = "https://embed.cs.utah.edu/creduce/${name}.tar.gz";
-    sha256 = "1vqx73ymfscvlyig03972a5m7ar3gx2yv6m8c6h2mibz792j5xkp";
+    url = "https://embed.cs.utah.edu/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "2xwPEjln8k1iCwQM69UwAb89zwPkAPeFVqL/LhH+oGM=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [ cmake makeWrapper llvm.dev ];
   buildInputs = [
     # Ensure stdenv's CC is on PATH before clang-unwrapped
     stdenv.cc
     # Actual deps:
-    llvm clang-unwrapped
+    llvm libclang
     flex zlib
   ] ++ (with perlPackages; [ perl ExporterLite FileWhich GetoptTabular RegexpCommon TermReadKey ]);
 
   # On Linux, c-reduce's preferred way to reason about
   # the cpu architecture/topology is to use 'lscpu',
   # so let's make sure it knows where to find it:
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     substituteInPlace creduce/creduce_utils.pm --replace \
-      lscpu ${utillinux}/bin/lscpu
+      lscpu ${util-linux}/bin/lscpu
   '';
-
-
-  enableParallelBuilding = true;
 
   postInstall = ''
     wrapProgram $out/bin/creduce --prefix PERL5LIB : "$PERL5LIB"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C program reducer";
-    homepage = https://embed.cs.utah.edu/creduce;
+    homepage = "https://embed.cs.utah.edu/creduce";
     # Officially, the license is: https://github.com/csmith-project/creduce/blob/master/COPYING
     license = licenses.ncsa;
     longDescription = ''

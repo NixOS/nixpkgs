@@ -1,15 +1,26 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, gnulib, perl, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "lbzip2-2.5";
+  pname = "lbzip2";
+  version = "2.5";
 
-  src = fetchurl {
-    url = "http://archive.lbzip2.org/${name}.tar.gz";
-    sha256 = "1sahaqc5bw4i0iyri05syfza4ncf5cml89an033fspn97klmxis6";
+  src = fetchFromGitHub {
+    owner = "kjn";
+    repo = "lbzip2";
+    rev = "v${version}";
+    sha256 = "1h321wva6fp6khz6x0i6rqb76xh327nw6v5jhgjpcckwdarj5jv8";
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://lbzip2.org/;
+  buildInputs = [ gnulib perl ];
+  nativeBuildInputs = [ autoconf automake ];
+
+  preConfigure = ''
+    substituteInPlace configure.ac --replace 'AC_PREREQ([2.63])' 'AC_PREREQ(2.64)'
+    ./build-aux/autogen.sh
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/kjn/lbzip2"; # Formerly http://lbzip2.org/
     description = "Parallel bzip2 compression utility";
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];

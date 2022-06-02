@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+let
   pname = "sahel-fonts";
-  version = "1.0.0-alpha22";
+  version = "3.4.0";
+in fetchFromGitHub {
+  name = "${pname}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "rastikerdar";
-    repo = "sahel-font";
-    rev = "v${version}";
-    sha256 = "1kx7byzb5zxspq0i4cvgf4q7sm6xnhdnfyw9zrb1wfmdv3jzaz7p";
-  };
+  owner = "rastikerdar";
+  repo = "sahel-font";
+  rev = "v${version}";
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/sahel-fonts
-    cp -v $( find . -name '*.ttf') $out/share/fonts/sahel-fonts
+  postFetch = ''
+    tar xf $downloadedFile --strip=1
+    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/sahel-fonts {} \;
   '';
+  sha256 = "sha256-MrKSgz9WpVgLS37uH/7S0LPBD/n3GLXeUCMBD7x5CG8=";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/rastikerdar/sahel-font;
+  meta = with lib; {
+    homepage = "https://github.com/rastikerdar/sahel-font";
     description = "A Persian (farsi) Font - فونت (قلم) فارسی ساحل";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.linarcx ];
+    maintainers = [ ];
   };
 }

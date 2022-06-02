@@ -7,7 +7,7 @@ let
 in
 {
   options.services.oxidized = {
-    enable = mkEnableOption "the oxidized configuation backup service.";
+    enable = mkEnableOption "the oxidized configuration backup service";
 
     user = mkOption {
       type = types.str;
@@ -33,7 +33,7 @@ in
 
     configFile = mkOption {
       type = types.path;
-      example = literalExample ''
+      example = literalExpression ''
         pkgs.writeText "oxidized-config.yml" '''
           ---
           debug: true
@@ -69,7 +69,7 @@ in
 
     routerDB = mkOption {
       type = types.path;
-      example = literalExample ''
+      example = literalExpression ''
         pkgs.writeText "oxidized-router.db" '''
           hostname-sw1:powerconnect:username1:password2
           hostname-sw2:procurve:username2:password2
@@ -89,6 +89,7 @@ in
       group = cfg.group;
       home = cfg.dataDir;
       createHome = true;
+      isSystemUser = true;
     };
 
     systemd.services.oxidized = {
@@ -97,8 +98,8 @@ in
 
       preStart = ''
         mkdir -p ${cfg.dataDir}/.config/oxidized
-        cp -v ${cfg.routerDB} ${cfg.dataDir}/.config/oxidized/router.db
-        cp -v ${cfg.configFile} ${cfg.dataDir}/.config/oxidized/config
+        ln -f -s ${cfg.routerDB} ${cfg.dataDir}/.config/oxidized/router.db
+        ln -f -s ${cfg.configFile} ${cfg.dataDir}/.config/oxidized/config
       '';
 
       serviceConfig = {
@@ -110,6 +111,7 @@ in
         Restart  = "always";
         WorkingDirectory = cfg.dataDir;
         KillSignal = "SIGKILL";
+        PIDFile = "${cfg.dataDir}/.config/oxidized/pid";
       };
     };
   };

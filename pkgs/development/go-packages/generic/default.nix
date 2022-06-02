@@ -1,5 +1,5 @@
 { go, govers, lib, fetchgit, fetchhg, fetchbzr, rsync
-, removeReferencesTo, fetchFromGitHub, stdenv }:
+, fetchFromGitHub, stdenv }:
 
 { buildInputs ? []
 , nativeBuildInputs ? []
@@ -7,11 +7,14 @@
 , preFixup ? ""
 , shellHook ? ""
 
+# Go linker flags, passed to go via -ldflags
+, ldflags ? []
+
+# Go tags, passed to go via -tag
+, tags ? []
+
 # We want parallel builds by default
 , enableParallelBuilding ? true
-
-# Disabled flag
-, disabled ? false
 
 # Go import path of the package
 , goPackagePath
@@ -29,24 +32,27 @@
 # go2nix dependency file
 , goDeps ? null
 
+# Whether to delete the vendor folder supplied with the source.
+, deleteVendor ? false
+
 , dontRenameImports ? false
 
 # Do not enable this without good reason
 # IE: programs coupled with the compiler
 , allowGoReference ? false
 
-, meta ? {}, ... } @ args':
+, CGO_ENABLED ? go.CGO_ENABLED
+
+# needed for buildFlags{,Array} warning
+, buildFlags ? ""
+, buildFlagsArray ? ""
+
+, meta ? {}, ... } @ args:
 
 
 with builtins;
 
 let
-  args = lib.filterAttrs (name: _: name != "extraSrcs") args';
-
-  removeReferences = [ ] ++ lib.optional (!allowGoReference) go;
-
-  removeExpr = refs: ''remove-references-to ${lib.concatMapStrings (ref: " -t ${ref}") refs}'';
-
   dep2src = goDep:
     {
       inherit (goDep) goPackagePath;
@@ -74,14 +80,24 @@ let
 
   goPath = if goDeps != null then importGodeps { depsFile = goDeps; } ++ extraSrcs
                              else extraSrcs;
-  package = go.stdenv.mkDerivation (
-    (builtins.removeAttrs args [ "goPackageAliases" "disabled" ]) // {
+  package = stdenv.mkDerivation (
+    (builtins.removeAttrs args [ "goPackageAliases" "disabled" "extraSrcs"]) // {
 
-    nativeBuildInputs = [ removeReferencesTo go ]
+    nativeBuildInputs = [ go ]
       ++ (lib.optional (!dontRenameImports) govers) ++ nativeBuildInputs;
     buildInputs = buildInputs;
 
-    inherit (go) GOOS GOARCH;
+    inherit (go) GOOS GOARCH GO386;
+
+    GOHOSTARCH = go.GOHOSTARCH or null;
+    GOHOSTOS = go.GOHOSTOS or null;
+
+    inherit CGO_ENABLED;
+
+    GO111MODULE = "off";
+    GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
+
+    GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
@@ -91,6 +107,18 @@ let
       mkdir -p "go/src/$(dirname "$goPackagePath")"
       mv "$sourceRoot" "go/src/$goPackagePath"
 
+    '' + lib.optionalString (deleteVendor == true) ''
+      if [ ! -d "go/src/$goPackagePath/vendor" ]; then
+        echo "vendor folder does not exist, 'deleteVendor' is not needed"
+        exit 10
+      else
+        rm -rf "go/src/$goPackagePath/vendor"
+      fi
+    '' + lib.optionalString (goDeps != null) ''
+      if [ -d "go/src/$goPackagePath/vendor" ]; then
+        echo "vendor folder exists, 'goDeps' is not needed"
+        exit 10
+      fi
     '' + lib.flip lib.concatMapStrings goPath ({ src, goPackagePath }: ''
       mkdir goPath
       (cd goPath; unpackFile "${src}")
@@ -122,15 +150,22 @@ let
 
       runHook renameImports
 
+      exclude='\(/_\|examples\|Godeps\|testdata'
+      if [[ -n "$excludedPackages" ]]; then
+        IFS=' ' read -r -a excludedArr <<<$excludedPackages
+        printf -v excludedAlternates '%s\\|' "''${excludedArr[@]}"
+        excludedAlternates=''${excludedAlternates%\\|} # drop final \| added by printf
+        exclude+='\|'"$excludedAlternates"
+      fi
+      exclude+='\)'
+
       buildGoDir() {
         local d; local cmd;
         cmd="$1"
         d="$2"
         . $TMPDIR/buildFlagsArray
-        echo "$d" | grep -q "\(/_\|examples\|Godeps\)" && return 0
-        [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
         local OUT
-        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" -v -p $NIX_BUILD_CORES $d 2>&1)"; then
+        if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${tags:+-tags=${lib.concatStringsSep "," tags}} ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
             echo "$OUT" >&2
             return 1
@@ -149,7 +184,7 @@ let
           echo "$subPackages" | sed "s,\(^\| \),\1$goPackagePath/,g"
         else
           pushd "$NIX_BUILD_TOP/go/src" >/dev/null
-          find "$goPackagePath" -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort | uniq
+          find "$goPackagePath" -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort | uniq | grep -v "$exclude"
           popd >/dev/null
         fi
       }
@@ -167,6 +202,7 @@ let
           export NIX_BUILD_CORES=1
       fi
       for pkg in $(getGoDirs ""); do
+        echo "Building subPackage $pkg"
         buildGoDir install "$pkg"
       done
     '' + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -189,7 +225,7 @@ let
       runHook preCheck
 
       for pkg in $(getGoDirs test); do
-        buildGoDir test "$pkg"
+        buildGoDir test $checkFlags "$pkg"
       done
 
       runHook postCheck
@@ -198,16 +234,14 @@ let
     installPhase = args.installPhase or ''
       runHook preInstall
 
-      mkdir -p $bin
+      mkdir -p $out
       dir="$NIX_BUILD_TOP/go/bin"
-      [ -e "$dir" ] && cp -r $dir $bin
+      [ -e "$dir" ] && cp -r $dir $out
 
       runHook postInstall
     '';
 
-    preFixup = preFixup + ''
-      find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
-    '';
+    strictDeps = true;
 
     shellHook = ''
       d=$(mktemp -d "--suffix=-$name")
@@ -228,20 +262,13 @@ let
 
     enableParallelBuilding = enableParallelBuilding;
 
-    # I prefer to call this dev but propagatedBuildInputs expects $out to exist
-    outputs = args.outputs or [ "bin" "out" ];
-
     meta = {
       # Add default meta information
       homepage = "https://${goPackagePath}";
       platforms = go.meta.platforms or lib.platforms.all;
-    } // meta // {
-      # add an extra maintainer to every package
-      maintainers = (meta.maintainers or []) ++
-                    [ lib.maintainers.ehmry lib.maintainers.lethalman ];
-    };
+    } // meta;
   });
-in if disabled then
-  throw "${package.name} not supported for go ${go.meta.branch}"
-else
+in
+lib.warnIf (buildFlags != "" || buildFlagsArray != "")
+  "Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
   package

@@ -1,7 +1,7 @@
-{ fetchurl, python2Packages }:
+{ fetchurl, pypy2Packages }:
 
-python2Packages.buildPythonApplication rec {
-  name = "tailor-${version}";
+pypy2Packages.buildPythonApplication rec {
+  pname = "tailor";
   version = "0.9.35";
 
   src = fetchurl {

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gdbm, glib }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gdbm, glib }:
 
 # Note (2017-10-24, yuriaisaka):
 # - Version 1.3.3 dates from Jul. 19, 2013.
@@ -9,13 +9,13 @@
 # - We for the moment do not package them to keep the dependencies slim.
 #   Probably, shall package the newer tools as skktools-extra in the future.
 stdenv.mkDerivation rec {
-  name = "skktools-${version}";
-  version = "1.3.3";
+  pname = "skktools";
+  version = "1.3.4";
   src = fetchFromGitHub {
     owner = "skk-dev";
     repo = "skktools";
-    rev = "c8816fe720604d4fd79f3552e99e0430ca6f2769";
-    sha256 = "11v1i5gkxvfsipigc1w1m16ijzh85drpl694kg6ih4jfam1q4vdh";
+    rev = "skktools-${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "1zway8jsm18279xq8zlpr84iqiw373x3v0ysay74n9bjqxbl234a";
   };
   # # See "12.2. Package naming"
   # name = "skktools-unstable-${version}";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   #   sha256 = "1k9zxqybl1l5h0a8px2awc920qrdyp1qls50h3kfrj3g65d08aq2";
   # };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gdbm glib ];
 
   meta = {
@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
       (merge, sort etc.) the dictionaries formatted for SKK Japanese
       input method.
     '';
-    homepage = https://github.com/skk-dev/skktools;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    homepage = "https://github.com/skk-dev/skktools";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ yuriaisaka ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

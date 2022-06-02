@@ -1,43 +1,80 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libusb1, libtool, libexif, libjpeg, gettext, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, buildPackages
+, autoreconfHook
+, pkg-config
+, gettext
+, libusb1
+, libtool
+, libexif
+, libgphoto2
+, libjpeg
+, curl
+, libxml2
+, gd
+}:
 
 stdenv.mkDerivation rec {
-  name = "libgphoto2-${meta.version}";
+  pname = "libgphoto2";
+  version = "2.5.29";
 
   src = fetchFromGitHub {
     owner = "gphoto";
     repo = "libgphoto2";
-    rev = "${meta.tag}";
-    sha256 = "0pbfg89817qkb35mmajsw2iz6j9nhkkj67m419f8x8yxpqkaa0wb";
+    rev = "libgphoto2-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
+    sha256 = "sha256-Js5gbD57lhtqBX6joGMiLKUwkPDaSclnTrwBR87AliQ=";
   };
 
-  patches = [];
+  depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ pkgconfig gettext autoreconfHook ];
-  buildInputs = [ libtool libjpeg libusb1  ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gettext
+    libtool
+    pkg-config
+  ];
+
+  buildInputs = [
+    libjpeg
+    libtool # for libltdl
+    libusb1
+    curl
+    libxml2
+    gd
+  ];
 
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];
 
   hardeningDisable = [ "format" ];
 
-  postInstall = ''
-    mkdir -p $out/lib/udev/rules.d
-    $out/lib/libgphoto2/print-camera-list udev-rules version 175 group camera >$out/lib/udev/rules.d/40-gphoto2.rules
-  '';
+  postInstall =
+    let
+      executablePrefix =
+        if stdenv.buildPlatform == stdenv.hostPlatform then
+          "$out"
+        else
+          buildPackages.libgphoto2;
+    in
+    ''
+      mkdir -p $out/lib/udev/rules.d
+      ${executablePrefix}/lib/libgphoto2/print-camera-list \
+          udev-rules version 175 group camera \
+          >$out/lib/udev/rules.d/40-gphoto2.rules
+    '';
 
   meta = {
-    homepage = http://www.gphoto.org/proj/libgphoto2/;
+    homepage = "http://www.gphoto.org/proj/libgphoto2/";
     description = "A library for accessing digital cameras";
     longDescription = ''
       This is the library backend for gphoto2. It contains the code for PTP,
       MTP, and other vendor specific protocols for controlling and transferring data
       from digital cameras.
     '';
-    version = "2.5.17";
-    tag = "libgphoto2-2_5_17-release";
     # XXX: the homepage claims LGPL, but several src files are lgpl21Plus
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = with stdenv.lib.platforms; unix;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = with lib.platforms; unix;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 }

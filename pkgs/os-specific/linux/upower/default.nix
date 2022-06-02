@@ -1,41 +1,118 @@
-{ stdenv, fetchurl, pkgconfig, dbus-glib
-, intltool, libxslt, docbook_xsl, udev, libgudev, libusb1
-, useSystemd ? true, systemd, gobject-introspection
+{ lib
+, stdenv
+, fetchFromGitLab
+, pkg-config
+, rsync
+, libxslt
+, meson
+, ninja
+, python3
+, gtk-doc
+, docbook-xsl-nons
+, udev
+, libgudev
+, libusb1
+, glib
+, gobject-introspection
+, gettext
+, systemd
+, useIMobileDevice ? true
+, libimobiledevice
+, withDocs ? (stdenv.buildPlatform == stdenv.hostPlatform)
 }:
 
 stdenv.mkDerivation rec {
-  name = "upower-0.99.9";
+  pname = "upower";
+  version = "0.99.17";
 
-  src = fetchurl {
-    url = https://gitlab.freedesktop.org/upower/upower/uploads/2282c7c0e53fb31816b824c9d1f547e8/upower-0.99.9.tar.xz;
-    sha256 = "046ix7j7hmb7ycv8v54668kjsrgjhzwxn299c1d87vdnkd38kfh1";
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals withDocs [ "devdoc" ];
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "upower";
+    repo = "upower";
+    rev = "v${version}";
+    sha256 = "xvvqzGxgkuGcvnO12jnLURNJUoSlnMw2g/mnII+i6Bs=";
   };
 
-  buildInputs =
-    [ dbus-glib intltool libxslt docbook_xsl udev libgudev libusb1 gobject-introspection ]
-    ++ stdenv.lib.optional useSystemd systemd;
+  strictDeps = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  depsBuildBuild = [
+    pkg-config
+  ];
 
-  configureFlags =
-    [ "--with-backend=linux" "--localstatedir=/var"
-    ]
-    ++ stdenv.lib.optional useSystemd
-    [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-      "--with-systemdutildir=$(out)/lib/systemd"
-      "--with-udevrulesdir=$(out)/lib/udev/rules.d"
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    python3
+    gtk-doc
+    docbook-xsl-nons
+    gettext
+    gobject-introspection
+    libxslt
+    pkg-config
+    rsync
+  ];
 
-  NIX_CFLAGS_LINK = "-lgcc_s";
+  buildInputs = [
+    libgudev
+    libusb1
+    udev
+    systemd
+  ] ++ lib.optionals useIMobileDevice [
+    libimobiledevice
+  ];
+
+  propagatedBuildInputs = [
+    glib
+  ];
+
+  mesonFlags = [
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "-Dos_backend=linux"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "auto" else "disabled"}"
+    "-Dgtk-doc=${lib.boolToString withDocs}"
+  ];
 
   doCheck = false; # fails with "env: './linux/integration-test': No such file or directory"
 
-  installFlags = "historydir=$(TMPDIR)/foo";
+  postPatch = ''
+    patchShebangs src/linux/unittest_inspector.py
+  '';
 
-  meta = {
-    homepage = https://upower.freedesktop.org/;
+  postInstall = ''
+    # Move stuff from DESTDIR to proper location.
+    # We use rsync to merge the directories.
+    for dir in etc var; do
+        rsync --archive "${DESTDIR}/$dir" "$out"
+        rm --recursive "${DESTDIR}/$dir"
+    done
+    for o in out dev; do
+        rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
+        rm --recursive "${DESTDIR}/''${!o}"
+    done
+    # Ensure the DESTDIR is removed.
+    rmdir "${DESTDIR}/nix/store" "${DESTDIR}/nix" "${DESTDIR}"
+  '';
+
+  # HACK: We want to install configuration files to $out/etc
+  # but upower should read them from /etc on a NixOS system.
+  # With autotools, it was possible to override Make variables
+  # at install time but Meson does not support this
+  # so we need to convince it to install all files to a temporary
+  # location using DESTDIR and then move it to proper one in postInstall.
+  DESTDIR = "${placeholder "out"}/dest";
+
+  meta = with lib; {
+    homepage = "https://upower.freedesktop.org/";
+    changelog = "https://gitlab.freedesktop.org/upower/upower/-/blob/v${version}/NEWS";
     description = "A D-Bus service for power management";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = teams.freedesktop.members;
+    platforms = platforms.linux;
+    license = licenses.gpl2Plus;
   };
 }

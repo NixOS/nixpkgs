@@ -1,28 +1,29 @@
-{ stdenv, fetchFromGitHub, which, ocaml, findlib, ocamlbuild }:
+{ lib, fetchFromGitHub, ocaml, buildDunePackage
+, stdlib-shims
+}:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "earley is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec {
-  version = "1.0.2";
-  name = "ocaml${ocaml.version}-earley-${version}";
+buildDunePackage rec {
+  version = "3.0.0";
+  pname = "earley";
   src = fetchFromGitHub {
     owner = "rlepigre";
     repo = "ocaml-earley";
-    rev = "ocaml-earley_${version}";
-    sha256 = "110njakmx1hyq42hyr6gx6qhaxly860whfhd6r0vks4yfp68qvcx";
+    rev = version;
+    sha256 = "1vi58zdxchpw6ai0bz9h2ggcmg8kv57yk6qbx82lh47s5wb3mz5y";
   };
 
-  buildInputs = [ which ocaml findlib ocamlbuild ];
+  minimumOCamlVersion = "4.07";
+  useDune2 = true;
 
-  createFindlibDestdir = true;
+  buildInputs = [ stdlib-shims ];
+
+  doCheck = true;
 
   meta = {
     description = "Parser combinators based on Earley Algorithm";
-    license = stdenv.lib.licenses.cecill-b;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/rlepigre/ocaml-earley";
+    license = lib.licenses.cecill-b;
+    maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "pa_ocaml";
   };
 }

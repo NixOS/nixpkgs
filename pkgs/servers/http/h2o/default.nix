@@ -1,39 +1,29 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, cmake
-, libressl, libuv, zlib
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, cmake, ninja
+, openssl, libuv, zlib
 }:
 
-with builtins;
-
 stdenv.mkDerivation rec {
-  name = "h2o-${version}";
-  version = "2.2.5";
+  pname   = "h2o";
+  version = "2.3.0-beta2";
 
   src = fetchFromGitHub {
     owner  = "h2o";
     repo   = "h2o";
     rev    = "refs/tags/v${version}";
-    sha256 = "0jyvbp6cjiirj44nxqa2fi5y473gnc8awfn8zv82hb1y9rlxqfyv";
+    sha256 = "0lwg5sfsr7fw7cfy0hrhadgixm35b5cgcvlhwhbk89j72y1bqi6n";
   };
 
-  # We have to fix up some function prototypes, because despite upstream h2o
-  # issue #1705 (https://github.com/h2o/h2o/issues/1706), libressl 2.7+ doesn't
-  # seem to work
-  patchPhase = ''
-    substituteInPlace ./deps/neverbleed/neverbleed.c \
-      --replace 'static void RSA_' 'void RSA_' \
-      --replace 'static int RSA_'  'int RSA_'
-  '';
+  outputs = [ "out" "man" "dev" "lib" ];
 
-  nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ libressl libuv zlib ];
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ pkg-config cmake ninja ];
+  buildInputs = [ openssl libuv zlib ];
 
-  meta = {
+  meta = with lib; {
     description = "Optimized HTTP/1 and HTTP/2 server";
-    homepage    = https://h2o.examp1e.net;
-    license     = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    homepage    = "https://h2o.examp1e.net";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ thoughtpolice ];
+    platforms   = platforms.linux;
   };
 }

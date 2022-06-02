@@ -3,27 +3,31 @@
 , fetchPypi
 , mecab
 , swig
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "mecab-python3";
-  version = "0.996.1";
+  version = "1.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5aca4d0d196161e41452b89921042c0e61a6b7e7e9373211c0c1c50d1809055d";
+    sha256 = "sha256-5wPXjIimcau4FwNRZEhQAV2bv6sxUwo7QNEkgaZ3mhE=";
   };
 
   nativeBuildInputs = [
     mecab # for mecab-config
     swig
+    setuptools-scm
   ];
 
   buildInputs = [ mecab ];
 
+  doCheck = false;
+
   meta = with lib; {
     description = "A python wrapper for mecab: Morphological Analysis engine";
-    homepage =  https://github.com/SamuraiT/mecab-python3;
+    homepage =  "https://github.com/SamuraiT/mecab-python3";
     license = with licenses; [ gpl2 lgpl21 bsd3 ]; # any of the three
     maintainers = with maintainers; [ ixxie ];
   };

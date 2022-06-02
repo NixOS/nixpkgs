@@ -84,6 +84,16 @@ in {
         type = types.bool;
         description = "Cadvisor storage driver, enable secure communication.";
       };
+
+      extraOptions = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Additional cadvisor options.
+
+          See <link xlink:href='https://github.com/google/cadvisor/blob/master/docs/runtime_options.md'/> for available options.
+        '';
+      };
     };
   };
 
@@ -101,6 +111,8 @@ in {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" "docker.service" "influxdb.service" ];
 
+        path = optionals config.boot.zfs.enabled [ pkgs.zfs ];
+
         postStart = mkBefore ''
           until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/containers/'; do
             sleep 1;
@@ -112,6 +124,7 @@ in {
             -logtostderr=true \
             -listen_ip="${cfg.listenAddress}" \
             -port="${toString cfg.port}" \
+            ${escapeShellArgs cfg.extraOptions} \
             ${optionalString (cfg.storageDriver != null) ''
               -storage_driver "${cfg.storageDriver}" \
               -storage_driver_user "${cfg.storageDriverHost}" \
@@ -124,7 +137,6 @@ in {
 
         serviceConfig.TimeoutStartSec=300;
       };
-      virtualisation.docker.enable = mkDefault true;
     })
   ];
 }

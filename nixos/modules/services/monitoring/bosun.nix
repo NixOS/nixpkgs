@@ -33,15 +33,14 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.bosun;
-        defaultText = "pkgs.bosun";
-        example = literalExample "pkgs.bosun";
+        defaultText = literalExpression "pkgs.bosun";
         description = ''
           bosun binary to use.
         '';
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "bosun";
         description = ''
           User account under which bosun runs.
@@ -49,7 +48,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "bosun";
         description = ''
           Group account under which bosun runs.
@@ -57,7 +56,7 @@ in {
       };
 
       opentsdbHost = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = "localhost:4242";
         description = ''
           Host and port of the OpenTSDB database that stores bosun data.
@@ -66,7 +65,7 @@ in {
       };
 
       influxHost = mkOption {
-        type = types.nullOr types.string;
+        type = types.nullOr types.str;
         default = null;
         example = "localhost:8086";
         description = ''
@@ -75,7 +74,7 @@ in {
       };
 
       listenAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = ":8070";
         description = ''
           The host address and port that bosun's web interface will listen on.
@@ -148,7 +147,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         ExecStart = ''
-          ${cfg.package.bin}/bin/bosun -c ${configFile}
+          ${cfg.package}/bin/bosun -c ${configFile}
         '';
       };
     };

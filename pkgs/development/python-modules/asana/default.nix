@@ -1,33 +1,47 @@
-{ buildPythonPackage, pytest, requests, requests_oauthlib, six
-, fetchFromGitHub, responses, stdenv
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-oauthlib
+, responses
+, six
 }:
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "0.7.1";
+  version = "0.10.9";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asana";
     repo = "python-asana";
     rev = "v${version}";
-    sha256 = "0vmpy4j1n54gkkg0l8bhw0xf4yby5kqzxnsv07cjc2w38snj5vy1";
+    sha256 = "sha256-9gOkCMY15ChdhiFdzS0TjvWpVTKKEGt7XIcK6EhkSK8=";
   };
 
-  checkInputs = [ pytest responses ];
-  propagatedBuildInputs = [ requests requests_oauthlib six ];
+  propagatedBuildInputs = [
+    requests
+    requests-oauthlib
+    six
+  ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "requests_oauthlib >= 0.8.0, == 0.8.*" "requests_oauthlib>=0.8.0<2.0"
-  '';
+  checkInputs = [
+    pytestCheckHook
+    responses
+  ];
 
-  checkPhase = ''
-    py.test tests
-  '';
+  pythonImportsCheck = [
+    "asana"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python client library for Asana";
-    homepage = https://github.com/asana/python-asana;
+    homepage = "https://github.com/asana/python-asana";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

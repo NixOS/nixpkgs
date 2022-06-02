@@ -27,7 +27,7 @@ in
               popd
             '';
           diskImageBase = "nixos-image-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.raw";
-          buildInputs = [ pkgs.utillinux pkgs.perl ];
+          buildInputs = [ pkgs.util-linux pkgs.perl ];
           exportReferencesGraph =
             [ "closure" config.system.build.toplevel ];
         }
@@ -111,7 +111,7 @@ in
   # Always include cryptsetup so that NixOps can use it.
   environment.systemPackages = [ pkgs.cryptsetup ];
 
-  systemd.services."fetch-ec2-data" =
+  systemd.services.fetch-ec2-data =
     { description = "Fetch EC2 Data";
 
       wantedBy = [ "multi-user.target" "sshd.service" ];
@@ -119,7 +119,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
-      path = [ pkgs.wget pkgs.iproute ];
+      path = [ pkgs.wget pkgs.iproute2 ];
 
       script =
         ''

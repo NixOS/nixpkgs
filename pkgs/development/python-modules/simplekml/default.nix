@@ -1,19 +1,24 @@
-{ lib , buildPythonPackage , fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+}:
 
 buildPythonPackage rec {
   pname = "simplekml";
-  version = "1.3.1";
+  version = "1.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "30c121368ce1d73405721730bf766721e580cae6fbb7424884c734c89ec62ad7";
+    sha256 = "cda687be2754395fcab664e908ebf589facd41e8436d233d2be37a69efb1c536";
   };
 
-  doCheck = false; # no tests are defined in 1.3.1
+  # no tests are defined in 1.3.5
+  doCheck = false;
+  pythonImportsCheck = [ "simplekml" ];
 
   meta = with lib; {
-    description = "Generate KML with as little effort as possible";
-    homepage =  https://readthedocs.org/projects/simplekml/;
+    description = "Python package to generate KML";
+    homepage =  "https://simplekml.readthedocs.io/";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ rvolosatovs ];
   };

@@ -1,30 +1,63 @@
-{ stdenv, autoreconfHook, pkgconfig, fetchFromGitHub, dleyna-connector-dbus, dleyna-core, gssdp, gupnp, gupnp-av, gupnp-dlna, libsoup, makeWrapper }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, dleyna-connector-dbus
+, dleyna-core
+, gssdp
+, gupnp
+, gupnp-av
+, gupnp-dlna
+, libsoup
+, makeWrapper
+, docbook-xsl-nons
+, libxslt
+}:
 
 stdenv.mkDerivation rec {
   pname = "dleyna-renderer";
-  name = "${pname}-${version}";
-  version = "0.6.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
-    owner = "01org";
+    owner = "phako";
     repo = pname;
-    rev = version;
-    sha256 = "0jy54aq8hgrvzchrvfzqaj4pcn0cfhafl9bv8a9p6j82yjk4pvpp";
+    rev = "v${version}";
+    sha256 = "sha256-bGasT3XCa7QHV3D7z59TSHoqWksNSIgaO0z9zYfHHuw=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
-  buildInputs = [ dleyna-core dleyna-connector-dbus gssdp gupnp gupnp-av gupnp-dlna libsoup ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    makeWrapper
+
+    # manpage
+    docbook-xsl-nons
+    libxslt # for xsltproc
+  ];
+
+  buildInputs = [
+    dleyna-core
+    dleyna-connector-dbus # runtime dependency to be picked up to DLEYNA_CONNECTOR_PATH
+    gssdp
+    gupnp
+    gupnp-av
+    gupnp-dlna
+    libsoup
+  ];
 
   preFixup = ''
     wrapProgram "$out/libexec/dleyna-renderer-service" \
       --set DLEYNA_CONNECTOR_PATH "$DLEYNA_CONNECTOR_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to discover and manipulate Digital Media Renderers";
-    homepage = https://01.org/dleyna;
-    maintainers = [ maintainers.jtojnar ];
+    homepage = "https://github.com/phako/dleyna-renderer";
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
   };
 }

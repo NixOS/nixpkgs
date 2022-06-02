@@ -17,24 +17,23 @@ in
 
     services.felix = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the Apache Felix OSGi service";
-      };
+      enable = mkEnableOption "the Apache Felix OSGi service";
 
       bundles = mkOption {
         type = types.listOf types.package;
         default = [ pkgs.felix_remoteshell ];
-        defaultText = "[ pkgs.felix_remoteshell ]";
+        defaultText = literalExpression "[ pkgs.felix_remoteshell ]";
         description = "List of bundles that should be activated on startup";
       };
 
       user = mkOption {
+        type = types.str;
         default = "osgi";
         description = "User account under which Apache Felix runs.";
       };
 
       group = mkOption {
+        type = types.str;
         default = "osgi";
         description = "Group account under which Apache Felix runs.";
       };
@@ -47,14 +46,10 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    users.groups = singleton
-      { name = "osgi";
-        gid = config.ids.gids.osgi;
-      };
+    users.groups.osgi.gid = config.ids.gids.osgi;
 
-    users.users = singleton
-      { name = "osgi";
-        uid = config.ids.uids.osgi;
+    users.users.osgi =
+      { uid = config.ids.uids.osgi;
         description = "OSGi user";
         home = "/homeless-shelter";
       };

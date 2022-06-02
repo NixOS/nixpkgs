@@ -2,19 +2,19 @@
 
 buildPythonPackage rec {
   pname = "future-fstrings";
-  version = "0.4.5";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit version;
     pname = "future_fstrings";
-    sha256 = "891c5d5f073b3e3ff686bebde0a4c45c479065f45c8cbd6de19323d5a50738a8";
+    sha256 = "6cf41cbe97c398ab5a81168ce0dbb8ad95862d3caf23c21e4430627b90844089";
   };
 
   # No tests included in Pypi archive
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/asottile/future-fstrings;
+    homepage = "https://github.com/asottile/future-fstrings";
     description = "A backport of fstrings to python<3.6";
     license = licenses.mit;
     maintainers = with maintainers; [ nyanloutre ];

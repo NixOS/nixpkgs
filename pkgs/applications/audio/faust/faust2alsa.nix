@@ -1,10 +1,10 @@
 { faust
-, alsaLib
+, alsa-lib
 , atk
 , cairo
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gtk2
 , pango
@@ -15,12 +15,12 @@ faust.wrapWithBuildEnv {
   baseName = "faust2alsa";
 
   propagatedBuildInputs = [
-    alsaLib
+    alsa-lib
     atk
     cairo
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gtk2
     pango

@@ -1,26 +1,24 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libplist }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libplist }:
 
 stdenv.mkDerivation rec {
   pname = "libusbmuxd";
-  version = "2019-01-18";
-
-  name = "${pname}-${version}";
+  version = "unstable-2021-02-06";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "c75605d862cd1c312494f6c715246febc26b2e05";
-    sha256 = "0467a045k4znmaz61i7a2s7yywj67q830ja6zn7z39k5pqcl2z4p";
+    rev = "3eb50a07bad4c2222e76df93b23a0161922150d1";
+    sha256 = "sha256-pBPBgE6s8JYKJYEV8CcumNki+6jD5r7HzQ0nZ8yQLdM=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libplist ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A client library to multiplex connections from and to iOS devices";
-    homepage    = https://github.com/libimobiledevice/libusbmuxd;
+    homepage    = "https://github.com/libimobiledevice/libusbmuxd";
     license     = licenses.lgpl21Plus;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ infinisil ];
   };
 }

@@ -1,29 +1,32 @@
 { stdenv
+, lib
 , ctags
+, cmark
+, appstream-glib
 , desktop-file-utils
-, docbook_xsl
-, docbook_xml_dtd_43
 , fetchurl
 , flatpak
-, glibcLocales
-, gnome3
+, gnome
 , libgit2-glib
+, gi-docgen
 , gobject-introspection
+, glade
 , gspell
-, gtk-doc
 , gtk3
 , gtksourceview4
-, hicolor-icon-theme
 , json-glib
 , jsonrpc-glib
 , libdazzle
+, libhandy
 , libpeas
+, libportal-gtk3
 , libxml2
 , meson
 , ninja
 , ostree
 , pcre
-, pkgconfig
+, pcre2
+, pkg-config
 , python3
 , sysprof
 , template-glib
@@ -31,30 +34,29 @@
 , vte
 , webkitgtk
 , wrapGAppsHook
+, dbus
+, xvfb-run
 }:
-let
-  version = "3.30.3";
+
+stdenv.mkDerivation rec {
   pname = "gnome-builder";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  version = "42.1";
+
+  outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11h6apjyah91djf77m8xkl5rvdz7mwpp3bjc4yzzs9lm3pag764r";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "XU1RtwKGW0gBcgHwxgfiSifXIDGo9ciNT86HW1VFZwo=";
   };
 
   nativeBuildInputs = [
-    #appstream-glib # tests fail if these tools are available
+    appstream-glib
     desktop-file-utils
-    docbook_xsl
-    docbook_xml_dtd_43
-    glibcLocales # for Meson's gtkdochelper
+    gi-docgen
     gobject-introspection
-    gtk-doc
-    hicolor-icon-theme
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     python3.pkgs.wrapPython
     wrapGAppsHook
@@ -62,10 +64,13 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     ctags
+    cmark
     flatpak
-    gnome3.devhelp
+    gnome.devhelp
+    glade
     libgit2-glib
     libpeas
+    libportal-gtk3
     vte
     gspell
     gtk3
@@ -73,9 +78,11 @@ in stdenv.mkDerivation {
     json-glib
     jsonrpc-glib
     libdazzle
+    libhandy
     libxml2
     ostree
     pcre
+    pcre2
     python3
     sysprof
     template-glib
@@ -83,27 +90,33 @@ in stdenv.mkDerivation {
     webkitgtk
   ];
 
-  outputs = [ "out" "devdoc" ];
-
-  prePatch = ''
-    patchShebangs build-aux/meson/post_install.py
-  '';
+  checkInputs = [
+    dbus
+    xvfb-run
+  ];
 
   mesonFlags = [
-    "-Dpython_libprefix=${python3.libPrefix}"
-    "-Dwith_docs=true"
+    "-Ddocs=true"
 
     # Making the build system correctly detect clang header and library paths
     # is difficult. Somebody should look into fixing this.
-    "-Dwith_clang=false"
+    "-Dplugin_clang=false"
+
+    # Do not try to check if appstream images exist
+    "-Dnetwork_tests=false"
   ];
 
-  # Some tests fail due to being unable to find the Vte typelib, and I don't
-  # understand why. Somebody should look into fixing this.
-  doCheck = false;
+  doCheck = true;
 
-  preInstall = ''
-    export LC_ALL="en_US.utf-8"
+  postPatch = ''
+    patchShebangs build-aux/meson/post_install.py
+  '';
+
+  checkPhase = ''
+    export NO_AT_BRIDGE=1
+    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
+      --config-file=${dbus.daemon}/share/dbus-1/session.conf \
+      meson test --print-errorlogs
   '';
 
   pythonPath = with python3.pkgs; requiredPythonModules [ pygobject3 ];
@@ -120,9 +133,16 @@ in stdenv.mkDerivation {
     done
   '';
 
-  passthru.updateScript = gnome3.updateScript { packageName = pname; };
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput share/doc/libide "$devdoc"
+  '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = gnome.updateScript {
+    packageName = pname;
+  };
+
+  meta = with lib; {
     description = "An IDE for writing GNOME-based software";
     longDescription = ''
       Global search, auto-completion, source code map, documentation
@@ -134,9 +154,9 @@ in stdenv.mkDerivation {
       currently recommend running gnome-builder inside a nix-shell with
       appropriate dependencies loaded.
     '';
-    homepage = https://wiki.gnome.org/Apps/Builder;
+    homepage = "https://wiki.gnome.org/Apps/Builder";
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

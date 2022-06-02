@@ -76,6 +76,7 @@ in {
       default = ''
         zookeeper.root.logger=INFO, CONSOLE
         log4j.rootLogger=INFO, CONSOLE
+        log4j.logger.org.apache.zookeeper.audit.Log4jAuditLogger=INFO, CONSOLE
         log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
         log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
         log4j.appender.CONSOLE.layout.ConversionPattern=[myid:%X{myid}] - %-5p [%t:%C{1}@%L] - %m%n
@@ -109,25 +110,36 @@ in {
     package = mkOption {
       description = "The zookeeper package to use";
       default = pkgs.zookeeper;
-      defaultText = "pkgs.zookeeper";
+      defaultText = literalExpression "pkgs.zookeeper";
       type = types.package;
     };
 
+    jre = mkOption {
+      description = "The JRE with which to run Zookeeper";
+      default = cfg.package.jre;
+      defaultText = literalExpression "pkgs.zookeeper.jre";
+      example = literalExpression "pkgs.jre";
+      type = types.package;
+    };
   };
 
 
   config = mkIf cfg.enable {
     environment.systemPackages = [cfg.package];
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 zookeeper - - -"
+      "Z '${cfg.dataDir}' 0700 zookeeper - - -"
+    ];
+
     systemd.services.zookeeper = {
       description = "Zookeeper Daemon";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      environment = { ZOOCFGDIR = configDir; };
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.jre}/bin/java \
-            -cp "${cfg.package}/lib/*:${cfg.package}/${cfg.package.name}.jar:${configDir}" \
+          ${cfg.jre}/bin/java \
+            -cp "${cfg.package}/lib/*:${configDir}" \
             ${escapeShellArgs cfg.extraCmdLineOptions} \
             -Dzookeeper.datadir.autocreate=false \
             ${optionalString cfg.preferIPv4 "-Djava.net.preferIPv4Stack=true"} \
@@ -135,20 +147,19 @@ in {
             ${configDir}/zoo.cfg
         '';
         User = "zookeeper";
-        PermissionsStartOnly = true;
       };
       preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}
-        if [ "$(id -u)" = 0 ]; then chown zookeeper ${cfg.dataDir}; fi
         echo "${toString cfg.id}" > ${cfg.dataDir}/myid
+        mkdir -p ${cfg.dataDir}/version-2
       '';
     };
 
-    users.users = singleton {
-      name = "zookeeper";
-      uid = config.ids.uids.zookeeper;
+    users.users.zookeeper = {
+      isSystemUser = true;
+      group = "zookeeper";
       description = "Zookeeper daemon user";
       home = cfg.dataDir;
     };
+    users.groups.zookeeper = {};
   };
 }

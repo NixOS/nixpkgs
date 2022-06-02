@@ -1,107 +1,132 @@
-{ stdenv, fetchurl, unzip, jdk, makeWrapper }:
+{ jdk8, jdk11, jdk17 }:
 
 rec {
-  gradleGen = {name, src, nativeVersion} : stdenv.mkDerivation rec {
-    inherit name src nativeVersion;
+  gen =
 
-    dontBuild = true;
+    { version, nativeVersion, sha256, defaultJava ? jdk8, supportedPlatforms ? null }:
 
-    installPhase = ''
-      mkdir -pv $out/lib/gradle/
-      cp -rv lib/ $out/lib/gradle/
+    { lib, stdenv, fetchurl, makeWrapper, unzip, java ? defaultJava
+    , javaToolchains ? [ ], ncurses5, ncurses6 }:
 
-      gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
-      test -f $gradle_launcher_jar
-      makeWrapper ${jdk}/bin/java $out/bin/gradle \
-        --set JAVA_HOME ${jdk} \
-        --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
-    '';
+    stdenv.mkDerivation rec {
+      pname = "gradle";
+      inherit version;
 
-    fixupPhase = if (!stdenv.isLinux) then ":" else
-      let arch = if stdenv.is64bit then "amd64" else "i386"; in ''
-        mkdir patching
-        pushd patching
-        jar xf $out/lib/gradle/lib/native-platform-linux-${arch}-${nativeVersion}.jar
-        patchelf --set-rpath "${stdenv.cc.cc.lib}/lib:${stdenv.cc.cc.lib}/lib64" net/rubygrapefruit/platform/linux-${arch}/libnative-platform.so
-        jar cf native-platform-linux-${arch}-${nativeVersion}.jar .
-        mv native-platform-linux-${arch}-${nativeVersion}.jar $out/lib/gradle/lib/
-        popd
+      src = fetchurl {
+        inherit sha256;
+        url =
+          "https://services.gradle.org/distributions/gradle-${version}-bin.zip";
+      };
+
+      dontBuild = true;
+
+      nativeBuildInputs = [ makeWrapper unzip ];
+      buildInputs = [ java ];
+
+      # NOTE: For more information on toolchains,
+      # see https://docs.gradle.org/current/userguide/toolchains.html
+      installPhase = with builtins;
+        let
+          toolchain = rec {
+            var = x: "JAVA_TOOLCHAIN_NIX_${toString x}";
+            vars = (lib.imap0 (i: x: ("${var i} ${x}")) javaToolchains);
+            varNames = lib.imap0 (i: x: var i) javaToolchains;
+            property = " -Porg.gradle.java.installations.fromEnv='${
+                 concatStringsSep "," varNames
+               }'";
+          };
+          vars = concatStringsSep "\n" (map (x: "  --set ${x} \\")
+            ([ "JAVA_HOME ${java}" ] ++ toolchain.vars));
+        in ''
+          mkdir -pv $out/lib/gradle/
+          cp -rv lib/ $out/lib/gradle/
+
+          gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
+          test -f $gradle_launcher_jar
+          makeWrapper ${java}/bin/java $out/bin/gradle \
+            ${vars}
+            --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
+        '';
+
+      dontFixup = !stdenv.isLinux;
+
+      fixupPhase = let arch = if stdenv.is64bit then "amd64" else "i386";
+      in ''
+        for variant in "" "-ncurses5" "-ncurses6"; do
+          mkdir "patching$variant"
+          pushd "patching$variant"
+          jar xf $out/lib/gradle/lib/native-platform-linux-${arch}$variant-${nativeVersion}.jar
+          patchelf \
+            --set-rpath "${stdenv.cc.cc.lib}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ncurses5 ncurses6 ]}" \
+            net/rubygrapefruit/platform/linux-${arch}$variant/libnative-platform*.so
+          jar cf native-platform-linux-${arch}$variant-${nativeVersion}.jar .
+          mv native-platform-linux-${arch}$variant-${nativeVersion}.jar $out/lib/gradle/lib/
+          popd
+        done
 
         # The scanner doesn't pick up the runtime dependency in the jar.
         # Manually add a reference where it will be found.
         mkdir $out/nix-support
         echo ${stdenv.cc.cc} > $out/nix-support/manual-runtime-dependencies
+        # Gradle will refuse to start without _both_ 5 and 6 versions of ncurses.
+        echo ${ncurses5} >> $out/nix-support/manual-runtime-dependencies
+        echo ${ncurses6} >> $out/nix-support/manual-runtime-dependencies
       '';
 
-    buildInputs = [ unzip jdk makeWrapper ];
-
-    meta = {
-      description = "Enterprise-grade build system";
-      longDescription = ''
-        Gradle is a build system which offers you ease, power and freedom.
-        You can choose the balance for yourself. It has powerful multi-project
-        build support. It has a layer on top of Ivy that provides a
-        build-by-convention integration for Ivy. It gives you always the choice
-        between the flexibility of Ant and the convenience of a
-        build-by-convention behavior.
-      '';
-      homepage = http://www.gradle.org/;
-      license = stdenv.lib.licenses.asl20;
-      platforms = stdenv.lib.platforms.unix;
+      meta = with lib; {
+        description = "Enterprise-grade build system";
+        longDescription = ''
+          Gradle is a build system which offers you ease, power and freedom.
+          You can choose the balance for yourself. It has powerful multi-project
+          build support. It has a layer on top of Ivy that provides a
+          build-by-convention integration for Ivy. It gives you always the choice
+          between the flexibility of Ant and the convenience of a
+          build-by-convention behavior.
+        '';
+        homepage = "https://www.gradle.org/";
+        changelog = "https://docs.gradle.org/${version}/release-notes.html";
+        downloadPage = "https://gradle.org/next-steps/?version=${version}";
+        license = licenses.asl20;
+        platforms = if (supportedPlatforms != null) then supportedPlatforms else platforms.unix;
+        maintainers = with maintainers; [ lorenzleutgeb liff ];
+      };
     };
+
+  # NOTE: Default JDKs are LTS versions and according to
+  # https://docs.gradle.org/current/userguide/compatibility.html
+
+  gradle_7 = gen {
+    version = "7.4.2";
+    nativeVersion = "0.22-milestone-23";
+    sha256 = "1nkz9gn1vb5l94dkf9yzb1j3hkll5x2vrl5p320msn2fk089pr19";
+    defaultJava = jdk17;
+    # Gradle 7 ships some binaries that are only available for some platforms
+    # See https://github.com/gradle/native-platform#supported-platforms
+    supportedPlatforms =  [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" "x86_64-cygwin" "x86_64-windows" "i686-windows"  ];
   };
 
-  gradle_latest = gradleGen rec {
-    name = "gradle-5.3.1";
-    nativeVersion = "0.17";
-
-    src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "0dkl6f17zl9pc6y2xm8xqz23x53fck4p2648vpq8572f0mxa2n8w";
-    };
+  gradle_6 = gen {
+    version = "6.9.2";
+    nativeVersion = "0.22-milestone-20";
+    sha256 = "13qyk3f6namw27ynh6nxljxpk9r3l12vxl3f0qpglprdf3c6ydcb";
+    defaultJava = jdk11;
+    # Gradle 6 ships some binaries that are only available for some platforms
+    # See https://github.com/gradle/native-platform#supported-platforms
+    supportedPlatforms =  [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" "x86_64-cygwin" "x86_64-windows" "i686-windows"  ];
   };
 
-  gradle_4_10 = gradleGen rec {
-    name = "gradle-4.10.3";
+  # NOTE: No GitHub Release for the following versions. `update.sh` will not work.
+  gradle_5 = gen {
+    version = "5.6.4";
+    nativeVersion = "0.18";
+    sha256 = "03d86bbqd19h9xlanffcjcy3vg1k5905vzhf9mal9g21603nfc0z";
+    defaultJava = jdk11;
+  };
+
+  gradle_4 = gen {
+    version = "4.10.3";
     nativeVersion = "0.14";
-
-    src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
-    };
-  };
-
-  gradle_3_5 = gradleGen rec {
-    name = "gradle-3.5.1";
-    nativeVersion = "0.14";
-
-    src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "1y7fbhrdriclbs5ksxahi0aafsz760lalwyz8r4llysc5pskbkld";
-    };
-  };
-
-  gradle_2_14 = gradleGen rec {
-    name = "gradle-2.14.1";
-    nativeVersion = "0.10";
-
-    src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "0fggjxpsnakdaviw7bn2jmsl06997phlqr1251bjmlgjf7d1xing";
-    };
-  };
-
-  # Nix pkgs that depend on this old version:
-  # pkgs/tools/security/jd-gui/default.nix
-  # pkgs/servers/mxisd/default.nix
-  # If these packages are updated, this old version can probably be removed
-  gradle_2_5 = gradleGen rec {
-    name = "gradle-2.5";
-    nativeVersion = "0.10";
-
-    src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "0mc5lf6phkncx77r0papzmfvyiqm0y26x50ipvmzkcsbn463x59z";
-    };
+    sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
+    defaultJava = jdk8;
   };
 }

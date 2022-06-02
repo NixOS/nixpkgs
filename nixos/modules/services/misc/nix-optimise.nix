@@ -37,11 +37,17 @@ in
   ###### implementation
 
   config = {
+    assertions = [
+      {
+        assertion = cfg.automatic -> config.nix.enable;
+        message = ''nix.optimise.automatic requires nix.enable'';
+      }
+    ];
 
-    systemd.services.nix-optimise =
+    systemd.services.nix-optimise = lib.mkIf config.nix.enable
       { description = "Nix Store Optimiser";
-        # No point running it inside a nixos-container. It should be on the host instead.
-        unitConfig.ConditionVirtualization = "!container";
+        # No point this if the nix daemon (and thus the nix store) is outside
+        unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket";
         serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";
         startAt = optionals cfg.automatic cfg.dates;
       };

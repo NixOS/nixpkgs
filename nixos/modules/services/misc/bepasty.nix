@@ -143,7 +143,7 @@ in
           serviceConfig = {
             Type = "simple";
             PrivateTmp = true;
-            ExecStartPre = assert !isNull server.secretKeyFile; pkgs.writeScript "bepasty-server.${name}-init" ''
+            ExecStartPre = assert server.secretKeyFile != null; pkgs.writeScript "bepasty-server.${name}-init" ''
               #!/bin/sh
               mkdir -p "${server.workDir}"
               mkdir -p "${server.dataDir}"
@@ -168,16 +168,12 @@ in
         })
     ) cfg.servers;
 
-    users.users = [{
-      uid = config.ids.uids.bepasty;
-      name = user;
-      group = group;
-      home = default_home;
-    }];
+    users.users.${user} =
+      { uid = config.ids.uids.bepasty;
+        group = group;
+        home = default_home;
+      };
 
-    users.groups = [{
-      name = group;
-      gid = config.ids.gids.bepasty;
-    }];
+    users.groups.${group}.gid = config.ids.gids.bepasty;
   };
 }

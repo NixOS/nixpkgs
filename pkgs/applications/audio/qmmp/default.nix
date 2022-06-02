@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, xlibsWrapper
+{ lib, mkDerivation, fetchurl, cmake, pkg-config, xlibsWrapper
 , qtbase, qttools, qtmultimedia, qtx11extras
 # transports
 , curl, libmms
@@ -6,13 +6,13 @@
 , libmad, taglib, libvorbis, libogg, flac, libmpcdec, libmodplug, libsndfile
 , libcdio, cdparanoia, libcddb, faad2, ffmpeg, wildmidi
 # output plugins
-, alsaLib, libpulseaudio
+, alsa-lib, libpulseaudio
 # effect plugins
 , libsamplerate
 }:
 
 # Additional plugins that can be added:
-#  wavpack (http://www.wavpack.com/)
+#  wavpack (https://www.wavpack.com/)
 #  gme (Game music support)
 #  Ogg Opus support
 #  BS2B effect plugin (http://bs2b.sourceforge.net/)
@@ -28,37 +28,35 @@
 # Qmmp installs working .desktop file(s) all by itself, so we don't need to
 # handle that.
 
-stdenv.mkDerivation rec {
-  name = "qmmp-1.3.1";
+mkDerivation rec {
+  pname = "qmmp";
+  version = "1.4.4";
 
   src = fetchurl {
-    url = "http://qmmp.ylsoftware.com/files/${name}.tar.bz2";
-    sha256 = "1dmybzibpr6hpr2iv1wvrjgww842mng2x0rh1mr8gs8j191xvlhw";
+    url = "https://qmmp.ylsoftware.com/files/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-sZRZVhCf2ceETuV4AULA0kVkuIMn3C+aYdKThqvPnVQ=";
   };
 
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs =
     [ # basic requirements
-      cmake pkgconfig xlibsWrapper
-      qtbase qttools qtmultimedia qtx11extras
+      qtbase qttools qtmultimedia qtx11extras xlibsWrapper
       # transports
       curl libmms
       # input plugins
       libmad taglib libvorbis libogg flac libmpcdec libmodplug libsndfile
       libcdio cdparanoia libcddb faad2 ffmpeg wildmidi
       # output plugins
-      alsaLib libpulseaudio
+      alsa-lib libpulseaudio
       # effect plugins
       libsamplerate
     ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based audio player that looks like Winamp";
-    homepage = http://qmmp.ylsoftware.com/;
-    license = licenses.gpl2;
+    homepage = "https://qmmp.ylsoftware.com/";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    repositories.svn = http://qmmp.googlecode.com/svn/;
   };
 }

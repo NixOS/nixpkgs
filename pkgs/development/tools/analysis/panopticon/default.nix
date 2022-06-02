@@ -1,10 +1,9 @@
-{ stdenv, fetchFromGitHub, rustPlatform, qt5, git, cmake
-, pkgconfig, makeWrapper }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, qt5, git, cmake
+, pkg-config, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "panopticon";
   version = "unstable-20171202";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "das-labor";
@@ -13,19 +12,19 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1zv87nqhrzsxx0m891df4vagzssj3kblfv9yp7j96dw0vn9950qa";
   };
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
   propagatedBuildInputs = with qt5; [
      qt5.qtbase
      qtdeclarative
      qtsvg
      qtquickcontrols2
      qtgraphicaleffects
-     pkgconfig
      git
   ];
 
-  cargoSha256 = "02k21mh0jyc6vz52jx1qijsfk07pkdv1g2hqx7gyvmm4v10vbfna";
+  dontWrapQtApps = true;
+
+  cargoSha256 = "0vhcb3kw1zgchx3nrk8lyrz8p5071y99vsysxvi71klv7dcvn0am";
   doCheck = false;
 
   postInstall = ''
@@ -36,7 +35,8 @@ rustPlatform.buildRustPackage rec {
     makeWrapper $out/share/${pname}/${pname} $out/bin/${pname}
      '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A libre cross-platform disassembler";
     longDescription = ''
       Panopticon is a cross platform disassembler for reverse
@@ -47,6 +47,5 @@ rustPlatform.buildRustPackage rec {
     '';
     license = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.all;
   };
 }

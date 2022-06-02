@@ -1,36 +1,94 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy37, fetchpatch, iana-etc, libredirect
-, case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
+{ stdenv
+, lib
+, billiard
+, boto3
+, buildPythonPackage
+, case
+, click
+, click-didyoumean
+, click-plugins
+, click-repl
+, dnspython
+, fetchPypi
+, kombu
+, moto
+, pymongo
+, pytest-celery
+, pytest-subtests
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, pytz
+, vine
+, nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.3.0";
+  version = "5.2.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4c4532aa683f170f40bd76f928b70bc06ff171a959e06e71bf35f2f9d6031ef9";
+    hash = "sha256-0TmMrfMPV2Jms0Nw4o6IAwbsVfektjB1SbCunBVmNIE=";
   };
 
+  propagatedBuildInputs = [
+    billiard
+    click
+    click-didyoumean
+    click-plugins
+    click-repl
+    kombu
+    pytz
+    vine
+  ];
+
+  checkInputs = [
+    boto3
+    case
+    dnspython
+    moto
+    pymongo
+    pytest-celery
+    pytest-subtests
+    pytest-timeout
+    pytestCheckHook
+  ];
+
   postPatch = ''
-    substituteInPlace requirements/test.txt \
-      --replace "pytest>=4.3.1,<4.4.0" pytest
+    substituteInPlace requirements/default.txt \
+      --replace "setuptools>=59.1.1,<59.7.0" "setuptools"
   '';
 
-  # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
-  preCheck = stdenv.lib.optionalString stdenv.isLinux ''
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols \
-      LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '';
-  postCheck = stdenv.lib.optionalString stdenv.isLinux ''
-    unset NIX_REDIRECTS LD_PRELOAD
-  '';
+  disabledTestPaths = [
+    # test_eventlet touches network
+    "t/unit/concurrency/test_eventlet.py"
+    # test_multi tries to create directories under /var
+    "t/unit/bin/test_multi.py"
+    "t/unit/apps/test_multi.py"
+  ];
 
-  checkInputs = [ case pytest boto3 moto ];
-  propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
+  disabledTests = [
+    "msgpack"
+    "test_check_privileges_no_fchown"
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/celery/celery/;
+  pythonImportsCheck = [
+    "celery"
+  ];
+
+  passthru.tests = {
+    inherit (nixosTests) sourcehut;
+  };
+
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Distributed task queue";
+    homepage = "https://github.com/celery/celery/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
   };
 }

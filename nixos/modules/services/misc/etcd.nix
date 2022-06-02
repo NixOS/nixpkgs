@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.etcd;
+  opt = options.services.etcd;
 
 in {
 
@@ -17,12 +18,14 @@ in {
     name = mkOption {
       description = "Etcd unique node name.";
       default = config.networking.hostName;
+      defaultText = literalExpression "config.networking.hostName";
       type = types.str;
     };
 
     advertiseClientUrls = mkOption {
       description = "Etcd list of this member's client URLs to advertise to the rest of the cluster.";
       default = cfg.listenClientUrls;
+      defaultText = literalExpression "config.${opt.listenClientUrls}";
       type = types.listOf types.str;
     };
 
@@ -41,12 +44,14 @@ in {
     initialAdvertisePeerUrls = mkOption {
       description = "Etcd list of this member's peer URLs to advertise to rest of the cluster.";
       default = cfg.listenPeerUrls;
+      defaultText = literalExpression "config.${opt.listenPeerUrls}";
       type = types.listOf types.str;
     };
 
     initialCluster = mkOption {
       description = "Etcd initial cluster configuration for bootstrapping.";
       default = ["${cfg.name}=http://127.0.0.1:2380"];
+      defaultText = literalExpression ''["''${config.${opt.name}}=http://127.0.0.1:2380"]'';
       type = types.listOf types.str;
     };
 
@@ -95,18 +100,21 @@ in {
     peerCertFile = mkOption {
       description = "Cert file to use for peer to peer communication";
       default = cfg.certFile;
+      defaultText = literalExpression "config.${opt.certFile}";
       type = types.nullOr types.path;
     };
 
     peerKeyFile = mkOption {
       description = "Key file to use for peer to peer communication";
       default = cfg.keyFile;
+      defaultText = literalExpression "config.${opt.keyFile}";
       type = types.nullOr types.path;
     };
 
     peerTrustedCaFile = mkOption {
       description = "Certificate authority file to use for peer to peer communication";
       default = cfg.trustedCaFile;
+      defaultText = literalExpression "config.${opt.trustedCaFile}";
       type = types.nullOr types.path;
     };
 
@@ -123,7 +131,7 @@ in {
       '';
       type = types.attrsOf types.str;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "CORS" = "*";
           "NAME" = "default-name";
@@ -142,6 +150,10 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 etcd - - -"
+    ];
+
     systemd.services.etcd = {
       description = "etcd key-value store";
       wantedBy = [ "multi-user.target" ];
@@ -174,25 +186,20 @@ in {
 
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${pkgs.etcd.bin}/bin/etcd";
+        ExecStart = "${pkgs.etcd}/bin/etcd";
         User = "etcd";
-        PermissionsStartOnly = true;
         LimitNOFILE = 40000;
       };
-
-      preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}
-        if [ "$(id -u)" = 0 ]; then chown etcd ${cfg.dataDir}; fi
-      '';
     };
 
-    environment.systemPackages = [ pkgs.etcdctl ];
+    environment.systemPackages = [ pkgs.etcd ];
 
-    users.users = singleton {
-      name = "etcd";
-      uid = config.ids.uids.etcd;
+    users.users.etcd = {
+      isSystemUser = true;
+      group = "etcd";
       description = "Etcd daemon user";
       home = cfg.dataDir;
     };
+    users.groups.etcd = {};
   };
 }

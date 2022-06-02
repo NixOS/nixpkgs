@@ -1,11 +1,12 @@
-{ fetchurl, stdenv, gettext, libmpcdec, libao }:
+{ fetchurl, lib, stdenv, gettext, libmpcdec, libao }:
 
 let version = "0.2.4"; in
 stdenv.mkDerivation rec {
-  name = "mpc123-${version}";
+  pname = "mpc123";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/mpc123/version%20${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/mpc123/version%20${version}/${pname}-${version}.tar.gz";
     sha256 = "0sf4pns0245009z6mbxpx7kqy4kwl69bc95wz9v23wgappsvxgy1";
   };
 
@@ -20,13 +21,13 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://mpc123.sourceforge.net/;
+    homepage = "http://mpc123.sourceforge.net/";
 
     description = "A Musepack (.mpc) audio player";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux; # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
   };
 }

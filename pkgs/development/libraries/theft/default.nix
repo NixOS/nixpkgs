@@ -1,29 +1,37 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.4";
-  name = "theft-${version}";
+  version = "0.4.5";
+  pname = "theft";
 
   src = fetchFromGitHub {
-    owner = "silentbicycle";
-    repo = "theft";
-    rev = "v${version}";
-    sha256 = "1csdhnb10k7vsyd44vjpg430nf6a909wj8af2zawdkbvnxn5wxc4";
+    owner  = "silentbicycle";
+    repo   = "theft";
+    rev    = "v${version}";
+    sha256 = "1n2mkawfl2bpd4pwy3mdzxwlqjjvb5bdrr2x2gldlyqdwbk7qjhd";
   };
 
   preConfigure = "patchShebangs ./scripts/mk_bits_lut";
 
   doCheck = true;
   checkTarget = "test";
-  
+
   installFlags = [ "PREFIX=$(out)" ];
-  postInstall = "install -m644 vendor/greatest.h $out/include/";
-  
-  meta = {
+
+  # fix the libtheft.pc file to use the right installation
+  # directory. should be fixed upstream, too
+  postInstall = ''
+    install -m644 vendor/greatest.h $out/include/
+
+    substituteInPlace $out/lib/pkgconfig/libtheft.pc \
+      --replace "/usr/local" "$out"
+  '';
+
+  meta = with lib; {
     description = "A C library for property-based testing";
-    platforms = stdenv.lib.platforms.linux;
-    homepage = "https://github.com/silentbicycle/theft/";
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.kquick ];
+    homepage    = "https://github.com/silentbicycle/theft/";
+    platforms   = platforms.unix;
+    license     = licenses.isc;
+    maintainers = with maintainers; [ kquick thoughtpolice ];
   };
 }

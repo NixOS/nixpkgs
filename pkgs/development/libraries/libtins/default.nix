@@ -1,19 +1,19 @@
-{ boost, cmake, fetchFromGitHub, gtest, libpcap, openssl, stdenv }:
+{ boost, cmake, fetchFromGitHub, gtest, libpcap, openssl, lib, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libtins-${version}";
-  version = "4.0";
-  
+  pname = "libtins";
+  version = "4.4";
+
   src = fetchFromGitHub {
     owner = "mfontanini";
-    repo = "libtins";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "13sdqad976j7gq2k1il6g51yxwr8rlqdkzf1kj9mzhihjq8541qs";
+    sha256 = "sha256-mXbinXh/CO0SZZ71+K+FozbHCCoi12+AIa2o+P0QmUw=";
   };
 
   postPatch = ''
     rm -rf googletest
-    cp -r ${gtest.src}/googletest googletest
+    cp -r ${gtest.src} googletest
     chmod -R a+w googletest
   '';
 
@@ -29,15 +29,19 @@ stdenv.mkDerivation rec {
     "--with-boost=${boost.dev}"
   ];
 
-  enableParallelBuilding = true;
   doCheck = true;
-  checkPhase = "make tests && LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib make test";
+  preCheck = ''
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD${placeholder "out"}/lib
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD${placeholder "out"}/lib
+  '';
+  checkTarget = "tests test";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High-level, multiplatform C++ network packet sniffing and crafting library";
-    homepage = https://libtins.github.io/;
-    license = stdenv.lib.licenses.bsd2;
+    homepage = "https://libtins.github.io/";
+    changelog = "https://raw.githubusercontent.com/mfontanini/${pname}/v${version}/CHANGES.md";
+    license = lib.licenses.bsd2;
     maintainers = with maintainers; [ fdns ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

@@ -1,33 +1,33 @@
-{ stdenv, fetchurl, python2 }:
+{ newScope, lib, python3 }:
 
-stdenv.mkDerivation rec {
-  name = "mailman-${version}";
-  version = "2.1.29";
+let
+  callPackage = newScope self;
 
-  src = fetchurl {
-    url = "mirror://gnu/mailman/${name}.tgz";
-    sha256 = "0b0dpwf6ap260791c7lg2vpw30llf19hymbf2hja3s016rqp5243";
-  };
+  self = lib.makeExtensible (self: {
+    python3 = callPackage ./python.nix { inherit python3; };
 
-  buildInputs = [ python2 python2.pkgs.dnspython ];
+    hyperkitty = callPackage ./hyperkitty.nix { };
 
-  patches = [ ./fix-var-prefix.patch ];
+    mailman = callPackage ./package.nix { };
 
-  configureFlags = [
-    "--without-permcheck"
-    "--with-cgi-ext=.cgi"
-    "--with-var-prefix=/var/lib/mailman"
-  ];
+    mailman-hyperkitty = callPackage ./mailman-hyperkitty.nix { };
 
-  installTargets = "doinstall"; # Leave out the 'update' target that's implied by 'install'.
+    postorius = callPackage ./postorius.nix { };
 
-  makeFlags = [ "DIRSETGID=:" ];
+    web = callPackage ./web.nix { };
 
-  meta = {
-    homepage = https://www.gnu.org/software/mailman/;
-    description = "Free software for managing electronic mail discussion and e-newsletter lists";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.peti ];
-  };
-}
+    buildEnvs = { web ? self.web
+                , mailman ? self.mailman
+                , mailman-hyperkitty ? self.mailman-hyperkitty
+                , withHyperkitty ? false
+                }:
+      {
+        mailmanEnv = self.python3.withPackages
+          (ps: [ mailman ps.psycopg2 ]
+            ++ lib.optional withHyperkitty mailman-hyperkitty);
+        webEnv = self.python3.withPackages
+          (ps: [ web ps.psycopg2 ]);
+      };
+  });
+
+in self

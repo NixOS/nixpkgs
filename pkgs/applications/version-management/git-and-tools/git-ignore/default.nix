@@ -1,31 +1,36 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, darwin }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, rustPlatform, pkg-config, openssl, darwin }:
 
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "git-ignore-${version}";
-  version = "0.2.0";
-
-  cargoSha256 = "1fqfy8lnvpn5sd3l73x2p359zq4303vsrdgw3aphvy6580yjb84d";
+  pname = "git-ignore";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "sondr3";
-    repo = "git-ignore";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1nihh5inh46r8jg9z7d6g9gqfyhrznmkn15nmzpbnzf0653dl629";
+    sha256 = "sha256-Bfr+4zDi6QqirlqccW1jU95eb4q82ZFG9LtT2mCPYLc=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  cargoSha256 = "sha256-ehEUI4M2IxqS6QhyqOncwP+w6IGbIlSFNIP/FEVH/JI=";
+
+  nativeBuildInputs = [ pkg-config installShellFiles ];
   buildInputs = [ openssl ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    installManPage assets/git-ignore.1
+    # There's also .elv and .ps1 completion files but I don't know where to install those
+    installShellCompletion assets/git-ignore.{bash,fish} --zsh assets/_git-ignore
+  '';
+
+  meta = with lib; {
     description = "Quickly and easily fetch .gitignore templates from gitignore.io";
-    homepage = https://github.com/sondr3/git-ignore;
+    homepage = "https://github.com/sondr3/git-ignore";
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
     maintainers = [ maintainers.sondr3 ];
   };
 }

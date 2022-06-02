@@ -1,21 +1,17 @@
-{ stdenv, ruby, bison, fetchFromGitHub }:
+{ lib, stdenv, ruby, bison, rake, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "mruby-${version}";
-  version = "2.0.0";
+  pname = "mruby";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner   = "mruby";
     repo    = "mruby";
     rev     = version;
-    sha256  = "1r6w1asjshff43ymdwa6xmrkggza99mi2kw88k7ic6ag2j81hcj5";
+    sha256  = "0gnzip7qfadnl0r1k8bpc9a6796sy503h77ggds02wrz7mpq32nf";
   };
 
-  patches = [
-    ./0001-Disables-IO-isatty-test-for-sandboxed-builds.patch
-  ];
-
-  nativeBuildInputs = [ ruby bison ];
+  nativeBuildInputs = [ ruby bison rake ];
 
   # Necessary so it uses `gcc` instead of `ld` for linking.
   # https://github.com/mruby/mruby/blob/35be8b252495d92ca811d76996f03c470ee33380/tasks/toolchains/gcc.rake#L25
@@ -23,14 +19,14 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir $out
-    cp -R build/host/{bin,lib} $out
+    cp -R include build/host/{bin,lib} $out
   '';
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An embeddable implementation of the Ruby language";
-    homepage = https://mruby.org;
+    homepage = "https://mruby.org";
     maintainers = [ maintainers.nicknovitski ];
     license = licenses.mit;
     platforms = platforms.unix;

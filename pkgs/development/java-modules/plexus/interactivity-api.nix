@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   plexusInteractivityApi_1_0_alpha4 = map (obj: fetchMaven {
     version = "1.0-alpha-4";
     artifactId = "plexus-interactivity-api";

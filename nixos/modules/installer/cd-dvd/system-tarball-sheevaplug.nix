@@ -87,19 +87,19 @@ in
   boot.initrd.availableKernelModules =
     [ "mvsdio" "reiserfs" "ext3" "ums-cypress" "rtc_mv" "ext4" ];
 
-  boot.postBootCommands =
+  boot.postBootCommands = lib.mkIf (!boot.initrd.systemd.enable)
     ''
       mkdir -p /mnt
 
       cp ${dummyConfiguration} /etc/nixos/configuration.nix
     '';
 
-  boot.initrd.extraUtilsCommands =
+  boot.initrd.extraUtilsCommands = lib.mkIf (!boot.initrd.systemd.enable)
     ''
-      copy_bin_and_libs ${pkgs.utillinux}/sbin/hwclock
+      copy_bin_and_libs ${pkgs.util-linux}/sbin/hwclock
     '';
 
-  boot.initrd.postDeviceCommands =
+  boot.initrd.postDeviceCommands = lib.mkIf (!boot.initrd.systemd.enable)
     ''
       hwclock -s
     '';
@@ -111,19 +111,18 @@ in
       # "console=ttyS0,115200n8"  # serial console
     ];
 
-  boot.kernelPackages = pkgs.linuxPackages_3_4;
+  boot.kernelPackages = pkgs.linuxKernel.packages.linux_3_4;
 
   boot.supportedFilesystems = [ "reiserfs" ];
 
   /* fake entry, just to have a happy stage-1. Users
      may boot without having stage-1 though */
-  fileSystems = [
+  fileSystems.fake =
     { mountPoint = "/";
       device = "/dev/something";
-      }
-  ];
+    };
 
-  services.mingetty = {
+  services.getty = {
     # Some more help text.
     helpLine = ''
       Log in as "root" with an empty password.  ${

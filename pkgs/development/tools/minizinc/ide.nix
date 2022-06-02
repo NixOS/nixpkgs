@@ -1,30 +1,29 @@
-{ stdenv, fetchFromGitHub, qtbase, qtwebengine, qtwebkit, qmake, makeWrapper, minizinc }:
-let
-  version = "2.2.3";
-in
-stdenv.mkDerivation {
-  name = "minizinc-ide-${version}";
+{ lib, mkDerivation, fetchFromGitHub, qtbase, qtwebengine, qtwebkit, qmake, minizinc }:
+mkDerivation rec {
+  pname = "minizinc-ide";
+  version = "2.5.5";
 
-  nativeBuildInputs = [ qmake makeWrapper ];
+  nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase qtwebengine qtwebkit ];
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    sha256 = "1hanq7c6li59awlwghgvpd8w93a7zb6iw7p4062nphnbd1dmg92f";
+    sha256 = "sha256-0U3KFRDam8psbCaEOcrwqzICAy1oBgo8SFEiR/PMqZk=";
+    fetchSubmodules = true;
   };
 
   sourceRoot = "source/MiniZincIDE";
 
-  enableParallelBuilding = true;
+  dontWrapQtApps = true;
 
   postInstall = ''
-    wrapProgram $out/bin/MiniZincIDE --prefix PATH ":" ${stdenv.lib.makeBinPath [ minizinc ]}
+    wrapProgram $out/bin/MiniZincIDE --prefix PATH ":" ${lib.makeBinPath [ minizinc ]}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.minizinc.org/;
+  meta = with lib; {
+    homepage = "https://www.minizinc.org/";
     description = "IDE for MiniZinc, a medium-level constraint modelling language";
 
     longDescription = ''

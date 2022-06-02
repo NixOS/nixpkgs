@@ -1,16 +1,25 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, pcsclite, talloc, python2, gnutls
+{ lib, stdenv
+, autoreconfHook
+, fetchFromGitHub
+, gnutls
+, libmnl
+, libusb1
+, lksctp-tools
+, pcsclite
+, pkg-config
+, python3
+, talloc
 }:
 
 stdenv.mkDerivation rec {
-  name = "libosmocore-${version}";
-  version = "1.0.1";
+  pname = "libosmocore";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmocore";
     rev = version;
-    sha256 = "08xbj2calh1zkp79kxbq01vnh0y7nkgd4cgsivrzlyqahilbzvd9";
+    hash = "sha256-AjOyZiLlXhsetbyMBuUssoNxk22LzGOkZpeLt4vKli4=";
   };
 
   propagatedBuildInputs = [
@@ -18,18 +27,24 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig
+    autoreconfHook
+    pkg-config
+    python3
   ];
 
   buildInputs = [
-    pcsclite python2 gnutls
+    gnutls
+    libmnl
+    libusb1
+    lksctp-tools
+    pcsclite
   ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    description = "libosmocore";
-    homepage = https://github.com/osmocom/libosmocore;
+  meta = with lib; {
+    description = "Set of Osmocom core libraries";
+    homepage = "https://github.com/osmocom/libosmocore";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ mog ];

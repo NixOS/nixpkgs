@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, makeWrapper, openssh }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, openssh }:
 
-stdenv.mkDerivation rec {
-  name = "rdocker-${version}";
+stdenv.mkDerivation {
+  pname = "rdocker";
   version = "unstable-2018-07-17";
 
   src = fetchFromGitHub {
@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/rdocker \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ openssh ]}
+      --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Securely control a remote docker daemon CLI using ssh forwarding, no SSL setup needed";
-    homepage = https://github.com/dvddarias/rdocker;
-    maintainers = [ stdenv.lib.maintainers.pneumaticat ];
+    homepage = "https://github.com/dvddarias/rdocker";
+    maintainers = [ lib.maintainers.pneumaticat ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

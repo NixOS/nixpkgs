@@ -1,38 +1,36 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, zlib }:
 
+let
+  ARCH = {
+    i686-linux    = "linux32";
+    x86_64-linux  = "linux64";
+    aarch64-linux = "linux64";
+  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+in
 stdenv.mkDerivation {
-  name = "picat-1.9-4";
+  pname = "picat";
+  version = "3.0p4";
 
   src = fetchurl {
-    url = http://picat-lang.org/download/picat19_src.tar.gz;
-    sha256 = "0wvl95gf4pjs93632g4wi0mw1glzzhjp9g4xg93ll2zxggbxibli";
+    url    = "http://picat-lang.org/download/picat30_4_src.tar.gz";
+    sha256 = "1rwin44m7ni2h2v51sh2r8gj2k6wm6f86zgaylrria9jr57inpqj";
   };
 
-  ARCH = if stdenv.hostPlatform.system == "i686-linux" then "linux32"
-         else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
-         else throw "Unsupported system";
+  buildInputs = [ zlib ];
+
+  inherit ARCH;
 
   hardeningDisable = [ "format" ];
+  enableParallelBuilding = true;
 
-  buildPhase = ''
-    cd emu
-    make -f Makefile.picat.$ARCH
-  '';
+  buildPhase = "cd emu && make -j $NIX_BUILD_CORES -f Makefile.$ARCH";
+  installPhase = "mkdir -p $out/bin && cp picat $out/bin/picat";
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp picat_$ARCH $out/bin/picat
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "Logic-based programming langage";
-    longDescription = ''
-      Picat is a simple, and yet powerful, logic-based multi-paradigm
-      programming language aimed for general-purpose applications.
-    '';
-    homepage = http://picat-lang.org/;
-    license = stdenv.lib.licenses.mpl20;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.earldouglas ];
+    homepage    = "http://picat-lang.org/";
+    license     = licenses.mpl20;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ earldouglas thoughtpolice ];
   };
 }

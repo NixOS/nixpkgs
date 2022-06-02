@@ -1,20 +1,26 @@
-{ fetchurl, stdenv }:
+{ fetchurl, lib, stdenv, bash, perl }:
 
 stdenv.mkDerivation rec {
-  name = "rush-1.8";
+  pname = "rush";
+  version = "2.2";
 
   src = fetchurl {
-    url = "mirror://gnu/rush/${name}.tar.gz";
-    sha256 = "1vxdb81ify4xcyygh86250pi50krb16dkj42i5ii4ns3araiwckz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-ld5TdpF7siprQCbhE4oxYhH40x3QZ5NCQlD3zRaNmM0=";
   };
 
-  patches = [ ./fix-format-security-error.patch
-    ./intprops.patch
-  ];
+  strictDeps = true;
+  buildInputs = [ bash ];
+
+  postInstall = ''
+    substituteInPlace $out/bin/rush-po \
+      --replace "exec perl" "exec ${lib.getExe perl}"
+  '';
 
   doCheck = true;
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "Restricted User Shell";
 
     longDescription =
@@ -31,11 +37,11 @@ stdenv.mkDerivation rec {
          sftp-server or scp, that lack this ability.
       '';
 
-    homepage = https://www.gnu.org/software/rush/;
-    license = stdenv.lib.licenses.gpl3Plus;
+    homepage = "https://www.gnu.org/software/rush/";
+    license = lib.licenses.gpl3Plus;
 
-    maintainers = [ stdenv.lib.maintainers.bjg ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = [ lib.maintainers.bjg ];
+    platforms = lib.platforms.all;
   };
 
   passthru = {

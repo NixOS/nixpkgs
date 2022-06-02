@@ -53,10 +53,10 @@ def main():
 
 def construct_url(x):
     if x['brief']:
-        return 'http://dev-www.libreoffice.org/src/{}{}'.format(
+        return 'https://dev-www.libreoffice.org/src/{}{}'.format(
             x.get('subdir', ''), x['tarball'])
     else:
-        return 'http://dev-www.libreoffice.org/src/{}{}-{}'.format(
+        return 'https://dev-www.libreoffice.org/src/{}{}-{}'.format(
             x.get('subdir', ''), x['md5'], x['tarball'])
 
 

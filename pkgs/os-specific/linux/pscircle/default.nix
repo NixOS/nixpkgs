@@ -1,25 +1,28 @@
-{ stdenv, fetchFromGitLab, meson, pkgconfig, ninja, cairo }:
+{ lib, stdenv, fetchFromGitLab, meson, pkg-config, ninja, cairo }:
 
 stdenv.mkDerivation rec {
-  name = "pscircle-${version}";
-  version = "1.3.0";
+  pname = "pscircle";
+  version = "1.3.1";
 
   src = fetchFromGitLab {
     owner = "mildlyparallel";
     repo = "pscircle";
     rev = "v${version}";
-    sha256 = "0qsif00dkqa8ky3vl2ycx5anx2yk62nrv47f5lrlqzclz91f00fx";
+    sha256 = "1sm99423hh90kr4wdjqi9sdrrpk65j2vz2hzj65zcxfxyr6khjci";
   };
 
-  buildInputs = [
-      meson
-      pkgconfig
-      cairo
-      ninja
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://gitlab.com/mildlyparallel/pscircle;
+  buildInputs = [
+    cairo
+  ];
+
+  meta = with lib; {
+    homepage = "https://gitlab.com/mildlyparallel/pscircle";
     description = "Visualize Linux processes in a form of a radial tree";
     license = licenses.gpl2;
     maintainers = [ maintainers.ldesgoui ];

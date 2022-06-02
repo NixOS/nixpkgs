@@ -1,27 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fuse, readline, pkgconfig, qtbase }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, fuse
+, readline
+, pkg-config
+, qtbase
+, qttools
+, wrapQtAppsHook }:
 
-stdenv.mkDerivation rec {
-  name = "android-file-transfer-${version}";
-  version = "3.7";
+mkDerivation rec {
+  pname = "android-file-transfer";
+  version = "4.2";
+
   src = fetchFromGitHub {
     owner = "whoozle";
     repo = "android-file-transfer-linux";
     rev = "v${version}";
-    sha256 = "0a388pqc0azgn0wy85wb1mjk3b5zb6vcr58l4warwfzhca400zn0";
+    sha256 = "125rq8ji83nw6chfw43i0h9c38hjqh1qjibb0gnf9wrigar9zc8b";
   };
-  buildInputs = [ cmake fuse readline pkgconfig qtbase ];
-  buildPhase = ''
-    cmake .
-    make
+
+  patches = [ ./darwin-dont-vendor-dependencies.patch ];
+
+  nativeBuildInputs = [ cmake readline pkg-config wrapQtAppsHook ];
+  buildInputs = [ fuse qtbase qttools ];
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir $out/Applications
+    mv $out/*.app $out/Applications
   '';
-  installPhase = ''
-    make install
-  '';
-  meta = with stdenv.lib; {
+
+  meta = with lib; {
     description = "Reliable MTP client with minimalistic UI";
-    homepage = https://whoozle.github.io/android-file-transfer-linux/;
-    license = licenses.lgpl21;
+    homepage = "https://whoozle.github.io/android-file-transfer-linux/";
+    license = licenses.lgpl21Plus;
     maintainers = [ maintainers.xaverdh ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

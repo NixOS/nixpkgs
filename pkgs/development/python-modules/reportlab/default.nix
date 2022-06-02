@@ -1,4 +1,5 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , fetchPypi
 , freetype
 , pillow
@@ -11,11 +12,11 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "3.5.13";
+  version = "3.6.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6116e750f98018febc08dfee6df20446cf954adbcfa378d2c703d56c8864aff3";
+    sha256 = "sha256-XQzDaCRWrSExUPbb/+fUfqtzfYCeUXwxYQM3a+VI+4Q=";
   };
 
   checkInputs = [ glibcLocales ];
@@ -23,12 +24,17 @@ in buildPythonPackage rec {
   buildInputs = [ ft pillow ];
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace "mif = findFile(d,'ft2build.h')" "mif = findFile('${lib.getDev ft}','ft2build.h')"
+
     # Remove all the test files that require access to the internet to pass.
     rm tests/test_lib_utils.py
     rm tests/test_platypus_general.py
+    rm tests/test_platypus_images.py
 
     # Remove the tests that require Vera fonts installed
     rm tests/test_graphics_render.py
+    rm tests/test_graphics_charts.py
   '';
 
   checkPhase = ''
@@ -41,6 +47,6 @@ in buildPythonPackage rec {
 
   meta = {
     description = "An Open Source Python library for generating PDFs and graphics";
-    homepage = http://www.reportlab.com/;
+    homepage = "http://www.reportlab.com/";
   };
 }

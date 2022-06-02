@@ -1,13 +1,13 @@
-diff --git a/src/pytesseract.py b/src/pytesseract.py
-index 32713cf..5f9209d 100755
---- a/src/pytesseract.py
-+++ b/src/pytesseract.py
-@@ -25,7 +25,7 @@ if numpy_installed:
-     from numpy import ndarray
+diff --git a/pytesseract/pytesseract.py b/pytesseract/pytesseract.py
+index 132f59b..f161e5c 100755
+--- a/pytesseract/pytesseract.py
++++ b/pytesseract/pytesseract.py
+@@ -23,7 +23,7 @@ except ImportError:
+     import Image
  
- # CHANGE THIS IF TESSERACT IS NOT IN YOUR PATH, OR IS NAMED DIFFERENTLY
+ 
 -tesseract_cmd = 'tesseract'
 +tesseract_cmd = '@drv@/bin/tesseract'
- RGB_MODE = 'RGB'
- OSD_KEYS = {
-     'Page number': ('page_num', int),
+ 
+ numpy_installed = find_loader('numpy') is not None
+ if numpy_installed:

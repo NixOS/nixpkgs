@@ -1,41 +1,33 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
 
-let
-  pname = "cmdliner";
-in
-
-assert stdenv.lib.versionAtLeast ocaml.version "4.01.0";
-
-let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.03" then {
-    version = "1.0.3";
-    sha256 = "0g3w4hvc1cx9x2yp5aqn6m2rl8lf9x1dn754hfq8m1sc1102lxna";
-  } else {
-    version = "1.0.2";
-    sha256 = "18jqphjiifljlh9jg8zpl6310p3iwyaqphdkmf89acyaix0s4kj1";
-  }
-; in
+assert (lib.versionAtLeast ocaml.version "4.03");
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
-  inherit (param) version;
+  pname = "cmdliner";
+  version = "1.0.4";
 
   src = fetchurl {
-    url = "http://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
-    inherit (param) sha256;
+    url = "https://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
+    sha256 = "1h04q0zkasd0mw64ggh4y58lgzkhg6yhzy60lab8k8zq9ba96ajw";
   };
 
-  nativeBuildInputs = [ ocamlbuild topkg ];
-  buildInputs = [ ocaml findlib ];
-  propagatedBuildInputs = [ result ];
+  nativeBuildInputs = [ ocaml ];
 
-  inherit (topkg) buildPhase installPhase;
+  makeFlags = [ "PREFIX=$(out)" ];
+  installTargets = "install install-doc";
+  installFlags = [
+    "LIBDIR=$(out)/lib/ocaml/${ocaml.version}/site-lib/${pname}"
+    "DOCDIR=$(out)/share/doc/${pname}"
+  ];
+  postInstall = ''
+    mv $out/lib/ocaml/${ocaml.version}/site-lib/${pname}/{opam,${pname}.opam}
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = http://erratique.ch/software/cmdliner;
+  meta = with lib; {
+    homepage = "https://erratique.ch/software/cmdliner";
     description = "An OCaml module for the declarative definition of command line interfaces";
     license = licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.vbgl ];
   };
 }

@@ -1,46 +1,41 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, coreutils
-, openvpn, python, dialog, wget, update-resolv-conf }:
+{ lib
+, buildPythonApplication
+, pythonOlder
+, fetchFromGitHub
+, protonvpn-nm-lib
+, pythondialog
+, dialog
+}:
 
-let
-  expectedUpdateResolvPath = "/etc/openvpn/update-resolv-conf";
-  actualUpdateResolvePath = "${update-resolv-conf}/libexec/openvpn/update-resolv-conf";
+buildPythonApplication rec {
+  pname = "protonvpn-cli";
+  version = "3.11.1";
+  format = "setuptools";
 
-in stdenv.mkDerivation rec {
-  name = "protonvpn-cli";
-  version = "1.1.2";
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
-    owner = "ProtonVPN";
-    repo = "protonvpn-cli";
-    rev = "v${version}";
-    sha256 = "0xvflr8zf267n3dv63nkk4wjxhbckw56sqmyca3krf410vrd7zlv";
+    owner = "protonvpn";
+    repo = "linux-cli";
+    rev = version;
+    sha256 = "sha256-u+POtUz7NoGS23aOmvDCZPUp2HW1xXGtfbZR88cWCBc=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = [
+    protonvpn-nm-lib
+    pythondialog
+    dialog
+  ];
 
-  installPhase = ''
-    mkdir -p "$out/bin"
-    substituteInPlace protonvpn-cli.sh \
-      --replace ${expectedUpdateResolvPath} ${actualUpdateResolvePath} \
-      --replace \$UID 0 \
-      --replace /etc/resolv.conf /dev/null \
-      --replace \
-        "  echo \"Connecting...\"" \
-        "  sed -ri 's@${expectedUpdateResolvPath}@${actualUpdateResolvePath}@g' \"\$openvpn_config\"; echo \"Connecting...\""
-    cp protonvpn-cli.sh "$out/bin/protonvpn-cli"
-    ln -s "$out/bin/protonvpn-cli" "$out/bin/pvpn"
-  '';
+  # Project has a dummy test
+  doCheck = false;
 
-  postInstallPhase = ''
-    wrapProgram $out/protonvpn-cli \
-      --prefix PATH : ${lib.makeBinPath [ coreutils openvpn python dialog wget update-resolv-conf ]}
-  '';
-
-  meta = with stdenv.lib; {
-    description = "ProtonVPN Command-Line Tool";
-    homepage = https://github.com/ProtonVPN/protonvpn-cli;
-    maintainers = with maintainers; [ caugner ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+  meta = with lib; {
+    description = "Linux command-line client for ProtonVPN";
+    homepage = "https://github.com/protonvpn/linux-cli";
+    maintainers = with maintainers; [ wolfangaukang ];
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    mainProgram = "protonvpn-cli";
   };
 }

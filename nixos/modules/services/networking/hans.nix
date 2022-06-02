@@ -27,7 +27,7 @@ in
           where <replaceable>name</replaceable> is the name of the
           corresponding attribute name.
         '';
-        example = literalExample ''
+        example = literalExpression ''
         {
           foo = {
             server = "192.0.2.1";
@@ -135,11 +135,11 @@ in
       };
     };
 
-    users.users = singleton {
-      name = hansUser;
+    users.users.${hansUser} = {
       description = "Hans daemon user";
+      isSystemUser = true;
     };
   };
 
-  meta.maintainers = with maintainers; [ gnidorah ];
+  meta.maintainers = with maintainers; [ ];
 }

@@ -6,7 +6,7 @@ let
   cfg = config.virtualisation.virtualbox.host;
 
   virtualbox = cfg.package.override {
-    inherit (cfg) enableHardening headless;
+    inherit (cfg) enableHardening headless enableWebService;
     extensionPack = if cfg.enableExtensionPack then pkgs.virtualboxExtpack else null;
   };
 
@@ -43,7 +43,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.virtualbox;
-      defaultText = "pkgs.virtualbox";
+      defaultText = literalExpression "pkgs.virtualbox";
       description = ''
         Which VirtualBox package to use.
       '';
@@ -80,6 +80,14 @@ in
         and when virtual machines are controlled only via SSH.
       '';
     };
+
+    enableWebService = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Build VirtualBox web service tool (vboxwebsrv) to allow managing VMs via other webpage frontend tools. Useful for headless servers.
+      '';
+    };
   };
 
   config = mkIf cfg.enable (mkMerge [{
@@ -104,7 +112,7 @@ in
       "VBoxNetNAT"
       "VBoxSDL"
       "VBoxVolInfo"
-      "VirtualBox"
+      "VirtualBoxVM"
     ]));
 
     users.groups.vboxusers.gid = config.ids.gids.vboxusers;
@@ -122,7 +130,7 @@ in
 
     # Since we lack the right setuid/setcap binaries, set up a host-only network by default.
   } (mkIf cfg.addNetworkInterface {
-    systemd.services."vboxnet0" =
+    systemd.services.vboxnet0 =
       { description = "VirtualBox vboxnet0 Interface";
         requires = [ "dev-vboxnetctl.device" ];
         after = [ "dev-vboxnetctl.device" ];
@@ -149,5 +157,12 @@ in
     # Make sure NetworkManager won't assume this interface being up
     # means we have internet access.
     networking.networkmanager.unmanaged = ["vboxnet0"];
-  })]);
+  }) (mkIf config.networking.useNetworkd {
+    systemd.network.networks."40-vboxnet0".extraConfig = ''
+      [Link]
+      RequiredForOnline=no
+    '';
+  })
+
+]);
 }

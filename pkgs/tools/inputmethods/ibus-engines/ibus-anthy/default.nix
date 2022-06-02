@@ -1,35 +1,57 @@
-{ stdenv, fetchurl, intltool, pkgconfig
-, anthy, ibus, glib, gobject-introspection, gtk3, python3
+{ lib, stdenv
+, fetchurl
+, gettext
+, pkg-config
+, wrapGAppsHook
+, anthy
+, ibus
+, glib
+, gobject-introspection
+, gtk3
+, python3
 }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-anthy-${version}";
-  version = "1.5.10";
+  pname = "ibus-anthy";
+  version = "1.5.14";
 
-  meta = with stdenv.lib; {
-    isIbusEngine = true;
-    description  = "IBus interface to the anthy input method";
-    homepage     = http://wiki.github.com/fujiwarat/ibus-anthy;
-    license      = licenses.gpl2Plus;
-    platforms    = platforms.linux;
-    maintainers  = with maintainers; [ gebner ericsagnes ];
+  src = fetchurl {
+    url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-yGlNoY0LiRpI9NdaDezjfsvKbRsay2QQGnqEytEEbZs=";
   };
 
-  configureFlags = [ "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t" ];
-
   buildInputs = [
-    anthy glib gobject-introspection gtk3 ibus (python3.withPackages (ps: [ps.pygobject3]))
+    anthy
+    glib
+    gtk3
+    ibus
+    (python3.withPackages (ps: [
+      ps.pygobject3
+      (ps.toPythonModule ibus)
+    ]))
   ];
 
-  nativeBuildInputs = [ intltool pkgconfig python3.pkgs.wrapPython ];
+  nativeBuildInputs = [
+    gettext
+    gobject-introspection
+    pkg-config
+    wrapGAppsHook
+  ];
+
+  configureFlags = [
+    "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t"
+  ];
 
   postFixup = ''
-    wrapPythonPrograms
     substituteInPlace $out/share/ibus/component/anthy.xml --replace \$\{exec_prefix\} $out
   '';
 
-  src = fetchurl {
-    url = "https://github.com/ibus/ibus-anthy/releases/download/${version}/${name}.tar.gz";
-    sha256 = "0jpqz7pb9brlqiwrbr3i6wvj3b39a9bs9lljl3qa3r77mz8y0cyc";
+  meta = with lib; {
+    isIbusEngine = true;
+    description = "IBus interface to the anthy input method";
+    homepage = "https://github.com/fujiwarat/ibus-anthy";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ gebner ericsagnes ];
   };
 }

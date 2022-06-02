@@ -1,22 +1,27 @@
-{ stdenv, fetchurl, pkgconfig, glib, nss }:
+{ lib, stdenv, fetchurl, pkg-config, glib, nss }:
 
 stdenv.mkDerivation rec {
-  name = "libcacard-${version}";
-  version = "2.6.1";
+  pname = "libcacard";
+  version = "2.8.1";
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/libcacard/${name}.tar.xz";
-    sha256 = "1w6y0kiakhg7dgyf8yqpm4jj6jiv17zhy9lp3d7z32q1pniccxk2";
+    url = "https://www.spice-space.org/download/libcacard/${pname}-${version}.tar.xz";
+    sha256 = "sha256-+79N6Mt9tb3/XstnL/Db5pOfufNEuQDVG6YpUymjMuc=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    sed -i '/--version-script/d' Makefile.in
+    sed -i 's/^vflag = .*$/vflag = ""/' meson.build
+  '';
+
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib nss ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Smart card emulation library";
-    homepage = https://gitlab.freedesktop.org/spice/libcacard;
+    homepage = "https://gitlab.freedesktop.org/spice/libcacard";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yana ];
     platforms = platforms.unix;
   };
 }

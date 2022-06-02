@@ -1,36 +1,46 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 
 , cmake
 , ninja
 , perl # Project uses Perl for scripting and testing
-, python
+, python3
 
 , enableThreading ? true # Threading can be disabled to increase security https://tls.mbed.org/kb/development/thread-safety-and-multi-threading
 }:
 
 stdenv.mkDerivation rec {
-  name = "mbedtls-${version}";
-  version = "2.15.1";
+  pname = "mbedtls";
+  # Auto updates are disabled due to repology listing dev releases as release
+  # versions. See
+  #  * https://github.com/NixOS/nixpkgs/pull/119838#issuecomment-822100428
+  #  * https://github.com/NixOS/nixpkgs/commit/0ee02a9d42b5fe1825b0f7cee7a9986bb4ba975d
+  version = "2.28.0"; # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "ARMmbed";
     repo = "mbedtls";
-    rev = name;
-    sha256 = "0w6cm2f7d43wp8cx6r5h4icq8zcix1jnvivshypir1rbk1q83gx8";
+    rev = "${pname}-${version}";
+    sha256 = "sha256-VDoIUBaK2e0E5nkwU1u3Wvxc+s6OzBSdIeHsJKJuZ2g=";
   };
 
-  nativeBuildInputs = [ cmake ninja perl python ];
+  nativeBuildInputs = [ cmake ninja perl python3 ];
 
-  postConfigure = stdenv.lib.optionals enableThreading ''
+  strictDeps = true;
+
+  postConfigure = lib.optionalString enableThreading ''
     perl scripts/config.pl set MBEDTLS_THREADING_C    # Threading abstraction layer
     perl scripts/config.pl set MBEDTLS_THREADING_PTHREAD    # POSIX thread wrapper layer for the threading layer.
   '';
 
   cmakeFlags = [ "-DUSE_SHARED_MBEDTLS_LIBRARY=on" ];
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [
+    "-Wno-error=format"
+    "-Wno-error=format-truncation"
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://tls.mbed.org/;
+  meta = with lib; {
+    homepage = "https://tls.mbed.org/";
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
     license = licenses.asl20;
     platforms = platforms.all;

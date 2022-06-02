@@ -1,29 +1,70 @@
-{ stdenv, fetchurl, pkgconfig, gettext, gobject-introspection, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, gupnp }:
+{ lib, stdenv
+, fetchurl
+, pkg-config
+, meson
+, ninja
+, gettext
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, glib
+, gupnp
+, gnome
+}:
 
 stdenv.mkDerivation rec {
-  name = "gupnp-igd-${version}";
-  version = "0.2.5";
+  pname = "gupnp-igd";
+  version = "1.2.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp-igd/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "081v1vhkbz3wayv49xfiskvrmvnpx93k25am2wnarg5cifiiljlb";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-S1EgCYqhPt0ngYup7k1/6WG/VAv1DQVv9wPGFUXgK+E=";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_412 ];
-  propagatedBuildInputs = [ glib gupnp ];
-
-  configureFlags = [
-    "--enable-gtk-doc"
+  depsBuildBuild = [
+    pkg-config
   ];
 
-  doCheck = true;
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    gettext
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ];
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    glib
+    gupnp
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+  ];
+
+  # Seems to get stuck sometimes.
+  # https://github.com/NixOS/nixpkgs/issues/119288
+  #doCheck = true;
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "odd-unstable";
+    };
+  };
+
+  meta = with lib; {
     description = "Library to handle UPnP IGD port mapping";
-    homepage = http://www.gupnp.org/;
-    license = licenses.lgpl21;
+    homepage = "http://www.gupnp.org/";
+    license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };
 }

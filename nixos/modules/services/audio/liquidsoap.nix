@@ -14,15 +14,10 @@ let
         description = "${name} liquidsoap stream";
         wantedBy = [ "multi-user.target" ];
         path = [ pkgs.wget ];
-        preStart =
-          ''
-            mkdir -p /var/log/liquidsoap
-            chown liquidsoap -R /var/log/liquidsoap
-          '';
         serviceConfig = {
-          PermissionsStartOnly="true";
           ExecStart = "${pkgs.liquidsoap}/bin/liquidsoap ${stream}";
           User = "liquidsoap";
+          LogsDirectory = "liquidsoap";
         };
       };
     };
@@ -44,9 +39,9 @@ in
       default = {};
 
       example = {
-        myStream1 = literalExample "\"/etc/liquidsoap/myStream1.liq\"";
-        myStream2 = literalExample "./myStream2.liq";
-        myStream3 = literalExample "\"out(playlist(\\\"/srv/music/\\\"))\"";
+        myStream1 = "/etc/liquidsoap/myStream1.liq";
+        myStream2 = literalExpression "./myStream2.liq";
+        myStream3 = "out(playlist(\"/srv/music/\"))";
       };
 
       type = types.attrsOf (types.either types.path types.str);

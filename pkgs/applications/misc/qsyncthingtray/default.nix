@@ -7,12 +7,12 @@
 
 mkDerivation rec {
   version = "0.5.8";
-  name = "qsyncthingtray-${version}";
+  pname = "qsyncthingtray";
 
   src = fetchFromGitHub {
     owner  = "sieren";
     repo   = "QSyncthingTray";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "1n9g4j7qznvg9zl6x163pi9f7wsc3x6q76i33psnm7x2v1i22x5w";
   };
 
@@ -53,10 +53,8 @@ mkDerivation rec {
     runHook postInstall
   '';
 
-  enableParallelBuilding = true;
-
   meta = with lib; {
-    homepage = https://github.com/sieren/QSyncthingTray/;
+    homepage = "https://github.com/sieren/QSyncthingTray/";
     description = "A Traybar Application for Syncthing written in C++";
     longDescription = ''
         A cross-platform status bar for Syncthing.
@@ -69,6 +67,6 @@ mkDerivation rec {
     # 0.5.7 segfaults when opening the main panel with qt 5.7 and fails to compile with qt 5.8
     # but qt > 5.6 works when only using the native browser
     # https://github.com/sieren/QSyncthingTray/issues/223
-    broken = (builtins.compareVersions qtbase.version "5.7.0" >= 0 && !preferNative);
+    broken = (builtins.compareVersions qtbase.version "5.7.0" >= 0 && !preferNative) || stdenv.isDarwin;
   };
 }

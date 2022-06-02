@@ -1,19 +1,49 @@
-{ stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+, libmnl
+, pkg-config
+, writeScript
+}:
 
 stdenv.mkDerivation rec {
-  name = "ethtool-${version}";
-  version = "5.0";
+  pname = "ethtool";
+  version = "5.17";
 
   src = fetchurl {
-    url = "mirror://kernel/software/network/ethtool/${name}.tar.xz";
-    sha256 = "16gfkf001mdid1vjrxwri7fs4iwiy6d4lkrssljr2n13y0xj7m7c";
+    url = "mirror://kernel/software/network/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-ZKuRS5xrRQRyRdkfQLh2CycomSqeWvInF8ZEI46IkTM=";
   };
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    libmnl
+  ];
+
+  passthru = {
+    updateScript = writeScript "update-ethtool" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of '<a href="ethtool-VER.tar.xz">...</a>'
+      # The page always lists versions newest to oldest. Pick the first one.
+      new_version="$(curl -s https://mirrors.edge.kernel.org/pub/software/network/ethtool/ |
+          pcregrep -o1 '<a href="ethtool-([0-9.]+)[.]tar[.]xz">' |
+          head -n1)"
+      update-source-version ${pname} "$new_version"
+    '';
+  };
+
+  meta = with lib; {
     description = "Utility for controlling network drivers and hardware";
-    homepage = https://www.kernel.org/pub/software/network/ethtool/;
-    license = licenses.gpl2;
+    homepage = "https://www.kernel.org/pub/software/network/ethtool/";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.bjornfor ];
+    maintainers = with maintainers; [ bjornfor ];
   };
 }

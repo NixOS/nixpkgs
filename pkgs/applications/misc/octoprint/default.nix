@@ -1,94 +1,217 @@
-{ stdenv, lib, fetchFromGitHub, python2 }:
-
+{ pkgs
+, stdenv
+, lib
+, fetchFromGitHub
+, python3
+, substituteAll
+, nix-update-script
+  # To include additional plugins, pass them here as an overlay.
+, packageOverrides ? self: super: { }
+}:
 let
-  mkOverride = attrname: version: sha256:
-    self: super: {
-      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
-        inherit version;
-        src = oldAttrs.src.override {
-          inherit version sha256;
-        };
-      });
-    };
 
-  py = python2.override {
-    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
-      (mkOverride "flask"       "0.10.1" "0wrkavjdjndknhp8ya8j850jq7a1cli4g5a93mg8nh1xz2gq50sc")
-      (mkOverride "flask_login" "0.2.11" "1rg3rsjs1gwi2pw6vr9jmhaqm9b3vc9c4hfcsvp4y8agbh7g3mc3")
-      (mkOverride "jinja2"      "2.8.1"  "14aqmhkc9rw5w0v311jhixdm6ym8vsm29dhyxyrjfqxljwx1yd1m")
-      (mkOverride "pylru"       "1.0.9"  "0b0pq0l7xv83dfsajsc49jcxzc99kb9jfx1a1dlx22hzcy962dvi")
-      (mkOverride "sarge"       "0.1.4"  "08s8896973bz1gg0pkr592w6g4p6v47bkfvws5i91p9xf8b35yar")
-      (mkOverride "tornado"     "4.5.3"  "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d")
+  py = python3.override {
+    self = py;
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
+      [
+        # Built-in dependency
+        (
+          self: super: {
+            octoprint-filecheck = self.buildPythonPackage rec {
+              pname = "OctoPrint-FileCheck";
+              version = "2021.2.23";
 
-      # https://github.com/NixOS/nixpkgs/pull/58179#issuecomment-478605134
-      (mkOverride "werkzeug"    "0.14.1" "c3fd7a7d41976d9f44db327260e263132466836cef6f91512889ed60ad26557c")
-    ]);
+              src = fetchFromGitHub {
+                owner = "OctoPrint";
+                repo = "OctoPrint-FileCheck";
+                rev = version;
+                sha256 = "sha256-e/QGEBa9+pjOdrZq3Zc6ifbSMClIyeTOi0Tji0YdVmI=";
+              };
+              doCheck = false;
+            };
+          }
+        )
+
+        # Built-in dependency
+        (
+          self: super: {
+            octoprint-firmwarecheck = self.buildPythonPackage rec {
+              pname = "OctoPrint-FirmwareCheck";
+              version = "2021.10.11";
+
+              src = fetchFromGitHub {
+                owner = "OctoPrint";
+                repo = "OctoPrint-FirmwareCheck";
+                rev = version;
+                sha256 = "0hl0612x0h4pcwsrga5il5x3m04j37cmyzh2dg1kl971cvrw79n2";
+              };
+              doCheck = false;
+            };
+          }
+        )
+
+        (
+          self: super: {
+            octoprint-pisupport = self.buildPythonPackage rec {
+              pname = "OctoPrint-PiSupport";
+              version = "2022.3.28";
+              format = "setuptools";
+
+              src = fetchFromGitHub {
+                owner = "OctoPrint";
+                repo = "OctoPrint-PiSupport";
+                rev = version;
+                sha256 = "yzE/jz604nX/CHcW3aa7goH1ey8qZ7rLw31SMfNKJZM=";
+              };
+
+              # requires octoprint itself during tests
+              doCheck = false;
+            };
+          }
+        )
+
+        (
+          self: super: {
+            octoprint = self.buildPythonPackage rec {
+              pname = "OctoPrint";
+              version = "1.8.0";
+
+              src = fetchFromGitHub {
+                owner = "OctoPrint";
+                repo = "OctoPrint";
+                rev = version;
+                sha256 = "sha256-GDKXHLigMAork+KAFOs8znNhaTYVTWVB2Tb+4sAqF8o=";
+              };
+
+              propagatedBuildInputs = with super; [
+                blinker
+                cachelib
+                click
+                colorlog
+                emoji
+                feedparser
+                filetype
+                flask
+                flask-babel
+                flask_assets
+                flask_login
+                frozendict
+                future
+                itsdangerous
+                immutabledict
+                jinja2
+                markdown
+                markupsafe
+                netaddr
+                netifaces
+                octoprint-filecheck
+                octoprint-firmwarecheck
+                octoprint-pisupport
+                pathvalidate
+                pkginfo
+                pip
+                psutil
+                pylru
+                pyserial
+                pyyaml
+                regex
+                requests
+                rsa
+                sarge
+                semantic-version
+                sentry-sdk
+                setuptools
+                tornado
+                unidecode
+                watchdog
+                websocket-client
+                werkzeug
+                wrapt
+                zeroconf
+                zipstream-ng
+              ] ++ lib.optionals stdenv.isDarwin [
+                py.pkgs.appdirs
+              ];
+
+              checkInputs = with super; [
+                ddt
+                mock
+                pytestCheckHook
+              ];
+
+              patches = [
+                # substitute pip and let it find out, that it can't write anywhere
+                (substituteAll {
+                  src = ./pip-path.patch;
+                  pip = "${super.pip}/bin/pip";
+                })
+
+                # hardcore path to ffmpeg and hide related settings
+                (substituteAll {
+                  src = ./ffmpeg-path.patch;
+                  ffmpeg = "${pkgs.ffmpeg}/bin/ffmpeg";
+                })
+              ];
+
+              postPatch =
+                let
+                  ignoreVersionConstraints = [
+                    "cachelib"
+                    "colorlog"
+                    "emoji"
+                    "immutabledict"
+                    "PyYAML"
+                    "sarge"
+                    "sentry-sdk"
+                    "watchdog"
+                    "wrapt"
+                    "zeroconf"
+                    "Flask-Login"
+                    "werkzeug"
+                  ];
+                in
+                ''
+                    sed -r -i \
+                      ${lib.concatStringsSep "\n" (
+                    map (
+                      e:
+                        ''-e 's@${e}[<>=]+.*@${e}",@g' \''
+                    ) ignoreVersionConstraints
+                  )}
+                      setup.py
+                '';
+
+              dontUseSetuptoolsCheck = true;
+
+              preCheck = ''
+                export HOME=$(mktemp -d)
+                rm pytest.ini
+              '';
+
+              disabledTests = [
+                "test_check_setup" # Why should it be able to call pip?
+              ] ++ lib.optionals stdenv.isDarwin [
+                "test_set_external_modification"
+              ];
+
+              passthru = {
+                python = self.python;
+                updateScript = nix-update-script { attrPath = "octoprint"; };
+              };
+
+              meta = with lib; {
+                homepage = "https://octoprint.org/";
+                description = "The snappy web interface for your 3D printer";
+                license = licenses.agpl3Only;
+                maintainers = with maintainers; [ abbradar gebner WhittlesJr gador ];
+              };
+            };
+          }
+        )
+        (import ./plugins.nix { inherit pkgs; })
+        packageOverrides
+      ]
+    );
   };
-
-  ignoreVersionConstraints = [
-    "Click"
-    "Flask-Assets"
-    "Flask-Babel"
-    "Flask-Principal"
-    "PyYAML"
-    "emoji"
-    "flask"
-    "future"
-    "futures"
-    "monotonic"
-    "pkginfo"
-    "psutil"
-    "pyserial"
-    "python-dateutil"
-    "requests"
-    "rsa"
-    "sarge"
-    "scandir"
-    "semantic_version"
-    "watchdog"
-    "websocket-client"
-    "werkzeug"
-    "wrapt"
-  ];
-
-in py.pkgs.buildPythonApplication rec {
-  pname = "OctoPrint";
-  version = "1.3.10";
-
-  src = fetchFromGitHub {
-    owner  = "foosel";
-    repo   = "OctoPrint";
-    rev    = version;
-    sha256 = "1pvh7ay76zrvfzcsadh3sl48sgf3by9vpiaqlrkscsw02zirx9r7";
-  };
-
-  propagatedBuildInputs = with py.pkgs; [
-    awesome-slugify flask_assets rsa requests pkginfo watchdog
-    semantic-version flask_principal werkzeug flaskbabel tornado
-    psutil pyserial flask_login netaddr markdown sockjs-tornado
-    pylru pyyaml sarge feedparser netifaces click websocket_client
-    scandir chainmap future dateutil futures wrapt monotonic emoji
-    frozendict
-  ];
-
-  checkInputs = with py.pkgs; [ nose mock ddt ];
-
-  postPatch = ''
-    sed -r -i \
-      ${lib.concatStringsSep "\n" (map (e:
-        ''-e 's@${e}[<>=]+.*@${e}",@g' \''
-      ) ignoreVersionConstraints)}
-      setup.py
-  '';
-
-  checkPhase = ''
-    HOME=$(mktemp -d) nosetests
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://octoprint.org/;
-    description = "The snappy web interface for your 3D printer";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ abbradar ];
-  };
-}
+in
+with py.pkgs; toPythonApplication octoprint

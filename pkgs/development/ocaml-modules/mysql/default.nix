@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ocaml, findlib, mysql }:
+{ stdenv, lib, fetchurl, fetchpatch, ocaml, findlib, libmysqlclient }:
 
 # TODO: la versione stabile da' un errore di compilazione dovuto a
 # qualche cambiamento negli header .h
@@ -17,16 +17,18 @@ stdenv.mkDerivation rec {
     sha256 = "06mb2bq7v37wn0lza61917zqgb4bsg1xxb73myjyn88p6khl6yl2";
   };
 
-  configureFlags = [ 
-     "--prefix=$out" 
+  configureFlags = [
+     "--prefix=$out"
      "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
   ];
 
-  buildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [ ocaml findlib ];
 
   createFindlibDestdir = true;
 
-  propagatedBuildInputs = [ mysql.connector-c ];
+  propagatedBuildInputs = [ libmysqlclient ];
+
+  strictDeps = true;
 
   patches = [
     (fetchpatch {
@@ -36,9 +38,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://ocaml-mysql.forge.ocamlcore.org;
+    homepage = "http://ocaml-mysql.forge.ocamlcore.org";
     description = "Bindings for interacting with MySQL databases from ocaml";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.roconnor ];
   };
 }

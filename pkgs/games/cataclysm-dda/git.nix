@@ -1,44 +1,38 @@
-{ stdenv, callPackage
-, tiles ? true, Cocoa, CoreFoundation
+{ stdenv, lib, callPackage, CoreFoundation, fetchFromGitHub, pkgs, wrapCDDA, attachPkgs
+, tiles ? true, Cocoa
 , debug ? false
+, useXdgDir ? false
+, version ? "2021-07-03"
+, rev ? "9017808252e1e149446c8f8bd7a6582ce0f95285"
+, sha256 ? "0qrvkbyg098jb9hv69sg5093b1vj8f4n75p73v01jnmyxlz3ax28"
 }:
 
 let
-  inherit (stdenv.lib) optionals optionalString substring;
-  inherit (callPackage ./common.nix { inherit tiles Cocoa debug; }) common utils;
-  inherit (utils) fetchFromCleverRaven installXDGAppLauncher installMacOSAppLauncher;
+  common = callPackage ./common.nix {
+    inherit CoreFoundation tiles Cocoa debug useXdgDir;
+  };
+
+  self = common.overrideAttrs (common: rec {
+    pname = common.pname + "-git";
+    inherit version;
+
+    src = fetchFromGitHub {
+      owner = "CleverRaven";
+      repo = "Cataclysm-DDA";
+      inherit rev sha256;
+    };
+
+    makeFlags = common.makeFlags ++ [
+      "VERSION=git-${version}-${lib.substring 0 8 src.rev}"
+    ];
+
+    meta = common.meta // {
+      maintainers = with lib.maintainers;
+      common.meta.maintainers ++ [ rardiol ];
+      # /nix/store/s8xaq3x7mcysvd752in2nihb1nr6svsl-SDL2-2.0.20-dev/include/SDL2/SDL_events.h:645:65: error: use of old-style cast [-Werror,-Wold-style-cast]
+      broken = (stdenv.isDarwin && stdenv.isx86_64);
+    };
+  });
 in
 
-stdenv.mkDerivation (common // rec {
-  version = "2018-07-15";
-  name = "cataclysm-dda-git-${version}";
-
-  src = fetchFromCleverRaven {
-    rev = "e1e5d81";
-    sha256 = "198wfj8l1p8xlwicj92cq237pzv2ha9pcf240y7ijhjpmlc9jkr1";
-  };
-
-  buildInputs = common.buildInputs
-    ++ optionals stdenv.isDarwin [ CoreFoundation ];
-
-  patches = [ ./patches/fix_locale_dir_git.patch ];
-
-  makeFlags = common.makeFlags ++ [
-    "VERSION=git-${version}-${substring 0 8 src.rev}"
-  ];
-
-  postInstall = optionalString tiles
-  ( if !stdenv.isDarwin
-    then installXDGAppLauncher
-    else installMacOSAppLauncher
-  );
-
-  # https://hydra.nixos.org/build/65193254
-  # src/weather_data.cpp:203:1: fatal error: opening dependency file obj/tiles/weather_data.d: No such file or directory
-  # make: *** [Makefile:687: obj/tiles/weather_data.o] Error 1
-  enableParallelBuilding = false;
-
-  meta = with stdenv.lib.maintainers; common.meta // {
-    maintainers = common.meta.maintainers ++ [ rardiol ];
-  };
-})
+attachPkgs pkgs self

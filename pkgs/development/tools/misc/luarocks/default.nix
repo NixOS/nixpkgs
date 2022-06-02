@@ -1,22 +1,30 @@
-{stdenv, fetchurl
+{lib, stdenv, fetchFromGitHub
 , curl, makeWrapper, which, unzip
 , lua
 # for 'luarocks pack'
 , zip
 # some packages need to be compiled with cmake
 , cmake
+, installShellFiles
 }:
 
 stdenv.mkDerivation rec {
   pname = "luarocks";
-  version = "3.0.4";
+  version = "3.8.0";
 
-  src = fetchurl {
-    url="http://luarocks.org/releases/luarocks-${version}.tar.gz";
-    sha256="1pqfzwvjy8dzqg4fqjq2cgqcr00fgrdd7nwzxm7nqmawr83s6dhj";
+  src = fetchFromGitHub {
+    owner = "luarocks";
+    repo = "luarocks";
+    rev = "v${version}";
+    sha256 = "sha256-tPSAtveOodF2w54d82hEyaTj91imtySJUTsk/gje2dQ=";
   };
 
-  patches = [ ./darwin.patch ];
+  patches = [ ./darwin-3.7.0.patch ];
+
+  postPatch = lib.optionalString stdenv.targetPlatform.isDarwin ''
+    substituteInPlace src/luarocks/core/cfg.lua --subst-var-by 'darwinMinVersion' '${stdenv.targetPlatform.darwinMinVersion}'
+  '';
+
   preConfigure = ''
     lua -e "" || {
         luajit -e "" && {
@@ -30,9 +38,9 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  buildInputs = [
-    lua curl makeWrapper which
-  ];
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
+
+  buildInputs = [ lua curl which ];
 
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
@@ -45,6 +53,9 @@ stdenv.mkDerivation rec {
               --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua"
         }
     done
+
+    installShellCompletion --cmd luarocks --bash <($out/bin/luarocks completion bash)
+    installShellCompletion --cmd luarocks --zsh <($out/bin/luarocks completion zsh)
   '';
 
   propagatedBuildInputs = [ zip unzip cmake ];
@@ -60,13 +71,11 @@ stdenv.mkDerivation rec {
     export LUA_PATH="src/?.lua;''${LUA_PATH:-}"
   '';
 
-  meta = with stdenv.lib; {
-    inherit version;
-    description = ''A package manager for Lua'';
+  meta = with lib; {
+    description = "A package manager for Lua";
     license = licenses.mit ;
     maintainers = with maintainers; [raskin teto];
     platforms = platforms.linux ++ platforms.darwin;
     downloadPage = "http://luarocks.org/releases/";
-    updateWalker = true;
   };
 }

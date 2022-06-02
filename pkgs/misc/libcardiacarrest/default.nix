@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, libpulseaudio }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, libpulseaudio }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "libcardiacarrest-${version}";
+  pname = "libcardiacarrest";
   version = "12.2.8"; # <PA API version>.<version>
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ glib ];
 

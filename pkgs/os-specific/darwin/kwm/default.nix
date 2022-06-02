@@ -1,7 +1,7 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "kwm-${version}";
+  pname = "kwm";
   version = "4.0.5";
 
   src = fetchzip {
@@ -23,12 +23,13 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/Library/LaunchDaemons/org.nixos.kwm.plist --subst-var out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tiling window manager with focus follows mouse for OSX";
-    homepage = https://github.com/koekeishiya/kwm;
-    downloadPage = https://github.com/koekeishiya/kwm/releases;
+    homepage = "https://github.com/koekeishiya/kwm";
+    downloadPage = "https://github.com/koekeishiya/kwm/releases";
     platforms = platforms.darwin;
     maintainers = with maintainers; [ lnl7 ];
+    mainProgram = "kwmc";
     license = licenses.mit;
   };
 }

@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, yap, tcsh, perl, patchelf }:
+{ lib, stdenv, fetchurl, yap, tcsh, perl, patchelf }:
 
 stdenv.mkDerivation rec {
-  name = "TPTP-${version}";
+  pname = "TPTP";
   version = "7.2.0";
 
   src = fetchurl {
     urls = [
-      "http://www.cs.miami.edu/~tptp/TPTP/Distribution/TPTP-v${version}.tgz"
-      "http://www.cs.miami.edu/~tptp/TPTP/Archive/TPTP-v${version}.tgz"
+      "http://tptp.cs.miami.edu/TPTP/Distribution/TPTP-v${version}.tgz"
+      "http://tptp.cs.miami.edu/TPTP/Archive/TPTP-v${version}.tgz"
     ];
     sha256 = "0yq8452b6mym4yscy46pshg0z2my8xi74b5bp2qlxd5bjwcrg6rl";
   };
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     ln -s $sharedir/Scripts/tptp4X $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Thousands of problems for theorem provers and tools";
     maintainers = with maintainers; [ raskin gebner ];
     # 6.3 GiB of data. Installation is unpacking and editing a few files.

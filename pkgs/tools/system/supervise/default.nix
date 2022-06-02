@@ -1,8 +1,8 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
 
-  name = "supervise-${version}";
+  pname = "supervise";
   version = "1.4.0";
 
   src = fetchzip {
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "0jk6q2f67pfs18ah040lmsbvbrnjap7w04jjddsfn1j5bcrvs13x";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/catern/supervise;
+  meta = with lib; {
+    homepage = "https://github.com/catern/supervise";
     description = "A minimal unprivileged process supervisor making use of modern Linux features";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ catern ];
+    maintainers = with lib.maintainers; [ catern ];
   };
 }

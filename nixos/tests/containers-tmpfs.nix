@@ -1,16 +1,13 @@
-# Test for NixOS' container support.
-
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-tmpfs";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ ckampka ];
+  meta = {
+    maintainers = with lib.maintainers; [ patryk27 ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     { imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
-      virtualisation.memorySize = 768;
 
       containers.tmpfs =
         {
@@ -28,52 +25,66 @@ import ./make-test.nix ({ pkgs, ...} : {
           config = { };
         };
 
-      virtualisation.pathsInNixDB = [ pkgs.stdenv ];
+      virtualisation.additionalPaths = [ pkgs.stdenv ];
     };
 
-  testScript =
-    ''
-      $machine->waitForUnit("default.target");
-      $machine->succeed("nixos-container list") =~ /tmpfs/ or die;
+  testScript = ''
+      machine.wait_for_unit("default.target")
+      assert "tmpfs" in machine.succeed("nixos-container list")
 
-      # Start the tmpfs container.
-      #$machine->succeed("nixos-container status tmpfs") =~ /up/ or die;
-
-      # Verify that /var is mounted as a tmpfs
-      #$machine->succeed("nixos-container run tmpfs -- systemctl status var.mount --no-pager 2>/dev/null") =~ /What: tmpfs/ or die;
-      $machine->succeed("nixos-container run tmpfs -- mountpoint -q /var 2>/dev/null");
-
-      # Verify that /var/log is mounted as a tmpfs
-      $machine->succeed("nixos-container run tmpfs -- systemctl status var-log.mount --no-pager 2>/dev/null") =~ /What: tmpfs/ or die;
-      $machine->succeed("nixos-container run tmpfs -- mountpoint -q /var/log 2>/dev/null");
-
-      # Verify that /some/random/path is mounted as a tmpfs
-      $machine->succeed("nixos-container run tmpfs -- systemctl status some-random-path.mount --no-pager 2>/dev/null") =~ /What: tmpfs/ or die;
-      $machine->succeed("nixos-container run tmpfs -- mountpoint -q /some/random/path 2>/dev/null");
-
-      # Verify that files created in the container in a non-tmpfs directory are visible on the host.
-      # This establishes legitimacy for the following tests
-      $machine->succeed("nixos-container run tmpfs -- touch /root/test.file 2>/dev/null");
-      $machine->succeed("nixos-container run tmpfs -- ls -l  /root | grep -q test.file 2>/dev/null");
-      $machine->succeed("test -e /var/lib/containers/tmpfs/root/test.file");
+      with subtest("tmpfs container is up"):
+          assert "up" in machine.succeed("nixos-container status tmpfs")
 
 
-      # Verify that /some/random/path is writable and that files created there
-      # are not in the hosts container dir but in the tmpfs
-      $machine->succeed("nixos-container run tmpfs -- touch /some/random/path/test.file 2>/dev/null");
-      $machine->succeed("nixos-container run tmpfs -- test -e /some/random/path/test.file 2>/dev/null");
+      def tmpfs_cmd(command):
+          return f"nixos-container run tmpfs -- {command} 2>/dev/null"
 
-      $machine->fail("test -e /var/lib/containers/tmpfs/some/random/path/test.file");
 
-      # Verify that files created in the hosts container dir in a path where a tmpfs file system has been mounted
-      # are not visible to the container as the do not exist in the tmpfs
-      $machine->succeed("touch /var/lib/containers/tmpfs/var/test.file");
+      with subtest("/var is mounted as a tmpfs"):
+          machine.succeed(tmpfs_cmd("mountpoint -q /var"))
 
-      $machine->succeed("test -e /var/lib/containers/tmpfs/var/test.file");
-      $machine->succeed("ls -l /var/lib/containers/tmpfs/var/ | grep -q test.file 2>/dev/null");
+      with subtest("/var/log is mounted as a tmpfs"):
+          assert "What: tmpfs" in machine.succeed(
+              tmpfs_cmd("systemctl status var-log.mount --no-pager")
+          )
+          machine.succeed(tmpfs_cmd("mountpoint -q /var/log"))
 
-      $machine->fail("nixos-container run tmpfs -- ls -l /var | grep -q test.file 2>/dev/null");
+      with subtest("/some/random/path is mounted as a tmpfs"):
+          assert "What: tmpfs" in machine.succeed(
+              tmpfs_cmd("systemctl status some-random-path.mount --no-pager")
+          )
+          machine.succeed(tmpfs_cmd("mountpoint -q /some/random/path"))
 
+      with subtest(
+          "files created in the container in a non-tmpfs directory are visible on the host."
+      ):
+          # This establishes legitimacy for the following tests
+          machine.succeed(
+              tmpfs_cmd("touch /root/test.file"),
+              tmpfs_cmd("ls -l  /root | grep -q test.file"),
+              "test -e /var/lib/nixos-containers/tmpfs/root/test.file",
+          )
+
+      with subtest(
+          "/some/random/path is writable and that files created there are not "
+          + "in the hosts container dir but in the tmpfs"
+      ):
+          machine.succeed(
+              tmpfs_cmd("touch /some/random/path/test.file"),
+              tmpfs_cmd("test -e /some/random/path/test.file"),
+          )
+          machine.fail("test -e /var/lib/nixos-containers/tmpfs/some/random/path/test.file")
+
+      with subtest(
+          "files created in the hosts container dir in a path where a tmpfs "
+          + "file system has been mounted are not visible to the container as "
+          + "the do not exist in the tmpfs"
+      ):
+          machine.succeed(
+              "touch /var/lib/nixos-containers/tmpfs/var/test.file",
+              "test -e /var/lib/nixos-containers/tmpfs/var/test.file",
+              "ls -l /var/lib/nixos-containers/tmpfs/var/ | grep -q test.file 2>/dev/null",
+          )
+          machine.fail(tmpfs_cmd("ls -l /var | grep -q test.file"))
     '';
-
 })

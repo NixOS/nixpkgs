@@ -10,7 +10,11 @@ use JSON::PP;
 
 STDOUT->autoflush(1);
 
+$SIG{__WARN__} = sub { warn "warning: ", @_ };
+$SIG{__DIE__}  = sub { die "error: ", @_ };
+
 my $out = $ENV{"out"};
+my $extraPrefix = $ENV{"extraPrefix"};
 
 my @pathsToLink = split ' ', $ENV{"pathsToLink"};
 
@@ -22,6 +26,19 @@ sub isInPathsToLink {
             $elem eq "/" ||
             (substr($path, 0, length($elem)) eq $elem
              && (($path eq $elem) || (substr($path, length($elem), 1) eq "/")));
+    }
+    return 0;
+}
+
+# Returns whether a path in one of the linked packages may contain
+# files in one of the elements of pathsToLink.
+sub hasPathsToLink {
+    my $path = shift;
+    foreach my $elem (@pathsToLink) {
+        return 1 if
+            $path eq "" ||
+            (substr($elem, 0, length($path)) eq $path
+             && (($path eq $elem) || (substr($elem, length($path), 1) eq "/")));
     }
     return 0;
 }
@@ -75,6 +92,10 @@ sub findFilesInDir {
 sub checkCollision {
     my ($path1, $path2) = @_;
 
+    if (! -e $path1 || ! -e $path2) {
+        return 0;
+    }
+
     my $stat1 = (stat($path1))[2];
     my $stat2 = (stat($path2))[2];
 
@@ -86,6 +107,11 @@ sub checkCollision {
     }
 
     return compare($path1, $path2) == 0;
+}
+
+sub prependDangling {
+    my $path = shift;
+    return (-l $path && ! -e $path ? "dangling symlink " : "") . "`$path'";
 }
 
 sub findFiles {
@@ -103,7 +129,8 @@ sub findFiles {
         $relName =~ /info\/dir/ ||
         ( $relName =~ /^\/share\/mime\// && !( $relName =~ /^\/share\/mime\/packages/ ) ) ||
         $baseName eq "perllocal.pod" ||
-        $baseName eq "log";
+        $baseName eq "log" ||
+        ! (hasPathsToLink($relName) || isInPathsToLink($relName));
 
     my ($oldTarget, $oldPriority) = @{$symlinks{$relName} // [undef, undef]};
 
@@ -111,7 +138,25 @@ sub findFiles {
     # symlink to a file (not a directory) in a lower-priority package,
     # overwrite it.
     if (!defined $oldTarget || ($priority < $oldPriority && ($oldTarget ne "" && ! -d $oldTarget))) {
+        # If target is a dangling symlink, emit a warning.
+        if (-l $target && ! -e $target) {
+            my $link = readlink $target;
+            warn "creating dangling symlink `$out$extraPrefix/$relName' -> `$target' -> `$link'\n";
+        }
         $symlinks{$relName} = [$target, $priority];
+        return;
+    }
+
+    # If target already exists and both targets resolves to the same path, skip
+    if (
+        defined $oldTarget && $oldTarget ne "" &&
+        defined abs_path($target) && defined abs_path($oldTarget) &&
+        abs_path($target) eq abs_path($oldTarget)
+    ) {
+        # Prefer the target that is not a symlink, if any
+        if (-l $oldTarget && ! -l $target) {
+            $symlinks{$relName} = [$target, $priority];
+        }
         return;
     }
 
@@ -121,14 +166,25 @@ sub findFiles {
         return;
     }
 
+    # If target is supposed to be a directory but it isn't, die with an error message
+    # instead of attempting to recurse into it, only to fail then.
+    # This happens e.g. when pathsToLink contains a non-directory path.
+    if ($oldTarget eq "" && ! -d $target) {
+        die "not a directory: `$target'\n";
+    }
+
     unless (-d $target && ($oldTarget eq "" || -d $oldTarget)) {
+        # Prepend "dangling symlink" to paths if applicable.
+        my $targetRef = prependDangling($target);
+        my $oldTargetRef = prependDangling($oldTarget);
+
         if ($ignoreCollisions) {
-            warn "collision between `$target' and `$oldTarget'\n" if $ignoreCollisions == 1;
+            warn "collision between $targetRef and $oldTargetRef\n" if $ignoreCollisions == 1;
             return;
         } elsif ($checkCollisionContents && checkCollision($oldTarget, $target)) {
             return;
         } else {
-            die "collision between `$target' and `$oldTarget'\n";
+            die "collision between $targetRef and $oldTargetRef\n";
         }
     }
 
@@ -201,7 +257,6 @@ while (scalar(keys %postponed) > 0) {
 
 
 # Create the symlinks.
-my $extraPrefix = $ENV{"extraPrefix"};
 my $nrLinks = 0;
 foreach my $relName (sort keys %symlinks) {
     my ($target, $priority) = @{$symlinks{$relName}};

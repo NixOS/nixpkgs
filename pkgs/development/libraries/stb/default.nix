@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "stb-${version}";
-  version = "20180211";
+stdenv.mkDerivation {
+  pname = "stb";
+  version = "unstable-2021-09-10";
 
   src = fetchFromGitHub {
     owner = "nothings";
     repo = "stb";
-    rev = "e6afb9cbae4064da8c3e69af3ff5c4629579c1d2";
-    sha256 = "079nsn9bnb8c0vfq26g5l53q6gzx19a5x9q2nb55mpcljxsgxnmf";
+    rev = "af1a5bc352164740c1cc1354942b1c6b72eacb8a";
+    sha256 = "0qq35cd747lll4s7bmnxb3pqvyp2hgcr9kyf758fax9lx76iwjhr";
   };
 
   dontBuild = true;
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     cp *.h $out/include/stb/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Single-file public domain libraries for C/C++";
-    homepage = https://github.com/nothings/stb;
+    homepage = "https://github.com/nothings/stb";
     license = licenses.publicDomain;
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau ];

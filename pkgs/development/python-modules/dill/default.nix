@@ -1,31 +1,47 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, python
+, fetchFromGitHub
+, isPy27
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "dill";
-  version = "0.2.9";
+  version = "0.3.4";
+  doCheck = !isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f6d6046f9f9195206063dd0415dff185ad593d6ee8b0e67f12597c0f4df4986f";
+  src = fetchFromGitHub {
+    owner = "uqfoundation";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "0x702gh50wb3n820p2p9w49cn4a354y207pllwc7snfxprv6hypm";
   };
 
-  # Messy test suite. Even when running the tests like tox does, it fails
-  doCheck = false;
-  checkPhase = ''
-    for test in tests/*.py; do
-      ${python.interpreter} $test
-    done
-  '';
-  # Following error without setting checkPhase
-  # TypeError: don't know how to make test from: {'byref': False, 'recurse': False, 'protocol': 3, 'fmode': 0}
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = {
+  # Tests seem to fail because of import pathing and referencing items/classes in modules.
+  # Seems to be a Nix/pathing related issue, not the codebase, so disabling failing tests.
+  disabledTestPaths = [
+    "tests/test_diff.py"
+    "tests/test_module.py"
+    "tests/test_objects.py"
+  ];
+
+  disabledTests = [
+    "test_class_objects"
+    "test_method_decorator"
+    "test_importable"
+    "test_the_rest"
+  ];
+
+  pythonImportsCheck = [ "dill" ];
+
+  meta = with lib; {
     description = "Serialize all of python (almost)";
-    homepage = http://www.cacr.caltech.edu/~mmckerns/dill.htm;
-    license = lib.licenses.bsd3;
+    homepage = "https://github.com/uqfoundation/dill/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
 }

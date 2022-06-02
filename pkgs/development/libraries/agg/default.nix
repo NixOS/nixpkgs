@@ -1,14 +1,30 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig
+{ lib, stdenv, fetchurl, autoconf, automake, libtool, pkg-config
 , freetype, SDL, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "agg-2.5";
+  pname = "agg";
+  version = "2.5";
   src = fetchurl {
-    url = "http://www.antigrain.com/${name}.tar.gz";
+    url = "https://www.antigrain.com/${pname}-${version}.tar.gz";
     sha256 = "07wii4i824vy9qsvjsgqxppgqmfdxq0xa87i5yk53fijriadq7mb";
   };
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake libtool freetype SDL libX11 ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+    libtool
+  ];
+  buildInputs = [
+    freetype
+    SDL
+  ] ++ lib.optionals stdenv.isLinux [
+    libX11
+  ];
+
+  postPatch = ''
+    substituteInPlace include/agg_renderer_outline_aa.h \
+      --replace 'line_profile_aa& profile() {' 'const line_profile_aa& profile() {'
+  '';
 
   # fix build with new automake, from Gentoo ebuild
   preConfigure = ''
@@ -16,7 +32,13 @@ stdenv.mkDerivation rec {
     sh autogen.sh
   '';
 
-  configureFlags = [ "--x-includes=${libX11.dev}/include" "--x-libraries=${libX11.out}/lib" "--enable-examples=no" ];
+  configureFlags = [
+    (lib.strings.enableFeature stdenv.isLinux "platform")
+    "--enable-examples=no"
+  ] ++ lib.optionals stdenv.isLinux [
+    "--x-includes=${lib.getDev libX11}/include"
+    "--x-libraries=${lib.getLib libX11}/lib"
+  ];
 
   # libtool --tag=CXX --mode=link g++ -g -O2 libexamples.la ../src/platform/X11/libaggplatformX11.la ../src/libagg.la -o alpha_mask2 alpha_mask2.o
   # libtool: error: cannot find the library 'libexamples.la'
@@ -35,8 +57,8 @@ stdenv.mkDerivation rec {
       of course, AGG can do much more than that.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://www.antigrain.com/;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    homepage = "http://www.antigrain.com/";
+    platforms = lib.platforms.unix;
   };
 }

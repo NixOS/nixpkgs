@@ -26,9 +26,10 @@ in {
 
     systemd.packages = [ pkgs.colord ];
 
-    environment.etc."tmpfiles.d/colord.conf".source = "${pkgs.colord}/lib/tmpfiles.d/colord.conf";
+    systemd.tmpfiles.packages = [ pkgs.colord ];
 
     users.users.colord = {
+      isSystemUser = true;
       home = "/var/lib/colord";
       group = "colord";
     };

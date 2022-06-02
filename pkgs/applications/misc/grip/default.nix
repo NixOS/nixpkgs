@@ -1,26 +1,38 @@
-{ stdenv, fetchurl, gtk2, glib, pkgconfig, libgnome, libgnomeui, vte
-, curl, cdparanoia, libid3tag, ncurses, libtool }:
+{ lib
+, stdenv
+, fetchurl
+, gtk2
+, pkg-config
+, curl
+, cdparanoia
+, libid3tag
+, libtool
+}:
 
 stdenv.mkDerivation rec {
-  name = "grip-3.3.1";
+  pname = "grip";
+  version = "4.2.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/grip/${name}.tar.gz";
-    sha256 = "1zb6zpq7qmn6bflbgfwisyg3vrjr23yi1c1kqvwndl1f0shr8qyl";
+    url = "mirror://sourceforge/grip/grip-${version}.tar.gz";
+    sha256 = "sha256-5Qgsf4+xs0ckhYJk2csKulXC3nWaLRAsQ15qaTkKkjw=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 glib libgnome libgnomeui vte curl cdparanoia
-    libid3tag ncurses libtool ];
-
-  hardeningDisable = [ "format" ];
+  nativeBuildInputs = [ pkg-config libtool ];
+  buildInputs = [
+    gtk2
+    curl
+    cdparanoia
+    libid3tag
+  ];
+  enableParallelBuilding = true;
 
   meta = {
-    description = "GTK+-based audio CD player/ripper";
-    homepage = http://nostatic.org/grip;
-    license = stdenv.lib.licenses.gpl2;
+    description = "GTK-based audio CD player/ripper";
+    homepage = "http://nostatic.org/grip";
+    license = lib.licenses.gpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ marcweber peti ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ marcweber ];
+    platforms = lib.platforms.linux;
   };
 }

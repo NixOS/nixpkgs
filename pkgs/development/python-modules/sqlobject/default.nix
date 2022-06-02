@@ -1,29 +1,48 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytestCheckHook
 , FormEncode
-, PasteDeploy
+, pastedeploy
 , paste
 , pydispatcher
 }:
 
 buildPythonPackage rec {
-  pname = "SQLObject";
-  version = "3.7.1";
+  pname = "sqlobject";
+  version = "3.9.1";
+  format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0f0a5d9430c40b9fa5065e210a7fd3aaabb0713313e72b1b7b7dc4c7d62e43d2";
+    pname = "SQLObject";
+    inherit version;
+    sha256 = "45064184decf7f42d386704e5f47a70dee517d3e449b610506e174025f84d921";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ FormEncode PasteDeploy paste pydispatcher ];
+  propagatedBuildInputs = [
+    FormEncode
+    paste
+    pastedeploy
+    pydispatcher
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/sqlobject/sqlobject/issues/179
+    "test_fail"
+  ];
+
+  pythonImportsCheck = [
+    "sqlobject"
+  ];
+
+  meta = with lib; {
     description = "Object Relational Manager for providing an object interface to your database";
     homepage = "http://www.sqlobject.org/";
     license = licenses.lgpl21;
+    maintainers = with maintainers; [ ];
   };
-
 }

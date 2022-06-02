@@ -1,41 +1,63 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, libevent, pkgconfig, makeWrapper }:
+{ lib, stdenv
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, bison
+, ncurses
+, libevent
+, utf8proc
+}:
 
 let
 
   bashCompletion = fetchFromGitHub {
     owner = "imomaliev";
     repo = "tmux-bash-completion";
-    rev = "fcda450d452f07d36d2f9f27e7e863ba5241200d";
-    sha256 = "092jpkhggjqspmknw7h3icm0154rg21mkhbc71j5bxfmfjdxmya8";
+    rev = "f5d53239f7658f8e8fbaf02535cc369009c436d6";
+    sha256 = "0sq2g3w0h3mkfa6qwqdw93chb5f1hgkz5vdl8yw8mxwdqwhsdprr";
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "tmux-${version}";
-  version = "2.8";
+  pname = "tmux";
+  version = "3.2a";
 
   outputs = [ "out" "man" ];
 
   src = fetchFromGitHub {
     owner = "tmux";
     repo = "tmux";
-    rev = "01918cb0170e07288d3aec624516e6470bf5b7fc";
-    sha256 = "1fy87wvxn7r7jzqapvjisc1iizic3kxqk2lv83giqmw1y4g3s7rl";
+    rev = version;
+    sha256 = "0143ylfk7zsl3xmiasb768238gr582cfhsgv3p0h0f13bp8d6q09";
   };
 
-  postPatch = ''
-    sed -i 's/2.8-rc/2.8/' configure.ac
-  '';
+  patches = [
+    # See https://github.com/tmux/tmux/pull/2755
+    (fetchpatch {
+      url = "https://github.com/tmux/tmux/commit/d0a2683120ec5a33163a14b0e1b39d208745968f.patch";
+      sha256 = "070knpncxfxi6k4q64jwi14ns5vm3606cf402h1c11cwnaa84n1g";
+    })
+  ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    bison
+  ];
 
-  buildInputs = [ ncurses libevent makeWrapper ];
+  buildInputs = [
+    ncurses
+    libevent
+  ] ++ lib.optionals stdenv.isDarwin [ utf8proc ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "--enable-utf8proc" ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/share/bash-completion/completions
@@ -43,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://tmux.github.io/;
+    homepage = "https://tmux.github.io/";
     description = "Terminal multiplexer";
 
     longDescription =
@@ -59,10 +81,10 @@ stdenv.mkDerivation rec {
           * Terminal locking, manually or after a timeout.
           * A clean, easily extended, BSD-licensed codebase, under active development.
       '';
+    changelog = "https://github.com/tmux/tmux/raw/${version}/CHANGES";
+    license = lib.licenses.bsd3;
 
-    license = stdenv.lib.licenses.bsd3;
-
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thammers fpletz ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thammers fpletz ];
   };
 }

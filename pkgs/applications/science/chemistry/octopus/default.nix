@@ -1,30 +1,56 @@
-{ stdenv, fetchurl, symlinkJoin, gfortran, perl, procps
-, libyaml, libxc, fftw, openblas, gsl, netcdf, arpack
+{ lib, stdenv, fetchFromGitLab, gfortran, perl, procps
+, libyaml, libxc, fftw, blas, lapack, gsl, netcdf, arpack, autoreconfHook
+, python3
+, enableFma ? stdenv.hostPlatform.fmaSupport
+, enableFma4 ? stdenv.hostPlatform.fma4Support
+, enableAvx ? stdenv.hostPlatform.avx2Support
+, enableAvx512 ? stdenv.hostPlatform.avx512Support
 }:
 
-let
-  version = "8.4";
-  fftwAll = symlinkJoin { name ="ftw-dev-out"; paths = [ fftw.dev fftw.out ]; };
+assert (!blas.isILP64) && (!lapack.isILP64);
 
-in stdenv.mkDerivation {
-  name = "octopus-${version}";
+stdenv.mkDerivation rec {
+  pname = "octopus";
+  version = "11.4";
 
-  src = fetchurl {
-    url = "http://www.tddft.org/programs/octopus/down.php?file=${version}/octopus-${version}.tar.gz";
-    sha256 = "1fx5ssnf65b9ld7xs9rvvg8i80pblxpyhqkir0a7xshkk1g60z55";
+  src = fetchFromGitLab {
+    owner = "octopus-code";
+    repo = "octopus";
+    rev = version;
+    sha256 = "1z423sjpc4ajjy3s7623z3rfwmp2hgis7iiiy8gb5apw73k33dyv";
   };
 
-  nativeBuildInputs = [ perl procps fftw.dev ];
-  buildInputs = [ libyaml gfortran libxc openblas gsl fftw.out netcdf arpack ];
+  nativeBuildInputs = [
+    perl
+    procps
+    autoreconfHook
+    gfortran
+  ];
 
-  configureFlags = [
+  buildInputs = [
+    libyaml
+    libxc
+    blas
+    lapack
+    gsl
+    fftw
+    netcdf
+    arpack
+    (python3.withPackages (ps: [ ps.pyyaml ]))
+  ];
+
+  configureFlags = with lib; [
     "--with-yaml-prefix=${libyaml}"
-    "--with-blas=-lopenblas"
-    "--with-lapack=-lopenblas"
-    "--with-fftw-prefix=${fftwAll}"
+    "--with-blas=-lblas"
+    "--with-lapack=-llapack"
+    "--with-fftw-prefix=${fftw.dev}"
     "--with-gsl-prefix=${gsl}"
     "--with-libxc-prefix=${libxc}"
-  ];
+    "--enable-openmp"
+  ] ++ optional enableFma "--enable-fma3"
+    ++ optional enableFma4 "--enable-fma4"
+    ++ optional enableAvx "--enable-avx"
+    ++ optional enableAvx512 "--enable-avx512";
 
   doCheck = false;
   checkTarget = "check-short";
@@ -39,11 +65,11 @@ in stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Real-space time dependent density-functional theory code";
-    homepage = http://octopus-code.org;
+    homepage = "https://octopus-code.org";
     maintainers = with maintainers; [ markuskowa ];
-    license = licenses.gpl2;
+    license = with licenses; [ gpl2Only asl20 lgpl3Plus bsd3 ];
     platforms = [ "x86_64-linux" ];
   };
 }

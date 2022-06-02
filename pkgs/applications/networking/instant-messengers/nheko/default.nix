@@ -1,75 +1,99 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl
-, cmake, cmark, lmdb, qt5, qtmacextras, mtxclient
-, boost, spdlog, olm, pkgconfig
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, asciidoc
+, cmark
+, lmdb
+, lmdbxx
+, libsecret
+, mkDerivation
+, qtbase
+, qtkeychain
+, qtmacextras
+, qtmultimedia
+, qtimageformats
+, qttools
+, qtquickcontrols2
+, qtgraphicaleffects
+, mtxclient
+, boost17x
+, spdlog
+, olm
+, pkg-config
+, nlohmann_json
+, coeurl
+, libevent
+, curl
+, voipSupport ? true
+, gst_all_1
+, libnice
 }:
 
-let
-  tweeny = fetchFromGitHub {
-    owner = "mobius3";
-    repo = "tweeny";
-    rev = "b94ce07cfb02a0eb8ac8aaf66137dabdaea857cf";
-    sha256 = "1wyyq0j7dhjd6qgvnh3knr70li47hmf5394yznkv9b1indqjx4mi";
-  };
-
-  lmdbxx = fetchFromGitHub {
-    owner = "bendiken";
-    repo = "lmdbxx";
-    rev = "0b43ca87d8cfabba392dfe884eb1edb83874de02";
-    sha256 = "1whsc5cybf9rmgyaj6qjji03fv5jbgcgygp956s3835b9f9cjg1n";
-  };
-in
-stdenv.mkDerivation rec {
-  name = "nheko-${version}";
-  version = "0.6.3";
+mkDerivation rec {
+  pname = "nheko";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
     rev = "v${version}";
-    sha256 = "1h95lixciiq904dnfpwxhyf545yfsrphhwqyvs4yrzdfr9k0cf98";
+    sha256 = "sha256-h1Yahz7Rt7+r55RFTSVj6E14nWnjCs0CecljceaWgaQ=";
   };
 
-  # If, on Darwin, you encounter the error
-  #   error: must specify at least one argument for '...' parameter of variadic
-  #   macro [-Werror,-Wgnu-zero-variadic-macro-arguments]
-  # Then adding this parameter is likely the fix you want.
-  #
-  # However, it looks like either cmake doesn't honor this CFLAGS variable, or
-  # darwin's compiler doesn't have the same syntax as gcc for turning off
-  # -Werror selectively.
-  #
-  # Anyway, this is something that will have to be debugged with access to a
-  # darwin-based OS. Sorry about that!
-  #
-  #preConfigure = lib.optionalString stdenv.isDarwin ''
-  #  export CFLAGS=-Wno-error=gnu-zero-variadic-macro-arguments
-  #'';
-
-  postPatch = ''
-    mkdir -p .deps/include/
-    ln -s ${tweeny}/include .deps/include/tweeny
-    ln -s ${spdlog} .deps/spdlog
-  '';
-
-  cmakeFlags = [
-    "-DTWEENY_INCLUDE_DIR=.deps/include"
-    "-DLMDBXX_INCLUDE_DIR=${lmdbxx}"
+  nativeBuildInputs = [
+    lmdbxx
+    cmake
+    pkg-config
+    asciidoc
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-
   buildInputs = [
-    mtxclient olm boost lmdb spdlog cmark
-    qt5.qtbase qt5.qtmultimedia qt5.qttools
-  ] ++ lib.optional stdenv.isDarwin qtmacextras;
+    nlohmann_json
+    mtxclient
+    olm
+    boost17x
+    libsecret
+    lmdb
+    spdlog
+    cmark
+    qtbase
+    qtmultimedia
+    qtimageformats
+    qttools
+    qtquickcontrols2
+    qtgraphicaleffects
+    qtkeychain
+    coeurl
+    libevent
+    curl
+  ] ++ lib.optional stdenv.isDarwin qtmacextras
+    ++ lib.optionals voipSupport (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      (gst-plugins-good.override { qt5Support = true; })
+      gst-plugins-bad
+      libnice
+    ]);
 
-  enableParallelBuilding = true;
+  cmakeFlags = [
+    "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
+  ];
 
-  meta = with stdenv.lib; {
+  preFixup = lib.optionalString voipSupport ''
+    # add gstreamer plugins path to the wrapper
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
+  '';
+
+  meta = with lib; {
     description = "Desktop client for the Matrix protocol";
-    homepage = https://github.com/Nheko-Reborn/nheko;
+    homepage = "https://github.com/Nheko-Reborn/nheko";
     maintainers = with maintainers; [ ekleog fpletz ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
+    # Should be fixable if a higher clang version is used, see:
+    # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177
+    broken = stdenv.targetPlatform.isDarwin;
     license = licenses.gpl3Plus;
   };
 }

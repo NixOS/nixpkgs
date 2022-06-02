@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, zlib, libiconv }:
+{ lib, stdenv, fetchurl, zlib, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "odt2txt-${version}";
+  pname = "odt2txt";
   version = "0.5";
 
   src = fetchurl {
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Simple .odt to .txt converter";
-    homepage = https://github.com/dstosberg/odt2txt;
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "https://github.com/dstosberg/odt2txt";
+    platforms = lib.platforms.all;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
   };
 }

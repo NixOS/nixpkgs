@@ -1,19 +1,27 @@
-{ stdenv, fetchurl, cups }:
+{ lib, stdenv, fetchurl, cups }:
 
-stdenv.mkDerivation rec {
-  name = "epson-escpr-${version}";
-  version = "1.6.16";
+stdenv.mkDerivation {
+  pname = "epson-escpr";
+  version = "1.7.16";
 
   src = fetchurl {
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/06/41/54/29588ed107f800e5bc3f91706661567efb369c1c/epson-inkjet-printer-escpr-1.6.16-1lsb3.2.tar.gz";
-    sha256 = "0v9mcih3dg3ws18hdcgm014k97hv6imga39hy2a84gnc6badp6n6";
+    # To find new versions, visit
+    # http://download.ebz.epson.net/dsc/search/01/search/?OSC=LX and search for
+    # some printer like for instance "WF-7110" to get to the most recent
+    # version.
+    # NOTE: Don't forget to update the webarchive link too!
+    urls = [
+      "https://download3.ebz.epson.net/dsc/f/03/00/12/97/30/97f146010d33b9a55badbc23429296f6b9b46011/epson-inkjet-printer-escpr-1.7.16-1lsb3.2.tar.gz"
+      "https://web.archive.org/web/https://download3.ebz.epson.net/dsc/f/03/00/12/97/30/97f146010d33b9a55badbc23429296f6b9b46011/epson-inkjet-printer-escpr-1.7.16-1lsb3.2.tar.gz"
+    ];
+    sha256 = "18n6fgyrii8084vdjhys94lr6nhhbmn7zzjd8jckvv1grb0iz9nv";
   };
 
   patches = [ ./cups-filter-ppd-dirs.patch ];
 
   buildInputs = [ cups ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
     description = "ESC/P-R Driver (generic driver)";
     longDescription = ''

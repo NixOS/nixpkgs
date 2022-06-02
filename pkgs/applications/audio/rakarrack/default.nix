@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, alsaLib, alsaUtils, fltk, libjack2, libXft,
+{ lib, stdenv, fetchurl, alsa-lib, alsa-utils, fltk, libjack2, libXft,
 libXpm, libjpeg, libpng, libsamplerate, libsndfile, zlib }:
 
 stdenv.mkDerivation  rec {
-  name = "rakarrack-${version}";
+  pname = "rakarrack";
   version = "0.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rakarrack/${name}.tar.bz2";
+    url = "mirror://sourceforge/rakarrack/${pname}-${version}.tar.bz2";
     sha256 = "1rpf63pdn54c4yg13k7cb1w1c7zsvl97c4qxcpz41c8l91xd55kn";
   };
 
@@ -14,12 +14,12 @@ stdenv.mkDerivation  rec {
 
   patches = [ ./fltk-path.patch ];
 
-  buildInputs = [ alsaLib alsaUtils fltk libjack2 libXft libXpm libjpeg
+  buildInputs = [ alsa-lib alsa-utils fltk libjack2 libXft libXpm libjpeg
     libpng libsamplerate libsndfile zlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multi-effects processor emulating a guitar effects pedalboard";
-    homepage = http://rakarrack.sourceforge.net;
+    homepage = "http://rakarrack.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

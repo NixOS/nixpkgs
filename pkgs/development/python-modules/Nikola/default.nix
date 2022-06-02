@@ -1,69 +1,112 @@
 { lib
-, buildPythonPackage
-, isPy3k
-, fetchPypi
-, fetchpatch
-, doit
-, glibcLocales
-, pytest
-, pytestcov
-, mock
-, pygments
-, pillow
-, dateutil
-, docutils
-, Mako
-, unidecode
-, lxml
-, Yapsy
-, PyRSS2Gen
-, Logbook
+, aiohttp
+, babel
 , blinker
-, setuptools
-, natsort
-, requests
-, piexif
-, markdown
-, phpserialize
-, jinja2
-, Babel
+, buildPythonPackage
+, python-dateutil
+, docutils
+, doit
+, fetchPypi
 , freezegun
-, pyyaml
-, toml
+, ghp-import
+, hsluv
+, html5lib
+, ipykernel
+, jinja2
+, lxml
+, Mako
+, markdown
+, micawber
+, mock
+, natsort
 , notebook
-, ruamel_yaml
+, phpserialize
+, piexif
+, pillow
+, pygal
+, pygments
+, pyphen
+, PyRSS2Gen
+, pytestCheckHook
+, pythonOlder
+, requests
+, ruamel-yaml
+, stdenv
+, toml
+, typogrify
+, unidecode
+, watchdog
+, Yapsy
 }:
 
 buildPythonPackage rec {
   pname = "Nikola";
-  version = "8.0.2";
-
-  # Nix contains only Python 3 supported version of doit, which is a dependency
-  # of Nikola. Python 2 support would require older doit 0.29.0 (which on the
-  # other hand doesn't support Python 3.3). So, just disable Python 2.
-  disabled = !isPy3k;
-
-  checkInputs = [ pytest pytestcov mock glibcLocales freezegun ];
-
-  propagatedBuildInputs = [
-    pygments pillow dateutil docutils Mako unidecode lxml Yapsy PyRSS2Gen
-    Logbook blinker setuptools natsort requests piexif markdown phpserialize
-    jinja2 doit Babel pyyaml toml notebook ruamel_yaml
-  ];
+  version = "8.2.2";
+  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a5y1qriy76hl4yxvbf365b1ggsxybm06mi1pwb5jkgbkwk2gkrf";
+    sha256 = "sha256-lfSrBRwkWMHTFEJ4KmrWIx9XIMO5I9XxcuJe7zTxJsE=";
   };
 
-  checkPhase = ''
-    LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" py.test .
+  propagatedBuildInputs = [
+    aiohttp
+    babel
+    blinker
+    python-dateutil
+    docutils
+    doit
+    ghp-import
+    hsluv
+    html5lib
+    ipykernel
+    jinja2
+    lxml
+    Mako
+    markdown
+    micawber
+    natsort
+    notebook
+    phpserialize
+    piexif
+    pillow
+    pygal
+    pygments
+    pyphen
+    PyRSS2Gen
+    requests
+    ruamel-yaml
+    toml
+    typogrify
+    unidecode
+    watchdog
+    Yapsy
+  ];
+
+  checkInputs = [
+    freezegun
+    mock
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov nikola --cov-report term-missing" ""
   '';
 
-  meta = {
-    homepage = https://getnikola.com/;
-    description = "A modular, fast, simple, static website and blog generator";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jluttine ];
+  disabledTests = [
+    # AssertionError
+    "test_compiling_markdown"
+  ];
+
+  pythonImportsCheck = [ "nikola" ];
+
+  meta = with lib; {
+    description = "Static website and blog generator";
+    homepage = "https://getnikola.com/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
+    # All tests fail
+    broken = stdenv.isDarwin;
   };
 }

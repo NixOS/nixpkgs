@@ -1,20 +1,23 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "lzo-2.10";
+  pname = "lzo";
+  version = "2.10";
 
   src = fetchurl {
-    url = "${meta.homepage}/download/${name}.tar.gz";
+    url = "https://www.oberhumer.com/opensource/lzo/download/${pname}-${version}.tar.gz";
     sha256 = "0wm04519pd3g8hqpjqhfr72q8qmbiwqaxcs3cndny9h86aa95y60";
   };
 
-  configureFlags = [ "--enable-shared" ];
+  configureFlags = lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared" ;
 
   enableParallelBuilding = true;
 
   doCheck = true; # not cross;
 
-  meta = with stdenv.lib; {
+  strictDeps = true;
+
+  meta = with lib; {
     description = "Real-time data (de)compression library";
     longDescription = ''
       LZO is a portable lossless data compression library written in ANSI C.
@@ -26,7 +29,7 @@ stdenv.mkDerivation rec {
       while still decompressing at this very high speed.
     '';
 
-    homepage = http://www.oberhumer.com/opensource/lzo;
+    homepage = "http://www.oberhumer.com/opensource/lzo";
     license = licenses.gpl2Plus;
 
     platforms = platforms.all;

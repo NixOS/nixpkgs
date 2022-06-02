@@ -1,30 +1,28 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, libintl }:
+{ lib, stdenv, fetchurl, pkg-config, meson, ninja, glib, libintl }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "desktop-file-utils-0.23";
+  pname = "desktop-file-utils";
+  version = "0.26";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/desktop-file-utils/releases/${name}.tar.xz";
-    sha256 = "119kj2w0rrxkhg4f9cf5waa55jz1hj8933vh47vcjipcplql02bc";
+    url = "https://www.freedesktop.org/software/${pname}/releases/${pname}-${version}.tar.xz";
+    sha256 = "02bkfi6fyk4c0gh2avd897882ww5zl7qg7bzzf28qb57kvkvsvdj";
   };
 
-  patches = [
-    # Makes font a recognized media type. Committed upstream, but no release has been made.
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/xdg/desktop-file-utils/commit/92af4108750ceaf4191fd54e255885c7d8a78b70.patch";
-      sha256 = "14sqy10p5skp6hv4hgiwnj9hpr460250x42k5z0390l6nr6gahsq";
-    })
-  ];
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config meson ninja ];
   buildInputs = [ glib libintl ];
+
+  postPatch = ''
+    substituteInPlace src/install.c \
+      --replace \"update-desktop-database\" \"$out/bin/update-desktop-database\"
+  '';
 
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = http://www.freedesktop.org/wiki/Software/desktop-file-utils;
+    homepage = "http://www.freedesktop.org/wiki/Software/desktop-file-utils";
     description = "Command line utilities for working with .desktop files";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl2;

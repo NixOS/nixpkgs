@@ -1,30 +1,36 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, boost, python
-, gocode ? null
-, godef ? null
-, rustracerd ? null
-, fixDarwinDylibNames, Cocoa ? null
+{ stdenv, lib, fetchFromGitHub, cmake, llvmPackages, boost, python
+, withGocode ? true, gocode
+, withGodef ? true, godef
+, withGotools? true, gotools
+, withTypescript ? true, nodePackages
+, fixDarwinDylibNames, Cocoa
 }:
 
-stdenv.mkDerivation rec {
-  name = "ycmd-${version}";
-  version = "2018-09-20";
+stdenv.mkDerivation {
+  pname = "ycmd";
+  version = "unstable-2020-02-22";
+  disabled = !python.isPy3k;
 
-  src = fetchgit {
-    url = "https://github.com/Valloric/ycmd.git";
-    rev = "bf658fd78722c517674c0aaf2381e199bca8f163";
-    sha256 = "1lwa8xr76vapfpncvp81cn3m9219yw14fl7fzk5gnly60zkphbbl";
+  # required for third_party directory creation
+  src = fetchFromGitHub {
+    owner = "Valloric";
+    repo = "ycmd";
+    rev = "9a6b86e3a156066335b678c328f226229746bae5";
+    sha256 = "sha256-xzLELjp4DsG6mkzaFqpuquSa0uoaZWrYLrKr/mzrqrA=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ boost llvmPackages.libclang ]
-    ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames Cocoa ];
+    ++ lib.optional stdenv.isDarwin Cocoa;
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
     ${python.interpreter} build.py --system-libclang --clang-completer --system-boost
   '';
 
-  configurePhase = ":";
+  dontConfigure = true;
 
   # remove the tests
   #
@@ -49,33 +55,40 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd
 
-    mkdir -p $out/lib/ycmd/third_party/{gocode,godef,racerd/target/release}
+    # Copy everything: the structure of third_party has been known to change.
+    # When linking our own libraries below, do so with '-f'
+    # to clobber anything we may have copied here.
+    mkdir -p $out/lib/ycmd/third_party
+    cp -r third_party/* $out/lib/ycmd/third_party/
 
-    for p in jedi waitress frozendict bottle parso python-future requests; do
-      cp -r third_party/$p $out/lib/ycmd/third_party
-    done
-
-  '' + lib.optionalString (gocode != null) ''
-    ln -s ${gocode}/bin/gocode $out/lib/ycmd/third_party/gocode
-  '' + lib.optionalString (godef != null) ''
-    ln -s ${godef}/bin/godef $out/lib/ycmd/third_party/godef
-  '' + lib.optionalString (rustracerd != null) ''
-    ln -s ${rustracerd}/bin/racerd $out/lib/ycmd/third_party/racerd/target/release
+  '' + lib.optionalString withGocode ''
+    TARGET=$out/lib/ycmd/third_party/gocode
+    mkdir -p $TARGET
+    ln -sf ${gocode}/bin/gocode $TARGET
+  '' + lib.optionalString withGodef ''
+    TARGET=$out/lib/ycmd/third_party/godef
+    mkdir -p $TARGET
+    ln -sf ${godef}/bin/godef $TARGET
+  '' + lib.optionalString withGotools ''
+    TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
+    mkdir -p $TARGET
+    ln -sf ${gotools}/bin/gopls $TARGET
+  '' + lib.optionalString withTypescript ''
+    TARGET=$out/lib/ycmd/third_party/tsserver
+    ln -sf ${nodePackages.typescript} $TARGET
   '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so
   # python won't be thrown off by argv[0]
   postFixup = ''
     substituteInPlace $out/lib/ycmd/ycmd/__main__.py \
-      --replace $out/lib/ycmd/ycmd/__main__.py \
-                $out/bin/ycmd \
-      --replace __file__ \
-                "'$out/lib/ycmd/ycmd/__main__.py'"
+      --replace $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd \
+      --replace __file__ "'$out/lib/ycmd/ycmd/__main__.py'"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A code-completion and comprehension server";
-    homepage = https://github.com/Valloric/ycmd;
+    homepage = "https://github.com/Valloric/ycmd";
     license = licenses.gpl3;
     maintainers = with maintainers; [ rasendubi cstrahan lnl7 ];
     platforms = platforms.all;

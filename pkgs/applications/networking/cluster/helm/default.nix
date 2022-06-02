@@ -1,48 +1,51 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
-buildGoPackage rec {
-  version = "2.11.0";
-  name = "helm-${version}";
+buildGoModule rec {
+  pname = "kubernetes-helm";
+  version = "3.9.0";
+  gitCommit = "7ceeda6c585217a19a1131663d8cd1f7d641b2a7";
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
-    sha256 = "1z810a6mxyrrw4i908dip8aqsj95c0kmv6xpb1wwhskg1zmf85wk";
+    sha256 = "sha256-pdWFCepVGSJmlYnvcJCaNaGSllbeh/oCdosrab8jA4s=";
   };
+  vendorSha256 = "sha256-r0a38ZB6VlyzKB66+OAllRLXhqwO0qbksZjOrBWdjqM=";
 
-  goPackagePath = "k8s.io/helm";
-  subPackages = [ "cmd/helm" "cmd/tiller" "cmd/rudder" ];
+  subPackages = [ "cmd/helm" ];
+  ldflags = [
+    "-w"
+    "-s"
+    "-X helm.sh/helm/v3/internal/version.version=v${version}"
+    "-X helm.sh/helm/v3/internal/version.gitCommit=${gitCommit}"
+  ];
 
-  goDeps = ./deps.nix;
-
-  # Thsese are the original flags from the helm makefile
-  buildFlagsArray = ''
-    -ldflags=-X k8s.io/helm/pkg/version.Version=v${version}
-    -w
-    -s
+  preCheck = ''
+    # skipping version tests because they require dot git directory
+    substituteInPlace cmd/helm/version_test.go \
+      --replace "TestVersion" "SkipVersion"
+  '' + lib.optionalString stdenv.isLinux ''
+    # skipping plugin tests on linux
+    substituteInPlace cmd/helm/plugin_test.go \
+      --replace "TestPluginDynamicCompletion" "SkipPluginDynamicCompletion" \
+      --replace "TestLoadPlugins" "SkipLoadPlugins"
+    substituteInPlace cmd/helm/helm_test.go \
+      --replace "TestPluginExitCode" "SkipPluginExitCode"
   '';
 
-  preBuild = ''
-    # This is a hack(?) to flatten the dependency tree the same way glide or dep would
-    # Otherwise you'll get errors like
-    # have DeepCopyObject() "k8s.io/kubernetes/vendor/k8s.io/apimachinery/pkg/runtime".Object
-    # want DeepCopyObject() "k8s.io/apimachinery/pkg/runtime".Object
-    rm -rf $NIX_BUILD_TOP/go/src/k8s.io/kubernetes/vendor
-    rm -rf $NIX_BUILD_TOP/go/src/k8s.io/apiextensions-apiserver/vendor
-  '';
-
+  nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
-    mkdir -p $bin/share/bash-completion/completions
-    mkdir -p $bin/share/zsh/site-functions
-    $bin/bin/helm completion bash > $bin/share/bash-completion/completions/helm
-    $bin/bin/helm completion zsh > $bin/share/zsh/site-functions/_helm
+    $out/bin/helm completion bash > helm.bash
+    $out/bin/helm completion zsh > helm.zsh
+    installShellCompletion helm.{bash,zsh}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/kubernetes/helm;
+  meta = with lib; {
+    homepage = "https://github.com/kubernetes/helm";
     description = "A package manager for kubernetes";
+    mainProgram = "helm";
     license = licenses.asl20;
-    maintainers = [ maintainers.rlupton20 maintainers.edude03 ];
+    maintainers = with maintainers; [ rlupton20 edude03 saschagrunert Frostman Chili-Man techknowlogick ];
   };
 }

@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, bison, flex }:
+{ lib, stdenv, fetchFromGitHub, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "iouyap";
   version = "0.97";
 
@@ -14,11 +13,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bison flex ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: netmap.o:(.bss+0x20): multiple definition of `sizecheck'; iouyap.o:(.bss+0x20): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   installPhase = ''
     install -D -m555 iouyap $out/bin/iouyap;
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bridge IOU to UDP, TAP and Ethernet";
     inherit (src.meta) homepage;
     license = licenses.gpl3Plus;

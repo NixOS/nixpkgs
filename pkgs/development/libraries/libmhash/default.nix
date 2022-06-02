@@ -1,12 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "mhash";
   version = "0.9.9.9";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "1w7yiljan8gf1ibiypi6hm3r363imm3sxl1j8hapjdq3m591qljn";
   };
 
@@ -22,8 +21,8 @@ stdenv.mkDerivation rec {
       following rfc2104 (HMAC). It also includes some key generation algorithms
       which are based on hash algorithms.
     '';
-    homepage = http://mhash.sourceforge.net;
+    homepage = "http://mhash.sourceforge.net";
     license = "LGPL";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

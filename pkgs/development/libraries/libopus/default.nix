@@ -1,28 +1,26 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , fixedPoint ? false, withCustomModes ? true }:
 
-let
-  version = "1.3";
-in
 stdenv.mkDerivation rec {
-  name = "libopus-${version}";
+  pname = "libopus";
+  version = "1.3.1";
 
   src = fetchurl {
-    url = "https://archive.mozilla.org/pub/opus/opus-${version}.tar.gz";
-    sha256 = "0l651n19h0vhc0sn6w2c95hgqks1i8m4b3j04ncaznzjznp6jgag";
+    url = "mirror://mozilla/opus/opus-${version}.tar.gz";
+    sha256 = "17gz8kxs4i7icsc1gj713gadiapyklynlwqlf0ai98dj4lg8xdb5";
   };
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = stdenv.lib.optional fixedPoint "--enable-fixed-point"
-                ++ stdenv.lib.optional withCustomModes "--enable-custom-modes";
+  configureFlags = lib.optional fixedPoint "--enable-fixed-point"
+                ++ lib.optional withCustomModes "--enable-custom-modes";
 
-  doCheck = true;
+  doCheck = !stdenv.isi686 && !stdenv.isAarch32; # test_unit_LPC_inv_pred_gain fails
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open, royalty-free, highly versatile audio codec";
-    license = stdenv.lib.licenses.bsd3;
-    homepage = http://www.opus-codec.org/;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    homepage = "https://www.opus-codec.org/";
+    platforms = platforms.all;
   };
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitLab, pkgconfig, meson, ninja, vala, glib, gsignond, json-glib, libsoup, gobject-introspection }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja, vala, glib, gsignond, json-glib, libsoup, gobject-introspection }:
 
-stdenv.mkDerivation rec {
-  name = "gsignond-plugin-lastfm-${version}";
+stdenv.mkDerivation {
+  pname = "gsignond-plugin-lastfm";
   version = "2018-05-07";
 
   src = fetchFromGitLab {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   PKG_CONFIG_GSIGNOND_GPLUGINSDIR = "${placeholder "out"}/lib/gsignond/gplugins";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Plugin for the Accounts-SSO gSignOn daemon that handles Last.FM credentials";
-    homepage = https://gitlab.com/accounts-sso/gsignond-plugin-lastfm;
+    homepage = "https://gitlab.com/accounts-sso/gsignond-plugin-lastfm";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

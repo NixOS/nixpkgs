@@ -1,7 +1,7 @@
-{stdenv, fetchgit}:
+{lib, stdenv, fetchgit}:
 
 stdenv.mkDerivation rec {
-  name = "mdf2iso-${version}";
+  pname = "mdf2iso";
   version = "0.3.1";
 
   src = fetchgit {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xg43jlvrk8adfjgbjir15nxwcj0nhz4gxpqx7jdfvhg0kwliq0n";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small utility that converts MDF images to ISO format";
     homepage = src.url;
     license = licenses.gpl2;

@@ -1,4 +1,5 @@
 { lib
+, autoreconfHook
 , fetchPypi
 , buildPythonPackage
 , cython
@@ -9,11 +10,11 @@ assert pariSupport -> pari != null;
 
 buildPythonPackage rec {
   pname = "cysignals";
-  version = "1.9.0";
+  version = "1.11.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15ix8crpad26cfl1skyg7qajqqfdrm8q5ahhmlfmqi1aw0jqj2g2";
+    sha256 = "5858b1760fbe21848121b826b2463a67ac5a45caf3d73105497a68618c5a6fa6";
   };
 
   # explicit check:
@@ -31,20 +32,23 @@ buildPythonPackage rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  buildInputs = lib.optionals pariSupport [
+  propagatedBuildInputs = [
+    cython
+  ] ++ lib.optionals pariSupport [
+    # When cysignals is built with pari, including cysignals into the
+    # buildInputs of another python package will cause cython to link against
+    # pari.
     pari
   ];
 
-  propagatedBuildInputs = [
-    cython
-  ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Interrupt and signal handling for Cython";
-    homepage = https://github.com/sagemath/cysignals/;
-    maintainers = with lib.maintainers; [ timokau ];
-    license = lib.licenses.lgpl3Plus;
+    homepage = "https://github.com/sagemath/cysignals/";
+    maintainers = teams.sage.members;
+    license = licenses.lgpl3Plus;
   };
 }

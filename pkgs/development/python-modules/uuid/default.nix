@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "uuid";
@@ -11,6 +11,6 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "UUID object and generation functions (Python 2.3 or higher)";
-    homepage = http://zesty.ca/python/;
+    homepage = "http://zesty.ca/python/";
   };
 }

@@ -1,16 +1,16 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-
-  name = "flvstreamer-2.1c1";
+  pname = "flvstreamer";
+  version = "2.1c1";
 
   src = fetchurl {
-    url = "mirror://savannah/flvstreamer/source/${name}.tar.gz";
+    url = "mirror://savannah/flvstreamer/source/flvstreamer-${version}.tar.gz";
     sha256 = "e90e24e13a48c57b1be01e41c9a7ec41f59953cdb862b50cf3e667429394d1ee";
   };
 
   buildPhase = ''
-    make CC=cc posix
+    make CC=${stdenv.cc.targetPrefix}cc posix
   '';
 
   installPhase = ''
@@ -25,15 +25,15 @@ stdenv.mkDerivation rec {
     description = "Command-line RTMP client";
 
     longDescription =
-      '' flvstreamer is an open source command-line RTMP client intended to 
+      '' flvstreamer is an open source command-line RTMP client intended to
          stream audio or video content from all types of flash or rtmp servers.
       '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    homepage = https://savannah.nongnu.org/projects/flvstreamer;
+    homepage = "https://savannah.nongnu.org/projects/flvstreamer";
 
-    maintainers = [ stdenv.lib.maintainers.thammers ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    maintainers = [ lib.maintainers.thammers ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

@@ -1,34 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, libpcap, libnet, zlib, curl, pcre
-, openssl, ncurses, glib, gtk2, atk, pango, flex, bison
-, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub, cmake, libpcap, libnet, zlib, curl, pcre
+, openssl, ncurses, glib, gtk3, atk, pango, flex, bison, geoip, harfbuzz
+, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "ettercap-${version}";
-  version = "0.8.2";
+  pname = "ettercap";
+  version = "0.8.3.1";
 
   src = fetchFromGitHub {
     owner = "Ettercap";
     repo = "ettercap";
     rev = "v${version}";
-    sha256 = "1kvrzv2f8kxy7pndfadkzv10cs5wsyfkaa1ski20r2mq4wrvd0cd";
+    sha256 = "1sdf1ssa81ib6k0mc5m2jzbjl4jd1yv6ahv5dwx2x9w4b2pyqg1c";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "CVE-2017-8366.patch";
-      url = "https://github.com/Ettercap/ettercap/commit/1083d604930ebb9f350126b83802ecd2cbc17f90.patch";
-      sha256 = "1ff6fp8fxisvd3fkkd01y4fjykgcj414kczzpfscdmi52ridwg8m";
-    })
-    (fetchpatch {
-      name = "CVE-2017-6430.patch";
-      url = "https://github.com/Ettercap/ettercap/commit/7f50c57b2101fe75592c8dc9960883bbd1878bce.patch";
-      sha256 = "0s13nc9yzxzp611rixsd1c8aw1b57q2lnvfq8wawxyrw07h7b2j4";
-    })
-  ];
-
+  strictDeps = true;
+  nativeBuildInputs = [ cmake flex bison pkg-config ];
   buildInputs = [
-    cmake libpcap libnet zlib curl pcre openssl ncurses
-    glib gtk2 atk pango flex bison
+    libpcap libnet zlib curl pcre openssl ncurses
+    glib gtk3 atk pango geoip harfbuzz
   ];
 
   preConfigure = ''
@@ -37,13 +26,23 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-    "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
-    "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
+    "-DBUNDLED_LIBS=Off"
+    "-DGTK3_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
   ];
 
-  meta = with stdenv.lib; {
+  # TODO: Remove after the next release (0.8.4 should work without this):
+  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+
+  meta = with lib; {
     description = "Comprehensive suite for man in the middle attacks";
-    homepage = http://ettercap.github.io/ettercap/;
+    longDescription = ''
+      Ettercap is a comprehensive suite for man in the middle attacks. It
+      features sniffing of live connections, content filtering on the fly and
+      many other interesting tricks. It supports active and passive dissection
+      of many protocols and includes many features for network and host
+      analysis.
+    '';
+    homepage = "https://www.ettercap-project.org/";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];

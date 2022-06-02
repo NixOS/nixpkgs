@@ -1,18 +1,19 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''split-sequence'';
-  version = ''v1.5.0'';
+  baseName = "split-sequence";
+  version = "v2.0.1";
 
   parasites = [ "split-sequence/tests" ];
 
-  description = ''Splits a sequence into a list of subsequences
-  delimited by objects satisfying a test.'';
+  description = "Splits a sequence into a list of subsequences
+  delimited by objects satisfying a test.";
 
   deps = [ args."fiveam" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/split-sequence/2018-10-18/split-sequence-v1.5.0.tgz'';
-    sha256 = ''0cxdgprb8c15fydm09aqvc8sdp5n87m6khv70kzkms1n2vm6sb0g'';
+    url = "http://beta.quicklisp.org/archive/split-sequence/2021-05-31/split-sequence-v2.0.1.tgz";
+    sha256 = "0x6jdpx5nwby0mjhavqzbfr97725jaryvawjj2f5w9z2s4m9ciya";
   };
 
   packageName = "split-sequence";
@@ -23,8 +24,8 @@ rec {
 /* (SYSTEM split-sequence DESCRIPTION
     Splits a sequence into a list of subsequences
   delimited by objects satisfying a test.
-    SHA256 0cxdgprb8c15fydm09aqvc8sdp5n87m6khv70kzkms1n2vm6sb0g URL
-    http://beta.quicklisp.org/archive/split-sequence/2018-10-18/split-sequence-v1.5.0.tgz
-    MD5 67844853787187d993e6d530306eb2b4 NAME split-sequence FILENAME
+    SHA256 0x6jdpx5nwby0mjhavqzbfr97725jaryvawjj2f5w9z2s4m9ciya URL
+    http://beta.quicklisp.org/archive/split-sequence/2021-05-31/split-sequence-v2.0.1.tgz
+    MD5 871be321b4dbca0a1f958927e9173795 NAME split-sequence FILENAME
     split-sequence DEPS ((NAME fiveam FILENAME fiveam)) DEPENDENCIES (fiveam)
-    VERSION v1.5.0 SIBLINGS NIL PARASITES (split-sequence/tests)) */
+    VERSION v2.0.1 SIBLINGS NIL PARASITES (split-sequence/tests)) */

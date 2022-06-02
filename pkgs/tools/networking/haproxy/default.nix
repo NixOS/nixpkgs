@@ -1,7 +1,9 @@
 { useLua ? !stdenv.isDarwin
 , usePcre ? true
-, stdenv, fetchurl
-, openssl, zlib, lua5_3 ? null, pcre ? null
+, withPrometheusExporter ? true
+, stdenv, lib, fetchurl, nixosTests
+, openssl, zlib
+, lua5_3 ? null, pcre ? null, systemd ? null
 }:
 
 assert useLua -> lua5_3 != null;
@@ -9,40 +11,50 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "1.9.3";
-  name = "${pname}-${version}";
+  version = "2.5.5";
 
   src = fetchurl {
-    url = "https://www.haproxy.org/download/${stdenv.lib.versions.majorMinor version}/src/${name}.tar.gz";
-    sha256 = "1d0d0zdr3908wbmwqllq0l968iawykxyf6fd8vdf545pb0bc2b6j";
+    url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
+    sha256 = "sha256-BjxIRc2y128pLvRNnAEXqFPY0Qrl2WFbQGsUpNdP5Lk=";
   };
 
   buildInputs = [ openssl zlib ]
-    ++ stdenv.lib.optional useLua lua5_3
-    ++ stdenv.lib.optional usePcre pcre;
+    ++ lib.optional useLua lua5_3
+    ++ lib.optional usePcre pcre
+    ++ lib.optional stdenv.isLinux systemd;
 
   # TODO: make it work on bsd as well
   makeFlags = [
-    "PREFIX=\${out}"
+    "PREFIX=${placeholder "out"}"
     ("TARGET=" + (if stdenv.isSunOS  then "solaris"
-             else if stdenv.isLinux  then "linux2628"
+             else if stdenv.isLinux  then "linux-glibc"
              else if stdenv.isDarwin then "osx"
              else "generic"))
   ];
+
   buildFlags = [
     "USE_OPENSSL=yes"
     "USE_ZLIB=yes"
-  ] ++ stdenv.lib.optionals usePcre [
+  ] ++ lib.optionals usePcre [
     "USE_PCRE=yes"
     "USE_PCRE_JIT=yes"
-  ] ++ stdenv.lib.optionals useLua [
+  ] ++ lib.optionals useLua [
     "USE_LUA=yes"
+    "LUA_LIB_NAME=lua"
     "LUA_LIB=${lua5_3}/lib"
     "LUA_INC=${lua5_3}/include"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "CC=cc"
-    ++ stdenv.lib.optional stdenv.isLinux "USE_GETADDRINFO=1";
+  ] ++ lib.optionals stdenv.isLinux [
+    "USE_SYSTEMD=yes"
+    "USE_GETADDRINFO=1"
+  ] ++ lib.optionals withPrometheusExporter [
+    "USE_PROMEX=yes"
+  ] ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  meta = {
+  enableParallelBuilding = true;
+
+  passthru.tests.haproxy = nixosTests.haproxy;
+
+  meta = with lib; {
     description = "Reliable, high performance TCP/HTTP load balancer";
     longDescription = ''
       HAProxy is a free, very fast and reliable solution offering high
@@ -52,9 +64,10 @@ stdenv.mkDerivation rec {
       tens of thousands of connections is clearly realistic with todays
       hardware.
     '';
-    homepage = http://haproxy.1wt.eu;
-    maintainers = with stdenv.lib.maintainers; [ fuzzy-id garbas ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "https://haproxy.org";
+    changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/CHANGELOG";
+    license = with licenses; [ gpl2Plus lgpl21Only ];
+    maintainers = with maintainers; [ fuzzy-id ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

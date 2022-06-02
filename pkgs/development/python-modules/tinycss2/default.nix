@@ -1,23 +1,41 @@
-{ lib, buildPythonPackage, fetchPypi, webencodings, pytest, pytestrunner, pytestcov, pytest-flake8, pytest-isort, glibcLocales }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
+, webencodings
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "tinycss2";
-  version = "0.6.1";
+  version = "1.1.0";
+  disabled = pythonOlder "3.5";
+  format = "flit";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "7c53c2c0e914c7711c295b3101bcc78e0b7eda23ff20228a936efe11cdcc7136";
+  src = fetchFromGitHub {
+    owner = "kozea";
+    repo = "tinycss2";
+    rev = "v${version}";
+    # for tests
+    fetchSubmodules = true;
+    sha256 = "sha256-WA88EYolL76WqeA1UKR3Sfw11j8NuOGOxPezujYizH8=";
   };
 
   propagatedBuildInputs = [ webencodings ];
 
-  checkInputs = [ pytest pytestrunner pytestcov pytest-flake8 pytest-isort glibcLocales ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  LC_ALL = "en_US.UTF-8";
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "'pytest-cov', 'pytest-flake8', 'pytest-isort', 'coverage[toml]'" "" \
+      --replace "--isort --flake8 --cov" ""
+  '';
 
   meta = with lib; {
     description = "Low-level CSS parser for Python";
-    homepage = https://github.com/Kozea/tinycss2;
+    homepage = "https://github.com/Kozea/tinycss2";
     license = licenses.bsd3;
   };
 }

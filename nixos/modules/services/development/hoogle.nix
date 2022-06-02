@@ -17,7 +17,7 @@ in {
     enable = mkEnableOption "Haskell documentation server";
 
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = 8080;
       description = ''
         Port number Hoogle will be listening to.
@@ -25,9 +25,10 @@ in {
     };
 
     packages = mkOption {
+      type = types.functionTo (types.listOf types.package);
       default = hp: [];
-      defaultText = "hp: []";
-      example = "hp: with hp; [ text lens ]";
+      defaultText = literalExpression "hp: []";
+      example = literalExpression "hp: with hp; [ text lens ]";
       description = ''
         The Haskell packages to generate documentation for.
 
@@ -39,8 +40,9 @@ in {
 
     haskellPackages = mkOption {
       description = "Which haskell package set to use.";
+      type = types.attrs;
       default = pkgs.haskellPackages;
-      defaultText = "pkgs.haskellPackages";
+      defaultText = literalExpression "pkgs.haskellPackages";
     };
 
     home = mkOption {
@@ -49,6 +51,11 @@ in {
       default = "https://hoogle.haskell.org";
     };
 
+    host = mkOption {
+      type = types.str;
+      description = "Set the host to bind on.";
+      default = "127.0.0.1";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -59,12 +66,10 @@ in {
 
       serviceConfig = {
         Restart = "always";
-        ExecStart = ''${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home}'';
+        ExecStart = ''${hoogleEnv}/bin/hoogle server --local --port ${toString cfg.port} --home ${cfg.home} --host ${cfg.host}'';
 
-        User = "nobody";
-        Group = "nogroup";
+        DynamicUser = true;
 
-        PrivateTmp = true;
         ProtectHome = true;
 
         RuntimeDirectory = "hoogle";

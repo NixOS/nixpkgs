@@ -1,33 +1,39 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, makeWrapper
-, perlPackages, libxml2 }:
+{ lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
+, perlPackages, libxml2, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "hivex-${version}";
-  version = "1.3.18";
+  pname = "hivex";
+  version = "1.3.21";
 
   src = fetchurl {
-    url = "http://libguestfs.org/download/hivex/${name}.tar.gz";
-    sha256 = "0ibl186l6rd9qj4rqccfwbg1nnx6z07vspkhk656x6zav67ph7la";
+    url = "https://libguestfs.org/download/hivex/${pname}-${version}.tar.gz";
+    sha256 = "sha256-ms4+9KL/LKUKmb4Gi2D7H9vJ6rivU+NF6XznW6S2O1Y=";
   };
 
   patches = [ ./hivex-syms.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
   buildInputs = [
-    autoreconfHook makeWrapper libxml2
-  ] ++ (with perlPackages; [ perl IOStringy ]);
+    libxml2
+  ]
+  ++ (with perlPackages; [ perl IOStringy ])
+  ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   postInstall = ''
-    for bin in $out/bin/*; do
-      wrapProgram "$bin" --prefix "PATH" : "$out/bin"
-    done
+    wrapProgram $out/bin/hivexregedit \
+        --set PERL5LIB "$out/${perlPackages.perl.libPrefix}" \
+        --prefix "PATH" : "$out/bin"
+
+    wrapProgram $out/bin/hivexml \
+        --prefix "PATH" : "$out/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Windows registry hive extraction library";
     license = licenses.lgpl2;
-    homepage = https://github.com/libguestfs/hivex;
+    homepage = "https://github.com/libguestfs/hivex";
     maintainers = with maintainers; [offline];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

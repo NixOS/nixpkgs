@@ -1,36 +1,40 @@
-{ stdenv, fetchurl, libidn, openssl, makeWrapper, fetchhg
-, lua5, luasocket, luasec, luaexpat, luafilesystem, luabitop
-, withLibevent ? true, luaevent ? null
-, withDBI ? true, luadbi ? null
+{ stdenv, fetchurl, lib, libidn, openssl, makeWrapper, fetchhg
+, icu
+, lua
+, nixosTests
+, withLibevent ? true
+, withDBI ? true
 # use withExtraLibs to add additional dependencies of community modules
 , withExtraLibs ? [ ]
+, withExtraLuaPackages ? _: [ ]
 , withOnlyInstalledCommunityModules ? [ ]
 , withCommunityModules ? [ ] }:
 
-assert withLibevent -> luaevent != null;
-assert withDBI -> luadbi != null;
-
-with stdenv.lib;
+with lib;
 
 let
-  libs        = [ luasocket luasec luaexpat luafilesystem luabitop ]
-                ++ optional withLibevent luaevent
-                ++ optional withDBI luadbi
-                ++ withExtraLibs;
-  getPath     = lib : type : "${lib}/lib/lua/${lua5.luaversion}/?.${type};${lib}/share/lua/${lua5.luaversion}/?.${type}";
-  getLuaPath  = lib : getPath lib "lua";
-  getLuaCPath = lib : getPath lib "so";
-  luaPath     = concatStringsSep ";" (map getLuaPath  libs);
-  luaCPath    = concatStringsSep ";" (map getLuaCPath libs);
+  luaEnv = lua.withPackages(p: with p; [
+      luasocket luasec luaexpat luafilesystem luabitop luadbi-sqlite3 luaunbound
+    ]
+    ++ lib.optional withLibevent p.luaevent
+    ++ lib.optional withDBI p.luadbi
+    ++ withExtraLuaPackages p
+  );
 in
-
 stdenv.mkDerivation rec {
-  version = "0.11.2"; # also update communityModules
-  name = "prosody-${version}";
-
+  version = "0.12.0"; # also update communityModules
+  pname = "prosody";
+  # The following community modules are necessary for the nixos module
+  # prosody module to comply with XEP-0423 and provide a working
+  # default setup.
+  nixosModuleDeps = [
+    "cloud_notify"
+    "vcard_muc"
+    "http_upload"
+  ];
   src = fetchurl {
-    url = "https://prosody.im/downloads/source/${name}.tar.gz";
-    sha256 = "0ca8ivqb4hxqka08pwnaqi1bqxrdl8zw47g6z7nw9q5r57fgc4c9";
+    url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
+    sha256 = "sha256-dS/zIBXaxWX8NBfCGWryaJccNY7gZuUfXZEkE1gNiJo=";
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -38,38 +42,45 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
-    rev = "b54e98d5c4a1";
-    sha256 = "0bzn92j48krb2zhp9gn5bbn5sg0qv15j5lpxfszwqdln3lpmrvzg";
+    rev = "65438e4ba563";
+    sha256 = "sha256-zHOrMzcgHOdBl7nObM+OauifbcmKEOfAuj81MDSoLMk=";
   };
 
-  buildInputs = [ lua5 makeWrapper libidn openssl ]
-    ++ optional withDBI luadbi;
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    luaEnv libidn openssl icu
+  ]
+  ++ withExtraLibs;
 
   configureFlags = [
     "--ostype=linux"
-    "--with-lua-include=${lua5}/include"
-    "--with-lua=${lua5}"
+    "--with-lua-include=${luaEnv}/include"
+    "--with-lua=${luaEnv}"
   ];
 
+  postBuild = ''
+    make -C tools/migration
+  '';
+
+  # the wrapping should go away once lua hook is fixed
   postInstall = ''
       ${concatMapStringsSep "\n" (module: ''
         cp -r $communityModules/mod_${module} $out/lib/prosody/modules/
-      '') (withCommunityModules ++ withOnlyInstalledCommunityModules)}
-      wrapProgram $out/bin/prosody \
-        --set LUA_PATH '${luaPath};' \
-        --set LUA_CPATH '${luaCPath};'
+      '') (lib.lists.unique(nixosModuleDeps ++ withCommunityModules ++ withOnlyInstalledCommunityModules))}
       wrapProgram $out/bin/prosodyctl \
-        --add-flags '--config "/etc/prosody/prosody.cfg.lua"' \
-        --set LUA_PATH '${luaPath};' \
-        --set LUA_CPATH '${luaCPath};'
+        --add-flags '--config "/etc/prosody/prosody.cfg.lua"'
+      make -C tools/migration install
     '';
 
-  passthru.communityModules = withCommunityModules;
+  passthru = {
+    communityModules = withCommunityModules;
+    tests = { inherit (nixosTests) prosody prosody-mysql; };
+  };
 
   meta = {
     description = "Open-source XMPP application server written in Lua";
     license = licenses.mit;
-    homepage = https://prosody.im;
+    homepage = "https://prosody.im";
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz globin ];
   };

@@ -33,15 +33,15 @@
 
 
 is_ignored_file() {
-	case "$1" in
-		skeleton | README | *.dpkg-dist | *.dpkg-old | rc | rcS | single | reboot | bootclean.sh)
-			return 0
-		;;
-	esac
-	return 1
+    case "$1" in
+        skeleton | README | *.dpkg-dist | *.dpkg-old | rc | rcS | single | reboot | bootclean.sh)
+            return 0
+        ;;
+    esac
+    return 1
 }
 
-VERSION=$(@coreutils@/bin/basename $0)" ver. 0.91-ubuntu1"
+VERSION=$(@coreutils@/bin/basename $0)" ver. 19-04"
 USAGE="Usage: "$(@coreutils@/bin/basename $0)" < option > | --status-all | \
 [ service_name [ command | --full-restart ] ]"
 SERVICE=
@@ -75,35 +75,35 @@ while [ $# -gt 0 ]; do
        if [ -z "${SERVICE}" -a $# -eq 1 -a "${1}" = "--status-all" ]; then
           if [ -d "${SERVICEDIR}" ]; then
              cd ${SERVICEDIR}
-	     for SERVICE in * ; do
-	       case "${SERVICE}" in
-	         functions | halt | killall | single| linuxconf| kudzu)
-	             ;;
-	         *)
-	           if ! is_ignored_file "${SERVICE}" \
-	   	    && [ -x "${SERVICEDIR}/${SERVICE}" ]; then
-	                   out=$(env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
-	                   retval=$?
-	                   if echo "$out" | egrep -iq "usage:"; then
-	                     #printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
-	                     echo " [ ? ]  $SERVICE" 1>&2
-	                     continue
-	                   else
-	                     if [ "$retval" = "0" -a -n "$out" ]; then
-	                       #printf " %s %-60s %s\n" "[+]" "$SERVICE:" "running"
-	                       echo " [ + ]  $SERVICE"
-	                       continue
-	                     else
-	                       #printf " %s %-60s %s\n" "[-]" "$SERVICE:" "NOT running"
-	                       echo " [ - ]  $SERVICE"
-	                       continue
-	                     fi
-	                   fi
-	             #env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status
-	           fi
-	           ;;
-	       esac
-	     done
+         for SERVICE in * ; do
+           case "${SERVICE}" in
+             functions | halt | killall | single| linuxconf| kudzu)
+                 ;;
+             *)
+               if ! is_ignored_file "${SERVICE}" \
+               && [ -x "${SERVICEDIR}/${SERVICE}" ]; then
+                       out=$(env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status 2>&1)
+                       retval=$?
+                       if echo "$out" | egrep -iq "usage:"; then
+                         #printf " %s %-60s %s\n" "[?]" "$SERVICE:" "unknown" 1>&2
+                         echo " [ ? ]  $SERVICE" 1>&2
+                         continue
+                       else
+                         if [ "$retval" = "0" -a -n "$out" ]; then
+                           #printf " %s %-60s %s\n" "[+]" "$SERVICE:" "running"
+                           echo " [ + ]  $SERVICE"
+                           continue
+                         else
+                           #printf " %s %-60s %s\n" "[-]" "$SERVICE:" "NOT running"
+                           echo " [ - ]  $SERVICE"
+                           continue
+                         fi
+                       fi
+                 #env -i LANG="$LANG" LANGUAGE="$LANGUAGE" LC_CTYPE="$LC_CTYPE" LC_NUMERIC="$LC_NUMERIC" LC_TIME="$LC_TIME" LC_COLLATE="$LC_COLLATE" LC_MONETARY="$LC_MONETARY" LC_MESSAGES="$LC_MESSAGES" LC_PAPER="$LC_PAPER" LC_NAME="$LC_NAME" LC_ADDRESS="$LC_ADDRESS" LC_TELEPHONE="$LC_TELEPHONE" LC_MEASUREMENT="$LC_MEASUREMENT" LC_IDENTIFICATION="$LC_IDENTIFICATION" LC_ALL="$LC_ALL" PATH="$PATH" TERM="$TERM" "$SERVICEDIR/$SERVICE" status
+               fi
+               ;;
+           esac
+         done
           else
              systemctl $sctl_args list-units
           fi
@@ -132,29 +132,6 @@ while [ $# -gt 0 ]; do
        ;;
    esac
 done
-
-# Operate against system upstart, not session
-unset UPSTART_SESSION
-if [ -r "/etc/init/${SERVICE}.conf" ] && which initctl >/dev/null \
-   && initctl version 2>/dev/null | grep -q upstart \
-   && initctl status ${SERVICE} 2>/dev/null 1>/dev/null
-then
-   # Upstart configuration exists for this job and we're running on upstart
-   case "${ACTION}" in
-      start|stop|status|reload)
-         # Action is a valid upstart action
-         exec ${ACTION} ${SERVICE} ${OPTIONS}
-      ;;
-      restart|force-reload)
-        # Map restart to the usual sysvinit behavior.
-        # Map force-reload to restart as per Debian policy 9.3.2,
-        # since there is no way to know if "reload" is supported
-         stop ${SERVICE} ${OPTIONS} || :
-         exec start ${SERVICE} ${OPTIONS}
-      ;;
-   esac
-fi
-
 
 run_via_sysvinit() {
    # Otherwise, use the traditional sysvinit
@@ -198,7 +175,7 @@ then
    fi
 
    case "${ACTION}" in
-      restart|status)
+      restart|status|try-restart)
          exec systemctl $sctl_args ${ACTION} ${UNIT}
       ;;
       start|stop)
@@ -214,7 +191,7 @@ then
          exec systemctl $sctl_args ${ACTION} ${UNIT}
       ;;
       reload)
-         _canreload="$(SYSTEMCTL -p CanReload show ${UNIT} 2>/dev/null)"
+         _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
          if [ "$_canreload" = "CanReload=no" ]; then
             # The reload action falls back to the sysv init script just in case
             # the systemd service file does not (yet) support reload for a

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, ncurses, coreutils }:
+{ lib, stdenv, fetchurl, ncurses, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "ncftp-${version}";
+  pname = "ncftp";
   version = "3.2.6";
 
   src = fetchurl {
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preConfigure = ''
+    find -name Makefile.in | xargs sed -i '/^TMPDIR=/d'
+
     find . -name '*.sh' -or -name '*.in' -or -name '*.c' -or -name configure | xargs sed -i \
       -e 's@/bin/ls@${coreutils}/bin/ls@g' \
       -e 's@/bin/rm@${coreutils}/bin/rm@g'
@@ -30,9 +32,9 @@ stdenv.mkDerivation rec {
     "--mandir=$(out)/share/man/"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line FTP (File Transfer Protocol) client";
-    homepage = https://www.ncftp.com/ncftp/;
+    homepage = "https://www.ncftp.com/ncftp/";
     maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.unix;
     license = licenses.clArtistic;

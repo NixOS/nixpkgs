@@ -1,28 +1,44 @@
-{ stdenv, fetchurl, python, rcs, git, makeWrapper }:
+{ lib
+, stdenv
+, fetchurl
+, python
+, rcs
+, git
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
-  name = "src-${version}";
-  version = "1.24";
+  pname = "src";
+  version = "1.29";
 
   src = fetchurl {
-    url = "http://www.catb.org/~esr/src/${name}.tar.gz";
-    sha256 = "0n9j2mywbm8c7mc5b3m7dvn6gff88wwwaygk4y1jivpg1f6s3k3l";
+    url = "http://www.catb.org/~esr/src/${pname}-${version}.tar.gz";
+    sha256 = "sha256-Tc+qBhLtC9u23BrqVniAprAV8YhXELvbMn+XxN5BQkE=";
   };
 
-  buildInputs = [ python rcs git makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [
+    python
+    rcs
+    git
+  ];
 
   preConfigure = ''
     patchShebangs .
   '';
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/src \
       --suffix PATH ":" "${rcs}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "http://www.catb.org/esr/src/";
     description = "Simple single-file revision control";
     longDescription = ''
       SRC, acronym of Simple Revision Control, is RCS/SCCS reloaded with a
@@ -32,9 +48,9 @@ stdenv.mkDerivation rec {
       will seem familiar to Subversion/Git/hg users, and no binary blobs
       anywhere.
     '';
-    homepage = http://www.catb.org/esr/src/;
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    changelog = "https://gitlab.com/esr/src/raw/${version}/NEWS";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ calvertvl AndersonTorres ];
+    inherit (python.meta) platforms;
   };
 }

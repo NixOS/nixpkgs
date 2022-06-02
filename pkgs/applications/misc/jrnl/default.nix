@@ -1,30 +1,61 @@
-{ stdenv
+{ lib
+, fetchFromGitHub
 , python3
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
-  version = "1.9.8";
+  version = "2.8.4";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d254c9c8f24dcf985b98a1d5311337c7f416e6305107eec34c567f58c95b06f4";
+  src = fetchFromGitHub {
+    owner = "jrnl-org";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-Edu+GW/D+R5r0R750Z1f8YUVPMYbm9PK4D73sTDzDEc=";
   };
 
-  propagatedBuildInputs = [
-    pytz six tzlocal keyring dateutil
-    parsedatetime pycrypto
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
   ];
 
-  # No tests in archive
-  doCheck = false;
+  propagatedBuildInputs = with python3.pkgs; [
+    ansiwrap
+    asteval
+    colorama
+    cryptography
+    keyring
+    parsedatetime
+    python-dateutil
+    pytz
+    pyxdg
+    pyyaml
+    tzlocal
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://maebert.github.io/jrnl/;
-    description = "A simple command line journal application that stores your journal in a plain text file";
-    license = licenses.mit;
+  checkInputs = with python3.pkgs; [
+    pytest-bdd
+    pytestCheckHook
+    toml
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'tzlocal = ">2.0, <3.0"' 'tzlocal = ">2.0, !=3.0"'
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
+
+  pythonImportsCheck = [
+    "jrnl"
+  ];
+
+  meta = with lib; {
+    description = "Simple command line journal application that stores your journal in a plain text file";
+    homepage = "https://jrnl.sh/";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ zalakain ];
   };
 }

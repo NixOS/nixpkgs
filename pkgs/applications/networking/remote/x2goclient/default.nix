@@ -1,21 +1,50 @@
-{ stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
-, makeWrapper, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
+{ lib
+, fetchurl
+, cups
+, libssh
+, libXpm
+, nx-libs
+, openldap
+, openssh
+, qt5
+, qtbase
+, qtsvg
+, qtx11extras
+, qttools
+, phonon
+, pkg-config
+}:
 
-stdenv.mkDerivation rec {
+qt5.mkDerivation rec {
   pname = "x2goclient";
-  version = "unstable-2018-11-30";
+  version = "4.1.2.2";
 
-  src = fetchgit {
-   url = "git://code.x2go.org/x2goclient.git";
-   rev = "659655675f11ffd361ab9fb48fa77a01a1536fe8";
-   sha256 = "05gfs11m259bchy3k0ihqpwg9wf8lp94rbca5dzla9fjzrb7pyy4";
+  src = fetchurl {
+    url = "https://code.x2go.org/releases/source/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "yZUyZ8QPpnEZrZanO6yx8mYZbaIFnwzc0bjVGZQh0So=";
   };
 
-  buildInputs = [ cups libssh libXpm nx-libs openldap openssh
-                  qtbase qtsvg qtx11extras qttools phonon pkgconfig ];
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    cups
+    libssh
+    libXpm
+    nx-libs
+    openldap
+    openssh
+    qtbase
+    qtsvg
+    qtx11extras
+    qttools
+    phonon
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
 
   postPatch = ''
+     substituteInPlace src/onmainwindow.cpp --replace "/usr/sbin/sshd" "${openssh}/bin/sshd"
      substituteInPlace Makefile \
        --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
        --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
@@ -25,16 +54,14 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" "build_client" "build_man" ];
 
-  enableParallelBuilding = true;
-
   installTargets = [ "install_client" "install_man" ];
-  postInstall = ''
-    wrapProgram "$out/bin/x2goclient" --suffix PATH : "${nx-libs}/bin:${openssh}/libexec";
-  '';
 
-  meta = with stdenv.lib; {
+  qtWrapperArgs = [ "--suffix PATH : ${nx-libs}/bin:${openssh}/libexec" "--set QT_QPA_PLATFORM xcb" ];
+
+  meta = with lib; {
     description = "Graphical NoMachine NX3 remote desktop client";
-    homepage = http://x2go.org/;
+    homepage = "http://x2go.org/";
+    maintainers = with maintainers; [ mkg20001 ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

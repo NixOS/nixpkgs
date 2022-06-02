@@ -1,13 +1,14 @@
-{ stdenv, buildEnv, fetchFromGitHub, mono }:
+{ lib, stdenv, buildEnv, fetchFromGitHub, mono }:
 
 let
   version = "1.8.4.2";
   drv = stdenv.mkDerivation {
-    name = "keepasshttp-${version}";
+    pname = "keepasshttp";
+    inherit version;
     src = fetchFromGitHub {
       owner = "pfn";
       repo = "keepasshttp";
-      #rev = "${version}";
+      # rev = version;
       # for 1.8.4.2 the tag is at the wrong commit (they fixed stuff
       # afterwards and didn't move the tag), hence reference by commitid
       rev = "c2c4eb5388a02169400cba7a67be325caabdcc37";
@@ -16,9 +17,9 @@ let
 
     meta = {
       description = "KeePass plugin to expose password entries securely (256bit AES/CBC) over HTTP";
-      homepage    = https://github.com/pfn/keepasshttp;
-      platforms   = with stdenv.lib.platforms; linux;
-      license     = stdenv.lib.licenses.gpl3;
+      homepage    = "https://github.com/pfn/keepasshttp";
+      platforms   = with lib.platforms; linux;
+      license     = lib.licenses.gpl3;
     };
 
     pluginFilename = "KeePassHttp.plgx";

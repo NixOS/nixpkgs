@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
+{ lib, stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
 , libXext , freetype, libXrender, fontconfig, libXft, libXinerama
 , libXfixes, libXScrnSaver, libnotify, glib , gtk3, libappindicator-gtk3
-, curl }:
+, curl, writeShellScript, common-updater-scripts }:
 
 let
+  url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/1.6.5-31be26f1/Hubstaff-1.6.5-31be26f1.sh";
+  version = "1.6.5-31be26f1";
+  sha256 = "1z1binnqppyxavmjg0l1cvy64ylzy2v454sws2x1am2qhhbnycjm";
 
-  version = "1.3.1-ff75f26";
-
-  rpath = stdenv.lib.makeLibraryPath
+  rpath = lib.makeLibraryPath
     [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
       libXinerama stdenv.cc.cc.lib libnotify glib gtk3 libappindicator-gtk3
       curl libXfixes libXScrnSaver ];
@@ -15,12 +16,10 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "hubstaff-${version}";
+  pname = "hubstaff";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://hubstaff-production.s3.amazonaws.com/downloads/HubstaffClient/Builds/Release/${version}/Hubstaff-${version}.sh";
-    sha256 = "0jm5l34r6lkfkg8vsdfqbr0axngxznhagwcl9y184lnyji91fmdl";
-  };
+  src = fetchurl { inherit sha256 url; };
 
   nativeBuildInputs = [ unzip makeWrapper ];
 
@@ -56,11 +55,23 @@ stdenv.mkDerivation {
     ln -s $opt/data/resources $opt/x86_64/resources
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = writeShellScript "hubstaff-updater" ''
+    set -eu -o pipefail
+
+    installation_script_url=$(curl --fail --head --location --silent --output /dev/null --write-out %{url_effective} https://app.hubstaff.com/download/linux)
+
+    version=$(echo "$installation_script_url" | sed -r 's/^https:\/\/hubstaff\-production\.s3\.amazonaws\.com\/downloads\/HubstaffClient\/Builds\/Release\/([^\/]+)\/Hubstaff.+$/\1/')
+
+    sha256=$(nix-prefetch-url "$installation_script_url")
+
+    ${common-updater-scripts}/bin/update-source-version hubstaff "$version" "$sha256" "$installation_script_url"
+  '';
+
+  meta = with lib; {
     description = "Time tracking software";
-    homepage = https://hubstaff.com/;
+    homepage = "https://hubstaff.com/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.michalrus ];
+    maintainers = with maintainers; [ michalrus srghma ];
   };
 }

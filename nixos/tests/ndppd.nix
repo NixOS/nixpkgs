@@ -1,6 +1,6 @@
-import ./make-test.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "ndppd";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ fpletz ];
   };
 
@@ -37,7 +37,7 @@ import ./make-test.nix ({ pkgs, lib, ...} : {
       };
       services.ndppd = {
         enable = true;
-        proxies."eth1".rules."fd42::/112" = {};
+        proxies.eth1.rules."fd42::/112" = {};
       };
       containers.client = {
         autoStart = true;
@@ -52,9 +52,9 @@ import ./make-test.nix ({ pkgs, lib, ...} : {
   };
 
   testScript = ''
-    startAll;
-    $server->waitForUnit("multi-user.target");
-    $upstream->waitForUnit("multi-user.target");
-    $upstream->waitUntilSucceeds("ping -c5 fd42::2");
+    start_all()
+    server.wait_for_unit("multi-user.target")
+    upstream.wait_for_unit("multi-user.target")
+    upstream.wait_until_succeeds("ping -c5 fd42::2")
   '';
 })

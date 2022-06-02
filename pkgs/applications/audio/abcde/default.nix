@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyeD3
+{ lib, stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyeD3
 , lame, flac, glyr
 , perlPackages
 , makeWrapper }:
@@ -6,7 +6,8 @@
 let version = "2.9.3";
 in
   stdenv.mkDerivation {
-    name = "abcde-${version}";
+    pname = "abcde";
+    inherit version;
     src = fetchurl {
       url = "https://abcde.einval.com/download/abcde-${version}.tar.gz";
       sha256 = "091ip2iwb6b67bhjsj05l0sxyq2whqjycbzqpkfbpm4dlyxx0v04";
@@ -37,15 +38,15 @@ in
       for cmd in abcde cddb-tool abcde-musicbrainz-tool; do
         wrapProgram "$out/bin/$cmd" \
           --prefix PERL5LIB : "$PERL5LIB" \
-          --prefix PATH ":" ${stdenv.lib.makeBinPath [
+          --prefix PATH ":" ${lib.makeBinPath [
             "$out" which libcdio-paranoia cddiscid wget
             vorbis-tools id3v2 eyeD3 lame flac glyr
           ]}
       done
     '';
 
-    meta = with stdenv.lib; {
-      homepage = http://abcde.einval.com/wiki/;
+    meta = with lib; {
+      homepage = "http://abcde.einval.com/wiki/";
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [ gebner ];
       description = "Command-line audio CD ripper";

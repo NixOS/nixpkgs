@@ -1,42 +1,46 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, makeWrapper
-, boost, xercesc
-, qtbase, qttools, qtwebkit, qtxmlpatterns
-, python3, python3Packages
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkg-config, makeWrapper
+, boost, xercesc, hunspell, zlib, pcre16
+, qtbase, qttools, qtwebengine, qtxmlpatterns
+, python3Packages
 }:
 
-stdenv.mkDerivation rec {
-  name = "sigil-${version}";
-  version = "0.9.12";
+mkDerivation rec {
+  pname = "sigil";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
-    sha256 = "0zlm1jjk91cbrphrilpvxhbm26bbmgy10n7hd0fb1ml8q70q34s3";
-    rev = version;
     repo = "Sigil";
     owner = "Sigil-Ebook";
+    rev = version;
+    sha256 = "sha256-LfP3qUzoHuYSpkTz1queVGTWOP9v9kbgbgvvtiMK6Eo=";
   };
 
   pythonPath = with python3Packages; [ lxml ];
 
-  propagatedBuildInputs = with python3Packages; [ lxml ];
-
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   buildInputs = [
-    boost xercesc qtbase qttools qtwebkit qtxmlpatterns
-    python3 python3Packages.lxml ];
+    boost xercesc qtbase qttools qtwebengine qtxmlpatterns
+    python3Packages.lxml
+  ];
+
+  prePatch = ''
+    sed -i '/^QTLIB_DIR=/ d' src/Resource_Files/bash/sigil-sh_install
+  '';
+
+  dontWrapQtApps = true;
 
   preFixup = ''
     wrapProgram "$out/bin/sigil" \
-       --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath ${python3Packages.lxml})
+       --prefix PYTHONPATH : $PYTHONPATH \
+       ''${qtWrapperArgs[@]}
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free, open source, multi-platform ebook (ePub) editor";
-    homepage = https://github.com/Sigil-Ebook/Sigil/;
+    homepage = "https://github.com/Sigil-Ebook/Sigil/";
     license = licenses.gpl3;
-    maintainers =[ maintainers.ramkromberg ];
+    # currently unmaintained
     platforms = platforms.linux;
   };
 }

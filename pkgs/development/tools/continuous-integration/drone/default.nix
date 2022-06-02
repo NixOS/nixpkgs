@@ -1,27 +1,26 @@
-{ stdenv, fetchFromGitHub, buildGoPackage, go-bindata, go-bindata-assetfs }:
+{ lib, fetchFromGitHub, buildGoModule
+, enableUnfree ? true }:
 
-buildGoPackage rec {
-  name = "drone.io-${version}";
-  version = "0.8.6-20180727-${stdenv.lib.strings.substring 0 7 revision}";
-  revision = "c48150767c2700d35dcc29b110a81c8b5969175e";
-  goPackagePath = "github.com/drone/drone";
+buildGoModule rec {
+  pname = "drone.io${lib.optionalString (!enableUnfree) "-oss"}";
+  version = "2.12.0";
 
-  # These dependencies pulled (in `drone` buildprocess) via Makefile,
-  # so I extracted them here, all revisions pinned by same date, as ${version}
-  goDeps= ./deps.nix;
+  vendorSha256 = "sha256-y9knuU/+hkXBLgMmJ5Trp0A3lEiLC1I2Dh85/CFBXow=";
 
-  nativeBuildInputs = [ go-bindata go-bindata-assetfs ];
+  doCheck = false;
 
   src = fetchFromGitHub {
-    owner = "drone";
+    owner = "harness";
     repo = "drone";
-    rev = revision;
-    sha256 = "0miq2012nivvr1ysi3aa2xrr5ak3mf0l3drybyc83iycy0kp4bda";
+    rev = "v${version}";
+    sha256 = "sha256-Bpv08iD0wRiscwNE8TIBgZMlChQFQEegbjkzDv4mIYU=";
   };
 
-  meta = with stdenv.lib; {
-    maintainers = with maintainers; [ avnik vdemeester ];
-    license = licenses.asl20;
+  tags = lib.optionals (!enableUnfree) [ "oss" "nolimit" ];
+
+  meta = with lib; {
+    maintainers = with maintainers; [ elohmeier vdemeester techknowlogick ];
+    license = with licenses; if enableUnfree then unfreeRedistributable else asl20;
     description = "Continuous Integration platform built on container technology";
   };
 }

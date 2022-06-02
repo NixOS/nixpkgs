@@ -1,45 +1,92 @@
-{ stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, python3, libgee, gsettings-desktop-schemas
-, gnome3, pantheon, gobject-introspection, wrapGAppsHook
-, gtk3, json-glib, glib, glib-networking, hicolor-icon-theme
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, fetchpatch
+, vala
+, meson
+, ninja
+, pkg-config
+, python3
+, libgee
+, gsettings-desktop-schemas
+, gnome
+, pantheon
+, wrapGAppsHook
+, gtk3
+, json-glib
+, glib
+, glib-networking
+, libhandy
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "tootle";
-  version = "0.2.0";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "bleakgrey";
     repo = pname;
     rev = version;
-    sha256 = "1z3wyx316nns6gi7vlvcfmalhvxncmvcmmlgclbv6b6hwl5x2ysi";
+    sha256 = "NRM7GiJA8c5z9AvXpGXtMl4ZaYN2GauEIbjBmoY4pdo=";
   };
 
+  patches = [
+    # Adhere to GLib.Object naming conventions for properties
+    # https://github.com/bleakgrey/tootle/pull/339
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/tootle/0001-Adhere-to-GLib.Object-naming-conventions-for-propert.patch?id=001bf1ce9695ddb0bbb58b44433d54207c15b0b5";
+      sha256 = "sha256-B62PhMRkU8P3jmnIUq1bYWztLtO2oNcDsXnAYbJGpso=";
+    })
+    # Use reason_phrase instead of get_phrase
+    # https://github.com/bleakgrey/tootle/pull/336
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/tootle/0002-Use-reason_phrase-instead-of-get_phrase.patch?id=001bf1ce9695ddb0bbb58b44433d54207c15b0b5";
+      sha256 = "sha256-rm5NFLeAL2ilXpioywgCR9ppoq+MD0MLyVaBmdzVkqU=";
+    })
+  ];
+
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
-    pantheon.vala
+    vala
     wrapGAppsHook
   ];
+
   buildInputs = [
-    gtk3 pantheon.granite json-glib glib glib-networking hicolor-icon-theme
-    libgee gnome3.libsoup gsettings-desktop-schemas
+    glib
+    glib-networking
+    gnome.libsoup
+    gsettings-desktop-schemas
+    gtk3
+    json-glib
+    libgee
+    pantheon.granite
+    libhandy
   ];
 
   postPatch = ''
-    chmod +x ./meson/post_install.py
-    patchShebangs ./meson/post_install.py
+    # Fix build with vala 0.56
+    # https://github.com/bleakgrey/tootle/pull/346
+    substituteInPlace src/Application.vala \
+      --replace "public const GLib.ActionEntry[] app_entries" "private const GLib.ActionEntry[] app_entries"
+
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+  meta = with lib; {
     description = "Simple Mastodon client designed for elementary OS";
-    homepage    = https://github.com/bleakgrey/tootle;
-    license     = licenses.gpl3;
+    homepage = "https://github.com/bleakgrey/tootle";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ dtzWill ];
   };
 }

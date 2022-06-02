@@ -1,45 +1,49 @@
-{ stdenv, fetchFromGitHub, coreutils, gnugrep, gnused, makeWrapper, git
-}:
+{ lib, stdenv, fetchFromGitHub, coreutils, git, gnugrep, gnused, makeWrapper, inotify-tools }:
 
 stdenv.mkDerivation rec {
-  name = "git-sync-${version}";
-  version = "20151024";
+  pname = "git-sync";
+  version = "unstable-2022-03-20";
 
   src = fetchFromGitHub {
     owner = "simonthum";
     repo = "git-sync";
-    rev = "eb9adaf2b5fd65aac1e83d6544b9076aae6af5b7";
-    sha256 = "01if8y93wa0mwbkzkzx2v1vqh47zlz4k1dysl6yh5rmppd1psknz";
+    rev = "8466b77a38b3d5e8b4ed9e3cb1b635e475eeb415";
+    sha256 = "sha256-8rCwpmHV6wgFCLzPJOKzwN5mG8uD5KIlGFwcgQD+SK4=";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -a git-sync $out/bin/git-sync
+    cp -a git-* $out/bin/
+    cp -a contrib/git-* $out/bin/
   '';
 
-  wrapperPath = with stdenv.lib; makeBinPath [
+  wrapperPath = with lib; makeBinPath [
+    inotify-tools
     coreutils
     git
     gnugrep
     gnused
   ];
 
-  fixupPhase = ''
-    patchShebangs $out/bin
+  postFixup = ''
+    wrap_path="${wrapperPath}":$out/bin
 
     wrapProgram $out/bin/git-sync \
-      --prefix PATH : "${wrapperPath}"
+      --prefix PATH : $wrap_path
+
+    wrapProgram $out/bin/git-sync-on-inotify \
+      --prefix PATH : $wrap_path
   '';
 
   meta = {
     description = "A script to automatically synchronize a git repository";
-    homepage = https://github.com/simonthum/git-sync;
-    maintainers = with stdenv.lib.maintainers; [ imalison ];
-    license = stdenv.lib.licenses.cc0;
-    platforms = with stdenv.lib.platforms; unix;
+    homepage = "https://github.com/simonthum/git-sync";
+    maintainers = with lib.maintainers; [ imalison ];
+    license = lib.licenses.cc0;
+    platforms = with lib.platforms; unix;
   };
 }

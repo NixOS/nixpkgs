@@ -1,27 +1,36 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, pkgconfig, gnutls
-, libgcrypt, libtasn1, glib, libplist, libusbmuxd }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libtool
+, pkg-config
+, gnutls
+, libgcrypt
+, libtasn1
+, glib
+, libplist
+, libusbmuxd
+}:
 
 stdenv.mkDerivation rec {
   pname = "libimobiledevice";
-  version = "2018-07-24";
-
-  name = "${pname}-${version}";
+  version = "unstable-2021-06-02";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "d7a2e04d2e7880c56116fd35489a7f98755501b7";
-    sha256 = "0cj0j10lmfr28c7nh79n2mcmy31xx50g93h0bqs0l7y76ph4dqkc";
+    rev = "ca324155f8b33babf907704828c7903608db0aa2";
+    sha256 = "sha256-Q7THwld1+elMJQ14kRnlIJDohFt7MW7JeyIUGC0k52I=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
     libtool
-    pkgconfig
+    pkg-config
   ];
+
   propagatedBuildInputs = [
     glib
     gnutls
@@ -31,16 +40,10 @@ stdenv.mkDerivation rec {
     libusbmuxd
   ];
 
-  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
+  configureFlags = [ "--disable-openssl" "--without-cython" ];
 
-  configureFlags = [
-    "--disable-static"
-    "--disable-openssl"
-    "--without-cython"
-  ];
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/libimobiledevice/libimobiledevice;
+  meta = with lib; {
+    homepage = "https://github.com/libimobiledevice/libimobiledevice";
     description = "A software library that talks the protocols to support iPhone®, iPod Touch® and iPad® devices on Linux";
     longDescription = ''
       libimobiledevice is a software library that talks the protocols to support
@@ -55,7 +58,7 @@ stdenv.mkDerivation rec {
       devices to the Linux Desktop.
     '';
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ infinisil ];
   };
 }

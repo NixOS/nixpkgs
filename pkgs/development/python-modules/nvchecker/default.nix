@@ -1,29 +1,79 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, pytest_xdist, flaky, tornado, pycurl }:
+{ lib
+, aiohttp
+, appdirs
+, buildPythonPackage
+, docutils
+, fetchFromGitHub
+, flaky
+, installShellFiles
+, packaging
+, pycurl
+, pytest-asyncio
+, pytest-httpbin
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, structlog
+, tomli
+, tornado
+}:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.4.3";
+  version = "2.8";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0v340wkq4sn9pvcpjh076l8mcqkn3nrn7if8p6iysk02bjxvknbv";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "lilydjwg";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-ikpjR1fEZBsSOE20jxTyarb9Pqn3Fz+TYOzXp0g4G9c=";
   };
 
-  propagatedBuildInputs = [ setuptools structlog tornado pycurl ];
-  checkInputs = [ pytest pytest-asyncio pytest_xdist flaky ];
+  nativeBuildInputs = [
+    docutils
+    installShellFiles
+  ];
 
-  # Disable tests for now, because our version of pytest seems to be too new
-  # https://github.com/lilydjwg/nvchecker/commit/42a02efec84824a073601e1c2de30339d251e4c7
-  doCheck = false;
+  propagatedBuildInputs = [
+    aiohttp
+    appdirs
+    packaging
+    pycurl
+    setuptools
+    structlog
+    tomli
+    tornado
+  ];
 
-  checkPhase = ''
-    py.test
+  checkInputs = [
+    flaky
+    pytest-asyncio
+    pytest-httpbin
+    pytestCheckHook
+  ];
+
+  postBuild = ''
+    patchShebangs docs/myrst2man.py
+    make -C docs man
   '';
 
-  disabled = pythonOlder "3.5";
+  postInstall = ''
+    installManPage docs/_build/man/nvchecker.1
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/lilydjwg/nvchecker;
+  pythonImportsCheck = [
+    "nvchecker"
+  ];
+
+  pytestFlagsArray = [
+    "-m 'not needs_net'"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/lilydjwg/nvchecker";
     description = "New version checker for software";
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];

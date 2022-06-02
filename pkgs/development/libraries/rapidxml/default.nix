@@ -1,12 +1,11 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "rapidxml";
   version = "1.13";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.zip";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.zip";
     sha256 = "0w9mbdgshr6sh6a5jr10lkdycjyvapbj7wxwz8hbp0a96y3biw63";
   };
 
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
     cp * $out/include/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast XML DOM-style parser in C++";
     homepage = "http://rapidxml.sourceforge.net/";
     license = licenses.boost;

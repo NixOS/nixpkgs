@@ -1,61 +1,108 @@
-{ stdenv, lib, fetchurl, fetchpatch, pkgconfig, freetype, harfbuzz, openjpeg
-, jbig2dec, libjpeg , darwin
-, enableX11 ? true, libX11, libXext, libXi, libXrandr
-, enableCurl ? true, curl, openssl
-, enableGL ? true, freeglut, libGLU
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, copyDesktopItems
+, makeDesktopItem
+, desktopToDarwinBundle
+, pkg-config
+, freetype
+, harfbuzz
+, openjpeg
+, jbig2dec
+, libjpeg
+, darwin
+, gumbo
+, enableX11 ? (!stdenv.isDarwin)
+, libX11
+, libXext
+, libXi
+, libXrandr
+, enableCurl ? true
+, curl
+, openssl
+, enableGL ? true
+, freeglut
+, libGLU
+, xcbuild
 }:
-
 let
 
   # OpenJPEG version is hardcoded in package source
   openJpegVersion = with stdenv;
-    lib.concatStringsSep "." (lib.lists.take 2
-      (lib.splitString "." (lib.getVersion openjpeg)));
+    lib.versions.majorMinor (lib.getVersion openjpeg);
 
 
-in stdenv.mkDerivation rec {
-  version = "1.14.0";
-  name = "mupdf-${version}";
+in
+stdenv.mkDerivation rec {
+  version = "1.19.0";
+  pname = "mupdf";
 
   src = fetchurl {
-    url = "https://mupdf.com/downloads/archive/${name}-source.tar.gz";
-    sha256 = "093p7lv6pgyymagn28n58fs0np928r0i5p2az9cc4gwccwx4hhy4";
+    url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
+    sha256 = "1vfyhlqq1a0k0drcggly4bgsjasmf6lmpfbdi5xcrwdbzkagrbr1";
   };
 
-  patches =
-    # Use shared libraries to decrease size
-    [( fetchpatch
-      {
-          name = "CVE-2018-18662";
-          url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=164ddc22ee0d5b63a81d5148f44c37dd132a9356";
-          sha256 = "1jkzh20n3b854871h86cy5y7fvy0d5wyqy51b3fg6gj3a0jqpzzd";
-      }
-    )]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) ./mupdf-1.14-shared_libs.patch
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin.patch
-  ;
+  patches = [ ./0001-Use-command-v-in-favor-of-which.patch
+              ./0002-Add-Darwin-deps.patch
+            ];
 
   postPatch = ''
     sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
   '';
 
-  makeFlags = [ "prefix=$(out) USE_SYSTEM_LIBS=yes" ];
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg freeglut libGLU ]
-                ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
-                ++ lib.optionals enableCurl [ curl openssl ]
-                ++ lib.optionals enableGL (
-                  if stdenv.isDarwin then
-                    with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
-                  else
-                    [ freeglut libGLU ])
-                ;
+  # Use shared libraries to decrease size
+  buildFlags = [ "shared" ];
+
+  makeFlags = [ "prefix=$(out)" "USE_SYSTEM_LIBS=yes" ]
+    ++ lib.optionals (!enableX11) [ "HAVE_X11=no" ]
+    ++ lib.optionals (!enableGL) [ "HAVE_GLUT=no" ];
+
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optional (enableGL || enableX11) copyDesktopItems
+    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+
+  buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
+    ++ lib.optional stdenv.isDarwin xcbuild
+    ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
+    ++ lib.optionals enableCurl [ curl openssl ]
+    ++ lib.optionals enableGL (
+    if stdenv.isDarwin then
+      with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
+    else
+      [ freeglut libGLU ]
+  )
+  ;
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   preConfigure = ''
     # Don't remove mujs because upstream version is incompatible
     rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,libjpeg,openjpeg,zlib}
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = pname;
+      comment = meta.description;
+      icon = "mupdf";
+      exec = "${pname} %f";
+      terminal = false;
+      mimeTypes = [
+        "application/epub+zip"
+        "application/oxps"
+        "application/pdf"
+        "application/vnd.ms-xpsdocument"
+        "application/x-cbz"
+        "application/x-pdf"
+      ];
+      categories = [ "Graphics" "Viewer" ];
+      keywords = [
+        "mupdf" "comic" "document" "ebook" "viewer"
+        "cbz" "epub" "fb2" "pdf" "xps"
+      ];
+    })
+  ];
 
   postInstall = ''
     mkdir -p "$out/lib/pkgconfig"
@@ -72,23 +119,19 @@ in stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
-    mkdir -p $bin/share/applications
-    cat > $bin/share/applications/mupdf.desktop <<EOF
-    [Desktop Entry]
-    Type=Application
-    Version=1.0
-    Name=mupdf
-    Comment=PDF viewer
-    Exec=$bin/bin/mupdf-x11 %f
-    Terminal=false
-    EOF
-  '';
+  '' + lib.optionalString (enableX11 || enableGL) ''
+    mkdir -p $bin/share/icons/hicolor/48x48/apps
+    cp docs/logo/mupdf.png $bin/share/icons/hicolor/48x48/apps
+  '' + (if enableGL then ''
+    ln -s "$bin/bin/mupdf-gl" "$bin/bin/mupdf"
+  '' else lib.optionalString (enableX11) ''
+    ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
+  '');
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://mupdf.com;
-    repositories.git = git://git.ghostscript.com/mupdf.git;
+  meta = with lib; {
+    homepage = "https://mupdf.com";
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ vrthra fpletz ];

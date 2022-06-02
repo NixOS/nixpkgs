@@ -1,47 +1,41 @@
-{ stdenv, fetchFromGitHub, makeWrapper
+{ lib, stdenv, fetchFromGitHub
 , cmake, llvmPackages, rapidjson, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name    = "ccls-${version}";
-  version = "0.20190301";
+  pname = "ccls";
+  version = "0.20210330";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "1n60mly993czq3mnb82k8yqjrbfnsnx5v5dmr8ylqif3awcsk04i";
+    sha256 = "sha256-jipSipgD0avd7XODlpxnqjHK3s6nacaxbIQIddix7X8=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
-  buildInputs = with llvmPackages; [ clang-unwrapped llvm rapidjson ];
+  nativeBuildInputs = [ cmake llvmPackages.llvm.dev ];
+  buildInputs = with llvmPackages; [ libclang llvm rapidjson ];
 
-  cmakeFlags = [
-    "-DSYSTEM_CLANG=ON"
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
-    "-DCMAKE_CXX_FLAGS=-fvisibility=hidden"
-  ];
+  cmakeFlags = [ "-DCCLS_VERSION=${version}" ];
 
+  preConfigure = ''
+    cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="-fvisibility=hidden -fno-rtti")
+  '';
+
+  clang = llvmPackages.clang;
   shell = runtimeShell;
+
   postFixup = ''
-    # We need to tell ccls where to find the standard library headers.
-
-    standard_library_includes="\\\"-isystem\\\", \\\"${stdenv.lib.getDev stdenv.cc.libc}/include\\\""
-    standard_library_includes+=", \\\"-isystem\\\", \\\"${llvmPackages.libcxx}/include/c++/v1\\\""
-    export standard_library_includes
-
-    wrapped=".ccls-wrapped"
-    export wrapped
-
+    export wrapped=".ccls-wrapped"
     mv $out/bin/ccls $out/bin/$wrapped
     substituteAll ${./wrapper} $out/bin/ccls
     chmod --reference=$out/bin/$wrapped $out/bin/ccls
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A c/c++ language server powered by clang";
-    homepage    = https://github.com/MaskRay/ccls;
+    homepage    = "https://github.com/MaskRay/ccls";
     license     = licenses.asl20;
     platforms   = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 tobim ];
   };
 }

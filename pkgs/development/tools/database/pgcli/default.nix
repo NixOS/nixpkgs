@@ -1,38 +1,50 @@
-{ lib, python3Packages, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv
+, buildPythonApplication
+, fetchPypi
+, isPy3k
+, cli-helpers
+, click
+, configobj
+, prompt-toolkit
+, psycopg2
+, pygments
+, sqlparse
+, pgspecial
+, setproctitle
+, keyring
+, pendulum
+, pytestCheckHook
+, sshtunnel
+, mock
+}:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "pgcli";
-  version = "2.0.2";
+  version = "3.4.1";
 
-  # Python 2 won't have prompt_toolkit 2.x.x
-  # See: https://github.com/NixOS/nixpkgs/blob/f49e2ad3657dede09dc998a4a98fd5033fb52243/pkgs/top-level/python-packages.nix#L3408
-  disabled = python3Packages.isPy27;
-
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "1p4j2dbcfxd3kz86qi519jkqjx1mg5wdgn1gxdjx3lk1vpsd7x04";
+    sha256 = "sha256-8DkwGH4n1g32WMqKBPtgHsXXR2xzXysVQsat7Fysj+I=";
   };
 
-  patches = [
-    (fetchpatch {
-      # TODO: Remove with next pgcli release. Fixes TypeError in tests
-      # https://github.com/dbcli/pgcli/pull/1006
-      url = https://github.com/dbcli/pgcli/commit/351135b61ef9ad3184c49a406544708daf589fe3.patch;
-      sha256 = "08131y0lv1v760i0ypcx2hljx066ks93kp96xkv3bycxnavvcl53";
-      excludes = [ "changelog.rst" ];
-    })
+  propagatedBuildInputs = [
+    cli-helpers
+    click
+    configobj
+    prompt-toolkit
+    psycopg2
+    pygments
+    sqlparse
+    pgspecial
+    setproctitle
+    keyring
+    pendulum
+    sshtunnel
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    cli-helpers click configobj humanize prompt_toolkit psycopg2
-    pygments sqlparse pgspecial setproctitle keyring
-  ];
+  checkInputs = [ pytestCheckHook mock ];
 
-  checkInputs = with python3Packages; [ pytest mock ];
-
-  checkPhase = ''
-    pytest
-  '';
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";
@@ -40,7 +52,8 @@ python3Packages.buildPythonApplication rec {
       Rich command-line interface for PostgreSQL with auto-completion and
       syntax highlighting.
     '';
-    homepage = https://pgcli.com;
+    homepage = "https://pgcli.com";
+    changelog = "https://github.com/dbcli/pgcli/raw/v${version}/changelog.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ dywedir ];
   };

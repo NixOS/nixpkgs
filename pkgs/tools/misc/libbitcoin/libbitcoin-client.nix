@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , boost, libbitcoin, libbitcoin-protocol }:
 
 let
@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
     sha256 = "0a9c00f1pfi8wczbfd1djkvr7di3iw1ynak6if910w01dkhbm6v4";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   propagatedBuildInputs = [ libbitcoin libbitcoin-protocol ];
 
   enableParallelBuilding = true;
@@ -26,11 +26,11 @@ in stdenv.mkDerivation {
     "--with-boost-libdir=${boost.out}/lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bitcoin client query library";
-    homepage = https://github.com/libbitcoin/libbitcoin-client;
+    homepage = "https://github.com/libbitcoin/libbitcoin-client";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [ ];
 
     # AGPL with a lesser clause
     license = licenses.agpl3;

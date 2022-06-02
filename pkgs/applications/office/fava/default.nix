@@ -1,37 +1,61 @@
-{ stdenv, python3, beancount }:
+{ lib, python3, fetchpatch }:
 
-let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
-in
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "fava";
-  version = "1.10";
+  version = "1.21";
+  format = "pyproject";
 
-  src = fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "145995nzgr06qsn619zap0xqa8ckfrp5azga41smyszq97pd01sj";
+    sha256 = "sha256-0aFCKEjmXn6yddgNMi9t4rzqHcN7VBLoz3LEg9apmNY=";
   };
 
-  doCheck = false;
+  patches = [
+    (fetchpatch {
+      # Update werkzeug compatibility
+      url = "https://github.com/beancount/fava/commit/5a99417a42e1d739b1e57fae2d01ff1d146dcbc2.patch";
+      hash = "sha256-Y6IcxZAcFJEYgT8/xBIABdkP+pUdQX1EgSS5uNdSJUE=";
+      excludes = [
+        ".pre-commit-config.yaml"
+      ];
+    })
+  ];
 
-  propagatedBuildInputs = with python3.pkgs;
-    [ 
-      Babel
-      cheroot
-      flaskbabel
-      flask
-      jinja2
-      beancount
-      click
-      markdown2
-      ply
-      simplejson
-    ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
 
-  meta = {
-    homepage = https://beancount.github.io/fava;
+  propagatedBuildInputs = with python3.pkgs; [
+    babel
+    beancount
+    cheroot
+    click
+    flask
+    flaskbabel
+    jaraco_functools
+    jinja2
+    markdown2
+    ply
+    simplejson
+    werkzeug
+  ];
+
+  checkInputs = with python3.pkgs; [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    export HOME=$TEMPDIR
+  '';
+
+  disabledTests = [
+    # runs fava in debug mode, which tries to interpret bash wrapper as Python
+    "test_cli"
+  ];
+
+  meta = with lib; {
     description = "Web interface for beancount";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
+    homepage = "https://beancount.github.io/fava";
+    changelog = "https://beancount.github.io/fava/changelog.html";
+    license = licenses.mit;
+    maintainers = with maintainers; [ bhipple ];
   };
 }

@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.peerflix;
+  opt = options.services.peerflix;
 
   configFile = pkgs.writeText "peerflix-config.json" ''
     {
@@ -32,6 +33,7 @@ in {
     downloadDir = mkOption {
       description = "Peerflix temporary download directory.";
       default = "${cfg.stateDir}/torrents";
+      defaultText = literalExpression ''"''${config.${opt.stateDir}}/torrents"'';
       type = types.path;
     };
   };
@@ -39,6 +41,10 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}' - peerflix - - -"
+    ];
+
     systemd.services.peerflix = {
       description = "Peerflix Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -47,17 +53,19 @@ in {
 
       preStart = ''
         mkdir -p "${cfg.stateDir}"/{torrents,.config/peerflix-server}
-        if [ "$(id -u)" = 0 ]; then chown -R peerflix "${cfg.stateDir}"; fi
         ln -fs "${configFile}" "${cfg.stateDir}/.config/peerflix-server/config.json"
       '';
 
       serviceConfig = {
         ExecStart = "${pkgs.nodePackages.peerflix-server}/bin/peerflix-server";
-        PermissionsStartOnly = true;
         User = "peerflix";
       };
     };
 
-    users.users.peerflix.uid = config.ids.uids.peerflix;
+    users.users.peerflix = {
+      isSystemUser = true;
+      group = "peerflix";
+    };
+    users.groups.peerflix = {};
   };
 }

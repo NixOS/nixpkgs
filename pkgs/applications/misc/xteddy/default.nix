@@ -1,19 +1,22 @@
-{ stdenv, fetchzip, pkg-config, xorg, imlib2, makeWrapper }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, xorg, imlib2, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "xteddy-${version}";
-  version = "2.2";
-  src = fetchzip {
-    url = "https://deb.debian.org/debian/pool/main/x/xteddy/xteddy_${version}.orig.tar.gz";
-    sha256 = "0sap4fqvs0888ymf5ga10p3n7n5kr35j38kfsfd7nj0xm4hmcma3";
+  pname = "xteddy";
+  version = "2.2-5";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "games-team";
+    repo = pname;
+    rev = "debian/${version}";
+    sha256 = "0rm7w78d6qajq4fvi4agyqm0c70f3c1i0cy2jdb6kqql2k8w78qy";
   };
+
   nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ imlib2 xorg.libX11 xorg.libXext ];
 
-  makeFlags = [ "LIBS=-lXext" ];
+  patches = [ "${src}/debian/patches/10_libXext.patch" "${src}/debian/patches/wrong-man-page-section.patch" ];
 
   postPatch = ''
-    sed -i 's/man 1 xteddy/man 6 xteddy/' xteddy.c
     sed -i "s:/usr/games/xteddy:$out/bin/xteddy:" xtoys
     sed -i "s:/usr/share/xteddy:$out/share/xteddy:" xtoys
   '';
@@ -27,12 +30,12 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # this is needed, because xteddy expects images to reside
     # in the current working directory
-    wrapProgram $out/bin/xteddy --run "cd $out/share/images/"
+    wrapProgram $out/bin/xteddy --chdir "$out/share/images/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cuddly teddy bear for your X desktop";
-    homepage = https://weber.itn.liu.se/~stegu/xteddy/;
+    homepage = "https://weber.itn.liu.se/~stegu/xteddy/";
     license = licenses.gpl2;
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.linux;

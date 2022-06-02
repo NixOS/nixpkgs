@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, luajit, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, luajit, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "wrk2-${version}";
+  pname = "wrk2";
   version = "4.0.0-${builtins.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace 'struct luaL_reg ' 'struct luaL_Reg '
   '';
 
-  configurePhase = ":";
+  dontConfigure = true;
   installPhase = ''
     mkdir -p $out/bin
     mv ./wrk $out/bin/wrk2
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Constant throughput, correct latency recording variant of wrk";
-    homepage    = https://github.com/giltene/wrk2;
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
+    homepage    = "https://github.com/giltene/wrk2";
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

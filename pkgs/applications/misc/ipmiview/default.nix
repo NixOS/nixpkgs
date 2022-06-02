@@ -1,33 +1,79 @@
-{ stdenv, fetchurl, patchelf, makeWrapper, xorg, gcc, gcc-unwrapped }:
+{ lib, stdenv
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, patchelf
+, fontconfig
+, freetype
+, gcc
+, gcc-unwrapped
+, iputils
+, psmisc
+, xorg }:
 
 stdenv.mkDerivation rec {
-   name = "IPMIView-${version}";
-   version = "2.14.0";
-   buildVersion = "180213";
+  pname = "IPMIView";
+  version = "2.20.0";
+  buildVersion = "220309";
 
-   src = fetchurl {
-    url = "ftp://ftp.supermicro.com/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
-    sha256 = "1wp22wm7smlsb25x0cck4p660cycfczxj381930crd1qrf68mw4h";
+  src = fetchurl {
+    url = "https://www.supermicro.com/wftp/utility/IPMIView/Linux/IPMIView_${version}_build.${buildVersion}_bundleJRE_Linux_x64.tar.gz";
+    hash = "sha256-qtklBMuK0jb9Ye0IkYM2WYFRMAfZg9tk08a1JQ64cjA=";
   };
 
-   nativeBuildInputs = [ patchelf makeWrapper ];
+  nativeBuildInputs = [ patchelf makeWrapper ];
+  buildPhase = with xorg;
+    let
+      stunnelBinary = if stdenv.hostPlatform.system == "x86_64-linux" then "linux/stunnel64"
+      else if stdenv.hostPlatform.system == "i686-linux" then "linux/stunnel32"
+      else throw "IPMIView is not supported on this platform";
+    in
+  ''
+    runHook preBuild
 
-   buildPhase = with xorg; ''
-     patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/amd64/xawt/libmawt.so
-     patchelf --set-rpath "${gcc-unwrapped.lib}/lib" ./libiKVM64.so
-     patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libXcursor libX11 libXext libXrender libXtst libXi ]}" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/javaws
-     patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/amd64/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
-   '';
+    patchelf --set-rpath "${lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/libawt_xawt.so
+    patchelf --set-rpath "${lib.makeLibraryPath [ freetype ]}" ./jre/lib/libfontmanager.so
+    patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./BMCSecurity/${stunnelBinary}
 
-   installPhase = ''
-     mkdir -p $out/bin
-     cp -R . $out/
-     makeWrapper $out/jre/bin/java $out/bin/IPMIView \
-       --prefix PATH : "$out/jre/bin" \
-       --add-flags "-jar $out/IPMIView20.jar"
-   '';
+    runHook postBuild
+  '';
 
-   meta = with stdenv.lib; {
+  desktopItem = makeDesktopItem rec {
+    name = "IPMIView";
+    exec = "IPMIView";
+    desktopName = name;
+    genericName = "Supermicro BMC manager";
+    categories = [ "Network" ];
+  };
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin
+    cp -R . $out/
+
+    ln -s ${desktopItem}/share $out/share
+
+    # LD_LIBRARY_PATH: fontconfig is used from java code
+    # PATH: iputils is used for ping, and psmisc is for killall
+    # WORK_DIR: unfortunately the ikvm related binaries are loaded from
+    #           and user configuration is written to files in the CWD
+    makeWrapper $out/jre/bin/java $out/bin/IPMIView \
+      --set LD_LIBRARY_PATH "${lib.makeLibraryPath [ fontconfig gcc-unwrapped.lib ]}" \
+      --prefix PATH : "$out/jre/bin:${iputils}/bin:${psmisc}/bin" \
+      --add-flags "-jar $out/IPMIView20.jar" \
+      --run 'WORK_DIR=''${XDG_DATA_HOME:-~/.local/share}/ipmiview
+             mkdir -p $WORK_DIR
+             ln -snf '$out'/iKVM.jar '$out'/iKVM_ssl.jar '$out'/libiKVM* '$out'/libSharedLibrary* $WORK_DIR
+             cd $WORK_DIR'
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     license = licenses.unfree;
-   };
-  }
+    maintainers = with maintainers; [ vlaci ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
+  };
+}

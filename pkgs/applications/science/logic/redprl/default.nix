@@ -1,28 +1,37 @@
-{ stdenv, fetchgit, mlton }:
+{ lib, stdenv, fetchFromGitHub, mlton }:
+
 stdenv.mkDerivation {
-  name = "redprl-2017-03-28";
-  src = fetchgit {
-    url = "https://github.com/RedPRL/sml-redprl.git";
-    rev = "bdf027de732e4a8d10f9f954389dfff0c822f18b";
-    sha256 = "0cihwnd78d3ksxp6mppifm7xpi3fsii5mixvicajy87ggw8z305c";
+  pname = "redprl";
+  version = "unstable-2019-11-04";
+
+  src = fetchFromGitHub {
+    owner = "RedPRL";
+    repo = "sml-redprl";
+    rev = "c72190de76f7ed1cfbe1d2046c96e99ac5022b0c";
     fetchSubmodules = true;
+    sha256 = "sha256-xrQT5o0bsIN+mCYUOz9iY4+j3HGROb1I6R2ADcLy8n4=";
   };
+
   buildInputs = [ mlton ];
-  patchPhase = ''
+
+  postPatch = ''
     patchShebangs ./script/
   '';
+
   buildPhase = ''
     ./script/mlton.sh
   '';
+
   installPhase = ''
     mkdir -p $out/bin
     mv ./bin/redprl $out/bin
   '';
-  meta = {
+
+  meta = with lib; {
     description = "A proof assistant for Nominal Computational Type Theory";
-    homepage = http://www.redprl.org/;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.acowley ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://www.redprl.org/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ acowley ];
+    platforms = platforms.unix;
   };
 }

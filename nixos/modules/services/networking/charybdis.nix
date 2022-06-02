@@ -21,14 +21,14 @@ in
       enable = mkEnableOption "Charybdis IRC daemon";
 
       config = mkOption {
-        type = types.string;
+        type = types.str;
         description = ''
           Charybdis IRC daemon configuration file.
         '';
       };
 
       statedir = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/lib/charybdis";
         description = ''
           Location of the state directory of charybdis.
@@ -36,7 +36,7 @@ in
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "ircd";
         description = ''
           Charybdis IRC daemon user.
@@ -44,7 +44,7 @@ in
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "ircd";
         description = ''
           Charybdis IRC daemon group.
@@ -71,38 +71,42 @@ in
 
   config = mkIf cfg.enable (lib.mkMerge [
     {
-      users.users = singleton {
-        name = cfg.user;
+      users.users.${cfg.user} = {
         description = "Charybdis IRC daemon user";
         uid = config.ids.uids.ircd;
         group = cfg.group;
       };
 
-      users.groups = singleton {
-        name = cfg.group;
+      users.groups.${cfg.group} = {
         gid = config.ids.gids.ircd;
       };
+
+      systemd.tmpfiles.rules = [
+        "d ${cfg.statedir} - ${cfg.user} ${cfg.group} - -"
+      ];
+
+      environment.etc."charybdis/ircd.conf".source = configFile;
 
       systemd.services.charybdis = {
         description = "Charybdis IRC daemon";
         wantedBy = [ "multi-user.target" ];
+        reloadIfChanged = true;
+        restartTriggers = [
+          configFile
+        ];
         environment = {
           BANDB_DBPATH = "${cfg.statedir}/ban.db";
         };
         serviceConfig = {
-          ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile ${configFile}";
+          ExecStart   = "${charybdis}/bin/charybdis -foreground -logfile /dev/stdout -configfile /etc/charybdis/ircd.conf";
+          ExecReload = "${coreutils}/bin/kill -HUP $MAINPID";
           Group = cfg.group;
           User = cfg.user;
-          PermissionsStartOnly = true; # preStart needs to run with root permissions
         };
-        preStart = ''
-          ${coreutils}/bin/mkdir -p ${cfg.statedir}
-          ${coreutils}/bin/chown ${cfg.user}:${cfg.group} ${cfg.statedir}
-        '';
       };
 
     }
-    
+
     (mkIf (cfg.motd != null) {
       environment.etc."charybdis/ircd.motd".text = cfg.motd;
     })

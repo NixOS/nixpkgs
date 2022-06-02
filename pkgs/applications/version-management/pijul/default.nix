@@ -1,37 +1,41 @@
-{ stdenv, fetchurl, rustPlatform, darwin, openssl, libsodium, pkgconfig }:
+{ lib, stdenv
+, fetchCrate
+, rustPlatform
+, pkg-config
+, libsodium
+, openssl
+, xxHash
+, zstd
+, darwin
+, gitImportSupport ? true
+, libgit2 ? null
+}:
 
-with rustPlatform;
+rustPlatform.buildRustPackage rec {
+  pname = "pijul";
+  version = "1.0.0-beta.1";
 
-buildRustPackage rec {
-  name = "pijul-${version}";
-  version = "0.11.0";
-
-  src = fetchurl {
-    url = "https://pijul.org/releases/${name}.tar.gz";
-    sha256 = "e60793ab124e9054c1d5509698acbae507ebb2fab5364d964067bc9ae8b6b5e5";
+  src = fetchCrate {
+    inherit version pname;
+    sha256 = "sha256-XdbZFWtHKXjcGV1vYn7MYdevW+Vc/IKON1DOU49Kzlo=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-
-  postInstall = ''
-    mkdir -p $out/share/{bash-completion/completions,zsh/site-functions,fish/vendor_completions.d}
-    $out/bin/pijul generate-completions --bash > $out/share/bash-completion/completions/pijul
-    $out/bin/pijul generate-completions --zsh > $out/share/zsh/site-functions/_pijul
-    $out/bin/pijul generate-completions --fish > $out/share/fish/vendor_completions.d/pijul.fish
-  '';
-
-  buildInputs = [ openssl libsodium ] ++ stdenv.lib.optionals stdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [ Security ]);
+  cargoSha256 = "sha256-9kPeJ0tOhA4oqFOdwGDkXMnNViklMlNO7VbbWXYrk3I=";
 
   doCheck = false;
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl libsodium xxHash zstd ]
+    ++ (lib.optionals gitImportSupport [ libgit2 ])
+    ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      CoreServices Security SystemConfiguration
+    ]));
 
-  cargoSha256 = "1r76azmka1d76ff0ddfhzr24b0ry496qrp13945i3vs0fgzk2sdz";
+  buildFeatures = lib.optional gitImportSupport "git";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A distributed version control system";
-    homepage = https://pijul.org;
+    homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];
-    maintainers = [ maintainers.gal_bolle ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ gal_bolle dywedir fabianhjr ];
   };
 }

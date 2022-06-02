@@ -1,24 +1,25 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, utillinux, which
-, procps, libcap_ng, openssl, python27 , perl
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, util-linux, which
+, procps, libcap_ng, openssl, python3 , perl
 , kernel ? null }:
 
-with stdenv.lib;
+with lib;
 
 let
   _kernel = kernel;
+  pythonEnv = python3.withPackages (ps: with ps; [ six ]);
 in stdenv.mkDerivation rec {
-  version = "2.5.4";
-  name = "openvswitch-${version}";
+  version = "2.17.0";
+  pname = "openvswitch";
 
   src = fetchurl {
-    url = "http://openvswitch.org/releases/${name}.tar.gz";
-    sha256 = "1lji87wg953lqcdf02f1zv2m54vhd2x9jd03bb91lnlb4qlhifiv";
+    url = "https://www.openvswitch.org/releases/${pname}-${version}.tar.gz";
+    sha256 = "sha256-4Dv6t8qC2Bp9OjbeTzkKO1IQ4/OWV2cfkih3zU6m3HM=";
   };
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper utillinux openssl libcap_ng python27
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ util-linux openssl libcap_ng pythonEnv
                   perl procps which ];
 
   configureFlags = [
@@ -36,28 +37,14 @@ in stdenv.mkDerivation rec {
 
   postBuild = ''
     # fix tests
-    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${python27.interpreter}'
-    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${python27.interpreter}'
+    substituteInPlace xenserver/opt_xensource_libexec_interface-reconfigure --replace '/usr/bin/env python' '${pythonEnv.interpreter}'
+    substituteInPlace vtep/ovs-vtep --replace '/usr/bin/env python' '${pythonEnv.interpreter}'
   '';
 
   enableParallelBuilding = true;
   doCheck = false; # bash-completion test fails with "compgen: command not found"
 
-  postInstall = ''
-    cp debian/ovs-monitor-ipsec $out/share/openvswitch/scripts
-    makeWrapper \
-      $out/share/openvswitch/scripts/ovs-monitor-ipsec \
-      $out/bin/ovs-monitor-ipsec \
-      --prefix PYTHONPATH : "$out/share/openvswitch/python"
-    substituteInPlace $out/share/openvswitch/scripts/ovs-monitor-ipsec \
-      --replace "UnixctlServer.create(None)" "UnixctlServer.create(os.environ['UNIXCTLPATH'])"
-    substituteInPlace $out/share/openvswitch/scripts/ovs-monitor-ipsec \
-      --replace "self.psk_file" "root_prefix + self.psk_file"
-    substituteInPlace $out/share/openvswitch/scripts/ovs-monitor-ipsec \
-      --replace "self.cert_dir" "root_prefix + self.cert_dir"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     platforms = platforms.linux;
     description = "A multilayer virtual switch";
     longDescription =
@@ -71,7 +58,8 @@ in stdenv.mkDerivation rec {
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
       '';
-    homepage = http://openvswitch.org/;
+    homepage = "https://www.openvswitch.org/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ netixx kmcopper ];
   };
 }

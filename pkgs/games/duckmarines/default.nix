@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
+{ lib, stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
 
-let
+stdenv.mkDerivation rec {
   pname = "duckmarines";
   version = "1.0c";
 
@@ -11,18 +11,13 @@ let
 
   desktopItem = makeDesktopItem {
     name = "duckmarines";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Duck-themed action puzzle video game";
     desktopName = "Duck Marines";
     genericName = "duckmarines";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
-
-in
-
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/SimonLarsen/${pname}/releases/download/v${version}/${pname}-1.0c.love";
@@ -32,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ lua love ];
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase =
   ''
@@ -48,13 +43,13 @@ stdenv.mkDerivation rec {
     ln -s ${desktopItem}/share/applications/* $out/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Duck-themed action puzzle video game";
     maintainers = with maintainers; [ leenaars ];
     platforms = platforms.linux;
     hydraPlatforms = [];
     license = licenses.free;
-    downloadPage = http://tangramgames.dk/games/duckmarines;
+    downloadPage = "http://tangramgames.dk/games/duckmarines";
   };
 
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "alchemy-${version}";
+  pname = "alchemy";
   version = "008";
 
   enableParallelBuilding = true;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/alchemy
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Drawing application";
     longDescription = ''
       Alchemy is an open drawing project aimed at exploring how we can sketch,
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Experimental in nature, Alchemy lets you brainstorm visually to explore
       an expanded range of ideas and possibilities in a serendipitous way.
     '';
-    homepage = http://al.chemy.org/;
+    homepage = "http://al.chemy.org/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.marcweber ];
     platforms = platforms.linux;

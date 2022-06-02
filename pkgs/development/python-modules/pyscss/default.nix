@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , pytest
@@ -11,28 +11,31 @@
 
 buildPythonPackage rec {
   pname = "pyScss";
-  version = "1.3.5";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
-    sha256 = "0lfsan74vcw6dypb196gmbprvlbran8p7w6czy8hyl2b1l728mhz";
-    rev = "v1.3.5";
     repo = "pyScss";
     owner = "Kronuz";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-z0y4z+/JE6rZWHAvps/taDZvutyVhxxs2gMujV5rNu4=";
   };
 
   checkInputs = [ pytest ];
 
   propagatedBuildInputs = [ six ]
-    ++ (stdenv.lib.optionals (pythonOlder "3.4") [ enum34 pathlib ])
-    ++ (stdenv.lib.optionals (pythonOlder "2.7") [ ordereddict ]);
+    ++ (lib.optionals (pythonOlder "3.4") [ enum34 pathlib ])
+    ++ (lib.optionals (pythonOlder "2.7") [ ordereddict ]);
 
+  # Test suite is broken.
+  # See https://github.com/Kronuz/pyScss/issues/415
+  doCheck = false;
   checkPhase = ''
     py.test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Scss compiler for Python";
-    homepage = http://pyscss.readthedocs.org/en/latest/;
+    homepage = "https://pyscss.readthedocs.org/en/latest/";
     license = licenses.mit;
   };
 

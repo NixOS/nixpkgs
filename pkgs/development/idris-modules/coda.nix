@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "coda";
+  pname = "coda";
   version = "2018-01-25";
 
   ipkgName = "Coda";
@@ -17,7 +17,7 @@ build-idris-package  {
 
   meta = {
     description = "Some Idris libraries including nodejs bindings and ISO8601 Date and Time";
-    homepage = https://github.com/ostera/idris-coda;
+    homepage = "https://github.com/ostera/idris-coda";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

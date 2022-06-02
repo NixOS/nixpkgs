@@ -1,7 +1,7 @@
 { stdenv, fetchurl, bdftopcf, mkfontdir, mkfontscale }:
 
 stdenv.mkDerivation rec {
-  name = "dosemu-fonts-${version}";
+  pname = "dosemu-fonts";
   version = "1.4.0";
 
   src = fetchurl {
@@ -31,6 +31,5 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Various fonts from the DOSEmu project";
-    platforms = stdenv.lib.platforms.linux;
   };
 }

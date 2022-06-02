@@ -1,43 +1,80 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-, wrapt
-, typing
-, pyserial
-, nose
-, mock
-, hypothesis
 , future
-, pytest
-, pytest-timeout }:
+, hypothesis
+, packaging
+, parameterized
+, msgpack
+, pyserial
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, typing-extensions
+, wrapt
+}:
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "3.1.0";
+  version = "4.0.0";
+  format = "setuptools";
 
-  # PyPI tarball is missing some tests and is missing __init__.py in test
-  # directory causing the tests to fail. See:
-  # https://github.com/hardbyte/python-can/issues/518
+  disabled = pythonOlder "3.6";
+
   src = fetchFromGitHub {
-    repo = pname;
     owner = "hardbyte";
-    rev = "v${version}";
-    sha256 = "01lfsh7drm4qvv909x9i0vnhskdh27mcb5xa86sv9m3zfpq8cjis";
+    repo = pname;
+    rev = version;
+    hash = "sha256-/z7zBfVbO7x4UtzWOXolH2YrtYWgsvRLObWwz8sqOEc=";
   };
 
-  propagatedBuildInputs = [ wrapt pyserial ] ++ lib.optional (pythonOlder "3.5") typing;
-  checkInputs = [ nose mock pytest pytest-timeout hypothesis future ];
+  propagatedBuildInputs = [
+    msgpack
+    packaging
+    pyserial
+    typing-extensions
+    wrapt
+  ];
 
-  # Add the scripts to PATH
-  checkPhase = ''
-    PATH=$out/bin:$PATH pytest -c /dev/null
+  checkInputs = [
+    future
+    hypothesis
+    parameterized
+    pytest-timeout
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace " --cov=can --cov-config=tox.ini --cov-report=xml --cov-report=term" ""
   '';
 
+  disabledTestPaths = [
+    # We don't support all interfaces
+    "test/test_interface_canalystii.py"
+  ];
+
+  disabledTests = [
+    # Tests require access socket
+    "BasicTestUdpMulticastBusIPv4"
+    "BasicTestUdpMulticastBusIPv6"
+    # pytest.approx is not supported in a boolean context (since pytest7)
+    "test_pack_unpack"
+    "test_receive"
+  ];
+
+  preCheck = ''
+    export PATH="$PATH:$out/bin";
+  '';
+
+  pythonImportsCheck = [
+    "can"
+  ];
+
   meta = with lib; {
-    homepage = https://github.com/hardbyte/python-can;
     description = "CAN support for Python";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ sorki ];
+    homepage = "https://python-can.readthedocs.io";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ fab sorki ];
   };
 }

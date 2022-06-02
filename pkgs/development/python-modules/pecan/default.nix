@@ -1,38 +1,60 @@
-{ stdenv
+{ lib
 , fetchPypi
 , buildPythonPackage
-# Python deps
-, singledispatch
 , logutils
-, webtest
 , Mako
+, webtest
+, pythonOlder
+, pytestCheckHook
 , genshi
-, Kajiki
-, sqlalchemy
 , gunicorn
 , jinja2
+, six
+, sqlalchemy
 , virtualenv
-, mock
 }:
 
 buildPythonPackage rec {
   pname = "pecan";
-  version = "1.3.2";
+  version = "1.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "24f06cf88a488b75f433e62b33c1c97e4575d0cd91eec9eec841a81cecfd6de3";
+    sha256 = "sha256-LL0O7btXR8BM3xjEquTxxunZUPOvcK8lRLB09+16BIA=";
   };
 
-  propagatedBuildInputs = [ singledispatch logutils ];
-  buildInputs = [
-    webtest Mako genshi Kajiki sqlalchemy gunicorn jinja2 virtualenv
+  propagatedBuildInputs = [
+    logutils
+    Mako
+    webtest
+    six
   ];
 
-  checkInputs = [ mock ];
+  checkInputs = [
+    pytestCheckHook
+    genshi
+    gunicorn
+    jinja2
+    sqlalchemy
+    virtualenv
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Pecan";
-    homepage = "https://github.com/pecan/pecan";
+  pytestFlagsArray = [
+    "--pyargs pecan"
+  ];
+
+  pythonImportsCheck = [
+    "pecan"
+  ];
+
+  meta = with lib; {
+    changelog = "https://pecan.readthedocs.io/en/latest/changes.html";
+    description = "WSGI object-dispatching web framework";
+    homepage = "https://www.pecanpy.org/";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ applePrincess ];
   };
 }

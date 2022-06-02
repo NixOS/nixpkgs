@@ -1,279 +1,362 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p qemu ec2_ami_tools jq ec2_api_tools awscli
+#!nix-shell -p awscli -p jq -p qemu -i bash
+# shellcheck shell=bash
+#
+# Future Deprecation?
+# This entire thing should probably be replaced with a generic terraform config
 
-# To start with do: nix-shell -p awscli --run "aws configure"
+# Uploads and registers NixOS images built from the
+# <nixos/release.nix> amazonImage attribute. Images are uploaded and
+# registered via a home region, and then copied to other regions.
 
-set -e
-set -o pipefail
+# The home region requires an s3 bucket, and an IAM role named "vmimport"
+# (by default) with access to the S3 bucket. The name can be
+# configured with the "service_role_name" variable. Configuration of the
+# vmimport role is documented in
+# https://docs.aws.amazon.com/vm-import/latest/userguide/vmimport-image-import.html
 
-version=$(nix-instantiate --eval --strict '<nixpkgs>' -A lib.version | sed s/'"'//g)
-major=${version:0:5}
-echo "NixOS version is $version ($major)"
+# set -x
+set -euo pipefail
 
-stateDir=/home/deploy/amis/ec2-image-$version
-echo "keeping state in $stateDir"
-mkdir -p $stateDir
+var () { true; }
 
-rm -f ec2-amis.nix
+# configuration
+var ${state_dir:=$HOME/amis/ec2-images}
+var ${home_region:=eu-west-1}
+var ${bucket:=nixos-amis}
+var ${service_role_name:=vmimport}
 
-types="hvm"
-stores="ebs"
-regions="eu-west-1 eu-west-2 eu-west-3 eu-central-1 us-east-1 us-east-2 us-west-1 us-west-2 ca-central-1 ap-southeast-1 ap-southeast-2 ap-northeast-1 ap-northeast-2 sa-east-1 ap-south-1"
+# Output of the command:
+# > aws ec2 describe-regions --all-regions --query "Regions[].{Name:RegionName}" --output text | sort
+var ${regions:=
+         af-south-1
+         ap-east-1
+         ap-northeast-1
+         ap-northeast-2
+         ap-northeast-3
+         ap-south-1
+         ap-southeast-1
+         ap-southeast-2
+         ap-southeast-3
+         ca-central-1
+         eu-central-1
+         eu-north-1
+         eu-south-1
+         eu-west-1
+         eu-west-2
+         eu-west-3
+         me-south-1
+         sa-east-1
+         us-east-1
+         us-east-2
+         us-west-1
+         us-west-2
+     }
 
-for type in $types; do
-    link=$stateDir/$type
-    imageFile=$link/nixos.qcow2
-    system=x86_64-linux
-    arch=x86_64
+regions=($regions)
 
-    # Build the image.
-    if ! [ -L $link ]; then
-        if [ $type = pv ]; then hvmFlag=false; else hvmFlag=true; fi
+log() {
+    echo "$@" >&2
+}
 
-        echo "building image type '$type'..."
-        nix-build -o $link \
-            '<nixpkgs/nixos>' \
-            -A config.system.build.amazonImage \
-            --arg configuration "{ imports = [ <nixpkgs/nixos/maintainers/scripts/ec2/amazon-image.nix> ]; ec2.hvm = $hvmFlag; }"
+if [ "$#" -ne 1 ]; then
+    log "Usage: ./upload-amazon-image.sh IMAGE_OUTPUT"
+    exit 1
+fi
+
+# result of the amazon-image from nixos/release.nix
+store_path=$1
+
+if [ ! -e "$store_path" ]; then
+    log "Store path: $store_path does not exist, fetching..."
+    nix-store --realise "$store_path"
+fi
+
+if [ ! -d "$store_path" ]; then
+    log "store_path: $store_path is not a directory. aborting"
+    exit 1
+fi
+
+read_image_info() {
+    if [ ! -e "$store_path/nix-support/image-info.json" ]; then
+        log "Image missing metadata"
+        exit 1
+    fi
+    jq -r "$1" "$store_path/nix-support/image-info.json"
+}
+
+# We handle a single image per invocation, store all attributes in
+# globals for convenience.
+zfs_disks=$(read_image_info .disks)
+is_zfs_image=
+if jq -e .boot <<< "$zfs_disks"; then
+  is_zfs_image=1
+  zfs_boot=".disks.boot"
+fi
+image_label="$(read_image_info .label)${is_zfs_image:+-ZFS}"
+image_system=$(read_image_info .system)
+image_files=( $(read_image_info ".disks.root.file") )
+
+image_logical_bytes=$(read_image_info "${zfs_boot:-.disks.root}.logical_bytes")
+
+if [[ -n "$is_zfs_image" ]]; then
+  image_files+=( $(read_image_info .disks.boot.file) )
+fi
+
+# Derived attributes
+
+image_logical_gigabytes=$(((image_logical_bytes-1)/1024/1024/1024+1)) # Round to the next GB
+
+case "$image_system" in
+    aarch64-linux)
+        amazon_arch=arm64
+        ;;
+    x86_64-linux)
+        amazon_arch=x86_64
+        ;;
+    *)
+        log "Unknown system: $image_system"
+        exit 1
+esac
+
+image_name="NixOS-${image_label}-${image_system}"
+image_description="NixOS ${image_label} ${image_system}"
+
+log "Image Details:"
+log " Name: $image_name"
+log " Description: $image_description"
+log " Size (gigabytes): $image_logical_gigabytes"
+log " System: $image_system"
+log " Amazon Arch: $amazon_arch"
+
+read_state() {
+    local state_key=$1
+    local type=$2
+
+    cat "$state_dir/$state_key.$type" 2>/dev/null || true
+}
+
+write_state() {
+    local state_key=$1
+    local type=$2
+    local val=$3
+
+    mkdir -p "$state_dir"
+    echo "$val" > "$state_dir/$state_key.$type"
+}
+
+wait_for_import() {
+    local region=$1
+    local task_id=$2
+    local state snapshot_id
+    log "Waiting for import task $task_id to be completed"
+    while true; do
+        read -r state message snapshot_id < <(
+            aws ec2 describe-import-snapshot-tasks --region "$region" --import-task-ids "$task_id" | \
+                jq -r '.ImportSnapshotTasks[].SnapshotTaskDetail | "\(.Status) \(.StatusMessage) \(.SnapshotId)"'
+        )
+        log " ... state=$state message=$message snapshot_id=$snapshot_id"
+        case "$state" in
+            active)
+                sleep 10
+                ;;
+            completed)
+                echo "$snapshot_id"
+                return
+                ;;
+            *)
+                log "Unexpected snapshot import state: '${state}'"
+                log "Full response: "
+                aws ec2 describe-import-snapshot-tasks --region "$region" --import-task-ids "$task_id" >&2
+                exit 1
+                ;;
+        esac
+    done
+}
+
+wait_for_image() {
+    local region=$1
+    local ami_id=$2
+    local state
+    log "Waiting for image $ami_id to be available"
+
+    while true; do
+        read -r state < <(
+            aws ec2 describe-images --image-ids "$ami_id" --region "$region" | \
+                jq -r ".Images[].State"
+        )
+        log " ... state=$state"
+        case "$state" in
+            pending)
+                sleep 10
+                ;;
+            available)
+                return
+                ;;
+            *)
+                log "Unexpected AMI state: '${state}'"
+                exit 1
+                ;;
+        esac
+    done
+}
+
+
+make_image_public() {
+    local region=$1
+    local ami_id=$2
+
+    wait_for_image "$region" "$ami_id"
+
+    log "Making image $ami_id public"
+
+    aws ec2 modify-image-attribute \
+        --image-id "$ami_id" --region "$region" --launch-permission 'Add={Group=all}' >&2
+}
+
+upload_image() {
+    local region=$1
+
+    for image_file in "${image_files[@]}"; do
+        local aws_path=${image_file#/}
+
+        if [[ -n "$is_zfs_image" ]]; then
+            local suffix=${image_file%.*}
+            suffix=${suffix##*.}
+        fi
+
+        local state_key="$region.$image_label${suffix:+.${suffix}}.$image_system"
+        local task_id
+        task_id=$(read_state "$state_key" task_id)
+        local snapshot_id
+        snapshot_id=$(read_state "$state_key" snapshot_id)
+        local ami_id
+        ami_id=$(read_state "$state_key" ami_id)
+
+        if [ -z "$task_id" ]; then
+            log "Checking for image on S3"
+            if ! aws s3 ls --region "$region" "s3://${bucket}/${aws_path}" >&2; then
+                log "Image missing from aws, uploading"
+                aws s3 cp --region "$region" "$image_file" "s3://${bucket}/${aws_path}" >&2
+            fi
+
+            log "Importing image from S3 path s3://$bucket/$aws_path"
+
+            task_id=$(aws ec2 import-snapshot --role-name "$service_role_name" --disk-container "{
+              \"Description\": \"nixos-image-${image_label}-${image_system}\",
+              \"Format\": \"vhd\",
+              \"UserBucket\": {
+                  \"S3Bucket\": \"$bucket\",
+                  \"S3Key\": \"$aws_path\"
+              }
+            }" --region "$region" | jq -r '.ImportTaskId')
+
+            write_state "$state_key" task_id "$task_id"
+        fi
+
+        if [ -z "$snapshot_id" ]; then
+            snapshot_id=$(wait_for_import "$region" "$task_id")
+            write_state "$state_key" snapshot_id "$snapshot_id"
+        fi
+    done
+
+    if [ -z "$ami_id" ]; then
+        log "Registering snapshot $snapshot_id as AMI"
+
+        local block_device_mappings=(
+            "DeviceName=/dev/xvda,Ebs={SnapshotId=$snapshot_id,VolumeSize=$image_logical_gigabytes,DeleteOnTermination=true,VolumeType=gp3}"
+        )
+
+        if [[ -n "$is_zfs_image" ]]; then
+            local root_snapshot_id=$(read_state "$region.$image_label.root.$image_system" snapshot_id)
+
+            local root_image_logical_bytes=$(read_image_info ".disks.root.logical_bytes")
+            local root_image_logical_gigabytes=$(((root_image_logical_bytes-1)/1024/1024/1024+1)) # Round to the next GB
+
+            block_device_mappings+=(
+                "DeviceName=/dev/xvdb,Ebs={SnapshotId=$root_snapshot_id,VolumeSize=$root_image_logical_gigabytes,DeleteOnTermination=true,VolumeType=gp3}"
+            )
+        fi
+
+
+        local extra_flags=(
+            --root-device-name /dev/xvda
+            --sriov-net-support simple
+            --ena-support
+            --virtualization-type hvm
+        )
+
+        block_device_mappings+=("DeviceName=/dev/sdb,VirtualName=ephemeral0")
+        block_device_mappings+=("DeviceName=/dev/sdc,VirtualName=ephemeral1")
+        block_device_mappings+=("DeviceName=/dev/sdd,VirtualName=ephemeral2")
+        block_device_mappings+=("DeviceName=/dev/sde,VirtualName=ephemeral3")
+
+        ami_id=$(
+            aws ec2 register-image \
+                --name "$image_name" \
+                --description "$image_description" \
+                --region "$region" \
+                --architecture $amazon_arch \
+                --block-device-mappings "${block_device_mappings[@]}" \
+                --boot-mode $(read_image_info .boot_mode) \
+                "${extra_flags[@]}" \
+                | jq -r '.ImageId'
+              )
+
+        write_state "$state_key" ami_id "$ami_id"
     fi
 
-    for store in $stores; do
+    [[ -v PRIVATE ]] || make_image_public "$region" "$ami_id"
 
-        bucket=nixos-amis
-        bucketDir="$version-$type-$store"
+    echo "$ami_id"
+}
 
-        prevAmi=
-        prevRegion=
+copy_to_region() {
+    local region=$1
+    local from_region=$2
+    local from_ami_id=$3
 
-        for region in $regions; do
+    state_key="$region.$image_label.$image_system"
+    ami_id=$(read_state "$state_key" ami_id)
 
-            name=nixos-$version-$arch-$type-$store
-            description="NixOS $system $version ($type-$store)"
+    if [ -z "$ami_id" ]; then
+        log "Copying $from_ami_id to $region"
+        ami_id=$(
+            aws ec2 copy-image \
+                --region "$region" \
+                --source-region "$from_region" \
+                --source-image-id "$from_ami_id" \
+                --name "$image_name" \
+                --description "$image_description" \
+                | jq -r '.ImageId'
+              )
 
-            amiFile=$stateDir/$region.$type.$store.ami-id
+        write_state "$state_key" ami_id "$ami_id"
+    fi
 
-            if ! [ -e $amiFile ]; then
+    [[ -v PRIVATE ]] || make_image_public "$region" "$ami_id"
 
-                echo "doing $name in $region..."
+    echo "$ami_id"
+}
 
-                if [ -n "$prevAmi" ]; then
-                    ami=$(aws ec2 copy-image \
-                        --region "$region" \
-                        --source-region "$prevRegion" --source-image-id "$prevAmi" \
-                        --name "$name" --description "$description" | jq -r '.ImageId')
-                    if [ "$ami" = null ]; then break; fi
-                else
+upload_all() {
+    home_image_id=$(upload_image "$home_region")
+    jq -n \
+       --arg key "$home_region.$image_system" \
+       --arg value "$home_image_id" \
+       '$ARGS.named'
 
-                    if [ $store = s3 ]; then
+    for region in "${regions[@]}"; do
+        if [ "$region" = "$home_region" ]; then
+            continue
+        fi
+        copied_image_id=$(copy_to_region "$region" "$home_region" "$home_image_id")
 
-                        # Bundle the image.
-                        imageDir=$stateDir/$type-bundled
-
-                        # Convert the image to raw format.
-                        rawFile=$stateDir/$type.raw
-                        if ! [ -e $rawFile ]; then
-                            qemu-img convert -f qcow2 -O raw $imageFile $rawFile.tmp
-                            mv $rawFile.tmp $rawFile
-                        fi
-
-                        if ! [ -d $imageDir ]; then
-                            rm -rf $imageDir.tmp
-                            mkdir -p $imageDir.tmp
-                            ec2-bundle-image \
-                                -d $imageDir.tmp \
-                                -i $rawFile --arch $arch \
-                                --user "$AWS_ACCOUNT" -c "$EC2_CERT" -k "$EC2_PRIVATE_KEY"
-                            mv $imageDir.tmp $imageDir
-                        fi
-
-                        # Upload the bundle to S3.
-                        if ! [ -e $imageDir/uploaded ]; then
-                            echo "uploading bundle to S3..."
-                            ec2-upload-bundle \
-                                -m $imageDir/$type.raw.manifest.xml \
-                                -b "$bucket/$bucketDir" \
-                                -a "$AWS_ACCESS_KEY_ID" -s "$AWS_SECRET_ACCESS_KEY" \
-                                --location EU
-                            touch $imageDir/uploaded
-                        fi
-
-                        extraFlags="--image-location $bucket/$bucketDir/$type.raw.manifest.xml"
-
-                    else
-
-                        # Convert the image to vhd format so we don't have
-                        # to upload a huge raw image.
-                        vhdFile=$stateDir/$type.vhd
-                        if ! [ -e $vhdFile ]; then
-                            qemu-img convert -f qcow2 -O vpc $imageFile $vhdFile.tmp
-                            mv $vhdFile.tmp $vhdFile
-                        fi
-
-                        vhdFileLogicalBytes="$(qemu-img info "$vhdFile" | grep ^virtual\ size: | cut -f 2 -d \(  | cut -f 1 -d \ )"
-                        vhdFileLogicalGigaBytes=$(((vhdFileLogicalBytes-1)/1024/1024/1024+1)) # Round to the next GB
-
-                        echo "Disk size is $vhdFileLogicalBytes bytes. Will be registered as $vhdFileLogicalGigaBytes GB."
-
-                        taskId=$(cat $stateDir/$region.$type.task-id 2> /dev/null || true)
-                        volId=$(cat $stateDir/$region.$type.vol-id 2> /dev/null || true)
-                        snapId=$(cat $stateDir/$region.$type.snap-id 2> /dev/null || true)
-
-                        # Import the VHD file.
-                        if [ -z "$snapId" -a -z "$volId" -a -z "$taskId" ]; then
-                            echo "importing $vhdFile..."
-                            taskId=$(ec2-import-volume $vhdFile --no-upload -f vhd \
-                                -O "$AWS_ACCESS_KEY_ID" -W "$AWS_SECRET_ACCESS_KEY" \
-                                -o "$AWS_ACCESS_KEY_ID" -w "$AWS_SECRET_ACCESS_KEY" \
-                                --region "$region" -z "${region}a" \
-                                --bucket "$bucket" --prefix "$bucketDir/" \
-                                | tee /dev/stderr \
-                                | sed 's/.*\(import-vol-[0-9a-z]\+\).*/\1/ ; t ; d')
-                            echo -n "$taskId" > $stateDir/$region.$type.task-id
-                        fi
-
-                        if [ -z "$snapId" -a -z "$volId" ]; then
-                            ec2-resume-import  $vhdFile -t "$taskId" --region "$region" \
-                                -O "$AWS_ACCESS_KEY_ID" -W "$AWS_SECRET_ACCESS_KEY" \
-                                -o "$AWS_ACCESS_KEY_ID" -w "$AWS_SECRET_ACCESS_KEY"
-                        fi
-
-                        # Wait for the volume creation to finish.
-                        if [ -z "$snapId" -a -z "$volId" ]; then
-                            echo "waiting for import to finish..."
-                            while true; do
-                                volId=$(aws ec2 describe-conversion-tasks --conversion-task-ids "$taskId" --region "$region" | jq -r .ConversionTasks[0].ImportVolume.Volume.Id)
-                                if [ "$volId" != null ]; then break; fi
-                                sleep 10
-                            done
-
-                            echo -n "$volId" > $stateDir/$region.$type.vol-id
-                        fi
-
-                        # Delete the import task.
-                        if [ -n "$volId" -a -n "$taskId" ]; then
-                            echo "removing import task..."
-                            ec2-delete-disk-image -t "$taskId" --region "$region" \
-                                -O "$AWS_ACCESS_KEY_ID" -W "$AWS_SECRET_ACCESS_KEY" \
-                                -o "$AWS_ACCESS_KEY_ID" -w "$AWS_SECRET_ACCESS_KEY" || true
-                            rm -f $stateDir/$region.$type.task-id
-                        fi
-
-                        # Create a snapshot.
-                        if [ -z "$snapId" ]; then
-                            echo "creating snapshot..."
-                            # FIXME: this can fail with InvalidVolume.NotFound. Eventual consistency yay.
-                            snapId=$(aws ec2 create-snapshot --volume-id "$volId" --region "$region" --description "$description" | jq -r .SnapshotId)
-                            if [ "$snapId" = null ]; then exit 1; fi
-                            echo -n "$snapId" > $stateDir/$region.$type.snap-id
-                        fi
-
-                        # Wait for the snapshot to finish.
-                        echo "waiting for snapshot to finish..."
-                        while true; do
-                            status=$(aws ec2 describe-snapshots --snapshot-ids "$snapId" --region "$region" | jq -r .Snapshots[0].State)
-                            if [ "$status" = completed ]; then break; fi
-                            sleep 10
-                        done
-
-                        # Delete the volume.
-                        if [ -n "$volId" ]; then
-                            echo "deleting volume..."
-                            aws ec2 delete-volume --volume-id "$volId" --region "$region" || true
-                            rm -f $stateDir/$region.$type.vol-id
-                        fi
-
-                        blockDeviceMappings="DeviceName=/dev/sda1,Ebs={SnapshotId=$snapId,VolumeSize=$vhdFileLogicalGigaBytes,DeleteOnTermination=true,VolumeType=gp2}"
-                        extraFlags=""
-
-                        if [ $type = pv ]; then
-                            extraFlags+=" --root-device-name /dev/sda1"
-                        else
-                            extraFlags+=" --root-device-name /dev/sda1"
-                            extraFlags+=" --sriov-net-support simple"
-                            extraFlags+=" --ena-support"
-                        fi
-
-                        blockDeviceMappings+=" DeviceName=/dev/sdb,VirtualName=ephemeral0"
-                        blockDeviceMappings+=" DeviceName=/dev/sdc,VirtualName=ephemeral1"
-                        blockDeviceMappings+=" DeviceName=/dev/sdd,VirtualName=ephemeral2"
-                        blockDeviceMappings+=" DeviceName=/dev/sde,VirtualName=ephemeral3"
-                    fi
-
-                    if [ $type = hvm ]; then
-                        extraFlags+=" --sriov-net-support simple"
-                        extraFlags+=" --ena-support"
-                    fi
-
-                    # Register the AMI.
-                    if [ $type = pv ]; then
-                        kernel=$(aws ec2 describe-images --owner amazon --filters "Name=name,Values=pv-grub-hd0_1.05-$arch.gz" | jq -r .Images[0].ImageId)
-                        if [ "$kernel" = null ]; then break; fi
-                        echo "using PV-GRUB kernel $kernel"
-                        extraFlags+=" --virtualization-type paravirtual --kernel $kernel"
-                    else
-                        extraFlags+=" --virtualization-type hvm"
-                    fi
-
-                    ami=$(aws ec2 register-image \
-                        --name "$name" \
-                        --description "$description" \
-                        --region "$region" \
-                        --architecture "$arch" \
-                        --block-device-mappings $blockDeviceMappings \
-                        $extraFlags | jq -r .ImageId)
-                    if [ "$ami" = null ]; then break; fi
-                fi
-
-                echo -n "$ami" > $amiFile
-                echo "created AMI $ami of type '$type' in $region..."
-
-            else
-                ami=$(cat $amiFile)
-            fi
-
-            echo "region = $region, type = $type, store = $store, ami = $ami"
-
-            if [ -z "$prevAmi" ]; then
-                prevAmi="$ami"
-                prevRegion="$region"
-            fi
-        done
-
+        jq -n \
+           --arg key "$region.$image_system" \
+           --arg value "$copied_image_id" \
+           '$ARGS.named'
     done
+}
 
-done
-
-for type in $types; do
-    link=$stateDir/$type
-    system=x86_64-linux
-    arch=x86_64
-
-    for store in $stores; do
-
-        for region in $regions; do
-
-            name=nixos-$version-$arch-$type-$store
-            amiFile=$stateDir/$region.$type.$store.ami-id
-            ami=$(cat $amiFile)
-
-            echo "region = $region, type = $type, store = $store, ami = $ami"
-
-            echo -n "waiting for AMI..."
-            while true; do
-                status=$(aws ec2 describe-images --image-ids "$ami" --region "$region" | jq -r .Images[0].State)
-                if [ "$status" = available ]; then break; fi
-                sleep 10
-                echo -n '.'
-            done
-            echo
-
-            # Make the image public.
-            aws ec2 modify-image-attribute \
-                --image-id "$ami" --region "$region" --launch-permission 'Add={Group=all}'
-
-            echo "  \"$major\".$region.$type-$store = \"$ami\";" >> ec2-amis.nix
-        done
-
-    done
-
-done
+upload_all | jq --slurp from_entries

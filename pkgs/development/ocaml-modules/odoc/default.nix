@@ -1,22 +1,30 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, cppo, bos, cmdliner, tyxml }:
+{ lib, fetchurl, buildDunePackage, ocaml
+, astring, cmdliner, cppo, fpath, result, tyxml
+, markup, alcotest, yojson, sexplib, jq
+}:
 
 buildDunePackage rec {
   pname = "odoc";
-  version = "1.3.0";
+  version = "1.5.3";
 
-  src = fetchFromGitHub {
-    owner = "ocaml";
-    repo = pname;
-    rev = version;
-    sha256 = "0hjan5aj5zk8j8qyagv9r4hqm469mh207cv2m6kxwgnw0c3cz7sy";
+  minimumOCamlVersion = "4.02";
+
+  src = fetchurl {
+    url = "https://github.com/ocaml/odoc/releases/download/${version}/odoc-${version}.tbz";
+    sha256 = "0idzidmz7y10xkwcf4aih0mdvkipxk1gzi4anhnbbi2q2s0nzdzj";
   };
 
-  buildInputs = [ cppo bos cmdliner tyxml ];
+  useDune2 = true;
+
+  buildInputs = [ astring cmdliner cppo fpath result tyxml ];
+
+  checkInputs = [ alcotest markup yojson sexplib jq ];
+  doCheck = lib.versionAtLeast ocaml.version "4.05";
 
   meta = {
     description = "A documentation generator for OCaml";
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
+    homepage = "https://github.com/ocaml/odoc";
   };
 }

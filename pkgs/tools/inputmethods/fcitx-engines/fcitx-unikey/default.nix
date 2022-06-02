@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, cmake, fcitx, gettext, pkgconfig }:
+{ lib, stdenv, fetchurl, cmake, fcitx, gettext, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-unikey-${version}";
+  pname = "fcitx-unikey";
   version = "0.2.5";
 
   src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-unikey/${name}.tar.xz";
+    url = "http://download.fcitx-im.org/fcitx-unikey/${pname}-${version}.tar.xz";
     sha256 = "063vc29v7ycaai98v3z4q319sv9sm91my17pmhblw1vifxnw02wf";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake fcitx gettext ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ fcitx gettext ];
 
   NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     substituteInPlace data/cmake_install.cmake \
       --replace ${fcitx} $out
   '';
-  
-  meta = with stdenv.lib; {
+
+  meta = with lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-unikey";
     downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";

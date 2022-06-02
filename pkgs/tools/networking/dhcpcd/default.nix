@@ -1,16 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, udev, runtimeShellPackage, runtimeShell }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, udev
+, runtimeShellPackage
+, runtimeShell
+, nixosTests
+, enablePrivSep ? true
+}:
 
 stdenv.mkDerivation rec {
-  # when updating this to >=7, check, see previous reverts:
-  # nix-build -A nixos.tests.networking.scripted.macvlan.x86_64-linux nixos/release-combined.nix
-  name = "dhcpcd-7.1.1";
+  pname = "dhcpcd";
+  version = "9.4.1";
 
   src = fetchurl {
-    url = "mirror://roy/dhcpcd/${name}.tar.xz";
-    sha256 = "0h94g5nl9bg3x3qaajqaz6izl6mlvyjgp93nifnlfb7r7n3j8yd2";
+    url = "mirror://roy/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-gZNXY07+0epc9E7AGyTT0/iFL+yLQkmSXcxWZ8VON2w=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     udev
     runtimeShellPackage # So patchShebangs finds a bash suitable for the installed scripts
@@ -25,20 +33,35 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ];
+  ]
+  ++ (
+    if ! enablePrivSep
+    then [ "--disable-privsep" ]
+    else [
+      "--enable-privsep"
+      # dhcpcd disables privsep if it can't find the default user,
+      # so we explicitly specify a user.
+      "--privsepuser=dhcpcd"
+    ]
+  );
 
-  makeFlags = "PREFIX=\${out}";
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   # Hack to make installation succeed.  dhcpcd will still use /var/db
   # at runtime.
-  installFlags = "DBDIR=\${TMPDIR}/db SYSCONFDIR=$(out)/etc";
+  installFlags = [ "DBDIR=$(TMPDIR)/db" "SYSCONFDIR=${placeholder "out"}/etc" ];
 
   # Check that the udev plugin got built.
-  postInstall = stdenv.lib.optional (udev != null) "[ -e $out/lib/dhcpcd/dev/udev.so ]";
+  postInstall = lib.optionalString (udev != null) "[ -e ${placeholder "out"}/lib/dhcpcd/dev/udev.so ]";
 
-  meta = with stdenv.lib; {
+  passthru = {
+    inherit enablePrivSep;
+    tests = { inherit (nixosTests.networking.scripted) macvlan dhcpSimple dhcpOneIf; };
+  };
+
+  meta = with lib; {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";
-    homepage = https://roy.marples.name/projects/dhcpcd;
+    homepage = "https://roy.marples.name/projects/dhcpcd";
     platforms = platforms.linux;
     license = licenses.bsd2;
     maintainers = with maintainers; [ eelco fpletz ];

@@ -35,7 +35,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.haskellPackages.hail;
-      defaultText = "pkgs.haskellPackages.hail";
+      defaultText = literalExpression "pkgs.haskellPackages.hail";
       description = "Hail package to use.";
     };
   };

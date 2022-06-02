@@ -1,23 +1,31 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, nose, pyyaml }:
+{ lib, buildPythonPackage, fetchPypi, numpy, pytest, pyyaml }:
 
 buildPythonPackage rec {
   pname = "spglib";
-  version = "1.12.2.post0";
+  version = "1.16.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15b02b74c0f06179bc3650c43a710a5200abbba387c6eda3105bfd9236041443";
+    sha256 = "sha256-Lqzv1TzGRLqakMRoH9bJNLa92BjBE9fzGZBOB41dq5M=";
   };
 
   propagatedBuildInputs = [ numpy ];
 
-  checkInputs = [ nose pyyaml ];
+  checkInputs = [ pytest pyyaml ];
 
-  meta = with stdenv.lib; {
+  # pytestCheckHook doesn't work
+  # ImportError: cannot import name '_spglib' from partially initialized module 'spglib'
+  checkPhase = ''
+    pytest
+  '';
+
+  pythonImportsCheck = [ "spglib" ];
+
+  meta = with lib; {
     description = "Python bindings for C library for finding and handling crystal symmetries";
-    homepage = https://atztogo.github.io/spglib;
+    homepage = "https://spglib.github.io/spglib/";
+    changelog = "https://github.com/spglib/spglib/raw/v${version}/ChangeLog";
     license = licenses.bsd3;
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

@@ -1,28 +1,77 @@
-{ stdenv, fetchgit, cmake, pkgconfig, zlib, libpng, cairo, freetype
-, json_c, fontconfig, gtkmm3, pangomm, glew, libGLU, xorg, pcre
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
 , wrapGAppsHook
+, at-spi2-core
+, cairo
+, dbus
+, freetype
+, fontconfig
+, glew
+, gtkmm3
+, json_c
+, libdatrie
+, libepoxy
+, libGLU
+, libpng
+, libselinux
+, libsepol
+, libthai
+, libxkbcommon
+, pangomm
+, pcre
+, util-linuxMinimal # provides libmount
+, xorg
+, zlib
 }:
+
 stdenv.mkDerivation rec {
-  name = "solvespace-2.3-20180906";
-  rev = "258545a334098cf25c1c9f4cd59b778dfe0b0d29";
-  src = fetchgit {
-    url = https://github.com/solvespace/solvespace;
-    inherit rev;
-    sha256 = "1wimh6l0zpk0vywcsd2minijjf6g550z8i3l8lpmfnl5przymc2v";
+  pname = "solvespace";
+  version = "3.0";
+
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-aaYqUZ0c1lCL91fmxtKFAAE2uUWrjnDB3WdcqdutXhE=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
-    pkgconfig cmake wrapGAppsHook
+    cmake
+    pkg-config
+    wrapGAppsHook
   ];
-  buildInputs = [
-    zlib libpng cairo freetype
-    json_c fontconfig gtkmm3 pangomm glew libGLU
-    xorg.libpthreadstubs xorg.libXdmcp pcre
-  ];
-  enableParallelBuilding = true;
 
-  preConfigure = ''
+  buildInputs = [
+    at-spi2-core
+    cairo
+    dbus
+    freetype
+    fontconfig
+    glew
+    gtkmm3
+    json_c
+    libdatrie
+    libepoxy
+    libGLU
+    libpng
+    libselinux
+    libsepol
+    libthai
+    libxkbcommon
+    pangomm
+    pcre
+    util-linuxMinimal
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    xorg.libXtst
+    zlib
+  ];
+
+  postPatch = ''
     patch CMakeLists.txt <<EOF
     @@ -20,9 +20,9 @@
      # NOTE TO PACKAGERS: The embedded git commit hash is critical for rapid bug triage when the builds
@@ -32,20 +81,18 @@ stdenv.mkDerivation rec {
     +# include(GetGitCommitHash)
      # and instead uncomment the following, adding the complete git hash of the checkout you are using:
     -# set(GIT_COMMIT_HASH 0000000000000000000000000000000000000000)
-    +set(GIT_COMMIT_HASH $rev)
+    +set(GIT_COMMIT_HASH $version)
     EOF
   '';
 
-  postInstall = ''
-    substituteInPlace $out/share/applications/solvespace.desktop \
-      --replace /usr/bin/ $out/bin/
-  '';
+  cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A parametric 3d CAD program";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.edef ];
     platforms = platforms.linux;
-    homepage = http://solvespace.com;
+    homepage = "https://solvespace.com";
+    changelog = "https://github.com/solvespace/solvespace/raw/v${version}/CHANGELOG.md";
   };
 }

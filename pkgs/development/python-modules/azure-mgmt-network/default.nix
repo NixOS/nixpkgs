@@ -1,37 +1,48 @@
-{ pkgs
+{ lib
 , buildPythonPackage
 , fetchPypi
-, azure-mgmt-common
-, python
+, azure-common
+, azure-mgmt-core
+, msrest
+, msrestazure
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "2.5.1";
+  version = "20.0.0";
   pname = "azure-mgmt-network";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "cef9bf5d36700966e52f7cea86e29c622bc5bbb92d0ce7a75420e29fb0e75f45";
+    hash = "sha256-mnjPyCAJ+rlNgZ4umSYjfVVVg83EobZYY/zupyDjdoY=";
   };
 
-  preConfigure = ''
-    # Patch to make this package work on requests >= 2.11.x
-    # CAN BE REMOVED ON NEXT PACKAGE UPDATE
-    sed -i 's|len(request_content)|str(len(request_content))|' azure/mgmt/network/networkresourceprovider.py
-  '';
+  propagatedBuildInputs = [
+    azure-common
+    azure-mgmt-core
+    msrest
+    msrestazure
+  ];
 
-  postInstall = ''
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
-    echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
-  '';
+  # Module has no tests
+  doCheck = false;
 
-  propagatedBuildInputs = [ azure-mgmt-common ];
+  pythonNamespaces = [
+    "azure.mgmt"
+  ];
 
-  meta = with pkgs.lib; {
+  pythonImportsCheck = [
+    "azure.mgmt.network"
+  ];
+
+  meta = with lib; {
     description = "Microsoft Azure SDK for Python";
-    homepage = "https://azure.microsoft.com/en-us/develop/python/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ olcai ];
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
+    license = licenses.mit;
+    maintainers = with maintainers; [ olcai maxwilson jonringer ];
   };
 }

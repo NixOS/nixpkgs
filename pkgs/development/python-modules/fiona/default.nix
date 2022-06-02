@@ -1,19 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPy3k, pythonOlder
 , attrs, click, cligj, click-plugins, six, munch, enum34
-, pytest, boto3
-, gdal
+, pytestCheckHook, boto3, mock, giflib, pytz
+, gdal, certifi
 }:
 
 buildPythonPackage rec {
-  pname = "Fiona";
-  version = "1.8.4";
+  pname = "fiona";
+  version = "1.8.21";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "aec9ab2e3513c9503ec123b1a8573bee55fc6a66e2ac07088c3376bf6738a424";
+    pname = "Fiona";
+    inherit version;
+    sha256 = "sha256-Og7coqegcNtAXXEYchSkPSMzpXtAl1RKP8woIGali/w=";
   };
 
-  CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11";
+  CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
   nativeBuildInputs = [
     gdal # for gdal-config
@@ -21,33 +22,38 @@ buildPythonPackage rec {
 
   buildInputs = [
     gdal
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ giflib ];
 
   propagatedBuildInputs = [
     attrs
+    certifi
     click
     cligj
     click-plugins
     six
     munch
-  ] ++ stdenv.lib.optional (!isPy3k) enum34;
+    pytz
+  ] ++ lib.optional (!isPy3k) enum34;
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     boto3
-  ];
+  ] ++ lib.optional (pythonOlder "3.4") mock;
 
-  checkPhase = ''
+  preCheck = ''
     rm -r fiona # prevent importing local fiona
-    # Some tests access network, others test packaging
-    pytest -k "not test_*_http \
-           and not test_*_https \
-           and not test_*_wheel"
+    # disable gdal deprecation warnings
+    export GDAL_ENABLE_DEPRECATED_DRIVER_GTM=YES
   '';
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # Some tests access network, others test packaging
+    "http" "https" "wheel"
+  ];
+
+  meta = with lib; {
     description = "OGR's neat, nimble, no-nonsense API for Python";
-    homepage = http://toblerity.org/fiona/;
+    homepage = "https://fiona.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];
   };

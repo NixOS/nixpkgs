@@ -1,11 +1,15 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
+# Source Serif Pro got renamed to Source Serif 4 (see
+# https://github.com/adobe-fonts/source-serif/issues/77). This is the
+# last version named "Pro". It is useful for backward compatibility
+# with older documents/templates/etc.
 let
-  version = "2.010";
+  version = "3.001";
 in fetchzip {
   name = "source-serif-pro-${version}";
 
-  url = "https://github.com/adobe-fonts/source-serif-pro/releases/download/${version}R-ro%2F1.010R-it/source-serif-pro-${version}R-ro-1.010R-it.zip";
+  url = "https://github.com/adobe-fonts/source-serif/releases/download/${version}R/source-serif-pro-${version}R.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/{opentype,truetype,variable}
@@ -14,14 +18,13 @@ in fetchzip {
     unzip -j $downloadedFile "*/VAR/*.otf" -d $out/share/fonts/variable
   '';
 
-  sha256 = "1a3lmqk7hyxpfkb30s9z73lhs823dmq6xr5llp9w23g6bh332x2h";
+  sha256 = "sha256-rYWk8D41QMuuSP+cQMk8ttT7uX3a7gBk4OqjA7K9udk=";
 
-  meta = with stdenv.lib; {
-    homepage = https://adobe-fonts.github.io/source-serif-pro/;
-    description = "A set of OpenType fonts to complement Source Sans Pro";
+  meta = with lib; {
+    homepage = "https://adobe-fonts.github.io/source-serif/";
+    description = "Typeface for setting text in many sizes, weights, and languages. Designed to complement Source Sans";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];
   };
 }
-

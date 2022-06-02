@@ -56,14 +56,14 @@ rec {
   };
 
   documentDefault = description : strongswanDefault :
-    if isNull strongswanDefault
+    if strongswanDefault == null
     then description
     else description + ''
       </para><para>
       StrongSwan default: <literal><![CDATA[${builtins.toJSON strongswanDefault}]]></literal>
     '';
 
-  single = f: name: value: { "${name}" = f value; };
+  single = f: name: value: { ${name} = f value; };
 
   mkStrParam         = mkParamOfType types.str;
   mkOptionalStrParam = mkStrParam null;

@@ -1,38 +1,60 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, conf ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, pkg-config
+, file
+, ncurses
+, readline
+, which
+# options
+, conf ? null
+, withIcons ? false
+, withNerdIcons ? false
+}:
 
-with stdenv.lib;
+# Mutually exclusive options
+assert withIcons -> withNerdIcons == false;
+assert withNerdIcons -> withIcons == false;
 
 stdenv.mkDerivation rec {
-  name = "nnn-${version}";
-  version = "2.4";
+  pname = "nnn";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "jarun";
-    repo = "nnn";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0y55h5pxd20qw2ajhz8fsk45aynx0xzgr9kfr545hyhmfkg2nc49";
+    sha256 = "sha256-uToAgWpGaTPTMYJh1D0xgvE23GSIshv1OBlWxXI07Mk=";
   };
 
-  configFile = optionalString (conf!=null) (builtins.toFile "nnn.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} nnn.h";
+  configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);
+  preBuild = lib.optionalString (conf != null) "cp ${configFile} src/nnn.h";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
   buildInputs = [ readline ncurses ];
 
-  makeFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ]
+    ++ lib.optional withIcons [ "O_ICONS=1" ]
+    ++ lib.optional withNerdIcons [ "O_NERD=1" ];
 
-  # shell completions
+  binPath = lib.makeBinPath [ file which ];
+
   postInstall = ''
-    install -Dm555 scripts/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
-    install -Dm555 scripts/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
-    install -Dm555 scripts/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
+    installShellCompletion --bash --name nnn.bash misc/auto-completion/bash/nnn-completion.bash
+    installShellCompletion --fish misc/auto-completion/fish/nnn.fish
+    installShellCompletion --zsh misc/auto-completion/zsh/_nnn
+
+    wrapProgram $out/bin/nnn --prefix PATH : "$binPath"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Small ncurses-based file browser forked from noice";
-    homepage = https://github.com/jarun/nnn;
+    homepage = "https://github.com/jarun/nnn";
+    changelog = "https://github.com/jarun/nnn/blob/v${version}/CHANGELOG";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ jfrankenau Br1ght0ne ];
   };
 }

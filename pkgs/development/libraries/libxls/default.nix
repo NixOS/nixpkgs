@@ -1,22 +1,34 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, autoconf-archive }:
 
 stdenv.mkDerivation rec {
-  name = "libxls-1.4.0";
+  pname = "libxls";
+  version = "1.6.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libxls/${name}.zip";
-    sha256 = "1g8ds7wbhsa4hdcn77xc2c0l3vvz5bx2hx9ng9c9n7aii92ymfnk";
+  src = fetchFromGitHub {
+    owner = "libxls";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-vjmYByk+IDBon8xGR1+oNaEQTiJK+IVpDXsG1IyVNoY=";
   };
 
-  nativeBuildInputs = [ unzip ];
+  patches = [
+    # Fix cross-compilation
+    (fetchpatch {
+      url = "https://github.com/libxls/libxls/commit/007e63c1f5e19bc73292f267c85d7dd14e9ecb38.patch";
+      sha256 = "sha256-PjPHuXth4Yaq9nVfk5MYJMRo5B0R6YA1KEqgwfjF3PM=";
+    })
+  ];
+
+  nativeBuildInputs = [ autoreconfHook autoconf-archive ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Extract Cell Data From Excel xls files";
-    homepage = https://sourceforge.net/projects/libxls/;
+    homepage = "https://github.com/libxls/libxls";
     license = licenses.bsd2;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
+    mainProgram = "xls2csv";
+    platforms = platforms.unix;
   };
 }

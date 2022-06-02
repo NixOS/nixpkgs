@@ -1,41 +1,63 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , dask
 , numpy, toolz # dask[array]
 , numba
 , pandas
-, scikitlearn
+, scikit-learn
 , scipy
 , dask-glm
 , six
 , multipledispatch
 , packaging
-, pytest
-, xgboost
-, tensorflow
-, joblib
 , distributed
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
-  version = "0.11.0";
+  version = "2022.1.22";
   pname = "dask-ml";
+  disabled = pythonOlder "3.6"; # >= 3.6
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a9e8e69494560dc23534adb236e88b3b21dc30a156648453c9c6e4b27ff2df96";
+    sha256 = "21a128e9f4f10e3b39cf82b36266eae28b17d16f2f6aa351bd73eb361e49326a";
   };
 
-  checkInputs = [ pytest xgboost tensorflow joblib distributed ];
-  propagatedBuildInputs = [ dask numpy toolz numba pandas scikitlearn scipy dask-glm six multipledispatch packaging ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  # dask-ml has some heavy test requirements
-  # and requires some very new packages
+  propagatedBuildInputs = [
+    dask
+    dask-glm
+    distributed
+    multipledispatch
+    numba
+    numpy
+    packaging
+    pandas
+    scikit-learn
+    scipy
+    six
+    toolz
+  ];
+
+  # has non-standard build from source, and pypi doesn't include tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/dask/dask-ml;
+  # in lieu of proper tests
+  pythonImportsCheck = [
+    "dask_ml"
+    "dask_ml.naive_bayes"
+    "dask_ml.wrappers"
+    "dask_ml.utils"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/dask/dask-ml";
     description = "Scalable Machine Learn with Dask";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

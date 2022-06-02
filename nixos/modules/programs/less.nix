@@ -24,9 +24,7 @@ let
     }
   '';
 
-  lessKey = pkgs.runCommand "lesskey"
-            { src = pkgs.writeText "lessconfig" configText; preferLocalBuild = true; }
-            "${pkgs.less}/bin/lesskey -o $out $src";
+  lessKey = pkgs.writeText "lessconfig" configText;
 
 in
 
@@ -35,12 +33,14 @@ in
 
     programs.less = {
 
+      # note that environment.nix sets PAGER=less, and
+      # therefore also enables this module
       enable = mkEnableOption "less";
 
       configFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = literalExample "$${pkgs.my-configs}/lesskey";
+        example = literalExpression ''"''${pkgs.my-configs}/lesskey"'';
         description = ''
           Path to lesskey configuration file.
 
@@ -54,8 +54,8 @@ in
         type = types.attrsOf types.str;
         default = {};
         example = {
-          "h" = "noaction 5\e(";
-          "l" = "noaction 5\e)";
+          h = "noaction 5\\e(";
+          l = "noaction 5\\e)";
         };
         description = "Defines new command keys.";
       };
@@ -74,14 +74,16 @@ in
         type = types.attrsOf types.str;
         default = {};
         example = {
-          "\e" = "abort";
+          e = "abort";
         };
         description = "Defines new line-editing keys.";
       };
 
       envVariables = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = {
+          LESS = "-R";
+        };
         example = {
           LESS = "--quit-if-one-screen";
         };
@@ -91,6 +93,7 @@ in
       lessopen = mkOption {
         type = types.nullOr types.str;
         default = "|${pkgs.lesspipe}/bin/lesspipe.sh %s";
+        defaultText = literalExpression ''"|''${pkgs.lesspipe}/bin/lesspipe.sh %s"'';
         description = ''
           Before less opens a file, it first gives your input preprocessor a chance to modify the way the contents of the file are displayed.
         '';
@@ -111,11 +114,11 @@ in
     environment.systemPackages = [ pkgs.less ];
 
     environment.variables = {
-      "LESSKEY_SYSTEM" = toString lessKey;
+      LESSKEYIN_SYSTEM = toString lessKey;
     } // optionalAttrs (cfg.lessopen != null) {
-      "LESSOPEN" = cfg.lessopen;
+      LESSOPEN = cfg.lessopen;
     } // optionalAttrs (cfg.lessclose != null) {
-      "LESSCLOSE" = cfg.lessclose;
+      LESSCLOSE = cfg.lessclose;
     };
 
     warnings = optional (

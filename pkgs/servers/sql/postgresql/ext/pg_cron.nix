@@ -1,31 +1,32 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
-  name = "pg_cron-${version}";
-  version = "1.1.2";
+  pname = "pg_cron";
+  version = "1.4.1";
 
   buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
     owner  = "citusdata";
-    repo   = "pg_cron";
-    rev    = "refs/tags/v${version}";
-    sha256 = "0n74dx1wkg9qxvjhnx03028465ap3p97v2kzqww833dws1wqk5m1";
+    repo   = pname;
+    rev    = "v${version}";
+    sha256 = "1fknr7z1m24dpp4hm5s6y5phdns7yvvj88cl481wjhw8bigz6kns";
   };
 
   installPhase = ''
-    mkdir -p $out/{lib,share/extension}
+    mkdir -p $out/{lib,share/postgresql/extension}
 
     cp *.so      $out/lib
-    cp *.sql     $out/share/extension
-    cp *.control $out/share/extension
+    cp *.sql     $out/share/postgresql/extension
+    cp *.control $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Run Cron jobs through PostgreSQL";
-    homepage    = https://www.citusdata.com/;
+    homepage    = "https://github.com/citusdata/pg_cron";
+    changelog   = "https://github.com/citusdata/pg_cron/raw/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ thoughtpolice ];
-    platforms   = platforms.linux;
+    platforms   = postgresql.meta.platforms;
     license     = licenses.postgresql;
   };
 }

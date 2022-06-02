@@ -1,16 +1,16 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "sdparm-${version}";
-  version = "1.10";
+  pname = "sdparm";
+  version = "1.12";
 
   src = fetchurl {
-    url = "http://sg.danny.cz/sg/p/${name}.tar.xz";
-    sha256 = "1jjq3lzgfy4r76rc26q02lv4wm5cb4dx5nh913h489zjrr4f3jbx";
+    url = "http://sg.danny.cz/sg/p/${pname}-${version}.tar.xz";
+    sha256 = "sha256-xMnvr9vrZi4vlxJwfsSQkyvU0BC7ESmueplSZUburb4=";
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://sg.danny.cz/sg/sdparm.html;
+  meta = with lib; {
+    homepage = "http://sg.danny.cz/sg/sdparm.html";
     description = "A utility to access SCSI device parameters";
     license = licenses.bsd3;
     platforms = with platforms; linux;

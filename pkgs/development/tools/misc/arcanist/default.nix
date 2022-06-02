@@ -1,58 +1,85 @@
-{ stdenv, fetchFromGitHub, php, flex, makeWrapper }:
+{ bison
+, cacert
+, fetchFromGitHub
+, flex
+, php
+, lib, stdenv
+, installShellFiles
+, which
+, python3
+}:
 
-let
-  libphutil = fetchFromGitHub {
-    owner = "phacility";
-    repo = "libphutil";
-    rev = "3215e4e291ed4468faeed4542d47a571b5bc559a";
-    sha256 = "0bbinaxny0j4iniz2grf0s9cysbl3x24yc32f3jra9mwsgh2v2zj";
-  };
-  arcanist = fetchFromGitHub {
+# Make a custom wrapper. If `wrapProgram` is used, arcanist thinks .arc-wrapped is being
+# invoked and complains about it being an unknown toolset. We could use `makeWrapper`, but
+# then we’d need to still craft a script that does the `php libexec/arcanist/bin/...` dance
+# anyway... So just do everything at once.
+let makeArcWrapper = toolset: ''
+  cat << WRAPPER > $out/bin/${toolset}
+  #!$shell -e
+  export PATH='${php}/bin:${which}/bin'\''${PATH:+':'}\$PATH
+  exec ${php}/bin/php $out/libexec/arcanist/bin/${toolset} "\$@"
+  WRAPPER
+  chmod +x $out/bin/${toolset}
+'';
+
+in
+stdenv.mkDerivation {
+  pname = "arcanist";
+  version = "20220425";
+
+  src = fetchFromGitHub {
     owner = "phacility";
     repo = "arcanist";
-    rev = "2650e8627a20e1bfe334a4a2b787f44ef5d6ebc5";
-    sha256 = "0x0xxiar202ypbgxh19swzjil546bbp8li4k5yrpvab55y8ymkd4";
+    rev = "da206314cf59f71334b187283e18823bddc16ddd";
+    sha256 = "sha256-6VVUjFMwPQvk22Ni1YUSgks4ZM0j1JP+71VnYKD8onM=";
   };
-in
-stdenv.mkDerivation rec {
-  name    = "arcanist-${version}";
-  version = "20180916";
 
-  src = [ arcanist libphutil ];
-  buildInputs = [ php makeWrapper flex ];
+  patches = [ ./dont-require-python3-in-path.patch ];
 
-  unpackPhase = ''
-    cp -aR ${libphutil} libphutil
-    cp -aR ${arcanist} arcanist
-    chmod +w -R libphutil arcanist
-  '';
+  buildInputs = [ php python3 ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
-    substituteInPlace libphutil/support/xhpast/Makefile \
+  nativeBuildInputs = [ bison flex installShellFiles ];
+
+  postPatch = lib.optionalString stdenv.isAarch64 ''
+    substituteInPlace support/xhpast/Makefile \
       --replace "-minline-all-stringops" ""
   '';
 
   buildPhase = ''
-    (
-      cd libphutil/support/xhpast
-      make clean all install
-    )
+    runHook preBuild
+    make cleanall -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
+    make xhpast   -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
+    runHook postBuild
   '';
-  installPhase = ''
-    mkdir -p $out/bin $out/libexec
-    cp -R libphutil $out/libexec/libphutil
-    cp -R arcanist  $out/libexec/arcanist
 
-    ln -s $out/libexec/arcanist/bin/arc $out/bin
-    wrapProgram $out/bin/arc \
-      --prefix PATH : "${php}/bin"
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/bin $out/libexec
+    make install  -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
+    make cleanall -C support/xhpast $makeFlags "''${makeFlagsArray[@]}" -j $NIX_BUILD_CORES
+    cp -R . $out/libexec/arcanist
+    ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt $out/libexec/arcanist/resources/ssl/default.pem
+
+    ${makeArcWrapper "arc"}
+    ${makeArcWrapper "phage"}
+
+    $out/bin/arc shell-complete --generate --
+    installShellCompletion --cmd arc --bash $out/libexec/arcanist/support/shell/rules/bash-rules.sh
+    installShellCompletion --cmd phage --bash $out/libexec/arcanist/support/shell/rules/bash-rules.sh
+    runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/arc help diff -- > /dev/null
+    $out/bin/phage help alias -- > /dev/null
   '';
 
   meta = {
     description = "Command line interface to Phabricator";
-    homepage    = "http://phabricator.org";
-    license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    homepage = "http://phabricator.org";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

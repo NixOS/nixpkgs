@@ -1,31 +1,28 @@
-{ stdenv, fetchurl, autoPatchelfHook, python }:
+{ stdenv, lib, fetchurl, autoPatchelfHook, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "gurobi-${version}";
-  version = "8.1.0";
+  pname = "gurobi";
+  version = "9.5.1";
 
-  src = with stdenv.lib; fetchurl {
-    url = "http://packages.gurobi.com/${versions.majorMinor version}/gurobi${version}_linux64.tar.gz";
-    sha256 = "1yjqbzqnq4jjkjm616d36bgd3rmqr0a1ii17n0prpdjzmdlq63dz";
+  src = fetchurl {
+    url = "https://packages.gurobi.com/${lib.versions.majorMinor version}/gurobi${version}_linux64.tar.gz";
+    sha256 = "sha256-+oKFnTPwj7iuudpmsPvZFxjtVzxTT1capSNyyd64kdo=";
   };
 
   sourceRoot = "gurobi${builtins.replaceStrings ["."] [""] version}/linux64";
 
   nativeBuildInputs = [ autoPatchelfHook ];
-  buildInputs = [ (python.withPackages (ps: [ ps.gurobipy ])) ];
+  buildInputs = [ (python3.withPackages (ps: [ ps.gurobipy ])) ];
 
-  buildPhase = ''
-    cd src/build
-    make
-    cd ../..
-  '';
+  strictDeps = true;
+
+  makeFlags = [ "--directory=src/build" ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp bin/* $out/bin/
-    rm $out/bin/gurobi.env
     rm $out/bin/gurobi.sh
-    rm $out/bin/python2.7
+    rm $out/bin/python*
 
     cp lib/gurobi.py $out/bin/gurobi.sh
 
@@ -44,9 +41,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/gurobi-javadoc.jar $out/share/java/
   '';
 
-  meta = with stdenv.lib; {
+  passthru.libSuffix = lib.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor version);
+
+  meta = with lib; {
     description = "Optimization solver for mathematical programming";
-    homepage = https://www.gurobi.com;
+    homepage = "https://www.gurobi.com";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jfrankenau ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , boost, gmp
 , tcl-8_5, tk-8_5
 , emacs
@@ -8,7 +8,7 @@ let
   version = "2.0.0";
 
   binaries = {
-    "x86_64-linux" = fetchurl {
+    x86_64-linux = fetchurl {
       url = "mirror://sourceforge/project/mozart-oz/v${version}-alpha.0/mozart2-${version}-alpha.0+build.4105.5c06ced-x86_64-linux.tar.gz";
       sha256 = "0rsfrjimjxqbwprpzzlmydl3z3aiwg5qkb052jixdxjyad7gyh5z";
     };
@@ -16,13 +16,14 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "mozart-binary-${version}";
+  pname = "mozart-binary";
+  inherit version;
 
   preferLocalBuild = true;
 
-  src = binaries."${stdenv.hostPlatform.system}" or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+  src = binaries.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
       boost
       gmp
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
 
   TK_LIBRARY = "${tk-8_5}/lib/tk8.5";
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildCommand = ''
     mkdir $out
@@ -50,8 +51,8 @@ stdenv.mkDerivation {
 
     wrapProgram $out/bin/ozemulator --set OZHOME $out
 
-    ${stdenv.lib.optionalString (emacs != null) ''
-      wrapProgram $out/bin/oz --suffix PATH ":" ${stdenv.lib.makeBinPath [ emacs ]}
+    ${lib.optionalString (emacs != null) ''
+      wrapProgram $out/bin/oz --suffix PATH ":" ${lib.makeBinPath [ emacs ]}
     ''}
 
     sed -i $out/share/applications/oz.desktop \
@@ -62,8 +63,8 @@ stdenv.mkDerivation {
     patchShebangs $out
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.mozart-oz.org/;
+  meta = with lib; {
+    homepage = "http://www.mozart-oz.org/";
     description = "Multiplatform implementation of the Oz programming language";
     longDescription = ''
       The Mozart Programming System combines ongoing research in

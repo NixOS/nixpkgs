@@ -1,63 +1,47 @@
-{ stdenv, fetchFromGitHub, rustPlatform, clang, llvmPackages, rustfmt, writeScriptBin,
-  runtimeShell }:
-
-rustPlatform.buildRustPackage rec {
-  name = "rust-bindgen-${version}";
-  version = "0.42.2";
-
-  src = fetchFromGitHub {
-    owner = "rust-lang-nursery";
-    repo = "rust-bindgen";
-    rev = "v${version}";
-    sha256 = "10h0h7x8yf4dsyw2p2nas2jg5p3i29np0y3rfzrdq898d70gvq4j";
-  };
-
-  cargoSha256 = "01jvi86xgz0r7ia9agnfpms6b6x68lzwj6f085m0w659i94acgpi";
-
-  libclang = llvmPackages.libclang.lib; #for substituteAll
-
-  buildInputs = [ libclang ];
-
-  propagatedBuildInputs = [ clang ]; # to populate NIX_CXXSTDLIB_COMPILE
-
-  configurePhase = ''
-    export LIBCLANG_PATH="${libclang}/lib"
-  '';
-
-  postInstall = ''
-    mv $out/bin/{bindgen,.bindgen-wrapped};
+{ rust-bindgen-unwrapped, zlib, bash, runCommand, runCommandCC }:
+let
+  clang = rust-bindgen-unwrapped.clang;
+  self = runCommand "rust-bindgen-${rust-bindgen-unwrapped.version}"
+    {
+      #for substituteAll
+      inherit bash;
+      unwrapped = rust-bindgen-unwrapped;
+      libclang = clang.cc.lib;
+      meta = rust-bindgen-unwrapped.meta // {
+        longDescription = rust-bindgen-unwrapped.meta.longDescription + ''
+          This version of bindgen is wrapped with the required compiler flags
+          required to find the c and c++ standard libary, as well as the libraries
+          specified in the buildInputs of your derivation.
+        '';
+      };
+      passthru.tests = {
+        simple-c = runCommandCC "simple-c-bindgen-tests" { } ''
+          echo '#include <stdlib.h>' > a.c
+          ${self}/bin/bindgen a.c --whitelist-function atoi | tee output
+          grep atoi output
+          touch $out
+        '';
+        simple-cpp = runCommandCC "simple-cpp-bindgen-tests" { } ''
+          echo '#include <cmath>' > a.cpp
+          ${self}/bin/bindgen a.cpp --whitelist-function erf -- -xc++ | tee output
+          grep erf output
+          touch $out
+        '';
+        with-lib = runCommandCC "zlib-bindgen-tests" { buildInputs = [ zlib ]; } ''
+          echo '#include <zlib.h>' > a.c
+          ${self}/bin/bindgen a.c --whitelist-function compress | tee output
+          grep compress output
+          touch $out
+        '';
+      };
+    }
+    # if you modify the logic to find the right clang flags, also modify rustPlatform.bindgenHook
+    ''
+    mkdir -p $out/bin
+    export cincludes="$(< ${clang}/nix-support/cc-cflags) $(< ${clang}/nix-support/libc-cflags)"
+    export cxxincludes="$(< ${clang}/nix-support/libcxx-cxxflags)"
     substituteAll ${./wrapper.sh} $out/bin/bindgen
     chmod +x $out/bin/bindgen
   '';
-
-  doCheck = true;
-  checkInputs =
-    let fakeRustup = writeScriptBin "rustup" ''
-      #!${runtimeShell}
-      shift
-      shift
-      exec "$@"
-    '';
-  in [
-    rustfmt
-    fakeRustup # the test suite insists in calling `rustup run nightly rustfmt`
-    clang
-  ];
-  preCheck = ''
-    # for the ci folder, notably
-    patchShebangs .
-  '';
-
-  meta = with stdenv.lib; {
-    description = "C and C++ binding generator";
-    longDescription = ''
-      Bindgen takes a c or c++ header file and turns them into
-      rust ffi declarations.
-      As with most compiler related software, this will only work
-      inside a nix-shell with the required libraries as buildInputs.
-    '';
-    homepage = https://github.com/rust-lang-nursery/rust-bindgen;
-    license = with licenses; [ bsd3 ];
-    maintainers = [ maintainers.ralith ];
-  };
-}
+in
+self

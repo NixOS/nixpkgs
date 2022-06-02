@@ -1,28 +1,19 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, givaro, pkgconfig, blas
-, fetchpatch
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, givaro, pkg-config, blas, lapack
 , gmpxx
-, optimize ? false # impure
 }:
+
+assert (!blas.isILP64) && (!lapack.isILP64);
+
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "fflas-ffpack";
-  version = "2.3.2";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "linbox-team";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1cqhassj2dny3gx0iywvmnpq8ca0d6m82xl5rz4mb8gaxr2kwddl";
+    sha256 = "sha256-Eztc2jUyKRVUiZkYEh+IFHkDuPIy+Gx3ZW/MsuOVaMc=";
   };
-
-  patches = [
-    # https://github.com/linbox-team/fflas-ffpack/issues/146
-    (fetchpatch {
-      name = "fix-flaky-test-fgemm-check.patch";
-      url = "https://github.com/linbox-team/fflas-ffpack/commit/d8cd67d91a9535417a5cb193cf1540ad6758a3db.patch";
-      sha256 = "1gnfc616fvnlr0smvz6lb2d445vn8fgv6vqcr6pwm3dj4wa6v3b3";
-    })
-  ];
 
   checkInputs = [
     gmpxx
@@ -32,36 +23,37 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
-  ] ++ stdenv.lib.optionals doCheck checkInputs;
+    pkg-config
+  ] ++ lib.optionals doCheck checkInputs;
 
-  buildInputs = [ givaro blas ];
+  buildInputs = [ givaro blas lapack ];
 
   configureFlags = [
-    "--with-blas-libs=-l${blas.linkName}"
-    "--with-lapack-libs=-l${blas.linkName}"
-  ] ++ stdenv.lib.optionals (!optimize) [
+    "--with-blas-libs=-lcblas"
+    "--with-lapack-libs=-llapacke"
+  ] ++ lib.optionals stdenv.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
-    "--disable-sse"
-    "--disable-sse2"
-    "--disable-sse3"
-    "--disable-ssse3"
-    "--disable-sse41"
-    "--disable-sse42"
-    "--disable-avx"
-    "--disable-avx2"
-    "--disable-fma"
-    "--disable-fma4"
+    # for now we need to be careful to disable *all* relevant versions of an instruction set explicitly (https://github.com/linbox-team/fflas-ffpack/issues/284)
+    "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"
+    "--${if stdenv.hostPlatform.ssse3Support  then "enable" else "disable"}-ssse3"
+    "--${if stdenv.hostPlatform.sse4_1Support then "enable" else "disable"}-sse41"
+    "--${if stdenv.hostPlatform.sse4_2Support then "enable" else "disable"}-sse42"
+    "--${if stdenv.hostPlatform.avxSupport    then "enable" else "disable"}-avx"
+    "--${if stdenv.hostPlatform.avx2Support   then "enable" else "disable"}-avx2"
+    "--${if stdenv.hostPlatform.avx512Support then "enable" else "disable"}-avx512f"
+    "--${if stdenv.hostPlatform.avx512Support then "enable" else "disable"}-avx512dq"
+    "--${if stdenv.hostPlatform.avx512Support then "enable" else "disable"}-avx512vl"
+    "--${if stdenv.hostPlatform.fmaSupport    then "enable" else "disable"}-fma"
+    "--${if stdenv.hostPlatform.fma4Support   then "enable" else "disable"}-fma4"
   ];
-
   doCheck = true;
 
-  meta = {
-    inherit version;
-    description = ''Finite Field Linear Algebra Subroutines'';
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
-    homepage = https://linbox-team.github.io/fflas-ffpack/;
+  meta = with lib; {
+    broken = stdenv.isDarwin;
+    description = "Finite Field Linear Algebra Subroutines";
+    license = licenses.lgpl21Plus;
+    maintainers = teams.sage.members;
+    platforms = platforms.unix;
+    homepage = "https://linbox-team.github.io/fflas-ffpack/";
   };
 }

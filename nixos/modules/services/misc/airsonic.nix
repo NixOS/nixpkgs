@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.airsonic;
+  opt = options.services.airsonic;
 in {
   options = {
 
@@ -34,13 +35,15 @@ in {
       };
 
       listenAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = "127.0.0.1";
         description = ''
           The host name or IP address on which to bind Airsonic.
-          Only relevant if you have multiple network interfaces and want
-          to make Airsonic available on only one of them. The default value
-          will bind Airsonic to all available network interfaces.
+          The default value is appropriate for first launch, when the
+          default credentials are easy to guess. It is also appropriate
+          if you intend to use the virtualhost option in the service
+          module. In other cases, you may want to change this to a
+          specific IP or 0.0.0.0 to listen on all interfaces.
         '';
       };
 
@@ -74,12 +77,31 @@ in {
       transcoders = mkOption {
         type = types.listOf types.path;
         default = [ "${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
-        defaultText= [ "\${pkgs.ffmpeg.bin}/bin/ffmpeg" ];
+        defaultText = literalExpression ''[ "''${pkgs.ffmpeg.bin}/bin/ffmpeg" ]'';
         description = ''
           List of paths to transcoder executables that should be accessible
           from Airsonic. Symlinks will be created to each executable inside
-          ${cfg.home}/transcoders.
+          ''${config.${opt.home}}/transcoders.
         '';
+      };
+
+      jre = mkOption {
+        type = types.package;
+        default = pkgs.jre8;
+        defaultText = literalExpression "pkgs.jre8";
+        description = ''
+          JRE package to use.
+
+          Airsonic only supports Java 8, airsonic-advanced requires at least
+          Java 11.
+        '';
+      };
+
+      war = mkOption {
+        type = types.path;
+        default = "${pkgs.airsonic}/webapps/airsonic.war";
+        defaultText = literalExpression ''"''${pkgs.airsonic}/webapps/airsonic.war"'';
+        description = "Airsonic war file to use.";
       };
 
       jvmOptions = mkOption {
@@ -105,7 +127,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.airsonic = {
       description = "Airsonic Media Server";
-      after = [ "local-fs.target" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
@@ -118,7 +140,7 @@ in {
       '';
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
+          ${cfg.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
           -Dairsonic.home=${cfg.home} \
           -Dserver.address=${cfg.listenAddress} \
           -Dserver.port=${toString cfg.port} \
@@ -128,7 +150,7 @@ in {
             "-Dserver.use-forward-headers=true"} \
           ${toString cfg.jvmOptions} \
           -verbose:gc \
-          -jar ${pkgs.airsonic}/webapps/airsonic.war
+          -jar ${cfg.war}
         '';
         Restart = "always";
         User = "airsonic";
@@ -138,16 +160,20 @@ in {
 
     services.nginx = mkIf (cfg.virtualHost != null) {
       enable = true;
-      virtualHosts."${cfg.virtualHost}" = {
-        locations."${cfg.contextPath}".proxyPass = "http://${cfg.listenAddress}:${toString cfg.port}";
+      recommendedProxySettings = true;
+      virtualHosts.${cfg.virtualHost} = {
+        locations.${cfg.contextPath}.proxyPass = "http://${cfg.listenAddress}:${toString cfg.port}";
       };
     };
 
     users.users.airsonic = {
       description = "Airsonic service user";
+      group = "airsonic";
       name = cfg.user;
       home = cfg.home;
       createHome = true;
+      isSystemUser = true;
     };
+    users.groups.airsonic = {};
   };
 }

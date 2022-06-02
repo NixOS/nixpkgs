@@ -1,12 +1,12 @@
 {
-  mkDerivation,
+  mkDerivation, lib,
   extra-cmake-modules,
   boost, kconfig, kcoreaddons, kdbusaddons, ki18n, kio, kglobalaccel,
-  kwindowsystem, kxmlgui, kcrash
+  kwindowsystem, kxmlgui, kcrash, qtbase
 }:
 
 mkDerivation {
-  name = "kactivitymanagerd";
+  pname = "kactivitymanagerd";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     boost kconfig kcoreaddons kdbusaddons kglobalaccel ki18n kio kwindowsystem

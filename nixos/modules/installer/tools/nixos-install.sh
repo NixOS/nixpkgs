@@ -1,4 +1,5 @@
-#! @shell@
+#! @runtimeShell@
+# shellcheck shell=bash
 
 set -e
 shopt -s nullglob
@@ -10,10 +11,12 @@ umask 0022
 
 # Parse the command line for the -I flag
 extraBuildFlags=()
+flakeFlags=()
 
 mountPoint=/mnt
 channelPath=
 system=
+verbosity=()
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -33,19 +36,36 @@ while [ "$#" -gt 0 ]; do
         --system|--closure)
             system="$1"; shift 1
             ;;
+        --flake)
+          flake="$1"
+          flakeFlags=(--experimental-features 'nix-command flakes')
+          shift 1
+          ;;
+        --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
+          lockFlags+=("$i")
+          ;;
+        --update-input)
+          j="$1"; shift 1
+          lockFlags+=("$i" "$j")
+          ;;
+        --override-input)
+          j="$1"; shift 1
+          k="$1"; shift 1
+          lockFlags+=("$i" "$j" "$k")
+          ;;
         --channel)
             channelPath="$1"; shift 1
             ;;
         --no-channel-copy)
             noChannelCopy=1
             ;;
-        --no-root-passwd)
+        --no-root-password|--no-root-passwd)
             noRootPasswd=1
             ;;
         --no-bootloader)
             noBootLoader=1
             ;;
-        --show-trace)
+        --show-trace|--impure|--keep-going)
             extraBuildFlags+=("$i")
             ;;
         --help)
@@ -54,6 +74,9 @@ while [ "$#" -gt 0 ]; do
             ;;
         --debug)
             set -x
+            ;;
+        -v*|--verbose)
+            verbosity+=("$i")
             ;;
         *)
             echo "$0: unknown option \`$i'"
@@ -67,6 +90,17 @@ if ! test -e "$mountPoint"; then
     exit 1
 fi
 
+# Verify permissions are okay-enough
+checkPath="$(realpath "$mountPoint")"
+while [[ "$checkPath" != "/" ]]; do
+    mode="$(stat -c '%a' "$checkPath")"
+    if [[ "${mode: -1}" -lt "5" ]]; then
+        echo "path $checkPath should have permissions 755, but had permissions $mode. Consider running 'chmod o+rx $checkPath'."
+        exit 1
+    fi
+    checkPath="$(dirname "$checkPath")"
+done
+
 # Get the path of the NixOS configuration file.
 if [[ -z $NIXOS_CONFIG ]]; then
     NIXOS_CONFIG=$mountPoint/etc/nixos/configuration.nix
@@ -77,33 +111,37 @@ if [[ ${NIXOS_CONFIG:0:1} != / ]]; then
     exit 1
 fi
 
-if [[ ! -e $NIXOS_CONFIG && -z $system ]]; then
+if [[ -n $flake ]]; then
+    if [[ $flake =~ ^(.*)\#([^\#\"]*)$ ]]; then
+       flake="${BASH_REMATCH[1]}"
+       flakeAttr="${BASH_REMATCH[2]}"
+    fi
+    if [[ -z "$flakeAttr" ]]; then
+        echo "Please specify the name of the NixOS configuration to be installed, as a URI fragment in the flake-uri."
+        echo "For example, to use the output nixosConfigurations.foo from the flake.nix, append \"#foo\" to the flake-uri."
+        exit 1
+    fi
+    flakeAttr="nixosConfigurations.\"$flakeAttr\""
+fi
+
+# Resolve the flake.
+if [[ -n $flake ]]; then
+    flake=$(nix "${flakeFlags[@]}" flake metadata --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
+fi
+
+if [[ ! -e $NIXOS_CONFIG && -z $system && -z $flake ]]; then
     echo "configuration file $NIXOS_CONFIG doesn't exist"
     exit 1
 fi
 
 # A place to drop temporary stuff.
-trap "rm -rf $tmpdir" EXIT
-tmpdir="$(mktemp -d)"
+tmpdir="$(mktemp -d -p "$mountPoint")"
+trap 'rm -rf $tmpdir' EXIT
+
+# store temporary files on target filesystem by default
+export TMPDIR=${TMPDIR:-$tmpdir}
 
 sub="auto?trusted=1"
-
-# Build the system configuration in the target filesystem.
-if [[ -z $system ]]; then
-    echo "building the configuration in $NIXOS_CONFIG..."
-    outLink="$tmpdir/system"
-    nix build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
-        --extra-substituters "$sub" \
-        -f '<nixpkgs/nixos>' system -I "nixos-config=$NIXOS_CONFIG"
-    system=$(readlink -f $outLink)
-fi
-
-# Set the system profile to point to the configuration. TODO: combine
-# this with the previous step once we have a nix-env replacement with
-# a progress bar.
-nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
-        --extra-substituters "$sub" \
-        -p $mountPoint/nix/var/nix/profiles/system --set "$system"
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
 # of the NixOS channel.
@@ -113,13 +151,38 @@ if [[ -z $noChannelCopy ]]; then
     fi
     if [[ -n $channelPath ]]; then
         echo "copying channel..."
-        mkdir -p $mountPoint/nix/var/nix/profiles/per-user/root
+        mkdir -p "$mountPoint"/nix/var/nix/profiles/per-user/root
         nix-env --store "$mountPoint" "${extraBuildFlags[@]}" --extra-substituters "$sub" \
-                -p $mountPoint/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet
-        install -m 0700 -d $mountPoint/root/.nix-defexpr
-        ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
+                -p "$mountPoint"/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet \
+                "${verbosity[@]}"
+        install -m 0700 -d "$mountPoint"/root/.nix-defexpr
+        ln -sfn /nix/var/nix/profiles/per-user/root/channels "$mountPoint"/root/.nix-defexpr/channels
     fi
 fi
+
+# Build the system configuration in the target filesystem.
+if [[ -z $system ]]; then
+    outLink="$tmpdir/system"
+    if [[ -z $flake ]]; then
+        echo "building the configuration in $NIXOS_CONFIG..."
+        nix-build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
+            --extra-substituters "$sub" \
+            '<nixpkgs/nixos>' -A system -I "nixos-config=$NIXOS_CONFIG" "${verbosity[@]}"
+    else
+        echo "building the flake in $flake..."
+        nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" \
+            --store "$mountPoint" --extra-substituters "$sub" "${verbosity[@]}" \
+            "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link "$outLink"
+    fi
+    system=$(readlink -f "$outLink")
+fi
+
+# Set the system profile to point to the configuration. TODO: combine
+# this with the previous step once we have a nix-env replacement with
+# a progress bar.
+nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
+        --extra-substituters "$sub" \
+        -p "$mountPoint"/nix/var/nix/profiles/system --set "$system" "${verbosity[@]}"
 
 # Mark the target as a NixOS installation, otherwise switch-to-configuration will chicken out.
 mkdir -m 0755 -p "$mountPoint/etc"
@@ -131,7 +194,7 @@ touch "$mountPoint/etc/NIXOS"
 if [[ -z $noBootLoader ]]; then
     echo "installing the boot loader..."
     # Grub needs an mtab.
-    ln -sfn /proc/mounts $mountPoint/etc/mtab
+    ln -sfn /proc/mounts "$mountPoint"/etc/mtab
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root "$mountPoint" -- /run/current-system/bin/switch-to-configuration boot
 fi
 

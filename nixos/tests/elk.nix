@@ -1,23 +1,26 @@
+# To run the test on the unfree ELK use the folllowing command:
+# cd path/to/nixpkgs
+# NIXPKGS_ALLOW_UNFREE=1 nix-build -A nixosTests.elk.unfree.ELK-6
+
 { system ? builtins.currentSystem,
   config ? {},
   pkgs ? import ../.. { inherit system config; },
-  enableUnfree ? false
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
-with pkgs.lib;
-
 let
+  inherit (pkgs) lib;
+
   esUrl = "http://localhost:9200";
 
-  mkElkTest = name : elk : makeTest {
+  mkElkTest = name : elk :
+    import ./make-test-python.nix ({
     inherit name;
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ eelco offline basvandijk ];
     };
     nodes = {
       one =
-        { pkgs, ... }: {
+        { pkgs, lib, ... }: {
             # Not giving the machine at least 2060MB results in elasticsearch failing with the following error:
             #
             #   OpenJDK 64-Bit Server VM warning:
@@ -36,6 +39,58 @@ let
             environment.systemPackages = [ pkgs.jq ];
 
             services = {
+
+              journalbeat = {
+                enable = elk ? journalbeat;
+                package = elk.journalbeat;
+                extraConfig = pkgs.lib.mkOptionDefault (''
+                  logging:
+                    to_syslog: true
+                    level: warning
+                    metrics.enabled: false
+                  output.elasticsearch:
+                    hosts: [ "127.0.0.1:9200" ]
+                  journalbeat.inputs:
+                  - paths: []
+                    seek: cursor
+                '');
+              };
+
+              filebeat = {
+                enable = elk ? filebeat;
+                package = elk.filebeat;
+                inputs.journald.id = "everything";
+
+                inputs.log = {
+                  enabled = true;
+                  paths = [
+                    "/var/lib/filebeat/test"
+                  ];
+                };
+
+                settings = {
+                  logging.level = "info";
+                };
+              };
+
+              metricbeat = {
+                enable = true;
+                package = elk.metricbeat;
+                modules.system = {
+                  metricsets = ["cpu" "load" "memory" "network" "process" "process_summary" "uptime" "socket_summary"];
+                  enabled = true;
+                  period = "5s";
+                  processes = [".*"];
+                  cpu.metrics = ["percentages" "normalized_percentages"];
+                  core.metrics = ["percentages"];
+                };
+                settings = {
+                  output.elasticsearch = {
+                    hosts = ["127.0.0.1:9200"];
+                  };
+                };
+              };
+
               logstash = {
                 enable = true;
                 package = elk.logstash;
@@ -67,7 +122,6 @@ let
               kibana = {
                 enable = true;
                 package = elk.kibana;
-                elasticsearch.url = esUrl;
               };
 
               elasticsearch-curator = {
@@ -82,6 +136,7 @@ let
                       prefixed indices. Ignore the error if the filter does not result in an
                       actionable list of indices (ignore_empty_list) and exit cleanly.
                     options:
+                      allow_ilm_indices: true
                       ignore_empty_list: True
                       disable_action: False
                     filters:
@@ -100,53 +155,151 @@ let
           };
       };
 
-    testScript = ''
-      startAll;
+    passthru.elkPackages = elk;
+    testScript =
+      let
+        valueObject = lib.optionalString (lib.versionAtLeast elk.elasticsearch.version "7") ".value";
+      in ''
+      import json
 
-      $one->waitForUnit("elasticsearch.service");
+
+      def expect_hits(message):
+          dictionary = {"query": {"match": {"message": message}}}
+          return (
+              "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
+              + "-H 'Content-Type: application/json' "
+              + "-d '{}' ".format(json.dumps(dictionary))
+              + " | tee /dev/console"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+          )
+
+
+      def expect_no_hits(message):
+          dictionary = {"query": {"match": {"message": message}}}
+          return (
+              "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
+              + "-H 'Content-Type: application/json' "
+              + "-d '{}' ".format(json.dumps(dictionary))
+              + " | tee /dev/console"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} == 0 end'"
+          )
+
+
+      def has_metricbeat():
+          dictionary = {"query": {"match": {"event.dataset": {"query": "system.cpu"}}}}
+          return (
+              "curl --silent --show-error --fail-with-body '${esUrl}/_search' "
+              + "-H 'Content-Type: application/json' "
+              + "-d '{}' ".format(json.dumps(dictionary))
+              + " | tee /dev/console"
+              + " | jq -es 'if . == [] then null else .[] | .hits.total${valueObject} > 0 end'"
+          )
+
+
+      start_all()
+
+      one.wait_for_unit("elasticsearch.service")
+      one.wait_for_open_port(9200)
 
       # Continue as long as the status is not "red". The status is probably
       # "yellow" instead of "green" because we are using a single elasticsearch
       # node which elasticsearch considers risky.
       #
-      # TODO: extend this test with multiple elasticsearch nodes and see if the status turns "green".
-      $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_cluster/health' | jq .status | grep -v red");
+      # TODO: extend this test with multiple elasticsearch nodes
+      #       and see if the status turns "green".
+      one.wait_until_succeeds(
+          "curl --silent --show-error --fail-with-body '${esUrl}/_cluster/health'"
+          + " | jq -es 'if . == [] then null else .[] | .status != \"red\" end'"
+      )
 
-      # Perform some simple logstash tests.
-      $one->waitForUnit("logstash.service");
-      $one->waitUntilSucceeds("cat /tmp/logstash.out | grep flowers");
-      $one->waitUntilSucceeds("cat /tmp/logstash.out | grep -v dragons");
+      with subtest("Perform some simple logstash tests"):
+          one.wait_for_unit("logstash.service")
+          one.wait_until_succeeds("cat /tmp/logstash.out | grep flowers")
+          one.wait_until_succeeds("cat /tmp/logstash.out | grep -v dragons")
 
-      # See if kibana is healthy.
-      $one->waitForUnit("kibana.service");
-      $one->waitUntilSucceeds("curl --silent --show-error 'http://localhost:5601/api/status' | jq .status.overall.state | grep green");
+      with subtest("Kibana is healthy"):
+          one.wait_for_unit("kibana.service")
+          one.wait_until_succeeds(
+              "curl --silent --show-error --fail-with-body 'http://localhost:5601/api/status'"
+              + " | jq -es 'if . == [] then null else .[] | .status.overall.state == \"green\" end'"
+          )
 
-      # See if logstash messages arive in elasticsearch.
-      $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' -d '{\"query\" : { \"match\" : { \"message\" : \"flowers\"}}}' | jq .hits.total | grep -v 0");
-      $one->waitUntilSucceeds("curl --silent --show-error '${esUrl}/_search' -H 'Content-Type: application/json' -d '{\"query\" : { \"match\" : { \"message\" : \"dragons\"}}}' | jq .hits.total | grep 0");
+      with subtest("Metricbeat is running"):
+          one.wait_for_unit("metricbeat.service")
 
-      # Test elasticsearch-curator.
-      $one->systemctl("stop logstash");
-      $one->systemctl("start elasticsearch-curator");
-      $one->waitUntilSucceeds("! curl --silent --show-error '${esUrl}/_cat/indices' | grep logstash | grep -q ^$1");
+      with subtest("Metricbeat metrics arrive in elasticsearch"):
+          one.wait_until_succeeds(has_metricbeat())
+
+      with subtest("Logstash messages arive in elasticsearch"):
+          one.wait_until_succeeds(expect_hits("flowers"))
+          one.wait_until_succeeds(expect_no_hits("dragons"))
+
+    '' + lib.optionalString (elk ? journalbeat) ''
+      with subtest(
+          "A message logged to the journal is ingested by elasticsearch via journalbeat"
+      ):
+          one.wait_for_unit("journalbeat.service")
+          one.execute("echo 'Supercalifragilisticexpialidocious' | systemd-cat")
+          one.wait_until_succeeds(
+              expect_hits("Supercalifragilisticexpialidocious")
+          )
+    '' + lib.optionalString (elk ? filebeat) ''
+      with subtest(
+          "A message logged to the journal is ingested by elasticsearch via filebeat"
+      ):
+          one.wait_for_unit("filebeat.service")
+          one.execute("echo 'Superdupercalifragilisticexpialidocious' | systemd-cat")
+          one.wait_until_succeeds(
+              expect_hits("Superdupercalifragilisticexpialidocious")
+          )
+          one.execute(
+              "echo 'SuperdupercalifragilisticexpialidociousIndeed' >> /var/lib/filebeat/test"
+          )
+          one.wait_until_succeeds(
+              expect_hits("SuperdupercalifragilisticexpialidociousIndeed")
+          )
+    '' + ''
+      with subtest("Elasticsearch-curator works"):
+          one.systemctl("stop logstash")
+          one.systemctl("start elasticsearch-curator")
+          one.wait_until_succeeds(
+              '! curl --silent --show-error --fail-with-body "${esUrl}/_cat/indices" | grep logstash | grep ^'
+          )
     '';
+  }) { inherit pkgs system; };
+in {
+  ELK-6 = mkElkTest "elk-6-oss" {
+    name = "elk-6-oss";
+    elasticsearch = pkgs.elasticsearch6-oss;
+    logstash      = pkgs.logstash6-oss;
+    kibana        = pkgs.kibana6-oss;
+    journalbeat   = pkgs.journalbeat6;
+    metricbeat    = pkgs.metricbeat6;
   };
-in mapAttrs mkElkTest {
-  "ELK-5" = {
-    elasticsearch = pkgs.elasticsearch5;
-    logstash      = pkgs.logstash5;
-    kibana        = pkgs.kibana5;
-  };
-  "ELK-6" =
-    if enableUnfree
-    then {
+  # We currently only package upstream binaries.
+  # Feel free to package an SSPL licensed source-based package!
+  # ELK-7 = mkElkTest "elk-7-oss" {
+  #   name = "elk-7";
+  #   elasticsearch = pkgs.elasticsearch7-oss;
+  #   logstash      = pkgs.logstash7-oss;
+  #   kibana        = pkgs.kibana7-oss;
+  #   filebeat      = pkgs.filebeat7;
+  #   metricbeat    = pkgs.metricbeat7;
+  # };
+  unfree = lib.dontRecurseIntoAttrs {
+    ELK-6 = mkElkTest "elk-6" {
       elasticsearch = pkgs.elasticsearch6;
       logstash      = pkgs.logstash6;
       kibana        = pkgs.kibana6;
-    }
-    else {
-      elasticsearch = pkgs.elasticsearch6-oss;
-      logstash      = pkgs.logstash6-oss;
-      kibana        = pkgs.kibana6-oss;
+      journalbeat   = pkgs.journalbeat6;
+      metricbeat    = pkgs.metricbeat6;
     };
+    ELK-7 = mkElkTest "elk-7" {
+      elasticsearch = pkgs.elasticsearch7;
+      logstash      = pkgs.logstash7;
+      kibana        = pkgs.kibana7;
+      filebeat      = pkgs.filebeat7;
+      metricbeat    = pkgs.metricbeat7;
+    };
+  };
 }

@@ -1,18 +1,35 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pylru";
-  version = "1.1.0";
+  version = "1.2.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e03a3d354eb8fdfa11638698e8a1f06cd3b3a214ebc0a120c603a79290d9ebec";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "jlhutch";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-dTYiD+/zt0ZSP+sefYyeD87To1nRXyoFodlBg8pm1YE=";
   };
 
+  # Check with the next release if tests are ready
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "pylru"
+  ];
+
   meta = with lib; {
-    homepage = https://github.com/jlhutch/pylru;
     description = "A least recently used (LRU) cache implementation";
-    license = licenses.gpl2;
+    homepage = "https://github.com/jlhutch/pylru";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ abbradar ];
   };
 }

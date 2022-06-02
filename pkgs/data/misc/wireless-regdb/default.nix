@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "wireless-regdb";
-  version = "2019.03.01";
+  version = "2022.02.18";
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/network/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0pwipig8bik1gca440hfv0xa23bi49jfiqc69xvcb6sr0rq6ykis";
+    sha256 = "sha256-iCjCWk7iUCAEQAT1c3S7nerIUoCfrXD409AXcL+ayX8=";
   };
 
   dontBuild = true;
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wireless regulatory database for CRDA";
-    homepage = http://wireless.kernel.org/en/developers/Regulatory/;
+    homepage = "http://wireless.kernel.org/en/developers/Regulatory/";
     license = licenses.isc;
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];

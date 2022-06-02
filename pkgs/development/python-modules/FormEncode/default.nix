@@ -1,30 +1,49 @@
-{ stdenv, buildPythonPackage, fetchPypi, dnspython, pycountry, nose }:
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, setuptools-scm
+, six
+, dnspython
+, pycountry
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "FormEncode";
-  version = "1.3.1";
+  version = "2.0.1";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xm77h2mds2prlaz0z4nzkx13g61rx5c2v3vpgjq9d5ij8bzb8md";
+    sha256 = "8f2974112c2557839d5bae8b76490104c03830785d923abbdef148bf3f710035";
   };
 
-  buildInputs = [ dnspython pycountry nose ];
-
-  patchPhase = ''
-    # dnspython3 has been superseded, see its PyPI page
-    substituteInPlace setup.py --replace dnspython3 dnspython
+  postPatch = ''
+    sed -i '/setuptools_scm_git_archive/d' setup.py
   '';
 
-  preCheck = ''
-    # two tests require dns resolving
-    sed -i 's/test_cyrillic_email/noop/' formencode/tests/test_email.py
-    sed -i 's/test_unicode_ascii_subgroup/noop/' formencode/tests/test_email.py
-  '';
+  nativeBuildInputs = [ setuptools-scm ];
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [ six ];
+
+  checkInputs = [
+    dnspython
+    pycountry
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # requires network for DNS resolution
+    "test_doctests"
+    "test_unicode_ascii_subgroup"
+  ];
+
+  meta = with lib; {
     description = "FormEncode validates and converts nested structures";
-    homepage = http://formencode.org;
+    homepage = "http://formencode.org";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

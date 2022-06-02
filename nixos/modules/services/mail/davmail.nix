@@ -7,7 +7,7 @@ let
   cfg = config.services.davmail;
 
   configType = with types;
-    either (either (attrsOf configType) str) (either int bool) // {
+    oneOf [ (attrsOf configType) str int bool ] // {
       description = "davmail config type (str, int, bool or attribute set thereof)";
     };
 
@@ -42,7 +42,7 @@ in
           and <link xlink:href="http://davmail.sourceforge.net/advanced.html"/>
           for details on supported values.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           {
             davmail.allowRemote = true;
             davmail.imapPort = 55555;
@@ -58,18 +58,26 @@ in
 
     config = mkIf cfg.enable {
 
-      services.davmail.config.davmail = mapAttrs (name: mkDefault) {
-        server = true;
-        disableUpdateCheck = true;
-        logFilePath = "/var/log/davmail/davmail.log";
-        logFileSize = "1MB";
-        mode = "auto";
-        url = cfg.url;
-        caldavPort = 1080;
-        imapPort = 1143;
-        ldapPort = 1389;
-        popPort = 1110;
-        smtpPort = 1025;
+      services.davmail.config = {
+        davmail = mapAttrs (name: mkDefault) {
+          server = true;
+          disableUpdateCheck = true;
+          logFilePath = "/var/log/davmail/davmail.log";
+          logFileSize = "1MB";
+          mode = "auto";
+          url = cfg.url;
+          caldavPort = 1080;
+          imapPort = 1143;
+          ldapPort = 1389;
+          popPort = 1110;
+          smtpPort = 1025;
+        };
+        log4j = {
+          logger.davmail = mkDefault "WARN";
+          logger.httpclient.wire = mkDefault "WARN";
+          logger.org.apache.commons.httpclient = mkDefault "WARN";
+          rootLogger = mkDefault "WARN";
+        };
       };
 
       systemd.services.davmail = {

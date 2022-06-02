@@ -1,0 +1,36 @@
+diff --git a/lib/googlecloudsdk/api_lib/sql/instances.py b/lib/googlecloudsdk/api_lib/sql/instances.py
+index 0d88ffe..814a436 100644
+--- a/lib/googlecloudsdk/api_lib/sql/instances.py
++++ b/lib/googlecloudsdk/api_lib/sql/instances.py
+@@ -85,18 +85,19 @@ def GetRegionFromZone(gce_zone):
+ def _GetCloudSqlProxyPath():
+   """Determines the path to the cloud_sql_proxy binary."""
+   sdk_bin_path = config.Paths().sdk_bin_path
+-  if not sdk_bin_path:
+-    # Check if cloud_sql_proxy is located on the PATH.
+-    proxy_path = file_utils.FindExecutableOnPath('cloud_sql_proxy')
+-    if proxy_path:
+-      log.debug(
+-          'Using cloud_sql_proxy found at [{path}]'.format(path=proxy_path))
+-      return proxy_path
+-    else:
+-      raise sql_exceptions.SqlProxyNotFound(
+-          'A Cloud SQL Proxy SDK root could not be found. Please check your '
+-          'installation.')
+-  return os.path.join(sdk_bin_path, 'cloud_sql_proxy')
++  if sdk_bin_path and os.path.isfile(os.path.join(sdk_bin_path, 'cloud_sql_proxy')):
++      return os.path.join(sdk_bin_path, 'cloud_sql_proxy')
++
++  # Check if cloud_sql_proxy is located on the PATH.
++  proxy_path = file_utils.FindExecutableOnPath('cloud_sql_proxy')
++  if proxy_path:
++    log.debug(
++        'Using cloud_sql_proxy found at [{path}]'.format(path=proxy_path))
++    return proxy_path
++
++  raise sql_exceptions.SqlProxyNotFound(
++      'A Cloud SQL Proxy SDK root could not be found. Please check your '
++      'installation.')
+ 
+ 
+ def _RaiseProxyError(error_msg=None):

@@ -1,23 +1,27 @@
-{ stdenv, fetchurl, opensp, pkgconfig, libxml2, curl }:
-        
-stdenv.mkDerivation rec {
-  name = "libofx-0.9.13";
+{ lib, stdenv, fetchFromGitHub, opensp, pkg-config, libxml2, curl
+, autoconf, automake, libtool, gengetopt, libiconv }:
 
-  src = fetchurl {
-    url = "mirror://sourceforge/libofx/${name}.tar.gz";
-    sha256 = "1r60pj1jn269mk4s4025qxllkzgvnbw5r3vby8j2ry5svmygksjp";
+stdenv.mkDerivation rec {
+  pname = "libofx";
+  version = "0.10.3";
+
+  src = fetchFromGitHub {
+    owner = "LibOFX";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-2ZSbXdlpX5MDV9y1d9ZqNSh/834MUeCZJHjJcg7ap0A=";
   };
 
+  preConfigure = "./autogen.sh";
   configureFlags = [ "--with-opensp-includes=${opensp}/include/OpenSP" ];
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ opensp libxml2 curl ];
+  nativeBuildInputs = [ pkg-config libtool autoconf automake gengetopt ];
+  buildInputs = [ opensp libxml2 curl ] ++ lib.optional stdenv.isDarwin libiconv;
 
-  meta = { 
+  meta = {
     description = "Opensource implementation of the Open Financial eXchange specification";
-    homepage = http://libofx.sourceforge.net/;
+    homepage = "http://libofx.sourceforge.net/";
     license = "LGPL";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }
-

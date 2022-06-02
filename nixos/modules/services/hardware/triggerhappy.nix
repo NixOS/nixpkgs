@@ -17,7 +17,7 @@ let
     ${cfg.extraConfig}
   '';
 
-  bindingCfg = { config, ... }: {
+  bindingCfg = { ... }: {
     options = {
 
       keys = mkOption {
@@ -57,11 +57,20 @@ in
         '';
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "nobody";
+        example = "root";
+        description = ''
+          User account under which <command>triggerhappy</command> runs.
+        '';
+      };
+
       bindings = mkOption {
         type = types.listOf (types.submodule bindingCfg);
         default = [];
-        example = lib.literalExample ''
-          [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc_cli}/bin/mpc -q toggle"; } ]
+        example = lib.literalExpression ''
+          [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc-cli}/bin/mpc -q toggle"; } ]
         '';
         description = ''
           Key bindings for <command>triggerhappy</command>.
@@ -93,10 +102,9 @@ in
 
     systemd.services.triggerhappy = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "local-fs.target" ];
       description = "Global hotkey daemon";
       serviceConfig = {
-        ExecStart = "${pkgs.triggerhappy}/bin/thd --user nobody --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";
+        ExecStart = "${pkgs.triggerhappy}/bin/thd ${optionalString (cfg.user != "root") "--user ${cfg.user}"} --socket ${socket} --triggers ${configFile} --deviceglob /dev/input/event*";
       };
     };
 

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, warsow-engine, makeWrapper }:
+{ lib, stdenv, fetchurl, warsow-engine, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "warsow-${version}";
+  pname = "warsow";
   version = "2.1.2";
 
   src = fetchurl {
-    url = "http://sebastian.network/warsow/${name}.tar.gz";
+    url = "http://warsow.net/${pname}-${version}.tar.gz";
     sha256 = "07y2airw5qg3s1bf1c63a6snjj22riz0mqhk62jmfm9nrarhavrc";
   };
 
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     for i in ${warsow-engine}/bin/*; do
-      makeWrapper "$i" "$out/bin/$(basename "$i")" --run "cd $out/share/warsow"
+      makeWrapper "$i" "$out/bin/$(basename "$i")" --chdir "$out/share/warsow"
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Multiplayer FPS game designed for competitive gaming";
     longDescription = ''
       Set in a futuristic cartoon-like world where rocketlauncher-wielding
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       completely free fast-paced first-person shooter (FPS) for Windows, Linux
       and macOS.
     '';
-    homepage = http://www.warsow.net;
+    homepage = "http://www.warsow.net";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ astsmtl abbradar ];
     platforms = warsow-engine.meta.platforms;

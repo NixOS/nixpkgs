@@ -1,39 +1,67 @@
-{ stdenv, python2, fetchFromGitHub }:
+{ pkgs, nodejs, lib, python3Packages, fetchFromGitHub, nixosTests }:
+let
+  nodeEnv = import ./node-env.nix {
+    inherit (pkgs) stdenv lib python2 runCommand writeTextFile;
+    inherit pkgs nodejs;
+    libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
+  };
+  nodePackages = import ./node-packages.nix {
+    inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
+    inherit nodeEnv;
+  };
 
-with python2.pkgs; buildPythonApplication rec {
+  nodeDependencies = (nodePackages.shell.override (old: {
+  })).nodeDependencies;
+in
+with python3Packages; buildPythonApplication rec {
+
   pname = "isso";
-  version = "0.12.2";
+  version = "0.12.6.2";
 
-  # no tests on PyPI
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
-    rev = version;
-    sha256 = "18v8lzwgl5hcbnawy50lfp3wnlc0rjhrnw9ja9260awkx7jra9ba";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-T5T3EJS8ef8uo+P9qkC+7I70qv+4PFrnhImr04Fz57U=";
   };
 
   propagatedBuildInputs = [
-    bleach
-    cffi
-    configparser
-    html5lib
-    ipaddr
+    itsdangerous
     jinja2
     misaka
+    html5lib
     werkzeug
+    bleach
+    flask-caching
   ];
 
-  checkInputs = [ nose ];
+  nativeBuildInputs = [
+    cffi
+    nodejs
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} setup.py nosetests
+  preBuild = ''
+    ln -s ${nodeDependencies}/lib/node_modules ./node_modules
+    export PATH="${nodeDependencies}/bin:$PATH"
+
+    make js
   '';
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytest
+    pytest-cov
+  ];
+
+  checkPhase = ''
+    pytest
+  '';
+
+  passthru.tests = { inherit (nixosTests) isso; };
+
+  meta = with lib; {
     description = "A commenting server similar to Disqus";
-    homepage = https://posativ.org/isso/;
+    homepage = "https://posativ.org/isso/";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
   };
 }
-

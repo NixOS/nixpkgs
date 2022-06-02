@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''uiop'';
-  version = ''3.3.2'';
+  baseName = "uiop";
+  version = "3.3.5";
 
-  description = '''';
+  description = "System lacks description";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/uiop/2018-07-11/uiop-3.3.2.tgz'';
-    sha256 = ''1q13a7dzc9vpd0w7c4xw03ijmlnyhjw2p76h0v8m7dyb23s7p9y5'';
+    url = "http://beta.quicklisp.org/archive/uiop/2021-08-07/uiop-3.3.5.tgz";
+    sha256 = "19bskbcv413ix2rjqlbj9y62qbm6780s5i7h00rvpd488nnrvaqk";
   };
 
   packageName = "uiop";
@@ -17,8 +18,8 @@ rec {
   asdFilesToKeep = ["uiop.asd"];
   overrides = x: x;
 }
-/* (SYSTEM uiop DESCRIPTION NIL SHA256
-    1q13a7dzc9vpd0w7c4xw03ijmlnyhjw2p76h0v8m7dyb23s7p9y5 URL
-    http://beta.quicklisp.org/archive/uiop/2018-07-11/uiop-3.3.2.tgz MD5
-    8d7b7b4065873107147678c6ef72e5ee NAME uiop FILENAME uiop DEPS NIL
-    DEPENDENCIES NIL VERSION 3.3.2 SIBLINGS (asdf-driver) PARASITES NIL) */
+/* (SYSTEM uiop DESCRIPTION System lacks description SHA256
+    19bskbcv413ix2rjqlbj9y62qbm6780s5i7h00rvpd488nnrvaqk URL
+    http://beta.quicklisp.org/archive/uiop/2021-08-07/uiop-3.3.5.tgz MD5
+    831138297c2ac03189d25bb6b03b919c NAME uiop FILENAME uiop DEPS NIL
+    DEPENDENCIES NIL VERSION 3.3.5 SIBLINGS (asdf-driver) PARASITES NIL) */

@@ -1,108 +1,181 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem
-, pkgconfig, autoconf213, alsaLib, bzip2, cairo
-, dbus, dbus-glib, file, fontconfig, freetype
-, gstreamer, gst-plugins-base, gst_all_1
-, gtk2, hunspell, icu, libevent, libjpeg, libnotify
-, libstartup_notification, libvpx, makeWrapper, libGLU_combined
-, nspr, nss, pango, perl, python, libpulseaudio, sqlite
-, unzip, xorg, which, yasm, zip, zlib
+{ lib
+, stdenv
+, alsa-lib
+, autoconf213
+, cairo
+, dbus
+, dbus-glib
+, desktop-file-utils
+, fetchFromGitea
+, ffmpeg
+, fontconfig
+, freetype
+, gnome2
+, gnum4
+, libGL
+, libGLU
+, libevent
+, libnotify
+, libpulseaudio
+, libstartup_notification
+, pango
+, perl
+, pkg-config
+, python2
+, unzip
+, which
+, wrapGAppsHook
+, writeScript
+, xorg
+, yasm
+, zip
+, zlib
+, withGTK3 ? true, gtk3, gtk2
+, testers
+, palemoon
 }:
 
+# Only specific GCC versions are supported with branding
+# https://developer.palemoon.org/build/linux/
+assert stdenv.cc.isGNU;
+assert with lib.strings; (
+  versionAtLeast stdenv.cc.version "7.1"
+  && versionOlder stdenv.cc.version "12"
+);
+
 stdenv.mkDerivation rec {
-  name = "palemoon-${version}";
-  version = "27.9.4";
+  pname = "palemoon";
+  version = "31.0.0";
 
-  src = fetchFromGitHub {
-    name   = "palemoon-src";
-    owner  = "MoonchildProductions";
-    repo   = "Pale-Moon";
-    rev    = version + "_Release";
-    sha256 = "0ir5gzhw98gfn15x58g1fwi11jd7gysvacqxg1v0jdjhgdl4m5sx";
+  src = fetchFromGitea {
+    domain = "repo.palemoon.org";
+    owner = "MoonchildProductions";
+    repo = "Pale-Moon";
+    rev = "${version}_Release";
+    fetchSubmodules = true;
+    sha256 = "sha256-fIQAQCtjA/9Otft3e9Z4xWgE09sqsdArYQtZqmEgfTc=";
   };
 
-  desktopItem = makeDesktopItem {
-    name = "palemoon";
-    exec = "palemoon %U";
-    icon = "palemoon";
-    desktopName = "Pale Moon";
-    genericName = "Web Browser";
-    categories = "Application;Network;WebBrowser;";
-    mimeType = stdenv.lib.concatStringsSep ";" [
-      "text/html"
-      "text/xml"
-      "application/xhtml+xml"
-      "application/vnd.mozilla.xul+xml"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-      "x-scheme-handler/ftp"
-    ];
-  };
+  nativeBuildInputs = [
+    autoconf213
+    desktop-file-utils
+    gnum4
+    perl
+    pkg-config
+    python2
+    unzip
+    which
+    wrapGAppsHook
+    yasm
+    zip
+  ];
 
   buildInputs = [
-    alsaLib bzip2 cairo dbus dbus-glib file fontconfig freetype
-    gst-plugins-base gstreamer gst_all_1.gst-plugins-base gtk2
-    hunspell icu libevent libjpeg libnotify libstartup_notification
-    libvpx makeWrapper libGLU_combined nspr nss pango perl pkgconfig python
-    libpulseaudio sqlite unzip which yasm zip zlib
-  ] ++ (with xorg; [
-    libX11 libXext libXft libXi libXrender libXScrnSaver
-    libXt pixman xorgproto
-  ]);
+    alsa-lib
+    cairo
+    dbus
+    dbus-glib
+    ffmpeg
+    fontconfig
+    freetype
+    gnome2.GConf
+    gtk2
+    libGL
+    libGLU
+    libevent
+    libnotify
+    libpulseaudio
+    libstartup_notification
+    pango
+    zlib
+  ]
+  ++ (with xorg; [
+    libX11
+    libXext
+    libXft
+    libXi
+    libXrender
+    libXScrnSaver
+    libXt
+    pixman
+    xorgproto
+  ])
+  ++ lib.optionals withGTK3 [
+    gtk3
+  ];
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    patchShebangs ./mach
+  '';
+
   configurePhase = ''
-    export AUTOCONF=${autoconf213}/bin/autoconf
-    export MOZBUILD_STATE_PATH=$(pwd)/.mozbuild
-    export MOZ_CONFIG=$(pwd)/.mozconfig
-    export builddir=$(pwd)/build
-    mkdir -p $MOZBUILD_STATE_PATH $builddir
-    echo > $MOZ_CONFIG "
-    . $src/build/mozconfig.common
-    ac_add_options --prefix=$out
-    ac_add_options --with-pthreads
-    ac_add_options --enable-application=browser
-    ac_add_options --enable-official-branding
-    ac_add_options --enable-optimize="-O2"
-    ac_add_options --enable-release
-    ac_add_options --enable-devtools
-    ac_add_options --enable-jemalloc
-    ac_add_options --enable-shared-js
-    ac_add_options --enable-strip
-    ac_add_options --disable-tests
-    ac_add_options --disable-installer
-    ac_add_options --disable-updaters
-    "
+    runHook preConfigure
+
+    export MOZCONFIG=$PWD/mozconfig
+    export MOZ_NOSPAM=1
+
+    export build64=${lib.optionalString stdenv.hostPlatform.is64bit "1"}
+    export gtkversion=${if withGTK3 then "3" else "2"}
+    export xlibs=${lib.makeLibraryPath [ xorg.libX11 ]}
+    export prefix=$out
+    export mozmakeflags="-j${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"}"
+    export autoconf=${autoconf213}/bin/autoconf
+
+    substituteAll ${./mozconfig} $MOZCONFIG
+
+    runHook postConfigure
   '';
 
-  patchPhase = ''
-    chmod u+w .
-  '';
-
-  hardeningDisable = [ "format" ];
-  
   buildPhase = ''
-    cd $builddir
-    $src/mach build
+    runHook preBuild
+
+    ./mach build
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    runHook preInstall
 
-    for n in 16 22 24 32 48 256; do
+    ./mach install
+
+    # Install official branding stuff
+    desktop-file-install --dir=$out/share/applications \
+      ./palemoon/branding/official/palemoon.desktop
+    for iconname in default{16,22,24,32,48,256} mozicon128; do
+      n=''${iconname//[^0-9]/}
       size=$n"x"$n
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      cp $src/browser/branding/official/default$n.png \
-         $out/share/icons/hicolor/$size/apps/palemoon.png
+      install -Dm644 ./palemoon/branding/official/$iconname.png $out/share/icons/hicolor/$size/apps/palemoon.png
     done
 
-    cd $builddir
-    $src/mach install
+    # Remove unneeded SDK data from installation
+    # https://forum.palemoon.org/viewtopic.php?f=37&t=26796&p=214676#p214729
+    rm -r $out/{include,share/idl,lib/palemoon-devel-${version}}
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    description = "A web browser";
+  dontWrapGApps = true;
+
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        ffmpeg
+        libpulseaudio
+      ];
+    in
+      ''
+        gappsWrapperArgs+=(
+          --prefix LD_LIBRARY_PATH : "${libPath}"
+        )
+    wrapGApp $out/lib/palemoon-${version}/palemoon
+  '';
+
+  meta = with lib; {
+    homepage = "https://www.palemoon.org/";
+    description = "An Open Source, Goanna-based web browser focusing on efficiency and customization";
     longDescription = ''
       Pale Moon is an Open Source, Goanna-based web browser focusing on
       efficiency and customization.
@@ -114,9 +187,29 @@ stdenv.mkDerivation rec {
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    homepage    = https://www.palemoon.org/;
-    license     = licenses.mpl20;
-    maintainers = with maintainers; [ rnhmjoj AndersonTorres ];
-    platforms   = platforms.linux;
+    changelog = "https://repo.palemoon.org/MoonchildProductions/Pale-Moon/releases/tag/${version}_Release";
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
+  };
+
+  passthru = {
+    updateScript = writeScript "update-${pname}" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p common-updater-scripts curl libxml2
+
+      set -eu -o pipefail
+
+      # Only release note announcement == finalized release
+      version="$(
+        curl -s 'http://www.palemoon.org/releasenotes.shtml' |
+        xmllint --html --xpath 'html/body/table/tbody/tr/td/h3/text()' - 2>/dev/null | head -n1 |
+        sed 's/v\(\S*\).*/\1/'
+      )"
+      update-source-version ${pname} "$version"
+    '';
+    tests.version = testers.testVersion {
+      package = palemoon;
+    };
   };
 }

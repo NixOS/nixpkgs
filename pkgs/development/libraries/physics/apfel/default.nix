@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, gfortran, lhapdf, python2 }:
+{ lib, stdenv, fetchFromGitHub, gfortran, lhapdf, python3, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "apfel-${version}";
-  version = "3.0.3";
+  pname = "apfel";
+  version = "3.0.6";
 
   src = fetchFromGitHub {
     owner = "scarrazza";
     repo = "apfel";
     rev = version;
-    sha256 = "13dvcc5ba6djflrcy5zf5ikaw8s78zd8ac6ickc0hxhbmx1gjb4j";
+    sha256 = "sha256-fRdJ+C92tEC75iUwP9Tmm/EswrlA52eUo5fBjfieH9o=";
   };
 
-  buildInputs = [ gfortran lhapdf python2 ];
+  buildInputs = [ gfortran lhapdf python3 zlib ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A PDF Evolution Library";
     license     = licenses.gpl3;
-    homepage    = http://apfel.mi.infn.it/;
+    homepage    = "https://apfel.mi.infn.it/";
     platforms   = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };

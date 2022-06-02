@@ -1,34 +1,57 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, docbook_xsl, docbook_xml_dtd_43, gtk-doc, icu
-, libxslt, pkgconfig, python3 }:
+{ lib, stdenv
+, fetchurl
+, autoreconfHook
+, docbook_xsl
+, docbook_xml_dtd_43
+, gtk-doc
+, lzip
+, libidn2
+, libunistring
+, libxslt
+, pkg-config
+, python3
+, valgrind
+, publicsuffix-list
+}:
 
 let
-
-  listVersion = "2017-02-03";
-  listSources = fetchFromGitHub {
-    sha256 = "0fhc86pjv50hxj3xf9r4mh0zzvdzqp5lac20caaxq1hlvdzavaa3";
-    rev = "37e30d13801eaad3383b122c11d8091c7ac21040";
-    repo = "list";
-    owner = "publicsuffix";
-  };
-
-  libVersion = "0.20.2";
-
+  enableValgrindTests = !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
+    # Apparently valgrind doesn't support some new ARM features on (some) Hydra machines:
+    #  VEX: Mismatch detected between RDMA and atomics features.
+    && !stdenv.isAarch64;
 in stdenv.mkDerivation rec {
-  name = "libpsl-${version}";
-  version = "${libVersion}-list-${listVersion}";
+  pname = "libpsl";
+  version = "0.21.1";
 
-  src = fetchFromGitHub {
-    sha256 = "0ijingxpnvl5xnna32j93ijagvjsvw2lhj71q39hz9xhzjzrda9b";
-    rev = "libpsl-${libVersion}";
-    repo = "libpsl";
-    owner = "rockdaboot";
+  src = fetchurl {
+    url = "https://github.com/rockdaboot/libpsl/releases/download/${version}/libpsl-${version}.tar.lz";
+    sha256 = "1a9kp2rj71jb9q030lmp3zhy33rqxscawbfzhp288fxvazapahv4";
   };
 
-  buildInputs = [ icu libxslt ];
-  nativeBuildInputs = [ autoreconfHook docbook_xsl docbook_xml_dtd_43 gtk-doc pkgconfig python3 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    docbook_xsl
+    docbook_xml_dtd_43
+    gtk-doc
+    lzip
+    pkg-config
+    python3
+    libxslt
+  ] ++ lib.optionals enableValgrindTests [
+    valgrind
+  ];
+
+  buildInputs = [
+    libidn2
+    libunistring
+    libxslt
+  ];
+
+  propagatedBuildInputs = [
+    publicsuffix-list
+  ];
 
   postPatch = ''
-    substituteInPlace src/psl.c --replace bits/stat.h sys/stat.h
     patchShebangs src/psl-make-dafsa
   '';
 
@@ -36,22 +59,21 @@ in stdenv.mkDerivation rec {
     gtkdocize
   '';
 
-  preConfigure = ''
-    # The libpsl check phase requires the list's test scripts (tests/) as well
-    cp -Rv "${listSources}"/* list
-  '';
   configureFlags = [
-    "--disable-builtin"
-    "--disable-static"
-    "--enable-gtk-doc"
+    # "--enable-gtk-doc"
     "--enable-man"
+    "--with-psl-distfile=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
+    "--with-psl-file=${publicsuffix-list}/share/publicsuffix/public_suffix_list.dat"
+    "--with-psl-testfile=${publicsuffix-list}/share/publicsuffix/test_psl.txt"
+  ] ++ lib.optionals enableValgrindTests [
+    "--enable-valgrind-tests"
   ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library for the Publix Suffix List";
     longDescription = ''
       libpsl is a C library for the Publix Suffix List (PSL). A "public suffix"
@@ -60,8 +82,11 @@ in stdenv.mkDerivation rec {
       "supercookies" and "super domain" certificates, for highlighting parts of
       the domain in a user interface or sorting domain lists by site.
     '';
-    homepage = http://rockdaboot.github.io/libpsl/;
+    homepage = "https://rockdaboot.github.io/libpsl/";
+    changelog = "https://raw.githubusercontent.com/rockdaboot/${pname}/${pname}-${version}/NEWS";
     license = licenses.mit;
-    platforms = with platforms; linux ++ darwin;
+    maintainers = [ maintainers.c0bw3b ];
+    mainProgram = "psl";
+    platforms = platforms.unix;
   };
 }

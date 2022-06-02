@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "xattr";
-  version = "0.9.6";
+  version = "0.9.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7cb1b28eeab4fe99cc4350e831434142fce658f7d03f173ff7722144e6a47458";
+    sha256 = "09cb7e1efb3aa1b4991d6be4eb25b73dc518b4fe894f0915f5b0dcede972f346";
   };
 
   propagatedBuildInputs = [ cffi ];
@@ -23,8 +23,8 @@ buildPythonPackage rec {
     ${python.interpreter} -m compileall -f xattr
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://github.com/xattr/xattr;
+  meta = with lib; {
+    homepage = "https://github.com/xattr/xattr";
     description = "Python wrapper for extended filesystem attributes";
     license = licenses.mit;
   };

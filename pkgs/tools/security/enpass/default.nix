@@ -1,12 +1,12 @@
 { stdenv, fetchurl, dpkg, xorg
-, glib, libGLU_combined, libpulseaudio, zlib, dbus, fontconfig, freetype
+, glib, libGLU, libGL, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk3, pango
-, makeWrapper , python, pythonPackages, lib
-, lsof, curl, libuuid, cups, mesa_drivers
+, makeWrapper , python3Packages, lib
+, lsof, curl, libuuid, cups, mesa, xz, libxkbcommon
 }:
 
 let
-  all_data = builtins.fromJSON (builtins.readFile ./data.json);
+  all_data = lib.importJSON ./data.json;
   system_map = {
     # i686-linux = "i386"; Uncomment if enpass 6 becomes available on i386
     x86_64-linux = "amd64";
@@ -14,12 +14,12 @@ let
 
   data = all_data.${system_map.${stdenv.hostPlatform.system} or (throw "Unsupported platform")};
 
-  baseUrl = http://repo.sinew.in;
+  baseUrl = "http://repo.sinew.in";
 
   # used of both wrappers and libpath
   libPath = lib.makeLibraryPath (with xorg; [
-    mesa_drivers
-    libGLU_combined
+    mesa.drivers
+    libGLU libGL
     fontconfig
     freetype
     libpulseaudio
@@ -38,26 +38,29 @@ let
     curl
     libuuid
     cups
+    xz
+    libxkbcommon
   ]);
-  package = stdenv.mkDerivation rec {
+  package = stdenv.mkDerivation {
 
     inherit (data) version;
-    name = "enpass-${version}";
+    pname = "enpass";
 
     src = fetchurl {
       inherit (data) sha256;
       url = "${baseUrl}/${data.path}";
     };
 
-    meta = {
-      description = "a well known password manager";
-      homepage = https://www.enpass.io/;
-      license = lib.licenses.unfree;
+    meta = with lib; {
+      description = "A well known password manager";
+      homepage = "https://www.enpass.io/";
+      license = licenses.unfree;
       platforms = [ "x86_64-linux" "i686-linux"];
+      maintainers = with maintainers; [ ewok ];
     };
 
-    buildInputs = [makeWrapper dpkg];
-    phases = [ "unpackPhase" "installPhase" ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [dpkg];
 
     unpackPhase = "dpkg -X $src .";
     installPhase=''
@@ -76,17 +79,19 @@ let
       # lsof must be in PATH for proper operation
       wrapProgram $out/bin/Enpass \
         --set LD_LIBRARY_PATH "${libPath}" \
-        --prefix PATH : ${lsof}/bin
+        --prefix PATH : ${lsof}/bin \
+        --unset QML2_IMPORT_PATH \
+        --unset QT_PLUGIN_PATH
     '';
   };
   updater = {
-    update = stdenv.mkDerivation rec {
+    update = stdenv.mkDerivation {
       name = "enpass-update-script";
       SCRIPT =./update_script.py;
 
-      buildInputs = with pythonPackages; [python requests pathlib2 six attrs ];
+      buildInputs = with python3Packages; [python requests pathlib2 six attrs ];
       shellHook = ''
-      exec python $SCRIPT --target pkgs/tools/security/enpass/data.json --repo ${baseUrl}
+        exec python $SCRIPT --target pkgs/tools/security/enpass/data.json --repo ${baseUrl}
       '';
 
     };

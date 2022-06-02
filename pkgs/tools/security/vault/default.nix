@@ -1,44 +1,51 @@
-{ stdenv, fetchFromGitHub, go, gox, removeReferencesTo }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests
+, makeWrapper
+, gawk
+, glibc
+}:
 
-stdenv.mkDerivation rec {
-  name = "vault-${version}";
-  version = "1.0.3";
+buildGoModule rec {
+  pname = "vault";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "1c5v1m8b6nm28mjwpsgc73n8q475pkzpdvyx46rf3xyrh01rfrnz";
+    sha256 = "sha256-12LOYp2ffTC/IOyNyT2PMnkP4FOKT8HROZNRWyTHxhA=";
   };
 
-  nativeBuildInputs = [ go gox removeReferencesTo ];
+  vendorSha256 = "sha256-w5nUkCNo9xfalbc/U7uYaHZsUdyMV3tKDypQM9MnwE4=";
 
-  preBuild = ''
-    patchShebangs ./
-    substituteInPlace scripts/build.sh --replace 'git rev-parse HEAD' 'echo ${src.rev}'
-    sed -i s/'^GIT_DIRTY=.*'/'GIT_DIRTY="+NixOS"'/ scripts/build.sh
+  subPackages = [ "." ];
 
-    mkdir -p .git/hooks src/github.com/hashicorp
-    ln -s $(pwd) src/github.com/hashicorp/vault
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-    export GOPATH=$(pwd)
-    export GOCACHE="$TMPDIR/go-cache"
+  tags = [ "vault" ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/hashicorp/vault/sdk/version.GitCommit=${src.rev}"
+    "-X github.com/hashicorp/vault/sdk/version.Version=${version}"
+    "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
+  ];
+
+  postInstall = ''
+    echo "complete -C $out/bin/vault vault" > vault.bash
+    installShellCompletion vault.bash
+  '' + lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/vault \
+      --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/bash-completion/completions
+  passthru.tests = { inherit (nixosTests) vault vault-postgresql; };
 
-    cp pkg/*/* $out/bin/
-    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
-
-    echo "complete -C $out/bin/vault vault" > $out/share/bash-completion/completions/vault
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://www.vaultproject.io;
+  meta = with lib; {
+    homepage = "https://www.vaultproject.io/";
     description = "A tool for managing secrets";
+    changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri ];
+    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri Chili-Man techknowlogick ];
   };
 }

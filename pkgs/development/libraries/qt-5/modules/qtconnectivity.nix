@@ -1,8 +1,8 @@
-{ qtModule, stdenv, qtbase, qtdeclarative, bluez, cf-private }:
+{ qtModule, lib, stdenv, qtbase, qtdeclarative, bluez }:
 
 qtModule {
-  name = "qtconnectivity";
+  pname = "qtconnectivity";
   qtInputs = [ qtbase qtdeclarative ];
-  buildInputs = if stdenv.isDarwin then [ cf-private ] else [ bluez ];
+  buildInputs = lib.optional stdenv.isLinux bluez;
   outputs = [ "out" "dev" "bin" ];
 }

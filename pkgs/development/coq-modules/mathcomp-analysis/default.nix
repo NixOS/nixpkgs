@@ -1,30 +1,47 @@
-{ stdenv, fetchFromGitHub, coq, mathcomp-bigenough, mathcomp-finmap }:
+{ coq, mkCoqDerivation, mathcomp, mathcomp-finmap, mathcomp-bigenough, mathcomp-real-closed,
+  hierarchy-builder, lib, version ? null }:
 
-stdenv.mkDerivation rec {
-  version = "0.1.0";
-  name = "coq${coq.coq-version}-mathcomp-analysis-${version}";
+with lib;
+let mca = mkCoqDerivation {
 
-  src = fetchFromGitHub {
-    owner = "math-comp";
-    repo = "analysis";
-    rev = version;
-    sha256 = "0hwkr2wzy710pcyh274fcarzdx8sv8myp16pv0vq5978nmih46al";
-  };
+  namePrefix = [ "coq" "mathcomp" ];
+  pname = "analysis";
+  owner = "math-comp";
 
-  buildInputs = [ coq ];
-  propagatedBuildInputs = [ mathcomp-bigenough mathcomp-finmap ];
+  release."0.3.13".sha256 = "sha256-Yaztew79KWRC933kGFOAUIIoqukaZOdNOdw4XszR1Hg=";
+  release."0.3.10".sha256 = "sha256-FBH2c8QRibq5Ycw/ieB8mZl0fDiPrYdIzZ6W/A3pIhI=";
+  release."0.3.9".sha256 = "sha256-uUU9diBwUqBrNRLiDc0kz0CGkwTZCUmigPwLbpDOeg4=";
+  release."0.3.6".sha256 = "0g2j7b2hca4byz62ssgg90bkbc8wwp7xkb2d3225bbvihi92b4c5";
+  release."0.3.4".sha256 = "18mgycjgg829dbr7ps77z6lcj03h3dchjbj5iir0pybxby7gd45c";
+  release."0.3.3".sha256 = "1m2mxcngj368vbdb8mlr91hsygl430spl7lgyn9qmn3jykack867";
+  release."0.3.1".sha256 = "1iad288yvrjv8ahl9v18vfblgqb1l5z6ax644w49w9hwxs93f2k8";
+  release."0.2.3".sha256 = "0p9mr8g1qma6h10qf7014dv98ln90dfkwn76ynagpww7qap8s966";
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  inherit version;
+  defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
+      { cases = [ (isGe "8.13") (isGe "1.12.0") ];      out = "0.3.13"; }
+      { cases = [ (range "8.11" "8.14") (isGe "1.12.0") ];      out = "0.3.10"; }
+      { cases = [ (range "8.11" "8.13") "1.11.0" ];             out = "0.3.4"; }
+      { cases = [ (range "8.10" "8.12") "1.11.0" ];             out = "0.3.3"; }
+      { cases = [ (range "8.10" "8.11") "1.11.0" ];             out = "0.3.1"; }
+      { cases = [ (range "8.8"  "8.11") (range "1.8" "1.10") ]; out = "0.2.3"; }
+    ] null;
+
+  propagatedBuildInputs =
+    [ mathcomp.ssreflect mathcomp.field
+      mathcomp-finmap mathcomp-bigenough mathcomp-real-closed ];
 
   meta = {
     description = "Analysis library compatible with Mathematical Components";
-    inherit (src.meta) homepage;
-    inherit (coq.meta) platforms;
-    license = stdenv.lib.licenses.cecill-c;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ maintainers.cohencyril ];
+    license = licenses.cecill-c;
   };
-
-  passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.8" "8.9" ];
-  };
-}
+}; in
+mca.overrideAttrs (o:
+  let ext = { propagatedBuildInputs = o.propagatedBuildInputs
+                                      ++ [ hierarchy-builder ]; };
+  in with versions; switch o.version [
+    {case = "dev";        out = ext;}
+    {case = isGe "0.3.4"; out = ext;}
+  ] {}
+)

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , twitter-common-options
@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname   = "twitter.common.log";
-  version = "0.3.10";
+  version = "0.3.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "81af4b0f51f3fb589f39b410d7031da6792e0ae650a45e9207a25a52a343a555";
+    sha256 = "7160a864eed30044705e05b816077dd193aec0c66f50ef1c077b7f8490e0d06a";
   };
 
   propagatedBuildInputs = [ twitter-common-options twitter-common-dirutil ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Twitter's common logging library";
     homepage    = "https://twitter.github.io/commons/";
     license     = licenses.asl20;

@@ -1,42 +1,59 @@
 { config, lib, pkgs, ... }:
 
-with pkgs;
 with lib;
 
 let
   cfg = config.networking.networkmanager;
 
-  dynamicHostsEnabled =
-    cfg.dynamicHosts.enable && cfg.dynamicHosts.hostsDirs != {};
+  delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
 
-  # /var/lib/misc is for dnsmasq.leases.
-  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
+  enableIwd = cfg.wifi.backend == "iwd";
 
-  configFile = writeText "NetworkManager.conf" ''
-    [main]
-    plugins=keyfile
-    dhcp=${cfg.dhcp}
-    dns=${cfg.dns}
+  mkValue = v:
+    if v == true then "yes"
+    else if v == false then "no"
+    else if lib.isInt v then toString v
+    else v;
 
-    [keyfile]
-    ${optionalString (cfg.unmanaged != [])
-      ''unmanaged-devices=${lib.concatStringsSep ";" cfg.unmanaged}''}
-
-    [logging]
-    level=${cfg.logLevel}
-
-    [connection]
-    ipv6.ip6-privacy=2
-    ethernet.cloned-mac-address=${cfg.ethernet.macAddress}
-    wifi.cloned-mac-address=${cfg.wifi.macAddress}
-    ${optionalString (cfg.wifi.powersave != null)
-      ''wifi.powersave=${if cfg.wifi.powersave then "3" else "2"}''}
-
-    [device]
-    wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
-
-    ${cfg.extraConfig}
+  mkSection = name: attrs: ''
+    [${name}]
+    ${
+      lib.concatStringsSep "\n"
+        (lib.mapAttrsToList
+          (k: v: "${k}=${mkValue v}")
+          (lib.filterAttrs
+            (k: v: v != null)
+            attrs))
+    }
   '';
+
+  configFile = pkgs.writeText "NetworkManager.conf" (lib.concatStringsSep "\n" [
+    (mkSection "main" {
+      plugins = "keyfile";
+      dhcp = cfg.dhcp;
+      dns = cfg.dns;
+      # If resolvconf is disabled that means that resolv.conf is managed by some other module.
+      rc-manager =
+        if config.networking.resolvconf.enable then "resolvconf"
+        else "unmanaged";
+      firewall-backend = cfg.firewallBackend;
+    })
+    (mkSection "keyfile" {
+      unmanaged-devices =
+        if cfg.unmanaged == [] then null
+        else lib.concatStringsSep ";" cfg.unmanaged;
+    })
+    (mkSection "logging" {
+      audit = config.security.audit.enable;
+      level = cfg.logLevel;
+    })
+    (mkSection "connection" cfg.connectionConfig)
+    (mkSection "device" {
+      "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
+      "wifi.backend" = cfg.wifi.backend;
+    })
+    cfg.extraConfig
+  ]);
 
   /*
     [network-manager]
@@ -64,25 +81,25 @@ let
     });
   '';
 
-  ns = xs: writeText "nameservers" (
+  ns = xs: pkgs.writeText "nameservers" (
     concatStrings (map (s: "nameserver ${s}\n") xs)
   );
 
-  overrideNameserversScript = writeScript "02overridedns" ''
+  overrideNameserversScript = pkgs.writeScript "02overridedns" ''
     #!/bin/sh
-    tmp=`${coreutils}/bin/mktemp`
-    ${gnused}/bin/sed '/nameserver /d' /etc/resolv.conf > $tmp
-    ${gnugrep}/bin/grep 'nameserver ' /etc/resolv.conf | \
-      ${gnugrep}/bin/grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
-    ${optionalString (cfg.appendNameservers != []) "${coreutils}/bin/cat $tmp $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf"}
-    ${optionalString (cfg.insertNameservers != []) "${coreutils}/bin/cat $tmp ${ns cfg.insertNameservers} $tmp.ns > /etc/resolv.conf"}
-    ${coreutils}/bin/rm -f $tmp $tmp.ns
+    PATH=${with pkgs; makeBinPath [ gnused gnugrep coreutils ]}
+    tmp=$(mktemp)
+    sed '/nameserver /d' /etc/resolv.conf > $tmp
+    grep 'nameserver ' /etc/resolv.conf | \
+      grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
+    cat $tmp ${ns cfg.insertNameservers} $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf
+    rm -f $tmp $tmp.ns
   '';
 
   dispatcherTypesSubdirMap = {
-    "basic" = "";
-    "pre-up" = "pre-up.d/";
-    "pre-down" = "pre-down.d/";
+    basic = "";
+    pre-up = "pre-up.d/";
+    pre-down = "pre-down.d/";
   };
 
   macAddressOpt = mkOption {
@@ -90,15 +107,46 @@ let
     default = "preserve";
     example = "00:11:22:33:44:55";
     description = ''
-      "XX:XX:XX:XX:XX:XX": MAC address of the interface.
-      <literal>permanent</literal>: use the permanent MAC address of the device.
-      <literal>preserve</literal>: don’t change the MAC address of the device upon activation.
-      <literal>random</literal>: generate a randomized value upon each connect.
-      <literal>stable</literal>: generate a stable, hashed MAC address.
+      Set the MAC address of the interface.
+      <variablelist>
+        <varlistentry>
+          <term>"XX:XX:XX:XX:XX:XX"</term>
+          <listitem><para>MAC address of the interface</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"permanent"</literal></term>
+          <listitem><para>Use the permanent MAC address of the device</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"preserve"</literal></term>
+          <listitem><para>Don’t change the MAC address of the device upon activation</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"random"</literal></term>
+          <listitem><para>Generate a randomized value upon each connect</para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"stable"</literal></term>
+          <listitem><para>Generate a stable, hashed MAC address</para></listitem>
+        </varlistentry>
+      </variablelist>
     '';
   };
 
+  packages = [
+    pkgs.modemmanager
+    pkgs.networkmanager
+  ]
+  ++ cfg.plugins
+  ++ lib.optionals (!delegateWireless && !enableIwd) [
+    pkgs.wpa_supplicant
+  ];
+
 in {
+
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
 
   ###### interface
 
@@ -118,48 +166,103 @@ in {
         '';
       };
 
+      connectionConfig = mkOption {
+        type = with types; attrsOf (nullOr (oneOf [
+          bool
+          int
+          str
+        ]));
+        default = {};
+        description = ''
+          Configuration for the [connection] section of NetworkManager.conf.
+          Refer to
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#id-1.2.3.11
+          </link>
+          or
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for more information.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
         description = ''
           Configuration appended to the generated NetworkManager.conf.
+          Refer to
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
+          </link>
+          or
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for more information.
         '';
       };
 
       unmanaged = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [];
         description = ''
           List of interfaces that will not be managed by NetworkManager.
-          Interface name can be specified here, but if you need more fidelity
-          see "Device List Format" in NetworkManager.conf man page.
+          Interface name can be specified here, but if you need more fidelity,
+          refer to
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#device-spec
+          </link>
+          or the "Device List Format" Appendix of
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>.
         '';
       };
 
-      # Ugly hack for using the correct gnome3 packageSet
-      basePackages = mkOption {
-        type = types.attrsOf types.package;
-        default = { inherit networkmanager modemmanager wpa_supplicant
-                            networkmanager-openvpn networkmanager-vpnc
-                            networkmanager-openconnect networkmanager-fortisslvpn
-                            networkmanager-l2tp networkmanager-iodine; };
-        internal = true;
-      };
-
-      packages = mkOption {
-        type = types.listOf types.path;
+      plugins = mkOption {
+        type =
+          let
+            networkManagerPluginPackage = types.package // {
+              description = "NetworkManager plug-in";
+              check =
+                p:
+                lib.assertMsg
+                  (types.package.check p
+                    && p ? networkManagerPlugin
+                    && lib.isString p.networkManagerPlugin)
+                  ''
+                    Package ‘${p.name}’, is not a NetworkManager plug-in.
+                    Those need to have a ‘networkManagerPlugin’ attribute.
+                  '';
+            };
+          in
+          types.listOf networkManagerPluginPackage;
         default = [ ];
         description = ''
-          Extra packages that provide NetworkManager plugins.
+          List of NetworkManager plug-ins to enable.
+          Some plug-ins are enabled by the NetworkManager module by default.
         '';
-        apply = list: (attrValues cfg.basePackages) ++ list;
       };
 
       dhcp = mkOption {
-        type = types.enum [ "dhclient" "dhcpcd" "internal" ];
-        default = "dhclient";
+        type = types.enum [ "dhcpcd" "internal" ];
+        default = "internal";
         description = ''
           Which program (or internal library) should be used for DHCP.
+        '';
+      };
+
+      firewallBackend = mkOption {
+        type = types.enum [ "iptables" "nftables" "none" ];
+        default = "iptables";
+        description = ''
+          Which firewall backend should be used for configuring masquerading with shared mode.
+          If set to none, NetworkManager doesn't manage the configuration at all.
         '';
       };
 
@@ -194,6 +297,15 @@ in {
       wifi = {
         macAddress = macAddressOpt;
 
+        backend = mkOption {
+          type = types.enum [ "wpa_supplicant" "iwd" ];
+          default = "wpa_supplicant";
+          description = ''
+            Specify the Wi-Fi backend used for the device.
+            Currently supported are <option>wpa_supplicant</option> or <option>iwd</option> (experimental).
+          '';
+        };
+
         powersave = mkOption {
           type = types.nullOr types.bool;
           default = null;
@@ -219,67 +331,15 @@ in {
           Set the DNS (<literal>resolv.conf</literal>) processing mode.
           </para>
           <para>
-          Options:
-          <variablelist>
-          <varlistentry>
-            <term><literal>"default"</literal></term>
-            <listitem><para>
-              NetworkManager will update <literal>/etc/resolv.conf</literal> to
-              reflect the nameservers provided by currently active connections.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"dnsmasq"</literal></term>
-            <listitem>
-              <para>
-                Enable NetworkManager's dnsmasq integration. NetworkManager will
-                run dnsmasq as a local caching nameserver, using a "split DNS"
-                configuration if you are connected to a VPN, and then update
-                <literal>resolv.conf</literal> to point to the local nameserver.
-              </para>
-              <para>
-                It is possible to pass custom options to the dnsmasq instance by
-                adding them to files in the
-                <literal>/etc/NetworkManager/dnsmasq.d/</literal> directory.
-              </para>
-              <para>
-                When multiple upstream servers are available, dnsmasq will
-                initially contact them in parallel and then use the fastest to
-                respond, probing again other servers after some time.  This
-                behavior can be modified passing the
-                <literal>all-servers</literal> or <literal>strict-order</literal>
-                options to dnsmasq (see the manual page for more details).
-              </para>
-              <para>
-                Note that this option causes NetworkManager to launch and manage
-                its own instance of the dnsmasq daemon, which is
-                <emphasis>not</emphasis> the same as setting
-                <literal>services.dnsmasq.enable = true;</literal>.
-              </para>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"unbound"</literal></term>
-            <listitem><para>
-              NetworkManager will talk to unbound and dnssec-triggerd,
-              providing a "split DNS" configuration with DNSSEC support.
-              <literal>/etc/resolv.conf</literal> will be managed by
-              dnssec-trigger daemon.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"systemd-resolved"</literal></term>
-            <listitem><para>
-              NetworkManager will push the DNS configuration to systemd-resolved.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>"none"</literal></term>
-            <listitem><para>
-              NetworkManager will not modify resolv.conf.
-            </para></listitem>
-          </varlistentry>
-          </variablelist>
+          A description of these modes can be found in the main section of
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html
+          </link>
+          or in
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>.
         '';
       };
 
@@ -306,12 +366,13 @@ in {
           };
         });
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
         [ {
               source = pkgs.writeText "upHook" '''
 
                 if [ "$2" != "up" ]; then
                     logger "exit: event $2 != up"
+                    exit
                 fi
 
                 # coreutils and iproute are in PATH too
@@ -332,58 +393,38 @@ in {
           </para><para>
           If you enable this option the
           <literal>networkmanager_strongswan</literal> plugin will be added to
-          the <option>networking.networkmanager.packages</option> option
+          the <option>networking.networkmanager.plugins</option> option
           so you don't need to to that yourself.
         '';
       };
 
-      dynamicHosts = {
-        enable = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Enabling this option requires the
-            <option>networking.networkmanager.dns</option> option to be
-            set to <literal>dnsmasq</literal>. If enabled, the directories
-            defined by the
-            <option>networking.networkmanager.dynamicHosts.hostsDirs</option>
-            option will be set up when the service starts. The dnsmasq instance
-            managed by NetworkManager will then watch those directories for
-            hosts files (see the <literal>--hostsdir</literal> option of
-            dnsmasq). This way a non-privileged user can add or override DNS
-            entries on the local system (depending on what hosts directories
-            that are configured)..
-          '';
-        };
-        hostsDirs = mkOption {
-          type = with types; attrsOf (submodule {
-            options = {
-              user = mkOption {
-                type = types.str;
-                default = "root";
-                description = ''
-                  The user that will own the hosts directory.
-                '';
-              };
-              group = mkOption {
-                type = types.str;
-                default = "root";
-                description = ''
-                  The group that will own the hosts directory.
-                '';
-              };
-            };
-          });
-          default = {};
-          description = ''
-            Defines a set of directories (relative to
-            <literal>/run/NetworkManager/hostdirs</literal>) that dnsmasq will
-            watch for hosts files.
-          '';
-        };
+      enableFccUnlock = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable FCC unlock procedures. Since release 1.18.4, the ModemManager daemon no longer
+          automatically performs the FCC unlock procedure by default. See
+          <link xlink:href="https://modemmanager.org/docs/modemmanager/fcc-unlock/">the docs</link>
+          for more details.
+        '';
       };
     };
   };
+
+  imports = [
+    (mkRenamedOptionModule
+      [ "networking" "networkmanager" "packages" ]
+      [ "networking" "networkmanager" "plugins" ])
+    (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
+    (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
+      This option was removed because allowing (multiple) regular users to
+      override host entries affecting the whole system opens up a huge attack
+      vector. There seem to be very rare cases where this might be useful.
+      Consider setting system-wide host entries using networking.hosts, provide
+      them via the DNS server in your network, or use environment.etc
+      to add a file into /etc/NetworkManager/dnsmasq.d reconfiguring hostsdir.
+    '')
+  ];
 
 
   ###### implementation
@@ -391,130 +432,140 @@ in {
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = config.networking.wireless.enable == false;
-        message = "You can not use networking.networkmanager with networking.wireless";
-      }
-      { assertion = !dynamicHostsEnabled || (dynamicHostsEnabled && cfg.dns == "dnsmasq");
+      { assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [];
         message = ''
-          To use networking.networkmanager.dynamicHosts you also need to set
-          networking.networkmanager.dns = "dnsmasq"
+          You can not use networking.networkmanager with networking.wireless.
+          Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
         '';
       }
     ];
 
-    environment.etc = with cfg.basePackages; [
-      { source = configFile;
-        target = "NetworkManager/NetworkManager.conf";
-      }
-      { source = "${networkmanager-openvpn}/lib/NetworkManager/VPN/nm-openvpn-service.name";
-        target = "NetworkManager/VPN/nm-openvpn-service.name";
-      }
-      { source = "${networkmanager-vpnc}/lib/NetworkManager/VPN/nm-vpnc-service.name";
-        target = "NetworkManager/VPN/nm-vpnc-service.name";
-      }
-      { source = "${networkmanager-openconnect}/lib/NetworkManager/VPN/nm-openconnect-service.name";
-        target = "NetworkManager/VPN/nm-openconnect-service.name";
-      }
-      { source = "${networkmanager-fortisslvpn}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name";
-        target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
-      }
-      { source = "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
-        target = "NetworkManager/VPN/nm-l2tp-service.name";
-      }
-      { source = "${networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
-        target = "NetworkManager/VPN/nm-strongswan-service.name";
-      }
-      { source = "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
-        target = "NetworkManager/VPN/nm-iodine-service.name";
-      }
-    ] ++ optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
-           { source = overrideNameserversScript;
-             target = "NetworkManager/dispatcher.d/02overridedns";
-           }
-      ++ lib.imap1 (i: s: {
-        inherit (s) source;
-        target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
-        mode = "0544";
-      }) cfg.dispatcherScripts
-      ++ optional (dynamicHostsEnabled)
-           { target = "NetworkManager/dnsmasq.d/dyndns.conf";
-             text = concatMapStrings (n: ''
-               hostsdir=/run/NetworkManager/hostsdirs/${n}
-             '') (attrNames cfg.dynamicHosts.hostsDirs);
-           };
+    hardware.wirelessRegulatoryDatabase = true;
 
-    environment.systemPackages = cfg.packages;
+    environment.etc = {
+        "NetworkManager/NetworkManager.conf".source = configFile;
+      }
+      // builtins.listToAttrs (map (pkg: nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
+        source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
+      }) cfg.plugins)
+      // optionalAttrs cfg.enableFccUnlock
+         {
+           "ModemManager/fcc-unlock.d".source =
+             "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/*";
+         }
+      // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
+         {
+           "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
+         }
+      // listToAttrs (lib.imap1 (i: s:
+         {
+            name = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
+            value = { mode = "0544"; inherit (s) source; };
+         }) cfg.dispatcherScripts);
 
-    users.groups = [{
-      name = "networkmanager";
-      gid = config.ids.gids.networkmanager;
-    }
-    {
-      name = "nm-openvpn";
-      gid = config.ids.gids.nm-openvpn;
-    }];
-    users.users = [{
-      name = "nm-openvpn";
-      uid = config.ids.uids.nm-openvpn;
-      extraGroups = [ "networkmanager" ];
-    }
-    {
-      name = "nm-iodine";
-      isSystemUser = true;
-      group = "networkmanager";
-    }];
+    environment.systemPackages = packages;
 
-    systemd.packages = cfg.packages;
-
-    systemd.services."network-manager" = {
-      wantedBy = [ "network.target" ];
-      restartTriggers = [ configFile ];
-
-      preStart = ''
-        mkdir -m 700 -p /etc/NetworkManager/system-connections
-        mkdir -m 700 -p /etc/ipsec.d
-        mkdir -m 755 -p ${stateDirs}
-      '';
+    users.groups = {
+      networkmanager.gid = config.ids.gids.networkmanager;
+      nm-openvpn.gid = config.ids.gids.nm-openvpn;
     };
 
-    systemd.services.nm-setup-hostsdirs = mkIf dynamicHostsEnabled {
-      wantedBy = [ "network-manager.service" ];
-      before = [ "network-manager.service" ];
-      partOf = [ "network-manager.service" ];
-      script = concatStrings (mapAttrsToList (n: d: ''
-        mkdir -p "/run/NetworkManager/hostsdirs/${n}"
-        chown "${d.user}:${d.group}" "/run/NetworkManager/hostsdirs/${n}"
-        chmod 0775 "/run/NetworkManager/hostsdirs/${n}"
-      '') cfg.dynamicHosts.hostsDirs);
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
+    users.users = {
+      nm-openvpn = {
+        uid = config.ids.uids.nm-openvpn;
+        group = "nm-openvpn";
+        extraGroups = [ "networkmanager" ];
+      };
+      nm-iodine = {
+        isSystemUser = true;
+        group = "networkmanager";
       };
     };
 
-    systemd.services."NetworkManager-dispatcher" = {
+    systemd.packages = packages;
+
+    systemd.tmpfiles.rules = [
+      "d /etc/NetworkManager/system-connections 0700 root root -"
+      "d /etc/ipsec.d 0700 root root -"
+      "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
+
+      "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+    ];
+
+    systemd.services.NetworkManager = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile ];
 
+      aliases = [ "dbus-org.freedesktop.NetworkManager.service" ];
+
+      serviceConfig = {
+        StateDirectory = "NetworkManager";
+        StateDirectoryMode = 755; # not sure if this really needs to be 755
+      };
+    };
+
+    systemd.services.NetworkManager-wait-online = {
+      wantedBy = [ "network-online.target" ];
+    };
+
+    systemd.services.ModemManager.aliases = [ "dbus-org.freedesktop.ModemManager1.service" ];
+
+    systemd.services.NetworkManager-dispatcher = {
+      wantedBy = [ "network.target" ];
+      restartTriggers = [ configFile overrideNameserversScript ];
+
       # useful binaries for user-specified hooks
-      path = [ pkgs.iproute pkgs.utillinux pkgs.coreutils ];
+      path = [ pkgs.iproute2 pkgs.util-linux pkgs.coreutils ];
+      aliases = [ "dbus-org.freedesktop.nm-dispatcher.service" ];
     };
 
-    # Turn off NixOS' network management
-    networking = {
-      useDHCP = false;
-      # use mkDefault to trigger the assertion about the conflict above
-      wireless.enable = lib.mkDefault false;
-    };
+    # Turn off NixOS' network management when networking is managed entirely by NetworkManager
+    networking = mkMerge [
+      (mkIf (!delegateWireless) {
+        useDHCP = false;
+      })
 
+      {
+        networkmanager.plugins = with pkgs; [
+          networkmanager-fortisslvpn
+          networkmanager-iodine
+          networkmanager-l2tp
+          networkmanager-openconnect
+          networkmanager-openvpn
+          networkmanager-vpnc
+          networkmanager-sstp
+        ];
+      }
+
+      (mkIf cfg.enableStrongSwan {
+        networkmanager.plugins = [ pkgs.networkmanager_strongswan ];
+      })
+
+      (mkIf enableIwd {
+        wireless.iwd.enable = true;
+      })
+
+      {
+        networkmanager.connectionConfig = {
+          "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
+          "wifi.cloned-mac-address" = cfg.wifi.macAddress;
+          "wifi.powersave" =
+            if cfg.wifi.powersave == null then null
+            else if cfg.wifi.powersave then 3
+            else 2;
+        };
+      }
+    ];
+
+    boot.kernelModules = [ "ctr" ];
+
+    security.polkit.enable = true;
     security.polkit.extraConfig = polkitConf;
 
-    networking.networkmanager.packages =
-      mkIf cfg.enableStrongSwan [ pkgs.networkmanager_strongswan ];
+    services.dbus.packages = packages
+      ++ optional cfg.enableStrongSwan pkgs.strongswanNM
+      ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
 
-    services.dbus.packages =
-      optional cfg.enableStrongSwan pkgs.strongswanNM ++ cfg.packages;
-
-    services.udev.packages = cfg.packages;
+    services.udev.packages = packages;
   };
 }

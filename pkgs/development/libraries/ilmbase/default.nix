@@ -1,35 +1,36 @@
-{ stdenv, fetchurl, buildPackages, automake, autoconf, libtool, which }:
+{ stdenv
+, lib
+, buildPackages
+, cmake
+, openexr
+}:
 
 stdenv.mkDerivation rec {
-  name = "ilmbase-${version}";
-  version = "2.3.0";
+  pname = "ilmbase";
+  version = lib.getVersion openexr;
 
-  src = fetchurl {
-    url = "https://github.com/openexr/openexr/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "0qiq5bqq9rxhqjiym2k36sx4vq8adgrz6xf6qwizi9bqm78phsa5";
-  };
+  # the project no longer provides separate tarballs. We may even want to merge
+  # the ilmbase package into openexr in the future.
+  inherit (openexr) src patches;
 
   outputs = [ "out" "dev" ];
 
-  preConfigure = ''
-    patchShebangs ./bootstrap
-    ./bootstrap
-  '';
-
+  nativeBuildInputs = [ cmake ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ automake autoconf libtool which ];
-
-  NIX_CFLAGS_LINK = [ "-pthread" ];
-
-  patches = [ ./bootstrap.patch ./cross.patch ];
 
   # fails 1 out of 1 tests with
   # "lt-ImathTest: testBoxAlgo.cpp:892: void {anonymous}::boxMatrixTransform(): Assertion `b21 == b2' failed"
   # at least on i686. spooky!
   doCheck = stdenv.isx86_64;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.openexr.com/;
+  preConfigure = ''
+    # Need to cd after patches for openexr patches to apply.
+    cd IlmBase
+  '';
+
+  meta = with lib; {
+    description = " A library for 2D/3D vectors and matrices and other mathematical objects, functions and data types for computer graphics";
+    homepage = "https://www.openexr.com/";
     license = licenses.bsd3;
     platforms = platforms.all;
   };

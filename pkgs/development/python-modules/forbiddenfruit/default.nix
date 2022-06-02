@@ -1,30 +1,35 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , nose
 }:
 
 buildPythonPackage rec {
-  version = "0.1.2";
+  version = "0.1.4";
   pname = "forbiddenfruit";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "09ee1959fa34936c15417defa28bfd09cf88ad54c15454bc863d465ed42b8922";
+  src = fetchFromGitHub {
+    owner = "clarete";
+    repo = "forbiddenfruit";
+    rev = version;
+    sha256 = "16chhrxbbmg6lfbzm532fq0v00z8qihcsj0kg2b5jlgnb6qijwn8";
   };
 
   checkInputs = [ nose ];
 
+  preBuild = ''
+    export FFRUIT_EXTENSION="true";
+  '';
+
+  # https://github.com/clarete/forbiddenfruit/pull/47 required to switch to pytest
   checkPhase = ''
+    find ./build -name '*.so' -exec mv {} tests/unit \;
     nosetests
   '';
 
-  # tests directory missing in PyPI tarball
-  doCheck = false;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Patch python built-in objects";
-    homepage = https://pypi.python.org/pypi/forbiddenfruit;
+    homepage = "https://github.com/clarete/forbiddenfruit";
     license = licenses.mit;
   };
 

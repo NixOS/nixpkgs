@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   version = "3.7.7";
-  name = "taktuk-${version}";
+  pname = "taktuk";
 
   buildInputs = [ perl ];
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/33412/${name}.tar.gz";
+    url = "https://gforge.inria.fr/frs/download.php/33412/${pname}-${version}.tar.gz";
     sha256 = "0w0h3ynlcxvq2nzm8hkj20g0805ww3vkw53g0qwj7wvp7p3gcvnr";
   };
 
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
       network to transport commands and perform I/Os multiplexing. It doesn't
       require any specific software on the nodes thanks to a self-propagation
       algorithm.'';
-    homepage = http://taktuk.gforge.inria.fr/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.bzizou ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://taktuk.gforge.inria.fr/";
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.linux;
   };
 }
 

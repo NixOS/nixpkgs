@@ -1,32 +1,38 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, vala
-, desktop-file-utils, gtk3, granite, libgee, gcr, webkitgtk, gobject-introspection, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, meson
+, python3
+, ninja
+, vala
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, libhandy
+, gcr
+, webkitgtk
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "capnet-assist";
-  version = "2.2.3";
-
-  name = "elementary-${pname}-${version}";
+  pname = "elementary-capnet-assist";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "capnet-assist";
     rev = version;
-    sha256 = "15cnwimkmmsb4rwvgm8bizcsn1krsj6k3qc88izn79is75y6wwji";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
-    };
+    sha256 = "sha256-aA71kxu4/dwODZt+DSp3vvely3P0dL23Ykqhd84hrZw=";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -37,22 +43,27 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    libhandy
     webkitgtk
   ];
-
-  # Not useful here or in elementary - See: https://github.com/elementary/capnet-assist/issues/3
-  patches = [ ./remove-capnet-test.patch ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "A small WebKit app that assists a user with login when a captive portal is detected";
-    homepage = https://github.com/elementary/capnet-assist;
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/elementary/capnet-assist";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.capnet-assist";
   };
 }

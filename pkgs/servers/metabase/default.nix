@@ -1,27 +1,32 @@
-{ stdenv, fetchurl, makeWrapper, jre }:
+{ lib, stdenv, fetchurl, makeWrapper, jdk11, nixosTests }:
 
 stdenv.mkDerivation rec {
-  name = "metabase-${version}";
-  version = "0.30.4";
+  pname = "metabase";
+  version = "0.42.1";
 
   src = fetchurl {
-    url = "http://downloads.metabase.com/v${version}/metabase.jar";
-    sha256 = "0mvyl5v798qwdydqsjjq94ihfwi62kq4gprxjg3rcckmjdyx2ycs";
+    url = "https://downloads.metabase.com/v${version}/metabase.jar";
+    hash = "sha256-PmcVVAS/5mDhmOSoFvkZeYkbvFD/KOcgVYuScwD4Olg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
-    makeWrapper ${jre}/bin/java $out/bin/metabase --add-flags "-jar $src"
+    runHook preInstall
+    makeWrapper ${jdk11}/bin/java $out/bin/metabase --add-flags "-jar $src"
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    description = "The easy, open source way for everyone in your company to ask questions and learn from data.";
-    homepage    = https://metabase.com;
-    license     = licenses.agpl3;
+  meta = with lib; {
+    description = "The easy, open source way for everyone in your company to ask questions and learn from data";
+    homepage    = "https://metabase.com";
+    license     = licenses.agpl3Only;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ schneefux thoughtpolice ];
+    maintainers = with maintainers; [ schneefux thoughtpolice mmahut ];
+  };
+  passthru.tests = {
+    inherit (nixosTests) metabase;
   };
 }

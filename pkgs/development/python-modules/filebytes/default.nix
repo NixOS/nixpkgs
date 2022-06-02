@@ -1,18 +1,18 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "filebytes";
-  version = "0.9.18";
+  version = "0.10.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y50wagcs1p5w1j4fxyfr209595m706ifdirv8vr8nc9xqd6ngjs";
+    sha256 = "0h97i6h525hg401dvvaa5krxi184qpvldbdn0izmirvr9pvh4hkn";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://scoding.de/filebytes-introduction";
     license = licenses.gpl2;
     description = "Scripts to parse ELF, PE, Mach-O and OAT (Android Runtime)";

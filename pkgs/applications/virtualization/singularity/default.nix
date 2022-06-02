@@ -1,75 +1,70 @@
-{stdenv
-, removeReferencesTo
-, lib
-, fetchgit
-, fetchFromGitHub
-, utillinux
+{ lib
+, fetchurl
+, util-linux
+, gpgme
 , openssl
+, libuuid
 , coreutils
-, gawk
-, go
 , which
 , makeWrapper
+, cryptsetup
 , squashfsTools
 , buildGoPackage}:
 
 with lib;
 
 buildGoPackage rec {
-  name = "singularity-${version}";
-  version = "3.0.1";
+  pname = "singularity";
+  version = "3.8.7";
 
-  src = fetchFromGitHub {
-    owner = "sylabs";
-    repo = "singularity";
-    rev = "v${version}";
-    sha256 = "1wpsd0il2ipa2n5cnbj8dzs095jycdryq2rx62kikbq7ahzz4fsi";
+  src = fetchurl {
+    url = "https://github.com/hpcng/singularity/releases/download/v${version}/singularity-${version}.tar.gz";
+    sha256 = "sha256-Myny5YP4SoNDyywDgKHWy86vrn0eYztcvK33FD6shZs=";
   };
 
   goPackagePath = "github.com/sylabs/singularity";
-  goDeps = ./deps.nix;
 
-  buildInputs = [ openssl ];
-  nativeBuildInputs = [ removeReferencesTo utillinux which makeWrapper ];
+  buildInputs = [ gpgme openssl libuuid ];
+  nativeBuildInputs = [ util-linux which makeWrapper cryptsetup ];
   propagatedBuildInputs = [ coreutils squashfsTools ];
 
-  postConfigure = ''
-    find . -name vendor -type d -print0 | xargs -0 rm -rf
+  postPatch = ''
+    substituteInPlace internal/pkg/build/files/copy.go \
+      --replace /bin/cp ${coreutils}/bin/cp
+  '';
 
+  postConfigure = ''
     cd go/src/github.com/sylabs/singularity
 
     patchShebangs .
-    sed -i 's|defaultEnv := "/bin:/usr/bin:/sbin:/usr/sbin:/usr/local/bin:/usr/local/sbin"|defaultEnv := "${stdenv.lib.makeBinPath propagatedBuildInputs}"|' src/cmd/singularity/cli/singularity.go
+    sed -i 's|defaultPath := "[^"]*"|defaultPath := "${lib.makeBinPath propagatedBuildInputs}"|' cmd/internal/cli/actions.go
 
-    ./mconfig -V ${version} -p $bin --localstatedir=/var
-    touch builddir/.dep-done
-    touch builddir/vendors-done
+    ./mconfig -V ${version} -p $out --localstatedir=/var
 
     # Don't install SUID binaries
     sed -i 's/-m 4755/-m 755/g' builddir/Makefile
-
-    # Point to base gopath
-    sed -i "s|^cni_vendor_GOPATH :=.*\$|cni_vendor_GOPATH := $NIX_BUILD_TOP/go/src/github.com/containernetworking/plugins/plugins|" builddir/Makefile
   '';
 
   buildPhase = ''
+    runHook preBuild
     make -C builddir
+    runHook postBuild
   '';
 
   installPhase = ''
-    make -C builddir install LOCALSTATEDIR=$bin/var
-    chmod 755 $bin/libexec/singularity/bin/starter-suid
+    runHook preInstall
+    make -C builddir install LOCALSTATEDIR=$out/var
+    chmod 755 $out/libexec/singularity/bin/starter-suid
+
+    # Explicitly configure paths in the config file
+    sed -i 's|^# mksquashfs path =.*$|mksquashfs path = ${lib.makeBinPath [squashfsTools]}/mksquashfs|' $out/etc/singularity/singularity.conf
+    sed -i 's|^# cryptsetup path =.*$|cryptsetup path = ${lib.makeBinPath [cryptsetup]}/cryptsetup|' $out/etc/singularity/singularity.conf
+
+    runHook postInstall
   '';
 
-  postFixup = ''
-    find $bin/ -type f -executable -exec remove-references-to -t ${go} '{}' + || true
-
-    # These etc scripts shouldn't have their paths patched
-    cp etc/actions/* $bin/etc/singularity/actions/
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = http://www.sylabs.io/;
+  meta = with lib; {
+    homepage = "http://www.sylabs.io/";
     description = "Application containers for linux";
     license = licenses.bsd3;
     platforms = platforms.linux;

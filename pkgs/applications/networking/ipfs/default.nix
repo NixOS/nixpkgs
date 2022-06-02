@@ -1,29 +1,56 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchgx }:
+{ lib, buildGoModule, fetchurl, nixosTests }:
 
-buildGoPackage rec {
-  name = "ipfs-${version}";
-  version = "0.4.19";
+buildGoModule rec {
+  pname = "ipfs";
+  version = "0.12.2"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
-  goPackagePath = "github.com/ipfs/go-ipfs";
+  repoVersion = "12"; # Also update ipfs-migrator when changing the repo version
 
-  extraSrcPaths = [
-    (fetchgx {
-      inherit name src;
-      sha256 = "0bj2kzxjssp7szp1wr9pp08bsi55jgf0k7gi4h70phlib2q673j2";
-    })
-  ];
-
-  src = fetchFromGitHub {
-    owner = "ipfs";
-    repo = "go-ipfs";
-    inherit rev;
-    sha256 = "061mgkawimhw3gq506h8m6kw50a2v26qysa5kc5jdqgaqx5yvqh4";
+  # go-ipfs makes changes to it's source tarball that don't match the git source.
+  src = fetchurl {
+    url = "https://github.com/ipfs/go-ipfs/releases/download/${rev}/go-ipfs-source.tar.gz";
+    sha256 = "sha256-66NNLMSfeBHQh/QlnETB/ssra9CKbD+jtaJuX+14x00=";
   };
 
-  meta = with stdenv.lib; {
+  # tarball contains multiple files/directories
+  postUnpack = ''
+    mkdir ipfs-src
+    shopt -s extglob
+    mv !(ipfs-src) ipfs-src || true
+    cd ipfs-src
+  '';
+
+  sourceRoot = ".";
+
+  subPackages = [ "cmd/ipfs" ];
+
+  passthru.tests.ipfs = nixosTests.ipfs;
+
+  vendorSha256 = null;
+
+  outputs = [ "out" "systemd_unit" "systemd_unit_hardened" ];
+
+  postPatch = ''
+    substituteInPlace 'misc/systemd/ipfs.service' \
+      --replace '/usr/bin/ipfs' "$out/bin/ipfs"
+    substituteInPlace 'misc/systemd/ipfs-hardened.service' \
+      --replace '/usr/bin/ipfs' "$out/bin/ipfs"
+  '';
+
+  postInstall = ''
+    install --mode=444 -D 'misc/systemd/ipfs-api.socket' "$systemd_unit/etc/systemd/system/ipfs-api.socket"
+    install --mode=444 -D 'misc/systemd/ipfs-gateway.socket' "$systemd_unit/etc/systemd/system/ipfs-gateway.socket"
+    install --mode=444 -D 'misc/systemd/ipfs.service' "$systemd_unit/etc/systemd/system/ipfs.service"
+
+    install --mode=444 -D 'misc/systemd/ipfs-api.socket' "$systemd_unit_hardened/etc/systemd/system/ipfs-api.socket"
+    install --mode=444 -D 'misc/systemd/ipfs-gateway.socket' "$systemd_unit_hardened/etc/systemd/system/ipfs-gateway.socket"
+    install --mode=444 -D 'misc/systemd/ipfs-hardened.service' "$systemd_unit_hardened/etc/systemd/system/ipfs.service"
+  '';
+
+  meta = with lib; {
     description = "A global, versioned, peer-to-peer filesystem";
-    homepage = https://ipfs.io/;
+    homepage = "https://ipfs.io/";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];

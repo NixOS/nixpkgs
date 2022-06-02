@@ -1,13 +1,13 @@
 # Verifies that the configuration suggested in (non-deprecated) example values
 # will result in the expected output.
 
-import ../make-test.nix ({ pkgs, ...} : {
+import ../make-test-python.nix ({ pkgs, ...} : {
   name = "krb5-with-example-config";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ eqyiel ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }: {
       krb5 = {
         enable = true;
@@ -18,7 +18,10 @@ import ../make-test.nix ({ pkgs, ...} : {
         realms = {
           "ATHENA.MIT.EDU" = {
             admin_server = "athena.mit.edu";
-            kdc = "athena.mit.edu";
+            kdc = [
+              "athena01.mit.edu"
+              "athena02.mit.edu"
+            ];
           };
         };
         domain_realm = {
@@ -65,7 +68,8 @@ import ../make-test.nix ({ pkgs, ...} : {
       [realms]
         ATHENA.MIT.EDU = {
           admin_server = athena.mit.edu
-          kdc = athena.mit.edu
+          kdc = athena01.mit.edu
+          kdc = athena02.mit.edu
         }
 
       [domain_realm]
@@ -101,6 +105,8 @@ import ../make-test.nix ({ pkgs, ...} : {
         default      = SYSLOG:NOTICE
     '';
   in ''
-    $machine->succeed("diff /etc/krb5.conf ${snapshot}");
+    machine.succeed(
+        "diff /etc/krb5.conf ${snapshot}"
+    )
   '';
 })

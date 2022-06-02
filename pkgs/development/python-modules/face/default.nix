@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, boltons, pytest }:
+{ lib, buildPythonPackage, fetchPypi, boltons, pytest }:
 
 buildPythonPackage rec {
   pname = "face";
-  version = "0.1.0";
+  version = "20.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zdp5qlrhxf4dypvvd0zr7zxj2svkz9wblp37vgw01wvcy9b1ds7";
+    sha256 = "7d59ca5ba341316e58cf72c6aff85cca2541cf5056c4af45cb63af9a814bed3e";
   };
 
   propagatedBuildInputs = [ boltons ];
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   # reporting
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mahmoud/face;
+  meta = with lib; {
+    homepage = "https://github.com/mahmoud/face";
     description = "A command-line interface parser and framework";
     longDescription = ''
       A command-line interface parser and framework, friendly for

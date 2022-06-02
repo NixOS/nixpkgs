@@ -1,9 +1,8 @@
 /* This function composes the Nix Packages collection. It:
 
-     1. Applies the final stage to the given `config` if it is a function
+     1. Elaborates `localSystem` and `crossSystem` with defaults as needed.
 
-     2. Infers an appropriate `platform` based on the `system` if none is
-        provided
+     2. Applies the final stage to the given `config` if it is a function
 
      3. Defaults to no non-standard config and no cross-compilation target
 
@@ -38,6 +37,9 @@
   # environment. See below for the arguments given to that function, the type of
   # list it returns.
   stdenvStages ? import ../stdenv
+
+, # Ignore unexpected args.
+  ...
 } @ args:
 
 let # Rename the function arguments
@@ -47,6 +49,23 @@ let # Rename the function arguments
 in let
   lib = import ../../lib;
 
+  inherit (lib) throwIfNot;
+
+  checked =
+    throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list."
+    lib.foldr (x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions.") (r: r) overlays
+    throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list."
+    lib.foldr (x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions.") (r: r) crossOverlays
+    ;
+
+  localSystem = lib.systems.elaborate args.localSystem;
+
+  # Condition preserves sharing which in turn affects equality.
+  crossSystem =
+    if crossSystem0 == null || crossSystem0 == args.localSystem
+    then localSystem
+    else lib.systems.elaborate crossSystem0;
+
   # Allow both:
   # { /* the config */ } and
   # { pkgs, ... } : { /* the config */ }
@@ -54,17 +73,6 @@ in let
     if lib.isFunction config0
     then config0 { inherit pkgs; }
     else config0;
-
-  # From a minimum of `system` or `config` (actually a target triple, *not*
-  # nixpkgs configuration), infer the other one and platform as needed.
-  localSystem = lib.systems.elaborate (
-    # Allow setting the platform in the config file. This take precedence over
-    # the inferred platform, but not over an explicitly passed-in one.
-    builtins.intersectAttrs { platform = null; } config1
-    // args.localSystem);
-
-  crossSystem = if crossSystem0 == null then localSystem
-                else lib.systems.elaborate crossSystem0;
 
   configEval = lib.evalModules {
     modules = [
@@ -122,4 +130,4 @@ in let
 
   pkgs = boot stages;
 
-in pkgs
+in checked pkgs

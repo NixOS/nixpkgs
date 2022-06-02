@@ -1,42 +1,41 @@
-{ stdenv, fetchFromGitHub, wxGTK, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, wxGTK
+, cmake
+, ninja
+, wrapGAppsHook
+, unstableGitUpdater
+}:
 
 stdenv.mkDerivation rec {
-  name    = "treesheets-${version}";
-  version = "2018-08-18";
+  pname = "treesheets";
+  version = "unstable-2022-03-12";
 
   src = fetchFromGitHub {
-    owner  = "aardappel";
-    repo   = "treesheets";
-    rev    = "3af41d99c8f9f32603a36ab64af3560b6d61dd73";
-    sha256 = "147y8ggh3clwjgsi15z8i4jnzlkh8p17mmlg532jym53zzbcva65";
+    owner = "aardappel";
+    repo = "treesheets";
+    rev = "120c10d4d9ea1ce76db5c1bbd6f5d705b397b57d";
+    sha256 = "oXgOvvRoZpueEeWnD3jsc6y5RIAzkXzLeEe7BSErBpw=";
   };
 
-  buildInputs = [ wxGTK makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    wrapGAppsHook
+  ];
 
-  preConfigure = "cd src";
+  buildInputs = [
+    wxGTK
+  ];
 
-  postInstall = ''
-    mkdir "$out/share" -p
-    cp -av ../TS "$out/share/libexec"
+  NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
 
-    mkdir "$out/bin" -p
-    makeWrapper "$out/share/libexec/treesheets" "$out/bin/treesheets"
+  passthru = {
+    updateScript = unstableGitUpdater { };
+  };
 
-    mkdir "$out/share/doc" -p
-
-    for f in readme.html docs examples
-    do
-      mv -v "$out/share/libexec/$f" "$out/share/doc"
-      ln -sv "$out/share/doc/$f" "$out/share/libexec/$f"
-    done
-
-    mkdir "$out/share/applications" -p
-    mv -v "$out/share/libexec/treesheets.desktop" "$out/share/applications"
-    substituteInPlace "$out/share/applications/treesheets.desktop" \
-      --replace "Icon=images/treesheets.svg" "Icon=$out/share/libexec/images/treesheets.svg"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Free Form Data Organizer";
 
     longDescription = ''
@@ -48,9 +47,9 @@ stdenv.mkDerivation rec {
       planning, requirements gathering, presentation of information, etc.
     '';
 
-    homepage    = http://strlen.com/treesheets/;
+    homepage = "https://strlen.com/treesheets/";
     maintainers = with maintainers; [ obadz avery ];
-    platforms   = platforms.linux;
-    license     = licenses.zlib;
+    platforms = platforms.linux;
+    license = licenses.zlib;
   };
 }

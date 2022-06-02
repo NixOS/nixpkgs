@@ -7,7 +7,7 @@ with lib.types;
 
     script = mkOption {
       type = str;
-      example = "\${pkgs.curl} -f http://localhost:80";
+      example = literalExpression ''"''${pkgs.curl} -f http://localhost:80"'';
       description = "(Path of) Script command to execute followed by args, i.e. cmd [args]...";
     };
 

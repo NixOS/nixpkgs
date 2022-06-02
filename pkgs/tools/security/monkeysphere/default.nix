@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , perl, libassuan, libgcrypt
 , perlPackages, lockfileProgs, gnupg, coreutils
 # For the tests:
-, bash, openssh, which, socat, cpio, hexdump, openssl
+, openssh, which, socat, cpio, hexdump, procps, openssl
 }:
 
 let
@@ -13,15 +13,15 @@ let
     patches = oldAttrs.patches ++ [ ./openssh-nixos-sandbox.patch ];
   });
 in stdenv.mkDerivation rec {
-  name = "monkeysphere-${version}";
-  version = "0.43";
+  pname = "monkeysphere";
+  version = "0.44";
 
   # The patched OpenSSH binary MUST NOT be used (except in the check phase):
   disallowedRequisites = [ opensshUnsafe ];
 
   src = fetchurl {
     url = "http://archive.monkeysphere.info/debian/pool/monkeysphere/m/monkeysphere/monkeysphere_${version}.orig.tar.gz";
-    sha256 = "18i7qpvp5qb7mmd0z5rqai550rya9l3nbsq2hamwkl3smqsjdqc0";
+    sha256 = "1ah7hy8r9gj96pni8azzjb85454qky5l17m3pqn37854l6grgika";
   };
 
   patches = [ ./monkeysphere.patch ];
@@ -32,20 +32,20 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl libassuan libgcrypt ]
-    ++ stdenv.lib.optional doCheck
-      ([ gnupg opensshUnsafe which socat cpio hexdump lockfileProgs ] ++
+    ++ lib.optional doCheck
+      ([ gnupg opensshUnsafe which socat cpio hexdump procps lockfileProgs ] ++
       (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
 
-  makeFlags = ''
-    PREFIX=/
-    DESTDIR=$(out)
-  '';
+  makeFlags = [
+    "PREFIX=/"
+    "DESTDIR=$(out)"
+  ];
 
   # The tests should be run (and succeed) when making changes to this package
   # but they aren't enabled by default because they "drain" entropy (GnuPG
   # still uses /dev/random).
   doCheck = false;
-  preCheck = stdenv.lib.optionalString doCheck ''
+  preCheck = lib.optionalString doCheck ''
     patchShebangs tests/
     patchShebangs src/
     sed -i \
@@ -60,20 +60,20 @@ in stdenv.mkDerivation rec {
   postFixup =
     let wrapperArgs = runtimeDeps:
           "--prefix PERL5LIB : "
-          + (with perlPackages; makePerlPath [
+          + (with perlPackages; makePerlPath [ # Optional (only required for keytrans)
               CryptOpenSSLRSA
               CryptOpenSSLBignum
             ])
-          + stdenv.lib.optionalString
+          + lib.optionalString
               (builtins.length runtimeDeps > 0)
-              " --prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps}";
+              " --prefix PATH : ${lib.makeBinPath runtimeDeps}";
         wrapMonkeysphere = runtimeDeps: program:
           "wrapProgram $out/bin/${program} ${wrapperArgs runtimeDeps}\n";
-        wrapPrograms = runtimeDeps: programs: stdenv.lib.concatMapStrings
+        wrapPrograms = runtimeDeps: programs: lib.concatMapStrings
           (wrapMonkeysphere runtimeDeps)
           programs;
     in wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]
-      + wrapPrograms [ lockfileProgs ] [ "monkeysphere" ]
+      + wrapPrograms [ gnupg lockfileProgs ] [ "monkeysphere" ]
       + ''
         # These 4 programs depend on the program name ($0):
         for program in openpgp2pem openpgp2spki openpgp2ssh pem2openpgp; do
@@ -84,8 +84,8 @@ in stdenv.mkDerivation rec {
         done
       '';
 
-  meta = with stdenv.lib; {
-    homepage = http://web.monkeysphere.info/;
+  meta = with lib; {
+    homepage = "http://web.monkeysphere.info/";
     description = "Leverage the OpenPGP web of trust for SSH and TLS authentication";
     longDescription = ''
       The Monkeysphere project's goal is to extend OpenPGP's web of
@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
       familiar with, such as your web browser0 or secure shell.
     '';
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };
 }

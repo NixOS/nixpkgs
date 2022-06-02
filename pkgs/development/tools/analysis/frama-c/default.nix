@@ -1,92 +1,96 @@
-{ stdenv, fetchurl, makeWrapper, ncurses, ocamlPackages, graphviz
-, ltl2ba, coq, why3, autoconf
+{ lib, stdenv, fetchurl, makeWrapper, writeText
+, autoconf, ncurses, graphviz, doxygen
+, ocamlPackages, ltl2ba, coq, why3
+, gdk-pixbuf, wrapGAppsHook
 }:
+
+let why3_1_5 = why3; in
+let why3 = why3_1_5.overrideAttrs (o: rec {
+  version = "1.4.1";
+  src = fetchurl {
+    url = "https://why3.gitlabpages.inria.fr/releases/${o.pname}-${version}.tar.gz";
+    sha256 = "sha256:1rqyypzlvagrn43ykl0c5wxyvnry5fl1ykn3xcvlzgghk96yq3jq";
+  };
+}); in
 
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
-  ocamlpath = "${mkocamlpath ocamlPackages.apron}:${mkocamlpath ocamlPackages.mlgmpidl}";
+  runtimeDeps = with ocamlPackages; [
+    apron.dev
+    biniou
+    camlzip
+    easy-format
+    menhirLib
+    mlgmpidl
+    num
+    ocamlgraph
+    stdlib-shims
+    why3
+    re
+    seq
+    sexplib
+    sexplib0
+    parsexp
+    base
+    yojson
+    zarith
+  ];
+  ocamlpath = lib.concatMapStringsSep ":" mkocamlpath runtimeDeps;
 in
 
 stdenv.mkDerivation rec {
-  name    = "frama-c-${version}";
-  version = "18.0";
-  slang   = "Argon";
+  pname = "frama-c";
+  version = "24.0";
+  slang   = "Chromium";
 
   src = fetchurl {
-    url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "0a88k2mhafj7pz3dzgsqkrc9digkxpnvr9jqq9nbzwq8qr02bca2";
+    url    = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    sha256 = "sha256:0x1xgip50jdz1phsb9rzwf2ra8lshn1hmd9g967xia402wrg3sjf";
   };
 
-  why2 = fetchurl {
-    url    = "http://why.lri.fr/download/why-2.40.tar.gz";
-    sha256 = "0h1mbpxsgwvf3pbl0qbg22j6f4v1ffka24ap1ajbjk9b1yb3ali8";
-  };
+  preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";
 
-  nativeBuildInputs = [ autoconf makeWrapper ];
+  nativeBuildInputs = [ autoconf wrapGAppsHook ];
 
   buildInputs = with ocamlPackages; [
-    ncurses ocaml findlib ltl2ba ocamlgraph
-    lablgtk coq graphviz zarith why3 apron
+    ncurses ocaml findlib ltl2ba ocamlgraph yojson menhirLib camlzip
+    lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
+    gdk-pixbuf
   ];
 
+  enableParallelBuilding = true;
 
-  # Experimentally, the build segfaults with high core counts
-  enableParallelBuilding = false;
-
-  unpackPhase = ''
-    tar xf $src
-    tar xf $why2
+  preFixup = ''
+     gappsWrapperArgs+=(--prefix OCAMLPATH ':' ${ocamlpath})
   '';
 
-  buildPhase = ''
-    cd frama*
-    ./configure --prefix=$out
-    # It is not parallel safe
-    make
-    make install
-    cd ../why*
-    FRAMAC=$out/bin/frama-c ./configure --prefix=$out
-    make
-    make install
-    for p in $out/bin/frama-c{,-gui};
-    do
-      wrapProgram $p --prefix OCAMLPATH ':' ${ocamlpath}
-    done
+  # Allow loading of external Frama-C plugins
+  setupHook = writeText "setupHook.sh" ''
+    addFramaCPath () {
+      if test -d "''$1/lib/frama-c/plugins"; then
+        export FRAMAC_PLUGIN="''${FRAMAC_PLUGIN-}''${FRAMAC_PLUGIN:+:}''$1/lib/frama-c/plugins"
+        export OCAMLPATH="''${OCAMLPATH-}''${OCAMLPATH:+:}''$1/lib/frama-c/plugins"
+      fi
+
+      if test -d "''$1/lib/frama-c"; then
+        export OCAMLPATH="''${OCAMLPATH-}''${OCAMLPATH:+:}''$1/lib/frama-c"
+      fi
+
+      if test -d "''$1/share/frama-c/"; then
+        export FRAMAC_EXTRA_SHARE="''${FRAMAC_EXTRA_SHARE-}''${FRAMAC_EXTRA_SHARE:+:}''$1/share/frama-c"
+      fi
+
+    }
+
+    addEnvHooks "$targetOffset" addFramaCPath
   '';
 
-  # Enter frama-c directory before patching
-  prePatch = ''cd frama*'';
-  patches = [ ./dynamic.diff ];
-  postPatch = ''
-    # strip absolute paths to /usr/bin
-    for file in ./configure ./share/Makefile.common ./src/*/configure; do #*/
-      substituteInPlace $file  --replace '/usr/bin/' ""
-    done
-
-    substituteInPlace ./src/plugins/aorai/aorai_register.ml --replace '"ltl2ba' '"${ltl2ba}/bin/ltl2ba'
-
-    cd ../why*
-
-    substituteInPlace ./Makefile.in --replace '-warn-error A' '-warn-error A-3'    
-    substituteInPlace ./frama-c-plugin/Makefile --replace 'shell frama-c' "shell $out/bin/frama-c"
-    substituteInPlace ./jc/jc_make.ml --replace ' why-dp '       " $out/bin/why-dp "
-    substituteInPlace ./jc/jc_make.ml --replace "?= why@\n"      "?= $out/bin/why@\n"
-    substituteInPlace ./jc/jc_make.ml --replace ' gwhy-bin@'     " $out/bin/gwhy-bin@"
-    substituteInPlace ./jc/jc_make.ml --replace ' why3 '         " ${why3}/bin/why3 "
-    substituteInPlace ./jc/jc_make.ml --replace ' why3ide '      " ${why3}/bin/why3ide "
-    substituteInPlace ./jc/jc_make.ml --replace ' why3replayer ' " ${why3}/bin/why3replayer "
-    substituteInPlace ./jc/jc_make.ml --replace ' why3ml '       " ${why3}/bin/why3ml "
-    substituteInPlace ./jc/jc_make.ml --replace ' coqdep@'       " ${coq}/bin/coqdep@"
-    substituteInPlace ./jc/jc_make.ml --replace 'coqc'           " ${coq}/bin/coqc"
-    substituteInPlace ./frama-c-plugin/register.ml --replace ' jessie ' " $out/bin/jessie "
-    cd ..
-  '';
 
   meta = {
     description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
-    homepage    = http://frama-c.com/;
-    license     = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice amiddelk ];
-    platforms   = stdenv.lib.platforms.unix;
+    homepage    = "http://frama-c.com/";
+    license     = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ thoughtpolice amiddelk ];
+    platforms   = lib.platforms.unix;
   };
 }

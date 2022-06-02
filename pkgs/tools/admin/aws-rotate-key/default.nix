@@ -1,25 +1,29 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, testers, aws-rotate-key }:
 
-buildGoPackage rec {
-  name = "aws-rotate-key-${version}";
-  version = "1.0.4";
-
-  goPackagePath = "github.com/Fullscreen/aws-rotate-key";
+buildGoModule rec {
+  pname = "aws-rotate-key";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "Fullscreen";
     repo = "aws-rotate-key";
-    sha256 = "14bcs434646qdywws55r1a1v8ncwz8n0yljaa8zb5796pv4445wf";
+    rev = "v${version}";
+    sha256 = "sha256-5kV87uQDSc/qpm79Pd2nXo/EcbMlhZqFYaw+gJQa2uo=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-h7tmJx/Um1Cy/ojiFjoKCH/LcOwhGU8ADb5WwmrkkJM=";
 
-  meta = with stdenv.lib; {
+  ldflags = [ "-s" "-w" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = aws-rotate-key;
+  };
+
+  meta = with lib; {
     description = "Easily rotate your AWS key";
-    homepage = https://github.com/Fullscreen/aws-rotate-key;
+    homepage = "https://github.com/Fullscreen/aws-rotate-key";
     license = licenses.mit;
-    maintainers = [maintainers.mbode];
+    maintainers = [ maintainers.mbode ];
     platforms = platforms.unix;
   };
 }

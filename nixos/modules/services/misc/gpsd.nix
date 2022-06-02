@@ -62,7 +62,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 2947;
         description = ''
           The port where to listen for TCP connections.
@@ -86,17 +86,14 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = singleton
-      { name = "gpsd";
-        inherit uid;
+    users.users.gpsd =
+      { inherit uid;
+        group = "gpsd";
         description = "gpsd daemon user";
         home = "/var/empty";
       };
 
-    users.groups = singleton
-      { name = "gpsd";
-        inherit gid;
-      };
+    users.groups.gpsd = { inherit gid; };
 
     systemd.services.gpsd = {
       description = "GPSD daemon";

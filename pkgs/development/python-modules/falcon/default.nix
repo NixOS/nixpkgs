@@ -1,35 +1,93 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, coverage
-, ddt
-, nose
+, pythonOlder
+, isPyPy
+, fetchFromGitHub
+
+# build
+, cython
+
+# tests
+, aiofiles
+, cbor2
+, httpx
+, msgpack
+, mujson
+, orjson
+, pytest-asyncio
+, pytestCheckHook
 , pyyaml
+, rapidjson
 , requests
 , testtools
-, six
-, python_mimeparse
+, ujson
+, uvicorn
+, websockets
 }:
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "1.4.1";
+  version = "3.1.0";
+  format = "pyproject";
+  disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3981f609c0358a9fcdb25b0e7fab3d9e23019356fb429c635ce4133135ae1bc4";
+  src = fetchFromGitHub {
+    owner = "falconry";
+    repo = pname;
+    rev = version;
+    hash = "sha256-Y6bD0GCXhqpvMV+/i1v59p2qWZ91f2ey7sPQrVALY54=";
   };
 
-  checkInputs = [coverage ddt nose pyyaml requests testtools];
-  propagatedBuildInputs = [ six python_mimeparse ];
+  nativeBuildInputs = lib.optionals (!isPyPy) [
+    cython
+  ];
 
-  # The travis build fails since the migration from multiprocessing to threading for hosting the API under test.
-  # OSError: [Errno 98] Address already in use
-  doCheck = false;
+  preCheck = ''
+    export HOME=$TMPDIR
+    cp -R tests examples $TMPDIR
+    pushd $TMPDIR
+  '';
 
-  meta = with stdenv.lib; {
+  postCheck = ''
+    popd
+  '';
+
+  checkInputs = [
+    # https://github.com/falconry/falcon/blob/master/requirements/tests
+    pytestCheckHook
+    pyyaml
+    requests
+    rapidjson
+    orjson
+
+    # ASGI specific
+    pytest-asyncio
+    aiofiles
+    httpx
+    uvicorn
+    websockets
+
+    # handler specific
+    cbor2
+    msgpack
+    mujson
+    ujson
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    testtools
+  ];
+
+  pytestFlagsArray = [
+    "tests"
+  ];
+
+  disabledTestPaths = [
+    # needs a running server
+    "tests/asgi/test_asgi_servers.py"
+  ];
+
+  meta = with lib; {
     description = "An unladen web framework for building APIs and app backends";
-    homepage = http://falconframework.org;
+    homepage = "https://falconframework.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ desiderius ];
   };

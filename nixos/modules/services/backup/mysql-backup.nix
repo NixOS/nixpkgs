@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inherit (pkgs) mysql gzip;
+  inherit (pkgs) mariadb gzip;
 
   cfg = config.services.mysqlBackup;
   defaultUser = "mysqlbackup";
@@ -20,7 +20,7 @@ let
   '';
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}.gz"
-    if ${mysql}/bin/mysqldump ${if cfg.singleTransaction then "--single-transaction" else ""} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
+    if ${mariadb}/bin/mysqldump ${if cfg.singleTransaction then "--single-transaction" else ""} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
@@ -37,12 +37,7 @@ in
 
     services.mysqlBackup = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to enable MySQL backups.
-        '';
-      };
+      enable = mkEnableOption "MySQL backups";
 
       calendar = mkOption {
         type = types.str;
@@ -53,6 +48,7 @@ in
       };
 
       user = mkOption {
+        type = types.str;
         default = defaultUser;
         description = ''
           User to be used to perform backup.
@@ -61,12 +57,14 @@ in
 
       databases = mkOption {
         default = [];
+        type = types.listOf types.str;
         description = ''
           List of database names to dump.
         '';
       };
 
       location = mkOption {
+        type = types.path;
         default = "/var/backup/mysql";
         description = ''
           Location to put the gzipped MySQL database dumps.
@@ -75,6 +73,7 @@ in
 
       singleTransaction = mkOption {
         default = false;
+        type = types.bool;
         description = ''
           Whether to create database dump in a single transaction
         '';
@@ -84,13 +83,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users = optionalAttrs (cfg.user == defaultUser) (singleton
-      { name = defaultUser;
+    users.users = optionalAttrs (cfg.user == defaultUser) {
+      ${defaultUser} = {
         isSystemUser = true;
         createHome = false;
         home = cfg.location;
         group = "nogroup";
-      });
+      };
+    };
 
     services.mysql.ensureUsers = [{
       name = cfg.user;
@@ -103,7 +103,7 @@ in
     }];
 
     systemd = {
-      timers."mysql-backup" = {
+      timers.mysql-backup = {
         description = "Mysql backup timer";
         wantedBy = [ "timers.target" ];
         timerConfig = {
@@ -112,19 +112,18 @@ in
           Unit = "mysql-backup.service";
         };
       };
-      services."mysql-backup" = {
-        description = "Mysql backup service";
+      services.mysql-backup = {
+        description = "MySQL backup service";
         enable = true;
         serviceConfig = {
+          Type = "oneshot";
           User = cfg.user;
-          PermissionsStartOnly = true;
         };
-        preStart = ''
-          mkdir -m 0700 -p ${cfg.location}
-          chown -R ${cfg.user} ${cfg.location}
-        '';
         script = backupScript;
       };
+      tmpfiles.rules = [
+        "d ${cfg.location} 0700 ${cfg.user} - - -"
+      ];
     };
   };
 

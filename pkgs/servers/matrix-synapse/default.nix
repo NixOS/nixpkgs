@@ -1,87 +1,79 @@
-{ lib, stdenv, python3
-, enableSystemd ? true
+{ lib, stdenv, python3, openssl
+, enableSystemd ? stdenv.isLinux, nixosTests
+, enableRedis ? true
+, callPackage
 }:
 
-with python3.pkgs;
-
 let
-  matrix-synapse-ldap3 = buildPythonPackage rec {
-    pname = "matrix-synapse-ldap3";
-    version = "0.1.3";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0a0d1y9yi0abdkv6chbmxr3vk36gynnqzrjhbg26q4zg06lh9kgn";
-    };
-
-    propagatedBuildInputs = [ service-identity ldap3 twisted ];
-
-    # ldaptor is not ready for py3 yet
-    doCheck = !isPy3k;
-    checkInputs = [ ldaptor mock ];
-  };
-
-in buildPythonApplication rec {
+  plugins = python3.pkgs.callPackage ./plugins { };
+  tools = callPackage ./tools { };
+in
+with python3.pkgs;
+buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "0.99.3";
+  version = "1.59.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03300dplzckydwfvbn4w1sfc77b461cvgpi3qkhbv9jnnzz5y28g";
+    sha256 = "sha256-EASd+tlPIYQpQP2OOHJSPDzgJZyVoigVfcC2b2c2A2o=";
   };
 
-  patches = [
-    # adds an entry point for the service
-    ./homeserver-script.patch
-  ];
+  buildInputs = [ openssl ];
 
   propagatedBuildInputs = [
+    authlib
     bcrypt
     bleach
     canonicaljson
     daemonize
     frozendict
+    ijson
     jinja2
     jsonschema
     lxml
-    matrix-synapse-ldap3
+    matrix-common
     msgpack
     netaddr
     phonenumbers
     pillow
-    (prometheus_client.overrideAttrs (x: {
-      src = fetchPypi {
-        pname = "prometheus_client";
-        version = "0.3.1";
-        sha256 = "093yhvz7lxl7irnmsfdnf2030lkj4gsfkg6pcmy4yr1ijk029g0p";
-      };
-    }))
+    prometheus-client
     psutil
     psycopg2
     pyasn1
+    pyjwt
     pymacaroons
     pynacl
     pyopenssl
     pysaml2
     pyyaml
     requests
+    setuptools
     signedjson
     sortedcontainers
     treq
     twisted
+    typing-extensions
     unpaddedbase64
-  ] ++ lib.optional enableSystemd systemd;
+  ] ++ lib.optional enableSystemd systemd
+    ++ lib.optionals enableRedis [ hiredis txredisapi ];
 
-  checkInputs = [ mock parameterized ];
+  checkInputs = [ mock parameterized openssl ];
+
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial tests
+    PYTHONPATH=".:$PYTHONPATH" ${python3.interpreter} -m twisted.trial -j $NIX_BUILD_CORES tests
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://matrix.org;
+  passthru.tests = { inherit (nixosTests) matrix-synapse; };
+  passthru.plugins = plugins;
+  passthru.tools = tools;
+  passthru.python = python3;
+
+  meta = with lib; {
+    homepage = "https://matrix.org";
     description = "Matrix reference homeserver";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ralith roblabla ekleog pacien ];
+    maintainers = teams.matrix.members;
   };
 }

@@ -1,21 +1,17 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "google-fonts-${version}";
-  version = "2018-07-13";
+stdenvNoCC.mkDerivation {
+  pname = "google-fonts";
+  version = "unstable-2022-02-26";
+
+  outputs = [ "out" "adobeBlank" ];
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fonts";
-    rev = "3ca591dae7372a26e254ec6d22e7b453813b9530";
-    sha256 = "01ak3dzw2kihwa0dy27x8vvpiscd66mnkf61vj1xn29m4g48y0lr";
+    rev = "2fba0d68602b7eb3374d030c1c34939de56023f9";
+    sha256 = "sha256-IFkKwRRyZeOXD8/9n8UDrruUKK6oQK4BD9wYN2dmSAc=";
   };
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "1pzm26794nwdbsvjnczpfchxiqa1n1zhp517g6g39wfm1nfszz83";
-
-  phases = [ "unpackPhase" "patchPhase" "installPhase" ];
 
   patchPhase = ''
     # These directories need to be removed because they contain
@@ -23,11 +19,9 @@ stdenv.mkDerivation rec {
     # directories. This causes non-determinism in the install since
     # the installation order of font files with the same name is not
     # fixed.
-    rm -rv ofl/alefhebrew \
-      ofl/misssaintdelafield \
-      ofl/mrbedford \
-      ofl/siamreap \
-      ofl/terminaldosislight
+    rm -rv ofl/cabincondensed \
+           ofl/signikanegative \
+           ofl/signikanegativesc
 
     if find . -name "*.ttf" | sed 's|.*/||' | sort | uniq -c | sort -n | grep -v '^.*1 '; then
       echo "error: duplicate font names"
@@ -35,13 +29,18 @@ stdenv.mkDerivation rec {
     fi
   '';
 
+  dontBuild = true;
+
   installPhase = ''
+    adobeBlankDest=$adobeBlank/share/fonts/truetype
+    install -m 444 -Dt $adobeBlankDest ofl/adobeblank/AdobeBlank-Regular.ttf
+    rm -r ofl/adobeblank
     dest=$out/share/fonts/truetype
     find . -name '*.ttf' -exec install -m 444 -Dt $dest '{}' +
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://fonts.google.com;
+  meta = with lib; {
+    homepage = "https://fonts.google.com";
     description = "Font files available from Google Fonts";
     license = with licenses; [ asl20 ofl ufl ];
     platforms = platforms.all;

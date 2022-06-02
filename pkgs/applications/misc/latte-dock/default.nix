@@ -3,13 +3,12 @@
 
 mkDerivation rec {
   pname = "latte-dock";
-  version = "0.8.6";
-  name = "${pname}-${version}";
+  version = "0.10.4";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${name}.tar.xz";
-    sha256 = "1qzf9fkfkbv8vnc9p6lm7ya9hzydwk2f7671by9ij26f77lmxfb3";
-    name = "${name}.tar.xz";
+    url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "XRop+MNcbeCcbnL2LM1i67QvMudW3CjWYEPLkT/qbGM=";
+    name = "${pname}-${version}.tar.xz";
   };
 
   buildInputs = [ plasma-framework xorg.libpthreadstubs xorg.libXdmcp xorg.libSM ];
@@ -17,11 +16,17 @@ mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules cmake karchive kwindowsystem
     qtx11extras kcrash knewstuff ];
 
-
+  patches = [
+    ./0001-close-user-autostart.patch
+  ];
+  fixupPhase = ''
+    mkdir -p $out/etc/xdg/autostart
+    cp $out/share/applications/org.kde.latte-dock.desktop $out/etc/xdg/autostart
+  '';
 
   meta = with lib; {
     description = "Dock-style app launcher based on Plasma frameworks";
-    homepage = https://github.com/psifidotos/Latte-Dock;
+    homepage = "https://github.com/psifidotos/Latte-Dock";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.benley maintainers.ysndr ];

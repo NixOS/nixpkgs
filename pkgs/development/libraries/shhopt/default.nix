@@ -1,19 +1,24 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "shhopt-1.1.7";
+  pname = "shhopt";
+  version = "1.1.7";
 
   src = fetchurl {
-    url = "http://shh.thathost.com/pub-unix/files/${name}.tar.gz";
+    url = "https://shh.thathost.com/pub-unix/files/${pname}-${version}.tar.gz";
     sha256 = "0yd6bl6qw675sxa81nxw6plhpjf9d2ywlm8a5z66zyjf28sl7sds";
   };
 
-  installFlags = "INSTBASEDIR=$(out)";
+  postPatch = ''
+    substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
+  '';
 
-  meta = with stdenv.lib; {
+  installFlags = [ "INSTBASEDIR=$(out)" ];
+
+  meta = with lib; {
     description = "A library for parsing command line options";
-    homepage = http://shh.thathost.com/pub-unix/;
+    homepage = "https://shh.thathost.com/pub-unix/";
     license = licenses.artistic1;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

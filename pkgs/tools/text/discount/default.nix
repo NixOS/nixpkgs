@@ -1,29 +1,40 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.4";
-  name = "discount-${version}";
+  version = "2.2.7b";
+  pname = "discount";
 
-  src = fetchurl {
-    url = "http://www.pell.portland.or.us/~orc/Code/discount/discount-${version}.tar.bz2";
-    sha256 = "199hwajpspqil0a4y3yxsmhdp2dm73gqkzfk4mrwzsmlq8y1xzbl";
+  src = fetchFromGitHub {
+    owner = "Orc";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-S6OVKYulhvEPRqNXBsvZ7m2W4cbdnrpZKPAo3SfD+9s=";
   };
 
-  patches = ./fix-configure-path.patch;
+  patches = [ ./fix-configure-path.patch ];
   configureScript = "./configure.sh";
-
   configureFlags = [
-    "--enable-all-features"
-    "--pkg-config"
     "--shared"
-    "--with-fenced-code"
+    "--debian-glitch" # use deterministic mangling
+    "--pkg-config"
+    "--h1-title"
   ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+  installTargets = [ "install.everything" ];
+
+  doCheck = true;
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    install_name_tool -id $out/lib/libmarkdown.dylib $out/lib/libmarkdown.dylib
+  '';
+
+  meta = with lib; {
     description = "Implementation of Markdown markup language in C";
-    homepage = http://www.pell.portland.or.us/~orc/Code/discount/;
+    homepage = "http://www.pell.portland.or.us/~orc/Code/discount/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ shell ndowens ];
+    maintainers = with maintainers; [ shell ];
+    mainProgram = "markdown";
     platforms = platforms.unix;
   };
 }

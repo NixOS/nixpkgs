@@ -1,23 +1,24 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig }:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
-  name = "gifski-${version}";
-  version = "0.8.7";
+  pname = "gifski";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "ImageOptim";
     repo = "gifski";
     rev = version;
-    sha256 = "0x41gyc5jk45jlx0hcq80j5gj1f66lcmbclqyx70l43ggslsi26f";
+    sha256 = "sha256-TD6MSZfvJ8fLJxvDh4fc4Dij5t4WSH2/i9Jz7eBmlME=";
   };
 
-  cargoSha256 = "0rgcm9kj9wapn8y3ymcm1n713r0a9bvgm339y302f5gy76gbgzrk";
+  cargoSha256 = "sha256-kG0svhytDzm2dc//8WTFm1sI3WS0Ny9yhYTSMoXnt8I=";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "GIF encoder based on libimagequant (pngquant)";
-    homepage = https://gif.ski/;
+    homepage = "https://gif.ski/";
     license = licenses.agpl3;
     maintainers = [ maintainers.marsam ];
   };

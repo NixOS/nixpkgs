@@ -1,21 +1,40 @@
-{ stdenv, fetchurl, cmake, makedepend, perl, pkgconfig, qttools
-, dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2
-, liblo, liblrdf, libsamplerate, libsndfile, lirc ? null, qtbase }:
+{ lib
+, stdenv
+, fetchurl
+, cmake
+, makedepend
+, perl
+, pkg-config
+, qttools
+, wrapQtAppsHook
+, dssi
+, fftwSinglePrec
+, ladspaH
+, ladspaPlugins
+, libjack2
+, alsa-lib
+, liblo
+, libsamplerate
+, libsndfile
+, lirc
+, lrdf
+, qtbase
+}:
 
-stdenv.mkDerivation (rec {
-  version = "18.12";
-  name = "rosegarden-${version}";
+stdenv.mkDerivation rec {
+  pname = "rosegarden";
+  version = "20.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rosegarden/${name}.tar.bz2";
-    sha256 = "15i9fm0vkn3wsgahaxqi1j5zs0wc0j3wdwml0x49084gk2p328vb";
+    url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-iGaEr8WFipV4I00fhFGI2xMBFPf784IIxNXs2hUTHFs=";
   };
 
-  patchPhase = ''
+  postPhase = ''
     substituteInPlace src/CMakeLists.txt --replace svnheader svnversion
   '';
 
-  nativeBuildInputs = [ cmake makedepend perl pkgconfig qttools ];
+  nativeBuildInputs = [ cmake makedepend perl pkg-config qttools wrapQtAppsHook ];
 
   buildInputs = [
     dssi
@@ -24,17 +43,16 @@ stdenv.mkDerivation (rec {
     ladspaPlugins
     libjack2
     liblo
-    liblrdf
     libsamplerate
     libsndfile
     lirc
+    lrdf
     qtbase
+    alsa-lib
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
-    homepage = https://www.rosegardenmusic.com/;
+  meta = with lib; {
+    homepage = "https://www.rosegardenmusic.com/";
     description = "Music composition and editing environment";
     longDescription = ''
       Rosegarden is a music composition and editing environment based around
@@ -49,4 +67,4 @@ stdenv.mkDerivation (rec {
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };
-})
+}

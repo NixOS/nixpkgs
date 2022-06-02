@@ -1,26 +1,71 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook
-, glib, gdk_pixbuf, gobject-introspection }:
+{ lib, stdenv
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, libxslt
+, docbook-xsl-ns
+, glib
+, gdk-pixbuf
+, gnome
+, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+, gobject-introspection
+}:
 
 stdenv.mkDerivation rec {
-  ver_maj = "0.7";
-  ver_min = "7";
-  name = "libnotify-${ver_maj}.${ver_min}";
+  pname = "libnotify";
+  version = "0.7.12";
+
+  outputs = [ "out" "man" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libnotify/${ver_maj}/${name}.tar.xz";
-    sha256 = "017wgq9n00hx39n0hm784zn18hl721hbaijda868cm96bcqwxd4w";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "dEsrN1CBNfgmG3Vanevm4JrdQhrcdb3pMPbhmLcKtG4=";
   };
 
-  # disable tests as we don't need to depend on gtk+(2/3)
-  configureFlags = [ "--disable-tests" ];
+  mesonFlags = [
+    # disable tests as we don't need to depend on GTK (2/3)
+    "-Dtests=false"
+    "-Ddocbook_docs=disabled"
+    "-Dgtk_doc=false"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
+  ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook gobject-introspection ];
-  buildInputs = [ glib gdk_pixbuf ];
+  strictDeps = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://developer.gnome.org/notification-spec/;
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    libxslt
+    docbook-xsl-ns
+    glib # for glib-mkenums needed during the build
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
+
+  buildInputs = lib.optionals withIntrospection [
+    gobject-introspection
+  ];
+
+  propagatedBuildInputs = [
+    gdk-pixbuf
+    glib
+  ];
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "none";
+    };
+  };
+
+  meta = with lib; {
     description = "A library that sends desktop notifications to a notification daemon";
-    platforms = platforms.unix;
+    homepage = "https://gitlab.gnome.org/GNOME/libnotify";
     license = licenses.lgpl21;
+    maintainers = teams.gnome.members;
+    mainProgram = "notify-send";
+    platforms = platforms.unix;
   };
 }

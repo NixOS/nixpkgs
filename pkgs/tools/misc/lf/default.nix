@@ -1,38 +1,29 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
-buildGoPackage rec {
-  name = "lf-${version}";
-  version = "11";
+buildGoModule rec {
+  pname = "lf";
+  version = "27";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "13622sx6xmbm8gf38dn8y8mkfnlbpamg4hmzsy9jnzg4h8qbjm6b";
+    hash = "sha256-CrtVw3HhrC+D3c4ltHX8FSQnDvBpQJ890oJHoD6qPt4=";
   };
 
-  goPackagePath = "github.com/gokcehan/lf";
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-evkQT624EGj6MUwx3/ajdIbUMYjA1QyOnIQFtTLt0Yo=";
 
-  # TODO: Setting buildFlags probably isn't working properly. I've tried a few
-  # variants, e.g.:
-  # - buildFlags = "-ldflags \"-s -w -X 'main.gVersion=${version}'\"";
-  # - buildFlags = "-ldflags \\\"-X ${goPackagePath}/main.gVersion=${version}\\\"";
+  nativeBuildInputs = [ installShellFiles ];
 
-  # Override the build phase (to set buildFlags):
-  buildPhase = ''
-    runHook preBuild
-    runHook renameImports
-    cd go/src/${goPackagePath}
-    go install -ldflags="-s -w -X main.gVersion=r${version}"
-    runHook postBuild
-  '';
+  ldflags = [ "-s" "-w" "-X main.gVersion=r${version}" ];
 
   postInstall = ''
-    install -D --mode=444 lf.1 $out/share/man/man1/lf.1
+    install -D --mode=444 lf.desktop $out/share/applications/lf.desktop
+    installManPage lf.1
+    installShellCompletion etc/lf.{bash,zsh,fish}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A terminal file manager written in Go and heavily inspired by ranger";
     longDescription = ''
       lf (as in "list files") is a terminal file manager written in Go. It is
@@ -40,9 +31,10 @@ buildGoPackage rec {
       the missing features are deliberately omitted since it is better if they
       are handled by external tools.
     '';
-    homepage = https://godoc.org/github.com/gokcehan/lf;
+    homepage = "https://godoc.org/github.com/gokcehan/lf";
+    changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

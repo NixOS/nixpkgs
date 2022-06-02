@@ -1,32 +1,78 @@
-{ fetchFromGitHub, pythonPackages, lib }:
+{ fetchFromGitHub, lib, buildPythonPackage, pythonOlder
+, afdko, appdirs, attrs, black, booleanoperations, brotlipy, click
+, defcon, fontmath, fontparts, fontpens, fonttools, lxml
+, mutatormath, pathspec, psautohint, pyclipper, pytz, regex, scour
+, toml, typed-ast, ufonormalizer, ufoprocessor, unicodedata2, zopfli
+, pillow, six, bash, setuptools-scm }:
 
-pythonPackages.buildPythonPackage rec {
-  version = "2017-09-25";
-  name = "nototools-${version}";
+buildPythonPackage rec {
+  pname = "nototools";
+  version = "0.2.16";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
-    owner = "googlei18n";
+    owner = "googlefonts";
     repo = "nototools";
-    rev = "v2017-09-25-tooling-for-phase3-update";
-    sha256 = "03nzvcvwmrhfrcjhg218q2f3hfrm3vlivp4rk19sc397kh3hisiz";
+    rev = "v${version}";
+    sha256 = "14rrdamkmhrykff8ln07fq9cm8zwj3k113lzwjcy0lgz23g51jyl";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ fonttools numpy ];
-
   postPatch = ''
-    sed -ie "s^join(_DATA_DIR_PATH,^join(\"$out/third_party/ucd\",^" nototools/unicode_data.py
+    sed -i 's/use_scm_version=.*,/version="${version}",/' setup.py
+  '';
+
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [
+    afdko
+    appdirs
+    attrs
+    black
+    booleanoperations
+    brotlipy
+    click
+    defcon
+    fontmath
+    fontparts
+    fontpens
+    fonttools
+    lxml
+    mutatormath
+    pathspec
+    psautohint
+    pyclipper
+    pytz
+    regex
+    scour
+    toml
+    typed-ast
+    ufonormalizer
+    ufoprocessor
+    unicodedata2
+    zopfli
+  ];
+
+  checkInputs = [
+    pillow
+    six
+    bash
+  ];
+
+  checkPhase = ''
+    patchShebangs tests/
+    cd tests
+    rm gpos_diff_test.py # needs ttxn?
+    ./run_tests
   '';
 
   postInstall = ''
     cp -r third_party $out
   '';
 
-  disabled = pythonPackages.isPy3k;
-
   meta = {
     description = "Noto fonts support tools and scripts plus web site generation";
     license = lib.licenses.asl20;
-    homepage = https://github.com/googlei18n/nototools;
-    platforms = lib.platforms.unix;
+    homepage = "https://github.com/googlefonts/nototools";
   };
 }

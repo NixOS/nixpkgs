@@ -1,4 +1,4 @@
-{ stdenv, callPackage, fetchurl,
+{ lib, stdenv, callPackage, fetchurl,
   guile_1_8, qt4, zlib, freetype, CoreFoundation, Cocoa, gettext, libiconv, ghostscript,
   tex ? null,
   aspell ? null,
@@ -15,7 +15,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "TeXmacs-${version}";
+  pname = "TeXmacs";
+  inherit version;
 
   src= fetchurl {
     url = "http://www.texmacs.org/Download/ftp/tmftp/source/TeXmacs-${version}-src.tar.gz";
@@ -48,12 +49,12 @@ stdenv.mkDerivation {
     "${ghostscript}/bin:" +
     (if aspell == null then "" else "${aspell}/bin:") +
     (if tex == null then "" else "${tex}/bin:") +
-    (if netpbm == null then "" else "${netpbm}/bin:") +
+    (if netpbm == null then "" else "${lib.getBin netpbm}/bin:") +
     (if imagemagick == null then "" else "${imagemagick}/bin:");
 
   enableParallelBuilding = true;
 
   meta = common.meta // {
-    platforms = stdenv.lib.platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 }

@@ -1,38 +1,43 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
-, python3, ninja, vala, gtk3, granite, wingpanel, libnotify
-, pulseaudio, libcanberra-gtk3, libgee, libxml2, wrapGAppsHook
-, gobject-introspection, elementary-icon-theme }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, meson
+, python3
+, ninja
+, vala
+, gtk3
+, granite
+, wingpanel
+, libnotify
+, pulseaudio
+, libcanberra-gtk3
+, libgee
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-sound";
-  version = "2.1.3";
+  version = "6.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0lgjl969c7s31nszh6d4pr1vsxfdsizplsihvd8r02mm1mlxmsda";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-    };
+    sha256 = "sha256-FHZ4YhGLqGTz5Po2XFJvnWuAi1eHKcT9zzgJFHic02E=";
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
-    wrapGAppsHook
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libcanberra-gtk3
@@ -42,18 +47,22 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "lib/wingpanel";
-
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "Sound Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-sound;
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/elementary/wingpanel-indicator-sound";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

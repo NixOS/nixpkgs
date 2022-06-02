@@ -1,15 +1,16 @@
-{ stdenv, fetchFromGitHub, autoconf-archive, gettext, libtool, intltool, autoconf, automake
-, glib, gtk3, gtk-doc, libgudev, pkgconfig, systemd }:
+{ lib, stdenv, fetchFromGitLab, autoconf-archive, gettext, libtool, intltool, autoconf, automake
+, glib, gtk3, gtk-doc, libgudev, pkg-config, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "iio-sensor-proxy-${version}";
-  version = "2.5";
+  pname = "iio-sensor-proxy";
+  version = "3.0";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
     owner  = "hadess";
-    repo   = "iio-sensor-proxy";
+    repo   = pname;
     rev    = version;
-    sha256 = "06x1vvslsa44bgw8s5rr17q9i2ssbw0x04l75zsy3rql9r3y2jzg";
+    sha256 = "0ngbz1vkbjci3ml6p47jh6c6caipvbkm8mxrc8ayr6vc2p9l1g49";
   };
 
   configurePhase = ''
@@ -37,15 +38,14 @@ stdenv.mkDerivation rec {
     gettext
     intltool
     libtool
-    pkgconfig
+    pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Proxy for sending IIO sensor data to D-Bus";
-    homepage = https://github.com/hadess/iio-sensor-proxy;
+    homepage = "https://github.com/hadess/iio-sensor-proxy";
     license = licenses.gpl3 ;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;
-    inherit version;
   };
 }

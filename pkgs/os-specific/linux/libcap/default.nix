@@ -1,36 +1,41 @@
-{ stdenv, buildPackages, fetchurl, attr, perl, pam }:
+{ stdenv, lib, buildPackages, fetchurl, attr, runtimeShell
+, usePam ? !isStatic, pam ? null
+, isStatic ? stdenv.hostPlatform.isStatic
+}:
+
+assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
-  name = "libcap-${version}";
-  version = "2.26";
+  pname = "libcap";
+  version = "2.63";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${name}.tar.xz";
-    sha256 = "12s5b8fp61jcn4qld8a7fakcz1han4a6l3b8cyl3n6r7hk2bfc5n";
+    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
+    sha256 = "sha256-DGN7j0T8fYYneH6c9X8VrAbB3cy1PkH+7FSWvjRm938=";
   };
 
-  outputs = [ "out" "dev" "lib" "man" "doc" "pam" ];
+  outputs = [ "out" "dev" "lib" "man" "doc" ]
+    ++ lib.optional usePam "pam";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl ];
 
-  buildInputs = [ pam ];
+  buildInputs = lib.optional usePam pam;
 
   propagatedBuildInputs = [ attr ];
 
   makeFlags = [
     "lib=lib"
-    "PAM_CAP=yes"
+    "PAM_CAP=${if usePam then "yes" else "no"}"
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
-  ];
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ] ++ lib.optional isStatic "SHARED=no";
 
-  prePatch = ''
-    # use relative bash path
-    substituteInPlace progs/capsh.c --replace "/bin/bash" "bash"
+  postPatch = ''
+    patchShebangs ./progs/mkcapshdoc.sh
 
-    # ensure capsh can find bash in $PATH
-    substituteInPlace progs/capsh.c --replace execve execvpe
+    # use full path to bash
+    substituteInPlace progs/capsh.c --replace "/bin/bash" "${runtimeShell}"
 
     # set prefixes
     substituteInPlace Make.Rules \
@@ -41,20 +46,21 @@ stdenv.mkDerivation rec {
       --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
   '';
 
-  installFlags = "RAISE_SETFCAP=no";
+  installFlags = [ "RAISE_SETFCAP=no" ];
 
   postInstall = ''
-    rm "$lib"/lib/*.a
-    mkdir -p "$doc/share/doc/${name}"
-    cp License "$doc/share/doc/${name}/"
-  '' + stdenv.lib.optionalString (pam != null) ''
+    ${lib.optionalString (!isStatic) ''rm "$lib"/lib/*.a''}
+    mkdir -p "$doc/share/doc/${pname}-${version}"
+    cp License "$doc/share/doc/${pname}-${version}/"
+  '' + lib.optionalString usePam ''
     mkdir -p "$pam/lib/security"
     mv "$lib"/lib/security "$pam/lib"
   '';
 
   meta = {
     description = "Library for working with POSIX capabilities";
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.bsd3;
+    homepage = "https://sites.google.com/site/fullycapable";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
   };
 }

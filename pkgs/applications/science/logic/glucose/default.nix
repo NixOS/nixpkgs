@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, zlib }:
+{ lib, stdenv, fetchurl, zlib }:
 stdenv.mkDerivation rec {
-  name = "glucose-${version}";
+  pname = "glucose";
   version = "4.1";
 
   src = fetchurl {
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   makeFlags = [ "r" ];
   installPhase = ''
     install -Dm0755 glucose_release $out/bin/glucose
-    mkdir -p "$out/share/doc/${name}/"
-    install -Dm0755 ../{LICEN?E,README*,Changelog*} "$out/share/doc/${name}/"
+    mkdir -p "$out/share/doc/${pname}-${version}/"
+    install -Dm0755 ../{LICEN?E,README*,Changelog*} "$out/share/doc/${pname}-${version}/"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern, parallel SAT solver (sequential version)";
     license = licenses.mit;
     platforms = platforms.unix;

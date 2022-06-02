@@ -1,10 +1,10 @@
 { stdenv, lib, fetchzip }:
 
 # Note that plugins are supposed to be installed as:
-#   $path/logstash/{inputs,codecs,filters,outputs}/*.rb 
+#   $path/logstash/{inputs,codecs,filters,outputs}/*.rb
 stdenv.mkDerivation rec {
   version = "1.4.2";
-  name = "logstash-contrib-${version}";
+  pname = "logstash-contrib";
 
   src = fetchzip {
    url = "https://download.elasticsearch.org/logstash/logstash/logstash-contrib-${version}.tar.gz";
@@ -17,15 +17,17 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/logstash
     cp -r lib/* $out
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Community-maintained logstash plugins";
-    homepage    = https://github.com/elasticsearch/logstash-contrib;
-    license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.unix;
+    homepage    = "https://github.com/elasticsearch/logstash-contrib";
+    license     = lib.licenses.asl20;
+    platforms   = lib.platforms.unix;
     maintainers = with maintainers; [ cstrahan ];
   };
 }

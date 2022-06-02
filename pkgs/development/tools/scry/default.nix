@@ -1,50 +1,40 @@
-{ stdenv, fetchFromGitHub, crystal, shards, which }:
+{ lib, fetchFromGitHub, crystal, coreutils, makeWrapper, bash }:
 
-stdenv.mkDerivation rec {
+crystal.buildCrystalPackage rec {
   pname = "scry";
-  # 0.7.1 doesn't work with crystal > 0.25
-  version = "0.7.1.20180919";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
-    owner  = "crystal-lang-tools";
-    repo   = "scry";
-    rev    = "543c1c3f764298f9fff192ca884d10f72338607d";
-    sha256 = "1yq7jap3y5pr2yqc6fn6bxshzwv7dz3w97incq7wpcvi7ibb4lcn";
+    owner = "crystal-lang-tools";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-hqyG1aKY3M8q8lZEKzpUUKl9jS7NF+VMsma6+C0sCbg=";
   };
 
-  nativeBuildInputs = [ crystal shards which ];
-
-  buildPhase = ''
-    runHook preBuild
-
-    shards build --release
-
-    runHook postBuild
+  # a bunch of tests fail when built in the sandbox while perfectly fine outside
+  postPatch = ''
+    rm spec/scry/{client,completion_provider,context,executable}_spec.cr
   '';
 
-  installPhase = ''
-    runHook preInstall
+  format = "shards";
 
-    install -Dm755 -t $out/bin bin/scry
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bash ];
 
-    runHook postInstall
+  shardsFile = ./shards.nix;
+
+  postFixup = ''
+    wrapProgram $out/bin/scry \
+      --prefix PATH : ${lib.makeBinPath [ crystal coreutils ]}
   '';
 
-  # https://github.com/crystal-lang-tools/scry/issues/138
-  doCheck = false;
+  # the binary doesn't take any arguments, so this will hang
+  doInstallCheck = false;
 
-  checkPhase = ''
-    runHook preCheck
-
-    crystal spec
-
-    runHook postCheck
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Code analysis server for the Crystal programming language";
-    homepage = https://github.com/crystal-lang-tools/scry;
+    homepage = "https://github.com/crystal-lang-tools/scry";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg Br1ght0ne ];
   };
 }

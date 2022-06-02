@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "willow";
-  version = "1.1";
+  version = "1.4.1";
   disabled = pythonOlder "2.7";
 
   src = fetchPypi {
     pname = "Willow";
     inherit version;
-    sha256 = "818ee11803c90a0a6d49c94b0453d6266be1ef83ae00de72731c45fae4d3e78c";
+    sha256 = "sha256-Dfj/UoUx4AtI1Av3Ltgb6sHcgvLULlu+1K/wIYvvjA0=";
   };
 
   propagatedBuildInputs = [ six pillow ];
@@ -23,9 +23,9 @@ buildPythonPackage rec {
   # https://github.com/torchbox/Willow/issues/34
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Python image library that sits on top of Pillow, Wand and OpenCV";
-    homepage = https://github.com/torchbox/Willow/;
+    homepage = "https://github.com/torchbox/Willow/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];
   };

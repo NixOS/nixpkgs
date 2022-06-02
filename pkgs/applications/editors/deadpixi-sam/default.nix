@@ -1,36 +1,43 @@
-{ stdenv, fetchFromGitHub, freetype, libX11, libXi, libXt, libXft }:
+{ lib, stdenv, fetchFromGitHub, freetype, libX11, libXi, libXt, libXft }:
 
 stdenv.mkDerivation rec {
-  version = "2017-10-27";
-  name = "deadpixi-sam-unstable-${version}";
+  pname = "deadpixi-sam-unstable";
+  version = "2020-07-14";
 
   src = fetchFromGitHub {
     owner = "deadpixi";
     repo = "sam";
-    rev = "51693780fb1457913389db6634163998f9b775b8";
-    sha256 = "0nfkj93j4bgli4ixbk041nwi14rabk04kqg8krq4mj0044m1qywr";
+    rev = "5d8acb35d78c327d76f00a54857cbd566ed9bc11";
+    sha256 = "sha256-+vRh6nDPc3UnmEdqROHRel5Te0h5m4eiaERs492xciQ=";
   };
 
   postPatch = ''
     substituteInPlace config.mk.def \
       --replace "/usr/include/freetype2" "${freetype.dev}/include/freetype2" \
-      --replace "CC=gcc" ""
+      --replace "CC=gcc" "CC=${stdenv.cc.targetPrefix}cc" \
+      --replace "RXPATH=/usr/bin/ssh" "RXPATH=ssh"
   '';
 
   CFLAGS = "-D_DARWIN_C_SOURCE";
   makeFlags = [ "DESTDIR=$(out)" ];
   buildInputs = [ libX11 libXi libXt libXft ];
+  # build fails when run in parallel
+  enableParallelBuilding = false;
 
   postInstall = ''
+    substituteInPlace deadpixi-sam.desktop \
+      --replace "accessories-text-editor" "$out/share/icons/hicolor/scalable/apps/sam.svg"
     mkdir -p $out/share/applications
+    mkdir -p $out/share/icons/hicolor/scalable/apps
     mv deadpixi-sam.desktop $out/share/applications
+    mv sam.svg $out/share/icons/hicolor/scalable/apps
   '';
 
-  meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
+  meta = with lib; {
+    homepage = "https://github.com/deadpixi/sam";
     description = "Updated version of the sam text editor";
-    license = with licenses; lpl-102;
+    license = licenses.lpl-102;
     maintainers = with maintainers; [ ramkromberg ];
-    platforms = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

@@ -1,46 +1,83 @@
-{ stdenv
+{ lib
+, babel
 , buildPythonPackage
-, fetchgit
 , click
-, watchdog
 , exifread
-, requests
-, mistune
-, inifile
-, Babel
-, jinja2
+, fetchFromGitHub
+, filetype
 , flask
+, inifile
+, jinja2
+, marshmallow
+, marshmallow-dataclass
+, mistune
+, pip
 , pyopenssl
-, ndg-httpsclient
-, pkgs
+, pytest-click
+, pytest-mock
+, pytest-pylint
+, pytestCheckHook
+, pythonOlder
+, python-slugify
+, requests
+, setuptools
+, watchdog
+, werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "lektor";
-  version = "2.3";
+  version = "3.3.4";
+  format = "pyproject";
 
-  src = fetchgit {
-    url = "https://github.com/lektor/lektor";
-    rev = "refs/tags/${version}";
-    sha256 = "1n0ylh1sbpvi9li3g6a7j7m28njfibn10y6s2gayjxwm6fpphqxy";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "lektor";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9Zd+N6FkvRuW7rptWAr3JLIARXwJDcocxAp/ZCTQ3Hw=";
   };
 
-  buildInputs = [ pkgs.glibcLocales ];
   propagatedBuildInputs = [
-    click watchdog exifread requests mistune inifile Babel jinja2
-    flask pyopenssl ndg-httpsclient
+    babel
+    click
+    exifread
+    filetype
+    flask
+    inifile
+    jinja2
+    marshmallow
+    marshmallow-dataclass
+    mistune
+    pip
+    pyopenssl
+    python-slugify
+    requests
+    setuptools
+    watchdog
+    werkzeug
   ];
 
-  LC_ALL="en_US.UTF-8";
+  checkInputs = [
+    pytest-click
+    pytest-mock
+    pytestCheckHook
+  ];
 
-  # No tests included in archive
-  doCheck = false;
+  pythonImportsCheck = [
+    "lektor"
+  ];
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # Test requires network access
+    "test_path_installed_plugin_is_none"
+  ];
+
+  meta = with lib; {
     description = "A static content management system";
-    homepage    = "https://www.getlektor.com/";
-    license     = licenses.bsd0;
-    maintainers = with maintainers; [ vozz ];
+    homepage = "https://www.getlektor.com/";
+    license = licenses.bsd0;
+    maintainers = with maintainers; [ costrouc ];
   };
-
 }

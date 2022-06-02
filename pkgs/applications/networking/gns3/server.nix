@@ -1,39 +1,41 @@
-{ stable, branch, version, sha256Hash }:
+{ stable
+, branch
+, version
+, sha256Hash
+, mkOverride
+, commonOverrides
+}:
 
-{ stdenv, python3, fetchFromGitHub, fetchpatch }:
+{ lib
+, python3
+, fetchFromGitHub
+, packageOverrides ? self: super: {}
+}:
 
 let
-  python = if stable then python3.override {
-    packageOverrides = self: super: {
-      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.1";
-        src = oldAttrs.src.override {
+  defaultOverrides = commonOverrides ++ [
+    (self: super: {
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "3.2.0";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
           inherit version;
-          sha256 = "1l3kg062m02mph6rf9rdv8r5c5n356clxa6b6mrn0i77vk9g9kq0";
+          sha256 = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
         };
-      });
-      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.10";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
-        };
-        propagatedBuildInputs = with self; [ async-timeout attrs chardet multidict yarl idna-ssl ];
+
+        SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
         doCheck = false;
       });
-      aiohttp-cors = super.aiohttp-cors.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
-        };
-        propagatedBuildInputs = with self; [ aiohttp ]
-          ++ stdenv.lib.optional (pythonOlder "3.5") typing;
-      });
-    };
-  } else python3;
 
-in python.pkgs.buildPythonPackage {
+    })
+  ];
+
+  python = python3.override {
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
+  };
+in python.pkgs.buildPythonApplication {
   pname = "gns3-server";
   inherit version;
 
@@ -45,15 +47,35 @@ in python.pkgs.buildPythonPackage {
   };
 
   postPatch = ''
-    # "typing" is only required for Python 3.4 and breaks Python 3.7:
-    sed -iE "s/.*typing.*//" requirements.txt
+    substituteInPlace requirements.txt \
+      --replace "aiohttp==" "aiohttp>=" \
+      --replace "aiofiles==" "aiofiles>=" \
+      --replace "Jinja2==" "Jinja2>=" \
+      --replace "sentry-sdk==" "sentry-sdk>=" \
+      --replace "async-timeout==" "async-timeout>=" \
+      --replace "psutil==" "psutil>=" \
+      --replace "distro==" "distro>=" \
+      --replace "py-cpuinfo==" "py-cpuinfo>=" \
+      --replace "setuptools==" "setuptools>="
   '';
 
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp-cors yarl aiohttp multidict
-    jinja2 psutil zipstream raven jsonschema
-    (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
-  ] ++ stdenv.lib.optional (!stable) [ distro async_generator aiofiles ];
+    aiofiles
+    aiohttp
+    aiohttp-cors
+    async_generator
+    distro
+    jinja2
+    jsonschema
+    multidict
+    prompt-toolkit
+    psutil
+    py-cpuinfo
+    sentry-sdk
+    setuptools
+    yarl
+    zipstream
+  ];
 
   # Requires network access
   doCheck = false;
@@ -62,16 +84,17 @@ in python.pkgs.buildPythonPackage {
     rm $out/bin/gns3loopback # For Windows only
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical Network Simulator 3 server (${branch} release)";
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or
       Qemu/KVM. Clients like the GNS3 GUI control the server using a HTTP REST
       API.
     '';
-    homepage = https://www.gns3.com/;
+    homepage = "https://www.gns3.com/";
+    changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

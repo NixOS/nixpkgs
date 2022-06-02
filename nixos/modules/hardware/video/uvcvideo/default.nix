@@ -26,14 +26,14 @@ in
           Whether to enable <command>uvcvideo</command> dynamic controls.
 
           Note that enabling this brings the <command>uvcdynctrl</command> tool
-          into your environement and register all dynamic controls from
+          into your environment and register all dynamic controls from
           specified <command>packages</command> to the <command>uvcvideo</command> driver.
         '';
       };
 
       packages = mkOption {
         type = types.listOf types.path;
-        example = literalExample "[ pkgs.tiscamera ]";
+        example = literalExpression "[ pkgs.tiscamera ]";
         description = ''
           List of packages containing <command>uvcvideo</command> dynamic controls
           rules. All files found in

@@ -1,25 +1,23 @@
-{ fetchurl, stdenv, libconfuse, yajl, alsaLib, libpulseaudio, libnl, pkgconfig
-  }:
+{ fetchurl, lib, stdenv, libconfuse, yajl, alsa-lib, libpulseaudio, libnl, meson, ninja, perl, pkg-config, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  name = "i3status-2.12";
+  pname = "i3status";
+  version = "2.14";
 
   src = fetchurl {
-    url = "https://i3wm.org/i3status/${name}.tar.bz2";
-    sha256 = "06krpbijv4yi33nypg6qcn4hilcrdyarsdpd9fmr2cq46qaqiikg";
+    url = "https://i3wm.org/i3status/i3status-${version}.tar.xz";
+    sha256 = "0929chhvyq9hg4scpcz8r9zn3s9jvbg6a86k3wqa77qg85rh4kaw";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libconfuse yajl alsaLib libpulseaudio libnl ];
-
-  makeFlags = [ "all" "PREFIX=$(out)" ];
+  nativeBuildInputs = [ meson ninja perl pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl ];
+  buildInputs = [ libconfuse yajl alsa-lib libpulseaudio libnl ];
 
   meta = {
-    description = "A tiling window manager";
-    homepage = https://i3wm.org;
-    maintainers = [ stdenv.lib.maintainers.garbas ];
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.all;
+    description = "Generates a status line for i3bar, dzen2, xmobar or lemonbar";
+    homepage = "https://i3wm.org";
+    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
   };
 
 }

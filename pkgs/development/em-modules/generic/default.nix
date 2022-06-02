@@ -1,4 +1,4 @@
-{ pkgs, lib, emscripten, python }:
+{ pkgs, lib, emscripten, python3 }:
 
 { buildInputs ? [], nativeBuildInputs ? []
 
@@ -7,12 +7,13 @@
 , meta ? {}, ... } @ args:
 
 pkgs.stdenv.mkDerivation (
-  args // 
+  args //
   {
 
-  name = "emscripten-${args.name}";
-  buildInputs = [ emscripten python ] ++ buildInputs;
-  nativeBuildInputs = [ emscripten python ] ++ nativeBuildInputs;
+  pname = "emscripten-${lib.getName args}";
+  version = lib.getVersion args;
+  buildInputs = [ emscripten python3 ] ++ buildInputs;
+  nativeBuildInputs = [ emscripten python3 ] ++ nativeBuildInputs;
 
   # fake conftest results with emscripten's python magic
   EMCONFIGURE_JS=2;
@@ -24,6 +25,9 @@ pkgs.stdenv.mkDerivation (
 
     emconfigure ./configure --prefix=$out
 
+    mkdir -p .emscriptencache
+    export EM_CACHE=$(pwd)/.emscriptencache
+
     runHook postConfigure
   '';
 
@@ -31,6 +35,7 @@ pkgs.stdenv.mkDerivation (
     runHook preBuild
 
     HOME=$TMPDIR
+
     emmake make
 
     runHook postBuild

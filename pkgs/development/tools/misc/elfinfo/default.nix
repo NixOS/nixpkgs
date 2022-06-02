@@ -1,20 +1,20 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "elfinfo-${version}";
-  version = "0.7.5";
+  pname = "elfinfo";
+  version = "1.1.0";
 
   goPackagePath = "github.com/xyproto/elfinfo";
   src = fetchFromGitHub {
     rev = version;
     owner = "xyproto";
     repo = "elfinfo";
-    sha256 = "0b6zyfq0yhpbf03h52q2lgf6ff086gcsbnhm6chx18h0q1g17m96";
+    sha256 = "1n8bg0rcq9fqa6rdnk6x9ngvm59hcayblkpjv9j5myn2vmm6fv8m";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small utility for showing information about ELF files";
-    homepage = https://elfinfo.roboticoverlords.org/;
+    homepage = "https://elfinfo.roboticoverlords.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
   };

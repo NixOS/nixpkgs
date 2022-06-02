@@ -1,6 +1,8 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, alsaLib
+, fetchpatch
+, pkg-config
+, alsa-lib
 , audiofile
 , libjack2
 , liblo
@@ -9,24 +11,67 @@
 , libsndfile
 , lilv
 , lv2
+, ncurses
+, readline
 }:
 
-# TODO: fix readline, ncurses, lilv, liblo, liboil and python. See configure log.
+# TODO: fix python. See configure log.
+# fix -Dnullptr=0 cludge below.
+# The error is
+# /nix/store/*-lilv-0.24.10/include/lilv-0/lilv/lilvmm.hpp:272:53: error: 'nullptr' was not declared in this scope
 
 stdenv.mkDerivation rec {
-  name = "ecasound-${version}";
-  version = "2.9.1";
+  pname = "ecasound";
+  version = "2.9.3";
 
   src = fetchurl {
     url = "https://ecasound.seul.org/download/ecasound-${version}.tar.gz";
-    sha256 = "1wyws3xc4f9pglrrqv6k9137sarv4asizqrxz8h0dn44rnzfiz1r";
+    sha256 = "1m7njfjdb7sqf0lhgc4swihgdr4snkg8v02wcly08wb5ar2fr2s6";
   };
 
-  buildInputs = [ alsaLib audiofile libjack2 liblo liboil libsamplerate libsndfile lilv lv2 ];
+  patches = [
+    # Pull patch pending upstream inclusion for ncurses-6.3:
+    #  https://sourceforge.net/p/ecasound/bugs/54/
+    (fetchpatch {
+      name = "ncursdes-6.3.patch";
+      url = "https://sourceforge.net/p/ecasound/bugs/54/attachment/0001-ecasignalview.cpp-always-use-s-style-format-for-prin.patch";
+      sha256 = "1x1gsjzd43lh19mhpmwrbq269h56s8bxgyv0yfi5yf0sqjf9vaq0";
+    })
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  buildInputs = [
+    alsa-lib
+    audiofile
+    libjack2
+    liblo
+    liboil
+    libsamplerate
+    libsndfile
+    lilv
+    lv2
+    ncurses
+    readline
+  ];
+
+  strictDeps = true;
+
+  CXXFLAGS = "-std=c++11";
+  configureFlags = [ "--enable-liblilv" "--with-extra-cppflags=-Dnullptr=0" ];
+
+  postPatch = ''
+    sed -i -e '
+      s@^#include <readline.h>@#include <readline/readline.h>@
+      s@^#include <history.h>@#include <readline/history.h>@
+      ' ecasound/eca-curses.cpp
+  '';
 
   meta = {
-    description = "Ecasound is a software package designed for multitrack audio processing";
-    license = with stdenv.lib.licenses;  [ gpl2 lgpl21 ];
-    homepage = http://nosignal.fi/ecasound/;
+    description = "Software package designed for multitrack audio processing";
+    license = with lib.licenses;  [ gpl2 lgpl21 ];
+    homepage = "http://nosignal.fi/ecasound/";
   };
 }

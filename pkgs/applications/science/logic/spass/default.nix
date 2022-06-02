@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, flex }:
+{ lib, stdenv, fetchurl, bison, flex }:
 
 let
   baseVersion="3";
@@ -8,8 +8,8 @@ let
     + " dfg2ascii dfg2dfg tptp2dfg dimacs2dfg pgen rescmp";
 in
 
-stdenv.mkDerivation rec {
-  name = "spass-${version}";
+stdenv.mkDerivation {
+  pname = "spass";
   version = "${baseVersion}.${minorVersion}";
 
   src = fetchurl {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     install -m0755 SPASS ${extraTools} $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automated theorem prover for first-order logic";
     maintainers = with maintainers;
     [

@@ -1,26 +1,37 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, unittest2, mock, requests, simplejson }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "2.21.0";
+  version = "3.1.0";
+  format = "setuptools";
 
-  # Tests require network connectivity and there's no easy way to disable
-  # them. ~ C.
-  doCheck = false;
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "170f76f2502888debf02da580138c840497b9359876ca3838f4692f2f02c9110";
+    hash = "sha256-1/pMGFeNJqfn9onlF33Y67R/KHmxwGAZqguIji3Rrrk=";
   };
 
-  checkInputs = [ unittest2 mock ];
+  propagatedBuildInputs = [
+    requests
+  ];
 
-  propagatedBuildInputs = [ requests ] ++ lib.optional (!isPy3k) simplejson;
+  # Tests require network connectivity and there's no easy way to disable them
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "stripe"
+  ];
 
   meta = with lib; {
     description = "Stripe Python bindings";
-    homepage = https://github.com/stripe/stripe-python;
+    homepage = "https://github.com/stripe/stripe-python";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

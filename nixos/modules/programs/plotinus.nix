@@ -18,7 +18,7 @@ in
       enable = mkOption {
         default = false;
         description = ''
-          Whether to enable the Plotinus GTK+3 plugin.  Plotinus provides a
+          Whether to enable the Plotinus GTK 3 plugin. Plotinus provides a
           popup (triggered by Ctrl-Shift-P) to search the menus of a
           compatible application.
         '';
@@ -30,7 +30,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
-    environment.variables.XDG_DATA_DIRS = [ "${pkgs.plotinus}/share/gsettings-schemas/${pkgs.plotinus.name}" ];
+    environment.sessionVariables.XDG_DATA_DIRS = [ "${pkgs.plotinus}/share/gsettings-schemas/${pkgs.plotinus.name}" ];
     environment.variables.GTK3_MODULES = [ "${pkgs.plotinus}/lib/libplotinus.so" ];
   };
 }

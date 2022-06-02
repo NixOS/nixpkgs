@@ -1,39 +1,64 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pytest
-, numpy
-, nbconvert
-, pandas
-, mock
-, jinja2
+, fetchFromGitHub
+, pythonOlder
+, pytestCheckHook
 , branca
-, six
+, jinja2
+, nbconvert
+, numpy
+, pandas
+, pillow
 , requests
+, selenium
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.8.0";
+  version = "0.12.1.post1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0f25fhwxnix8hddzf67barzjwwsvpww112zisrvz2lpl08j388rn";
+  disabled = pythonOlder "3.5";
+
+  src = fetchFromGitHub {
+    owner = "python-visualization";
+    repo = "folium";
+    rev = "v${version}";
+    sha256 = "sha256-4UseN/3ojZdDUopwZLpHZEBon1qDDvCWfdzxodi/BeA=";
   };
 
-  checkInputs = [ pytest nbconvert pandas mock ];
-  propagatedBuildInputs = [ jinja2 branca six requests numpy ];
+  SETUPTOOLS_SCM_PRETEND_VERSION = "v${version}";
 
-  # No tests in archive
-  doCheck = false;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  propagatedBuildInputs = [
+    branca
+    jinja2
+    numpy
+    requests
+  ];
+
+  checkInputs = [
+    nbconvert
+    pytestCheckHook
+    pandas
+    pillow
+    selenium
+  ];
+
+  disabledTests = [
+    # requires internet connection
+    "test_geojson"
+    "test_heat_map_with_weights"
+    "test_json_request"
+    "test_notebook"
+  ];
 
   meta = {
     description = "Make beautiful maps with Leaflet.js & Python";
-    homepage = https://github.com/python-visualization/folium;
+    homepage = "https://github.com/python-visualization/folium";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fridh ];
   };

@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, gettext, pkgconfig, perlPackages
+{ lib, stdenv, fetchurl, gettext, pkg-config, perlPackages
 , libidn2, zlib, pcre, libuuid, libiconv, libintl
 , python3, lzip
 , libpsl ? null
 , openssl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-${version}";
-  version = "1.20.1";
+  pname = "wget";
+  version = "1.21.3";
 
   src = fetchurl {
-    url = "mirror://gnu/wget/${name}.tar.lz";
-    sha256 = "0a29qsqxkk8145vkyy35q5a1wc7qzwx3qj3gmfrkmi9xs96yhqqg";
+    url = "mirror://gnu/wget/${pname}-${version}.tar.lz";
+    sha256 = "sha256-29L7XkcUnUdS0Oqg2saMxJzyDUbfT44yb/yPGLKvTqU=";
   };
 
   patches = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     patchShebangs doc
 
-  '' + stdenv.lib.optionalString doCheck ''
+  '' + lib.optionalString doCheck ''
     # Work around lack of DNS resolution in chroots.
     for i in "tests/"*.pm "tests/"*.px
     do
@@ -28,20 +28,23 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ gettext pkgconfig perlPackages.perl lzip libiconv libintl ];
+  nativeBuildInputs = [ gettext pkg-config perlPackages.perl lzip libiconv libintl ];
   buildInputs = [ libidn2 zlib pcre libuuid ]
-    ++ stdenv.lib.optionals doCheck [ perlPackages.IOSocketSSL perlPackages.LWP python3 ]
-    ++ stdenv.lib.optional (openssl != null) openssl
-    ++ stdenv.lib.optional (libpsl != null) libpsl
-    ++ stdenv.lib.optional stdenv.isDarwin perlPackages.perl;
+    ++ lib.optionals doCheck [ perlPackages.IOSocketSSL perlPackages.LWP python3 ]
+    ++ lib.optional (openssl != null) openssl
+    ++ lib.optional (libpsl != null) libpsl
+    ++ lib.optional stdenv.isDarwin perlPackages.perl;
 
   configureFlags = [
-    (stdenv.lib.withFeatureAs (openssl != null) "ssl" "openssl")
+    (lib.withFeatureAs (openssl != null) "ssl" "openssl")
+  ] ++ lib.optionals stdenv.isDarwin [
+    # https://lists.gnu.org/archive/html/bug-wget/2021-01/msg00076.html
+    "--without-included-regex"
   ];
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for retrieving files using HTTP, HTTPS, and FTP";
 
     longDescription =
@@ -53,7 +56,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    homepage = https://www.gnu.org/software/wget/;
+    homepage = "https://www.gnu.org/software/wget/";
 
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "suid-chroot-${version}";
+  pname = "suid-chroot";
   version = "1.0.2";
 
   src = fetchurl {
     sha256 = "1a9xqhck0ikn8kfjk338h9v1yjn113gd83q0c50k78xa68xrnxjx";
-    url = "http://myweb.tiscali.co.uk/scottrix/linux/download/${name}.tar.bz2";
+    url = "http://myweb.tiscali.co.uk/scottrix/linux/download/${pname}-${version}.tar.bz2";
   };
 
   postPatch = ''
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sed -i -e '/chmod u+s/d' Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Setuid-safe wrapper for chroot";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;

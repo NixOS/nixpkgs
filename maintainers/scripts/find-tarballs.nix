@@ -37,7 +37,7 @@ let
   keyDrv = drv: if canEval drv.drvPath then { key = drv.drvPath; value = drv; } else { };
 
   immediateDependenciesOf = drv:
-    concatLists (mapAttrsToList (n: v: derivationsIn v) (removeAttrs drv ["meta" "passthru"]));
+    concatLists (mapAttrsToList (n: v: derivationsIn v) (removeAttrs drv (["meta" "passthru"] ++ optionals (drv?passthru) (attrNames drv.passthru))));
 
   derivationsIn = x:
     if !canEval x then []

@@ -1,5 +1,5 @@
 .PHONY: all
-all: manual-combined.xml format
+all: manual-combined.xml
 
 .PHONY: debug
 debug: generated manual-combined.xml
@@ -24,7 +24,7 @@ fix-misc-xml:
 clean:
 	rm -f manual-combined.xml generated
 
-generated: ./options-to-docbook.xsl
+generated:
 	nix-build ../../release.nix \
 		--attr manualGeneratedSources.x86_64-linux \
 		--out-link ./generated

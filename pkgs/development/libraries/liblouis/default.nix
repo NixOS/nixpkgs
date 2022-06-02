@@ -1,25 +1,46 @@
-{ fetchFromGitHub, stdenv, autoreconfHook, pkgconfig, gettext, python3
-, texinfo, help2man, libyaml, perl
+{ fetchFromGitHub
+, lib
+, stdenv
+, fetchpatch
+, autoreconfHook
+, pkg-config
+, gettext
+, python3
+, texinfo
+, help2man
+, libyaml
+, perl
 }:
 
-let
-  version = "3.5.0";
-in stdenv.mkDerivation rec {
-  name = "liblouis-${version}";
+stdenv.mkDerivation rec {
+  pname = "liblouis";
+  version = "3.21.0";
 
   src = fetchFromGitHub {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${version}";
-    sha256 = "0klmyh6cg9khv59j4xdsrwwjzdgylw689gvrjiy5jsvqll58fcsd";
+    sha256 = "sha256-Hfn0dfXihtUfO3R+qJaetrPwupcIwblvi1DQdHCF1s8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "parenthesize-memcpy-calls-clang.patch";
+      url = "https://github.com/liblouis/liblouis/commit/528f38938e9f539a251d9de92ad1c1b90401c4d0.patch";
+      sha256 = "0hlhqsvd5wflg70bd7bmssnchk8znzbr93in0zpspzbyap6xz112";
+    })
+  ];
 
   outputs = [ "out" "dev" "man" "info" "doc" ];
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig gettext python3
+    autoreconfHook
+    pkg-config
+    gettext
+    python3
     # Docs, man, info
-    texinfo help2man
+    texinfo
+    help2man
   ];
 
   buildInputs = [
@@ -47,12 +68,11 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open-source braille translator and back-translator";
-    homepage = http://liblouis.org/;
-    broken = true;
+    homepage = "http://liblouis.org/";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

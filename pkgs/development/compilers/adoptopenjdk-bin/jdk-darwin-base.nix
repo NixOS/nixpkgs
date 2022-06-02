@@ -1,15 +1,19 @@
-sourcePerArch:
+{ sourcePerArch, knownVulnerabilities ? [] }:
 
 { swingSupport ? true # not used for now
-, stdenv
+, lib, stdenv
 , fetchurl
+, setJavaClassPath
 }:
 
+assert (stdenv.isDarwin && stdenv.isx86_64);
+
 let cpuName = stdenv.hostPlatform.parsed.cpu.name;
-    result = stdenv.mkDerivation rec {
-  name = if sourcePerArch.packageType == "jdk"
-    then "adoptopenjdk-${sourcePerArch.vmType}-bin-${sourcePerArch.${cpuName}.version}"
-    else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin-${sourcePerArch.${cpuName}.version}";
+    result = stdenv.mkDerivation {
+  pname = if sourcePerArch.packageType == "jdk"
+    then "adoptopenjdk-${sourcePerArch.vmType}-bin"
+    else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin";
+  version = sourcePerArch.${cpuName}.version or (throw "unsupported CPU ${cpuName}");
 
   src = fetchurl {
     inherit (sourcePerArch.${cpuName}) url sha256;
@@ -23,21 +27,25 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
     mv $sourceRoot $out
 
+    # jni.h expects jni_md.h to be in the header search path.
+    ln -s $out/Contents/Home/include/darwin/*_md.h $out/Contents/Home/include/
+
     rm -rf $out/Home/demo
 
     # Remove some broken manpages.
     rm -rf $out/Home/man/ja*
 
-    # for backward compatibility
-    ln -s $out/Contents/Home $out/jre
-
     ln -s $out/Contents/Home/* $out/
 
+    # Propagate the setJavaClassPath setup hook from the JDK so that
+    # any package that depends on the JDK has $CLASSPATH set up
+    # properly.
     mkdir -p $out/nix-support
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
-    if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
+    if [ -z "\''${JAVA_HOME-}" ]; then export JAVA_HOME=$out; fi
     EOF
   '';
 
@@ -46,14 +54,13 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
 
   passthru.home = result;
 
-  # for backward compatibility
-  passthru.architecture = "";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.gpl2Classpath;
     description = "AdoptOpenJDK, prebuilt OpenJDK binary";
     platforms = [ "x86_64-darwin" ]; # some inherit jre.meta.platforms
-    maintainers = with stdenv.lib.maintainers; [ taku0 ];
+    maintainers = with lib.maintainers; [ taku0 ];
+    inherit knownVulnerabilities;
+    mainProgram = "java";
   };
 
 }; in result

@@ -1,43 +1,35 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, antlr
-, qtbase, qttools, qscintilla, sqlite }:
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake
+, qtbase, qttools, sqlcipher, wrapGAppsHook, qtmacextras
+}:
 
 mkDerivation rec {
-  version = "3.10.1";
-  name = "sqlitebrowser-${version}";
+  pname = "sqlitebrowser";
+  version = "3.12.2";
 
   src = fetchFromGitHub {
-    repo   = "sqlitebrowser";
-    owner  = "sqlitebrowser";
-    rev    = "v${version}";
-    sha256 = "1brzam8yv6sbdmbqsp7vglhd6wlx49g2ap8llr271zrkld4k3kar";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-33iVic0kxemWld+SiHOWGlKFSi5fpk1RtLUiNDr7WNI=";
   };
 
-  buildInputs = [ qtbase qscintilla sqlite ];
+  # We should be using qscintilla from nixpkgs instead of the vendored version,
+  # but qscintilla is currently in a bit of a mess as some consumers expect a
+  # -qt4 or -qt5 prefix while others do not.
+  # We *really* should get that cleaned up.
+  buildInputs = [ qtbase sqlcipher ] ++ lib.optionals stdenv.isDarwin [ qtmacextras ];
 
-  nativeBuildInputs = [ cmake antlr qttools ];
+  nativeBuildInputs = [ cmake qttools wrapGAppsHook ];
 
-  NIX_LDFLAGS = [
-    "-lQt5PrintSupport"
+  cmakeFlags = [
+    "-Dsqlcipher=1"
   ];
-
-  enableParallelBuilding = true;
-
-  # We have to patch out Test and PrintSupport to make this work with Qt 5.9
-  # It can go when the application supports 5.9
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace Test         "" \
-      --replace PrintSupport ""
-
-    substituteInPlace libs/qcustomplot-source/CMakeLists.txt \
-      --replace PrintSupport ""
-  '';
 
   meta = with lib; {
     description = "DB Browser for SQLite";
-    homepage = http://sqlitebrowser.org/;
+    homepage = "https://sqlitebrowser.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ma27 ];
-    platforms = platforms.linux; # can only test on linux
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.unix;
   };
 }

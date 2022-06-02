@@ -1,15 +1,11 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules,
   qtbase
 }:
 
 mkDerivation {
-  name = "kitemmodels";
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-    broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
-  };
+  pname = "kitemmodels";
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ qtbase ];
   outputs = [ "out" "dev" ];

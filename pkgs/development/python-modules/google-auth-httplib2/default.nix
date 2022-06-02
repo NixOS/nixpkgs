@@ -2,40 +2,38 @@
 , buildPythonPackage
 , fetchPypi
 , flask
-, mock
-, six
-, pytest
-, pytest-localserver
-, google_auth
+, google-auth
 , httplib2
-
+, mock
+, pytestCheckHook
+, pytest-localserver
 }:
 
 buildPythonPackage rec {
   pname = "google-auth-httplib2";
-  version = "0.0.3";
+  version = "0.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "098fade613c25b4527b2c08fa42d11f3c2037dda8995d86de0745228e965d445";
+    sha256 = "a07c39fd632becacd3f07718dfd6021bf396978f03ad3ce4321d060015cc30ac";
   };
-
-  checkInputs = [
-    flask mock six pytest pytest-localserver
-  ];
 
   propagatedBuildInputs = [
-    google_auth httplib2
+    google-auth
+    httplib2
   ];
 
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [
+    flask
+    mock
+    pytestCheckHook
+    pytest-localserver
+  ];
 
-  meta = {
+  meta = with lib; {
     description = "Google Authentication Library: httplib2 transport";
-    homepage = https://github.com/GoogleCloudPlatform/google-auth-library-python-httplib2;
-    license = lib.licenses.asl20;
+    homepage = "https://github.com/GoogleCloudPlatform/google-auth-library-python-httplib2";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
-
 }

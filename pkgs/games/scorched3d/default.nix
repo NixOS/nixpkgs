@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, libGLU_combined, glew, pkgconfig, openalSoft, freealut, wxGTK, libogg
+{ lib, stdenv, fetchurl, libGLU, libGL, glew, pkg-config, openalSoft, freealut, wxGTK, libogg
 , freetype, libvorbis, fftwSinglePrec, SDL, SDL_net, expat, libjpeg, libpng }:
 
 stdenv.mkDerivation rec {
   version = "44";
-  name = "scorched3d-${version}";
+  pname = "scorched3d";
   src = fetchurl {
     url = "mirror://sourceforge/scorched3d/Scorched3D-${version}-src.tar.gz";
     sha256 = "1fldi9pn7cz6hc9h70pacgb7sbykzcac44yp3pkhn0qh4axj10qw";
   };
 
   buildInputs =
-    [ libGLU_combined glew openalSoft freealut wxGTK libogg freetype libvorbis
+    [ libGLU libGL glew openalSoft freealut wxGTK libogg freetype libvorbis
       SDL SDL_net expat libjpeg libpng fftwSinglePrec
     ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   patches = [
     ./file-existence.patch
@@ -28,10 +28,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-fftw=${fftwSinglePrec.dev}" ];
 
-  NIX_LDFLAGS = [ "-lopenal" ];
+  NIX_LDFLAGS = "-lopenal";
 
-  meta = with stdenv.lib; {
-    homepage = http://scorched3d.co.uk/;
+  meta = with lib; {
+    homepage = "http://scorched3d.co.uk/";
     description = "3D Clone of the classic Scorched Earth";
     license = licenses.gpl2Plus;
     platforms = platforms.linux; # maybe more

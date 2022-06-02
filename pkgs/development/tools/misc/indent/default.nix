@@ -1,23 +1,32 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, texinfo, buildPackages, pkgsStatic }:
 
 stdenv.mkDerivation rec {
-  name = "indent-2.2.10";
+  pname = "indent";
+  version = "2.2.12";
 
   src = fetchurl {
-    url = "mirror://gnu/indent/${name}.tar.gz";
-    sha256 = "0f9655vqdvfwbxvs1gpa7py8k1z71aqh8hp73f65vazwbfz436wa";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "12xvcd16cwilzglv9h7sgh4h1qqjd1h8s48ji2dla58m4706hzg7";
   };
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i 's|#include <malloc.h>|#include <malloc/malloc.h>|' ./man/texinfo2man.c
-  '';
+  patches = [ ./darwin.patch ];
+  makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" ];
+
+  strictDeps = true;
+  nativeBuildInputs = [ texinfo ];
+  pkgsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
+
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
+    "-Wno-implicit-function-declaration";
 
   hardeningDisable = [ "format" ];
 
+  passthru.tests.static = pkgsStatic.indent;
   meta = {
-    homepage = https://www.gnu.org/software/indent/;
+    homepage = "https://www.gnu.org/software/indent/";
     description = "A source code reformatter";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.mmahut ];
+    platforms = lib.platforms.unix;
   };
 }

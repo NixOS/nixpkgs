@@ -1,21 +1,22 @@
-{ stdenv, pkgs, fetchurl, makeWrapper, wrapGAppsHook, gvfs, gtk3, atomEnv }:
+{ lib, stdenv, pkgs, fetchurl, wrapGAppsHook, glib, gtk3, atomEnv }:
 
 let
   versions = {
     atom = {
-      version = "1.34.0";
-      sha256 = "16hrjymrc43izg7frcrk7cwjwwrclcxzcwb5iw2llzjc6iadzlkb";
+      version = "1.58.0";
+      sha256 = "sha256-QxDhr4gwlS9O/lk0nfqsw5sFiPckSTFL15XtRpQh0tU=";
     };
 
     atom-beta = {
-      version = "1.35.0";
+      version = "1.59.0";
       beta = 0;
-      sha256 = "0gm5k573dq1hhnyw3719f5k1c6rsz872mhzg8q53n89y0g2r5xmw";
+      sha256 = "sha256-s1XHR2e4JPywdLiIcjTqMRILARDthHxBeTQOCIkhmXE=";
+      broken = true;
     };
   };
 
-  common = pname: {version, sha256, beta ? null}:
-      let fullVersion = version + stdenv.lib.optionalString (beta != null) "-beta${toString beta}";
+  common = pname: {version, sha256, beta ? null, broken ? false}:
+      let fullVersion = version + lib.optionalString (beta != null) "-beta${toString beta}";
       name = "${pname}-${fullVersion}";
   in stdenv.mkDerivation {
     inherit name;
@@ -35,23 +36,31 @@ let
       gtk3  # Fix error: GLib-GIO-ERROR **: Settings schema 'org.gtk.Settings.FileChooser' is not installed
     ];
 
+    dontBuild = true;
+    dontConfigure = true;
+
+    unpackPhase = ''
+      ar p $src data.tar.xz | tar xJ ./usr/
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out
+      mv usr/bin usr/share $out
+      rm -rf $out/share/lintian
+
+      runHook postInstall
+    '';
+
     preFixup = ''
       gappsWrapperArgs+=(
-        --prefix "PATH" : "${gvfs}/bin" \
+        # needed for gio executable to be able to delete files
+        --prefix "PATH" : "${glib.bin}/bin"
       )
     '';
 
-    buildCommand = ''
-      mkdir -p $out/usr/
-      ar p $src data.tar.xz | tar -C $out -xJ ./usr
-      sed -i -e "s|Exec=.*$|Exec=$out/bin/${pname}|" $out/usr/share/applications/${pname}.desktop
-      mv $out/usr/* $out/
-      rm -r $out/share/lintian
-      rm -r $out/usr/
-      sed -i "s/${pname})/.${pname}-wrapped)/" $out/bin/${pname}
-
-      fixupPhase
-
+    postFixup = ''
       share=$out/share/${pname}
 
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -70,14 +79,17 @@ let
       ln -s ${pkgs.git}/bin/git $dugite/git/libexec/git-core/git
 
       find $share -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$share" {} \;
+
+      sed -i -e "s|Exec=.*$|Exec=$out/bin/${pname}|" $out/share/applications/${pname}.desktop
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "A hackable text editor for the 21st Century";
-      homepage = https://atom.io/;
+      homepage = "https://atom.io/";
       license = licenses.mit;
-      maintainers = with maintainers; [ offline nequissimus ysndr ];
+      maintainers = with maintainers; [ offline ysndr ];
       platforms = platforms.x86_64;
+      inherit broken;
     };
   };
-in stdenv.lib.mapAttrs common versions
+in lib.mapAttrs common versions

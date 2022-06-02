@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
-stdenv.mkDerivation rec {
-  name    = "pgjwt-${version}";
+stdenv.mkDerivation {
+  pname = "pgjwt";
   version = "unstable-2017-04-24";
 
   src = fetchFromGitHub {
@@ -11,19 +11,19 @@ stdenv.mkDerivation rec {
     sha256 = "1riz0xvwb6y02j0fljbr9hcbqb2jqs4njlivmavy9ysbcrrv1vrf";
   };
 
-  buildPhase = ":";
+  dontBuild = true;
   installPhase = ''
-    mkdir -p $out/bin  # current postgresql extension mechanism in nixos requires bin directory
-    mkdir -p $out/share/extension
-    cp pg*sql *.control $out/share/extension
+    mkdir -p $out/share/postgresql/extension
+    cp pg*sql *.control $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PostgreSQL implementation of JSON Web Tokens";
     longDescription = ''
       sign() and verify() functions to create and verify JSON Web Tokens.
     '';
     license = licenses.mit;
+    platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [spinus];
   };
 }

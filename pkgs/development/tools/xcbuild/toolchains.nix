@@ -44,8 +44,8 @@ runCommand "Toolchains" {} (''
     fi
   done
 
-  ln -s ${buildPackages.yacc}/bin/yacc $toolchain/bin/yacc
-  ln -s ${buildPackages.yacc}/bin/bison $toolchain/bin/bison
+  ln -s ${buildPackages.bison}/bin/yacc $toolchain/bin/yacc
+  ln -s ${buildPackages.bison}/bin/bison $toolchain/bin/bison
   ln -s ${buildPackages.flex}/bin/flex $toolchain/bin/flex
   ln -s ${buildPackages.flex}/bin/flex++ $toolchain/bin/flex++
   ln -s $toolchain/bin/flex $toolchain/bin/lex
@@ -67,6 +67,7 @@ runCommand "Toolchains" {} (''
   done
 
   ln -s ${buildPackages.darwin.bootstrap_cmds}/bin/mig $toolchain/bin
+  mkdir -p $toolchain/libexec
   ln -s ${buildPackages.darwin.bootstrap_cmds}/libexec/migcom $toolchain/libexec
   ln -s ${mkdep-darwin-src} $toolchain/bin/mkdep
 '')

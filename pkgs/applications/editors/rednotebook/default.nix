@@ -1,17 +1,17 @@
 { lib, buildPythonApplication, fetchFromGitHub
-, gdk_pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk
+, gdk-pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk
 , pygobject3, pyyaml
 }:
 
 buildPythonApplication rec {
   pname = "rednotebook";
-  version = "2.8";
+  version = "2.24";
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
     rev = "v${version}";
-    sha256 = "0k75lw3p6jx30ngvn8iipk1763gazkbrsad3fpl3sqppaqaggryj";
+    sha256 = "sha256-nTFyRNJAhTrVlKdLd2F0jv7VcNn2pGTAegvfMjfHY84=";
   };
 
   # We have not packaged tests.
@@ -20,7 +20,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
-    gdk_pixbuf glib gtk3 gtksourceview pango webkitgtk
+    gdk-pixbuf glib gtk3 gtksourceview pango webkitgtk
     pygobject3 pyyaml
   ];
 
@@ -30,10 +30,15 @@ buildPythonApplication rec {
     "--suffix XDG_DATA_DIRS : $XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   ];
 
+  # Until gobject-introspection in nativeBuildInputs is supported.
+  # https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-472568643
+  strictDeps = false;
+
   meta = with lib; {
-    homepage = http://rednotebook.sourceforge.net/;
+    homepage = "https://rednotebook.sourceforge.io/";
+    changelog = "https://github.com/jendrikseipp/rednotebook/blob/v${version}/CHANGELOG.md";
     description = "A modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ orivej tstrobel ];
   };
 }

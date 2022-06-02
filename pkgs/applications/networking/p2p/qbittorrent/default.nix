@@ -1,29 +1,34 @@
-{ stdenv, fetchFromGitHub, pkgconfig
-, boost, libtorrentRasterbar, qtbase, qttools, qtsvg
-, debugSupport ? false # Debugging
+{ mkDerivation, lib, fetchFromGitHub, makeWrapper, pkg-config
+, boost, libtorrent-rasterbar, qtbase, qttools, qtsvg
+, debugSupport ? false
 , guiSupport ? true, dbus ? null # GUI (disable to run headless)
 , webuiSupport ? true # WebUI
+, trackerSearch ? true, python3 ? null
 }:
 
 assert guiSupport -> (dbus != null);
-with stdenv.lib;
+assert trackerSearch -> (python3 != null);
 
-stdenv.mkDerivation rec {
-  name = "qbittorrent-${version}";
-  version = "4.1.5";
+with lib;
+mkDerivation rec {
+  pname = "qbittorrent";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
-    repo = "qbittorrent";
+    repo = "qBittorrent";
     rev = "release-${version}";
-    sha256 = "09zcygaxfv9g6av0vsvlyzv4v65wvj766xyfx31yz5ig3xan6ak1";
+    sha256 = "sha256-xBNN9YYKMDcoL1wvERjlAjV8vb2GVgwwlHtb5y0+f+8=";
   };
 
-  # NOTE: 2018-05-31: CMake is working but it is not officially supported
-  nativeBuildInputs = [ pkgconfig ];
+  enableParallelBuilding = true;
 
-  buildInputs = [ boost libtorrentRasterbar qtbase qttools qtsvg ]
-    ++ optional guiSupport dbus; # D(esktop)-Bus depends on GUI support
+  # NOTE: 2018-05-31: CMake is working but it is not officially supported
+  nativeBuildInputs = [ makeWrapper pkg-config ];
+
+  buildInputs = [ boost libtorrent-rasterbar qtbase qttools qtsvg ]
+    ++ optional guiSupport dbus # D(esktop)-Bus depends on GUI support
+    ++ optional trackerSearch python3;
 
   # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
   QMAKE_LRELEASE = "lrelease";
@@ -35,12 +40,17 @@ stdenv.mkDerivation rec {
     ++ optional (!webuiSupport) "--disable-webui"
     ++ optional debugSupport "--enable-debug";
 
-  enableParallelBuilding = true;
+  postInstall = "wrapProgram $out/bin/${
+    if guiSupport
+    then "qbittorrent"
+    else "qbittorrent-nox"
+  } --prefix PATH : ${makeBinPath [ python3 ]}";
 
   meta = {
     description = "Featureful free software BitTorrent client";
-    homepage    = https://www.qbittorrent.org/;
-    license     = licenses.gpl2;
+    homepage    = "https://www.qbittorrent.org/";
+    changelog   = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
+    license     = licenses.gpl2Plus;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ Anton-Latukha ];
   };

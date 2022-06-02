@@ -1,15 +1,14 @@
-{ stdenv, fetchFromGitHub, openssl }:
+{ lib, stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "eschalot";
-  version = "2018-01-19";
-  name = "${pname}-${version}";
+  version = "1.2.0.20191006";
 
   src = fetchFromGitHub {
     owner = "ReclaimYourPrivacy";
     repo = pname;
-    rev = "56a967b62631cfd3c7ef68541263dbd54cbbc2c4";
-    sha256 = "1iw1jrydasm9dmgpcdimd8dy9n281ys9krvf3fd3dlymkgsj604d";
+    rev = "a45bad5b9a3e4939340ddd8a751ceffa3c0db76a";
+    sha256 = "1wbi0azc2b57nmmx6c1wmvng70d9ph1s83yhnl5lxaaqaj85h22g";
   };
 
   buildInputs = [ openssl ];
@@ -18,7 +17,7 @@ stdenv.mkDerivation rec {
     install -D -t $out/bin eschalot worgen
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tor hidden service name generator";
     homepage = src.meta.homepage;
     license = licenses.isc;

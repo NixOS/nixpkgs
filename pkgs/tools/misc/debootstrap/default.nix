@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, dpkg, gawk, perl, wget, coreutils, utillinux
-, gnugrep, gnutar, gnused, gzip, makeWrapper }:
+{ lib, stdenv, fetchFromGitLab, dpkg, gawk, perl, wget, coreutils, util-linux
+, gnugrep, gnupg1, gnutar, gnused, gzip, makeWrapper }:
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?
-let binPath = stdenv.lib.makeBinPath [
+let binPath = lib.makeBinPath [
     coreutils
     dpkg
     gawk
     gnugrep
+    gnupg1
     gnused
     gnutar
     gzip
@@ -14,14 +15,15 @@ let binPath = stdenv.lib.makeBinPath [
     wget
   ];
 in stdenv.mkDerivation rec {
-  name = "debootstrap-${version}";
-  version = "1.0.114";
+  pname = "debootstrap";
+  version = "1.0.126";
 
-  src = fetchurl {
-    # git clone git://git.debian.org/d-i/debootstrap.git
-    # I'd like to use the source. However it's lacking the lanny script ? (still true?)
-    url = "mirror://debian/pool/main/d/debootstrap/debootstrap_${version}.tar.gz";
-    sha256 = "14lw18bhxap1g15q0rhslacj1bcrl69wrqcx6azmbvd92rl4bqd8";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "installer-team";
+    repo = pname;
+    rev = version;
+    sha256 = "0hfx6k86kby4xf0xqskpllq00g159j4khh66hfi6dhcdb91dgyd7";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +35,7 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace debootstrap \
       --replace 'CHROOT_CMD="chroot '  'CHROOT_CMD="${coreutils}/bin/chroot ' \
-      --replace 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${utillinux}/bin/unshare ' \
+      --replace 'CHROOT_CMD="unshare ' 'CHROOT_CMD="${util-linux}/bin/unshare ' \
       --replace /usr/bin/dpkg ${dpkg}/bin/dpkg \
       --replace '#!/bin/sh' '#!/bin/bash' \
       --subst-var-by VERSION ${version}
@@ -57,11 +59,11 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Tool to create a Debian system in a chroot";
-    homepage = https://wiki.debian.org/Debootstrap;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://wiki.debian.org/Debootstrap";
+    license = licenses.mit;
+    maintainers = with maintainers; [ marcweber ];
+    platforms = platforms.linux;
   };
 }

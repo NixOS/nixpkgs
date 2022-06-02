@@ -1,73 +1,109 @@
-{ lib, fetchurl, fetchpatch, pythonPackages, pkgconfig
-, qmake, lndir, qtbase, qtsvg, qtwebengine, dbus
-, withConnectivity ? false, qtconnectivity
-, withWebKit ? false, qtwebkit
-, withWebSockets ? false, qtwebsockets
+{ lib
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, pkg-config
+, dbus
+, lndir
+, dbus-python
+, sip
+, pyqt5_sip
+, pyqt-builder
+, libsForQt5
+, withConnectivity ? false
+, withMultimedia ? false
+, withWebKit ? false
+, withWebSockets ? false
+, withLocation ? false
 }:
 
-let
+buildPythonPackage rec {
+  pname = "PyQt5";
+  version = "5.15.4";
+  format = "pyproject";
 
-  inherit (pythonPackages) buildPythonPackage python isPy3k dbus-python enum34;
+  disabled = isPy27;
 
-  sip = pythonPackages.sip.override { sip-module = "PyQt5.sip"; };
-
-in buildPythonPackage rec {
-  pname = "PyQt";
-  version = "5.11.3";
-  format = "other";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/pyqt/PyQt5/PyQt-${version}/PyQt5_gpl-${version}.tar.gz";
-    sha256 = "0wqh4srqkcc03rvkwrcshaa028psrq58xkys6npnyhqxc0apvdf9";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1gp5jz71nmg58zsm1h4vzhcphf36rbz37qgsfnzal76i1mz5js9a";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig qmake lndir sip ];
+  dontWrapQtApps = true;
 
-  buildInputs = [ dbus sip ];
+  nativeBuildInputs = with libsForQt5; [
+    pkg-config
+    qmake
+    lndir
+    sip
+    qtbase
+    qtsvg
+    qtdeclarative
+    qtwebchannel
+  ]
+    ++ lib.optional withConnectivity qtconnectivity
+    ++ lib.optional withMultimedia qtmultimedia
+    ++ lib.optional withWebKit qtwebkit
+    ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation
+  ;
 
-  propagatedBuildInputs = [ qtbase qtsvg qtwebengine ]
-    ++ lib.optional (!isPy3k) enum34
+  buildInputs = with libsForQt5; [
+    dbus
+    qtbase
+    qtsvg
+    qtdeclarative
+    pyqt-builder
+  ]
     ++ lib.optional withConnectivity qtconnectivity
     ++ lib.optional withWebKit qtwebkit
-    ++ lib.optional withWebSockets qtwebsockets;
+    ++ lib.optional withWebSockets qtwebsockets
+    ++ lib.optional withLocation qtlocation
+  ;
 
-  configurePhase = ''
-    runHook preConfigure
+  propagatedBuildInputs = [
+    dbus-python
+    pyqt5_sip
+  ];
 
-    mkdir -p $out
-    lndir ${dbus-python} $out
-    rm -rf "$out/nix-support"
+  patches = [
+    # Fix some wrong assumptions by ./project.py
+    # TODO: figure out how to send this upstream
+    ./pyqt5-fix-dbus-mainloop-support.patch
+  ];
 
-    export PYTHONPATH=$PYTHONPATH:$out/${python.sitePackages}
+  passthru = {
+    inherit sip pyqt5_sip;
+    multimediaEnabled = withMultimedia;
+    webKitEnabled = withWebKit;
+    WebSocketsEnabled = withWebSockets;
+  };
 
-    ${python.executable} configure.py  -w \
-      --confirm-license \
-      --dbus=${dbus.dev}/include/dbus-1.0 \
-      --no-qml-plugin \
-      --bindir=$out/bin \
-      --destdir=$out/${python.sitePackages} \
-      --stubsdir=$out/${python.sitePackages}/PyQt5 \
-      --sipdir=$out/share/sip/PyQt5 \
-      --designer-plugindir=$out/plugins/designer
+  dontConfigure = true;
 
-    runHook postConfigure
-  '';
+  # Checked using pythonImportsCheck
+  doCheck = false;
 
-  postInstall = ''
-    ln -s ${sip}/${python.sitePackages}/PyQt5/sip.* $out/${python.sitePackages}/PyQt5/
-    for i in $out/bin/*; do
-      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
-    done
-  '';
-
-  enableParallelBuilding = true;
+  pythonImportsCheck = [
+    "PyQt5"
+    "PyQt5.QtCore"
+    "PyQt5.QtQml"
+    "PyQt5.QtWidgets"
+    "PyQt5.QtGui"
+  ]
+    ++ lib.optional withWebSockets "PyQt5.QtWebSockets"
+    ++ lib.optional withWebKit "PyQt5.QtWebKit"
+    ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
+    ++ lib.optional withConnectivity "PyQt5.QtConnectivity"
+    ++ lib.optional withLocation "PyQt5.QtPositioning"
+  ;
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage    = http://www.riverbankcomputing.co.uk;
-    license     = licenses.gpl3;
+    homepage    = "https://riverbankcomputing.com/";
+    license     = licenses.gpl3Only;
     platforms   = platforms.mesaPlatforms;
     maintainers = with maintainers; [ sander ];
   };

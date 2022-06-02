@@ -6,7 +6,7 @@ Index: kfilemetadata-5.18.0/src/CMakeLists.txt
  
  install(EXPORT KF5FileMetaDataTargets
          NAMESPACE KF5::
--        DESTINATION ${LIB_INSTALL_DIR}/cmake/KF5FileMetaData
+-        DESTINATION ${KDE_INSTALL_LIBDIR}/cmake/KF5FileMetaData
 +        DESTINATION ${KDE_INSTALL_FULL_CMAKEPACKAGEDIR}/KF5FileMetaData
          FILE KF5FileMetaDataTargets.cmake)
  

@@ -1,51 +1,84 @@
-{ stdenv, fetchurl, iproute, lzo, openssl, pam, pkgconfig
-, useSystemd ? stdenv.isLinux, systemd ? null
-, pkcs11Support ? false, pkcs11helper ? null,
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, iproute2
+, lzo
+, openssl
+, pam
+, useSystemd ? stdenv.isLinux
+, systemd
+, update-systemd-resolved
+, util-linux
+, pkcs11Support ? false
+, pkcs11helper
 }:
 
-assert useSystemd -> (systemd != null);
-assert pkcs11Support -> (pkcs11helper != null);
+let
+  inherit (lib) versionOlder optional optionals optionalString;
 
-with stdenv.lib;
+  generic = { version, sha256 }:
+    let
+      withIpRoute = stdenv.isLinux && (versionOlder version "2.5.4");
+    in
+    stdenv.mkDerivation
+      rec {
+        pname = "openvpn";
+        inherit version;
 
-stdenv.mkDerivation rec {
-  name = "openvpn-${version}";
-  version = "2.4.7";
+        src = fetchurl {
+          url = "https://swupdate.openvpn.net/community/releases/${pname}-${version}.tar.gz";
+          inherit sha256;
+        };
 
-  src = fetchurl {
-    url = "https://swupdate.openvpn.net/community/releases/${name}.tar.xz";
-    sha256 = "0j7na936isk9j8nsdrrbw7wmy09inmjqvsb8mw8az7k61xbm6bx4";
+        nativeBuildInputs = [ pkg-config ];
+
+        buildInputs = [ lzo openssl ]
+          ++ optional stdenv.isLinux pam
+          ++ optional withIpRoute iproute2
+          ++ optional useSystemd systemd
+          ++ optional pkcs11Support pkcs11helper;
+
+        configureFlags = optionals withIpRoute [
+          "--enable-iproute2"
+          "IPROUTE=${iproute2}/sbin/ip"
+        ]
+        ++ optional useSystemd "--enable-systemd"
+        ++ optional pkcs11Support "--enable-pkcs11"
+        ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
+
+        # We used to vendor the update-systemd-resolved script inside libexec,
+        # but a separate package was made, that uses libexec/openvpn. Copy it
+        # into libexec in case any consumers expect it to be there even though
+        # they should use the update-systemd-resolved package instead.
+        postInstall = ''
+          mkdir -p $out/share/doc/openvpn/examples
+          cp -r sample/sample-{config-files,keys,scripts}/ $out/share/doc/openvpn/examples
+        '' + optionalString useSystemd ''
+          install -Dm555 -t $out/libexec ${update-systemd-resolved}/libexec/openvpn/*
+        '';
+
+        enableParallelBuilding = true;
+
+        meta = with lib; {
+          description = "A robust and highly flexible tunneling application";
+          downloadPage = "https://openvpn.net/community-downloads/";
+          homepage = "https://openvpn.net/";
+          license = licenses.gpl2Only;
+          maintainers = with maintainers; [ viric peterhoeg ];
+          platforms = platforms.unix;
+        };
+      };
+
+in
+{
+  openvpn_24 = generic {
+    version = "2.4.12";
+    sha256 = "1vjx82nlkxrgzfiwvmmlnz8ids5m2fiqz7scy1smh3j9jnf2v5b6";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ lzo openssl ]
-                  ++ optionals stdenv.isLinux [ pam iproute ]
-                  ++ optional useSystemd systemd
-                  ++ optional pkcs11Support pkcs11helper;
-
-  configureFlags = optionals stdenv.isLinux [
-    "--enable-iproute2"
-    "IPROUTE=${iproute}/sbin/ip" ]
-    ++ optional useSystemd "--enable-systemd"
-    ++ optional pkcs11Support "--enable-pkcs11"
-    ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
-
-  postInstall = ''
-    mkdir -p $out/share/doc/openvpn/examples
-    cp -r sample/sample-config-files/ $out/share/doc/openvpn/examples
-    cp -r sample/sample-keys/ $out/share/doc/openvpn/examples
-    cp -r sample/sample-scripts/ $out/share/doc/openvpn/examples
-  '';
-
-  enableParallelBuilding = true;
-
-  meta = {
-    description = "A robust and highly flexible tunneling application";
-    homepage = https://openvpn.net/;
-    downloadPage = "https://openvpn.net/index.php/open-source/downloads.html";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.viric ];
-    platforms = stdenv.lib.platforms.unix;
-    updateWalker = true;
+  openvpn = generic {
+    version = "2.5.6";
+    sha256 = "0gdd88rcan9vfiwkzsqn6fxxdim7kb1bsxrcra59c5xksprpwfik";
   };
 }

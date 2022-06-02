@@ -2,38 +2,43 @@
 , buildPythonPackage
 , fetchPypi
 , nose
-, dateutil
+, python-dateutil
 , ipython_genutils
 , decorator
 , pyzmq
 , ipython
-, jupyter_client
+, jupyter-client
 , ipykernel
+, packaging
+, psutil
 , tornado
+, tqdm
 , isPy3k
-, futures
+, futures ? null
 }:
 
 buildPythonPackage rec {
   pname = "ipyparallel";
-  version = "6.2.3";
+  version = "8.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1k9701r120gv0an0wxvcjrbmhns8lq3zj6px5y2izly56j2dafqy";
+    sha256 = "sha256-8mdHPFL8aohsa4Fq2xVb7Asne8fSJPs/q+uDg05zPHI=";
   };
 
   buildInputs = [ nose ];
 
-  propagatedBuildInputs = [ dateutil ipython_genutils decorator pyzmq ipython jupyter_client ipykernel tornado
+  propagatedBuildInputs = [ python-dateutil ipython_genutils decorator pyzmq ipython jupyter-client ipykernel packaging psutil tornado tqdm
   ] ++ lib.optionals (!isPy3k) [ futures ];
 
   # Requires access to cluster
   doCheck = false;
 
+  disabled = !isPy3k;
+
   meta = {
     description = "Interactive Parallel Computing with IPython";
-    homepage = http://ipython.org/;
+    homepage = "http://ipython.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

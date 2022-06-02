@@ -11,8 +11,6 @@ let
 
   # build nsd with the options needed for the given config
   nsdPkg = pkgs.nsd.override {
-    configFile = "${configFile}/nsd.conf";
-
     bind8Stats = cfg.bind8Stats;
     ipv6 = cfg.ipv6;
     ratelimit = cfg.ratelimit.enable;
@@ -21,6 +19,15 @@ let
   };
 
   mkZoneFileName = name: if name == "." then "root" else name;
+
+  # replaces include: directives for keys with fake keys for nsd-checkconf
+  injectFakeKeys = keys: concatStrings
+    (mapAttrsToList
+      (keyName: keyOptions: ''
+        fakeKey="$(${pkgs.bind}/bin/tsig-keygen -a ${escapeShellArgs [ keyOptions.algorithm keyName ]} | grep -oP "\s*secret \"\K.*(?=\";)")"
+        sed "s@^\s*include:\s*\"${stateDir}/private/${keyName}\"\$@secret: $fakeKey@" -i $out/nsd.conf
+      '')
+      keys);
 
   nsdEnv = pkgs.buildEnv {
     name = "nsd-env";
@@ -36,9 +43,9 @@ let
         echo "|- checking zone '$out/zones/$zoneFile'"
         ${nsdPkg}/sbin/nsd-checkzone "$zoneFile" "$zoneFile" || {
           if grep -q \\\\\\$ "$zoneFile"; then
-            echo zone "$zoneFile" contains escaped dollar signes \\\$
-            echo Escaping them is not needed any more. Please make shure \
-                 to unescape them where they prefix a variable name
+            echo zone "$zoneFile" contains escaped dollar signs \\\$
+            echo Escaping them is not needed any more. Please make sure \
+                 to unescape them where they prefix a variable name.
           fi
 
           exit 1
@@ -46,7 +53,14 @@ let
       done
 
       echo "checking configuration file"
+      # Save original config file including key references...
+      cp $out/nsd.conf{,.orig}
+      # ...inject mock keys into config
+      ${injectFakeKeys cfg.keys}
+      # ...do the checkconf
       ${nsdPkg}/sbin/nsd-checkconf $out/nsd.conf
+      # ... and restore original config file.
+      mv $out/nsd.conf{.orig,}
     '';
   };
 
@@ -180,19 +194,8 @@ let
                        zone.children
       );
 
-  # fighting infinite recursion
-  zoneOptions = zoneOptionsRaw // childConfig zoneOptions1 true;
-  zoneOptions1 = zoneOptionsRaw // childConfig zoneOptions2 false;
-  zoneOptions2 = zoneOptionsRaw // childConfig zoneOptions3 false;
-  zoneOptions3 = zoneOptionsRaw // childConfig zoneOptions4 false;
-  zoneOptions4 = zoneOptionsRaw // childConfig zoneOptions5 false;
-  zoneOptions5 = zoneOptionsRaw // childConfig zoneOptions6 false;
-  zoneOptions6 = zoneOptionsRaw // childConfig null         false;
-
-  childConfig = x: v: { options.children = { type = types.attrsOf x; visible = v; }; };
-
   # options are ordered alphanumerically
-  zoneOptionsRaw = types.submodule {
+  zoneOptions = types.submodule {
     options = {
 
       allowAXFRFallback = mkOption {
@@ -232,6 +235,13 @@ let
       };
 
       children = mkOption {
+        # TODO: This relies on the fact that `types.anything` doesn't set any
+        # values of its own to any defaults, because in the above zoneConfigs',
+        # values from children override ones from parents, but only if the
+        # attributes are defined. Because of this, we can't replace the element
+        # type here with `zoneConfigs`, since that would set all the attributes
+        # to default values, breaking the parent inheriting function.
+        type = types.attrsOf types.anything;
         default = {};
         description = ''
           Children zones inherit all options of their parents. Attributes
@@ -244,15 +254,14 @@ let
       };
 
       data = mkOption {
-        type = types.str;
+        type = types.lines;
         default = "";
-        example = "";
         description = ''
           The actual zone data. This is the content of your zone file.
           Use imports or pkgs.lib.readFile if you don't want this data in your config file.
         '';
       };
-      
+
       dnssec = mkEnableOption "DNSSEC";
 
       dnssecPolicy = {
@@ -383,7 +392,6 @@ let
       requestXFR = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = [];
         description = ''
           Format: <code>[AXFR|UDP] &lt;ip-address&gt; &lt;key-name | NOKEY&gt;</code>
         '';
@@ -484,7 +492,7 @@ in
     };
 
     extraConfig = mkOption {
-      type = types.str;
+      type = types.lines;
       default = "";
       description = ''
         Extra nsd config.
@@ -591,6 +599,7 @@ in
     reuseport = mkOption {
       type = types.bool;
       default = pkgs.stdenv.isLinux;
+      defaultText = literalExpression "pkgs.stdenv.isLinux";
       description = ''
         Whether to enable SO_REUSEPORT on all used sockets. This lets multiple
         processes bind to the same port. This speeds up operation especially
@@ -712,7 +721,7 @@ in
         };
       });
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         { "tsig.example.org" = {
             algorithm = "hmac-md5";
             keyFile = "/path/to/my/key";
@@ -847,7 +856,7 @@ in
     zones = mkOption {
       type = types.attrsOf zoneOptions;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         { "serverGroup1" = {
             provideXFR = [ "10.1.2.3 NOKEY" ];
             children = {
@@ -897,15 +906,14 @@ in
               + "want, please enable 'services.nsd.rootServer'.";
     };
 
-    environment.systemPackages = [ nsdPkg ];
-
-    users.groups = singleton {
-      name = username;
-      gid = config.ids.gids.nsd;
+    environment = {
+      systemPackages = [ nsdPkg ];
+      etc."nsd/nsd.conf".source = "${configFile}/nsd.conf";
     };
 
-    users.users = singleton {
-      name = username;
+    users.groups.${username}.gid = config.ids.gids.nsd;
+
+    users.users.${username} = {
       description = "NSD service user";
       home = stateDir;
       createHome  = true;
@@ -916,18 +924,17 @@ in
     systemd.services.nsd = {
       description = "NSD authoritative only domain name service";
 
-      after = [ "keys.target" "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      wants = [ "keys.target" ];
 
+      startLimitBurst = 4;
+      startLimitIntervalSec = 5 * 60;  # 5 mins
       serviceConfig = {
         ExecStart = "${nsdPkg}/sbin/nsd -d -c ${nsdEnv}/nsd.conf";
         StandardError = "null";
         PIDFile = pidFile;
         Restart = "always";
         RestartSec = "4s";
-        StartLimitBurst = 4;
-        StartLimitInterval = "5min";
       };
 
       preStart = ''
@@ -955,7 +962,7 @@ in
       '';
     };
 
-    systemd.timers."nsd-dnssec" = mkIf dnssec {
+    systemd.timers.nsd-dnssec = mkIf dnssec {
       description = "Automatic DNSSEC key rollover";
 
       wantedBy = [ "nsd.service" ];
@@ -966,7 +973,7 @@ in
       };
     };
 
-    systemd.services."nsd-dnssec" = mkIf dnssec {
+    systemd.services.nsd-dnssec = mkIf dnssec {
       description = "DNSSEC key rollover";
 
       wantedBy = [ "nsd.service" ];
@@ -975,7 +982,7 @@ in
       script = signZones;
 
       postStop = ''
-        ${pkgs.systemd}/bin/systemctl kill -s SIGHUP nsd.service
+        /run/current-system/systemd/bin/systemctl kill -s SIGHUP nsd.service
       '';
     };
 

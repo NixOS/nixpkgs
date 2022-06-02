@@ -1,46 +1,83 @@
-{ buildPythonPackage
+{ lib
+, buildPythonPackage
 , isPyPy
 , fetchPypi
+, fetchpatch
+, pythonOlder
 , curl
 , openssl
 , bottle
-, pytest
-, nose
+, pytestCheckHook
 , flaky
 }:
 
 buildPythonPackage rec {
   pname = "pycurl";
-  version = "7.43.0.2";
-  disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
+  version = "7.45.1";
+  disabled = isPyPy || (pythonOlder "3.5"); # https://github.com/pycurl/pycurl/issues/208
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0f0cdfc7a92d4f2a5c44226162434e34f7d6967d3af416a6f1448649c09a25a4";
+    sha256 = "sha256-qGOtGP9Hj1VFkkBXiHza5CLhsnRuQWdGFfaHSY6luIo=";
   };
 
-  buildInputs = [ curl openssl.out ];
-  nativeBuildInputs = [ curl ];
-
-  checkInputs = [ bottle pytest nose flaky ];
-
-  checkPhase = ''
-    py.test -k "not ssh_key_cb_test \
-                and not test_libcurl_ssl_gnutls \
-                and not test_libcurl_ssl_nss \
-                and not test_libcurl_ssl_openssl \
-                and not test_libcurl_ssl_unrecognized \
-                and not test_request_with_verifypeer \
-                and not test_ssl_in_static_libs" tests
-  '';
+  patches = [
+    # Pull upstream patch for curl-3.83:
+    #  https://github.com/pycurl/pycurl/pull/753
+    (fetchpatch {
+      name = "curl-3.83.patch";
+      url = "https://github.com/pycurl/pycurl/commit/d47c68b1364f8a1a45ab8c584c291d44b762f7b1.patch";
+      sha256 = "sha256-/lGq7O7ZyytzBAxWJPigcWdvypM7OHLBcp9ItmX7z1g=";
+    })
+  ];
 
   preConfigure = ''
     substituteInPlace setup.py --replace '--static-libs' '--libs'
     export PYCURL_SSL_LIBRARY=openssl
   '';
 
-  meta = {
-    homepage = http://pycurl.sourceforge.net/;
-    description = "Python wrapper for libcurl";
+  buildInputs = [
+    curl
+    openssl
+  ];
+
+  nativeBuildInputs = [
+    curl
+  ];
+
+  checkInputs = [
+    bottle
+    pytestCheckHook
+    flaky
+  ];
+
+  pytestFlagsArray = [
+    # don't pick up the tests directory below examples/
+    "tests"
+  ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
+
+  disabledTests = [
+    # tests that require network access
+    "test_keyfunction"
+    "test_keyfunction_bogus_return"
+    # OSError: tests/fake-curl/libcurl/with_openssl.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_openssl"
+    # OSError: tests/fake-curl/libcurl/with_nss.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_nss"
+    # OSError: tests/fake-curl/libcurl/with_gnutls.so: cannot open shared object file: No such file or directory
+    "test_libcurl_ssl_gnutls"
+    # AssertionError: assert 'crypto' in ['curl']
+    "test_ssl_in_static_libs"
+  ];
+
+  meta = with lib; {
+    homepage = "http://pycurl.io/";
+    description = "Python Interface To The cURL library";
+    license = with licenses; [ lgpl2Only mit ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

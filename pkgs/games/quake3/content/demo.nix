@@ -1,9 +1,10 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let
   version = "1.11-6";
 in stdenv.mkDerivation {
-  name = "quake3-demodata-${version}";
+  pname = "quake3-demodata";
+  inherit version;
 
   src = fetchurl {
     url = "https://ftp.gwdg.de/pub/misc/ftp.idsoftware.com/idstuff/quake3/linux/linuxq3ademo-${version}.x86.gz.sh";
@@ -19,7 +20,7 @@ in stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quake 3 Arena demo content";
     license = licenses.unfreeRedistributable;
     platforms = platforms.all;

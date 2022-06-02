@@ -1,20 +1,21 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "morty-${version}";
+  pname = "morty";
   version = "0.2.0";
 
   goPackagePath = "github.com/asciimoo/morty";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
+    owner = "asciimoo";
+    repo = "morty";
     rev = "v${version}";
-    url = "https://github.com/asciimoo/morty";
-    sha256 = "1wvrdlwbpzizfg7wrcfyf1x6qllp3aw425n88z516wc9jalfqrrm";
+    sha256 = "sha256-NWfsqJKJcRPKR8gWQbgal1JsenDesczPcz/+uzhtefM=";
   };
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/asciimoo/morty";
     maintainers = with maintainers; [ leenaars ];
     license = licenses.agpl3;
@@ -37,6 +38,6 @@ buildGoPackage rec {
       * No Caching/Etag
       * Supports GET/POST forms and IFrames
       * Optional HMAC URL verifier key to prevent service abuse
-'';
-   };
+    '';
+  };
 }

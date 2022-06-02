@@ -1,26 +1,39 @@
-{stdenv, fetchurl, ruby, opencl-headers, libGL_driver }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, ruby
+, opencl-headers
+, addOpenGLRunpath
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "ocl-icd-${version}";
-  version = "2.2.10";
+  pname = "ocl-icd";
+  version = "2.3.1";
 
-  src = fetchurl {
-    url = "https://forge.imag.fr/frs/download.php/810/${name}.tar.gz";
-    sha256 = "0f14gpa13sdm0kzqv5yycp4pschbmi6n5fj7wl4ilspzsrqcgqr2";
+  src = fetchFromGitHub {
+    owner = "OCL-dev";
+    repo = "ocl-icd";
+    rev = "v${version}";
+    sha256 = "1km2rqc9pw6xxkqp77a22pxfsb5kgw95w9zd15l5jgvyjb6rqqad";
   };
 
-  nativeBuildInputs = [ ruby ];
+  nativeBuildInputs = [
+    autoreconfHook
+    ruby
+  ];
 
   buildInputs = [ opencl-headers ];
 
-  postPatch = ''
-    sed -i 's,"/etc/OpenCL/vendors","${libGL_driver.driverLink}/etc/OpenCL/vendors",g' ocl_icd_loader.c
-  '';
+  configureFlags = [
+    "--enable-custom-vendordir=/run/opengl-driver/etc/OpenCL/vendors"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenCL ICD Loader for ${opencl-headers.name}";
-    homepage    = https://forge.imag.fr/projects/ocl-icd/;
+    homepage    = "https://github.com/OCL-dev/ocl-icd";
     license     = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ r-burns ];
   };
 }

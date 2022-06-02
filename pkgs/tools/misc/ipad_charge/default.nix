@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, libusb1 }:
+{ lib, stdenv, fetchFromGitHub, libusb1 }:
 
 stdenv.mkDerivation rec {
-  name = "ipad_charge-${version}";
+  pname = "ipad_charge";
   version = "2015-02-03";
 
   src = fetchFromGitHub {
@@ -16,17 +16,19 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace " -o root -g root" "" \
+      --replace "/usr" "$out" \
+      --replace "/etc/udev" "$out/lib/udev"
+    substituteInPlace *.rules \
       --replace "/usr" "$out"
-    sed "/rules\.d/d" -i Makefile
   '';
 
   enableParallelBuilding = true;
 
   preInstall = ''
-    mkdir -p $out/bin
+    mkdir -p $out/{bin,lib/udev/rules.d}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Apple device USB charging utility for Linux";
     longDescription = ''

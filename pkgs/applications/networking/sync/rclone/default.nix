@@ -1,38 +1,59 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
+, makeWrapper
+, enableCmount ? true, fuse, macfuse-stubs
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "rclone";
-  version = "1.46";
-
-  goPackagePath = "github.com/ncw/rclone";
-  subPackages = [ "." ];
+  version = "1.58.1";
 
   src = fetchFromGitHub {
-    owner = "ncw";
-    repo = "rclone";
+    owner = pname;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1fl52dl41n76r678nzkxa2kgk9khn1fxraxgk8jd3ayc787qs9ia";
+    sha256 = "sha256-Hh0IVNaLAUOmdYJ6cbYFyDCLwL+0HyZdRzKnXAT0CB8=";
   };
 
-  outputs = [ "bin" "out" "man" ];
+  vendorSha256 = "sha256-MPo1t1gzlrzAzbTOv/dSs2BH8NwlXmf6vo1DOFP2TrM=";
 
-  # https://github.com/ncw/rclone/issues/2964
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ncw/rclone/commit/1c1a8ef24bea9332c6c450379ed3c5d953e07508.patch";
-      sha256 = "0mq74z78lc3dhama303k712xkzz9q6p7zqlbwbl04bndqlkny03k";
-    })
-  ];
+  subPackages = [ "." ];
 
-  postInstall = ''
-    install -D -m644 $src/rclone.1 $man/share/man/man1/rclone.1
-  '';
+  outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  buildInputs = lib.optional enableCmount (if stdenv.isDarwin then macfuse-stubs else fuse);
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
+
+  tags = lib.optionals enableCmount [ "cmount" ];
+
+  ldflags = [ "-s" "-w" "-X github.com/rclone/rclone/fs.Version=${version}" ];
+
+  postInstall =
+    let
+      rcloneBin =
+        if stdenv.buildPlatform == stdenv.hostPlatform
+        then "$out"
+        else lib.getBin buildPackages.rclone;
+    in
+    ''
+      installManPage rclone.1
+      for shell in bash zsh fish; do
+        ${rcloneBin}/bin/rclone genautocomplete $shell rclone.$shell
+        installShellCompletion rclone.$shell
+      done
+    '' + lib.optionalString (enableCmount && !stdenv.isDarwin)
+      # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount,
+      # as the setuid wrapper is required as non-root on NixOS.
+      ''
+      wrapProgram $out/bin/rclone \
+                  --suffix PATH : "${lib.makeBinPath [ fuse ] }" \
+                  --prefix LD_LIBRARY_PATH : "${fuse}/lib"
+    '';
+
+  meta = with lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";
-    homepage = https://rclone.org;
+    homepage = "https://rclone.org";
+    changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ danielfullmer ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ danielfullmer marsam SuperSandro2000 ];
   };
 }

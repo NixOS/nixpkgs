@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+let
   pname = "samim-fonts";
-  version = "3.1.0";
+  version = "4.0.4";
+in fetchFromGitHub {
+  name = "${pname}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "rastikerdar";
-    repo = "samim-font";
-    rev = "v${version}";
-    sha256 = "1mp0pgbn9r098ilajwzag7c21shwb13mq61ly9av0mfbpnhkkjqk";
-  };
+  owner = "rastikerdar";
+  repo = "samim-font";
+  rev = "v${version}";
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/samim-fonts
-    cp -v $( find . -name '*.ttf') $out/share/fonts/samim-fonts
+  postFetch = ''
+    tar xf $downloadedFile --strip=1
+    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/samim-fonts {} \;
   '';
+  sha256 = "sha256-WYSJ2mAzAe5H0EaMYU3qNVcQ0lRuHsjZ11YmLnZ2FCo=";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/rastikerdar/samim-font;
+  meta = with lib; {
+    homepage = "https://github.com/rastikerdar/samim-font";
     description = "A Persian (Farsi) Font - فونت (قلم) فارسی صمیم";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.linarcx ];
+    maintainers = [ ];
   };
 }

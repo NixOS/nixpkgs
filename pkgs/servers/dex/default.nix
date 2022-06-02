@@ -1,32 +1,38 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
-let version = "2.4.1"; in
-
-buildGoPackage rec {
-  name = "dex-${version}";
-
-  goPackagePath = "github.com/coreos/dex";
+buildGoModule rec {
+  pname = "dex";
+  version = "2.31.1";
 
   src = fetchFromGitHub {
+    owner = "dexidp";
+    repo = pname;
     rev = "v${version}";
-    owner = "coreos";
-    repo = "dex";
-    sha256 = "11qpn3wh74mq16xgl9l50n2v02ffqcd14xccf77j5il04xr764nx";
+    sha256 = "sha256-4BmZpN3k1qDYLdkXm4AX73bX5hBiyLv0nVKYVwD/HCM=";
   };
+
+  vendorSha256 = "sha256-l+/qjYokg5zHAFkKxtkdX49HqVW6kfz7OHqs6SRKDYg=";
 
   subPackages = [
     "cmd/dex"
   ];
 
-  buildFlagsArray = [
-    "-ldflags=-w -X ${goPackagePath}/version.Version=${src.rev}"
+  ldflags = [
+    "-w" "-s" "-X github.com/dexidp/dex/version.Version=${src.rev}"
   ];
 
-  meta = {
+  postInstall = ''
+    mkdir -p $out/share
+    cp -r $src/web $out/share/web
+  '';
+
+  passthru.tests = { inherit (nixosTests) dex-oidc; };
+
+  meta = with lib; {
     description = "OpenID Connect and OAuth2 identity provider with pluggable connectors";
-    license = lib.licenses.asl20;
-    homepage = https://github.com/coreos/dex;
-    maintainers = with lib.maintainers; [benley];
-    platforms = lib.platforms.unix;
+    homepage = "https://github.com/dexidp/dex";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ benley ];
+    platforms = platforms.unix;
   };
 }

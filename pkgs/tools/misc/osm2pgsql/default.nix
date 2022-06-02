@@ -1,28 +1,44 @@
-{ stdenv, fetchgit, cmake, expat, proj, bzip2, zlib, boost, postgresql, lua}:
+{ lib, stdenv
+, fetchFromGitHub
+, cmake
+, expat
+, proj
+, bzip2
+, zlib
+, boost
+, postgresql
+, withLuaJIT ? false
+, lua
+, luajit
+, libosmium
+, protozero
+}:
 
-let
-  version = "0.92.1-unstable";
-in
 stdenv.mkDerivation rec {
-  name = "osm2pgsql-${version}";
+  pname = "osm2pgsql";
+  version = "1.6.0";
 
-  src = fetchgit {
-    url = "https://github.com/openstreetmap/osm2pgsql.git";
-    rev = "2b72b2121e91b72b0db6911d65c5165ca46d9d66";
-    # Still waiting on release after:
-    # https://github.com/openstreetmap/osm2pgsql/pull/684
-    # https://github.com/openstreetmap/osm2pgsql/issues/634
-    #rev = "refs/tags/${version}";
-    sha256 = "1v6s863zsv9p2mni35gfamawj0xr2cv2p8a31z7sijf8m6fn0vpy";
+  src = fetchFromGitHub {
+    owner = "openstreetmap";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-6FVMv+DowMYdRdsQFL2iwG/V9D2cLWkHUVkmR3/TuUI=";
   };
-  nativeBuildInputs = [cmake];
-  buildInputs = [expat proj bzip2 zlib boost postgresql lua];
 
-  meta = {
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [ expat proj bzip2 zlib boost postgresql libosmium protozero ]
+    ++ lib.optional withLuaJIT luajit
+    ++ lib.optional (!withLuaJIT) lua;
+
+  cmakeFlags = [ "-DEXTERNAL_LIBOSMIUM=ON" "-DEXTERNAL_PROTOZERO=ON" ]
+    ++ lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
+
+  meta = with lib; {
     description = "OpenStreetMap data to PostgreSQL converter";
-    version = "0.92.1-unstable";
-    homepage = https://github.com/openstreetmap/osm2pgsql;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://osm2pgsql.org";
+    license = licenses.gpl2Plus;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ jglukasik das-g ];
   };
 }

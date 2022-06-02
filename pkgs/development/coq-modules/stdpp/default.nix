@@ -1,28 +1,31 @@
-{ stdenv, fetchzip, coq }:
+{ lib, mkCoqDerivation, coq, version ? null }:
 
-stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-stdpp-1.1";
-  src = fetchzip {
-    url = "https://gitlab.mpi-sws.org/robbertkrebbers/coq-stdpp/-/archive/coq-stdpp-1.1.0/coq-stdpp-coq-stdpp-1.1.0.tar.gz";
-    sha256 = "0z8zl288x9w32w06sjax01jcpy12wd5i3ygps58dl2hfy7r3lwg0";
-  };
+with lib; mkCoqDerivation rec {
+  pname = "stdpp";
+  inherit version;
+  domain = "gitlab.mpi-sws.org";
+  owner = "iris";
+  defaultVersion = with versions; switch coq.coq-version [
+    { case = range "8.13" "8.15"; out = "1.7.0"; }
+    { case = range "8.12" "8.14"; out = "1.6.0"; }
+    { case = range "8.11" "8.13"; out = "1.5.0"; }
+    { case = range "8.8" "8.10";  out = "1.4.0"; }
+  ] null;
+  release."1.7.0".sha256 = "sha256:0447wbzm23f9rl8byqf6vglasfn6c1wy6cxrrwagqjwsh3i5lx8y";
+  release."1.6.0".sha256 = "1l1w6srzydjg0h3f4krrfgvz455h56shyy2lbcnwdbzjkahibl7v";
+  release."1.5.0".sha256 = "1ym0fy620imah89p8b6rii8clx2vmnwcrbwxl3630h24k42092nf";
+  release."1.4.0".sha256 = "1m6c7ibwc99jd4cv14v3r327spnfvdf3x2mnq51f9rz99rffk68r";
+  releaseRev = v: "coq-stdpp-${v}";
 
-  buildInputs = [ coq ];
-
-  enableParallelBuilding = true;
-
-  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
+  preBuild = ''
+    if [[ -f coq-lint.sh ]]
+    then patchShebangs coq-lint.sh
+    fi
+  '';
 
   meta = {
-    homepage = "https://gitlab.mpi-sws.org/robbertkrebbers/coq-stdpp";
     description = "An extended “Standard Library” for Coq";
-    inherit (coq.meta) platforms;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
   };
-
-  passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" "8.8" ];
-  };
-
 }

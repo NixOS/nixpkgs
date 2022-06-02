@@ -1,50 +1,69 @@
-{ stdenv, fetchurl, fetchpatch, which, autoconf, automake, flex, yacc
-, kernel, glibc, perl, libtool_2, kerberos }:
+{ lib
+, stdenv
+, fetchurl
+, which
+, autoconf
+, automake
+, flex
+, bison
+, kernel
+, glibc
+, perl
+, libtool_2
+, libkrb5
+, fetchpatch
+}:
 
-with (import ./srcs.nix { inherit fetchurl; });
+with (import ./srcs.nix {
+  inherit fetchurl;
+});
 
 let
   modDestDir = "$out/lib/modules/${kernel.modDirVersion}/extra/openafs";
   kernelBuildDir = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
-in stdenv.mkDerivation rec {
-  name = "openafs-${version}-${kernel.modDirVersion}";
-  inherit version src;
+  fetchBase64Patch = args: (fetchpatch args).overrideAttrs (o: {
+    postFetch = "mv $out p; base64 -d p > $out; " + o.postFetch;
+  });
 
-  patches = [
-    # Linux 4.20
-    (fetchpatch {
-      name = "openafs_1_8-do_settimeofday.patch";
-      url = "http://git.openafs.org/?p=openafs.git;a=patch;h=aa80f892ec39e2984818090a6bb2047430836ee2";
-      sha256 = "11zw676zqi9sj3vhp7n7ndxcxhp17cq9g2g41n030mcd3ap4g53h";
-    })
-    (fetchpatch {
-      name = "openafs_1_8-current_kernel_time.patch";
-      url = "http://git.openafs.org/?p=openafs.git;a=patch;h=3c454b39d04f4886536267c211171dae30dc0344";
-      sha256 = "16fl9kp0l95dqm166jx3x4ijbzhf2bc9ilnipn3k1j00mfy4lnia";
-    })
-    # Linux 5.0
-    (fetchpatch {
-      name = "openafs_1_8-ktime_get_coarse_real_ts64.patch";
-      url = "http://git.openafs.org/?p=openafs.git;a=patch;h=21ad6a0c826c150c4227ece50554101641ab4626";
-      sha256 = "0cd2bzfn4gkb68qf27wpgcg9kvaky7kll22b8p2vmw5x4xkckq2y";
-    })
-    (fetchpatch {
-      name = "openafs_1_8-ktime_get_real_ts64.patch";
-      url = "http://git.openafs.org/?p=openafs.git;a=patch;h=b892fb127815bdf72103ae41ee70aadd87931b0c";
-      sha256 = "1xmf2l4g5nb9rhca7zn0swynvq8f9pd0k9drsx9bpnwp662y9l8m";
-    })
-    (fetchpatch {
-      name = "openafs_1_8-super_block.patch";
-      url = "http://git.openafs.org/?p=openafs.git;a=patch;h=3969bbca6017eb0ce6e1c3099b135f210403f661";
-      sha256 = "0cdd76s1h1bhxj0hl7r6mcha1jcy5vhlvc5dc8m2i83a6281yjsa";
-    })
-  ];
+in
+stdenv.mkDerivation {
+  pname = "openafs";
+  version = "${version}-${kernel.modDirVersion}";
+  inherit src;
 
-  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which yacc ]
+  nativeBuildInputs = [ autoconf automake flex libtool_2 perl which bison ]
     ++ kernel.moduleBuildDependencies;
 
-  buildInputs = [ kerberos ];
+  buildInputs = [ libkrb5 ];
+
+  patches = [
+    # Add autoconf-archive to src/external
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/14942/revisions/006616bd8e88b2d386a5ddc23973cf3e625cb80d/patch";
+      hash = "sha256-55sc2sKy5XkQHAv6ysVxi69+0xVsHnN2TS144UTeLHU=";
+    })
+    # Import of code from autoconf-archive
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/14943/revisions/d3782b1d4e6fd81c5432e95112eb44305f07f272/patch";
+      hash = "sha256-ohkjSux+S3+6slh6uZIw5UJXlvhy9UUDpDlP0YFRwmw=";
+    })
+    # Use autoconf-archive m4 from src/external
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/14944/revisions/ea2a0e128d71802f61b8da2e44de3c6325c5f328/patch";
+      hash = "sha256-PAUk/MXL5p8xwhn40/UGmo3UIhvl1PB2FwgqhmqsjJ4=";
+    })
+    # Linux-5.17: kernel func complete_and_exit renamed
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/14945/revisions/a714e865efe41aa1112f6f9c8479112660dacd6f/patch";
+      hash = "sha256-zvyR/GOPJeAbG6ySRRMp44oT5tPujUwybyU0XR/5Xyc=";
+    })
+    # Linux-5.17: Kernel build uses -Wcast-function-type
+    (fetchBase64Patch {
+      url = "https://gerrit.openafs.org/changes/14946/revisions/449d1faf87e2841e80be38cf2b4a5cf5ff4df2d8/patch";
+      hash = "sha256-3bRTHYeMRIleLhob56m2Xt0dWzIMDo3QrytY0K1/q7c=";
+    })
+  ];
 
   hardeningDisable = [ "pic" ];
 
@@ -78,13 +97,12 @@ in stdenv.mkDerivation rec {
     xz -f ${modDestDir}/libafs.ko
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open AFS client kernel module";
-    homepage = https://www.openafs.org;
+    homepage = "https://www.openafs.org";
     license = licenses.ipl10;
     platforms = platforms.linux;
-    maintainers = [ maintainers.z77z maintainers.spacefrogg ];
-    broken = versionOlder kernel.version "3.18";
+    maintainers = with maintainers; [ maggesi spacefrogg ];
+    broken = kernel.isHardened || kernel.kernelAtLeast "5.18";
   };
-
 }

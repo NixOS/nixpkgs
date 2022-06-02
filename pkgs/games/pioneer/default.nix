@@ -1,38 +1,68 @@
-{ fetchFromGitHub, stdenv, autoconf, automake, pkgconfig
-, curl, libsigcxx, SDL2, SDL2_image, freetype, libvorbis, libpng, assimp, libGLU_combined
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, assimp
+, curl
+, freetype
+#, glew
+, libGL
+, libGLU
+, libpng
+, libsigcxx
+, libvorbis
+, lua5_2
+, mesa
+, SDL2
+, SDL2_image
 }:
 
 stdenv.mkDerivation rec {
-  name = "pioneer-${version}";
-  version = "20180203";
+  pname = "pioneer";
+  version = "20220203";
 
   src = fetchFromGitHub{
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    sha256 = "0hp2mf36kj2v93hka8m8lxw2qhmnjc62wjlpw7c7ix0r8xa01i6h";
+    hash = "sha256-HNVg8Lq6k6gQDmgOdpnBwJ57WSEnn5XwtqzmkDU1WGI=";
   };
 
-  nativeBuildInputs = [ autoconf automake pkgconfig ];
-
-  buildInputs = [ curl libsigcxx SDL2 SDL2_image freetype libvorbis libpng assimp libGLU_combined ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2}/include/SDL2"
-  ];
-
-  preConfigure = ''
-     export PIONEER_DATA_DIR="$out/share/pioneer/data";
-    ./bootstrap
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace 'string(TIMESTAMP PROJECT_VERSION "%Y%m%d")' 'set(PROJECT_VERSION ${version})'
   '';
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    assimp
+    curl
+    freetype
+    libGL
+    libGLU
+    libpng
+    libsigcxx
+    libvorbis
+    lua5_2
+    mesa
+    SDL2
+    SDL2_image
+  ];
+
+  cmakeFlags = [
+    "-DPIONEER_DATA_DIR:PATH=${placeholder "out"}/share/pioneer/data"
+    "-DUSE_SYSTEM_LIBLUA:BOOL=YES"
+  ];
+
+  makeFlags = [ "all" "build-data" ];
+
+  meta = with lib; {
     description = "A space adventure game set in the Milky Way galaxy at the turn of the 31st century";
-    homepage = https://pioneerspacesim.net;
+    homepage = "https://pioneerspacesim.net";
     license = with licenses; [
-        gpl3 cc-by-sa-30
+        gpl3Only cc-by-sa-30
     ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

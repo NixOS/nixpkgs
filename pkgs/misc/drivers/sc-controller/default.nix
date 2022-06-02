@@ -1,28 +1,32 @@
 { lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
+, pytestCheckHook
 , gtk3, gobject-introspection, libappindicator-gtk3, librsvg
-, evdev, pygobject3, pylibacl, pytest, bluez
+, evdev, pygobject3, pylibacl, bluez, vdf
 , linuxHeaders
 , libX11, libXext, libXfixes, libusb1, udev
 }:
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.6.1";
+  version = "0.4.8.7";
 
   src = fetchFromGitHub {
-    owner  = "kozec";
+    owner  = "Ryochan7";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1kcqsnrlwl4s94j6ahgkz3w4sy9hsr95y624zab6g10w0fl5sqrc";
+    sha256 = "03514sb1spaxdr7x1gq7b54z74in4kd060adj6sq1xjj6d9b297i";
   };
+
+  # see https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
   buildInputs = [ gtk3 gobject-introspection libappindicator-gtk3 librsvg ];
 
-  propagatedBuildInputs = [ evdev pygobject3 pylibacl ];
+  propagatedBuildInputs = [ evdev pygobject3 pylibacl vdf ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
@@ -34,9 +38,6 @@ buildPythonApplication rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH")
-    # gdk-pixbuf setup hook can not choose between propagated librsvg
-    # and our librsvg with GObject introspection.
-    GDK_PIXBUF_MODULE_FILE=$(echo ${librsvg}/lib/gdk-pixbuf-2.0/*/loaders.cache)
   '';
 
   postFixup = ''
@@ -48,12 +49,8 @@ buildPythonApplication rec {
     )
   '';
 
-  checkPhase = ''
-    PYTHONPATH=. py.test
-  '';
-
   meta = with lib; {
-    homepage    = https://github.com/kozec/sc-controller;
+    homepage    = "https://github.com/Ryochan7/sc-controller";
     # donations: https://www.patreon.com/kozec
     description = "User-mode driver and GUI for Steam Controller and other controllers";
     license     = licenses.gpl2;

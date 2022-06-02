@@ -1,16 +1,10 @@
-{ stdenv, pkgs, fetchgit, nix, node_webkit, makeDesktopItem
+{ lib, stdenv, pkgs, fetchFromGitHub, nix, node_webkit, makeDesktopItem
 , writeScript }:
 let
-  version = "0.2.1";
-  src = fetchgit {
-    url = "git://github.com/matejc/nixui.git";
-    rev = "845a5f4a33f1d0c509c727c130d0792a5b450a38";
-    sha256 = "1ay3i4lgzs3axbby06l4vvspxi0aa9pwiil84qj0dqq1jb6isara";
-  };
   nixui = (import ./nixui.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
-  })."nixui-git://github.com/matejc/nixui.git#0.2.1";
+  })."nixui-git+https://github.com/matejc/nixui.git#0.2.1";
   script = writeScript "nixui" ''
     #! ${stdenv.shell}
     export PATH="${nix}/bin:\$PATH"
@@ -25,8 +19,14 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "nixui-${version}";
-  inherit version src;
+  pname = "nixui";
+  version = "0.2.1";
+  src = fetchFromGitHub {
+    owner = "matejc";
+    repo = "nixui";
+    rev = version;
+    sha256 = "sha256-KisdzZIB4wYkJojGyG9SCsR+9d6EGuDX6mro/yiJw6s=";
+  };
   installPhase = ''
     mkdir -p $out/bin
     ln -s ${script} $out/bin/nixui
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = "NodeWebkit user interface for Nix";
-    homepage = https://github.com/matejc/nixui;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.matejc ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://github.com/matejc/nixui";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.matejc ];
+    platforms = lib.platforms.unix;
   };
 }

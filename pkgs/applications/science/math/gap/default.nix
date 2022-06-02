@@ -1,10 +1,10 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , makeWrapper
-, m4
+, readline
 , gmp
+, zlib
 # one of
 # - "minimal" (~400M):
 #     Install the bare minimum of packages required by gap to start.
@@ -34,7 +34,7 @@ let
     "autpgrp-*"
     "alnuth-*"
     "crisp-*"
-    "ctbllib"
+    "ctbllib-*"
     "FactInt-*"
     "fga"
     "irredsol-*"
@@ -45,7 +45,6 @@ let
     "sophus-*"
     "tomlib-*"
   ];
-  standardPackages = requiredPackages ++ autoloadedPackages;
   keepAll = keepAllPackages || (packageSet == "full");
   packagesToKeep = requiredPackages ++ lib.optionals (packageSet == "standard") autoloadedPackages;
 
@@ -62,11 +61,11 @@ in
 stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
-  version = "4.10.0";
+  version = "4.11.1";
 
   src = fetchurl {
-    url = "https://www.gap-system.org/pub/gap/gap-${lib.versions.major version}.${lib.versions.minor version}/tar.bz2/gap-${version}.tar.bz2";
-    sha256 = "1dmb8v4p7j1nnf7sx8sg54b49yln36bi9acwp7w1d3a1nxj17ird";
+    url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
+    sha256 = "sha256-ZjXF2n2CdV+DOUhrnKwzdm9YcS8pfoI0+6QIGJAuowQ=";
   };
 
   # remove all non-essential packages (which take up a lot of space)
@@ -74,38 +73,14 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = [ "--with-gmp=system" ];
-
   buildInputs = [
-    m4
+    readline
     gmp
+    zlib
   ];
 
   nativeBuildInputs = [
     makeWrapper
-  ];
-
-  patches = [
-    # bugfix: https://github.com/gap-system/gap/pull/3102
-    (fetchpatch {
-      name = "fix-infinite-loop-in-writeandcheck.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/0001-a-version-of-the-writeandcheck.patch-from-Sage-that-.patch?id=5e61d7b6a0da3aa53d8176fa1fb9353cc559b098";
-      sha256 = "1zkv8bbiw3jdn54sqqvfkdkfsd7jxzq0bazwsa14g4sh2265d28j";
-    })
-
-    # needed for libgap (sage): https://github.com/gap-system/gap/pull/3043
-    (fetchpatch {
-      name = "add-error-messages-helper.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/0002-kernel-add-helper-function-for-writing-error-message.patch?id=5e61d7b6a0da3aa53d8176fa1fb9353cc559b098";
-      sha256 = "0c4ry5znb6hwwp8ld6k62yw8w6cqldflw3x49bbzizbmipfpidh5";
-    })
-
-    # needed for libgap (sage): https://github.com/gap-system/gap/pull/3096
-    (fetchpatch {
-      name = "gap-enter.patch";
-      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/gap/patches/0003-Prototype-for-GAP_Enter-Leave-macros-to-bracket-use-.patch?id=5e61d7b6a0da3aa53d8176fa1fb9353cc559b098";
-      sha256 = "12fg8mb8rm6khsz1r4k3k26jrkx4q1rv13hcrfnlhn0m7iikvc3q";
-    })
   ];
 
   # "teststandard" is a superset of testinstall. It takes ~1h instead of ~1min.
@@ -113,7 +88,7 @@ stdenv.mkDerivation rec {
   # checkTarget = "teststandard";
 
   doInstallCheck = true;
-  installCheckTarget = "testinstall";
+  installCheckTarget = "check";
 
   preInstallCheck = ''
     # gap tests check that the home directory exists
@@ -134,16 +109,6 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postCheck = ''
-    # The testsuite doesn't exit with a non-zero exit code on failure.
-    # It leaves its logs in dev/log however.
-
-    # grep for error messages
-    if grep ^##### dev/log/*; then
-        exit 1
-    fi
-  '';
-
   postBuild = ''
     pushd pkg
     bash ../bin/BuildPackages.sh
@@ -162,7 +127,6 @@ stdenv.mkDerivation rec {
 
     mkdir -p "$out/bin" "$out/share/gap/"
 
-    mkdir -p "$out/share/gap"
     echo "Copying files to target directory"
     cp -ar . "$out/share/gap/build-dir"
 
@@ -184,11 +148,12 @@ stdenv.mkDerivation rec {
       timokau
     ];
     platforms = platforms.all;
-    # keeping all packages increases the package size considerably, wchich
-    # is why a local build is preferable in that situation. The timeframe
-    # is reasonable and that way the binary cache doesn't get overloaded.
+    broken = stdenv.isDarwin;
+    # keeping all packages increases the package size considerably, which is
+    # why a local build is preferable in that situation. The timeframe is
+    # reasonable and that way the binary cache doesn't get overloaded.
     hydraPlatforms = lib.optionals (!keepAllPackages) meta.platforms;
     license = licenses.gpl2;
-    homepage = http://gap-system.org/;
+    homepage = "https://www.gap-system.org";
   };
 }

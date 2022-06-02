@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, libX11, libXaw }:
+{ lib, stdenv, fetchurl, fetchpatch, libX11, libXaw }:
 
 let
   getPatch = { name, sha256 }: fetchpatch {
@@ -16,23 +16,27 @@ let
       # this ^ also fixes CVE-2011-5244
   ];
 in
-stdenv.mkDerivation {
-  name = "t1lib-5.1.2";
+stdenv.mkDerivation rec {
+  pname = "t1lib";
+  version = "5.1.2";
 
   src = fetchurl {
-    url = "mirror://metalab/libs/graphics/t1lib-5.1.2.tar.gz";
-    sha256 = "0nbvjpnmcznib1nlgg8xckrmsw3haa154byds2h90y2g0nsjh4w2";
+    url = "mirror://ibiblioPubLinux/libs/graphics/${pname}-${version}.tar.gz";
+    hash = "sha256-ghMotQVPeJCg0M0vUoJScHBd82QdvUdtWNF+Vu2Ve1k=";
   };
   inherit patches;
 
   buildInputs = [ libX11 libXaw ];
-  buildFlags = "without_doc";
+  buildFlags = [ "without_doc" ];
 
-  postInstall = stdenv.lib.optional (!stdenv.isDarwin) "chmod +x $out/lib/*.so.*"; # ??
+  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+    # ??
+    chmod +x $out/lib/*.so.*
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "http://www.t1lib.org/";
     description = "A type 1 font rasterizer library for UNIX/X11";
-    homepage = http://www.t1lib.org/;
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.unix;
   };

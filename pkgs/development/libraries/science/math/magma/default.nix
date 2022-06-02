@@ -1,46 +1,76 @@
-{ stdenv, fetchurl, cmake, gfortran, cudatoolkit, libpthreadstubs, liblapack }:
+{ lib, stdenv, fetchurl, cmake, gfortran, ninja, cudaPackages, libpthreadstubs, lapack, blas }:
 
-with stdenv.lib;
+let
+  inherit (cudaPackages) cudatoolkit;
+in
 
-let version = "2.0.2";
+assert let majorIs = lib.versions.major cudatoolkit.version;
+       in majorIs == "9" || majorIs == "10" || majorIs == "11";
+
+let
+  version = "2.6.2";
+
+  # We define a specific set of CUDA compute capabilities here,
+  # because CUDA 11 does not support compute capability 3.0. Also,
+  # we use it to enable newer capabilities that are not enabled
+  # by magma by default. The list of supported architectures
+  # can be found in magma's top-level CMakeLists.txt.
+  cudaCapabilities = rec {
+    cuda9 = [
+      "Kepler"  # 3.0, 3.5
+      "Maxwell" # 5.0
+      "Pascal"  # 6.0
+      "Volta"   # 7.0
+    ];
+
+    cuda10 = [
+      "Turing"  # 7.5
+    ] ++ cuda9;
+
+    cuda11 = [
+      "sm_35"   # sm_30 is not supported by CUDA 11
+      "Maxwell" # 5.0
+      "Pascal"  # 6.0
+      "Volta"   # 7.0
+      "Turing"  # 7.5
+      "Ampere"  # 8.0
+    ];
+  };
+
+  capabilityString = lib.strings.concatStringsSep ","
+    cudaCapabilities."cuda${lib.versions.major cudatoolkit.version}";
 
 in stdenv.mkDerivation {
-  name = "magma-${version}";
+  pname = "magma";
+  inherit version;
   src = fetchurl {
     url = "https://icl.cs.utk.edu/projectsfiles/magma/downloads/magma-${version}.tar.gz";
-    sha256 = "0w3z6k1npfh0d3r8kpw873f1m7lny29sz2bvvfxzk596d4h083lk";
+    hash = "sha256-dbVU2rAJA+LRC5cskT5Q5/iMvGLzrkMrWghsfk7aCnE=";
     name = "magma-${version}.tar.gz";
   };
 
-  buildInputs = [ gfortran cudatoolkit libpthreadstubs liblapack cmake ];
+  nativeBuildInputs = [ gfortran cmake ninja ];
+
+  buildInputs = [ cudatoolkit libpthreadstubs lapack blas ];
+
+  cmakeFlags = [ "-DGPU_TARGET=${capabilityString}" ];
 
   doCheck = false;
-  #checkTarget = "tests";
 
-  enableParallelBuilding=true;
-
-  # MAGMA's default CMake setup does not care about installation. So we copy files directly.
-  installPhase = ''
-    mkdir -p $out
-    mkdir -p $out/include
-    mkdir -p $out/lib
-    mkdir -p $out/lib/pkgconfig
-    cp -a ../include/*.h $out/include
-    #cp -a sparse-iter/include/*.h $out/include
-    cp -a lib/*.a $out/lib
-    cat ../lib/pkgconfig/magma.pc.in                   | \
-    sed -e s:@INSTALL_PREFIX@:"$out":          | \
-    sed -e s:@CFLAGS@:"-I$out/include":    | \
-    sed -e s:@LIBS@:"-L$out/lib -lmagma -lmagma_sparse": | \
-    sed -e s:@MAGMA_REQUIRED@::                       \
-        > $out/lib/pkgconfig/magma.pc
+  preConfigure = ''
+    export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '';
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding=true;
+  buildFlags = [ "magma" "magma_sparse" ];
+
+  meta = with lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";
     license = licenses.bsd3;
-    homepage = http://icl.cs.utk.edu/magma/index.html;
+    homepage = "http://icl.cs.utk.edu/magma/index.html";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ianwookim ];
+    maintainers = with maintainers; [ tbenst ];
   };
+
+  passthru.cudatoolkit = cudatoolkit;
 }

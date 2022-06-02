@@ -1,12 +1,10 @@
-{ stdenv, fetchurl }:
+{ lib, fetchurl }:
 
 let
-
   version = "5.4";
-
 in
 
-fetchurl rec {
+fetchurl {
   name = "pecita-${version}";
 
   url = "http://pecita.eu/b/Pecita.otf";
@@ -21,8 +19,8 @@ fetchurl rec {
   recursiveHash = true;
   sha256 = "0pwm20f38lcbfkdqkpa2ydpc9kvmdg0ifc4h2dmipsnwbcb5rfwm";
 
-  meta = with stdenv.lib; {
-    homepage = http://pecita.eu/police-en.php;
+  meta = with lib; {
+    homepage = "http://pecita.eu/police-en.php";
     description = "Handwritten font with connected glyphs";
     license = licenses.ofl;
     platforms = platforms.all;

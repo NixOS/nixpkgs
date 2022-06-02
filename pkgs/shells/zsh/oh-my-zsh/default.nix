@@ -1,74 +1,127 @@
 # This script was inspired by the ArchLinux User Repository package:
 #
 #   https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=oh-my-zsh-git
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchFromGitHub, nixosTests, writeScript, common-updater-scripts
+, git, nix, nixfmt, jq, coreutils, gnused, curl, cacert, bash }:
 
 stdenv.mkDerivation rec {
-  version = "2019-01-15";
-  name = "oh-my-zsh-${version}";
+  version = "2022-04-24";
+  pname = "oh-my-zsh";
+  rev = "8f56a8bdf39d7727ab0e220f0164f78c77f9c50e";
 
-  src = fetchgit {
-    url = "https://github.com/robbyrussell/oh-my-zsh";
-    rev = "586ca16902d9dae4d95d5256a824572f60219c83";
-    sha256 = "0hzc1fv848h9vlmrw487818l30xfw2vnv50yhkrgvw8lqaam3bs8";
+  src = fetchFromGitHub {
+    inherit rev;
+    owner = "ohmyzsh";
+    repo = "ohmyzsh";
+    sha256 = "yxuvVDjNCH7r/g6ZoF8kEzwirBB0s+CRQizBwRR4Sp4=";
   };
 
-  pathsToLink = [ "/share/oh-my-zsh" ];
-
-  phases = "installPhase";
+  strictDeps = true;
+  buildInputs = [ bash ];
 
   installPhase = ''
-  outdir=$out/share/oh-my-zsh
-  template=templates/zshrc.zsh-template
+    runHook preInstall
 
-  mkdir -p $outdir
-  cp -r $src/* $outdir
-  cd $outdir
+    outdir=$out/share/oh-my-zsh
+    template=templates/zshrc.zsh-template
 
-  rm LICENSE.txt
-  rm -rf .git*
+    mkdir -p $outdir
+    cp -r * $outdir
+    cd $outdir
 
-  chmod -R +w templates
+    rm LICENSE.txt
+    rm -rf .git*
 
-  # Change the path to oh-my-zsh dir and disable auto-updating.
-  sed -i -e "s#ZSH=\$HOME/.oh-my-zsh#ZSH=$outdir#" \
-         -e 's/\# \(DISABLE_AUTO_UPDATE="true"\)/\1/' \
-   $template
+    chmod -R +w templates
 
-  # Look for .zsh_variables, .zsh_aliases, and .zsh_funcs, and source
-  # them, if found.
-  cat >> $template <<- EOF
+    # Change the path to oh-my-zsh dir and disable auto-updating.
+    sed -i -e "s#ZSH=\$HOME/.oh-my-zsh#ZSH=$outdir#" \
+           -e 's/\# \(DISABLE_AUTO_UPDATE="true"\)/\1/' \
+     $template
 
-  # Load the variables.
-  if [ -f ~/.zsh_variables ]; then
-      . ~/.zsh_variables
-  fi
+    chmod +w oh-my-zsh.sh
 
-  # Load the functions.
-  if [ -f ~/.zsh_funcs ]; then
-    . ~/.zsh_funcs
-  fi
+    # Both functions expect oh-my-zsh to be in ~/.oh-my-zsh and try to
+    # modify the directory.
+    cat >> oh-my-zsh.sh <<- EOF
 
-  # Load the aliases.
-  if [ -f ~/.zsh_aliases ]; then
-      . ~/.zsh_aliases
-  fi
-  EOF
+    # Undefine functions that don't work on Nix.
+    unfunction uninstall_oh_my_zsh
+    unfunction upgrade_oh_my_zsh
+    EOF
+
+    # Look for .zsh_variables, .zsh_aliases, and .zsh_funcs, and source
+    # them, if found.
+    cat >> $template <<- EOF
+
+    # Load the variables.
+    if [ -f ~/.zsh_variables ]; then
+        . ~/.zsh_variables
+    fi
+
+    # Load the functions.
+    if [ -f ~/.zsh_funcs ]; then
+      . ~/.zsh_funcs
+    fi
+
+    # Load the aliases.
+    if [ -f ~/.zsh_aliases ]; then
+        . ~/.zsh_aliases
+    fi
+    EOF
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-  description     = "A framework for managing your zsh configuration";
-  longDescription = ''
-  Oh My Zsh is a framework for managing your zsh configuration.
+  passthru = {
+    tests = { inherit (nixosTests) oh-my-zsh; };
 
-  To copy the Oh My Zsh configuration file to your home directory, run
-  the following command:
+    updateScript = writeScript "update.sh" ''
+      #!${stdenv.shell}
+      set -o errexit
+      PATH=${
+        lib.makeBinPath [
+          common-updater-scripts
+          curl
+          cacert
+          git
+          nixfmt
+          nix
+          jq
+          coreutils
+          gnused
+        ]
+      }
 
-    $ cp -v $(nix-env -q --out-path oh-my-zsh | cut -d' ' -f3)/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
-  '';
-  homepage        = https://ohmyz.sh/;
-  license         = licenses.mit;
-  platforms       = platforms.all;
-  maintainers     = with maintainers; [ scolobb nequissimus ];
+      oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion oh-my-zsh" | tr -d '"')"
+      latestSha="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits\?sha\=master\&since\=$oldVersion | jq -r '.[0].sha')"
+
+      if [ ! "null" = "$latestSha" ]; then
+        nixpkgs="$(git rev-parse --show-toplevel)"
+        default_nix="$nixpkgs/pkgs/shells/zsh/oh-my-zsh/default.nix"
+        latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/$latestSha | jq '.commit.committer.date' | sed 's|"\(.*\)T.*|\1|g')"
+        update-source-version oh-my-zsh "$latestSha" --version-key=rev
+        update-source-version oh-my-zsh "$latestDate" --ignore-same-hash
+        nixfmt "$default_nix"
+      else
+        echo "${pname} is already up-to-date"
+      fi
+    '';
+  };
+
+  meta = with lib; {
+    description = "A framework for managing your zsh configuration";
+    longDescription = ''
+      Oh My Zsh is a framework for managing your zsh configuration.
+
+      To copy the Oh My Zsh configuration file to your home directory, run
+      the following command:
+
+        $ cp -v $(nix-env -q --out-path oh-my-zsh | cut -d' ' -f3)/share/oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+    '';
+    homepage = "https://ohmyz.sh/";
+    license = licenses.mit;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ nequissimus ];
   };
 }

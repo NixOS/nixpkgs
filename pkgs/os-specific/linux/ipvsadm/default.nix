@@ -1,20 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, libnl, popt, gnugrep }:
+{ lib, stdenv, fetchurl, pkg-config, libnl, popt, gnugrep }:
 
 stdenv.mkDerivation rec {
-  name = "ipvsadm-${version}";
-  version = "1.29";
+  pname = "ipvsadm";
+  version = "1.31";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/kernel/ipvsadm/${name}.tar.xz";
-    sha256 = "c3de4a21d90a02c621f0c72ee36a7aa27374b6f29fd4178f33fbf71b4c66c149";
+    url = "mirror://kernel/linux/utils/kernel/ipvsadm/${pname}-${version}.tar.xz";
+    sha256 = "1nyzpv1hx75k9lh0vfxfhc0p2fpqaqb38xpvs8sn88m1nljmw2hs";
   };
 
   postPatch = ''
     substituteInPlace Makefile --replace "-lnl" "$(pkg-config --libs libnl-genl-3.0)"
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libnl popt ];
+
+  # Disable parallel build, errors:
+  #  *** No rule to make target 'libipvs/libipvs.a', needed by 'ipvsadm'.  Stop.
+  enableParallelBuilding = false;
 
   preBuild = ''
     makeFlagsArray+=(
@@ -28,9 +32,9 @@ stdenv.mkDerivation rec {
     sed -i -e "s|^PATH=.*|PATH=$out/bin:${gnugrep}/bin|" $out/sbin/ipvsadm-{restore,save}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Linux Virtual Server support programs";
-    homepage = http://www.linuxvirtualserver.org/software/ipvs.html;
+    homepage = "http://www.linuxvirtualserver.org/software/ipvs.html";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

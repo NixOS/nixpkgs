@@ -15,25 +15,25 @@ in {
     source = mkOption {
       description = "Heapster metric source";
       example = "kubernetes:https://kubernetes.default";
-      type = types.string;
+      type = types.str;
     };
 
     sink = mkOption {
       description = "Heapster metic sink";
       example = "influxdb:http://localhost:8086";
-      type = types.string;
+      type = types.str;
     };
 
     extraOpts = mkOption {
       description = "Heapster extra options";
       default = "";
-      type = types.string;
+      type = types.separatedString " ";
     };
 
     package = mkOption {
       description = "Package to use by heapster";
       default = pkgs.heapster;
-      defaultText = "pkgs.heapster";
+      defaultText = literalExpression "pkgs.heapster";
       type = types.package;
     };
   };
@@ -49,10 +49,11 @@ in {
       };
     };
 
-    users.users = singleton {
-      name = "heapster";
-      uid = config.ids.uids.heapster;
+    users.users.heapster = {
+      isSystemUser = true;
+      group = "heapster";
       description = "Heapster user";
     };
+    users.groups.heapster = {};
   };
 }

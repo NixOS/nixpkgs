@@ -1,11 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "uptimed-${version}";
-  version = "0.4.1";
+  pname = "uptimed";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
-    sha256 = "0hqs7n3agayckwdgwadzw5shpdh4h1inqgvp4zr5fi324pj5x80j";
+    sha256 = "sha256-aYP20O/8QotmnpryiFnFAfrpyk5f+0OkbkGxWf2Ug9w=";
     rev = "v${version}";
     repo = "uptimed";
     owner = "rpodgorny";
@@ -14,7 +14,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   patches = [ ./no-var-spool-install.patch ];
 
-  meta = with stdenv.lib; {
+  postPatch = ''
+    substituteInPlace libuptimed/urec.h \
+      --replace /var/spool /var/lib
+  '';
+
+  meta = with lib; {
     description = "Uptime record daemon";
     longDescription = ''
       An uptime record daemon keeping track of the highest uptimes a computer
@@ -22,9 +27,9 @@ stdenv.mkDerivation rec {
       each other. Uptimed comes with a console front-end to parse the records,
       which can also easily be used to show your records on a web page.
     '';
-    homepage = https://github.com/rpodgorny/uptimed/;
-    license = licenses.gpl2;
+    homepage = "https://github.com/rpodgorny/uptimed/";
+    license = with licenses; [ gpl2Only lgpl21Plus ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
-
 }

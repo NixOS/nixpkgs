@@ -14,7 +14,7 @@ in {
       enable = mkEnableOption "periodic SSD TRIM of mounted partitions in background";
 
       interval = mkOption {
-        type = types.string;
+        type = types.str;
         default = "weekly";
         description = ''
           How often we run fstrim. For most desktop and server systems
@@ -31,7 +31,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.packages = [ pkgs.utillinux ];
+    systemd.packages = [ pkgs.util-linux ];
 
     systemd.timers.fstrim = {
       timerConfig = {
@@ -42,5 +42,5 @@ in {
 
   };
 
-  meta.maintainers = with maintainers; [ gnidorah ];
+  meta.maintainers = with maintainers; [ ];
 }

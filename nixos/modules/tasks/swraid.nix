@@ -1,56 +1,43 @@
-{ pkgs, ... }:
+{ config, pkgs, lib, ... }: let
 
-{
+  cfg = config.boot.initrd.services.swraid;
 
-  environment.systemPackages = [ pkgs.mdadm ];
+in {
 
-  services.udev.packages = [ pkgs.mdadm ];
-
-  boot.initrd.availableKernelModules = [ "md_mod" "raid0" "raid1" "raid10" "raid456" ];
-
-  boot.initrd.extraUdevRulesCommands = ''
-    cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
-  '';
-
-  systemd.services.mdadm-shutdown = {
-    wantedBy = [ "final.target"];
-    after = [ "umount.target" ];
-
-    unitConfig = {
-      DefaultDependencies = false;
+  options.boot.initrd.services.swraid = {
+    enable = (lib.mkEnableOption "swraid support using mdadm") // {
+      visible = false; # only has effect when the new stage 1 is in place
     };
 
-    serviceConfig = {
-      Type = "oneshot";
-      ExecStart = ''${pkgs.mdadm}/bin/mdadm --wait-clean --scan'';
+    mdadmConf = lib.mkOption {
+      description = "Contents of <filename>/etc/mdadm.conf</filename> in initrd.";
+      type = lib.types.lines;
+      default = "";
     };
   };
 
-  systemd.services."mdmon@" = {
-    description = "MD Metadata Monitor on /dev/%I";
+  config = {
+    environment.systemPackages = [ pkgs.mdadm ];
 
-    unitConfig.DefaultDependencies = false;
+    services.udev.packages = [ pkgs.mdadm ];
 
-    serviceConfig = {
-      Type = "forking";
-      Environment = "IMSM_NO_PLATFORM=1";
-      ExecStart = ''${pkgs.mdadm}/bin/mdmon --offroot --takeover %I'';
-      KillMode = "none";
+    systemd.packages = [ pkgs.mdadm ];
+
+    boot.initrd.availableKernelModules = lib.mkIf (config.boot.initrd.systemd.enable -> cfg.enable) [ "md_mod" "raid0" "raid1" "raid10" "raid456" ];
+
+    boot.initrd.extraUdevRulesCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
+      cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
+    '';
+
+    boot.initrd.systemd = lib.mkIf cfg.enable {
+      contents."/etc/mdadm.conf" = lib.mkIf (cfg.mdadmConf != "") {
+        text = cfg.mdadmConf;
+      };
+
+      packages = [ pkgs.mdadm ];
+      initrdBin = [ pkgs.mdadm ];
     };
+
+    boot.initrd.services.udev.packages = lib.mkIf cfg.enable [ pkgs.mdadm ];
   };
-
-  systemd.services."mdadm-grow-continue@" = {
-    description = "Manage MD Reshape on /dev/%I";
-
-    unitConfig.DefaultDependencies = false;
-
-    serviceConfig = {
-      ExecStart = ''${pkgs.mdadm}/bin/mdadm --grow --continue /dev/%I'';
-      StandardInput = "null";
-      StandardOutput = "null";
-      StandardError = "null";
-      KillMode = "none";
-    };
-  };
- 
 }

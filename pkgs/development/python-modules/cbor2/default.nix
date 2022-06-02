@@ -1,22 +1,49 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, pytestcov, setuptools_scm }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+}:
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "4.1.2";
+  version = "5.4.2.post1";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1bp9l3wdj0wm15xlmlcwbgv6hc6vcfx39nssikj8fkwnd7d1bdhp";
+    sha256 = "sha256-nPIdWWBLlSnXh3yOA0Ki66rhoH/o/1aD3HX+wVhHx5c=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
-  checkInputs = [ pytest pytestcov ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkPhase = "pytest";
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov" ""
+  '';
+
+  # https://github.com/agronholm/cbor2/issues/99
+  disabledTests = lib.optionals stdenv.is32bit [
+    "test_huge_truncated_bytes"
+    "test_huge_truncated_string"
+  ];
+
+  pythonImportsCheck = [
+    "cbor2"
+  ];
 
   meta = with lib; {
-    description = "Pure Python CBOR (de)serializer with extensive tag support";
-    homepage = https://github.com/agronholm/cbor2;
+    description = "Python CBOR (de)serializer with extensive tag support";
+    homepage = "https://github.com/agronholm/cbor2";
     license = licenses.mit;
     maintainers = with maintainers; [ taneb ];
   };

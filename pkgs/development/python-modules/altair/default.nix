@@ -1,35 +1,60 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
-, pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
-, entrypoints, jsonschema, numpy, pandas, six, toolz, typing
-, pythonOlder, recommonmark }:
+{ lib, buildPythonPackage, fetchPypi, isPy27
+, entrypoints
+, glibcLocales
+, ipython
+, jinja2
+, jsonschema
+, numpy
+, pandas
+, pytestCheckHook
+, pythonOlder
+, recommonmark
+, six
+, sphinx
+, toolz
+, typing ? null
+, vega_datasets
+}:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "2.4.1";
+  version = "4.2.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lqln4510qqqla6s8z4ca0271qrhq6yyznsijsdn3nssvxsynqpc";
+    sha256 = "d87d9372e63b48cd96b2a6415f0cf9457f50162ab79dc7a31cd7e024dd840026";
   };
 
-  postPatch = ''
-    # Tests require network
-    rm altair/examples/boxplot_max_min.py altair/examples/line_percent.py
+  propagatedBuildInputs = [
+    entrypoints
+    jsonschema
+    numpy
+    pandas
+    six
+    toolz
+    jinja2
+  ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
+
+  checkInputs = [
+    glibcLocales
+    ipython
+    pytestCheckHook
+    recommonmark
+    sphinx
+    vega_datasets
+  ];
+
+  pythonImportsCheck = [ "altair" ];
+
+  # avoid examples directory, which fetches web resources
+  preCheck = ''
+    cd altair/tests
   '';
 
-  checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales recommonmark ];
-
-  propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
-
-  checkPhase = ''
-    export LANG=en_US.UTF-8
-    py.test altair --doctest-modules
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A declarative statistical visualization library for Python.";
-    homepage = https://github.com/altair-viz/altair;
+    homepage = "https://github.com/altair-viz/altair";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
     platforms = platforms.unix;

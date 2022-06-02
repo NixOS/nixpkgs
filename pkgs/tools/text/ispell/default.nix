@@ -1,29 +1,19 @@
-{ stdenv, fetchurl, bison, ncurses }:
+{ lib, stdenv, fetchurl, bison, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ispell-3.3.02";
+  pname = "ispell";
+  version = "3.4.04";
+
   src = fetchurl {
-    url = "http://fmg-www.cs.ucla.edu/geoff/tars/${name}.tar.gz";
-    sha256 = "1d7c2fqrdjckp91ajpkn5nnmpci2qrxqn8b6cyl0zn1afb9amxbz";
+    url = "https://www.cs.hmc.edu/~geoff/tars/${pname}-${version}.tar.gz";
+    sha256 = "sha256-h7zW8FIdhaCjp4NCFZVtdOvEkxRMx8eR+HvmhyzP4T4=";
   };
+
   buildInputs = [ bison ncurses ];
-  patches = [
-    ./patches/0005-Do-not-reorder-words.patch
-    ./patches/0007-Use-termios.patch
-    ./patches/0008-Tex-backslash.patch
-    ./patches/0009-Fix-FTBFS-on-glibc.patch
-    ./patches/0011-Missing-prototypes.patch
-    ./patches/0012-Fix-getline.patch
-    ./patches/0013-Fix-man-pages.patch
-    ./patches/0021-Fix-gcc-warnings.patch
-    ./patches/0023-Exclusive-options.patch
-    ./patches/0024-Check-tempdir-creation.patch
-    ./patches/0025-Languages.patch
-    ./patches/0030-Display-whole-multibyte-character.patch
-  ];
+
   postPatch = ''
     cat >> local.h <<EOF
-    ${stdenv.lib.optionalString (!stdenv.isDarwin) "#define USG"}
+    ${lib.optionalString (!stdenv.isDarwin) "#define USG"}
     #define TERMLIB "-lncurses"
     #define LANGUAGES "{american,MASTERDICTS=american.med,HASHFILES=americanmed.hash}"
     #define MASTERHASH "americanmed.hash"
@@ -37,11 +27,12 @@ stdenv.mkDerivation rec {
     #define MINIMENU
     #define HAS_RENAME
     EOF
+  '';
 
-  '';
-  preBuild = ''
-    for dir in $out/share/emacs/site-lisp $out/share/info $out/share/man/man1 $out/share/man/man4 $out/bin $out/lib; do
-    mkdir -p $dir
-    done
-  '';
+  meta = with lib; {
+    description = "An interactive spell-checking program for Unix";
+    homepage = "https://www.cs.hmc.edu/~geoff/ispell.html";
+    license = licenses.free;
+    platforms = platforms.unix;
+  };
 }

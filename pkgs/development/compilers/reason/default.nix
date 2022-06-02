@@ -1,39 +1,61 @@
-{ stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune
-, menhir, merlin_extend, ppx_tools_versioned, utop
+{ lib, callPackage, stdenv, makeWrapper, fetchurl, ocaml, findlib, dune_2
+, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
 }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-reason-${version}";
-  version = "3.3.7";
+  pname = "ocaml${ocaml.version}-reason";
+  version = "3.8.0";
 
-  src = fetchFromGitHub {
-    owner = "facebook";
-    repo = "reason";
-    rev = "4d20e5b535c29c5ef1283e65958b32996e449e5a";
-    sha256 = "0f3pb61wg58g8f3wcnp1h4gpmnwmp7bq0cnqdfwldmh9cs0dqyfk";
+  src = fetchurl {
+    url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
+    sha256 = "sha256:0yc94m3ddk599crg33yxvkphxpy54kmdsl599c320wvn055p4y4l";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    menhir
+  ];
 
-  propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
+  buildInputs = [
+    cppo
+    dune_2
+    findlib
+    fix
+    menhir
+    menhirSdk
+    ocaml
+    ppxlib
+    utop
+  ];
 
-  buildInputs = [ ocaml findlib dune utop menhir ];
+  propagatedBuildInputs = [
+    menhirLib
+    merlin-extend
+    ppx_derivers
+  ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
-  inherit (dune) installPhase;
-
-  postInstall = ''
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix=$out --libdir=$OCAMLFIND_DESTDIR
     wrapProgram $out/bin/rtop \
       --prefix PATH : "${utop}/bin" \
-      --set OCAMLPATH $out/lib/ocaml/${ocaml.version}/site-lib:$OCAMLPATH
+      --prefix CAML_LD_LIBRARY_PATH : "$CAML_LD_LIBRARY_PATH" \
+      --prefix OCAMLPATH : "$OCAMLPATH:$OCAMLFIND_DESTDIR"
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://reasonml.github.io/;
+  passthru.tests = {
+    hello = callPackage ./tests/hello { };
+  };
+
+  meta = with lib; {
+    homepage = "https://reasonml.github.io/";
+    downloadPage = "https://github.com/reasonml/reason";
     description = "Facebook's friendly syntax to OCaml";
     license = licenses.mit;
     inherit (ocaml.meta) platforms;
-    maintainers = [ maintainers.volth ];
+    maintainers = with maintainers; [ ];
   };
 }

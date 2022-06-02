@@ -1,8 +1,7 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, openssl }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "httperf";
-  name = "${pname}-${version}";
   version = "0.9.1";
 
   src = fetchFromGitHub {
@@ -27,12 +26,12 @@ stdenv.mkDerivation rec {
     mv -v src/httperf $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The httperf HTTP load generator";
-    homepage = https://github.com/httperf/httperf;
-    maintainers = with maintainers; [ nand0p ];
+    homepage = "https://github.com/httperf/httperf";
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 
 }

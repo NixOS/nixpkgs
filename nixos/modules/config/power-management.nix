@@ -35,7 +35,7 @@ in
       powerUpCommands = mkOption {
         type = types.lines;
         default = "";
-        example = literalExample ''
+        example = literalExpression ''
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
         description =
@@ -49,7 +49,7 @@ in
       powerDownCommands = mkOption {
         type = types.lines;
         default = "";
-        example = literalExample ''
+        example = literalExpression ''
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
         description =
@@ -78,7 +78,7 @@ in
     };
 
     # Service executed before suspending/hibernating.
-    systemd.services."pre-sleep" =
+    systemd.services.pre-sleep =
       { description = "Pre-Sleep Actions";
         wantedBy = [ "sleep.target" ];
         before = [ "sleep.target" ];
@@ -89,12 +89,12 @@ in
         serviceConfig.Type = "oneshot";
       };
 
-    systemd.services."post-resume" =
+    systemd.services.post-resume =
       { description = "Post-Resume Actions";
         after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
         script =
           ''
-            ${config.systemd.package}/bin/systemctl try-restart post-resume.target
+            /run/current-system/systemd/bin/systemctl try-restart post-resume.target
             ${cfg.resumeCommands}
             ${cfg.powerUpCommands}
           '';

@@ -1,20 +1,25 @@
-{ stdenv, fetchurl, ncurses }:
-stdenv.mkDerivation rec {
+{ lib, stdenv, fetchurl, ncurses }:
 
-  name = "tudu-${version}";
-  version = "0.10.2";
+stdenv.mkDerivation rec {
+  pname = "tudu";
+  version = "0.10.4";
 
   src = fetchurl {
-    url = "https://code.meskio.net/tudu/${name}.tar.gz";
-    sha256 = "1xsncvd1c6v8y0dzc5mspy9rrwc89pabhz6r2lihsirk83h2rqym";
+    url = "https://code.meskio.net/tudu/${pname}-${version}.tar.gz";
+    sha256 = "14srqn968ii3sr4v6xc5zzs50dmm9am22lrm57j7n0rhjclwbssy";
   };
 
   buildInputs = [ ncurses ];
 
-  meta = {
+  preConfigure = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace configure \
+      --replace 'echo "main()' 'echo "int main()'
+  '';
+
+  meta = with lib; {
     description = "ncurses-based hierarchical todo list manager with vim-like keybindings";
-    homepage = https://code.meskio.net/tudu/;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://code.meskio.net/tudu/";
+    license = licenses.gpl3;
+    platforms = platforms.unix;
   };
 }

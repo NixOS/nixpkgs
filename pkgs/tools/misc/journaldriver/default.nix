@@ -1,9 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, pkgconfig, openssl, systemd }:
+{ lib, fetchFromGitHub, rustPlatform, pkg-config, openssl, systemd }:
 
 rustPlatform.buildRustPackage rec {
-  name        = "journaldriver-${version}";
+  pname = "journaldriver";
   version     = "1.1.0";
-  cargoSha256 = "03rq96hzv97wh2gbzi8sz796bqgh6pbpvdn0zy6zgq2f2sgkavsl";
+  cargoSha256 = "1gzfwkcm63fn41jls16c5sqxz28b0hrfpjhwsvvbwcfv40qxjhsg";
 
   src = fetchFromGitHub {
     owner  = "tazjin";
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs       = [ openssl systemd ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {
     description = "Log forwarder from journald to Stackdriver Logging";

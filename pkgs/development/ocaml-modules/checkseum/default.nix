@@ -1,39 +1,48 @@
-{ stdenv, fetchurl, ocaml, findlib, dune, alcotest, cmdliner, fmt, optint, rresult }:
+{ lib, fetchurl, buildDunePackage, dune-configurator, pkg-config
+, bigarray-compat, optint
+, fmt, rresult, bos, fpath, astring, alcotest
+, withFreestanding ? false
+, ocaml-freestanding
+}:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "checkseum is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+  version = "0.3.2";
+  pname = "checkseum";
 
-# The C implementation is not portable: x86 only
-let hasC = stdenv.isi686 || stdenv.isx86_64; in
+  useDune2 = true;
 
-stdenv.mkDerivation rec {
-  version = "0.0.3";
-  name = "ocaml${ocaml.version}-checkseum-${version}";
+  minimumOCamlVersion = "4.07";
+
   src = fetchurl {
-    url = "https://github.com/mirage/checkseum/releases/download/v0.0.3/checkseum-v0.0.3.tbz";
-    sha256 = "12j45zsvil1ynwx1x8fbddhqacc8r1zf7f6h576y3f3yvbg7l1fm";
+    url = "https://github.com/mirage/checkseum/releases/download/v${version}/checkseum-v${version}.tbz";
+    sha256 = "9cdd282ea1cfc424095d7284e39e4d0ad091de3c3f2580539d03f6966d45ccd5";
   };
 
-  postPatch = stdenv.lib.optionalString (!hasC) ''
-    rm -r bin src-c
-  '';
+  buildInputs = [ dune-configurator ];
+  nativeBuildInputs = [ pkg-config ];
+  propagatedBuildInputs = [
+    bigarray-compat
+    optint
+  ] ++ lib.optionals withFreestanding [
+    ocaml-freestanding
+  ];
 
-  buildInputs = [ ocaml findlib dune alcotest cmdliner fmt rresult ];
-  propagatedBuildInputs = [ optint ];
+  checkInputs = [
+    alcotest
+    bos
+    astring
+    fmt
+    fpath
+    rresult
+  ];
 
-  buildPhase = "dune build";
-
-  doCheck = hasC;
-  checkPhase = "dune runtest";
-
-  inherit (dune) installPhase;
+  doCheck = true;
 
   meta = {
-    homepage = "https://github.com/mirage/checkseum";
     description = "ADLER-32 and CRC32C Cyclic Redundancy Check";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    homepage = "https://github.com/mirage/checkseum";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "checkseum.checkseum";
   };
 }

@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation rec {
-  name = "libstemmer-2017-03-02";
+stdenv.mkDerivation {
+  pname = "libstemmer";
+  version = "unstable-2017-03-02";
 
   src = fetchFromGitHub {
     owner = "zvelo";

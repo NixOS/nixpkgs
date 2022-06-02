@@ -1,11 +1,14 @@
-{ stdenv
+{ lib
 , buildPythonPackage
+, pythonAtLeast
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "validictory";
   version = "1.1.2";
+
+  disabled = pythonAtLeast "3.10"; # abandoned, should be removed when we move to py310/311
 
   src = fetchPypi {
     inherit pname version;
@@ -14,9 +17,9 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Validate dicts against a schema";
-    homepage = https://github.com/sunlightlabs/validictory;
+    homepage = "https://github.com/sunlightlabs/validictory";
     license = licenses.mit;
   };
 

@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, six, mock }:
+{ lib, buildPythonPackage, fetchPypi, pytest, six, mock }:
 
 buildPythonPackage rec {
-  version = "1.4.4";
+  version = "2.0.2";
   pname = "kafka-python";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1p9sr9vl96xz8qrgdrjiql9qkch2qx29pkq7igk28clgc6zbn510";
+    sha256 = "04dfe7fea2b63726cd6f3e79a2d86e709d608d74406638c5da33a01d45a9d7e3";
   };
 
   checkInputs = [ pytest six mock ];
@@ -20,9 +20,9 @@ buildPythonPackage rec {
   # E   ImportError: cannot import name 'unittest'
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure Python client for Apache Kafka";
-    homepage = https://github.com/dpkp/kafka-python;
+    homepage = "https://github.com/dpkp/kafka-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
   };

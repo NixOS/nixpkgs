@@ -1,12 +1,13 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchurl
 , ncurses
 , libX11, xorgproto, buildEnv
+, fetchpatch
 }:
 
 let
-   useX11 = stdenv.isi686 || stdenv.isx86_64;
+   useX11 = stdenv.hostPlatform.isx86;
    x11deps = [ libX11 xorgproto ];
-   inherit (stdenv.lib) optionals;
+   inherit (lib) optionals;
 
    baseOcamlBranch  = "4.07";
    baseOcamlVersion = "${baseOcamlBranch}.1";
@@ -14,7 +15,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ber-metaocaml-${version}";
+  pname = "ber-metaocaml";
   version = metaocamlPatch;
 
   src = fetchurl {
@@ -41,23 +42,34 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   buildInputs = [ ncurses ] ++ optionals useX11 x11deps;
 
+  patches = [
+    # glibc 2.34 changed SIGSTKSZ from a #define'd integer to an
+    # expression involving a function call.  This broke all code that
+    # used SIGSTKSZ as the size of a statically-allocated array.  This
+    # patch is also applied by the ocaml/4.07.nix expression.
+    (fetchpatch {
+      url = "https://github.com/ocaml/ocaml/commit/00b8c4d503732343d5d01761ad09650fe50ff3a0.patch";
+      sha256 = "sha256:02cfya5ff5szx0fsl5x8ax76jyrla9zmf3qxavf3adhwq5ssrfcv";
+    })
+  ];
+
   postConfigure = ''
     tar -xvzf $metaocaml
-    cd ${name}
+    cd ${pname}-${version}
     make patch
     cd ..
   '';
 
   buildPhase = ''
     make world
-    make -i install
 
     make bootstrap
     make opt.opt
+    make -i install
     make installopt
     mkdir -p $out/include
     ln -sv $out/lib/ocaml/caml $out/include/caml
-    cd ${name}
+    cd ${pname}-${version}
     make all
   '';
 
@@ -67,7 +79,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
-    cd ${name}
+    cd ${pname}-${version}
     make test
     make test-compile
     make test-native
@@ -78,9 +90,9 @@ stdenv.mkDerivation rec {
     nativeCompilers = true;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description     = "Multi-Stage Programming extension for OCaml";
-    homepage        = http://okmij.org/ftp/ML/MetaOCaml.html;
+    homepage        = "https://okmij.org/ftp/ML/MetaOCaml.html";
     license         = with licenses; [ /* compiler */ qpl /* library */ lgpl2 ];
     maintainers     = with maintainers; [ thoughtpolice ];
 

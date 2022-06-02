@@ -1,56 +1,61 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala
-, libgee, granite, gtk3, libaccounts-glib, libsignon-glib, json-glib
-, librest, webkitgtk, libsoup, switchboard, gobject-introspection }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, meson
+, ninja
+, pkg-config
+, vala
+, evolution-data-server
+, glib
+, granite
+, gtk3
+, libgdata
+, libhandy
+, sqlite
+, switchboard
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-onlineaccounts";
-  version = "2.0.1";
+  version = "6.5.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "03h8ii8zz59fpp4fwlvyx3m3550096fn7a6w612b1rbj3dqhlmh9";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-    };
+    sha256 = "sha256-Q/vvXKyeedn5o7HnL9F5ixSjJS3OWrvvHbzvx2fW2qY=";
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
   buildInputs = [
+    evolution-data-server
+    glib
     granite
     gtk3
-    json-glib
-    libaccounts-glib
-    libgee
-    libsignon-glib
-    libsoup
-    librest
+    libgdata
+    libhandy
+    sqlite # needed for camel-1.2
     switchboard
-    webkitgtk
   ];
 
-  PKG_CONFIG_LIBACCOUNTS_GLIB_PROVIDERFILESDIR = "${placeholder "out"}/share/accounts/providers";
-  PKG_CONFIG_LIBACCOUNTS_GLIB_SERVICEFILESDIR = "${placeholder "out"}/share/accounts/services";
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
-
-  meta = with stdenv.lib; {
-    description = "Switchboard Online Accounts Plug";
-    homepage = https://github.com/elementary/switchboard-plug-onlineaccounts;
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
   };
 
+  meta = with lib; {
+    description = "Switchboard Online Accounts Plug";
+    homepage = "https://github.com/elementary/switchboard-plug-onlineaccounts";
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    maintainers = teams.pantheon.members;
+  };
 }

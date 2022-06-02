@@ -1,30 +1,82 @@
-{ stdenv, fetchurl, pkgconfig, gobject-introspection, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, libsoup, gtk3, glib }:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, vala
+, gi-docgen
+, python3
+, libsoup
+, glib
+, gnome
+, gssdp-tools
+}:
 
 stdenv.mkDerivation rec {
-  name = "gssdp-${version}";
-  version = "1.0.2";
+  pname = "gssdp";
+  version = "1.4.0.1";
 
-  outputs = [ "out" "bin" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gssdp/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1p1m2m3ndzr2whipqw4vfb6s6ia0g7rnzzc4pnq8b8g1qw4prqd1";
+    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "hnaEnVf7giuHKIVtut6/OGf4nuR6DsR6IARdAR9DFYI=";
   };
 
-  nativeBuildInputs = [ pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
-  buildInputs = [ libsoup gtk3 ];
-  propagatedBuildInputs = [ glib ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gi-docgen
+    python3
+  ];
 
-  configureFlags = [
-    "--enable-gtk-doc"
+  buildInputs = [
+    libsoup
+  ];
+
+  propagatedBuildInputs = [
+    glib
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dsniffer=false"
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  postFixup = lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+    # Move developer documentation to devdoc output.
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
+      | while IFS= read -r -d ''' file; do
+        moveToOutput "$(dirname "''${file/"$out/"/}")" "$devdoc"
+    done
+  '';
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+    };
+
+    tests = {
+      inherit gssdp-tools;
+    };
+  };
+
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
-    homepage = http://www.gupnp.org/;
+    homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
+    maintainers = teams.gnome.members;
     platforms = platforms.all;
   };
 }

@@ -1,18 +1,20 @@
-{ stdenv, fetchurl, python3, texinfo, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, python3, texinfo, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "ponysay-3.0.3";
+  pname = "ponysay";
+  version = "unstable-2021-03-27";
 
-  src = fetchurl {
-    url = "https://github.com/erkin/ponysay/archive/3.0.3.tar.gz";
-    sha256 = "12mjabf5cpp5dgg63s19rlyq3dhhpzzy2sa439yncqzsk7rdg0n3";
+  src = fetchFromGitHub {
+    owner = "erkin";
+    repo = "ponysay";
+    rev = "8a2c71416e70e4e7b0931917ebfd6479f51ddf9a";
+    sha256 = "sha256-LNc83E+7NFYYILORElNlYC7arQKGUJHv6phu+vM5xpQ=";
   };
 
-  buildInputs = [ python3 texinfo makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python3 texinfo ];
 
   inherit python3;
-
-  phases = "unpackPhase installPhase fixupPhase";
 
   installPhase = ''
     find -type f -name "*.py" | xargs sed -i "s@/usr/bin/env python3@$python3/bin/python3@g"
@@ -24,11 +26,11 @@ stdenv.mkDerivation rec {
         --with-bash
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Cowsay reimplemention for ponies";
-    homepage = http://erkin.co/ponysay/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ bodil ];
-    platforms = with stdenv.lib.platforms; unix;
+    homepage = "https://github.com/erkin/ponysay";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ bodil ];
+    platforms = platforms.unix;
   };
 }

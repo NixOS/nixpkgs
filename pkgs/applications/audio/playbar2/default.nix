@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , cmake
 , extra-cmake-modules
 , plasma-framework
@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "playbar2-${version}";
+  pname = "playbar2";
   version = "2.5";
 
   src = fetchFromGitHub {
@@ -27,9 +27,11 @@ stdenv.mkDerivation rec {
     kwindowsystem
   ];
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     description = "Mpris2 Client for Plasma5";
-    homepage = https://github.com/audoban/PlayBar2;
+    homepage = "https://github.com/audoban/PlayBar2";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pjones ];

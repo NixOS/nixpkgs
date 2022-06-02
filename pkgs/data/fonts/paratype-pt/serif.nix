@@ -1,9 +1,12 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
-fetchzip rec {
+fetchzip {
   name = "paratype-pt-serif";
 
-  url = "http://www.paratype.ru/uni/public/PTSerif.zip";
+  urls = [
+    "https://company.paratype.com/system/attachments/634/original/ptserif.zip"
+    "http://rus.paratype.ru/system/attachments/634/original/ptserif.zip"
+  ];
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
@@ -13,8 +16,8 @@ fetchzip rec {
 
   sha256 = "1iw5qi4ag3yp1lwmi91lb18gr768bqwl46xskaqnkhr9i9qp0v6d";
 
-  meta = with stdenv.lib; {
-    homepage = http://www.paratype.ru/public/; 
+  meta = with lib; {
+    homepage = "http://www.paratype.ru/public/";
     description = "An open Paratype font";
 
     license = "Open Paratype license";

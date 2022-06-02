@@ -1,28 +1,30 @@
-{ buildGoPackage
+{ buildGoModule
 , fetchFromGitHub
 , lib
 }:
 
-buildGoPackage rec {
-  name = "archiver-${version}";
-  version = "3.0.0";
-
-  goPackagePath = "github.com/mholt/archiver";
+buildGoModule rec {
+  pname = "archiver";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "mholt";
-    repo = "archiver";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1wngv51333h907mp6nbzd9dq6r0x06mag2cij92912jcbzy0q8bk";
+    sha256 = "1py186hfy4p69wghqmbsyi1r3xvw1nyl55pz8f97a5qhmwxb3mwp";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "1y4v95z1ga111g3kdv5wvyikwifl25f36firf1i916rxli6f6g5i";
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=${src.rev}" "-X main.date=unknown" ];
+
+  doCheck = false;
 
   meta = with lib; {
-    description = "Easily create and extract .zip, .tar, .tar.gz, .tar.bz2, .tar.xz, .tar.lz4, .tar.sz, and .rar (extract-only) files with Go";
-    homepage = https://github.com/mholt/archiver;
+    description = "Easily create & extract archives, and compress & decompress files of various formats";
+    homepage = "https://github.com/mholt/archiver";
+    mainProgram = "arc";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.all;
   };
 }

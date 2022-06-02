@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "CharacterCompressor-${version}";
+  pname = "CharacterCompressor";
   version = "0.3.3";
 
   src = fetchFromGitHub {
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A compressor with character. For jack and lv2";
-    homepage = https://github.com/magnetophon/CharacterCompressor;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
+    homepage = "https://github.com/magnetophon/CharacterCompressor";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
   };
 }

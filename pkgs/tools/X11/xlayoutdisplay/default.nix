@@ -1,34 +1,35 @@
-{ stdenv, fetchFromGitHub, xorg, boost, cmake, gtest }:
+{ lib, stdenv, fetchFromGitHub, xorg, boost, gtest }:
 
 stdenv.mkDerivation rec {
-  name = "xlayoutdisplay-${version}";
-  version = "1.0.2";
+  pname = "xlayoutdisplay";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
-    repo = "xlayoutdisplay";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1cqn98lpx9rkfhavbqalaaljw351hvqsrszgqnwvcyq05vq26dwx";
+    sha256 = "sha256-8K9SoZToJTk/sL4PC4Fcsu9XzGLYfNIZlbIyxc9jf84=";
   };
 
-  nativeBuildInputs = [ cmake ];
   buildInputs = with xorg; [ libX11 libXrandr libXcursor boost ];
   checkInputs = [ gtest ];
 
   doCheck = true;
+  checkTarget = "gtest";
 
-  # format security fixup
+  # Fixup reference to hardcoded boost path, dynamically link as seems fine and we don't have static for this
   postPatch = ''
-    substituteInPlace test/test-Monitors.cpp \
-      --replace 'fprintf(lidStateFile, contents);' \
-                'fputs(contents, lidStateFile);'
-
+    substituteInPlace config.mk --replace '/usr/lib/libboost_program_options.a' '-lboost_program_options'
   '';
 
-  meta = with stdenv.lib; {
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Detects and arranges linux display outputs, using XRandR for detection and xrandr for arrangement";
-    homepage = https://github.com/alex-courtis/xlayoutdisplay;
+    homepage = "https://github.com/alex-courtis/xlayoutdisplay";
     maintainers = with maintainers; [ dtzWill ];
     license = licenses.asl20;
+    platforms = platforms.linux;
   };
 }

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "amrwb-${version}";
+  pname = "amrwb";
   version = "11.0.0.0";
 
   srcAmr = fetchurl {
-    url = http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-b00.zip;
+    url = "http://www.3gpp.org/ftp/Specs/archive/26_series/26.204/26204-b00.zip";
     sha256 = "1v4zhs6f1mf1xkrzhljh05890in0rpr5d5pcak9h4igxhd2c91f8";
   };
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p6m9nd08mv525w14py9qzs9zwsa5i3vxf5bgcmcvc408jqmkbsw";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   configureFlags = [ "--cache-file=config.cache" "--with-downloader=true" ];
 
@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.penguin.cz/~utx/amr;
+    homepage = "http://www.penguin.cz/~utx/amr";
     description = "AMR Wide-Band Codec";
     # The wrapper code is free, but not the libraries from 3gpp.
     # It's a source code reference implementation with patents and licenses on
     # some countries, not redistributable.
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
   };
 }

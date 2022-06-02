@@ -1,25 +1,24 @@
-{ stdenv, fetchurl, cmake, pkgconfig, gettext
+{ lib, stdenv, fetchurl, cmake, pkg-config, gettext
 , gtk2, libcanberra, libnotify, pcre, sqlite, xorg
+, harfbuzz
 }:
 
 stdenv.mkDerivation rec {
-  name = "libgaminggear-${version}";
+  pname = "libgaminggear";
   version = "0.15.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libgaminggear/${name}.tar.bz2";
+    url = "mirror://sourceforge/libgaminggear/${pname}-${version}.tar.bz2";
     sha256 = "0jf5i1iv8j842imgiixbhwcr6qcwa93m27lzr6gb01ri5v35kggz";
   };
 
   outputs = [ "dev" "out" "bin" ];
 
-  nativeBuildInputs = [ cmake pkgconfig gettext ];
+  nativeBuildInputs = [ cmake pkg-config gettext ];
 
   propagatedBuildInputs = [
     gtk2 libcanberra libnotify pcre sqlite xorg.libXdmcp xorg.libpthreadstubs
   ];
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DINSTALL_CMAKE_MODULESDIR=lib/cmake"
@@ -27,14 +26,17 @@ stdenv.mkDerivation rec {
     "-DINSTALL_LIBDIR=lib"
   ];
 
+  # https://sourceforge.net/p/libgaminggear/discussion/general/thread/b43a776b3a/
+  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+
   postFixup = ''
     moveToOutput bin "$bin"
   '';
 
   meta = {
     description = "Provides functionality for gaming input devices";
-    homepage = https://sourceforge.net/projects/libgaminggear/;
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2Plus;
+    homepage = "https://sourceforge.net/projects/libgaminggear/";
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt, libxml2
-, docbook_xml_dtd_412, docbook_xsl, gnome-doc-utils, flex, bison
+{ lib, stdenv, nixosTests, fetchpatch, fetchFromGitHub, autoreconfHook, libxslt
+, libxml2 , docbook_xml_dtd_45, docbook_xsl, itstool, flex, bison, runtimeShell
 , pam ? null, glibcCross ? null
 }:
 
@@ -11,32 +11,37 @@ let
     else assert stdenv.hostPlatform.libc == "glibc"; stdenv.cc.libc;
 
   dots_in_usernames = fetchpatch {
-    url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/sys-apps/shadow/files/shadow-4.1.3-dots-in-usernames.patch;
+    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-apps/shadow/files/shadow-4.1.3-dots-in-usernames.patch";
     sha256 = "1fj3rg6x3jppm5jvi9y7fhd2djbi4nc5pgwisw00xlh4qapgz692";
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "shadow-${version}";
-  version = "4.6";
+  pname = "shadow";
+  version = "4.11.1";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
-    rev = "${version}";
-    sha256 = "1llcv77lvpc4h3rgww9ms736kbdisiylcr2z02863f41afxbwl82";
+    rev = "v${version}";
+    sha256 = "sha256-PxLX5V0t18JftT5wT41krNv18Ew7Kz3MfZkOi/80ODA=";
   };
 
-  buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
+  buildInputs = lib.optional (pam != null && stdenv.isLinux) pam;
   nativeBuildInputs = [autoreconfHook libxslt libxml2
-    docbook_xml_dtd_412 docbook_xsl gnome-doc-utils flex bison
+    docbook_xml_dtd_45 docbook_xsl flex bison itstool
     ];
 
   patches =
     [ ./keep-path.patch
+      # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
+      ./respect-xml-catalog-files-var.patch
       dots_in_usernames
+      ./runtime-shell.patch
     ];
+
+  RUNTIME_SHELL = runtimeShell;
 
   # The nix daemon often forbids even creating set[ug]id files.
   postPatch =
@@ -52,19 +57,14 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export ac_cv_func_setpgrp_void=yes
     export shadow_cv_logdir=/var/log
-    (
-    head -n -1 "${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml"
-    tail -n +3 "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml"
-    ) > xmlcatalog
-    configureFlags="$configureFlags --with-xml-catalog=$PWD/xmlcatalog ";
   '';
 
   configureFlags = [
     "--enable-man"
     "--with-group-name-max-length=32"
-  ] ++ stdenv.lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd";
+  ] ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd";
 
-  preBuild = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "glibc")
+  preBuild = lib.optionalString (stdenv.hostPlatform.libc == "glibc")
     ''
       substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc.bin}/bin/nscd
     '';
@@ -80,8 +80,10 @@ stdenv.mkDerivation rec {
       mv $out/bin/su $su/bin
     '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/shadow-maint;
+  disallowedReferences = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) stdenv.shellPackage;
+
+  meta = with lib; {
+    homepage = "https://github.com/shadow-maint";
     description = "Suite containing authentication-related tools such as passwd and su";
     license = licenses.bsd3;
     platforms = platforms.linux;
@@ -89,5 +91,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     shellPath = "/bin/nologin";
+    tests = { inherit (nixosTests) shadow; };
   };
 }

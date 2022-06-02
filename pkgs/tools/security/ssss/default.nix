@@ -1,28 +1,45 @@
-{ stdenv, fetchurl, gmp }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gmp
+, installShellFiles
+}:
 
 stdenv.mkDerivation rec {
-  name = "ssss-0.5";
+  pname = "ssss";
+  version = "0.5.7";
 
-  src = fetchurl {
-    url = http://point-at-infinity.org/ssss/ssss-0.5.tar.gz;
-    sha256 = "15grn2fp1x8p92kxkwbmsx8rz16g93y9grl3hfqbh1jn21ama5jx";
+  src = fetchFromGitHub {
+    owner = "MrJoy";
+    repo = pname;
+    rev = "releases%2Fv${version}";
+    sha256 = "18r1hwch6nq6gjijavr4pvrxz2plrlrvdx8ssqhdj2vmqvlqwbvd";
   };
 
-  buildInputs = [ gmp ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  preBuild =
-    ''
-      sed -e s@/usr/@$out/@g -i Makefile
-      cp ssss.manpage.xml ssss.1
-      cp ssss.manpage.xml ssss.1.html
-      mkdir -p $out/bin $out/share/man/man1
-      echo -e 'install:\n\tcp ssss-combine ssss-split '"$out"'/bin' >>Makefile
-    '';
+  buildInputs = [
+    gmp
+  ];
 
-  meta = {
+  preBuild = ''
+    sed -e s@/usr/@$out/@g -i Makefile
+    cp ssss.manpage.xml ssss.1
+    mkdir -p $out/bin
+    echo -e 'install:\n\tcp ssss-combine ssss-split '"$out"'/bin' >>Makefile
+  '';
+
+  postInstall = ''
+    installManPage ssss.1
+  '';
+
+  meta = with lib; {
     description = "Shamir Secret Sharing Scheme";
-    homepage = http://point-at-infinity.org/ssss/;
-    platforms = stdenv.lib.platforms.unix;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "http://point-at-infinity.org/ssss/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,45 +1,48 @@
-{ lib
+{ stdenv
+, lib
 , fetchPypi
-, fetchpatch
 , buildPythonPackage
-, pytest
-, mock
 , isPy3k
-, pysqlite
+, pythonOlder
+, greenlet
+, importlib-metadata
+, mock
+, pysqlite ? null
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
-  version = "1.2.14";
+  version = "1.4.36";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9de7c7dabcf06319becdb7e15099c44e5e34ba7062f9ba10bc00e562f5db3d04";
+    hash = "sha256-ZGeKwyHWSkWQHvLiRyXsXng/H0pYgwXhlkMUR+es4kM=";
   };
 
-  patches = [
-    # fix for failing doc tests
-    # https://bitbucket.org/zzzeek/sqlalchemy/issues/4370/sqlite-325x-docs-tutorialrst-doctests-fail
-    (fetchpatch {
-      name = "doc-test-fixes.patch";
-      url = https://bitbucket.org/zzzeek/sqlalchemy/commits/63279a69e2b9277df5e97ace161fa3a1bb4f29cd/raw;
-      sha256 = "1x25aj5hqmgjdak4hllya0rf0srr937k1hwaxb24i9ban607hjri";
-    })
+  propagatedBuildInputs = [
+    greenlet
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
     mock
-#     Disable pytest_xdist tests for now, because our version seems to be too new.
-#     pytest_xdist
   ] ++ lib.optional (!isPy3k) pysqlite;
 
-  checkPhase = ''
-    py.test -k "not test_round_trip_direct_type_affinity"
+  postInstall = ''
+    sed -e 's:--max-worker-restart=5::g' -i setup.cfg
   '';
 
+  # disable mem-usage tests on mac, has trouble serializing pickle files
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "MemUsageWBackendTest"
+    "MemUsageTest"
+  ];
+
   meta = with lib; {
-    homepage = http://www.sqlalchemy.org/;
+    homepage = "http://www.sqlalchemy.org/";
     description = "A Python SQL toolkit and Object Relational Mapper";
     license = licenses.mit;
   };

@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.neo4j;
+  opt = options.services.neo4j;
   certDirOpt = options.services.neo4j.directories.certificates;
   isDefaultPathOption = opt: isOption opt && opt.type == types.path && opt.highestPrio >= 1500;
 
@@ -16,14 +17,14 @@ let
       ''}
       dbms.ssl.policy.${name}.client_auth=${conf.clientAuth}
       ${if length (splitString "/" conf.privateKey) > 1 then
-        ''dbms.ssl.policy.${name}.private_key=${conf.privateKey}''
+        "dbms.ssl.policy.${name}.private_key=${conf.privateKey}"
       else
-        ''dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}''
+        "dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}"
       }
       ${if length (splitString "/" conf.privateKey) > 1 then
-        ''dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}''
+        "dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}"
       else
-        ''dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}''
+        "dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}"
       }
       dbms.ssl.policy.${name}.revoked_dir=${conf.revokedDir}
       dbms.ssl.policy.${name}.tls_versions=${concatStringsSep "," conf.tlsVersions}
@@ -103,6 +104,18 @@ let
 
 in {
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "neo4j" "host" ] [ "services" "neo4j" "defaultListenAddress" ])
+    (mkRenamedOptionModule [ "services" "neo4j" "listenAddress" ] [ "services" "neo4j" "defaultListenAddress" ])
+    (mkRenamedOptionModule [ "services" "neo4j" "enableBolt" ] [ "services" "neo4j" "bolt" "enable" ])
+    (mkRenamedOptionModule [ "services" "neo4j" "enableHttps" ] [ "services" "neo4j" "https" "enable" ])
+    (mkRenamedOptionModule [ "services" "neo4j" "certDir" ] [ "services" "neo4j" "directories" "certificates" ])
+    (mkRenamedOptionModule [ "services" "neo4j" "dataDir" ] [ "services" "neo4j" "directories" "home" ])
+    (mkRemovedOptionModule [ "services" "neo4j" "port" ] "Use services.neo4j.http.listenAddress instead.")
+    (mkRemovedOptionModule [ "services" "neo4j" "boltPort" ] "Use services.neo4j.bolt.listenAddress instead.")
+    (mkRemovedOptionModule [ "services" "neo4j" "httpsPort" ] "Use services.neo4j.https.listenAddress instead.")
+  ];
+
   ###### interface
 
   options.services.neo4j = {
@@ -167,7 +180,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.neo4j;
-      defaultText = "pkgs.neo4j";
+      defaultText = literalExpression "pkgs.neo4j";
       description = ''
         Neo4j package to use.
       '';
@@ -244,6 +257,7 @@ in {
       certificates = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/certificates";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/certificates"'';
         description = ''
           Directory for storing certificates to be used by Neo4j for
           TLS connections.
@@ -268,6 +282,7 @@ in {
       data = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/data";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/data"'';
         description = ''
           Path of the data directory. You must not configure more than one
           Neo4j installation to use the same data directory.
@@ -293,6 +308,7 @@ in {
       imports = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/import";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/import"'';
         description = ''
           The root directory for file URLs used with the Cypher
           <literal>LOAD CSV</literal> clause. Only meaningful when
@@ -309,6 +325,7 @@ in {
       plugins = mkOption {
         type = types.path;
         default = "${cfg.directories.home}/plugins";
+        defaultText = literalExpression ''"''${config.${opt.directories.home}}/plugins"'';
         description = ''
           Path of the database plugin directory. Compiled Java JAR files that
           contain database procedures will be loaded if they are placed in
@@ -420,6 +437,7 @@ in {
           baseDirectory = mkOption {
             type = types.path;
             default = "${cfg.directories.certificates}/${name}";
+            defaultText = literalExpression ''"''${config.${opt.directories.certificates}}/''${name}"'';
             description = ''
               The mandatory base directory for cryptographic objects of this
               policy. This path is only automatically generated when this
@@ -481,6 +499,7 @@ in {
           revokedDir = mkOption {
             type = types.path;
             default = "${config.baseDirectory}/revoked";
+            defaultText = literalExpression ''"''${config.${options.baseDirectory}}/revoked"'';
             description = ''
               Path to directory of CRLs (Certificate Revocation Lists) in
               PEM format. Must be an absolute path. The existence of this
@@ -516,6 +535,7 @@ in {
           trustedDir = mkOption {
             type = types.path;
             default = "${config.baseDirectory}/trusted";
+            defaultText = literalExpression ''"''${config.${options.baseDirectory}}/trusted"'';
             description = ''
               Path to directory of X.509 certificates in PEM format for
               trusted parties. Must be an absolute path. The existence of this
@@ -638,12 +658,13 @@ in {
 
       environment.systemPackages = [ cfg.package ];
 
-      users.users = singleton {
-        name = "neo4j";
-        uid = config.ids.uids.neo4j;
+      users.users.neo4j = {
+        isSystemUser = true;
+        group = "neo4j";
         description = "Neo4j daemon user";
         home = cfg.directories.home;
       };
+      users.groups.neo4j = {};
     };
 
   meta = {

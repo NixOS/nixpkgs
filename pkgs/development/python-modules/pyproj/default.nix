@@ -2,37 +2,93 @@
 , buildPythonPackage
 , fetchFromGitHub
 , python
-, nose2
+, proj
+, pythonOlder
+, substituteAll
 , cython
-, proj ? null
+, pytestCheckHook
+, mock
+, certifi
+, numpy
+, shapely
+, pandas
+, xarray
 }:
 
-buildPythonPackage (rec {
+buildPythonPackage rec {
   pname = "pyproj";
-  version = "unstable-2018-11-13";
+  version = "3.3.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "jswhit";
-    repo = pname;
-    rev = "78540f5ff40da92160f80860416c91ee74b7643c";
-    sha256 = "1vq5smxmpdjxialxxglsfh48wx8kaq9sc5mqqxn4fgv1r5n1m3n9";
+    owner = "pyproj4";
+    repo = "pyproj";
+    rev = version;
+    hash = "sha256-crLYNACS9I0WGOdkYCJNoyxeAYsR41ZszzKRZsYHCLY=";
   };
 
-  buildInputs = [ cython ];
+  # force pyproj to use ${proj}
+  patches = [
+    (substituteAll {
+      src = ./001.proj.patch;
+      proj = proj;
+      projdev = proj.dev;
+    })
+  ];
 
-  checkInputs = [ nose2 ];
+  nativeBuildInputs = [ cython ];
+  buildInputs = [ proj ];
 
-  checkPhase = ''
-    runHook preCheck
-    pushd unittest  # changing directory should ensure we're importing the global pyproj
-    ${python.interpreter} test.py && ${python.interpreter} -c "import doctest, pyproj, sys; sys.exit(doctest.testmod(pyproj)[0])"
-    popd
-    runHook postCheck
+  propagatedBuildInputs = [
+     certifi
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    mock
+    numpy
+    shapely
+    pandas
+    xarray
+  ];
+
+  preCheck = ''
+    # We need to build extensions locally to run tests
+    ${python.interpreter} setup.py build_ext --inplace
+    cd test
   '';
+
+  disabledTestPaths = [
+    "test_doctest_wrapper.py"
+    "test_datadir.py"
+  ];
+
+  disabledTests = [
+    # The following tests try to access network and end up with a URLError
+    "test__load_grid_geojson_old_file"
+    "test_get_transform_grid_list"
+    "test_get_transform_grid_list__area_of_use"
+    "test_get_transform_grid_list__bbox__antimeridian"
+    "test_get_transform_grid_list__bbox__out_of_bounds"
+    "test_get_transform_grid_list__contains"
+    "test_get_transform_grid_list__file"
+    "test_get_transform_grid_list__source_id"
+    "test_sync__area_of_use__list"
+    "test_sync__bbox__list"
+    "test_sync__bbox__list__exclude_world_coverage"
+    "test_sync__download_grids"
+    "test_sync__file__list"
+    "test_sync__source_id__list"
+    "test_sync_download"
+    "test_sync_download__directory"
+    "test_sync_download__system_directory"
+    "test_transformer_group__download_grids"
+  ];
 
   meta = {
     description = "Python interface to PROJ.4 library";
-    homepage = https://github.com/jswhit/pyproj;
+    homepage = "https://github.com/pyproj4/pyproj";
     license = with lib.licenses; [ isc ];
+    maintainers = with lib.maintainers; [ lsix ];
   };
-} // (if proj == null then {} else { PROJ_DIR = proj; }))
+}

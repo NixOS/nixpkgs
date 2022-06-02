@@ -1,32 +1,62 @@
 { lib
 , fetchPypi
 , buildPythonPackage
-, isPy3k
+, pythonOlder
+
+# build time
+, astropy-extension-helpers
+, astropy-helpers
+, cython
+, jinja2
+, setuptools-scm
+
+# runtime
 , numpy
-, pytest }:
+, packaging
+, pyerfa
+, pyyaml
+}:
 
-buildPythonPackage rec {
+let
   pname = "astropy";
-  version = "3.1.2";
+  version = "5.0.3";
+in
+buildPythonPackage {
+  inherit pname version;
+  format = "pyproject";
 
-  disabled = !isPy3k; # according to setup.py
-
-  doCheck = false; #Some tests are failing. More importantly setup.py hangs on completion. Needs fixing with a proper shellhook.
+  disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1plyx3gcsff02g4yclvhlcdj8bh1lnm98d7h6wdabl36jvnahy2a";
+    sha256 = "sha256-GxZOxV63HH8Pil8zVDOcWkLWEpg1ayFOT7n/JWqGgUc=";
   };
 
-  propagatedBuildInputs = [ pytest numpy ]; # yes it really has pytest in install_requires
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  meta = {
+  nativeBuildInputs = [
+    astropy-extension-helpers
+    astropy-helpers
+    cython
+    jinja2
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    packaging
+    pyerfa
+    pyyaml
+  ];
+
+  # infinite recursion with pytest-astropy (pytest-astropy-header depends on astropy itself)
+  doCheck = false;
+
+  meta = with lib; {
     description = "Astronomy/Astrophysics library for Python";
-    homepage = http://www.astropy.org;
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ kentjames ];
+    homepage = "https://www.astropy.org";
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = [ maintainers.kentjames ];
   };
 }
-
-

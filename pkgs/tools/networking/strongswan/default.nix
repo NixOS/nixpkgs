@@ -1,52 +1,46 @@
-{ stdenv, fetchurl, substituteAll
-, pkgconfig, autoreconfHook
-, gmp, python, iptables, ldns, unbound, openssl, pcsclite
+{ lib, stdenv, fetchFromGitHub
+, pkg-config, autoreconfHook, perl, gperf, bison, flex
+, gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
 , systemd, pam
 , curl
-, kmod
 , enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
-, libpcap
 , darwin
+, nixosTests
 }:
 
 # Note on curl support: If curl is built with gnutls as its backend, the
 # strongswan curl plugin may break.
 # See https://wiki.strongswan.org/projects/strongswan/wiki/Curl for more info.
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "strongswan-${version}";
-  version = "5.7.2";
+  pname = "strongswan";
+  version = "5.9.5"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
-  src = fetchurl {
-    url = "https://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "0w6cks42lvvyj5ivyhqyqxya48x93yzfpz281q3xmqicdskkp3ih";
+  src = fetchFromGitHub {
+    owner = "strongswan";
+    repo = "strongswan";
+    rev = version;
+    sha256 = "sha256-Jx0Wd/xgkl/WrBfcEvZPogPAQp0MW9HE+AQR2anP5Vo=";
   };
 
   dontPatchELF = true;
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook perl gperf bison flex ];
   buildInputs =
-    [ curl gmp python ldns unbound openssl pcsclite ]
+    [ curl gmp python3 ldns unbound openssl pcsclite ]
     ++ optionals enableTNC [ trousers sqlite libxml2 ]
     ++ optionals stdenv.isLinux [ systemd.dev pam iptables ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
-    ++ optionals enableNetworkManager [ networkmanager ]
-    # ad-hoc fix for https://github.com/NixOS/nixpkgs/pull/51787
-    # Remove when the above PR lands in master
-    ++ [ libpcap ];
+    ++ optionals enableNetworkManager [ networkmanager glib ];
 
   patches = [
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
-    (optional stdenv.isLinux (substituteAll {
-      src = ./modprobe-path.patch;
-      inherit kmod;
-    }))
   ];
 
   postPatch = optionalString stdenv.isLinux ''
@@ -55,10 +49,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
     '';
-
-  preConfigure = ''
-    configureFlagsArray+=("--with-systemdsystemunitdir=$out/etc/systemd/system")
-  '';
 
   configureFlags =
     [ "--enable-swanctl"
@@ -74,7 +64,7 @@ stdenv.mkDerivation rec {
       "--enable-curl" ]
     ++ optionals stdenv.isLinux [
       "--enable-farp" "--enable-dhcp"
-      "--enable-systemd"
+      "--enable-systemd" "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
       "--enable-xauth-pam"
       "--enable-forecast"
       "--enable-connmark"
@@ -112,9 +102,11 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = optionalString stdenv.cc.isGNU "-lgcc_s" ;
 
+  passthru.tests = { inherit (nixosTests) strongswan-swanctl; };
+
   meta = {
     description = "OpenSource IPsec-based VPN Solution";
-    homepage = https://www.strongswan.org;
+    homepage = "https://www.strongswan.org";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
   };

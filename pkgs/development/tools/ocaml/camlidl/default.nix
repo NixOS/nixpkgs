@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, ocaml, writeText }:
+{ lib, stdenv, fetchurl, ocaml, writeText }:
 
 let
   pname = "camlidl";
-  webpage = "http://caml.inria.fr/pub/old_caml_site/camlidl/";
+  webpage = "https://caml.inria.fr/pub/old_caml_site/camlidl/";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
     sha256 = "0483cs66zsxsavcllpw1qqvyhxb39ddil3h72clcd69g7fyxazl5";
   };
 
-  buildInputs = [ ocaml ];
+  nativeBuildInputs = [ ocaml ];
+
+  # build fails otherwise
+  enableParallelBuilding = false;
 
   preBuild = ''
     mv config/Makefile.unix config/Makefile
@@ -37,15 +40,15 @@ stdenv.mkDerivation rec {
   '';
 
   setupHook = writeText "setupHook.sh" ''
-    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
+    export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${name}/"
     export NIX_CFLAGS_COMPILE+=" -isystem $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
     export NIX_LDFLAGS+=" -L $1/lib/ocaml/${ocaml.version}/site-lib/camlidl"
   '';
 
   meta = {
     description = "A stub code generator and COM binding for Objective Caml";
-    homepage = "${webpage}";
+    homepage = webpage;
     license = "LGPL";
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
+    maintainers = [ lib.maintainers.roconnor ];
   };
 }

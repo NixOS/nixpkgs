@@ -1,37 +1,49 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, cached-property, frozendict, pystache, pyyaml, pytest, pytestrunner
+{ lib
+, buildPythonPackage
+, cached-property
+, chevron
+, fetchPypi
+, frozendict
+, pystache
+, pythonOlder
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "genanki";
-  version = "0.6.3";
+  version = "0.13.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2408f7d9955c8963fd9b1ecbb873f5d18dee786e060dcb083aef5dd86c736773";
+    sha256 = "bfacdcadd7903ed6afce6168e1977e473b431677b358f8fd42e80b48cedd19ab";
   };
 
   propagatedBuildInputs = [
-		pytestrunner
     cached-property
+    chevron
     frozendict
     pystache
     pyyaml
   ];
 
-  checkInputs = [ pytest ];
-
-  disabled = !isPy3k;
-
-  # relies on upstream anki
-	doCheck = false;
-  checkPhase = ''
-    py.test
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," ""
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://github.com/kerrickstaley/genanki;
+  # relies on upstream anki
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "genanki"
+  ];
+
+  meta = with lib; {
     description = "Generate Anki decks programmatically";
+    homepage = "https://github.com/kerrickstaley/genanki";
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];
   };

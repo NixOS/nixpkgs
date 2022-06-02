@@ -1,40 +1,47 @@
-{ stdenv, fetchurl, unzip }:
-
-let
-
-  version = "1.60";
-
-  src = fetchurl {
-    name = "lsiutil-${version}.zip";
-    url = "http://www.lsi.com/DistributionSystem/AssetDocument/support/downloads/hbas/fibre_channel/hardware_drivers/LSIUtil%20Kit_${version}.zip";
-    sha256 = "1d4337faa56e24f7d98db87b9de94d6e2c17ab671f4e301b93833eea08b9e426";
-  };  
-
-in
+{ lib
+, stdenv
+, fetchurl
+, kmod
+, coreutils
+}:
 
 stdenv.mkDerivation rec {
-  name = "lsiutils-${version}";
-  
-  srcs = [ src "Source/lsiutil.tar.gz" ];
+  pname = "lsiutil";
+  version = "1.72";
 
-  buildInputs = [ unzip ];
+  src = fetchurl {
+    url = "https://github.com/exactassembly/meta-xa-stm/raw/f96cf6e13f3c9c980f5651510dd96279b9b2af4f/recipes-support/lsiutil/files/lsiutil-${version}.tar.gz";
+    sha256 = "sha256-aTi+EogY1aDWYq3anjRkjz1mzINVfUPQbOPHthxrvS4=";
+  };
 
-  sourceRoot = "lsiutil";
+  postPatch = ''
+    substituteInPlace lsiutil.c \
+      --replace /sbin/modprobe "${kmod}/bin/modprobe" \
+      --replace /bin/mknod "${coreutils}/bin/mknod"
+  '';
 
-  preBuild =
-    ''
-      mkdir -p $out/bin
-      substituteInPlace Makefile --replace /usr/bin $out/bin
-      substituteInPlace lsiutil.c \
-        --replace /sbin/modprobe modprobe \
-        --replace /bin/mknod $(type -P mknod)
-    '';
+  buildPhase = ''
+    runHook preBuild
 
-  installPhase = "true";
-  
-  meta = {
-    homepage = http://www.lsi.com/;
-    description = "LSI Logic Fusion MPT command line management tool";
-    license = stdenv.lib.licenses.unfree;
+    gcc -Wall -O lsiutil.c -o lsiutil
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p "$out/bin"
+    install -Dm755 lsiutil "$out/bin/lsiutil"
+
+    runHook postInstall
+  '';
+
+  meta = with lib; {
+    homepage = "https://github.com/exactassembly/meta-xa-stm/tree/master/recipes-support/lsiutil/files";
+    description = "Configuration utility for MPT adapters (FC, SCSI, and SAS/SATA)";
+    license = licenses.unfree;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ Luflosi ];
   };
 }

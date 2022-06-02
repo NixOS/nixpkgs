@@ -4,7 +4,7 @@
 , botocore
 , jmespath
 , s3transfer
-, futures
+, futures ? null
 , docutils
 , nose
 , mock
@@ -12,12 +12,12 @@
 }:
 
 buildPythonPackage rec {
-  pname =  "boto3";
-  version = "1.9.96"; # N.B: if you change this, change botocore too
+  pname = "boto3";
+  version = "1.21.30"; # N.B: if you change this, change botocore and awscli to a matching version
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c103241394d396ee08548b03d5d1f0f89a7ad1dfa7ccca88a47131f329cca093";
+    sha256 = "sha256-8K+PTvX+Y1PHlM08zmJ9Rpphi1is58p1pjz9cZ32Fc4=";
   };
 
   propagatedBuildInputs = [ botocore jmespath s3transfer ] ++ lib.optionals (!isPy3k) [ futures ];
@@ -35,8 +35,10 @@ buildPythonPackage rec {
   # Network access
   doCheck = false;
 
+  pythonImportsCheck = [ "boto3" ];
+
   meta = {
-    homepage = https://github.com/boto/boto3;
+    homepage = "https://github.com/boto/boto3";
     license = lib.licenses.asl20;
     description = "AWS SDK for Python";
     longDescription = ''

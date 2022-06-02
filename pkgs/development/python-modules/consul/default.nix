@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , requests, six, pytest }:
 
 buildPythonPackage rec {
@@ -15,9 +15,9 @@ buildPythonPackage rec {
   # No tests distributed. https://github.com/cablehead/python-consul/issues/133
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python client for Consul (https://www.consul.io/)";
-    homepage = https://github.com/cablehead/python-consul;
+    homepage = "https://github.com/cablehead/python-consul";
     license = licenses.mit;
     maintainers = with maintainers; [ desiderius ];
   };

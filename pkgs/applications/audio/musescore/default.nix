@@ -1,17 +1,20 @@
-{ stdenv, lib, fetchzip, cmake, pkgconfig
-, alsaLib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
-, portaudio, portmidi, qtbase, qtdeclarative, qtscript, qtsvg, qttools
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
+, alsa-lib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
+, portaudio, portmidi, qtbase, qtdeclarative, qtgraphicaleffects
+, qtquickcontrols2, qtscript, qtsvg, qttools
 , qtwebengine, qtxmlpatterns
+, nixosTests
 }:
 
-stdenv.mkDerivation rec {
-  name = "musescore-${version}";
-  version = "3.0.5";
+mkDerivation rec {
+  pname = "musescore";
+  version = "3.6.2";
 
-  src = fetchzip {
-    url = "https://download.musescore.com/releases/MuseScore-${version}/MuseScore-${version}.zip";
-    sha256 = "1pbf6v0l3nixxr8k5igwhj09wnqvw92av6q6yjrbb3kyjh5br2d8";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "musescore";
+    repo = "MuseScore";
+    rev = "v${version}";
+    sha256 = "sha256-GBGAD/qdOhoNfDzI+O0EiKgeb86GFJxpci35T6tZ+2s=";
   };
 
   patches = [
@@ -19,22 +22,34 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-  ] ++ lib.optional (lib.versionAtLeast freetype.version "2.5.2") "-DUSE_SYSTEM_FREETYPE=ON";
-
-  nativeBuildInputs = [ cmake pkgconfig ];
-
-  buildInputs = [
-    alsaLib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
-    portaudio portmidi # tesseract
-    qtbase qtdeclarative qtscript qtsvg qttools qtwebengine qtxmlpatterns
+    "-DMUSESCORE_BUILD_CONFIG=release"
+    "-DUSE_SYSTEM_FREETYPE=ON"
   ];
 
-  meta = with stdenv.lib; {
+  qtWrapperArgs = [
+    # MuseScore JACK backend loads libjack at runtime.
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
+    # There are some issues with using the wayland backend, see:
+    # https://musescore.org/en/node/321936
+    "--set QT_QPA_PLATFORM xcb"
+  ];
+
+  nativeBuildInputs = [ cmake pkg-config ];
+
+  buildInputs = [
+    alsa-lib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
+    portaudio portmidi # tesseract
+    qtbase qtdeclarative qtgraphicaleffects qtquickcontrols2
+    qtscript qtsvg qttools qtwebengine qtxmlpatterns
+  ];
+
+  passthru.tests = nixosTests.musescore;
+
+  meta = with lib; {
     description = "Music notation and composition software";
-    homepage = https://musescore.org/;
+    homepage = "https://musescore.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ vandenoever ];
+    maintainers = with maintainers; [ vandenoever turion doronbehar ];
     platforms = platforms.linux;
-    repositories.git = https://github.com/musescore/MuseScore;
   };
 }

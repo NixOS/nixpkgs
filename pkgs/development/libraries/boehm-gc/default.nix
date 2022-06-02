@@ -1,49 +1,39 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, libatomic_ops
-, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v7.6.6/doc/README.macros#L179
+{ lib, stdenv, fetchurl
+, autoreconfHook
+, enableLargeConfig ? false # doc: https://github.com/ivmai/bdwgc/blob/v8.0.6/doc/README.macros (LARGE_CONFIG)
+, nixVersions
 }:
 
 stdenv.mkDerivation rec {
-  name = "boehm-gc-${version}";
-  version = "8.0.2";
+  pname = "boehm-gc";
+  version = "8.0.6";
 
   src = fetchurl {
     urls = [
       "https://github.com/ivmai/bdwgc/releases/download/v${version}/gc-${version}.tar.gz"
-      "http://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
+      "https://www.hboehm.info/gc/gc_source/gc-${version}.tar.gz"
     ];
-    sha256 = "1jsixcpdwy5cgq5s9fi3bdlid9zh46vakymf3nbjffianyss932f";
+    sha256 = "3b4914abc9fa76593596773e4da671d7ed4d5390e3d46fbf2e5f155e121bea11";
   };
 
-  buildInputs = [ libatomic_ops ];
-  nativeBuildInputs = [ pkgconfig ];
-
   outputs = [ "out" "dev" "doc" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
-  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform.libc == "musl") ''
-    export NIX_CFLAGS_COMPILE+=" -D_GNU_SOURCE -DUSE_MMAP -DHAVE_DL_ITERATE_PHDR"
-  '';
-
-  patches =
-    # https://github.com/ivmai/bdwgc/pull/208
-    lib.optional stdenv.hostPlatform.isRiscV ./riscv.patch;
+  # boehm-gc whitelists GCC threading models
+  patches = lib.optional stdenv.hostPlatform.isMinGW ./mcfgthread.patch;
 
   configureFlags =
-    [ "--enable-cplusplus" ]
-    ++ lib.optional enableLargeConfig "--enable-large-config"
-    ++ lib.optional (stdenv.hostPlatform.libc == "musl") "--disable-static"
-    # Configure script can't detect whether C11 atomic intrinsics are available
-    # when cross-compiling, so it links to libatomic_ops, which has to be
-    # propagated to all dependencies. To avoid this, assume that the intrinsics
-    # are available.
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-libatomic-ops=none";
+    [ "--enable-cplusplus" "--with-libatomic-ops=none" ]
+    ++ lib.optional enableLargeConfig "--enable-large-config";
+
+  nativeBuildInputs =
+    lib.optional stdenv.hostPlatform.isMinGW autoreconfHook;
 
   doCheck = true; # not cross;
 
-  # Don't run the native `strip' when cross-compiling.
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
-
   enableParallelBuilding = true;
+
+  passthru.tests = nixVersions;
 
   meta = {
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
@@ -65,12 +55,12 @@ stdenv.mkDerivation rec {
       C or C++ programs, though that is not its primary goal.
     '';
 
-    homepage = http://hboehm.info/gc/;
+    homepage = "https://hboehm.info/gc/";
 
     # non-copyleft, X11-style license
-    license = http://hboehm.info/gc/license.txt;
+    license = "https://hboehm.info/gc/license.txt";
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -1,34 +1,87 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, umockdev, gobject-introspection
-, pkgconfig, glib, systemd, libgudev, vala }:
+{ stdenv
+, lib
+, docbook-xsl-nons
+, fetchurl
+, glib
+, gobject-introspection
+, gtk-doc
+, libgudev
+, libpcap
+, meson
+, ninja
+, pkg-config
+, python3
+, systemd
+, usbutils
+, vala
+, which
+}:
 
 stdenv.mkDerivation rec {
-  name = "umockdev-${version}";
-  version = "0.12.1";
+  pname = "umockdev";
+  version = "0.17.9";
 
-  outputs = [ "bin" "out" "dev" "doc" ];
+  outputs = [ "bin" "out" "dev" "devdoc" ];
 
-  src = fetchFromGitHub {
-    owner  = "martinpitt";
-    repo   = "umockdev";
-    rev    = version;
-    sha256 = "0wnmz4jh04mvqzjnqvxrah969gg4x4v8d6ip61zc7jpbwnqb2fpg";
+  src = fetchurl {
+    url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-FEmWjJVmKKckC30zULGI/mZ3VNtirnweZq2gKh/Y5VE=";
   };
 
-  # autoreconfHook complains if we try to build the documentation
+  patches = [
+    # Hardcode absolute paths to libraries so that consumers
+    # do not need to set LD_LIBRARY_PATH themselves.
+    ./hardcode-paths.patch
+  ];
+
+  nativeBuildInputs = [
+    docbook-xsl-nons
+    gobject-introspection
+    gtk-doc
+    meson
+    ninja
+    pkg-config
+    vala
+  ];
+
+  buildInputs = [
+    glib
+    systemd
+    libgudev
+    libpcap
+  ];
+
+  checkInputs = [
+    python3
+    which
+    usbutils
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
+
+  doCheck = true;
+
   postPatch = ''
-    echo 'EXTRA_DIST =' > docs/gtk-doc.make
+    # Substitute the path to this derivation in the patch we apply.
+    substituteInPlace src/umockdev-wrapper \
+      --subst-var-by 'LIBDIR' "''${!outputLib}/lib"
   '';
 
-  buildInputs = [ glib systemd libgudev ];
+  preCheck = ''
+    # Our patch makes the path to the `LD_PRELOAD`ed library absolute.
+    # When running tests, the library is not yet installed, though,
+    # so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overridden during installation.
+    mkdir -p "$out/lib"
+    ln -s "$PWD/libumockdev-preload.so.0" "$out/lib/libumockdev-preload.so.0"
+  '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig vala gobject-introspection ];
-
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mock hardware devices for creating unit tests";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ ndowens ];
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ flokli ];
     platforms = with platforms; linux;
   };
 }

@@ -1,13 +1,23 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, validatePkgConfig }:
 
 stdenv.mkDerivation rec {
-  name = "duktape-${version}";
-  version = "2.3.0";
+  pname = "duktape";
+  version = "2.7.0";
   src = fetchurl {
     url = "http://duktape.org/duktape-${version}.tar.xz";
-    sha256 = "1s5g8lg0dga6x3rcq328a6hsd2sk2vzwq9zfmskjh5h6n8x2yvpd";
+    sha256 = "sha256-kPjS+otVZ8aJmDDd7ywD88J5YLEayiIvoXqnrGE8KJA=";
   };
 
+  nativeBuildInputs = [ validatePkgConfig ];
+
+  postPatch = ''
+    substituteInPlace Makefile.sharedlibrary \
+      --replace 'gcc' '${stdenv.cc.targetPrefix}cc' \
+      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+    substituteInPlace Makefile.cmdline \
+      --replace 'gcc' '${stdenv.cc.targetPrefix}cc' \
+      --replace 'g++' '${stdenv.cc.targetPrefix}c++'
+  '';
   buildPhase = ''
     make -f Makefile.sharedlibrary
     make -f Makefile.cmdline
@@ -15,18 +25,20 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -d $out/bin
     install -m755 duk $out/bin/
-    install -d $out/lib
+    install -d $out/lib/pkgconfig
     install -d $out/include
     make -f Makefile.sharedlibrary install INSTALL_PREFIX=$out
+    substituteAll ${./duktape.pc.in} $out/lib/pkgconfig/duktape.pc
   '';
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An embeddable Javascript engine, with a focus on portability and compact footprint";
-    homepage = https://duktape.org/;
-    downloadPage = https://duktape.org/download.html;
+    homepage = "https://duktape.org/";
+    downloadPage = "https://duktape.org/download.html";
     license = licenses.mit;
     maintainers = [ maintainers.fgaz ];
-    platforms = platforms.linux;
+    mainProgram = "duk";
+    platforms = platforms.all;
   };
 }

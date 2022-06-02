@@ -1,49 +1,65 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala
-, gtk3, granite, wingpanel, libgee, libxml2, gobject-introspection
-, elementary-icon-theme, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, pkg-config
+, meson
+, ninja
+, vala
+, gtk3
+, granite
+, wingpanel
+, libgee
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-nightlight";
-  version = "2.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0kw83ws91688xg96k9034dnz15szx2kva9smh1nb7xmdbpzn3qph";
+    sha256 = "1zxjw68byg4sjn8lzsidzmy4ipwxgnv8rm529a7wzlpgj2xq3x4j";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-    };
-  };
+  patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/wingpanel-indicator-nightlight/pull/91
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel-indicator-nightlight/commit/4e15f71ed958df3569b2f1e224b9fb18613281f1.patch";
+      sha256 = "07awmswyy0988pm6ggyz22mllja675cbdzrjdqc1xd4knwcgy77v";
+    })
+  ];
 
   nativeBuildInputs = [
-    gobject-introspection
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
-    wrapGAppsHook
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "lib/wingpanel";
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Night Light Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-nightlight;
+    homepage = "https://github.com/elementary/wingpanel-indicator-nightlight";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

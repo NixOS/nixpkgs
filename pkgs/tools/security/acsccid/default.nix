@@ -1,20 +1,51 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, flex, perl, pkgconfig, pcsclite, libusb }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, gettext
+, flex
+, perl
+, pkg-config
+, pcsclite
+, libusb1
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
-  version = "1.1.6";
-  name = "acsccid-${version}";
+  version = "1.1.8";
+  pname = "acsccid";
 
   src = fetchFromGitHub {
     owner = "acshk";
-    repo = "acsccid";
-    rev = "26bc84c738d12701e6a7289ed578671d71cbf3cb";
-    sha256 = "09k7hvcay092wkyf0hjsvimg1h4qzss1nk7m5yanlib4ldhw5g5c";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "12aahrvsk21qgpjwcrr01s742ixs44nmjkvcvqyzhqb307x1rrn3";
   };
 
-  doCheck = true;
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+    libtool
+    gettext
+    flex
+    perl
+  ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pcsclite libusb autoconf automake libtool gettext flex perl ];
+  buildInputs = [
+    pcsclite
+    libusb1
+  ] ++ lib.optionals stdenv.isDarwin [
+    libiconv
+  ];
+
+  configureFlags = [
+    "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"
+  ];
+
+  doCheck = true;
 
   postPatch = ''
     sed -e s_/bin/echo_echo_g -i src/Makefile.am
@@ -28,11 +59,10 @@ stdenv.mkDerivation rec {
     autoheader
     automake --force-missing --add-missing
     autoconf
-    configureFlags="$configureFlags --enable-usbdropdir=$out/pcsc/drivers"
   '';
 
-  meta = with stdenv.lib; {
-    description = "acsccid is a PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card readers.";
+  meta = with lib; {
+    description = "A PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card readers";
     longDescription = ''
       acsccid is a PC/SC driver for Linux/Mac OS X and it supports ACS CCID smart card
       readers. This library provides a PC/SC IFD handler implementation and
@@ -48,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = src.meta.homepage;
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ roberth ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

@@ -1,9 +1,10 @@
-  { config, lib, pkgs, ... }:
+  { config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   top = config.services.kubernetes;
+  otop = options.services.kubernetes;
   cfg = top.apiserver;
 
   isRBACEnabled = elem "RBAC" cfg.authorizationMode;
@@ -13,6 +14,18 @@ let
   )) + ".1");
 in
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "admissionControl" ] [ "services" "kubernetes" "apiserver" "enableAdmissionPlugins" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "address" ] ["services" "kubernetes" "apiserver" "bindAddress"])
+    (mkRenamedOptionModule [ "services" "kubernetes" "apiserver" "port" ] ["services" "kubernetes" "apiserver" "insecurePort"])
+    (mkRemovedOptionModule [ "services" "kubernetes" "apiserver" "publicAddress" ] "")
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "servers" ] [ "services" "kubernetes" "apiserver" "etcd" "servers" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "keyFile" ] [ "services" "kubernetes" "apiserver" "etcd" "keyFile" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "certFile" ] [ "services" "kubernetes" "apiserver" "etcd" "certFile" ])
+    (mkRenamedOptionModule [ "services" "kubernetes" "etcd" "caFile" ] [ "services" "kubernetes" "apiserver" "etcd" "caFile" ])
+  ];
+
   ###### interface
   options.services.kubernetes.apiserver = with lib.types; {
 
@@ -72,6 +85,7 @@ in
     clientCaFile = mkOption {
       description = "Kubernetes apiserver CA file for client auth.";
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
@@ -126,6 +140,7 @@ in
       caFile = mkOption {
         description = "Etcd ca file.";
         default = top.caFile;
+        defaultText = literalExpression "config.${otop.caFile}";
         type = types.nullOr types.path;
       };
     };
@@ -133,7 +148,7 @@ in
     extraOpts = mkOption {
       description = "Kubernetes apiserver extra command line options.";
       default = "";
-      type = str;
+      type = separatedString " ";
     };
 
     extraSANs = mkOption {
@@ -145,6 +160,7 @@ in
     featureGates = mkOption {
       description = "List set of feature gates";
       default = top.featureGates;
+      defaultText = literalExpression "config.${otop.featureGates}";
       type = listOf str;
     };
 
@@ -163,6 +179,7 @@ in
     kubeletClientCaFile = mkOption {
       description = "Path to a cert file for connecting to kubelet.";
       default = top.caFile;
+      defaultText = literalExpression "config.${otop.caFile}";
       type = nullOr path;
     };
 
@@ -178,10 +195,22 @@ in
       type = nullOr path;
     };
 
-    kubeletHttps = mkOption {
-      description = "Whether to use https for connections to kubelet.";
-      default = true;
-      type = bool;
+    preferredAddressTypes = mkOption {
+      description = "List of the preferred NodeAddressTypes to use for kubelet connections.";
+      type = nullOr str;
+      default = null;
+    };
+
+    proxyClientCertFile = mkOption {
+      description = "Client certificate to use for connections to proxy.";
+      default = null;
+      type = nullOr path;
+    };
+
+    proxyClientKeyFile = mkOption {
+      description = "Key to use for connections to proxy.";
+      default = null;
+      type = nullOr path;
     };
 
     runtimeConfig = mkOption {
@@ -208,14 +237,40 @@ in
       type = int;
     };
 
+    apiAudiences = mkOption {
+      description = ''
+        Kubernetes apiserver ServiceAccount issuer.
+      '';
+      default = "api,https://kubernetes.default.svc";
+      type = str;
+    };
+
+    serviceAccountIssuer = mkOption {
+      description = ''
+        Kubernetes apiserver ServiceAccount issuer.
+      '';
+      default = "https://kubernetes.default.svc";
+      type = str;
+    };
+
+    serviceAccountSigningKeyFile = mkOption {
+      description = ''
+        Path to the file that contains the current private key of the service
+        account token issuer. The issuer will sign issued ID tokens with this
+        private key.
+      '';
+      type = path;
+    };
+
     serviceAccountKeyFile = mkOption {
       description = ''
-        Kubernetes apiserver PEM-encoded x509 RSA private or public key file,
-        used to verify ServiceAccount tokens. By default tls private key file
-        is used.
+        File containing PEM-encoded x509 RSA or ECDSA private or public keys,
+        used to verify ServiceAccount tokens. The specified file can contain
+        multiple keys, and the flag can be specified multiple times with
+        different files. If unspecified, --tls-private-key-file is used.
+        Must be specified when --service-account-signing-key is provided
       '';
-      default = null;
-      type = nullOr path;
+      type = path;
     };
 
     serviceClusterIpRange = mkOption {
@@ -309,20 +364,27 @@ in
                 "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.featureGates}"} \
               ${optionalString (cfg.basicAuthFile != null)
                 "--basic-auth-file=${cfg.basicAuthFile}"} \
-              --kubelet-https=${boolToString cfg.kubeletHttps} \
               ${optionalString (cfg.kubeletClientCaFile != null)
                 "--kubelet-certificate-authority=${cfg.kubeletClientCaFile}"} \
               ${optionalString (cfg.kubeletClientCertFile != null)
                 "--kubelet-client-certificate=${cfg.kubeletClientCertFile}"} \
               ${optionalString (cfg.kubeletClientKeyFile != null)
                 "--kubelet-client-key=${cfg.kubeletClientKeyFile}"} \
+              ${optionalString (cfg.preferredAddressTypes != null)
+                "--kubelet-preferred-address-types=${cfg.preferredAddressTypes}"} \
+              ${optionalString (cfg.proxyClientCertFile != null)
+                "--proxy-client-cert-file=${cfg.proxyClientCertFile}"} \
+              ${optionalString (cfg.proxyClientKeyFile != null)
+                "--proxy-client-key-file=${cfg.proxyClientKeyFile}"} \
               --insecure-bind-address=${cfg.insecureBindAddress} \
               --insecure-port=${toString cfg.insecurePort} \
               ${optionalString (cfg.runtimeConfig != "")
                 "--runtime-config=${cfg.runtimeConfig}"} \
               --secure-port=${toString cfg.securePort} \
-              ${optionalString (cfg.serviceAccountKeyFile!=null)
-                "--service-account-key-file=${cfg.serviceAccountKeyFile}"} \
+              --api-audiences=${toString cfg.apiAudiences} \
+              --service-account-issuer=${toString cfg.serviceAccountIssuer} \
+              --service-account-signing-key-file=${cfg.serviceAccountSigningKeyFile} \
+              --service-account-key-file=${cfg.serviceAccountKeyFile} \
               --service-cluster-ip-range=${cfg.serviceClusterIpRange} \
               --storage-backend=${cfg.storageBackend} \
               ${optionalString (cfg.tlsCertFile != null)
@@ -340,6 +402,10 @@ in
             AmbientCapabilities = "cap_net_bind_service";
             Restart = "on-failure";
             RestartSec = 5;
+          };
+
+          unitConfig = {
+            StartLimitIntervalSec = 0;
           };
         };
 
@@ -389,6 +455,11 @@ in
                   ] ++ cfg.extraSANs;
           action = "systemctl restart kube-apiserver.service";
         };
+        apiserverProxyClient = mkCert {
+          name = "kube-apiserver-proxy-client";
+          CN = "front-proxy-client";
+          action = "systemctl restart kube-apiserver.service";
+        };
         apiserverKubeletClient = mkCert {
           name = "kube-apiserver-kubelet-client";
           CN = "system:kube-apiserver";
@@ -425,4 +496,5 @@ in
 
   ];
 
+  meta.buildDocsInSandbox = false;
 }

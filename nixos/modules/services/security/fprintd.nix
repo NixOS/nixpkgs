@@ -5,6 +5,7 @@ with lib;
 let
 
   cfg = config.services.fprintd;
+  fprintdPkg = if cfg.tod.enable then pkgs.fprintd-tod else pkgs.fprintd;
 
 in
 
@@ -17,37 +18,47 @@ in
 
     services.fprintd = {
 
-      enable = mkOption {
-        type = types.bool;
-        default = false;
+      enable = mkEnableOption "fprintd daemon and PAM module for fingerprint readers handling";
+
+      package = mkOption {
+        type = types.package;
+        default = fprintdPkg;
+        defaultText = literalExpression "if config.services.fprintd.tod.enable then pkgs.fprintd-tod else pkgs.fprintd";
         description = ''
-          Whether to enable fprintd daemon and PAM module for fingerprint readers handling.
+          fprintd package to use.
         '';
       };
 
-    };
-    
-  };
-  
-  
-  ###### implementation
-  
-  config = mkIf cfg.enable {
+      tod = {
 
-    services.dbus.packages = [ pkgs.fprintd ];
+        enable = mkEnableOption "Touch OEM Drivers library support";
 
-    environment.systemPackages = [ pkgs.fprintd ];
-
-    systemd.services.fprintd = {
-      description = "Fingerprint Authentication Daemon";
-
-      serviceConfig = {
-        Type = "dbus";
-        BusName = "net.reactivated.Fprint";
-        ExecStart = "${pkgs.fprintd}/libexec/fprintd";
+        driver = mkOption {
+          type = types.package;
+          example = literalExpression "pkgs.libfprint-2-tod1-goodix";
+          description = ''
+            Touch OEM Drivers (TOD) package to use.
+          '';
+        };
       };
     };
+  };
+
+
+  ###### implementation
+
+  config = mkIf cfg.enable {
+
+    services.dbus.packages = [ cfg.package ];
+
+    environment.systemPackages = [ cfg.package ];
+
+    systemd.packages = [ cfg.package ];
+
+    systemd.services.fprintd.environment = mkIf cfg.tod.enable {
+      FP_TOD_DRIVERS_DIR = "${cfg.tod.driver}${cfg.tod.driver.driverPath}";
+    };
 
   };
-  
+
 }

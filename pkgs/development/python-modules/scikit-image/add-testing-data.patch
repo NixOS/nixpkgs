@@ -1,0 +1,17 @@
+diff --git a/skimage/data/setup.py b/skimage/data/setup.py
+index 528e9c284ce..ba0e155559c 100644
+--- a/skimage/data/setup.py
++++ b/skimage/data/setup.py
+@@ -11,7 +11,11 @@ def configuration(parent_package='', top_path=None):
+     # further notice.
+     # Testing data and additional datasets should only
+     # be made available via pooch
+-    config.add_data_files(*legacy_datasets)
++    # Nix patch: add ALL images to facilitate testing of a fully-built package
++    from pathlib import Path
++    config.add_data_files(
++        *(path.name for path in Path(__file__).parent.glob("*") if path.suffix != ".py")
++    )
+     # It seems hard to create a consistent hash for README.txt since
+     # the line endings keep getting converted
+     config.add_data_files('README.txt')

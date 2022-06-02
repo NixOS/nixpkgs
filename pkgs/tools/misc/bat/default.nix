@@ -1,34 +1,63 @@
-{ stdenv, rustPlatform, fetchFromGitHub, cmake, pkgconfig, zlib
-, Security, libiconv
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, less
+, Security
+, libiconv
+, installShellFiles
+, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
-  name    = "bat-${version}";
-  version = "0.10.0";
+  pname = "bat";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
-    owner  = "sharkdp";
-    repo   = "bat";
-    rev    = "v${version}";
-    sha256 = "1q22lbyrwh58vhznpjpkiaa8v4qv6a3a8lrxzaypd8wg78p9dca6";
-    fetchSubmodules = true;
+    owner = "sharkdp";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-eCk0oOHGZNqgqz+JJfIhjWdLgBTpBig+mggi1c3EUDk=";
   };
+  cargoSha256 = "sha256-kYZxtiK9hnHBOMvRoHZK5kyXO9cg/gHBYuaITqKUpbE=";
 
-  cargoSha256 = "0npj2rf4vr45gq3qwqq6kqnv9dh58v5lpx0gsmy2qrq44dxb75rq";
+  nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 
-  nativeBuildInputs = [ cmake pkgconfig zlib ];
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   postInstall = ''
-    install -m 444 -Dt $out/share/man/man1 doc/bat.1
+    installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
+    installShellCompletion $releaseDir/build/bat-*/out/assets/completions/bat.{bash,fish,zsh}
   '';
 
-  meta = with stdenv.lib; {
+  # Insert Nix-built `less` into PATH because the system-provided one may be too old to behave as
+  # expected with certain flag combinations.
+  postFixup = ''
+    wrapProgram "$out/bin/bat" \
+      --prefix PATH : "${lib.makeBinPath [ less ]}"
+  '';
+
+  checkFlags = [ "--skip=pager_more" "--skip=pager_most" ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    testFile=$(mktemp /tmp/bat-test.XXXX)
+    echo -ne 'Foobar\n\n\n42' > $testFile
+    $out/bin/bat -p $testFile | grep "Foobar"
+    $out/bin/bat -p $testFile -r 4:4 | grep 42
+    rm $testFile
+
+    runHook postInstallCheck
+  '';
+
+  meta = with lib; {
     description = "A cat(1) clone with syntax highlighting and Git integration";
-    homepage    = https://github.com/sharkdp/bat;
-    license     = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir ];
-    platforms   = platforms.linux ++ platforms.darwin;
+    homepage = "https://github.com/sharkdp/bat";
+    changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ dywedir lilyball zowoq SuperSandro2000 ];
   };
 }

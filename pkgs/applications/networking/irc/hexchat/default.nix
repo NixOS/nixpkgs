@@ -1,47 +1,53 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gtk2, lua, perl, python2
-, libtool, pciutils, dbus-glib, libcanberra-gtk2, libproxy
-, libsexy, enchant, libnotify, openssl, intltool
-, desktop-file-utils, hicolor-icon-theme
-, autoconf, automake, autoconf-archive
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, gtk2, lua, perl, python3Packages
+, pciutils, dbus-glib, libcanberra-gtk2, libproxy
+, enchant2, libnotify, openssl, isocodes
+, desktop-file-utils
+, meson, ninja, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.12.4";
-  name = "hexchat-${version}";
+  pname = "hexchat";
+  version = "2.16.1";
 
   src = fetchFromGitHub {
     owner = "hexchat";
     repo = "hexchat";
     rev = "v${version}";
-    sha256 = "1z8v7jg1mc2277k3jihnq4rixw1q27305aw6b6rpb1x7vpiy2zr3";
+    sha256 = "sha256-2IUlNUTL3TOJnDNMds2EWwkfn5NUOQ1ids96Ddo196E=";
   };
 
-  nativeBuildInputs = [
-    pkgconfig libtool intltool
-    autoconf autoconf-archive automake
-  ];
+  nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
 
   buildInputs = [
-    gtk2 lua perl python2 pciutils dbus-glib libcanberra-gtk2 libproxy
-    libsexy libnotify openssl desktop-file-utils hicolor-icon-theme
+    gtk2 lua perl python3Packages.python python3Packages.cffi pciutils dbus-glib libcanberra-gtk2 libproxy
+    libnotify openssl desktop-file-utils
+    isocodes
   ];
 
-  enableParallelBuilding = true;
-
-  #hexchat and heachat-text loads enchant spell checking library at run time and so it needs to have route to the path
-  patchPhase = ''
-    sed -i "s,libenchant.so.1,${enchant}/lib/libenchant.so.1,g" src/fe-gtk/sexy-spell-entry.c
+  #hexchat and hexchat-text loads enchant spell checking library at run time and so it needs to have route to the path
+  postPatch = ''
+    sed -i "s,libenchant-2.so.2,${enchant2}/lib/libenchant-2.so.2,g" src/fe-gtk/sexy-spell-entry.c
+    sed -i "/flag.startswith('-I')/i if flag.contains('no-such-path')\ncontinue\nendif" plugins/perl/meson.build
+    chmod +x meson_post_install.py
+    for f in meson_post_install.py \
+             plugins/perl/generate_header.py \
+             plugins/python/generate_plugin.py \
+             po/validate-textevent-translations \
+             src/common/make-te.py
+    do
+      patchShebangs $f
+    done
   '';
 
-  preConfigure = ''
-    ./autogen.sh
+  mesonFlags = [ "-Dwith-lua=lua" "-Dtext-frontend=true" ];
+
+  postInstall = ''
+    wrapProgram $out/bin/hexchat --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
-  configureFlags = [ "--enable-shm" "--enable-textfe" ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A popular and easy to use graphical IRC (chat) client";
-    homepage = https://hexchat.github.io/;
+    homepage = "https://hexchat.github.io/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

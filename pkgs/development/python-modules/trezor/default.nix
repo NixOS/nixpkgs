@@ -1,48 +1,79 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, python, pytest
-, typing-extensions
-, protobuf
-, hidapi
-, ecdsa
-, mnemonic
-, requests
-, pyblake2
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, installShellFiles
+, attrs
 , click
 , construct
+, ecdsa
+, hidapi
 , libusb1
+, mnemonic
+, pillow
+, protobuf
+, pyblake2
+, requests
 , rlp
+, shamir-mnemonic
+, typing-extensions
+, trezor-udev-rules
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.11.2";
+  version = "0.13.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a6f4b47b37a21247535fc43411cb70a8c61ef0a5a2dfee668bd05611e2741fb8";
+    sha256 = "4571aa09dbfe88b31eb2f16c7c359b4809621b75a04b7b5bc9dbffe17046c99a";
   };
 
-  propagatedBuildInputs = [ typing-extensions protobuf hidapi ecdsa mnemonic requests pyblake2 click construct libusb1 rlp ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  # build requires UTF-8 locale
-  LANG = "en_US.UTF-8";
-
-  checkInputs = [
-    pytest
+  propagatedBuildInputs = [
+    attrs
+    click
+    construct
+    ecdsa
+    hidapi
+    libusb1
+    mnemonic
+    pillow
+    protobuf
+    pyblake2
+    requests
+    rlp
+    shamir-mnemonic
+    typing-extensions
+  ] ++ lib.optionals stdenv.isLinux [
+    trezor-udev-rules
   ];
 
-  # disable test_tx_api.py as it requires being online
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} -m pytest --pyarg trezorlib.tests.unit_tests --ignore trezorlib/tests/unit_tests/test_tx_api.py
-    runHook postCheck
+  checkInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    "tests/test_stellar.py" # requires stellar-sdk
+  ];
+
+  postFixup = ''
+    mkdir completions
+    _TREZORCTL_COMPLETE=source_bash $out/bin/trezorctl > completions/trezorctl || true
+    _TREZORCTL_COMPLETE=source_zsh $out/bin/trezorctl > completions/_trezorctl || true
+    _TREZORCTL_COMPLETE=source_fish $out/bin/trezorctl > completions/trezorctl.fish || true
+    installShellCompletion --bash completions/trezorctl
+    installShellCompletion --zsh completions/_trezorctl
+    installShellCompletion --fish completions/trezorctl.fish
   '';
 
-  meta = {
-    description = "Python library for communicating with TREZOR Bitcoin Hardware Wallet";
-    homepage = https://github.com/trezor/python-trezor;
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ np prusnak ];
+  meta = with lib; {
+    description = "Python library for communicating with Trezor Hardware Wallet";
+    homepage = "https://github.com/trezor/trezor-firmware/tree/master/python";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ np prusnak mmahut _1000101 ];
   };
 }

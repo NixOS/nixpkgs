@@ -1,31 +1,42 @@
-{ stdenv, fetchFromGitLab, python, ensureNewerSourcesForZipFilesHook }:
-
+{ lib, stdenv, fetchFromGitLab, python3, ensureNewerSourcesForZipFilesHook
+# optional list of extra waf tools, e.g. `[ "doxygen" "pytest" ]`
+, withTools ? null
+}:
+let
+  wafToolsArg = with lib.strings;
+    optionalString (!isNull withTools) " --tools=\"${concatStringsSep "," withTools}\"";
+in
 stdenv.mkDerivation rec {
-  name = "waf-${version}";
-  version = "2.0.13";
+  pname = "waf";
+  version = "2.0.23";
 
   src = fetchFromGitLab {
     owner = "ita1024";
     repo = "waf";
-    rev = name;
-    sha256 = "1r4nyxpf07w98bx9zx0xii97rwsc27s6898xi9ph25p0n6hsdxxg";
+    rev = "${pname}-${version}";
+    sha256 = "sha256-AASjkXb3eCVjbuT0GOwhagoNHxG7/XP1Mj0i1U4j13Q=";
   };
 
-  buildInputs = [ python ensureNewerSourcesForZipFilesHook ];
+  nativeBuildInputs = [ python3 ensureNewerSourcesForZipFilesHook ];
+
+  # waf bin has #!/usr/bin/env python
+  buildInputs = [ python3 ];
 
   configurePhase = ''
     python waf-light configure
   '';
   buildPhase = ''
-    python waf-light build
+    python waf-light build${wafToolsArg}
   '';
   installPhase = ''
-    install waf $out
+    install -D waf $out/bin/waf
   '';
 
-  meta = with stdenv.lib; {
+  strictDeps = true;
+
+  meta = with lib; {
     description = "Meta build system";
-    homepage    = https://waf.io;
+    homepage    = "https://waf.io";
     license     = licenses.bsd3;
     platforms   = platforms.all;
     maintainers = with maintainers; [ vrthra ];

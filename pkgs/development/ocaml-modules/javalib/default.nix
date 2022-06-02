@@ -1,24 +1,31 @@
-{ stdenv, fetchzip, which, ocaml, findlib, camlp4
-, camlzip, camomile, extlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, ocaml
+, findlib
+, camlzip
+, extlib
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4"
-then throw "javalib not supported for ocaml ${ocaml.version}"
+if lib.versionOlder ocaml.version "4.04"
+then throw "javalib is not available for OCaml ${ocaml.version}"
 else
 
-let
-  pname = "javalib";
-in
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
-  version = "3.0";
+  pname = "ocaml${ocaml.version}-javalib";
+  version = "3.2.1";
 
-  src = fetchzip {
-    url = "https://github.com/javalib-team/javalib/archive/v${version}.tar.gz";
-    sha256 = "02zgn1z1wj3rbg9xqmbagys91bnsy27iwrngkivzhlykyaw9vf6n";
+  src = fetchFromGitHub {
+    owner = "javalib-team";
+    repo = "javalib";
+    rev = "v${version}";
+    sha256 = "sha256-du1h+S+A7CetMXofsYxdGeSsobCgspDB9oUE9WNUbbo=";
   };
 
-  buildInputs = [ which ocaml findlib camlp4 ];
+  nativeBuildInputs = [ which ocaml findlib ];
+
+  strictDeps = true;
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 
@@ -28,14 +35,16 @@ stdenv.mkDerivation rec {
 
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [ ];
 
-  propagatedBuildInputs = [ camlzip camomile extlib ];
+  propagatedBuildInputs = [ camlzip extlib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library that parses Java .class files into OCaml data structures";
-    homepage = https://javalib-team.github.io/javalib/;
+    homepage = "https://javalib-team.github.io/javalib/";
     license = licenses.lgpl3;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

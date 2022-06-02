@@ -1,20 +1,20 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "imagesize";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f3832918bc3c66617f92e35f5d70729187676313caa60c187eb0f28b8fe5e3b5";
+    sha256 = "cd1750d452385ca327479d45b64d9c7729ecf0b3969a58148298c77092261f9d";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Getting image size from png/jpeg/jpeg2000/gif file";
-    homepage = https://github.com/shibukawa/imagesize_py;
+    homepage = "https://github.com/shibukawa/imagesize_py";
     license = with licenses; [ mit ];
   };
 

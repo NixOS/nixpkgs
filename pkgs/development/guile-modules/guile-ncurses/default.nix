@@ -1,18 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, guile, ncurses, libffi }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, guile
+, libffi
+, ncurses
+}:
 
-let
-  name = "guile-ncurses-${version}";
+stdenv.mkDerivation rec {
+  pname = "guile-ncurses";
   version = "1.7";
-in stdenv.mkDerivation {
-  inherit name;
 
   src = fetchurl {
-    url = "mirror://gnu/guile-ncurses/${name}.tar.gz";
-    sha256 = "153vv75gb7l62sp3666rc97i63rnaqbx2rjar7d9b5w81fhwv4r5";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    hash = "sha256-JZPNoQuIl5XayUpm0RdWNg8TT2LZGDOuFoae9crZe5Q=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ guile ncurses libffi ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
+  buildInputs = [
+    guile
+    libffi
+    ncurses
+  ];
 
   preConfigure = ''
     configureFlags="$configureFlags --with-guilesitedir=$out/share/guile/site"
@@ -28,7 +39,8 @@ in stdenv.mkDerivation {
   # XXX: 1 of 65 tests failed.
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/guile-ncurses/";
     description = "Scheme interface to the NCurses libraries";
     longDescription = ''
       GNU Guile-Ncurses is a library for the Guile Scheme interpreter that
@@ -36,7 +48,6 @@ in stdenv.mkDerivation {
       interface functionality is built on the ncurses libraries: curses, form,
       panel, and menu.
     '';
-    homepage = "https://www.gnu.org/software/guile-ncurses/";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
     platforms = platforms.gnu ++ platforms.linux;

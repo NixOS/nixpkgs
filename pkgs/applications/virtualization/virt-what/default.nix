@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "virt-what-${version}";
-  version = "1.19";
+  pname = "virt-what";
+  version = "1.21";
 
   src = fetchurl {
-    url = "https://people.redhat.com/~rjones/virt-what/files/${name}.tar.gz";
-    sha256 = "00nhwly5q0ps8yv9cy3c2qp8lfshf3s0kdpwiy5zwk3g77z96rwk";
+    url = "https://people.redhat.com/~rjones/virt-what/files/${pname}-${version}.tar.gz";
+    sha256 = "0yqz1l4di57d4y1z94yhdmkiykg9a8i7xwkqmd9zsk5a6i9lbjqj";
   };
 
   meta = with lib; {

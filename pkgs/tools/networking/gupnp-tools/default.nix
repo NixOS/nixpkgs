@@ -1,35 +1,59 @@
-{fetchurl, fetchpatch, stdenv, meson, ninja, gupnp, gssdp, pkgconfig, gtk3, libuuid, gettext, gupnp-av, gtksourceview4, gnome3, wrapGAppsHook}:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, gupnp
+, gssdp
+, pkg-config
+, gtk3
+, libuuid
+, gettext
+, gupnp-av
+, gtksourceview4
+, gnome
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "gupnp-tools";
-  version = "0.8.15";
+  version = "0.10.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1awpqjs08cf6aimvzldnlnz5zmdyw8aq4k2rl5239j4zkfhg8vik";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "RX9Nkjk1sHhBXNK6iNeNtgB5tyWSa37hBuRWXv4yBN4=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gupnp-tools/commit/2845d07b1584789a23a0e691ceff476e5d82ccb7.patch;
-      sha256 = "1a8bhsz41s27kbaxp9jbmbisabin6lz2ln87012syvi6f2s332hv";
-    })
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    wrapGAppsHook
   ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook ];
-  buildInputs = [ gupnp libuuid gssdp gtk3 gupnp-av gtksourceview4 gnome3.adwaita-icon-theme ];
+  buildInputs = [
+    gupnp
+    libuuid
+    gssdp
+    gtk3
+    gupnp-av
+    gtksourceview4
+    gnome.adwaita-icon-theme
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Set of utilities and demos to work with UPnP";
-    homepage = https://wiki.gnome.org/Projects/GUPnP;
+    homepage = "https://wiki.gnome.org/Projects/GUPnP";
     license = licenses.gpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

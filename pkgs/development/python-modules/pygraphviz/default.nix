@@ -1,37 +1,52 @@
-{ stdenv, buildPythonPackage, fetchPypi, substituteAll, graphviz
-, pkgconfig, doctest-ignore-unicode, mock, nose }:
+{ lib
+, buildPythonPackage
+, isPy3k
+, fetchPypi
+, substituteAll
+, graphviz
+, coreutils
+, pkg-config
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "pygraphviz";
-  version = "1.3.1";
+  version = "1.9";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7c294cbc9d88946be671cc0d8602aac176d8c56695c0a7d871eadea75a958408";
+    hash = "sha256-+hj3xs6ig0Gk5GbtDPBWgrCmgoiv6N18lCZ4L3wa4Bw=";
+    extension = "zip";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ graphviz ];
-  checkInputs = [ doctest-ignore-unicode mock nose ];
-
   patches = [
-    # pygraphviz depends on graphviz being in PATH. This patch always prepends
-    # graphviz to PATH.
+    # pygraphviz depends on graphviz executables and wc being in PATH
     (substituteAll {
-      src = ./graphviz-path.patch;
-      inherit graphviz;
+      src = ./path.patch;
+      path = lib.makeBinPath [ graphviz coreutils ];
     })
   ];
 
-  # The tests are currently failing because of a bug in graphviz 2.40.1.
-  # Upstream does not want to skip the relevant tests:
-  # https://github.com/pygraphviz/pygraphviz/pull/129
-  doCheck = false;
+  nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [ graphviz ];
+
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    runHook preCheck
+    pytest --pyargs pygraphviz
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [ "pygraphviz" ];
+
+  meta = with lib; {
     description = "Python interface to Graphviz graph drawing package";
-    homepage = https://github.com/pygraphviz/pygraphviz;
+    homepage = "https://github.com/pygraphviz/pygraphviz";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ matthiasbeyer ];
+    maintainers = with maintainers; [ matthiasbeyer dotlambda ];
   };
 }

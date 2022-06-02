@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, qmake
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch, qmake
 , qtbase, qtscript, qtwebkit, qtserialport, qtsvg, qtdeclarative, qtquickcontrols2
-, alsaLib, libsndfile, flite, openssl, udev, SDL2
+, alsa-lib, libsndfile, flite, openssl, udev, SDL2
 }:
 
-stdenv.mkDerivation rec {
-  name = "apmplanner2-${version}";
-  # TODO revert Qt59 to Qt5 in pkgs/top-level/all-packages.nix on next release
-  version = "2.0.26";
+mkDerivation rec {
+  pname = "apmplanner2";
+  version = "2.0.28";
+
   src = fetchFromGitHub {
     owner = "ArduPilot";
     repo = "apm_planner";
-    rev = "${version}";
-    sha256 = "0bnyi1r8k8ij5sq2zqv7mfbrxm0xdw97qrx3sk4rinqv2g6h6di4";
+    rev = version;
+    sha256 = "0wvbfjnnf7sh6fpgw8gimh5hgzywj3nwrgr80r782f5gayd3v2l1";
   };
 
-  qtInputs = [
+  buildInputs = [
+    alsa-lib libsndfile flite openssl udev SDL2
     qtbase qtscript qtwebkit qtserialport qtsvg qtdeclarative qtquickcontrols2
   ];
 
-  buildInputs = [ alsaLib libsndfile flite openssl udev SDL2 ] ++ qtInputs;
   nativeBuildInputs = [ qmake ];
 
   qmakeFlags = [ "apm_planner.pro" ];
@@ -27,10 +27,8 @@ stdenv.mkDerivation rec {
   preFixup = ''
     ln --relative --symbolic $out/share/APMPlanner2/* $out/bin/
     substituteInPlace $out/share/applications/apmplanner2.desktop \
-                      --replace /usr $out
+      --replace /usr $out
   '';
-  
-  enableParallelBuilding = true;
 
   meta = {
     description = "Ground station software for autonomous vehicles";
@@ -38,8 +36,8 @@ stdenv.mkDerivation rec {
       A GUI ground control station for autonomous vehicles using the MAVLink protocol.
       Includes support for the APM and PX4 based controllers.
     '';
-    homepage = http://ardupilot.org/planner2/;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.wucke13 ];
+    homepage = "https://ardupilot.org/planner2/";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ wucke13 ];
   };
 }

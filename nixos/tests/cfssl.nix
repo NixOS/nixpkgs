@@ -1,7 +1,7 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "cfssl";
 
-  machine = { config, lib, pkgs, ... }:
+  nodes.machine = { config, lib, pkgs, ... }:
   {
     networking.firewall.allowedTCPPorts = [ config.services.cfssl.port ];
 
@@ -38,7 +38,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   testScript =
   let
     cfsslrequest = with pkgs; writeScript "cfsslrequest" ''
-      curl -X POST -H "Content-Type: application/json" -d @${csr} \
+      curl -f -X POST -H "Content-Type: application/json" -d @${csr} \
         http://localhost:8888/api/v1/cfssl/newkey | ${cfssl}/bin/cfssljson /tmp/certificate
     '';
     csr = pkgs.writeText "csr.json" (builtins.toJSON {
@@ -60,8 +60,8 @@ import ./make-test.nix ({ pkgs, ...} : {
     });
   in
     ''
-      $machine->waitForUnit('cfssl.service');
-      $machine->waitUntilSucceeds('${cfsslrequest}');
-      $machine->succeed('ls /tmp/certificate-key.pem');
+      machine.wait_for_unit("cfssl.service")
+      machine.wait_until_succeeds("${cfsslrequest}")
+      machine.succeed("ls /tmp/certificate-key.pem")
     '';
 })

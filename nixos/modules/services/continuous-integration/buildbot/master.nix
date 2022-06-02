@@ -1,11 +1,12 @@
 # NixOS module for Buildbot continous integration server.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.buildbot-master;
+  opt = options.services.buildbot-master;
 
   python = cfg.package.pythonModule;
 
@@ -16,7 +17,7 @@ let
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
      workers       = [${concatStringsSep "," cfg.workers}],
-     protocols     = { 'pb': {'port': ${toString cfg.bpPort} } },
+     protocols     = { 'pb': {'port': ${toString cfg.pbPort} } },
      title         = '${escapeStr cfg.title}',
      titleURL      = '${escapeStr cfg.titleUrl}',
      buildbotURL   = '${escapeStr cfg.buildbotUrl}',
@@ -25,7 +26,7 @@ let
      change_source = [ ${concatStringsSep "," cfg.changeSource} ],
      schedulers    = [ ${concatStringsSep "," cfg.schedulers} ],
      builders      = [ ${concatStringsSep "," cfg.builders} ],
-     status        = [ ${concatStringsSep "," cfg.status} ],
+     services      = [ ${concatStringsSep "," cfg.reporters} ],
     )
     for step in [ ${concatStringsSep "," cfg.factorySteps} ]:
       factory.addStep(step)
@@ -63,7 +64,7 @@ in {
         description = "Factory Steps";
         default = [];
         example = [
-          "steps.Git(repourl='git://github.com/buildbot/pyflakes.git', mode='incremental')"
+          "steps.Git(repourl='https://github.com/buildbot/pyflakes.git', mode='incremental')"
           "steps.ShellCommand(command=['trial', 'pyflakes'])"
         ];
       };
@@ -73,7 +74,7 @@ in {
         description = "List of Change Sources.";
         default = [];
         example = [
-          "changes.GitPoller('git://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
+          "changes.GitPoller('https://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
         ];
       };
 
@@ -93,6 +94,7 @@ in {
         type = types.path;
         description = "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
         default = defaultMasterCfg;
+        defaultText = literalDocBook ''generated configuration file'';
         example = "/etc/nixos/buildbot/master.cfg";
       };
 
@@ -119,10 +121,10 @@ in {
         default = [ "worker.Worker('example-worker', 'pass')" ];
       };
 
-      status = mkOption {
+      reporters = mkOption {
         default = [];
         type = types.listOf types.str;
-        description = "List of status notification endpoints.";
+        description = "List of reporter objects used to present build status to various users.";
       };
 
       user = mkOption {
@@ -151,14 +153,25 @@ in {
 
       buildbotDir = mkOption {
         default = "${cfg.home}/master";
+        defaultText = literalExpression ''"''${config.${opt.home}}/master"'';
         type = types.path;
         description = "Specifies the Buildbot directory.";
       };
 
-      bpPort = mkOption {
+      pbPort = mkOption {
         default = 9989;
-        type = types.int;
-        description = "Port where the master will listen to Buildbot Worker.";
+        type = types.either types.str types.int;
+        example = "'tcp:9990:interface=127.0.0.1'";
+        description = ''
+          The buildmaster will listen on a TCP port of your choosing
+          for connections from workers.
+          It can also use this port for connections from remote Change Sources,
+          status clients, and debug tools.
+          This port should be visible to the outside world, and you’ll need to tell
+          your worker admins about your choice.
+          If put in (single) quotes, this can also be used as a connection string,
+          as defined in the <link xlink:href="https://twistedmatrix.com/documents/current/core/howto/endpoints.html">ConnectionStrings guide</link>.
+        '';
       };
 
       listenAddress = mkOption {
@@ -200,41 +213,43 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.python3Packages.buildbot-full;
-        defaultText = "pkgs.python3Packages.buildbot-full";
+        defaultText = literalExpression "pkgs.python3Packages.buildbot-full";
         description = "Package to use for buildbot.";
-        example = literalExample "pkgs.python3Packages.buildbot";
+        example = literalExpression "pkgs.python3Packages.buildbot";
       };
 
       packages = mkOption {
         default = [ pkgs.git ];
-        example = literalExample "[ pkgs.git ]";
+        defaultText = literalExpression "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
       };
 
       pythonPackages = mkOption {
+        type = types.functionTo (types.listOf types.package);
         default = pythonPackages: with pythonPackages; [ ];
-        defaultText = "pythonPackages: with pythonPackages; [ ]";
+        defaultText = literalExpression "pythonPackages: with pythonPackages; [ ]";
         description = "Packages to add the to the PYTHONPATH of the buildbot process.";
-        example = literalExample "pythonPackages: with pythonPackages; [ requests ]";
+        example = literalExpression "pythonPackages: with pythonPackages; [ requests ]";
       };
     };
   };
 
   config = mkIf cfg.enable {
-    users.groups = optional (cfg.group == "buildbot") {
-      name = "buildbot";
+    users.groups = optionalAttrs (cfg.group == "buildbot") {
+      buildbot = { };
     };
 
-    users.users = optional (cfg.user == "buildbot") {
-      name = "buildbot";
-      description = "Buildbot User.";
-      isNormalUser = true;
-      createHome = true;
-      home = cfg.home;
-      group = cfg.group;
-      extraGroups = cfg.extraGroups;
-      useDefaultShell = true;
+    users.users = optionalAttrs (cfg.user == "buildbot") {
+      buildbot = {
+        description = "Buildbot User.";
+        isNormalUser = true;
+        createHome = true;
+        home = cfg.home;
+        group = cfg.group;
+        extraGroups = cfg.extraGroups;
+        useDefaultShell = true;
+      };
     };
 
     systemd.services.buildbot-master = {
@@ -263,5 +278,13 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ nand0p mic92 ];
+  imports = [
+    (mkRenamedOptionModule [ "services" "buildbot-master" "bpPort" ] [ "services" "buildbot-master" "pbPort" ])
+    (mkRemovedOptionModule [ "services" "buildbot-master" "status" ] ''
+      Since Buildbot 0.9.0, status targets are deprecated and ignored.
+      Review your configuration and migrate to reporters (available at services.buildbot-master.reporters).
+    '')
+  ];
+
+  meta.maintainers = with lib.maintainers; [ mic92 lopsided98 ];
 }

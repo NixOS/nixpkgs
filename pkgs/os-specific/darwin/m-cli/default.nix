@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "m-cli-${version}";
-  version = "0.2.5";
+  pname = "m-cli";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "rgcr";
-    repo = "m-cli";
+    repo = pname;
     rev = "v${version}";
-    sha512 = "0mkcx7jq91pbfs8327qc8434gj73fvjgdfdsrza0lyd9wns6jhsqsf0585klzl68aqscvksgzi2asdnim4va35cdkp2fdzl0g3sm4kd";
+    sha256 = "sha256-KzlE1DdVMLnGmcOS1a2HK4pASofD1EHpdqbzVVIxeb4=";
   };
 
   dontBuild = true;
@@ -32,14 +32,14 @@ stdenv.mkDerivation rec {
     install -Dt "$out/share/zsh/site-functions/" -m444 completion/zsh/_m
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Swiss Army Knife for macOS";
     inherit (src.meta) homepage;
-    repositories.git = git://github.com/rgcr/m-cli.git;
 
     license = licenses.mit;
 
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ yurrriq ];
+    maintainers = with maintainers; [];
+    mainProgram = "m";
   };
 }

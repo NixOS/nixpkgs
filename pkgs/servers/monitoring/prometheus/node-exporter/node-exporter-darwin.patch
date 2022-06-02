@@ -1,0 +1,17 @@
+diff --git a/collector/powersupplyclass_darwin.go b/collector/powersupplyclass_darwin.go
+index a070f64..01d7f18 100644
+--- a/collector/powersupplyclass_darwin.go
++++ b/collector/powersupplyclass_darwin.go
+@@ -18,9 +18,11 @@ package collector
+ 
+ /*
+ #cgo LDFLAGS: -framework IOKit -framework CoreFoundation
++#include <CoreFoundation/CFNumber.h>
++#include <CoreFoundation/CFRunLoop.h>
++#include <CoreFoundation/CFString.h>
+ #include <IOKit/ps/IOPowerSources.h>
+ #include <IOKit/ps/IOPSKeys.h>
+-#include <CoreFoundation/CFArray.h>
+ 
+ // values collected from IOKit Power Source APIs
+ // Functions documentation available at

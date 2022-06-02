@@ -1,8 +1,40 @@
-{ stdenv, fetchurl, pkgconfig, spice-protocol, gettext, celt_0_5_1
-, openssl, libpulseaudio, pixman, gobject-introspection, libjpeg_turbo, zlib
-, cyrus_sasl, python2Packages, autoreconfHook, usbredir, libsoup
-, withPolkit ? true, polkit, acl, usbutils
-, vala, gtk3, epoxy, libdrm, gst_all_1, phodav, opusfile }:
+{ lib, stdenv
+, fetchurl
+, acl
+, cyrus_sasl
+, docbook_xsl
+, libepoxy
+, gettext
+, gobject-introspection
+, gst_all_1
+, gtk-doc
+, gtk3
+, hwdata
+, json-glib
+, libcacard
+, libcap_ng
+, libdrm
+, libjpeg_turbo
+, libopus
+, libsoup
+, libusb1
+, lz4
+, meson
+, ninja
+, openssl
+, perl
+, phodav
+, pixman
+, pkg-config
+, polkit
+, python3
+, spice-protocol
+, usbredir
+, vala
+, wayland-protocols
+, zlib
+, withPolkit ? true
+}:
 
 # If this package is built with polkit support (withPolkit=true),
 # usb redirection reqires spice-client-glib-usb-acl-helper to run setuid root.
@@ -25,56 +57,87 @@
 #    KERNEL=="*", SUBSYSTEMS=="usb", MODE="0664", GROUP="usb"
 #  '';
 
-with stdenv.lib;
+stdenv.mkDerivation rec {
+  pname = "spice-gtk";
+  version = "0.40";
 
-let
-  inherit (python2Packages) python pygtk;
-in stdenv.mkDerivation rec {
-  name = "spice-gtk-0.35";
-
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
-    url = "https://www.spice-space.org/download/gtk/${name}.tar.bz2";
-    sha256 = "11lymg467gvj5ys8k22ihnfbxjn4x34ygyzirpg2nphjwlyhgrml";
+    url = "https://www.spice-space.org/download/gtk/${pname}-${version}.tar.xz";
+    sha256 = "sha256-I/X/f6gLdWR85zzaXq+LMi80Mtu7f286g5Y0YYrbztM=";
   };
 
   postPatch = ''
     # get rid of absolute path to helper in store so we can use a setuid wrapper
     substituteInPlace src/usb-acl-helper.c \
       --replace 'ACL_HELPER_PATH"/' '"'
+    # don't try to setcap/suid in a nix builder
+    substituteInPlace src/meson.build \
+      --replace "meson.add_install_script('../build-aux/setcap-or-suid'," \
+      "# meson.add_install_script('../build-aux/setcap-or-suid',"
   '';
 
-  buildInputs = [
-    spice-protocol celt_0_5_1 openssl libpulseaudio gst_all_1.gst-plugins-base pixman
-    libjpeg_turbo zlib cyrus_sasl python pygtk usbredir gtk3 epoxy libdrm phodav opusfile
-  ] ++ optionals withPolkit [ polkit acl usbutils ] ;
+  nativeBuildInputs = [
+    docbook_xsl
+    gettext
+    gobject-introspection
+    gtk-doc
+    libsoup
+    meson
+    ninja
+    perl
+    pkg-config
+    python3
+    python3.pkgs.pyparsing
+    python3.pkgs.six
+    vala
+  ];
 
-  nativeBuildInputs = [ pkgconfig gettext libsoup autoreconfHook vala gobject-introspection ];
+  propagatedBuildInputs = [
+    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+  ];
+
+  buildInputs = [
+    cyrus_sasl
+    libepoxy
+    gtk3
+    json-glib
+    libcacard
+    libcap_ng
+    libdrm
+    libjpeg_turbo
+    libopus
+    libusb1
+    lz4
+    openssl
+    phodav
+    pixman
+    spice-protocol
+    usbredir
+    wayland-protocols
+    zlib
+  ] ++ lib.optionals withPolkit [ polkit acl ] ;
 
   PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
 
-  configureFlags = [
-    "--with-gtk3"
-    "--enable-introspection"
-    "--enable-vala"
-    "--enable-celt051"
+  mesonFlags = [
+    "-Dusb-acl-helper-dir=${placeholder "out"}/bin"
+    "-Dusb-ids-path=${hwdata}/share/hwdata/usb.ids"
+  ] ++ lib.optionals (!withPolkit) [
+    "-Dpolkit=disabled"
   ];
 
-  dontDisableStatic = true; # Needed by the coroutine test
-
-  enableParallelBuilding = true;
-
-  meta = {
-    description = "A GTK+3 SPICE widget";
+  meta = with lib; {
+    description = "GTK 3 SPICE widget";
     longDescription = ''
-      spice-gtk is a GTK+3 SPICE widget. It features glib-based
+      spice-gtk is a GTK 3 SPICE widget. It features glib-based
       objects for SPICE protocol parsing and a gtk widget for embedding
       the SPICE display into other applications such as virt-manager.
       Python bindings are available too.
     '';
 
-    homepage = https://www.spice-space.org/;
+    homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
     maintainers = [ maintainers.xeji ];
     platforms = platforms.linux;

@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, unzip, ... }: stdenv.mkDerivation rec {
-  name = "scriptaculous-${version}";
+{ lib, stdenv, fetchurl, unzip, ... }:
+
+stdenv.mkDerivation rec {
+  pname = "scriptaculous";
   version = "1.9.0";
 
   src = fetchurl {
@@ -14,7 +16,7 @@
     cp src/*.js $out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A set of JavaScript libraries to enhance the user interface of web sites";
     longDescription = ''
       script.aculo.us provides you with
@@ -22,8 +24,8 @@
       interface JavaScript libraries to make
       your web sites and web applications fly.
     '';
-    homepage = https://script.aculo.us/;
-    downloadPage = https://script.aculo.us/dist/;
+    homepage = "https://script.aculo.us/";
+    downloadPage = "https://script.aculo.us/dist/";
     license = licenses.mit;
     maintainers = with maintainers; [ das_j ];
   };

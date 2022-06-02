@@ -1,34 +1,37 @@
 { buildBazelPackage
-, cacert
 , fetchFromGitHub
-, fetchpatch
 , git
 , go
-, python
-, stdenv
+, python3
+, lib, stdenv
 }:
 
+let
+  patches = [
+    ./use-go-in-path.patch
+  ];
+in
 buildBazelPackage rec {
-  name = "bazel-watcher-${version}";
-  version = "0.9.1";
+  pname = "bazel-watcher";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "1gjbv67ydyb0mafpp59qr9n8f8vva2mwhgan6lxxl0i9yfx7qc6p";
+    sha256 = "0gigl1lg8sb4bj5crvj54329ws4yirldbncs15f96db6vhp0ig7r";
   };
 
-  nativeBuildInputs = [ go git python ];
+  nativeBuildInputs = [ go git python3 ];
+  removeRulesCC = false;
 
   bazelTarget = "//ibazel";
 
   fetchAttrs = {
+    inherit patches;
+
     preBuild = ''
       patchShebangs .
-
-      # tell rules_go to use the Go binary found in the PATH
-      sed -e 's:go_register_toolchains():go_register_toolchains(go_version = "host"):g' -i WORKSPACE
     '';
 
     preInstall = ''
@@ -42,6 +45,10 @@ buildBazelPackage rec {
       rm -rf $bazelOut/external/{go_sdk,\@go_sdk.marker}
       sed -e '/^FILE:@go_sdk.*/d' -i $bazelOut/external/\@*.marker
 
+      # Retains go build input markers
+      chmod -R 755 $bazelOut/external/{bazel_gazelle_go_repository_cache,@\bazel_gazelle_go_repository_cache.marker}
+      rm -rf $bazelOut/external/{bazel_gazelle_go_repository_cache,@\bazel_gazelle_go_repository_cache.marker}
+
       # Remove the gazelle tools, they contain go binaries that are built
       # non-deterministically. As long as the gazelle version matches the tools
       # should be equivalent.
@@ -49,15 +56,16 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "0p6yarz4wlb6h33n4slkczkdkaa93zc9jx55h8wl9vv81ahp0md5";
+    sha256 = "1j175z3d4fbi4pl35py7yjq7ywrvwin6id131jv32hx0ck4g1m46";
   };
 
   buildAttrs = {
+    inherit patches;
+
     preBuild = ''
       patchShebangs .
 
-      # tell rules_go to use the Go binary found in the PATH
-      sed -e 's:go_register_toolchains():go_register_toolchains(go_version = "host"):g' -i WORKSPACE
+      substituteInPlace ibazel/BUILD --replace '{STABLE_GIT_VERSION}' ${version}
     '';
 
     installPhase = ''
@@ -65,11 +73,13 @@ buildBazelPackage rec {
     '';
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/bazelbuild/bazel-watcher;
-    description = "Tools for building Bazel targets when source files change.";
+  meta = with lib; {
+    homepage = "https://github.com/bazelbuild/bazel-watcher";
+    description = "Tools for building Bazel targets when source files change";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.all;
+    # broken on darwin, see https://github.com/NixOS/nixpkgs/issues/105573
+    broken = stdenv.isDarwin;
   };
 }

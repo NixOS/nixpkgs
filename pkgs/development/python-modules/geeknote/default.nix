@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , isPy27
@@ -10,7 +10,7 @@
 , evernote
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   version = "2015-05-11";
   pname = "geeknote";
   disabled = ! isPy27;
@@ -28,9 +28,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ thrift beautifulsoup4 markdown2 sqlalchemy html2text evernote ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Work with Evernote from command line";
-    homepage = http://www.geeknote.me;
+    homepage = "http://www.geeknote.me";
     license = licenses.gpl1;
     maintainers = with maintainers; [ hbunke ];
   };

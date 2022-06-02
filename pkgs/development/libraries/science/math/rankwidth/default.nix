@@ -1,28 +1,27 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 }:
 
 stdenv.mkDerivation rec {
   pname = "rankwidth";
-  version = "0.7";
-  name = "${pname}-${version}";
+  version = "0.9";
 
   src = fetchurl {
     url = "mirror://sageupstream/rw/rw-${version}.tar.gz";
-    sha256 = "1rv2v42x2506x7f10349m1wpmmfxrv9l032bkminni2gbip9cjg0";
+    sha256 = "sha256-weA1Bv4lzfy0KMBR/Fay0q/7Wwb7o/LOdWYxRmvvtEE=";
   };
 
   configureFlags = [
     "--enable-executable=no" # no igraph dependency
   ];
 
-  # check phase is empty for now (as of version 0.7)
+  # check phase is empty for now (as of version 0.9)
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculates rank-width and rank-decompositions";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    maintainers = teams.sage.members;
+    platforms = platforms.unix;
   };
 }

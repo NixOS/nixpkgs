@@ -1,9 +1,9 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyinputevent";
   version = "2016-10-18";
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "0rkis0xp8f9jc00x7jb9kbvhdla24z1vl30djqa6wy6fx0cr6sib";
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ntzrmtthihu777/pyinputevent";
     description = "Python interface to the Input Subsystem's input_event and uinput";
     license = licenses.bsd3;

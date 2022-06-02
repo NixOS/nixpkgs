@@ -1,18 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, dbus-glib, libnotify, libxml2, libcanberra-gtk3, mod_dnssd, apacheHttpd, hicolor-icon-theme, mate, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, gtk3, dbus-glib, libnotify, libxml2
+, libcanberra-gtk3, mod_dnssd, apacheHttpd, hicolor-icon-theme, mate, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
-  name = "mate-user-share-${version}";
-  version = "1.20.1";
+  pname = "mate-user-share";
+  version = "1.26.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0v5xilk978zl5443vlxf25z8z1g5sw9xl5sq76gvrmdlz2parfrn";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1wh0b4qw5wzpl7sg44lpwjb9r6xllch3xfz8c2cchl8rcgbh2kph";
   };
 
   nativeBuildInputs = [
-    pkgconfig
-    intltool
+    pkg-config
+    gettext
     itstool
+    libxml2
     wrapGAppsHook
   ];
 
@@ -21,7 +23,6 @@ stdenv.mkDerivation rec {
     dbus-glib
     libnotify
     libcanberra-gtk3
-    libxml2
     mate.caja
     hicolor-icon-theme
     # Should mod_dnssd and apacheHttpd be runtime dependencies?
@@ -38,15 +39,19 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-httpd=${apacheHttpd.out}/bin/httpd"
-    "--with-modules-path=${apacheHttpd.dev}/modules"
+    "--with-modules-path=${apacheHttpd}/modules"
     "--with-cajadir=$(out)/lib/caja/extensions-2.0"
   ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "User level public file sharing for the MATE desktop";
-    homepage = https://github.com/mate-desktop/mate-user-share;
+    homepage = "https://github.com/mate-desktop/mate-user-share";
     license = with licenses; [ gpl2Plus ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

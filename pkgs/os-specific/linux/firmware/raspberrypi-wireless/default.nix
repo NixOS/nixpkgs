@@ -1,23 +1,23 @@
-{ stdenv, fetchurl, fetchFromGitHub, dpkg }:
+{ lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "raspberrypi-wireless-firmware-${version}";
-  version = "2018-08-20";
+stdenv.mkDerivation {
+  pname = "raspberrypi-wireless-firmware";
+  version = "2021-12-06";
 
   srcs = [
     (fetchFromGitHub {
       name = "bluez-firmware";
       owner = "RPi-Distro";
       repo = "bluez-firmware";
-      rev = "ade2bae1aaaebede09abb8fb546f767a0e4c7804";
-      sha256 = "07gm76gxp5anv6paryvxcp34a86fkny8kdlzqhzcpfczzglkp6ag";
+      rev = "e7fd166981ab4bb9a36c2d1500205a078a35714d";
+      hash = "sha256-6xBdXwAGA1N42k1KKYrEgtsxtFAtrwhKdIrYY39Fb7Y=";
     })
     (fetchFromGitHub {
       name = "firmware-nonfree";
       owner = "RPi-Distro";
       repo = "firmware-nonfree";
-      rev = "b518de45ced519e8f7a499f4778100173402ae43";
-      sha256 = "1d5026ic9awji6c67irpwsxpxgsc0dhn11d3abkxi2vvra1pir4g";
+      rev = "99d5c588e95ec9c9b86d7e88d3cf85b4f729d2bc";
+      hash = "sha256-xg6fYQvg7t2ikyLI8/XfpiNaNTf7CNFQlAzpTldTz10=";
     })
   ];
 
@@ -28,24 +28,26 @@ stdenv.mkDerivation rec {
   dontFixup = true;
 
   installPhase = ''
+    runHook preInstall
     mkdir -p "$out/lib/firmware/brcm"
 
     # Wifi firmware
-    for filename in firmware-nonfree/brcm/brcmfmac434??-sdio.*; do
-      cp "$filename" "$out/lib/firmware/brcm"
-    done
+    cp -rv "$NIX_BUILD_TOP/firmware-nonfree/debian/config/brcm80211/." "$out/lib/firmware/"
 
     # Bluetooth firmware
-    cp bluez-firmware/broadcom/*.hcd "$out/lib/firmware/brcm"
+    cp -rv "$NIX_BUILD_TOP/bluez-firmware/broadcom/." "$out/lib/firmware/brcm"
+
+    # CM4 symlink must be added since it's missing from upstream
+    pushd $out/lib/firmware/brcm &>/dev/null
+    ln -s "./brcmfmac43455-sdio.txt" "$out/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-compute-module.txt"
+    popd &>/dev/null
+
+    runHook postInstall
   '';
 
-  outputHashMode = "recursive";
-  outputHashAlgo = "sha256";
-  outputHash = "1s5gb00v42s5izbaw8irs1fwvhh7z9wl07czc0nkw6p91871ivb7";
-
-  meta = with stdenv.lib; {
-    description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3 and Zero W";
-    homepage = https://github.com/RPi-Distro/firmware-nonfree;
+  meta = with lib; {
+    description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";
+    homepage = "https://github.com/RPi-Distro/firmware-nonfree";
     license = licenses.unfreeRedistributableFirmware;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lopsided98 ];

@@ -1,22 +1,47 @@
-{ stdenv, fetchFromGitHub, which, pkgconfig, SDL2, libGLU_combined, openalSoft
-, curl, speex, opusfile, libogg, libvorbis, libopus, libjpeg, mumble, freetype
+{ lib
+, stdenv
+, fetchFromGitHub
+, which
+, pkg-config
+, SDL2
+, libGL
+, openalSoft
+, curl
+, speex
+, opusfile
+, libogg
+, libvorbis
+, libopus
+, libjpeg
+, mumble
+, freetype
 }:
 
-stdenv.mkDerivation rec {
-  name = "ioquake3-git-${version}";
-  version = "2018-12-14";
+stdenv.mkDerivation {
+  pname = "ioquake3";
+  version = "unstable-2021-07-20";
 
   src = fetchFromGitHub {
     owner = "ioquake";
     repo = "ioq3";
-    rev = "b0d2b141e702aafc3dcf77a026e12757f00e45ed";
-    sha256 = "17qkqi22f2fyh6bnfcf1zz2lycgv08d6aw52sf0hqw7r3qq86d08";
+    rev = "bc8737d707595aebd7cc11d6d5a5d65ede750f59";
+    sha256 = "1icrkaw6c5c5ndy886bn65lycwnxzxwvz0ndz4p9i6r716k11add";
   };
 
-  nativeBuildInputs = [ which pkgconfig ];
+  nativeBuildInputs = [ which pkg-config ];
   buildInputs = [
-    SDL2 libGLU_combined openalSoft curl speex opusfile libogg libvorbis libopus libjpeg
-    freetype mumble
+    SDL2
+    libGL
+    openalSoft
+    curl
+    speex
+    opusfile
+    libogg
+    libvorbis
+    libopus
+    libjpeg
+    freetype
+    mumble
   ];
 
   enableParallelBuilding = true;
@@ -31,10 +56,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/baseq3
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://ioquake3.org/;
+  meta = with lib; {
+    homepage = "https://ioquake3.org/";
     description = "First person shooter engine based on the Quake 3: Arena and Quake 3: Team Arena";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rvolosatovs eelco abbradar ];
   };

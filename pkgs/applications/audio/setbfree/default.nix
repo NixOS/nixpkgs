@@ -1,33 +1,35 @@
-{ stdenv, fetchurl, alsaLib, freetype, ftgl, libjack2, libX11, lv2
-, libGLU_combined, pkgconfig, ttf_bitstream_vera
+{ lib, stdenv, fetchFromGitHub, alsa-lib, freetype, ftgl, libjack2, libX11, lv2
+, libGLU, libGL, pkg-config, ttf_bitstream_vera
 }:
 
 stdenv.mkDerivation  rec {
-  name = "setbfree-${version}";
-  version = "0.8.8";
+  pname = "setbfree";
+  version = "0.8.11";
 
-  src = fetchurl {
-    url = "https://github.com/pantherb/setBfree/archive/v${version}.tar.gz";
-    sha256 = "1ldxwds99azingkjh246kz7x3j7307jhr0fls5rjjbcfchpg7v99";
+  src = fetchFromGitHub {
+    owner = "pantherb";
+    repo = "setBfree";
+    rev = "v${version}";
+    sha256 = "sha256-OYrsq3zVaotmS1KUgDIQbVQgxpfweMKiB17/PC1iXDA=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed 's#/usr/local#$(out)#g' -i common.mak
     sed 's#/usr/share/fonts/truetype/ttf-bitstream-vera#${ttf_bitstream_vera}/share/fonts/truetype#g' \
       -i b_synth/Makefile
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    alsaLib freetype ftgl libjack2 libX11 lv2 libGLU_combined
+    alsa-lib freetype ftgl libjack2 libX11 lv2 libGLU libGL
     ttf_bitstream_vera
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A DSP tonewheel organ emulator";
-    homepage = http://setbfree.org;
+    homepage = "https://setbfree.org";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ]; # fails on ARM and Darwin
     maintainers = [ maintainers.goibhniu ];
   };
 }

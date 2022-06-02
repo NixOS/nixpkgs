@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gnome3, gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ lib, stdenv, fetchurl, pkg-config, gettext, itstool, libxml2, gtk3, file, mate, hicolor-icon-theme, wrapGAppsHook, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
-  name = "engrampa-${version}";
-  version = "1.20.2";
+  pname = "engrampa";
+  version = "1.26.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0fj957dfagw6p7mq5545h9j2w3hv18yqnkpypnr719r4g13d3f2v";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1qsy0ynhj1v0kyn3g3yf62g31rwxmpglfh9xh0w5lc9j5k1b5kcp";
   };
 
   nativeBuildInputs = [
-    pkgconfig
-    intltool
+    pkg-config
+    gettext
     itstool
     wrapGAppsHook
   ];
@@ -19,18 +19,26 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxml2
     gtk3
+    file #libmagic
     mate.caja
     hicolor-icon-theme
     mate.mate-desktop
   ];
 
-  configureFlags = [ "--with-cajadir=$$out/lib/caja/extensions-2.0" ];
+  configureFlags = [
+    "--with-cajadir=$$out/lib/caja/extensions-2.0"
+    "--enable-magic"
+  ];
 
-  meta = {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "Archive Manager for MATE";
-    homepage = http://mate-desktop.org;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    homepage = "https://mate-desktop.org";
+    license = with licenses; [ gpl2Plus lgpl2Plus fdl11Plus ];
+    platforms = platforms.unix;
+    maintainers = teams.mate.members;
   };
 }

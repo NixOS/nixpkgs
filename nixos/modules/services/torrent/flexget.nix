@@ -19,7 +19,7 @@ in {
       user = mkOption {
         default = "deluge";
         example = "some_user";
-        type = types.string;
+        type = types.str;
         description = "The user under which to run flexget.";
       };
 
@@ -33,13 +33,13 @@ in {
       interval = mkOption {
         default = "10m";
         example = "1h";
-        type = types.string;
+        type = types.str;
         description = "When to perform a <command>flexget</command> run. See <command>man 7 systemd.time</command> for the format.";
       };
 
       systemScheduler = mkOption {
         default = true;
-        example = "false";
+        example = false;
         type = types.bool;
         description = "When true, execute the runs via the flexget-runner.timer. If false, you have to specify the settings yourself in the YML file.";
       };

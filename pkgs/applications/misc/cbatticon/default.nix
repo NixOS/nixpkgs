@@ -1,32 +1,31 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, glib, gtk3, libnotify }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, gettext, glib, gtk3, libnotify, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-
-  name = "cbatticon-${version}";
-  version = "1.6.8";
+  pname = "cbatticon";
+  version = "1.6.12";
 
   src = fetchFromGitHub {
     owner = "valr";
-    repo = "cbatticon";
+    repo = pname;
     rev = version;
-    sha256 = "16g26vin1693dbdr9qsnw36fdchx394lp79gvp7gcbw0w1ny9av6";
+    sha256 = "sha256-FGCT3gP+KL71Am4cd+f71iY8EwDPRZJ4+FDgQqjZK1M=";
   };
+
+  nativeBuildInputs = [ pkg-config gettext wrapGAppsHook ];
+
+  buildInputs =  [ glib gtk3 libnotify ];
 
   patchPhase = ''
     sed -i -e 's/ -Wno-format//g' Makefile
   '';
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  nativeBuildInputs = [ pkgconfig gettext ];
-
-  buildInputs =  [ glib gtk3 libnotify ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight and fast battery icon that sits in the system tray";
-    homepage = https://github.com/valr/cbatticon;
+    homepage = "https://github.com/valr/cbatticon";
     license = licenses.gpl2;
-    maintainers = [ maintainers.domenkozar ];
     platforms = platforms.linux;
+    maintainers = [ maintainers.domenkozar ];
   };
 }

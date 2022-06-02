@@ -1,36 +1,38 @@
-{ stdenv, fetchFromGitHub, gawk, mercury, pandoc, ncurses, gpgme }:
+{ lib, stdenv, fetchFromGitHub, mercury, pandoc, ncurses, gpgme }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-bower-${version}";
-  version = "0.10";
+  pname = "notmuch-bower";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner = "wangp";
     repo = "bower";
     rev = version;
-    sha256 = "0jpaxlfxz7mj76z3cyj8sq053p0mkp46kaw05nimzwaq5yx923fv";
+    sha256 = "0r5s16pc3ym5nd33lv9ljv1p1gpb7yysrdni4g7w7yvjrnwk35l6";
   };
 
-  nativeBuildInputs = [ gawk mercury pandoc ];
+  nativeBuildInputs = [ mercury pandoc ];
 
   buildInputs = [ ncurses gpgme ];
 
   makeFlags = [ "PARALLEL=-j$(NIX_BUILD_CORES)" "bower" "man" ];
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out/bin
     mv bower $out/bin/
     mkdir -p $out/share/man/man1
     mv bower.1 $out/share/man/man1/
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/wangp/bower;
+  meta = with lib; {
+    homepage = "https://github.com/wangp/bower";
     description = "A curses terminal client for the Notmuch email system";
-    maintainers = with maintainers; [ erictapen ];
-    license = licenses.gpl3;
+    maintainers = with maintainers; [ jgart ];
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   name = "poly";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/share/fonts/opentype
@@ -43,9 +43,8 @@ stdenv.mkDerivation rec {
       line. Poly is a Unicode typeface family that supports Open Type features
       and languages that use the Latin script and its variants.
     '';
-    homepage = http://www.fontsquirrel.com/fonts/poly;
-    license = stdenv.lib.licenses.ofl;
-    maintainers = with stdenv.lib.maintainers; [ relrod ];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "http://www.fontsquirrel.com/fonts/poly";
+    license = lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ relrod ];
   };
 }

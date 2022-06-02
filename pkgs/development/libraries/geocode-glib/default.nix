@@ -1,17 +1,17 @@
-{ fetchurl, stdenv, meson, ninja, pkgconfig, gettext, gtk-doc, docbook_xsl, gobject-introspection, gnome3, libsoup, json-glib, glib }:
+{ fetchurl, lib, stdenv, meson, ninja, pkg-config, gettext, gtk-doc, docbook_xsl, gobject-introspection, gnome, libsoup, json-glib, glib }:
 
 stdenv.mkDerivation rec {
   pname = "geocode-glib";
-  version = "3.26.0";
+  version = "3.26.2";
 
   outputs = [ "out" "dev" "devdoc" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/geocode-glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1vmydxs5xizcmaxpkfrq75xpj6pqrpdjizxyb30m00h54yqqch7a";
+    url = "mirror://gnome/sources/geocode-glib/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1l8g0f13xgkrk335afr9w8k46mziwb2jnyhl07jccl5yl37q9zh1";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gtk-doc docbook_xsl gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext gtk-doc docbook_xsl gobject-introspection ];
   buildInputs = [ glib libsoup json-glib ];
 
   patches = [
@@ -23,15 +23,15 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A convenience library for the geocoding and reverse geocoding using Nominatim service";
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ lib, stdenv, fetchurl, fetchpatch }:
 
-stdenv.mkDerivation {
-  name = "openslp-2.0.0";
+stdenv.mkDerivation rec {
+  pname = "openslp";
+  version = "2.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/openslp/2.0.0/2.0.0/openslp-2.0.0.tar.gz";
+    url = "mirror://sourceforge/openslp/${version}/${version}/openslp-${version}.tar.gz";
     sha256 = "16splwmqp0400w56297fkipaq9vlbhv7hapap8z09gp5m2i3fhwj";
   };
 
@@ -20,10 +21,11 @@ stdenv.mkDerivation {
       sha256 = "0zp61axx93b7nrbsyhn2x4dnw7n9y6g4rys21hyqxk4khrnc2yr9";
     })
     ./CVE-2016-4912.patch
+    ./CVE-2019-5544.patch
   ];
 
-  meta = with stdenv.lib; {
-    homepage = http://www.openslp.org/;
+  meta = with lib; {
+    homepage = "http://www.openslp.org/";
     description = "An open-source implementation of the IETF Service Location Protocol";
     maintainers = with maintainers; [ ttuegel ];
     license = licenses.bsd3;

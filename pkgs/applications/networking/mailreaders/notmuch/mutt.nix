@@ -1,7 +1,7 @@
 { stdenv, lib, perl, perlPackages, makeWrapper, coreutils, notmuch }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-mutt-${version}";
+  pname = "notmuch-mutt";
   version = notmuch.version;
 
   outputs = [ "out" ];
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
 
   src = notmuch.src;
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     ${coreutils}/bin/install -Dm755 \
@@ -36,9 +37,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    inherit version;
     description = "Mutt support for notmuch";
-    homepage    = https://notmuchmail.org/;
+    homepage    = "https://notmuchmail.org/";
     license     = with licenses; gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;

@@ -1,23 +1,35 @@
-{stdenv, fetchurl, libX11, glib, pkgconfig, libXmu }:
+{ lib, stdenv
+, fetchurl
+, libX11
+, glib
+, pkg-config
+, libXmu
+}:
 
 stdenv.mkDerivation rec {
-  
-  name = "wmctrl-1.07";
- 
+
+  pname = "wmctrl";
+  version = "1.07";
+
   src = fetchurl {
-    url = "http://tomas.styblo.name/wmctrl/dist/${name}.tar.gz";
+    # NOTE: 2019-04-11: There is also a semi-official mirror: http://tripie.sweb.cz/utils/wmctrl/
+    url = "https://sites.google.com/site/tstyblo/wmctrl/${pname}-${version}.tar.gz";
     sha256 = "1afclc57b9017a73mfs9w7lbdvdipmf9q0xdk116f61gnvyix2np";
   };
- 
-  nativeBuildInputs = [ pkgconfig ];
+
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
+  nativeBuildInputs = [ glib.dev ];
   buildInputs = [ libX11 libXmu glib ];
 
   patches = [ ./64-bit-data.patch ];
 
   meta = {
-    homepage = http://tomas.styblo.name/wmctrl/;
-    description = "Command line tool to interact with an EWMH/NetWM compatible X Window Manager";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; all;
+    homepage = "https://sites.google.com/site/tstyblo/wmctrl";
+    description = "CLI tool to interact with EWMH/NetWM compatible X Window Managers";
+    license = lib.licenses.gpl2;
+    platforms = with lib.platforms; all;
+    maintainers = [ lib.maintainers.Anton-Latukha ];
   };
+
 }

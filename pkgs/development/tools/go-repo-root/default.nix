@@ -1,16 +1,16 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "go-repo-root-${version}";
-  version = "20140911-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "90041e5c7dc634651549f96814a452f4e0e680f9";
-  
+  pname = "go-repo-root";
+  version = "unstable-2014-09-11";
+
   goPackagePath = "github.com/cstrahan/go-repo-root";
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/cstrahan/go-repo-root";
-    sha256 = "1rlzp8kjv0a3dnfhyqcggny0ad648j5csr2x0siq5prahlp48mg4";
+  src = fetchFromGitHub {
+    owner = "cstrahan";
+    repo = "go-repo-root";
+    rev = "90041e5c7dc634651549f96814a452f4e0e680f9";
+    sha256 = "sha256-5FVELoUq34KjBl1kzYpExDQFvH2PYQ+dbUOBLSe6n+Y=";
   };
 
   goDeps = ./deps.nix;

@@ -1,31 +1,31 @@
 # TODO: Resolve the issues with the Mono bindings.
 
-{ stdenv, fetchurl, lib, file
-, pkgconfig, autoconf
+{ stdenv, fetchgit, lib
+, pkg-config, autoreconfHook
 , glib, dbus-glib, gtkVersion ? "3"
 , gtk2 ? null, libindicator-gtk2 ? null, libdbusmenu-gtk2 ? null
 , gtk3 ? null, libindicator-gtk3 ? null, libdbusmenu-gtk3 ? null
-, python2Packages, gobject-introspection, vala
+, gtk-doc, vala, gobject-introspection
 , monoSupport ? false, mono ? null, gtk-sharp-2_0 ? null
  }:
 
 with lib;
 
-let
-  inherit (python2Packages) python pygobject2 pygtk;
-in stdenv.mkDerivation rec {
-  name = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
-          in "libappindicator-${postfix}-${version}";
-  version = "${versionMajor}.${versionMinor}";
-  versionMajor = "12.10";
-  versionMinor = "0";
 
-  src = fetchurl {
-    url = "${meta.homepage}/${versionMajor}/${version}/+download/libappindicator-${version}.tar.gz";
-    sha256 = "17xlqd60v0zllrxp8bgq3k5a1jkj0svkqn8rzllcyjh8k0gpr46m";
+stdenv.mkDerivation rec {
+  pname = let postfix = if gtkVersion == "2" && monoSupport then "sharp" else "gtk${gtkVersion}";
+          in "libappindicator-${postfix}";
+  version = "12.10.1+20.10.20200706.1";
+
+  outputs = [ "out" "dev" ];
+
+  src = fetchgit {
+    url = "https://git.launchpad.net/ubuntu/+source/libappindicator";
+    rev = "fe25e53bc7e39cd59ad6b3270cd7a6a9c78c4f44";
+    sha256 = "0xjvbl4gn7ra2fs6gn2g9s787kzb5cg9hv79iqsz949rxh4iw32d";
   };
 
-  nativeBuildInputs = [ pkgconfig autoconf ];
+  nativeBuildInputs = [ pkg-config autoreconfHook vala gobject-introspection gtk-doc ];
 
   propagatedBuildInputs =
     if gtkVersion == "2"
@@ -34,19 +34,12 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     glib dbus-glib
-    python pygobject2 pygtk gobject-introspection vala
   ] ++ (if gtkVersion == "2"
     then [ libindicator-gtk2 ] ++ optionals monoSupport [ mono gtk-sharp-2_0 ]
     else [ libindicator-gtk3 ]);
 
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace '=codegendir pygtk-2.0' '=codegendir pygobject-2.0'
-    autoconf
-    for f in {configure,ltmain.sh,m4/libtool.m4}; do
-      substituteInPlace $f \
-        --replace /usr/bin/file ${file}/bin/file
-    done
+  preAutoreconf = ''
+    gtkdocize
   '';
 
   configureFlags = [
@@ -56,21 +49,16 @@ in stdenv.mkDerivation rec {
     "--with-gtk=${gtkVersion}"
   ];
 
-  postConfigure = ''
-    substituteInPlace configure \
-      --replace /usr/bin/file ${file}/bin/file
-  '';
-
   doCheck = false; # generates shebangs in check phase, too lazy to fix
 
   installFlags = [
-    "sysconfdir=\${out}/etc"
+    "sysconfdir=${placeholder "out"}/etc"
     "localstatedir=\${TMPDIR}"
   ];
 
   meta = {
     description = "A library to allow applications to export a menu into the Unity Menu bar";
-    homepage = https://launchpad.net/libappindicator;
+    homepage = "https://launchpad.net/libappindicator";
     license = with licenses; [ lgpl21 lgpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

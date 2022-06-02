@@ -27,7 +27,8 @@ in
 
         locker = mkOption {
           default = "${pkgs.xlockmore}/bin/xlock"; # default according to `man xautolock`
-          example = "${pkgs.i3lock}/bin/i3lock -i /path/to/img";
+          defaultText = literalExpression ''"''${pkgs.xlockmore}/bin/xlock"'';
+          example = literalExpression ''"''${pkgs.i3lock}/bin/i3lock -i /path/to/img"'';
           type = types.str;
 
           description = ''
@@ -37,7 +38,7 @@ in
 
         nowlocker = mkOption {
           default = null;
-          example = "${pkgs.i3lock}/bin/i3lock -i /path/to/img";
+          example = literalExpression ''"''${pkgs.i3lock}/bin/i3lock -i /path/to/img"'';
           type = types.nullOr types.str;
 
           description = ''
@@ -56,7 +57,7 @@ in
 
         notifier = mkOption {
           default = null;
-          example = "${pkgs.libnotify}/bin/notify-send \"Locking in 10 seconds\"";
+          example = literalExpression ''"''${pkgs.libnotify}/bin/notify-send 'Locking in 10 seconds'"'';
           type = types.nullOr types.str;
 
           description = ''
@@ -66,7 +67,7 @@ in
 
         killer = mkOption {
           default = null; # default according to `man xautolock` is none
-          example = "${pkgs.systemd}/bin/systemctl suspend";
+          example = "/run/current-system/systemd/bin/systemctl suspend";
           type = types.nullOr types.str;
 
           description = ''
@@ -129,10 +130,10 @@ in
           assertion = cfg.killer != null -> cfg.killtime >= 10;
           message = "killtime has to be at least 10 minutes according to `man xautolock`";
         }
-      ] ++ (lib.flip map [ "locker" "notifier" "nowlocker" "killer" ]
+      ] ++ (lib.forEach [ "locker" "notifier" "nowlocker" "killer" ]
         (option:
         {
-          assertion = cfg."${option}" != null -> builtins.substring 0 1 cfg."${option}" == "/";
+          assertion = cfg.${option} != null -> builtins.substring 0 1 cfg.${option} == "/";
           message = "Please specify a canonical path for `services.xserver.xautolock.${option}`";
         })
       );

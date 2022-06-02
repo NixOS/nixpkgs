@@ -1,15 +1,15 @@
-{ stdenv, apulse, libpulseaudio, pkgconfig, intltool, autoreconfHook }:
+{ stdenv, apulse, libpulseaudio, pkg-config, intltool }:
 
 stdenv.mkDerivation {
-  name = "libpressureaudio-${apulse.version}";
+  pname = "libpressureaudio";
+  version = apulse.version;
 
   src = libpulseaudio.src;
 
-  nativeBuildInputs = [ pkgconfig intltool autoreconfHook ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
-  configurePhase = ":";
-
-  buildPhase = ":";
+  dontConfigure = true;
+  dontBuild = true;
 
   installPhase = ''
     echo "Copying libraries from apulse."
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     Name: libpulse
     Description: PulseAudio Client Interface
     Version: ${libpulseaudio.version}-rebootstrapped
-    Libs: -L$out/lib -lpulse 
+    Libs: -L$out/lib -lpulse
     Cflags: -I$out/include -D_REENTRANT
     EOF
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     Name: libpulse-simple
     Description: PulseAudio Simplified Synchronous Client Interface
     Version: ${libpulseaudio.version}-rebootstrapped
-    Libs: -L$out/lib -lpulse-simple 
+    Libs: -L$out/lib -lpulse-simple
     Cflags: -I$out/include -D_REENTRANT
     Requires: libpulse
     EOF
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     Name: libpulse-mainloop-glib
     Description: PulseAudio GLib 2.0 Main Loop Wrapper
     Version: ${libpulseaudio.version}-rebootstrapped
-    Libs: -L$out/lib -lpulse-mainloop-glib 
+    Libs: -L$out/lib -lpulse-mainloop-glib
     Cflags: -I$out/include -D_REENTRANT
     Requires: libpulse glib-2.0
     EOF

@@ -8,32 +8,7 @@
   <subtitle>Version <xi:include href="./generated/version" parse="text" />
   </subtitle>
  </info>
- <preface xml:id="preface">
-  <title>Preface</title>
-  <para>
-   This manual describes how to install, use and extend NixOS, a Linux
-   distribution based on the purely functional package management system Nix.
-  </para>
-  <para>
-   If you encounter problems, please report them on the
-   <literal
-    xlink:href="https://discourse.nixos.org">Discourse</literal> or
-   on the <link
-    xlink:href="irc://irc.freenode.net/#nixos">
-   <literal>#nixos</literal> channel on Freenode</link>. Bugs should be
-   reported in
-   <link
-    xlink:href="https://github.com/NixOS/nixpkgs/issues">NixOS’
-   GitHub issue tracker</link>.
-  </para>
-  <note>
-   <para>
-    Commands prefixed with <literal>#</literal> have to be run as root, either
-    requiring to login as root user or temporarily switching to it using
-    <literal>sudo</literal> for example.
-   </para>
-  </note>
- </preface>
+ <xi:include href="preface.xml" />
  <xi:include href="installation/installation.xml" />
  <xi:include href="configuration/configuration.xml" />
  <xi:include href="administration/running.xml" />
@@ -44,5 +19,6 @@
   <xi:include href="./generated/options-db.xml"
                 xpointer="configuration-variable-list" />
  </appendix>
+ <xi:include href="./from_md/contributing-to-this-manual.chapter.xml" />
  <xi:include href="release-notes/release-notes.xml" />
 </book>

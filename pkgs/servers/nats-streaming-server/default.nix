@@ -1,26 +1,27 @@
-{  buildGoPackage, fetchFromGitHub, lib  }:
+{ buildGoModule, fetchFromGitHub, lib  }:
 
 with lib;
 
-buildGoPackage rec {
-  name = "nats-streaming-server-${version}";
-  version = "0.11.2";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/nats-io/nats-streaming-server";
+buildGoModule rec {
+  pname   = "nats-streaming-server";
+  version = "0.24.3";
 
   src = fetchFromGitHub {
-    inherit rev;
-    owner = "nats-io";
-    repo = "nats-streaming-server";
-    sha256 = "1jd9c5yw3xxp5hln1g8w48l4cslhxbv0k2af47g6pya09kwknqkq";
+    rev    = "v${version}";
+    owner  = "nats-io";
+    repo   = pname;
+    sha256 = "sha256-vpDOiFuxLpqor+9SztdZrJvwC8QGwt5+df4R2OTcxlA=";
   };
+
+  vendorSha256 = "sha256:1m783cq20xlv5aglf252g5127r5ilfq4fqj00vim38v271511hmy";
+
+  # tests fail and ask to `go install`
+  doCheck = false;
 
   meta = {
     description = "NATS Streaming System Server";
     license = licenses.asl20;
     maintainers = [ maintainers.swdunlop ];
-    homepage = https://nats.io/;
-    platforms = platforms.all;
+    homepage = "https://nats.io/";
   };
 }

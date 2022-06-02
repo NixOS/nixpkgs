@@ -1,27 +1,41 @@
-{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy, fetchpatch}:
+{ lib
+, stdenv
+, fetchPypi
+, python
+, buildPythonPackage
+, cython
+, gfortran
+, pythran
+, nose
+, pytest
+, pytest-xdist
+, numpy
+, pybind11
+}:
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "1.2.1";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e085d1babcb419bbe58e2e805ac61924dac4ca45a07c9fa081144739e500aa3c";
+    sha256 = "sha256-MdTy1rckvJqY5Se1hJuKflib8epjDDOqVj7akSyf8L0=";
   };
 
-  checkInputs = [ nose pytest ];
-  nativeBuildInputs = [ gfortran ];
-  buildInputs = [ numpy.blas ];
+  nativeBuildInputs = [ cython gfortran pythran ];
+
+  buildInputs = [ numpy.blas pybind11 ];
+
   propagatedBuildInputs = [ numpy ];
+
+  checkInputs = [ nose pytest pytest-xdist ];
 
   # Remove tests because of broken wrapper
   prePatch = ''
     rm scipy/linalg/tests/test_lapack.py
   '';
 
-  # INTERNALERROR, solved with https://github.com/scipy/scipy/pull/8871
-  # however, it does not apply cleanly.
-  doCheck = false;
+  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
     sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
@@ -32,12 +46,20 @@ buildPythonPackage rec {
     ln -s ${numpy.cfg} site.cfg
   '';
 
-  enableParallelBuilding = true;
+  # disable stackprotector on aarch64-darwin for now
+  #
+  # build error:
+  #
+  # /private/tmp/nix-build-python3.9-scipy-1.6.3.drv-0/ccDEsw5U.s:109:15: error: index must be an integer in range [-256, 255].
+  #
+  #         ldr     x0, [x0, ___stack_chk_guard];momd
+  #
+  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
 
   checkPhase = ''
     runHook preCheck
     pushd dist
-    ${python.interpreter} -c 'import scipy; scipy.test("fast", verbose=10)'
+    ${python.interpreter} -c "import scipy; scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES)"
     popd
     runHook postCheck
   '';
@@ -48,9 +70,12 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
 
-  meta = {
-    description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering. ";
-    homepage = https://www.scipy.org/;
-    maintainers = with lib.maintainers; [ fridh ];
+  SCIPY_USE_G77_ABI_WRAPPER = 1;
+
+  meta = with lib; {
+    description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
+    homepage = "https://www.scipy.org/";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.fridh ];
   };
 }

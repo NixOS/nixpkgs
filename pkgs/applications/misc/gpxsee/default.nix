@@ -1,44 +1,45 @@
-{ stdenv, fetchFromGitHub, qmake, qttools }:
+{ lib, stdenv, fetchFromGitHub, qmake, qttools, qttranslations, qtlocation, wrapQtAppsHook, substituteAll }:
 
 stdenv.mkDerivation rec {
-  name = "gpxsee-${version}";
-  version = "7.1";
+  pname = "gpxsee";
+  version = "10.5";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "1dgag8j3566qwiz1pschfq2wqdp7y1pr4cm9na4zwrdjhn3ci6v5";
+    sha256 = "sha256-TvOdyzWvGSdl8aSA+pAOpPVpQzK9POmqtClqdXAMsws=";
   };
 
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ qttools ];
+  patches = (substituteAll {
+    # See https://github.com/NixOS/nixpkgs/issues/86054
+    src = ./fix-qttranslations-path.diff;
+    inherit qttranslations;
+  });
+
+  buildInputs = [ qtlocation ];
+
+  nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
 
   preConfigure = ''
-    substituteInPlace src/common/programpaths.cpp --replace /usr/share/ $out/share/
-    lrelease lang/*.ts
+    lrelease gpxsee.pro
   '';
 
-  installPhase = ''
-    install -Dm755 GPXSee $out/bin/GPXSee
-    mkdir -p $out/share/gpxsee
-    cp -r pkg/csv $out/share/gpxsee/
-    cp -r pkg/maps $out/share/gpxsee/
-    mkdir -p $out/share/gpxsee/translations
-    cp -r lang/*.qm $out/share/gpxsee/translations
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv GPXSee.app $out/Applications
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
-    homepage = https://www.gpxsee.org/;
-    description = "GPX viewer and analyzer";
+  meta = with lib; {
+    description = "GPS log file viewer and analyzer";
     longDescription = ''
-      GPXSee is a Qt-based GPS log file viewer and analyzer that supports GPX,
-      TCX, KML, FIT, IGC, NMEA, SLF, LOC and OziExplorer files.
+      GPXSee is a Qt-based GPS log file viewer and analyzer that supports
+      all common GPS log file formats.
     '';
-    license = licenses.gpl3;
-    maintainers = [ maintainers.womfoo ];
-    platforms = platforms.linux;
+    homepage = "https://www.gpxsee.org/";
+    changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ womfoo sikmir ];
+    platforms = platforms.unix;
   };
 }

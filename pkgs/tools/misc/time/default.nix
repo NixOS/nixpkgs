@@ -1,11 +1,11 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "time-${version}";
+  pname = "time";
   version = "1.9";
 
   src = fetchurl {
-    url = "mirror://gnu/time/${name}.tar.gz";
+    url = "mirror://gnu/time/${pname}-${version}.tar.gz";
     sha256 = "07jj7cz6lc13iqrpgn81ivqh8rkm73p4rnivwgrrshk23v4g1b7v";
   };
 
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
       `time' reports unavailable information as zero values.
     '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
-    homepage = https://www.gnu.org/software/time/;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    homepage = "https://www.gnu.org/software/time/";
+    platforms = lib.platforms.unix;
   };
 }

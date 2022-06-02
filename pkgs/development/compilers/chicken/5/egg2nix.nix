@@ -1,4 +1,4 @@
-{ stdenv, eggDerivation, fetchFromGitHub, chickenEggs }:
+{ lib, eggDerivation, fetchFromGitHub, chickenEggs }:
 
 # Note: This mostly reimplements the default.nix already contained in
 # the tarball. Is there a nicer way than duplicating code?
@@ -21,9 +21,9 @@ eggDerivation {
 
   meta = {
     description = "Generate nix-expression from CHICKEN scheme eggs";
-    homepage = https://github.com/the-kenny/egg2nix;
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.the-kenny ];
+    homepage = "https://github.com/the-kenny/egg2nix";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ corngood ];
   };
 }

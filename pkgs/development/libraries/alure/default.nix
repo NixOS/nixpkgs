@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, cmake, openal }:
+{ lib, stdenv, fetchurl, cmake, openal }:
 
 stdenv.mkDerivation rec {
-  name = "alure-${version}";
+  pname = "alure";
   version = "1.2";
 
   src = fetchurl {
@@ -9,11 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0w8gsyqki21s1qb2s5ac1kj08i6nc937c0rr08xbw9w9wvd6lpj6";
   };
 
-  buildInputs = [ cmake openal ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ openal ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A utility library to help manage common tasks with OpenAL applications";
-    homepage = http://kcat.strangesoft.net/alure.html;
+    homepage = "https://github.com/kcat/alure";
     license = licenses.mit;
     platforms = platforms.linux;
   };

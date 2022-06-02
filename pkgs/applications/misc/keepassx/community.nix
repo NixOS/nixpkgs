@@ -1,106 +1,126 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, qttools
+{ lib, stdenv
+, fetchFromGitHub
+, cmake
+, qttools
+, darwin
 
+, asciidoctor
+, botan2
 , curl
-, libargon2
-, libgcrypt
-, libsodium
-, zlib
-, libmicrohttpd
-, libXtst
-, qtbase
-, libgpgerror
-, glibcLocales
-, libyubikey
-, yubikey-personalization
 , libXi
-, qtx11extras
+, libXtst
+, libargon2
+, libusb1
+, minizip
+, pcsclite
+, pkg-config
+, qrencode
+, qtbase
 , qtmacextras
+, qtsvg
+, qtx11extras
+, readline
+, wrapGAppsHook
+, wrapQtAppsHook
+, zlib
 
 , withKeePassBrowser ? true
+, withKeePassKeeShare ? true
 , withKeePassSSHAgent ? true
-, withKeePassHTTP ? false
-, withKeePassNetworking ? false
+, withKeePassNetworking ? true
+, withKeePassTouchID ? true
+, withKeePassYubiKey ? true
+, withKeePassFDOSecrets ? true
+
+, nixosTests
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "keepassxc-${version}";
-  version = "2.3.4";
+  pname = "keepassxc";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
-    rev = "${version}";
-    sha256 = "1gja402dsbws4z8ybnhqbw7rc9svgqnshqjgf7158d6x0ni386m3";
+    rev = version;
+    sha256 = "sha256-BOtehDzlWhhfXj8TOFvFN4f86Hl2EC3rO4qUIl9fqq4=";
   };
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
+  NIX_CFLAGS_COMPILE = optionalString stdenv.cc.isClang [
     "-Wno-old-style-cast"
     "-Wno-error"
     "-D__BIG_ENDIAN__=${if stdenv.isBigEndian then "1" else "0"}"
   ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace CMakeLists.txt \
-      --replace "/usr/local/bin" "../bin" \
-      --replace "/usr/local/share/man" "../share/man"
-  '';
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
+  NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
 
   patches = [
     ./darwin.patch
-    ./qt511.patch
   ];
 
   cmakeFlags = [
     "-DKEEPASSXC_BUILD_TYPE=Release"
     "-DWITH_GUI_TESTS=ON"
-    "-DWITH_XC_AUTOTYPE=ON"
-    "-DWITH_XC_YUBIKEY=ON"
+    "-DWITH_XC_UPDATECHECK=OFF"
   ]
   ++ (optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
-  ++ (optional withKeePassHTTP "-DWITH_XC_HTTP=ON")
+  ++ (optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
   ++ (optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
+  ++ (optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
+  ++ (optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
   ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
 
   doCheck = true;
   checkPhase = ''
+    runHook preCheck
+
     export LC_ALL="en_US.UTF-8"
-    make test ARGS+="-E testgui --output-on-failure"
+    export QT_QPA_PLATFORM=offscreen
+    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
+    # testcli and testgui are flaky - skip them both
+    make test ARGS+="-E 'testcli|testgui' --output-on-failure"
+
+    runHook postCheck
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper qttools ];
+  nativeBuildInputs = [ asciidoctor cmake wrapGAppsHook wrapQtAppsHook qttools pkg-config ];
 
   buildInputs = [
     curl
-    glibcLocales
+    botan2
     libXi
     libXtst
     libargon2
-    libgcrypt
-    libgpgerror
-    libmicrohttpd
-    libsodium
-    libyubikey
+    minizip
+    pcsclite
+    qrencode
     qtbase
+    qtsvg
     qtx11extras
-    yubikey-personalization
+    readline
     zlib
-  ] ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
+  ]
+  ++ optional stdenv.isLinux libusb1
+  ++ optional stdenv.isDarwin qtmacextras
+  ++ optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication;
 
-  postInstall = optionalString stdenv.isDarwin ''
-    # Make it work without Qt in PATH.
-    wrapProgram $out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC \
-      --set QT_PLUGIN_PATH ${qtbase.bin}/${qtbase.qtPluginPrefix}
-  '';
+  passthru.tests = nixosTests.keepassxc;
 
   meta = {
-    description = "Password manager to store your passwords safely and auto-type them into your everyday websites and applications";
-    longDescription = "A community fork of KeePassX, which is itself a port of KeePass Password Safe. The goal is to extend and improve KeePassX with new features and bugfixes to provide a feature-rich, fully cross-platform and modern open-source password manager. Accessible via native cross-platform GUI and via CLI. Includes optional http-interface to allow browser-integration with plugins like PassIFox (https://github.com/pfn/passifox).";
-    homepage = https://keepassxc.org/;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ s1lvester jonafato ];
-    platforms = with platforms; linux ++ darwin;
+    description = "Offline password manager with many features.";
+    longDescription = ''
+      A community fork of KeePassX, which is itself a port of KeePass Password Safe.
+      The goal is to extend and improve KeePassX with new features and bugfixes,
+      to provide a feature-rich, fully cross-platform and modern open-source password manager.
+      Accessible via native cross-platform GUI, CLI, has browser integration
+      using the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser)
+    '';
+    homepage = "https://keepassxc.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ jonafato turion ];
+    platforms = platforms.linux ++ platforms.darwin;
+    broken = stdenv.isDarwin;  # see to https://github.com/NixOS/nixpkgs/issues/172165
   };
 }

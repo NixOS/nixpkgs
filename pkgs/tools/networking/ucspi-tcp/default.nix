@@ -1,10 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ucspi-tcp-0.88";
+  pname = "ucspi-tcp";
+  version = "0.88";
 
   src = fetchurl {
-    url = "https://cr.yp.to/ucspi-tcp/${name}.tar.gz";
+    url = "https://cr.yp.to/ucspi-tcp/ucspi-tcp-${version}.tar.gz";
     sha256 = "171yl9kfm8w7l17dfxild99mbf877a9k5zg8yysgb1j8nz51a1ja";
   };
 
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
     cp debian/ucspi-tcp-man/*.1 "$out/share/man/man1"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command-line tools for building TCP client-server applications";
     longDescription = ''
       tcpserver waits for incoming connections and, for each connection, runs a
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
       Interface, using the TCP protocol. UCSPI tools are available for several
       different networks.
     '';
-    homepage = http://cr.yp.to/ucspi-tcp.html;
+    homepage = "http://cr.yp.to/ucspi-tcp.html";
     license = licenses.publicDomain;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

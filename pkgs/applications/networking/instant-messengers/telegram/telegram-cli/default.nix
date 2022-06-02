@@ -1,37 +1,49 @@
-{ stdenv, fetchgit, bash, libconfig, libevent, openssl
-, readline, zlib, lua5_2, python, pkgconfig, jansson
-, runtimeShell
+{ stdenv, fetchFromGitHub, jansson, lib, libconfig, libevent, libgcrypt, lua, lua53Packages
+, makeWrapper, openssl, pkg-config, python3, readline, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "telegram-cli-2016-03-23";
+  pname = "telegram-cli";
+  version = "20200106";
 
-  src = fetchgit {
-    url = "https://github.com/vysheng/tg.git";
-    sha256 = "07sss5cnw2ygd7mp8f5532lmj7qm6ywqf4cjaq5g13i8igzqzwzj";
-    rev = "6547c0b21b977b327b3c5e8142963f4bc246187a";
+  src = fetchFromGitHub {
+    owner = "kenorb-contrib";
+    repo = "tg";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-wYBPr2b8IOycO9y/CNyGjnRsyGyYl3oiXYtTzwTurVA=";
+    fetchSubmodules = true;
   };
 
   buildInputs = [
-    libconfig libevent openssl readline zlib
-    lua5_2 python pkgconfig jansson
+    jansson
+    libconfig
+    libevent
+    libgcrypt
+    lua
+    lua53Packages.lgi
+    openssl
+    python3
+    readline
+    zlib
   ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
+
   installPhase = ''
-    mkdir -p $out/bin
-    cp ./bin/telegram-cli $out/bin/telegram-wo-key
-    cp ./tg-server.pub $out/
-    cat > $out/bin/telegram-cli <<EOF
-    #!${runtimeShell}
-    $out/bin/telegram-wo-key -k $out/tg-server.pub "\$@"
-    EOF
-    chmod +x $out/bin/telegram-cli
+    runHook preInstall
+    install -Dm755 ./bin/telegram-cli $out/bin/telegram-cli-keyless
+    install -Dm644 ./tg-server.pub -t $out/share/telegram-cli
+    makeWrapper $out/bin/telegram-cli-keyless $out/bin/telegram-cli \
+      --add-flags "-k $out/share/telegram-cli/tg-server.pub"
+    runHook postInstall
   '';
 
-  meta = {
-    description = "Command-line interface for Telegram messenger";
-    homepage = https://telegram.org/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.jagajaga ];
+  meta = with lib; {
+    description = "Command-line interface for Telegram, that uses readline interface, it's a client implementation of TGL library";
+    downloadPage = "https://github.com/kenorb-contrib/tg";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ];
   };
 }

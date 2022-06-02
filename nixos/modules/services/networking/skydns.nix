@@ -49,6 +49,7 @@ in {
 
     nameservers = mkOption {
       default = map (n: n + ":53") config.networking.nameservers;
+      defaultText = literalExpression ''map (n: n + ":53") config.networking.nameservers'';
       type = types.listOf types.str;
       description = "Skydns list of nameservers to forward DNS requests to when not authoritative for a domain.";
       example = ["8.8.8.8:53" "8.8.4.4:53"];
@@ -56,7 +57,7 @@ in {
 
     package = mkOption {
       default = pkgs.skydns;
-      defaultText = "pkgs.skydns";
+      defaultText = literalExpression "pkgs.skydns";
       type = types.package;
       description = "Skydns package to use.";
     };
@@ -64,7 +65,7 @@ in {
     extraConfig = mkOption {
       default = {};
       type = types.attrsOf types.str;
-      description = "Skydns attribute set of extra config options passed as environemnt variables.";
+      description = "Skydns attribute set of extra config options passed as environment variables.";
     };
   };
 
@@ -83,7 +84,7 @@ in {
         SKYDNS_NAMESERVERS = concatStringsSep "," cfg.nameservers;
       };
       serviceConfig = {
-        ExecStart = "${cfg.package.bin}/bin/skydns";
+        ExecStart = "${cfg.package}/bin/skydns";
       };
     };
 

@@ -1,7 +1,7 @@
 # builder for Emacs packages built for packages.el
 # using MELPA package-build.el
 
-{ lib, stdenv, fetchFromGitHub, emacs, texinfo }:
+{ lib, stdenv, fetchFromGitHub, emacs, texinfo, writeText, gcc }:
 
 with lib;
 
@@ -23,23 +23,23 @@ with lib;
 let
 
   defaultMeta = {
-    homepage = args.src.meta.homepage or "http://melpa.org/#/${pname}";
+    homepage = args.src.meta.homepage or "https://melpa.org/#/${pname}";
   };
 
 in
 
-import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
+import ./generic.nix { inherit lib stdenv emacs texinfo writeText gcc; } ({
 
   ename =
-    if isNull(ename)
+    if ename == null
     then pname
     else ename;
 
   packageBuild = fetchFromGitHub {
     owner = "melpa";
     repo = "package-build";
-    rev = "0a22c3fbbf661822ec1791739953b937a12fa623";
-    sha256 = "0dpy5p34il600sc8ic5jdgb3glya9si3lrvhxab0swks8fdydjgs";
+    rev = "35017a2d87376c70c3239f48bdbac7efca85aa10";
+    sha256 = "07hdmam85452v4r2vaabj1qfyami1hgbh0jgj9dcwbkpr0y1gvqj";
   };
 
   elpa2nix = ./elpa2nix.el;
@@ -70,7 +70,7 @@ import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
         -L "$NIX_BUILD_TOP/package-build" \
         -l "$melpa2nix" \
         -f melpa2nix-build-package \
-        $ename $version
+        $ename $version $commit
 
     runHook postBuild
     '';

@@ -1,26 +1,46 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala
-, desktop-file-utils, python3, gettext, libxml2, gtk3, granite, libgee, gst_all_1
-, libcanberra, clutter-gtk, clutter-gst, elementary-icon-theme, appstream, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, appstream
+, desktop-file-utils
+, gettext
+, libxml2
+, meson
+, ninja
+, pkg-config
+, python3
+, vala
+, wrapGAppsHook
+, glib
+, granite
+, gst_all_1
+, gtk3
+, libcanberra
+, libgee
+, libhandy
+}:
 
 stdenv.mkDerivation rec {
-  pname = "camera";
-  version = "1.0.4";
-
-  name = "elementary-${pname}-${version}";
+  pname = "elementary-camera";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "camera";
     rev = version;
-    sha256 = "1p532f961cjdg7szmxw7hw3av9v342hv5rx7in3bbhlc7adxflyc";
+    sha256 = "sha256-xIv+mOlZV58XD0Z6Vc2wA1EQUxT5BaQ0zhYc9v+ne1w=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
-    };
-  };
+  patches = [
+    # Fix build with meson 0.61
+    # https://github.com/elementary/camera/pull/216
+    (fetchpatch {
+      url = "https://github.com/elementary/camera/commit/ead143b7e3246c5fa9bb37c95d491fb07cea9e04.patch";
+      sha256 = "sha256-2zGigUi6DpjJx8SEvAE3Q3jrm7MggOvLc72lAPMPvs4=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream
@@ -29,36 +49,46 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    clutter-gst
-    clutter-gtk
-    elementary-icon-theme
+    glib
     granite
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
     gtk3
     libcanberra
     libgee
-  ];
+    libhandy
+  ] ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-base
+    # gtkSupport needed for gtksink
+    # https://github.com/elementary/camera/issues/181
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "Camera app designed for elementary OS";
-    homepage = https://github.com/elementary/camera;
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/elementary/camera";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.camera";
   };
 }

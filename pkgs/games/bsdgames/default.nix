@@ -1,18 +1,20 @@
-{ stdenv, fetchurl, ncurses, openssl, flex, bison, less, miscfiles }:
+{ lib, stdenv, fetchurl, ncurses, openssl, flex, bison, less, miscfiles }:
 
-stdenv.mkDerivation {
-  name = "bsd-games-2.17";
+stdenv.mkDerivation rec {
+  pname = "bsd-games";
+  version = "2.17";
 
   src = fetchurl {
-    url = ftp://metalab.unc.edu/pub/Linux/games/bsd-games-2.17.tar.gz;
-    sha256 = "0q7zdyyfvn15y0w4g54kq3gza89h61py727m8slmw73cxx594vq6";
+    url = "mirror://ibiblioPubLinux/games/${pname}-${version}.tar.gz";
+    hash = "sha256-Bm+SSu9sHF6pRvWI428wMCH138CTlEc48CXY7bxv/2A=";
   };
 
   buildInputs = [ ncurses openssl flex bison ];
 
   patches = [
+    # Remove UTMPX support on Makefrag file
     (fetchurl {
-      url = http://svn.exactcode.de/t2/trunk/package/games/bsd-games/dm-noutmpx.patch;
+      url = "http://svn.exactcode.de/t2/trunk/package/games/bsd-games/dm-noutmpx.patch";
       sha256 = "1k3qp3jj0dksjr4dnppv6dvkwslrgk9c7p2n9vipqildpxgqp7w2";
     })
   ];
@@ -58,10 +60,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.t2-project.org/packages/bsd-games.html;
+    homepage = "http://www.t2-project.org/packages/bsd-games.html";
     description = "Ports of all the games from NetBSD-current that are free";
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.free;
+    maintainers = with lib.maintainers; [viric];
+    platforms = with lib.platforms; linux;
   };
 }

@@ -2,1633 +2,3796 @@
 # Do not edit!
 
 {
-  version = "0.90.2";
+  version = "2022.5.5";
   components = {
-    "abode" = ps: with ps; [  ];
-    "abode.alarm_control_panel" = ps: with ps; [  ];
-    "abode.binary_sensor" = ps: with ps; [  ];
-    "abode.camera" = ps: with ps; [  ];
-    "abode.cover" = ps: with ps; [  ];
-    "abode.light" = ps: with ps; [  ];
-    "abode.lock" = ps: with ps; [  ];
-    "abode.sensor" = ps: with ps; [  ];
-    "abode.switch" = ps: with ps; [  ];
-    "ads" = ps: with ps; [  ];
-    "ads.binary_sensor" = ps: with ps; [  ];
-    "ads.light" = ps: with ps; [  ];
-    "ads.sensor" = ps: with ps; [  ];
-    "ads.switch" = ps: with ps; [  ];
-    "air_quality" = ps: with ps; [  ];
-    "air_quality.demo" = ps: with ps; [  ];
-    "air_quality.nilu" = ps: with ps; [  ];
-    "air_quality.norway_air" = ps: with ps; [  ];
-    "air_quality.opensensemap" = ps: with ps; [  ];
-    "alarm_control_panel" = ps: with ps; [  ];
-    "alarm_control_panel.alarmdotcom" = ps: with ps; [  ];
-    "alarm_control_panel.canary" = ps: with ps; [  ];
-    "alarm_control_panel.concord232" = ps: with ps; [  ];
-    "alarm_control_panel.demo" = ps: with ps; [  ];
-    "alarm_control_panel.ialarm" = ps: with ps; [  ];
-    "alarm_control_panel.manual" = ps: with ps; [  ];
-    "alarm_control_panel.manual_mqtt" = ps: with ps; [ paho-mqtt ];
-    "alarm_control_panel.ness_alarm" = ps: with ps; [  ];
-    "alarm_control_panel.nx584" = ps: with ps; [  ];
-    "alarm_control_panel.spc" = ps: with ps; [  ];
-    "alarm_control_panel.totalconnect" = ps: with ps; [  ];
-    "alarm_control_panel.yale_smart_alarm" = ps: with ps; [  ];
-    "alarmdecoder" = ps: with ps; [  ];
-    "alarmdecoder.alarm_control_panel" = ps: with ps; [  ];
-    "alarmdecoder.binary_sensor" = ps: with ps; [  ];
-    "alarmdecoder.sensor" = ps: with ps; [  ];
-    "alert" = ps: with ps; [  ];
-    "alexa" = ps: with ps; [ aiohttp-cors ];
-    "alexa.auth" = ps: with ps; [  ];
-    "alexa.const" = ps: with ps; [  ];
-    "alexa.flash_briefings" = ps: with ps; [  ];
-    "alexa.intent" = ps: with ps; [  ];
-    "alexa.smart_home" = ps: with ps; [  ];
-    "ambient_station" = ps: with ps; [  ];
-    "ambient_station.binary_sensor" = ps: with ps; [  ];
-    "ambient_station.config_flow" = ps: with ps; [  ];
-    "ambient_station.const" = ps: with ps; [  ];
-    "ambient_station.sensor" = ps: with ps; [  ];
-    "amcrest" = ps: with ps; [ ha-ffmpeg ];
-    "amcrest.camera" = ps: with ps; [ ha-ffmpeg ];
-    "amcrest.sensor" = ps: with ps; [ ha-ffmpeg ];
-    "amcrest.switch" = ps: with ps; [ ha-ffmpeg ];
-    "android_ip_webcam" = ps: with ps; [  ];
-    "android_ip_webcam.binary_sensor" = ps: with ps; [  ];
-    "android_ip_webcam.sensor" = ps: with ps; [  ];
-    "android_ip_webcam.switch" = ps: with ps; [  ];
-    "androidtv" = ps: with ps; [  ];
-    "androidtv.media_player" = ps: with ps; [  ];
-    "apcupsd" = ps: with ps; [  ];
-    "apcupsd.binary_sensor" = ps: with ps; [  ];
-    "apcupsd.sensor" = ps: with ps; [  ];
-    "api" = ps: with ps; [ aiohttp-cors ];
-    "apple_tv" = ps: with ps; [ pyatv ];
-    "apple_tv.media_player" = ps: with ps; [ pyatv ];
-    "apple_tv.remote" = ps: with ps; [ pyatv ];
-    "aqualogic" = ps: with ps; [  ];
-    "aqualogic.sensor" = ps: with ps; [  ];
-    "aqualogic.switch" = ps: with ps; [  ];
-    "arduino" = ps: with ps; [  ];
-    "arduino.sensor" = ps: with ps; [  ];
-    "arduino.switch" = ps: with ps; [  ];
-    "arlo" = ps: with ps; [  ];
-    "arlo.alarm_control_panel" = ps: with ps; [  ];
-    "arlo.camera" = ps: with ps; [ ha-ffmpeg ];
-    "arlo.sensor" = ps: with ps; [  ];
-    "asterisk_mbox" = ps: with ps; [  ];
-    "asterisk_mbox.mailbox" = ps: with ps; [  ];
-    "asuswrt" = ps: with ps; [  ];
-    "august" = ps: with ps; [  ];
-    "august.binary_sensor" = ps: with ps; [  ];
-    "august.camera" = ps: with ps; [  ];
-    "august.lock" = ps: with ps; [  ];
-    "auth" = ps: with ps; [ aiohttp-cors ];
-    "auth.indieauth" = ps: with ps; [  ];
-    "auth.login_flow" = ps: with ps; [  ];
-    "auth.mfa_setup_flow" = ps: with ps; [  ];
-    "automation" = ps: with ps; [  ];
-    "automation.event" = ps: with ps; [  ];
-    "automation.geo_location" = ps: with ps; [  ];
-    "automation.homeassistant" = ps: with ps; [  ];
-    "automation.litejet" = ps: with ps; [  ];
-    "automation.mqtt" = ps: with ps; [ paho-mqtt ];
-    "automation.numeric_state" = ps: with ps; [  ];
-    "automation.state" = ps: with ps; [  ];
-    "automation.sun" = ps: with ps; [  ];
-    "automation.template" = ps: with ps; [  ];
-    "automation.time" = ps: with ps; [  ];
-    "automation.time_pattern" = ps: with ps; [  ];
-    "automation.webhook" = ps: with ps; [ aiohttp-cors ];
-    "automation.zone" = ps: with ps; [  ];
-    "axis" = ps: with ps; [  ];
-    "axis.binary_sensor" = ps: with ps; [  ];
-    "axis.camera" = ps: with ps; [  ];
-    "bbb_gpio" = ps: with ps; [  ];
-    "bbb_gpio.binary_sensor" = ps: with ps; [  ];
-    "bbb_gpio.switch" = ps: with ps; [  ];
-    "binary_sensor" = ps: with ps; [  ];
-    "binary_sensor.arest" = ps: with ps; [  ];
-    "binary_sensor.aurora" = ps: with ps; [  ];
-    "binary_sensor.bayesian" = ps: with ps; [  ];
-    "binary_sensor.command_line" = ps: with ps; [  ];
-    "binary_sensor.concord232" = ps: with ps; [  ];
-    "binary_sensor.demo" = ps: with ps; [  ];
-    "binary_sensor.ffmpeg_motion" = ps: with ps; [ ha-ffmpeg ];
-    "binary_sensor.ffmpeg_noise" = ps: with ps; [ ha-ffmpeg ];
-    "binary_sensor.flic" = ps: with ps; [  ];
-    "binary_sensor.hikvision" = ps: with ps; [  ];
-    "binary_sensor.iss" = ps: with ps; [  ];
-    "binary_sensor.mystrom" = ps: with ps; [ aiohttp-cors ];
-    "binary_sensor.ness_alarm" = ps: with ps; [  ];
-    "binary_sensor.nx584" = ps: with ps; [  ];
-    "binary_sensor.ping" = ps: with ps; [  ];
-    "binary_sensor.random" = ps: with ps; [  ];
-    "binary_sensor.rest" = ps: with ps; [  ];
-    "binary_sensor.rflink" = ps: with ps; [  ];
-    "binary_sensor.ring" = ps: with ps; [  ];
-    "binary_sensor.sleepiq" = ps: with ps; [  ];
-    "binary_sensor.spc" = ps: with ps; [  ];
-    "binary_sensor.tapsaff" = ps: with ps; [  ];
-    "binary_sensor.tcp" = ps: with ps; [  ];
-    "binary_sensor.template" = ps: with ps; [  ];
-    "binary_sensor.threshold" = ps: with ps; [  ];
-    "binary_sensor.tod" = ps: with ps; [  ];
-    "binary_sensor.trend" = ps: with ps; [ numpy ];
-    "binary_sensor.uptimerobot" = ps: with ps; [  ];
-    "binary_sensor.vultr" = ps: with ps; [ vultr ];
-    "binary_sensor.workday" = ps: with ps; [  ];
-    "blink" = ps: with ps; [  ];
-    "blink.alarm_control_panel" = ps: with ps; [  ];
-    "blink.binary_sensor" = ps: with ps; [  ];
-    "blink.camera" = ps: with ps; [  ];
-    "blink.sensor" = ps: with ps; [  ];
-    "bloomsky" = ps: with ps; [  ];
-    "bloomsky.binary_sensor" = ps: with ps; [  ];
-    "bloomsky.camera" = ps: with ps; [  ];
-    "bloomsky.sensor" = ps: with ps; [  ];
-    "bmw_connected_drive" = ps: with ps; [  ];
-    "bmw_connected_drive.binary_sensor" = ps: with ps; [  ];
-    "bmw_connected_drive.device_tracker" = ps: with ps; [  ];
-    "bmw_connected_drive.lock" = ps: with ps; [  ];
-    "bmw_connected_drive.sensor" = ps: with ps; [  ];
-    "browser" = ps: with ps; [  ];
-    "calendar" = ps: with ps; [ aiohttp-cors ];
-    "calendar.caldav" = ps: with ps; [  ];
-    "calendar.demo" = ps: with ps; [  ];
-    "calendar.todoist" = ps: with ps; [ todoist ];
-    "camera" = ps: with ps; [ aiohttp-cors ];
-    "camera.canary" = ps: with ps; [ ha-ffmpeg ];
-    "camera.demo" = ps: with ps; [  ];
-    "camera.familyhub" = ps: with ps; [  ];
-    "camera.ffmpeg" = ps: with ps; [ ha-ffmpeg ];
-    "camera.foscam" = ps: with ps; [  ];
-    "camera.generic" = ps: with ps; [  ];
-    "camera.local_file" = ps: with ps; [  ];
-    "camera.mjpeg" = ps: with ps; [  ];
-    "camera.onvif" = ps: with ps; [ ha-ffmpeg ];
-    "camera.proxy" = ps: with ps; [ pillow ];
-    "camera.push" = ps: with ps; [ aiohttp-cors ];
-    "camera.ring" = ps: with ps; [ ha-ffmpeg ];
-    "camera.rpi_camera" = ps: with ps; [  ];
-    "camera.synology" = ps: with ps; [  ];
-    "camera.uvc" = ps: with ps; [  ];
-    "camera.xeoma" = ps: with ps; [  ];
-    "camera.xiaomi" = ps: with ps; [ ha-ffmpeg ];
-    "camera.yi" = ps: with ps; [ ha-ffmpeg ];
-    "canary" = ps: with ps; [  ];
-    "cast" = ps: with ps; [ PyChromecast ];
-    "cast.media_player" = ps: with ps; [ PyChromecast ];
-    "cisco_mobility_express" = ps: with ps; [  ];
-    "cisco_mobility_express.device_tracker" = ps: with ps; [  ];
-    "climate" = ps: with ps; [  ];
-    "climate.const" = ps: with ps; [  ];
-    "climate.coolmaster" = ps: with ps; [  ];
-    "climate.demo" = ps: with ps; [  ];
-    "climate.dyson" = ps: with ps; [  ];
-    "climate.ephember" = ps: with ps; [  ];
-    "climate.eq3btsmart" = ps: with ps; [ construct ];
-    "climate.flexit" = ps: with ps; [  ];
-    "climate.generic_thermostat" = ps: with ps; [  ];
-    "climate.heatmiser" = ps: with ps; [  ];
-    "climate.honeywell" = ps: with ps; [  ];
-    "climate.melissa" = ps: with ps; [  ];
-    "climate.mill" = ps: with ps; [  ];
-    "climate.nuheat" = ps: with ps; [  ];
-    "climate.oem" = ps: with ps; [  ];
-    "climate.proliphix" = ps: with ps; [  ];
-    "climate.radiotherm" = ps: with ps; [  ];
-    "climate.reproduce_state" = ps: with ps; [  ];
-    "climate.sensibo" = ps: with ps; [  ];
-    "climate.touchline" = ps: with ps; [  ];
-    "climate.venstar" = ps: with ps; [  ];
-    "climate.zhong_hong" = ps: with ps; [  ];
-    "cloud" = ps: with ps; [ aiohttp-cors ];
-    "cloud.binary_sensor" = ps: with ps; [ aiohttp-cors ];
-    "cloud.const" = ps: with ps; [  ];
-    "cloud.http_api" = ps: with ps; [  ];
-    "cloud.prefs" = ps: with ps; [  ];
-    "cloud.utils" = ps: with ps; [  ];
-    "cloudflare" = ps: with ps; [  ];
-    "coinbase" = ps: with ps; [  ];
-    "comfoconnect" = ps: with ps; [  ];
-    "comfoconnect.fan" = ps: with ps; [  ];
-    "comfoconnect.sensor" = ps: with ps; [  ];
-    "config" = ps: with ps; [ aiohttp-cors ];
-    "config.area_registry" = ps: with ps; [  ];
-    "config.auth" = ps: with ps; [  ];
-    "config.automation" = ps: with ps; [  ];
-    "config.config_entries" = ps: with ps; [  ];
-    "config.core" = ps: with ps; [  ];
-    "config.customize" = ps: with ps; [  ];
-    "config.device_registry" = ps: with ps; [  ];
-    "config.entity_registry" = ps: with ps; [  ];
-    "config.group" = ps: with ps; [  ];
-    "config.script" = ps: with ps; [  ];
-    "config.zwave" = ps: with ps; [  ];
-    "configurator" = ps: with ps; [  ];
-    "conversation" = ps: with ps; [ aiohttp-cors ];
-    "conversation.util" = ps: with ps; [  ];
-    "counter" = ps: with ps; [  ];
-    "cover" = ps: with ps; [  ];
-    "cover.aladdin_connect" = ps: with ps; [  ];
-    "cover.brunt" = ps: with ps; [  ];
-    "cover.command_line" = ps: with ps; [  ];
-    "cover.demo" = ps: with ps; [  ];
-    "cover.garadget" = ps: with ps; [  ];
-    "cover.gogogate2" = ps: with ps; [  ];
-    "cover.group" = ps: with ps; [  ];
-    "cover.myq" = ps: with ps; [  ];
-    "cover.opengarage" = ps: with ps; [  ];
-    "cover.rflink" = ps: with ps; [  ];
-    "cover.template" = ps: with ps; [  ];
-    "cppm_tracker" = ps: with ps; [  ];
-    "cppm_tracker.device_tracker" = ps: with ps; [  ];
-    "daikin" = ps: with ps; [  ];
-    "daikin.climate" = ps: with ps; [  ];
-    "daikin.config_flow" = ps: with ps; [  ];
-    "daikin.const" = ps: with ps; [  ];
-    "daikin.sensor" = ps: with ps; [  ];
-    "danfoss_air" = ps: with ps; [  ];
-    "danfoss_air.binary_sensor" = ps: with ps; [  ];
-    "danfoss_air.sensor" = ps: with ps; [  ];
-    "danfoss_air.switch" = ps: with ps; [  ];
-    "datadog" = ps: with ps; [ datadog ];
-    "deconz" = ps: with ps; [  ];
-    "deconz.binary_sensor" = ps: with ps; [  ];
-    "deconz.climate" = ps: with ps; [  ];
-    "deconz.config_flow" = ps: with ps; [  ];
-    "deconz.const" = ps: with ps; [  ];
-    "deconz.cover" = ps: with ps; [  ];
-    "deconz.deconz_device" = ps: with ps; [  ];
-    "deconz.gateway" = ps: with ps; [  ];
-    "deconz.light" = ps: with ps; [  ];
-    "deconz.scene" = ps: with ps; [  ];
-    "deconz.sensor" = ps: with ps; [  ];
-    "deconz.switch" = ps: with ps; [  ];
-    "default_config" = ps: with ps; [ pynacl aiohttp-cors distro sqlalchemy zeroconf ];
-    "demo" = ps: with ps; [ aiohttp-cors ];
-    "demo.remote" = ps: with ps; [  ];
-    "device_sun_light_trigger" = ps: with ps; [  ];
-    "device_tracker" = ps: with ps; [  ];
-    "device_tracker.actiontec" = ps: with ps; [  ];
-    "device_tracker.aruba" = ps: with ps; [ pexpect ];
-    "device_tracker.asuswrt" = ps: with ps; [  ];
-    "device_tracker.automatic" = ps: with ps; [ aiohttp-cors ];
-    "device_tracker.bbox" = ps: with ps; [  ];
-    "device_tracker.bluetooth_le_tracker" = ps: with ps; [  ];
-    "device_tracker.bluetooth_tracker" = ps: with ps; [ bt_proximity ];
-    "device_tracker.bt_home_hub_5" = ps: with ps; [  ];
-    "device_tracker.bt_smarthub" = ps: with ps; [  ];
-    "device_tracker.cisco_ios" = ps: with ps; [ pexpect ];
-    "device_tracker.ddwrt" = ps: with ps; [  ];
-    "device_tracker.demo" = ps: with ps; [  ];
-    "device_tracker.ee_brightbox" = ps: with ps; [  ];
-    "device_tracker.fritz" = ps: with ps; [ fritzconnection ];
-    "device_tracker.google_maps" = ps: with ps; [  ];
-    "device_tracker.hitron_coda" = ps: with ps; [  ];
-    "device_tracker.huawei_router" = ps: with ps; [  ];
-    "device_tracker.icloud" = ps: with ps; [  ];
-    "device_tracker.keenetic_ndms2" = ps: with ps; [  ];
-    "device_tracker.linksys_ap" = ps: with ps; [ beautifulsoup4 ];
-    "device_tracker.linksys_smart" = ps: with ps; [  ];
-    "device_tracker.luci" = ps: with ps; [  ];
-    "device_tracker.meraki" = ps: with ps; [ aiohttp-cors ];
-    "device_tracker.mikrotik" = ps: with ps; [  ];
-    "device_tracker.mqtt_json" = ps: with ps; [ paho-mqtt ];
-    "device_tracker.netgear" = ps: with ps; [  ];
-    "device_tracker.nmap_tracker" = ps: with ps; [  ];
-    "device_tracker.ping" = ps: with ps; [  ];
-    "device_tracker.quantum_gateway" = ps: with ps; [  ];
-    "device_tracker.ritassist" = ps: with ps; [  ];
-    "device_tracker.sky_hub" = ps: with ps; [  ];
-    "device_tracker.snmp" = ps: with ps; [ pysnmp ];
-    "device_tracker.swisscom" = ps: with ps; [  ];
-    "device_tracker.synology_srm" = ps: with ps; [  ];
-    "device_tracker.thomson" = ps: with ps; [  ];
-    "device_tracker.tile" = ps: with ps; [  ];
-    "device_tracker.tomato" = ps: with ps; [  ];
-    "device_tracker.tplink" = ps: with ps; [  ];
-    "device_tracker.traccar" = ps: with ps; [  ];
-    "device_tracker.trackr" = ps: with ps; [  ];
-    "device_tracker.ubee" = ps: with ps; [  ];
-    "device_tracker.ubus" = ps: with ps; [  ];
-    "device_tracker.unifi" = ps: with ps; [ pyunifi ];
-    "device_tracker.unifi_direct" = ps: with ps; [ pexpect ];
-    "device_tracker.upc_connect" = ps: with ps; [ defusedxml ];
-    "device_tracker.xfinity" = ps: with ps; [  ];
-    "device_tracker.xiaomi" = ps: with ps; [  ];
-    "dialogflow" = ps: with ps; [ aiohttp-cors ];
-    "digital_ocean" = ps: with ps; [ digital-ocean ];
-    "digital_ocean.binary_sensor" = ps: with ps; [ digital-ocean ];
-    "digital_ocean.switch" = ps: with ps; [ digital-ocean ];
-    "discovery" = ps: with ps; [ netdisco ];
-    "dominos" = ps: with ps; [ aiohttp-cors ];
-    "doorbird" = ps: with ps; [  ];
-    "doorbird.camera" = ps: with ps; [  ];
-    "doorbird.switch" = ps: with ps; [  ];
-    "dovado" = ps: with ps; [  ];
-    "dovado.notify" = ps: with ps; [  ];
-    "dovado.sensor" = ps: with ps; [  ];
-    "downloader" = ps: with ps; [  ];
-    "duckdns" = ps: with ps; [  ];
-    "dweet" = ps: with ps; [  ];
-    "dweet.sensor" = ps: with ps; [  ];
-    "dyson" = ps: with ps; [  ];
-    "ebusd" = ps: with ps; [  ];
-    "ebusd.const" = ps: with ps; [  ];
-    "ebusd.sensor" = ps: with ps; [  ];
-    "ecoal_boiler" = ps: with ps; [  ];
-    "ecoal_boiler.sensor" = ps: with ps; [  ];
-    "ecoal_boiler.switch" = ps: with ps; [  ];
-    "ecobee" = ps: with ps; [  ];
-    "ecobee.binary_sensor" = ps: with ps; [  ];
-    "ecobee.climate" = ps: with ps; [  ];
-    "ecobee.notify" = ps: with ps; [  ];
-    "ecobee.sensor" = ps: with ps; [  ];
-    "ecobee.weather" = ps: with ps; [  ];
-    "ecovacs" = ps: with ps; [  ];
-    "ecovacs.vacuum" = ps: with ps; [  ];
-    "edp_redy" = ps: with ps; [  ];
-    "edp_redy.sensor" = ps: with ps; [  ];
-    "edp_redy.switch" = ps: with ps; [  ];
-    "egardia" = ps: with ps; [  ];
-    "egardia.alarm_control_panel" = ps: with ps; [  ];
-    "egardia.binary_sensor" = ps: with ps; [  ];
-    "eight_sleep" = ps: with ps; [  ];
-    "eight_sleep.binary_sensor" = ps: with ps; [  ];
-    "eight_sleep.sensor" = ps: with ps; [  ];
-    "elkm1" = ps: with ps; [  ];
-    "elkm1.alarm_control_panel" = ps: with ps; [  ];
-    "elkm1.climate" = ps: with ps; [  ];
-    "elkm1.light" = ps: with ps; [  ];
-    "elkm1.scene" = ps: with ps; [  ];
-    "elkm1.sensor" = ps: with ps; [  ];
-    "elkm1.switch" = ps: with ps; [  ];
-    "emoncms_history" = ps: with ps; [  ];
-    "emulated_hue" = ps: with ps; [ aiohttp-cors ];
-    "emulated_hue.hue_api" = ps: with ps; [  ];
-    "emulated_hue.upnp" = ps: with ps; [  ];
-    "emulated_roku" = ps: with ps; [  ];
-    "emulated_roku.binding" = ps: with ps; [  ];
-    "emulated_roku.config_flow" = ps: with ps; [  ];
-    "emulated_roku.const" = ps: with ps; [  ];
-    "enigma2" = ps: with ps; [  ];
-    "enigma2.media_player" = ps: with ps; [  ];
-    "enocean" = ps: with ps; [  ];
-    "enocean.binary_sensor" = ps: with ps; [  ];
-    "enocean.light" = ps: with ps; [  ];
-    "enocean.sensor" = ps: with ps; [  ];
-    "enocean.switch" = ps: with ps; [  ];
-    "envisalink" = ps: with ps; [  ];
-    "envisalink.alarm_control_panel" = ps: with ps; [  ];
-    "envisalink.binary_sensor" = ps: with ps; [  ];
-    "envisalink.sensor" = ps: with ps; [  ];
-    "esphome" = ps: with ps; [ aioesphomeapi ];
-    "esphome.binary_sensor" = ps: with ps; [  ];
-    "esphome.config_flow" = ps: with ps; [  ];
-    "esphome.cover" = ps: with ps; [  ];
-    "esphome.fan" = ps: with ps; [  ];
-    "esphome.light" = ps: with ps; [  ];
-    "esphome.sensor" = ps: with ps; [  ];
-    "esphome.switch" = ps: with ps; [  ];
-    "eufy" = ps: with ps; [  ];
-    "eufy.light" = ps: with ps; [  ];
-    "eufy.switch" = ps: with ps; [  ];
-    "evohome" = ps: with ps; [  ];
-    "evohome.climate" = ps: with ps; [  ];
-    "fan" = ps: with ps; [  ];
-    "fan.demo" = ps: with ps; [  ];
-    "fan.dyson" = ps: with ps; [  ];
-    "fan.template" = ps: with ps; [  ];
-    "fastdotcom" = ps: with ps; [  ];
-    "fastdotcom.sensor" = ps: with ps; [  ];
-    "feedreader" = ps: with ps; [  ];
-    "ffmpeg" = ps: with ps; [ ha-ffmpeg ];
-    "fibaro" = ps: with ps; [  ];
-    "fibaro.binary_sensor" = ps: with ps; [  ];
-    "fibaro.cover" = ps: with ps; [  ];
-    "fibaro.light" = ps: with ps; [  ];
-    "fibaro.scene" = ps: with ps; [  ];
-    "fibaro.sensor" = ps: with ps; [  ];
-    "fibaro.switch" = ps: with ps; [  ];
-    "folder_watcher" = ps: with ps; [ watchdog ];
-    "foursquare" = ps: with ps; [ aiohttp-cors ];
-    "freebox" = ps: with ps; [  ];
-    "freebox.device_tracker" = ps: with ps; [  ];
-    "freebox.sensor" = ps: with ps; [  ];
-    "freedns" = ps: with ps; [  ];
-    "fritzbox" = ps: with ps; [  ];
-    "fritzbox.binary_sensor" = ps: with ps; [  ];
-    "fritzbox.climate" = ps: with ps; [  ];
-    "fritzbox.sensor" = ps: with ps; [  ];
-    "fritzbox.switch" = ps: with ps; [  ];
-    "frontend" = ps: with ps; [ aiohttp-cors ];
-    "frontend.storage" = ps: with ps; [  ];
-    "gc100" = ps: with ps; [  ];
-    "gc100.binary_sensor" = ps: with ps; [  ];
-    "gc100.switch" = ps: with ps; [  ];
-    "geo_location" = ps: with ps; [  ];
-    "geo_location.demo" = ps: with ps; [  ];
-    "geo_location.geo_json_events" = ps: with ps; [  ];
-    "geo_location.nsw_rural_fire_service_feed" = ps: with ps; [  ];
-    "geo_location.usgs_earthquakes_feed" = ps: with ps; [  ];
-    "geofency" = ps: with ps; [ aiohttp-cors ];
-    "geofency.device_tracker" = ps: with ps; [ aiohttp-cors ];
-    "goalfeed" = ps: with ps; [  ];
-    "google" = ps: with ps; [ google_api_python_client httplib2 oauth2client ];
-    "google.calendar" = ps: with ps; [  ];
-    "google.tts" = ps: with ps; [  ];
-    "google_assistant" = ps: with ps; [ aiohttp-cors ];
-    "google_assistant.const" = ps: with ps; [  ];
-    "google_assistant.helpers" = ps: with ps; [  ];
-    "google_assistant.http" = ps: with ps; [  ];
-    "google_assistant.smart_home" = ps: with ps; [  ];
-    "google_assistant.trait" = ps: with ps; [  ];
-    "google_domains" = ps: with ps; [  ];
-    "google_pubsub" = ps: with ps; [ google_cloud_pubsub ];
-    "googlehome" = ps: with ps; [  ];
-    "googlehome.device_tracker" = ps: with ps; [  ];
-    "googlehome.sensor" = ps: with ps; [  ];
-    "gpslogger" = ps: with ps; [ aiohttp-cors ];
-    "gpslogger.device_tracker" = ps: with ps; [ aiohttp-cors ];
-    "graphite" = ps: with ps; [  ];
-    "greeneye_monitor" = ps: with ps; [  ];
-    "group" = ps: with ps; [  ];
-    "group.reproduce_state" = ps: with ps; [  ];
-    "habitica" = ps: with ps; [  ];
-    "habitica.sensor" = ps: with ps; [  ];
-    "hangouts" = ps: with ps; [  ];
-    "hangouts.config_flow" = ps: with ps; [  ];
-    "hangouts.const" = ps: with ps; [  ];
-    "hangouts.hangouts_bot" = ps: with ps; [  ];
-    "hangouts.intents" = ps: with ps; [  ];
-    "hangouts.notify" = ps: with ps; [  ];
-    "harmony" = ps: with ps; [  ];
-    "harmony.remote" = ps: with ps; [  ];
-    "hassio" = ps: with ps; [ aiohttp-cors ];
-    "hassio.auth" = ps: with ps; [  ];
-    "hassio.const" = ps: with ps; [  ];
-    "hassio.discovery" = ps: with ps; [  ];
-    "hassio.handler" = ps: with ps; [  ];
-    "hassio.http" = ps: with ps; [  ];
-    "hdmi_cec" = ps: with ps; [  ];
-    "hdmi_cec.media_player" = ps: with ps; [  ];
-    "hdmi_cec.switch" = ps: with ps; [  ];
-    "history" = ps: with ps; [ aiohttp-cors sqlalchemy ];
-    "history_graph" = ps: with ps; [ aiohttp-cors sqlalchemy ];
-    "hive" = ps: with ps; [  ];
-    "hive.binary_sensor" = ps: with ps; [  ];
-    "hive.climate" = ps: with ps; [  ];
-    "hive.light" = ps: with ps; [  ];
-    "hive.sensor" = ps: with ps; [  ];
-    "hive.switch" = ps: with ps; [  ];
-    "hlk_sw16" = ps: with ps; [  ];
-    "hlk_sw16.switch" = ps: with ps; [  ];
-    "homekit" = ps: with ps; [  ];
-    "homekit.const" = ps: with ps; [  ];
-    "homekit.util" = ps: with ps; [  ];
-    "homekit_controller" = ps: with ps; [  ];
-    "homekit_controller.alarm_control_panel" = ps: with ps; [  ];
-    "homekit_controller.binary_sensor" = ps: with ps; [  ];
-    "homekit_controller.climate" = ps: with ps; [  ];
-    "homekit_controller.config_flow" = ps: with ps; [  ];
-    "homekit_controller.connection" = ps: with ps; [  ];
-    "homekit_controller.const" = ps: with ps; [  ];
-    "homekit_controller.cover" = ps: with ps; [  ];
-    "homekit_controller.light" = ps: with ps; [  ];
-    "homekit_controller.lock" = ps: with ps; [  ];
-    "homekit_controller.sensor" = ps: with ps; [  ];
-    "homekit_controller.switch" = ps: with ps; [  ];
-    "homematic" = ps: with ps; [ pyhomematic ];
-    "homematic.binary_sensor" = ps: with ps; [ pyhomematic ];
-    "homematic.climate" = ps: with ps; [ pyhomematic ];
-    "homematic.cover" = ps: with ps; [ pyhomematic ];
-    "homematic.light" = ps: with ps; [ pyhomematic ];
-    "homematic.lock" = ps: with ps; [ pyhomematic ];
-    "homematic.notify" = ps: with ps; [ pyhomematic ];
-    "homematic.sensor" = ps: with ps; [ pyhomematic ];
-    "homematic.switch" = ps: with ps; [ pyhomematic ];
-    "homematicip_cloud" = ps: with ps; [  ];
-    "homematicip_cloud.alarm_control_panel" = ps: with ps; [  ];
-    "homematicip_cloud.binary_sensor" = ps: with ps; [  ];
-    "homematicip_cloud.climate" = ps: with ps; [  ];
-    "homematicip_cloud.config_flow" = ps: with ps; [  ];
-    "homematicip_cloud.const" = ps: with ps; [  ];
-    "homematicip_cloud.cover" = ps: with ps; [  ];
-    "homematicip_cloud.device" = ps: with ps; [  ];
-    "homematicip_cloud.errors" = ps: with ps; [  ];
-    "homematicip_cloud.hap" = ps: with ps; [  ];
-    "homematicip_cloud.light" = ps: with ps; [  ];
-    "homematicip_cloud.sensor" = ps: with ps; [  ];
-    "homematicip_cloud.switch" = ps: with ps; [  ];
-    "homematicip_cloud.weather" = ps: with ps; [  ];
-    "homeworks" = ps: with ps; [  ];
-    "homeworks.light" = ps: with ps; [  ];
-    "http" = ps: with ps; [ aiohttp-cors ];
-    "http.auth" = ps: with ps; [  ];
-    "http.ban" = ps: with ps; [  ];
-    "http.const" = ps: with ps; [  ];
-    "http.cors" = ps: with ps; [  ];
-    "http.data_validator" = ps: with ps; [  ];
-    "http.real_ip" = ps: with ps; [  ];
-    "http.static" = ps: with ps; [  ];
-    "http.view" = ps: with ps; [  ];
-    "huawei_lte" = ps: with ps; [  ];
-    "huawei_lte.device_tracker" = ps: with ps; [  ];
-    "huawei_lte.notify" = ps: with ps; [  ];
-    "huawei_lte.sensor" = ps: with ps; [  ];
-    "hue" = ps: with ps; [ aiohue ];
-    "hue.bridge" = ps: with ps; [  ];
-    "hue.config_flow" = ps: with ps; [  ];
-    "hue.const" = ps: with ps; [  ];
-    "hue.errors" = ps: with ps; [  ];
-    "hue.light" = ps: with ps; [ aiohue ];
-    "hydrawise" = ps: with ps; [  ];
-    "hydrawise.binary_sensor" = ps: with ps; [  ];
-    "hydrawise.sensor" = ps: with ps; [  ];
-    "hydrawise.switch" = ps: with ps; [  ];
-    "idteck_prox" = ps: with ps; [  ];
-    "ifttt" = ps: with ps; [ aiohttp-cors pyfttt ];
-    "ifttt.alarm_control_panel" = ps: with ps; [ aiohttp-cors pyfttt ];
-    "ihc" = ps: with ps; [ defusedxml ];
-    "ihc.binary_sensor" = ps: with ps; [ defusedxml ];
-    "ihc.const" = ps: with ps; [  ];
-    "ihc.ihcdevice" = ps: with ps; [  ];
-    "ihc.light" = ps: with ps; [ defusedxml ];
-    "ihc.sensor" = ps: with ps; [ defusedxml ];
-    "ihc.switch" = ps: with ps; [ defusedxml ];
-    "ihc.util" = ps: with ps; [  ];
-    "image_processing" = ps: with ps; [ aiohttp-cors ];
-    "image_processing.demo" = ps: with ps; [  ];
-    "image_processing.dlib_face_detect" = ps: with ps; [ face_recognition ];
-    "image_processing.dlib_face_identify" = ps: with ps; [ face_recognition ];
-    "image_processing.facebox" = ps: with ps; [  ];
-    "image_processing.microsoft_face_detect" = ps: with ps; [ aiohttp-cors ];
-    "image_processing.microsoft_face_identify" = ps: with ps; [ aiohttp-cors ];
-    "image_processing.openalpr_cloud" = ps: with ps; [  ];
-    "image_processing.openalpr_local" = ps: with ps; [  ];
-    "image_processing.opencv" = ps: with ps; [ numpy ];
-    "image_processing.qrcode" = ps: with ps; [ pillow ];
-    "image_processing.seven_segments" = ps: with ps; [  ];
-    "image_processing.tensorflow" = ps: with ps; [ numpy pillow protobuf ];
-    "influxdb" = ps: with ps; [ influxdb ];
-    "input_boolean" = ps: with ps; [  ];
-    "input_datetime" = ps: with ps; [  ];
-    "input_number" = ps: with ps; [  ];
-    "input_select" = ps: with ps; [  ];
-    "input_text" = ps: with ps; [  ];
-    "insteon" = ps: with ps; [  ];
-    "insteon.binary_sensor" = ps: with ps; [  ];
-    "insteon.cover" = ps: with ps; [  ];
-    "insteon.fan" = ps: with ps; [  ];
-    "insteon.light" = ps: with ps; [  ];
-    "insteon.sensor" = ps: with ps; [  ];
-    "insteon.switch" = ps: with ps; [  ];
-    "insteon_local" = ps: with ps; [  ];
-    "insteon_plm" = ps: with ps; [  ];
-    "intent_script" = ps: with ps; [  ];
-    "introduction" = ps: with ps; [  ];
-    "ios" = ps: with ps; [ aiohttp-cors zeroconf ];
-    "ios.notify" = ps: with ps; [ aiohttp-cors zeroconf ];
-    "ios.sensor" = ps: with ps; [ aiohttp-cors zeroconf ];
-    "iota" = ps: with ps; [  ];
-    "iota.sensor" = ps: with ps; [  ];
-    "iperf3" = ps: with ps; [  ];
-    "iperf3.sensor" = ps: with ps; [  ];
-    "ipma" = ps: with ps; [  ];
-    "ipma.config_flow" = ps: with ps; [  ];
-    "ipma.const" = ps: with ps; [  ];
-    "ipma.weather" = ps: with ps; [  ];
-    "isy994" = ps: with ps; [  ];
-    "isy994.binary_sensor" = ps: with ps; [  ];
-    "isy994.cover" = ps: with ps; [  ];
-    "isy994.fan" = ps: with ps; [  ];
-    "isy994.light" = ps: with ps; [  ];
-    "isy994.lock" = ps: with ps; [  ];
-    "isy994.sensor" = ps: with ps; [  ];
-    "isy994.switch" = ps: with ps; [  ];
-    "itach" = ps: with ps; [  ];
-    "itach.remote" = ps: with ps; [  ];
-    "joaoapps_join" = ps: with ps; [  ];
-    "joaoapps_join.notify" = ps: with ps; [  ];
-    "juicenet" = ps: with ps; [  ];
-    "juicenet.sensor" = ps: with ps; [  ];
-    "keyboard" = ps: with ps; [  ];
-    "keyboard_remote" = ps: with ps; [ evdev ];
-    "kira" = ps: with ps; [  ];
-    "kira.remote" = ps: with ps; [  ];
-    "kira.sensor" = ps: with ps; [  ];
-    "knx" = ps: with ps; [  ];
-    "knx.binary_sensor" = ps: with ps; [  ];
-    "knx.climate" = ps: with ps; [  ];
-    "knx.cover" = ps: with ps; [  ];
-    "knx.light" = ps: with ps; [  ];
-    "knx.notify" = ps: with ps; [  ];
-    "knx.scene" = ps: with ps; [  ];
-    "knx.sensor" = ps: with ps; [  ];
-    "knx.switch" = ps: with ps; [  ];
-    "konnected" = ps: with ps; [ aiohttp-cors ];
-    "konnected.binary_sensor" = ps: with ps; [ aiohttp-cors ];
-    "konnected.const" = ps: with ps; [  ];
-    "konnected.handlers" = ps: with ps; [  ];
-    "konnected.sensor" = ps: with ps; [ aiohttp-cors ];
-    "konnected.switch" = ps: with ps; [ aiohttp-cors ];
-    "lametric" = ps: with ps; [  ];
-    "lametric.notify" = ps: with ps; [  ];
-    "lcn" = ps: with ps; [  ];
-    "lcn.const" = ps: with ps; [  ];
-    "lcn.cover" = ps: with ps; [  ];
-    "lcn.light" = ps: with ps; [  ];
-    "lcn.switch" = ps: with ps; [  ];
-    "lifx" = ps: with ps; [ aiolifx ];
-    "lifx.light" = ps: with ps; [ aiolifx aiolifx-effects ];
-    "light" = ps: with ps; [  ];
-    "light.avion" = ps: with ps; [  ];
-    "light.blinksticklight" = ps: with ps; [ BlinkStick ];
-    "light.blinkt" = ps: with ps; [  ];
-    "light.decora" = ps: with ps; [  ];
-    "light.decora_wifi" = ps: with ps; [  ];
-    "light.demo" = ps: with ps; [  ];
-    "light.everlights" = ps: with ps; [  ];
-    "light.flux_led" = ps: with ps; [  ];
-    "light.futurenow" = ps: with ps; [  ];
-    "light.greenwave" = ps: with ps; [  ];
-    "light.group" = ps: with ps; [  ];
-    "light.hyperion" = ps: with ps; [  ];
-    "light.iglo" = ps: with ps; [  ];
-    "light.lifx_legacy" = ps: with ps; [  ];
-    "light.limitlessled" = ps: with ps; [ limitlessled ];
-    "light.litejet" = ps: with ps; [  ];
-    "light.lw12wifi" = ps: with ps; [  ];
-    "light.mystrom" = ps: with ps; [  ];
-    "light.nanoleaf" = ps: with ps; [  ];
-    "light.niko_home_control" = ps: with ps; [  ];
-    "light.opple" = ps: with ps; [  ];
-    "light.osramlightify" = ps: with ps; [  ];
-    "light.piglow" = ps: with ps; [  ];
-    "light.rflink" = ps: with ps; [  ];
-    "light.rpi_gpio_pwm" = ps: with ps; [  ];
-    "light.sensehat" = ps: with ps; [  ];
-    "light.switch" = ps: with ps; [  ];
-    "light.template" = ps: with ps; [  ];
-    "light.tikteck" = ps: with ps; [  ];
-    "light.x10" = ps: with ps; [  ];
-    "light.yeelight" = ps: with ps; [  ];
-    "light.yeelightsunflower" = ps: with ps; [  ];
-    "light.zengge" = ps: with ps; [  ];
-    "lightwave" = ps: with ps; [  ];
-    "lightwave.light" = ps: with ps; [  ];
-    "lightwave.switch" = ps: with ps; [  ];
-    "linode" = ps: with ps; [ linode-api ];
-    "linode.binary_sensor" = ps: with ps; [ linode-api ];
-    "linode.switch" = ps: with ps; [ linode-api ];
-    "lirc" = ps: with ps; [  ];
-    "litejet" = ps: with ps; [  ];
-    "locative" = ps: with ps; [ aiohttp-cors ];
-    "locative.device_tracker" = ps: with ps; [ aiohttp-cors ];
-    "lock" = ps: with ps; [  ];
-    "lock.demo" = ps: with ps; [  ];
-    "lock.kiwi" = ps: with ps; [  ];
-    "lock.lockitron" = ps: with ps; [  ];
-    "lock.nello" = ps: with ps; [  ];
-    "lock.nuki" = ps: with ps; [  ];
-    "lock.sesame" = ps: with ps; [  ];
-    "lock.template" = ps: with ps; [  ];
-    "logbook" = ps: with ps; [ aiohttp-cors sqlalchemy ];
-    "logentries" = ps: with ps; [  ];
-    "logger" = ps: with ps; [  ];
-    "logi_circle" = ps: with ps; [  ];
-    "logi_circle.camera" = ps: with ps; [  ];
-    "logi_circle.sensor" = ps: with ps; [  ];
-    "lovelace" = ps: with ps; [  ];
-    "luftdaten" = ps: with ps; [ luftdaten ];
-    "luftdaten.config_flow" = ps: with ps; [  ];
-    "luftdaten.const" = ps: with ps; [  ];
-    "luftdaten.sensor" = ps: with ps; [ luftdaten ];
-    "lupusec" = ps: with ps; [  ];
-    "lupusec.alarm_control_panel" = ps: with ps; [  ];
-    "lupusec.binary_sensor" = ps: with ps; [  ];
-    "lupusec.switch" = ps: with ps; [  ];
-    "lutron" = ps: with ps; [  ];
-    "lutron.cover" = ps: with ps; [  ];
-    "lutron.light" = ps: with ps; [  ];
-    "lutron.scene" = ps: with ps; [  ];
-    "lutron.switch" = ps: with ps; [  ];
-    "lutron_caseta" = ps: with ps; [  ];
-    "lutron_caseta.cover" = ps: with ps; [  ];
-    "lutron_caseta.light" = ps: with ps; [  ];
-    "lutron_caseta.scene" = ps: with ps; [  ];
-    "lutron_caseta.switch" = ps: with ps; [  ];
-    "mailbox" = ps: with ps; [ aiohttp-cors ];
-    "mailbox.asterisk_cdr" = ps: with ps; [  ];
-    "mailbox.demo" = ps: with ps; [  ];
-    "mailgun" = ps: with ps; [ aiohttp-cors ];
-    "mailgun.notify" = ps: with ps; [ aiohttp-cors ];
-    "map" = ps: with ps; [  ];
-    "matrix" = ps: with ps; [ matrix-client ];
-    "matrix.notify" = ps: with ps; [ matrix-client ];
-    "maxcube" = ps: with ps; [  ];
-    "maxcube.binary_sensor" = ps: with ps; [  ];
-    "maxcube.climate" = ps: with ps; [  ];
-    "media_extractor" = ps: with ps; [ aiohttp-cors youtube-dl-light ];
-    "media_player" = ps: with ps; [ aiohttp-cors ];
-    "media_player.anthemav" = ps: with ps; [  ];
-    "media_player.aquostv" = ps: with ps; [  ];
-    "media_player.blackbird" = ps: with ps; [  ];
-    "media_player.bluesound" = ps: with ps; [ xmltodict ];
-    "media_player.braviatv" = ps: with ps; [  ];
-    "media_player.channels" = ps: with ps; [  ];
-    "media_player.clementine" = ps: with ps; [  ];
-    "media_player.cmus" = ps: with ps; [  ];
-    "media_player.const" = ps: with ps; [  ];
-    "media_player.demo" = ps: with ps; [  ];
-    "media_player.denon" = ps: with ps; [  ];
-    "media_player.denonavr" = ps: with ps; [  ];
-    "media_player.directv" = ps: with ps; [  ];
-    "media_player.dlna_dmr" = ps: with ps; [  ];
-    "media_player.dunehd" = ps: with ps; [  ];
-    "media_player.emby" = ps: with ps; [  ];
-    "media_player.epson" = ps: with ps; [  ];
-    "media_player.frontier_silicon" = ps: with ps; [  ];
-    "media_player.gpmdp" = ps: with ps; [ websocket_client ];
-    "media_player.gstreamer" = ps: with ps; [  ];
-    "media_player.harman_kardon_avr" = ps: with ps; [  ];
-    "media_player.horizon" = ps: with ps; [  ];
-    "media_player.itunes" = ps: with ps; [  ];
-    "media_player.kodi" = ps: with ps; [ jsonrpc-async jsonrpc-websocket ];
-    "media_player.lg_netcast" = ps: with ps; [  ];
-    "media_player.lg_soundbar" = ps: with ps; [  ];
-    "media_player.liveboxplaytv" = ps: with ps; [  ];
-    "media_player.mediaroom" = ps: with ps; [  ];
-    "media_player.monoprice" = ps: with ps; [  ];
-    "media_player.mpchc" = ps: with ps; [  ];
-    "media_player.mpd" = ps: with ps; [ mpd2 ];
-    "media_player.nad" = ps: with ps; [  ];
-    "media_player.onkyo" = ps: with ps; [ onkyo-eiscp ];
-    "media_player.openhome" = ps: with ps; [  ];
-    "media_player.panasonic_bluray" = ps: with ps; [  ];
-    "media_player.panasonic_viera" = ps: with ps; [ wakeonlan ];
-    "media_player.pandora" = ps: with ps; [ pexpect ];
-    "media_player.philips_js" = ps: with ps; [  ];
-    "media_player.pioneer" = ps: with ps; [  ];
-    "media_player.pjlink" = ps: with ps; [  ];
-    "media_player.plex" = ps: with ps; [  ];
-    "media_player.reproduce_state" = ps: with ps; [  ];
-    "media_player.russound_rio" = ps: with ps; [  ];
-    "media_player.russound_rnet" = ps: with ps; [  ];
-    "media_player.samsungtv" = ps: with ps; [ wakeonlan ];
-    "media_player.snapcast" = ps: with ps; [ snapcast ];
-    "media_player.songpal" = ps: with ps; [  ];
-    "media_player.soundtouch" = ps: with ps; [ libsoundtouch ];
-    "media_player.spotify" = ps: with ps; [ aiohttp-cors ];
-    "media_player.squeezebox" = ps: with ps; [  ];
-    "media_player.ue_smart_radio" = ps: with ps; [  ];
-    "media_player.universal" = ps: with ps; [  ];
-    "media_player.vizio" = ps: with ps; [  ];
-    "media_player.vlc" = ps: with ps; [  ];
-    "media_player.volumio" = ps: with ps; [  ];
-    "media_player.xiaomi_tv" = ps: with ps; [  ];
-    "media_player.yamaha" = ps: with ps; [  ];
-    "media_player.yamaha_musiccast" = ps: with ps; [  ];
-    "media_player.ziggo_mediabox_xl" = ps: with ps; [  ];
-    "melissa" = ps: with ps; [  ];
-    "meteo_france" = ps: with ps; [  ];
-    "meteo_france.sensor" = ps: with ps; [  ];
-    "meteo_france.weather" = ps: with ps; [  ];
-    "microsoft_face" = ps: with ps; [ aiohttp-cors ];
-    "mobile_app" = ps: with ps; [ pynacl aiohttp-cors ];
-    "mobile_app.binary_sensor" = ps: with ps; [ pynacl aiohttp-cors ];
-    "mobile_app.const" = ps: with ps; [  ];
-    "mobile_app.entity" = ps: with ps; [  ];
-    "mobile_app.helpers" = ps: with ps; [  ];
-    "mobile_app.http_api" = ps: with ps; [  ];
-    "mobile_app.sensor" = ps: with ps; [ pynacl aiohttp-cors ];
-    "mobile_app.webhook" = ps: with ps; [  ];
-    "mobile_app.websocket_api" = ps: with ps; [  ];
-    "mochad" = ps: with ps; [  ];
-    "mochad.light" = ps: with ps; [  ];
-    "mochad.switch" = ps: with ps; [  ];
-    "modbus" = ps: with ps; [  ];
-    "modbus.binary_sensor" = ps: with ps; [  ];
-    "modbus.climate" = ps: with ps; [  ];
-    "modbus.sensor" = ps: with ps; [  ];
-    "modbus.switch" = ps: with ps; [  ];
-    "mqtt" = ps: with ps; [ paho-mqtt ];
-    "mqtt.alarm_control_panel" = ps: with ps; [ paho-mqtt ];
-    "mqtt.binary_sensor" = ps: with ps; [ paho-mqtt ];
-    "mqtt.camera" = ps: with ps; [ paho-mqtt ];
-    "mqtt.climate" = ps: with ps; [ paho-mqtt ];
-    "mqtt.config_flow" = ps: with ps; [  ];
-    "mqtt.const" = ps: with ps; [  ];
-    "mqtt.cover" = ps: with ps; [ paho-mqtt ];
-    "mqtt.device_tracker" = ps: with ps; [ paho-mqtt ];
-    "mqtt.discovery" = ps: with ps; [  ];
-    "mqtt.fan" = ps: with ps; [ paho-mqtt ];
-    "mqtt.light" = ps: with ps; [ paho-mqtt ];
-    "mqtt.lock" = ps: with ps; [ paho-mqtt ];
-    "mqtt.sensor" = ps: with ps; [ paho-mqtt ];
-    "mqtt.server" = ps: with ps; [ aiohttp-cors hbmqtt ];
-    "mqtt.subscription" = ps: with ps; [  ];
-    "mqtt.switch" = ps: with ps; [ paho-mqtt ];
-    "mqtt.vacuum" = ps: with ps; [ paho-mqtt ];
-    "mqtt_eventstream" = ps: with ps; [ paho-mqtt ];
-    "mqtt_statestream" = ps: with ps; [ paho-mqtt ];
-    "mychevy" = ps: with ps; [  ];
-    "mychevy.binary_sensor" = ps: with ps; [  ];
-    "mychevy.sensor" = ps: with ps; [  ];
-    "mycroft" = ps: with ps; [  ];
-    "mysensors" = ps: with ps; [  ];
-    "mysensors.binary_sensor" = ps: with ps; [  ];
-    "mysensors.climate" = ps: with ps; [  ];
-    "mysensors.const" = ps: with ps; [  ];
-    "mysensors.cover" = ps: with ps; [  ];
-    "mysensors.device" = ps: with ps; [  ];
-    "mysensors.device_tracker" = ps: with ps; [  ];
-    "mysensors.gateway" = ps: with ps; [  ];
-    "mysensors.handler" = ps: with ps; [  ];
-    "mysensors.helpers" = ps: with ps; [  ];
-    "mysensors.light" = ps: with ps; [  ];
-    "mysensors.notify" = ps: with ps; [  ];
-    "mysensors.sensor" = ps: with ps; [  ];
-    "mysensors.switch" = ps: with ps; [  ];
-    "mythicbeastsdns" = ps: with ps; [  ];
-    "namecheapdns" = ps: with ps; [ defusedxml ];
-    "neato" = ps: with ps; [ pybotvac ];
-    "neato.camera" = ps: with ps; [ pybotvac ];
-    "neato.switch" = ps: with ps; [ pybotvac ];
-    "neato.vacuum" = ps: with ps; [ pybotvac ];
-    "ness_alarm" = ps: with ps; [  ];
-    "nest" = ps: with ps; [  ];
-    "nest.binary_sensor" = ps: with ps; [  ];
-    "nest.camera" = ps: with ps; [  ];
-    "nest.climate" = ps: with ps; [  ];
-    "nest.config_flow" = ps: with ps; [  ];
-    "nest.const" = ps: with ps; [  ];
-    "nest.local_auth" = ps: with ps; [  ];
-    "nest.sensor" = ps: with ps; [  ];
-    "netatmo" = ps: with ps; [ aiohttp-cors ];
-    "netatmo.binary_sensor" = ps: with ps; [ aiohttp-cors ];
-    "netatmo.camera" = ps: with ps; [ aiohttp-cors ];
-    "netatmo.climate" = ps: with ps; [ aiohttp-cors ];
-    "netatmo.sensor" = ps: with ps; [ aiohttp-cors ];
-    "netgear_lte" = ps: with ps; [  ];
-    "netgear_lte.notify" = ps: with ps; [  ];
-    "netgear_lte.sensor" = ps: with ps; [  ];
-    "nissan_leaf" = ps: with ps; [  ];
-    "nissan_leaf.binary_sensor" = ps: with ps; [  ];
-    "nissan_leaf.device_tracker" = ps: with ps; [  ];
-    "nissan_leaf.sensor" = ps: with ps; [  ];
-    "nissan_leaf.switch" = ps: with ps; [  ];
-    "no_ip" = ps: with ps; [  ];
-    "notify" = ps: with ps; [  ];
-    "notify.apns" = ps: with ps; [  ];
-    "notify.aws_lambda" = ps: with ps; [ boto3 ];
-    "notify.aws_sns" = ps: with ps; [ boto3 ];
-    "notify.aws_sqs" = ps: with ps; [ boto3 ];
-    "notify.ciscospark" = ps: with ps; [  ];
-    "notify.clickatell" = ps: with ps; [  ];
-    "notify.clicksend" = ps: with ps; [  ];
-    "notify.clicksend_tts" = ps: with ps; [  ];
-    "notify.command_line" = ps: with ps; [  ];
-    "notify.demo" = ps: with ps; [  ];
-    "notify.discord" = ps: with ps; [ discordpy ];
-    "notify.facebook" = ps: with ps; [  ];
-    "notify.file" = ps: with ps; [  ];
-    "notify.flock" = ps: with ps; [  ];
-    "notify.free_mobile" = ps: with ps; [  ];
-    "notify.gntp" = ps: with ps; [  ];
-    "notify.group" = ps: with ps; [  ];
-    "notify.hipchat" = ps: with ps; [  ];
-    "notify.html5" = ps: with ps; [ aiohttp-cors ];
-    "notify.kodi" = ps: with ps; [ jsonrpc-async ];
-    "notify.lannouncer" = ps: with ps; [  ];
-    "notify.llamalab_automate" = ps: with ps; [  ];
-    "notify.mastodon" = ps: with ps; [  ];
-    "notify.message_bird" = ps: with ps; [  ];
-    "notify.mycroft" = ps: with ps; [  ];
-    "notify.nfandroidtv" = ps: with ps; [  ];
-    "notify.prowl" = ps: with ps; [  ];
-    "notify.pushbullet" = ps: with ps; [ pushbullet ];
-    "notify.pushetta" = ps: with ps; [  ];
-    "notify.pushover" = ps: with ps; [ python-pushover ];
-    "notify.pushsafer" = ps: with ps; [  ];
-    "notify.rest" = ps: with ps; [  ];
-    "notify.rocketchat" = ps: with ps; [  ];
-    "notify.sendgrid" = ps: with ps; [  ];
-    "notify.simplepush" = ps: with ps; [  ];
-    "notify.slack" = ps: with ps; [  ];
-    "notify.smtp" = ps: with ps; [  ];
-    "notify.stride" = ps: with ps; [  ];
-    "notify.synology_chat" = ps: with ps; [  ];
-    "notify.syslog" = ps: with ps; [  ];
-    "notify.telegram" = ps: with ps; [ python-telegram-bot ];
-    "notify.twilio_call" = ps: with ps; [ aiohttp-cors twilio ];
-    "notify.twilio_sms" = ps: with ps; [ aiohttp-cors twilio ];
-    "notify.twitter" = ps: with ps; [  ];
-    "notify.xmpp" = ps: with ps; [ slixmpp ];
-    "notify.yessssms" = ps: with ps; [  ];
-    "nuheat" = ps: with ps; [  ];
-    "nuimo_controller" = ps: with ps; [  ];
-    "octoprint" = ps: with ps; [  ];
-    "octoprint.binary_sensor" = ps: with ps; [  ];
-    "octoprint.sensor" = ps: with ps; [  ];
-    "onboarding" = ps: with ps; [ aiohttp-cors ];
-    "onboarding.const" = ps: with ps; [  ];
-    "onboarding.views" = ps: with ps; [  ];
-    "opentherm_gw" = ps: with ps; [  ];
-    "opentherm_gw.binary_sensor" = ps: with ps; [  ];
-    "opentherm_gw.climate" = ps: with ps; [  ];
-    "opentherm_gw.sensor" = ps: with ps; [  ];
-    "openuv" = ps: with ps; [  ];
-    "openuv.binary_sensor" = ps: with ps; [  ];
-    "openuv.config_flow" = ps: with ps; [  ];
-    "openuv.const" = ps: with ps; [  ];
-    "openuv.sensor" = ps: with ps; [  ];
-    "owlet" = ps: with ps; [  ];
-    "owlet.binary_sensor" = ps: with ps; [  ];
-    "owlet.const" = ps: with ps; [  ];
-    "owlet.sensor" = ps: with ps; [  ];
-    "owntracks" = ps: with ps; [ pynacl aiohttp-cors ];
-    "owntracks.config_flow" = ps: with ps; [  ];
-    "owntracks.device_tracker" = ps: with ps; [ pynacl aiohttp-cors ];
-    "panel_custom" = ps: with ps; [ aiohttp-cors ];
-    "panel_iframe" = ps: with ps; [ aiohttp-cors ];
-    "persistent_notification" = ps: with ps; [  ];
-    "person" = ps: with ps; [  ];
-    "pilight" = ps: with ps; [  ];
-    "pilight.binary_sensor" = ps: with ps; [  ];
-    "pilight.sensor" = ps: with ps; [  ];
-    "pilight.switch" = ps: with ps; [  ];
-    "plant" = ps: with ps; [  ];
-    "plum_lightpad" = ps: with ps; [  ];
-    "plum_lightpad.light" = ps: with ps; [  ];
-    "point" = ps: with ps; [ aiohttp-cors ];
-    "point.alarm_control_panel" = ps: with ps; [  ];
-    "point.binary_sensor" = ps: with ps; [  ];
-    "point.config_flow" = ps: with ps; [  ];
-    "point.const" = ps: with ps; [  ];
-    "point.sensor" = ps: with ps; [  ];
-    "prometheus" = ps: with ps; [ aiohttp-cors prometheus_client ];
-    "proximity" = ps: with ps; [  ];
-    "ps4" = ps: with ps; [  ];
-    "ps4.config_flow" = ps: with ps; [  ];
-    "ps4.const" = ps: with ps; [  ];
-    "ps4.media_player" = ps: with ps; [  ];
-    "python_script" = ps: with ps; [  ];
-    "qwikswitch" = ps: with ps; [  ];
-    "qwikswitch.binary_sensor" = ps: with ps; [  ];
-    "qwikswitch.light" = ps: with ps; [  ];
-    "qwikswitch.sensor" = ps: with ps; [  ];
-    "qwikswitch.switch" = ps: with ps; [  ];
-    "rachio" = ps: with ps; [  ];
-    "rachio.binary_sensor" = ps: with ps; [  ];
-    "rachio.switch" = ps: with ps; [  ];
-    "rainbird" = ps: with ps; [  ];
-    "raincloud" = ps: with ps; [  ];
-    "raincloud.binary_sensor" = ps: with ps; [  ];
-    "raincloud.sensor" = ps: with ps; [  ];
-    "raincloud.switch" = ps: with ps; [  ];
-    "rainmachine" = ps: with ps; [  ];
-    "rainmachine.binary_sensor" = ps: with ps; [  ];
-    "rainmachine.config_flow" = ps: with ps; [  ];
-    "rainmachine.const" = ps: with ps; [  ];
-    "rainmachine.sensor" = ps: with ps; [  ];
-    "rainmachine.switch" = ps: with ps; [  ];
-    "raspihats" = ps: with ps; [  ];
-    "raspihats.binary_sensor" = ps: with ps; [  ];
-    "raspihats.switch" = ps: with ps; [  ];
-    "recorder" = ps: with ps; [ sqlalchemy ];
-    "recorder.const" = ps: with ps; [  ];
-    "recorder.migration" = ps: with ps; [  ];
-    "recorder.purge" = ps: with ps; [  ];
-    "recorder.util" = ps: with ps; [  ];
-    "reddit" = ps: with ps; [  ];
-    "reddit.sensor" = ps: with ps; [ praw ];
-    "remember_the_milk" = ps: with ps; [ httplib2 ];
-    "remote" = ps: with ps; [  ];
-    "rest_command" = ps: with ps; [  ];
-    "rflink" = ps: with ps; [  ];
-    "rfxtrx" = ps: with ps; [  ];
-    "rfxtrx.binary_sensor" = ps: with ps; [  ];
-    "rfxtrx.cover" = ps: with ps; [  ];
-    "rfxtrx.light" = ps: with ps; [  ];
-    "rfxtrx.sensor" = ps: with ps; [  ];
-    "rfxtrx.switch" = ps: with ps; [  ];
-    "ring" = ps: with ps; [  ];
-    "roku" = ps: with ps; [  ];
-    "roku.media_player" = ps: with ps; [  ];
-    "roku.remote" = ps: with ps; [  ];
-    "route53" = ps: with ps; [ boto3 ];
-    "rpi_gpio" = ps: with ps; [  ];
-    "rpi_gpio.binary_sensor" = ps: with ps; [  ];
-    "rpi_gpio.cover" = ps: with ps; [  ];
-    "rpi_gpio.switch" = ps: with ps; [  ];
-    "rpi_pfio" = ps: with ps; [  ];
-    "rpi_pfio.binary_sensor" = ps: with ps; [  ];
-    "rpi_pfio.switch" = ps: with ps; [  ];
-    "rss_feed_template" = ps: with ps; [ aiohttp-cors ];
-    "sabnzbd" = ps: with ps; [  ];
-    "sabnzbd.sensor" = ps: with ps; [  ];
-    "satel_integra" = ps: with ps; [  ];
-    "satel_integra.alarm_control_panel" = ps: with ps; [  ];
-    "satel_integra.binary_sensor" = ps: with ps; [  ];
-    "scene" = ps: with ps; [  ];
-    "scene.homeassistant" = ps: with ps; [  ];
-    "scene.hunterdouglas_powerview" = ps: with ps; [  ];
-    "scene.lifx_cloud" = ps: with ps; [  ];
-    "scene.litejet" = ps: with ps; [  ];
-    "script" = ps: with ps; [  ];
-    "scsgate" = ps: with ps; [  ];
-    "scsgate.cover" = ps: with ps; [  ];
-    "scsgate.light" = ps: with ps; [  ];
-    "scsgate.switch" = ps: with ps; [  ];
-    "sense" = ps: with ps; [  ];
-    "sense.binary_sensor" = ps: with ps; [  ];
-    "sense.sensor" = ps: with ps; [  ];
-    "sensor" = ps: with ps; [  ];
-    "sensor.aftership" = ps: with ps; [  ];
-    "sensor.airvisual" = ps: with ps; [ pyairvisual ];
-    "sensor.alpha_vantage" = ps: with ps; [  ];
-    "sensor.api_streams" = ps: with ps; [  ];
-    "sensor.arest" = ps: with ps; [  ];
-    "sensor.arwn" = ps: with ps; [ paho-mqtt ];
-    "sensor.asuswrt" = ps: with ps; [  ];
-    "sensor.awair" = ps: with ps; [  ];
-    "sensor.bbox" = ps: with ps; [  ];
-    "sensor.bh1750" = ps: with ps; [  ];
-    "sensor.bitcoin" = ps: with ps; [  ];
-    "sensor.blockchain" = ps: with ps; [  ];
-    "sensor.bme280" = ps: with ps; [  ];
-    "sensor.bme680" = ps: with ps; [  ];
-    "sensor.bom" = ps: with ps; [  ];
-    "sensor.broadlink" = ps: with ps; [ broadlink ];
-    "sensor.brottsplatskartan" = ps: with ps; [  ];
-    "sensor.buienradar" = ps: with ps; [  ];
-    "sensor.canary" = ps: with ps; [  ];
-    "sensor.cert_expiry" = ps: with ps; [  ];
-    "sensor.citybikes" = ps: with ps; [  ];
-    "sensor.co2signal" = ps: with ps; [  ];
-    "sensor.coinbase" = ps: with ps; [  ];
-    "sensor.coinmarketcap" = ps: with ps; [ coinmarketcap ];
-    "sensor.comed_hourly_pricing" = ps: with ps; [  ];
-    "sensor.command_line" = ps: with ps; [  ];
-    "sensor.cpuspeed" = ps: with ps; [ py-cpuinfo ];
-    "sensor.crimereports" = ps: with ps; [  ];
-    "sensor.cups" = ps: with ps; [ pycups ];
-    "sensor.currencylayer" = ps: with ps; [  ];
-    "sensor.darksky" = ps: with ps; [ python-forecastio ];
-    "sensor.deluge" = ps: with ps; [ deluge-client ];
-    "sensor.demo" = ps: with ps; [  ];
-    "sensor.deutsche_bahn" = ps: with ps; [  ];
-    "sensor.dht" = ps: with ps; [  ];
-    "sensor.discogs" = ps: with ps; [ discogs_client ];
-    "sensor.dnsip" = ps: with ps; [ aiodns ];
-    "sensor.dsmr" = ps: with ps; [  ];
-    "sensor.dte_energy_bridge" = ps: with ps; [  ];
-    "sensor.dublin_bus_transport" = ps: with ps; [  ];
-    "sensor.duke_energy" = ps: with ps; [  ];
-    "sensor.dwd_weather_warnings" = ps: with ps; [  ];
-    "sensor.dyson" = ps: with ps; [  ];
-    "sensor.ebox" = ps: with ps; [  ];
-    "sensor.eddystone_temperature" = ps: with ps; [ construct ];
-    "sensor.efergy" = ps: with ps; [  ];
-    "sensor.eliqonline" = ps: with ps; [  ];
-    "sensor.emoncms" = ps: with ps; [  ];
-    "sensor.enphase_envoy" = ps: with ps; [  ];
-    "sensor.entur_public_transport" = ps: with ps; [  ];
-    "sensor.envirophat" = ps: with ps; [  ];
-    "sensor.etherscan" = ps: with ps; [  ];
-    "sensor.fail2ban" = ps: with ps; [  ];
-    "sensor.fedex" = ps: with ps; [  ];
-    "sensor.fido" = ps: with ps; [  ];
-    "sensor.file" = ps: with ps; [  ];
-    "sensor.filesize" = ps: with ps; [  ];
-    "sensor.filter" = ps: with ps; [  ];
-    "sensor.fints" = ps: with ps; [ fints ];
-    "sensor.fitbit" = ps: with ps; [ aiohttp-cors ];
-    "sensor.fixer" = ps: with ps; [  ];
-    "sensor.flunearyou" = ps: with ps; [  ];
-    "sensor.folder" = ps: with ps; [  ];
-    "sensor.foobot" = ps: with ps; [  ];
-    "sensor.fritzbox_callmonitor" = ps: with ps; [ fritzconnection ];
-    "sensor.fritzbox_netmonitor" = ps: with ps; [ fritzconnection ];
-    "sensor.gearbest" = ps: with ps; [  ];
-    "sensor.geizhals" = ps: with ps; [  ];
-    "sensor.geo_rss_events" = ps: with ps; [  ];
-    "sensor.github" = ps: with ps; [ PyGithub ];
-    "sensor.gitlab_ci" = ps: with ps; [ python-gitlab ];
-    "sensor.gitter" = ps: with ps; [  ];
-    "sensor.glances" = ps: with ps; [  ];
-    "sensor.google_travel_time" = ps: with ps; [  ];
-    "sensor.google_wifi" = ps: with ps; [  ];
-    "sensor.gpsd" = ps: with ps; [  ];
-    "sensor.greeneye_monitor" = ps: with ps; [  ];
-    "sensor.gtfs" = ps: with ps; [  ];
-    "sensor.gtt" = ps: with ps; [  ];
-    "sensor.haveibeenpwned" = ps: with ps; [  ];
-    "sensor.hddtemp" = ps: with ps; [  ];
-    "sensor.history_stats" = ps: with ps; [ aiohttp-cors sqlalchemy ];
-    "sensor.hp_ilo" = ps: with ps; [  ];
-    "sensor.htu21d" = ps: with ps; [  ];
-    "sensor.hydroquebec" = ps: with ps; [  ];
-    "sensor.iliad_italy" = ps: with ps; [  ];
-    "sensor.imap" = ps: with ps; [  ];
-    "sensor.imap_email_content" = ps: with ps; [  ];
-    "sensor.influxdb" = ps: with ps; [ influxdb ];
-    "sensor.integration" = ps: with ps; [  ];
-    "sensor.irish_rail_transport" = ps: with ps; [  ];
-    "sensor.islamic_prayer_times" = ps: with ps; [  ];
-    "sensor.jewish_calendar" = ps: with ps; [  ];
-    "sensor.kwb" = ps: with ps; [  ];
-    "sensor.lacrosse" = ps: with ps; [  ];
-    "sensor.lastfm" = ps: with ps; [ pylast ];
-    "sensor.launch_library" = ps: with ps; [  ];
-    "sensor.linky" = ps: with ps; [  ];
-    "sensor.linux_battery" = ps: with ps; [ batinfo ];
-    "sensor.london_air" = ps: with ps; [  ];
-    "sensor.london_underground" = ps: with ps; [  ];
-    "sensor.loopenergy" = ps: with ps; [  ];
-    "sensor.lyft" = ps: with ps; [  ];
-    "sensor.magicseaweed" = ps: with ps; [  ];
-    "sensor.metoffice" = ps: with ps; [  ];
-    "sensor.mfi" = ps: with ps; [  ];
-    "sensor.mhz19" = ps: with ps; [  ];
-    "sensor.miflora" = ps: with ps; [  ];
-    "sensor.min_max" = ps: with ps; [  ];
-    "sensor.mitemp_bt" = ps: with ps; [  ];
-    "sensor.modem_callerid" = ps: with ps; [  ];
-    "sensor.mold_indicator" = ps: with ps; [  ];
-    "sensor.moon" = ps: with ps; [  ];
-    "sensor.mopar" = ps: with ps; [  ];
-    "sensor.mqtt_room" = ps: with ps; [ paho-mqtt ];
-    "sensor.mvglive" = ps: with ps; [ PyMVGLive ];
-    "sensor.nederlandse_spoorwegen" = ps: with ps; [  ];
-    "sensor.netatmo_public" = ps: with ps; [ aiohttp-cors ];
-    "sensor.netdata" = ps: with ps; [  ];
-    "sensor.neurio_energy" = ps: with ps; [  ];
-    "sensor.nmbs" = ps: with ps; [  ];
-    "sensor.noaa_tides" = ps: with ps; [  ];
-    "sensor.nsw_fuel_station" = ps: with ps; [  ];
-    "sensor.nut" = ps: with ps; [  ];
-    "sensor.nzbget" = ps: with ps; [  ];
-    "sensor.ohmconnect" = ps: with ps; [ defusedxml ];
-    "sensor.onewire" = ps: with ps; [  ];
-    "sensor.openevse" = ps: with ps; [  ];
-    "sensor.openexchangerates" = ps: with ps; [  ];
-    "sensor.openhardwaremonitor" = ps: with ps; [  ];
-    "sensor.opensky" = ps: with ps; [  ];
-    "sensor.openweathermap" = ps: with ps; [ pyowm ];
-    "sensor.otp" = ps: with ps; [ pyotp ];
-    "sensor.pi_hole" = ps: with ps; [  ];
-    "sensor.plex" = ps: with ps; [  ];
-    "sensor.pocketcasts" = ps: with ps; [  ];
-    "sensor.pollen" = ps: with ps; [ numpy ];
-    "sensor.postnl" = ps: with ps; [  ];
-    "sensor.prezzibenzina" = ps: with ps; [  ];
-    "sensor.pushbullet" = ps: with ps; [ pushbullet ];
-    "sensor.pvoutput" = ps: with ps; [  ];
-    "sensor.pyload" = ps: with ps; [  ];
-    "sensor.qbittorrent" = ps: with ps; [  ];
-    "sensor.qnap" = ps: with ps; [  ];
-    "sensor.radarr" = ps: with ps; [  ];
-    "sensor.rainbird" = ps: with ps; [  ];
-    "sensor.random" = ps: with ps; [  ];
-    "sensor.recollect_waste" = ps: with ps; [  ];
-    "sensor.rejseplanen" = ps: with ps; [  ];
-    "sensor.rest" = ps: with ps; [  ];
-    "sensor.rflink" = ps: with ps; [  ];
-    "sensor.ring" = ps: with ps; [  ];
-    "sensor.ripple" = ps: with ps; [  ];
-    "sensor.rmvtransport" = ps: with ps; [  ];
-    "sensor.rova" = ps: with ps; [  ];
-    "sensor.rtorrent" = ps: with ps; [  ];
-    "sensor.ruter" = ps: with ps; [  ];
-    "sensor.scrape" = ps: with ps; [ beautifulsoup4 ];
-    "sensor.season" = ps: with ps; [ ephem ];
-    "sensor.sensehat" = ps: with ps; [  ];
-    "sensor.serial" = ps: with ps; [  ];
-    "sensor.serial_pm" = ps: with ps; [  ];
-    "sensor.seventeentrack" = ps: with ps; [  ];
-    "sensor.shodan" = ps: with ps; [ shodan ];
-    "sensor.sht31" = ps: with ps; [  ];
-    "sensor.sigfox" = ps: with ps; [  ];
-    "sensor.simulated" = ps: with ps; [  ];
-    "sensor.skybeacon" = ps: with ps; [  ];
-    "sensor.sleepiq" = ps: with ps; [  ];
-    "sensor.sma" = ps: with ps; [  ];
-    "sensor.snmp" = ps: with ps; [ pysnmp ];
-    "sensor.sochain" = ps: with ps; [  ];
-    "sensor.socialblade" = ps: with ps; [  ];
-    "sensor.solaredge" = ps: with ps; [  ];
-    "sensor.sonarr" = ps: with ps; [  ];
-    "sensor.spotcrime" = ps: with ps; [  ];
-    "sensor.sql" = ps: with ps; [ sqlalchemy ];
-    "sensor.srp_energy" = ps: with ps; [  ];
-    "sensor.starlingbank" = ps: with ps; [  ];
-    "sensor.startca" = ps: with ps; [ xmltodict ];
-    "sensor.statistics" = ps: with ps; [  ];
-    "sensor.steam_online" = ps: with ps; [  ];
-    "sensor.supervisord" = ps: with ps; [  ];
-    "sensor.swiss_hydrological_data" = ps: with ps; [  ];
-    "sensor.swiss_public_transport" = ps: with ps; [  ];
-    "sensor.syncthru" = ps: with ps; [  ];
-    "sensor.synologydsm" = ps: with ps; [  ];
-    "sensor.systemmonitor" = ps: with ps; [ psutil ];
-    "sensor.sytadin" = ps: with ps; [ beautifulsoup4 ];
-    "sensor.tank_utility" = ps: with ps; [  ];
-    "sensor.tautulli" = ps: with ps; [  ];
-    "sensor.tcp" = ps: with ps; [  ];
-    "sensor.ted5000" = ps: with ps; [ xmltodict ];
-    "sensor.teksavvy" = ps: with ps; [  ];
-    "sensor.temper" = ps: with ps; [  ];
-    "sensor.template" = ps: with ps; [  ];
-    "sensor.thermoworks_smoke" = ps: with ps; [  ];
-    "sensor.time_date" = ps: with ps; [  ];
-    "sensor.torque" = ps: with ps; [ aiohttp-cors ];
-    "sensor.trafikverket_weatherstation" = ps: with ps; [  ];
-    "sensor.transport_nsw" = ps: with ps; [  ];
-    "sensor.travisci" = ps: with ps; [  ];
-    "sensor.twitch" = ps: with ps; [  ];
-    "sensor.uber" = ps: with ps; [  ];
-    "sensor.uk_transport" = ps: with ps; [  ];
-    "sensor.ups" = ps: with ps; [  ];
-    "sensor.uptime" = ps: with ps; [  ];
-    "sensor.uscis" = ps: with ps; [  ];
-    "sensor.vasttrafik" = ps: with ps; [  ];
-    "sensor.version" = ps: with ps; [  ];
-    "sensor.viaggiatreno" = ps: with ps; [  ];
-    "sensor.volkszaehler" = ps: with ps; [  ];
-    "sensor.vultr" = ps: with ps; [ vultr ];
-    "sensor.waqi" = ps: with ps; [  ];
-    "sensor.waze_travel_time" = ps: with ps; [ WazeRouteCalculator ];
-    "sensor.whois" = ps: with ps; [  ];
-    "sensor.worldclock" = ps: with ps; [  ];
-    "sensor.worldtidesinfo" = ps: with ps; [  ];
-    "sensor.worxlandroid" = ps: with ps; [  ];
-    "sensor.wsdot" = ps: with ps; [  ];
-    "sensor.wunderground" = ps: with ps; [  ];
-    "sensor.xbox_live" = ps: with ps; [  ];
-    "sensor.yr" = ps: with ps; [ xmltodict ];
-    "sensor.yweather" = ps: with ps; [ yahooweather ];
-    "sensor.zamg" = ps: with ps; [  ];
-    "sensor.zestimate" = ps: with ps; [ xmltodict ];
-    "shell_command" = ps: with ps; [  ];
-    "shiftr" = ps: with ps; [ paho-mqtt ];
-    "shopping_list" = ps: with ps; [ aiohttp-cors ];
-    "simplisafe" = ps: with ps; [  ];
-    "simplisafe.alarm_control_panel" = ps: with ps; [  ];
-    "simplisafe.config_flow" = ps: with ps; [  ];
-    "simplisafe.const" = ps: with ps; [  ];
-    "sisyphus" = ps: with ps; [  ];
-    "sisyphus.light" = ps: with ps; [  ];
-    "sisyphus.media_player" = ps: with ps; [  ];
-    "skybell" = ps: with ps; [  ];
-    "skybell.binary_sensor" = ps: with ps; [  ];
-    "skybell.camera" = ps: with ps; [  ];
-    "skybell.light" = ps: with ps; [  ];
-    "skybell.sensor" = ps: with ps; [  ];
-    "skybell.switch" = ps: with ps; [  ];
-    "sleepiq" = ps: with ps; [  ];
-    "smappee" = ps: with ps; [  ];
-    "smappee.sensor" = ps: with ps; [  ];
-    "smappee.switch" = ps: with ps; [  ];
-    "smartthings" = ps: with ps; [ aiohttp-cors ];
-    "smartthings.binary_sensor" = ps: with ps; [ aiohttp-cors ];
-    "smartthings.climate" = ps: with ps; [ aiohttp-cors ];
-    "smartthings.config_flow" = ps: with ps; [  ];
-    "smartthings.const" = ps: with ps; [  ];
-    "smartthings.cover" = ps: with ps; [ aiohttp-cors ];
-    "smartthings.fan" = ps: with ps; [ aiohttp-cors ];
-    "smartthings.light" = ps: with ps; [ aiohttp-cors ];
-    "smartthings.lock" = ps: with ps; [ aiohttp-cors ];
-    "smartthings.scene" = ps: with ps; [ aiohttp-cors ];
-    "smartthings.sensor" = ps: with ps; [ aiohttp-cors ];
-    "smartthings.smartapp" = ps: with ps; [  ];
-    "smartthings.switch" = ps: with ps; [ aiohttp-cors ];
-    "smhi" = ps: with ps; [  ];
-    "smhi.config_flow" = ps: with ps; [  ];
-    "smhi.const" = ps: with ps; [  ];
-    "smhi.weather" = ps: with ps; [  ];
-    "snips" = ps: with ps; [ paho-mqtt ];
-    "sonos" = ps: with ps; [  ];
-    "sonos.media_player" = ps: with ps; [  ];
-    "spaceapi" = ps: with ps; [ aiohttp-cors ];
-    "spc" = ps: with ps; [  ];
-    "speedtestdotnet" = ps: with ps; [ speedtest-cli ];
-    "speedtestdotnet.const" = ps: with ps; [  ];
-    "speedtestdotnet.sensor" = ps: with ps; [ speedtest-cli ];
-    "spider" = ps: with ps; [  ];
-    "spider.climate" = ps: with ps; [  ];
-    "spider.switch" = ps: with ps; [  ];
-    "splunk" = ps: with ps; [  ];
-    "statsd" = ps: with ps; [ statsd ];
-    "stream" = ps: with ps; [ aiohttp-cors av ];
-    "stream.const" = ps: with ps; [  ];
-    "stream.core" = ps: with ps; [  ];
-    "stream.hls" = ps: with ps; [  ];
-    "stream.worker" = ps: with ps; [  ];
-    "sun" = ps: with ps; [  ];
-    "switch" = ps: with ps; [  ];
-    "switch.acer_projector" = ps: with ps; [ pyserial ];
-    "switch.anel_pwrctrl" = ps: with ps; [  ];
-    "switch.arest" = ps: with ps; [  ];
-    "switch.broadlink" = ps: with ps; [ broadlink ];
-    "switch.command_line" = ps: with ps; [  ];
-    "switch.deluge" = ps: with ps; [ deluge-client ];
-    "switch.demo" = ps: with ps; [  ];
-    "switch.digitalloggers" = ps: with ps; [  ];
-    "switch.dlink" = ps: with ps; [  ];
-    "switch.edimax" = ps: with ps; [  ];
-    "switch.flux" = ps: with ps; [  ];
-    "switch.fritzdect" = ps: with ps; [  ];
-    "switch.hikvisioncam" = ps: with ps; [  ];
-    "switch.hook" = ps: with ps; [  ];
-    "switch.kankun" = ps: with ps; [  ];
-    "switch.litejet" = ps: with ps; [  ];
-    "switch.mfi" = ps: with ps; [  ];
-    "switch.mystrom" = ps: with ps; [  ];
-    "switch.netio" = ps: with ps; [ aiohttp-cors ];
-    "switch.orvibo" = ps: with ps; [  ];
-    "switch.pencom" = ps: with ps; [  ];
-    "switch.pulseaudio_loopback" = ps: with ps; [  ];
-    "switch.rainbird" = ps: with ps; [  ];
-    "switch.raspyrfm" = ps: with ps; [  ];
-    "switch.recswitch" = ps: with ps; [  ];
-    "switch.rest" = ps: with ps; [  ];
-    "switch.rflink" = ps: with ps; [  ];
-    "switch.rpi_rf" = ps: with ps; [  ];
-    "switch.snmp" = ps: with ps; [ pysnmp ];
-    "switch.sony_projector" = ps: with ps; [  ];
-    "switch.switchbot" = ps: with ps; [  ];
-    "switch.switchmate" = ps: with ps; [  ];
-    "switch.telnet" = ps: with ps; [  ];
-    "switch.template" = ps: with ps; [  ];
-    "switch.vesync" = ps: with ps; [  ];
-    "switch.vultr" = ps: with ps; [ vultr ];
-    "switch.wake_on_lan" = ps: with ps; [ wakeonlan ];
-    "system_health" = ps: with ps; [ aiohttp-cors ];
-    "system_log" = ps: with ps; [ aiohttp-cors ];
-    "tado" = ps: with ps; [  ];
-    "tado.climate" = ps: with ps; [  ];
-    "tado.device_tracker" = ps: with ps; [  ];
-    "tado.sensor" = ps: with ps; [  ];
-    "tahoma" = ps: with ps; [  ];
-    "tahoma.binary_sensor" = ps: with ps; [  ];
-    "tahoma.cover" = ps: with ps; [  ];
-    "tahoma.scene" = ps: with ps; [  ];
-    "tahoma.sensor" = ps: with ps; [  ];
-    "tahoma.switch" = ps: with ps; [  ];
-    "telegram_bot" = ps: with ps; [ python-telegram-bot ];
-    "telegram_bot.broadcast" = ps: with ps; [  ];
-    "telegram_bot.polling" = ps: with ps; [  ];
-    "telegram_bot.webhooks" = ps: with ps; [ aiohttp-cors ];
-    "tellduslive" = ps: with ps; [  ];
-    "tellduslive.binary_sensor" = ps: with ps; [  ];
-    "tellduslive.config_flow" = ps: with ps; [  ];
-    "tellduslive.const" = ps: with ps; [  ];
-    "tellduslive.cover" = ps: with ps; [  ];
-    "tellduslive.entry" = ps: with ps; [  ];
-    "tellduslive.light" = ps: with ps; [  ];
-    "tellduslive.sensor" = ps: with ps; [  ];
-    "tellduslive.switch" = ps: with ps; [  ];
-    "tellstick" = ps: with ps; [  ];
-    "tellstick.cover" = ps: with ps; [  ];
-    "tellstick.light" = ps: with ps; [  ];
-    "tellstick.sensor" = ps: with ps; [  ];
-    "tellstick.switch" = ps: with ps; [  ];
-    "tesla" = ps: with ps; [  ];
-    "tesla.binary_sensor" = ps: with ps; [  ];
-    "tesla.climate" = ps: with ps; [  ];
-    "tesla.device_tracker" = ps: with ps; [  ];
-    "tesla.lock" = ps: with ps; [  ];
-    "tesla.sensor" = ps: with ps; [  ];
-    "tesla.switch" = ps: with ps; [  ];
-    "thethingsnetwork" = ps: with ps; [  ];
-    "thethingsnetwork.sensor" = ps: with ps; [  ];
-    "thingspeak" = ps: with ps; [  ];
-    "thinkingcleaner" = ps: with ps; [  ];
-    "thinkingcleaner.sensor" = ps: with ps; [  ];
-    "thinkingcleaner.switch" = ps: with ps; [  ];
-    "tibber" = ps: with ps; [  ];
-    "tibber.notify" = ps: with ps; [  ];
-    "tibber.sensor" = ps: with ps; [  ];
-    "timer" = ps: with ps; [  ];
-    "tof" = ps: with ps; [  ];
-    "tof.sensor" = ps: with ps; [  ];
-    "toon" = ps: with ps; [  ];
-    "toon.binary_sensor" = ps: with ps; [  ];
-    "toon.climate" = ps: with ps; [  ];
-    "toon.config_flow" = ps: with ps; [  ];
-    "toon.const" = ps: with ps; [  ];
-    "toon.sensor" = ps: with ps; [  ];
-    "tplink" = ps: with ps; [  ];
-    "tplink.light" = ps: with ps; [  ];
-    "tplink.switch" = ps: with ps; [  ];
-    "tplink_lte" = ps: with ps; [  ];
-    "tplink_lte.notify" = ps: with ps; [  ];
-    "tradfri" = ps: with ps; [  ];
-    "tradfri.config_flow" = ps: with ps; [  ];
-    "tradfri.const" = ps: with ps; [  ];
-    "tradfri.light" = ps: with ps; [  ];
-    "tradfri.sensor" = ps: with ps; [  ];
-    "tradfri.switch" = ps: with ps; [  ];
-    "transmission" = ps: with ps; [ transmissionrpc ];
-    "transmission.sensor" = ps: with ps; [ transmissionrpc ];
-    "transmission.switch" = ps: with ps; [ transmissionrpc ];
-    "tts" = ps: with ps; [ aiohttp-cors mutagen ];
-    "tts.amazon_polly" = ps: with ps; [ boto3 ];
-    "tts.baidu" = ps: with ps; [  ];
-    "tts.demo" = ps: with ps; [  ];
-    "tts.marytts" = ps: with ps; [  ];
-    "tts.microsoft" = ps: with ps; [  ];
-    "tts.picotts" = ps: with ps; [  ];
-    "tts.voicerss" = ps: with ps; [  ];
-    "tts.yandextts" = ps: with ps; [  ];
-    "tuya" = ps: with ps; [  ];
-    "tuya.climate" = ps: with ps; [  ];
-    "tuya.cover" = ps: with ps; [  ];
-    "tuya.fan" = ps: with ps; [  ];
-    "tuya.light" = ps: with ps; [  ];
-    "tuya.scene" = ps: with ps; [  ];
-    "tuya.switch" = ps: with ps; [  ];
-    "twilio" = ps: with ps; [ aiohttp-cors twilio ];
-    "unifi" = ps: with ps; [ aiounifi ];
-    "unifi.const" = ps: with ps; [  ];
-    "unifi.controller" = ps: with ps; [  ];
-    "unifi.errors" = ps: with ps; [  ];
-    "unifi.switch" = ps: with ps; [ aiounifi ];
-    "upcloud" = ps: with ps; [  ];
-    "upcloud.binary_sensor" = ps: with ps; [  ];
-    "upcloud.switch" = ps: with ps; [  ];
-    "updater" = ps: with ps; [ distro ];
-    "upnp" = ps: with ps; [  ];
-    "upnp.const" = ps: with ps; [  ];
-    "upnp.device" = ps: with ps; [  ];
-    "upnp.sensor" = ps: with ps; [  ];
-    "usps" = ps: with ps; [  ];
-    "usps.camera" = ps: with ps; [  ];
-    "usps.sensor" = ps: with ps; [  ];
-    "utility_meter" = ps: with ps; [  ];
-    "utility_meter.const" = ps: with ps; [  ];
-    "utility_meter.sensor" = ps: with ps; [  ];
-    "vacuum" = ps: with ps; [  ];
-    "vacuum.demo" = ps: with ps; [  ];
-    "vacuum.dyson" = ps: with ps; [  ];
-    "vacuum.roomba" = ps: with ps; [  ];
-    "velbus" = ps: with ps; [  ];
-    "velbus.binary_sensor" = ps: with ps; [  ];
-    "velbus.climate" = ps: with ps; [  ];
-    "velbus.cover" = ps: with ps; [  ];
-    "velbus.sensor" = ps: with ps; [  ];
-    "velbus.switch" = ps: with ps; [  ];
-    "velux" = ps: with ps; [  ];
-    "velux.cover" = ps: with ps; [  ];
-    "velux.scene" = ps: with ps; [  ];
-    "vera" = ps: with ps; [  ];
-    "vera.binary_sensor" = ps: with ps; [  ];
-    "vera.climate" = ps: with ps; [  ];
-    "vera.cover" = ps: with ps; [  ];
-    "vera.light" = ps: with ps; [  ];
-    "vera.lock" = ps: with ps; [  ];
-    "vera.scene" = ps: with ps; [  ];
-    "vera.sensor" = ps: with ps; [  ];
-    "vera.switch" = ps: with ps; [  ];
-    "verisure" = ps: with ps; [  ];
-    "verisure.alarm_control_panel" = ps: with ps; [  ];
-    "verisure.binary_sensor" = ps: with ps; [  ];
-    "verisure.camera" = ps: with ps; [  ];
-    "verisure.lock" = ps: with ps; [  ];
-    "verisure.sensor" = ps: with ps; [  ];
-    "verisure.switch" = ps: with ps; [  ];
-    "volvooncall" = ps: with ps; [  ];
-    "volvooncall.binary_sensor" = ps: with ps; [  ];
-    "volvooncall.device_tracker" = ps: with ps; [  ];
-    "volvooncall.lock" = ps: with ps; [  ];
-    "volvooncall.sensor" = ps: with ps; [  ];
-    "volvooncall.switch" = ps: with ps; [  ];
-    "vultr" = ps: with ps; [ vultr ];
-    "w800rf32" = ps: with ps; [  ];
-    "w800rf32.binary_sensor" = ps: with ps; [  ];
-    "wake_on_lan" = ps: with ps; [ wakeonlan ];
-    "water_heater" = ps: with ps; [  ];
-    "water_heater.demo" = ps: with ps; [  ];
-    "water_heater.econet" = ps: with ps; [  ];
-    "waterfurnace" = ps: with ps; [  ];
-    "waterfurnace.sensor" = ps: with ps; [  ];
-    "watson_iot" = ps: with ps; [  ];
-    "weather" = ps: with ps; [  ];
-    "weather.bom" = ps: with ps; [  ];
-    "weather.buienradar" = ps: with ps; [  ];
-    "weather.darksky" = ps: with ps; [ python-forecastio ];
-    "weather.demo" = ps: with ps; [  ];
-    "weather.met" = ps: with ps; [  ];
-    "weather.metoffice" = ps: with ps; [  ];
-    "weather.openweathermap" = ps: with ps; [ pyowm ];
-    "weather.yweather" = ps: with ps; [ yahooweather ];
-    "weather.zamg" = ps: with ps; [  ];
-    "webhook" = ps: with ps; [ aiohttp-cors ];
-    "weblink" = ps: with ps; [  ];
-    "webostv" = ps: with ps; [  ];
-    "webostv.media_player" = ps: with ps; [ websockets ];
-    "webostv.notify" = ps: with ps; [  ];
-    "websocket_api" = ps: with ps; [ aiohttp-cors ];
-    "websocket_api.auth" = ps: with ps; [  ];
-    "websocket_api.commands" = ps: with ps; [  ];
-    "websocket_api.connection" = ps: with ps; [  ];
-    "websocket_api.const" = ps: with ps; [  ];
-    "websocket_api.decorators" = ps: with ps; [  ];
-    "websocket_api.error" = ps: with ps; [  ];
-    "websocket_api.http" = ps: with ps; [  ];
-    "websocket_api.messages" = ps: with ps; [  ];
-    "websocket_api.permissions" = ps: with ps; [  ];
-    "wemo" = ps: with ps; [  ];
-    "wemo.binary_sensor" = ps: with ps; [  ];
-    "wemo.fan" = ps: with ps; [  ];
-    "wemo.light" = ps: with ps; [  ];
-    "wemo.switch" = ps: with ps; [  ];
-    "wink" = ps: with ps; [  ];
-    "wink.alarm_control_panel" = ps: with ps; [  ];
-    "wink.binary_sensor" = ps: with ps; [  ];
-    "wink.climate" = ps: with ps; [  ];
-    "wink.cover" = ps: with ps; [  ];
-    "wink.fan" = ps: with ps; [  ];
-    "wink.light" = ps: with ps; [  ];
-    "wink.lock" = ps: with ps; [  ];
-    "wink.scene" = ps: with ps; [  ];
-    "wink.sensor" = ps: with ps; [  ];
-    "wink.switch" = ps: with ps; [  ];
-    "wink.water_heater" = ps: with ps; [  ];
-    "wirelesstag" = ps: with ps; [  ];
-    "wirelesstag.binary_sensor" = ps: with ps; [  ];
-    "wirelesstag.sensor" = ps: with ps; [  ];
-    "wirelesstag.switch" = ps: with ps; [  ];
-    "wunderlist" = ps: with ps; [  ];
-    "xiaomi_aqara" = ps: with ps; [  ];
-    "xiaomi_aqara.binary_sensor" = ps: with ps; [  ];
-    "xiaomi_aqara.cover" = ps: with ps; [  ];
-    "xiaomi_aqara.light" = ps: with ps; [  ];
-    "xiaomi_aqara.lock" = ps: with ps; [  ];
-    "xiaomi_aqara.sensor" = ps: with ps; [  ];
-    "xiaomi_aqara.switch" = ps: with ps; [  ];
-    "xiaomi_miio" = ps: with ps; [  ];
-    "xiaomi_miio.device_tracker" = ps: with ps; [ construct ];
-    "xiaomi_miio.fan" = ps: with ps; [ construct ];
-    "xiaomi_miio.light" = ps: with ps; [ construct ];
-    "xiaomi_miio.remote" = ps: with ps; [ construct ];
-    "xiaomi_miio.sensor" = ps: with ps; [ construct ];
-    "xiaomi_miio.switch" = ps: with ps; [ construct ];
-    "xiaomi_miio.vacuum" = ps: with ps; [ construct ];
-    "xs1" = ps: with ps; [  ];
-    "xs1.climate" = ps: with ps; [  ];
-    "xs1.sensor" = ps: with ps; [  ];
-    "xs1.switch" = ps: with ps; [  ];
-    "zabbix" = ps: with ps; [  ];
-    "zabbix.sensor" = ps: with ps; [  ];
-    "zeroconf" = ps: with ps; [ aiohttp-cors zeroconf ];
-    "zha" = ps: with ps; [  ];
-    "zha.api" = ps: with ps; [  ];
-    "zha.binary_sensor" = ps: with ps; [  ];
-    "zha.config_flow" = ps: with ps; [  ];
-    "zha.const" = ps: with ps; [  ];
-    "zha.core" = ps: with ps; [  ];
-    "zha.device_entity" = ps: with ps; [  ];
-    "zha.entity" = ps: with ps; [  ];
-    "zha.fan" = ps: with ps; [  ];
-    "zha.light" = ps: with ps; [  ];
-    "zha.sensor" = ps: with ps; [  ];
-    "zha.switch" = ps: with ps; [  ];
-    "zigbee" = ps: with ps; [  ];
-    "zigbee.binary_sensor" = ps: with ps; [  ];
-    "zigbee.light" = ps: with ps; [  ];
-    "zigbee.sensor" = ps: with ps; [  ];
-    "zigbee.switch" = ps: with ps; [  ];
-    "zone" = ps: with ps; [  ];
-    "zone.config_flow" = ps: with ps; [  ];
-    "zone.const" = ps: with ps; [  ];
-    "zone.zone" = ps: with ps; [  ];
-    "zoneminder" = ps: with ps; [ zm-py ];
-    "zoneminder.binary_sensor" = ps: with ps; [ zm-py ];
-    "zoneminder.camera" = ps: with ps; [ zm-py ];
-    "zoneminder.sensor" = ps: with ps; [ zm-py ];
-    "zoneminder.switch" = ps: with ps; [ zm-py ];
-    "zwave" = ps: with ps; [ homeassistant-pyozw pydispatcher ];
-    "zwave.binary_sensor" = ps: with ps; [  ];
-    "zwave.climate" = ps: with ps; [  ];
-    "zwave.config_flow" = ps: with ps; [  ];
-    "zwave.const" = ps: with ps; [  ];
-    "zwave.cover" = ps: with ps; [  ];
-    "zwave.discovery_schemas" = ps: with ps; [  ];
-    "zwave.fan" = ps: with ps; [  ];
-    "zwave.light" = ps: with ps; [  ];
-    "zwave.lock" = ps: with ps; [  ];
-    "zwave.node_entity" = ps: with ps; [  ];
-    "zwave.sensor" = ps: with ps; [  ];
-    "zwave.switch" = ps: with ps; [  ];
-    "zwave.util" = ps: with ps; [  ];
-    "zwave.workaround" = ps: with ps; [  ];
+    "abode" = ps: with ps; [
+      abodepy
+    ];
+    "accuweather" = ps: with ps; [
+      accuweather
+    ];
+    "acer_projector" = ps: with ps; [
+      pyserial
+    ];
+    "acmeda" = ps: with ps; [
+      aiopulse
+    ];
+    "actiontec" = ps: with ps; [
+    ];
+    "adax" = ps: with ps; [
+      adax-local
+      adax
+    ];
+    "adguard" = ps: with ps; [
+      adguardhome
+    ];
+    "ads" = ps: with ps; [
+      pyads
+    ];
+    "advantage_air" = ps: with ps; [
+      advantage-air
+    ];
+    "aemet" = ps: with ps; [
+      aemet-opendata
+    ];
+    "aftership" = ps: with ps; [
+      pyaftership
+    ];
+    "agent_dvr" = ps: with ps; [
+      agent-py
+    ];
+    "air_quality" = ps: with ps; [
+    ];
+    "airly" = ps: with ps; [
+      airly
+    ];
+    "airnow" = ps: with ps; [
+      pyairnow
+    ];
+    "airthings" = ps: with ps; [
+      airthings-cloud
+    ];
+    "airtouch4" = ps: with ps; [
+      airtouch4pyapi
+    ];
+    "airvisual" = ps: with ps; [
+      pyairvisual
+    ];
+    "airzone" = ps: with ps; [
+      aioairzone
+    ];
+    "aladdin_connect" = ps: with ps; [
+      aladdin-connect
+    ];
+    "alarm_control_panel" = ps: with ps; [
+    ];
+    "alarmdecoder" = ps: with ps; [
+      adext
+    ];
+    "alert" = ps: with ps; [
+    ];
+    "alexa" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+    ];
+    "almond" = ps: with ps; [
+      aiohttp-cors
+      pyalmond
+    ];
+    "alpha_vantage" = ps: with ps; [
+      alpha-vantage
+    ];
+    "amazon_polly" = ps: with ps; [
+      boto3
+    ];
+    "ambee" = ps: with ps; [
+      ambee
+    ];
+    "amberelectric" = ps: with ps; [
+      amberelectric
+    ];
+    "ambiclimate" = ps: with ps; [
+      aiohttp-cors
+      ambiclimate
+    ];
+    "ambient_station" = ps: with ps; [
+      aioambient
+    ];
+    "amcrest" = ps: with ps; [
+      amcrest
+      ha-ffmpeg
+    ];
+    "ampio" = ps: with ps; [
+      asmog
+    ];
+    "analytics" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      lru-dict
+      sqlalchemy
+    ];
+    "android_ip_webcam" = ps: with ps; [
+      pydroid-ipcam
+    ];
+    "androidtv" = ps: with ps; [
+      adb-shell
+      androidtv
+      pure-python-adb
+    ]
+    ++ adb-shell.optional-dependencies.async
+    ++ androidtv.optional-dependencies.async
+    ++ pure-python-adb.optional-dependencies.async;
+    "anel_pwrctrl" = ps: with ps; [
+    ]; # missing inputs: anel_pwrctrl-homeassistant
+    "anthemav" = ps: with ps; [
+    ]; # missing inputs: anthemav
+    "apache_kafka" = ps: with ps; [
+      aiokafka
+    ];
+    "apcupsd" = ps: with ps; [
+      apcaccess
+    ];
+    "api" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "apple_tv" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+      pyatv
+      zeroconf
+    ];
+    "apprise" = ps: with ps; [
+      apprise
+    ];
+    "aprs" = ps: with ps; [
+      aprslib
+      geopy
+    ];
+    "aqualogic" = ps: with ps; [
+      aqualogic
+    ];
+    "aquostv" = ps: with ps; [
+    ]; # missing inputs: sharp_aquos_rc
+    "arcam_fmj" = ps: with ps; [
+      arcam-fmj
+    ];
+    "arest" = ps: with ps; [
+    ];
+    "arris_tg2492lg" = ps: with ps; [
+      arris-tg2492lg
+    ];
+    "aruba" = ps: with ps; [
+      pexpect
+    ];
+    "arwn" = ps: with ps; [
+      aiohttp-cors
+      paho-mqtt
+    ];
+    "aseko_pool_live" = ps: with ps; [
+      aioaseko
+    ];
+    "asterisk_cdr" = ps: with ps; [
+      asterisk-mbox
+    ];
+    "asterisk_mbox" = ps: with ps; [
+      asterisk-mbox
+    ];
+    "asuswrt" = ps: with ps; [
+      aioasuswrt
+    ];
+    "atag" = ps: with ps; [
+      pyatag
+    ];
+    "aten_pe" = ps: with ps; [
+      atenpdu
+    ];
+    "atome" = ps: with ps; [
+      pyatome
+    ];
+    "august" = ps: with ps; [
+      yalexs
+    ];
+    "aurora" = ps: with ps; [
+      auroranoaa
+    ];
+    "aurora_abb_powerone" = ps: with ps; [
+      aurorapy
+    ];
+    "aussie_broadband" = ps: with ps; [
+      pyaussiebb
+    ];
+    "auth" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "automation" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "avea" = ps: with ps; [
+      avea
+    ];
+    "avion" = ps: with ps; [
+      avion
+    ];
+    "awair" = ps: with ps; [
+      python-awair
+    ];
+    "aws" = ps: with ps; [
+      aiobotocore
+    ];
+    "axis" = ps: with ps; [
+      aiohttp-cors
+      axis
+      paho-mqtt
+    ];
+    "azure_devops" = ps: with ps; [
+      aioazuredevops
+    ];
+    "azure_event_hub" = ps: with ps; [
+      azure-eventhub
+    ];
+    "azure_service_bus" = ps: with ps; [
+      azure-servicebus
+    ];
+    "backup" = ps: with ps; [
+      aiohttp-cors
+      securetar
+    ];
+    "baidu" = ps: with ps; [
+    ]; # missing inputs: baidu-aip
+    "balboa" = ps: with ps; [
+      pybalboa
+    ];
+    "bayesian" = ps: with ps; [
+    ];
+    "bbox" = ps: with ps; [
+    ]; # missing inputs: pybbox
+    "beewi_smartclim" = ps: with ps; [
+    ]; # missing inputs: beewi_smartclim
+    "binary_sensor" = ps: with ps; [
+    ];
+    "bitcoin" = ps: with ps; [
+      blockchain
+    ];
+    "bizkaibus" = ps: with ps; [
+      bizkaibus
+    ];
+    "blackbird" = ps: with ps; [
+      pyblackbird
+    ];
+    "blebox" = ps: with ps; [
+      blebox-uniapi
+    ];
+    "blink" = ps: with ps; [
+      blinkpy
+    ];
+    "blinksticklight" = ps: with ps; [
+      BlinkStick
+    ];
+    "blockchain" = ps: with ps; [
+    ]; # missing inputs: python-blockchain-api
+    "bloomsky" = ps: with ps; [
+    ];
+    "blueprint" = ps: with ps; [
+    ];
+    "bluesound" = ps: with ps; [
+      xmltodict
+    ];
+    "bluetooth_le_tracker" = ps: with ps; [
+      pygatt
+    ]
+    ++ pygatt.optional-dependencies.GATTTOOL;
+    "bluetooth_tracker" = ps: with ps; [
+      bt-proximity
+      pybluez
+    ];
+    "bmw_connected_drive" = ps: with ps; [
+      bimmer-connected
+    ];
+    "bond" = ps: with ps; [
+      bond-api
+    ];
+    "bosch_shc" = ps: with ps; [
+      aiohttp-cors
+      boschshcpy
+      ifaddr
+      zeroconf
+    ];
+    "braviatv" = ps: with ps; [
+      bravia-tv
+    ];
+    "broadlink" = ps: with ps; [
+      broadlink
+    ];
+    "brother" = ps: with ps; [
+      brother
+    ];
+    "brottsplatskartan" = ps: with ps; [
+      brottsplatskartan
+    ];
+    "browser" = ps: with ps; [
+    ];
+    "brunt" = ps: with ps; [
+      brunt
+    ];
+    "bsblan" = ps: with ps; [
+      bsblan
+    ];
+    "bt_home_hub_5" = ps: with ps; [
+    ]; # missing inputs: bthomehub5-devicelist
+    "bt_smarthub" = ps: with ps; [
+    ]; # missing inputs: btsmarthub_devicelist
+    "buienradar" = ps: with ps; [
+      buienradar
+    ];
+    "button" = ps: with ps; [
+    ];
+    "caldav" = ps: with ps; [
+      caldav
+    ];
+    "calendar" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "camera" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+    ];
+    "canary" = ps: with ps; [
+      ha-ffmpeg
+      py-canary
+    ];
+    "cast" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+      hass-nabucasa
+      ifaddr
+      mutagen
+      plexapi
+      plexauth
+      plexwebsocket
+      PyChromecast
+      zeroconf
+    ];
+    "cert_expiry" = ps: with ps; [
+    ];
+    "channels" = ps: with ps; [
+      pychannels
+    ];
+    "circuit" = ps: with ps; [
+      circuit-webhook
+    ];
+    "cisco_ios" = ps: with ps; [
+      pexpect
+    ];
+    "cisco_mobility_express" = ps: with ps; [
+      ciscomobilityexpress
+    ];
+    "cisco_webex_teams" = ps: with ps; [
+      webexteamssdk
+    ];
+    "citybikes" = ps: with ps; [
+    ];
+    "clementine" = ps: with ps; [
+    ]; # missing inputs: python-clementine-remote
+    "clickatell" = ps: with ps; [
+    ];
+    "clicksend" = ps: with ps; [
+    ];
+    "clicksend_tts" = ps: with ps; [
+    ];
+    "climacell" = ps: with ps; [
+      pyclimacell
+      pytomorrowio
+    ];
+    "climate" = ps: with ps; [
+    ];
+    "cloud" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+      hass-nabucasa
+    ];
+    "cloudflare" = ps: with ps; [
+      pycfdns
+    ];
+    "cmus" = ps: with ps; [
+    ]; # missing inputs: pycmus
+    "co2signal" = ps: with ps; [
+      co2signal
+    ];
+    "coinbase" = ps: with ps; [
+    ]; # missing inputs: coinbase
+    "color_extractor" = ps: with ps; [
+      colorthief
+    ];
+    "comed_hourly_pricing" = ps: with ps; [
+    ];
+    "comfoconnect" = ps: with ps; [
+      pycomfoconnect
+    ];
+    "command_line" = ps: with ps; [
+    ];
+    "compensation" = ps: with ps; [
+      numpy
+    ];
+    "concord232" = ps: with ps; [
+    ]; # missing inputs: concord232
+    "config" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "configurator" = ps: with ps; [
+    ];
+    "control4" = ps: with ps; [
+      pycontrol4
+    ];
+    "conversation" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "coolmaster" = ps: with ps; [
+      pycoolmasternet-async
+    ];
+    "coronavirus" = ps: with ps; [
+      coronavirus
+    ];
+    "counter" = ps: with ps; [
+    ];
+    "cover" = ps: with ps; [
+    ];
+    "cppm_tracker" = ps: with ps; [
+    ]; # missing inputs: clearpasspy
+    "cpuspeed" = ps: with ps; [
+      py-cpuinfo
+    ];
+    "crownstone" = ps: with ps; [
+      aiohttp-cors
+      crownstone-cloud
+      crownstone-sse
+      crownstone-uart
+      pyserial
+      pyudev
+    ];
+    "cups" = ps: with ps; [
+      pycups
+    ];
+    "currencylayer" = ps: with ps; [
+    ];
+    "daikin" = ps: with ps; [
+      pydaikin
+    ];
+    "danfoss_air" = ps: with ps; [
+      pydanfossair
+    ];
+    "darksky" = ps: with ps; [
+      python-forecastio
+    ];
+    "datadog" = ps: with ps; [
+      datadog
+    ];
+    "ddwrt" = ps: with ps; [
+    ];
+    "debugpy" = ps: with ps; [
+      debugpy
+    ];
+    "deconz" = ps: with ps; [
+      pydeconz
+    ];
+    "decora" = ps: with ps; [
+      bluepy
+    ]; # missing inputs: decora
+    "decora_wifi" = ps: with ps; [
+    ]; # missing inputs: decora_wifi
+    "default_config" = ps: with ps; [
+      pynacl
+      pyturbojpeg
+      aiodiscover
+      aiohttp-cors
+      async-upnp-client
+      fnvhash
+      hass-nabucasa
+      home-assistant-frontend
+      ifaddr
+      lru-dict
+      pillow
+      pyserial
+      pyudev
+      scapy
+      sqlalchemy
+      zeroconf
+    ];
+    "delijn" = ps: with ps; [
+      pydelijn
+    ];
+    "deluge" = ps: with ps; [
+      deluge-client
+    ];
+    "demo" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      lru-dict
+      sqlalchemy
+    ];
+    "denon" = ps: with ps; [
+    ];
+    "denonavr" = ps: with ps; [
+      denonavr
+    ];
+    "derivative" = ps: with ps; [
+    ];
+    "deutsche_bahn" = ps: with ps; [
+      schiene
+    ];
+    "device_automation" = ps: with ps; [
+    ];
+    "device_sun_light_trigger" = ps: with ps; [
+      aiohttp-cors
+      pillow
+    ];
+    "device_tracker" = ps: with ps; [
+    ];
+    "devolo_home_control" = ps: with ps; [
+      aiohttp-cors
+      devolo-home-control-api
+      ifaddr
+      zeroconf
+    ];
+    "devolo_home_network" = ps: with ps; [
+      devolo-plc-api
+    ];
+    "dexcom" = ps: with ps; [
+      pydexcom
+    ];
+    "dhcp" = ps: with ps; [
+      aiodiscover
+      scapy
+    ];
+    "diagnostics" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "dialogflow" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "digital_ocean" = ps: with ps; [
+      digital-ocean
+    ];
+    "directv" = ps: with ps; [
+      directv
+    ];
+    "discogs" = ps: with ps; [
+      discogs-client
+    ];
+    "discord" = ps: with ps; [
+      nextcord
+    ];
+    "discovery" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+      netdisco
+      zeroconf
+    ];
+    "dlib_face_detect" = ps: with ps; [
+      face_recognition
+    ];
+    "dlib_face_identify" = ps: with ps; [
+      face_recognition
+    ];
+    "dlink" = ps: with ps; [
+    ]; # missing inputs: pyW215
+    "dlna_dmr" = ps: with ps; [
+      aiohttp-cors
+      async-upnp-client
+      ifaddr
+      zeroconf
+    ];
+    "dlna_dms" = ps: with ps; [
+      aiohttp-cors
+      async-upnp-client
+      ifaddr
+      zeroconf
+    ];
+    "dnsip" = ps: with ps; [
+      aiodns
+    ];
+    "dominos" = ps: with ps; [
+      aiohttp-cors
+    ]; # missing inputs: pizzapi
+    "doods" = ps: with ps; [
+      pillow
+      pydoods
+    ];
+    "doorbird" = ps: with ps; [
+      aiohttp-cors
+      doorbirdpy
+    ];
+    "dovado" = ps: with ps; [
+    ]; # missing inputs: dovado
+    "downloader" = ps: with ps; [
+    ];
+    "dsmr" = ps: with ps; [
+      dsmr-parser
+    ];
+    "dsmr_reader" = ps: with ps; [
+      aiohttp-cors
+      paho-mqtt
+    ];
+    "dte_energy_bridge" = ps: with ps; [
+    ];
+    "dublin_bus_transport" = ps: with ps; [
+    ];
+    "duckdns" = ps: with ps; [
+    ];
+    "dunehd" = ps: with ps; [
+      pdunehd
+    ];
+    "dwd_weather_warnings" = ps: with ps; [
+      dwdwfsapi
+    ];
+    "dweet" = ps: with ps; [
+    ]; # missing inputs: dweepy
+    "dynalite" = ps: with ps; [
+      dynalite-devices
+    ];
+    "eafm" = ps: with ps; [
+      aioeafm
+    ];
+    "ebox" = ps: with ps; [
+    ]; # missing inputs: pyebox
+    "ebusd" = ps: with ps; [
+    ]; # missing inputs: ebusdpy
+    "ecoal_boiler" = ps: with ps; [
+      ecoaliface
+    ];
+    "ecobee" = ps: with ps; [
+      python-ecobee-api
+    ];
+    "econet" = ps: with ps; [
+      pyeconet
+    ];
+    "ecovacs" = ps: with ps; [
+    ]; # missing inputs: sucks
+    "eddystone_temperature" = ps: with ps; [
+      construct
+    ]; # missing inputs: beacontools
+    "edimax" = ps: with ps; [
+      pyedimax
+    ];
+    "edl21" = ps: with ps; [
+      pysml
+    ];
+    "efergy" = ps: with ps; [
+      pyefergy
+    ];
+    "egardia" = ps: with ps; [
+      pythonegardia
+    ];
+    "eight_sleep" = ps: with ps; [
+      pyeight
+    ];
+    "elgato" = ps: with ps; [
+      elgato
+    ];
+    "eliqonline" = ps: with ps; [
+      eliqonline
+    ];
+    "elkm1" = ps: with ps; [
+      aiohttp-cors
+      elkm1-lib
+      ifaddr
+    ];
+    "elmax" = ps: with ps; [
+      elmax-api
+    ];
+    "elv" = ps: with ps; [
+      pypca
+    ];
+    "emby" = ps: with ps; [
+      pyemby
+    ];
+    "emoncms" = ps: with ps; [
+    ];
+    "emoncms_history" = ps: with ps; [
+    ];
+    "emonitor" = ps: with ps; [
+      aioemonitor
+    ];
+    "emulated_hue" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+    ];
+    "emulated_kasa" = ps: with ps; [
+      sense-energy
+    ];
+    "emulated_roku" = ps: with ps; [
+      aiohttp-cors
+      emulated-roku
+      ifaddr
+    ];
+    "energy" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      lru-dict
+      sqlalchemy
+    ];
+    "enigma2" = ps: with ps; [
+      openwebifpy
+    ];
+    "enocean" = ps: with ps; [
+      enocean
+    ];
+    "enphase_envoy" = ps: with ps; [
+      envoy-reader
+    ];
+    "entur_public_transport" = ps: with ps; [
+      enturclient
+    ];
+    "environment_canada" = ps: with ps; [
+      env-canada
+    ];
+    "envisalink" = ps: with ps; [
+      pyenvisalink
+    ];
+    "ephember" = ps: with ps; [
+      pyephember
+    ];
+    "epson" = ps: with ps; [
+      epson-projector
+    ];
+    "epsonworkforce" = ps: with ps; [
+    ]; # missing inputs: epsonprinter
+    "eq3btsmart" = ps: with ps; [
+      construct
+    ]; # missing inputs: python-eq3bt
+    "esphome" = ps: with ps; [
+      aioesphomeapi
+      aiohttp-cors
+      ifaddr
+      zeroconf
+    ];
+    "etherscan" = ps: with ps; [
+    ]; # missing inputs: python-etherscan-api
+    "eufy" = ps: with ps; [
+    ]; # missing inputs: lakeside
+    "everlights" = ps: with ps; [
+      pyeverlights
+    ];
+    "evil_genius_labs" = ps: with ps; [
+      pyevilgenius
+    ];
+    "evohome" = ps: with ps; [
+      evohome-async
+    ];
+    "ezviz" = ps: with ps; [
+      ha-ffmpeg
+      pyezviz
+    ];
+    "faa_delays" = ps: with ps; [
+      faadelays
+    ];
+    "facebook" = ps: with ps; [
+    ];
+    "facebox" = ps: with ps; [
+    ];
+    "fail2ban" = ps: with ps; [
+    ];
+    "familyhub" = ps: with ps; [
+      python-family-hub-local
+    ];
+    "fan" = ps: with ps; [
+    ];
+    "fastdotcom" = ps: with ps; [
+    ]; # missing inputs: fastdotcom
+    "feedreader" = ps: with ps; [
+      feedparser
+    ];
+    "ffmpeg" = ps: with ps; [
+      ha-ffmpeg
+    ];
+    "ffmpeg_motion" = ps: with ps; [
+      ha-ffmpeg
+    ];
+    "ffmpeg_noise" = ps: with ps; [
+      ha-ffmpeg
+    ];
+    "fibaro" = ps: with ps; [
+      fiblary3-fork
+    ];
+    "fido" = ps: with ps; [
+      pyfido
+    ];
+    "file" = ps: with ps; [
+    ];
+    "filesize" = ps: with ps; [
+    ];
+    "filter" = ps: with ps; [
+      fnvhash
+      lru-dict
+      sqlalchemy
+    ];
+    "fints" = ps: with ps; [
+      fints
+    ];
+    "fireservicerota" = ps: with ps; [
+      pyfireservicerota
+    ];
+    "firmata" = ps: with ps; [
+      pymata-express
+    ];
+    "fitbit" = ps: with ps; [
+      aiohttp-cors
+      fitbit
+    ];
+    "fivem" = ps: with ps; [
+      fivem-api
+    ];
+    "fixer" = ps: with ps; [
+      fixerio
+    ];
+    "fjaraskupan" = ps: with ps; [
+      fjaraskupan
+    ];
+    "fleetgo" = ps: with ps; [
+      ritassist
+    ];
+    "flexit" = ps: with ps; [
+      pymodbus
+    ];
+    "flic" = ps: with ps; [
+      pyflic
+    ];
+    "flick_electric" = ps: with ps; [
+      pyflick
+    ];
+    "flipr" = ps: with ps; [
+      flipr-api
+    ];
+    "flo" = ps: with ps; [
+      aioflo
+    ];
+    "flock" = ps: with ps; [
+    ];
+    "flume" = ps: with ps; [
+      pyflume
+    ];
+    "flunearyou" = ps: with ps; [
+      pyflunearyou
+    ];
+    "flux" = ps: with ps; [
+    ];
+    "flux_led" = ps: with ps; [
+      aiohttp-cors
+      flux-led
+      ifaddr
+    ];
+    "folder" = ps: with ps; [
+    ];
+    "folder_watcher" = ps: with ps; [
+      watchdog
+    ];
+    "foobot" = ps: with ps; [
+      foobot-async
+    ];
+    "forecast_solar" = ps: with ps; [
+      forecast-solar
+    ];
+    "forked_daapd" = ps: with ps; [
+    ]; # missing inputs: pyforked-daapd pylibrespot-java
+    "fortios" = ps: with ps; [
+      fortiosapi
+    ];
+    "foscam" = ps: with ps; [
+      libpyfoscam
+    ];
+    "foursquare" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "free_mobile" = ps: with ps; [
+    ]; # missing inputs: freesms
+    "freebox" = ps: with ps; [
+      freebox-api
+    ];
+    "freedns" = ps: with ps; [
+    ];
+    "freedompro" = ps: with ps; [
+      pyfreedompro
+    ];
+    "fritz" = ps: with ps; [
+      aiohttp-cors
+      fritzconnection
+      ifaddr
+      xmltodict
+    ];
+    "fritzbox" = ps: with ps; [
+      pyfritzhome
+    ];
+    "fritzbox_callmonitor" = ps: with ps; [
+      fritzconnection
+    ];
+    "fronius" = ps: with ps; [
+      pyfronius
+    ];
+    "frontend" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "frontier_silicon" = ps: with ps; [
+      afsapi
+    ];
+    "futurenow" = ps: with ps; [
+      pyfnip
+    ];
+    "garadget" = ps: with ps; [
+    ];
+    "garages_amsterdam" = ps: with ps; [
+      garages-amsterdam
+    ];
+    "gc100" = ps: with ps; [
+    ]; # missing inputs: python-gc100
+    "gdacs" = ps: with ps; [
+      aio-georss-gdacs
+    ];
+    "generic" = ps: with ps; [
+      av
+      pillow
+    ];
+    "generic_hygrostat" = ps: with ps; [
+    ];
+    "generic_thermostat" = ps: with ps; [
+      fnvhash
+      lru-dict
+      sqlalchemy
+    ];
+    "geniushub" = ps: with ps; [
+      geniushub-client
+    ];
+    "geo_json_events" = ps: with ps; [
+      aio-geojson-generic-client
+    ];
+    "geo_location" = ps: with ps; [
+    ];
+    "geo_rss_events" = ps: with ps; [
+      georss-generic-client
+    ];
+    "geofency" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "geonetnz_quakes" = ps: with ps; [
+      aio-geojson-geonetnz-quakes
+    ];
+    "geonetnz_volcano" = ps: with ps; [
+      aio-geojson-geonetnz-volcano
+    ];
+    "gios" = ps: with ps; [
+      gios
+    ];
+    "github" = ps: with ps; [
+      aiogithubapi
+    ];
+    "gitlab_ci" = ps: with ps; [
+      python-gitlab
+    ];
+    "gitter" = ps: with ps; [
+    ]; # missing inputs: gitterpy
+    "glances" = ps: with ps; [
+      glances-api
+    ];
+    "goalfeed" = ps: with ps; [
+    ]; # missing inputs: pysher
+    "goalzero" = ps: with ps; [
+      goalzero
+    ];
+    "gogogate2" = ps: with ps; [
+      ismartgate
+    ];
+    "goodwe" = ps: with ps; [
+      goodwe
+    ];
+    "google" = ps: with ps; [
+      aiohttp-cors
+      gcal-sync
+      oauth2client
+    ];
+    "google_assistant" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+    ];
+    "google_cloud" = ps: with ps; [
+      google-cloud-texttospeech
+    ];
+    "google_domains" = ps: with ps; [
+    ];
+    "google_maps" = ps: with ps; [
+      locationsharinglib
+    ];
+    "google_pubsub" = ps: with ps; [
+      google-cloud-pubsub
+    ];
+    "google_translate" = ps: with ps; [
+      gtts
+    ];
+    "google_travel_time" = ps: with ps; [
+      googlemaps
+    ];
+    "google_wifi" = ps: with ps; [
+    ];
+    "gpsd" = ps: with ps; [
+      gps3
+    ];
+    "gpslogger" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "graphite" = ps: with ps; [
+    ];
+    "gree" = ps: with ps; [
+      greeclimate
+    ];
+    "greeneye_monitor" = ps: with ps; [
+    ]; # missing inputs: greeneye_monitor
+    "greenwave" = ps: with ps; [
+    ]; # missing inputs: greenwavereality
+    "group" = ps: with ps; [
+    ];
+    "growatt_server" = ps: with ps; [
+      growattserver
+    ];
+    "gstreamer" = ps: with ps; [
+    ]; # missing inputs: gstreamer-player
+    "gtfs" = ps: with ps; [
+      pygtfs
+    ];
+    "guardian" = ps: with ps; [
+      aioguardian
+    ];
+    "habitica" = ps: with ps; [
+      habitipy
+    ];
+    "hangouts" = ps: with ps; [
+      hangups
+    ];
+    "harman_kardon_avr" = ps: with ps; [
+      hkavr
+    ];
+    "harmony" = ps: with ps; [
+      aioharmony
+    ];
+    "hassio" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "haveibeenpwned" = ps: with ps; [
+    ];
+    "hddtemp" = ps: with ps; [
+    ];
+    "hdmi_cec" = ps: with ps; [
+      pycec
+    ];
+    "heatmiser" = ps: with ps; [
+    ]; # missing inputs: heatmiserV3
+    "heos" = ps: with ps; [
+      pyheos
+    ];
+    "here_travel_time" = ps: with ps; [
+      herepy
+    ];
+    "hikvision" = ps: with ps; [
+    ]; # missing inputs: pyhik
+    "hikvisioncam" = ps: with ps; [
+      hikvision
+    ];
+    "hisense_aehw4a1" = ps: with ps; [
+      pyaehw4a1
+    ];
+    "history" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      lru-dict
+      sqlalchemy
+    ];
+    "history_stats" = ps: with ps; [
+      fnvhash
+      lru-dict
+      sqlalchemy
+    ];
+    "hitron_coda" = ps: with ps; [
+    ];
+    "hive" = ps: with ps; [
+      pyhiveapi
+    ];
+    "hlk_sw16" = ps: with ps; [
+      hlk-sw16
+    ];
+    "home_connect" = ps: with ps; [
+      aiohttp-cors
+      homeconnect
+    ];
+    "home_plus_control" = ps: with ps; [
+      aiohttp-cors
+      homepluscontrol
+    ];
+    "homeassistant" = ps: with ps; [
+    ];
+    "homekit" = ps: with ps; [
+      hap-python
+      pyqrcode
+      pyturbojpeg
+      aiohttp-cors
+      base36
+      fnvhash
+      ha-ffmpeg
+      ifaddr
+      zeroconf
+    ];
+    "homekit_controller" = ps: with ps; [
+      aiohomekit
+      aiohttp-cors
+      ifaddr
+      zeroconf
+    ];
+    "homematic" = ps: with ps; [
+      pyhomematic
+    ];
+    "homematicip_cloud" = ps: with ps; [
+      homematicip
+    ];
+    "homewizard" = ps: with ps; [
+      aiohwenergy
+    ];
+    "homeworks" = ps: with ps; [
+      pyhomeworks
+    ];
+    "honeywell" = ps: with ps; [
+      somecomfort
+    ];
+    "horizon" = ps: with ps; [
+    ]; # missing inputs: horimote
+    "hp_ilo" = ps: with ps; [
+      python-hpilo
+    ];
+    "html5" = ps: with ps; [
+      aiohttp-cors
+      pywebpush
+    ];
+    "http" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "huawei_lte" = ps: with ps; [
+      huawei-lte-api
+      stringcase
+      url-normalize
+    ];
+    "hue" = ps: with ps; [
+      aiohue
+    ];
+    "huisbaasje" = ps: with ps; [
+      huisbaasje-client
+    ];
+    "humidifier" = ps: with ps; [
+    ];
+    "hunterdouglas_powerview" = ps: with ps; [
+      aiopvapi
+    ];
+    "hvv_departures" = ps: with ps; [
+      pygti
+    ];
+    "hydrawise" = ps: with ps; [
+      hydrawiser
+    ];
+    "hyperion" = ps: with ps; [
+      hyperion-py
+    ];
+    "ialarm" = ps: with ps; [
+      pyialarm
+    ];
+    "iammeter" = ps: with ps; [
+    ]; # missing inputs: iammeter
+    "iaqualink" = ps: with ps; [
+      iaqualink
+    ];
+    "icloud" = ps: with ps; [
+      pyicloud
+    ];
+    "idteck_prox" = ps: with ps; [
+    ]; # missing inputs: rfk101py
+    "ifttt" = ps: with ps; [
+      aiohttp-cors
+      pyfttt
+    ];
+    "iglo" = ps: with ps; [
+    ]; # missing inputs: iglo
+    "ign_sismologia" = ps: with ps; [
+      georss-ign-sismologia-client
+    ];
+    "ihc" = ps: with ps; [
+      defusedxml
+    ]; # missing inputs: ihcsdk
+    "image" = ps: with ps; [
+      aiohttp-cors
+      pillow
+    ];
+    "image_processing" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+    ];
+    "imap" = ps: with ps; [
+      aioimaplib
+    ];
+    "imap_email_content" = ps: with ps; [
+    ];
+    "incomfort" = ps: with ps; [
+      incomfort-client
+    ];
+    "influxdb" = ps: with ps; [
+      influxdb-client
+      influxdb
+    ];
+    "input_boolean" = ps: with ps; [
+    ];
+    "input_button" = ps: with ps; [
+    ];
+    "input_datetime" = ps: with ps; [
+    ];
+    "input_number" = ps: with ps; [
+    ];
+    "input_select" = ps: with ps; [
+    ];
+    "input_text" = ps: with ps; [
+    ];
+    "insteon" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      insteon-frontend-home-assistant
+      lru-dict
+      pillow
+      pyinsteon
+      pyserial
+      pyudev
+      sqlalchemy
+    ];
+    "integration" = ps: with ps; [
+    ];
+    "intellifire" = ps: with ps; [
+      intellifire4py
+    ];
+    "intent" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "intent_script" = ps: with ps; [
+    ];
+    "intesishome" = ps: with ps; [
+      pyintesishome
+    ];
+    "ios" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+      zeroconf
+    ];
+    "iotawatt" = ps: with ps; [
+      iotawattpy
+    ];
+    "iperf3" = ps: with ps; [
+    ]; # missing inputs: iperf3
+    "ipma" = ps: with ps; [
+      pyipma
+    ];
+    "ipp" = ps: with ps; [
+      pyipp
+    ];
+    "iqvia" = ps: with ps; [
+      numpy
+      pyiqvia
+    ];
+    "irish_rail_transport" = ps: with ps; [
+    ]; # missing inputs: pyirishrail
+    "islamic_prayer_times" = ps: with ps; [
+      prayer-times-calculator
+    ];
+    "iss" = ps: with ps; [
+    ]; # missing inputs: pyiss
+    "isy994" = ps: with ps; [
+      pyisy
+    ];
+    "itach" = ps: with ps; [
+    ]; # missing inputs: pyitachip2ir
+    "itunes" = ps: with ps; [
+    ];
+    "izone" = ps: with ps; [
+      python-izone
+    ];
+    "jellyfin" = ps: with ps; [
+      jellyfin-apiclient-python
+    ];
+    "jewish_calendar" = ps: with ps; [
+      hdate
+    ];
+    "joaoapps_join" = ps: with ps; [
+    ]; # missing inputs: python-join-api
+    "juicenet" = ps: with ps; [
+      python-juicenet
+    ];
+    "kaiterra" = ps: with ps; [
+    ]; # missing inputs: kaiterra-async-client
+    "kaleidescape" = ps: with ps; [
+    ]; # missing inputs: pykaleidescape
+    "kankun" = ps: with ps; [
+    ];
+    "keba" = ps: with ps; [
+    ]; # missing inputs: keba-kecontact
+    "keenetic_ndms2" = ps: with ps; [
+      ndms2-client
+    ];
+    "kef" = ps: with ps; [
+      aiokef
+      getmac
+    ];
+    "keyboard" = ps: with ps; [
+    ]; # missing inputs: pyuserinput
+    "keyboard_remote" = ps: with ps; [
+      aionotify
+      evdev
+    ];
+    "kira" = ps: with ps; [
+      pykira
+    ];
+    "kiwi" = ps: with ps; [
+    ]; # missing inputs: kiwiki-client
+    "kmtronic" = ps: with ps; [
+      pykmtronic
+    ];
+    "knx" = ps: with ps; [
+      xknx
+    ];
+    "kodi" = ps: with ps; [
+      aiohttp-cors
+      pykodi
+    ];
+    "konnected" = ps: with ps; [
+      aiohttp-cors
+      konnected
+    ];
+    "kostal_plenticore" = ps: with ps; [
+    ]; # missing inputs: kostal_plenticore
+    "kraken" = ps: with ps; [
+      krakenex
+      pykrakenapi
+    ];
+    "kulersky" = ps: with ps; [
+      pykulersky
+    ];
+    "kwb" = ps: with ps; [
+    ]; # missing inputs: pykwb
+    "lacrosse" = ps: with ps; [
+      pylacrosse
+    ];
+    "lametric" = ps: with ps; [
+      lmnotify
+    ];
+    "lannouncer" = ps: with ps; [
+    ];
+    "lastfm" = ps: with ps; [
+      pylast
+    ];
+    "launch_library" = ps: with ps; [
+      pylaunches
+    ];
+    "lcn" = ps: with ps; [
+      pypck
+    ];
+    "lg_netcast" = ps: with ps; [
+      pylgnetcast
+    ];
+    "lg_soundbar" = ps: with ps; [
+      temescal
+    ];
+    "life360" = ps: with ps; [
+      life360
+    ];
+    "lifx" = ps: with ps; [
+      aiohttp-cors
+      aiolifx
+      aiolifx-effects
+      ifaddr
+    ];
+    "lifx_cloud" = ps: with ps; [
+    ];
+    "light" = ps: with ps; [
+    ];
+    "lightwave" = ps: with ps; [
+      lightwave
+    ];
+    "limitlessled" = ps: with ps; [
+      limitlessled
+    ];
+    "linksys_smart" = ps: with ps; [
+    ];
+    "linode" = ps: with ps; [
+      linode-api
+    ];
+    "linux_battery" = ps: with ps; [
+      batinfo
+    ];
+    "lirc" = ps: with ps; [
+    ]; # missing inputs: python-lirc
+    "litejet" = ps: with ps; [
+    ]; # missing inputs: pylitejet
+    "litterrobot" = ps: with ps; [
+      pylitterbot
+    ];
+    "llamalab_automate" = ps: with ps; [
+    ];
+    "local_file" = ps: with ps; [
+    ];
+    "local_ip" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+    ];
+    "locative" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "lock" = ps: with ps; [
+    ];
+    "logbook" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "logentries" = ps: with ps; [
+    ];
+    "logger" = ps: with ps; [
+    ];
+    "logi_circle" = ps: with ps; [
+      aiohttp-cors
+      ha-ffmpeg
+      logi-circle
+    ];
+    "london_air" = ps: with ps; [
+    ];
+    "london_underground" = ps: with ps; [
+    ]; # missing inputs: london-tube-status
+    "lookin" = ps: with ps; [
+      aiolookin
+    ];
+    "lovelace" = ps: with ps; [
+    ];
+    "luci" = ps: with ps; [
+      openwrt-luci-rpc
+    ];
+    "luftdaten" = ps: with ps; [
+      luftdaten
+    ];
+    "lupusec" = ps: with ps; [
+      lupupy
+    ];
+    "lutron" = ps: with ps; [
+      pylutron
+    ];
+    "lutron_caseta" = ps: with ps; [
+      pylutron-caseta
+    ];
+    "lw12wifi" = ps: with ps; [
+    ]; # missing inputs: lw12
+    "lyric" = ps: with ps; [
+      aiohttp-cors
+      aiolyric
+    ];
+    "magicseaweed" = ps: with ps; [
+    ]; # missing inputs: magicseaweed
+    "mailbox" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "mailgun" = ps: with ps; [
+      aiohttp-cors
+    ]; # missing inputs: pymailgunner
+    "manual" = ps: with ps; [
+    ];
+    "manual_mqtt" = ps: with ps; [
+      aiohttp-cors
+      paho-mqtt
+    ];
+    "map" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "marytts" = ps: with ps; [
+    ]; # missing inputs: speak2mary
+    "mastodon" = ps: with ps; [
+      mastodon-py
+    ];
+    "matrix" = ps: with ps; [
+      matrix-client
+    ];
+    "maxcube" = ps: with ps; [
+      maxcube-api
+    ];
+    "mazda" = ps: with ps; [
+      pymazda
+    ];
+    "meater" = ps: with ps; [
+      meater-python
+    ];
+    "media_extractor" = ps: with ps; [
+      aiohttp-cors
+      youtube-dl-light
+    ];
+    "media_player" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "media_source" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "mediaroom" = ps: with ps; [
+      pymediaroom
+    ];
+    "melcloud" = ps: with ps; [
+      pymelcloud
+    ];
+    "melissa" = ps: with ps; [
+    ]; # missing inputs: py-melissa-climate
+    "meraki" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "message_bird" = ps: with ps; [
+    ]; # missing inputs: messagebird
+    "met" = ps: with ps; [
+      pymetno
+    ];
+    "met_eireann" = ps: with ps; [
+      pymeteireann
+    ];
+    "meteo_france" = ps: with ps; [
+      meteofrance-api
+    ];
+    "meteoalarm" = ps: with ps; [
+      meteoalertapi
+    ];
+    "meteoclimatic" = ps: with ps; [
+      pymeteoclimatic
+    ];
+    "metoffice" = ps: with ps; [
+      datapoint
+    ];
+    "mfi" = ps: with ps; [
+    ]; # missing inputs: mficlient
+    "microsoft" = ps: with ps; [
+    ]; # missing inputs: pycsspeechtts
+    "microsoft_face" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+    ];
+    "microsoft_face_detect" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+    ];
+    "microsoft_face_identify" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+    ];
+    "miflora" = ps: with ps; [
+      bluepy
+    ]; # missing inputs: miflora
+    "mikrotik" = ps: with ps; [
+      librouteros
+    ];
+    "mill" = ps: with ps; [
+      mill-local
+      millheater
+    ];
+    "min_max" = ps: with ps; [
+    ];
+    "minecraft_server" = ps: with ps; [
+      aiodns
+      getmac
+      mcstatus
+    ];
+    "minio" = ps: with ps; [
+      minio
+    ];
+    "mitemp_bt" = ps: with ps; [
+    ]; # missing inputs: mitemp_bt
+    "mjpeg" = ps: with ps; [
+    ];
+    "mobile_app" = ps: with ps; [
+      pynacl
+      pyturbojpeg
+      aiohttp-cors
+      hass-nabucasa
+      pillow
+    ];
+    "mochad" = ps: with ps; [
+    ]; # missing inputs: pymochad
+    "modbus" = ps: with ps; [
+      pymodbus
+    ];
+    "modem_callerid" = ps: with ps; [
+      aiohttp-cors
+      phone-modem
+      pyserial
+      pyudev
+    ];
+    "modern_forms" = ps: with ps; [
+      aiomodernforms
+    ];
+    "moehlenhoff_alpha2" = ps: with ps; [
+    ]; # missing inputs: moehlenhoff-alpha2
+    "mold_indicator" = ps: with ps; [
+    ];
+    "monoprice" = ps: with ps; [
+    ]; # missing inputs: pymonoprice
+    "moon" = ps: with ps; [
+    ];
+    "motion_blinds" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+      motionblinds
+    ];
+    "motioneye" = ps: with ps; [
+      aiohttp-cors
+      motioneye-client
+    ];
+    "mpd" = ps: with ps; [
+      mpd2
+    ];
+    "mqtt" = ps: with ps; [
+      aiohttp-cors
+      paho-mqtt
+    ];
+    "mqtt_eventstream" = ps: with ps; [
+      aiohttp-cors
+      paho-mqtt
+    ];
+    "mqtt_json" = ps: with ps; [
+      aiohttp-cors
+      paho-mqtt
+    ];
+    "mqtt_room" = ps: with ps; [
+      aiohttp-cors
+      paho-mqtt
+    ];
+    "mqtt_statestream" = ps: with ps; [
+      aiohttp-cors
+      paho-mqtt
+    ];
+    "msteams" = ps: with ps; [
+      pymsteams
+    ];
+    "mullvad" = ps: with ps; [
+      mullvad-api
+    ];
+    "mutesync" = ps: with ps; [
+      mutesync
+    ];
+    "mvglive" = ps: with ps; [
+      PyMVGLive
+    ];
+    "my" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "mycroft" = ps: with ps; [
+    ]; # missing inputs: mycroftapi
+    "myq" = ps: with ps; [
+      pymyq
+    ];
+    "mysensors" = ps: with ps; [
+      aiohttp-cors
+      paho-mqtt
+      pymysensors
+    ];
+    "mystrom" = ps: with ps; [
+      aiohttp-cors
+      python-mystrom
+    ];
+    "mythicbeastsdns" = ps: with ps; [
+      mbddns
+    ];
+    "nad" = ps: with ps; [
+      nad-receiver
+    ];
+    "nam" = ps: with ps; [
+      nettigo-air-monitor
+    ];
+    "namecheapdns" = ps: with ps; [
+      defusedxml
+    ];
+    "nanoleaf" = ps: with ps; [
+      aionanoleaf
+    ];
+    "neato" = ps: with ps; [
+      aiohttp-cors
+      pybotvac
+    ];
+    "nederlandse_spoorwegen" = ps: with ps; [
+      nsapi
+    ];
+    "ness_alarm" = ps: with ps; [
+      nessclient
+    ];
+    "nest" = ps: with ps; [
+      aiohttp-cors
+      google-nest-sdm
+      ha-ffmpeg
+      python-nest
+    ];
+    "netatmo" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+      hass-nabucasa
+      pyatmo
+    ];
+    "netdata" = ps: with ps; [
+      netdata
+    ];
+    "netgear" = ps: with ps; [
+      pynetgear
+    ];
+    "netgear_lte" = ps: with ps; [
+      eternalegypt
+    ];
+    "netio" = ps: with ps; [
+      aiohttp-cors
+    ]; # missing inputs: pynetio
+    "network" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+    ];
+    "neurio_energy" = ps: with ps; [
+    ]; # missing inputs: neurio
+    "nexia" = ps: with ps; [
+      nexia
+    ];
+    "nextbus" = ps: with ps; [
+      py-nextbusnext
+    ];
+    "nextcloud" = ps: with ps; [
+      nextcloudmonitor
+    ];
+    "nfandroidtv" = ps: with ps; [
+    ]; # missing inputs: notifications-android-tv
+    "nightscout" = ps: with ps; [
+      py-nightscout
+    ];
+    "niko_home_control" = ps: with ps; [
+      niko-home-control
+    ];
+    "nilu" = ps: with ps; [
+      niluclient
+    ];
+    "nina" = ps: with ps; [
+      pynina
+    ];
+    "nissan_leaf" = ps: with ps; [
+      pycarwings2
+    ];
+    "nmap_tracker" = ps: with ps; [
+      aiohttp-cors
+      getmac
+      ifaddr
+      netmap
+    ]; # missing inputs: mac-vendor-lookup
+    "nmbs" = ps: with ps; [
+    ]; # missing inputs: pyrail
+    "no_ip" = ps: with ps; [
+    ];
+    "noaa_tides" = ps: with ps; [
+    ]; # missing inputs: noaa-coops
+    "norway_air" = ps: with ps; [
+      pymetno
+    ];
+    "notify" = ps: with ps; [
+    ];
+    "notify_events" = ps: with ps; [
+      notify-events
+    ];
+    "notion" = ps: with ps; [
+      aionotion
+    ];
+    "nsw_fuel_station" = ps: with ps; [
+    ]; # missing inputs: nsw-fuel-api-client
+    "nsw_rural_fire_service_feed" = ps: with ps; [
+      aio-geojson-nsw-rfs-incidents
+    ];
+    "nuheat" = ps: with ps; [
+    ]; # missing inputs: nuheat
+    "nuki" = ps: with ps; [
+      pynuki
+    ];
+    "numato" = ps: with ps; [
+    ]; # missing inputs: numato-gpio
+    "number" = ps: with ps; [
+    ];
+    "nut" = ps: with ps; [
+      pynut2
+    ];
+    "nws" = ps: with ps; [
+      pynws
+    ];
+    "nx584" = ps: with ps; [
+      pynx584
+    ];
+    "nzbget" = ps: with ps; [
+    ]; # missing inputs: pynzbgetapi
+    "oasa_telematics" = ps: with ps; [
+      oasatelematics
+    ];
+    "obihai" = ps: with ps; [
+      pyobihai
+    ];
+    "octoprint" = ps: with ps; [
+      pyoctoprintapi
+    ];
+    "oem" = ps: with ps; [
+      oemthermostat
+    ];
+    "ohmconnect" = ps: with ps; [
+      defusedxml
+    ];
+    "ombi" = ps: with ps; [
+      pyombi
+    ];
+    "omnilogic" = ps: with ps; [
+      omnilogic
+    ];
+    "onboarding" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "oncue" = ps: with ps; [
+      aiooncue
+    ];
+    "ondilo_ico" = ps: with ps; [
+      aiohttp-cors
+      ondilo
+    ];
+    "onewire" = ps: with ps; [
+      pi1wire
+      pyownet
+    ];
+    "onkyo" = ps: with ps; [
+      onkyo-eiscp
+    ];
+    "onvif" = ps: with ps; [
+      wsdiscovery
+      ha-ffmpeg
+      onvif-zeep-async
+    ];
+    "open_meteo" = ps: with ps; [
+      open-meteo
+    ];
+    "openalpr_cloud" = ps: with ps; [
+    ];
+    "openalpr_local" = ps: with ps; [
+    ];
+    "opencv" = ps: with ps; [
+      numpy
+    ]; # missing inputs: opencv-python-headless
+    "openerz" = ps: with ps; [
+      openerz-api
+    ];
+    "openevse" = ps: with ps; [
+      openevsewifi
+    ];
+    "openexchangerates" = ps: with ps; [
+    ];
+    "opengarage" = ps: with ps; [
+      open-garage
+    ];
+    "openhardwaremonitor" = ps: with ps; [
+    ];
+    "openhome" = ps: with ps; [
+      openhomedevice
+    ];
+    "opensensemap" = ps: with ps; [
+      opensensemap-api
+    ];
+    "opensky" = ps: with ps; [
+    ];
+    "opentherm_gw" = ps: with ps; [
+      pyotgw
+    ];
+    "openuv" = ps: with ps; [
+      pyopenuv
+    ];
+    "openweathermap" = ps: with ps; [
+      pyowm
+    ];
+    "opnsense" = ps: with ps; [
+      pyopnsense
+    ];
+    "opple" = ps: with ps; [
+      pyoppleio
+    ];
+    "oru" = ps: with ps; [
+    ]; # missing inputs: oru
+    "orvibo" = ps: with ps; [
+      orvibo
+    ];
+    "osramlightify" = ps: with ps; [
+    ]; # missing inputs: lightify
+    "otp" = ps: with ps; [
+      pyotp
+    ];
+    "overkiz" = ps: with ps; [
+      pyoverkiz
+    ];
+    "ovo_energy" = ps: with ps; [
+      ovoenergy
+    ];
+    "owntracks" = ps: with ps; [
+      pynacl
+      pyturbojpeg
+      aiohttp-cors
+      hass-nabucasa
+      paho-mqtt
+    ];
+    "p1_monitor" = ps: with ps; [
+      p1monitor
+    ];
+    "panasonic_bluray" = ps: with ps; [
+      panacotta
+    ];
+    "panasonic_viera" = ps: with ps; [
+    ]; # missing inputs: panasonic_viera
+    "pandora" = ps: with ps; [
+      pexpect
+    ];
+    "panel_custom" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "panel_iframe" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "peco" = ps: with ps; [
+      peco
+    ];
+    "pencom" = ps: with ps; [
+      pencompy
+    ];
+    "persistent_notification" = ps: with ps; [
+    ];
+    "person" = ps: with ps; [
+      aiohttp-cors
+      pillow
+    ];
+    "philips_js" = ps: with ps; [
+      ha-philipsjs
+    ];
+    "pi_hole" = ps: with ps; [
+      hole
+    ];
+    "picnic" = ps: with ps; [
+      python-picnic-api
+    ];
+    "picotts" = ps: with ps; [
+    ];
+    "pilight" = ps: with ps; [
+    ]; # missing inputs: pilight
+    "ping" = ps: with ps; [
+      icmplib
+    ];
+    "pioneer" = ps: with ps; [
+    ];
+    "pjlink" = ps: with ps; [
+    ]; # missing inputs: pypjlink2
+    "plaato" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+      hass-nabucasa
+      pyplaato
+    ];
+    "plant" = ps: with ps; [
+      fnvhash
+      lru-dict
+      sqlalchemy
+    ];
+    "plex" = ps: with ps; [
+      aiohttp-cors
+      plexapi
+      plexauth
+      plexwebsocket
+    ];
+    "plugwise" = ps: with ps; [
+      plugwise
+    ];
+    "plum_lightpad" = ps: with ps; [
+    ]; # missing inputs: plumlightpad
+    "pocketcasts" = ps: with ps; [
+    ]; # missing inputs: pycketcasts
+    "point" = ps: with ps; [
+      aiohttp-cors
+      pypoint
+    ];
+    "poolsense" = ps: with ps; [
+      poolsense
+    ];
+    "powerwall" = ps: with ps; [
+      tesla-powerwall
+    ];
+    "profiler" = ps: with ps; [
+      guppy3
+      objgraph
+      pyprof2calltree
+    ];
+    "progettihwsw" = ps: with ps; [
+    ]; # missing inputs: progettihwsw
+    "proliphix" = ps: with ps; [
+    ]; # missing inputs: proliphix
+    "prometheus" = ps: with ps; [
+      aiohttp-cors
+      prometheus-client
+    ];
+    "prosegur" = ps: with ps; [
+      pyprosegur
+    ];
+    "prowl" = ps: with ps; [
+    ];
+    "proximity" = ps: with ps; [
+    ];
+    "proxmoxve" = ps: with ps; [
+      proxmoxer
+    ];
+    "proxy" = ps: with ps; [
+      pillow
+    ];
+    "ps4" = ps: with ps; [
+    ]; # missing inputs: pyps4-2ndscreen
+    "pulseaudio_loopback" = ps: with ps; [
+      pulsectl
+    ];
+    "pure_energie" = ps: with ps; [
+      gridnet
+    ];
+    "push" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "pushbullet" = ps: with ps; [
+      pushbullet
+    ];
+    "pushover" = ps: with ps; [
+      pushover-complete
+    ];
+    "pushsafer" = ps: with ps; [
+    ];
+    "pvoutput" = ps: with ps; [
+      pvo
+    ];
+    "pvpc_hourly_pricing" = ps: with ps; [
+      aiopvpc
+    ];
+    "pyload" = ps: with ps; [
+    ];
+    "python_script" = ps: with ps; [
+      restrictedpython
+    ];
+    "qbittorrent" = ps: with ps; [
+    ]; # missing inputs: python-qbittorrent
+    "qld_bushfire" = ps: with ps; [
+      georss-qld-bushfire-alert-client
+    ];
+    "qnap" = ps: with ps; [
+      qnapstats
+    ];
+    "qnap_qsw" = ps: with ps; [
+      aioqsw
+    ];
+    "qrcode" = ps: with ps; [
+      pillow
+      pyzbar
+    ];
+    "quantum_gateway" = ps: with ps; [
+      quantum-gateway
+    ];
+    "qvr_pro" = ps: with ps; [
+      pyqvrpro
+    ];
+    "qwikswitch" = ps: with ps; [
+    ]; # missing inputs: pyqwikswitch
+    "rachio" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+      hass-nabucasa
+      rachiopy
+    ];
+    "radarr" = ps: with ps; [
+    ];
+    "radio_browser" = ps: with ps; [
+      radios
+    ];
+    "radiotherm" = ps: with ps; [
+      radiotherm
+    ];
+    "rainbird" = ps: with ps; [
+      pyrainbird
+    ];
+    "raincloud" = ps: with ps; [
+      raincloudy
+    ];
+    "rainforest_eagle" = ps: with ps; [
+      aioeagle
+      ueagle
+    ];
+    "rainmachine" = ps: with ps; [
+      regenmaschine
+    ];
+    "random" = ps: with ps; [
+    ];
+    "raspyrfm" = ps: with ps; [
+    ]; # missing inputs: raspyrfm-client
+    "rdw" = ps: with ps; [
+      vehicle
+    ];
+    "recollect_waste" = ps: with ps; [
+      aiorecollect
+    ];
+    "recorder" = ps: with ps; [
+      fnvhash
+      lru-dict
+      sqlalchemy
+    ];
+    "recswitch" = ps: with ps; [
+    ]; # missing inputs: pyrecswitch
+    "reddit" = ps: with ps; [
+      praw
+    ];
+    "rejseplanen" = ps: with ps; [
+      rjpl
+    ];
+    "remember_the_milk" = ps: with ps; [
+      httplib2
+    ]; # missing inputs: RtmAPI
+    "remote" = ps: with ps; [
+    ];
+    "remote_rpi_gpio" = ps: with ps; [
+    ]; # missing inputs: gpiozero pigpio
+    "renault" = ps: with ps; [
+      renault-api
+    ];
+    "repetier" = ps: with ps; [
+    ]; # missing inputs: pyrepetierng
+    "rest" = ps: with ps; [
+      jsonpath
+      xmltodict
+    ];
+    "rest_command" = ps: with ps; [
+    ];
+    "rflink" = ps: with ps; [
+      rflink
+    ];
+    "rfxtrx" = ps: with ps; [
+      pyrfxtrx
+    ];
+    "ridwell" = ps: with ps; [
+      aioridwell
+    ];
+    "ring" = ps: with ps; [
+      ha-ffmpeg
+      ring-doorbell
+    ];
+    "ripple" = ps: with ps; [
+    ]; # missing inputs: python-ripple-api
+    "risco" = ps: with ps; [
+      pyrisco
+    ];
+    "rituals_perfume_genie" = ps: with ps; [
+      pyrituals
+    ];
+    "rmvtransport" = ps: with ps; [
+      pyrmvtransport
+    ];
+    "rocketchat" = ps: with ps; [
+    ]; # missing inputs: rocketchat-API
+    "roku" = ps: with ps; [
+      rokuecp
+    ];
+    "roomba" = ps: with ps; [
+      roombapy
+    ];
+    "roon" = ps: with ps; [
+      roonapi
+    ];
+    "route53" = ps: with ps; [
+      boto3
+    ];
+    "rova" = ps: with ps; [
+      rova
+    ];
+    "rpi_camera" = ps: with ps; [
+    ];
+    "rpi_gpio" = ps: with ps; [
+    ]; # missing inputs: RPi.GPIO
+    "rpi_power" = ps: with ps; [
+      rpi-bad-power
+    ];
+    "rss_feed_template" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "rtorrent" = ps: with ps; [
+    ];
+    "rtsp_to_webrtc" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+      rtsp-to-webrtc
+    ];
+    "ruckus_unleashed" = ps: with ps; [
+      pyruckus
+    ];
+    "russound_rio" = ps: with ps; [
+    ]; # missing inputs: russound_rio
+    "russound_rnet" = ps: with ps; [
+    ]; # missing inputs: russound
+    "sabnzbd" = ps: with ps; [
+      pysabnzbd
+    ];
+    "safe_mode" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+      fnvhash
+      hass-nabucasa
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "saj" = ps: with ps; [
+      pysaj
+    ];
+    "samsungtv" = ps: with ps; [
+      aiohttp-cors
+      async-upnp-client
+      getmac
+      ifaddr
+      samsungctl
+      samsungtvws
+      wakeonlan
+      zeroconf
+    ]
+    ++ samsungctl.optional-dependencies.websocket
+    ++ samsungtvws.optional-dependencies.async
+    ++ samsungtvws.optional-dependencies.encrypted;
+    "satel_integra" = ps: with ps; [
+    ]; # missing inputs: satel_integra
+    "scene" = ps: with ps; [
+    ];
+    "schluter" = ps: with ps; [
+    ]; # missing inputs: py-schluter
+    "scrape" = ps: with ps; [
+      beautifulsoup4
+      jsonpath
+      xmltodict
+    ];
+    "screenlogic" = ps: with ps; [
+      screenlogicpy
+    ];
+    "script" = ps: with ps; [
+    ];
+    "scsgate" = ps: with ps; [
+    ]; # missing inputs: scsgate
+    "search" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "season" = ps: with ps; [
+      ephem
+    ];
+    "select" = ps: with ps; [
+    ];
+    "sendgrid" = ps: with ps; [
+      sendgrid
+    ];
+    "sense" = ps: with ps; [
+      sense-energy
+    ];
+    "senseme" = ps: with ps; [
+      aiosenseme
+    ];
+    "sensibo" = ps: with ps; [
+      pysensibo
+    ];
+    "sensor" = ps: with ps; [
+      fnvhash
+      lru-dict
+      sqlalchemy
+    ];
+    "sentry" = ps: with ps; [
+      sentry-sdk
+    ];
+    "senz" = ps: with ps; [
+      aiohttp-cors
+      aiosenz
+    ];
+    "serial" = ps: with ps; [
+      pyserial-asyncio
+    ];
+    "serial_pm" = ps: with ps; [
+      pmsensor
+    ];
+    "sesame" = ps: with ps; [
+    ]; # missing inputs: pysesame2
+    "seven_segments" = ps: with ps; [
+      pillow
+    ];
+    "seventeentrack" = ps: with ps; [
+      py17track
+    ];
+    "sharkiq" = ps: with ps; [
+      sharkiq
+    ];
+    "shell_command" = ps: with ps; [
+    ];
+    "shelly" = ps: with ps; [
+      aioshelly
+    ];
+    "shiftr" = ps: with ps; [
+      paho-mqtt
+    ];
+    "shodan" = ps: with ps; [
+      shodan
+    ];
+    "shopping_list" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "sia" = ps: with ps; [
+      pysiaalarm
+    ];
+    "sigfox" = ps: with ps; [
+    ];
+    "sighthound" = ps: with ps; [
+      pillow
+      simplehound
+    ];
+    "signal_messenger" = ps: with ps; [
+      pysignalclirestapi
+    ];
+    "simplepush" = ps: with ps; [
+    ]; # missing inputs: simplepush
+    "simplisafe" = ps: with ps; [
+      simplisafe-python
+    ];
+    "simulated" = ps: with ps; [
+    ];
+    "sinch" = ps: with ps; [
+    ]; # missing inputs: clx-sdk-xms
+    "siren" = ps: with ps; [
+    ];
+    "sisyphus" = ps: with ps; [
+    ]; # missing inputs: sisyphus-control
+    "sky_hub" = ps: with ps; [
+      pyskyqhub
+    ];
+    "skybeacon" = ps: with ps; [
+      pygatt
+    ]
+    ++ pygatt.optional-dependencies.GATTTOOL;
+    "skybell" = ps: with ps; [
+      skybellpy
+    ];
+    "slack" = ps: with ps; [
+      slackclient
+    ];
+    "sleepiq" = ps: with ps; [
+      asyncsleepiq
+    ];
+    "slide" = ps: with ps; [
+    ]; # missing inputs: goslide-api
+    "slimproto" = ps: with ps; [
+      aiohttp-cors
+      aioslimproto
+    ];
+    "sma" = ps: with ps; [
+      pysma
+    ];
+    "smappee" = ps: with ps; [
+      aiohttp-cors
+      pysmappee
+    ];
+    "smart_meter_texas" = ps: with ps; [
+      smart-meter-texas
+    ];
+    "smartthings" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+      hass-nabucasa
+      pysmartapp
+      pysmartthings
+    ];
+    "smarttub" = ps: with ps; [
+      python-smarttub
+    ];
+    "smarty" = ps: with ps; [
+    ]; # missing inputs: pysmarty
+    "smhi" = ps: with ps; [
+      smhi-pkg
+    ];
+    "sms" = ps: with ps; [
+      python-gammu
+    ];
+    "smtp" = ps: with ps; [
+    ];
+    "snapcast" = ps: with ps; [
+      snapcast
+    ];
+    "snips" = ps: with ps; [
+      aiohttp-cors
+      paho-mqtt
+    ];
+    "snmp" = ps: with ps; [
+      pysnmp
+    ];
+    "solaredge" = ps: with ps; [
+      solaredge
+      stringcase
+    ];
+    "solaredge_local" = ps: with ps; [
+    ]; # missing inputs: solaredge-local
+    "solarlog" = ps: with ps; [
+      sunwatcher
+    ];
+    "solax" = ps: with ps; [
+      solax
+    ];
+    "soma" = ps: with ps; [
+      pysoma
+    ];
+    "somfy" = ps: with ps; [
+      aiohttp-cors
+      pymfy
+    ];
+    "somfy_mylink" = ps: with ps; [
+      somfy-mylink-synergy
+    ];
+    "sonarr" = ps: with ps; [
+      aiopyarr
+    ];
+    "songpal" = ps: with ps; [
+      python-songpal
+    ];
+    "sonos" = ps: with ps; [
+      aiohttp-cors
+      async-upnp-client
+      ifaddr
+      plexapi
+      plexauth
+      plexwebsocket
+      soco
+      spotipy
+      zeroconf
+    ];
+    "sony_projector" = ps: with ps; [
+      pysdcp
+    ];
+    "soundtouch" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+      libsoundtouch
+      zeroconf
+    ];
+    "spaceapi" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "spc" = ps: with ps; [
+      pyspcwebgw
+    ];
+    "speedtestdotnet" = ps: with ps; [
+      speedtest-cli
+    ];
+    "spider" = ps: with ps; [
+      spiderpy
+    ];
+    "splunk" = ps: with ps; [
+    ]; # missing inputs: hass_splunk
+    "spotify" = ps: with ps; [
+      aiohttp-cors
+      spotipy
+    ];
+    "sql" = ps: with ps; [
+      sqlalchemy
+    ];
+    "squeezebox" = ps: with ps; [
+      pysqueezebox
+    ];
+    "srp_energy" = ps: with ps; [
+      srpenergy
+    ];
+    "ssdp" = ps: with ps; [
+      aiohttp-cors
+      async-upnp-client
+      ifaddr
+      zeroconf
+    ];
+    "starline" = ps: with ps; [
+      starline
+    ];
+    "starlingbank" = ps: with ps; [
+    ]; # missing inputs: starlingbank
+    "startca" = ps: with ps; [
+      xmltodict
+    ];
+    "statistics" = ps: with ps; [
+      fnvhash
+      lru-dict
+      sqlalchemy
+    ];
+    "statsd" = ps: with ps; [
+      statsd
+    ];
+    "steam_online" = ps: with ps; [
+      steamodd
+    ];
+    "steamist" = ps: with ps; [
+      aiohttp-cors
+      aiosteamist
+      discovery30303
+      ifaddr
+    ];
+    "stiebel_eltron" = ps: with ps; [
+      pymodbus
+    ]; # missing inputs: pystiebeleltron
+    "stookalert" = ps: with ps; [
+      stookalert
+    ];
+    "stream" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+      av
+    ];
+    "streamlabswater" = ps: with ps; [
+      streamlabswater
+    ];
+    "stt" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "subaru" = ps: with ps; [
+      subarulink
+    ];
+    "suez_water" = ps: with ps; [
+    ]; # missing inputs: pysuez
+    "sun" = ps: with ps; [
+    ];
+    "supervisord" = ps: with ps; [
+    ];
+    "supla" = ps: with ps; [
+    ]; # missing inputs: asyncpysupla
+    "surepetcare" = ps: with ps; [
+      surepy
+    ];
+    "swiss_hydrological_data" = ps: with ps; [
+      swisshydrodata
+    ];
+    "swiss_public_transport" = ps: with ps; [
+      python-opendata-transport
+    ];
+    "swisscom" = ps: with ps; [
+    ];
+    "switch" = ps: with ps; [
+    ];
+    "switch_as_x" = ps: with ps; [
+    ];
+    "switchbot" = ps: with ps; [
+      pyswitchbot
+    ];
+    "switcher_kis" = ps: with ps; [
+      aioswitcher
+    ];
+    "switchmate" = ps: with ps; [
+    ]; # missing inputs: pySwitchmate
+    "syncthing" = ps: with ps; [
+      aiosyncthing
+    ];
+    "syncthru" = ps: with ps; [
+      pysyncthru
+      url-normalize
+    ];
+    "synology_chat" = ps: with ps; [
+    ];
+    "synology_dsm" = ps: with ps; [
+      py-synologydsm-api
+    ];
+    "synology_srm" = ps: with ps; [
+    ]; # missing inputs: synology-srm
+    "syslog" = ps: with ps; [
+    ];
+    "system_bridge" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+      systembridge
+      zeroconf
+    ];
+    "system_health" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "system_log" = ps: with ps; [
+    ];
+    "systemmonitor" = ps: with ps; [
+      psutil
+    ];
+    "tado" = ps: with ps; [
+      python-tado
+    ];
+    "tag" = ps: with ps; [
+    ];
+    "tailscale" = ps: with ps; [
+      tailscale
+    ];
+    "tank_utility" = ps: with ps; [
+    ]; # missing inputs: tank_utility
+    "tankerkoenig" = ps: with ps; [
+      pytankerkoenig
+    ];
+    "tapsaff" = ps: with ps; [
+    ]; # missing inputs: tapsaff
+    "tasmota" = ps: with ps; [
+      aiohttp-cors
+      hatasmota
+      paho-mqtt
+    ];
+    "tautulli" = ps: with ps; [
+      pytautulli
+    ];
+    "tcp" = ps: with ps; [
+    ];
+    "ted5000" = ps: with ps; [
+      xmltodict
+    ];
+    "telegram" = ps: with ps; [
+      pysocks
+      aiohttp-cors
+      python-telegram-bot
+    ];
+    "telegram_bot" = ps: with ps; [
+      pysocks
+      aiohttp-cors
+      python-telegram-bot
+    ];
+    "tellduslive" = ps: with ps; [
+      tellduslive
+    ];
+    "tellstick" = ps: with ps; [
+    ]; # missing inputs: tellcore-net tellcore-py
+    "telnet" = ps: with ps; [
+    ];
+    "temper" = ps: with ps; [
+    ]; # missing inputs: temperusb
+    "template" = ps: with ps; [
+    ];
+    "tensorflow" = ps: with ps; [
+      numpy
+      pillow
+      pycocotools
+      tensorflow
+    ]; # missing inputs: tf-models-official
+    "tesla_wall_connector" = ps: with ps; [
+      tesla-wall-connector
+    ];
+    "tfiac" = ps: with ps; [
+    ]; # missing inputs: pytfiac
+    "thermoworks_smoke" = ps: with ps; [
+      stringcase
+    ]; # missing inputs: thermoworks_smoke
+    "thethingsnetwork" = ps: with ps; [
+    ];
+    "thingspeak" = ps: with ps; [
+    ]; # missing inputs: thingspeak
+    "thinkingcleaner" = ps: with ps; [
+    ]; # missing inputs: pythinkingcleaner
+    "thomson" = ps: with ps; [
+    ];
+    "threshold" = ps: with ps; [
+    ];
+    "tibber" = ps: with ps; [
+      fnvhash
+      lru-dict
+      pytibber
+      sqlalchemy
+    ];
+    "tikteck" = ps: with ps; [
+    ]; # missing inputs: tikteck
+    "tile" = ps: with ps; [
+      pytile
+    ];
+    "time_date" = ps: with ps; [
+    ];
+    "timer" = ps: with ps; [
+    ];
+    "tmb" = ps: with ps; [
+      tmb
+    ];
+    "tod" = ps: with ps; [
+    ];
+    "todoist" = ps: with ps; [
+      todoist
+    ];
+    "tolo" = ps: with ps; [
+      tololib
+    ];
+    "tomato" = ps: with ps; [
+    ];
+    "tomorrowio" = ps: with ps; [
+      pytomorrowio
+    ];
+    "toon" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+      hass-nabucasa
+      toonapi
+    ];
+    "torque" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "totalconnect" = ps: with ps; [
+      total-connect-client
+    ];
+    "touchline" = ps: with ps; [
+    ]; # missing inputs: pytouchline
+    "tplink" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+      python-kasa
+    ];
+    "tplink_lte" = ps: with ps; [
+    ]; # missing inputs: tp-connected
+    "traccar" = ps: with ps; [
+      aiohttp-cors
+      pytraccar
+      stringcase
+    ];
+    "trace" = ps: with ps; [
+    ];
+    "tractive" = ps: with ps; [
+      aiotractive
+    ];
+    "tradfri" = ps: with ps; [
+      pytradfri
+    ]
+    ++ pytradfri.optional-dependencies.async;
+    "trafikverket_ferry" = ps: with ps; [
+      pytrafikverket
+    ];
+    "trafikverket_train" = ps: with ps; [
+      pytrafikverket
+    ];
+    "trafikverket_weatherstation" = ps: with ps; [
+      pytrafikverket
+    ];
+    "transmission" = ps: with ps; [
+      transmissionrpc
+    ];
+    "transport_nsw" = ps: with ps; [
+      pytransportnsw
+    ];
+    "travisci" = ps: with ps; [
+    ]; # missing inputs: TravisPy
+    "trend" = ps: with ps; [
+      numpy
+    ];
+    "tts" = ps: with ps; [
+      aiohttp-cors
+      mutagen
+    ];
+    "tuya" = ps: with ps; [
+      ha-ffmpeg
+      tuya-iot-py-sdk
+    ];
+    "twentemilieu" = ps: with ps; [
+      twentemilieu
+    ];
+    "twilio" = ps: with ps; [
+      aiohttp-cors
+      twilio
+    ];
+    "twilio_call" = ps: with ps; [
+      aiohttp-cors
+      twilio
+    ];
+    "twilio_sms" = ps: with ps; [
+      aiohttp-cors
+      twilio
+    ];
+    "twinkly" = ps: with ps; [
+      ttls
+    ];
+    "twitch" = ps: with ps; [
+      twitchapi
+    ];
+    "twitter" = ps: with ps; [
+      twitterapi
+    ];
+    "ubus" = ps: with ps; [
+      openwrt-ubus-rpc
+    ];
+    "ue_smart_radio" = ps: with ps; [
+    ];
+    "uk_transport" = ps: with ps; [
+    ];
+    "ukraine_alarm" = ps: with ps; [
+      uasiren
+    ];
+    "unifi" = ps: with ps; [
+      aiounifi
+    ];
+    "unifi_direct" = ps: with ps; [
+      pexpect
+    ];
+    "unifiled" = ps: with ps; [
+      unifiled
+    ];
+    "unifiprotect" = ps: with ps; [
+      aiohttp-cors
+    ]; # missing inputs: pyunifiprotect unifi-discovery
+    "universal" = ps: with ps; [
+    ];
+    "upb" = ps: with ps; [
+      upb-lib
+    ];
+    "upc_connect" = ps: with ps; [
+      connect-box
+    ];
+    "upcloud" = ps: with ps; [
+      upcloud-api
+    ];
+    "update" = ps: with ps; [
+    ];
+    "upnp" = ps: with ps; [
+      aiohttp-cors
+      async-upnp-client
+      getmac
+      ifaddr
+      zeroconf
+    ];
+    "uptime" = ps: with ps; [
+    ];
+    "uptimerobot" = ps: with ps; [
+      pyuptimerobot
+    ];
+    "usb" = ps: with ps; [
+      aiohttp-cors
+      pyserial
+      pyudev
+    ];
+    "uscis" = ps: with ps; [
+    ]; # missing inputs: uscisstatus
+    "usgs_earthquakes_feed" = ps: with ps; [
+      geojson-client
+    ];
+    "utility_meter" = ps: with ps; [
+      croniter
+    ];
+    "uvc" = ps: with ps; [
+      uvcclient
+    ];
+    "vacuum" = ps: with ps; [
+    ];
+    "vallox" = ps: with ps; [
+      vallox-websocket-api
+    ];
+    "vasttrafik" = ps: with ps; [
+    ]; # missing inputs: vtjp
+    "velbus" = ps: with ps; [
+      aiohttp-cors
+      pyserial
+      pyudev
+      velbus-aio
+    ];
+    "velux" = ps: with ps; [
+      pyvlx
+    ];
+    "venstar" = ps: with ps; [
+      venstarcolortouch
+    ];
+    "vera" = ps: with ps; [
+      pyvera
+    ];
+    "verisure" = ps: with ps; [
+      vsure
+    ];
+    "versasense" = ps: with ps; [
+      pyversasense
+    ];
+    "version" = ps: with ps; [
+      pyhaversion
+    ];
+    "vesync" = ps: with ps; [
+      pyvesync
+    ];
+    "viaggiatreno" = ps: with ps; [
+    ];
+    "vicare" = ps: with ps; [
+      pyvicare
+    ];
+    "vilfo" = ps: with ps; [
+      vilfo-api-client
+    ];
+    "vivotek" = ps: with ps; [
+      libpyvivotek
+    ];
+    "vizio" = ps: with ps; [
+      pyvizio
+    ];
+    "vlc" = ps: with ps; [
+      python-vlc
+    ];
+    "vlc_telnet" = ps: with ps; [
+      aiovlc
+    ];
+    "voicerss" = ps: with ps; [
+    ];
+    "volkszaehler" = ps: with ps; [
+      volkszaehler
+    ];
+    "volumio" = ps: with ps; [
+      pyvolumio
+    ];
+    "volvooncall" = ps: with ps; [
+      volvooncall
+    ];
+    "vulcan" = ps: with ps; [
+      vulcan-api
+    ];
+    "vultr" = ps: with ps; [
+      vultr
+    ];
+    "w800rf32" = ps: with ps; [
+    ]; # missing inputs: pyW800rf32
+    "wake_on_lan" = ps: with ps; [
+      wakeonlan
+    ];
+    "wallbox" = ps: with ps; [
+      wallbox
+    ];
+    "waqi" = ps: with ps; [
+      waqiasync
+    ];
+    "water_heater" = ps: with ps; [
+    ];
+    "waterfurnace" = ps: with ps; [
+      waterfurnace
+    ];
+    "watson_iot" = ps: with ps; [
+    ]; # missing inputs: ibmiotf
+    "watson_tts" = ps: with ps; [
+      ibm-watson
+    ];
+    "watttime" = ps: with ps; [
+      aiowatttime
+    ];
+    "waze_travel_time" = ps: with ps; [
+      wazeroutecalculator
+    ];
+    "weather" = ps: with ps; [
+    ];
+    "webhook" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "webostv" = ps: with ps; [
+      aiowebostv
+    ];
+    "websocket_api" = ps: with ps; [
+      aiohttp-cors
+    ];
+    "wemo" = ps: with ps; [
+      pywemo
+    ];
+    "whirlpool" = ps: with ps; [
+      whirlpool-sixth-sense
+    ];
+    "whois" = ps: with ps; [
+      whois
+    ];
+    "wiffi" = ps: with ps; [
+      wiffi
+    ];
+    "wilight" = ps: with ps; [
+      pywilight
+    ];
+    "wirelesstag" = ps: with ps; [
+    ]; # missing inputs: wirelesstagpy
+    "withings" = ps: with ps; [
+      aiohttp-cors
+    ]; # missing inputs: withings-api
+    "wiz" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+      pywizlight
+    ];
+    "wled" = ps: with ps; [
+      wled
+    ];
+    "wolflink" = ps: with ps; [
+    ]; # missing inputs: wolf_smartset
+    "workday" = ps: with ps; [
+      holidays
+    ];
+    "worldclock" = ps: with ps; [
+    ];
+    "worldtidesinfo" = ps: with ps; [
+    ];
+    "worxlandroid" = ps: with ps; [
+    ];
+    "wsdot" = ps: with ps; [
+    ];
+    "x10" = ps: with ps; [
+    ];
+    "xbox" = ps: with ps; [
+      aiohttp-cors
+      xbox-webapi
+    ];
+    "xbox_live" = ps: with ps; [
+      xboxapi
+    ];
+    "xeoma" = ps: with ps; [
+      pyxeoma
+    ];
+    "xiaomi" = ps: with ps; [
+      ha-ffmpeg
+    ];
+    "xiaomi_aqara" = ps: with ps; [
+      pyxiaomigateway
+      aiohttp-cors
+      ifaddr
+      netdisco
+      zeroconf
+    ];
+    "xiaomi_miio" = ps: with ps; [
+      construct
+      micloud
+      python-miio
+    ];
+    "xiaomi_tv" = ps: with ps; [
+      pymitv
+    ];
+    "xmpp" = ps: with ps; [
+      slixmpp
+    ];
+    "xs1" = ps: with ps; [
+    ]; # missing inputs: xs1-api-client
+    "yale_smart_alarm" = ps: with ps; [
+      yalesmartalarmclient
+    ];
+    "yamaha" = ps: with ps; [
+      rxv
+    ];
+    "yamaha_musiccast" = ps: with ps; [
+      aiohttp-cors
+      aiomusiccast
+      async-upnp-client
+      ifaddr
+      zeroconf
+    ];
+    "yandex_transport" = ps: with ps; [
+      aioymaps
+    ];
+    "yandextts" = ps: with ps; [
+    ];
+    "yeelight" = ps: with ps; [
+      aiohttp-cors
+      async-upnp-client
+      ifaddr
+      yeelight
+      zeroconf
+    ];
+    "yeelightsunflower" = ps: with ps; [
+    ]; # missing inputs: yeelightsunflower
+    "yi" = ps: with ps; [
+      aioftp
+      ha-ffmpeg
+    ];
+    "youless" = ps: with ps; [
+      youless-api
+    ];
+    "zabbix" = ps: with ps; [
+      py-zabbix
+    ];
+    "zamg" = ps: with ps; [
+    ];
+    "zengge" = ps: with ps; [
+      bluepy
+    ]; # missing inputs: zengge
+    "zeroconf" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+      zeroconf
+    ];
+    "zerproc" = ps: with ps; [
+      pyzerproc
+    ];
+    "zestimate" = ps: with ps; [
+      xmltodict
+    ];
+    "zha" = ps: with ps; [
+      aiohttp-cors
+      bellows
+      ifaddr
+      pyserial-asyncio
+      pyserial
+      pyudev
+      zeroconf
+      zha-quirks
+      zigpy-deconz
+      zigpy-xbee
+      zigpy-zigate
+      zigpy-znp
+      zigpy
+    ];
+    "zhong_hong" = ps: with ps; [
+    ]; # missing inputs: zhong_hong_hvac
+    "ziggo_mediabox_xl" = ps: with ps; [
+    ]; # missing inputs: ziggo-mediabox-xl
+    "zodiac" = ps: with ps; [
+    ];
+    "zone" = ps: with ps; [
+    ];
+    "zoneminder" = ps: with ps; [
+      zm-py
+    ];
+    "zwave_js" = ps: with ps; [
+      aiohttp-cors
+      pyserial
+      pyudev
+      zwave-js-server-python
+    ];
+    "zwave_me" = ps: with ps; [
+      aiohttp-cors
+      ifaddr
+      url-normalize
+      zeroconf
+      zwave-me-ws
+    ];
   };
+  # components listed in tests/components for which all dependencies are packaged
+  supportedComponentsWithTests = [
+    "abode"
+    "accuweather"
+    "acmeda"
+    "adax"
+    "adguard"
+    "advantage_air"
+    "aemet"
+    "agent_dvr"
+    "air_quality"
+    "airly"
+    "airnow"
+    "airthings"
+    "airtouch4"
+    "airvisual"
+    "airzone"
+    "alarm_control_panel"
+    "alarmdecoder"
+    "alert"
+    "alexa"
+    "almond"
+    "ambee"
+    "amberelectric"
+    "ambiclimate"
+    "ambient_station"
+    "analytics"
+    "androidtv"
+    "apache_kafka"
+    "api"
+    "apple_tv"
+    "apprise"
+    "aprs"
+    "arcam_fmj"
+    "aseko_pool_live"
+    "asuswrt"
+    "atag"
+    "august"
+    "aurora"
+    "aurora_abb_powerone"
+    "aussie_broadband"
+    "auth"
+    "automation"
+    "awair"
+    "aws"
+    "axis"
+    "azure_devops"
+    "azure_event_hub"
+    "backup"
+    "balboa"
+    "bayesian"
+    "binary_sensor"
+    "blackbird"
+    "blebox"
+    "blink"
+    "blueprint"
+    "bluetooth_le_tracker"
+    "bmw_connected_drive"
+    "bond"
+    "bosch_shc"
+    "braviatv"
+    "broadlink"
+    "brother"
+    "brunt"
+    "bsblan"
+    "buienradar"
+    "button"
+    "caldav"
+    "calendar"
+    "camera"
+    "canary"
+    "cast"
+    "cert_expiry"
+    "climacell"
+    "climate"
+    "cloud"
+    "cloudflare"
+    "co2signal"
+    "color_extractor"
+    "comfoconnect"
+    "command_line"
+    "compensation"
+    "config"
+    "configurator"
+    "control4"
+    "conversation"
+    "coolmaster"
+    "coronavirus"
+    "counter"
+    "cover"
+    "cpuspeed"
+    "crownstone"
+    "daikin"
+    "darksky"
+    "datadog"
+    "debugpy"
+    "deconz"
+    "default_config"
+    "deluge"
+    "demo"
+    "denonavr"
+    "derivative"
+    "device_automation"
+    "device_sun_light_trigger"
+    "device_tracker"
+    "devolo_home_control"
+    "devolo_home_network"
+    "dexcom"
+    "dhcp"
+    "diagnostics"
+    "dialogflow"
+    "directv"
+    "discord"
+    "discovery"
+    "dlna_dmr"
+    "dlna_dms"
+    "dnsip"
+    "doorbird"
+    "dsmr"
+    "dte_energy_bridge"
+    "duckdns"
+    "dunehd"
+    "dynalite"
+    "eafm"
+    "ecobee"
+    "econet"
+    "efergy"
+    "elgato"
+    "elkm1"
+    "elmax"
+    "emonitor"
+    "emulated_hue"
+    "emulated_kasa"
+    "emulated_roku"
+    "energy"
+    "enocean"
+    "enphase_envoy"
+    "environment_canada"
+    "epson"
+    "esphome"
+    "everlights"
+    "evil_genius_labs"
+    "ezviz"
+    "faa_delays"
+    "facebook"
+    "facebox"
+    "fail2ban"
+    "fan"
+    "feedreader"
+    "ffmpeg"
+    "fibaro"
+    "fido"
+    "file"
+    "filesize"
+    "filter"
+    "fireservicerota"
+    "firmata"
+    "fivem"
+    "fjaraskupan"
+    "flic"
+    "flick_electric"
+    "flipr"
+    "flo"
+    "flume"
+    "flunearyou"
+    "flux"
+    "flux_led"
+    "folder"
+    "folder_watcher"
+    "foobot"
+    "forecast_solar"
+    "foscam"
+    "freebox"
+    "freedns"
+    "freedompro"
+    "fritz"
+    "fritzbox"
+    "fritzbox_callmonitor"
+    "fronius"
+    "frontend"
+    "garages_amsterdam"
+    "gdacs"
+    "generic"
+    "generic_hygrostat"
+    "generic_thermostat"
+    "geo_json_events"
+    "geo_location"
+    "geo_rss_events"
+    "geofency"
+    "geonetnz_quakes"
+    "geonetnz_volcano"
+    "gios"
+    "github"
+    "glances"
+    "goalzero"
+    "gogogate2"
+    "goodwe"
+    "google"
+    "google_assistant"
+    "google_domains"
+    "google_pubsub"
+    "google_translate"
+    "google_travel_time"
+    "google_wifi"
+    "gpslogger"
+    "graphite"
+    "gree"
+    "group"
+    "growatt_server"
+    "guardian"
+    "habitica"
+    "hangouts"
+    "harmony"
+    "hassio"
+    "hddtemp"
+    "heos"
+    "here_travel_time"
+    "hisense_aehw4a1"
+    "history"
+    "history_stats"
+    "hive"
+    "hlk_sw16"
+    "home_connect"
+    "home_plus_control"
+    "homeassistant"
+    "homekit"
+    "homekit_controller"
+    "homematic"
+    "homematicip_cloud"
+    "homewizard"
+    "honeywell"
+    "html5"
+    "http"
+    "huawei_lte"
+    "hue"
+    "huisbaasje"
+    "humidifier"
+    "hunterdouglas_powerview"
+    "hvv_departures"
+    "hyperion"
+    "ialarm"
+    "iaqualink"
+    "icloud"
+    "ifttt"
+    "ign_sismologia"
+    "image"
+    "image_processing"
+    "imap_email_content"
+    "influxdb"
+    "input_boolean"
+    "input_button"
+    "input_datetime"
+    "input_number"
+    "input_select"
+    "input_text"
+    "insteon"
+    "integration"
+    "intellifire"
+    "intent"
+    "intent_script"
+    "ios"
+    "iotawatt"
+    "ipma"
+    "ipp"
+    "iqvia"
+    "islamic_prayer_times"
+    "isy994"
+    "izone"
+    "jellyfin"
+    "jewish_calendar"
+    "juicenet"
+    "keenetic_ndms2"
+    "kira"
+    "kmtronic"
+    "knx"
+    "kodi"
+    "konnected"
+    "kraken"
+    "kulersky"
+    "lastfm"
+    "launch_library"
+    "lcn"
+    "light"
+    "litterrobot"
+    "local_file"
+    "local_ip"
+    "locative"
+    "lock"
+    "logbook"
+    "logentries"
+    "logger"
+    "logi_circle"
+    "london_air"
+    "lookin"
+    "lovelace"
+    "luftdaten"
+    "lutron_caseta"
+    "lyric"
+    "mailbox"
+    "manual"
+    "manual_mqtt"
+    "maxcube"
+    "mazda"
+    "meater"
+    "media_player"
+    "media_source"
+    "melcloud"
+    "meraki"
+    "met"
+    "met_eireann"
+    "meteo_france"
+    "meteoclimatic"
+    "metoffice"
+    "microsoft_face"
+    "microsoft_face_detect"
+    "microsoft_face_identify"
+    "mikrotik"
+    "mill"
+    "min_max"
+    "minecraft_server"
+    "minio"
+    "mjpeg"
+    "mobile_app"
+    "modbus"
+    "modem_callerid"
+    "modern_forms"
+    "mold_indicator"
+    "moon"
+    "motion_blinds"
+    "motioneye"
+    "mqtt"
+    "mqtt_eventstream"
+    "mqtt_json"
+    "mqtt_room"
+    "mqtt_statestream"
+    "mullvad"
+    "mutesync"
+    "my"
+    "myq"
+    "mysensors"
+    "mythicbeastsdns"
+    "nam"
+    "namecheapdns"
+    "nanoleaf"
+    "neato"
+    "ness_alarm"
+    "nest"
+    "netatmo"
+    "netgear"
+    "network"
+    "nexia"
+    "nextbus"
+    "nightscout"
+    "nina"
+    "no_ip"
+    "notify"
+    "notify_events"
+    "notion"
+    "nsw_rural_fire_service_feed"
+    "nuki"
+    "number"
+    "nut"
+    "nws"
+    "nx584"
+    "octoprint"
+    "omnilogic"
+    "onboarding"
+    "oncue"
+    "ondilo_ico"
+    "onewire"
+    "onvif"
+    "open_meteo"
+    "openalpr_cloud"
+    "openalpr_local"
+    "openerz"
+    "opengarage"
+    "openhardwaremonitor"
+    "opentherm_gw"
+    "openuv"
+    "openweathermap"
+    "opnsense"
+    "overkiz"
+    "ovo_energy"
+    "owntracks"
+    "p1_monitor"
+    "panel_custom"
+    "panel_iframe"
+    "peco"
+    "persistent_notification"
+    "person"
+    "philips_js"
+    "pi_hole"
+    "picnic"
+    "ping"
+    "plaato"
+    "plant"
+    "plex"
+    "plugwise"
+    "point"
+    "poolsense"
+    "powerwall"
+    "profiler"
+    "prometheus"
+    "prosegur"
+    "proximity"
+    "pure_energie"
+    "push"
+    "pushbullet"
+    "pvoutput"
+    "pvpc_hourly_pricing"
+    "python_script"
+    "qld_bushfire"
+    "qnap_qsw"
+    "rachio"
+    "radarr"
+    "radio_browser"
+    "rainforest_eagle"
+    "rainmachine"
+    "random"
+    "rdw"
+    "recollect_waste"
+    "recorder"
+    "reddit"
+    "remote"
+    "renault"
+    "rest"
+    "rest_command"
+    "rflink"
+    "rfxtrx"
+    "ridwell"
+    "ring"
+    "risco"
+    "rituals_perfume_genie"
+    "rmvtransport"
+    "roku"
+    "roomba"
+    "roon"
+    "rpi_power"
+    "rss_feed_template"
+    "rtsp_to_webrtc"
+    "ruckus_unleashed"
+    "sabnzbd"
+    "safe_mode"
+    "samsungtv"
+    "scene"
+    "scrape"
+    "screenlogic"
+    "script"
+    "search"
+    "season"
+    "select"
+    "sense"
+    "senseme"
+    "sensibo"
+    "sensor"
+    "sentry"
+    "senz"
+    "seventeentrack"
+    "sharkiq"
+    "shell_command"
+    "shelly"
+    "shopping_list"
+    "sia"
+    "sigfox"
+    "sighthound"
+    "signal_messenger"
+    "simplisafe"
+    "simulated"
+    "siren"
+    "slack"
+    "sleepiq"
+    "slimproto"
+    "sma"
+    "smappee"
+    "smart_meter_texas"
+    "smartthings"
+    "smarttub"
+    "smhi"
+    "smtp"
+    "snips"
+    "solaredge"
+    "solarlog"
+    "solax"
+    "soma"
+    "somfy"
+    "somfy_mylink"
+    "sonarr"
+    "songpal"
+    "sonos"
+    "soundtouch"
+    "spaceapi"
+    "spc"
+    "speedtestdotnet"
+    "spider"
+    "spotify"
+    "sql"
+    "squeezebox"
+    "srp_energy"
+    "ssdp"
+    "starline"
+    "startca"
+    "statistics"
+    "statsd"
+    "steam_online"
+    "steamist"
+    "stookalert"
+    "stream"
+    "stt"
+    "subaru"
+    "sun"
+    "surepetcare"
+    "switch"
+    "switch_as_x"
+    "switchbot"
+    "switcher_kis"
+    "syncthing"
+    "syncthru"
+    "synology_dsm"
+    "system_bridge"
+    "system_health"
+    "system_log"
+    "tado"
+    "tag"
+    "tailscale"
+    "tankerkoenig"
+    "tasmota"
+    "tautulli"
+    "tcp"
+    "telegram"
+    "telegram_bot"
+    "tellduslive"
+    "template"
+    "tesla_wall_connector"
+    "threshold"
+    "tibber"
+    "tile"
+    "time_date"
+    "timer"
+    "tod"
+    "todoist"
+    "tolo"
+    "tomato"
+    "tomorrowio"
+    "toon"
+    "totalconnect"
+    "tplink"
+    "traccar"
+    "trace"
+    "tractive"
+    "tradfri"
+    "trafikverket_ferry"
+    "trafikverket_train"
+    "trafikverket_weatherstation"
+    "transmission"
+    "transport_nsw"
+    "trend"
+    "tts"
+    "tuya"
+    "twentemilieu"
+    "twilio"
+    "twinkly"
+    "twitch"
+    "uk_transport"
+    "ukraine_alarm"
+    "unifi"
+    "unifi_direct"
+    "universal"
+    "upb"
+    "upcloud"
+    "update"
+    "upnp"
+    "uptime"
+    "uptimerobot"
+    "usb"
+    "usgs_earthquakes_feed"
+    "utility_meter"
+    "uvc"
+    "vacuum"
+    "vallox"
+    "velbus"
+    "venstar"
+    "vera"
+    "verisure"
+    "version"
+    "vesync"
+    "vicare"
+    "vilfo"
+    "vizio"
+    "vlc_telnet"
+    "voicerss"
+    "volumio"
+    "vulcan"
+    "vultr"
+    "wake_on_lan"
+    "wallbox"
+    "water_heater"
+    "watttime"
+    "waze_travel_time"
+    "weather"
+    "webhook"
+    "webostv"
+    "websocket_api"
+    "wemo"
+    "whirlpool"
+    "whois"
+    "wiffi"
+    "wilight"
+    "wiz"
+    "wled"
+    "workday"
+    "worldclock"
+    "wsdot"
+    "xbox"
+    "xiaomi"
+    "xiaomi_aqara"
+    "xiaomi_miio"
+    "yale_smart_alarm"
+    "yamaha"
+    "yamaha_musiccast"
+    "yandex_transport"
+    "yandextts"
+    "yeelight"
+    "youless"
+    "zeroconf"
+    "zerproc"
+    "zha"
+    "zodiac"
+    "zone"
+    "zwave_js"
+    "zwave_me"
+  ];
 }

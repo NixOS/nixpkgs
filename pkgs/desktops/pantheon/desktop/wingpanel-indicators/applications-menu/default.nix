@@ -1,72 +1,96 @@
-{ stdenv, fetchFromGitHub, pantheon, substituteAll, cmake, ninja
-, pkgconfig, vala, granite, libgee, gettext, gtk3, appstream, gnome-menus
-, json-glib, plank, bamf, switchboard, libunity, libsoup, wingpanel, libwnck3
-, zeitgeist, gobject-introspection, elementary-icon-theme, bc, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, substituteAll
+, meson
+, ninja
+, python3
+, pkg-config
+, vala
+, granite
+, libgee
+, gettext
+, gtk3
+, gnome-menus
+, json-glib
+, elementary-dock
+, bamf
+, switchboard-with-plugs
+, libsoup
+, wingpanel
+, zeitgeist
+, bc
+, libhandy
+}:
 
 stdenv.mkDerivation rec {
-  pname = "applications-menu";
-  version = "2.4.2";
-
-  name = "wingpanel-${pname}-${version}";
+  pname = "wingpanel-applications-menu";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "applications-menu";
     rev = version;
-    sha256 = "0y7kh50ixvm4m56v18c70s05hhpfp683c4qi3sxy50p2368d772x";
+    sha256 = "sha256-xBuMJzIFOueSvNwvXc85AI9NHuMW3bOblNsyuDkIzyk=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "wingpanel-${pname}";
-    };
-  };
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      bc = "${bc}/bin/bc";
+    })
+  ];
 
   nativeBuildInputs = [
-    appstream
-    cmake
-    ninja
     gettext
-    gobject-introspection
-    pkgconfig
+    meson
+    ninja
+    pkg-config
+    python3
     vala
-    wrapGAppsHook
-   ];
+  ];
 
   buildInputs = [
     bamf
-    elementary-icon-theme
-    gnome-menus
+    elementary-dock
     granite
     gtk3
     json-glib
     libgee
+    libhandy
     libsoup
-    libunity
-    libwnck3
-    plank
-    switchboard
+    switchboard-with-plugs
     wingpanel
     zeitgeist
-   ];
+  ] ++
+  # applications-menu has a plugin to search switchboard plugins
+  # see https://github.com/NixOS/nixpkgs/issues/100209
+  # wingpanel's wrapper will need to pick up the fact that
+  # applications-menu needs a version of switchboard with all
+  # its plugins for search.
+  switchboard-with-plugs.buildInputs;
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "lib/wingpanel";
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "lib/switchboard";
-
-  patches = [
-    (substituteAll {
-      src = ./bc.patch;
-      exec = "${bc}/bin/bc";
-    })
-    ./xdg.patch
+  mesonFlags = [
+    "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  meta = with stdenv.lib; {
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "Lightweight and stylish app launcher for Pantheon";
-    homepage = https://github.com/elementary/applications-menu;
+    homepage = "https://github.com/elementary/applications-menu";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

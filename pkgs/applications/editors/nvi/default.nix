@@ -1,55 +1,40 @@
-{ fetchurl, stdenv, ncurses }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, db }:
 
 stdenv.mkDerivation rec {
-  name = "nvi-1.79";
+  pname = "nvi";
+  version = "1.81.6";
 
   src = fetchurl {
-    urls =
-      [ "ftp://ftp.eenet.ee/pub/cpan/src/misc/nvi-1.79.tar.gz"
-        "ftp://ftp.saintjoe.edu/pub/CPAN/src/misc/nvi-1.79.tar.gz"
-        "ftp://ftp.free.fr/.mirrors1/ftp.netbsd.org/packages/distfiles/nvi-1.79.tar.gz"
-      ];
-    sha256 = "0cvf56rbylz7ksny6g2256sjg8yrsxrmbpk82r64rhi53sm8fnvm";
+    url = "https://deb.debian.org/debian/pool/main/n/nvi/nvi_${version}.orig.tar.gz";
+    sha256 = "13cp9iz017bk6ryi05jn7drbv7a5dyr201zqd3r4r8srj644ihwb";
   };
 
-  buildInputs = [ ncurses ];
+  patches = [
+    # Fix runtime error with modern versions of db.
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/nvi/raw/f33/f/nvi-03-db4.patch";
+      sha256 = "1vpnly3dcldwl8gwl0jrh5yh0vhgbdhsh6xn7lnwhrawlvk6d55y";
+    })
 
-  # nvi tries to write to a usual tmp directory (/var/tmp),
-  # so we will force it to use /tmp.
-  patchPhase = ''
-    sed -i build/configure \
-      -e s@vi_cv_path_preserve=no@vi_cv_path_preserve=/tmp/vi.recover@ \
-      -e s@/var/tmp@@ \
-      -e s@-lcurses@-lncurses@
+    # Fix build with Glibc.
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/nvi/raw/f33/f/nvi-20-glibc_has_grantpt.patch";
+      sha256 = "1ypqj263wh53m5rgiag5c4gy1rksj2waginny1lcj34n72p2dsml";
+    })
+  ];
+
+  buildInputs = [ ncurses db ];
+
+  preConfigure = ''
+    cd build.unix
   '';
+  configureScript = "../dist/configure";
+  configureFlags = [ "vi_cv_path_preserve=/tmp" ];
 
-  configurePhase = ''
-    mkdir mybuild
-    cd mybuild
-    ../build/configure --prefix=$out --disable-curses
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin $out/share/vi/catalog
-    for a in dutch english french german ru_SU.KOI8-R spanish swedish; do
-      cp ../catalog/$a $out/share/vi/catalog
-    done
-    cp nvi $out/bin/nvi
-    ln -s $out/bin/nvi $out/bin/vi
-    ln -s $out/bin/nvi $out/bin/ex
-    ln -s $out/bin/nvi $out/bin/view
-
-    mkdir -p $out/share/man/man1
-    cp ../docs/USD.doc/vi.man/vi.1 $out/share/man/man1/nvi.1
-    ln -s $out/share/man/man1/nvi.1 $out/share/man/man1/vi
-    ln -s $out/share/man/man1/nvi.1 $out/share/man/man1/ex
-    ln -s $out/share/man/man1/nvi.1 $out/share/man/man1/view
-    ln -s $out/bin/{,vi-}nvi # create a symlink so that all vi(m) users will find it
-  '';
-
-  meta = {
-    homepage = http://www.bostic.com/vi/;
+  meta = with lib; {
     description = "The Berkeley Vi Editor";
-    license = stdenv.lib.licenses.free;
+    license = licenses.free;
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/nvi.x86_64-darwin
   };
 }

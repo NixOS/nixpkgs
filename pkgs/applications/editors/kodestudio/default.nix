@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
 , # Patchelf dependencies:
-  alsaLib, atomEnv, boehmgc, flac, libogg, libvorbis, libXScrnSaver, libGLU_combined
+  alsa-lib, atomEnv, boehmgc, flac, libogg, libvorbis, libXScrnSaver, libGLU, libGL
 , openssl, xorg, zlib
 }:
 
@@ -20,15 +20,17 @@ let
 
 in
 
-  stdenv.mkDerivation rec {
-    name = "kodestudio-${version}";
+  stdenv.mkDerivation {
+    pname = "kodestudio";
+    inherit version;
 
     src = fetchurl {
         url = urlStr;
         inherit sha256;
     };
 
-    buildInputs = [ makeWrapper libXScrnSaver ];
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ libXScrnSaver ];
 
     desktopItem = makeDesktopItem {
       name = "kodestudio";
@@ -37,7 +39,7 @@ in
       comment = "Kode Studio is an IDE for Kha based on Visual Studio Code";
       desktopName = "Kode Studio";
       genericName = "Text Editor";
-      categories = "GNOME;GTK;Utility;TextEditor;Development;";
+      categories = [ "GNOME" "GTK" "Utility" "TextEditor" "Development" ];
     };
 
     sourceRoot = ".";
@@ -55,7 +57,7 @@ in
           $out/kodestudio
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ".:${stdenv.cc.libc}/lib:${xorg.libXinerama}/lib:${xorg.libX11}/lib:${alsaLib}/lib:${libGLU_combined}/lib:${openssl.out}/lib" \
+          --set-rpath ".:${stdenv.cc.libc}/lib:${xorg.libXinerama}/lib:${xorg.libX11}/lib:${alsa-lib}/lib:${libGL}/lib:${libGLU}/lib:${lib.getLib openssl}/lib" \
           $out/resources/app/extensions/krom/Krom/linux/Krom
       patchelf \
           --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -110,10 +112,10 @@ in
 
       # Wrap preload libXss
       wrapProgram $out/bin/kodestudio \
-          --prefix LD_PRELOAD : ${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
+          --prefix LD_PRELOAD : ${lib.makeLibraryPath [ libXScrnSaver ]}/libXss.so.1
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = ''
         An IDE for Kha based on Visual Studio Code
       '';
@@ -124,8 +126,8 @@ in
         (with JavaScript coming soon). Using Kha or Kore you can access all
         hardware at the lowest possible level in a completely portable way.
       '';
-      homepage = http://kode.tech/;
-      downloadPage = https://github.com/Kode/KodeStudio/releases;
+      homepage = "http://kode.tech/";
+      downloadPage = "https://github.com/Kode/KodeStudio/releases";
       license = licenses.mit;
       maintainers = [ maintainers.patternspandemic ];
       platforms = [ "x86_64-linux" "i686-cygwin" ];

@@ -1,57 +1,62 @@
-{ stdenv, fetchFromGitHub
-, cmake, pkgconfig, flex, bison
-, llvmPackages, kernel, linuxHeaders, elfutils, libelf, bcc
+{ lib, stdenv, fetchFromGitHub
+, cmake, pkg-config, flex, bison
+, llvmPackages, elfutils
+, libelf, libbfd, libbpf, libopcodes, bcc
+, cereal, asciidoctor
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
-  name = "bpftrace-unstable-${version}";
-  version = "2018-10-27";
+  pname = "bpftrace";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
-    owner = "iovisor";
-    repo = "bpftrace";
-    rev = "c07b54f61fd7b7b49e0a254e746d6f442c5d780d";
-    sha256 = "1mpcjfyay9akmpqxag2ndwpz1qsdx8ii07jh9fky4w40wi9cipyg";
+    owner  = "iovisor";
+    repo   = "bpftrace";
+    rev    = "v${version}";
+    sha256 = "sha256-QDqHAEVM/XHCFMS0jMLdKJfDUOpkUqONOf8+Fbd5dCY=";
   };
 
-  # bpftrace requires an unreleased version of bcc, added to the cmake
-  # build as an ExternalProject.
-  # https://github.com/iovisor/bpftrace/issues/184
-  bccSrc = fetchFromGitHub {
-    owner = "iovisor";
-    repo = "bcc";
-    rev = "afd00154865f3b2da6781cf92cecebaca4853950";
-    sha256 = "0ad78smrnipr1f377i5rv6ksns7v2vq54g5badbj5ldqs4x0hygd";
-  };
+  # libbpf 0.6.0 relies on typeof in bpf/btf.h to pick the right version of
+  # btf_dump__new() but that's not valid c++.
+  # see https://github.com/iovisor/bpftrace/issues/2068
+  patches = [ ./btf-dump-new-0.6.0.patch ];
 
-  buildInputs = [
-    llvmPackages.llvm llvmPackages.clang-unwrapped kernel
-    elfutils libelf bccSrc
-  ];
+  buildInputs = with llvmPackages;
+    [ llvm libclang
+      elfutils libelf bcc
+      libbpf libbfd libopcodes
+      cereal asciidoctor
+    ];
 
-  nativeBuildInputs = [ cmake pkgconfig flex bison ]
-    # libelf is incompatible with elfutils-libelf
-    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev ];
 
-  patches = [
-    ./bcc-source.patch
-    # https://github.com/iovisor/bpftrace/issues/184
-    ./disable-gtests.patch
-  ];
+  # tests aren't built, due to gtest shenanigans. see:
+  #
+  #     https://github.com/iovisor/bpftrace/issues/161#issuecomment-453606728
+  #     https://github.com/iovisor/bpftrace/pull/363
+  #
+  cmakeFlags =
+    [ "-DBUILD_TESTING=FALSE"
+      "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
+    ];
 
-  configurePhase = ''
-    mkdir build
-    cd build
-    cmake ../                                   \
-      -DKERNEL_HEADERS_DIR=${linuxHeaders}      \
-      -DNIX_BUILDS:BOOL=ON                      \
-      -DCMAKE_INSTALL_PREFIX=$out
+  # nuke the example/reference output .txt files, for the included tools,
+  # stuffed inside $out. we don't need them at all.
+  postInstall = ''
+    rm -rf $out/share/bpftrace/tools/doc
   '';
 
-  meta = with stdenv.lib; {
+  outputs = [ "out" "man" ];
+
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
+
+  meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
-    homepage = https://github.com/iovisor/bpftrace;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rvl ];
+    homepage    = "https://github.com/iovisor/bpftrace";
+    license     = licenses.asl20;
+    maintainers = with maintainers; [ rvl thoughtpolice martinetd ];
   };
 }

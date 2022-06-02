@@ -1,62 +1,52 @@
-{ stdenv, fetchFromGitHub
-, cmake, gcc-arm-embedded, binutils-arm-embedded, python
-, qt5, SDL, gtest
+{ lib, mkDerivation, fetchFromGitHub
+, cmake, gcc-arm-embedded, python3Packages
+, qtbase, qtmultimedia, qttranslations, SDL, gtest
 , dfu-util, avrdude
 }:
 
-let
-
-  version = "2.2.1";
-
-in stdenv.mkDerivation {
-
-  name = "opentx-${version}";
+mkDerivation rec {
+  pname = "opentx";
+  version = "2.3.14";
 
   src = fetchFromGitHub {
     owner = "opentx";
     repo = "opentx";
-    rev = version;
-    sha256 = "01lnnkrxach21aivnx1k1iqhih02nixh8c4nk6rpw408p13him9g";
+    # 2.3.14 release tag points to the commit before the one that updates the
+    # version number.
+    # rev = "release/${version}";
+    rev = "1e09791a1e2fe2a0ca9835019d634a4c6a4fa3bf";
+    sha256 = "0mhzp1j6nmqvkjxg8lv8xa637m1lavdsak30mdlq0g25dhwg6k92";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
 
-  nativeBuildInputs = [
-    cmake
-    gcc-arm-embedded binutils-arm-embedded
-  ];
-
-  buildInputs = with qt5; [
-    python python.pkgs.pyqt4
-    qtbase qtmultimedia qttranslations
-    SDL
-  ];
+  buildInputs = [ qtbase qtmultimedia qttranslations SDL ];
 
   postPatch = ''
-    sed -i companion/src/burnconfigdialog.cpp -e 's|/usr/.*bin/dfu-util|${dfu-util}/bin/dfu-util|'
-    sed -i companion/src/burnconfigdialog.cpp -e 's|/usr/.*bin/avrdude|${avrdude}/bin/avrdude|'
+    sed -i companion/src/burnconfigdialog.cpp \
+      -e 's|/usr/.*bin/dfu-util|${dfu-util}/bin/dfu-util|' \
+      -e 's|/usr/.*bin/avrdude|${avrdude}/bin/avrdude|'
   '';
 
   cmakeFlags = [
     "-DGTEST_ROOT=${gtest.src}/googletest"
-    "-DQT_TRANSLATIONS_DIR=${qt5.qttranslations}/translations"
+    "-DQT_TRANSLATIONS_DIR=${qttranslations}/translations"
     # XXX I would prefer to include these here, though we will need to file a bug upstream to get that changed.
     #"-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"
-    "-DNANO=NO"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "OpenTX Companion transmitter support software";
     longDescription = ''
       OpenTX Companion is used for many different tasks like loading OpenTX
       firmware to the radio, backing up model settings, editing settings and
       running radio simulators.
     '';
-    homepage = https://open-tx.org/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    maintainers = with maintainers; [ elitak ];
+    homepage = "https://www.open-tx.org/";
+    license = licenses.gpl2Only;
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [ elitak lopsided98 ];
   };
 
 }

@@ -128,26 +128,37 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.atlassian-confluence;
-        defaultText = "pkgs.atlassian-confluence";
+        defaultText = literalExpression "pkgs.atlassian-confluence";
         description = "Atlassian Confluence package to use.";
       };
 
       jrePackage = mkOption {
         type = types.package;
         default = pkgs.oraclejre8;
-        defaultText = "pkgs.oraclejre8";
+        defaultText = literalExpression "pkgs.oraclejre8";
         description = "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
       };
     };
   };
 
   config = mkIf cfg.enable {
-    users.users."${cfg.user}" = {
+    users.users.${cfg.user} = {
       isSystemUser = true;
       group = cfg.group;
     };
 
-    users.groups."${cfg.group}" = {};
+    users.groups.${cfg.group} = {};
+
+    systemd.tmpfiles.rules = [
+      "d '${cfg.home}' - ${cfg.user} - - -"
+      "d /run/confluence - - - - -"
+
+      "L+ /run/confluence/home - - - - ${cfg.home}"
+      "L+ /run/confluence/logs - - - - ${cfg.home}/logs"
+      "L+ /run/confluence/temp - - - - ${cfg.home}/temp"
+      "L+ /run/confluence/work - - - - ${cfg.home}/work"
+      "L+ /run/confluence/server.xml - - - - ${cfg.home}/server.xml"
+    ];
 
     systemd.services.confluence = {
       description = "Atlassian Confluence";
@@ -167,12 +178,6 @@ in
       preStart = ''
         mkdir -p ${cfg.home}/{logs,work,temp,deploy}
 
-        mkdir -p /run/confluence
-        ln -sf ${cfg.home}/{logs,work,temp,server.xml} /run/confluence
-        ln -sf ${cfg.home} /run/confluence/home
-
-        chown ${cfg.user} ${cfg.home}
-
         sed -e 's,port="8090",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
         '' + (lib.optionalString cfg.proxy.enable ''
           -e 's,protocol="org.apache.coyote.http11.Http11NioProtocol",protocol="org.apache.coyote.http11.Http11NioProtocol" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}",' \
@@ -184,7 +189,8 @@ in
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
-        PermissionsStartOnly = true;
+        Restart = "on-failure";
+        RestartSec = "10";
         ExecStart = "${pkg}/bin/start-confluence.sh -fg";
         ExecStop = "${pkg}/bin/stop-confluence.sh";
       };

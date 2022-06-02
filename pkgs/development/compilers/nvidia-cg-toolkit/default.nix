@@ -1,13 +1,11 @@
 { lib, stdenv, fetchurl }:
 
-assert stdenv ? glibc;
-
 stdenv.mkDerivation rec {
   version = "3.1";
 
   date = "April2012";
 
-  name = "nvidia-cg-toolkit-${version}";
+  pname = "nvidia-cg-toolkit";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -25,7 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     for b in cgc cgfxcat cginfo
     do
-        patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux*.so.? "bin/$b"
+        patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux*.so.? "bin/$b"
     done
     # FIXME: cgfxcat and cginfo need more patchelf
     mkdir -p "$out/bin/"
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://developer.nvidia.com/cg-toolkit;
+    homepage = "https://developer.nvidia.com/cg-toolkit";
     license = lib.licenses.unfreeRedistributable;
   };
 }

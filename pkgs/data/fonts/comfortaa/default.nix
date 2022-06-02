@@ -1,21 +1,25 @@
-{stdenv, fetchzip}:
+{ lib, fetchFromGitHub }:
 
 let
-  version = "3.001";
-in fetchzip rec {
+  version = "2021-07-29";
+in fetchFromGitHub rec {
   name = "comfortaa-${version}";
 
-  url = "https://orig00.deviantart.net/40a3/f/2017/093/d/4/comfortaa___font_by_aajohan-d1qr019.zip";
-  postFetch = ''
-    mkdir -p $out/share/fonts $out/share/doc
-    unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf                        -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*/FONTLOG.txt \*/donate.html -d $out/share/doc/${name}
-  '';
-  sha256 = "0z7xr0cnn6ghwivrm5b5awq9bzhnay3y99qq6dkdgfkfdsaz0n9h";
+  owner = "googlefonts";
+  repo = "comfortaa";
+  rev = "2a87ac6f6ea3495150bfa00d0c0fb53dd0a2f11b";
 
-  meta = with stdenv.lib; {
-    homepage = http://aajohan.deviantart.com/art/Comfortaa-font-105395949;
+  postFetch = ''
+    tar -xf $downloadedFile --strip=1
+    mkdir -p $out/share/fonts/truetype $out/share/doc/comfortaa
+    cp fonts/TTF/*.ttf $out/share/fonts/truetype
+    cp FONTLOG.txt README.md $out/share/doc/comfortaa
+  '';
+
+  sha256 = "12ad7qy11q49iv9h3l2d7x7y7kf0hxbqhclb92bzwig8dzly9n2k";
+
+  meta = with lib; {
+    homepage = "http://aajohan.deviantart.com/art/Comfortaa-font-105395949";
     description = "A clean and modern font suitable for headings and logos";
     license = licenses.ofl;
     platforms = platforms.all;

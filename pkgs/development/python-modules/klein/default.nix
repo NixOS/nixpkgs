@@ -1,27 +1,30 @@
-{ lib, buildPythonPackage, fetchPypi
-, six, twisted, werkzeug, incremental
-, mock }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, python
+, attrs, enum34, hyperlink, incremental, six, twisted, typing, tubes, werkzeug, zope_interface
+, hypothesis, treq
+}:
 
 buildPythonPackage rec {
   pname = "klein";
-  version = "17.10.0";
+  version = "21.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "30aaf0d78a987d5dbfe0968a07367ad0c73e02823cc8eef4c54f80ab848370d0";
+    sha256 = "1mpydmz90d0n9dwa7mr6pgj5v0kczfs05ykssrasdq368dssw7ch";
   };
 
-  propagatedBuildInputs = [ six twisted werkzeug incremental ];
+  propagatedBuildInputs = [ attrs enum34 hyperlink incremental six twisted typing tubes werkzeug zope_interface ];
 
-  checkInputs = [ mock ];
+  checkInputs = [ hypothesis treq ];
 
   checkPhase = ''
-    trial klein
+    ${python.interpreter} -m twisted.trial -j $NIX_BUILD_CORES klein
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Klein Web Micro-Framework";
     homepage    = "https://github.com/twisted/klein";
     license     = licenses.mit;
+    maintainers = with maintainers; [ exarkun ];
   };
 }

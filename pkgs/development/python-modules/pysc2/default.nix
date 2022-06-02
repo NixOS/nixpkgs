@@ -12,11 +12,11 @@
 , pygame
 , s2clientprotocol
 , six
-, websocket_client
+, websocket-client
 , sc2-headless
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "PySC2";
   version = "1.2";
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pygame
     s2clientprotocol
     six
-    websocket_client
+    websocket-client
     sc2-headless
   ];
 

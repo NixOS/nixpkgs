@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, }:
+{ lib, stdenv, fetchurl, geant_version }:
 
 let
-  mkDataset = { name, version, sha256, envvar}:
+  mkDataset = { pname, version, sha256, envvar }:
     stdenv.mkDerivation {
-      inherit name version;
+      inherit pname version;
+      inherit geant_version;
 
       src = fetchurl {
-        url = "https://geant4-data.web.cern.ch/geant4-data/datasets/${name}.${version}.tar.gz";
+        url = "https://cern.ch/geant4-data/datasets/${pname}.${version}.tar.gz";
         inherit sha256;
       };
 
@@ -14,15 +15,16 @@ let
       dontBuild = true;
       dontConfigure = true;
 
+      datadir = "${placeholder "out"}/share/Geant4-${geant_version}/data/${pname}${version}";
       installPhase = ''
-        mkdir -p $out/data
-        mv ./* $out/data
+        mkdir -p $datadir
+        mv ./* $datadir
       '';
 
       inherit envvar;
       setupHook = ./datasets-hook.sh;
 
-      meta = with stdenv.lib; {
+      meta = with lib; {
         description = "Data files for the Geant4 toolkit";
         homepage = "https://geant4.web.cern.ch/support/download";
         license = licenses.g4sl;
@@ -30,74 +32,88 @@ let
       };
     };
 in
-  builtins.listToAttrs (map (a: { inherit (a) name; value = mkDataset a; }) [
+  builtins.listToAttrs (map (a: { name = a.pname; value = mkDataset a; }) [
     {
-      name = "G4NDL";
-      version = "4.5";
-      sha256 = "cba928a520a788f2bc8229c7ef57f83d0934bb0c6a18c31ef05ef4865edcdf8e";
+      pname = "G4NDL";
+      version = "4.6";
+      sha256 = "sha256-nSh88q4PuIeirc6AHudPub4hsNFm2rSby+6UCKUUVAg=";
       envvar = "NEUTRONHP";
     }
 
     {
-      name = "G4EMLOW";
-      version = "7.3";
-      sha256 = "583aa7f34f67b09db7d566f904c54b21e95a9ac05b60e2bfb794efb569dba14e";
+      pname = "G4EMLOW";
+      version = "8.0";
+      sha256 = "sha256-2Rmo5YOGiCV7kkimE5EOsqdjMFngMMi1DAosKtn9Kzs=";
       envvar = "LE";
     }
 
     {
-      name = "G4PhotonEvaporation";
-      version = "5.2";
-      sha256 = "83607f8d36827b2a7fca19c9c336caffbebf61a359d0ef7cee44a8bcf3fc2d1f";
+      pname = "G4PhotonEvaporation";
+      version = "5.7";
+      sha256 = "sha256-dh5C5W/93j2YOfn52BAmB8a0wDKRUe5Rggb07p535+U=";
       envvar = "LEVELGAMMA";
     }
 
     {
-      name = "G4RadioactiveDecay";
-      version = "5.2";
-      sha256 = "99c038d89d70281316be15c3c98a66c5d0ca01ef575127b6a094063003e2af5d";
+      pname = "G4RadioactiveDecay";
+      version = "5.6";
+      sha256 = "sha256-OIYHfJyOWph4PmcY4cMlZ4me6y27M+QC1Edrwv5PDfE=";
       envvar = "RADIOACTIVE";
     }
 
     {
-      name = "G4SAIDDATA";
-      version = "1.1";
-      sha256 = "a38cd9a83db62311922850fe609ecd250d36adf264a88e88c82ba82b7da0ed7f";
+      pname = "G4SAIDDATA";
+      version = "2.0";
+      sha256 = "sha256-HSao55uqceRNV1m59Vpn6Lft4xdRMWqekDfYAJDHLpE=";
       envvar = "SAIDXS";
     }
 
     {
-      name = "G4NEUTRONXS";
-      version = "1.4";
-      sha256 = "57b38868d7eb060ddd65b26283402d4f161db76ed2169437c266105cca73a8fd";
-      envvar = "NEUTRONXS";
+      pname = "G4PARTICLEXS";
+      version = "4.0";
+      sha256 = "sha256-k4EDlwPD8rD9NqtJmTYqLItP+QgMMi+QtOMZKBEzypU=";
+      envvar = "PARTICLEXS";
     }
 
     {
-      name = "G4ABLA";
+      pname = "G4ABLA";
       version = "3.1";
-      sha256 = "7698b052b58bf1b9886beacdbd6af607adc1e099fc730ab6b21cf7f090c027ed";
+      sha256 = "sha256-dpiwUrWL8bmIa+rNvWr2B63B4Jn8cwq2shz38JDAJ+0=";
       envvar = "ABLA";
     }
 
     {
-      name = "G4PII";
+      pname = "G4INCL";
+      version = "1.0";
+      sha256 = "sha256-cWFhghrp89BWX788LPNPTgLj5RnrQZqCI27vIsLENn0=";
+      envvar = "INCL";
+    }
+
+    {
+      pname = "G4PII";
       version = "1.3";
-      sha256 = "6225ad902675f4381c98c6ba25fc5a06ce87549aa979634d3d03491d6616e926";
+      sha256 = "sha256-YiWtkCZ19DgcmMa6JfxaBs6HVJqpeWNNPQNJHWYW6SY=";
       envvar = "PII";
     }
 
     {
-      name = "G4ENSDFSTATE";
-      version = "2.2";
-      sha256 = "dd7e27ef62070734a4a709601f5b3bada6641b111eb7069344e4f99a01d6e0a6";
+      pname = "G4ENSDFSTATE";
+      version = "2.3";
+      sha256 = "sha256-lETF4IIHkavTzKrOEFsOR3kPrc4obhEUmDTnnEqOkgM=";
       envvar = "ENSDFSTATE";
     }
 
     {
-      name = "G4RealSurface";
-      version = "2.1";
-      sha256 = "2a287adbda1c0292571edeae2082a65b7f7bd6cf2bf088432d1d6f889426dcf3";
+      pname = "G4RealSurface";
+      version = "2.2";
+      sha256 = "sha256-mVTe4AEvUzEmf3g2kOkS5y21v1Lqm6vs0S6iIoIXaCA=";
       envvar = "REALSURFACE";
+    }
+
+    {
+      pname = "G4TENDL";
+      version = "1.4";
+      sha256 = "sha256-S3J0AgzItO1Wm4ku8YwuCI7c22tm850lWFzO4l2XIeA=";
+      envvar = "PARTICLEHP";
     }
   ])

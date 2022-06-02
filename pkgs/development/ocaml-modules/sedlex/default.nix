@@ -1,21 +1,25 @@
-{ stdenv, fetchzip, ocaml, findlib, gen, ppx_tools_versioned }:
+{ stdenv, lib, fetchFromGitHub, ocaml, findlib, gen, ppx_tools_versioned, ocaml-migrate-parsetree }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "sedlex is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-sedlex-${version}";
-  version = "1.99.4";
+  pname = "ocaml${ocaml.version}-sedlex";
+  version = "1.99.5";
 
-  src = fetchzip {
-    url = "http://github.com/alainfrisch/sedlex/archive/v${version}.tar.gz";
-    sha256 = "1b7nqxyfcz8i7m4b8zil2rn6ygh2czy26f9v64xnxn8r0hy9sh1m";
+  src = fetchFromGitHub {
+    owner = "ocaml-community";
+    repo = "sedlex";
+    rev = "fb84e1766fc4b29e79ec40029ffee5cdb37b392f";
+    sha256 = "sha256-VhzlDTYBFXgKWT69PqZYLuHkiaDwzhmyX2XfaqzHFl4=";
   };
 
-  buildInputs = [ ocaml findlib ppx_tools_versioned ];
+  nativeBuildInputs = [ ocaml findlib ];
 
-  propagatedBuildInputs = [ gen ];
+  propagatedBuildInputs = [ gen ocaml-migrate-parsetree ppx_tools_versioned ];
+
+  strictDeps = true;
 
   buildFlags = [ "all" "opt" ];
 
@@ -24,10 +28,10 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
-    homepage = https://github.com/alainfrisch/sedlex;
+    homepage = "https://github.com/ocaml-community/sedlex";
     description = "An OCaml lexer generator for Unicode";
-    license = stdenv.lib.licenses.mit;
+    license = lib.licenses.mit;
     inherit (ocaml.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

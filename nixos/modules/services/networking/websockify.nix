@@ -5,12 +5,12 @@ with lib;
 let cfg = config.services.networking.websockify; in {
   options = {
     services.networking.websockify = {
-      enable = mkOption {  
+      enable = mkOption {
         description = "Whether to enable websockify to forward websocket connections to TCP connections.";
 
-        default = false;   
+        default = false;
 
-        type = types.bool; 
+        type = types.bool;
       };
 
       sslCert = mkOption {
@@ -21,7 +21,7 @@ let cfg = config.services.networking.websockify; in {
       sslKey = mkOption {
         description = "Path to the SSL key.";
         default = cfg.sslCert;
-        defaultText = "config.services.networking.websockify.sslCert";
+        defaultText = literalExpression "config.services.networking.websockify.sslCert";
         type = types.path;
       };
 
@@ -44,9 +44,9 @@ let cfg = config.services.networking.websockify; in {
       scriptArgs = "%i";
     };
 
-    systemd.targets."default-websockify" = {
+    systemd.targets.default-websockify = {
       description = "Target to start all default websockify@ services";
-      unitConfig."X-StopOnReconfiguration" = true;
+      unitConfig.X-StopOnReconfiguration = true;
       wants = mapAttrsToList (name: value: "websockify@${name}:${toString value}.service") cfg.portMap;
       wantedBy = [ "multi-user.target" ];
     };

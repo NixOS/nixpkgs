@@ -1,43 +1,24 @@
---- a/mesonbuild/compilers/compilers.py
-+++ b/mesonbuild/compilers/compilers.py
-@@ -1202,8 +1202,10 @@
-             # In order to avoid relinking for RPATH removal, the binary needs to contain just
-             # enough space in the ELF header to hold the final installation RPATH.
-             paths = ':'.join(all_paths)
--            if len(paths) < len(install_rpath):
--                padding = 'X' * (len(install_rpath) - len(paths))
-+            store_paths = ':'.join(filter(lambda path: path.startswith('@storeDir@'), all_paths))
-+            extra_space_needed = len(install_rpath + (':' if install_rpath and store_paths else '') + store_paths) - len(paths)
-+            if extra_space_needed > 0:
-+                padding = 'X' * extra_space_needed
-                 if not paths:
-                     paths = padding
-                 else:
---- a/mesonbuild/scripts/depfixer.py
-+++ b/mesonbuild/scripts/depfixer.py
-@@ -303,6 +303,14 @@
-             return
-         self.bf.seek(rp_off)
-         old_rpath = self.read_str()
+--- a/mesonbuild/backend/backends.py
++++ b/mesonbuild/backend/backends.py
+@@ -723,6 +723,21 @@
+     @staticmethod
+     def get_rpath_dirs_from_link_args(args: T.List[str]) -> T.Set[str]:
+         dirs: T.Set[str] = set()
 +
-+        if new_rpath:
-+            new_rpath += b':'
-+        else:
-+            new_rpath = b''
++        nix_ldflags = os.environ.get('NIX_LDFLAGS', '').split()
++        next_is_path = False
++        # Try to add rpaths set by user or ld-wrapper so that they are not removed.
++        # Based on https://github.com/NixOS/nixpkgs/blob/69711a2f5ffe8cda208163be5258266172ff527f/pkgs/build-support/bintools-wrapper/ld-wrapper.sh#L148-L177
++        for flag in nix_ldflags:
++            if flag == '-rpath' or flag == '-L':
++                next_is_path = True
++            elif next_is_path or flag.startswith('-L/'):
++                if flag.startswith('-L/'):
++                    flag = flag[2:]
++                if flag.startswith('@storeDir@'):
++                    dirs.add(flag)
++                next_is_path = False
 +
-+        new_rpath += b':'.join(filter(lambda path: path.startswith(b'@storeDir@'), old_rpath.split(b':')))
-+
-         if len(old_rpath) < len(new_rpath):
-             sys.exit("New rpath must not be longer than the old one.")
-         # The linker does read-only string deduplication. If there is a
-@@ -316,6 +324,10 @@
-         if not new_rpath:
-             self.remove_rpath_entry(entrynum)
-         else:
-+            # clean old rpath to avoid stale references
-+            # (see https://github.com/NixOS/nixpkgs/pull/46020)
-+            self.bf.seek(rp_off)
-+            self.bf.write(b'\0'*len(old_rpath))
-             self.bf.seek(rp_off)
-             self.bf.write(new_rpath)
-             self.bf.write(b'\0')
+         # Match rpath formats:
+         # -Wl,-rpath=
+         # -Wl,-rpath,

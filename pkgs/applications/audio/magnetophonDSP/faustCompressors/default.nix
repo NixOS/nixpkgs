@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
-  name = "faustCompressors-v${version}";
+  pname = "faustCompressors";
   version = "1.2";
 
   src = fetchFromGitHub {
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ faust2jaqt faust2lv2 ];
 
   buildPhase = ''
+    echo "hack out autoComp.dsp due to https://github.com/grame-cncm/faust/407/issues "
+    rm autoComp.dsp
     for f in *.dsp;
     do
       echo "compiling standalone from" $f
@@ -39,8 +41,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A collection of bread and butter compressors";
-    homepage = https://github.com/magnetophon/faustCompressors;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
+    homepage = "https://github.com/magnetophon/faustCompressors";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
   };
 }

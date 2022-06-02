@@ -1,23 +1,54 @@
-{ stdenv, fetchurl, hamlib, fltk13, libjpeg, libpng, portaudio, libsndfile,
-  libsamplerate, libpulseaudio, libXinerama, gettext, pkgconfig, alsaLib }:
+{ lib
+, stdenv
+, fetchurl
+, hamlib
+, fltk13
+, libjpeg
+, libpng
+, portaudio
+, libsndfile
+, libsamplerate
+, libpulseaudio
+, libXinerama
+, gettext
+, pkg-config
+, alsa-lib
+, udev
+}:
 
 stdenv.mkDerivation rec {
-  version = "4.1.01";
   pname = "fldigi";
+  version = "4.1.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1pznq18rv8q7qflpnnk6wvbwfqvhvyx1a77jlp3kzjh19pjaqldy";
+    sha256 = "0f64pqijl3jlfmv00hkdxvn1wy5yy3zl33p6vf3fn1b91w590c2h";
   };
 
-  buildInputs = [ libXinerama gettext hamlib fltk13 libjpeg libpng portaudio
-                  libsndfile libsamplerate libpulseaudio pkgconfig alsaLib ];
+  nativeBuildInputs = [ pkg-config ];
 
-  meta = {
+  buildInputs = [
+    libXinerama
+    gettext
+    hamlib
+    fltk13
+    libjpeg
+    libpng
+    portaudio
+    libsndfile
+    libsamplerate
+  ] ++ lib.optionals (stdenv.isLinux) [ libpulseaudio alsa-lib udev ];
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Digital modem program";
-    homepage = https://sourceforge.net/projects/fldigi/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ relrod ftrvxmtrx ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://sourceforge.net/projects/fldigi/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ relrod ftrvxmtrx ];
+    platforms = platforms.unix;
+    # unable to execute command: posix_spawn failed: Argument list too long
+    # Builds fine on aarch64-darwin
+    broken = stdenv.system == "x86_64-darwin";
   };
 }

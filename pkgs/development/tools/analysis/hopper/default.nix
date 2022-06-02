@@ -1,44 +1,76 @@
-{ stdenv, fetchurl, pkgs, makeWrapper, lib }:
+{ stdenv
+, fetchurl
+, lib
+, autoPatchelfHook
+, wrapQtAppsHook
+, gmpxx
+, gnustep
+, libbsd
+, libffi_3_3
+, ncurses6
+}:
 
 stdenv.mkDerivation rec {
-  pname    = "hopper";
-  version = "4.5.7";
-  rev = "v${lib.versions.major version}";
+  pname = "hopper";
+  version = "5.5.3";
+  rev = "v4";
 
   src = fetchurl {
-    url = "https://d2ap6ypl1xbe4k.cloudfront.net/Hopper-${rev}-${version}-Linux.pkg.tar.xz";
-    sha256 = "1ce7a0f13126a940398aa8da4a74e250dff0401074f30446a8840ac3dbb902c0";
+    url = "https://d2ap6ypl1xbe4k.cloudfront.net/Hopper-${rev}-${version}-Linux-demo.pkg.tar.xz";
+    hash = "sha256-xq9ZVg1leHm/tq6LYyQLa8p5dDwBd64Jt92uMoE0z58=";
   };
 
   sourceRoot = ".";
 
-  ldLibraryPath = with pkgs; stdenv.lib.makeLibraryPath  [
-libbsd.out libffi.out gmpxx.out python27Full.out python27Packages.libxml2 qt5.qtbase zlib  xlibs.libX11.out xorg_sys_opengl.out xlibs.libXrender.out gcc-unwrapped.lib
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapQtAppsHook
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    gnustep.libobjc
+    libbsd
+    libffi_3_3
+    ncurses6
+  ];
 
   installPhase = ''
-     mkdir -p $out/bin
-     mkdir -p $out/lib
-     mkdir -p $out/share
-     cp $sourceRoot/opt/hopper-${rev}/bin/Hopper $out/bin/hopper
-     cp -r $sourceRoot/opt/hopper-${rev}/lib $out
-     cp -r $sourceRoot/usr/share $out/share
-    patchelf \
-    --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
-    $out/bin/hopper
-    # Details: https://nixos.wiki/wiki/Qt
-     wrapProgram $out/bin/hopper \
-    --suffix LD_LIBRARY_PATH : ${ldLibraryPath} \
-    --suffix QT_PLUGIN_PATH : ${pkgs.qt5.qtbase}/lib/qt-${pkgs.qt5.qtbase.qtCompatVersion}/plugins
+    runHook preInstall
+
+    mkdir -p $out/bin
+    mkdir -p $out/lib
+    mkdir -p $out/share
+
+    cp $sourceRoot/opt/hopper-${rev}/bin/Hopper $out/bin/hopper
+    cp \
+      --archive \
+      $sourceRoot/opt/hopper-${rev}/lib/libBlocksRuntime.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libdispatch.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libgnustep-base.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libHopperCore.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libkqueue.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libobjcxx.so* \
+      $sourceRoot/opt/hopper-${rev}/lib/libpthread_workqueue.so* \
+      $out/lib
+
+    cp -r $sourceRoot/usr/share $out
+
+    runHook postInstall
   '';
 
-  meta = {
+  postFixup = ''
+    substituteInPlace "$out/share/applications/hopper-${rev}.desktop" \
+      --replace "Exec=/opt/hopper-${rev}/bin/Hopper" "Exec=$out/bin/hopper"
+  '';
+
+  meta = with lib; {
     homepage = "https://www.hopperapp.com/index.html";
     description = "A macOS and Linux Disassembler";
-    license = stdenv.lib.licenses.unfree;
-    maintainers = [ stdenv.lib.maintainers.luis ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      luis
+      Enteee
+    ];
+    platforms = platforms.linux;
   };
 }

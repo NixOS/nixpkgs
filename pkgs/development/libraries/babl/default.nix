@@ -1,20 +1,43 @@
-{ stdenv, fetchurl }:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gobject-introspection
+, lcms2
+, vala
+}:
 
 stdenv.mkDerivation rec {
-  name = "babl-0.1.60";
+  pname = "babl";
+  version = "0.1.92";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "https://ftp.gtk.org/pub/babl/0.1/${name}.tar.bz2";
-    sha256 = "0kv0y12j4k9khrxqa7rryfb4ikcnrax6x4nwi70wnz05nv6fxld3";
+    url = "https://download.gimp.org/pub/babl/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-9mdzUCiUS2N1rRjxYKZM65P1x9zKqdh1HeNZd3SIosE=";
   };
 
-  doCheck = true;
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+  ];
 
-  meta = with stdenv.lib; {
+  buildInputs = [
+    lcms2
+  ];
+
+  meta = with lib; {
     description = "Image pixel format conversion library";
-    homepage = http://gegl.org/babl/;
-    license = licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ jtojnar ];
+    homepage = "https://gegl.org/babl/";
+    changelog = "https://gitlab.gnome.org/GNOME/babl/-/blob/BABL_${lib.replaceStrings [ "." ] [ "_" ] version}/NEWS";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

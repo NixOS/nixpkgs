@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "unstable-2018-10-18";
-  name = "ps2client-${version}";
+  pname = "ps2client";
 
   src = fetchFromGitHub {
     owner = "ps2dev";
@@ -14,16 +14,16 @@ stdenv.mkDerivation rec {
   patchPhase = ''
    sed -i -e "s|-I/usr/include||g" -e "s|-I/usr/local/include||g" Makefile
   '';
-  
+
   installPhase = ''
     make PREFIX=$out install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop clients to interact with ps2link and ps2netfs";
-    homepage = https://github.com/ps2dev/ps2client;
+    homepage = "https://github.com/ps2dev/ps2client";
     license = licenses.bsd3;
-    maintainers = [ maintainers.genesis ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

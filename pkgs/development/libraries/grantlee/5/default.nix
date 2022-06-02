@@ -1,21 +1,24 @@
-{ mkDerivation, lib, copyPathsToStore, fetchurl, qtbase, qtscript, cmake }:
+{ mkDerivation, lib, fetchFromGitHub, qtbase, qtscript, cmake }:
 
 mkDerivation rec {
-  name = "grantlee-${version}";
-  version = "5.1.0";
-  grantleeCompatVersion = "5.1";
-  grantleePluginPrefix = "lib/grantlee/${grantleeCompatVersion}";
+  pname = "grantlee";
+  version = "5.2.0";
+  grantleePluginPrefix = "lib/grantlee/${lib.versions.majorMinor version}";
 
-  src = fetchurl {
-    url = "https://github.com/steveire/grantlee/archive/v${version}.tar.gz";
-    sha256 = "1lf9rkv0i0kd7fvpgg5l8jb87zw8dzcwd1liv6hji7g4wlpmfdiq";
-    name = "${name}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "steveire";
+    repo = "grantlee";
+    rev = "v${version}";
+    sha256 = "sha256-mAbgzdBdIW1wOTQNBePQuyTgkKdpn1c+zR3H7mXHvgk=";
   };
 
   buildInputs = [ qtbase qtscript ];
   nativeBuildInputs = [ cmake ];
 
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./grantlee-nix-profiles.patch
+    ./grantlee-no-canonicalize-filepath.patch
+  ];
 
   outputs = [ "out" "dev" ];
   postFixup =
@@ -44,7 +47,7 @@ mkDerivation rec {
       The syntax is intended to follow the syntax of the Django template system,
       and the design of Django is reused in Grantlee.'';
 
-    homepage = http://gitorious.org/grantlee;
+    homepage = "https://github.com/steveire/grantlee";
     maintainers = [ maintainers.ttuegel ];
     license = licenses.lgpl21;
     inherit (qtbase.meta) platforms;

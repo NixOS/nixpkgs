@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "cycler";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8";
+    sha256 = "9c87405839a19696e837b3b818fed3f5f69f16f1eec1a1ad77e043dcea9c772f";
   };
 
   checkInputs = [ coverage nose ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Composable style cycles";
-    homepage = https://github.com/matplotlib/cycler;
+    homepage = "https://github.com/matplotlib/cycler";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

@@ -1,99 +1,139 @@
-{ stdenv
+{ mkDerivation
+, lib
+, qtbase
 , fetchFromGitHub
 , fftwSinglePrec
 , ruby
-, libffi
+, erlang
 , aubio
+, alsa-lib
+, rtmidi
+, libsndfile
 , cmake
-, pkgconfig
-, qt5
-, libsForQt5
+, pkg-config
 , boost
 , bash
-, makeWrapper
-, jack2Full
+, jack2
+, supercollider
+, qwt
 }:
 
 let
-  supercollider = libsForQt5.callPackage ../../../development/interpreters/supercollider {
-    fftw = fftwSinglePrec;
-  };
 
-in stdenv.mkDerivation rec {
-  version = "3.1.0";
-  name = "sonic-pi-${version}";
+  supercollider_single_prec = supercollider.override {  fftw = fftwSinglePrec; };
 
+  pname = "sonic-pi";
+  version = "3.3.1";
   src = fetchFromGitHub {
-    owner = "samaaron";
+    owner = "sonic-pi-net";
     repo = "sonic-pi";
     rev = "v${version}";
-    sha256 = "0gi4a73szaa8iz5q1gxgpsnyvhhghcfqm6bfwwxbix4m5csbfgh9";
+    sha256 = "sha256-AE7iuSNnW1SAtBMplReGzXKcqD4GG23i10MIAWnlcPo=";
   };
 
+  # sonic pi uses it's own aubioonset with hardcoded parameters but will compile a whole aubio for it
+  # let's just build the aubioonset instead and link against aubio from nixpkgs
+  aubioonset = mkDerivation {
+    name = "aubioonset";
+    src = src;
+    sourceRoot = "source/app/external/aubio/examples";
+    buildInputs = [jack2 aubio libsndfile];
+    patchPhase = ''
+      sed -i "s@<aubio.h>@<aubio/aubio.h>@" jackio.c utils.h
+    '';
+    buildPhase = ''
+      gcc -o aubioonset -laubio jackio.c utils.c aubioonset.c
+    '';
+    installPhase = ''
+      install -D aubioonset $out/aubioonset
+    '';
+  };
+
+in
+
+mkDerivation rec {
+  inherit pname version src;
+
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     bash
-    cmake
-    makeWrapper
-    pkgconfig
-    qt5.qtbase
-    libsForQt5.qscintilla
-    libsForQt5.qwt
+    pkg-config
+    qtbase
+    qwt
     ruby
-    libffi
     aubio
-    supercollider
+    supercollider_single_prec
     boost
+    erlang
+    alsa-lib
+    rtmidi
   ];
 
   dontUseCmakeConfigure = true;
 
-  preConfigure = ''
-    patchShebangs .
-    substituteInPlace app/gui/qt/mainwindow.cpp \
-      --subst-var-by ruby "${ruby}/bin/ruby" \
-      --subst-var out
+  prePatch = ''
+    sed -i '/aubio/d' app/external/linux_build_externals.sh
+    sed -i '/aubio/d' app/linux-prebuild.sh
+    patchShebangs app
+  '';
+
+  configurePhase = ''
+    runHook preConfigure
+
+    ./app/linux-prebuild.sh
+    ./app/linux-config.sh
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
-    export SONIC_PI_HOME=$TMPDIR
-    export AUBIO_LIB=${aubio}/lib/libaubio.so
+    runHook preBuild
 
-    pushd app/server/ruby/bin
-      ./compile-extensions.rb
-      ./i18n-tool.rb -t
+    pushd app/build
+    cmake --build . --config Release
     popd
 
-    pushd app/gui/qt
-      cp -f ruby_help.tmpl ruby_help.h
-      ../../server/ruby/bin/qt-doc.rb -o ruby_help.h
-
-      substituteInPlace SonicPi.pro \
-        --replace "LIBS += -lrt -lqt5scintilla2" \
-                  "LIBS += -lrt -lqscintilla2 -lqwt"
-
-      lrelease SonicPi.pro
-      qmake SonicPi.pro
-
-      make
-    popd
+    runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
 
-    cp -r . $out
-    wrapProgram $out/bin/sonic-pi \
-      --prefix PATH : ${ruby}/bin:${bash}/bin:${supercollider}/bin:${jack2Full}/bin \
-      --set AUBIO_LIB "${aubio}/lib/libaubio.so"
+    mkdir $out
+    cp -r {bin,etc} $out/
+
+    # Copy server whole.
+    mkdir -p $out/app
+    cp -r app/server $out/app/
+
+    # We didn't build this during linux-prebuild.sh so copy from the separate derivation
+    cp ${aubioonset}/aubioonset $out/app/server/native/
+
+    # Copy only necessary files for the gui app.
+    mkdir -p $out/app/gui/qt
+    cp -r app/gui/qt/{book,fonts,help,html,images,image_source,info,lang,theme} $out/app/gui/qt/
+    mkdir -p $out/app/build/gui/qt
+    cp app/build/gui/qt/sonic-pi $out/app/build/gui/qt/sonic-pi
 
     runHook postInstall
   '';
 
+  # $out/bin/sonic-pi is a shell script, and wrapQtAppsHook doesn't wrap them.
+  dontWrapQtApps = true;
+  preFixup = ''
+    wrapQtApp "$out/bin/sonic-pi" \
+      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider erlang] }
+    makeWrapper \
+      $out/app/server/ruby/bin/sonic-pi-server.rb \
+      $out/bin/sonic-pi-server \
+      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider erlang ] }
+  '';
+
   meta = {
-    homepage = http://sonic-pi.net/;
+    homepage = "https://sonic-pi.net/";
     description = "Free live coding synth for everyone originally designed to support computing and music lessons within schools";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ Phlogistique kamilchm ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Phlogistique kamilchm c0deaddict sohalt ];
+    platforms = lib.platforms.linux;
   };
 }

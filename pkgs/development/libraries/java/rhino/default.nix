@@ -1,16 +1,14 @@
-{ fetchurl, stdenv, unzip, ant, javac, jvm }:
+{ fetchurl, lib, stdenv, unzip, ant, javac, jvm }:
 
 let
-  version = "1.7R2";
-
   xbeans  = fetchurl {
     url = "http://archive.apache.org/dist/xmlbeans/binaries/xmlbeans-2.2.0.zip";
     sha256 = "1pb08d9j81d0wz5wj31idz198iwhqb7mch872n08jh1354rjlqwk";
   };
 in
-
-stdenv.mkDerivation {
-  name = "rhino-${version}";
+stdenv.mkDerivation rec {
+  pname = "rhino";
+  version = "1.7R2";
 
   src = fetchurl {
     url = "mirror://mozilla/js/rhino1_7R2.zip";
@@ -30,7 +28,8 @@ stdenv.mkDerivation {
       ln -sv "${xbeans}" "build/tmp-xbean/xbean.zip"
     '';
 
-  buildInputs = [ unzip ant javac jvm ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ ant javac jvm ];
 
   buildPhase = "ant jar";
   doCheck    = false;
@@ -42,7 +41,7 @@ stdenv.mkDerivation {
       cp -v *.jar "$out/share/java"
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An implementation of JavaScript written in Java";
 
     longDescription =
@@ -51,7 +50,7 @@ stdenv.mkDerivation {
          to provide scripting to end users.
       '';
 
-    homepage = http://www.mozilla.org/rhino/;
+    homepage = "http://www.mozilla.org/rhino/";
 
     license = with licenses; [ mpl11 /* or */ gpl2Plus ];
     platforms = platforms.linux ++ platforms.darwin;

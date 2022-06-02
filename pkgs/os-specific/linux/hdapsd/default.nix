@@ -1,8 +1,8 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-let version = "20141203"; in
 stdenv.mkDerivation rec {
-  name = "hdapsd-"+version;
+  pname = "hdapsd";
+  version = "20141203";
 
   src = fetchurl {
     url = "https://github.com/evgeni/hdapsd/releases/download/${version}/hdapsd-${version}.tar.gz";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   postInstall = builtins.readFile ./postInstall.sh;
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Hard Drive Active Protection System Daemon";
       homepage = "http://hdaps.sf.net/";
       license = licenses.gpl2;

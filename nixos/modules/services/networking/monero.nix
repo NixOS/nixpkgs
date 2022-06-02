@@ -4,7 +4,6 @@ with lib;
 
 let
   cfg     = config.services.monero;
-  dataDir = "/var/lib/monero";
 
   listToConf = option: list:
     concatMapStrings (value: "${option}=${value}\n") list;
@@ -26,7 +25,7 @@ let
       rpc-login=${rpc.user}:${rpc.password}
     ''}
     ${optionalString rpc.restricted ''
-      restrict-rpc=1
+      restricted-rpc=1
     ''}
 
     limit-rate-up=${toString limits.upload}
@@ -51,13 +50,21 @@ in
 
     services.monero = {
 
-      enable = mkEnableOption "Monero node daemon.";
+      enable = mkEnableOption "Monero node daemon";
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/monero";
+        description = ''
+          The directory where Monero stores its data files.
+        '';
+      };
 
       mining.enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
-          Whether to mine moneroj.
+          Whether to mine monero.
         '';
       };
 
@@ -87,7 +94,7 @@ in
       };
 
       rpc.password = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
         default = null;
         description = ''
           Password for RPC connections.
@@ -103,7 +110,7 @@ in
       };
 
       rpc.port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 18081;
         description = ''
           Port the RPC server will bind to.
@@ -197,18 +204,15 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = singleton {
-      name = "monero";
-      uid  = config.ids.uids.monero;
+    users.users.monero = {
+      isSystemUser = true;
+      group = "monero";
       description = "Monero daemon user";
-      home = dataDir;
+      home = cfg.dataDir;
       createHome = true;
     };
 
-    users.groups = singleton {
-      name = "monero";
-      gid  = config.ids.gids.monero;
-    };
+    users.groups.monero = { };
 
     systemd.services.monero = {
       description = "monero daemon";
@@ -218,21 +222,23 @@ in
       serviceConfig = {
         User  = "monero";
         Group = "monero";
-        ExecStart = "${pkgs.monero}/bin/monerod --config-file=${configFile} --non-interactive";
+        ExecStart = "${pkgs.monero-cli}/bin/monerod --config-file=${configFile} --non-interactive";
         Restart = "always";
         SuccessExitStatus = [ 0 1 ];
       };
     };
 
-   assertions = singleton {
-     assertion = cfg.mining.enable -> cfg.mining.address != "";
-     message   = ''
+    assertions = singleton {
+      assertion = cfg.mining.enable -> cfg.mining.address != "";
+      message   = ''
        You need a Monero address to receive mining rewards:
        specify one using option monero.mining.address.
-    '';
-   };
+      '';
+    };
 
   };
+
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
 }
 

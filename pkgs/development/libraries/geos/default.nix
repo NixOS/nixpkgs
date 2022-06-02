@@ -1,20 +1,31 @@
-{ stdenv, fetchurl, python }:
+{ lib
+, stdenv
+, fetchurl
+, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "geos-3.7.1";
+  pname = "geos";
+  version = "3.10.2";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/geos/${name}.tar.bz2";
-    sha256 = "1312m02xk4sp6f1xdpb9w0ic0zbxg90p5y66qnwidl5fksscf1h0";
+    url = "https://download.osgeo.org/geos/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-ULvFmaw4a0wrOWLcxBHwBAph8gSq7066ciXs3Qz0VxU=";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ python ];
+  postPatch = ''
+    substituteInPlace tools/geos-config.in \
+      --replace "@libdir@" "@prefix@/lib" \
+      --replace "@includedir@" "@prefix@/include"
+  '';
 
-  meta = {
+  meta = with lib; {
     description = "C++ port of the Java Topology Suite (JTS)";
-    homepage = http://geos.refractions.net/;
-    license = "GPL";
+    homepage = "https://trac.osgeo.org/geos";
+    license = licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [
+      willcohen
+    ];
   };
 }

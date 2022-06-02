@@ -1,38 +1,55 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cargo, cmake, sphinx, lib, prefix ? "uutils-" }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, rustPlatform
+, cargo
+, sphinx
+, Security
+, libiconv
+, prefix ? "uutils-"
+, buildMulticallBinary ? true
+}:
 
-rustPlatform.buildRustPackage {
-  name = "uutils-coreutils-2018-09-30";
+stdenv.mkDerivation rec {
+  pname = "uutils-coreutils";
+  version = "0.0.13";
+
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
-    rev = "a161b7e803aef08455ae0547dccd9210e38a4574";
-    sha256 = "19j40cma7rz6yf5j6nyid8qslbcmrnxdk6by53hflal2qx3g555z";
+    rev = version;
+    sha256 = "sha256-Fb5X3xpve6pRRlHSzevBvOdRpR0MrHzcOB83C15//zg=";
   };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-pSEo1XW/zywFoqt8vx55HS28CVbEC6/858ANknt1FPU=";
+  };
+
+  nativeBuildInputs = [ rustPlatform.cargoSetupHook sphinx ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  makeFlags = [
+    "CARGO=${cargo}/bin/cargo"
+    "PREFIX=${placeholder "out"}"
+    "PROFILE=release"
+    "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
+  ] ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
+  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
 
   # too many impure/platform-dependent tests
   doCheck = false;
 
-  cargoSha256 = "1a9k7i4829plkxgsflmpji3mrw2i1vln6jsnhxmkl14h554yi5j4";
-
-  makeFlags =
-    [ "CARGO=${cargo}/bin/cargo" "PREFIX=$(out)" "PROFILE=release" "INSTALLDIR_MAN=$(out)/share/man/man1" ]
-    ++ lib.optional (prefix != null) [ "PROG_PREFIX=${prefix}" ];
-
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ cargo sphinx ];
-
-  # empty {build,install}Phase to use defaults of `stdenv.mkDerivation` rather than rust defaults
-  buildPhase = "";
-  installPhase = "";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform Rust rewrite of the GNU coreutils";
     longDescription = ''
       uutils is an attempt at writing universal (as in cross-platform)
       CLI utils in Rust. This repo is to aggregate the GNU coreutils rewrites.
     '';
-    homepage = https://github.com/uutils/coreutils;
-    maintainers = with maintainers; [ ma27 ];
+    homepage = "https://github.com/uutils/coreutils";
+    maintainers = with maintainers; [ siraben SuperSandro2000 ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

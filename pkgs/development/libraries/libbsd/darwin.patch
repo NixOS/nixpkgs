@@ -1,30 +1,17 @@
-diff --git a/configure.ac b/configure.ac
-index 55fcfe6..1e26c93 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -51,15 +51,19 @@ AS_CASE([$host_os],
-     AC_SEARCH_LIBS([clock_gettime], [rt], [CLOCK_GETTIME_LIBS="-lrt"])
-     AC_SUBST([CLOCK_GETTIME_LIBS])
-     LIBS="$saved_LIBS"
-+    AM_CONDITIONAL([BUILD_LINK_VERSION_SCRIPT], [1])
-   ],
-   [*-musl*], [
-     # Upstream refuses to define this, we will do it ourselves then.
-     AC_DEFINE([__MUSL__], [1], [Define to 1 if we are building for musl])
-+    AM_CONDITIONAL([BUILD_LINK_VERSION_SCRIPT], [1])
-   ],
--)
-+  [
-+  AM_CONDITIONAL([BUILD_LINK_VERSION_SCRIPT], [1])
-+  ])
+diff --git c/configure.ac w/configure.ac
+index 09cb310..30c0e2a 100644
+--- c/configure.ac
++++ w/configure.ac
+@@ -110,7 +110,7 @@ AS_CASE([$host_os],
+ AM_CONDITIONAL([OS_WINDOWS], [test "x$is_windows" = "xyes"])
  
  # Checks for header files.
--AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h])
-+AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h nlist.h])
+-AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h pwd.h grp.h])
++AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h pwd.h grp.h nlist.h])
  
  # Checks for typedefs, structures, and compiler characteristics.
  AC_C_INLINE
-@@ -143,7 +147,8 @@ AC_LINK_IFELSE(
+@@ -210,7 +210,8 @@ AC_LINK_IFELSE(
  
  AC_CHECK_FUNCS([clearenv dirfd fopencookie __fpurge \
                  getauxval getentropy getexecname getline \
@@ -33,11 +20,11 @@ index 55fcfe6..1e26c93 100644
 +		strlcpy strlcat strnstr strmode fpurge])
  AM_CONDITIONAL([HAVE_GETENTROPY], [test "x$ac_cv_func_getentropy" = "xtrue"])
  
- AC_CONFIG_FILES([
-diff --git a/include/bsd/string.h b/include/bsd/string.h
+ AC_SUBST([LIBBSD_LIBS])
+diff --git c/include/bsd/string.h w/include/bsd/string.h
 index f987fee..a1e17ed 100644
---- a/include/bsd/string.h
-+++ b/include/bsd/string.h
+--- c/include/bsd/string.h
++++ w/include/bsd/string.h
 @@ -41,10 +41,21 @@
  #include <sys/types.h>
  
@@ -60,26 +47,10 @@ index f987fee..a1e17ed 100644
  
  #if !defined(__GLIBC__) || \
      (defined(__GLIBC__) && (!__GLIBC_PREREQ(2, 25) || !defined(_GNU_SOURCE)))
-diff --git a/src/Makefile.am b/src/Makefile.am
-index f3cc0fa..3aaecd4 100644
---- a/src/Makefile.am
-+++ b/src/Makefile.am
-@@ -56,8 +56,10 @@ libbsd_la_DEPENDENCIES = \
- libbsd_la_LIBADD = \
- 	$(CLOCK_GETTIME_LIBS)
- libbsd_la_LDFLAGS = \
--	-Wl,--version-script=$(srcdir)/libbsd.map \
- 	-version-number $(LIBBSD_ABI)
-+if BUILD_LINK_VERSION_SCRIPT
-+libbsd_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libbsd.map
-+endif
- libbsd_la_SOURCES = \
- 	arc4random.c \
- 	arc4random.h \
-diff --git a/src/fpurge.c b/src/fpurge.c
+diff --git c/src/fpurge.c w/src/fpurge.c
 index 462535a..a8941db 100644
---- a/src/fpurge.c
-+++ b/src/fpurge.c
+--- c/src/fpurge.c
++++ w/src/fpurge.c
 @@ -26,9 +26,10 @@
  
  #include <errno.h>
@@ -129,10 +100,10 @@ index 462535a..a8941db 100644
  #else
  #error "Function fpurge() needs to be ported."
  #endif
-diff --git a/src/funopen.c b/src/funopen.c
-index 1e05c7e..65ba5a8 100644
---- a/src/funopen.c
-+++ b/src/funopen.c
+diff --git c/src/funopen.c w/src/funopen.c
+index 1e6f43a..3a3af6a 100644
+--- c/src/funopen.c
++++ w/src/funopen.c
 @@ -143,6 +143,7 @@ funopen(const void *cookie,
   * they will not add the needed support to implement it. Just ignore this
   * interface there, as it has never been provided anyway.
@@ -141,59 +112,31 @@ index 1e05c7e..65ba5a8 100644
  #else
  #error "Function funopen() needs to be ported or disabled."
  #endif
-diff --git a/src/hash/sha512.h b/src/hash/sha512.h
-index 4f368a1..7632e25 100644
---- a/src/hash/sha512.h
-+++ b/src/hash/sha512.h
-@@ -29,7 +29,11 @@
- #ifndef _SHA512_H_
- #define _SHA512_H_
- 
-+#ifdef __MACH__
-+#include <stdint.h>
-+#else
- #include <sys/types.h>
-+#endif
- 
- #define SHA512_DIGEST_LENGTH		64
- 
-diff --git a/src/hash/sha512c.c b/src/hash/sha512c.c
-index b3c8d5e..602f54e 100644
---- a/src/hash/sha512c.c
-+++ b/src/hash/sha512c.c
-@@ -25,7 +25,12 @@
-  */
- 
- #include <sys/cdefs.h>
-+
-+#ifdef __MACH__
-+#include <machine/endian.h>
-+#else
- #include <sys/endian.h>
-+#endif
- #include <sys/types.h>
- 
- #include <string.h>
-diff --git a/src/local-link.h b/src/local-link.h
-index d518dcf..84694a2 100644
---- a/src/local-link.h
-+++ b/src/local-link.h
-@@ -27,7 +27,11 @@
+diff --git c/src/local-link.h w/src/local-link.h
+index 0d4351a..fc520af 100644
+--- c/src/local-link.h
++++ w/src/local-link.h
+@@ -27,6 +27,11 @@
  #ifndef LIBBSD_LOCAL_LINK_H
  #define LIBBSD_LOCAL_LINK_H
  
 +#ifdef __MACH__
 +#define libbsd_link_warning(symbol, msg)
++#define libbsd_symver_default(alias, symbol, version)
++#define libbsd_symver_variant(alias, symbol, version)
 +#else
  #define libbsd_link_warning(symbol, msg) \
  	static const char libbsd_emit_link_warning_##symbol[] \
- 		__attribute__((used,section(".gnu.warning." #symbol))) = msg;
+ 		__attribute__((__used__,__section__(".gnu.warning." #symbol))) = msg;
+@@ -45,3 +50,4 @@
+ #endif
+ 
  #endif
 +#endif
-diff --git a/src/nlist.c b/src/nlist.c
-index 0932f59..4502048 100644
---- a/src/nlist.c
-+++ b/src/nlist.c
+diff --git c/src/nlist.c w/src/nlist.c
+index d22fa19..f41333f 100644
+--- c/src/nlist.c
++++ w/src/nlist.c
 @@ -41,6 +41,7 @@
  #include <unistd.h>
  #include <nlist.h>
@@ -201,16 +144,16 @@ index 0932f59..4502048 100644
 +#if !HAVE_NLIST_H
  #include "local-elf.h"
  
- #define SIZE_T_MAX 0xffffffffU
-@@ -265,3 +266,4 @@ nlist(const char *name, struct nlist *list)
+ #ifndef SIZE_T_MAX
+@@ -282,3 +283,4 @@ nlist(const char *name, struct nlist *list)
  	(void)close(fd);
  	return (n);
  }
 +#endif
-diff --git a/src/readpassphrase.c b/src/readpassphrase.c
+diff --git c/src/readpassphrase.c w/src/readpassphrase.c
 index f9f6195..2bc5fb4 100644
---- a/src/readpassphrase.c
-+++ b/src/readpassphrase.c
+--- c/src/readpassphrase.c
++++ w/src/readpassphrase.c
 @@ -36,6 +36,14 @@
  #define TCSASOFT 0
  #endif
@@ -226,13 +169,13 @@ index f9f6195..2bc5fb4 100644
  static volatile sig_atomic_t signo[_NSIG];
  
  static void handler(int);
-diff --git a/src/setproctitle.c b/src/setproctitle.c
-index 038ac7d..e9ee09c 100644
---- a/src/setproctitle.c
-+++ b/src/setproctitle.c
-@@ -32,6 +32,10 @@
- #include <unistd.h>
+diff --git c/src/setproctitle.c w/src/setproctitle.c
+index ff32aa3..51ed833 100644
+--- c/src/setproctitle.c
++++ w/src/setproctitle.c
+@@ -33,6 +33,10 @@
  #include <string.h>
+ #include "local-link.h"
  
 +#ifdef __MACH__
 +extern char **environ;
@@ -241,34 +184,20 @@ index 038ac7d..e9ee09c 100644
  static struct {
  	/* Original value. */
  	const char *arg0;
-@@ -280,16 +284,22 @@ setproctitle_impl(const char *fmt, ...)
- 		*++nul = '\0';
- 	}
- }
-+#ifndef __MACH__
- __asm__(".symver setproctitle_impl,setproctitle@@LIBBSD_0.5");
-+#endif
- 
- /* The original function introduced in 0.2 was a stub, it only got implemented
+@@ -287,7 +291,8 @@ libbsd_symver_default(setproctitle, setproctitle_impl, LIBBSD_0.5);
   * in 0.5, make the implementation available in the old version as an alias
   * for code linking against that version, and change the default to use the
   * new version, so that new code depends on the implemented version. */
 -#ifdef HAVE_TYPEOF
 +#ifdef __MACH__
-+void setproctitle_stub(const char *fmt, ...);
-+#elif HAVE_TYPEOF
- extern typeof(setproctitle_impl) setproctitle_stub __attribute__((alias("setproctitle_impl")));
- #else
- void setproctitle_stub(const char *fmt, ...)
- 	__attribute__((alias("setproctitle_impl")));
- #endif
-+#ifndef __MACH__
- __asm__(".symver setproctitle_stub,setproctitle@LIBBSD_0.2");
-+#endif
-diff --git a/src/strlcat.c b/src/strlcat.c
++#elif defined(HAVE_TYPEOF)
+ extern __typeof__(setproctitle_impl)
+ setproctitle_stub
+ 	__attribute__((__alias__("setproctitle_impl")));
+diff --git c/src/strlcat.c w/src/strlcat.c
 index 14c53a1..5961c17 100644
---- a/src/strlcat.c
-+++ b/src/strlcat.c
+--- c/src/strlcat.c
++++ w/src/strlcat.c
 @@ -26,6 +26,7 @@
   * Returns strlen(src) + MIN(dsize, strlen(initial dst)).
   * If retval >= dsize, truncation occurred.
@@ -282,10 +211,10 @@ index 14c53a1..5961c17 100644
  	return(dlen + (src - osrc));	/* count does not include NUL */
  }
 +#endif
-diff --git a/src/strlcpy.c b/src/strlcpy.c
+diff --git c/src/strlcpy.c w/src/strlcpy.c
 index e9a7fe4..5137acb 100644
---- a/src/strlcpy.c
-+++ b/src/strlcpy.c
+--- c/src/strlcpy.c
++++ w/src/strlcpy.c
 @@ -24,6 +24,7 @@
   * chars will be copied.  Always NUL terminates (unless dsize == 0).
   * Returns strlen(src); if retval >= dsize, truncation occurred.
@@ -299,10 +228,10 @@ index e9a7fe4..5137acb 100644
  	return(src - osrc - 1);	/* count does not include NUL */
  }
 +#endif
-diff --git a/src/strmode.c b/src/strmode.c
+diff --git c/src/strmode.c w/src/strmode.c
 index e6afde5..da680c9 100644
---- a/src/strmode.c
-+++ b/src/strmode.c
+--- c/src/strmode.c
++++ w/src/strmode.c
 @@ -32,6 +32,7 @@
  #include <sys/stat.h>
  #include <string.h>
@@ -316,46 +245,3 @@ index e6afde5..da680c9 100644
  	*p = '\0';
  }
 +#endif
-diff --git a/src/unvis.c b/src/unvis.c
-index 94e3e7a..fba4c66 100644
---- a/src/unvis.c
-+++ b/src/unvis.c
-@@ -565,11 +565,15 @@ strnunvis_openbsd(char *dst, const char *src, size_t dlen)
- {
- 	return strnunvisx(dst, dlen, src, 0);
- }
-+#ifndef __MACH__
- __asm__(".symver strnunvis_openbsd,strnunvis@@LIBBSD_0.2");
-+#endif
- 
- int
- strnunvis_netbsd(char *dst, size_t dlen, const char *src)
- {
- 	return strnunvisx(dst, dlen, src, 0);
- }
-+#ifndef __MACH__
- __asm__(".symver strnunvis_netbsd,strnunvis@LIBBSD_0.9.1");
-+#endif
-diff --git a/src/vis.c b/src/vis.c
-index c2cd2d8..2d84330 100644
---- a/src/vis.c
-+++ b/src/vis.c
-@@ -723,14 +723,18 @@ strnvis_openbsd(char *mbdst, const char *mbsrc, size_t dlen, int flags)
- {
- 	return istrsenvisxl(&mbdst, &dlen, mbsrc, flags, "", NULL);
- }
-+#ifndef __MACH__
- __asm__(".symver strnvis_openbsd,strnvis@@LIBBSD_0.2");
-+#endif
- 
- int
- strnvis_netbsd(char *mbdst, size_t dlen, const char *mbsrc, int flags)
- {
- 	return istrsenvisxl(&mbdst, &dlen, mbsrc, flags, "", NULL);
- }
-+#ifndef __MACH__
- __asm__(".symver strnvis_netbsd,strnvis@LIBBSD_0.9.1");
-+#endif
- 
- int
- stravis(char **mbdstp, const char *mbsrc, int flags)

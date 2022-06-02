@@ -1,38 +1,63 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, isPy3k
 , boto3
-, enum34
+, buildPythonPackage
+, fetchFromGitHub
 , jsonschema
+, mock
+, parameterized
+, pytestCheckHook
+, pythonOlder
+, pyyaml
 , six
 }:
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.10.0";
+  version = "1.42.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0axr4598b1h9kyb5mv104cpn5q667s0g1wkkbqzj66vrqsaa07qf";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "serverless-application-model";
+    rev = "v${version}";
+    sha256 = "sha256-pjcRsmxPL4lbgDopW+wKQRkRcqebLPTd95JTL8PiWtc=";
   };
-
-  # Tests are not included in the PyPI package
-  doCheck = false;
-
-  disabled = isPy3k;
 
   propagatedBuildInputs = [
     boto3
-    enum34
     jsonschema
     six
   ];
 
-  meta = {
-    homepage = https://github.com/awslabs/serverless-application-model;
+  postPatch = ''
+    substituteInPlace requirements/base.txt \
+      --replace "jsonschema~=3.2" "jsonschema>=3.2"
+    substituteInPlace pytest.ini \
+      --replace " --cov samtranslator --cov-report term-missing --cov-fail-under 95" ""
+  '';
+
+  checkInputs = [
+    mock
+    parameterized
+    pytestCheckHook
+    pyyaml
+  ];
+
+  disabledTests = [
+    # AssertionError: Expected 7 errors, found 9:
+    "test_errors_13_error_definitionuri"
+  ];
+
+  pythonImportsCheck = [
+    "samtranslator"
+  ];
+
+  meta = with lib; {
     description = "Python library to transform SAM templates into AWS CloudFormation templates";
-    license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.andreabedini ];
+    homepage = "https://github.com/awslabs/serverless-application-model";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ ];
   };
 }

@@ -23,6 +23,8 @@ in
         type = types.int;
         description = ''
           The port the server should listen on. Will use the server's default (2022) if not specified.
+
+          Make sure to open this port in the firewall if necessary.
         '';
       };
 
@@ -65,7 +67,7 @@ in
       eternal-terminal = {
         description = "Eternal Terminal server.";
         wantedBy = [ "multi-user.target" ];
-        after = [ "syslog.target" "network.target" ];
+        after = [ "network.target" ];
         serviceConfig = {
           Type = "forking";
           ExecStart = "${pkgs.eternal-terminal}/bin/etserver --daemon --cfgfile=${pkgs.writeText "et.cfg" ''
@@ -85,5 +87,9 @@ in
         };
       };
     };
+  };
+
+  meta = {
+    maintainers = with lib.maintainers; [ ];
   };
 }

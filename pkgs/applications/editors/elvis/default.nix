@@ -1,19 +1,22 @@
-{ fetchurl, fetchpatch, stdenv, ncurses }:
+{ fetchurl, fetchpatch, lib, stdenv, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "elvis-2.2_0";
+  pname = "elvis";
+  version = "2.2_0";
 
   src = fetchurl {
-    url = "http://www.the-little-red-haired-girl.org/pub/elvis/elvis-2.2_0.tar.gz";
+    url = "http://www.the-little-red-haired-girl.org/pub/elvis/elvis-${version}.tar.gz";
     sha256 = "182fj9qzyq6cjq1r849gpam6nq9smwv9f9xwaq84961p56r6d14s";
   };
 
   buildInputs = [ ncurses ];
 
-  patches = [ (fetchpatch {
-    url = "https://github.com/mbert/elvis/commit/076cf4ad5cc993be0c6195ec0d5d57e5ad8ac1eb.patch";
-    sha256 = "0yzkc1mxjwg09mfmrk20ksa0vfnb2x83ndybwvawq4xjm1qkcahc";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mbert/elvis/commit/076cf4ad5cc993be0c6195ec0d5d57e5ad8ac1eb.patch";
+      sha256 = "0yzkc1mxjwg09mfmrk20ksa0vfnb2x83ndybwvawq4xjm1qkcahc";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace configure \
@@ -39,8 +42,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--ioctl=termios" ];
 
   meta = {
-    homepage = http://elvis.vi-editor.org/;
+    homepage = "http://elvis.the-little-red-haired-girl.org/";
     description = "A vi clone for Unix and other operating systems";
-    license = stdenv.lib.licenses.free;
+    license = lib.licenses.free;
   };
 }

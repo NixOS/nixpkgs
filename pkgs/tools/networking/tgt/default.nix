@@ -1,19 +1,21 @@
-{ stdenv, fetchFromGitHub, libxslt, libaio, systemd, perl, perlPackages
-, docbook_xsl }:
+{ stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl
+, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
+}:
 
-let
-  version = "1.0.75";
-in stdenv.mkDerivation rec {
-  name = "tgt-${version}";
+stdenv.mkDerivation rec {
+  pname = "tgt";
+  version = "1.0.82";
 
   src = fetchFromGitHub {
     owner = "fujita";
-    repo = "tgt";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "008x7xz49fnqi91hw4nim4f25gp5qyjgzxfikmj7gz81mh4hhamj";
+    sha256 = "sha256-uVd1qPNBIqs9+pRnRP/Q8Z5sXpRdcwBejKjt0BJbXWA=";
   };
 
-  buildInputs = [ libxslt systemd libaio docbook_xsl ];
+  nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
+
+  buildInputs = [ systemd libaio ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -27,19 +29,31 @@ in stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's|/usr/bin/||' doc/Makefile
     sed -i 's|/usr/include/libaio.h|${libaio}/include/libaio.h|' usr/Makefile
-    sed -i 's|/usr/include/sys/|${stdenv.glibc.dev}/include/sys/|' usr/Makefile
-    sed -i 's|/usr/include/linux/|${stdenv.glibc.dev}/include/linux/|' usr/Makefile
+    sed -i 's|/usr/include/sys/|${stdenv.cc.libc.dev}/include/sys/|' usr/Makefile
+    sed -i 's|/usr/include/linux/|${stdenv.cc.libc.dev}/include/linux/|' usr/Makefile
   '';
 
   postInstall = ''
-    sed -i 's|#!/usr/bin/perl|#! ${perl}/bin/perl -I${perlPackages.ConfigGeneral}/${perl.libPrefix}|' $out/sbin/tgt-admin
+    substituteInPlace $out/sbin/tgt-admin \
+      --replace "#!/usr/bin/perl" "#! ${perl.withPackages (p: [ p.ConfigGeneral ])}/bin/perl"
+    wrapProgram $out/sbin/tgt-admin --prefix PATH : \
+      ${lib.makeBinPath [ lsof sg3_utils (placeholder "out") ]}
+
+    install -D scripts/tgtd.service $out/etc/systemd/system/tgtd.service
+    substituteInPlace $out/etc/systemd/system/tgtd.service \
+      --replace "/usr/sbin/tgt" "$out/bin/tgt"
+
+    # See https://bugzilla.redhat.com/show_bug.cgi?id=848942
+    sed -i '/ExecStart=/a ExecStartPost=${coreutils}/bin/sleep 5' $out/etc/systemd/system/tgtd.service
   '';
 
   enableParallelBuilding = true;
 
-  meta = {
-    description = "iSCSI Target daemon with rdma support";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+  meta = with lib; {
+    description = "iSCSI Target daemon with RDMA support";
+    homepage = "https://github.com/fujita/tgt";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ johnazoidberg ];
   };
 }

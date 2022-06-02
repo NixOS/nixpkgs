@@ -1,40 +1,66 @@
-{ stdenv, fetchurl, buildPythonPackage, pkgconfig, glib, gobject-introspection,
-pycairo, cairo, which, ncurses, meson, ninja, isPy3k, gnome3 }:
+{ lib
+, stdenv
+, fetchurl
+, buildPythonPackage
+, pkg-config
+, glib
+, gobject-introspection
+, pycairo
+, cairo
+, ncurses
+, meson
+, ninja
+, isPy3k
+, gnome
+}:
 
 buildPythonPackage rec {
   pname = "pygobject";
-  version = "3.30.4";
+  version = "3.42.1";
+
+  outputs = [ "out" "dev" ];
+
+  disabled = !isPy3k;
 
   format = "other";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hscyvr6hh8l90fyz97b9d03506g3r8s5hl1bgk5aadq8jja3h9d";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "HzS192JN415E61p+tCg1MoW9AwBNVRMaX39/qbkPPMk=";
   };
 
-  outputs = [ "out" "dev" ];
-
-  mesonFlags = [
-    "-Dpython=python${if isPy3k then "3" else "2" }"
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    gobject-introspection
   ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja gobject-introspection ];
-  buildInputs = [ glib gobject-introspection ]
-                 ++ stdenv.lib.optionals stdenv.isDarwin [ which ncurses ];
-  propagatedBuildInputs = [ pycairo cairo ];
+  buildInputs = [
+    glib
+    gobject-introspection
+  ] ++ lib.optionals stdenv.isDarwin [
+    ncurses
+  ];
+
+  propagatedBuildInputs = [
+    pycairo
+    cairo
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       attrPath = "python3.pkgs.${pname}3";
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://pygobject.readthedocs.io/;
+  meta = with lib; {
+    homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for Glib";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ jtojnar ];
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

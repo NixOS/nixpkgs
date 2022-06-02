@@ -5,6 +5,21 @@ with lib;
 let
   cfg = config.services.sshguard;
 
+  configFile = let
+    args = lib.concatStringsSep " " ([
+      "-afb"
+      "-p info"
+      "-o cat"
+      "-n1"
+    ] ++ (map (name: "-t ${escapeShellArg name}") cfg.services));
+    backend = if config.networking.nftables.enable
+      then "sshg-fw-nft-sets"
+      else "sshg-fw-ipset";
+  in pkgs.writeText "sshguard.conf" ''
+    BACKEND="${pkgs.sshguard}/libexec/${backend}"
+    LOGREADER="LANG=C ${config.systemd.package}/bin/journalctl ${args}"
+  '';
+
 in {
 
   ###### interface
@@ -85,17 +100,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.etc."sshguard.conf".text = let
-      args = lib.concatStringsSep " " ([
-        "-afb"
-        "-p info"
-        "-o cat"
-        "-n1"
-      ] ++ (map (name: "-t ${escapeShellArg name}") cfg.services));
-    in ''
-      BACKEND="${pkgs.sshguard}/libexec/sshg-fw-ipset"
-      LOGREADER="LANG=C ${pkgs.systemd}/bin/journalctl ${args}"
-    '';
+    environment.etc."sshguard.conf".source = configFile;
 
     systemd.services.sshguard = {
       description = "SSHGuard brute-force attacks protection system";
@@ -104,18 +109,32 @@ in {
       after = [ "network.target" ];
       partOf = optional config.networking.firewall.enable "firewall.service";
 
-      path = with pkgs; [ iptables ipset iproute systemd ];
+      restartTriggers = [ configFile ];
 
-      postStart = ''
-        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:ip family inet
-        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:ip family inet6
+      path = with pkgs; if config.networking.nftables.enable
+        then [ nftables iproute2 systemd ]
+        else [ iptables ipset iproute2 systemd ];
+
+      # The sshguard ipsets must exist before we invoke
+      # iptables. sshguard creates the ipsets after startup if
+      # necessary, but if we let sshguard do it, we can't reliably add
+      # the iptables rules because postStart races with the creation
+      # of the ipsets. So instead, we create both the ipsets and
+      # firewall rules before sshguard starts.
+      preStart = optionalString config.networking.firewall.enable ''
+        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:net family inet
         ${pkgs.iptables}/bin/iptables  -I INPUT -m set --match-set sshguard4 src -j DROP
+      '' + optionalString (config.networking.firewall.enable && config.networking.enableIPv6) ''
+        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:net family inet6
         ${pkgs.iptables}/bin/ip6tables -I INPUT -m set --match-set sshguard6 src -j DROP
       '';
 
-      preStop = ''
+      postStop = optionalString config.networking.firewall.enable ''
         ${pkgs.iptables}/bin/iptables  -D INPUT -m set --match-set sshguard4 src -j DROP
+        ${pkgs.ipset}/bin/ipset -quiet destroy sshguard4
+      '' + optionalString (config.networking.firewall.enable && config.networking.enableIPv6) ''
         ${pkgs.iptables}/bin/ip6tables -D INPUT -m set --match-set sshguard6 src -j DROP
+        ${pkgs.ipset}/bin/ipset -quiet destroy sshguard6
       '';
 
       unitConfig.Documentation = "man:sshguard(8)";

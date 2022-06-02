@@ -5,8 +5,10 @@
 }:
 
 mkDerivation {
-  name = "kruler";
+  pname = "kruler";
   meta = {
+    homepage = "https://apps.kde.org/kruler/";
+    description = "Screen ruler";
     license = with lib.licenses; [ gpl2 ];
     maintainers = [ lib.maintainers.vandenoever ];
   };

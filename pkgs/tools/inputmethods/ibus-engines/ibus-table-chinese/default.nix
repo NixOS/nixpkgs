@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchFromGitHub, pkgconfig,  ibus, ibus-table, python3, cmake }:
+{ lib, stdenv, fetchgit, fetchFromGitHub, pkg-config, ibus, ibus-table, python3, cmake }:
 
 let
   src = fetchFromGitHub {
@@ -13,8 +13,8 @@ let
     rev = "7d5297759aef4cd086bdfa30cf6d4b2ad9446992";
     sha256 = "0mx9jvxpiva9v2ffaqlyny48iqr073h84yw8ln43z2avv11ipr7n";
   };
-in stdenv.mkDerivation rec {
-  name = "ibus-table-chinese-${version}";
+in stdenv.mkDerivation {
+  pname = "ibus-table-chinese";
   version = "1.8.2";
 
   srcs = [ src cmakeFedoraSrc ];
@@ -51,12 +51,13 @@ in stdenv.mkDerivation rec {
     rm -rf $HOME
   '';
 
-  buildInputs = [ pkgconfig ibus ibus-table python3 cmake ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ ibus ibus-table python3 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description  = "Chinese tables for IBus-Table";
-    homepage     = https://github.com/definite/ibus-table-chinese;
+    homepage     = "https://github.com/definite/ibus-table-chinese";
     license      = licenses.gpl3;
     platforms    = platforms.linux;
     maintainers  = with maintainers; [ pneumaticat ];

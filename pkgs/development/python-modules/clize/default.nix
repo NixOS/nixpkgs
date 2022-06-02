@@ -1,34 +1,38 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, dateutil
+
+# propagtes
 , sigtools
 , six
 , attrs
 , od
 , docutils
-, repeated_test
-, unittest2
+
+# extras: datetime
+, python-dateutil
+
+# tests
 , pygments
+, unittest2
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "clize";
-  version = "4.0.3";
+  version = "4.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dbcfba5571dc30aaf90dc98fc279e2aab69d0f8f3665fc0394fbc10a87a2be60";
+    sha256 = "3177a028e4169d8865c79af82bdd441b24311d4bd9c0ae8803641882d340a51d";
   };
 
-  checkInputs = [ 
-    dateutil
-    pygments
-    repeated_test
-    unittest2
-  ];
-  
-  propagatedBuildInputs = [ 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "docutils ~= 0.17.0" "docutils"
+  '';
+
+  propagatedBuildInputs = [
     attrs
     docutils
     od
@@ -36,10 +40,28 @@ buildPythonPackage rec {
     six
   ];
 
-  meta = with stdenv.lib; {
+  passthru.optional-dependencies = {
+    datetime = [
+      python-dateutil
+    ];
+  };
+
+  # repeated_test no longer exists in nixpkgs
+  # also see: https://github.com/epsy/clize/issues/74
+  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    python-dateutil
+    pygments
+    unittest2
+  ];
+
+  pythonImportsCheck = [ "clize" ];
+
+  meta = with lib; {
     description = "Command-line argument parsing for Python";
     homepage = "https://github.com/epsy/clize";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

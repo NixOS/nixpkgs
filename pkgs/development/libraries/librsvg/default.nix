@@ -1,45 +1,99 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintl, darwin, rust, gnome3
-, withGTK ? false, gtk3 ? null
-, vala, gobject-introspection }:
+{ lib
+, stdenv
+, fetchurl
+, pkg-config
+, glib
+, gdk-pixbuf
+, pango
+, cairo
+, libxml2
+, bzip2
+, libintl
+, ApplicationServices
+, Foundation
+, libobjc
+, rustPlatform
+, rustc
+, rust
+, cargo
+, gi-docgen
+, python3Packages
+, gnome
+, vala
+, withIntrospection ? stdenv.hostPlatform == stdenv.buildPlatform
+, gobject-introspection
+, nixosTests
+}:
 
-let
-  pname = "librsvg";
-  version = "2.44.12";
-in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "librsvg";
+  version = "2.54.1";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1h3qnqhr0l7pd2bxg69ki6ckl4srdwgr471dpp4jq9i4784hp0v6";
-  };
-
-  outputs = [ "out" "dev" "installedTests" ];
-
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintl ];
-
-  propagatedBuildInputs = [ glib gdk_pixbuf cairo ] ++ lib.optional withGTK gtk3;
-
-  nativeBuildInputs = [ pkgconfig rust.rustc rust.cargo vala gobject-introspection ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      ApplicationServices
-    ]);
-
-  configureFlags = [
-    "--enable-introspection"
-    "--enable-vala"
-    "--enable-installed-tests"
-    "--enable-always-build-tests"
-  ] ++ stdenv.lib.optional stdenv.isDarwin "--disable-Bsymbolic";
-
-  makeFlags = [
-    "installed_test_metadir=$(installedTests)/share/installed-tests/RSVG"
-    "installed_testdir=$(installedTests)/libexec/installed-tests/RSVG"
+  outputs = [ "out" "dev" "installedTests" ] ++ lib.optionals withIntrospection [
+    "devdoc"
   ];
 
-  NIX_CFLAGS_COMPILE
-    = stdenv.lib.optionalString stdenv.isDarwin "-I${cairo.dev}/include/cairo";
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1VV++9zEFaQYDhEWt/c2y3EbJT0RDZX6huyDD3ACZiU=";
+  };
+
+  cargoVendorDir = "vendor";
+
+  strictDeps = true;
+
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [
+    gdk-pixbuf
+    pkg-config
+    rustc
+    cargo
+    python3Packages.docutils
+    vala
+    rustPlatform.cargoSetupHook
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gi-docgen
+  ];
+
+  buildInputs = [
+    libxml2
+    bzip2
+    pango
+    libintl
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ] ++ lib.optionals stdenv.isDarwin [
+    ApplicationServices
+    Foundation
+    libobjc
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gdk-pixbuf
+    cairo
+  ];
+
+  configureFlags = [
+    (lib.enableFeature withIntrospection "introspection")
+
+    # Vapi does not build on MacOS.
+    # https://github.com/NixOS/nixpkgs/pull/117081#issuecomment-827782004
+    (lib.enableFeature (withIntrospection && !stdenv.isDarwin) "vala")
+
+    "--enable-installed-tests"
+    "--enable-always-build-tests"
+  ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
+    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${rust.toRustTarget stdenv.hostPlatform}";
+
+  makeFlags = [
+    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/RSVG"
+    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/RSVG"
+  ];
+
+  doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the
@@ -57,30 +111,42 @@ stdenv.mkDerivation rec {
          -i gdk-pixbuf-loader/Makefile
 
     # Fix thumbnailer path
-    sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk_pixbuf}/bin\1#g" \
+    sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk-pixbuf}/bin\1#g" \
         -i gdk-pixbuf-loader/librsvg.thumbnailer.in
+
+    # 'error: linker `cc` not found' when cross-compiling
+    export RUSTFLAGS="-Clinker=$CC"
   '';
 
-  doCheck = false; # fails 20 of 145 tests, very likely to be buggy
+  # Not generated when cross compiling.
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    # Merge gdkpixbuf and librsvg loaders
+    cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
+    mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
+  '';
 
-  # Merge gdkpixbuf and librsvg loaders
-  postInstall = ''
-    mv $GDK_PIXBUF/loaders.cache $GDK_PIXBUF/loaders.cache.tmp
-    cat ${gdk_pixbuf.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache.tmp > $GDK_PIXBUF/loaders.cache
-    rm $GDK_PIXBUF/loaders.cache.tmp
+  postFixup = lib.optionalString withIntrospection ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
+    };
+
+    tests = {
+      installedTests = nixosTests.installed-tests.librsvg;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small library to render SVG images to Cairo surfaces";
-    homepage = https://wiki.gnome.org/Projects/LibRsvg;
+    homepage = "https://wiki.gnome.org/Projects/LibRsvg";
     license = licenses.lgpl2Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
+    mainProgram = "rsvg-convert";
     platforms = platforms.unix;
   };
 }

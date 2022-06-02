@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation rec{
-  name = "zimg-${version}";
-  version = "2.8";
+stdenv.mkDerivation rec {
+  pname = "zimg";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner  = "sekrit-twc";
     repo   = "zimg";
     rev    = "release-${version}";
-    sha256 = "0s4n1swg1hgv81l8hvf0ny0fn305vf6l6dakbj452304p6ihxd83";
+    sha256 = "1069x49l7kh1mqcq1h3f0m5j0h832jp5x230bh4c613ymgg5kn00";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Scaling, colorspace conversion and dithering library";
-    homepage    = https://github.com/sekrit-twc/zimg;
+    homepage    = "https://github.com/sekrit-twc/zimg";
     license     = licenses.wtfpl;
     platforms   = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ rnhmjoj ];

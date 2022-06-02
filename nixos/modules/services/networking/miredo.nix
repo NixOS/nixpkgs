@@ -20,12 +20,12 @@ in
 
     services.miredo = {
 
-      enable = mkEnableOption "the Miredo IPv6 tunneling service.";
+      enable = mkEnableOption "the Miredo IPv6 tunneling service";
 
       package = mkOption {
         type = types.package;
         default = pkgs.miredo;
-        defaultText = "pkgs.miredo";
+        defaultText = literalExpression "pkgs.miredo";
         description = ''
           The package to use for the miredo daemon's binary.
         '';

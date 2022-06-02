@@ -1,25 +1,36 @@
-{ stdenv, autoreconfHook, pkgconfig, SDL2, SDL2_mixer, SDL2_net, fetchurl }:
+{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "crispy-doom-5.5.1";
-  src = fetchurl {
-    url = "https://github.com/fabiangreffrath/crispy-doom/archive/${name}.tar.gz";
-    sha256 = "0qnqyyjnclmwls34m7nk8lpvpaffdmhxshlarsiggcsn9py96kns";
+  pname = "crispy-doom";
+  version = "5.11.1";
+
+  src = fetchFromGitHub {
+    owner = "fabiangreffrath";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "sha256-2Sjl9XO01ko0BwbFQSFv9mNoetyMa8Dxx17y0JmlLS0=";
   };
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ SDL2 SDL2_mixer SDL2_net ];
-  patchPhase = ''
+
+  postPatch = ''
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
+    for script in $(grep -lr '^#!/usr/bin/env python3$'); do patchShebangs $script; done
   '';
 
+  nativeBuildInputs = [ autoreconfHook pkg-config python3 ];
+  buildInputs = [ SDL2 SDL2_mixer SDL2_net ];
   enableParallelBuilding = true;
 
+  strictDeps = true;
+
   meta = {
-    homepage = http://fabiangreffrath.github.io/crispy-doom;
+    homepage = "http://fabiangreffrath.github.io/crispy-doom";
     description = "A limit-removing enhanced-resolution Doom source port based on Chocolate Doom";
-    longDescription = "Crispy Doom is a limit-removing enhanced-resolution Doom source port based on Chocolate Doom. Its name means that 640x400 looks \"crisp\" and is also a slight reference to its origin.";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ neonfuz ];
+    longDescription = ''
+      Crispy Doom is a limit-removing enhanced-resolution Doom source port based on Chocolate Doom.
+      Its name means that 640x400 looks \"crisp\" and is also a slight reference to its origin.
+    '';
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ neonfuz ];
   };
 }

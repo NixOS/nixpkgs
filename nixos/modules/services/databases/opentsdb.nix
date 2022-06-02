@@ -26,15 +26,14 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.opentsdb;
-        defaultText = "pkgs.opentsdb";
-        example = literalExample "pkgs.opentsdb";
+        defaultText = literalExpression "pkgs.opentsdb";
         description = ''
           OpenTSDB package to use.
         '';
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "opentsdb";
         description = ''
           User account under which OpenTSDB runs.
@@ -42,7 +41,7 @@ in {
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "opentsdb";
         description = ''
           Group account under which OpenTSDB runs.

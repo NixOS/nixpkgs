@@ -1,12 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, zlib, pcre, xorg, libjpeg, libtiff, libpng, gtk2, libpaper, makeWrapper, ghostscript }:
+{ lib, stdenv, fetchurl, pkg-config, zlib, pcre, xorg, libjpeg, libtiff, libpng, gtk2, libpaper, makeWrapper, ghostscript }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "ted";
   version = "2.23";
 
   src = fetchurl {
-    url = "http://ftp.nluug.nl/pub/editors/${pname}/${name}.src.tar.gz";
+    url = "http://ftp.nluug.nl/pub/editors/${pname}/${pname}-${version}.src.tar.gz";
     sha256 = "0v1ipynyjklb3chd1vq26a21sjjg66sir57gi2kkrbwnpk195a9z";
   };
 
@@ -50,7 +49,7 @@ stdenv.mkDerivation rec {
     pushd $out/share/Ted/examples
     for f in rtf2*.sh
     do
-        makeWrapper "$PWD/$f" "$out/bin/$f" --prefix PATH : $out/bin:${stdenv.lib.makeBinPath [ ghostscript ]}
+        makeWrapper "$PWD/$f" "$out/bin/$f" --prefix PATH : $out/bin:${lib.makeBinPath [ ghostscript ]}
     done
     popd
 
@@ -59,10 +58,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  buildInputs = [ pkgconfig zlib pcre xorg.xlibsWrapper xorg.libXpm libjpeg libtiff libpng gtk2 libpaper makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
+  buildInputs = [ zlib pcre xorg.xlibsWrapper xorg.libXpm libjpeg libtiff libpng gtk2 libpaper ];
 
-  meta = with stdenv.lib; {
-    description = "Ted, an easy rich text processor";
+  meta = with lib; {
+    description = "An easy rich text processor";
     longDescription = ''
       Ted is a text processor running under X Windows on Unix/Linux systems.
       Ted was developed as a standard easy light weight word processor, having
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       MS-Word. Additionally, Ted also is an RTF to PostScript and an RTF to
       Acrobat PDF converter.
     '';
-    homepage    = https://nllgg.nl/Ted/;
+    homepage    = "https://nllgg.nl/Ted/";
     license     = licenses.gpl2;
     platforms   = platforms.all;
     broken      = stdenv.isDarwin;

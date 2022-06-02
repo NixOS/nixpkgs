@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
-stdenv.mkDerivation {
-  name = "ocamlify-0.0.2";
+stdenv.mkDerivation rec {
+  pname = "ocamlify";
+  version = "0.0.2";
 
   src = fetchurl {
-    url = http://forge.ocamlcore.org/frs/download.php/1209/ocamlify-0.0.2.tar.gz;
+    url = "https://forge.ocamlcore.org/frs/download.php/1209/${pname}-${version}.tar.gz";
     sha256 = "1f0fghvlbfryf5h3j4as7vcqrgfjb4c8abl5y0y5h069vs4kp5ii";
   };
 
@@ -24,12 +25,12 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   meta = {
-    homepage = http://forge.ocamlcore.org/projects/ocamlmod/ocamlmod;
+    homepage = "https://forge.ocamlcore.org/projects/ocamlmod/ocamlmod";
     description = "Generate OCaml modules from source files";
     platforms = ocaml.meta.platforms or [];
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [
-      z77z
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [
+      maggesi
     ];
   };
 }

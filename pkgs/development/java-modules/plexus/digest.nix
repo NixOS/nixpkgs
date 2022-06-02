@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   plexusDigest_1_0 = map (obj: fetchMaven {
     version = "1.0";
     artifactId = "plexus-digest";

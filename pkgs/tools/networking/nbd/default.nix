@@ -1,35 +1,38 @@
-{ stdenv, fetchurl, pkgconfig, glib, which }:
+{ lib, stdenv, fetchurl, pkg-config, glib, which, bison, nixosTests, linuxHeaders }:
 
 stdenv.mkDerivation rec {
-  name = "nbd-3.19";
+  pname = "nbd";
+  version = "3.24";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nbd/${name}.tar.xz";
-    sha256 = "1446rdg490fxd8mg5gvrf4nddbw1w7lf2daxy9cpc19yy4968iml";
+    url = "mirror://sourceforge/nbd/nbd-${version}.tar.xz";
+    sha256 = "sha256-aHcVbSOnsz917uidL1wskcVCr8PNy2Nt6lqIU5pY0Qw=";
   };
 
-  buildInputs = [ glib ]
-    ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.linuxHeaders;
+  buildInputs = [ glib linuxHeaders ];
 
-  nativeBuildInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkg-config which bison ];
 
   postInstall = ''
-    mkdir -p "$out/share/doc/${name}"
-    cp README.md "$out/share/doc/${name}/"
+    mkdir -p "$out/share/doc/nbd-${version}"
+    cp README.md "$out/share/doc/nbd-${version}/"
   '';
 
   doCheck = true;
 
+  passthru.tests = {
+    test = nixosTests.nbd;
+  };
+
   # Glib calls `clock_gettime', which is in librt. Linking that library
   # here ensures that a proper rpath is added to the executable so that
   # it can be loaded at run-time.
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lrt -lpthread";
+  NIX_LDFLAGS = lib.optionalString stdenv.isLinux "-lrt -lpthread";
 
   meta = {
-    homepage = http://nbd.sourceforge.net;
+    homepage = "http://nbd.sourceforge.net";
     description = "Map arbitrary files as block devices over the network";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.peti ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

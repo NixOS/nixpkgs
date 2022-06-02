@@ -1,57 +1,113 @@
-{ stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib,
-  python3, readline, udev, libical, systemd,
-  enableWiimote ? false, enableMidi ? false, enableSixaxis ? false }:
-
-stdenv.mkDerivation rec {
-  name = "bluez-5.50";
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, alsa-lib
+, dbus
+, ell
+, glib
+, json_c
+, libical
+, docutils
+, pkg-config
+, python3
+, readline
+, systemd
+, udev
+, withExperimental ? false
+}: let
+  pythonPath = with python3.pkgs; [
+    dbus-python
+    pygobject3
+    recursivePthLoader
+  ];
+in stdenv.mkDerivation rec {
+  pname = "bluez";
+  version = "5.64";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "048r91vx9gs5nwwbah2s0xig04nwk14c5s0vb7qmaqdvighsmz2z";
+    url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
+    sha256 = "sha256-rkN+ZbazBwwZi8WwEJ/pzeueqjhzgOIHL53mX+ih3jQ=";
   };
 
-  pythonPath = with python3.pkgs; [
-    dbus-python pygobject2 pygobject3 recursivePthLoader
-  ];
-
   buildInputs = [
-    dbus glib alsaLib python3 python3.pkgs.wrapPython
-    readline udev libical
+    alsa-lib
+    dbus
+    ell
+    glib
+    json_c
+    libical
+    python3
+    readline
+    udev
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    docutils
+    pkg-config
+    python3.pkgs.wrapPython
+  ];
 
-  outputs = [ "out" "dev" "test" ];
+  outputs = [ "out" "dev" ] ++ lib.optional doCheck "test";
 
-  patches = [ ./bluez-5.37-obexd_without_systemd-1.patch ];
+  patches = [
+    # https://github.com/bluez/bluez/commit/0905a06410d4a5189f0be81e25eb3c3e8a2199c5
+    # which fixes https://github.com/bluez/bluez/issues/329
+    # and is already merged upstream and not yet in a release.
+    (fetchpatch {
+      name = "StateDirectory_and_ConfigurationDirectory.patch";
+      url = "https://github.com/bluez/bluez/commit/0905a06410d4a5189f0be81e25eb3c3e8a2199c5.patch";
+      sha256 = "sha256-MI6yPTiDLHsSTjLvNqtWnuy2xUMYpSat1WhMbeoedSM=";
+    })
+  ];
 
-  postConfigure = ''
+  postPatch = ''
     substituteInPlace tools/hid2hci.rules \
       --replace /sbin/udevadm ${systemd}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
+    # Disable some tests:
+    # - test-mesh-crypto depends on the following kernel settings:
+    #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
+    if [[ ! -f unit/test-mesh-crypto.c ]]; then echo "unit/test-mesh-crypto.c no longer exists"; false; fi
+    echo 'int main() { return 77; }' > unit/test-mesh-crypto.c
   '';
 
-  configureFlags = (with stdenv.lib; [
+  configureFlags = [
     "--localstatedir=/var"
     "--enable-library"
     "--enable-cups"
     "--enable-pie"
-    "--with-dbusconfdir=$(out)/etc"
-    "--with-dbussystembusdir=$(out)/share/dbus-1/system-services"
-    "--with-dbussessionbusdir=$(out)/share/dbus-1/services"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    "--with-systemduserunitdir=$(out)/etc/systemd/user"
-    "--with-udevdir=$(out)/lib/udev"
-    ] ++ optional enableWiimote [ "--enable-wiimote" ]
-      ++ optional enableMidi    [ "--enable-midi" ]
-      ++ optional enableSixaxis [ "--enable-sixaxis" ]);
+    "--enable-external-ell"
+    "--with-dbusconfdir=${placeholder "out"}/share"
+    "--with-dbussystembusdir=${placeholder "out"}/share/dbus-1/system-services"
+    "--with-dbussessionbusdir=${placeholder "out"}/share/dbus-1/services"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
+    "--with-udevdir=${placeholder "out"}/lib/udev"
+    "--enable-health"
+    "--enable-mesh"
+    "--enable-midi"
+    "--enable-nfc"
+    "--enable-sap"
+    "--enable-sixaxis"
+    "--enable-btpclient"
+    "--enable-hid2hci"
+    "--enable-logger"
+
+    # To provide ciptool, sdptool, and rfcomm (unmaintained)
+    # superseded by new D-Bus APIs
+    "--enable-deprecated"
+  ] ++ lib.optional withExperimental "--enable-experimental";
+
 
   # Work around `make install' trying to create /var/lib/bluetooth.
-  installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
+  installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];
 
-  makeFlags = "rulesdir=$(out)/lib/udev/rules.d";
+  makeFlags = [ "rulesdir=${placeholder "out"}/lib/udev/rules.d" ];
 
-  postInstall = ''
+  doCheck = stdenv.hostPlatform.isx86_64;
+
+  postInstall = lib.optionalString doCheck ''
     mkdir -p $test/{bin,test}
     cp -a test $test
     pushd $test/test
@@ -66,8 +122,8 @@ stdenv.mkDerivation rec {
       ln -s ../test/$a $test/bin/bluez-$a
     done
     popd
-    wrapPythonProgramsIn $test/test "$test/test $pythonPath"
-
+    wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
+  '' + ''
     # for bluez4 compatibility for NixOS
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
@@ -82,15 +138,15 @@ stdenv.mkDerivation rec {
       filename=$(basename $files)
       install -Dm755 tools/$filename $out/bin/$filename
     done
+    install -Dm755 attrib/gatttool $out/bin/gatttool
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bluetooth support for Linux";
-    homepage = http://www.bluez.org/;
+    homepage = "http://www.bluez.org/";
     license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.linux;
-    repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;
   };
 }

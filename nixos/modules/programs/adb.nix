@@ -23,7 +23,7 @@ with lib;
   ###### implementation
   config = mkIf config.programs.adb.enable {
     services.udev.packages = [ pkgs.android-udev-rules ];
-    environment.systemPackages = [ pkgs.androidenv.androidPkgs_9_0.platform-tools ];
+    environment.systemPackages = [ pkgs.android-tools ];
     users.groups.adbusers = {};
   };
 }

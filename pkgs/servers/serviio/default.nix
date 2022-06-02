@@ -1,23 +1,21 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "serviio-${version}";
-  version = "1.9";
+  pname = "serviio";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "http://download.serviio.org/releases/${name}-linux.tar.gz";
-    sha256 = "0vi9dwpdrk087gpi0xib0hwpvdmaf9g99nfdfx2r3wmmdzw7wysl";
+    url = "http://download.serviio.org/releases/${pname}-${version}-linux.tar.gz";
+    sha256 = "sha256-uRRWKMv4f2b1yIE9OnXDIZAmcoqw/8F0z1LOesQBsyQ=";
   };
-
-  phases = ["unpackPhase" "installPhase"];
 
   installPhase = ''
     mkdir -p $out
     cp -R config legal lib library plugins LICENCE.txt NOTICE.txt README.txt RELEASE_NOTES.txt $out
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://serviio.org;
+  meta = with lib; {
+    homepage = "https://serviio.org";
     description = "UPnP Media Streaming Server";
     longDescription = ''
       Serviio is a free media server. It allows you to stream your media files (music, video or images)

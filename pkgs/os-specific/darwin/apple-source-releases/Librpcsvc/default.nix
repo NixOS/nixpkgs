@@ -1,6 +1,6 @@
-{ stdenv, appleDerivation, developer_cmds }:
+{ lib, appleDerivation, developer_cmds }:
 
-appleDerivation rec {
+appleDerivation {
   buildInputs = [ developer_cmds ];
 
   installPhase = ''
@@ -14,7 +14,7 @@ appleDerivation rec {
     rmdir $out/usr/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     maintainers = with maintainers; [ matthewbauer ];
     platforms   = platforms.darwin;
     license     = licenses.apsl20;

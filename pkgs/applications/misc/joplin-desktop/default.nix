@@ -1,30 +1,31 @@
-{ stdenv, appimage-run, fetchurl }:
+{ lib, stdenv, appimageTools, fetchurl, undmg }:
 
 let
-  version = "1.0.140";
-  sha256 = "1114v141jayqhvkkxf7dr864j09nf5nz002c7z0pprzr00fifqzx";
-in
-  stdenv.mkDerivation rec {
-  name = "joplin-${version}";
+  pname = "joplin-desktop";
+  version = "2.7.15";
+  name = "${pname}-${version}";
+
+  inherit (stdenv.hostPlatform) system;
+  throwSystem = throw "Unsupported system: ${system}";
+
+  suffix = {
+    x86_64-linux = "AppImage";
+    x86_64-darwin = "dmg";
+  }.${system} or throwSystem;
 
   src = fetchurl {
-    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}-x86_64.AppImage";
-    inherit sha256;
+    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
+    sha256 = {
+      x86_64-linux = "sha256-PtfDH2W8wolqa10BoI9hazcj+1bszlnpt+D+sbzSRts=";
+      x86_64-darwin = "sha256-CPD/2x5FxHL9CsYz9EZJX5SYiFGz7/fjntOlDMKHYEA=";
+    }.${system} or throwSystem;
   };
 
-  buildInputs = [ appimage-run ];
+  appimageContents = appimageTools.extractType2 {
+    inherit name src;
+  };
 
-  unpackPhase = ":";
-
-  installPhase = ''
-    mkdir -p $out/{bin,share}
-    cp $src $out/share/joplin.AppImage
-    echo "#!/bin/sh" > $out/bin/joplin-desktop
-    echo "${appimage-run}/bin/appimage-run $out/share/joplin.AppImage" >> $out/bin/joplin-desktop
-    chmod +x $out/bin/joplin-desktop $out/share/joplin.AppImage
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source note taking and to-do application with synchronisation capabilities";
     longDescription = ''
       Joplin is a free, open source note taking and to-do application, which can
@@ -33,9 +34,44 @@ in
       applications directly or from your own text editor. The notes are in
       Markdown format.
     '';
-    homepage = https://joplin.cozic.net/;
+    homepage = "https://joplinapp.org";
     license = licenses.mit;
-    maintainers = with maintainers; [ rafaelgg raquelgb ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ hugoreeves ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
-}
+
+  linux = appimageTools.wrapType2 rec {
+    inherit name src meta;
+
+    profile = ''
+      export LC_ALL=C.UTF-8
+    '';
+
+    multiPkgs = null; # no 32bit needed
+    extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
+    extraInstallCommands = ''
+      mv $out/bin/{${name},${pname}}
+      install -Dm444 ${appimageContents}/@joplinapp-desktop.desktop -t $out/share/applications
+      install -Dm444 ${appimageContents}/@joplinapp-desktop.png -t $out/share/pixmaps
+      substituteInPlace $out/share/applications/@joplinapp-desktop.desktop \
+        --replace 'Exec=AppRun' 'Exec=${pname}' \
+        --replace 'Icon=joplin' "Icon=$out/share/pixmaps/@joplinapp-desktop.png"
+    '';
+  };
+
+  darwin = stdenv.mkDerivation {
+    inherit name src meta;
+
+    nativeBuildInputs = [ undmg ];
+
+    sourceRoot = "Joplin.app";
+
+    installPhase = ''
+      mkdir -p $out/Applications/Joplin.app
+      cp -R . $out/Applications/Joplin.app
+    '';
+  };
+in
+if stdenv.isDarwin
+then darwin
+else linux

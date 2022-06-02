@@ -1,32 +1,40 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
+, py
 , pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-forked";
-  version = "1.0.2";
+  version = "1.4.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d352aaced2ebd54d42a65825722cb433004b4446ab5d2044851d9cc7a00c9e38";
+    sha256 = "sha256-i2dYfI+Yy7rf3YBFOe1UVbbtA4AiA0hd0vU8FCLXRA4=";
   };
 
-  buildInputs = [ pytest setuptools_scm ];
+  nativeBuildInputs = [ setuptools-scm ];
 
-  # Do not function
-  doCheck = false;
+  buildInputs = [
+    pytest
+  ];
 
-  checkPhase = ''
-    py.test testing
-  '';
+  propagatedBuildInputs = [
+    py
+  ];
+
+  checkInputs = [ pytestCheckHook ];
 
   meta = {
     description = "Run tests in isolated forked subprocesses";
-    homepage = https://github.com/pytest-dev/pytest-forked;
+    homepage = "https://github.com/pytest-dev/pytest-forked";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
-
 }

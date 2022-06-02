@@ -1,19 +1,20 @@
-{ stdenv, fetchFromGitHub, icmake
+{ lib, stdenv, fetchFromGitLab, icmake
 , libmilter, libX11, openssl, readline
-, utillinux, yodl }:
+, util-linux, yodl }:
 
 stdenv.mkDerivation rec {
-  name = "bobcat-${version}";
-  version = "4.08.03";
+  pname = "bobcat";
+  version = "5.09.01";
 
-  src = fetchFromGitHub {
-    sha256 = "163mdl8hxids7123bjxmqhcaqyc1dv7hv8k33s713ac6lzawarq2";
+  src = fetchFromGitLab {
+    sha256 = "sha256-kaz15mNn/bq1HUknUJqXoLYxPRPX4w340sv9be0M+kQ=";
+    domain = "gitlab.com";
     rev = version;
     repo = "bobcat";
     owner = "fbb-git";
   };
 
-  buildInputs = [ libmilter libX11 openssl readline utillinux ];
+  buildInputs = [ libmilter libX11 openssl readline util-linux ];
   nativeBuildInputs = [ icmake yodl ];
 
   setSourceRoot = ''
@@ -34,9 +35,9 @@ stdenv.mkDerivation rec {
     ./build install x
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Brokken's Own Base Classes And Templates";
-    homepage = https://fbb-git.github.io/bobcat/;
+    homepage = "https://fbb-git.gitlab.io/bobcat/";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

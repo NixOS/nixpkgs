@@ -1,50 +1,72 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, libxml2, desktop-file-utils
-, gtk3, glib, granite, libgee, elementary-icon-theme, gobject-introspection, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, nix-update-script
+, pkg-config
+, meson
+, ninja
+, vala
+, libxml2
+, desktop-file-utils
+, gtk3
+, glib
+, granite
+, libgee
+, libhandy
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "shortcut-overlay";
-  version = "1.0.1";
-
-  name = "elementary-${pname}-${version}";
+  pname = "elementary-shortcut-overlay";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "shortcut-overlay";
     rev = version;
-    sha256 = "1ph4rx2l5fn0zh4fjfjlgbgskmzc0lvzqgcv7v4kr5m4rij1p4y4";
+    sha256 = "sha256-qmqzGCM3cVM6y80pzjm5CCyG6BO6XlKZiODAAEnwVrM=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
-    };
-  };
+  patches = [
+    # Fix build with meson 0.61
+    # https://github.com/elementary/shortcut-overlay/pull/113
+    (fetchpatch {
+      url = "https://github.com/elementary/shortcut-overlay/commit/130f78eb4b7770586ea98ba0a5fdbbf5bb116f3f.patch";
+      sha256 = "sha256-XXWq9CEv3Z2B8ogcFQAJZCfy19XxNHs3c8NToE2m/aA=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    elementary-icon-theme
     glib
     granite
     gtk3
     libgee
+    libhandy
   ];
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "A native OS-wide shortcut overlay to be launched by Gala";
-    homepage = https://github.com/elementary/shortcut-overlay;
+    homepage = "https://github.com/elementary/shortcut-overlay";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.shortcut-overlay";
   };
 }

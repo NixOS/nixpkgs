@@ -1,17 +1,24 @@
-{ stdenv, buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "i3cat-${version}";
-  version = "20150321-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "b9ba886a7c769994ccd8d4627978ef4b51fcf576";
+  pname = "i3cat";
+  version = "1.0";
 
   goPackagePath = "github.com/vincent-petithory/i3cat";
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/vincent-petithory/i3cat";
-    sha256 = "1xlm5c9ajdb71985nq7hcsaraq2z06przbl6r4ykvzi8w2lwgv72";
+  src = fetchFromGitHub {
+    owner = "vincent-petithory";
+    repo = "i3cat";
+    rev = "v${version}";
+    sha256 = "sha256-BxiiYzSjvXAMUQSUTKviLvrmGjkCLW6QPrgBBHvvF+Q=";
   };
 
   goDeps = ./deps.nix;
+
+  meta = with lib; {
+    description = "combine multiple i3bar JSON inputs into one to forward to i3bar";
+    homepage = "https://vincent-petithory.github.io/i3cat/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ];
+  };
 }

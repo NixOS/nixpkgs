@@ -1,46 +1,51 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3
-, vala, desktop-file-utils, gtk3, libxml2, granite, libnotify, vte, libgee
-, elementary-icon-theme, appstream, gobject-introspection, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+, pkg-config
+, meson
+, ninja
+, python3
+, vala
+, desktop-file-utils
+, gtk3
+, granite
+, libhandy
+, libnotify
+, vte
+, libgee
+, pcre2
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "terminal";
-  version = "5.3.4";
-
-  name = "elementary-${pname}-${version}";
+  pname = "elementary-terminal";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "terminal";
     rev = version;
-    sha256 = "08vwgd385j7cbi7c8442sjygzw9qy2phsi5lva4jaxwm8l15hk86";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
-    };
+    sha256 = "sha256-glcY47E9bGVI6k9gakItN6srzMtmA4hCEz/JVD5UUmI=";
   };
 
   nativeBuildInputs = [
-    appstream
     desktop-file-utils
-    gobject-introspection
-    libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
+    libhandy
     libnotify
+    pcre2
     vte
   ];
 
@@ -52,15 +57,22 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "Terminal emulator designed for elementary OS";
     longDescription = ''
       A super lightweight, beautiful, and simple terminal. Comes with sane defaults, browser-class tabs, sudo paste protection,
       smart copy/paste, and little to no configuration.
     '';
-    homepage = https://github.com/elementary/terminal;
-    license = licenses.lgpl3;
+    homepage = "https://github.com/elementary/terminal";
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.terminal";
   };
 }

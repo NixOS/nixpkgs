@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, jam, pkgconfig
-, zlib, libxml2, libxslt, xorgproto, libX11, libGLU_combined, SDL
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, jam, pkg-config
+, zlib, libxml2, libxslt, xorgproto, libX11, libGLU, libGL, SDL
 , SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, physfs
 }:
 
-stdenv.mkDerivation rec {
-  name = "lincity-ng-${version}";
+stdenv.mkDerivation {
+  pname = "lincity-ng";
   version = "2.9beta.20170715";
 
   src = fetchFromGitHub {
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [
-    autoreconfHook jam pkgconfig
+    autoreconfHook jam pkg-config
   ];
 
   buildInputs = [
-    zlib libxml2 libxslt xorgproto libX11 libGLU_combined SDL SDL_mixer SDL_image
+    zlib libxml2 libxslt xorgproto libX11 libGLU libGL SDL SDL_mixer SDL_image
     SDL_ttf SDL_gfx physfs
   ];
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "City building game";
     license = licenses.gpl2;
     maintainers = with maintainers; [ raskin ];

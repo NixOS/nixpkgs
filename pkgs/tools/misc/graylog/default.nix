@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, makeWrapper, jre_headless }:
+{ lib, stdenv, fetchurl, makeWrapper, openjdk11_headless, nixosTests }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.1";
-  name = "graylog-${version}";
+  pname = "graylog";
+  version = "3.3.16";
 
   src = fetchurl {
     url = "https://packages.graylog2.org/releases/graylog/graylog-${version}.tgz";
-    sha256 = "07a003c2d9hj6aczlbai279z9bw50yk0a6qx1cw44f8p08y6dnqi";
+    sha256 = "sha256-P/cnfYKnMSnDD4otEyirKlLaFduyfSO9sao4BY3c3Z4=";
   };
 
   dontBuild = true;
   dontStrip = true;
 
-  buildInputs = [ makeWrapper ];
-  makeWrapperArgs = [ "--prefix" "PATH" ":" "${jre_headless}/bin" ];
+  nativeBuildInputs = [ makeWrapper ];
+  makeWrapperArgs = [ "--set-default" "JAVA_HOME" "${openjdk11_headless}" ];
+
+  passthru.tests = { inherit (nixosTests) graylog; };
 
   installPhase = ''
     mkdir -p $out
@@ -21,11 +23,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/graylogctl $makeWrapperArgs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source log management solution";
-    homepage    = https://www.graylog.org/;
+    homepage    = "https://www.graylog.org/";
     license     = licenses.gpl3;
-    platforms   = platforms.unix;
     maintainers = [ maintainers.fadenb ];
+    mainProgram = "graylogctl";
+    platforms   = platforms.unix;
   };
 }

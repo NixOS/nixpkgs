@@ -1,50 +1,59 @@
-{ fetchFromGitHub, fetchpatch, stdenv, makeWrapper, unzip, libxml2, m4, uthash }:
+{ fetchFromGitHub, lib, stdenv, makeWrapper, unzip, libxml2, m4, uthash, which }:
 
 stdenv.mkDerivation rec {
-  name = "z88dk-${version}";
-  version = "20180217";
-  rev = "49a7c6032b2675af742f5b0b3aa5bd5260bdd814";
-  short_rev = "${builtins.substring 0 7 rev}";
+  pname = "z88dk";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "z88dk";
-    repo  = "z88dk";
-    inherit rev;
-    sha256 = "00vbklh6lkq1gyd08ig2vcg6c1mghvlwfx3vq3wldf34hcs3k4pp";
+    repo = "z88dk";
+    rev = "v${version}";
+    sha256 = "sha256-NgO8rbM31IX4nrJRU0p1DUafHPagMQepKLLoOLuGlT8=";
+    fetchSubmodules = true;
   };
-
-  # https://github.com/z88dk/z88dk/pull/612
-  patches = [(fetchpatch {
-    url = "https://github.com/Mic92/z88dk/commit/5b4ca132fa1f31c9ac48cf2220358715739ca0b2.patch";
-    sha256 = "1p2l31j68p7jzykhkhd9iagn2lr08hdclk3cl9l32p1q6ghdipfv";
-  })];
 
   postPatch = ''
     # we dont rely on build.sh :
     export PATH="$PWD/bin:$PATH" # needed to have zcc in testsuite
     export ZCCCFG=$PWD/lib/config/
+    # we don't want to build zsdcc since it required network (svn)
+    # we test in checkPhase
+    substituteInPlace Makefile \
+      --replace 'testsuite bin/z88dk-lib$(EXESUFFIX)' 'bin/z88dk-lib$(EXESUFFIX)'\
+      --replace 'ALL_EXT = bin/zsdcc$(EXESUFFIX)' 'ALL_EXT ='
   '';
 
+  checkPhase = ''
+    make testsuite
+  '';
+  #failed on Issue_1105_function_pointer_calls
+  doCheck = stdenv.hostPlatform.system != "aarch64-linux";
+
+  #_FORTIFY_SOURCE requires compiling with optimization (-O)
+  NIX_CFLAGS_COMPILE = "-O";
+
+  short_rev = builtins.substring 0 7 src.rev;
   makeFlags = [
-    "prefix=$(out)"
     "git_rev=${short_rev}"
     "version=${version}"
+    "DESTDIR=$(out)"
     "git_count=0"
   ];
-  nativeBuildInputs = [ makeWrapper unzip ];
+
+  nativeBuildInputs = [ which makeWrapper unzip ];
   buildInputs = [ libxml2 m4 uthash ];
 
   preInstall = ''
     mkdir -p $out/{bin,share}
   '';
 
-  installTargets = "libs install";
+  installTargets = [ "libs" "install" ];
 
-  meta = with stdenv.lib; {
-    homepage    = https://www.z88dk.org;
+  meta = with lib; {
+    homepage = "https://www.z88dk.org";
     description = "z80 Development Kit";
-    license     = licenses.clArtistic;
-    maintainers = [ maintainers.genesis ];
-    platforms = [ "x86_64-linux" ];
+    license = licenses.clArtistic;
+    maintainers = [ maintainers.siraben ];
+    platforms = platforms.unix;
   };
 }

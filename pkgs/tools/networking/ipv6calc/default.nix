@@ -1,43 +1,59 @@
-{ stdenv, fetchurl, getopt, ip2location-c, openssl, perl
-, geoip ? null, geolite-legacy ? null }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, getopt
+, ip2location-c
+, openssl
+, perl
+, libmaxminddb ? null
+, geolite-legacy ? null
+}:
 
 stdenv.mkDerivation rec {
-  name = "ipv6calc-${version}";
-  version = "1.1.0";
+  pname = "ipv6calc";
+  version = "4.0.1";
 
-  src = fetchurl {
-    url = "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/${name}.tar.gz";
-    sha256 = "1q74ikg780v5hllbq08wdfvxr2lf0fc7i41hclqrh1ajc6dqybbq";
+  src = fetchFromGitHub {
+    owner = "pbiering";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-mfJ6ADjGjECyoW5ELnUzXiJHHiwEDHzeOKCGSmGnLno=";
   };
 
-  buildInputs = [ geoip geolite-legacy getopt ip2location-c openssl ];
-  nativeBuildInputs = [ perl ];
+  buildInputs = [
+    libmaxminddb
+    geolite-legacy
+    getopt
+    ip2location-c
+    openssl
+    perl
+  ];
 
-  patchPhase = ''
+  postPatch = ''
+    patchShebangs *.sh */*.sh
     for i in {,databases/}lib/Makefile.in; do
-      substituteInPlace $i --replace /sbin/ldconfig true
-    done
-    for i in {{,databases/}lib,man}/Makefile.in; do
-      substituteInPlace $i --replace DESTDIR out
+      substituteInPlace $i --replace "/sbin/ldconfig" "ldconfig"
     done
   '';
 
   configureFlags = [
+    "--prefix=${placeholder "out"}"
+    "--libdir=${placeholder "out"}/lib"
     "--disable-bundled-getopt"
     "--disable-bundled-md5"
     "--disable-dynamic-load"
     "--enable-shared"
-  ] ++ stdenv.lib.optional (geoip != null ) [
-    "--enable-geoip"
-  ] ++ stdenv.lib.optional (geolite-legacy != null) [
+  ] ++ lib.optional (libmaxminddb != null) [
+    "--enable-mmdb"
+  ] ++ lib.optional (geolite-legacy != null) [
     "--with-geoip-db=${geolite-legacy}/share/GeoIP"
-  ] ++ stdenv.lib.optional (ip2location-c != null ) [
+  ] ++ lib.optional (ip2location-c != null) [
     "--enable-ip2location"
   ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Calculate/manipulate (not only) IPv6 addresses";
     longDescription = ''
       ipv6calc is a small utility to manipulate (not only) IPv6 addresses and
@@ -47,8 +63,9 @@ stdenv.mkDerivation rec {
       difficult) migrating the Perl program ip6_int into.
       Now only one utiltity is needed to do a lot.
     '';
-    homepage = http://www.deepspace6.net/projects/ipv6calc.html;
-    license = licenses.gpl2;
+    homepage = "http://www.deepspace6.net/projects/ipv6calc.html";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

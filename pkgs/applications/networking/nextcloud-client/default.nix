@@ -1,63 +1,101 @@
-{ stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
-, inotify-tools, makeWrapper, openssl_1_1, pcre, qtwebengine, libsecret, fetchpatch
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, inotify-tools
+, installShellFiles
+, libcloudproviders
+, librsvg
+, libsecret
+, openssl
+, pcre
+, pkg-config
+, qtbase
+, qtkeychain
+, qttools
+, qtwebengine
+, qtwebsockets
+, qtquickcontrols2
+, qtgraphicaleffects
+, plasma5Packages
+, sphinx
+, sqlite
+, xdg-utils
 }:
 
-stdenv.mkDerivation rec {
-  name = "nextcloud-client-${version}";
-  version = "2.5.1";
+mkDerivation rec {
+  pname = "nextcloud-client";
+  version = "3.5.1";
 
-  src = fetchgit {
-    url = "git://github.com/nextcloud/desktop.git";
-    rev = "refs/tags/v${version}";
-    sha256 = "0r6jj3vbmwh7ipv83c8w1b25pbfq3mzrjgcijdw2gwfxwx9pfq7d";
-    fetchSubmodules = true;
+  outputs = [ "out" "dev" ];
+
+  src = fetchFromGitHub {
+    owner = "nextcloud";
+    repo = "desktop";
+    rev = "v${version}";
+    sha256 = "sha256-/Bz3vkV4+ZFlGBNtkLIGsBk51a3wxy32U1KYcA3awcw=";
   };
 
-  # Patches contained in next (>2.5.1) release
   patches = [
-    (fetchpatch {
-     name = "fix-qt-5.12-build";
-     url = "https://github.com/nextcloud/desktop/commit/071709ab5e3366e867dd0b0ea931aa7d6f80f528.patch";
-     sha256 = "14k635jwm8hz6i22lz88jj2db8v5czwa3zg0667i4hwhkqqmy61n";
-     })
-     (fetchpatch {
-       name = "fix-qtwebengine-crash";
-       url = "https://patch-diff.githubusercontent.com/raw/nextcloud/desktop/pull/959.patch";
-       sha256 = "00qx976az2rb1gwl1rxapm8gqj42yzqp8k2fasn3h7b30lnxdyr0";
-     })
+    # Explicitly move dbus configuration files to the store path rather than `/etc/dbus-1/services`.
+    ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
+    ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
-
-  buildInputs = [ qtbase qtwebkit qtkeychain qttools qtwebengine sqlite openssl_1_1.out pcre inotify-tools ];
-
-  enableParallelBuilding = true;
-
-  NIX_LDFLAGS = "${openssl_1_1.out}/lib/libssl.so ${openssl_1_1.out}/lib/libcrypto.so";
-
-  cmakeFlags = [
-    "-UCMAKE_INSTALL_LIBDIR"
-    "-DCMAKE_BUILD_TYPE=Release"
-    "-DOPENSSL_LIBRARIES=${openssl_1_1.out}/lib"
-    "-DOPENSSL_INCLUDE_DIR=${openssl_1_1.dev}/include"
-    "-DINOTIFY_LIBRARY=${inotify-tools}/lib/libinotifytools.so"
-    "-DINOTIFY_INCLUDE_DIR=${inotify-tools}/include"
-  ];
-
-  postInstall = ''
-    sed -i 's/\(Icon.*\)=nextcloud/\1=Nextcloud/g' \
-    $out/share/applications/nextcloud.desktop
-
-    wrapProgram "$out/bin/nextcloud" \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libsecret ]} \
-      --prefix QT_PLUGIN_PATH : ${qtbase}/${qtbase.qtPluginPrefix}
+  postPatch = ''
+    for file in src/libsync/vfs/*/CMakeLists.txt; do
+      substituteInPlace $file \
+        --replace "PLUGINDIR" "KDE_INSTALL_PLUGINDIR"
+    done
   '';
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    extra-cmake-modules
+    librsvg
+    sphinx
+  ];
+
+  buildInputs = [
+    inotify-tools
+    libcloudproviders
+    libsecret
+    openssl
+    pcre
+    plasma5Packages.kio
+    qtbase
+    qtkeychain
+    qttools
+    qtwebengine
+    qtquickcontrols2
+    qtgraphicaleffects
+    qtwebsockets
+    sqlite
+  ];
+
+  qtWrapperArgs = [
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libsecret ]}"
+    # See also: https://bugreports.qt.io/browse/QTBUG-85967
+    "--set QML_DISABLE_DISK_CACHE 1"
+    "--prefix PATH : ${lib.makeBinPath [ xdg-utils ]}"
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_INSTALL_LIBDIR=lib" # expected to be prefix-relative by build code setting RPATH
+    "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
+  ];
+
+  postBuild = ''
+    make doc-man
+  '';
+
+  meta = with lib; {
     description = "Nextcloud themed desktop client";
-    homepage = https://nextcloud.com;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ caugner ma27 ];
+    homepage = "https://nextcloud.com";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kranzes SuperSandro2000 ];
     platforms = platforms.linux;
   };
 }

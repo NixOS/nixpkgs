@@ -1,37 +1,46 @@
-{ stdenv, fetchpatch, python, cmake, llvm, ocaml, findlib, ctypes }:
+{ stdenv, lib, python3, cmake, libllvm, ocaml, findlib, ctypes }:
 
-let version = stdenv.lib.getVersion llvm; in
+let version = lib.getVersion libllvm; in
 
 stdenv.mkDerivation {
-  name = "ocaml-llvm-${version}";
+  pname = "ocaml-llvm";
+  inherit version;
 
-  inherit (llvm) src;
+  inherit (libllvm) src;
 
-  buildInputs = [ python cmake llvm ocaml findlib ctypes ];
+  nativeBuildInputs = [ cmake python3 ocaml findlib ];
+  buildInputs = [ ctypes ];
+  propagatedBuildInputs = [ libllvm ];
 
-  patches = [ (fetchpatch {
-    url = https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/llvm/llvm.3.9/files/cmake.patch;
-    sha256 = "1fcc6ylfiw1npdhx7mrsj7h0dx7cym7i9664kpr76zqazb52ikm9";
-  })];
+  strictDeps = true;
 
-  cmakeFlags = [ "-DLLVM_OCAML_OUT_OF_TREE=TRUE" ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=YES" # fixes bytecode builds
+    "-DLLVM_OCAML_OUT_OF_TREE=TRUE"
+    "-DLLVM_OCAML_INSTALL_PATH=${placeholder "out"}/ocaml"
+    "-DLLVM_OCAML_EXTERNAL_LLVM_LIBDIR=${lib.getLib libllvm}/lib"
+  ];
 
-  buildFlags = "ocaml_all";
+  buildFlags = [ "ocaml_all" ];
 
-  installFlags = "-C bindings/ocaml";
+  installFlags = [ "-C" "bindings/ocaml" ];
 
   postInstall = ''
-    mv $out/lib/ocaml $out/ocaml
     mkdir -p $OCAMLFIND_DESTDIR/
     mv $out/ocaml $OCAMLFIND_DESTDIR/llvm
     mv $OCAMLFIND_DESTDIR/llvm/META{.llvm,}
+    mv $OCAMLFIND_DESTDIR/llvm/stublibs $OCAMLFIND_DESTDIR/stublibs
   '';
 
+  passthru = {
+    inherit libllvm;
+  };
+
   meta = {
-    inherit (llvm.meta) license homepage;
-    platforms = ocaml.meta.platforms or [];
+    inherit (libllvm.meta) license homepage;
+    inherit (ocaml.meta) platforms;
     description = "OCaml bindings distributed with LLVM";
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 
 }

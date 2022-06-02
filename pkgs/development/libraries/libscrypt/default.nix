@@ -1,26 +1,26 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "libscrypt-${version}";
-  version = "1.21";
+  pname = "libscrypt";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "technion";
     repo = "libscrypt";
     rev = "v${version}";
-    sha256 = "1d76ys6cp7fi4ng1w3mz2l0p9dbr7ljbk33dcywyimzjz8bahdng";
+    sha256 = "sha256-QWWqC10bENemG5FYEog87tT7IxDaBJUDqu6j/sO3sYE=";
   };
 
-  buildFlags = stdenv.lib.optional stdenv.isDarwin "LDFLAGS= CFLAGS_EXTRA=";
+  buildFlags = lib.optional stdenv.isDarwin "LDFLAGS= LDFLAGS_EXTRA= CFLAGS_EXTRA=";
 
   installFlags = [ "PREFIX=$(out)" ];
-  installTargets = if stdenv.isDarwin then "install-osx" else "install";
+  installTargets = lib.optional stdenv.isDarwin "install-osx";
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Shared library that implements scrypt() functionality";
-    homepage = https://lolware.net/2014/04/29/libscrypt.html;
+    homepage = "https://lolware.net/2014/04/29/libscrypt.html";
     license = licenses.bsd2;
     maintainers = with maintainers; [ davidak ];
     platforms = platforms.unix;

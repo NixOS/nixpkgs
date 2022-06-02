@@ -1,39 +1,50 @@
-{ stdenv, fetchFromGitHub, cmake
-, alsaSupport ? !stdenv.isDarwin, alsaLib ? null
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio ? null
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+, alsaSupport ? !stdenv.isDarwin, alsa-lib
+, dbusSupport ? !stdenv.isDarwin, dbus
+, pipewireSupport ? !stdenv.isDarwin, pipewire
+, pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , CoreServices, AudioUnit, AudioToolbox
 }:
 
-with stdenv.lib;
-
-assert alsaSupport -> alsaLib != null;
-assert pulseSupport -> libpulseaudio != null;
-
 stdenv.mkDerivation rec {
-  version = "1.19.1";
-  name = "openal-soft-${version}";
+  pname = "openal-soft";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
-    rev = name;
-    sha256 = "0b0g0q1c36nfb289xcaaj3cmyfpiswvvgky3qyalsf9n4dj7vnzi";
+    rev = version;
+    sha256 = "sha256-Y2KhPkwtG6tBzUhSqwV2DVnOjZwxPihidLKahjaIvyU=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  # this will make it find its own data files (e.g. HRTF profiles)
+  # without any other configuration
+  patches = [ ./search-out.patch ];
+  postPatch = ''
+    substituteInPlace core/helpers.cpp \
+      --replace "@OUT@" $out
+  '';
 
-  buildInputs = []
-    ++ optional alsaSupport alsaLib
-    ++ optional pulseSupport libpulseaudio
-    ++ optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
+  strictDeps = true;
 
-  NIX_LDFLAGS = []
-    ++ optional alsaSupport "-lasound"
-    ++ optional pulseSupport "-lpulse";
+  nativeBuildInputs = [ cmake pkg-config ];
 
-  meta = {
+  buildInputs = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) stdenv.cc.libc
+    ++ lib.optional alsaSupport alsa-lib
+    ++ lib.optional dbusSupport dbus
+    ++ lib.optional pipewireSupport pipewire
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
+
+  cmakeFlags = [
+    # Automatically links dependencies without having to rely on dlopen, thus
+    # removes the need for NIX_LDFLAGS.
+    "-DALSOFT_DLOPEN=OFF"
+  ];
+
+  meta = with lib; {
     description = "OpenAL alternative";
-    homepage = http://kcat.strangesoft.net/openal.html;
+    homepage = "https://kcat.strangesoft.net/openal.html";
     license = licenses.lgpl2;
     maintainers = with maintainers; [ftrvxmtrx];
     platforms = platforms.unix;

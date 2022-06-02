@@ -1,39 +1,38 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, bash, go-bindata}:
+{ lib, fetchzip, buildGoModule, go-bindata, nixosTests }:
 
-buildGoPackage rec {
-  name = "traefik-${version}";
-  version = "1.7.9";
+buildGoModule rec {
+  pname = "traefik";
+  version = "2.6.3";
 
-  goPackagePath = "github.com/containous/traefik";
-
-  src = fetchFromGitHub {
-    owner = "containous";
-    repo = "traefik";
-    rev = "v${version}";
-    sha256 = "0lncygkqws5jvbhpx2qlr18y8b325y9a6690ll9azlphxydrv44m";
+  src = fetchzip {
+    url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
+    sha256 = "sha256-OaKgX3qwiJM/EPprV1r3CbUnxOaWl7BTMcS5v+tmHoo=";
+    stripRoot = false;
   };
 
-  buildInputs = [ go-bindata bash ];
+  vendorSha256 = "sha256-tqrfCpZ/fRYZBZ/SBAvvJebLBeD2M/AVJEPiseehJHY=";
 
-  buildPhase = ''
-    runHook preBuild
-    (
-      cd go/src/github.com/containous/traefik
-      bash ./script/make.sh generate
+  subPackages = [ "cmd/traefik" ];
 
-      CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
-      go build -ldflags "\
-        -X github.com/containous/traefik/version.Version=${version} \
-        -X github.com/containous/traefik/version.Codename=$CODENAME \
-      " -a -o $bin/bin/traefik ./cmd/traefik
-    )
-    runHook postBuild
+  nativeBuildInputs = [ go-bindata ];
+
+  passthru.tests = { inherit (nixosTests) traefik; };
+
+  preBuild = ''
+    go generate
+
+    CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
+
+    buildFlagsArray+=("-ldflags=\
+      -X github.com/traefik/traefik/v2/pkg/version.Version=${version} \
+      -X github.com/traefik/traefik/v2/pkg/version.Codename=$CODENAME")
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://traefik.io;
+  meta = with lib; {
+    homepage = "https://traefik.io";
     description = "A modern reverse proxy";
+    changelog = "https://github.com/traefik/traefik/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hamhut1066 vdemeester ];
+    maintainers = with maintainers; [ vdemeester ];
   };
 }

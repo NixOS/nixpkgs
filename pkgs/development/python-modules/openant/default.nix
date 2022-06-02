@@ -1,10 +1,10 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 , pyusb
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "openant-unstable";
   version = "2017-02-11";
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyusb ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/Tigge/openant";
     description = "ANT and ANT-FS Python Library";
     license = licenses.mit;

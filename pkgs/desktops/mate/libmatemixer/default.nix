@@ -1,31 +1,36 @@
-{ config, stdenv, fetchurl, pkgconfig, intltool, glib, mate
-, alsaSupport ? stdenv.isLinux, alsaLib
+{ config, lib, stdenv, fetchurl, pkg-config, gettext, glib
+, alsaSupport ? stdenv.isLinux, alsa-lib
 , pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
 , ossSupport ? false
- }:
+, mateUpdateScript
+}:
 
 stdenv.mkDerivation rec {
-  name = "libmatemixer-${version}";
-  version = "1.20.1";
+  pname = "libmatemixer";
+  version = "1.26.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "00p67mi0flsbgn15qpwq60rzf917s5islbmhirbvz6npcvv0d493";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1wcz4ppg696m31f5x7rkyvxxdriik2vprsr83b4wbs97bdhcr6ws";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config gettext ];
 
   buildInputs = [ glib ]
-    ++ stdenv.lib.optional alsaSupport alsaLib
-    ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
+    ++ lib.optional alsaSupport alsa-lib
+    ++ lib.optional pulseaudioSupport libpulseaudio;
 
-  configureFlags = stdenv.lib.optional ossSupport "--enable-oss";
+  configureFlags = lib.optional ossSupport "--enable-oss";
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "Mixer library for MATE";
-    homepage = https://github.com/mate-desktop/libmatemixer;
-    license = with licenses; [ gpl2 lgpl2 ];
+    homepage = "https://github.com/mate-desktop/libmatemixer";
+    license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

@@ -1,27 +1,36 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv, fetchgit, python3 }:
 
 stdenv.mkDerivation {
-  name = "gnulib-20180226";
+  pname = "gnulib";
+  version = "20210702";
 
   src = fetchgit {
     url = "https://git.savannah.gnu.org/r/gnulib.git";
-    rev = "0bec5d56c6938c2f28417bb5fd1c4b05ea2e7d28";
-    sha256 = "0sifr3bkmhyr5s6ljgfyr0fw6w49ajf11rlp1r797f3r3r6j9w4k";
+    rev = "901694b904cd861adc2529b2e05a3fb33f9b534f";
+    sha256 = "1f5znlv2wjziglw9vlygdgm4jfbsz34h2dz6w4h90bl4hm0ycb1w";
   };
 
-  dontFixup = true;
-  # no "make install", gnulib is a collection of source code
+  postPatch = ''
+    patchShebangs gnulib-tool.py
+  '';
+
+  buildInputs = [ python3 ];
+
   installPhase = ''
-    mkdir -p $out; mv * $out/
-    ln -s $out/lib $out/include
     mkdir -p $out/bin
+    cp -r * $out/
+    ln -s $out/lib $out/include
     ln -s $out/gnulib-tool $out/bin/
   '';
 
-  meta = {
-    homepage = https://www.gnu.org/software/gnulib/;
+  # do not change headers to not update all vendored build files
+  dontFixup = true;
+
+  meta = with lib; {
     description = "Central location for code to be shared among GNU packages";
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://www.gnu.org/software/gnulib/";
+    license = licenses.gpl3Plus;
+    mainProgram = "gnulib-tool";
+    platforms = platforms.unix;
   };
 }

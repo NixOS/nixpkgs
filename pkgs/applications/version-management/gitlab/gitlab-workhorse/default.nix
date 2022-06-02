@@ -1,25 +1,30 @@
-{ stdenv, fetchFromGitLab, git, go }:
+{ lib, fetchFromGitLab, git, buildGoModule }:
+let
+  data = lib.importJSON ../data.json;
+in
+buildGoModule rec {
+  pname = "gitlab-workhorse";
 
-stdenv.mkDerivation rec {
-  name = "gitlab-workhorse-${version}";
-
-  version = "8.3.1";
+  version = "15.0.0";
 
   src = fetchFromGitLab {
-    owner = "gitlab-org";
-    repo = "gitlab-workhorse";
-    rev = "v${version}";
-    sha256 = "14zmxajzx6r2wrsxkmqp7j94yxnq4qpg27wih5l8lhf1imzgnk3j";
+    owner = data.owner;
+    repo = data.repo;
+    rev = data.rev;
+    sha256 = data.repo_hash;
   };
 
-  buildInputs = [ git go ];
+  sourceRoot = "source/workhorse";
 
-  makeFlags = [ "PREFIX=$(out)" "VERSION=${version}" "GOCACHE=$(TMPDIR)/go-cache" ];
+  vendorSha256 = "sha256-7hNwBCDMdiiOliZa/lkYLo8gyAksAU0HanCSyaAMYLs=";
+  buildInputs = [ git ];
+  ldflags = [ "-X main.Version=${version}" ];
+  doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.gitlab.com/;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz globin ];
+  meta = with lib; {
+    homepage = "http://www.gitlab.com/";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fpletz globin talyz yayayayaka ];
     license = licenses.mit;
   };
 }

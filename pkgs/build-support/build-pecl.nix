@@ -1,25 +1,37 @@
-{ stdenv, php, autoreconfHook, fetchurl }:
+{ stdenv, lib, php, autoreconfHook, fetchurl, re2c }:
 
-{ name
-, buildInputs ? []
-, nativeBuildInputs ? []
-, makeFlags ? []
+{ pname
+, version
+, internalDeps ? [ ]
+, peclDeps ? [ ]
+, buildInputs ? [ ]
+, nativeBuildInputs ? [ ]
+, postPhpize ? ""
+, makeFlags ? [ ]
 , src ? fetchurl {
-    url = "http://pecl.php.net/get/${name}.tgz";
+    url = "http://pecl.php.net/get/${pname}-${version}.tgz";
     inherit (args) sha256;
   }
 , ...
 }@args:
 
 stdenv.mkDerivation (args // {
-  name = "php-${name}";
+  name = "php-${pname}-${version}";
+  extensionName = pname;
 
   inherit src;
 
-  nativeBuildInputs = [ autoreconfHook ] ++ nativeBuildInputs;
-  buildInputs = [ php ] ++ buildInputs;
+  nativeBuildInputs = [ autoreconfHook re2c ] ++ nativeBuildInputs;
+  buildInputs = [ php ] ++ peclDeps ++ buildInputs;
 
   makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ makeFlags;
 
-  autoreconfPhase = "phpize";
+  autoreconfPhase = ''
+    phpize
+    ${postPhpize}
+    ${lib.concatMapStringsSep "\n"
+      (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
+      internalDeps}
+  '';
+  checkPhase = "NO_INTERACTON=yes make test";
 })

@@ -1,6 +1,6 @@
 { lib, rustPlatform, fetchFromGitHub }:
 rustPlatform.buildRustPackage rec {
-  name = "git-codeowners-${version}";
+  pname = "git-codeowners";
   version = "0.1.2";
 
   src = fetchFromGitHub {
@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0bzq4ridzb4l1zqrj1r0vlzkjpgfaqwky5jf49cwjhz4ybwrfpkq";
   };
 
-  cargoSha256 = "0rdmv9s86xba1zkl2j5rgix6k7pkkxqmpar03sak2fjrd7mh8iz0";
+  cargoSha256 = "00wi64v2zn8rp8fjwbdwyvl3pva5sn9xclaawp2m222dqnlszb2d";
 
   meta = with lib; {
     homepage = "https://github.com/softprops/git-codeowners";

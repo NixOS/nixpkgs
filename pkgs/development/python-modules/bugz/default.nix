@@ -1,9 +1,9 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "bugz-0.9.3";
   version = "0.13";
 
@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.liquidx.net/pybugz/;
+  meta = with lib; {
+    homepage = "https://github.com/williamh/pybugz";
     description = "Command line interface for Bugzilla";
     license = licenses.gpl2;
     maintainers = [ maintainers.costrouc ];

@@ -1,23 +1,32 @@
-{ stdenv, fetchurl, intltool, itstool, libxml2, yelp, mate }:
+{ lib, stdenv, fetchurl, gettext, itstool, libxml2, yelp, mateUpdateScript }:
 
 stdenv.mkDerivation rec {
-  name = "mate-user-guide-${version}";
-  version = "1.20.2";
+  pname = "mate-user-guide";
+  version = "1.26.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0cbi625xd7nsifvxbixsb29kj2zj14sn0sl61wkcvasz7whg7w6r";
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1h620ngryqc4m8ybvc92ba8404djnm0l65f34mlw38g9ad8d9085";
   };
 
-  nativeBuildInputs = [ itstool intltool libxml2 ];
+  nativeBuildInputs = [ itstool gettext libxml2 ];
 
   buildInputs = [ yelp ];
 
-  meta = with stdenv.lib; {
+  postPatch = ''
+    substituteInPlace mate-user-guide.desktop.in.in \
+      --replace "Exec=yelp" "Exec=${yelp}/bin/yelp"
+  '';
+
+  enableParallelBuilding = true;
+
+  passthru.updateScript = mateUpdateScript { inherit pname version; };
+
+  meta = with lib; {
     description = "MATE User Guide";
-    homepage = http://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus fdl12 ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
+    maintainers = teams.mate.members;
   };
 }

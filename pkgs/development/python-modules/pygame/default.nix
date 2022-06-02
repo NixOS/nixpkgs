@@ -1,48 +1,79 @@
-{ lib, fetchPypi, buildPythonPackage, python, pkg-config, libX11
-, SDL, SDL_image, SDL_mixer, SDL_ttf, libpng, libjpeg, portmidi, freetype
+{ stdenv, lib, substituteAll, fetchFromGitHub, buildPythonPackage, python, pkg-config, libX11
+, SDL2, SDL2_image, SDL2_mixer, SDL2_ttf, libpng, libjpeg, portmidi, freetype, fontconfig
+, AppKit
 }:
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "1.9.4";
+  version = "2.1.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "700d1781c999af25d11bfd1f3e158ebb660f72ebccb2040ecafe5069d0b2c0b6";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    # Unicode file names lead to different checksums on HFS+ vs. other
+    # filesystems because of unicode normalisation. The documentation
+    # has such files and will be removed.
+    sha256 = "sha256-v1z6caEMJNXqbcbTmFXoy3KQewHiz6qK4vhNU6Qbukk=";
+    postFetch = "rm -rf $out/docs/reST";
   };
 
+  patches = [
+    # Patch pygame's dependency resolution to let it find build inputs
+    (substituteAll {
+      src = ./fix-dependency-finding.patch;
+      buildinputs_include = builtins.toJSON (builtins.concatMap (dep: [
+        "${lib.getDev dep}/"
+        "${lib.getDev dep}/include"
+        "${lib.getDev dep}/include/SDL2"
+      ]) buildInputs);
+      buildinputs_lib = builtins.toJSON (builtins.concatMap (dep: [
+        "${lib.getLib dep}/"
+        "${lib.getLib dep}/lib"
+      ]) buildInputs);
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace src_py/sysfont.py \
+      --replace 'path="fc-list"' 'path="${fontconfig}/bin/fc-list"' \
+      --replace /usr/X11/bin/fc-list ${fontconfig}/bin/fc-list
+  '';
+
   nativeBuildInputs = [
-    pkg-config SDL
+    pkg-config SDL2
   ];
 
   buildInputs = [
-    SDL SDL_image SDL_mixer SDL_ttf libpng libjpeg
+    SDL2 SDL2_image SDL2_mixer SDL2_ttf libpng libjpeg
     portmidi libX11 freetype
+  ] ++ lib.optionals stdenv.isDarwin [
+    AppKit
   ];
 
-  # Tests fail because of no audio device and display.
-  doCheck = false;
-
   preConfigure = ''
-    sed \
-      -e "s/^origincdirs = .*/origincdirs = []/" \
-      -e "s/^origlibdirs = .*/origlibdirs = []/" \
-      -e "/\/include\/smpeg/d" \
-      -i config_unix.py
-    ${lib.concatMapStrings (dep: ''
-      sed \
-        -e "/^origincdirs =/aorigincdirs += ['${lib.getDev dep}/include']" \
-        -e "/^origlibdirs =/aoriglibdirs += ['${lib.getLib dep}/lib']" \
-        -i config_unix.py
-      '') buildInputs
-    }
-    LOCALBASE=/ ${python.interpreter} config.py
+    ${python.interpreter} buildconfig/config.py
   '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    # No audio or video device in test environment
+    export SDL_VIDEODRIVER=dummy
+    export SDL_AUDIODRIVER=disk
+    export SDL_DISKAUDIOFILE=/dev/null
+
+    ${python.interpreter} -m pygame.tests -v --exclude opengl,timing --time_out 300
+
+    runHook postCheck
+  '';
+  pythonImportsCheck = [ "pygame" ];
 
   meta = with lib; {
     description = "Python library for games";
-    homepage = http://www.pygame.org/;
+    homepage = "https://www.pygame.org/";
     license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = platforms.unix;
   };
 }

@@ -1,28 +1,49 @@
-{ stdenv, pkgconfig, curl, openssl, zlib, fetchFromGitHub, rustPlatform }:
+{ stdenv, lib, runCommand, patchelf, makeWrapper, pkg-config, curl, runtimeShell
+, openssl, zlib, fetchFromGitHub, rustPlatform, libiconv }:
 
 rustPlatform.buildRustPackage rec {
-  name = "elan-${version}";
-  version = "0.7.5";
-
-  cargoSha256 = "0vv7kr7rc3lvas7ngp5dp99ajjd5v8k5937ish7zqz1k4970q2f1";
+  pname = "elan";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
-    owner = "kha";
+    owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "1147f3lzr6lgvf580ppspn20bdwnf6l8idh1h5ana0p0lf5a0dn1";
+    sha256 = "sha256-jHECNSXSATLuNHNSVwi7mBTI8l6+cLPDISc5T/4yHDg=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  cargoSha256 = "sha256-/XwlTmUboDbB6RTanhKyO6o2GBUhxpH/NQjeNsKpse0=";
 
-  buildInputs = [ curl zlib openssl ];
+  nativeBuildInputs = [ pkg-config makeWrapper ];
 
-  cargoBuildFlags = [ "--features no-self-update" ];
+  OPENSSL_NO_VENDOR = 1;
+  buildInputs = [ curl zlib openssl ]
+    ++ lib.optional stdenv.isDarwin libiconv;
+
+  buildFeatures = [ "no-self-update" ];
+
+  patches = lib.optionals stdenv.isLinux [
+    # Run patchelf on the downloaded binaries.
+    # This is necessary because Lean 4 is now dynamically linked.
+    (runCommand "0001-dynamically-patchelf-binaries.patch" {
+        CC = stdenv.cc;
+        cc = "${stdenv.cc}/bin/cc";
+        patchelf = patchelf;
+        shell = runtimeShell;
+      } ''
+     export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+     substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+       --subst-var patchelf \
+       --subst-var dynamicLinker \
+       --subst-var cc \
+       --subst-var shell
+    '')
+  ];
 
   postInstall = ''
     pushd $out/bin
     mv elan-init elan
-    for link in lean leanpkg leanchecker; do
+    for link in lean leanpkg leanchecker leanc leanmake lake; do
       ln -s elan $link
     done
     popd
@@ -35,9 +56,9 @@ rustPlatform.buildRustPackage rec {
     $out/bin/elan completions zsh >  "$out/share/zsh/site-functions/_elan"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small tool to manage your installations of the Lean theorem prover";
-    homepage = "https://github.com/Kha/elan";
+    homepage = "https://github.com/leanprover/elan";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
   };

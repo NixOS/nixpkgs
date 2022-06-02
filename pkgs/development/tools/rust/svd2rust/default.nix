@@ -1,28 +1,23 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, rustPlatform, fetchCrate, stdenv, libiconv }:
 
-with rustPlatform;
+rustPlatform.buildRustPackage rec {
+  pname = "svd2rust";
+  version = "0.21.0";
 
-buildRustPackage rec {
-  name = "svd2rust-${version}";
-  version = "0.14.0";
-
-  src = fetchFromGitHub {
-    owner = "rust-embedded";
-    repo = "svd2rust";
-    rev = "v${version}";
-    sha256 = "1a0ldmjkhyv5c52gcq8p8avkj0cgj1b367w6hm85bxdf5j4y8rra";
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "0mxzbbxrg1jysxpjqcvgwwmh8qf0lyf64fl1gxxp0whph0x279qj";
   };
-  cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "0wsiaa6q9hr9x1cbg6sc8ajg846jjci5qwhdga4d408fmqav72ih";
+  cargoSha256 = "0kvya6swx1nsxxlhn2w8x4dhl4j3v56jxqr2h259cx6lzv3xjhin";
 
-  # doc tests fail due to missing dependency
-  doCheck = false;
+  buildInputs = lib.optional stdenv.isDarwin libiconv;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate Rust register maps (`struct`s) from SVD files";
-    homepage = https://github.com/rust-embedded/svd2rust;
+    homepage = "https://github.com/rust-embedded/svd2rust";
+    changelog = "https://github.com/rust-embedded/svd2rust/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit asl20 ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ ];
   };
 }

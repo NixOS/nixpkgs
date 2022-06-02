@@ -6,6 +6,7 @@ use warnings;
 
 use CPAN::Meta();
 use CPANPLUS::Backend();
+use Module::CoreList;
 use Getopt::Long::Descriptive qw( describe_options );
 use JSON::PP qw( encode_json );
 use Log::Log4perl qw(:easy);
@@ -164,7 +165,7 @@ Readonly::Hash my %LICENSE_MAP => (
 
     # License not provided in metadata.
     unknown => {
-        licenses => [qw( unknown )],
+        licenses => [],
         amb      => 1
     }
 );
@@ -226,7 +227,7 @@ sub pkg_to_attr {
 
 sub get_pkg_name {
     my ($module) = @_;
-    return $module->package_name . '-' . $module->package_version;
+    return ( $module->package_name, $module->package_version =~ s/^v(\d)/$1/r );
 }
 
 sub read_meta {
@@ -278,14 +279,8 @@ sub get_deps {
     foreach my $n ( $deps->required_modules ) {
         next if $n eq "perl";
 
-        # Figure out whether the module is a core module by attempting
-        # to `use` the module in a pure Perl interpreter and checking
-        # whether it succeeded. Note, $^X is a magic variable holding
-        # the path to the running Perl interpreter.
-        if ( system("env -i $^X -M$n -e1 >/dev/null 2>&1") == 0 ) {
-            DEBUG("skipping Perl-builtin module $n");
-            next;
-        }
+        my @core = Module::CoreList->find_modules(qr/^$n$/);
+        next if (@core);
 
         my $pkg = module_to_pkg( $cb, $n );
 
@@ -314,7 +309,7 @@ sub render_license {
     # "GPL v2" or to "GPL v2 or later".
     my $amb = 0;
 
-    # Whether the license is available inside `stdenv.lib.licenses`.
+    # Whether the license is available inside `lib.licenses`.
     my $in_set = 1;
 
     my $nix_license = $LICENSE_MAP{$cpan_license};
@@ -336,7 +331,7 @@ sub render_license {
         # Avoid defining the license line.
     }
     elsif ($in_set) {
-        my $lic = 'stdenv.lib.licenses';
+        my $lic = 'lib.licenses';
         if ( @$licenses == 1 ) {
             $license_line = "$lic.$licenses->[0]";
         }
@@ -375,13 +370,13 @@ die "module $module_name not found\n" if scalar @modules == 0;
 die "multiple packages that match module $module_name\n" if scalar @modules > 1;
 my $module = $modules[0];
 
-my $pkg_name  = get_pkg_name $module;
+my ($pkg_name, $pkg_version) = get_pkg_name $module;
 my $attr_name = pkg_to_attr $module;
 
 INFO( "attribute name: ", $attr_name );
 INFO( "module: ",         $module->module );
 INFO( "version: ",        $module->version );
-INFO( "package: ", $module->package, " (", $pkg_name, ", ", $attr_name, ")" );
+INFO( "package: ", $module->package, " (", "$pkg_name-$pkg_version", ", ", $attr_name, ")" );
 INFO( "path: ",    $module->path );
 
 my $tar_path = $module->fetch();
@@ -436,10 +431,11 @@ my $build_fun = -e "$pkg_path/Build.PL"
 print STDERR "===\n";
 
 print <<EOF;
-  ${\(is_reserved($attr_name) ? "\"$attr_name\"" : $attr_name)} = $build_fun rec {
-    name = "$pkg_name";
+  ${\(is_reserved($attr_name) ? "\"$attr_name\"" : $attr_name)} = $build_fun {
+    pname = "$pkg_name";
+    version = "$pkg_version";
     src = fetchurl {
-      url = "mirror://cpan/${\$module->path}/\${name}.${\$module->package_extension}";
+      url = "mirror://cpan/${\$module->path}/${\$module->package}";
       sha256 = "${\$module->status->checksum_value}";
     };
 EOF
@@ -453,7 +449,7 @@ print <<EOF;
     meta = {
 EOF
 print <<EOF if defined $homepage;
-      homepage = $homepage;
+      homepage = "$homepage";
 EOF
 print <<EOF if defined $description && $description ne "Unknown";
       description = "$description";

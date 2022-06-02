@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, bitwig-studio1,
-  xdg_utils, zenity, ffmpeg, pulseaudio }:
+{ fetchurl, bitwig-studio1,
+  pulseaudio }:
 
 bitwig-studio1.overrideAttrs (oldAttrs: rec {
-  name = "bitwig-studio-${version}";
+  pname = "bitwig-studio";
   version = "2.5";
 
   src = fetchurl {

@@ -1,30 +1,45 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pytest, hypothesis, zope_interface
-, pympler, coverage, six, clang }:
+{ lib
+, callPackage
+, buildPythonPackage
+, fetchPypi
+}:
 
 buildPythonPackage rec {
   pname = "attrs";
-  version = "18.2.0";
+  version = "21.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69";
+    hash = "sha256-YmuoI0IR25joad92IwoTfExAoS1yRFxF1fW3FvB24v0=";
   };
 
-  # macOS needs clang for testing
-  checkInputs = [
-    pytest hypothesis zope_interface pympler coverage six
-  ] ++ lib.optionals (stdenv.isDarwin) [ clang ];
+  outputs = [
+    "out"
+    "testout"
+  ];
 
-  checkPhase = ''
-    py.test
+  postInstall = ''
+    # Install tests as the tests output.
+    mkdir $testout
+    cp -R tests $testout/tests
   '';
 
-  # To prevent infinite recursion with pytest
+  pythonImportsCheck = [
+    "attr"
+  ];
+
+  # pytest depends on attrs, so we can't do this out-of-the-box.
+  # Instead, we do this as a passthru.tests test.
   doCheck = false;
+
+  passthru.tests = {
+    pytest = callPackage ./tests.nix { };
+  };
 
   meta = with lib; {
     description = "Python attributes without boilerplate";
-    homepage = https://github.com/hynek/attrs;
+    homepage = "https://github.com/hynek/attrs";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
 }

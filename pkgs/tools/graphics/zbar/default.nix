@@ -1,36 +1,91 @@
-{ stdenv, fetchFromGitHub, imagemagickBig, pkgconfig, python2Packages, perl
-, libX11, libv4l, qt5, lzma, gtk2, xmlto, docbook_xsl, autoreconfHook
+{ stdenv
+, lib
+, fetchFromGitHub
+, imagemagickBig
+, pkg-config
+, libX11
+, libv4l
+, qtbase
+, qtx11extras
+, wrapQtAppsHook
+, wrapGAppsHook
+, gtk3
+, xmlto
+, docbook_xsl
+, autoreconfHook
+, dbus
 , enableVideo ? stdenv.isLinux
+  # The implementation is buggy and produces an error like
+  # Name Error (Connection ":1.4380" is not allowed to own the service "org.linuxtv.Zbar" due to security policies in the configuration file)
+  # for every scanned code.
+  # see https://github.com/mchehab/zbar/issues/104
+, enableDbus ? false
+, libintl
 }:
 
-let
-  inherit (python2Packages) pygtk python;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "zbar";
-  version = "0.22";
+  version = "0.23.90";
+
+  outputs = [ "out" "lib" "dev" "doc" "man" ];
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "zbar";
     rev = version;
-    sha256 = "0pz0vq6a97vnc3lcjw9k12dk2awgmws46cjfh16zin0jiz18d1xq";
+    sha256 = "sha256-FvV7TMc4JbOiRjWLka0IhtpGGqGm5fis7h870OmJw2U=";
   };
 
-  nativeBuildInputs = [ pkgconfig xmlto autoreconfHook docbook_xsl ];
+  nativeBuildInputs = [
+    pkg-config
+    xmlto
+    autoreconfHook
+    docbook_xsl
+    wrapQtAppsHook
+    wrapGAppsHook
+  ];
 
   buildInputs = [
-    imagemagickBig python pygtk perl libX11
-  ] ++ stdenv.lib.optionals enableVideo [
-    libv4l gtk2 qt5.qtbase qt5.qtx11extras
+    imagemagickBig
+    libX11
+    libintl
+  ] ++ lib.optionals enableDbus [
+    dbus
+  ] ++ lib.optionals enableVideo [
+    libv4l
+    gtk3
+    qtbase
+    qtx11extras
   ];
+
+  # Disable assertions which include -dev QtBase file paths.
+  NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
   configureFlags = [
-    "--with-dbusconfdir=$out/etc/dbus-1/system.d"
-  ] ++ stdenv.lib.optionals (!enableVideo) [
-    "--disable-video" "--without-gtk" "--without-qt"
-  ];
+    "--without-python"
+  ] ++ (if enableDbus then [
+    "--with-dbusconfdir=${placeholder "out"}/share"
+  ] else [
+    "--without-dbus"
+  ]) ++ (if enableVideo then [
+    "--with-gtk=gtk3"
+  ] else [
+    "--disable-video"
+    "--without-gtk"
+    "--without-qt"
+  ]);
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+  dontWrapGApps = true;
+
+  postFixup = lib.optionalString enableVideo ''
+    wrapGApp "$out/bin/zbarcam-gtk"
+    wrapQtApp "$out/bin/zbarcam-qt"
+  '';
+
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Bar code reader";
     longDescription = ''
       ZBar is an open source software suite for reading bar codes from various
@@ -42,6 +97,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ delroth raskin ];
     platforms = platforms.unix;
     license = licenses.lgpl21;
-    homepage = https://github.com/mchehab/zbar;
+    homepage = "https://github.com/mchehab/zbar";
   };
 }

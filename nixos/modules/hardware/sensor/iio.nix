@@ -8,7 +8,12 @@ with lib;
   options = {
     hardware.sensor.iio = {
       enable = mkOption {
-        description = "Enable this option to support IIO sensors.";
+        description = ''
+          Enable this option to support IIO sensors with iio-sensor-proxy.
+
+          IIO sensors are used for orientation and ambient light
+          sensors on some mobile devices.
+        '';
         type = types.bool;
         default = false;
       };

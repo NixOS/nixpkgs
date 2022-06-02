@@ -1,24 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , libX11, libXcomposite, libXft, libXmu, libXrandr, libXext, libXScrnSaver
-, pam, apacheHttpd, imagemagick, pamtester, xscreensaver, xset }:
+, pam, apacheHttpd, pamtester, xscreensaver, coreutils, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "xsecurelock-${version}";
-  version = "1.2";
+  pname = "xsecurelock";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "xsecurelock";
     rev = "v${version}";
-    sha256 = "1vaw2m3yyfazj1x7xdwppmm0ch075q399g5vzrmhhrkzdrs53r1x";
+    sha256 = "020y2mi4sshc5dghcz37aj5wwizbg6712rzq2a72f8z8m7mnxr5y";
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig
+    autoreconfHook pkg-config makeWrapper
   ];
+
   buildInputs = [
     libX11 libXcomposite libXft libXmu libXrandr libXext libXScrnSaver
-    pam apacheHttpd imagemagick pamtester
+    pam apacheHttpd pamtester
   ];
 
   configureFlags = [
@@ -32,14 +33,13 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  preInstall = ''
-    substituteInPlace helpers/saver_blank \
-      --replace 'protect xset' 'protect ${xset}/bin/xset'
+  postInstall = ''
+    wrapProgram $out/libexec/xsecurelock/saver_blank --prefix PATH : ${coreutils}/bin
   '';
 
   meta = with lib; {
     description = "X11 screen lock utility with security in mind";
-    homepage = https://github.com/google/xsecurelock;
+    homepage = "https://github.com/google/xsecurelock";
     license = licenses.asl20;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;

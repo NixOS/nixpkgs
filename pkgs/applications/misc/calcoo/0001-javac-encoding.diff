@@ -1,0 +1,21 @@
+diff -Naur calcoo-2.1.0-old/build.xml calcoo-2.1.0-new/build.xml
+--- calcoo-2.1.0-old/build.xml	1969-12-31 21:00:01.000000000 -0300
++++ calcoo-2.1.0-new/build.xml	2022-04-16 15:41:59.763861191 -0300
+@@ -16,7 +16,7 @@
+     <!-- Create the build directory structure used by compile -->
+     <mkdir dir="${build}"/>
+     <!-- Compile the java code from ${src} into ${build} -->
+-    <javac srcdir="${src}" destdir="${build}" includeantruntime="false"/>
++    <javac srcdir="${src}" destdir="${build}" includeantruntime="false" encoding="iso-8859-1"/>
+   </target>
+ 
+   <target name="copyresource" depends="compile">
+@@ -31,7 +31,7 @@
+   <target name="testcompile">
+     <mkdir dir="${testbuild}"/>
+     <!-- Compile the java code from ${testsrc} into ${testbuild} -->
+-    <javac srcdir="${testsrc}" destdir="${testbuild}" includeantruntime="false">
++    <javac srcdir="${testsrc}" destdir="${testbuild}" includeantruntime="false" encoding="iso-8859-1">
+ 		<classpath>
+ 			<pathelement location="${junitpath}\junit.jar"/>
+ 			<pathelement location="${junitpath}\hamcrest-core.jar"/>

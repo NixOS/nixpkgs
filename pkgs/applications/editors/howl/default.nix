@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, gtk3, librsvg }:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, gtk3, librsvg }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "howl-${version}";
-  version = "0.5.3";
+  pname = "howl";
+  version = "0.6";
 
   # Use the release tarball containing pre-downloaded dependencies sources
   src = fetchurl {
-    url = "https://github.com/howl-editor/howl/releases/download/0.5.3/howl-0.5.3.tgz";
-    sha256 = "0gnc8vr5h8mwapbcqc1zr9la62rb633awyqgy8q7pwjpiy85a03v";
+    url = "https://github.com/howl-editor/howl/releases/download/${version}/howl-${version}.tgz";
+    sha256 = "1qc58l3rkr37cj6vhf8c7bnwbz93nscyraz7jxqwjq6k4gj0cjw3";
   };
 
   sourceRoot = "./howl-${version}/src";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # The Makefile uses "/usr/local" if not explicitly overridden
   installFlags = [ "PREFIX=$(out)" ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ gtk3 librsvg ];
   enableParallelBuilding = true;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://howl.io/;
+    homepage = "https://howl.io/";
     description = "A general purpose, fast and lightweight editor with a keyboard-centric minimalistic user interface";
     license = licenses.mit;
     maintainers = with maintainers; [ pacien ];

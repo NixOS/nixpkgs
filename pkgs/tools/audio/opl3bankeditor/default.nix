@@ -1,27 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, qttools, alsaLib }:
-
-stdenv.mkDerivation rec {
-  version = "1.5";
-  pname = "OPL3BankEditor";
-
-  src = fetchFromGitHub {
-    owner = "Wohlstand";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "16va5xfbyn2m63722ab5yph0l7kmghkbk6dkia93041mfhdyg9rc";
-    fetchSubmodules = true;
-  };
-
-  buildInputs = [
-    alsaLib qttools
+import ./common.nix rec {
+  pname = "opl3bankeditor";
+  chip = "OPL3";
+  version = "1.5.1";
+  sha256 = "08krbxlxgmc7i2r2k6d6wgi0m6k8hh3j60xf21kz4kp023w613sa";
+  extraPatches = [
+    ./0001-opl3bankeditor-Look-for-system-installed-Rt-libs.patch
   ];
-  nativeBuildInputs = [ cmake ];
-
-  meta = with stdenv.lib; {
-    description = "A small cross-platform editor of the OPL3 FM banks of different formats";
-    homepage = src.meta.homepage;
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ gnidorah ];
-  };
 }

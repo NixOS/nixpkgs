@@ -1,21 +1,44 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, lxml
+, pytestCheckHook
+, text-unidecode
+, xmlschema
+}:
 
 buildPythonPackage rec {
-  version = "2.0.0";
   pname = "sepaxml";
-  disabled = !isPy3k;
+  version = "2.4.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0jhj8fa0lbyaw15q485kyyli9qgrmqr47a6z6pgqm40kwmjghiyc";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "raphaelm";
+    repo = "python-sepaxml";
+    rev = version;
+    sha256 = "sha256-Up6zHm20tc6+lQk958csdgC4FMJFhdt+oAJcNcVbcjk=";
   };
 
-  # no tests included in PyPI package
-  doCheck = false;
+  propagatedBuildInputs = [
+    text-unidecode
+    xmlschema
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/raphaelm/python-sepaxml/;
+  checkInputs = [
+    pytestCheckHook
+    lxml
+  ];
+
+  pythonImportsCheck = [
+    "sepaxml"
+  ];
+
+  meta = with lib; {
     description = "SEPA Direct Debit XML generation in python";
+    homepage = "https://github.com/raphaelm/python-sepaxml/";
     license = licenses.mit;
     maintainers = with maintainers; [ elohmeier ];
   };

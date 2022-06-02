@@ -1,29 +1,61 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "deluge";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ flokli ];
   };
 
   nodes = {
-    server =
-      { ... }:
-
-      { services.deluge = {
+    simple = {
+      services.deluge = {
+        enable = true;
+        package = pkgs.deluge-2_x;
+        web = {
           enable = true;
-          web.enable = true;
+          openFirewall = true;
         };
-        networking.firewall.allowedTCPPorts = [ 8112 ];
       };
+    };
 
-    client = { };
+    declarative = {
+      services.deluge = {
+        enable = true;
+        package = pkgs.deluge-2_x;
+        openFirewall = true;
+        declarative = true;
+        config = {
+          allow_remote = true;
+          download_location = "/var/lib/deluge/my-download";
+          daemon_port = 58846;
+          listen_ports = [ 6881 6889 ];
+        };
+        web = {
+          enable = true;
+          port =  3142;
+        };
+        authFile = pkgs.writeText "deluge-auth" ''
+          localclient:a7bef72a890:10
+          andrew:password:10
+          user3:anotherpass:5
+        '';
+      };
+    };
+
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $server->waitForUnit("deluged");
-    $server->waitForUnit("delugeweb");
-    $client->waitForUnit("network.target");
-    $client->waitUntilSucceeds("curl --fail http://server:8112");
+    simple.wait_for_unit("deluged")
+    simple.wait_for_unit("delugeweb")
+    simple.wait_for_open_port("8112")
+    declarative.wait_for_unit("network.target")
+    declarative.wait_until_succeeds("curl --fail http://simple:8112")
+
+    declarative.wait_for_unit("deluged")
+    declarative.wait_for_unit("delugeweb")
+    declarative.wait_until_succeeds("curl --fail http://declarative:3142")
+    declarative.succeed(
+        "deluge-console 'connect 127.0.0.1:58846 andrew password; help' | grep -q 'rm.*Remove a torrent'"
+    )
   '';
 })

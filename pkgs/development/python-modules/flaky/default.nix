@@ -1,26 +1,33 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , mock
+, nose
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "flaky";
-  version = "3.5.3";
+  version = "3.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12bd5e41f372b2190e8d754b6e5829c2f11dbc764e10b30f57e59f829c9ca1da";
+    sha256 = "3ad100780721a1911f57a165809b7ea265a7863305acb66708220820caf8aa0d";
   };
 
-  buildInputs = [ mock pytest ];
+  checkInputs = [ mock nose pytest ];
 
-  # waiting for feedback https://github.com/box/flaky/issues/97
-  doCheck = false;
+  checkPhase = ''
+    # based on tox.ini
+    pytest -k 'example and not options' --doctest-modules test/test_pytest/
+    pytest -k 'example and not options' test/test_pytest/
+    pytest -p no:flaky test/test_pytest/test_flaky_pytest_plugin.py
+    nosetests --with-flaky --force-flaky --max-runs 2 test/test_nose/test_nose_options_example.py
+    pytest --force-flaky --max-runs 2  test/test_pytest/test_pytest_options_example.py
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/box/flaky;
+  meta = with lib; {
+    homepage = "https://github.com/box/flaky";
     description = "Plugin for nose or py.test that automatically reruns flaky tests";
     license = licenses.asl20;
   };

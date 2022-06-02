@@ -1,63 +1,71 @@
-{ stdenv, lib, fetchurl, coursier, jdk, jre, python, makeWrapper }:
+{ stdenv
+, fetchurl
+, autoPatchelfHook
+, installShellFiles
+, makeWrapper
+, jre
+, lib
+, zlib
+}:
 
-let
-  baseName = "bloop";
-  version = "1.2.5";
-  deps = stdenv.mkDerivation {
-    name = "${baseName}-deps-${version}";
-    buildCommand = ''
-      export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch ch.epfl.scala:bloop-frontend_2.12:${version} \
-        -r "bintray:scalameta/maven" \
-        -r "bintray:scalacenter/releases" \
-        -r "https://oss.sonatype.org/content/repositories/staging" > deps
-      mkdir -p $out/share/java
-      cp $(< deps) $out/share/java/
-    '';
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash     = "19373fyb0g7irrdzb1vsjmyv5xj84qwbcfb6lm076px7wfyn0w1c";
-  };
-in
 stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
+  pname = "bloop";
+  version = "1.5.0";
 
-  # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
-  nailgunCommit = "0c325237";
+  platform =
+    if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
+    else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
+    else throw "unsupported platform";
 
-  buildInputs = [ jdk makeWrapper deps ];
-
-  phases = [ "installPhase" ];
-
-  client = fetchurl {
-    url = "https://raw.githubusercontent.com/scalacenter/nailgun/${nailgunCommit}/pynailgun/ng.py";
-    sha256 = "0qjw4nsyb4cxg96jj1yv5c0ivcxvmscxxqfzll5w9p1pjb30bq0n";
+  bloop-bash = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bash-completions";
+    sha256 = "sha256-2mt+zUEJvQ/5ixxFLZ3Z0m7uDSj/YE9sg/uNMjamvdE=";
   };
 
-  zshCompletion = fetchurl {
-    url = "https://raw.githubusercontent.com/scalacenter/bloop/v${version}/etc/zsh/_bloop";
-    sha256 = "1id6f1fgy2rk0q5aad6ffivhbxa94fallzsc04l9n0y1s2xdhqpm";
+  bloop-fish = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/fish-completions";
+    sha256 = "sha256-eFESR6iPHRDViGv+Fk3sCvPgVAhk2L1gCG4LnfXO/v4=";
   };
+
+  bloop-zsh = fetchurl {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/zsh-completions";
+    sha256 = "sha256-WNMsPwBfd5EjeRbRtc06lCEVI2FVoLfrqL82OR0G7/c=";
+  };
+
+  bloop-binary = fetchurl rec {
+    url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
+    sha256 =
+      if stdenv.isLinux && stdenv.isx86_64 then "sha256-jif9z05W17vjFgb146qWC3o44HmbnX05gWPlbXttYsE="
+      else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-YOnXgKXsGrTu9P4I0NZW6ollZVQUXnbW8WtZTJmy+w0="
+      else throw "unsupported platform";
+  };
+
+  dontUnpack = true;
+  nativeBuildInputs = [ installShellFiles makeWrapper ]
+    ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  buildInputs = [ stdenv.cc.cc.lib zlib ];
+  propagatedBuildInputs = [ jre ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/zsh/site-functions
+    runHook preInstall
 
-    cp ${client} $out/bin/blp-client
-    cp ${zshCompletion} $out/share/zsh/site-functions/_bloop
-    chmod +x $out/bin/blp-client
+    install -D -m 0755 ${bloop-binary} $out/.bloop-wrapped
 
-    makeWrapper ${jre}/bin/java $out/bin/blp-server \
-      --prefix PATH : ${lib.makeBinPath [ jdk ]} \
-      --add-flags "-cp $CLASSPATH bloop.Server"
-    makeWrapper $out/bin/blp-client $out/bin/bloop \
-      --prefix PATH : ${lib.makeBinPath [ python ]}
+    makeWrapper $out/.bloop-wrapped $out/bin/bloop
+
+    #Install completions
+    installShellCompletion --name bloop --bash ${bloop-bash}
+    installShellCompletion --name _bloop --zsh ${bloop-zsh}
+    installShellCompletion --name bloop.fish --fish ${bloop-fish}
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://scalacenter.github.io/bloop/;
+  meta = with lib; {
+    homepage = "https://scalacenter.github.io/bloop/";
     license = licenses.asl20;
-    description = "Bloop is a Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way.";
-    maintainers = with maintainers; [ tomahna ];
+    description = "A Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    maintainers = with maintainers; [ kubukoz tomahna ];
   };
 }

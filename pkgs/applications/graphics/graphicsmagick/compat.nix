@@ -1,10 +1,10 @@
-{ stdenv, graphicsmagick }:
+{ lib, stdenv, graphicsmagick }:
 
-stdenv.mkDerivation rec {
-  name = "graphicsmagick-imagemagick-compat-${version}";
+stdenv.mkDerivation {
+  pname = "graphicsmagick-imagemagick-compat";
   inherit (graphicsmagick) version;
 
-  unpackPhase = "true";
+  dontUnpack = true;
   buildPhase = "true";
 
   utils = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "ImageMagick interface for GraphicsMagick";
-    license = stdenv.lib.licenses.free;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.free;
+    platforms = lib.platforms.all;
   };
 }

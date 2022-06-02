@@ -1,22 +1,22 @@
-{ stdenv, python3, fetchFromGitHub, makeWrapper, makeDesktopItem }:
+{ lib, mkDerivation, python3, fetchFromGitHub, makeWrapper, wrapQtAppsHook, makeDesktopItem }:
 
-stdenv.mkDerivation rec {
-  name = "leo-editor-${version}";
-  version = "5.7.3";
+mkDerivation rec {
+  pname = "leo-editor";
+  version = "6.6-b2";
 
   src = fetchFromGitHub {
     owner = "leo-editor";
     repo = "leo-editor";
     rev = version;
-    sha256 = "0ri6l6cxwva450l05af5vs1lsgrz6ciwd02njdgphs9pm1vwxbl9";
+    sha256 = "sha256-oUOsAYcxknG+bao76bzPhStO1m08pMWTEEiG2rLkklA=";
   };
 
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper python3 ];
+  nativeBuildInputs = [ wrapQtAppsHook makeWrapper python3 ];
   propagatedBuildInputs = with python3.pkgs; [ pyqt5 docutils ];
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "leo-editor";
     exec = "leo %U";
     icon = "leoapp32";
@@ -24,11 +24,9 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Leo";
     genericName = "Text Editor";
-    categories = stdenv.lib.concatStringsSep ";" [
-      "Application" "Development" "IDE" "QT"
-    ];
-    startupNotify = "false";
-    mimeType = stdenv.lib.concatStringsSep ";" [
+    categories = [ "Application" "Development" "IDE" ];
+    startupNotify = false;
+    mimeTypes = [
       "text/plain" "text/asp" "text/x-c" "text/x-script.elisp" "text/x-fortran"
       "text/html" "application/inf" "text/x-java-source" "application/x-javascript"
       "application/javascript" "text/ecmascript" "application/x-ksh" "text/x-script.ksh"
@@ -53,13 +51,16 @@ stdenv.mkDerivation rec {
     makeWrapper ${python3.interpreter} $out/bin/leo \
       --set PYTHONPATH "$PYTHONPATH:$out/share/leo-editor" \
       --add-flags "-O $out/share/leo-editor/launchLeo.py"
+
+    wrapQtApp $out/bin/leo
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://leoeditor.com;
+  meta = with lib; {
+    homepage = "http://leoeditor.com";
     description = "A powerful folding editor";
     longDescription = "Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers.";
     license = licenses.mit;
-    maintainers = with maintainers; [ leonardoce ramkromberg ];
+    maintainers = with maintainers; [ leonardoce ];
+    mainProgram = "leo";
   };
 }

@@ -1,27 +1,108 @@
-{ stdenv, fetchurl, pkgconfig, perl, pam, nspr, nss, openldap
-, db, cyrus_sasl, svrcore, icu, net_snmp, kerberos, pcre, perlPackages
-}:
-let
-  version = "1.3.5.19";
-in
-stdenv.mkDerivation rec {
-  name = "389-ds-base-${version}";
+{ stdenv
+, autoreconfHook
+, fetchFromGitHub
+, lib
 
-  src = fetchurl {
-    url = "http://directory.fedoraproject.org/binaries/${name}.tar.bz2";
-    sha256 = "1r1n44xfvy51r4r1180dfmjziyj3pqxwmnv6rjvvvjjm87fslmdd";
+, bzip2
+, cmocka
+, cracklib
+, cyrus_sasl
+, db
+, doxygen
+, icu
+, libevent
+, libkrb5
+, lm_sensors
+, net-snmp
+, nspr
+, nss
+, openldap
+, openssl
+, pcre
+, perl
+, perlPackages
+, pkg-config
+, python3
+, svrcore
+, zlib
+
+, enablePamPassthru ? true
+, pam
+
+, enableCockpit ? true
+, rsync
+
+, enableDna ? true
+, enableLdapi ? true
+, enableAutobind ? false
+, enableAutoDnSuffix ? false
+, enableBitwise ? true
+, enableAcctPolicy ? true
+, enablePosixWinsync ? true
+}:
+
+stdenv.mkDerivation rec {
+  pname = "389-ds-base";
+  version = "2.0.7";
+
+  src = fetchFromGitHub {
+    owner = "389ds";
+    repo = pname;
+    rev = "${pname}-${version}";
+    sha256 = "sha256-aM1qo+yHrCFespPWHv2f25ooqQVCIZGaZS43dY6kiC4=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];
+
   buildInputs = [
-    perl pam nspr nss openldap db cyrus_sasl svrcore icu
-    net_snmp kerberos pcre
-  ] ++ (with perlPackages; [ MozillaLdap NetAddrIP DBFile ]);
+    bzip2
+    cracklib
+    cyrus_sasl
+    db
+    icu
+    libevent
+    libkrb5
+    lm_sensors
+    net-snmp
+    nspr
+    nss
+    openldap
+    openssl
+    pcre
+    perl
+    python3
+    svrcore
+    zlib
 
-  # TODO: Fix bin/ds-logpipe.py, bin/logconv, bin/cl-dump
+    # tests
+    cmocka
+    libevent
 
-  patches = [ ./perl-path.patch
-  ];
+    # lib389
+    (python3.withPackages (ps: with ps; [
+      setuptools
+      ldap
+      six
+      pyasn1
+      pyasn1-modules
+      python-dateutil
+      argcomplete
+      libselinux
+    ]))
+
+    # logconv.pl
+    perlPackages.DBFile
+    perlPackages.ArchiveTar
+  ]
+  ++ lib.optional enableCockpit rsync
+  ++ lib.optional enablePamPassthru pam;
+
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace 's,@perlpath\@,$(perldir),g' 's,@perlpath\@,$(perldir) $(PERLPATH),g'
+
+    patchShebangs ./buildnum.py ./ldap/servers/slapd/mkDBErrStrs.py
+  '';
 
   preConfigure = ''
     # Create perl paths for library imports in perl scripts
@@ -32,33 +113,48 @@ stdenv.mkDerivation rec {
     export PERLPATH
   '';
 
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--with-openldap"
-    "--with-db"
-    "--with-db-inc=${db.dev}/include"
-    "--with-db-lib=${db.out}/lib"
-    "--with-sasl=${cyrus_sasl.dev}"
-    "--with-netsnmp=${net_snmp}"
-  ];
+  configureFlags =
+    let
+      mkEnable = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
+    in
+    [
+      "--enable-cmocka"
+      "--localstatedir=/var"
+      "--sysconfdir=/etc"
+      "--with-db-inc=${db.dev}/include"
+      "--with-db-lib=${db.out}/lib"
+      "--with-db=yes"
+      "--with-netsnmp-inc=${lib.getDev net-snmp}/include"
+      "--with-netsnmp-lib=${lib.getLib net-snmp}/lib"
+      "--with-netsnmp=yes"
+      "--with-openldap"
 
-  preInstall = ''
-    # The makefile doesn't create this directory for whatever reason
-    mkdir -p $out/lib/dirsrv
-  '';
+      "${mkEnable enableCockpit "cockpit"}"
+      "${mkEnable enablePamPassthru "pam-passthru"}"
+      "${mkEnable enableDna "dna"}"
+      "${mkEnable enableLdapi "ldapi"}"
+      "${mkEnable enableAutobind "autobind"}"
+      "${mkEnable enableAutoDnSuffix "auto-dn-suffix"}"
+      "${mkEnable enableBitwise "bitwise"}"
+      "${mkEnable enableAcctPolicy "acctpolicy"}"
+      "${mkEnable enablePosixWinsync "posix-winsync"}"
+    ];
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
 
   installFlags = [
-    "sysconfdir=\${out}/etc"
-    "localstatedir=\${TMPDIR}"
+    "sysconfdir=${placeholder "out"}/etc"
+    "localstatedir=${placeholder "TMPDIR"}"
   ];
 
   passthru.version = version;
 
-  meta = with stdenv.lib; {
-    homepage = http://www.port389.org/;
+  meta = with lib; {
+    homepage = "https://www.port389.org/";
     description = "Enterprise-class Open Source LDAP server for Linux";
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };
 }

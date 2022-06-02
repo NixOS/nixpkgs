@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''simple-date'';
-  version = ''postmodern-20190107-git'';
+  baseName = "simple-date";
+  version = "postmodern-20211209-git";
 
-  parasites = [ "simple-date/postgres-glue" "simple-date/tests" ];
+  parasites = [ "simple-date/tests" ];
 
-  description = '''';
+  description = "Simple date library that can be used with postmodern";
 
-  deps = [ args."cl-postgres" args."fiveam" args."md5" args."usocket" ];
+  deps = [ args."fiveam" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/postmodern/2019-01-07/postmodern-20190107-git.tgz'';
-    sha256 = ''030p5kp593p4z7p3k0828dlayglw2si3q187z1fafgpvspp42sd5'';
+    url = "http://beta.quicklisp.org/archive/postmodern/2021-12-09/postmodern-20211209-git.tgz";
+    sha256 = "1qcbg31mz5r7ibmq2y7r3vqvdwpznxvwdnwd94hfil7pg4j119d6";
   };
 
   packageName = "simple-date";
@@ -19,13 +20,11 @@ rec {
   asdFilesToKeep = ["simple-date.asd"];
   overrides = x: x;
 }
-/* (SYSTEM simple-date DESCRIPTION NIL SHA256
-    030p5kp593p4z7p3k0828dlayglw2si3q187z1fafgpvspp42sd5 URL
-    http://beta.quicklisp.org/archive/postmodern/2019-01-07/postmodern-20190107-git.tgz
-    MD5 3f6f78c4fb0f5a8bb9f13247f1f3d6eb NAME simple-date FILENAME simple-date
-    DEPS
-    ((NAME cl-postgres FILENAME cl-postgres) (NAME fiveam FILENAME fiveam)
-     (NAME md5 FILENAME md5) (NAME usocket FILENAME usocket))
-    DEPENDENCIES (cl-postgres fiveam md5 usocket) VERSION
-    postmodern-20190107-git SIBLINGS (cl-postgres postmodern s-sql) PARASITES
-    (simple-date/postgres-glue simple-date/tests)) */
+/* (SYSTEM simple-date DESCRIPTION
+    Simple date library that can be used with postmodern SHA256
+    1qcbg31mz5r7ibmq2y7r3vqvdwpznxvwdnwd94hfil7pg4j119d6 URL
+    http://beta.quicklisp.org/archive/postmodern/2021-12-09/postmodern-20211209-git.tgz
+    MD5 6d14c4b5fec085594dc66d520174e0e6 NAME simple-date FILENAME simple-date
+    DEPS ((NAME fiveam FILENAME fiveam)) DEPENDENCIES (fiveam) VERSION
+    postmodern-20211209-git SIBLINGS (cl-postgres postmodern s-sql) PARASITES
+    (simple-date/tests)) */

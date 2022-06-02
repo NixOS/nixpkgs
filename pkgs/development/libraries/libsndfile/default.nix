@@ -1,51 +1,21 @@
-{ stdenv, fetchurl, flac, libogg, libvorbis, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, flac, libogg, libopus, libvorbis, pkg-config, python3
 , Carbon, AudioToolbox
 }:
 
 stdenv.mkDerivation rec {
-  name = "libsndfile-1.0.28";
+  pname = "libsndfile";
+  version = "1.1.0";
 
-  src = fetchurl {
-    url = "http://www.mega-nerd.com/libsndfile/files/${name}.tar.gz";
-    sha256 = "1afzm7jx34jhqn32clc5xghyjglccam2728yxlx37yj2y0lkkwqz";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-bhIXVSKuUnUzs5aaLDHt21RcnqekEpLU414sFtl2Lro=";
   };
 
-  patches = [
-    (fetchurl {
-      name = "CVE-2017-12562.patch";
-      url = "https://github.com/erikd/libsndfile/commit/cf7a8182c2642c50f1cf90dddea9ce96a8bad2e8.patch";
-      sha256 = "1jg3wq30wdn9nv52mcyv6jyi4d80h4r1h9p96czcria7l91yh4sy";
-    })
-    (fetchurl {
-      name = "CVE-2017-6892.patch";
-      url = "https://github.com/erikd/libsndfile/commit/f833c53cb596e9e1792949f762e0b33661822748.patch";
-      sha256 = "05xkmz2ihc1zcj73sbmj1ikrv9qlcym2bkp1v6ak7w53ky619mwq";
-    })
-    (fetchurl {
-      name = "CVE-2017-8361+CVE-2017-8363+CVE-2017-8365.patch";
-      url = "https://github.com/erikd/libsndfile/commit/fd0484aba8e51d16af1e3a880f9b8b857b385eb3.patch";
-      sha256 = "0ccndnvjzx5fw18zvy03vnb29rr81h5vsh1m16msqbxk8ibndln2";
-    })
-    (fetchurl {
-      name = "CVE-2017-8362.patch";
-      url = "https://github.com/erikd/libsndfile/commit/ef1dbb2df1c0e741486646de40bd638a9c4cd808.patch";
-      sha256 = "1xyv30ga71cpy4wx5f76sc4dma91la2lcc6s9f3pk9rndyi7gj9x";
-    })
-    (fetchurl {
-      name = "CVE-2017-14634.patch";
-      url = "https://github.com/erikd/libsndfile/commit/85c877d5072866aadbe8ed0c3e0590fbb5e16788.patch";
-      sha256 = "0kc7vp22qsxidhvmlc6nfamw7k92n0hcfpmwhb3gaksjamwhb2df";
-    })
-    (fetchurl {
-      name = "CVE-2018-13139.patch";
-      url = "https://github.com/erikd/libsndfile/commit/aaea680337267bfb6d2544da878890ee7f1c5077.patch";
-      sha256 = "01q3m7pa3xqkh05ijmfgv064v8flkg4p24bgy9wxnc6wfcdifggx";
-    })
-  ];
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ flac libogg libvorbis ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
+  nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
+  buildInputs = [ flac libogg libopus libvorbis ]
+    ++ lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
 
   enableParallelBuilding = true;
 
@@ -53,7 +23,7 @@ stdenv.mkDerivation rec {
 
   # need headers from the Carbon.framework in /System/Library/Frameworks to
   # compile this on darwin -- not sure how to handle
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin
+  preConfigure = lib.optionalString stdenv.isDarwin
     ''
       NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
     '';
@@ -61,9 +31,9 @@ stdenv.mkDerivation rec {
   # Needed on Darwin.
   NIX_CFLAGS_LINK = "-logg -lvorbis";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C library for reading and writing files containing sampled sound";
-    homepage    = http://www.mega-nerd.com/libsndfile/;
+    homepage    = "https://libsndfile.github.io/libsndfile/";
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

@@ -1,13 +1,13 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "mbpfan-${version}";
-  version = "2.1.0";
+  pname = "mbpfan";
+  version = "2.3.0";
   src = fetchFromGitHub {
     owner = "dgraziotin";
     repo = "mbpfan";
     rev = "v${version}";
-    sha256 = "1gysq778rkl6dvvj9a1swxcl15wvz0bng5bn4nwq118cl8p8pask";
+    sha256 = "sha256-jIYg9b0c/7mMRS5WF+mOH6t9SCWEP32lsdbCgpWpg24=";
   };
   installPhase = ''
     mkdir -p $out/bin $out/etc
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Daemon that uses input from coretemp module and sets the fan speed using the applesmc module";
-    homepage = https://github.com/dgraziotin/mbpfan;
+    homepage = "https://github.com/dgraziotin/mbpfan";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

@@ -1,44 +1,55 @@
 { config, lib, pkgs, ... }:
 
 let
+  inherit (lib) generators literalExpression mkEnableOption mkIf mkOption recursiveUpdate types;
   cfg = config.services.zeronet;
+  dataDir = "/var/lib/zeronet";
+  configFile = pkgs.writeText "zeronet.conf" (generators.toINI {} (recursiveUpdate defaultSettings cfg.settings));
 
-  zConfFile = pkgs.writeTextFile {
-    name = "zeronet.conf";
-    
-    text = ''
-      [global]
-      data_dir = ${cfg.dataDir}
-      log_dir = ${cfg.logDir}
-    '' + lib.optionalString (cfg.port != null) ''
-      ui_port = ${toString cfg.port}
-    '' + lib.optionalString (cfg.torAlways) ''
-      tor = always
-    '' + cfg.extraConfig;
+  defaultSettings = {
+    global = {
+      data_dir = dataDir;
+      log_dir = dataDir;
+      ui_port = cfg.port;
+      fileserver_port = cfg.fileserverPort;
+      tor = if !cfg.tor then "disable" else if cfg.torAlways then "always" else "enable";
+    };
   };
 in with lib; {
   options.services.zeronet = {
     enable = mkEnableOption "zeronet";
 
-    dataDir = mkOption {
-      type = types.path;
-      default = "/var/lib/zeronet";
-      example = "/home/okina/zeronet";
-      description = "Path to the zeronet data directory.";
+    package = mkOption {
+      type = types.package;
+      default = pkgs.zeronet;
+      defaultText = literalExpression "pkgs.zeronet";
+      description = "ZeroNet package to use";
     };
 
-    logDir = mkOption {
-      type = types.path;
-      default = "/var/log/zeronet";
-      example = "/home/okina/zeronet/log";
-      description = "Path to the zeronet log directory.";
+    settings = mkOption {
+      type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
+      default = {};
+      example = literalExpression "{ global.tor = enable; }";
+
+      description = ''
+        <filename>zeronet.conf</filename> configuration. Refer to
+        <link xlink:href="https://zeronet.readthedocs.io/en/latest/faq/#is-it-possible-to-use-a-configuration-file"/>
+        for details on supported values;
+      '';
     };
 
     port = mkOption {
-      type = types.nullOr types.int;
-      default = null;
-      example = 43110;
+      type = types.port;
+      default = 43110;
       description = "Optional zeronet web UI port.";
+    };
+
+    fileserverPort = mkOption {
+      # Not optional: when absent zeronet tries to write one to the
+      # read-only config file and crashes
+      type = types.port;
+      default = 12261;
+      description = "Zeronet fileserver port.";
     };
 
     tor = mkOption {
@@ -52,22 +63,13 @@ in with lib; {
       default = false;
       description = "Use TOR for all zeronet traffic.";
     };
-
-    extraConfig = mkOption {
-      type = types.lines;
-      default = "";
-
-      description = ''
-        Extra configuration. Contents will be added verbatim to the
-        configuration file at the end.
-      '';
-    };
   };
 
   config = mkIf cfg.enable {
     services.tor = mkIf cfg.tor {
       enable = true;
       controlPort = 9051;
+
       extraConfig = ''
         CacheDirectoryGroupReadable 1
         CookieAuthentication 1
@@ -77,38 +79,23 @@ in with lib; {
 
     systemd.services.zeronet = {
       description = "zeronet";
-      after = [ "network.target" (optionalString cfg.tor "tor.service") ];
+      after = [ "network.target" ] ++ optional cfg.tor "tor.service";
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        # Ensure folder exists or create it and permissions are correct
-        mkdir -p ${escapeShellArg cfg.dataDir} ${escapeShellArg cfg.logDir}
-        chmod 750 ${escapeShellArg cfg.dataDir} ${escapeShellArg cfg.logDir}
-        chown zeronet:zeronet ${escapeShellArg cfg.dataDir} ${escapeShellArg cfg.logDir}
-      '';
-
       serviceConfig = {
-        PermissionsStartOnly = true;
-        PrivateTmp = "yes";
         User = "zeronet";
-        Group = "zeronet";
-        ExecStart = "${pkgs.zeronet}/bin/zeronet --config_file ${zConfFile}";
-      };
-    };
-
-    users = {
-      groups.zeronet.gid = config.ids.gids.zeronet;
-
-      users.zeronet = {
-        description = "zeronet service user";
-        home = cfg.dataDir;
-        createHome = true;
-        group = "zeronet";
-        extraGroups = mkIf cfg.tor [ "tor" ];
-        uid = config.ids.uids.zeronet;
+        DynamicUser = true;
+        StateDirectory = "zeronet";
+        SupplementaryGroups = mkIf cfg.tor [ "tor" ];
+        ExecStart = "${cfg.package}/bin/zeronet --config_file ${configFile}";
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ chiiruno ];
+  imports = [
+    (mkRemovedOptionModule [ "services" "zeronet" "dataDir" ] "Zeronet will store data by default in /var/lib/zeronet")
+    (mkRemovedOptionModule [ "services" "zeronet" "logDir" ] "Zeronet will log by default in /var/lib/zeronet")
+  ];
+
+  meta.maintainers = with maintainers; [ Madouura ];
 }

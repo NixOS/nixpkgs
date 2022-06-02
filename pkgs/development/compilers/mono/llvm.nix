@@ -13,8 +13,8 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
-  name    = "llvm-${version}";
+stdenv.mkDerivation {
+  pname = "llvm";
   version = "3.6-mono-2017-02-15";
 
   src = fetchFromGitHub {
@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     sha256 = "07wd1cs3fdvzb1lv41b655z5zk34f47j8fgd9ljjimi5j9pj71f7";
   };
 
-  buildInputs = [ perl groff cmake libxml2 python2 libffi ] ++ lib.optional stdenv.isLinux valgrind;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ perl groff libxml2 python2 libffi ] ++ lib.optional stdenv.isLinux valgrind;
 
   propagatedBuildInputs = [ ncurses zlib ];
 
@@ -38,15 +39,13 @@ stdenv.mkDerivation rec {
   cmakeFlags = with stdenv; [
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ] ++ stdenv.lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
-
-  enableParallelBuilding = true;
+  ] ++ lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies - Mono build";
-    homepage    = http://llvm.org/;
-    license     = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
-    platforms   = stdenv.lib.platforms.all;
+    homepage    = "http://llvm.org/";
+    license     = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    platforms   = lib.platforms.all;
   };
 }

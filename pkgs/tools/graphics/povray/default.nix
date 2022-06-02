@@ -1,20 +1,20 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, boost
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, boost
 , zlib, libpng, libjpeg, libtiff, xlibsWrapper, SDL
 }:
 
 stdenv.mkDerivation rec {
-  name = "povray-${version}";
-  version = "3.7.0.8";
+  pname = "povray";
+  version = "3.8.0-x.10064738";
 
   src = fetchFromGitHub {
     owner = "POV-Ray";
     repo = "povray";
     rev = "v${version}";
-    sha256 = "1q114n4m3r7qy3yn954fq7p46rg7ypdax5fazxr9yj1jklf1lh6z";
+    sha256 = "0hy5a3q5092szk2x3s9lpn1zkszgq9bp15rxzdncxlvnanyzsasf";
   };
 
-
-  buildInputs = [ autoconf automake boost zlib libpng libjpeg libtiff xlibsWrapper SDL ];
+  nativeBuildInputs = [ automake autoconf ];
+  buildInputs = [ boost zlib libpng libjpeg libtiff xlibsWrapper SDL ];
 
   # the installPhase wants to put files into $HOME. I let it put the files
   # to $TMPDIR, so they don't get into the $out
@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.povray.org/;
+  meta = with lib; {
+    homepage = "http://www.povray.org/";
     description = "Persistence of Vision Raytracer";
     license = licenses.free;
     platforms = platforms.linux;

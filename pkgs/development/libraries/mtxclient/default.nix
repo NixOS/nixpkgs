@@ -1,39 +1,62 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig
-, boost, openssl, zlib, libsodium, olm, gtest, spdlog, nlohmann_json }:
+{ lib, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, openssl
+, olm
+, spdlog
+, nlohmann_json
+, coeurl
+, libevent
+, curl
+}:
 
 stdenv.mkDerivation rec {
-  name = "mtxclient-${version}";
-  version = "0.2.0";
+  pname = "mtxclient";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
-    owner = "mujx";
+    owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    sha256 = "19v1qa6mzvc65m7wy7x0g4i24bcg9xk31y1grwvd3zr0l4v6xcgs";
+    sha256 = "sha256-iGw+qdw7heL5q7G0dwtl4PX2UA0Kka0FUmH610dM/00=";
   };
 
-  patches = [
-    # remove on the next mtxclient update
-    (fetchpatch {
-      url = "https://github.com/Nheko-Reborn/mtxclient/commit/41314809da7eb17ec00cff1795af6a528c5e904a.diff";
-      sha256 = "17pzrkdhd4jr8xwd7hhyzak880k8yb9nkg3vcbyjfp5si89dha5j";
-    })
-  ];
-
   postPatch = ''
-    ln -s ${nlohmann_json}/include/nlohmann/json.hpp include/json.hpp
+    # See https://github.com/gabime/spdlog/issues/1897
+    sed -i '1a add_compile_definitions(SPDLOG_FMT_EXTERNAL)' CMakeLists.txt
   '';
 
-  cmakeFlags = [ "-DBUILD_LIB_TESTS=OFF" "-DBUILD_LIB_EXAMPLES=OFF" ];
+  cmakeFlags = [
+    # Network requiring tests can't be disabled individually:
+    # https://github.com/Nheko-Reborn/mtxclient/issues/22
+    "-DBUILD_LIB_TESTS=OFF"
+    "-DBUILD_LIB_EXAMPLES=OFF"
+  ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ boost openssl zlib libsodium olm ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    spdlog
+    nlohmann_json
+    openssl
+    olm
+    coeurl
+    libevent
+    curl
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Client API library for Matrix, built on top of Boost.Asio";
-    homepage = https://github.com/mujx/mtxclient;
+  meta = with lib; {
+    description = "Client API library for the Matrix protocol.";
+    homepage = "https://github.com/Nheko-Reborn/mtxclient";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ fpletz pstn ];
+    platforms = platforms.all;
+    # Should be fixable if a higher clang version is used, see:
+    # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177
+    broken = stdenv.targetPlatform.isDarwin;
   };
 }

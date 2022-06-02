@@ -1,41 +1,46 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ansible
 , pytest
 , mock
-, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "2.0.2";
+  version = "2.2.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "d69d89cbcf29e587cbe6ec4b229346edbf027d3c04944dd7bcbf3d7bba46348f";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "pytest-ansible";
+    rev = "v${version}";
+    sha256 = "0vr015msciwzz20zplxalfmfx5hbg8rkf8vwjdg3z12fba8z8ks4";
   };
 
   patchPhase = ''
     sed -i "s/'setuptools-markdown'//g" setup.py
   '';
 
+  buildInputs = [ pytest ];
+
   # requires pandoc < 2.0
   # buildInputs = [ setuptools-markdown ];
   checkInputs =  [ mock ];
-  propagatedBuildInputs = [ ansible pytest ];
+  propagatedBuildInputs = [ ansible ];
 
-  # tests not included with release
+  # tests not included with release, even on github
   doCheck = false;
 
   checkPhase = ''
-    pytest
+    HOME=$TMPDIR pytest tests/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://github.com/jlaska/pytest-ansible;
+  meta = with lib; {
+    homepage = "https://github.com/jlaska/pytest-ansible";
     description = "Plugin for py.test to simplify calling ansible modules from tests or fixtures";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
+    # https://github.com/ansible-community/pytest-ansible/blob/v2.2.4/setup.py#L124
+    broken = lib.versionAtLeast ansible.version "2.10";
   };
 }

@@ -1,34 +1,49 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
+, fetchFromGitHub
+, gevent
 , nose
 , mock
-, pyyaml
-, unittest2
-, pyev
 , twisted
 , tornado
 }:
 
 buildPythonPackage rec {
   pname = "pika";
-  version = "0.13.0";
+  version = "1.2.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1104b0jm7qs9b211hw6siddflvf56ag4lfsjy6yfbczds4lxhf2k";
+  src = fetchFromGitHub {
+    owner = "pika";
+    repo = "pika";
+    rev = version;
+    sha256 = "sha256-Wog6Wxa8V/zv/bBrFOigZi6KE5qRf82bf1GK2XwvpDI=";
   };
 
-  # Tests require twisted which is only availalble for python-2.x
-  doCheck = !isPy3k;
+  propagatedBuildInputs = [ gevent tornado twisted ];
 
-  buildInputs = [ nose mock pyyaml unittest2 pyev ]
-    ++ stdenv.lib.optionals (!isPy3k) [ twisted tornado ];
+  checkInputs = [ nose mock ];
 
-  meta = with stdenv.lib; {
+  postPatch = ''
+    # don't stop at first test failure
+    # don't run acceptance tests because they access the network
+    # don't report test coverage
+    substituteInPlace setup.cfg \
+      --replace "stop = 1" "stop = 0" \
+      --replace "tests=tests/unit,tests/acceptance" "tests=tests/unit" \
+      --replace "with-coverage = 1" "with-coverage = 0"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    PIKA_TEST_TLS=true nosetests
+
+    runHook postCheck
+  '';
+
+  meta = with lib; {
     description = "Pure-Python implementation of the AMQP 0-9-1 protocol";
-    homepage = https://pika.readthedocs.org;
+    homepage = "https://pika.readthedocs.org";
     license = licenses.bsd3;
   };
 

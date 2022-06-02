@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview, camlp4 }:
+{ stdenv, lib, fetchurl, ocaml, findlib, pkg-config, gtk2, libgnomecanvas, gtksourceview, camlp4 }:
 
-if stdenv.lib.versionAtLeast ocaml.version "4.04"
+if lib.versionAtLeast ocaml.version "4.04"
 then throw "lablgtk-2.14 is not available for OCaml ${ocaml.version}" else
 
 let
@@ -16,11 +16,11 @@ stdenv.mkDerivation (rec {
     sha256 = "1fnh0amm7lwgyjdhmlqgsp62gwlar1140425yc1j6inwmgnsp0a9";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocaml findlib gtk2 libgnomecanvas libglade gtksourceview camlp4 ];
+  nativeBuildInputs = [ pkg-config ocaml findlib camlp4 ];
+  buildInputs = [ gtk2 libgnomecanvas gtksourceview ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
-  buildFlags = "world";
+  buildFlags = [ "world" ];
 
   preInstall = ''
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib
@@ -29,13 +29,13 @@ stdenv.mkDerivation (rec {
 
   meta = {
     branch = "2.14";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [
-      stdenv.lib.maintainers.z77z
-      stdenv.lib.maintainers.roconnor
+      lib.maintainers.maggesi
+      lib.maintainers.roconnor
     ];
-    homepage = http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgtk.html;
-    description = "LablGTK is is an Objective Caml interface to gtk+";
-    license = stdenv.lib.licenses.lgpl21Plus;
+    homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgtk.html";
+    description = "LablGTK is is an Objective Caml interface to GTK";
+    license = lib.licenses.lgpl21Plus;
   };
 })

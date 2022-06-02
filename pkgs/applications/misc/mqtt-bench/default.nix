@@ -1,7 +1,7 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
+{ lib, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 buildGoPackage rec {
-  name = "mqtt-bench-${version}";
+  pname = "mqtt-bench";
   version = "0.3.0";
   rev = "v${version}";
 
@@ -24,9 +24,9 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mosquitto benchmark tool";
-    homepage = https://github.com/takanorig/mqtt-bench;
+    homepage = "https://github.com/takanorig/mqtt-bench";
     maintainers = with maintainers; [ disassembler ];
   };
 }

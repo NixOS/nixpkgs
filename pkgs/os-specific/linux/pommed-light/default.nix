@@ -1,22 +1,21 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , pciutils
 , libconfuse
-, alsaLib
+, alsa-lib
 , audiofile
-, pkgconfig
+, pkg-config
 , zlib
 , eject
 }:
 
 stdenv.mkDerivation rec {
-  pkgname = "pommed-light";
+  pname = "pommed-light";
   version = "1.51lw";
-  name = "${pkgname}-${version}";
 
   src = fetchFromGitHub {
     owner = "bytbox";
-    repo = pkgname;
+    repo = "pommed-light";
     rev = "v${version}";
     sha256 = "18fvdwwhcl6s4bpf2f2i389s71c8k4g0yb81am9rdddqmzaw27iy";
   };
@@ -28,11 +27,11 @@ stdenv.mkDerivation rec {
     substituteInPlace pommed/cd_eject.c --replace /usr/bin/eject ${eject}/bin/eject
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     pciutils
     libconfuse
-    alsaLib
+    alsa-lib
     audiofile
     zlib
     eject
@@ -58,8 +57,8 @@ stdenv.mkDerivation rec {
       ambient light sensor support removed, optimized for use with dwm
       and the like.
     '';
-    homepage = https://github.com/bytbox/pommed-light;
+    homepage = "https://github.com/bytbox/pommed-light";
     platforms = [ "x86_64-linux" ];
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
   };
 }

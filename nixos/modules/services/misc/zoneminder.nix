@@ -2,6 +2,7 @@
 
 let
   cfg = config.services.zoneminder;
+  fpm = config.services.phpfpm.pools.zoneminder;
   pkg = pkgs.zoneminder;
 
   dirName = pkg.dirName;
@@ -10,16 +11,14 @@ let
   group = {
     nginx = config.services.nginx.group;
     none  = user;
-  }."${cfg.webserver}";
+  }.${cfg.webserver};
 
   useNginx = cfg.webserver == "nginx";
 
   defaultDir = "/var/lib/${user}";
   home = if useCustomDir then cfg.storageDir else defaultDir;
 
-  useCustomDir = !(builtins.isNull cfg.storageDir);
-
-  socket = "/run/phpfpm/${dirName}.sock";
+  useCustomDir = cfg.storageDir != null;
 
   zms = "/cgi-bin/zms";
 
@@ -50,7 +49,7 @@ let
     ZM_DB_TYPE=mysql
     ZM_DB_HOST=${cfg.database.host}
     ZM_DB_NAME=${cfg.database.name}
-    ZM_DB_USER=${if cfg.database.createLocally then user else cfg.database.username}
+    ZM_DB_USER=${cfg.database.username}
     ZM_DB_PASS=${cfg.database.password}
 
     # Web
@@ -64,10 +63,6 @@ let
     ${cfg.extraConfig}
   '';
 
-  phpExtensions = with pkgs.phpPackages; [
-    { pkg = apcu; name = "apcu"; }
-  ];
-
 in {
   options = {
     services.zoneminder = with lib; {
@@ -78,6 +73,8 @@ in {
         `config.services.zoneminder.database.createLocally` to true. Otherwise,
         when set to `false` (the default), you will have to create the database
         and database user as well as populate the database yourself.
+        Additionally, you will need to run `zmupdate.pl` yourself when
+        upgrading to a newer version.
       '';
 
       webserver = mkOption {
@@ -155,6 +152,7 @@ in {
           default = "zmpass";
           description = ''
             Username for accessing the database.
+            Not used if <literal>createLocally</literal> is set.
           '';
         };
       };
@@ -173,7 +171,7 @@ in {
         example = "/storage/tank";
         description = ''
           ZoneMinder can generate quite a lot of data, so in case you don't want
-          to use the default ${home}, you can override the path here.
+          to use the default ${defaultDir}, you can override the path here.
         '';
       };
 
@@ -189,12 +187,21 @@ in {
 
   config = lib.mkIf cfg.enable {
 
+    assertions = [
+      { assertion = cfg.database.createLocally -> cfg.database.username == user;
+        message = "services.zoneminder.database.username must be set to ${user} if services.zoneminder.database.createLocally is set true";
+      }
+    ];
+
     environment.etc = {
       "zoneminder/60-defaults.conf".source = defaultsFile;
       "zoneminder/80-nixos.conf".source    = configFile;
     };
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [
+      cfg.port
+      6802 # zmtrigger
+    ];
 
     services = {
       fcgiwrap = lib.mkIf useNginx {
@@ -204,10 +211,9 @@ in {
       };
 
       mysql = lib.mkIf cfg.database.createLocally {
+        enable = true;
+        package = lib.mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.database.name ];
-        initialDatabases = [{
-          inherit (cfg.database) name; schema = "${pkg}/share/zoneminder/db/zm_create.sql";
-        }];
         ensureUsers = [{
           name = cfg.database.username;
           ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
@@ -217,7 +223,7 @@ in {
       nginx = lib.mkIf useNginx {
         enable = true;
         virtualHosts = {
-          "${cfg.hostname}" = {
+          ${cfg.hostname} = {
             default = true;
             root = "${pkg}/share/zoneminder/www";
             listen = [ { addr = "0.0.0.0"; inherit (cfg) port; } ];
@@ -228,6 +234,8 @@ in {
 
               location / {
                 try_files $uri $uri/ /index.php?$args =404;
+
+                rewrite ^/skins/.*/css/fonts/(.*)$ /fonts/$1 permanent;
 
                 location ~ /api/(css|img|ico) {
                   rewrite ^/api(.+)$ /api/app/webroot/$1 break;
@@ -246,7 +254,7 @@ in {
                 location /cgi-bin {
                   gzip off;
 
-                  include ${pkgs.nginx}/conf/fastcgi_params;
+                  include ${config.services.nginx.package}/conf/fastcgi_params;
                   fastcgi_param SCRIPT_FILENAME ${pkg}/libexec/zoneminder/${zms};
                   fastcgi_param HTTP_PROXY "";
                   fastcgi_intercept_errors on;
@@ -254,19 +262,19 @@ in {
                   fastcgi_pass ${fcgi.socketType}:${fcgi.socketAddress};
                 }
 
-                location /cache {
-                  alias /var/cache/${dirName};
+                location /cache/ {
+                  alias /var/cache/${dirName}/;
                 }
 
                 location ~ \.php$ {
                   try_files $uri =404;
                   fastcgi_index index.php;
 
-                  include ${pkgs.nginx}/conf/fastcgi_params;
+                  include ${config.services.nginx.package}/conf/fastcgi_params;
                   fastcgi_param SCRIPT_FILENAME $request_filename;
                   fastcgi_param HTTP_PROXY "";
 
-                  fastcgi_pass unix:${socket};
+                  fastcgi_pass unix:${fpm.socket};
                 }
               }
             '';
@@ -276,36 +284,31 @@ in {
 
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
-          listen = socket;
+          inherit user group;
+          phpPackage = pkgs.php.withExtensions ({ enabled, all }: enabled ++ [ all.apcu ]);
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
-
-            ${lib.concatStringsSep "\n" (map (e:
-            "extension=${e.pkg}/lib/php/extensions/${e.name}.so") phpExtensions)}
           '';
-          extraConfig = ''
-            user = ${user}
-            group = ${group}
+          settings = lib.mapAttrs (name: lib.mkDefault) {
+            "listen.owner" = user;
+            "listen.group" = group;
+            "listen.mode" = "0660";
 
-            listen.owner = ${user}
-            listen.group = ${group}
-            listen.mode = 0660
-
-            pm = dynamic
-            pm.start_servers = 1
-            pm.min_spare_servers = 1
-            pm.max_spare_servers = 2
-            pm.max_requests = 500
-            pm.max_children = 5
-            pm.status_path = /$pool-status
-            ping.path = /$pool-ping
-          '';
+            "pm" = "dynamic";
+            "pm.start_servers" = 1;
+            "pm.min_spare_servers" = 1;
+            "pm.max_spare_servers" = 2;
+            "pm.max_requests" = 500;
+            "pm.max_children" = 5;
+            "pm.status_path" = "/$pool-status";
+            "ping.path" = "/$pool-ping";
+          };
         };
       };
     };
 
     systemd.services = {
-      zoneminder = with pkgs; rec {
+      zoneminder = with pkgs; {
         inherit (zoneminder.meta) description;
         documentation = [ "https://zoneminder.readthedocs.org/en/latest/" ];
         path = [
@@ -313,11 +316,18 @@ in {
           procps
           psmisc
         ];
-        after = [ "mysql.service" "nginx.service" ];
+        after = [ "nginx.service" ] ++ lib.optional cfg.database.createLocally "mysql.service";
         wantedBy = [ "multi-user.target" ];
         restartTriggers = [ defaultsFile configFile ];
-        preStart = lib.mkIf useCustomDir ''
+        preStart = lib.optionalString useCustomDir ''
           install -dm775 -o ${user} -g ${group} ${cfg.storageDir}/{${lib.concatStringsSep "," libDirs}}
+        '' + lib.optionalString cfg.database.createLocally ''
+          if ! test -e "/var/lib/${dirName}/db-created"; then
+            ${config.services.mysql.package}/bin/mysql < ${pkg}/share/zoneminder/db/zm_create.sql
+            touch "/var/lib/${dirName}/db-created"
+          fi
+
+          ${zoneminder}/bin/zmupdate.pl -nointeractive
         '';
         serviceConfig = {
           User = user;
@@ -344,11 +354,11 @@ in {
       };
     };
 
-    users.groups."${user}" = {
+    users.groups.${user} = {
       gid = config.ids.gids.zoneminder;
     };
 
-    users.users."${user}" = {
+    users.users.${user} = {
       uid = config.ids.uids.zoneminder;
       group = user;
       inherit home;
@@ -356,5 +366,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ peterhoeg ];
+  meta.maintainers = with lib.maintainers; [ ];
 }

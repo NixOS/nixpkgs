@@ -19,7 +19,7 @@ let
       lhs = optCall lhs_ { inherit pkgs; };
       rhs = optCall rhs_ { inherit pkgs; };
     in
-    lhs // rhs //
+    recursiveUpdate lhs rhs //
     optionalAttrs (lhs ? packageOverrides) {
       packageOverrides = pkgs:
         optCall lhs.packageOverrides pkgs //
@@ -39,7 +39,7 @@ let
             if c x then true
             else lib.traceSeqN 1 x false;
       in traceXIfNot isConfig;
-    merge = args: fold (def: mergeConfig def.value) {};
+    merge = args: foldr (def: mergeConfig def.value) {};
   };
 
   overlayType = mkOptionType {
@@ -64,16 +64,21 @@ let
 in
 
 {
+  imports = [
+    ./assertions.nix
+    ./meta.nix
+  ];
+
   options.nixpkgs = {
 
     pkgs = mkOption {
-      defaultText = literalExample
-        ''import "''${nixos}/.." {
-            inherit (cfg) config overlays localSystem crossSystem;
-          }
-        '';
+      defaultText = literalExpression ''
+        import "''${nixos}/.." {
+          inherit (cfg) config overlays localSystem crossSystem;
+        }
+      '';
       type = pkgsType;
-      example = literalExample ''import <nixpkgs> {}'';
+      example = literalExpression "import <nixpkgs> {}";
       description = ''
         If set, the pkgs argument to all NixOS modules is the value of
         this option, extended with <code>nixpkgs.overlays</code>, if
@@ -109,7 +114,7 @@ in
 
     config = mkOption {
       default = {};
-      example = literalExample
+      example = literalExpression
         ''
           { allowBroken = true; allowUnfree = true; }
         '';
@@ -125,15 +130,16 @@ in
 
     overlays = mkOption {
       default = [];
-      example = literalExample
+      example = literalExpression
         ''
-          [ (self: super: {
+          [
+            (self: super: {
               openssh = super.openssh.override {
                 hpnSupport = true;
                 kerberos = self.libkrb5;
               };
-            };
-          ) ]
+            })
+          ]
         '';
       type = types.listOf overlayType;
       description = ''
@@ -157,7 +163,7 @@ in
       # Make sure that the final value has all fields for sake of other modules
       # referring to this. TODO make `lib.systems` itself use the module system.
       apply = lib.systems.elaborate;
-      defaultText = literalExample
+      defaultText = literalExpression
         ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
         Specifies the platform on which NixOS should be built. When
@@ -177,8 +183,6 @@ in
       type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = null;
       example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
-      defaultText = literalExample
-        ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
       description = ''
         Specifies the platform for which NixOS should be
         built. Specify this only if it is different from
@@ -195,7 +199,6 @@ in
     system = mkOption {
       type = types.str;
       example = "i686-linux";
-      default = { system = builtins.currentSystem; };
       description = ''
         Specifies the Nix platform type on which NixOS should be built.
         It is better to specify <code>nixpkgs.localSystem</code> instead.
@@ -216,6 +219,14 @@ in
         Ignored when <code>nixpkgs.pkgs</code> is set.
       '';
     };
+
+    initialSystem = mkOption {
+      type = types.str;
+      internal = true;
+      description = ''
+        Preserved value of <literal>system</literal> passed to <literal>eval-config.nix</literal>.
+      '';
+    };
   };
 
   config = {
@@ -228,8 +239,8 @@ in
         let
           nixosExpectedSystem =
             if config.nixpkgs.crossSystem != null
-            then config.nixpkgs.crossSystem.system
-            else config.nixpkgs.localSystem.system;
+            then config.nixpkgs.crossSystem.system or (lib.systems.parse.doubleFromSystem (lib.systems.parse.mkSystemFromString config.nixpkgs.crossSystem.config))
+            else config.nixpkgs.localSystem.system or (lib.systems.parse.doubleFromSystem (lib.systems.parse.mkSystemFromString config.nixpkgs.localSystem.config));
           nixosOption =
             if config.nixpkgs.crossSystem != null
             then "nixpkgs.crossSystem"
@@ -242,4 +253,7 @@ in
       )
     ];
   };
+
+  # needs a full nixpkgs path to import nixpkgs
+  meta.buildDocsInSandbox = false;
 }

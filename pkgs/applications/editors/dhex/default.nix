@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, ncurses }:
+{ lib, stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "dhex-${version}";
+  pname = "dhex";
   version = "0.69";
 
   src = fetchurl {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ];
- 
+
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A themeable hex editor with diff mode";
-    homepage = http://www.dettus.net/dhex/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [qknight];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "http://www.dettus.net/dhex/";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [qknight];
+    platforms = with lib.platforms; linux;
   };
 }

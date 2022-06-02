@@ -1,31 +1,40 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild
-, topkg, result, lwt, cmdliner, fmt }:
+{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild
+, topkg, result, lwt, cmdliner, fmt
+, js_of_ocaml
+, jsooSupport ? true
+}:
 let
   pname = "logs";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01.0";
+if lib.versionOlder ocaml.version "4.03"
+then throw "logs is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
-  name = "ocaml-${pname}-${version}";
-  version = "0.6.2";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "1khbn7jqpid83zn8rvyh1x1sirls7zc878zj4fz985m5xlsfy853";
+    sha256 = "1jnmd675wmsmdwyb5mx5b0ac66g4c6gpv5s4mrx2j6pb0wla1x46";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg fmt cmdliner lwt ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ fmt cmdliner lwt topkg ]
+    ++ lib.optional jsooSupport js_of_ocaml;
   propagatedBuildInputs = [ result ];
 
-  buildPhase = "${topkg.run} build --with-js_of_ocaml false";
+  strictDeps = true;
+
+  buildPhase = "${topkg.run} build --with-js_of_ocaml ${lib.boolToString jsooSupport}";
 
   inherit (topkg) installPhase;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Logging infrastructure for OCaml";
-    homepage = "${webpage}";
+    homepage = webpage;
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.sternenseemann ];
     license = licenses.isc;

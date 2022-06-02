@@ -1,26 +1,61 @@
-{ stdenv, fetchurl, qmake, qtscript }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qtscript
+, wrapQtAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "smplayer-19.1.0";
+  pname = "smplayer";
+  version = "22.2.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/smplayer/${name}.tar.bz2";
-    sha256 = "0q23nsmmdhj4kb90axaqrzv5pyj7szbwy8l3skl53yi8r4j3sj3s";
+  src = fetchFromGitHub {
+    owner = "smplayer-dev";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-7DMvIqW3vzjVzJPyjbXuHHcf1T6EFcf/a/mVYqa3XS8=";
   };
 
-  buildInputs = [ qtscript ];
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qtscript
+  ];
 
   dontUseQmakeConfigure = true;
 
-  preConfigure = ''
-    makeFlags="PREFIX=$out"
-  '';
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
-  meta = {
+  meta = with lib; {
+    homepage = "https://www.smplayer.info";
     description = "A complete front-end for MPlayer";
-    homepage = http://smplayer.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
+    longDescription = ''
+      SMPlayer is a free media player for Windows and Linux with built-in codecs
+      that can play virtually all video and audio formats. It doesn't need any
+      external codecs. Just install SMPlayer and you'll be able to play all
+      formats without the hassle to find and install codec packs.
+
+      One of the most interesting features of SMPlayer: it remembers the
+      settings of all files you play. So you start to watch a movie but you have
+      to leave... don't worry, when you open that movie again it will be resumed
+      at the same point you left it, and with the same settings: audio track,
+      subtitles, volume...
+
+      SMPlayer is a graphical user interface (GUI) for the award-winning
+      MPlayer, which is capable of playing almost all known video and audio
+      formats. But apart from providing access for the most common and useful
+      options of MPlayer, SMPlayer adds other interesting features like the
+      possibility to play Youtube videos or download subtitles.
+    '';
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
   };
 }
+# TODO [ AndersonTorres ]: some form of wrapping mplayer/mpv around it

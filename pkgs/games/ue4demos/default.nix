@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, unzip, patchelf, xorg, openal }:
+{ lib, stdenv, fetchurl, unzip, patchelf, xorg, openal }:
 
 let
   urls = file:
     [
       # Untrusted mirrors - do not update hashes
       "https://ludios.org/mirror/ue4demos/${file}"
-      "http://web.archive.org/web/20140824192039/http://ue4linux.raxxy.com/${file}"
+      "https://web.archive.org/web/20140824192039/http://ue4linux.raxxy.com/${file}"
     ];
 
   buildDemo = { name, src }:
@@ -14,9 +14,9 @@ let
 
       nativeBuildInputs = [ unzip patchelf ];
 
-      rtdeps = stdenv.lib.makeLibraryPath
+      rtdeps = lib.makeLibraryPath
         [ xorg.libXxf86vm xorg.libXext openal ]
-        + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
+        + ":" + lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
 
       buildCommand =
       ''
@@ -24,7 +24,7 @@ let
         cd $out
         unzip $src
 
-        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+        interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
         binary=$(find . -executable -type f)
         patchelf \
           --set-interpreter $interpreter \
@@ -50,14 +50,14 @@ let
 
       meta = {
         description = "Unreal Engine 4 Linux demos";
-        homepage = https://wiki.unrealengine.com/Linux_Demos;
+        homepage = "https://wiki.unrealengine.com/Linux_Demos";
         platforms = [ "x86_64-linux" ];
-        license = stdenv.lib.licenses.unfree;
+        license = lib.licenses.unfree;
       };
     };
 
 in {
-  tappy_chicken = buildDemo rec {
+  tappy_chicken = buildDemo {
     name = "ue4demos-tappy_chicken";
     src = fetchurl {
       urls = urls "tappy_chicken.zip";
@@ -65,7 +65,7 @@ in {
     };
   };
 
-  swing_ninja = buildDemo rec {
+  swing_ninja = buildDemo {
     name = "ue4demos-swing_ninja";
     src = fetchurl {
       urls = urls "swing_ninja.zip";
@@ -73,7 +73,7 @@ in {
     };
   };
 
-  card_game = buildDemo rec {
+  card_game = buildDemo {
     name = "ue4demos-card_game";
     src = fetchurl {
       urls = urls "card_game.zip";
@@ -81,7 +81,7 @@ in {
     };
   };
 
-  vehicle_game = buildDemo rec {
+  vehicle_game = buildDemo {
     name = "ue4demos-vehicle_game";
     src = fetchurl {
       urls = urls "vehicle_game.zip";
@@ -89,7 +89,7 @@ in {
     };
   };
 
-  shooter_game = buildDemo rec {
+  shooter_game = buildDemo {
     name = "ue4demos-shooter_game";
     src = fetchurl {
       urls = urls "shooter_game.zip";
@@ -97,7 +97,7 @@ in {
     };
   };
 
-  strategy_game = buildDemo rec {
+  strategy_game = buildDemo {
     name = "ue4demos-strategy_game";
     src = fetchurl {
       urls = urls "strategy_game.zip";
@@ -105,7 +105,7 @@ in {
     };
   };
 
-  black_jack = buildDemo rec {
+  black_jack = buildDemo {
     name = "ue4demos-black_jack";
     src = fetchurl {
       urls = urls "black_jack.zip";
@@ -113,7 +113,7 @@ in {
     };
   };
 
-  landscape_mountains = buildDemo rec {
+  landscape_mountains = buildDemo {
     name = "ue4demos-landscape_mountains";
     src = fetchurl {
       urls = urls "landscape_mountains.zip";
@@ -121,7 +121,7 @@ in {
     };
   };
 
-  matinee_demo = buildDemo rec {
+  matinee_demo = buildDemo {
     name = "ue4demos-matinee_demo";
     src = fetchurl {
       urls = urls "matinee_demo.zip";
@@ -129,7 +129,7 @@ in {
     };
   };
 
-  elemental_demo = buildDemo rec {
+  elemental_demo = buildDemo {
     name = "ue4demos-elemental_demo";
     src = fetchurl {
       urls = urls "elemental_demo.zip";
@@ -137,7 +137,7 @@ in {
     };
   };
 
-  effects_cave_demo = buildDemo rec {
+  effects_cave_demo = buildDemo {
     name = "ue4demos-effects_cave_demo";
     src = fetchurl {
       urls = urls "effects_cave_demo.zip";
@@ -145,7 +145,7 @@ in {
     };
   };
 
-  realistic_rendering = buildDemo rec {
+  realistic_rendering = buildDemo {
     name = "ue4demos-realistic_rendering";
     src = fetchurl {
       urls = urls "realistic_rendering_demo.zip";
@@ -153,7 +153,7 @@ in {
     };
   };
 
-  reflections_subway = buildDemo rec {
+  reflections_subway = buildDemo {
     name = "ue4demos-reflections_subway";
     src = fetchurl {
       urls = urls "reflections_subway_demo.zip";
@@ -161,7 +161,7 @@ in {
     };
   };
 
-  scifi_hallway_demo = buildDemo rec {
+  scifi_hallway_demo = buildDemo {
     name = "ue4demos-scifi_hallway_demo";
     src = fetchurl {
       urls = urls "sci-fi_hallway_demo.zip";
@@ -169,7 +169,7 @@ in {
     };
   };
 
-  mobile_temple_demo = buildDemo rec {
+  mobile_temple_demo = buildDemo {
     name = "ue4demos-mobile_temple_demo";
     src = fetchurl {
       urls = urls "mobile_temple_demo.zip";
@@ -177,7 +177,7 @@ in {
     };
   };
 
-  stylized_demo = buildDemo rec {
+  stylized_demo = buildDemo {
     name = "ue4demos-stylized_demo";
     src = fetchurl {
       urls = urls "stylized_demo.zip";
@@ -185,7 +185,7 @@ in {
     };
   };
 
-  blueprint_examples_demo = buildDemo rec {
+  blueprint_examples_demo = buildDemo {
     name = "ue4demos-blueprint_examples_demo";
     src = fetchurl {
       urls = urls "blueprint_examples_demo.zip";

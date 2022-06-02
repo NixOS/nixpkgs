@@ -1,34 +1,35 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, makeWrapper
+{ lib, stdenv, fetchFromGitHub, pkg-config, gettext, makeWrapper
 , ncurses, libdrm, libpciaccess, libxcb }:
 
 stdenv.mkDerivation rec {
-  name = "radeontop-${version}";
-  version = "2018-03-25";
+  pname = "radeontop";
+  version = "1.4";
 
   src = fetchFromGitHub {
-    sha256 = "0s41xy9nrzxmimkdg23fr86rqcfiw6iqh99zpph0j990l8yzmv9b";
-    rev = "v1.1";
+    sha256 = "0kwqddidr45s1blp0h8r8h1dd1p50l516yb6mb4s6zsc827xzgg3";
+    rev = "v${version}";
     repo = "radeontop";
     owner = "clbr";
   };
 
   buildInputs = [ ncurses libdrm libpciaccess libxcb ];
-  nativeBuildInputs = [ pkgconfig gettext makeWrapper ];
+  nativeBuildInputs = [ pkg-config gettext makeWrapper ];
 
   enableParallelBuilding = true;
 
   patchPhase = ''
     substituteInPlace getver.sh --replace ver=unknown ver=${version}
+    substituteInPlace Makefile --replace pkg-config "$PKG_CONFIG"
   '';
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    wrapProgram $out/sbin/radeontop \
+    wrapProgram $out/bin/radeontop \
       --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Top-like tool for viewing AMD Radeon GPU utilization";
     longDescription = ''
       View GPU utilization, both for the total activity percent and individual
@@ -37,9 +38,8 @@ stdenv.mkDerivation rec {
       is also valid for OpenCL loads; the other blocks are only useful for GL
       loads. Requires root rights or other permissions to read /dev/mem.
     '';
-    homepage = https://github.com/clbr/radeontop;
+    homepage = "https://github.com/clbr/radeontop";
     platforms = platforms.linux;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ rycee ];
   };
 }

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "sphinx-argparse";
-  version = "0.2.5";
+  version = "0.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05wc8f5hb3jsg2vh2jf7jsyan8d4i09ifrz2c8fp6f7x1zw9iav0";
+    sha256 = "82151cbd43ccec94a1530155f4ad34f251aaca6a0ffd5516d7fadf952d32dc1e";
   };
 
   checkInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A sphinx extension that automatically documents argparse commands and options";
-    homepage = https://github.com/ribozz/sphinx-argparse;
+    homepage = "https://github.com/ribozz/sphinx-argparse";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ clacke ];
   };

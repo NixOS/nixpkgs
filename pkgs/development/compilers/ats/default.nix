@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, gmp }:
+{ lib, stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation rec {
-  name    = "ats-${version}";
+  pname = "ats";
   version = "0.2.12";
 
   src = fetchurl {
@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Functional programming language with dependent types";
     homepage    = "http://www.ats-lang.org";
-    license     = stdenv.lib.licenses.gpl3Plus;
+    license     = lib.licenses.gpl3Plus;
     # TODO: it looks like ATS requires gcc specifically. Someone with more knowledge
     # will need to experiment.
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    platforms   = lib.platforms.linux;
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

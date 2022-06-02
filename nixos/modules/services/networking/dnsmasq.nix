@@ -79,17 +79,27 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.dnsmasq.enable {
+  config = mkIf cfg.enable {
 
     networking.nameservers =
       optional cfg.resolveLocalQueries "127.0.0.1";
 
     services.dbus.packages = [ dnsmasq ];
 
-    users.users = singleton {
-      name = "dnsmasq";
-      uid = config.ids.uids.dnsmasq;
+    users.users.dnsmasq = {
+      isSystemUser = true;
+      group = "dnsmasq";
       description = "Dnsmasq daemon user";
+    };
+    users.groups.dnsmasq = {};
+
+    networking.resolvconf = mkIf cfg.resolveLocalQueries {
+      useLocalResolver = mkDefault true;
+
+      extraConfig = ''
+        dnsmasq_conf=/etc/dnsmasq-conf.conf
+        dnsmasq_resolv=/etc/dnsmasq-resolv.conf
+      '';
     };
 
     systemd.services.dnsmasq = {

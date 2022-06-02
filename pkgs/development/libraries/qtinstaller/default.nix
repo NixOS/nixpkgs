@@ -1,7 +1,7 @@
 { stdenv, fetchurl, qtdeclarative , qttools, qtbase, qmake }:
 
 stdenv.mkDerivation rec {
-  name = "qtinstaller-${version}";
+  pname = "qtinstaller";
 
   propagatedBuildInputs = [ qtdeclarative qttools ];
   nativeBuildInputs = [ qmake ];
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "doc" ];
 
   setOutputFlags = false;
-  enableParallelBuilding = true;
   NIX_QT_SUBMODULE = true;
+  dontWrapQtApps = true;
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/qt-installer-framework}
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = ''Qt installer framework'';
+    description = "Qt installer framework";
     inherit (qtbase.meta) platforms license homepage;
   };
 }

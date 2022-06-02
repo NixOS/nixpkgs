@@ -26,6 +26,7 @@
     pkgs.fuse
     pkgs.fuse3
     pkgs.sshfs-fuse
+    pkgs.rsync
     pkgs.socat
     pkgs.screen
 
@@ -39,6 +40,7 @@
     # Tools to create / manipulate filesystems.
     pkgs.ntfsprogs # for resizing NTFS partitions
     pkgs.dosfstools
+    pkgs.mtools
     pkgs.xfsprogs.bin
     pkgs.jfsutils
     pkgs.f2fs-tools

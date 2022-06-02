@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, ncurses, hdate, lua5_2 }:
+{ lib, stdenv, fetchFromGitHub, ncurses, hdate, lua5_2 }:
 
 stdenv.mkDerivation rec {
   version = "12010904";
-  name = "dozenal-${version}";
+  pname = "dozenal";
   src = fetchFromGitHub {
     owner = "dgoodmaniii";
     repo = "dozenal";
@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
   patches = [ ./lua-header.patch ];
   preBuild = "cd dozenal";
   buildInputs = [ ncurses hdate lua5_2 ];
+
+  # Parallel builds fail due to no dependencies between subdirs.
+  # As a result some subdirs are atempted to build twice:
+  #   ../dec/dec.c:39:10: fatal error: conv.h: No such file or directory
+  # Let's disable parallelism until it's fixed upstream:
+  #  https://gitlab.com/dgoodmaniii/dozenal/-/issues/8
+  enableParallelBuilding = false;
+
   # I remove gdozdc, as I didn't figure all it's dependency yet.
   postInstall = "rm $out/bin/gdozdc";
 
@@ -54,8 +62,8 @@ stdenv.mkDerivation rec {
          Roman numerals.  Arbitrary ranks and symbols may be used.
          Defaults to dozenal Roman numerals.
     '';
-    homepage = https://github.com/dgoodmaniii/dozenal/;
-    maintainers = with stdenv.lib.maintainers; [ CharlesHD ];
-    license = stdenv.lib.licenses.gpl3;
+    homepage = "https://github.com/dgoodmaniii/dozenal/";
+    maintainers = with lib.maintainers; [ CharlesHD ];
+    license = lib.licenses.gpl3;
   };
 }

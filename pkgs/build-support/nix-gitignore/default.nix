@@ -12,11 +12,6 @@ with builtins;
 let
   debug = a: trace a a;
   last = l: elemAt l ((length l) - 1);
-
-  throwIfOldNix = let required = "2.0"; in
-    if compareVersions nixVersion required == -1
-    then throw "nix (v${nixVersion} =< v${required}) is too old for nix-gitignore"
-    else true;
 in rec {
   # [["good/relative/source/file" true] ["bad.tmpfile" false]] -> root -> path
   filterPattern = patterns: root:
@@ -31,7 +26,6 @@ in rec {
 
   # string -> [[regex bool]]
   gitignoreToPatterns = gitignore:
-    assert throwIfOldNix;
     let
       # ignore -> bool
       isComment = i: (match "^(#.*|$)" i) != null;
@@ -40,6 +34,9 @@ in rec {
       computeNegation = l:
         let split = match "^(!?)(.*)" l;
         in [(elemAt split 1) (head split == "!")];
+
+      # regex -> regex
+      handleHashesBangs = replaceStrings ["\\#" "\\!"] ["#" "!"];
 
       # ignore -> regex
       substWildcards =
@@ -86,7 +83,7 @@ in rec {
       mapPat = f: l: [(f (head l)) (last l)];
     in
       map (l: # `l' for "line"
-        mapPat (l: handleSlashSuffix (handleSlashPrefix (mapAroundCharclass substWildcards l)))
+        mapPat (l: handleSlashSuffix (handleSlashPrefix (handleHashesBangs (mapAroundCharclass substWildcards l))))
         (computeNegation l))
       (filter (l: !isList l && !isComment l)
       (split "\n" gitignore));
@@ -148,10 +145,10 @@ in rec {
       '');
 
   withGitignoreFile = patterns: root:
-    lib.toList patterns ++ [(root + "/.gitignore")];
+    lib.toList patterns ++ [ ".git" ] ++ [(root + "/.gitignore")];
 
   withRecursiveGitignoreFile = patterns: root:
-    lib.toList patterns ++ [(compileRecursiveGitignore root)];
+    lib.toList patterns ++ [ ".git" ] ++ [(compileRecursiveGitignore root)];
 
   # filterSource derivatives
 

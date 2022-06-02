@@ -1,8 +1,7 @@
-{ stdenv, bundlerEnv, ruby}:
+{ lib, stdenv, bundlerEnv, ruby, bundlerUpdateScript }:
 
 let
-  # To update, just run `nix-shell` in this directory.
-  papertrail-env = bundlerEnv rec {
+  papertrail-env = bundlerEnv {
     name = "papertrail-env";
     inherit ruby;
     gemfile = ./Gemfile;
@@ -10,12 +9,23 @@ let
     gemset = ./gemset.nix;
   };
 in stdenv.mkDerivation {
-  name = "papertrail-${(import ./gemset.nix).papertrail.version}";
+  pname = "papertrail";
+  version = (import ./gemset.nix).papertrail.version;
 
-  phases = [ "installPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
     mkdir -p $out/bin
     ln -s ${papertrail-env}/bin/papertrail $out/bin/papertrail
   '';
+
+  passthru.updateScript = bundlerUpdateScript "papertrail";
+
+  meta = with lib; {
+    description = "Command-line client for Papertrail log management service";
+    homepage    = "https://github.com/papertrail/papertrail-cli/";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ nicknovitski ];
+    platforms   = ruby.meta.platforms;
+  };
 }

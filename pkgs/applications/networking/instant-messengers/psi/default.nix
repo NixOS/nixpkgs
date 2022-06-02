@@ -1,31 +1,32 @@
-{ stdenv, fetchurl, enchant, qt4, zlib, sox, libX11, xorgproto, libSM
-, libICE, qca2, pkgconfig, which, glib
-, libXScrnSaver
+{ lib, mkDerivation, fetchFromGitHub, cmake
+, qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
+, libidn, qca-qt5, libXScrnSaver, hunspell
 }:
 
-stdenv.mkDerivation rec {
-  name = "psi-0.15";
-
-  src = fetchurl {
-    url = "mirror://sourceforge/psi/${name}.tar.bz2";
-    sha256 = "593b5ddd7934af69c245afb0e7290047fd7dedcfd8765baca5a3a024c569c7e6";
+mkDerivation rec {
+  pname = "psi";
+  version = "1.5";
+  src = fetchFromGitHub {
+    owner = "psi-im";
+    repo = pname;
+    rev = version;
+    sha256 = "hXDZODHl14kimRlMQ1XjISQ2kk9NS78axVN3U21wkuM=";
+    fetchSubmodules = true;
   };
+  patches = [
+    ./fix-cmake-hunspell-1.7.patch
+  ];
+  nativeBuildInputs = [ cmake qttools ];
+  buildInputs = [
+    qtbase qtmultimedia qtx11extras qtwebengine
+    libidn qca-qt5 libXScrnSaver hunspell
+  ];
 
-  buildInputs =
-    [ enchant qt4 zlib sox libX11 xorgproto libSM libICE
-      qca2 pkgconfig which glib libXScrnSaver
-    ];
-
-  NIX_CFLAGS_COMPILE="-I${qca2}/include/QtCrypto";
-
-  NIX_LDFLAGS="-lqca";
-
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
-    description = "Psi, an XMPP (Jabber) client";
+  meta = with lib; {
+    homepage = "https://psi-im.org";
+    description = "An XMPP (Jabber) client";
     maintainers = [ maintainers.raskin ];
     license = licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
   };
 }

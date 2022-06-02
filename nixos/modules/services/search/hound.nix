@@ -50,7 +50,7 @@ in {
 
       package = mkOption {
         default = pkgs.hound;
-        defaultText = "pkgs.hound";
+        defaultText = literalExpression "pkgs.hound";
         type = types.package;
         description = ''
           Package for running hound.
@@ -63,16 +63,18 @@ in {
           The full configuration of the Hound daemon. Note the dbpath
           should be an absolute path to a writable location on disk.
         '';
-        example = ''
-          {
-             "max-concurrent-indexers" : 2,
-             "dbpath" : "''${services.hound.home}/data",
-             "repos" : {
-                "nixpkgs": {
-                   "url" : "https://www.github.com/NixOS/nixpkgs.git"
-                }
-             }
-          }
+        example = literalExpression ''
+          '''
+            {
+              "max-concurrent-indexers" : 2,
+              "dbpath" : "''${services.hound.home}/data",
+              "repos" : {
+                  "nixpkgs": {
+                    "url" : "https://www.github.com/NixOS/nixpkgs.git"
+                  }
+              }
+            }
+          '''
         '';
       };
 
@@ -88,19 +90,19 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = optional (cfg.group == "hound") {
-      name = "hound";
-      gid = config.ids.gids.hound;
+    users.groups = optionalAttrs (cfg.group == "hound") {
+      hound.gid = config.ids.gids.hound;
     };
 
-    users.users = optional (cfg.user == "hound") {
-      name = "hound";
-      description = "hound code search";
-      createHome = true;
-      home = cfg.home;
-      group = cfg.group;
-      extraGroups = cfg.extraGroups;
-      uid = config.ids.uids.hound;
+    users.users = optionalAttrs (cfg.user == "hound") {
+      hound = {
+        description = "hound code search";
+        createHome = true;
+        home = cfg.home;
+        group = cfg.group;
+        extraGroups = cfg.extraGroups;
+        uid = config.ids.uids.hound;
+      };
     };
 
     systemd.services.hound = {

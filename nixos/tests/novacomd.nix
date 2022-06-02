@@ -1,34 +1,28 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "novacomd";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ dtzWill ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     services.novacomd.enable = true;
   };
 
   testScript = ''
-    $machine->waitForUnit("multi-user.target");
+    machine.wait_for_unit("novacomd.service")
 
-    # multi-user.target wants novacomd.service, but let's make sure
-    $machine->waitForUnit("novacomd.service");
+    with subtest("Make sure the daemon is really listening"):
+        machine.wait_for_open_port(6968)
+        machine.succeed("novacom -l")
 
-    # Check status and try connecting with novacom
-    $machine->succeed("systemctl status novacomd.service >&2");
-    # to prevent non-deterministic failure,
-    # make sure the daemon is really listening
-    $machine->waitForOpenPort(6968);
-    $machine->succeed("novacom -l");
+    with subtest("Stop the daemon, double-check novacom fails if daemon isn't working"):
+        machine.stop_job("novacomd")
+        machine.fail("novacom -l")
 
-    # Stop the daemon, double-check novacom fails if daemon isn't working
-    $machine->stopJob("novacomd");
-    $machine->fail("novacom -l");
-
-    # And back again for good measure
-    $machine->startJob("novacomd");
-    # make sure the daemon is really listening
-    $machine->waitForOpenPort(6968);
-    $machine->succeed("novacom -l");
+    with subtest("Make sure the daemon starts back up again"):
+        machine.start_job("novacomd")
+        # make sure the daemon is really listening
+        machine.wait_for_open_port(6968)
+        machine.succeed("novacom -l")
   '';
 })

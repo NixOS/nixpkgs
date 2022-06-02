@@ -1,27 +1,31 @@
-{ stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub
+, installShellFiles
 , boost, zlib, openssl
 , upnpSupport ? true, miniupnpc ? null
-, aesniSupport ? false
-, avxSupport ? false
+, aesniSupport ? stdenv.hostPlatform.aesSupport
+, avxSupport   ? stdenv.hostPlatform.avxSupport
 }:
 
 assert upnpSupport -> miniupnpc != null;
 
 stdenv.mkDerivation rec {
-
-  name = pname + "-" + version;
   pname = "i2pd";
-  version = "2.23.0";
+  version = "2.41.0";
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
-    sha256 = "0sw9fjamd5wjrsxnxsih9532yf6x3rrjmv5ybskkpk7b6acyqjj1";
+    sha256 = "sha256-fQqbZYb0brGmGf7Yc/2Zd5BZ+YOkGYC3o9uhShYdAE4=";
   };
 
-  buildInputs = with stdenv.lib; [ boost zlib openssl ]
+  buildInputs = with lib; [ boost zlib openssl ]
     ++ optional upnpSupport miniupnpc;
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   makeFlags =
     let ynf = a: b: a + "=" + (if b then "yes" else "no"); in
     [ (ynf "USE_AESNI" aesniSupport)
@@ -29,15 +33,19 @@ stdenv.mkDerivation rec {
       (ynf "USE_UPNP"  upnpSupport)
     ];
 
+  enableParallelBuilding = true;
+
   installPhase = ''
     install -D i2pd $out/bin/i2pd
+    install --mode=444 -D 'contrib/i2pd.service' "$out/etc/systemd/system/i2pd.service"
+    installManPage 'debian/i2pd.1'
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://i2pd.website;
+  meta = with lib; {
+    homepage = "https://i2pd.website";
     description = "Minimal I2P router written in C++";
     license = licenses.bsd3;
     maintainers = with maintainers; [ edwtjo ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

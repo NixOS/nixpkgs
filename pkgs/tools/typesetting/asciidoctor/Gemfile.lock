@@ -1,106 +1,67 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    Ascii85 (1.0.3)
-    addressable (2.5.2)
-      public_suffix (>= 2.0.2, < 4.0)
+    Ascii85 (1.1.0)
+    addressable (2.8.0)
+      public_suffix (>= 2.0.2, < 5.0)
     afm (0.2.2)
-    asciidoctor (1.5.7.1)
-    asciidoctor-bespoke (1.0.0.alpha.1)
-      asciidoctor (>= 1.5.0)
-      slim (~> 3.0.6)
-      thread_safe (~> 0.3.5)
-    asciidoctor-diagram (1.5.9)
-      asciidoctor (~> 1.5.0)
-    asciidoctor-latex (1.5.0.17.dev)
-      asciidoctor (~> 1.5, >= 1.5.2)
-      htmlentities (~> 4.3)
-      opal (~> 0.6.3)
-    asciidoctor-mathematical (0.2.2)
-      asciidoctor (~> 1.5, >= 1.5.0)
-      mathematical (~> 1.5, >= 1.5.8)
-      ruby-enum (~> 0.4)
-    asciidoctor-pdf (1.5.0.alpha.16)
-      asciidoctor (>= 1.5.0)
-      prawn (>= 1.3.0, < 2.3.0)
-      prawn-icon (= 1.3.0)
-      prawn-svg (>= 0.21.0, < 0.28.0)
-      prawn-table (= 0.2.2)
-      prawn-templates (>= 0.0.3, <= 0.1.1)
-      safe_yaml (~> 1.0.4)
-      thread_safe (~> 0.3.6)
-      treetop (= 1.5.3)
-    coderay (1.1.2)
-    concurrent-ruby (1.0.5)
-    css_parser (1.6.0)
+    asciidoctor (2.0.17)
+    asciidoctor-pdf (1.6.2)
+      asciidoctor (~> 2.0)
+      concurrent-ruby (~> 1.1)
+      prawn (~> 2.4.0)
+      prawn-icon (~> 3.0.0)
+      prawn-svg (~> 0.32.0)
+      prawn-table (~> 0.2.0)
+      prawn-templates (~> 0.1.0)
+      safe_yaml (~> 1.0.0)
+      treetop (~> 1.6.0)
+    coderay (1.1.3)
+    concurrent-ruby (1.1.9)
+    css_parser (1.11.0)
       addressable
     hashery (2.1.2)
-    htmlentities (4.3.4)
-    i18n (1.1.0)
-      concurrent-ruby (~> 1.0)
-    json (2.1.0)
-    mathematical (1.6.11)
-      ruby-enum (~> 0.4)
-    multi_json (1.13.1)
-    opal (0.6.3)
-      source_map
-      sprockets
-    pdf-core (0.7.0)
-    pdf-reader (2.1.0)
-      Ascii85 (~> 1.0.0)
+    pdf-core (0.9.0)
+    pdf-reader (2.8.0)
+      Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
       ruby-rc4
       ttfunk
     polyglot (0.3.5)
-    prawn (2.2.2)
-      pdf-core (~> 0.7.0)
-      ttfunk (~> 1.5)
-    prawn-icon (1.3.0)
+    prawn (2.4.0)
+      pdf-core (~> 0.9.0)
+      ttfunk (~> 1.7)
+    prawn-icon (3.0.0)
       prawn (>= 1.1.0, < 3.0.0)
-    prawn-svg (0.27.1)
-      css_parser (~> 1.3)
+    prawn-svg (0.32.0)
+      css_parser (~> 1.6)
       prawn (>= 0.11.1, < 3)
+      rexml (~> 3.2)
     prawn-table (0.2.2)
       prawn (>= 1.3.0, < 3.0.0)
-    prawn-templates (0.1.1)
+    prawn-templates (0.1.2)
       pdf-reader (~> 2.0)
       prawn (~> 2.2)
-    public_suffix (3.0.3)
-    pygments.rb (1.2.1)
-      multi_json (>= 1.0.0)
-    rack (2.0.6)
-    ruby-enum (0.7.2)
-      i18n
+    public_suffix (4.0.6)
+    pygments.rb (2.3.0)
+    rexml (3.2.5)
+    rouge (3.27.0)
     ruby-rc4 (0.1.5)
-    safe_yaml (1.0.4)
-    slim (3.0.9)
-      temple (>= 0.7.6, < 0.9)
-      tilt (>= 1.3.3, < 2.1)
-    source_map (3.0.1)
-      json
-    sprockets (3.7.2)
-      concurrent-ruby (~> 1.0)
-      rack (> 1, < 3)
-    temple (0.8.0)
-    thread_safe (0.3.6)
-    tilt (2.0.8)
-    treetop (1.5.3)
+    safe_yaml (1.0.5)
+    treetop (1.6.11)
       polyglot (~> 0.3)
-    ttfunk (1.5.1)
+    ttfunk (1.7.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   asciidoctor
-  asciidoctor-bespoke
-  asciidoctor-diagram
-  asciidoctor-latex
-  asciidoctor-mathematical
   asciidoctor-pdf
   coderay
   pygments.rb
+  rouge
 
 BUNDLED WITH
-   1.16.4
+   2.2.24

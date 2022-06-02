@@ -1,27 +1,32 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest_3, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
-, contextlib2, termcolor }:
+{ lib, isPyPy, buildPythonPackage, fetchPypi
+, pytest, cmdline, pytest-cov, coverage, setuptools-git, mock, path, execnet
+, contextlib2, termcolor, six }:
 
 buildPythonPackage rec {
   pname = "pytest-shutil";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "efe615b7709637ec8828abebee7fc2ad033ae0f1fc54145f769a8b5e8cc3b4ca";
+    sha256 = "0q8j0ayzmnvlraml6i977ybdq4xi096djhf30n2m1rvnvrhm45nq";
   };
 
-  checkInputs = [ cmdline pytest_3 ];
-  propagatedBuildInputs = [ pytestcov coverage setuptools-git mock pathpy execnet contextlib2 termcolor ];
-  nativeBuildInputs = [ pytest_3 ];
-
-  checkPhase = ''
-    py.test
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "path.py" "path"
   '';
 
-  meta = with stdenv.lib; {
+  buildInputs = [ pytest ];
+  checkInputs = [ cmdline pytest ];
+  propagatedBuildInputs = [ pytest-cov coverage setuptools-git mock path execnet contextlib2 termcolor six ];
+
+  checkPhase = ''
+    py.test ${lib.optionalString isPyPy "-k'not (test_run or test_run_integration)'"}
+  '';
+
+  meta = with lib; {
     description = "A goodie-bag of unix shell and environment tools for py.test";
-    homepage = https://github.com/manahl/pytest-plugins;
+    homepage = "https://github.com/manahl/pytest-plugins";
     maintainers = with maintainers; [ ryansydnor ];
     license = licenses.mit;
   };

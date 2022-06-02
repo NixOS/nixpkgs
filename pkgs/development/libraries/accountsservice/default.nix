@@ -1,50 +1,84 @@
-{ stdenv, fetchurl, pkgconfig, glib, intltool, makeWrapper, shadow
-, gobject-introspection, polkit, systemd, coreutils, meson, dbus
-, ninja, python3 }:
+{ lib
+, stdenv
+, fetchurl
+, substituteAll
+, pkg-config
+, glib
+, shadow
+, gobject-introspection
+, polkit
+, systemd
+, coreutils
+, meson
+, dbus
+, ninja
+, python3
+, vala
+, gettext
+}:
 
 stdenv.mkDerivation rec {
-  name = "accountsservice-${version}";
-  version = "0.6.54";
+  pname = "accountsservice";
+  version = "22.08.8";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
-    sha256 = "1b115n0a4yfa06kgxc69qfc1rc0w4frgs3id3029czkrhhn0ds96";
+    sha256 = "kJmXp2kZ/n3BOKmgHOpwvWItWpMtvJ+xMBARMCOno5E=";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper meson ninja python3 ];
-
-  buildInputs = [ glib intltool gobject-introspection polkit systemd dbus ];
-
-  mesonFlags = [ "-Dsystemdsystemunitdir=etc/systemd/system"
-                 "-Dlocalstatedir=/var" ];
-  prePatch = ''
-    chmod +x meson_post_install.py
-    patchShebangs meson_post_install.py
-
-    substituteInPlace src/daemon.c --replace '"/usr/sbin/useradd"' '"${shadow}/bin/useradd"' \
-                                   --replace '"/usr/sbin/userdel"' '"${shadow}/bin/userdel"'
-    substituteInPlace src/user.c   --replace '"/usr/sbin/usermod"' '"${shadow}/bin/usermod"' \
-                                   --replace '"/usr/bin/chage"' '"${shadow}/bin/chage"' \
-                                   --replace '"/usr/bin/passwd"' '"${shadow}/bin/passwd"' \
-                                   --replace '"/bin/cat"' '"${coreutils}/bin/cat"'
-  '';
-
   patches = [
+    # Hardcode dependency paths.
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit shadow coreutils;
+    })
+
+    # Do not try to create directories in /var, that will not work in Nix sandbox.
     ./no-create-dirs.patch
+
+    # Disable mutating D-Bus methods with immutable /etc.
     ./Disable-methods-that-change-files-in-etc.patch
+
+    # Do not ignore third-party (e.g Pantheon) extensions not matching FHS path scheme.
+    # Fixes https://github.com/NixOS/nixpkgs/issues/72396
+    ./drop-prefix-check-extensions.patch
   ];
 
-  preFixup = ''
-    wrapProgram "$out/libexec/accounts-daemon" \
-      --run "${coreutils}/bin/mkdir -p /var/lib/AccountsService/users" \
-      --run "${coreutils}/bin/mkdir -p /var/lib/AccountsService/icons"
+  nativeBuildInputs = [
+    dbus
+    gettext
+    gobject-introspection
+    meson
+    ninja
+    pkg-config
+    python3
+    vala
+  ];
+
+  buildInputs = [
+    glib
+    polkit
+    systemd
+  ];
+
+  mesonFlags = [
+    "-Dadmin_group=wheel"
+    "-Dlocalstatedir=/var"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+  ];
+
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "D-Bus interface for user account query and manipulation";
-    homepage = https://www.freedesktop.org/wiki/Software/AccountsService;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux;
+    homepage = "https://www.freedesktop.org/wiki/Software/AccountsService";
+    license = licenses.gpl3Plus;
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ pSub ]);
+    platforms = platforms.linux;
   };
 }

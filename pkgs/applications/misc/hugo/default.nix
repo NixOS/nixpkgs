@@ -1,28 +1,42 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
-  name = "hugo-${version}";
-  version = "0.54.0";
-
-  goPackagePath = "github.com/gohugoio/hugo";
+  pname = "hugo";
+  version = "0.99.1";
 
   src = fetchFromGitHub {
-    owner  = "gohugoio";
-    repo   = "hugo";
-    rev    = "v${version}";
-    sha256 = "01grfbr3kpd4qf5cbcmzc6yfq34cm0nkak4pqzgrn46r254y0ymv";
+    owner = "gohugoio";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-NFsXu4UxBmsSM6sNRSSoIUj6QjfB5iSXXbTNftakyHI=";
   };
 
-  modSha256 = "01gni3ksw9whf388c6cj0vcbpsyhdrwfl8cyw85kjx8r56dv88y5";
+  vendorSha256 = "sha256-A1ct8BjtKudNqfytCiaEGfgbRCMv45MIQxTka4ZFblg=";
 
-  buildFlags = "-tags extended";
+  doCheck = false;
+
+  proxyVendor = true;
+
+  tags = [ "extended" ];
 
   subPackages = [ "." ];
 
-  meta = with stdenv.lib; {
-    description = "A fast and modern static website engine.";
-    homepage = https://gohugo.io;
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    $out/bin/hugo gen man
+    installManPage man/*
+    installShellCompletion --cmd hugo \
+      --bash <($out/bin/hugo completion bash) \
+      --fish <($out/bin/hugo completion fish) \
+      --zsh <($out/bin/hugo completion zsh)
+  '';
+
+  meta = with lib; {
+    broken = stdenv.isDarwin;
+    description = "A fast and modern static website engine";
+    homepage = "https://gohugo.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ schneefux ];
+    maintainers = with maintainers; [ schneefux Br1ght0ne Frostman ];
   };
 }

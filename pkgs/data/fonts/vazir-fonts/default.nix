@@ -1,27 +1,26 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "vazir-fonts";
-  version = "19.2.0";
+let
+  pname = "vazir-fonts";
+  version = "32.0.0";
+in fetchFromGitHub {
+  name = "${pname}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "rastikerdar";
-    repo = "vazir-font";
-    rev = "v${version}";
-    sha256 = "0p96y4q20nhpv7hxca6rncfcb14iqy2vacv0xl55wkwqkm4wvzgr";
-  };
+  owner = "rastikerdar";
+  repo = "vazir-font";
+  rev = "v${version}";
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/vazir-fonts
-    cp -v $( find . -name '*.ttf') $out/share/fonts/vazir-fonts
-
+  postFetch = ''
+    tar xf $downloadedFile --strip=1
+    find . -name '*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
   '';
+  sha256 = "sha256-Uy8hgBtCcTLwXu9FkLN1WavUfP74Jf53ChxVGS3UBVM=";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/rastikerdar/vazir-font;
+  meta = with lib; {
+    homepage = "https://github.com/rastikerdar/vazir-font";
     description = "A Persian (Farsi) Font - قلم (فونت) فارسی وزیر";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.linarcx ];
+    maintainers = [ ];
   };
 }

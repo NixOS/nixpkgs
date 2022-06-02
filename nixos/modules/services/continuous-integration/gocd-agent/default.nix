@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.gocd-agent;
+  opt = options.services.gocd-agent;
 in {
   options = {
     services.gocd-agent = {
@@ -37,7 +38,7 @@ in {
 
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
-        defaultText = "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
+        defaultText = literalExpression "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the Go.CD agent process.
@@ -90,6 +91,7 @@ in {
       };
 
       startupOptions = mkOption {
+        type = types.listOf types.str;
         default = [
           "-Xms${cfg.initialJavaHeapSize}"
           "-Xmx${cfg.maxJavaHeapMemory}"
@@ -97,6 +99,15 @@ in {
           "-Dcruise.console.publish.interval=10"
           "-Djava.security.egd=file:/dev/./urandom"
         ];
+        defaultText = literalExpression ''
+          [
+            "-Xms''${config.${opt.initialJavaHeapSize}}"
+            "-Xmx''${config.${opt.maxJavaHeapMemory}}"
+            "-Djava.io.tmpdir=/tmp"
+            "-Dcruise.console.publish.interval=10"
+            "-Djava.security.egd=file:/dev/./urandom"
+          ]
+        '';
         description = ''
           Specifies startup command line arguments to pass to Go.CD agent
           java process.
@@ -105,6 +116,7 @@ in {
 
       extraOptions = mkOption {
         default = [ ];
+        type = types.listOf types.str;
         example = [
           "-X debug"
           "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5006"
@@ -135,20 +147,20 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = optional (cfg.group == "gocd-agent") {
-      name = "gocd-agent";
-      gid = config.ids.gids.gocd-agent;
+    users.groups = optionalAttrs (cfg.group == "gocd-agent") {
+      gocd-agent.gid = config.ids.gids.gocd-agent;
     };
 
-    users.users = optional (cfg.user == "gocd-agent") {
-      name = "gocd-agent";
-      description = "gocd-agent user";
-      createHome = true;
-      home = cfg.workDir;
-      group = cfg.group;
-      extraGroups = cfg.extraGroups;
-      useDefaultShell = true;
-      uid = config.ids.uids.gocd-agent;
+    users.users = optionalAttrs (cfg.user == "gocd-agent") {
+      gocd-agent = {
+        description = "gocd-agent user";
+        createHome = true;
+        home = cfg.workDir;
+        group = cfg.group;
+        extraGroups = cfg.extraGroups;
+        useDefaultShell = true;
+        uid = config.ids.uids.gocd-agent;
+      };
     };
 
     systemd.services.gocd-agent = {

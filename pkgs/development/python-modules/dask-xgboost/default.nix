@@ -1,36 +1,31 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , xgboost
 , dask
 , distributed
-, pytest
-, scikitlearn
-, scipy
 }:
 
 buildPythonPackage rec {
-  version = "0.1.5";
+  version = "0.2.0";
   pname = "dask-xgboost";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1860d06965fe68def1c83b9195130a92050fd4bc28bf2be689898a3a74ee1316";
+    sha256 = "6d9c491dc4099f74a0df66c4d439d296c0f1fba97009fe93e21b2350f295b4ca";
   };
 
-  checkInputs = [ pytest scikitlearn ];
   propagatedBuildInputs = [ xgboost dask distributed ];
 
-  checkPhase = ''
-    py.test dask_xgboost/tests/test_core.py
-  '';
-
   doCheck = false;
+  pythonImportsCheck = [ "dask_xdgboost" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/dask/dask-xgboost;
+  meta = with lib; {
+    homepage = "https://github.com/dask/dask-xgboost";
     description = "Interactions between Dask and XGBoost";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
+    # TypeError: __init__() got an unexpected keyword argument 'iid'
+    broken = true;
   };
 }

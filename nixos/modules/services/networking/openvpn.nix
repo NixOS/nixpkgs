@@ -11,7 +11,7 @@ let
   makeOpenVPNJob = cfg: name:
     let
 
-      path = (getAttr "openvpn-${name}" config.systemd.services).path;
+      path = makeBinPath (getAttr "openvpn-${name}" config.systemd.services).path;
 
       upScript = ''
         #! /bin/sh
@@ -63,7 +63,7 @@ let
       wantedBy = optional cfg.autoStart "multi-user.target";
       after = [ "network.target" ];
 
-      path = [ pkgs.iptables pkgs.iproute pkgs.nettools ];
+      path = [ pkgs.iptables pkgs.iproute2 pkgs.nettools ];
 
       serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --suppress-timestamps --config ${configFile}";
       serviceConfig.Restart = "always";
@@ -73,6 +73,9 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "openvpn" "enable" ] "")
+  ];
 
   ###### interface
 
@@ -81,11 +84,11 @@ in
     services.openvpn.servers = mkOption {
       default = {};
 
-      example = literalExample ''
+      example = literalExpression ''
         {
           server = {
             config = '''
-              # Simplest server configuration: http://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
+              # Simplest server configuration: https://community.openvpn.net/openvpn/wiki/StaticKeyMiniHowto
               # server :
               dev tun
               ifconfig 10.8.0.1 10.8.0.2
@@ -182,12 +185,12 @@ in
               options = {
                 username = mkOption {
                   description = "The username to store inside the credentials file.";
-                  type = types.string;
+                  type = types.str;
                 };
 
                 password = mkOption {
                   description = "The password to store inside the credentials file.";
-                  type = types.string;
+                  type = types.str;
                 };
               };
             });

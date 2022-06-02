@@ -1,23 +1,25 @@
-{ stdenv, darwin, fetchurl, SDL2, freetype, libGL }:
+{ lib, stdenv, pkg-config, darwin, fetchurl, SDL2, freetype, libGL }:
 
 stdenv.mkDerivation rec {
-  name = "SDL2_ttf-${version}";
-  version = "2.0.14";
+  pname = "SDL2_ttf";
+  version = "2.0.18";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_ttf/release/${name}.tar.gz";
-    sha256 = "0xljwcpvd2knrjdfag5b257xqayplz55mqlszrqp0kpnphh5xnrl";
+    url = "https://www.libsdl.org/projects/SDL_ttf/release/${pname}-${version}.tar.gz";
+    sha256 = "sha256-cjTriINRTgGed0fHA+SndFdbGNQ1wipKKdBoy3aKIlE=";
   };
 
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ SDL2 freetype libGL ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
+    ++ lib.optional stdenv.isDarwin darwin.libobjc;
 
-  meta = with stdenv.lib; {
-    description = "SDL TrueType library";
+  meta = with lib; {
+    description = "Support for TrueType (.ttf) font files with Simple Directmedia Layer";
     platforms = platforms.unix;
     license = licenses.zlib;
-    homepage = https://www.libsdl.org/projects/SDL_ttf/;
+    homepage = "https://github.com/libsdl-org/SDL_ttf";
   };
 }

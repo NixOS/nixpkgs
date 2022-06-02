@@ -1,29 +1,31 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python3, meson, ninja, vala, pkgconfig, gobject-introspection, libgee, pantheon, gtk3, glib, gettext, hicolor-icon-theme, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, python3
+, meson
+, ninja
+, vala
+, pkg-config
+, libgee
+, gtk3
+, glib
+, gettext
+, gsettings-desktop-schemas
+, gobject-introspection
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "5.2.3";
+  version = "6.2.0"; # nixpkgs-update: no auto update
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "10ddq1s2w4jvpzq813cylmqhh8pggzaz890fy3kzg07275i98gah";
-  };
-
-  patches = [
-    # Resolve the circular dependency between granite and the datetime wingpanel indicator
-    # See: https://github.com/elementary/granite/pull/242
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/granite/raw/0550b44ed6400c9b1ff7e70871913747df2ff323/f/00-datetime-clock-format-gsettings.patch";
-      sha256 = "0i9yvdmn77x5fjdwd1raw6ym8js8yxa7w6ydc7syx7hcyls00dmq";
-    })
-  ];
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      repoName = pname;
-    };
+    sha256 = "sha256-WM0Wo9giVP5pkMFaPCHsMfnAP6xD71zg6QLCYV6lmkY=";
   };
 
   nativeBuildInputs = [
@@ -31,16 +33,16 @@ stdenv.mkDerivation rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     glib
+    gsettings-desktop-schemas # is_clock_format_12h uses "org.gnome.desktop.interface clock-format"
     gtk3
-    hicolor-icon-theme
     libgee
   ];
 
@@ -49,15 +51,16 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
-    description = "An extension to GTK+ used by elementary OS";
+  meta = with lib; {
+    description = "An extension to GTK used by elementary OS";
     longDescription = ''
-      Granite is a companion library for GTK+ and GLib. Among other things, it provides complex widgets and convenience functions
+      Granite is a companion library for GTK and GLib. Among other things, it provides complex widgets and convenience functions
       designed for use in apps built for elementary OS.
     '';
-    homepage = https://github.com/elementary/granite;
+    homepage = "https://github.com/elementary/granite";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "granite-demo";
   };
 }

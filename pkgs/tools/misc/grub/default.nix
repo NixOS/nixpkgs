@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, autoreconfHook, texinfo, buggyBiosCDSupport ? true }:
+{ lib, stdenv, fetchurl, autoreconfHook, texinfo, buggyBiosCDSupport ? true }:
 
-stdenv.mkDerivation {
-  name = "grub-0.97-73";
+stdenv.mkDerivation rec {
+  pname = "grub";
+  version = "0.97-73";
 
   src = fetchurl {
-    url = https://alpha.gnu.org/gnu/grub/grub-0.97.tar.gz;
+    url = "https://alpha.gnu.org/gnu/grub/grub-${lib.versions.majorMinor version}.tar.gz";
     sha256 = "02r6b52r0nsp6ryqfiqchnl7r1d9smm80sqx24494gmx5p8ia7af";
   };
 
@@ -14,9 +15,13 @@ stdenv.mkDerivation {
     # grub-install isn't smart enough.
     ./symlink.patch
   ]
-  ++ (stdenv.lib.optional buggyBiosCDSupport ./buggybios.patch)
+  ++ (lib.optional buggyBiosCDSupport ./buggybios.patch)
   ++ map fetchurl (import ./grub1.patches.nix)
   ;
+
+  preConfigure = ''
+    substituteInPlace ./configure.ac --replace 'AC_PREREQ(2.61)' 'AC_PREREQ(2.64)'
+  '';
 
   # autoreconfHook required for the splashimage patch.
   nativeBuildInputs = [ autoreconfHook ];
@@ -26,8 +31,8 @@ stdenv.mkDerivation {
 
   passthru.grubTarget = "";
 
-  meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/grub;
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/grub";
     description = "GRand Unified Bootloader";
     license = licenses.gpl2;
     platforms = platforms.linux;

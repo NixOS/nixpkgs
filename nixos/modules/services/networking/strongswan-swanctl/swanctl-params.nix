@@ -6,7 +6,7 @@
 #
 #   git clone https://github.com/strongswan/strongswan.git
 #   cd strongswan
-#   git diff 5.5.3..5.6.0 src/swanctl/swanctl.opt
+#   git diff 5.7.2..5.8.0 src/swanctl/swanctl.opt
 
 lib: with (import ./param-constructors.nix lib);
 
@@ -227,6 +227,22 @@ in {
       irrespective of the value of this option (even when set to no).
     '';
 
+    childless = mkEnumParam [ "allow" "force" "never" ] "allow" ''
+      Use childless IKE_SA initiation (RFC 6023) for IKEv2.  Acceptable values
+      are <literal>allow</literal> (the default), <literal>force</literal> and
+      <literal>never</literal>. If set to <literal>allow</literal>, responders
+      will accept childless IKE_SAs (as indicated via notify in the IKE_SA_INIT
+      response) while initiators continue to create regular IKE_SAs with the
+      first CHILD_SA created during IKE_AUTH, unless the IKE_SA is initiated
+      explicitly without any children (which will fail if the responder does not
+      support or has disabled this extension).  If set to
+      <literal>force</literal>, only childless initiation is accepted and the
+      first CHILD_SA is created with a separate CREATE_CHILD_SA exchange
+      (e.g. to use an independent DH exchange for all CHILD_SAs). Finally,
+      setting the option to <literal>never</literal> disables support for
+      childless IKE_SAs as responder.
+    '';
+
     send_certreq = mkYesNoParam yes ''
       Send certificate request payloads to offer trusted root CA certificates to
       the peer. Certificate requests help the peer to choose an appropriate
@@ -348,6 +364,16 @@ in {
       List of named IP pools to allocate virtual IP addresses
       and other configuration attributes from. Each name references a pool by
       name from either the pools section or an external pool.
+    '';
+
+    if_id_in = mkStrParam "0" ''
+      XFRM interface ID set on inbound policies/SA, can be overridden by child
+      config, see there for details.
+    '';
+
+    if_id_out = mkStrParam "0" ''
+      XFRM interface ID set on outbound policies/SA, can be overridden by child
+      config, see there for details.
     '';
 
     mediation = mkYesNoParam no ''
@@ -541,6 +567,16 @@ in {
         Section for a certificate candidate to use for
         authentication. Certificates in certs are transmitted as binary blobs,
         these sections offer more flexibility.
+      '';
+
+      ca_id = mkOptionalStrParam ''
+        Identity in CA certificate to accept for authentication. The specified
+        identity must be contained in one (intermediate) CA of the remote peer
+        trustchain, either as subject or as subjectAltName. This has the same
+        effect as specifying <literal>cacerts</literal> to force clients under
+        a CA to specific connections; it does not require the CA certificate
+        to be available locally, and can be received from the peer during the
+        IKE exchange.
       '';
 
       cacerts = mkCommaSepListParam [] ''
@@ -799,7 +835,7 @@ in {
         Updown script to invoke on CHILD_SA up and down events.
       '';
 
-      hostaccess = mkYesNoParam yes ''
+      hostaccess = mkYesNoParam no ''
         Hostaccess variable to pass to <literal>updown</literal> script.
       '';
 
@@ -959,6 +995,26 @@ in {
         Setting marks in XFRM output is supported since Linux 4.14. Setting a
         mask requires at least Linux 4.19.
       '';
+
+      if_id_in = mkStrParam "0" ''
+        XFRM interface ID set on inbound policies/SA. This allows installing
+        duplicate policies/SAs and associates them with an interface with the
+        same ID. The special value <literal>%unique</literal> sets a unique
+        interface ID on each CHILD_SA instance, beyond that the value
+        <literal>%unique-dir</literal> assigns a different unique interface ID
+        for each CHILD_SA direction (in/out).
+      '';
+
+      if_id_out = mkStrParam "0" ''
+        XFRM interface ID set on outbound policies/SA. This allows installing
+        duplicate policies/SAs and associates them with an interface with the
+        same ID. The special value <literal>%unique</literal> sets a unique
+        interface ID on each CHILD_SA instance, beyond that the value
+        <literal>%unique-dir</literal> assigns a different unique interface ID
+        for each CHILD_SA direction (in/out).
+
+        The daemon will not install routes for CHILD_SAs that have this option set.
+     '';
 
       tfc_padding = mkParamOfType (with lib.types; either int (enum ["mtu"])) 0 ''
         Pads ESP packets with additional data to have a consistent ESP packet
@@ -1127,20 +1183,20 @@ in {
 
     ppk = mkPrefixedAttrsOfParams {
       secret = mkOptionalStrParam ''
-	      Value of the PPK. It may either be an ASCII string, a hex encoded string
-	      if it has a <literal>0x</literal> prefix or a Base64 encoded string if
-	      it has a <literal>0s</literal> prefix in its value. Should have at least
-	      256 bits of entropy for 128-bit security.
+        Value of the PPK. It may either be an ASCII string, a hex encoded string
+        if it has a <literal>0x</literal> prefix or a Base64 encoded string if
+        it has a <literal>0s</literal> prefix in its value. Should have at least
+        256 bits of entropy for 128-bit security.
       '';
 
       id = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
-	      PPK identity the PPK belongs to. Multiple unique identities may be
-	      specified, each having an <literal>id</literal> prefix, if a secret is
-	      shared between multiple peers.
+        PPK identity the PPK belongs to. Multiple unique identities may be
+        specified, each having an <literal>id</literal> prefix, if a secret is
+        shared between multiple peers.
       '';
     } ''
-	    Postquantum Preshared Key (PPK) section for a specific secret. Each PPK is
-	    defined in a unique section having the <literal>ppk</literal> prefix.
+      Postquantum Preshared Key (PPK) section for a specific secret. Each PPK is
+      defined in a unique section having the <literal>ppk</literal> prefix.
     '';
 
     private = mkPrefixedAttrsOfParams {
@@ -1227,7 +1283,7 @@ in {
         provided the user is prompted during an interactive
         <literal>--load-creds</literal> call.
       '';
-    } ''Definition for a private key that's stored on a token/smartcard/TPM.'';
+    } "Definition for a private key that's stored on a token/smartcard/TPM.";
 
   };
 

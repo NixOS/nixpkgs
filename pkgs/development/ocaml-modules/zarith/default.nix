@@ -1,46 +1,38 @@
-{ stdenv, buildOcaml, fetchurl
-, ocaml, findlib, pkgconfig, perl
+{ lib, stdenv, fetchFromGitHub
+, ocaml, findlib, pkg-config
 , gmp
 }:
 
-let source =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02"
-  then {
-    version = "1.7";
-    url = https://github.com/ocaml/Zarith/archive/release-1.7.tar.gz;
-    sha256 = "0fmblap5nsbqq0dab63d6b7lsxpc3snkgz7jfldi2qa4s1kbnhfn";
-  } else {
-    version = "1.3";
-    url = http://forge.ocamlcore.org/frs/download.php/1471/zarith-1.3.tgz;
-    sha256 = "1mx3nxcn5h33qhx4gbg0hgvvydwlwdvdhqcnvfwnmf9jy3b8frll";
+if lib.versionOlder ocaml.version "4.04"
+then throw "zarith is not available for OCaml ${ocaml.version}"
+else
+
+stdenv.mkDerivation rec {
+  pname = "ocaml${ocaml.version}-zarith";
+  version = "1.12";
+  src = fetchFromGitHub {
+    owner = "ocaml";
+    repo = "Zarith";
+    rev = "release-${version}";
+    sha256 = "1jslm1rv1j0ya818yh23wf3bb6hz7qqj9pn5fwl45y9mqyqa01s9";
   };
-in
 
-buildOcaml rec {
-  name = "zarith";
-  inherit (source) version;
-  src = fetchurl { inherit (source) url sha256; };
-
-  minimumSupportedOcamlVersion = "3.12.1";
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocaml findlib perl ];
+  nativeBuildInputs = [ pkg-config ocaml findlib ];
   propagatedBuildInputs = [ gmp ];
+  strictDeps = true;
 
-  # needed so setup-hook.sh sets CAML_LD_LIBRARY_PATH for dllzarith.so
-  hasSharedObjects = true;
+  dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
+  configureFlags = [ "-installdir ${placeholder "out"}/lib/ocaml/${ocaml.version}/site-lib" ];
 
-  patchPhase = "patchShebangs ./z_pp.pl";
-  configurePhase = ''
-    ./configure -installdir $out/lib/ocaml/${ocaml.version}/site-lib
-  '';
-  preInstall = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib";
+  preInstall = "mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast, arbitrary precision OCaml integers";
     homepage    = "http://forge.ocamlcore.org/projects/zarith";
     license     = licenses.lgpl2;
-    platforms   = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = with maintainers; [ thoughtpolice vbgl ];
   };
 }

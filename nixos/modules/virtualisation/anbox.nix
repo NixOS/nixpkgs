@@ -35,7 +35,7 @@ in
 
     image = mkOption {
       default = pkgs.anbox.image;
-      example = literalExample "pkgs.anbox.image";
+      defaultText = literalExpression "pkgs.anbox.image";
       type = types.package;
       description = ''
         Base android image for Anbox.
@@ -56,7 +56,7 @@ in
 
       dns = mkOption {
         default = "1.1.1.1";
-        type = types.string;
+        type = types.str;
         description = ''
           Container DNS server.
         '';
@@ -72,9 +72,6 @@ in
     };
 
     environment.systemPackages = with pkgs; [ anbox ];
-
-    boot.kernelModules = [ "ashmem_linux" "binder_linux" ];
-    boot.extraModulePackages = [ kernelPackages.anbox ];
 
     services.udev.extraRules = ''
       KERNEL=="ashmem", NAME="%k", MODE="0666"
@@ -98,14 +95,8 @@ in
       environment.XDG_RUNTIME_DIR="${anboxloc}";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
       preStart = let
-        initsh = let
-          ip = cfg.ipv4.container.address;
-          gw = cfg.ipv4.gateway.address;
-          dns = cfg.ipv4.dns;
-        in
-        pkgs.writeText "nixos-init" (''
+        initsh = pkgs.writeText "nixos-init" (''
           #!/system/bin/sh
           setprop nixos.version ${config.system.nixos.version}
 

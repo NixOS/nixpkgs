@@ -1,4 +1,6 @@
-{ stdenv, fetchzip, dos2unix
+{ stdenv
+, fetchzip
+, dos2unix
 , soundPack ? stdenv.mkDerivation {
     name = "soundsense-soundpack";
     src = fetchzip {
@@ -8,18 +10,18 @@
     installPhase = ''
       cp -r . $out
     '';
-}}:
+  }
+}:
 
 stdenv.mkDerivation rec {
   version = "2016-1_196";
   dfVersion = "0.44.12";
   inherit soundPack;
-  name = "soundsense-${version}";
+  pname = "soundsense";
   src = fetchzip {
     url = "http://df.zweistein.cz/soundsense/soundSense_${version}.zip";
     sha256 = "1gkrs69l3xsh858yjp204ddp29m668j630akm7arssc9359wxqkk";
   };
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
   nativeBuildInputs = [ dos2unix ];
   buildPhase = ''
     dos2unix soundSense.sh

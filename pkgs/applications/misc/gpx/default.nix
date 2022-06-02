@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "gpx-${version}";
-  version = "2.5.2";
+  pname = "gpx";
+  version = "2.6.8";
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
     owner = "markwal";
     repo = "GPX";
     rev = version;
-    sha256 = "1yab269x8qyf7rd04vaxyqyjv4pzz9lp4sc4dwh927k23avr3rw5";
+    sha256 = "1izs8s5npkbfrsyk17429hyl1vyrbj9dp6vmdlbb2vh6mfgl54h8";
   };
 
   meta = {
     description = "Gcode to x3g conversion postprocessor";
-    homepage = https://github.com/markwal/GPX/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.leo60228 ];
+    homepage = "https://github.com/markwal/GPX/";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.leo60228 ];
   };
 }

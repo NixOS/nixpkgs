@@ -1,86 +1,162 @@
-{ lib, fetchFromGitHub, fetchpatch, python3
+{ stdenv
+, lib
+, callPackage
+, fetchFromGitHub
+, fetchpatch
+, python3
+, substituteAll
+, ffmpeg
+, inetutils
+, nixosTests
 
 # Look up dependencies of specified components in component-packages.nix
-, extraComponents ? []
+, extraComponents ? [ ]
 
 # Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
 
+# Write out info about included extraComponents and extraPackages
+, writeText
+
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
-, packageOverrides ? self: super: { }
+, packageOverrides ? self: super: {}
 
 # Skip pip install of required packages on startup
 , skipPip ? true }:
 
 let
-
   defaultOverrides = [
-    # Override the version of some packages pinned in Home Assistant's setup.py
-    (mkOverride "aiohttp" "3.5.4"
-      "9c4c83f4fa1938377da32bc2d59379025ceeee8e24b89f72fcbccd8ca22dc9bf")
-    (mkOverride "astral" "1.10.1"
-      "d2a67243c4503131c856cafb1b1276de52a86e5b8a1d507b7e08bee51cb67bf1")
-    (mkOverride "async-timeout" "3.0.1"
-      "0c3c816a028d47f659d6ff5c745cb2acf1f966da1fe5c19c77a70282b25f4c5f")
-    (mkOverride "attrs" "18.2.0"
-      "10cbf6e27dbce8c30807caf056c8eb50917e0eaafe86347671b57254006c3e69")
-    (mkOverride "bcrypt" "3.1.6"
-      "44636759d222baa62806bbceb20e96f75a015a6381690d1bc2eda91c01ec02ea")
+    # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
+    (mkOverride "python-slugify" "4.0.1" "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=")
+
+    # pytest-aiohttp>0.3.0 breaks home-assistant tests
     (self: super: {
-      pyjwt = super.pyjwt.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.4";
+      pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "4ee413b357d53fd3fb44704577afac88e72e878716116270d722723d65b42176";
+          hash = "sha256-ySmFQzljeXc3WDhwO2L+9jUoWYvAqdRRY566lfSqpE8=";
         };
-        doCheck = false; # https://github.com/jpadilla/pyjwt/issues/382
+        propagatedBuildInputs = with python3.pkgs; [ aiohttp pytest ];
+        doCheck = false;
+        patches = [];
+      });
+      aiohomekit = super.aiohomekit.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      gcal-sync = super.gcal-sync.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      hass-nabucasa = super.hass-nabucasa.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      pydeconz = super.pydeconz.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      pynws = super.pynws.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      pytomorrowio = super.pytomorrowio.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      rtsp-to-webrtc = super.rtsp-to-webrtc.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires pytest-aiohttp>=1.0.0
+      });
+      snitun = super.snitun.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
+      });
+      zwave-js-server-python = super.zwave-js-server-python.overridePythonAttrs (oldAttrs: {
+        doCheck = false; # requires aiohttp>=1.0.0
       });
     })
-    (mkOverride "cryptography" "2.5"
-      "00c4d7gvsymlaw0r13zrm32dcnarmpayjyrh65yymlmr6mrbcij9")
-    (mkOverride "cryptography_vectors" "2.5" # required by cryptography==2.5
-      "15qfl3pnw2f11r0z0zhwl56f6pb60ysav8fxmpnz5p80cfwljdik")
-    (mkOverride "python-slugify" "1.2.6"
-      "7723daf30996db26573176bddcdf5fcb98f66dc70df05c9cb29f2c79b8193245")
-    (mkOverride "pyyaml" "3.13"
-      "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf")
-    (mkOverride "requests" "2.21.0"
-      "502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e")
-    (mkOverride "ruamel_yaml" "0.15.88"
-      "ac56193c47a31c9efa151064a9e921865cdad0f7a991d229e7197e12fe8e0cd7")
-    (mkOverride "voluptuous" "0.11.5"
-      "567a56286ef82a9d7ae0628c5842f65f516abcb496e74f3f59f1d7b28df314ef")
-    (mkOverride "voluptuous-serialize" "2.1.0"
-      "d30fef4f1aba251414ec0b315df81a06da7bf35201dcfb1f6db5253d738a154f")
 
-    # used by auth.mfa_modules.totp
-    (mkOverride "pyotp" "2.2.6"
-      "dd9130dd91a0340d89a0f06f887dbd76dd07fb95a8886dc4bc401239f2eebd69")
-
-    # used by check_config script
-    # can be unpinned once https://github.com/home-assistant/home-assistant/issues/11917 is resolved
-    (mkOverride "colorlog" "4.0.2"
-      "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
-
-    # hass-frontend does not exist in python3.pkgs
     (self: super: {
-      hass-frontend = self.callPackage ./frontend.nix { };
+      huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.18";
+        src = fetchFromGitHub {
+          owner = "Salamek";
+          repo = "huawei-lte-api";
+          rev = version;
+          sha256 = "1qaqxmh03j10wa9wqbwgc5r3ays8wfr7bldvsm45fycr3qfyn5fg";
+        };
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.dicttoxml ];
+      });
+    })
+
+    # Pinned due to API changes in pyruckus>0.12
+    (self: super: {
+      pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
+        version = "0.12";
+        src = fetchFromGitHub {
+          owner = "gabe565";
+          repo = "pyruckus";
+          rev = version;
+          sha256 = "0ykv6r6blbj3fg9fplk9i7xclkv5d93rwvx0fm5s8ms9f2s9ih8z";
+        };
+      });
+    })
+
+    # Pinned due to API changes in 0.1.0
+    (mkOverride "poolsense" "0.0.8" "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=")
+
+    # Pinned due to API changes >0.3.5.3
+    (self: super: {
+      pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.5.3";
+        src = fetchFromGitHub {
+          owner = "MatsNl";
+          repo = "pyatag";
+          rev = version;
+          sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
+        };
+      });
+    })
+
+    # Pinned due to API changes in 0.4.0
+    (self: super: {
+      vilfo-api-client = super.vilfo-api-client.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.3";
+        src = fetchFromGitHub {
+          owner = "ManneW";
+          repo = "vilfo-api-client-python";
+          rev = "v${version}";
+          sha256 = "1gy5gpsg99rcm1cc3m30232za00r9i46sp74zpd12p3vzz1wyyqf";
+        };
+      });
+    })
+
+    # Pinned due to API changes ~1.0
+    (self: super: {
+      vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
+        version = "0.1.2";
+        src = fetchFromGitHub {
+          owner = "spry-group";
+          repo = "python-vultr";
+          rev = "v${version}";
+          sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
+        };
+      });
+    })
+
+    # home-assistant-frontend does not exist in python3.pkgs
+    (self: super: {
+      home-assistant-frontend = self.callPackage ./frontend.nix { };
     })
   ];
 
-  mkOverride = attrname: version: sha256:
+  mkOverride = attrName: version: hash:
     self: super: {
-      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+      ${attrName} = super.${attrName}.overridePythonAttrs (oldAttrs: {
         inherit version;
         src = oldAttrs.src.override {
-          inherit version sha256;
+          inherit version hash;
         };
       });
     };
-    
-  py = python3.override {
+
+  python = python3.override {
     # Put packageOverrides at the start so they are applied after defaultOverrides
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
@@ -89,59 +165,196 @@ let
 
   availableComponents = builtins.attrNames componentPackages.components;
 
-  getPackages = component: builtins.getAttr component componentPackages.components;
+  inherit (componentPackages) supportedComponentsWithTests;
 
-  componentBuildInputs = lib.concatMap (component: getPackages component py.pkgs) extraComponents;
+  getPackages = component: componentPackages.components.${component};
+
+  componentBuildInputs = lib.concatMap (component: getPackages component python.pkgs) extraComponents;
 
   # Ensure that we are using a consistent package set
-  extraBuildInputs = extraPackages py.pkgs;
+  extraBuildInputs = extraPackages python.pkgs;
+
+  # Create info about included packages and components
+  extraComponentsFile = writeText "home-assistant-components" (lib.concatStringsSep "\n" extraComponents);
+  extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.90.2";
+  hassVersion = "2022.5.5";
 
-in with py.pkgs; buildPythonApplication rec {
+in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
+  format = "pyproject";
 
-  disabled = pythonOlder "3.5";
+  # check REQUIRED_PYTHON_VER in homeassistant/const.py
+  disabled = python.pythonOlder "3.9";
 
-  inherit availableComponents;
+  # don't try and fail to strip 6600+ python files, it takes minutes!
+  dontStrip = true;
 
   # PyPI tarball is missing tests/ directory
   src = fetchFromGitHub {
     owner = "home-assistant";
-    repo = "home-assistant";
+    repo = "core";
     rev = version;
-    sha256 = "0byikidvrvx8nxgddhpqz609rxb91j1kcppziv4ibb57g6lj7iwx";
+    hash = "sha256-uVB3Yg3f0fNkq2rav7hmbJ9IAMg0UIrdMshJVgOharA=";
   };
 
-  propagatedBuildInputs = [
-    # From setup.py
-    aiohttp astral async-timeout attrs bcrypt certifi jinja2 pyjwt cryptography pip
-    python-slugify pytz pyyaml requests ruamel_yaml voluptuous voluptuous-serialize
-    # From http, frontend and recorder components and auth.mfa_modules.totp
-    sqlalchemy aiohttp-cors hass-frontend pyotp pyqrcode
-  ] ++ componentBuildInputs ++ extraBuildInputs;
-
-  checkInputs = [
-    asynctest pytest pytest-aiohttp requests-mock pydispatcher
+  # leave this in, so users don't have to constantly update their downstream patch handling
+  patches = [
+    (substituteAll {
+      src = ./patches/ffmpeg-path.patch;
+      ffmpeg = "${lib.getBin ffmpeg}/bin/ffmpeg";
+    })
   ];
 
-  checkPhase = ''
-    # The components' dependencies are not included, so they cannot be tested
-    py.test --ignore tests/components
-    # Some basic components should be tested however
-    py.test \
-      tests/components/{api,config,configurator,demo,discovery,frontend,group,history,history_graph} \
-      tests/components/{http,init,introduction,logger,script,shell_command,system_log,websocket_api}
+  postPatch = let
+    relaxedConstraints = [
+      "aiohttp"
+      "async_timeout"
+      "attrs"
+      "awesomeversion"
+      "bcrypt"
+      "cryptography"
+      "httpx"
+      "jinja2"
+      "pip"
+      "requests"
+      "yarl"
+    ];
+  in ''
+    sed -r -i \
+      ${lib.concatStringsSep "\n" (map (package:
+        ''-e 's@${package}[<>=]+.*@${package}@g' \''
+      ) relaxedConstraints)}
+    setup.cfg
+    substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
+
+  propagatedBuildInputs = with python.pkgs; [
+    # Only packages required in setup.py
+    aiohttp
+    astral
+    async-timeout
+    atomicwrites
+    attrs
+    awesomeversion
+    bcrypt
+    certifi
+    ciso8601
+    cryptography
+    httpx
+    ifaddr
+    jinja2
+    pip
+    pyjwt
+    python-slugify
+    pytz
+    pyyaml
+    requests
+    ruamel-yaml
+    voluptuous
+    voluptuous-serialize
+    yarl
+    # Not in setup.py, but used in homeassistant/util/package.py
+    setuptools
+    # Not in setup.py, but uncounditionally imported via tests/conftest.py
+    paho-mqtt
+  ] ++ componentBuildInputs ++ extraBuildInputs;
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
 
+  # upstream only tests on Linux, so do we.
+  doCheck = stdenv.isLinux;
+
+  checkInputs = with python.pkgs; [
+    # test infrastructure (selectively from requirement_test.txt)
+    freezegun
+    jsonpickle
+    pytest-aiohttp
+    pytest-freezegun
+    pytest-mock
+    pytest-rerunfailures
+    pytest-socket
+    pytest-xdist
+    pytestCheckHook
+    requests-mock
+    respx
+    stdlib-list
+    tqdm
+    # required by tests/auth/mfa_modules
+    pyotp
+  ] ++ lib.concatMap (component: getPackages component python.pkgs) [
+    # some components are needed even if tests in tests/components are disabled
+    "default_config"
+    "hue"
+  ];
+
+  pytestFlagsArray = [
+    # assign tests grouped by file to workers
+    "--dist loadfile"
+    # retry racy tests that end in "RuntimeError: Event loop is closed"
+    "--reruns 3"
+    "--only-rerun RuntimeError"
+    # enable full variable printing on error
+    "--showlocals"
+    # helpers/test_system_info.py: AssertionError: assert 'Unknown' == 'Home Assistant Container'
+    "--deselect tests/helpers/test_system_info.py::test_container_installationtype"
+    # tests are located in tests/
+    "tests"
+  ];
+
+  disabledTestPaths = [
+    # we don't care about code quality
+    "tests/pylint"
+    # don't bulk test all components
+    "tests/components"
+    # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0
+    "tests/auth/mfa_modules/test_notify.py"
+  ];
+
+  disabledTests = [
+    # AssertionError: assert 1 == 0
+    "test_merge"
+    # Tests are flaky
+    "test_config_platform_valid"
+    # Test requires pylint>=2.13.0
+    "test_invalid_discovery_info"
+  ];
+
+  preCheck = ''
+    export HOME="$TEMPDIR"
+
+    # the tests require the existance of a media dir
+    mkdir /build/media
+
+    # put ping binary into PATH, e.g. for wake_on_lan tests
+    export PATH=${inetutils}/bin:$PATH
+  '';
+
+  postInstall = ''
+    cp -v ${extraComponentsFile} $out/extra_components
+    cp -v ${extraPackagesFile} $out/extra_packages
+  '';
+
+  passthru = {
+    inherit
+      availableComponents
+      extraComponents
+      getPackages
+      python
+      supportedComponentsWithTests;
+    tests = {
+      nixos = nixosTests.home-assistant;
+      components = callPackage ./tests.nix { };
+    };
+  };
+
   meta = with lib; {
-    homepage = https://home-assistant.io/;
-    description = "Open-source home automation platform running on Python 3";
+    homepage = "https://home-assistant.io/";
+    description = "Open source home automation that puts local control and privacy first";
     license = licenses.asl20;
-    maintainers = with maintainers; [ f-breidenstein dotlambda ];
+    maintainers = teams.home-assistant.members;
+    platforms = platforms.linux;
   };
 }

@@ -1,47 +1,32 @@
-{ stdenv, ruby, bundler, fetchFromGitLab, go }:
+{ lib, fetchFromGitLab, buildGoModule, ruby }:
 
-stdenv.mkDerivation rec {
-  version = "8.7.1";
-  name = "gitlab-shell-${version}";
-
+buildGoModule rec {
+  pname = "gitlab-shell";
+  version = "14.3.0";
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "0x9jlgd5s5zhdv7fzxba74zjigvd7v5h045y7gny53lf8xda68ia";
+    sha256 = "sha256-SFoNtWcY0iJREsA+vZRsVJHmNb2vNvOiBJnochxA/Us=";
   };
 
-  buildInputs = [ ruby bundler go ];
+  buildInputs = [ ruby ];
 
   patches = [ ./remove-hardcoded-locations.patch ];
 
-  installPhase = ''
-    export GOCACHE="$TMPDIR/go-cache"
+  vendorSha256 = "sha256-eSzJon8o7ktV3rFuTE1A4tzdkBzWBZf1JxnrcMj5s00=";
 
-    ruby bin/compile
-    mkdir -p $out/
-    cp -R . $out/
-
-    # Nothing to install ATM for non-development but keeping the
-    # install command anyway in case that changes in the future:
-    export HOME=$(pwd)
-    bundle install -j4 --verbose --local --deployment --without development test
+  postInstall = ''
+    cp -r "$NIX_BUILD_TOP/source"/bin/* $out/bin
+    cp -r "$NIX_BUILD_TOP/source"/{support,VERSION} $out/
   '';
+  doCheck = false;
 
-  # gitlab-shell will try to read its config relative to the source
-  # code by default which doesn't work in nixos because it's a
-  # read-only filesystem
-  postPatch = ''
-    substituteInPlace lib/gitlab_config.rb --replace \
-       "File.join(ROOT_PATH, 'config.yml')" \
-       "'/run/gitlab/shell-config.yml'"
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SSH access and repository management app for GitLab";
-    homepage = http://www.gitlab.com/;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz globin ];
+    homepage = "http://www.gitlab.com/";
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fpletz globin talyz yayayayaka ];
     license = licenses.mit;
   };
 }

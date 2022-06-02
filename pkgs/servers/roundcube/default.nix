@@ -1,16 +1,25 @@
-{ lib, stdenv, fetchzip, buildEnv, roundcube, roundcubePlugins }:
-let
-  version = "1.3.8";
-in
-fetchzip rec {
-  name= "roundcube-${version}";
+{ fetchurl, lib, stdenv, buildEnv, roundcube, roundcubePlugins }:
 
-  url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz";
-  sha256 = "1lhwr13bglm8rqgamnb480b07wpqhw9bskjj2xxb0x8kdjly29ks";
+stdenv.mkDerivation rec {
+  pname = "roundcube";
+  version = "1.5.2";
 
-  extraPostFetch = ''
+  src = fetchurl {
+    url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz";
+    sha256 = "sha256-8DloOBFW/nkNhYr34GnFVQqFd/uWT5ZiRDSJUnIFODg=";
+  };
+
+  patches = [ ./0001-Don-t-resolve-symlinks-when-trying-to-find-INSTALL_P.patch ];
+
+  dontBuild = true;
+
+  installPhase = ''
+    mkdir $out
+    cp -r * $out/
     ln -sf /etc/roundcube/config.inc.php $out/config/config.inc.php
     rm -rf $out/installer
+    # shut up updater
+    rm $out/composer.json-dist
   '';
 
   passthru.withPlugins = f: buildEnv {
@@ -20,8 +29,8 @@ fetchzip rec {
 
   meta = {
     description = "Open Source Webmail Software";
-    maintainers = with stdenv.lib.maintainers; [ vskilet ];
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with lib.maintainers; [ vskilet globin ma27 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
   };
 }

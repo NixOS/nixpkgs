@@ -1,13 +1,44 @@
-{ stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, libnotify, libxcb, nspr, nss, systemd, xorg }:
+{
+alsa-lib,
+at-spi2-atk,
+at-spi2-core,
+atk,
+cairo,
+cups,
+curl,
+dbus,
+dpkg,
+expat,
+fetchurl,
+fontconfig,
+freetype,
+gdk-pixbuf,
+glib,
+gtk3,
+lib,
+libdrm,
+libnotify,
+libsecret,
+libuuid,
+libxcb,
+libxkbcommon,
+mesa,
+nspr,
+nss,
+pango,
+stdenv,
+systemd,
+wrapGAppsHook,
+xorg,
+}:
 
 let
+  version = "1.31.2";
 
-  version = "1.13.1";
-
-  rpath = stdenv.lib.makeLibraryPath [
-    alsaLib
+  rpath = lib.makeLibraryPath [
+    alsa-lib
+    at-spi2-atk
+    at-spi2-core
     atk
     cairo
     cups
@@ -16,20 +47,23 @@ let
     expat
     fontconfig
     freetype
+    gdk-pixbuf
     glib
-    gnome2.GConf
-    gnome2.gdk_pixbuf
-    gnome2.gtk
-    gnome2.pango
+    gtk3
+    libdrm
     libnotify
+    libsecret
+    libuuid
     libxcb
+    libxkbcommon
+    mesa
     nspr
     nss
+    pango
     stdenv.cc.cc
     systemd
-
-    xorg.libxkbfile
     xorg.libX11
+    xorg.libXScrnSaver
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage
@@ -39,48 +73,63 @@ let
     xorg.libXrandr
     xorg.libXrender
     xorg.libXtst
-    xorg.libXScrnSaver
-  ] + ":${stdenv.cc.cc.lib}/lib64";
+    xorg.libxkbfile
+    xorg.libxshmfence
+    (lib.getLib stdenv.cc.cc)
+  ];
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.mongodb.com/compass/mongodb-compass_${version}_amd64.deb";
-        sha256 = "0x23jshnr0rafm5sn2vhq2y2gryg8mksahzyv5fszblgaxay234p";
+        sha256 = "sha256-ij5lOP3xaty9YjKPionfUhZTcuumlFHt46MUMkjO2yA=";
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
-  name = "mongodb-compass-${version}";
+  pname = "mongodb-compass";
+  inherit version;
 
   inherit src;
 
-  buildInputs = [ dpkg ];
-  unpackPhase = "true";
+  buildInputs = [ dpkg wrapGAppsHook gtk3 ];
+  dontUnpack = true;
 
   buildCommand = ''
     IFS=$'\n'
-    dpkg -x $src $out
-    cp -av $out/usr/* $out
+
+    # The deb file contains a setuid binary, so 'dpkg -x' doesn't work here
+    dpkg --fsys-tarfile $src | tar --extract
+
+    mkdir -p $out
+    mv usr/* $out
+
+    # cp -av $out/usr/* $out
     rm -rf $out/share/lintian
-    #The node_modules are bringing in non-linux files/dependencies
+
+    # The node_modules are bringing in non-linux files/dependencies
     find $out -name "*.app" -exec rm -rf {} \; || true
     find $out -name "*.dll" -delete
     find $out -name "*.exe" -delete
+
     # Otherwise it looks "suspicious"
     chmod -R g-w $out
+
     for file in `find $out -type f -perm /0111 -o -name \*.so\*`; do
       echo "Manipulating file: $file"
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-      patchelf --set-rpath ${rpath}:$out/share/mongodb-compass "$file" || true
+      patchelf --set-rpath ${rpath}:$out/lib/mongodb-compass "$file" || true
     done
+
+    wrapGAppsHook $out/bin/mongodb-compass
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The GUI for MongoDB";
-    homepage = https://www.mongodb.com/products/compass;
-    license = licenses.unfree;
+    maintainers = with maintainers; [ bryanasdev000 ];
+    homepage = "https://www.mongodb.com/products/compass";
+    license = licenses.sspl;
     platforms = [ "x86_64-linux" ];
   };
 }

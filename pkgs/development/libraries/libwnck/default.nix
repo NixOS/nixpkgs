@@ -1,28 +1,74 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, intltool, xorg }:
+{ lib, stdenv
+, fetchurl
+, fetchpatch
+, meson
+, ninja
+, pkg-config
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_412
+, libX11
+, glib
+, gtk3
+, pango
+, cairo
+, libXres
+, libstartup_notification
+, gettext
+, gobject-introspection
+, gnome
+}:
 
-let
-  ver_maj = "2.31";
-  ver_min = "0";
-in
 stdenv.mkDerivation rec {
-  name = "libwnck-${ver_maj}.${ver_min}";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/libwnck/${ver_maj}/${name}.tar.xz";
-    sha256 = "17isfjvrzgj5znld2a7zsk9vd39q9wnsysnw5jr8iz410z935xw3";
-  };
+  pname = "libwnck";
+  version = "40.1";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 intltool xorg.libX11 xorg.libXres ];
-  # ?another optional: startup-notification
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "AxNPoRTvP740B1qoNnj1iqLevp/O9OojwHeeKGAdZhE=";
+  };
 
-  configureFlags = [ "--disable-introspection" ]; # not needed anywhere AFAIK
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ];
 
-  meta = {
-    description = "A library for creating task lists and pagers";
-    license = stdenv.lib.licenses.lgpl21;
+  buildInputs = [
+    libX11
+    libstartup_notification
+    pango
+    cairo
+    libXres
+  ];
+
+  propagatedBuildInputs = [
+    glib
+    gtk3
+  ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
+  ];
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+    };
+  };
+
+  meta = with lib; {
+    description = "Library to manage X windows and workspaces (via pagers, tasklists, etc.)";
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ liff ];
   };
 }

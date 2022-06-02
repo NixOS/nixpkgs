@@ -1,11 +1,7 @@
-{ mkDerivation, lib, extra-cmake-modules, qtbase, qttools, gperf }:
+{ mkDerivation, extra-cmake-modules, qtbase, qttools, gperf }:
 
 mkDerivation {
-  name = "kcodecs";
-  meta = {
-    maintainers = [ lib.maintainers.ttuegel ];
-    broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
-  };
+  pname = "kcodecs";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qttools gperf ];
   propagatedBuildInputs = [ qtbase ];

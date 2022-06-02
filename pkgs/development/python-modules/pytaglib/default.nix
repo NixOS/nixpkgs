@@ -1,33 +1,37 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , taglib
 , cython
-, pytest
-, glibcLocales
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
-  pname   = "pytaglib";
-  version = "1.4.4";
+  pname = "pytaglib";
+  version = "1.5.0-1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c3458e64cea61a7d4189f26c601e7bfd82053f3c02c2247cb8c430847927ef18";
+  src = fetchFromGitHub {
+    owner = "supermihi";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1nssiqzlzvzdd3pc5xd1qwgwgkyazynmq8qiljz0dhy0c8j6mkfp";
   };
 
-  buildInputs = [ taglib cython ];
+  buildInputs = [
+    cython
+    taglib
+  ];
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    LC_ALL=en_US.utf-8 pytest .
-  '';
+  pythonImportsCheck = [ "taglib" ];
 
-  meta = {
-    homepage = https://github.com/supermihi/pytaglib;
-    description = "Python 2.x/3.x bindings for the Taglib audio metadata library";
-    license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.mrkkrp ];
+  meta = with lib; {
+    description = "Python bindings for the Taglib audio metadata library";
+    homepage = "https://github.com/supermihi/pytaglib";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ mrkkrp ];
   };
 }

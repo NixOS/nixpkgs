@@ -1,28 +1,59 @@
-{ lib, buildPythonApplication, fetchurl, pythonOlder
-, pytest, aiodns, slixmpp, pyinotify, potr, mpd2, cffi, pkgconfig }:
+{ lib
+, aiodns
+, buildPythonApplication
+, cffi
+, fetchFromGitHub
+, mpd2
+, pkg-config
+, potr
+, pyasn1
+, pyasn1-modules
+, pyinotify
+, pytestCheckHook
+, pythonOlder
+, setuptools
+, slixmpp
+, typing-extensions
+}:
+
 buildPythonApplication rec {
-    name = "poezio-${version}";
-    version = "0.12";
+  pname = "poezio";
+  version = "0.13.1";
+  disabled = pythonOlder "3.4";
 
-    disabled = pythonOlder "3.4";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "041y61pcbdb86s04qwp8s1g6bp84yskc7vdizwpi2hz18y01x5fy";
+  };
 
-    buildInputs = [ pytest ];
-    propagatedBuildInputs = [ aiodns slixmpp pyinotify potr mpd2 cffi ];
-    nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-    src = fetchurl {
-      url = "http://dev.louiz.org/attachments/download/129/${name}.tar.gz";
-      sha256 = "11n9x82xyjwbqk28lsfnvqwn8qc9flv6w2c64camh6j3148ykpvz";
-    };
+  propagatedBuildInputs = [
+    aiodns
+    cffi
+    mpd2
+    potr
+    pyasn1
+    pyasn1-modules
+    pyinotify
+    setuptools
+    slixmpp
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    typing-extensions
+  ];
 
-    checkPhase = ''
-      py.test
-    '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-    meta = with lib; {
-      description = "Free console XMPP client";
-      homepage = https://poez.io;
-      license = licenses.mit;
-      maintainers = [ maintainers.lsix ];
-    };
-  }
+  meta = with lib; {
+    description = "Free console XMPP client";
+    homepage = "https://poez.io";
+    license = licenses.zlib;
+    maintainers = [ maintainers.lsix ];
+  };
+}

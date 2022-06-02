@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, udev }:
+{ lib, stdenv, fetchFromGitHub, udev }:
 
-stdenv.mkDerivation rec {
-  name = "moltengamepad-git-${version}";
-  version = "2016-05-04";
+stdenv.mkDerivation {
+  pname = "moltengamepad";
+  version = "unstable-2016-05-04";
 
   src = fetchFromGitHub {
     owner = "jgeumlek";
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
     sed -i -e '159d;161d;472d;473d;474d;475d' source/eventlists/key_list.cpp
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/jgeumlek/MoltenGamepad;
+  meta = with lib; {
+    homepage = "https://github.com/jgeumlek/MoltenGamepad";
     description = "Flexible Linux input device translator, geared for gamepads";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];

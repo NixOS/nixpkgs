@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, gtkmm2, lv2, lvtk, pkgconfig }:
-stdenv.mkDerivation rec {
-  name = "fmsynth-unstable-${version}";
+{ lib, stdenv, fetchFromGitHub, gtkmm2, lv2, lvtk, pkg-config }:
+stdenv.mkDerivation {
+  pname = "fmsynth-unstable";
   version = "2015-02-07";
   src = fetchFromGitHub {
     owner = "Themaister";
@@ -9,13 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "1bk0bpr069hzx2508rgfbwpxiqgr7dmdkhqdywmd2i4rmibgrm1q";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtkmm2 lv2 lvtk ];
 
   buildPhase = ''
     cd lv2
     substituteInPlace GNUmakefile --replace "/usr/lib/lv2" "$out/lib/lv2"
-    make
+    make  SIMD=0
   '';
 
   preInstall = "mkdir -p $out/lib/lv2";
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
       - Full floating point implementation optimized for SIMD
       - Hard real-time constraints
     '';
-    homepage = https://github.com/Themaister/libfmsynth;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/Themaister/libfmsynth";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
   };
 }

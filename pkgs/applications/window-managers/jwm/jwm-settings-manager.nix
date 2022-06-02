@@ -1,19 +1,18 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
+{ lib, stdenv, fetchbzr, cmake, pkg-config, gettext, libXpm, libGL, fltk, hicolor-icon-theme, glib, gnome2, which }:
 
 stdenv.mkDerivation rec {
-  name = "jwm-settings-manager-${version}";
-  version = "2018-10-19";
-  
-  src = fetchFromGitHub {
-    owner = "Israel-D";
-    repo = "jwm-settings-manager";
-    rev = "cb32a70563cf1f3927339093481542b85ec3c8c8";
-    sha256 = "0d5bqf74p8zg8azns44g46q973blhmp715k8kcd73x88g7sfir8s";
+  pname = "jwm-settings-manager";
+  version = "2019-01-27";
+
+  src = fetchbzr {
+    url = "lp:${pname}";
+    rev = "292";
+    sha256 = "1yqc1ac2pbkc88z7p1qags1jygdlr5y1rhc5mx6gapcf54bk0lmi";
   };
 
   nativeBuildInputs = [
     cmake
-    pkgconfig
+    pkg-config
     gettext
   ];
 
@@ -34,9 +33,14 @@ stdenv.mkDerivation rec {
       --replace 'DESTINATION usr/share' "DESTINATION share"
   '';
 
-  meta = with stdenv.lib; {
+  postConfigure = ''
+    substituteInPlace cmake_install.cmake \
+      --replace "/var/empty" "/usr"
+  '';
+
+  meta = with lib; {
     description = "A full configuration manager for JWM";
-    homepage = https://joewing.net/projects/jwm;
+    homepage = "https://joewing.net/projects/jwm";
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

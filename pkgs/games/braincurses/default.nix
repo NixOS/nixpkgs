@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, ncurses }:
+{ lib, stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "braincurses-${version}";
+  pname = "braincurses";
   version = "1.1.0";
 
   src = fetchFromGitHub {
@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     install -Dt $out/bin braincurses
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/bderrly/braincurses;
+  meta = with lib; {
+    homepage = "https://github.com/bderrly/braincurses";
     description = "A version of the classic game Mastermind";
     license = licenses.gpl2;
     maintainers = with maintainers; [ dotlambda ];

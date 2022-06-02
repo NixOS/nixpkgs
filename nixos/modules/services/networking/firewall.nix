@@ -42,23 +42,14 @@ let
 
   kernelHasRPFilter = ((kernel.config.isEnabled or (x: false)) "IP_NF_MATCH_RPFILTER") || (kernel.features.netfilterRPFilter or false);
 
-  helpers =
-    ''
-      # Helper command to manipulate both the IPv4 and IPv6 tables.
-      ip46tables() {
-        iptables -w "$@"
-        ${optionalString config.networking.enableIPv6 ''
-          ip6tables -w "$@"
-        ''}
-      }
-    '';
+  helpers = import ./helpers.nix { inherit config lib; };
 
   writeShScript = name: text: let dir = pkgs.writeScriptBin name ''
     #! ${pkgs.runtimeShell} -e
     ${text}
   ''; in "${dir}/bin/${name}";
 
-  defaultInterface = { default = mapAttrs (name: value: cfg."${name}") commonOptions; };
+  defaultInterface = { default = mapAttrs (name: value: cfg.${name}) commonOptions; };
   allInterfaces = defaultInterface // cfg.interfaces;
 
   startScript = writeShScript "firewall-start" ''
@@ -188,10 +179,6 @@ let
       ) cfg.allowedUDPPortRanges
     ) allInterfaces)}
 
-    # Accept IPv4 multicast.  Not a big security risk since
-    # probably nobody is listening anyway.
-    #iptables -A nixos-fw -d 224.0.0.0/4 -j nixos-fw-accept
-
     # Optionally respond to ICMPv4 pings.
     ${optionalString cfg.allowPing ''
       iptables -w -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
@@ -271,7 +258,7 @@ let
       apply = canonicalizePortList;
       example = [ 22 80 ];
       description =
-        '' 
+        ''
           List of TCP ports on which incoming connections are
           accepted.
         '';
@@ -282,7 +269,7 @@ let
       default = [ ];
       example = [ { from = 8999; to = 9003; } ];
       description =
-        '' 
+        ''
           A range of TCP ports on which incoming connections are
           accepted.
         '';
@@ -331,12 +318,25 @@ in
           '';
       };
 
+      package = mkOption {
+        type = types.package;
+        default = pkgs.iptables;
+        defaultText = literalExpression "pkgs.iptables";
+        example = literalExpression "pkgs.iptables-legacy";
+        description =
+          ''
+            The iptables package to use for running the firewall service."
+          '';
+      };
+
       logRefusedConnections = mkOption {
         type = types.bool;
         default = true;
         description =
           ''
             Whether to log rejected or dropped incoming connections.
+            Note: The logs are found in the kernel logs, i.e. dmesg
+            or journalctl -k.
           '';
       };
 
@@ -348,6 +348,8 @@ in
             Whether to log all rejected or dropped incoming packets.
             This tends to give a lot of log messages, so it's mostly
             useful for debugging.
+            Note: The logs are found in the kernel logs, i.e. dmesg
+            or journalctl -k.
           '';
       };
 
@@ -415,6 +417,7 @@ in
       checkReversePath = mkOption {
         type = types.either types.bool (types.enum ["strict" "loose"]);
         default = kernelHasRPFilter;
+        defaultText = literalDocBook "<literal>true</literal> if supported by the chosen kernel";
         example = "loose";
         description =
           ''
@@ -430,8 +433,6 @@ in
             drop the packet if the source address is not reachable via any
             interface) or false.  Defaults to the value of
             kernelHasRPFilter.
-
-            (needs kernel 3.3+)
           '';
       };
 
@@ -494,7 +495,7 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [ ];
-        example = literalExample "[ pkgs.ipset ]";
+        example = literalExpression "[ pkgs.ipset ]";
         description =
           ''
             Additional packages to be included in the environment of the system
@@ -536,7 +537,7 @@ in
 
     networking.firewall.trustedInterfaces = [ "lo" ];
 
-    environment.systemPackages = [ pkgs.iptables ] ++ cfg.extraPackages;
+    environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
 
     boot.kernelModules = (optional cfg.autoLoadConntrackHelpers "nf_conntrack")
       ++ map (x: "nf_conntrack_${x}") cfg.connectionTrackingModules;
@@ -544,9 +545,13 @@ in
       options nf_conntrack nf_conntrack_helper=1
     '';
 
-    assertions = [ { assertion = (cfg.checkReversePath != false) || kernelHasRPFilter;
-                     message = "This kernel does not support rpfilter"; }
-                 ];
+    assertions = [
+      # This is approximately "checkReversePath -> kernelHasRPFilter",
+      # but the checkReversePath option can include non-boolean
+      # values.
+      { assertion = cfg.checkReversePath == false || kernelHasRPFilter;
+        message = "This kernel does not support rpfilter"; }
+    ];
 
     systemd.services.firewall = {
       description = "Firewall";
@@ -555,7 +560,7 @@ in
       before = [ "network-pre.target" ];
       after = [ "systemd-modules-load.service" ];
 
-      path = [ pkgs.iptables ] ++ cfg.extraPackages;
+      path = [ cfg.package ] ++ cfg.extraPackages;
 
       # FIXME: this module may also try to load kernel modules, but
       # containers don't have CAP_SYS_MODULE.  So the host system had

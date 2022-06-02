@@ -1,19 +1,18 @@
-{ stdenv, fetchurl }:
-
-let version = "0.8"; in
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "buildtorrent-${version}";
+  pname = "buildtorrent";
+  version = "0.8";
 
   src = fetchurl {
-    url = "https://mathr.co.uk/blog/code/${name}.tar.gz";
-    sha256 = "e8e27647bdb38873ac570d46c1a9689a92b01bb67f59089d1cdd08784f7052d0";
+    url = "https://mathr.co.uk/blog/code/${pname}-${version}.tar.gz";
+    sha256 = "sha256-6OJ2R72ziHOsVw1GwalompKwG7Z/WQidHN0IeE9wUtA=";
   };
 
-  meta = {
+  meta = with lib; {
     description = "A simple commandline torrent creator";
-    homepage = http://mathr.co.uk/blog/torrent.html;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://mathr.co.uk/blog/torrent.html";
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
   };
 }

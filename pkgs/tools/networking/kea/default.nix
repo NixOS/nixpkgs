@@ -1,42 +1,64 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, openssl, botan2, log4cplus
-, boost, python3, postgresql, mysql, gmp, bzip2 }:
+{ stdenv
+, lib
+, fetchurl
+, autoreconfHook
+, pkg-config
+, boost
+, botan2
+, libmysqlclient
+, log4cplus
+, postgresql
+, python3
+, nixosTests
+}:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "kea";
-  version = "1.5.0";
+  version = "2.0.2"; # only even minor versions are stable
 
   src = fetchurl {
-    url = "https://ftp.isc.org/isc/${pname}/${version}/${name}.tar.gz";
-    sha256 = "1v5a3prgrplw6dp9124f9gpy0kz0jrjwhnvzrw3zcynad2mlzkpd";
+    url = "https://ftp.isc.org/isc/${pname}/${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-jSghO9yOK7hwo4OzCsHlPVTh66Q9L4blFRsItmqmzzI=";
   };
 
   patches = [ ./dont-create-var.patch ];
 
   postPatch = ''
     substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@sysconfdir@' "$out/etc"
-    substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@(sysconfdir)@' "$out/etc"
   '';
 
   configureFlags = [
+    "--enable-perfdhcp"
+    "--enable-shell"
     "--localstatedir=/var"
+    "--with-mysql=${lib.getDev libmysqlclient}/bin/mysql_config"
     "--with-pgsql=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.connector-c}/bin/mysql_config"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
   buildInputs = [
-    openssl log4cplus boost python3 mysql.connector-c
-    botan2 gmp bzip2
+    boost
+    botan2
+    libmysqlclient
+    log4cplus
+    python3
   ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://kea.isc.org/;
+  passthru.tests = {
+    inherit (nixosTests) kea;
+  };
+
+  meta = with lib; {
+    homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";
     longDescription = ''
-      KEA is a new open source DHCPv4/DHCPv6 server being developed by
+      Kea is a new open source DHCPv4/DHCPv6 server being developed by
       Internet Systems Consortium. The objective of this project is to
       provide a very high-performance, extensible DHCP server engine for
       use by enterprises and service providers, either as is or with
@@ -44,6 +66,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mpl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz hexa ];
   };
 }

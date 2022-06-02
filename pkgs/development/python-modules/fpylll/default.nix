@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , buildPythonPackage
 , pkgconfig
@@ -14,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "fpylll";
-  version = "0.4.1dev";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fpylll";
     rev = version;
-    sha256 = "01x2sqdv0sbjj4g4waj0hj4rcn4bq7h17442xaqwbznym9azmn9w";
+    sha256 = "sha256-Bxcc0941+pl2Uzam48qe+PFlcBWsJ0rDYZxrxIYQpEA=";
   };
 
   buildInputs = [
@@ -45,13 +46,19 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    py.test
+    # Since upstream introduced --doctest-modules in
+    # https://github.com/fplll/fpylll/commit/9732fdb40cf1bd43ad1f60762ec0a8401743fc79,
+    # it is necessary to ignore import mismatches. Not sure why, but the files
+    # should be identical anyway.
+    PY_IGNORE_IMPORTMISMATCH=1 pytest
   '';
 
-  meta = {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A Python interface for fplll";
-    homepage = https://github.com/fplll/fpylll;
-    maintainers = with lib.maintainers; [ timokau ];
-    license = lib.licenses.gpl2Plus;
+    changelog = "https://github.com/fplll/fpylll/releases/tag/${version}";
+    homepage = "https://github.com/fplll/fpylll";
+    maintainers = teams.sage.members;
+    license = licenses.gpl2Plus;
   };
 }

@@ -1,38 +1,33 @@
-{ stdenv, fetchurl, libjpeg }:
+{ lib, stdenv, fetchFromGitHub, libjpeg }:
 
 stdenv.mkDerivation rec {
-  name = "jhead-${version}";
-  version = "3.03";
+  pname = "jhead";
+  version = "3.06.0.1";
 
-  src = fetchurl {
-    url = "http://www.sentex.net/~mwandel/jhead/${name}.tar.gz";
-    sha256 = "1hn0yqcicq3qa20h1g313l1a671r8mccpb9gz0w1056r500lw6c2";
+  src = fetchFromGitHub {
+    owner = "Matthias-Wandel";
+    repo = "jhead";
+    rev = version;
+    sha256 = "0zgh36486cpcnf7xg6dwf7rhz2h4gpayqvdk8hmrx6y418b2pfyf";
   };
 
   buildInputs = [ libjpeg ];
 
-  patchPhase = ''
-    substituteInPlace makefile \
-      --replace /usr/local/bin $out/bin
-
-    substituteInPlace jhead.c \
-      --replace "\"   Compiled: \"__DATE__" "" \
-      --replace "jpegtran -trim" "${libjpeg.bin}/bin/jpegtran -trim"
-  '';
+  makeFlags = [ "CPPFLAGS=" "CFLAGS=-O3" "LDFLAGS=" ];
 
   installPhase = ''
     mkdir -p \
       $out/bin \
       $out/man/man1 \
-      $out/share/doc/${name}
+      $out/share/doc/${pname}-${version}
 
     cp -v jhead $out/bin
     cp -v jhead.1 $out/man/man1
-    cp -v *.txt $out/share/doc/${name}
+    cp -v *.txt $out/share/doc/${pname}-${version}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.sentex.net/~mwandel/jhead/;
+  meta = with lib; {
+    homepage = "http://www.sentex.net/~mwandel/jhead/";
     description = "Exif Jpeg header manipulation tool";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ rycee ];

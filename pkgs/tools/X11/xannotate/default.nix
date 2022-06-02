@@ -1,9 +1,8 @@
-{stdenv, fetchFromBitbucket, libX11}:
+{lib, stdenv, fetchFromBitbucket, libX11}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "xannotate";
   version = "20150301";
-  
+
   src = fetchFromBitbucket {
     owner = "blais";
     repo = pname;
@@ -14,11 +13,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 ];
 
   meta = {
-    inherit version;
     description = "A tool to scribble over X windows";
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
-    homepage = https://bitbucket.org/blais/xannotate;
+    license = lib.licenses.gpl2Plus ;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
+    homepage = "https://bitbucket.org/blais/xannotate";
   };
 }

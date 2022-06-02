@@ -1,21 +1,27 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "sops-${version}";
-  version = "3.2.0";
-
-  goPackagePath = "go.mozilla.org/sops";
+buildGoModule rec {
+  pname = "sops";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
-    rev = version;
+    rev = "v${version}";
     owner = "mozilla";
-    repo = "sops";
-    sha256 = "0lzwql3f4n70gmw1d0vnsg7hd0ma6ys0a4x54g3jk10nrn2f7wxl";
+    repo = pname;
+    sha256 = "sha256-wN1ksLwD4G+fUhvCe+jahh1PojPk6L6tnx1rsc7dz+M=";
   };
 
-  meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
+  vendorSha256 = "sha256-8IaE+vhVZkc9QDR6+/3eOSsuf3SYF2upNcCifbqtx14=";
+
+  ldflags = [ "-s" "-w" ];
+
+  doCheck = false;
+
+  meta = with lib; {
+    homepage = "https://github.com/mozilla/sops";
     description = "Mozilla sops (Secrets OPerationS) is an editor of encrypted files";
+    changelog = "https://github.com/mozilla/sops/raw/v${version}/CHANGELOG.rst";
+    maintainers = [ maintainers.marsam ];
     license = licenses.mpl20;
   };
 }

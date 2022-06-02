@@ -1,22 +1,22 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 }:
 
 buildPythonPackage rec {
-  version = "1.16";
+  version = "1.25";
   pname = "numericalunits";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "71ae8e236c7a223bccefffb670dca68be476dd63b7b9009641fc64099455da25";
+    sha256 = "c32a482adae818a1a8d6c799bf9fb153326461d490c0de9deab9c694a6537eec";
   };
 
-  # no tests
-  doCheck = false;
+  disabled = !isPy3k;
 
-  meta = with stdenv.lib; {
-    homepage = http://pypi.python.org/pypi/numericalunits;
+  meta = with lib; {
+    homepage = "http://pypi.python.org/pypi/numericalunits";
     description = "A package that lets you define quantities with unit";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

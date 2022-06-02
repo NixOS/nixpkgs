@@ -1,19 +1,20 @@
-{ stdenv, fetchurl, libdbi
-, mysql ? null
+{ lib, stdenv, fetchurl, libdbi
+, libmysqlclient ? null
 , sqlite ? null
 , postgresql ? null
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  name = "libdbi-drivers-0.9.0";
+  pname = "libdbi-drivers";
+  version = "0.9.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libdbi-drivers/${name}.tar.gz";
+    url = "mirror://sourceforge/libdbi-drivers/libdbi-drivers-${version}.tar.gz";
     sha256 = "0m680h8cc4428xin4p733azysamzgzcmv4psjvraykrsaz6ymlj3";
   };
 
-  buildInputs = [ libdbi sqlite postgresql ] ++ optional (mysql != null) mysql.connector-c;
+  buildInputs = [ libdbi sqlite postgresql ] ++ optional (libmysqlclient != null) libmysqlclient;
 
   postPatch = ''
     sed -i '/SQLITE3_LIBS/ s/-lsqlite/-lsqlite3/' configure;
@@ -26,10 +27,10 @@ stdenv.mkDerivation rec {
     "--enable-libdbi"
     "--with-dbi-incdir=${libdbi}/include"
     "--with-dbi-libdir=${libdbi}/lib"
-  ] ++ optionals (mysql != null) [
+  ] ++ optionals (libmysqlclient != null) [
     "--with-mysql"
-    "--with-mysql-incdir=${mysql.connector-c}/include/mysql"
-    "--with-mysql-libdir=${mysql.connector-c}/lib/mysql"
+    "--with-mysql-incdir=${getDev libmysqlclient}/include/mysql"
+    "--with-mysql-libdir=${libmysqlclient}/lib/mysql"
   ] ++ optionals (sqlite != null) [
     "--with-sqlite3"
     "--with-sqlite3-incdir=${sqlite.dev}/include/sqlite"
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://libdbi-drivers.sourceforge.net/;
+    homepage = "http://libdbi-drivers.sourceforge.net/";
     description = "Database drivers for libdbi";
     platforms = platforms.all;
     license = licenses.lgpl21;

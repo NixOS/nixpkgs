@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "An easy to use PyPI client";
-    homepage = https://yarg.readthedocs.io;
+    homepage = "https://yarg.readthedocs.io";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

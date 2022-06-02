@@ -1,14 +1,28 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtx11extras, qtsvg, kwindowsystem, liblxqt, libqtxdg, sudo }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, lxqt-build-tools
+, qtbase
+, qttools
+, qtx11extras
+, qtsvg
+, kwindowsystem
+, liblxqt
+, libqtxdg
+, sudo
+, lxqtUpdateScript
+}:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-sudo";
-  version = "0.14.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1my0wpic20493rdlabp9ghag1g3nhwafk2yklkgczlajmarakgpc";
+    sha256 = "Oa4OYIDXQUIQ96pEY7rGBq+spwVSU+kgDS7250tYNuc=";
   };
 
   nativeBuildInputs = [
@@ -27,16 +41,13 @@ stdenv.mkDerivation rec {
     sudo
   ];
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace "\''${LXQT_TRANSLATIONS_DIR}" "''${out}/share/lxqt/translations"
-  '';
+  passthru.updateScript = lxqtUpdateScript { inherit pname version src; };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://github.com/lxqt/lxqt-sudo";
     description = "GUI frontend for sudo/su";
-    homepage = https://github.com/lxqt/lxqt-sudo;
-    license = licenses.lgpl21;
-    platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    license = licenses.lgpl21Plus;
+    platforms = platforms.linux;
+    maintainers = teams.lxqt.members;
   };
 }

@@ -5,10 +5,11 @@
 # for token storage, except that it would make the Nix package inconsistent with
 # upstream and other distributions.
 
-{ stdenv, lib, writeShellScriptBin, fetchFromGitHub, curl, jq, runtimeShell }:
+{ stdenv, lib, fetchFromGitHub, curl, jq, coreutils, gnugrep, gnused
+, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "slack-cli-${version}";
+  pname = "slack-cli";
   version = "0.18.0";
 
   src = fetchFromGitHub {
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
     MESSAGE
 
-    export PATH=${lib.makeBinPath [ curl jq ]}:"\$PATH"
+    export PATH=${lib.makeBinPath [ curl jq coreutils gnugrep gnused ]}:"\$PATH"
     exec "$out/bin/.slack-wrapped" "\$@"
     WRAPPER
 
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
   meta = {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.qyliss ];
+    mainProgram = "slack";
     platforms = lib.platforms.unix;
   };
 }

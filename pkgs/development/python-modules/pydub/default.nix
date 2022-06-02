@@ -1,33 +1,44 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, scipy, ffmpeg-full }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+
+# tests
+, ffmpeg-full
+, python
+}:
 
 buildPythonPackage rec {
   pname = "pydub";
-  version = "0.23.1";
+  version = "0.25.1";
+  format = "setuptools";
+
   # pypi version doesn't include required data files for tests
   src = fetchFromGitHub {
     owner = "jiaaro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1v0bghy4j2nnkgf1r8rbz4s7war872asyy08pc0x1iy1qs275i7s";
+    sha256 = "0xskllq66wqndjfmvp58k26cv3w480sqsil6ifwp4gghir7hqc8m";
   };
 
+  pythonImportsCheck = [
+    "pydub"
+    "pydub.audio_segment"
+    "pydub.playback"
+  ];
 
-  # disable a test that fails on aarch64 due to rounding errors
-  postPatch = stdenv.lib.optionalString stdenv.isAarch64 ''
-    substituteInPlace test/test.py \
-      --replace "test_overlay_with_gain_change" "notest_overlay_with_gain_change"
-  '';
-
-  checkInputs = [ scipy ffmpeg-full ];
+  checkInputs = [
+    ffmpeg-full
+  ];
 
   checkPhase = ''
-    python test/test.py
+    ${python.interpreter} test/test.py
   '';
 
-  meta = with stdenv.lib; {
-    description = "Manipulate audio with a simple and easy high level interface.";
-    homepage    = "http://pydub.com/";
-    license     = licenses.mit;
-    platforms   = platforms.all;
+  meta = with lib; {
+    description = "Manipulate audio with a simple and easy high level interface";
+    homepage = "http://pydub.com";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
   };
 }

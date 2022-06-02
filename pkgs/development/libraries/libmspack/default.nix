@@ -1,17 +1,18 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "libmspack-0.7.1alpha";
+  pname = "libmspack";
+  version = "0.10.1alpha";
 
   src = fetchurl {
-    url = "https://www.cabextract.org.uk/libmspack/${name}.tar.gz";
-    sha256 = "0zn4vwzk5ankgd0l88cipan19pzbzv0sm3fba17lvqwka3dp1acp";
+    url = "https://www.cabextract.org.uk/libmspack/${pname}-${version}.tar.gz";
+    sha256 = "13janaqsvm7aqc4agjgd4819pbgqv50j88bh5kci1z70wvg65j5s";
   };
 
   meta = {
     description = "A de/compression library for various Microsoft formats";
-    homepage = https://www.cabextract.org.uk/libmspack;
-    license = stdenv.lib.licenses.lgpl2;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://www.cabextract.org.uk/libmspack";
+    license = lib.licenses.lgpl2Only;
+    platforms = lib.platforms.unix;
   };
 }

@@ -118,12 +118,26 @@ in
       type = with types; attrsOf (nullOr (either str path));
     };
 
+    environment.homeBinInPath = mkOption {
+      description = ''
+        Include ~/bin/ in $PATH.
+      '';
+      default = false;
+      type = types.bool;
+    };
+
+    environment.localBinInPath = mkOption {
+      description = ''
+        Add ~/.local/bin/ to $PATH
+      '';
+      default = false;
+      type = types.bool;
+    };
+
     environment.binsh = mkOption {
       default = "${config.system.build.binsh}/bin/sh";
-      defaultText = "\${config.system.build.binsh}/bin/sh";
-      example = literalExample ''
-        "''${pkgs.dash}/bin/dash"
-      '';
+      defaultText = literalExpression ''"''${config.system.build.binsh}/bin/sh"'';
+      example = literalExpression ''"''${pkgs.dash}/bin/dash"'';
       type = types.path;
       visible = false;
       description = ''
@@ -136,7 +150,7 @@ in
 
     environment.shells = mkOption {
       default = [];
-      example = literalExample "[ pkgs.bashInteractive pkgs.zsh ]";
+      example = literalExpression "[ pkgs.bashInteractive pkgs.zsh ]";
       description = ''
         A list of permissible login shells for user accounts.
         No need to mention <literal>/bin/sh</literal>
@@ -157,13 +171,15 @@ in
     # terminal instead of logging out of X11).
     environment.variables = config.environment.sessionVariables;
 
+    environment.profileRelativeEnvVars = config.environment.profileRelativeSessionVariables;
+
     environment.shellAliases = mapAttrs (name: mkDefault) {
       ls = "ls --color=tty";
       ll = "ls -l";
       l  = "ls -alh";
     };
 
-    environment.etc."shells".text =
+    environment.etc.shells.text =
       ''
         ${concatStringsSep "\n" (map utils.toShellPath cfg.shells)}
         /bin/sh
@@ -171,7 +187,7 @@ in
 
     # For resetting environment with `. /etc/set-environment` when needed
     # and discoverability (see motivation of #30418).
-    environment.etc."set-environment".source = config.system.build.setEnvironment;
+    environment.etc.set-environment.source = config.system.build.setEnvironment;
 
     system.build.setEnvironment = pkgs.writeText "set-environment"
       ''
@@ -184,8 +200,14 @@ in
 
         ${cfg.extraInit}
 
-        # ~/bin if it exists overrides other bin directories.
-        export PATH="$HOME/bin:$PATH"
+        ${optionalString cfg.homeBinInPath ''
+          # ~/bin if it exists overrides other bin directories.
+          export PATH="$HOME/bin:$PATH"
+        ''}
+
+        ${optionalString cfg.localBinInPath ''
+          export PATH="$HOME/.local/bin:$PATH"
+        ''}
       '';
 
     system.activationScripts.binsh = stringAfter [ "stdio" ]

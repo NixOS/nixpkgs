@@ -1,8 +1,10 @@
-{ stdenv, fetchFromGitHub, buildDunePackage, lwt }:
+{ lib, fetchFromGitHub, buildDunePackage, lwt }:
 
 buildDunePackage rec {
   pname = "lwt_log";
-  version = "1.1.0";
+  version = "1.1.1";
+
+  useDune2 = true;
 
   minimumOCamlVersion = "4.02";
 
@@ -10,7 +12,7 @@ buildDunePackage rec {
     owner = "aantron";
     repo = pname;
     rev = version;
-    sha256 = "1c58gkqfvyf2j11jwj2nh4iq999wj9xpnmr80hz9d0nk9fv333pi";
+    sha256 = "1n12i1rmn9cjn6p8yr6qn5dwbrwvym7ckr7bla04a1xnq8qlcyj7";
   };
 
   propagatedBuildInputs = [ lwt ];
@@ -18,7 +20,7 @@ buildDunePackage rec {
   meta = {
     description = "Lwt logging library (deprecated)";
     homepage = "https://github.com/aantron/lwt_log";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

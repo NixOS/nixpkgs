@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "affine";
-  version = "2.2.2";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "146slzpj2b220dmbmrxib030wymvplawxzn7gcgnbahgm500y3gz";
+    sha256 = "sha256-1nbeZhV61q+Z/9lOD1Tonfw1sPtyUurS7QrS3KQxvdA=";
   };
 
   checkInputs = [ pytest ];
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Matrices describing affine transformation of the plane";
     license = licenses.bsd3;
-    homepage = https://github.com/sgillies/affine;
+    homepage = "https://github.com/sgillies/affine";
     maintainers = with maintainers; [ mredaelli ];
   };
 

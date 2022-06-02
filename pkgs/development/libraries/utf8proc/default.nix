@@ -1,21 +1,31 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "utf8proc-${version}";
-  version = "2.2.0";
+  pname = "utf8proc";
+  version = "2.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/JuliaLang/utf8proc/archive/v${version}.tar.gz";
-    sha256 = "1gsxxp7vk36z1g5mg19kq10j35dks5f9slsab2xfazh5vgdx33rz";
+  src = fetchFromGitHub {
+    owner = "JuliaStrings";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-UjZFW+ECU1qbKoo2J2GE8gMEas7trz7YI4mqF5WtOvM=";
   };
 
-  makeFlags = [ "prefix=$(out)" ];
+  nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DUTF8PROC_ENABLE_TESTING=ON"
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+  ];
+
+  doCheck = true;
+
+  meta = with lib; {
     description = "A clean C library for processing UTF-8 Unicode data";
-    homepage = https://julialang.org/utf8proc;
+    homepage = "https://juliastrings.github.io/utf8proc/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.ftrvxmtrx ];
+    maintainers = [ maintainers.ftrvxmtrx maintainers.sternenseemann ];
   };
 }

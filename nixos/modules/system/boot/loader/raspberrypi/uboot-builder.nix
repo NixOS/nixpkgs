@@ -10,11 +10,13 @@ let
       pkgs.ubootRaspberryPi
     else if version == 2 then
       pkgs.ubootRaspberryPi2
-    else
+    else if version == 3 then
       if isAarch64 then
         pkgs.ubootRaspberryPi3_64bit
       else
-        pkgs.ubootRaspberryPi3_32bit;
+        pkgs.ubootRaspberryPi3_32bit
+    else
+      throw "U-Boot is not yet supported on the raspberry pi 4.";
 
   extlinuxConfBuilder =
     import ../generic-extlinux-compatible/extlinux-conf-builder.nix {
@@ -24,11 +26,12 @@ in
 pkgs.substituteAll {
   src = ./uboot-builder.sh;
   isExecutable = true;
-  inherit (pkgs.buildPackages) bash;
-  path = with pkgs.buildPackages; [coreutils gnused gnugrep];
+  inherit (pkgs) bash;
+  path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   firmware = pkgs.raspberrypifw;
   inherit uboot;
   inherit configTxt;
   inherit extlinuxConfBuilder;
   inherit version;
 }
+

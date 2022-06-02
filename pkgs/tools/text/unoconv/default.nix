@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, libreoffice-unwrapped, asciidoc, makeWrapper
+{ lib, stdenv, fetchFromGitHub, python3, libreoffice-unwrapped, asciidoc, makeWrapper
 # whether to install odt2pdf/odt2doc/... symlinks to unoconv
 , installSymlinks ? true
 }:
@@ -7,18 +7,17 @@
 # will not be able to load the pyuno module from libreoffice).
 
 stdenv.mkDerivation rec {
-  name = "unoconv-0.6";
+  pname = "unoconv";
+  version = "0.9.0";
 
-  src = fetchurl {
-    url = "http://dag.wieers.com/home-made/unoconv/${name}.tar.gz";
-    sha256 = "1m3kv942zf5rzyrbkil0nhmyq9mm3007y64bb3s7w88mhr5n23kr";
+  src = fetchFromGitHub {
+    owner = "unoconv";
+    repo = "unoconv";
+    rev = version;
+    sha256 = "1akx64686in8j8arl6vsgp2n3bv770q48pfv283c6fz6wf9p8fvr";
   };
 
-  buildInputs = [ asciidoc makeWrapper ];
-
-  # We need to use python3 because libreoffice 4.x uses it. This patch comes
-  # from unoconv.git, so it will be a part of the next release.
-  patches = [ ./unoconv-python3.patch ];
+  nativeBuildInputs = [ asciidoc makeWrapper ];
 
   preBuild = ''
     makeFlags=prefix="$out"
@@ -31,9 +30,9 @@ stdenv.mkDerivation rec {
     make install-links prefix="$out"
   '' else "");
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Convert between any document format supported by LibreOffice/OpenOffice";
-    homepage = http://dag.wieers.com/home-made/unoconv/;
+    homepage = "http://dag.wieers.com/home-made/unoconv/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

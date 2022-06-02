@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.exhibitor;
+  opt = options.services.exhibitor;
   exhibitorConfig = ''
     zookeeper-install-directory=${cfg.baseDir}/zookeeper
     zookeeper-data-directory=${cfg.zkDataDir}
@@ -58,7 +59,7 @@ let
     };
   };
   cliOptions = concatStringsSep " " (mapAttrsToList (k: v: "--${k} ${v}") (filterAttrs (k: v: v != null && v != "") (cliOptionsCommon //
-               cliOptionsPerConfig."${cfg.configType}" //
+               cliOptionsPerConfig.${cfg.configType} //
                s3CommonOptions //
                optionalAttrs cfg.s3Backup { s3backup = "true"; } //
                optionalAttrs cfg.fileSystemBackup { filesystembackup = "true"; }
@@ -165,6 +166,7 @@ in
       zkDataDir = mkOption {
         type = types.str;
         default = "${cfg.baseDir}/zkData";
+        defaultText = literalExpression ''"''${config.${opt.baseDir}}/zkData"'';
         description = ''
           The Zookeeper data directory
         '';
@@ -172,6 +174,7 @@ in
       zkLogDir = mkOption {
         type = types.path;
         default = "${cfg.baseDir}/zkLogs";
+        defaultText = literalExpression ''"''${config.${opt.baseDir}}/zkLogs"'';
         description = ''
           The Zookeeper logs directory
         '';
@@ -185,7 +188,7 @@ in
       };
       zkExtraCfg = mkOption {
         type = types.str;
-        default = ''initLimit=5&syncLimit=2&tickTime=2000'';
+        default = "initLimit=5&syncLimit=2&tickTime=2000";
         description = ''
           Extra options to pass into Zookeeper
         '';
@@ -252,7 +255,7 @@ in
         example = ["host1:2181" "host2:2181"];
       };
       zkConfigExhibitorPath = mkOption {
-        type = types.string;
+        type = types.str;
         description = ''
           If the ZooKeeper shared config is also running Exhibitor, the URI path for the REST call
         '';
@@ -410,8 +413,7 @@ in
         sed -i 's/'"$replace_what"'/'"$replace_with"'/g' ${cfg.baseDir}/zookeeper/bin/zk*.sh
       '';
     };
-    users.users = singleton {
-      name = "zookeeper";
+    users.users.zookeeper = {
       uid = config.ids.uids.zookeeper;
       description = "Zookeeper daemon user";
       home = cfg.baseDir;

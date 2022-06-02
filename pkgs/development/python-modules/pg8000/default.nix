@@ -1,26 +1,40 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, pytz
-, six
+, passlib
+, pythonOlder
+, scramp
 }:
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.13.1";
+  version = "1.28.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2208c7aaffe8d61f5c4ccbefeb74ba033003899e64aee37c0eb98aadae8b9c6b";
+    sha256 = "sha256-Q1E949TjeOc6xEKpOQa6qdNWJFqmeqf2FgXFbjmn9ZE=";
   };
 
-  propagatedBuildInputs = [ pytz six ];
+  propagatedBuildInputs = [
+    passlib
+    scramp
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/tlocke/pg8000;
-    description = "PostgreSQL interface library, for asyncio";
-    maintainers = with maintainers; [ garbas domenkozar ];
+  # Tests require a running PostgreSQL instance
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "pg8000"
+  ];
+
+  meta = with lib; {
+    description = "Python driver for PostgreSQL";
+    homepage = "https://github.com/tlocke/pg8000";
+    license = with licenses; [ bsd3 ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
   };
-
 }

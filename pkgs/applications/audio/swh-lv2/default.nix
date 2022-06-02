@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, fftwSinglePrec, libxslt, lv2, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, fftwSinglePrec, libxslt, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
-  name = "swh-lv2-${version}";
+  pname = "swh-lv2";
   version = "1.0.16";
 
-  src = fetchurl {
-    url = "https://github.com/swh/lv2/archive/v${version}.tar.gz";
-    sha256 = "0j1mih0lp4fds07knp5i32in515sh0df1qi6694pmyz2wqnm295w";
+  src = fetchFromGitHub {
+    owner = "swh";
+    repo = "lv2";
+    rev = "v${version}";
+    sha256 = "sha256-v6aJUWDbBZEmz0v6+cSCi/KhOYNUeK/MJLUSgzi39ng=";
   };
 
   patchPhase = ''
@@ -14,13 +16,13 @@ stdenv.mkDerivation rec {
     sed -e "s#PREFIX = /usr/local#PREFIX = $out#" -i Makefile
   '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ fftwSinglePrec lv2 ];
 
   installPhase = "make install-system";
 
-  meta = with stdenv.lib; {
-    homepage = http://plugin.org.uk;
+  meta = with lib; {
+    homepage = "http://plugin.org.uk";
     description = "LV2 version of Steve Harris' SWH plugins";
     longDescription = ''
       SWH plugins include:

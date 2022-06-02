@@ -1,40 +1,95 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, libxml2, gtk3, gtk-vnc, gmp
-, libgcrypt, gnupg, cyrus_sasl, shared-mime-info, libvirt, yajl, xen
-, gsettings-desktop-schemas, wrapGAppsHook, libvirt-glib, libcap_ng, numactl
-, libapparmor, gst_all_1
+{ lib
+, stdenv
+, bash-completion
+, fetchurl
+, fetchpatch
+, gdbm ? null
+, glib
+, gsettings-desktop-schemas
+, gtk-vnc
+, gtk3
+, intltool
+, libcap ? null
+, libgovirt
+, libvirt
+, libvirt-glib
+, libxml2
+, meson
+, ninja
+, pkg-config
+, python3
+, shared-mime-info
+, spice-gtk ? null
+, spice-protocol ? null
 , spiceSupport ? true
-, spice-gtk ? null, spice-protocol ? null, libcap ? null, gdbm ? null
+, vte
+, wrapGAppsHook
 }:
 
-assert spiceSupport ->
-  spice-gtk != null && spice-protocol != null && libcap != null && gdbm != null;
+assert spiceSupport -> (
+  gdbm != null
+  && libcap != null
+  && spice-gtk != null
+  && spice-protocol != null
+);
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  baseName = "virt-viewer";
-  version = "8.0";
-  name = "${baseName}-${version}";
+  pname = "virt-viewer";
+  version = "11.0";
 
   src = fetchurl {
-    url = "http://virt-manager.org/download/sources/${baseName}/${name}.tar.gz";
-    sha256 = "1vdnjmhrva7r1n9nv09j8gc12hy0j9j5l4rka4hh0jbsbpnmiwyw";
+    url = "https://releases.pagure.org/virt-viewer/virt-viewer-${version}.tar.xz";
+    sha256 = "sha256-pD+iMlxMHHelyMmAZaww7wURohrJjlkPIjQIabrZq9A=";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
+  patches = [
+    # Fix build with meson 0.61
+    # https://gitlab.com/virt-viewer/virt-viewer/-/merge_requests/117
+    (fetchpatch {
+      url = "https://gitlab.com/virt-viewer/virt-viewer/-/commit/ed19e51407bee53988878a6ebed4e7279d00b1a1.patch";
+      sha256 = "sha256-3AbnkbhWOh0aNjUkmVoSV/9jFQtvTllOr7plnkntb2o=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    glib
+    intltool
+    meson
+    ninja
+    pkg-config
+    python3
+    shared-mime-info
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    glib libxml2 gtk3 gtk-vnc gmp libgcrypt gnupg cyrus_sasl shared-mime-info
-    libvirt yajl gsettings-desktop-schemas libvirt-glib
-    libcap_ng numactl libapparmor
-  ] ++ optionals stdenv.isx86_64 [
-    xen
+    bash-completion
+    glib
+    gsettings-desktop-schemas
+    gtk-vnc
+    gtk3
+    libgovirt
+    libvirt
+    libvirt-glib
+    libxml2
+    vte
   ] ++ optionals spiceSupport [
-    spice-gtk spice-protocol libcap gdbm
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    gdbm
+    libcap
+    spice-gtk
+    spice-protocol
   ];
 
   # Required for USB redirection PolicyKit rules file
   propagatedUserEnvPkgs = optional spiceSupport spice-gtk;
+
+  strictDeps = true;
+
+  postPatch = ''
+    patchShebangs build-aux/post_install.py
+  '';
 
   meta = {
     description = "A viewer for remote virtual machines";

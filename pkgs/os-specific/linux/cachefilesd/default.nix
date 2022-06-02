@@ -1,11 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "cachefilesd-${version}";
+  pname = "cachefilesd";
   version = "0.10.10";
 
   src = fetchurl {
-    url = "https://people.redhat.com/dhowells/fscache/${name}.tar.bz2";
+    url = "https://people.redhat.com/dhowells/fscache/${pname}-${version}.tar.bz2";
     sha256 = "00hsw4cdlm13wijlygp8f0aq6gxdp0skbxs9r2vh5ggs3s2hj0qd";
   };
 
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     "MANDIR=$(out)/share/man"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Local network file caching management daemon";
-    homepage = https://people.redhat.com/dhowells/fscache/;
+    homepage = "https://people.redhat.com/dhowells/fscache/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

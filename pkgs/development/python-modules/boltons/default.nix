@@ -1,26 +1,55 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytest }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, pytestCheckHook
+, pythonAtLeast
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "2019-01-07";
+  version = "20.2.1";
+  format = "setuptools";
 
-  # No tests in PyPi Tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
-    rev = "3584ac9399f227a2a11b74153140ee171fd49783";
-    sha256 = "13xngjw249sk4vmr5kqqnia0npw0kpa0gm020a4dqid0cjyvj0rv";
+    rev = version;
+    hash = "sha256-iCueZsi/gVbko7MW43vaUQMWRVI/YhmdfN29gD6AgG8=";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = "pytest tests";
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mahmoud/boltons;
-    description = "220+ constructs, recipes, and snippets extending (and relying on nothing but) the Python standard library";
+  patches = lib.optionals (pythonAtLeast "3.10") [
+    # pprint has no attribute _safe_repr, https://github.com/mahmoud/boltons/issues/294
+    (fetchpatch {
+      name = "fix-pprint-attribute.patch";
+      url = "https://github.com/mahmoud/boltons/commit/270e974975984f662f998c8f6eb0ebebd964de82.patch";
+      sha256 = "sha256-pZLfr6SRCw2aLwZeYaX7bzfJeZC4cFUILEmnVsKR6zc=";
+    })
+  ];
+
+  disabledTests = [
+    # This test is broken without this PR. Merged but not released
+    # https://github.com/mahmoud/boltons/pull/283
+    "test_frozendict"
+  ];
+
+  pythonImportsCheck = [
+    "boltons"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/mahmoud/boltons";
+    description = "Constructs, recipes, and snippets extending the Python standard library";
     longDescription = ''
-      Boltons is a set of over 220 BSD-licensed, pure-Python utilities
-      in the same spirit as — and yet conspicuously missing from — the
+      Boltons is a set of over 200 BSD-licensed, pure-Python utilities
+      in the same spirit as - and yet conspicuously missing from - the
       standard library, including:
 
       - Atomic file saving, bolted on with fileutils

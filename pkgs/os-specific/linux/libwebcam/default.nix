@@ -2,14 +2,13 @@
 , stdenv
 , fetchurl
 , cmake
-, pkgconfig
+, pkg-config
 , libxml2
 }:
 
 stdenv.mkDerivation rec {
   pname = "libwebcam";
   version = "0.2.5";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/source/${pname}-src-${version}.tar.gz";
@@ -20,11 +19,8 @@ stdenv.mkDerivation rec {
     ./uvcdynctrl_symlink_support_and_take_data_dir_from_env.patch
   ];
 
-  buildInputs = [
-    cmake
-    pkgconfig
-    libxml2
-  ];
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ libxml2 ];
 
   postPatch = ''
     substituteInPlace ./uvcdynctrl/CMakeLists.txt \

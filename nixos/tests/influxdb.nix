@@ -1,33 +1,40 @@
 # This test runs influxdb and checks if influxdb is up and running
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "influxdb";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ offline ];
   };
 
   nodes = {
     one = { ... }: {
       services.influxdb.enable = true;
+      environment.systemPackages = [ pkgs.httpie ];
     };
   };
 
   testScript = ''
-    startAll;
-  
-    $one->waitForUnit("influxdb.service");
+    import shlex
+
+    start_all()
+
+    one.wait_for_unit("influxdb.service")
 
     # create database
-    $one->succeed(q~
-      curl -XPOST http://localhost:8086/query --data-urlencode "q=CREATE DATABASE test"
-    ~);
+    one.succeed(
+        "curl -XPOST http://localhost:8086/query --data-urlencode 'q=CREATE DATABASE test'"
+    )
 
     # write some points and run simple query
-    $one->succeed(q~
-      curl -XPOST 'http://localhost:8086/write?db=test' --data-binary 'cpu_load_short,host=server01,region=us-west value=0.64 1434055562000000000'
-    ~);
-    $one->succeed(q~
-      curl -GET 'http://localhost:8086/query' --data-urlencode "db=test" --data-urlencode "q=SELECT \"value\" FROM \"cpu_load_short\" WHERE \"region\"='us-west'"  | grep "0\.64"
-    ~);
+    out = one.succeed(
+        "curl -XPOST 'http://localhost:8086/write?db=test' --data-binary 'cpu_load_short,host=server01,region=us-west value=0.64 1434055562000000000'"
+    )
+
+    qv = "SELECT value FROM cpu_load_short WHERE region='us-west'"
+    cmd = f'curl -GET "http://localhost:8086/query?db=test" --data-urlencode {shlex.quote("q="+ qv)}'
+    out = one.succeed(cmd)
+
+    assert "2015-06-11T20:46:02Z" in out
+    assert "0.64" in out
   '';
 })

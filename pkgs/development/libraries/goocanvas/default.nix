@@ -1,22 +1,29 @@
-{ stdenv, fetchurl, gtk2, cairo, glib, pkgconfig }:
+{ lib, stdenv, fetchurl, gtk2, cairo, glib, pkg-config, gnome }:
 
 stdenv.mkDerivation rec {
-  majVersion = "1.0";
-  version = "${majVersion}.0";
-  name = "goocanvas-${version}";
+  pname = "goocanvas";
+  version = "1.0.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/goocanvas/${majVersion}/${name}.tar.bz2";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
     sha256 = "07kicpcacbqm3inp7zq32ldp95mxx4kfxpaazd0x5jk7hpw2w1qw";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 cairo glib ];
 
-  meta = { 
-    description = "Canvas widget for GTK+ based on the the Cairo 2D library";
-    homepage = http://goocanvas.sourceforge.net/;
-    license = ["GPL" "LGPL"];
-    platforms = stdenv.lib.platforms.unix;
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = pname;
+      versionPolicy = "odd-unstable";
+      freeze = true;
+    };
+  };
+
+  meta = with lib; {
+    description = "Canvas widget for GTK based on the the Cairo 2D library";
+    homepage = "https://wiki.gnome.org/Projects/GooCanvas";
+    license = licenses.lgpl2;
+    platforms = lib.platforms.unix;
   };
 }

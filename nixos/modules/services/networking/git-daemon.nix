@@ -74,7 +74,7 @@ in
       };
 
       port = mkOption {
-        type = types.int;
+        type = types.port;
         default = 9418;
         description = "Port to listen on.";
       };
@@ -104,18 +104,19 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = if cfg.user != "git" then {} else singleton
-      { name = "git";
+    users.users = optionalAttrs (cfg.user == "git") {
+      git = {
         uid = config.ids.uids.git;
+        group = "git";
         description = "Git daemon user";
       };
+    };
 
-    users.groups = if cfg.group != "git" then {} else singleton
-      { name = "git";
-        gid = config.ids.gids.git;
-      };
+    users.groups = optionalAttrs (cfg.group == "git") {
+      git.gid = config.ids.gids.git;
+    };
 
-    systemd.services."git-daemon" = {
+    systemd.services.git-daemon = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       script = "${pkgs.git}/bin/git daemon --reuseaddr "

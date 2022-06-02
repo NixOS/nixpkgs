@@ -1,23 +1,62 @@
-{ stdenv, fetchFromGitHub, python3, openssl }:
+{ lib, fetchFromGitHub, python3, openssl }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "2.6";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    sha256 = "1hxgzqh5z81dq1k2xd6329h8idk9y8q29izrwm1vhn0m9v1pxa22";
+    hash = "sha256-9WmiLji7Zoad5WIzgkpvkI9t96sfdkCtFh6zqVxF7qo=";
   };
 
-  checkInputs = with python3.pkgs; [ flake8 flake8-future-import flake8-import-order openssl ];
-  propagatedBuildInputs = with python3.pkgs; [ pyserial pyaes ecdsa ];
+  postPatch = ''
+    substituteInPlace test/test_imagegen.py \
+      --replace "sys.executable, ESPTOOL_PY" "ESPTOOL_PY"
+  '';
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = with python3.pkgs; [
+    bitstring
+    cryptography
+    ecdsa
+    pyserial
+    reedsolo
+  ];
+
+  # wrapPythonPrograms will overwrite esptool.py with a bash script,
+  # but espefuse.py tries to import it. Since we don't add any binary paths,
+  # use patchPythonScript directly.
+  dontWrapPythonPrograms = true;
+  postFixup = ''
+    buildPythonPath "$out $pythonPath"
+    for f in $out/bin/*.py; do
+        echo "Patching $f"
+        patchPythonScript "$f"
+    done
+  '';
+
+  checkInputs = with python3.pkgs; [
+    pyelftools
+  ];
+
+  # tests mentioned in `.github/workflows/test_esptool.yml`
+  checkPhase = ''
+    runHook preCheck
+
+    export ESPTOOL_PY=$out/bin/esptool.py
+    ${python3.interpreter} test/test_imagegen.py
+    ${python3.interpreter} test/test_espsecure.py
+    ${python3.interpreter} test/test_merge_bin.py
+    ${python3.interpreter} test/test_modules.py
+
+    runHook postCheck
+  '';
+
+  meta = with lib; {
     description = "ESP8266 and ESP32 serial bootloader utility";
-    homepage = https://github.com/espressif/esptool;
-    license = licenses.gpl2;
+    homepage = "https://github.com/espressif/esptool";
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dezgeg dotlambda ];
     platforms = platforms.linux;
   };

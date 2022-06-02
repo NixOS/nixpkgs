@@ -1,38 +1,38 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
+  pname = "analog";
+  version = "6.0.17";
 
-  name = "analog-6.0.13";
-
-  buildInputs = [ unzip ];
-
-  src = fetchurl {
-    url = "http://www.c-amie.co.uk/static/analog/6013/analog-src-6013ce.zip";
-    sha256 = "1njfsclmxk8sn1i07k3qfk8fmsnz7qw9kmydk3bil7qjf4ngmzc6";
+  src = fetchFromGitHub {
+    owner = "c-amie";
+    repo = "analog-ce";
+    rev = version;
+    sha256 = "sha256-89nNkIUKzlcKKy0TfthA9T27A446Fqv9hYllGjYkDP4=";
   };
 
-  configurePhase = ''
+  postPatch = ''
     sed -i src/anlghead.h \
       -e "s|#define DEFAULTCONFIGFILE .*|#define DEFAULTCONFIGFILE \"$out/etc/analog.cfg\"|g" \
-      -e "s|#define LANGDIR .*|#define LANGDIR \"$out/share/${name}/lang/\"|g"
+      -e "s|#define LANGDIR .*|#define LANGDIR \"$out/share/${pname}/lang/\"|g"
+    substituteInPlace src/Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/etc $out/share/doc/${name} $out/share/man/man1 $out/share/${name}
+    mkdir -p $out/bin $out/etc $out/share/doc/$pname $out/share/man/man1 $out/share/$pname
     mv analog $out/bin/
     cp examples/big.cfg $out/etc/analog.cfg
     mv analog.man $out/share/man/man1/analog.1
-    mv docs $out/share/doc/${name}/manual
-    mv how-to $out/share/doc/${name}/
-    mv lang images examples $out/share/${name}/
+    mv docs $out/share/doc/$pname/manual
+    mv how-to $out/share/doc/$pname/
+    mv lang images examples $out/share/$pname/
   '';
 
   meta = {
-    homepage = http://www.c-amie.co.uk/software/analog/;
-    license = stdenv.lib.licenses.gpl2;
+    homepage = "https://www.c-amie.co.uk/software/analog/";
+    license = lib.licenses.gpl2;
     description = "Powerful tool to generate web server statistics";
-    maintainers = [ stdenv.lib.maintainers.peti ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 
 }

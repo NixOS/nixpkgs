@@ -1,37 +1,27 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
-, bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
+{ stdenv, lib, fetchurl, pkg-config
+, bzip2, curlMinimal, expat, libarchive, xz, zlib, libuv, rhash
 , buildPackages
 # darwin attributes
-, cf-private, ps
+, SystemConfiguration
+, ps
 , isBootstrap ? false
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
+, useOpenSSL ? !isBootstrap, openssl
 , useNcurses ? false, ncurses
-, useQt4 ? false, qt4
-, withQt5 ? false, qtbase
+, withQt5 ? false, qtbase, wrapQtAppsHook
+, buildDocs ? (!isBootstrap && (useNcurses || withQt5)), sphinx, texinfo
 }:
 
-assert withQt5 -> useQt4 == false;
-assert useQt4 -> withQt5 == false;
-
-with stdenv.lib;
-
-let
-  os = stdenv.lib.optionalString;
-  majorVersion = "3.13";
-  minorVersion = "4";
-  # from https://cmake.org/files/v3.13/cmake-3.13.4-SHA-256.txt for cmake-3.13.4.tar.gz
-  sha256 = "fdd928fee35f472920071d1c7f1a6a2b72c9b25e04f7a37b409349aef3f20e9b";
-  version = "${majorVersion}.${minorVersion}";
-in
-
 stdenv.mkDerivation rec {
-  name = "cmake-${os isBootstrap "boot-"}${os useNcurses "cursesUI-"}${os withQt5 "qt5UI-"}${os useQt4 "qt4UI-"}${version}";
-
-  inherit majorVersion;
+  pname = "cmake"
+    + lib.optionalString isBootstrap "-boot"
+    + lib.optionalString useNcurses "-cursesUI"
+    + lib.optionalString withQt5 "-qt5UI";
+  version = "3.22.3";
 
   src = fetchurl {
-    url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    inherit sha256;
+    url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
+    sha256 = "sha256-n4RpFm+UVTtpeKFu4pIn7Emi61zrYIJ13sQNiuDRtaA=";
   };
 
   patches = [
@@ -43,42 +33,58 @@ stdenv.mkDerivation rec {
 
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
     ./libuv-application-services.patch
-  ] ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
-  outputs = [ "out" ];
+  ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch
+  # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
+  ++ lib.optional (stdenv.isDarwin && isBootstrap) ./remove-systemconfiguration-dep.patch
+  # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
+  ++ lib.optional stdenv.isDarwin ./darwin-always-set-runtime-c-flag.patch;
+
+  outputs = [ "out" ]
+    ++ lib.optionals buildDocs [ "man" "info" ];
   setOutputFlags = false;
 
   setupHook = ./setup-hook.sh;
 
-  buildInputs =
-    [ setupHook pkgconfig ]
-    ++ optional stdenv.isDarwin cf-private  # needed for CFBundleCopyExecutableURL
-    ++ optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
-    ++ optional useNcurses ncurses
-    ++ optional useQt4 qt4
-    ++ optional withQt5 qtbase;
-
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  propagatedBuildInputs = optional stdenv.isDarwin ps;
+  nativeBuildInputs = [ setupHook pkg-config ]
+    ++ lib.optionals buildDocs [ texinfo ]
+    ++ lib.optionals withQt5 [ wrapQtAppsHook ];
+
+  buildInputs = lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
+    ++ lib.optional useOpenSSL openssl
+    ++ lib.optional useNcurses ncurses
+    ++ lib.optional withQt5 qtbase
+    ++ lib.optional (stdenv.isDarwin && !isBootstrap) SystemConfiguration;
+
+  propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
 
   preConfigure = ''
     fixCmakeFiles .
     substituteInPlace Modules/Platform/UnixPaths.cmake \
-      --subst-var-by libc_bin ${getBin stdenv.cc.libc} \
-      --subst-var-by libc_dev ${getDev stdenv.cc.libc} \
-      --subst-var-by libc_lib ${getLib stdenv.cc.libc}
-    substituteInPlace Modules/FindCxxTest.cmake \
-      --replace "$""{PYTHON_EXECUTABLE}" ${stdenv.shell}
-    # BUILD_CC and BUILD_CXX are used to bootstrap cmake
-    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$BUILD_CC CXX=$BUILD_CXX $configureFlags"
+      --subst-var-by libc_bin ${lib.getBin stdenv.cc.libc} \
+      --subst-var-by libc_dev ${lib.getDev stdenv.cc.libc} \
+      --subst-var-by libc_lib ${lib.getLib stdenv.cc.libc}
+    # CC_FOR_BUILD and CXX_FOR_BUILD are used to bootstrap cmake
+    configureFlags="--parallel=''${NIX_BUILD_CORES:-1} CC=$CC_FOR_BUILD CXX=$CXX_FOR_BUILD $configureFlags"
   '';
 
   configureFlags = [
-    "--docdir=share/doc/${name}"
+    "CXXFLAGS=-Wno-elaborated-enum-base"
+    "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
-    ++ optional (useQt4 || withQt5) "--qt-gui"
-    ++ [
+  ++ lib.optional withQt5 "--qt-gui"
+  ++ lib.optionals buildDocs [
+    "--sphinx-build=${sphinx}/bin/sphinx-build"
+    "--sphinx-man"
+    "--sphinx-info"
+  ]
+  # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
+  ++ lib.optionals stdenv.hostPlatform.is32bit [
+    "CFLAGS=-D_FILE_OFFSET_BITS=64"
+    "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
+  ] ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
     # http://www.cmake.org/Wiki/CMake_Cross_Compiling
@@ -88,16 +94,18 @@ stdenv.mkDerivation rec {
     # package being built.
     "-DCMAKE_CXX_COMPILER=${stdenv.cc.targetPrefix}c++"
     "-DCMAKE_C_COMPILER=${stdenv.cc.targetPrefix}cc"
-    "-DCMAKE_AR=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
-    "-DCMAKE_RANLIB=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
-    "-DCMAKE_STRIP=${getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
-  ]
+    "-DCMAKE_AR=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar"
+    "-DCMAKE_RANLIB=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
+    "-DCMAKE_STRIP=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
+
+    "-DCMAKE_USE_OPENSSL=${if useOpenSSL then "ON" else "OFF"}"
     # Avoid depending on frameworks.
-    ++ optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
+    "-DBUILD_CursesDialog=${if useNcurses then "ON" else "OFF"}"
+  ];
 
   # make install attempts to use the just-built cmake
-  preInstall = optional (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    sed -i 's|bin/cmake|${buildPackages.cmake}/bin/cmake|g' Makefile
+  preInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    sed -i 's|bin/cmake|${buildPackages.cmakeMinimal}/bin/cmake|g' Makefile
   '';
 
   dontUseCmakeConfigure = true;
@@ -109,10 +117,19 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails
 
-  meta = with stdenv.lib; {
-    homepage = http://www.cmake.org/;
+  meta = with lib; {
+    broken = (withQt5 && stdenv.isDarwin);
+    homepage = "https://cmake.org/";
+    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/release/${lib.versions.majorMinor version}.html";
     description = "Cross-Platform Makefile Generator";
-    platforms = if useQt4 then qt4.meta.platforms else platforms.all;
+    longDescription = ''
+      CMake is an open-source, cross-platform family of tools designed to
+      build, test and package software. CMake is used to control the software
+      compilation process using simple platform and compiler independent
+      configuration files, and generate native makefiles and workspaces that
+      can be used in the compiler environment of your choice.
+    '';
+    platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel lnl7 ];
     license = licenses.bsd3;
   };

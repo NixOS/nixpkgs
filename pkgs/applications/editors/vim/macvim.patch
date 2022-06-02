@@ -1,65 +1,78 @@
-diff --git a/src/MacVim/MacVim.xcodeproj/project.pbxproj b/src/MacVim/MacVim.xcodeproj/project.pbxproj
-index c384bf7..bf1ce96 100644
---- a/src/MacVim/MacVim.xcodeproj/project.pbxproj
-+++ b/src/MacVim/MacVim.xcodeproj/project.pbxproj
-@@ -437,6 +437,8 @@
- /* Begin PBXProject section */
- 		29B97313FDCFA39411CA2CEA /* Project object */ = {
- 			isa = PBXProject;
-+			attributes = {
-+			};
- 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MacVim" */;
- 			compatibilityVersion = "Xcode 2.4";
- 			developmentRegion = English;
-@@ -632,6 +634,7 @@
- 				INSTALL_PATH = "$(HOME)/Applications";
- 				MACOSX_DEPLOYMENT_TARGET = "";
- 				ONLY_ACTIVE_ARCH = YES;
-+				OTHER_LDFLAGS = "-headerpad_max_install_names";
- 				PRODUCT_NAME = MacVim;
- 				VERSIONING_SYSTEM = "apple-generic";
- 				WARNING_CFLAGS = "-Wall";
-@@ -662,6 +665,7 @@
- 				INSTALL_PATH = "$(HOME)/Applications";
- 				MACOSX_DEPLOYMENT_TARGET = "";
- 				ONLY_ACTIVE_ARCH = YES;
-+				OTHER_LDFLAGS = "-headerpad_max_install_names";
- 				PRODUCT_NAME = MacVim;
- 				VERSIONING_SYSTEM = "apple-generic";
- 				WRAPPER_EXTENSION = app;
+diff --git a/src/MacVim/vimrc b/src/MacVim/vimrc
+index 32c89b387..c2af70127 100644
+--- a/src/MacVim/vimrc
++++ b/src/MacVim/vimrc
+@@ -9,35 +9,5 @@ set nocompatible
+ " more sensible value.  Add "set backspace&" to your ~/.vimrc to reset it.
+ set backspace+=indent,eol,start
+ 
+-" Python2
+-" MacVim is configured by default to use the pre-installed System python2
+-" version. However, following code tries to find a Homebrew, MacPorts or
+-" an installation from python.org:
+-if exists("&pythondll") && exists("&pythonhome")
+-  if filereadable("/usr/local/Frameworks/Python.framework/Versions/2.7/Python")
+-    " Homebrew python 2.7
+-    set pythondll=/usr/local/Frameworks/Python.framework/Versions/2.7/Python
+-  elseif filereadable("/opt/local/Library/Frameworks/Python.framework/Versions/2.7/Python")
+-    " MacPorts python 2.7
+-    set pythondll=/opt/local/Library/Frameworks/Python.framework/Versions/2.7/Python
+-  elseif filereadable("/Library/Frameworks/Python.framework/Versions/2.7/Python")
+-    " https://www.python.org/downloads/mac-osx/
+-    set pythondll=/Library/Frameworks/Python.framework/Versions/2.7/Python
+-  endif
+-endif
+-
+-" Python3
+-" MacVim is configured by default to use Homebrew python3 version
+-" If this cannot be found, following code tries to find a MacPorts
+-" or an installation from python.org:
+-if exists("&pythonthreedll") && exists("&pythonthreehome") &&
+-      \ !filereadable(&pythonthreedll)
+-  if filereadable("/opt/local/Library/Frameworks/Python.framework/Versions/3.9/Python")
+-    " MacPorts python 3.9
+-    set pythonthreedll=/opt/local/Library/Frameworks/Python.framework/Versions/3.9/Python
+-  elseif filereadable("/Library/Frameworks/Python.framework/Versions/3.9/Python")
+-    " https://www.python.org/downloads/mac-osx/
+-    set pythonthreedll=/Library/Frameworks/Python.framework/Versions/3.9/Python
+-  endif
+-endif
+-
++" Default cscopeprg to the Nix-installed path
++set cscopeprg=@CSCOPE@
 diff --git a/src/Makefile b/src/Makefile
-index 84a93f7..e23196d 100644
+index c4a3ada37..06ee3de44 100644
 --- a/src/Makefile
 +++ b/src/Makefile
-@@ -1306,7 +1306,7 @@ MACVIMGUI_SRC	= gui.c gui_beval.c MacVim/gui_macvim.m MacVim/MMBackend.m \
+@@ -1402,7 +1402,7 @@ MACVIMGUI_SRC	= gui.c gui_beval.c MacVim/gui_macvim.m MacVim/MMBackend.m \
  		  MacVim/MacVim.m
- MACVIMGUI_OBJ	= objects/gui.o objects/gui_beval.o objects/pty.o \
+ MACVIMGUI_OBJ	= objects/gui.o objects/gui_beval.o \
  		  objects/gui_macvim.o objects/MMBackend.o objects/MacVim.o
 -MACVIMGUI_DEFS	= -DFEAT_GUI_MACVIM -Wall -Wno-unknown-pragmas -pipe
-+MACVIMGUI_DEFS	= -DMACOS_X_UNIX -DFEAT_GUI_MACVIM -Wall -Wno-unknown-pragmas -pipe
++MACVIMGUI_DEFS	= -DMACOS_X_DARWIN -DFEAT_GUI_MACVIM -Wall -Wno-unknown-pragmas -pipe
  MACVIMGUI_IPATH	=
  MACVIMGUI_LIBS_DIR =
- MACVIMGUI_LIBS1	= -framework Cocoa -framework Carbon
+ MACVIMGUI_LIBS1	=
 diff --git a/src/auto/configure b/src/auto/configure
-index cdc0819..8e2fd16 100755
+index 39ef81449..d8fa7ec2f 100755
 --- a/src/auto/configure
 +++ b/src/auto/configure
-@@ -5383,10 +5383,7 @@ $as_echo "no" >&6; }
+@@ -5896,10 +5896,7 @@ $as_echo "not found" >&6; }
+ 
+     for path in "${vi_cv_path_mzscheme_pfx}/lib" "${SCHEME_LIB}"; do
+       if test "X$path" != "X"; then
+-	if test "x$MACOS_X" = "xyes"; then
+-	  MZSCHEME_LIBS="-framework Racket"
+-	  MZSCHEME_CFLAGS="-DMZ_PRECISE_GC"
+-	elif test -f "${path}/libmzscheme3m.a"; then
++	if test -f "${path}/libmzscheme3m.a"; then
+ 	  MZSCHEME_LIBS="${path}/libmzscheme3m.a"
+ 	  MZSCHEME_CFLAGS="-DMZ_PRECISE_GC"
+ 	elif test -f "${path}/libracket3m.a"; then
+@@ -6287,23 +6284,6 @@ $as_echo ">>> too old; need Perl version 5.003_01 or later <<<" >&6; }
    fi
  
-   if test "X$vi_cv_path_mzscheme_pfx" != "X"; then
--    if test "x$MACOSX" = "xyes"; then
--      MZSCHEME_LIBS="-framework Racket"
--      MZSCHEME_CFLAGS="-DMZ_PRECISE_GC"
--    elif test -f "${vi_cv_path_mzscheme_pfx}/lib/libmzscheme3m.a"; then
-+    if test -f "${vi_cv_path_mzscheme_pfx}/lib/libmzscheme3m.a"; then
-       MZSCHEME_LIBS="${vi_cv_path_mzscheme_pfx}/lib/libmzscheme3m.a"
-       MZSCHEME_CFLAGS="-DMZ_PRECISE_GC"
-     elif test -f "${vi_cv_path_mzscheme_pfx}/lib/libracket3m.a"; then
-@@ -5731,23 +5728,6 @@ $as_echo ">>> too old; need Perl version 5.003_01 or later <<<" >&6; }
-   fi
- 
-   if test "x$MACOSX" = "xyes"; then
+   if test "x$MACOS_X" = "xyes"; then
 -        dir=/System/Library/Perl
 -    darwindir=$dir/darwin
 -    if test -d $darwindir; then
@@ -80,21 +93,21 @@ index cdc0819..8e2fd16 100755
                  PERL_LIBS=`echo "$PERL_LIBS" | sed -e 's/-arch\ ppc//' -e 's/-arch\ i386//' -e 's/-arch\ x86_64//'`
      PERL_CFLAGS=`echo "$PERL_CFLAGS" | sed -e 's/-arch\ ppc//' -e 's/-arch\ i386//' -e 's/-arch\ x86_64//'`
    fi
-@@ -5954,13 +5934,6 @@ __:
+@@ -6526,13 +6506,6 @@ __:
  eof
  	    	    eval "`cd ${PYTHON_CONFDIR} && make -f "${tmp_mkf}" __ | sed '/ directory /d'`"
  	    rm -f -- "${tmp_mkf}"
--	    if test "x$MACOSX" = "xyes" && ${vi_cv_path_python} -c \
+-	    if test "x$MACOS_X" = "xyes" && test -n "${python_PYTHONFRAMEWORK}" && ${vi_cv_path_python} -c \
 -		"import sys; sys.exit(${vi_cv_var_python_version} < 2.3)"; then
 -	      vi_cv_path_python_plibs="-framework Python"
 -	      if test "x${vi_cv_path_python}" != "x/usr/bin/python" && test -n "${python_PYTHONFRAMEWORKPREFIX}"; then
 -		  vi_cv_path_python_plibs="-F${python_PYTHONFRAMEWORKPREFIX} -framework Python"
 -	      fi
 -	    else
- 	      if test "${vi_cv_var_python_version}" = "1.4"; then
- 		  vi_cv_path_python_plibs="${PYTHON_CONFDIR}/libModules.a ${PYTHON_CONFDIR}/libPython.a ${PYTHON_CONFDIR}/libObjects.a ${PYTHON_CONFDIR}/libParser.a"
- 	      else
-@@ -5979,7 +5952,6 @@ eof
+ 	      vi_cv_path_python_plibs="-L${PYTHON_CONFDIR} -lpython${vi_cv_var_python_version}"
+ 	      	      	      	      if test -n "${python_LINKFORSHARED}" && test -n "${python_PYTHONFRAMEWORKPREFIX}"; then
+ 	        python_link_symbol=`echo ${python_LINKFORSHARED} | sed 's/\([^ \t][^ \t]*[ \t][ \t]*[^ \t][^ \t]*\)[ \t].*/\1/'`
+@@ -6547,7 +6520,6 @@ eof
  	      fi
  	      vi_cv_path_python_plibs="${vi_cv_path_python_plibs} ${python_BASEMODLIBS} ${python_LIBS} ${python_SYSLIBS} ${python_LINKFORSHARED}"
  	      	      vi_cv_path_python_plibs=`echo $vi_cv_path_python_plibs | sed s/-ltermcap//`
@@ -102,7 +115,7 @@ index cdc0819..8e2fd16 100755
  
  fi
  
-@@ -6055,13 +6027,6 @@ rm -f core conftest.err conftest.$ac_objext \
+@@ -6626,13 +6598,6 @@ rm -f core conftest.err conftest.$ac_objext \
  $as_echo "no" >&6; }
  	fi
  
@@ -116,116 +129,74 @@ index cdc0819..8e2fd16 100755
  			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if compile and link flags for Python are sane" >&5
  $as_echo_n "checking if compile and link flags for Python are sane... " >&6; }
  	cflags_save=$CFLAGS
-@@ -6919,11 +6884,7 @@ $as_echo "$tclver - OK" >&6; };
+@@ -7557,11 +7522,7 @@ $as_echo "$tclver - OK" >&6; };
  
        { $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of Tcl include" >&5
  $as_echo_n "checking for location of Tcl include... " >&6; }
--      if test "x$MACOSX" != "xyes"; then
+-      if test "x$MACOS_X" != "xyes"; then
  	tclinc="$tclloc/include $tclloc/include/tcl $tclloc/include/tcl$tclver /usr/local/include /usr/local/include/tcl$tclver /usr/include /usr/include/tcl$tclver"
 -      else
--		tclinc="/System/Library/Frameworks/Tcl.framework/Headers"
+-				tclinc="$tclloc/include $tclloc/include/tcl $tclloc/include/tcl$tclver /System/Library/Frameworks/Tcl.framework/Headers `xcrun --show-sdk-path`/System/Library/Frameworks/Tcl.framework/Versions/Current/Headers"
 -      fi
        TCL_INC=
        for try in $tclinc; do
  	if test -f "$try/tcl.h"; then
-@@ -6941,12 +6902,8 @@ $as_echo "<not found>" >&6; }
+@@ -7579,13 +7540,8 @@ $as_echo "<not found>" >&6; }
        if test -z "$SKIP_TCL"; then
  	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for location of tclConfig.sh script" >&5
  $as_echo_n "checking for location of tclConfig.sh script... " >&6; }
--	if test "x$MACOSX" != "xyes"; then
+-	if test "x$MACOS_X" != "xyes"; then
  	  tclcnf=`echo $tclinc | sed s/include/lib/g`
  	  tclcnf="$tclcnf `echo $tclinc | sed s/include/lib64/g`"
 -	else
--	  	  tclcnf="/System/Library/Frameworks/Tcl.framework"
+-	  	  	  	  tclcnf=`echo $tclinc | sed s/include/lib/g`
+-	  tclcnf="$tclcnf /System/Library/Frameworks/Tcl.framework `xcrun --show-sdk-path`/System/Library/Frameworks/Tcl.framework"
 -	fi
  	for try in $tclcnf; do
- 	  if test -f $try/tclConfig.sh; then
+ 	  if test -f "$try/tclConfig.sh"; then
  	    { $as_echo "$as_me:${as_lineno-$LINENO}: result: $try/tclConfig.sh" >&5
-@@ -7120,10 +7077,6 @@ $as_echo "$rubyhdrdir" >&6; }
- 	if test -f "$rubylibdir/$librubya"; then
- 	  librubyarg="$librubyarg"
+@@ -7774,10 +7730,6 @@ $as_echo "$rubyhdrdir" >&6; }
+ 	rubylibdir=`$vi_cv_path_ruby -r rbconfig -e "print $ruby_rbconfig.expand($ruby_rbconfig::CONFIG['libdir'])"`
+ 	if test -f "$rubylibdir/$librubya" || expr "$librubyarg" : "-lruby"; then
  	  RUBY_LIBS="$RUBY_LIBS -L$rubylibdir"
--        elif test -d "/System/Library/Frameworks/Ruby.framework"; then
+-        elif test "$vi_cv_path_ruby" = "/usr/bin/ruby" -a -d "/System/Library/Frameworks/Ruby.framework"; then
 -                        RUBY_LIBS="-framework Ruby"
--                        RUBY_CFLAGS="-DRUBY_VERSION=$rubyversion"
+-                        RUBY_CFLAGS="$RUBY_CFLAGS -DRUBY_VERSION=$rubyversion"
 -            librubyarg=
  	fi
  
  	if test "X$librubyarg" != "X"; then
-diff --git a/src/if_python.c b/src/if_python.c
-index 1d87cac..9d28df0 100644
---- a/src/if_python.c
-+++ b/src/if_python.c
-@@ -55,11 +55,7 @@
- 
- #define PY_SSIZE_T_CLEAN
- 
--#ifdef FEAT_GUI_MACVIM
--# include <Python/Python.h>
--#else
--# include <Python.h>
--#endif
-+#include <Python.h>
- 
- #if !defined(PY_VERSION_HEX) || PY_VERSION_HEX < 0x02050000
- # undef PY_SSIZE_T_CLEAN
-diff --git a/src/if_ruby.c b/src/if_ruby.c
-index 1deb83e..ac23878 100644
---- a/src/if_ruby.c
-+++ b/src/if_ruby.c
-@@ -106,17 +106,9 @@
- # define rb_check_type rb_check_type_stub
- #endif
- 
--#ifdef FEAT_GUI_MACVIM
--# include <Ruby/ruby.h>
--#else
--# include <ruby.h>
--#endif
-+#include <ruby.h>
- #ifdef RUBY19_OR_LATER
--# ifdef FEAT_GUI_MACVIM
--#  include <Ruby/ruby/encoding.h>
--# else
--#  include <ruby/encoding.h>
--# endif
-+# include <ruby/encoding.h>
- #endif
- 
- #undef off_t	/* ruby defines off_t as _int64, Mingw uses long */
 diff --git a/src/vim.h b/src/vim.h
-index 4c93908..edc6bd7 100644
+index 4ff59f201..f91cb9836 100644
 --- a/src/vim.h
 +++ b/src/vim.h
-@@ -308,18 +308,6 @@
- # define UNUSED
+@@ -244,17 +244,6 @@
+ # define SUN_SYSTEM
  #endif
  
--/* if we're compiling in C++ (currently only KVim), the system
-- * headers must have the correct prototypes or nothing will build.
-- * conversely, our prototypes might clash due to throw() specifiers and
-- * cause compilation failures even though the headers are correct.  For
-- * a concrete example, gcc-3.2 enforces exception specifications, and
-- * glibc-2.2.5 has them in their system headers.
-- */
+-// If we're compiling in C++ (currently only KVim), the system
+-// headers must have the correct prototypes or nothing will build.
+-// Conversely, our prototypes might clash due to throw() specifiers and
+-// cause compilation failures even though the headers are correct.  For
+-// a concrete example, gcc-3.2 enforces exception specifications, and
+-// glibc-2.2.5 has them in their system headers.
 -#if !defined(__cplusplus) && defined(UNIX) \
--  && !defined(MACOS_X) /* MACOS_X doesn't yet support osdef.h */
--# include "auto/osdef.h"	/* bring missing declarations in */
+-	&& !defined(MACOS_X) // MACOS_X doesn't yet support osdef.h
+-# include "auto/osdef.h"	// bring missing declarations in
 -#endif
 -
- #ifdef __EMX__
- # define    getcwd  _getcwd2
- # define    chdir   _chdir2
+ #ifdef AMIGA
+ # include "os_amiga.h"
+ #endif
 diff --git a/src/vimtutor b/src/vimtutor
-index 70d9ec7..b565a1a 100755
+index 3b154f288..e89f26060 100755
 --- a/src/vimtutor
 +++ b/src/vimtutor
-@@ -16,7 +16,7 @@ seq="vim vim8 vim75 vim74 vim73 vim72 vim71 vim70 vim7 vim6 vi"
- if test "$1" = "-g"; then 
-   # Try to use the GUI version of Vim if possible, it will fall back
-   # on Vim if Gvim is not installed.
--  seq="gvim gvim8 gvim75 gvim74 gvim73 gvim72 gvim71 gvim70 gvim7 gvim6 $seq"
-+  seq="mvim gvim gvim8 gvim75 gvim74 gvim73 gvim72 gvim71 gvim70 gvim7 gvim6 $seq"
-   shift
+@@ -16,6 +16,6 @@ seq="vim vim81 vim80 vim8 vim74 vim73 vim72 vim71 vim70 vim7 vim6 vi"
+ if test "$1" = "-g"; then
+     # Try to use the GUI version of Vim if possible, it will fall back
+     # on Vim if Gvim is not installed.
+-    seq="gvim gvim81 gvim80 gvim8 gvim74 gvim73 gvim72 gvim71 gvim70 gvim7 gvim6 $seq"
++    seq="mvim gvim gvim81 gvim80 gvim8 gvim74 gvim73 gvim72 gvim71 gvim70 gvim7 gvim6 $seq"
+     shift
  fi
- 

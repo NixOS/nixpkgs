@@ -1,23 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, qt5, fetchFromGitHub }:
+{ lib, mkDerivation, cmake, hunspell, pkg-config, qttools, qtbase, qtsvg, qtx11extras
+, fetchFromGitHub }:
 
-with qt5;
+mkDerivation rec {
+  pname = "featherpad";
+  version = "1.1.1";
 
-stdenv.mkDerivation rec {
-  version = "0.9.4";
-  name = "featherpad-${version}";
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "FeatherPad";
     rev = "V${version}";
-    sha256 = "18zna6rx2qyiplr44wrkvr4avk9yy2l1s23fy3d7ql9f1fq12z3w";
+    sha256 = "sha256-qDhubKk6FLZmVxp4SkGm1B7zIg6rPtPRoFGCcBYUDFA=";
   };
-  nativeBuildInputs = [ qmake pkgconfig qttools ];
-  buildInputs = [ qtbase qtsvg qtx11extras ];
-  meta = with stdenv.lib; {
+
+  nativeBuildInputs = [ cmake pkg-config qttools ];
+  buildInputs = [ hunspell qtbase qtsvg qtx11extras ];
+
+  meta = with lib; {
     description = "Lightweight Qt5 Plain-Text Editor for Linux";
-    homepage = https://github.com/tsujan/FeatherPad;
+    homepage = "https://github.com/tsujan/FeatherPad";
     platforms = platforms.linux;
     maintainers = [ maintainers.flosse ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }

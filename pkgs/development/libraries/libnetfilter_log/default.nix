@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, libnfnetlink, libmnl }:
+{ lib, stdenv, fetchurl, pkg-config, libnfnetlink, libmnl }:
 
 stdenv.mkDerivation rec {
-  name = "libnetfilter_log-${version}";
-  version = "1.0.1";
+  pname = "libnetfilter_log";
+  version = "1.0.2";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/libnetfilter_log/files/${name}.tar.bz2";
-    sha256 = "089vjcfxl5qjqpswrbgklf4wflh44irmw6sk2k0kmfixfmszxq3l";
+    url = "https://netfilter.org/projects/libnetfilter_log/files/${pname}-${version}.tar.bz2";
+    sha256 = "1spy9xs41v76kid5ana8n126f3mvgq6fjibbfbj4kn0larbhix73";
   };
 
   buildInputs = [ libmnl ];
   propagatedBuildInputs = [ libnfnetlink ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Userspace library providing interface to packets that have been logged by the kernel packet filter";
     longDescription = ''
       libnetfilter_log is a userspace library providing interface to packets
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       system that deprecates the old syslog/dmesg based packet logging. This
       library has been previously known as libnfnetlink_log.
     '';
-    homepage = https://netfilter.org/projects/libnetfilter_log/;
+    homepage = "https://netfilter.org/projects/libnetfilter_log/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ orivej ];

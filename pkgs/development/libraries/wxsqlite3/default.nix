@@ -1,29 +1,38 @@
-{ stdenv, fetchFromGitHub, wxGTK, sqlite
-, darwin }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, wxGTK
+, sqlite
+, Cocoa
+, setfile
+, rez
+, derez
+, wxmac
+}:
 
 stdenv.mkDerivation rec {
-  name = "wxsqlite3-${version}";
-  version = "3.3.1";
+  pname = "wxsqlite3";
+  version = "4.7.6";
 
   src = fetchFromGitHub {
     owner = "utelle";
     repo = "wxsqlite3";
     rev = "v${version}";
-    sha1 = "bb8p58g88nkdcsj3h4acx7h925n2cy9g";
+    hash = "sha256-QoICP66eluD5phYVi1iK8tg1FL04EQjY29/4n6SIz3s=";
   };
 
-  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
-    cp build28/Info.plist.in build28/wxmac.icns build/
-  '';
+  nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ wxGTK sqlite ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa darwin.stubs.setfile darwin.stubs.rez darwin.stubs.derez ];
+  buildInputs = [ sqlite ]
+    ++ lib.optionals (!stdenv.isDarwin) [ wxGTK ]
+    ++ lib.optionals (stdenv.isDarwin) [ Cocoa setfile rez derez wxmac ];
 
-  meta = with stdenv.lib; {
-    homepage = https://utelle.github.io/wxsqlite3/ ;
+  meta = with lib; {
+    homepage = "https://utelle.github.io/wxsqlite3/";
     description = "A C++ wrapper around the public domain SQLite 3.x for wxWidgets";
     platforms = platforms.unix;
     maintainers = with maintainers; [ vrthra ];
-    license = [ licenses.lgpl2 ];
+    license = with licenses; [ lgpl3Plus gpl3Plus ];
   };
 }

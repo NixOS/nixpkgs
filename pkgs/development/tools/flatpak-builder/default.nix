@@ -1,6 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
+, nixosTests
 
 , autoreconfHook
 , docbook_xml_dtd_412
@@ -10,20 +11,24 @@
 , gettext
 , libxml2
 , libxslt
-, pkgconfig
+, pkg-config
 , xmlto
 
 , acl
-, bazaar
+, breezy
 , binutils
 , bzip2
 , coreutils
 , cpio
 , curl
+, debugedit
 , elfutils
 , flatpak
 , gitMinimal
 , glib
+, glibcLocales
+, gnumake
+, gnupg
 , gnutar
 , json-glib
 , libcap
@@ -32,57 +37,33 @@
 , libyaml
 , ostree
 , patch
+, python2
 , rpm
 , unzip
 }:
 
 let
-  version = "1.0.5";
+  installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
+  installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
 in stdenv.mkDerivation rec {
-  name = "flatpak-builder-${version}";
+  pname = "flatpak-builder";
+  version = "1.2.2";
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [ "out" "doc" "man" "installedTests" ];
 
   src = fetchurl {
-    url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${name}.tar.xz";
-    sha256 = "1l5hpxkc7f3mp9v8wyagpbc8vvfn0m0jq8rsk1h7vwyyjmijv6mb";
+    url = "https://github.com/flatpak/flatpak-builder/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-if2mjlN8Hp3gI1JpC9icMhenKRZFWNNfNbCPea2E4D4=";
   };
-
-  nativeBuildInputs = [
-    autoreconfHook
-    docbook_xml_dtd_412
-    docbook_xml_dtd_42
-    docbook_xml_dtd_43
-    docbook_xsl
-    gettext
-    libxml2
-    libxslt
-    pkgconfig
-    xmlto
-  ];
-
-  buildInputs = [
-    acl
-    bzip2
-    curl
-    elfutils
-    flatpak
-    glib
-    json-glib
-    libcap
-    libdwarf
-    libsoup
-    libxml2
-    libyaml
-    ostree
-  ];
 
   patches = [
     # patch taken from gtk_doc
     ./respect-xml-catalog-files-var.patch
+
+    # Hardcode paths
     (substituteAll {
       src = ./fix-paths.patch;
-      bzr = "${bazaar}/bin/bzr";
+      brz = "${breezy}/bin/brz";
       cp = "${coreutils}/bin/cp";
       patch = "${patch}/bin/patch";
       tar = "${gnutar}/bin/tar";
@@ -95,13 +76,83 @@ in stdenv.mkDerivation rec {
       eustrip = "${elfutils}/bin/eu-strip";
       euelfcompress = "${elfutils}/bin/eu-elfcompress";
     })
+
+    # The test scripts in Flatpak repo were updated so we are basing
+    # this on our patch for Flatpak 0.99.
+    (substituteAll {
+      src = ./fix-test-paths.patch;
+      inherit glibcLocales python2;
+    })
   ];
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [
+    autoreconfHook
+    docbook_xml_dtd_43
+    docbook_xsl
+    gettext
+    libxml2
+    libxslt
+    pkg-config
+    xmlto
+  ];
+
+  buildInputs = [
+    acl
+    bzip2
+    curl
+    debugedit
+    elfutils
+    flatpak
+    glib
+    json-glib
+    libcap
+    libdwarf
+    libsoup
+    libxml2
+    libyaml
+    ostree
+  ];
+
+  configureFlags = [
+    "--enable-installed-tests"
+    "--with-system-debugedit"
+  ];
+
+  makeFlags = [
+    "installed_testdir=${installed_testdir}"
+    "installed_test_metadir=${installed_test_metadir}"
+  ];
+
+  # Some scripts used by tests  need to use shebangs that are available in Flatpak runtimes.
+  dontPatchShebangs = true;
+
+  enableParallelBuilding = true;
+
+  # Installed tests
+  postFixup = ''
+    for file in ${installed_testdir}/{test-builder.sh,test-builder-python.sh}; do
+      patchShebangs $file
+    done
+  '';
+
+  passthru = {
+    installedTestsDependencies = [
+      gnupg
+      ostree
+      python2
+      gnumake
+    ];
+
+    tests = {
+      installedTests = nixosTests.installed-tests.flatpak-builder;
+    };
+  };
+
+  meta = with lib; {
     description = "Tool to build flatpaks from source";
-    homepage = https://flatpak.org/;
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ jtojnar ];
+    homepage = "https://github.com/flatpak/flatpak-builder";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

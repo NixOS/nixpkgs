@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, bash, coreutils, python3
+{ lib, stdenv, fetchurl, bash, coreutils, python3
 , libcap_ng, policycoreutils, selinux-python, dbus
 , xorgserver, openbox, xmodmap }:
 
 # this is python3 only as it depends on selinux-python
 
-with stdenv.lib; 
+with lib;
 with python3.pkgs;
 
 stdenv.mkDerivation rec {
-  name = "selinux-sandbox-${version}";
-  version = "2.7";
-  se_release = "20170804";
+  pname = "selinux-sandbox";
+  version = "3.3";
+  inherit (policycoreutils) se_url;
 
   src = fetchurl {
-    url = "https://raw.githubusercontent.com/wiki/SELinuxProject/selinux/files/releases/${se_release}/selinux-sandbox-${version}.tar.gz";
-    sha256 = "0hf5chm90iapb42njaps6p5460ys3ajh5446ja544vdbh01n544l";
+    url = "${se_url}/${version}/selinux-sandbox-${version}.tar.gz";
+    sha256 = "0rw8pxfqhl6ww4w31fbf4hi3zilh1n3b1rfjm7ra76mm78wfyylj";
   };
 
   nativeBuildInputs = [ wrapPython ];
@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/test" "${coreutils}/bin/test" \
   '';
 
-  preBuild = ''
-    makeFlagsArray+=("PREFIX=$out")
-    makeFlagsArray+=("DESTDIR=$out")
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SYSCONFDIR=$(out)/etc/sysconfig"
+  ];
 
   postFixup = ''
     wrapPythonPrograms
@@ -54,8 +54,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SELinux sandbox utility";
     license = licenses.gpl2;
-    homepage = https://selinuxproject.org;
+    homepage = "https://selinuxproject.org";
     platforms = platforms.linux;
   };
 }
-

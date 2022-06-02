@@ -1,42 +1,62 @@
-{ stdenv, pass, fetchFromGitHub, pythonPackages, makeWrapper }:
+{ lib
+, fetchFromGitHub
+, fetchpatch
+, python3Packages
+, gnupg
+, pass
+, makeWrapper
+}:
 
-let
-  pythonEnv = pythonPackages.python.withPackages (p: [ p.defusedxml ]);
-
-in stdenv.mkDerivation rec {
-  name = "pass-import-${version}";
-  version = "2.3";
+python3Packages.buildPythonApplication rec {
+  pname = "pass-import";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-import";
     rev = "v${version}";
-    sha256 = "1209aqkiqqbir5yzwk5jvyk8c1fyrsj9igr3n4banf347rlwmzfv";
+    sha256 = "0hrpg7yiv50xmbajfy0zdilsyhbj5iv0qnlrgkfv99q1dvd5qy56";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = with python3Packages; [
+    cryptography
+    defusedxml
+    pyaml
+    pykeepass
+    python-magic # similar API to "file-magic", but already in nixpkgs.
+    secretstorage
+  ];
 
-  buildInputs = [ pythonEnv ];
+  checkInputs = [
+    gnupg
+    pass
+    python3Packages.pytestCheckHook
+  ];
 
-  patchPhase = ''
-    sed -i -e 's|$0|${pass}/bin/pass|' import.bash
-  '';
+  disabledTests = [
+    "test_import_gnome_keyring" # requires dbus, which pytest doesn't support
+  ];
 
-  dontBuild = true;
-
-  installFlags = [ "PREFIX=$(out)" ];
-
-  postFixup = ''
+  postInstall = ''
+    mkdir -p $out/lib/password-store/extensions
+    cp ${src}/import.bash $out/lib/password-store/extensions/import.bash
     wrapProgram $out/lib/password-store/extensions/import.bash \
-      --prefix PATH : "${pythonEnv}/bin" \
+      --prefix PATH : "${python3Packages.python.withPackages (_: propagatedBuildInputs)}/bin" \
+      --prefix PYTHONPATH : "$out/${python3Packages.python.sitePackages}" \
       --run "export PREFIX"
+    cp -r ${src}/share $out/
   '';
 
-  meta = with stdenv.lib; {
+  postCheck = ''
+    $out/bin/pimport --list-exporters --list-importers
+  '';
+
+  meta = with lib; {
     description = "Pass extension for importing data from existing password managers";
-    homepage = https://github.com/roddhjav/pass-import;
+    homepage = "https://github.com/roddhjav/pass-import";
+    changelog = "https://github.com/roddhjav/pass-import/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher ];
+    maintainers = with maintainers; [ lovek323 fpletz tadfisher ];
     platforms = platforms.unix;
   };
 }

@@ -1,5 +1,5 @@
-{ stdenv, fetchPypi, fetchpatch, buildPythonPackage
-, dateparser, humanize, pendulum, ruamel_yaml, tzlocal }:
+{ lib, fetchPypi, fetchpatch, buildPythonPackage
+, dateparser, humanize, pendulum, ruamel-yaml, tzlocal }:
 
 buildPythonPackage rec {
   pname = "maya";
@@ -19,14 +19,14 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [ dateparser humanize pendulum ruamel_yaml tzlocal ];
+  propagatedBuildInputs = [ dateparser humanize pendulum ruamel-yaml tzlocal ];
 
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Datetimes for Humans";
-    homepage = https://github.com/kennethreitz/maya;
+    homepage = "https://github.com/kennethreitz/maya";
     license = licenses.mit;
   };
 }

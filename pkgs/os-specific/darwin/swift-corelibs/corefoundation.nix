@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchurl, python, ninja, libxml2, objc4, ICU, curl }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
 
 let
   # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
@@ -11,7 +11,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "swift-corefoundation";
+  pname = "swift-corefoundation";
+  version = "unstable-2018-09-14";
 
   src = fetchFromGitHub {
     owner  = "apple";
@@ -20,12 +21,14 @@ stdenv.mkDerivation {
     sha256 = "17kpql0f27xxz4jjw84vpas5f5sn4vdqwv10g151rc3rswbwln1z";
   };
 
-  nativeBuildInputs = [ ninja python ];
-  buildInputs = [ libxml2 objc4 ICU curl ];
+  nativeBuildInputs = [ ninja python3 ];
+  buildInputs = [ curl libxml2 objc4 ICU ];
 
-  sourceRoot = "source/CoreFoundation";
+  patches = [ ./0001-Add-missing-TARGET_OS_-defines.patch ];
 
-  patchPhase = ''
+  postPatch = ''
+    cd CoreFoundation
+
     cp ${sysdir-free-system-directories} Base.subproj/CFSystemDirectories.c
 
     # In order, since I can't comment individual lines:
@@ -39,6 +42,7 @@ stdenv.mkDerivation {
     # Fix sandbox impurities.
     substituteInPlace ../lib/script.py \
       --replace '/bin/cp' cp
+    patchShebangs --build ../configure
 
     # Includes xpc for some initialization routine that they don't define anyway, so no harm here
     substituteInPlace PlugIn.subproj/CFBundlePriv.h \
@@ -63,10 +67,20 @@ stdenv.mkDerivation {
   # I'm guessing at the version here. https://github.com/apple/swift-corelibs-foundation/commit/df3ec55fe6c162d590a7653d89ad669c2b9716b1 imported "high sierra"
   # and this version is a version from there. No idea how accurate it is.
   LDFLAGS = "-current_version 1454.90.0 -compatibility_version 150.0.0 -init ___CFInitialize";
-  configurePhase = "../configure release --sysroot UNUSED";
+
+  configurePhase = ''
+    ../configure release --sysroot UNUSED
+  '';
 
   enableParallelBuilding = true;
-  buildPhase = "ninja -j $NIX_BUILD_CORES";
+
+  buildPhase = ''
+    runHook preBuild
+
+    ninja -j $NIX_BUILD_CORES
+
+    runHook postBuild
+  '';
 
   # TODO: their build system sorta kinda can do this, but it doesn't seem to work right now
   # Also, this includes a bunch of private headers in the framework, which is not what we want

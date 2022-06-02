@@ -1,9 +1,9 @@
-{stdenv, fetchzip}:
+{ fetchzip }:
 
 fetchzip {
   name = "bakoma-ttf";
 
-  url = http://tarballs.nixos.org/sha256/1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km;
+  url = "http://tarballs.nixos.org/sha256/1j1y3cq6ys30m734axc0brdm2q9n2as4h32jws15r7w5fwr991km";
 
   postFetch = ''
     tar xjvf $downloadedFile --strip-components=1
@@ -15,7 +15,6 @@ fetchzip {
 
   meta = {
     description = "TrueType versions of the Computer Modern and AMS TeX Fonts";
-    homepage = http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://www.ctan.org/tex-archive/fonts/cm/ps-type1/bakoma/ttf/";
   };
 }

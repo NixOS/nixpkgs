@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, expat, curl, fftw }:
+{ lib, stdenv, fetchurl, expat, curl, fftw }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "libofa";
   version = "0.9.3";
   deb_patch = "5";
-in
-stdenv.mkDerivation rec {
-  name = "libofa-${version}";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/musicip-libofa/${name}.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/musicip-libofa/${pname}-${version}.tar.gz";
     sha256 = "184ham039l7lwhfgg0xr2vch2xnw1lwh7sid432mh879adhlc5h2";
   };
 
@@ -27,8 +25,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ expat curl fftw ];
 
-  meta = with stdenv.lib; {
-    homepage = https://code.google.com/archive/p/musicip-libofa/;
+  meta = with lib; {
+    homepage = "https://code.google.com/archive/p/musicip-libofa/";
     description = "Library Open Fingerprint Architecture";
     longDescription = ''
       LibOFA (Library Open Fingerprint Architecture) is an open-source audio

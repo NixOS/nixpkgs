@@ -1,42 +1,70 @@
-{ stdenv, pkgconfig, fetchurl, python, dropbox }:
+{ lib, stdenv
+, substituteAll
+, pkg-config
+, fetchurl
+, python3
+, dropbox
+, gtk3
+, gnome
+, gdk-pixbuf
+, gobject-introspection
+}:
+
 let
-  version = "2019.02.14";
+  version = "2020.03.04";
   dropboxd = "${dropbox}/bin/dropbox";
 in
 stdenv.mkDerivation {
-  name = "dropbox-cli-${version}";
+  pname = "dropbox-cli";
+  inherit version;
+
+  outputs = [ "out" "nautilusExtension" ];
 
   src = fetchurl {
     url = "https://linux.dropboxstatic.com/packages/nautilus-dropbox-${version}.tar.bz2";
-    sha256 = "09yg7q45sycl88l3wq0byz4a9k6sxx3m0r3szinvisfay9wlj35f";
+    sha256 = "1jjc835n2j61d23kvygdb4n4jsrw33r9mbwxrm4fqin6x01l2w7k";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python ];
+  strictDeps = true;
 
-  phases = "unpackPhase installPhase";
+  patches = [
+    (substituteAll {
+      src = ./fix-cli-paths.patch;
+      inherit dropboxd;
+    })
+  ];
 
-  installPhase = ''
-    mkdir -p "$out/bin/" "$out/share/applications"
-    cp data/dropbox.desktop "$out/share/applications"
-    cp -a data/icons "$out/share/icons"
-    find "$out/share/icons" -type f \! -name '*.png' -delete
-    substitute "dropbox.in" "$out/bin/dropbox" \
-      --replace '@PACKAGE_VERSION@' ${version} \
-      --replace '@DESKTOP_FILE_DIR@' "$out/share/applications" \
-      --replace '@IMAGEDATA16@' '"too-lazy-to-fix"' \
-      --replace '@IMAGEDATA64@' '"too-lazy-to-fix"'
-    sed -i 's:db_path = .*:db_path = "${dropboxd}":' $out/bin/dropbox
-    chmod +x "$out/bin/"*
-    patchShebangs "$out/bin"
-  '';
+  nativeBuildInputs = [
+    pkg-config
+    gobject-introspection
+    gdk-pixbuf
+    # only for build, the install command also wants to use GTK through introspection
+    # but we are using Nix for installation so we will not need that.
+    (python3.withPackages (ps: with ps; [
+      docutils
+      pygobject3
+    ]))
+  ];
+
+  buildInputs = [
+    python3
+    gtk3
+    gnome.nautilus
+  ];
+
+  configureFlags = [
+    "--with-nautilus-extension-dir=${placeholder "nautilusExtension"}/lib/nautilus/extensions-3.0"
+  ];
+
+  makeFlags = [
+    "EMBLEM_DIR=${placeholder "nautilusExtension"}/share/nautilus-dropbox/emblems"
+  ];
 
   meta = {
-    homepage = http://dropbox.com;
+    homepage = "https://www.dropbox.com";
     description = "Command line client for the dropbox daemon";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
+    license = lib.licenses.gpl3Plus;
     # NOTE: Dropbox itself only works on linux, so this is ok.
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

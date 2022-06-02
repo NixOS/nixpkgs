@@ -1,21 +1,30 @@
-{ stdenv, fetchurl, ed }:
+{ lib, stdenv, fetchurl, buildPackages, diffutils, ed, lzip }:
 
 stdenv.mkDerivation rec {
-  name = "rcs-5.9.4";
+  pname = "rcs";
+  version = "5.10.1";
 
   src = fetchurl {
-    url = "mirror://gnu/rcs/${name}.tar.xz";
-    sha256 = "1zsx7bb0rgvvvisiy4zlixf56ay8wbd9qqqcp1a1g0m1gl6mlg86";
+    url = "mirror://gnu/rcs/${pname}-${version}.tar.lz";
+    sha256 = "sha256-Q93+EHJKi4XiRo9kA7YABzcYbwHmDgvWL95p2EIjTMU=";
   };
 
-  buildInputs = [ ed ];
+  ac_cv_path_ED = "${ed}/bin/ed";
+  DIFF = "${diffutils}/bin/diff";
+  DIFF3 = "${diffutils}/bin/diff3";
 
-  doCheck = true;
+  disallowedReferences =
+    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+      [ buildPackages.diffutils buildPackages.ed ];
 
-  NIX_CFLAGS_COMPILE = [ "-std=c99" ];
+  NIX_CFLAGS_COMPILE = "-std=c99";
+
+  hardeningDisable = lib.optional stdenv.cc.isClang "format";
+
+  nativeBuildInputs = [ lzip ];
 
   meta = {
-    homepage = https://www.gnu.org/software/rcs/;
+    homepage = "https://www.gnu.org/software/rcs/";
     description = "Revision control system";
     longDescription =
       '' The GNU Revision Control System (RCS) manages multiple revisions of
@@ -25,8 +34,8 @@ stdenv.mkDerivation rec {
          documentation, graphics, papers, and form letters.
       '';
 
-    license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ eelco ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ eelco ];
+    platforms = lib.platforms.unix;
   };
 }

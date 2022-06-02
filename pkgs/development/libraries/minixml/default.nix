@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "mxml-${version}";
-  version = "3.0";
+  pname = "mxml";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "mxml";
     rev = "v${version}";
-    sha256 = "0madp2v2md3xq96aham91byns6qy4byd5pbg28q827fdahfhpmq7";
+    sha256 = "sha256-YN8g8KDk7xnDVK1io0zSLO7erxEp4VQ9heA7Lu/cUUg=";
   };
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small XML library";
-    homepage = https://www.msweet.org/mxml/;
+    homepage = "https://www.msweet.org/mxml/";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.goibhniu ];
   };
 }

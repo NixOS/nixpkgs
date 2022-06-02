@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, libX11, libXrandr, libXft }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXrandr, libXft }:
 
 stdenv.mkDerivation rec {
-  name = "bevelbar-${version}";
+  pname = "bevelbar";
   version = "16.11";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An X11 status bar with fancy schmancy 1985-ish beveled borders";
     inherit (src.meta) homepage;
     license = licenses.mit;

@@ -1,63 +1,39 @@
-{ lib, stdenv, fetchurl, fetchpatch, flex, bison, readline }:
+{ lib, stdenv, fetchurl, fetchpatch, flex, bison, readline, libssh, nixosTests }:
 
-with lib;
+stdenv.mkDerivation rec {
+  pname = "bird";
+  version = "2.0.9";
 
-let
-
-  generic = { version, sha256, enableIPv6 ? false }:
-    stdenv.mkDerivation rec {
-      name = "bird-${version}";
-
-      src = fetchurl {
-        inherit sha256;
-        url = "ftp://bird.network.cz/pub/bird/${name}.tar.gz";
-      };
-
-      nativeBuildInputs = [ flex bison ];
-      buildInputs = [ readline ];
-
-      patches = [
-        (./. + "/dont-create-sysconfdir-${builtins.substring 0 1 version}.patch")
-      ]
-      ++ optional (lib.versionOlder version "2")
-        # https://github.com/BIRD/bird/pull/4
-        (fetchpatch {
-          url = "https://github.com/BIRD/bird/commit/fca9ab48e3823c734886f47156a92f6b804c16e9.patch";
-          sha256 = "1pnndc3n56lqqcy74ln0w5kn3i9rbzsm2dqiyp1qw7j33dpkln1b";
-        })
-        ;
-
-      CPP="${stdenv.cc.targetPrefix}cpp -E";
-
-      configureFlags = [
-        "--localstatedir=/var"
-      ] ++ optional enableIPv6 "--enable-ipv6";
-
-      meta = {
-        description = "BIRD Internet Routing Daemon";
-        homepage = http://bird.network.cz;
-        license = licenses.gpl2Plus;
-        maintainers = with maintainers; [ fpletz ];
-        platforms = platforms.linux;
-      };
-    };
-
-in
-
-{
-  bird = generic {
-    version = "1.6.6";
-    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
+  src = fetchurl {
+    sha256 = "sha256-dnhrvN7TBh4bsiGwEfLMACIewGPenNoASn2bBhoJbV4=";
+    url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
   };
 
-  bird6 = generic {
-    version = "1.6.6";
-    sha256 = "0w1dmwx89g3qdy92wkjl3p52rn521izm2m8yq74hs7myxxx3nnwp";
-    enableIPv6 = true;
-  };
+  nativeBuildInputs = [ flex bison ];
+  buildInputs = [ readline libssh ];
 
-  bird2 = generic {
-    version = "2.0.4";
-    sha256 = "1phl8ycasbzgla83d9zbzzy1ymjz30k1qh1pmywmjhbxa6vi0q37";
+  patches = [
+    ./dont-create-sysconfdir-2.patch
+    (fetchurl {
+      url = "https://gitlab.nic.cz/labs/bird/-/commit/fcb4dd0c831339c4374ace17d8f2ae6ebfeed279.patch";
+      sha256 = "sha256-PEgpRnOGLa1orHJDEHlblnVhBVv7XOKPR70M1wUMxMQ=";
+    })
+  ];
+
+  CPP="${stdenv.cc.targetPrefix}cpp -E";
+
+  configureFlags = [
+    "--localstatedir=/var"
+    "--runstatedir=/run/bird"
+  ];
+
+  passthru.tests = nixosTests.bird;
+
+  meta = with lib; {
+    description = "BIRD Internet Routing Daemon";
+    homepage = "http://bird.network.cz";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fpletz globin ];
+    platforms = platforms.linux;
   };
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, openssl, zlib }:
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "aerospike-server-${version}";
+  pname = "aerospike-server";
   version = "4.2.0.4";
 
   src = fetchFromGitHub {
@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
   preBuild = ''
     patchShebangs build/gen_version
     substituteInPlace build/gen_version --replace 'git describe' 'echo ${version}'
+
+    # drop blanket -Werror
+    substituteInPlace make_in/Makefile.in --replace '-Werror' ""
   '';
 
   installPhase = ''
@@ -26,9 +29,9 @@ stdenv.mkDerivation rec {
     cp -dpR modules/lua-core/src        $out/share/udf/lua
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Flash-optimized, in-memory, NoSQL database";
-    homepage = http://aerospike.com/;
+    homepage = "https://aerospike.com/";
     license = licenses.agpl3;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kalbasit ];

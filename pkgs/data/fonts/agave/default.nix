@@ -1,26 +1,34 @@
-{ stdenv, fetchurl }:
+{ lib, fetchurl, stdenv }:
 
-stdenv.mkDerivation rec {
+let
   pname = "agave";
-  version = "009";
+  version = "37";
 
-  src = fetchurl {
-    url = "https://github.com/agarick/agave/releases/download/v${version}/agave-r.ttf";
-    sha256 = "05766gp2glm1p2vknk1nncxigq28hg8s58kjwsbn8zpwy8ivywpk";
+  mkAg = name: hash: fetchurl {
+    url = "https://github.com/agarick/agave/releases/download/v${version}/Agave-${name}.ttf";
+    sha256 = hash;
+    name = "Agave-${name}.ttf";
   };
+  # There are slashed variants, but with same name so only bundle the default versions for now:
+  fonts = [
+    (mkAg "Regular" "sha256-vX1VhEgqy9rQ7hPmAgBGxKyIs2QSAYqZC/mL/2BIOrA=")
+    (mkAg "Bold" "sha256-Ax/l/RKyc03law0ThiLac/7HHV4+YxibKzcZnjZs6VI=")
+  ];
 
+in stdenv.mkDerivation {
+  inherit pname version;
+  srcs = fonts;
   sourceRoot = ".";
 
-  unpackPhase = ":";
-  dontBuild = true;
+  dontUnpack = true;
+
   installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp $src $out/share/fonts/truetype/
+    install -D $srcs -t $out/share/fonts/truetype/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "truetype monospaced typeface designed for X environments";
-    homepage = https://b.agaric.net/page/agave;
+    homepage = "https://b.agaric.net/page/agave";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
     platforms = platforms.all;

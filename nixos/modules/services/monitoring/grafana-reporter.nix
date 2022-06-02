@@ -1,4 +1,4 @@
-{ options, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -41,8 +41,9 @@ in {
 
     templateDir = mkOption {
       description = "Optional template directory to use custom tex templates";
-      default = "${pkgs.grafana_reporter}";
-      type = types.str;
+      default = pkgs.grafana_reporter;
+      defaultText = literalExpression "pkgs.grafana_reporter";
+      type = types.either types.str types.path;
     };
   };
 
@@ -52,14 +53,14 @@ in {
       wantedBy = ["multi-user.target"];
       after = ["network.target"];
       serviceConfig = let
-        args = lib.concatSepString " " [
+        args = lib.concatStringsSep " " [
           "-proto ${cfg.grafana.protocol}://"
           "-ip ${cfg.grafana.addr}:${toString cfg.grafana.port}"
           "-port :${toString cfg.port}"
           "-templates ${cfg.templateDir}"
         ];
       in {
-        ExecStart = "${pkgs.grafana_reporter.bin}/bin/grafana-reporter ${args}";
+        ExecStart = "${pkgs.grafana_reporter}/bin/grafana-reporter ${args}";
       };
     };
   };

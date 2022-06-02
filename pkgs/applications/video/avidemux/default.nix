@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, cmake, pkgconfig
+{ stdenv, lib, fetchurl, cmake, pkg-config
 , zlib, gettext, libvdpau, libva, libXv, sqlite
 , yasm, freetype, fontconfig, fribidi
-, makeWrapper, libXext, libGLU, qttools, qtbase
-, alsaLib
+, makeWrapper, libXext, libGLU, qttools, qtbase, wrapQtAppsHook
+, alsa-lib
 , withX265 ? true, x265
 , withX264 ? true, x264
 , withXvid ? true, xvidcore
@@ -24,12 +24,12 @@ assert default != "qt5" -> default == "cli";
 assert !withQT -> default != "qt5";
 
 stdenv.mkDerivation rec {
-  name = "avidemux-${version}";
-  version = "2.7.2";
+  pname = "avidemux";
+  version = "2.8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "07fdz3y4iln7cizikdjj96dqvp2f8zzhs31ncxxwzdkngn5v8138";
+    sha256 = "sha256-0exvUnflEijs8O4cqJ+uJMWR9SD4fOlvq+yIGNBN4zs=";
   };
 
   patches = [
@@ -37,10 +37,12 @@ stdenv.mkDerivation rec {
     ./bootstrap_logging.patch
   ];
 
-  nativeBuildInputs = [ yasm cmake pkgconfig ];
+  nativeBuildInputs =
+    [ yasm cmake pkg-config ]
+    ++ lib.optional withQT wrapQtAppsHook;
   buildInputs = [
     zlib gettext libvdpau libva libXv sqlite fribidi fontconfig
-    freetype alsaLib libXext libGLU makeWrapper
+    freetype alsa-lib libXext libGLU makeWrapper
   ] ++ lib.optional withX264 x264
     ++ lib.optional withX265 x265
     ++ lib.optional withXvid xvidcore
@@ -54,14 +56,17 @@ stdenv.mkDerivation rec {
     ++ lib.optional withVPX libvpx;
 
   buildCommand = let
-    qtVersion = "5.${stdenv.lib.versions.minor qtbase.version}";
-    wrapProgram = f: "wrapProgram ${f} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+    qtVersion = "5.${lib.versions.minor qtbase.version}";
+    wrapWith = makeWrapper: filename:
+      "${makeWrapper} ${filename} --set ADM_ROOT_DIR $out --prefix LD_LIBRARY_PATH : ${libXext}/lib";
+    wrapQtApp = wrapWith "wrapQtApp";
+    wrapProgram = wrapWith "wrapProgram";
   in ''
     unpackPhase
     cd "$sourceRoot"
     patchPhase
 
-    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${libXext}/lib"
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${libXext}/lib"
     ${stdenv.shell} bootStrap.bash \
       --with-core \
       ${if withQT then "--with-qt" else "--without-qt"} \
@@ -73,9 +78,9 @@ stdenv.mkDerivation rec {
 
     ${wrapProgram "$out/bin/avidemux3_cli"}
 
-    ${stdenv.lib.optionalString withQT ''
-      ${wrapProgram "$out/bin/avidemux3_qt5"} --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtVersion}/plugins
-      ${wrapProgram "$out/bin/avidemux3_jobs_qt5"} --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-${qtVersion}/plugins
+    ${lib.optionalString withQT ''
+      ${wrapQtApp "$out/bin/avidemux3_qt5"}
+      ${wrapQtApp "$out/bin/avidemux3_jobs_qt5"}
     ''}
 
     ln -s "$out/bin/avidemux3_${default}" "$out/bin/avidemux"
@@ -83,10 +88,10 @@ stdenv.mkDerivation rec {
     fixupPhase
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://fixounet.free.fr/avidemux/;
+  meta = with lib; {
+    homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
-    maintainers = with maintainers; [ abbradar ma27 ];
+    maintainers = with maintainers; [ abbradar ];
     # "CPU not supported" errors on AArch64
     platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.gpl2;

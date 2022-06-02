@@ -1,24 +1,27 @@
-{ stdenv, fetchurl, buildDunePackage, ppx_sexp_conv, ounit
-, re, sexplib, stringext
+{ lib, fetchurl, buildDunePackage, ounit
+, angstrom, stringext
 }:
 
 buildDunePackage rec {
+  minimumOCamlVersion = "4.03";
   pname = "uri";
-  version = "1.9.6";
+  version = "4.2.0";
+
+  useDune2 = true;
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "1m845rwd70wi4iijkrigyz939m1x84ba70hvv0d9sgk6971w4kz0";
+    url = "https://github.com/mirage/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    sha256 = "0szifda6yism5vn5jdizkha3ad0xk6zw4xgfl8g77dnv83ci7h65";
   };
 
-  buildInputs = [ ounit ];
-  propagatedBuildInputs = [ ppx_sexp_conv re sexplib stringext ];
+  checkInputs = [ ounit ];
+  propagatedBuildInputs = [ angstrom stringext ];
   doCheck = true;
 
   meta = {
     homepage = "https://github.com/mirage/ocaml-uri";
     description = "RFC3986 URI parsing library for OCaml";
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

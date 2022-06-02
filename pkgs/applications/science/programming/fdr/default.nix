@@ -1,23 +1,24 @@
-{stdenv, fetchurl, qtbase, qtx11extras, ncurses, xorg, zlib, python27Packages}:
+{ lib, stdenv, fetchurl, qtbase, qtx11extras, ncurses5, xorg, zlib, python27Packages }:
 stdenv.mkDerivation {
-  name = "fdr-4.2.3";
+  pname = "fdr";
+  version = "4.2.7";
   src = fetchurl {
-    url = https://www.cs.ox.ac.uk/projects/fdr/downloads/fdr-3789-linux-x86_64.tar.gz;
-    sha256 = "0n2yqichym5xdawlgk3r7yha88k7ycnx6585jfrcm7043sls1i88";
+    url = "https://dl.cocotec.io/fdr/fdr-3814-linux-x86_64.tar.gz";
+    sha256 = "0cajz1gz4slq9nfhm8dqdgxl0kc950838n0lrf8jw4vl54gv6chh";
   };
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     stdenv.cc.cc
     python27Packages.python
     qtbase
     qtx11extras
-    ncurses
+    ncurses5
     xorg.libX11
     xorg.libXft
     zlib
   ];
 
-  phases = [ "unpackPhase" "installPhase" ];
+  dontConfigure = true;
   installPhase = ''
     mkdir -p "$out"
 
@@ -26,8 +27,7 @@ stdenv.mkDerivation {
     rm -r lib/qt_plugins
 
     cp -r * "$out"
-    # Hack around lack of libtinfo in NixOS
-    ln -s ${ncurses.out}/lib/libncursesw.so.6 $out/lib/libtinfo.so.5
+    ln -s ${ncurses5.out}/lib/libtinfo.so.5 $out/lib/libtinfo.so.5
     ln -s ${qtbase.bin}/${qtbase.qtPluginPrefix} $out/lib/qt_plugins
     ln -s ${zlib.out}/lib/libz.so.1 $out/lib/libz.so.1
 
@@ -59,8 +59,8 @@ stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.cs.ox.ac.uk/projects/fdr/;
+  meta = with lib; {
+    homepage = "https://cocotec.io/fdr/";
     description = "The CSP refinement checker";
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;

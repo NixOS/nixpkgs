@@ -1,49 +1,67 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
-, pbr, six, simplegeneric, netaddr, pytz, webob
-, cornice, nose, webtest, pecan, transaction, cherrypy, sphinx
-, flask, flask-restful, suds-jurko, glibcLocales }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonAtLeast
+, pbr
+, six
+, simplegeneric
+, netaddr
+, pytz
+, webob
+# Test inputs
+, cherrypy
+, flask
+, flask-restful
+, glibcLocales
+, nose
+, pecan
+, sphinx
+, transaction
+, webtest
+}:
 
 buildPythonPackage rec {
   pname = "WSME";
-  version = "0.9.3";
+  version = "0.11.0";
+
+  disabled = pythonAtLeast "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e24fcff24392a0b176e560ffc6591b1f658342bbc992f84e0e8a3c53fd92580a";
+    sha256 = "bd2dfc715bedcc8f4649611bc0c8a238f483dc01cff7102bc1efa6bea207b64b";
   };
-
-  postPatch = ''
-    # remove turbogears tests as we don't have it packaged
-    rm tests/test_tg*
-    # WSME seems incompatible with recent SQLAlchemy version
-    rm wsmeext/tests/test_sqlalchemy*
-    # https://bugs.launchpad.net/wsme/+bug/1510823
-    ${if isPy3k then "rm tests/test_cornice.py" else ""}
-  '';
-
-  checkPhae = ''
-    nosetests --exclude test_buildhtml \
-              --exlcude test_custom_clientside_error \
-              --exclude test_custom_non_http_clientside_error
-  '';
-
-  # UnicodeEncodeError, ImportError, ...
-  doCheck = !isPy3k;
 
   nativeBuildInputs = [ pbr ];
 
   propagatedBuildInputs = [
-    six simplegeneric netaddr pytz webob
+    netaddr
+    pytz
+    simplegeneric
+    six
+    webob
   ];
 
   checkInputs = [
-    cornice nose webtest pecan transaction cherrypy sphinx
-    flask flask-restful suds-jurko glibcLocales
+    nose
+    cherrypy
+    flask
+    flask-restful
+    glibcLocales
+    pecan
+    sphinx
+    transaction
+    webtest
   ];
+
+  # from tox.ini, tests don't work with pytest
+  checkPhase = ''
+    nosetests wsme/tests tests/pecantest tests/test_sphinxext.py tests/test_flask.py --verbose
+  '';
 
   meta = with lib; {
     description = "Simplify the writing of REST APIs, and extend them with additional protocols";
-    homepage = http://git.openstack.org/cgit/openstack/wsme;
+    homepage = "https://pythonhosted.org/WSME/";
+    changelog = "https://pythonhosted.org/WSME/changes.html";
     license = licenses.mit;
   };
 }

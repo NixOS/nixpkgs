@@ -30,7 +30,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.boinc;
-        defaultText = "pkgs.boinc";
+        defaultText = literalExpression "pkgs.boinc";
         description = ''
           Which BOINC package to use.
         '';
@@ -60,7 +60,7 @@ in
       extraEnvPackages = mkOption {
         type = types.listOf types.package;
         default = [];
-        example = "[ pkgs.virtualbox ]";
+        example = literalExpression "[ pkgs.virtualbox ]";
         description = ''
           Additional packages to make available in the environment in which
           BOINC will run. Common choices are:
@@ -99,25 +99,26 @@ in
       environment.systemPackages = [cfg.package];
 
       users.users.boinc = {
+        group = "boinc";
         createHome = false;
         description = "BOINC Client";
         home = cfg.dataDir;
         isSystemUser = true;
       };
+      users.groups.boinc = {};
+
+      systemd.tmpfiles.rules = [
+        "d '${cfg.dataDir}' - boinc boinc - -"
+      ];
 
       systemd.services.boinc = {
         description = "BOINC Client";
-        after = ["network.target" "local-fs.target"];
+        after = ["network.target"];
         wantedBy = ["multi-user.target"];
-        preStart = ''
-          mkdir -p ${cfg.dataDir}
-          chown boinc ${cfg.dataDir}
-        '';
         script = ''
-          ${fhsEnvExecutable} --dir ${cfg.dataDir} --redirectio ${allowRemoteGuiRpcFlag}
+          ${fhsEnvExecutable} --dir ${cfg.dataDir} ${allowRemoteGuiRpcFlag}
         '';
         serviceConfig = {
-          PermissionsStartOnly = true; # preStart must be run as root
           User = "boinc";
           Nice = 10;
         };

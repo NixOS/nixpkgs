@@ -1,25 +1,32 @@
-{ stdenv, lib, fetchFromGitHub, alex, happy, Agda, agdaIowaStdlib,
-  buildPlatform, buildPackages, ghcWithPackages, fetchpatch }:
-let
-  options-patch =
-    fetchpatch {
-      url = https://github.com/cedille/cedille/commit/ee62b0fabde6c4f7299a3778868519255cc4a64f.patch;
-      name = "options.patch";
-      sha256 = "19xzn9sqpfnfqikqy1x9lb9mb6722kbgvrapl6cf8ckcw8cfj8cz";
-      };
-in
+{ stdenv
+, lib
+, fetchFromGitHub
+, alex
+, happy
+, Agda
+, buildPlatform
+, buildPackages
+, ghcWithPackages
+}:
+
 stdenv.mkDerivation rec {
-  version = "1.0.0";
-  name = "cedille-${version}";
+  version = "1.1.2";
+  pname = "cedille";
+
   src = fetchFromGitHub {
     owner = "cedille";
     repo = "cedille";
     rev = "v${version}";
-    sha256 = "08c2vgg8i6l3ws7hd5gsj89mki36lxm7x7s8hi1qa5gllq04a832";
+    sha256 = "1j745q9sd32fhcb96wjq6xvyqq1k6imppjnya6x0n99fyfnqzvg9";
+    fetchSubmodules = true;
   };
-  buildInputs = [ alex happy Agda (ghcWithPackages (ps: [ps.ieee])) ];
 
-  patches = [options-patch];
+  patches = [
+    ./Fix-to-string.agda-to-compile-with-Agda-2.6.1.patch
+  ];
+
+  nativeBuildInputs = [ alex happy ];
+  buildInputs = [ Agda (ghcWithPackages (ps: [ps.ieee])) ];
 
   LANG = "en_US.UTF-8";
   LOCALE_ARCHIVE =
@@ -28,23 +35,27 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs create-libraries.sh
-    cp -r ${agdaIowaStdlib.src} ial
-    chmod -R 755 ial
   '';
-
-  outputs = ["out" "lib"];
 
   installPhase = ''
-    mkdir -p $out/bin
-    mv cedille $out/bin/cedille
-    mv lib $lib
+    install -Dm755 -t $out/bin/ cedille
+    install -Dm755 -t $out/bin/ core/cedille-core
+    install -Dm644 -t $out/share/info docs/info/cedille-info-main.info
+
+    mkdir -p $out/lib/
+    cp -r lib/ $out/lib/cedille/
   '';
 
-  meta = {
-    description = "An interactive theorem-prover and dependently typed programming language, based on extrinsic (aka Curry-style) type theory.";
-    homepage = https://cedille.github.io/;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.mpickering ];
-    platforms = stdenv.lib.platforms.unix;
+  meta = with lib; {
+    description = "An interactive theorem-prover and dependently typed programming language, based on extrinsic (aka Curry-style) type theory";
+    homepage = "https://cedille.github.io/";
+    license = licenses.mit;
+    maintainers = with maintainers; [ marsam mpickering ];
+    platforms = platforms.unix;
+
+    # Broken due to Agda update.  See
+    # https://github.com/NixOS/nixpkgs/pull/129606#issuecomment-881107449.
+    broken = true;
+    hydraPlatforms = platforms.none;
   };
 }

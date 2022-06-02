@@ -1,52 +1,58 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ragel, python27
+{ lib, stdenv, fetchFromGitHub, cmake, ragel, python3
+, util-linux, fetchpatch
 , boost
+, withStatic ? false # build only shared libs by default, build static+shared if true
 }:
 
-# NOTICE: pkgconfig, pcap and pcre intentionally omitted from build inputs
-#         pcap used only in examples, pkgconfig used only to check for pcre
+# NOTICE: pkg-config, pcap and pcre intentionally omitted from build inputs
+#         pcap used only in examples, pkg-config used only to check for pcre
 #         which is fixed 8.41 version requirement (nixpkgs have 8.42+, and
 #         I not see any reason (for now) to backport 8.41.
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "hyperscan";
-  version = "5.1.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "intel";
-    repo = "hyperscan";
-    sha256 = "0r2c7s7alnq14yhbfhpkq6m28a3pyfqd427115k0754afxi82vbq";
+    repo = pname;
+    sha256 = "sha256-AJAjaXVnGqIlMk+gb6lpTLUdZr8nxn2XSW4fj6j/cmk=";
     rev = "v${version}";
   };
 
   outputs = [ "out" "dev" ];
 
   buildInputs = [ boost ];
-  nativeBuildInputs = [ cmake ragel python27 ];
+  nativeBuildInputs = [
+    cmake ragel python3
+    # Consider simply using busybox for these
+    # Need at least: rev, sed, cut, nm
+    util-linux
+  ];
 
   cmakeFlags = [
     "-DFAT_RUNTIME=ON"
     "-DBUILD_AVX512=ON"
-    "-DBUILD_STATIC_AND_SHARED=ON"
+  ]
+  ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
+  ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
+
+  patches = [
+    (fetchpatch {
+      # part of https://github.com/intel/hyperscan/pull/336
+      url = "https://github.com/intel/hyperscan/commit/e2c4010b1fc1272cab816ba543940b3586e68a0c.patch";
+      sha256 = "sha256-doVNwROL6MTcgOW8jBwGTnxe0zvxjawiob/g6AvXLak=";
+    })
   ];
 
-  prePatch = ''
+  postPatch = ''
     sed -i '/examples/d' CMakeLists.txt
+    substituteInPlace libhs.pc.in \
+      --replace "libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" "libdir=@CMAKE_INSTALL_LIBDIR@" \
+      --replace "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
   '';
 
-  postInstall = ''
-    mkdir -p $dev/lib
-    mv $out/lib/*.a $dev/lib/
-    ln -sf $out/lib/libhs.so $dev/lib/
-    ln -sf $out/lib/libhs_runtime.so $dev/lib/
-  '';
-
-  postFixup = ''
-    sed -i "s,$out/include,$dev/include," $dev/lib/pkgconfig/libhs.pc
-    sed -i "s,$out/lib,$dev/lib," $dev/lib/pkgconfig/libhs.pc
-  '';
-
-  meta = {
+  meta = with lib; {
     description = "High-performance multiple regex matching library";
     longDescription = ''
       Hyperscan is a high-performance multiple regex matching library.
@@ -55,15 +61,15 @@ stdenv.mkDerivation rec {
 
       Hyperscan uses hybrid automata techniques to allow simultaneous
       matching of large numbers (up to tens of thousands) of regular
-      expressions and for the matching of regular expressions across 
+      expressions and for the matching of regular expressions across
       streams of data.
 
       Hyperscan is typically used in a DPI library stack.
     '';
 
-    homepage = https://www.hyperscan.io/;
-    maintainers = with lib.maintainers; [ avnik ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    license = lib.licenses.bsd3;
+    homepage = "https://www.hyperscan.io/";
+    maintainers = with maintainers; [ avnik ];
+    platforms = [ "x86_64-linux" ]; # can't find nm on darwin ; might build on aarch64 but untested
+    license = licenses.bsd3;
   };
 }

@@ -3,7 +3,7 @@
 , buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "interlock-${version}";
+  pname = "interlock";
   version = "2016.04.13";
   rev = "v${version}";
 
@@ -21,7 +21,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   nativeBuildInputs = [ sudo ];
-  buildFlags = [ "-tags textsecure" ];
+  tags = [ "textsecure" ];
   postPatch = ''
     grep -lr '/s\?bin/' | xargs sed -i \
       -e 's|/bin/mount|${mount}/bin/mount|' \

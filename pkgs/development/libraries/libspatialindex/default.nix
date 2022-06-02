@@ -1,9 +1,8 @@
-{ stdenv, fetchurl }:
-
-let version = "1.8.5"; in
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libspatialindex-${version}";
+  pname = "libspatialindex";
+  version = "1.8.5";
 
   src = fetchurl {
     url = "https://download.osgeo.org/libspatialindex/spatialindex-src-${version}.tar.gz";
@@ -14,8 +13,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Extensible spatial index library in C++";
-    homepage = http://libspatialindex.github.io/;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://libspatialindex.github.io/";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

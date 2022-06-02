@@ -8,6 +8,8 @@ buildPythonPackage rec {
     sha256 = "1mzc29wwyhyardclj1vg2xsfdibg2lzb7f1azjcxi580ama55wv2";
   };
 
+  propagatedNativeBuildInputs = [ cffi ];
+
   propagatedBuildInputs = [ cffi ];
 
   # The tests require write access to $out
@@ -15,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A CFFI binding for Hoedown, a markdown parsing library";
-    homepage = "http://misaka.61924.nl/";
+    homepage = "https://misaka.61924.nl";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz ];
   };

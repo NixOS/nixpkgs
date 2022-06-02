@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "ridiculously fast object serialization";
-    homepage = https://github.com/clarkduvall/serpy;
+    homepage = "https://github.com/clarkduvall/serpy";
     license = lib.licenses.mit;
   };
 

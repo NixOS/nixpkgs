@@ -1,25 +1,21 @@
-{ lib, python3Packages, stdenv, writeTextDir, substituteAll, targetPackages }:
+{ lib
+, fetchpatch
+, installShellFiles
+, ninja
+, pkg-config
+, python3
+, substituteAll
+, withDarwinFrameworksGtkDocPatch ? false
+}:
 
-python3Packages.buildPythonApplication rec {
-  version = "0.49.1";
+python3.pkgs.buildPythonApplication rec {
   pname = "meson";
+  version = "0.61.2";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "05wr4kn88aqq2cbzqx59zj56410c9d42wracb4cjs70mvq0lp50s";
+    hash = "sha256-AjOn+NlZB5MY9gUrCTnCf2il3oa6YB8lye5oaftfWIk=";
   };
-
-  postFixup = ''
-    pushd $out/bin
-    # undo shell wrapper as meson tools are called with python
-    for i in *; do
-      mv ".$i-wrapped" "$i"
-    done
-    popd
-
-    # Do not propagate Python
-    rm $out/nix-support/propagated-build-inputs
-  '';
 
   patches = [
     # Upstream insists on not allowing bindir and other dir options
@@ -27,6 +23,11 @@ python3Packages.buildPythonApplication rec {
     # https://github.com/mesonbuild/meson/issues/2561
     # We remove the check so multiple outputs can work sanely.
     ./allow-dirs-outside-of-prefix.patch
+
+    # Meson is currently inspecting fewer variables than autoconf does, which
+    # makes it harder for us to use setup hooks, etc.  Taken from
+    # https://github.com/mesonbuild/meson/pull/6827
+    ./more-env-vars.patch
 
     # Unlike libtool, vanilla Meson does not pass any information
     # about the path library will be installed to to g-ir-scanner,
@@ -44,49 +45,77 @@ python3Packages.buildPythonApplication rec {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
     })
-  ] ++ lib.optionals stdenv.isDarwin [
-    # We use custom Clang, which makes Meson think *not Apple*, while still
-    # relying on system linker. When it detects standard Clang, Meson will
-    # pass it `-Wl,-O1` flag but optimizations are not recognized by
-    # Mac linker.
-    # https://github.com/mesonbuild/meson/issues/4784
-    ./fix-objc-linking.patch
+
+    # When Meson removes build_rpath from DT_RUNPATH entry, it just writes
+    # the shorter NUL-terminated new rpath over the old one to reduce
+    # the risk of potentially breaking the ELF files.
+    # But this can cause much bigger problem for Nix as it can produce
+    # cut-in-half-by-\0 store path references.
+    # Let’s just clear the whole rpath and hope for the best.
+    ./clear-old-rpath.patch
+
+    # Patch out default boost search paths to avoid impure builds on
+    # unsandboxed non-NixOS builds, see:
+    # https://github.com/NixOS/nixpkgs/issues/86131#issuecomment-711051774
+    ./boost-Do-not-add-system-paths-on-nix.patch
+
+    # https://github.com/mesonbuild/meson/pull/9841
+    # cross-compilation fix
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/266e8acb5807b38a550cb5145cea0e19545a21d7.patch";
+      sha256 = "sha256-1GdKsm2xvq2GxTNeTyBH5O73hxboL0YI+w2BCoUeWXM=";
+    })
+  ] ++ lib.optionals withDarwinFrameworksGtkDocPatch [
+    # Fix building gtkdoc for GLib
+    # https://github.com/mesonbuild/meson/pull/10186
+    ./fix-gtkdoc-when-using-multiple-apple-frameworks.patch
   ];
 
   setupHook = ./setup-hook.sh;
 
-  crossFile = writeTextDir "cross-file.conf" ''
-    [binaries]
-    c = '${targetPackages.stdenv.cc.targetPrefix}cc'
-    cpp = '${targetPackages.stdenv.cc.targetPrefix}c++'
-    ar = '${targetPackages.stdenv.cc.bintools.targetPrefix}ar'
-    strip = '${targetPackages.stdenv.cc.bintools.targetPrefix}strip'
-    pkgconfig = 'pkg-config'
-
-    [properties]
-    needs_exe_wrapper = true
-
-    [host_machine]
-    system = '${targetPackages.stdenv.targetPlatform.parsed.kernel.name}'
-    cpu_family = '${targetPackages.stdenv.targetPlatform.parsed.cpu.family}'
-    cpu = '${targetPackages.stdenv.targetPlatform.parsed.cpu.name}'
-    endian = ${if targetPackages.stdenv.targetPlatform.isLittleEndian then "'little'" else "'big'"}
+  # Meson included tests since 0.45, however they fail in Nixpkgs because they
+  # require a typical building environment (including C compiler and stuff).
+  # Just for the sake of documentation, the next lines are maintained here.
+  doCheck = false;
+  checkInputs = [ ninja pkg-config ];
+  checkPhase = ''
+    python ./run_project_tests.py
   '';
 
-  # 0.45 update enabled tests but they are failing
-  doCheck = false;
-  # checkInputs = [ ninja pkgconfig ];
-  # checkPhase = "python ./run_project_tests.py";
+  postFixup = ''
+    pushd $out/bin
+    # undo shell wrapper as meson tools are called with python
+    for i in *; do
+      mv ".$i-wrapped" "$i"
+    done
+    popd
 
-  inherit (stdenv) cc;
+    # Do not propagate Python
+    rm $out/nix-support/propagated-build-inputs
+  '';
 
-  isCross = stdenv.targetPlatform != stdenv.hostPlatform;
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --zsh data/shell-completions/zsh/_meson
+    installShellCompletion --bash data/shell-completions/bash/meson
+  '';
 
   meta = with lib; {
-    homepage = http://mesonbuild.com;
-    description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
+    homepage = "https://mesonbuild.com";
+    description = "An open source, fast and friendly build system made in Python";
+    longDescription = ''
+      Meson is an open source build system meant to be both extremely fast, and,
+      even more importantly, as user friendly as possible.
+
+      The main design point of Meson is that every moment a developer spends
+      writing or debugging build definitions is a second wasted. So is every
+      second spent waiting for the build system to actually start compiling
+      code.
+    '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ mbe rasendubi ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ mbe AndersonTorres ];
+    inherit (python3.meta) platforms;
   };
 }
+# TODO: a more Nixpkgs-tailoired test suite

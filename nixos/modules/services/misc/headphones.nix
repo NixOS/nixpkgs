@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -7,6 +7,7 @@ let
   name = "headphones";
 
   cfg = config.services.headphones;
+  opt = options.services.headphones;
 
 in
 
@@ -29,6 +30,7 @@ in
       configFile = mkOption {
         type = types.path;
         default = "${cfg.dataDir}/config.ini";
+        defaultText = literalExpression ''"''${config.${opt.dataDir}}/config.ini"'';
         description = "Path to config file.";
       };
       host = mkOption {
@@ -59,19 +61,19 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = optionalAttrs (cfg.user == name) (singleton {
-      name = name;
-      uid = config.ids.uids.headphones;
-      group = cfg.group;
-      description = "headphones user";
-      home = cfg.dataDir;
-      createHome = true;
-    });
+    users.users = optionalAttrs (cfg.user == name) {
+      ${name} = {
+        uid = config.ids.uids.headphones;
+        group = cfg.group;
+        description = "headphones user";
+        home = cfg.dataDir;
+        createHome = true;
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == name) (singleton {
-      name = name;
-      gid = config.ids.gids.headphones;
-    });
+    users.groups = optionalAttrs (cfg.group == name) {
+      ${name}.gid = config.ids.gids.headphones;
+    };
 
     systemd.services.headphones = {
         description = "Headphones Server";

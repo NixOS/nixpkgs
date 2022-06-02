@@ -1,83 +1,75 @@
-{ stdenv, requireFile
-, libX11, libXext, libXau, libxcb, libXdmcp , SDL, SDL_mixer, libvorbis, libGLU_combined
-, runtimeShell
-, demo ? false }:
+{ lib, stdenv, requireFile, unzip, makeDesktopItem, SDL2, SDL2_mixer, libogg, libvorbis }:
 
-# TODO: add i686 support
+let
+  arch = if stdenv.system == "x86_64-linux"
+    then "x86_64"
+    else "x86";
+
+  desktopItem = makeDesktopItem {
+    desktopName = "World of Goo";
+    genericName = "World of Goo";
+    categories = [ "Game" ];
+    exec = "WorldOfGoo.bin.${arch}";
+    icon = "2dboy-worldofgoo";
+    name = "worldofgoo";
+  };
+
+in
 
 stdenv.mkDerivation rec {
-  name = if demo
-    then "WorldOfGooDemo-1.41"
-    else "WorldofGoo-1.41";
+  pname = "WorldOfGoo";
+  version = "1.53";
 
-  arch = if stdenv.hostPlatform.system == "x86_64-linux" then "supported"
-    else throw "Sorry. World of Goo only is only supported on x86_64 now.";
-
-  goBuyItNow = ''
+  helpMsg = ''
     We cannot download the full version automatically, as you require a license.
-    Once you bought a license, you need to add your downloaded version to the nix store.
-    You can do this by using "nix-prefetch-url file://\$PWD/WorldOfGooSetup.1.41.tar.gz" in the
-    directory where you saved it.
-
-    Or you can install the demo version: 'nix-env -i -A pkgs.worldofgoo_demo'.
+    Once you have bought a license, you need to add your downloaded version to the nix store.
+    You can do this by using "nix-prefetch-url file://\$PWD/${pname}.Linux${version}.sh"
+    in the directory where you saved it.
   '';
 
-  getTheDemo = ''
-    We cannot download the demo version automatically. Please go to
-    http://worldofgoo.com/dl2.php?lk=demo, then add it to your nix store.
-    You can do this by using "nix-prefetch-url file://\$PWD/WorldOfGooDemo.1.41.tar.gz" in the
-    directory where you saved it.
+  src = requireFile {
+    message = helpMsg;
+    name = "WorldOfGoo.Linux.1.53.sh";
+    sha256 = "175e4b0499a765f1564942da4bd65029f8aae1de8231749c56bec672187d53ee";
+  };
+
+  nativeBuildInputs = [ unzip ];
+  sourceRoot = pname;
+  phases = [ "unpackPhase installPhase" ];
+
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc.lib stdenv.cc.libc SDL2 SDL2_mixer
+    libogg libvorbis ];
+
+  unpackPhase = ''
+    # The game is distributed as a shell script, with a tar of mojosetup, and a
+    # zip archive attached to the end. Therefore a simple unzip does the job.
+    # However, to avoid unzip errors, we need to strip those out first.
+    tail -c +421887 ${src} > ${src}.zip
+    unzip -q ${src}.zip -d ${pname}
   '';
-
-  src = if demo
-    then
-      requireFile {
-         message = getTheDemo;
-         name = "WorldOfGooDemo.1.41.tar.gz";
-         sha256 = "0ndcix1ckvcj47sgndncr3hxjcg402cbd8r16rhq4cc43ibbaxri";
-       }
-    else
-      requireFile {
-        message = goBuyItNow;
-        name = "WorldOfGooSetup.1.41.tar.gz";
-        sha256 = "0rj5asx4a2x41ncwdby26762my1lk1gaqar2rl8dijfnpq8qlnk7";
-      };
-
-  phases = "unpackPhase installPhase";
-
-  # XXX: stdenv.lib.makeLibraryPath doesn't pick up /lib64
-  libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc ]
-    + ":" + stdenv.lib.makeLibraryPath [libX11 libXext libXau libxcb libXdmcp SDL SDL_mixer libvorbis libGLU_combined ]
-    + ":" + stdenv.cc.cc + "/lib64";
 
   installPhase = ''
-    mkdir -p $out/libexec/2dboy/WorldOfGoo/
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/256x256/apps
 
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath $libPath ./WorldOfGoo.bin64
+    install -t $out/bin -m755 data/${arch}/WorldOfGoo.bin.${arch}
+    cp -R data/noarch/* $out/bin
+    cp data/noarch/game/gooicon.png $out/share/icons/hicolor/256x256/apps/2dboy-worldofgoo.png
+    cp ${desktopItem}/share/applications/worldofgoo.desktop \
+      $out/share/applications/worldofgoo.desktop
 
-    cp -r * $out/libexec/2dboy/WorldOfGoo/
-
-    #makeWrapper doesn't do cd. :(
-
-    cat > $out/bin/WorldofGoo << EOF
-    #!${runtimeShell}
-    cd $out/libexec/2dboy/WorldOfGoo
-    exec ./WorldOfGoo.bin64
-    EOF
-    chmod +x $out/bin/WorldofGoo
+    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath $libPath $out/bin/WorldOfGoo.bin.${arch}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A physics based puzzle game";
     longDescription = ''
       World of Goo is a physics based puzzle / construction game. The millions of Goo
       Balls who live in the beautiful World of Goo don't know that they are in a
       game, or that they are extremely delicious.
     '';
-    homepage = http://worldofgoo.com;
+    homepage = "https://worldofgoo.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jcumming ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with maintainers; [ jcumming maxeaubrey ];
   };
-
 }

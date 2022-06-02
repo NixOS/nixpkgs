@@ -1,28 +1,54 @@
-{ stdenv, buildPythonPackage, python, fetchFromGitHub, six, pycryptodome, chardet, nose, pytest, sortedcontainers }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, cryptography
+, charset-normalizer
+, pytestCheckHook
+, ocrmypdf
+}:
 
 buildPythonPackage rec {
   pname = "pdfminer_six";
-  version = "20181108";
+  version = "20220506";
+
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
-    rev = "${version}";
-    sha256 = "1v8pcx43fgidv1g54s92k85anvcss08blkhm4yi1hn1ybl0mmw6c";
+    rev = version;
+    sha256 = "sha256-Lq+ou7+Lmr1H69L8X/vuky+/tXDD3bBBaCysymeRuXA=";
   };
 
-  propagatedBuildInputs = [ six pycryptodome chardet sortedcontainers ];
+  propagatedBuildInputs = [ charset-normalizer cryptography ];
 
-  checkInputs = [ nose pytest ];
-  checkPhase = ''
-    ${python.interpreter} -m pytest
+  postInstall = ''
+    for file in $out/bin/*.py; do
+      ln $file ''${file//.py/}
+    done
   '';
 
-  meta = with stdenv.lib; {
-    description = "fork of PDFMiner using six for Python 2+3 compatibility";
-    homepage = https://github.com/pdfminer/pdfminer.six;
+  postPatch = ''
+    # Verion is not stored in repo, gets added by a GitHub action after tag is created
+    # https://github.com/pdfminer/pdfminer.six/pull/727
+    substituteInPlace pdfminer/__init__.py --replace "__VERSION__" ${version}
+  '';
+
+  pythonImportsCheck = [ "pdfminer" ];
+
+  checkInputs = [ pytestCheckHook ];
+
+  passthru = {
+    tests = {
+      inherit ocrmypdf;
+    };
+  };
+
+  meta = with lib; {
+    description = "PDF parser and analyzer";
+    homepage = "https://github.com/pdfminer/pdfminer.six";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [ psyanticy marsam ];
   };
 }
-

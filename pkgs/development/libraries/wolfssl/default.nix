@@ -1,21 +1,50 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, openssl
+}:
 
 stdenv.mkDerivation rec {
-  name = "wolfssl-${version}";
-  version = "3.15.7";
+  pname = "wolfssl";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "wolfSSL";
     repo = "wolfssl";
     rev = "v${version}-stable";
-    sha256 = "128z1f7nry278kdjzq950cr81bml8p17fgdchmpvy0awhh7r20y9";
+    sha256 = "sha256-KteArWAgDohlqEYaNfzLPuBn6uy5ABA8vV/LRCVIPGA=";
   };
 
-  configureFlags = [ "--enable-all" ];
+  postPatch = ''
+    patchShebangs ./scripts
+    # ocsp tests require network access
+    sed -i -e '/ocsp\.test/d' -e '/ocsp-stapling\.test/d' scripts/include.am
+  '';
 
-  outputs = [ "out" "dev" "doc" "lib" ];
+  # Almost same as Debian but for now using --enable-all --enable-reproducible-build instead of --enable-distro to ensure options.h gets installed
+  configureFlags = [
+    "--enable-all"
+    "--enable-base64encode"
+    "--enable-pkcs11"
+    "--enable-writedup"
+    "--enable-reproducible-build"
+    "--enable-tls13"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  outputs = [
+    "dev"
+    "doc"
+    "lib"
+    "out"
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
+
+  doCheck = true;
+  checkInputs = [ openssl ];
 
   postInstall = ''
      # fix recursive cycle:
@@ -25,11 +54,11 @@ stdenv.mkDerivation rec {
      mkdir -p "$out"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A small, fast, portable implementation of TLS/SSL for embedded devices";
-    homepage    = "https://www.wolfssl.com/";
-    platforms   = platforms.all;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with maintainers; [ mcmtroffaes ];
+    homepage = "https://www.wolfssl.com/";
+    platforms = platforms.all;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ fab ];
   };
 }

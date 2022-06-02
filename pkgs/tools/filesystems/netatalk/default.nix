@@ -1,29 +1,36 @@
-{ fetchurl, stdenv, autoreconfHook, pkgconfig, perl, python
+{ fetchurl, lib, stdenv, autoreconfHook, pkg-config, perl, python3
 , db, libgcrypt, avahi, libiconv, pam, openssl, acl
-, ed, glibc
+, ed, libtirpc, libevent, fetchpatch
 }:
 
-stdenv.mkDerivation rec{
-  name = "netatalk-3.1.12";
+stdenv.mkDerivation rec {
+  pname = "netatalk";
+  version = "3.1.13";
 
   src = fetchurl {
-    url = "mirror://sourceforge/netatalk/netatalk/${name}.tar.bz2";
-    sha256 = "1ld5mnz88ixic21m6f0xcgf8v6qm08j6xabh1dzfj6x47lxghq0m";
+    url = "mirror://sourceforge/netatalk/netatalk/netatalk-${version}.tar.bz2";
+    sha256 = "0pg0slvvvq3l6f5yjz9ybijg4i6rs5a6c8wcynaasf8vzsyadbc9";
   };
 
   patches = [
     ./no-suid.patch
     ./omitLocalstatedirCreation.patch
+    (fetchpatch {
+      name = "make-afpstats-python3-compatible.patch";
+      url = "https://github.com/Netatalk/Netatalk/commit/916b515705cf7ba28dc53d13202811c6e1fe6a9e.patch";
+      sha256 = "sha256-DAABpYjQPJLsQBhmtP30gA357w0Qn+AsnFgAeyDC/Rg=";
+    })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig perl python python.pkgs.wrapPython ];
+  nativeBuildInputs = [ autoreconfHook pkg-config perl python3 python3.pkgs.wrapPython ];
 
-  buildInputs = [ db libgcrypt avahi libiconv pam openssl acl ];
+  buildInputs = [ db libgcrypt avahi libiconv pam openssl acl libevent ];
 
   configureFlags = [
     "--with-bdb=${db.dev}"
     "--with-ssl-dir=${openssl.dev}"
     "--with-lockfile=/run/lock/netatalk"
+    "--with-libevent=${libevent.dev}"
     "--localstatedir=/var/lib"
   ];
 
@@ -37,14 +44,14 @@ stdenv.mkDerivation rec{
     /^afpd_LDADD
     /am__append_2
     a
-      ${glibc.static}/lib/librpcsvc.a \\
+      ${libtirpc}/lib/libtirpc.so \\
     .
     w
     EOF
   '';
 
   postInstall = ''
-    buildPythonPath ${python.pkgs.dbus-python}
+    buildPythonPath ${python3.pkgs.dbus-python}
     patchPythonScript $out/bin/afpstats
   '';
 
@@ -52,9 +59,9 @@ stdenv.mkDerivation rec{
 
   meta = {
     description = "Apple Filing Protocol Server";
-    homepage = http://netatalk.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jcumming ];
+    homepage = "http://netatalk.sourceforge.net/";
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jcumming ];
   };
 }

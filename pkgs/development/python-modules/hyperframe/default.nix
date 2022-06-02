@@ -1,16 +1,22 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ lib, buildPythonPackage, fetchPypi, pytestCheckHook }:
+
 buildPythonPackage rec {
   pname = "hyperframe";
-  version = "5.2.0";
+  version = "6.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a9f5c17f2cc3c719b917c4f33ed1c61bd1f8dfac4b1bd23b7c80b3400971b41f";
+    sha256 = "ae510046231dc8e9ecb1a6586f63d2347bf4c8905914aa84ba585ae85f28a914";
   };
 
-  meta = with stdenv.lib; {
+  checkInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "hyperframe" ];
+
+  meta = with lib; {
     description = "HTTP/2 framing layer for Python";
-    homepage = "http://hyper.rtfd.org/";
+    homepage = "https://github.com/python-hyper/hyperframe/";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

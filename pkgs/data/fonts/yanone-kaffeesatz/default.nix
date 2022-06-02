@@ -1,9 +1,9 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 fetchzip {
   name = "yanone-kaffeesatz-2004";
 
-  url = https://yanone.de/2015/data/UIdownloads/Yanone%20Kaffeesatz.zip;
+  url = "https://yanone.de/2015/data/UIdownloads/Yanone%20Kaffeesatz.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
@@ -14,9 +14,9 @@ fetchzip {
 
   meta = {
     description = "The free font classic";
-    maintainers = with stdenv.lib.maintainers; [ mt-caret ];
-    platforms = with stdenv.lib.platforms; all;
-    homepage = https://yanone.de/fonts/kaffeesatz/;
-    license = stdenv.lib.licenses.ofl;
+    maintainers = with lib.maintainers; [ mt-caret ];
+    platforms = with lib.platforms; all;
+    homepage = "https://yanone.de/fonts/kaffeesatz/";
+    license = lib.licenses.ofl;
   };
 }

@@ -1,35 +1,17 @@
-{ stdenv
-, lndir
-, lilypond
-, openlilylib-fonts
-, fonts ? openlilylib-fonts.all
+{ lib, symlinkJoin, makeWrapper
+, lilypond, openlilylib-fonts
 }:
 
-stdenv.lib.appendToName "with-fonts" (stdenv.mkDerivation {
-  inherit (lilypond) name;
-  phases = "installPhase";
-  buildInputs = fonts;
-  nativeBuildInputs = [ lndir ];
-  installPhase = ''
-    local fontsdir=$out/share/lilypond/${lilypond.version}/fonts
+lib.appendToName "with-fonts" (symlinkJoin {
+  inherit (lilypond) meta name version ;
 
-    install -m755 -d $fontsdir/otf
-    install -m755 -d $fontsdir/svg
+  paths = [ lilypond ] ++ openlilylib-fonts.all;
 
-    ${stdenv.lib.concatMapStrings (font: ''
-        lndir -silent ${font}/otf $fontsdir/otf
-        lndir -silent ${font}/svg $fontsdir/svg
-      '') fonts}
+  nativeBuildInputs = [ makeWrapper ];
 
-      install -m755 -d $out/lib
-      lndir -silent ${lilypond}/lib $out/lib
-      install -m755 -d $out/share
-      lndir -silent ${lilypond}/share $out/share
-
-      install -m755 -Dt $out/bin ${lilypond}/bin/*
-
-      for p in $out/bin/*; do
-        substituteInPlace $p --replace "exec -a \"${lilypond}" "exec -a \"$out"
-      done
+  postBuild = ''
+    for p in $out/bin/*; do
+        wrapProgram "$p" --set LILYPOND_DATADIR "$out/share/lilypond/${lilypond.version}"
+    done
   '';
 })

@@ -1,38 +1,64 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, pcre
+{ lib, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pcre
+, pkg-config
+, protobufc
 , withCrypto ? true, openssl
-, enableMagic ? true, file
 , enableCuckoo ? true, jansson
+, enableDex ? true
+, enableDotNet ? true
+, enableMacho ? true
+, enableMagic ? true, file
+, enableStatic ? false
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.9.0";
-  name = "yara-${version}";
+  pname = "yara";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
-    repo = "yara";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1a707nx1py1q1z9fc18c93gjd4k5k6k53a93qw09jlcc67xk2sz7";
+    hash = "sha256-/6EMnNVNSgeYHrbPF3QDS5oc0eLaggKNuZi2pXx/CqY=";
   };
 
-  buildInputs = [ autoconf automake libtool pcre]
-    ++ stdenv.lib.optionals withCrypto [ openssl ]
-    ++ stdenv.lib.optionals enableMagic [ file ]
-    ++ stdenv.lib.optionals enableCuckoo [ jansson ]
-  ;
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    pcre
+    protobufc
+  ] ++ lib.optionals withCrypto [
+    openssl
+  ] ++ lib.optionals enableMagic [
+    file
+  ] ++ lib.optionals enableCuckoo [
+    jansson
+  ];
 
   preConfigure = "./bootstrap.sh";
 
   configureFlags = [
-    (stdenv.lib.withFeature withCrypto "crypto")
-    (stdenv.lib.enableFeature enableMagic "magic")
-    (stdenv.lib.enableFeature enableCuckoo "cuckoo")
+    (lib.withFeature withCrypto "crypto")
+    (lib.enableFeature enableCuckoo "cuckoo")
+    (lib.enableFeature enableDex "dex")
+    (lib.enableFeature enableDotNet "dotnet")
+    (lib.enableFeature enableMacho "macho")
+    (lib.enableFeature enableMagic "magic")
+    (lib.enableFeature enableStatic "static")
   ];
 
-  meta = with stdenv.lib; {
+  doCheck = enableStatic;
+
+  meta = with lib; {
     description = "The pattern matching swiss knife for malware researchers";
-    homepage    = http://Virustotal.github.io/yara/;
-    license     = licenses.asl20;
-    platforms   = stdenv.lib.platforms.all;
+    homepage = "http://Virustotal.github.io/yara/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
+    platforms = platforms.all;
   };
 }

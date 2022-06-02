@@ -1,16 +1,15 @@
-{ stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, makeWrapper
 , xorg, imlib2, libjpeg, libpng
-, curl, libexif, perlPackages }:
-
-with stdenv.lib;
+, curl, libexif, jpegexiforient, perl
+, enableAutoreload ? !stdenv.hostPlatform.isDarwin }:
 
 stdenv.mkDerivation rec {
-  name = "feh-${version}";
-  version = "3.1.3";
+  pname = "feh";
+  version = "3.8";
 
   src = fetchurl {
-    url = "https://feh.finalrewind.org/${name}.tar.bz2";
-    sha256 = "1vsnxf4as3vyzjfhd8frzb1a8i7wnq7ck5ljx7qxqrnfqvxl1s4z";
+    url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
+    sha256 = "1a9bsq5j9sl2drzkab0hdhnamalpaszw9mz2prz6scrr5dak8g3z";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -21,29 +20,25 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}" "exif=1"
-  ] ++ optional stdenv.isDarwin "verscmp=0";
+  ] ++ lib.optional stdenv.isDarwin "verscmp=0"
+    ++ lib.optional enableAutoreload "inotify=1";
 
   installTargets = [ "install" ];
   postInstall = ''
-    wrapProgram "$out/bin/feh" --prefix PATH : "${libjpeg.bin}/bin" \
+    wrapProgram "$out/bin/feh" --prefix PATH : "${lib.makeBinPath [ libjpeg jpegexiforient ]}" \
                                --add-flags '--theme=feh'
   '';
 
-  checkInputs = [ perlPackages.perl perlPackages.TestCommand ];
-  preCheck = ''
-    export PERL5LIB="${perlPackages.TestCommand}/${perlPackages.perl.libPrefix}"
-  '';
-  postCheck = ''
-    unset PERL5LIB
-  '';
-
+  checkInputs = lib.singleton (perl.withPackages (p: [ p.TestCommand ]));
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "A light-weight image viewer";
     homepage = "https://feh.finalrewind.org/";
-    license = licenses.mit;
-    maintainers = [ maintainers.viric maintainers.willibutz ];
+    # released under a variant of the MIT license
+    # https://spdx.org/licenses/MIT-feh.html
+    license = licenses.mit-feh;
+    maintainers = with maintainers; [ viric willibutz globin ma27 ];
     platforms = platforms.unix;
   };
 }

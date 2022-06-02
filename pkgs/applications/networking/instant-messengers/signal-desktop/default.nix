@@ -1,8 +1,10 @@
-{ stdenv, lib, fetchurl, dpkg, wrapGAppsHook
-, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
+{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook, makeWrapper, nixosTests
+, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
-, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, udev, libnotify, libuuid
+, libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsa-lib
+, cups, expat, libuuid, at-spi2-core, libappindicator-gtk3, mesa
+# Runtime dependencies:
+, systemd, libnotify, libdbusmenu, libpulseaudio, xdg-utils
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -16,28 +18,45 @@ let
       # E.g. "de_DE" -> "de-de" (spellcheckerLanguage -> hunspellDict)
       spellLangComponents = splitString "_" spellcheckerLanguage;
       hunspellDict = elemAt spellLangComponents 0 + "-" + toLower (elemAt spellLangComponents 1);
-    in if spellcheckerLanguage != null
-      then ''
-        --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
-        --set LC_MESSAGES "${spellcheckerLanguage}"''
-      else "");
-  rpath = lib.makeLibraryPath [
-    alsaLib
-    atk
+    in lib.optionalString (spellcheckerLanguage != null) ''
+      --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
+      --set LC_MESSAGES "${spellcheckerLanguage}"'');
+
+in stdenv.mkDerivation rec {
+  pname = "signal-desktop";
+  version = "5.43.0"; # Please backport all updates to the stable channel.
+  # All releases have a limited lifetime and "expire" 90 days after the release.
+  # When releases "expire" the application becomes unusable until an update is
+  # applied. The expiration date for the current release can be extracted with:
+  # $ grep -a "^{\"buildExpiration" "${signal-desktop}/lib/Signal/resources/app.asar"
+  # (Alternatively we could try to patch the asar archive, but that requires a
+  # few additional steps and might not be the best idea.)
+
+  src = fetchurl {
+    url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
+    sha256 = "sha256-DYJ3WZbaalKhQXhVQO3qhJiGj92Cc+pwRDx/YBIi6gg=";
+  };
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+    (wrapGAppsHook.override { inherit makeWrapper; })
+  ];
+
+  buildInputs = [
+    alsa-lib
     at-spi2-atk
+    at-spi2-core
+    atk
     cairo
     cups
     dbus
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
-    gnome2.GConf
     gtk3
-    pango
-    libnotify
-    libuuid
     libX11
     libXScrnSaver
     libXcomposite
@@ -49,54 +68,75 @@ let
     libXrandr
     libXrender
     libXtst
+    libappindicator-gtk3
+    libnotify
+    libuuid
+    mesa # for libgbm
     nspr
     nss
-    udev
+    pango
+    systemd
     xorg.libxcb
+    xorg.libxshmfence
   ];
 
-in stdenv.mkDerivation rec {
-  name = "signal-desktop-${version}";
-  version = "1.23.2";
-
-  src = fetchurl {
-    url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "0nl8rv0lgp4cwv029kl7y09ngcrik2657m4wjn0rnls8kpmdhd8j";
-  };
-
-  phases = [ "unpackPhase" "installPhase" ];
-
-  nativeBuildInputs = [ dpkg wrapGAppsHook ];
+  runtimeDependencies = [
+    (lib.getLib systemd)
+    libnotify
+    libdbusmenu
+    xdg-utils
+  ];
 
   unpackPhase = "dpkg-deb -x $src .";
 
+  dontBuild = true;
+  dontConfigure = true;
+  dontPatchELF = true;
+  # We need to run autoPatchelf manually with the "no-recurse" option, see
+  # https://github.com/NixOS/nixpkgs/pull/78413 for the reasons.
+  dontAutoPatchelf = true;
+
   installPhase = ''
-    mkdir -p $out
-    cp -R opt $out
+    runHook preInstall
 
-    mv ./usr/share $out/share
-    mv $out/opt/Signal $out/libexec
-    rmdir $out/opt
+    mkdir -p $out/lib
 
-    chmod -R g-w $out
+    mv usr/share $out/share
+    mv opt/Signal $out/lib/Signal
 
-    # Patch signal
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-             --set-rpath ${rpath}:$out/libexec $out/libexec/signal-desktop
-    wrapProgram $out/libexec/signal-desktop \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.cc.cc.lib}/lib" \
-      ${customLanguageWrapperArgs} \
-      "''${gappsWrapperArgs[@]}"
+    # Note: The following path contains bundled libraries:
+    # $out/lib/Signal/resources/app.asar.unpacked/node_modules/sharp/vendor/lib/
+    # We run autoPatchelf with the "no-recurse" option to avoid picking those
+    # up, but resources/app.asar still requires them.
 
     # Symlink to bin
     mkdir -p $out/bin
-    ln -s $out/libexec/signal-desktop $out/bin/signal-desktop
+    ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
+
+    # Create required symlinks:
+    ln -s libGLESv2.so $out/lib/Signal/libGLESv2.so.2
+
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ] }"
+      ${customLanguageWrapperArgs}
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+    )
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/signal-desktop.desktop \
       --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
+
+    autoPatchelf --no-recurse -- $out/lib/Signal/
+    patchelf --add-needed ${libpulseaudio}/lib/libpulse.so $out/lib/Signal/resources/app.asar.unpacked/node_modules/ringrtc/build/linux/libringrtc-x64.node
   '';
+
+  # Tests if the application launches and waits for "Link your phone to Signal Desktop":
+  passthru.tests.application-launch = nixosTests.signal-desktop;
 
   meta = {
     description = "Private, simple, and secure messenger";
@@ -104,9 +144,10 @@ in stdenv.mkDerivation rec {
       Signal Desktop is an Electron application that links with your
       "Signal Android" or "Signal iOS" app.
     '';
-    homepage    = https://signal.org/;
-    license     = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ixmatus primeos ];
+    homepage    = "https://signal.org/";
+    changelog   = "https://github.com/signalapp/Signal-Desktop/releases/tag/v${version}";
+    license     = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ mic92 equirosa ];
     platforms   = [ "x86_64-linux" ];
   };
 }

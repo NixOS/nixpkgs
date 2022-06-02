@@ -1,11 +1,9 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, utils, ... }:
 
 let
   toplevelConfig = config;
   inherit (lib) types;
-  inherit (import ../system/boot/systemd-lib.nix {
-    inherit config pkgs lib;
-  }) mkPathSafeName;
+  inherit (utils.systemdUtils.lib) mkPathSafeName;
 in {
   options.systemd.services = lib.mkOption {
     type = types.attrsOf (types.submodule ({ name, config, ... }: {
@@ -62,8 +60,8 @@ in {
       options.confinement.binSh = lib.mkOption {
         type = types.nullOr types.path;
         default = toplevelConfig.environment.binsh;
-        defaultText = "config.environment.binsh";
-        example = lib.literalExample "\${pkgs.dash}/bin/dash";
+        defaultText = lib.literalExpression "config.environment.binsh";
+        example = lib.literalExpression ''"''${pkgs.dash}/bin/dash"'';
         description = ''
           The program to make available as <filename>/bin/sh</filename> inside
           the chroot. If this is set to <literal>null</literal>, no
@@ -105,7 +103,7 @@ in {
         wantsAPIVFS = lib.mkDefault (config.confinement.mode == "full-apivfs");
       in lib.mkIf config.confinement.enable {
         serviceConfig = {
-          RootDirectory = pkgs.runCommand rootName {} "mkdir \"$out\"";
+          RootDirectory = "/var/empty";
           TemporaryFileSystem = "/";
           PrivateMounts = lib.mkDefault true;
 
@@ -135,7 +133,7 @@ in {
           ];
           execPkgs = lib.concatMap (opt: let
             isSet = config.serviceConfig ? ${opt};
-          in lib.optional isSet config.serviceConfig.${opt}) execOpts;
+          in lib.flatten (lib.optional isSet config.serviceConfig.${opt})) execOpts;
           unitAttrs = toplevelConfig.systemd.units."${name}.service";
           allPkgs = lib.singleton (builtins.toJSON unitAttrs);
           unitPkgs = if fullUnit then allPkgs else execPkgs;
@@ -160,6 +158,11 @@ in {
               + " the 'users.users' option instead as this combination is"
               + " currently not supported.";
     }
+    { assertion = cfg.serviceConfig ? ProtectSystem -> cfg.serviceConfig.ProtectSystem == false;
+      message = "${whatOpt "ProtectSystem"}. ProtectSystem is not compatible"
+              + " with service confinement as it fails to remount /usr within"
+              + " our chroot. Please disable the option.";
+    }
   ]) config.systemd.services);
 
   config.systemd.packages = lib.concatLists (lib.mapAttrsToList (name: cfg: let
@@ -172,8 +175,8 @@ in {
       serviceName = "${name}.service";
       excludedPath = rootPaths;
     } ''
-      mkdir -p "$out/lib/systemd/system"
-      serviceFile="$out/lib/systemd/system/$serviceName"
+      mkdir -p "$out/lib/systemd/system/$serviceName.d"
+      serviceFile="$out/lib/systemd/system/$serviceName.d/confinement.conf"
 
       echo '[Service]' > "$serviceFile"
 

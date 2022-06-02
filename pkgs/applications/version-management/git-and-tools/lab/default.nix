@@ -1,31 +1,38 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, xdg-utils, installShellFiles, git }:
 
 buildGoModule rec {
   pname = "lab";
-  version = "0.15.3";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${version}";
-    sha256 = "00c0ljyvcqrzzcsdb3r37lxd4z2wvwp80ggs8jvp7y32p1b61bsg";
+    sha256 = "sha256-7AUhH2aBRpsjUzZQGE2fHDOa1k0rMUfZJqUEKZXpJuM=";
   };
 
   subPackages = [ "." ];
 
-  modSha256 = "0bw47dd1b46ywsian2b957a4ipm77ncidipzri9ra39paqlv7abb";
+  vendorSha256 = "sha256-ChysquNuUffcM3qaWUdqu3Av33gnKkdlotEoFKoedA0=";
+
+  doCheck = false;
+
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   postInstall = ''
-    mkdir -p $out/share/zsh/site-functions
-    LAB_CORE_HOST=a LAB_CORE_USER=b LAB_CORE_TOKEN=c \
-    $out/bin/lab completion zsh > $out/share/zsh/site-functions/_lab
+    wrapProgram $out/bin/lab --prefix PATH ":" "${lib.makeBinPath [ git xdg-utils ]}";
+    for shell in bash fish zsh; do
+      $out/bin/lab completion $shell > lab.$shell
+      installShellCompletion lab.$shell
+    done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
-    homepage = https://zaquestion.github.io/lab;
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ marsam dtzWill ];
-    platforms = platforms.all;
+    homepage = "https://zaquestion.github.io/lab";
+    license = licenses.cc0;
+    maintainers = with maintainers; [ marsam dtzWill SuperSandro2000 ];
   };
 }

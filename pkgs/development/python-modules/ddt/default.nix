@@ -1,27 +1,30 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, nose, six, pyyaml, mock
+, six, pyyaml, mock
+, pytestCheckHook
+, enum34
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "ddt";
-  version = "1.2.0";
+  version = "1.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "898364fc34b27981b925171a0011c174c94633cb678eb1fac05fe7a234c7912c";
+    sha256 = "8de39a69730442dc835e4d33f9d2e33043ff91151c8d18086959ee556febb9f8";
   };
 
-  checkInputs = [ nose six pyyaml mock ];
+  checkInputs = [ six pyyaml mock pytestCheckHook ];
 
-  checkPhase = ''
-    nosetests -s
-  '';
+  propagatedBuildInputs = lib.optionals (!isPy3k) [
+    enum34
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Data-Driven/Decorated Tests, a library to multiply test cases";
-    homepage = https://github.com/txels/ddt;
+    homepage = "https://github.com/txels/ddt";
     license = licenses.mit;
   };
 

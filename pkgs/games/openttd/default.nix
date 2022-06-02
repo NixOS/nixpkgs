@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchzip, pkgconfig, SDL, libpng, zlib, xz, freetype, fontconfig
+{ lib, stdenv, fetchurl, fetchzip, cmake, SDL2, libpng, zlib, xz, freetype, fontconfig
 , withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
 , withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
 , writeScriptBin, makeWrapper, runtimeShell
@@ -6,18 +6,18 @@
 
 let
   opengfx = fetchzip {
-    url = "http://binaries.openttd.org/extra/opengfx/0.5.5/opengfx-0.5.5-all.zip";
-    sha256 = "065l0g5nawcd6fkfbsfgviwgq9610y7gxzkpmd19i423d0lrq6d8";
+    url = "https://cdn.openttd.org/opengfx-releases/7.1/opengfx-7.1-all.zip";
+    sha256 = "sha256-daJ/Qwg/okpmLQkXcCjruIiP8GEwyyp02YWcGQepxzs=";
   };
 
   opensfx = fetchzip {
-    url = "http://binaries.openttd.org/extra/opensfx/0.2.3/opensfx-0.2.3-all.zip";
-    sha256 = "1bb167kszdd6dqbcdjrxxwab6b7y7jilhzi3qijdhprpm5gf1lp3";
+    url = "https://cdn.openttd.org/opensfx-releases/1.0.3/opensfx-1.0.3-all.zip";
+    sha256 = "sha256-QmfXizrRTu/fUcVOY7tCndv4t4BVW+fb0yUi8LgSYzM=";
   };
 
   openmsx = fetchzip {
-    url = "http://binaries.openttd.org/extra/openmsx/0.3.1/openmsx-0.3.1-all.zip";
-    sha256 = "0qnmfzz0v8vxrrvxnm7szphrlrlvhkwn3y92b4iy0b4b6yam0yd4";
+    url = "https://cdn.openttd.org/openmsx-releases/0.4.2/openmsx-0.4.2-all.zip";
+    sha256 = "sha256-Cgrg2m+uTODFg39mKgX+hE8atV7v5bVyZd716vSZB8M=";
   };
 
   playmidi = writeScriptBin "playmidi" ''
@@ -28,17 +28,17 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "openttd-${version}";
-  version = "1.9.0";
+  pname = "openttd";
+  version = "12.2";
 
   src = fetchurl {
-    url = "http://proxy.binaries.openttd.org/openttd-releases/${version}/${name}-source.tar.xz";
-    sha256 = "06blx844q6a248jwzqlgi82692vvkmvb00bfdx4jhcwp9mayvza5";
+    url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
+    hash = "sha256-gVCPDek6DCZLIW71agX4OB//e/+m0BASGiFJC02s6Vw=";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
-  buildInputs = [ SDL libpng xz zlib freetype fontconfig ]
-    ++ stdenv.lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
+  nativeBuildInputs = [ cmake makeWrapper ];
+  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig ]
+    ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
 
   prefixKey = "--prefix-dir=";
 
@@ -46,35 +46,31 @@ stdenv.mkDerivation rec {
     "--without-liblzo2"
   ];
 
-  makeFlags = "INSTALL_PERSONAL_DIR=";
-
   postInstall = ''
-    mv $out/games/ $out/bin
-
-    ${stdenv.lib.optionalString withOpenGFX ''
-      cp ${opengfx}/* $out/share/games/openttd/baseset
+    ${lib.optionalString withOpenGFX ''
+      cp ${opengfx}/*.tar $out/share/games/openttd/baseset
     ''}
 
     mkdir -p $out/share/games/openttd/data
 
-    ${stdenv.lib.optionalString withOpenSFX ''
-      cp ${opensfx}/*.{obs,cat} $out/share/games/openttd/data
+    ${lib.optionalString withOpenSFX ''
+      cp ${opensfx}/*.tar $out/share/games/openttd/data
     ''}
 
     mkdir $out/share/games/openttd/baseset/openmsx
 
-    ${stdenv.lib.optionalString withOpenMSX ''
-      cp ${openmsx}/*.{obm,mid} $out/share/games/openttd/baseset/openmsx
+    ${lib.optionalString withOpenMSX ''
+      cp ${openmsx}/*.tar $out/share/games/openttd/baseset/openmsx
     ''}
 
-    ${stdenv.lib.optionalString withFluidSynth ''
+    ${lib.optionalString withFluidSynth ''
       wrapProgram $out/bin/openttd \
         --add-flags -m \
         --add-flags extmidi:cmd=${playmidi}/bin/playmidi
     ''}
   '';
 
-  meta = {
+  meta = with lib; {
     description = ''Open source clone of the Microprose game "Transport Tycoon Deluxe"'';
     longDescription = ''
       OpenTTD is a transportation economics simulator. In single player mode,
@@ -86,9 +82,9 @@ stdenv.mkDerivation rec {
         - play cooperatively controlling the same business
         - observe as spectators
     '';
-    homepage = http://www.openttd.org/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ jcumming the-kenny fpletz ];
+    homepage = "https://www.openttd.org/";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ jcumming fpletz ];
   };
 }

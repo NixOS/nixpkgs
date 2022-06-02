@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, ocaml, ncurses }:
+{ lib, stdenv, fetchurl, ocaml, ncurses }:
 
 stdenv.mkDerivation rec {
 
-  name = "omake-${version}";
+  pname = "omake";
   version = "0.10.3";
 
   src = fetchurl {
-    url = "http://download.camlcity.org/download/${name}.tar.gz";
+    url = "http://download.camlcity.org/download/${pname}-${version}.tar.gz";
     sha256 = "07bdg1h5i7qnlv9xq81ad5hfypl10hxm771h4rjyl5cn8plhfcgz";
   };
 
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A build system designed for scalability and portability";
-    homepage = http://projects.camlcity.org/projects/omake.html;
-    license = with stdenv.lib.licenses; [
+    homepage = "http://projects.camlcity.org/projects/omake.html";
+    license = with lib.licenses; [
       mit /* scripts */
       gpl2 /* program */
     ];

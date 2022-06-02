@@ -1,27 +1,44 @@
-{ stdenv, fetchurl, scons, libX11, pkgconfig
-, libusb1, boost, glib, dbus-glib }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, scons
+, libX11
+, pkg-config
+, libusb1
+, boost
+, glib
+, dbus-glib
+}:
 
-let
+stdenv.mkDerivation rec {
+  pname = "xboxdrv";
   version = "0.8.8";
-in stdenv.mkDerivation {
-  name = "xboxdrv-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/xboxdrv/xboxdrv/archive/v${version}.tar.gz";
-    sha256 = "0jx2wqmc7602dxyj19n3h8x0cpy929h7c0h39vcc5rf0q74fh3id";
+  src = fetchFromGitHub {
+    owner = "xboxdrv";
+    repo = "xboxdrv";
+    rev = "v${version}";
+    hash = "sha256-R0Bt4xfzQA1EmZbf7lcWLwSSUayf5Y711QhlAVhiLrY=";
   };
 
-  makeFlags = "PREFIX=$(out)";
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ scons libX11 libusb1 boost glib dbus-glib ];
+  makeFlags = [ "PREFIX=$(out)" ];
+  nativeBuildInputs = [ pkg-config scons ];
+  buildInputs = [ libX11 libusb1 boost glib dbus-glib ];
+  enableParallelBuilding = true;
   dontUseSconsInstall = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://pingus.seul.org/~grumbel/xboxdrv/;
+  patches = [
+    ./fix-60-sec-delay.patch
+    ./scons-py3.patch
+    ./scons-v4.2.0.patch
+    ./xboxdrvctl-py3.patch
+  ];
+
+  meta = with lib; {
+    homepage = "https://xboxdrv.gitlab.io/";
     description = "Xbox/Xbox360 (and more) gamepad driver for Linux that works in userspace";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
-
 }

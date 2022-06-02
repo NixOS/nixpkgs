@@ -1,0 +1,60 @@
+From b65921873585616c86a591eee9efbc68f84eb3d3 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo?= <malaquias@gmail.com>
+Date: Wed, 25 Aug 2021 12:03:09 -0300
+Subject: [PATCH] Fix paths
+
+---
+ fbmenugen | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/fbmenugen b/fbmenugen
+index 241be16..5fc9aea 100755
+--- a/fbmenugen
++++ b/fbmenugen
+@@ -214,9 +214,7 @@ my %CONFIG = (
+ 
+ #<<<
+         desktop_files_paths => [
+-            '/usr/share/applications',
+-            '/usr/local/share/applications',
+-            '/usr/share/applications/kde4',
++            '/run/current-system/sw/share/applications',
+             "$home_dir/.local/share/applications",
+         ],
+ #>>>
+@@ -252,7 +250,7 @@ if (not -e $config_file) {
+ }
+ 
+ if (not -e $schema_file) {
+-    if (-e (my $etc_schema_file = "/etc/xdg/$pkgname/schema.pl")) {
++    if (-e (my $etc_schema_file = "@fbmenugen@/etc/xdg/$pkgname/schema.pl")) {
+         require File::Copy;
+         File::Copy::copy($etc_schema_file, $schema_file)
+           or warn "$0: can't copy file `$etc_schema_file' to `$schema_file': $!\n";
+@@ -588,7 +586,7 @@ EXIT
+         $generated_menu .= begin_category(@{$schema->{fluxbox}}) . <<"FOOTER";
+ [config] (Configure)
+ [submenu] (System Styles) {Choose a style...}
+-  [stylesdir] (/usr/share/fluxbox/styles)
++  [stylesdir] (@fluxbox@/share/fluxbox/styles)
+ [end]
+ [submenu] (User Styles) {Choose a style...}
+   [stylesdir] (~/.fluxbox/styles)
+@@ -598,12 +596,13 @@ EXIT
+   [exec] (Screenshot - JPG) {import screenshot.jpg && display -resize 50% screenshot.jpg}
+   [exec] (Screenshot - PNG) {import screenshot.png && display -resize 50% screenshot.png}
+   [exec] (Run) {fbrun}
+-  [exec] (Regen Menu) {fluxbox-generate_menu}
++  [exec] (Regen Menu) {@fluxbox@/bin/fluxbox-generate_menu}
+ [end]
+ [commanddialog] (Fluxbox Command)
+   [reconfig] (Reload config)
+   [restart] (Restart)
+   [exec] (About) {(fluxbox -v; fluxbox -info | sed 1d) | xmessage -file - -center}
++  [exec] (About) {(@fluxbox@/bin/fluxbox -v; @fluxbox@/bin/fluxbox -info | @gnused@/bin/sed 1d) | @xmessage@/bin/xmessage -file - -center}
+   [separator]
+   [exit] (Exit)
+ [end]
+-- 
+2.32.0
+

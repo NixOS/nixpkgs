@@ -1,34 +1,34 @@
-{ stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
-, xapian, glib, gmime, texinfo , emacs, guile
-, gtk3, webkitgtk24x-gtk3, libsoup, icu
-, withMug ? false }:
+{ lib, stdenv, fetchFromGitHub, sqlite, pkg-config, autoreconfHook, pmccabe
+, xapian, glib, gmime3, texinfo, emacs, guile
+, gtk3, webkitgtk, libsoup, icu
+, makeWrapper
+, withMug ? false
+, batchSize ? null }:
 
 stdenv.mkDerivation rec {
-  name = "mu-${version}";
-  version = "1.0";
+  pname = "mu";
+  version = "1.6.10";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
-    rev    = "v${version}";
-    sha256 = "0y6azhcmqdx46a9gi7mn8v8p0mhfx2anjm5rj7i69kbr6j8imlbc";
+    rev    = version;
+    sha256 = "1uJB8QdR0JgWlogb1cdUicz+LLtYQpAvYJjwcRjXt+E=";
   };
 
-  # 0.9.18 and 1.0 have 2 failing tests but previously we had no tests
-  patches = [
-    ./failing_tests.patch
-  ];
-
-  # test-utils coredumps so don't run those
-  postPatch = ''
-    sed -i -e '/test-utils/d' lib/parser/Makefile.am
+  postPatch = lib.optionalString (batchSize != null) ''
+    sed -i lib/mu-store.cc --regexp-extended \
+      -e 's@(constexpr auto BatchSize).*@\1 = ${toString batchSize};@'
   '';
 
   buildInputs = [
-    sqlite xapian glib gmime texinfo emacs guile libsoup icu
-  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk24x-gtk3 ];
+    sqlite xapian glib gmime3 texinfo emacs libsoup icu
+  ]
+    # Workaround for https://github.com/djcb/mu/issues/1641
+    ++ lib.optional (!stdenv.isDarwin) guile
+    ++ lib.optionals withMug [ gtk3 webkitgtk ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook pmccabe ];
+  nativeBuildInputs = [ pkg-config autoreconfHook pmccabe makeWrapper ];
 
   enableParallelBuilding = true;
 
@@ -36,26 +36,27 @@ stdenv.mkDerivation rec {
     # Fix mu4e-builddir (set it to $out)
     substituteInPlace mu4e/mu4e-meta.el.in \
       --replace "@abs_top_builddir@" "$out"
-
-    # We install msg2pdf to bin/msg2pdf, fix its location in elisp
-    substituteInPlace mu4e/mu4e-actions.el \
-      --replace "/toys/msg2pdf/msg2pdf" "/bin/msg2pdf"
   '';
 
-  # Install mug and msg2pdf
-  postInstall = stdenv.lib.optionalString withMug ''
-    for f in msg2pdf mug ; do
+  # Make sure included scripts can find their dependencies & optionally install mug
+  postInstall = ''
+    wrapProgram "$out/bin/mu" \
+      --prefix LD_LIBRARY_PATH : "$out/lib" \
+      --prefix GUILE_LOAD_PATH : "$out/share/guile/site/2.2"
+  '' + lib.optionalString withMug ''
+    for f in mug ; do
       install -m755 toys/$f/$f $out/bin/$f
     done
   '';
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A collection of utilties for indexing and searching Maildirs";
     license = licenses.gpl3Plus;
-    homepage = http://www.djcbsoftware.nl/code/mu/;
+    homepage = "https://www.djcbsoftware.nl/code/mu/";
+    changelog = "https://github.com/djcb/mu/releases/tag/${version}";
+    maintainers = with maintainers; [ antono chvp peterhoeg ];
     platforms = platforms.mesaPlatforms;
-    maintainers = with maintainers; [ antono the-kenny peterhoeg ];
   };
 }

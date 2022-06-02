@@ -1,17 +1,44 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, typing-extensions
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "avro";
-  version = "1.8.2";
-  disabled = isPy3k;
+  version = "1.11.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8f9ee40830b70b5fb52a419711c9c4ad0336443a6fba7335060805f961b04b59";
+    sha256 = "1206365cc30ad561493f735329857dd078533459cee4e928aec2505f341ce445";
   };
 
-  meta = with stdenv.lib; {
-    description = "A serialization and RPC framework";
-    homepage = https://pypi.python.org/pypi/avro/;
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Requires network access
+    "test_server_with_path"
+  ];
+
+  pythonImportsCheck = [
+    "avro"
+  ];
+
+  meta = with lib; {
+    description = "Python serialization and RPC framework";
+    homepage = "https://github.com/apache/avro";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ zimbatm ];
   };
 }

@@ -1,39 +1,48 @@
-{ stdenv, fetchFromGitHub, fetchurl, perl, perlPackages, wget, autoconf, automake }:
+{ lib, stdenv, fetchFromGitHub, fetchurl, perl, perlPackages, wget, autoconf, automake, autoreconfHook }:
 
 let
-  # when upgrade znapzend, check versions of Perl libs here: https://github.com/oetiker/znapzend/blob/master/PERL_MODULES
-  Mojolicious-6-46 = perlPackages.buildPerlPackage rec {
-    name = "Mojolicious-6.46";
+  # when upgrade znapzend, check versions of Perl libs here: https://github.com/oetiker/znapzend/blob/master/cpanfile
+  # pinned versions are listed at https://github.com/oetiker/znapzend/blob/master/thirdparty/cpanfile-5.30.snapshot
+  Mojolicious' = perlPackages.buildPerlPackage rec {
+    pname = "Mojolicious";
+    version = "8.73";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SR/SRI/${name}.tar.gz";
-      sha256 = "0i3axmx4506fx5gms148pj65x6ys7flaz1aqjd8hd9zfkd8pzdfr";
+      url = "mirror://cpan/authors/id/S/SR/SRI/${pname}-${version}.tar.gz";
+      sha256 = "118y2264f89bbp5ly2dh36xjq25jk85s2ssxa3y4gsgsk6sjzzk1";
     };
   };
-  MojoIOLoopForkCall-0-17 = perlPackages.buildPerlModule rec {
-    name = "Mojo-IOLoop-ForkCall-0.17";
+  MojoIOLoopForkCall' = perlPackages.buildPerlModule rec {
+    pname = "Mojo-IOLoop-ForkCall";
+    version = "0.20";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JB/JBERGER/${name}.tar.gz";
-      sha256 = "090qxz1nbah2qxvfg4whl6yp6q03qkx7a42751iai521nk1yavc8";
+      url = "mirror://cpan/authors/id/J/JB/JBERGER/${pname}-${version}.tar.gz";
+      sha256 = "19pih5x0ayxs2m8j29qwdpi6ky3w4ghv6vrmax3ix9r59hj6569b";
     };
-    propagatedBuildInputs = [ perlPackages.IOPipely Mojolicious-6-46 ];
+    propagatedBuildInputs = [ perlPackages.IOPipely Mojolicious' ];
   };
 
-  version = "0.18.0";
-  checksum = "1nlvw56viwgafma506slywfg54z6009jmzc9q6wljgr6mqfmmchd";
+  perl' = perl.withPackages (p:
+    [ MojoIOLoopForkCall'
+      p.TAPParserSourceHandlerpgTAP
+    ]);
+
+  version = "0.21.0";
+  sha256 = "1lg46rf2ahlclan29zx8ag5k4fjp28sc9l02z76f0pvdlj4qnihl";
 in
-stdenv.mkDerivation rec {
-  name = "znapzend-${version}";
+stdenv.mkDerivation {
+  pname = "znapzend";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "oetiker";
     repo = "znapzend";
     rev = "v${version}";
-    sha256 = checksum;
+    inherit sha256;
   };
 
-  buildInputs = [ wget perl MojoIOLoopForkCall-0-17 perlPackages.TAPParserSourceHandlerpgTAP ];
+  buildInputs = [ wget perl' ];
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [ autoconf automake autoreconfHook ];
 
   preConfigure = ''
     sed -i 's/^SUBDIRS =.*$/SUBDIRS = lib/' Makefile.am
@@ -49,33 +58,9 @@ stdenv.mkDerivation rec {
     automake
   '';
 
-  postInstall = ''
-    substituteInPlace $out/bin/znapzend --replace "${perl}/bin/perl" \
-      "${perl}/bin/perl \
-      -I${Mojolicious-6-46}/${perl.libPrefix} \
-      -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
-      -I${MojoIOLoopForkCall-0-17}/${perl.libPrefix} \
-      -I${perlPackages.IOPipely}/${perl.libPrefix} \
-      "
-    substituteInPlace $out/bin/znapzendzetup --replace "${perl}/bin/perl" \
-      "${perl}/bin/perl \
-      -I${Mojolicious-6-46}/${perl.libPrefix} \
-      -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
-      -I${MojoIOLoopForkCall-0-17}/${perl.libPrefix} \
-      -I${perlPackages.IOPipely}/${perl.libPrefix} \
-      "
-    substituteInPlace $out/bin/znapzendztatz --replace "${perl}/bin/perl" \
-      "${perl}/bin/perl \
-      -I${Mojolicious-6-46}/${perl.libPrefix} \
-      -I${perlPackages.TAPParserSourceHandlerpgTAP}/${perl.libPrefix} \
-      -I${MojoIOLoopForkCall-0-17}/${perl.libPrefix} \
-      -I${perlPackages.IOPipely}/${perl.libPrefix} \
-      "
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "High performance open source ZFS backup with mbuffer and ssh support";
-    homepage    = http://www.znapzend.org;
+    homepage    = "https://www.znapzend.org";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ otwieracz ];
     platforms   = platforms.all;

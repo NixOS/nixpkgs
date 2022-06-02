@@ -1,14 +1,14 @@
 { stdenv, lib, perl, pandoc, fetchFromGitHub, xdotool, wmctrl, xprop, nettools }:
 
 stdenv.mkDerivation rec {
-  name = "jumpapp-${version}";
-  version = "1.0";
+  pname = "jumpapp";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "mkropat";
     repo = "jumpapp";
     rev = "v${version}";
-    sha256 = "11ibh51q4vcjkz9fqyw5dy9qrkqxm42hpdccas1s6h2dk9z62kfb";
+    sha256 = "sha256-9sh0+zpDxwqRGC1jUgGTDdSDRdAFsL12mQ/Opwh/UBc=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://github.com/mkropat/jumpapp;
+    homepage = "https://github.com/mkropat/jumpapp";
     description = "A run-or-raise application switcher for any X11 desktop";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matklad ];

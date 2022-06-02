@@ -1,13 +1,17 @@
-Initialize debug-file-directory from NIX_DEBUG_INFO_DIRS, a colon-separated list
-of directories with separate debugging information files.
-
 --- a/gdb/main.c
 +++ b/gdb/main.c
-@@ -551,3 +551,6 @@ captured_main_1 (struct captured_main_args *context)
+@@ -708,8 +708,12 @@ captured_main_1 (struct captured_main_args *context)
+   if (gdb_sysroot.empty ())
+     gdb_sysroot = TARGET_SYSROOT_PREFIX;
  
--  debug_file_directory = relocate_gdb_directory (DEBUGDIR,
-+  debug_file_directory = getenv("NIX_DEBUG_INFO_DIRS");
-+
-+  if (debug_file_directory == NULL)
-+    debug_file_directory = relocate_gdb_directory (DEBUGDIR,
- 						 DEBUGDIR_RELOCATABLE);
+-  debug_file_directory
+-    = relocate_gdb_directory (DEBUGDIR, DEBUGDIR_RELOCATABLE);
++  const char * nix_debug = getenv ("NIX_DEBUG_INFO_DIRS");
++  if (nix_debug != NULL)
++      debug_file_directory = nix_debug;
++  else
++    debug_file_directory
++      = relocate_gdb_directory (DEBUGDIR, DEBUGDIR_RELOCATABLE);
+ 
+   gdb_datadir = relocate_gdb_directory (GDB_DATADIR,
+ 					GDB_DATADIR_RELOCATABLE);

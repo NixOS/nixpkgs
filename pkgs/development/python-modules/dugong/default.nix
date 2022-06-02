@@ -1,14 +1,37 @@
-{ buildPythonPackage, fetchPypi, pythonOlder }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, pythonAtLeast
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "dugong";
-  version = "3.7.4";
+  version = "3.8.1";
+  disabled = pythonOlder "3.3";
 
-  disabled = pythonOlder "3.3"; # Library does not support versions older than 3.3
+  src = fetchFromGitHub {
+    owner = "python-dugong";
+    repo = "python-dugong";
+    rev = "release-${version}";
+    sha256 = "1063c1779idc5nrjzfv5w1xqvyy3crapb2a2xll9y6xphxclnkjc";
+  };
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "tar.bz2";
-    sha256 = "1fb9kwib6jsd09bxiz70av6g0blscygkx7xzaz1b7ibd28ms77zd";
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  # Lots of tests hang during teardown with:
+  #   ssl.SSLEOFError: EOF occurred in violation of protocol (_ssl.c:2396)
+  doCheck = pythonOlder "3.10";
+
+  pythonImportsCheck = [ "dugong" ];
+
+  meta = with lib; {
+    description = "HTTP 1.1 client designed for REST-ful APIs";
+    homepage = "https://github.com/python-dugong/python-dugong/";
+    license = with licenses; [ psfl asl20 ];
+    maintainers = with maintainers; [ ];
   };
 }

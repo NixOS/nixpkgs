@@ -1,23 +1,20 @@
-#! /usr/bin/env perl
+#!/usr/bin/env nix-shell
+#!nix-shell --pure --keep NIX_PATH -i perl -p cacert nix perl
 
-# Usage:
-#
-# manually update tarballs.list
-# then run: cat tarballs.list | perl ./generate-expr-from-tarballs.pl
-
+# Usage: manually update tarballs.list then run: ./generate-expr-from-tarballs.pl tarballs.list
 
 use strict;
 use warnings;
 
 use File::Basename;
 use File::Spec::Functions;
-
-my $tmpDir = "/tmp/xorg-unpack";
+use File::Temp;
 
 
 my %pkgURLs;
 my %pkgHashes;
 my %pkgNames;
+my %pkgVersions;
 my %pkgRequires;
 my %pkgNativeRequires;
 
@@ -26,7 +23,7 @@ my %pcMap;
 my %extraAttrs;
 
 
-my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mkfontscale", "mkfontdir", "bdftopcf", "libxslt", "openssl", "gperf", "m4");
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python3", "mkfontscale", "bdftopcf", "libxslt", "openssl", "gperf", "m4", "libinput", "libevdev", "mtdev", "xorgproto", "cairo", "gettext", "meson", "ninja" );
 $pcMap{$_} = $_ foreach @missingPCs;
 $pcMap{"freetype2"} = "freetype";
 $pcMap{"libpng12"} = "libpng";
@@ -35,11 +32,13 @@ $pcMap{"dbus-1"} = "dbus";
 $pcMap{"uuid"} = "libuuid";
 $pcMap{"libudev"} = "udev";
 $pcMap{"gl"} = "libGL";
-$pcMap{"gbm"} = "mesa_noglu";
+$pcMap{"GL"} = "libGL";
+$pcMap{"gbm"} = "mesa";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
 $pcMap{"\$DRI2PROTO"} = "xorgproto";
+$pcMap{"\${XKBMODULE}"} = "libxkbfile";
 
 
 my $downloadCache = "./download-cache";
@@ -58,7 +57,7 @@ while (<>) {
       $tarball =~ /\/((?:(?:[A-Za-z0-9]|(?:-[^0-9])|(?:-[0-9]*[a-z]))+))[^\/]*$/;
       die unless defined $1;
       $pkg = $1;
-      $pkg =~ s/-//g;
+      $pkg =~ s/(-|[a-f0-9]{40})//g; # Remove hyphen-minus and SHA-1
       #next unless $pkg eq "xcbutil";
     }
 
@@ -72,8 +71,12 @@ while (<>) {
         next;
     }
 
+    # Split by first occurrence of hyphen followed by only numbers, ends line, another hyphen follows, or SHA-1
+    my ($name, $version) = split(/-(?=[.0-9]+(?:$|-)|[a-f0-9]{40})/, $pkgName, 2);
+
     $pkgURLs{$pkg} = $tarball;
-    $pkgNames{$pkg} = $pkgName;
+    $pkgNames{$pkg} = $name;
+    $pkgVersions{$pkg} = $version;
 
     my $cachePath = catdir($downloadCache, basename($tarball));
     my $hash;
@@ -91,8 +94,7 @@ while (<>) {
     $pkgHashes{$pkg} = $hash;
 
     print "\nunpacking $path\n";
-    system "rm -rf '$tmpDir'";
-    mkdir $tmpDir, 0700;
+    my $tmpDir = File::Temp->newdir();
     system "cd '$tmpDir' && tar xf '$path'";
     die "cannot unpack `$path'" if $? != 0;
     print "\n";
@@ -149,19 +151,19 @@ while (<>) {
     }
 
     if ($file =~ /AC_PATH_PROG\(BDFTOPCF/) {
-        push @requires, "bdftopcf";
+        push @nativeRequires, "bdftopcf";
     }
 
     if ($file =~ /AC_PATH_PROG\(MKFONTSCALE/) {
-        push @requires, "mkfontscale";
+        push @nativeRequires, "mkfontscale";
     }
 
     if ($file =~ /AC_PATH_PROG\(MKFONTDIR/) {
-        push @requires, "mkfontdir";
+        push @nativeRequires, "mkfontscale";
     }
 
     if ($file =~ /AM_PATH_PYTHON/) {
-        push @nativeRequires, "python";
+        push @nativeRequires, "python3";
     }
 
     if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
@@ -173,17 +175,17 @@ while (<>) {
     my $isFont;
 
     if ($file =~ /XORG_FONT_BDF_UTILS/) {
-        push @requires, "bdftopcf", "mkfontdir";
+        push @nativeRequires, "bdftopcf", "mkfontscale";
         $isFont = 1;
     }
 
     if ($file =~ /XORG_FONT_SCALED_UTILS/) {
-        push @requires, "mkfontscale", "mkfontdir";
+        push @nativeRequires, "mkfontscale";
         $isFont = 1;
     }
 
     if ($file =~ /XORG_FONT_UCS2ANY/) {
-        push @requires, "fontutil", "mkfontscale";
+        push @nativeRequires, "fontutil", "mkfontscale";
         $isFont = 1;
     }
 
@@ -213,6 +215,7 @@ while (<>) {
 
     #process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,\s*[\[]?([^\)\[]*)/g;
     process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,([^\)\,]*)/g;
+    process \@requires, $1 while $file =~ /AC_SEARCH_LIBS\([^,]*,([^\)\,]*)/g;
     process \@requires, $1 while $file =~ /MODULES=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRED_LIBS=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /REQUIRED_MODULES=\"(.*)\"/g;
@@ -224,8 +227,11 @@ while (<>) {
     process \@requires, $1 while $file =~ /ivo_requires=\"(.*)\"/g;
     process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
 
+    push @nativeRequires, "gettext" if $file =~ /USE_GETTEXT/;
     push @requires, "libxslt" if $pkg =~ /libxcb/;
-    push @requires, "gperf", "m4", "xorgproto" if $pkg =~ /xcbutil/;
+    push @nativeRequires, "meson", "ninja" if $pkg =~ /libxcvt/;
+    push @nativeRequires, "m4" if $pkg =~ /xcbutil/;
+    push @requires, "gperf", "xorgproto" if $pkg =~ /xcbutil/;
 
     print "REQUIRES $pkg => @requires\n";
     print "NATIVE_REQUIRES $pkg => @nativeRequires\n";
@@ -289,7 +295,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
 
     my @arguments = @buildInputs;
     push @arguments, @nativeBuildInputs;
-    unshift @arguments, "stdenv", "pkgconfig", "fetchurl";
+    unshift @arguments, "stdenv", "pkg-config", "fetchurl";
     my $argumentsStr = join ", ", @arguments;
 
     my $extraAttrsStr = "";
@@ -298,17 +304,19 @@ foreach my $pkg (sort (keys %pkgURLs)) {
     }
 
     print OUT <<EOF
+  # THIS IS A GENERATED FILE.  DO NOT EDIT!
   $pkg = callPackage ({ $argumentsStr }: stdenv.mkDerivation {
-    name = "$pkgNames{$pkg}";
+    pname = "$pkgNames{$pkg}";
+    version = "$pkgVersions{$pkg}";
     builder = ./builder.sh;
     src = fetchurl {
-      url = $pkgURLs{$pkg};
+      url = "$pkgURLs{$pkg}";
       sha256 = "$pkgHashes{$pkg}";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig $nativeBuildInputsStr];
+    nativeBuildInputs = [ pkg-config $nativeBuildInputsStr];
     buildInputs = [ $buildInputsStr];$extraAttrsStr
-    meta.platforms = stdenv.lib.platforms.unix;
+    meta.platforms = lib.platforms.unix;
   }) {};
 
 EOF

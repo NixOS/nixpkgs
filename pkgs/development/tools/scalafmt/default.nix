@@ -1,42 +1,46 @@
-{ stdenv, jdk, jre, coursier, makeWrapper }:
+{ lib, stdenv, jdk, jre, coursier, makeWrapper }:
 
 let
   baseName = "scalafmt";
-  version = "1.5.1";
+  version = "3.4.3";
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier fetch com.geirsson:scalafmt-cli_2.12:${version} > deps
+      ${coursier}/bin/cs fetch org.scalameta:scalafmt-cli_2.13:${version} > deps
       mkdir -p $out/share/java
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "15xfys9wdlx3rrqb2ab6qcfngkf6sa8v8q8shh10kk8jrc30g6dk";
+    outputHash     = "FWGvhKK/VnvetnHS35/z1errYTRZCrcfWyEAHlhKApk=";
   };
 in
-stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
+stdenv.mkDerivation {
+  pname = baseName;
+  inherit version;
 
-  buildInputs = [ jdk makeWrapper deps ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jdk deps ];
 
-  doCheck = true;
-
-  phases = [ "installPhase" "checkPhase" ];
+  dontUnpack = true;
 
   installPhase = ''
+    runHook preInstall
+
     makeWrapper ${jre}/bin/java $out/bin/${baseName} \
       --add-flags "-cp $CLASSPATH org.scalafmt.cli.Cli"
+
+    runHook postInstall
   '';
 
-  checkPhase = ''
+  installCheckPhase = ''
     $out/bin/${baseName} --version | grep -q "${version}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Opinionated code formatter for Scala";
-    homepage = http://scalafmt.org;
+    homepage = "http://scalameta.org/scalafmt";
     license = licenses.asl20;
     maintainers = [ maintainers.markus1189 ];
   };

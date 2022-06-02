@@ -48,7 +48,7 @@ let
     type = types.nullOr types.int;
     default = null;
     example = 365;
-    apply = val: if isNull val then -1 else val;
+    apply = val: if val == null then -1 else val;
     description = mkAutoDesc ''
       The expiration time of ${desc} in days or <literal>null</literal> for no
       expiration time.
@@ -82,7 +82,7 @@ let
          then attrByPath newPath (notFound newPath) cfg.pki.manual
          else findPkiDefinitions newPath val;
     in flatten (mapAttrsToList mkSublist attrs);
-  in all isNull (findPkiDefinitions [] manualPkiOptions);
+  in all (x: x == null) (findPkiDefinitions [] manualPkiOptions);
 
   orgOptions = { ... }: {
     options.users = mkOption {
@@ -106,7 +106,7 @@ let
 
   certtool = "${pkgs.gnutls.bin}/bin/certtool";
 
-  nixos-taskserver = pkgs.pythonPackages.buildPythonApplication {
+  nixos-taskserver = with pkgs.python3.pkgs; buildPythonApplication {
     name = "nixos-taskserver";
 
     src = pkgs.runCommand "nixos-taskserver-src" { preferLocalBuild = true; } ''
@@ -129,7 +129,7 @@ let
       EOF
     '';
 
-    propagatedBuildInputs = [ pkgs.pythonPackages.click ];
+    propagatedBuildInputs = [ click ];
   };
 
 in {
@@ -138,12 +138,13 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = ''
+        description = let
+          url = "https://nixos.org/manual/nixos/stable/index.html#module-services-taskserver";
+        in ''
           Whether to enable the Taskwarrior server.
 
           More instructions about NixOS in conjuction with Taskserver can be
-          found in the NixOS manual at
-          <olink targetdoc="manual" targetptr="module-taskserver"/>.
+          found <link xlink:href="${url}">in the NixOS manual</link>.
         '';
       };
 
@@ -276,10 +277,6 @@ in {
         example = "::";
         description = ''
           The address (IPv4, IPv6 or DNS) to listen on.
-
-          If the value is something else than <literal>localhost</literal> the
-          port defined by <option>listenPort</option> is automatically added to
-          <option>networking.firewall.allowedTCPPorts</option>.
         '';
       };
 
@@ -288,6 +285,14 @@ in {
         default = 53589;
         description = ''
           Port number of the Taskserver.
+        '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open the firewall for the specified Taskserver port.
         '';
       };
 
@@ -368,16 +373,16 @@ in {
     (mkIf cfg.enable {
       environment.systemPackages = [ nixos-taskserver ];
 
-      users.users = optional (cfg.user == "taskd") {
-        name = "taskd";
-        uid = config.ids.uids.taskd;
-        description = "Taskserver user";
-        group = cfg.group;
+      users.users = optionalAttrs (cfg.user == "taskd") {
+        taskd = {
+          uid = config.ids.uids.taskd;
+          description = "Taskserver user";
+          group = cfg.group;
+        };
       };
 
-      users.groups = optional (cfg.group == "taskd") {
-        name = "taskd";
-        gid = config.ids.gids.taskd;
+      users.groups = optionalAttrs (cfg.group == "taskd") {
+        taskd.gid = config.ids.gids.taskd;
       };
 
       services.taskserver.config = {
@@ -411,7 +416,7 @@ in {
         } else {
           cert = "${cfg.pki.manual.server.cert}";
           key = "${cfg.pki.manual.server.key}";
-          crl = "${cfg.pki.manual.server.crl}";
+          ${mapNullable (_: "crl") cfg.pki.manual.server.crl} = "${cfg.pki.manual.server.crl}";
         });
 
         ca.cert = if needToCreateCA then "${cfg.dataDir}/keys/ca.cert"
@@ -559,7 +564,7 @@ in {
         '';
       };
     })
-    (mkIf (cfg.enable && cfg.listenHost != "localhost") {
+    (mkIf (cfg.enable && cfg.openFirewall) {
       networking.firewall.allowedTCPPorts = [ cfg.listenPort ];
     })
   ];

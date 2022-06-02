@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libusb1, libimobiledevice }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libusb1, libimobiledevice }:
 
 stdenv.mkDerivation rec {
   pname = "usbmuxd";
-  version = "2018-10-10";
+  version = "unstable-2021-05-08";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "96e4aabe0b9a46ea9da4955a10c774a8e58fe677";
-    sha256 = "03xnj4y606adbhl829vv46qa78f6w2ik4mjz19a34x9lhkcrqxqi";
+    rev = "5e484e18f1383b5a0bd6c353ab1d668b03e4ffab";
+    sha256 = "sha256-hhbfRmLEhVVuJNnw65PakPnvjSCrN3oSMK6D7Zwnw60=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   propagatedBuildInputs = [ libimobiledevice libusb1 ];
 
   preConfigure = ''
@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --with-systemdsystemunitdir=$out/lib/systemd/system"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/libimobiledevice/usbmuxd;
+  meta = with lib; {
+    homepage = "https://github.com/libimobiledevice/usbmuxd";
     description = "A socket daemon to multiplex connections from and to iOS devices";
     longDescription = ''
       usbmuxd stands for "USB multiplexing daemon". This daemon is in charge of
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       in parallel. The higher-level layers are handled by libimobiledevice.
     '';
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ infinisil ];
   };
 }

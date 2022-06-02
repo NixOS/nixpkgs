@@ -1,30 +1,67 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, urllib3, certifi
-, gevent, geventhttpclient, mock, fastimport
-, git, glibcLocales }:
+{ lib
+, stdenv
+, buildPythonPackage
+, certifi
+, fastimport
+, fetchPypi
+, gevent
+, geventhttpclient
+, git
+, glibcLocales
+, gpgme
+, mock
+, pkgs
+, urllib3
+, paramiko
+, pythonOlder
+}:
 
 buildPythonPackage rec {
-  version = "0.19.11";
+  version = "0.20.40";
   pname = "dulwich";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "afbe070f6899357e33f63f3f3696e601731fef66c64a489dea1bc9f539f4a725";
+    hash = "sha256-vtcO/gt91RpHvOqbmEqwamdddDi3izLaHLr891D7utc=";
   };
 
   LC_ALL = "en_US.UTF-8";
 
-  propagatedBuildInputs = [ urllib3 certifi ];
+  propagatedBuildInputs = [
+    certifi
+    urllib3
+  ];
 
-  # Only test dependencies
-  checkInputs = [ git glibcLocales gevent geventhttpclient mock fastimport ];
+  checkInputs = [
+    fastimport
+    gevent
+    geventhttpclient
+    git
+    glibcLocales
+    gpgme
+    pkgs.gnupg
+    mock
+    paramiko
+  ];
 
   doCheck = !stdenv.isDarwin;
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "dulwich"
+  ];
+
+  meta = with lib; {
     description = "Simple Python implementation of the Git file formats and protocols";
-    homepage = https://samba.org/~jelmer/dulwich/;
-    license = licenses.gpl2Plus;
+    longDescription = ''
+      Dulwich is a Python implementation of the Git file formats and protocols, which
+      does not depend on Git itself. All functionality is available in pure Python.
+    '';
+    homepage = "https://www.dulwich.io/";
+    changelog = "https://github.com/dulwich/dulwich/blob/dulwich-${version}/NEWS";
+    license = with licenses; [ asl20 gpl2Plus ];
     maintainers = with maintainers; [ koral ];
   };
 }

@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "msr-tools-${version}";
+  pname = "msr-tools";
   version = "1.3";
 
   src = fetchurl {
-    url = "https://01.org/sites/default/files/downloads/msr-tools/${name}.zip";
+    url = "https://01.org/sites/default/files/downloads/msr-tools/${pname}-${version}.zip";
     sha256 = "07hxmddg0l31kjfmaq84ni142lbbvgq6391r8bd79wpm819pnigr";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   preInstall = ''
     mkdir -p $out/bin
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       --replace /usr/sbin $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to read/write from/to MSR CPU registers on Linux";
     license = licenses.gpl2;
     platforms = platforms.linux;

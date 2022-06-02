@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "bmrsa-${version}";
+  pname = "bmrsa";
   version = "11";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ksd9xkvm9lkvj4yl5sl0zmydp1wn3xhc55b28gj70gi4k75kcl4";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   unpackPhase = ''
     mkdir bmrsa
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     echo -e 'install:\n\tcp bmrsa '$out'/bin' >> Makefile
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "RSA utility";
-    homepage = http://bmrsa.sourceforge.net/;
+    homepage = "http://bmrsa.sourceforge.net/";
     license = licenses.gpl1;
     platforms = platforms.linux;
   };

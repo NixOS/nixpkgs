@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libuuid
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libuuid
 , sane-backends, podofo, libjpeg, djvulibre, libxmlxx3, libzip, tesseract
 , intltool, poppler, json-glib
 , ninja
@@ -6,8 +6,8 @@
 
 # Gtk deps
 # upstream gImagereader supports Qt too
-, gtk3, gobject-introspection, wrapGAppsHook
-, gnome3, gtkmm3, gtksourceview3, gtksourceviewmm, gtkspell3, gtkspellmm, cairomm
+, gobject-introspection, wrapGAppsHook
+, gtkmm3, gtksourceview3, gtksourceviewmm, gtkspell3, gtkspellmm, cairomm
 }:
 
 let
@@ -15,20 +15,20 @@ let
   pythonEnv = python3.withPackages( ps: with ps;[ pygobject3 ] );
 in
 stdenv.mkDerivation rec {
-  name = "gImageReader-${version}";
-  version = "3.3.0";
+  pname = "gImageReader";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner= "manisandro";
     repo = "gImageReader";
     rev = "v${version}";
-    sha256 = "0pjk4kr7bc5q4hi1xf7na2zln9fyqdazgzq62r3bg41nzy7fakcz";
+    sha256 = "sha256-lJ4wPLxVN3NERnru8vLreiWMEUip6xeCXAfoT8DcfiQ=";
   };
 
   nativeBuildInputs = [
     cmake ninja
     intltool
-    pkgconfig
+    pkg-config
     pythonEnv
 
     # Gtk specific
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
   # interface type can be where <type> is either gtk, qt5, qt4
   cmakeFlags = [ "-DINTERFACE_TYPE=${variant}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple Gtk/Qt front-end to tesseract-ocr";
-    homepage = https://github.com/manisandro/gImageReader;
+    homepage = "https://github.com/manisandro/gImageReader";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [teto];
     platforms = platforms.linux;

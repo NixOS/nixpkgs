@@ -1,22 +1,45 @@
-{ lib, fetchFromGitHub, buildPythonApplication
-, pygtk
-, numpy ? null
+{ lib, python3Packages, fetchFromGitHub
+, gtk3
+, pango
+, gobject-introspection
+, wrapGAppsHook
 }:
 
-buildPythonApplication {
-  name = "escrotum-2017-01-28";
+with python3Packages; buildPythonApplication {
+  pname = "escrotum";
+  version = "unstable-2020-12-07";
 
   src = fetchFromGitHub {
     owner  = "Roger";
     repo   = "escrotum";
-    rev    = "a51e330f976c1c9e1ac6932c04c41381722d2171";
-    sha256 = "0vbpyihqgm0fyh22ashy4lhsrk67n31nw3bs14d1wr7ky0l3rdnj";
+    rev    = "a41d0f11bb6af4f08e724b8ccddf8513d905c0d1";
+    sha256 = "sha256-z0AyTbOEE60j/883X17mxgoaVlryNtn0dfEB0C18G2s=";
   };
 
-  propagatedBuildInputs = [ pygtk numpy ];
+  buildInputs = [
+    gtk3
+    pango
+  ];
+
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
+  propagatedBuildInputs = [ pygobject3 xcffib pycairo numpy ];
+
+  # Cannot find pango without strictDeps = false
+  strictDeps = false;
+
+  outputs = [ "out" "man" ];
+
+  postInstall = ''
+    mkdir -p $man/share/man/man1
+    cp man/escrotum.1 $man/share/man/man1/
+  '';
 
   meta = with lib; {
-    homepage = https://github.com/Roger/escrotum;
+    homepage = "https://github.com/Roger/escrotum";
     description = "Linux screen capture using pygtk, inspired by scrot";
     platforms = platforms.linux;
     maintainers = with maintainers; [ rasendubi ];

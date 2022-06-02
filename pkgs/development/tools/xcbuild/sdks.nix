@@ -1,5 +1,5 @@
-{ stdenv, runCommand, lib, toolchainName, sdkName
-, writeText, version, xcodePlatform, libcxx, symlinkJoin }:
+{ runCommand, lib, toolchainName, sdkName
+, writeText, version, xcodePlatform }:
 
 let
   inherit (lib.generators) toPlist;

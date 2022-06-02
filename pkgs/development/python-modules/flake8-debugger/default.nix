@@ -1,28 +1,41 @@
-{ lib, fetchPypi, buildPythonPackage, flake8, pycodestyle, pytestrunner, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, flake8
+, pycodestyle
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "flake8-debugger";
-  version = "3.1.0";
+  version = "4.1.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be4fb88de3ee8f6dd5053a2d347e2c0a2b54bab6733a2280bb20ebd3c4ca1d97";
+    hash = "sha256-UrACVglB422b+Ab8olI9x/uFYKKV1fGm4VrC3tenOEA=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  propagatedBuildInputs = [
+    flake8
+    pycodestyle
+  ];
 
-  propagatedBuildInputs = [ flake8 pycodestyle ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkInputs = [ pytest ];
+  pythonImportsCheck = [
+    "flake8_debugger"
+  ];
 
-  # Tests not included in PyPI tarball
-  # FIXME: Remove when https://github.com/JBKahn/flake8-debugger/pull/15 is merged
-  doCheck = false;
-
-  meta = {
-    homepage = https://github.com/jbkahn/flake8-debugger;
+  meta = with lib; {
     description = "ipdb/pdb statement checker plugin for flake8";
-    maintainers = with lib.maintainers; [ johbo ];
-    license = lib.licenses.mit;
+    homepage = "https://github.com/jbkahn/flake8-debugger";
+    license = licenses.mit;
+    maintainers = with maintainers; [ johbo ];
   };
 }

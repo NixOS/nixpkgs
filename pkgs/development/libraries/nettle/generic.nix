@@ -1,13 +1,13 @@
-{ stdenv, buildPackages, gmp, gnum4
+{ lib, stdenv, buildPackages, gmp, gnum4
 
 # Version specific args
 , version, src
-, ...}:
+}:
 
-stdenv.mkDerivation (rec {
-  name = "nettle-${version}";
+stdenv.mkDerivation {
+  pname = "nettle";
 
-  inherit src;
+  inherit version src;
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
@@ -16,14 +16,23 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
+  configureFlags =
+    # runtime selection of HW-accelerated code; it's default since 3.7
+    [ "--enable-fat" ]
+    # Make sure the right <gmp.h> is found, and not the incompatible
+    # /usr/include/mp.h from OpenSolaris.  See
+    # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
+    # for details.
+    ++ lib.optional stdenv.isSunOS "--with-include-path=${gmp.dev}/include";
+
   doCheck = (stdenv.hostPlatform.system != "i686-cygwin" && !stdenv.isDarwin);
 
   enableParallelBuilding = true;
 
-  patches = stdenv.lib.optional (stdenv.hostPlatform.system == "i686-cygwin")
+  patches = lib.optional (stdenv.hostPlatform.system == "i686-cygwin")
               ./cygwin.patch;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cryptographic library";
 
     longDescription = ''
@@ -51,18 +60,9 @@ stdenv.mkDerivation (rec {
 
      license = licenses.gpl2Plus;
 
-     homepage = http://www.lysator.liu.se/~nisse/nettle/;
+     homepage = "https://www.lysator.liu.se/~nisse/nettle/";
 
      platforms = platforms.all;
+     maintainers = [ maintainers.vcunat ];
   };
 }
-
-//
-
-stdenv.lib.optionalAttrs stdenv.isSunOS {
-  # Make sure the right <gmp.h> is found, and not the incompatible
-  # /usr/include/mp.h from OpenSolaris.  See
-  # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
-  # for details.
-  configureFlags = [ "--with-include-path=${gmp.dev}/include" ];
-})

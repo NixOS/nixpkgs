@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , numpy
 , astropy
 , astropy-helpers
@@ -10,25 +11,27 @@
 , pyregion
 , pillow
 , scikitimage
+, cython
 , shapely
+, pytest
+, pytest-astropy
 }:
 
 buildPythonPackage rec {
   pname = "aplpy";
-  version = "2.0.3";
-
-  doCheck = false; # tests require pytest-astropy
+  version = "2.1.0";
+  format = "pyproject";
 
   src = fetchPypi {
-    pname = "APLpy";
+    pname = "aplpy";
     inherit version;
-    sha256 = "239f3d83635ca4251536aeb577df7c60df77fc4d658097b92094719739aec3f3";
+    sha256 = "sha256-KCdmBwQWt7IfHsjq7pWlbSISEpfQZDyt+SQSTDaUCV4=";
   };
 
   propagatedBuildInputs = [
     numpy
+    cython
     astropy
-    astropy-helpers
     matplotlib
     reproject
     pyavm
@@ -38,14 +41,16 @@ buildPythonPackage rec {
     shapely
   ];
 
-  # Disable automatic update of the astropy-helper module
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
+  nativeBuildInputs = [ astropy-helpers ];
+  checkInputs = [ pytest pytest-astropy ];
+
+  checkPhase = ''
+    OPENMP_EXPECTED=0 pytest aplpy
   '';
 
   meta = with lib; {
     description = "The Astronomical Plotting Library in Python";
-    homepage = http://aplpy.github.io;
+    homepage = "http://aplpy.github.io";
     license = licenses.mit;
     maintainers = [ maintainers.smaret ];
   };

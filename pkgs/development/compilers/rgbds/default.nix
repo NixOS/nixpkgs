@@ -1,22 +1,34 @@
-{stdenv, fetchFromGitHub, yacc}:
+{lib, stdenv, fetchFromGitHub, bison, flex, pkg-config, libpng}:
 
 stdenv.mkDerivation rec {
-  name = "rgbds-${version}";
-  version = "0.2.4";
+  pname = "rgbds";
+  version = "0.5.2";
   src = fetchFromGitHub {
-    owner = "bentley";
+    owner = "gbdev";
     repo = "rgbds";
     rev = "v${version}";
-    sha256 = "0dwq0p9g1lci8sm12a2rfk0g33z2vr75x78zdf1g84djwbz8ipc6";
+    sha256 = "sha256-/GjxdB3Nt+XuKKQWjU12mS91U4FFoeP+9t0L+HsB/o8=";
   };
-  nativeBuildInputs = [ yacc ];
-  installFlags = "PREFIX=\${out}";
+  nativeBuildInputs = [ bison flex pkg-config ];
+  buildInputs = [ libpng ];
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-fno-lto";
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://www.anjbe.name/rgbds/;
-    description = "An assembler/linker package that produces Game Boy programs";
-    license = licenses.free;
-    maintainers = with maintainers; [ matthewbauer ];
+  meta = with lib; {
+    homepage = "https://rgbds.gbdev.io/";
+    description = "A free assembler/linker package for the Game Boy and Game Boy Color";
+    license = licenses.mit;
+    longDescription =
+      ''RGBDS (Rednex Game Boy Development System) is a free assembler/linker package for the Game Boy and Game Boy Color. It consists of:
+
+          - rgbasm (assembler)
+          - rgblink (linker)
+          - rgbfix (checksum/header fixer)
+          - rgbgfx (PNG‐to‐Game Boy graphics converter)
+
+        This is a fork of the original RGBDS which aims to make the programs more like other UNIX tools.
+      '';
+    maintainers = with maintainers; [ matthewbauer NieDzejkob ];
     platforms = platforms.all;
   };
 }

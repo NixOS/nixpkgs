@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , mock
@@ -7,6 +7,7 @@
 , nbconvert
 , markdown
 , isPy3k
+, ipykernel
 }:
 
 buildPythonPackage rec {
@@ -21,14 +22,14 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   buildInputs = [ mock pkgs.glibcLocales ];
-  propagatedBuildInputs = [ matplotlib nbconvert markdown ];
+  propagatedBuildInputs = [ ipykernel matplotlib nbconvert markdown ];
 
   # fails due to trying to run CSS as test
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Scientific reports with embedded python computations with reST, LaTeX or markdown";
-    homepage = http://mpastell.com/pweave/ ;
+    homepage = "https://mpastell.com/pweave/";
     license = licenses.bsd3;
   };
 

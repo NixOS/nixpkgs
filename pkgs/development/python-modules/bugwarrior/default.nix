@@ -1,31 +1,31 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, mock, unittest2, nose
-, twiggy, requests, offtrac, bugzilla, taskw, dateutil, pytz, keyring, six
-, jinja2, pycurl, dogpile_cache, lockfile, click, pyxdg, future }:
+{ lib, buildPythonPackage, fetchPypi, pythonOlder, setuptools
+, twiggy, requests, offtrac, bugzilla, taskw, python-dateutil, pytz, keyring, six
+, jinja2, pycurl, dogpile-cache, lockfile, click, pyxdg, future, jira }:
 
 buildPythonPackage rec {
   pname = "bugwarrior";
-  version = "1.6.0";
+  version = "1.8.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cfa4fac19b4f4638928347b8fe192315f72813c3e8ed668867e5891338c7e4ec";
+    sha256 = "f024c29d2089b826f05481cace33a62aa984f33e98d226f6e41897e6f11b3f51";
   };
 
-  buildInputs = [ mock unittest2 nose /* jira megaplan */ ];
   propagatedBuildInputs = [
-    twiggy requests offtrac bugzilla taskw dateutil pytz keyring six
-    jinja2 pycurl dogpile_cache lockfile click pyxdg future
+    setuptools
+    twiggy requests offtrac bugzilla taskw python-dateutil pytz keyring six
+    jinja2 pycurl dogpile-cache lockfile click pyxdg future jira
   ];
 
-  # for the moment jira>=0.22 and megaplan>=1.4 are missing for running the test suite.
+  # for the moment oauth2client <4.0.0 and megaplan>=1.4 are missing for running the test suite.
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage =  https://github.com/ralphbean/bugwarrior;
+  meta = with lib; {
+    homepage = "https://github.com/ralphbean/bugwarrior";
     description = "Sync github, bitbucket, bugzilla, and trac issues with taskwarrior";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pierron ];
+    maintainers = with maintainers; [ pierron yurrriq ];
   };
 }

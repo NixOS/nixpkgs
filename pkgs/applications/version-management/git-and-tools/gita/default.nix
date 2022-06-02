@@ -1,23 +1,56 @@
-{ lib, python3Packages }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, git
+, pytest
+, pyyaml
+, setuptools
+, installShellFiles
+}:
 
-python3Packages.buildPythonApplication rec {
-  version = "0.8.2";
+buildPythonApplication rec {
+  version = "0.11.9";
   pname = "gita";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "16jpnl323x86dkrnh4acyvi9jknhgi3r0ccv63rkjcmd0srkaxkk";
+  src = fetchFromGitHub {
+    sha256 = "9+zuLAx9lMfltsBqjvsivJ5wPnStPfq11XgGMv/JDpY=";
+    rev = version;
+    repo = "gita";
+    owner = "nosarthur";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     pyyaml
+    setuptools
   ];
 
-  doCheck = false;  # Releases don't include tests
+  nativeBuildInputs = [ installShellFiles ];
+
+  postUnpack = ''
+    for case in "\n" ""; do
+        substituteInPlace source/tests/test_main.py \
+         --replace "'gita$case'" "'source$case'"
+    done
+  '';
+
+  checkInputs = [
+    git
+    pytest
+  ];
+
+  checkPhase = ''
+    git init
+    pytest tests
+  '';
+
+  postInstall = ''
+    installShellCompletion --bash --name gita ${src}/.gita-completion.bash
+    installShellCompletion --zsh --name gita ${src}/.gita-completion.zsh
+  '';
 
   meta = with lib; {
     description = "A command-line tool to manage multiple git repos";
-    homepage = https://github.com/nosarthur/gita;
+    homepage = "https://github.com/nosarthur/gita";
     license = licenses.mit;
     maintainers = with maintainers; [ seqizz ];
   };

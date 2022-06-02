@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, boost, ladspaH, lilv, lv2, pkgconfig, serd, sord, sratom }:
+{ lib, stdenv, fetchFromGitHub, boost, ladspaH, lilv, lv2, pkg-config, serd, sord, sratom }:
 
-stdenv.mkDerivation rec {
-  name = "plugin-torture-${version}";
+stdenv.mkDerivation {
+  pname = "plugin-torture";
   version = "2016-07-25";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xyhvhm85d9z0kw716cjllrrzksn4s4bw34layg8hf4m5m31sp2p";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ boost ladspaH lilv lv2 serd sord sratom ];
 
   installPhase = ''
@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
     cp find-safe-plugins $out/bin/
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/cth103/plugin-torture;
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
+    homepage = "https://github.com/cth103/plugin-torture";
     description = "A tool to test LADSPA and LV2 plugins";
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];

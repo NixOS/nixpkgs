@@ -1,23 +1,37 @@
-{ mkDerivation, lib, fetchFromGitHub
-, cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs
-, libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch
+, cmake, extra-cmake-modules, pkg-config, libxcb, libpthreadstubs
+, libXdmcp, libXau, qtbase, qtdeclarative, qtquickcontrols2, qttools, pam, systemd
 }:
 
 let
-  version = "0.18.0";
+  version = "0.19.0";
 
-in mkDerivation rec {
-  name = "sddm-${version}";
+in mkDerivation {
+  pname = "sddm";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "16xnm02iqgy4hydzd6my0widq981glbazbhxnihhclgsaczh8mfq";
+    sha256 = "1s6icb5r1n6grfs137gdzfrcvwsb3hvlhib2zh6931x8pkl1qvxa";
   };
 
   patches = [
     ./sddm-ignore-config-mtime.patch
+    ./sddm-default-session.patch
+    # Load `/etc/profile` for `environment.variables` with zsh default shell.
+    # See: https://github.com/sddm/sddm/pull/1382
+    (fetchpatch {
+      url = "https://github.com/sddm/sddm/commit/e1dedeeab6de565e043f26ac16033e613c222ef9.patch";
+      sha256 = "sha256-OPyrUI3bbH+PGDBfoL4Ohb4wIvmy9TeYZhE0JxR/D58=";
+    })
+    # Fix build with Qt 5.15.3
+    # See: https://github.com/sddm/sddm/pull/1325
+    (fetchpatch {
+      url = "https://github.com/sddm/sddm/commit/e93bf95c54ad8c2a1604f8d7be05339164b19308.patch";
+      sha256 = "sha256:1rh6sdvzivjcl5b05fczarvxhgpjhi7019hvf2gadnwgwdg104r4";
+    })
   ];
 
   postPatch =
@@ -26,10 +40,10 @@ in mkDerivation rec {
       sed -e '1i#include <sys/time.h>' -i src/helper/HelperApp.cpp
     '';
 
-  nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
+  nativeBuildInputs = [ cmake extra-cmake-modules pkg-config qttools ];
 
   buildInputs = [
-    libxcb libpthreadstubs libXdmcp libXau pam qtbase qtdeclarative systemd
+    libxcb libpthreadstubs libXdmcp libXau pam qtbase qtdeclarative qtquickcontrols2 systemd
   ];
 
   cmakeFlags = [
@@ -41,11 +55,12 @@ in mkDerivation rec {
     # not supported anyway.
     "-DUID_MIN=1000"
     "-DUID_MAX=29999"
-  ];
 
-  preConfigure = ''
-    export cmakeFlags="$cmakeFlags -DQT_IMPORTS_DIR=$out/$qtQmlPrefix -DCMAKE_INSTALL_SYSCONFDIR=$out/etc -DSYSTEMD_SYSTEM_UNIT_DIR=$out/lib/systemd/system"
-  '';
+    "-DQT_IMPORTS_DIR=${placeholder "out"}/${qtbase.qtQmlPrefix}"
+    "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
+    "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
+    "-DDBUS_CONFIG_DIR=${placeholder "out"}/share/dbus-1/system.d"
+  ];
 
   postInstall = ''
     # remove empty scripts
@@ -58,7 +73,7 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "QML based X11 display manager";
-    homepage    = https://github.com/sddm/sddm;
+    homepage    = "https://github.com/sddm/sddm";
     maintainers = with maintainers; [ abbradar ttuegel ];
     platforms   = platforms.linux;
     license     = licenses.gpl2Plus;

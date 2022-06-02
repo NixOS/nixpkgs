@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, nose }:
+{ lib, buildPythonPackage, fetchPypi, nose }:
 
 buildPythonPackage rec {
   pname = "IPy";
-  version = "0.83";
+  version = "1.01";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "61da5a532b159b387176f6eabf11946e7458b6df8fb8b91ff1d345ca7a6edab8";
+    sha256 = "edeca741dea2d54aca568fa23740288c3fe86c0f3ea700344571e9ef14a7cc1a";
   };
 
   checkInputs = [ nose ];
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     nosetests -e fuzz
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Class and tools for handling of IPv4 and IPv6 addresses and networks";
     homepage = "https://github.com/autocracy/python-ipy";
     license = licenses.bsdOriginal;

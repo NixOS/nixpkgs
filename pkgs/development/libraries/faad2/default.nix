@@ -1,25 +1,30 @@
-{stdenv, fetchurl
+{lib, stdenv, fetchFromGitHub, autoreconfHook
 , drmSupport ? false # Digital Radio Mondiale
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  name = "faad2-${version}";
-  version = "2.8.8";
+  pname = "faad2";
+  version = "2.10.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/faac/${name}.tar.gz";
-    sha256 = "1db37ydb6mxhshbayvirm5vz6j361bjim4nkpwjyhmy4ddfinmhl";
+  src = fetchFromGitHub {
+    owner = "knik0";
+    repo = "faad2";
+    rev = builtins.replaceStrings [ "." ] [ "_" ] version;
+    sha256 = "0q52kdd95ls6ihzyspx176wg9x22425v5qsknrmrjq30q25qmmlg";
   };
 
   configureFlags = []
     ++ optional drmSupport "--with-drm";
 
+  nativeBuildInputs = [ autoreconfHook ];
+
   meta = {
     description = "An open source MPEG-4 and MPEG-2 AAC decoder";
-    homepage    = http://www.audiocoding.com/faad2.html;
-    license     = licenses.gpl2;
+    homepage = "https://sourceforge.net/projects/faac/";
+    license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ codyopel ];
+    mainProgram = "faad";
     platforms   = platforms.all;
   };
 }

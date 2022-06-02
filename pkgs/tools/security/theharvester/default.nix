@@ -1,41 +1,67 @@
-{ stdenv, makeWrapper, python2Packages, fetchFromGitHub }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-stdenv.mkDerivation rec {
-  pname = "theHarvester";
-  version = "2.7.1";
-  name = "${pname}-${version}";
+python3.pkgs.buildPythonApplication rec {
+  pname = "theharvester";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "laramies";
-    repo = "${pname}";
-    rev = "25553762d2d93a39083593adb08a34d5f5142c60";
-    sha256 = "0gnm598y6paz0knwvdv1cx0w6ngdbbpzkdark3q5vs66yajv24w4";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-Ckouhe/Uq6Dv9p/LRpPQkiKuYrwrl/Z7KkYYamDHav8=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = with python3.pkgs; [
+    aiodns
+    aiofiles
+    aiohttp
+    aiomultiprocess
+    aiosqlite
+    beautifulsoup4
+    censys
+    certifi
+    dnspython
+    fastapi
+    lxml
+    netaddr
+    orjson
+    plotly
+    pyppeteer
+    pyyaml
+    requests
+    retrying
+    shodan
+    slowapi
+    starlette
+    uvicorn
+    uvloop
+  ];
 
-  # add dependencies
-  propagatedBuildInputs = [ python2Packages.requests ];
+  checkInputs = with  python3.pkgs; [
+    pytest
+    pytest-asyncio
+  ];
 
-  installPhase = ''
-    # create dirs
-    mkdir -p $out/share/${pname} $out/bin
-
-    # move project code
-    mv * $out/share/${pname}/
-
-    # make project runnable
-    chmod +x $out/share/${pname}/theHarvester.py
-    ln -s $out/share/${pname}/theHarvester.py $out/bin
-
-    wrapProgram "$out/bin/theHarvester.py" --prefix PYTHONPATH : $out/share/${pname}:$PYTHONPATH
+  # We don't run other tests (discovery modules) because they require network access
+  checkPhase = ''
+    runHook preCheck
+    pytest tests/test_myparser.py
+    runHook postCheck
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gather E-mails, subdomains and names from different public sources";
+    longDescription = ''
+      theHarvester is a very simple, yet effective tool designed to be used in the early
+      stages of a penetration test. Use it for open source intelligence gathering and
+      helping to determine an entity's external threat landscape on the internet. The tool
+      gathers emails, names, subdomains, IPs, and URLs using multiple public data sources.
+    '';
     homepage = "https://github.com/laramies/theHarvester";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ treemo ];
-    license = licenses.gpl2;
+    maintainers = with maintainers; [ c0bw3b treemo ];
+    license = licenses.gpl2Only;
   };
 }

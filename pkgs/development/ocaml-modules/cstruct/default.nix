@@ -1,20 +1,28 @@
-{ stdenv, fetchurl, buildDunePackage, sexplib, ocplib-endian }:
+{ lib, fetchurl, buildDunePackage, bigarray-compat, alcotest, ocaml }:
 
 buildDunePackage rec {
   pname = "cstruct";
-  version = "3.1.1";
+  version = "6.0.1";
+
+  useDune2 = true;
+
+  minimumOCamlVersion = "4.03";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-cstruct/releases/download/v${version}/cstruct-${version}.tbz";
-    sha256 = "1x4jxsvd1lrfibnjdjrkfl7hqsc48rljnwbap6faanj9qhwwa6v2";
+    url = "https://github.com/mirage/ocaml-cstruct/releases/download/v${version}/cstruct-v${version}.tbz";
+    sha256 = "4a67bb8f042753453c59eabf0e47865631253ba694091ce6062aac05d47a9bed";
   };
 
-  propagatedBuildInputs = [ sexplib ocplib-endian ];
+  propagatedBuildInputs = [ bigarray-compat ];
+
+  # alcotest isn't available for OCaml < 4.05 due to fmt
+  doCheck = lib.versionAtLeast ocaml.version "4.05";
+  checkInputs = [ alcotest ];
 
   meta = {
     description = "Access C-like structures directly from OCaml";
-    license = stdenv.lib.licenses.isc;
+    license = lib.licenses.isc;
     homepage = "https://github.com/mirage/ocaml-cstruct";
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

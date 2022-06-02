@@ -1,23 +1,29 @@
-{ fetchurl, stdenv, ncurses }:
+{ fetchurl, lib, stdenv, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "nmon-${version}";
-  version = "16i";
+  pname = "nmon";
+  version = "16n";
 
   src = fetchurl {
     url = "mirror://sourceforge/nmon/lmon${version}.c";
-    sha256 = "0k52nvkfhwq7125gbrz7p56gid4rik59am8w22ja8ihiribdfrmg";
+    sha256 = "1wpm2f30414b87kpbr9hbidblr5cmfby5skwqd0fkpi5v712q0f0";
   };
 
   buildInputs = [ ncurses ];
-  unpackPhase = ":";
-  buildPhase = "cc -o nmon ${src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D X86";
+  dontUnpack = true;
+  buildPhase = "${stdenv.cc.targetPrefix}cc -o nmon ${src} -g -O2 -D JFS -D GETUSER -Wall -D LARGEMEM -lncurses -lm -g -D ${
+    with stdenv.targetPlatform;
+    if isx86_32 || isx86_64 then "X86"
+    else if isAarch32 || isAarch64 then "ARM"
+    else if isPower then "POWER"
+    else "UNKNOWN"
+  }";
   installPhase = ''
     mkdir -p $out/bin
     cp nmon $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AIX & Linux Performance Monitoring tool";
     homepage = "http://nmon.sourceforge.net";
     license = licenses.gpl3Plus;

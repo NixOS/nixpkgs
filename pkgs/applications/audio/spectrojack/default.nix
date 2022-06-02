@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, libjack2, fftwFloat, gtk2 }:
+{ lib, stdenv, fetchurl, pkg-config, libjack2, fftwFloat, gtk2 }:
 
 stdenv.mkDerivation rec {
-  name = "spectrojack-${version}";
+  pname = "spectrojack";
   version = "0.4.1";
 
   src = fetchurl {
-    url = "http://sed.free.fr/spectrojack/${name}.tar.gz";
+    url = "http://sed.free.fr/spectrojack/${pname}-${version}.tar.gz";
     sha256 = "1kiwx0kag7kq7rhg0bvckfm8r7pqmbk76ppa39cq2980jb5v8rfp";
   };
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjack2 fftwFloat gtk2 ];
   configurePhase= ''
     sed -i 's/.*home.*/#&/' ./Makefile
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A little spectrogram/audiogram/sonogram/whatever for JACK";
-    homepage = http://sed.free.fr/spectrojack;
-    license = stdenv.lib.licenses.publicDomain;
-    maintainers = with stdenv.lib.maintainers; [ sleexyz ];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "http://sed.free.fr/spectrojack";
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ sleexyz ];
+    platforms = with lib.platforms; linux;
   };
 }

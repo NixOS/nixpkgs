@@ -1,7 +1,7 @@
 { lib, python3Packages, fetchurl, git }:
 
 python3Packages.buildPythonApplication rec {
-  name = "nox-${version}";
+  pname = "nox";
   version = "0.0.6";
   namePrefix = "";
 
@@ -15,14 +15,15 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [ python3Packages.pbr git ];
 
   propagatedBuildInputs = with python3Packages; [
-      dogpile_cache
+      dogpile-cache
       click
       requests
       characteristic
+      setuptools
     ];
 
   meta = {
-    homepage = https://github.com/madjar/nox;
+    homepage = "https://github.com/madjar/nox";
     description = "Tools to make nix nicer to use";
     maintainers = [ lib.maintainers.madjar ];
     license = lib.licenses.mit;

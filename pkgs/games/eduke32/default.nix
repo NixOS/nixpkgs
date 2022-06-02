@@ -1,76 +1,104 @@
-{ stdenv, fetchurl, flac, gtk2, libvorbis, libvpx, makeDesktopItem, libGLU_combined, nasm
-, pkgconfig, SDL2, SDL2_mixer, runtimeShell }:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, nasm, makeDesktopItem
+, alsa-lib, flac, gtk2, libvorbis, libvpx, libGLU, libGL
+, SDL2, SDL2_mixer
+, AGL, Cocoa, GLUT, OpenGL
+}:
 
 let
-  year = "2015";
-  date = "20150420";
-  rev = "5160";
-in stdenv.mkDerivation rec {
-  name = "eduke32-${version}";
-  version = "${date}-${rev}";
-
-  src = fetchurl {
-    url = "http://dukeworld.duke4.net/eduke32/synthesis/old/${year}/${version}/eduke32_src_${version}.tar.xz";
-    sha256 = "1nlq5jbglg00c1z1vsyl627fh0mqfxvk5qyxav5vzla2b4svik2v";
-  };
-
-  buildInputs = [ flac gtk2 libvorbis libvpx libGLU_combined SDL2 SDL2_mixer ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
-  nativeBuildInputs = [ pkgconfig ];
-
-  postPatch = ''
-    substituteInPlace build/src/glbuild.c \
-      --replace libGL.so	${libGLU_combined}/lib/libGL.so \
-      --replace libGLU.so	${libGLU_combined}/lib/libGLU.so
-  '';
-
-  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
-  NIX_LDFLAGS = "-L${SDL2}/lib";
-
-  makeFlags = [
-    "LINKED_GTK=1"
-    "SDLCONFIG=${SDL2}/bin/sdl2-config"
-    "VC_REV=${rev}"
-  ];
-
   desktopItem = makeDesktopItem {
     name = "eduke32";
-    exec = "eduke32-wrapper";
+    exec = "@out@/bin/${wrapper}";
     comment = "Duke Nukem 3D port";
     desktopName = "Enhanced Duke Nukem 3D";
     genericName = "Duke Nukem 3D port";
-    categories = "Application;Game;";
+    categories = [ "Game" ];
   };
 
-  installPhase = ''
-    # Make wrapper script
-    cat > eduke32-wrapper <<EOF
-    #!${runtimeShell}
+  wrapper = "eduke32-wrapper";
 
-    if [ "$EDUKE32_DATA_DIR" = "" ]; then
-        EDUKE32_DATA_DIR=/var/lib/games/eduke32
-    fi
-    if [ "$EDUKE32_GRP_FILE" = "" ]; then
-        EDUKE32_GRP_FILE=\$EDUKE32_DATA_DIR/DUKE3D.GRP
-    fi
+in stdenv.mkDerivation rec {
+  pname = "eduke32";
+  version = "20210910";
+  rev = "9603";
+  revExtra = "6c289cce4";
 
-    cd \$EDUKE32_DATA_DIR
-    exec $out/bin/eduke32 -g \$EDUKE32_GRP_FILE
-    EOF
+  src = fetchurl {
+    url = "https://dukeworld.com/eduke32/synthesis/${version}-${rev}-${revExtra}/eduke32_src_${version}-${rev}-${revExtra}.tar.xz";
+    sha256 = "sha256-/NQMsmT9z2N3KWBrP8hlGngQKJUgSP+vrNoFqJscRCk=";
+  };
 
-    # Install binaries
-    mkdir -p $out/bin
-    install -Dm755 eduke32{,-wrapper} mapster32 $out/bin
+  buildInputs = [
+    flac
+    libvorbis
+    libvpx
+    SDL2
+    SDL2_mixer
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+    gtk2
+    libGL
+    libGLU
+  ] ++ lib.optionals stdenv.isDarwin [
+    AGL
+    Cocoa
+    GLUT
+    OpenGL
+  ];
 
-    # Install desktop item
-    cp -rv ${desktopItem}/share $out
+  nativeBuildInputs = [ makeWrapper pkg-config ]
+    ++ lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
+
+  postPatch = lib.optionalString stdenv.isLinux ''
+    substituteInPlace source/build/src/glbuild.cpp \
+      --replace libGLU.so ${libGLU}/lib/libGLU.so
+
+    for f in glad.c glad_wgl.c ; do
+      substituteInPlace source/glad/src/$f \
+        --replace libGL.so ${libGL}/lib/libGL.so
+    done
   '';
 
-  meta = with stdenv.lib; {
+  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_mixer}/include/SDL2";
+
+  makeFlags = [
+    "SDLCONFIG=${SDL2}/bin/sdl2-config"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # broken, see: https://github.com/NixOS/nixpkgs/issues/19098
+    "LTO=0"
+  ];
+
+  enableParallelBuilding = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm755 -t $out/bin eduke32 mapster32
+  '' + lib.optionalString stdenv.isLinux ''
+    makeWrapper $out/bin/eduke32 $out/bin/${wrapper} \
+      --set-default EDUKE32_DATA_DIR /var/lib/games/eduke32 \
+      --add-flags '-g "$EDUKE32_DATA_DIR/DUKE3D.GRP"'
+
+    cp -rv ${desktopItem}/share $out
+    substituteInPlace $out/share/applications/eduke32.desktop \
+      --subst-var out
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications/EDuke32.app/Contents/MacOS
+    mkdir -p $out/Applications/Mapster32.app/Contents/MacOS
+
+    cp -r platform/Apple/bundles/EDuke32.app/* $out/Applications/EDuke32.app/
+    cp -r platform/Apple/bundles/Mapster32.app/* $out/Applications/Mapster32.app/
+
+    ln -sf $out/bin/eduke32 $out/Applications/EDuke32.app/Contents/MacOS/eduke32
+    ln -sf $out/bin/mapster32 $out/Applications/Mapster32.app/Contents/MacOS/mapster32
+  '' + ''
+    runHook postInstall
+  '';
+
+  meta = with lib; {
     description = "Enhanched port of Duke Nukem 3D for various platforms";
+    homepage = "http://eduke32.com";
     license = licenses.gpl2Plus;
-    homepage = http://eduke32.com;
-    maintainers = with maintainers; [ sander ];
-    platforms = with platforms; linux;
+    maintainers = with maintainers; [ mikroskeem sander ];
+    platforms = platforms.all;
   };
 }

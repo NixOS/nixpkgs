@@ -1,45 +1,56 @@
-{ stdenv, fetchFromGitHub, pkgconfig, meson, ninja, python3, pantheon
-, gtk3, gtksourceview, json-glib, gnome3, wrapGAppsHook }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, gtk4
+, json-glib
+, libadwaita
+, libgee
+, desktop-file-utils
+, meson
+, ninja
+, nix-update-script
+, pkg-config
+, vala
+, wrapGAppsHook4
+}:
 
 stdenv.mkDerivation rec {
   pname = "notejot";
-  version = "1.5.5";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "0khf6mwidybfgnq4zmhf3af4w6aicipmi12fvs722fqlf1lrkdmd";
+    hash = "sha256-p5F0OITgfZyvHwndI5r5BE524+nft7A2XfR3BJZFamU=";
   };
 
   nativeBuildInputs = [
+    desktop-file-utils
     meson
     ninja
-    pantheon.vala
-    pkgconfig
-    python3
-    wrapGAppsHook
+    pkg-config
+    vala
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    gnome3.libgee
-    gtk3
-    gtksourceview
+    gtk4
     json-glib
-    pantheon.elementary-icon-theme
-    pantheon.granite
+    libadwaita
+    libgee
   ];
 
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
-  meta = with stdenv.lib; {
-    description = "Stupidly-simple sticky notes applet";
-    homepage = https://github.com/lainsce/notejot;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+  meta = with lib; {
+    homepage = "https://github.com/lainsce/notejot";
+    description = "Stupidly-simple notes app";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
+    mainProgram = "io.github.lainsce.Notejot";
   };
 }

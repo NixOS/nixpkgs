@@ -8,13 +8,13 @@ with lib;
       enable = mkEnableOption "xl2tpd, the Layer 2 Tunnelling Protocol Daemon";
 
       serverIp = mkOption {
-        type        = types.string;
+        type        = types.str;
         description = "The server-side IP address.";
         default     = "10.125.125.1";
       };
 
       clientIpRange = mkOption {
-        type        = types.string;
+        type        = types.str;
         description = "The range from which client IPs are drawn.";
         default     = "10.125.125.2-11";
       };
@@ -116,18 +116,18 @@ with lib;
         #username	xl2tpd	password	*
         EOF
 
-        chown root.root ppp/chap-secrets
+        chown root:root ppp/chap-secrets
         chmod 600 ppp/chap-secrets
 
         # The documentation says this file should be present but doesn't explain why and things work even if not there:
         [ -f l2tp-secrets ] || (echo -n "* * "; ${pkgs.apg}/bin/apg -n 1 -m 32 -x 32 -a 1 -M LCN) > l2tp-secrets
-        chown root.root l2tp-secrets
+        chown root:root l2tp-secrets
         chmod 600 l2tp-secrets
 
         popd > /dev/null
 
         mkdir -p /run/xl2tpd
-        chown root.root /run/xl2tpd
+        chown root:root /run/xl2tpd
         chmod 700       /run/xl2tpd
       '';
 

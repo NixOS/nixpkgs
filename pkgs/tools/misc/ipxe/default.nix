@@ -1,22 +1,48 @@
-{ stdenv, lib, fetchgit, perl, cdrkit, syslinux, xz, openssl
+{ stdenv, lib, fetchFromGitHub, unstableGitUpdater
+, gnu-efi, mtools, openssl, perl, xorriso, xz
+, syslinux ? null
 , embedScript ? null
+, additionalTargets ? {}
 }:
 
 let
-  date = "20190310";
-  rev = "b6ffe28a21c53a0946d95751c905d9e0b6c3b630";
+  targets = additionalTargets // lib.optionalAttrs stdenv.isx86_64 {
+    "bin-x86_64-efi/ipxe.efi" = null;
+    "bin-x86_64-efi/ipxe.efirom" = null;
+    "bin-x86_64-efi/ipxe.usb" = "ipxe-efi.usb";
+  } // lib.optionalAttrs stdenv.hostPlatform.isx86 {
+    "bin/ipxe.dsk" = null;
+    "bin/ipxe.usb" = null;
+    "bin/ipxe.iso" = null;
+    "bin/ipxe.lkrn" = null;
+    "bin/undionly.kpxe" = null;
+  } // lib.optionalAttrs stdenv.isAarch32 {
+    "bin-arm32-efi/ipxe.efi" = null;
+    "bin-arm32-efi/ipxe.efirom" = null;
+    "bin-arm32-efi/ipxe.usb" = "ipxe-efi.usb";
+  } // lib.optionalAttrs stdenv.isAarch64 {
+    "bin-arm64-efi/ipxe.efi" = null;
+    "bin-arm64-efi/ipxe.efirom" = null;
+    "bin-arm64-efi/ipxe.usb" = "ipxe-efi.usb";
+  };
 in
 
-stdenv.mkDerivation {
-  name = "ipxe-${date}-${builtins.substring 0 7 rev}";
+stdenv.mkDerivation rec {
+  pname = "ipxe";
+  version = "unstable-2022-04-06";
 
-  buildInputs = [ perl cdrkit syslinux xz openssl ];
+  nativeBuildInputs = [ gnu-efi mtools openssl perl xorriso xz ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
 
-  src = fetchgit {
-    url = git://git.ipxe.org/ipxe.git;
-    sha256 = "1s8sy75lpx8zq60wc0i35d8c1wwm1rq3scxpkq31623d097mch59";
-    inherit rev;
+  src = fetchFromGitHub {
+    owner = "ipxe";
+    repo = "ipxe";
+    rev = "70995397e5bdfd3431e12971aa40630c7014785f";
+    sha256 = "SrTNEYk13JXAcJuogm9fZ7CrzJIDRc0aziGdjRNv96I=";
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    substituteInPlace src/util/genfsimg --replace "	syslinux " "	true "
+  ''; # calling syslinux on a FAT image isn't going to work
 
   # not possible due to assembler code
   hardeningDisable = [ "pic" "stackprotector" ];
@@ -25,38 +51,55 @@ stdenv.mkDerivation {
 
   makeFlags =
     [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
-      "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
-      "LDLINUX_C32=${syslinux}/share/syslinux/ldlinux.c32"
     ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
 
-  enabledOptions = [ "DOWNLOAD_PROTO_HTTPS" ];
+  enabledOptions = [
+    "PING_CMD"
+    "IMAGE_TRUST_CMD"
+    "DOWNLOAD_PROTO_HTTP"
+    "DOWNLOAD_PROTO_HTTPS"
+  ];
 
   configurePhase = ''
     runHook preConfigure
-    for opt in $enabledOptions; do echo "#define $opt" >> src/config/general.h; done
-    sed -i '/cp \''${ISOLINUX_BIN}/s/$/ --no-preserve=mode/' src/util/geniso
+    for opt in ${lib.escapeShellArgs enabledOptions}; do echo "#define $opt" >> src/config/general.h; done
+    substituteInPlace src/Makefile.housekeeping --replace '/bin/echo' echo
+  '' + lib.optionalString stdenv.hostPlatform.isx86 ''
+    substituteInPlace src/util/genfsimg --replace /usr/lib/syslinux ${syslinux}/share/syslinux
+  '' + ''
     runHook postConfigure
   '';
 
   preBuild = "cd src";
 
+  buildFlags = lib.attrNames targets;
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
-    cp bin/ipxe.dsk bin/ipxe.usb bin/ipxe.iso bin/ipxe.lkrn bin/undionly.kpxe $out
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (from: to:
+      if to == null
+      then "cp -v ${from} $out"
+      else "cp -v ${from} $out/${to}") targets)}
 
     # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
     # let's provide it as a symlink to be compatible in this case.
     ln -s undionly.kpxe $out/undionly.kpxe.0
+
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib;
+  passthru.updateScript = unstableGitUpdater {};
+
+  meta = with lib;
     { description = "Network boot firmware";
-      homepage = http://ipxe.org/;
-      license = licenses.gpl2;
+      homepage = "https://ipxe.org/";
+      license = licenses.gpl2Only;
       maintainers = with maintainers; [ ehmry ];
-      platforms = platforms.all;
+      platforms = platforms.linux;
     };
 }

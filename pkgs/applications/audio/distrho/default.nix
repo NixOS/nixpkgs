@@ -1,57 +1,97 @@
-{ stdenv, fetchFromGitHub, alsaLib, fftwSinglePrec, freetype, libjack2
-, pkgconfig, ladspa-sdk, premake3
-, libX11, libXcomposite, libXcursor, libXext, libXinerama, libXrender
+{ lib
+, stdenv
+, alsa-lib
+, fetchFromGitHub
+, fftwFloat
+, freetype
+, libGL
+, libX11
+, libXcursor
+, libXext
+, libXrender
+, meson
+, ninja
+, pkg-config
 }:
 
-let
-  premakeos = if stdenv.hostPlatform.isDarwin then "osx"
-              else if stdenv.hostPlatform.isWindows then "mingw"
-              else "linux";
-in stdenv.mkDerivation rec {
-  name = "distrho-ports-${version}";
-  version = "2018-04-16";
+let rpathLibs = [
+  fftwFloat
+];
+in
+stdenv.mkDerivation rec {
+  pname = "distrho-ports";
+  version = "2021-03-15";
 
   src = fetchFromGitHub {
     owner = "DISTRHO";
     repo = "DISTRHO-Ports";
     rev = version;
-    sha256 = "0l4zwl4mli8jzch32a1fh7c88r9q17xnkxsdw17ds5hadnxlk12v";
+    sha256 = "00fgqwayd20akww3n2imyqscmyrjyc9jj0ar13k9dhpaxqk2jxbf";
   };
 
-  configurePhase = ''
-    runHook preConfigure
+  nativeBuildInputs = [ pkg-config meson ninja ];
 
-    sh ./scripts/premake-update.sh ${premakeos}
-
-    runHook postConfigure
-  '';
-
-  patchPhase = ''
-    sed -e "s#@./scripts#sh scripts#" -i Makefile
-  '';
-
-  nativeBuildInputs = [ pkgconfig premake3 ];
-  buildInputs = [
-    alsaLib fftwSinglePrec freetype libjack2
-    libX11 libXcomposite libXcursor libXext
-    libXinerama libXrender ladspa-sdk
+  buildInputs = rpathLibs ++ [
+    alsa-lib
+    freetype
+    libGL
+    libX11
+    libXcursor
+    libXext
+    libXrender
   ];
 
-  makeFlags = "PREFIX=$(out)";
+  postFixup = ''
+    for file in \
+      $out/lib/lv2/vitalium.lv2/vitalium.so \
+      $out/lib/vst/vitalium.so \
+      $out/lib/vst3/vitalium.vst3/Contents/x86_64-linux/vitalium.so
+    do
+      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}:$(patchelf --print-rpath $file)" $file
+    done
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = http://distrho.sourceforge.net;
-    description = "A collection of cross-platform audio effects and plugins";
+  meta = with lib; {
+    homepage = "http://distrho.sourceforge.net/ports";
+    description = "Linux audio plugins and LV2 ports";
     longDescription = ''
       Includes:
-      Dexed drowaudio-distortion drowaudio-distortionshaper drowaudio-flanger
-      drowaudio-reverb drowaudio-tremolo drumsynth EasySSP eqinox HiReSam
-      JuceDemoPlugin KlangFalter LUFSMeter LUFSMeterMulti Luftikus Obxd
-      PitchedDelay ReFine StereoSourceSeparation TAL-Dub-3 TAL-Filter
-      TAL-Filter-2 TAL-NoiseMaker TAL-Reverb TAL-Reverb-2 TAL-Reverb-3
-      TAL-Vocoder-2 TheFunction ThePilgrim Vex Wolpertinger
+        arctican-function
+        arctican-pilgrim
+        dexed
+        drowaudio-distortion
+        drowaudio-distortionshaper
+        drowaudio-flanger
+        drowaudio-reverb
+        drowaudio-tremolo
+        drumsynth
+        easySSP
+        eqinox
+        HiReSam
+        juce-opl
+        klangfalter
+        LUFSMeter
+        LUFSMeter-Multi
+        luftikus
+        obxd
+        pitchedDelay
+        refine
+        stereosourceseparation
+        swankyamp
+        tal-dub-3
+        tal-filter
+        tal-filter-2
+        tal-noisemaker
+        tal-reverb
+        tal-reverb-2
+        tal-reverb-3
+        tal-vocoder-2
+        temper
+        vex
+        vitalium
+        wolpertinger
     '';
-    license = with licenses; [ gpl2 gpl3 gpl2Plus lgpl3 mit ];
+    license = with licenses; [ gpl2Only gpl3Only gpl2Plus lgpl2Plus lgpl3Only mit ];
     maintainers = [ maintainers.goibhniu ];
     platforms = [ "x86_64-linux" ];
   };

@@ -1,4 +1,4 @@
-{ fetchsvn, stdenv, cmake, qt4, libGLU_combined }:
+{ fetchsvn, lib, stdenv, cmake, qt4, libGLU, libGL }:
 
 # ViTE 1.1 has several bugs, so use the SVN version.
 let
@@ -10,7 +10,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "vite-1.2pre${rev}";
+  pname = "vite";
+  version = "1.2pre${rev}";
 
   src = fetchsvn {
     url = "svn://scm.gforge.inria.fr/svn/vite/trunk";
@@ -23,7 +24,8 @@ stdenv.mkDerivation {
     ln -sv "${externals}" externals
   '';
 
-  buildInputs = [ cmake qt4 libGLU_combined ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qt4 libGLU libGL ];
 
   NIX_LDFLAGS = "-lGLU";
 
@@ -36,9 +38,9 @@ stdenv.mkDerivation {
       parallel or distributed applications.
     '';
 
-    homepage = http://vite.gforge.inria.fr/;
-    license = stdenv.lib.licenses.cecill20;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://vite.gforge.inria.fr/";
+    license = lib.licenses.cecill20;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -1,39 +1,52 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg
-, ppx_sexp_conv, result, x509, nocrypto, cstruct, ppx_cstruct, cstruct-unix, ounit
-, lwt     ? null}:
+{ lib, fetchurl, buildDunePackage
+, cstruct, cstruct-sexp, domain-name, fmt, ppx_cstruct, ppx_sexp_conv, logs, hkdf, mirage-crypto, mirage-crypto-ec, mirage-crypto-pk, mirage-crypto-rng, ocaml_lwt, ptime, sexplib, x509
+, ipaddr, ipaddr-sexp
+, alcotest, cstruct-unix, ounit2, randomconv
+}:
 
-with stdenv.lib;
+buildDunePackage rec {
+  pname = "tls";
+  version = "0.15.2";
 
-let withLwt = lwt != null; in
-
-if !versionAtLeast ocaml.version "4.04"
-then throw "tls is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec {
-  version = "0.9.0";
-  name = "ocaml${ocaml.version}-tls-${version}";
-
-  src = fetchFromGitHub {
-    owner  = "mirleft";
-    repo   = "ocaml-tls";
-    rev    = "${version}";
-    sha256 = "0qgw8lq8pk9hss7b5i6fr08pi711i0zqx7yyjgcil47ipjig6c31";
+  src = fetchurl {
+    url = "https://github.com/mirleft/ocaml-tls/releases/download/v${version}/tls-v${version}.tbz";
+    sha256 = "b76371757249bbeabb12c333de4ea2a09c095767bdbbc83322538c0da1fc1e36";
   };
 
-  buildInputs = [ ocaml ocamlbuild findlib topkg ppx_sexp_conv ounit ppx_cstruct cstruct-unix ];
-  propagatedBuildInputs = [ cstruct nocrypto result x509 ] ++
-                          optional withLwt lwt;
+  minimumOCamlVersion = "4.08";
+  useDune2 = true;
 
-  buildPhase = "${topkg.run} build --tests true --with-mirage false --with-lwt ${if withLwt then "true" else "false"}";
+  propagatedBuildInputs = [
+    cstruct
+    cstruct-sexp
+    domain-name
+    fmt
+    ppx_cstruct
+    ppx_sexp_conv
+    logs
+    hkdf
+    mirage-crypto
+    mirage-crypto-ec
+    mirage-crypto-pk
+    mirage-crypto-rng
+    ocaml_lwt
+    ptime
+    sexplib
+    x509
+    ipaddr
+    ipaddr-sexp
+  ];
 
   doCheck = true;
-  checkPhase = "${topkg.run} test";
+  checkInputs = [
+    alcotest
+    cstruct-unix
+    ounit2
+    randomconv
+  ];
 
-  inherit (topkg) installPhase;
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mirleft/ocaml-tls;
+  meta = with lib; {
+    homepage = "https://github.com/mirleft/ocaml-tls";
     description = "TLS in pure OCaml";
     license = licenses.bsd2;
     maintainers = with maintainers; [ sternenseemann ];

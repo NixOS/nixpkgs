@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules, kdoctools,
   kconfig, kconfigwidgets, kcoreaddons , kdbusaddons, ki18n,
   kiconthemes, knotifications, kservice, kwidgetsaddons, kwindowsystem,
@@ -7,8 +7,7 @@
 }:
 
 mkDerivation {
-  name = "kwallet";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  pname = "kwallet";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kconfigwidgets kcoreaddons kdbusaddons ki18n kiconthemes

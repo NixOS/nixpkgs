@@ -1,24 +1,40 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
+{ stdenv, buildGoModule, fetchFromGitHub, lib, installShellFiles }:
 
-buildGoPackage rec {
-  name = "golangci-lint-${version}";
-  version = "1.9.2";
-  goPackagePath = "github.com/golangci/golangci-lint";
-
-  subPackages = [ "cmd/golangci-lint" ];
+buildGoModule rec {
+  pname = "golangci-lint";
+  version = "1.46.2";
 
   src = fetchFromGitHub {
     owner = "golangci";
     repo = "golangci-lint";
     rev = "v${version}";
-    sha256 = "0r05j6ayk5778fkd5r1sgcwq675ra0vq82lqs125g70291ryha08";
+    sha256 = "sha256-7sDAwWz+qoB/ngeH35tsJ5FZUfAQvQsU6kU9rUHIHMk=";
   };
 
+  vendorSha256 = "sha256-w38OKN6HPoz37utG/2QSPMai55IRDXCIIymeMe6ogIU=";
+
+  doCheck = false;
+
+  subPackages = [ "cmd/golangci-lint" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  ldflags = [
+    "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" "-X main.date=19700101-00:00:00"
+  ];
+
+  postInstall = ''
+    for shell in bash zsh fish; do
+      HOME=$TMPDIR $out/bin/golangci-lint completion $shell > golangci-lint.$shell
+      installShellCompletion golangci-lint.$shell
+    done
+  '';
+
   meta = with lib; {
-    description = "Linters Runner for Go. 5x faster than gometalinter. Nice colored output.";
-    homepage = https://golangci.com/;
-    license = licenses.agpl3;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.manveru ];
+    broken = stdenv.isDarwin;
+    description = "Fast linters Runner for Go";
+    homepage = "https://golangci-lint.run/";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ anpryl manveru mic92 ];
   };
 }

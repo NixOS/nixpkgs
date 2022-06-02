@@ -1,6 +1,17 @@
 { libopus
+, opusfile
+, libopusenc
+, libogg
+, libctb
+, gsmlib
 , lua
 , curl
+, ffmpeg
+, libmysqlclient
+, postgresql
+, spandsp3
+, sofia_sip
+, libks
 }:
 
 let
@@ -13,7 +24,7 @@ in
 {
   applications = {
     abstraction = mk "applications/mod_abstraction" [];
-    av = mk "applications/mod_av" [];
+    av = mk "applications/mod_av" [ ffmpeg ];
     avmd = mk "applications/mod_avmd" [];
     bert = mk "applications/mod_bert" [];
     blacklist = mk "applications/mod_blacklist" [];
@@ -60,7 +71,7 @@ in
     snom = mk "applications/mod_snom" [];
     sonar = mk "applications/mod_sonar" [];
     soundtouch = mk "applications/mod_soundtouch" [];
-    spandsp = mk "applications/mod_spandsp" [];
+    spandsp = mk "applications/mod_spandsp" [ spandsp3 ];
     spy = mk "applications/mod_spy" [];
     stress = mk "applications/mod_stress" [];
     translate = mk "applications/mod_translate" [];
@@ -101,6 +112,11 @@ in
     theora = mk "codecs/mod_theora" [];
   };
 
+  databases = {
+    mariadb = mk "databases/mod_mariadb" [ libmysqlclient ];
+    pgsql = mk "databases/mod_pgsql" [ postgresql ];
+  };
+
   dialplans = {
     asterisk = mk "dialplans/mod_dialplan_asterisk" [];
     directory = mk "dialplans/mod_dialplan_directory" [];
@@ -114,7 +130,7 @@ in
   endpoints = {
     alsa = mk "endpoints/mod_alsa" [];
     dingaling = mk "endpoints/mod_dingaling" [];
-    gsmopen = mk "endpoints/mod_gsmopen" [];
+    gsmopen = mk "endpoints/mod_gsmopen" [ gsmlib libctb ];
     h323 = mk "endpoints/mod_h323" [];
     khomp = mk "endpoints/mod_khomp" [];
     loopback = mk "endpoints/mod_loopback" [];
@@ -123,8 +139,8 @@ in
     rtc = mk "endpoints/mod_rtc" [];
     rtmp = mk "endpoints/mod_rtmp" [];
     skinny = mk "endpoints/mod_skinny" [];
-    sofia = mk "endpoints/mod_sofia" [];
-    verto = mk "endpoints/mod_verto" [];
+    sofia = mk "endpoints/mod_sofia" [ sofia_sip ];
+    verto = mk "endpoints/mod_verto" [ libks ];
   };
 
   event_handlers = {
@@ -152,6 +168,7 @@ in
     imagick = mk "formats/mod_imagick" [];
     local_stream = mk "formats/mod_local_stream" [];
     native_file = mk "formats/mod_native_file" [];
+    opusfile = mk "formats/mod_opusfile" [ libopus opusfile libopusenc libogg ];
     png = mk "formats/mod_png" [];
     portaudio_stream = mk "formats/mod_portaudio_stream" [];
     shell_stream = mk "formats/mod_shell_stream" [];
@@ -160,6 +177,7 @@ in
     ssml = mk "formats/mod_ssml" [];
     tone_stream = mk "formats/mod_tone_stream" [];
     vlc = mk "formats/mod_vlc" [];
+    webm = mk "formats/mod_webm" [];
   };
 
   languages = {

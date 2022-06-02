@@ -5,8 +5,8 @@ let
   cfg = config.programs.singularity;
   singularity = pkgs.singularity.overrideAttrs (attrs : {
     installPhase = attrs.installPhase + ''
-      mv $bin/libexec/singularity/bin/starter-suid $bin/libexec/singularity/bin/starter-suid.orig
-      ln -s /run/wrappers/bin/singularity-suid $bin/libexec/singularity/bin/starter-suid
+      mv $out/libexec/singularity/bin/starter-suid $out/libexec/singularity/bin/starter-suid.orig
+      ln -s /run/wrappers/bin/singularity-suid $out/libexec/singularity/bin/starter-suid
     '';
   });
 in {
@@ -16,7 +16,12 @@ in {
 
   config = mkIf cfg.enable {
       environment.systemPackages = [ singularity ];
-      security.wrappers.singularity-suid.source = "${singularity}/libexec/singularity/bin/starter-suid.orig";
+      security.wrappers.singularity-suid =
+      { setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${singularity}/libexec/singularity/bin/starter-suid.orig";
+      };
       systemd.tmpfiles.rules = [
         "d /var/singularity/mnt/session 0770 root root -"
         "d /var/singularity/mnt/final 0770 root root -"

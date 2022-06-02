@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "iniparser-${version}";
+  pname = "iniparser";
   version = "4.1";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = ./no-usr.patch;
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
         --replace -Wl,-soname= -Wl,-install_name,
   '';
@@ -27,18 +27,21 @@ stdenv.mkDerivation rec {
     mkdir -p $out/include
     cp src/*.h $out/include
 
-    mkdir -p $out/share/doc/${name}
+    mkdir -p $out/share/doc/${pname}-${version}
     for i in AUTHORS INSTALL LICENSE README.md; do
-      bzip2 -c -9 $i > $out/share/doc/${name}/$i.bz2;
+      bzip2 -c -9 $i > $out/share/doc/${pname}-${version}/$i.bz2;
     done;
-    cp -r html $out/share/doc/${name}
+    cp -r html $out/share/doc/${pname}-${version}
 
     cp libiniparser.a $out/lib
     cp libiniparser.so.1 $out/lib
     ln -s libiniparser.so.1 $out/lib/libiniparser.so
+
+    mkdir -p $out/lib/pkgconfig
+    substituteAll ${./iniparser.pc.in} $out/lib/pkgconfig/iniparser.pc
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "Free standalone ini file parsing library";
     license = licenses.mit;

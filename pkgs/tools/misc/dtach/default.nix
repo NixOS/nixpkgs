@@ -1,11 +1,11 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dtach-${version}";
+  pname = "dtach";
   version = "0.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/dtach/dtach/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/dtach/dtach/${version}/${pname}-${version}.tar.gz";
     sha256 = "1wwj2hlngi8qn2pisvhyfxxs8gyqjlgrrv5lz91w8ly54dlzvs9j";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://dtach.sourceforge.net/;
+    homepage = "http://dtach.sourceforge.net/";
     description = "A program that emulates the detach feature of screen";
 
     longDescription = ''
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
       themselves.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

@@ -1,51 +1,28 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub }:
 
-let
-  # last commit on the directory containing the fonts in the upstream repository
-  commit = "883939708704a19a295e0652036369d22469e8dc";
-in
-stdenv.mkDerivation rec {
-  name = "roboto-slab-${version}";
-  version = "2016-01-11";
+stdenv.mkDerivation {
+  pname = "roboto-slab";
+  version = "2.000";
 
-  srcs = [
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotoslab/RobotoSlab-Regular.ttf";
-      sha256 = "04180b5zk2nzll1rrgx8f1i1za66pk6pbrp0iww2xypjqra5zahk";
-    })
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotoslab/RobotoSlab-Bold.ttf";
-      sha256 = "0ayl2hf5j33vixxfa7051hzjjxnx8zhag3rr0mmmnxpsn7md44ms";
-    })
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotoslab/RobotoSlab-Light.ttf";
-      sha256 = "09riqgj9ixqjdb3mkzbs799cgmnp3ja3d6izlqkhpkfm52sgafqm";
-    })
-    (fetchurl {
-      url = "https://raw.githubusercontent.com/google/fonts/${commit}/apache/robotoslab/RobotoSlab-Thin.ttf";
-      sha256 = "1hd0m7lxhr261a4s2nb572ari6v53w2yd8yjr9i534iqfl4jcbsf";
-    })
-  ];
-
-  sourceRoot = "./";
-
-  unpackCmd = ''
-    ttfName=$(basename $(stripHash $curSrc))
-    cp $curSrc ./$ttfName
-  '';
+  src = fetchFromGitHub {
+    owner = "googlefonts";
+    repo = "robotoslab";
+    rev = "baeeba45e0c3ccdcfb6a70dc564785941aafef5d";
+    sha256 = "1v6z0a2xgwgf9dyj62sriy8ckwpbwlxkki6gfax1f4h4livvzpdn";
+  };
 
   installPhase = ''
     mkdir -p $out/share/fonts/truetype
-    cp -a *.ttf $out/share/fonts/truetype/
+    cp -a fonts/static/*.ttf $out/share/fonts/truetype/
   '';
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "0imhvisjzi0rvn32hn04kngca4szx0j39h4c4zs7ryb4wdca76q9";
+  outputHash = "0g663npi5lkvwcqafd4cjrm90ph0nv1lig7d19xzfymnj47qpj8x";
 
-  meta = {
-    homepage = https://www.google.com/fonts/specimen/Roboto+Slab;
-    description = "Google Roboto Slab fonts";
+  meta = with lib; {
+    homepage = "https://www.google.com/fonts/specimen/Roboto+Slab";
+    description = "Roboto Slab Typeface by Google";
     longDescription = ''
       Roboto has a dual nature. It has a mechanical skeleton and the forms
       are largely geometric. At the same time, the font features friendly
@@ -57,8 +34,8 @@ stdenv.mkDerivation rec {
       This is the Roboto Slab family, which can be used alongside the normal
       Roboto family and the Roboto Condensed family.
     '';
-    license = stdenv.lib.licenses.asl20;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.asl20;
+    platforms = platforms.all;
+    maintainers = [ maintainers.romildo ];
   };
 }

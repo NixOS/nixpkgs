@@ -1,23 +1,35 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, nixosTests }:
+
 stdenv.mkDerivation rec {
-  version = "1.10";
-  name = "beanstalkd-${version}";
+  version = "1.12";
+  pname = "beanstalkd";
 
-  installPhase=''make install "PREFIX=$out"'';
-
-  src = fetchurl {
-    url = "https://github.com/kr/beanstalkd/archive/v${version}.tar.gz";
-    sha256 = "0n9dlmiddcfl7i0f1lwfhqiwyvf26493fxfcmn8jm30nbqciwfwj";
+  src = fetchFromGitHub {
+    owner = "kr";
+    repo = "beanstalkd";
+    rev = "v${version}";
+    hash = "sha256-HChpVZ02l08CObrb4+ZEjBiXeQMMYi6zhSWUTDxuEao=";
   };
 
   hardeningDisable = [ "fortify" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://kr.github.io/beanstalkd/;
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage doc/beanstalkd.1
+  '';
+
+  passthru.tests = {
+    smoke-test = nixosTests.beanstalkd;
+  };
+
+  meta = with lib; {
+    homepage = "http://kr.github.io/beanstalkd/";
     description = "A simple, fast work queue";
     license = licenses.mit;
     maintainers = [ maintainers.zimbatm ];
     platforms = platforms.all;
   };
 }
-

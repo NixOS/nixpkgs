@@ -1,6 +1,6 @@
-{stdenv, fetchurl, unzip}:
+{lib, stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "nafees";
 
   srcs = [(fetchurl {
@@ -50,13 +50,13 @@ stdenv.mkDerivation rec {
       Al-Hussaini (Nafees Raqam) one of the finest calligraphers of
       Pakistan
     '';
-    homepage = http://www.cle.org.pk/software/localization.htm;
+    homepage = "http://www.cle.org.pk/software/localization.htm";
 
     # Used to be GPLv2.  The license distributed with the fonts looks
     # more like a modified BSD, but still contains the GPLv2 embedded
     # font exception, and some not-for-resale language.
     license = "unknown";
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ bergey ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bergey ];
   };
 }

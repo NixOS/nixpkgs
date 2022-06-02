@@ -1,6 +1,6 @@
-{stdenv, fetchFromGitHub, mono}:
+{lib, stdenv, fetchFromGitHub, mono}:
 stdenv.mkDerivation rec {
-  name = "wavefunctioncollapse-${version}";
+  pname = "wavefunctioncollapse";
   version = "0.0pre20170130";
   src = fetchFromGitHub {
     owner = "mxgmn";
@@ -25,10 +25,9 @@ stdenv.mkDerivation rec {
   '';
   buildInputs = [mono];
   meta = {
-    inherit version;
-    description = ''A generator of bitmaps that are locally similar to the input bitmap'';
-    license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    description = "A generator of bitmaps that are locally similar to the input bitmap";
+    license = lib.licenses.mit;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.linux;
   };
 }

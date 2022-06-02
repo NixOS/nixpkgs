@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, config, wrapGAppsHook
-, alsaLib
+, alsa-lib
 , atk
 , cairo
 , curl
@@ -8,13 +8,11 @@
 , dbus
 , fontconfig
 , freetype
-, gconf
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
-, gtk2
 , gtk3
-, kerberos
+, libkrb5
 , libX11
 , libXScrnSaver
 , libxcb
@@ -26,16 +24,18 @@
 , libXi
 , libXinerama
 , libXrender
+, libXrandr
 , libXt
-, libcanberra-gtk2
-, libgnome
-, libgnomeui
+, libXtst
+, libcanberra
 , libnotify
-, gnome3
-, libGLU_combined
+, adwaita-icon-theme
+, libGLU, libGL
 , nspr
 , nss
 , pango
+, pipewire
+, pciutils
 , libheimdal
 , libpulseaudio
 , systemd
@@ -50,7 +50,8 @@
 , gnupg
 , ffmpeg
 , runtimeShell
-, systemLocale ? config.i18n.defaultLocale or "en-US"
+, mesa # firefox wants gbm for drm+dmabuf
+, systemLocale ? config.i18n.defaultLocale or "en_US"
 }:
 
 let
@@ -58,8 +59,8 @@ let
   inherit (generated) version sources;
 
   mozillaPlatforms = {
-    "i686-linux" = "linux-i686";
-    "x86_64-linux" = "linux-x86_64";
+    i686-linux = "linux-i686";
+    x86_64-linux = "linux-x86_64";
   };
 
   arch = mozillaPlatforms.${stdenv.hostPlatform.system};
@@ -72,29 +73,31 @@ let
 
   policies = {
     DisableAppUpdate = true;
-  };
+  } // config.firefox.policies or {};
 
-  policiesJson = writeText "no-update-firefox-policy.json" (builtins.toJSON { inherit policies; });
+  policiesJson = writeText "firefox-policies.json" (builtins.toJSON { inherit policies; });
 
-  defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") {} sources;
+  defaultSource = lib.findFirst (sourceMatches "en-US") {} sources;
 
-  source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
+  mozLocale =
+    if systemLocale == "ca_ES@valencia"
+    then "ca-valencia"
+    else lib.replaceStrings ["_"] ["-"] systemLocale;
 
-  name = "firefox-${channel}-bin-unwrapped-${version}";
+  source = lib.findFirst (sourceMatches mozLocale) defaultSource sources;
+
+  pname = "firefox-${channel}-bin-unwrapped";
 
 in
 
 stdenv.mkDerivation {
-  inherit name;
+  inherit pname version;
 
-  src = fetchurl { inherit (source) url sha512; };
+  src = fetchurl { inherit (source) url sha256; };
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
-
-  libPath = stdenv.lib.makeLibraryPath
+  libPath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib
-      (lib.getDev alsaLib)
+      alsa-lib
       atk
       cairo
       curl
@@ -103,13 +106,12 @@ stdenv.mkDerivation {
       dbus
       fontconfig
       freetype
-      gconf
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       glibc
-      gtk2
       gtk3
-      kerberos
+      libkrb5
+      mesa
       libX11
       libXScrnSaver
       libXcomposite
@@ -121,27 +123,28 @@ stdenv.mkDerivation {
       libXi
       libXinerama
       libXrender
+      libXrandr
       libXt
-      libcanberra-gtk2
-      libgnome
-      libgnomeui
+      libXtst
+      libcanberra
       libnotify
-      libGLU_combined
+      libGLU libGL
       nspr
       nss
       pango
+      pipewire
+      pciutils
       libheimdal
       libpulseaudio
-      (lib.getDev libpulseaudio)
       systemd
       ffmpeg
-    ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
+    ] + ":" + lib.makeSearchPathOutput "lib" "lib64" [
       stdenv.cc.cc
     ];
 
   inherit gtk3;
 
-  buildInputs = [ wrapGAppsHook gtk3 gnome3.adwaita-icon-theme ];
+  buildInputs = [ wrapGAppsHook gtk3 adwaita-icon-theme ];
 
   # "strip" after "patchelf" may break binaries.
   # See: https://github.com/NixOS/patchelf/issues/10
@@ -185,26 +188,26 @@ stdenv.mkDerivation {
       ln -s ${policiesJson} "$out/lib/firefox-bin-${version}/distribution/policies.json";
     '';
 
+  passthru.binaryName = "firefox";
+  passthru.libName = "firefox-bin-${version}";
   passthru.execdir = "/bin";
   passthru.ffmpegSupport = true;
   passthru.gssSupport = true;
   # update with:
   # $ nix-shell maintainers/scripts/update.nix --argstr package firefox-bin-unwrapped
   passthru.updateScript = import ./update.nix {
-    inherit stdenv name channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
+    inherit pname channel writeScript xidel coreutils gnused gnugrep gnupg curl runtimeShell;
     baseUrl =
       if channel == "devedition"
         then "http://archive.mozilla.org/pub/devedition/releases/"
         else "http://archive.mozilla.org/pub/firefox/releases/";
   };
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Mozilla Firefox, free web browser (binary package)";
-    homepage = http://www.mozilla.org/firefox/;
-    license = {
-      free = false;
-      url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
-    };
+    homepage = "http://www.mozilla.org/firefox/";
+    license = licenses.mpl20;
     platforms = builtins.attrNames mozillaPlatforms;
-    maintainers = with maintainers; [ garbas ];
+    hydraPlatforms = [];
+    maintainers = with maintainers; [ taku0 lovesegfault ];
   };
 }

@@ -1,24 +1,28 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl
-, cmake, pkgconfig, dbus, makeWrapper
-, gtest
+{ lib, stdenv, fetchFromGitHub, fetchurl
+, cmake, pkg-config, dbus, makeWrapper
 , boost
+, elfutils # for libdw
+, git
+, glib
+, glm
+, gtest
+, libbfd
 , libcap
-, systemd
-, mesa
+, libdwarf
 , libGL
 , libglvnd
-, glib
-, git
-, SDL2
-, SDL2_image
+, lxc
+, mesa
 , properties-cpp
 , protobuf
 , protobufc
-, python
-, lxc
+, python3
+, runtimeShell
+, SDL2
+, SDL2_image
+, systemd
 , writeText
 , writeScript
-, runtimeShell
 }:
 
 let
@@ -45,23 +49,40 @@ in
 
 stdenv.mkDerivation rec {
   pname = "anbox";
-  version = "unstable-2019-03-07";
+  version = "unstable-2021-10-20";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "d521e282965462e82465045ab95d4ae1c4619685";
-    sha256 = "1wfx4bsyxvrjl16dq5pqgial8rnnsnxzbak2ap0waddz847czxwz";
+    rev = "84f0268012cbe322ad858d76613f4182074510ac";
+    sha256 = "sha256-QXWhatewiUDQ93cH1UZsYgbjUxpgB1ajtGFYZnKmabc=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    cmake
+    pkg-config
     makeWrapper
   ];
 
   buildInputs = [
-    cmake pkgconfig dbus boost libcap gtest systemd mesa glib
-    SDL2 SDL2_image protobuf protobufc properties-cpp lxc python
+    boost
+    dbus
+    elfutils # libdw
+    glib
+    glm
+    gtest
+    libbfd
+    libcap
+    libdwarf
     libGL
+    lxc
+    mesa
+    properties-cpp
+    protobuf protobufc
+    python3
+    SDL2 SDL2_image
+    systemd
   ];
 
   patchPhase = ''
@@ -94,7 +115,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/anbox \
-      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [libGL libglvnd]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libGL libglvnd]} \
       --prefix PATH : ${git}/bin
 
     mkdir -p $out/share/dbus-1/services
@@ -127,8 +148,8 @@ stdenv.mkDerivation rec {
       };
     }.${stdenv.system} or null;
 
-  meta = with stdenv.lib; {
-    homepage = https://anbox.io;
+  meta = with lib; {
+    homepage = "https://anbox.io";
     description = "Android in a box";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];

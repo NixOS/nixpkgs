@@ -1,32 +1,35 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, libzip, gnupg, 
+{ lib, stdenv, fetchFromGitHub, rustPlatform, cmake, libzip, gnupg,
   # Darwin
   libiconv, CoreFoundation, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "sit-${version}";
-  version = "0.4.0";
+  pname = "sit";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "sit-fyi";
     repo = "sit";
     rev = "v${version}";
-    sha256 = "10ycs6vc7mfzxnxrki09xn974pcwh196h1pfnsds98x6r87hxkpn";
+    sha256 = "06xkhlfix0h6di6cnvc4blbj3mjy90scbh89dvywbx16wjlc79pf";
   };
 
-  buildInputs = [ cmake libzip gnupg ] ++
-    (if stdenv.isDarwin then [ libiconv CoreFoundation Security ] else []);
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libzip gnupg ]
+    ++ (lib.optionals stdenv.isDarwin [ libiconv CoreFoundation Security ]);
 
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
 
-  cargoSha256 = "023anmnprxbsvqww1b1bdyfhbhjh1ah2kc67cdihvdvi4lqdmbia";
+  cargoSha256 = "1ghr01jcq12ddna5qadvjy6zbgqgma5nf0qv06ayxnra37d2l92l";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Serverless Information Tracker";
-    homepage = https://sit.fyi/;
+    homepage = "https://sit.fyi/";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir yrashk ];
-    platforms = platforms.all;
+    # Upstream has not had a release in several years, and dependencies no
+    # longer compile with the latest Rust compiler.
+    broken = true;
   };
 }

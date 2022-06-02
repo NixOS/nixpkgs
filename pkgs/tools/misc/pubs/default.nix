@@ -1,32 +1,54 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "pubs";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "pubs";
     repo = "pubs";
     rev = "v${version}";
-    sha256 = "16zwdqfbmlla6906g3a57a4nj8wnl11fq78r20qms717bzv211j0";
+    hash = "sha256-U/9MLqfXrzYVGttFSafw4pYDy26WgdsJMCxciZzO1pw=";
   };
 
-  # Fix for bibtexparser 1.1.0
-  patches = fetchpatch {
-    url = https://github.com/pubs/pubs/pull/185/commits/e58ae98b93b8364a07fd5f5f452ba88ad332c948.patch;
-    sha256 = "1n7zrk119v395jj8wqg8wlymc9l9pq3v752yy3kam9kflc0aashp";
-  };
-
-  propagatedBuildInputs = with python3Packages; [
-    argcomplete dateutil configobj feedparser bibtexparser pyyaml requests six beautifulsoup4
+  propagatedBuildInputs = with python3.pkgs; [
+    pyyaml
+    bibtexparser
+    python-dateutil
+    six
+    requests
+    configobj
+    beautifulsoup4
+    feedparser
+    argcomplete
   ];
 
-  checkInputs = with python3Packages; [ pyfakefs mock ddt ];
+  checkInputs = with python3.pkgs; [
+    pyfakefs
+    mock
+    ddt
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
+  disabledTestPaths = [
+    # Disabling git tests because they expect git to be preconfigured
+    # with the user's details. See
+    # https://github.com/NixOS/nixpkgs/issues/94663
+    "tests/test_git.py"
+  ];
+
+  disabledTests = [
+    # https://github.com/pubs/pubs/issues/276
+    "test_readme"
+  ];
+
+  meta = with lib; {
     description = "Command-line bibliography manager";
-    homepage = https://github.com/pubs/pubs;
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ gebner ];
+    homepage = "https://github.com/pubs/pubs";
+    license = licenses.lgpl3Only;
+    maintainers = with maintainers; [ gebner dotlambda ];
   };
 }

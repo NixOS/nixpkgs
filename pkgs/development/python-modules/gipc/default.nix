@@ -1,22 +1,21 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
 , gevent
 }:
 
 buildPythonPackage rec {
   pname = "gipc";
-  version = "1.0.1";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1zg5bm30lqqd8x0jqbvr4yi8i4rzzk2hdnh280qnj2bwm5nqpghi";
+    sha256 = "sha256-P8d2GIxFAAHeXjXgIxKGwahiH1TW/9fE+V0f9Ra54wo=";
   };
 
   propagatedBuildInputs = [ gevent ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "gevent-cooperative child processes and IPC";
     longDescription = ''
       Usage of Python's multiprocessing package in a gevent-powered
@@ -26,7 +25,7 @@ buildPythonPackage rec {
       multiprocessing. Process-based child processes can safely be created
       anywhere within your gevent-powered application.
     '';
-    homepage = http://gehrcke.de/gipc;
+    homepage = "http://gehrcke.de/gipc";
     license = licenses.mit;
   };
 

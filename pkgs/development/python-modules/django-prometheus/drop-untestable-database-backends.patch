@@ -1,0 +1,38 @@
+diff --git a/django_prometheus/tests/end2end/testapp/settings.py b/django_prometheus/tests/end2end/testapp/settings.py
+index 0630721..bd2190a 100644
+--- a/django_prometheus/tests/end2end/testapp/settings.py
++++ b/django_prometheus/tests/end2end/testapp/settings.py
+@@ -53,33 +53,6 @@ DATABASES = {
+         "ENGINE": "django_prometheus.db.backends.sqlite3",
+         "NAME": "db.sqlite3",
+     },
+-    # Comment this to not test django_prometheus.db.backends.postgres.
+-    "postgresql": {
+-        "ENGINE": "django_prometheus.db.backends.postgresql",
+-        "NAME": "postgres",
+-        "USER": "postgres",
+-        "PASSWORD": "",
+-        "HOST": "localhost",
+-        "PORT": "5432",
+-    },
+-    # Comment this to not test django_prometheus.db.backends.postgis.
+-    "postgis": {
+-        "ENGINE": "django_prometheus.db.backends.postgis",
+-        "NAME": "postgis",
+-        "USER": "postgres",
+-        "PASSWORD": "",
+-        "HOST": "localhost",
+-        "PORT": "5432",
+-    },
+-    # Comment this to not test django_prometheus.db.backends.mysql.
+-    "mysql": {
+-        "ENGINE": "django_prometheus.db.backends.mysql",
+-        "NAME": "django_prometheus_1",
+-        "USER": "travis",
+-        "PASSWORD": "",
+-        "HOST": "localhost",
+-        "PORT": "3306",
+-    },
+     # The following databases are used by test_db.py only
+     "test_db_1": {
+         "ENGINE": "django_prometheus.db.backends.sqlite3",

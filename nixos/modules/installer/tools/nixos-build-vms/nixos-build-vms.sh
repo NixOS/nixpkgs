@@ -1,4 +1,5 @@
-#! @shell@ -e
+#! @runtimeShell@ -e
+# shellcheck shell=bash
 
 # Shows the usage of this command to the user
 
@@ -9,49 +10,44 @@ showUsage() {
 
 # Parse valid argument options
 
-PARAMS=`getopt -n $0 -o h -l no-out-link,show-trace,help -- "$@"`
+nixBuildArgs=()
+networkExpr=
 
-if [ $? != 0 ]
-then
-    showUsage
-    exit 1
-fi
-
-eval set -- "$PARAMS"
-
-# Evaluate valid options
-
-while [ "$1" != "--" ]
-do
+while [ $# -gt 0 ]; do
     case "$1" in
-	--no-out-link)
-	    noOutLinkArg="--no-out-link"
-	    ;;
-	--show-trace)
-	    showTraceArg="--show-trace"
-	    ;;
-	-h|--help)
-	    showUsage
-	    exit 0
-	    ;;
+      --no-out-link)
+        nixBuildArgs+=("--no-out-link")
+        ;;
+      --show-trace)
+        nixBuildArgs+=("--show-trace")
+        ;;
+      -h|--help)
+        showUsage
+        exit 0
+        ;;
+      --option)
+        shift
+        nixBuildArgs+=("--option" "$1" "$2"); shift
+        ;;
+      *)
+        if [ -n "$networkExpr" ]; then
+          echo "Network expression already set!"
+          showUsage
+          exit 1
+        fi
+        networkExpr="$(readlink -f "$1")"
+        ;;
     esac
-    
+
     shift
 done
 
-shift
-
-# Validate the given options
-
-if [ "$1" = "" ]
+if [ -z "$networkExpr" ]
 then
     echo "ERROR: A network expression must be specified!" >&2
     exit 1
-else
-    networkExpr=$(readlink -f $1)
 fi
 
 # Build a network of VMs
-
 nix-build '<nixpkgs/nixos/modules/installer/tools/nixos-build-vms/build-vms.nix>' \
-    --argstr networkExpr $networkExpr $noOutLinkArg $showTraceArg
+    --argstr networkExpr "$networkExpr" "${nixBuildArgs[@]}"

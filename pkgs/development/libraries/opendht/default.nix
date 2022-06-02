@@ -1,39 +1,71 @@
-{ stdenv, fetchFromGitHub
-, autoreconfHook, pkgconfig
-, nettle, gnutls, msgpack, readline, libargon2
+{ lib
+, stdenv
+, fetchFromGitHub
+, Security
+, cmake
+, pkg-config
+, asio
+, nettle
+, gnutls
+, msgpack
+, readline
+, libargon2
+, jsoncpp
+, restinio
+, http-parser
+, openssl
+, fmt
+, enableProxyServerAndClient ? false
+, enablePushNotifications ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "opendht-${version}";
-  version = "1.8.0";
+  pname = "opendht";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
-    rev = "${version}";
-    sha256 = "1mj3zsywxphh9wcazyqsldwwn14r77xv9cjsmc0nmcybsl2bwnpl";
+    rev = version;
+    sha256 = "sha256-vfMzUzTfz8G+E4W/1pX5v2P0RntgSTR61urmxtsrOWM=";
   };
 
-  nativeBuildInputs =
-    [ autoreconfHook
-      pkgconfig
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs =
-    [ nettle
-      gnutls
-      msgpack
-      readline
-      libargon2
-    ];
+  buildInputs = [
+    asio
+    nettle
+    gnutls
+    msgpack
+    readline
+    libargon2
+  ] ++ lib.optionals enableProxyServerAndClient [
+    jsoncpp
+    restinio
+    http-parser
+    openssl
+    fmt
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+  ];
+
+  cmakeFlags = lib.optionals enableProxyServerAndClient [
+    "-DOPENDHT_PROXY_SERVER=ON"
+    "-DOPENDHT_PROXY_CLIENT=ON"
+  ] ++ lib.optionals enablePushNotifications [
+    "-DOPENDHT_PUSH_NOTIFICATIONS=ON"
+  ];
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C++11 Kademlia distributed hash table implementation";
-    homepage    = https://github.com/savoirfairelinux/opendht;
-    license     = licenses.gpl3Plus;
+    homepage = "https://github.com/savoirfairelinux/opendht";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ taeer olynch thoughtpolice ];
-    platforms   = platforms.linux;
+    platforms = platforms.unix;
   };
 }

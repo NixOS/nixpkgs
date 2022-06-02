@@ -1,7 +1,13 @@
-{ stdenv, fetchFromGitHub, pkgconfig, mpd_clientlib, curl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkg-config
+, libmpdclient
+, curl
+}:
 
 stdenv.mkDerivation rec {
-  name = "mpdas-${version}";
+  pname = "mpdas";
   version = "0.4.5";
 
   src = fetchFromGitHub {
@@ -11,15 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "0fcqc4w6iwbi1n3cllcgj0k61zffhqkbr8668myxap21m35x8y1r";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ mpd_clientlib curl ];
+  buildInputs = [ libmpdclient curl ];
 
   makeFlags = [ "CONFIG=/etc" "DESTDIR=" "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Music Player Daemon AudioScrobbler";
-    homepage = http://50hz.ws/mpdas/;
+    homepage = "https://50hz.ws/mpdas/";
     license = licenses.bsd3;
     maintainers = [ maintainers.taketwo ];
     platforms = platforms.all;

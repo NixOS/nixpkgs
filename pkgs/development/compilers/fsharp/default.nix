@@ -1,18 +1,20 @@
 # Temporarily avoid dependency on dotnetbuildhelpers to avoid rebuilding many times while working on it
 
-{ stdenv, fetchurl, mono, pkgconfig, dotnetbuildhelpers, autoconf, automake, which }:
+{ lib, stdenv, fetchFromGitHub, mono, pkg-config, dotnetbuildhelpers, autoconf, automake, which }:
 
 stdenv.mkDerivation rec {
-  name = "fsharp-${version}";
+  pname = "fsharp";
   version = "4.0.1.1";
 
-  src = fetchurl {
-    url = "https://github.com/fsharp/fsharp/archive/${version}.tar.gz";
-    sha256 = "0mvmvwwpl4zq0yvgzdizww8l9azvlrc82xm32nz1fi1nw8x5qfqk";
+  src = fetchFromGitHub {
+    owner = "fsharp";
+    repo = "fsharp";
+    rev = version;
+    sha256 = "sha256-dgTEM2aL8lVjVMuW0+HLc+TUA39IiuBv/RfHYNURh5s=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ mono dotnetbuildhelpers autoconf automake which ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ mono dotnetbuildhelpers which ];
 
   configurePhase = ''
     sed -i '988d' src/FSharpSource.targets
@@ -40,9 +42,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A functional CLI language";
-    homepage = https://fsharp.org/;
-    license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin ];
-    platforms = with stdenv.lib.platforms; unix;
+    homepage = "https://fsharp.org/";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thoughtpolice raskin ];
+    platforms = with lib.platforms; unix;
   };
 }

@@ -1,4 +1,4 @@
-{ fetchzip, unzip
+{ fetchzip
 }:
 let
   fetchzip' = args: (fetchzip args).overrideAttrs (old: { UNZIP = "-j -P iagreetotheeula"; });
@@ -9,7 +9,7 @@ in
     sha256 = "19f873ilcdsf50g2v0s2zzmxil1bqncsk8nq99bzy87h0i7khkla";
     stripRoot = false;
   };
-  
+
   melee = fetchzip' {
     url = "http://blzdistsc2-a.akamaihd.net/MapPacks/Melee.zip";
     sha256 = "0z44pgy10jklsvgpr0kcn4c2mz3hw7nlcmvsy6a6lzpi3dvzf33i";

@@ -1,33 +1,30 @@
-{ stdenv, fetchurl, xcbuildHook, cf-private, Foundation, AddressBook }:
+{ lib, stdenv, fetchFromGitHub, xcbuildHook, Foundation, AddressBook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.1a-3";
-  name = "contacts-${version}";
+  pname = "contacts";
 
-  src = fetchurl {
-    url = "https://github.com/dhess/contacts/archive/4092a3c6615d7a22852a3bafc44e4aeeb698aa8f.tar.gz";
-    sha256 = "0wdqc1ndgrdhqapvvgx5xihc750szv08lp91x4l6n0gh59cpxpg3";
+  src = fetchFromGitHub {
+    owner = "dhess";
+    repo = "contacts";
+    rev = "4092a3c6615d7a22852a3bafc44e4aeeb698aa8f";
+    hash = "sha256-Li/c5uf9rfpuU+hduuSm7EmhVwIIkS72dqzmN+0cE3A=";
   };
 
   nativeBuildInputs = [ xcbuildHook ];
-
-  buildInputs = [
-    Foundation AddressBook
-    # Needed for OBJC_CLASS_$_NSArray symbols.
-    cf-private
-  ];
+  buildInputs = [ Foundation AddressBook ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp Products/Default/contacts $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Access contacts from the Mac address book from command-line";
-    homepage    = http://www.gnufoo.org/contacts/contacts.html;
-    license     = licenses.gpl2;
+    homepage = "http://www.gnufoo.org/contacts/contacts.html";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ jwiegley ];
-    platforms   = stdenv.lib.platforms.darwin;
-    hydraPlatforms = stdenv.lib.platforms.darwin;
+    platforms = platforms.darwin;
+    hydraPlatforms = platforms.darwin;
   };
 }

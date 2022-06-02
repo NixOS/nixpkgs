@@ -1,9 +1,12 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
-fetchzip rec {
+fetchzip {
   name = "paratype-pt-mono";
 
-  url = "http://www.paratype.ru/uni/public/PTMono.zip";
+  urls = [
+    "https://company.paratype.com/system/attachments/631/original/ptmono.zip"
+    "http://rus.paratype.ru/system/attachments/631/original/ptmono.zip"
+  ];
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
@@ -13,8 +16,8 @@ fetchzip rec {
 
   sha256 = "07kl82ngby55khvzsvn831ddpc0q8djgz2y6gsjixkyjfdk2xjjm";
 
-  meta = with stdenv.lib; {
-    homepage = http://www.paratype.ru/public/; 
+  meta = with lib; {
+    homepage = "http://www.paratype.ru/public/";
     description = "An open Paratype font";
 
     license = "Open Paratype license";

@@ -1,12 +1,12 @@
-{ stdenv, fetchsvn }:
+{ lib, stdenv, fetchsvn }:
 
 stdenv.mkDerivation rec {
-  name = "xavs-${version}";
+  pname = "xavs";
   version = "55";
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/xavs/code/trunk";
-    rev = "${version}";
+    rev = version;
     sha256 = "0drw16wm95dqszpl7j33y4gckz0w0107lnz6wkzb66f0dlbv48cf";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     patchShebangs tools/patcheck
     patchShebangs tools/regression-test.pl
     patchShebangs tools/xavs-format
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace config.guess --replace 'uname -p' 'uname -m'
     substituteInPlace configure \
       --replace '-O4' '-O3' \
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
     "--disable-asm"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "AVS encoder and decoder";
-    homepage    = http://xavs.sourceforge.net/;
+    homepage    = "http://xavs.sourceforge.net/";
     license     = licenses.lgpl2;
     platforms   = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ codyopel ];

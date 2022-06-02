@@ -1,28 +1,44 @@
-{ stdenv, fetchPypi
-, buildPythonPackage, pythonOlder
-, pytest, pytestrunner
-, parse, six, enum34
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, parse
+, pytestCheckHook
+, six
 }:
 
 buildPythonPackage rec {
-  pname = "parse_type";
-  version = "0.4.2";
+  pname = "parse-type";
+  version = "0.6.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0g3b6gsdwnm8dpkh2vn34q6dzxm9gl908ggyzcv31n9xbp3vv5pm";
+  src = fetchFromGitHub {
+    owner = "jenisys";
+    repo = "parse_type";
+    rev = "v${version}";
+    sha256 = "sha256-v79zzAAwXYoK2N8ZPl1L90qOwMRexAV2wCTMvo4vrSc=";
   };
 
-  checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ parse six ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
+  propagatedBuildInputs = [
+    parse
+    six
+  ];
 
-  checkPhase = ''
-    py.test tests
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    substituteInPlace pytest.ini \
+      --replace "--metadata PACKAGE_UNDER_TEST parse_type" "" \
+      --replace "--metadata PACKAGE_VERSION ${version}" "" \
+      --replace "--html=build/testing/report.html --self-contained-html" "" \
+      --replace "--junit-xml=build/testing/report.xml" ""
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/jenisys/parse_type;
+  pythonImportsCheck = [ "parse_type" ];
+
+  meta = with lib; {
     description = "Simplifies to build parse types based on the parse module";
+    homepage = "https://github.com/jenisys/parse_type";
     license = licenses.bsd3;
     maintainers = with maintainers; [ alunduil ];
   };

@@ -1,65 +1,84 @@
-{ stdenv, fetchurl, makeDesktopItem, wrapGAppsHook
-, alsaLib, atk, at-spi2-atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
-, glib, gtk3, libnotify, libX11, libXcomposite, libXcursor, libXdamage, libuuid
-, libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
-, pango, systemd, libXScrnSaver, libcxx, libpulseaudio }:
-
-stdenv.mkDerivation rec {
-
-    pname = "discord";
-    version = "0.0.9";
-
-    src = fetchurl {
-        url = "https://cdn.discordapp.com/apps/linux/${version}/${pname}-${version}.tar.gz";
-        sha256 = "1i0f8id10rh2fx381hx151qckvvh8hbznfsfav8w0dfbd1bransf";
+{ branch ? "stable", pkgs, lib, stdenv }:
+let
+  inherit (pkgs) callPackage fetchurl;
+  versions = if stdenv.isLinux then {
+    stable = "0.0.17";
+    ptb = "0.0.29";
+    canary = "0.0.135";
+  } else {
+    stable = "0.0.264";
+    ptb = "0.0.59";
+    canary = "0.0.283";
+  };
+  version = versions.${branch};
+  srcs = let
+    darwin-ptb = fetchurl {
+      url = "https://dl-ptb.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
+      sha256 = "sha256-LS7KExVXkOv8O/GrisPMbBxg/pwoDXIOo1dK9wk1yB8=";
     };
-
-    nativeBuildInputs = [ wrapGAppsHook ];
-
-    dontWrapGApps = true;
-
-    libPath = stdenv.lib.makeLibraryPath [
-        libcxx systemd libpulseaudio
-        stdenv.cc.cc alsaLib atk at-spi2-atk cairo cups dbus expat fontconfig freetype
-        gdk_pixbuf glib gtk3 libnotify libX11 libXcomposite libuuid
-        libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-        libXtst nspr nss libxcb pango systemd libXScrnSaver
-     ];
-
-    installPhase = ''
-        mkdir -p $out/{bin,opt/discord,share/pixmaps}
-        mv * $out/opt/discord
-
-        chmod +x $out/opt/discord/Discord
-        patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-                 $out/opt/discord/Discord
-
-        wrapProgram $out/opt/discord/Discord \
-          "''${gappsWrapperArgs[@]}" \
-          --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-          --prefix LD_LIBRARY_PATH : ${libPath}
-
-        ln -s $out/opt/discord/Discord $out/bin/
-        ln -s $out/opt/discord/discord.png $out/share/pixmaps
-
-        ln -s "${desktopItem}/share/applications" $out/share/
-        '';
-
-    desktopItem = makeDesktopItem {
-      name = pname;
-      exec = "Discord";
-      icon = pname;
-      desktopName = "Discord";
-      genericName = meta.description;
-      categories = "Network;InstantMessaging;";
+  in {
+    x86_64-linux = {
+      stable = fetchurl {
+        url =
+          "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
+        sha256 = "058k0cmbm4y572jqw83bayb2zzl2fw2aaz0zj1gvg6sxblp76qil";
+      };
+      ptb = fetchurl {
+        url =
+          "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
+        sha256 = "d78NnQZ3MkLje8mHrI6noH2iD2oEvSJ3cDnsmzQsUYc=";
+      };
+      canary = fetchurl {
+        url =
+          "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
+        sha256 = "sha256-dmG+3BWS1BMHHQAv4fsXuObVeAJBeD+TqnyQz69AMac=";
+      };
     };
-
-    meta = with stdenv.lib; {
-        description = "All-in-one cross-platform voice and text chat for gamers";
-        homepage = https://discordapp.com/;
-        downloadPage = "https://github.com/crmarsh/discord-linux-bugs";
-        license = licenses.unfree;
-        maintainers = [ maintainers.ldesgoui maintainers.MP2E ];
-        platforms = [ "x86_64-linux" ];
+    x86_64-darwin = {
+      stable = fetchurl {
+        url = "https://dl.discordapp.net/apps/osx/${version}/Discord.dmg";
+        sha256 = "1jvlxmbfqhslsr16prsgbki77kq7i3ipbkbn67pnwlnis40y9s7p";
+      };
+      ptb = darwin-ptb;
+      canary = fetchurl {
+        url =
+          "https://dl-canary.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
+        sha256 = "0mqpk1szp46mih95x42ld32rrspc6jx1j7qdaxf01whzb3d4pi9l";
+      };
     };
-}
+    # Only PTB bundles a MachO Universal binary with ARM support.
+    aarch64-darwin = { ptb = darwin-ptb; };
+  };
+  src = srcs.${stdenv.hostPlatform.system}.${branch};
+
+  meta = with lib; {
+    description = "All-in-one cross-platform voice and text chat for gamers";
+    homepage = "https://discordapp.com/";
+    downloadPage = "https://discordapp.com/download";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ ldesgoui MP2E devins2518 ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ]
+      ++ lib.optionals (branch == "ptb") [ "aarch64-darwin" ];
+  };
+  package = if stdenv.isLinux then ./linux.nix else ./darwin.nix;
+  packages = (builtins.mapAttrs
+    (_: value: callPackage package (value // { inherit src version; meta = meta // { mainProgram = value.binaryName; }; }))
+    {
+      stable = rec {
+        pname = "discord";
+        binaryName = "Discord";
+        desktopName = "Discord";
+      };
+      ptb = rec {
+        pname = "discord-ptb";
+        binaryName = "DiscordPTB";
+        desktopName = "Discord PTB";
+      };
+      canary = rec {
+        pname = "discord-canary";
+        binaryName = "DiscordCanary";
+        desktopName = "Discord Canary";
+      };
+    }
+  );
+in packages.${branch}

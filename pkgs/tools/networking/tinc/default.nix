@@ -1,12 +1,12 @@
-{stdenv, fetchurl, lzo, openssl, zlib}:
+{lib, stdenv, fetchurl, lzo, openssl, zlib}:
 
 stdenv.mkDerivation rec {
-  version = "1.0.35";
-  name = "tinc-${version}";
+  version = "1.0.36";
+  pname = "tinc";
 
   src = fetchurl {
     url = "https://www.tinc-vpn.org/packages/tinc-${version}.tar.gz";
-    sha256 = "0pl92sdwrkiwgll78x0ww06hfljd07mkwm62g8x17qn3gha3pj0q";
+    sha256 = "021i2sl2mjscbm8g59d7vs74iw3gf0m48wg7w3zhwj6czarkpxs0";
   };
 
   buildInputs = [ lzo openssl zlib ];
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
       authentication, compression and ethernet bridging.
     '';
     homepage="http://www.tinc-vpn.org/";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "tincd";
+    platforms = lib.platforms.unix;
   };
 }

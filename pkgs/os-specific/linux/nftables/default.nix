@@ -1,29 +1,59 @@
-{ stdenv, fetchurl, pkgconfig, docbook2x, docbook_xml_dtd_45
-, flex, bison, libmnl, libnftnl, gmp, readline }:
+{ lib, stdenv, fetchurl, pkg-config, bison, file, flex
+, asciidoc, libxslt, findXMLCatalogs, docbook_xml_dtd_45, docbook_xsl
+, libmnl, libnftnl, libpcap
+, gmp, jansson, libedit
+, autoreconfHook, fetchpatch
+, withDebugSymbols ? false
+, withPython ? false , python3
+, withXtables ? true , iptables
+}:
 
 stdenv.mkDerivation rec {
-  version = "0.9.0";
-  name = "nftables-${version}";
+  version = "1.0.2";
+  pname = "nftables";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/nftables/files/${name}.tar.bz2";
-    sha256 = "14bygs6vg2v448cw5r4pxqi8an29hw0m9vab8hpmgjmrzjsq30dd";
+    url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.bz2";
+    sha256 = "00jcjn1pl7qyqpg8pd4yhlkys7wbj4vkzgg73n27nmplzips6a0b";
   };
 
-  configureFlags = [
-    "CONFIG_MAN=y"
-    "DB2MAN=docbook2man"
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config bison file flex
+    asciidoc docbook_xml_dtd_45 docbook_xsl findXMLCatalogs libxslt
   ];
 
-  XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
+  buildInputs = [
+    libmnl libnftnl libpcap
+    gmp jansson libedit
+  ] ++ lib.optional withXtables iptables
+    ++ lib.optional withPython python3;
 
-  nativeBuildInputs = [ pkgconfig docbook2x flex bison ];
-  buildInputs = [ libmnl libnftnl gmp readline ];
+  preConfigure = ''
+    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
+  '';
 
-  meta = with stdenv.lib; {
+  patches = [
+    # fix build after 1.0.2 release, drop when updating to a newer release
+    (fetchpatch {
+      url = "https://git.netfilter.org/nftables/patch/?id=18a08fb7f0443f8bde83393bd6f69e23a04246b3";
+      sha256 = "03dzhd7fhg0d20ly4rffk4ra7wlxp731892dhp8zw67jwhys9ywz";
+    })
+  ];
+
+  configureFlags = [
+    "--with-json"
+    "--with-cli=editline"
+  ] ++ lib.optional (!withDebugSymbols) "--disable-debug"
+    ++ lib.optional (!withPython) "--disable-python"
+    ++ lib.optional withPython "--enable-python"
+    ++ lib.optional withXtables "--with-xtables";
+
+  meta = with lib; {
     description = "The project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
-    homepage = http://netfilter.org/projects/nftables;
-    license = licenses.gpl2;
+    homepage = "https://netfilter.org/projects/nftables/";
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ izorkin ajs124 ];
   };
 }

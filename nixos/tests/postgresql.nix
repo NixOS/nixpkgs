@@ -3,7 +3,7 @@
   pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
 let
@@ -23,46 +23,110 @@ let
   '';
   make-postgresql-test = postgresql-name: postgresql-package: backup-all: makeTest {
     name = postgresql-name;
-    meta = with pkgs.stdenv.lib.maintainers; {
+    meta = with pkgs.lib.maintainers; {
       maintainers = [ zagy ];
     };
 
-    machine = {...}:
+    nodes.machine = {...}:
       {
-        services.postgresql.enable = true;
-        services.postgresql.package = postgresql-package;
+        services.postgresql = {
+          enable = true;
+          package = postgresql-package;
+        };
 
-        services.postgresqlBackup.enable = true;
-        services.postgresqlBackup.databases = optional (!backup-all) "postgres";
+        services.postgresqlBackup = {
+          enable = true;
+          databases = optional (!backup-all) "postgres";
+        };
       };
 
     testScript = let
       backupName = if backup-all then "all" else "postgres";
       backupService = if backup-all then "postgresqlBackup" else "postgresqlBackup-postgres";
+      backupFileBase = "/var/backup/postgresql/${backupName}";
     in ''
-      sub check_count {
-        my ($select, $nlines) = @_;
-        return 'test $(sudo -u postgres psql postgres -tAc "' . $select . '"|wc -l) -eq ' . $nlines;
-      }
+      def check_count(statement, lines):
+          return 'test $(sudo -u postgres psql postgres -tAc "{}"|wc -l) -eq {}'.format(
+              statement, lines
+          )
 
-      $machine->start;
-      $machine->waitForUnit("postgresql");
-      # postgresql should be available just after unit start
-      $machine->succeed("cat ${test-sql} | sudo -u postgres psql");
-      $machine->shutdown; # make sure that postgresql survive restart (bug #1735)
-      sleep(2);
-      $machine->start;
-      $machine->waitForUnit("postgresql");
-      $machine->fail(check_count("SELECT * FROM sth;", 3));
-      $machine->succeed(check_count("SELECT * FROM sth;", 5));
-      $machine->fail(check_count("SELECT * FROM sth;", 4));
-      $machine->succeed(check_count("SELECT xpath(\'/test/text()\', doc) FROM xmltest;", 1));
 
-      # Check backup service
-      $machine->succeed("systemctl start ${backupService}.service");
-      $machine->succeed("zcat /var/backup/postgresql/${backupName}.sql.gz | grep '<test>ok</test>'");
-      $machine->succeed("stat -c '%a' /var/backup/postgresql/${backupName}.sql.gz | grep 600");
-      $machine->shutdown;
+      machine.start()
+      machine.wait_for_unit("postgresql")
+
+      with subtest("Postgresql is available just after unit start"):
+          machine.succeed(
+              "cat ${test-sql} | sudo -u postgres psql"
+          )
+
+      with subtest("Postgresql survives restart (bug #1735)"):
+          machine.shutdown()
+          import time
+          time.sleep(2)
+          machine.start()
+          machine.wait_for_unit("postgresql")
+
+      machine.fail(check_count("SELECT * FROM sth;", 3))
+      machine.succeed(check_count("SELECT * FROM sth;", 5))
+      machine.fail(check_count("SELECT * FROM sth;", 4))
+      machine.succeed(check_count("SELECT xpath('/test/text()', doc) FROM xmltest;", 1))
+
+      with subtest("Backup service works"):
+          machine.succeed(
+              "systemctl start ${backupService}.service",
+              "zcat ${backupFileBase}.sql.gz | grep '<test>ok</test>'",
+              "ls -hal /var/backup/postgresql/ >/dev/console",
+              "stat -c '%a' ${backupFileBase}.sql.gz | grep 600",
+          )
+      with subtest("Backup service removes prev files"):
+          machine.succeed(
+              # Create dummy prev files.
+              "touch ${backupFileBase}.prev.sql{,.gz,.zstd}",
+              "chown postgres:postgres ${backupFileBase}.prev.sql{,.gz,.zstd}",
+
+              # Run backup.
+              "systemctl start ${backupService}.service",
+              "ls -hal /var/backup/postgresql/ >/dev/console",
+
+              # Since nothing has changed in the database, the cur and prev files
+              # should match.
+              "zcat ${backupFileBase}.sql.gz | grep '<test>ok</test>'",
+              "cmp ${backupFileBase}.sql.gz ${backupFileBase}.prev.sql.gz",
+
+              # The prev files with unused suffix should be removed.
+              "[ ! -f '${backupFileBase}.prev.sql' ]",
+              "[ ! -f '${backupFileBase}.prev.sql.zstd' ]",
+
+              # Both cur and prev file should only be accessible by the postgres user.
+              "stat -c '%a' ${backupFileBase}.sql.gz | grep 600",
+              "stat -c '%a' '${backupFileBase}.prev.sql.gz' | grep 600",
+          )
+      with subtest("Backup service fails gracefully"):
+          # Sabotage the backup process
+          machine.succeed("rm /run/postgresql/.s.PGSQL.5432")
+          machine.fail(
+              "systemctl start ${backupService}.service",
+          )
+          machine.succeed(
+              "ls -hal /var/backup/postgresql/ >/dev/console",
+              "zcat ${backupFileBase}.prev.sql.gz | grep '<test>ok</test>'",
+              "stat ${backupFileBase}.in-progress.sql.gz",
+          )
+          # In a previous version, the second run would overwrite prev.sql.gz,
+          # so we test a second run as well.
+          machine.fail(
+              "systemctl start ${backupService}.service",
+          )
+          machine.succeed(
+              "stat ${backupFileBase}.in-progress.sql.gz",
+              "zcat ${backupFileBase}.prev.sql.gz | grep '<test>ok</test>'",
+          )
+
+
+      with subtest("Initdb works"):
+          machine.succeed("sudo -u postgres initdb -D /tmp/testpostgres2")
+
+      machine.shutdown()
     '';
 
   };

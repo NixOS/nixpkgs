@@ -1,4 +1,4 @@
-{pkgs, config, lib, ...}:
+{config, lib, ...}:
 
 let
   inherit (lib) mkOption mkIf types length attrNames;
@@ -51,12 +51,7 @@ in
   ###### interface
   options = {
     services.kerberos_server = {
-      enable = mkOption {
-        default = false;
-        description = ''
-          Enable the kerberos authentification server.
-        '';
-      };
+      enable = lib.mkEnableOption "the kerberos authentification server";
 
       realms = mkOption {
         type = types.attrsOf (types.submodule realm);

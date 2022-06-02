@@ -1,37 +1,41 @@
-{ stdenv, fetchFromGitHub, qmake4Hook , qt4, libX11, libXext }:
+{ lib, stdenv, fetchFromGitHub, qmake4Hook , qt4, libX11, libXext }:
 
 stdenv.mkDerivation rec {
-  name = "qtstyleplugin-kvantum-qt4-${version}";
-  version = "0.10.4";
+  pname = "qtstyleplugin-kvantum-qt4";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
-    rev = "0527bb03f2252269fd382e11181a34ca72c96b4b";
-    sha256 = "0ky44s1fgqxraywagx1mv07yz76ppgiz3prq447db78wkwqg2d8p";
+    rev = "V${version}";
+    hash = "sha256-Faex1NF5bJa0GdC+Sz4p6kHaGUtAkqZlNGi0TSc5ckw=";
   };
 
   nativeBuildInputs = [ qmake4Hook ];
   buildInputs = [ qt4 libX11 libXext ];
 
-  postUnpack = "sourceRoot=\${sourceRoot}/Kvantum";
+  sourceRoot = "source/Kvantum";
 
   buildPhase = ''
+    runHook preBuild
     qmake kvantum.pro
     make
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
     mkdir $TMP/kvantum
     make INSTALL_ROOT="$TMP/kvantum" install
     mv $TMP/kvantum/usr/ $out
     mv $TMP/kvantum/${qt4}/lib $out
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SVG-based Qt4 theme engine";
     homepage = "https://github.com/tsujan/Kvantum";
-    license = licenses.gpl2;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bugworm ];
   };

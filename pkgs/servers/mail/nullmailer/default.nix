@@ -5,19 +5,19 @@ assert tls -> gnutls != null;
 stdenv.mkDerivation rec {
 
   version = "2.2";
-  name = "nullmailer-${version}";
+  pname = "nullmailer";
 
   src = fetchurl {
     url = "https://untroubled.org/nullmailer/nullmailer-${version}.tar.gz";
     sha256 = "0md8cf90fl2yf3zh9njjy42a673v4j4ygyq95xg7fzkygdigm1lq";
   };
 
-  buildInputs = stdenv.lib.optional tls gnutls;
+  buildInputs = lib.optional tls gnutls;
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ] ++ stdenv.lib.optional tls "--enable-tls";
+  ] ++ lib.optional tls "--enable-tls";
 
   installFlags = [ "DESTDIR=$(out)" ];
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://untroubled.org/nullmailer/;
+    homepage = "http://untroubled.org/nullmailer/";
     description = ''
       A sendmail/qmail/etc replacement MTA for hosts which relay to a fixed set of smart relays.
       It is designed to be simple to configure, secure, and easily extendable.

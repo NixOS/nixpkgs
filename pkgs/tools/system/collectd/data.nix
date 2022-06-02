@@ -1,14 +1,14 @@
 { stdenv, collectd }:
 
-stdenv.mkDerivation rec {
-  inherit (collectd) meta version;
+stdenv.mkDerivation {
+  pname = "collectd-data";
+  inherit (collectd) meta src version;
 
-  name = "collectd-data-${version}";
-
-  phases = [ "installPhase" ];
+  dontConfigure = true;
+  dontBuild = true;
+  dontFixup = true;
 
   installPhase = ''
-    mkdir -p $out/share/collectd
-    cp ${collectd}/share/collectd/*.{db,conf} $out/share/collectd/
+    install -Dm444 -t $out/share/collectd/ src/*.{db,conf}
   '';
 }

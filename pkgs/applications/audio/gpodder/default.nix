@@ -1,21 +1,25 @@
-{ stdenv, fetchFromGitHub, python3, python3Packages, intltool
-, glibcLocales, gnome3, gtk3, wrapGAppsHook
-, ipodSupport ? false, libgpod, gobject-introspection
+{ lib, fetchFromGitHub, python3, python3Packages, intltool
+, glibcLocales, gnome, gtk3, wrapGAppsHook
+, gobject-introspection
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.7";
+  version = "3.10.21";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0sx9rj6dpvd2xz7lak2yi0zlgr3lp2ng1fw23s39la9ly4g1835j";
+    sha256 = "0n73jm5ypsj962gpr0dk10lqh83giqsczm63wchyhmrkyf1wgga1";
   };
 
-  postPatch = with stdenv.lib; ''
+  patches = [
+    ./disable-autoupdate.patch
+  ];
+
+  postPatch = with lib; ''
     sed -i -re 's,^( *gpodder_dir *= *).*,\1"'"$out"'",' bin/gpodder
   '';
 
@@ -25,14 +29,23 @@ python3Packages.buildPythonApplication rec {
     glibcLocales
   ];
 
+  # as of 2021-07, the gobject-introspection setup hook does not
+  # work with `strictDeps` enabled, thus for proper `wrapGAppsHook`
+  # it needs to be disabled explicitly. https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
+
   buildInputs = [
     python3
+    gtk3
     gobject-introspection
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
   ];
 
   checkInputs = with python3Packages; [
-    coverage minimock
+    minimock
+    pytest
+    pytest-httpserver
+    pytest-cov
   ];
 
   doCheck = true;
@@ -41,12 +54,12 @@ python3Packages.buildPythonApplication rec {
     feedparser
     dbus-python
     mygpoclient
+    requests
     pygobject3
     eyeD3
     podcastparser
     html5lib
-    gtk3
-  ] ++ stdenv.lib.optional ipodSupport libgpod;
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -60,16 +73,17 @@ python3Packages.buildPythonApplication rec {
   '';
 
   installCheckPhase = ''
-    LC_ALL=C PYTHONPATH=./src:$PYTHONPATH python3 -m gpodder.unittests
+    LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest --ignore=tests --ignore=src/gpodder/utilwin32ctypes.py --doctest-modules src/gpodder/util.py src/gpodder/jsonconfig.py
+    LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A podcatcher written in python";
     longDescription = ''
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.
     '';
-    homepage = http://gpodder.org/;
+    homepage = "http://gpodder.org/";
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ skeidel mic92 ];

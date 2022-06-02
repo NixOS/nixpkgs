@@ -1,16 +1,17 @@
-{ libsmbios, stdenv, autoreconfHook, fetchFromGitHub }:
+{ libsmbios, lib, stdenv, autoreconfHook, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "netperf-20180504";
+stdenv.mkDerivation {
+  pname = "netperf";
+  version = "20210121";
 
   src = fetchFromGitHub {
     owner = "HewlettPackard";
     repo = "netperf";
-    rev = "c0a0d9f31f9940abf375a41b43a343cdbf87caab";
-    sha256 = "0wfj9kkhar6jb5639f5wxpwsraxw4v9yzg71rsdidvj5fyncjjq2";
+    rev = "3bc455b23f901dae377ca0a558e1e32aa56b31c4";
+    sha256 = "s4G1ZN+6LERdEMDkc+12ZQgTi6K+ppUYUCGn4faCS9c=";
   };
 
-  buildInputs = [ libsmbios ];
+  buildInputs = lib.optional (with stdenv.hostPlatform; isx86 && isLinux) libsmbios;
   nativeBuildInputs = [ autoreconfHook ];
   autoreconfPhase = ''
     autoreconf -i -I src/missing/m4
@@ -20,10 +21,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Benchmark to measure the performance of many different types of networking";
-    homepage = http://www.netperf.org/netperf/;
-    license = "Hewlett-Packard BSD-like license";
+    homepage = "http://www.netperf.org/netperf/";
+    license = lib.licenses.mit;
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.mmlb ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.mmlb ];
   };
 }

@@ -4,13 +4,13 @@
 , ptyprocess
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (rec {
   pname = "pexpect";
-  version = "4.6.0";
+  version = "4.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2a8e88259839571d1251d278476f3eec5db26deb73a70be5ed5dc5435e418aba";
+    sha256 = "fc65a43959d153d0114afe13997d439c22823a27cefceb5ff35c2178c6784c0c";
   };
 
   # Wants to run pythonin a subprocess
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ ptyprocess ];
 
   meta = with lib; {
-    homepage = http://www.noah.org/wiki/Pexpect;
+    homepage = "http://www.noah.org/wiki/Pexpect";
     description = "Automate interactive console applications such as ssh, ftp, etc";
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
@@ -40,4 +40,4 @@ buildPythonPackage rec {
       any platform that supports the standard Python pty module.
     '';
   };
-}
+})

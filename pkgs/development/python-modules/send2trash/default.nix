@@ -1,30 +1,28 @@
-{ stdenv
-, lib
+{ lib, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pytest
-, configparser
-, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "Send2Trash";
-  version = "1.4.2";
+  version = "1.8.1b0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hsoft";
     repo = "send2trash";
     rev = version;
-    sha256 = "1w502i5h8xaqf03g6h95h4vs1wqfv6kg925dn63phrwmg1hfz2xx";
+    sha256 = "sha256-kDUEfyMTk8CXSxTEi7E6kl09ohnWHeaoif+EIaIJh9Q=";
   };
 
   doCheck = !stdenv.isDarwin;
-  checkPhase = "HOME=. py.test";
-  checkInputs = [ pytest ] ++ lib.optional (!isPy3k) configparser;
+  checkPhase = "HOME=$TMPDIR pytest";
+  checkInputs = [ pytest ];
 
   meta = with lib; {
     description = "Send file to trash natively under macOS, Windows and Linux";
-    homepage = https://github.com/hsoft/send2trash;
+    homepage = "https://github.com/hsoft/send2trash";
     license = licenses.bsd3;
   };
 }

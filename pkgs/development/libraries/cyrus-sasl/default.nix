@@ -1,33 +1,35 @@
-{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext
-, pam, fixDarwinDylibNames, autoreconfHook, fetchpatch, enableLdap ? false
-, buildPackages, pruneLibtoolFiles }:
+{ lib, stdenv, fetchurl, openssl, openldap, libkrb5, db, gettext
+, pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
+, buildPackages, pruneLibtoolFiles, nixosTests }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  name = "cyrus-sasl-${version}";
-  version = "2.1.27";
+  pname = "cyrus-sasl";
+  version = "2.1.28";
 
   src = fetchurl {
     urls =
-      [ "http://www.cyrusimap.org/releases/${name}.tar.gz"
-        "http://www.cyrusimap.org/releases/old/${name}.tar.gz"
+      [ "https://github.com/cyrusimap/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz"
+        "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
+        "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
       ];
-    sha256 = "1m85zcpgfdhm43cavpdkhb1s2zq1b31472hq1w1gs3xh94anp1i6";
+    sha256 = "sha256-fM/Gq9Ae1nwaCSSzU+Um8bdmsh9C1FYu5jWo6/xbs4w=";
   };
+
+  patches = [
+    # Fix cross-compilation
+    ./cyrus-sasl-ac-try-run-fix.patch
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook fixDarwinDylibNames pruneLibtoolFiles ];
+  nativeBuildInputs = [ autoreconfHook pruneLibtoolFiles ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
-    [ openssl db gettext kerberos ]
+    [ openssl db gettext libkrb5 ]
     ++ lib.optional enableLdap openldap
     ++ lib.optional stdenv.isLinux pam;
-
-  patches = [
-    ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
-    ./cyrus-sasl-ac-try-run-fix.patch
-  ];
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
@@ -39,8 +41,12 @@ stdenv.mkDerivation rec {
 
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
+  passthru.tests = {
+    inherit (nixosTests) parsedmarc postfix;
+  };
+
   meta = {
-    homepage = https://www.cyrusimap.org/sasl;
+    homepage = "https://www.cyrusimap.org/sasl";
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
     license = licenses.bsdOriginal;

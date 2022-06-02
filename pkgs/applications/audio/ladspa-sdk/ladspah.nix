@@ -1,10 +1,10 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 stdenv.mkDerivation rec {
-  name = "ladspa.h-${version}";
-  version = "1.13";
+  pname = "ladspa.h";
+  version = "1.15";
   src = fetchurl {
     url = "https://www.ladspa.org/download/ladspa_sdk_${version}.tgz";
-    sha256 = "0srh5n2l63354bc0srcrv58rzjkn4gv8qjqzg8dnq3rs4m7kzvdm";
+    sha256 = "1vgx54cgsnc3ncl9qbgjbmq12c444xjafjkgr348h36j16draaa2";
   };
 
   installPhase = ''
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
       The ladspa.h API header file from the LADSPA SDK.
       For the full SDK, use the ladspa-sdk package.
     '';
-    homepage = http://www.ladspa.org/ladspa_sdk/overview.html;
-    license = stdenv.lib.licenses.lgpl2;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "http://www.ladspa.org/ladspa_sdk/overview.html";
+    license = lib.licenses.lgpl2;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.all;
   };
 }

@@ -1,27 +1,27 @@
-{ stdenv, fetchurl, unzip, cairo, xorg, gdk_pixbuf, fontconfig, pango, gnome2, atk, gtk2, glib
-, freetype, dbus, nss, nspr, alsaLib, cups, expat, udev, makeDesktopItem
+{ lib, stdenv, fetchurl, unzip, cairo, xorg, gdk-pixbuf, fontconfig, pango, gnome, atk, at-spi2-atk, at-spi2-core
+, gtk3, glib, freetype, dbus, nss, nspr, alsa-lib, cups, expat, udev, makeDesktopItem
 }:
 
 let
-  rpath = stdenv.lib.makeLibraryPath [
+  rpath = lib.makeLibraryPath [
     cairo
     stdenv.cc.cc
-    gdk_pixbuf
+    gdk-pixbuf
     fontconfig
     pango
     atk
-    gtk2
+    gtk3
     glib
     freetype
     dbus
     nss
     nspr
-    alsaLib
+    alsa-lib
     cups
     expat
     udev
-
-    gnome2.GConf
+    at-spi2-atk
+    at-spi2-core
 
     xorg.libX11
     xorg.libXcursor
@@ -37,30 +37,29 @@ let
     xorg.libXScrnSaver
   ];
 in stdenv.mkDerivation rec {
-  name = "react-native-debugger-${version}";
-  version = "0.9.7";
-
+  pname = "react-native-debugger";
+  version = "0.12.1";
   src = fetchurl {
     url = "https://github.com/jhen0409/react-native-debugger/releases/download/v${version}/rn-debugger-linux-x64.zip";
-    sha256 = "0f1wvk1550z4imcs60sv229zllcxpykx4b60bw658idr1xc3c0ix";
+    sha256 = "sha256-DzDZmZn45gpZb/fkSssb0PtR7EVyBk44IjC57beg0RM=";
   };
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
   buildCommand = ''
     shopt -s extglob
     mkdir -p $out
     unzip $src -d $out
 
     mkdir $out/{lib,bin,share}
-    mv $out/lib{node,ffmpeg}.so $out/lib
+    mv $out/{libEGL,libGLESv2,libvk_swiftshader,libffmpeg}.so $out/lib
     mv $out/!(lib|share|bin) $out/share
 
     patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       --set-rpath ${rpath}:$out/lib \
-      $out/share/React\ Native\ Debugger
+      $out/share/react-native-debugger
 
-    ln -s $out/share/React\ Native\ Debugger $out/bin/React\ Native\ Debugger
+    ln -s $out/share/react-native-debugger $out/bin/react-native-debugger
 
     install -Dm644 "${desktopItem}/share/applications/"* \
       -t $out/share/applications/
@@ -68,16 +67,16 @@ in stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = "rndebugger";
-    exec = "React\\ Native\\ Debugger";
+    exec = "react-native-debugger";
     desktopName = "React Native Debugger";
     genericName = "React Native Debugger";
-    categories = "Development;Tools;";
+    categories = [ "Development" "Debugger" ];
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/jhen0409/react-native-debugger;
+  meta = with lib; {
+    homepage = "https://github.com/jhen0409/react-native-debugger";
     license = licenses.mit;
     description = "The standalone app based on official debugger of React Native, and includes React Inspector / Redux DevTools";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

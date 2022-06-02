@@ -5,7 +5,7 @@ declare -A hardeningEnableMap=()
 # Intentionally word-split in case 'NIX_HARDENING_ENABLE' is defined in Nix. The
 # array expansion also prevents undefined variables from causing trouble with
 # `set -u`.
-for flag in ${NIX_@infixSalt@_HARDENING_ENABLE-}; do
+for flag in ${NIX_HARDENING_ENABLE_@suffixSalt@-}; do
   hardeningEnableMap["$flag"]=1
 done
 
@@ -45,11 +45,12 @@ for flag in "${!hardeningEnableMap[@]}"; do
       hardeningCFlags+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
       ;;
     pie)
+      # NB: we do not use `+=` here, because PIE flags must occur before any PIC flags
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling CFlags -fPIE >&2; fi
-      hardeningCFlags+=('-fPIE')
-      if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
+      hardeningCFlags=('-fPIE' "${hardeningCFlags[@]}")
+      if [[ ! (" $* " =~ " -shared " || " $* " =~ " -static ") ]]; then
         if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
-        hardeningCFlags+=('-pie')
+        hardeningCFlags=('-pie' "${hardeningCFlags[@]}")
       fi
       ;;
     pic)

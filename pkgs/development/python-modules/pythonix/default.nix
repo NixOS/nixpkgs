@@ -1,29 +1,36 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, ninja, boost, meson, pkgconfig, nix, isPy3k }:
+{ lib, buildPythonPackage, fetchFromGitHub, ninja, boost, meson, pkg-config, nix, isPy3k, python }:
 
 buildPythonPackage rec {
   pname = "pythonix";
-  version = "0.1.4";
+  version = "0.1.7";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "pythonix";
     rev = "v${version}";
-    sha256 = "1q1fagfwzvmcm1n3a0liay7m5krazmhw9l001m90rrz2x7vrsqwk";
+    sha256 = "1wxqv3i4bva2qq9mx670bcx0g0irjn68fvk28dwvhay9ndwcspqf";
   };
 
   disabled = !isPy3k;
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config ];
 
   buildInputs = [ nix boost ];
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    # This is typically set by pipInstallHook/eggInstallHook,
+    # so we have to do so manually when using meson
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
+  '';
+
+  pythonImportsCheck = [ "nix" ];
+
+  meta = with lib; {
     description = ''
        Eval nix code from python.
     '';
     maintainers = [ maintainers.mic92 ];
     license = licenses.mit;
-    broken = true;
   };
 }

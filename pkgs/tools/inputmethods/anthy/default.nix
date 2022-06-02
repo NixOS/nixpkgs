@@ -1,18 +1,19 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "anthy-9100h";
+stdenv.mkDerivation rec {
+  pname = "anthy";
+  version = "9100h";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Hiragana text to Kana Kanji mixed text Japanese input method";
-    homepage    = http://sourceforge.jp/projects/anthy/;
+    homepage    = "https://anthy.osdn.jp/";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ericsagnes ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 
   src = fetchurl {
-    url = "http://dl.sourceforge.jp/anthy/37536/anthy-9100h.tar.gz";
+    url = "mirror://osdn/anthy/37536/anthy-${version}.tar.gz";
     sha256 = "0ism4zibcsa5nl77wwi12vdsfjys3waxcphn1p5s7d0qy1sz0mnj";
   };
 }

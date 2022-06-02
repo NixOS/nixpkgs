@@ -30,7 +30,7 @@ fetchGithubName () {
         curl https://github.com/NixOS/nixpkgs/commit/"$commitid" 2>/dev/null |
         grep committed -B10 | grep 'href="/' |
         sed -re 's@.* href="/@@; s@".*@@' |
-	grep -v "/commit/"
+        grep -v "/commit/"
     )";
     echo "$userid"
 }
@@ -38,7 +38,7 @@ fetchGithubName () {
 [ -n "$NIXPKGS_GITHUB_NAME_CACHE" ] && {
     echo "$emails" | while read email; do
         line="$(grep "$email	" "$NIXPKGS_GITHUB_NAME_CACHE")"
-	[ -z "$line" ] && {
+        [ -z "$line" ] && {
             echo "$email	$(fetchGithubName "$email")" >> \
                 "$NIXPKGS_GITHUB_NAME_CACHE"
         }
@@ -47,11 +47,11 @@ fetchGithubName () {
 
 # For RDF
 normalize_name () {
-	sed -e 's/%/%25/g; s/ /%20/g; s/'\''/%27/g; s/"/%22/g; s/`/%60/g; s/\^/%5e/g; '
+    sed -e 's/%/%25/g; s/ /%20/g; s/'\''/%27/g; s/"/%22/g; s/`/%60/g; s/\^/%5e/g; '
 }
 
 denormalize_name () {
-	sed -e 's/%20/ /g; s/%27/'\''/g; s/%22/"/g; s/%60/`/g; s/%5e/^/g; s/%25/%/g;';
+    sed -e 's/%20/ /g; s/%27/'\''/g; s/%22/"/g; s/%60/`/g; s/%5e/^/g; s/%25/%/g;';
 }
 
 n3="$(mktemp --suffix .n3)"
@@ -75,22 +75,22 @@ echo "$maintainers" | cut -f 2 | sed -e 's@.*@<my://name/&>	<my://is-name>	<my:/
 # Get transitive closure
 sparql="$(nix-build '<nixpkgs>' -Q -A apache-jena --no-out-link)/bin/sparql"
 name_list="$(
-	"$sparql" --results=TSV --data="$n3" "
-	select ?x ?y ?g where {
-	  ?x <my://can-be>+ ?y.
-	  ?x <my://is-name> ?g.
+    "$sparql" --results=TSV --data="$n3" "
+    select ?x ?y ?g where {
+      ?x <my://can-be>+ ?y.
+      ?x <my://is-name> ?g.
         }
-	" | tail -n +2 |
-	sed -re 's@<my://name/@@g; s@<my://@@g; s@>@@g;' |
-	sort -k 2,3 -t '	'
+    " | tail -n +2 |
+    sed -re 's@<my://name/@@g; s@<my://@@g; s@>@@g;' |
+    sort -k 2,3 -t '	'
 )"
 github_name_list="$(
-	"$sparql" --results=TSV --data="$n3" "
-	select ?x ?y where {
-	  ?x (<my://can-be>+ / <my://at-github>) ?y.
+    "$sparql" --results=TSV --data="$n3" "
+    select ?x ?y where {
+      ?x (<my://can-be>+ / <my://at-github>) ?y.
         }
-	" | tail -n +2 |
-	sed -re 's@<my://(name|github)/@@g; s@<my://@@g; s@>@@g;'
+    " | tail -n +2 |
+    sed -re 's@<my://(name|github)/@@g; s@<my://@@g; s@>@@g;'
 )"
 
 # Take first spelling option for every person
@@ -104,10 +104,10 @@ if [ -n "$NIXPKGS_GITHUB_NAME_CACHE" ]; then
     github_adder_script="$(mktemp)"
     echo "$github_name_list" |
         grep -E "$(echo "$name_list_canonical" | cut -f 2 |
-	    tr '\n' '|' )" |
-	sort | uniq |
+        tr '\n' '|' )" |
+    sort | uniq |
         sed -re 's/(.*)\t(.*)/s| \1$| \1\t\2|g;/' |
-	denormalize_name > "$github_adder_script"
+    denormalize_name > "$github_adder_script"
 else
     github_adder_script='/dev/null'
 fi

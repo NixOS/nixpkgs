@@ -1,21 +1,44 @@
-{ lib, buildPythonPackage, fetchPypi,
-  django, pillow
+{ lib
+, buildPythonPackage
+, django
+, fetchPypi
+, pillow
+, pytestCheckHook
+, pythonOlder
+, reportlab
+, svglib
 }:
 
 buildPythonPackage rec {
   pname = "easy-thumbnails";
-  version = "2.6";
+  version = "2.8.1";
+  format = "setuptools";
 
-  meta = {
-    description = "Easy thumbnails for Django";
-    homepage = https://github.com/SmileyChris/easy-thumbnails;
-    license = lib.licenses.bsd3;
-  };
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "23fbe3415c93b2369ece8ebdfb5faa05540943bef8b941b3118ce769ba95e275";
+    sha256 = "1a283fe8a3569c3feab4605e8279929d75c85c1151b2fd627f95b1863b5fc6c2";
   };
 
-  propagatedBuildInputs = [ django pillow ];
+  propagatedBuildInputs = [
+    django
+    pillow
+    svglib
+    reportlab
+  ];
+
+  # Tests require a Django instance which is setup
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "easy_thumbnails"
+  ];
+
+  meta = with lib; {
+    description = "Easy thumbnails for Django";
+    homepage = "https://github.com/SmileyChris/easy-thumbnails";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
+  };
 }

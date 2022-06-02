@@ -1,18 +1,16 @@
 { lib, buildPythonPackage, fetchPypi
-, pylev, pastel, clikit }:
+, clikit }:
 
 buildPythonPackage rec {
   pname = "cleo";
-  version = "0.7.2";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "091nzpfp5incd2fzqych78rvyx4i3djr50cnizbjzr3dc7g00l3s";
+    sha256 = "3d0e22d30117851b45970b6c14aca4ab0b18b1b53c8af57bed13208147e4069f";
   };
 
   propagatedBuildInputs = [
-    pylev
-    pastel
     clikit
   ];
 
@@ -22,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/sdispater/cleo;
+    homepage = "https://github.com/sdispater/cleo";
     description = "Allows you to create beautiful and testable command-line interfaces";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

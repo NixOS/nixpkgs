@@ -1,36 +1,29 @@
-{stdenv, fetchurl}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="forktty";
-    version="1.3";
-    name="${baseName}-${version}";
-    hash="0nd55zdqly6nl98k9lc7j751x86cw9hayx1qn0725f22r1x3j5zb";
-    url="http://sunsite.unc.edu/pub/linux/utils/terminal/forktty-1.3.tgz";
-    sha256="0nd55zdqly6nl98k9lc7j751x86cw9hayx1qn0725f22r1x3j5zb";
-  };
-  buildInputs = [
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
+{ lib, stdenv, fetchurl }:
+
+stdenv.mkDerivation rec {
+  pname = "forktty";
+  version = "1.3";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "mirror://ibiblioPubLinux/utils/terminal/${pname}-${version}.tgz";
+    hash = "sha256-6xc5eshCuCIOsDh0r2DizKAeypGH0TRRotZ4itsvpVk=";
   };
+
   preBuild = ''
     sed -e s@/usr/bin/ginstall@install@g -i Makefile
   '';
+
   preInstall = ''
     mkdir -p "$out/bin"
     mkdir -p "$out/share/man/man8"
   '';
-  makeFlags='' prefix="''${out}" manprefix="''${out}/share/" '';
-  meta = {
-    inherit (s) version;
-    description = ''Tool to detach from controlling TTY and attach to another'';
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+
+  makeFlags = [ "prefix=$(out)" "manprefix=$(out)/share/" ];
+
+  meta = with lib; {
+    description = "Tool to detach from controlling TTY and attach to another";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
   };
 }

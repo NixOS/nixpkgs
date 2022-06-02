@@ -20,6 +20,7 @@ let
         size = 2048;
     };
     CN = top.masterAddress;
+    hosts = [top.masterAddress] ++ cfg.cfsslAPIExtraSANs;
   });
 
   cfsslAPITokenBaseName = "apitoken.secret";
@@ -40,7 +41,7 @@ in
   ###### interface
   options.services.kubernetes.pki = with lib.types; {
 
-    enable = mkEnableOption "Whether to enable easyCert issuer service.";
+    enable = mkEnableOption "easyCert issuer service";
 
     certs = mkOption {
       description = "List of certificate specs to feed to cert generator.";
@@ -66,6 +67,15 @@ in
       type = bool;
     };
 
+    cfsslAPIExtraSANs = mkOption {
+      description = ''
+        Extra x509 Subject Alternative Names to be added to the cfssl API webserver TLS cert.
+      '';
+      default = [];
+      example = [ "subdomain.example.com" ];
+      type = listOf str;
+    };
+
     genCfsslAPIToken = mkOption {
       description = ''
         Whether to automatically generate cfssl API-token secret,
@@ -88,6 +98,7 @@ in
         the public and private keys respectively.
       '';
       default = "${config.services.cfssl.dataDir}/ca";
+      defaultText = literalExpression ''"''${config.services.cfssl.dataDir}/ca"'';
       type = str;
     };
 
@@ -179,6 +190,7 @@ in
         # manually paste it in place. Just symlink.
         # otherwise, create the target file, ready for users to insert the token
 
+        mkdir -p "$(dirname "${certmgrAPITokenPath}")"
         if [ -f "${cfsslAPITokenPath}" ]; then
           ln -fs "${cfsslAPITokenPath}" "${certmgrAPITokenPath}"
         else
@@ -218,7 +230,8 @@ in
             };
             private_key = cert.privateKeyOptions;
             request = {
-              inherit (cert) CN hosts;
+              hosts = [cert.CN] ++ cert.hosts;
+              inherit (cert) CN;
               key = {
                 algo = "rsa";
                 size = 2048;
@@ -253,7 +266,7 @@ in
           in
           ''
             export KUBECONFIG=${clusterAdminKubeconfig}
-            ${kubectl}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
+            ${kubernetes}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
           '';
         })]);
 
@@ -350,9 +363,12 @@ in
           tlsCertFile = mkDefault cert;
           tlsKeyFile = mkDefault key;
           serviceAccountKeyFile = mkDefault cfg.certs.serviceAccount.cert;
+          serviceAccountSigningKeyFile = mkDefault cfg.certs.serviceAccount.key;
           kubeletClientCaFile = mkDefault caCert;
           kubeletClientCertFile = mkDefault cfg.certs.apiserverKubeletClient.cert;
           kubeletClientKeyFile = mkDefault cfg.certs.apiserverKubeletClient.key;
+          proxyClientCertFile = mkDefault cfg.certs.apiserverProxyClient.cert;
+          proxyClientKeyFile = mkDefault cfg.certs.apiserverProxyClient.key;
         });
         controllerManager = mkIf top.controllerManager.enable {
           serviceAccountKeyFile = mkDefault cfg.certs.serviceAccount.key;
@@ -385,4 +401,6 @@ in
         };
       };
     });
+
+  meta.buildDocsInSandbox = false;
 }

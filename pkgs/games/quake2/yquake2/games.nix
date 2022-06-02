@@ -1,26 +1,26 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ stdenv, lib, fetchFromGitHub }:
 
 let
   games = {
     ctf = {
       id = "ctf";
-      version = "1.05";
+      version = "1.07";
       description = "'Capture The Flag' for Yamagi Quake II";
-      sha256 = "15ihspyshls645ig0gq6bwdzvghyyysqk60g6ad3n4idb2ms52md";
+      sha256 = "0i9bwhjvq6yhalrsbzjambh27fdzrzgswqz3jgfn9qw6k1kjvlin";
     };
 
     ground-zero = {
       id = "rogue";
-      version = "2.04";
+      version = "2.07";
       description = "'Ground Zero' for Yamagi Quake II";
-      sha256 = "0x1maaycrxv7d3xvvk1ih2zymhvcd3jnab7g3by8qh6g5y33is5l";
+      sha256 = "1m2r4vgfdxpsi0lkf32liwf1433mdhhmjxiicjwzqjlkncjyfcb1";
     };
 
     the-reckoning = {
       id = "xatrix";
-      version = "2.05";
+      version = "2.08";
       description = "'The Reckoning' for Yamagi Quake II";
-      sha256 = "0gf2ryhgz8nw1mb1arlbriihjsx09fa0wmkgcayc8ijignfi1qkh";
+      sha256 = "1wp9fg1q8nly2r9hh4394r1h4dxyni3lvdy7g419cz5s8hhn5msr";
     };
   };
 
@@ -28,7 +28,7 @@ let
     inherit (data) id version description sha256;
     inherit title;
 
-    name = "yquake2-${title}-${version}";
+    pname = "yquake2-${title}";
 
     src = fetchFromGitHub {
       inherit sha256;
@@ -37,16 +37,12 @@ let
       rev = "${lib.toUpper id}_${builtins.replaceStrings ["."] ["_"] version}";
     };
 
-    enableParallelBuilding = true;
-
-    nativeBuildInputs = [ cmake ];
-
     installPhase = ''
       mkdir -p $out/lib/yquake2/${id}
-      cp Release/* $out/lib/yquake2/${id}
+      cp release/* $out/lib/yquake2/${id}
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       inherit (data) description;
       homepage = "https://www.yamagi.org/quake2/";
       license = licenses.unfree;

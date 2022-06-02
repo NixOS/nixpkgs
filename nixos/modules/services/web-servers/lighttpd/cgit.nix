@@ -41,9 +41,13 @@ in
 
     configText = mkOption {
       default = "";
-      example = ''
-        cache-size=1000
-        scan-path=/srv/git
+      example = literalExpression ''
+        '''
+          source-filter=''${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py
+          about-filter=''${pkgs.cgit}/lib/cgit/filters/about-formatting.sh
+          cache-size=1000
+          scan-path=/srv/git
+        '''
       '';
       type = types.lines;
       description = ''

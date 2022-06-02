@@ -1,32 +1,40 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, pythonOlder
-, snowballstemmer, six, configparser
-, pytest, pytestpep8, mock, pathlib }:
+{ lib
+, buildPythonPackage
+, isPy3k
+, fetchFromGitHub
+, snowballstemmer
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pydocstyle";
-  version = "2.1.1";
+  version = "6.1.1";
+  disabled = !isPy3k;
 
-  # no tests on PyPI
-  # https://github.com/PyCQA/pydocstyle/issues/302
+  format = "setuptools";
+
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = version;
-    sha256 = "1h0k8lpx14svc8dini62j0kqiam10pck5sdzvxa4xhsx7y689g5l";
+    sha256 = "sha256-j0WMD2qKDdMaKG2FxrrM/O7zX4waJ1afaRPRv70djkE=";
   };
 
-  propagatedBuildInputs = [ snowballstemmer six ] ++ lib.optional (!isPy3k) configparser;
+  propagatedBuildInputs = [
+    snowballstemmer
+  ];
 
-  checkInputs = [ pytest pytestpep8 mock ] ++ lib.optional (pythonOlder "3.4") pathlib;
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    # test_integration.py installs packages via pip
-    py.test --pep8 --cache-clear -vv src/tests -k "not test_integration"
-  '';
+  disabledTestPaths = [
+    "src/tests/test_integration.py" # runs pip install
+  ];
 
   meta = with lib; {
     description = "Python docstring style checker";
-    homepage = https://github.com/PyCQA/pydocstyle/;
+    homepage = "https://github.com/PyCQA/pydocstyle";
     license = licenses.mit;
     maintainers = with maintainers; [ dzabraev ];
   };
