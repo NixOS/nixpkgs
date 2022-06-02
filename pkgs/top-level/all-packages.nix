@@ -32472,8 +32472,6 @@ with pkgs;
     serverOnly = true;
   };
 
-  zangband = callPackage ../games/zangband { };
-
   zaz = callPackage ../games/zaz { };
 
   zdbsp = callPackage ../games/zdoom/zdbsp.nix { };
