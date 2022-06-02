@@ -19,8 +19,8 @@ rec {
   # Policy: use the highest stable version as the default (on our master).
   stable = if stdenv.hostPlatform.system == "x86_64-linux"
     then generic {
-      version = "510.68.02";
-      sha256_64bit = "sha256-vSw0SskrL8ErBgQ1kKT+jU6wzLdNDEk1LwBM8tKZ9MU=";
+      version = "515.48.07";
+      sha256_64bit = "sha256-4odkzFsTwy52NwUT2ur8BcKJt37gURVSRQ8aAOMa4eM=";
       settingsSha256 = "sha256-4TBA/ITpaaBiVDkpj7/Iydei1knRPpruPL4fRrqFAmU=";
       persistencedSha256 = "sha256-Q1Rk6dAK4pnm6yDK4kmj5Vg4GRbi034C96ypywHYB2I=";
     }
