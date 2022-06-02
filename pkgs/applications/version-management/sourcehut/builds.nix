@@ -12,13 +12,13 @@
 , unzip
 }:
 let
-  version = "0.80.0";
+  version = "0.81.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "builds.sr.ht";
     rev = version;
-    sha256 = "sha256-SzA9bOXiXULRD4Eq9xBbbmMUpXT8egOtooZFF4p79ms=";
+    sha256 = "sha256-oUSzanRFZ2dQTgm/VuNhqUaUAPq7ffxR7OtBKtE61DE=";
   };
 
   buildsrht-api = buildGoModule ({
