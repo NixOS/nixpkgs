@@ -411,6 +411,8 @@ with pkgs;
 
   pridecat = callPackage ../tools/misc/pridecat { };
 
+  pridefetch = callPackage ../tools/misc/pridefetch { };
+
   proto-contrib = callPackage ../development/tools/proto-contrib { };
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc { };
