@@ -35,6 +35,8 @@ mkDerivation rec {
     qttranslations
   ];
 
+  # replace this hack with a proper cmake variable or environment variable
+  # once https://github.com/open-eid/cmake/pull/34 (or #35) gets merged.
   qtWrapperArgs = [
       "--prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/"
   ];
