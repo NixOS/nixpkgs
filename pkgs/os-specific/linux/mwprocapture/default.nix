@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
+  patches = [ ./pci.patch ];
+
+  NIX_CFLAGS_COMPILE="-Wno-error=implicit-fallthrough";
+
   postInstall = ''
     cd ../
     mkdir -p $out/bin
