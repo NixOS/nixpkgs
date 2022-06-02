@@ -77,7 +77,7 @@ in
         settings = {
           homeserver.address = https://matrix.org;
           bridge.permissions = {
-            "@example:matrix.org" = 100;
+            "@admin:myhomeserver.org" = "admin";
           };
         };
       };
