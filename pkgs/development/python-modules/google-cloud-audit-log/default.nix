@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-audit-log";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d0852f525ad65705f9fbff6288be4493e1449a7906fb5e01bd71c8d1e424d1fc";
+    sha256 = "sha256-bYmQOEiu6YF0d+zjBlRIUbkDpexWHalmu7pajRJQmk0=";
   };
 
   propagatedBuildInputs = [ googleapis-common-protos protobuf ];
