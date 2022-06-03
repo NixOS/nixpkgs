@@ -21,11 +21,12 @@
 , pyyaml
 , scipy
 , toolz
+, zarr
 }:
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2022.05.0";
+  version = "2022.05.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    hash = "sha256-HFRi08RujlwatCPIRaVr9aBZRq9wBx5JRZrELB3hZks=";
+    hash = "sha256-8M70Pf31PhYnBPRhSG55eWg6gK0lxsIFKF+cRCsf0/U=";
   };
 
   propagatedBuildInputs = [
@@ -49,6 +50,9 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     array = [
       numpy
+    ];
+    complete = [
+      distributed
     ];
     dataframe = [
       numpy
@@ -70,6 +74,7 @@ buildPythonPackage rec {
     pytest-rerunfailures
     pytest-xdist
     scipy
+    zarr
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -92,12 +97,19 @@ buildPythonPackage rec {
     "--reruns 3"
     # Don't run tests that require network access
     "-m 'not network'"
+    # Ignore warning about pyarrow 5.0.0 feautres
+    "-W"
+    "ignore::FutureWarning"
   ];
 
   disabledTests = lib.optionals stdenv.isDarwin [
     # Test requires features of python3Packages.psutil that are
     # blocked in sandboxed-builds
     "test_auto_blocksize_csv"
+    # AttributeError: 'str' object has no attribute 'decode'
+    "test_read_dir_nometa"
+  ] ++ [
+    "test_chunksize_files"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -112,10 +124,6 @@ buildPythonPackage rec {
     "dask.dataframe.tseries"
     "dask.diagnostics"
   ];
-
-  passthru.optional-dependencies = {
-    complete = [ distributed ];
-  };
 
   meta = with lib; {
     description = "Minimal task scheduling abstraction";
