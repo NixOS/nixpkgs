@@ -16,7 +16,7 @@ buildPythonApplication rec {
   version = "8.3.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "squidfunk";
