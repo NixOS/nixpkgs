@@ -48,6 +48,15 @@ stdenv.mkDerivation rec {
     for f in "$lib/lib/"*.la "$dev/bin/"bind*-config; do
       sed -i "$f" -e 's|-L${openssl.dev}|-L${lib.getLib openssl}|g'
     done
+
+    cat <<EOF >$out/etc/rndc.conf
+    include "/etc/bind/rndc.key";
+    options {
+        default-key "rndc-key";
+        default-server 127.0.0.1;
+        default-port 953;
+    };
+    EOF
   '';
 
   doCheck = false; # requires root and the net
