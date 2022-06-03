@@ -18,17 +18,12 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.6.2";
+  version = "2.6.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YNRJ+BQsdC23YPTAvjkSG8jZvoVVVdeEwlLerKHO0/U=";
+    sha256 = "sha256-G6STjgMrc961HlnEZWoA4JOc8LERJXUJnxNrq7RWMxI=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "cachetools>=2.0.0,<5.0" "cachetools"
-  '';
 
   propagatedBuildInputs = [
     cachetools
