@@ -23509,8 +23509,6 @@ with pkgs;
 
   gofumpt = callPackage ../development/tools/gofumpt { };
 
-  gotags = callPackage ../development/tools/gotags { };
-
   go-task = callPackage ../development/tools/go-task { };
 
   golint = callPackage ../development/tools/golint { };
