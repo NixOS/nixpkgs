@@ -47,6 +47,8 @@ in
               options = [ "nfsvers=4" "sec=krb5p" "noauto" ];
             };
           };
+
+        environment.systemPackages = [ pkgs.nfs4-acl-tools ];
       };
 
     server = { lib, ...}:
@@ -129,5 +131,11 @@ in
           ids = client.succeed("stat -c '%U %G' /data/alice").split()
           expected = ["alice", "users"]
           assert ids == expected, f"ids incorrect: got {ids} expected {expected}"
+
+      with subtest("ACL tools are working"):
+          client.succeed("su alice -c 'nfs4_getfacl /data/alice'")
+          client.succeed("su alice -c 'ls /data/alice'")
+          client.succeed("su alice -c 'nfs4_setfacl -a D::alice@nfs.test:r /data/alice'")
+          client.fail("su alice -c 'ls /data/alice'")
     '';
 })
