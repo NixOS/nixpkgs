@@ -531,10 +531,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/http",
     "repo": "terraform-provider-http",
-    "rev": "v2.1.0",
-    "sha256": "1gih0ksrmhz82966c45ad2yv829pcgbvls92cll7r5haqgvx6k79",
-    "vendorSha256": null,
-    "version": "2.1.0"
+    "rev": "v2.2.0",
+    "sha256": "sha256-Ym9z/b2geSLdXYlQGggjyNTBZLo+GeMW5XLM+Gvk/gA=",
+    "vendorSha256": "sha256-Qk3ztfAtKt6Gq9QBtaeodwVkH/71TrCNMMAdrXO6Tjs=",
+    "version": "2.2.0"
   },
   "huaweicloud": {
     "owner": "huaweicloud",
