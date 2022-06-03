@@ -1,11 +1,44 @@
 { lib, newScope, pkgs, config }:
 
 let
-  liftJaneStreet = self: super: super.janeStreet // super;
-
   mkOcamlPackages = ocaml:
     (lib.makeScope newScope (self: with self;
-  {
+  let
+    janeStreet =
+      if lib.versionOlder "4.08" ocaml.version
+      then janeStreet_0_14
+      else if lib.versionOlder "4.07" ocaml.version
+      then janeStreet_0_12
+      else import ../development/ocaml-modules/janestreet {
+        self = self // {
+          ppxlib = ppxlib.override { version = "0.8.1"; };
+        };
+        inherit (pkgs) openssl;
+      };
+
+    janePackage_0_14 = callPackage ../development/ocaml-modules/janestreet/janePackage_0_14.nix {};
+
+    janePackage_0_12 = callPackage ../development/ocaml-modules/janestreet/janePackage_0_12.nix {};
+
+    janePackage_0_11 = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
+
+    janeStreet_0_14 = import ../development/ocaml-modules/janestreet/0.14.nix {
+      self = self // {
+        janePackage = janePackage_0_14;
+      };
+      inherit (pkgs) fetchpatch lib openssl zstd;
+    };
+
+    janeStreet_0_12 = import ../development/ocaml-modules/janestreet/0.12.nix {
+      self = self // {
+        janePackage = janePackage_0_12;
+        ppxlib = ppxlib.override { version = "0.8.1"; };
+      };
+      inherit (pkgs) openssl;
+    };
+
+  in
+  janeStreet // {
     inherit ocaml;
 
     # Libs
@@ -1473,32 +1506,8 @@ let
 
     # Jane Street
 
-    janePackage =
-      if lib.versionOlder "4.08" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/janePackage_0_14.nix {}
-      else if lib.versionOlder "4.07" ocaml.version
-      then callPackage ../development/ocaml-modules/janestreet/janePackage_0_12.nix {}
-      else callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
-
-    janeStreet =
-    if lib.versionOlder "4.08" ocaml.version
-    then import ../development/ocaml-modules/janestreet/0.14.nix {
-      inherit self;
-      inherit (pkgs) fetchpatch lib openssl zstd;
-    }
-    else if lib.versionOlder "4.07" ocaml.version
-    then import ../development/ocaml-modules/janestreet/0.12.nix {
-      self = self // {
-        ppxlib = ppxlib.override { version = "0.8.1"; };
-      };
-      inherit (pkgs) openssl;
-    }
-    else import ../development/ocaml-modules/janestreet {
-      self = self // {
-        ppxlib = ppxlib.override { version = "0.8.1"; };
-      };
-      inherit (pkgs) openssl;
-    };
+    inherit janePackages janePackage_0_14 janePackage_0_12 janePackage_0_11
+      janeStreet_0_14 janeStreet_0_12;
 
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
       self = self.janeStreet_0_9_0;
@@ -1523,7 +1532,7 @@ let
 
     hol_light = callPackage ../applications/science/logic/hol_light { };
 
-  })).overrideScope' liftJaneStreet;
+  }));
 
 in let inherit (pkgs) callPackage; in rec
 {

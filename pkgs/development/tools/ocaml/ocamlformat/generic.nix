@@ -26,6 +26,7 @@ let src =
       "0.20.0" = "sha256-JtmNCgwjbCyUE4bWqdH5Nc2YSit+rekwS43DcviIfgk=";
       "0.20.1" = "sha256-fTpRZFQW+ngoc0T6A69reEUAZ6GmHkeQvxspd5zRAjU=";
       "0.21.0" = "sha256-KhgX9rxYH/DM6fCqloe4l7AnJuKrdXSe6Y1XY3BXMy0=";
+      "0.22.4" = "sha256-61TeK4GsfMLmjYGn3ICzkagbc3/Po++Wnqkb2tbJwGA=";
     }."${version}";
   };
   ocamlPackages =
@@ -60,7 +61,6 @@ buildDunePackage {
   buildInputs =
     if lib.versionAtLeast version "0.20.0"
     then [
-      base
       (if lib.versionAtLeast version "0.21.0" then cmdliner_1_1 else cmdliner_1_0)
       dune-build-info
       either
@@ -72,10 +72,13 @@ buildDunePackage {
       ocp-indent
       (if version == "0.20.0" then odoc-parser.override { version = "0.9.0"; } else odoc-parser)
       re
-      stdio
       uuseg
       uutf
     ]
+    ++ (if lib.versionAtLeast version "0.22.0"
+        then [ base stdio ] # No constraint on janestreet version
+        else with janeStreet_0_14; [ base stdio ])
+    ++ (if lib.versionAtLeast version "0.22.0" then [ csexp ] else [])
     else if lib.versionAtLeast version "0.19.0"
     then [
       base
