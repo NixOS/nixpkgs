@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "afterburn";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "afterburn";
     rev = "v${version}";
-    sha256 = "sha256-Uzkp4G72oarpBnhbgLoh//JW9kg/t2XpNbiZTNxMl/w=";
+    sha256 = "sha256-yX95qmcyouSSjEHorMpRJjZyrxIjQorwTpGtGZN4s6s=";
   };
 
-  cargoSha256 = "sha256-92E76QwxeOLp9sfO066L97r2FO/9nQ4DaVyWJrL9L2M=";
+  cargoSha256 = "sha256-DweJ608aJChn2ezAM7Ly0cwtLAvM1DZ5gc4WUVyKIco=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
