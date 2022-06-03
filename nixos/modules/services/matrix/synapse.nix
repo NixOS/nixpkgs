@@ -191,12 +191,12 @@ in {
 
       settings = mkOption {
         default = {};
-        description = ''
+        description = mdDoc ''
           The primary synapse configuration. See the
-          <link xlink:href="https://github.com/matrix-org/synapse/blob/v${cfg.package.version}/docs/sample_config.yaml">sample configuration</link>
+          [sample configuration](https://github.com/matrix-org/synapse/blob/v${cfg.package.version}/docs/sample_config.yaml)
           for possible values.
 
-          Secrets should be passed in by using the <literal>extraConfigFiles</literal> option.
+          Secrets should be passed in by using the `extraConfigFiles` option.
         '';
         type = with types; submodule {
           freeformType = format.type;
@@ -230,23 +230,23 @@ in {
             registration_shared_secret = mkOption {
               type = types.nullOr types.str;
               default = null;
-              description = ''
+              description = mdDoc ''
                 If set, allows registration by anyone who also has the shared
                 secret, even if registration is otherwise disabled.
 
-                Secrets should be passed in via <literal>extraConfigFiles</literal>!
+                Secrets should be passed in via `extraConfigFiles`!
               '';
             };
 
             macaroon_secret_key = mkOption {
               type = types.nullOr types.str;
               default = null;
-              description = ''
+              description = mdDoc ''
                 Secret key for authentication tokens. If none is specified,
                 the registration_shared_secret is used, if one is given; otherwise,
                 a secret key is derived from the signing key.
 
-                Secrets should be passed in via <literal>extraConfigFiles</literal>!
+                Secrets should be passed in via `extraConfigFiles`!
               '';
             };
 
@@ -620,10 +620,10 @@ in {
               example = literalExpression ''
                 config.services.coturn.static-auth-secret
               '';
-              description = ''
+              description = mdDoc ''
                 The shared secret used to compute passwords for the TURN server.
 
-                Secrets should be passed in via <literal>extraConfigFiles</literal>!
+                Secrets should be passed in via `extraConfigFiles`!
               '';
             };
 

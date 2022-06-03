@@ -56,7 +56,14 @@ The function `mkOption` accepts the following arguments.
 `description`
 
 :   A textual description of the option, in DocBook format, that will be
-    included in the NixOS manual.
+    included in the NixOS manual. During the migration process from DocBook
+    to CommonMark the description may also be written in CommonMark, but has
+    to be wrapped in `lib.mdDoc` to differentiate it from DocBook. See
+    the nixpkgs manual for [the list of CommonMark extensions](
+    https://nixos.org/nixpkgs/manual/#sec-contributing-markup)
+    supported by NixOS documentation.
+
+    New documentation should preferably be written as CommonMark.
 
 ## Utility functions for common option patterns {#sec-option-declarations-util}
 

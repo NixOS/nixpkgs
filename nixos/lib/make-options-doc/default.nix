@@ -112,7 +112,15 @@ in rec {
 
   optionsJSON = pkgs.runCommand "options.json"
     { meta.description = "List of NixOS options in JSON format";
-      buildInputs = [ pkgs.brotli ];
+      buildInputs = [
+        pkgs.brotli
+        (let
+          self = (pkgs.python3Minimal.override {
+            inherit self;
+            includeSiteCustomize = true;
+           });
+         in self.withPackages (p: [ p.mistune_2_0 ]))
+      ];
       options = builtins.toFile "options.json"
         (builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix));
     }
@@ -123,9 +131,13 @@ in rec {
 
       ${
         if baseOptionsJSON == null
-          then "cp $options $dst/options.json"
+          then ''
+            # `cp $options $dst/options.json`, but with temporary
+            # markdown processing
+            python ${./mergeJSON.py} $options <(echo '{}') > $dst/options.json
+          ''
           else ''
-            ${pkgs.python3Minimal}/bin/python ${./mergeJSON.py} \
+            python ${./mergeJSON.py} \
               ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
               ${baseOptionsJSON} $options \
               > $dst/options.json
