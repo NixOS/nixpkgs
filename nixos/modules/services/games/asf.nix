@@ -163,6 +163,7 @@ respectively `0` because NixOS takes care of updating everything.
     users = {
       users.asf = {
         home = cfg.dataDir;
+        homeMode = "700";
         isSystemUser = true;
         group = "asf";
         description = "Archis-Steam-Farm service user";
