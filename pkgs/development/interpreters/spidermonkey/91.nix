@@ -5,6 +5,7 @@
 # build time
 , buildPackages
 , cargo
+, libiconv
 , m4
 , perl
 , pkg-config
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
     rustc.llvmPackages.llvm # for llvm-objdump
     which
     zip
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuild libobjc ];
+  ] ++ lib.optionals stdenv.isDarwin [ xcbuild libobjc libiconv ];
 
   buildInputs = [
     icu
