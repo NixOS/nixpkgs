@@ -83,8 +83,7 @@ in
       type = format.type;
       description = ''
         The ASF.json file, all the options are documented <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#global-config">here</link>.
-        Do note that `AutoRestart`  and `UpdateChannel` is always to `false`
-respectively `0` because NixOS takes care of updating everything.
+        Do note that `AutoRestart`  and `UpdateChannel` is always to `false` respectively `0` because NixOS takes care of updating everything.
         `Headless` is also always set to `true` because there is no way to provide inputs via a systemd service.
         You should try to keep ASF up to date since upstream does not provide support for anything but the latest version and you're exposing yourself to all kinds of issues - as is outlined <link xlink:href="https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#updateperiod">here</link>.
       '';
@@ -122,14 +121,12 @@ respectively `0` because NixOS takes care of updating everything.
         options = {
           username = mkOption {
             type = types.str;
-            description =
-              "Name of the user to log in. Default is attribute name.";
+            description = "Name of the user to log in. Default is attribute name.";
             default = "";
           };
           passwordFile = mkOption {
             type = types.path;
-            description =
-              "Path to a file containig the password. The file must be readable by the <literal>asf</literal> user/group.";
+            description = "Path to a file containig the password. The file must be readable by the <literal>asf</literal> user/group.";
           };
           enabled = mkOption {
             type = types.bool;
@@ -138,8 +135,7 @@ respectively `0` because NixOS takes care of updating everything.
           };
           settings = mkOption {
             type = types.attrs;
-            description =
-              "Additional settings that are documented <link xlink:href=\"https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#bot-config\">here</link>.";
+            description = "Additional settings that are documented <link xlink:href=\"https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#bot-config\">here</link>.";
             default = { };
           };
         };
@@ -184,8 +180,7 @@ respectively `0` because NixOS takes care of updating everything.
             Group = "asf";
             WorkingDirectory = cfg.dataDir;
             Type = "simple";
-            ExecStart =
-              "${cfg.package}/bin/ArchiSteamFarm --path ${cfg.dataDir} --process-required --no-restart --service --no-config-migrate";
+            ExecStart = "${cfg.package}/bin/ArchiSteamFarm --path ${cfg.dataDir} --process-required --no-restart --service --no-config-migrate";
 
             # mostly copied from the default systemd service
             PrivateTmp = true;
@@ -210,36 +205,38 @@ respectively `0` because NixOS takes care of updating everything.
           }
         ];
 
-        preStart = let
-          createBotsScript = pkgs.runCommandLocal "ASF-bots" {} ''
-            mkdir -p $out
-            # clean potential removed bots
-            rm -rf $out/*.json
-            for i in ${strings.concatStringsSep " " (lists.map (x: "${getName x},${x}") (attrsets.mapAttrsToList mkBot cfg.bots))}; do IFS=",";
-              set -- $i
-              ln -fs $2 $out/$1
-            done
+        preStart =
+          let
+            createBotsScript = pkgs.runCommandLocal "ASF-bots" { } ''
+              mkdir -p $out
+              # clean potential removed bots
+              rm -rf $out/*.json
+              for i in ${strings.concatStringsSep " " (lists.map (x: "${getName x},${x}") (attrsets.mapAttrsToList mkBot cfg.bots))}; do IFS=",";
+                set -- $i
+                ln -fs $2 $out/$1
+              done
+            '';
+            replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
+          in
+          ''
+            mkdir -p config
+
+            cp --no-preserve=mode ${asf-config} config/ASF.json
+            ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
+
+            ${optionalString (cfg.ipcSettings != {}) ''
+              ln -fs ${ipc-config} config/IPC.config
+            ''}
+
+            ${optionalString (cfg.ipcSettings != {}) ''
+              ln -fs ${createBotsScript}/* config/
+            ''}
+
+            rm -f www
+            ${optionalString cfg.web-ui.enable ''
+              ln -s ${cfg.web-ui.package}/lib/dist www
+            ''}
           '';
-          replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
-        in ''
-          mkdir -p config
-
-          cp --no-preserve=mode ${asf-config} config/ASF.json
-          ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
-
-          ${optionalString (cfg.ipcSettings != {}) ''
-            ln -fs ${ipc-config} config/IPC.config
-          ''}
-
-          ${optionalString (cfg.ipcSettings != {}) ''
-            ln -fs ${createBotsScript}/* config/
-          ''}
-
-          rm -f www
-          ${optionalString cfg.web-ui.enable ''
-            ln -s ${cfg.web-ui.package}/lib/dist www
-          ''}
-        '';
       };
     };
   };
