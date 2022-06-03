@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "deltachat-cursed";
-  version = "0.4.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "adbenitez";
     repo = "deltachat-cursed";
     rev = "v${version}";
-    hash = "sha256-li6HsatiRJPVKKBBHyWhq2b8HhvDrOUiVT2tSupjuag=";
+    hash = "sha256-qFX5CjrF0HLR41BbrCPT+rI9vAP6VLzXXAaVq/Loabs=";
   };
 
   nativeBuildInputs = [
@@ -22,6 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     deltachat
+    emoji
     notify-py
     urwid-readline
   ];

@@ -118,6 +118,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = with lib; {
+    broken = (withQt5 && stdenv.isDarwin);
     homepage = "https://cmake.org/";
     changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/release/${lib.versions.majorMinor version}.html";
     description = "Cross-Platform Makefile Generator";

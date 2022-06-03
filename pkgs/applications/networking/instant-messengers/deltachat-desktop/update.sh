@@ -29,7 +29,7 @@ tac default.nix \
 
 src=$(nix-build "$nixpkgs" -A deltachat-desktop.src --no-out-link)
 
-jq '{ name, version, dependencies: (.dependencies + (.devDependencies | del(.["@types/chai","@types/mocha","@typescript-eslint/eslint-plugin","@typescript-eslint/parser","chai","electron-builder","electron-devtools-installer","electron-notarize","eslint","eslint-config-prettier","eslint-plugin-react-hooks","hallmark","mocha","prettier","testcafe","testcafe-browser-provider-electron","testcafe-react-selectors","ts-node","walk"]))) }' \
+jq '{ name, version, dependencies: (.dependencies + (.devDependencies | del(.["@types/chai","@types/mocha","@types/node-fetch","@typescript-eslint/eslint-plugin","@typescript-eslint/parser","chai","electron-builder","electron-devtools-installer","electron-notarize","eslint","eslint-config-prettier","eslint-plugin-react-hooks","hallmark","mocha","node-fetch","prettier","testcafe","testcafe-browser-provider-electron","testcafe-react-selectors","ts-node","walk"]))) }' \
     "$src/package.json" > package.json.new
 
 if cmp --quiet package.json{.new,}; then

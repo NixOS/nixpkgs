@@ -124,10 +124,10 @@ with pkgs;
       sourceVersion = {
         major = "3";
         minor = "9";
-        patch = "12";
+        patch = "13";
         suffix = "";
       };
-      sha256 = "sha256-LNlLIGcOQVnG2atX+R2/JVuX2MGhRR0cNfTsGWit+XE=";
+      sha256 = "sha256-ElsMWY8eFdKqZUBug/eS330XHN84wWgDsUmZQxajCA8=";
     };
     python310 = {
       sourceVersion = {
@@ -231,6 +231,8 @@ in {
     enableLTO = false;
     mimetypesSupport = false;
   } // sources.python39)).overrideAttrs(old: {
+    # TODO(@Artturin): Add this to the main cpython expr
+    strictDeps = true;
     pname = "python3-minimal";
     meta = old.meta // {
       maintainers = [];

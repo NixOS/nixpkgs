@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/readthedocs/sphinx-autoapi";
     description = "Provides 'autodoc' style documentation";
     longDescription = "Sphinx AutoAPI provides 'autodoc' style documentation for multiple programming languages without needing to load, run, or import the project being documented.";

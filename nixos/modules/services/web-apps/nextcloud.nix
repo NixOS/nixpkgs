@@ -733,7 +733,7 @@ in {
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
-              ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles}"}
+              ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles},"}
               ${objectstoreConfig}
             ];
           '';
@@ -830,7 +830,7 @@ in {
             ${occ}/bin/nextcloud-occ config:system:delete trusted_domains
 
             ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
-                # Try to enable apps (don't fail when one of them cannot be enabled , eg. due to incompatible version)
+                # Try to enable apps
                 ${occ}/bin/nextcloud-occ app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
             ''}
 

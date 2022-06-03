@@ -14,6 +14,7 @@ let
     PATHS_PLUGINS = if builtins.isNull cfg.declarativePlugins then "${cfg.dataDir}/plugins" else declarativePlugins;
     PATHS_LOGS = "${cfg.dataDir}/log";
 
+    SERVER_SERVE_FROM_SUBPATH = boolToString cfg.server.serveFromSubPath;
     SERVER_PROTOCOL = cfg.protocol;
     SERVER_HTTP_ADDR = cfg.addr;
     SERVER_HTTP_PORT = cfg.port;
@@ -41,9 +42,23 @@ let
     USERS_AUTO_ASSIGN_ORG = boolToString cfg.users.autoAssignOrg;
     USERS_AUTO_ASSIGN_ORG_ROLE = cfg.users.autoAssignOrgRole;
 
+    AUTH_DISABLE_LOGIN_FORM = boolToString cfg.auth.disableLoginForm;
+
     AUTH_ANONYMOUS_ENABLED = boolToString cfg.auth.anonymous.enable;
     AUTH_ANONYMOUS_ORG_NAME = cfg.auth.anonymous.org_name;
     AUTH_ANONYMOUS_ORG_ROLE = cfg.auth.anonymous.org_role;
+
+    AUTH_AZUREAD_NAME = "Azure AD";
+    AUTH_AZUREAD_ENABLED = boolToString cfg.auth.azuread.enable;
+    AUTH_AZUREAD_ALLOW_SIGN_UP = boolToString cfg.auth.azuread.allowSignUp;
+    AUTH_AZUREAD_CLIENT_ID = cfg.auth.azuread.clientId;
+    AUTH_AZUREAD_SCOPES = "openid email profile";
+    AUTH_AZUREAD_AUTH_URL = "https://login.microsoftonline.com/${cfg.auth.azuread.tenantId}/oauth2/v2.0/authorize";
+    AUTH_AZUREAD_TOKEN_URL = "https://login.microsoftonline.com/${cfg.auth.azuread.tenantId}/oauth2/v2.0/token";
+    AUTH_AZUREAD_ALLOWED_DOMAINS = cfg.auth.azuread.allowedDomains;
+    AUTH_AZUREAD_ALLOWED_GROUPS = cfg.auth.azuread.allowedGroups;
+    AUTH_AZUREAD_ROLE_ATTRIBUTE_STRICT = false;
+
     AUTH_GOOGLE_ENABLED = boolToString cfg.auth.google.enable;
     AUTH_GOOGLE_ALLOW_SIGN_UP = boolToString cfg.auth.google.allowSignUp;
     AUTH_GOOGLE_CLIENT_ID = cfg.auth.google.clientId;
@@ -484,6 +499,14 @@ in {
       };
     };
 
+    server = {
+      serveFromSubPath = mkOption {
+        description = "Serve Grafana from subpath specified in rootUrl setting";
+        default = false;
+        type = types.bool;
+      };
+    };
+
     smtp = {
       enable = mkEnableOption "smtp";
       host = mkOption {
@@ -546,6 +569,12 @@ in {
     };
 
     auth = {
+      disableLoginForm = mkOption {
+        description = "Set to true to disable (hide) the login form, useful if you use OAuth";
+        default = false;
+        type = types.bool;
+      };
+
       anonymous = {
         enable = mkOption {
           description = "Whether to allow anonymous access.";
@@ -560,6 +589,53 @@ in {
         org_role = mkOption {
           description = "Which role anonymous users have in the organization.";
           default = "Viewer";
+          type = types.str;
+        };
+      };
+      azuread = {
+        enable = mkOption {
+          description = "Whether to allow Azure AD OAuth.";
+          default = false;
+          type = types.bool;
+        };
+        allowSignUp = mkOption {
+          description = "Whether to allow sign up with Azure AD OAuth.";
+          default = false;
+          type = types.bool;
+        };
+        clientId = mkOption {
+          description = "Azure AD OAuth client ID.";
+          default = "";
+          type = types.str;
+        };
+        clientSecretFile = mkOption {
+          description = "Azure AD OAuth client secret.";
+          default = null;
+          type = types.nullOr types.path;
+        };
+        tenantId = mkOption {
+          description = ''
+            Tenant id used to create auth and token url. Default to "common"
+            , let user sign in with any tenant.
+            '';
+          default = "common";
+          type = types.str;
+        };
+        allowedDomains = mkOption {
+          description = ''
+            To limit access to authenticated users who are members of one or more groups,
+            set allowedGroups to a comma- or space-separated list of group object IDs.
+            You can find object IDs for a specific group on the Azure portal.
+          '';
+          default = "";
+          type = types.str;
+        };
+        allowedGroups = mkOption {
+          description = ''
+            Limits access to users who belong to specific domains.
+            Separate domains with space or comma.
+          '';
+          default = "";
           type = types.str;
         };
       };
@@ -652,6 +728,10 @@ in {
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
 
+        ${optionalString (cfg.auth.azuread.clientSecretFile != null) ''
+          GF_AUTH_AZUREAD_CLIENT_SECRET="$(<${escapeShellArg cfg.auth.azuread.clientSecretFile})"
+          export GF_AUTH_AZUREAD_CLIENT_SECRET
+        ''}
         ${optionalString (cfg.auth.google.clientSecretFile != null) ''
           GF_AUTH_GOOGLE_CLIENT_SECRET="$(<${escapeShellArg cfg.auth.google.clientSecretFile})"
           export GF_AUTH_GOOGLE_CLIENT_SECRET

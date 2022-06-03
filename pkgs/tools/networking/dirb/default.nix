@@ -25,6 +25,12 @@ in stdenv.mkDerivation rec {
     sed -i "s#/usr#$out#" src/dirb.c
   '';
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: resume.o:/build/dirb222/src/variables.h:15: multiple definition of `curl';
+  #     crea_wordlist.o:/build/dirb222/src/variables.h:15: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   postInstall = ''
     mkdir -p $out/share/dirb/
     cp -r wordlists/ $out/share/dirb/

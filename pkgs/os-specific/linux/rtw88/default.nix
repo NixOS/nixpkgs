@@ -5,13 +5,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw88";
-  version = "unstable-2021-04-19";
+  version = "unstable-2022-05-08";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
-    rev = "0f3cc6a5973bc386d9cb542fc85a6ba027edff5d";
-    hash = "sha256-PRzWXC1lre8gt1GfVdnaG836f5YK57P9a8tG20yef0w=";
+    rev = "dbcc43c31a4576f90e1e468d3a85c2dfdb25ec42";
+    hash = "sha256-IDHolspYtwjV5r5WArWl1g4zgKLvPd4ydKKH/aE5NSg=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -33,9 +33,9 @@ stdenv.mkDerivation {
     description = "The newest Realtek rtlwifi codes";
     homepage = "https://github.com/lwfinger/rtw88";
     license = with licenses; [ bsd3 gpl2Only ];
-    maintainers = with maintainers; [ tvorog ];
+    maintainers = with maintainers; [ tvorog atila ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "4.14" || kernel.kernelAtLeast "5.14";
+    broken = kernel.kernelOlder "4.14";
     priority = -1;
   };
 }

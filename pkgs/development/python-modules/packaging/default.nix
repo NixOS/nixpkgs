@@ -3,6 +3,7 @@
 , fetchPypi
 , pyparsing
 , pytestCheckHook
+, pythonOlder
 , pretend
 , setuptools
 }:
@@ -12,6 +13,8 @@ let
     pname = "packaging";
     version = "21.3";
     format = "pyproject";
+
+    disabled = pythonOlder "3.6";
 
     src = fetchPypi {
       inherit pname version;

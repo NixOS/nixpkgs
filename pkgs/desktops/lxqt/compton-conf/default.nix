@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , mkDerivation
 , fetchFromGitHub
 , cmake
@@ -40,6 +41,7 @@ mkDerivation rec {
   passthru.updateScript = lxqt.lxqtUpdateScript { inherit pname version src; };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/lxqt/compton-conf";
     description = "GUI configuration tool for compton X composite manager";
     license = licenses.lgpl21Plus;

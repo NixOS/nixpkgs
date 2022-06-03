@@ -83,9 +83,8 @@ let
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
       qtwebview = callPackage ./modules/qtwebview.nix { };
 
-      wrapQtAppsHook = makeSetupHook
-        {
-          deps = [ self.qtbase.dev self.qtwayland.dev makeWrapper ];
+      wrapQtAppsHook = makeSetupHook {
+          deps = [ makeWrapper ];
         } ./hooks/wrap-qt-apps-hook.sh;
     };
 

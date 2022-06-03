@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
   + lib.optionalString stdenv.isAarch64 "rm -v testo.d/arc-project.test";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Convert, upload and download data from GPS and Map programs";
     longDescription = ''
       GPSBabel converts waypoints, tracks, and routes between popular

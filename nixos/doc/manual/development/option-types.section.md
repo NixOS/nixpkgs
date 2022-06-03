@@ -308,6 +308,10 @@ The option set can be defined directly
 ([Example: Directly defined submodule](#ex-submodule-direct)) or as reference
 ([Example: Submodule defined as a reference](#ex-submodule-reference)).
 
+Note that even if your submodule’s options all have a default value,
+you will still need to provide a default value (e.g. an empty attribute set)
+if you want to allow users to leave it undefined.
+
 ::: {#ex-submodule-direct .example}
 ::: {.title}
 **Example: Directly defined submodule**

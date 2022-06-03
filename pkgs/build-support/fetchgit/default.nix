@@ -92,4 +92,8 @@ stdenvNoCC.mkDerivation {
   ];
 
   inherit preferLocalBuild meta;
+
+  passthru = {
+    gitRepoUrl = url;
+  };
 }

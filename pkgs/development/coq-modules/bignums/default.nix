@@ -5,7 +5,7 @@ with lib; mkCoqDerivation {
   owner = "coq";
   displayVersion = { bignums = ""; };
   inherit version;
-  defaultVersion = if versions.isGe "8.5" coq.coq-version
+  defaultVersion = if versions.isGe "8.6" coq.coq-version
     then "${coq.coq-version}.0" else null;
 
   release."8.15.0".sha256 = "093klwlhclgyrba1iv18dyz1qp5f0lwiaa7y0qwvgmai8rll5fns";

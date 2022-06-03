@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     for binaryfile in $binaryFiles; do
       patchelf \
-        --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 \
-        --set-rpath ${stdenv.glibc}/lib \
+        --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 \
+        --set-rpath ${stdenv.cc.libc}/lib \
         $binaryfile
     done
   '';

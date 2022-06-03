@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "sysconfdir=/etc" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Open source library libnfc for Near Field Communication";
     license = licenses.gpl3;
     homepage = "https://github.com/nfc-tools/libnfc";

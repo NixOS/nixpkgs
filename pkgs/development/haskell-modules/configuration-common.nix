@@ -165,6 +165,9 @@ self: super: {
     })
   ] super.flat;
 
+  # Too strict bounds on base, optparse-applicative: https://github.com/edsko/friendly/issues/5
+  friendly = doJailbreak super.friendly;
+
   # Too strict bound on hspec: https://github.com/ivan-m/graphviz/issues/55
   graphviz = doJailbreak super.graphviz;
 
@@ -779,22 +782,6 @@ self: super: {
   # The tests spuriously fail
   libmpd = dontCheck super.libmpd;
 
-  # For template-haskell 2.16 and 2.17 support: https://github.com/JonasDuregard/sized-functors/pull/10
-  size-based = overrideCabal
-    (drv: {
-      # make all line endings unix, otherwise patching fails
-      prePatch = ''
-        find . -type f -print0 | xargs -0 ${pkgs.buildPackages.dos2unix}/bin/dos2unix
-      '' + (drv.prePatch or "");
-      patches = [
-        (fetchpatch {
-          url = "https://github.com/JonasDuregard/sized-functors/pull/10/commits/fe6bf78a1b97ff7429630d0e8974c9bc40945dcf.patch";
-          sha256 = "sha256-mMsXOqLqSbGl9Q0txiZiciPtGT7f12lnhlpFsnCwamk=";
-        })
-      ];
-    })
-    super.size-based;
-
   # https://github.com/diagrams/diagrams-braille/issues/1
   diagrams-braille = doJailbreak super.diagrams-braille;
 
@@ -1003,10 +990,6 @@ self: super: {
   # https://github.com/haskell-hvr/resolv/pull/6
   resolv_0_1_1_2 = dontCheck super.resolv_0_1_1_2;
 
-  # Too strict bounds on base and Cabal, fixed on master
-  # Occasional test failures: https://github.com/phadej/spdx/issues/27
-  spdx = assert super.spdx.version == "1.0.0.2"; doJailbreak (dontCheck super.spdx);
-
   # The test suite does not know how to find the 'alex' binary.
   alex = overrideCabal (drv: {
     testSystemDepends = (drv.testSystemDepends or []) ++ [pkgs.which];
@@ -1165,16 +1148,6 @@ self: super: {
 
   # https://github.com/danfran/cabal-macosx/issues/13
   cabal-macosx = dontCheck super.cabal-macosx;
-
-  # Causes Test.QuickCheck.resize: negative size crashes e.g. in test suites
-  # https://github.com/typeable/generic-arbitrary/issues/14
-  generic-arbitrary = appendPatches [
-    (pkgs.fetchpatch {
-      name = "generic-arbitrary-no-negative-resize.patch";
-      url = "https://github.com/typeable/generic-arbitrary/commit/c13d119d8ad0d43860ecdb93b357b0239e366a6c.patch";
-      sha256 = "1jgbd2jn575icqw9nfdzh57nacm3pn8n53ka52129pnfjqfzyhsi";
-    })
-  ] super.generic-arbitrary;
 
   # https://github.com/DanielG/cabal-helper/pull/123
   cabal-helper = doJailbreak super.cabal-helper;
@@ -1767,7 +1740,11 @@ self: super: {
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
-  hercules-ci-agent = generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent;
+  hercules-ci-agent =
+    assert super.hercules-ci-agent.version == "0.9.5"; # >0.9.5: remove source override as sdist will be fixed
+    overrideSrc
+      { src = pkgs.fetchFromGitHub { owner = "hercules-ci"; repo = "hercules-ci-agent"; rev = "hercules-ci-agent-0.9.5"; sha256 = "sha256-7d8lf4g8CWHTzIOmma8UKvFIi1Og6RqPH9Lt+6iA4pw="; } + "/hercules-ci-agent"; }
+      (generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent);
 
   # Test suite doesn't compile with aeson 2.0
   # https://github.com/hercules-ci/hercules-ci-agent/pull/387
@@ -2351,22 +2328,16 @@ self: super: {
       "--skip" "/Data.List.UniqueUnsorted.repeatedBy,repeated,unique/repeatedBy: simple test/"
     ] ++ drv.testFlags or [];
   }) super.Unique;
+
   # https://github.com/AndrewRademacher/aeson-casing/issues/8
   aeson-casing = assert super.aeson-casing.version == "0.2.0.0"; overrideCabal (drv: {
     testFlags = [
       "-p" "! /encode train/"
     ] ++ drv.testFlags or [];
   }) super.aeson-casing;
-  # https://github.com/Soostone/katip/issues/134
-  katip = assert super.katip.version == "0.8.7.0"; overrideCabal (drv: {
-    testFlags = [
-      "-p" "!/Text-golden/&&!/respects payloadKeys for each constituent payload/"
-    ] ++ drv.testFlags or [];
-  }) super.katip;
+
   # 2020-11-19: Jailbreaking until: https://github.com/snapframework/heist/pull/124
   # 2021-12-22: https://github.com/snapframework/heist/issues/131
-
-
   heist = assert super.heist.version == "1.1.0.1";
     # aeson 2.0 compat https://github.com/snapframework/heist/pull/132
     # not merged in master yet

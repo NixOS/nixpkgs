@@ -47,7 +47,6 @@ dont-distribute-packages:
  - Bitly
  - BlastHTTP
  - Blobs
- - BlogLiterately
  - BlogLiterately-diagrams
  - Bookshelf
  - CBOR
@@ -2621,6 +2620,7 @@ dont-distribute-packages:
  - list-witnesses
  - listenbrainz-client
  - liszt
+ - little-rio_1_0_0
  - live-sequencer
  - llvm
  - llvm-analysis
@@ -3189,7 +3189,6 @@ dont-distribute-packages:
  - protobuf-native
  - protocol-buffers-descriptor-fork
  - proton
- - psc-ide
  - psql
  - ptera
  - ptera-core
@@ -3202,9 +3201,7 @@ dont-distribute-packages:
  - pure-cdb
  - pure-priority-queue-tests
  - purenix
- - purescript
  - purescript-iso
- - purescript-tsd-gen
  - pursuit-client
  - push-notify
  - push-notify-apn
@@ -4236,7 +4233,6 @@ dont-distribute-packages:
  - yuuko
  - z85
  - zasni-gerna
- - zephyr
  - zephyr-copilot
  - zeromq3-conduit
  - zeromq3-haskell

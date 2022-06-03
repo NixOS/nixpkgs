@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , anytree
@@ -92,6 +93,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "devito" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://www.devitoproject.org/";
     description = "Code generation framework for automated finite difference computation";
     license = licenses.mit;

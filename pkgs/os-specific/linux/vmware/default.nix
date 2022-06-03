@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mkubecek/vmware-host-modules";
     license = licenses.gpl2Only;
     platforms = [ "x86_64-linux" ];
-    broken = kernel.kernelOlder "5.5" && kernel.isHardened;
+    broken = (kernel.kernelOlder "5.5" && kernel.isHardened) || kernel.kernelAtLeast "5.18";
     maintainers = with maintainers; [ deinferno ];
   };
 }

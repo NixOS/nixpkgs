@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "unix-like reverse engineering framework and commandline tools";
     homepage = "https://radare.org/";
     license = licenses.gpl2Plus;

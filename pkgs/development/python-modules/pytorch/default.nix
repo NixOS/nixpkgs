@@ -315,12 +315,12 @@ in buildPythonPackage rec {
   };
 
   meta = with lib; {
+    # darwin: error: use of undeclared identifier 'noU'; did you mean 'no'?
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Open source, prototype-to-production deep learning platform";
     homepage    = "https://pytorch.org/";
     license     = licenses.bsd3;
     platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
     maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
-    # error: use of undeclared identifier 'noU'; did you mean 'no'?
-    broken = stdenv.isDarwin;
   };
 }

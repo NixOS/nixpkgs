@@ -4,7 +4,7 @@ assert lib.versionAtLeast nodejs.version "12.0.0";
 
 let
   nodeSources = runCommand "node-sources" {} ''
-    tar --no-same-owner --no-same-permissions -xf "${nodejs.src}"
+    tar --no-same-owner --no-same-permissions -xf ${nodejs.src}
     mv node-* $out
   '';
 

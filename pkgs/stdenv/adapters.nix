@@ -69,7 +69,7 @@ rec {
       }));
     } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "libc") {
       extraBuildInputs = (old.extraBuildInputs or []) ++ [
-        stdenv0.glibc.static
+        pkgs.glibc.static
       ];
     });
 
@@ -119,7 +119,7 @@ rec {
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeStaticBinaries
 
     # Glibc doesn’t come with static runtimes by default.
-    # ++ lib.optional (stdenv.hostPlatform.libc == "glibc") ((lib.flip overrideInStdenv) [ self.stdenv.glibc.static ])
+    # ++ lib.optional (stdenv.hostPlatform.libc == "glibc") ((lib.flip overrideInStdenv) [ self.glibc.static ])
   );
 
 

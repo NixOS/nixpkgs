@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Mount an S3 bucket as filesystem through FUSE";
     license = licenses.gpl2;
     platforms = platforms.linux ++ platforms.darwin;

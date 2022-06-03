@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pyfaidx";
-  version = "0.6.4";
+  version = "0.7.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-e6O9yx30unSfdmWzTmoFKqToQkBqDflebfRxfMEj85I=";
+    sha256 = "sha256-mtXMk4Hw3pxD1L3sD68Qa4KM37b4FQ7HHKssp8i+53A=";
   };
 
   nativeBuildInputs = [

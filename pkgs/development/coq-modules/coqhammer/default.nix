@@ -28,8 +28,10 @@ with lib; mkCoqDerivation {
   release."1.3-coq8.12".sha256   = "1q1y3cwhd98pkm98g71fsdjz85bfwgcz2xn7s7wwmiraifv5l6z8";
   release."1.3-coq8.11".sha256   = "08zf8qfna7b9p2myfaz4g7bas3a1q1156x78n5isqivlnqfrjc1b";
   release."1.3-coq8.10".sha256   = "1fj8497ir4m79hyrmmmmrag01001wrby0h24wv6525vz0w5py3cd";
-  release."1.1.1-coq8.9".sha256  = "1knjmz4hr8vlp103j8n4fyb2lfxysnm512gh3m2kp85n6as6fvb9";
-  release."1.1-coq8.8".sha256    = "0ms086wp4jmrzyglb8wymchzyflflk01nsfsk4r6qv8rrx81nx9h";
+  release."1.1.1-coq8.9" = { sha256 = "1knjmz4hr8vlp103j8n4fyb2lfxysnm512gh3m2kp85n6as6fvb9";
+                             rev    = "f8b4d81a213aa1f25afbe53c7c9ca1b15e3d42bc"; };
+  release."1.1-coq8.8" =   { sha256 = "0ms086wp4jmrzyglb8wymchzyflflk01nsfsk4r6qv8rrx81nx9h";
+                             rev    = "c3cb54b4d5f33fab372d33c7189861368a08fa22"; };
 
   release."1.3.1-coq8.13".version  = "1.3.1";
   release."1.3.1-coq8.12".version  = "1.3.1";

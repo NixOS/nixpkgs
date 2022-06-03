@@ -17,9 +17,6 @@ buildDotnetModule rec {
     sha256 = "EHpnLUFHR+FC1qlwW0TuLas9aA/CMELHkzbLlNyiwgE=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-
   projectFile = "DiscordChatExporter.Cli/DiscordChatExporter.Cli.csproj";
   nugetDeps = ./deps.nix;
 

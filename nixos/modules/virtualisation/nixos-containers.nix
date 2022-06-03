@@ -284,7 +284,7 @@ let
     DeviceAllow = map (d: "${d.node} ${d.modifier}") cfg.allowedDevices;
   };
 
-  system = config.nixpkgs.localSystem.system;
+  inherit (config.nixpkgs) localSystem;
   kernelVersion = config.boot.kernelPackages.kernel.version;
 
   bindMountOpts = { name, ... }: {
@@ -478,12 +478,12 @@ in
               type = lib.mkOptionType {
                 name = "Toplevel NixOS config";
                 merge = loc: defs: (import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
-                  inherit system;
                   modules =
                     let
                       extraConfig = {
                         _file = "module at ${__curPos.file}:${toString __curPos.line}";
                         config = {
+                          nixpkgs = { inherit localSystem; };
                           boot.isContainer = true;
                           networking.hostName = mkDefault name;
                           networking.useDHCP = false;

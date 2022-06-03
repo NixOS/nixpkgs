@@ -154,11 +154,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Serves multiple Jupyter notebook instances";
     homepage = "https://jupyter.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie cstrahan ];
-    # E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
-    broken = stdenv.isDarwin;
   };
 }

@@ -17,10 +17,11 @@ import ./make-test-python.nix (
           homeserver = { pkgs, ... }: {
             services.dendrite = {
               enable = true;
+              loadCredential = [ "test_private_key:${private_key}" ];
               openRegistration = true;
               settings = {
                 global.server_name = "test-dendrite-server.com";
-                global.private_key = private_key;
+                global.private_key = "$CREDENTIALS_DIRECTORY/test_private_key";
                 client_api.registration_disabled = false;
               };
             };

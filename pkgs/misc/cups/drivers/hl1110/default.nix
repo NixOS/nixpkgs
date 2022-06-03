@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk}:
+{lib, stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk }:
 
 let
   version = "3.0.1-1";
@@ -38,9 +38,9 @@ stdenv.mkDerivation {
 
     sed -i '/GHOST_SCRIPT=/c\GHOST_SCRIPT=gs' $out/opt/brother/Printers/HL1110/lpd/psconvert2
 
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1110/lpd/brprintconflsr3
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1110/lpd/rawtobr3
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1110/inf/braddprinter
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1110/lpd/brprintconflsr3
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1110/lpd/rawtobr3
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1110/inf/braddprinter
 
     wrapProgram $out/opt/brother/Printers/HL1110/lpd/psconvert2 \
     --prefix PATH ":" ${ lib.makeBinPath [ gnused coreutils gawk ] }

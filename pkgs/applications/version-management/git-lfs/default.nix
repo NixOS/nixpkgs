@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "git-lfs";
-  version = "3.1.4";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "git-lfs";
     repo = "git-lfs";
-    sha256 = "sha256-dGqb7gw7l2SPGwhHIFbEq6XqMB9QRw3+3Pfbk2S4kW4=";
+    sha256 = "sha256-3gVUPfZs5GViEA3D7Zm5NdxhuEz9DhwPLoQqHFdGCrI=";
   };
 
   goPackagePath = "github.com/git-lfs/git-lfs";
@@ -30,7 +30,7 @@ buildGoPackage rec {
   '';
 
   postInstall = ''
-    installManPage go/src/${goPackagePath}/man/*.{1,5}
+    installManPage go/src/${goPackagePath}/man/man*/*
   '';
 
   meta = with lib; {

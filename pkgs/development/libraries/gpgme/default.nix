@@ -18,17 +18,20 @@
 , pythonSupport ? false
 , swig2 ? null
 , python ? null
+# only for passthru.tests
+, libsForQt5
+, python3
 }:
 let
   inherit (stdenv.hostPlatform) system;
 in
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.17.0";
+  version = "1.17.1";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
-    sha256 = "1xb9k88rrafdi0n95nzx0d6bz7hcn9b44hciqbigrqkvxc6gblsf";
+    hash = "sha256-cR6r9d1mG5sEvp7cms4qe8Ax9r2dN6do0C0O/e8Qj18=";
   };
 
   patches = [
@@ -106,9 +109,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.tests = {
+    python = python3.pkgs.gpgme;
+    qt = libsForQt5.qgpgme;
+  };
+
   meta = with lib; {
     homepage = "https://gnupg.org/software/gpgme/index.html";
-    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;a=blob;f=NEWS;hb=refs/tags/gpgme-${version}";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=gpgme.git;f=NEWS;hb=gpgme-${version}";
     description = "Library for making GnuPG easier to use";
     longDescription = ''
       GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG
@@ -118,6 +126,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ lgpl21Plus gpl3Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

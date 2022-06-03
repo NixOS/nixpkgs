@@ -109,6 +109,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "info" "man" ];
 
+  strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     bison

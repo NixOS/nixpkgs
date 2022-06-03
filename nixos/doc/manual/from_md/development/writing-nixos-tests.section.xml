@@ -590,6 +590,19 @@ import ./make-test-python.nix {
       # fmt: on
     '';
 </programlisting>
+    <para>
+      Similarly, the type checking of test scripts can be disabled in
+      the following way:
+    </para>
+    <programlisting language="bash">
+import ./make-test-python.nix {
+  skipTypeCheck = true;
+  nodes.machine =
+    { config, pkgs, ... }:
+    { configuration…
+    };
+}
+</programlisting>
   </section>
   <section xml:id="ssec-failing-tests-early">
     <title>Failing tests early</title>

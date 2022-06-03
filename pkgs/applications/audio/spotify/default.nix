@@ -1,6 +1,6 @@
 { fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeWrapper, wrapGAppsHook, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss, libpng, libnotify
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curl, zlib, gnome
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curlWithGnuTls, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
 }:
 
@@ -26,7 +26,7 @@ let
     atk
     cairo
     cups
-    curl
+    curlWithGnuTls
     dbus
     expat
     ffmpeg

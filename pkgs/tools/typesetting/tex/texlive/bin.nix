@@ -33,7 +33,7 @@ let
     '';
 
     configureFlags = [
-      "--with-banner-add=/NixOS.org"
+      "--with-banner-add=/nixos.org"
       "--disable-missing" "--disable-native-texlive-build"
       "--enable-shared" # "--enable-cxx-runtime-hack" # static runtime
       "--enable-tex-synctex"

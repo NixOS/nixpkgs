@@ -36,6 +36,7 @@ let
 
     # constants
     licenses = callLibs ./licenses.nix;
+    sourceTypes = callLibs ./source-types.nix;
     systems = callLibs ./systems;
 
     # serialization

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , mkDerivation
 , fetchFromGitHub
 , pipewire
@@ -86,6 +87,7 @@ in
   ];
 
   meta = with lib;{
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "An audio effect processor for PipeWire clients";
     homepage = "https://github.com/Audio4Linux/JDSP4Linux";
     license = licenses.gpl3Only;

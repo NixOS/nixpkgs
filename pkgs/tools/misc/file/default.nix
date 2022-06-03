@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-E+Uyx7Nk99V+I9/uoxRxAxUMuQWTpXr4bBDk9uQRYD8=";
   };
 
+  strictDeps = true;
+  enableParallelBuilding = true;
+
   nativeBuildInputs = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
   buildInputs = [ zlib ]
     ++ lib.optional stdenv.hostPlatform.isWindows libgnurx;

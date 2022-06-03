@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A video processing framework with the future in mind";
     homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;

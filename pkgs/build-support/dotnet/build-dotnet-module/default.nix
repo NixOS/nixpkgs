@@ -56,9 +56,9 @@
 # The type of build to perform. This is passed to `dotnet` with the `--configuration` flag. Possible values are `Release`, `Debug`, etc.
 , buildType ? "Release"
 # The dotnet SDK to use.
-, dotnet-sdk ? dotnetCorePackages.sdk_5_0
+, dotnet-sdk ? dotnetCorePackages.sdk_6_0
 # The dotnet runtime to use.
-, dotnet-runtime ? dotnetCorePackages.runtime_5_0
+, dotnet-runtime ? dotnetCorePackages.runtime_6_0
 # The dotnet SDK to run tests against. This can differentiate from the SDK compiled against.
 , dotnet-test-sdk ? dotnet-sdk
 , ... } @ args:

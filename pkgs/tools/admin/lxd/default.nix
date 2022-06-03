@@ -11,13 +11,16 @@
 
 buildGo118Package rec {
   pname = "lxd";
-  version = "5.1";
+  version = "5.2";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "sha256-MZ9Ok1BuIUTtqigLAYX7N8Q3TPfXRopeXIwbZ4GJJQo=";
+    urls = [
+      "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
+      "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
+    ];
+    sha256 = "sha256-4i0rNKGEjTOyCAsrHII1WvttNv3+SeZ/RLN0ntvALkw=";
   };
 
   postPatch = ''

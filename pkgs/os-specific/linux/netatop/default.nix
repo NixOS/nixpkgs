@@ -16,6 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [ kmod zlib ];
 
   hardeningDisable = [ "pic" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-fallthrough" ];
 
   patches = [
     # fix paths in netatop.service

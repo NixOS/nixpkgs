@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
     homepage = "https://boinc.berkeley.edu/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;  # arbitrary choice
+    # checking for gcc options needed to detect all undeclared functions... cannot detect
+    # configure: error: in `/build/boinc-7.18.1-src':
+    # configure: error: cannot make gcc report undeclared builtins
+    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ Luflosi ];
   };
 }

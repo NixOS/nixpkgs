@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     export PATH_CHKCONFIG=/no-such-program
     export BZIP=${bzip2.bin}/bin/bzip2
     export SYSTEMCTL=systemctl
+    export COMPRESS_MANPG=n
   '';
 
   makeFlags = [ "SYSCONFIG_DIR=$(out)/etc" "IGNORE_FILE_ATTRIBUTES=y" "CHOWN=true" ];

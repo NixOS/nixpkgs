@@ -39,5 +39,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ womfoo grahamc kraem ];
     platforms = [ "i686-linux" "x86_64-linux" ];
+    broken = kernel.kernelAtLeast "5.18";
   };
 }

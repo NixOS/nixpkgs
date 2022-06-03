@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, libX11, libXinerama }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, libX11, libXinerama }:
 
 let
   rpathLibs = [ libXinerama libX11 ];
@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   dontPatchELF = true;
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A tiling window manager for the adventurer";
     homepage = "https://github.com/leftwm/leftwm";
     license = licenses.mit;

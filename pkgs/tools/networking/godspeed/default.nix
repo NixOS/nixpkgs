@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildGoModule
 , fetchFromGitHub
 , libpcap
@@ -26,6 +27,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Manager for reverse shells";
     homepage = "https://github.com/redcode-labs/GodSpeed";
     license = with licenses; [ mit ];

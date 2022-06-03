@@ -50,6 +50,7 @@ rec {
     , qemu_pkg ? pkgs.qemu_test
     , enableOCR ? false
     , skipLint ? false
+    , skipTypeCheck ? false
     , passthru ? {}
     , interactive ? false
     , extraPythonPackages ? (_ :[])
@@ -86,7 +87,7 @@ rec {
 
       nodeHostNames = let
         nodesList = map (c: c.config.system.name) (lib.attrValues nodes);
-      in nodesList ++ lib.optional (lib.length nodesList == 1) "machine";
+      in nodesList ++ lib.optional (lib.length nodesList == 1 && !lib.elem "machine" nodesList) "machine";
 
       # TODO: This is an implementation error and needs fixing
       # the testing famework cannot legitimately restrict hostnames further
@@ -101,6 +102,9 @@ rec {
         then testScript { inherit nodes; }
         else testScript;
 
+      uniqueVlans = lib.unique (builtins.concatLists vlans);
+      vlanNames = map (i: "vlan${toString i}: VLan;") uniqueVlans;
+      machineNames = map (name: "${name}: Machine;") nodeHostNames;
     in
     if lib.length invalidNodeNames > 0 then
       throw ''
@@ -114,7 +118,7 @@ rec {
     else lib.warnIf skipLint "Linting is disabled" (runCommand testDriverName
       {
         inherit testName;
-        nativeBuildInputs = [ makeWrapper ];
+        nativeBuildInputs = [ makeWrapper mypy ];
         testScript = testScript';
         preferLocalBuild = true;
         passthru = passthru // {
@@ -126,7 +130,25 @@ rec {
         mkdir -p $out/bin
 
         vmStartScripts=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
-        echo -n "$testScript" > $out/test-script
+
+        ${lib.optionalString (!skipTypeCheck) ''
+          # prepend type hints so the test script can be type checked with mypy
+          cat "${./test-script-prepend.py}" >> testScriptWithTypes
+          echo "${builtins.toString machineNames}" >> testScriptWithTypes
+          echo "${builtins.toString vlanNames}" >> testScriptWithTypes
+          echo -n "$testScript" >> testScriptWithTypes
+
+          # set pythonpath so mypy knows where to find the imports. this requires the py.typed file.
+          export PYTHONPATH='${./test-driver}'
+          mypy  --no-implicit-optional \
+                --pretty \
+                --no-color-output \
+                testScriptWithTypes
+          unset PYTHONPATH
+        ''}
+
+        echo -n "$testScript" >> $out/test-script
+
         ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-test-driver
 
         ${testDriver}/bin/generate-driver-symbols
@@ -153,6 +175,7 @@ rec {
     , testScript
     , enableOCR ? false
     , name ? "unnamed"
+    , skipTypeCheck ? false
       # Skip linting (mainly intended for faster dev cycles)
     , skipLint ? false
     , passthru ? {}
@@ -209,19 +232,19 @@ rec {
             )];
           };
         in
-          lib.warnIf (t?machine) "In test `${name}': The `machine' attribute in NixOS tests (pkgs.nixosTest / make-test-pyton.nix / testing-python.nix / makeTest) is deprecated. Please use the equivalent `nodes.machine'."
+          lib.warnIf (t?machine) "In test `${name}': The `machine' attribute in NixOS tests (pkgs.nixosTest / make-test-python.nix / testing-python.nix / makeTest) is deprecated. Please use the equivalent `nodes.machine'."
           build-vms.buildVirtualNetwork (
               nodes // lib.optionalAttrs (machine != null) { inherit machine; }
           );
 
       driver = setupDriverForTest {
-        inherit testScript enableOCR skipLint passthru extraPythonPackages;
+        inherit testScript enableOCR skipTypeCheck skipLint passthru extraPythonPackages;
         testName = name;
         qemu_pkg = pkgs.qemu_test;
         nodes = mkNodes pkgs.qemu_test;
       };
       driverInteractive = setupDriverForTest {
-        inherit testScript enableOCR skipLint passthru extraPythonPackages;
+        inherit testScript enableOCR skipTypeCheck skipLint passthru extraPythonPackages;
         testName = name;
         qemu_pkg = pkgs.qemu;
         nodes = mkNodes pkgs.qemu;

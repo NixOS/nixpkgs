@@ -7,6 +7,8 @@ old=$(nix-instantiate --eval -A linuxPackages_zen.kernel.modDirVersion "$nixpkgs
 old="${old%\"}"
 old="${old#\"}"
 new=$(curl https://github.com/zen-kernel/zen-kernel/releases.atom | grep -m1 -o -E '[0-9.]+-zen[0-9]+')
+# add ".0" patch to modDirVersion when minor only
+new=$(echo "$new" | sed -E 's/^([0-9]+)\.([0-9]+)-(\w+)$/\1.\2.0-\3/')
 if [[ "$new" == "$old" ]]; then
     echo "already up-to-date"
     exit 0

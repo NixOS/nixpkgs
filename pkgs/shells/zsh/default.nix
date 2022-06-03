@@ -13,7 +13,7 @@
 , buildPackages }:
 
 let
-  version = "5.8.1";
+  version = "5.9";
 in
 
 stdenv.mkDerivation {
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
-    sha256 = "sha256-tpc1ILrOYAtHeSACabHl155fUFrElSBYwRrVu/DdmRk=";
+    sha256 = "sha256-m40ezt1bXoH78ZGOh2dSp92UjgXBoNuhCrhjhC1FrNU=";
   };
 
   patches = [
@@ -82,6 +82,8 @@ EOF
       ${lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
     ''}
     mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
+
+    rm $out/bin/zsh-${version}
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
 
@@ -97,7 +99,7 @@ EOF
     '';
     license = "MIT-like";
     homepage = "https://www.zsh.org/";
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [ pSub artturin ];
     platforms = lib.platforms.unix;
   };
 

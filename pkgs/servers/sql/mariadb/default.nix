@@ -60,7 +60,7 @@ commonOptions = packageSettings: rec { # attributes common to both builds
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
-    "-DMANUFACTURER=NixOS.org"
+    "-DMANUFACTURER=nixos.org"
     "-DDEFAULT_CHARSET=utf8mb4"
     "-DDEFAULT_COLLATION=utf8mb4_unicode_ci"
     "-DSECURITY_HARDENED=ON"

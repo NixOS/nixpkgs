@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Free interpreter for the APL programming language";
     homepage    = "https://www.gnu.org/software/apl/";
     license     = licenses.gpl3Plus;

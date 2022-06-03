@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pktgen";
-  version = "21.11.0";
+  version = "22.04.1";
 
   src = fetchFromGitHub {
     owner = "pktgen";
     repo = "Pktgen-DPDK";
     rev = "pktgen-${version}";
-    sha256 = "sha256-3z5DSkggHTwjzsRzRG5zzZTcNsn/5YankJT8CKSN8b4=";
+    sha256 = "0gbag98i2jq0p2hpvfgc3fiqy2sark1dm72hla4sxmn3gljy3p70";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

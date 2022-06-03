@@ -43,15 +43,16 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Please remove this line when you add the first item since
-          docbook requires the section to be non-empty
+          <link xlink:href="https://github.com/jollheef/appvm">appvm</link>,
+          Nix based app VMs. Available as
+          <link xlink:href="options.html#opt-virtualisation.appvm.enable">virtualisation.appvm</link>.
         </para>
       </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">
     <title>Backward Incompatibilities</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           The <literal>isCompatible</literal> predicate checking CPU
@@ -69,6 +70,21 @@
           compatible</emphasis>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The <literal>isPowerPC</literal> predicate, found on
+          <literal>platform</literal> attrsets
+          (<literal>hostPlatform</literal>,
+          <literal>buildPlatform</literal>,
+          <literal>targetPlatform</literal>, etc) has been removed in
+          order to reduce confusion. The predicate was was defined such
+          that it matches only the 32-bit big-endian members of the
+          POWER/PowerPC family, despite having a name which would imply
+          a broader set of systems. If you were using this predicate,
+          you can replace <literal>foo.isPowerPC</literal> with
+          <literal>(with foo; isPower &amp;&amp; is32bit &amp;&amp; isBigEndian)</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-notable-changes">
@@ -76,8 +92,21 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Please remove this line when you add the first item since
-          docbook requires the section to be non-empty
+          A new module was added for the Saleae Logic device family,
+          providing the options
+          <literal>hardware.saleae-logic.enable</literal> and
+          <literal>hardware.saleae-logic.package</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Matrix Synapse now requires entries in the
+          <literal>state_group_edges</literal> table to be unique, in
+          order to prevent accidentally introducing duplicate
+          information (for example, because a database backup was
+          restored multiple times). If your Synapse database already has
+          duplicate rows in this table, this could fail with an error
+          and require manual remediation.
         </para>
       </listitem>
     </itemizedlist>

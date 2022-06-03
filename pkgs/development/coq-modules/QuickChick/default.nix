@@ -36,8 +36,7 @@ let recent = lib.versions.isGe "8.7" coq.coq-version; in
     "substituteInPlace Makefile --replace quickChickTool.byte quickChickTool.native";
 
   mlPlugin = true;
-  extraNativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
-  extraBuildInputs = lib.optional recent coq.ocamlPackages.num;
+  nativeBuildInputs = lib.optional recent coq.ocamlPackages.ocamlbuild;
   propagatedBuildInputs = [ ssreflect ]
     ++ lib.optionals recent [ coq-ext-lib simple-io ];
   extraInstallFlags = [ "-f Makefile.coq" ];

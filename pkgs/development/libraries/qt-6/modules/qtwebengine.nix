@@ -63,7 +63,8 @@
 , libxslt
 , lcms2
 , re2
-, kerberos
+, libkrb5
+, xkeyboard_config
 , enableProprietaryCodecs ? true
 }:
 
@@ -127,6 +128,13 @@ qtModule rec {
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
+
+    substituteInPlace src/3rdparty/chromium/ui/events/ozone/layout/xkb/xkb_keyboard_layout_engine.cc \
+      --replace "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
+
+    substituteInPlace src/core/web_engine_library_info.cpp \
+      --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
+      --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\""
   '';
 
   cmakeFlags = [
@@ -215,7 +223,7 @@ qtModule rec {
     # Pipewire
     pipewire
 
-    kerberos
+    libkrb5
   ];
 
   buildInputs = [
@@ -225,6 +233,7 @@ qtModule rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A web engine based on the Chromium web browser";
     platforms = platforms.linux;
     # This build takes a long time; particularly on slow architectures

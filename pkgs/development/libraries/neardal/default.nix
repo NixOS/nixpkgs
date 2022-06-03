@@ -23,6 +23,7 @@ stdenv.mkDerivation {
   configureFlags = [ "--disable-dependency-tracking" "--disable-traces" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "C APIs to exchange datas with the NFC daemon 'Neard'";
     license = licenses.lgpl2;
     homepage = "https://01.org/linux-nfc";

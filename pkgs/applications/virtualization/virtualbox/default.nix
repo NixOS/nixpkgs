@@ -62,8 +62,8 @@ in stdenv.mkDerivation {
         ${optionalString (!headless) ''
         -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
         ''} -i configure
-    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2
-    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
+    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2
+    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2
 
     grep 'libpulse\.so\.0'      src include -rI --files-with-match | xargs sed -i -e '
       ${optionalString pulseSupport

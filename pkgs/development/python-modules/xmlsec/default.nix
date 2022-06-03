@@ -34,16 +34,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ lxml ];
 
-  # Full git clone required for test_doc_examples
   checkInputs = [ pytestCheckHook hypothesis ];
 
   disabledTestPaths = [
+    # Full git clone required for test_doc_examples
     "tests/test_doc_examples.py"
     # test_reinitialize_module segfaults python
     # https://github.com/mehcode/python-xmlsec/issues/203
     "tests/test_xmlsec.py"
   ];
-
 
   pythonImportsCheck = [ "xmlsec" ];
 

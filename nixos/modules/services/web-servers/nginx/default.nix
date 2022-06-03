@@ -932,7 +932,7 @@ in
         # System Call Filtering
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" ]
-          ++ optionals ((cfg.package != pkgs.tengine) && (!lib.any (mod: (mod.disableIPC or false)) cfg.package.modules)) [ "~@ipc" ];
+          ++ optionals ((cfg.package != pkgs.tengine) && (cfg.package != pkgs.openresty) && (!lib.any (mod: (mod.disableIPC or false)) cfg.package.modules)) [ "~@ipc" ];
       };
     };
 

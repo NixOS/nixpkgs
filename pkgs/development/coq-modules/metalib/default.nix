@@ -13,7 +13,6 @@ with lib; mkCoqDerivation {
   release."8.10".sha256 = "0wbypc05d2lqfm9qaw98ynr5yc1p0ipsvyc3bh1rk9nz7zwirmjs";
 
   sourceRoot = "source/Metalib";
-  installFlags = "COQMF_COQLIB=$(out)/lib/coq/${coq.coq-version}";
 
   meta = {
     license = licenses.mit;

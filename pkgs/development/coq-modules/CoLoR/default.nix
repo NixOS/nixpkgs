@@ -20,7 +20,7 @@ with lib; mkCoqDerivation {
   release."1.4.0".rev    = "168c6b86c7d3f87ee51791f795a8828b1521589a";
   release."1.4.0".sha256 = "1d2whsgs3kcg5wgampd6yaqagcpmzhgb6a0hp6qn4lbimck5dfmm";
 
-  extraBuildInputs = [ bignums ];
+  propagatedBuildInputs = [ bignums ];
   enableParallelBuilding = false;
 
   meta = {

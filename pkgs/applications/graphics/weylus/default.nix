@@ -78,6 +78,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Use your tablet as graphic tablet/touch screen on your computer";
     homepage = "https://github.com/H-M-H/Weylus";
     license = with licenses; [ agpl3Only ];

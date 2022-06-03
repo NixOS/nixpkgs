@@ -63,5 +63,8 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.all;
+    # ../../utils/CarlaPluginUI.cpp:31:10: fatal error: 'Cocoa/Cocoa.h' file not found
+    # # import <Cocoa/Cocoa.h>
+    broken = stdenv.isDarwin;
   };
 }

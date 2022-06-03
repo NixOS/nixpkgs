@@ -9,6 +9,7 @@
 , wrapQtAppsHook
 , extra-cmake-modules
 , qtbase
+, qtwayland
 , qtsvg
 , qtimageformats
 , qt5compat
@@ -112,6 +113,7 @@ env.mkDerivation rec {
 
   buildInputs = [
     qtbase
+    qtwayland
     qtsvg
     qtimageformats
     qt5compat

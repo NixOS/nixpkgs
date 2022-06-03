@@ -14,7 +14,7 @@
 , pyshp
 , fonttools
 , pyyaml
-, pdfminer
+, pdfminer-six
 , vobject
 , tabulate
 , wcwidth
@@ -55,7 +55,7 @@ buildPythonApplication rec {
     pyyaml
     #namestand
     #datapackage
-    pdfminer
+    pdfminer-six
     #tabula
     vobject
     tabulate

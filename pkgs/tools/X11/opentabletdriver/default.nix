@@ -33,9 +33,6 @@ buildDotnetModule rec {
     sha256 = "sha256-LJqH3+JckPF7S/1uBE2X81jxWg0MF9ff92Ei8WPEA2w=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-
   dotnetInstallFlags = [ "--framework=net6.0" ];
 
   projectFile = [ "OpenTabletDriver.Console" "OpenTabletDriver.Daemon" "OpenTabletDriver.UX.Gtk" ];

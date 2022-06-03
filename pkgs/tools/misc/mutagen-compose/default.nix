@@ -1,4 +1,4 @@
-{ lib, buildGo118Module, fetchFromGitHub, fetchzip }:
+{ stdenv, lib, buildGo118Module, fetchFromGitHub, fetchzip }:
 
 buildGo118Module rec {
   pname = "mutagen-compose";
@@ -18,6 +18,7 @@ buildGo118Module rec {
   subPackages = [ "cmd/mutagen-compose" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Compose with Mutagen integration";
     homepage = "https://mutagen.io/";
     changelog = "https://github.com/mutagen-io/mutagen-compose/releases/tag/v${version}";
