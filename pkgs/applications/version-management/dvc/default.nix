@@ -98,12 +98,18 @@ buildPythonApplication rec {
     zc_lockfile
   ] ++ lib.optional enableGoogle [
     google-cloud-storage
+    gcsfs
   ] ++ lib.optional enableAWS [
+    aiobotocore
     boto3
+    s3fs
   ] ++ lib.optional enableAzure [
-    azure-storage-blob
+    # adlfs
+    azure-identity
+    knack
   ] ++ lib.optional enableSSH [
-    paramiko
+    bcrypt
+    sshfs
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.9") [
