@@ -5,9 +5,7 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "soupault";
-  version = "4.0.0";
-
-  useDune2 = true;
+  version = "4.0.1";
 
   minimalOCamlVersion = "4.08";
 
@@ -16,7 +14,7 @@ ocamlPackages.buildDunePackage rec {
     owner = "PataphysicalSociety";
     repo = pname;
     rev = version;
-    sha256 = "sha256-txNKAZMd3LReFoAtf6iaoDF+Ku3IUNDzBWUqGC2ePKw=";
+    sha256 = "sha256-Ojsup/BgXsqhRUsU6JevvuLnMtVs2Kd5kTeDvVO5BOk=";
   };
 
   buildInputs = with ocamlPackages; [
@@ -42,6 +40,7 @@ ocamlPackages.buildDunePackage rec {
   meta = {
     description = "A tool that helps you create and manage static websites";
     homepage = "https://soupault.app/";
+    changelog = "https://codeberg.org/PataphysicalSociety/soupault/src/branch/main/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ toastal ];
   };
