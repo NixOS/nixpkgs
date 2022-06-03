@@ -55,6 +55,13 @@ in stdenv.mkDerivation rec {
     ./skip-CONFIGURE_COMMAND.patch
   ];
 
+  # Guard against unused buld-time development inputs in closure. Without
+  # the ./skip-CONFIGURE_COMMAND.patch patch the closure retains inputs up
+  # to bootstrap tools:
+  #   https://github.com/NixOS/nixpkgs/pull/175719
+  # We pick zlib.dev as a simple canary package with pkg-config input.
+  disallowedReferences = [ zlib.dev ];
+
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
   postInstall = ''

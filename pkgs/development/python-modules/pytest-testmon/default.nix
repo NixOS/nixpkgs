@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-testmon";
-  version = "1.3.1";
+  version = "1.3.3";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-6gWWCtm/GHknhjLyRdVf42koeaSKzk5/V0173DELmj0=";
+    sha256 = "sha256-Csg5wIm9+ZdAQYdZozlx09rMaVz3GazeS5Z/f4jRECw=";
   };
 
   propagatedBuildInputs = [ pytest coverage ];

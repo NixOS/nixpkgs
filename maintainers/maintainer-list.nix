@@ -5074,6 +5074,12 @@
     githubId = 2405974;
     name = "Sébastian Méric de Bellefon";
   };
+  helium = {
+    email = "helium.dev@tuta.io";
+    github = "helium18";
+    githubId = 86223025;
+    name = "helium";
+  };
   henkkalkwater = {
     email = "chris+nixpkgs@netsoj.nl";
     github = "HenkKalkwater";
@@ -8483,6 +8489,17 @@
       fingerprint = "3196 83D3 9A1B 4DE1 3DC2  51FD FEA8 88C9 F5D6 4F62";
     }];
   };
+  minion3665 = {
+    name = "Skyler Grey";
+    email = "skyler3665@gmail.com";
+    matrix = "@minion3665:matrix.org";
+    github = "Minion3665";
+    githubId = 34243578;
+    keys = [{
+      longkeyid = "rsa4096/0x1AFD10256B3C714D";
+      fingerprint = "D520 AC8D 7C96 9212 5B2B  BD3A 1AFD 1025 6B3C 714D";
+    }];
+  };
   mir06 = {
     email = "armin.leuprecht@uni-graz.at";
     github = "mir06";
@@ -9878,6 +9895,12 @@
     github = "pcarrier";
     githubId = 8641;
     name = "Pierre Carrier";
+  };
+  pedrohlc = {
+    email = "root@pedrohlc.com";
+    github = "PedroHLC";
+    githubId = 1368952;
+    name = "Pedro Lara Campos";
   };
   penguwin = {
     email = "penguwin@penguwin.eu";
