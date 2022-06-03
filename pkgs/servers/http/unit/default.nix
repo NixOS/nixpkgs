@@ -26,14 +26,14 @@ let
   php80-unit = php80.override phpConfig;
 
 in stdenv.mkDerivation rec {
-  version = "1.26.1";
+  version = "1.27.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rTT7EJSHepGOwNXVqlOBOhZayZQXyNo3B2Oa1oLf2FI=";
+    sha256 = "sha256-H/WIrCyocEO/HZfVMyI9IwD565JsUIzC8n1qUYmCvWc=";
   };
 
   nativeBuildInputs = [ which ];
@@ -66,6 +66,10 @@ in stdenv.mkDerivation rec {
     ${optionalString withPerl534    "./configure perl   --module=perl534  --perl=${perl534}/bin/perl"}
     ${optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
     ${optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}
+  '';
+
+  postInstall = ''
+    rmdir $out/state
   '';
 
   passthru.tests.unit-php = nixosTests.unit-php;
