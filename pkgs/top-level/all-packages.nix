@@ -16373,10 +16373,6 @@ with pkgs;
 
   tweak = callPackage ../applications/editors/tweak { };
 
-  tychus = callPackage ../development/tools/tychus {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
-  };
-
   uddup = callPackage ../tools/security/uddup { };
 
   udis86 = callPackage  ../development/tools/udis86 { };
