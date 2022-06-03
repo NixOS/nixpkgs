@@ -1515,6 +1515,11 @@ mapAliases ({
   ocamlformat_0_16_0 = throw "ocamlformat_0_16_0 has been removed in favor of newer versions"; # Added 2022-06-01
   ocamlformat_0_17_0 = throw "ocamlformat_0_17_0 has been removed in favor of newer versions"; # Added 2022-06-01
   ocamlformat_0_18_0 = throw "ocamlformat_0_18_0 has been removed in favor of newer versions"; # Added 2022-06-01
+  ocamlformat_0_19_0 = ocamlformat.override { version = "0.19.0"; }; # Added 2022-06-02
+  ocamlformat_0_20_0 = ocamlformat.override { version = "0.20.0"; }; # Added 2022-06-02
+  ocamlformat_0_20_1 = ocamlformat.override { version = "0.20.1"; }; # Added 2022-06-02
+  ocamlformat_0_21_0 = ocamlformat.override { version = "0.21.0"; }; # Added 2022-06-02
+  ocamlformat_0_22_4 = ocamlformat.override { version = "0.22.4"; }; # Added 2022-06-02
 
   zabbix44 = throw ''
     Zabbix 4.4 is end of life. For details on upgrading to Zabbix 5.0 look at
