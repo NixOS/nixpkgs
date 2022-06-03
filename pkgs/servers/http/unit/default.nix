@@ -6,7 +6,8 @@
 , withPerl532 ? false, perl532
 , withPerl534 ? true, perl534
 , withPerldevel ? false, perldevel
-, withRuby_2_7 ? false, ruby_2_7
+, withRuby_2_7 ? true, ruby_2_7
+, withRuby_3_0 ? false, ruby_3_0
 , withSSL ? true, openssl ? null
 , withIPv6 ? true
 , withDebug ? false
@@ -48,6 +49,7 @@ in stdenv.mkDerivation rec {
     ++ optional withPerl534 perl534
     ++ optional withPerldevel perldevel
     ++ optional withRuby_2_7 ruby_2_7
+    ++ optional withRuby_3_0 ruby_3_0
     ++ optional withSSL openssl;
 
   configureFlags = [
@@ -71,6 +73,7 @@ in stdenv.mkDerivation rec {
     ${optionalString withPerl534    "./configure perl   --module=perl534  --perl=${perl534}/bin/perl"}
     ${optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
     ${optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}
+    ${optionalString withRuby_3_0   "./configure ruby   --module=ruby30   --ruby=${ruby_3_0}/bin/ruby"}
   '';
 
   postInstall = ''
