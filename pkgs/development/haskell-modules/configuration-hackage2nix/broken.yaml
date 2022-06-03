@@ -766,12 +766,14 @@ broken-packages:
   - compaREST
   - comparse
   - compdata
+  - compdoc
   - compendium-client
   - competition
   - compilation
   - complex-generic
   - composable-associations-aeson
   - compose-trans
+  - composite-aeson-path
   - composite-cassava
   - composite-dhall
   - composite-ekg

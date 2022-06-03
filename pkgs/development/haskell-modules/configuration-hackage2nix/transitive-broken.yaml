@@ -1040,6 +1040,7 @@ dont-distribute-packages:
  - compdata-automata
  - compdata-dags
  - compdata-param
+ - compdoc-dhall-decoder
  - complexity
  - compstrat
  - comptrans
