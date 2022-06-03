@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitLab
+, gitUpdater
 , appstream-glib
 , desktop-file-utils
 , fwupd
@@ -52,6 +53,11 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dconsolekit=false"
   ];
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    ignoredVersions = "(alpha|beta|rc).*";
+  };
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/gnome-firmware";
