@@ -1,6 +1,4 @@
-{ version, sha256 }:
-
-{ lib, stdenv, fetchurl, fetchpatch, writeText, sbclBootstrap
+{ lib, stdenv, fetchurl, fetchpatch, writeText, sbclBootstrap, version ? "2.2.4"
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
 , threadSupport ? (stdenv.hostPlatform.isx86 || "aarch64-linux" == stdenv.hostPlatform.system || "aarch64-darwin" == stdenv.hostPlatform.system)
 , linkableRuntime ? stdenv.hostPlatform.isx86
@@ -12,14 +10,24 @@
 , texinfo
 }:
 
-stdenv.mkDerivation rec {
-  pname = "sbcl";
-  inherit version;
-
+let
+  pname ="sbcl";
   src = fetchurl {
     url = "mirror://sourceforge/project/sbcl/sbcl/${version}/${pname}-${version}-source.tar.bz2";
-    inherit sha256;
+    sha256 = {
+      "2.0.8" = "1xwrwvps7drrpyw3wg5h3g2qajmkwqs9gz0fdw1ns9adp7vld390";
+      "2.0.9" = "17wvrcwgp45z9b6arik31fjnz7908qhr5ackxq1y0gqi1hsh1xy4";
+      "2.1.1" = "15wa66sachhzgvg5n35vihmkpasg100lh561c1d1bdrql0p8kbd9";
+      "2.1.2" = "sha256:02scrqyp2izsd8xjm2k5j5lhn4pdhd202jlcb54ysmcqjd80awdp";
+      "2.1.9" = "189gjqzdz10xh3ybiy4ch1r98bsmkcb4hpnrmggd4y2g5kqnyx4y";
+      "2.1.10" ="0f5ihj486m7ghh3nc0jlnqa656sbqcmhdv32syz2rjx5b47ky67b";
+      "2.1.11" ="1zgypmn19c58pv7j33ga7m1l7lzghj70w3xbybpgmggxwwflihdz";
+      "2.2.4" = "sha256-/N0lHLxl9/gI7QrXckaEjRvhZqppoX90mWABhLelcgI=";
+    }."${version}";
   };
+in
+stdenv.mkDerivation rec {
+  inherit pname src version;
 
   buildInputs = [texinfo];
 

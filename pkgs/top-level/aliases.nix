@@ -1571,6 +1571,15 @@ mapAliases ({
   posix_man_pages = man-pages-posix; # Added 2021-04-15
   riot-desktop = throw "riot-desktop is now element-desktop!"; # Cleanup before 21.05
   riot-web = throw "riot-web is now element-web"; # Cleanup before 21.05
+
+  sbcl_2_0_8 = sbcl.override { version = "2.0.8"; }; # Added 2021-06-03
+  sbcl_2_0_9 = sbcl.override { version = "2.0.9"; }; # Added 2021-06-03
+  sbcl_2_1_1 = sbcl.override { version = "2.1.1"; }; # Added 2021-06-03
+  sbcl_2_1_2 = sbcl.override { version = "2.1.2"; }; # Added 2021-06-03
+  sbcl_2_1_9 = sbcl.override { version = "2.1.9"; }; # Added 2021-06-03
+  sbcl_2_1_10 = sbcl.override { version = "2.1.10"; }; # Added 2021-06-03
+  sbcl_2_1_11 = sbcl.override { version = "2.1.11"; }; # Added 2021-06-03
+
   sqldeveloper_18 = throw "sqldeveloper_18 is not maintained anymore!"; # Added 2020-02-04
   todolist = throw "todolist is now ultralist"; # Added 2020-12-27
   tor-browser-bundle = throw "tor-browser-bundle was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead"; # Added 2020-01-10
