@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
-  version = "0.9.14";
+  version = "0.9.16";
 
   src = fetchFromGitHub {
     owner = "nextest-rs";
     repo = "nextest";
     rev = "cargo-nextest-${version}";
-    sha256 = "sha256-g2kgMMmztURik/aSgP76vG+yI3vSqX9k836ACtLviFk=";
+    sha256 = "sha256-XxsJSuUyw2q2kXaITWbkka8R6fx0ikoRMtw0hiySJ+M=";
   };
 
-  cargoSha256 = "sha256-1TJ96ilHX+LGkrMLXIK4rAebVxNQpRTYo9RnPE6BmmU=";
+  cargoSha256 = "sha256-aE/yKf2HIjN/yk3Euj2KaX4DPB4wFywAAHWkRQ1SWKw=";
 
   cargoTestFlags = [ # TODO: investigate some more why these tests fail in nix
     "--"
