@@ -173,7 +173,10 @@ in
         wantedBy = [ "multi-user.target" ];
 
         serviceConfig = mkMerge [
-          (mkIf (cfg.dataDir == "/var/lib/asf") { StateDirectory = "asf"; })
+          (mkIf (cfg.dataDir == "/var/lib/asf") {
+            StateDirectory = "asf";
+            StateDirectoryMode = "700";
+          })
           {
             User = "asf";
             Group = "asf";
