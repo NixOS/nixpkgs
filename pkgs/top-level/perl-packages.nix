@@ -13436,6 +13436,10 @@ let
       url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/2.1/pari-${pariversion}.tgz";
       sha256 = "1yjml5z1qdn258qh6329v7vib2gyx6q2np0s5ybci0rhmz6z4hli";
     };
+    # Workaround build failure on -fno-common toolchains:
+    #   ld: libPARI/libPARI.a(compat.o):(.bss+0x8): multiple definition of
+    #   `overflow'; Pari.o:(.bss+0x80): first defined here
+    NIX_CFLAGS_COMPILE = "-fcommon";
     preConfigure = "cp ${pari_tgz} pari-${pariversion}.tgz";
     makeMakerFlags = "pari_tgz=pari-${pariversion}.tgz";
     src = fetchurl {
