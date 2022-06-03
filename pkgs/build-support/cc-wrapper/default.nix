@@ -208,6 +208,7 @@ stdenv.mkDerivation {
     + ''
       export named_cc=${targetPrefix}cc
       export named_cxx=${targetPrefix}c++
+      export needsTarget=0
 
       if [ -e $ccPath/${targetPrefix}gcc ]; then
         wrap ${targetPrefix}gcc $wrapper $ccPath/${targetPrefix}gcc
@@ -215,6 +216,8 @@ stdenv.mkDerivation {
         export named_cc=${targetPrefix}gcc
         export named_cxx=${targetPrefix}g++
       elif [ -e $ccPath/clang ]; then
+        needsTarget=1
+        export defaultTarget=${targetPlatform.config}
         wrap ${targetPrefix}clang $wrapper $ccPath/clang
         ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}clang
@@ -225,6 +228,8 @@ stdenv.mkDerivation {
         wrap ${targetPrefix}g++ $wrapper $ccPath/${targetPrefix}g++
         ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
       elif [ -e $ccPath/clang++ ]; then
+        needsTarget=1
+        export defaultTarget=${targetPlatform.config}
         wrap ${targetPrefix}clang++ $wrapper $ccPath/clang++
         ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
       fi
@@ -295,14 +300,6 @@ stdenv.mkDerivation {
       if [[ -f "$bintools/nix-support/dynamic-linker-m32" ]]; then
         ln -s "$bintools/nix-support/dynamic-linker-m32" "$out/nix-support"
       fi
-    ''
-
-    ##
-    ## General Clang support
-    ##
-    + optionalString isClang ''
-
-      echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
     ''
 
     ##
