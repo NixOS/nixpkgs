@@ -2102,6 +2102,28 @@ cp /var/lib/redis/dump.rdb &quot;/var/lib/redis-mastodon/dump.rdb&quot;
       </listitem>
       <listitem>
         <para>
+          Peertube now uses services.redis.servers to start a new redis
+          server, instead of using a global redis server. This improves
+          compatibility with other services that use redis.
+        </para>
+        <para>
+          Redis database is used for storage only cache and job queue.
+          More information can be found here -
+          <link xlink:href="https://docs.joinpeertube.org/contribute-architecture">Peertube
+          architecture</link>.
+        </para>
+        <para>
+          If you do want to save the redis database, you can use the
+          following commands before upgrade OS:
+        </para>
+        <programlisting language="bash">
+redis-cli save
+sudo mkdir /var/lib/redis-peertube
+sudo cp /var/lib/redis/dump.rdb /var/lib/redis-peertube/dump.rdb
+</programlisting>
+      </listitem>
+      <listitem>
+        <para>
           If you are using Wayland you can choose to use the Ozone
           Wayland support in Chrome and several Electron apps by setting
           the environment variable <literal>NIXOS_OZONE_WL=1</literal>
