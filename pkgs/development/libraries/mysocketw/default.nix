@@ -1,10 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
+, fetchurl
 , openssl
 , cmake
 }:
 
+let
+
+  joinpaths-src = fetchurl {
+    url = "https://AnotherFoxGuy.com/CMakeCM/modules/JoinPaths.cmake";
+    hash = "sha256-eUsNj6YqO3mMffEtUBFFgNGkeiNL+2tNgwkutkam7MQ=";
+  };
+
+in
 stdenv.mkDerivation rec {
   pname = "mysocketw";
   version = "3.11.0";
@@ -16,6 +26,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-mpfhmKE2l59BllkOjmURIfl17lAakXpmGh2x9SFSaAo=";
   };
 
+  patches = [
+    # in master post 3.11.0, see https://github.com/RigsOfRods/socketw/issues/16
+    (fetchpatch {
+      name = "fix-pkg-config.patch";
+      url = "https://github.com/RigsOfRods/socketw/commit/17cad062c3673bd0da74a2fecadb01dbf9813a07.patch";
+      sha256 = "01b019gfm01g0r1548cizrf7mqigsda8jnrzhg8dhi9c49nfw1bp";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
   ];
@@ -24,11 +43,13 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  postPatch = ''
-    # https://github.com/RigsOfRods/socketw/issues/16
-    substituteInPlace SocketW.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
-  '' + lib.optionalString stdenv.isDarwin ''
+  postUnpack = ''(
+    mkdir -p source/build/_cmcm-modules/resolved && cd $_
+    cp ${joinpaths-src} JoinPaths.cmake
+    printf %s 'https://AnotherFoxGuy.com/CMakeCM::modules/JoinPaths.cmake.1' > JoinPaths.cmake.whence
+  )'';
+
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/Makefile \
         --replace -Wl,-soname, -Wl,-install_name,$out/lib/
   '';
