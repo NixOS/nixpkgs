@@ -81,9 +81,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ MP2E ashkitten xfix ];
     branch = "master";
-    # x86_32 is an unsupported platform.
-    # Enable generic build if you really want a JIT-less binary.
     broken = stdenv.isDarwin;
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    platforms = platforms.unix;
   };
 }

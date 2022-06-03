@@ -33,7 +33,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.isDarwin && stdenv.isx86_64;
     description = "A fast and modern static website engine";
     homepage = "https://gohugo.io";
     license = licenses.asl20;

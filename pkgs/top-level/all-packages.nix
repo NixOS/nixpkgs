@@ -411,6 +411,8 @@ with pkgs;
 
   pridecat = callPackage ../tools/misc/pridecat { };
 
+  pridefetch = callPackage ../tools/misc/pridefetch { };
+
   proto-contrib = callPackage ../development/tools/proto-contrib { };
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc { };
@@ -1068,6 +1070,8 @@ with pkgs;
   aircrack-ng = callPackage ../tools/networking/aircrack-ng { };
 
   airfield = callPackage ../tools/networking/airfield { };
+
+  airgeddon = callPackage ../tools/networking/airgeddon { };
 
   apache-airflow = with python3.pkgs; toPythonApplication apache-airflow;
 
@@ -4635,20 +4639,16 @@ with pkgs;
 
   circus = callPackage ../tools/networking/circus { };
 
-  citrix_workspace = citrix_workspace_21_12_0;
+  citrix_workspace = citrix_workspace_22_05_0;
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
-    citrix_workspace_20_04_0
-    citrix_workspace_20_06_0
-    citrix_workspace_20_09_0
-    citrix_workspace_20_10_0
-    citrix_workspace_20_12_0
     citrix_workspace_21_01_0
     citrix_workspace_21_03_0
     citrix_workspace_21_06_0
     citrix_workspace_21_08_0
     citrix_workspace_21_09_0
     citrix_workspace_21_12_0
+    citrix_workspace_22_05_0
   ;
 
   cmigemo = callPackage ../tools/text/cmigemo { };
@@ -6299,8 +6299,6 @@ with pkgs;
   };
 
   git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
-
-  git-lfs1 = callPackage ../applications/version-management/git-lfs/1.nix { };
 
   git-ftp = callPackage ../development/tools/git-ftp { };
 
@@ -19346,6 +19344,10 @@ with pkgs;
 
   libversion = callPackage ../development/libraries/libversion { };
 
+  libvgm = callPackage ../development/libraries/libvgm {
+    inherit (darwin.apple_sdk.frameworks) CoreAudio AudioToolbox;
+  };
+
   libvirt = callPackage ../development/libraries/libvirt {
     inherit (darwin.apple_sdk.frameworks) Carbon AppKit;
   };
@@ -26161,6 +26163,8 @@ with pkgs;
 
   faircamp = callPackage ../applications/misc/faircamp { };
 
+  famistudio = callPackage ../applications/audio/famistudio { };
+
   fasttext = callPackage ../applications/science/machine-learning/fasttext { };
 
   fbmenugen = callPackage ../applications/misc/fbmenugen { };
@@ -26560,6 +26564,8 @@ with pkgs;
   };
 
   firefox_decrypt = python3Packages.callPackage ../tools/security/firefox_decrypt { };
+
+  fmtoy = callPackage ../tools/audio/fmtoy { };
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -27193,6 +27199,8 @@ with pkgs;
   swaylock-effects = callPackage ../applications/window-managers/sway/lock-effects.nix { };
 
   swaynotificationcenter = callPackage ../applications/misc/swaynotificationcenter { };
+
+  swaynag-battery = callPackage ../applications/misc/swaynag-battery {};
 
   tiramisu = callPackage ../applications/misc/tiramisu { };
 
@@ -28147,6 +28155,17 @@ with pkgs;
     };
   };
 
+  mmlgui = callPackage ../applications/audio/mmlgui {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+    libvgm = libvgm.override {
+      withAllEmulators = false;
+      emulators = [
+        "_PRESET_SMD"
+      ];
+      enableLibplayer = false;
+    };
+  };
+
   mmsd = callPackage ../tools/networking/mmsd { };
 
   mmtc = callPackage ../applications/audio/mmtc { };
@@ -28818,6 +28837,10 @@ with pkgs;
   osmium-tool = callPackage ../applications/misc/osmium-tool { };
 
   owamp = callPackage ../applications/networking/owamp { };
+
+  vgmplay-libvgm = callPackage ../applications/audio/vgmplay-libvgm { };
+
+  vgmtools = callPackage ../tools/audio/vgmtools { };
 
   vieb = callPackage ../applications/networking/browsers/vieb { };
 

@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchurl, cmake, darkhttpd, gettext, makeWrapper
+{ lib, mkDerivation, fetchurl, cmake, gettext
 , pkg-config, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase
 , qttranslations, qtsvg }:
 
@@ -17,7 +17,7 @@ mkDerivation rec {
     sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
 
-  nativeBuildInputs = [ cmake darkhttpd gettext makeWrapper pkg-config ];
+  nativeBuildInputs = [ cmake gettext pkg-config ];
 
   postPatch = ''
     substituteInPlace client/CMakeLists.txt \
@@ -35,10 +35,11 @@ mkDerivation rec {
     qttranslations
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/qdigidoc4 \
-      --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
-  '';
+  # replace this hack with a proper cmake variable or environment variable
+  # once https://github.com/open-eid/cmake/pull/34 (or #35) gets merged.
+  qtWrapperArgs = [
+      "--prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/"
+  ];
 
   meta = with lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";

@@ -98,7 +98,7 @@ let
       ''
       + (lib.concatMapStrings (dependency:
         ''
-          if [ ! -e "${dependency.name}" ]; then
+          if [ ! -e "${dependency.packageName}" ]; then
               ${composePackage dependency}
           fi
         ''
@@ -257,8 +257,8 @@ let
           var packageLock = JSON.parse(fs.readFileSync("./package-lock.json"));
 
           if(![1, 2].includes(packageLock.lockfileVersion)) {
-             process.stderr.write("Sorry, I only understand lock file versions 1 and 2!\n");
-             process.exit(1);
+            process.stderr.write("Sorry, I only understand lock file versions 1 and 2!\n");
+            process.exit(1);
           }
 
           if(packageLock.dependencies !== undefined) {
@@ -390,7 +390,7 @@ let
   buildNodePackage =
     { name
     , packageName
-    , version
+    , version ? null
     , dependencies ? []
     , buildInputs ? []
     , production ? true
@@ -409,7 +409,7 @@ let
       extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" "dontStrip" "dontNpmInstall" "preRebuild" "unpackPhase" "buildPhase" "meta" ];
     in
     stdenv.mkDerivation ({
-      name = "${name}-${version}";
+      name = "${name}${if version == null then "" else "-${version}"}";
       buildInputs = [ tarWrapper python nodejs ]
         ++ lib.optional (stdenv.isLinux) utillinux
         ++ lib.optional (stdenv.isDarwin) libtool
@@ -441,6 +441,14 @@ let
         if [ -d "$out/lib/node_modules/.bin" ]
         then
             ln -s $out/lib/node_modules/.bin $out/bin
+
+            # Patch the shebang lines of all the executables
+            ls $out/bin/* | while read i
+            do
+                file="$(readlink -f "$i")"
+                chmod u+rwx "$file"
+                patchShebangs "$file"
+            done
         fi
 
         # Create symlinks to the deployed manual page folders, if applicable
@@ -471,7 +479,7 @@ let
   buildNodeDependencies =
     { name
     , packageName
-    , version
+    , version ? null
     , src
     , dependencies ? []
     , buildInputs ? []
@@ -489,7 +497,7 @@ let
       extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" ];
     in
       stdenv.mkDerivation ({
-        name = "node-dependencies-${name}-${version}";
+        name = "node-dependencies-${name}${if version == null then "" else "-${version}"}";
 
         buildInputs = [ tarWrapper python nodejs ]
           ++ lib.optional (stdenv.isLinux) utillinux
@@ -519,6 +527,7 @@ let
             if [ -f ${src}/package-lock.json ]
             then
                 cp ${src}/package-lock.json .
+                chmod 644 package-lock.json
             fi
           ''}
 
@@ -541,7 +550,7 @@ let
   buildNodeShell =
     { name
     , packageName
-    , version
+    , version ? null
     , src
     , dependencies ? []
     , buildInputs ? []
@@ -557,9 +566,10 @@ let
 
     let
       nodeDependencies = buildNodeDependencies args;
+      extraArgs = removeAttrs args [ "name" "dependencies" "buildInputs" "dontStrip" "dontNpmInstall" "unpackPhase" "buildPhase" ];
     in
-    stdenv.mkDerivation {
-      name = "node-shell-${name}-${version}";
+    stdenv.mkDerivation ({
+      name = "node-shell-${name}${if version == null then "" else "-${version}"}";
 
       buildInputs = [ python nodejs ] ++ lib.optional (stdenv.isLinux) utillinux ++ buildInputs;
       buildCommand = ''
@@ -578,7 +588,7 @@ let
         export NODE_PATH=${nodeDependencies}/lib/node_modules
         export PATH="${nodeDependencies}/bin:$PATH"
       '';
-    };
+    } // extraArgs);
 in
 {
   buildNodeSourceDist = lib.makeOverridable buildNodeSourceDist;
