@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , bison
 , git
 , python2
@@ -71,6 +72,14 @@ stdenv.mkDerivation rec {
   patches = [
     ./force-gcc-as-linker.patch
     ./system-libuv.patch
+
+    # Pull upstream fix for -fno-common toolchains:
+    #   https://github.com/mruby-zest/mruby-zest-build/issues/25
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/mruby-zest/mruby-zest-build/commit/4eb88250f22ee684acac95d4d1f114df504e37a7.patch";
+      sha256 = "0wg7qy1vg0mzcxagf35bv35dlr0q17pxjicigpf86yqppvgrzrsb";
+    })
   ];
 
   # Add missing dependencies of deps/mruby-dir-glob/mrbgem.rake
