@@ -4,12 +4,12 @@
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.2.9";
+  version = "4.2.11";
 
   src = fetchurl {
     url =
-      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    sha256 = "1rhd3mvj6ld16zgfscj81f1vhs2nvifsizky509l1av7dsjfbbzr";
+      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4_${version}.110-1804.tar.xz";
+    sha256 = "sha256-Sg6lFZeIJn3T/suDc5Z/kNqBf/sIV9c6EJJ0Nr0dwTM=";
   };
 
   tsl = fetchurl {
