@@ -332,6 +332,19 @@ repository):
     '';
 ```
 
+Similarly, the type checking of test scripts can be disabled in the following
+way:
+
+```nix
+import ./make-test-python.nix {
+  skipTypeCheck = true;
+  nodes.machine =
+    { config, pkgs, ... }:
+    { configuration…
+    };
+}
+```
+
 ## Failing tests early {#ssec-failing-tests-early}
 
 To fail tests early when certain invariables are no longer met (instead of waiting for the build to time out), the decorator `polling_condition` is provided. For example, if we are testing a program `foo` that should not quit after being started, we might write the following:

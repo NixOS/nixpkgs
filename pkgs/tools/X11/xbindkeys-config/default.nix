@@ -4,6 +4,10 @@ stdenv.mkDerivation rec {
   pname = "xbindkeys-config";
   version = "0.1.3";
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   nativeBuildInputs = [ pkg-config makeWrapper ];
   buildInputs = [ gtk ];
 
