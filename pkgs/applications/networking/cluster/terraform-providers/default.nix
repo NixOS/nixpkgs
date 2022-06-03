@@ -19,10 +19,11 @@ let
      , vendorSha256 ? throw "vendorSha256 missing: please use `buildGoModule`" /* added 2022/01 */
      , deleteVendor ? false
      , proxyVendor ? false
+     , mkProviderGoModule ? buildGoModule
      , # Looks like "registry.terraform.io/vancluever/acme"
        provider-source-address
      }@attrs:
-      buildGoModule {
+      mkProviderGoModule {
         pname = repo;
         inherit vendorSha256 version deleteVendor proxyVendor;
         subPackages = [ "." ];
