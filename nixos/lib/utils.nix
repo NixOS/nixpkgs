@@ -39,11 +39,17 @@ rec {
     || hasPrefix a'.mountPoint b'.mountPoint
     || any (hasPrefix a'.mountPoint) b'.depends;
 
-  # Escape a path according to the systemd rules, e.g. /dev/xyzzy
-  # becomes dev-xyzzy.  FIXME: slow.
+  # Escape a path according to the systemd rules, FIXME: slow.
+  # The rules are described in systemd.unit(5) as follows:
+  # The escaping algorithm operates as follows: given a string, any "/" character is replaced by "-", and all other characters which are not ASCII alphanumerics, ":", "_" or "." are replaced by C-style "\x2d" escapes. In addition, "." is replaced with such a C-style escape when it would appear as the first character in the escaped string.
+  # When the input qualifies as absolute file system path, this algorithm is extended slightly: the path to the root directory "/" is encoded as single dash "-". In addition, any leading, trailing or duplicate "/" characters are removed from the string before transformation. Example: /foo//bar/baz/ becomes "foo-bar-baz".
   escapeSystemdPath = s:
    replaceChars ["/" "-" " "] ["-" "\\x2d" "\\x20"]
-   (removePrefix "/" s);
+     (if s == "/"
+      then s
+      else removeSuffix "/" (removePrefix "/"
+        (builtins.foldl' (x: y: if y == "/" && lib.hasSuffix "/" x then x else x+y) "" (lib.splitString "" s))
+     ));
 
   # Quotes an argument for use in Exec* service lines.
   # systemd accepts "-quoted strings with escape sequences, toJSON produces
