@@ -24282,8 +24282,6 @@ with pkgs;
   envypn-font = callPackage ../data/fonts/envypn-font
     { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
-  envdir = callPackage ../tools/misc/envdir-go { };
-
   execline-man-pages = skawarePackages.execline-man-pages;
 
   ezra-sil = callPackage ../data/fonts/ezra-sil { };
