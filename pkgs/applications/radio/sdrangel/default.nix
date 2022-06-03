@@ -45,13 +45,13 @@
 
 mkDerivation rec {
   pname = "sdrangel";
-  version = "6.20.2";
+  version = "6.20.3";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     rev = "v${version}";
-    sha256 = "sha256-4RvOXC4I0njkMQqYiQODtJB2bYfw6Kt6z3Ek63BOVYg=";
+    sha256 = "sha256-Ma1XB1F+0TcDy9/NhiaBajewFCn/7yMRhgx9GI1+VWk=";
     fetchSubmodules = false;
   };
 
