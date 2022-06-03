@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib bzip2 xz ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: ./libfml.a(rle.o):/build/source/SeqLib/fermi-lite/rle.h:33: multiple definition of
+  #     `rle_auxtab'; ./libfml.a(misc.o):/build/source/SeqLib/fermi-lite/rle.h:33: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   installPhase = ''
     runHook preInstall
     install -Dm555 src/svaba/svaba $out/bin/svaba
