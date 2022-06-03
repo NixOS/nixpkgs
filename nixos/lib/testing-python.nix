@@ -50,6 +50,7 @@ rec {
     , qemu_pkg ? pkgs.qemu_test
     , enableOCR ? false
     , skipLint ? false
+    , skipTypeCheck ? false
     , passthru ? {}
     , interactive ? false
   }:
@@ -129,19 +130,21 @@ rec {
 
         vmStartScripts=($(for i in ${toString vms}; do echo $i/bin/run-*-vm; done))
 
-        # prepend type hints so the test script can be type checked with mypy
-        cat "${./test-script-prepend.py}" >> testScriptWithTypes
-        echo "${builtins.toString machineNames}" >> testScriptWithTypes
-        echo "${builtins.toString vlanNames}" >> testScriptWithTypes
-        echo -n "$testScript" >> testScriptWithTypes
+        ${lib.optionalString (!skipTypeCheck) ''
+          # prepend type hints so the test script can be type checked with mypy
+          cat "${./test-script-prepend.py}" >> testScriptWithTypes
+          echo "${builtins.toString machineNames}" >> testScriptWithTypes
+          echo "${builtins.toString vlanNames}" >> testScriptWithTypes
+          echo -n "$testScript" >> testScriptWithTypes
 
-        # set pythonpath so mypy knows where to find the imports. this requires the py.typed file.
-        export PYTHONPATH='${./test-driver}'
-        mypy  --no-implicit-optional \
-              --pretty \
-              --no-color-output \
-              testScriptWithTypes
-        unset PYTHONPATH
+          # set pythonpath so mypy knows where to find the imports. this requires the py.typed file.
+          export PYTHONPATH='${./test-driver}'
+          mypy  --no-implicit-optional \
+                --pretty \
+                --no-color-output \
+                testScriptWithTypes
+          unset PYTHONPATH
+        ''}
 
         echo -n "$testScript" >> $out/test-script
 
@@ -171,6 +174,7 @@ rec {
     , testScript
     , enableOCR ? false
     , name ? "unnamed"
+    , skipTypeCheck ? false
       # Skip linting (mainly intended for faster dev cycles)
     , skipLint ? false
     , passthru ? {}
@@ -232,13 +236,13 @@ rec {
           );
 
       driver = setupDriverForTest {
-        inherit testScript enableOCR skipLint passthru;
+        inherit testScript enableOCR skipTypeCheck skipLint passthru;
         testName = name;
         qemu_pkg = pkgs.qemu_test;
         nodes = mkNodes pkgs.qemu_test;
       };
       driverInteractive = setupDriverForTest {
-        inherit testScript enableOCR skipLint passthru;
+        inherit testScript enableOCR skipTypeCheck skipLint passthru;
         testName = name;
         qemu_pkg = pkgs.qemu;
         nodes = mkNodes pkgs.qemu;
