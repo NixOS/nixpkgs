@@ -7254,8 +7254,6 @@ with pkgs;
 
   jc = with python3Packages; toPythonApplication jc;
 
-  jd = callPackage ../development/tools/jd { };
-
   jd-diff-patch = callPackage ../development/tools/jd-diff-patch { };
 
   jd-gui = callPackage ../tools/security/jd-gui { };
