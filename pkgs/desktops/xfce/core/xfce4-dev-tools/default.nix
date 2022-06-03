@@ -1,6 +1,8 @@
 { lib
+, stdenv
 , mkXfceDerivation
 , autoreconfHook
+, makeBinaryWrapper
 , libxslt
 , docbook_xsl
 , autoconf
@@ -9,6 +11,7 @@
 , gtk-doc
 , intltool
 , libtool
+, m4
 }:
 
 mkXfceDerivation {
@@ -20,18 +23,25 @@ mkXfceDerivation {
 
   nativeBuildInputs = [
     autoreconfHook
+    makeBinaryWrapper
     libxslt
     docbook_xsl
   ];
 
-  propagatedBuildInputs = [
-    autoconf
-    automake
-    glib
-    gtk-doc
-    intltool
-    libtool
-  ];
+  buildInputs = [ glib ];
+
+  # ../xdt-csource/xdt-csource: cannot execute binary file: Exec format error
+  postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace Makefile.am \
+    --replace 'xdt-csource \' "xdt-csource" \
+     --replace "  tests" ""
+  '';
+
+  postInstall = ''
+    for b in $out/bin/*; do
+      wrapProgram $b --suffix PATH : ${lib.makeBinPath [ autoconf automake intltool libtool gtk-doc glib m4 ]}
+    done
+  '';
 
   setupHook = ./setup-hook.sh;
 

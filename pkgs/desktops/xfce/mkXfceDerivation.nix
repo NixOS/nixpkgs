@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook, gitUpdater }:
+{ lib, stdenv, fetchFromGitLab, pkg-config, xfce4-dev-tools, hicolor-icon-theme, xfce, wrapGAppsHook, gitUpdater
+, autoconf, automake, gettext, libtool, intltool, glib, gtk-doc }:
 
 { category
 , pname
@@ -25,8 +26,13 @@ let
   template = rec {
     inherit pname version;
 
-    nativeBuildInputs = [ pkg-config xfce4-dev-tools wrapGAppsHook ];
-    buildInputs = [ hicolor-icon-theme ];
+    nativeBuildInputs = [ pkg-config xfce4-dev-tools wrapGAppsHook
+      autoconf automake gettext libtool intltool gtk-doc ];
+    buildInputs = [
+      glib
+      hicolor-icon-theme
+      xfce4-dev-tools # for envHooks
+  ];
     configureFlags = [ "--enable-maintainer-mode" ];
 
     src = fetchFromGitLab {
