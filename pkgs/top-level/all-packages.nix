@@ -35304,6 +35304,10 @@ with pkgs;
     libpng = libpng12;
   };
 
+  vvvvvv = callPackage ../games/vvvvvv {
+    inherit (darwin.apple_sdk.frameworks) Foundation IOKit;
+  };
+
   wargus = callPackage ../games/wargus { };
 
   warmux = callPackage ../games/warmux { };
