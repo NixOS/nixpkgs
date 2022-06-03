@@ -8637,6 +8637,8 @@ with pkgs;
 
   nfs-ganesha = callPackage ../servers/nfs-ganesha { };
 
+  nfs4-acl-tools = callPackage ../tools/filesystems/nfs4-acl-tools { };
+
   ngrep = callPackage ../tools/networking/ngrep { };
 
   neuron-notes = haskell.lib.compose.justStaticExecutables (haskell.lib.compose.generateOptparseApplicativeCompletion "neuron" haskellPackages.neuron);
