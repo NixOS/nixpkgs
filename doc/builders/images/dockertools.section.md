@@ -302,7 +302,7 @@ buildImage {
 
   runAsRoot = ''
     #!${pkgs.runtimeShell}
-    ${shadowSetup}
+    ${pkgs.dockerTools.shadowSetup}
     groupadd -r redis
     useradd -r -g redis redis
     mkdir /data
