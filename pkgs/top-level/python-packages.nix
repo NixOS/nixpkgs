@@ -10780,6 +10780,8 @@ in {
 
   unifi = callPackage ../development/python-modules/unifi { };
 
+  unifi-discovery = callPackage ../development/python-modules/unifi-discovery { };
+
   unify = callPackage ../development/python-modules/unify { };
 
   unifiled = callPackage ../development/python-modules/unifiled { };
