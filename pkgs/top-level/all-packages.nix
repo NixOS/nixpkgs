@@ -18055,6 +18055,8 @@ with pkgs;
 
   jsonnet-bundler = callPackage ../development/tools/jsonnet-bundler { };
 
+  jsonnet-language-server = callPackage ../development/tools/jsonnet-language-server { };
+
   jrsonnet = callPackage ../development/compilers/jrsonnet { };
 
   go-jsonnet = callPackage ../development/compilers/go-jsonnet { };
