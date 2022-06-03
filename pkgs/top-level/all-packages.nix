@@ -18396,10 +18396,6 @@ with pkgs;
 
   libdecor = callPackage ../development/libraries/libdecor { };
 
-  libdigidoc = callPackage ../development/libraries/libdigidoc {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   libdigidocpp = callPackage ../development/libraries/libdigidocpp { };
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
