@@ -62,8 +62,18 @@ stdenv.mkDerivation rec {
 
   # nuke the example/reference output .txt files, for the included tools,
   # stuffed inside $out. we don't need them at all.
+  # (see "Allow skipping examples" for a potential option
+  #  https://github.com/iovisor/bpftrace/pull/2256)
+  #
+  # Pull BPF scripts into $PATH (next to their bcc program equivalents), but do
+  # not move them to keep `${pkgs.bpftrace}/share/bpftrace/tools/...` working.
+  # (remove `chmod` once a new release "Add executable permission to tools"
+  #  https://github.com/iovisor/bpftrace/commit/77e524e6d276216ed6a6e1984cf204418db07c78)
   postInstall = ''
     rm -rf $out/share/bpftrace/tools/doc
+
+    ln -s $out/share/bpftrace/tools/*.bt $out/bin/
+    chmod +x $out/bin/*.bt
   '';
 
   outputs = [ "out" "man" ];
