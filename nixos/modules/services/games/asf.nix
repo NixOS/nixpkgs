@@ -13,7 +13,7 @@ let
     # is in theory not needed as this is already the default for default builds
     UpdateChannel = 0;
     Headless = true;
-  } // lib.optionalAttrs (cfg.ipcPasswordFile != "") {
+  } // lib.optionalAttrs (cfg.ipcPasswordFile != null) {
     IPCPassword = "#ipcPassword#";
   });
 
@@ -94,7 +94,8 @@ in
     };
 
     ipcPasswordFile = mkOption {
-      type = types.path;
+      type = types.nullOr types.path;
+      default = null;
       description = "Path to a file containig the password. The file must be readable by the <literal>asf</literal> user/group.";
     };
 
@@ -225,7 +226,10 @@ in
             mkdir -p config
 
             cp --no-preserve=mode ${asf-config} config/ASF.json
-            ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
+
+            ${optionalString (cfg.ipcPasswordFile != null) ''
+              ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
+            ''}
 
             ${optionalString (cfg.ipcSettings != {}) ''
               ln -fs ${ipc-config} config/IPC.config
