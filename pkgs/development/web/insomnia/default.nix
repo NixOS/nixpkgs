@@ -1,82 +1,27 @@
-{ lib, stdenv, makeWrapper, fetchurl, dpkg, alsa-lib, atk, cairo, cups, dbus, expat
-, fontconfig, freetype, gdk-pixbuf, glib, pango, mesa, nspr, nss, gtk3
-, at-spi2-atk, gsettings-desktop-schemas, gobject-introspection, wrapGAppsHook
-, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, nghttp2
-, libudev0-shim, glibc, curl, openssl, autoPatchelfHook }:
+{ lib, fetchurl, appimageTools }:
 
 let
-  runtimeLibs = lib.makeLibraryPath [
-    curl
-    glibc
-    libudev0-shim
-    nghttp2
-    openssl
-  ];
-in stdenv.mkDerivation rec {
   pname = "insomnia";
-  version = "2022.1.1";
-
+  version = "2022.3.0";
   src = fetchurl {
-    url =
-      "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.deb";
-    sha256 = "sha256-AaRiXGdKCzcsY4GEgLr5PO+f7STsR+p7ybGISdJlCVk=";
+    url = "https://github.com/Kong/insomnia/releases/download/core%40${version}/Insomnia.Core-${version}.AppImage";
+    sha256 = "sha256-cPdRxb9Nqu+CQ6Ebcp4M7snI0oo8lrYEgQFLQhET9yk=";
   };
+  appimageContents = appimageTools.extractType2 { inherit pname version src; };
+in
+appimageTools.wrapType2 {
+  inherit pname version src;
 
-  nativeBuildInputs =
-    [ autoPatchelfHook dpkg makeWrapper gobject-introspection wrapGAppsHook ];
+  extraInstallCommands = ''
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
 
-  buildInputs = [
-    alsa-lib
-    at-spi2-atk
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    pango
-    gtk3
-    gsettings-desktop-schemas
-    libX11
-    libXScrnSaver
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libxcb
-    libxshmfence
-    mesa # for libgbm
-    nspr
-    nss
-  ];
+    install -m 444 -D ${appimageContents}/insomnia.desktop -t $out/share/applications
 
-  dontBuild = true;
-  dontConfigure = true;
+    substituteInPlace $out/share/applications/insomnia.desktop \
+      --replace 'Exec=AppRun' 'Exec=${pname}'
 
-  unpackPhase = "dpkg-deb -x $src .";
-
-  installPhase = ''
-    mkdir -p $out/share/insomnia $out/lib $out/bin
-
-    mv usr/share/* $out/share/
-    mv opt/Insomnia/* $out/share/insomnia
-    mv $out/share/insomnia/*.so $out/lib/
-
-    ln -s $out/share/insomnia/insomnia $out/bin/insomnia
-    sed -i 's|\/opt\/Insomnia|'$out'/bin|g' $out/share/applications/insomnia.desktop
-  '';
-
-  preFixup = ''
-    wrapProgram "$out/bin/insomnia" --prefix LD_LIBRARY_PATH : ${runtimeLibs}
+    install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/insomnia.png \
+      $out/share/icons/hicolor/512x512/apps/insomnia.png
   '';
 
   meta = with lib; {
@@ -84,7 +29,6 @@ in stdenv.mkDerivation rec {
     description = "The most intuitive cross-platform REST API Client";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ markus1189 babariviere ];
+    maintainers = with maintainers; [ markus1189 babariviere khushraj ];
   };
-
 }
