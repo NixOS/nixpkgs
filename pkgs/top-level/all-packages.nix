@@ -23527,8 +23527,6 @@ with pkgs;
 
   gosec = callPackage ../development/tools/gosec { };
 
-  govers = callPackage ../development/tools/govers { };
-
   govendor = callPackage ../development/tools/govendor { };
 
   go-tools = callPackage ../development/tools/go-tools { };
