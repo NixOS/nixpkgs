@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, python3, imagemagick, libwnck, libxfce4ui, xfce4-panel, xfconf, xfce4-dev-tools, xfce, gitUpdater }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, intltool, python3, imagemagick, libwnck, libxfce4ui, xfce4-panel, xfconf, xfce4-dev-tools, xfce, gitUpdater, libtool }:
 
 stdenv.mkDerivation rec {
   pname  = "xfce4-windowck-plugin";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     intltool
+    libtool
+    xfce4-dev-tools
   ];
 
   buildInputs = [

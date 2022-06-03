@@ -16,6 +16,7 @@
 , libpeas
 , libcddb
 , libcdio
+, libtool
 , gst_all_1, withGstPlugins ? true
 , glyr, withGlyr ? true
 , liblastfmSF, withLastfm ? true
@@ -49,6 +50,7 @@ mkDerivation rec {
     intltool
     pkg-config
     xfce.xfce4-dev-tools
+    libtool
     desktop-file-utils
     installShellFiles
   ];
