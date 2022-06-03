@@ -23,6 +23,8 @@
 , libxcb
 , libxkbcommon
 , libxshmfence
+, libGL
+, libappindicator-gtk3
 , mesa
 , nspr
 , nss
@@ -42,11 +44,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "1password";
-  version = "8.8.0-11.BETA";
+  version = "8.8.0-119.BETA";
 
   src = fetchurl {
     url = "https://downloads.1password.com/linux/tar/beta/x86_64/1password-${version}.x64.tar.gz";
-    sha256 = "sha256-HU+nIz3aKXXdBWEBMSRlbi8yZ+JEsE33o6nfbWRgpBo=";
+    sha256 = "sha256-MnfO41r86jLGI9R30trCPR+BwXVKACyrB3dWSbPbBIA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -78,6 +80,8 @@ in stdenv.mkDerivation rec {
       libxcb
       libxkbcommon
       libxshmfence
+      libGL
+      libappindicator-gtk3
       mesa
       nspr
       nss
