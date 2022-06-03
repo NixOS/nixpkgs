@@ -212,12 +212,12 @@ respectively `0` because NixOS takes care of updating everything.
 
         preStart = let
           createBotsScript = pkgs.runCommandLocal "ASF-bots" {} ''
-            mkdir -p $out/lib/asf/bots
+            mkdir -p $out
             # clean potential removed bots
-            rm -rf $out/lib/asf/bots/*.json
+            rm -rf $out/*.json
             for i in ${strings.concatStringsSep " " (lists.map (x: "${getName x},${x}") (attrsets.mapAttrsToList mkBot cfg.bots))}; do IFS=",";
               set -- $i
-              ln -fs $2 $out/lib/asf/bots/$1
+              ln -fs $2 $out/$1
             done
           '';
           replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
@@ -232,7 +232,7 @@ respectively `0` because NixOS takes care of updating everything.
           ''}
 
           ${optionalString (cfg.ipcSettings != {}) ''
-            ln -fs ${createBotsScript}/lib/asf/bots/* config/
+            ln -fs ${createBotsScript}/* config/
           ''}
 
           rm -f www
