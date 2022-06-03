@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, makeWrapper, minizip, pcsclite, opensc, openssl
+{ lib, stdenv, fetchurl, fetchpatch, cmake, makeWrapper, minizip, pcsclite, opensc, openssl
 , xercesc, xml-security-c, pkg-config, xsd, zlib, xalanc, xxd }:
 
 stdenv.mkDerivation rec {
@@ -9,6 +9,18 @@ stdenv.mkDerivation rec {
      url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
      sha256 = "sha256-U5i5IAyJF4359q6M6mQemEuG7+inPYIXqLy8GHv4dkg=";
   };
+
+  patches = [
+    (fetchpatch {
+      # fix runtime crashes when signing with OpenSSL>1.1.1l
+      # https://github.com/open-eid/libdigidocpp/issues/474 asks for a new release
+      url = "https://github.com/open-eid/libdigidocpp/commit/42a8cfd834c10bdd206fe784a13217df222b1c8e.patch";
+      sha256 = "sha256-o3ZT0dXhIu79C5ZR+2HPdLMZ3YwPG1v3vly5bseuxtU=";
+      excludes = [
+        ".github/workflows/build.yml" # failed hunk
+      ];
+    })
+  ];
 
   nativeBuildInputs = [ cmake makeWrapper pkg-config xxd ];
 
