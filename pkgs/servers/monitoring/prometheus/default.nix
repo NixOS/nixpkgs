@@ -10,6 +10,7 @@
 , enableAzure ? true
 , enableConsul ? true
 , enableDigitalOcean ? true
+, enableDNS ? true
 , enableEureka ? true
 , enableGCE ? true
 , enableHetzner ? true
@@ -64,6 +65,8 @@ buildGoModule rec {
       "echo - github.com/prometheus/prometheus/discovery/consul"}
     ${lib.optionalString (enableDigitalOcean)
       "echo - github.com/prometheus/prometheus/discovery/digitalocean"}
+    ${lib.optionalString (enableDNS)
+      "echo - github.com/prometheus/prometheus/discovery/dns"}
     ${lib.optionalString (enableEureka)
       "echo - github.com/prometheus/prometheus/discovery/eureka"}
     ${lib.optionalString (enableGCE)
