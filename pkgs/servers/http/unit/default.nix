@@ -1,7 +1,8 @@
 { lib, stdenv, fetchFromGitHub, nixosTests, which
 , pcre2
 , withPython3 ? true, python3, ncurses
-, withPHP80 ? true, php80
+, withPHP80 ? false, php80
+, withPHP81 ? true, php81
 , withPerl532 ? false, perl532
 , withPerl534 ? true, perl534
 , withPerldevel ? false, perldevel
@@ -24,6 +25,7 @@ let
   };
 
   php80-unit = php80.override phpConfig;
+  php81-unit = php81.override phpConfig;
 
 in stdenv.mkDerivation rec {
   version = "1.27.0";
@@ -41,6 +43,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ pcre2.dev ]
     ++ optionals withPython3 [ python3 ncurses ]
     ++ optional withPHP80 php80-unit
+    ++ optional withPHP81 php81-unit
     ++ optional withPerl532 perl532
     ++ optional withPerl534 perl534
     ++ optional withPerldevel perldevel
@@ -58,10 +61,12 @@ in stdenv.mkDerivation rec {
 
   # Optionally add the PHP derivations used so they can be addressed in the configs
   usedPhp80 = optionals withPHP80 php80-unit;
+  usedPhp81 = optionals withPHP81 php81-unit;
 
   postConfigure = ''
     ${optionalString withPython3    "./configure python --module=python3  --config=python3-config  --lib-path=${python3}/lib"}
     ${optionalString withPHP80      "./configure php    --module=php80    --config=${php80-unit.unwrapped.dev}/bin/php-config --lib-path=${php80-unit}/lib"}
+    ${optionalString withPHP81      "./configure php    --module=php81    --config=${php81-unit.unwrapped.dev}/bin/php-config --lib-path=${php81-unit}/lib"}
     ${optionalString withPerl532    "./configure perl   --module=perl532  --perl=${perl532}/bin/perl"}
     ${optionalString withPerl534    "./configure perl   --module=perl534  --perl=${perl534}/bin/perl"}
     ${optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
