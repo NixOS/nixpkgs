@@ -21420,8 +21420,6 @@ with pkgs;
 
   vgo2nix = callPackage ../development/tools/vgo2nix { };
 
-  ws = callPackage ../development/tools/ws { };
-
   ### DEVELOPMENT / JAVA MODULES
 
   javaPackages = recurseIntoAttrs (callPackage ./java-packages.nix { });
