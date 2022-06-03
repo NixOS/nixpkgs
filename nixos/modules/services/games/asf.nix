@@ -13,6 +13,8 @@ let
     # is in theory not needed as this is already the default for default builds
     UpdateChannel = 0;
     Headless = true;
+  } // lib.optionalAttrs (cfg.ipcPasswordFile != "") {
+    IPCPassword = "#ipcPassword#";
   });
 
   ipc-config = format.generate "IPC.config" cfg.ipcSettings;
@@ -90,6 +92,11 @@ respectively `0` because NixOS takes care of updating everything.
         Statistics = false;
       };
       default = { };
+    };
+
+    ipcPasswordFile = mkOption {
+      type = types.path;
+      description = "Path to a file containig the password. The file must be readable by the <literal>asf</literal> user/group.";
     };
 
     ipcSettings = mkOption {
@@ -202,26 +209,33 @@ respectively `0` because NixOS takes care of updating everything.
           }
         ];
 
-        preStart = ''
-          mkdir -p config
-          rm -f www
-          rm -f config/{*.json,*.config}
-
-          ln -s ${asf-config} config/ASF.json
-
-          ${strings.optionalString (cfg.ipcSettings != {}) ''
-            ln -s ${ipc-config} config/IPC.config
-          ''}
-
-          ln -s ${pkgs.runCommandLocal "ASF-bots" {} ''
+        preStart = let
+          createBotsScript = pkgs.runCommandLocal "ASF-bots" {} ''
             mkdir -p $out/lib/asf/bots
+            # clean potential removed bots
+            rm -rf $out/lib/asf/bots/*.json
             for i in ${strings.concatStringsSep " " (lists.map (x: "${getName x},${x}") (attrsets.mapAttrsToList mkBot cfg.bots))}; do IFS=",";
               set -- $i
-              ln -s $2 $out/lib/asf/bots/$1
+              ln -fs $2 $out/lib/asf/bots/$1
             done
-          ''}/lib/asf/bots/* config/
+          '';
+          replaceSecretBin = "${pkgs.replace-secret}/bin/replace-secret";
+        in ''
+          mkdir -p config
 
-          ${strings.optionalString cfg.web-ui.enable ''
+          cp --no-preserve=mode ${asf-config} config/ASF.json
+          ${replaceSecretBin} '#ipcPassword#' '${cfg.ipcPasswordFile}' config/ASF.json
+
+          ${optionalString (cfg.ipcSettings != {}) ''
+            ln -fs ${ipc-config} config/IPC.config
+          ''}
+
+          ${optionalString (cfg.ipcSettings != {}) ''
+            ln -fs ${createBotsScript}/lib/asf/bots/* config/
+          ''}
+
+          rm -f www
+          ${optionalString cfg.web-ui.enable ''
             ln -s ${cfg.web-ui.package}/lib/dist www
           ''}
         '';
