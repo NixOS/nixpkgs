@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
     "-Dman=true"
+    # TODO(mindavi): introspection broken due to https://github.com/NixOS/nixpkgs/issues/72868
+    #                can be removed if cross-compiling gobject-introspection works.
     "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
   ];
 
