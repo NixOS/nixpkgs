@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "whalebird";
-  version = "4.5.4";
+  version = "4.6.0";
 
   src = fetchurl {
     url = "https://github.com/h3poteto/whalebird-desktop/releases/download/${version}/Whalebird-${version}-linux-x64.deb";
-    sha256 = "048c2hpnlzjli8r1lcm7hd32qfsq4p9vkimrgc049yw9f15ndjpr";
+    sha256 = "d8042eb21e4320771782a1835a591252894ad657eec46248c807d5a772e1938e";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     # Necessary steps to find the tray icon
     asar extract opt/Whalebird/resources/app.asar "$TMP/work"
     substituteInPlace $TMP/work/dist/electron/main.js \
-      --replace "jo,\"tray_icon.png\"" "\"$out/opt/Whalebird/resources/build/icons/tray_icon.png\""
+      --replace "Do,\"tray_icon.png\"" "\"$out/opt/Whalebird/resources/build/icons/tray_icon.png\""
     asar pack --unpack='{*.node,*.ftz,rect-overlay}' "$TMP/work" opt/Whalebird/resources/app.asar
 
     runHook postBuild
