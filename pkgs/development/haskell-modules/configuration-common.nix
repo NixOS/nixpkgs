@@ -99,7 +99,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "sha256-NYe34bsq2v0rlmcSMgYvU9ec94meXFFJoWo0sIjX/bY=";
+      sha256 = "0a0jnahljd46vzjgcwlzjhrrjgn40s0zfjklh63aa9w9x0zkvbin";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -515,28 +515,8 @@ self: super: {
   #    else dontCheck super.doctest-discover);
   doctest-discover = dontCheck super.doctest-discover;
 
-  # Depends on itself for testing
   tasty-discover = overrideCabal (drv: {
-    # Compatibility with tasty-hspec >= 1.1.7 requires a patch and a dependency on hspec
-    patches = drv.patches or [] ++ [
-      # Intermediate patch so fix applies
-      (fetchpatch {
-        url = "https://github.com/haskell-works/tasty-discover/commit/67b022f5945abdfb71ca31fca7910abc7effe043.patch";
-        sha256 = "1x539qa2871fiahw9zjxyyqz86v4ib7k7fv9hdvvxcrrfw3zwl66";
-      })
-      # Actual fix
-      (fetchpatch {
-        name = "tasty-hspec-1.1.7-compat.patch";
-        url = "https://github.com/haskell-works/tasty-discover/commit/98d3c464f33129e38fa9c0fcdfb1847dfb0490b9.patch";
-        sha256 = "01a8ni3lyh1wql7aghl41nd2c9m6gcn1i77bh3pygh6r403x771p";
-      })
-    ];
-    testHaskellDepends = drv.testHaskellDepends or [] ++ [
-      self.hspec
-    ];
-    # https://github.com/haskell-works/tasty-discover/issues/17
-    jailbreak = true; # allow tasty-hspec >= 1.2
-
+    # Depends on itself for testing
     preBuild = ''
       export PATH="$PWD/dist/build/tasty-discover:$PATH"
     '' + (drv.preBuild or "");
@@ -785,11 +765,6 @@ self: super: {
   # https://github.com/diagrams/diagrams-braille/issues/1
   diagrams-braille = doJailbreak super.diagrams-braille;
 
-  # https://github.com/timbod7/haskell-chart/pull/231#issuecomment-953745932
-  Chart-diagrams = doJailbreak (super.Chart-diagrams.override {
-    SVGFonts = super.SVGFonts_1_7_0_1;
-  });
-
   # https://github.com/xu-hao/namespace/issues/1
   namespace = doJailbreak super.namespace;
 
@@ -845,13 +820,12 @@ self: super: {
   sensei = overrideCabal (drv: {
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_9_3 ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
-  }) (super.sensei.overrideScope (self: super: {
-    hspec-meta = self.hspec-meta_2_9_3;
+  }) (super.sensei.override {
     hspec = self.hspec_2_10_0;
-    hspec-core = dontCheck self.hspec-core_2_10_0;
-    hspec-discover = self.hspec-discover_2_10_0;
-    shelly = dontCheck super.shelly; # disable checks, because the newer hspec in this overrideScope doesn‘t work with newest hspec-contrib
-  }));
+    hspec-wai = super.hspec-wai.override {
+      hspec = self.hspec_2_10_0;
+    };
+  });
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
@@ -1093,51 +1067,6 @@ self: super: {
 
   # https://github.com/haskell/hoopl/issues/50
   hoopl = dontCheck super.hoopl;
-
-  # The most recent version of purescript-cst (0.4.0.0) has version
-  # bounds for LTS-17, so we need to jailbreak it for LTS-18.
-  # doJailbreak can likely be removed when the next version of
-  # purescript-cst is released, since the version bounds have
-  # been updated for LTS-18.
-  purescript-cst = doJailbreak super.purescript-cst;
-
-  purescript =
-    lib.pipe
-      (super.purescript.override {
-        # The latest version of language-javascript is 0.7.1.0,
-        # but it seems to have a bug with async support:
-        # https://github.com/erikd/language-javascript/issues/131
-        language-javascript = self.language-javascript_0_7_0_0;
-      })
-      [ # This PR upgrades purescript from building with LTS-17 to building
-        # with LTS-18.  Aside from bumping dependency bounds, there is one
-        # minor change that needs to be made in app/Main.hs.
-        #
-        # This patch can likely be removed when purescript-0.14.6 is released.
-        (appendPatch
-          (fetchpatch {
-            url = "https://patch-diff.githubusercontent.com/raw/purescript/purescript/pull/4199.patch";
-            sha256 = "sha256-OeG30EfCHs7gttLME909WfKxkEZr7Ch3leYiw4lElGg=";
-            includes = [
-              "app/Main.hs"
-            ];
-          })
-        )
-        # PureScript uses nodejs to run tests, so the tests have been disabled
-        # for now.  If someone is interested in figuring out how to get this
-        # working, it seems like it might be possible.
-        dontCheck
-        # The current version of purescript (0.14.5) has version bounds for LTS-17,
-        # but it compiles cleanly using deps in LTS-18 as well.  This jailbreak can
-        # likely be removed when purescript-0.14.6 is released.
-        doJailbreak
-        # Generate shell completions
-        (generateOptparseApplicativeCompletion "purs")
-      ];
-
-  # purenix-1.0 has a strict version bound requiring purescript-0.14.4, but it
-  # works with later versions of purescript as well.
-  purenix = doJailbreak super.purenix;
 
   # Generate shell completion for spago
   spago = generateOptparseApplicativeCompletion "spago" super.spago;
@@ -1585,8 +1514,9 @@ self: super: {
   liquidhaskell = super.liquidhaskell.override { Diff = self.Diff_0_3_4; };
   Diff_0_3_4 = dontCheck super.Diff_0_3_4;
 
-  # jailbreaking pandoc-citeproc because it has not bumped upper bound on pandoc
-  pandoc-citeproc = doJailbreak super.pandoc-citeproc;
+  # jailbreaking pandoc-crossref because it has not bumped its upper bound on pandoc
+  # https://github.com/lierdakil/pandoc-crossref/issues/350
+  pandoc-crossref = doJailbreak super.pandoc-crossref;
 
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
@@ -1705,10 +1635,19 @@ self: super: {
   reflex-dom-pandoc = super.reflex-dom-pandoc.override { clay = dontCheck self.clay_0_13_3; };
 
   # 2022-03-16: Pull request for ghc 9 compat: https://github.com/reflex-frp/reflex/pull/467
-  reflex = appendPatch (fetchpatch {
-    url = "https://github.com/reflex-frp/reflex/compare/823afd9424234cbe0134051f09a6710e54509cec...469b4ab4a755cad76b8d4d6c9ad482d02686b4ae.patch";
-    sha256 = "sha256-EwW7QBXHGlcJkKiLDmsXCZPwQz24+mg2Vuiu0Vb/T6w=";
-  }) (dontCheck super.reflex);
+  reflex = overrideCabal (drv: {
+    patches = drv.patches or [] ++ [
+      (fetchpatch {
+        url = "https://github.com/reflex-frp/reflex/compare/469b4ab4a755cad76b8d4d6c9ad482d02686b4ae.patch";
+        sha256 = "04sxzxpx7xhr6p4n76rg1ci8zjfzs19lr21ziwsfig8zmdg22i7q";
+      })
+    ];
+    doCheck = false;
+    # hackage revision seems to have DOS newlines
+    prePatch = drv.prePatch or "" + ''
+      ${pkgs.buildPackages.dos2unix}/bin/dos2unix reflex.cabal
+    '';
+  }) super.reflex;
 
   # 2020-11-19: jailbreaking because of pretty-simple bound out of date
   # https://github.com/kowainik/stan/issues/408
@@ -1736,6 +1675,22 @@ self: super: {
   # 2020-11-27: Tests broken
   # Upstream issue: https://github.com/haskell-servant/servant-swagger/issues/129
   servant-swagger = dontCheck super.servant-swagger;
+
+  # Strange doctest problems
+  # https://github.com/biocad/servant-openapi3/issues/30
+  servant-openapi3 = dontCheck super.servant-openapi3;
+
+  # Give hspec 2.10.* correct dependency versions without overrideScope
+  hspec_2_10_0 = doDistribute (super.hspec_2_10_0.override {
+    hspec-discover = self.hspec-discover_2_10_0;
+    hspec-core = self.hspec-core_2_10_0;
+  });
+  hspec-discover_2_10_0 = super.hspec-discover_2_10_0.override {
+    hspec-meta = self.hspec-meta_2_9_3;
+  };
+  hspec-core_2_10_0 = super.hspec-core_2_10_0.override {
+    hspec-meta = self.hspec-meta_2_9_3;
+  };
 
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
@@ -2209,24 +2164,6 @@ self: super: {
   # https://github.com/muesli4/table-layout/issues/16
   table-layout = doJailbreak super.table-layout;
 
-  # Bounds on profunctors are too strict
-  # https://github.com/ConferOpenSource/composite/issues/50
-  # Remove overrides when assert fails.
-  composite-base = assert super.composite-base.version == "0.7.5.0";
-    overrideCabal (drv: {
-      patches = drv.patches or [] ++ [
-        (fetchpatch {
-          name = "composite-base-template-haskell-2.17.patch";
-          url = "https://github.com/ConferOpenSource/composite/commit/4ca7562d46a0cdfae3afacf194134db768450a02.patch";
-          sha256 = "sha256-FG2t1BYfV09VENJDlh1PD88sXAGqaujhpss5DWFcbeE=";
-          relative = "composite-base";
-        })
-      ];
-      jailbreak = true;
-    }) super.composite-base;
-  composite-aeson = assert super.composite-aeson.version == "0.7.5.0";
-    doJailbreak super.composite-aeson;
-
   # 2021-06-20: Outdated upper bounds
   # https://github.com/Porges/email-validate-hs/issues/58
   email-validate = doJailbreak super.email-validate;
@@ -2241,12 +2178,12 @@ self: super: {
 
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_2_20220307;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_3;
+    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
   });
 
-  ghc-lib-parser-ex_9_2_0_3 = super.ghc-lib-parser-ex_9_2_0_3.override {
-    ghc-lib-parser = super.ghc-lib-parser_9_2_2_20220307;
+  ghc-lib-parser-ex_9_2_0_4 = super.ghc-lib-parser-ex_9_2_0_4.override {
+    ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
   };
 
   # To strict bound on hspec
@@ -2551,7 +2488,6 @@ self: super: {
   # attoparsec bump is on v2 branch, but not released yet
   irc-core = assert super.irc-core.version == "2.10"; doJailbreak super.irc-core;
   glirc = assert super.irc-core.version == "2.10"; doJailbreak super.glirc;
-  hookup = assert super.irc-core.version == "2.10"; doJailbreak super.hookup;
 
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
@@ -2660,4 +2596,60 @@ self: super: {
     })
   ] super.fast-tags;
 
-} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
+  # lucid-htmx has restrictive upper bounds on lucid and servant:
+  #
+  #   Setup: Encountered missing or private dependencies:
+  #   lucid >=2.9.12.1 && <=2.11, servant >=0.18.3 && <0.19
+  #
+  # Can be removed once
+  #
+  # > https://github.com/MonadicSystems/lucid-htmx/issues/6
+  #
+  # has been resolved.
+  lucid-htmx = doJailbreak super.lucid-htmx;
+
+} // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
+  # We need to build purescript with these dependencies and thus also its reverse
+  # dependencies to avoid version mismatches in their dependency closure.
+  # TODO(@cdepillabout): maybe unify with the spago overlay in configuration-nix.nix?
+  purescriptOverlay = self: super: {
+    # Purescript targets Stackage LTS 18, so we need to downgrade a few things
+    aeson = self.aeson_1_5_6_0;
+    bower-json = self.bower-json_1_0_0_1;
+    # As of 2021-11-08, the latest release of `language-javascript` is 0.7.1.0,
+    # but it has a problem with parsing the `async` keyword.  It doesn't allow
+    # `async` to be used as an object key:
+    # https://github.com/erikd/language-javascript/issues/131
+    language-javascript = self.language-javascript_0_7_0_0;
+  };
+
+  # Doesn't support GHC >= 9.0 (something related to instance resolution and TH)
+  purescriptBrokenFlag = drv:
+    if lib.versionAtLeast self.ghc.version "9.0"
+    then dontDistribute (markBroken drv)
+    else drv;
+in {
+  purescript =
+    lib.pipe
+      (super.purescript.overrideScope purescriptOverlay)
+      [
+        # PureScript uses nodejs to run tests, so the tests have been disabled
+        # for now.  If someone is interested in figuring out how to get this
+        # working, it seems like it might be possible.
+        dontCheck
+        # The current version of purescript (0.14.5) has version bounds for LTS-17,
+        # but it compiles cleanly using deps in LTS-18 as well.  This jailbreak can
+        # likely be removed when purescript-0.14.6 is released.
+        doJailbreak
+        # Generate shell completions
+        (generateOptparseApplicativeCompletion "purs")
+
+        purescriptBrokenFlag
+      ];
+
+  purescript-cst = purescriptBrokenFlag (super.purescript-cst.overrideScope purescriptOverlay);
+
+  purescript-ast = purescriptBrokenFlag (super.purescript-ast.overrideScope purescriptOverlay);
+
+  purenix = super.purenix.overrideScope purescriptOverlay;
+})
