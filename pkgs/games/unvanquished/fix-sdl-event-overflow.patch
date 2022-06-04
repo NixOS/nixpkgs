@@ -1,0 +1,27 @@
+From 3a978c485f2a7e02c0bc5aeed2c7c4378026cb33 Mon Sep 17 00:00:00 2001
+From: Sam Lantinga <slouken@libsdl.org>
+Date: Fri, 22 Apr 2022 23:34:10 -0700
+Subject: [PATCH] Only center the mouse if we get a mouse event with relative
+ motion
+
+For more information, see the discussion in https://github.com/libsdl-org/SDL/issues/5569
+
+Fixes https://github.com/DaemonEngine/Daemon/issues/600
+---
+ src/engine/sys/sdl_input.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/engine/sys/sdl_input.cpp b/src/engine/sys/sdl_input.cpp
+index 3da0fd3c8..5361cb550 100644
+--- a/daemon/src/engine/sys/sdl_input.cpp
++++ b/daemon/src/engine/sys/sdl_input.cpp
+@@ -1083,7 +1083,7 @@ static void IN_ProcessEvents( bool dropInput )
+ 					{
+ 						Com_QueueEvent( Util::make_unique<Sys::MouseEvent>(e.motion.xrel, e.motion.yrel) );
+ #if defined( __linux__ ) || defined( __BSD__ )
+-						if ( !in_nograb->integer )
++						if ( !in_nograb->integer && ( e.motion.xrel || e.motion.yrel ) )
+ 						{
+ 							// work around X window managers and edge-based workspace flipping
+ 							// - without this, we get LeaveNotify, no mouse button events, EnterNotify;
+
