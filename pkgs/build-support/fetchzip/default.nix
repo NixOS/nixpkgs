@@ -5,7 +5,7 @@
 # (e.g. due to minor changes in the compression algorithm, or changes
 # in timestamps).
 
-{ lib, fetchurl, unzip }:
+{ lib, fetchurl, unzip, glibcLocalesUtf8 }:
 
 { # Optionally move the contents of the unpacked tree up one level.
   stripRoot ? true
@@ -35,7 +35,10 @@ in {
 
   downloadToTemp = true;
 
-  nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
+  # Have to pull in glibcLocalesUtf8 for unzip in setup-hook.sh to handle
+  # UTF-8 aware locale:
+  #   https://github.com/NixOS/nixpkgs/issues/176225#issuecomment-1146617263
+  nativeBuildInputs = [ unzip glibcLocalesUtf8 ] ++ nativeBuildInputs;
 
   postFetch =
     ''
