@@ -29,6 +29,7 @@ in {
       environment.etc."openldap/root_password".text = "notapassword";
       services.openldap = {
         enable = true;
+        urlList = [ "ldapi:///" "ldap://" ];
         settings = {
           children = {
             "cn=schema".includes = [
