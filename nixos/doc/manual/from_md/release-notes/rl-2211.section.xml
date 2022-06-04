@@ -89,7 +89,7 @@
   </section>
   <section xml:id="sec-release-22.11-notable-changes">
     <title>Other Notable Changes</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           A new module was added for the Saleae Logic device family,
