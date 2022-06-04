@@ -3925,6 +3925,8 @@ in {
 
   heudiconv = callPackage ../development/python-modules/heudiconv { };
 
+  hexbytes = callPackage ../development/python-modules/hexbytes { };
+
   hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
 
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
