@@ -7,15 +7,20 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "lexicon";
-  version = "3.9.4";
+  version = "3.11.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "AnalogJ";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-TySgIxBEl2RolndAkEN4vCIDKaI48vrh2ocd+CTn7Ow=";
+    hash = "sha256-z0GaA1O0ctP280QvhdzW7Cxonidz9dOnP6N4RJ+tqfw=";
   };
+
+  postPatch = ''
+    substituteInPlace lexicon/tests/providers/test_oci.py \
+      --replace "os.remove(KEY_FILE)" 'os.system(f"rm -f {KEY_FILE}")'
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -26,16 +31,13 @@ buildPythonApplication rec {
     boto3
     cryptography
     dnspython
-    future
+    importlib-metadata
     localzone
     oci
-    pynamecheap
     pyyaml
     requests
     softlayer
     tldextract
-    transip
-    xmltodict
     zeep
   ];
 
@@ -46,9 +48,15 @@ buildPythonApplication rec {
     vcrpy
   ];
 
+  preCheck = ''
+    export HOME=$TEMP
+  '';
+
   disabledTestPaths = [
     # Tests require network access
     "lexicon/tests/providers/test_auto.py"
+    # some problem with VCR.py
+    "lexicon/tests/providers/test_namecheap.py"
   ];
 
   pythonImportsCheck = [
