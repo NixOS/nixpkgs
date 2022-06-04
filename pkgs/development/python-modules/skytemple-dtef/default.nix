@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "skytemple-dtef";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "0l2b66z5ngyas3ijbzwz2wizw46kz47f8jr729pzbg4wbqbqjihr";
+    sha256 = "QL+nLmjz0wCED2RjidIDK0tB6mAPnoaSJWpyLFu0pP4=";
   };
 
   propagatedBuildInputs = [ skytemple-files ];
@@ -20,6 +20,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/SkyTemple/skytemple-dtef";
     description = "A format for standardized rule-based tilesets with 256 adjacency combinations";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ xfix ];
+    maintainers = with maintainers; [ xfix marius851000 ];
   };
 }
