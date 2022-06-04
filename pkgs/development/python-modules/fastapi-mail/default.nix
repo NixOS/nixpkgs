@@ -31,6 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-PkA7qkdDUd7mrtvb6IbCzFRq6X0M3iKY+FKuNConJ5A=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'httpx = "^0.22.0"' 'httpx = "*"'
+  '';
+
   nativeBuildInputs = [
     poetry-core
   ];
