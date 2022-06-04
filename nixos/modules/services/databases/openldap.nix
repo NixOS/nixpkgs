@@ -269,6 +269,9 @@ in {
           "-h" (lib.concatStringsSep " " cfg.urlList)
         ]);
         Type = "notify";
+        # Fixes an error where openldap attempts to notify from a thread
+        # outside the main process:
+        #   Got notification message from PID 6378, but reception only permitted for main PID 6377
         NotifyAccess = "all";
         PIDFile = cfg.settings.attrs.olcPidFile;
       };
