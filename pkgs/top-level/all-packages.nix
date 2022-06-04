@@ -25498,8 +25498,6 @@ with pkgs;
 
   bspwm = callPackage ../applications/window-managers/bspwm { };
 
-  btops = callPackage ../applications/window-managers/btops { };
-
   bvi = callPackage ../applications/editors/bvi { };
 
   bviplus = callPackage ../applications/editors/bviplus { };
@@ -28014,8 +28012,6 @@ with pkgs;
   markmind = callPackage ../applications/misc/markmind {
     electron = electron_9;
   };
-
-  marp = callPackage ../applications/office/marp { };
 
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
 
