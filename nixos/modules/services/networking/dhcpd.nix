@@ -49,7 +49,8 @@ let
         "dhcpd${postfix}" = {
           description = "DHCPv${postfix} server";
           wantedBy = [ "multi-user.target" ];
-          after = [ "network.target" ];
+          after = [ "network.target" (mkIf config.services.bind.enable "bind.service") ];
+
 
           preStart = "touch ${leaseFile}";
           serviceConfig = {
@@ -63,6 +64,10 @@ let
               "CAP_NET_RAW"          # to send ICMP messages
               "CAP_NET_BIND_SERVICE" # to bind on DHCP port (67)
             ];
+
+            # allow dhcpd to update records on bind
+            BindReadOnlyPaths = mkIf config.services.bind.enable [ "/etc/bind/rndc.key" ];
+
             StateDirectory   = "dhcpd${postfix}";
             RuntimeDirectory = "dhcpd${postfix}";
             PIDFile = "/run/dhcpd${postfix}/dhcpd.pid";
