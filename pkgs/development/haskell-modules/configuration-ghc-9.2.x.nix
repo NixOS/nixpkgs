@@ -206,7 +206,7 @@ self: super: {
   regex-rure = doDistribute (markUnbroken super.regex-rure);
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
-  fourmolu = super.fourmolu_0_6_0_0;
+  fourmolu = super.fourmolu_0_7_0_1;
   # hls-fourmolu-plugin in this version has a to strict upper bound of fourmolu <= 0.5.0.0
   hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.3.0"; doJailbreak super.hls-fourmolu-plugin;
   hls-ormolu-plugin = assert super.hls-ormolu-plugin.version == "1.0.2.1"; doJailbreak super.hls-ormolu-plugin;
