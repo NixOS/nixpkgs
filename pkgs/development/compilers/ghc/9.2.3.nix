@@ -6,6 +6,8 @@
 , xattr, autoSignDarwinBinariesHook
 , bash
 
+, autoreconfHook # GHC 9.2.3 tarballs don't have autoconf run on them
+
 , libiconv ? null, ncurses
 , glibcLocales ? null
 
@@ -171,12 +173,12 @@ assert buildTargetLlvmPackages.llvm == llvmPackages.llvm;
 assert stdenv.targetPlatform.isDarwin -> buildTargetLlvmPackages.clang == llvmPackages.clang;
 
 stdenv.mkDerivation (rec {
-  version = "9.2.2";
+  version = "9.2.3";
   pname = "${targetPrefix}ghc${variantSuffix}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "902463a4cc6ee479af9358b9f8b2ee3237b03e934a1ea65b6d1fcf3e0d749ea6";
+    sha256 = "50ecdc2bef013e518f9a62a15245d7db0e4409d737c43b1cea7306fd82e1669e";
   };
 
   enableParallelBuilding = true;
@@ -197,7 +199,7 @@ stdenv.mkDerivation (rec {
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
+    export CXX="${targetCC}/bin/${targetCC.targetPrefix}c++"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
     export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
@@ -218,6 +220,9 @@ stdenv.mkDerivation (rec {
   '' + ''
 
     echo -n "${buildMK}" > mk/build.mk
+    # GHC 9.2.3 tarball is not properly prepared
+    ./boot
+
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
@@ -283,6 +288,7 @@ stdenv.mkDerivation (rec {
   dontAddExtraLibs = true;
 
   nativeBuildInputs = [
+    autoreconfHook # GHC 9.2.3 tarball hasn't autoconf run on it
     perl autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
