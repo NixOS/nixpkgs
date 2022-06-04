@@ -34461,6 +34461,8 @@ with pkgs;
 
   pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
 
+  photoprism = callPackage ../servers/photoprism { };
+
   physlock = callPackage ../misc/screensavers/physlock { };
 
   pjsip = callPackage ../applications/networking/pjsip {
