@@ -21,7 +21,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Simple command line Bluetooth LE scanner";
     homepage = "https://gitlab.com/jtaimisto/bluewalker";
-    changelog = "https://gitlab.com/jtaimisto/${pname}/-/raw/master/CHANGELOG";
+    changelog = "https://gitlab.com/jtaimisto/bluewalker/-/tags/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ cimm ];
     platforms = platforms.linux;
