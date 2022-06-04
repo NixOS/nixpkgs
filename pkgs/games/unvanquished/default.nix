@@ -98,6 +98,8 @@ in stdenv.mkDerivation rec {
     chmod +w -R daemon/external_deps/linux64-${binary-deps-version}/
   '';
 
+  patches = [ ./fix-sdl-event-overflow.patch ];
+
   nativeBuildInputs = [ cmake unvanquished-binary-deps copyDesktopItems ];
   buildInputs = [
     gmp
