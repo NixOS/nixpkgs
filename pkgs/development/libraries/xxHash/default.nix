@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, fetchurl
+}:
 
 stdenv.mkDerivation rec {
   pname = "xxHash";
@@ -11,21 +16,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2WoYCO6QRHWrbGP2mK04/sLNTyQLOuL3urVktilAwMA=";
   };
 
-  # Upstream Makefile does not anticipate that user may not want to
-  # build .so library.
-  postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
-    sed -i 's/lib: libxxhash.a libxxhash/lib: libxxhash.a/' Makefile
-    sed -i '/LIBXXH) $(DESTDIR/ d' Makefile
-  '';
+  patches = [
+    # Merged in https://github.com/Cyan4973/xxHash/pull/649
+    # Should be present in next release
+    (fetchurl {
+      name = "cmakeinstallfix.patch";
+      url = "https://github.com/Cyan4973/xxHash/commit/636f966ecc713c84ddd3b7ccfde2bfb2cc7492a0.patch";
+      hash = "sha256-fj+5V5mDhFgWGvrG1E4fEekL4eh7as0ouVvY4wnIHjs=";
+    })
+  ];
 
-  outputs = [ "out" "dev" ];
 
-  makeFlags = [ "PREFIX=$(dev)" "EXEC_PREFIX=$(out)" ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  # pkgs/build-support/setup-hooks/compress-man-pages.sh hook fails
-  # to compress symlinked manpages. Avoid compressing manpages until
-  # it's fixed.
-  dontGzipMan = true;
+  # Using unofficial CMake build script to install CMake module files.
+  cmakeDir = "../cmake_unofficial";
+
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if stdenv.hostPlatform.isStatic then "OFF" else "ON"}"
+  ];
 
   meta = with lib; {
     description = "Extremely fast hash algorithm";
@@ -39,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Cyan4973/xxHash";
     license = with licenses; [ bsd2 gpl2 ];
     maintainers = with maintainers; [ orivej ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
   };
 }
