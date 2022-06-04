@@ -149,6 +149,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ i077 ];

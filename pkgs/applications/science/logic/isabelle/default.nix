@@ -178,6 +178,10 @@ in stdenv.mkDerivation rec {
       formulas in a logical calculus.
     '';
     homepage = "https://isabelle.in.tum.de/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode  # source bundles binary dependencies
+    ];
     license = licenses.bsd3;
     maintainers = [ maintainers.jwiegley maintainers.jvanbruegge ];
     platforms = platforms.linux;

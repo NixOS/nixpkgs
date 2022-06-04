@@ -55,6 +55,7 @@ let
     description = "All-in-one cross-platform voice and text chat for gamers";
     homepage = "https://discordapp.com/";
     downloadPage = "https://discordapp.com/download";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ ldesgoui MP2E devins2518 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ]
