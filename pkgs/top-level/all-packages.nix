@@ -496,8 +496,6 @@ with pkgs;
 
   nix-prefetch-docker = callPackage ../build-support/docker/nix-prefetch-docker.nix { };
 
-  docker-compose = python3Packages.callPackage ../applications/virtualization/docker-compose {};
-
   docker-ls = callPackage ../tools/misc/docker-ls { };
 
   docker-slim = callPackage ../applications/virtualization/docker-slim { };
@@ -25870,7 +25868,8 @@ with pkgs;
   afterburn = callPackage ../tools/admin/afterburn {};
 
   docker-buildx = callPackage ../applications/virtualization/docker/buildx.nix { };
-  docker-compose_2 = callPackage ../applications/virtualization/docker/compose.nix { };
+  docker-compose = callPackage ../applications/virtualization/docker/compose.nix { };
+  docker-compose_1 = python3Packages.callPackage ../applications/virtualization/docker/compose_1.nix {};
 
   amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
 
