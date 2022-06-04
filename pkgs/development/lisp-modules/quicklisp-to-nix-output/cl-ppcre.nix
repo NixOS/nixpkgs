@@ -2,17 +2,17 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "cl-ppcre";
-  version = "20190521-git";
+  version = "20220220-git";
 
-  parasites = [ "cl-ppcre-test" ];
+  parasites = [ "cl-ppcre/test" ];
 
   description = "Perl-compatible regular expression library";
 
   deps = [ args."flexi-streams" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/cl-ppcre/2019-05-21/cl-ppcre-20190521-git.tgz";
-    sha256 = "0p6jcvf9afnsg80a1zqsp7fyz0lf1fxzbin7rs9bl4i6jvm0hjqx";
+    url = "http://beta.quicklisp.org/archive/cl-ppcre/2022-02-20/cl-ppcre-20220220-git.tgz";
+    sha256 = "14s56h7l0w1r65qsh060kijqg6hzkpfma9qxd6h6l6qq0db69vxv";
   };
 
   packageName = "cl-ppcre";
@@ -21,8 +21,8 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-ppcre DESCRIPTION Perl-compatible regular expression library
-    SHA256 0p6jcvf9afnsg80a1zqsp7fyz0lf1fxzbin7rs9bl4i6jvm0hjqx URL
-    http://beta.quicklisp.org/archive/cl-ppcre/2019-05-21/cl-ppcre-20190521-git.tgz
-    MD5 a980b75c1b386b49bcb28107991eb4ec NAME cl-ppcre FILENAME cl-ppcre DEPS
+    SHA256 14s56h7l0w1r65qsh060kijqg6hzkpfma9qxd6h6l6qq0db69vxv URL
+    http://beta.quicklisp.org/archive/cl-ppcre/2022-02-20/cl-ppcre-20220220-git.tgz
+    MD5 dfc08fa8887d446fb0d7f243c1b4e757 NAME cl-ppcre FILENAME cl-ppcre DEPS
     ((NAME flexi-streams FILENAME flexi-streams)) DEPENDENCIES (flexi-streams)
-    VERSION 20190521-git SIBLINGS (cl-ppcre-unicode) PARASITES (cl-ppcre-test)) */
+    VERSION 20220220-git SIBLINGS (cl-ppcre-unicode) PARASITES (cl-ppcre/test)) */

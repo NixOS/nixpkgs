@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "trivial-package-local-nicknames";
-  version = "20200610-git";
+  version = "20220220-git";
 
   description = "Portability library for package-local nicknames";
 
   deps = [ ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/trivial-package-local-nicknames/2020-06-10/trivial-package-local-nicknames-20200610-git.tgz";
-    sha256 = "1wabkcwz0v144rb2w3rvxlcj264indfnvlyigk1wds7nq0c8lwk5";
+    url = "http://beta.quicklisp.org/archive/trivial-package-local-nicknames/2022-02-20/trivial-package-local-nicknames-20220220-git.tgz";
+    sha256 = "1is3yj7jas4blr3a92dh18yn59ay5jsl715cwy435y61cqm0c756";
   };
 
   packageName = "trivial-package-local-nicknames";
@@ -20,8 +20,8 @@ rec {
 }
 /* (SYSTEM trivial-package-local-nicknames DESCRIPTION
     Portability library for package-local nicknames SHA256
-    1wabkcwz0v144rb2w3rvxlcj264indfnvlyigk1wds7nq0c8lwk5 URL
-    http://beta.quicklisp.org/archive/trivial-package-local-nicknames/2020-06-10/trivial-package-local-nicknames-20200610-git.tgz
-    MD5 b3620521d3400ad5910878139bc86fcc NAME trivial-package-local-nicknames
+    1is3yj7jas4blr3a92dh18yn59ay5jsl715cwy435y61cqm0c756 URL
+    http://beta.quicklisp.org/archive/trivial-package-local-nicknames/2022-02-20/trivial-package-local-nicknames-20220220-git.tgz
+    MD5 d6959b6dd52f354bafa5fa6bcb7b42a1 NAME trivial-package-local-nicknames
     FILENAME trivial-package-local-nicknames DEPS NIL DEPENDENCIES NIL VERSION
-    20200610-git SIBLINGS NIL PARASITES NIL) */
+    20220220-git SIBLINGS NIL PARASITES NIL) */

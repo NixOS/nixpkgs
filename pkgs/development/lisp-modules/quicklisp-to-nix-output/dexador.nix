@@ -2,15 +2,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = "dexador";
-  version = "20211209-git";
+  version = "20220220-git";
 
   description = "Yet another HTTP client for Common Lisp";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."chipz" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-cookie" args."cl-ppcre" args."cl-utilities" args."fast-http" args."fast-io" args."flexi-streams" args."local-time" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."trivial-mimes" args."uiop" args."usocket" args."xsubseq" ];
 
   src = fetchurl {
-    url = "http://beta.quicklisp.org/archive/dexador/2021-12-09/dexador-20211209-git.tgz";
-    sha256 = "0cknpgz9cbqnaa0wafs7nfqlis8cikfxi11gd5r9md8zm0iw3gi7";
+    url = "http://beta.quicklisp.org/archive/dexador/2022-02-20/dexador-20220220-git.tgz";
+    sha256 = "10zpg5s36kc7n93h5409fqz2n6w75flhrd35n2yw8g8p6baxwvmm";
   };
 
   packageName = "dexador";
@@ -19,9 +19,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM dexador DESCRIPTION Yet another HTTP client for Common Lisp SHA256
-    0cknpgz9cbqnaa0wafs7nfqlis8cikfxi11gd5r9md8zm0iw3gi7 URL
-    http://beta.quicklisp.org/archive/dexador/2021-12-09/dexador-20211209-git.tgz
-    MD5 211593b3d20b0be78f8c525a9a1f5cfb NAME dexador FILENAME dexador DEPS
+    10zpg5s36kc7n93h5409fqz2n6w75flhrd35n2yw8g8p6baxwvmm URL
+    http://beta.quicklisp.org/archive/dexador/2022-02-20/dexador-20220220-git.tgz
+    MD5 a8eb6c4ada563f23ce889259ebd005cf NAME dexador FILENAME dexador DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
@@ -48,4 +48,4 @@ rec {
      flexi-streams local-time proc-parse quri smart-buffer split-sequence
      static-vectors trivial-features trivial-garbage trivial-gray-streams
      trivial-mimes uiop usocket xsubseq)
-    VERSION 20211209-git SIBLINGS (dexador-test) PARASITES NIL) */
+    VERSION 20220220-git SIBLINGS (dexador-test) PARASITES NIL) */

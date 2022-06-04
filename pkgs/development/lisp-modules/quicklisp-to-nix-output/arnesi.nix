@@ -4,11 +4,11 @@ rec {
   baseName = "arnesi";
   version = "20170403-git";
 
-  parasites = [ "arnesi/cl-ppcre-extras" "arnesi/slime-extras" ];
+  parasites = [ "arnesi/cl-ppcre-extras" ];
 
   description = "A bag-of-tools utilities library used to aid in implementing the bese.it toolkit";
 
-  deps = [ args."alexandria" args."cl-ppcre" args."closer-mop" args."collectors" args."iterate" args."swank" args."symbol-munger" ];
+  deps = [ args."alexandria" args."cl-ppcre" args."closer-mop" args."collectors" args."iterate" args."symbol-munger" ];
 
   src = fetchurl {
     url = "http://beta.quicklisp.org/archive/arnesi/2017-04-03/arnesi-20170403-git.tgz";
@@ -28,8 +28,7 @@ rec {
     ((NAME alexandria FILENAME alexandria) (NAME cl-ppcre FILENAME cl-ppcre)
      (NAME closer-mop FILENAME closer-mop)
      (NAME collectors FILENAME collectors) (NAME iterate FILENAME iterate)
-     (NAME swank FILENAME swank) (NAME symbol-munger FILENAME symbol-munger))
+     (NAME symbol-munger FILENAME symbol-munger))
     DEPENDENCIES
-    (alexandria cl-ppcre closer-mop collectors iterate swank symbol-munger)
-    VERSION 20170403-git SIBLINGS NIL PARASITES
-    (arnesi/cl-ppcre-extras arnesi/slime-extras)) */
+    (alexandria cl-ppcre closer-mop collectors iterate symbol-munger) VERSION
+    20170403-git SIBLINGS NIL PARASITES (arnesi/cl-ppcre-extras)) */

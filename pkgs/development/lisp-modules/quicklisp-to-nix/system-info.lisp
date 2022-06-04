@@ -490,4 +490,5 @@ Run with --debug and/or --verbose for more info.
   "Make an executable"
   (setf uiop:*image-entry-point* #'main)
   (setf uiop:*lisp-interaction* nil)
+  (require :sb-sprof) ;; required in image to handle HU.DWIM.ASDF
   (uiop:dump-image "quicklisp-to-nix-system-info" :executable t))

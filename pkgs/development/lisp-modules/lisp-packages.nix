@@ -8,7 +8,7 @@ let lispPackages = rec {
 
   quicklisp = buildLispPackage rec {
     baseName = "quicklisp";
-    version = "2021-02-13";
+    version = "2022-02-20";
 
     buildSystems = [];
 
@@ -25,8 +25,8 @@ let lispPackages = rec {
       quicklispdist = pkgs.fetchurl {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
-        url = "http://beta.quicklisp.org/dist/quicklisp/2021-12-09/distinfo.txt";
-        sha256 = "sha256:0gc4cv73nl7xkfwvmkmfhfx6yqf876nfm2v24v6fky9n24sh4y6w";
+        url = "http://beta.quicklisp.org/dist/quicklisp/2022-02-20/distinfo.txt";
+        sha256 = "sha256:07gq5kgsss2s9wdqn9z4krhs4kaf1gp9xnk4zd8csk5p7zmcd2dd";
       };
       buildPhase = "true; ";
       postInstall = ''
