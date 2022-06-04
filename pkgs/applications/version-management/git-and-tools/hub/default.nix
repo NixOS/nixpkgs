@@ -1,13 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub, git, groff, installShellFiles, unixtools, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, git, groff, installShellFiles, unixtools, nixosTests }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "hub";
   version = "2.14.2";
-
-  goPackagePath = "github.com/github/hub";
-
-  # Only needed to build the man-pages
-  excludedPackages = [ "github.com/github/hub/md2roff-bin" ];
 
   src = fetchFromGitHub {
     owner = "github";
@@ -16,7 +11,7 @@ buildGoPackage rec {
     sha256 = "1qjab3dpia1jdlszz3xxix76lqrm4zbmqzd9ymld7h06awzsg2vh";
   };
 
-  nativeBuildInputs = [ groff installShellFiles unixtools.col ];
+  vendorSha256 = null;
 
   postPatch = ''
     patchShebangs .
@@ -24,8 +19,16 @@ buildGoPackage rec {
     substituteInPlace commands/args.go --replace "Executable:  \"git\"" "Executable:  \"${git}/bin/git\""
   '';
 
+  # Only needed to build the man-pages
+  excludedPackages = [ "md2roff-bin" ];
+
+  nativeBuildInputs = [ groff installShellFiles unixtools.col ];
+
+  ldflags = [ "-s" "-w" ];
+
+  doCheck = false;
+
   postInstall = ''
-    cd go/src/${goPackagePath}
     installShellCompletion --zsh --name _hub etc/hub.zsh_completion
     installShellCompletion --bash --name hub etc/hub.bash_completion.sh
     installShellCompletion --fish --name hub.fish etc/hub.fish_completion
@@ -39,9 +42,8 @@ buildGoPackage rec {
 
   meta = with lib; {
     description = "Command-line wrapper for git that makes you better at GitHub";
-    license = licenses.mit;
     homepage = "https://hub.github.com/";
+    license = licenses.mit;
     maintainers = with maintainers; [ globin ];
-    platforms = with platforms; unix;
   };
 }
