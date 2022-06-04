@@ -225,7 +225,7 @@ in the precedence list had been composed together in that specific order.
 
 ### Advantages of multiple inheritance
 
-Without multiple inheritance, programmers must have manually maintain an
+Without multiple inheritance, programmers must manually maintain an
 implicit or explicit list of prototypes to combine *in the right order*,
 so as to successfully compute their instances as a fixed-point.
 
