@@ -347,9 +347,8 @@ in
         };
     };
 
-    services.redis = lib.mkIf (cfg.redisCreateLocally) {
-      enable = true;
-    };
+    # Use global redis server rather than per-application instance
+    services.redis.servers."".enable = lib.mkIf (cfg.redisCreateLocally) true;
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.server.port ];
