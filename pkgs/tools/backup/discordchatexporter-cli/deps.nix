@@ -1,5 +1,5 @@
 { fetchNuGet }: [
-  (fetchNuGet { pname = "CliFx"; version = "2.2.2"; sha256 = "13g5xlrbyhnbwkyzic5jlhxl0kpvkfrdmb5h2rdf9yp4gp5p9mwg"; })
+  (fetchNuGet { pname = "CliFx"; version = "2.2.5"; sha256 = "1bk716rdswy28h53qy68xywci8k1h2iqdy2iz1yf7v8g0sa2n79p"; })
   (fetchNuGet { pname = "Gress"; version = "2.0.1"; sha256 = "00xhyfkrlc38nbl6aymr7zwxc3kj0rxvx5gwk6fkfrvi1pzgq0wc"; })
   (fetchNuGet { pname = "JsonExtensions"; version = "1.2.0"; sha256 = "0g54hibabbqqfhxjlnxwv1rxagpali5agvnpymp2w3dk8h6q66xy"; })
   (fetchNuGet { pname = "MiniRazor.CodeGen"; version = "2.2.1"; sha256 = "1mrjw3vq59pbiqvayilazjgv6l87j20j8hmhcpbacz9p5bl1hvvr"; })
