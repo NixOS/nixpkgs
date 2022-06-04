@@ -3,7 +3,6 @@
 with lib;
 let
   cfg = config.services.openldap;
-  legacyOptions = [ "rootpwFile" "suffix" "dataDir" "rootdn" "rootpw" ];
   openldap = cfg.package;
   configDir = if cfg.configDir != null then cfg.configDir else "/etc/openldap/slapd.d";
 
@@ -76,44 +75,6 @@ let
     lib.flatten (lib.mapAttrsToList (name: value: attrsToLdif "${name},${dn}" value) children)
   );
 in {
-  imports = let
-    deprecationNote = "This option is removed due to the deprecation of `slapd.conf` upstream. Please migrate to `services.openldap.settings`, see the release notes for advice with this process.";
-    mkDatabaseOption = old: new:
-      lib.mkChangedOptionModule [ "services" "openldap" old ] [ "services" "openldap" "settings" "children" ]
-        (config: let
-          database = lib.getAttrFromPath [ "services" "openldap" "database" ] config;
-          value = lib.getAttrFromPath [ "services" "openldap" old ] config;
-        in lib.setAttrByPath ([ "olcDatabase={1}${database}" "attrs" ] ++ new) value);
-  in [
-    (lib.mkRemovedOptionModule [ "services" "openldap" "extraConfig" ] deprecationNote)
-    (lib.mkRemovedOptionModule [ "services" "openldap" "extraDatabaseConfig" ] deprecationNote)
-
-    (lib.mkChangedOptionModule [ "services" "openldap" "logLevel" ] [ "services" "openldap" "settings" "attrs" "olcLogLevel" ]
-      (config: lib.splitString " " (lib.getAttrFromPath [ "services" "openldap" "logLevel" ] config)))
-    (lib.mkChangedOptionModule [ "services" "openldap" "defaultSchemas" ] [ "services" "openldap" "settings" "children" "cn=schema" "includes"]
-      (config: lib.optionals (lib.getAttrFromPath [ "services" "openldap" "defaultSchemas" ] config) (
-        map (schema: "${openldap}/etc/schema/${schema}.ldif") [ "core" "cosine" "inetorgperson" "nis" ])))
-
-    (lib.mkChangedOptionModule [ "services" "openldap" "database" ] [ "services" "openldap" "settings" "children" ]
-      (config: let
-        database = lib.getAttrFromPath [ "services" "openldap" "database" ] config;
-      in {
-        "olcDatabase={1}${database}".attrs = {
-          # objectClass is case-insensitive, so don't need to capitalize ${database}
-          objectClass = [ "olcdatabaseconfig" "olc${database}config" ];
-          olcDatabase = "{1}${database}";
-          olcDbDirectory = lib.mkDefault "/var/db/openldap";
-        };
-        "cn=schema".includes = lib.mkDefault (
-          map (schema: "${openldap}/etc/schema/${schema}.ldif") [ "core" "cosine" "inetorgperson" "nis" ]
-        );
-      }))
-    (mkDatabaseOption "rootpwFile" [ "olcRootPW" "path" ])
-    (mkDatabaseOption "suffix" [ "olcSuffix" ])
-    (mkDatabaseOption "dataDir" [ "olcDbDirectory" ])
-    (mkDatabaseOption "rootdn" [ "olcRootDN" ])
-    (mkDatabaseOption "rootpw" [ "olcRootPW" ])
-  ];
   options = {
     services.openldap = {
       enable = mkOption {
@@ -248,10 +209,6 @@ in {
   meta.maintainers = with lib.maintainers; [ mic92 kwohlfahrt ];
 
   config = mkIf cfg.enable {
-    assertions = map (opt: {
-      assertion = ((getAttr opt cfg) != "_mkMergedOptionModule") -> (cfg.database != "_mkMergedOptionModule");
-      message = "Legacy OpenLDAP option `services.openldap.${opt}` requires `services.openldap.database` (use value \"mdb\" if unsure)";
-    }) legacyOptions;
     environment.systemPackages = [ openldap ];
 
     # Literal attributes must always be set
