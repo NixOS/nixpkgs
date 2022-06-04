@@ -9789,6 +9789,8 @@ in {
 
   softlayer = callPackage ../development/python-modules/softlayer { };
 
+  softlayer-zeep = callPackage ../development/python-modules/softlayer-zeep { };
+
   solaredge = callPackage ../development/python-modules/solaredge { };
 
   solax = callPackage ../development/python-modules/solax { };
