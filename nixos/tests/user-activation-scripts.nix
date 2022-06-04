@@ -19,9 +19,9 @@ import ./make-test-python.nix ({ lib, ... }: {
 
     machine.wait_for_unit("multi-user.target")
     machine.wait_for_unit("getty@tty1.service")
-    machine.wait_until_tty_matches(1, "login: ")
+    machine.wait_until_tty_matches("1", "login: ")
     machine.send_chars("alice\n")
-    machine.wait_until_tty_matches(1, "Password: ")
+    machine.wait_until_tty_matches("1", "Password: ")
     machine.send_chars("pass1\n")
     machine.send_chars("touch login-ok\n")
     machine.wait_for_file("/home/alice/login-ok")

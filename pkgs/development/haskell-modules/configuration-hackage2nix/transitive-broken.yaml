@@ -142,6 +142,7 @@ dont-distribute-packages:
  - GrowlNotify
  - Gtk2hsGenerics
  - GtkGLTV
+ - GuiHaskell
  - GuiTV
  - H
  - HAppS-Data
@@ -173,6 +174,7 @@ dont-distribute-packages:
  - HLearn-distributions
  - HNM
  - HPhone
+ - HPlot
  - HPong
  - HROOT
  - HROOT-core
@@ -832,6 +834,7 @@ dont-distribute-packages:
  - blosum
  - bloxorz
  - blubber
+ - bluetile
  - blunt
  - bno055-haskell
  - bogre-banana
@@ -1040,15 +1043,8 @@ dont-distribute-packages:
  - compdata-automata
  - compdata-dags
  - compdata-param
- - compdoc
  - compdoc-dhall-decoder
  - complexity
- - composite-aeson-cofree-list
- - composite-aeson-path
- - composite-aeson-refined
- - composite-aeson-throw
- - composite-aeson-writeonly
- - composite-swagger
  - compstrat
  - comptrans
  - computational-algebra
@@ -1236,6 +1232,7 @@ dont-distribute-packages:
  - diagrams-pandoc
  - diagrams-reflex
  - diagrams-wx
+ - dialog
  - difference-monoid
  - differential
  - digestive-functors-hsp
@@ -1294,6 +1291,7 @@ dont-distribute-packages:
  - doc-review
  - dom-parser
  - dormouse-client
+ - dotparse
  - doublezip
  - dovetail
  - dovetail-aeson
@@ -1600,6 +1598,7 @@ dont-distribute-packages:
  - ghc-tags-plugin
  - ghci-pretty
  - ghcjs-dom-hello
+ - ghcjs-dom-webkit
  - ghcjs-fetch
  - ghcjs-hplay
  - ghcprofview
@@ -1623,6 +1622,7 @@ dont-distribute-packages:
  - gitlib-cross
  - gitlib-s3
  - givegif
+ - gladexml-accessor
  - glazier
  - glazier-pipes
  - glazier-react
@@ -1880,6 +1880,7 @@ dont-distribute-packages:
  - gstorable
  - gtfs
  - gtk-serialized-event
+ - gtk2hs-cast-glade
  - gtk2hs-cast-gnomevfs
  - gtk2hs-cast-gtk
  - gtk2hs-cast-gtkglext
@@ -2063,6 +2064,8 @@ dont-distribute-packages:
  - hbb
  - hbcd
  - hbf
+ - hbro
+ - hbro-contrib
  - hcg-minus-cairo
  - hcheat
  - hcheckers
@@ -2257,6 +2260,7 @@ dont-distribute-packages:
  - hstar
  - hstox
  - hstradeking
+ - hstzaar
  - hsubconvert
  - hswip
  - hsx-jmacro
@@ -2522,6 +2526,7 @@ dont-distribute-packages:
  - lambdaFeed
  - lambdaLit
  - lambdabot-zulip
+ - lambdacat
  - lambdacms-media
  - lambdacube
  - lambdacube-bullet
@@ -2620,7 +2625,7 @@ dont-distribute-packages:
  - list-witnesses
  - listenbrainz-client
  - liszt
- - little-rio_1_0_0
+ - little-rio_1_0_1
  - live-sequencer
  - llvm
  - llvm-analysis
@@ -2762,6 +2767,7 @@ dont-distribute-packages:
  - migrant-postgresql-simple
  - migrant-sqlite-simple
  - minecraft-data
+ - minesweeper
  - mini-egison
  - minilight-lua
  - minimung
@@ -2956,6 +2962,7 @@ dont-distribute-packages:
  - nyan
  - nyan-interpolation
  - nyan-interpolation-simple
+ - nymphaea
  - oanda-rest-api
  - oath
  - obd
@@ -3042,6 +3049,7 @@ dont-distribute-packages:
  - peparser
  - perdure
  - perf-analysis
+ - perf_0_10_0
  - perfecthash
  - periodic-client
  - periodic-client-exe
@@ -3181,6 +3189,7 @@ dont-distribute-packages:
  - prolude
  - prometheus-effect
  - propane
+ - proplang
  - prosidyc
  - proteome
  - proto-lens-descriptors
@@ -3189,6 +3198,7 @@ dont-distribute-packages:
  - protobuf-native
  - protocol-buffers-descriptor-fork
  - proton
+ - psc-ide
  - psql
  - ptera
  - ptera-core
@@ -3200,8 +3210,8 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
- - purenix
  - purescript-iso
+ - purescript-tsd-gen
  - pursuit-client
  - push-notify
  - push-notify-apn
@@ -3311,7 +3321,6 @@ dont-distribute-packages:
  - reduce-equations
  - refh
  - reflex-animation
- - reflex-backend-socket
  - reflex-backend-wai
  - reflex-dom-colonnade
  - reflex-dynamic-containers
@@ -3573,10 +3582,12 @@ dont-distribute-packages:
  - shapefile
  - shapely-data
  - shapes-demo
+ - sheets
  - shelduck
  - shellmate-extras
  - shine-varying
  - short-vec-lens
+ - showdown
  - shpider
  - shuffle
  - si-clock
@@ -4233,6 +4244,7 @@ dont-distribute-packages:
  - yuuko
  - z85
  - zasni-gerna
+ - zephyr
  - zephyr-copilot
  - zeromq3-conduit
  - zeromq3-haskell
