@@ -25612,6 +25612,8 @@ with pkgs;
 
   bookworm = callPackage ../applications/office/bookworm { };
 
+  bookletimposer = callPackage ../applications/office/bookletimposer { };
+
   boops = callPackage ../applications/audio/boops { };
 
   ChowCentaur  = callPackage ../applications/audio/ChowCentaur { };
