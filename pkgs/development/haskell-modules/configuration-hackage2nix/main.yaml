@@ -87,10 +87,6 @@ default-package-overrides:
   - dhall-nix < 1.1.24
   # Temporarily forbid distribution-nixpkgs updates until cabal2nix supports the new version
   - distribution-nixpkgs < 1.7.0
-  # glirc 2.39 is broken: https://github.com/glguy/irc-core/issues/99
-  - glirc == 2.38
-  # glirc 2.38 requires hookup 0.6
-  - hookup == 0.6
 
 extra-packages:
   - aeson < 2                           # required by pantry-0.5.2
