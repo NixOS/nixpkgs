@@ -5933,6 +5933,8 @@ in {
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
 
+  py-ecc = callPackage ../development/python-modules/py-ecc { };
+
   py-eth-sig-utils = callPackage ../development/python-modules/py-eth-sig-utils { };
 
   nwdiag = callPackage ../development/python-modules/nwdiag { };
