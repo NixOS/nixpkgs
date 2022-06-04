@@ -37,6 +37,8 @@ let
         scrubbedEval = evalModules {
           modules = [ {
             _module.check = false;
+          } {
+            config.system.stateVersion = config.system.stateVersion;
           } ] ++ docModules.eager;
           specialArgs = specialArgs // {
             pkgs = scrubDerivations "pkgs" pkgs;
@@ -81,7 +83,7 @@ let
             --argstr pkgsLibPath "$pkgsLibPath" \
             --argstr nixosPath "$nixosPath" \
             --arg modules "[ $modules ]" \
-            --argstr stateVersion "${options.system.stateVersion.default}" \
+            --argstr stateVersion "${options.system.nixos.release.default}" \
             --argstr release "${config.system.nixos.release}" \
             $nixosPath/lib/eval-cacheable-options.nix > $out \
             || {
