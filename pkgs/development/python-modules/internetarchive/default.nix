@@ -2,11 +2,9 @@
 , fetchPypi
 , pytest
 , tqdm
-, pyyaml
 , docopt
 , requests
 , jsonpatch
-, args
 , schema
 , responses
 , lib
@@ -18,24 +16,22 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "3.0.0";
+  version = "3.0.1";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fRcqsT8p/tqXUpU2/9lAEF1IT8Cy5KK0+jKaeVwZshI=";
+    sha256 = "sha256-0DcX2w2omPdOmBD6WpG2Li1ERPSI0i9qOINdO/kVrUI=";
   };
 
   propagatedBuildInputs = [
     tqdm
-    pyyaml
     docopt
     requests
     jsonpatch
-    args
     schema
-    setuptools
+    setuptools # needs pkg_resources at runtime
     urllib3
   ];
 

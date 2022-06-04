@@ -44,13 +44,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.6.8";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "0fpz63dfac1i6wwf5wp3v1vs3r5yzh05g95m5vidx56h0g4dcp44";
+    sha256 = "sha256-tCFi1m3xyQlG+8FijjQh8PMwg6CIfIxvLkd5xCIZHHo=";
   };
 
   preBuild = ''

@@ -67,6 +67,7 @@ in
   imports = [
     ./assertions.nix
     ./meta.nix
+    (mkRemovedOptionModule [ "nixpkgs" "initialSystem" ] "The NixOS options `nesting.clone` and `nesting.children` have been deleted, and replaced with named specialisation. Therefore `nixpgks.initialSystem` has no effect anymore.")
   ];
 
   options.nixpkgs = {
@@ -217,14 +218,6 @@ in
 
         Ignored when <code>nixpkgs.localSystem</code> is set.
         Ignored when <code>nixpkgs.pkgs</code> is set.
-      '';
-    };
-
-    initialSystem = mkOption {
-      type = types.str;
-      internal = true;
-      description = ''
-        Preserved value of <literal>system</literal> passed to <literal>eval-config.nix</literal>.
       '';
     };
   };

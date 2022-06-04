@@ -48,6 +48,7 @@ let
    "8.14.1".sha256     = "0sx78pgx0qw8v7v2r32zzy3l161zipzq95iacda628girim7psnl";
    "8.15.0".sha256     = "sha256:1ma76wfrpfsl72yh10w1ys2a0vi0mdc2jc79kdc8nrmxkhpw1nxx";
    "8.15.1".sha256     = "sha256:1dsa04jzkx5pw69pmxn0l55q4w88lg6fvz7clbga0bazzsfnsgd6";
+   "8.15.2".sha256     = "sha256:0gn8dz69scxnxaq6ycb3x34bjfk9wlp1y2xn8w69kg9fm4b6gkc7";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix

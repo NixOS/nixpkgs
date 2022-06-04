@@ -28,14 +28,14 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.25.0";
+  version = "0.25.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "sha256-RYQVcbyKIv/FlrtROoQywWR+iF+4KYiYrrzErUrOCWM=";
+    sha256 = "sha256-wL631cbA6ffXZomi6iDHk7XerRlpIL6T2qlEiQvFSJY=";
   };
 
   buildInputs = [
@@ -78,23 +78,42 @@ buildPythonApplication rec {
   outputs = [ "out" "terminfo" "shell_integration" ];
 
   patches = [
-    # Required to get `test_ssh_env_vars` to pass.
-    (fetchpatch {
-      name = "increase-pty-lines.patch";
-      url = "https://github.com/kovidgoyal/kitty/commit/eb84990f5a8edc458e04d24cc1cda05316d74ceb.patch";
-      sha256 = "sha256-eOANfhGPMoN4FqxtIGDBu5X0O3RPLABDnL+LKqSLROI=";
-    })
     # Fix to ensure that files in tar files used by SSH kitten have write permissions.
-    ./tarball-restore-write-permissions.patch
+    (fetchpatch {
+      name = "fix-tarball-file-permissions.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/8540ca399053e8d42df27283bb5dd4af562ed29b.patch";
+      sha256 = "sha256-y5w+ritkR+ZEfNSRDQW9r3BU2qt98UNK7vdEX/X+mKU=";
+    })
+
+    # Remove upon next release. Needed because of a missing #define.
+    (fetchpatch {
+      name = "fontconfig-1.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/bec620a8d30c36453e471b140b07483c7f875bf4.patch";
+      sha256 = "sha256-r1OTcXdO+RUAXmmIqI07m+z0zXq8DXCzgBRXPpnkGGM=";
+    })
+    (fetchpatch {
+      name = "fontconfig-2.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/1283a2b7e552d30cabce9345e5c13e5f9079183d.patch";
+      sha256 = "sha256-UM/OsumnfVHuHTahpRwyWZOeu6L8WOwbBf3lcjwdTj8=";
+    })
+    (fetchpatch {
+      name = "fontconfig-3.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/5c4abe749b1f50ae556a711d24ac7f3e384fac4e.patch";
+      sha256 = "sha256-amvyv5cZxHGPg7dZv649WjH4MNloFbmz5D4rhjKNzYA=";
+    })
 
     # Needed on darwin
 
     # Gets `test_ssh_shell_integration` to pass for `zsh` when `compinit` complains about
     # permissions.
     ./zsh-compinit.patch
-    # Skip `test_ssh_login_shell_detection` in some cases, build users have their shell set to
-    # `/sbin/nologin` which causes issues.
-    ./disable-test_ssh_login_shell_detection.patch
+
+    # Skip login shell detection when login shell is set to nologin
+    (fetchpatch {
+      name = "skip-login-shell-detection-for-nologin.patch";
+      url = "https://github.com/kovidgoyal/kitty/commit/27906ea853ce7862bcb83e324ef80f6337b5d846.patch";
+      sha256 = "sha256-Zg6uWkiWvb45i4xcp9k6jy0R2IQMT4PXr7BenzZ/md8=";
+    })
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
@@ -122,6 +141,7 @@ buildPythonApplication rec {
       --egl-library='${lib.getLib libGL}/lib/libEGL.so.1' \
       --startup-notification-library='${libstartup_notification}/lib/libstartup-notification-1.so' \
       --canberra-library='${libcanberra}/lib/libcanberra.so' \
+      --fontconfig-library='${fontconfig.lib}/lib/libfontconfig.so' \
       ${commonOptions}
     ''}
     runHook postBuild
@@ -203,7 +223,6 @@ buildPythonApplication rec {
   passthru.tests.test = nixosTests.terminal-emulators.kitty;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://github.com/kovidgoyal/kitty";
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3Only;

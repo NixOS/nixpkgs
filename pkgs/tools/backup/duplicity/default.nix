@@ -78,15 +78,12 @@ pythonPackages.buildPythonApplication rec {
     idna
     pygobject3
     fasteners
-    ipaddress
     lockfile
     paramiko
     pyasn1
     pycrypto
-    pydrive
+    pydrive2
     future
-  ] ++ lib.optionals (!isPy3k) [
-    enum
   ];
 
   checkInputs = [

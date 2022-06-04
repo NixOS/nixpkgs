@@ -1,15 +1,15 @@
-{ lib, mkDerivation, fetchurl, cmake, darkhttpd, gettext, makeWrapper
+{ lib, mkDerivation, fetchurl, cmake, gettext
 , pkg-config, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase
 , qttranslations, qtsvg }:
 
 mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.2.9";
+  version = "4.2.11";
 
   src = fetchurl {
     url =
-      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4-${version}.tar.gz";
-    sha256 = "1rhd3mvj6ld16zgfscj81f1vhs2nvifsizky509l1av7dsjfbbzr";
+      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4_${version}.110-1804.tar.xz";
+    sha256 = "sha256-Sg6lFZeIJn3T/suDc5Z/kNqBf/sIV9c6EJJ0Nr0dwTM=";
   };
 
   tsl = fetchurl {
@@ -17,7 +17,7 @@ mkDerivation rec {
     sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
 
-  nativeBuildInputs = [ cmake darkhttpd gettext makeWrapper pkg-config ];
+  nativeBuildInputs = [ cmake gettext pkg-config ];
 
   postPatch = ''
     substituteInPlace client/CMakeLists.txt \
@@ -35,10 +35,11 @@ mkDerivation rec {
     qttranslations
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/qdigidoc4 \
-      --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
-  '';
+  # replace this hack with a proper cmake variable or environment variable
+  # once https://github.com/open-eid/cmake/pull/34 (or #35) gets merged.
+  qtWrapperArgs = [
+      "--prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/"
+  ];
 
   meta = with lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";

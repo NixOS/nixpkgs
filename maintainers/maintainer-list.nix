@@ -5074,6 +5074,12 @@
     githubId = 2405974;
     name = "Sébastian Méric de Bellefon";
   };
+  helium = {
+    email = "helium.dev@tuta.io";
+    github = "helium18";
+    githubId = 86223025;
+    name = "helium";
+  };
   henkkalkwater = {
     email = "chris+nixpkgs@netsoj.nl";
     github = "HenkKalkwater";
@@ -7995,6 +8001,12 @@
     githubId = 19036;
     name = "Matthew Bauer";
   };
+  matthiasbenaets = {
+    email = "matthias.benaets@gmail.com";
+    github = "MatthiasBenaets";
+    githubId = 89214559;
+    name = "Matthias Benaets";
+  };
   matthiasbeyer = {
     email = "mail@beyermatthias.de";
     matrix = "@musicmatze:beyermatthi.as";
@@ -8475,6 +8487,17 @@
     keys = [{
       longkeyid = "rsa2048/0xFEA888C9F5D64F62";
       fingerprint = "3196 83D3 9A1B 4DE1 3DC2  51FD FEA8 88C9 F5D6 4F62";
+    }];
+  };
+  minion3665 = {
+    name = "Skyler Grey";
+    email = "skyler3665@gmail.com";
+    matrix = "@minion3665:matrix.org";
+    github = "Minion3665";
+    githubId = 34243578;
+    keys = [{
+      longkeyid = "rsa4096/0x1AFD10256B3C714D";
+      fingerprint = "D520 AC8D 7C96 9212 5B2B  BD3A 1AFD 1025 6B3C 714D";
     }];
   };
   mir06 = {
@@ -9873,6 +9896,12 @@
     githubId = 8641;
     name = "Pierre Carrier";
   };
+  pedrohlc = {
+    email = "root@pedrohlc.com";
+    github = "PedroHLC";
+    githubId = 1368952;
+    name = "Pedro Lara Campos";
+  };
   penguwin = {
     email = "penguwin@penguwin.eu";
     github = "penguwin";
@@ -10187,6 +10216,12 @@
     github = "podocarp";
     githubId = 10473184;
     name = "Jia Xiaodong";
+  };
+  polarmutex = {
+    email = "brian@brianryall.xyz";
+    github = "polarmutex";
+    githubId = 115141;
+    name = "Brian Ryall";
   };
   polendri = {
     email = "paul@ijj.li";
@@ -12221,6 +12256,12 @@
     github = "strager";
     githubId = 48666;
     name = "Matthew \"strager\" Glazar";
+  };
+  strikerlulu = {
+    email = "strikerlulu7@gmail.com";
+    github = "strikerlulu";
+    githubId = 38893265;
+    name = "StrikerLulu";
   };
   stumoss = {
     email = "samoss@gmail.com";

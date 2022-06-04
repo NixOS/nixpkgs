@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "8.0.16";
+  version = "8.0.17";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-S8eBpRqHiaxAKzbvLgfRdjbRKniQACdU+NcPBbto31E=";
+    sha256 = "sha256-BCxRiqeZo4vsIqegvyjfgM5hfrfeMrwEl5hwfAo2Fn8=";
   };
 
   postPatch = ''

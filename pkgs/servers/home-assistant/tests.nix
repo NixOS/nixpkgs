@@ -14,6 +14,7 @@ let
     lovelace = [ PyChromecast ];
     nest = [ av ];
     onboarding = [ pymetno radios rpi-bad-power ];
+    raspberry_pi = [ rpi-bad-power ];
     tomorrowio = [ pyclimacell ];
     version = [ aioaseko ];
     voicerss = [ mutagen ];

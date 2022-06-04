@@ -1,5 +1,6 @@
 { lib
 , buildGoModule
+, buildGo118Module
 , fetchFromGitHub
 , callPackage
 , config
@@ -19,10 +20,11 @@ let
      , vendorSha256 ? throw "vendorSha256 missing: please use `buildGoModule`" /* added 2022/01 */
      , deleteVendor ? false
      , proxyVendor ? false
+     , mkProviderGoModule ? buildGoModule
      , # Looks like "registry.terraform.io/vancluever/acme"
        provider-source-address
      }@attrs:
-      buildGoModule {
+      mkProviderGoModule {
         pname = repo;
         inherit vendorSha256 version deleteVendor proxyVendor;
         subPackages = [ "." ];
@@ -58,6 +60,7 @@ let
     {
       # Packages that don't fit the default model
 
+      brightbox = automated-providers.brightbox.override { mkProviderGoModule = buildGo118Module; };
       # mkisofs needed to create ISOs holding cloud-init data,
       # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });

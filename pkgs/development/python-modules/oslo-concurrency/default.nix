@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchPypi {
     pname = "oslo.concurrency";
     inherit version;
-    sha256 = "1h76pq9p1bpwcs6jl9m2w4280wcp2w3is88qlaqknqkd3pdaixwr";
+    sha256 = "sha256-aGm5Rrk9lbq/IM0Wvgb8NaXsFNB+osHzFfSsbqXw2hc=";
   };
 
   postPatch = ''

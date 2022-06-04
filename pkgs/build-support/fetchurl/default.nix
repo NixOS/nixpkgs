@@ -14,6 +14,7 @@ let
   mirrorsFile =
     buildPackages.stdenvNoCC.mkDerivation ({
       name = "mirrors-list";
+      strictDeps = true;
       builder = ./write-mirror-list.sh;
       preferLocalBuild = true;
     } // mirrors);

@@ -904,6 +904,18 @@ final: prev:
     meta.homepage = "https://github.com/akinsho/bufferline.nvim/";
   };
 
+  bullets-vim = buildVimPluginFrom2Nix {
+    pname = "bullets.vim";
+    version = "2022-06-01";
+    src = fetchFromGitHub {
+      owner = "dkarter";
+      repo = "bullets.vim";
+      rev = "f3b4ae71f60b5723077a77cfe9e8776a3ca553ac";
+      sha256 = "1dfgxdmvzjqjc1viqx2nmzzrjr2n7c6931d3iypv96p2zywld99s";
+    };
+    meta.homepage = "https://github.com/dkarter/bullets.vim/";
+  };
+
   calendar-vim = buildVimPluginFrom2Nix {
     pname = "calendar.vim";
     version = "2022-03-21";
@@ -4784,6 +4796,18 @@ final: prev:
       sha256 = "0znwgry4ill0nxm096hc8s9vf20rf9xcq3dz8y8h7xlqzzsycl7a";
     };
     meta.homepage = "https://github.com/roxma/nvim-completion-manager/";
+  };
+
+  nvim-config-local = buildVimPluginFrom2Nix {
+    pname = "nvim-config-local";
+    version = "2022-03-26";
+    src = fetchFromGitHub {
+      owner = "klen";
+      repo = "nvim-config-local";
+      rev = "af59d6344e555917209f7304709bbff7cea9b5cc";
+      sha256 = "1wg6g4rqpj12sjj0g1qxqgcpkzr7x82lk90lf6qczim97r3lj9hy";
+    };
+    meta.homepage = "https://github.com/klen/nvim-config-local/";
   };
 
   nvim-cursorline = buildVimPluginFrom2Nix {

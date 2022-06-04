@@ -134,6 +134,14 @@ stdenv.mkDerivation ({
         url = "https://patchwork.sourceware.org/project/glibc/patch/20220314175316.3239120-2-sam@gentoo.org/raw/";
         sha256 = "sq0BoPqXHQ69Vq4zJobCspe4XRfnAiuac/wqzVQJESc=";
       })
+
+      /* Patch pending upstream inclusion to fix string.h syntax for older gcc.
+         Needed to unbreak gnat bootstrap against old gcc in nixpkgs:
+           https://patchwork.sourceware.org/project/glibc/patch/20220520150609.346566-1-slyfox@gentoo.org/ */
+      (fetchurl {
+        url = "https://patchwork.sourceware.org/project/glibc/patch/20220520150609.346566-1-slyfox@gentoo.org/raw/";
+        sha256 = "x3/eO1EHJXBIrH2WXHRRD1swtWv+btFVjvMt5tj/wDA=";
+      })
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
@@ -204,6 +212,7 @@ stdenv.mkDerivation ({
   # out as the first output is an exception exclusive to glibc
   outputs = [ "out" "bin" "dev" "static" ];
 
+  strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison python3Minimal ] ++ extraNativeBuildInputs;
   buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ] ++ extraBuildInputs;
