@@ -1,28 +1,49 @@
-{ lib, stdenv, fetchFromGitHub, xcbuildHook, libiconv, ncurses, Cocoa }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libassuan
+, libgpg-error
+, libiconv
+, texinfo
+, Cocoa
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pinentry-mac";
-  version = "0.9.4";
+  version = "1.1.1.1";
 
   src = fetchFromGitHub {
-    owner = "matthewbauer";
-    repo = "pinentry-mac";
-    rev = "6dfef256c8ea32d642fea847f27d800f024cf51e";
-    sha256 = "0g75302697gqcxyf2hyqzvcbd5pyss1bl2xvfd40wqav7dlyvj83";
+    owner = "GPGTools";
+    repo = "pinentry";
+    rev = "v${version}";
+    sha256 = "sha256-QnDuqFrI/U7aZ5WcOCp5vLE+w59LVvDGOFNQy9fSy70=";
   };
 
-  nativeBuildInputs = [ xcbuildHook ];
-  buildInputs = [ libiconv ncurses Cocoa ];
+  postPatch = ''
+    substituteInPlace macosx/Makefile.am --replace ibtool /usr/bin/ibtool
+  '';
 
-  preBuild = ''
-    # Only build for what we care about (also allows arm64)
-    substituteInPlace pinentry-mac.xcodeproj/project.pbxproj \
-      --replace "i386 x86_64 ppc" "${stdenv.targetPlatform.darwinArch}"
+  nativeBuildInputs = [ autoreconfHook texinfo ];
+  buildInputs = [ libassuan libgpg-error libiconv Cocoa ];
+
+  configureFlags = [ "--enable-maintainer-mode" "--disable-ncurses" ];
+
+  # This is required to let ibtool run.
+  sandboxProfile = ''
+    (allow process-exec
+      (literal "/usr/bin/ibtool")
+      (regex "/Xcode.app/Contents/Developer/usr/bin/ibtool")
+      (regex "/Xcode.app/Contents/Developer/usr/bin/xcodebuild")
+      (literal "/usr/libexec/PlistBuddy"))
+    (allow file-read*)
+    (deny file-read* (subpath "/usr/local") (with no-log))
+    (allow file-write* (subpath "/private/var/folders"))
   '';
 
   installPhase = ''
     mkdir -p $out/Applications
-    mv Products/Release/pinentry-mac.app $out/Applications
+    mv macosx/pinentry-mac.app $out/Applications
   '';
 
   passthru = {
