@@ -612,12 +612,8 @@ dont-distribute-packages:
   - spike
   - web-browser-in-haskell
   - webkit
-  - webkitgtk3
   - webkitgtk3-javascriptcore
   - websnap
-
-  # glade relies on system libglade which is deprecated
-  - glade
 
   # mesos was removed from nixpkgs
   - hs-mesos

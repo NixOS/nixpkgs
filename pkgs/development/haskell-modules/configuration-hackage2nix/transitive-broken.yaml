@@ -142,6 +142,7 @@ dont-distribute-packages:
  - GrowlNotify
  - Gtk2hsGenerics
  - GtkGLTV
+ - GuiHaskell
  - GuiTV
  - H
  - HAppS-Data
@@ -173,6 +174,7 @@ dont-distribute-packages:
  - HLearn-distributions
  - HNM
  - HPhone
+ - HPlot
  - HPong
  - HROOT
  - HROOT-core
@@ -832,6 +834,7 @@ dont-distribute-packages:
  - blosum
  - bloxorz
  - blubber
+ - bluetile
  - blunt
  - bno055-haskell
  - bogre-banana
@@ -1229,6 +1232,7 @@ dont-distribute-packages:
  - diagrams-pandoc
  - diagrams-reflex
  - diagrams-wx
+ - dialog
  - difference-monoid
  - differential
  - digestive-functors-hsp
@@ -1594,6 +1598,7 @@ dont-distribute-packages:
  - ghc-tags-plugin
  - ghci-pretty
  - ghcjs-dom-hello
+ - ghcjs-dom-webkit
  - ghcjs-fetch
  - ghcjs-hplay
  - ghcprofview
@@ -1617,6 +1622,7 @@ dont-distribute-packages:
  - gitlib-cross
  - gitlib-s3
  - givegif
+ - gladexml-accessor
  - glazier
  - glazier-pipes
  - glazier-react
@@ -1874,6 +1880,7 @@ dont-distribute-packages:
  - gstorable
  - gtfs
  - gtk-serialized-event
+ - gtk2hs-cast-glade
  - gtk2hs-cast-gnomevfs
  - gtk2hs-cast-gtk
  - gtk2hs-cast-gtkglext
@@ -2057,6 +2064,8 @@ dont-distribute-packages:
  - hbb
  - hbcd
  - hbf
+ - hbro
+ - hbro-contrib
  - hcg-minus-cairo
  - hcheat
  - hcheckers
@@ -2251,6 +2260,7 @@ dont-distribute-packages:
  - hstar
  - hstox
  - hstradeking
+ - hstzaar
  - hsubconvert
  - hswip
  - hsx-jmacro
@@ -2516,6 +2526,7 @@ dont-distribute-packages:
  - lambdaFeed
  - lambdaLit
  - lambdabot-zulip
+ - lambdacat
  - lambdacms-media
  - lambdacube
  - lambdacube-bullet
@@ -2756,6 +2767,7 @@ dont-distribute-packages:
  - migrant-postgresql-simple
  - migrant-sqlite-simple
  - minecraft-data
+ - minesweeper
  - mini-egison
  - minilight-lua
  - minimung
@@ -2950,6 +2962,7 @@ dont-distribute-packages:
  - nyan
  - nyan-interpolation
  - nyan-interpolation-simple
+ - nymphaea
  - oanda-rest-api
  - oath
  - obd
@@ -3176,6 +3189,7 @@ dont-distribute-packages:
  - prolude
  - prometheus-effect
  - propane
+ - proplang
  - prosidyc
  - proteome
  - proto-lens-descriptors
@@ -3573,6 +3587,7 @@ dont-distribute-packages:
  - shellmate-extras
  - shine-varying
  - short-vec-lens
+ - showdown
  - shpider
  - shuffle
  - si-clock
