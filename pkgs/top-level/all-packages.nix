@@ -29825,9 +29825,7 @@ with pkgs;
 
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
 
-  symbolic-preview = callPackage ../applications/graphics/symbolic-preview {
-    libhandy = libhandy_0;
-  };
+  symbolic-preview = callPackage ../applications/graphics/symbolic-preview { };
 
   symlinks = callPackage ../tools/system/symlinks { };
 
