@@ -1549,6 +1549,10 @@ in {
 
   censys = callPackage ../development/python-modules/censys { };
 
+  coincurve = callPackage ../development/python-modules/coincurve {
+    inherit (pkgs) secp256k1;
+  };
+
   connect-box = callPackage ../development/python-modules/connect_box { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
