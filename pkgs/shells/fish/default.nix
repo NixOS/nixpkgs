@@ -147,6 +147,16 @@ let
       sha256 = "sha256-tvI7OEOwTbawqQ/qH28NDkDMAntKcyCYIAhj8oZKlOo=";
     };
 
+    patches = [
+      # merged https://github.com/fish-shell/fish-shell/pull/8978
+      # "create_manpage_completions.py: Do not overstrip commands with dots"
+      (fetchpatch {
+        name = "fix-cmdname-completeion-generator.patch";
+        url = "https://github.com/fish-shell/fish-shell/commit/32d646a5483844e9b1fae4b73f252a34ec0d4c76.patch";
+        sha256 = "sha256-51hqgPHQ7oQbl1i3SfqvGsbkYMe2Jh+sEwCRu2kiv1U=";
+      })
+    ];
+
     # Fix FHS paths in tests
     postPatch = ''
       # src/fish_tests.cpp

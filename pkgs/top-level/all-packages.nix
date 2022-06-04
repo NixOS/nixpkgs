@@ -19724,6 +19724,8 @@ with pkgs;
 
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
+  nanotts = callPackage ../tools/audio/nanotts { };
+
   ncnn = callPackage ../development/libraries/ncnn { };
 
   ndpi = callPackage ../development/libraries/ndpi { };
