@@ -111,6 +111,7 @@ in {
     pattern = re.compile(r"path=(?P<path>[\/a-z0-9-.]+)\/bin\/hass")
     response = hass.execute("systemctl show -p ExecStart home-assistant.service")[1]
     match = pattern.search(response)
+    assert match
     package = match.group('path')
 
     hass.wait_for_unit("home-assistant.service")
