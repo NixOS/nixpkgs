@@ -10,7 +10,15 @@ let
     # Can't do types.either with multiple non-overlapping submodules, so define our own
     singleLdapValueType = lib.mkOptionType rec {
       name = "LDAP";
-      description = "LDAP value";
+      # TODO: It would be nice to define a { secret = ...; } option, using
+      # systemd's LoadCredentials for secrets. That would remove the last
+      # barrier to using DynamicUser for openldap. This is blocked on
+      # systemd/systemd#19604
+      description = ''
+        LDAP value - either a string, or an attrset containing
+        <literal>path</literal> or <literal>base64</literal> for included
+        values or base-64 encoded values respectively.
+      '';
       check = x: lib.isString x || (lib.isAttrs x && (x ? path || x ? base64));
       merge = lib.mergeEqualOption;
     };
@@ -80,9 +88,7 @@ in {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "
-          Whether to enable the ldap server.
-        ";
+        description = "Whether to enable the ldap server.";
       };
 
       package = mkOption {
@@ -147,7 +153,7 @@ in {
                 attrs = {
                   objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
                   olcDatabase = "{1}mdb";
-                  olcDbDirectory = "/var/db/ldap";
+                  olcDbDirectory = "/var/lib/openldap/ldap";
                   olcDbIndex = [
                     "objectClass eq"
                     "cn pres,eq"
@@ -171,7 +177,18 @@ in {
           Use this config directory instead of generating one from the
           <literal>settings</literal> option. Overrides all NixOS settings.
         '';
-        example = "/var/db/slapd.d";
+        example = "/var/lib/openldap/slapd.d";
+      };
+
+      mutableConfig = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to allow writable on-line configuration. If
+          <literal>true</literal>, the NixOS settings will only be used to
+          initialize the OpenLDAP configuration if it does not exist, and are
+          subsequently ignored.
+        '';
       };
 
       declarativeContents = mkOption {
@@ -185,6 +202,11 @@ in {
           reboot of the server. Performance-wise the database and indexes are
           rebuilt on each server startup, so this will slow down server startup,
           especially with large databases.
+
+          Note that the root of the DB must be defined in
+          <code>services.openldap.settings</code> and the
+          <code>olcDbDirectory</code> must begin with
+          <literal>"/var/lib/openldap"</literal>.
         '';
         example = lib.literalExpression ''
           {
@@ -207,7 +229,49 @@ in {
 
   meta.maintainers = with lib.maintainers; [ mic92 kwohlfahrt ];
 
-  config = mkIf cfg.enable {
+  config = let
+    dbSettings = mapAttrs' (name: { attrs, ... }: nameValuePair attrs.olcSuffix attrs)
+      (filterAttrs (name: value: hasPrefix "olcDatabase=" name) cfg.settings.children);
+    settingsFile = pkgs.writeText "config.ldif" (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
+    writeConfig = pkgs.writeShellScript "openldap-config" ''
+      set -euo pipefail
+
+      ${lib.optionalString (!cfg.mutableConfig) "rm -rf ${configDir}/*"}
+      if [ ! -e "${configDir}/cn=config.ldif" ]; then
+        ${openldap}/bin/slapadd -F ${configDir} -bcn=config -l ${settingsFile}
+      fi
+      chmod -R ${if cfg.mutableConfig then "u+rw" else "u+r-w"} ${configDir}
+    '';
+
+    contentsFiles = mapAttrs (dn: ldif: pkgs.writeText "${dn}.ldif" ldif) cfg.declarativeContents;
+    writeContents = pkgs.writeShellScript "openldap-load" ''
+      rm -rf /var/lib/openldap/$2/*
+      ${openldap}/bin/slapadd -F ${configDir} -b $1 -l $3
+    '';
+  in mkIf cfg.enable {
+    assertions = [{
+      assertion = (cfg.declarativeContents != {}) -> cfg.configDir == null;
+      message = ''
+        Declarative DB contents (${attrNames cfg.declarativeContents}) are not
+        supported with user-managed configuration.
+      '';
+    }] ++ (map (dn: {
+      assertion = (getAttr dn dbSettings) ? "olcDbDirectory";
+      # olcDbDirectory is necessary to prepopulate database using `slapadd`.
+      message = ''
+        Declarative DB ${dn} does not exist in `services.openldap.settings`, or does not have
+        `olcDbDirectory` configured.
+      '';
+    }) (attrNames cfg.declarativeContents)) ++ (mapAttrsToList (dn: { olcDbDirectory ? null, ... }: {
+      # For forward compatibility with `DynamicUser`, and to avoid accidentally clobbering
+      # directories with `declarativeContents`.
+      assertion = (olcDbDirectory != null) ->
+      ((hasPrefix "/var/lib/openldap/" olcDbDirectory) && (olcDbDirectory != "/var/lib/openldap/"));
+      message = ''
+        Database ${dn} has `olcDbDirectory` (${olcDbDirectory}) that is not a subdirectory of
+        `/var/lib/openldap/`.
+      '';
+    }) dbSettings);
     environment.systemPackages = [ openldap ];
 
     # Literal attributes must always be set
@@ -231,46 +295,31 @@ in {
       ];
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
-      preStart = let
-        settingsFile = pkgs.writeText "config.ldif" (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
-
-        dbSettings = lib.filterAttrs (name: value: lib.hasPrefix "olcDatabase=" name) cfg.settings.children;
-        dataDirs = lib.mapAttrs' (name: value: lib.nameValuePair value.attrs.olcSuffix value.attrs.olcDbDirectory)
-          (lib.filterAttrs (_: value: value.attrs ? olcDbDirectory) dbSettings);
-        dataFiles = lib.mapAttrs (dn: contents: pkgs.writeText "${dn}.ldif" contents) cfg.declarativeContents;
-        mkLoadScript = dn: let
-          dataDir = lib.escapeShellArg (getAttr dn dataDirs);
-        in  ''
-          rm -rf ${dataDir}/*
-          ${openldap}/bin/slapadd -F ${lib.escapeShellArg configDir} -b ${dn} -l ${getAttr dn dataFiles}
-          chown -R "${cfg.user}:${cfg.group}" ${dataDir}
-        '';
-      in ''
-        mkdir -p /run/slapd
-        chown -R "${cfg.user}:${cfg.group}" /run/slapd
-
-        mkdir -p ${lib.escapeShellArg configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
-        chown "${cfg.user}:${cfg.group}" ${lib.escapeShellArg configDir} ${lib.escapeShellArgs (lib.attrValues dataDirs)}
-
-        ${lib.optionalString (cfg.configDir == null) (''
-          rm -Rf ${configDir}/*
-          ${openldap}/bin/slapadd -F ${configDir} -bcn=config -l ${settingsFile}
-        '')}
-        chown -R "${cfg.user}:${cfg.group}" ${lib.escapeShellArg configDir}
-
-        ${lib.concatStrings (map mkLoadScript (lib.attrNames cfg.declarativeContents))}
-        ${openldap}/bin/slaptest -u -F ${lib.escapeShellArg configDir}
-      '';
       serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStartPre = [
+          "!${pkgs.coreutils}/bin/mkdir -p ${configDir}"
+          "+${pkgs.coreutils}/bin/chown $USER ${configDir}"
+        ] ++ (lib.optional (cfg.configDir == null) writeConfig)
+        ++ (mapAttrsToList (dn: content: lib.escapeShellArgs [
+          writeContents dn (getAttr dn dbSettings).olcDbDirectory content
+        ]) contentsFiles)
+        ++ [ "${openldap}/bin/slaptest -u -F ${configDir}" ];
         ExecStart = lib.escapeShellArgs ([
-          "${openldap}/libexec/slapd" "-d" "0" "-u" cfg.user "-g" cfg.group "-F" configDir
-          "-h" (lib.concatStringsSep " " cfg.urlList)
+          "${openldap}/libexec/slapd" "-d" "0" "-F" configDir "-h" (lib.concatStringsSep " " cfg.urlList)
         ]);
         Type = "notify";
         # Fixes an error where openldap attempts to notify from a thread
         # outside the main process:
         #   Got notification message from PID 6378, but reception only permitted for main PID 6377
         NotifyAccess = "all";
+        RuntimeDirectory = "slapd"; # TODO: openldap, for consistency
+        StateDirectory = ["openldap"]
+          ++ (map ({olcDbDirectory, ... }: removePrefix "/var/lib/" olcDbDirectory) (attrValues dbSettings));
+        StateDirectoryMode = "700";
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+        CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
       };
     };
 
