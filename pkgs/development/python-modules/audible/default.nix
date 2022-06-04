@@ -14,9 +14,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ beautifulsoup4 httpx pbkdf2 pillow pyaes rsa ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'httpx>=0.20.*,<=0.22.*' 'httpx'
+    sed -i "s/httpx.*/httpx',/" setup.py
   '';
+
+  # has no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "audible"];
 
