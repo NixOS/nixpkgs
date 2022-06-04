@@ -2710,6 +2710,8 @@ with pkgs;
 
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
+  bluewalker = callPackage ../tools/bluetooth/bluewalker { };
+
   blur-effect = callPackage ../tools/graphics/blur-effect { };
 
   bootiso = callPackage ../tools/cd-dvd/bootiso { };
