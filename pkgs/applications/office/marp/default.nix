@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Markdown presentation writer, powered by Electron";
     homepage = "https://yhatt.github.io/marp/";
+    knownVulnerabilities = [
+      "Remote code execution: https://github.com/yhatt/marp/issues/276"
+    ];
     license = licenses.mit;
     maintainers = [ maintainers.puffnfresh ];
     platforms = [ "x86_64-linux" ];
