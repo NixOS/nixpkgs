@@ -1514,7 +1514,8 @@
     ];
     "mailgun" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: pymailgunner
+      pymailgunner
+    ];
     "manual" = ps: with ps; [
     ];
     "manual_mqtt" = ps: with ps; [
@@ -3513,6 +3514,7 @@
     "lutron_caseta"
     "lyric"
     "mailbox"
+    "mailgun"
     "manual"
     "manual_mqtt"
     "maxcube"
