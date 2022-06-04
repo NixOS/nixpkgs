@@ -1,7 +1,7 @@
 { stdenv, lib, buildPythonPackage, fetchpatch, fetchPypi, makeWrapper, isPy3k
 , python, twisted, jinja2, msgpack, zope_interface, sqlalchemy, alembic
 , python-dateutil, txaio, autobahn, pyjwt, pyyaml, treq, txrequests, pypugjs
-, boto3, moto, mock, lz4, setuptoolsTrial, isort, pylint, flake8
+, boto3, moto, mock, lz4, setuptoolsTrial
 , buildbot-worker, buildbot-pkg, buildbot-plugins, parameterized, git, openssh
 , glibcLocales
 , nixosTests
@@ -65,9 +65,6 @@ let
       mock
       lz4
       setuptoolsTrial
-      isort
-      pylint
-      flake8
       buildbot-worker
       buildbot-pkg
       buildbot-plugins.www
