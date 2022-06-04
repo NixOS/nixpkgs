@@ -2805,6 +2805,8 @@ in {
 
   eth-abi = callPackage ../development/python-modules/eth-abi { };
 
+  eth-account = callPackage ../development/python-modules/eth-account { };
+
   eth-hash = callPackage ../development/python-modules/eth-hash { };
 
   eth-typing = callPackage ../development/python-modules/eth-typing { };
