@@ -13,9 +13,9 @@ buildGoModule rec {
 
   vendorSha256 = "189qs6vmx63vwsjmc4qgf1y8xjsi7x6l1f5c3kd8j8jnagl26z4h";
 
-  ldflags = [ # omit some things for a smaller binary
-    "-w" # omit the DWARF symbol table
-    "-s" # omit symbol table and debug info
+  ldflags = [
+    "-w"
+    "-s"
   ];
 
   meta = with lib; {
