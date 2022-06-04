@@ -13,7 +13,7 @@ rec {
       , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
-      , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose_2
+      , sqlite, iproute2, lvm2, systemd, docker-buildx, docker-compose
       , btrfs-progs, iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, libseccomp, rootlesskit, slirp4netns, fuse-overlayfs
       , nixosTests
@@ -136,7 +136,7 @@ rec {
     });
 
     plugins = optionals buildxSupport [ docker-buildx ]
-      ++ optionals composeSupport [ docker-compose_2 ];
+      ++ optionals composeSupport [ docker-compose ];
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
     buildGoPackage ((optionalAttrs (!clientOnly) {
