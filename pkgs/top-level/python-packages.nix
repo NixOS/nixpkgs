@@ -411,6 +411,8 @@ in {
 
   aiosmtpd = callPackage ../development/python-modules/aiosmtpd { };
 
+  aiosmtplib = callPackage ../development/python-modules/aiosmtplib { };
+
   aiosqlite = callPackage ../development/python-modules/aiosqlite { };
 
   aiosteamist = callPackage ../development/python-modules/aiosteamist { };
@@ -2914,6 +2916,8 @@ in {
   faraday-plugins = callPackage ../development/python-modules/faraday-plugins { };
 
   fastapi = callPackage ../development/python-modules/fastapi { };
+
+  fastapi-mail = callPackage ../development/python-modules/fastapi-mail { };
 
   fastavro = callPackage ../development/python-modules/fastavro { };
 
