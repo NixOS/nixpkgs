@@ -223,19 +223,19 @@ let
   });
 in {
   # Maint version
-  perl532 = common {
-    perl = pkgs.perl532;
-    buildPerl = buildPackages.perl532;
-    version = "5.32.1";
-    sha256 = "0b7brakq9xs4vavhg391as50nbhzryc7fy5i65r81bnq3j897dh3";
-  };
-
-  # Maint version
   perl534 = common {
     perl = pkgs.perl534;
     buildPerl = buildPackages.perl534;
     version = "5.34.1";
     sha256 = "sha256-NXlRpJGwuhzjYRJjki/ux4zNWB3dwkpEawM+JazyQqE=";
+  };
+
+  # Maint version
+  perl536 = common {
+    perl = pkgs.perl536;
+    buildPerl = buildPackages.perl536;
+    version = "5.36.0";
+    sha256 = "sha256-4mCFr4rDlvYq3YpTPDoOqMhJfYNvBok0esWr17ek4Ao=";
   };
 
   # the latest Devel version
