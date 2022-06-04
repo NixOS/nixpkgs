@@ -5,11 +5,12 @@ in {
   osdnRelease = fetchzip {
     name = "${pname}-osdn";
     url = "mirror://osdn/mplus-fonts/62344/mplus-TESTFLIGHT-063a.tar.xz";
-    sha256 = "16jirhkjs46ac8cdk2w4xkpv989gmz7i8gnrq9bck13rbil7wlzr";
+    sha256 = "sha256-+VN+aFx5hMlWwtk+FM+vL6G07+yEi9kYYsoQLSfMUZo=";
     postFetch = ''
-      mkdir -p $out/share/fonts/truetype/${pname}
-      tar xvJf $downloadedFile
-      mv */*.ttf $out/share/fonts/truetype/${pname}
+      install -m444 -Dt $out/share/fonts/truetype/${pname} $out/*.ttf
+      shopt -s extglob dotglob
+      rm -rf $out/!(share)
+      shopt -u extglob dotglob
     '';
 
     meta = with lib; {
@@ -26,12 +27,14 @@ in {
     owner = "coz-m";
     repo = "MPLUS_FONTS";
     rev = "336fec4e9e7c1e61bd22b82e6364686121cf3932";
-    sha256 = "1ha92hyzcfbbq682c50k8clbhigc09rcb9mxjzjwqfj9rfp348id";
+    sha256 = "sha256-LSIyrstJOszll72mxXIC7EW4KEMTFCaQwWs59j0UScE=";
     postFetch = ''
       mkdir -p $out/share/fonts/{truetype,opentype}/${pname}
-      tar xvzf $downloadedFile
-      mv */fonts/ttf/* $out/share/fonts/truetype/${pname}
-      mv */fonts/otf/* $out/share/fonts/opentype/${pname}
+      mv $out/fonts/ttf/* $out/share/fonts/truetype/${pname}
+      mv $out/fonts/otf/* $out/share/fonts/opentype/${pname}
+      shopt -s extglob dotglob
+      rm -rf $out/!(share)
+      shopt -u extglob dotglob
     '';
 
     meta = with lib; {
