@@ -31184,6 +31184,8 @@ with pkgs;
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
+  pop-launcher = callPackage ../applications/misc/pop-launcher { };
+
   popcorntime = callPackage ../applications/video/popcorntime {};
 
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
