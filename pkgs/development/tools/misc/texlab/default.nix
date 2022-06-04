@@ -30,6 +30,13 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     installManPage texlab.1
+
+    # Remove generated dylib of human_name dependency. TexLab statically
+    # links to the generated rlib and doesn't reference the dylib. I
+    # couldn't find any way to prevent building this by passing cargo flags.
+    # See https://github.com/djudd/human-name/blob/master/Cargo.toml#L43
+    rm "$out/lib/libhuman_name${stdenv.hostPlatform.extensions.sharedLibrary}"
+    rmdir "$out/lib"
   '';
 
   passthru.updateScript = nix-update-script {

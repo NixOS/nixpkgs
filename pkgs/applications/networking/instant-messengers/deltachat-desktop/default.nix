@@ -81,7 +81,7 @@ in nodePackages.deltachat-desktop.override rec {
   postInstall = ''
     rm -r node_modules/deltachat-node/node/prebuilds
 
-    npm run build
+    npm run build4production
 
     npm prune --production
 
