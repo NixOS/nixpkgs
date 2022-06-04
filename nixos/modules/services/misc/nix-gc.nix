@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, utils, ... }:
 
 with lib;
 
@@ -90,7 +90,9 @@ in
 
     systemd.services.nix-gc = lib.mkIf config.nix.enable {
       description = "Nix Garbage Collector";
-      serviceConfig.ExecStart = "${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
+      serviceConfig.ExecStart = utils.escapeSystemdExecArgs [
+        "${config.nix.package.out}/bin/nix-collect-garbage"
+      ] ++ cfg.options;
       startAt = optional cfg.automatic cfg.dates;
     };
 
