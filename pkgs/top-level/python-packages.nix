@@ -675,6 +675,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  asn1tools = callPackage ../development/python-modules/asn1tools { };
+
   aspell-python = callPackage ../development/python-modules/aspell-python { };
 
   aspy-refactor-imports = callPackage ../development/python-modules/aspy-refactor-imports { };
