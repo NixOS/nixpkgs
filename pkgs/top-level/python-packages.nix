@@ -5931,6 +5931,8 @@ in {
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
 
+  py-eth-sig-utils = callPackage ../development/python-modules/py-eth-sig-utils { };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   oasatelematics = callPackage ../development/python-modules/oasatelematics { };
