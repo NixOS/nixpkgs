@@ -106,7 +106,6 @@ rec {
       xorg.libXi
       xorg.libSM
       xorg.libICE
-      gnome2.GConf
       freetype
       curlWithGnuTls
       nspr
