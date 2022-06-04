@@ -53,5 +53,8 @@ poetry2nix.mkPoetryApplication {
   meta = with lib; {
     inherit (python.meta) platforms;
     maintainers = with maintainers; [ adisbladis jakewaksbaum ];
+    knownVulnerabilities = [
+      "CVE-2021-33503"  # urllib3 version in poetry.lock is vulnerable
+    ];
   };
 }
