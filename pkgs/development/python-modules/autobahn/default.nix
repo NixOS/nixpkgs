@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , attrs
 , argon2-cffi
@@ -10,7 +9,8 @@
 , click
 , cryptography
 , ecdsa
-  # , eth-abi
+, eth-abi
+, eth-account
 , flatbuffers
 , jinja2
 , hkdf
@@ -19,14 +19,14 @@
 , mock
 , msgpack
 , passlib
-  # , py-ecc
-  # , py-eth-sig-utils
+, py-ecc
+, py-eth-sig-utils
 , py-multihash
 , py-ubjson
 , pynacl
 , pygobject3
 , pyopenssl
-, pyqrcode
+, qrcode
 , pytest-asyncio
 , python-snappy
 , pytestCheckHook
@@ -48,27 +48,20 @@
 
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "22.4.2";
+  version = "22.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-V7es8ijVDYPPMnNyuInioWioaSdbJuF5F+0LTPTYI6Y=";
+    sha256 = "sha256-NKpVabC0QZ+MJ3eSxgDcJRjEkwkox04iee+LiNi4o+o=";
   };
 
-  patches = [
-    # fix txaio compatibility
-    (fetchpatch {
-      url = "https://github.com/crossbario/autobahn-python/commit/2e2ee5f9775ed312db699f5c55fc0488311735a5.patch";
-      excludes = [
-        "setup.py"
-        "tox.ini"
-      ];
-      sha256 = "sha256-LQSusXZwDpxyQl4tphZovaYceg/JVG0SyoA9FUQlVWU=";
-    })
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest>=2.8.6,<3.3.0" "pytest"
+  '';
 
   propagatedBuildInputs = [
     cryptography
@@ -81,13 +74,11 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
+    # FIXME: remove the following dependencies when web3 gets added
+    eth-account
   ] ++ passthru.optional-dependencies.scram
-  ++ passthru.optional-dependencies.serialization;
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest>=2.8.6,<3.3.0" "pytest"
-  '';
+  ++ passthru.optional-dependencies.serialization
+  ++ passthru.optional-dependencies.xbr;
 
   preCheck = ''
     # Run asyncio tests (requires twisted)
@@ -106,13 +97,13 @@ buildPythonPackage rec {
     all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui ++ xbr;
     accelerate = [ /* wsaccel */ ];
     compress = [ python-snappy ];
-    encryption = [ pynacl pyopenssl pyqrcode /* pytrie */ service-identity ];
+    encryption = [ pynacl pyopenssl qrcode /* pytrie */ service-identity ];
     nvx = [ cffi ];
     scram = [ argon2-cffi cffi passlib ];
     serialization = [ cbor2 flatbuffers msgpack ujson py-ubjson ];
     twisted = [ attrs args.twisted zope_interface ];
     ui = [ pygobject3 ];
-    xbr = [ base58 cbor2 click ecdsa /* eth-abi */ jinja2 hkdf mnemonic /* py-ecc py-eth-sig-utils */ py-multihash rlp spake2 twisted /* web3 xbr */ yapf /* zlmdb */ ];
+    xbr = [ base58 cbor2 click ecdsa eth-abi jinja2 hkdf mnemonic py-ecc py-eth-sig-utils py-multihash rlp spake2 twisted /* web3 xbr */ yapf /* zlmdb */ ];
   };
 
   meta = with lib; {
