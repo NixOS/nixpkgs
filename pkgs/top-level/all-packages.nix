@@ -34462,6 +34462,8 @@ with pkgs;
 
   sndio = callPackage ../misc/sndio { };
 
+  sticky = callPackage ../applications/misc/sticky { };
+
   stork = callPackage ../applications/misc/stork { };
 
   oclgrind = callPackage ../development/tools/analysis/oclgrind { };
