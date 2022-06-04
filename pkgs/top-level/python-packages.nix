@@ -7482,6 +7482,8 @@ in {
 
   pykwalify = callPackage ../development/python-modules/pykwalify { };
 
+  pykwb = callPackage ../development/python-modules/pykwb { };
+
   pylacrosse = callPackage ../development/python-modules/pylacrosse { };
 
   pylama = callPackage ../development/python-modules/pylama { };
