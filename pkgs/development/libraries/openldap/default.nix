@@ -93,18 +93,18 @@ stdenv.mkDerivation rec {
     "ac_cv_func_memcmp_working=yes"
   ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
-  makeFlags = [
+  NIX_CFLAGS_COMPILE = [ "-DLDAPI_SOCK=\"/run/slapd/ldapi\"" ];
+
+  makeFlags= [
     "CC=${stdenv.cc.targetPrefix}cc"
     "STRIP="  # Disable install stripping as it breaks cross-compiling. We strip binaries anyway in fixupPhase.
+    "STRIP_OPTS="
     "prefix=${placeholder "out"}"
     "sysconfdir=${placeholder "out"}/etc"
     "systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     # contrib modules require these
     "moduledir=${placeholder "out"}/lib/modules"
     "mandir=${placeholder "out"}/share/man"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    # Can be unconditional, doing it like this to prevent a mass rebuild.
-    "STRIP_OPTS="
   ];
 
   extraContribModules = [
