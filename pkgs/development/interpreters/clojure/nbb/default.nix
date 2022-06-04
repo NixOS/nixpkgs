@@ -65,14 +65,8 @@ stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = ''
     $out/bin/nbb --help > /dev/null
+    [ $($out/bin/nbb -e '(+ 1 2)') = '3' ]
   '';
-
-  passthru.tests = {
-    simple = runCommand "${pname}-test" {} ''
-      [ $(${nbb}/bin/nbb -e '(+ 1 2)') = '3' ]
-      touch $out
-    '';
-  };
 
   enableParallelBuilding = true;
 
@@ -83,6 +77,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       PlumpMath
     ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
 }
