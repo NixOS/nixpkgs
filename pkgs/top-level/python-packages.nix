@@ -2809,6 +2809,8 @@ in {
 
   eth-hash = callPackage ../development/python-modules/eth-hash { };
 
+  eth-keyfile = callPackage ../development/python-modules/eth-keyfile { };
+
   eth-typing = callPackage ../development/python-modules/eth-typing { };
 
   eth-utils = callPackage ../development/python-modules/eth-utils { };
