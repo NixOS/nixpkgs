@@ -3,6 +3,7 @@
 , aioshutil
 , buildPythonPackage
 , fetchFromGitHub
+, ipython
 , packaging
 , pillow
 , poetry-core
@@ -17,6 +18,7 @@
 , python-dotenv
 , pythonOlder
 , pytz
+, termcolor
 , typer
 }:
 
@@ -41,10 +43,17 @@ buildPythonPackage rec {
     pillow
     pydantic
     pyjwt
-    python-dotenv
     pytz
     typer
   ];
+
+  passthru.optional-dependencies = {
+    shell = [
+      ipython
+      python-dotenv
+      termcolor
+    ];
+  };
 
   checkInputs = [
     pytest-aiohttp
@@ -56,9 +65,6 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # https://github.com/briis/pyunifiprotect/pull/176
-    substituteInPlace setup.cfg \
-      --replace "asyncio" "aiohttp"
     substituteInPlace pyproject.toml \
       --replace "--cov=pyunifiprotect --cov-append" ""
   '';
