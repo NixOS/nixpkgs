@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, fetchpatch
 
 , graphene
 , graphql-core
@@ -32,6 +33,11 @@ buildPythonPackage rec {
 
   patches = [
     ./graphene-3_2_0.patch
+    (fetchpatch {
+      url = "https://github.com/graphql-python/graphene-django/commit/ca555293a4334c26cf9a390dd1e3d0bd4c819a17.patch";
+      excludes = [ "setup.py" ];
+      sha256 = "sha256-RxG1MRhmpBKnHhSg4SV+DjZ3uA0nl9oUeei56xjtUpw=";
+    })
   ];
 
   postPatch = ''
