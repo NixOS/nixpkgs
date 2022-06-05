@@ -210,6 +210,7 @@ in python.pkgs.buildPythonApplication rec {
       "attrs"
       "awesomeversion"
       "bcrypt"
+      "cryptography"
       "httpx"
       "PyJWT"
     ];
