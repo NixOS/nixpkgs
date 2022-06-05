@@ -77,5 +77,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/shazow/urllib3";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    knownVulnerabilities = [
+      "CVE-2021-33503"
+    ];
   };
 }
