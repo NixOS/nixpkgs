@@ -26079,7 +26079,7 @@ with pkgs;
 
   eq10q = callPackage ../applications/audio/eq10q { };
 
-  errbot = python3Packages.callPackage ../applications/networking/errbot { };
+  errbot = callPackage ../applications/networking/errbot { };
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
