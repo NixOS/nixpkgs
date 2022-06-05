@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.keycloak.org/";
     description = "Identity and access management for modern applications and services";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = jre.meta.platforms;
     maintainers = with maintainers; [ ngerstle talyz ];

@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://emma.sourceforge.net/";
     description = "A code coverage tool for Java";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     platforms = lib.platforms.unix;
     license = lib.licenses.cpl10;
   };

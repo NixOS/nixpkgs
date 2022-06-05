@@ -43,6 +43,7 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Team collaboration software written in Java and mainly used in corporate environments";
     homepage = "https://www.atlassian.com/software/confluence";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ fpletz globin willibutz ciil techknowlogick ];
   };

@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ vlaci ];
     platforms = [ "x86_64-linux" "i686-linux" ];

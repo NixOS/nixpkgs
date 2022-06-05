@@ -29,6 +29,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "High-performance Minecraft Server";
     homepage    = "https://papermc.io/";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license     = lib.licenses.gpl3Only;
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ aaronjanse neonfuz ];
