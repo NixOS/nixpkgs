@@ -11014,6 +11014,8 @@ with pkgs;
 
   tracebox = callPackage ../tools/networking/tracebox { };
 
+  tracee = callPackage ../tools/security/tracee { };
+
   tracefilegen = callPackage ../development/tools/analysis/garcosim/tracefilegen { };
 
   tracefilesim = callPackage ../development/tools/analysis/garcosim/tracefilesim { };
