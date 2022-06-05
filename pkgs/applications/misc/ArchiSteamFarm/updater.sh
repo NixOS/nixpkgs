@@ -1,6 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../.. -i bash -p curl gnused jq common-updater-scripts nuget-to-nix
-set -exo pipefail
+set -euox pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 deps_file="$(realpath ./deps)"
@@ -18,7 +18,7 @@ fi
 cd ../../../..
 
 nixpkgs_path=$(pwd)
-if [[ "$1" != "--deps-only" ]]; then
+if [[ "${1:-}" != "--deps-only" ]]; then
     update-source-version ArchiSteamFarm "$new_version"
 fi
 store_src="$(nix-build -A ArchiSteamFarm.src --no-out-link)"
@@ -36,12 +36,11 @@ for i in $platforms; do
   nix-shell -I nixpkgs="$nixpkgs_path" -p dotnet-sdk_6 --argstr system $i --run "
      mkdir ./nuget_pkgs-$i
      for project in ArchiSteamFarm/ArchiSteamFarm.csproj ArchiSteamFarm.Tests/ArchiSteamFarm.Tests.csproj; do
-       dotnet restore $project --packages ./nuget_pkgs-$i
+       dotnet restore \$project --packages ./nuget_pkgs-$i
      done;
 
      nuget-to-nix ./nuget_pkgs-$i > $deps_file-$i.nix" \
   || echo "Did you set up binformat for $i?";
-
 done;
 
 trap '
