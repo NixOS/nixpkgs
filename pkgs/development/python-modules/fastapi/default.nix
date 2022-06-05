@@ -7,7 +7,6 @@
 , pytest-asyncio
 , aiosqlite
 , databases
-, fetchpatch
 , flask
 , httpx
 , passlib
@@ -20,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.75.2";
+  version = "0.78.0";
   format = "flit";
 
   disabled = pythonOlder "3.6";
@@ -29,8 +28,13 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = version;
-    hash = "sha256-B4q3Q256Sj4jTQt1TDm3fiEaQKdVxddCF9+KsxkkTWo=";
+    hash = "sha256-4JS0VLVg67O7VdcDw2k2u+98kiCdCHvCAEGHYGWEIOA=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "starlette==" "starlette>="
+  '';
 
   propagatedBuildInputs = [
     starlette
@@ -50,21 +54,6 @@ buildPythonPackage rec {
     sqlalchemy
     trio
   ] ++ passlib.optional-dependencies.bcrypt;
-
-  patches = [
-    # Bump starlette, https://github.com/tiangolo/fastapi/pull/4483
-    (fetchpatch {
-      name = "support-later-starlette.patch";
-      # PR contains multiple commits
-      url = "https://patch-diff.githubusercontent.com/raw/tiangolo/fastapi/pull/4483.patch";
-      sha256 = "sha256-ZWaqAd/QYEYRL1hSQdXdFPgWgdmOill2GtmEn33vz2U=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "starlette ==" "starlette >="
-  '';
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from
