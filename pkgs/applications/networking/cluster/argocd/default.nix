@@ -2,19 +2,19 @@
 
 buildGoModule rec {
   pname = "argocd";
-  version = "2.3.3";
+  version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
-    sha256 = "sha256-ChgWqhkzVKhbyEA+g2flWK/WMxur7UHWXJUcLzp9RTE=";
+    sha256 = "sha256-pWDwmsLCXoK8EzipOPXUdYu75hPm5AIExXmgoA102Dg=";
   };
 
   vendorSha256 = "sha256-XrIIMnn65Y10KnVTsmw6vLE53Zra1lWNFgklmaj3gF8=";
 
   # Set target as ./cmd per release-cli
-  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L222
+  # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
   subPackages = [ "cmd" ];
 
   ldflags =
