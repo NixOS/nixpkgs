@@ -70,9 +70,7 @@ let
           makeDerivationExtensible mkDerivationSimple (self: attrs // f self attrs))
       attrs;
 
-in
-
-makeOverlayable (overrideAttrs:
+  mkDerivationSimple = overrideAttrs:
 
 
 # `mkDerivation` wraps the builtin `derivation` function to
@@ -485,6 +483,7 @@ lib.extendDerivation
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
    passthru)
-  (derivation derivationArg)
+  (derivation derivationArg);
 
-)
+in
+  makeOverlayable mkDerivationSimple
