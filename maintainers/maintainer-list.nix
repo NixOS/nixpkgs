@@ -11452,6 +11452,12 @@
     githubId = 59476;
     name = "Peter Schuller";
   };
+  scoder12 = {
+    name = "Spencer Pogorzelski";
+    email = "34356756+Scoder12@users.noreply.github.com";
+    github = "scoder12";
+    githubId = 34356756;
+  };
   scolobb = {
     email = "sivanov@colimite.fr";
     github = "scolobb";
