@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/eclipse/eclipse.jdt.ls";
     description = "Java language server";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl20;
     maintainers = with maintainers; [ matt-snider ];
   };

@@ -29,6 +29,7 @@ stdenv.mkDerivation rec{
       This package is only the Community Edition of the Flyway command-line tool.
     '';
     homepage = "https://flywaydb.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = [ maintainers.cmcdragonkai ];

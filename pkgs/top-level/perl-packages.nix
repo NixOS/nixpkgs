@@ -11511,6 +11511,8 @@ let
       description = "A tool to read, write and edit EXIF meta information";
       homepage = "https://exiftool.org/";
 
+      mainProgram = "exiftool";
+
       longDescription = ''
         ExifTool is a platform-independent Perl library plus a command-line
         application for reading, writing and editing meta information in a wide

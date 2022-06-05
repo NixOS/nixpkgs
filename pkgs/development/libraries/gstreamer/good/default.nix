@@ -72,8 +72,13 @@ stdenv.mkDerivation rec {
     orc
     libshout
     glib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals qt5Support (with qt5; [
+    qtbase
+  ]) ++ lib.optionals stdenv.isLinux [
     wayland-protocols
+  ] ++ lib.optionals qt5Support [
+    qt5.qttools.dev
+    qt5.qtbase.dev # For moc-qt5
   ];
 
   buildInputs = [

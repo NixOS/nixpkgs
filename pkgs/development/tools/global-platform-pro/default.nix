@@ -61,6 +61,10 @@ stdenv.mkDerivation rec {
       If you run NixOS, it can be enabled with `services.pcscd.enable = true;`.
     '';
     homepage = "https://github.com/martinpaljak/GlobalPlatformPro";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = with licenses; [ lgpl3 ];
     maintainers = with maintainers; [ ekleog ];
     mainProgram = "gp";
