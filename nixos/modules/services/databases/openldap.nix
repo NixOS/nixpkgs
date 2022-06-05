@@ -231,7 +231,7 @@ in {
 
   config = let
     dbSettings = mapAttrs' (name: { attrs, ... }: nameValuePair attrs.olcSuffix attrs)
-      (filterAttrs (name: value: hasPrefix "olcDatabase=" name) cfg.settings.children);
+      (filterAttrs (name: { attrs, ... }: (hasPrefix "olcDatabase=" name) && attrs ? olcSuffix) cfg.settings.children);
     settingsFile = pkgs.writeText "config.ldif" (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
     writeConfig = pkgs.writeShellScript "openldap-config" ''
       set -euo pipefail
@@ -245,7 +245,9 @@ in {
 
     contentsFiles = mapAttrs (dn: ldif: pkgs.writeText "${dn}.ldif" ldif) cfg.declarativeContents;
     writeContents = pkgs.writeShellScript "openldap-load" ''
-      rm -rf /var/lib/openldap/$2/*
+      set -euo pipefail
+
+      rm -rf $2/*
       ${openldap}/bin/slapadd -F ${configDir} -b $1 -l $3
     '';
   in mkIf cfg.enable {
