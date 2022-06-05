@@ -90,7 +90,7 @@ let
           bindsTo = [ "network-setup.service" ];
         };
 
-        networkSetup =
+        networkSetup = lib.mkIf (config.networking.resolvconf.enable || cfg.defaultGateway != null || cfg.defaultGateway6 != null)
           { description = "Networking Setup";
 
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
