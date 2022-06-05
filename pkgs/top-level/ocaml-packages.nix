@@ -24,6 +24,8 @@ let
 
     alcotest-mirage = callPackage ../development/ocaml-modules/alcotest/mirage.nix {};
 
+    alsa = callPackage ../development/ocaml-modules/alsa { };
+
     angstrom = callPackage ../development/ocaml-modules/angstrom { };
 
     angstrom-async = callPackage ../development/ocaml-modules/angstrom-async { };
@@ -479,6 +481,8 @@ let
     gsl = callPackage ../development/ocaml-modules/gsl {
       inherit (pkgs) gsl;
     };
+
+    gstreamer = callPackage ../development/ocaml-modules/gstreamer { };
 
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
@@ -1131,6 +1135,10 @@ let
 
     ptime = callPackage ../development/ocaml-modules/ptime { };
 
+    pulseaudio = callPackage ../development/ocaml-modules/pulseaudio {
+      inherit (pkgs) pulseaudio;
+    };
+
     pure-splitmix = callPackage ../development/ocaml-modules/pure-splitmix { };
 
     resource-pooling = callPackage ../development/ocaml-modules/resource-pooling { };
@@ -1204,6 +1212,10 @@ let
     parany = callPackage ../development/ocaml-modules/parany { };
 
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
+
+    portaudio = callPackage ../development/ocaml-modules/portaudio {
+      inherit (pkgs) portaudio;
+    };
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
