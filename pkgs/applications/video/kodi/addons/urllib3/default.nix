@@ -1,19 +1,23 @@
-{ lib, buildKodiAddon, fetchzip, addonUpdateScript }:
+{ lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript }:
+
 buildKodiAddon rec {
   pname = "urllib3";
   namespace = "script.module.urllib3";
-  version = "1.26.4+matrix.1";
+  version = "1.26.8+matrix.1";
 
-  src = fetchzip {
-    url = "https://mirrors.kodi.tv/addons/matrix/${namespace}/${namespace}-${version}.zip";
-    sha256 = "1d2k6gbsnhdadcl1xc7igz4m71z2fcnpln5ppfjv455cmkk110vf";
+  # temporarily fetching from a PR because of CVE-2021-33503
+  # see https://github.com/xbmc/repo-scripts/pull/2193 for details
+  src = fetchFromGitHub {
+    owner = "xbmc";
+    repo = "repo-scripts";
+    rev = "f0bfacab4732e33c5669bedd1a86319fa9e38338";
+    sha256 = "sha256-UEMLrIvuuPARGHMsz6dOZrOuHIYVSpi0gBy2lK1Y2sk=";
   };
+
+  sourceRoot = "source/script.module.urllib3";
 
   passthru = {
     pythonPath = "lib";
-    updateScript = addonUpdateScript {
-      attrPath = "kodi.packages.urllib3";
-    };
   };
 
   meta = with lib; {
