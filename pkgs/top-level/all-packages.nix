@@ -28037,6 +28037,8 @@ with pkgs;
 
   mbrola = callPackage ../applications/audio/mbrola { };
 
+  mcomix = callPackage ../applications/graphics/mcomix { };
+
   mcomix3 = callPackage ../applications/graphics/mcomix3 {};
 
   mcpp = callPackage ../development/compilers/mcpp { };
