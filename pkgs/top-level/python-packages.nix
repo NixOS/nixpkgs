@@ -2887,6 +2887,8 @@ in {
 
   ezdxf = callPackage ../development/python-modules/ezdxf { };
 
+  f90nml = callPackage ../development/python-modules/f90nml { };
+
   Fabric = callPackage ../development/python-modules/Fabric { };
 
   faadelays = callPackage ../development/python-modules/faadelays { };

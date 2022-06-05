@@ -7064,9 +7064,7 @@ with pkgs;
 
   ifuse = callPackage ../tools/filesystems/ifuse { };
   ideviceinstaller = callPackage ../tools/misc/ideviceinstaller { };
-  idevicerestore = callPackage ../tools/misc/idevicerestore {
-    inherit (darwin) IOKit;
-  };
+  idevicerestore = callPackage ../tools/misc/idevicerestore { };
 
   inherit (callPackages ../tools/filesystems/irods rec {
     stdenv = llvmPackages.libcxxStdenv;
@@ -18700,7 +18698,11 @@ with pkgs;
 
   libieee1284 = callPackage ../development/libraries/libieee1284 { };
 
-  libimobiledevice = callPackage ../development/libraries/libimobiledevice { };
+  libimobiledevice = callPackage ../development/libraries/libimobiledevice {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation;
+  };
+
+  libimobiledevice-glue = callPackage ../development/libraries/libimobiledevice-glue { };
 
   libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
@@ -29412,6 +29414,8 @@ with pkgs;
 
   rkdeveloptool = callPackage ../misc/rkdeveloptool { };
 
+  rkdeveloptool-pine64 = callPackage ../misc/rkdeveloptool-pine64 { };
+
   rocketchat-desktop = callPackage ../applications/networking/instant-messengers/rocketchat-desktop { };
 
   rofi-unwrapped = callPackage ../applications/misc/rofi { };
@@ -31241,6 +31245,8 @@ with pkgs;
   lnd = callPackage ../applications/blockchains/lnd { };
 
   lndconnect = callPackage ../applications/blockchains/lndconnect { };
+
+  lndhub-go = callPackage ../applications/blockchains/lndhub-go { };
 
   lndmanage = callPackage ../applications/blockchains/lndmanage { };
 
@@ -34460,6 +34466,8 @@ with pkgs;
 
   sndio = callPackage ../misc/sndio { };
 
+  sticky = callPackage ../applications/misc/sticky { };
+
   stork = callPackage ../applications/misc/stork { };
 
   oclgrind = callPackage ../development/tools/analysis/oclgrind { };
@@ -34562,7 +34570,7 @@ with pkgs;
 
   runit = callPackage ../tools/system/runit { };
 
-  runitor = callPackage ../tools/system/runitor { };
+  runitor = callPackage ../tools/system/runitor { buildGoModule = buildGo118Module; };
 
   refind = callPackage ../tools/bootloaders/refind { };
 
