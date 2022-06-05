@@ -236,7 +236,10 @@ in {
     writeConfig = pkgs.writeShellScript "openldap-config" ''
       set -euo pipefail
 
-      ${lib.optionalString (!cfg.mutableConfig) "rm -rf ${configDir}/*"}
+      ${lib.optionalString (!cfg.mutableConfig) ''
+        chmod -R u+w ${configDir}
+        rm -rf ${configDir}/*
+      ''}
       if [ ! -e "${configDir}/cn=config.ldif" ]; then
         ${openldap}/bin/slapadd -F ${configDir} -bcn=config -l ${settingsFile}
       fi
