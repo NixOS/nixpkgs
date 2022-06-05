@@ -11,7 +11,7 @@ let
   };
 
   # Based off lib.makeExtensible, with modifications:
-  makeDerivationExtensible = mkDerivationSimple: rattrs:
+  makeDerivationExtensible = rattrs:
     let
       # NOTE: The following is a hint that will be printed by the Nix cli when
       # encountering an infinite recursion. It must not be formatted into
@@ -42,14 +42,14 @@ let
                     f0 self super
                   else x;
             in
-              makeDerivationExtensible mkDerivationSimple
+              makeDerivationExtensible
                 (self: let super = rattrs self; in super // f self super))
           args;
     in finalPackage;
 
   # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
   # but pre-evaluated for a slight improvement in performance.
-  makeDerivationExtensibleConst = mkDerivationSimple: attrs:
+  makeDerivationExtensibleConst = attrs:
     mkDerivationSimple
       (f0:
         let
@@ -61,7 +61,7 @@ let
                 f0 self super
               else x;
         in
-          makeDerivationExtensible mkDerivationSimple (self: attrs // f self attrs))
+          makeDerivationExtensible (self: attrs // f self attrs))
       attrs;
 
   mkDerivationSimple = overrideAttrs:
@@ -482,5 +482,5 @@ lib.extendDerivation
 in
   fnOrAttrs:
     if builtins.isFunction fnOrAttrs
-    then makeDerivationExtensible mkDerivationSimple fnOrAttrs
-    else makeDerivationExtensibleConst mkDerivationSimple fnOrAttrs
+    then makeDerivationExtensible fnOrAttrs
+    else makeDerivationExtensibleConst fnOrAttrs
