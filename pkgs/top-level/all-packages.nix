@@ -1065,6 +1065,8 @@ with pkgs;
 
   airfield = callPackage ../tools/networking/airfield { };
 
+  airgeddon = callPackage ../tools/networking/airgeddon { };
+
   apache-airflow = with python3.pkgs; toPythonApplication apache-airflow;
 
   airsonic = callPackage ../servers/misc/airsonic { };
