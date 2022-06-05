@@ -2,20 +2,20 @@
 
 buildGoModule rec {
   pname = "NoiseTorch";
-  version = "0.11.5";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
-    owner = "lawl";
+    owner = "noisetorch";
     repo = "NoiseTorch";
-    rev = version;
-    sha256 = "sha256-j/6XB3vA5LvTuCxmeB0HONqEDzYg210AWW/h3nCGOD8=";
+    rev = "v${version}";
+    sha256 = "sha256-Y/rMoR74qeN5zr5ekq7Abpx2iTWf7dJimXfknPACWK8=";
   };
 
   vendorSha256 = null;
 
   doCheck = false;
 
-  ldflags = [ "-X main.version=${version}"  "-X main.distribution=nix" ];
+  ldflags = [ "-X main.version=${version}" "-X main.distribution=nix" ];
 
   subPackages = [ "." ];
 
@@ -34,9 +34,10 @@ buildGoModule rec {
 
   meta = with lib; {
     insecure = true;
-    knownVulnerabilities = [ "https://github.com/lawl/NoiseTorch/releases/tag/0.11.6" ];
+    knownVulnerabilities =
+      lib.optional (lib.versionOlder version "0.12") "https://github.com/noisetorch/NoiseTorch/releases/tag/v0.12.0";
     description = "Virtual microphone device with noise supression for PulseAudio";
-    homepage = "https://github.com/lawl/NoiseTorch";
+    homepage = "https://github.com/noisetorch/NoiseTorch";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ panaeon lom ];
