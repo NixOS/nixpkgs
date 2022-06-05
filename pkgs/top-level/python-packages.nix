@@ -88,6 +88,8 @@ let
         name = removePythonPrefix oldAttrs.name;
         pythonModule = false;
       };
+      # don't draw python and python packages into application
+      setupHook = null;
     });
 
   disabled = drv: throw "${removePythonPrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}";
