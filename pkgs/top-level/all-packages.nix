@@ -28321,6 +28321,8 @@ with pkgs;
 
   dia = callPackage ../applications/graphics/dia { };
 
+  digital = callPackage ../applications/science/electronics/digital {};
+
   direwolf = callPackage ../applications/radio/direwolf {
     hamlib = hamlib_4;
   };
