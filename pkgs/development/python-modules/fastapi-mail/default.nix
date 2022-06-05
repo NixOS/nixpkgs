@@ -33,6 +33,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'fastapi = "^0.75.0"' 'fastapi = "*"' \
       --replace 'httpx = "^0.22.0"' 'httpx = "*"'
   '';
 
