@@ -49,6 +49,7 @@
   git-run = "gr";
   gitmoji-cli = "gitmoji";
   graphql-cli = "graphql";
+  graphql-language-service-cli = "graphql-lsp";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
   kaput-cli = "kaput";
