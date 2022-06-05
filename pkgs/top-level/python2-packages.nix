@@ -110,8 +110,6 @@ with self; with super; {
 
   pygtk = callPackage ../development/python2-modules/pygtk { };
 
-  pyjwt = callPackage ../development/python2-modules/pyjwt { };
-
   pyparsing = callPackage ../development/python2-modules/pyparsing { };
 
   pyroma = callPackage ../development/python2-modules/pyroma { };
