@@ -66,7 +66,7 @@ assert enableGeoLocation -> geoclue2 != null;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.36.2";
+  version = "2.36.3";
 
   outputs = [ "out" "dev" ];
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "/pO920oCwONvkm77boHSiv0oi4gk9sXPanXPQCKOAI4=";
+    sha256 = "sha256-cy/PjE7GRLjtKLRuu9fB66udngr+qb315dEnhq/EeNE=";
   };
 
   patches = lib.optionals stdenv.isLinux [
