@@ -28,6 +28,9 @@ let
       with lib.kernel;
       with (lib.kernel.whenHelpers version);
       {
+        # TODO: remove this once https://github.com/NixOS/nixpkgs/pull/175433 is in master
+        WERROR = no;
+
         # removed options
         CFS_BANDWIDTH = lib.mkForce (option no);
         RT_GROUP_SCHED = lib.mkForce (option no);
