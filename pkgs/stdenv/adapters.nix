@@ -21,7 +21,7 @@ let
 
   # Wrap the original `mkDerivation` providing extra args to it.
   extendMkDerivationArgs = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
-    mkDerivationSuper (args // f args));
+    (mkDerivationSuper args).overrideAttrs f);
 
   # Wrap the original `mkDerivation` transforming the result.
   overrideMkDerivationResult = old: f: withOldMkDerivation old (_: mkDerivationSuper: args:
@@ -60,10 +60,10 @@ rec {
       mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
       if stdenv.hostPlatform.isDarwin
       then throw "Cannot build fully static binaries on Darwin/macOS"
-      else mkDerivationSuper (args // {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
-      } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
-        configureFlags = (args.configureFlags or []) ++ [
+      else (mkDerivationSuper args).overrideAttrs(finalAttrs: {
+        NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "") + " -static";
+      } // lib.optionalAttrs (!(finalAttrs.dontAddStaticConfigureFlags or false)) {
+        configureFlags = (finalAttrs.configureFlags or []) ++ [
             "--disable-shared" # brrr...
           ];
       }));

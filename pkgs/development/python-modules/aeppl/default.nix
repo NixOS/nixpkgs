@@ -42,6 +42,11 @@ buildPythonPackage rec {
     "aeppl"
   ];
 
+  disabledTests = [
+    # Compute issue
+    "test_initial_values"
+  ];
+
   meta = with lib; {
     description = "Library for an Aesara-based PPL";
     homepage = "https://github.com/aesara-devs/aeppl";

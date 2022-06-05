@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libmt32emu";
-  version = "2.5.3";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
     rev = "${pname}_${lib.replaceChars [ "." ] [ "_" ] version}";
-    hash = "sha256-n5VV5Swh1tOVQGT3urEKl64A/w7cY95/0y5wC5ZuLm4=";
+    sha256 = "0ncy55fj9l2s750clxjpv102hrgcndz4qba9w2sf8lwzgy6d1xmp";
   };
 
   outputs = [ "out" "dev" ];
