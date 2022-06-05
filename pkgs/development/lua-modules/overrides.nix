@@ -199,7 +199,7 @@ with prev;
     # until Alloyed/lua-lsp#28
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
-        --replace '"lpeglabel ~> 1.5",' '"lpeglabel >= 1.5",'
+        --replace '"dkjson ~> 2.5",' '"dkjson >= 2.5",'
     '';
   });
 
