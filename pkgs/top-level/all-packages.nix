@@ -10402,6 +10402,8 @@ with pkgs;
     jdk = jdk11;
   };
 
+  sockdump = callPackage ../tools/networking/sockdump { };
+
   spglib = callPackage ../development/libraries/spglib {
     inherit (llvmPackages) openmp;
   };
