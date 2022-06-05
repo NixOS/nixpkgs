@@ -1,6 +1,11 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pywebpush
+, py-vapid
+}:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "ntfy-webpush";
   version = "0.1.3";
 
@@ -17,7 +22,7 @@ python3Packages.buildPythonPackage rec {
       --replace "'ntfy', " ""
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     pywebpush
     py-vapid
   ];
