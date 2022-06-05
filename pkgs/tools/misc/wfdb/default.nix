@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "https://physionet.org/content/wfdb";
     # Library as LGPL2 and application as GPLv2 or later
     license = [ licenses.lgpl2 licenses.gpl2Plus ];
-    maintainers = [ maintainers.maksteel ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }
