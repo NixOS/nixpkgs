@@ -1,8 +1,8 @@
 { version
 , src
 , jami-meta
-, mkDerivation
 , lib
+, stdenv
 , pkg-config
 , cmake
 , networkmanager # for libnm
@@ -10,18 +10,19 @@
 , qttools # for translations
 , wrapQtAppsHook
 , libnotify
-, qrencode
-, qtwebengine
+, qt5compat
+, qtbase
 , qtdeclarative
-, qtquickcontrols2
+, qrencode
 , qtmultimedia
+, qtnetworkauth
 , qtsvg
+, qtwebengine
 , qtwebchannel
-, qtgraphicaleffects # no gui without this
 , jami-libclient
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "jami-client-qt";
   inherit version src;
 
@@ -33,6 +34,7 @@ mkDerivation {
   '';
 
   nativeBuildInputs = [
+    wrapQtAppsHook
     pkg-config
     cmake
     python3
@@ -43,14 +45,20 @@ mkDerivation {
     jami-libclient
     networkmanager
     libnotify
+    qtbase
+    qt5compat
     qrencode
-    qtwebengine
+    qtnetworkauth
     qtdeclarative
-    qtquickcontrols2
     qtmultimedia
     qtsvg
     qtwebchannel
-    qtgraphicaleffects
+    qtwebengine
+  ];
+
+  qtWrapperArgs = [
+    # With wayland the titlebar is not themed and the wmclass is wrong.
+    "--set-default QT_QPA_PLATFORM xcb"
   ];
 
   meta = jami-meta // {
