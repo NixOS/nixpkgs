@@ -55,6 +55,14 @@ in {
             "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
             "${pkgs.openldap}/etc/schema/nis.ldif"
           ];
+          "olcDatabase={0}config" = {
+            attrs = {
+              objectClass = [ "olcDatabaseConfig" ];
+              olcDatabase = "{0}config";
+              olcRootDN = "cn=root,cn=config";
+              olcRootPW = "configpassword";
+            };
+          };
           "olcDatabase={1}mdb" = {
             # This tests string, base64 and path values, as well as lists of string values
             attrs = {
@@ -77,6 +85,9 @@ in {
     };
 
     specialisation = {
+      mutableConfig.configuration = { ... }: {
+        services.openldap.mutableConfig = true;
+      };
       manualConfigDir = {
         inheritParentConfig = false;
         configuration = { ... }: {
@@ -99,10 +110,17 @@ in {
   in ''
     machine.wait_for_unit("openldap.service")
     machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"')
+    machine.fail('ldapmodify -D cn=root,cn=config -w configpassword -f ${pkgs.writeText "rootpw.ldif" changeRootPw}')
+
+    with subtest("mutable config"):
+      machine.succeed('${specializations}/mutableConfig/bin/switch-to-configuration test')
+      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"')
+      machine.succeed('ldapmodify -D cn=root,cn=config -w configpassword -f ${pkgs.writeText "rootpw.ldif" changeRootPw}')
+      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w foobar -b "dc=example"')
 
     with subtest("manual config dir"):
       machine.succeed(
-        'mkdir -p /var/db/slapd.d /var/db/openldap',
+        'mkdir /var/db/slapd.d /var/db/openldap',
         'slapadd -F /var/db/slapd.d -n0 -l ${pkgs.writeText "config.ldif" ldifConfig}',
         'slapadd -F /var/db/slapd.d -n1 -l ${pkgs.writeText "contents.ldif" dbContents}',
         'chown -R openldap:openldap /var/db/slapd.d /var/db/openldap',
