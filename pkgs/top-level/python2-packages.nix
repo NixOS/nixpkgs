@@ -166,12 +166,6 @@ with self; with super; {
 
   wsproto = callPackage ../development/python2-modules/wsproto { };
 
-  wxPython30 = callPackage ../development/python2-modules/wxPython {
-    wxGTK = pkgs.wxGTK30;
-  };
-
-  wxPython = self.wxPython30;
-
   vcrpy = callPackage ../development/python2-modules/vcrpy { };
 
   zeek = disabled super.zeek;
