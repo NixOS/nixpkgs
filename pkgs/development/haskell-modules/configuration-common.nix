@@ -2351,25 +2351,6 @@ self: super: {
   # Invalid CPP in test suite: https://github.com/cdornan/memory-cd/issues/1
   memory-cd = dontCheck super.memory-cd;
 
-  protolude = appendPatches [
-    # Intermediate Patch, so the next one applies
-    (fetchpatch {
-      name = "integer-gmp-only-symbols.patch";
-      url = "https://github.com/protolude/protolude/commit/84d228a3b5a2adfe5c8aec23176a0301012e54eb.patch";
-      sha256 = "0mk0gxcg8vp73wlz764y24gqmxdrhanp12dfam9xsb6cm34jkjdc";
-    })
-    # Compat with GHC 9.0 (not merged yet)
-    (fetchpatch {
-      name = "protolude-ghc-9.0.patch";
-      url = "https://github.com/protolude/protolude/pull/131/commits/1ca4b4564b4d868022d5bab5330e2c7d9cae11a0.patch";
-      sha256 = "0jrm6715kc8v7v4isi79b3w1i51rs332bkak25ik6zv3i5lgcg68";
-      includes = [
-        "protolude.cabal"
-        "src/**"
-      ];
-    })
-  ] super.protolude;
-
   # https://github.com/haskell/fgl/pull/99
   fgl = doJailbreak super.fgl;
   fgl-arbitrary = doJailbreak super.fgl-arbitrary;
