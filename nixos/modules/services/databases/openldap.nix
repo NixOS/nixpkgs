@@ -319,7 +319,7 @@ in {
         # outside the main process:
         #   Got notification message from PID 6378, but reception only permitted for main PID 6377
         NotifyAccess = "all";
-        RuntimeDirectory = "slapd"; # TODO: openldap, for consistency
+        RuntimeDirectory = "openldap";
         StateDirectory = ["openldap"]
           ++ (map ({olcDbDirectory, ... }: removePrefix "/var/lib/" olcDbDirectory) (attrValues dbSettings));
         StateDirectoryMode = "700";
