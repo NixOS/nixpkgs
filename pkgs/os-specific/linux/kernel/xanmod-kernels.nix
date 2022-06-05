@@ -14,6 +14,7 @@ let
   };
 
   xanmodKernelFor = { version, suffix, hash }: buildLinux (args // rec {
+  with (lib.kernel.whenHelpers version);
     inherit version;
     modDirVersion = "${version}-${suffix}";
 
