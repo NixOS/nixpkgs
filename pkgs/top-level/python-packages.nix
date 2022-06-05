@@ -1597,6 +1597,8 @@ in {
 
   cfn-lint = callPackage ../development/python-modules/cfn-lint { };
 
+  cfscrape = callPackage ../development/python-modules/cfscrape { };
+
   cftime = callPackage ../development/python-modules/cftime { };
 
   cgen = callPackage ../development/python-modules/cgen { };
