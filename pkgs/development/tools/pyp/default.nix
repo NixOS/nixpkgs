@@ -7,13 +7,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "pyp";
-  version = "0.2.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "hauntsaninja";
     repo = "${pname}";
     rev = "v${version}";
-    sha256 = "1p2mqkgqh138vkry0rc4d65ksffypsqlbza1dzc9h2prrx8dbysw";
+    sha256 = "sha256-9eHmSdTOhZSAdCVIuomP/fyknrA3PWo6eI28A8/xZyY=";
   };
 
   buildInputs = [ astunparse ];
