@@ -57,6 +57,9 @@ buildPythonPackage rec {
     # Fail on Hydra, see https://github.com/NixOS/nixpkgs/pull/130785
     "test_bpo_2142_workaround"
     "test_skip_magic_trailing_comma"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # exceeds max open files on hydra builders
+    "test_blackd_supported_version"
   ];
 
   propagatedBuildInputs = [
