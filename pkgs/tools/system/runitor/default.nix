@@ -1,29 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, runitor }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, testers, runitor }:
 
 buildGoModule rec {
   pname = "runitor";
-  version = "0.9.2";
+  version = "0.10.0";
   vendorSha256 = null;
 
   src = fetchFromGitHub {
     owner = "bdd";
     repo = "runitor";
     rev = "v${version}";
-    sha256 = "sha256-LuCxn4j0MlnJjSh3d18YNzNrtbqtMPxgkZttqKUGJd4";
+    sha256 = "sha256-96WKMeRkkG6en9JXaZjjnqeZOcLSII3knx8cdjTBAKw=";
   };
 
   ldflags = [
-    "-s" "-w" "-X main.Version=v${version}"
+    "-s" "-X main.Version=v${version}"
   ];
 
-  # TODO(cole-h):
-  # End-to-end tests requiring localhost networking currently under
-  # OfBorg's Linux builders, while passing under Darwin.
-  #
-  # Ref: https://github.com/NixOS/nixpkgs/pull/170566#issuecomment-1114034891
-  #
-  # Temporarily disable tests.
-  doCheck = false;
+  patches = [
+    (fetchpatch {
+      name = "backport_TestPostRetries-timeout-fix.patch";
+      url = "https://github.com/bdd/runitor/commit/418142585a8387224825637cca3fe275d3c3d147.patch";
+      sha256 = "sha256-cl+KYoiHm2ioFuJVKokZkglIzL/NaEd5JNUuj4g8MUg=";
+    })
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = runitor;
