@@ -4,6 +4,7 @@
 , requests
 , requests-oauthlib
 , pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     requests
     requests-oauthlib
+    six
   ];
 
   # Project has no tests
