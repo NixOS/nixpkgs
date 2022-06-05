@@ -160,8 +160,6 @@ with self; with super; {
 
   typing = callPackage ../development/python2-modules/typing { };
 
-  urllib3 = callPackage ../development/python2-modules/urllib3 { };
-
   werkzeug = callPackage ../development/python2-modules/werkzeug { };
 
   wsproto = callPackage ../development/python2-modules/wsproto { };
