@@ -76,9 +76,6 @@ stdenv.mkDerivation rec {
     qtbase
   ]) ++ lib.optionals stdenv.isLinux [
     wayland-protocols
-  ] ++ lib.optionals qt5Support [
-    qt5.qttools.dev
-    qt5.qtbase.dev # For moc-qt5
   ];
 
   buildInputs = [
