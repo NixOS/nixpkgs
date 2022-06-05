@@ -407,7 +407,7 @@ with prev;
   })).overrideAttrs (old: {
     # Without this, source root is wrongly set to ./readline-2.6/doc
     setSourceRoot = ''
-      sourceRoot=./readline-3.0
+      sourceRoot=./readline-${pkgs.lib.versions.majorMinor old.version}
     '';
   });
 
