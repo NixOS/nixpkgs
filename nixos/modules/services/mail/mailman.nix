@@ -401,7 +401,7 @@ in {
           plugins = ["python3"];
           home = webEnv;
           module = "mailman_web.wsgi";
-          http = "127.0.0.1:18507";
+          http = "[::1]:18507";
         };
         uwsgiConfigFile = pkgs.writeText "uwsgi-mailman.json" (builtins.toJSON uwsgiConfig);
       in {
