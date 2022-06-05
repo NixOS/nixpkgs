@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , removeReferencesTo
 , zlib
@@ -39,6 +40,20 @@ stdenv.mkDerivation rec {
   });
 
   outputs = [ "out" "lib" "dev" "man" ];
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-26691.patch";
+      url = "https://github.com/OpenPrinting/cups/commit/de4f8c196106033e4c372dce3e91b9d42b0b9444.patch";
+      sha256 = "sha256-IKOtV7bCS6PstwK6YqnYRYTeH562jWwkley86p+6Of8=";
+      excludes = [ "CHANGES.md" ];
+    })
+    (fetchpatch {
+      name = "CVE-2022-26691-fix-comment.patch";
+      url = "https://github.com/OpenPrinting/cups/commit/411b6136f450a583ee08c3880fa09dbe837eb3f1.patch";
+      sha256 = "sha256-dVopmr34c9N5H2ZZz52rXVnHQBuDTNo8M40x9455+jQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace cups/testfile.c \
