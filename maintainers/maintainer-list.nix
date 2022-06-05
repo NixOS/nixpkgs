@@ -3475,6 +3475,13 @@
     githubId = 10042482;
     name = "Louis Pearson";
   };
+  Dettorer = {
+    name = "Paul Hervot";
+    email = "paul.hervot@dettorer.net";
+    matrix = "@dettorer:matrix.org";
+    github = "Dettorer";
+    githubId = 2761682;
+  };
   devhell = {
     email = ''"^"@regexmail.net'';
     github = "devhell";
