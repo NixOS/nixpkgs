@@ -10104,8 +10104,6 @@ with pkgs;
 
   salt = callPackage ../tools/admin/salt {};
 
-  salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
-
   samim-fonts = callPackage ../data/fonts/samim-fonts {};
 
   saml2aws = callPackage ../tools/security/saml2aws {
