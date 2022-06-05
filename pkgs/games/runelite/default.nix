@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source Old School RuneScape client";
     homepage = "https://runelite.net/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.bsd2;
     maintainers = with maintainers; [ kmeakin ];
     platforms = [ "x86_64-linux" ];

@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
       programmatically extract tables from PDFs.
     '';
     homepage = "https://tabula.technology/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = [ maintainers.jakewaksbaum ];
     platforms = platforms.all;

@@ -58,6 +58,7 @@ buildGraalvmNativeImage rec {
   meta = with lib; {
     description = "Language Server Protocol (LSP) for Clojure";
     homepage = "https://github.com/clojure-lsp/clojure-lsp";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo babariviere ];
   };
