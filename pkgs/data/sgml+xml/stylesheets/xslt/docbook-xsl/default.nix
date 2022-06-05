@@ -1,4 +1,4 @@
-{ lib, stdenv, substituteAll, fetchurl, fetchpatch, findXMLCatalogs, writeScriptBin, ruby, bash }:
+{ lib, stdenv, substituteAll, fetchurl, fetchpatch, findXMLCatalogs, writeScriptBin, ruby, bash, withManOptDedupPatch ? false }:
 
 let
 
@@ -17,8 +17,17 @@ let
         # Prevent a potential stack overflow
         # https://github.com/docbook/xslt10-stylesheets/pull/37
         (fetchpatch {
-          url = https://src.fedoraproject.org/rpms/docbook-style-xsl/raw/e3ae7a97ed1d185594dd35954e1a02196afb205a/f/docbook-style-xsl-non-recursive-string-subst.patch;
+          url = "https://src.fedoraproject.org/rpms/docbook-style-xsl/raw/e3ae7a97ed1d185594dd35954e1a02196afb205a/f/docbook-style-xsl-non-recursive-string-subst.patch";
           sha256 = "0lrjjg5kpwwmbhkxzz6i5zmimb6lsvrrdhzc2qgjmb3r6jnsmii3";
+          stripLen = "1";
+        })
+
+        # Fix reproducibility by respecting generate.consistent.ids in indexes
+        # https://github.com/docbook/xslt10-stylesheets/pull/88
+        # https://sourceforge.net/p/docbook/bugs/1385/
+        (fetchpatch {
+          url = "https://github.com/docbook/xslt10-stylesheets/commit/07631601e6602bc49b8eac3aab9d2b35968d3e7a.patch";
+          sha256 = "0igfhcr6hzcydqsnjsd181h5yl3drjnrwdmxcybr236m8255vkq3";
           stripLen = "1";
         })
 
@@ -27,6 +36,10 @@ let
           src = ./catalog-legacy-uris.patch;
           inherit legacySuffix suffix version;
         })
+      ] ++ lib.optionals withManOptDedupPatch [
+        # Fixes https://github.com/NixOS/nixpkgs/issues/166304
+        # https://github.com/docbook/xslt10-stylesheets/pull/241
+        ./fix-man-options-duplication.patch
       ];
 
       propagatedBuildInputs = [ findXMLCatalogs ];
@@ -54,8 +67,9 @@ let
         '';
 
       meta = {
-        homepage = http://wiki.docbook.org/topic/DocBookXslStylesheets;
+        homepage = "https://github.com/docbook/wiki/wiki/DocBookXslStylesheets";
         description = "XSL stylesheets for transforming DocBook documents into HTML and various other formats";
+        license = lib.licenses.mit;
         maintainers = [ lib.maintainers.eelco ];
         platforms = lib.platforms.all;
       };

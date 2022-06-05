@@ -1,60 +1,51 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, nix-update-script
+, pkg-config
 , meson
 , ninja
 , python3
 , vala
 , desktop-file-utils
 , gtk3
-, libxml2
 , granite
+, libhandy
 , libnotify
 , vte
 , libgee
-, elementary-icon-theme
-, appstream
+, pcre2
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-terminal";
-  version = "5.5.0";
-
-  repoName = "terminal";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "terminal";
     rev = version;
-    sha256 = "1wna3kcg621qjyvg70dzk4lfq8si2snnlm9fnl5gj0w6b707gz2x";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-glcY47E9bGVI6k9gakItN6srzMtmA4hCEz/JVD5UUmI=";
   };
 
   nativeBuildInputs = [
-    appstream
     desktop-file-utils
-    libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
+    libhandy
     libnotify
+    pcre2
     vte
   ];
 
@@ -66,15 +57,22 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "Terminal emulator designed for elementary OS";
     longDescription = ''
       A super lightweight, beautiful, and simple terminal. Comes with sane defaults, browser-class tabs, sudo paste protection,
       smart copy/paste, and little to no configuration.
     '';
-    homepage = https://github.com/elementary/terminal;
-    license = licenses.lgpl3;
+    homepage = "https://github.com/elementary/terminal";
+    license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.terminal";
   };
 }

@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, perl, rsync }:
+{ lib, stdenv, fetchurl, perl, rsync, fetchpatch }:
 
 let
-  base = import ./base.nix { inherit stdenv fetchurl; };
+  base = import ./base.nix { inherit lib fetchurl fetchpatch; };
 in
 stdenv.mkDerivation {
-  name = "rrsync-${base.version}";
+  pname = "rrsync";
+  version = base.version;
 
   src = base.src;
 
@@ -27,6 +28,6 @@ stdenv.mkDerivation {
 
   meta = base.meta // {
     description = "A helper to run rsync-only environments from ssh-logins";
-    maintainers = [ stdenv.lib.maintainers.kampfschlaefer ];
+    maintainers = [ lib.maintainers.kampfschlaefer ];
   };
 }

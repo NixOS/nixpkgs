@@ -6,19 +6,23 @@
 , jinja2
 , pylint
 , pyyaml
+, six
 }:
 
 buildPythonApplication rec {
   pname = "cmake-format";
-  version = "0.6.5";
+  version = "0.6.13";
+  # The source distribution does not build because of missing files.
+  format = "wheel";
 
   src = fetchPypi {
-    inherit version;
-    pname = "cmake_format";
-    sha256 = "0fzfczf66df81szp488zwdz6phx6lcq6wkb0dzpzq6ni39r7kvw8";
+    inherit version format;
+    python = "py3";
+    pname = "cmakelang";
+    sha256 = "0kmggnfbv6bba75l3zfzqwk0swi90brjka307m2kcz2w35kr8jvn";
   };
 
-  propagatedBuildInputs = [ autopep8 flake8 jinja2 pylint pyyaml ];
+  propagatedBuildInputs = [ autopep8 flake8 jinja2 pylint pyyaml six ];
 
   doCheck = false;
 

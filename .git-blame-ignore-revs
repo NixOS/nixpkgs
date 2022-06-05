@@ -1,0 +1,32 @@
+# This file contains a list of commits that are not likely what you
+# are looking for in a blame, such as mass reformatting or renaming.
+# You can set this file as a default ignore file for blame by running
+# the following command.
+#
+# $ git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# To temporarily not use this file add
+# --ignore-revs-file=""
+# to your blame command.
+#
+# The ignoreRevsFile can't be set globally due to blame failing if the file isn't present.
+# To not have to set the option in every repository it is needed in,
+# save the following script in your path with the name "git-bblame"
+# now you can run
+# $ git bblame $FILE
+# to use the .git-blame-ignore-revs file if it is present.
+#
+# #!/usr/bin/env bash
+# repo_root=$(git rev-parse --show-toplevel)
+# if [[ -e $repo_root/.git-blame-ignore-revs ]]; then
+#     git blame --ignore-revs-file="$repo_root/.git-blame-ignore-revs" $@
+# else
+#     git blame $@
+# fi
+
+
+# nixos/modules/rename: Sort alphabetically
+1f71224fe86605ef4cd23ed327b3da7882dad382
+
+# nixos: fix module paths in rename.nix
+d08ede042b74b8199dc748323768227b88efcf7c

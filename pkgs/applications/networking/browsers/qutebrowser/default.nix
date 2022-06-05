@@ -1,32 +1,43 @@
-{ stdenv, lib, fetchurl, fetchzip, python3Packages
-, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
+{ stdenv, lib, fetchurl, fetchzip, python3
+, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, qtwebengine, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
-, withPdfReader        ? true
-, withMediaPlayback    ? true
+, withPdfReader      ? true
+, withMediaPlayback  ? true
+, backend            ? "webengine"
+, pipewireSupport    ? stdenv.isLinux
+, pipewire_0_2
 }:
 
 assert withMediaPlayback -> gst_all_1 != null;
 
 let
+  python3Packages = python3.pkgs;
   pdfjs = let
-    version = "2.3.200";
+    version = "2.14.305";
   in
   fetchzip rec {
-    name = "pdfjs-${version}";
-    url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "1fpxsw0hzahccyng08acvc7g0gk29j2x701p6w6fg1718mvcrm1q";
+    url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/pdfjs-${version}-dist.zip";
+    hash = "sha256-E7t+0AUndrgi4zfJth0w28RmWLqLyXMUCnueNf/gNi4=";
     stripRoot = false;
   };
 
+  backendPackage =
+   if backend == "webengine" then python3Packages.pyqtwebengine else
+   if backend == "webkit"    then python3Packages.pyqt5_with_qtwebkit else
+   throw ''
+     Unknown qutebrowser backend "${backend}".
+     Valid choices are qtwebengine (recommended) or qtwebkit.
+   '';
+
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.8.3";
+  version = "2.5.1";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "055zmzk3q0m3hx1742nfy2mdawfllrkvijnbzp1hiv01dj1bxaf8";
+    hash = "sha256-5ohYhqhM0WamumM3lKWKTGfYccJxiBJ+XdvFJ2127bw=";
   };
 
   # Needs tox
@@ -45,13 +56,17 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    pyyaml pyqt5 pyqtwebengine jinja2 pygments
-    pypeg2 cssutils pyopengl attrs setuptools
+  propagatedBuildInputs = with python3Packages; ([
+    pyyaml backendPackage jinja2 pygments
     # scripts and userscripts libs
     tldextract beautifulsoup4
-    pyreadability pykeepass stem
-  ];
+    readability-lxml pykeepass stem
+    pynacl
+    # extensive ad blocking
+    adblock
+  ]
+    ++ lib.optional (pythonOlder "3.9") importlib-resources
+  );
 
   patches = [
     ./fix-restart.patch
@@ -61,9 +76,9 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
   dontWrapQtApps = true;
 
   postPatch = ''
-    substituteInPlace qutebrowser/app.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
+    substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
 
-    sed -i "s,/usr/share/,$out/share/,g" qutebrowser/utils/standarddir.py
+    sed -i "s,/usr,$out,g" qutebrowser/utils/standarddir.py
   '' + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
   '';
@@ -98,16 +113,24 @@ in mkDerivationWith python3Packages.buildPythonApplication rec {
     done
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/qutebrowser \
-      "''${gappsWrapperArgs[@]}" \
+  preFixup = let
+    libPath = lib.makeLibraryPath [ pipewire_0_2 ];
+  in
+    ''
+    makeWrapperArgs+=(
+      "''${gappsWrapperArgs[@]}"
       "''${qtWrapperArgs[@]}"
+      --add-flags '--backend ${backend}'
+      --set QUTE_QTWEBENGINE_VERSION_OVERRIDE "${lib.getVersion qtwebengine}"
+      ${lib.optionalString (pipewireSupport && backend == "webengine") ''--prefix LD_LIBRARY_PATH : ${libPath}''}
+    )
   '';
 
-  meta = with stdenv.lib; {
-    homepage    = https://github.com/The-Compiler/qutebrowser;
+  meta = with lib; {
+    homepage    = "https://github.com/The-Compiler/qutebrowser";
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry ];
+    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda ];
+    inherit (backendPackage.meta) platforms;
   };
 }

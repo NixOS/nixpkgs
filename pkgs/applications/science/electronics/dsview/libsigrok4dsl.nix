@@ -1,6 +1,6 @@
-{ stdenv, pkgconfig, autoreconfHook,
-glib, libzip, libserialport, check, libusb, libftdi,
-systemd, alsaLib, dsview
+{ lib, stdenv, pkg-config, autoreconfHook,
+glib, libzip, libserialport, check, libusb1, libftdi,
+systemd, alsa-lib, dsview
 }:
 
 stdenv.mkDerivation {
@@ -12,15 +12,15 @@ stdenv.mkDerivation {
     export sourceRoot=$sourceRoot/libsigrok4DSL
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   buildInputs = [
-    glib libzip libserialport libusb libftdi systemd check alsaLib
+    glib libzip libserialport libusb1 libftdi systemd check alsa-lib
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A fork of the sigrok library for usage with DSView";
-    homepage = https://www.dreamsourcelab.com/;
+    homepage = "https://www.dreamsourcelab.com/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bachp ];

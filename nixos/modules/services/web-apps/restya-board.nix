@@ -30,7 +30,6 @@ in
       dataDir = mkOption {
         type = types.path;
         default = "/var/lib/restya-board";
-        example = "/var/lib/restya-board";
         description = ''
           Data of the application.
         '';
@@ -39,7 +38,6 @@ in
       user = mkOption {
         type = types.str;
         default = "restya-board";
-        example = "restya-board";
         description = ''
           User account under which the web-application runs.
         '';
@@ -48,7 +46,6 @@ in
       group = mkOption {
         type = types.str;
         default = "nginx";
-        example = "nginx";
         description = ''
           Group account under which the web-application runs.
         '';
@@ -238,7 +235,7 @@ in
       locations."~ \\.php$" = {
         tryFiles = "$uri =404";
         extraConfig = ''
-          include ${pkgs.nginx}/conf/fastcgi_params;
+          include ${config.services.nginx.package}/conf/fastcgi_params;
           fastcgi_pass    unix:${fpm.socket};
           fastcgi_index   index.php;
           fastcgi_param   SCRIPT_FILENAME $document_root$fastcgi_script_name;
@@ -266,8 +263,8 @@ in
       serviceConfig.RemainAfterExit = true;
 
       wantedBy = [ "multi-user.target" ];
-      requires = [ "postgresql.service" ];
-      after = [ "network.target" "postgresql.service" ];
+      requires = if cfg.database.host == null then [] else [ "postgresql.service" ];
+      after = [ "network.target" ] ++ (if cfg.database.host == null then [] else [ "postgresql.service" ]);
 
       script = ''
         rm -rf "${runDir}"
@@ -285,7 +282,7 @@ in
           sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', 'restya');/g" "${runDir}/server/php/config.inc.php"
         '' else ''
           sed -i "s/^.*'R_DB_HOST'.*$/define('R_DB_HOST', '${cfg.database.host}');/g" "${runDir}/server/php/config.inc.php"
-          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', ${if cfg.database.passwordFile == null then "''" else "'file_get_contents(${cfg.database.passwordFile})'"});/g" "${runDir}/server/php/config.inc.php
+          sed -i "s/^.*'R_DB_PASSWORD'.*$/define('R_DB_PASSWORD', ${if cfg.database.passwordFile == null then "''" else "'$(cat ${cfg.database.passwordFile})');/g"}" "${runDir}/server/php/config.inc.php"
         ''}
         sed -i "s/^.*'R_DB_PORT'.*$/define('R_DB_PORT', '${toString cfg.database.port}');/g" "${runDir}/server/php/config.inc.php"
         sed -i "s/^.*'R_DB_NAME'.*$/define('R_DB_NAME', '${cfg.database.name}');/g" "${runDir}/server/php/config.inc.php"
@@ -297,7 +294,7 @@ in
         ln -sf "${cfg.dataDir}/client/img" "${runDir}/client/img"
 
         chmod g+w "${runDir}/tmp/cache"
-        chown -R "${cfg.user}"."${cfg.group}" "${runDir}"
+        chown -R "${cfg.user}":"${cfg.group}" "${runDir}"
 
 
         mkdir -m 0750 -p "${cfg.dataDir}"
@@ -305,9 +302,9 @@ in
         mkdir -m 0750 -p "${cfg.dataDir}/client/img"
         cp -r "${pkgs.restya-board}/media/"* "${cfg.dataDir}/media"
         cp -r "${pkgs.restya-board}/client/img/"* "${cfg.dataDir}/client/img"
-        chown "${cfg.user}"."${cfg.group}" "${cfg.dataDir}"
-        chown -R "${cfg.user}"."${cfg.group}" "${cfg.dataDir}/media"
-        chown -R "${cfg.user}"."${cfg.group}" "${cfg.dataDir}/client/img"
+        chown "${cfg.user}":"${cfg.group}" "${cfg.dataDir}"
+        chown -R "${cfg.user}":"${cfg.group}" "${cfg.dataDir}/media"
+        chown -R "${cfg.user}":"${cfg.group}" "${cfg.dataDir}/client/img"
 
         ${optionalString (cfg.database.host == null) ''
           if ! [ -e "${cfg.dataDir}/.db-initialized" ]; then

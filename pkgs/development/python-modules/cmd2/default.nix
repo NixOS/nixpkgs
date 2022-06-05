@@ -1,60 +1,74 @@
-{ stdenv, fetchPypi, buildPythonPackage, pythonOlder, isPy3k
-, pyperclip, six, pyparsing, vim, wcwidth, colorama, attrs
-, contextlib2 ? null, typing ? null, setuptools_scm
-, pytest, mock ? null, pytest-mock
-, which, glibcLocales
+{ lib
+, stdenv
+, attrs
+, buildPythonPackage
+, colorama
+, fetchPypi
+, glibcLocales
+, importlib-metadata
+, pyperclip
+, pytest-mock
+, pytestCheckHook
+, pythonOlder
+, setuptools-scm
+, typing-extensions
+, vim
+, wcwidth
 }:
+
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "0.9.22";
+  version = "2.4.0";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ba244b07c0b465ff54a6838dc61919599141dc92de1bf00bb0a70875189155e6";
+    sha256 = "sha256-CQkJq2yOzuQIE87HWeYd1ucMgiehqOlggvXysNOUvHc=";
   };
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
-  postPatch = stdenv.lib.optional stdenv.isDarwin ''
+  buildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    attrs
+    colorama
+    pyperclip
+    wcwidth
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+    importlib-metadata
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    glibcLocales
+    pytest-mock
+    vim
+  ];
+
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '' + lib.optionalString stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     mkdir bin
-    echo '#${stdenv.shell}' > bin/pbpaste
-    echo '#${stdenv.shell}' > bin/pbcopy
+    echo '#!${stdenv.shell}' > bin/pbpaste
+    echo '#!${stdenv.shell}' > bin/pbcopy
     chmod +x bin/{pbcopy,pbpaste}
     export PATH=$(realpath bin):$PATH
   '';
 
-  disabled = !isPy3k;
-
-  buildInputs = [
-    setuptools_scm
-  ];
-
-  propagatedBuildInputs = [
-    colorama
-    pyperclip
-    six
-    pyparsing
-    wcwidth
-    attrs
-  ]
-  ++ stdenv.lib.optionals (pythonOlder "3.5") [contextlib2 typing]
-  ;
-
-
   doCheck = !stdenv.isDarwin;
-  # pytest-cov
-  # argcomplete  will generate errors
-  checkInputs= [ pytest mock which vim glibcLocales pytest-mock ]
-        ++ stdenv.lib.optional (pythonOlder "3.6") [ mock ];
-  checkPhase = ''
-    # test_path_completion_user_expansion might be fixed in the next release
-    py.test -k 'not test_path_completion_user_expansion'
-  '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [ "cmd2" ];
+
+  meta = with lib; {
     description = "Enhancements for standard library's cmd module";
-    homepage = https://github.com/python-cmd2/cmd2;
+    homepage = "https://github.com/python-cmd2/cmd2";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ teto ];
   };
 }

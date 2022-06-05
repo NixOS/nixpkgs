@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gnused, openssl, curl, ncurses, libjpeg
+{ lib, stdenv, fetchurl, gnused, openssl, curl, ncurses, libjpeg
 , withGpg ? true, gpgme ? null}:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = "-std=gnu++98";
 
   buildInputs = [ openssl curl ncurses libjpeg ]
-    ++ stdenv.lib.optional withGpg gpgme;
+    ++ lib.optional withGpg gpgme;
 
   preConfigure = ''
     ${gnused}/bin/sed -i '1,1i#include <stdio.h>' libicq2000/libicq2000/sigslot.h
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = http://www.centerim.org/;
+    homepage = "http://www.centerim.org/";
     description = "Fork of CenterICQ, a curses instant messaging program";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = with stdenv.lib.platforms; linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux;
   };
 }

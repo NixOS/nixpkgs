@@ -24,12 +24,18 @@ existing packages here and modify it as necessary.
 
 */
 
-{
-  libsForQt5, lib, fetchurl,
-  gconf, gsettings-desktop-schemas
+{ libsForQt5, lib, config, fetchurl
+, gconf, gsettings-desktop-schemas
 }:
 
 let
+  minQtVersion = "5.15";
+  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
+  maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
+  license = with lib.licenses; [
+    lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+  ];
+
   srcs = import ./srcs.nix {
     inherit fetchurl;
     mirror = "mirror://kde";
@@ -70,8 +76,8 @@ let
 
         mkDerivation = args:
           let
-            inherit (args) name;
-            sname = args.sname or name;
+            inherit (args) pname;
+            sname = args.sname or pname;
             inherit (srcs.${sname}) src version;
 
             outputs = args.outputs or [ "out" ];
@@ -81,18 +87,18 @@ let
             defaultSetupHook = if hasBin && hasDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
 
-            meta = {
-              license = with lib.licenses; [
-                lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
-              ];
-              platforms = lib.platforms.linux;
-              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
-              homepage = http://www.kde.org;
-            } // (args.meta or {});
+            meta =
+              let meta = args.meta or {}; in
+              meta // {
+                homepage = meta.homepage or "http://www.kde.org";
+                license = meta.license or license;
+                maintainers = (meta.maintainers or []) ++ maintainers;
+                platforms = meta.platforms or lib.platforms.linux;
+                broken = meta.broken or broken;
+              };
           in
           mkDerivation (args // {
-            name = "${name}-${version}";
-            inherit meta outputs setupHook src;
+            inherit pname version meta outputs setupHook src;
           });
       };
 
@@ -115,29 +121,54 @@ let
       kscreen = callPackage ./kscreen.nix {};
       kscreenlocker = callPackage ./kscreenlocker.nix {};
       ksshaskpass = callPackage ./ksshaskpass.nix {};
-      ksysguard = callPackage ./ksysguard.nix {};
+      ksystemstats = callPackage ./ksystemstats.nix {};
       kwallet-pam = callPackage ./kwallet-pam.nix {};
       kwayland-integration = callPackage ./kwayland-integration.nix {};
+      kwayland-server = callPackage ./kwayland-server {};
       kwin = callPackage ./kwin {};
       kwrited = callPackage ./kwrited.nix {};
+      layer-shell-qt = callPackage ./layer-shell-qt.nix {};
       libkscreen = callPackage ./libkscreen {};
       libksysguard = callPackage ./libksysguard {};
       milou = callPackage ./milou.nix {};
       oxygen = callPackage ./oxygen.nix {};
       plasma-browser-integration = callPackage ./plasma-browser-integration.nix {};
       plasma-desktop = callPackage ./plasma-desktop {};
+      plasma-disks = callPackage ./plasma-disks.nix {};
       plasma-integration = callPackage ./plasma-integration {};
+      plasma-mobile = callPackage ./plasma-mobile {};
+      plasma-nano = callPackage ./plasma-nano {};
       plasma-nm = callPackage ./plasma-nm {};
       plasma-pa = callPackage ./plasma-pa.nix { inherit gconf; };
+      plasma-sdk = callPackage ./plasma-sdk.nix {};
+      plasma-systemmonitor = callPackage ./plasma-systemmonitor.nix { };
+      plasma-thunderbolt = callPackage ./plasma-thunderbolt.nix { };
       plasma-vault = callPackage ./plasma-vault {};
       plasma-workspace = callPackage ./plasma-workspace {};
       plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
       polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};
       powerdevil = callPackage ./powerdevil.nix {};
+      qqc2-breeze-style = callPackage ./qqc2-breeze-style.nix {};
       sddm-kcm = callPackage ./sddm-kcm.nix {};
       systemsettings = callPackage ./systemsettings.nix {};
-      user-manager = callPackage ./user-manager.nix {};
       xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde.nix {};
+
+      thirdParty = let inherit (libsForQt5) callPackage; in {
+        plasma-applet-caffeine-plus = callPackage ./3rdparty/addons/caffeine-plus.nix { };
+        plasma-applet-virtual-desktop-bar = callPackage ./3rdparty/addons/virtual-desktop-bar.nix { };
+        bismuth = callPackage ./3rdparty/addons/bismuth { };
+        kwin-dynamic-workspaces = callPackage ./3rdparty/kwin/scripts/dynamic-workspaces.nix { };
+        kwin-tiling = callPackage ./3rdparty/kwin/scripts/tiling.nix { };
+        krohnkite = callPackage ./3rdparty/kwin/scripts/krohnkite.nix { };
+        krunner-ssh = callPackage ./3rdparty/addons/krunner-ssh.nix { };
+        krunner-symbols = callPackage ./3rdparty/addons/krunner-symbols.nix { };
+        lightly = callPackage ./3rdparty/lightly { };
+        parachute = callPackage ./3rdparty/kwin/scripts/parachute.nix { };
+      };
+
+    } // lib.optionalAttrs config.allowAliases {
+      ksysguard = throw "ksysguard has been replaced with plasma-systemmonitor";
+      plasma-phone-components = throw "'plasma-phone-components' has been renamed to/replaced by 'plasma-mobile'";
     };
 in
 lib.makeScope libsForQt5.newScope packages

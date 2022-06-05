@@ -1,29 +1,43 @@
-{ stdenv, fetchurl, jre }:
+{ lib
+, stdenv
+, fetchurl
+, jre
+, autoPatchelfHook
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "sbt";
-  version = "1.3.5";
+  version = "1.6.2";
 
   src = fetchurl {
-    urls = [
-      "https://piccolo.link/sbt-${version}.tgz"
-      "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz"
-    ];
-    sha256 = "1c1ha4w3c36l7w2ncmwvry05hwcj8pv7dkpq23wdc25w1yj0l7sn";
+    url = "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
+    sha256 = "sha256-Y3Y3tsTm+gSrYs02QGHjKxJICwkAHNIzA99is2+t1EA=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     echo -java-home ${jre.home} >>conf/sbtopts
   '';
 
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+
+  buildInputs = lib.optionals stdenv.isLinux [ zlib ];
+
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/sbt $out/bin
     cp -ra . $out/share/sbt
-    ln -s $out/share/sbt/bin/sbt $out/bin/
+    ln -sT ../share/sbt/bin/sbt $out/bin/sbt
+    ln -sT ../share/sbt/bin/sbtn-x86_64-${
+      if (stdenv.isDarwin) then "apple-darwin" else "pc-linux"
+    } $out/bin/sbtn
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.scala-sbt.org/;
+  meta = with lib; {
+    homepage = "https://www.scala-sbt.org/";
     license = licenses.bsd3;
     description = "A build tool for Scala, Java and more";
     maintainers = with maintainers; [ nequissimus ];

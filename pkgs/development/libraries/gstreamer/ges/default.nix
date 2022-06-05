@@ -1,63 +1,70 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, fetchpatch
 , meson
 , ninja
-, pkgconfig
-, python
+, pkg-config
+, python3
+, bash-completion
 , gst-plugins-base
+, gst-plugins-bad
+, gst-devtools
 , libxml2
 , flex
-, perl
 , gettext
 , gobject-introspection
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gstreamer-editing-services";
-  version = "1.16.2";
+  pname = "gst-editing-services";
+  version = "1.20.1";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
+  ];
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "05hcf3prna8ajjnqd53221gj9syarrrjbgvjcbhicv0c38csc1hf";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1ps887yyj6jkj8a2613n43b4fbvynxwryinxvavi00cfnlhipkka";
   };
-
-  patches = [
-    ./fix_pkgconfig_includedir.patch
-  ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     gobject-introspection
-    python
+    gst-devtools
+    python3
     flex
-    perl
+
+    # documentation
+    # TODO add hotdoc here
   ];
 
   buildInputs = [
+    bash-completion
     libxml2
   ];
 
   propagatedBuildInputs = [
     gst-plugins-base
+    gst-plugins-bad
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=disabled"
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
   ];
 
   postPatch = ''
-    # for some reason, gst-plugins-bad cannot be found
-    # fortunately, they are only used by tests, which we do not run
-    sed -i -r -e 's/p(bad|good) = .*/p\1 = pbase/' tests/check/meson.build
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for creation of audio/video non-linear editors";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;

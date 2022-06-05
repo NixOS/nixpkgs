@@ -1,15 +1,14 @@
-{ stdenv, python27Packages, curaengine, makeDesktopItem, fetchurl }:
-let
-  py = python27Packages;
-  version = "15.04";
-in
+{ lib, stdenv, python27Packages, curaengine, makeDesktopItem, fetchFromGitHub }:
+
 stdenv.mkDerivation rec {
   pname = "cura";
-  inherit version;
+  version = "15.06.03";
 
-  src = fetchurl {
-    url = "https://github.com/daid/Cura/archive/${version}.tar.gz";
-    sha256 = "0xbjvzhp8wzq9lnpmcg1fjf7j5h39bj5463sd5c8jzdjl96izizl";
+  src = fetchFromGitHub {
+    owner = "daid";
+    repo = "Cura";
+    rev = version;
+    sha256 = "sha256-o1cAi4Wi19WOijlRB9iYwNEpSNnmywUj5Bth8rRhqFA=";
   };
 
   desktopItem = makeDesktopItem {
@@ -19,20 +18,20 @@ stdenv.mkDerivation rec {
     comment = "Cura";
     desktopName = "Cura";
     genericName = "3D printing host software";
-    categories = "GNOME;GTK;Utility;";
+    categories = [ "GNOME" "GTK" "Utility" ];
   };
 
-  python_deps = with py; [ pyopengl pyserial numpy wxPython30 power setuptools ];
+  python_deps = with python27Packages; [ pyopengl pyserial numpy wxPython30 power setuptools ];
 
   pythonPath = python_deps;
 
   propagatedBuildInputs = python_deps;
 
-  buildInputs = [ curaengine py.wrapPython ];
+  buildInputs = [ curaengine python27Packages.wrapPython ];
 
   configurePhase = "";
   buildPhase = "";
-  
+
   patches = [ ./numpy-cast.patch ];
 
   installPhase = ''
@@ -64,11 +63,10 @@ stdenv.mkDerivation rec {
     ln -s "$resources/images/c.png" "$out"/share/icons/cura.png
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "3D printing host software";
-    homepage = https://github.com/daid/Cura;
+    homepage = "https://github.com/daid/Cura";
     license = licenses.agpl3;
     platforms = platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };
 }

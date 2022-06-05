@@ -1,35 +1,51 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests
+, makeWrapper
+, gawk
+, glibc
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "vault";
-  version = "1.3.1";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "052aj79gwmydc7ph1g567cbssqf8dsmqxad47k5hc5sc58bx7c93";
+    sha256 = "sha256-12LOYp2ffTC/IOyNyT2PMnkP4FOKT8HROZNRWyTHxhA=";
   };
 
-  goPackagePath = "github.com/hashicorp/vault";
+  vendorSha256 = "sha256-w5nUkCNo9xfalbc/U7uYaHZsUdyMV3tKDypQM9MnwE4=";
 
   subPackages = [ "." ];
 
-  buildFlagsArray = [
-    "-tags='vault'"
-    "-ldflags=\"-X github.com/hashicorp/vault/sdk/version.GitCommit='v${version}'\""
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
+
+  tags = [ "vault" ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/hashicorp/vault/sdk/version.GitCommit=${src.rev}"
+    "-X github.com/hashicorp/vault/sdk/version.Version=${version}"
+    "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
   ];
 
   postInstall = ''
-    mkdir -p $bin/share/bash-completion/completions
-    echo "complete -C $bin/bin/vault vault" > $bin/share/bash-completion/completions/vault
+    echo "complete -C $out/bin/vault vault" > vault.bash
+    installShellCompletion vault.bash
+  '' + lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/vault \
+      --prefix PATH ${lib.makeBinPath [ gawk glibc ]}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.vaultproject.io;
+  passthru.tests = { inherit (nixosTests) vault vault-postgresql; };
+
+  meta = with lib; {
+    homepage = "https://www.vaultproject.io/";
     description = "A tool for managing secrets";
+    changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri ];
+    maintainers = with maintainers; [ rushmorem lnl7 offline pradeepchhetri Chili-Man techknowlogick ];
   };
 }

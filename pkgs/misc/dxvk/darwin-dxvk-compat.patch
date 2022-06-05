@@ -1,0 +1,35 @@
+Source: https://github.com/marzent/dxvk/commit/65247afe2de5dd6b555b8fdd46dddcdc6325e1d6
+---
+ src/d3d11/d3d11_device.cpp        |  12 +-
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/src/d3d11/d3d11_device.cpp b/src/d3d11/d3d11_device.cpp
+index 21f0d1b4a..5b1d05335 100644
+--- a/src/d3d11/d3d11_device.cpp
++++ b/src/d3d11/d3d11_device.cpp
+@@ -799,8 +799,12 @@ namespace dxvk {
+     InitReturnPtr(ppGeometryShader);
+     D3D11CommonShader module;
+ 
+-    if (!m_dxvkDevice->features().extTransformFeedback.transformFeedback)
+-      return DXGI_ERROR_INVALID_CALL;
++      if (!m_dxvkDevice->features().extTransformFeedback.transformFeedback) {
++          Logger::err(
++                   "D3D11: CreateGeometryShaderWithStreamOutput:"
++                   "\n  Transform feedback not supported by device");
++          return S_OK;
++      }
+ 
+     // Zero-init some counterss so that we can increment
+     // them while walking over the stream output entries
+@@ -1973,8 +1977,8 @@ namespace dxvk {
+       enabled.core.features.logicOp                               = supported.core.features.logicOp;
+       enabled.core.features.shaderImageGatherExtended             = VK_TRUE;
+       enabled.core.features.variableMultisampleRate               = supported.core.features.variableMultisampleRate;
+-      enabled.extTransformFeedback.transformFeedback              = VK_TRUE;
+-      enabled.extTransformFeedback.geometryStreams                = VK_TRUE;
++        enabled.extTransformFeedback.transformFeedback              = supported.extTransformFeedback.transformFeedback;
++        enabled.extTransformFeedback.geometryStreams                = supported.extTransformFeedback.geometryStreams;
+     }
+     
+     if (featureLevel >= D3D_FEATURE_LEVEL_10_1) {

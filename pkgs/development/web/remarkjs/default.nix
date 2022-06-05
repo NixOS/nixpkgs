@@ -1,32 +1,36 @@
-{ stdenv, lib, fetchgit, fetchurl, nodejs, phantomjs2, pkgs }:
+{ stdenv, lib, fetchFromGitHub, nodejs, pkgs }:
 
 with lib;
 
 let
 
   # highlight.js is a git submodule of remark
-  highlightjs = fetchgit {
-    url = https://github.com/isagalaev/highlight.js;
+  highlightjs = fetchFromGitHub {
+    owner = "isagalaev";
+    repo = "highlight.js";
     rev = "10b9500b67983f0a9c42d8ce8bf8e8c469f7078c";
     sha256 = "1yy8by15kfklw8lwh17z1swpj067q0skjjih12yawbryraig41m0";
   };
-  
+
   nodePackages = import ./nodepkgs.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "remarkjs";
 
   version = "0.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/gnab/remark/archive/v${version}.tar.gz";
-    sha256 = "1a2il6aa0g9cnig56ykmq8lr626pbxlsllk6js41h6gcn214rw60";
+  src = fetchFromGitHub {
+    owner = "gnab";
+    repo = "remark";
+    rev = "v${version}";
+    sha256 = "sha256-zhHuW4pBqXQEBlSxuyvHKh+ftyIdcqpYgIZZHArUtns=";
   };
 
-  buildInputs = [ nodejs phantomjs2 ] ++ (with nodePackages; [
+  buildInputs = [ nodejs ] ++ (with nodePackages; [
     marked
     browserify
     uglify-js
@@ -60,11 +64,11 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://remarkjs.com;
+    homepage = "https://remarkjs.com";
     description = "A simple, in-browser, markdown-driven slideshow tool";
-    maintainers = [];
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
     broken = true;
   };
 }

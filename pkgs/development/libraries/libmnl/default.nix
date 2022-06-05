@@ -1,11 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libmnl-1.0.4";
+  pname = "libmnl";
+  version = "1.0.5";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/libmnl/files/${name}.tar.bz2";
-    sha256 = "108zampspaalv44zn0ar9h386dlfixpd149bnxa5hsi8kxlqj7qp";
+    url = "https://netfilter.org/projects/libmnl/files/${pname}-${version}.tar.bz2";
+    sha256 = "09851ns07399rbz0y8slrlmnw3fn1nakr8d37pxjn5gkks8rnjr7";
   };
 
   meta = {
@@ -17,9 +18,9 @@ stdenv.mkDerivation rec {
       This library aims to provide simple helpers that allows you to re-use code and to avoid
       re-inventing the wheel.
     '';
-    homepage = https://netfilter.org/projects/libmnl/index.html;
-    license = stdenv.lib.licenses.lgpl21Plus;
+    homepage = "https://netfilter.org/projects/libmnl/index.html";
+    license = lib.licenses.lgpl21Plus;
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

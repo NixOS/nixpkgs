@@ -1,40 +1,60 @@
-{ fetchurl, stdenv, makeWrapper, pkgconfig, intltool, gettext, gtk2, expat, curl
-, gpsd, bc, file, gnome-doc-utils, libexif, libxml2, libxslt, scrollkeeper
-, docbook_xml_dtd_412, gexiv2, sqlite, gpsbabel, expect
-, geoclue2, liboauth, nettle }:
+{ lib, stdenv, fetchurl
+, docbook_xml_dtd_45, docbook_xsl, intltool, itstool, libxslt, pkg-config, wrapGAppsHook, yelp-tools
+, curl, gdk-pixbuf, gtk3, json-glib, libxml2
+, gpsbabel
+, withGeoClue ? true, geoclue2
+, withGeoTag ? true, gexiv2
+, withMagic ? true, file
+, withMapnik ? false, mapnik
+, withMBTiles ? true, sqlite
+, withMd5Hash ? true, nettle
+, withOAuth ? true, liboauth
+, withRealtimeGPSTracking ? true, gpsd
+}:
 
 stdenv.mkDerivation rec {
   pname = "viking";
-  version = "1.7";
+  version = "1.10";
 
   src = fetchurl {
-    url = "mirror://sourceforge/viking/viking/viking-${version}.tar.bz2";
-    sha256 = "092q2dv0rcz12nh2js1z1ralib1553dmzy9pdrvz9nv2vf61wybw";
+    url = "mirror://sourceforge/viking/viking-${version}.tar.bz2";
+    sha256 = "sha256-lFXIlfmLwT3iS9ayNM0PHV7NwbBotMvG62ZE9hJuRaw=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper intltool gettext gtk2 expat curl gpsd bc file gnome-doc-utils
-    libexif libxml2 libxslt scrollkeeper docbook_xml_dtd_412 gexiv2 sqlite
-    geoclue2 liboauth nettle
+  nativeBuildInputs = [ docbook_xml_dtd_45 docbook_xsl intltool itstool libxslt pkg-config wrapGAppsHook yelp-tools ];
+
+  buildInputs = [ curl gdk-pixbuf gtk3 json-glib libxml2 ]
+    ++ lib.optional withGeoClue geoclue2
+    ++ lib.optional withGeoTag  gexiv2
+    ++ lib.optional withMagic   file
+    ++ lib.optional withMapnik  mapnik
+    ++ lib.optional withMBTiles sqlite
+    ++ lib.optional withMd5Hash nettle
+    ++ lib.optional withOAuth   liboauth
+    ++ lib.optional withRealtimeGPSTracking gpsd;
+
+  configureFlags = [
+    (lib.enableFeature withGeoClue "geoclue")
+    (lib.enableFeature withGeoTag  "geotag")
+    (lib.enableFeature withMagic   "magic")
+    (lib.enableFeature withMapnik  "mapnik")
+    (lib.enableFeature withMBTiles "mbtiles")
+    (lib.enableFeature withMd5Hash "nettle")
+    (lib.enableFeature withOAuth   "oauth")
+    (lib.enableFeature withRealtimeGPSTracking "realtime-gps-tracking")
   ];
 
-  configureFlags = [ "--disable-scrollkeeper --disable-mapnik" ];
-
-  preBuild = ''
-    sed -i help/Makefile \
-        -e 's|--noout|--noout --nonet --path "${scrollkeeper}/share/xml/scrollkeeper/dtds"|g'
-    sed -i help/Makefile -e 's|--postvalid||g'
-  '';
+  hardeningDisable = [ "format" ];
 
   doCheck = true;
 
-  postInstall = ''
-    wrapProgram $out/bin/viking \
-      --prefix PATH : "${gpsbabel}/bin" \
-      --prefix PATH : "${expect}/bin"
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${lib.makeBinPath [ gpsbabel ]}
+    )
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GPS data editor and analyzer";
     longDescription = ''
       Viking is a free/open source program to manage GPS data.  You
@@ -43,9 +63,9 @@ stdenv.mkDerivation rec {
       on the map, make new tracks and waypoints, see real-time GPS
       position, etc.
     '';
-    homepage = https://sourceforge.net/projects/viking/;
+    homepage = "https://sourceforge.net/projects/viking/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub sikmir ];
     platforms = with platforms; linux;
   };
 }

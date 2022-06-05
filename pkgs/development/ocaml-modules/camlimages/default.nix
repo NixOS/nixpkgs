@@ -1,21 +1,32 @@
-{ lib, fetchzip, buildDunePackage, configurator, cppo, lablgtk }:
+{ lib, fetchFromGitLab, buildDunePackage, dune-configurator, cppo
+, graphics, lablgtk, stdio
+}:
 
 buildDunePackage rec {
   pname = "camlimages";
-  version = "5.0.1";
+  version = "5.0.4";
 
-  src = fetchzip {
-    url = "https://bitbucket.org/camlspotter/${pname}/get/${version}.tar.gz";
-    sha256 = "1figrgzsdrrxzfza0bhz0225g1rwawdf5x2m9lw2kzrdb815khs5";
+  useDune2 = true;
+
+  minimumOCamlVersion = "4.07";
+
+  src = fetchFromGitLab {
+    owner = "camlspotter";
+    repo = pname;
+    rev = version;
+    sha256 = "1m2c76ghisg73dikz2ifdkrbkgiwa0hcmp21f2fm2rkbf02rq3f4";
   };
 
-  buildInputs = [ configurator cppo lablgtk ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ cppo ];
+  buildInputs = [ dune-configurator graphics lablgtk stdio ];
 
   meta = with lib; {
     branch = "5.0";
-    homepage = https://bitbucket.org/camlspotter/camlimages;
+    inherit (src.meta) homepage;
     description = "OCaml image processing library";
-    license = licenses.gpl2;
+    license = licenses.lgpl2;
     maintainers = [ maintainers.vbgl maintainers.mt-caret ];
   };
 }

@@ -1,49 +1,77 @@
-{ pkgs
-, buildPythonPackage
-, fetchPypi
-, cryptography
+{ lib
 , bcrypt
+, buildPythonPackage
+, cryptography
+, fetchPypi
 , invoke
-, pynacl
-, pyasn1
-, pytest
-, pytest-relaxed
 , mock
+, pyasn1
+, pynacl
+, pytest-relaxed
+, pytestCheckHook
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.7.1";
+  version = "2.10.4";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "920492895db8013f6cc0179293147f830b8c7b21fdfc839b6bad760c27459d9f";
+    sha256 = "sha256-PS5lC2gSzm0WCr/3AdbvRDTsl5NLE+lc8a09pw/7XFg=";
   };
 
-  checkInputs = [ invoke pytest mock pytest-relaxed ];
-  propagatedBuildInputs = [ bcrypt cryptography pynacl pyasn1 ];
+  patches = [
+    # Fix usage of dsa keys
+    # https://github.com/paramiko/paramiko/pull/1606/
+    (fetchpatch {
+      url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
+      sha256 = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
+    })
+  ];
+
+  propagatedBuildInputs = [
+    bcrypt
+    cryptography
+    pyasn1
+    pynacl
+  ];
+
+  checkInputs = [
+    invoke
+    mock
+    pytest-relaxed
+    pytestCheckHook
+  ];
+
+  # with python 3.9.6+, the deprecation warnings will fail the test suite
+  # see: https://github.com/pyinvoke/invoke/issues/829
+  # pytest-relaxed does not work with pytest 6
+  # see: https://github.com/bitprophet/pytest-relaxed/issues/12
+  doCheck = false;
+
+  disabledTestPaths = [
+    "tests/test_sftp.py"
+    "tests/test_config.py"
+  ];
+
+  pythonImportsCheck = [
+    "paramiko"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
-  # 2 sftp tests fail (skip for now)
-  # test_config relies on artifacts to be to downloaded
-  checkPhase = ''
-    pytest tests \
-      --ignore=tests/test_sftp.py \
-      --ignore=tests/test_config.py
-  '';
-
-  meta = with pkgs.lib; {
+  meta = with lib; {
     homepage = "https://github.com/paramiko/paramiko/";
     description = "Native Python SSHv2 protocol library";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ aszlig ];
-
     longDescription = ''
-      This is a library for making SSH2 connections (client or server).
-      Emphasis is on using SSH2 as an alternative to SSL for making secure
-      connections between python scripts. All major ciphers and hash methods
-      are supported. SFTP client and server mode are both supported too.
+      Library for making SSH2 connections (client or server). Emphasis is
+      on using SSH2 as an alternative to SSL for making secure connections
+      between python scripts. All major ciphers and hash methods are
+      supported. SFTP client and server mode are both supported too.
     '';
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

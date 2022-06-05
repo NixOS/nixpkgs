@@ -1,27 +1,27 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , buildPythonPackage
 , six
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "jpylyzer";
-  version = "1.18.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "openpreserve";
     repo = pname;
     rev = version;
-    sha256 = "0vhrq15l6jd5fm6vj7mczjzjpl2ph1dk8jp89dw4vlccky8660ll";
+    sha256 = "1cd9klq83g9p4nkg7x78axqid5vcsqzggp431hcfdiixa50yjxjg";
   };
 
   propagatedBuildInputs = [ six ];
 
-  # there don't appear to be any in-tree tests as such, but the builder's automatic
-  # runner seems to be upset by the project layout
-  doCheck = false;
+  checkInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "jpylyzer" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "JP2 (JPEG 2000 Part 1) image validator and properties extractor";
     homepage = "https://jpylyzer.openpreservation.org/";
     license = licenses.lgpl3;

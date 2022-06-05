@@ -7,27 +7,29 @@
 , pyyaml
 , nbformat
 , nbconvert
+, nbclient
 , six
 , tqdm
-, jupyter_client
+, jupyter-client
 , requests
 , entrypoints
 , tenacity
-, futures
+, futures ? null
+, black
 , backports_tempfile
 , isPy27
 , pytest
-, pytestcov
+, pytest-cov
 , pytest-mock
 }:
 
 buildPythonPackage rec {
   pname = "papermill";
-  version = "1.2.1";
+  version = "2.3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04dadaabdeb129c7414079f77b9f9a4a08f1322549aa99e20e4a12700ee23509";
+    sha256 = "be12d2728989c0ae17b42fcb05b623500004e94b34f56bd153355ccebb84a59a";
   };
 
   propagatedBuildInputs = [
@@ -37,12 +39,14 @@ buildPythonPackage rec {
     pyyaml
     nbformat
     nbconvert
+    nbclient
     six
     tqdm
-    jupyter_client
+    jupyter-client
     requests
     entrypoints
     tenacity
+    black
   ] ++ lib.optionals isPy27 [
     futures
     backports_tempfile
@@ -50,7 +54,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytest
-    pytestcov
+    pytest-cov
     pytest-mock
   ];
 
@@ -63,7 +67,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Parametrize and run Jupyter and nteract Notebooks";
-    homepage = https://github.com/nteract/papermill;
+    homepage = "https://github.com/nteract/papermill";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 }:
@@ -21,9 +21,14 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=Release"
   ];
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=misleading-indentation"
+    "-Wno-error=stringop-overflow"
+  ];
+
   meta = {
     description = "FlatBuffers Compiler and Library in C for C ";
-    homepage = https://github.com/dvidelabs/flatcc;
-    license = [ stdenv.lib.licenses.asl20 ];
+    homepage = "https://github.com/dvidelabs/flatcc";
+    license = [ lib.licenses.asl20 ];
   };
 }

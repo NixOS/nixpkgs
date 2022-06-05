@@ -19,8 +19,6 @@ in stdenv.mkDerivation rec {
     sha256 = "1894g6fymr8kra9vwhbmnrcr58l022mcd7g9ans4zd3izla2j3gx";
   };
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
-
   patches = lib.optionalString (rubies != null) [
     ./env.patch
   ];
@@ -37,9 +35,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Changes the current Ruby";
-    homepage = https://github.com/postmodern/chruby;
+    homepage = "https://github.com/postmodern/chruby";
     license = licenses.mit;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ cstrahan ];
+    mainProgram = "chruby-exec";
+    platforms = platforms.unix;
   };
 }

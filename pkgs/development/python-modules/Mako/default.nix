@@ -1,35 +1,67 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
-, python
-, markupsafe
-, nose
-, mock
 , isPyPy
+
+# propagates
+, markupsafe
+
+# extras: Babel
+, babel
+
+# tests
+, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "Mako";
-  version = "1.1.0";
+  version = "1.2.0";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a36919599a9b7dc5d86a7a8988f23a9a3a3d083070023bab23d64f7f1d1e0a4b";
+    sha256 = "sha256-mnx+kiuH2zaGIQz0nV12cDOkHUAQsoTnR2gskr3dizk=";
   };
 
-  checkInputs = [ markupsafe nose mock ];
-  propagatedBuildInputs = [ markupsafe ];
+  propagatedBuildInputs = [
+    markupsafe
+  ];
 
-  doCheck = !isPyPy;  # https://bitbucket.org/zzzeek/mako/issue/238/2-tests-failed-on-pypy-24-25
-  checkPhase = ''
-    ${python.interpreter} -m unittest discover
-  '';
+  passthru.optional-dependencies = {
+    babel = [
+      babel
+    ];
+  };
 
-  meta = {
+  checkInputs = [
+    pytestCheckHook
+    mock
+  ] ++ passthru.optional-dependencies.babel;
+
+  disabledTests = lib.optionals isPyPy [
+    # https://github.com/sqlalchemy/mako/issues/315
+    "test_alternating_file_names"
+    # https://github.com/sqlalchemy/mako/issues/238
+    "test_file_success"
+    "test_stdin_success"
+    # fails on pypy2.7
+    "test_bytestring_passthru"
+  ];
+
+  disabledTestPaths = [
+    # lingua dependency is not packaged
+    "test/ext/test_linguaplugin.py"
+  ];
+
+  meta = with lib; {
     description = "Super-fast templating language";
-    homepage = http://www.makotemplates.org;
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ domenkozar ];
+    homepage = "https://www.makotemplates.org/";
+    changelog = "https://docs.makotemplates.org/en/latest/changelog.html";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

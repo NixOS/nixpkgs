@@ -6,6 +6,10 @@ with lib;
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   # Added 2019-08-09
   imports = [
     (mkRenamedOptionModule
@@ -37,9 +41,9 @@ with lib;
 
   config = mkIf config.programs.gnome-disks.enable {
 
-    environment.systemPackages = [ pkgs.gnome3.gnome-disk-utility ];
+    environment.systemPackages = [ pkgs.gnome.gnome-disk-utility ];
 
-    services.dbus.packages = [ pkgs.gnome3.gnome-disk-utility ];
+    services.dbus.packages = [ pkgs.gnome.gnome-disk-utility ];
 
   };
 

@@ -1,12 +1,12 @@
-{ stdenv
+{ lib
 , python3Packages
-, pkgconfig
+, pkg-config
 , librsvg
 , gobject-introspection
 , atk
 , gtk3
 , gtkspell3
-, gnome3
+, gnome
 , glib
 , goocanvas2
 , gdk-pixbuf
@@ -16,27 +16,27 @@
 , wrapGAppsHook
 }:
 
-with stdenv.lib;
+with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "5.4.1";
+  version = "5.4.2";
 
   disabled = !python3Packages.isPy3k;
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0lk47qv944yc2b1ifhinp07af839r408w83rj8zzy8b43cwkpsxd";
+    sha256 = "1rca19krvmycdhmi1vb4ixwq0cagmrkhbqry4f19b725nlp8cv0q";
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gobject-introspection
     wrapGAppsHook
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    dateutil
+    python-dateutil
     pygobject3
     goocalendar
     pycairo
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
     atk
     gdk-pixbuf
     glib
-    gnome3.adwaita-icon-theme
+    gnome.adwaita-icon-theme
     goocanvas2
     fontconfig
     freetype
@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
       It is the core base of a complete business solution providing
       modularity, scalability and security.
     '';
-    homepage = http://www.tryton.org/;
+    homepage = "http://www.tryton.org/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ johbo udono ];
   };

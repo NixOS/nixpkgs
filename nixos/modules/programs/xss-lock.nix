@@ -11,7 +11,8 @@ in
 
     lockerCommand = mkOption {
       default = "${pkgs.i3lock}/bin/i3lock";
-      example = literalExample ''''${pkgs.i3lock-fancy}/bin/i3lock-fancy'';
+      defaultText = literalExpression ''"''${pkgs.i3lock}/bin/i3lock"'';
+      example = literalExpression ''"''${pkgs.i3lock-fancy}/bin/i3lock-fancy"'';
       type = types.separatedString " ";
       description = "Locker to be used with xsslock";
     };
@@ -34,7 +35,7 @@ in
       partOf = [ "graphical-session.target" ];
       serviceConfig.ExecStart = with lib;
         strings.concatStringsSep " " ([
-            "${pkgs.xss-lock}/bin/xss-lock"
+            "${pkgs.xss-lock}/bin/xss-lock" "--session \${XDG_SESSION_ID}"
           ] ++ (map escapeShellArg cfg.extraOptions) ++ [
             "--"
             cfg.lockerCommand

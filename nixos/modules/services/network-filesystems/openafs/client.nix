@@ -4,12 +4,12 @@
 with import ./lib.nix { inherit config lib pkgs; };
 
 let
-  inherit (lib) getBin mkOption mkIf optionalString singleton types;
+  inherit (lib) getBin literalExpression mkOption mkIf optionalString singleton types;
 
   cfg = config.services.openafsClient;
 
   cellServDB = pkgs.fetchurl {
-    url = http://dl.central.org/dl/cellservdb/CellServDB.2018-05-14;
+    url = "http://dl.central.org/dl/cellservdb/CellServDB.2018-05-14";
     sha256 = "1wmjn6mmyy2r8p10nlbdzs4nrqxy8a9pjyrdciy5nmppg4053rk2";
   };
 
@@ -57,11 +57,10 @@ in
           CellServDB. See CellServDB(5) man page for syntax. Ignored when
           <literal>afsdb</literal> is set to <literal>true</literal>.
         '';
-        example = ''
-          [ { ip = "1.2.3.4"; dnsname = "first.afsdb.server.dns.fqdn.org"; }
-            { ip = "2.3.4.5"; dnsname = "second.afsdb.server.dns.fqdn.org"; }
-          ]
-        '';
+        example = [
+          { ip = "1.2.3.4"; dnsname = "first.afsdb.server.dns.fqdn.org"; }
+          { ip = "2.3.4.5"; dnsname = "second.afsdb.server.dns.fqdn.org"; }
+        ];
       };
 
       cache = {
@@ -149,13 +148,13 @@ in
       packages = {
         module = mkOption {
           default = config.boot.kernelPackages.openafs;
-          defaultText = "config.boot.kernelPackages.openafs";
+          defaultText = literalExpression "config.boot.kernelPackages.openafs";
           type = types.package;
           description = "OpenAFS kernel module package. MUST match the userland package!";
         };
         programs = mkOption {
           default = getBin pkgs.openafs;
-          defaultText = "getBin pkgs.openafs";
+          defaultText = literalExpression "getBin pkgs.openafs";
           type = types.package;
           description = "OpenAFS programs package. MUST match the kernel module package!";
         };
@@ -244,7 +243,7 @@ in
       # postStop, then we get a hang + kernel oops, because AFS can't be
       # stopped simply by sending signals to processes.
       preStop = ''
-        ${pkgs.utillinux}/bin/umount ${cfg.mountPoint}
+        ${pkgs.util-linux}/bin/umount ${cfg.mountPoint}
         ${openafsBin}/sbin/afsd -shutdown
         ${pkgs.kmod}/sbin/rmmod libafs
       '';

@@ -1,17 +1,29 @@
-{ stdenv, fetchgit }:
+{ lib, stdenv
+, fetchgit
+, unstableGitUpdater
+, callPackage
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "qbe";
-  version = "unstable-2019-07-11";
+  version = "unstable-2022-04-11";
 
   src = fetchgit {
     url = "git://c9x.me/qbe.git";
-    rev = "7bf08ff50729037c8820b26d085905175b5593c8";
-    sha256 = "0w1yack5ky6x6lbw8vn6swsy8s90n6ny0jpkw0866ja677z7qz34";
+    rev = "2caa26e388b1c904d2f12fb09f84df7e761d8331";
+    sha256 = "sha256-TNKHKX/PbrNIQJ+Q50KemfcigEBKe7gmJzTjB6ofYL8=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
-  meta = with stdenv.lib; {
+
+  doCheck = true;
+
+  passthru = {
+    tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
+    updateScript = unstableGitUpdater { };
+  };
+
+  meta = with lib; {
     homepage = "https://c9x.me/compile/";
     description = "A small compiler backend written in C";
     maintainers = with maintainers; [ fgaz ];
@@ -19,4 +31,3 @@ stdenv.mkDerivation {
     platforms = platforms.all;
   };
 }
-

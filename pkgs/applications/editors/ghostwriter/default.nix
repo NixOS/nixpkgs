@@ -1,25 +1,43 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qmake, pkgconfig, qttools, qtwebengine, hunspell }:
+{ lib
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, qmake
+, pkg-config
+, qttools
+, qtwebengine
+, hunspell
+, cmark
+, multimarkdown
+, pandoc
+}:
 
 mkDerivation rec {
   pname = "ghostwriter";
-  version = "1.8.0";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "wereturtle";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "13yn82m1l2pq93wbl569a2lzpc3sn8a8g30hsgdch1l9xlmhwran";
+    rev = version;
+    hash = "sha256-U6evyaC7fLFyKzeDNAI3U3/IcCk8DTY8pb3e3xqSfwk=";
   };
 
-  nativeBuildInputs = [ qmake pkgconfig qttools ];
+  nativeBuildInputs = [ qmake pkg-config qttools ];
 
   buildInputs = [ qtwebengine hunspell ];
 
-  meta = with stdenv.lib; {
+  qtWrapperArgs = [
+    "--prefix" "PATH" ":" (lib.makeBinPath [ cmark multimarkdown pandoc ])
+  ];
+
+  meta = with lib; {
     description = "A cross-platform, aesthetic, distraction-free Markdown editor";
     homepage = src.meta.homepage;
+    changelog = "https://github.com/wereturtle/ghostwriter/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda erictapen ];
+    broken = stdenv.isDarwin;
   };
 }

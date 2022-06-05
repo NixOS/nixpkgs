@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bzip2, qt4, qmake4Hook, libX11, xorgproto, libXtst }:
+{ lib, stdenv, fetchurl, bzip2, qt4, qmake4Hook, libX11, xorgproto, libXtst }:
 
 stdenv.mkDerivation rec {
   pname = "keepassx";
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Qt password manager compatible with its Win32 and Pocket PC versions";
-    homepage = https://www.keepassx.org/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ qknight ];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "https://www.keepassx.org/";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ qknight ];
+    platforms = with lib.platforms; linux;
   };
 }

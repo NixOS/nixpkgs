@@ -1,41 +1,83 @@
-{ stdenv, python3, glibcLocales }:
-
+{ stdenv
+, lib
+, python3
+, glibcLocales
+, installShellFiles
+, jq
+}:
 let
-  inherit (python3.pkgs) buildPythonApplication fetchPypi;
+  inherit (python3.pkgs) buildPythonApplication fetchPypi setuptools-scm;
 in
 buildPythonApplication rec {
   pname = "todoman";
-  version = "3.7.0";
+  version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16brw2zhm5vamffin6qjb0lxjlj3ba40vaficl851nw2xh2mrdhy";
+    sha256 = "ce3caa481d923e91da9b492b46509810a754e2d3ef857f5d20bc5a8e362b50c8";
   };
 
-    LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
-      "${glibcLocales}/lib/locale/locale-archive";
-    LANG = "en_US.UTF-8";
-    LC_TYPE = "en_US.UTF-8";
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = with python3.pkgs;
-    [ atomicwrites click click-log click-repl configobj humanize icalendar parsedatetime
-      python-dateutil pyxdg tabulate urwid ];
+  nativeBuildInputs = [
+    installShellFiles
+    setuptools-scm
+  ];
 
-  checkInputs = with python3.pkgs;
-    [ flake8 flake8-import-order freezegun hypothesis pytest pytestrunner pytestcov ];
+  propagatedBuildInputs = with python3.pkgs; [
+    atomicwrites
+    click
+    click-log
+    click-repl
+    humanize
+    icalendar
+    parsedatetime
+    python-dateutil
+    pyxdg
+    tabulate
+    urwid
+  ];
 
-  makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
-                      "--set CHARSET en_us.UTF-8" ];
+  checkInputs = with python3.pkgs; [
+    flake8
+    flake8-import-order
+    freezegun
+    hypothesis
+    pytestCheckHook
+    glibcLocales
+  ];
 
-  preCheck = ''
-    # Remove one failing test that only checks whether the command line works
-    rm tests/test_main.py
-    rm tests/test_cli.py
+  LC_ALL = "en_US.UTF-8";
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov=todoman --cov-report=term-missing" ""
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pimutils/todoman;
+  postInstall = ''
+    installShellCompletion --bash contrib/completion/bash/_todo
+    substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${jq}/bin/jq "
+    installShellCompletion --zsh contrib/completion/zsh/_todo
+  '';
+
+  disabledTests = [
+    # Testing of the CLI part and output
+    "test_color_due_dates"
+    "test_color_flag"
+    "test_default_command"
+    "test_main"
+    "test_missing_cache_dir"
+    "test_sorting_null_values"
+    "test_xdg_existant"
+  ];
+
+  pythonImportsCheck = [
+    "todoman"
+  ];
+
+  meta = with lib; {
+    broken = stdenv.isDarwin;
+    homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''
       Todoman is a simple, standards-based, cli todo (aka: task) manager. Todos
@@ -50,8 +92,8 @@ buildPythonApplication rec {
 
       Todoman is part of the pimutils project
     '';
+    changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
   };
 }

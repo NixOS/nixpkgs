@@ -1,24 +1,29 @@
-{ stdenv, SDL2, fetchFromGitHub, makeWrapper, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, SDL2, gzip, libvorbis, libmad, vulkan-headers, vulkan-loader }:
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
-  version = "1.03.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     rev = version;
-    sha256 = "1x2lx1fvr2p91clbx2jcc29j5yyh0xwq9fh0lyxhyadf5a710fn0";
+    sha256 = "sha256-dRPeUsBLliBevjMOSMU+uPSAivrQ0tbuh4QeLmowrAI=";
   };
 
   sourceRoot = "source/Quake";
 
   nativeBuildInputs = [
-    makeWrapper vulkan-headers
+    makeWrapper
+    vulkan-headers
   ];
 
   buildInputs = [
-    gzip SDL2 libvorbis libmad vulkan-loader
+    gzip
+    SDL2
+    libvorbis
+    libmad
+    vulkan-loader
   ];
 
   buildFlags = [ "DO_USERDIRS=1" ];
@@ -30,12 +35,13 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out) bindir=$(out)/bin" ];
 
   postFixup = ''
-    wrapProgram $out/bin/vkquake --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+    wrapProgram $out/bin/vkquake \
+      --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
   '';
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Vulkan Quake port based on QuakeSpasm";
     homepage = src.meta.homepage;
     longDescription = ''
@@ -47,7 +53,7 @@ stdenv.mkDerivation rec {
       specialization constants, CPU/GPU parallelism and memory pooling.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.gnidorah ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ ];
   };
 }

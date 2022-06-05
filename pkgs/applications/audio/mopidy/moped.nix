@@ -1,4 +1,4 @@
-{ stdenv, pythonPackages, mopidy, glibcLocales }:
+{ lib, pythonPackages, mopidy, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "Mopidy-Moped";
@@ -16,8 +16,8 @@ pythonPackages.buildPythonApplication rec {
   # no tests implemented
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/martijnboland/moped;
+  meta = with lib; {
+    homepage = "https://github.com/martijnboland/moped";
     description = "A web client for Mopidy";
     license = licenses.mit;
     maintainers = [];

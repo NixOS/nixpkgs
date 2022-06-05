@@ -19,6 +19,7 @@ in
     services.autofs = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Mount filesystems on demand. Unmount them automatically.
@@ -28,7 +29,7 @@ in
 
       autoMaster = mkOption {
         type = types.str;
-        example = literalExample ''
+        example = literalExpression ''
           let
             mapConf = pkgs.writeText "auto" '''
              kernel    -ro,soft,intr       ftp.kernel.org:/pub/linux
@@ -51,11 +52,13 @@ in
       };
 
       timeout = mkOption {
+        type = types.int;
         default = 600;
         description = "Set the global minimum timeout, in seconds, until directories are unmounted";
       };
 
       debug = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Pass -d and -7 to automount and write log to the system journal.

@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, gettext, fetchpatch
+{ stdenv, lib, buildPackages, fetchurl, gettext
 , genPosixLockObjOnly ? false
 }: let
   genPosixLockObjOnlyAttrs = lib.optionalAttrs genPosixLockObjOnly {
@@ -17,34 +17,31 @@
   };
 in stdenv.mkDerivation (rec {
   pname = "libgpg-error";
-  version = "1.36";
+  version = "1.42";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "0z696dmhfxm2n6pmr8b857wwljq9h633yi99bhbn7h88f91rigds";
+    sha256 = "sha256-/AfnD2xhX4xPWQqON6m43S4soelAj45gRZxnRSuSXiM=";
   };
 
-  # Remove gawk buildfix on > 1.36
-  patches = [
-    (fetchpatch {
-      url = "https://dev.gnupg.org/rE7865041c77f4f7005282f10f9b6666b19072fbdf?diff=1";
-      sha256 = "0hs4rpwqq2afpsbqliq451jjaysq2iyzxvd9sx3992b4vnllgqqq";
-    })
-  ];
+  # 1.42 breaks (some?) cross-compilation (e.g. x86_64 -> aarch64).
+  # Backporting this fix (merged in upstream master but no release cut) by David Michael <fedora.dm0@gmail.com> https://dev.gnupg.org/rE33593864cd54143db594c4237bba41e14179061c
+  patches = [ ./fix-1.42-cross-compilation.patch ];
 
   postPatch = ''
-    # Remove on > 1.36 release: gawk upgrade fix didn't include Makefile regeneration
-    sed 's/-v namespace=errnos_/-v pkg_namespace=errnos_/' -i src/Makefile.in
-
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
   '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
     ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabihf.h
     ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabi.h
   '' + lib.optionalString (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isMusl) ''
     ln -s lock-obj-pub.x86_64-pc-linux-musl.h src/syscfg/lock-obj-pub.linux-musl.h
+  '' + lib.optionalString (stdenv.hostPlatform.isi686 && stdenv.hostPlatform.isMusl) ''
+    ln -s lock-obj-pub.i686-unknown-linux-gnu.h src/syscfg/lock-obj-pub.linux-musl.h
   '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isMusl) ''
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.arm-unknown-linux-musleabihf.h
-    ln -s src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-musleabihf.h
+    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.arm-unknown-linux-musleabihf.h
+    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-musleabihf.h
+  '' + lib.optionalString (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isMusl) ''
+    ln -s lock-obj-pub.aarch64-unknown-linux-gnu.h src/syscfg/lock-obj-pub.linux-musl.h
   '';
 
   outputs = [ "out" "dev" "info" ];
@@ -60,14 +57,15 @@ in stdenv.mkDerivation (rec {
     # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
     # `config.status' run:
     #   ./config.status[1401]: shift: (null): bad number
-    # (See <http://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
+    # (See <https://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
     # Thus, re-run it with Bash.
       "${stdenv.shell} config.status";
 
   doCheck = true; # not cross
 
-  meta = with stdenv.lib; {
-    homepage = https://www.gnupg.org/related_software/libgpg-error/index.html;
+  meta = with lib; {
+    homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
+    changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
     description = "A small library that defines common error values for all GnuPG components";
 
     longDescription = ''

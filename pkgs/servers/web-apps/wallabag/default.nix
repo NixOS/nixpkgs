@@ -1,39 +1,53 @@
-{ stdenv, fetchurl }:
+{ lib
+, stdenv
+, fetchurl
+}:
 
-stdenv.mkDerivation rec {
+# Point the environment variable $WALLABAG_DATA to a data directory
+# that contains the folder `app` which must be a clone of
+# wallabag's configuration files with your customized `parameters.yml`.
+# In practice you need to copy `${pkgs.wallabag}/app` and the
+# customizzed `parameters.yml` to $WALLABAG_DATA.
+# These need to be updated every package upgrade.
+#
+# After a package upgrade, empty the `var/cache` folder or unexpected
+# error will occur.
+
+let
   pname = "wallabag";
-  version = "2.3.8";
+  version = "2.5.0";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
-  # remember to rm -r var/cache/* after a rebuild or unexpected errors will occur
-
+  # GitHub distribution does not include vendored files
   src = fetchurl {
     url = "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz";
-    sha256 = "1sr62hfk2f2rl5by48dg8yd1gchngjnc850as17wr3w287p1kwsq";
+    hash = "sha256-fE/4bVwImQ03wrfdrx6AlulO2xU1M2HIaSOGpTAb02E=";
   };
 
-  outputs = [ "out" ];
-
-  patches = [ ./wallabag-data.patch ]; # exposes $WALLABAG_DATA
+  patches = [
+    ./wallabag-data.patch # exposes $WALLABAG_DATA
+  ];
 
   dontBuild = true;
 
   installPhase = ''
-    mkdir $out/
+    mkdir $out
     cp -R * $out/
   '';
 
-  meta = with stdenv.lib; {
-    description = "Web page archiver";
+  meta = with lib; {
+    description = "wallabag is a self hostable application for saving web pages";
     longDescription = ''
-      wallabag is a self hostable application for saving web pages.
-
-      Point the environment variable $WALLABAG_DATA to a data directory that contains the folder `app/config` which must be a clone of wallabag's configuration files with your customized `parameters.yml`. These need to be updated every package upgrade.
-      After a package upgrade, empty the `var/cache` folder.
+      wallabag is a self-hostable PHP application allowing you to not
+      miss any content anymore. Click, save and read it when you can.
+      It extracts content so that you can read it when you have time.
     '';
     license = licenses.mit;
-    homepage = http://wallabag.org;
+    homepage = "http://wallabag.org";
+    changelog = "https://github.com/wallabag/wallabag/releases/tag/${version}";
     maintainers = with maintainers; [ schneefux ];
     platforms = platforms.all;
   };
 }
-

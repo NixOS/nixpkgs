@@ -33,8 +33,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.bosun;
-        defaultText = "pkgs.bosun";
-        example = literalExample "pkgs.bosun";
+        defaultText = literalExpression "pkgs.bosun";
         description = ''
           bosun binary to use.
         '';
@@ -148,7 +147,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         ExecStart = ''
-          ${cfg.package.bin}/bin/bosun -c ${configFile}
+          ${cfg.package}/bin/bosun -c ${configFile}
         '';
       };
     };

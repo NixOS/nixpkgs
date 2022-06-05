@@ -1,13 +1,16 @@
 { stdenv
+, lib
 , fetchurl
+, fetchpatch
 , atk
 , cairo
 , desktop-file-utils
 , evolution-data-server
+, evolution
 , gcr
 , gettext
 , glib
-, gnome3
+, gnome
 , gpgme
 , gtk3
 , gtksourceview3
@@ -16,19 +19,30 @@
 , libxml2
 , meson
 , ninja
-, pkgconfig
+, pkg-config
+, python3
 , sqlite
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "almanah";
-  version = "0.12.0";
+  version = "0.12.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "09rxx4s4c34d1axza6ayss33v78p44r9bpx058shllh1sf5avpcb";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "lMpDQOxlGljP66APR49aPbTZnfrGakbQ2ZcFvmiPMFo=";
   };
+
+  patches = [
+    # Fix build with meson 0.61
+    # data/meson.build:2:5: ERROR: Function does not take positional arguments.
+    # Patch taken from https://gitlab.gnome.org/GNOME/almanah/-/merge_requests/13
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/almanah/-/commit/8c42a67695621d1e30cec933a04e633e6030bbaf.patch";
+      sha256 = "qyqFgYSu4emFDG/Mjwz1bZb3v3/4gwQSKmGCoPPNYCQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -36,7 +50,8 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
+    python3
     wrapGAppsHook
   ];
 
@@ -46,7 +61,7 @@ stdenv.mkDerivation rec {
     evolution-data-server
     gcr
     glib
-    gnome3.evolution
+    evolution
     gpgme
     gtk3
     gtksourceview3
@@ -56,17 +71,17 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none"; # it is quite odd
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Small GTK application to allow to keep a diary of your life";
-    homepage = https://wiki.gnome.org/Apps/Almanah_Diary;
+    homepage = "https://wiki.gnome.org/Apps/Almanah_Diary";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

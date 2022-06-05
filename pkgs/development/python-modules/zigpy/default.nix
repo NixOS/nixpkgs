@@ -1,25 +1,70 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, aiohttp, crccheck, pycryptodome, pycrypto
-, pytest, pytest-asyncio, asynctest }:
+{ lib
+, aiohttp
+, aiosqlite
+, asynctest
+, buildPythonPackage
+, crccheck
+, cryptography
+, fetchFromGitHub
+, pycryptodome
+, pytest-aiohttp
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, voluptuous
+}:
 
 buildPythonPackage rec {
-  pname = "zigpy-homeassistant";
-  version = "0.11.0";
+  pname = "zigpy";
+  version = "0.46.0";
+  format = "setuptools";
 
-  nativeBuildInputs = [ pytest pytest-asyncio asynctest ];
-  buildInputs = [ aiohttp pycryptodome ];
-  propagatedBuildInputs = [ crccheck pycrypto ];
+  disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "021wg9yhz8dsif60r8s5621mf63bsayjjb2bimhq0am03ql0fysl";
+  src = fetchFromGitHub {
+    owner = "zigpy";
+    repo = "zigpy";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-YCkNjygNSvGNuhP7N1apCWYevl18GASgUFSSTLHj2YU=";
   };
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [
+    aiohttp
+    aiosqlite
+    crccheck
+    cryptography
+    pycryptodome
+    voluptuous
+  ];
+
+  checkInputs = [
+    pytest-aiohttp
+    pytest-timeout
+    pytestCheckHook
+  ]  ++ lib.optionals (pythonOlder "3.8") [
+    asynctest
+  ];
+
+  disabledTests = [
+    # RuntimeError: coroutine 'test_remigrate_forcibly_downgraded_v4' was never awaited
+    #"test_remigrate_forcibly_downgraded_v4"
+    # RuntimeError: Event loop is closed
+    #"test_startup"
+  ];
+
+  pythonImportsCheck = [
+    "zigpy.application"
+    "zigpy.config"
+    "zigpy.exceptions"
+    "zigpy.types"
+    "zigpy.zcl"
+  ];
+
+  meta = with lib; {
     description = "Library implementing a ZigBee stack";
     homepage = "https://github.com/zigpy/zigpy";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ etu ];
+    maintainers = with maintainers; [ etu mvnetbiz ];
     platforms = platforms.linux;
   };
 }

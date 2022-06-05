@@ -1,19 +1,40 @@
-{ stdenv, buildPythonPackage, fetchPypi, mock, six }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mock
+, six
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "whisper";
-  version = "1.1.6";
+  version = "1.1.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "8dbb3b7cf4a02a080162467fff5cd38bf77940c3e2b25f7c4f78529427ca9cfe";
+  src = fetchFromGitHub {
+    owner = "graphite-project";
+    repo = pname;
+    rev = version;
+    sha256 = "11f7sarj62zgpw3ak4a2q55lj7ap4039l9ybc3a6yvs1ppvrcn7x";
   };
 
-  propagatedBuildInputs = [ six ];
-  checkInputs = [ mock ];
+  propagatedBuildInputs = [
+    six
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://graphite.wikidot.com/;
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # whisper-resize.py: not found
+    "test_resize_with_aggregate"
+  ];
+
+  pythonImportsCheck = [ "whisper" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/graphite-project/whisper";
     description = "Fixed size round-robin style database";
     maintainers = with maintainers; [ offline basvandijk ];
     license = licenses.asl20;

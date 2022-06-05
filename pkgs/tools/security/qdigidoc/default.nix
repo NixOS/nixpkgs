@@ -1,23 +1,23 @@
-{ stdenv, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkgconfig
-, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations, qtsvg }:
+{ lib, mkDerivation, fetchurl, cmake, gettext
+, pkg-config, libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase
+, qttranslations, qtsvg }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.1.0";
+  version = "4.2.11";
 
-  src = fetchgit {
-    url = "https://github.com/open-eid/DigiDoc4-Client";
-    rev = "v${version}";
-    sha256 = "1iry36h3pfnw2gqjnfhv53i2svybxj8jf18qh486djyai84hjr4d";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url =
+      "https://github.com/open-eid/DigiDoc4-Client/releases/download/v${version}/qdigidoc4_${version}.110-1804.tar.xz";
+    sha256 = "sha256-Sg6lFZeIJn3T/suDc5Z/kNqBf/sIV9c6EJJ0Nr0dwTM=";
   };
 
   tsl = fetchurl {
-    url = "https://ec.europa.eu/information_society/policy/esignature/trusted-list/tl-mp.xml";
-    sha256 = "0llr2fj8vd097hcr1d0xmzdy4jydv0b5j5qlksbjffs22rqgal14";
+    url = "https://ec.europa.eu/tools/lotl/eu-lotl-pivot-300.xml";
+    sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
 
-  nativeBuildInputs = [ cmake darkhttpd gettext makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake gettext pkg-config ];
 
   postPatch = ''
     substituteInPlace client/CMakeLists.txt \
@@ -35,16 +35,17 @@ stdenv.mkDerivation rec {
     qttranslations
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/qdigidoc4 \
-      --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
-  '';
+  # replace this hack with a proper cmake variable or environment variable
+  # once https://github.com/open-eid/cmake/pull/34 (or #35) gets merged.
+  qtWrapperArgs = [
+      "--prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
-    homepage = https://www.id.ee/;
+    homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ mmahut yana ];
   };
 }

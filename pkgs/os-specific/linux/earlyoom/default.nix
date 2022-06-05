@@ -1,26 +1,37 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, pandoc, installShellFiles, withManpage ? false, nixosTests }:
 
 stdenv.mkDerivation rec {
-  name = "earlyoom-${VERSION}";
-  # This environment variable is read by make to set the build version.
-  VERSION = "1.3";
+  pname = "earlyoom";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = "earlyoom";
-    rev = "v${VERSION}";
-    sha256 = "0fwbx0y80nqgkxrc9kf9j3iwa0wbps2jmqir3pgqbc2cj0wjh0lr";
+    rev = "v${version}";
+    sha256 = "sha256-8YcT1TTlAet7F1U9Ginda4IApNqkudegOXqm8rnRGfc=";
   };
+
+  nativeBuildInputs = lib.optionals withManpage [ pandoc installShellFiles ];
+
+  patches = [ ./fix-dbus-path.patch ];
+
+  makeFlags = [ "VERSION=${version}" ];
 
   installPhase = ''
     install -D earlyoom $out/bin/earlyoom
+  '' + lib.optionalString withManpage ''
+    installManPage earlyoom.1
   '';
 
-  meta = {
+  passthru.tests = {
+    inherit (nixosTests) earlyoom;
+  };
+
+  meta = with lib; {
     description = "Early OOM Daemon for Linux";
-    homepage    = https://github.com/rfjakob/earlyoom;
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    homepage = "https://github.com/rfjakob/earlyoom";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [];
   };
 }

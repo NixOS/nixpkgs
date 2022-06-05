@@ -11,11 +11,13 @@ buildGoModule rec {
     sha256 = "0ksxic7cypv9gg8q5lkl5bla1n9i65z7b03cx9lwq6252glmf2jk";
   };
 
-  modSha256 = "19cqz13jd95d5vibd10420gg69ldgf6afc51mkglhafgmmif56b0";
+  vendorSha256 = "093blawprs2yf478zp9p1zc7mmimgpiwrw6nh8nqml89y5b5zldc";
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Contributed tools and other packages on top of the Go proto package";
-    homepage = https://github.com/emicklei/proto-contrib;
+    homepage = "https://github.com/emicklei/proto-contrib";
     license = licenses.mit;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

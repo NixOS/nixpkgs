@@ -1,10 +1,10 @@
-{ gccStdenv, fetchFromGitLab, zlib }:
+{ lib, gccStdenv, fetchFromGitLab, zlib }:
 
 let
   stdenv = gccStdenv;
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and exact comparison and clustering of sequences";
-    homepage = https://metabarcoding.org/sumatra;
+    homepage = "https://metabarcoding.org/sumatra";
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.unix;
   };

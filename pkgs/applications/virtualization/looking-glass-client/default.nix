@@ -1,38 +1,68 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig, SDL2, SDL, SDL2_ttf, openssl, spice-protocol, fontconfig
-, libX11, freefont_ttf, nettle, libconfig, wayland, libpthreadstubs, libXdmcp
-, libXfixes, libbfd
+{ stdenv, lib, fetchFromGitHub, makeDesktopItem, cmake, pkg-config
+, freefont_ttf, spice-protocol, nettle, libbfd, fontconfig, libffi, expat
+, libxkbcommon, libGL, libXext, libXrandr, libXi, libXScrnSaver, libXinerama
+, libXcursor, libXpresent, wayland, wayland-protocols
 }:
 
+let
+  desktopItem = makeDesktopItem {
+    name = "looking-glass-client";
+    desktopName = "Looking Glass Client";
+    type = "Application";
+    exec = "looking-glass-client";
+    icon = "lg-logo";
+    terminal = true;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "looking-glass-client";
-  version = "B1";
+  version = "B5.0.1";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
     rev = version;
-    sha256 = "0vykv7yjz4fima9d82m83acd8ab72nq4wyzyfs1c499i27wz91ia";
+    sha256 = "sha256-UzZQU5SzJ2mo9QBweQB0VJSnKfzgTG5QaKpIQN/6LCE=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    SDL SDL2 SDL2_ttf openssl spice-protocol fontconfig
-    libX11 freefont_ttf nettle libconfig wayland libpthreadstubs
-    libXdmcp libXfixes libbfd cmake
+    libGL
+    freefont_ttf
+    spice-protocol
+    expat
+    libbfd
+    nettle
+    fontconfig
+    libffi
+    libxkbcommon
+    libXi
+    libXScrnSaver
+    libXinerama
+    libXcursor
+    libXpresent
+    libXext
+    libXrandr
+    wayland
+    wayland-protocols
   ];
 
-  enableParallelBuilding = true;
+  cmakeFlags = [ "-DOPTIMIZE_FOR_NATIVE=OFF" ];
 
-  sourceRoot = "source/client";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mv looking-glass-client $out/bin
+  postUnpack = ''
+    echo ${src.rev} > source/VERSION
+    export sourceRoot="source/client"
   '';
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    mkdir -p $out/share/pixmaps
+    ln -s ${desktopItem}/share/applications $out/share/
+    cp $src/resources/lg-logo.png $out/share/pixmaps
+  '';
+
+  meta = with lib; {
     description = "A KVM Frame Relay (KVMFR) implementation";
     longDescription = ''
       Looking Glass is an open source application that allows the use of a KVM
@@ -41,9 +71,9 @@ stdenv.mkDerivation rec {
       step required to move away from dual booting with other operating systems
       for legacy programs that require high performance graphics.
     '';
-    homepage = https://looking-glass.hostfission.com/;
+    homepage = "https://looking-glass.io/";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.alexbakker ];
+    maintainers = with maintainers; [ alexbakker babbaj ];
     platforms = [ "x86_64-linux" ];
   };
 }

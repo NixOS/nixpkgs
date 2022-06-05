@@ -1,21 +1,23 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "consul_exporter";
-  version = "0.3.0";
-
-  goPackagePath = "github.com/prometheus/consul_exporter";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "consul_exporter";
     rev = "v${version}";
-    sha256 = "1zffbxyfmqpbdqkx5rb5vjgd9j4p4zcrh6jvn1zhbdzrcs7khnd9";
+    sha256 = "sha256-5odAKMWK2tDZ3a+bIVIdPgzxrW64hF8nNqItGO7sODI=";
   };
 
-  meta = with stdenv.lib; {
+  vendorSha256 = "sha256-vbaiHeQRo9hsHa/10f4202xLe9mduELRJMCDFuyKlW0=";
+
+  ldflags = [ "-s" "-w" ];
+
+  meta = with lib; {
     description = "Prometheus exporter for Consul metrics";
-    homepage = https://github.com/prometheus/consul_exporter;
+    homepage = "https://github.com/prometheus/consul_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ hectorj ];
     platforms = platforms.unix;

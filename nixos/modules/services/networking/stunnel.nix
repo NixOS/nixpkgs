@@ -16,13 +16,17 @@ let
   serverConfig = {
     options = {
       accept = mkOption {
-        type = types.int;
-        description = "On which port stunnel should listen for incoming TLS connections.";
+        type = types.either types.str types.int;
+        description = ''
+          On which [host:]port stunnel should listen for incoming TLS connections.
+          Note that unlike other softwares stunnel ipv6 address need no brackets,
+          so to listen on all IPv6 addresses on port 1234 one would use ':::1234'.
+        '';
       };
 
       connect = mkOption {
-        type = types.int;
-        description = "To which port the decrypted connection should be forwarded.";
+        type = types.either types.str types.int;
+        description = "Port or IP:Port to which the decrypted connection should be forwarded.";
       };
 
       cert = mkOption {
@@ -65,6 +69,7 @@ let
       CAFile = mkOption {
         type = types.nullOr types.path;
         default = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        defaultText = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
         description = "Path to a file containing certificates to validate against.";
       };
 
@@ -129,7 +134,6 @@ in
         type = with types; attrsOf (submodule serverConfig);
         example = {
           fancyWebserver = {
-            enable = true;
             accept = 443;
             connect = 8080;
             cert = "/path/to/pem/file";

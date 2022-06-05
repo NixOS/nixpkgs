@@ -1,73 +1,69 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, go-bindata }:
-
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 let
-  goPackagePath = "k8s.io/kops";
-
-  generic = { version, sha256, ...}@attrs:
-    let attrs' = builtins.removeAttrs attrs ["version" "sha256"] ; in
-      buildGoPackage {
+  generic = { version, sha256, rev ? version, ... }@attrs:
+    let attrs' = builtins.removeAttrs attrs [ "version" "sha256" "rev" ]; in
+    buildGoModule
+      {
         pname = "kops";
         inherit version;
 
-        inherit goPackagePath;
-
         src = fetchFromGitHub {
-          rev = version;
+          rev = rev;
           owner = "kubernetes";
           repo = "kops";
           inherit sha256;
         };
 
-        buildInputs = [go-bindata];
-        subPackages = ["cmd/kops"];
+        vendorSha256 = null;
 
-        buildFlagsArray = ''
-          -ldflags=
-              -X k8s.io/kops.Version=${version}
-              -X k8s.io/kops.GitVersion=${version}
-        '';
+        nativeBuildInputs = [ installShellFiles ];
 
-        preBuild = ''
-          (cd go/src/k8s.io/kops
-           go-bindata -o upup/models/bindata.go -pkg models -prefix upup/models/ upup/models/...)
-        '';
+        subPackages = [ "cmd/kops" ];
+
+        ldflags = [
+          "-s"
+          "-w"
+          "-X k8s.io/kops.Version=${version}"
+          "-X k8s.io/kops.GitVersion=${version}"
+        ];
+
+        doCheck = false;
 
         postInstall = ''
-          mkdir -p $bin/share/bash-completion/completions
-          mkdir -p $bin/share/zsh/site-functions
-          $bin/bin/kops completion bash > $bin/share/bash-completion/completions/kops
-          $bin/bin/kops completion zsh > $bin/share/zsh/site-functions/_kops
+          installShellCompletion --cmd kops \
+            --bash <($GOPATH/bin/kops completion bash) \
+            --fish <($GOPATH/bin/kops completion fish) \
+            --zsh <($GOPATH/bin/kops completion zsh)
         '';
 
-        meta = with stdenv.lib; {
+        meta = with lib; {
           description = "Easiest way to get a production Kubernetes up and running";
-          homepage = https://github.com/kubernetes/kops;
+          homepage = "https://github.com/kubernetes/kops";
+          changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
           license = licenses.asl20;
-          maintainers = with maintainers; [offline zimbatm kampka];
+          maintainers = with maintainers; [ offline zimbatm diegolelis yurrriq ];
           platforms = platforms.unix;
         };
       } // attrs';
-in rec {
-
+in
+rec {
   mkKops = generic;
 
-  kops_1_12 = mkKops {
-    version = "1.12.3";
-    sha256 = "0rpbaz54l5v1z7ab5kpxcb4jyakkl5ysgz1sxajqmw2d6dvf7xly";
+  kops_1_21 = mkKops rec {
+    version = "1.21.4";
+    sha256 = "sha256-f2xOVa3N/GH5IoI6H/QwDdKTeQoF/kEHX6lNytCZ9cs=";
+    rev = "v${version}";
   };
 
-  kops_1_13 = mkKops {
-    version = "1.13.2";
-    sha256 = "0lkkg34vn020r62ga8vg5d3a8jwvq00xlv3p1s01nkz33f6salng";
-  };
-  
-  kops_1_14 = mkKops {
-    version = "1.14.1";
-    sha256 = "0ikd8qwrjh8s1sc95g18sm0q6p33swz2m1rjd8zw34mb2w9jv76n";
+  kops_1_22 = mkKops rec {
+    version = "1.22.4";
+    sha256 = "sha256-osU7yI77ZALGrAGuP8qAgv+ogDRn+BSVmcjPbi/WEKE=";
+    rev = "v${version}";
   };
 
-  kops_1_15 = mkKops {
-    version = "1.15.0";
-    sha256 = "0sjas8pn0njl767b1y15g7cci2q3kxkxwmgr0wvs7vi3n1s1sf9d";
+  kops_1_23 = mkKops rec {
+    version = "1.23.2";
+    sha256 = "sha256-9GANjGRS9QaJw+CEeMv/f+rEu37QV2YxMvSRSH6+3PM=";
+    rev = "v${version}";
   };
 }

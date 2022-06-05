@@ -1,54 +1,61 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-
+, autoreconfHook
 , dbus
 , gettext
 , gnutls
-, gtk2
 , libfilezilla
 , libidn
 , nettle
-, pkgconfig
+, pkg-config
 , pugixml
 , sqlite
 , tinyxml
-, wxGTK30
-, xdg_utils
+, wrapGAppsHook
+, wxGTK30-gtk3
+, xdg-utils
 }:
 
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.46.0";
+  version = "3.58.0";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.bz2";
-    sha256 = "0v7656p7b6w88a96wj8058b13yxbwi186l092i9whrisngnv2pnf";
+    sha256 = "sha256-0P5/cuAfd0K6oGRmgYsYbo6R//Ytbuey8OiEtrM4XYg=";
   };
+
+  # https://www.linuxquestions.org/questions/slackware-14/trouble-building-filezilla-3-47-2-1-current-4175671182/#post6099769
+  postPatch = ''
+    sed -i src/interface/Mainfrm.h \
+      -e '/^#define/a #include <list>'
+  '';
 
   configureFlags = [
     "--disable-manualupdatecheck"
     "--disable-autoupdatecheck"
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook ];
+
   buildInputs = [
     dbus
     gettext
     gnutls
-    gtk2
     libfilezilla
     libidn
     nettle
     pugixml
     sqlite
     tinyxml
-    wxGTK30
-    xdg_utils
+    wxGTK30-gtk3
+    wxGTK30-gtk3.gtk
+    xdg-utils
   ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://filezilla-project.org/";
     description = "Graphical FTP, FTPS and SFTP client";
     longDescription = ''

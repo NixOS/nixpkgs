@@ -6,9 +6,9 @@
 # tools. For example:
 #
 #   # Flags for compiling (whether or not linking) C code for the...
-#   NIX_BUILD_CFLAGS_COMPILE  # ...build platform
-#   NIX_CFLAGS_COMPILE        # ...host platform
-#   NIX_TARGET_CFLAGS_COMPILE # ...target platform
+#   NIX_CFLAGS_COMPILE_FOR_BUILD  # ...build platform
+#   NIX_CFLAGS_COMPILE            # ...host platform
+#   NIX_CFLAGS_COMPILE_FOR_TARGET # ...target platform
 #
 # Notice that these platforms are the 3 *relative* to the package using
 # cc-wrapper, not absolute like `x86_64-pc-linux-gnu`.
@@ -33,12 +33,12 @@
 # The basic strategy is:
 #
 #  - Everyone exclusively *adds information* to relative-platform-specific
-#    environment variables, like `NIX_TARGET_CFLAGS_COMPILE`, to communicate
+#    environment variables, like `NIX_CFLAGS_COMPILE_FOR_TARGET`, to communicate
 #    with the wrapped binaries.
 #
 #  - The wrapped binaries will exclusively *read* cc-wrapper-derivation-specific
-#    environment variables distinguished with with `infixSalt`, like
-#    `NIX_@infixSalt@_CFLAGS_COMPILE`.
+#    environment variables distinguished with with `suffixSalt`, like
+#    `NIX_CFLAGS_COMPILE_@suffixSalt@`.
 #
 #  - `add-flags`, beyond its old task of reading extra flags stuck inside the
 #    cc-wrapper derivation, will convert the relative-platform-specific
@@ -65,15 +65,15 @@
 # function is guaranteed to be exactly the same.
 ccWrapper_addCVars () {
     # See ../setup-hooks/role.bash
-    local role_post role_pre
+    local role_post
     getHostRoleEnvHook
 
     if [ -d "$1/include" ]; then
-        export NIX_${role_pre}CFLAGS_COMPILE+=" -isystem $1/include"
+        export NIX_CFLAGS_COMPILE${role_post}+=" -isystem $1/include"
     fi
 
     if [ -d "$1/Library/Frameworks" ]; then
-        export NIX_${role_pre}CFLAGS_COMPILE+=" -iframework $1/Library/Frameworks"
+        export NIX_CFLAGS_COMPILE${role_post}+=" -iframework $1/Library/Frameworks"
     fi
 }
 
@@ -105,10 +105,10 @@ fi
 
 # Export tool environment variables so various build systems use the right ones.
 
-export NIX_${role_pre}CC=@out@
+export NIX_CC${role_post}=@out@
 
-export ${role_pre}CC=@named_cc@
-export ${role_pre}CXX=@named_cxx@
+export CC${role_post}=@named_cc@
+export CXX${role_post}=@named_cxx@
 export CC${role_post}=@named_cc@
 export CXX${role_post}=@named_cxx@
 
@@ -117,4 +117,4 @@ export CXX${role_post}=@named_cxx@
 export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file
-unset -v role_pre role_post
+unset -v role_post

@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.8.6";
+  version = "0.8.9";
   pname = "tabulate";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5470cc6687a091c7042cee89b2946d9235fe9f6d49c193a4ae2ac7bf386737c8";
+    sha256 = "eb1d13f25760052e8931f2ef80aaf6045a6cceb47514db8beab24cded16f13a7";
   };
 
   checkInputs = [ nose ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Pretty-print tabular data";
-    homepage = https://bitbucket.org/astanin/python-tabulate;
+    homepage = "https://bitbucket.org/astanin/python-tabulate";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fridh ];
   };

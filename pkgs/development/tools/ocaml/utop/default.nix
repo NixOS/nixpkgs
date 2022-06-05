@@ -1,24 +1,23 @@
-{ stdenv, fetchurl, ocaml, findlib, dune
-, lambdaTerm, cppo, makeWrapper, buildDunePackage
+{ lib, stdenv, fetchurl, ocaml, findlib
+, lambda-term, cppo, makeWrapper, buildDunePackage
 }:
-
-if !stdenv.lib.versionAtLeast ocaml.version "4.03"
-then throw "utop is not available for OCaml ${ocaml.version}"
-else
 
 buildDunePackage rec {
   pname = "utop";
-  version = "2.4.2";
+  version = "2.9.1";
+
+  useDune2 = true;
+
+  minimalOCamlVersion = "4.03";
 
   src = fetchurl {
     url = "https://github.com/ocaml-community/utop/releases/download/${version}/utop-${version}.tbz";
-    sha256 = "0y2v8rkfz19nlz8gh0lkh5wx5hyvw5gl4nw1kg8j2pw9jnilq5nb";
+    sha256 = "sha256-6TQxLYN/qjTABZuK6rp+daCSNWyJIXzB8q2QpZeBwaY=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cppo ];
+  nativeBuildInputs = [ makeWrapper cppo ];
 
-  propagatedBuildInputs = [ lambdaTerm ];
+  propagatedBuildInputs = [ lambda-term ];
 
   postFixup =
    let
@@ -32,7 +31,7 @@ buildDunePackage rec {
 
        buildInputs = [ findlib ] ++ propagatedBuildInputs;
 
-       phases = [ "installPhase" ];
+       dontUnpack = true;
 
        installPhase = ''
          mkdir -p "$out"/${path}
@@ -56,7 +55,7 @@ buildDunePackage rec {
       --prefix CAML_LD_LIBRARY_PATH ":" "${get "CAML_LD_LIBRARY_PATH"}" \
       --prefix OCAMLPATH ":" "${get "OCAMLPATH"}" \
       --prefix OCAMLPATH ":" $(unset OCAMLPATH; addOCamlPath "$out"; printf %s "$OCAMLPATH") \
-      --add-flags "-I ${findlib}/lib/ocaml/${stdenv.lib.getVersion ocaml}/site-lib"
+      --add-flags "-I ${findlib}/lib/ocaml/${lib.getVersion ocaml}/site-lib"
    done
    '';
 
@@ -67,11 +66,11 @@ buildDunePackage rec {
 
     It integrates with the tuareg mode in Emacs.
     '';
-    homepage = https://github.com/diml/utop;
-    license = stdenv.lib.licenses.bsd3;
+    homepage = "https://github.com/diml/utop";
+    license = lib.licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.gal_bolle
+      lib.maintainers.gal_bolle
     ];
   };
 }

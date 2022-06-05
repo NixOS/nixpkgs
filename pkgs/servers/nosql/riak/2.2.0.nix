@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, erlang, which, pam }:
+{ stdenv, lib, fetchurl, unzip, erlang, which, pam, nixosTests }:
 
 let
   solrName = "solr-4.10.4-yz-2.tgz";
@@ -26,10 +26,12 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "riak-2.2.0";
+  pname = "riak";
+  version = "2.2.0";
 
+  nativeBuildInputs = [ unzip ];
   buildInputs = [
-    which unzip erlang pam
+    which erlang pam
   ];
 
   src = srcs.riak;
@@ -87,6 +89,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru.tests = { inherit (nixosTests) riak; };
 
   meta = with lib; {
     maintainers = with maintainers; [ cstrahan mdaiter ];

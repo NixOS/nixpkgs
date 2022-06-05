@@ -1,16 +1,14 @@
-{ stdenv, fetchurl, postgresql, openssl, pam ? null, libmemcached ? null }:
+{ lib, stdenv, fetchurl, postgresql, openssl, pam ? null, libmemcached ? null }:
 
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
-  version = "4.0.6";
+  version = "4.3.2";
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
     url = "http://www.pgpool.net/download.php?f=${pname}-${version}.tar.gz";
-    sha256 = "0blmbqczyrgzykby2z3xzmhzd8kgij9izxv50n5cjn5azf7dn8g5";
+    sha256 = "02jg0c6k259i0r927dng9h0y58q965swshg2c9mzqhazcdiga5ap";
   };
-
-  patches = [ ./pgpool.patch ];
 
   buildInputs = [ postgresql openssl pam libmemcached ];
 
@@ -18,8 +16,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-openssl"
-  ] ++ stdenv.lib.optional (pam != null) "--with-pam"
-    ++ stdenv.lib.optional (libmemcached != null) "--with-memcached=${libmemcached}";
+  ] ++ lib.optional (pam != null) "--with-pam"
+    ++ lib.optional (libmemcached != null) "--with-memcached=${libmemcached}";
 
   installFlags = [
     "sysconfdir=\${out}/etc"
@@ -27,8 +25,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://pgpool.net/mediawiki/index.php;
+  meta = with lib; {
+    homepage = "http://pgpool.net/mediawiki/index.php";
     description = "A middleware that works between postgresql servers and postgresql clients";
     license = licenses.free;
     platforms = platforms.linux;

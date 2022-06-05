@@ -5,18 +5,11 @@ export PLAN9_TARGET=$PLAN9
 
 plan9portLinkFlags()
 {
-    local -a linkFlags=()
     eval set -- "$NIX_LDFLAGS"
-    while (( $# > 0 )); do
-        if [[ $1 = -rpath ]]; then
-            linkFlags+=( "-Wl,-rpath,$2" )
-            shift 2
-        else
-            linkFlags+=( "$1" )
-            shift
-        fi
+    local flag
+    for flag in "$@"; do
+        printf ' -Wl,%s' "$flag"
     done
-    echo "${linkFlags[*]}"
 }
 
 configurePhase()
@@ -31,7 +24,6 @@ configurePhase()
           i?86-*)   echo OBJTYPE=386;;
           *power*)  echo OBJTYPE=power;;
           *sparc*)  echo OBJTYPE=sparc;;
-          *) exit 12
         esac
         if [[ $system =~ .*linux.* ]]; then
           echo SYSVERSION=2.6.x

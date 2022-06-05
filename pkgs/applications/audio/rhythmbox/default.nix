@@ -1,13 +1,30 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, pkg-config
+, meson
+, ninja
+, fetchFromGitLab
 , python3
-, perl
-, perlPackages
+, vala
+, glib
 , gtk3
-, intltool
 , libpeas
 , libsoup
-, gnome3
+, libxml2
+, libsecret
+, libnotify
+, libdmapsharing
+, gnome
+, gobject-introspection
 , totem-pl-parser
+, libgudev
+, libgpod
+, libmtp
+, lirc
+, brasero
+, grilo
 , tdb
 , json-glib
 , itstool
@@ -15,20 +32,32 @@
 , gst_all_1
 , gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
 }:
-let
+
+stdenv.mkDerivation rec {
   pname = "rhythmbox";
-  version = "3.4.3";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.4.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1yx3n7p9vmv23jsv98fxwq95n78awdxqm8idhyhxx2d6vk4w1hgx";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "l+u8YPN4sibaRbtEbYmQL26hgx4j8Q76ujZVk7HnTyo=";
   };
 
+  patches = [
+    # Fix stuff linking against rhythmdb not finding libxml headers
+    # included by rhythmdb.h header.
+    # https://gitlab.gnome.org/GNOME/rhythmbox/-/merge_requests/147
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/rhythmbox/-/commit/7e8c7b803a45b7badf350132f8e78e3d75b99a21.patch";
+      sha256 = "5CE/NVlmx7FItNJCVQxx+x0DCYhUkAi/UuksfAiyWBg=";
+    })
+  ];
+
   nativeBuildInputs = [
-    pkgconfig
-    intltool perl perlPackages.XMLParser
+    pkg-config
+    meson
+    ninja
+    vala
+    glib
     itstool
     wrapGAppsHook
   ];
@@ -36,31 +65,57 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     python3
     libsoup
+    libxml2
     tdb
     json-glib
 
+    glib
     gtk3
     libpeas
     totem-pl-parser
-    gnome3.adwaita-icon-theme
+    libgudev
+    libgpod
+    libmtp
+    lirc
+    brasero
+    grilo
+
+    gobject-introspection
+    python3.pkgs.pygobject3
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
+
+    libdmapsharing # for daap support
+    libsecret
+    libnotify
   ] ++ gst_plugins;
 
-  enableParallelBuilding = true;
+  postInstall = ''
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PYTHONPATH : "${python3.pkgs.pygobject3}/${python3.sitePackages}:$out/lib/rhythmbox/plugins/"
+    )
+  '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Rhythmbox;
+  meta = with lib; {
+    homepage = "https://wiki.gnome.org/Apps/Rhythmbox";
     description = "A music playing application for GNOME";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.rasendubi ];
   };

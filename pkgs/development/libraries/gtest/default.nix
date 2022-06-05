@@ -1,9 +1,8 @@
-{ stdenv, cmake, ninja, fetchFromGitHub
-, static ? false }:
+{ lib, stdenv, cmake, ninja, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "gtest";
-  version = "1.10.0";
+  version = "1.11.0";
 
   outputs = [ "out" "dev" ];
 
@@ -11,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "googletest";
     rev = "release-${version}";
-    sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
+    hash = "sha256-SjlJxushfry13RGA7BCjYC9oZqV4z6x8dOiHfl/wpF0=";
   };
 
   patches = [
@@ -20,13 +19,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
-  cmakeFlags = stdenv.lib.optional (!static) "-DBUILD_SHARED_LIBS=ON";
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Google's framework for writing C++ tests";
-    homepage = https://github.com/google/googletest;
+    homepage = "https://github.com/google/googletest";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ zoomulator ivan-tkatchev ];
+    maintainers = with maintainers; [ ivan-tkatchev ];
   };
 }

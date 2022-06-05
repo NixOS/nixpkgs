@@ -1,36 +1,50 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, pythonOlder
+, setuptools
+, setuptools-scm
+, typing-extensions
+, toml
 , zipp
-, pathlib2
-, contextlib2
-, configparser
-, isPy3k
-, importlib-resources
-, packaging
 }:
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "1.3.0";
+  version = "4.11.3";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    sha256 = "0ibvvqajphwdclbr236gikvyja0ynvqjlix38kvsabgrf0jqafh7";
+    hash = "sha256-6kxZfr83FC+Ce485KZV54xaFwx06Q4tZ9GlAav0PJTk=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools # otherwise cross build fails
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ zipp ]
-    ++ lib.optionals (!isPy3k) [ pathlib2 contextlib2 configparser ];
+  propagatedBuildInputs = [
+    toml
+    zipp
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ];
 
-  checkInputs = [ importlib-resources packaging ];
+  # Cyclic dependencies due to pyflakefs
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "importlib_metadata"
+  ];
 
   meta = with lib; {
     description = "Read metadata from Python packages";
-    homepage = https://importlib-metadata.readthedocs.io/;
+    homepage = "https://importlib-metadata.readthedocs.io/";
     license = licenses.asl20;
+    maintainers = with maintainers; [ fab ];
   };
 }

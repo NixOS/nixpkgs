@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''xsubseq'';
-  version = ''20170830-git'';
+  baseName = "xsubseq";
+  version = "20170830-git";
 
-  description = ''Efficient way to manage "subseq"s in Common Lisp'';
+  description = "Efficient way to manage \"subseq\"s in Common Lisp";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/xsubseq/2017-08-30/xsubseq-20170830-git.tgz'';
-    sha256 = ''1am63wkha97hyvkqf4ydx3q07mqpa0chkx65znr7kmqi83a8waml'';
+    url = "http://beta.quicklisp.org/archive/xsubseq/2017-08-30/xsubseq-20170830-git.tgz";
+    sha256 = "1am63wkha97hyvkqf4ydx3q07mqpa0chkx65znr7kmqi83a8waml";
   };
 
   packageName = "xsubseq";

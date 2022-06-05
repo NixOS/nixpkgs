@@ -6,8 +6,8 @@
 , geckodriver
 , urllib3
 , xorg
+, nixosTests
 }:
-
 
 let
   # Recompiling x_ignore_nofocus.so as the original one dlopen's libX11.so.6 by some
@@ -30,15 +30,15 @@ buildPythonPackage rec {
     sha256 = "039hf9knvl4s3hp21bzwsp1g5ri9gxsh504dp48lc6nr1av35byy";
   };
 
-  buildInputs = [xorg.libX11];
+  buildInputs = [ xorg.libX11 ];
 
   propagatedBuildInputs = [
     geckodriver urllib3
   ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.isLinux ''
     cp "${x_ignore_nofocus}/cpp/linux-specific/"* .
-    substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${xorg.libX11.out}/lib/libX11.so.6"
+    substituteInPlace x_ignore_nofocus.c --replace "/usr/lib/libX11.so.6" "${lib.getLib xorg.libX11}/lib/libX11.so.6"
     cc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
     cc -shared \
       -Wl,${if stdenv.isDarwin then "-install_name" else "-soname"},x_ignore_nofocus.so \
@@ -47,9 +47,13 @@ buildPythonPackage rec {
     cp -v x_ignore_nofocus.so selenium/webdriver/firefox/${if stdenv.is64bit then "amd64" else "x86"}/
   '';
 
+  passthru.tests = {
+    testing-vaultwarden = nixosTests.vaultwarden;
+  };
+
   meta = with lib; {
     description = "The selenium package is used to automate web browser interaction from Python";
-    homepage = http://www.seleniumhq.org;
+    homepage = "http://www.seleniumhq.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ jraygauthier ];
   };

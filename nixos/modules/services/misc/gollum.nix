@@ -44,10 +44,28 @@ in
       description = "Enable uploads of external files";
     };
 
+    user-icons = mkOption {
+      type = types.nullOr (types.enum [ "gravatar" "identicon" ]);
+      default = null;
+      description = "User icons for history view";
+    };
+
     emoji = mkOption {
       type = types.bool;
       default = false;
       description = "Parse and interpret emoji tags";
+    };
+
+    h1-title = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Use the first h1 as page title";
+    };
+
+    no-edit = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Disable editing pages";
     };
 
     branch = mkOption {
@@ -94,18 +112,24 @@ in
       serviceConfig = {
         User = config.users.users.gollum.name;
         Group = config.users.groups.gollum.name;
+        WorkingDirectory = cfg.stateDir;
         ExecStart = ''
           ${pkgs.gollum}/bin/gollum \
             --port ${toString cfg.port} \
             --host ${cfg.address} \
-            --config ${builtins.toFile "gollum-config.rb" cfg.extraConfig} \
+            --config ${pkgs.writeText "gollum-config.rb" cfg.extraConfig} \
             --ref ${cfg.branch} \
             ${optionalString cfg.mathjax "--mathjax"} \
             ${optionalString cfg.emoji "--emoji"} \
+            ${optionalString cfg.h1-title "--h1-title"} \
+            ${optionalString cfg.no-edit "--no-edit"} \
             ${optionalString (cfg.allowUploads != null) "--allow-uploads ${cfg.allowUploads}"} \
+            ${optionalString (cfg.user-icons != null) "--user-icons ${cfg.user-icons}"} \
             ${cfg.stateDir}
         '';
       };
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ erictapen bbenno ];
 }

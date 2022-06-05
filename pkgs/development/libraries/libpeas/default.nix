@@ -1,38 +1,73 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3
-, glib, gtk3, gobject-introspection, python3, ncurses
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, pkg-config
+, gettext
+, gi-docgen
+, gnome
+, glib
+, gtk3
+, gobject-introspection
+, python3
+, ncurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "1.24.0";
+  version = "1.32.0";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1yg6r0srz3knhgvplprl3pikrq5c02dmdxgfwcynd6hjih9h16hb";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1iVSD6AuiXcCmyRq5Dm8IYloll8egtYSIItxPx3MPQ4=";
   };
 
-  nativeBuildInputs = [ pkgconfig meson ninja gettext gobject-introspection ];
-  buildInputs =  [ glib gtk3 ncurses python3 python3.pkgs.pygobject3 ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    gettext
+    gi-docgen
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    ncurses
+    python3
+    python3.pkgs.pygobject3
+  ];
+
   propagatedBuildInputs = [
     # Required by libpeas-1.0.pc
     gobject-introspection
   ];
 
-  patches = [
-    ./fix-libpeas-gtk-pc.patch
+  mesonFlags = [
+    "-Dgtk_doc=true"
   ];
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A GObject-based plugins engine";
-    homepage = https://wiki.gnome.org/Projects/Libpeas;
+    homepage = "https://wiki.gnome.org/Projects/Libpeas";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
   };
 }

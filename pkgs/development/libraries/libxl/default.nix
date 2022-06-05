@@ -1,12 +1,12 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "libxl";
-  version = "3.8.7";
+  version = "3.9.4.3";
 
   src = fetchurl {
-    url = "http://www.libxl.com/download/${pname}-lin-${version}.tar.gz";
-    sha256 = "0mfi2mlsgqjw9ki3c5bsb6nr2aqym7s1priw70f69r12azzxfqw3";
+    url = "https://www.libxl.com/download/${pname}-lin-${version}.tar.gz";
+    sha256 = "sha256-U8hXoqBzjSGigOXc29LZQk3KrGiYvBPBJPg5qihcAsY=";
   };
 
   dontConfigure = true;
@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
     cp -rva lib64 $out/lib
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for parsing Excel files";
-    homepage    = "http://www.libxl.com/";
+    homepage    = "https://www.libxl.com/";
     license     = licenses.unfree;
     platforms   = platforms.linux;
     maintainers = with maintainers; [  ];

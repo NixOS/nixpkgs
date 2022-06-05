@@ -1,25 +1,46 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , importlib-resources
 , jaraco_functools
-, setuptools_scm
+, jaraco-context
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "jaraco.text";
-  version = "3.2.0";
+  version = "3.7.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1v0hz3h74m31jlbc5bxwkvrx1h2n7887bajrg1n1c3yc4q8qn1z5";
+    sha256 = "sha256-p/nMG0Sl8wlqIWy9EwtlDHprLJ+ABbAArpfzKSOafAA=";
   };
 
-  nativeBuildInputs =[ setuptools_scm ];
+  pythonNamespaces = [
+    "jaraco"
+  ];
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
   propagatedBuildInputs = [
+    jaraco-context
     jaraco_functools
-  ] ++ lib.optional (pythonOlder "3.7") [ importlib-resources ];
+  ] ++ lib.optional (pythonOlder "3.9") [
+    importlib-resources
+  ];
 
   # no tests in pypi package
   doCheck = false;
+
+  pythonImportsCheck = [
+    "jaraco.text"
+  ];
 
   meta = with lib; {
     description = "Module for text manipulation";
@@ -27,5 +48,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
-
 }

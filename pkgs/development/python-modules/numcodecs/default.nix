@@ -1,26 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, isPy27
+, setuptools-scm
 , cython
 , numpy
 , msgpack
-, pytest
+, pytestCheckHook
 , python
 , gcc8
 }:
 
 buildPythonPackage rec {
   pname = "numcodecs";
-  version = "0.6.4";
+  version = "0.9.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef4843d5db4d074e607e9b85156835c10d006afc10e175bda62ff5412fca6e4d";
+    sha256 = "35adbcc746b95e3ac92e949a161811f5aa2602b9eb1ef241b5ea6f09bb220997";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
     cython
     gcc8
   ];
@@ -31,15 +33,23 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest $out/${python.sitePackages}/numcodecs -k "not test_backwards_compatibility"
-  '';
+  pytestFlagsArray = [
+    "$out/${python.sitePackages}/numcodecs"
+  ];
+
+  disabledTests = [
+    "test_backwards_compatibility"
+
+    "test_encode_decode"
+    "test_legacy_codec_broken"
+    "test_bytes"
+  ];
 
   meta = with lib;{
-    homepage = https://github.com/alimanfoo/numcodecs;
+    homepage = "https://github.com/zarr-developers/numcodecs";
     license = licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";
     maintainers = [ maintainers.costrouc ];

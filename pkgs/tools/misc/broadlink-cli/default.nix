@@ -1,37 +1,36 @@
-{ stdenv, python2Packages, fetchFromGitHub }:
+{ lib, python3Packages, fetchFromGitHub }:
 
-python2Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "broadlink-cli";
-  inherit (python2Packages.broadlink) version;
+  version = "0.18.2";
 
   # the tools are available as part of the source distribution from GH but
   # not pypi, so we have to fetch them here.
   src = fetchFromGitHub {
     owner  = "mjg59";
     repo   = "python-broadlink";
-    # this rev is version 0.9
-    rev    = "766b7b00fb1cec868e3d5fca66f1aada208959ce";
-    sha256 = "0j0idzxmpwkb1lbgvi9df2hbxafm5hxjc6mgg5481lq7z4z1r4nb";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-JX+Io5EP1OgtP7T+UQtkfCPWE1rd3MTrCYRhU9C0+0c=";
   };
 
   format = "other";
 
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = with python3Packages; [
     broadlink
   ];
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -t $out/bin cli/broadlink_{cli,discovery}
-    install -Dm644 -t $out/share/doc/broadlink cli/README.md
+    install -Dm555 -t $out/bin cli/broadlink_{cli,discovery}
+    install -Dm444 -t $out/share/doc/broadlink cli/README.md
 
     runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tools for interfacing with Broadlink RM2/3 (Pro) remote controls, A1 sensor platforms and SP2/3 smartplugs";
     maintainers = with maintainers; [ peterhoeg ];
-    inherit (python2Packages.broadlink.meta) homepage license;
+    inherit (python3Packages.broadlink.meta) homepage license;
   };
 }

@@ -1,58 +1,67 @@
-{ stdenv, fetchurl, fetchzip, ocaml, findlib, tcl, tk }:
+{ stdenv, lib, makeWrapper, fetchzip, ocaml, findlib, tcl, tk }:
 
-let OCamlVersionAtLeast = stdenv.lib.versionAtLeast ocaml.version; in
-
-if !OCamlVersionAtLeast "4.04"
-then throw "labltk is not available for OCaml ${ocaml.version}"
-else
-
-let param =
-if OCamlVersionAtLeast "4.08" then rec {
-  version = "8.06.7";
-  src = fetchzip {
-    url = "https://github.com/garrigue/labltk/archive/${version}.tar.gz";
-    sha256 = "1cqnxjv2dvw9csiz4iqqyx6rck04jgylpglk8f69kgybf7k7xk2h";
-  };
-} else
-  let mkOldParam = { version, key, sha256 }: {
-    src = fetchurl {
-      url = "https://forge.ocamlcore.org/frs/download.php/${key}/labltk-${version}.tar.gz";
+let
+ params =
+  let mkNewParam = { version, sha256, rev ? version }: {
+    inherit version;
+    src = fetchzip {
+      url = "https://github.com/garrigue/labltk/archive/${rev}.tar.gz";
       inherit sha256;
     };
-    inherit version;
   }; in
- {
-  "4.04" = mkOldParam {
-    version = "8.06.2";
-    key = "1628";
-    sha256 = "1p97j9s33axkb4yyl0byhmhlyczqarb886ajpyggizy2br3a0bmk";
-  };
-  "4.05" = mkOldParam {
-    version = "8.06.3";
-    key = "1701";
-    sha256 = "1rka9jpg3kxqn7dmgfsa7pmsdwm16x7cn4sh15ijyyrad9phgdxn";
-  };
-  "4.06" = mkOldParam {
+ rec {
+  "4.06" = mkNewParam {
     version = "8.06.4";
-    key = "1727";
-    sha256 = "0j3rz0zz4r993wa3ssnk5s416b1jhj58l6z2jk8238a86y7xqcii";
+    rev = "labltk-8.06.4";
+    sha256 = "03xwnnnahb2rf4siymzqyqy8zgrx3h26qxjgbp5dh1wdl7n02c7g";
   };
-  "4.07" = mkOldParam {
+  "4.07" = mkNewParam {
     version = "8.06.5";
-    key = "1764";
-    sha256 = "0wgx65y1wkgf22ihpqmspqfp95fqbj3pldhp1p3b1mi8rmc37zwj";
+    rev = "1b71e2c6f3ae6847d3d5e79bf099deb7330fb419";
+    sha256 = "02vchmrm3izrk7daldd22harhgrjhmbw6i1pqw6hmfmrmrypypg2";
   };
-}.${builtins.substring 0 4 ocaml.version};
+  _8_06_7 = mkNewParam {
+    version = "8.06.7";
+    sha256 = "1cqnxjv2dvw9csiz4iqqyx6rck04jgylpglk8f69kgybf7k7xk2h";
+  };
+  "4.08" = _8_06_7;
+  "4.09" = _8_06_7;
+  "4.10" = mkNewParam {
+    version = "8.06.8";
+    sha256 = "0lfjc7lscq81ibqb3fcybdzs2r1i2xl7rsgi7linq46a0pcpkinw";
+  };
+  "4.11" = mkNewParam {
+    version = "8.06.9";
+    sha256 = "1k42k3bjkf22gk39lwwzqzfhgjyhxnclslldrzpg5qy1829pbnc0";
+  };
+  "4.12" = mkNewParam {
+    version = "8.06.10";
+    sha256 = "06cck7wijq4zdshzhxm6jyl8k3j0zglj2axsyfk6q1sq754zyf4a";
+  };
+  "4.13" = mkNewParam {
+    version = "8.06.11";
+    sha256 = "1zjpg9jvs6i9jvbgn6zgispwqiv8rxvaszxcx9ha9fax3wzhv9qy";
+  };
+  "4.14" = mkNewParam {
+    version = "8.06.12";
+    sha256 = "sha256:17fmb13l18isgwr38hg9r5a0nayf2hhw6acj5153cy1sygsdg3b5";
+  };
+ };
+ param = params . ${lib.versions.majorMinor ocaml.version}
+   or (throw "labltk is not available for OCaml ${ocaml.version}");
 in
 
 stdenv.mkDerivation rec {
   inherit (param) version src;
-  name = "ocaml${ocaml.version}-labltk-${version}";
+  pname = "ocaml${ocaml.version}-labltk";
 
-  buildInputs = [ ocaml findlib tcl tk ];
+  nativeBuildInputs = [ ocaml findlib makeWrapper ];
+  buildInputs = [ tcl tk ];
 
   configureFlags = [ "--use-findlib" "--installbindir" "$(out)/bin" ];
   dontAddPrefix = true;
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   buildFlags = [ "all" "opt" ];
 
@@ -61,13 +70,17 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $OCAMLFIND_DESTDIR/stublibs
     mv $OCAMLFIND_DESTDIR/labltk/dlllabltk.so $OCAMLFIND_DESTDIR/stublibs/
+    for p in $out/bin/*
+    do
+      wrapProgram $p --set CAML_LD_LIBRARY_PATH $OCAMLFIND_DESTDIR/stublibs
+    done
   '';
 
   meta = {
     description = "OCaml interface to Tcl/Tk, including OCaml library explorer OCamlBrowser";
     homepage = "http://labltk.forge.ocamlcore.org/";
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
     inherit (ocaml.meta) platforms;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

@@ -5,15 +5,16 @@
 , six
 , testrepository
 , testtools
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "requests-mock";
-  version = "1.7.0";
+  version = "1.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ij6ir5cy0gpy5xw4sykxz320ndi26np6flx9yg9mimkv0nl1lw8";
+    sha256 = "8d72abe54546c1fc9696fa1516672f1031d72a55a1d66c85184f972a24ba0eba";
   };
 
   patchPhase = ''
@@ -22,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests six ];
 
-  checkInputs = [ mock purl testrepository testtools ];
+  checkInputs = [ mock purl testrepository testtools pytest ];
 
   meta = with lib; {
     description = "Mock out responses from the requests package";

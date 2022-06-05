@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, libcap, libconfig, perl, tcp_wrappers, pcre }:
+{ lib, stdenv, fetchFromGitHub, libcap, libconfig, perl, tcp_wrappers, pcre2, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "sslh";
-  version = "1.20";
+  version = "1.22c";
 
-  src = fetchurl {
-    url = "https://www.rutschle.net/tech/sslh/sslh-v${version}.tar.gz";
-    sha256 = "05jihpjxx094h7hqzgd9v5jmy77ipwrakzzmjyfvpdzw3h59px57";
+  src = fetchFromGitHub {
+    owner = "yrutschle";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-A+nUWiOPoz/T5afZUzt5In01e049TgHisTF8P5Vj180=";
   };
 
   postPatch = "patchShebangs *.sh";
 
-  buildInputs = [ libcap libconfig perl tcp_wrappers pcre ];
+  buildInputs = [ libcap libconfig perl tcp_wrappers pcre2 ];
 
   makeFlags = [ "USELIBCAP=1" "USELIBWRAP=1" ];
 
@@ -19,10 +21,14 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    inherit (nixosTests) sslh;
+  };
+
+  meta = with lib; {
     description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";
     license = licenses.gpl2Plus;
-    homepage = https://www.rutschle.net/tech/sslh/README.html;
+    homepage = "https://www.rutschle.net/tech/sslh/README.html";
     maintainers = with maintainers; [ koral fpletz ];
     platforms = platforms.all;
   };

@@ -1,8 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule, go-bindata }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
-  name = "gvisor-containerd-shim-${version}";
-  version = "2019-10-09";
+  pname = "gvisor-containerd-shim";
+  version = "unstable-2019-10-09";
 
   src = fetchFromGitHub {
     owner  = "google";
@@ -11,13 +11,12 @@ buildGoModule rec {
     sha256 = "077bhrmjrpcxv1z020yxhx2c4asn66j21gxlpa6hz0av3lfck9lm";
   };
 
-  modSha256 = "1jdhgbrn59ahnabwnig99i21f6kimmqx9f3dg10ffwfs3dx0gzlg";
+  vendorSha256 = "11jai5jl024k7wbhz4a3zzdbvl0si07jwgwmyr8bn4i0nqx8ig2k";
 
   buildPhase = ''
     make
   '';
 
-  doCheck = true;
   checkPhase = ''
     make test
   '';
@@ -28,7 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "containerd shim for gVisor";
-    homepage    = https://github.com/google/gvisor-containerd-shim;
+    homepage    = "https://github.com/google/gvisor-containerd-shim";
     license     = licenses.asl20;
     maintainers = with maintainers; [ andrew-d ];
     platforms   = [ "x86_64-linux" ];

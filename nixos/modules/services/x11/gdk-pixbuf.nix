@@ -19,7 +19,7 @@ let
           continue
         fi
         GDK_PIXBUF_MODULEDIR="$module_dir" \
-          ${pkgs.gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders
+          ${pkgs.stdenv.hostPlatform.emulator pkgs.buildPackages} ${pkgs.gdk-pixbuf.dev}/bin/gdk-pixbuf-query-loaders
       done
     ) > "$out"
   '';

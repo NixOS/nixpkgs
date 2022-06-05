@@ -1,10 +1,15 @@
-{ stdenv, buildPackages
-, fetchurl, pkgconfig, ncurses, gzip
-, sslSupport ? true, openssl ? null
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, pkg-config
+, ncurses
+, gzip
+, sslSupport ? true
+, openssl
 , nukeReferences
+, fetchpatch
 }:
-
-assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
   pname = "lynx";
@@ -22,17 +27,26 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-38165.patch";
+      url = "https://git.alpinelinux.org/aports/plain/main/lynx/CVE-2021-38165.patch?id=3400945dbbb8a87065360963e4caa0e17d3dcc61";
+      sha256 = "1aykb9y2g2vdpbbpvjlm4r40x7py2yv6jbywwcqcxrlciqcw4x57";
+    })
+  ];
+
   configureFlags = [
     "--enable-default-colors"
     "--enable-widec"
     "--enable-ipv6"
-  ] ++ stdenv.lib.optional sslSupport "--with-ssl";
+  ] ++ lib.optional sslSupport "--with-ssl";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ nukeReferences ]
-    ++ stdenv.lib.optional sslSupport pkgconfig;
+    ++ lib.optional sslSupport pkg-config;
 
-  buildInputs = [ ncurses gzip ] ++ stdenv.lib.optional sslSupport openssl.dev;
+  buildInputs = [ ncurses gzip ]
+    ++ lib.optional sslSupport openssl;
 
   # cfg_defs.h captures lots of references to build-only dependencies, derived
   # from config.cache.
@@ -41,9 +55,10 @@ stdenv.mkDerivation rec {
     nuke-refs cfg_defs.h
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A text-mode web browser";
-    homepage = https://lynx.invisible-island.net/;
+    homepage = "https://lynx.invisible-island.net/";
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };

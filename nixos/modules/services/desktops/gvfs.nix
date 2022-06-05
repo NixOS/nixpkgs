@@ -12,6 +12,10 @@ in
 
 {
 
+  meta = {
+    maintainers = teams.gnome.members;
+  };
+
   # Added 2019-08-19
   imports = [
     (mkRenamedOptionModule
@@ -30,7 +34,8 @@ in
       # gvfs can be built with multiple configurations
       package = mkOption {
         type = types.package;
-        default = pkgs.gnome3.gvfs;
+        default = pkgs.gnome.gvfs;
+        defaultText = literalExpression "pkgs.gnome.gvfs";
         description = "Which GVfs package to use.";
       };
 
@@ -49,10 +54,10 @@ in
 
     systemd.packages = [ cfg.package ];
 
-    services.udev.packages = [ pkgs.libmtp.bin ];
+    services.udev.packages = [ pkgs.libmtp.out ];
 
     # Needed for unwrapped applications
-    environment.variables.GIO_EXTRA_MODULES = [ "${cfg.package}/lib/gio/modules" ];
+    environment.sessionVariables.GIO_EXTRA_MODULES = [ "${cfg.package}/lib/gio/modules" ];
 
   };
 

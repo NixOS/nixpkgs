@@ -1,26 +1,28 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
 , isPyPy
 , livestreamer
 }:
 
 buildPythonPackage rec {
-  version = "1.5.2";
   pname = "livestreamer-curses";
+  version = "1.5.2";
   disabled = isPyPy;
 
-  src = fetchurl {
-    url = "https://github.com/gapato/livestreamer-curses/archive/v${version}.tar.gz";
-    sha256 = "1v49sym6mrci9dxy0a7cpbp4bv6fg2ijj6rwk4wzg18c2x4qzkhn";
+  src = fetchFromGitHub {
+    owner = "gapato";
+    repo = "livestreamer-curses";
+    rev = "v${version}";
+    sha256 = "sha256-Pi0PIOUhMMAWft9ackB04IgF6DyPrXppNqyVjozIjN4=";
   };
 
   propagatedBuildInputs = [ livestreamer ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/gapato/livestreamer-curses;
+  meta = with lib; {
+    homepage = "https://github.com/gapato/livestreamer-curses";
     description = "Curses frontend for livestreamer";
     license = licenses.mit;
+    maintainers = with maintainers; [ ];
   };
-
 }

@@ -1,16 +1,19 @@
-{ stdenv, fetchurl, python, unzip, wxPython, wrapPython, tor }:
-stdenv.mkDerivation rec {
+{ lib, stdenv, fetchFromGitHub, python2, unzip, tor }:
 
+stdenv.mkDerivation rec {
   pname = "torchat";
   version = "0.9.9.553";
 
-  src = fetchurl {
-    url = "https://github.com/prof7bit/TorChat/archive/${version}.tar.gz";
-    sha256 = "0rb4lvv40pz6ab5kxq40ycvh7kh1yxn7swzgv2ff2nbhi62xnzp0";
+  src = fetchFromGitHub {
+    owner = "prof7bit";
+    repo = "TorChat";
+    rev = version;
+    sha256 = "2LHG9qxZDo5rV6wsputdRo2Y1aHs+irMwt1ucFnXQE0=";
   };
 
-  buildInputs = [ python unzip wxPython wrapPython ];
-  pythonPath = [ wxPython ];
+  nativeBuildInputs = [ unzip ];
+  buildInputs = with python2.pkgs; [ python wxPython wrapPython ];
+  pythonPath = with python2.pkgs; [ wxPython ];
 
   preConfigure = "cd torchat/src; rm portable.txt";
 
@@ -21,17 +24,17 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/lib/torchat
     cp -rf * $out/lib/torchat
-    makeWrapper ${python}/bin/python $out/bin/torchat \
+    makeWrapper ${python2}/bin/python $out/bin/torchat \
         --set PYTHONPATH $out/lib/torchat:$program_PYTHONPATH \
-        --run "cd $out/lib/torchat" \
+        --chdir "$out/lib/torchat" \
         --add-flags "-O $out/lib/torchat/torchat.py"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/prof7bit/TorChat;
+  meta = with lib; {
+    homepage = "https://github.com/prof7bit/TorChat";
     description = "Instant messaging application on top of the Tor network and it's location hidden services";
     license = licenses.gpl3;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

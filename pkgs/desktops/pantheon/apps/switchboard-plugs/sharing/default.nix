@@ -1,10 +1,11 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
+, nix-update-script
 , fetchpatch
-, pantheon
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
 , granite
@@ -14,25 +15,28 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sharing";
-  version = "2.1.3";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1yi6aga9i18wwn22zwmfbhsk16f92fka837is5r8xghqb7a50hyh";
+    sha256 = "00lqrxq1wz3y2s9jiz8rh9d571va2vza2gdwj6c86z3q4c4hmn17";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Upstream code not respecting our localedir
+    # https://github.com/elementary/switchboard-plug-sharing/pull/55
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-sharing/commit/5219839738b79e3c5f039a811d96a40eb2644eab.patch";
+      sha256 = "020w746q7gzmic0pdnbxs792sx15wlsqaf2x770r5xwbyfmqr7bs";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -43,21 +47,17 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  patches = [
-    # Fix build with latest vala
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-sharing/commit/22c9d52577a2e8c36c840a99009420266a39e1fe.patch";
-      sha256 = "0rbf1yxhc7k44cwikd45mv2g6slzw0rkwn5s38q3yxai9jnpvqch";
-    })
-  ];
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Switchboard Sharing Plug";
-    homepage = https://github.com/elementary/switchboard-plug-sharing;
-    license = licenses.gpl2Plus;
+    homepage = "https://github.com/elementary/switchboard-plug-sharing";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

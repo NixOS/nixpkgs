@@ -1,20 +1,50 @@
-{ stdenv, fetchgit, cups, libssh, libXpm, nx-libs, openldap, openssh
-, mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkgconfig }:
+{ lib
+, fetchurl
+, cups
+, libssh
+, libXpm
+, nx-libs
+, openldap
+, openssh
+, qt5
+, qtbase
+, qtsvg
+, qtx11extras
+, qttools
+, phonon
+, pkg-config
+}:
 
-mkDerivation {
+qt5.mkDerivation rec {
   pname = "x2goclient";
-  version = "unstable-2019-07-24";
+  version = "4.1.2.2";
 
-  src = fetchgit {
-   url = "git://code.x2go.org/x2goclient.git";
-   rev = "704c4ab92d20070dd160824c9b66a6d1c56dcc49";
-   sha256 = "1pndp3lfzwifyxqq0gps3p1bwakw06clbk6n8viv020l4bsfmq5f";
+  src = fetchurl {
+    url = "https://code.x2go.org/releases/source/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "yZUyZ8QPpnEZrZanO6yx8mYZbaIFnwzc0bjVGZQh0So=";
   };
 
-  buildInputs = [ cups libssh libXpm nx-libs openldap openssh
-                  qtbase qtsvg qtx11extras qttools phonon pkgconfig ];
+  buildInputs = [
+    cups
+    libssh
+    libXpm
+    nx-libs
+    openldap
+    openssh
+    qtbase
+    qtsvg
+    qtx11extras
+    qttools
+    phonon
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
 
   postPatch = ''
+     substituteInPlace src/onmainwindow.cpp --replace "/usr/sbin/sshd" "${openssh}/bin/sshd"
      substituteInPlace Makefile \
        --replace "SHELL=/bin/bash" "SHELL=$SHELL" \
        --replace "lrelease-qt4" "${qttools.dev}/bin/lrelease" \
@@ -24,15 +54,14 @@ mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" "ETCDIR=$(out)/etc" "build_client" "build_man" ];
 
-  enableParallelBuilding = true;
-
   installTargets = [ "install_client" "install_man" ];
 
-  qtWrapperArgs = [ ''--suffix PATH : ${nx-libs}/bin:${openssh}/libexec'' ];
+  qtWrapperArgs = [ "--suffix PATH : ${nx-libs}/bin:${openssh}/libexec" "--set QT_QPA_PLATFORM xcb" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Graphical NoMachine NX3 remote desktop client";
-    homepage = http://x2go.org/;
+    homepage = "http://x2go.org/";
+    maintainers = with maintainers; [ mkg20001 ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

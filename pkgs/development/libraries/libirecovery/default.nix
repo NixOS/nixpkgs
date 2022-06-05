@@ -1,34 +1,36 @@
-{ stdenv, fetchFromGitHub, automake, autoconf, libtool, pkgconfig
-, libusb
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libusb1
 , readline
+, libimobiledevice-glue
 }:
 
 stdenv.mkDerivation rec {
   pname = "libirecovery";
-  version = "2019-01-28";
+  version = "1.0.0+date=2022-04-04";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "5da2a0d7d60f79d93c283964888c6fbbc17be1a3";
-    sha256 = "0fqmr1h4b3qn608dn606y7aqv3bsm949gx72b5d6433xlw9b23n8";
+    rev = "82d235703044c5af9da8ad8f77351fd2046dac47";
+    hash = "sha256-OESN9qme+TlSt+ZMbR4F3z/3RN0I12R7fcSyURBqUVk=";
   };
 
-  outputs = [ "out" "dev" ];
-
   nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
-    pkgconfig
+    autoreconfHook
+    pkg-config
   ];
 
   buildInputs = [
-    libusb
+    libusb1
     readline
+    libimobiledevice-glue
   ];
-
-  preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   # Packager note: Not clear whether this needs a NixOS configuration,
   # as only the `idevicerestore` binary was tested so far (which worked
@@ -38,17 +40,17 @@ stdenv.mkDerivation rec {
     ''--with-udevrule="OWNER=\"root\", GROUP=\"myusergroup\", MODE=\"0660\""''
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/libimobiledevice/libirecovery;
+  meta = with lib; {
     description = "Library and utility to talk to iBoot/iBSS via USB on Mac OS X, Windows, and Linux";
     longDescription = ''
       libirecovery is a cross-platform library which implements communication to
       iBoot/iBSS found on Apple's iOS devices via USB. A command-line utility is also
       provided.
     '';
-    license = licenses.lgpl21;
-    # Upstream description says it works on more platforms, but packager hasn't tried that yet
-    platforms = platforms.linux;
+    homepage = "https://github.com/libimobiledevice/libirecovery";
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ nh2 ];
+    mainProgram = "irecovery";
+    platforms = platforms.unix;
   };
 }

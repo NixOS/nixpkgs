@@ -1,42 +1,48 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl
-, withALSA ? true, alsaLib ? null
-, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null
+{ lib, fetchFromGitHub, rustPackages, pkg-config, openssl
+, withALSA ? true, alsa-lib
+, withPulseAudio ? false, libpulseaudio
+, withPortAudio ? false, portaudio
+, withMpris ? false
+, withKeyring ? false
+, dbus
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPackages.rustPlatform.buildRustPackage rec {
   pname = "spotifyd";
-  version = "0.2.20";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "Spotifyd";
     repo = "spotifyd";
     rev = "v${version}";
-    sha256 = "1hf4wpk7r0s4jpjhxaz67y1hd8jx9ns5imd85r3cdg4lxf3j5gph";
+    sha256 = "1liql2wp7cx0x4ha1578wx3m4byd295m4ph268s05yw2wrnr3v6c";
   };
 
-  cargoSha256 = "1h3fis47hmxvppiv1icjhgp48nd46gayfcmzfjs34q6jask90n0w";
+  cargoSha256 = "1plvqd55d1gj0ydimv3154pwgj2sh1fqx2182nw8akzdfmzg1150";
 
-  cargoBuildFlags = [
-    "--no-default-features"
-    "--features"
-    "${stdenv.lib.optionalString withALSA "alsa_backend,"}${stdenv.lib.optionalString withPulseAudio "pulseaudio_backend,"}${stdenv.lib.optionalString withPortAudio "portaudio_backend,"}"
-  ];
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optional withALSA alsaLib
-    ++ stdenv.lib.optional withPulseAudio libpulseaudio
-    ++ stdenv.lib.optional withPortAudio portaudio;
+    ++ lib.optional withALSA alsa-lib
+    ++ lib.optional withPulseAudio libpulseaudio
+    ++ lib.optional withPortAudio portaudio
+    ++ lib.optional (withMpris || withKeyring) dbus;
+
+  buildNoDefaultFeatures = true;
+  buildFeatures = lib.optional withALSA "alsa_backend"
+    ++ lib.optional withPulseAudio "pulseaudio_backend"
+    ++ lib.optional withPortAudio "portaudio_backend"
+    ++ lib.optional withMpris "dbus_mpris"
+    ++ lib.optional withKeyring "dbus_keyring";
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source Spotify client running as a UNIX daemon";
     homepage = "https://github.com/Spotifyd/spotifyd";
-    license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ anderslundstedt filalex77 marsam ];
+    changelog = "https://github.com/Spotifyd/spotifyd/raw/v${version}/CHANGELOG.md";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ anderslundstedt Br1ght0ne marsam ];
     platforms = platforms.unix;
   };
 }

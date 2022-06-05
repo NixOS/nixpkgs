@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, perl, libX11 }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, perl, libX11 }:
 
 stdenv.mkDerivation rec {
   pname = "ffcast";
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     make install
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Run commands on rectangular screen regions";
-    homepage = https://github.com/lolilolicon/FFcast;
+    homepage = "https://github.com/lolilolicon/FFcast";
     license = licenses.gpl3;
     maintainers = [ maintainers.guyonvarch ];
     platforms = platforms.linux;

@@ -1,21 +1,31 @@
-{ stdenv, buildPythonPackage, python, fetchFromGitHub
-, cmake, sip, protobuf, pythonOlder }:
+{ lib, buildPythonPackage, python, fetchFromGitHub
+, fetchpatch
+, cmake, sip_4, protobuf, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "4.4.0";
+  version = "4.12.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "16m7m6ak5fqw3djn4azwiamkizcc1dv7brv11kv99n3b43zzgn6d";
+    sha256 = "sha256-X33ptwYj9YkVWqUDPP+Ic+hoIb+rwsLdQXvHLA9z+3w=";
   };
 
-  disabled = pythonOlder "3.4.0";
+  patches = [
+    # Fix build against protobuf 3.18+
+    # https://github.com/Ultimaker/libArcus/issues/121
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/coryan/vcpkg/f69b85aa403b04e7d442c90db3418d484e44024f/ports/arcus/0001-fix-protobuf-deprecated.patch";
+      sha256 = "0bqj7pxzpwsamknd6gadj419x6mwx8wnlfzg4zqn6cax3cmasjb2";
+    })
+  ];
 
-  propagatedBuildInputs = [ sip ];
+  disabled = pythonOlder "3.4";
+
+  propagatedBuildInputs = [ sip_4 ];
   nativeBuildInputs = [ cmake ];
   buildInputs = [ protobuf ];
 
@@ -23,9 +33,9 @@ buildPythonPackage rec {
     sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Communication library between internal components for Ultimaker software";
-    homepage = https://github.com/Ultimaker/libArcus;
+    homepage = "https://github.com/Ultimaker/libArcus";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar gebner ];

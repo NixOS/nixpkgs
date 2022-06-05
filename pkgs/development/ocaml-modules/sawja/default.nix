@@ -1,22 +1,30 @@
-{stdenv, fetchurl, which, perl, ocaml, findlib, javalib }:
-
-assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
+{ lib, stdenv, fetchFromGitHub, which, ocaml, findlib, javalib }:
 
 let
   pname = "sawja";
-  version = "1.5.7";
-  webpage = "http://sawja.inria.fr/";
+  version = "1.5.11";
 in
+
+if lib.versionOlder ocaml.version "4.07"
+then throw "${pname} is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation {
 
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+  pname = "ocaml${ocaml.version}-${pname}";
 
-  src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/38117/sawja-1.5.7.tar.bz2;
-    sha256 = "08xv1bq4pragc1g93w4dnbn0mighcjwfp3ixj9jzmhka2vzqm4cc";
+  inherit version;
+
+  src = fetchFromGitHub {
+    owner = "javalib-team";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-1aKkRZDuLJLmDhUC1FXnn4QrgXaTyAbnXfTOAdnKgs8=";
   };
 
-  buildInputs = [ which perl ocaml findlib ];
+  nativeBuildInputs = [ which ocaml findlib ];
+
+  strictDeps = true;
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 
@@ -26,14 +34,16 @@ stdenv.mkDerivation {
 
   configureScript = "./configure.sh";
   dontAddPrefix = "true";
+  dontAddStaticConfigureFlags = true;
+  configurePlatforms = [];
 
   propagatedBuildInputs = [ javalib ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library written in OCaml, relying on Javalib to provide a high level representation of Java bytecode programs";
-    homepage = webpage;
+    homepage = "http://sawja.inria.fr/";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

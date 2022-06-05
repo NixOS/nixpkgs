@@ -1,25 +1,34 @@
-{ stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "bazel-buildtools";
-  version = "0.29.0";
-  rev = "5bcc31df55ec1de770cb52887f2e989e7068301f";
+  version = "5.1.0";
 
-  goPackagePath = "github.com/bazelbuild/buildtools";
-
-  src = fetchgit {
-    inherit rev;
-    url = "https://github.com/bazelbuild/buildtools";
-    sha256 = "0p2kgyawh3l46h7dzglqh9c7i16zr5mhmqlhy7qvr4skwif1l089";
+  src = fetchFromGitHub {
+    owner = "bazelbuild";
+    repo = "buildtools";
+    rev = version;
+    sha256 = "sha256-PNIqsP5p+OdYH0JgOmjqvge9zVOrAcNg0FMflXFJHwQ=";
   };
 
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-9WUjQhXWkpSEJj9Xq+9rOe3I1VZ7nqMTnX7DPl+rxsU=";
 
-  meta = with stdenv.lib; {
-    description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps.";
-    homepage = https://github.com/bazelbuild/buildtools;
+  preBuild = ''
+    rm -r warn/docs
+  '';
+
+  doCheck = false;
+
+  excludedPackages = [ "generatetables" ];
+
+  ldflags = [ "-s" "-w" "-X main.buildVersion=${version}" "-X main.buildScmRevision=${src.rev}" ];
+
+  meta = with lib; {
+    description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps";
+    homepage = "https://github.com/bazelbuild/buildtools";
     license = licenses.asl20;
-    maintainers = with maintainers; [ elasticdog uri-canva ];
-    platforms = platforms.all;
+    maintainers = with maintainers;
+      [ elasticdog uri-canva marsam ]
+      ++ lib.teams.bazel.members;
   };
 }

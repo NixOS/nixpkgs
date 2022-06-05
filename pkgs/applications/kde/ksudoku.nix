@@ -8,11 +8,13 @@
 }:
 
 mkDerivation {
-  name = "ksudoku";
+  pname = "ksudoku";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ libGLU kdeclarative libkdegames ];
   meta = {
+    homepage = "https://apps.kde.org/ksudoku/";
+    description = "Suduko game";
     license = with lib.licenses; [ gpl2 ];
-    maintainers = with lib.maintainers; [ genesis ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

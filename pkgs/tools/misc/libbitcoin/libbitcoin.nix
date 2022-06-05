@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
 , boost, secp256k1 }:
 
 let
@@ -15,11 +15,13 @@ in stdenv.mkDerivation {
     sha256 = "1rppyp3zpb6ymwangjpblwf6qh4y3d1hczrjx8aavmrq7hznnrhq";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   propagatedBuildInputs = [ secp256k1 ];
 
   enableParallelBuilding = true;
+
+  patches = [ ./fix-gcc11-compilation.patch ];
 
   configureFlags = [
     "--with-tests=no"
@@ -27,11 +29,11 @@ in stdenv.mkDerivation {
     "--with-boost-libdir=${boost.out}/lib"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++ library for building bitcoin applications";
-    homepage = https://libbitcoin.org/;
+    homepage = "https://libbitcoin.info/";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [ ];
 
     # AGPL with a lesser clause
     license = licenses.agpl3;

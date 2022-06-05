@@ -1,33 +1,57 @@
 { stdenv
+, lib
 , buildPythonPackage
-, fetchPypi
 , dask
 , distributed
 , docrep
-, pytest
+, fetchPypi
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "0.7.0";
   pname = "dask-jobqueue";
+  version = "0.7.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "660cd4cd052ada872fd6413f224a2d9221026dd55a8a29a9a7d52b262bec67e7";
+    hash = "sha256-aC18wOazGbarg6eomGgMEunHfdx33zgLQAQSkPVdTnk=";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ dask distributed docrep ];
+  propagatedBuildInputs = [
+    dask
+    distributed
+    docrep
+  ];
 
-  # do not run entire tests suite (requires slurm, sge, etc.)
-  checkPhase = ''
-    py.test dask_jobqueue/tests/test_jobqueue_core.py
-  '';
+  checkInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/dask/dask-jobqueue;
+  pytestFlagsArray = [
+    # Do not run entire tests suite (requires slurm, sge, etc.)
+    "dask_jobqueue/tests/test_jobqueue_core.py"
+  ];
+
+  disabledTests = [
+    "test_import_scheduler_options_from_config"
+    "test_security"
+  ];
+
+  pythonImportsCheck = [
+    "dask_jobqueue"
+  ];
+
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Deploy Dask on job schedulers like PBS, SLURM, and SGE";
+    homepage = "https://github.com/dask/dask-jobqueue";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

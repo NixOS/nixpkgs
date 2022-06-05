@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, coreutils, fltk, libjpeg }:
+{ lib, stdenv, fetchurl, coreutils, fltk, libjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "4.7";
+  version = "5.0.5";
   pname = "seaview";
 
   src = fetchurl {
     url = "ftp://pbil.univ-lyon1.fr/pub/mol_phylogeny/seaview/archive/seaview_${version}.tar.gz";
-    sha256 = "0fhyq7dcn0izhwcfin9ajsr7kmmsqm9f1np1rmhzg4digfwqb29n";
+    sha256 = "sha256-zo9emLpHiDv6kekbx55NOibxWN2Zg7XngzGkUqSx+PI=";
   };
 
   buildInputs = [ fltk libjpeg ];
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patchPhase = "sed -i 's#PATH=/bin:/usr/bin rm#'${coreutils}/bin/rm'#' seaview.cxx";
   installPhase = "mkdir -p $out/bin; cp seaview $out/bin";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GUI for molecular phylogeny";
     longDescription = ''
       SeaView is a multiplatform, graphical user interface for multiple sequence alignment and molecular phylogeny.
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
           Gouy M., Guindon S. & Gascuel O. (2010) SeaView version 4 : a multiplatform graphical user interface for sequence alignment and phylogenetic tree building. Molecular Biology and Evolution 27(2):221-224.
     '';
-    homepage = http://doua.prabi.fr/software/seaview;
+    homepage = "http://doua.prabi.fr/software/seaview";
     license = licenses.gpl3;
     maintainers = [ maintainers.iimog ];
     platforms = platforms.linux;

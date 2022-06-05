@@ -11,7 +11,7 @@ buildGoModule {
     sha256 = "17gkh1qfxasvxy25lmjdwk5fsjkcp7lmw9si3xzf01m7qnj5zi4b";
   };
 
-  modSha256 = "025p891klwpid5fw4z39fimgfkwgkcwqpn5276hflzdp1hfv35ly";
+  vendorSha256 = "0vvs717pl5gzggxpbn2vkyxmpiw5zjdfnpbh8i81xidbqvlnm22h";
 
   outputs = [ "out" "index" ];
 
@@ -21,7 +21,7 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    homepage = https://github.com/mpolden/echoip;
+    homepage = "https://github.com/mpolden/echoip";
     license = licenses.bsd3;
     maintainers = with maintainers; [ rvolosatovs ];
   };

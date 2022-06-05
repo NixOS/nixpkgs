@@ -1,4 +1,4 @@
-{ stdenv, makeWrapper, bash, curl, darwin
+{ lib, stdenv, makeWrapper, bash, curl, darwin, zlib
 , version
 , src
 , platform
@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (stdenv.lib) optionalString;
+  inherit (lib) optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
   bootstrapping = versionType == "bootstrap";
@@ -19,20 +19,20 @@ in
 
 rec {
   rustc = stdenv.mkDerivation {
-    name = "rustc-${versionType}-${version}";
+    pname = "rustc-${versionType}";
 
     inherit version;
     inherit src;
 
-    meta = with stdenv.lib; {
-      homepage = http://www.rust-lang.org/;
+    meta = with lib; {
+      homepage = "http://www.rust-lang.org/";
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
 
     buildInputs = [ bash ]
-      ++ stdenv.lib.optional stdenv.isDarwin Security;
+      ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .
@@ -42,17 +42,23 @@ rec {
       ./install.sh --prefix=$out \
         --components=${installComponents}
 
-      ${optionalString (stdenv.isLinux && bootstrapping) ''
+      ${optionalString (stdenv.isLinux && bootstrapping) (''
         patchelf \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/rustc"
+        '' + optionalString (lib.versionAtLeast version "1.46")
+        # rustc bootstrap needs libz starting from 1.46
+        ''
+          ln -s ${zlib}/lib/libz.so.1 $out/lib/libz.so.1
+          ln -s ${zlib}/lib/libz.so $out/lib/libz.so
+        '' + ''
         patchelf \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/rustdoc"
         patchelf \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/cargo"
-      ''}
+      '')}
 
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
       # (or similar) here. It causes strange effects where rustc loads
@@ -65,20 +71,20 @@ rec {
   };
 
   cargo = stdenv.mkDerivation {
-    name = "cargo-${versionType}-${version}";
+    pname = "cargo-${versionType}";
 
     inherit version;
     inherit src;
 
-    meta = with stdenv.lib; {
-      homepage = http://www.rust-lang.org/;
+    meta = with lib; {
+      homepage = "http://www.rust-lang.org/";
       description = "A safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    buildInputs = [ makeWrapper bash ]
-      ++ stdenv.lib.optional stdenv.isDarwin Security;
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ bash ] ++ lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .

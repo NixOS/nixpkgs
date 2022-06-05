@@ -1,77 +1,86 @@
-{ stdenv, fetchFromGitLab, lib, darwin
-, git, nettle, llvmPackages, cargo, rustc
-, rustPlatform, pkgconfig, glib
-, openssl, sqlite, capnproto
-, ensureNewerSourcesForZipFilesHook, pythonSupport ? true, pythonPackages ? null
+{ stdenv
+, fetchFromGitLab
+, lib
+, darwin
+, git
+, nettle
+# Use the same llvmPackages version as Rust
+, llvmPackages_12
+, cargo
+, rustc
+, rustPlatform
+, pkg-config
+, glib
+, openssl
+, sqlite
+, capnproto
+, ensureNewerSourcesForZipFilesHook
+, pythonSupport ? true
+, pythonPackages ? null
 }:
 
 assert pythonSupport -> pythonPackages != null;
 
 rustPlatform.buildRustPackage rec {
   pname = "sequoia";
-  version = "0.11.0";
+  # Upstream has separate version numbering for the library and the CLI frontend.
+  # This derivation provides the CLI frontend, and thus uses its version number.
+  version = "0.26.0";
 
   src = fetchFromGitLab {
     owner = "sequoia-pgp";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1k0pr3vn77fpfzyvbg7xb4jwm6srsiws9bsd8q7i3hl6j56a880i";
+    repo = "sequoia";
+    rev = "sq/v${version}";
+    sha256 = "1rcbv1s7wpxhrzw082q6vfrq1ja2ssfxn53c90h8fh5wrj7ns751";
   };
 
-  cargoSha256 = "15bhg7b88rq8p0bn6y5wwv2l42kqb1qyx2s3kw0r0v0wadf823q3";
+  cargoSha256 = "0f3b8rh4pl03n8j9ihazaak214sv1rsksbgrb1nfcy8sq2yqfj4g";
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     cargo
     rustc
     git
-    llvmPackages.libclang
-    llvmPackages.clang
+    llvmPackages_12.libclang.lib
+    llvmPackages_12.clang
     ensureNewerSourcesForZipFilesHook
+    capnproto
   ] ++
     lib.optionals pythonSupport [ pythonPackages.setuptools ]
   ;
 
   checkInputs = lib.optionals pythonSupport [
     pythonPackages.pytest
-    pythonPackages.pytestrunner
+    pythonPackages.pytest-runner
   ];
 
   buildInputs = [
     openssl
     sqlite
     nettle
-    capnproto
-  ]
-    ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
+  ] ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]
   ;
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
+    # Defaults to "ginstall" from some reason, although upstream's Makefiles check uname
+    "INSTALL=install"
   ];
 
   buildFlags = [
     "build-release"
   ];
 
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  LIBCLANG_PATH = "${llvmPackages_12.libclang.lib}/lib";
 
-  postPatch = ''
-    # otherwise, the check fails because we delete the `.git` in the unpack phase
-    substituteInPlace openpgp-ffi/Makefile \
-      --replace 'git grep' 'grep -R'
-    # Without this, the check fails
-    substituteInPlace openpgp-ffi/examples/Makefile \
-      --replace '-O0 -g -Wall -Werror' '-g'
-    substituteInPlace ffi/examples/Makefile \
-      --replace '-O0 -g -Wall -Werror' '-g'
-  '';
+  # Sometimes, tests fail on CI (ofborg) & hydra without this
+  CARGO_TEST_ARGS = "--workspace --exclude sequoia-store";
 
   preInstall = lib.optionalString pythonSupport ''
     export installFlags="PYTHONPATH=$PYTHONPATH:$out/${pythonPackages.python.sitePackages}"
   '' + lib.optionalString (!pythonSupport) ''
-    export installFlags="PYTHON=disable"
+    export makeFlags="PYTHON=disable"
   '';
 
   # Don't use buildRustPackage phases, only use it for rust deps setup
@@ -81,12 +90,11 @@ rustPlatform.buildRustPackage rec {
   checkPhase = null;
   installPhase = null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cool new OpenPGP implementation";
     homepage = "https://sequoia-pgp.org/";
-    license = licenses.gpl3;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ minijackson doronbehar ];
-    platforms = platforms.all;
-    broken = stdenv.targetPlatform.isDarwin;
+    mainProgram = "sq";
   };
 }

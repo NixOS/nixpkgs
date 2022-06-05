@@ -1,7 +1,8 @@
-{ stdenv, zlib, autoreconfHook }:
+{ lib, stdenv, zlib, autoreconfHook }:
 
 stdenv.mkDerivation {
-  name = "minizip-${zlib.version}";
+  pname = "minizip";
+  version = zlib.version;
   inherit (zlib) src;
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -12,6 +13,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Compression library implementing the deflate compression method found in gzip and PKZIP";
     inherit (zlib.meta) license homepage;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

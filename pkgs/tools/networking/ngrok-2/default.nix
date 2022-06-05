@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, patchelfUnstable }:
+{ lib, stdenv, fetchurl }:
 
-with stdenv.lib;
+with lib;
 
-let versions = builtins.fromJSON (builtins.readFile ./versions.json);
+let versions = lib.importJSON ./versions.json;
     arch = if stdenv.isi686 then "386"
            else if stdenv.isx86_64 then "amd64"
            else if stdenv.isAarch32 then "arm"
@@ -16,15 +16,13 @@ let versions = builtins.fromJSON (builtins.readFile ./versions.json);
 
 in
 stdenv.mkDerivation {
-  name = "ngrok-${version}";
-  version = version;
+  pname = "ngrok";
+  inherit version;
 
   # run ./update
   src = fetchurl { inherit sha256 url; };
 
   sourceRoot = ".";
-
-  nativeBuildInputs = optionals stdenv.isLinux [ patchelfUnstable ];
 
   unpackPhase = "cp $src ngrok";
 
@@ -36,14 +34,14 @@ stdenv.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
+  # Stripping causes SEGFAULT on x86_64-darwin
+  dontStrip = true;
+
   meta = {
-    description = "ngrok";
-    longDescription = ''
-      Allows you to expose a web server running on your local machine to the internet.
-    '';
-    homepage = https://ngrok.com/;
+    description = "Allows you to expose a web server running on your local machine to the internet";
+    homepage = "https://ngrok.com/";
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = [ maintainers.bobvanderlinden ];
   };
 }

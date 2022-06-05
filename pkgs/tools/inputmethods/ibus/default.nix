@@ -1,29 +1,32 @@
-{ stdenv
+{ lib, stdenv
 , substituteAll
 , fetchurl
+, fetchpatch
 , fetchFromGitHub
 , autoreconfHook
 , gettext
 , makeWrapper
-, pkgconfig
+, pkg-config
 , vala
 , wrapGAppsHook
 , dbus
+, systemd
 , dconf ? null
 , glib
 , gdk-pixbuf
 , gobject-introspection
 , gtk2
 , gtk3
+, gtk4
 , gtk-doc
+, runCommand
 , isocodes
-, cldr-emoji-annotation
+, cldr-annotations
 , unicode-character-database
 , unicode-emoji
 , python3
 , json-glib
 , libnotify ? null
-, enablePython2Library ? false
 , enableUI ? true
 , withWayland ? false
 , libxkbcommon ? null
@@ -35,7 +38,7 @@
 
 assert withWayland -> wayland != null && libxkbcommon != null;
 
-with stdenv.lib;
+with lib;
 
 let
   python3Runtime = python3.withPackages (ps: with ps; [ pygobject3 ]);
@@ -47,20 +50,34 @@ let
       makeWrapper ${glib.dev}/bin/glib-mkenums $out/bin/glib-mkenums --unset PYTHONPATH
     '';
   };
+  # make-dconf-override-db.sh needs to execute dbus-launch in the sandbox,
+  # it will fail to read /etc/dbus-1/session.conf unless we add this flag
+  dbus-launch = runCommand "sandbox-dbus-launch" {
+    nativeBuildInputs = [ makeWrapper ];
+  } ''
+      makeWrapper ${dbus}/bin/dbus-launch $out/bin/dbus-launch \
+        --add-flags --config-file=${dbus.daemon}/share/dbus-1/session.conf
+  '';
 in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.21";
+  version = "1.5.26";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "0fjbqj7d2g5c8i1wdggzhz269xisxv4xb1pa9swalm5p2b2vrjlx";
+    sha256 = "7Vuj4Gyd+dLUoCkR4SPkfGPwVQPRo2pHk0pRAsmtjxc=";
   };
 
   patches = [
+    # Fixes systemd unit installation path https://github.com/ibus/ibus/pull/2388
+    (fetchpatch {
+      url = "https://github.com/ibus/ibus/commit/33b4b3932bfea476a841f8df99e20049b83f4b0e.patch";
+      sha256 = "kh8SBR+cqsov/B0A2YXLJVq1F171qoSRUKbBPHjPRHI=";
+    })
+
     (substituteAll {
       src = ./fix-paths.patch;
       pythonInterpreter = python3Runtime.interpreter;
@@ -71,7 +88,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "installedTests" ];
 
   postPatch = ''
-    echo \#!${runtimeShell} > data/dconf/make-dconf-override-db.sh
+    patchShebangs --build data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
   '';
 
@@ -82,18 +99,17 @@ stdenv.mkDerivation rec {
     (enableFeature (dconf != null) "dconf")
     (enableFeature (libnotify != null) "libnotify")
     (enableFeature withWayland "wayland")
-    (enableFeature enablePython2Library "python-library")
-    (enableFeature enablePython2Library "python2") # XXX: python2 library does not work anyway
     (enableFeature enableUI "ui")
+    "--enable-gtk4"
     "--enable-install-tests"
     "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
-    "--with-emoji-annotation-dir=${cldr-emoji-annotation}/share/unicode/cldr/common/annotations"
+    "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
     "--with-ucd-dir=${unicode-character-database}/share/unicode"
   ];
 
   makeFlags = [
-    "test_execsdir=${placeholder ''installedTests''}/libexec/installed-tests/ibus"
-    "test_sourcesdir=${placeholder ''installedTests''}/share/installed-tests/ibus"
+    "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
+    "test_sourcesdir=${placeholder "installedTests"}/share/installed-tests/ibus"
   ];
 
   nativeBuildInputs = [
@@ -101,10 +117,11 @@ stdenv.mkDerivation rec {
     gtk-doc
     gettext
     makeWrapper
-    pkgconfig
+    pkg-config
     python3BuildEnv
     vala
     wrapGAppsHook
+    dbus-launch
   ];
 
   propagatedBuildInputs = [
@@ -113,12 +130,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dbus
+    systemd
     dconf
     gdk-pixbuf
     gobject-introspection
     python3.pkgs.pygobject3 # for pygobject overrides
     gtk2
     gtk3
+    gtk4
     isocodes
     json-glib
     libnotify
@@ -159,6 +178,6 @@ stdenv.mkDerivation rec {
     description = "Intelligent Input Bus, input method framework";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel yegortimoshenko ];
+    maintainers = with maintainers; [ ttuegel yana ];
   };
 }

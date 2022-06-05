@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, bokeh
 , emcee
 , matplotlib
 , netcdf4
@@ -8,73 +9,97 @@
 , numpy
 , pandas
 , pytest
-, scipy
 , setuptools
-, tensorflow-probability
+, cloudpickle
+, pytestCheckHook
+, scipy
+, packaging
+, typing-extensions
+, pythonOlder
 , xarray
-#, h5py (used by disabled tests)
-#, pymc3 (broken)
-#, pyro-ppl (broken)
-#, pystan (not packaged)
-#, numpyro (not packaged)
+, xarray-einstats
+, zarr
+, h5py
+, jaxlib
+, torchvision
+, jax
+  # , pymc3 (circular dependency)
+, pyro-ppl
+  #, pystan (not packaged)
+, numpyro
 }:
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.5.1";
+  version = "0.12.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
-    repo = "arviz";
-    rev = version;
-    sha256 = "0p600cakix24wz2ridnzy6sp3l1p2kr5s60qc7s82wpv7fw0i9ry";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-5P6EXXAAS1Q2eNQuj/5JrDg0lPHfA5K4WaYfKaaXm9s=";
   };
 
   propagatedBuildInputs = [
-    # needed to install
     matplotlib
     netcdf4
-    pandas
-    xarray
-    # needed to import
-    setuptools
-    # not needed to import, but used by many functions
-    # and is listed as a dependency in the documentation
     numpy
+    packaging
+    pandas
     scipy
+    setuptools
+    xarray
+    xarray-einstats
   ];
 
   checkInputs = [
+    bokeh
+    cloudpickle
     emcee
+    h5py
+    jax
+    jaxlib
     numba
-    pytest
-    tensorflow-probability
-    #h5py (used by disabled tests)
-    #pymc3 (broken)
-    #pyro-ppl (broken)
-    #pystan (not packaged)
-    #numpyro (not packaged)
+    numpyro
+    # pymc3 (circular dependency)
+    pyro-ppl
+    # pystan (not packaged)
+    pytestCheckHook
+    torchvision
+    zarr
   ];
 
-  # check requires pymc3 and pyro-ppl, which are currently broken, and pystan
-  # and numpyro, which are not yet packaged, some checks also need to make
-  # directories and do not have permission to do so. So we can only check part
-  # of the package
-  # Additionally, there are some failures with the plots test, which revolve
-  # around attempting to output .mp4 files through an interface that only wants
-  # to output .html files.
-  # The following test have been disabled as a result: data_cmdstanpy,
-  # data_numpyro, data_pyro, data_pystan, and plots.
-  checkPhase = ''
-    cd arviz/tests/
-    HOME=$TMPDIR pytest test_{data_cmdstan,data_emcee,data,data_tfp,\
-    diagnostics,plot_utils,rcparams,stats,stats_utils,utils}.py
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
+  pytestFlagsArray = [
+    "arviz/tests/base_tests/"
+  ];
+
+  disabledTestPaths = [
+    # Remove tests as dependency creates a circular dependency
+    "arviz/tests/external_tests/test_data_pymc.py"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_plot_separation"
+    "test_plot_trace_legend"
+    "test_cov"
+  ];
+
+  pythonImportsCheck = [
+    "arviz"
+  ];
+
   meta = with lib; {
-    description = "ArviZ is a Python package for exploratory analysis of Bayesian models";
+    description = "Library for exploratory analysis of Bayesian models";
     homepage = "https://arviz-devs.github.io/arviz/";
     license = licenses.asl20;
-    maintainers = [ maintainers.omnipotententity ];
+    maintainers = with maintainers; [ omnipotententity ];
   };
 }

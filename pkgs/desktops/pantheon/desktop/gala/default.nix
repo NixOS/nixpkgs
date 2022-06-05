@@ -1,7 +1,9 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, fetchpatch
+, nix-update-script
+, pkg-config
 , meson
 , python3
 , ninja
@@ -13,33 +15,38 @@
 , granite
 , libgee
 , bamf
-, libcanberra
 , libcanberra-gtk3
 , gnome-desktop
 , mutter
 , clutter
-, plank
-, elementary-icon-theme
-, elementary-settings-daemon
+, gnome-settings-daemon
 , wrapGAppsHook
+, gexiv2
 }:
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "3.2.0";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1vf55ls3h20zpf0yxb206cijq8nkf89z2lmhccb4i1g2zajd31ix";
+    sha256 = "sha256-7RZt6gA3wyp1cxIWBYFK+fYFSZDbjHcwYa2snOmDw1Y=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # We look for plugins in `/run/current-system/sw/lib/` because
+    # there are multiple plugin providers (e.g. gala and wingpanel).
+    ./plugins-dir.patch
+
+    # WindowManager: save/restore easing on workspace switch
+    # https://github.com/elementary/gala/pull/1430
+    (fetchpatch {
+      url = "https://github.com/elementary/gala/commit/1f94db16c627f73af5dc69714611815e4691b5e8.patch";
+      sha256 = "sha256-PLNbAXyOG0TMn1y2QIBnL6BOQVqBA+DBgPOVJo4nDr8=";
+    })
+  ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -47,7 +54,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     wrapGAppsHook
@@ -56,20 +63,20 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bamf
     clutter
-    elementary-icon-theme
+    gnome-settings-daemon
+    gexiv2
     gnome-desktop
-    elementary-settings-daemon
     granite
     gtk3
-    libcanberra
     libcanberra-gtk3
     libgee
     mutter
-    plank
   ];
 
-  patches = [
-    ./plugins-dir.patch
+  mesonFlags = [
+    # TODO: enable this and remove --builtin flag from session-settings
+    # https://github.com/NixOS/nixpkgs/pull/140429
+    "-Dsystemd=false"
   ];
 
   postPatch = ''
@@ -77,11 +84,18 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/post_install.py
   '';
 
-  meta =  with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "A window & compositing manager based on mutter and designed by elementary for use with Pantheon";
-    homepage = https://github.com/elementary/gala;
+    homepage = "https://github.com/elementary/gala";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "gala";
   };
 }

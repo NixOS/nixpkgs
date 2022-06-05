@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , cairo, gtk2, poppler }:
 
 stdenv.mkDerivation rec {
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "14ffdm4y26imq99wjhkrhy9lp33165xci1l5ndwfia8hz53bl02k";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ cairo poppler gtk2 ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PDF converter to SVG format";
-    homepage = http://www.cityinthesky.co.uk/opensource/pdf2svg;
+    homepage = "http://www.cityinthesky.co.uk/opensource/pdf2svg";
     license = licenses.gpl2;
     maintainers = [ maintainers.ianwookim ];
     platforms = platforms.unix;

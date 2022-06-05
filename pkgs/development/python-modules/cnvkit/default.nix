@@ -1,11 +1,12 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
+, fetchpatch
 , rPackages
-, rWrapper
 , buildPythonPackage
 , biopython
 , numpy
 , scipy
+, scikit-learn
 , pandas
 , matplotlib
 , reportlab
@@ -14,21 +15,35 @@
 , pillow
 , pomegranate
 , pyfaidx
+, python
+, R
 }:
 
 buildPythonPackage rec {
   pname = "CNVkit";
-  version = "0.9.6";
+  version = "0.9.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1hj8c98s538i0hg5mrz4bw4v07qmcl51rhxq611rj2nglnc9r25y";
+  src = fetchFromGitHub {
+    owner = "etal";
+    repo = "cnvkit";
+    rev = "v${version}";
+    sha256 = "1q4l7jhr1k135an3n9aa9wsid5lk6fwxb0hcldrr6v6y76zi4gj1";
   };
+
+  postPatch = ''
+    # see https://github.com/etal/cnvkit/issues/589
+    substituteInPlace setup.py \
+      --replace 'joblib < 1.0' 'joblib'
+    # see https://github.com/etal/cnvkit/issues/680
+    substituteInPlace test/test_io.py \
+      --replace 'test_read_vcf' 'dont_test_read_vcf'
+  '';
 
   propagatedBuildInputs = [
     biopython
     numpy
     scipy
+    scikit-learn
     pandas
     matplotlib
     reportlab
@@ -37,12 +52,24 @@ buildPythonPackage rec {
     future
     pillow
     pomegranate
+    rPackages.DNAcopy
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pandas >= 0.20.1, < 0.25.0" "pandas"
+  checkInputs = [ R ];
+
+  checkPhase = ''
+    pushd test/
+    ${python.interpreter} test_io.py
+    ${python.interpreter} test_genome.py
+    ${python.interpreter} test_cnvlib.py
+    ${python.interpreter} test_commands.py
+    ${python.interpreter} test_r.py
+    popd # test/
   '';
+
+  pythonImportsCheck = [
+    "cnvlib"
+  ];
 
   meta = with lib; {
     homepage = "https://cnvkit.readthedocs.io";

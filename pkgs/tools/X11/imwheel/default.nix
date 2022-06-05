@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, libX11, libXext, libXi, libXmu, libXt, libXtst }:
+{ lib, stdenv, fetchurl, libX11, libXext, libXi, libXmu, libXt, libXtst }:
 
 stdenv.mkDerivation rec {
-  name = "imwheel-1.0.0pre12";
+  pname = "imwheel";
+  version = "1.0.0pre12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/imwheel/${name}.tar.gz";
+    url = "mirror://sourceforge/imwheel/imwheel-${version}.tar.gz";
     sha256 = "2320ed019c95ca4d922968e1e1cbf0c075a914e865e3965d2bd694ca3d57cfe3";
   };
 
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     "ETCDIR=${placeholder "out"}/etc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://imwheel.sourceforge.net/";
     description = "Mouse wheel configuration tool for XFree86/Xorg";
     maintainers = with maintainers; [ jhillyerd ];

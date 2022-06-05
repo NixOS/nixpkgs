@@ -1,29 +1,25 @@
 { lib
 , stdenv
-, openglSupport ? true
-, libX11
-, pyopengl
 , buildPythonPackage
 , fetchPypi
-, pkgconfig
-, libjpeg
-, libtiff
-, SDL
-, gst-plugins-base
-, libnotify
-, freeglut
-, xorg
+, pkg-config
 , which
 , cairo
-, requests
 , pango
-, pathlib2
 , python
 , doxygen
 , ncurses
-, libpng
-, gstreamer
+, libintl
 , wxGTK
+, wxmac
+, IOKit
+, Carbon
+, Cocoa
+, AudioToolbox
+, OpenGL
+, CoreFoundation
+, pillow
+, numpy
 }:
 
 buildPythonPackage rec {
@@ -37,17 +33,18 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ pkgconfig which doxygen wxGTK ];
+  nativeBuildInputs = [ pkg-config which doxygen ]
+  ++ (if stdenv.isDarwin then [ wxmac ] else [ wxGTK ]);
 
-  buildInputs = [ libjpeg libtiff SDL
-      gst-plugins-base libnotify freeglut xorg.libSM ncurses
-      requests libpng gstreamer libX11
-      pathlib2
-      (wxGTK.gtk)
-  ]
-    ++ lib.optional openglSupport pyopengl;
+  buildInputs = [ ncurses libintl ]
+  ++ (if stdenv.isDarwin
+  then
+    [ AudioToolbox Carbon Cocoa CoreFoundation IOKit OpenGL ]
+  else
+    [ wxGTK.gtk ]
+  );
 
-  hardeningDisable = [ "format" ];
+  propagatedBuildInputs = [ pillow numpy ];
 
   DOXYGEN = "${doxygen}/bin/doxygen";
 
@@ -68,15 +65,14 @@ buildPythonPackage rec {
 
   installPhase = ''
     ${python.interpreter} setup.py install --skip-build --prefix=$out
-    wrapPythonPrograms
   '';
 
-  passthru = { inherit wxGTK openglSupport; };
+  passthru = { wxWidgets = if stdenv.isDarwin then wxmac else wxGTK; };
 
 
   meta = {
     description = "Cross platform GUI toolkit for Python, Phoenix version";
-    homepage = http://wxpython.org/;
+    homepage = "http://wxpython.org/";
     license = lib.licenses.wxWindows;
   };
 

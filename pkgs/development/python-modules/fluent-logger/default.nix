@@ -2,21 +2,32 @@
 
 buildPythonPackage rec {
   pname = "fluent-logger";
-  version = "0.9.4";
+  version = "0.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "814cb51892c620a00c5a6129fffaa09eeeb0c8822c9bcb4f96232ae3cbc4d8b3";
+    sha256 = "678bda90c513ff0393964b64544ce41ef25669d2089ce6c3b63d9a18554b9bfa";
   };
 
+  prePatch = ''
+    substituteInPlace setup.py \
+      --replace "msgpack<1.0.0" "msgpack"
+  '';
+
   propagatedBuildInputs = [ msgpack ];
-  
+
   # Tests fail because absent in package
   doCheck = false;
+  pythonImportsCheck = [
+    "fluent"
+    "fluent.event"
+    "fluent.handler"
+    "fluent.sender"
+  ];
 
   meta = with lib; {
     description = "A structured logger for Fluentd (Python)";
-    homepage = https://github.com/fluent/fluent-logger-python;
+    homepage = "https://github.com/fluent/fluent-logger-python";
     license = licenses.asl20;
   };
 }

@@ -1,27 +1,51 @@
-{ stdenv, fetchgit, fetchNodeModules, buildPythonPackage
-, pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
-, sqlalchemy, flask_login, beautifulsoup4, sqlalchemy-utils, celery, alembic
+{ lib
+, fetchgit
+, fetchNodeModules
+, buildPythonPackage
+, pgpy
+, flask
+, bleach
+, misaka
+, humanize
+, html5lib
+, markdown
+, psycopg2
+, pygments
+, requests
+, sqlalchemy
+, cryptography
+, beautifulsoup4
+, sqlalchemy-utils
+, prometheus-client
+, celery
+, alembic
 , importlib-metadata
-, sassc, nodejs
-, writeText }:
+, mistletoe
+, minio
+, sassc
+, nodejs
+, redis
+}:
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.54.4";
+  version = "0.68.14";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
     rev = version;
-    sha256 = "0flxvn178hqd8ljz89ddis80zfnmzgimv4506w4dg2flbwzywy7z";
+    sha256 = "sha256-BY3W2rwrg0mhH3CltgUqg6Xv8Ve5VZNY/lI1cfbAjYM=";
+    fetchSubmodules = true;
   };
 
   node_modules = fetchNodeModules {
     src = "${src}/srht";
     nodejs = nodejs;
-    sha256 = "0axl50swhcw8llq8z2icwr4nkr5qsw2riih0a040f9wx4xiw4p6p";
+    sha256 = "sha256-IWKahdWv3qJ5DNyb1GB9JWYkZxghn6wzZe68clYXij8=";
   };
 
   patches = [
+    # Disable check for npm
     ./disable-npm-install.patch
   ];
 
@@ -36,19 +60,24 @@ buildPythonPackage rec {
     bleach
     misaka
     humanize
+    html5lib
     markdown
     psycopg2
     pygments
     requests
+    mistletoe
     sqlalchemy
-    flask_login
+    cryptography
     beautifulsoup4
     sqlalchemy-utils
+    prometheus-client
 
     # Unofficial runtime dependencies?
     celery
     alembic
     importlib-metadata
+    minio
+    redis
   ];
 
   PKGVER = version;
@@ -57,20 +86,11 @@ buildPythonPackage rec {
     cp -r ${node_modules} srht/node_modules
   '';
 
-  preCheck = let
-    config = writeText "config.ini" ''
-      [webhooks]
-      private-key=K6JupPpnr0HnBjelKTQUSm3Ro9SgzEA2T2Zv472OvzI=
+  dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "srht" ];
 
-      [meta.sr.ht]
-      origin=http://meta.sr.ht.local
-    '';
-  in ''
-    cp -f ${config} config.ini
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/srht;
+  meta = with lib; {
+    homepage = "https://git.sr.ht/~sircmpwn/srht";
     description = "Core modules for sr.ht";
     license = licenses.bsd3;
     maintainers = with maintainers; [ eadwu ];

@@ -1,25 +1,18 @@
-{ stdenv, fetchurl, which, m4
-, protobuf, boost, zlib, curl, openssl, icu, jemalloc, libtool
+{ lib, stdenv, fetchurl, which, m4
+, protobuf, boost170, zlib, curl, openssl, icu, jemalloc, libtool
 , python2Packages, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "rethinkdb";
-  version = "2.3.6";
+  version = "2.4.1";
 
   src = fetchurl {
-    url = "https://download.rethinkdb.com/dist/${pname}-${version}.tgz";
-    sha256 = "0a6wlgqa2flf87jrp4fq4y9aihwyhgwclmss56z03b8hd5k5j8f4";
+    url = "https://download.rethinkdb.com/repository/raw/dist/${pname}-${version}.tgz";
+    sha256 = "5f1786c94797a0f8973597796e22545849dc214805cf1962ef76969e0b7d495b";
   };
 
-  patches = [
-    (fetchurl {
-        url = "https://github.com/rethinkdb/rethinkdb/commit/871bd3705a1f29c4ab07a096d562a4b06231a97c.patch";
-        sha256 = "05nagixlwnq3x7441fhll5vs70pxppbsciw8qjqp660bdb5m4jm1";
-    })
-  ];
-
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' external/v8_3.30.33.16/build/gyp/pylib/gyp/xcode_emulation.py
 
     # very meta
@@ -31,16 +24,18 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [
+  configureFlags = lib.optionals (!stdenv.isDarwin) [
     "--with-jemalloc"
     "--lib-path=${jemalloc}/lib"
   ];
 
-  buildInputs = [ protobuf boost zlib curl openssl icu makeWrapper ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) jemalloc
-    ++ stdenv.lib.optional stdenv.isDarwin libtool;
+  makeFlags = [ "rethinkdb" ];
 
-  nativeBuildInputs = [ which m4 python2Packages.python ];
+  buildInputs = [ protobuf boost170 zlib curl openssl icu ]
+    ++ lib.optional (!stdenv.isDarwin) jemalloc
+    ++ lib.optional stdenv.isDarwin libtool;
+
+  nativeBuildInputs = [ which m4 python2Packages.python makeWrapper ];
 
   enableParallelBuilding = true;
 
@@ -57,10 +52,9 @@ stdenv.mkDerivation rec {
       query language that supports really useful queries like table
       joins and group by, and is easy to setup and learn.
     '';
-    homepage    = http://www.rethinkdb.com;
-    license     = stdenv.lib.licenses.agpl3;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice bluescreen303 ];
-    broken = true;  # broken with openssl 1.1
+    homepage    = "https://rethinkdb.com";
+    license     = lib.licenses.asl20;
+    platforms   = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thoughtpolice bluescreen303 ];
   };
 }

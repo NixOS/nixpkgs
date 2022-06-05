@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security }:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "diskus";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "diskus";
     rev = "v${version}";
-    sha256 = "087w58q5kd3r23a9qnhqgvq4vhv69b5a6a7n3kh09g5cjszy8s05";
+    sha256 = "sha256-SKd2CU0F2iR4bSHntu2VKvZyjjf2XJeXJG6XS/fIBMU=";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "07wsl1vw2aimgmrlri03pfcxv13klqxyvmmsbzgnq9sc9qzzy8gp";
+  cargoSha256 = "sha256-qNXv6Z9sKl7rol78UTOSRFML/JCGfOJMGOdt49KHD50=";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A minimal, fast alternative to 'du -sh'";
-    homepage = https://github.com/sharkdp/diskus;
+    homepage = "https://github.com/sharkdp/diskus";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.fuerbringer ];
     platforms = platforms.unix;

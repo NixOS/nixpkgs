@@ -10,12 +10,12 @@ options = {
       pidDir = mkOption {
         default = "/run/gateone";
         type = types.path;
-        description = ''Path of pid files for GateOne.'';
+        description = "Path of pid files for GateOne.";
       };
       settingsDir = mkOption {
         default = "/var/lib/gateone";
         type = types.path;
-        description = ''Path of configuration files for GateOne.'';
+        description = "Path of configuration files for GateOne.";
       };
     };
 };
@@ -36,11 +36,11 @@ config = mkIf cfg.enable {
     preStart = ''
       if [ ! -d ${cfg.settingsDir} ] ; then
         mkdir -m 0750 -p ${cfg.settingsDir}
-        chown -R gateone.gateone ${cfg.settingsDir}
+        chown -R gateone:gateone ${cfg.settingsDir}
       fi
       if [ ! -d ${cfg.pidDir} ] ; then
         mkdir -m 0750 -p ${cfg.pidDir}
-        chown -R gateone.gateone ${cfg.pidDir}
+        chown -R gateone:gateone ${cfg.pidDir}
       fi
       '';
     #unitConfig.RequiresMountsFor = "${cfg.settingsDir}";
@@ -56,4 +56,4 @@ config = mkIf cfg.enable {
   };
 };
 }
-  
+

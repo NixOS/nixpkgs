@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pcre }:
+{ lib, stdenv, fetchurl, pcre }:
 
 stdenv.mkDerivation {
-  name = "leafnode-2.0.0.alpha20121101a.12";
+  pname = "leafnode";
+  version = "2.0.0.alpha20121101a.12";
 
   src = fetchurl {
     url = "http://home.pages.de/~mandree/leafnode/beta/leafnode-2.0.0.alpha20121101a.tar.bz2";
@@ -29,9 +30,9 @@ stdenv.mkDerivation {
   buildInputs = [ pcre];
 
   meta = {
-    homepage = http://leafnode.sourceforge.net/;
-    description = "Leafnode implements a store & forward NNTP proxy";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://leafnode.sourceforge.net/";
+    description = "Implementation of a store & forward NNTP proxy";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

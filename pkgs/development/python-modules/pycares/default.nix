@@ -1,35 +1,42 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, python
 , c-ares
 , cffi
+, fetchPypi
+, idna
 }:
 
 buildPythonPackage rec {
   pname = "pycares";
-  version = "3.1.0";
+  version = "4.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "663c000625725d3a63466a674df4ee7f62bf8ca1ae8a0b87a6411eb811e0e794";
+    sha256 = "sha256-A0kL4Oe1GgyAc/h3vsNH7/MQA/ZPV9lRjUGdk2lFKDc=";
   };
 
-  buildInputs = [ c-ares ];
+  buildInputs = [
+    c-ares
+  ];
 
-  propagatedBuildInputs = [ cffi ];
+  propagatedBuildInputs = [
+    cffi
+    idna
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} tests/tests.py
-  '';
+  propagatedNativeBuildInputs = [
+    cffi
+  ];
 
-  # requires network access
+  # Requires network access
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/saghul/pycares;
-    description = "Interface for c-ares";
-    license = licenses.mit;
-  };
+  pythonImportsCheck = [ "pycares" ];
 
+  meta = with lib; {
+    description = "Python interface for c-ares";
+    homepage = "https://github.com/saghul/pycares";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fab ];
+  };
 }

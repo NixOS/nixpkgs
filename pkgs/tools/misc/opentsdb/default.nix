@@ -1,19 +1,28 @@
-{ stdenv, autoconf, automake, curl, fetchurl, jdk, jre, makeWrapper, nettools
-, python, git
+{ lib, stdenv, autoconf, automake, curl, fetchurl, fetchpatch, jdk8, makeWrapper, nettools
+, python2, git
 }:
 
-with stdenv.lib;
+let jdk = jdk8; jre = jdk8.jre; in
 
 stdenv.mkDerivation rec {
   pname = "opentsdb";
-  version = "2.3.1";
+  version = "2.4.0";
 
   src = fetchurl {
     url = "https://github.com/OpenTSDB/opentsdb/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "1lf1gynr11silla4bsrkwqv023dxirsb88ncs2qmc2ng35593fjd";
+    sha256 = "0b0hilqmgz6n1q7irp17h48v8fjpxhjapgw1py8kyav1d51s7mm2";
   };
 
-  buildInputs = [ autoconf automake curl jdk makeWrapper nettools python git ];
+  patches = [
+    (fetchpatch {
+      name = "CVE-2020-35476.patch";
+      url = "https://github.com/OpenTSDB/opentsdb/commit/b89fded4ee326dc064b9d7e471e9f29f7d1dede9.patch";
+      sha256 = "1vb9m0a4fsjqcjagiypvkngzgsw4dil8jrlhn5xbz7rwx8x96wvb";
+    })
+  ];
+
+  nativeBuildInputs = [ makeWrapper autoconf automake ];
+  buildInputs = [ curl jdk nettools python2 git ];
 
   preConfigure = ''
     patchShebangs ./build-aux/
@@ -26,11 +35,11 @@ stdenv.mkDerivation rec {
       --set JAVA "${jre}/bin/java"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Time series database with millisecond precision";
-    homepage = http://opentsdb.net;
+    homepage = "http://opentsdb.net";
     license = licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ maintainers.ocharles ];
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
 }

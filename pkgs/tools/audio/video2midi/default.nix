@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages, opencv3 }:
+{ lib, fetchFromGitHub, pythonPackages, opencv3 }:
 
 let
   opencv3_ = pythonPackages.toPythonModule (opencv3.override {
@@ -8,7 +8,7 @@ let
   });
 in pythonPackages.buildPythonApplication rec {
   pname = "video2midi";
-  version = "0.3.9.6";
+  version = "0.4.6.5";
 
   format = "other";
 
@@ -16,7 +16,7 @@ in pythonPackages.buildPythonApplication rec {
     owner = "svsdval";
     repo = pname;
     rev = version;
-    sha256 = "0x9b8hwl325gd6v9i60yh95gbn49nydpwyfqs92mbq8vvvq7x8fk";
+    sha256 = "0qzrxqhsxn0h71nfrsi9g78hx3pqm3b8sr6fjq01k4k6dd2nwfam";
   };
 
   propagatedBuildInputs = with pythonPackages; [ opencv3_ midiutil pygame pyopengl ];
@@ -25,11 +25,11 @@ in pythonPackages.buildPythonApplication rec {
     install -Dm755 v2m.py $out/bin/v2m.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Youtube synthesia video to midi conversion tool";
     homepage = src.meta.homepage;
-    license = licenses.gpl3;
-    maintainers = [ maintainers.gnidorah ];
+    license = licenses.gpl3Only;
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

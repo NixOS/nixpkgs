@@ -26,13 +26,13 @@ in {
     systemd.services.enable-ksm = {
       description = "Enable Kernel Same-Page Merging";
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
-      script = ''
-        if [ -e /sys/kernel/mm/ksm ]; then
+      script =
+        ''
           echo 1 > /sys/kernel/mm/ksm/run
-          ${optionalString (cfg.sleep != null) ''echo ${toString cfg.sleep} > /sys/kernel/mm/ksm/sleep_millisecs''}
-        fi
-      '';
+        '' + optionalString (cfg.sleep != null)
+        ''
+          echo ${toString cfg.sleep} > /sys/kernel/mm/ksm/sleep_millisecs
+        '';
     };
   };
 }

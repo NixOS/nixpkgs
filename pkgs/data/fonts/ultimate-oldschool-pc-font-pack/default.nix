@@ -1,12 +1,12 @@
 { lib, fetchzip }:
 
 let
-  version = "1.0";
+  version = "2.2";
 in
 fetchzip {
   name = "ultimate-oldschool-pc-font-pack-${version}";
-  url = "http://int10h.org/oldschool-pc-fonts/download/ultimate_oldschool_pc_font_pack_v${version}.zip";
-  sha256 = "0hid4dgqfy2w26734vcw2rxmpacd9vd1r2qpdr9ww1n3kgc92k9y";
+  url = "https://int10h.org/oldschool-pc-fonts/download/oldschool_pc_font_pack_v${version}_linux.zip";
+  sha256 = "sha256-BOA2fMa2KT3Bkpvj/0DzrzuZbl3RARvNn4qbI/+dApU=";
 
   postFetch= ''
     mkdir -p $out/share/fonts/truetype
@@ -15,7 +15,8 @@ fetchzip {
 
   meta = with lib; {
     description = "The Ultimate Oldschool PC Font Pack (TTF Fonts)";
-    homepage = "http://int10h.org/oldschool-pc-fonts/";
+    homepage = "https://int10h.org/oldschool-pc-fonts/";
+    changelog = "https://int10h.org/oldschool-pc-fonts/readme/#history";
     license = licenses.cc-by-sa-40;
     maintainers = [ maintainers.endgame ];
   };

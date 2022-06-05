@@ -1,7 +1,7 @@
 { useLua ? !stdenv.isDarwin
 , usePcre ? true
 , withPrometheusExporter ? true
-, stdenv, lib, fetchurl
+, stdenv, lib, fetchurl, nixosTests
 , openssl, zlib
 , lua5_3 ? null, pcre ? null, systemd ? null
 }:
@@ -11,11 +11,11 @@ assert usePcre -> pcre != null;
 
 stdenv.mkDerivation rec {
   pname = "haproxy";
-  version = "2.0.10";
+  version = "2.5.5";
 
   src = fetchurl {
-    url = "https://www.haproxy.org/download/${stdenv.lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
-    sha256 = "1sm42q9l159pdmjs5dg544z10dn6x073caljkqh0p4syshysnf0x";
+    url = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/${pname}-${version}.tar.gz";
+    sha256 = "sha256-BjxIRc2y128pLvRNnAEXqFPY0Qrl2WFbQGsUpNdP5Lk=";
   };
 
   buildInputs = [ openssl zlib ]
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   # TODO: make it work on bsd as well
   makeFlags = [
-    "PREFIX=\${out}"
+    "PREFIX=${placeholder "out"}"
     ("TARGET=" + (if stdenv.isSunOS  then "solaris"
              else if stdenv.isLinux  then "linux-glibc"
              else if stdenv.isDarwin then "osx"
@@ -40,16 +40,19 @@ stdenv.mkDerivation rec {
     "USE_PCRE_JIT=yes"
   ] ++ lib.optionals useLua [
     "USE_LUA=yes"
+    "LUA_LIB_NAME=lua"
     "LUA_LIB=${lua5_3}/lib"
     "LUA_INC=${lua5_3}/include"
   ] ++ lib.optionals stdenv.isLinux [
     "USE_SYSTEMD=yes"
     "USE_GETADDRINFO=1"
   ] ++ lib.optionals withPrometheusExporter [
-    "EXTRA_OBJS=contrib/prometheus-exporter/service-prometheus.o"
-  ] ++ lib.optional stdenv.isDarwin "CC=cc";
+    "USE_PROMEX=yes"
+  ] ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   enableParallelBuilding = true;
+
+  passthru.tests.haproxy = nixosTests.haproxy;
 
   meta = with lib; {
     description = "Reliable, high performance TCP/HTTP load balancer";
@@ -62,7 +65,8 @@ stdenv.mkDerivation rec {
       hardware.
     '';
     homepage = "https://haproxy.org";
-    license = licenses.gpl2;
+    changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/CHANGELOG";
+    license = with licenses; [ gpl2Plus lgpl21Only ];
     maintainers = with maintainers; [ fuzzy-id ];
     platforms = with platforms; linux ++ darwin;
   };

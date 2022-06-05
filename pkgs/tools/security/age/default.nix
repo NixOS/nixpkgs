@@ -1,22 +1,36 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "age";
-  version = "1.0.0-beta2";
-  goPackagePath = "github.com/FiloSottile/age";
-  modSha256 = "0kwdwhkxgqjd8h1p7pm4h4xidp2vk840h1j4qya4qz8bjf9vskl9";
-
-  subPackages = [
-    "cmd/age"
-    "cmd/age-keygen"
-  ];
+  version = "1.0.0";
+  vendorSha256 = "sha256-Hdsd+epcLFLkeHzJ2CUu4ss1qOd0+lTjhfs9MhI5Weg=";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
     rev = "v${version}";
-    sha256 = "1n1ww8yjw0mg00dvnfmggww9kwp1hls0a85iv6vx9k89mzv8mdrq";
+    sha256 = "sha256-MfyW8Yv8swKqA7Hl45l5Zn4wZrQmE661eHsKIywy36U=";
   };
+
+  ldflags = [
+    "-s" "-w" "-X main.Version=${version}"
+  ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  preInstall = ''
+    installManPage doc/*.1
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    if [[ "$("$out/bin/${pname}" --version)" == "${version}" ]]; then
+      echo '${pname} smoke check passed'
+    else
+      echo '${pname} smoke check failed'
+      return 1
+    fi
+  '';
 
   meta = with lib; {
     homepage = "https://age-encryption.org/";

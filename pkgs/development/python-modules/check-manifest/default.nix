@@ -1,21 +1,53 @@
-{ stdenv, buildPythonPackage, fetchPypi, toml }:
+{ lib
+, breezy
+, build
+, buildPythonPackage
+, fetchPypi
+, git
+, mock
+, pep517
+, pytestCheckHook
+, toml
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "check-manifest";
-  version = "0.40";
+  version = "0.48";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "42de6eaab4ed149e60c9b367ada54f01a3b1e4d6846784f9b9710e770ff5572c";
+    hash = "sha256-O1dfHa3nvrMHjvS/M6lFGYNEV8coHbxyaxXFRmtVxlc=";
   };
 
-  propagatedBuildInputs = [ toml ];
+  propagatedBuildInputs = [
+    build
+    pep517
+    toml
+  ];
 
-  doCheck = false;
+  checkInputs = [
+    breezy
+    git
+    mock
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mgedmin/check-manifest;
+  disabledTests = [
+    # Test wants to setup a venv
+    "test_build_sdist_pep517_isolated"
+  ];
+
+  pythonImportsCheck = [
+    "check_manifest"
+  ];
+
+  meta = with lib; {
     description = "Check MANIFEST.in in a Python source package for completeness";
+    homepage = "https://github.com/mgedmin/check-manifest";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo ];
   };

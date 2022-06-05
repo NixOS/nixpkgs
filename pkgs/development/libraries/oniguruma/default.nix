@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "onig";
-  version = "6.9.4";
+  version = "6.9.7.1";
 
   src = fetchFromGitHub {
     owner = "kkos";
     repo = "oniguruma";
     rev = "v${version}";
-    sha256 = "11imbhj4p5w8lvrmcczccm1zq014h9j85r51z2ibb8jhf5p3lslh";
+    sha256 = "sha256-IBWxmzmVdKTkHbfy7V8ejpeIdfOU/adGwpUTCMdLU3w=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ autoreconfHook ];
+  configureFlags = [ "--enable-posix-api=yes" ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/kkos/oniguruma;
+  meta = with lib; {
+    homepage = "https://github.com/kkos/oniguruma";
     description = "Regular expressions library";
     license = licenses.bsd2;
     maintainers = with maintainers; [ ];

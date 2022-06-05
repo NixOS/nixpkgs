@@ -15,6 +15,14 @@ in {
           issued by the `lorri` command.
         '';
       };
+      package = lib.mkOption {
+        default = pkgs.lorri;
+        type = lib.types.package;
+        description = ''
+          The lorri package to use.
+        '';
+        defaultText = lib.literalExpression "pkgs.lorri";
+      };
     };
   };
 
@@ -34,7 +42,7 @@ in {
       after = [ "lorri.socket" ];
       path = with pkgs; [ config.nix.package git gnutar gzip ];
       serviceConfig = {
-        ExecStart = "${pkgs.lorri}/bin/lorri daemon";
+        ExecStart = "${cfg.package}/bin/lorri daemon";
         PrivateTmp = true;
         ProtectSystem = "strict";
         ProtectHome = "read-only";
@@ -42,6 +50,6 @@ in {
       };
     };
 
-    environment.systemPackages = [ pkgs.lorri ];
+    environment.systemPackages = [ cfg.package ];
   };
 }

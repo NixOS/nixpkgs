@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
+{ lib, stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   pname = "pluginUtils";
   version = "1.1";
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Some simple utility lv2 plugins";
-    homepage = https://github.com/magnetophon/pluginUtils;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.magnetophon ];
+    homepage = "https://github.com/magnetophon/pluginUtils";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.magnetophon ];
   };
 }

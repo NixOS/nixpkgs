@@ -1,8 +1,33 @@
-{ stdenv, fetchFromGitHub, nixosTests, substituteAll, autoreconfHook, pkgconfig, libxml2, glib, pipewire, fontconfig, flatpak, gsettings-desktop-schemas, acl, dbus, fuse, geoclue2, json-glib, wrapGAppsHook }:
+{ lib
+, acl
+, autoreconfHook
+, dbus
+, fetchFromGitHub
+, fetchpatch
+, flatpak
+, fuse3
+, systemdMinimal
+, geoclue2
+, glib
+, gsettings-desktop-schemas
+, json-glib
+, libportal
+, libxml2
+, nixosTests
+, pipewire
+, gdk-pixbuf
+, librsvg
+, python3
+, pkg-config
+, stdenv
+, substituteAll
+, wrapGAppsHook
+, enableGeoLocation ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
-  version = "1.4.2";
+  version = "1.14.4";
 
   outputs = [ "out" "installedTests" ];
 
@@ -10,29 +35,49 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "1rs3kmpczkr6nm08kb9njnl7n3rmhh0ral0xav6f0y70pyh8whx6";
+    sha256 = "///X0inMi9Znuhjn9n0HlVLa5/kFWpKorKS8RY9WeYM=";
   };
 
-  patches = [
-    ./respect-path-env-var.patch
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit flatpak;
-    })
+  nativeBuildInputs = [
+    autoreconfHook
+    libxml2
+    pkg-config
+    wrapGAppsHook
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libxml2 wrapGAppsHook ];
-  buildInputs = [ glib pipewire fontconfig flatpak acl dbus geoclue2 fuse gsettings-desktop-schemas json-glib ];
+  buildInputs = [
+    acl
+    dbus
+    flatpak
+    fuse3
+    systemdMinimal # libsystemd
+    glib
+    gsettings-desktop-schemas
+    json-glib
+    libportal
+    pipewire
 
-  doCheck = true; # XXX: investigate!
+    # For icon validator
+    gdk-pixbuf
+    librsvg
+
+    # For document-fuse installed test.
+    (python3.withPackages (pp: with pp; [
+      pygobject3
+    ]))
+  ] ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ];
 
   configureFlags = [
     "--enable-installed-tests"
+  ] ++ lib.optionals (!enableGeoLocation) [
+    "--disable-geoclue"
   ];
 
   makeFlags = [
-    "installed_testdir=$(installedTests)/libexec/installed-tests/xdg-desktop-portal"
-    "installed_test_metadir=$(installedTests)/share/installed-tests/xdg-desktop-portal"
+    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal"
+    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/xdg-desktop-portal"
   ];
 
   passthru = {
@@ -41,9 +86,9 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Desktop integration portals for sandboxed apps";
-    license = licenses.lgpl21;
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };

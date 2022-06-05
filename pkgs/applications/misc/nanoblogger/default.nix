@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, bash }:
+{ fetchurl, lib, stdenv, bash }:
 
 stdenv.mkDerivation rec {
   version = "3.5-rc1";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp -r * $out
-    cat > $out/bin/nb << EOF 
+    cat > $out/bin/nb << EOF
     #!${bash}/bin/bash
     $out/nb "\$@"
     EOF
@@ -23,8 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Small weblog engine written in Bash for the command line";
-    homepage = http://nanoblogger.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "http://nanoblogger.sourceforge.net/";
+    license = lib.licenses.gpl2;
+    mainProgram = "nb";
+    platforms = lib.platforms.unix;
   };
 }

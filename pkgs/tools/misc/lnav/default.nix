@@ -1,21 +1,27 @@
-{ stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
+{ lib, stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
 , readline, zlib, bzip2, autoconf, automake, curl }:
 
 stdenv.mkDerivation rec {
-
-  name = "lnav-${meta.version}";
+  pname = "lnav";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
-    rev = "v${meta.version}";
-    sha256 = "0z8bsr0falxlkmd1b5gy871vyafyih0sw7lgg858lqnbsy0q2m4i";
-    inherit name;
+    rev = "v${version}";
+    sha256 = "sha256-1b4mVKIUotMSK/ADHnpiM42G98JF0abL8sXXGFyS3sw=";
   };
 
+  patches = [ ./0001-Forcefully-disable-docs-build.patch ];
+  postPatch = ''
+    substituteInPlace Makefile.am \
+      --replace "SUBDIRS = src test" "SUBDIRS = src"
+  '';
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
-    autoconf
-    automake
     zlib
     bzip2
     ncurses
@@ -29,8 +35,8 @@ stdenv.mkDerivation rec {
     ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/tstack/lnav;
+  meta = with lib; {
+    homepage = "https://github.com/tstack/lnav";
     description = "The Logfile Navigator";
     longDescription = ''
       The log file navigator, lnav, is an enhanced log file viewer that takes
@@ -43,7 +49,6 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    version = "0.8.5";
     maintainers = with maintainers; [ dochang ma27 ];
     platforms = platforms.unix;
   };

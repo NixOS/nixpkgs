@@ -23,29 +23,29 @@ in
         type = types.bool;
         default = true;
         description = "Allow IPv6 HTTP requests?";
-        defaultText = "Allow IPv6 HTTP requests.";
       };
 
       key = mkOption {
         type = types.str;
         default = "";
-        description = "HMAC url validation key (hexadecimal encoded).
-	Leave blank to disable. Without validation key, anyone can
-	submit proxy requests. Leave blank to disable.";
-        defaultText = "No HMAC url validation. Generate with echo -n somevalue | openssl dgst -sha1 -hmac somekey";
+        description = ''
+          HMAC url validation key (hexadecimal encoded).
+          Leave blank to disable. Without validation key, anyone can
+          submit proxy requests. Leave blank to disable.
+          Generate with <literal>printf %s somevalue | openssl dgst -sha1 -hmac somekey</literal>
+        '';
       };
 
       timeout = mkOption {
         type = types.int;
         default = 2;
         description = "Request timeout in seconds.";
-        defaultText = "A resource now gets 2 seconds to respond.";
       };
 
       package = mkOption {
         type = types.package;
         default = pkgs.morty;
-        defaultText = "pkgs.morty";
+        defaultText = literalExpression "pkgs.morty";
         description = "morty package to use.";
       };
 
@@ -59,7 +59,6 @@ in
         type = types.str;
         default = "127.0.0.1";
         description = "The address on which the service listens";
-        defaultText = "127.0.0.1 (localhost)";
       };
 
     };
@@ -75,7 +74,9 @@ in
         createHome = true;
         home = "/var/lib/morty";
         isSystemUser = true;
+        group = "morty";
       };
+    users.groups.morty = {};
 
     systemd.services.morty =
       {
@@ -85,10 +86,10 @@ in
         serviceConfig = {
           User = "morty";
           ExecStart = ''${cfg.package}/bin/morty              \
-	    -listen ${cfg.listenAddress}:${toString cfg.port} \
-	    ${optionalString cfg.ipv6 "-ipv6"}                \
-	    ${optionalString (cfg.key != "") "-key " + cfg.key} \
-	  '';
+            -listen ${cfg.listenAddress}:${toString cfg.port} \
+            ${optionalString cfg.ipv6 "-ipv6"}                \
+            ${optionalString (cfg.key != "") "-key " + cfg.key} \
+          '';
         };
       };
     environment.systemPackages = [ cfg.package ];

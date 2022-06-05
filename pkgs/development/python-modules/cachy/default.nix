@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , redis
-, memcached
+, python-memcached
 , msgpack
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     redis
-    memcached
+    python-memcached
     msgpack
   ];
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/sdispater/cachy;
+    homepage = "https://github.com/sdispater/cachy";
     description = "Cachy provides a simple yet effective caching library";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];

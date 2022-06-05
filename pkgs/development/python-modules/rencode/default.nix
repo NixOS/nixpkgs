@@ -1,25 +1,24 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, isPy33
-, fetchgit
+, fetchFromGitHub
 , cython
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "rencode";
-  version = "git20150810";
-  disabled = isPy33;
+  version = "1.0.6";
 
-  src = fetchgit {
-    url = https://github.com/aresch/rencode;
-    rev = "b45e04abdca0dea36e383a8199783269f186c99e";
-    sha256 = "b4bd82852d4220e8a9493d3cfaecbc57b1325708a2d48c0f8acf262edb10dc40";
+  src = fetchFromGitHub {
+    owner = "aresch";
+    repo = "rencode";
+    rev = "v${version}";
+    sha256 = "sha256-PGjjrZuoGYSPMNqXG1KXoZnOoWIe4g6s056jFhqrJ60=";
   };
 
   buildInputs = [ cython ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/aresch/rencode;
+  meta = with lib; {
+    homepage = "https://github.com/aresch/rencode";
     description = "Fast (basic) object serialization similar to bencode";
     license = licenses.gpl3;
   };

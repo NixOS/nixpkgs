@@ -1,6 +1,7 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonAtLeast
 , numpy
 , matplotlib
 , pillow
@@ -13,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "basemap";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "matplotlib";
     repo = "basemap";
-    rev = "v${version}rel";
-    sha256 = "13lw1iwa8hadpvqdgb06nh881l8c17awzvvwbfwblvb9q9s0lnzp";
+    rev = "v${version}";
+    sha256 = "sha256-onNdOQL4i6GTcuCRel5yanJ2EQ5iYClp+imuBObXF2I=";
   };
 
   propagatedBuildInputs = [ numpy matplotlib pillow pyproj pyshp six ];
@@ -34,7 +35,7 @@ buildPythonPackage rec {
   # TODO : do the post install checks (`cd examples && ${python.interpreter} run_all.py`)
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://matplotlib.org/basemap/";
     description = "Plot data on map projections with matplotlib";
     longDescription = ''
@@ -43,6 +44,7 @@ buildPythonPackage rec {
       http://matplotlib.github.com/basemap/users/examples.html for examples of what it can do.
     '';
     license = with licenses; [ mit gpl2 ];
+    broken = pythonAtLeast "3.9";
   };
 
 }

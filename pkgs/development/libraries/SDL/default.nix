@@ -1,23 +1,24 @@
-{ stdenv, config, fetchurl, fetchpatch, pkgconfig, audiofile, libcap, libiconv
-, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
+{ lib, stdenv, config, fetchurl, fetchpatch, pkg-config, audiofile, libcap, libiconv
+, libGLSupported ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL, libGLU
-, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsa-lib
 , x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
 , libXext, libICE, libXrandr
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
-, OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
+, OpenGL, GLUT, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
 }:
 
 # NOTE: When editing this expression see if the same change applies to
 # SDL2 expression too
 
-with stdenv.lib;
+with lib;
 
 let
   extraPropagatedBuildInputs = [ ]
     ++ optionals x11Support [ libXext libICE libXrandr ]
-    ++ optionals openglSupport [ libGL libGLU ]
-    ++ optional alsaSupport alsaLib
+    ++ optionals (openglSupport && stdenv.isLinux) [ libGL libGLU ]
+    ++ optionals (openglSupport && stdenv.isDarwin) [ OpenGL GLUT ]
+    ++ optional alsaSupport alsa-lib
     ++ optional pulseaudioSupport libpulseaudio
     ++ optional stdenv.isDarwin Cocoa;
   rpath = makeLibraryPath extraPropagatedBuildInputs;
@@ -38,7 +39,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ optional stdenv.isLinux libcap;
 
   propagatedBuildInputs = [ libiconv ] ++ extraPropagatedBuildInputs;
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
   # Please try revert the change that introduced this comment when updating SDL.
   ] ++ optional stdenv.isDarwin "--disable-x11-shared"
     ++ optional (!x11Support) "--without-x"
-    ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib";
+    ++ optional alsaSupport "--with-alsa-prefix=${alsa-lib.out}/lib";
 
   patches = [
     ./find-headers.patch
@@ -73,18 +74,18 @@ stdenv.mkDerivation rec {
     })
     # Fix drops of keyboard events for SDL_EnableUNICODE
     (fetchpatch {
-      url = "http://hg.libsdl.org/SDL/raw-rev/0aade9c0203f";
-      sha256 = "1y9izncjlqvk1mkz1pkl9lrk9s452cmg2izjjlqqrhbn8279xy50";
+      url = "https://github.com/libsdl-org/SDL-1.2/commit/0332e2bb18dc68d6892c3b653b2547afe323854b.patch";
+      sha256 = "0g458iv6pp9sikdch6ms8svz60lf5ks2q5wgid8s9rydhk98lpp5";
     })
     # Ignore insane joystick axis events
     (fetchpatch {
-      url = "http://hg.libsdl.org/SDL/raw-rev/95abff7adcc2";
-      sha256 = "0i8x0kx0pw12ld5bfxhyzs466y3c0n9dscw1ijhq1b96r72xyhqq";
+      url = "https://github.com/libsdl-org/SDL-1.2/commit/ab99cc82b0a898ad528d46fa128b649a220a94f4.patch";
+      sha256 = "1b3473sawfdbkkxaqf1hg0vn37yk8hf655jhnjwdk296z4gclazh";
     })
     # https://bugzilla.libsdl.org/show_bug.cgi?id=1769
     (fetchpatch {
-      url = "http://hg.libsdl.org/SDL/raw-rev/91ad7b43317a";
-      sha256 = "15g537vbl2my4mfrjxfkcx9ri6bk2gjvaqj650rjdxwk2nkdkn4b";
+      url = "https://github.com/libsdl-org/SDL-1.2/commit/5d79977ec7a6b58afa6e4817035aaaba186f7e9f.patch";
+      sha256 = "1k7y57b1zy5afib1g7w3in36n8cswbcrzdbrjpn5cb105rnb9vmp";
     })
     # Workaround X11 bug to allow changing gamma
     # Ticket: https://bugs.freedesktop.org/show_bug.cgi?id=27222
@@ -96,12 +97,12 @@ stdenv.mkDerivation rec {
     # Fix a build failure on OS X Mavericks
     # Ticket: https://bugzilla.libsdl.org/show_bug.cgi?id=2085
     (fetchpatch {
-      url = "http://hg.libsdl.org/SDL/raw-rev/e9466ead70e5";
-      sha256 = "0mpwdi09h89df2wxqw87m1rdz7pr46k0w6alk691k8kwv970z6pl";
+      url = "https://github.com/libsdl-org/SDL-1.2/commit/19039324be71738d8990e91b9ba341b2ea068445.patch";
+      sha256 = "0ckwling2ad27c9vxgp97ndjd098d6zbrydza8b9l77k8airj98c";
     })
     (fetchpatch {
-      url = "http://hg.libsdl.org/SDL/raw-rev/bbfb41c13a87";
-      sha256 = "1336g7waaf1c8yhkz11xbs500h8bmvabh4h437ax8l1xdwcppfxv";
+      url = "https://github.com/libsdl-org/SDL-1.2/commit/7933032ad4d57c24f2230db29f67eb7d21bb5654.patch";
+      sha256 = "1by16firaxyr0hjvn35whsgcmq6bl0nwhnpjf75grjzsw9qvwyia";
     })
   ];
 
@@ -124,7 +125,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A cross-platform multimedia library";
     homepage    = "http://www.libsdl.org/";
     maintainers = with maintainers; [ lovek323 ];

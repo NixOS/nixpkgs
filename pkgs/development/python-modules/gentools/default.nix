@@ -1,5 +1,5 @@
 { buildPythonPackage, lib, fetchFromGitHub, pytest
-, typing, funcsigs, pythonOlder
+, typing ? null, funcsigs ? null, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tools for generators, generator functions, and generator-based coroutines";
     license = licenses.mit;
-    homepage = https://gentools.readthedocs.io/;
+    homepage = "https://gentools.readthedocs.io/";
     maintainers = with maintainers; [ mredaelli ];
   };
 

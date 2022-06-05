@@ -1,41 +1,46 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
-, python
-, isPy3k
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "azure-mgmt-commerce";
-  version = "1.0.1";
+  version = "6.0.0";
 
-  src = fetchFromGitHub {
-    owner = "Azure";
-    repo = "azure-sdk-for-python";
-    rev = "ee5b47525d6c1eae3b1fd5f65b0421eab62a6e6f";
-    sha256 = "0xzdn7da5c3q5knh033vbsqk36vwbm75cx8vf10x0yj58krb4kn4";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "zip";
+    sha256 = "6f5447395503b2318f451d24f8021ee08db1cac44f1c3337ea690700419626b6";
   };
-
-  preBuild = ''
-    cd ./azure-mgmt-commerce
-  '';
 
   propagatedBuildInputs = [
     msrestazure
     azure-common
+    azure-mgmt-core
     azure-mgmt-nspkg
   ];
 
+  prePatch = ''
+    rm -f azure_bdist_wheel.py tox.ini
+    substituteInPlace setup.py \
+      --replace "wheel==0.30.0" "wheel"
+    sed -i "/azure-namespace-package/c\ " setup.cfg
+  '';
+
+  pythonNamespaces = [ "azure.mgmt" ];
+
   # has no tests
   doCheck = false;
+  pythonImportsCheck = [ "azure.mgmt.commerce" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Commerce Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson jonringer ];
   };
 }

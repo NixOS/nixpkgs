@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, buildPackages, ncurses }:
+{ lib, stdenv, fetchFromGitHub, buildPackages, ncurses }:
 
-let dialect = with stdenv.lib; last (splitString "-" stdenv.hostPlatform.system); in
+let dialect = with lib; last (splitString "-" stdenv.hostPlatform.system); in
 
 stdenv.mkDerivation rec {
   pname = "lsof";
-  version = "4.93.2";
+  version = "4.94.0";
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ ncurses ];
@@ -13,19 +13,19 @@ stdenv.mkDerivation rec {
     owner = "lsof-org";
     repo = "lsof";
     rev = version;
-    sha256 = "1gd6r0nv8xz76pmvk52dgmfl0xjvkxl0s51b4jk4a0lphw3393yv";
+    sha256 = "0yxv2jg6rnzys49lyrz9yjb4knamah4xvlqj596y6ix3vm4k3chp";
   };
 
   patches = [ ./no-build-info.patch ];
 
-  postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace dialects/linux/dlsof.h --replace "defined(__UCLIBC__)" 1
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's|lcurses|lncurses|g' Configure
   '';
 
   # Stop build scripts from searching global include paths
-  LSOF_INCLUDE = "${stdenv.lib.getDev stdenv.cc.libc}/include";
+  LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     cp lsof $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/lsof-org/lsof";
     description = "A tool to list open files";
     longDescription = ''

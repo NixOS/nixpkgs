@@ -14,7 +14,7 @@ in {
 
       configFile = mkOption {
         type = types.path;
-        example = "${pkgs.shibboleth-sp}/etc/shibboleth/shibboleth2.xml";
+        example = literalExpression ''"''${pkgs.shibboleth-sp}/etc/shibboleth/shibboleth2.xml"'';
         description = "Path to shibboleth config file";
       };
 

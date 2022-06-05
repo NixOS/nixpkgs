@@ -49,9 +49,9 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/fxlputil --prefix PATH : ${lib.makeBinPath [ tcl tk ]}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Optional configuration tool for fxlinuxprint";
-    homepage = https://onlinesupport.fujixerox.com;
+    homepage = "https://onlinesupport.fujixerox.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ delan ];
     platforms = platforms.linux;

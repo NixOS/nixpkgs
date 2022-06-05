@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, zlib, glib, alsaLib, makeDesktopItem
+{ stdenv, lib, fetchurl, zlib, glib, alsa-lib, makeDesktopItem
 , dbus, gtk2, atk, pango, freetype, fontconfig, libgnome-keyring3, gdk-pixbuf
-, cairo, cups, expat, libgpgerror, nspr, gnome2, nss, xorg, systemd, libnotify
+, cairo, cups, expat, libgpg-error, nspr, gnome2, nss, xorg, systemd, libnotify
 }:
 
 let
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
       stdenv.cc.cc zlib glib dbus gtk2 atk pango freetype libgnome-keyring3 nss
-      fontconfig gdk-pixbuf cairo cups expat libgpgerror alsaLib nspr gnome2.GConf
+      fontconfig gdk-pixbuf cairo cups expat libgpg-error alsa-lib nspr gnome2.GConf
       xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
       xorg.libXcomposite xorg.libXi xorg.libXfixes libnotify xorg.libXrandr
       xorg.libXcursor
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
         sha256 = "06fj725xfhf3fwrf7dya7ijmxq3v76kfmd4lr2067a92zhlwr5pv";
       };
 
-  phases = [ "installPhase" ];
+  dontConfigure = true;
 
   installPhase = ''
     tar xf ${src}
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
 
     mv $out/share/LightTable/light $out/bin/light
 
-    ln -sf ${systemd.lib}/lib/libudev.so.1 $out/share/LightTable/libudev.so.0
+    ln -sf ${lib.getLib systemd}/lib/libudev.so.1 $out/share/LightTable/libudev.so.0
     substituteInPlace $out/bin/light \
-        --replace "/usr/lib/x86_64-linux-gnu" "${systemd.lib}/lib" \
+        --replace "/usr/lib/x86_64-linux-gnu" "${lib.getLib systemd}/lib" \
         --replace "/lib/x86_64-linux-gnu" "$out/share/LightTable" \
         --replace 'HERE=`dirname $(readlink -f $0)`' "HERE=$out/share/LightTable"
 
@@ -55,9 +55,9 @@ stdenv.mkDerivation rec {
     cp "${desktopItem}/share/applications/LightTable.desktop" "$out"/share/applications/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The next generation code editor";
-    homepage = http://www.lighttable.com/;
+    homepage = "http://www.lighttable.com/";
     license = licenses.gpl3;
     maintainers = [ maintainers.matejc ];
     platforms = [ "x86_64-linux" ];

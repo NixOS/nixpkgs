@@ -1,20 +1,20 @@
-{ stdenv
-, fetchurl
+{ lib, stdenv
+, fetchurl, unzip
 , hdf5
 , m4
 , curl # for DAP
+, removeReferencesTo
 }:
 
 let
-  mpiSupport = hdf5.mpiSupport;
-  mpi = hdf5.mpi;
+  inherit (hdf5) mpiSupport mpi;
 in stdenv.mkDerivation rec {
-  pname = "netcdf";
-  version = "4.7.3";
+  pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
+  version = "4.8.1";
 
   src = fetchurl {
-    url = "https://www.unidata.ucar.edu/downloads/netcdf/ftp/${pname}-c-${version}.tar.gz";
-    sha256 = "12s4w2s96p51hlsa81lw92w56rdx8i3mk21pz2ydwcamw579z34f";
+    url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
+    sha256 = "1cbjwjmp9691clacw5v88hmpz46ngxs3bfpkf2xy1j7cvlkc72l0";
   };
 
   postPatch = ''
@@ -26,12 +26,11 @@ in stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ m4 ];
+  nativeBuildInputs = [ m4 removeReferencesTo ];
   buildInputs = [ hdf5 curl mpi ];
 
   passthru = {
-    mpiSupport = mpiSupport;
-    inherit mpi;
+    inherit mpiSupport mpi;
   };
 
   configureFlags = [
@@ -40,16 +39,23 @@ in stdenv.mkDerivation rec {
       "--enable-shared"
       "--disable-dap-remote-tests"
   ]
-  ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+  ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
 
-  doCheck = !mpiSupport;
+  disallowedReferences = [ stdenv.cc ];
+
+  postFixup = ''
+    remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"
+  '';
+
+  doCheck = !(mpiSupport || (stdenv.isDarwin && stdenv.isAarch64));
+  checkInputs = [ unzip ];
 
   meta = {
       description = "Libraries for the Unidata network Common Data Format";
-      platforms = stdenv.lib.platforms.unix;
-      homepage = https://www.unidata.ucar.edu/software/netcdf/;
+      platforms = lib.platforms.unix;
+      homepage = "https://www.unidata.ucar.edu/software/netcdf/";
       license = {
-        url = https://www.unidata.ucar.edu/software/netcdf/docs/copyright.html;
+        url = "https://www.unidata.ucar.edu/software/netcdf/docs/copyright.html";
       };
   };
 }

@@ -1,48 +1,41 @@
-{ stdenv, fetchurl, rustPlatform, darwin, openssl, libsodium, nettle, clang, libclang, pkgconfig }:
+{ lib, stdenv
+, fetchCrate
+, rustPlatform
+, pkg-config
+, libsodium
+, openssl
+, xxHash
+, zstd
+, darwin
+, gitImportSupport ? true
+, libgit2 ? null
+}:
 
-let
-  # nettle-sys=1.0.1 requires the des-compat.h header, but it was removed in
-  # nettle 3.5.  See https://nest.pijul.com/pijul_org/pijul/discussions/416
-  # Remove with the next release
-  nettle_34 = nettle.overrideAttrs (_oldAttrs: rec {
-    version = "3.4.1";
-    src = fetchurl {
-      url = "mirror://gnu/nettle/nettle-${version}.tar.gz";
-      sha256 = "1bcji95n1iz9p9vsgdgr26v6s7zhpsxfbjjwpqcihpfd6lawyhgr";
-    };
-  });
-in rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "pijul";
-  version = "0.12.0";
+  version = "1.0.0-beta.1";
 
-  src = fetchurl {
-    url = "https://pijul.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "1rm787kkh3ya8ix0rjvj7sbrg9armm0rnpkga6gjmsbg5bx20y4q";
+  src = fetchCrate {
+    inherit version pname;
+    sha256 = "sha256-XdbZFWtHKXjcGV1vYn7MYdevW+Vc/IKON1DOU49Kzlo=";
   };
 
-  nativeBuildInputs = [ pkgconfig clang ];
-
-  postInstall = ''
-    mkdir -p $out/share/{bash-completion/completions,zsh/site-functions,fish/vendor_completions.d}
-    $out/bin/pijul generate-completions --bash > $out/share/bash-completion/completions/pijul
-    $out/bin/pijul generate-completions --zsh > $out/share/zsh/site-functions/_pijul
-    $out/bin/pijul generate-completions --fish > $out/share/fish/vendor_completions.d/pijul.fish
-  '';
-
-  LIBCLANG_PATH = libclang + "/lib";
-
-  buildInputs = [ openssl libsodium nettle_34 libclang ] ++ stdenv.lib.optionals stdenv.isDarwin
-    (with darwin.apple_sdk.frameworks; [ CoreServices Security ]);
+  cargoSha256 = "sha256-9kPeJ0tOhA4oqFOdwGDkXMnNViklMlNO7VbbWXYrk3I=";
 
   doCheck = false;
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ openssl libsodium xxHash zstd ]
+    ++ (lib.optionals gitImportSupport [ libgit2 ])
+    ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      CoreServices Security SystemConfiguration
+    ]));
 
-  cargoSha256 = "1w77s5q18yr1gqqif15wmrfdvv2chq8rq3w4dnmxg2gn0r7bmz2k";
+  buildFeatures = lib.optional gitImportSupport "git";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A distributed version control system";
-    homepage = https://pijul.org;
+    homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];
-    maintainers = [ maintainers.gal_bolle ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ gal_bolle dywedir fabianhjr ];
   };
 }

@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestrunner
+, pytest-runner
 , pytest
 , pytest-asyncio
 , contextvars
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    pytestrunner
+    pytest-runner
   ];
 
   checkInputs = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Asyncio support for PEP-567 contextvars backport";
-    homepage = https://github.com/fantix/aiocontextvars;
+    homepage = "https://github.com/fantix/aiocontextvars";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

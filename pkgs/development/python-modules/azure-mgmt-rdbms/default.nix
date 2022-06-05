@@ -4,35 +4,38 @@
 , msrest
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
 , isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-rdbms";
-  version = "1.9.0";
+  version = "10.1.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0v91hl936wp9sl3bc31svf6kdxwa57qh6ih9rrv43dnb2000km6r";
+    sha256 = "sha256-qH1AHIdshHNM3UiIr1UeShRhtLMo2YFq9gy4rFl58DU=";
   };
 
   propagatedBuildInputs = [
+    azure-common
+    azure-mgmt-core
     msrest
     msrestazure
-    azure-common
   ] ++ lib.optionals (!isPy3k) [
     azure-mgmt-nspkg
   ];
 
   # has no tests
   doCheck = false;
+  pythonImportsCheck = [ "azure.mgmt.rdbms" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure RDBMS Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

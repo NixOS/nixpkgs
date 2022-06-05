@@ -1,23 +1,26 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+}:
 
 rustPlatform.buildRustPackage rec {
-  pname = "svgcleaner";
-  version = "0.9.2";
+  pname = "SVGCleaner";
+  version = "unstable-2021-08-30";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
-    repo = "svgcleaner";
-    rev = "v${version}";
-    sha256 = "1jpnqsln37kkxz98vj7gly3c2170v6zamd876nc9nfl9vns41s0f";
+    repo = pname;
+    rev = "575eac74400a5ac45c912b144f0c002aa4a0135f";
+    sha256 = "sha256-pRDRRVb8Lyna8X/PEjS9tS5dbG4g7vyMCU5AqPlpxec=";
   };
 
-  cargoSha256 = "0kzrklw5nrzgvrfzq1mlnri06s19p4f3w38v39247baz2xd6j1n2";
+  cargoSha256 = "sha256-SZWmJGiCc/FevxMWJpa8xKVz/rbll52oNbFtqPpz74g=";
 
-  meta = with stdenv.lib; {
-    description = "A tool for tidying and optimizing SVGs";
-    homepage = "https://github.com/RazrFalcon/svgcleaner";
+  meta = with lib; {
+    description = "Clean and optimize SVG files from unnecessary data";
+    homepage = "https://github.com/RazrFalcon/SVGCleaner";
+    changelog = "https://github.com/RazrFalcon/svgcleaner/releases";
     license = licenses.gpl2;
-    platforms = platforms.all;
-    maintainers = [ maintainers.mehandes ];
+    maintainers = with maintainers; [ yuu ];
   };
 }

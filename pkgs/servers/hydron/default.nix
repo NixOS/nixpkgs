@@ -1,28 +1,25 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, ffmpeg-full, graphicsmagick
-, quicktemplate, go-bindata, easyjson }:
+{ lib, buildGoModule, fetchFromGitHub, pkg-config, ffmpeg }:
 
-buildGoPackage {
-  pname = "hydron-unstable";
-  version = "2019-02-17";
-  goPackagePath = "github.com/bakape/hydron";
-  goDeps = ./deps.nix;
+buildGoModule rec {
+  pname = "hydron";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "bakape";
     repo = "hydron";
-    rev = "824789fb108966432e507143db39b358dd7ff233";
-    sha256 = "1xxykjf5iyavm12gd6nx4j8x2mlzzn7x8vm0j5009lsir98qr5zn";
+    rev = "v${version}";
+    sha256 = "0c958dsw5pq9z8n1b9q9j8y6vgiqf6mmlsf77ncb7yrlilhbrz6s";
   };
 
-  enableParallelBuilding = true;
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ffmpeg-full graphicsmagick quicktemplate go-bindata easyjson ];
+  vendorSha256 = "0cc8ar8p7lgg6rj76vhfp6bzrxyn5yaqjwj8i1bn0zp6sj6zcfam";
+  proxyVendor = true;
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ ffmpeg ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/bakape/hydron";
     description = "High performance media tagger and organizer";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ chiiruno ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ Madouura ];
   };
 }

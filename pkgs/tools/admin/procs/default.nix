@@ -1,35 +1,37 @@
-{ stdenv, fetchFromGitHub, rustPlatform, fetchpatch
-, Security
-}:
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.8.16";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0l4n3gr1sc7wfa21p8yh7idaii0mnfpyqp4cg7f9l4345isy94vq";
+    sha256 = "sha256-XR6HhMu5AN1vkR3YtDlogTN9/aEExFQtATyKUqWjyAM=";
   };
 
-  cargoSha256 = "03c63dlzvag341n6la1s61ccri1avlprd91m11z9zzjhi9b46kcr";
+  cargoSha256 = "sha256-U1ewV/t66jrFRMdu5ddPWyg08C2IGFr6rudPFRIkPsg=";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ installShellFiles ];
 
-  patches = [
-    # Fix tests on darwin. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/dalance/procs/commit/bb554e247b5b339bc00fa5dd2e771b0d7cb09cd5.patch";
-      sha256 = "1szvvifa4pdbgdsmdj5f0zq6qzf1lh6wwc6ipawblfzwmg7d9wvk";
-    })
-  ];
+  LIBCLANG_PATH = lib.optionals stdenv.isDarwin "${stdenv.cc.cc.lib}/lib/";
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    for shell in bash fish zsh; do
+      $out/bin/procs --completion $shell
+    done
+    installShellCompletion procs.{bash,fish} --zsh _procs
+  '';
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  meta = with lib; {
     description = "A modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.dalance ];
-    platforms = with platforms; linux ++ darwin;
+    changelog = "https://github.com/dalance/procs/raw/v${version}/CHANGELOG.md";
+    license = licenses.mit;
+    maintainers = with maintainers; [ Br1ght0ne SuperSandro2000 sciencentistguy ];
+    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }

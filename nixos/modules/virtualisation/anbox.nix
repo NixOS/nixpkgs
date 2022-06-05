@@ -35,7 +35,7 @@ in
 
     image = mkOption {
       default = pkgs.anbox.image;
-      example = literalExample "pkgs.anbox.image";
+      defaultText = literalExpression "pkgs.anbox.image";
       type = types.package;
       description = ''
         Base android image for Anbox.
@@ -73,9 +73,6 @@ in
 
     environment.systemPackages = with pkgs; [ anbox ];
 
-    boot.kernelModules = [ "ashmem_linux" "binder_linux" ];
-    boot.extraModulePackages = [ kernelPackages.anbox ];
-
     services.udev.extraRules = ''
       KERNEL=="ashmem", NAME="%k", MODE="0666"
       KERNEL=="binder*", NAME="%k", MODE="0666"
@@ -98,7 +95,6 @@ in
       environment.XDG_RUNTIME_DIR="${anboxloc}";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "systemd-udev-settle.service" ];
       preStart = let
         initsh = pkgs.writeText "nixos-init" (''
           #!/system/bin/sh

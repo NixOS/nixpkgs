@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, python3 }:
+{ lib, stdenv
+, fetchurl
+, fetchpatch
+, python3
+}:
 
 stdenv.mkDerivation rec {
   version = "1.5";
@@ -9,7 +13,26 @@ stdenv.mkDerivation rec {
     sha256 = "0mw48fgm9lyh9d3pw997fccmglzsjccf2y347gxjas74wx6aira2";
   };
 
-  buildInputs = [ python3 ];
+  buildInputs = [
+    (python3.withPackages (p: [ p.distro ]))
+  ];
+
+  patchFlags = [ "-p0" ];
+
+  patches = [
+    # Required to allow pastebinit 1.5 to run on Python 3.8
+    (fetchpatch {
+      name = "use-distro-module.patch";
+      url = "https://bazaar.launchpad.net/~arnouten/pastebinit/python38/diff/264?context=3";
+      sha256 = "1gp5inp4xald65xbb7fc5aqq5s2fhw464niwjjja9anqyp3zhawj";
+    })
+    # Required because pastebin.com now redirects http requests to https
+    (fetchpatch {
+      name = "pastebin-com-https.patch";
+      url = "https://bazaar.launchpad.net/~arnouten/pastebinit/pastebin-com-https/diff/264?context=3";
+      sha256 = "0hxhhfcai0mll8qfyhdl3slmbf34ynb759b648x63274m9nd2kji";
+    })
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -19,10 +42,10 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/bin/pastebinit --replace "'/etc/pastebin.d" "'$out/etc/pastebin.d"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://launchpad.net/pastebinit;
+  meta = with lib; {
+    homepage = "https://launchpad.net/pastebinit";
     description = "A software that lets you send anything you want directly to a pastebin from the command line";
-    maintainers = with maintainers; [ lethalman ];
+    maintainers = with maintainers; [ raboof ];
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

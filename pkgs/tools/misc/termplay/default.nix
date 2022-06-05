@@ -1,19 +1,17 @@
-{ rustPlatform, fetchFromGitHub, lib, makeWrapper, gst_all_1, libsixel }:
+{ rustPlatform, fetchFromGitLab, lib, makeWrapper, gst_all_1, libsixel }:
 
 rustPlatform.buildRustPackage rec {
   pname = "termplay";
   version = "2.0.6";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "jD91mZM2";
     repo = "termplay";
     rev = "v${version}";
-
     sha256 = "1w7hdqgqr1jgxid3k7f2j52wz31gv8bzr9rsm6xzp7nnihp6i45p";
   };
 
-  cargoBuildFlags = ["--features" "bin"];
-  cargoSha256 = "15i7qid91awlk74n823im1n6isqanf4vlcal90n1w9izyddzs9j0";
+  cargoSha256 = "08ip6x4kink244majlk595yh551c2ap3ry58wly994mh8wf6ifwb";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
@@ -25,15 +23,17 @@ rustPlatform.buildRustPackage rec {
     libsixel
   ];
 
+  buildFeatures = [ "bin" ];
+
   postInstall = ''
     wrapProgram $out/bin/termplay --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
   '';
 
   meta = with lib; {
     description = "Play an image/video in your terminal";
-    homepage = https://jd91mzm2.github.io/termplay/;
+    homepage = "https://jd91mzm2.github.io/termplay/";
     license = licenses.mit;
-    maintainers = with maintainers; [ jD91mZM2 ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

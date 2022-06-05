@@ -6,7 +6,7 @@ args@
 , developerProgram ? false
 , runPatches ? []
 , addOpenGLRunpath
-, alsaLib
+, alsa-lib
 , expat
 , fetchurl
 , fontconfig
@@ -58,10 +58,8 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     ncurses5 expat python27 zlib glibc
     xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
-    gtk2 glib fontconfig freetype unixODBC alsaLib
+    gtk2 glib fontconfig freetype unixODBC alsa-lib
   ];
-
-  rpath = "${stdenv.lib.makeLibraryPath runtimeDependencies}:${stdenv.cc.cc.lib}/lib64";
 
   unpackPhase = ''
     sh $src --keep --noexec
@@ -95,12 +93,39 @@ stdenv.mkDerivation rec {
       cd ..
     done
     ''}
-    ${lib.optionalString (lib.versionAtLeast version "10.1") ''
+    ${lib.optionalString (lib.versionAtLeast version "10.1" && lib.versionOlder version "11") ''
       cd pkg/builds/cuda-toolkit
       mv * $out/
     ''}
+    ${lib.optionalString (lib.versionAtLeast version "11") ''
+      mkdir -p $out/bin $out/lib64 $out/include $doc
+      for dir in pkg/builds/* pkg/builds/cuda_nvcc/nvvm pkg/builds/cuda_cupti/extras/CUPTI; do
+        if [ -d $dir/bin ]; then
+          mv $dir/bin/* $out/bin
+        fi
+        if [ -d $dir/doc ]; then
+          (cd $dir/doc && find . -type d -exec mkdir -p $doc/\{} \;)
+          (cd $dir/doc && find . \( -type f -o -type l \) -exec mv \{} $doc/\{} \;)
+        fi
+        if [ -L $dir/include ] || [ -d $dir/include ]; then
+          (cd $dir/include && find . -type d -exec mkdir -p $out/include/\{} \;)
+          (cd $dir/include && find . \( -type f -o -type l \) -exec mv \{} $out/include/\{} \;)
+        fi
+        if [ -L $dir/lib64 ] || [ -d $dir/lib64 ]; then
+          (cd $dir/lib64 && find . -type d -exec mkdir -p $out/lib64/\{} \;)
+          (cd $dir/lib64 && find . \( -type f -o -type l \) -exec mv \{} $out/lib64/\{} \;)
+        fi
+      done
+      mv pkg/builds/cuda_nvcc/nvvm $out/nvvm
 
-    rm $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
+      mv pkg/builds/cuda_sanitizer_api $out/cuda_sanitizer_api
+      ln -s $out/cuda_sanitizer_api/compute-sanitizer/compute-sanitizer $out/bin/compute-sanitizer
+
+      mv pkg/builds/nsight_systems/target-linux-x64 $out/target-linux-x64
+      mv pkg/builds/nsight_systems/host-linux-x64 $out/host-linux-x64
+    ''}
+
+    rm -f $out/tools/CUDA_Occupancy_Calculator.xls # FIXME: why?
 
     ${lib.optionalString (lib.versionOlder version "10.1") ''
     # let's remove the 32-bit libraries, they confuse the lib64->lib mover
@@ -126,6 +151,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/nix-support
     echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
 
+    # Set the host compiler to be used by nvcc for CMake-based projects:
+    # https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
+    echo "cmakeFlags+=' -DCUDA_HOST_COMPILER=${gcc}/bin'" >> $out/nix-support/setup-hook
+
     # Move some libraries to the lib output so that programs that
     # depend on them don't pull in this entire monstrosity.
     mkdir -p $lib/lib
@@ -133,8 +162,9 @@ stdenv.mkDerivation rec {
 
     # Remove OpenCL libraries as they are provided by ocl-icd and driver.
     rm -f $out/lib64/libOpenCL*
-    ${lib.optionalString (lib.versionAtLeast version "10.1") ''
+    ${lib.optionalString (lib.versionAtLeast version "10.1" && (lib.versionOlder version "11")) ''
       mv $out/lib64 $out/lib
+      mv $out/extras/CUPTI/lib64/libcupti* $out/lib
     ''}
 
     # Set compiler for NVCC.
@@ -152,28 +182,41 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    for b in nvvp nsight; do
+    for b in nvvp ${lib.optionalString (lib.versionOlder version "11") "nsight"}; do
       wrapProgram "$out/bin/$b" \
         --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
     done
   '';
 
-  preFixup = ''
-    while IFS= read -r -d ''$'\0' i; do
-      if ! isELF "$i"; then continue; fi
-      echo "patching $i..."
-      if [[ ! $i =~ \.so ]]; then
-        patchelf \
-          --set-interpreter "''$(cat $NIX_CC/nix-support/dynamic-linker)" $i
-      fi
-      if [[ $i =~ libcudart ]]; then
-        rpath2=
-      else
-        rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
-      fi
-      patchelf --set-rpath "$rpath2" --force-rpath $i
-    done < <(find $out $lib $doc -type f -print0)
-  '';
+  preFixup =
+    let rpath = lib.concatStringsSep ":" [
+      (lib.makeLibraryPath (runtimeDependencies ++ [ "$lib" "$out" "$out/nvvm" ]))
+      "${stdenv.cc.cc.lib}/lib64"
+      "$out/jre/lib/amd64/jli"
+      "$out/lib64"
+      "$out/nvvm/lib64"
+    ];
+    in
+    ''
+      while IFS= read -r -d $'\0' i; do
+        if ! isELF "$i"; then continue; fi
+        echo "patching $i..."
+        if [[ ! $i =~ \.so ]]; then
+          patchelf \
+            --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $i
+        fi
+        if [[ $i =~ libcudart ]]; then
+          patchelf --remove-rpath $i
+        else
+          patchelf --set-rpath "${rpath}" --force-rpath $i
+        fi
+      done < <(find $out $lib $doc -type f -print0)
+    '' + lib.optionalString (lib.versionAtLeast version "11") ''
+      for file in $out/target-linux-x64/*.so; do
+        echo "patching $file..."
+        patchelf --set-rpath "${rpath}:\$ORIGIN" $file
+      done
+    '';
 
   # Set RPATH so that libcuda and other libraries in
   # /run/opengl-driver(-32)/lib can be found. See the explanation in
@@ -182,6 +225,10 @@ stdenv.mkDerivation rec {
   # --force-rpath prevents changing RPATH (set above) to RUNPATH.
   postFixup = ''
     addOpenGLRunpath --force-rpath {$out,$lib}/lib/lib*.so
+  '' + lib.optionalString (lib.versionAtLeast version "11") ''
+    addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/*
+    addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/x86/*
+    addOpenGLRunpath $out/target-linux-x64/*
   '';
 
   # cuda-gdb doesn't run correctly when not using sandboxing, so
@@ -207,10 +254,11 @@ stdenv.mkDerivation rec {
   '';
   passthru = {
     cc = gcc;
+    majorMinorVersion = lib.versions.majorMinor version;
     majorVersion = lib.versions.majorMinor version;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A compiler for NVIDIA GPUs, math libraries, and tools";
     homepage = "https://developer.nvidia.com/cuda-toolkit";
     platforms = [ "x86_64-linux" ];

@@ -10,8 +10,6 @@ let
 
   stateDir = "/var/lib/ntp";
 
-  ntpUser = "ntp";
-
   configFile = pkgs.writeText "ntp.conf" ''
     driftfile ${stateDir}/ntp.drift
 
@@ -23,9 +21,11 @@ let
     restrict -6 ::1
 
     ${toString (map (server: "server " + server + " iburst\n") cfg.servers)}
+
+    ${cfg.extraConfig}
   '';
 
-  ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup ${toString cfg.extraFlags}";
+  ntpFlags = "-c ${configFile} -u ntp:ntp ${toString cfg.extraFlags}";
 
 in
 
@@ -38,6 +38,7 @@ in
     services.ntp = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to synchronise your machine's time using ntpd, as a peer in
@@ -76,15 +77,28 @@ in
 
       servers = mkOption {
         default = config.networking.timeServers;
+        defaultText = literalExpression "config.networking.timeServers";
+        type = types.listOf types.str;
         description = ''
           The set of NTP servers from which to synchronise.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        example = ''
+          fudge 127.127.1.0 stratum 10
+        '';
+        description = ''
+          Additional text appended to <filename>ntp.conf</filename>.
         '';
       };
 
       extraFlags = mkOption {
         type = types.listOf types.str;
         description = "Extra flags passed to the ntpd command.";
-        example = literalExample ''[ "--interface=eth0" ]'';
+        example = literalExpression ''[ "--interface=eth0" ]'';
         default = [];
       };
 
@@ -104,11 +118,13 @@ in
 
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
 
-    users.users.${ntpUser} =
-      { uid = config.ids.uids.ntp;
+    users.users.ntp =
+      { isSystemUser = true;
+        group = "ntp";
         description = "NTP daemon user";
         home = stateDir;
       };
+    users.groups.ntp = {};
 
     systemd.services.ntpd =
       { description = "NTP Daemon";
@@ -120,7 +136,7 @@ in
         preStart =
           ''
             mkdir -m 0755 -p ${stateDir}
-            chown ${ntpUser} ${stateDir}
+            chown ntp ${stateDir}
           '';
 
         serviceConfig = {

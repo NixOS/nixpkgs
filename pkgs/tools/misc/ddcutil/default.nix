@@ -1,28 +1,49 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, glib, i2c-tools, udev, libgudev, libusb, libdrm, xorg }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, glib
+, i2c-tools
+, udev
+, kmod
+, libgudev
+, libusb1
+, libdrm
+, xorg
+}:
 
 stdenv.mkDerivation rec {
   pname = "ddcutil";
-  version = "0.9.8";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
-    owner  = "rockowitz";
-    repo   = "ddcutil";
-    rev    = "v${version}";
-    sha256 = "1r89cfw3ycqwvpfwwiqg8ykc1vyr1gf3ah30mvrmmalgmi6bnx5w";
+    owner = "rockowitz";
+    repo = "ddcutil";
+    rev = "v${version}";
+    sha256 = "0hbd2ybpqmm96icg387vr57dqkdbc20vyimqjq5yx0sdlp4ikzi7";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+
   buildInputs = [
-    i2c-tools udev libgudev
-    glib libusb libdrm xorg.libXrandr
+    glib
+    i2c-tools
+    kmod
+    libdrm
+    libgudev
+    libusb1
+    udev
+    xorg.libXrandr
   ];
 
-  meta = with stdenv.lib; {
-    homepage    = http://www.ddcutil.com/;
+  enableParallelBuilding = true;
+
+  meta = with lib; {
+    homepage = "http://www.ddcutil.com/";
     description = "Query and change Linux monitor settings using DDC/CI and USB";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

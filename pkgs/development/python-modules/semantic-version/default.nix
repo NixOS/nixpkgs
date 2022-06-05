@@ -1,20 +1,35 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-  pname = "semantic_version";
-  version = "2.8.4";
+  pname = "semantic-version";
+  version = "2.9.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "352459f640f3db86551d8054d1288608b29a96e880c7746f0a59c92879d412a3";
+    pname = "semantic_version";
+    inherit version;
+    sha256 = "sha256-q/VIc1U+Xgem/U1fZTt4H1rkEpekk2ZrWdzyFABqErI=";
   };
 
-  # ModuleNotFoundError: No module named 'tests'
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "semantic_version"
+  ];
 
   meta = with lib; {
     description = "A library implementing the 'SemVer' scheme";
-    license = licenses.bsdOriginal;
+    homepage = "https://github.com/rbarrois/python-semanticversion/";
+    license = licenses.bsd2;
     maintainers = with maintainers; [ layus makefu ];
   };
 }

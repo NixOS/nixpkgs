@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , isPy3k
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   checkInputs = [ matplotlib pytest ];
   doCheck = !isPy3k;  # https://github.com/marinkaz/nimfa/issues/42
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Nonnegative matrix factorization library";
     homepage = "http://nimfa.biolab.si";
     license = licenses.bsd3;

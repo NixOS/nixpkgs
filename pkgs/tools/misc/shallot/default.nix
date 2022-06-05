@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , openssl
 }:
 
@@ -30,16 +30,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: src/shallot.o:(.bss+0x8): multiple definition of `lucky_thread'; src/error.o:(.bss+0x8): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   installPhase = ''
     mkdir -p $out/bin
     cp ./shallot $out/bin/
   '';
 
   meta = {
-    description = "Shallot allows you to create customized .onion addresses for your hidden service";
+    description = "Allows you to create customized .onion addresses for your hidden service";
 
-    license = stdenv.lib.licenses.mit;
-    homepage = https://github.com/katmagic/Shallot;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    homepage = "https://github.com/katmagic/Shallot";
+    platforms = lib.platforms.linux;
   };
 }

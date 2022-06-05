@@ -12,9 +12,6 @@ let
     inherit (config.boot.loader.generationsDir) copyKernels;
   };
 
-  # Temporary check, for nixos to cope both with nixpkgs stdenv-updates and trunk
-  inherit (pkgs.stdenv.hostPlatform) platform;
-
 in
 
 {
@@ -59,7 +56,7 @@ in
 
     system.build.installBootLoader = generationsDirBuilder;
     system.boot.loader.id = "generationsDir";
-    system.boot.loader.kernelFile = platform.kernelTarget;
+    system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
 
   };
 }

@@ -1,38 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, nose
-, numpy
-, six
-, ruamel_yaml
+, pythonOlder
 , msgpack
-, coverage
-, coveralls
+, pytestCheckHook
+, numpy
+, pandas
+, pydantic
 , pymongo
-, lsof
+, ruamel-yaml
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "3.0.2";
-  disabled = isPy27; # uses type annotations
+  version = "2022.4.26";
+  disabled = pythonOlder "3.5"; # uses type annotations
 
-  # No tests in Pypi
   src = fetchFromGitHub {
     owner = "materialsvirtuallab";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1wxqxp0j7i6czdpr2r1imgmy3qbgn2l7d4za2h1lg3hllvx6jra1";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-SQku10nzTSuO5ISUDyDKAEoMhBBxPzyLNhoAyrlKH+E=";
   };
 
-  checkInputs = [ lsof nose numpy msgpack coverage coveralls pymongo];
-  propagatedBuildInputs = [ six ruamel_yaml ];
-
-  preCheck = ''
+  postPatch = ''
     substituteInPlace tests/test_os.py \
       --replace 'self.assertEqual("/usr/bin/find", which("/usr/bin/find"))' '#'
   '';
+
+  propagatedBuildInputs = [
+    ruamel-yaml
+    tqdm
+    msgpack
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    numpy
+    pandas
+    pydantic
+    pymongo
+  ];
 
   meta = with lib; {
     description = "Serves as a complement to the Python standard library by providing a suite of tools to solve many common problems";
@@ -41,7 +50,7 @@ buildPythonPackage rec {
       standard library. Examples include useful utilities like transparent support for zipped files, useful design
       patterns such as singleton and cached_class, and many more.
     ";
-    homepage = https://github.com/materialsvirtuallab/monty;
+    homepage = "https://github.com/materialsvirtuallab/monty";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

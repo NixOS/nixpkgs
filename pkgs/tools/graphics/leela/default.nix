@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig, poppler }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, poppler }:
 
 stdenv.mkDerivation {
-  name = "leela-12.fe7a35a";
+  pname = "leela";
+  version = "12.fe7a35a";
 
   src = fetchFromGitHub {
     owner = "TrilbyWhite";
@@ -10,16 +11,16 @@ stdenv.mkDerivation {
     sha256 = "1k6n758r9dhjmc1pnpk6qzpg0q7pkq2hf18z3b0s2z198jpkg9s3";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ poppler ];
 
   installFlags = [ "PREFIX=$(out)" "MANDIR=$(out)/share/man" ];
 
   meta = {
     description = "CLI frontend to the poppler-glib libary of PDF tools";
-    homepage = https://github.com/TrilbyWhite/Leela;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.puffnfresh ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/TrilbyWhite/Leela";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.puffnfresh ];
+    platforms = lib.platforms.linux;
   };
 }

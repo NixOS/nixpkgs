@@ -140,7 +140,7 @@ in
     services.nylon = mkOption {
       default = {};
       description = "Collection of named nylon instances";
-      type = with types; loaOf (submodule nylonOpts);
+      type = with types; attrsOf (submodule nylonOpts);
       internal = true;
     };
 
@@ -160,7 +160,7 @@ in
 
     users.groups.nylon.gid = config.ids.gids.nylon;
 
-    systemd.services = fold (a: b: a // b) {} nylonUnits;
+    systemd.services = foldr (a: b: a // b) {} nylonUnits;
 
   };
 }

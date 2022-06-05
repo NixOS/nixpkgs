@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, django, pytest, pytest-django }:
+{ lib, fetchFromGitHub, buildPythonPackage, django, pytest, pytest-django }:
 
 buildPythonPackage rec {
   pname = "django-logentry-admin";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "yprez";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ji04qklzhjb7fx6644vzikjb2196rxyi8hrwf2knsz41ndvq1l9";
+    sha256 = "1bndxgvisw8kk52zfdifvly6dl4833wqilxf77pg473172yaf5gq";
   };
 
   checkInputs = [ pytest pytest-django ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Show all LogEntry objects in the Django admin site";
     homepage = "https://github.com/yprez/django-logentry-admin";
     license = licenses.isc;

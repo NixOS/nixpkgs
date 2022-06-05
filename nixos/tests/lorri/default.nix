@@ -1,5 +1,5 @@
 import ../make-test-python.nix {
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     imports = [ ../../modules/profiles/minimal.nix ];
     environment.systemPackages = [ pkgs.lorri ];
   };
@@ -15,12 +15,12 @@ import ../make-test-python.nix {
 
     # Start the daemon and wait until it is ready
     machine.execute("lorri daemon > lorri.stdout 2> lorri.stderr &")
-    machine.wait_until_succeeds("grep --fixed-strings 'lorri: ready' lorri.stdout")
+    machine.wait_until_succeeds("grep --fixed-strings 'ready' lorri.stdout")
 
     # Ping the daemon
-    machine.execute("lorri ping_ $(readlink -f shell.nix)")
+    machine.succeed("lorri internal ping shell.nix")
 
     # Wait for the daemon to finish the build
-    machine.wait_until_succeeds("grep --fixed-strings 'OutputPaths' lorri.stdout")
+    machine.wait_until_succeeds("grep --fixed-strings 'Completed' lorri.stdout")
   '';
 }

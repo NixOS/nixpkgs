@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, unzip, zip, libiconv, perl, aspell, dos2unix
+{ lib, stdenv, fetchFromGitHub, unzip, zip, libiconv, perl, aspell, dos2unix
 , singleWordlist ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "scowl";
-  version = "2018.04.16";
+  version = "2020.12.07";
 
   src = fetchFromGitHub {
     owner = "en-wl";
     repo = "wordlist";
     rev = "rel-${version}";
-    sha256 = "0p0hgg5y88bb802z210cdk1c4fjwlpxxkci6yph3fk7g6s9xc73g";
+    sha256 = "sha256-J61jhpnZcXMnoGlSuSCrKDZnnyp3Snjr+fUpTVKX64g=";
   };
 
   postPatch = ''
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ unzip zip perl aspell dos2unix ];
-  buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  buildInputs = lib.optional (!stdenv.isLinux) libiconv;
 
   NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}$PWD/varcon"
   '';
 
-  postBuild = stdenv.lib.optionalString (singleWordlist == null) ''
+  postBuild = lib.optionalString (singleWordlist == null) ''
     (
     cd scowl/speller
     make aspell
@@ -102,11 +102,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    inherit version;
     description = "Spell checker oriented word lists";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [lib.maintainers.raskin];
+    platforms = lib.platforms.unix;
     homepage = "http://wordlist.aspell.net/";
   };
 }

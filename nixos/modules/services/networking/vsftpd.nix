@@ -116,7 +116,8 @@ let
         userlist_file=${cfg.userlistFile}
       ''}
       background=YES
-      listen=YES
+      listen=NO
+      listen_ipv6=YES
       nopriv_user=vsftpd
       secure_chroot_dir=/var/empty
       ${optionalString (cfg.localRoot != null) ''
@@ -133,8 +134,8 @@ let
       ${optionalString cfg.enableVirtualUsers ''
         guest_enable=YES
         guest_username=vsftpd
-        pam_service_name=vsftpd
       ''}
+      pam_service_name=vsftpd
       ${cfg.extraConfig}
     '';
 
@@ -152,13 +153,14 @@ in
 
       userlist = mkOption {
         default = [];
+        type = types.listOf types.str;
         description = "See <option>userlistFile</option>.";
       };
 
       userlistFile = mkOption {
         type = types.path;
         default = pkgs.writeText "userlist" (concatMapStrings (x: "${x}\n") cfg.userlist);
-        defaultText = "pkgs.writeText \"userlist\" (concatMapStrings (x: \"\${x}\n\") cfg.userlist)";
+        defaultText = literalExpression ''pkgs.writeText "userlist" (concatMapStrings (x: "''${x}\n") cfg.userlist)'';
         description = ''
           Newline separated list of names to be allowed/denied if <option>userlistEnable</option>
           is <literal>true</literal>. Meaning see <option>userlistDeny</option>.
@@ -281,7 +283,8 @@ in
 
     users.users = {
       "vsftpd" = {
-        uid = config.ids.uids.vsftpd;
+        group = "vsftpd";
+        isSystemUser = true;
         description = "VSFTPD user";
         home = if cfg.localRoot != null
                then cfg.localRoot # <= Necessary for virtual users.
@@ -296,6 +299,7 @@ in
         };
     };
 
+    users.groups.vsftpd = {};
     users.groups.ftp.gid = config.ids.gids.ftp;
 
     # If you really have to access root via FTP use mkOverride or userlistDeny

@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , libltc, libsndfile, libsamplerate, ftgl, freefont_ttf, libjack2
 , libGLU, lv2, gtk2, cairo, pango, fftwFloat, zita-convolver }:
 
 stdenv.mkDerivation rec {
-  version = "20191215";
+  version = "20220327";
   pname = "x42-plugins";
 
   src = fetchurl {
     url = "https://gareus.org/misc/x42-plugins/${pname}-${version}.tar.xz";
-    sha256 = "1mwfvhsvc0qgjyiwd8pmmam1mav43lmv39fljhmj9yri558v5g1c";
+    sha256 = "sha256-IhuPqTlCbCxExT5B9Au42RQQl4sDEvz6+HhsuT02KVs=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libGLU ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat zita-convolver ];
 
   # Don't remove this. The default fails with 'do not know how to unpack source archive'
@@ -26,14 +26,14 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     patchShebangs ./stepseq.lv2/gridgen.sh
-    patchShebangs ./matrixmixer.lv2/genttl.sh #TODO: remove at next update, see https://github.com/x42/matrixmixer.lv2/issues/2
-    patchShebangs ./matrixmixer.lv2/genhead.sh #TODO: remove at next update, see https://github.com/x42/matrixmixer.lv2/issues/2
+    patchShebangs ./matrixmixer.lv2/genttl.sh
+    patchShebangs ./matrixmixer.lv2/genhead.sh
     sed -i 's|/usr/include/zita-convolver.h|${zita-convolver}/include/zita-convolver.h|g' ./convoLV2/Makefile
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Collection of LV2 plugins by Robin Gareus";
-      homepage = https://github.com/x42/x42-plugins;
+      homepage = "https://github.com/x42/x42-plugins";
       maintainers = with maintainers; [ magnetophon ];
       license = licenses.gpl2;
       platforms = [ "i686-linux" "x86_64-linux" ];

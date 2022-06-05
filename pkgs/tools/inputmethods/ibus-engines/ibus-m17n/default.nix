@@ -1,7 +1,7 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , ibus
 , gtk3
 , m17n_lib
@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-m17n";
-  version = "1.4.1";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus-m17n";
     rev = version;
-    sha256 = "1xl7swqn46nhi43rka0zx666mpk667ykag3sz07x0zqrwi41frps";
+    sha256 = "sha256-N9hzyu2etbxlJPD2yUc2T0jxAfhEhshQ8X5R27JBg1E=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
     gettext
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
     "--with-gtk=3.0"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description = "m17n engine for ibus";
-    homepage = https://github.com/ibus/ibus-m17n;
-    license = licenses.gpl2;
+    homepage = "https://github.com/ibus/ibus-m17n";
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ericsagnes ];
   };

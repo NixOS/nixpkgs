@@ -18,10 +18,11 @@ let
   maintenancePath = lib.makeBinPath [ gawk gnused gnugrep coreutils which ];
 
 in stdenv.mkDerivation rec {
-  name = "dspam-3.10.2";
+  pname = "dspam";
+  version = "3.10.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dspam/dspam/${name}/${name}.tar.gz";
+    url = "mirror://sourceforge/dspam/dspam/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "1acklnxn1wvc7abn31l3qdj8q6k13s51k5gv86vka7q20jb5cxmf";
   };
 
@@ -51,6 +52,12 @@ in stdenv.mkDerivation rec {
     "--enable-external-lookup"
   ] ++ lib.optional withMySQL "--with-mysql-includes=${mysql57.connector-c}/include/mysql"
     ++ lib.optional withPgSQL "--with-pgsql-libraries=${postgresql.lib}/lib";
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: .libs/hash_drv.o:/build/dspam-3.10.2/src/util.h:96: multiple definition of `verified_user';
+  #     .libs/libdspam.o:/build/dspam-3.10.2/src/util.h:96: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   # Lots of things are hardwired to paths like sysconfdir. That's why we install with both "prefix" and "DESTDIR"
   # and fix directory structure manually after that.
@@ -99,9 +106,9 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = http://nuclearelephant.com/;
+    homepage = "http://dspam.sourceforge.net/";
     description = "Community Driven Antispam Filter";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };

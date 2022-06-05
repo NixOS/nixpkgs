@@ -3,45 +3,33 @@
 with lib;
 
 let
-  cfg = config.services.localtime;
+  cfg = config.services.localtimed;
 in {
   options = {
-    services.localtime = {
+    services.localtimed = {
       enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
-          Enable <literal>localtime</literal>, simple daemon for keeping the system
-          timezone up-to-date based on the current location. It uses geoclue2 to
-          determine the current location and systemd-timedated to actually set
-          the timezone.
+          Enable <literal>localtimed</literal>, a simple daemon for keeping the
+          system timezone up-to-date based on the current location. It uses
+          geoclue2 to determine the current location.
         '';
       };
     };
   };
 
   config = mkIf cfg.enable {
-    services.geoclue2 = {
-      enable = true;
-      appConfig.localtime = {
-        isAllowed = true;
-        isSystem = true;
-      };
+    services.geoclue2.appConfig.localtimed = {
+      isAllowed = true;
+      isSystem = true;
     };
 
-    # We use the 'out' output, since localtime has its 'bin' output
-    # first, so that is what we get if we use the derivation bare.
     # Install the polkit rules.
-    environment.systemPackages = [ pkgs.localtime.out ];
+    environment.systemPackages = [ pkgs.localtime ];
     # Install the systemd unit.
-    systemd.packages = [ pkgs.localtime.out ];
+    systemd.packages = [ pkgs.localtime ];
 
-    users.users.localtimed = {
-      description = "Taskserver user";
-    };
-
-    systemd.services.localtime = {
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig.Restart = "on-failure";
-    };
+    systemd.services.localtime.wantedBy = [ "multi-user.target" ];
   };
 }

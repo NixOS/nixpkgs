@@ -1,11 +1,11 @@
 {
-  mkDerivation, extra-cmake-modules,
+  mkDerivation, lib, extra-cmake-modules,
   kcoreaddons, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, knotifications,
-  kwidgetsaddons, kwindowsystem, polkit-qt
+  kwidgetsaddons, kwindowsystem, polkit-qt, qtbase
 }:
 
 mkDerivation {
-  name = "polkit-kde-agent";
+  pname = "polkit-kde-agent";
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [
     kdbusaddons kwidgetsaddons kcoreaddons kcrash kconfig ki18n kiconthemes

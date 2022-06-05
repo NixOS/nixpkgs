@@ -1,43 +1,34 @@
 diff --git a/internal/config/config.go b/internal/config/config.go
-index 2231851..c869930 100644
+index 36f8625..72ede08 100644
 --- a/internal/config/config.go
 +++ b/internal/config/config.go
-@@ -3,7 +3,6 @@ package config
- import (
- 	"io/ioutil"
- 	"net/url"
--	"os"
- 	"path"
- 	"path/filepath"
+@@ -12,7 +12,7 @@ import (
+ )
  
-@@ -38,16 +37,13 @@ type Config struct {
- }
+ const (
+-	configFile            = "config.yml"
++	configFile            = "shell-config.yml"
+ 	defaultSecretFileName = ".gitlab_shell_secret"
+ )
  
- func New() (*Config, error) {
--	dir, err := os.Getwd()
--	if err != nil {
--		return nil, err
--	}
-+	dir := "/run/gitlab"
- 
- 	return NewFromDir(dir)
- }
- 
- func NewFromDir(dir string) (*Config, error) {
--	return newFromFile(path.Join(dir, configFile))
-+	return newFromFile("/run/gitlab/shell-config.yml")
- }
- 
- func newFromFile(filename string) (*Config, error) {
+@@ -91,7 +91,7 @@ func (c *Config) GetHttpClient() *client.HttpClient {
+ // NewFromDirExternal returns a new config from a given root dir. It also applies defaults appropriate for
+ // gitlab-shell running in an external SSH server.
+ func NewFromDirExternal(dir string) (*Config, error) {
+-	cfg, err := newFromFile(filepath.Join(dir, configFile))
++	cfg, err := newFromFile(filepath.Join("/run/gitlab", configFile))
+ 	if err != nil {
+ 		return nil, err
+ 	}
 diff --git a/internal/keyline/key_line.go b/internal/keyline/key_line.go
-index c29a320..c44b701 100644
+index c6f2422..fb0426b 100644
 --- a/internal/keyline/key_line.go
 +++ b/internal/keyline/key_line.go
-@@ -36,7 +36,7 @@ func NewPrincipalKeyLine(keyId string, principal string, rootDir string) (*KeyLi
+@@ -37,7 +37,7 @@ func NewPrincipalKeyLine(keyId, principal string, config *config.Config) (*KeyLi
  }
  
  func (k *KeyLine) ToString() string {
--	command := fmt.Sprintf("%s %s-%s", path.Join(k.RootDir, executable.BinDir, executable.GitlabShell), k.Prefix, k.Id)
+-	command := fmt.Sprintf("%s %s-%s", path.Join(k.Config.RootDir, executable.BinDir, executable.GitlabShell), k.Prefix, k.Id)
 +	command := fmt.Sprintf("%s %s-%s", path.Join("/run/current-system/sw/bin", executable.GitlabShell), k.Prefix, k.Id)
  
  	return fmt.Sprintf(`command="%s",%s %s`, command, SshOptions, k.Value)

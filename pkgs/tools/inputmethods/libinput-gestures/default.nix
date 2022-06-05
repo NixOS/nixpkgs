@@ -5,13 +5,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "libinput-gestures";
-  version = "2.39";
+  version = "2.72";
 
   src = fetchFromGitHub {
     owner = "bulletmark";
     repo = "libinput-gestures";
     rev = version;
-    sha256 = "0bzyi55yhr9wyar9mnd09cr6pi88jkkp0f9lndm0a9jwi1xr4bdf";
+    sha256 = "sha256-si94aKyiJtRwg+JS0PazqRjGrA/zUwN8CCIKI5KLJNw=";
   };
   patches = [
     ./0001-hardcode-name.patch
@@ -44,8 +44,8 @@ stdenv.mkDerivation rec {
       wrapProgram "$out/bin/libinput-gestures" --prefix PATH : "${lib.makeBinPath ([coreutils] ++ extraUtilsPath)}"
     '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/bulletmark/libinput-gestures;
+  meta = with lib; {
+    homepage = "https://github.com/bulletmark/libinput-gestures";
     description = "Gesture mapper for libinput";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

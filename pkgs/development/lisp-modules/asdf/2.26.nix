@@ -1,23 +1,20 @@
-{stdenv, fetchurl, texinfo, texLive, perl}:
-let
-  s = # Generated upstream information
-  rec {
-    baseName="asdf";
-    version="2.26";
-    name="${baseName}-${version}";
-    url="http://common-lisp.net/project/asdf/archives/asdf-${version}.tar.gz";
-    sha256="1qzp444rgnqf1cz9v48nh0yvz7wjq9fjdpimifsfcjswaqi2xrdn";
-  };
-  buildInputs = [
-    texinfo texLive perl
-  ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
+{ lib, stdenv, fetchurl, texinfo, texLive, perl }:
+
+stdenv.mkDerivation rec {
+  pname = "asdf";
+  version = "2.26";
+
   src = fetchurl {
-    inherit (s) url sha256;
+    url = "http://common-lisp.net/project/asdf/archives/asdf-${version}.tar.gz";
+    sha256 = "sha256-tuUuIlZcS+a0izXeJl3Ckp+/PYAWkZ0+Cw7blwkh9+M=";
   };
+
+  strictDeps = true;
+  nativeBuildInputs = [
+    texinfo
+    texLive
+    perl
+  ];
 
   buildPhase = ''
     make asdf.lisp
@@ -31,11 +28,11 @@ stdenv.mkDerivation {
     cp -r doc/* "$out"/share/doc/asdf/
     ln -s  "$out"/lib/common-lisp/{asdf/uiop,uiop}
   '';
-  meta = {
-    inherit (s) version;
-    description = ''Standard software-system definition library for Common Lisp'';
-    license = stdenv.lib.licenses.mit ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+
+  meta = with lib; {
+    description = "Standard software-system definition library for Common Lisp";
+    license = licenses.mit;
+    maintainers = with maintainers; [ raskin ];
+    platforms = platforms.linux;
   };
 }

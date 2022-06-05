@@ -1,8 +1,18 @@
-{ stdenv, fetchFromGitHub, makeWrapper, rofi, mpc_cli, perl,
-utillinux, pythonPackages, libnotify }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, rofi
+, mpc-cli
+, perl
+, util-linux
+, python3Packages
+, libnotify
+}:
 
 stdenv.mkDerivation {
-  name = "clerk-2016-10-14";
+  pname = "clerk";
+  version = "unstable-2016-10-14";
 
   src = fetchFromGitHub {
     owner = "carnager";
@@ -11,20 +21,36 @@ stdenv.mkDerivation {
     sha256 = "0y045my65hr3hjyx13jrnyg6g3wb41phqb1m7azc4l6vx6r4124b";
   };
 
-  buildInputs = [ makeWrapper pythonPackages.mpd2 ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python3Packages.mpd2 ];
 
   dontBuild = true;
 
-  installPhase = ''
-    DESTDIR=$out PREFIX=/ make install
-    wrapProgram $out/bin/clerk \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ rofi mpc_cli perl utillinux libnotify ]}"
-  '';
+  strictDeps = true;
 
-  meta = with stdenv.lib; {
+  installPhase =
+    let
+      binPath = lib.makeBinPath [
+        libnotify
+        mpc-cli
+        perl
+        rofi
+        util-linux
+      ];
+    in
+      ''
+        runHook preInstall
+
+        DESTDIR=$out PREFIX=/ make install
+        wrapProgram $out/bin/clerk --prefix PATH : "${binPath}"
+
+        runHook postInstall
+      '';
+
+  meta = with lib; {
     description = "An MPD client built on top of rofi";
-    homepage    = https://github.com/carnager/clerk;
-    license     = licenses.mit;
+    homepage = "https://github.com/carnager/clerk";
+    license = licenses.mit;
     maintainers = with maintainers; [ anderspapitto ];
   };
 }

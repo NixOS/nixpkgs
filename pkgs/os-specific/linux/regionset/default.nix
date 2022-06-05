@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 let version = "0.2"; in
 stdenv.mkDerivation {
@@ -15,9 +15,9 @@ stdenv.mkDerivation {
     install -Dm644 {.,$out/share/man/man8}/regionset.8
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit version;
-    homepage = http://linvdr.org/projects/regionset/;
+    homepage = "http://linvdr.org/projects/regionset/";
     description = "Tool for changing the region code setting of DVD players";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

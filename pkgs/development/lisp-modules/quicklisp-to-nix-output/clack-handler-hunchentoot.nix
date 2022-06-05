@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''clack-handler-hunchentoot'';
-  version = ''clack-20190710-git'';
+  baseName = "clack-handler-hunchentoot";
+  version = "clack-20210411-git";
 
-  description = ''Clack handler for Hunchentoot.'';
+  description = "Clack handler for Hunchentoot.";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."chunga" args."cl_plus_ssl" args."cl-base64" args."cl-fad" args."cl-ppcre" args."clack-socket" args."flexi-streams" args."hunchentoot" args."md5" args."rfc2388" args."split-sequence" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2019-07-10/clack-20190710-git.tgz'';
-    sha256 = ''1642myknfaajcyqllnhn9s17yb6dbj1yh9wmg1kbplwq9c3yjs7k'';
+    url = "http://beta.quicklisp.org/archive/clack/2021-04-11/clack-20210411-git.tgz";
+    sha256 = "0yai9cx1gha684ljr8k1s5n4mi6mpj2wmvv6b9iw7pw1vhw5m8mf";
   };
 
   packageName = "clack-handler-hunchentoot";
@@ -18,9 +19,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM clack-handler-hunchentoot DESCRIPTION Clack handler for Hunchentoot.
-    SHA256 1642myknfaajcyqllnhn9s17yb6dbj1yh9wmg1kbplwq9c3yjs7k URL
-    http://beta.quicklisp.org/archive/clack/2019-07-10/clack-20190710-git.tgz
-    MD5 9d8869ca599652d68dd759c8a6adcd3d NAME clack-handler-hunchentoot
+    SHA256 0yai9cx1gha684ljr8k1s5n4mi6mpj2wmvv6b9iw7pw1vhw5m8mf URL
+    http://beta.quicklisp.org/archive/clack/2021-04-11/clack-20210411-git.tgz
+    MD5 c47deb6287b72fc9033055914787f3a5 NAME clack-handler-hunchentoot
     FILENAME clack-handler-hunchentoot DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
@@ -42,7 +43,7 @@ rec {
      cl-ppcre clack-socket flexi-streams hunchentoot md5 rfc2388 split-sequence
      trivial-backtrace trivial-features trivial-garbage trivial-gray-streams
      usocket)
-    VERSION clack-20190710-git SIBLINGS
+    VERSION clack-20210411-git SIBLINGS
     (clack-handler-fcgi clack-handler-toot clack-handler-wookie clack-socket
      clack-test clack-v1-compat clack t-clack-handler-fcgi
      t-clack-handler-hunchentoot t-clack-handler-toot t-clack-handler-wookie

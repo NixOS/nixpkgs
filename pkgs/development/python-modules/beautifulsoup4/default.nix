@@ -1,23 +1,44 @@
-{ stdenv, buildPythonPackage, fetchPypi, soupsieve, pytest, python }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, html5lib
+, lxml
+, pytestCheckHook
+, pythonOlder
+, soupsieve
+, sphinxHook
+}:
 
 buildPythonPackage rec {
   pname = "beautifulsoup4";
-  version = "4.8.2";
+  version = "4.11.1";
+  format = "setuptools";
+  outputs = ["out" "doc"];
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05fd825eb01c290877657a56df4c6e4c311b3965bda790c613a3d6fb01a5462a";
+    hash = "sha256-rZqlW2XvKAjrQF9Gz3Tff8twRNXLwmSH+W6y7y5DZpM=";
   };
 
-  checkInputs = [ pytest ];
-  checkPhase = ''
-    py.test $out/${python.sitePackages}/bs4/tests
-  '';
+  propagatedBuildInputs = [
+    html5lib
+    lxml
+    soupsieve
+  ];
 
-  propagatedBuildInputs = [ soupsieve ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+  nativeBuildInputs = [ sphinxHook ];
 
-  meta = with stdenv.lib; {
-    homepage = http://crummy.com/software/BeautifulSoup/bs4/;
+  pythonImportsCheck = [
+    "bs4"
+  ];
+
+  meta = with lib; {
+    homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
     description = "HTML and XML parser";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];

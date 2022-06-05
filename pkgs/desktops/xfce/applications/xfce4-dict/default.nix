@@ -1,11 +1,11 @@
-{ mkXfceDerivation, automakeAddFlags, gtk3, libxfce4ui, libxfce4util, xfce4-panel }:
+{ lib, mkXfceDerivation, automakeAddFlags, gtk3, libxfce4ui, libxfce4util, xfce4-panel }:
 
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-dict";
-  version = "0.8.2";
+  version = "0.8.4";
 
-  sha256 = "1zbb0k0984ny7wy4gbk6ymkh87rbfakpim54yq4r3h5ymslx7iv7";
+  sha256 = "sha256-UEkHB+i6hkTTjX62GCnr4uiCdZANuffSx2Nb2DF/pT4=";
 
   patches = [ ./configure-gio.patch ];
 
@@ -17,7 +17,8 @@ mkXfceDerivation {
 
   buildInputs = [ gtk3 libxfce4ui libxfce4util xfce4-panel ];
 
-  meta = {
+  meta = with lib; {
     description = "A Dictionary Client for the Xfce desktop environment";
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , fetchpatch
 , coreutils
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://wiki.sagemath.org/spkg/rubiks;
+  meta = with lib; {
+    homepage = "https://wiki.sagemath.org/spkg/rubiks";
     description = "Several programs for working with Rubik's cubes";
     # The individual websites are no longer available
     longDescription = ''
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
       gpl2 # Michael Reid's and Eric Dietz software
       mit # Dik T. Winter's software
     ];
-    maintainers = with maintainers; [ timokau ];
+    maintainers = teams.sage.members;
     platforms = platforms.unix;
   };
 }

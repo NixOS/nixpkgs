@@ -1,20 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, libX11, libXpm, libXext, libXfixes, libXmu }:
+{ lib, stdenv, fetchurl, pkg-config, libX11, libXpm, libXext, libXfixes, libXmu }:
 
-stdenv.mkDerivation {
-  name = "wmsystemtray-1.4";
+stdenv.mkDerivation rec {
+  pname = "wmsystemtray";
+  version = "1.4";
+
   src = fetchurl {
-     url = mirror://sourceforge/project/wmsystemtray/wmsystemtray/wmsystemtray-1.4.tar.gz;
-     sha256 = "8edef43691e9fff071000e29166c7c1ad420c0956e9068151061e881c8ac97e9";
+    url = "mirror://sourceforge/project/${pname}/${pname}/${pname}-${version}.tar.gz";
+     sha256 = "sha256-jt70NpHp//BxAA4pFmx8GtQgwJVukGgVEGHogcisl+k=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libX11 libXpm libXext libXfixes libXmu ];
 
-  meta = {
-    description = "Systemtray for Windowmaker";
-    homepage = http://wmsystemtray.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.bstrik ];
-    platforms = stdenv.lib.platforms.linux;
+  meta = with lib; {
+    description = "A system tray for Windowmaker";
+    homepage = "http://wmsystemtray.sourceforge.net";
+    license = licenses.gpl2Only;
+    maintainers = [ maintainers.bstrik ];
+    platforms = platforms.linux;
   };
 }

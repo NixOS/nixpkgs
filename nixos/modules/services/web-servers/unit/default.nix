@@ -14,7 +14,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.unit;
-        defaultText = "pkgs.unit";
+        defaultText = literalExpression "pkgs.unit";
         description = "Unit package to use.";
       };
       user = mkOption {
@@ -28,10 +28,12 @@ in {
         description = "Group account under which unit runs.";
       };
       stateDir = mkOption {
+        type = types.path;
         default = "/var/spool/unit";
         description = "Unit data directory.";
       };
       logDir = mkOption {
+        type = types.path;
         default = "/var/log/unit";
         description = "Unit log directory.";
       };
@@ -43,7 +45,7 @@ in {
             "applications": {}
           }
         '';
-        example = literalExample ''
+        example = ''
           {
             "listeners": {
               "*:8300": {
@@ -91,47 +93,58 @@ in {
       description = "Unit App Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ curl ];
       preStart = ''
-        test -f '${cfg.stateDir}/conf.json' || rm -f '${cfg.stateDir}/conf.json'
+        [ ! -e '${cfg.stateDir}/conf.json' ] || rm -f '${cfg.stateDir}/conf.json'
       '';
       postStart = ''
-        curl -X PUT --data-binary '@${configFile}' --unix-socket '/run/unit/control.unit.sock' 'http://localhost/config'
+        ${pkgs.curl}/bin/curl -X PUT --data-binary '@${configFile}' --unix-socket '/run/unit/control.unit.sock' 'http://localhost/config'
       '';
       serviceConfig = {
+        Type = "forking";
+        PIDFile = "/run/unit/unit.pid";
         ExecStart = ''
           ${cfg.package}/bin/unitd --control 'unix:/run/unit/control.unit.sock' --pid '/run/unit/unit.pid' \
-                                   --log '${cfg.logDir}/unit.log' --state '${cfg.stateDir}' --no-daemon \
+                                   --log '${cfg.logDir}/unit.log' --state '${cfg.stateDir}' --tmp '/tmp' \
                                    --user ${cfg.user} --group ${cfg.group}
         '';
-        # User and group
-        User = cfg.user;
-        Group = cfg.group;
-        # Capabilities
-        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" ];
-        # Security
-        NoNewPrivileges = true;
-        # Sanboxing
-        ProtectSystem = "full";
-        ProtectHome = true;
+        ExecStop = ''
+          ${pkgs.curl}/bin/curl -X DELETE --unix-socket '/run/unit/control.unit.sock' 'http://localhost/config'
+        '';
+        # Runtime directory and mode
         RuntimeDirectory = "unit";
         RuntimeDirectoryMode = "0750";
+        # Access write directories
+        ReadWritePaths = [ cfg.stateDir cfg.logDir ];
+        # Security
+        NoNewPrivileges = true;
+        # Sandboxing
+        ProtectSystem = "strict";
+        ProtectHome = true;
         PrivateTmp = true;
         PrivateDevices = true;
+        PrivateUsers = false;
         ProtectHostname = true;
+        ProtectClock = true;
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
+        ProtectKernelLogs = true;
         ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
+        RestrictSUIDSGID = true;
         PrivateMounts = true;
+        # System Call Filtering
+        SystemCallArchitectures = "native";
       };
     };
 
     users.users = optionalAttrs (cfg.user == "unit") {
-      unit.group = cfg.group;
-      isSystemUser = true;
+      unit = {
+        group = cfg.group;
+        isSystemUser = true;
+      };
     };
 
     users.groups = optionalAttrs (cfg.group == "unit") {

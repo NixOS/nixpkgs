@@ -13,8 +13,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  modSha256 = "0f10b86gyn7m7lw43c8y1m30mdg0i092a319v3cb2qj05jb9vn42";
-  goPackagePath = "github.com/b4b4r07/history";
+  vendorSha256 = "1863ad97y82fx0an1ysalkxnqjz3zfz228wag9a92wdssl1vwzws";
+
+  doCheck = false;
 
   postInstall = ''
     install -d $out/share
@@ -24,10 +25,11 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A CLI to provide enhanced history for your ZSH shell";
+    homepage = "https://github.com/b4b4r07/history";
     license = licenses.mit;
-    homepage = https://github.com/b4b4r07/history;
+    maintainers = with maintainers; [ ];
+    mainProgram = "history";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ kampka ];
   };
 
   passthru.tests = {

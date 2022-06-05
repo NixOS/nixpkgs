@@ -52,7 +52,13 @@ let
     set  -s escape-time       ${toString cfg.escapeTime}
     set  -g history-limit     ${toString cfg.historyLimit}
 
-    ${cfg.extraTmuxConf}
+    ${lib.optionalString (cfg.plugins != []) ''
+    # Run plugins
+    ${lib.concatMapStringsSep "\n" (x: "run-shell ${x.rtp}") cfg.plugins}
+
+    ''}
+
+    ${cfg.extraConfig}
   '';
 
 in {
@@ -102,7 +108,7 @@ in {
         description = "Time in milliseconds for which tmux waits after an escape is input.";
       };
 
-      extraTmuxConf = mkOption {
+      extraConfig = mkOption {
         default = "";
         description = ''
           Additional contents of /etc/tmux.conf
@@ -165,6 +171,13 @@ in {
           downside it doesn't survive user logout.
         '';
       };
+
+      plugins = mkOption {
+        default = [];
+        type = types.listOf types.package;
+        description = "List of plugins to install.";
+        example = lib.literalExpression "[ pkgs.tmuxPlugins.nord ]";
+      };
     };
   };
 
@@ -174,11 +187,15 @@ in {
     environment = {
       etc."tmux.conf".text = tmuxConf;
 
-      systemPackages = [ pkgs.tmux ];
+      systemPackages = [ pkgs.tmux ] ++ cfg.plugins;
 
       variables = {
         TMUX_TMPDIR = lib.optional cfg.secureSocket ''''${XDG_RUNTIME_DIR:-"/run/user/$(id -u)"}'';
       };
     };
   };
+
+  imports = [
+    (lib.mkRenamedOptionModule [ "programs" "tmux" "extraTmuxConf" ] [ "programs" "tmux" "extraConfig" ])
+  ];
 }

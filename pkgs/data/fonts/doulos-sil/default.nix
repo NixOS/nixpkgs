@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "5.000";
+  version = "6.101";
 in
   fetchzip rec {
     name = "doulos-sil-${version}";
@@ -14,10 +14,10 @@ in
       unzip -j $downloadedFile \*OFL.txt \*OFL-FAQ.txt \*README.txt \*FONTLOG.txt -d "$out/share/doc/${name}"
     '';
 
-    sha256 = "04a9cr7jbw7d8llcj8xsqp9rp8w6gcgbd9sdwvi02kz7jhqa0vad";
+    sha256 = "sha256-vYdnudMkkWz6r8pwq98fyO0zcfFBRPmrqlmWxHCOIcc=";
 
     meta = with lib; {
-      homepage = https://software.sil.org/doulos;
+      homepage = "https://software.sil.org/doulos";
       description = "A font that provides complete support for the International Phonetic Alphabet";
       longDescription = ''
       This Doulos SIL font is essentially the same design as the SIL Doulos font first released by SIL in 1992. The design has been changed from the original in that it has been scaled down to be a better match with contemporary digital fonts, such as Times New Roman®. This current release is a regular typeface, with no bold or italic version available or planned. It is intended for use alongside other Times-like fonts where a range of styles (italic, bold) are not needed. Therefore, just one font is included in the Doulos SIL release: Doulos SIL Regular.

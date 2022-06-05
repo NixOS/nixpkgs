@@ -1,7 +1,8 @@
-diff -ur cmake-3.12.1/Utilities/cmlibuv/CMakeLists.txt cmake-3.12.1-patched/Utilities/cmlibuv/CMakeLists.txt
---- cmake-3.12.1/Utilities/cmlibuv/CMakeLists.txt	2018-08-09 21:14:08.000000000 +0900
-+++ cmake-3.12.1-patched/Utilities/cmlibuv/CMakeLists.txt	2018-08-13 10:14:53.000000000 +0900
-@@ -173,6 +173,22 @@
+diff --git a/Utilities/cmlibuv/CMakeLists.txt b/Utilities/cmlibuv/CMakeLists.txt
+index 7625cf65d9..167903e309 100644
+--- a/Utilities/cmlibuv/CMakeLists.txt
++++ b/Utilities/cmlibuv/CMakeLists.txt
+@@ -193,6 +193,22 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
      src/unix/kqueue.c
      src/unix/proctitle.c
      )
@@ -24,9 +25,10 @@ diff -ur cmake-3.12.1/Utilities/cmlibuv/CMakeLists.txt cmake-3.12.1-patched/Util
  endif()
  
  if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-diff -ur cmake-3.12.1/Utilities/cmlibuv/src/unix/fsevents.c cmake-3.12.1-patched/Utilities/cmlibuv/src/unix/fsevents.c
---- cmake-3.12.1/Utilities/cmlibuv/src/unix/fsevents.c	2018-08-09 21:14:08.000000000 +0900
-+++ cmake-3.12.1-patched/Utilities/cmlibuv/src/unix/fsevents.c	2018-08-13 10:01:29.000000000 +0900
+diff --git a/Utilities/cmlibuv/src/unix/fsevents.c b/Utilities/cmlibuv/src/unix/fsevents.c
+index a51f29b3f6..3f6bf01968 100644
+--- a/Utilities/cmlibuv/src/unix/fsevents.c
++++ b/Utilities/cmlibuv/src/unix/fsevents.c
 @@ -21,7 +21,7 @@
  #include "uv.h"
  #include "internal.h"
@@ -35,17 +37,17 @@ diff -ur cmake-3.12.1/Utilities/cmlibuv/src/unix/fsevents.c cmake-3.12.1-patched
 +#if !HAVE_CORESERVICES_CORESERVICES_H || MAC_OS_X_VERSION_MAX_ALLOWED < 1070
  
  /* iOS (currently) doesn't provide the FSEvents-API (nor CoreServices) */
- 
-@@ -38,7 +38,7 @@
+ /* macOS prior to 10.7 doesn't provide the full FSEvents API so use kqueue */
+@@ -39,7 +39,7 @@ int uv__fsevents_close(uv_fs_event_t* handle) {
  void uv__fsevents_loop_delete(uv_loop_t* loop) {
  }
  
 -#else /* TARGET_OS_IPHONE */
 +#else /* !HAVE_CORESERVICES_CORESERVICES_H */
  
- #include <dlfcn.h>
- #include <assert.h>
-@@ -916,4 +916,4 @@
+ #include "darwin-stub.h"
+ 
+@@ -920,4 +920,4 @@ int uv__fsevents_close(uv_fs_event_t* handle) {
    return 0;
  }
  

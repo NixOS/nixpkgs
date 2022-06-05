@@ -1,11 +1,10 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, tox
-, pytest
 , ansicolors
+, buildPythonPackage
 , coverage
-, pytestcov
+, fetchPypi
+, pytest-cov
+, pytestCheckHook
 , textwrap3
 }:
 
@@ -20,24 +19,19 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    tox
-    pytest
     ansicolors
     coverage
-    pytestcov
+    pytest-cov
+    pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
-    textwrap3
-  ];
+  propagatedBuildInputs = [ textwrap3 ];
 
-  checkPhase = ''
-    pytest
-  '';
+  pythonImportsCheck = [ "ansiwrap" ];
 
   meta = with lib; {
     description = "Textwrap, but savvy to ANSI colors and styles";
-    homepage = https://github.com/jonathaneunice/ansiwrap;
+    homepage = "https://github.com/jonathaneunice/ansiwrap";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

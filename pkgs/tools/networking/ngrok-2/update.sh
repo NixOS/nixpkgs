@@ -29,5 +29,6 @@ get_download_info() {
     get_download_info linux arm
     get_download_info linux arm64
     get_download_info darwin amd64
+    get_download_info darwin arm64
 ) | jq --slurp 'map ({ (.sys): . }) | add' \
     > pkgs/tools/networking/ngrok-2/versions.json

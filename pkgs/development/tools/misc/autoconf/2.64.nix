@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, m4, perl }:
+{ lib, stdenv, fetchurl, m4, perl }:
 
 stdenv.mkDerivation rec {
-  name = "autoconf-2.64";
+  pname = "autoconf";
+  version = "2.64";
 
   src = fetchurl {
-    url = "mirror://gnu/autoconf/${name}.tar.xz";
+    url = "mirror://gnu/autoconf/autoconf-${version}.tar.xz";
     sha256 = "0j3jdjpf5ly39dlp0bg70h72nzqr059k0x8iqxvaxf106chpgn9j";
   };
 
@@ -24,14 +25,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Make the Autotest test suite run in parallel.
-  preCheck =''
+  preCheck = ''
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"
   '';
 
   doInstallCheck = false; # fails
 
   meta = {
-    homepage = https://www.gnu.org/software/autoconf/;
+    homepage = "https://www.gnu.org/software/autoconf/";
     description = "Part of the GNU Build System";
 
     longDescription = ''
@@ -44,8 +45,8 @@ stdenv.mkDerivation rec {
       can use, in the form of M4 macro calls.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

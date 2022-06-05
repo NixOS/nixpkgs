@@ -1,41 +1,68 @@
-{ stdenv
+{ lib
 , fetchFromGitHub
 , buildPythonPackage
-, pyusb
+, cython
+, git
+, pkgconfig
+, setuptools-scm
+, future
 , numpy
+, pyusb
+, mock
+, pytestCheckHook
+, zipp
 }:
 
 ## Usage
-# In NixOS, simply add the `udev` multiple output to services.udev.packages:
-#   services.udev.packages = [ pkgs.python3Packages.seabreeze.udev ];
+# In NixOS, add the package to services.udev.packages for non-root plugdev
+# users to get device access permission:
+#    services.udev.packages = [ pkgs.python3Packages.seabreeze ];
 
 buildPythonPackage rec {
   pname = "seabreeze";
-  version = "0.6.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
-    rev = "python-seabreeze-v${version}";
-    sha256 = "0bc2s9ic77gz9m40w89snixphxlzib60xa4f49n4zasjrddfz1l8";
+    rev = "v${version}";
+    sha256 = "1hm9aalpb9sdp8s7ckn75xvyiacp5678pv9maybm5nz0z2h29ibq";
+    leaveDotGit = true;
   };
 
-  outputs = [ "out" "udev" ];
-
-  postInstall = ''
-    mkdir -p $udev/lib/udev/rules.d
-    cp misc/10-oceanoptics.rules $udev/lib/udev/rules.d/10-oceanoptics.rules
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner",' ""
   '';
 
-  # underlying c libraries are tested and fail
-  # (c libs are used with anaconda, which we don't care about as we use the alternative path, being that of pyusb).
-  doCheck = false;
+  nativeBuildInputs = [
+    cython
+    git
+    pkgconfig
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [ pyusb numpy ];
+  propagatedBuildInputs = [
+    future
+    numpy
+    pyusb
+  ];
+
+  postInstall = ''
+    mkdir -p $out/etc/udev/rules.d
+    cp os_support/10-oceanoptics.rules $out/etc/udev/rules.d/10-oceanoptics.rules
+  '';
+
+  # few backends enabled, but still some tests
+  checkInputs = [
+    pytestCheckHook
+    mock
+    zipp
+  ];
 
   setupPyBuildFlags = [ "--without-cseabreeze" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/ap--/python-seabreeze";
     description = "A python library to access Ocean Optics spectrometers";
     maintainers = [];

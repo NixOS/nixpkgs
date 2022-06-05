@@ -1,14 +1,14 @@
 diff --git a/tests/test_sftp.py b/tests/test_sftp.py
-index db9cc88..234004b 100644
+index d94379f..4ee46a9 100644
 --- a/tests/test_sftp.py
 +++ b/tests/test_sftp.py
-@@ -957,8 +957,8 @@ class _TestSFTP(_CheckSFTP):
+@@ -955,8 +955,8 @@ class _TestSFTP(_CheckSFTP):
  
          try:
              self._create_file('file')
--            yield from sftp.chmod('file', 0o4321)
+-            await sftp.chmod('file', 0o4321)
 -            self.assertEqual(stat.S_IMODE(os.stat('file').st_mode), 0o4321)
-+            yield from sftp.chmod('file', 0o1234)
++            await sftp.chmod('file', 0o1234)
 +            self.assertEqual(stat.S_IMODE(os.stat('file').st_mode), 0o1234)
          finally:
              remove('file')

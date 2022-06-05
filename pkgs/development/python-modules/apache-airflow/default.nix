@@ -1,188 +1,249 @@
 { lib
 , stdenv
+, python
 , buildPythonPackage
-, fetchPypi
 , fetchFromGitHub
-, fetchpatch
 , alembic
+, argcomplete
+, attrs
+, blinker
 , cached-property
-, configparser
+, cattrs
+, clickclick
 , colorlog
 , croniter
+, cryptography
+, dataclasses
 , dill
 , flask
-, flask-appbuilder
-, flask-admin
-, flask-caching
 , flask_login
-, flask-swagger
-, flask_wtf
-, flask-bcrypt
-, funcsigs
-, future
+, flask-wtf
+, flask-appbuilder
+, flask-caching
 , GitPython
+, graphviz
 , gunicorn
+, httpx
 , iso8601
-, json-merge-patch
+, importlib-resources
+, importlib-metadata
+, inflection
+, itsdangerous
 , jinja2
-, ldap3
-, lxml
+, jsonschema
 , lazy-object-proxy
+, lockfile
 , markdown
+, markupsafe
+, marshmallow-oneofschema
+, numpy
+, openapi-spec-validator
 , pandas
 , pendulum
 , psutil
 , pygments
+, pyjwt
 , python-daemon
 , python-dateutil
-, requests
+, python-nvd3
+, python-slugify
+, python3-openid
+, pythonOlder
+, pyyaml
+, rich
 , setproctitle
-, snakebite
 , sqlalchemy
+, sqlalchemy-jsonfield
+, swagger-ui-bundle
 , tabulate
 , tenacity
 , termcolor
-, text-unidecode
-, thrift
-, tzlocal
 , unicodecsv
 , werkzeug
-, zope_deprecation
-, enum34
-, typing
-, nose
-, python
-, isPy3k
+, pytestCheckHook
+, freezegun
+, mkYarnPackage
 }:
+let
+  version = "2.2.4";
 
-buildPythonPackage rec {
-  pname = "apache-airflow";
-  version = "1.10.5";
-  disabled = (!isPy3k);
-
-  src = fetchFromGitHub rec {
+  airflow-src = fetchFromGitHub rec {
     owner = "apache";
     repo = "airflow";
     rev = version;
-    sha256 = "14fmhfwx977c9jdb2kgm93i6acx43l45ggj30rb37r68pzpb6l6h";
+    sha256 = "sha256-JCcEgCq1sB8lBaeJy7QQbWU00sGAh5vUmJAptF8M9qo=";
   };
 
-  patches = [
-       # Not yet accepted: https://github.com/apache/airflow/pull/6562
-     (fetchpatch {
-       name = "avoid-warning-from-abc.collections";
-       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6562.patch;
-       sha256 = "0swpay1qlb7f9kgc56631s1qd9k82w4nw2ggvkm7jvxwf056k61z";
-     })
-       # Not yet accepted: https://github.com/apache/airflow/pull/6561
-     (fetchpatch {
-       name = "pendulum2-compatibility";
-       url = https://patch-diff.githubusercontent.com/raw/apache/airflow/pull/6561.patch;
-       sha256 = "17hw8qyd4zxvib9zwpbn32p99vmrdz294r31gnsbkkcl2y6h9knk";
-     })
-  ];
+  # airflow bundles a web interface, which is built using webpack by an undocumented shell script in airflow's source tree.
+  # This replicates this shell script, fixing bugs in yarn.lock and package.json
+
+  airflow-frontend = mkYarnPackage {
+    name = "airflow-frontend";
+
+    src = "${airflow-src}/airflow/www";
+    packageJSON = ./package.json;
+    yarnLock = ./yarn.lock;
+    yarnNix = ./yarn.nix;
+
+    distPhase = "true";
+
+    configurePhase = ''
+      cp -r $node_modules node_modules
+    '';
+
+    buildPhase = ''
+      yarn --offline build
+      find package.json yarn.lock static/css static/js -type f | sort | xargs md5sum > static/dist/sum.md5
+    '';
+
+    installPhase = ''
+      mkdir -p $out/static/
+      cp -r static/dist $out/static
+    '';
+  };
+
+in
+buildPythonPackage rec {
+  pname = "apache-airflow";
+  inherit version;
+  src = airflow-src;
+
+  disabled = pythonOlder "3.6";
 
   propagatedBuildInputs = [
     alembic
+    argcomplete
+    attrs
+    blinker
     cached-property
+    cattrs
+    clickclick
     colorlog
-    configparser
     croniter
+    cryptography
     dill
     flask
-    flask-admin
     flask-appbuilder
-    flask-bcrypt
     flask-caching
     flask_login
-    flask-swagger
-    flask_wtf
-    funcsigs
-    future
+    flask-wtf
     GitPython
+    graphviz
     gunicorn
+    httpx
     iso8601
-    json-merge-patch
+    importlib-resources
+    inflection
+    itsdangerous
     jinja2
-    ldap3
-    lxml
+    jsonschema
     lazy-object-proxy
+    lockfile
     markdown
+    markupsafe
+    marshmallow-oneofschema
+    numpy
+    openapi-spec-validator
     pandas
     pendulum
     psutil
     pygments
+    pyjwt
     python-daemon
     python-dateutil
-    requests
+    python-nvd3
+    python-slugify
+    python3-openid
+    pyyaml
+    rich
     setproctitle
     sqlalchemy
+    sqlalchemy-jsonfield
+    swagger-ui-bundle
     tabulate
     tenacity
     termcolor
-    text-unidecode
-    thrift
-    tzlocal
     unicodecsv
     werkzeug
-    zope_deprecation
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    dataclasses
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-metadata
+  ];
+
+  buildInputs = [
+    airflow-frontend
   ];
 
   checkInputs = [
-    snakebite
-    nose
+    freezegun
+    pytestCheckHook
   ];
 
+  INSTALL_PROVIDERS_FROM_SOURCES = "true";
+
   postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "attrs>=20.0, <21.0" "attrs" \
+      --replace "cattrs~=1.1, <1.7.0" "cattrs" \
+      --replace "colorlog>=4.0.2, <6.0" "colorlog" \
+      --replace "croniter>=0.3.17, <1.1" "croniter" \
+      --replace "docutils<0.17" "docutils" \
+      --replace "flask-login>=0.3, <0.5" "flask-login" \
+      --replace "flask-wtf>=0.14.3, <0.15" "flask-wtf" \
+      --replace "flask>=1.1.0, <2.0" "flask" \
+      --replace "importlib_resources~=1.4" "importlib_resources" \
+      --replace "itsdangerous>=1.1.0, <2.0" "itsdangerous" \
+      --replace "markupsafe>=1.1.1, <2.0" "markupsafe" \
+      --replace "pyjwt<2" "pyjwt" \
+      --replace "python-slugify>=3.0.0,<5.0" "python-slugify" \
+      --replace "sqlalchemy_jsonfield~=1.0" "sqlalchemy-jsonfield" \
+      --replace "tenacity~=6.2.0" "tenacity" \
+      --replace "werkzeug~=1.0, >=1.0.1" "werkzeug"
 
-   substituteInPlace setup.py \
-     --replace "flask>=1.1.0, <2.0" "flask" \
-     --replace "flask-caching>=1.3.3, <1.4.0" "flask-caching" \
-     --replace "flask-appbuilder>=1.12.5, <2.0.0" "flask-appbuilder" \
-     --replace "pendulum==1.4.4" "pendulum" \
-     --replace "cached_property~=1.5" "cached_property" \
-     --replace "dill>=0.2.2, <0.3" "dill" \
-     --replace "configparser>=3.5.0, <3.6.0" "configparser" \
-     --replace "jinja2>=2.7.3, <=2.10.0" "jinja2" \
-     --replace "funcsigs==1.0.0" "funcsigs" \
-     --replace "flask-swagger==0.2.13" "flask-swagger" \
-     --replace "python-daemon>=2.1.1, <2.2" "python-daemon" \
-     --replace "alembic>=0.9, <1.0" "alembic" \
-     --replace "markdown>=2.5.2, <3.0" "markdown" \
-     --replace "future>=0.16.0, <0.17" "future" \
-     --replace "tenacity==4.12.0" "tenacity" \
-     --replace "text-unidecode==1.2" "text-unidecode" \
-     --replace "tzlocal>=1.4,<2.0.0" "tzlocal" \
-     --replace "sqlalchemy~=1.3" "sqlalchemy" \
-     --replace "werkzeug>=0.14.1, <0.15.0" "werkzeug"
- 
-  # dumb-init is only needed for CI and Docker, not relevant for NixOS.
-  substituteInPlace setup.py \
-     --replace "'dumb-init>=1.2.2'," ""
-
-   substituteInPlace tests/core.py \
-     --replace "/bin/bash" "${stdenv.shell}"
+    substituteInPlace tests/core/test_core.py \
+      --replace "/bin/bash" "${stdenv.shell}"
+  '' + lib.optionalString stdenv.isDarwin ''
+    # Fix failing test on Hydra
+    substituteInPlace airflow/utils/db.py \
+      --replace "/tmp/sqlite_default.db" "$TMPDIR/sqlite_default.db"
   '';
 
-  checkPhase = ''
-   export HOME=$(mktemp -d)
-   export AIRFLOW_HOME=$HOME
-   export AIRFLOW__CORE__UNIT_TEST_MODE=True
-   export AIRFLOW_DB="$HOME/airflow.db"
-   export PATH=$PATH:$out/bin
+  # allow for gunicorn processes to have access to Python packages
+  makeWrapperArgs = [
+    "--prefix PYTHONPATH : $PYTHONPATH"
+  ];
 
-   airflow version
-   airflow initdb
-   airflow resetdb -y
-   nosetests tests.core.CoreTest
-   ## all tests
-   # nosetests --cover-package=airflow
+  preCheck = ''
+    export HOME=$(mktemp -d)
+    export AIRFLOW_HOME=$HOME
+    export AIRFLOW__CORE__UNIT_TEST_MODE=True
+    export AIRFLOW_DB="$HOME/airflow.db"
+    export PATH=$PATH:$out/bin
+
+    airflow version
+    airflow db init
+    airflow db reset -y
+  '';
+
+  pytestFlagsArray = [
+    "tests/core/test_core.py"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "bash_operator_kill" # psutil.AccessDenied
+  ];
+
+  postInstall = ''
+    cp -rv ${airflow-frontend}/static/dist $out/lib/${python.libPrefix}/site-packages/airflow/www/static
   '';
 
   meta = with lib; {
     description = "Programmatically author, schedule and monitor data pipelines";
-    homepage = http://airflow.apache.org/;
+    homepage = "https://airflow.apache.org/";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc maintainers.ingenieroariel ];
+    maintainers = with maintainers; [ bhipple costrouc ingenieroariel ];
+    # requires extremely outdated versions of multiple dependencies
+    broken = true;
   };
 }

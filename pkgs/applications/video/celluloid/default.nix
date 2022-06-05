@@ -1,45 +1,46 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, meson
-, ninja
-, python3
-, gettext
-, pkgconfig
-, desktop-file-utils
-, wrapGAppsHook
 , appstream-glib
-, epoxy
+, desktop-file-utils
+, libepoxy
 , glib
-, gtk3
+, gtk4
+, wayland
+, meson
 , mpv
+, ninja
+, nix-update-script
+, pkg-config
+, python3
+, wrapGAppsHook4
 }:
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.18";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     rev = "v${version}";
-    sha256 = "1j8z75y98liirr41rlcn89cshvp1xp71cspcclm6wx455i7q2cg1";
+    hash = "sha256-YKDud/UJJx9ko5k+Oux8mUUme0MXaRMngESE14Hhxv8=";
   };
 
   nativeBuildInputs = [
+    appstream-glib
+    desktop-file-utils
     meson
     ninja
+    pkg-config
     python3
-    appstream-glib
-    gettext
-    pkgconfig
-    desktop-file-utils
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
-
   buildInputs = [
-    epoxy
+    libepoxy
     glib
-    gtk3
+    gtk4
+    wayland
     mpv
   ];
 
@@ -49,16 +50,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    homepage = "https://github.com/celluloid-player/celluloid";
     description = "Simple GTK frontend for the mpv video player";
     longDescription = ''
-      GNOME MPV interacts with mpv via the client API exported by libmpv,
-      allowing access to mpv's powerful playback capabilities through an
-      easy-to-use user interface.
+      Celluloid (formerly GNOME MPV) is a simple GTK+ frontend for mpv.
+      Celluloid interacts with mpv via the client API exported by libmpv,
+      allowing access to mpv's powerful playback capabilities.
     '';
-    homepage = "https://github.com/celluloid-player/celluloid";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
+  };
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
   };
 }

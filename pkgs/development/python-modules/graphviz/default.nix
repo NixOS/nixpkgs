@@ -1,49 +1,71 @@
 { lib
+, stdenv
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , substituteAll
 , graphviz
+, xdg-utils
 , makeFontsConf
 , freefont_ttf
 , mock
 , pytest
 , pytest-mock
-, pytestcov
+, python
 }:
 
 buildPythonPackage rec {
   pname = "graphviz";
-  version = "0.10.1";
+  version = "0.20";
+
+  disabled = pythonOlder "3.7";
 
   # patch does not apply to PyPI tarball due to different line endings
   src = fetchFromGitHub {
     owner = "xflr6";
     repo = "graphviz";
     rev = version;
-    sha256 = "1vqk4xy45c72la56j24z9jmjp5a0aa2k32fybnlbkzqjvvbl72d8";
+    hash = "sha256-QyZwXxRbcMushxh/Ypy+v4FOTM4H1u5b7IZMSVgLyEs=";
   };
 
   patches = [
     (substituteAll {
-      src = ./hardcode-graphviz-path.patch;
+      src = ./paths.patch;
       inherit graphviz;
+      xdgutils = xdg-utils;
     })
   ];
 
-  # Fontconfig error: Cannot load default config file 
-  FONTCONFIG_FILE = makeFontsConf { 
-    fontDirectories = [ freefont_ttf ]; 
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+
+  # Fontconfig error: Cannot load default config file
+  FONTCONFIG_FILE = makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
   };
 
-  checkInputs = [ mock pytest pytest-mock pytestcov ];
+  checkInputs = [
+    mock
+    pytest
+    pytest-mock
+  ];
 
   checkPhase = ''
-    pytest
+    runHook preCheck
+
+    HOME=$TMPDIR ${python.interpreter} run-tests.py
+
+    runHook postCheck
   '';
+
+  # Too many failures due to attempting to connect to com.apple.fonts daemon
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Simple Python interface for Graphviz";
-    homepage = https://github.com/xflr6/graphviz;
+    homepage = "https://github.com/xflr6/graphviz";
+    changelog = "https://github.com/xflr6/graphviz/blob/${src.rev}/CHANGES.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

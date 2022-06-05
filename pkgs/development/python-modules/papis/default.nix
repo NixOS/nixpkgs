@@ -1,66 +1,121 @@
-{ lib, buildPythonPackage, fetchFromGitHub, xdg_utils
-, requests, filetype, pyparsing, configparser, arxiv2bib
-, pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
-, pylibgen, click, python-slugify, habanero, isbnlib
-, prompt_toolkit, pygments, stevedore, tqdm, lxml
-, python-doi, isPy3k, pythonOlder
-#, optional, dependencies
-, whoosh, pytest
+{ lib
 , stdenv
+, arxiv2bib
+, beautifulsoup4
+, bibtexparser
+, buildPythonPackage
+, chardet
+, click
+, colorama
+, configparser
+, fetchFromGitHub
+, filetype
+, habanero
+, isbnlib
+, lxml
+, prompt-toolkit
+, pygments
+, pyparsing
+, pytestCheckHook
+, python-doi
+, python-slugify
+, pythonAtLeast
+, pythonOlder
+, pyyaml
+, requests
+, stevedore
+, tqdm
+, typing-extensions
+, whoosh
+, xdg-utils
 }:
 
 buildPythonPackage rec {
   pname = "papis";
-  version = "0.9";
-  disabled = !isPy3k;
+  version = "0.11.1";
+  format = "setuptools";
 
-  # Missing tests on Pypi
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "papis";
     repo = pname;
     rev = "v${version}";
-    sha256 = "kzA8nlglbjHDPEB7HRAY2dza1Umn/OYUu+ydbA1OJ5Y=";
+    hash = "sha256-hlokGoXBhxkAMbqohztZEWlPBSSAUIAGuHtrF7iXcy0=";
   };
 
   propagatedBuildInputs = [
-    requests filetype pyparsing configparser arxiv2bib
-    pyyaml chardet beautifulsoup4 colorama bibtexparser
-    pylibgen click python-slugify habanero isbnlib
-    prompt_toolkit pygments
-    stevedore tqdm lxml
+    arxiv2bib
+    beautifulsoup4
+    bibtexparser
+    chardet
+    click
+    colorama
+    configparser
+    filetype
+    habanero
+    isbnlib
+    lxml
+    prompt-toolkit
+    pygments
+    pyparsing
     python-doi
-    # optional dependencies
+    python-slugify
+    pyyaml
+    requests
+    stevedore
+    tqdm
+    typing-extensions
     whoosh
   ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "lxml<=4.3.5" "lxml~=4.3" \
-      --replace "python-slugify>=1.2.6,<4" "python-slugify"
+      --replace "isbnlib>=3.9.1,<3.10" "isbnlib>=3.9"
+    substituteInPlace setup.cfg \
+      --replace "--cov=papis" ""
   '';
 
-  # pytest seems to hang with python3.8
-  doCheck = !stdenv.isDarwin && pythonOlder "3.8";
+  # Tests are failing on Python > 3.9
+  doCheck = !stdenv.isDarwin && !(pythonAtLeast "3.10");
 
   checkInputs = ([
-    pytest
+    pytestCheckHook
   ]) ++ [
-    xdg_utils
+    xdg-utils
   ];
 
-  # most of the downloader tests and 4 other tests require a network connection
-  # test_export_yaml and test_citations check for the exact output produced by pyyaml 3.x and
-  # fail with 5.x
-  checkPhase = ''
-    HOME=$(mktemp -d) pytest papis tests --ignore tests/downloaders \
-      -k "not test_get_data and not test_doi_to_data and not test_general and not get_document_url \
-      and not test_validate_arxivid and not test_downloader_getter"
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
-  meta = {
+  pytestFlagsArray = [
+    "papis tests"
+  ];
+
+  disabledTestPaths = [
+    "tests/downloaders"
+  ];
+
+  disabledTests = [
+    "get_document_url"
+    "match"
+    "test_doi_to_data"
+    "test_downloader_getter"
+    "test_general"
+    "test_get_data"
+    "test_validate_arxivid"
+    "test_yaml"
+  ];
+
+  pythonImportsCheck = [
+    "papis"
+  ];
+
+  meta = with lib; {
     description = "Powerful command-line document and bibliography manager";
-    homepage = https://papis.readthedocs.io/en/latest/;
-    license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ nico202 teto ];
+    homepage = "https://papis.readthedocs.io/";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ nico202 teto ];
   };
 }

@@ -1,30 +1,26 @@
-{ stdenv, rustPlatform, fetchFromGitHub, lib, Security }:
+{ stdenv, rustPlatform, fetchFromGitHub, lib, libiconv, Security, nixosTests }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wireguard-exporter";
-  version = "3.2.2";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "MindFlavor";
     repo = "prometheus_wireguard_exporter";
     rev = version;
-    sha256 = "18khym7ygj29w98zf6i1l5c2pz84zla2z34l5jnh595xvwfl94pc";
+    sha256 = "sha256-m29/whlmhIkLin84NOWs2NVZcXNpVsyyHZ1CLp4FXd0=";
   };
 
-  cargoSha256 = "1bi9nr1dhyv322pq6fjrhs12h3wdak53mvwkbyim1hmrp62vky4m";
+  cargoSha256 = "sha256-XK4hjBIcOx6JMv61gOpIXaZy7Unw+Bk84TEb+8Fib6Q=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  # Commonly used hack in nixpkgs to allow unstable features on a stable rustc. This is needed
-  # since `prometheus_exporter_base` uses `#!feature[]` to enable async which
-  # is actually not needed as `async` is part of rustc 1.39.0-stable. This can be removed
-  # as soon as https://github.com/MindFlavor/prometheus_exporter_base/pull/15 is merged.
-  RUSTC_BOOTSTRAP = 1;
+  passthru.tests = { inherit (nixosTests.prometheus-exporters) wireguard; };
 
   meta = with lib; {
-    description = "A Prometheus exporter for WireGuard, written in Rust.";
+    description = "A Prometheus exporter for WireGuard, written in Rust";
+    homepage = "https://github.com/MindFlavor/prometheus_wireguard_exporter";
     license = licenses.mit;
-    homepage = https://github.com/MindFlavor/prometheus_wireguard_exporter;
     maintainers = with maintainers; [ ma27 globin ];
   };
 }

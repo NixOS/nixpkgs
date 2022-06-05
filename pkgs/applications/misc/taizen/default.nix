@@ -1,4 +1,4 @@
-{ rustPlatform, lib, fetchFromGitHub, ncurses, openssl, pkgconfig, Security, stdenv }:
+{ rustPlatform, lib, fetchFromGitHub, ncurses, openssl, pkg-config, Security, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "taizen";
@@ -12,14 +12,14 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = [ ncurses openssl ] ++ lib.optional stdenv.isDarwin Security;
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "0h8ybhb17pqhhfjcmq1l70kp8g1yyq38228lcf86byk3r2ar2rkg";
+  cargoSha256 = "1yqy5v02a4qshgb7k8rnn408k3n6qx3jc8zziwvv7im61n9sjynf";
 
   meta = with lib; {
-    homepage = https://crates.io/crates/taizen;
+    homepage = "https://crates.io/crates/taizen";
     license = licenses.mit;
     description = "curses based mediawiki browser";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

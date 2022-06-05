@@ -1,33 +1,57 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, slicerator
-, scikitimage
-, six
+, fetchFromGitHub
+, imageio
 , numpy
-, tifffile
-, nose
+, pytestCheckHook
+, pythonOlder
+, scikitimage
+, slicerator
 }:
 
 buildPythonPackage rec {
-  version = "0.4.1";
-  pname = "PIMS";
+  pname = "pims";
+  version = "0.6.1";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6a53a155e900b44e71127a1e1fccbfbaed7eec3c2b52497c40c23a05f334c9dd";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "soft-matter";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QdllA1QTSJ8vWaSJ0XoUanX53sb4RaOmdXBCFEsoWMU=";
   };
 
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ slicerator six numpy tifffile scikitimage ];
+  propagatedBuildInputs = [
+    slicerator
+    imageio
+    numpy
+  ];
 
-  # not everything packaged with pypi release
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    scikitimage
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/soft-matter/pims;
+  pythonImportsCheck = [
+    "pims"
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # NotImplementedError: Do not know how to deal with infinite readers
+    "TestVideo_ImageIO"
+  ];
+
+  meta = with lib; {
     description = "Python Image Sequence: Load video and sequential images in many formats with a simple, consistent interface";
-    license = licenses.bsdOriginal;
-    maintainers = [ maintainers.costrouc ];
+    homepage = "https://github.com/soft-matter/pims";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ costrouc ];
   };
 }

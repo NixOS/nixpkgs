@@ -1,29 +1,26 @@
-{ stdenv, fetchFromGitHub, zsh }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "lambda-mod-zsh-theme-unstable-2019-04-17";
+  pname = "lambda-mod-zsh-theme-unstable";
+  version = "2020-10-03";
 
   src = fetchFromGitHub {
     owner = "halfo";
     repo = "lambda-mod-zsh-theme";
-    rev = "6b83aedf9de41ea4e226cdbc78af1b7b92beb6ac";
-    sha256 = "1xf451c349fxnqbvsb07y9r1iqrwslx6x4b6drmnqqqy4yx1r5dj";
+    rev = "78347ea9709935f265e558b6345919d12323fbff";
+    sha256 = "0fvxnvgbcvwii7ghvpj5l43frllq71wwjvfg7cqfmic727z001dh";
   };
 
-  buildInputs = [ zsh ];
-
+  strictDeps = true;
   installPhase = ''
-    chmod +x lambda-mod.zsh-theme # only executable scripts are found by `patchShebangs`
-    patchShebangs .
-
     install -Dm0644 lambda-mod.zsh-theme $out/share/zsh/themes/lambda-mod.zsh-theme
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A ZSH theme optimized for people who use Git & Unicode-compatible fonts and terminals";
-    homepage = https://github.com/halfo/lambda-mod-zsh-theme/;
+    homepage = "https://github.com/halfo/lambda-mod-zsh-theme/";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ ma27 ];
   };
 }

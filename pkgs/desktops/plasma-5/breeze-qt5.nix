@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "breeze-qt5";
+  pname = "breeze-qt5";
   sname = "breeze";
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [

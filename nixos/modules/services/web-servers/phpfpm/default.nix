@@ -26,12 +26,9 @@ let
   phpIni = poolOpts: pkgs.runCommand "php.ini" {
     inherit (poolOpts) phpPackage phpOptions;
     preferLocalBuild = true;
-    nixDefaults = ''
-      sendmail_path = "/run/wrappers/bin/sendmail -t -i"
-    '';
-    passAsFile = [ "nixDefaults" "phpOptions" ];
+    passAsFile = [ "phpOptions" ];
   } ''
-    cat ${poolOpts.phpPackage}/etc/php.ini $nixDefaultsPath $phpOptionsPath > $out
+    cat ${poolOpts.phpPackage}/etc/php.ini $phpOptionsPath > $out
   '';
 
   poolOpts = { name, ... }:
@@ -47,6 +44,7 @@ let
             Path to the unix socket file on which to accept FastCGI requests.
             <note><para>This option is read-only and managed by NixOS.</para></note>
           '';
+          example = "${runtimeDir}/<name>.sock";
         };
 
         listen = mkOption {
@@ -61,7 +59,7 @@ let
         phpPackage = mkOption {
           type = types.package;
           default = cfg.phpPackage;
-          defaultText = "config.services.phpfpm.phpPackage";
+          defaultText = literalExpression "config.services.phpfpm.phpPackage";
           description = ''
             The PHP package to use for running this PHP-FPM pool.
           '';
@@ -80,7 +78,7 @@ let
           description = ''
             Environment variables used for this PHP-FPM pool.
           '';
-          example = literalExample ''
+          example = literalExpression ''
             {
               HOSTNAME = "$HOSTNAME";
               TMP = "/tmp";
@@ -109,7 +107,7 @@ let
             for details. Note that settings names must be enclosed in quotes (e.g.
             <literal>"pm.max_children"</literal> instead of <literal>pm.max_children</literal>).
           '';
-          example = literalExample ''
+          example = literalExpression ''
             {
               "pm" = "dynamic";
               "pm.max_children" = 75;
@@ -181,7 +179,7 @@ in {
       phpPackage = mkOption {
         type = types.package;
         default = pkgs.php;
-        defaultText = "pkgs.php";
+        defaultText = literalExpression "pkgs.php";
         description = ''
           The PHP package to use for running the PHP-FPM service.
         '';
@@ -202,20 +200,20 @@ in {
       pools = mkOption {
         type = types.attrsOf (types.submodule poolOpts);
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
          {
            mypool = {
              user = "php";
              group = "php";
              phpPackage = pkgs.php;
-             settings = '''
+             settings = {
                "pm" = "dynamic";
                "pm.max_children" = 75;
                "pm.start_servers" = 10;
                "pm.min_spare_servers" = 5;
                "pm.max_spare_servers" = 20;
                "pm.max_requests" = 500;
-             ''';
+             };
            }
          }'';
         description = ''
@@ -276,6 +274,7 @@ in {
           ExecReload = "${pkgs.coreutils}/bin/kill -USR2 $MAINPID";
           RuntimeDirectory = "phpfpm";
           RuntimeDirectoryPreserve = true; # Relevant when multiple processes are running
+          Restart = "always";
         };
       }
     ) cfg.pools;

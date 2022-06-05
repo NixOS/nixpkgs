@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, qt4, qmake4Hook, AGL }:
+{ lib, stdenv, fetchurl, qt4, qmake4Hook, AGL }:
 
 stdenv.mkDerivation rec {
-  name = "qwt-6.1.4";
+  pname = "qwt";
+  version = "6.1.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qwt/${name}.tar.bz2";
-    sha256 = "1navkcnmn0qz8kzsyqmk32d929zl72l0b580w1ica7z5559j2a8m";
+    url = "mirror://sourceforge/qwt/qwt-${version}.tar.bz2";
+    sha256 = "0hf0mpca248xlqn7xnzkfj8drf19gdyg5syzklvq8pibxiixwxj0";
   };
 
   buildInputs = [
     qt4
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [ AGL ];
+  ] ++ lib.optionals stdenv.isDarwin [ AGL ];
 
   nativeBuildInputs = [ qmake4Hook ];
 
@@ -22,18 +23,18 @@ stdenv.mkDerivation rec {
 
   # qwt.framework output includes a relative reference to itself, which breaks dependents
   preFixup =
-    stdenv.lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.isDarwin ''
       echo "Attempting to repair qwt"
       install_name_tool -id "$out/lib/qwt.framework/Versions/6/qwt" "$out/lib/qwt.framework/Versions/6/qwt"
     '';
 
-  qmakeFlags = [ "-after doc.path=$out/share/doc/${name}" ];
+  qmakeFlags = [ "-after doc.path=$out/share/doc/qwt-${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt widgets for technical applications";
-    homepage = http://qwt.sourceforge.net/;
+    homepage = "http://qwt.sourceforge.net/";
     # LGPL 2.1 plus a few exceptions (more liberal)
-    license = stdenv.lib.licenses.qwt;
+    license = lib.licenses.qwt;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
     branch = "6";

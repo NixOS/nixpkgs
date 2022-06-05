@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mupdf, ncurses, openjpeg
+{ lib, stdenv, fetchFromGitHub
+, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mupdf_1_17, ncurses, openjpeg
 , openssl
 
 , imageSupport ? true, imlib2 ? null }:
@@ -14,22 +14,27 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "${package}-${version}";
-  version = "0.5.6";
+  pname = package;
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     repo = "JFBView";
     owner = "jichu4n";
     rev = version;
-    sha256 = "09rcmlf04aka0yzr25imadi0fl4nlbsxcahs7fhvzx4nql4halqw";
+    sha256 = "0ppns49hnmp04zdjw6wc28v0yvz31rkzvd5ylcj7arikx20llpxf";
   };
+
+  postPatch = ''
+    substituteInPlace main.cpp \
+      --replace "<stropts.h>" "<sys/ioctl.h>"
+  '';
 
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    freetype harfbuzz jbig2dec libjpeg libX11 mupdf ncurses openjpeg
+    freetype harfbuzz jbig2dec libjpeg libX11 mupdf_1_17 ncurses openjpeg
     openssl
-  ] ++ stdenv.lib.optionals imageSupport [
+  ] ++ lib.optionals imageSupport [
     imlib2
   ];
 
@@ -49,7 +54,7 @@ stdenv.mkDerivation rec {
     install ${toString binaries} $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PDF and image viewer for the Linux framebuffer";
     longDescription = ''
       A very fast PDF and image viewer for the Linux framebuffer with some
@@ -61,7 +66,7 @@ stdenv.mkDerivation rec {
       - Asynchronous background rendering of the next page
       - Customizable multi-threaded caching
     '';
-    homepage = https://seasonofcode.com/pages/jfbview.html;
+    homepage = "https://seasonofcode.com/pages/jfbview.html";
     license = licenses.asl20;
     platforms = platforms.linux;
   };

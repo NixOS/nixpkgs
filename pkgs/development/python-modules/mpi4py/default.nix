@@ -1,12 +1,12 @@
-{ stdenv, fetchPypi, python, buildPythonPackage, mpi, openssh }:
+{ lib, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.0.3";
+  version = "3.1.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "012d716c8b9ed1e513fcc4b18e5af16a8791f51e6d1716baccf988ad355c5a1f";
+    sha256 = "sha256-8en64QefQ+r92fgXzbP9MNcJ7cCTtdXa2lekYbLbMAg=";
   };
 
   passthru = {
@@ -43,10 +43,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ mpi openssh ];
 
-  meta = {
-    description =
-      "Python bindings for the Message Passing Interface standard";
+  meta = with lib; {
+    description = "Python bindings for the Message Passing Interface standard";
     homepage = "https://bitbucket.org/mpi4py/mpi4py/";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
   };
 }

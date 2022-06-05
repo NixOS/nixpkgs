@@ -1,9 +1,22 @@
-{ pkgs, options, config, version, revision, extraSources ? [] }:
+{ pkgs
+, options
+, config
+, version
+, revision
+, extraSources ? []
+, baseOptionsJSON ? null
+, warningsAreErrors ? true
+, prefix ? ../../..
+}:
 
 with pkgs;
 
 let
   lib = pkgs.lib;
+
+  docbook_xsl_ns = pkgs.docbook-xsl-ns.override {
+    withManOptDedupPatch = true;
+  };
 
   # We need to strip references to /nix/store/* from options,
   # including any `extraSources` if some modules came from elsewhere,
@@ -11,11 +24,11 @@ let
   #
   # E.g. if some `options` came from modules in ${pkgs.customModules}/nix,
   # you'd need to include `extraSources = [ pkgs.customModules ]`
-  prefixesToStrip = map (p: "${toString p}/") ([ ../../.. ] ++ extraSources);
-  stripAnyPrefixes = lib.flip (lib.fold lib.removePrefix) prefixesToStrip;
+  prefixesToStrip = map (p: "${toString p}/") ([ prefix ] ++ extraSources);
+  stripAnyPrefixes = lib.flip (lib.foldr lib.removePrefix) prefixesToStrip;
 
   optionsDoc = buildPackages.nixosOptionsDoc {
-    inherit options revision;
+    inherit options revision baseOptionsJSON warningsAreErrors;
     transformOptions = opt: opt // {
       # Clean up declaration sites to not refer to the NixOS source tree.
       declarations = map stripAnyPrefixes opt.declarations;
@@ -63,6 +76,7 @@ let
     "--stringparam html.script './highlightjs/highlight.pack.js ./highlightjs/loader.js'"
     "--param xref.with.number.and.title 1"
     "--param toc.section.depth 0"
+    "--param generate.consistent.ids 1"
     "--stringparam admon.style ''"
     "--stringparam callout.graphics.extension .svg"
     "--stringparam current.docid manual"
@@ -160,7 +174,7 @@ let
 in rec {
   inherit generatedSources;
 
-  inherit (optionsDoc) optionsJSON optionsXML optionsDocBook;
+  inherit (optionsDoc) optionsJSON optionsNix optionsDocBook;
 
   # Generate the NixOS manual.
   manualHTML = runCommand "nixos-manual-html"
@@ -204,7 +218,7 @@ in rec {
 
   manualEpub = runCommand "nixos-manual-epub"
     { inherit sources;
-      buildInputs = [ libxml2.bin libxslt.bin zip ];
+      nativeBuildInputs = [ buildPackages.libxml2.bin buildPackages.libxslt.bin buildPackages.zip ];
     }
     ''
       # Generate the epub manual.

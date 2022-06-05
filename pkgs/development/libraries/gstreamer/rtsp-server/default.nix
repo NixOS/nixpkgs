@@ -1,8 +1,10 @@
 { stdenv
+, lib
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
+, python3
 , gettext
 , gobject-introspection
 , gst-plugins-base
@@ -11,21 +13,29 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
-  version = "1.16.2";
+  version = "1.20.1";
 
   src = fetchurl {
-    url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0vn23nxwvs96g7gcxw5zbnw23hkhky8a8r42wq68411vgf1s41yy";
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "028maajlvfn96v3gqk2ws1k6w9hjfk7dsxnm84d73pnpi99bqia7";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+    # "devdoc" # disabled until `hotdoc` is packaged in nixpkgs
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
     gettext
     gobject-introspection
-    pkgconfig
+    pkg-config
+    python3
+
+    # documentation
+    # TODO add hotdoc here
   ];
 
   buildInputs = [
@@ -35,9 +45,17 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dexamples=disabled" # requires many dependencies and probably not useful for our users
+    "-Ddoc=disabled" # `hotdoc` not packaged in nixpkgs as of writing
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dintrospection=disabled"
   ];
 
-  meta = with stdenv.lib; {
+  postPatch = ''
+    patchShebangs \
+      scripts/extract-release-date-from-doap-file.py
+  '';
+
+  meta = with lib; {
     description = "GStreamer RTSP server";
     homepage = "https://gstreamer.freedesktop.org";
     longDescription = ''

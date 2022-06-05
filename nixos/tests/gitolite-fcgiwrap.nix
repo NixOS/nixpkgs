@@ -13,14 +13,14 @@ import ./make-test-python.nix (
       {
         name = "gitolite-fcgiwrap";
 
-        meta = with pkgs.stdenv.lib.maintainers; {
+        meta = with pkgs.lib.maintainers; {
           maintainers = [ bbigras ];
         };
 
         nodes = {
 
           server =
-            { ... }:
+            { config, ... }:
               {
                 networking.firewall.allowedTCPPorts = [ 80 ];
 
@@ -42,7 +42,7 @@ import ./make-test-python.nix (
                     auth_basic_user_file /etc/gitolite/htpasswd;
 
                     # common FastCGI parameters are required
-                    include ${pkgs.nginx}/conf/fastcgi_params;
+                    include ${config.services.nginx.package}/conf/fastcgi_params;
 
                     # strip the CGI program prefix
                     fastcgi_split_path_info ^(/git)(.*)$;

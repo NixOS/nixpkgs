@@ -1,30 +1,39 @@
-{ stdenv, fetchgit, buildPythonPackage
-, python
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
 , buildGoModule
-, srht, redis, celery, pyyaml, markdown }:
-
+, srht
+, redis
+, celery
+, pyyaml
+, markdown
+, ansi2html
+, python
+}:
 let
-  version = "0.48.0";
+  version = "0.75.2";
+
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "builds.sr.ht";
+    rev = version;
+    sha256 = "sha256-SwyxMzmp9baRQ0vceuEn/OpfIv7z7jwq/l67hdOHXjM=";
+  };
 
   buildWorker = src: buildGoModule {
     inherit src version;
     pname = "builds-sr-ht-worker";
-    goPackagePath = "git.sr.ht/~sircmpwn/builds.sr.ht/worker";
 
-    modSha256 = "1jm259ncw8dgqp0fqbjn30c4y3v3vwqj41gfh99jx30bwlmpgfax";
+    vendorSha256 = "sha256-Pf1M9a43eK4jr6QMi6kRHA8DodXQU0pqq9ua5VC3ER0=";
   };
-in buildPythonPackage rec {
-  inherit version;
+in
+buildPythonPackage rec {
+  inherit src version;
   pname = "buildsrht";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
-    rev = version;
-    sha256 = "1z5bxsn67cqffixqsrnska86mw0a6494650wbi6dbp10z03870bs";
-  };
-
   patches = [
-    ./use-srht-path.patch
+    # Revert change breaking Unix socket support for Redis
+    patches/redis-socket/build/0001-Revert-Add-build-submission-and-queue-monitoring.patch
   ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -35,6 +44,7 @@ in buildPythonPackage rec {
     celery
     pyyaml
     markdown
+    ansi2html
   ];
 
   preBuild = ''
@@ -51,10 +61,12 @@ in buildPythonPackage rec {
     cp ${buildWorker "${src}/worker"}/bin/worker $out/bin/builds.sr.ht-worker
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://git.sr.ht/~sircmpwn/builds.sr.ht;
+  pythonImportsCheck = [ "buildsrht" ];
+
+  meta = with lib; {
+    homepage = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     description = "Continuous integration service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

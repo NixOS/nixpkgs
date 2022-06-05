@@ -90,7 +90,7 @@ let
         Timeout until mails are considered "didn't make it".
       '';
     };
-    disableFileDelition = mkOption {
+    disableFileDeletion = mkOption {
       type = types.bool;
       default = false;
       description = ''
@@ -100,7 +100,7 @@ let
     servers = mkOption {
       type = types.listOf (types.submodule serverOptions);
       default = [];
-      example = literalExample ''
+      example = literalExpression ''
         [ {
           name = "testserver";
           server = "smtp.domain.tld";
@@ -112,6 +112,24 @@ let
       '';
       description = ''
         List of servers that should be probed.
+
+        <emphasis>Note:</emphasis> if your mailserver has <citerefentry>
+        <refentrytitle>rspamd</refentrytitle><manvolnum>8</manvolnum></citerefentry> configured,
+        it can happen that emails from this exporter are marked as spam.
+
+        It's possible to work around the issue with a config like this:
+        <programlisting>
+        {
+          <link linkend="opt-services.rspamd.locals._name_.text">services.rspamd.locals."multimap.conf".text</link> = '''
+            ALLOWLIST_PROMETHEUS {
+              filter = "email:domain:tld";
+              type = "from";
+              map = "''${pkgs.writeText "allowmap" "domain.tld"}";
+              score = -100.0;
+            }
+          ''';
+        }
+        </programlisting>
       '';
     };
   };
@@ -127,8 +145,8 @@ in
       '';
     };
     configuration = mkOption {
-      type = types.submodule exporterOptions;
-      default = {};
+      type = types.nullOr (types.submodule exporterOptions);
+      default = null;
       description = ''
         Specify the mailexporter configuration file to use.
       '';
@@ -147,8 +165,9 @@ in
       ExecStart = ''
         ${pkgs.prometheus-mail-exporter}/bin/mailexporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+          --web.telemetry-path ${cfg.telemetryPath} \
           --config.file ${
-            if cfg.configuration != {} then configurationFile else cfg.configFile
+            if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile)
           } \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';

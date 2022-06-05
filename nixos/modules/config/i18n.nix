@@ -14,7 +14,13 @@ with lib;
           allLocales = any (x: x == "all") config.i18n.supportedLocales;
           locales = config.i18n.supportedLocales;
         };
-        example = literalExample "pkgs.glibcLocales";
+        defaultText = literalExpression ''
+          pkgs.buildPackages.glibcLocales.override {
+            allLocales = any (x: x == "all") config.i18n.supportedLocales;
+            locales = config.i18n.supportedLocales;
+          }
+        '';
+        example = literalExpression "pkgs.glibcLocales";
         description = ''
           Customized pkg.glibcLocales package.
 
@@ -68,7 +74,8 @@ with lib;
   config = {
 
     environment.systemPackages =
-      optional (config.i18n.supportedLocales != []) config.i18n.glibcLocales;
+      # We increase the priority a little, so that plain glibc in systemPackages can't win.
+      optional (config.i18n.supportedLocales != []) (lib.setPrio (-1) config.i18n.glibcLocales);
 
     environment.sessionVariables =
       { LANG = config.i18n.defaultLocale;
@@ -83,7 +90,7 @@ with lib;
     environment.etc."locale.conf".source = pkgs.writeText "locale.conf"
       ''
         LANG=${config.i18n.defaultLocale}
-        ${concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${v}'') config.i18n.extraLocaleSettings)}
+        ${concatStringsSep "\n" (mapAttrsToList (n: v: "${n}=${v}") config.i18n.extraLocaleSettings)}
       '';
 
   };

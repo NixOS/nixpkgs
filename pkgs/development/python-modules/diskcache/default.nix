@@ -1,40 +1,58 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
-, pytestcov
-, pytest_xdist
 , pytest-django
-, mock
+, pytest-xdist
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "diskcache";
-  version = "4.1.0";
+  version = "5.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "grantjenks";
     repo = "python-diskcache";
     rev = "v${version}";
-    sha256 = "0xy2vpk4hixb4gg871d9sx9wxdz8pi0pmnfdwg4bf8jqfjg022w8";
+    hash = "sha256-c/k8mx/T4RkseDobJ2gtcuom0A6Ewyw4aP2Bk9pxV+o=";
   };
 
   checkInputs = [
-    pytest
-    pytestcov
-    pytest_xdist
     pytest-django
-    mock
+    pytest-xdist
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    pytest
+  postPatch = ''
+    sed -i "/--cov/d" tox.ini
   '';
+
+  # Darwin sandbox causes most tests to fail
+  doCheck = !stdenv.isDarwin;
+
+  disabledTests = [
+    # Very time sensitive, can fail on over subscribed machines
+    "test_incr_update_keyerror"
+    # AssertionError: 'default' is not None
+    "test_decr_version"
+    "test_incr_version"
+    "test_get_or_set"
+    "test_get_many"
+  ];
+
+  pythonImportsCheck = [
+    "diskcache"
+  ];
 
   meta = with lib; {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = licenses.asl20;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

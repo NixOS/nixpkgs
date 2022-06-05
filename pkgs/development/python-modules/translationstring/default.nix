@@ -1,19 +1,19 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "translationstring";
-  version = "1.3";
+  version = "1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ee44cfa58c52ade8910ea0ebc3d2d84bdcad9fa0422405b1801ec9b9a65b72d";
+    sha256 = "bf947538d76e69ba12ab17283b10355a9ecfbc078e6123443f43f2107f6376f3";
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://pylonsproject.org/;
+  meta = with lib; {
+    homepage = "https://pylonsproject.org/";
     description = "Utility library for i18n relied on by various Repoze and Pyramid packages";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];

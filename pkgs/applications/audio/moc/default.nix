@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, pkg-config
 , ncurses, db , popt, libtool
+, libiconv, CoreServices
 # Sound sub-systems
-, alsaSupport ? true, alsaLib
+, alsaSupport ? (!stdenv.isDarwin), alsa-lib
 , pulseSupport ? true, libpulseaudio, autoreconfHook
 , jackSupport ? true, libjack2
 , ossSupport ? true
@@ -18,14 +19,13 @@
 , sndfileSupport ? true, libsndfile
 , wavpackSupport ? true, wavpack
 # Misc
-, withffmpeg4 ? false, ffmpeg_4
 , curlSupport ? true, curl
 , samplerateSupport ? true, libsamplerate
 , withDebug ? false
 }:
 
 let
-  opt = stdenv.lib.optional;
+  opt = lib.optional;
   mkFlag = c: f: if c then "--with-${f}" else "--without-${f}";
 
 in stdenv.mkDerivation rec {
@@ -39,15 +39,15 @@ in stdenv.mkDerivation rec {
   };
 
   patches = []
-    ++ opt withffmpeg4 ./moc-ffmpeg4.patch
+    ++ opt ffmpegSupport ./moc-ffmpeg4.patch
     ++ opt pulseSupport ./pulseaudio.patch;
 
-  nativeBuildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkg-config ]
     ++ opt pulseSupport autoreconfHook;
 
   buildInputs = [ ncurses db popt libtool ]
     # Sound sub-systems
-    ++ opt alsaSupport alsaLib
+    ++ opt alsaSupport alsa-lib
     ++ opt pulseSupport libpulseaudio
     ++ opt jackSupport libjack2
     # Audio formats
@@ -57,16 +57,16 @@ in stdenv.mkDerivation rec {
     ++ opt midiSupport timidity
     ++ opt modplugSupport libmodplug
     ++ opt mp3Support libmad
-    ++ stdenv.lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
+    ++ lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
     ++ opt vorbisSupport libvorbis
     ++ opt speexSupport speex
-    ++ opt (ffmpegSupport && !withffmpeg4) ffmpeg
-    ++ opt (ffmpegSupport && withffmpeg4) ffmpeg_4
+    ++ opt ffmpegSupport ffmpeg
     ++ opt sndfileSupport libsndfile
     ++ opt wavpackSupport wavpack
     # Misc
     ++ opt curlSupport curl
-    ++ opt samplerateSupport libsamplerate;
+    ++ opt samplerateSupport libsamplerate
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ];
 
   configureFlags = [
     # Sound sub-systems
@@ -94,11 +94,11 @@ in stdenv.mkDerivation rec {
     "--without-rcc"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An ncurses console audio player designed to be powerful and easy to use";
-    homepage = http://moc.daper.net/;
+    homepage = "http://moc.daper.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ aethelz pSub jagajaga ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

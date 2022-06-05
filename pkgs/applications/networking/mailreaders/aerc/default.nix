@@ -1,61 +1,71 @@
-{ stdenv, buildGoModule, fetchurl
-, go, ncurses, notmuch, scdoc
-, python3, perl, w3m, dante
+{ lib
+, buildGoModule
+, fetchFromSourcehut
+, ncurses
+, notmuch
+, scdoc
+, python3
+, w3m
+, dante
 }:
 
 buildGoModule rec {
   pname = "aerc";
-  version = "0.3.0";
+  version = "0.10.0";
 
-  src = fetchurl {
-    url = "https://git.sr.ht/~sircmpwn/aerc/archive/${version}.tar.gz";
-    sha256 = "188jln8hmgiqn5il5m54bns0wk4grj09di8y6mmid58ibw6spma4";
+  src = fetchFromSourcehut {
+    owner = "~rjarry";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-v1+12UCgBbH/2PxZ9QdDN30LmyzVcfGlYiVNVPYO3zs=";
   };
 
+  proxyVendor = true;
+  vendorSha256 = "sha256-fGQ15i3mWNmmfypRt5A7SAVYSEg9m4so4FYlUY+7mW8=";
+
+  doCheck = false;
+
   nativeBuildInputs = [
-    go
     scdoc
     python3.pkgs.wrapPython
-    notmuch
   ];
 
   patches = [
     ./runtime-sharedir.patch
   ];
 
+  postPatch = ''
+    substituteAllInPlace config/aerc.conf
+    substituteAllInPlace config/config.go
+    substituteAllInPlace doc/aerc-config.5.scd
+  '';
+
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
+
   pythonPath = [
     python3.pkgs.colorama
   ];
 
-  buildInputs = [ python3 perl ];
-
-  GOFLAGS="-tags=notmuch";
-
-  buildPhase = "
-    runHook preBuild
-    # we use make instead of go build
-    runHook postBuild
-  ";
+  buildInputs = [ python3 notmuch ];
 
   installPhase = ''
     runHook preInstall
-    make PREFIX=$out install
-    wrapPythonProgramsIn $out/share/aerc/filters "$out $pythonPath"
+
+    make $makeFlags GOFLAGS="$GOFLAGS -tags=notmuch" install
+
     runHook postInstall
   '';
 
   postFixup = ''
     wrapProgram $out/bin/aerc --prefix PATH ":" \
-      "$out/share/aerc/filters:${stdenv.lib.makeBinPath [ ncurses ]}"
+      "$out/share/aerc/filters:${lib.makeBinPath [ ncurses ]}"
     wrapProgram $out/share/aerc/filters/html --prefix PATH ":" \
-      ${stdenv.lib.makeBinPath [ w3m dante ]}
+      ${lib.makeBinPath [ w3m dante ]}
   '';
 
-  modSha256 = "0pxbv4zfhii0g41cy0ycfpkkxw6nnd4ibavic6zqw30j476jnm2x";
-
-  meta = with stdenv.lib; {
-    description = "aerc is an email client for your terminal";
-    homepage = https://aerc-mail.org/;
+  meta = with lib; {
+    description = "An email client for your terminal";
+    homepage = "https://aerc-mail.org/";
     maintainers = with maintainers; [ tadeokondrak ];
     license = licenses.mit;
     platforms = platforms.unix;

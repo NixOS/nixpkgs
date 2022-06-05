@@ -36,6 +36,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.systemd-journal2gelf;
+        defaultText = literalExpression "pkgs.systemd-journal2gelf";
         description = ''
           SystemdJournal2Gelf package to use.
         '';

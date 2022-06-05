@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mfcj6510dwlpr, makeWrapper}:
+{ lib, stdenv, fetchurl, mfcj6510dwlpr, makeWrapper}:
 
 stdenv.mkDerivation rec {
   pname = "mfcj6510dw-cupswrapper";
@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
     make clean
     '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.brother.com/;
+  meta = with lib; {
+    homepage = "http://www.brother.com/";
     description = "Brother MFC-J6510DW CUPS wrapper driver";
     license = with licenses; gpl2;
     platforms = with platforms; linux;
-    downloadPage = http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128;
+    downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128";
     maintainers = with maintainers; [ ramkromberg ];
   };
 }

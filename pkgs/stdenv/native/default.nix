@@ -78,7 +78,7 @@ let
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).
   makeStdenv =
-    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }) }:
+    { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }), extraNativeBuildInputs ? [] }:
 
     import ../generic {
       buildPlatform = localSystem;
@@ -94,10 +94,10 @@ let
         if system == "x86_64-cygwin" then prehookCygwin else
         prehookBase;
 
-      extraNativeBuildInputs =
-        if system == "i686-cygwin" then extraNativeBuildInputsCygwin else
+      extraNativeBuildInputs = extraNativeBuildInputs ++
+        (if system == "i686-cygwin" then extraNativeBuildInputsCygwin else
         if system == "x86_64-cygwin" then extraNativeBuildInputsCygwin else
-        [];
+        []);
 
       initialPath = extraPath ++ path;
 
@@ -129,10 +129,10 @@ in
       name = "cc-native";
       nativeTools = true;
       nativeLibc = true;
-      inherit nativePrefix;
+      inherit lib nativePrefix;
       bintools = import ../../build-support/bintools-wrapper {
         name = "bintools";
-        inherit stdenvNoCC nativePrefix;
+        inherit lib stdenvNoCC nativePrefix;
         nativeTools = true;
         nativeLibc = true;
       };
@@ -163,6 +163,7 @@ in
       inherit (prevStage.stdenv) cc fetchurl;
       extraPath = [ prevStage.xz ];
       overrides = self: super: { inherit (prevStage) xz; };
+      extraNativeBuildInputs = if localSystem.isLinux then [ prevStage.patchelf ] else [];
     };
   })
 

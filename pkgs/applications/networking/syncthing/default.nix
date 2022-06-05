@@ -1,27 +1,24 @@
-{ buildGoModule, stdenv, lib, procps, fetchFromGitHub }:
+{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, nixosTests }:
 
 let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
-      version = "1.3.3";
-      name = "${stname}-${version}";
+      pname = stname;
+      version = "1.20.1";
 
       src = fetchFromGitHub {
-        owner  = "syncthing";
-        repo   = "syncthing";
-        rev    = "v${version}";
-        sha256 = "0bcp8kbj8xsnly2dfafnfvj6vl27mbgvj84pjk0wxdjfnr2my9ic";
+        owner = "syncthing";
+        repo = "syncthing";
+        rev = "v${version}";
+        hash = "sha256-QJevD/meVPEHnfwT1Eu3cwfVFU+ab/16eJBl6cuhGdA=";
       };
 
-      goPackagePath = "github.com/syncthing/syncthing";
+      vendorSha256 = "sha256-NuiT2GytWaGkgSyl+qoe9DjCCL7wSHc6FU8C6rsy6Vc=";
 
-      modSha256 = "0kv24bi3w3pvjyjng7ly67brq8wkc1xnhsyha1h7v3jbmj5fgb12";
+      doCheck = false;
 
-      patches = [
-        ./add-stcli-target.patch
-      ];
-      BUILD_USER="nix";
-      BUILD_HOST="nix";
+      BUILD_USER = "nix";
+      BUILD_HOST = "nix";
 
       buildPhase = ''
         runHook preBuild
@@ -37,16 +34,24 @@ let
 
       inherit postInstall;
 
+      passthru.tests = with nixosTests; {
+        init = syncthing-init;
+        relay = syncthing-relay;
+      };
+
       meta = with lib; {
-        homepage = https://www.syncthing.net/;
+        homepage = "https://syncthing.net/";
         description = "Open Source Continuous File Synchronization";
+        changelog = "https://github.com/syncthing/syncthing/releases/tag/v${version}";
         license = licenses.mpl20;
-        maintainers = with maintainers; [ pshendry joko peterhoeg andrew-d ];
+        maintainers = with maintainers; [ joko peterhoeg andrew-d ];
+        mainProgram = target;
         platforms = platforms.unix;
       };
     };
 
-in {
+in
+{
   syncthing = common {
     stname = "syncthing";
     target = "syncthing";
@@ -75,12 +80,6 @@ in {
                  $out/lib/systemd/user/syncthing.service \
                  --replace /usr/bin/syncthing $out/bin/syncthing
     '';
-  };
-
-  syncthing-cli = common {
-    stname = "syncthing-cli";
-
-    target = "stcli";
   };
 
   syncthing-discovery = common {

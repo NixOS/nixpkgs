@@ -1,8 +1,9 @@
 { stdenv
+, lib
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , gettext
 , dbus
 , glib
@@ -17,13 +18,14 @@
 , fuse3
 , libcdio
 , libxml2
+, libsoup_3
 , libxslt
 , docbook_xsl
 , docbook_xml_dtd_42
 , samba
 , libmtp
 , gnomeSupport ? false
-, gnome3
+, gnome
 , gcr
 , glib-networking
 , gnome-online-accounts
@@ -41,11 +43,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
-  version = "1.42.2";
+  version = "1.50.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0jgrbid8a61hgh05wl8c4f4638x7dffd5vip02jmladxfdszjymm";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "A9crjBXvQ4EQ8M9Fe1ZVJmyLUV0EErMPTVXPoNoGrF4=";
   };
 
   postPatch = ''
@@ -59,7 +61,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     python3
-    pkgconfig
+    pkg-config
     gettext
     wrapGAppsHook
     libxml2
@@ -89,9 +91,8 @@ stdenv.mkDerivation rec {
     libnfs
     openssh
     gsettings-desktop-schemas
-    # TODO: a ligther version of libsoup to have FTP/HTTP support?
-  ] ++ stdenv.lib.optionals gnomeSupport [
-    gnome3.libsoup
+    libsoup_3
+  ] ++ lib.optionals gnomeSupport [
     gcr
     glib-networking # TLS support
     gnome-online-accounts
@@ -102,13 +103,14 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "-Dtmpfilesdir=no"
-  ] ++ stdenv.lib.optionals (!gnomeSupport) [
+  ] ++ lib.optionals (!gnomeSupport) [
     "-Dgcr=false"
     "-Dgoa=false"
     "-Dkeyring=false"
-    "-Dhttp=false"
     "-Dgoogle=false"
-  ] ++ stdenv.lib.optionals (samba == null) [
+  ] ++ lib.optionals (avahi == null) [
+    "-Ddnssd=false"
+  ] ++ lib.optionals (samba == null) [
     # Xfce don't want samba
     "-Dsmb=false"
   ];
@@ -117,15 +119,16 @@ stdenv.mkDerivation rec {
   doInstallCheck = doCheck;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual Filesystem support library" + optionalString gnomeSupport " (full GNOME support)";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.lethalman ] ++ gnome3.maintainers;
+    maintainers = [ ] ++ teams.gnome.members;
   };
 }

@@ -1,8 +1,8 @@
 --- a/configure
 +++ b/configure
-@@ -6029,53 +6029,8 @@
+@@ -6143,53 +6143,8 @@ rm -f confcache
+ #AC_CHECK_HEADERS(openssl/ssl.h openssl/crypto.h)
  #AC_CHECK_HEADERS(zlib.h)
- #EGG_CHECK_ZLIB
  
 -{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for path to OpenSSL" >&5
 -$as_echo_n "checking for path to OpenSSL... " >&6; }
@@ -52,7 +52,7 @@
 -fi
 -unset cf_openssl_basedir
 +SSL_INCLUDES="-I@openssl.dev@/include"
-+SSL_LIBS="-L@openssl.out@/lib"
++SSL_LIBS="-L@openssl-lib@/lib"
  
  save_CXX="$CXX"
  CXX="$CXX $SSL_INCLUDES"

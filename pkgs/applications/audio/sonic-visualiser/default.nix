@@ -1,23 +1,26 @@
 # TODO add plugins having various licenses, see http://www.vamp-plugins.org/download.html
 
-{ stdenv, fetchurl, alsaLib, bzip2, fftw, libjack2, libX11, liblo
-, libmad, libogg, librdf, librdf_raptor, librdf_rasqal, libsamplerate
-, libsndfile, pkgconfig, libpulseaudio, qtbase, redland
-, qmake, rubberband, serd, sord, vampSDK, fftwFloat
+{ lib, stdenv, fetchurl, alsa-lib, bzip2, fftw, libjack2, libX11, liblo
+, libmad, lrdf, librdf_raptor, librdf_rasqal, libsamplerate
+, libsndfile, pkg-config, libpulseaudio, qtbase, qtsvg, redland
+, rubberband, serd, sord, vamp-plugin-sdk, fftwFloat
+, capnproto, liboggz, libfishsound, libid3tag, opusfile
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "sonic-visualiser";
-  version = "2.4.1";
+  version = "4.2";
 
   src = fetchurl {
-    url = "https://code.soundsoftware.ac.uk/attachments/download/1185/${pname}-${version}.tar.gz";
-    sha256 = "06nlha70kgrby16nyhngrv5q846xagnxdinv608v7ga7vpywwmyb";
+    url = "https://code.soundsoftware.ac.uk/attachments/download/2755/${pname}-${version}.tar.gz";
+    sha256 = "1wsvranhvdl21ksbinbgb55qvs3g2d4i57ssj1vx2aln6m01ms9q";
   };
 
+  nativeBuildInputs = [ pkg-config wrapQtAppsHook ];
   buildInputs =
-    [ libsndfile qtbase fftw fftwFloat bzip2 librdf rubberband
-      libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
+    [ libsndfile qtbase qtsvg fftw fftwFloat bzip2 lrdf rubberband
+      libsamplerate vamp-plugin-sdk alsa-lib librdf_raptor librdf_rasqal redland
       serd
       sord
       # optional
@@ -25,32 +28,27 @@ stdenv.mkDerivation rec {
       # portaudio
       libpulseaudio
       libmad
-      libogg # ?
-      # fishsound
+      libfishsound
       liblo
       libX11
+      capnproto
+      liboggz
+      libid3tag
+      opusfile
     ];
 
-  nativeBuildInputs = [ pkgconfig qmake ];
-
-  configurePhase = ''
-    for i in sonic-visualiser svapp svcore svgui;
-      do cd $i && qmake PREFIX=$out && cd ..;
-    done
+  # comment out the tests
+  preConfigure = ''
+    sed -i 's/sub_test_svcore_/#sub_test_svcore_/' sonic-visualiser.pro
   '';
 
-  installPhase = ''
-    mkdir -p $out/{bin,share/sonic-visualiser}
-    cp sonic-visualiser $out/bin/
-    cp -r samples $out/share/sonic-visualiser/
-  '';
+  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "View and analyse contents of music audio files";
-    homepage = http://www.sonicvisualiser.org/;
+    homepage = "https://www.sonicvisualiser.org/";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu maintainers.marcweber ];
     platforms = platforms.linux;
-    broken = true;
   };
 }

@@ -6,10 +6,7 @@ let
 
   cfg = config.services.jupyter;
 
-  # NOTE: We don't use top-level jupyter because we don't
-  # want to pass in JUPYTER_PATH but use .environment instead,
-  # saving a rebuild.
-  package = pkgs.python3.pkgs.notebook;
+  package = cfg.package;
 
   kernels = (pkgs.jupyter-kernel.create  {
     definitions = if cfg.kernels != null
@@ -35,6 +32,28 @@ in {
       description = ''
         IP address Jupyter will be listening on.
       '';
+    };
+
+    package = mkOption {
+      type = types.package;
+      # NOTE: We don't use top-level jupyter because we don't
+      # want to pass in JUPYTER_PATH but use .environment instead,
+      # saving a rebuild.
+      default = pkgs.python3.pkgs.notebook;
+      defaultText = literalExpression "pkgs.python3.pkgs.notebook";
+      description = ''
+        Jupyter package to use.
+      '';
+    };
+
+    command = mkOption {
+      type = types.str;
+      default = "jupyter-notebook";
+      example = "jupyter-lab";
+      description = ''
+        Which command the service runs. Note that not all jupyter packages
+        have all commands, e.g. jupyter-lab isn't present in the default package.
+       '';
     };
 
     port = mkOption {
@@ -87,10 +106,7 @@ in {
           "open('/path/secret_file', 'r', encoding='utf8').read().strip()"
         It will be interpreted at the end of the notebookConfig.
       '';
-      example = [
-        "'sha1:1b961dc713fb:88483270a63e57d18d43cf337e629539de1436ba'"
-        "open('/path/secret_file', 'r', encoding='utf8').read().strip()"
-      ];
+      example = "'sha1:1b961dc713fb:88483270a63e57d18d43cf337e629539de1436ba'";
     };
 
     notebookConfig = mkOption {
@@ -107,26 +123,26 @@ in {
       })));
 
       default = null;
-      example = literalExample ''
+      example = literalExpression ''
         {
           python3 = let
             env = (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
                     ipykernel
                     pandas
-                    scikitlearn
+                    scikit-learn
                   ]));
           in {
             displayName = "Python 3 for machine learning";
             argv = [
-              "$ {env.interpreter}"
+              "''${env.interpreter}"
               "-m"
               "ipykernel_launcher"
               "-f"
               "{connection_file}"
             ];
             language = "python";
-            logo32 = "$ {env.sitePackages}/ipykernel/resources/logo-32x32.png";
-            logo64 = "$ {env.sitePackages}/ipykernel/resources/logo-64x64.png";
+            logo32 = "''${env.sitePackages}/ipykernel/resources/logo-32x32.png";
+            logo64 = "''${env.sitePackages}/ipykernel/resources/logo-64x64.png";
           };
         }
       '';
@@ -157,7 +173,7 @@ in {
 
         serviceConfig = {
           Restart = "always";
-          ExecStart = ''${package}/bin/jupyter-notebook \
+          ExecStart = ''${package}/bin/${cfg.command} \
             --no-browser \
             --ip=${cfg.ip} \
             --port=${toString cfg.port} --port-retries 0 \
@@ -178,6 +194,7 @@ in {
         extraGroups = [ cfg.group ];
         home = "/var/lib/jupyter";
         createHome = true;
+        isSystemUser = true;
         useDefaultShell = true; # needed so that the user can start a terminal.
       };
     })

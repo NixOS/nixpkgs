@@ -6,16 +6,16 @@
 
 buildPythonApplication rec {
   pname = "pyznap";
-  version = "1.4.3";
+  version = "1.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00xpw6rmkq5cfjfw23mv0917wfzvb5zxj420p6yh0rnl3swh7gi8";
+    sha256 = "88bf1d6de2c11f14acbdfa01b61eb95c94f95d829ddebdaee3786b64ccb93ae3";
   };
 
   propagatedBuildInputs = [
     setuptools
-  ];  
+  ];
 
   # tests aren't included in the PyPI packages
   doCheck = false;

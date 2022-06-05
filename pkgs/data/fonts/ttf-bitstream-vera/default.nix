@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 let
   pname = "ttf-bitstream-vera";
   version = "1.10";
@@ -6,7 +6,7 @@ in
 fetchzip rec {
   name = "${pname}-${version}";
 
-  url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.bz2";
+  url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${name}.tar.bz2";
 
   postFetch = ''
     tar -xjf $downloadedFile --strip-components=1

@@ -1,14 +1,15 @@
 { stdenv, lib, lndir, makeWrapper
 , fetchFromGitHub, cmake
-, libusb, pkgconfig
+, libusb-compat-0_1, pkg-config
 , usePython ? false
-, python, ncurses, swig2
+, python ? null
+, ncurses, swig2
 , extraPackages ? []
 } :
 
 let
 
-  version = "0.7.1";
+  version = "0.8.1";
   modulesVersion = with lib; versions.major version + "." + versions.minor version;
   modulesPath = "lib/SoapySDR/modules" + modulesVersion;
   extraPackagesSearchPath = lib.makeSearchPath modulesPath extraPackages;
@@ -21,11 +22,11 @@ in stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapySDR";
     rev = "soapy-sdr-${version}";
-    sha256 = "1rbnd3w12kzsh94fiywyn4vch7h0kf75m88fi6nq992b3vnmiwvl";
+    sha256 = "19f2x0pkxvf9figa0pl6xqlcz8fblvqb19mcnj632p0l8vk6qdv2";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
-  buildInputs = [ libusb ncurses ]
+  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  buildInputs = [ libusb-compat-0_1 ncurses ]
     ++ lib.optionals usePython [ python swig2 ];
 
   propagatedBuildInputs = lib.optional usePython python.pkgs.numpy;
@@ -41,15 +42,16 @@ in stdenv.mkDerivation {
     done
     # Needed for at least the remote plugin server
     for file in $out/bin/*; do
-        wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${extraPackagesSearchPath}
+        wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.escapeShellArg extraPackagesSearchPath}
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/pothosware/SoapySDR;
+  meta = with lib; {
+    homepage = "https://github.com/pothosware/SoapySDR";
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];
-    platforms = platforms.linux;
+    mainProgram = "SoapySDRUtil";
+    platforms = platforms.unix;
   };
 }

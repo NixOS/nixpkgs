@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, apr, expat, gnused
+{ lib, stdenv, fetchurl, makeWrapper, apr, expat, gnused
 , sslSupport ? true, openssl
 , bdbSupport ? true, db
 , ldapSupport ? !stdenv.isCygwin, openldap
@@ -10,13 +10,14 @@ assert sslSupport -> openssl != null;
 assert bdbSupport -> db != null;
 assert ldapSupport -> openldap != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
-  name = "apr-util-1.6.1";
+  pname = "apr-util";
+  version = "1.6.1";
 
   src = fetchurl {
-    url = "mirror://apache/apr/${name}.tar.bz2";
+    url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
     sha256 = "0nq3s1yn13vplgl6qfm09f7n0wm08malff9s59bqf9nid9xjzqfk";
   };
 
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = optional stdenv.isFreeBSD autoreconfHook;
 
   configureFlags = [ "--with-apr=${apr.dev}" "--with-expat=${expat.dev}" ]
@@ -37,7 +39,15 @@ stdenv.mkDerivation rec {
         "--without-freetds" "--without-berkeley-db" "--without-crypto" ]
     ;
 
-  propagatedBuildInputs = [ makeWrapper apr expat libiconv ]
+  # For some reason, db version 6.9 is selected when cross-compiling.
+  # It's unclear as to why, it requires someone with more autotools / configure knowledge to go deeper into that.
+  # Always replacing the link flag with a generic link flag seems to help though, so let's do that for now.
+  postConfigure = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    substituteInPlace Makefile \
+      --replace "-ldb-6.9" "-ldb"
+  '';
+
+  propagatedBuildInputs = [ apr expat libiconv ]
     ++ optional sslSupport openssl
     ++ optional bdbSupport db
     ++ optional ldapSupport openldap
@@ -48,7 +58,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $f \
         --replace "${expat.dev}/lib" "${expat.out}/lib" \
         --replace "${db.dev}/lib" "${db.out}/lib" \
-        --replace "${openssl.dev}/lib" "${openssl.out}/lib"
+        --replace "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
     done
 
     # Give apr1 access to sed for runtime invocations.
@@ -61,8 +71,8 @@ stdenv.mkDerivation rec {
     inherit sslSupport bdbSupport ldapSupport;
   };
 
-  meta = with stdenv.lib; {
-    homepage = http://apr.apache.org/;
+  meta = with lib; {
+    homepage = "https://apr.apache.org/";
     description = "A companion library to APR, the Apache Portable Runtime";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.unix;

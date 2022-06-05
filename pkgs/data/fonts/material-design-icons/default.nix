@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub }:
 
 let
-  version = "4.7.95";
+  version = "6.6.96";
 in fetchFromGitHub {
   name = "material-design-icons-${version}";
   owner  = "Templarian";
@@ -16,20 +16,17 @@ in fetchFromGitHub {
     cp fonts/*.woff $out/share/fonts/woff/
     cp fonts/*.woff2 $out/share/fonts/woff2/
   '';
-  sha256 = "0da92kz8ryy60kb5xm52md13w28ih4sfap8g3v9b4ziyww66zjhz";
+  sha256 = "sha256-rfDb9meTF0Y0kiCQd11SgnntQnw34Ti/IXn35xaPO1M=";
 
   meta = with lib; {
-    description = "3200+ Material Design Icons from the Community";
+    description = "4600+ Material Design Icons from the Community";
     longDescription = ''
       Material Design Icons' growing icon collection allows designers and
       developers targeting various platforms to download icons in the format,
       color and size they need for any project.
     '';
-    homepage = https://materialdesignicons.com;
-    license = with licenses; [
-      asl20  # for icons from: https://github.com/google/material-design-icons
-      ofl
-    ];
+    homepage = "https://materialdesignicons.com";
+    license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ vlaci ];
   };

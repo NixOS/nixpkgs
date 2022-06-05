@@ -1,5 +1,5 @@
-{ stdenv, fetchzip, ncurses, libX11, libXaw, libXt, libXext, libXmu, makeWrapper, writeScript, ... }:
-let 
+{ lib, stdenv, fetchzip, ncurses, libX11, libXaw, libXt, libXext, libXmu, makeWrapper, writeScript, ... }:
+let
   setup = writeScript "setup" ''
     mkdir -p "$ANGBAND_PATH"
     # Copy all the data files into place
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     stripRoot=false;
   };
 
-  buildInputs = [ makeWrapper ncurses libX11 libXaw libXt libXext libXmu ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ ncurses libX11 libXaw libXt libXext libXmu ];
 
   sourceRoot = "source/Sil/src";
 
@@ -26,19 +27,25 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     # Allow usage of ANGBAND_PATH
-    substituteInPlace config.h --replace "#define FIXED_PATHS" "" 
+    substituteInPlace config.h --replace "#define FIXED_PATHS" ""
   '';
 
   preConfigure = ''
     buildFlagsArray+=("LIBS=-lXaw -lXext -lSM -lICE -lXmu -lXt -lX11 -lncurses")
   '';
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: main.o:/build/source/Sil/src/externs.h:57: multiple definition of
+  #     `mini_screenshot_char'; variable.o:/build/source/Sil/src/externs.h:57: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   installPhase = ''
     # the makefile doesn't have a sensible install target, so we hav to do it ourselves
     mkdir -p $out/bin
     cp sil $out/bin/sil
     # Wrap the program to set a user-local ANGBAND_PATH, and run the setup script to copy files into place
-    # We could just use the options for a user-local save and scores dir, but it tried to write to the 
+    # We could just use the options for a user-local save and scores dir, but it tried to write to the
     # lib directory anyway, so we might as well give everyone a copy
     wrapProgram $out/bin/sil \
       --run "set -u" \
@@ -49,15 +56,15 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A rouge-like game set in the first age of Middle-earth";
     longDescription = ''
-      A game of adventure set in the first age of Middle-earth, when the world still 
+      A game of adventure set in the first age of Middle-earth, when the world still
       rang with elven song and gleamed with dwarven mail.
 
-      Walk the dark halls of Angband.  Slay creatures black and fell.  Wrest a shining 
+      Walk the dark halls of Angband.  Slay creatures black and fell.  Wrest a shining
       Silmaril from Morgoth’s iron crown.
     '';
-    homepage = http://www.amirrorclear.net/flowers/game/sil/index.html;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.michaelpj ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "http://www.amirrorclear.net/flowers/game/sil/index.html";
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.michaelpj ];
+    platforms = lib.platforms.linux;
   };
 }

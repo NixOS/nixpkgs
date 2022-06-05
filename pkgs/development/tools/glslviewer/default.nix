@@ -1,28 +1,28 @@
-{ stdenv, fetchFromGitHub, glfw, pkgconfig, libXrandr, libXdamage
+{ lib, stdenv, fetchFromGitHub, glfw, pkg-config, libXrandr, libXdamage
 , libXext, libXrender, libXinerama, libXcursor, libXxf86vm, libXi
-, libX11, libGLU, python2Packages, ensureNewerSourcesForZipFilesHook
+, libX11, libGLU, python3Packages, ensureNewerSourcesForZipFilesHook
 , Cocoa
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "glslviewer";
-  version = "2019-04-22";
+  version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "patriciogonzalezvivo";
     repo = "glslViewer";
-    rev = "fa3e2ed4810927d189e480b704366cca22f281f3";
-    sha256 = "1888jxi84f2nnc0kpzqrn2cada1z4zqyq8ss4ppb5y3wy7d87qjn";
+    rev = version;
+    sha256 = "0v7x93b61ama0gmzlx1zc56jgi7bvzsfvbkfl82xzwf2h5g1zni7";
   };
 
-  nativeBuildInputs = [ pkgconfig ensureNewerSourcesForZipFilesHook ];
+  nativeBuildInputs = [ pkg-config ensureNewerSourcesForZipFilesHook python3Packages.six ];
   buildInputs = [
     glfw libGLU glfw libXrandr libXdamage
     libXext libXrender libXinerama libXcursor libXxf86vm
     libXi libX11
-  ] ++ (with python2Packages; [ python setuptools wrapPython ])
-    ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
-  pythonPath = with python2Packages; [ requests ];
+  ] ++ (with python3Packages; [ python setuptools wrapPython ])
+    ++ lib.optional stdenv.isDarwin Cocoa;
+  pythonPath = with python3Packages; [ pyyaml requests ];
 
   # Makefile has /usr/local/bin hard-coded for 'make install'
   preConfigure = ''
@@ -31,6 +31,7 @@ stdenv.mkDerivation {
         --replace '/usr/bin/clang++' 'clang++'
     substituteInPlace Makefile \
         --replace 'python setup.py install' "python setup.py install --prefix=$out"
+    2to3 -w bin/*
   '';
 
   preInstall = ''
@@ -42,9 +43,9 @@ stdenv.mkDerivation {
     wrapPythonPrograms
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Live GLSL coding renderer";
-    homepage = http://patriciogonzalezvivo.com/2015/glslViewer/;
+    homepage = "http://patriciogonzalezvivo.com/2015/glslViewer/";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.hodapp ];

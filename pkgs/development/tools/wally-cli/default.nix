@@ -1,34 +1,29 @@
-{ lib, buildGoPackage, fetchFromGitHub, pkg-config, libusb1 }:
+{ lib, buildGoModule, fetchFromGitHub, pkg-config, libusb1 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "wally-cli";
-  version = "1.1.1";
+  version = "2.0.1";
 
-  goPackagePath = "github.com/zsa/wally";
-  subPackages = [ "cli" ];
+  subPackages = [ "." ];
 
-  nativeBuildInputs = [
-    pkg-config
-    libusb1
-  ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libusb1 ];
 
   src = fetchFromGitHub {
     owner = "zsa";
-    repo = "wally";
-    rev = "68960e452ee0f6c7142f5008d4b1cdc6284d3de7";
-    sha256 = "122m5v7s5wqlshyk2salmd848lqs4rrz54d2ap11ay61kijm0bs2";
+    repo = "wally-cli";
+    rev = "${version}-linux";
+    sha256 = "NuyQHEygy4LNqLtrpdwfCR+fNy3ZUxOClVdRen6AXMc=";
   };
 
-  postInstall = ''
-    mv $bin/bin/cli $bin/bin/wally
-  '';
-
-  goDeps = ./deps.nix;
+  vendorSha256 = "sha256-HffgkuKmaOjTYi+jQ6vBlC50JqqbYiikURT6TCqL7e0=";
 
   meta = with lib; {
     description = "A tool to flash firmware to mechanical keyboards";
-    homepage = https://ergodox-ez.com/pages/wally-planck;
+    homepage = "https://ergodox-ez.com/pages/wally-planck";
+    platforms = with platforms; linux ++ darwin;
     license = licenses.mit;
-    maintainers = [ maintainers.spacekookie ];
+    maintainers = with maintainers; [ spacekookie r-burns ];
   };
 }

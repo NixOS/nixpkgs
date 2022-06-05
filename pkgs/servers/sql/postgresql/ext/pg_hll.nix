@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, postgresql }:
+{ lib, stdenv, fetchFromGitHub, postgresql }:
 
 stdenv.mkDerivation rec {
   pname = "pg_hll";
-  version = "2.14";
+  version = "2.16";
 
   buildInputs = [ postgresql ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "citusdata";
     repo   = "postgresql-hll";
     rev    = "refs/tags/v${version}";
-    sha256 = "13vphxkc9pn4bkpgab560bgdbl99li2b3p1n2rm5a78wswlsbsps";
+    sha256 = "0icns4m3dkm20fs6gznciwsb8ba8gcc316igz6j7qwjdnyg2ppbf";
   };
 
   installPhase = ''
@@ -21,9 +21,10 @@ stdenv.mkDerivation rec {
     cp *.control $out/share/postgresql/extension
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "HyperLogLog for PostgreSQL";
-    homepage    = https://www.citusdata.com/;
+    homepage    = "https://github.com/citusdata/postgresql-hll";
+    changelog   = "https://github.com/citusdata/postgresql-hll/raw/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ thoughtpolice ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;

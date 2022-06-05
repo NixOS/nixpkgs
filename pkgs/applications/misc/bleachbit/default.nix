@@ -1,5 +1,5 @@
-{ stdenv
-, pythonPackages
+{ lib
+, python3Packages
 , fetchurl
 , gettext
 , gobject-introspection
@@ -7,17 +7,18 @@
 , glib
 , gtk3
 , libnotify
+, scandir ? null
 }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "bleachbit";
-  version = "3.0";
+  version = "4.4.0";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
-    sha256 = "18ns9hms671b4l0189m1m2agprkydnpvyky9q2f5hxf35i9cn67d";
+    sha256 = "0kqqfzq6bh03n7kxb9vd483bqi1cklfvj35a7h4iqk96sq1xv8z6";
   };
 
   nativeBuildInputs = [
@@ -32,7 +33,7 @@ pythonPackages.buildPythonApplication rec {
     libnotify
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     chardet
     pygobject3
     requests
@@ -43,6 +44,7 @@ pythonPackages.buildPythonApplication rec {
   postPatch = ''
     find -type f -exec sed -i -e 's@/usr/share@${placeholder "out"}/share@g' {} \;
     find -type f -exec sed -i -e 's@/usr/bin@${placeholder "out"}/bin@g' {} \;
+    find -type f -exec sed -i -e 's@${placeholder "out"}/bin/python3@${python3Packages.python}/bin/python3@' {} \;
   '';
 
   dontBuild = true;
@@ -51,13 +53,19 @@ pythonPackages.buildPythonApplication rec {
     "prefix=${placeholder "out"}"
   ];
 
+  # Prevent double wrapping from wrapGApps and wrapPythonProgram
+  dontWrapGApps = true;
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+  ];
+
   strictDeps = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://bleachbit.sourceforge.net;
+  meta = with lib; {
+    homepage = "http://bleachbit.sourceforge.net";
     description = "A program to clean your computer";
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ leonardoce ];
+    maintainers = with maintainers; [ leonardoce mbprtpmnr ];
   };
 }

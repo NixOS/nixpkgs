@@ -1,24 +1,24 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , setuptools
-, dateutil
+, python-dateutil
 , pytz
 }:
 
 buildPythonPackage rec {
-  version = "4.0.4";
+  version = "4.0.9";
   pname = "icalendar";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16gjvqv0n05jrb9g228pdjgzd3amz2pdhvcgsn1jypszjg5m2w9l";
+    sha256 = "cc73fa9c848744843046228cb66ea86cd8c18d73a51b140f7c003f760b84a997";
   };
 
   buildInputs = [ setuptools ];
-  propagatedBuildInputs = [ dateutil pytz ];
+  propagatedBuildInputs = [ python-dateutil pytz ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A parser/generator of iCalendar files";
     homepage = "https://icalendar.readthedocs.org/";
     license = licenses.bsd2;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mpfr, readline }:
+{ lib, stdenv, fetchurl, mpfr, readline }:
 
 stdenv.mkDerivation rec {
   pname = "wcalc";
@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mpfr readline ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A command line calculator";
-    homepage = http://w-calc.sourceforge.net;
+    homepage = "http://w-calc.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.all;
   };

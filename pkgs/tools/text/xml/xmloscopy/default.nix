@@ -43,9 +43,9 @@ stdenv.mkDerivation rec {
       --set PATH "${spath}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "wtf is my docbook broken?";
-    homepage = https://github.com/grahamc/xmloscopy;
+    homepage = "https://github.com/grahamc/xmloscopy";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ grahamc ];

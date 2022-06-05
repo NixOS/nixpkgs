@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , at-spi2-core
 , babl
@@ -13,7 +13,7 @@
 , gfbgraph
 , glib
 , gnome-online-accounts
-, gnome3
+, gnome
 , gobject-introspection
 , grilo
 , grilo-plugins
@@ -21,12 +21,13 @@
 , gtk3
 , itstool
 , libdazzle
+, libhandy
 , libgdata
 , libxml2
 , meson
 , ninja
 , nixosTests
-, pkgconfig
+, pkg-config
 , python3
 , tracker
 , tracker-miners
@@ -35,13 +36,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-photos";
-  version = "3.34.0";
+  version = "42.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "12j455id5g616cn0nnj73v83aqgpavrsqszw1r5yhbpyc76lg03m";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "JcsoFCUZnex7BF8T8y+PlgNMsMuLlNlvnf+vT1vmhVE=";
   };
 
   patches = [
@@ -57,7 +58,7 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    pkgconfig
+    pkg-config
     (python3.withPackages (pkgs: with pkgs; [
       dogtail
       pygobject3
@@ -77,12 +78,12 @@ stdenv.mkDerivation rec {
     gfbgraph
     glib
     gnome-online-accounts
-    gnome3.adwaita-icon-theme
     grilo
     grilo-plugins
     gsettings-desktop-schemas
     gtk3
     libdazzle
+    libhandy
     libgdata
     tracker
     tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
@@ -106,20 +107,20 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
     };
 
     tests = {
-      installed-tests = nixosTests.gnome-photos;
+      installed-tests = nixosTests.installed-tests.gnome-photos;
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Access, organize and share your photos";
-    homepage = https://wiki.gnome.org/Apps/Photos;
+    homepage = "https://wiki.gnome.org/Apps/Photos";
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

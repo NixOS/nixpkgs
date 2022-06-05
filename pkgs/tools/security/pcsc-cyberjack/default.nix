@@ -1,24 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, libusb, pcsclite }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libusb1, pcsclite }:
 
-stdenv.mkDerivation rec {
+let
+  version = "3.99.5";
+  suffix = "SP13";
+  tarBall = "${version}final.${suffix}";
+
+in stdenv.mkDerivation rec {
   pname = "pcsc-cyberjack";
-  version = "3.99.5_SP12";
+  inherit version;
 
-  src = with stdenv.lib; let
-    splittedVer = splitString "_" version;
-    mainVer = if length splittedVer >= 1 then head splittedVer else version;
-    spVer = optionalString (length splittedVer >= 1) ("." + last splittedVer);
-    tarballVersion = "${mainVer}final${spVer}";
-  in fetchurl {
-    url = "http://support.reiner-sct.de/downloads/LINUX/V${version}"
-        + "/pcsc-cyberjack-${tarballVersion}.tar.bz2";
-    sha256 = "04pkmybal56s5xnjld09vl1s1h6qf8mvhm41b758d6hi240kgp1j";
+  src = fetchurl {
+    url =
+      "http://support.reiner-sct.de/downloads/LINUX/V${version}_${suffix}/${pname}_${tarBall}.tar.gz";
+    sha256 = "1lx4bfz4riz7j77sl65akyxzww0ygm63w0c1b75knr1pijlv8d3b";
   };
 
   outputs = [ "out" "tools" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libusb pcsclite ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  buildInputs = [ libusb1 pcsclite ];
+
+  enableParallelBuilding = true;
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=narrowing";
 
   configureFlags = [
     "--with-usbdropdir=${placeholder "out"}/pcsc/drivers"
@@ -27,11 +32,11 @@ stdenv.mkDerivation rec {
 
   postInstall = "make -C tools/cjflash install";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "REINER SCT cyberJack USB chipcard reader user space driver";
-    homepage = https://www.reiner-sct.com/;
+    homepage = "https://www.reiner-sct.com/";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ aszlig ];
+    platforms = platforms.linux;
   };
 }

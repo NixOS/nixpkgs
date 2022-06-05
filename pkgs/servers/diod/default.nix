@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, munge, lua,
+{ lib, stdenv, fetchurl, munge, lua,
   libcap, perl, ncurses
 }:
 
@@ -13,11 +13,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace diod/xattr.c --replace attr/xattr.h sys/xattr.h
+    sed -i -e '/sys\/types\.h>/a #include <sys/sysmacros.h>' diod/ops.c
   '';
 
   buildInputs = [ munge lua libcap perl ncurses ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An I/O forwarding server that implements a variant of the 9P protocol";
     maintainers = with maintainers; [ rnhmjoj ];
     platforms   = platforms.linux;

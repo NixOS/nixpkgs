@@ -1,45 +1,38 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, makeWrapper
-, coreutils, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted, p7zip, utillinux, wget
-, wxGTK30 }:
+{ lib, stdenv, fetchFromGitHub, installShellFiles, makeWrapper
+, coreutils, dosfstools, findutils, gawk, gnugrep, grub2_light, ncurses, ntfs3g, parted, p7zip, util-linux, wimlib, wget }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.0";
+  version = "5.2.4";
   pname = "woeusb";
 
   src = fetchFromGitHub {
-    owner = "slacka";
+    owner = "WoeUSB";
     repo = "WoeUSB";
     rev = "v${version}";
-    sha256 = "1w3m3qbjn0igydsbpf22w29lzf1pkxv7dlny5mbyrb6j0q6wlx0b";
+    sha256 = "sha256-HB1E7rP/U58dyL3j6YnhF5AOGAcHqmA/ZZ5JNBDibco=";
   };
 
-  patches = [ ./remove-workaround.patch ];
-
-  nativeBuildInputs = [ autoreconfHook makeWrapper ];
-  buildInputs = [ wxGTK30 ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   postPatch = ''
     # Emulate version smudge filter (see .gitattributes, .gitconfig).
-    for file in configure.ac debian/changelog src/woeusb src/woeusb.1 src/woeusbgui.1; do
+    for file in sbin/woeusb share/man/man1/woeusb.1; do
       substituteInPlace "$file" \
         --replace '@@WOEUSB_VERSION@@' '${version}'
     done
-
-    substituteInPlace src/MainPanel.cpp \
-      --replace "'woeusb " "'$out/bin/woeusb "
   '';
 
-  postInstall = ''
-    # don't write data into /
-    substituteInPlace "$out/bin/woeusb" \
-      --replace /media/ /run/woeusb/
+  installPhase = ''
+    runHook preInstall
 
-    # woeusbgui launches woeusb with pkexec, which sets
-    # PATH=/usr/sbin:/usr/bin:/sbin:/bin:/root/bin.  Perhaps pkexec
-    # should be patched with a less useless default PATH, but for now
-    # we add everything we need manually.
+    mkdir -p $out/bin
+    mv sbin/woeusb $out/bin
+    installManPage share/man/man1/woeusb.1
+
     wrapProgram "$out/bin/woeusb" \
-      --set PATH '${stdenv.lib.makeBinPath [ coreutils dosfstools findutils gawk gnugrep grub2_light ncurses ntfs3g parted utillinux wget p7zip ]}'
+      --set PATH '${lib.makeBinPath [ coreutils dosfstools findutils gawk gnugrep grub2_light ncurses ntfs3g parted p7zip util-linux wget wimlib ]}'
+
+    runHook postInstall
   '';
 
   doInstallCheck = true;
@@ -50,11 +43,11 @@ stdenv.mkDerivation rec {
     [ "$out_version" = '${version}' ]
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Create bootable USB disks from Windows ISO images";
-    homepage = https://github.com/slacka/WoeUSB;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ bjornfor gnidorah ];
+    homepage = "https://github.com/WoeUSB/WoeUSB";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux;
   };
 }

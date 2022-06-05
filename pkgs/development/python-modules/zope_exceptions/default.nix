@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_interface
@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "zope.exceptions";
-  version = "4.3";
+  version = "4.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5fa59c3c1044bb9448aeec8328db0bfceaae2a2174e88528d3fe04adf8d47211";
+    sha256 = "sha256-TjW7oEiJxdEU3KpVKXQl1fM/YYqF7323Ehs7dxEAeE4=";
   };
 
   propagatedBuildInputs = [ zope_interface ];
@@ -18,9 +18,9 @@ buildPythonPackage rec {
   # circular deps
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Exception interfaces and implementations";
-    homepage = https://pypi.python.org/pypi/zope.exceptions;
+    homepage = "https://pypi.python.org/pypi/zope.exceptions";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
   };

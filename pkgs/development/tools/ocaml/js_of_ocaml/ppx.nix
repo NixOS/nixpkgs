@@ -1,14 +1,15 @@
-{ stdenv, ocaml, findlib, dune, js_of_ocaml-compiler
-, ocaml-migrate-parsetree, ppx_tools_versioned
+{ buildDunePackage, js_of_ocaml-compiler
+, ppxlib
 , js_of_ocaml
 }:
 
-stdenv.mkDerivation {
-	pname = "js_of_ocaml-ppx"; 
+buildDunePackage {
+  pname = "js_of_ocaml-ppx";
 
-	inherit (js_of_ocaml-compiler) version src installPhase meta;
+  inherit (js_of_ocaml-compiler) version src useDune2;
 
-	buildInputs = [ ocaml findlib dune ocaml-migrate-parsetree ppx_tools_versioned js_of_ocaml ];
+  buildInputs = [ js_of_ocaml ];
+  propagatedBuildInputs = [ ppxlib ];
 
-	buildPhase = "dune build -p js_of_ocaml-ppx";
+  meta = builtins.removeAttrs js_of_ocaml-compiler.meta [ "mainProgram" ];
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libraw1394
+{ lib, stdenv, fetchurl, libraw1394
 , libusb1, CoreServices }:
 
 stdenv.mkDerivation rec {
@@ -11,14 +11,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libusb1 ]
-    ++ stdenv.lib.optional stdenv.isLinux libraw1394
-    ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
+    ++ lib.optional stdenv.isLinux libraw1394
+    ++ lib.optional stdenv.isDarwin CoreServices;
 
-  meta = with stdenv.lib; {
-    homepage = https://sourceforge.net/projects/libdc1394/;
+  meta = with lib; {
     description = "Capture and control API for IIDC compliant cameras";
+    homepage = "https://sourceforge.net/projects/libdc1394/";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.viric ];
+    mainProgram = "dc1394_reset_bus";
     platforms = platforms.unix;
   };
 }

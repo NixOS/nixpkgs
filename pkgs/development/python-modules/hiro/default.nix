@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, mock }:
+{ lib, buildPythonPackage, fetchPypi, six, mock }:
 buildPythonPackage rec {
   pname = "hiro";
   version = "0.5.1";
@@ -10,9 +10,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six mock ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Time manipulation utilities for Python";
-    homepage = https://hiro.readthedocs.io/en/latest/;
+    homepage = "https://hiro.readthedocs.io/en/latest/";
     license = licenses.mit;
     maintainers = with maintainers; [ nyarly ];
   };

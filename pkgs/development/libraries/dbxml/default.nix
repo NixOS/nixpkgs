@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, db62, xercesc, xqilla }:
+{ lib, stdenv, fetchurl, db62, xercesc, xqilla }:
 
 stdenv.mkDerivation rec {
   pname = "dbxml";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "http://download.oracle.com/berkeley-db/${pname}-${version}.tar.gz";
     sha256 = "a8fc8f5e0c3b6e42741fa4dfc3b878c982ff8f5e5f14843f6a7e20d22e64251a";
   };
+
+  outputs = [ "bin" "dev" "out" ];
 
   patches = [
     ./cxx11.patch
@@ -32,11 +34,11 @@ stdenv.mkDerivation rec {
     cd dbxml
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.oracle.com/database/berkeley-db/xml.html;
+  meta = with lib; {
+    homepage = "https://www.oracle.com/database/berkeley-db/xml.html";
     description = "Embeddable XML database based on Berkeley DB";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ danieldk ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

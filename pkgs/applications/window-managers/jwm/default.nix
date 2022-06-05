@@ -1,34 +1,46 @@
-{ stdenv, fetchFromGitHub, pkgconfig, automake, autoconf, libtool,
-  gettext, which, xorg, libX11, libXext, libXinerama, libXpm, libXft,
-  libXau, libXdmcp, libXmu, libpng, libjpeg, expat, xorgproto,
-  librsvg, freetype, fontconfig }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook, gettext
+, which, xorg, libX11, libXext, libXinerama, libXpm, libXft, libXau, libXdmcp
+, libXmu, libpng, libjpeg, expat, xorgproto, librsvg, freetype, fontconfig }:
 
 stdenv.mkDerivation rec {
   pname = "jwm";
-  version = "1685";
-  
+  version = "2.4.1";
+
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
-    rev = "s${version}";
-    sha256 = "1kyvy022sij898g2hm5spy5vq0kw6aqd7fsnawl2xyh06gwh29wg";
+    rev = "v${version}";
+    sha256 = "sha256-7CEL2ddlABM7SYjMVUs3pu0O+2cVsz04slsdUIbgZuM=";
   };
 
-  nativeBuildInputs = [ pkgconfig automake autoconf libtool gettext which ];
+  nativeBuildInputs = [ pkg-config gettext which autoreconfHook ];
 
-  buildInputs = [ libX11 libXext libXinerama libXpm libXft xorg.libXrender
-    libXau libXdmcp libXmu libpng libjpeg expat xorgproto
-    librsvg freetype fontconfig ];
+  buildInputs = [
+    libX11
+    libXext
+    libXinerama
+    libXpm
+    libXft
+    xorg.libXrender
+    libXau
+    libXdmcp
+    libXmu
+    libpng
+    libjpeg
+    expat
+    xorgproto
+    librsvg
+    freetype
+    fontconfig
+  ];
 
   enableParallelBuilding = true;
 
-  preConfigure = "./autogen.sh";
-
   meta = {
-    homepage = http://joewing.net/projects/jwm/;
+    homepage = "http://joewing.net/projects/jwm/";
     description = "Joe's Window Manager is a light-weight X11 window manager";
-    license = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.romildo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

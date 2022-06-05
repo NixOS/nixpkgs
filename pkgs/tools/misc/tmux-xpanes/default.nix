@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, openssl, perl }:
+{ lib, stdenv, fetchFromGitHub, openssl, perl }:
 
 stdenv.mkDerivation rec {
   pname = "tmux-xpanes";
-  version = "4.1.0";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "greymd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11yz6rh2ckd1z8q80n8giv2gcz2i22fgf3pnfxq96qrzflb0d96a";
+    sha256 = "sha256-e0dEkkEkColBQ0PgOQpoVbIkR3aVsrMZoSGbg4O11SU=";
   };
 
   buildInputs = [ openssl perl ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     install -m 644 man/*.1 $out/share/man/man1/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "tmux-based terminal divider";
     homepage = "https://github.com/greymd/tmux-xpanes";
     license = licenses.mit;

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -16,9 +16,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pkgs.git ];
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Setuptools revision control system plugin for Git";
-    homepage = https://pypi.python.org/pypi/setuptools-git;
+    homepage = "https://pypi.python.org/pypi/setuptools-git";
     license = licenses.bsd3;
   };
 

@@ -1,29 +1,35 @@
-{ stdenv, buildPythonPackage, fetchPypi, cloudpickle, ipykernel, wurlitzer,
-  jupyter_client, pyzmq }:
+{ lib, buildPythonPackage, fetchPypi, cloudpickle, ipykernel, wurlitzer,
+  jupyter-client, pyzmq }:
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
-  version = "1.8.1";
+  version = "2.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a782fc5961a9dd48d520ddc1c868b960d54b8edb1116c21fc2e3c347fe5a4474";
+    sha256 = "sha256-pdU20Oil53TX1hbBAqj6LWqkX9MwoLeZuY7vFYNW02w=";
   };
 
   propagatedBuildInputs = [
     cloudpickle
     ipykernel
     wurlitzer
-    jupyter_client
+    jupyter-client
     pyzmq
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py --replace "ipython>=7.31.1,<8" "ipython"
+  '';
 
   # No tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Jupyter kernels for Spyder's console";
-    homepage = "https://github.com/spyder-ide/spyder-kernels";
+    homepage = "https://docs.spyder-ide.org/current/ipythonconsole.html";
+    downloadPage = "https://github.com/spyder-ide/spyder-kernels/releases";
+    changelog = "https://github.com/spyder-ide/spyder-kernels/blob/master/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
   };

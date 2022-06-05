@@ -1,23 +1,29 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine, lilypond }:
+{ lib, stdenv, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine, lilypond }:
 
 buildPythonApplication rec {
-  name = "frescobaldi-${version}";
-  version = "3.1";
+  pname = "frescobaldi";
+  version = "3.1.3";
 
   src = fetchFromGitHub {
     owner = "wbsoft";
     repo = "frescobaldi";
     rev = "v${version}";
-    sha256 = "0sv6dc1l34rrhfbn1wqkl9zs9hiacmmbviw87d0d03987s1iirb1";
+    sha256 = "1p8f4vn2dpqndw1dylmg7wms6vi69zcfj544c908s4r8rrmbycyf";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    lilypond pygame python-ly sip
+    lilypond pygame python-ly sip_4
     pyqt5 poppler-qt5
     pyqtwebengine
   ];
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+
+  # Needed because source is fetched from git
+  preBuild = ''
+    make -C i18n
+    make -C linux
+  '';
 
   # no tests in shipped with upstream
   doCheck = false;
@@ -28,10 +34,10 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    homepage = http://frescobaldi.org/;
-    description = ''Frescobaldi is a LilyPond sheet music text editor'';
+    homepage = "https://frescobaldi.org/";
+    description = "A LilyPond sheet music text editor";
     longDescription = ''
-      Powerful text editor with syntax highlighting and automatic completion, 
+      Powerful text editor with syntax highlighting and automatic completion,
       Music view with advanced Point & Click, Midi player to proof-listen
       LilyPond-generated MIDI files, Midi capturing to enter music,
       Powerful Score Wizard to quickly setup a music score, Snippet Manager
@@ -45,5 +51,6 @@ buildPythonApplication rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sepi ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/frescobaldi.x86_64-darwin
   };
 }

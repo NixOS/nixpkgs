@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, patches
+{ lib, stdenv, fetchFromGitHub, patches
 , libxcb, xcbutilkeysyms, xcbutilwm
 , libX11, xcbutil, xcbutilxrm }:
 
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   installPhase = "make install DESTDIR=$out PREFIX=\"\"";
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/venam/2bwm;
+  meta = with lib; {
+    homepage = "https://github.com/venam/2bwm";
     description = "A fast floating WM written over the XCB library and derived from mcwm";
     license = licenses.mit;
     maintainers =  [ maintainers.sternenseemann ];

@@ -1,41 +1,48 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchurl
-, pkgconfig
+, pkg-config
 , expat
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
+, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
 , systemd
-, libX11 ? null
-, libICE ? null
-, libSM ? null
-, x11Support ? (stdenv.isLinux || stdenv.isDarwin)
+, audit
+, libapparmor
 , dbus
+, docbook_xml_dtd_44
+, docbook-xsl-nons
+, xmlto
+, autoreconfHook
+, autoconf-archive
+, x11Support ? (stdenv.isLinux || stdenv.isDarwin)
+, xorg
 }:
-
-assert
-  x11Support ->
-    libX11 != null && libICE != null && libSM != null;
-
-assert enableSystemd -> systemd != null;
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.12.16";
+  version = "1.14.0";
 
   src = fetchurl {
-    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "107ckxaff1cv4q6kmfdi2fb1nlsv03312a7kf6lb4biglhpjv8jl";
+    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
+    sha256 = "sha256-zNfM43WW4KGVWP1mSNEnKrQ/AR2AyGNa6o/QutWK69Q=";
   };
 
-  patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
+  patches = [
+    # Fix dbus-daemon crashing when running tests due to long XDG_DATA_DIRS.
+    # https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/302
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/dbus/dbus/-/commit/b551b3e9737958216a1a9d359150a4110a9d0549.patch";
+      sha256 = "kOVjlklZzKvBZXmmrE1UiO4XWRoBLViGwdn6/eDH+DY=";
+    })
+  ] ++ (lib.optional stdenv.isSunOS ./implement-getgrouplist.patch);
 
   postPatch = ''
-    substituteInPlace tools/Makefile.in \
-      --replace 'install-localstatelibDATA:' 'disabled:' \
+    substituteInPlace bus/Makefile.am \
+      --replace 'install-data-hook:' 'disabled:' \
+      --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
+    substituteInPlace tools/Makefile.am \
       --replace 'install-data-local:' 'disabled:' \
       --replace 'installcheck-local:' 'disabled:'
-    substituteInPlace bus/Makefile.in \
-      --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
   '' + /* cleanup of runtime references */ ''
     substituteInPlace ./dbus/dbus-sysdeps-unix.c \
       --replace 'DBUS_BINDIR "/dbus-launch"' "\"$lib/bin/dbus-launch\""
@@ -43,10 +50,16 @@ stdenv.mkDerivation rec {
       --replace 'DBUS_DAEMONDIR"/dbus-daemon"' '"/run/current-system/sw/bin/dbus-daemon"'
   '';
 
-  outputs = [ "out" "dev" "lib" "doc" ];
+  outputs = [ "out" "dev" "lib" "doc" "man" ];
 
+  strictDeps = true;
   nativeBuildInputs = [
-    pkgconfig
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+    docbook_xml_dtd_44
+    docbook-xsl-nons
+    xmlto
   ];
 
   propagatedBuildInputs = [
@@ -54,16 +67,18 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    lib.optionals x11Support [
+    lib.optionals x11Support (with xorg; [
       libX11
       libICE
       libSM
-    ] ++ lib.optional enableSystemd systemd;
+    ]) ++ lib.optional enableSystemd systemd
+    ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
 
   configureFlags = [
     "--enable-user-session"
-    "--libexecdir=${placeholder ''out''}/libexec"
+    "--enable-xml-docs"
+    "--libexecdir=${placeholder "out"}/libexec"
     "--datadir=/etc"
     "--localstatedir=/var"
     "--runstatedir=/run"
@@ -71,14 +86,12 @@ stdenv.mkDerivation rec {
     "--with-session-socket-dir=/tmp"
     "--with-system-pid-file=/run/dbus/pid"
     "--with-system-socket=/run/dbus/system_bus_socket"
-    "--with-systemdsystemunitdir=${placeholder ''out''}/etc/systemd/system"
-    "--with-systemduserunitdir=${placeholder ''out''}/etc/systemd/user"
-  ] ++ lib.optional (!x11Support) "--without-x";
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
+  ] ++ lib.optional (!x11Support) "--without-x"
+  ++ lib.optionals stdenv.isLinux [ "--enable-apparmor" "--enable-libaudit" ]
+  ++ lib.optionals enableSystemd [ "SYSTEMCTL=${systemd}/bin/systemctl" ];
 
-  # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
-  # (it just execs dbus-launch in dbus.tools), contrary to what the configure script demands.
-  # problems building without x11Support so disabled in that case for now
-  NIX_CFLAGS_COMPILE = lib.optionalString x11Support "-DDBUS_ENABLE_X11_AUTOLAUNCH=1";
   NIX_CFLAGS_LINK = lib.optionalString (!stdenv.isDarwin) "-Wl,--as-needed";
 
   enableParallelBuilding = true;
@@ -86,8 +99,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   installFlags = [
-    "sysconfdir=${placeholder ''out''}/etc"
-    "datadir=${placeholder ''out''}/share"
+    "sysconfdir=${placeholder "out"}/etc"
+    "datadir=${placeholder "out"}/share"
   ];
 
   # it's executed from $lib by absolute path
@@ -101,11 +114,11 @@ stdenv.mkDerivation rec {
     daemon = dbus.out;
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple interprocess messaging system";
-    homepage = http://www.freedesktop.org/wiki/Software/dbus/;
+    homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
     license = licenses.gpl2Plus; # most is also under AFL-2.1
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;
   };
 }

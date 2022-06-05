@@ -90,7 +90,7 @@ in {
         default = [];
         description = ''
           Additional cadvisor options.
-          
+
           See <link xlink:href='https://github.com/google/cadvisor/blob/master/docs/runtime_options.md'/> for available options.
         '';
       };
@@ -110,6 +110,8 @@ in {
       systemd.services.cadvisor = {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" "docker.service" "influxdb.service" ];
+
+        path = optionals config.boot.zfs.enabled [ pkgs.zfs ];
 
         postStart = mkBefore ''
           until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/containers/'; do
@@ -135,7 +137,6 @@ in {
 
         serviceConfig.TimeoutStartSec=300;
       };
-      virtualisation.docker.enable = mkDefault true;
     })
   ];
 }

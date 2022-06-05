@@ -1,22 +1,25 @@
-{ fetchurl, fetchpatch, stdenv, gnutls, glib, pkgconfig, check, libotr, python
+{ lib, fetchurl, fetchpatch, stdenv, gnutls, glib, pkg-config, check, libotr, python3
 , enableLibPurple ? false, pidgin ? null
 , enablePam ? false, pam ? null
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
-  name = "bitlbee-3.6";
+  pname = "bitlbee";
+  version = "3.6";
 
   src = fetchurl {
-    url = "mirror://bitlbee/src/${name}.tar.gz";
+    url = "mirror://bitlbee/src/bitlbee-${version}.tar.gz";
     sha256 = "0zhhcbcr59sx9h4maf8zamzv2waya7sbsl7w74gbyilvy93dw5cz";
   };
 
-  nativeBuildInputs = [ pkgconfig ] ++ optional doCheck check;
+  nativeBuildInputs = [ pkg-config ] ++ optional doCheck check;
 
-  buildInputs = [ gnutls glib libotr python ]
+  buildInputs = [ gnutls libotr python3 ]
     ++ optional enableLibPurple pidgin
     ++ optional enablePam pam;
+
+  propagatedBuildInputs = [ glib ];
 
   configureFlags = [
     "--otr=1"
@@ -57,10 +60,10 @@ stdenv.mkDerivation rec {
       Messenger, AIM and ICQ.
     '';
 
-    homepage = https://www.bitlbee.org/;
+    homepage = "https://www.bitlbee.org/";
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ lassulus pSub ];
     platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
   };
 }

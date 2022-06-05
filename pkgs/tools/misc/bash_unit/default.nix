@@ -1,16 +1,16 @@
 { fetchFromGitHub
-, stdenv
+, lib, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "bash_unit";
-  version = "1.6.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "pgrange";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jcjpcyf569b12vm4jrd53iqrrsjvr8sp9y29w2ls38fm8a16vr6";
+    sha256 = "sha256-TtpVldIAqyv+apXmbI+1L0NgZxoKdc6Ffrl4WOqRI9c=";
   };
 
   installPhase = ''
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
     cp bash_unit $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bash unit testing enterprise edition framework for professionals";
     maintainers = with maintainers; [ pamplemousse ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
     license = licenses.gpl3Plus;
   };
 }

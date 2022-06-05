@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     }
   );
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
-  patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
+  patchPhase = lib.optionalString stdenv.isLinux ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "$out/lib:${makeLibraryPath [zlib]}" \
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A secure tunneling app for executing tests securely when testing behind firewalls";
     license = licenses.unfree;
-    homepage = https://docs.saucelabs.com/reference/sauce-connect/;
+    homepage = "https://docs.saucelabs.com/reference/sauce-connect/";
     maintainers = with maintainers; [offline];
     platforms = platforms.linux ++ platforms.darwin;
   };

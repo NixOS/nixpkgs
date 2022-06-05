@@ -33,6 +33,8 @@ in {
       };
       configurationDir = mkOption {
         default = "${activemq}/conf";
+        defaultText = literalExpression ''"''${pkgs.activemq}/conf"'';
+        type = types.str;
         description = ''
           The base directory for ActiveMQ's configuration.
           By default, this directory is searched for a file named activemq.xml,
@@ -63,9 +65,11 @@ in {
       javaProperties = mkOption {
         type = types.attrs;
         default = { };
-        example = {
-          "java.net.preferIPv4Stack" = "true";
-        };
+        example = literalExpression ''
+          {
+            "java.net.preferIPv4Stack" = "true";
+          }
+        '';
         apply = attrs: {
           "activemq.base" = "${cfg.baseDir}";
           "activemq.data" = "${cfg.baseDir}/data";

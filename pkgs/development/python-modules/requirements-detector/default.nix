@@ -1,38 +1,52 @@
-{ buildPythonPackage
+{ lib
+, astroid
+, buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, lib
-
-# pythonPackages
-, pytest
+, packaging
+, poetry-core
+, poetry-semver
+, pytestCheckHook
+, pythonOlder
+, toml
 }:
 
 buildPythonPackage rec {
   pname = "requirements-detector";
-  version = "0.6";
-  disabled = isPy27;
+  version = "1.0.3";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = "yuvadm";
+    owner = "landscapeio";
     repo = pname;
     rev = version;
-    sha256 = "15s0n1lhkz0zwi33waqkkjipal3f7s45rxsj1bw89xpr4dj87qx5";
+    hash = "sha256-AEXCguf5Q9lU5ygFJUlbc1F637hkQ0wJybbRK7uhB9s=";
   };
 
-  checkInputs = [
-    pytest
+  nativeBuildInputs = [
+    poetry-core
   ];
 
-  checkPhase = ''
-    pytest
-  '';
+  propagatedBuildInputs = [
+    astroid
+    packaging
+    poetry-semver
+    toml
+  ];
 
-  meta = {
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "requirements_detector"
+  ];
+
+  meta = with lib; {
     description = "Python tool to find and list requirements of a Python project";
     homepage = "https://github.com/landscapeio/requirements-detector";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      kamadorueda
-    ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

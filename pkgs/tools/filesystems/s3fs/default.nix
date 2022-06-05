@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, curl, openssl, libxml2, fuse }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, curl, openssl, libxml2, fuse }:
 
 stdenv.mkDerivation rec {
   pname = "s3fs-fuse";
-  version = "1.85";
+  version = "1.91";
 
   src = fetchFromGitHub {
     owner  = "s3fs-fuse";
     repo   = "s3fs-fuse";
     rev    = "v${version}";
-    sha256 = "0sk2b7bxb2wzni1f39l4976dy47s7hqv62l7x7fwcjp62y22nw7m";
+    sha256 = "sha256-41IgUgpVZiIzi3N5kgX7PAhgnd+i/FH1o8t5y3Uw14g=";
   };
 
   buildInputs = [ curl openssl libxml2 fuse ];
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   configureFlags = [
     "--with-openssl"
@@ -22,9 +22,10 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/s3fs $out/bin/mount.s3fs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Mount an S3 bucket as filesystem through FUSE";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

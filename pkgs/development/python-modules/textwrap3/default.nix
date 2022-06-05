@@ -4,7 +4,7 @@
 , tox
 , pytest
 , coverage
-, pytestcov
+, pytest-cov
 }:
 
 buildPythonPackage rec {
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     tox
     pytest
     coverage
-    pytestcov
+    pytest-cov
   ];
 
   checkPhase = ''
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Textwrap from Python 3.6 backport plus a few tweaks";
-    homepage = https://github.com/jonathaneunice/textwrap3;
+    homepage = "https://github.com/jonathaneunice/textwrap3";
     license = licenses.psfl;
     maintainers = [ maintainers.costrouc ];
   };

@@ -1,53 +1,172 @@
-{ stdenv, fetchurl, fetchpatch, pam, python3, libxslt, perl, ArchiveZip, gettext
-, IOCompress, zlib, libjpeg, expat, freetype, libwpd
-, libxml2, db, curl, fontconfig, libsndfile, neon
-, bison, flex, zip, unzip, gtk3, gtk2, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, cups, xorg, libcmis, fontforge
-, openssl, gperf, cppunit, GConf, ORBit2, poppler, utillinux
-, librsvg, gnome_vfs, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
-, autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus-glib, qt4, clucene_core, libcdr, lcms, vigra
-, unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
-, fontsConf, pkgconfig, bluez5, libtool, carlito
-, libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
-, librevenge, libe-book, libmwaw, glm, glew, gst_all_1
-, gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, gnome3, glib, ncurses, epoxy, gpgme
-, langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ru" "sl" "zh-CN" ]
+{ stdenv
+, fetchurl
+, lib
+, pam
+, python3
+, libxslt
+, perl
+, ArchiveZip
+, box2d
+, gettext
+, IOCompress
+, zlib
+, libjpeg
+, expat
+, freetype
+, libwpd
+, libxml2
+, db
+, curl
+, fontconfig
+, libsndfile
+, neon
+, bison
+, flex
+, zip
+, unzip
+, gtk3
+, libmspack
+, getopt
+, file
+, cairo
+, which
+, icu
+, boost
+, jdk
+, ant
+, cups
+, xorg
+, fontforge
+, jre_minimal
+, openssl
+, gperf
+, cppunit
+, poppler
+, util-linux
+, librsvg
+, libGLU
+, libGL
+, bsh
+, CoinMP
+, libwps
+, libabw
+, libmysqlclient
+, autoconf
+, automake
+, openldap
+, bash
+, hunspell
+, librdf_redland
+, nss
+, nspr
+, libwpg
+, dbus-glib
+, clucene_core
+, libcdr
+, lcms
+, unixODBC
+, mdds
+, sane-backends
+, mythes
+, libexttextcat
+, libvisio
+, fontsConf
+, pkg-config
+, bluez5
+, libtool
+, carlito
+, libatomic_ops
+, graphite2
+, harfbuzz
+, libodfgen
+, libzmf
+, librevenge
+, libe-book
+, libmwaw
+, glm
+, gst_all_1
+, gdb
+, commonsLogging
+, librdf_rasqal
+, wrapGAppsHook
+, gnome
+, glib
+, ncurses
+, libepoxy
+, gpgme
+, abseil-cpp
+, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "uk" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
+, mkDerivation ? null
+, qtbase ? null
+, qtx11extras ? null
+, ki18n ? null
+, kconfig ? null
+, kcoreaddons ? null
+, kio ? null
+, kwindowsystem ? null
+, wrapQtAppsHook ? null
 , variant ? "fresh"
+, symlinkJoin
 } @ args:
 
 assert builtins.elem variant [ "fresh" "still" ];
 
 let
+  inherit (lib)
+    flatten flip
+    concatMapStrings concatMapStringsSep concatStringsSep
+    getDev getLib
+    optional optionals optionalString;
+
+  jre' = jre_minimal.override {
+    modules = [ "java.base" "java.desktop" "java.logging" ];
+  };
+
   importVariant = f: import (./. + "/src-${variant}/${f}");
 
   primary-src = importVariant "primary.nix" { inherit fetchurl; };
 
   inherit (primary-src) major minor subdir version;
 
-  lib = stdenv.lib;
-  langsSpaces = lib.concatStringsSep " " langs;
+  langsSpaces = concatStringsSep " " langs;
+
+  mkDrv = if kdeIntegration then mkDerivation else stdenv.mkDerivation;
 
   srcs = {
     third_party =
-      map (x : ((fetchurl {inherit (x) url sha256 name;}) // {inherit (x) md5name md5;}))
-      (importVariant "download.nix" ++ [
-        (rec {
-          name = "unowinreg.dll";
-          url = "https://dev-www.libreoffice.org/extern/${md5name}";
-          sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
-          md5 = "185d60944ea767075d27247c3162b3bc";
-          md5name = "${md5}-${name}";
-        })
-      ]);
+      map (x: ((fetchurl { inherit (x) url sha256 name; }) // { inherit (x) md5name md5; }))
+        (importVariant "download.nix" ++ [
+          (rec {
+            name = "unowinreg.dll";
+            url = "https://dev-www.libreoffice.org/extern/${md5name}";
+            sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
+            md5 = "185d60944ea767075d27247c3162b3bc";
+            md5name = "${md5}-${name}";
+          })
+        ]);
 
     translations = primary-src.translations;
     help = primary-src.help;
   };
-in (stdenv.mkDerivation rec {
+
+  # See `postPatch` for details
+  kdeDeps = symlinkJoin {
+    name = "libreoffice-kde-dependencies-${version}";
+    paths = flatten (map (e: [ (getDev e) (getLib e) ]) [
+      qtbase
+      qtx11extras
+      kconfig
+      kcoreaddons
+      ki18n
+      kio
+      kwindowsystem
+    ]);
+  };
+
+in
+(mkDrv rec {
   pname = "libreoffice";
   inherit version;
 
@@ -55,35 +174,19 @@ in (stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  # For some reason librdf_redland sometimes refers to rasqal.h instead
-  # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal";
-
-  patches = [
-    ./xdg-open-brief.patch
-
-    # Poppler-0.82 compatibility
-    # https://gerrit.libreoffice.org/81545
-    (fetchpatch {
-      url = "https://github.com/LibreOffice/core/commit/2eadd46ab81058087af95bdfc1fea28fcdb65998.patch";
-      sha256 = "1mpipdfxvixjziizbhfbpybpzlg1ijw7s0yqjpmq5d7pf3pvkm4n";
-    })
-    # Poppler-0.83 compatibility
-    # https://gerrit.libreoffice.org/84384
-    (fetchpatch {
-      url = "https://github.com/LibreOffice/core/commit/9065cd8d9a19864f6b618f2dc10daf577badd9ee.patch";
-      sha256 = "0nd0gck8ra3ffw936a7ri0s6a0ii5cyglnhip2prcjh5yf7vw2i2";
-    })
+  NIX_CFLAGS_COMPILE = [
+    "-I${librdf_rasqal}/include/rasqal" # librdf_redland refers to rasqal.h instead of rasqal/rasqal.h
+    "-fno-visibility-inlines-hidden" # https://bugs.documentfoundation.org/show_bug.cgi?id=78174#c10
   ];
 
   tarballPath = "external/tarballs";
 
   postUnpack = ''
     mkdir -v $sourceRoot/${tarballPath}
-  '' + (lib.flip lib.concatMapStrings srcs.third_party (f: ''
-      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
-      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
-    ''))
+  '' + (flip concatMapStrings srcs.third_party (f: ''
+    ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
+    ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
+  ''))
   + ''
     ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
@@ -91,8 +194,37 @@ in (stdenv.mkDerivation rec {
     tar -xf ${srcs.translations}
   '';
 
+  patches = [
+    ./skip-failed-test-with-icu70.patch
+
+    # Fix build with poppler 22.03
+    (fetchurl {
+      url = "https://github.com/archlinux/svntogit-packages/raw/f82958b9538f86e41b51f1ba7134968d2f3788d1/trunk/poppler-22.03.0.patch";
+      sha256 = "5h4qJmx6Q3Q3dHUlSi8JXBziN2mAswGVWk5aDTLTwls=";
+    })
+
+    # Fix build with poppler 22.04
+    ./poppler-22-04-0.patch
+  ];
+
+  ### QT/KDE
+  #
+  # configure.ac assumes that the first directory that contains headers and
+  # libraries during its checks contains *all* the relevant headers/libs which
+  # obviously doesn't work for us, so we have 2 options:
+  #
+  # 1. patch configure.ac in order to specify the direct paths to various Qt/KDE
+  # dependencies which is ugly and brittle, or
+  #
+  # 2. use symlinkJoin to pull in the relevant dependencies and just patch in
+  # that path which is *also* ugly, but far less likely to break
+  #
+  # The 2nd option is not very Nix'y, but I'll take robust over nice any day.
+  # Additionally, it's much easier to fix if LO breaks on the next upgrade (just
+  # add the missing dependencies to it).
   postPatch = ''
-    sed -e 's@/usr/bin/xdg-open@xdg-open@g' -i shell/source/unix/exec/shellexec.cxx
+    substituteInPlace shell/source/unix/exec/shellexec.cxx \
+      --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
 
     # configure checks for header 'gpgme++/gpgmepp_version.h',
     # and if it is found (no matter where) uses a hardcoded path
@@ -103,9 +235,16 @@ in (stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
+  '' + optionalString kdeIntegration ''
+    substituteInPlace configure.ac \
+      --replace '$QT5INC ' '$QT5INC ${kdeDeps}/include ' \
+      --replace '$QT5LIB ' '$QT5LIB ${kdeDeps}/lib ' \
+      --replace '$KF5INC ' '$KF5INC ${kdeDeps}/include ${kdeDeps}/include/KF5 '\
+      --replace '$KF5LIB ' '$KF5LIB ${kdeDeps}/lib '
   '';
 
-  QT4DIR = qt4;
+  dontUseCmakeConfigure = true;
+  dontUseCmakeBuildDir = true;
 
   preConfigure = ''
     configureFlagsArray=(
@@ -145,7 +284,6 @@ in (stdenv.mkDerivation rec {
       # this I actually hate, this should be a data consistency test!
       sed -e '/CPPUNIT_TEST(testTdf115013);/d' -i sw/qa/extras/uiwriter/uiwriter.cxx
       # rendering-dependent test
-      sed -e '/CPPUNIT_ASSERT_EQUAL(11148L, pOleObj->GetLogicRect().getWidth());/d ' -i sc/qa/unit/subsequent_filters-test.cxx
       # tilde expansion in path processing checks the existence of $HOME
       sed -e 's@OString sSysPath("~/tmp");@& return ; @' -i sal/qa/osl/file/osl_File.cxx
       # fails on systems using ZFS, see https://github.com/NixOS/nixpkgs/issues/19071
@@ -158,9 +296,6 @@ in (stdenv.mkDerivation rec {
       # one more fragile test?
       sed -e '/CPPUNIT_TEST(testTdf77014);/d' -i sw/qa/extras/uiwriter/uiwriter.cxx
       # rendering-dependent tests
-      sed -e '/CPPUNIT_TEST(testCustomColumnWidthExportXLSX)/d' -i sc/qa/unit/subsequent_export-test.cxx
-      sed -e '/CPPUNIT_TEST(testColumnWidthExportFromODStoXLSX)/d' -i sc/qa/unit/subsequent_export-test.cxx
-      sed -e '/CPPUNIT_TEST(testChartImportXLS)/d' -i sc/qa/unit/subsequent_filters-test.cxx
       sed -e '/CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape)/d' -i sc/qa/unit/filters-test.cxx
       sed -zre 's/DesktopLOKTest::testGetFontSubset[^{]*[{]/& return; /' -i desktop/qa/desktop_lib/test_desktop_lib.cxx
       sed -z -r -e 's/DECLARE_OOXMLEXPORT_TEST[(]testFlipAndRotateCustomShape,[^)]*[)].[{]/& return;/' -i sw/qa/extras/ooxmlexport/ooxmlexport7.cxx
@@ -191,37 +326,6 @@ in (stdenv.mkDerivation rec {
       sed -e '/CPPUNIT_TEST(testTdf113818);/d' -i './sd/qa/unit/export-tests.cxx'
       sed -e '/CPPUNIT_TEST(testTdf119629);/d' -i './sd/qa/unit/export-tests.cxx'
       sed -e '/CPPUNIT_TEST(testTdf113822);/d' -i './sd/qa/unit/export-tests.cxx'
-      sed -e '/CPPUNIT_TEST(test);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testConditionalFormatExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF16LErtlSHA1);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA1);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA256ODF12);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA256W3C);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_XL_SHA1);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testColorScaleExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testDataBarExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testNamedRangeBugfdo62729);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testRichTextExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testFormulaRefSheetNameODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCellValuesExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCellNoteExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testFormatExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testEmbeddedChartODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCellAnchoredGroupXLS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCeilingFloorODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testRelativePathsODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testSheetProtectionODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testSwappedOutImageExport);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testLinkedGraphicRT);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testImageWithSpecialID);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testAbsNamedRangeHTML);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testMoveCellAnchoredShapesODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testRefStringUnspecified);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testHeaderImageODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testTdf88657ODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testExponentWithoutSignFormatXLSX);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testHiddenRepeatedRowsODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testHyperlinkTargetFrameODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
       sed -e '/CPPUNIT_TEST(testTdf105739);/d' -i './sd/qa/unit/export-tests-ooxml2.cxx'
       sed -e '/CPPUNIT_TEST(testPageBitmapWithTransparency);/d' -i './sd/qa/unit/export-tests-ooxml2.cxx'
       sed -e '/CPPUNIT_TEST(testTdf115005);/d' -i './sd/qa/unit/export-tests-ooxml2.cxx'
@@ -235,7 +339,6 @@ in (stdenv.mkDerivation rec {
       sed -e '/CPPUNIT_TEST(testEmbeddedDataSource);/d' -i './sw/qa/extras/uiwriter/uiwriter.cxx'
       sed -e '/CPPUNIT_TEST(testTdf96479);/d' -i './sw/qa/extras/uiwriter/uiwriter.cxx'
       sed -e '/CPPUNIT_TEST(testInconsistentBookmark);/d' -i './sw/qa/extras/uiwriter/uiwriter.cxx'
-      sed -e '/CPPUNIT_TEST(Import_Export_Import);/d' -i './sw/qa/extras/inc/swmodeltestbase.hxx'
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx"
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/ooxmlexport/ooxmlencryption.cxx"
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/odfexport/odfexport.cxx"
@@ -243,18 +346,16 @@ in (stdenv.mkDerivation rec {
     ''
     # This to avoid using /lib:/usr/lib at linking
     + ''
-    sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
+      sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
 
-    find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
+      find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
     '';
 
   makeFlags = [ "SHELL=${bash}/bin/bash" ];
 
   enableParallelBuilding = true;
 
-  buildPhase = ''
-    make build-nocheck
-  '';
+  buildTargets = [ "build-nocheck" ];
 
   doCheck = true;
 
@@ -272,9 +373,9 @@ in (stdenv.mkDerivation rec {
     ln -s $out/lib/libreoffice/share/xdg $out/share/applications
 
     for f in $out/share/applications/*.desktop; do
-      substituteInPlace "$f" --replace "Exec=libreofficedev${major}.${minor}" "Exec=libreoffice"
-      substituteInPlace "$f" --replace "Exec=libreoffice${major}.${minor}" "Exec=libreoffice"
-      substituteInPlace "$f" --replace "Exec=libreoffice" "Exec=libreoffice"
+      substituteInPlace "$f" \
+        --replace "Exec=libreofficedev${major}.${minor}" "Exec=libreoffice" \
+        --replace "Exec=libreoffice${major}.${minor}"    "Exec=libreoffice"
     done
 
     cp -r sysui/desktop/icons  "$out/share"
@@ -282,43 +383,42 @@ in (stdenv.mkDerivation rec {
 
     mkdir -p $dev
     cp -r include $dev
+  '' + optionalString kdeIntegration ''
+    for prog in $out/bin/*; do
+      wrapQtApp $prog
+    done
   '';
+
+  dontWrapQtApps = true;
 
   configureFlags = [
     (if withHelp then "" else "--without-help")
-    "--with-boost=${boost.dev}"
-    "--with-boost-libdir=${boost.out}/lib"
+    "--with-boost=${getDev boost}"
+    "--with-boost-libdir=${getLib boost}/lib"
     "--with-beanshell-jar=${bsh}"
     "--with-vendor=NixOS"
-    "--with-commons-logging-jar=${commonsLogging}/share/java/commons-logging-1.2.jar"
     "--disable-report-builder"
     "--disable-online-update"
     "--enable-python=system"
     "--enable-dbus"
     "--enable-release-build"
-    (lib.enableFeature kdeIntegration "kde4")
     "--enable-epm"
-    "--with-jdk-home=${jdk.home}"
-    "--with-ant-home=${ant}/lib/ant"
+    "--with-ant-home=${getLib ant}/lib/ant"
     "--with-system-cairo"
     "--with-system-libs"
     "--with-system-headers"
     "--with-system-openssl"
     "--with-system-libabw"
-    "--with-system-libcmis"
+    "--without-system-libcmis"
     "--with-system-libwps"
     "--with-system-openldap"
     "--with-system-coinmp"
-
-    "--with-alloc=system"
 
     # Without these, configure does not finish
     "--without-junit"
 
     # Schema files for validation are not included in the source tarball
     "--without-export-validation"
-
-    "--disable-libnumbertext" # system-libnumbertext"
 
     # We do tarball prefetching ourselves
     "--disable-fetch-external"
@@ -342,52 +442,150 @@ in (stdenv.mkDerivation rec {
     "--without-system-libfreehand"
     "--without-system-liblangtag"
     "--without-system-libmspub"
+    "--without-system-libnumbertext"
     "--without-system-libpagemaker"
     "--without-system-libstaroffice"
     "--without-system-libepubgen"
     "--without-system-libqxp"
-    "--without-system-mdds"
+    "--without-system-mdds" # we have mdds but our version is too new
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
     "--without-system-xmlsec"
+  ] ++ optionals kdeIntegration [
+    "--enable-kf5"
+    "--enable-qt5"
+    "--enable-gtk3-kde5"
   ];
 
-  checkPhase = ''
-    make unitcheck
-    make slowcheck
-  '';
+  checkTarget = concatStringsSep " " [
+    "unitcheck"
+    "slowcheck"
+  ];
 
-  nativeBuildInputs = [ wrapGAppsHook gdb fontforge autoconf automake bison pkgconfig libtool ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    bison
+    fontforge
+    gdb
+    jdk
+    libtool
+    pkg-config
+  ]
+  ++ [ (if kdeIntegration then wrapQtAppsHook else wrapGAppsHook) ];
 
-  buildInputs = with xorg;
-    [ ant ArchiveZip boost cairo clucene_core
-      IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
-      freetype GConf getopt gnome_vfs gperf gtk3 gtk2
-      hunspell icu jdk lcms libcdr libexttextcat unixODBC libjpeg
-      libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
-      libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs libGLU libGL mythes gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base glib libmysqlclient
-      neon nspr nss openldap openssl ORBit2 pam perl pkgconfig poppler
-      python3 sane-backends unzip vigra which zip zlib
-      mdds bluez5 libcmis libwps libabw libzmf
-      libxshmfence libatomic_ops graphite2 harfbuzz gpgme utillinux
-      librevenge libe-book libmwaw glm glew ncurses epoxy
-      libodfgen CoinMP librdf_rasqal gnome3.adwaita-icon-theme gettext
-    ]
-    ++ lib.optional kdeIntegration kdelibs4;
+  buildInputs = with xorg; [
+    ArchiveZip
+    CoinMP
+    IOCompress
+    abseil-cpp
+    ant
+    bluez5
+    boost
+    box2d
+    cairo
+    clucene_core
+    cppunit
+    cups
+    curl
+    db
+    dbus-glib
+    expat
+    file
+    flex
+    fontconfig
+    freetype
+    getopt
+    gettext
+    glib
+    glm
+    gnome.adwaita-icon-theme
+    gperf
+    gpgme
+    graphite2
+    gtk3
+    harfbuzz
+    hunspell
+    icu
+    jre'
+    lcms
+    libGL
+    libGLU
+    libX11
+    libXaw
+    libXdmcp
+    libXext
+    libXi
+    libXinerama
+    libXtst
+    libabw
+    libatomic_ops
+    libcdr
+    libe-book
+    libepoxy
+    libexttextcat
+    libjpeg
+    libmspack
+    libmwaw
+    libmysqlclient
+    libodfgen
+    libpthreadstubs
+    librdf_rasqal
+    librdf_redland
+    librevenge
+    librsvg
+    libsndfile
+    libvisio
+    libwpd
+    libwpg
+    libwps
+    libxml2
+    libxshmfence
+    libxslt
+    libzmf
+    mdds
+    mythes
+    ncurses
+    neon
+    nspr
+    nss
+    openldap
+    openssl
+    pam
+    perl
+    pkg-config
+    poppler
+    python3
+    sane-backends
+    unixODBC
+    unzip
+    util-linux
+    which
+    zip
+    zlib
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ])
+  ++ optionals kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
 
   passthru = {
-    inherit srcs jdk;
+    inherit srcs;
+    jdk = jre';
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
-    homepage = https://libreoffice.org/;
+    homepage = "https://libreoffice.org/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
-}).overrideAttrs ((importVariant "override.nix") args)
+}).overrideAttrs ((importVariant "override.nix") (args // { inherit kdeIntegration; }))

@@ -32,9 +32,9 @@ let
       description = "Bind address for ${name} endpoint.";
     };
     port = mkOption {
-      type = types.int;
+      type = types.port;
       default = port;
-      description = "Bind port for ${name} endoint.";
+      description = "Bind port for ${name} endpoint.";
     };
   };
 
@@ -158,10 +158,10 @@ let
       (sec "addressbook")
       (strOpt "defaulturl" cfg.addressbook.defaulturl)
     ] ++ (optionalEmptyList "subscriptions" cfg.addressbook.subscriptions)
-      ++ (flip mapAttrs
-      (collect (name: proto: proto ? port && proto ? address && proto ? name) cfg.proto)
+      ++ (flip map
+      (collect (proto: proto ? port && proto ? address) cfg.proto)
       (proto: let protoOpts = [
-        (sec name)
+        (sec proto.name)
         (boolOpt "enabled" proto.enable)
         (strOpt "address" proto.address)
         (intOpt "port" proto.port)
@@ -181,10 +181,10 @@ let
 
   tunnelConf = let opts = [
     notice
-    (flip mapAttrs
-      (collect (name: tun: tun ? port && tun ? destination) cfg.outTunnels)
+    (flip map
+      (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
       (tun: let outTunOpts = [
-        (sec name)
+        (sec tun.name)
         "type = client"
         (intOpt "port" tun.port)
         (strOpt "destination" tun.destination)
@@ -204,10 +204,10 @@ let
         ++ (if tun ? crypto.tagsToSend then
             optionalNullInt "crypto.tagstosend" tun.crypto.tagsToSend else []);
         in concatStringsSep "\n" outTunOpts))
-    (flip mapAttrs
-      (collect (name: tun: tun ? port && tun ? address) cfg.inTunnels)
+    (flip map
+      (collect (tun: tun ? port && tun ? address) cfg.inTunnels)
       (tun: let inTunOpts = [
-        (sec name)
+        (sec tun.name)
         "type = server"
         (intOpt "port" tun.port)
         (strOpt "host" tun.address)
@@ -222,14 +222,12 @@ let
         in concatStringsSep "\n" inTunOpts))];
     in pkgs.writeText "i2pd-tunnels.conf" opts;
 
-  i2pdSh = pkgs.writeScriptBin "i2pd" ''
-    #!/bin/sh
-    exec ${pkgs.i2pd}/bin/i2pd \
-      ${if cfg.address == null then "" else "--host="+cfg.address} \
-      --service \
-      --conf=${i2pdConf} \
-      --tunconf=${tunnelConf}
-  '';
+  i2pdFlags = concatStringsSep " " (
+    optional (cfg.address != null) ("--host=" + cfg.address) ++ [
+    "--service"
+    ("--conf=" + i2pdConf)
+    ("--tunconf=" + tunnelConf)
+  ]);
 
 in
 
@@ -250,6 +248,15 @@ in
           Enables I2Pd as a running service upon activation.
           Please read http://i2pd.readthedocs.io/en/latest/ for further
           configuration help.
+        '';
+      };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.i2pd;
+        defaultText = literalExpression "pkgs.i2pd";
+        description = ''
+          i2pd package to use.
         '';
       };
 
@@ -481,7 +488,7 @@ in
       exploratory.inbound = i2cpOpts "exploratory";
       exploratory.outbound = i2cpOpts "exploratory";
 
-      ntcp2.enable = mkEnableTrueOption "NTCP2.";
+      ntcp2.enable = mkEnableTrueOption "NTCP2";
       ntcp2.published = mkEnableOption "NTCP2 publication";
       ntcp2.port = mkOption {
         type = types.int;
@@ -606,7 +613,7 @@ in
 
       outTunnels = mkOption {
         default = {};
-        type = with types; loaOf (submodule (
+        type = with types; attrsOf (submodule (
           { name, ... }: {
             options = {
               destinationPort = mkOption {
@@ -627,7 +634,7 @@ in
 
       inTunnels = mkOption {
         default = {};
-        type = with types; loaOf (submodule (
+        type = with types; attrsOf (submodule (
           { name, ... }: {
             options = {
               inPort = mkOption {
@@ -677,7 +684,7 @@ in
         User = "i2pd";
         WorkingDirectory = homeDir;
         Restart = "on-abort";
-        ExecStart = "${i2pdSh}/bin/i2pd";
+        ExecStart = "${cfg.package}/bin/i2pd ${i2pdFlags}";
       };
     };
   };

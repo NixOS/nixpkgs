@@ -1,26 +1,35 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , python
+, pythonOlder
 }:
+
 buildPythonPackage rec {
   pname = "plac";
-  version = "1.1.3";
+  version = "1.3.5";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "398cb947c60c4c25e275e1f1dadf027e7096858fb260b8ece3b33bcff90d985f";
+    hash = "sha256-OL3YZNBFD7dIGTqoF7nEWKj1MZ+/l7ImEVHPwKWBIJA=";
   };
 
   checkPhase = ''
-      cd doc
-      ${python.interpreter} -m unittest discover -p "*test_plac*"
-    '';
+    cd doc
+    ${python.interpreter} -m unittest discover -p "*test_plac*"
+  '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "plac"
+  ];
+
+  meta = with lib; {
     description = "Parsing the Command Line the Easy Way";
-    homepage = https://github.com/micheles/plac;
+    homepage = "https://github.com/micheles/plac";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ sdll ];
-    };
+    maintainers = with maintainers; [ ];
+  };
 }

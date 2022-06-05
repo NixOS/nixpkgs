@@ -1,8 +1,7 @@
-{ stdenv, writeScript, fetchurl, requireFile, unzip, clang_35, mono, which,
+{ lib, stdenv, writeScript, fetchurl, requireFile, unzip, clang, mono, which,
   xorg, xdg-user-dirs }:
 
 let
-  inherit (stdenv) lib;
   deps = import ./cdn-deps.nix { inherit fetchurl; };
   linkDeps = writeScript "link-deps.sh" (lib.concatMapStringsSep "\n" (hash:
     let prefix = lib.concatStrings (lib.take 2 (lib.stringToCharacters hash));
@@ -11,7 +10,7 @@ let
       ln -s ${lib.getAttr hash deps} .git/ue4-gitdeps/${prefix}/${hash}
     ''
   ) (lib.attrNames deps));
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = lib.makeLibraryPath [
     xorg.libX11 xorg.libXScrnSaver xorg.libXau xorg.libXcursor xorg.libXext
     xorg.libXfixes xorg.libXi xorg.libXrandr xorg.libXrender xorg.libXxf86vm
     xorg.libxcb
@@ -70,14 +69,15 @@ stdenv.mkDerivation rec {
 
     cp -r . "$sharedir"
   '';
-  buildInputs = [ clang_35 mono which xdg-user-dirs ];
+  buildInputs = [ clang mono which xdg-user-dirs ];
 
   meta = {
     description = "A suite of integrated tools for game developers to design and build games, simulations, and visualizations";
-    homepage = https://www.unrealengine.com/what-is-unreal-engine-4;
-    license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.puffnfresh ];
+    homepage = "https://www.unrealengine.com/what-is-unreal-engine-4";
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
+    # See issue https://github.com/NixOS/nixpkgs/issues/17162
     broken = true;
   };
 }

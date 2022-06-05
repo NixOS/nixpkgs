@@ -1,6 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, isPy3k, attrs, coverage, enum34, pexpect
-, doCheck ? true, pytest, pytest_xdist, flaky, mock
+{ lib
+, buildPythonPackage
+, pythonAtLeast
+, fetchFromGitHub
+, attrs
+, pexpect
+, doCheck ? true
+, pytestCheckHook
+, pytest-xdist
+, sortedcontainers
+, tzdata
+, pythonOlder
 }:
 buildPythonPackage rec {
   # https://hypothesis.readthedocs.org/en/latest/packaging.html
@@ -9,32 +18,53 @@ buildPythonPackage rec {
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  version = "4.56.1";
   pname = "hypothesis";
+  version = "6.40.0";
+  format = "setuptools";
 
-  # Use github tarballs that includes tests
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
     rev = "hypothesis-python-${version}";
-    sha256 = "09bpwp4kdywkmzci969m57w0yy8c31kzwg60vg4mvrmmgyi2cfzv";
+    hash = "sha256-6BC3CTotkMhguueH4NJM8VjbrYhofHqtZEUytcllMwQ=";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
-  propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) enum34;
+  propagatedBuildInputs = [
+    attrs
+    sortedcontainers
+  ];
 
-  checkInputs = [ pytest pytest_xdist flaky mock pexpect ];
+  checkInputs = [
+    pexpect
+    pytest-xdist
+    pytestCheckHook
+  ] ++ lib.optional (pythonAtLeast "3.9") [
+    tzdata
+  ];
+
   inherit doCheck;
 
-  checkPhase = ''
-    rm tox.ini # This file changes how py.test runs and breaks it
-    py.test tests/cover
+  # This file changes how pytest runs and breaks it
+  preCheck = ''
+    rm tox.ini
   '';
 
+  pytestFlagsArray = [
+    "tests/cover"
+  ];
+
+  pythonImportsCheck = [
+    "hypothesis"
+  ];
+
   meta = with lib; {
-    description = "A Python library for property based testing";
-    homepage = https://github.com/HypothesisWorks/hypothesis;
+    description = "Library for property based testing";
+    homepage = "https://github.com/HypothesisWorks/hypothesis";
     license = licenses.mpl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

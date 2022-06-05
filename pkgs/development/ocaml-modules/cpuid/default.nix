@@ -4,6 +4,8 @@ buildDunePackage rec {
   pname = "cpuid";
   version = "0.1.2";
 
+  useDune2 = true;
+
   minimumOCamlVersion = "4.03";
 
   src = fetchurl {
@@ -12,7 +14,7 @@ buildDunePackage rec {
   };
 
   meta = {
-    homepage = https://github.com/pqwy/cpuid;
+    homepage = "https://github.com/pqwy/cpuid";
     description = "Detect CPU features from OCaml";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];

@@ -1,9 +1,10 @@
 { fetchurl
+, lib
 , stdenv
 , meson
 , ninja
 , gettext
-, pkgconfig
+, pkg-config
 , pulseaudioFull
 , glibmm
 , gtkmm3
@@ -11,18 +12,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "paprefs-1.1";
+  pname = "paprefs";
+  version = "1.2";
 
   src = fetchurl {
-    url = "https://freedesktop.org/software/pulseaudio/paprefs/${name}.tar.xz";
-    sha256 = "189z5p20hk0xv9vwvym293503j4pwl03xqk9hl7cl6dwgv0l7wkf";
+    url = "https://freedesktop.org/software/pulseaudio/paprefs/paprefs-${version}.tar.xz";
+    sha256 = "sha256-s/IeQNw5NtFeP/yRD7DAfBS4jowodxW0VqlIwXY49jM=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     gettext
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
     gtkmm3
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "PulseAudio Preferences";
 
     longDescription = ''
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
       dialog for the PulseAudio sound server.
     '';
 
-    homepage = http://freedesktop.org/software/pulseaudio/paprefs/;
+    homepage = "http://freedesktop.org/software/pulseaudio/paprefs/";
 
     license = licenses.gpl2Plus;
 

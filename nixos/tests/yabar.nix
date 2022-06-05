@@ -4,14 +4,14 @@ with lib;
 
 {
   name = "yabar";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ ma27 ];
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ ];
   };
 
-  machine = {
+  nodes.machine = {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
 
-    services.xserver.displayManager.auto.user = "bob";
+    test-support.displayManager.auto.user = "bob";
 
     programs.yabar.enable = true;
     programs.yabar.bars = {

@@ -2,14 +2,14 @@ import ./make-test-python.nix ({ ... }:
 {
   name = "snapper";
 
-  machine = { pkgs, lib, ... }: {
+  nodes.machine = { pkgs, lib, ... }: {
     boot.initrd.postDeviceCommands = ''
       ${pkgs.btrfs-progs}/bin/mkfs.btrfs -f -L aux /dev/vdb
     '';
 
     virtualisation.emptyDiskImages = [ 4096 ];
 
-    fileSystems = lib.mkVMOverride {
+    virtualisation.fileSystems = {
       "/home" = {
         device = "/dev/disk/by-label/aux";
         fsType = "btrfs";

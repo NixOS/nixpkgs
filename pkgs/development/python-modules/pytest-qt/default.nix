@@ -1,25 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, setuptools_scm
+, setuptools-scm
 , pytest
 , pyqt5
 }:
 
 buildPythonPackage rec {
   pname = "pytest-qt";
-  version = "3.3.0";
+  version = "4.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "714b0bf86c5313413f2d300ac613515db3a1aef595051ab8ba2ffe619dbe8925";
+    sha256 = "dfc5240dec7eb43b76bcb5f9a87eecae6ef83592af49f3af5f1d5d093acaa93e";
   };
 
   nativeBuildInputs = [
-    setuptools_scm
+    setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     pytest
   ];
 

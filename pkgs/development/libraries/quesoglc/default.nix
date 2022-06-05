@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libGLU, libGL, glew, freetype, fontconfig, fribidi, libX11 }:
+{ lib, stdenv, fetchurl, libGLU, libGL, glew, freetype, fontconfig, fribidi, libX11 }:
 stdenv.mkDerivation rec {
   pname = "quesoglc";
   version = "0.7.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ libGLU libGL glew freetype fontconfig fribidi libX11 ];
   # FIXME: Configure fails to use system glew.
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free implementation of the OpenGL Character Renderer";
     longDescription = ''
       QuesoGLC is a free (as in free speech) implementation of the OpenGL
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       provides Unicode support and is designed to be easily ported to any
       platform that supports both FreeType and the OpenGL API.
     '';
-    homepage = http://quesoglc.sourceforge.net/;
+    homepage = "http://quesoglc.sourceforge.net/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ astsmtl ];
     platforms = platforms.linux;

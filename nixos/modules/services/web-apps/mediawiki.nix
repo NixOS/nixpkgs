@@ -3,7 +3,7 @@
 let
 
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption;
-  inherit (lib) concatStringsSep literalExample mapAttrsToList optional optionals optionalString types;
+  inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionals optionalString types;
 
   cfg = config.services.mediawiki;
   fpm = config.services.phpfpm.pools.mediawiki;
@@ -29,7 +29,7 @@ let
       '') cfg.skins)}
 
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
-        ln -s ${v} $out/share/mediawiki/extensions/${k}
+        ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
       '') cfg.extensions)}
     '';
   };
@@ -176,10 +176,12 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.mediawiki;
+        defaultText = literalExpression "pkgs.mediawiki";
         description = "Which MediaWiki package to use.";
       };
 
       name = mkOption {
+        type = types.str;
         default = "MediaWiki";
         example = "Foobar Wiki";
         description = "Name of the wiki.";
@@ -204,17 +206,28 @@ in
         default = {};
         type = types.attrsOf types.path;
         description = ''
-          List of paths whose content is copied to the 'skins'
-          subdirectory of the MediaWiki installation.
+          Attribute set of paths whose content is copied to the <filename>skins</filename>
+          subdirectory of the MediaWiki installation in addition to the default skins.
         '';
       };
 
       extensions = mkOption {
         default = {};
-        type = types.attrsOf types.path;
+        type = types.attrsOf (types.nullOr types.path);
         description = ''
-          List of paths whose content is copied to the 'extensions'
-          subdirectory of the MediaWiki installation.
+          Attribute set of paths whose content is copied to the <filename>extensions</filename>
+          subdirectory of the MediaWiki installation and enabled in configuration.
+
+          Use <literal>null</literal> instead of path to enable extensions that are part of MediaWiki.
+        '';
+        example = literalExpression ''
+          {
+            Matomo = pkgs.fetchzip {
+              url = "https://github.com/DaSchTour/matomo-mediawiki-extension/archive/v4.0.1.tar.gz";
+              sha256 = "0g5rd3zp0avwlmqagc59cg9bbkn3r7wx7p6yr80s644mj6dlvs1b";
+            };
+            ParserFunctions = null;
+          }
         '';
       };
 
@@ -274,14 +287,14 @@ in
         socket = mkOption {
           type = types.nullOr types.path;
           default = if cfg.database.createLocally then "/run/mysqld/mysqld.sock" else null;
-          defaultText = "/run/mysqld/mysqld.sock";
+          defaultText = literalExpression "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
         };
 
         createLocally = mkOption {
           type = types.bool;
           default = cfg.database.type == "mysql";
-          defaultText = "true";
+          defaultText = literalExpression "true";
           description = ''
             Create the database and database user locally.
             This currently only applies if database type "mysql" is selected.
@@ -290,8 +303,8 @@ in
       };
 
       virtualHost = mkOption {
-        type = types.submodule (import ../web-servers/apache-httpd/per-server-options.nix);
-        example = literalExample ''
+        type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+        example = literalExpression ''
           {
             hostName = "mediawiki.example.org";
             adminAddr = "webmaster@example.org";

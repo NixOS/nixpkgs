@@ -1,28 +1,29 @@
-{ stdenv, fetchurl, ocamlPackages }:
+{ lib, stdenv, fetchurl, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "proverif";
-  version = "2.00";
+  version = "2.04";
 
   src = fetchurl {
-    url    = "http://prosecco.gforge.inria.fr/personal/bblanche/proverif/proverif${version}.tar.gz";
-    sha256 = "0vjphj85ch9q39vc7sd6n4vxy5bplp017vlshk989yhfwb00r37y";
+    url    = "https://bblanche.gitlabpages.inria.fr/proverif/proverif${version}.tar.gz";
+    sha256 = "sha256:0xgwnp59779xc40sb7ck8rmfn620pilxyq79l3bymj9m7z0mwvm9";
   };
 
-  buildInputs = with ocamlPackages; [ ocaml findlib lablgtk ];
+  buildInputs = with ocamlPackages; [ ocaml findlib ];
 
-  buildPhase = "./build";
+  buildPhase = "./build -nointeract";
   installPhase = ''
-    mkdir -p $out/bin
-    cp ./proverif      $out/bin
-    cp ./proveriftotex $out/bin
+    runHook preInstall
+    install -D -t $out/bin proverif proveriftotex
+    install -D -t $out/share/emacs/site-lisp/ emacs/proverif.el
+    runHook postInstall
   '';
 
   meta = {
-    description = "Cryptographic protocol verifier in the Dolev-Yao model";
-    homepage    = "https://prosecco.gforge.inria.fr/personal/bblanche/proverif/";
-    license     = stdenv.lib.licenses.gpl2;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    description = "Cryptographic protocol verifier in the formal model";
+    homepage    = "https://bblanche.gitlabpages.inria.fr/proverif/";
+    license     = lib.licenses.gpl2;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice vbgl ];
   };
 }

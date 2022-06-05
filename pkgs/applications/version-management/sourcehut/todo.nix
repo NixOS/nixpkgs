@@ -1,20 +1,29 @@
-{ stdenv, fetchgit, buildPythonPackage
+{ lib
+, fetchFromSourcehut
+, buildPythonPackage
+, srht
+, redis
+, alembic
+, pystache
+, pytest
+, factory_boy
 , python
-, srht, redis, alembic, pystache
-, pytest, factory_boy, writeText }:
+}:
 
 buildPythonPackage rec {
   pname = "todosrht";
-  version = "0.51.13";
+  version = "0.67.2";
 
-  src = fetchgit {
-    url = "https://git.sr.ht/~sircmpwn/todo.sr.ht";
+  src = fetchFromSourcehut {
+    owner = "~sircmpwn";
+    repo = "todo.sr.ht";
     rev = version;
-    sha256 = "19gywq5j7wlpk7j2whm2ivz0z0i3j50n7k7bx29pghndl7l43c18";
+    sha256 = "sha256-/QHsMlhzyah85ubZyx8j4GDUoITuWcLDJKosbZGeOZU=";
   };
 
   patches = [
-    ./use-srht-path.patch
+    # Revert change breaking Unix socket support for Redis
+    patches/redis-socket/todo/0001-Revert-Add-webhook-queue-monitoring.patch
   ];
 
   nativeBuildInputs = srht.nativeBuildInputs;
@@ -31,38 +40,19 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
+  # pytest tests fail
   checkInputs = [
     pytest
     factory_boy
   ];
 
-  installCheckPhase = let
-    config = writeText "config.ini" ''
-      [webhooks]
-      private-key=K6JupPpnr0HnBjelKTQUSm3Ro9SgzEA2T2Zv472OvzI=
+  dontUseSetuptoolsCheck = true;
+  pythonImportsCheck = [ "todosrht" ];
 
-      [todo.sr.ht]
-      origin=http://todo.sr.ht.local
-      oauth-client-id=
-      oauth-client-secret=
-
-      [todo.sr.ht::mail]
-      posting-domain=
-
-      [meta.sr.ht]
-      origin=http://meta.sr.ht.local
-    '';
-  in ''
-    cp -f ${config} config.ini
-
-    # pytest tests fail
-    # pytest tests/
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://todo.sr.ht/~sircmpwn/todo.sr.ht;
+  meta = with lib; {
+    homepage = "https://todo.sr.ht/~sircmpwn/todo.sr.ht";
     description = "Ticket tracking service for the sr.ht network";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ eadwu ];
   };
 }

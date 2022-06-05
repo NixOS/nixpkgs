@@ -28,6 +28,13 @@ existing packages here and modify it as necessary.
 
 let
 
+  minQtVersion = "5.15";
+  broken = lib.versionOlder libsForQt5.qtbase.version minQtVersion;
+  maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
+  license = with lib.licenses; [
+    lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
+  ];
+
   srcs = import ./srcs.nix {
     inherit fetchurl;
     mirror = "mirror://kde";
@@ -63,8 +70,8 @@ let
         mkDerivation = args:
           let
 
-            inherit (args) name;
-            inherit (srcs.${name}) src version;
+            inherit (args) pname;
+            inherit (srcs.${pname}) src version;
 
             outputs = args.outputs or [ "bin" "dev" "out" ];
             hasSeparateDev = lib.elem "dev" outputs;
@@ -72,18 +79,18 @@ let
             defaultSetupHook = if hasSeparateDev then propagateBin else null;
             setupHook = args.setupHook or defaultSetupHook;
 
-            meta = {
-              homepage = http://www.kde.org;
-              license = with lib.licenses; [
-                lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
-              ];
-              maintainers = with lib.maintainers; [ ttuegel nyanloutre ];
-              platforms = lib.platforms.linux;
-            } // (args.meta or {});
+            meta =
+              let meta = args.meta or {}; in
+              meta // {
+                homepage = meta.homepage or "https://kde.org";
+                license = meta.license or license;
+                maintainers = (meta.maintainers or []) ++ maintainers;
+                platforms = meta.platforms or lib.platforms.linux;
+                broken = meta.broken or broken;
+              };
 
           in mkDerivation (args // {
-            name = "${name}-${version}";
-            inherit meta outputs setupHook src;
+            inherit pname meta outputs setupHook src version;
           });
 
       };
@@ -100,15 +107,19 @@ let
       kcalendarcore = callPackage ./kcalendarcore.nix {};
       kcodecs = callPackage ./kcodecs.nix {};
       kconfig = callPackage ./kconfig.nix {};
+      kcontacts = callPackage ./kcontacts.nix {};
       kcoreaddons = callPackage ./kcoreaddons.nix {};
       kdbusaddons = callPackage ./kdbusaddons.nix {};
       kdnssd = callPackage ./kdnssd.nix {};
       kguiaddons = callPackage ./kguiaddons.nix {};
+      kholidays = callPackage ./kholidays.nix {};
       ki18n = callPackage ./ki18n.nix {};
       kidletime = callPackage ./kidletime.nix {};
+      kirigami2 = callPackage ./kirigami2.nix {};
       kitemmodels = callPackage ./kitemmodels.nix {};
       kitemviews = callPackage ./kitemviews.nix {};
       kplotting = callPackage ./kplotting.nix {};
+      kquickcharts = callPackage ./kquickcharts.nix {};
       kwayland = callPackage ./kwayland.nix {};
       kwidgetsaddons = callPackage ./kwidgetsaddons.nix {};
       kwindowsystem = callPackage ./kwindowsystem {};
@@ -116,12 +127,11 @@ let
       networkmanager-qt = callPackage ./networkmanager-qt.nix {};
       oxygen-icons5 = callPackage ./oxygen-icons5.nix {};
       prison = callPackage ./prison.nix {};
+      qqc2-desktop-style = callPackage ./qqc2-desktop-style.nix {};
       solid = callPackage ./solid.nix {};
       sonnet = callPackage ./sonnet.nix {};
       syntax-highlighting = callPackage ./syntax-highlighting.nix {};
       threadweaver = callPackage ./threadweaver.nix {};
-      kirigami2 = callPackage ./kirigami2.nix {};
-      kholidays = callPackage ./kholidays.nix {};
 
     # TIER 2
       kactivities = callPackage ./kactivities.nix {};
@@ -144,17 +154,18 @@ let
       kbookmarks = callPackage ./kbookmarks.nix {};
       kcmutils = callPackage ./kcmutils {};
       kconfigwidgets = callPackage ./kconfigwidgets {};
+      kdav = callPackage ./kdav.nix {};
       kdeclarative = callPackage ./kdeclarative.nix {};
       kded = callPackage ./kded.nix {};
       kdesignerplugin = callPackage ./kdesignerplugin.nix {};
-      kdesu = callPackage ./kdesu.nix {};
+      kdesu = callPackage ./kdesu {};
       kdewebkit = callPackage ./kdewebkit.nix {};
       kemoticons = callPackage ./kemoticons.nix {};
       kglobalaccel = callPackage ./kglobalaccel.nix {};
       kiconthemes = callPackage ./kiconthemes {};
       kinit = callPackage ./kinit {};
       kio = callPackage ./kio {};
-      knewstuff = callPackage ./knewstuff.nix {};
+      knewstuff = callPackage ./knewstuff {};
       knotifyconfig = callPackage ./knotifyconfig.nix {};
       kparts = callPackage ./kparts.nix {};
       kpeople = callPackage ./kpeople.nix {};

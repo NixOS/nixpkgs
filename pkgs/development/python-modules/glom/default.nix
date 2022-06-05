@@ -1,32 +1,53 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , boltons
 , attrs
 , face
-, pytest
+, pytestCheckHook
 , pyyaml
-, isPy37
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "19.10.0";
+  version = "22.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8a50cb9fcf0c84807836c6a73cf61285557834b9050d7bde7732b936aceb7dd";
+    hash = "sha256-FRDGWHqPnGSiRmQbcAM8vF696Z8CrSRWk2eAOOghrrU=";
   };
 
-  propagatedBuildInputs = [ boltons attrs face ];
+  propagatedBuildInputs = [
+    boltons
+    attrs
+    face
+  ];
 
-  checkInputs = [ pytest pyyaml ];
-  checkPhase = "pytest glom/test";
+  checkInputs = [
+    pytestCheckHook
+    pyyaml
+  ];
 
-  doCheck = !isPy37; # https://github.com/mahmoud/glom/issues/72
+  preCheck = ''
+    # test_cli.py checks the output of running "glom"
+    export PATH=$out/bin:$PATH
+  '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mahmoud/glom;
+  disabledTests = [
+    # Test is outdated (was made for PyYAML 3.x)
+    "test_main_yaml_target"
+  ];
+
+  pythonImportsCheck = [
+    "glom"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/mahmoud/glom";
     description = "Restructuring data, the Python way";
     longDescription = ''
       glom helps pull together objects from other objects in a

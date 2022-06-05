@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "5.000";
+  version = "6.101";
 in fetchzip rec {
   name = "gentium-${version}";
 
@@ -10,15 +10,23 @@ in fetchzip rec {
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
     unzip -l $downloadedFile
-    unzip -j $downloadedFile \*.ttf                                          -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*/FONTLOG.txt \*/GENTIUM-FAQ.txt \*/README.txt -d $out/share/doc/${name}
-    unzip -j $downloadedFile \*/documentation/\*                             -d $out/share/doc/${name}/documentation
+    unzip -j $downloadedFile \*.ttf \
+      -d $out/share/fonts/truetype
+    unzip -j $downloadedFile \
+      \*/FONTLOG.txt \
+      \*/README.txt \
+      -d $out/share/doc/${name}
+    unzip -j $downloadedFile \
+      \*/documentation/\*.html \
+      \*/documentation/\*.txt \
+      -x \*/documentation/source/\* \
+      -d $out/share/doc/${name}/documentation
   '';
 
-  sha256 = "1qr2wjdmm93167b0w9cidlf3wwsyjx4838ja9jmm4jkyian5whhp";
+  sha256 = "sha256-+T5aUlqQYDWRp4/4AZzsREHgjAnOeUB6qn1GAI0A5hE=";
 
   meta = with lib; {
-    homepage = https://software.sil.org/gentium/;
+    homepage = "https://software.sil.org/gentium/";
     description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
     longDescription = ''
       Gentium is a typeface family designed to enable the diverse ethnic groups

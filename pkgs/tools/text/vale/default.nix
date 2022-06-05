@@ -1,22 +1,30 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "vale";
-  version = "1.7.1";
+  version = "2.17.0";
 
-  subPackages = [ "." ];
+  subPackages = [ "cmd/vale" ];
+  outputs = [ "out" "data" ];
 
   src = fetchFromGitHub {
-    owner  = "errata-ai";
-    repo   = "vale";
-    rev    = "v${version}";
-    sha256 = "1qi3brjppiymk6as0xic2n3bhq8g8qw1z8d9a24w60x9gp52yq5m";
+    owner = "errata-ai";
+    repo = "vale";
+    rev = "v${version}";
+    sha256 = "sha256-PUaIx6rEaLz0HUxkglsVHw0Kx/ovI2f4Yhknuysr5Gs=";
   };
 
-  goPackagePath = "github.com/errata-ai/vale";
+  vendorSha256 = "sha256-zdgLWEArmtHTDM844LoSJwKp0UGoAR8bHnFOSlrrjdg=";
 
-  meta = with stdenv.lib; {
-    homepage = https://errata-ai.github.io/vale/;
+  postInstall = ''
+    mkdir -p $data/share/vale
+    cp -r styles $data/share/vale
+  '';
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+
+  meta = with lib; {
+    homepage = "https://vale.sh/";
     description = "A syntax-aware linter for prose built with speed and extensibility in mind";
     license = licenses.mit;
     maintainers = [ maintainers.marsam ];

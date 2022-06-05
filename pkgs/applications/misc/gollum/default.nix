@@ -1,34 +1,22 @@
-{ stdenv, bundlerEnv, ruby, makeWrapper, bundlerUpdateScript
-, git }:
+{ lib, bundlerApp, bundlerUpdateScript, ruby, makeWrapper, git, docutils }:
 
-stdenv.mkDerivation rec {
+bundlerApp rec {
   pname = "gollum";
-  # nix-shell -p bundix icu zlib
-  version = (import ./gemset.nix).gollum.version;
+  exes = [ "gollum" ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  inherit ruby;
+  gemdir = ./.;
 
-  phases = [ "installPhase" ];
-
-  installPhase = let
-    env = bundlerEnv {
-      name = "${pname}-${version}-gems";
-      inherit pname ruby;
-      gemdir = ./.;
-    };
-  in ''
-    mkdir -p $out/bin
-    makeWrapper ${env}/bin/gollum $out/bin/gollum \
-      --prefix PATH ":" ${stdenv.lib.makeBinPath [ git ]}
-  '';
+  buildInputs = [ makeWrapper ];
 
   passthru.updateScript = bundlerUpdateScript "gollum";
 
-  meta = with stdenv.lib; {
-    description = "A simple, Git-powered wiki";
-    homepage = https://github.com/gollum/gollum;
+  meta = with lib; {
+    description = "A simple, Git-powered wiki with a sweet API and local frontend";
+    homepage = "https://github.com/gollum/gollum";
+    changelog = "https://github.com/gollum/gollum/blob/HEAD/HISTORY.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jgillich primeos nicknovitski ];
+    maintainers = with maintainers; [ erictapen jgillich nicknovitski bbenno ];
     platforms = platforms.unix;
   };
 }

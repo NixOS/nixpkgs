@@ -1,23 +1,26 @@
-{ stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
+{ lib, stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz, libX11
-, libwebp, quantumdepth ? 8, fixDarwinDylibNames }:
+, libwebp, quantumdepth ? 8, fixDarwinDylibNames, nukeReferences
+, runCommand
+, graphicsmagick  # for passthru.tests
+}:
 
 stdenv.mkDerivation rec {
   pname = "graphicsmagick";
-  version = "1.3.32";
+  version = "1.3.38";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "1qclp9i31idpcbbqswmnq2q11lmv0a7cvdb1y72xcky8sshaahmq";
+    sha256 = "sha256-1gzZ21k1HSucsZvrRDFwrKoo8HPRPSWPZ7NidjXjJnU=";
   };
 
   patches = [
     ./disable-popen.patch
-    ./1.3.32-darwin-png-strlcat-fix.patch
   ];
 
   configureFlags = [
     "--enable-shared"
+    "--with-frozenpaths"
     "--with-quantum-depth=${toString quantumdepth}"
     "--with-gslib=yes"
   ];
@@ -25,19 +28,36 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ bzip2 freetype ghostscript graphviz libjpeg libpng libtiff libX11 libxml2
       zlib libtool libwebp
-    ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ];
 
-  nativeBuildInputs = [ xz ];
+  nativeBuildInputs = [ xz nukeReferences ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+
+  # Remove CFLAGS from the binaries to avoid closure bloat.
+  # In the past we have had -dev packages in the closure of the binaries soley due to the string references.
+  postConfigure = ''
+    nuke-refs -e $out ./magick/magick_config.h
+  '';
 
   postInstall = ''
     sed -i 's/-ltiff.*'\'/\'/ $out/bin/*
   '';
 
+  passthru = {
+    tests = {
+      issue-157920 = runCommand "issue-157920-regression-test" {
+        buildInputs = [ graphicsmagick ];
+      } ''
+        gm convert ${graphviz}/share/graphviz/doc/pdf/neatoguide.pdf jpg:$out
+      '';
+    };
+  };
+
   meta = {
-    homepage = http://www.graphicsmagick.org;
+    homepage = "http://www.graphicsmagick.org";
     description = "Swiss army knife of image processing";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    mainProgram = "gm";
   };
 }

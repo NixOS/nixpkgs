@@ -20,7 +20,7 @@ let
   allTestsForSystem = system:
     import ./tests/all-tests.nix {
       inherit system;
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import ./.. { inherit system; };
       callTest = t: {
         ${system} = hydraJob t.test;
       };
@@ -28,7 +28,7 @@ let
   allTests =
     foldAttrs recursiveUpdate {} (map allTestsForSystem supportedSystems);
 
-  pkgs = import nixpkgs { system = "x86_64-linux"; };
+  pkgs = import ./.. { system = "x86_64-linux"; };
 
 
   versionModule =
@@ -41,7 +41,7 @@ let
   makeIso =
     { module, type, system, ... }:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -54,7 +54,7 @@ let
   makeSdImage =
     { module, system, ... }:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -65,7 +65,7 @@ let
   makeSystemTarball =
     { module, maintainers ? ["viric"], system }:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     let
 
@@ -79,7 +79,7 @@ let
     in
       tarball //
         { meta = {
-            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.platform.name}";
+            description = "NixOS system tarball for ${system} - ${stdenv.hostPlatform.linux-kernel.name}";
             maintainers = map (x: lib.maintainers.${x}) maintainers;
           };
           inherit config;
@@ -105,7 +105,7 @@ let
         modules = makeModules module {};
       };
       build = configEvaled.config.system.build;
-      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.platform.kernelTarget;
+      kernelTarget = configEvaled.pkgs.stdenv.hostPlatform.linux-kernel.target;
     in
       pkgs.symlinkJoin {
         name = "netboot";
@@ -138,7 +138,7 @@ in rec {
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ ... }: { }) (config: config.system.build.initialRamdisk);
 
-  netboot = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system: makeNetboot {
+  netboot = forMatchingSystems supportedSystems (system: makeNetboot {
     module = ./modules/installer/netboot/netboot-minimal.nix;
     inherit system;
   });
@@ -149,9 +149,15 @@ in rec {
     inherit system;
   });
 
-  iso_graphical = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-kde.nix;
-    type = "graphical";
+  iso_plasma5 = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix;
+    type = "plasma5";
+    inherit system;
+  });
+
+  iso_gnome = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-calamares-gnome.nix;
+    type = "gnome";
     inherit system;
   });
 
@@ -165,30 +171,25 @@ in rec {
 
   sd_image = forMatchingSystems [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ] (system: makeSdImage {
     module = {
-        armv6l-linux = ./modules/installer/cd-dvd/sd-image-raspberrypi.nix;
-        armv7l-linux = ./modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix;
-        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64.nix;
+        armv6l-linux = ./modules/installer/sd-card/sd-image-raspberrypi-installer.nix;
+        armv7l-linux = ./modules/installer/sd-card/sd-image-armv7l-multiplatform-installer.nix;
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-installer.nix;
       }.${system};
     inherit system;
   });
 
   sd_image_new_kernel = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
     module = {
-        aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64-new-kernel.nix;
+        aarch64-linux = ./modules/installer/sd-card/sd-image-aarch64-new-kernel-installer.nix;
       }.${system};
     type = "minimal-new-kernel";
-    inherit system;
-  });
-
-  sd_image_raspberrypi4 = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
-    module = ./modules/installer/cd-dvd/sd-image-raspberrypi4.nix;
     inherit system;
   });
 
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -204,18 +205,83 @@ in rec {
   # A disk image that can be imported to Amazon EC2 and registered as an AMI
   amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
       modules =
-        [ versionModule
+        [ configuration
+          versionModule
           ./maintainers/scripts/ec2/amazon-image.nix
         ];
     }).config.system.build.amazonImage)
 
   );
+  amazonImageZfs = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image-zfs.nix
+        ];
+    }).config.system.build.amazonImage)
+
+  );
+
+
+  # Test job for https://github.com/NixOS/nixpkgs/issues/121354 to test
+  # automatic sizing without blocking the channel.
+  amazonImageAutomaticSize = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image.nix
+          ({ ... }: { amazonImage.sizeMB = "auto"; })
+        ];
+    }).config.system.build.amazonImage)
+
+  );
+
+  # An image that can be imported into lxd and used for container creation
+  lxdImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-image.nix
+        ];
+    }).config.system.build.tarball)
+
+  );
+
+  # Metadata for the lxd image
+  lxdMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/lxd/lxd-image.nix
+        ];
+    }).config.system.build.metadata)
+
+  );
 
   # Ensure that all packages used by the minimal NixOS config end up in the channel.
   dummy = forAllSystems (system: pkgs.runCommand "dummy"
@@ -297,19 +363,24 @@ in rec {
         services.xserver.desktopManager.xfce.enable = true;
       });
 
-    gnome3 = makeClosure ({ ... }:
+    gnome = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.displayManager.gdm.enable = true;
-        services.xserver.desktopManager.gnome3.enable = true;
+        services.xserver.desktopManager.gnome.enable = true;
+      });
+
+    pantheon = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.desktopManager.pantheon.enable = true;
       });
 
     # Linux/Apache/PostgreSQL/PHP stack.
     lapp = makeClosure ({ pkgs, ... }:
       { services.httpd.enable = true;
         services.httpd.adminAddr = "foo@example.org";
+        services.httpd.enablePHP = true;
         services.postgresql.enable = true;
         services.postgresql.package = pkgs.postgresql;
-        environment.systemPackages = [ pkgs.php ];
       });
   };
 }

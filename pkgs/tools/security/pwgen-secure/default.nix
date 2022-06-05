@@ -1,7 +1,9 @@
 { lib, python3Packages, fetchFromGitHub }:
 
-with python3Packages;
+let
+  inherit (python3Packages) buildPythonApplication pythonOlder;
 
+in
 buildPythonApplication rec {
   pname = "pwgen-secure";
   version = "0.9.1";
@@ -18,10 +20,18 @@ buildPythonApplication rec {
     sha256 = "15md5606hzy1xfhj2lxmc0nvynyrcs4vxa5jdi34kfm31rdklj28";
   };
 
-  propagatedBuildInputs = [ docopt ];
+  postPatch = ''
+    shareDir=$out/share/${pname}
+
+    substituteInPlace pwgen_secure/rpg.py \
+      --replace "os.path.join(path, 'words.txt')" "os.path.join('$shareDir', 'words.txt')"
+  '';
+
+  propagatedBuildInputs = with python3Packages; [ docopt ];
 
   postInstall = ''
-    install -Dm755 spwgen.py $out/bin/spwgen
+    install -Dm555 spwgen.py $out/bin/spwgen
+    install -Dm444 pwgen_secure/words.txt -t $shareDir
   '';
 
   # there are no checks
@@ -32,5 +42,6 @@ buildPythonApplication rec {
     homepage = "https://github.com/mjmunger/pwgen_secure/";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "spwgen";
   };
 }

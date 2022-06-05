@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , kazoo
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover zake/tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/yahoo/Zake";
     description = "A python package that works to provide a nice set of testing utilities for the kazoo library";
     license = licenses.asl20;

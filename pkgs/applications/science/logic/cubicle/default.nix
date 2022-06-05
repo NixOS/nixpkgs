@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocamlPackages }:
+{ lib, stdenv, fetchurl, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "cubicle";
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = with ocamlPackages; [ ocaml findlib functory ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An open source model checker for verifying safety properties of array-based systems";
-    homepage = http://cubicle.lri.fr/;
+    homepage = "http://cubicle.lri.fr/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lucas8 ];
+    maintainers = with maintainers; [ dwarfmaster ];
   };
 }

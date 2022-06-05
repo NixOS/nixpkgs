@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , gtk-doc
 , autoconf
 , automake
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     gtk-doc
     autoconf
     automake
@@ -53,8 +53,8 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 ./autogen.sh
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://projects.gnome.org/gtkglext/;
+  meta = with lib; {
+    homepage = "https://projects.gnome.org/gtkglext/";
     description = "GtkGLExt, an OpenGL extension to GTK";
     longDescription = ''
       GtkGLExt is an OpenGL extension to GTK. It provides additional GDK

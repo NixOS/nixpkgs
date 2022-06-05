@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "arc-kde-theme";
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A port of the arc theme for Plasma";
-    homepage = https://git.io/arc-kde;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.nixy ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://git.io/arc-kde";
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.nixy ];
+    platforms = lib.platforms.all;
   };
 }

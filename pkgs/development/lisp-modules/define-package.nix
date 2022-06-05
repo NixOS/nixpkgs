@@ -1,4 +1,4 @@
-args @ {stdenv, clwrapper, baseName, packageName ? baseName
+args @ {lib, stdenv, clwrapper, baseName, packageName ? baseName
   , parasites ? []
   , buildSystems ? ([packageName] ++ parasites)
   , version ? "latest"
@@ -29,7 +29,9 @@ let
     echo "source '$path_config_script'" >> "$config_script"
     echo "fi" >> "$config_script"
     echo "if test -z \"\''${_''${outhash}_NIX_LISP_PATH_CONFIG:-}\"; then export _''${outhash}_NIX_LISP_PATH_CONFIG=1; " >> "$path_config_script"
-    echo "export NIX_LISP_ASDF_PATHS=\"$( ( echo "\''${NIX_LISP_ASDF_PATHS:-}"; echo "$NIX_LISP_ASDF_PATHS"; echo "$out/lib/common-lisp/${args.baseName}" ) | grep . | sort | uniq)\"" >> "$path_config_script"
+    echo "NIX_LISP_ASDF_PATHS=\"$( echo "\''${NIX_LISP_ASDF_PATHS:-}"; echo "$NIX_LISP_ASDF_PATHS"; echo "$out/lib/common-lisp/${args.baseName}" )\"" >> "$path_config_script"
+    echo "export NIX_LISP_ASDF_PATHS=\$((tr ' ' '\n' | sort | uniq | tr '\n' ' ') <<< \$NIX_LISP_ASDF_PATHS)" >> $path_config_script
+
     test -n "$LD_LIBRARY_PATH" &&
         echo "export LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}\"'$LD_LIBRARY_PATH'" >> "$path_config_script"
     test -n "$NIX_LISP_LD_LIBRARY_PATH" &&
@@ -43,7 +45,7 @@ let
     chmod a+x "$launch_script"
     echo "#! ${stdenv.shell}" >> "$launch_script"
     echo "source '$config_script'" >> "$launch_script"
-    echo "test -n \"\$NIX_LISP_LD_LIBRARY_PATH\" export LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH\"" >> "$launch_script"
+    echo "test -n \"\$NIX_LISP_LD_LIBRARY_PATH\" && export LD_LIBRARY_PATH=\"\$NIX_LISP_LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}\$LD_LIBRARY_PATH\"" >> "$launch_script"
     echo '"${clwrapper}/bin/common-lisp.sh" "$@"' >> "$launch_script"
   '';
   moveAsdFiles = ''
@@ -89,7 +91,7 @@ basePackage = {
     env -i \
     NIX_LISP="$NIX_LISP" \
     NIX_LISP_PRELAUNCH_HOOK='nix_lisp_run_single_form "(progn
-          ${stdenv.lib.concatMapStrings (system: ''
+          ${lib.concatMapStrings (system: ''
             (asdf:compile-system :${system})
             (asdf:load-system :${system})
             (asdf:operate (quote asdf::compile-bundle-op) :${system})
@@ -106,6 +108,8 @@ basePackage = {
   dontStrip=true;
 
   ASDF_OUTPUT_TRANSLATIONS="${builtins.storeDir}/:${builtins.storeDir}";
+
+  noAuditTmpDir = true;
 
   meta = {
     inherit description version;

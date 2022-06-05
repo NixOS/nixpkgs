@@ -1,42 +1,60 @@
-{ stdenv, fetchFromGitHub, makeWrapper, libpcap }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+, makeWrapper
+, libpcap
+}:
 
 stdenv.mkDerivation rec {
   pname = "masscan";
-  version = "1.0.5";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
-    owner  = "robertdavidgraham";
-    repo   = "masscan";
-    rev    = version;
-    sha256 = "0q0c7bsf0pbl8napry1qyg0gl4pd8wn872h4mz9b56dx4rx90vqg";
+    owner = "robertdavidgraham";
+    repo = "masscan";
+    rev = version;
+    sha256 = "sha256-mnGC/moQANloR5ODwRjzJzBa55OEZ9QU+9WpAHxQE/g=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  makeFlags = [ "PREFIX=$(out)" "GITVER=${version}" "CC=cc" ];
-
-  preInstall = ''
-    mkdir -p $out/bin
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # Fix broken install command
+    substituteInPlace Makefile --replace "-pm755" "-pDm755"
   '';
+
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
+
+  makeFlags = [
+    "PREFIX=$(out)"
+    "GITVER=${version}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p $out/share/man/man8
-    mkdir -p $out/share/{doc,licenses}/masscan
-    mkdir -p $out/etc/masscan
+    installManPage doc/masscan.?
 
-    cp data/exclude.conf $out/etc/masscan
-    cp -t $out/share/doc/masscan doc/algorithm.js doc/howto-afl.md doc/bot.html
-    cp doc/masscan.8 $out/share/man/man8/masscan.8
-    cp LICENSE $out/share/licenses/masscan/LICENSE
+    install -Dm444 -t $out/etc/masscan            data/exclude.conf
+    install -Dm444 -t $out/share/doc/masscan      doc/*.{html,js,md}
+    install -Dm444 -t $out/share/licenses/masscan LICENSE
 
-    wrapProgram $out/bin/masscan --prefix LD_LIBRARY_PATH : "${libpcap}/lib"
+    wrapProgram $out/bin/masscan \
+      --prefix LD_LIBRARY_PATH : "${libpcap}/lib"
   '';
 
-  meta = with stdenv.lib; {
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/masscan --selftest
+  '';
+
+  meta = with lib; {
     description = "Fast scan of the Internet";
-    homepage    = https://github.com/robertdavidgraham/masscan;
-    license     = licenses.agpl3;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/robertdavidgraham/masscan";
+    changelog = "https://github.com/robertdavidgraham/masscan/releases/tag/${version}";
+    license = licenses.agpl3Only;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

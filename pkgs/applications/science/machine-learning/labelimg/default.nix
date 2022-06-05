@@ -1,24 +1,35 @@
-{ stdenv, python2Packages, fetchurl }:
-  python2Packages.buildPythonApplication rec {
+{ lib, python3Packages, fetchFromGitHub, qt5 }:
+  python3Packages.buildPythonApplication rec {
     pname = "labelImg";
-    version = "1.6.0";
-    src = fetchurl {
-      url = "https://github.com/tzutalin/labelImg/archive/v${version}.tar.gz";
-      sha256 = "126kc4r7xm9170kh7snqsfkkc868m5bcnswrv7b4cq9ivlrdwbm4";
+    version = "1.8.3";
+    src = fetchFromGitHub {
+      owner = "tzutalin";
+      repo = "labelImg";
+      rev = "v${version}";
+      sha256 = "07v106fzlmxrbag4xm06m4mx9m0gckb27vpwsn7sap1bbgc1pap5";
     };
-    nativeBuildInputs = with python2Packages; [
-      pyqt4
+    nativeBuildInputs = with python3Packages; [
+      pyqt5
+      qt5.wrapQtAppsHook
     ];
-    propagatedBuildInputs = with python2Packages; [
-      pyqt4
+    propagatedBuildInputs = with python3Packages; [
+      pyqt5
       lxml
+      sip_4
     ];
     preBuild = ''
-      make qt4py2
+      make qt5py3
     '';
-    meta = with stdenv.lib; {
-      description = "LabelImg is a graphical image annotation tool and label object bounding boxes in images";
-      homepage = https://github.com/tzutalin/labelImg;
+    postInstall = ''
+      cp libs/resources.py $out/${python3Packages.python.sitePackages}/libs
+    '';
+    dontWrapQtApps = true;
+    preFixup = ''
+      makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+    '';
+    meta = with lib; {
+      description = "A graphical image annotation tool and label object bounding boxes in images";
+      homepage = "https://github.com/tzutalin/labelImg";
       license = licenses.mit;
       platforms = platforms.linux;
       maintainers = [ maintainers.cmcdragonkai ];

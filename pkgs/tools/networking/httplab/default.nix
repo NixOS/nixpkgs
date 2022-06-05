@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "httplab";
-  version = "0.3.0";
+  version = "0.4.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/gchaincl/httplab";
@@ -11,11 +11,11 @@ buildGoPackage rec {
     owner = "gchaincl";
     repo = "httplab";
     inherit rev;
-    sha256 = "1q9rp43z59nryfm79gci5a1gmqw552rqd4cki81rymbj3f6xvrf9";
+    sha256 = "0442nnpxyfl2gi9pilv7q6cxs2cd98wblg8d4nw6dx98yh4h99zs";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/gchaincl/httplab;
+  meta = with lib; {
+    homepage = "https://github.com/gchaincl/httplab";
     description = "Interactive WebServer";
     license = licenses.mit;
     maintainers = with maintainers; [ pradeepchhetri ];

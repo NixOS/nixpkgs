@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, perl, autoconf }:
+{ lib, stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.11.6";
+  pname = "automake";
+  version = "1.11.6";
 
   # TODO: Remove the `aclocal' wrapper when $ACLOCAL_PATH support is
   # available upstream; see
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
-    url = "mirror://gnu/automake/${name}.tar.xz";
+    url = "mirror://gnu/automake/automake-${version}.tar.xz";
     sha256 = "1ffbc6cc41f0ea6c864fbe9485b981679dc5e350f6c4bc6c3512f5a4226936b5";
   };
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     branch = "1.11";
-    homepage = https://www.gnu.org/software/automake/;
+    homepage = "https://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
 
     longDescription = ''
@@ -42,8 +43,8 @@ stdenv.mkDerivation rec {
       Standards.  Automake requires the use of Autoconf.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = lib.platforms.all;
   };
 }

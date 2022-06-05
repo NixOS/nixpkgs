@@ -1,19 +1,21 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cloud-nuke";
-  version = "0.1.7";
+  version = "0.11.6";
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = pname;
     rev = "v${version}";
-    sha256 = "054z6v13x55x9l5xnixxxszj8k2wa09b5ld2wq4gm4hc273s2m4k";
+    sha256 = "sha256-wsCe32Ui+czM0+qpMxgTahJ7FlcnFMkueEkrcwm1sdE=";
   };
 
-  goPackagePath = "github.com/gruntwork-io/cloud-nuke";
+  vendorSha256 = "sha256-McCbogZvgm9pnVjay9O2CxAh+653JnDMcU4CHD0PTPI=";
 
-  goDeps = ./deps.nix;
+  ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
+
+  doCheck = false;
 
   meta = with lib; {
     homepage = "https://github.com/gruntwork-io/cloud-nuke";

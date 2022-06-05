@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pytest }:
+{ lib, fetchPypi, buildPythonPackage, pytest }:
 
 buildPythonPackage rec {
   pname = "backports.shutil_which";
@@ -15,9 +15,9 @@ buildPythonPackage rec {
     py.test test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Backport of shutil.which from Python 3.3";
-    homepage = https://github.com/minrk/backports.shutil_which;
+    homepage = "https://github.com/minrk/backports.shutil_which";
     license = licenses.psfl;
     maintainers = with maintainers; [ jluttine ];
   };

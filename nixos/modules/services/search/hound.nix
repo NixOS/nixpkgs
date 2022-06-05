@@ -50,7 +50,7 @@ in {
 
       package = mkOption {
         default = pkgs.hound;
-        defaultText = "pkgs.hound";
+        defaultText = literalExpression "pkgs.hound";
         type = types.package;
         description = ''
           Package for running hound.
@@ -63,16 +63,18 @@ in {
           The full configuration of the Hound daemon. Note the dbpath
           should be an absolute path to a writable location on disk.
         '';
-        example = ''
-          {
-             "max-concurrent-indexers" : 2,
-             "dbpath" : "''${services.hound.home}/data",
-             "repos" : {
-                "nixpkgs": {
-                   "url" : "https://www.github.com/NixOS/nixpkgs.git"
-                }
-             }
-          }
+        example = literalExpression ''
+          '''
+            {
+              "max-concurrent-indexers" : 2,
+              "dbpath" : "''${services.hound.home}/data",
+              "repos" : {
+                  "nixpkgs": {
+                    "url" : "https://www.github.com/NixOS/nixpkgs.git"
+                  }
+              }
+            }
+          '''
         '';
       };
 

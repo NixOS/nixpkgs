@@ -1,8 +1,7 @@
-{ stdenv, fetchFromGitHub, gradle_4_10, perl, makeWrapper, jre, gsettings-desktop-schemas }:
+{ lib, stdenv, fetchFromGitHub, gradle_6, perl, makeWrapper, jdk11, gsettings-desktop-schemas }:
 
 let
   version = "0.9.3-3";
-  name = "mucommander-${version}";
 
   src = fetchFromGitHub {
     owner = "mucommander";
@@ -34,9 +33,9 @@ let
 
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
-    name = "${name}-deps";
-    inherit src postPatch;
-    nativeBuildInputs = [ gradle_4_10 perl ];
+    pname = "mucommander-deps";
+    inherit version src postPatch;
+    nativeBuildInputs = [ gradle_6 perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon build
@@ -53,8 +52,9 @@ let
   };
 
 in stdenv.mkDerivation {
-  inherit name src postPatch;
-  nativeBuildInputs = [ gradle_4_10 perl makeWrapper ];
+  pname = "mucommander";
+  inherit version src postPatch;
+  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
@@ -73,11 +73,11 @@ in stdenv.mkDerivation {
     tar xvf build/distributions/mucommander-${version}.tar --directory=$out --strip=1
     wrapProgram $out/bin/mucommander \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name} \
-      --set JAVA_HOME ${jre}
+      --set JAVA_HOME ${jdk11}
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://www.mucommander.com/;
+  meta = with lib; {
+    homepage = "http://www.mucommander.com/";
     description = "Cross-platform file manager";
     license = licenses.gpl3;
     maintainers = with maintainers; [ volth ];

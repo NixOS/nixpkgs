@@ -1,4 +1,4 @@
-{ stdenv, gtest, fetchFromGitHub, cmake, boost, eigen, python, vtk, zlib, tbb }:
+{ lib, stdenv, gtest, fetchFromGitHub, cmake, boost, eigen, python3, vtk, zlib, tbb }:
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
@@ -31,12 +31,10 @@ stdenv.mkDerivation rec {
     install -Dm644 -t "$out/share/bash-completion/completions/mirtk" share/completion/bash/mirtk
   '';
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake gtest ];
-  buildInputs = [ boost eigen python vtk zlib tbb ];
+  buildInputs = [ boost eigen python3 vtk zlib tbb ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/BioMedIA/MIRTK";
     description = "Medical image registration library and tools";
     maintainers = with maintainers; [ bcdarwin ];

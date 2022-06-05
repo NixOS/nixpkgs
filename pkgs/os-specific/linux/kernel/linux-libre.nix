@@ -1,8 +1,8 @@
 { stdenv, lib, fetchsvn, linux
 , scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
-    rev = "17177";
-    sha256 = "0hyd7wp73w4555d42xcvk4x4nxrfckbzah2ckb4d2aqzxab87789";
+    rev = "18738";
+    sha256 = "024iw4352h8b1kbbimqgid95h868swiw45wn91sjkpmwr612v6kd";
   }
 , ...
 }:
@@ -14,15 +14,22 @@ let
   minor = lib.versions.minor linux.modDirVersion;
   patch = lib.versions.patch linux.modDirVersion;
 
+  # See http://linux-libre.fsfla.org/pub/linux-libre/releases
+  versionPrefix = if linux.kernelOlder "5.14" then
+    "gnu1"
+  else
+    "gnu";
 in linux.override {
   argsOverride = {
-    modDirVersion = "${linux.modDirVersion}-gnu";
+    modDirVersion = "${linux.modDirVersion}-${versionPrefix}";
+    isLibre = true;
 
     src = stdenv.mkDerivation {
       name = "${linux.name}-libre-src";
       src = linux.src;
       buildPhase = ''
-        ${scripts}/${majorMinor}/deblob-${majorMinor} \
+        # --force flag to skip empty files after deblobbing
+        ${scripts}/${majorMinor}/deblob-${majorMinor} --force \
             ${major} ${minor} ${patch}
       '';
       checkPhase = ''
@@ -35,6 +42,6 @@ in linux.override {
 
     passthru.updateScript = ./update-libre.sh;
 
-    maintainers = [ lib.maintainers.qyliss ];
+    maintainers = with lib.maintainers; [ qyliss ivar ];
   };
 }

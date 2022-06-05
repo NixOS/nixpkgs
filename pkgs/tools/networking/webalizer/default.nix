@@ -1,12 +1,17 @@
-{ stdenv, fetchurl, zlib, libpng, gd, geoip, db }:
+{ lib, stdenv, fetchurl, zlib, libpng, gd, geoip, db }:
 
-stdenv.mkDerivation {
-  name = "webalizer-2.23-05";
+stdenv.mkDerivation rec {
+  pname = "webalizer";
+  version = "2.23-05";
 
   src = fetchurl {
-    url = ftp://ftp.mrunix.net/pub/webalizer/webalizer-2.23-05-src.tar.bz2;
+    url = "ftp://ftp.mrunix.net/pub/webalizer/webalizer-${version}-src.tar.bz2";
     sha256 = "0nl88y57a7gawfragj3viiigfkh5sgivfb4n0k89wzcjw278pj5g";
   };
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: dns_resolv.o:(.bss+0x20): multiple definition of `system_info'; webalizer.o:(.bss+0x76e0): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure =
     ''
@@ -22,9 +27,9 @@ stdenv.mkDerivation {
     "--enable-shared"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Web server log file analysis program";
-    homepage = http://www.webalizer.org;
+    homepage = "https://webalizer.net/";
     platforms = platforms.unix;
     license = licenses.gpl2;
   };

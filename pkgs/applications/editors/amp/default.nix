@@ -1,28 +1,27 @@
-{ stdenv, fetchFromGitHub, rustPlatform, openssl, pkgconfig, python3, xorg, cmake, libgit2, darwin
+{ lib, stdenv, fetchFromGitHub, rustPlatform, openssl, pkg-config, python3, xorg, cmake, libgit2, darwin
 , curl }:
 
 rustPlatform.buildRustPackage rec {
   pname = "amp";
-  # The latest release (0.5.2) does not compile, so we use a git snapshot instead.
-  version = "unstable-2019-06-09";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "jmacdonald";
     repo = pname;
-    rev = "2c88e82a88ada8a5fd2620ef225192395a4533a2";
-    sha256 = "0ha1xiabq31s687gkrnszf3zc7b3sfdl79iyg5ygbc49mzvarp8c";
+    rev = version;
+    sha256 = "0l1vpcfq6jrq2dkrmsa4ghwdpp7c54f46gz3n7nk0i41b12hnigw";
   };
 
-  cargoSha256 = "1bvj2zg19ak4vi47vjkqlybz011kn5zq1j7zznr76zrryacw4lz1";
+  cargoSha256 = "19r3xvysragmf02zk2l5s2hjg92gxdygsh52y7za81x443lvjyvq";
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ openssl python3 xorg.libxcb libgit2 ] ++ stdenv.lib.optionals stdenv.isDarwin
+  nativeBuildInputs = [ cmake pkg-config python3 ];
+  buildInputs = [ openssl xorg.libxcb libgit2 ] ++ lib.optionals stdenv.isDarwin
     (with darwin.apple_sdk.frameworks; [ curl Security AppKit ]);
 
   # Tests need to write to the theme directory in HOME.
   preCheck = "export HOME=`mktemp -d`";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A modern text editor inspired by Vim";
     homepage = "https://amp.rs";
     license = [ licenses.gpl3 ];

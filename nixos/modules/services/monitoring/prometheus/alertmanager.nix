@@ -18,9 +18,11 @@ let
     in checkedConfig yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
-    "--config.file ${alertmanagerYml}"
+    "--config.file /tmp/alert-manager-substituted.yaml"
     "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
     "--log.level ${cfg.logLevel}"
+    "--storage.path /var/lib/alertmanager"
+    (toString (map (peer: "--cluster.peer ${peer}:9094") cfg.clusterPeers))
     ] ++ (optional (cfg.webExternalUrl != null)
       "--web.external-url ${cfg.webExternalUrl}"
     ) ++ (optional (cfg.logFormat != null)
@@ -43,7 +45,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.prometheus-alertmanager;
-        defaultText = "pkgs.alertmanager";
+        defaultText = literalExpression "pkgs.alertmanager";
         description = ''
           Package that should be used for alertmanager.
         '';
@@ -120,11 +122,31 @@ in {
         '';
       };
 
+      clusterPeers = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Initial peers for HA cluster.
+        '';
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
         description = ''
           Extra commandline options when launching the Alertmanager.
+        '';
+      };
+
+      environmentFile = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        example = "/root/alertmanager.env";
+        description = ''
+          File to load as environment file. Environment variables
+          from this file will be interpolated into the config file
+          using envsubst with this syntax:
+          <literal>$ENVIRONMENT ''${VARIABLE}</literal>
         '';
       };
     };
@@ -143,10 +165,16 @@ in {
 
       systemd.services.alertmanager = {
         wantedBy = [ "multi-user.target" ];
-        after    = [ "network.target" ];
+        after    = [ "network-online.target" ];
+        preStart = ''
+           ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \
+                                                    -i "${alertmanagerYml}"
+        '';
         serviceConfig = {
           Restart  = "always";
-          DynamicUser = true;
+          StateDirectory = "alertmanager";
+          DynamicUser = true; # implies PrivateTmp
+          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
           WorkingDirectory = "/tmp";
           ExecStart = "${cfg.package}/bin/alertmanager" +
             optionalString (length cmdlineArgs != 0) (" \\\n  " +

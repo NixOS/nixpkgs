@@ -5,51 +5,55 @@ with lib;
 let
   cfg = config.networking.networkmanager;
 
-  basePackages = with pkgs; [
-    crda
-    modemmanager
-    networkmanager
-    networkmanager-fortisslvpn
-    networkmanager-iodine
-    networkmanager-l2tp
-    networkmanager-openconnect
-    networkmanager-openvpn
-    networkmanager-vpnc
-   ] ++ optional (!delegateWireless && !enableIwd) wpa_supplicant;
-
   delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
 
   enableIwd = cfg.wifi.backend == "iwd";
 
-  configFile = pkgs.writeText "NetworkManager.conf" ''
-    [main]
-    plugins=keyfile
-    dhcp=${cfg.dhcp}
-    dns=${cfg.dns}
-    # If resolvconf is disabled that means that resolv.conf is managed by some other module.
-    rc-manager=${if config.networking.resolvconf.enable then "resolvconf" else "unmanaged"}
+  mkValue = v:
+    if v == true then "yes"
+    else if v == false then "no"
+    else if lib.isInt v then toString v
+    else v;
 
-    [keyfile]
-    ${optionalString (cfg.unmanaged != [])
-      ''unmanaged-devices=${lib.concatStringsSep ";" cfg.unmanaged}''}
-
-    [logging]
-    level=${cfg.logLevel}
-    audit=${lib.boolToString config.security.audit.enable}
-
-    [connection]
-    ipv6.ip6-privacy=2
-    ethernet.cloned-mac-address=${cfg.ethernet.macAddress}
-    wifi.cloned-mac-address=${cfg.wifi.macAddress}
-    ${optionalString (cfg.wifi.powersave != null)
-      ''wifi.powersave=${if cfg.wifi.powersave then "3" else "2"}''}
-
-    [device]
-    wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
-    wifi.backend=${cfg.wifi.backend}
-
-    ${cfg.extraConfig}
+  mkSection = name: attrs: ''
+    [${name}]
+    ${
+      lib.concatStringsSep "\n"
+        (lib.mapAttrsToList
+          (k: v: "${k}=${mkValue v}")
+          (lib.filterAttrs
+            (k: v: v != null)
+            attrs))
+    }
   '';
+
+  configFile = pkgs.writeText "NetworkManager.conf" (lib.concatStringsSep "\n" [
+    (mkSection "main" {
+      plugins = "keyfile";
+      dhcp = cfg.dhcp;
+      dns = cfg.dns;
+      # If resolvconf is disabled that means that resolv.conf is managed by some other module.
+      rc-manager =
+        if config.networking.resolvconf.enable then "resolvconf"
+        else "unmanaged";
+      firewall-backend = cfg.firewallBackend;
+    })
+    (mkSection "keyfile" {
+      unmanaged-devices =
+        if cfg.unmanaged == [] then null
+        else lib.concatStringsSep ";" cfg.unmanaged;
+    })
+    (mkSection "logging" {
+      audit = config.security.audit.enable;
+      level = cfg.logLevel;
+    })
+    (mkSection "connection" cfg.connectionConfig)
+    (mkSection "device" {
+      "wifi.scan-rand-mac-address" = cfg.wifi.scanRandMacAddress;
+      "wifi.backend" = cfg.wifi.backend;
+    })
+    cfg.extraConfig
+  ]);
 
   /*
     [network-manager]
@@ -129,7 +133,20 @@ let
     '';
   };
 
+  packages = [
+    pkgs.modemmanager
+    pkgs.networkmanager
+  ]
+  ++ cfg.plugins
+  ++ lib.optionals (!delegateWireless && !enableIwd) [
+    pkgs.wpa_supplicant
+  ];
+
 in {
+
+  meta = {
+    maintainers = teams.freedesktop.members;
+  };
 
   ###### interface
 
@@ -146,6 +163,28 @@ in {
           configured. If enabled, a group <literal>networkmanager</literal>
           will be created. Add all users that should have permission
           to change network settings to this group.
+        '';
+      };
+
+      connectionConfig = mkOption {
+        type = with types; attrsOf (nullOr (oneOf [
+          bool
+          int
+          str
+        ]));
+        default = {};
+        description = ''
+          Configuration for the [connection] section of NetworkManager.conf.
+          Refer to
+          <link xlink:href="https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html">
+            https://developer.gnome.org/NetworkManager/stable/NetworkManager.conf.html#id-1.2.3.11
+          </link>
+          or
+          <citerefentry>
+            <refentrytitle>NetworkManager.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for more information.
         '';
       };
 
@@ -185,20 +224,45 @@ in {
         '';
       };
 
-      packages = mkOption {
-        type = types.listOf types.package;
+      plugins = mkOption {
+        type =
+          let
+            networkManagerPluginPackage = types.package // {
+              description = "NetworkManager plug-in";
+              check =
+                p:
+                lib.assertMsg
+                  (types.package.check p
+                    && p ? networkManagerPlugin
+                    && lib.isString p.networkManagerPlugin)
+                  ''
+                    Package ‘${p.name}’, is not a NetworkManager plug-in.
+                    Those need to have a ‘networkManagerPlugin’ attribute.
+                  '';
+            };
+          in
+          types.listOf networkManagerPluginPackage;
         default = [ ];
         description = ''
-          Extra packages that provide NetworkManager plugins.
+          List of NetworkManager plug-ins to enable.
+          Some plug-ins are enabled by the NetworkManager module by default.
         '';
-        apply = list: basePackages ++ list;
       };
 
       dhcp = mkOption {
-        type = types.enum [ "dhclient" "dhcpcd" "internal" ];
+        type = types.enum [ "dhcpcd" "internal" ];
         default = "internal";
         description = ''
           Which program (or internal library) should be used for DHCP.
+        '';
+      };
+
+      firewallBackend = mkOption {
+        type = types.enum [ "iptables" "nftables" "none" ];
+        default = "iptables";
+        description = ''
+          Which firewall backend should be used for configuring masquerading with shared mode.
+          If set to none, NetworkManager doesn't manage the configuration at all.
         '';
       };
 
@@ -302,7 +366,7 @@ in {
           };
         });
         default = [];
-        example = literalExample ''
+        example = literalExpression ''
         [ {
               source = pkgs.writeText "upHook" '''
 
@@ -329,14 +393,28 @@ in {
           </para><para>
           If you enable this option the
           <literal>networkmanager_strongswan</literal> plugin will be added to
-          the <option>networking.networkmanager.packages</option> option
+          the <option>networking.networkmanager.plugins</option> option
           so you don't need to to that yourself.
+        '';
+      };
+
+      enableFccUnlock = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable FCC unlock procedures. Since release 1.18.4, the ModemManager daemon no longer
+          automatically performs the FCC unlock procedure by default. See
+          <link xlink:href="https://modemmanager.org/docs/modemmanager/fcc-unlock/">the docs</link>
+          for more details.
         '';
       };
     };
   };
 
   imports = [
+    (mkRenamedOptionModule
+      [ "networking" "networkmanager" "packages" ]
+      [ "networking" "networkmanager" "plugins" ])
     (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
     (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
       This option was removed because allowing (multiple) regular users to
@@ -362,35 +440,22 @@ in {
       }
     ];
 
-    environment.etc = with pkgs; {
-      "NetworkManager/NetworkManager.conf".source = configFile;
+    hardware.wirelessRegulatoryDatabase = true;
 
-      "NetworkManager/VPN/nm-openvpn-service.name".source =
-        "${networkmanager-openvpn}/lib/NetworkManager/VPN/nm-openvpn-service.name";
-
-      "NetworkManager/VPN/nm-vpnc-service.name".source =
-        "${networkmanager-vpnc}/lib/NetworkManager/VPN/nm-vpnc-service.name";
-
-      "NetworkManager/VPN/nm-openconnect-service.name".source =
-        "${networkmanager-openconnect}/lib/NetworkManager/VPN/nm-openconnect-service.name";
-
-      "NetworkManager/VPN/nm-fortisslvpn-service.name".source =
-        "${networkmanager-fortisslvpn}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name";
-
-      "NetworkManager/VPN/nm-l2tp-service.name".source =
-        "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
-
-      "NetworkManager/VPN/nm-iodine-service.name".source =
-        "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
+    environment.etc = {
+        "NetworkManager/NetworkManager.conf".source = configFile;
       }
+      // builtins.listToAttrs (map (pkg: nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
+        source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
+      }) cfg.plugins)
+      // optionalAttrs cfg.enableFccUnlock
+         {
+           "ModemManager/fcc-unlock.d".source =
+             "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/*";
+         }
       // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
          {
            "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
-         }
-      // optionalAttrs cfg.enableStrongSwan
-         {
-           "NetworkManager/VPN/nm-strongswan-service.name".source =
-             "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
          }
       // listToAttrs (lib.imap1 (i: s:
          {
@@ -398,7 +463,7 @@ in {
             value = { mode = "0544"; inherit (s) source; };
          }) cfg.dispatcherScripts);
 
-    environment.systemPackages = cfg.packages;
+    environment.systemPackages = packages;
 
     users.groups = {
       networkmanager.gid = config.ids.gids.networkmanager;
@@ -408,6 +473,7 @@ in {
     users.users = {
       nm-openvpn = {
         uid = config.ids.uids.nm-openvpn;
+        group = "nm-openvpn";
         extraGroups = [ "networkmanager" ];
       };
       nm-iodine = {
@@ -416,14 +482,13 @@ in {
       };
     };
 
-    systemd.packages = cfg.packages;
+    systemd.packages = packages;
 
     systemd.tmpfiles.rules = [
       "d /etc/NetworkManager/system-connections 0700 root root -"
       "d /etc/ipsec.d 0700 root root -"
       "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
 
-      "d /var/lib/dhclient 0755 root root -"
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
     ];
 
@@ -447,10 +512,10 @@ in {
 
     systemd.services.NetworkManager-dispatcher = {
       wantedBy = [ "network.target" ];
-      restartTriggers = [ configFile ];
+      restartTriggers = [ configFile overrideNameserversScript ];
 
       # useful binaries for user-specified hooks
-      path = [ pkgs.iproute pkgs.utillinux pkgs.coreutils ];
+      path = [ pkgs.iproute2 pkgs.util-linux pkgs.coreutils ];
       aliases = [ "dbus-org.freedesktop.nm-dispatcher.service" ];
     };
 
@@ -460,21 +525,47 @@ in {
         useDHCP = false;
       })
 
+      {
+        networkmanager.plugins = with pkgs; [
+          networkmanager-fortisslvpn
+          networkmanager-iodine
+          networkmanager-l2tp
+          networkmanager-openconnect
+          networkmanager-openvpn
+          networkmanager-vpnc
+          networkmanager-sstp
+        ];
+      }
+
       (mkIf cfg.enableStrongSwan {
-        networkmanager.packages = [ pkgs.networkmanager_strongswan ];
+        networkmanager.plugins = [ pkgs.networkmanager_strongswan ];
       })
 
       (mkIf enableIwd {
         wireless.iwd.enable = true;
       })
+
+      {
+        networkmanager.connectionConfig = {
+          "ethernet.cloned-mac-address" = cfg.ethernet.macAddress;
+          "wifi.cloned-mac-address" = cfg.wifi.macAddress;
+          "wifi.powersave" =
+            if cfg.wifi.powersave == null then null
+            else if cfg.wifi.powersave then 3
+            else 2;
+        };
+      }
     ];
 
+    boot.kernelModules = [ "ctr" ];
+
+    security.polkit.enable = true;
     security.polkit.extraConfig = polkitConf;
 
-    services.dbus.packages = cfg.packages
+    services.dbus.packages = packages
       ++ optional cfg.enableStrongSwan pkgs.strongswanNM
       ++ optional (cfg.dns == "dnsmasq") pkgs.dnsmasq;
 
-    services.udev.packages = cfg.packages;
+    services.udev.packages = packages;
   };
 }

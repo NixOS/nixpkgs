@@ -1,175 +1,239 @@
-{ lib, stdenv, gnome3, pkgs, wxGTK30, wxGTK31
-, gsettings-desktop-schemas, hicolor-icon-theme
-, callPackage, callPackages
-, librsvg, cups
+{ lib, stdenv
+, fetchFromGitLab
+, gnome
+, dconf
+, wxGTK31-gtk3
+, makeWrapper
+, gsettings-desktop-schemas
+, hicolor-icon-theme
+, callPackage
+, callPackages
+, librsvg
+, cups
 
 , pname ? "kicad"
-, oceSupport ? false, opencascade
-, withOCCT ? true, opencascade-occt
-, ngspiceSupport ? true, libngspice
-, scriptingSupport ? true, swig, python3, python3Packages
-, debug ? false, valgrind
+, stable ? true
+, withOCC ? true
+, withNgspice ? true
+, libngspice
+, withScripting ? true
+, python3
+, debug ? false
+, sanitizeAddress ? false
+, sanitizeThreads ? false
 , with3d ? true
 , withI18n ? true
+, withPCM ? true # Plugin and Content Manager
+, srcs ? { }
 }:
 
-assert ngspiceSupport -> libngspice != null;
+# The `srcs` parameter can be used to override the kicad source code
+# and all libraries, which are otherwise inaccessible
+# to overlays since most of the kicad build expression has been
+# refactored into base.nix, most of the library build expressions have
+# been refactored into libraries.nix. Overrides are only applied when
+# building `kicad-unstable`. The `srcs` parameter has
+# no effect for stable `kicad`. `srcs` takes an attribute set in which
+# any of the following attributes are meaningful (though none are
+# mandatory): "kicad", "kicadVersion", "symbols", "templates",
+# "footprints", "packages3d", and "libVersion". "kicadVersion" and
+# "libVersion" should be set to a string with the desired value for
+# the version attribute in kicad's `mkDerivation` and the version
+# attribute in any of the library's `mkDerivation`, respectively.
+# "kicad", "symbols", "templates", "footprints", and "packages3d"
+# should be set to an appropriate fetcher (e.g. `fetchFromGitLab`).
+# So, for example, a possible overlay for kicad is:
+#
+# final: prev:
 
-with lib;
+# {
+#   kicad-unstable = (prev.kicad-unstable.override {
+#     srcs = {
+#       kicadVersion = "2020-10-08";
+#       kicad = prev.fetchFromGitLab {
+#         group = "kicad";
+#         owner = "code";
+#         repo = "kicad";
+#         rev = "fd22fe8e374ce71d57e9f683ba996651aa69fa4e";
+#         sha256 = "sha256-F8qugru/jU3DgZSpQXQhRGNFSk0ybFRkpyWb7HAGBdc=";
+#       };
+#     };
+#   });
+# }
+
 let
-
-  stable = pname != "kicad-unstable";
   baseName = if (stable) then "kicad" else "kicad-unstable";
+  versionsImport = import ./versions.nix;
 
-  versions = {
-    "kicad" = {
-      kicadVersion = {
-        version = "5.1.5";
-        src.sha256 = "15h3rwisjss3fdc9bam9n2wq94slhacc3fbg14bnzf4n5agsnv5b";
-      };
-      libVersion = {
-        version = "5.1.5";
-        libSources = {
-          i18n.sha256 = "1rfpifl8vky1gba2angizlb2n7mwmsiai3r6ip6qma60wdj8sbd3";
-          symbols.sha256 = "048b07ffsaav1ssrchw2p870lvb4rsyb5vnniy670k7q9p16qq6h";
-          templates.sha256 = "0cs3bm3zb5ngw5ldn0lzw5bvqm4kvcidyrn76438alffwiz2b15g";
-          footprints.sha256 = "1c4whgn14qhz4yqkl46w13p6rpv1k0hsc9s9h9368fxfcz9knb2j";
-          packages3d.sha256 = "0cff2ms1bsw530kqb1fr1m2pjixyxzwa81mxgac3qpbcf8fnpvaz";
-        };
-      };
-    };
-    "kicad-unstable" = {
-      kicadVersion = {
-        version = "2019-12-31";
-        src = {
-          rev = "eaaa4eb63acb289047dfbb6cc275579dea58f12b";
-          sha256 = "1v2hf2slphjdh14y56pmzlpi6mqidrd8198if1fi0cch72v37zch";
-        };
-      };
-      libVersion = {
-        version = "unstable";
-        libSources = {
-          i18n.rev = "e7439fd76f27cfc26e269c4e6c4d56245345c28b";
-          i18n.sha256 = "1nqm1kx5b4f7s0f9q8bg4rdhqnp0128yp6bgnrkia1kwmfnf5gmy";
-          symbols.rev = "1bc5ff11c76bcbfda227e534b0acf737edddde8f";
-          symbols.sha256 = "05kv93790wi4dpbn2488p587b83yz1zw9h62lkv41h7vn2r1mmb7";
-          templates.rev = "0c0490897f803ab8b7c3dad438b7eb1f80e0417c";
-          templates.sha256 = "0cs3bm3zb5ngw5ldn0lzw5bvqm4kvcidyrn76438alffwiz2b15g";
-          footprints.rev = "454126c125edd3fa8633f301421a7d9c4de61b77";
-          footprints.sha256 = "00nli4kx2i68bk852rivbirzcgpsdlpdk34g1q892952jsbh7fy6";
-          packages3d.rev = "c2b92a411adc93ddeeed74b36b542e1057f81a2a";
-          packages3d.sha256 = "05znc6y2lc31iafspg308cxdda94zg6c7mwslmys76npih1pb8qc";
-        };
-      };
-    };
+  # versions.nix does not provide us with version, src and rev. We
+  # need to turn this into approprate fetcher calls.
+  kicadSrcFetch = fetchFromGitLab {
+    group = "kicad";
+    owner = "code";
+    repo = "kicad";
+    rev = versionsImport.${baseName}.kicadVersion.src.rev;
+    sha256 = versionsImport.${baseName}.kicadVersion.src.sha256;
   };
-  versionConfig = versions.${baseName};
 
-  wxGTK = if (stable)
-    # wxGTK3x may default to withGtk2 = false, see #73145
-    then wxGTK30.override { withGtk2 = false; }
-    # wxGTK31 currently introduces an issue with opening the python interpreter in pcbnew
-    # but brings high DPI support?
-    else wxGTK31.override { withGtk2 = false; };
+  libSrcFetch = name: fetchFromGitLab {
+    group = "kicad";
+    owner = "libraries";
+    repo = "kicad-${name}";
+    rev = versionsImport.${baseName}.libVersion.libSources.${name}.rev;
+    sha256 = versionsImport.${baseName}.libVersion.libSources.${name}.sha256;
+  };
 
-  pythonPackages = python3Packages;
+  # only override `src` or `version` if building `kicad-unstable` with
+  # the appropriate attribute defined in `srcs`.
+  srcOverridep = attr: (!stable && builtins.hasAttr attr srcs);
+
+  # use default source and version (as defined in versions.nix) by
+  # default, or use the appropriate attribute from `srcs` if building
+  # unstable with `srcs` properly defined.
+  kicadSrc =
+    if srcOverridep "kicad" then srcs.kicad
+    else kicadSrcFetch;
+  kicadVersion =
+    if srcOverridep "kicadVersion" then srcs.kicadVersion
+    else versionsImport.${baseName}.kicadVersion.version;
+
+  libSrc = name: if srcOverridep name then srcs.${name} else libSrcFetch name;
+  # TODO does it make sense to only have one version for all libs?
+  libVersion =
+    if srcOverridep "libVersion" then srcs.libVersion
+    else versionsImport.${baseName}.libVersion.version;
+
+  wxGTK = wxGTK31-gtk3;
   python = python3;
-  wxPython = python3Packages.wxPython_4_0;
+  wxPython = python.pkgs.wxPython_4_1;
 
-  kicad-libraries = callPackages ./libraries.nix versionConfig.libVersion;
-  kicad-base = callPackage ./base.nix {
-    pname = baseName;
-    inherit versions stable baseName;
-    inherit wxGTK python wxPython;
-    inherit debug withI18n withOCCT oceSupport ngspiceSupport scriptingSupport;
-  };
-
+  inherit (lib) concatStringsSep flatten optionalString optionals;
 in
 stdenv.mkDerivation rec {
 
-  inherit pname;
-  version = versions.${baseName}.kicadVersion.version;
+  # Common libraries, referenced during runtime, via the wrapper.
+  passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
+  base = callPackage ./base.nix {
+    inherit stable baseName;
+    inherit kicadSrc kicadVersion;
+    inherit wxGTK python wxPython;
+    inherit withOCC withNgspice withScripting withI18n withPCM;
+    inherit debug sanitizeAddress sanitizeThreads;
+  };
 
-  src = kicad-base;
+  inherit pname;
+  version = if (stable) then kicadVersion else builtins.substring 0 10 src.src.rev;
+
+  src = base;
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
   dontFixup = true;
 
-  pythonPath = optionals (scriptingSupport)
-    [ wxPython pythonPackages.six ];
+  pythonPath = optionals (withScripting)
+    [ wxPython python.pkgs.six ];
 
-  nativeBuildInputs = optionals (scriptingSupport)
-    [ pythonPackages.wrapPython ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ optionals (withScripting)
+    [ python.pkgs.wrapPython ];
 
-  # wrapGAppsHook added the equivalent to ${kicad-base}/share
-  # though i noticed no difference without it
-  makeWrapperArgs = [
-    "--prefix XDG_DATA_DIRS : ${kicad-base}/share"
+  # We are emulating wrapGAppsHook, along with other variables to the
+  # wrapper
+  makeWrapperArgs = with passthru.libraries; [
+    "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
-    "--prefix XDG_DATA_DIRS : ${gnome3.defaultIconTheme}/share"
+    "--prefix XDG_DATA_DIRS : ${gnome.adwaita-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${wxGTK.gtk}/share/gsettings-schemas/${wxGTK.gtk.name}"
     "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
     # wrapGAppsHook did these two as well, no idea if it matters...
     "--prefix XDG_DATA_DIRS : ${cups}/share"
-    "--prefix GIO_EXTRA_MODULES : ${gnome3.dconf}/lib/gio/modules"
-
-    "--set KISYSMOD ${kicad-libraries.footprints}/share/kicad/modules"
-    "--set KICAD_SYMBOL_DIR ${kicad-libraries.symbols}/share/kicad/library"
-    "--set KICAD_TEMPLATE_DIR ${kicad-libraries.templates}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${kicad-libraries.symbols}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${kicad-libraries.footprints}/share/kicad/template"
+    "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
+    # required to open a bug report link in firefox-wayland
+    "--set-default MOZ_DBUS_REMOTE 1"
+    "--set-default KICAD6_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
+    "--set-default KICAD6_SYMBOL_DIR ${symbols}/share/kicad/symbols"
+    "--set-default KICAD6_TEMPLATE_DIR ${templates}/share/kicad/template"
+    "--prefix KICAD6_TEMPLATE_DIR : ${symbols}/share/kicad/template"
+    "--prefix KICAD6_TEMPLATE_DIR : ${footprints}/share/kicad/template"
   ]
-  ++ optionals (with3d) [ "--set KISYS3DMOD ${kicad-libraries.packages3d}/share/kicad/modules/packages3d" ]
-  ++ optionals (ngspiceSupport) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
+  ++ optionals (with3d)
+  [
+    "--set-default KICAD6_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
+  ]
+  ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
   # infinisil's workaround for #39493
   ++ [ "--set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" ]
   ;
 
-  # dunno why i have to add $makeWrapperArgs manually...
+  # why does $makeWrapperArgs have to be added explicitly?
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
-  # not sure if anything has to be done with the other stuff in kicad-base/bin
-  # dxf2idf, idf2vrml, idfcyl, idfrect, kicad2step, kicad-ogltest
   installPhase =
-    optionalString (scriptingSupport) '' buildPythonPath "${kicad-base} $pythonPath"
-    '' +
-    '' makeWrapper ${kicad-base}/bin/kicad $out/bin/kicad $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${kicad-base}/bin/pcbnew $out/bin/pcbnew $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${kicad-base}/bin/eeschema $out/bin/eeschema $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${kicad-base}/bin/gerbview $out/bin/gerbview $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${kicad-base}/bin/pcb_calculator $out/bin/pcb_calculator $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${kicad-base}/bin/pl_editor $out/bin/pl_editor $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    '' +
-    '' makeWrapper ${kicad-base}/bin/bitmap2component $out/bin/bitmap2component $makeWrapperArgs ''
-    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
-    ''
+    let
+      tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
+      utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad2step" ];
+    in
+    (concatStringsSep "\n"
+      (flatten [
+        "runHook preInstall"
+
+        (optionalString (withScripting) "buildPythonPath \"${base} $pythonPath\" \n")
+
+        # wrap each of the directly usable tools
+        (map
+          (tool: "makeWrapper ${base}/bin/${tool} $out/bin/${tool} $makeWrapperArgs"
+            + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
+          )
+          tools)
+
+        # link in the CLI utils
+        (map (util: "ln -s ${base}/bin/${util} $out/bin/${util}") utils)
+
+        "runHook postInstall"
+      ])
+    )
   ;
 
-  meta = {
-    description = if (stable)
-      then "Open Source Electronics Design Automation Suite"
-      else "Open Source EDA Suite, Development Build";
-    homepage = "https://www.kicad-pcb.org/";
+  postInstall = ''
+    mkdir -p $out/share
+    ln -s ${base}/share/applications $out/share/applications
+    ln -s ${base}/share/icons $out/share/icons
+    ln -s ${base}/share/mime $out/share/mime
+    ln -s ${base}/share/metainfo $out/share/metainfo
+  '';
+
+  # can't run this for each pname
+  # stable and unstable are in the same versions.nix
+  # and kicad-small reuses stable
+  # with "all" it updates both, run it manually if you don't want that
+  # and can't git commit if this could be running in parallel with other scripts
+  passthru.updateScript = [ ./update.sh "all" ];
+
+  meta = rec {
+    description = (if (stable)
+    then "Open Source Electronics Design Automation suite"
+    else "Open Source EDA suite, development build")
+    + (if (!with3d) then ", without 3D models" else "");
+    homepage = "https://www.kicad.org/";
     longDescription = ''
       KiCad is an open source software suite for Electronic Design Automation.
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
-    license = licenses.agpl3;
-    # berce seems inactive...
-    maintainers = with maintainers; [ evils kiwi berce ];
-    # kicad's cross-platform, not sure what to fill in here
-    platforms = with platforms; linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ evils kiwi ];
+    # kicad is cross platform
+    platforms = lib.platforms.all;
+    # despite that, nipkgs' wxGTK for darwin is "wxmac"
+    # and wxPython_4_0 does not account for this
+    # adjusting this package to downgrade to python2Packages.wxPython (wxPython 3),
+    # seems like more trouble than fixing wxPython_4_0 would be
+    # additionally, libngspice is marked as linux only, though it should support darwin
+
+    hydraPlatforms = if (with3d) then [ ] else platforms;
+    # We can't download the 3d models on Hydra,
+    # they are a ~1 GiB download and they occupy ~5 GiB in store.
+    # as long as the base and libraries (minus 3d) are build,
+    # this wrapper does not need to get built
+    # the kicad-*small "packages" cause this to happen
   };
 }

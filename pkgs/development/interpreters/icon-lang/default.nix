@@ -1,34 +1,47 @@
-{ stdenv, fetchFromGitHub, libX11, libXt , withGraphics ? true }:
+{ lib, stdenv
+, fetchFromGitHub
+, libX11
+, libXt
+, withGraphics ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "icon-lang";
-  version = "9.5.1";
+  version = "unstable-2020-02-05";
   src = fetchFromGitHub {
     owner = "gtownsend";
     repo = "icon";
-    rev = "rel${builtins.replaceStrings ["."] [""] version}";
-    sha256 = "1gkvj678ldlr1m5kjhx6zpmq11nls8kxa7pyy64whgakfzrypynw";
+    rev = "829cff33de4a21546fb269de3ef5acd7b4f0c0c7";
+    sha256 = "1lj2f13pbaajcy4v3744bz46rghhw5sv4dwwfnzhsllbj5gnjsv2";
   };
 
-  buildInputs = stdenv.lib.optionals withGraphics [ libX11 libXt ];
+  buildInputs = lib.optionals withGraphics [ libX11 libXt ];
 
   configurePhase =
     let
-      _name = if stdenv.isDarwin then "macintosh" else "linux";
+      target = if withGraphics then "X-Configure" else "Configure";
+      platform =
+        if stdenv.isLinux then "linux"
+        else if stdenv.isDarwin then "macintosh"
+        else if stdenv.isBSD then "bsd"
+        else if stdenv.isCygwin then "cygwin"
+        else if stdenv.isSunOS then "solaris"
+        else throw "unsupported system";
     in
-    ''
-      make ${stdenv.lib.optionalString withGraphics "X-"}Configure name=${_name}
-    '';
+    "make ${target} name=${platform}";
 
   installPhase = ''
     make Install dest=$out
+    rm $out/README
+    mkdir -p $out/share/doc
+    mv $out/doc $out/share/doc/icon
   '';
 
-  meta = with stdenv.lib; {
-    description = ''A very high level general-purpose programming language'';
+  meta = with lib; {
+    description = "A very high level general-purpose programming language";
     maintainers = with maintainers; [ vrthra yurrriq ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd ++ cygwin ++ illumos;
     license = licenses.publicDomain;
-    homepage = https://www.cs.arizona.edu/icon/;
+    homepage = "https://www.cs.arizona.edu/icon/";
   };
 }

@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, openssl }:
+{ lib, stdenv, fetchurl, openssl, pam, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "pure-ftpd-1.0.49";
+  pname = "pure-ftpd";
+  version = "1.0.50";
 
   src = fetchurl {
-    url = "https://download.pureftpd.org/pub/pure-ftpd/releases/${name}.tar.gz";
-    sha256 = "19cjr262n6h560fi9nm7l1srwf93k34bp8dp1c6gh90bqxcg8yvn";
+    url = "https://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-${version}.tar.gz";
+    sha256 = "08zas1kg5pnckl28gs7q29952pjfyj8rj59bq96hscqbni7gkqmb";
   };
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl pam ];
 
   configureFlags = [ "--with-tls" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free, secure, production-quality and standard-conformant FTP server";
-    homepage = https://www.pureftpd.org;
+    homepage = "https://www.pureftpd.org";
     license = licenses.isc; # with some parts covered by BSD3(?)
-    maintainers = [ maintainers.lethalman ];
-    platforms = platforms.linux;
+    maintainers = [ ];
+    platforms = platforms.unix;
   };
 }

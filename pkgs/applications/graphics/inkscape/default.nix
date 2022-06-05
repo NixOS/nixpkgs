@@ -1,41 +1,64 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, perlPackages, libXft
-, libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
-, glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
-, gsl, gtkspell2, cairo, python2, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif, potrace, cmake
-, librsvg, wrapGAppsHook
+{ stdenv
+, lib
+, boehmgc
+, boost
+, cairo
+, cmake
+, fetchurl
+, fetchpatch
+, gettext
+, ghostscript
+, glib
+, glibmm
+, gsl
+, gspell
+, gtk-mac-integration
+, gtkmm3
+, gdk-pixbuf
+, imagemagick
+, lcms
+, lib2geom
+, libcdr
+, libexif
+, libpng
+, librevenge
+, librsvg
+, libsigcxx
+, libsoup
+, libvisio
+, libwpg
+, libXft
+, libxml2
+, libxslt
+, ninja
+, perlPackages
+, pkg-config
+, poppler
+, popt
+, potrace
+, python3
+, substituteAll
+, wrapGAppsHook
+, zlib
 }:
-
 let
-  python2Env = python2.withPackages(ps: with ps;
-    [ numpy lxml scour ]);
+  python3Env = python3.withPackages
+    (ps: with ps; [
+      numpy
+      lxml
+      pillow
+      scour
+      pyserial
+    ]);
 in
-
 stdenv.mkDerivation rec {
-  name = "inkscape-0.92.4";
+  pname = "inkscape";
+  version = "1.1.2";
 
   src = fetchurl {
-    url = "https://media.inkscape.org/dl/resources/file/${name}.tar.bz2";
-    sha256 = "0pjinhjibfsz1aywdpgpj3k23xrsszpj4a1ya5562dkv2yl2vv2p";
+    url = "https://media.inkscape.org/dl/resources/file/${pname}-${version}.tar.xz";
+    sha256 = "sha256-P/5UoG0LJaTNi260JFNu8e0gW+E0Q6Oc1DfIx7ibltE=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "inkscape-poppler_0_76_compat.patch";
-      url = "https://gitlab.com/inkscape/inkscape/commit/e831b034746f8dc3c3c1b88372751f6dcb974831.diff";
-      sha256 = "096rdyi6ppjq1h9jwwsm9hb99nggfrfinik8rm23jkn4h2zl01zf";
-    })
-    (fetchpatch {
-      name = "inkscape-poppler_0_82_compat.patch";
-      url = "https://gitlab.com/inkscape/inkscape/commit/835b6bb62be565efab986d5a3f30a672ad56c7eb.patch";
-      sha256 = "02c6sxi2w52b885vr3pgani6kvxp9gdqqk2jgiykkdzv70hhrnm7";
-    })
-    (fetchpatch {
-      name = "inkscape-poppler_0_83_compat.patch";
-      url = "https://gitlab.com/inkscape/inkscape/commit/b5360a807b12d4e8318475ffd0464b84882788b5.patch";
-      sha256 = "1p44rr2q2i3zkd1y1j7xgdcbgx8yvlq6hq92im8s0bkjby6p5cpz";
-    })
-  ];
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
   # CMake’s ARGMAX check doesn’t offer enough padding for NIX_LDFLAGS.
@@ -43,48 +66,105 @@ stdenv.mkDerivation rec {
   # will leave us under ARGMAX.
   strictDeps = true;
 
-  unpackPhase = ''
-    cp $src ${name}.tar.bz2
-    tar xvjf ${name}.tar.bz2 > /dev/null
-    cd ${name}
-  '';
+  patches = [
+    (substituteAll {
+      src = ./fix-python-paths.patch;
+      # Python is used at run-time to execute scripts,
+      # e.g., those from the "Effects" menu.
+      python3 = "${python3Env}/bin/python";
+    })
+
+    # Fix build with poppler 22.03
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/4187
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/a18c57ffff313fd08bc8a44f6b6bf0b01d7e9b75.patch";
+      sha256 = "UZb8ZTtfA5667uo5ZlVQ5vPowiSgd4ItAJ9U1BOsRQg=";
+    })
+
+    # Fix build with poppler 22.04
+    # https://gitlab.com/inkscape/inkscape/-/merge_requests/4266
+    (fetchpatch {
+      url = "https://gitlab.com/inkscape/inkscape/-/commit/d989cdf1059c78bc3bb6414330242073768d640b.patch";
+      sha256 = "2cJZdunbRgPIwhJgz1dQoQRw3ZYZ2Fp6c3hpVBV2PbE=";
+    })
+  ];
 
   postPatch = ''
     patchShebangs share/extensions
-    patchShebangs fix-roff-punct
+    substituteInPlace share/extensions/eps_input.inx \
+      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
+    substituteInPlace share/extensions/ps_input.inx \
+      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
+    substituteInPlace share/extensions/ps_input.py \
+      --replace "call('ps2pdf'" "call('${ghostscript}/bin/ps2pdf'"
+    patchShebangs share/templates
+    patchShebangs man/fix-roff-punct
 
-    # Python is used at run-time to execute scripts, e.g., those from
-    # the "Effects" menu.
-    substituteInPlace src/extension/implementation/script.cpp \
-      --replace '"python-interpreter", "python"' '"python-interpreter", "${python2Env}/bin/python"'
+    # double-conversion is a dependency of 2geom
+    substituteInPlace CMakeScripts/DefineDependsandFlags.cmake \
+      --replace 'find_package(DoubleConversion REQUIRED)' ""
   '';
 
-  nativeBuildInputs = [ pkgconfig cmake makeWrapper python2Env wrapGAppsHook ]
-    ++ (with perlPackages; [ perl XMLParser ]);
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    python3Env
+    glib # for setup hook
+    gdk-pixbuf # for setup hook
+    wrapGAppsHook
+  ] ++ (with perlPackages; [
+    perl
+    XMLParser
+  ]);
+
   buildInputs = [
-    libXft libpng zlib popt boehmgc
-    libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
-    gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif potrace
-
+    boehmgc
+    boost
+    gettext
+    glib
+    glibmm
+    gsl
+    gtkmm3
+    imagemagick
+    lcms
+    lib2geom
+    libcdr
+    libexif
+    libpng
+    librevenge
     librsvg # for loading icons
-
-    python2Env perlPackages.perl
-  ] ++ stdenv.lib.optional (!stdenv.isDarwin) gtkspell2
-    ++ stdenv.lib.optional stdenv.isDarwin cairo;
-
-  enableParallelBuilding = true;
+    libsigcxx
+    libsoup
+    libvisio
+    libwpg
+    libXft
+    libxml2
+    libxslt
+    perlPackages.perl
+    poppler
+    popt
+    potrace
+    python3Env
+    zlib
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    gspell
+  ] ++ lib.optionals stdenv.isDarwin [
+    cairo
+    gtk-mac-integration
+  ];
 
   # Make sure PyXML modules can be found at run-time.
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkscape
     install_name_tool -change $out/lib/libinkscape_base.dylib $out/lib/inkscape/libinkscape_base.dylib $out/bin/inkview
   '';
 
-  meta = with stdenv.lib; {
-    license = "GPL";
-    homepage = https://www.inkscape.org;
+  meta = with lib; {
     description = "Vector graphics editor";
+    homepage = "https://www.inkscape.org";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.jtojnar ];
     platforms = platforms.all;
     longDescription = ''
       Inkscape is a feature-rich vector graphics editor that edits

@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''map-set'';
-  version = ''20190307-hg'';
+  baseName = "map-set";
+  version = "20190307-hg";
 
-  description = ''Set-like data structure.'';
+  description = "Set-like data structure.";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/map-set/2019-03-07/map-set-20190307-hg.tgz'';
-    sha256 = ''1x7yh4gzdvypr1q45qgmjln5pjlh82bfpk6sqyrihrldmwwnbzg9'';
+    url = "http://beta.quicklisp.org/archive/map-set/2019-03-07/map-set-20190307-hg.tgz";
+    sha256 = "1x7yh4gzdvypr1q45qgmjln5pjlh82bfpk6sqyrihrldmwwnbzg9";
   };
 
   packageName = "map-set";

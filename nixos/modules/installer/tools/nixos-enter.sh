@@ -1,4 +1,5 @@
-#! @shell@
+#! @runtimeShell@
+# shellcheck shell=bash
 
 set -e
 
@@ -60,15 +61,49 @@ chmod 0755 "$mountPoint/dev" "$mountPoint/sys"
 mount --rbind /dev "$mountPoint/dev"
 mount --rbind /sys "$mountPoint/sys"
 
-# If silent, write both stdout and stderr of activation script to /dev/null
-# otherwise, write both streams to stderr of this process
-if [ "$silent" -eq 0 ]; then
-    PIPE_TARGET="/dev/stderr"
-else
-    PIPE_TARGET="/dev/null"
-fi
+# modified from https://github.com/archlinux/arch-install-scripts/blob/bb04ab435a5a89cd5e5ee821783477bc80db797f/arch-chroot.in#L26-L52
+chroot_add_resolv_conf() {
+    local chrootDir="$1" resolvConf="$1/etc/resolv.conf"
 
-# Run the activation script. Set $LOCALE_ARCHIVE to supress some Perl locale warnings.
-LOCALE_ARCHIVE="$system/sw/lib/locale/locale-archive" chroot "$mountPoint" "$system/activate" >>$PIPE_TARGET 2>&1 || true
+    [[ -e /etc/resolv.conf ]] || return 0
+
+    # Handle resolv.conf as a symlink to somewhere else.
+    if [[ -L "$resolvConf" ]]; then
+      # readlink(1) should always give us *something* since we know at this point
+      # it's a symlink. For simplicity, ignore the case of nested symlinks.
+      # We also ignore the possibility of `../`s escaping the root.
+      resolvConf="$(readlink "$resolvConf")"
+      if [[ "$resolvConf" = /* ]]; then
+        resolvConf="$chrootDir$resolvConf"
+      else
+        resolvConf="$chrootDir/etc/$resolvConf"
+      fi
+    fi
+
+    # ensure file exists to bind mount over
+    if [[ ! -f "$resolvConf" ]]; then
+      install -Dm644 /dev/null "$resolvConf" || return 1
+    fi
+
+    mount --bind /etc/resolv.conf "$resolvConf"
+}
+
+chroot_add_resolv_conf "$mountPoint" || echo "$0: failed to set up resolv.conf" >&2
+
+(
+    # If silent, write both stdout and stderr of activation script to /dev/null
+    # otherwise, write both streams to stderr of this process
+    if [ "$silent" -eq 1 ]; then
+        exec 2>/dev/null
+    fi
+
+    # Run the activation script. Set $LOCALE_ARCHIVE to supress some Perl locale warnings.
+    LOCALE_ARCHIVE="$system/sw/lib/locale/locale-archive" IN_NIXOS_ENTER=1 chroot "$mountPoint" "$system/activate" 1>&2 || true
+
+    # Create /tmp
+    chroot "$mountPoint" systemd-tmpfiles --create --remove --exclude-prefix=/dev 1>&2 || true
+)
+
+unset TMPDIR
 
 exec chroot "$mountPoint" "${command[@]}"

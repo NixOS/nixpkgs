@@ -1,37 +1,93 @@
-{ lib, buildPythonPackage, fetchPypi, libredirect
-, case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
+{ stdenv
+, lib
+, billiard
+, boto3
+, buildPythonPackage
+, case
+, click
+, click-didyoumean
+, click-plugins
+, click-repl
+, dnspython
+, fetchPypi
+, kombu
+, moto
+, pymongo
+, pytest-celery
+, pytest-subtests
+, pytest-timeout
+, pytestCheckHook
+, pythonOlder
+, pytz
+, vine
+, nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.4.0";
+  version = "5.2.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3363bb5df72d74420986a435449f3c3979285941dff57d5d97ecba352a0e3e2";
+    hash = "sha256-+vvYKTTTD4oAT4Ho96Bi4xQToj1ES+juMyZVORWVjG0=";
   };
 
-  postPatch = ''
-    substituteInPlace requirements/test.txt \
-      --replace "moto==1.3.7" moto \
-      --replace "pytest>=4.3.1,<4.4.0" pytest
-  '';
+  propagatedBuildInputs = [
+    billiard
+    click
+    click-didyoumean
+    click-plugins
+    click-repl
+    kombu
+    pytz
+    vine
+  ];
 
-  # ignore test that's incompatible with pytest5
-  # test_eventlet touches network
-  # test_mongodb requires pymongo
-  checkPhase = ''
-    pytest -k 'not restore_current_app_fallback and not msgpack' \
-      --ignore=t/unit/concurrency/test_eventlet.py \
-      --ignore=t/unit/backends/test_mongodb.py
-  '';
+  checkInputs = [
+    boto3
+    case
+    dnspython
+    moto
+    pymongo
+    pytest-celery
+    pytest-subtests
+    pytest-timeout
+    pytestCheckHook
+  ];
 
-  checkInputs = [ case pytest boto3 moto ];
-  propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
+  disabledTestPaths = [
+    # test_eventlet touches network
+    "t/unit/concurrency/test_eventlet.py"
+    # test_multi tries to create directories under /var
+    "t/unit/bin/test_multi.py"
+    "t/unit/apps/test_multi.py"
+  ];
+
+  disabledTests = [
+    "msgpack"
+    "test_check_privileges_no_fchown"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # too many open files on hydra
+    "test_cleanup"
+    "test_with_autoscaler_file_descriptor_safety"
+    "test_with_file_descriptor_safety"
+  ];
+
+  pythonImportsCheck = [
+    "celery"
+  ];
+
+  passthru.tests = {
+    inherit (nixosTests) sourcehut;
+  };
 
   meta = with lib; {
-    homepage = https://github.com/celery/celery/;
     description = "Distributed task queue";
+    homepage = "https://github.com/celery/celery/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
   };
 }

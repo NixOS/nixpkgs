@@ -1,4 +1,4 @@
-{stdenv, composeXcodeWrapper}:
+{stdenv, lib, composeXcodeWrapper}:
 { name
 , src
 , sdkVersion ? "13.1"
@@ -53,13 +53,13 @@ let
   extraArgs = removeAttrs args ([ "name" "scheme" "xcodeFlags" "release" "certificateFile" "certificatePassword" "provisioningProfile" "signMethod" "generateIPA" "generateXCArchive" "enableWirelessDistribution" "installURL" "bundleId" "version" ] ++ builtins.attrNames xcodewrapperFormalArgs);
 in
 stdenv.mkDerivation ({
-  name = stdenv.lib.replaceChars [" "] [""] name; # iOS app names can contain spaces, but in the Nix store this is not allowed
+  name = lib.replaceChars [" "] [""] name; # iOS app names can contain spaces, but in the Nix store this is not allowed
   buildPhase = ''
     # Be sure that the Xcode wrapper has priority over everything else.
     # When using buildInputs this does not seem to be the case.
     export PATH=${xcodewrapper}/bin:$PATH
-    
-    ${stdenv.lib.optionalString release ''
+
+    ${lib.optionalString release ''
       export HOME=/Users/$(whoami)
       keychainName="$(basename $out)"
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation ({
       security unlock-keychain -p "" $keychainName
 
       # Import the certificate into the keychain
-      security import ${certificateFile} -k $keychainName -P "${certificatePassword}" -A 
+      security import ${certificateFile} -k $keychainName -P "${certificatePassword}" -A
 
       # Grant the codesign utility permissions to read from the keychain
       security set-key-partition-list -S apple-tool:,apple: -s -k "" $keychainName
@@ -91,10 +91,10 @@ stdenv.mkDerivation ({
     # Do the building
     export LD=/usr/bin/clang # To avoid problem with -isysroot parameter that is unrecognized by the stock ld. Comparison with an impure build shows that it uses clang instead. Ugly, but it works
 
-    xcodebuild -target ${_target} -configuration ${_configuration} ${stdenv.lib.optionalString (scheme != null) "-scheme ${scheme}"} -sdk ${_sdk} TARGETED_DEVICE_FAMILY="1, 2" ONLY_ACTIVE_ARCH=NO CONFIGURATION_TEMP_DIR=$TMPDIR CONFIGURATION_BUILD_DIR=$out ${if generateIPA || generateXCArchive then "-archivePath \"${name}.xcarchive\" archive" else ""} ${if release then '' PROVISIONING_PROFILE=$PROVISIONING_PROFILE OTHER_CODE_SIGN_FLAGS="--keychain $HOME/Library/Keychains/$keychainName-db"'' else ""} ${xcodeFlags}
+    xcodebuild -target ${_target} -configuration ${_configuration} ${lib.optionalString (scheme != null) "-scheme ${scheme}"} -sdk ${_sdk} TARGETED_DEVICE_FAMILY="1, 2" ONLY_ACTIVE_ARCH=NO CONFIGURATION_TEMP_DIR=$TMPDIR CONFIGURATION_BUILD_DIR=$out ${if generateIPA || generateXCArchive then "-archivePath \"${name}.xcarchive\" archive" else ""} ${if release then '' PROVISIONING_PROFILE=$PROVISIONING_PROFILE OTHER_CODE_SIGN_FLAGS="--keychain $HOME/Library/Keychains/$keychainName-db"'' else ""} ${xcodeFlags}
 
-    ${stdenv.lib.optionalString release ''
-      ${stdenv.lib.optionalString generateIPA ''
+    ${lib.optionalString release ''
+      ${lib.optionalString generateIPA ''
         # Create export plist file
         cat > "${name}.plist" <<EOF
         <?xml version="1.0" encoding="UTF-8"?>
@@ -112,7 +112,7 @@ stdenv.mkDerivation ({
             <string>manual</string>
             <key>method</key>
             <string>${signMethod}</string>
-            ${stdenv.lib.optionalString (signMethod == "enterprise" || signMethod == "ad-hoc") ''
+            ${lib.optionalString (signMethod == "enterprise" || signMethod == "ad-hoc") ''
               <key>compileBitcode</key>
               <false/>
             ''}
@@ -127,14 +127,14 @@ stdenv.mkDerivation ({
         mkdir -p $out/nix-support
         echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
 
-        ${stdenv.lib.optionalString enableWirelessDistribution ''
+        ${lib.optionalString enableWirelessDistribution ''
           # Add another hacky build product that enables wireless adhoc installations
           appname="$(basename "$(echo $out/*.ipa)" .ipa)"
           sed -e "s|@INSTALL_URL@|${installURL}?bundleId=${bundleId}\&amp;version=${appVersion}\&amp;title=$appname|" ${./install.html.template} > $out/''${appname}.html
           echo "doc install \"$out/''${appname}.html\"" >> $out/nix-support/hydra-build-products
         ''}
       ''}
-      ${stdenv.lib.optionalString generateXCArchive ''
+      ${lib.optionalString generateXCArchive ''
         mkdir -p $out
         mv "${name}.xcarchive" $out
       ''}
@@ -144,7 +144,7 @@ stdenv.mkDerivation ({
     ''}
   '';
 
-  failureHook = stdenv.lib.optionalString release deleteKeychain;
+  failureHook = lib.optionalString release deleteKeychain;
 
   installPhase = "true";
 } // extraArgs)

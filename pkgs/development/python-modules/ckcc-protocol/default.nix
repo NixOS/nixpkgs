@@ -1,35 +1,33 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , click
 , ecdsa
 , hidapi
-, lib
 , fetchPypi
-, pytest
 , pyaes
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "ckcc-protocol";
-  version = "0.8.0";
+  version = "1.3.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mbs9l8qycy50j5lq6az7l5d8i40nb0vmlyhcyax298qp6c1r1gh";
+    sha256 = "sha256-4y5pe0CFD3C1+N0kP/2j9Wser2zkn8Uf4203ci45Rq0=";
   };
-
-  checkInputs = [
-    pytest
-  ];
 
   propagatedBuildInputs = [ click ecdsa hidapi pyaes ];
 
-  meta = with stdenv.lib; {
+  # Project has no tests
+  doCheck = false;
+  pythonImportsCheck = [ "ckcc" ];
+
+  meta = with lib; {
     description = "Communicate with your Coldcard using Python";
-    homepage = https://github.com/Coldcard/ckcc-protocol;
-    license = licenses.gpl3;
+    homepage = "https://github.com/Coldcard/ckcc-protocol";
+    license = licenses.mit;
     maintainers = [ maintainers.hkjn ];
   };
 }

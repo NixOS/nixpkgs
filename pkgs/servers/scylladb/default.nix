@@ -1,8 +1,8 @@
 {
-  stdenv,
-  fetchgit,
+  lib,
+  fetchFromGitHub,
   python3Packages,
-  pkgconfig,
+  pkg-config,
   gcc8Stdenv,
   boost,
   git,
@@ -34,17 +34,18 @@ gcc8Stdenv.mkDerivation {
   pname = "scylladb";
   version = "3.0.5";
 
-  src = fetchgit {
-    url = "https://github.com/scylladb/scylla.git";
+  src = fetchFromGitHub {
+    owner = "scylladb";
+    repo = "scylla";
     rev = "403f66ecad6bc773712c69c4a80ebd172eb48b13";
-    sha256 = "14mg0kzpkrxvwqyiy19ndy4rsc7s5gnv2gwd3xdwm1lx1ln8ywsi";
+    sha256 = "sha256-UXOPLA2dhspbH40/se0r+jCdiW82BR895rvnef8Er5I=";
     fetchSubmodules = true;
   };
 
   patches = [ ./seastar-configure-script-paths.patch ./configure-etc-osrelease.patch ];
 
   nativeBuildInputs = [
-   pkgconfig
+   pkg-config
    cmake
    makeWrapper
    ninja
@@ -91,12 +92,13 @@ gcc8Stdenv.mkDerivation {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "NoSQL data store using the seastar framework, compatible with Apache Cassandra";
     homepage = "https://scylladb.com";
     license = licenses.agpl3;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = lib.platforms.linux;
     hydraPlatforms = []; # It's huge ATM, about 18 GB.
-    maintainers = [ stdenv.lib.maintainers.farlion ];
+    maintainers = [ lib.maintainers.farlion ];
+    broken = true;
   };
 }

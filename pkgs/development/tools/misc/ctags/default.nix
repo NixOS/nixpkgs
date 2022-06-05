@@ -1,12 +1,12 @@
-{ stdenv, fetchsvn, autoreconfHook }:
+{ lib, stdenv, fetchsvn, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "ctags-${revision}";
-  revision = "816";
+  pname = "ctags";
+  version = "816";
 
   src = fetchsvn {
-    url = https://svn.code.sf.net/p/ctags/code/trunk;
-    rev = revision;
+    url = "https://svn.code.sf.net/p/ctags/code/trunk";
+    rev = version;
     sha256 = "0jmbkrmscbl64j71qffcc39x005jrmphx8kirs1g2ws44wil39hf";
   };
 
@@ -15,7 +15,14 @@ stdenv.mkDerivation rec {
   # don't use $T(E)MP which is set to the build directory
   configureFlags= [ "--enable-tmpdir=/tmp" ];
 
-  meta = with stdenv.lib; {
+  patches = [
+    # Library defines an `__unused__` which is a reserved name, and may
+    # conflict with the standard library definition. One such conflict is with
+    # macOS headers.
+    ./unused-collision.patch
+  ];
+
+  meta = with lib; {
     description = "A tool for fast source code browsing (exuberant ctags)";
     longDescription = ''
       Ctags generates an index (or tag) file of language objects found
@@ -25,7 +32,7 @@ stdenv.mkDerivation rec {
       alternatively, the index entry created for that object).  Many
       programming languages are supported.
     '';
-    homepage = http://ctags.sourceforge.net/;
+    homepage = "http://ctags.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
 

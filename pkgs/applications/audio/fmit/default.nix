@@ -1,28 +1,28 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
-, alsaSupport ? true, alsaLib ? null
+{ lib, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
+, alsaSupport ? true, alsa-lib ? null
 , jackSupport ? false, libjack2 ? null
 , portaudioSupport ? false, portaudio ? null }:
 
-assert alsaSupport -> alsaLib != null;
+assert alsaSupport -> alsa-lib != null;
 assert jackSupport -> libjack2 != null;
 assert portaudioSupport -> portaudio != null;
 
-with stdenv.lib;
+with lib;
 
 mkDerivation rec {
   pname = "fmit";
-  version = "1.2.13";
+  version = "1.2.14";
 
   src = fetchFromGitHub {
     owner = "gillesdegottex";
     repo = "fmit";
     rev = "v${version}";
-    sha256 = "1qyskam053pvlap1av80rgp12pzhr92rs88vqs6s0ia3ypnixcc6";
+    sha256 = "1q062pfwz2vr9hbfn29fv54ip3jqfd9r99nhpr8w7mn1csy38azx";
   };
 
   nativeBuildInputs = [ qmake itstool wrapQtAppsHook ];
   buildInputs = [ fftw qtbase qtmultimedia ]
-    ++ optionals alsaSupport [ alsaLib ]
+    ++ optionals alsaSupport [ alsa-lib ]
     ++ optionals jackSupport [ libjack2 ]
     ++ optionals portaudioSupport [ portaudio ];
 
@@ -38,15 +38,13 @@ mkDerivation rec {
       PREFIXSHORTCUT=$out"
   '';
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Free Musical Instrument Tuner";
     longDescription = ''
       FMIT is a graphical utility for tuning musical instruments, with error
       and volume history, and advanced features.
     '';
-    homepage = http://gillesdegottex.github.io/fmit/;
+    homepage = "http://gillesdegottex.github.io/fmit/";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
   };

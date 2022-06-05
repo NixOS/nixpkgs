@@ -76,9 +76,18 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.redshift;
-      defaultText = "pkgs.redshift";
+      defaultText = literalExpression "pkgs.redshift";
       description = ''
         redshift derivation to use.
+      '';
+    };
+
+    executable = mkOption {
+      type = types.str;
+      default = "/bin/redshift";
+      example = "/bin/redshift-gtk";
+      description = ''
+        Redshift executable to use within the package.
       '';
     };
 
@@ -114,7 +123,7 @@ in {
       partOf = [ "graphical-session.target" ];
       serviceConfig = {
         ExecStart = ''
-          ${cfg.package}/bin/redshift \
+          ${cfg.package}${cfg.executable} \
             -l ${providerString} \
             -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
             -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \

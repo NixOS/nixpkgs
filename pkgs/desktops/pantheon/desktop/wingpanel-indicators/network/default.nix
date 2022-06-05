@@ -1,39 +1,35 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, nix-update-script
+, substituteAll
+, pkg-config
 , meson
 , ninja
 , vala
 , gtk3
 , granite
 , networkmanager
-, networkmanagerapplet
+, libnma
 , wingpanel
 , libgee
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-network";
-  version = "2.2.2";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0fch27imk5x4nfx49cwcylkxd7m289rl9niy1vx5kjplhbhyhdq2";
-  };
-
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
+    sha256 = "sha256-4Fg8/Gm9mUqaL3wEc8h+/pMvOfD75ILjo7LhLz6LQmo=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
@@ -42,17 +38,21 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     networkmanager
-    networkmanagerapplet
+    libnma
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network Indicator for Wingpanel";
-    homepage = https://github.com/elementary/wingpanel-indicator-network;
+    homepage = "https://github.com/elementary/wingpanel-indicator-network";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 }

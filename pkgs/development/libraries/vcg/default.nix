@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, eigen }:
+{ lib, stdenv, fetchFromGitHub, eigen }:
 
 stdenv.mkDerivation rec {
   pname = "vcg";
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     find $out -name \*.h -exec sed -i 's,<eigenlib/,<eigen3/,g' {} \;
   '';
 
-  meta = with stdenv.lib; {
-    homepage = http://vcg.isti.cnr.it/vcglib/install.html;
+  meta = with lib; {
+    homepage = "http://vcg.isti.cnr.it/vcglib/install.html";
     description = "C++ library for manipulation, processing and displaying with OpenGL of triangle and tetrahedral meshes";
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
   };
 }

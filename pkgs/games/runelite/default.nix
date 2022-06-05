@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, jre, makeDesktopItem, lib }:
+{ pkgs, lib, stdenv, makeDesktopItem, fetchurl, unzip, makeWrapper, xorg, jre, }:
 
 stdenv.mkDerivation rec {
   pname = "runelite";
-  version = "2.0.0";
+  version = "2.1.5";
 
-  src = fetchurl {
+  jar = fetchurl {
     url = "https://github.com/runelite/launcher/releases/download/${version}/RuneLite.jar";
-    sha256 = "0q0x8g43ggkvp5fgnymgygx59xfhnyyrhpi6ha333gqg97rr0rvw";
+    sha256 = "4BX188QIjIFTxng2ktqlKn7AqQ9tdBcKWmgOj/5yd10=";
   };
 
   icon = fetchurl {
@@ -14,33 +14,45 @@ stdenv.mkDerivation rec {
     sha256 = "04fcjm7p546gr82g0jbh497j7rnh70lrvas0k171bff4v3knrjw1";
   };
 
+  # The `.so` files provided by these two jars aren't detected by RuneLite for some reason, so we have to provide them manually
+  jogl = fetchurl {
+    url = "https://repo.runelite.net/net/runelite/jogl/jogl-all/2.4.0-rc-20200429/jogl-all-2.4.0-rc-20200429-natives-linux-amd64.jar";
+    sha256 = "S60qxyWY9RfyhLFygn/OxZFWnc8qVRtTFdWMbdu+2U0=";
+  };
+  gluegen = fetchurl {
+    url = "https://repo.runelite.net/net/runelite/gluegen/gluegen-rt/2.4.0-rc-20200429/gluegen-rt-2.4.0-rc-20200429-natives-linux-amd64.jar";
+    sha256 = "eF8S5sQkJFDtW8rcVBKIyeyKm5Ze5rXK5r/yosZcHjU=";
+  };
+  dontUnpack = true;
+
   desktop = makeDesktopItem {
     name = "RuneLite";
     type = "Application";
     exec = "runelite";
     icon = icon;
     comment = "Open source Old School RuneScape client";
-    terminal = "false";
     desktopName = "RuneLite";
     genericName = "Oldschool Runescape";
-    categories = "Application;Game";
-    startupNotify = null;
+    categories = [ "Game" ];
   };
 
-  buildInputs = [ makeWrapper ];
-
-  # colon is bash form of no-op (do nothing)
-  dontUnpack = true;
-
+  nativeBuildInputs = [ makeWrapper unzip ];
   installPhase = ''
     mkdir -p $out/share/runelite
     mkdir -p $out/share/applications
+    mkdir -p $out/natives
 
-    ln -s ${src} $out/share/runelite/RuneLite.jar
-    ln -s ${desktop}/share/applications/* $out/share/applications
+    unzip ${jogl}    'natives/*' -d $out
+    unzip ${gluegen} 'natives/*' -d $out
 
+    ln -s ${jar} $out/share/runelite/RuneLite.jar
+    ln -s ${desktop}/share/applications/RuneLite.desktop $out/share/applications/RuneLite.desktop
+
+    # RuneLite looks for `.so` files in $PWD/natives, so ensure that we set the PWD to the right place
     makeWrapper ${jre}/bin/java $out/bin/runelite \
-    --add-flags "-jar $out/share/runelite/RuneLite.jar"
+      --chdir "$out" \
+      --prefix LD_LIBRARY_PATH : "${xorg.libXxf86vm}/lib" \
+      --add-flags "-jar $out/share/runelite/RuneLite.jar"
   '';
 
   meta = with lib; {
@@ -48,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://runelite.net/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ kmeakin ];
-    platforms = platforms.all;
+    platforms = [ "x86_64-linux" ];
   };
 }

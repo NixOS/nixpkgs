@@ -4,16 +4,25 @@ with lib;
 
 let
   cfg = config.services.nginx.sso;
-  pkg = getBin pkgs.nginx-sso;
+  pkg = getBin cfg.package;
   configYml = pkgs.writeText "nginx-sso.yml" (builtins.toJSON cfg.configuration);
 in {
   options.services.nginx.sso = {
     enable = mkEnableOption "nginx-sso service";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.nginx-sso;
+      defaultText = literalExpression "pkgs.nginx-sso";
+      description = ''
+        The nginx-sso package that should be used.
+      '';
+    };
+
     configuration = mkOption {
       type = types.attrsOf types.unspecified;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           listen = { addr = "127.0.0.1"; port = 8080; };
 

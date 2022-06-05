@@ -41,31 +41,30 @@ let
         value)
     else value;
 
-  mkIndent = depth: concatStrings (builtins.genList (_:  " ") (2 * depth));
+  indent = "  ";
 
-  mkRelation = name: value: "${name} = ${mkVal { inherit value; }}";
+  mkRelation = name: value:
+    if (isList value) then
+      concatMapStringsSep "\n" (mkRelation name) value
+    else "${name} = ${mkVal value}";
 
-  mkVal = { value, depth ? 0 }:
+  mkVal = value:
     if (value == true) then "true"
     else if (value == false) then "false"
     else if (isInt value) then (toString value)
-    else if (isList value) then
-      concatMapStringsSep " " mkVal { inherit value depth; }
     else if (isAttrs value) then
-      (concatStringsSep "\n${mkIndent (depth + 1)}"
-        ([ "{" ] ++ (mapAttrsToList
-          (attrName: attrValue: let
-            mappedAttrValue = mkVal {
-              value = attrValue;
-              depth = depth + 1;
-            };
-          in "${attrName} = ${mappedAttrValue}")
-        value))) + "\n${mkIndent depth}}"
+      let configLines = concatLists
+        (map (splitString "\n")
+          (mapAttrsToList mkRelation value));
+      in
+      (concatStringsSep "\n${indent}"
+        ([ "{" ] ++ configLines))
+      + "\n}"
     else value;
 
   mkMappedAttrsOrString = value: concatMapStringsSep "\n"
     (line: if builtins.stringLength line > 0
-      then "${mkIndent 1}${line}"
+      then "${indent}${line}"
       else line)
     (splitString "\n"
       (if isAttrs value then
@@ -84,8 +83,8 @@ in {
       kerberos = mkOption {
         type = types.package;
         default = pkgs.krb5Full;
-        defaultText = "pkgs.krb5Full";
-        example = literalExample "pkgs.heimdalFull";
+        defaultText = literalExpression "pkgs.krb5Full";
+        example = literalExpression "pkgs.heimdal";
         description = ''
           The Kerberos implementation that will be present in
           <literal>environment.systemPackages</literal> after enabling this
@@ -97,7 +96,7 @@ in {
         type = with types; either attrs lines;
         default = {};
         apply = attrs: filterEmbeddedMetadata attrs;
-        example = literalExample ''
+        example = literalExpression ''
           {
             default_realm = "ATHENA.MIT.EDU";
           };
@@ -110,11 +109,14 @@ in {
       realms = mkOption {
         type = with types; either attrs lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "ATHENA.MIT.EDU" = {
               admin_server = "athena.mit.edu";
-              kdc = "athena.mit.edu";
+              kdc = [
+                "athena01.mit.edu"
+                "athena02.mit.edu"
+              ];
             };
           };
         '';
@@ -125,7 +127,7 @@ in {
       domain_realm = mkOption {
         type = with types; either attrs lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "example.com" = "EXAMPLE.COM";
             ".example.com" = "EXAMPLE.COM";
@@ -140,7 +142,7 @@ in {
       capaths = mkOption {
         type = with types; either attrs lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "ATHENA.MIT.EDU" = {
               "EXAMPLE.COM" = ".";
@@ -159,7 +161,7 @@ in {
       appdefaults = mkOption {
         type = with types; either attrs lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             pam = {
               debug = false;
@@ -180,7 +182,7 @@ in {
       plugins = mkOption {
         type = with types; either attrs lines;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             ccselect = {
               disable = "k5identity";

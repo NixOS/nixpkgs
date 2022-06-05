@@ -17,6 +17,7 @@ in
   options = {
 
     services.rdnssd.enable = mkOption {
+      type = types.bool;
       default = false;
       #default = config.networking.enableIPv6;
       description =
@@ -71,8 +72,10 @@ in
 
     users.users.rdnssd = {
       description = "RDNSSD Daemon User";
-      uid = config.ids.uids.rdnssd;
+      isSystemUser = true;
+      group = "rdnssd";
     };
+    users.groups.rdnssd = {};
 
   };
 

@@ -1,37 +1,61 @@
 { stdenv
+, lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , ifaddr
-, typing
-, isPy27
+, pytest-asyncio
 , pythonOlder
-, python
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.24.3";
-  disabled = isPy27;
+  version = "0.38.6";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "de62e5067ea7ab356f7168a3562d79fececa8632ed0fad0e82f505e01fafbc6d";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "jstasiak";
+    repo = "python-zeroconf";
+    rev = version;
+    hash = "sha256-P5yAXh/5J5/giOZTOuk9ay3PF8MNxPOJgtoWeX7xxFk=";
   };
 
-  propagatedBuildInputs = [ ifaddr ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+  propagatedBuildInputs = [
+    ifaddr
+  ];
 
-  # tests not included with pypi release
-  doCheck = false;
+  checkInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} test_zeroconf.py
-  '';
+  disabledTests = [
+    # tests that require network interaction
+    "test_close_multiple_times"
+    "test_launch_and_close"
+    "test_launch_and_close_context_manager"
+    "test_launch_and_close_v4_v6"
+    "test_launch_and_close_v6_only"
+    "test_integration_with_listener_ipv6"
+    # Starting with 0.38.6: AssertionError: assert [('add', '_ht..._tcp.local.')]
+    "test_service_browser_expire_callbacks"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_lots_of_names"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "A pure python implementation of multicast DNS service discovery";
-    homepage = https://github.com/jstasiak/python-zeroconf;
-    license = licenses.lgpl21;
+  __darwinAllowLocalNetworking = true;
+
+  pythonImportsCheck = [
+    "zeroconf"
+    "zeroconf.asyncio"
+  ];
+
+  meta = with lib; {
+    description = "Python implementation of multicast DNS service discovery";
+    homepage = "https://github.com/jstasiak/python-zeroconf";
+    license = licenses.lgpl21Only;
     maintainers = with maintainers; [ abbradar ];
   };
 }

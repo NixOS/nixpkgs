@@ -1,22 +1,25 @@
 {
   stdenv, lib, fetchFromGitHub, which,
-  enableStatic ? false,
+  buildPackages,
+  enableStatic ? stdenv.hostPlatform.isStatic,
   enableMinimal ? false,
   extraConfig ? ""
 }:
 
 stdenv.mkDerivation rec {
   pname = "toybox";
-  version = "0.8.2";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = pname;
     rev = version;
-    sha256 = "02mliqz2lry779ba6vmyaa13nxcmj91f8pyhzim9wvcnjq8vc5cj";
+    sha256 = "sha256-NbONJten685wekfCwbOOQxdS3B2/Ljfp/jdTa7D4U+M=";
   };
 
-  buildInputs = lib.optionals enableStatic [ stdenv.cc.libc stdenv.cc.libc.static ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ]; # needed for cross
+  buildInputs = lib.optionals (enableStatic && stdenv.cc.libc ? static)
+    [ stdenv.cc.libc stdenv.cc.libc.static ];
 
   postPatch = "patchShebangs .";
 
@@ -55,11 +58,13 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight implementation of some Unix command line utilities";
-    homepage = https://landley.net/toybox/;
+    homepage = "https://landley.net/toybox/";
     license = licenses.bsd0;
     platforms = with platforms; linux ++ darwin ++ freebsd;
+    # https://github.com/NixOS/nixpkgs/issues/101229
+    broken = stdenv.isDarwin;
     maintainers = with maintainers; [ hhm ];
     priority = 10;
   };

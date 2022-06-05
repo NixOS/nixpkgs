@@ -1,9 +1,10 @@
 { stdenv
+, lib
 , fetchFromGitHub
-, fetchpatch
-, autoreconfHook
+, meson
+, ninja
 , makeWrapper
-, pkgconfig
+, pkg-config
 , dleyna-core
 , dleyna-connector-dbus
 , gssdp
@@ -15,33 +16,25 @@
 
 stdenv.mkDerivation rec {
   pname = "dleyna-server";
-  version = "0.6.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
-    owner = "01org";
+    owner = "phako";
     repo = pname;
-    rev = version;
-    sha256 = "13a2i6ms27s46yxdvlh2zm7pim7jmr5cylnygzbliz53g3gxxl3j";
+    rev = "v${version}";
+    sha256 = "sha256-jlF9Lr/NG+Fsy/bB7aLb7xOLqel8GueJK5luo9rsDME=";
   };
 
-  patches = [
-    # fix build with gupnp 1.2
-    # https://github.com/intel/dleyna-server/pull/161
-    (fetchpatch {
-      url = https://github.com/intel/dleyna-server/commit/96c01c88363d6e5e9b7519bc4e8b5d86cf783e1f.patch;
-      sha256 = "0p8fn331x2whvn6skxqvfzilx0m0yx2q5mm2wh2625l396m3fzmm";
-    })
-  ];
-
   nativeBuildInputs = [
-    autoreconfHook
-    pkgconfig
+    meson
+    ninja
+    pkg-config
     makeWrapper
   ];
 
   buildInputs = [
     dleyna-core
-    dleyna-connector-dbus
+    dleyna-connector-dbus # runtime dependency to be picked up to DLEYNA_CONNECTOR_PATH
     gssdp
     gupnp
     gupnp-av
@@ -54,11 +47,11 @@ stdenv.mkDerivation rec {
       --set DLEYNA_CONNECTOR_PATH "$DLEYNA_CONNECTOR_PATH"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library to discover, browse and manipulate Digital Media Servers";
-    homepage = https://01.org/dleyna;
-    maintainers = [ maintainers.jtojnar ];
+    homepage = "https://github.com/phako/dleyna-server";
+    maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
-    license = licenses.lgpl21;
+    license = licenses.lgpl21Only;
   };
 }

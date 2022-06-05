@@ -1,4 +1,4 @@
-{ stdenv, lib, callPackage, fetchFromGitHub, fetchpatch, cmake, ninja, pkgconfig
+{ stdenv, lib, callPackage, fetchFromGitHub, fetchpatch, cmake, ninja, pkg-config
 , curl, freetype, giflib, libjpeg, libpng, libwebp, pixman, tinyxml, zlib
 , harfbuzzFull, glib, fontconfig, pcre
 , libX11, libXext, libXcursor, libXxf86vm, libGL
@@ -6,12 +6,16 @@
 , cmark
 }:
 
+# Unfree version is not redistributable:
+# https://dev.aseprite.org/2016/09/01/new-source-code-license/
+# Consider supporting the developer: https://aseprite.org/#buy
+
 let
   skia = callPackage ./skia.nix {};
 in
 stdenv.mkDerivation rec {
   pname = "aseprite";
-  version = if unfree then "1.2.11" else "1.1.7";
+  version = if unfree then "1.2.16.3" else "1.1.7";
 
   src = fetchFromGitHub {
     owner = "aseprite";
@@ -19,12 +23,12 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     fetchSubmodules = true;
     sha256 = if unfree
-      then "1illr51jpg5g6nx29rav9dllyy5lzyyn7lj2fhrnpz1ysqgaq5p8"
+      then "16yn7y9xdc5jd50cq7bmsm320gv23pp71lr8hg2nmynzc8ibyda8"
       else "0gd49lns2bpzbkwax5jf9x1xmg1j8ij997kcxr2596cwiswnw4di";
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig
+    cmake pkg-config
   ] ++ lib.optionals unfree [ ninja ];
 
   buildInputs = [
@@ -36,7 +40,9 @@ stdenv.mkDerivation rec {
     skia libGL
   ];
 
-  patches = lib.optionals unfree [
+  patches = if !unfree then [
+    ./allegro-glibc-2.30.patch
+  ] else [
     (fetchpatch {
       url = "https://github.com/lfont/aseprite/commit/f1ebc47012d3fed52306ed5922787b4b98cc0a7b.patch";
       sha256 = "03xg7x6b9iv7z18vzlqxhcfphmx4v3qhs9f5rgf38ppyklca5jyw";
@@ -90,10 +96,10 @@ stdenv.mkDerivation rec {
     rm -rf "$out"/include "$out"/lib
   '';
 
-  enableParallelBuilding = true;
+  passthru = { inherit skia; };
 
   meta = with lib; {
-    homepage = https://www.aseprite.org/;
+    homepage = "https://www.aseprite.org/";
     description = "Animated sprite editor & pixel art tool";
     license = if unfree then licenses.unfree else licenses.gpl2;
     longDescription =

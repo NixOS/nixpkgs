@@ -1,36 +1,38 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, perl, static ? false }:
+{ stdenv, lib, fetchFromGitHub, cmake, gflags, perl }:
 
 stdenv.mkDerivation rec {
   pname = "glog";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "glog";
     rev = "v${version}";
-    sha256 = "1xd3maiipfbxmhc9rrblc5x52nxvkwxp14npg31y5njqvkvzax9b";
+    sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
   };
-
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
-    # TODO: Remove at next release that includes this commit.
-    (fetchpatch {
-      name = "glog-Fix-symbolize_unittest-for-musl-builds.patch";
-      url = "https://github.com/google/glog/commit/834dd780bf1fe0704b8ed0350ca355a55f711a9f.patch";
-      sha256 = "0k4lanxg85anyvjsj3mh93bcgds8gizpiamcy2zvs3yyfjl40awn";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}" ];
+  propagatedBuildInputs = [ gflags ];
 
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    # Mak CMake place RPATHs such that tests will find the built libraries.
+    # See https://github.com/NixOS/nixpkgs/pull/144561#discussion_r742468811 and https://github.com/NixOS/nixpkgs/pull/108496
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+  ];
+
+  # TODO: Re-enable Darwin tests once we're on a release that has https://github.com/google/glog/issues/709#issuecomment-960381653 fixed
+  doCheck = !stdenv.isDarwin;
+  # There are some non-thread safe tests that can fail
+  enableParallelChecking = false;
   checkInputs = [ perl ];
-  doCheck = false; # fails with "Mangled symbols (28 out of 380) found in demangle.dm"
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/google/glog";
     license = licenses.bsd3;
     description = "Library for application-level logging";
     platforms = platforms.unix;
+    maintainers = with maintainers; [ nh2 r-burns ];
   };
 }

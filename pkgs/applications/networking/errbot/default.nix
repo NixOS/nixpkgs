@@ -1,53 +1,91 @@
-{ lib, fetchFromGitHub, python, glibcLocales }:
+{ lib
+, ansi
+, buildPythonApplication
+, colorlog
+, daemonize
+, deepmerge
+, dulwich
+, fetchFromGitHub
+, flask
+, glibcLocales
+, hypchat
+, irc
+, jinja2
+, markdown
+, mock
+, pyasn1
+, pyasn1-modules
+, pygments
+, pygments-markdown-lexer
+, pyopenssl
+, pytestCheckHook
+, requests
+, slackclient
+, sleekxmpp
+, telegram
+, webtest
+}:
 
-let
-  # errbot requires markdown<3, and is not compatible with it either.
-  py = python.override {
-    packageOverrides = self: super: {
-      markdown = super.markdown.overridePythonAttrs (oldAttrs: rec {
-        version = "2.6.11";
-        src = super.fetchPypi {
-          pname = "Markdown";
-          inherit version;
-          sha256 = "108g80ryzykh8bj0i7jfp71510wrcixdi771lf2asyghgyf8cmm8";
-        };
-      });
-    };
-  };
-
-in
-py.pkgs.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "errbot";
-  version = "6.1.1";
+  version = "6.1.7";
 
   src = fetchFromGitHub {
     owner = "errbotio";
     repo = "errbot";
     rev = version;
-    sha256 = "1s4dl1za5imwsv6j3y7m47dy91hmqd5n221kkqm9ni4mpzgpffz0";
+    sha256 = "02h44qd3d91zy657hyqsw3gskgxg31848pw6zpb8dhd1x84z5y77";
   };
 
   LC_ALL = "en_US.utf8";
 
   buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = with py.pkgs; [
-    webtest requests jinja2 flask dulwich
-    pyopenssl colorlog markdown ansi pygments
-    daemonize pygments-markdown-lexer telegram irc slackclient
-    sleekxmpp pyasn1 pyasn1-modules hypchat
+
+  propagatedBuildInputs = [
+    ansi
+    colorlog
+    daemonize
+    deepmerge
+    dulwich
+    flask
+    hypchat
+    irc
+    jinja2
+    markdown
+    pyasn1
+    pyasn1-modules
+    pygments
+    pygments-markdown-lexer
+    pyopenssl
+    requests
+    slackclient
+    sleekxmpp
+    telegram
+    webtest
   ];
 
-  checkInputs = with py.pkgs; [ mock pytest ];
-  # avoid tests that do network calls
-  checkPhase = ''
-    pytest tests -k 'not backup and not broken_plugin and not plugin_cycle'
-  '';
+  checkInputs = [
+    mock
+    pytestCheckHook
+  ];
+
+  # Slack backend test has an import issue
+  pytestFlagsArray = [ "--ignore=tests/backend_tests/slack_test.py" ];
+
+  disabledTests = [
+    "backup"
+    "broken_plugin"
+    "plugin_cycle"
+  ];
+
+  pythonImportsCheck = [ "errbot" ];
 
   meta = with lib; {
     description = "Chatbot designed to be simple to extend with plugins written in Python";
-    homepage = http://errbot.io/;
+    homepage = "http://errbot.io/";
     maintainers = with maintainers; [ fpletz globin ];
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = licenses.gpl3Plus;
+    platforms = platforms.linux;
+    # flaky on darwin, "RuntimeError: can't start new thread"
   };
 }

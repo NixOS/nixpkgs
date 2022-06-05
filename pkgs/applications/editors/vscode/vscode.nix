@@ -6,20 +6,25 @@ let
   plat = {
     x86_64-linux = "linux-x64";
     x86_64-darwin = "darwin";
+    aarch64-linux = "linux-arm64";
+    aarch64-darwin = "darwin-arm64";
+    armv7l-linux = "linux-armhf";
   }.${system};
 
-  archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
+  archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
-    x86_64-linux = "00b6q3rvf9v993i8d1vh9ckb86s655mz6kqkw0lxg8xmhpm568ra";
-    x86_64-darwin = "1r4qbjbypdqx9qmycykgkrg8anckicmdmawwwsszgkdd0zd5idgg";
+    x86_64-linux = "0yahcv64jblmz5q0ylgg1sghcnyam4nq47var3y18ndjpaqyb1fl";
+    x86_64-darwin = "0zsizwrhc0na9dfics27i48q4x3kz0qq5m2vdjvrgi69y2iy5z4c";
+    aarch64-linux = "01wpi9pdf1fjxfx8w5g5da31q561qw7ykjm9spb3arvnivq20dp2";
+    aarch64-darwin = "0qk22jyn0vypsx8x4cmpab5wrmhqx6hdkm314k8k06mz5cg1v4r3";
+    armv7l-linux = "04r0x31flahzw8y0kkbzqnvcwllifaa0ysr163bb5b8kiyc189kk";
   }.${system};
 in
   callPackage ./generic.nix rec {
-    # The update script doesn't correctly change the hash for darwin, so please:
-    # nixpkgs-update: no auto update
-
-    version = "1.41.1";
+    # Please backport all compatible updates to the stable release.
+    # This is important for the extension ecosystem.
+    version = "1.67.2";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -28,17 +33,20 @@ in
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
-      url = "https://vscode-update.azurewebsites.net/${version}/${plat}/stable";
+      url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
       inherit sha256;
     };
 
     sourceRoot = "";
 
-    meta = with stdenv.lib; {
+    updateScript = ./update-vscode.sh;
+
+    meta = with lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS
       '';
+      mainProgram = "code";
       longDescription = ''
         Open source source code editor developed by Microsoft for Windows,
         Linux and macOS. It includes support for debugging, embedded Git
@@ -46,10 +54,10 @@ in
         and code refactoring. It is also customizable, so users can change the
         editor's theme, keyboard shortcuts, and preferences
       '';
-      homepage = https://code.visualstudio.com/;
-      downloadPage = https://code.visualstudio.com/Updates;
+      homepage = "https://code.visualstudio.com/";
+      downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
-      maintainers = with maintainers; [ eadwu synthetica ];
-      platforms = [ "x86_64-linux" "x86_64-darwin" ];
+      maintainers = with maintainers; [ eadwu synthetica maxeaubrey bobby285271 ];
+      platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

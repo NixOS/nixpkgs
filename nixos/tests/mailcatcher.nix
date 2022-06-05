@@ -4,13 +4,18 @@ import ./make-test-python.nix ({ lib, ... }:
   name = "mailcatcher";
   meta.maintainers = [ lib.maintainers.aanderse ];
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     {
       services.mailcatcher.enable = true;
 
-      services.ssmtp.enable = true;
-      services.ssmtp.hostName = "localhost:1025";
+      programs.msmtp = {
+        enable = true;
+        accounts.default = {
+          host = "localhost";
+          port = 1025;
+        };
+      };
 
       environment.systemPackages = [ pkgs.mailutils ];
     };
@@ -24,7 +29,7 @@ import ./make-test-python.nix ({ lib, ... }:
         'echo "this is the body of the email" | mail -s "subject" root@example.org'
     )
     assert "this is the body of the email" in machine.succeed(
-        "curl http://localhost:1080/messages/1.source"
+        "curl -f http://localhost:1080/messages/1.source"
     )
   '';
 })

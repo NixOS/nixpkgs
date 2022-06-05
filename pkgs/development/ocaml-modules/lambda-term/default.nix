@@ -1,18 +1,32 @@
-{ stdenv, fetchurl, libev, buildDunePackage, zed, lwt_log, lwt_react }:
+{ lib, fetchFromGitHub, buildDunePackage, ocaml, zed, lwt_log, lwt_react, mew_vi }:
+
+let params =
+  if lib.versionAtLeast ocaml.version "4.08" then {
+    version = "3.2.0";
+    sha256 = "sha256:048k26644wq5wlwk0j179dxrxyz9nxqqq4vvhyh6pqpgxdajd44i";
+  } else {
+    version = "3.1.0";
+    sha256 = "1k0ykiz0vhpyyj9fkss29ajas4fh1xh449j702xkvayqipzj1mkg";
+  }
+; in
 
 buildDunePackage rec {
   pname = "lambda-term";
-  version = "2.0.2";
+  inherit (params) version;
 
-  src = fetchurl {
-    url = "https://github.com/ocaml-community/lambda-term/releases/download/${version}/lambda-term-${version}.tbz";
-    sha256 = "1p9yczrx78pf5hvhcg1qiqb2vdlmw6bmhhjsm4wiqjq2cc6piaqw";
+  useDune2 = true;
+
+  src = fetchFromGitHub {
+    owner = "ocaml-community";
+    repo = pname;
+    rev = version;
+    inherit (params) sha256;
   };
 
-  buildInputs = [ libev ];
-  propagatedBuildInputs = [ zed lwt_log lwt_react ];
+  propagatedBuildInputs = [ zed lwt_log lwt_react mew_vi ];
 
-  meta = { description = "Terminal manipulation library for OCaml";
+  meta = {
+    description = "Terminal manipulation library for OCaml";
     longDescription = ''
     Lambda-term is a cross-platform library for
     manipulating the terminal. It provides an abstraction for keys,
@@ -28,10 +42,9 @@ buildDunePackage rec {
     console applications.
     '';
 
-    homepage = https://github.com/diml/lambda-term;
-    license = stdenv.lib.licenses.bsd3;
-    maintainers = [
-      stdenv.lib.maintainers.gal_bolle
-    ];
+    inherit (src.meta) homepage;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.gal_bolle ];
+    mainProgram = "lambda-term-actions";
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , pkgs
@@ -8,22 +8,22 @@
 
 buildPythonPackage rec {
   pname = "plyvel";
-  version = "1.1.0";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1icsycqqjj8048a0drj3j75a71yiv2cmijh4w3jf9zxahh3k2c9p";
+    sha256 = "4ea98bea04ebf0f44747bacdfafefc8827787106fbb787f0aedc46482b2dfd53";
   };
 
-  buildInputs = [ pkgs.leveldb ] ++ stdenv.lib.optional isPy3k pytest;
+  buildInputs = [ pkgs.leveldb ] ++ lib.optional isPy3k pytest;
 
   # no tests for python2
   doCheck = isPy3k;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and feature-rich Python interface to LevelDB";
     platforms = platforms.unix;
-    homepage = https://github.com/wbolster/plyvel;
+    homepage = "https://github.com/wbolster/plyvel";
     license = licenses.bsd3;
   };
 }

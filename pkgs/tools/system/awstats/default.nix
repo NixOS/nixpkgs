@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, perlPackages, jdk }:
+{ lib, fetchurl, perlPackages, jdk }:
 
 perlPackages.buildPerlPackage rec {
   pname = "awstats";
-  version = "7.7";
+  version = "7.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/awstats/${pname}-${version}.tar.gz";
-    sha256 = "0z3p77jnpjilajs9yv87r8xla2x1gjqlvrhpbgbh5ih73386v3j2";
+    sha256 = "1f6l0hd01jmz7hpg0py8qixxiq50n8gl37iypayskxmy05z8craa";
   };
 
   postPatch = ''
@@ -52,9 +52,9 @@ perlPackages.buildPerlPackage rec {
     mv docs "$doc/share/doc/awstats"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Real-time logfile analyzer to get advanced statistics";
-    homepage = http://awstats.org;
+    homepage = "https://awstats.org";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

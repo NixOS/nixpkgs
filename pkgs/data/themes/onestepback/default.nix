@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
   pname = "onestepback";
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
     rm $out/share/themes/*/{LICENSE,README*}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gtk theme inspired by the NextStep look";
-    homepage = http://www.vide.memoire.free.fr/perso/OneStepBack;
+    homepage = "http://www.vide.memoire.free.fr/perso/OneStepBack";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];

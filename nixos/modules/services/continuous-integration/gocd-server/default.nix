@@ -1,9 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.gocd-server;
+  opt = options.services.gocd-server;
 in {
   options = {
     services.gocd-server = {
@@ -27,6 +28,7 @@ in {
 
       extraGroups = mkOption {
         default = [ ];
+        type = types.listOf types.str;
         example = [ "wheel" "docker" ];
         description = ''
           List of extra groups that the "gocd-server" user should be a part of.
@@ -68,7 +70,7 @@ in {
 
       packages = mkOption {
         default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
-        defaultText = "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
+        defaultText = literalExpression "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
         type = types.listOf types.package;
         description = ''
           Packages to add to PATH for the Go.CD server's process.
@@ -92,6 +94,7 @@ in {
       };
 
       startupOptions = mkOption {
+        type = types.listOf types.str;
         default = [
           "-Xms${cfg.initialJavaHeapSize}"
           "-Xmx${cfg.maxJavaHeapMemory}"
@@ -104,6 +107,20 @@ in {
           "-Dcruise.server.port=${toString cfg.port}"
           "-Dcruise.server.ssl.port=${toString cfg.sslPort}"
         ];
+        defaultText = literalExpression ''
+          [
+            "-Xms''${config.${opt.initialJavaHeapSize}}"
+            "-Xmx''${config.${opt.maxJavaHeapMemory}}"
+            "-Dcruise.listen.host=''${config.${opt.listenAddress}}"
+            "-Duser.language=en"
+            "-Djruby.rack.request.size.threshold.bytes=30000000"
+            "-Duser.country=US"
+            "-Dcruise.config.dir=''${config.${opt.workDir}}/conf"
+            "-Dcruise.config.file=''${config.${opt.workDir}}/conf/cruise-config.xml"
+            "-Dcruise.server.port=''${toString config.${opt.port}}"
+            "-Dcruise.server.ssl.port=''${toString config.${opt.sslPort}}"
+          ]
+        '';
 
         description = ''
           Specifies startup command line arguments to pass to Go.CD server
@@ -113,6 +130,7 @@ in {
 
       extraOptions = mkOption {
         default = [ ];
+        type = types.listOf types.str;
         example = [
           "-X debug"
           "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"

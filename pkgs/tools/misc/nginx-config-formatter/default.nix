@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3 }:
+{ lib, stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation {
   version = "2019-02-13";
@@ -23,10 +23,10 @@ stdenv.mkDerivation {
     install -m 0755 $src/nginxfmt.py $out/bin/nginxfmt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "nginx config file formatter";
     maintainers = with maintainers; [ Baughn ];
     license = licenses.asl20;
-    homepage = https://github.com/1connect/nginx-config-formatter;
+    homepage = "https://github.com/1connect/nginx-config-formatter";
   };
 }

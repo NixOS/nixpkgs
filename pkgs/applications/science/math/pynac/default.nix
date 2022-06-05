@@ -1,38 +1,50 @@
-{ stdenv
+{ lib, stdenv
+, fetchpatch
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , flint
 , gmp
-, python2
+, python3
 , singular
+, ncurses
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.26";
+  version = "0.7.29";
   pname = "pynac";
 
   src = fetchFromGitHub {
     owner = "pynac";
     repo = "pynac";
     rev = "pynac-${version}";
-    sha256 = "09d2p74x1arkydlxy6pw4p4byi7r8q7f29w373h4d8a215kadc6d";
+    sha256 = "sha256-ocR7emXtKs+Xe2f6dh4xEDAacgiolY8mtlLnWnNBS8A=";
   };
+
+  patches = [
+    # the patch below is included in sage 9.4 and should be included
+    # in a future pynac release. see https://trac.sagemath.org/ticket/28357
+    (fetchpatch {
+      name = "realpartloop.patch";
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/pynac/patches/realpartloop.patch?h=9.4.beta5";
+      sha256 = "sha256-1nj0xtlFN5fZKEiRLD+tiW/ZtxMQre1ziEGA0OVUGE4=";
+    })
+  ];
 
   buildInputs = [
     flint
     gmp
     singular
-    singular
-    python2
+    python3
+    ncurses
   ];
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python is Not a CAS -- modified version of Ginac";
     longDescription = ''
       Pynac -- "Python is Not a CAS" is a modified version of Ginac that
@@ -40,9 +52,9 @@ stdenv.mkDerivation rec {
       It is a lite version of GiNaC as well, not implementing all the features
       of the full GiNaC, and it is *only* meant to be used as a Python library.
     '';
-    homepage    = http://pynac.org;
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ timokau ];
+    homepage    = "http://pynac.org";
+    license = licenses.gpl2Plus;
+    maintainers = teams.sage.members;
     platforms   = platforms.unix;
   };
 }

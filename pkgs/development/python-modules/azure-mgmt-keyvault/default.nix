@@ -1,36 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
-, isPy3k
 , msrest
 , msrestazure
 , azure-common
-, azure-mgmt-nspkg
+, azure-mgmt-core
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-keyvault";
-  version = "2.0.0";
+  version = "10.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "057ii54h8yr7rhfnbl0r29xbsg7mhf031hjffmdv0zf93552kmja";
+    hash = "sha256-ALaVll2198a6DjOpzaHobE22N78Qe5koYYLxCtFiwaM=";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
-    azure-mgmt-nspkg
+    azure-mgmt-core
   ];
 
-  # this is still need when overriding to prevoius versions
-  # E.g. azure-cli
-  postInstall = lib.optionalString isPy3k ''
-    rm -f $out/${python.sitePackages}/azure/{,mgmt/}__init__.py
-  '';
+  pythonNamespaces = [
+    "azure.mgmt"
+  ];
 
   # has no tests
   doCheck = false;
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "This is the Microsoft Azure Key Vault Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer mwilsoninsight ];
+    maintainers = with maintainers; [ jonringer maxwilson ];
   };
 }

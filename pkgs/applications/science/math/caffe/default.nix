@@ -9,16 +9,20 @@
 , opencv3
 , protobuf
 , doxygen
-, openblas
+, blas
 , Accelerate, CoreGraphics, CoreVideo
 , lmdbSupport ? true, lmdb
 , leveldbSupport ? true, leveldb, snappy
-, cudaSupport ? config.cudaSupport or false, cudatoolkit
-, cudnnSupport ? cudaSupport, cudnn ? null
-, ncclSupport ? false, nccl ? null
+, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+, cudnnSupport ? cudaSupport
+, ncclSupport ? false
 , pythonSupport ? false, python ? null, numpy ? null
 , substituteAll
 }:
+
+let
+  inherit (cudaPackages) cudatoolkit cudnn nccl;
+in
 
 assert leveldbSupport -> (leveldb != null && snappy != null);
 assert cudnnSupport -> cudaSupport;
@@ -46,8 +50,6 @@ stdenv.mkDerivation rec {
     sha256 = "104jp3cm823i3cdph7hgsnj6l77ygbwsy35mdmzhmsi4jxprd9j3";
   };
 
-  enableParallelBuilding = true;
-
   nativeBuildInputs = [ cmake doxygen ];
 
   cmakeFlags =
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
       ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
       ++ ["-DUSE_LMDB=${toggle lmdbSupport}"];
 
-  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 openblas ]
+  buildInputs = [ boost gflags glog protobuf hdf5-cpp opencv3 blas ]
                 ++ lib.optional cudaSupport cudatoolkit
                 ++ lib.optional cudnnSupport cudnn
                 ++ lib.optional lmdbSupport lmdb
@@ -78,7 +80,7 @@ stdenv.mkDerivation rec {
     let pp = python.pkgs; in ([
       pp.numpy pp.scipy pp.scikitimage pp.h5py
       pp.matplotlib pp.ipython pp.networkx pp.nose
-      pp.pandas pp.dateutil pp.protobuf pp.gflags
+      pp.pandas pp.python-dateutil pp.protobuf pp.gflags
       pp.pyyaml pp.pillow pp.six
     ] ++ lib.optional leveldbSupport pp.leveldb)
   );
@@ -93,7 +95,11 @@ stdenv.mkDerivation rec {
     inherit (python.sourceVersion) major minor;  # Should be changed in case of PyPy
   });
 
-  postPatch = lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''
+  postPatch = ''
+    substituteInPlace src/caffe/util/io.cpp --replace \
+      'SetTotalBytesLimit(kProtoReadBytesLimit, 536870912)' \
+      'SetTotalBytesLimit(kProtoReadBytesLimit)'
+  '' + lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''
     # CUDA 9.0 doesn't support sm_20
     sed -i 's,20 21(20) ,,' cmake/Cuda.cmake
   '';
@@ -127,15 +133,16 @@ stdenv.mkDerivation rec {
       -weights "${test_model_weights}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Deep learning framework";
     longDescription = ''
       Caffe is a deep learning framework made with expression, speed, and
       modularity in mind. It is developed by the Berkeley Vision and Learning
       Center (BVLC) and by community contributors.
     '';
-    homepage = http://caffe.berkeleyvision.org/;
-    maintainers = with maintainers; [ jb55 ];
+    homepage = "http://caffe.berkeleyvision.org/";
+    maintainers = with maintainers; [ ];
+    broken = pythonSupport && (python.isPy310);
     license = licenses.bsd2;
     platforms = platforms.linux ++ platforms.darwin;
   };

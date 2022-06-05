@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, file, openssl, mlton
+{ lib, stdenv, fetchurl, file, openssl, mlton
 , libmysqlclient, postgresql, sqlite, gcc, icu
 }:
 
 stdenv.mkDerivation rec {
   pname = "urweb";
-  version = "20190217";
+  version = "20200209";
 
   src = fetchurl {
     url = "https://github.com/urweb/urweb/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1cl0x0sy7w1lazszc8q06q3wx0x0rczxh27vimrsw54s6s9y096s";
+    sha256 = "0qh6wcxfk5kf735i5gqwnkdirnnmqhnnpkfz96gz144dgz2i0c5c";
   };
 
   buildInputs = [ openssl mlton libmysqlclient postgresql sqlite icu ];
@@ -23,10 +23,11 @@ stdenv.mkDerivation rec {
     export PGHEADER="${postgresql}/include/libpq-fe.h";
     export MSHEADER="${libmysqlclient}/include/mysql/mysql.h";
     export SQHEADER="${sqlite.dev}/include/sqlite3.h";
+    export ICU_INCLUDES="-I${icu.dev}/include";
 
     export CC="${gcc}/bin/gcc";
     export CCARGS="-I$out/include \
-                   -L${openssl.out}/lib \
+                   -L${lib.getLib openssl}/lib \
                    -L${libmysqlclient}/lib \
                    -L${postgresql.lib}/lib \
                    -L${sqlite.out}/lib";
@@ -38,8 +39,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Advanced purely-functional web programming language";
     homepage    = "http://www.impredicative.com/ur/";
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice stdenv.lib.maintainers.sheganinans ];
+    license     = lib.licenses.bsd3;
+    platforms   = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = [ lib.maintainers.thoughtpolice lib.maintainers.sheganinans ];
   };
 }

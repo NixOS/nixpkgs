@@ -1,27 +1,31 @@
-{ stdenv, lib, fetchFromGitHub, python2Packages, gettext }:
+{ stdenv, lib, fetchFromGitHub, python3Packages, gettext }:
 
-python2Packages.buildPythonApplication rec {
+with python3Packages;
+
+buildPythonApplication rec {
   pname = "linkchecker";
-  version = "9.4.0";
+  version = "10.0.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "v${version}";
-    sha256 = "1vbwl2vb8dyzki27z3sl5yf9dhdd2cpkg10vbgaz868dhpqlshgs";
+    rev = "v" + version;
+    sha256 = "sha256-OOssHbX9nTCURpMKIy+95ZTvahuUAabLUhPnRp3xpN4=";
   };
 
   nativeBuildInputs = [ gettext ];
 
-  propagatedBuildInputs = with python2Packages; [
-    ConfigArgParse
+  propagatedBuildInputs = [
+    configargparse
     argcomplete
+    beautifulsoup4
+    pyopenssl
     dnspython
     pyxdg
     requests
   ];
 
-  checkInputs = with python2Packages; [
+  checkInputs = [
     parameterized
     pytest
   ];
@@ -29,26 +33,21 @@ python2Packages.buildPythonApplication rec {
   postPatch = ''
     sed -i 's/^requests.*$/requests>=2.2/' requirements.txt
     sed -i "s/'request.*'/'requests >= 2.2'/" setup.py
-    sed -i 's~/usr/lib/python2.7/argparse.py~~g' po/Makefile
   '';
 
+  # test_timeit2 is flakey, and depends sleep being precise to the milisecond
   checkPhase = ''
-    runHook preCheck
-
-    # the mime test fails for me...
-    rm tests/test_mimeutil.py
     ${lib.optionalString stdenv.isDarwin ''
       # network tests fails on darwin
-      rm tests/test_network.py
+      rm tests/test_network.py tests/checker/test_http*.py tests/checker/test_content_allows_robots.py tests/checker/test_noproxy.py
     ''}
-    make test PYTESTOPTS="--tb=short" TESTS="tests/test_*.py tests/logger/test_*.py"
-
-    runHook postCheck
+      pytest --ignore=tests/checker/{test_telnet,telnetserver}.py \
+        -k 'not TestLoginUrl and not test_timeit2'
   '';
 
   meta = {
     description = "Check websites for broken links";
-    homepage = https://linkcheck.github.io/linkchecker/;
+    homepage = "https://linkcheck.github.io/linkchecker/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ peterhoeg tweber ];
   };

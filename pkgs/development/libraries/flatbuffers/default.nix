@@ -1,45 +1,52 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+}:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "flatbuffers";
-  version = "1.11.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
-    sha256 = "1gl8pnykzifh7pnnvl80f5prmj5ga60dp44inpv9az2k9zaqx3qr";
+    sha256 = "1zbf6bdpps8369r1ql00irxrp58jnalycc8jcapb8iqg654vlfz8";
   };
 
-  preConfigure = stdenv.lib.optional stdenv.buildPlatform.isDarwin ''
-    rm BUILD
-  '';
+  patches = [
+    # Pull patch pending upstream inclustion for gcc-12 support:
+    # https://github.com/google/flatbuffers/pull/6946
+    (fetchpatch {
+      name = "gcc-12.patch";
+      url = "https://github.com/google/flatbuffers/commit/17d9f0c4cf47a9575b4f43a2ac33eb35ba7f9e3e.patch";
+      sha256 = "0sksk47hi7camja9ppnjr88jfdgj0nxqxy8976qs1nx73zkgbpf9";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
-  enableParallelBuilding = true;
 
-  doCheck = true;
+  cmakeFlags = [
+    "-DFLATBUFFERS_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+  ];
+
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   checkTarget = "test";
 
-  meta = {
-    description = "Memory Efficient Serialization Library.";
+  meta = with lib; {
+    description = "Memory Efficient Serialization Library";
     longDescription = ''
       FlatBuffers is an efficient cross platform serialization library for
       games and other memory constrained apps. It allows you to directly
       access serialized data without unpacking/parsing it first, while still
       having great forwards/backwards compatibility.
     '';
-    maintainers = [ stdenv.lib.maintainers.teh ];
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
-    homepage = https://google.github.io/flatbuffers/;
+    homepage = "https://google.github.io/flatbuffers/";
+    license = licenses.asl20;
+    maintainers = [ maintainers.teh ];
+    mainProgram = "flatc";
+    platforms = platforms.unix;
   };
-} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isMusl {
-  # Remove when updating to the next version.
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/google/flatbuffers/commit/2b52494047fb6e97af03e1801b42adc7ed3fd78a.diff";
-      sha256 = "01k07ws0f4w7nnl8nli795wgjm4p94lxd3kva4yf7nf3pg4p8arx";
-    })
-  ];
-})
+}

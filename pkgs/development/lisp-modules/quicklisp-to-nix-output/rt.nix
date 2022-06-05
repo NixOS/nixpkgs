@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''rt'';
-  version = ''20101006-git'';
+  baseName = "rt";
+  version = "20101006-git";
 
-  description = ''MIT Regression Tester'';
+  description = "MIT Regression Tester";
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/rt/2010-10-06/rt-20101006-git.tgz'';
-    sha256 = ''1jncar0xwkqk8yrc2dln389ivvgzs7ijdhhs3zpfyi5d21f0qa1v'';
+    url = "http://beta.quicklisp.org/archive/rt/2010-10-06/rt-20101006-git.tgz";
+    sha256 = "1jncar0xwkqk8yrc2dln389ivvgzs7ijdhhs3zpfyi5d21f0qa1v";
   };
 
   packageName = "rt";

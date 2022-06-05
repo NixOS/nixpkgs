@@ -1,29 +1,98 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy3k
-, cython, setuptools
-, numpy, affine, attrs, cligj, click-plugins, snuggs, gdal
-, pytest, pytestcov, packaging, hypothesis, boto3, mock
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+
+# build time
+, cython
+, gdal
+
+# runtime
+, affine
+, attrs
+, boto3
+, click
+, click-plugins
+, cligj
+, matplotlib
+, numpy
+, snuggs
+, setuptools
+
+# tests
+, hypothesis
+, packaging
+, pytest-randomly
+, pytestCheckHook
+, shapely
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.1.2";
+  version = "1.2.10"; # not x.y[ab]z, those are alpha/beta versions
+  format = "pyproject";
+  disabled = pythonOlder "3.6";
 
   # Pypi doesn't ship the tests, so we fetch directly from GitHub
   src = fetchFromGitHub {
-    owner = "mapbox";
+    owner = "rasterio";
     repo = "rasterio";
     rev = version;
-    sha256 = "12szhfify7wn02cbiz9xapwfyp7bg0zm2ja9wq4jyaz5ijy6rm45";
+    hash = "sha256-xVGwQfQvxsqYihUYXENJAz9Qp9xBkhsGc/RheRTJxgo=";
   };
 
-  checkInputs = [ boto3 pytest pytestcov packaging hypothesis ] ++ lib.optional (!isPy3k) mock;
-  nativeBuildInputs = [ cython gdal ];
-  propagatedBuildInputs = [ gdal numpy attrs affine cligj click-plugins snuggs setuptools ];
+  nativeBuildInputs = [
+    cython
+    gdal
+  ];
+
+  propagatedBuildInputs = [
+    affine
+    attrs
+    boto3
+    click
+    click-plugins
+    cligj
+    matplotlib
+    numpy
+    snuggs
+    setuptools # needs pkg_resources at runtime
+  ];
+
+  preCheck = ''
+    rm -rf rasterio
+  '';
+
+  checkInputs = [
+    pytest-randomly
+    pytestCheckHook
+    packaging
+    hypothesis
+    shapely
+  ];
+
+  pytestFlagsArray = [
+    "-m 'not network'"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_reproject_error_propagation"
+  ];
+
+  pythonImportsCheck = [
+    "rasterio"
+  ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/rio --version | grep ${version} > /dev/null
+  '';
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";
+    homepage = "https://rasterio.readthedocs.io/en/latest/";
     license = licenses.bsd3;
-    homepage = https://rasterio.readthedocs.io/en/latest/;
     maintainers = with maintainers; [ mredaelli ];
   };
 }

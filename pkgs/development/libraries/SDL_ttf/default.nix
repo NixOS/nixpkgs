@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, SDL, freetype }:
+{ lib, stdenv, fetchurl, fetchpatch, SDL, freetype }:
 
 stdenv.mkDerivation rec {
   pname = "SDL_ttf";
@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL freetype ];
 
-  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SDL TrueType library";
     license = licenses.zlib;
     platforms = platforms.all;
-    homepage = https://www.libsdl.org/projects/SDL_ttf/release-1.2.html;
+    homepage = "https://www.libsdl.org/projects/SDL_ttf/release-1.2.html";
     maintainers = with maintainers; [ abbradar ];
   };
 }

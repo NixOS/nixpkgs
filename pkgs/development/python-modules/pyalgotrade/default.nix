@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , matplotlib
@@ -32,9 +32,9 @@ buildPythonPackage rec {
   # no tests in PyPI tarball
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Python Algorithmic Trading";
-    homepage = http://gbeced.github.io/pyalgotrade/;
+    homepage = "http://gbeced.github.io/pyalgotrade/";
     license = licenses.asl20;
   };
 

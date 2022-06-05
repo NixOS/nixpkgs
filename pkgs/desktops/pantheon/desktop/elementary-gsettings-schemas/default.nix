@@ -1,14 +1,13 @@
-{ stdenv
+{ lib
 , runCommand
 , mutter
 , elementary-default-settings
-, nixos-artwork
 , glib
 , gala
 , epiphany
-, elementary-settings-daemon
+, gnome-settings-daemon
 , gtk3
-, plank
+, elementary-dock
 , gsettings-desktop-schemas
 , extraGSettingsOverrides ? ""
 , extraGSettingsOverridePackages ? []
@@ -17,18 +16,18 @@
 let
 
   gsettingsOverridePackages = [
-    elementary-settings-daemon
+    elementary-dock
+    gnome-settings-daemon
     epiphany
     gala
-    mutter
     gsettings-desktop-schemas
     gtk3
-    plank
+    mutter
   ] ++ extraGSettingsOverridePackages;
 
 in
 
-with stdenv.lib;
+with lib;
 
 # TODO: Having https://github.com/NixOS/nixpkgs/issues/54150 would supersede this
 runCommand "elementary-gsettings-desktop-schemas" {}
@@ -36,7 +35,8 @@ runCommand "elementary-gsettings-desktop-schemas" {}
      schema_dir=$out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
 
      mkdir -p $schema_dir
-     cp -rf ${glib.getSchemaPath gsettings-desktop-schemas}/*.xml $schema_dir
+
+     cp -rf ${glib.getSchemaPath gala}/*.gschema.override $schema_dir
 
      ${concatMapStrings (pkg: "cp -rf ${glib.getSchemaPath pkg}/*.xml $schema_dir\n") gsettingsOverridePackages}
 

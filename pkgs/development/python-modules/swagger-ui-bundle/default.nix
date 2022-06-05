@@ -1,13 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, jinja2, flake8 }:
+{ lib, buildPythonPackage, fetchPypi, jinja2, flake8 }:
 
 buildPythonPackage rec {
   pname = "swagger-ui-bundle";
-  version = "0.0.5";
+  version = "0.0.9";
 
   src = fetchPypi {
     pname = "swagger_ui_bundle";
     inherit version;
-    sha256 = "0v69v94mzzb63ciwpz3n8jwxqcyll3fsyx087s9k9q543zdqzbh1";
+    sha256 = "b462aa1460261796ab78fd4663961a7f6f347ce01760f1303bbbdf630f11f516";
   };
 
   # patch away unused test requirements since package contains no tests
@@ -20,9 +20,9 @@ buildPythonPackage rec {
   # package contains no tests
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "bundled swagger-ui pip package";
-    homepage = https://github.com/dtkav/swagger_ui_bundle;
+    homepage = "https://github.com/dtkav/swagger_ui_bundle";
     license = licenses.asl20;
     maintainers = with maintainers; [ elohmeier ];
   };

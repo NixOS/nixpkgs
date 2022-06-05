@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, git, perl, makeWrapper }:
+{ lib, stdenv, fetchFromGitHub, git, perl, makeWrapper }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "git-octopus";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "prefix=$(out)" ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   # perl provides shasum
   postInstall = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = https://github.com/lesfurets/git-octopus;
+    homepage = "https://github.com/lesfurets/git-octopus";
     description = "The continuous merge workflow";
     license = licenses.lgpl3;
     platforms = platforms.unix;

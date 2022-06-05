@@ -1,30 +1,28 @@
-{ stdenv, fetchFromGitHub, gtk3, numix-icon-theme, hicolor-icon-theme }:
+{ lib, stdenv, fetchFromGitHub, gtk3, numix-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "numix-icon-theme-circle";
-  version = "19.09.20";
+  version = "22.03.01";
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = pname;
     rev = version;
-    sha256 = "1pmz2dy1580ln5m57xw3vhqrjhviayisgbs2km3i77hyx66hiivi";
+    sha256 = "sha256-adSoFKvemirQtxoS6KrQvXxtIOKFZ73PTktVXytblbM=";
   };
 
-  nativeBuildInputs = [ gtk3 numix-icon-theme ];
+  nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [
-    hicolor-icon-theme
-  ];
+  propagatedBuildInputs = [ numix-icon-theme hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 
   installPhase = ''
-    install -dm 755 $out/share/icons
-    cp -dr --no-preserve='ownership' Numix-Circle{,-Light} $out/share/icons/
-  '';
+    runHook preInstall
 
-  postFixup = ''
+    mkdir -p $out/share/icons
+    cp -a Numix-Circle{,-Light} $out/share/icons
+
     for panel in $out/share/icons/*/*/panel; do
       ln -sf $(realpath ${numix-icon-theme}/share/icons/Numix/16/$(readlink $panel)) $panel
     done
@@ -32,12 +30,14 @@ stdenv.mkDerivation rec {
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Numix icon theme (circle version)";
-    homepage = https://numixproject.github.io;
-    license = licenses.gpl3;
+    homepage = "https://numixproject.github.io";
+    license = licenses.gpl3Only;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];

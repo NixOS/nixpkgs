@@ -63,10 +63,6 @@ let
     ${cfg.extraConfig}
   '';
 
-  phpExtensions = with pkgs.phpPackages; [
-    { pkg = apcu; name = "apcu"; }
-  ];
-
 in {
   options = {
     services.zoneminder = with lib; {
@@ -77,6 +73,8 @@ in {
         `config.services.zoneminder.database.createLocally` to true. Otherwise,
         when set to `false` (the default), you will have to create the database
         and database user as well as populate the database yourself.
+        Additionally, you will need to run `zmupdate.pl` yourself when
+        upgrading to a newer version.
       '';
 
       webserver = mkOption {
@@ -173,7 +171,7 @@ in {
         example = "/storage/tank";
         description = ''
           ZoneMinder can generate quite a lot of data, so in case you don't want
-          to use the default ${home}, you can override the path here.
+          to use the default ${defaultDir}, you can override the path here.
         '';
       };
 
@@ -256,7 +254,7 @@ in {
                 location /cgi-bin {
                   gzip off;
 
-                  include ${pkgs.nginx}/conf/fastcgi_params;
+                  include ${config.services.nginx.package}/conf/fastcgi_params;
                   fastcgi_param SCRIPT_FILENAME ${pkg}/libexec/zoneminder/${zms};
                   fastcgi_param HTTP_PROXY "";
                   fastcgi_intercept_errors on;
@@ -272,7 +270,7 @@ in {
                   try_files $uri =404;
                   fastcgi_index index.php;
 
-                  include ${pkgs.nginx}/conf/fastcgi_params;
+                  include ${config.services.nginx.package}/conf/fastcgi_params;
                   fastcgi_param SCRIPT_FILENAME $request_filename;
                   fastcgi_param HTTP_PROXY "";
 
@@ -287,11 +285,9 @@ in {
       phpfpm = lib.mkIf useNginx {
         pools.zoneminder = {
           inherit user group;
+          phpPackage = pkgs.php.withExtensions ({ enabled, all }: enabled ++ [ all.apcu ]);
           phpOptions = ''
             date.timezone = "${config.time.timeZone}"
-
-            ${lib.concatStringsSep "\n" (map (e:
-            "extension=${e.pkg}/lib/php/extensions/${e.name}.so") phpExtensions)}
           '';
           settings = lib.mapAttrs (name: lib.mkDefault) {
             "listen.owner" = user;
@@ -330,6 +326,8 @@ in {
             ${config.services.mysql.package}/bin/mysql < ${pkg}/share/zoneminder/db/zm_create.sql
             touch "/var/lib/${dirName}/db-created"
           fi
+
+          ${zoneminder}/bin/zmupdate.pl -nointeractive
         '';
         serviceConfig = {
           User = user;
@@ -368,5 +366,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ peterhoeg ];
+  meta.maintainers = with lib.maintainers; [ ];
 }

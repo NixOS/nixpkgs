@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "5.000";
+  version = "6.101";
 in
   fetchzip rec {
     name = "andika-${version}";
@@ -14,10 +14,10 @@ in
       unzip -j $downloadedFile \*OFL.txt \*OFL-FAQ.txt \*README.txt \*FONTLOG.txt -d "$out/share/doc/${name}"
     '';
 
-    sha256 = "1jy9vpcprpd1k48p20wh6jhyn909ibia8lr5i747p41l0s8a7lqy";
+    sha256 = "sha256-J/Ad+fmCMOxLoo+691LE6Bgi/l3ovIfWScwwVWtqACI=";
 
     meta = with lib; {
-      homepage = https://software.sil.org/andika;
+      homepage = "https://software.sil.org/andika";
       description = "A family designed especially for literacy use taking into account the needs of beginning readers";
       longDescription = ''
       Andika is a sans serif, Unicode-compliant font designed especially for literacy use, taking into account the needs of beginning readers. The focus is on clear, easy-to-perceive letterforms that will not be readily confused with one another.

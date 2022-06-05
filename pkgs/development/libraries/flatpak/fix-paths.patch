@@ -7,7 +7,7 @@ index 5dd7629e..ddc71a4c 100644
    int i;
    char *p11_argv[] = {
 -    "p11-kit", "server",
-+    "@p11@/bin/p11-kit", "server",
++    "@p11kit@", "server",
      /* We explicitly request --sh here, because we then fail on earlier versions that doesn't support
       * this flag. This is good, because those earlier versions did not properly daemonize and caused
       * the spawn_sync to hang forever, waiting for the pipe to close.

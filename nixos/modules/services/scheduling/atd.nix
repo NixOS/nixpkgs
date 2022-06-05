@@ -58,7 +58,9 @@ in
     security.pam.services.atd = {};
 
     users.users.atd =
-      { uid = config.ids.uids.atd;
+      {
+        uid = config.ids.uids.atd;
+        group = "atd";
         description = "atd user";
         home = "/var/empty";
       };
@@ -67,8 +69,6 @@ in
 
     systemd.services.atd = {
       description = "Job Execution Daemon (atd)";
-      after = [ "systemd-udev-settle.service" ];
-      wants = [ "systemd-udev-settle.service" ];
       wantedBy = [ "multi-user.target" ];
 
       path = [ at ];
@@ -83,14 +83,9 @@ in
         jobdir=/var/spool/atjobs
         etcdir=/etc/at
 
-        for dir in "$spooldir" "$jobdir" "$etcdir"; do
-          if [ ! -d "$dir" ]; then
-              mkdir -p "$dir"
-              chown atd:atd "$dir"
-          fi
-        done
-        chmod 1770 "$spooldir" "$jobdir"
-        ${if cfg.allowEveryone then ''chmod a+rwxt "$spooldir" "$jobdir" '' else ""}
+        install -dm755 -o atd -g atd "$etcdir"
+        spool_and_job_dir_perms=${if cfg.allowEveryone then "1777" else "1770"}
+        install -dm"$spool_and_job_dir_perms" -o atd -g atd "$spooldir" "$jobdir"
         if [ ! -f "$etcdir"/at.deny ]; then
             touch "$etcdir"/at.deny
             chown root:atd "$etcdir"/at.deny

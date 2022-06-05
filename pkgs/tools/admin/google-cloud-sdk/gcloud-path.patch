@@ -33,15 +33,14 @@ diff --git a/lib/googlecloudsdk/api_lib/container/kubeconfig.py b/lib/googleclou
 index 4330988d6..37424b841 100644
 --- a/lib/googlecloudsdk/api_lib/container/kubeconfig.py
 +++ b/lib/googlecloudsdk/api_lib/container/kubeconfig.py
-@@ -255,7 +255,7 @@ def _AuthProvider(name='gcp'):
-       raise Error(SDK_BIN_PATH_NOT_FOUND)
+@@ -352,7 +352,7 @@ def _AuthProvider(name='gcp',
+       if sdk_bin_path is None:
+         log.error(SDK_BIN_PATH_NOT_FOUND)
+         raise Error(SDK_BIN_PATH_NOT_FOUND)
+-      cmd_path = os.path.join(sdk_bin_path, bin_name)
++      cmd_path = bin_name
+ 
      cfg = {
          # Command for gcloud credential helper
--        'cmd-path': os.path.join(sdk_bin_path, bin_name),
-+        'cmd-path': bin_name,
-         # Args for gcloud credential helper
-         'cmd-args': 'config config-helper --format=json',
-         # JSONpath to the field that is the raw access token
 -- 
 2.21.0
-

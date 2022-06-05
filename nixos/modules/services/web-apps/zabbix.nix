@@ -1,11 +1,12 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
 
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) literalExample mapAttrs optionalString;
+  inherit (lib) literalExpression mapAttrs optionalString versionAtLeast;
 
   cfg = config.services.zabbixWeb;
+  opt = options.services.zabbixWeb;
   fpm = config.services.phpfpm.pools.zabbix;
 
   user = "zabbix";
@@ -21,13 +22,16 @@ let
     $DB['PORT'] = '${toString cfg.database.port}';
     $DB['DATABASE'] = '${cfg.database.name}';
     $DB['USER'] = '${cfg.database.user}';
-    $DB['PASSWORD'] = ${if cfg.database.passwordFile != null then "file_get_contents('${cfg.database.passwordFile}')" else "''"};
+    # NOTE: file_get_contents adds newline at the end of returned string
+    $DB['PASSWORD'] = ${if cfg.database.passwordFile != null then "trim(file_get_contents('${cfg.database.passwordFile}'), \"\\r\\n\")" else "''"};
     // Schema name. Used for IBM DB2 and PostgreSQL.
     $DB['SCHEMA'] = ''';
     $ZBX_SERVER = '${cfg.server.address}';
     $ZBX_SERVER_PORT = '${toString cfg.server.port}';
     $ZBX_SERVER_NAME = ''';
     $IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
+
+    ${cfg.extraConfig}
   '';
 
 in
@@ -41,7 +45,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.zabbix.web;
-        defaultText = "zabbix.web";
+        defaultText = literalExpression "zabbix.web";
         description = "Which Zabbix package to use.";
       };
 
@@ -79,6 +83,11 @@ in
             if cfg.database.type == "mysql" then config.services.mysql.port
             else if cfg.database.type == "pgsql" then config.services.postgresql.port
             else 1521;
+          defaultText = literalExpression ''
+            if config.${opt.database.type} == "mysql" then config.${options.services.mysql.port}
+            else if config.${opt.database.type} == "pgsql" then config.${options.services.postgresql.port}
+            else 1521
+          '';
           description = "Database host port.";
         };
 
@@ -113,8 +122,8 @@ in
       };
 
       virtualHost = mkOption {
-        type = types.submodule (import ../web-servers/apache-httpd/per-server-options.nix);
-        example = literalExample ''
+        type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+        example = literalExpression ''
           {
             hostName = "zabbix.example.org";
             adminAddr = "webmaster@example.org";
@@ -143,12 +152,24 @@ in
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = ''
+          Additional configuration to be copied verbatim into <filename>zabbix.conf.php</filename>.
+        '';
+      };
+
     };
   };
 
   # implementation
 
   config = mkIf cfg.enable {
+
+    services.zabbixWeb.extraConfig = optionalString ((versionAtLeast config.system.stateVersion "20.09") && (versionAtLeast cfg.package.version "5.0.0")) ''
+      $DB['DOUBLE_IEEE754'] = 'true';
+    '';
 
     systemd.tmpfiles.rules = [
       "d '${stateDir}' 0750 ${user} ${group} - -"

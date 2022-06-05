@@ -1,25 +1,26 @@
-{ stdenv, lib, fetchurl, utillinux, makeWrapper
+{ stdenv, lib, fetchurl, util-linux, makeWrapper
 , enableReadline ? true, readline, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "calc";
-  version = "2.12.7.2";
+  version = "2.14.1.0";
 
   src = fetchurl {
     urls = [
       "https://github.com/lcn2/calc/releases/download/${version}/${pname}-${version}.tar.bz2"
       "http://www.isthe.com/chongo/src/calc/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "147wmbajcxv6wp92j6pizq4plrr1sb7jirifr1477bx33hc49bsp";
+    sha256 = "sha256-C1YWZS4x7htUWF3MhRLQIYChL4rdwJxASdPQjttUr0A=";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace '-install_name ''${LIBDIR}/libcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcalc''${LIB_EXT_VERSION}' \
       --replace '-install_name ''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}' '-install_name ''${T}''${LIBDIR}/libcustcalc''${LIB_EXT_VERSION}'
   '';
 
-  buildInputs = [ utillinux makeWrapper ]
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ util-linux ]
              ++ lib.optionals enableReadline [ readline ncurses ];
 
   makeFlags = [
@@ -40,8 +41,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C-style arbitrary precision calculator";
-    homepage = http://www.isthe.com/chongo/tech/comp/calc/;
-    license = licenses.lgpl21;
+    homepage = "http://www.isthe.com/chongo/tech/comp/calc/";
+    # The licensing situation depends on readline (see section 3 of the LGPL)
+    # If linked against readline then GPLv2 otherwise LGPLv2.1
+    license = with licenses; if enableReadline then gpl2Only else lgpl21Only;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.all;
   };

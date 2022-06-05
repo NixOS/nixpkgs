@@ -1,3 +1,5 @@
+diff --git a/giscanner/scannermain.py b/giscanner/scannermain.py
+index 64575557..1eb0a2b4 100644
 --- a/giscanner/scannermain.py
 +++ b/giscanner/scannermain.py
 @@ -95,6 +95,39 @@ def get_windows_option_group(parser):
@@ -40,17 +42,19 @@
  def _get_option_parser():
      parser = optparse.OptionParser('%prog [options] sources',
                                     version='%prog ' + giscanner.__version__)
-@@ -205,6 +238,10 @@ match the namespace prefix.""")
-     parser.add_option("", "--filelist",
-                       action="store", dest="filelist", default=[],
-                       help="file containing headers and sources to be scanned")
+@@ -214,6 +247,10 @@ match the namespace prefix.""")
+     parser.add_option("", "--c-include",
+                       action="append", dest="c_includes", default=[],
+                       help="headers which should be included in C programs")
 +    parser.add_option("", "--fallback-library-path",
 +                      action="store", dest="fallback_libpath",
 +                      default=_get_default_fallback_libpath(),
 +                      help="Path to prepend to unknown shared libraries")
- 
-     group = get_preprocessor_option_group(parser)
-     parser.add_option_group(group)
+     parser.add_option("", "--filelist",
+                       action="store", dest="filelist", default=[],
+                       help="file containing headers and sources to be scanned")
+diff --git a/giscanner/shlibs.py b/giscanner/shlibs.py
+index 9f8ab5df..af325022 100644
 --- a/giscanner/shlibs.py
 +++ b/giscanner/shlibs.py
 @@ -57,6 +57,12 @@ def _ldd_library_pattern(library_name):
@@ -66,7 +70,7 @@
  # This is a what we do for non-la files. We assume that we are on an
  # ELF-like system where ldd exists and the soname extracted with ldd is
  # a filename that can be opened with dlopen().
-@@ -106,7 +112,8 @@ def _resolve_non_libtool(options, binary, libraries):
+@@ -108,7 +114,8 @@ def _resolve_non_libtool(options, binary, libraries):
              output = output.decode("utf-8", "replace")
  
          shlibs = resolve_from_ldd_output(libraries, output)
@@ -76,7 +80,7 @@
  
  
  def sanitize_shlib_path(lib):
-@@ -115,19 +122,18 @@ def sanitize_shlib_path(lib):
+@@ -117,19 +124,18 @@ def sanitize_shlib_path(lib):
      # In case we get relative paths on macOS (like @rpath) then we fall
      # back to the basename as well:
      # https://gitlab.gnome.org/GNOME/gobject-introspection/issues/222
@@ -101,7 +105,7 @@
      if len(patterns) == 0:
          return []
  
-@@ -139,8 +145,11 @@ def resolve_from_ldd_output(libraries, output):
+@@ -141,8 +147,11 @@ def resolve_from_ldd_output(libraries, output):
          if line.endswith(':'):
              continue
          for word in line.split():
@@ -115,9 +119,11 @@
                  if m:
                      del patterns[library]
                      shlibs.append(m.group())
+diff --git a/giscanner/utils.py b/giscanner/utils.py
+index 31c7ea48..630002a8 100644
 --- a/giscanner/utils.py
 +++ b/giscanner/utils.py
-@@ -111,17 +111,11 @@ def extract_libtool_shlib(la_file):
+@@ -114,16 +114,11 @@ def extract_libtool_shlib(la_file):
      if dlname is None:
          return None
  
@@ -129,8 +135,7 @@
 -        if libdir is None:
 -            return dlbasename
 -        return libdir + '/' + dlbasename
--    # From the comments in extract_libtool(), older libtools had
--    # a path rather than the raw dlname
+-    # Older libtools had a path rather than the raw dlname
 -    return os.path.basename(dlname)
 +    dlbasename = os.path.basename(dlname)
 +    libdir = _extract_libdir_field(la_file)
@@ -139,4 +144,49 @@
 +    return libdir + '/' + dlbasename
  
  
- def extract_libtool(la_file):
+ # Returns arguments for invoking libtool, if applicable, otherwise None
+diff --git a/tests/scanner/test_shlibs.py b/tests/scanner/test_shlibs.py
+index a8337c60..72789d76 100644
+--- a/tests/scanner/test_shlibs.py
++++ b/tests/scanner/test_shlibs.py
+@@ -7,6 +7,30 @@ from giscanner.shlibs import resolve_from_ldd_output, sanitize_shlib_path
+ 
+ class TestLddParser(unittest.TestCase):
+ 
++    def test_resolve_from_ldd_output_nix(self):
++        output = '''\
++            libglib-2.0.so.0 => @nixStoreDir@/gmrf09y7sfxrr0mcx90dba7w41jj2kzk-glib-2.58.1/lib/libglib-2.0.so.0 (0x00007f0ee1b28000)
++            libgobject-2.0.so.0 => @nixStoreDir@/gmrf09y7sfxrr0mcx90dba7w41jj2kzk-glib-2.58.1/lib/libgobject-2.0.so.0 (0x00007f0ee18cf000)
++            libgio-2.0.so.0 => @nixStoreDir@/gmrf09y7sfxrr0mcx90dba7w41jj2kzk-glib-2.58.1/lib/libgio-2.0.so.0 (0x00007f0ee1502000)
++            libxml2.so.2 => @nixStoreDir@/72mxkk74cv266snkjpz1kwl1i2rg8rpc-libxml2-2.9.8/lib/libxml2.so.2 (0x00007f0ee119c000)
++            libsqlite3.so.0 => @nixStoreDir@/ck5ay23hsmlc67pg3m34kzd1k2hhvww0-sqlite-3.24.0/lib/libsqlite3.so.0 (0x00007f0ee0e98000)
++            libpsl.so.5 => @nixStoreDir@/qn3l2gn7m76f318676wflrs2z6d4rrkj-libpsl-0.20.2-list-2017-02-03/lib/libpsl.so.5 (0x00007f0ee0c88000)
++            libc.so.6 => @nixStoreDir@/g2yk54hifqlsjiha3szr4q3ccmdzyrdv-glibc-2.27/lib/libc.so.6 (0x00007f0ee08d4000)
++            libpcre.so.1 => @nixStoreDir@/hxbq8lpc53qsf1bc0dfcsm47wmcxzjvh-pcre-8.42/lib/libpcre.so.1 (0x00007f0ee0662000)
++            @nixStoreDir@/g2yk54hifqlsjiha3szr4q3ccmdzyrdv-glibc-2.27/lib64/ld-linux-x86-64.so.2 (0x00007f0ee20ff000)
++            libblkid.so.1 => @nixStoreDir@/q0kgnq21j0l2yd77gdlld371246cwghh-util-linux-2.32.1/lib/libblkid.so.1 (0x00007f0edd0cd000)
++            libuuid.so.1 => @nixStoreDir@/q0kgnq21j0l2yd77gdlld371246cwghh-util-linux-2.32.1/lib/libuuid.so.1 (0x00007f0edcec5000)
++            librt.so.1 => @nixStoreDir@/g2yk54hifqlsjiha3szr4q3ccmdzyrdv-glibc-2.27/lib/librt.so.1 (0x00007f0edccbd000)
++            libstdc++.so.6 => @nixStoreDir@/3v5r7fkrbkw2qajadvjbf6p6qriz9p1i-gcc-7.3.0-lib/lib/libstdc++.so.6 (0x00007f0edc936000)
++            libgcc_s.so.1 => @nixStoreDir@/g2yk54hifqlsjiha3szr4q3ccmdzyrdv-glibc-2.27/lib/libgcc_s.so.1 (0x00007f0edc720000)
++        '''
++        libraries = ['glib-2.0', 'gio-2.0']
++
++        self.assertEqual(
++            ['@nixStoreDir@/gmrf09y7sfxrr0mcx90dba7w41jj2kzk-glib-2.58.1/lib/libglib-2.0.so.0',
++             '@nixStoreDir@/gmrf09y7sfxrr0mcx90dba7w41jj2kzk-glib-2.58.1/lib/libgio-2.0.so.0'],
++            resolve_from_ldd_output(libraries, output))
++
+     def test_resolve_from_ldd_output(self):
+         output = '''\
+             libglib-2.0.so.0 => /usr/lib/x86_64-linux-gnu/libglib-2.0.so.0 (0x00007fbe12d68000)
+@@ -40,7 +64,8 @@ class TestLddParser(unittest.TestCase):
+ 
+         self.assertEqual(
+             sanitize_shlib_path('/foo/bar'),
+-            '/foo/bar' if sys.platform == 'darwin' else 'bar')
++            # NixOS always want the absolute path
++            '/foo/bar')
+ 
+     def test_unresolved_library(self):
+         output = ''

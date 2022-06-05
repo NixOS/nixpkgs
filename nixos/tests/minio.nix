@@ -20,7 +20,7 @@ let
     '';
 in {
   name = "minio";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ bachp ];
   };
 
@@ -28,7 +28,10 @@ in {
     machine = { pkgs, ... }: {
       services.minio = {
         enable = true;
-        inherit accessKey secretKey;
+        rootCredentialsFile = pkgs.writeText "minio-credentials" ''
+          MINIO_ROOT_USER=${accessKey}
+          MINIO_ROOT_PASSWORD=${secretKey}
+        '';
       };
       environment.systemPackages = [ pkgs.minio-client ];
 
@@ -44,7 +47,7 @@ in {
 
     # Create a test bucket on the server
     machine.succeed(
-        "mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} S3v4"
+        "mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
     )
     machine.succeed("mc mb minio/test-bucket")
     machine.succeed("${minioPythonScript}")

@@ -1,50 +1,56 @@
-{ stdenv
+{ lib
 , buildPythonPackage
+, fetchFromGitHub
 , isPyPy
 , python
-, pkgs
 , pillow
 , pycairo
+, pkg-config
+, boost
+, cairo
+, harfbuzz
+, icu
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, mapnik
+, proj
+, zlib
 }:
 
-let
-  boost = pkgs.boost.override {
-    enablePython = true;
-    inherit python;
-  };
-  mapnik = pkgs.mapnik.override {
-    inherit python boost;
-  };
-
-in buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "python-mapnik";
-  version = "3.0.16";
+  version = "unstable-2020-02-24";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "mapnik";
     repo = "python-mapnik";
-    rev = "v${version}";
-    sha256 = "1gqs4kvmjawdgl80j0ab5r8y0va9kw0rvwix3093xsv4hwd00lcc";
+    rev = "7da019cf9eb12af8f8aa88b7d75789dfcd1e901b";
+    sha256 = "0snn7q7w1ab90311q8wgd1z64kw1svm5w831q0xd6glqhah86qc8";
   };
 
   disabled = isPyPy;
   doCheck = false; # doesn't find needed test data files
-  preBuild = let
-    pythonVersion = with stdenv.lib.versions; "${major python.version}${minor python.version}";
-  in ''
-    export BOOST_PYTHON_LIB="boost_python${pythonVersion}"
+  preBuild = ''
+    export BOOST_PYTHON_LIB="boost_python${"${lib.versions.major python.version}${lib.versions.minor python.version}"}"
     export BOOST_THREAD_LIB="boost_thread"
     export BOOST_SYSTEM_LIB="boost_system"
+    export PYCAIRO=true
   '';
 
   nativeBuildInputs = [
     mapnik # for mapnik_config
+    pkg-config
+  ];
+
+  patches = [
+    ./find-pycairo-with-pkg-config.patch
   ];
 
   buildInputs = [
     mapnik
     boost
-  ] ++ (with pkgs; [
     cairo
     harfbuzz
     icu
@@ -54,13 +60,16 @@ in buildPythonPackage rec {
     libwebp
     proj
     zlib
-  ]);
+  ];
+
   propagatedBuildInputs = [ pillow pycairo ];
 
-  meta = with stdenv.lib; {
-    description = "Python bindings for Mapnik";
-    homepage = https://mapnik.org;
-    license  = licenses.lgpl21;
-  };
+  pythonImportsCheck = [ "mapnik" ];
 
+  meta = with lib; {
+    description = "Python bindings for Mapnik";
+    maintainers = with maintainers; [ erictapen ];
+    homepage = "https://mapnik.org";
+    license = licenses.lgpl21;
+  };
 }

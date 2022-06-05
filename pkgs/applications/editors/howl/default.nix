@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, gtk3, librsvg }:
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, gtk3, librsvg }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "howl";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # The Makefile uses "/usr/local" if not explicitly overridden
   installFlags = [ "PREFIX=$(out)" ];
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkg-config ];
   buildInputs = [ gtk3 librsvg ];
   enableParallelBuilding = true;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://howl.io/;
+    homepage = "https://howl.io/";
     description = "A general purpose, fast and lightweight editor with a keyboard-centric minimalistic user interface";
     license = licenses.mit;
     maintainers = with maintainers; [ pacien ];

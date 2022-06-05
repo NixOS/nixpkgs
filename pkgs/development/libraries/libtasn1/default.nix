@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, perl, texinfo }:
+{ lib, stdenv, fetchurl, perl, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "libtasn1-4.14";
+  pname = "libtasn1";
+  version = "4.18.0";
 
   src = fetchurl {
-    url = "mirror://gnu/libtasn1/${name}.tar.gz";
-    sha256 = "025sqnlzji78ss2fi78dajc0v0h5fi02wp39hws41sn8qnjlnq4y";
+    url = "mirror://gnu/libtasn1/libtasn1-${version}.tar.gz";
+    sha256 = "sha256-Q2XBVJU1Y9ZMZ6AktgfR7nXG23bg0PZXCeqAozTNGJg=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -14,9 +15,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo perl ];
 
   doCheck = true;
+  preCheck = if stdenv.isDarwin then
+    "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs"
+  else
+    null;
 
-  meta = with stdenv.lib; {
-    homepage = https://www.gnu.org/software/libtasn1/;
+  meta = with lib; {
+    homepage = "https://www.gnu.org/software/libtasn1/";
     description = "An ASN.1 library";
     longDescription = ''
       Libtasn1 is the ASN.1 library used by GnuTLS, GNU Shishi and some

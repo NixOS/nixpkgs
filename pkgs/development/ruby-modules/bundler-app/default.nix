@@ -1,4 +1,4 @@
-{ lib, stdenv, callPackage, runCommand, makeWrapper, ruby }@defs:
+{ lib, callPackage, runCommand, makeWrapper, ruby }@defs:
 
 # Use for simple installation of Ruby tools shipped in a Gem.
 # Start with a Gemfile that includes `gem <toolgem>`
@@ -53,11 +53,11 @@ in
     ${(lib.concatMapStrings (x: "ln -s '${basicEnv}/bin/${x}' $out/bin/${x};\n") exes)}
     ${(lib.concatMapStrings (s: "makeWrapper $out/bin/$(basename ${s}) $srcdir/${s} " +
                                 "--set BUNDLE_GEMFILE ${basicEnv.confFiles}/Gemfile "+
-                                "--set BUNDLE_PATH ${basicEnv}/${ruby.gemPath} "+
+                                "--unset BUNDLE_PATH "+
                                 "--set BUNDLE_FROZEN 1 "+
                                 "--set GEM_HOME ${basicEnv}/${ruby.gemPath} "+
                                 "--set GEM_PATH ${basicEnv}/${ruby.gemPath} "+
-                                "--run \"cd $srcdir\";\n") scripts)}
+                                "--chdir \"$srcdir\";\n") scripts)}
 
     ${lib.optionalString installManpages ''
     for section in {1..9}; do

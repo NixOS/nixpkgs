@@ -1,7 +1,11 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-cpp",
-  "rev": "f5afa0ee48ad1dc067ed6fe1aa2cfd2a3ea5d443",
-  "date": "2019-08-06T17:23:46-07:00",
-  "sha256": "1w9zjqj232fcagqfqd8qi4kmvr655s4ivllrm27973sda4xq557h",
-  "fetchSubmodules": false
+  "rev": "38d8b495bd43977498f0eb122e0f9cfef8526d18",
+  "date": "2022-05-30T11:35:53-07:00",
+  "path": "/nix/store/4ndwshhwzcj9xrj8g0qnvqz7gwpd64z2-tree-sitter-cpp",
+  "sha256": "0lck8s0z0ay9aw6zljaq892xxmgx8wn3kgsin3sjf5ysyjdva3qn",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "leaveDotGit": false
 }

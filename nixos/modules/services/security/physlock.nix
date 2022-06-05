@@ -38,9 +38,6 @@ in
           setuid wrapper to allow any user to start physlock as root, which
           is a minor security risk. Call the physlock binary to use this instead
           of using the systemd service.
-
-          Note that you might need to relog to have the correct binary in your
-          PATH upon changing this option.
         '';
       };
 
@@ -49,6 +46,14 @@ in
         default = true;
         description = ''
           Whether to disable SysRq when locked with physlock.
+        '';
+      };
+
+      lockMessage = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          Message to show on physlock login terminal.
         '';
       };
 
@@ -107,10 +112,11 @@ in
                 ++ cfg.lockOn.extraTargets;
         before   = optional cfg.lockOn.suspend   "systemd-suspend.service"
                 ++ optional cfg.lockOn.hibernate "systemd-hibernate.service"
+                ++ optional (cfg.lockOn.hibernate || cfg.lockOn.suspend) "systemd-suspend-then-hibernate.service"
                 ++ cfg.lockOn.extraTargets;
         serviceConfig = {
           Type = "forking";
-          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}";
+          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.disableSysRq "s"}${optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""}";
         };
       };
 
@@ -120,7 +126,12 @@ in
 
     (mkIf cfg.allowAnyUser {
 
-      security.wrappers.physlock = { source = "${pkgs.physlock}/bin/physlock"; user = "root"; };
+      security.wrappers.physlock =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.physlock}/bin/physlock";
+        };
 
     })
   ]);

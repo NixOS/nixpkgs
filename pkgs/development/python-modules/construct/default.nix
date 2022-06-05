@@ -1,31 +1,34 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, six, pytest, arrow
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+, pytestCheckHook, pytest-benchmark, numpy, arrow, ruamel-yaml
+, lz4, cloudpickle
 }:
 
 buildPythonPackage rec {
   pname   = "construct";
-  version = "2.9.45";
+  version = "2.10.68";
 
+  disabled = pythonOlder "3.6";
+
+  # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0ig66xrzswpkhhmw123p2nvr15a9lxz54a1fmycfdh09327c1d3y";
+    sha256 = "sha256-bp/YyRFP0rrBHPyhiqnn6o1iC5l61oedShZ2phGeqaw=";
   };
 
-  propagatedBuildInputs = [ six ];
+  # not an explicit dependency, but it's imported by an entrypoint
+  propagatedBuildInputs = [
+    lz4
+  ];
 
-  checkInputs = [ pytest arrow ];
+  checkInputs = [ pytestCheckHook numpy arrow ruamel-yaml cloudpickle ];
 
-  # TODO: figure out missing dependencies
-  doCheck = false;
-  checkPhase = ''
-    py.test -k 'not test_numpy and not test_gallery' tests
-  '';
+  disabledTests = [ "test_benchmarks" ] ++ lib.optionals stdenv.isDarwin [ "test_multiprocessing" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful declarative parser (and builder) for binary data";
-    homepage = https://construct.readthedocs.org/;
+    homepage = "https://construct.readthedocs.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor ];
   };

@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, cmake }:
+{ fetchurl, lib, stdenv, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "cmocka";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Lightweight library to simplify and generalize unit tests for C";
 
     longDescription =
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
         This is the successor of Google's Cmockery.'';
 
-    homepage = https://cmocka.org/;
+    homepage = "https://cmocka.org/";
 
     license = licenses.asl20;
     platforms = platforms.all;

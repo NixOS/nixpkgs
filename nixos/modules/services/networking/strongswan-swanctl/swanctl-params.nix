@@ -569,6 +569,16 @@ in {
         these sections offer more flexibility.
       '';
 
+      ca_id = mkOptionalStrParam ''
+        Identity in CA certificate to accept for authentication. The specified
+        identity must be contained in one (intermediate) CA of the remote peer
+        trustchain, either as subject or as subjectAltName. This has the same
+        effect as specifying <literal>cacerts</literal> to force clients under
+        a CA to specific connections; it does not require the CA certificate
+        to be available locally, and can be received from the peer during the
+        IKE exchange.
+      '';
+
       cacerts = mkCommaSepListParam [] ''
         List of CA certificates to accept for
         authentication. The certificates may use a relative path from the
@@ -1173,20 +1183,20 @@ in {
 
     ppk = mkPrefixedAttrsOfParams {
       secret = mkOptionalStrParam ''
-	      Value of the PPK. It may either be an ASCII string, a hex encoded string
-	      if it has a <literal>0x</literal> prefix or a Base64 encoded string if
-	      it has a <literal>0s</literal> prefix in its value. Should have at least
-	      256 bits of entropy for 128-bit security.
+        Value of the PPK. It may either be an ASCII string, a hex encoded string
+        if it has a <literal>0x</literal> prefix or a Base64 encoded string if
+        it has a <literal>0s</literal> prefix in its value. Should have at least
+        256 bits of entropy for 128-bit security.
       '';
 
       id = mkPrefixedAttrsOfParam (mkOptionalStrParam "") ''
-	      PPK identity the PPK belongs to. Multiple unique identities may be
-	      specified, each having an <literal>id</literal> prefix, if a secret is
-	      shared between multiple peers.
+        PPK identity the PPK belongs to. Multiple unique identities may be
+        specified, each having an <literal>id</literal> prefix, if a secret is
+        shared between multiple peers.
       '';
     } ''
-	    Postquantum Preshared Key (PPK) section for a specific secret. Each PPK is
-	    defined in a unique section having the <literal>ppk</literal> prefix.
+      Postquantum Preshared Key (PPK) section for a specific secret. Each PPK is
+      defined in a unique section having the <literal>ppk</literal> prefix.
     '';
 
     private = mkPrefixedAttrsOfParams {
@@ -1273,7 +1283,7 @@ in {
         provided the user is prompted during an interactive
         <literal>--load-creds</literal> call.
       '';
-    } ''Definition for a private key that's stored on a token/smartcard/TPM.'';
+    } "Definition for a private key that's stored on a token/smartcard/TPM.";
 
   };
 

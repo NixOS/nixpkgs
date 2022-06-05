@@ -1,31 +1,66 @@
-{ stdenv, lib, fetchFromGitHub, libpcap, libjpeg , libungif, libpng
-, giflib, glib, gtk2, cairo, pango, gdk-pixbuf, atk
-, pkgconfig, autoreconfHook }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, fetchpatch
+, autoreconfHook
+, cairo
+, giflib
+, glib
+, gtk2-x11
+, libjpeg
+, libpcap
+, libpng
+, libwebsockets
+, pkg-config
+, libuv
+, openssl
+}:
 
-with lib;
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "driftnet";
-  version = "1.1.5";
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    libpcap libjpeg libungif libpng giflib
-    glib gtk2 glib cairo pango gdk-pixbuf atk autoreconfHook
-  ];
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "deiv";
     repo = "driftnet";
-    rev = "0ae4a91";
-    sha256 = "1sagpx0mw68ggvqd9c3crjhghqmj7391mf2cb6cjw1cpd2hcddsj";
+    rev = "v${version}";
+    sha256 = "0kd22aqb25kf54jjv3ml8wy8xm7lmbf0xz1wfp31m08cbzsbizib";
   };
 
-  meta = {
-    description = "Driftnet watches network traffic, and picks out and displays JPEG and GIF images for display";
-    homepage = https://github.com/deiv/driftnet;
+  # https://github.com/deiv/driftnet/pull/33
+  # remove on version bump from 1.3.0
+  patches = [
+    (fetchpatch {
+      name = "fix-darwin-build";
+      url = "https://github.com/deiv/driftnet/pull/33/commits/bef5f3509ab5710161e9e21ea960a997eada534f.patch";
+      sha256 = "1b7p9fkgp7dxv965l7q7y632s80h3nnrkaqnak2h0hakwv0i4pvm";
+    })
+    # https://github.com/deiv/driftnet/issues/37
+    ./libwebsockets-4.3.0.patch
+  ];
+
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+
+  buildInputs = [
+    cairo
+    giflib
+    glib
+    gtk2-x11
+    libjpeg
+    libpcap
+    libpng
+    libwebsockets
+    openssl
+    libuv
+  ];
+
+  meta = with lib; {
+    description = "Watches network traffic, and picks out and displays JPEG and GIF images for display";
+    homepage = "https://github.com/deiv/driftnet";
     maintainers = with maintainers; [ offline ];
-    platforms = platforms.linux;
-    license = licenses.gpl2;
+    platforms = platforms.linux ++ platforms.darwin;
+    license = licenses.gpl2Plus;
   };
 }

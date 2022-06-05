@@ -1,26 +1,38 @@
-{ stdenv, fetchurl, openssl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, openssl
+, cmake
+}:
 
-stdenv.mkDerivation {
-  name = "mysocketw-031026";
-  src = fetchurl {
-    url = http://www.digitalfanatics.org/cal/socketw/files/SocketW031026.tar.gz;
-    sha256 = "0crinikhdl7xihzmc3k3k41pgxy16d5ci8m9sza1lbibns7pdwj4";
+stdenv.mkDerivation rec {
+  pname = "mysocketw";
+  version = "3.11.0";
+
+  src = fetchFromGitHub {
+    owner = "RigsOfRods";
+    repo = "socketw";
+    rev = version;
+    hash = "sha256-mpfhmKE2l59BllkOjmURIfl17lAakXpmGh2x9SFSaAo=";
   };
 
-  patches = [ ./gcc.patch ];
+  nativeBuildInputs = [
+    cmake
+  ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [
+    openssl
+  ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/Makefile \
         --replace -Wl,-soname, -Wl,-install_name,$out/lib/
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "CXX=c++" ];
-
-  meta = {
+  meta = with lib; {
     description = "Cross platform (Linux/FreeBSD/Unix/Win32) streaming socket C++";
-    license = stdenv.lib.licenses.lgpl21Plus;
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://github.com/RigsOfRods/socketw";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ ];
   };
 }

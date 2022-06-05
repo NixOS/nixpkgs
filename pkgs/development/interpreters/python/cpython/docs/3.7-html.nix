@@ -2,10 +2,12 @@
 
 { stdenv, fetchurl, lib }:
 
-stdenv.mkDerivation {
-  name = "python37-docs-html-3.7.2";
+stdenv.mkDerivation rec {
+  pname = "python37-docs-html";
+  version = "3.7.2";
+
   src = fetchurl {
-    url = http://docs.python.org/ftp/python/doc/3.7.2/python-3.7.2-docs-html.tar.bz2;
+    url = "http://docs.python.org/ftp/python/doc/${version}/python-${version}-docs-html.tar.bz2";
     sha256 = "19wbrawpdam09fmyipfy92sxwn1rl93v8jkfqsfx028qhvzf0422";
   };
   installPhase = ''

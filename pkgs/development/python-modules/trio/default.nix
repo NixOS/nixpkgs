@@ -5,36 +5,26 @@
 , idna
 , outcome
 , contextvars
-, pytest
+, pytestCheckHook
 , pyopenssl
 , trustme
 , sniffio
 , stdenv
 , jedi
-, pylint
 , astor
 , yapf
+, coreutils
 }:
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.13.0";
-  disabled = pythonOlder "3.5";
+  version = "0.20.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f1cf00054ad974c86d9b7afa187a65d79fd5995340abe01e8e4784d86f4acb30";
+    sha256 = "sha256-ZwpS0xFdDoeeGsg4pOuZmvMvhYFj46cE/kg53ipnYHA=";
   };
-
-  checkInputs = [ astor pytest pyopenssl trustme jedi pylint yapf ];
-  # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
-  checkPhase = ''
-    HOME=$TMPDIR py.test -k 'not getnameinfo \
-                             and not SocketType_resolve \
-                             and not getprotobyname \
-                             and not waitpid \
-                             and not static_tool_sees_all_symbols'
-  '';
 
   propagatedBuildInputs = [
     attrs
@@ -48,9 +38,38 @@ buildPythonPackage rec {
   # tests are failing on Darwin
   doCheck = !stdenv.isDarwin;
 
+  checkInputs = [
+    astor
+    jedi
+    pyopenssl
+    pytestCheckHook
+    trustme
+    yapf
+  ];
+
+  preCheck = ''
+    substituteInPlace trio/tests/test_subprocess.py \
+      --replace "/bin/sleep" "${coreutils}/bin/sleep"
+  '';
+
+  # It appears that the build sandbox doesn't include /etc/services, and these tests try to use it.
+  disabledTests = [
+    "getnameinfo"
+    "SocketType_resolve"
+    "getprotobyname"
+    "waitpid"
+    "static_tool_sees_all_symbols"
+    # tests pytest more than python
+    "fallback_when_no_hook_claims_it"
+  ];
+
+  pytestFlagsArray = [
+    "-W" "ignore::DeprecationWarning"
+  ];
+
   meta = {
     description = "An async/await-native I/O library for humans and snake people";
-    homepage = https://github.com/python-trio/trio;
+    homepage = "https://github.com/python-trio/trio";
     license = with lib.licenses; [ mit asl20 ];
     maintainers = with lib.maintainers; [ catern ];
   };

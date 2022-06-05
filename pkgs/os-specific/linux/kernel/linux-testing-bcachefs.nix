@@ -1,22 +1,34 @@
-{ stdenv, buildPackages, fetchgit, fetchpatch, perl, buildLinux, ... } @ args:
+{ lib
+, fetchpatch
+, kernel
+, date ? "2022-04-25"
+, commit ? "bdf6d7c1350497bc7b0be6027a51d9330645672d"
+, diffHash ? "09bcbklvfj9i9czjdpix2iz7fvjksmavaljx8l92ay1i9fapjmhc"
+, kernelPatches # must always be defined in bcachefs' all-packages.nix entry because it's also a top-level attribute supplied by callPackage
+, argsOverride ? {}
+, ...
+} @ args:
 
-buildLinux (args // {
-  version = "5.2.2019.10.12";
-  modDirVersion = "5.2.0";
+# NOTE: bcachefs-tools should be updated simultaneously to preserve compatibility
+(kernel.override ( args // {
+  argsOverride = {
+    version = "${kernel.version}-bcachefs-unstable-${date}";
 
-  src = fetchgit {
-    url = "https://evilpiepirate.org/git/bcachefs.git";
-    rev = "de906c3e2eddad291d46bd0e7c81c68eaadcd08a";
-    sha256 = "1ahabp8pd9slf4lchkbyfkagg9vhic0cw3kwvwryzaxxxjmf2hkk";
-  };
+    extraMeta = {
+      branch = "master";
+      maintainers = with lib.maintainers; [ davidak Madouura ];
+    };
+  } // argsOverride;
 
-  extraConfig = "BCACHEFS_FS m";
+  kernelPatches = [ {
+      name = "bcachefs-${commit}";
 
-  extraMeta = {
-    branch = "master";
-    hydraPlatforms = []; # Should the testing kernels ever be built on Hydra?
-    maintainers = with stdenv.lib.maintainers; [ davidak chiiruno ];
-    platforms = [ "x86_64-linux" ];
-  };
+      patch = fetchpatch {
+        name = "bcachefs-${commit}.diff";
+        url = "https://evilpiepirate.org/git/bcachefs.git/rawdiff/?id=${commit}&id2=v${lib.versions.majorMinor kernel.version}";
+        sha256 = diffHash;
+      };
 
-} // (args.argsOverride or {}))
+      extraConfig = "BCACHEFS_FS m";
+    } ] ++ kernelPatches;
+}))

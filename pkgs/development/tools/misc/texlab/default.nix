@@ -1,31 +1,53 @@
-{ stdenv
+{ lib
+, stdenv
 , rustPlatform
 , fetchFromGitHub
-, nodejs
+, installShellFiles
+, libiconv
 , Security
+, CoreServices
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "1.9.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
-    # 1.9.0 + patches for building citeproc-db, see https://github.com/latex-lsp/texlab/pull/137
-    rev = "e38fe4bedc9d8094649a9d2753ca9855e0c18882";
-    sha256 = "0j87gmzyqrpgxrgalvlfqj5cj8j0h23hbbv8vdz2dhc847xhhfq1";
+    rev = "v${version}";
+    sha256 = "sha256-hRY1cJFakbq6pU2TKql+eVWvKtNDzVIQkE5BbRW5n5A=";
   };
 
-  cargoSha256 = "09d9r7aal1q00idv08zdw7dygyasyp5l6jrh96cdclf63h1p4fk9";
+  cargoSha256 = "sha256-VwB02FfoAKL0fEvpvpxfkAR6PcWZFK/d5aVOtUq7f10=";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security CoreServices ];
+
+  postInstall = ''
+    installManPage texlab.1
+
+    # Remove generated dylib of human_name dependency. TexLab statically
+    # links to the generated rlib and doesn't reference the dylib. I
+    # couldn't find any way to prevent building this by passing cargo flags.
+    # See https://github.com/djudd/human-name/blob/master/Cargo.toml#L43
+    rm "$out/lib/libhuman_name${stdenv.hostPlatform.extensions.sharedLibrary}"
+    rmdir "$out/lib"
+  '';
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+
+  meta = with lib; {
     description = "An implementation of the Language Server Protocol for LaTeX";
-    homepage = https://texlab.netlify.com/;
+    homepage = "https://texlab.netlify.app";
     license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar metadark ];
+    maintainers = with maintainers; [ doronbehar kira-bruneau ];
     platforms = platforms.all;
   };
 }

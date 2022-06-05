@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_event
@@ -6,18 +6,20 @@
 
 buildPythonPackage rec {
   pname = "zope.interface";
-  version = "4.7.1";
-  
+  version = "5.4.0";
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4bb937e998be9d5e345f486693e477ba79e4344674484001a0b646be1d530487";
+    sha256 = "5dba5f530fec3f0988d83b78cc591b58c0b6eb8431a85edd1569a0539a8a5a0e";
   };
 
   propagatedBuildInputs = [ zope_event ];
 
-  meta = with stdenv.lib; {
+  doCheck = false; # Circular deps.
+
+  meta = with lib; {
     description = "Zope.Interface";
-    homepage = http://zope.org/Products/ZopeInterface;
+    homepage = "https://zope.org/Products/ZopeInterface";
     license = licenses.zpl20;
     maintainers = [ maintainers.goibhniu ];
   };

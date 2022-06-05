@@ -12,12 +12,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0myg26cssmbakz53dl61lswsbaqnjqlbc30c2571pq8f7gvz2qv5";
   };
 
-  cargoSha256 = "1k4byg77s1iqhry96pl57mbsvd32sbnvf60dlbd62pvan39rispg";
+  cargoSha256 = "0wyvly7aq4njlxnmgpfgbh08fxgqh85kw7d938pm6qxmj27zn4p2";
 
   meta = with lib; {
     description = "A cargo subcommand for creating GraphViz DOT files and dependency graphs";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ basvandijk ];
-    platforms = platforms.all;
   };
 }

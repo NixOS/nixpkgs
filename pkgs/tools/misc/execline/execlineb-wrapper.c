@@ -1,3 +1,10 @@
+/*
+ * A wrapper around execlineb, which provides all execline
+ * tools on execlineb’s PATH.
+ * It is implemented as a C program, because on non-Linux,
+ * nested shebang lines are not supported.
+ */
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -5,6 +12,7 @@
 #include <skalibs/djbunix.h>
 #include <skalibs/strerr2.h>
 #include <skalibs/env.h>
+#include <skalibs/exec.h>
 
 #define dienomem() strerr_diefu1sys(111, "stralloc_catb")
 
@@ -34,10 +42,10 @@ int main(int argc, char const* argv[], char const *const *envp)
   }
 
   // exec into execlineb and append path_modif to the environment
-  xpathexec_r_name(
+  xmexec_aem(
     EXECLINEB_PATH(),
     argv,
-    envp, env_len(envp),
+    envp,
     path_modif.s, path_modif.len
   );
 }

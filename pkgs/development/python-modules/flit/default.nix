@@ -1,16 +1,14 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, isPy3k
+, fetchFromGitHub
 , docutils
 , requests
-, requests_download
-, zipfile36
-, pythonOlder
-, pytest_4
+, pytestCheckHook
 , testpath
 , responses
-, pytoml
+, flit-core
+, tomli
+, tomli-w
 }:
 
 # Flit is actually an application to build universal wheels.
@@ -20,29 +18,39 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "1.3";
-  disabled = !isPy3k;
+  version = "3.7.1";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6f6f0fb83c51ffa3a150fa41b5ac118df9ea4a87c2c06dff4ebf9adbe7b52b36";
+  src = fetchFromGitHub {
+    owner = "takluyver";
+    repo = "flit";
+    rev = version;
+    sha256 = "sha256-zKgaeK3fskz2TuHvIWlxBrdZIWfIJHhaqopZ3+V36wY=";
   };
 
-  propagatedBuildInputs = [ docutils requests requests_download pytoml ]
-    ++ lib.optional (pythonOlder "3.6") zipfile36;
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  checkInputs = [ pytest_4 testpath responses ];
+  propagatedBuildInputs = [
+    docutils
+    requests
+    flit-core
+    tomli
+    tomli-w
+  ];
 
-  # Disable test that needs some ini file.
-  # Disable test that wants hg
-  checkPhase = ''
-    HOME=$(mktemp -d) pytest -k "not test_invalid_classifier and not test_build_sdist"
-  '';
+  checkInputs = [ pytestCheckHook testpath responses ];
+
+  disabledTests = [
+    # needs some ini file.
+    "test_invalid_classifier"
+  ];
 
   meta = with lib; {
     description = "A simple packaging tool for simple packages";
-    homepage = https://github.com/takluyver/flit;
+    homepage = "https://github.com/pypa/flit";
     license = licenses.bsd3;
-    maintainers = [ maintainers.fridh ];
+    maintainers = with maintainers; [ fridh SuperSandro2000 ];
   };
 }

@@ -46,9 +46,11 @@ in
         https://www.jetbrains.com/help/youtrack/standalone/YouTrack-Java-Start-Parameters.html
         for more information.
       '';
-      example = {
-        "jetbrains.youtrack.overrideRootPassword" = "tortuga";
-      };
+      example = literalExpression ''
+        {
+          "jetbrains.youtrack.overrideRootPassword" = "tortuga";
+        }
+      '';
       type = types.attrsOf types.str;
     };
 
@@ -58,7 +60,7 @@ in
       '';
       type = types.package;
       default = pkgs.youtrack;
-      defaultText = "pkgs.youtrack";
+      defaultText = literalExpression "pkgs.youtrack";
     };
 
     port = mkOption {
@@ -126,6 +128,7 @@ in
         Type = "simple";
         User = "youtrack";
         Group = "youtrack";
+        Restart = "on-failure";
         ExecStart = ''${cfg.package}/bin/youtrack --J-Xmx${cfg.maxMemory} --J-XX:MaxMetaspaceSize=${cfg.maxMetaspaceSize} ${cfg.jvmOpts} ${cfg.address}:${toString cfg.port}'';
       };
     };

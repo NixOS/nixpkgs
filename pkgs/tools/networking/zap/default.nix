@@ -1,34 +1,42 @@
-{ stdenv, fetchFromGitHub, jdk, ant, runtimeShell }:
+{ lib, stdenv, fetchurl, jre, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "zap";
-  version = "2.7.0";
-  src = fetchFromGitHub {
-    owner = "zaproxy";
-    repo = "zaproxy";
-    rev =version;
-    sha256 = "1bz4pgq66v6kxmgj99llacm1d85vj8z78jlgc2z9hv0ha5i57y32";
+  version = "2.11.1";
+  src = fetchurl {
+    url = "https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}_Linux.tar.gz";
+    sha256 = "0b1qqrjm4m76djy0az9hnz3rqpz1qkql4faqmi7gkx33b1p6d0sz";
   };
 
-  buildInputs = [ jdk ant ];
+  buildInputs = [ jre ];
 
-  buildPhase = ''
-    cd build
-    echo -n "${version}" > version.txt
-    ant -f build.xml setup init  compile dist copy-source-to-build package-linux
-  '';
+  # From https://github.com/zaproxy/zaproxy/blob/master/zap/src/main/java/org/parosproxy/paros/Constant.java
+  version_tag = "2010000";
 
+  # Copying config and adding version tag before first use to avoid permission
+  # issues if zap tries to copy config on it's own.
   installPhase = ''
-    mkdir -p "$out/share"
-    tar xvf  "ZAP_${version}_Linux.tar.gz" -C "$out/share/"
-    mkdir -p "$out/bin"
-    echo "#!${runtimeShell}" > "$out/bin/zap"
-    echo \"$out/share/ZAP_${version}/zap.sh\" >> "$out/bin/zap"
-    chmod +x "$out/bin/zap"
+    mkdir -p "$out/bin" "$out/share"
+    cp -pR . "$out/share/${pname}/"
+
+    cat >> "$out/bin/${pname}" << EOF
+    #!${runtimeShell}
+    export PATH="${lib.makeBinPath [ jre ]}:\$PATH"
+    export JAVA_HOME='${jre}'
+    if ! [ -f "~/.ZAP/config.xml" ];then
+      mkdir -p "\$HOME/.ZAP"
+      head -n 2 $out/share/${pname}/xml/config.xml > "\$HOME/.ZAP/config.xml"
+      echo "<version>${version_tag}</version>" >> "\$HOME/.ZAP/config.xml"
+      tail -n +3 $out/share/${pname}/xml/config.xml >> "\$HOME/.ZAP/config.xml"
+    fi
+    exec "$out/share/${pname}/zap.sh"  "\$@"
+    EOF
+
+    chmod u+x  "$out/bin/${pname}"
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://www.owasp.org/index.php/ZAP;
+  meta = with lib; {
+    homepage = "https://www.owasp.org/index.php/ZAP";
     description = "Java application for web penetration testing";
     maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;

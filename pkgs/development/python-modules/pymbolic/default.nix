@@ -1,44 +1,47 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, matchpy
+, pytestCheckHook
+, pythonOlder
 , pytools
-, pytest
-, six
-, sympy
-, pexpect
-, symengine
 }:
 
 buildPythonPackage rec {
   pname = "pymbolic";
-  version = "2019.2";
+  version = "2022.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7507864a76574d72bf5732497b247661c6ad73bb277cd9c8aae09e90a62e05a";
+    hash = "sha256-tS9FHdC5gD4D3jMgrzt85XIwcAYcbSMcACFvbaQlkBI=";
   };
 
-  postConfigure = ''
-    substituteInPlace setup.py \
-      --replace "\"pytest>=2.3\"," ""
-  '';
-
-  checkInputs = [ sympy pexpect symengine pytest ];
   propagatedBuildInputs = [
     pytools
-    six
   ];
 
-  # too many tests fail
-  doCheck = false;
-  checkPhase = ''
-    pytest test
+  checkInputs = [
+    matchpy
+    pytestCheckHook
+  ];
+
+  postPatch = ''
+    # pytest is a test requirement not a run-time one
+      substituteInPlace setup.py \
+        --replace '"pytest>=2.3",' ""
   '';
+
+  pythonImportsCheck = [
+    "pymbolic"
+  ];
 
   meta = with lib; {
     description = "A package for symbolic computation";
-    homepage = https://mathema.tician.de/software/pymbolic;
+    homepage = "https://documen.tician.de/pymbolic/";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

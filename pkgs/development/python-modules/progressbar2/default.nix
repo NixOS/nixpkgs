@@ -1,45 +1,31 @@
-{ stdenv
+{ lib
 , python
 , buildPythonPackage
 , fetchPypi
-, pytest
 , python-utils
-, sphinx
-, flake8
-, pytestpep8
-, pytest-flakes
-, pytestcov
-, pytestcache
-, pytestrunner
-, freezegun
 }:
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "3.47.0";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7538d02045a1fd3aa2b2834bfda463da8755bd3ff050edc6c5ddff3bc616215f";
+    sha256 = "14d3165a1781d053ffaa117daf27cc706128d2ec1d2977fdb05b6bb079888013";
   };
 
   propagatedBuildInputs = [ python-utils ];
-  nativeBuildInputs = [ pytestrunner ];
-  checkInputs = [
-    pytest sphinx flake8 pytestpep8 pytest-flakes pytestcov
-    pytestcache freezegun
-  ];
-  # ignore tests on the nix wrapped setup.py and don't flake .eggs directory
-  checkPhase = ''
-    runHook preCheck
-    ${python.interpreter} setup.py test --addopts "--ignore=.eggs"
-    runHook postCheck
-  '';
 
-  meta = with stdenv.lib; {
-    homepage = https://progressbar-2.readthedocs.io/en/latest/;
+  # depends on unmaintained pytest-pep8
+  # https://github.com/WoLpH/python-progressbar/issues/241
+  doCheck = false;
+
+  pythonImportsCheck = [ "progressbar" ];
+
+  meta = with lib; {
+    homepage = "https://progressbar-2.readthedocs.io/en/latest/";
     description = "Text progressbar library for python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman ];
+    maintainers = with maintainers; [ ashgillman turion ];
   };
 }

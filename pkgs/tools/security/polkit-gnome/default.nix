@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, polkit, gtk3, pkgconfig, intltool }:
+{ lib, stdenv, fetchurl, polkit, gtk3, pkg-config, intltool }:
 stdenv.mkDerivation rec {
   pname = "polkit-gnome";
   version = "0.105";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ polkit gtk3 ];
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkg-config intltool ];
 
   configureFlags = [ "--disable-introspection" ];
 
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://gitlab.gnome.org/Archive/policykit-gnome";
     description = "A dbus session bus service that is used to bring up authentication dialogs";
-    license = stdenv.lib.licenses.lgpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [ phreedom ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

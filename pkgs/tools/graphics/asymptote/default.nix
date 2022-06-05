@@ -1,36 +1,44 @@
-{ stdenv, fetchFromGitHub, fetchurl
-, autoreconfHook, bison, glm, yacc, flex
+{ lib, stdenv, fetchFromGitHub, fetchurl, fetchpatch
+, autoreconfHook, bison, glm, flex
 , freeglut, ghostscriptX, imagemagick, fftw
 , boehmgc, libGLU, libGL, mesa, ncurses, readline, gsl, libsigsegv
 , python3Packages
-, zlib, perl
+, zlib, perl, curl
 , texLive, texinfo
 , darwin
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.61";
+  version = "2.67";
   pname = "asymptote";
 
   src = fetchFromGitHub {
     owner = "vectorgraphics";
     repo = pname;
     rev = version;
-    sha256 = "0nblcxqzaxv1286zl2fjkivgp478l0nf3m0wnk78rd99lscjlw71";
+    hash = "sha256-dMgsKBg6YQ3mdx3jFqjX4vZeizaier8+ZQUl4J6QXNE=";
   };
+
+  patches =
+    (lib.optional (lib.versionOlder version "2.68")
+      (fetchpatch {
+        url = "https://github.com/vectorgraphics/asymptote/commit/3361214340d58235f4dbb8f24017d0cd5d94da72.patch";
+        hash = "sha256-1RYMZcwbjBAM7aAXFBbwst0eozWYFtJ8HcicjXogS/w=";
+      }))
+  ;
 
   nativeBuildInputs = [
     autoreconfHook
     bison
     flex
-    yacc
+    bison
     texinfo
   ];
 
   buildInputs = [
     ghostscriptX imagemagick fftw
     boehmgc ncurses readline gsl libsigsegv
-    zlib perl
+    zlib perl curl
     texLive
   ] ++ (with python3Packages; [
     python
@@ -39,9 +47,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     glm
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.isLinux [
     freeglut libGLU libGL mesa.osmesa
-  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT Cocoa
   ]);
 
@@ -68,10 +76,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =  "A tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.raskin maintainers.peti ];
+    maintainers = [ maintainers.raskin ];
     broken = stdenv.isDarwin;  # https://github.com/vectorgraphics/asymptote/issues/69
     platforms = platforms.linux ++ platforms.darwin;
   };

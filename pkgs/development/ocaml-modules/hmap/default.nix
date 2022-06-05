@@ -13,7 +13,7 @@ in
 assert lib.versionOlder minimumSupportedOcamlVersion ocaml.version;
 
 stdenv.mkDerivation rec {
-	pname = "hmap";
+  pname = "hmap";
   version = "0.8.1";
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
@@ -22,7 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "10xyjy4ab87z7jnghy0wnla9wrmazgyhdwhr4hdmxxdn28dxn03a";
   };
 
-	buildInputs = [ ocaml ocamlbuild findlib topkg ];
+  nativeBuildInputs = [ ocaml ocamlbuild findlib topkg ];
+  buildInputs = [ topkg ];
+
+  strictDeps = true;
 
   inherit (topkg) installPhase;
 
@@ -33,9 +36,9 @@ stdenv.mkDerivation rec {
   checkPhase = "${topkg.run} test";
 
   meta = {
-		description = "Heterogeneous value maps for OCaml";
+    description = "Heterogeneous value maps for OCaml";
     homepage = "https://erratique.ch/software/hmap";
-		license = lib.licenses.isc;
-		maintainers = [ lib.maintainers.pmahoney ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.pmahoney ];
   };
 }

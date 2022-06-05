@@ -4,22 +4,23 @@
 
 stdenv.mkDerivation rec {
   pname = "xmrig";
-  version = "5.4.0";
+  version = "6.17.0";
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
-    sha256 = "1rwnlhzhasfa2iklrp897c0z7nvav2bz2z6nk41fvwwd3bsay2sf";
+    sha256 = "sha256-K8mN3Wzlay2Qgoo70mu3Bh4lXUXNDpXYt17aNnwWkIc=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libuv libmicrohttpd openssl hwloc ];
 
+  inherit donateLevel;
+
+  patches = [ ./donate-level.patch ];
   postPatch = ''
-    substituteInPlace src/donate.h \
-      --replace "kDefaultDonateLevel = 5;" "kDefaultDonateLevel = ${toString donateLevel};" \
-      --replace "kMinimumDonateLevel = 1;" "kMinimumDonateLevel = ${toString donateLevel};"
+    substituteAllInPlace src/donate.h
   '';
 
   installPhase = ''
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";
     license = licenses.gpl3Plus;

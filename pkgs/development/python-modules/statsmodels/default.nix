@@ -1,7 +1,7 @@
 { lib
-, self
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , nose
 , numpy
 , scipy
@@ -13,22 +13,25 @@
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.10.2";
+  version = "0.13.2";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9cd2194c6642a8754e85f9a6e6912cdf996bebf6ff715d3cc67f65dadfd37cc9";
+    sha256 = "sha256-d9wpLJk5wDakdvF3D50Il2sFQ32qIpko2nMjEUfN59Q=";
   };
 
-  checkInputs = with self; [ nose ];
-  propagatedBuildInputs = with self; [numpy scipy pandas patsy cython matplotlib];
+  nativeBuildInputs = [ cython ];
+  checkInputs = [ nose ];
+  propagatedBuildInputs = [ numpy scipy pandas patsy matplotlib ];
 
   # Huge test suites with several test failures
   doCheck = false;
+  pythonImportsCheck = [ "statsmodels" ];
 
   meta = {
     description = "Statistical computations and models for use with SciPy";
-    homepage = https://www.github.com/statsmodels/statsmodels;
+    homepage = "https://www.github.com/statsmodels/statsmodels";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

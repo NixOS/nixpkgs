@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, mkDerivation
-, pkgconfig, qtbase, qttools, qmake, qtmultimedia, qtx11extras, alsaLib, libv4l, libXrandr
+{ lib, fetchFromGitHub, mkDerivation
+, pkg-config, qtbase, qttools, qmake, qtmultimedia, qtx11extras, alsa-lib, libv4l, libXrandr
 , ffmpeg
 }:
 
@@ -15,9 +15,9 @@ mkDerivation rec {
     sha256  = "1a85vbsi53mhzva49smqwcs61c51wv3ic410nvb9is9nlsbifwan";
   };
 
-  nativeBuildInputs = [ pkgconfig qmake ];
+  nativeBuildInputs = [ pkg-config qmake ];
   buildInputs = [
-    alsaLib
+    alsa-lib
     libv4l
     qtbase
     qtmultimedia
@@ -30,6 +30,10 @@ mkDerivation rec {
     ./ffmpeg-out-of-box.patch
   ];
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: alsa_device.o:(.bss+0x8): multiple definition of `rc'; QvkAlsaDevice.o:(.bss+0x8): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   preConfigure = ''
     sed -i 's/lrelease-qt5/lrelease/g' vokoscreen.pro
   '';
@@ -38,9 +42,9 @@ mkDerivation rec {
     substituteInPlace settings/QvkSettings.cpp --subst-var-by ffmpeg ${ffmpeg}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Simple GUI screencast recorder, using ffmpeg";
-    homepage = "http://linuxecke.volkoh.de/vokoscreen/vokoscreen.html";
+    homepage = "https://linuxecke.volkoh.de/vokoscreen/vokoscreen.html";
     longDescription = ''
       vokoscreen is an easy to use screencast creator to record
       educational videos, live recordings of browser, installation,

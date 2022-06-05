@@ -1,41 +1,48 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ lib, stdenv, fetchurl, python3, installShellFiles }:
 
 stdenv.mkDerivation rec {
-    version = "2.3";
-    pname = "weather";
+  version = "2.4.2";
+  pname = "weather";
 
-    src = fetchurl {
-        url = "http://fungi.yuggoth.org/weather/src/${pname}-${version}.tar.xz";
-        sha256 = "0inij30prqqcmzjwcmfzjjn0ya5klv18qmajgxipz1jr3lpqs546";
-    };
+  src = fetchurl {
+    url = "http://fungi.yuggoth.org/weather/src/${pname}-${version}.tar.xz";
+    sha256 = "sha256-qJl5rFDk31Fm+tmR6+Iiihcx6qyd9alHz2L672pNJsc=";
+  };
 
-    nativeBuildInputs = [ pythonPackages.wrapPython ];
+  nativeBuildInputs = [
+    installShellFiles
+    python3.pkgs.wrapPython
+  ];
 
-    buildInputs = [ pythonPackages.python ];
+  dontConfigure = true;
+  dontBuild = true;
 
-    phases = [ "unpackPhase" "installPhase" ];
+  # Upstream doesn't provide a setup.py or alike, so we follow:
+  # http://fungi.yuggoth.org/weather/doc/install.rst#id3
+  installPhase = ''
+    site_packages=$out/${python3.sitePackages}
+    install -Dt $out/bin -m 755 weather
+    install -Dt $site_packages weather.py
+    install -Dt $out/share/weather-util \
+      airports overrides.{conf,log} places slist stations \
+      zctas zlist zones
+    install -Dt $out/etc weatherrc
 
-    installPhase = ''
-        site_packages=$out/${pythonPackages.python.sitePackages}
-        mkdir -p $out/{share/{man,weather-util},bin,etc} $site_packages
-        cp weather $out/bin/
-        cp weather.py $site_packages/
-        chmod +x $out/bin/weather
-        cp airports overrides.{conf,log} places slist stations zctas zlist zones $out/share/weather-util/
-        cp weatherrc $out/etc
-        cp weather.1 weatherrc.5 $out/share/man/
-        sed -i \
-          -e "s|/etc|$out/etc|g" \
-          -e "s|else: default_setpath = \".:~/.weather|&:$out/share/weather-util|" \
-          $site_packages/weather.py
-        wrapPythonPrograms
-    '';
+    sed -i \
+      -e "s|/etc|$out/etc|g" \
+      -e "s|else: default_setpath = \".:~/.weather|&:$out/share/weather-util|" \
+      $site_packages/weather.py
 
-    meta = {
-        homepage = http://fungi.yuggoth.org/weather;
-        description = "Quick access to current weather conditions and forecasts";
-        license = stdenv.lib.licenses.isc;
-        maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
-        platforms = with stdenv.lib.platforms; linux; # my only platform
-    };
+    wrapPythonPrograms
+
+    installManPage weather.1 weatherrc.5
+  '';
+
+  meta = with lib; {
+    homepage = "http://fungi.yuggoth.org/weather";
+    description = "Quick access to current weather conditions and forecasts";
+    license = licenses.isc;
+    maintainers = [ maintainers.matthiasbeyer ];
+    platforms = platforms.unix;
+  };
 }

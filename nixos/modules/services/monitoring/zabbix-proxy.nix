@@ -1,12 +1,14 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 let
   cfg = config.services.zabbixProxy;
+  opt = options.services.zabbixProxy;
   pgsql = config.services.postgresql;
   mysql = config.services.mysql;
 
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption;
-  inherit (lib) attrValues concatMapStringsSep literalExample optional optionalAttrs optionalString types;
+  inherit (lib) mkAfter mkDefault mkEnableOption mkIf mkMerge mkOption;
+  inherit (lib) attrValues concatMapStringsSep getName literalExpression optional optionalAttrs optionalString types;
+  inherit (lib.generators) toKeyValue;
 
   user = "zabbix";
   group = "zabbix";
@@ -19,24 +21,7 @@ let
     paths = attrValues cfg.modules;
   };
 
-  configFile = pkgs.writeText "zabbix_proxy.conf" ''
-    LogType = console
-    ListenIP = ${cfg.listen.ip}
-    ListenPort = ${toString cfg.listen.port}
-    Server = ${cfg.server}
-    # TODO: set to cfg.database.socket if database type is pgsql?
-    DBHost = ${optionalString (cfg.database.createLocally != true) cfg.database.host}
-    ${optionalString (cfg.database.createLocally != true) "DBPort = ${cfg.database.port}"}
-    DBName = ${cfg.database.name}
-    DBUser = ${cfg.database.user}
-    ${optionalString (cfg.database.passwordFile != null) "Include ${passwordFile}"}
-    ${optionalString (mysqlLocal && cfg.database.socket != null) "DBSocket = ${cfg.database.socket}"}
-    SocketDir = ${runtimeDir}
-    FpingLocation = /run/wrappers/bin/fping
-    ${optionalString (cfg.modules != {}) "LoadModulePath = ${moduleEnv}/lib"}
-    ${concatMapStringsSep "\n" (name: "LoadModule = ${name}") (builtins.attrNames cfg.modules)}
-    ${cfg.extraConfig}
-  '';
+  configFile = pkgs.writeText "zabbix_proxy.conf" (toKeyValue { listsAsDuplicateKeys = true; } cfg.settings);
 
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
@@ -44,6 +29,10 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "zabbixProxy" "extraConfig" ] "Use services.zabbixProxy.settings instead.")
+  ];
+
   # interface
 
   options = {
@@ -64,14 +53,14 @@ in
           if cfg.database.type == "mysql" then pkgs.zabbix.proxy-mysql
           else if cfg.database.type == "pgsql" then pkgs.zabbix.proxy-pgsql
           else pkgs.zabbix.proxy-sqlite;
-        defaultText = "pkgs.zabbix.proxy-pgsql";
+        defaultText = literalExpression "pkgs.zabbix.proxy-pgsql";
         description = "The Zabbix package to use.";
       };
 
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = with pkgs; [ nettools nmap traceroute ];
-        defaultText = "[ nettools nmap traceroute ]";
+        defaultText = literalExpression "[ nettools nmap traceroute ]";
         description = ''
           Packages to be added to the Zabbix <envar>PATH</envar>.
           Typically used to add executables for scripts, but can be anything.
@@ -82,7 +71,7 @@ in
         type = types.attrsOf types.package;
         description = "A set of modules to load.";
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {
               name = "zabbix-dummy-module-''${cfg.package.version}";
@@ -115,13 +104,18 @@ in
         port = mkOption {
           type = types.int;
           default = if cfg.database.type == "mysql" then mysql.port else pgsql.port;
+          defaultText = literalExpression ''
+            if config.${opt.database.type} == "mysql"
+            then config.${options.services.mysql.port}
+            else config.${options.services.postgresql.port}
+          '';
           description = "Database host port.";
         };
 
         name = mkOption {
           type = types.str;
           default = if cfg.database.type == "sqlite" then "${stateDir}/zabbix.db" else "zabbix";
-          defaultText = "zabbix";
+          defaultText = literalExpression "zabbix";
           description = "Database name.";
         };
 
@@ -182,15 +176,19 @@ in
         '';
       };
 
-      # TODO: for bonus points migrate this to https://github.com/NixOS/rfcs/pull/42
-      extraConfig = mkOption {
-        default = "";
-        type = types.lines;
+      settings = mkOption {
+        type = with types; attrsOf (oneOf [ int str (listOf str) ]);
+        default = {};
         description = ''
-          Configuration that is injected verbatim into the configuration file. Refer to
+          Zabbix Proxy configuration. Refer to
           <link xlink:href="https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_proxy"/>
           for details on supported values.
         '';
+        example = {
+          CacheSize = "1G";
+          SSHKeyLocation = "/var/lib/zabbix/.ssh";
+          StartPingers = 32;
+        };
       };
 
     };
@@ -213,6 +211,26 @@ in
       }
     ];
 
+    services.zabbixProxy.settings = mkMerge [
+      {
+        LogType = "console";
+        ListenIP = cfg.listen.ip;
+        ListenPort = cfg.listen.port;
+        Server = cfg.server;
+        # TODO: set to cfg.database.socket if database type is pgsql?
+        DBHost = optionalString (cfg.database.createLocally != true) cfg.database.host;
+        DBName = cfg.database.name;
+        DBUser = cfg.database.user;
+        SocketDir = runtimeDir;
+        FpingLocation = "/run/wrappers/bin/fping";
+        LoadModule = builtins.attrNames cfg.modules;
+      }
+      (mkIf (cfg.database.createLocally != true) { DBPort = cfg.database.port; })
+      (mkIf (cfg.database.passwordFile != null) { Include = [ "${passwordFile}" ]; })
+      (mkIf (mysqlLocal && cfg.database.socket != null) { DBSocket = cfg.database.socket; })
+      (mkIf (cfg.modules != {}) { LoadModulePath = "${moduleEnv}/lib"; })
+    ];
+
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.listen.port ];
     };
@@ -220,13 +238,14 @@ in
     services.mysql = optionalAttrs mysqlLocal {
       enable = true;
       package = mkDefault pkgs.mariadb;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }
-      ];
     };
+
+    systemd.services.mysql.postStart = mkAfter (optionalString mysqlLocal ''
+      ( echo "CREATE DATABASE IF NOT EXISTS \`${cfg.database.name}\` CHARACTER SET utf8 COLLATE utf8_bin;"
+        echo "CREATE USER IF NOT EXISTS '${cfg.database.user}'@'localhost' IDENTIFIED WITH ${if (getName config.services.mysql.package == getName pkgs.mariadb) then "unix_socket" else "auth_socket"};"
+        echo "GRANT ALL PRIVILEGES ON \`${cfg.database.name}\`.* TO '${cfg.database.user}'@'localhost';"
+      ) | ${config.services.mysql.package}/bin/mysql -N
+    '');
 
     services.postgresql = optionalAttrs pgsqlLocal {
       enable = true;
@@ -249,7 +268,12 @@ in
     };
 
     security.wrappers = {
-      fping.source = "${pkgs.fping}/bin/fping";
+      fping =
+        { setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.fping}/bin/fping";
+        };
     };
 
     systemd.services.zabbix-proxy = {

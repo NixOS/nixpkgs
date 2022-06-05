@@ -20,7 +20,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.trickster;
-        defaultText = "pkgs.trickster";
+        defaultText = literalExpression "pkgs.trickster";
         description = ''
           Package that should be used for trickster.
         '';
@@ -106,7 +106,8 @@ in
         Restart = "always";
       };
     };
+  };
 
-  };  
+  meta.maintainers = with maintainers; [ _1000101 ];
+
 }
-

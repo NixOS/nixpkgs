@@ -1,54 +1,102 @@
-{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja
-, wayland, wlroots, gtkmm3, libinput, libsigcxx, jsoncpp, fmt, scdoc, spdlog, gtk-layer-shell
-, traySupport  ? true,  libdbusmenu-gtk3
-, pulseSupport ? false, libpulseaudio
-, nlSupport    ? true,  libnl
-, udevSupport  ? true,  udev
-, swaySupport  ? true,  sway
-, mpdSupport   ? true,  mpd_clientlib
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, pkg-config
+, ninja
+, wrapGAppsHook
+, wayland
+, wlroots
+, gtkmm3
+, libsigcxx
+, jsoncpp
+, scdoc
+, spdlog
+, gtk-layer-shell
+, howard-hinnant-date
+, libxkbcommon
+, runTests        ? true,  catch2
+, traySupport     ? true,  libdbusmenu-gtk3
+, pulseSupport    ? true,  libpulseaudio
+, sndioSupport    ? true,  sndio
+, nlSupport       ? true,  libnl
+, udevSupport     ? true,  udev
+, evdevSupport    ? true,  libevdev
+, swaySupport     ? true,  sway
+, mpdSupport      ? true,  libmpdclient
+, rfkillSupport   ? true
+, upowerSupport   ? true, upower
+, withMediaPlayer ? false, glib, gobject-introspection, python3, python38Packages, playerctl
 }:
-  stdenv.mkDerivation rec {
-    pname = "waybar";
-    version = "0.9.0";
 
-    src = fetchFromGitHub {
-      owner = "Alexays";
-      repo = "Waybar";
-      rev = version;
-      sha256 = "1w8a6jih872ry288k8ic6mjfi9ccf1jwc24wnh9p5c7w73247c2c";
-    };
+stdenv.mkDerivation rec {
+  pname = "waybar";
+  version = "0.9.13";
 
-    nativeBuildInputs = [
-      meson ninja pkgconfig scdoc
-    ];
+  src = fetchFromGitHub {
+    owner = "Alexays";
+    repo = "Waybar";
+    rev = version;
+    sha256 = "sha256-Uzg2IrCDD8uUdGAveA8IjvonJnnnobOrAgjGG1kQ3pU=";
+  };
 
-    buildInputs = with stdenv.lib;
-      [ wayland wlroots gtkmm3 libinput libsigcxx jsoncpp fmt spdlog gtk-layer-shell ]
-      ++ optional  traySupport  libdbusmenu-gtk3
-      ++ optional  pulseSupport libpulseaudio
-      ++ optional  nlSupport    libnl
-      ++ optional  udevSupport  udev
-      ++ optional  swaySupport  sway
-      ++ optional  mpdSupport   mpd_clientlib;
+  nativeBuildInputs = [
+    meson ninja pkg-config scdoc wrapGAppsHook
+  ] ++ lib.optional withMediaPlayer gobject-introspection;
 
-    mesonFlags = (stdenv.lib.mapAttrsToList
-      (option: enable: "-D${option}=${if enable then "enabled" else "disabled"}")
-      {
-        dbusmenu-gtk = traySupport;
-        pulseaudio = pulseSupport;
-        libnl = nlSupport;
-        libudev = udevSupport;
-        mpd = mpdSupport;
-      }
-    ) ++ [
-      "-Dout=${placeholder "out"}"
-      "-Dsystemd=disabled"
-    ];
+  propagatedBuildInputs = lib.optionals withMediaPlayer [
+    glib
+    playerctl
+    python38Packages.pygobject3
+  ];
+  strictDeps = false;
 
-    meta = with stdenv.lib; {
-      description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";
-      license = licenses.mit;
-      maintainers = with maintainers; [ FlorianFranzen minijackson synthetica ];
-      platforms = platforms.unix;
-    };
-  }
+  buildInputs = with lib;
+    [ wayland wlroots gtkmm3 libsigcxx jsoncpp spdlog gtk-layer-shell howard-hinnant-date libxkbcommon ]
+    ++ optional  traySupport   libdbusmenu-gtk3
+    ++ optional  pulseSupport  libpulseaudio
+    ++ optional  sndioSupport  sndio
+    ++ optional  nlSupport     libnl
+    ++ optional  udevSupport   udev
+    ++ optional  evdevSupport  libevdev
+    ++ optional  swaySupport   sway
+    ++ optional  mpdSupport    libmpdclient
+    ++ optional  upowerSupport upower;
+
+  checkInputs = [ catch2 ];
+  doCheck = runTests;
+
+  mesonFlags = (lib.mapAttrsToList
+    (option: enable: "-D${option}=${if enable then "enabled" else "disabled"}")
+    {
+      dbusmenu-gtk = traySupport;
+      pulseaudio = pulseSupport;
+      sndio = sndioSupport;
+      libnl = nlSupport;
+      libudev = udevSupport;
+      mpd = mpdSupport;
+      rfkill = rfkillSupport;
+      upower_glib = upowerSupport;
+      tests = runTests;
+    }
+  ) ++ [
+    "-Dsystemd=disabled"
+    "-Dgtk-layer-shell=enabled"
+    "-Dman-pages=enabled"
+  ];
+
+  preFixup = lib.optionalString withMediaPlayer ''
+      cp $src/resources/custom_modules/mediaplayer.py $out/bin/waybar-mediaplayer.py
+
+      wrapProgram $out/bin/waybar-mediaplayer.py \
+        --prefix PYTHONPATH : "$PYTHONPATH:$out/${python3.sitePackages}"
+    '';
+
+  meta = with lib; {
+    description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";
+    license = licenses.mit;
+    maintainers = with maintainers; [ FlorianFranzen minijackson synthetica lovesegfault ];
+    platforms = platforms.unix;
+    homepage = "https://github.com/alexays/waybar";
+  };
+}

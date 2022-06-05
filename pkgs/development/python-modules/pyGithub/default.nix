@@ -1,25 +1,43 @@
-{ stdenv, fetchFromGitHub
-, buildPythonPackage, python-jose, pyjwt, requests, deprecated, httpretty }:
+{ lib
+, buildPythonPackage
+, cryptography
+, deprecated
+, fetchFromGitHub
+, pynacl
+, pyjwt
+, pythonOlder
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "PyGithub";
-  version = "1.45";
+  version = "1.55";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "PyGithub";
     repo = "PyGithub";
     rev = "v${version}";
-    sha256 = "1aiyqwdxpcr7yzz7aqmmjn1g2ajs5bpbln4sax5zw19dqi6qgp9z";
+    sha256 = "sha256-PuGCBFSbM91NtSzuyf0EQUr3LiuHDq90OwkSf53rSyA=";
   };
 
-  propagatedBuildInputs = [ python-jose pyjwt requests deprecated httpretty ];
-  doCheck = false;
+  propagatedBuildInputs = [
+    cryptography
+    deprecated
+    pynacl
+    pyjwt
+    requests
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/PyGithub/PyGithub;
-    description = "A Python (2 and 3) library to access the GitHub API v3";
+  # Test suite makes REST calls against github.com
+  doCheck = false;
+  pythonImportsCheck = [ "github" ];
+
+  meta = with lib; {
+    description = "Python library to access the GitHub API v3";
+    homepage = "https://github.com/PyGithub/PyGithub";
     platforms = platforms.all;
-    license = licenses.gpl3;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ jhhuh ];
   };
 }

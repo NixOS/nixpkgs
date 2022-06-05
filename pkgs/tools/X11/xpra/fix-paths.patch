@@ -1,29 +1,60 @@
-gdiff --git a/setup.py b/setup.py
-index 8d3df15..6156206 100755
+diff --git a/setup.py b/setup.py
+index fc67abb50a..c29db3a6d2 100755
 --- a/setup.py
 +++ b/setup.py
-@@ -2359,10 +2359,7 @@ if v4l2_ENABLED:
-     v4l2_pkgconfig = pkgconfig()
-     #fuly warning: cython makes this difficult,
-     #we have to figure out if "device_caps" exists in the headers:
--    ENABLE_DEVICE_CAPS = False
--    if os.path.exists("/usr/include/linux/videodev2.h"):
--        hdata = open("/usr/include/linux/videodev2.h").read()
--        ENABLE_DEVICE_CAPS = hdata.find("device_caps")>=0
-+    ENABLE_DEVICE_CAPS = True
-     kwargs = {"ENABLE_DEVICE_CAPS" : ENABLE_DEVICE_CAPS}
-     make_constants("xpra", "codecs", "v4l2", "constants", **kwargs)
-     cython_add(Extension("xpra.codecs.v4l2.pusher",
-diff --git a/xpra/x11/bindings/keyboard_bindings.pyx b/xpra/x11/bindings/keyboard_bindings.pyx
-index bd7023d..064c6b5 100644
---- a/xpra/x11/bindings/keyboard_bindings.pyx
-+++ b/xpra/x11/bindings/keyboard_bindings.pyx
-@@ -21,7 +21,7 @@ from libc.stdlib cimport free, malloc
-
- DEF PATH_MAX = 1024
- DEF DFLT_XKB_RULES_FILE = b"base"
--DEF DFLT_XKB_CONFIG_ROOT = b"/usr/share/X11/xkb"
-+DEF DFLT_XKB_CONFIG_ROOT = b"@xkeyboardconfig@/share/X11/xkb"
-
- ###################################
- # Headers, python magic
+@@ -2348,17 +2348,7 @@ if v4l2_ENABLED:
+             break
+     constants_pxi = "xpra/codecs/v4l2/constants.pxi"
+     if not os.path.exists(videodev2_h) or should_rebuild(videodev2_h, constants_pxi):
+-        ENABLE_DEVICE_CAPS = 0
+-        if os.path.exists(videodev2_h):
+-            try:
+-                with subprocess.Popen("cpp -fpreprocessed %s | grep -q device_caps" % videodev2_h,
+-                                     shell=True) as proc:
+-                    ENABLE_DEVICE_CAPS = proc.wait()==0
+-            except OSError:
+-                with open(videodev2_h) as f:
+-                    hdata = f.read()
+-                ENABLE_DEVICE_CAPS = int(hdata.find("device_caps")>=0)
+-                print("failed to detect device caps, assuming off")
++        ENABLE_DEVICE_CAPS = 1
+         with open(constants_pxi, "wb") as f:
+             f.write(b"DEF ENABLE_DEVICE_CAPS=%i" % ENABLE_DEVICE_CAPS)
+     add_cython_ext("xpra.codecs.v4l2.pusher",
+diff --git a/xpra/x11/fakeXinerama.py b/xpra/x11/fakeXinerama.py
+index d5c1c8bb10..88c77e8142 100755
+--- a/xpra/x11/fakeXinerama.py
++++ b/xpra/x11/fakeXinerama.py
+@@ -22,31 +22,7 @@ fakeXinerama_config_files = [
+            ]
+ 
+ def find_libfakeXinerama():
+-    libname = "fakeXinerama"
+-    try:
+-        from ctypes.util import find_library
+-        flibname = find_library("fakeXinerama")
+-        if flibname:
+-            libname = flibname
+-    except Exception:
+-        pass
+-    if POSIX:
+-        for lib_dir in os.environ.get("LD_LIBRARY_PATH", "/usr/lib").split(os.pathsep):
+-            lib_path = os.path.join(lib_dir, libname)
+-            if not os.path.exists(lib_dir):
+-                continue
+-            if os.path.exists(lib_path) and os.path.isfile(lib_path):
+-                return lib_path
+-    if LINUX:
+-        try:
+-            libpath = find_lib_ldconfig("fakeXinerama")
+-            if libpath:
+-                return libpath
+-        except Exception as e:
+-            log("find_libfakeXinerama()", exc_info=True)
+-            log.error("Error: cannot launch ldconfig -p to locate libfakeXinerama:")
+-            log.error(" %s", e)
+-    return find_lib("libfakeXinerama.so.1")
++    return "@libfakeXinerama@/lib/libfakeXinerama.so.1"
+ 
+ current_xinerama_config = None
+ 

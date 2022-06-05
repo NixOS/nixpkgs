@@ -1,31 +1,65 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, isPyPy
-, lazy-object-proxy, six, wrapt, typing, typed-ast
-, pytestrunner, pytest
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, pythonOlder
+, isPyPy
+, lazy-object-proxy
+, wrapt
+, typing-extensions
+, typed-ast
+, pytestCheckHook
+, setuptools-scm
+, pylint
 }:
 
 buildPythonPackage rec {
   pname = "astroid";
-  version = "2.3.3";
+  version = "2.11.2"; # Check whether the version is compatible with pylint
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.6.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "71ea07f44df9568a75d0f354c49143a4575d90645e9fead6dfb52c26a85ed13a";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-adnvJCchsMWQxsIlenndUb6Mw1MgCNAanZcTmssmsEc=";
   };
 
-  # From astroid/__pkginfo__.py
-  propagatedBuildInputs = [ lazy-object-proxy six wrapt ]
-    ++ lib.optional (pythonOlder "3.5") typing
-    ++ lib.optional (!isPyPy) typed-ast;
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
-  checkInputs = [ pytestrunner pytest ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    lazy-object-proxy
+    wrapt
+  ] ++ lib.optionals (pythonOlder "3.10") [
+    typing-extensions
+  ] ++ lib.optional (!isPyPy && pythonOlder "3.8") typed-ast;
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # assert (1, 1) == (1, 16)
+    "test_end_lineno_string"
+  ] ++ lib.optionals (pythonAtLeast "3.10") [
+    # AssertionError: Lists differ: ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'Protocol', 'object'] != ['ABC[16 chars]yBase', 'Final', 'Generic', 'MyProtocol', 'object']
+    "test_mro_typing_extensions"
+  ];
+
+  passthru.tests = {
+    inherit pylint;
+  };
 
   meta = with lib; {
     description = "An abstract syntax tree for Python with inference support";
-    homepage = https://github.com/PyCQA/astroid;
-    license = licenses.lgpl2;
+    homepage = "https://github.com/PyCQA/astroid";
+    license = licenses.lgpl21Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ ];
   };
 }

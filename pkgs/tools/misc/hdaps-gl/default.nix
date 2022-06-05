@@ -1,26 +1,23 @@
-{ stdenv, fetchzip, freeglut, libGL, libGLU }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, freeglut, libGL, libGLU }:
 
-let version = "0.0.5"; in
-stdenv.mkDerivation {
-      pname = "hdaps-gl";
-      inherit version;
-      src = fetchzip {
-            url = "mirror://sourceforge/project/hdaps/hdaps-gl/hdaps-gl-${version}/hdaps-gl-${version}.tar.gz";
-            sha256 = "16fk4k0lvr4c95vd6c7qdylcqa1h5yjp3xm4xwipdjbp0bvsgxq4";
-      };
+stdenv.mkDerivation rec {
+  pname = "hdaps-gl";
+  version = "0.0.7";
+  src = fetchFromGitHub {
+    owner = "linux-thinkpad";
+    repo = "hdaps-gl";
+    rev = version;
+    sha256 = "0jywsrcr1wzkjig5cvz014c3r026sbwscbkv7zh1014lkjm0kyyh";
+  };
 
-      buildInputs = [ freeglut libGL libGLU ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ freeglut libGL libGLU ];
 
-      # the Makefile has no install target
-      installPhase = ''
-            install -Dt $out/bin ./hdaps-gl
-      '';
-
-      meta = with stdenv.lib; {
-            description = "GL-based laptop model that rotates in real-time via hdaps";
-            homepage = https://sourceforge.net/projects/hdaps/;
-            license = licenses.gpl2;
-            platforms = platforms.linux;
-            maintainers = [ maintainers.symphorien ];
-      };
+  meta = with lib; {
+    description = "GL-based laptop model that rotates in real-time via hdaps";
+    homepage = "https://github.com/linux-thinkpad/hdaps-gl";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.symphorien ];
+  };
 }

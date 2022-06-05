@@ -1,39 +1,63 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pythonOlder
-, dbus-python
-, entrypoints
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, setuptools-scm
 , importlib-metadata
-, pytest
-, pytest-flake8
+, dbus-python
+, jeepney
 , secretstorage
-, setuptools_scm
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "20.0.1";
-  disabled = isPy27;
+  version = "23.5.1";
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "963bfa7f090269d30bdc5e25589e5fd9dad2cf2a7c6f176a7f2386910e5d0d8d";
+    hash = "sha256-3uUCzfGKmCEb70KO6hFFajPABxiy8IUk/Vcnx/Qkv/0=";
   };
 
-  nativeBuildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  checkInputs = [ pytest pytest-flake8 ];
+  propagatedBuildInputs = [
+    # this should be optional, however, it has a different API
+    importlib-metadata # see https://github.com/jaraco/keyring/issues/503#issuecomment-798973205
+  ] ++ lib.optionals stdenv.isLinux [
+    jeepney
+    secretstorage
+  ];
 
-  propagatedBuildInputs = [ dbus-python entrypoints ]
-  ++ lib.optional stdenv.isLinux secretstorage
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  pythonImportsCheck = [
+    "keyring"
+    "keyring.backend"
+  ];
 
-  # checks try to access a darwin path on linux
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # E       ValueError: too many values to unpack (expected 1)
+    "test_entry_point"
+  ];
+
+  disabledTestPaths = [
+    "tests/backends/test_macOS.py"
+  ];
 
   meta = with lib; {
     description = "Store and access your passwords safely";
-    homepage    = "https://pypi.python.org/pypi/keyring";
-    license     = licenses.psfl;
-    maintainers = with maintainers; [ lovek323 ];
+    homepage    = "https://github.com/jaraco/keyring";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ lovek323 dotlambda ];
     platforms   = platforms.unix;
   };
 }

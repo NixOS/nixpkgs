@@ -2,7 +2,7 @@
 
 let
   pname = "source-han-code-jp";
-  version = "2.011R";
+  version = "2.012R";
 in fetchzip {
   name = "${pname}-${version}";
 
@@ -13,13 +13,13 @@ in fetchzip {
     unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
 
-  sha256 = "184vrjkymcm29k1cx00cdvjchzqr1w17925lmh85f0frx7vwljcd";
+  sha256 = "16y5as1k864ghy3vzp8svr3q0sw57rv53za3f48700ksvxz5pwry";
 
   meta = {
     description = "A monospaced Latin font suitable for coding";
     maintainers = with lib.maintainers; [ mt-caret ];
     platforms = with lib.platforms; all;
-    homepage = https://blogs.adobe.com/CCJKType/2015/06/source-han-code-jp.html;
+    homepage = "https://blogs.adobe.com/CCJKType/2015/06/source-han-code-jp.html";
     license = lib.licenses.ofl;
   };
 }

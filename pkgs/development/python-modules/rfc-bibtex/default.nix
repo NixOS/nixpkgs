@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchPypi, isPy3k }:
+{ lib, buildPythonApplication, fetchPypi, isPy3k }:
 
 buildPythonApplication rec {
   pname = "rfc-bibtex";
@@ -11,8 +11,8 @@ buildPythonApplication rec {
 
   disabled = !isPy3k;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/iluxonchik/rfc-bibtex/;
+  meta = with lib; {
+    homepage = "https://github.com/iluxonchik/rfc-bibtex/";
     description = "Generate Bibtex entries for IETF RFCs and Internet-Drafts";
     license = licenses.mit;
     maintainers = with maintainers; [ teto ];

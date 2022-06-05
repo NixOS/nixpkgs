@@ -1,32 +1,50 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
-, pep8, nose, unittest2, docutils, blockdiag, reportlab }:
+{ lib
+, blockdiag
+, buildPythonPackage
+, fetchFromGitHub
+, nose
+, pytestCheckHook
+, pythonOlder
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "actdiag";
-  version = "0.5.4";
+  version = "3.0.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "983071777d9941093aaef3be1f67c198a8ac8d2bba264cdd1f337ca415ab46af";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "blockdiag";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-WmprkHOgvlsOIg8H77P7fzEqxGnj6xaL7Df7urRkg3o=";
   };
 
-  patches = fetchpatch {
-    name = "drop_test_pep8.py.patch";
-    url = https://bitbucket.org/blockdiag/actdiag/commits/c1f2ed5947a1e93291f5860e4e30cee098bd635d/raw;
-    sha256 = "1zxzwb0fvwlc8xgs45fx65341sjhb3h6l2p6rdj6i127vg1hsxb4";
-  };
+  propagatedBuildInputs = [
+    blockdiag
+    setuptools
+  ];
 
-  buildInputs = [ pep8 nose unittest2 docutils ];
+  checkInputs = [
+    nose
+    pytestCheckHook
+  ];
 
-  propagatedBuildInputs = [ blockdiag ];
+  pytestFlagsArray = [
+    "src/actdiag/tests/"
+  ];
 
-  checkInputs = [ reportlab ];
+  pythonImportsCheck = [
+    "actdiag"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Generate activity-diagram image from spec-text file (similar to Graphviz)";
-    homepage = http://blockdiag.com/;
+    homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor SuperSandro2000 ];
   };
 }

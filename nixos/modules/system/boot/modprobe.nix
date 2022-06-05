@@ -28,7 +28,7 @@ with lib;
         Any additional configuration to be appended to the generated
         <filename>modprobe.conf</filename>.  This is typically used to
         specify module options.  See
-        <citerefentry><refentrytitle>modprobe.conf</refentrytitle>
+        <citerefentry><refentrytitle>modprobe.d</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
       type = types.lines;
@@ -51,6 +51,8 @@ with lib;
         ${config.boot.extraModprobeConfig}
       '';
     environment.etc."modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
+
+    environment.etc."modprobe.d/systemd.conf".source = "${config.systemd.package}/lib/modprobe.d/systemd.conf";
 
     environment.systemPackages = [ pkgs.kmod ];
 

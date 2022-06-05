@@ -1,31 +1,35 @@
-{ stdenv, fetchurl, pkgconfig, scons, qt4, lash, libjack2, jack ? libjack2 }:
+{ mkDerivation, lib, fetchFromGitHub, pkg-config, sconsPackages, qtbase, lash, libjack2, jack ? libjack2, alsa-lib }:
 
-stdenv.mkDerivation {
-  name = "jackmix-0.5.2";
-  src = fetchurl {
-    url = https://github.com/kampfschlaefer/jackmix/archive/v0.5.2.tar.gz;
-    sha256 = "18f5v7g66mgarhs476frvayhch7fy4nyjf2xivixc061ipn0m82j";
+mkDerivation rec {
+  pname = "jackmix";
+  version = "0.6.0";
+
+  src = fetchFromGitHub {
+    owner = "kampfschlaefer";
+    repo = "jackmix";
+    rev = version;
+    sha256 = "0p59411vk38lccn24r7nih10jpgg9i46yc26zpc3x13amxwwpd4h";
   };
 
   patches = [ ./no_error.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ sconsPackages.scons_3_1_2 pkg-config ];
   buildInputs = [
-    scons
-    qt4
+    qtbase
     lash
     jack
+    alsa-lib
   ];
 
   installPhase = ''
     install -D jackmix/jackmix $out/bin/jackmix
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Matrix-Mixer for the Jack-Audio-connection-Kit";
-    homepage = http://www.arnoldarts.de/jackmix/;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.kampfschlaefer ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/kampfschlaefer/jackmix";
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ kampfschlaefer ];
+    platforms = platforms.linux;
   };
 }

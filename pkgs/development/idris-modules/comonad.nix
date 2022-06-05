@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "comonad";
+  pname = "comonad";
   version = "2018-02-26";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ build-idris-package  {
 
   meta = {
     description = "Comonads for Idris";
-    homepage = https://github.com/vmchale/comonad;
+    homepage = "https://github.com/vmchale/comonad";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

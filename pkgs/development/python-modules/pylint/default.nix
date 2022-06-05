@@ -1,48 +1,101 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, astroid,
-  isort, mccabe, pytestCheckHook, pytestrunner }:
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonAtLeast
+, pythonOlder
+, installShellFiles
+, astroid
+, dill
+, isort
+, mccabe
+, platformdirs
+, tomli
+, typing-extensions
+, GitPython
+, pytest-timeout
+, pytest-xdist
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.4.4";
+  version = "2.13.5";
+  format = "setuptools";
 
-  disabled = pythonOlder "3.4";
+  disabled = pythonOlder "3.6.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3db5468ad013380e987410a8d6956226963aed94ecb5f9d3a28acca6d9ac36cd";
+  src = fetchFromGitHub {
+    owner = "PyCQA";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-FB99vmUtoTc0cTjDUSbx80Tesh0vASigSpPktrDYk08=";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  checkInputs = [ pytestCheckHook ];
-
-  propagatedBuildInputs = [ astroid isort mccabe ];
-
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    # Remove broken darwin test
-    rm -vf pylint/test/test_functional.py
-  '';
-
-  disabledTests = [
-    # https://github.com/PyCQA/pylint/issues/3198
-    "test_by_module_statement_value"
-   ] ++ lib.optionals stdenv.isDarwin [
-      "test_parallel_execution"
-      "test_py3k_jobs_option"
-   ];
-
-  dontUseSetuptoolsCheck = true;
+  propagatedBuildInputs = [
+    astroid
+    dill
+    isort
+    mccabe
+    platformdirs
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    typing-extensions
+  ];
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
-    cp "elisp/"*.el $out/share/emacs/site-lisp/
+    cp -v "elisp/"*.el $out/share/emacs/site-lisp/
+    installManPage man/*.1
   '';
 
+  checkInputs = [
+    GitPython
+    # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
+    typing-extensions
+  ];
+
+  dontUseSetuptoolsCheck = true;
+
+  # calls executable in one of the tests
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+    export HOME=$TEMPDIR
+  '';
+
+  disabledTestPaths = [
+    "tests/benchmark"
+    # tests miss multiple input files
+    # FileNotFoundError: [Errno 2] No such file or directory
+    "tests/pyreverse/test_writer.py"
+  ];
+
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_parallel_execution"
+    "test_py3k_jobs_option"
+  ];
+
   meta = with lib; {
-    homepage = https://github.com/PyCQA/pylint;
+    homepage = "https://pylint.pycqa.org/";
     description = "A bug and style checker for Python";
-    platforms = platforms.all;
+    longDescription = ''
+      Pylint is a Python static code analysis tool which looks for programming errors,
+      helps enforcing a coding standard, sniffs for code smells and offers simple
+      refactoring suggestions.
+      Pylint is shipped with following additional commands:
+      - pyreverse: an UML diagram generator
+      - symilar: an independent similarities checker
+      - epylint: Emacs and Flymake compatible Pylint
+    '';
     license = licenses.gpl1Plus;
-    maintainers = with maintainers; [ nand0p ];
+    maintainers = with maintainers; [ totoroot ];
   };
 }

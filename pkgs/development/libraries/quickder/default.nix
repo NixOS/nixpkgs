@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, python2Packages, hexio
+{ lib, stdenv, fetchFromGitHub, python3Packages, hexio
 , cmake, bash, arpa2cm, git, asn2quickder }:
 
 stdenv.mkDerivation rec {
   pname = "quickder";
-  version = "1.2-6";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    sha256 = "00wifjydgmqw2i5vmr049visc3shjqccgzqynkmmhkjhs86ghzr6";
+    sha256 = "15lxv8vcjnsjxg7ywcac5p6mj5vf5pxq1219yap653ci4f1liqfr";
     rev = "version-${version}";
     owner = "vanrein";
     repo = "quick-der";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = with python2Packages; [
+  buildInputs = with python3Packages; [
     arpa2cm
     asn1ate
     hexio
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
     export PREFIX=$out
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Quick (and Easy) DER, a Library for parsing ASN.1";
-    homepage = https://github.com/vanrein/quick-der;
+    homepage = "https://github.com/vanrein/quick-der";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];

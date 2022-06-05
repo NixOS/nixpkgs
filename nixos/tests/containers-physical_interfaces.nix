@@ -1,14 +1,12 @@
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-physical_interfaces";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ kampfschlaefer ];
+  meta = {
+    maintainers = with lib.maintainers; [ kampfschlaefer ];
   };
 
   nodes = {
     server = { ... }:
       {
-        virtualisation.memorySize = 256;
         virtualisation.vlans = [ 1 ];
 
         containers.server = {
@@ -24,7 +22,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         };
       };
     bridged = { ... }: {
-      virtualisation.memorySize = 128;
       virtualisation.vlans = [ 1 ];
 
       containers.bridged = {
@@ -42,7 +39,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
 
     bonded = { ... }: {
-      virtualisation.memorySize = 128;
       virtualisation.vlans = [ 1 ];
 
       containers.bonded = {
@@ -63,7 +59,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     };
 
     bridgedbond = { ... }: {
-      virtualisation.memorySize = 128;
       virtualisation.vlans = [ 1 ];
 
       containers.bridgedbond = {

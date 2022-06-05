@@ -1,36 +1,36 @@
-{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages }:
+{ lib, rustPlatform, fetchFromGitHub, llvmPackages }:
 
 rustPlatform.buildRustPackage rec {
   pname = "parinfer-rust";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "eraserhd";
     repo = "parinfer-rust";
     rev = "v${version}";
-    sha256 = "1k2kr1zlxx3w3kwb634kngzx8vl5iif1yr6zk2xh46gjwqb3223l";
+    sha256 = "0hj5in5h7pj72m4ag80ing513fh65q8xlsf341qzm3vmxm3y3jgd";
   };
 
-  cargoSha256 = "0i5wy15w985nxwl4b6rzb06hchzjwph6ygzjkkmigm9diw9jcycn";
+  cargoSha256 = "1lam4gwzcj6w0pyxf61l2cpbvvf5gmj2gwi8dangnhd60qhlnvrx";
 
-  buildInputs = [ llvmPackages.libclang llvmPackages.clang ];
-  LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
+  nativeBuildInputs = [ llvmPackages.clang ];
+  buildInputs = [ llvmPackages.libclang ];
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postInstall = ''
     mkdir -p $out/share/kak/autoload/plugins
     cp rc/parinfer.kak $out/share/kak/autoload/plugins/
 
-    rtpPath=$out/share/vim-plugins/parinfer-rust
-    mkdir -p $rtpPath/plugin
+    rtpPath=$out/plugin
+    mkdir -p $rtpPath
     sed "s,let s:libdir = .*,let s:libdir = '${placeholder "out"}/lib'," \
-      plugin/parinfer.vim >$rtpPath/plugin/parinfer.vim
+      plugin/parinfer.vim > $rtpPath/parinfer.vim
   '';
 
-  meta = with stdenv.lib; {
-    description = "Infer parentheses for Clojure, Lisp, and Scheme.";
+  meta = with lib; {
+    description = "Infer parentheses for Clojure, Lisp, and Scheme";
     homepage = "https://github.com/eraserhd/parinfer-rust";
     license = licenses.isc;
     maintainers = with maintainers; [ eraserhd ];
-    platforms = platforms.all;
   };
 }

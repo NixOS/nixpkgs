@@ -1,57 +1,79 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , aiofiles
-, graphene
+, anyio
+, contextlib2
 , itsdangerous
 , jinja2
+, python-multipart
 , pyyaml
 , requests
-, ujson
-, python-multipart
-, pytest
-, uvicorn
-, isPy27
-, darwin
-, databases
 , aiosqlite
+, databases
+, pytestCheckHook
+, pythonOlder
+, trio
+, typing-extensions
+, ApplicationServices
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.13.0";
-  disabled = isPy27;
+  version = "0.19.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6bd414152d40d000ccbf6aa40ed89718b40868366a0f69fb83034f416303acef";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "encode";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-gjRTMzoQ8pqxjIusRwRXGs72VYo6xsp2DSUxmEr9KxU=";
   };
+
+  postPatch = ''
+    # remove coverage arguments to pytest
+    sed -i '/--cov/d' setup.cfg
+  '';
 
   propagatedBuildInputs = [
     aiofiles
-    graphene
+    anyio
     itsdangerous
     jinja2
+    python-multipart
     pyyaml
     requests
-    ujson
-    uvicorn
-    python-multipart
-    databases
-  ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices ];
-
-  checkInputs = [
-    pytest
-    aiosqlite
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    contextlib2
+  ] ++ lib.optional stdenv.isDarwin [
+    ApplicationServices
   ];
 
-  checkPhase = ''
-    pytest --ignore=tests/test_graphql.py
-  '';
+  checkInputs = [
+    aiosqlite
+    databases
+    pytestCheckHook
+    trio
+    typing-extensions
+  ];
+
+  disabledTests = [
+    # asserts fail due to inclusion of br in Accept-Encoding
+    "test_websocket_headers"
+    "test_request_headers"
+  ];
+
+  pythonImportsCheck = [
+    "starlette"
+  ];
 
   meta = with lib; {
-    homepage = https://www.starlette.io/;
+    homepage = "https://www.starlette.io/";
     description = "The little ASGI framework that shines";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

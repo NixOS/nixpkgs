@@ -1,35 +1,20 @@
-{ stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
-, openblas, gfortran, openssh, openmpi
+{ lib, stdenv, fetchpatch, fetchFromGitHub, autoreconfHook
+, blas, gfortran, openssh, mpi
 } :
 
-let
-  version = "5.7";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "globalarrays";
-  inherit version;
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "GlobalArrays";
     repo = "ga";
     rev = "v${version}";
-    sha256 = "07i2idaas7pq3in5mdqq5ndvxln5q87nyfgk3vzw85r72c4fq5jh";
+    sha256 = "sha256-IyHdeIUHu/T4lb/etGGnNB2guIspual8/v9eS807Qco=";
   };
 
-  # upstream patches for openmpi-4 compatibility
-  patches = [ (fetchpatch {
-    name = "MPI_Type_struct-was-deprecated-in-MPI-2";
-    url = "https://github.com/GlobalArrays/ga/commit/36e6458993b1df745f43b7db86dc17087758e0d2.patch";
-    sha256 = "058qi8x0ananqx980p03yxpyn41cnmm0ifwsl50qp6sc0bnbnclh";
-  })
-  (fetchpatch {
-    name = "MPI_Errhandler_set-was-deprecated-in-MPI-2";
-    url = "https://github.com/GlobalArrays/ga/commit/f1ea5203d2672c1a1d0275a012fb7c2fb3d033d8.patch";
-    sha256 = "06n7ds9alk5xa6hd7waw3wrg88yx2azhdkn3cjs2k189iw8a7fqk";
-  })];
-
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openmpi openblas gfortran openssh ];
+  nativeBuildInputs = [ autoreconfHook gfortran ];
+  buildInputs = [ mpi blas openssh ];
 
   preConfigure = ''
     configureFlagsArray+=( "--enable-i8" \
@@ -37,18 +22,16 @@ in stdenv.mkDerivation {
                            "--with-mpi3" \
                            "--enable-eispack" \
                            "--enable-underscoring" \
-                           "--with-blas8=${openblas}/lib -lopenblas" )
+                           "--with-blas8=${blas}/lib -lblas" )
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Global Arrays Programming Models";
-    homepage = http://hpc.pnl.gov/globalarrays/;
+    homepage = "http://hpc.pnl.gov/globalarrays/";
     maintainers = [ maintainers.markuskowa ];
     license = licenses.bsd3;
     platforms = platforms.linux;
   };
 }
-
-

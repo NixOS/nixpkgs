@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, sqlite }: let
+{ lib, rustPlatform, fetchFromGitHub, sqlite }: let
 
 manifest = {
   description = "Bukubrow extension host application";
@@ -18,7 +18,7 @@ in rustPlatform.buildRustPackage rec {
     sha256 = "1a3gqxj6d1shv3w0v9m8x2xr0bvcynchy778yqalxkc3x4vr0nbn";
   };
 
-  cargoSha256 = "06nh99cvg3y4f98fs0j5bkidzq6fg46wk47z5jfzz5lf72ha54lk";
+  cargoSha256 = "0z6i9wzz5gy9rs8cxfmwg4mpfajv0xvj4nn6jfl7f1rw6k457jc9";
 
   buildInputs = [ sqlite ];
 
@@ -38,11 +38,10 @@ in rustPlatform.buildRustPackage rec {
     install -Dm0644 chrome.json $out/etc/chromium/native-messaging-hosts/com.samhh.bukubrow.json
   '';
 
-  meta = with stdenv.lib; {
-    description = "Bukubrow is a WebExtension for Buku, a command-line bookmark manager";
-    homepage = https://github.com/SamHH/bukubrow-host;
+  meta = with lib; {
+    description = "A WebExtension for Buku, a command-line bookmark manager";
+    homepage = "https://github.com/SamHH/bukubrow-host";
     license = licenses.gpl3;
-    platforms = platforms.all;
     maintainers = with maintainers; [ infinisil ];
   };
 }

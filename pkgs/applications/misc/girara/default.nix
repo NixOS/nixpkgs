@@ -1,22 +1,23 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, check, dbus, xvfb_run, glib, gtk, gettext, libiconv, json_c, libintl
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, check, dbus, xvfb-run, glib, gtk, gettext, libiconv, json_c, libintl
 }:
 
 stdenv.mkDerivation rec {
   pname = "girara";
-  version = "0.3.3";
+  version = "0.3.7";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://git.pwmt.org/pwmt/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-    sha256 = "13vr62kkkqs2xsrmsn114n6c6084ix1qyjksczqsc3s2y3bdsmj4";
+    sha256 = "sha256-QTQiE/jnRSWPHbKMu2zMJ6YwCaXgAb95G74BzkNtTbc=";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext check dbus xvfb_run ];
+  nativeBuildInputs = [ meson ninja pkg-config gettext check dbus ];
   buildInputs = [ libintl libiconv json_c ];
   propagatedBuildInputs = [ glib gtk ];
+  checkInputs = [ xvfb-run ];
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   mesonFlags = [
     "-Ddocs=disabled" # docs do not seem to be installed
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://git.pwmt.org/pwmt/girara";
     description = "User interface library";
     longDescription = ''

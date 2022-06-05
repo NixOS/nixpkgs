@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.xserver.windowManager.fvwm;
-  fvwm = pkgs.fvwm.override { gestures = cfg.gestures; };
+  fvwm = pkgs.fvwm.override { enableGestures = cfg.gestures; };
 in
 
 {

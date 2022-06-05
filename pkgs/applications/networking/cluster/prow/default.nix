@@ -2,60 +2,57 @@
 
 buildGoModule rec {
   pname = "prow-unstable";
-  version = "2019-08-14";
-  rev = "35a7744f5737bbc1c4e1256a9c9c5ad135c650e4";
+  version = "2020-04-01";
+  rev = "32e3b5ce7695fb622381421653db436cb57b47c5";
 
   src = fetchFromGitHub {
     inherit rev;
 
     owner = "kubernetes";
     repo = "test-infra";
-    sha256 = "07kdlzrj59xyaa73vlx4s50fpg0brrkb0h0cyjgx81a0hsc7s03k";
+    sha256 = "0mc3ynmbf3kidibdy8k3v3xjlvmxl8w7zm1z2m0skmhd0y4bpmk4";
   };
 
-  patches = [
-    # https://github.com/kubernetes/test-infra/pull/13918
-    ./13918-fix-go-sum.patch
-  ];
+  vendorSha256 = "16fdc5r28andm8my4fxj0f1yygx6j2mvn92i6xdfhbcra0lvr4ql";
 
-  modSha256 = "06q1zvhm78k64aj475k1xl38h7nk83mysd0bja0wknja048ymgsq";
+  doCheck = false;
 
   subPackages = [
-    "./prow/cmd/admission"
-    "./prow/cmd/artifact-uploader"
-    "./prow/cmd/branchprotector"
-    "./prow/cmd/build"
-    "./prow/cmd/checkconfig"
-    "./prow/cmd/clonerefs"
-    "./prow/cmd/config-bootstrapper"
-    "./prow/cmd/crier"
-    "./prow/cmd/deck"
-    "./prow/cmd/entrypoint"
-    "./prow/cmd/gcsupload"
-    "./prow/cmd/gerrit"
-    "./prow/cmd/hook"
-    "./prow/cmd/horologium"
-    "./prow/cmd/initupload"
-    "./prow/cmd/jenkins-operator"
-    "./prow/cmd/mkbuild-cluster"
-    "./prow/cmd/mkpj"
-    "./prow/cmd/mkpod"
-    "./prow/cmd/peribolos"
-    "./prow/cmd/phaino"
-    "./prow/cmd/phony"
-    "./prow/cmd/pipeline"
-    "./prow/cmd/plank"
-    "./prow/cmd/sidecar"
-    "./prow/cmd/sinker"
-    "./prow/cmd/status-reconciler"
-    "./prow/cmd/sub"
-    "./prow/cmd/tackle"
-    "./prow/cmd/tide"
-    "./prow/cmd/tot"
+    "prow/cmd/admission"
+    "prow/cmd/branchprotector"
+    "prow/cmd/checkconfig"
+    "prow/cmd/clonerefs"
+    "prow/cmd/cm2kc"
+    "prow/cmd/config-bootstrapper"
+    "prow/cmd/crier"
+    "prow/cmd/deck"
+    "prow/cmd/entrypoint"
+    "prow/cmd/exporter"
+    "prow/cmd/gcsupload"
+    "prow/cmd/gerrit"
+    "prow/cmd/hook"
+    "prow/cmd/horologium"
+    "prow/cmd/initupload"
+    "prow/cmd/jenkins-operator"
+    "prow/cmd/mkbuild-cluster"
+    "prow/cmd/mkpj"
+    "prow/cmd/mkpod"
+    "prow/cmd/peribolos"
+    "prow/cmd/phaino"
+    "prow/cmd/phony"
+    "prow/cmd/pipeline"
+    "prow/cmd/plank"
+    "prow/cmd/sidecar"
+    "prow/cmd/sinker"
+    "prow/cmd/status-reconciler"
+    "prow/cmd/sub"
+    "prow/cmd/tackle"
+    "prow/cmd/tide"
+    "prow/cmd/tot"
   ];
 
   meta = with lib; {
-    description = "Prow is a Kubernetes based CI/CD system";
+    description = "A Kubernetes based CI/CD system";
     longDescription = ''
       Prow is a Kubernetes based CI/CD system. Jobs can be triggered by various
       types of events and report their status to many different services. In

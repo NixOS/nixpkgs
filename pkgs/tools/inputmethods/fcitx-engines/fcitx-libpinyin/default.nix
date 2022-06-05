@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, cmake, pkgconfig, fcitx, gettext, libpinyin, glib, pcre, dbus, qtwebengine, qtbase, fcitx-qt5 }:
+{ lib, stdenv, fetchurl, cmake, pkg-config, fcitx, gettext, libpinyin, glib, pcre, dbus, qtwebengine, qtbase, fcitx-qt5 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx-libpinyin";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchurl {
     url = "http://download.fcitx-im.org/fcitx-libpinyin/${pname}-${version}.tar.xz";
-    sha256 = "196c229ckib3xvafkk4n3n3jk9rpksfcjsbbwka6a9k2f34qrjj6";
+    sha256 = "1wvsc21imbgq3chlxfw4aycmkb2vi1bkjj9frvhga2m5b5pq82k5";
   };
 
-  nativeBuildInputs = [ pkgconfig  ];
-  buildInputs = [ fcitx-qt5 qtbase qtwebengine.dev cmake fcitx gettext libpinyin glib pcre dbus ];
+  nativeBuildInputs = [ cmake pkg-config  ];
+  buildInputs = [ fcitx-qt5 qtbase qtwebengine.dev fcitx gettext libpinyin glib pcre dbus ];
 
   # With a typical installation via NixOS option i18n.inputMethod.fcitx.engines,
   # the FCITXDIR environment variable is set to $out of fcitx-with-plugins,
@@ -42,10 +42,12 @@ stdenv.mkDerivation rec {
       cp -rv ${store_path} $NIX_BUILD_TOP/$name/data/${ZHUYIN_DATA_FILE_NAME}
     '';
 
-  meta = with stdenv.lib; {
+  dontWrapQtApps = true;
+
+  meta = with lib; {
     isFcitxEngine = true;
     description  = "Fcitx Wrapper for libpinyin, Library to deal with pinyin";
-    homepage     = https://github.com/fcitx/fcitx-libpinyin;
+    homepage     = "https://github.com/fcitx/fcitx-libpinyin";
     license      = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericsagnes ];
     platforms    = platforms.linux;

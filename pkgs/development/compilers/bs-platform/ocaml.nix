@@ -1,7 +1,7 @@
-{ stdenv, src, version, bs-version }:
+{ lib, stdenv, src, version }:
 stdenv.mkDerivation rec {
   inherit src version;
-  name = "ocaml-${version}+bs-${bs-version}";
+  pname = "ocaml-bs";
   configurePhase = ''
     ./configure -prefix $out
   '';
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     make -j9 world.opt
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     branch = "4.06";
     platforms = platforms.all;
   };

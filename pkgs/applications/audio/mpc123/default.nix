@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gettext, libmpcdec, libao }:
+{ fetchurl, lib, stdenv, gettext, libmpcdec, libao }:
 
 let version = "0.2.4"; in
 stdenv.mkDerivation rec {
@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./use-gcc.patch ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: /build/cc566Cj9.o:(.bss+0x0): multiple definition of `mpc123_file_reader'; ao.o:(.bss+0x40): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildInputs = [ gettext libmpcdec libao ];
 
   installPhase =
@@ -21,13 +26,13 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://mpc123.sourceforge.net/;
+    homepage = "http://mpc123.sourceforge.net/";
 
     description = "A Musepack (.mpc) audio player";
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux; # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
   };
 }

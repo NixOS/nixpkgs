@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, git }:
+{ lib, stdenv, fetchFromGitHub, git }:
 
 # Changing the variables CPPFLAGS and BUILD_CONFIG_NAME can be done by
 # overriding the same-named attributes. See ./presets.nix for examples.
@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     cp mkspiffs $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool to build and unpack SPIFFS images";
     license = licenses.mit;
-    homepage = https://github.com/igrr/mkspiffs;
+    homepage = "https://github.com/igrr/mkspiffs";
     maintainers = with maintainers; [ haslersn ];
     platforms = platforms.linux;
   };

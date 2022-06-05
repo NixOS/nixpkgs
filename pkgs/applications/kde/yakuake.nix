@@ -1,15 +1,15 @@
 {
   mkDerivation, lib, kdoctools, extra-cmake-modules,
   karchive, kcrash, kdbusaddons, ki18n, kiconthemes, knewstuff, knotifications,
-  knotifyconfig, konsole, kparts, kwindowsystem, qtx11extras
+  knotifyconfig, konsole, kparts, kwayland, kwindowsystem, qtx11extras
 }:
 
 mkDerivation {
-  name = "yakuake";
+  pname = "yakuake";
 
   buildInputs = [
     karchive kcrash kdbusaddons ki18n kiconthemes knewstuff knotifications
-    knotifyconfig kparts kwindowsystem qtx11extras
+    knotifyconfig kparts kwayland kwindowsystem qtx11extras
   ];
 
   propagatedBuildInputs = [
@@ -23,8 +23,10 @@ mkDerivation {
     extra-cmake-modules kdoctools
   ];
 
+  outputs = [ "out" "dev" ];
+
   meta = {
-    homepage = https://yakuake.kde.org;
+    homepage = "https://yakuake.kde.org";
     description = "Quad-style terminal emulator for KDE";
     maintainers = with lib.maintainers; [ fridh ];
     license = lib.licenses.gpl2;

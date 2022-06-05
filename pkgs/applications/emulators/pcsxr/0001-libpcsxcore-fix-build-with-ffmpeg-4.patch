@@ -1,0 +1,76 @@
+From 351be6b3f2ad10d86ec4ae711db5a1067acc592a Mon Sep 17 00:00:00 2001
+From: Zane van Iperen <zane@zanevaniperen.com>
+Date: Sun, 7 Nov 2021 15:17:07 +1000
+Subject: [PATCH] libpcsxcore: fix build with ffmpeg 4
+
+---
+ libpcsxcore/cdriso.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/libpcsxcore/cdriso.c b/libpcsxcore/cdriso.c
+index f89678e..6314482 100644
+--- a/libpcsxcore/cdriso.c
++++ b/libpcsxcore/cdriso.c
+@@ -266,14 +266,14 @@ static int decode_compressed_cdda_track(FILE* outfile, const char* infilepath, s
+ 		}
+ 
+ 		if (!decoded_frame) {
+-			if (!(decoded_frame = avcodec_alloc_frame())) {
++			if (!(decoded_frame = av_frame_alloc())) {
+ 				SysMessage(_(" -> Error allocating audio frame buffer. This track will not be available."));
+ 				avformat_close_input(&inAudioFormat);
+-				avcodec_free_frame(&decoded_frame);
++				av_frame_free(&decoded_frame);
+ 				return 1; // error decoding frame
+ 			}
+ 		} else {
+-			avcodec_get_frame_defaults(decoded_frame);
++			av_frame_unref(decoded_frame);
+ 		}
+ 		len = avcodec_decode_audio4(c, decoded_frame, &got_frame, &avpkt);
+ 		if (len > 0 && got_frame) {
+@@ -285,7 +285,7 @@ static int decode_compressed_cdda_track(FILE* outfile, const char* infilepath, s
+ 			fwrite(decoded_frame->data[0], 1, data_size, outfile);
+ 		}
+ 		av_free_packet(&avpkt);
+-		//avcodec_free_frame(&decoded_frame);
++		//av_frame_free(&decoded_frame);
+ 	} while (moreFrames >= 0); // TODO: check for possible leaks
+ 
+ 	// file will be closed later on, now just flush it
+@@ -294,7 +294,7 @@ static int decode_compressed_cdda_track(FILE* outfile, const char* infilepath, s
+ 	avformat_close_input(&inAudioFormat);
+ 	//avcodec_close(c);
+ 	//av_free(c);
+-	avcodec_free_frame(&decoded_frame);
++	av_frame_free(&decoded_frame);
+ 	return 0;
+ }
+ #endif
+@@ -340,12 +340,12 @@ static int decode_compressed_cdda_track(FILE* outfile, FILE* infile, enum AVCode
+ 	while (avpkt.size > 0) {
+ 		int got_frame = 0;
+ 		if (!decoded_frame) {
+-			if (!(decoded_frame = avcodec_alloc_frame())) {
++			if (!(decoded_frame = av_frame_alloc())) {
+ 				SysPrintf(" -> Error allocating audio frame buffer. Track will not be available.");
+ 				return 1; // error decoding frame
+ 			}
+ 		} else {
+-			avcodec_get_frame_defaults(decoded_frame);
++			av_frame_unref(decoded_frame);
+ 		}
+ 
+ 		len = avcodec_decode_audio4(c, decoded_frame, &got_frame, &avpkt);
+@@ -383,7 +383,7 @@ static int decode_compressed_cdda_track(FILE* outfile, FILE* infile, enum AVCode
+ 
+ 	avcodec_close(c);
+ 	av_free(c);
+-	avcodec_free_frame(&decoded_frame);
++	av_frame_free(&decoded_frame);
+ 	return 0;
+ }
+ #endif
+-- 
+2.31.1
+

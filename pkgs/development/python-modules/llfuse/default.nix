@@ -1,31 +1,58 @@
-{ stdenv, fetchurl, buildPythonPackage, pkgconfig, pytest, fuse, attr, which
+{ lib
+, stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchFromGitHub
 , contextlib2
+, cython
+, fuse
+, pkg-config
+, pytestCheckHook
+, python
+, which
 }:
 
 buildPythonPackage rec {
   pname = "llfuse";
-  version = "1.3.6";
+  version = "1.4.2";
 
-  src = fetchurl {
-    url = "mirror://pypi/l/llfuse/${pname}-${version}.tar.bz2";
-    sha256 = "1j9fzxpgmb4rxxyl9jcf84zvznhgi3hnh4hg5vb0qaslxkvng8ii";
+  disabled = pythonOlder "3.5";
+
+  src = fetchFromGitHub {
+    owner = "python-llfuse";
+    repo = "python-llfuse";
+    rev = "release-${version}";
+    hash = "sha256-TnZnv439fLvg0WM96yx0dPSSz8Mrae6GDC9LiLFrgQ8=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cython pkg-config ];
+
   buildInputs = [ fuse ];
-  checkInputs = [ pytest attr which ];
 
   propagatedBuildInputs = [ contextlib2 ];
 
-  checkPhase = ''
-    py.test -k "not test_listdir"
+  preConfigure = ''
+    substituteInPlace setup.py \
+        --replace "'pkg-config'" "'${stdenv.cc.targetPrefix}pkg-config'"
   '';
 
-  meta = with stdenv.lib; {
+  preBuild = ''
+    ${python.pythonForBuild.interpreter} setup.py build_cython
+  '';
+
+  # On Darwin, the test requires macFUSE to be installed outside of Nix.
+  doCheck = !stdenv.isDarwin;
+  checkInputs = [ pytestCheckHook which ];
+
+  disabledTests = [
+    "test_listdir" # accesses /usr/bin
+  ];
+
+  meta = with lib; {
     description = "Python bindings for the low-level FUSE API";
-    homepage = https://github.com/python-llfuse/python-llfuse;
+    homepage = "https://github.com/python-llfuse/python-llfuse";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor dotlambda ];
   };
 }

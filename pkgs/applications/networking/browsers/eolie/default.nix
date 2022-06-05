@@ -1,11 +1,11 @@
-{ stdenv, fetchgit, meson, ninja, pkgconfig
-, python3, gtk3, libsecret, gst_all_1, webkitgtk
+{ lib, fetchgit, meson, ninja, pkg-config, nix-update-script
+, python3, gtk3, libsecret, gst_all_1, webkitgtk, glib
 , glib-networking, gtkspell3, hunspell, desktop-file-utils
-, gobject-introspection, wrapGAppsHook }:
+, gobject-introspection, wrapGAppsHook, gnome }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "eolie";
-  version = "0.9.63";
+  version = "0.9.99";
 
   format = "other";
   doCheck = false;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     url = "https://gitlab.gnome.org/World/eolie";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "0z8gcfg7i842rr5p8r3vqa31kf7nnj1yv3afax3jzf4zbnhb8wm0";
+    sha256 = "077jww5mqg6bbqbj0j1gss2j3dxlfr2xw8bc43k8vg52drqg6g8w";
   };
 
   nativeBuildInputs = [
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     meson
     ninja
-    pkgconfig
+    pkg-config
     wrapGAppsHook
   ];
 
@@ -33,18 +33,23 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-base
     gst-plugins-ugly
     gstreamer
+    gnome.gnome-settings-daemon
     gtk3
     gtkspell3
     hunspell
     libsecret
     webkitgtk
+    glib
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+    pyfxa
     beautifulsoup4
+    cryptography
     pycairo
     pygobject3
     python-dateutil
+    pycrypto
   ];
 
   postPatch = ''
@@ -52,16 +57,26 @@ python3.pkgs.buildPythonApplication rec {
     patchShebangs meson_post_install.py
   '';
 
+  dontWrapGApps = true;
   preFixup = ''
     buildPythonPath "$out $propagatedBuildInputs"
     patchPythonScript "$out/libexec/eolie-sp"
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+  };
+
+  strictDeps = false;
+
+  meta = with lib; {
     description = "A new GNOME web browser";
-    homepage = https://wiki.gnome.org/Apps/Eolie;
+    homepage = "https://wiki.gnome.org/Apps/Eolie";
     license  = licenses.gpl3Plus;
-    maintainers = with maintainers; [ samdroid-apps worldofpeace ];
+    maintainers = with maintainers; [ samdroid-apps ];
     platforms = platforms.linux;
   };
 }

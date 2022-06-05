@@ -1,24 +1,24 @@
-{stdenv, fetchurl, sqlite}:
+{lib, stdenv, fetchurl, sqlite}:
 
 stdenv.mkDerivation rec
 {
-  version = "3.1";
+  version = "3.2.2";
   pname = "libzdb";
 
   src = fetchurl
   {
     url = "https://www.tildeslash.com/libzdb/dist/libzdb-${version}.tar.gz";
-    sha256 = "1596njvy518x7vsvsykmnk1ky82x8jxd6nmmp551y6hxn2qsn08g";
+    sha256 = "1blmy7228649iscwlldrc1ldf31nhps1ps9xfv44ms0yxqhlw7nm";
   };
 
   buildInputs = [ sqlite ];
 
   meta =
   {
-    homepage = http://www.tildeslash.com/libzdb/;
+    homepage = "http://www.tildeslash.com/libzdb/";
     description = "A small, easy to use Open Source Database Connection Pool Library";
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

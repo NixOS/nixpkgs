@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, ncurses, which, perl
+{ lib, stdenv, fetchurl, fetchpatch, ncurses, which, perl
 , gdbm ? null
 , openssl ? null
 , cyrus_sasl ? null
 , gnupg ? null
 , gpgme ? null
-, kerberos ? null
+, libkrb5 ? null
 , headerCache  ? true
 , sslSupport   ? true
 , saslSupport  ? true
@@ -23,15 +23,16 @@ assert smimeSupport -> openssl    != null;
 assert gpgSupport   -> gnupg      != null;
 assert gpgmeSupport -> gpgme      != null && openssl != null;
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
-  version = "1.13.2";
+  version = "2.2.4";
+  outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
-    sha256 = "0x4yfvk8415p80h9an242n6q3b43mw6mnnczh95zd3j0zwdr6wrg";
+    sha256 = "0q70qrsjvmkfns1qxc0il2rlmfjwzbmfg89zlch0iqghpyz7c9xq";
   };
 
   patches = optional smimeSupport (fetchpatch {
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     [ ncurses which perl ]
     ++ optional headerCache  gdbm
     ++ optional sslSupport   openssl
-    ++ optional gssSupport   kerberos
+    ++ optional gssSupport   libkrb5
     ++ optional saslSupport  cyrus_sasl
     ++ optional gpgmeSupport gpgme;
 
@@ -88,9 +89,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A small but very powerful text-based mail client";
-    homepage = http://www.mutt.org;
+    homepage = "http://www.mutt.org";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny rnhmjoj ];
+    maintainers = with maintainers; [ rnhmjoj ];
   };
 }

@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, libsndfile, ApplicationServices, Carbon, CoreServices }:
+{ lib, stdenv, fetchurl, pkg-config, libsndfile, ApplicationServices, Carbon, CoreServices }:
 
 let
-  inherit (stdenv.lib) optionals optionalString;
+  inherit (lib) optionals optionalString;
 
 in stdenv.mkDerivation rec {
-  name = "libsamplerate-0.1.9";
+  pname = "libsamplerate";
+  version = "0.1.9";
 
   src = fetchurl {
-    url = "http://www.mega-nerd.com/SRC/${name}.tar.gz";
+    url = "http://www.mega-nerd.com/SRC/${pname}-${version}.tar.gz";
     sha256 = "1ha46i0nbibq0pl0pjwcqiyny4hj8lp1bnl4dpxm64zjw9lb2zha";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ]
     ++ optionals stdenv.isDarwin [ ApplicationServices CoreServices ];
 
@@ -27,9 +28,9 @@ in stdenv.mkDerivation rec {
     substituteInPlace examples/Makefile --replace "-fpascal-strings" ""
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Sample Rate Converter for audio";
-    homepage    = http://www.mega-nerd.com/SRC/index.html;
+    homepage    = "http://www.mega-nerd.com/SRC/index.html";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;

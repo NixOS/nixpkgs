@@ -1,55 +1,81 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytest
-, nose
-, glibcLocales
-, entrypoints
+{ beautifulsoup4
 , bleach
-, mistune
-, jinja2
-, pygments
-, traitlets
-, testpath
-, jupyter_core
-, nbformat
-, ipykernel
-, pandocfilters
-, tornado
-, jupyter_client
+, buildPythonPackage
 , defusedxml
+, fetchPypi
+, ipywidgets
+, jinja2
+, jupyterlab-pygments
+, lib
+, markupsafe
+, mistune
+, nbclient
+, pandocfilters
+, pyppeteer
+, pytestCheckHook
+, tinycss2
 }:
 
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "5.6.1";
+  version = "6.5.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "21fb48e700b43e82ba0e3142421a659d7739b65568cc832a13976a77be16b523";
+    hash = "sha256-Ij5G4nq+hZa4rtVDAfrbukM7f/6oGWpo/Xsf9Qnu6Z0=";
   };
 
-  checkInputs = [ nose pytest glibcLocales ];
-
-  propagatedBuildInputs = [
-    entrypoints bleach mistune jinja2 pygments traitlets testpath
-    jupyter_core nbformat ipykernel pandocfilters tornado jupyter_client
-    defusedxml
+  # Add $out/share/jupyter to the list of paths that are used to search for
+  # various exporter templates
+  patches = [
+    ./templates.patch
   ];
 
-  # disable preprocessor tests for ipython 7
-  # see issue https://github.com/jupyter/nbconvert/issues/898
-  checkPhase = ''
-    export LC_ALL=en_US.UTF-8
-    HOME=$(mktemp -d) py.test -v --ignore="nbconvert/preprocessors/tests/test_execute.py"
+  postPatch = ''
+    substituteAllInPlace ./nbconvert/exporters/templateexporter.py
   '';
+
+  propagatedBuildInputs = [
+    beautifulsoup4
+    bleach
+    defusedxml
+    jinja2
+    jupyterlab-pygments
+    markupsafe
+    mistune
+    nbclient
+    pandocfilters
+    tinycss2
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  checkInputs = [
+    ipywidgets
+    pyppeteer
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    # DeprecationWarning: Support for bleach <5 will be removed in a future version of nbconvert
+    "-W ignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # Attempts network access (Failed to establish a new connection: [Errno -3] Temporary failure in name resolution)
+    "test_export"
+    "test_webpdf_with_chromium"
+  ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Converting Jupyter Notebooks";
-    homepage = https://jupyter.org/;
+    homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

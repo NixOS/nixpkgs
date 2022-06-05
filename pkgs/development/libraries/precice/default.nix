@@ -1,33 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, openmpi, python2, python2Packages }:
+{ lib, stdenv, fetchFromGitHub, cmake, gcc, boost, eigen, libxml2, mpi, python3, petsc }:
 
 stdenv.mkDerivation rec {
   pname = "precice";
-  version = "1.6.1";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "precice";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00631zw6cpm67j35cwad04nwgfcvlxa8p660fwz30pgj2hzdx3d2";
+    sha256 = "0qmwdxpbmy4dvjxav3dls18qns734j0yfvxvjrh1nnkk36qhfp3q";
   };
 
-  preConfigure = ''
-    cmakeFlags="-DBUILD_SHARED_LIBS=ON -DPETSC=off"
-  '';
+  cmakeFlags = [
+    "-DPRECICE_PETScMapping=OFF"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DPYTHON_LIBRARIES=${python3.libPrefix}"
+    "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
+  ];
+
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin [ "-D_GNU_SOURCE" ];
 
   nativeBuildInputs = [ cmake gcc ];
-  buildInputs = [ boost eigen libxml2 openmpi python2 python2Packages.numpy ];
-  installPhase = ''
-    mkdir -p $out/lib
-    cp libprecice.so libprecice.so.1.6.1 $out/lib/
-  '';
+  buildInputs = [ boost eigen libxml2 mpi python3 python3.pkgs.numpy ];
 
   meta = {
     description = "preCICE stands for Precise Code Interaction Coupling Environment";
+    homepage = "https://precice.org/";
     license = with lib.licenses; [ gpl3 ];
-    homepage = "https://www.precice.org/";
-    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Scriptkiddi ];
+    mainProgram = "binprecice";
+    platforms = lib.platforms.unix;
   };
 }
+
 

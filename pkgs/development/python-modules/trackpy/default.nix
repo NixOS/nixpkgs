@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , numpy
@@ -7,18 +8,19 @@
 , pandas
 , pyyaml
 , matplotlib
-, pytest
+, numba
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "trackpy";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "soft-matter";
     repo = pname;
     rev = "v${version}";
-    sha256 = "01fdv93f6z16gypmvqnlbjmcih7dmr7a63n5w9swmp11x3if4iyq";
+    sha256 = "0if069f4sjyjl7wvzyzk8k9q9qjixswcc6aszrrgfb4a4mix3h1g";
   };
 
   propagatedBuildInputs = [
@@ -28,30 +30,24 @@ buildPythonPackage rec {
     pandas
     pyyaml
     matplotlib
+    numba
   ];
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    ${stdenv.lib.optionalString (stdenv.isDarwin) ''
+  preCheck = lib.optionalString stdenv.isDarwin ''
     # specifically needed for darwin
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-    ''}
-
-    pytest trackpy --ignore trackpy/tests/test_motion.py \
-                   --ignore trackpy/tests/test_feature_saving.py \
-                   --ignore trackpy/tests/test_feature.py \
-                   --ignore trackpy/tests/test_plots.py \
-                   --ignore trackpy/tests/test_legacy_linking.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Particle-tracking toolkit";
-    homepage = https://github.com/soft-matter/trackpy;
+    homepage = "https://github.com/soft-matter/trackpy";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

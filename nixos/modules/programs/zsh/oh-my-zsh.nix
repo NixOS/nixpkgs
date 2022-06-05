@@ -39,6 +39,7 @@ in
     options = {
       programs.zsh.ohMyZsh = {
         enable = mkOption {
+          type = types.bool;
           default = false;
           description = ''
             Enable oh-my-zsh.
@@ -47,7 +48,7 @@ in
 
         package = mkOption {
           default = pkgs.oh-my-zsh;
-          defaultText = "pkgs.oh-my-zsh";
+          defaultText = literalExpression "pkgs.oh-my-zsh";
           description = ''
             Package to install for `oh-my-zsh` usage.
           '';

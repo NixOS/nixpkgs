@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, libX11, makeWrapper, tcl, tk }:
+{ lib, stdenv, fetchurl, alsa-lib, libX11, makeWrapper, tcl, tk }:
 
 stdenv.mkDerivation  rec {
   pname = "vkeybd";
@@ -9,7 +9,8 @@ stdenv.mkDerivation  rec {
     sha256 = "0107b5j1gf7dwp7qb4w2snj4bqiyps53d66qzl2rwj4jfpakws5a";
   };
 
-  buildInputs = [ alsaLib libX11 makeWrapper tcl tk ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ alsa-lib libX11 tcl tk ];
 
   configurePhase = ''
     mkdir -p $out/bin
@@ -22,9 +23,9 @@ stdenv.mkDerivation  rec {
     wrapProgram $out/bin/vkeybd --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Virtual MIDI keyboard";
-    homepage = http://www.alsa-project.org/~tiwai/alsa.html;
+    homepage = "https://www.alsa-project.org/~tiwai/alsa.html";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

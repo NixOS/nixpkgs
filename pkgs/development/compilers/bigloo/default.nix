@@ -1,17 +1,30 @@
-{ fetchurl, stdenv, gmp }:
+{ fetchurl, lib, stdenv, autoconf, automake, libtool, gmp
+, darwin, libunistring
+}:
 
 stdenv.mkDerivation rec {
   pname = "bigloo";
-  version = "4.1a-2";
+  version = "4.4b";
 
   src = fetchurl {
-    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo${version}.tar.gz";
-    sha256 = "09yrz8r0jpj7bda39fdxzrrdyhi851nlfajsyf0b6jxanz6ygcjx";
+    url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
+    sha256 = "sha256-oxOSJwKWmwo7PYAwmeoFrKaYdYvmvQquWXyutolc488=";
   };
+
+  nativeBuildInputs = [ autoconf automake libtool ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.ApplicationServices
+    libunistring
+  ];
 
   propagatedBuildInputs = [ gmp ];
 
   preConfigure =
+    # For libuv on darwin
+    lib.optionalString stdenv.isDarwin ''
+      export LIBTOOLIZE=libtoolize
+    '' +
     # Help libgc's configure.
     '' export CXXCPP="$CXX -E"
     '';
@@ -20,14 +33,14 @@ stdenv.mkDerivation rec {
     # Fix absolute paths.
     sed -e 's=/bin/mv=mv=g' -e 's=/bin/rm=rm=g'			\
         -e 's=/tmp=$TMPDIR=g' -i autoconf/*		\
-	[Mm]akefile*   */[Mm]akefile*   */*/[Mm]akefile*	\
-	*/*/*/[Mm]akefile*   */*/*/*/[Mm]akefile*		\
-	comptime/Cc/cc.scm gc/install-*
+        [Mm]akefile*   */[Mm]akefile*   */*/[Mm]akefile*	\
+        */*/*/[Mm]akefile*   */*/*/*/[Mm]akefile*		\
+        comptime/Cc/cc.scm gc/install-*
 
     # Make sure we don't change string lengths in the generated
     # C files.
     sed -e 's=/bin/rm=     rm=g' -e 's=/bin/mv=     mv=g'	\
-	-i comptime/Cc/cc.c
+        -i comptime/Cc/cc.c
   '';
 
   checkTarget = "test";
@@ -37,10 +50,14 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Efficient Scheme compiler";
-    homepage    = http://www-sop.inria.fr/indes/fp/Bigloo/;
-    license     = stdenv.lib.licenses.gpl2Plus;
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
+    homepage    = "http://www-sop.inria.fr/indes/fp/Bigloo/";
+    license     = lib.licenses.gpl2Plus;
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+    # dyld: Library not loaded: /nix/store/w3liqjlrcmzc0sf2kgwjprqgqwqx8z47-libunistring-1.0/lib/libunistring.2.dylib
+    #  Referenced from: /private/tmp/nix-build-bigloo-4.4b.drv-0/bigloo-4.4b/bin/bigloo
+    #  Reason: Incompatible library version: bigloo requires version 5.0.0 or later, but libunistring.2.dylib provides version 4.0.0
+    broken      = (stdenv.isDarwin && stdenv.isx86_64);
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

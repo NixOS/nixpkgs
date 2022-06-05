@@ -1,10 +1,10 @@
-{ stdenv, fetchurl
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, libtool
 , threadingSupport ? true # multi-threading
-, openglSupport ? false, freeglut ? null, libGL ? null, libGLU ? null # OpenGL (required for vwebp)
-, pngSupport ? true, libpng ? null # PNG image format
-, jpegSupport ? true, libjpeg ? null # JPEG image format
-, tiffSupport ? true, libtiff ? null # TIFF image format
-, gifSupport ? true, giflib ? null # GIF image format
+, openglSupport ? false, freeglut, libGL, libGLU # OpenGL (required for vwebp)
+, pngSupport ? true, libpng # PNG image format
+, jpegSupport ? true, libjpeg # JPEG image format
+, tiffSupport ? true, libtiff # TIFF image format
+, gifSupport ? true, giflib # GIF image format
 #, wicSupport ? true # Windows Imaging Component
 , alignedSupport ? false # Force aligned memory operations
 , swap16bitcspSupport ? false # Byte swap for 16bit color spaces
@@ -14,25 +14,23 @@
 , libwebpdecoderSupport ? true # Build libwebpdecoder
 }:
 
-assert openglSupport -> freeglut != null && libGL != null && libGLU != null;
-assert pngSupport -> (libpng != null);
-assert jpegSupport -> (libjpeg != null);
-assert tiffSupport -> (libtiff != null);
-assert gifSupport -> (giflib != null);
-
 let
   mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
 in
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.0.3";
+  version = "1.2.1";
 
-  src = fetchurl {
-    url = "http://downloads.webmproject.org/releases/webp/${pname}-${version}.tar.gz";
-    sha256 = "0kxk4sic34bln3k09mml7crvrmhj97swdk7b1ahbp5w6bj30f2p2";
+  src = fetchFromGitHub {
+    owner  = "webmproject";
+    repo   = pname;
+    rev    = "v${version}";
+    hash   = "sha256-KrvB5d3KNmujbfekWaevz2JZrWtK3PjEG9NEzRBYIDw=";
   };
+
+  prePatch = "patchShebangs .";
 
   configureFlags = [
     (mkFlag threadingSupport "threading")
@@ -50,6 +48,7 @@ stdenv.mkDerivation rec {
     (mkFlag libwebpdecoderSupport "libwebpdecoder")
   ];
 
+  nativeBuildInputs = [ autoreconfHook libtool ];
   buildInputs = [ ]
     ++ optionals openglSupport [ freeglut libGL libGLU ]
     ++ optional pngSupport libpng
@@ -61,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tools and library for the WebP image format";
-    homepage = https://developers.google.com/speed/webp/;
+    homepage = "https://developers.google.com/speed/webp/";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ codyopel ];

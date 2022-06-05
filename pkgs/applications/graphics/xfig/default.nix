@@ -1,21 +1,42 @@
-{ stdenv, fetchurl, xlibsWrapper, makeWrapper, libXpm
-, libXmu, libXi, libXp, Xaw3d, fig2dev
+{ lib
+, stdenv
+, fetchurl
+, xlibsWrapper
+, makeWrapper
+, imagemagick
+, libXpm
+, libXmu
+, libXi
+, libXp
+, Xaw3d
+, libXaw
+, fig2dev
 }:
 
-let
-  version = "3.2.7a";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "xfig";
-  inherit version;
+  version = "3.2.8b";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcj/xfig-${version}.tar.xz";
-    sha256 = "096zgp0bqnxhgxbrv2jjylrjz3pr4da0xxznlk2z7ffxr5pri2fa";
+    sha256 = "0fndgbm1mkqb1sn2v2kj3nx9mxj70jbp31y2bjvzcmmkry0q3k5j";
   };
 
+  nativeBuildInputs = [ imagemagick makeWrapper ];
+
+  buildInputs = [
+    xlibsWrapper
+    libXpm
+    libXmu
+    libXi
+    libXp
+    Xaw3d
+    libXaw
+  ];
+
   postPatch = ''
-    sed -i 's:"fig2dev":"${fig2dev}/bin/fig2dev":' src/main.c
+    substituteInPlace src/main.c --replace '"fig2dev"' '"${fig2dev}/bin/fig2dev"'
+    substituteInPlace xfig.desktop --replace "/usr/bin/" "$out/bin/"
   '';
 
   postInstall = ''
@@ -24,20 +45,25 @@ in stdenv.mkDerivation {
 
     wrapProgram $out/bin/xfig \
       --set XAPPLRESDIR $out/share/X11/app-defaults
+
+    mkdir -p $out/share/icons/hicolor/{16x16,22x22,48x48,64x64}/apps
+
+    for dimension in 16x16 22x22 48x48; do
+      convert doc/html/images/xfig-logo.png -geometry $dimension\
+        $out/share/icons/hicolor/16x16/apps/xfig.png
+    done
+    install doc/html/images/xfig-logo.png \
+      $out/share/icons/hicolor/64x64/apps/xfig.png
   '';
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  buildInputs = [ xlibsWrapper libXpm libXmu libXi libXp Xaw3d ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interactive drawing tool for X11";
     longDescription = ''
       Note that you need to have the <literal>netpbm</literal> tools
       in your path to export bitmaps.
     '';
-    inherit (fig2dev.meta) license homepage platforms;
+    inherit (fig2dev.meta) license homepage platforms maintainers;
   };
 }

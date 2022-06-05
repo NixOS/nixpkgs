@@ -1,45 +1,39 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchPypi
-, fetchpatch
+, capstone
+, stdenv
 , setuptools
 }:
 
 buildPythonPackage rec {
   pname = "capstone";
-  version = "3.0.5.post1";
+  version = lib.getVersion capstone;
 
-  setupPyBuildFlags = [
-    "--plat-name x86_64-linux"
-  ];
+  src = capstone.src;
+  sourceRoot = "source/bindings/python";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "3c0f73db9f8392f7048c8a244809f154d7c39f354e2167f6c477630aa517ed04";
-  };
+  postPatch = ''
+    ln -s ${capstone}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
+    ln -s ${capstone}/lib/libcapstone.a prebuilt/
+    substituteInPlace setup.py --replace manylinux1 manylinux2014
+  '';
+
+  # aarch64 only available from MacOS SDK 11 onwards, so fix the version tag.
+  # otherwise, bdist_wheel may detect "macosx_10_6_arm64" which doesn't make sense.
+  setupPyBuildFlags = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "--plat-name" "macosx_11_0" ];
 
   propagatedBuildInputs = [ setuptools ];
 
-  patches = [
-    (fetchpatch {
-      stripLen = 2;
-      url = "https://patch-diff.githubusercontent.com/raw/aquynh/capstone/pull/783/commits/23fe9f36622573c747e2bab6119ff245437bf276.patch";
-      sha256 = "0yizqrdlxqxn16873593kdx2vrr7gvvilhgcf9xy6hr0603d3m5r";
-    })
-  ];
-
-  postPatch = ''
-    patchShebangs src/make.sh
+  checkPhase = ''
+    mv capstone capstone.hidden
+    patchShebangs test_*
+    make check
   '';
 
-  preCheck = ''
-    mv src/libcapstone.so capstone
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://www.capstone-engine.org/";
     license = licenses.bsdOriginal;
-    description = "Capstone disassembly engine";
-    maintainers = with maintainers; [ bennofs ];
+    description = "Python bindings for Capstone disassembly engine";
+    maintainers = with maintainers; [ bennofs ris ];
   };
 }

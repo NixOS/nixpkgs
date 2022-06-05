@@ -1,6 +1,6 @@
-{ stdenv, buildPackages, fetchurl, fetchpatch, pciutils }:
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, pciutils }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "gnu-efi";
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU EFI development toolchain";
-    homepage = https://sourceforge.net/projects/gnu-efi/;
+    homepage = "https://sourceforge.net/projects/gnu-efi/";
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

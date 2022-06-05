@@ -3,10 +3,10 @@
 
 buildPerlPackage rec {
   pname = "po4a";
-  version = "0.55";
+  version = "0.62";
   src = fetchurl {
     url = "https://github.com/mquinson/po4a/releases/download/v${version}/po4a-${version}.tar.gz";
-    sha256 = "1qss4q5df3nsydsbggb7gg50bn0kdxq5wn8riqm9zwkiq6a4bifg";
+    sha256 = "0eb510a66f59de68cf7a205342036cc9fc08b39334b91f1456421a5f3359e68b";
   };
   nativeBuildInputs = [ docbook_xsl docbook_xsl_ns ModuleBuild ];
   propagatedBuildInputs = [ TextWrapI18N LocaleGettext SGMLSpm UnicodeLineBreak PodParser YAMLTiny ];

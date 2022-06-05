@@ -1,20 +1,19 @@
-{ fetchFromGitHub, stdenv, lib, pkgconfig, autoreconfHook
+{ fetchFromGitHub, stdenv, lib, pkg-config, autoreconfHook
 , ncurses, gnutls, readline
-, openssl, perl, sqlite, libjpeg, speex, pcre
+, openssl, perl, sqlite, libjpeg, speex, pcre, libuuid
 , ldns, libedit, yasm, which, libsndfile, libtiff
 
-, curl, lua, libmysqlclient, postgresql, libopus, libctb, gsmlib
+, callPackage
 
 , SystemConfiguration
 
 , modules ? null
+, nixosTests
 }:
 
 let
 
-availableModules = import ./modules.nix {
-  inherit curl lua libmysqlclient postgresql libopus libctb gsmlib;
-};
+availableModules = callPackage ./modules.nix { };
 
 # the default list from v1.8.7, except with applications/mod_signalwire also disabled
 defaultModules = mods: with mods; [
@@ -89,29 +88,44 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
-  version = "1.10.2";
+  version = "1.10.7";
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fmrm51zgrasjbmhs0pzb1lyca3ddx0wd35shvxnkjnifi8qd1h7";
+    sha256 = "0npdvidvsi4dhwswdwilff4p3x04qmz7hgs9sdadiy2w83qb6alf";
   };
+
   postPatch = ''
     patchShebangs     libs/libvpx/build/make/rtcd.pl
     substituteInPlace libs/libvpx/build/make/configure.sh \
       --replace AS=\''${AS} AS=yasm
+
+    # Disable advertisement banners
+    for f in src/include/cc.h libs/esl/src/include/cc.h; do
+      {
+        echo 'const char *cc = "";'
+        echo 'const char *cc_s = "";'
+      } > $f
+    done
   '';
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  strictDeps = true;
+  nativeBuildInputs = [ pkg-config autoreconfHook perl which yasm ];
   buildInputs = [
-    openssl ncurses gnutls readline perl libjpeg
-    sqlite pcre speex ldns libedit yasm which
+    openssl ncurses gnutls readline libjpeg
+    sqlite pcre speex ldns libedit
     libsndfile libtiff
+    libuuid
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
 
+  enableParallelBuilding = true;
+
   NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  CFLAGS = "-D_ANSI_SOURCE";
 
   hardeningDisable = [ "format" ];
 
@@ -123,13 +137,17 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # helper for compiling modules... not generally useful; also pulls in perl dependency
     rm "$out"/bin/fsxs
+    # include configuration templates
+    cp -r conf $out/share/freeswitch/
   '';
+
+  passthru.tests.freeswitch = nixosTests.freeswitch;
 
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";
-    homepage = https://freeswitch.org/;
-    license = stdenv.lib.licenses.mpl11;
-    maintainers = with stdenv.lib.maintainers; [ misuzu ];
-    platforms = with stdenv.lib.platforms; unix;
+    homepage = "https://freeswitch.org/";
+    license = lib.licenses.mpl11;
+    maintainers = with lib.maintainers; [ misuzu ];
+    platforms = with lib.platforms; unix;
   };
 }

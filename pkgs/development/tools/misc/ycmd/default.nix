@@ -1,24 +1,29 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, boost, python
-, gocode ? null
-, godef ? null
-, gotools ? null
-, rustracerd ? null
-, fixDarwinDylibNames, Cocoa ? null
+{ stdenv, lib, fetchFromGitHub, cmake, llvmPackages, boost, python
+, withGocode ? true, gocode
+, withGodef ? true, godef
+, withGotools? true, gotools
+, withTypescript ? true, nodePackages
+, fixDarwinDylibNames, Cocoa
 }:
 
 stdenv.mkDerivation {
   pname = "ycmd";
-  version = "2019-09-19";
+  version = "unstable-2020-02-22";
+  disabled = !python.isPy3k;
 
-  src = fetchgit {
-    url = "https://github.com/Valloric/ycmd.git";
-    rev = "c6d360775b0c5c82e2513dce7b625f8bf3812702";
-    sha256 = "19rxlval20gg65xc5p7q9cnzfm9zw2j0m6vxxk0vqlalcyh0rnzd";
+  # required for third_party directory creation
+  src = fetchFromGitHub {
+    owner = "Valloric";
+    repo = "ycmd";
+    rev = "9a6b86e3a156066335b678c328f226229746bae5";
+    sha256 = "sha256-xzLELjp4DsG6mkzaFqpuquSa0uoaZWrYLrKr/mzrqrA=";
+    fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ boost llvmPackages.libclang ]
-    ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames Cocoa ];
+    ++ lib.optional stdenv.isDarwin Cocoa;
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
@@ -56,37 +61,34 @@ stdenv.mkDerivation {
     mkdir -p $out/lib/ycmd/third_party
     cp -r third_party/* $out/lib/ycmd/third_party/
 
-  '' + lib.optionalString (gocode != null) ''
+  '' + lib.optionalString withGocode ''
     TARGET=$out/lib/ycmd/third_party/gocode
     mkdir -p $TARGET
     ln -sf ${gocode}/bin/gocode $TARGET
-  '' + lib.optionalString (godef != null) ''
+  '' + lib.optionalString withGodef ''
     TARGET=$out/lib/ycmd/third_party/godef
     mkdir -p $TARGET
     ln -sf ${godef}/bin/godef $TARGET
-  '' + lib.optionalString (gotools != null) ''
+  '' + lib.optionalString withGotools ''
     TARGET=$out/lib/ycmd/third_party/go/src/golang.org/x/tools/cmd/gopls
     mkdir -p $TARGET
     ln -sf ${gotools}/bin/gopls $TARGET
-  '' + lib.optionalString (rustracerd != null) ''
-    TARGET=$out/lib/ycmd/third_party/racerd/target/release
-    mkdir -p $TARGET
-    ln -sf ${rustracerd}/bin/racerd $TARGET
+  '' + lib.optionalString withTypescript ''
+    TARGET=$out/lib/ycmd/third_party/tsserver
+    ln -sf ${nodePackages.typescript} $TARGET
   '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so
   # python won't be thrown off by argv[0]
   postFixup = ''
     substituteInPlace $out/lib/ycmd/ycmd/__main__.py \
-      --replace $out/lib/ycmd/ycmd/__main__.py \
-                $out/bin/ycmd \
-      --replace __file__ \
-                "'$out/lib/ycmd/ycmd/__main__.py'"
+      --replace $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd \
+      --replace __file__ "'$out/lib/ycmd/ycmd/__main__.py'"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A code-completion and comprehension server";
-    homepage = https://github.com/Valloric/ycmd;
+    homepage = "https://github.com/Valloric/ycmd";
     license = licenses.gpl3;
     maintainers = with maintainers; [ rasendubi cstrahan lnl7 ];
     platforms = platforms.all;

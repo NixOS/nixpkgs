@@ -1,19 +1,25 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "shiori";
-  version = "1.5.0";
+  version = "1.5.2";
 
-  modSha256 = "1z6q5lv0j433p8lc3nxlw1rds5x1kvs1vzl63jf3disxw7ppyai3";
+  vendorSha256 = "sha256-6XF4wBwoRnINAskhGHTw4eAJ9zAaoZcEYo9/xZk4ems=";
+
+  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "go-shiori";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13and7gh2882khqppwz3wwq44p7az4bfdfjvlnqcpqyi8xa28pmq";
+    sha256 = "sha256-Py6Lq29F7RkvSui+Z2VyogU9+azHQ2KEvEq924pQmQo=";
   };
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    smoke-test = nixosTests.shiori;
+  };
+
+  meta = with lib; {
     description = "Simple bookmark manager built with Go";
     homepage = "https://github.com/go-shiori/shiori";
     license = licenses.mit;

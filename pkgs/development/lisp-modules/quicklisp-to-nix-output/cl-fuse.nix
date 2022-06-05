@@ -1,15 +1,16 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-fuse'';
-  version = ''20190710-git'';
+  baseName = "cl-fuse";
+  version = "20200925-git";
 
-  description = ''CFFI bindings to FUSE (Filesystem in user space)'';
+  description = "CFFI bindings to FUSE (Filesystem in user space)";
 
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cffi-toolchain" args."cl-utilities" args."iterate" args."trivial-backtrace" args."trivial-features" args."trivial-utf-8" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-fuse/2019-07-10/cl-fuse-20190710-git.tgz'';
-    sha256 = ''1gxah8qwwb9xlvbdy5xxz07hh2hsw7xdrps1n4slhz4x6vyy80li'';
+    url = "http://beta.quicklisp.org/archive/cl-fuse/2020-09-25/cl-fuse-20200925-git.tgz";
+    sha256 = "1c5cn0l0md77asw804qssylcbbphw81mfpbijydd0s25q6xga7dp";
   };
 
   packageName = "cl-fuse";
@@ -18,9 +19,9 @@ rec {
   overrides = x: x;
 }
 /* (SYSTEM cl-fuse DESCRIPTION CFFI bindings to FUSE (Filesystem in user space)
-    SHA256 1gxah8qwwb9xlvbdy5xxz07hh2hsw7xdrps1n4slhz4x6vyy80li URL
-    http://beta.quicklisp.org/archive/cl-fuse/2019-07-10/cl-fuse-20190710-git.tgz
-    MD5 5f267e59eb2358b1b6e4e735fb408e6a NAME cl-fuse FILENAME cl-fuse DEPS
+    SHA256 1c5cn0l0md77asw804qssylcbbphw81mfpbijydd0s25q6xga7dp URL
+    http://beta.quicklisp.org/archive/cl-fuse/2020-09-25/cl-fuse-20200925-git.tgz
+    MD5 0342ea914801f40d804629170a435e54 NAME cl-fuse FILENAME cl-fuse DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)
      (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
@@ -32,4 +33,4 @@ rec {
     DEPENDENCIES
     (alexandria babel bordeaux-threads cffi cffi-grovel cffi-toolchain
      cl-utilities iterate trivial-backtrace trivial-features trivial-utf-8)
-    VERSION 20190710-git SIBLINGS NIL PARASITES NIL) */
+    VERSION 20200925-git SIBLINGS NIL PARASITES NIL) */

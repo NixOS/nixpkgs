@@ -1,22 +1,21 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 }:
 
 buildPythonPackage rec {
   pname = "xlsx2csv";
-  version = "0.7.6";
+  version = "0.7.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff4121d42d318f31f71b248f37acfc21455a7d897a3c117b578744c89bc34f6c";
+    sha256 = "c3aaf0c5febd9c5e48488026e7a58af37a67bf3da5e221cc57d371328b3b7dd3";
   };
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/bitprophet/alabaster;
+  meta = with lib; {
+    homepage = "https://github.com/dilshod/xlsx2csv";
     description = "Convert xlsx to csv";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jb55 ];
   };
-
 }

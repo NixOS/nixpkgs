@@ -35,7 +35,7 @@ in
       powerUpCommands = mkOption {
         type = types.lines;
         default = "";
-        example = literalExample ''
+        example = literalExpression ''
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
         description =
@@ -49,7 +49,7 @@ in
       powerDownCommands = mkOption {
         type = types.lines;
         default = "";
-        example = literalExample ''
+        example = literalExpression ''
           "''${pkgs.hdparm}/sbin/hdparm -B 255 /dev/sda"
         '';
         description =
@@ -94,7 +94,7 @@ in
         after = [ "suspend.target" "hibernate.target" "hybrid-sleep.target" ];
         script =
           ''
-            ${config.systemd.package}/bin/systemctl try-restart post-resume.target
+            /run/current-system/systemd/bin/systemctl try-restart post-resume.target
             ${cfg.resumeCommands}
             ${cfg.powerUpCommands}
           '';

@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
-, typing, aiohttp
+, typing ? null, aiohttp
 }:
 
 buildPythonPackage rec {

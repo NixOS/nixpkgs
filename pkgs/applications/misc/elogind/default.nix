@@ -8,7 +8,7 @@
 , getent
 , libcap
 , gettext
-, pkgconfig
+, pkg-config
 , udev
 , eudev
 , libxslt
@@ -25,24 +25,24 @@
 , enableSystemd ? false
 }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "elogind";
-  version = "241.4";
+  version = "246.10";
 
   src = fetchFromGitHub {
     owner = "elogind";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13nd0chackqclgvw43910k4pkw2q773dh6wq9s5f3d97ibnik48k";
+    sha256 = "sha256-+Nv6FL9Yjmfxs24+2mUTP//wbjzGUq4ftgJLfuEqBJg=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     m4
-    pkgconfig
+    pkg-config
     gperf
     getent
     libcap
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = https://github.com/elogind/elogind;
+    homepage = "https://github.com/elogind/elogind";
     description = ''The systemd project's "logind", extracted to a standalone package'';
     platforms = platforms.linux; # probably more
     license = licenses.lgpl21Plus;

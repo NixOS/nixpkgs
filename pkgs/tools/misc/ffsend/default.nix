@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitLab, rustPlatform, cmake, pkgconfig, openssl
-, darwin, installShellFiles
+{ lib, stdenv, fetchFromGitLab, rustPlatform, cmake, pkg-config, openssl
+, installShellFiles
+, CoreFoundation, CoreServices, Security, AppKit, libiconv
 
 , x11Support ? stdenv.isLinux || stdenv.hostPlatform.isBSD
 , xclip ? null, xsel ? null
@@ -7,7 +8,7 @@
 }:
 
 let
-  usesX11 = stdenv.isLinux || stdenv.hostPlatform.isBSD;
+  usesX11 = stdenv.isLinux || stdenv.isBSD;
 in
 
 assert (x11Support && usesX11) -> xclip != null || xsel != null;
@@ -16,23 +17,23 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "ffsend";
-  version = "0.2.58";
+  version = "0.2.74";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "0yqigqh5vldzmp7wc1mxi5a4bxzm81xycx5h0ghak74vbjibps49";
+    sha256 = "0ia9agh0h9hp06ijmlgnw63n3xz2jajjw1maz27sawqp342x9vn5";
   };
 
-  cargoSha256 = "1wwdnm6a5g4gpd1f89qii8v4f6mcfc1bif1v6mdlcbrpwax5skh4";
+  cargoSha256 = "0dl671sw3amny52a81bx7imh94dvi91dprwhcm1b0g40mjic45pw";
 
-  nativeBuildInputs = [ cmake pkgconfig installShellFiles ];
-  buildInputs = [ openssl ]
-  ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security AppKit ])
-  ;
+  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
+  buildInputs =
+    if stdenv.isDarwin then [ libiconv CoreFoundation CoreServices Security AppKit ]
+    else [ openssl ];
 
-  preBuild = stdenv.lib.optionalString (x11Support && usesX11) (
+  preBuild = lib.optionalString (x11Support && usesX11) (
     if preferXsel && xsel != null then ''
       export XSEL_PATH="${xsel}/bin/xsel"
     '' else ''
@@ -45,7 +46,7 @@ buildRustPackage rec {
   '';
   # There's also .elv and .ps1 completion files but I don't know where to install those
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Easily and securely share files from the command line. A fully featured Firefox Send client";
     longDescription = ''
       Easily and securely share files and directories from the command line through a safe, private
@@ -53,8 +54,8 @@ buildRustPackage rec {
       may be up to 2GB. Others are able to download these files with this tool, or through their
       web browser.
     '';
-    homepage = https://gitlab.com/timvisee/ffsend;
-    license = licenses.gpl3;
+    homepage = "https://gitlab.com/timvisee/ffsend";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ lilyball equirosa ];
     platforms = platforms.unix;
   };

@@ -5,7 +5,7 @@
 , supervise
 , isPy3k
 , whichcraft
-, utillinux
+, util-linux
 }:
 
 buildPythonPackage rec {
@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optional (!isPy3k) whichcraft;
 
-  checkInputs = [ utillinux ];
+  checkInputs = [ util-linux ];
 
   meta = {
     description = "An API for running processes safely and securely";
-    homepage = https://github.com/catern/supervise;
+    homepage = "https://github.com/catern/supervise";
     license = lib.licenses.lgpl3;
     maintainers = with lib.maintainers; [ catern ];
   };

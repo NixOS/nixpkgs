@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub
-, autoreconfHook, pkgconfig, gettext
+{ lib, stdenv, fetchFromGitHub
+, autoreconfHook, pkg-config, gettext
 , vim, glib, libxml2, ncurses, popt, screen
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig autoreconfHook gettext
+    pkg-config autoreconfHook gettext
   ];
 
   buildInputs = [
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/DE-IBH/apt-dater;
+  meta = with lib; {
+    homepage = "https://github.com/DE-IBH/apt-dater";
     description = "Terminal-based remote package update manager";
     longDescription = ''
       Provides an ncurses frontend for managing package updates on a large

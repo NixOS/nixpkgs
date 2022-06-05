@@ -1,21 +1,34 @@
-{ lib, buildGoModule, fetchFromGitHub, alsaLib }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, darwin, libiconv, alsa-lib, stdenv }:
 
 buildGoModule rec {
   pname = "sampler";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "sqshq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "129vifb1y57vyqj9p23gq778jschndh2y2ingwvjz0a6lrm45vpf";
+    sha256 = "1lanighxhnn28dfzils7i55zgxbw2abd6y723mq7x9wg1aa2bd0z";
   };
 
-  modSha256 = "0wgwnn50lrg6ix5ll2jdwi421wgqgsv4y9xd5hfj81kya3dxcbw0";
+  patches = [
+    # fix build with go 1.17
+    (fetchpatch {
+      url = "https://github.com/sqshq/sampler/commit/97a4a0ebe396a780d62f50f112a99b27044e832b.patch";
+      sha256 = "1czns7jc85mzdf1mg874jimls8x32l35x3lysxfgfah7cvvwznbk";
+    })
+  ];
+
+  vendorSha256 = "02cfzqadpsk2vkzsp7ciji9wisjza0yp35pw42q44navhbzcb4ji";
+
+  doCheck = false;
 
   subPackages = [ "." ];
 
-  buildInputs = [ alsaLib ];
+  buildInputs = lib.optional stdenv.isLinux alsa-lib
+    ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.OpenAL
+  ];
 
   meta = with lib; {
     description = "Tool for shell commands execution, visualization and alerting";

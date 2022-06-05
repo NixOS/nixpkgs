@@ -9,15 +9,15 @@ let
   # This middle-ground solution ensures *an* sshd can do their basic validation
   # on the configuration.
   validationPackage = if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform
-    then [ cfgc.package ]
-    else [ pkgs.buildPackages.openssh ];
+    then cfgc.package
+    else pkgs.buildPackages.openssh;
 
   sshconf = pkgs.runCommand "sshd.conf-validated" { nativeBuildInputs = [ validationPackage ]; } ''
     cat >$out <<EOL
     ${cfg.extraConfig}
     EOL
 
-    ssh-keygen -f mock-hostkey -N ""
+    ssh-keygen -q -f mock-hostkey -N ""
     sshd -t -f $out -h mock-hostkey
   '';
 
@@ -30,7 +30,7 @@ let
 
     options.openssh.authorizedKeys = {
       keys = mkOption {
-        type = types.listOf types.str;
+        type = types.listOf types.singleLineStr;
         default = [];
         description = ''
           A list of verbatim OpenSSH public keys that should be added to the
@@ -41,6 +41,10 @@ let
           Warning: If you are using <literal>NixOps</literal> then don't use this
           option since it will replace the key required for deployment via ssh.
         '';
+        example = [
+          "ssh-rsa AAAAB3NzaC1yc2etc/etc/etcjwrsh8e596z6J0l7 example@host"
+          "ssh-ed25519 AAAAC3NzaCetcetera/etceteraJZMfk3QPfQ foo@bar"
+        ];
       };
 
       keyFiles = mkOption {
@@ -77,6 +81,7 @@ in
   imports = [
     (mkAliasOptionModule [ "services" "sshd" "enable" ] [ "services" "openssh" "enable" ])
     (mkAliasOptionModule [ "services" "openssh" "knownHosts" ] [ "programs" "ssh" "knownHosts" ])
+    (mkRenamedOptionModule [ "services" "openssh" "challengeResponseAuthentication" ] [ "services" "openssh" "kbdInteractiveAuthentication" ])
   ];
 
   ###### interface
@@ -119,6 +124,15 @@ in
           Whether to enable the SFTP subsystem in the SSH daemon.  This
           enables the use of commands such as <command>sftp</command> and
           <command>sshfs</command>.
+        '';
+      };
+
+      sftpServerExecutable = mkOption {
+        type = types.str;
+        example = "internal-sftp";
+        description = ''
+          The sftp server executable.  Can be a path or "internal-sftp" to use
+          the sftp server built into the sshd binary.
         '';
       };
 
@@ -205,11 +219,11 @@ in
         '';
       };
 
-      challengeResponseAuthentication = mkOption {
+      kbdInteractiveAuthentication = mkOption {
         type = types.bool;
         default = true;
         description = ''
-          Specifies whether challenge/response authentication is allowed.
+          Specifies whether keyboard-interactive authentication is allowed.
         '';
       };
 
@@ -232,15 +246,55 @@ in
         '';
       };
 
+      banner = mkOption {
+        type = types.nullOr types.lines;
+        default = null;
+        description = ''
+          Message to display to the remote user before authentication is allowed.
+        '';
+      };
+
       authorizedKeysFiles = mkOption {
         type = types.listOf types.str;
         default = [];
-        description = "Files from which authorized keys are read.";
+        description = ''
+          Specify the rules for which files to read on the host.
+
+          This is an advanced option. If you're looking to configure user
+          keys, you can generally use <xref linkend="opt-users.users._name_.openssh.authorizedKeys.keys"/>
+          or <xref linkend="opt-users.users._name_.openssh.authorizedKeys.keyFiles"/>.
+
+          These are paths relative to the host root file system or home
+          directories and they are subject to certain token expansion rules.
+          See AuthorizedKeysFile in man sshd_config for details.
+        '';
+      };
+
+      authorizedKeysCommand = mkOption {
+        type = types.str;
+        default = "none";
+        description = ''
+          Specifies a program to be used to look up the user's public
+          keys. The program must be owned by root, not writable by group
+          or others and specified by an absolute path.
+        '';
+      };
+
+      authorizedKeysCommandUser = mkOption {
+        type = types.str;
+        default = "nobody";
+        description = ''
+          Specifies the user under whose account the AuthorizedKeysCommand
+          is run. It is recommended to use a dedicated user that has no
+          other role on the host than running authorized keys commands.
+        '';
       };
 
       kexAlgorithms = mkOption {
         type = types.listOf types.str;
         default = [
+          "sntrup761x25519-sha512@openssh.com"
+          "curve25519-sha256"
           "curve25519-sha256@libssh.org"
           "diffie-hellman-group-exchange-sha256"
         ];
@@ -248,10 +302,10 @@ in
           Allowed key exchange algorithms
           </para>
           <para>
-          Defaults to recommended settings from both
+          Uses the lower bound recommended in both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
@@ -272,7 +326,7 @@ in
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
@@ -293,21 +347,18 @@ in
           Defaults to recommended settings from both
           <link xlink:href="https://stribika.github.io/2015/01/04/secure-secure-shell.html" />
           and
-          <link xlink:href="https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29" />
+          <link xlink:href="https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67" />
         '';
       };
 
       logLevel = mkOption {
         type = types.enum [ "QUIET" "FATAL" "ERROR" "INFO" "VERBOSE" "DEBUG" "DEBUG1" "DEBUG2" "DEBUG3" ];
-        default = "VERBOSE";
+        default = "INFO"; # upstream default
         description = ''
           Gives the verbosity level that is used when logging messages from sshd(8). The possible values are:
-          QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3. The default is VERBOSE. DEBUG and DEBUG1
+          QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, and DEBUG3. The default is INFO. DEBUG and DEBUG1
           are equivalent. DEBUG2 and DEBUG3 each specify higher levels of debugging output. Logging with a DEBUG level
           violates the privacy of users and is not recommended.
-
-          LogLevel VERBOSE logs user's key fingerprint on login.
-          Needed to have a clear audit track of which key was used to log in.
         '';
       };
 
@@ -341,7 +392,7 @@ in
     };
 
     users.users = mkOption {
-      type = with types; loaOf (submodule userOptions);
+      type = with types; attrsOf (submodule userOptions);
     };
 
   };
@@ -352,11 +403,15 @@ in
   config = mkIf cfg.enable {
 
     users.users.sshd =
-      { isSystemUser = true;
+      {
+        isSystemUser = true;
+        group = "sshd";
         description = "SSH privilege separation user";
       };
+    users.groups.sshd = {};
 
     services.openssh.moduliFile = mkDefault "${cfgc.package}/etc/ssh/moduli";
+    services.openssh.sftpServerExecutable = mkDefault "${cfgc.package}/libexec/sftp-server";
 
     environment.etc = authKeysFiles //
       { "ssh/moduli".source = cfg.moduliFile;
@@ -386,7 +441,8 @@ in
                 mkdir -m 0755 -p /etc/ssh
 
                 ${flip concatMapStrings cfg.hostKeys (k: ''
-                  if ! [ -f "${k.path}" ]; then
+                  if ! [ -s "${k.path}" ]; then
+                      rm -f "${k.path}"
                       ssh-keygen \
                         -t "${k.type}" \
                         ${if k ? bits then "-b ${toString k.bits}" else ""} \
@@ -403,6 +459,7 @@ in
               { ExecStart =
                   (optionalString cfg.startWhenNeeded "-") +
                   "${cfgc.package}/bin/sshd " + (optionalString cfg.startWhenNeeded "-i ") +
+                  "-D " +  # don't detach into a daemon process
                   "-f /etc/ssh/sshd_config";
                 KillMode = "process";
               } // (if cfg.startWhenNeeded then {
@@ -426,6 +483,8 @@ in
             else
               cfg.ports;
             socketConfig.Accept = true;
+            # Prevent brute-force attacks from shutting down socket
+            socketConfig.TriggerLimitIntervalSec = 0;
           };
 
         services."sshd@" = service;
@@ -448,11 +507,13 @@ in
     # https://github.com/NixOS/nixpkgs/pull/10155
     # https://github.com/NixOS/nixpkgs/pull/41745
     services.openssh.authorizedKeysFiles =
-      [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
+      [ "%h/.ssh/authorized_keys" "%h/.ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 
     services.openssh.extraConfig = mkOrder 0
       ''
         UsePAM yes
+
+        Banner ${if cfg.banner == null then "none" else pkgs.writeText "ssh_banner" cfg.banner}
 
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
         ${concatMapStrings (port: ''
@@ -467,24 +528,24 @@ in
             XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
         ''}
 
-        ${if cfg.forwardX11 then ''
-          X11Forwarding yes
-        '' else ''
-          X11Forwarding no
-        ''}
+        X11Forwarding ${if cfg.forwardX11 then "yes" else "no"}
 
         ${optionalString cfg.allowSFTP ''
-          Subsystem sftp ${cfgc.package}/libexec/sftp-server ${concatStringsSep " " cfg.sftpFlags}
+          Subsystem sftp ${cfg.sftpServerExecutable} ${concatStringsSep " " cfg.sftpFlags}
         ''}
 
         PermitRootLogin ${cfg.permitRootLogin}
         GatewayPorts ${cfg.gatewayPorts}
         PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
-        ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
+        KbdInteractiveAuthentication ${if cfg.kbdInteractiveAuthentication then "yes" else "no"}
 
         PrintMotd no # handled by pam_motd
 
         AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
+        ${optionalString (cfg.authorizedKeysCommand != "none") ''
+          AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
+          AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
+        ''}
 
         ${flip concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}
@@ -496,11 +557,7 @@ in
 
         LogLevel ${cfg.logLevel}
 
-        ${if cfg.useDns then ''
-          UseDNS yes
-        '' else ''
-          UseDNS no
-        ''}
+        UseDNS ${if cfg.useDns then "yes" else "no"}
 
       '';
 

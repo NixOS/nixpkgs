@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "loki";
@@ -14,11 +14,15 @@ stdenv.mkDerivation rec {
     make build-shared
   '';
 
+  NIX_CFLAGS_COMPILE = [
+    "-std=c++11"
+  ];
+
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A C++ library of designs, containing flexible implementations of common design patterns and idioms";
-    homepage = http://loki-lib.sourceforge.net;
+    homepage = "http://loki-lib.sourceforge.net";
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ peterhoeg ];

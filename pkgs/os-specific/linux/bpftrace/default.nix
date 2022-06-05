@@ -1,38 +1,54 @@
-{ stdenv, fetchFromGitHub
-, cmake, pkgconfig, flex, bison
-, llvmPackages, kernel, elfutils, libelf, bcc
+{ lib, stdenv, fetchFromGitHub
+, cmake, pkg-config, flex, bison
+, llvmPackages, elfutils
+, libelf, libbfd, libbpf, libopcodes, bcc
+, cereal, asciidoctor
+, nixosTests
+, util-linux
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.9.3";
+  version = "0.14.1";
+
+  # Cherry-picked from merged PR, remove this hook on next update
+  # https://github.com/iovisor/bpftrace/pull/2242
+  # Cannot `fetchpatch` such pure renaming diff since
+  # https://github.com/iovisor/bpftrace/commit/2df807dbae4037aa8bf0afc03f52fb3f6321c62a.patch
+  # does not contain any diff in unified format but just this instead:
+  #   ...
+  #   man/man8/{bashreadline.8 => bashreadline.bt.8}     | 0
+  #   ...
+  #   35 files changed, 0 insertions(+), 0 deletions(-)
+  #   rename man/man8/{bashreadline.8 => bashreadline.bt.8} (100%)
+  #   ...
+  # on witch `fetchpatch` fails with
+  #   error: Normalized patch '/build/patch' is empty (while the fetched file was not)!
+  #   Did you maybe fetch a HTML representation of a patch instead of a raw patch?
+  postUnpack = ''
+    rename .8 .bt.8 "$sourceRoot"/man/man8/*.8
+  '';
 
   src = fetchFromGitHub {
     owner  = "iovisor";
     repo   = "bpftrace";
-    rev    = "refs/tags/v${version}";
-    sha256 = "1qkfbmksdssmm1qxcvcwdql1pz8cqy233195n9i9q5dhk876f75v";
+    rev    = "v${version}";
+    sha256 = "sha256-QDqHAEVM/XHCFMS0jMLdKJfDUOpkUqONOf8+Fbd5dCY=";
   };
 
-  enableParallelBuilding = true;
+  # libbpf 0.6.0 relies on typeof in bpf/btf.h to pick the right version of
+  # btf_dump__new() but that's not valid c++.
+  # see https://github.com/iovisor/bpftrace/issues/2068
+  patches = [ ./btf-dump-new-0.6.0.patch ];
 
   buildInputs = with llvmPackages;
-    [ llvm clang-unwrapped
-      kernel elfutils libelf bcc
+    [ llvm libclang
+      elfutils libelf bcc
+      libbpf libbfd libopcodes
+      cereal asciidoctor
     ];
 
-  nativeBuildInputs = [ cmake pkgconfig flex bison ]
-    # libelf is incompatible with elfutils-libelf
-    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
-
-  # patch the source, *then* substitute on @NIX_KERNEL_SRC@ in the result. we could
-  # also in theory make this an environment variable around bpftrace, but this works
-  # nicely without wrappers.
-  patchPhase = ''
-    patch -p1 < ${./fix-kernel-include-dir.patch}
-    substituteInPlace ./src/utils.cpp \
-      --subst-var-by NIX_KERNEL_SRC '${kernel.dev}/lib/modules/${kernel.modDirVersion}'
-  '';
+  nativeBuildInputs = [ cmake pkg-config flex bison llvmPackages.llvm.dev util-linux ];
 
   # tests aren't built, due to gtest shenanigans. see:
   #
@@ -41,7 +57,7 @@ stdenv.mkDerivation rec {
   #
   cmakeFlags =
     [ "-DBUILD_TESTING=FALSE"
-      "-DLIBBCC_INCLUDE_DIRS=${bcc}/include/bcc"
+      "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
     ];
 
   # nuke the example/reference output .txt files, for the included tools,
@@ -52,10 +68,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
-  meta = with stdenv.lib; {
+  passthru.tests = {
+    bpf = nixosTests.bpf;
+  };
+
+  meta = with lib; {
     description = "High-level tracing language for Linux eBPF";
-    homepage    = https://github.com/iovisor/bpftrace;
+    homepage    = "https://github.com/iovisor/bpftrace";
     license     = licenses.asl20;
-    maintainers = with maintainers; [ rvl thoughtpolice ];
+    maintainers = with maintainers; [ rvl thoughtpolice martinetd ];
   };
 }

@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
-, alsaLib, asio, avahi, flac, libogg, libvorbis }:
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config
+, alsa-lib, asio, avahi, boost17x, flac, libogg, libvorbis, soxr
+, pulseaudioSupport ? false, libpulseaudio
+, nixosTests }:
+
+assert pulseaudioSupport -> libpulseaudio != null;
 
 let
 
@@ -19,8 +23,8 @@ let
 
   aixlog = dependency {
     name    = "aixlog";
-    version = "1.2.1";
-    sha256  = "1rh4jib5g41b85bqrxkl5g74hk5ryf187y9fw0am76g59xlymfpr";
+    version = "1.5.0";
+    sha256  = "09mnkrans9zmwfxsiwgkm0rba66c11kg5zby9x3rjic34gnmw6ay";
   };
 
   popl = dependency {
@@ -33,22 +37,23 @@ in
 
 stdenv.mkDerivation rec {
   pname = "snapcast";
-  version = "0.15.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner  = "badaix";
     repo   = "snapcast";
     rev    = "v${version}";
-    sha256 = "11rnpy6w3wm240qgmkp74k5w8wh5b7hzfx05qrnh6l7ng7m25ky2";
+    sha256 = "sha256-CCifn9OEFM//Hk1PJj8T3MXIV8pXCTdBBXPsHuZwLyQ=";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   # snapcast also supports building against tremor but as we have libogg, that's
   # not needed
   buildInputs = [
-    alsaLib asio avahi flac libogg libvorbis
-    aixlog popl
-  ];
+    boost17x
+    alsa-lib asio avahi flac libogg libvorbis
+    aixlog popl soxr
+  ] ++ lib.optional pulseaudioSupport libpulseaudio;
 
   # Upstream systemd unit files are pretty awful, so we provide our own in a
   # NixOS module. It might make sense to get that upstreamed...
@@ -57,10 +62,12 @@ stdenv.mkDerivation rec {
     cp -r ../doc/* ../*.md $out/share/doc/snapcast
   '';
 
+  passthru.tests.snapcast = nixosTests.snapcast;
+
   meta = with lib; {
     description = "Synchronous multi-room audio player";
-    homepage = https://github.com/badaix/snapcast;
+    homepage = "https://github.com/badaix/snapcast";
     maintainers = with maintainers; [ fpletz ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }

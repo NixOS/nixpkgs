@@ -1,18 +1,22 @@
-diff -ru3 SDL2-2.0.4/sdl2-config.cmake.in SDL2-2.0.4-new/sdl2-config.cmake.in
---- SDL2-2.0.4/sdl2-config.cmake.in	2016-01-02 22:56:31.000000000 +0300
-+++ SDL2-2.0.4-new/sdl2-config.cmake.in	2016-08-22 05:26:42.420397323 +0300
-@@ -6,5 +6,6 @@
- set(SDL2_PREFIX "@prefix@")
- set(SDL2_EXEC_PREFIX "@prefix@")
- set(SDL2_LIBDIR "@libdir@")
--set(SDL2_INCLUDE_DIRS "@includedir@/SDL2")
-+set(SDL2_INCLUDE_DIRS "@includedir@/SDL2" $ENV{SDL2_PATH})
+diff --git a/sdl2-config.cmake.in b/sdl2-config.cmake.in
+index c570511fa..ca694f595 100644
+--- a/sdl2-config.cmake.in
++++ b/sdl2-config.cmake.in
+@@ -7,7 +7,8 @@ set(includedir "@includedir@")
+ set(SDL2_PREFIX "${prefix}")
+ set(SDL2_EXEC_PREFIX "${exec_prefix}")
+ set(SDL2_LIBDIR "${libdir}")
+-set(SDL2_INCLUDE_DIRS "${includedir}/SDL2")
++set(SDL2_INCLUDE_DIRS "${includedir}/SDL2" $ENV{SDL2_PATH})
 +separate_arguments(SDL2_INCLUDE_DIRS)
  set(SDL2_LIBRARIES "-L${SDL2_LIBDIR} @SDL_RLD_FLAGS@ @SDL_LIBS@")
-diff -ru3 SDL2-2.0.4/sdl2-config.in SDL2-2.0.4-new/sdl2-config.in
---- SDL2-2.0.4/sdl2-config.in	2016-01-02 22:56:31.000000000 +0300
-+++ SDL2-2.0.4-new/sdl2-config.in	2016-08-22 05:32:02.256397839 +0300
-@@ -42,7 +42,11 @@
+ string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
+ 
+diff --git a/sdl2-config.in b/sdl2-config.in
+index 5a2aed292..7c55f0a28 100644
+--- a/sdl2-config.in
++++ b/sdl2-config.in
+@@ -42,7 +42,11 @@ while test $# -gt 0; do
        echo @SDL_VERSION@
        ;;
      --cflags)
@@ -25,3 +29,6 @@ diff -ru3 SDL2-2.0.4/sdl2-config.in SDL2-2.0.4-new/sdl2-config.in
        ;;
  @ENABLE_SHARED_TRUE@    --libs)
  @ENABLE_SHARED_TRUE@      echo -L@libdir@ @SDL_RLD_FLAGS@ @SDL_LIBS@
+-- 
+2.33.1
+

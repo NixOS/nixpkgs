@@ -1,27 +1,23 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib
+, buildEnv
+, makeWrapper
+, ipfs-migrator-unwrapped
+, ipfs-migrator-all-fs-repo-migrations
+}:
 
-buildGoPackage {
-  pname = "ipfs-migrator";
-  version = "7";
+buildEnv {
+  name = "ipfs-migrator-${ipfs-migrator-unwrapped.version}";
 
-  goPackagePath = "github.com/ipfs/fs-repo-migrations";
+  nativeBuildInputs = [ makeWrapper ];
 
-  goDeps = ./deps.nix;
+  paths = [ ipfs-migrator-unwrapped ];
 
-  src = fetchFromGitHub {
-    owner = "ipfs";
-    repo = "fs-repo-migrations";
-    rev = "4e8e0b41d7348646c719d572c678c3d0677e541a";
-    sha256 = "1i6izncgc3wgabppglnnrslffvwrv3cazbdhsk4vjfsd66hb4d37";
-  };
+  pathsToLink = [ "/bin" ];
 
-  patches = [ ./lru-repo-path-fix.patch ];
+  postBuild = ''
+    wrapProgram "$out/bin/fs-repo-migrations" \
+      --prefix PATH ':' '${lib.makeBinPath [ ipfs-migrator-all-fs-repo-migrations ]}'
+  '';
 
-  meta = with stdenv.lib; {
-    description = "Migration tool for ipfs repositories";
-    homepage = https://ipfs.io/;
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ elitak ];
-  };
+  inherit (ipfs-migrator-unwrapped) meta;
 }

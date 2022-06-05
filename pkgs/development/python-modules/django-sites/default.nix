@@ -1,32 +1,41 @@
-{ lib, buildPythonPackage, fetchPypi, django }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, django
+, django-jinja
+, python
+}:
 
 buildPythonPackage rec {
   pname = "django-sites";
-  version = "0.10";
+  version = "0.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "f6f9ae55a05288a95567f5844222052b6b997819e174f4bde4e7c23763be6fc3";
+  src = fetchFromGitHub {
+    owner = "niwinz";
+    repo = "django-sites";
+    rev = version;
+    sha256 = "sha256-MQtQC+9DyS1ICXXovbqPpkKIQ5wpuJDgq3Lcd/1kORU=";
   };
-  # LICENSE file appears to be missing from pypi package, but expected by the installer
-  # https://github.com/niwinz/django-sites/issues/11
-  postPatch = ''
-    touch LICENSE
+
+  propagatedBuildInputs = [
+    django
+  ];
+
+  checkInputs = [
+    django-jinja
+  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    ${python.interpreter} runtests.py
+
+    runHook postCheck
   '';
 
-  propagatedBuildInputs = [ django ];
-
-  # required files for test don't seem to be included in pypi package, full source for 0.10
-  # version doesn't appear to be present on github
-  # https://github.com/niwinz/django-sites/issues/9
-  doCheck = false;
-
   meta = {
-    description = ''
-      Alternative implementation of django "sites" framework
-      based on settings instead of models.
-    '';
-    homepage = https://github.com/niwinz/django-sites;
+    description = "Alternative implementation of django sites framework";
+    homepage = "https://github.com/niwinz/django-sites";
     license = lib.licenses.bsd3;
   };
 }

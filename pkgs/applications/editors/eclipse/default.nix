@@ -1,29 +1,34 @@
-{ stdenv, fetchurl, makeDesktopItem, makeWrapper
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXrender, zlib
-, glib, gtk3, libXtst, jdk, gsettings-desktop-schemas
+, glib, gtk3, gtk2, libXtst, jdk, jdk8, gsettings-desktop-schemas
 , webkitgtk ? null  # for internal web browser
 , buildEnv, runCommand
 , callPackage
 }:
 
-assert stdenv ? glibc;
-
-# http://download.eclipse.org/eclipse/downloads/ is the main place to
+# https://download.eclipse.org/eclipse/downloads/ is the main place to
 # find the downloads needed for new versions
+#
+# to test:
+# $ for e in cpp modeling platform sdk java jee committers rcp; do nix build -f default.nix pkgs.eclipses.eclipse-${e} -o eclipse-${e}; done
 
 let
   platform_major = "4";
-  platform_minor = "14";
-  year = "2019";
-  month = "12";
-  timestamp = "201912100610";
+  platform_minor = "23";
+  year = "2022";
+  month = "03"; #release month
+  buildmonth = "03"; #sometimes differs from release month
+  timestamp = "${year}${buildmonth}080310";
+  gtk = gtk3;
 in rec {
 
-  buildEclipse = import ./build-eclipse.nix {
+  # work around https://bugs.eclipse.org/bugs/show_bug.cgi?id=476075#c3
+  buildEclipseUnversioned = callPackage ./build-eclipse.nix {
     inherit stdenv makeDesktopItem freetype fontconfig libX11 libXrender zlib
-            jdk glib gtk3 libXtst gsettings-desktop-schemas webkitgtk
+            jdk glib gtk libXtst gsettings-desktop-schemas webkitgtk
             makeWrapper;
   };
+  buildEclipse = eclipseData: buildEclipseUnversioned (eclipseData // { productVersion = "${platform_major}.${platform_minor}"; });
 
   ### Eclipse CPP
 
@@ -33,7 +38,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-cpp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "28h8z45j7zlcbvvabzsniwqls1lns21isx69y6l207a869rknp9vzg6506q6zalj9b49j8c7ynkn379xgbzp07i6zw3dzk3pqp2rgam";
+        hash = "sha512-IKoHGBH8pQ1mkdMz11exO1u5T3hCPk662nPYoFunCyrQHOVA6KDAVHzEo1dxNUSJVGvW9YHDbGlZphXniTBJHw==";
       };
   };
 
@@ -45,7 +50,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-modeling-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "1g1zsz3c2kx4vs1mjpcisbk81lk4hsr1z2fw46lih825c53vwf59snp8d97c8yw2i25y0ml48nc1nskib6qnif8m2h6rpah7kgmi8ay";
+        hash = "sha512-cG3mMEJiuNrVfFy5nNkVqC2OpMeE5C1iu26E+LKGwwIBwqPoJtFBPRhLdGVC73KwDDRK8DEyurXsiFal60dv/g==";
       };
   };
 
@@ -57,25 +62,21 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-platform-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        sha512 = "05nsldw937l1g9fj964njivgkf2ipk1rh1jg5w8svdhpp3v1pp3iinfm2mz9kk8namwfkx8krsvsxcgvqyzgrkhf42wqh53vqrjf70h";
+        hash = "sha512-AEGENE5AXXUmIRwv8Hp3LByfPtuG/HvipqkMoq+K4A+8Y7NZCRQM9YSf8zr42S0aYTr6rwP6VJajpFiz4ixULg==";
       };
   };
 
   ### Eclipse Scala SDK
 
-  eclipse-scala-sdk = buildEclipse {
-    name = "eclipse-scala-sdk-4.4.1";
-    description = "Eclipse IDE for Scala Developers";
-    src =
-      if stdenv.hostPlatform.system == "x86_64-linux" then
-        fetchurl { # tested
-          url = https://downloads.typesafe.com/scalaide-pack/4.4.1-vfinal-luna-211-20160504/scala-SDK-4.4.1-vfinal-2.11-linux.gtk.x86_64.tar.gz;
-          sha256  = "4c2d1ac68384e12a11a851cf0fc7757aea087eba69329b21d539382a65340d27";
-        }
-      else
-        fetchurl { # untested
-          url = https://downloads.typesafe.com/scalaide-pack/4.4.1-vfinal-luna-211-20160504/scala-SDK-4.4.1-vfinal-2.11-linux.gtk.x86.tar.gz;
-          sha256 = "35383cb09567187e14a30c15de9fd9aa0eef99e4bbb342396ce3acd11fb5cbac";
+  eclipse-scala-sdk =
+    buildEclipseUnversioned.override { jdk = jdk8; gtk = gtk2; } {
+      name = "eclipse-scala-sdk-4.7.0";
+      description = "Eclipse IDE for Scala Developers";
+      productVersion = "4.7";
+      src =
+        fetchurl {
+          url = "https://downloads.typesafe.com/scalaide-pack/4.7.0-vfinal-oxygen-212-20170929/scala-SDK-4.7.0-vfinal-2.12-linux.gtk.x86_64.tar.gz";
+          sha256  = "1n5w2a7mh9ajv6fxcas1gpgwb04pdxbr9v5dzr67gsz5bhahq4ya";
         };
   };
 
@@ -87,7 +88,7 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops${platform_major}/R-${platform_major}.${platform_minor}-${timestamp}/eclipse-SDK-${platform_major}.${platform_minor}-linux-gtk-x86_64.tar.gz";
-        sha512 = "0dcbxzjqc27v1faz16yxqcm6zrbna4kkd32xy7paadiwn125y6ijx8zvda4kc7bih6v5b9ch2i0z5ndra1lcjcc88z6cklh0vngjkh1";
+        hash = "sha512-CTSuI6Dc2wKe0RduPKAacQmXbEBtF4J7Q5b9gC1MIkXXWPLW7Yp+lL/a167TXgDHG3kqNWbonjZ2JwU2T0FRjg==";
       };
   };
 
@@ -99,7 +100,43 @@ in rec {
     src =
       fetchurl {
         url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-java-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
-        sha512 = "21lhgv3z23mn8q0gffgxlfwhyxb348zjnzv716zsys7h7kj5vigl45q9mz0qrl11524rxx7jwi901jjd4l258w9kp7wzlq0d5n1r39m";
+        hash = "sha512-6QOtNFYCRhdSiclEwijBcp2EODnlp8qtO56NJLuRdgwpEe+3A567L/vsZe/E72YTGZOFh9yJ7+XehIEjonfUIw==";
+      };
+  };
+
+  ### Eclipse Java EE
+
+  eclipse-jee = buildEclipse {
+    name = "eclipse-jee-${platform_major}.${platform_minor}";
+    description = "Eclipse IDE for Enterprise Java and Web Developers";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-jee-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
+        hash = "sha512-bgaRM7l4WOoGA8doR/nqjV4Hnszx3N4cZANYfq/Fq5Agspocu4m1F4ofetQC4BdlLkx0o+moKSN6sm34aT5H4Q==";
+      };
+  };
+
+  ### Eclipse Committers
+
+  eclipse-committers = buildEclipse {
+    name = "eclipse-committers-${platform_major}.${platform_minor}";
+    description = "Eclipse IDE for Eclipse Committers and Eclipse Platform Plugin Developers";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-committers-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
+        hash = "sha512-YyyATAL0pJVrinrLixIW3p+bz3WfD7L/WL0EGnUWgCGsiVDzF2CGoXXT8YsH34uc+6Hn8z23JCoNX4Sqdo8i7Q==";
+      };
+  };
+
+  ### Eclipse IDE for RCP and RAP Developers
+
+  eclipse-rcp = buildEclipse {
+    name = "eclipse-rcp-${platform_major}.${platform_minor}";
+    description = "Eclipse IDE for RCP and RAP Developers";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-rcp-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
+        hash = "sha256-1Go3e1HDRJlba8ySYRfi0+aU6aHjKmd3fc/IgeKw18c=";
       };
   };
 
@@ -113,7 +150,7 @@ in rec {
       pluginEnv = buildEnv {
         name = "eclipse-plugins";
         paths =
-          with stdenv.lib;
+          with lib;
             filter (x: x ? isEclipsePlugin) (closePropagation plugins);
       };
 
@@ -121,13 +158,13 @@ in rec {
       # add the property indicating the plugin directory.
       dropinPropName = "org.eclipse.equinox.p2.reconciler.dropins.directory";
       dropinProp = "-D${dropinPropName}=${pluginEnv}/eclipse/dropins";
-      jvmArgsText = stdenv.lib.concatStringsSep "\n" (jvmArgs ++ [dropinProp]);
+      jvmArgsText = lib.concatStringsSep "\n" (jvmArgs ++ [dropinProp]);
 
       # Base the derivation name on the name of the underlying
       # Eclipse.
-      name = (stdenv.lib.meta.appendToName "with-plugins" eclipse).name;
+      name = (lib.meta.appendToName "with-plugins" eclipse).name;
     in
-      runCommand name { buildInputs = [ makeWrapper ]; } ''
+      runCommand name { nativeBuildInputs = [ makeWrapper ]; } ''
         mkdir -p $out/bin $out/etc
 
         # Prepare an eclipse.ini with the plugin directory.

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "udftools";
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     sed -e '38i#include <string.h>' -i wrudf/wrudf-cdrw.c
     sed -e '12i#include <string.h>' -i wrudf/wrudf-cdr.c
     sed -e '37i#include <stdlib.h>' -i wrudf/ide-pc.c
+    sed -e '46i#include <sys/sysmacros.h>' -i mkudffs/main.c
 
     sed -e "s@\$(DESTDIR)/lib/udev/rules.d@$out/lib/udev/rules.d@" -i pktsetup/Makefile.am
   '';
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s@/usr/sbin/pktsetup@$out/sbin/pktsetup@" $out/lib/udev/rules.d/80-pktsetup.rules
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "UDF tools";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

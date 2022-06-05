@@ -1,23 +1,39 @@
-{ buildPythonPackage, fetchPypi, lib, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, flit-core
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "ordered-set";
-  version = "3.1.1";
+  version = "4.1.0";
+  format = "pyproject";
 
-  checkInputs = [ pytest ];
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "094pww79pawgmjgwi47r0fji9irb7sr4xc9xwjbb0wwcficaigx7";
+    sha256 = "sha256-aUqORMh2V8WSku3nKJHrkdNBMfZTFGOqswCRkcdzZKg=";
   };
 
-  checkPhase = ''
-    py.test test.py
-  '';
+  nativeBuildInputs = [
+    flit-core
+  ];
 
-  meta = {
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "ordered_set"
+  ];
+
+  meta = with lib; {
     description = "A MutableSet that remembers its order, so that every entry has an index.";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.MostAwesomeDude ];
+    homepage = "https://github.com/rspeer/ordered-set";
+    license = licenses.mit;
+    maintainers = with maintainers; [ MostAwesomeDude ];
   };
 }

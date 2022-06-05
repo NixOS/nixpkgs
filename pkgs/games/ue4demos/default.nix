@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, unzip, patchelf, xorg, openal }:
+{ lib, stdenv, fetchurl, unzip, patchelf, xorg, openal }:
 
 let
   urls = file:
     [
       # Untrusted mirrors - do not update hashes
       "https://ludios.org/mirror/ue4demos/${file}"
-      "http://web.archive.org/web/20140824192039/http://ue4linux.raxxy.com/${file}"
+      "https://web.archive.org/web/20140824192039/http://ue4linux.raxxy.com/${file}"
     ];
 
   buildDemo = { name, src }:
@@ -14,9 +14,9 @@ let
 
       nativeBuildInputs = [ unzip patchelf ];
 
-      rtdeps = stdenv.lib.makeLibraryPath
+      rtdeps = lib.makeLibraryPath
         [ xorg.libXxf86vm xorg.libXext openal ]
-        + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
+        + ":" + lib.makeSearchPathOutput "lib" "lib64" [ stdenv.cc.cc ];
 
       buildCommand =
       ''
@@ -24,7 +24,7 @@ let
         cd $out
         unzip $src
 
-        interpreter=$(echo ${stdenv.glibc.out}/lib/ld-linux*.so.2)
+        interpreter=$(echo ${stdenv.cc.libc}/lib/ld-linux*.so.2)
         binary=$(find . -executable -type f)
         patchelf \
           --set-interpreter $interpreter \
@@ -50,9 +50,9 @@ let
 
       meta = {
         description = "Unreal Engine 4 Linux demos";
-        homepage = https://wiki.unrealengine.com/Linux_Demos;
+        homepage = "https://wiki.unrealengine.com/Linux_Demos";
         platforms = [ "x86_64-linux" ];
-        license = stdenv.lib.licenses.unfree;
+        license = lib.licenses.unfree;
       };
     };
 

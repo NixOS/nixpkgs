@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, msgpack
-, libvpx, check, libconfig, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, cmake, libsodium, ncurses, libopus, msgpack
+, libvpx, check, libconfig, pkg-config }:
 
 let
   generic = { version, sha256 }:
@@ -22,13 +22,11 @@ let
 
     buildInputs = [
       libsodium msgpack ncurses libconfig
-    ] ++ stdenv.lib.optionals (!stdenv.isAarch32) [
+    ] ++ lib.optionals (!stdenv.isAarch32) [
       libopus libvpx
     ];
 
-    nativeBuildInputs = [ cmake pkgconfig ];
-
-    enableParallelBuilding = true;
+    nativeBuildInputs = [ cmake pkg-config ];
 
     doCheck = false; # hangs, tries to access the net?
     checkInputs = [ check ];
@@ -39,9 +37,10 @@ let
         -e "s|^includedir=.*|includedir=$out/include|"
     '';
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "P2P FOSS instant messaging application aimed to replace Skype";
-      homepage = https://tox.chat;
+      homepage = "https://tox.chat";
       license = licenses.gpl3Plus;
       maintainers = with maintainers; [ peterhoeg ];
       platforms = platforms.all;
@@ -55,7 +54,7 @@ in {
   };
 
   libtoxcore_0_2 = generic {
-    version = "0.2.10";
-    sha256 = "0r5j2s5n8ikayvr1zylvv3ai3smbhm2m0yhpa9lfcsxhvyn9phcn";
+    version = "0.2.17";
+    sha256 = "sha256-SOI6QKOSt/EK9JDrSaV6CrD5sx8aYb5ZL3StYq8u/Dg=";
   };
 }

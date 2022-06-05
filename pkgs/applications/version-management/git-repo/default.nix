@@ -1,39 +1,52 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, python, git, gnupg, less, cacert
+{ lib, stdenv, fetchFromGitHub, makeWrapper, nix-update-script
+, python3, git, gnupg, less, openssh
 }:
 
 stdenv.mkDerivation rec {
   pname = "git-repo";
-  version = "1.13.8";
+  version = "2.25";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "1wmzgijmssgwkkw8g4zgmc4x64xkvz6nq1b3szcvawgv1ndwnb2j";
+    sha256 = "sha256-3S4peybytlO432ui+bECVWQTbyNfs2kSMqcqQyVc1os=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python ];
+  # Fix 'NameError: name 'ssl' is not defined'
+  patches = [ ./import-ssl-module.patch ];
 
-  patchPhase = ''
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ python3 ];
+
+  postPatch = ''
     substituteInPlace repo --replace \
       'urllib.request.urlopen(url)' \
-      'urllib.request.urlopen(url, cafile="${cacert}/etc/ssl/certs/ca-bundle.crt")'
+      'urllib.request.urlopen(url, context=ssl.create_default_context())'
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     cp repo $out/bin/repo
+
+    runHook postInstall
   '';
 
   # Important runtime dependencies
   postFixup = ''
     wrapProgram $out/bin/repo --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ git gnupg less ]}"
+      "${lib.makeBinPath [ git gnupg less openssh ]}"
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "gitRepo";
+    };
+  };
+
+  meta = with lib; {
     description = "Android's repo management tool";
     longDescription = ''
       Repo is a Python script based on Git that helps manage many Git
@@ -41,9 +54,9 @@ stdenv.mkDerivation rec {
       parts of the development workflow. Repo is not meant to replace Git, only
       to make it easier to work with Git.
     '';
-    homepage = https://android.googlesource.com/tools/repo;
+    homepage = "https://android.googlesource.com/tools/repo";
     license = licenses.asl20;
-    maintainers = [ maintainers.primeos ];
+    maintainers = with maintainers; [ otavio ];
     platforms = platforms.unix;
   };
 }

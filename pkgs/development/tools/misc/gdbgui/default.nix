@@ -1,52 +1,51 @@
-{ stdenv
+{ lib
 , buildPythonApplication
 , fetchPypi
 , gdb
-, flask
 , flask-socketio
 , flask-compress
 , pygdbmi
 , pygments
-, gevent
 , }:
 
 buildPythonApplication rec {
   pname = "gdbgui";
-  version = "0.13.1.1";
+
+  version = "0.15.0.1";
+
 
   buildInputs = [ gdb ];
   propagatedBuildInputs = [
-    flask
     flask-socketio
     flask-compress
     pygdbmi
     pygments
-    gevent
   ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ypxgkxwb443ndyrmsa7zx2hn0d9b3s7n2w49ngfghd3l8k0yvi2";
+    sha256 = "sha256-bwrleLn3GBx4Mie2kujtaUo+XCALM+hRLySIZERlBg0=";
   };
 
   postPatch = ''
     echo ${version} > gdbgui/VERSION.txt
     # remove upper version bound
-    sed -ie 's!, <.*"!"!' setup.py
+    sed -ie 's!,.*<.*!!' requirements.in
   '';
 
   postInstall = ''
     wrapProgram $out/bin/gdbgui \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ gdb ]}
+      --prefix PATH : ${lib.makeBinPath [ gdb ]}
   '';
 
   # tests do not work without stdout/stdin
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A browser-based frontend for GDB";
+    homepage = "https://www.gdbgui.com/";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ yrashk ];
+    maintainers = with maintainers; [ yrashk dump_stack ];
   };
 }

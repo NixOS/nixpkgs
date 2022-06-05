@@ -1,14 +1,24 @@
-{ fetchurl, stdenv, expect, makeWrapper }:
+{ fetchurl, lib, stdenv, expect, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "dejagnu-1.6.2";
+  pname = "dejagnu";
+  version = "1.6.3";
 
   src = fetchurl {
-    url = "mirror://gnu/dejagnu/${name}.tar.gz";
-    sha256 = "0qfj2wd4qk1yn9yzam6g8nmyxfazcc0knjyyibycb2ainkhp21hd";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1qx2cv6qkxbiqg87jh217jb62hk3s7dmcs4cz1llm2wmsynfznl7";
   };
 
-  buildInputs = [ expect makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ expect ];
+
+  # dejagnu-1.6.3 can't successfully run tests in source tree:
+  #   https://wiki.linuxfromscratch.org/lfs/ticket/4871
+  preConfigure = ''
+    mkdir build
+    cd build
+  '';
+  configureScript = "../configure";
 
   doCheck = true;
 
@@ -30,7 +40,7 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "${expect}/bin"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Framework for testing other programs";
 
     longDescription = ''
@@ -44,7 +54,7 @@ stdenv.mkDerivation rec {
       Tool command language.
     '';
 
-    homepage = https://www.gnu.org/software/dejagnu/;
+    homepage = "https://www.gnu.org/software/dejagnu/";
     license = licenses.gpl2Plus;
 
     platforms = platforms.unix;

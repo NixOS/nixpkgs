@@ -1,7 +1,7 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python, robotframework, selenium, mockito, robotstatuschecker, approvaltests }:
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub, python, robotframework, selenium, mockito, robotstatuschecker, approvaltests }:
 
 buildPythonPackage rec {
-  version = "3.3.1";
+  version = "6.0.0";
   pname = "robotframework-seleniumlibrary";
 
   # no tests included in PyPI tarball
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "robotframework";
     repo = "SeleniumLibrary";
     rev = "v${version}";
-    sha256 = "0dabc5dwx0pwsyiy74d7wj97k72yl28a17sasjzrdq819pyc3dvq";
+    sha256 = "1rjzz6mrx4zavcck2ry8269rf3dkvvs1qfa9ra7dkppbarrjin3f";
   };
 
   propagatedBuildInputs = [ robotframework selenium ];
@@ -21,9 +21,10 @@ buildPythonPackage rec {
     ${python.interpreter} utest/run.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Web testing library for Robot Framework";
-    homepage = https://github.com/robotframework/SeleniumLibrary;
+    homepage = "https://github.com/robotframework/SeleniumLibrary";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
   };

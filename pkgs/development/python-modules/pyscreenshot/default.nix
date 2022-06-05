@@ -1,24 +1,36 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , EasyProcess
+, entrypoint2
+, jeepney
+, mss
+, pillow
 }:
 
 buildPythonPackage rec {
   pname = "pyscreenshot";
-  version = "0.6";
+  version = "3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7322ad9454652b1702a3689646ce53ef01ed2b14869ea557030bd4e03a06fc0e";
+    sha256 = "dd4fdfaeb617483913a6b16845b9f428de5db28758979f4b6cf8f236d292b908";
   };
 
   propagatedBuildInputs = [
     EasyProcess
+    entrypoint2
+    pillow
+  ] ++ lib.optionals (isPy3k) [
+    jeepney
+    mss
   ];
 
   # recursive dependency on pyvirtualdisplay
   doCheck = false;
+
+  pythonImportsCheck = [ "pyscreenshot" ];
 
   meta = with lib; {
     description = "python screenshot";

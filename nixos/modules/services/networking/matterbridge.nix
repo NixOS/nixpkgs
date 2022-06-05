@@ -38,8 +38,8 @@ in
           # Use services.matterbridge.configPath instead.
 
           [irc]
-              [irc.freenode]
-              Server="irc.freenode.net:6667"
+              [irc.libera]
+              Server="irc.libera.chat:6667"
               Nick="matterbot"
 
           [mattermost]
@@ -55,7 +55,7 @@ in
           name="gateway1"
           enable=true
               [[gateway.inout]]
-              account="irc.freenode"
+              account="irc.libera"
               channel="#testing"
 
               [[gateway.inout]]
@@ -111,7 +111,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.matterbridge.bin}/bin/matterbridge -conf ${matterbridgeConfToml}";
+        ExecStart = "${pkgs.matterbridge}/bin/matterbridge -conf ${matterbridgeConfToml}";
         Restart = "always";
         RestartSec = "10";
       };

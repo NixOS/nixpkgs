@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, xorg, xorgproto, cairo, lv2, pkgconfig }:
+{ lib, stdenv, fetchFromGitHub, xorg, xorgproto, cairo, lv2, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "GxPlugins.lv2";
-  version = "0.7";
+  version = "0.9";
 
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0jqdqnkg7pg9plcbxy49p7gcs1aj6h0xf7y9gndmjmkw5yjn2940";
+    sha256 = "02fksl8wr443ygwgcd1c2zab8kp67a6ps12k71ysqx7szv4zq877";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     xorg.libX11 xorgproto cairo lv2
   ];
@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/brummer10/GxPlugins.lv2;
+  meta = with lib; {
+    homepage = "https://github.com/brummer10/GxPlugins.lv2";
     description = "A set of extra lv2 plugins from the guitarix project";
     maintainers = [ maintainers.magnetophon ];
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
   };
 }

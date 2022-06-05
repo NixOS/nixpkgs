@@ -1,24 +1,24 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy
+{ lib, buildPythonPackage, fetchPypi, isPyPy
 , dnspython
 , geoip2
 , ipython
 , praw
 , pyenchant
 , pygeoip
-, pytest
-, python
+, pytestCheckHook
 , pytz
+, sqlalchemy
 , xmltodict
 }:
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "6.6.9";
+  version = "7.1.8";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1arldn3p2yp09wnn2cw50r5ri303d5jdsjnf6lgfl82jhfmk49a2";
+    sha256 = "sha256-zxb95GVcDrd3FG/k+0PLg+dVlMgQpf1ntG8jF/zpHH4=";
   };
 
   propagatedBuildInputs = [
@@ -29,25 +29,34 @@ buildPythonPackage rec {
     pyenchant
     pygeoip
     pytz
+    sqlalchemy
     xmltodict
   ];
 
   # remove once https://github.com/sopel-irc/sopel/pull/1653 lands
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "praw<6.0.0" "praw<7.0.0"
+      --replace "praw>=4.0.0,<6.0.0" "praw" \
+      --replace "sqlalchemy<1.4" "sqlalchemy"
   '';
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
 
-  checkPhase = ''
-    HOME=$PWD # otherwise tries to create tmpdirs at root
-    pytest .
+  preCheck = ''
+    export TESTDIR=$(mktemp -d)
+    cp -R ./test $TESTDIR
+    pushd $TESTDIR
   '';
 
-  meta = with stdenv.lib; {
+  postCheck = ''
+    popd
+  '';
+
+  pythonImportsCheck = [ "sopel" ];
+
+  meta = with lib; {
     description = "Simple and extensible IRC bot";
-    homepage = "http://sopel.chat";
+    homepage = "https://sopel.chat";
     license = licenses.efl20;
     maintainers = with maintainers; [ mog ];
   };

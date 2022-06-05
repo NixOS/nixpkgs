@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "test";
+  pname = "test";
   version = "2017-03-30";
 
   idrisDeps = [ effects ];
@@ -20,7 +20,7 @@ build-idris-package  {
 
   meta = {
     description = "Testing Utilities for Idris programs";
-    homepage = https://github.com/jfdm/idris-testing;
+    homepage = "https://github.com/jfdm/idris-testing";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.brainrape ];
   };

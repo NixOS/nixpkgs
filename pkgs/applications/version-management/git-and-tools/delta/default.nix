@@ -1,23 +1,41 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, installShellFiles
+, DiskArbitration
+, Foundation
+, libiconv
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.0.15";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = pname;
     rev = version;
-    sha256 = "1c2zqvkzkrj8rcz226vfk43yw113b1fdcz2gx0xh8fs72arqx6wh";
+    sha256 = "sha256-5h4epV3RORZiynW1fkFLImqPunC3PZ/YzLiSrzescww=";
   };
 
-  cargoSha256 = "1888bvkpalfcw9bc9zmf9bmil6x35l9ia31x6mx1h2dvrfpw3bb1";
+  cargoSha256 = "sha256-4dPTcrT8Gx3WfT0sauqnCSmcGE9LrgIqgHrY5l503ZA=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation libiconv Security ];
+
+  postInstall = ''
+    installShellCompletion --bash --name delta.bash etc/completion/completion.bash
+    installShellCompletion --zsh --name _delta etc/completion/completion.zsh
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/dandavison/delta";
     description = "A syntax-highlighting pager for git";
     changelog = "https://github.com/dandavison/delta/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ marsam ma27 ];
+    maintainers = with maintainers; [ marsam zowoq SuperSandro2000 ];
   };
 }

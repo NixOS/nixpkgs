@@ -1,45 +1,56 @@
-{ stdenv
+{ lib, stdenv
+, fetchFromGitLab
+, pkg-config
+, gobject-introspection
+, meson
+, ninja
+, perl
+, gettext
+, cairo
+, gtk-doc
+, libxslt
+, docbook-xsl-nons
+, docbook_xml_dtd_412
 , fetchurl
-, fetchpatch
-, pkgconfig
-, intltool
-, libfprint
 , glib
-, dbus-glib
+, gusb
+, dbus
 , polkit
 , nss
 , pam
 , systemd
-, autoreconfHook
-, gtk-doc
+, libfprint
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "fprintd";
-  version = "0.9.0";
+  version = "1.94.2";
+  outputs = [ "out" "devdoc" ];
 
-  src = fetchurl {
-    url = "https://gitlab.freedesktop.org/libfprint/fprintd/uploads/9dec4b63d1f00e637070be1477ce63c0/fprintd-${version}.tar.xz";
-    sha256 = "182gcnwb6zjwmk0dn562rjmpbk7ac7dhipbfdhfic2sn1jzis49p";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "libfprint";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-ePhcIZyXoGr8XlBuzKjpibU9D/44iCXYBlpVR9gcswQ=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/libfprint/fprintd/merge_requests/16.patch";
-      sha256 = "1y39zsmxjll9hip8464qwhq5qg06c13pnafyafgxdph75lvhdll7";
-    })
-  ];
-
   nativeBuildInputs = [
-    intltool
-    pkgconfig
-    autoreconfHook # Drop with above patch
-    gtk-doc # Drop with above patch
+    pkg-config
+    meson
+    ninja
+    perl # for pod2man
+    gettext
+    gtk-doc
+    libxslt
+    dbus
+    docbook-xsl-nons
+    docbook_xml_dtd_412
   ];
 
   buildInputs = [
     glib
-    dbus-glib
     polkit
     nss
     pam
@@ -47,18 +58,44 @@ stdenv.mkDerivation rec {
     libfprint
   ];
 
-  configureFlags = [
-    # is hardcoded to /var/lib/fprint, this is for the StateDirectory install target
-    "--localstatedir=${placeholder "out"}/var"
-    "--sysconfdir=${placeholder "out"}/etc"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  checkInputs = with python3.pkgs; [
+    gobject-introspection # for setup hook
+    python-dbusmock
+    dbus-python
+    pygobject3
+    pycairo
+    pypamtest
+    gusb # Required by libfprint’s typelib
   ];
 
-  meta = with stdenv.lib; {
-    homepage = https://fprint.freedesktop.org/;
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dpam_modules_dir=${placeholder "out"}/lib/security"
+    "-Dsysconfdir=${placeholder "out"}/etc"
+    "-Ddbus_service_dir=${placeholder "out"}/share/dbus-1/system-services"
+    "-Dsystemd_system_unit_dir=${placeholder "out"}/lib/systemd/system"
+  ];
+
+  PKG_CONFIG_DBUS_1_INTERFACES_DIR = "${placeholder "out"}/share/dbus-1/interfaces";
+  PKG_CONFIG_POLKIT_GOBJECT_1_POLICYDIR = "${placeholder "out"}/share/polkit-1/actions";
+  PKG_CONFIG_DBUS_1_DATADIR = "${placeholder "out"}/share";
+
+  # FIXME: Ugly hack for tests to find libpam_wrapper.so
+  LIBRARY_PATH = lib.makeLibraryPath [ python3.pkgs.pypamtest ];
+
+  doCheck = true;
+
+  postPatch = ''
+    patchShebangs \
+      po/check-translations.sh \
+      tests/unittest_inspector.py
+  '';
+
+  meta = with lib; {
+    homepage = "https://fprint.freedesktop.org/";
     description = "D-Bus daemon that offers libfprint functionality over the D-Bus interprocess communication bus";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar elyhaka ];
   };
 }

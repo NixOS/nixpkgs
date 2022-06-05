@@ -18,7 +18,8 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "tbs-2018.04.18-${kernel.version}";
+  pname = "tbs";
+  version = "2018.04.18-${kernel.version}";
 
   srcs = [ media build ];
   sourceRoot = build.name;
@@ -53,11 +54,11 @@ in stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = https://www.tbsdtv.com/;
+    homepage = "https://www.tbsdtv.com/";
     description = "Linux driver for TBSDTV cards";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ck3d ];
     priority = -1;
-    broken = stdenv.lib.versionAtLeast kernel.version "4.18";
+    broken = true;
   };
 }

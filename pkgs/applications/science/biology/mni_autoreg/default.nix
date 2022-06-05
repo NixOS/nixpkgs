@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, perlPackages, libminc }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, perlPackages, libminc }:
 
 stdenv.mkDerivation rec {
   pname = "mni_autoreg";
-  name  = "${pname}-2017-09-22";
+  version = "unstable-2017-09-22";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
@@ -11,11 +11,21 @@ stdenv.mkDerivation rec {
     sha256 = "0axl069nv57vmb2wvqq7s9v3bfxwspzmk37bxm4973ai1irgppjq";
   };
 
+  patches = [
+    # Pull upstream workaround for -fno-common toolchains:
+    #  https://github.com/BIC-MNI/mni_autoreg/pull/28
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/BIC-MNI/mni_autoreg/commit/06adfacbd84369ea3bcc4376596ac1c0f2e49af9.patch";
+      sha256 = "004sdrbx9kcj1qqwjly6p03svakl0x2sbv83salyg63fv67jynx8";
+    })
+  ];
+
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ libminc ];
   propagatedBuildInputs = with perlPackages; [ perl GetoptTabular MNI-Perllib ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" ];
   # testing broken: './minc_wrapper: Permission denied' from Testing/ellipse0.mnc
 
   postFixup = ''
@@ -25,8 +35,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/BIC-MNI/mni_autoreg;
+  meta = with lib; {
+    homepage = "https://github.com/BIC-MNI/mni_autoreg";
     description = "Tools for automated registration using the MINC image format";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;

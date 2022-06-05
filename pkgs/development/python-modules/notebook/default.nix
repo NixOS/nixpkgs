@@ -2,6 +2,7 @@
 , lib
 , buildPythonPackage
 , fetchPypi
+, argon2-cffi
 , nose
 , nose_warnings_filters
 , glibcLocales
@@ -12,7 +13,7 @@
 , ipython_genutils
 , traitlets
 , jupyter_core
-, jupyter_client
+, jupyter-client
 , nbformat
 , nbconvert
 , ipykernel
@@ -20,28 +21,29 @@
 , requests
 , send2trash
 , pexpect
-, prometheus_client
+, prometheus-client
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "6.0.2";
+  version = "6.4.10";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "399a4411e171170173344761e7fd4491a3625659881f76ce47c50231ed714d9b";
+    sha256 = "sha256-JAina8YokoOo7s/KZ+KY7IPGfbUaTC4bcT3RgLs56Q4=";
   };
 
   LC_ALL = "en_US.utf8";
 
-  checkInputs = [ nose glibcLocales ]
+  checkInputs = [ nose pytestCheckHook glibcLocales ]
     ++ (if isPy3k then [ nose_warnings_filters ] else [ mock ]);
 
   propagatedBuildInputs = [
     jinja2 tornado ipython_genutils traitlets jupyter_core send2trash
-    jupyter_client nbformat nbconvert ipykernel terminado requests pexpect
-    prometheus_client
+    jupyter-client nbformat nbconvert ipykernel terminado requests pexpect
+    prometheus-client argon2-cffi
   ];
 
   # disable warning_filters
@@ -52,25 +54,37 @@ buildPythonPackage rec {
   postPatch = ''
     # Remove selenium tests
     rm -rf notebook/tests/selenium
-
+    export HOME=$TMPDIR
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    mkdir tmp
-    HOME=tmp nosetests -v ${if (stdenv.isDarwin) then ''
-      --exclude test_delete \
-      --exclude test_checkpoints_follow_file
-    ''
-    else ""}
-  '';
+  disabledTests = [
+    # a "system_config" is generated, and fails many tests
+    "config"
+    "load_ordered"
+    # requires jupyter, but will cause circular imports
+    "test_run"
+    "TestInstallServerExtension"
+    "launch_socket"
+    "sock_server"
+    "test_list_formats" # tries to find python MIME type
+    "KernelCullingTest" # has a race condition failing on slower hardware
+  ] ++ lib.optional stdenv.isDarwin [
+    "test_delete"
+    "test_checkpoints_follow_file"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # requires local networking
+    "notebook/auth/tests/test_login.py"
+    "notebook/bundler/tests/test_bundler_api.py"
+  ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
-    homepage = https://jupyter.org/;
+    homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

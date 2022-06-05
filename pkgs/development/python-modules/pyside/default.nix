@@ -1,17 +1,22 @@
-{ lib, fetchurl, cmake, buildPythonPackage, pysideGeneratorrunner, pysideShiboken, qt4, mesa, libGL }:
+{ lib, fetchFromGitHub, cmake, buildPythonPackage, pysideGeneratorrunner, pysideShiboken, qt4, mesa, libGL }:
 
-# This derivation provides a Python module and should therefore be called via `python-packages.nix`.
 buildPythonPackage rec {
   pname = "pyside";
   version = "1.2.4";
   format = "other";
 
-  src = fetchurl {
-    url = "https://github.com/PySide/PySide/archive/${version}.tar.gz";
-    sha256 = "90f2d736e2192ac69e5a2ac798fce2b5f7bf179269daa2ec262986d488c3b0f7";
+  src = fetchFromGitHub {
+    owner = "PySide";
+    repo = "PySide";
+    rev = version;
+    sha256 = "sha256-14XbihJRMk9WaeK6NUBV/4OMFZF8EBIJgEJEaCU8Ecg=";
   };
 
-  enableParallelBuilding = true;
+  outputs = [ "out" "dev" ];
+
+  preConfigure = ''
+    cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$dev")
+  '';
 
   nativeBuildInputs = [ cmake pysideGeneratorrunner pysideShiboken qt4 ];
 
@@ -19,9 +24,11 @@ buildPythonPackage rec {
 
   makeFlags = [ "QT_PLUGIN_PATH=${pysideShiboken}/lib/generatorrunner" ];
 
+  dontWrapQtApps = true;
+
   meta = {
     description = "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
     license = lib.licenses.lgpl21;
-    homepage = http://www.pyside.org;
+    homepage = "http://www.pyside.org";
   };
 }

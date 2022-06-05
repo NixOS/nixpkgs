@@ -1,68 +1,112 @@
 { lib
+, async_generator
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , certifi
-, hstspreload
-, chardet
-, h11
-, h2
-, idna
+, charset-normalizer
+, httpcore
 , rfc3986
 , sniffio
-, isPy27
-, pytest
-, pytestcov
+, h2
+, socksio
+, isPyPy
+, brotli
+, brotlicffi
+, click
+, rich
+, pygments
+, python
+, pytestCheckHook
+, pytest-asyncio
+, pytest-trio
+, typing-extensions
 , trustme
 , uvicorn
-, trio
-, brotli
 }:
 
 buildPythonPackage rec {
   pname = "httpx";
-  version = "0.9.5";
-  disabled = isPy27;
+  version = "0.22.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "140z2j7b5hlcxvfb433hqv5b8irqa88hpq33lzr9m992djbhj2hb";
+    sha256 = "sha256-hQmQodGpVG23IZSsWV7rB1iB6QAudDao/8YshIgpmas=";
   };
 
   propagatedBuildInputs = [
     certifi
-    hstspreload
-    chardet
-    h11
-    h2
-    idna
+    charset-normalizer
+    httpcore
     rfc3986
     sniffio
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    async_generator
   ];
 
+  passthru.optional-dependencies = {
+    http2 = [ h2 ];
+    socks = [ socksio ];
+    brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
+    cli = [ click rich pygments ];
+  };
+
   checkInputs = [
-    pytest
-    pytestcov
+    pytestCheckHook
+    pytest-asyncio
+    pytest-trio
     trustme
+    typing-extensions
     uvicorn
-    trio
-    brotli
-  ];
+  ] ++ passthru.optional-dependencies.http2
+    ++ passthru.optional-dependencies.brotli
+    ++ passthru.optional-dependencies.socks;
 
   postPatch = ''
     substituteInPlace setup.py \
-          --replace "h11==0.8.*" "h11"
+      --replace "rfc3986[idna2008]>=1.3,<2" "rfc3986>=1.3"
   '';
 
-  checkPhase = ''
-    PYTHONPATH=.:$PYTHONPATH pytest
+  # testsuite wants to find installed packages for testing entrypoint
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
   '';
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
+  disabledTests = [
+    # httpcore.ConnectError: [Errno 101] Network is unreachable
+    "test_connect_timeout"
+    # httpcore.ConnectError: [Errno -2] Name or service not known
+    "test_async_proxy_close"
+    "test_sync_proxy_close"
+    # sensitive to charset_normalizer output
+    "iso-8859-1"
+    "test_response_no_charset_with_iso_8859_1_content"
+  ];
+
+  disabledTestPaths = [
+    "tests/test_main.py"
+  ];
+
+  pythonImportsCheck = [
+    "httpx"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "The next generation HTTP client";
-    homepage = https://github.com/encode/httpx;
+    homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc fab ];
   };
 }

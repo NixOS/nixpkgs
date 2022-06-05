@@ -1,18 +1,17 @@
-{ stdenv, fetchFromGitHub, glib, pkgconfig, xorg, dbus }:
+{ lib, stdenv, fetchFromGitHub, glib, pkg-config, xorg, dbus }:
 
-let rev = "1.0.0"; in
-
-stdenv.mkDerivation {
-  name = "xssproxy-${rev}";
+stdenv.mkDerivation rec {
+  pname = "xssproxy";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "timakro";
     repo = "xssproxy";
-    rev = "v${rev}";
+    rev = "v${version}";
     sha256 = "0c83wmipnsdnbihc5niyczs7jrkss2s8n6iwwjdia7hkjzbd0hl7";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib xorg.libX11 xorg.libXScrnSaver dbus ];
 
   makeFlags = [
@@ -22,9 +21,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Forward freedesktop.org Idle Inhibition Service calls to Xss";
-    homepage = https://github.com/timakro/xssproxy;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ benley ];
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://github.com/timakro/xssproxy";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ benley ];
+    platforms = lib.platforms.unix;
   };
 }

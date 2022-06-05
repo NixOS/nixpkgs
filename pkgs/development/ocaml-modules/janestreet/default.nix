@@ -1,10 +1,10 @@
-{ janePackage, ocamlbuild, angstrom, cryptokit, ctypes,
-  magic-mime, ocaml-migrate-parsetree, octavius, ounit, ppx_deriving, re,
-  num, openssl
-, ppxlib
+{ self
+, openssl
 }:
 
-rec {
+with self;
+
+{
 
   ocaml-compiler-libs = janePackage {
     pname = "ocaml-compiler-libs";
@@ -234,7 +234,7 @@ rec {
   ppx_let = janePackage {
     pname = "ppx_let";
     hash = "1ckzwljlb78cdf6xxd24nddnmsihvjrnq75r1b255aj3xgkzsygx";
-    buildInputs = [ ppxlib ];
+    propagatedBuildInputs = [ base ppxlib ];
     meta.description = "Monadic let-bindings";
   };
 
@@ -299,9 +299,9 @@ rec {
   };
 
   core = janePackage {
-    version = "0.11.2";
+    version = "0.11.3";
     pname = "core";
-    hash = "0vpsvd75lxb09il2rnzyib9mlr51v1hzqdc9fdxgx353pb5agh8a";
+    hash = "0pzl8n09z4f3i7z2wq4cjxfqrr8mj6xcdp7rbg0nxap2zdhjgvrq";
     propagatedBuildInputs = [ core_kernel spawn ];
     meta.description = "Jane Street's standard library overlay";
   };
@@ -417,7 +417,12 @@ rec {
     pname = "async_ssl";
     hash = "1p83fzfla4rb820irdrz3f2hp8kq5zrhw47rqmfv6qydlca1bq64";
     propagatedBuildInputs = [ async ctypes openssl ];
-    meta.description = "Async wrappers for SSL";
+    meta = {
+      description = "Async wrappers for SSL";
+      # ctypes no longer works with dune 1
+      # dune 2 no longer supports jbuild
+      broken = true;
+    };
   };
 
   sexp_pretty = janePackage {
@@ -515,13 +520,6 @@ rec {
     meta.description = "Micro-benchmarking library for OCaml";
   };
 
-  core_profiler = janePackage {
-    pname = "core_profiler";
-    hash = "1kaaw3jp3qarbd9rgpjfb9md0dqblf2bxiqb245sqmx4c1346v1c";
-    propagatedBuildInputs = [ core_extended ];
-    meta.description = "Profiling library";
-  };
-
   csvfields = janePackage {
     pname = "csvfields";
     hash = "10zw4fjlniivfdzzz79lnbvcjnhk5y16m1p8mn4xbs23n6mbix0f";
@@ -534,13 +532,6 @@ rec {
     hash = "1is5156q59s427x3q5nh9wsi8h1x77670bmyilqxasy39yway7g8";
     propagatedBuildInputs = [ async expect_test_helpers_kernel ];
     meta.description = "Writing Emacs plugin in OCaml";
-  };
-
-  email_message = janePackage {
-    pname = "email_message";
-    hash = "131jd72k4s8cdbgg6gyg7w5v8mphdlvdx4fgvh8d9a1m7kkvbxfg";
-    propagatedBuildInputs = [ async angstrom core_extended cryptokit magic-mime ounit ];
-    meta.description = "E-mail message parser";
   };
 
   incremental_kernel = janePackage {
@@ -563,14 +554,6 @@ rec {
     hash = "01vx9aldxpigz5ah9h337xcw73a7r8449v8l2xbralljhs0zglx9";
     propagatedBuildInputs = [ incremental_kernel ];
     meta.description = "Helpers for incremental operations on map like data structures";
-  };
-
-  ocaml_plugin = janePackage {
-    pname = "ocaml_plugin";
-    hash = "0fal5j59qkbksg6ak1ngn92pcgg3f9gwfaglpxb7l6bck20kaigp";
-    buildInputs = [ ocamlbuild ];
-    propagatedBuildInputs = [ async ];
-    meta.description = "Automatically build and dynlink ocaml source files";
   };
 
   parsexp_io = janePackage {

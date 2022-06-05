@@ -6,8 +6,8 @@ let
 
   cfg = config.qt5;
 
-  isQGnome = cfg.platformTheme == "gnome" && cfg.style == "adwaita";
-  isQtStyle = cfg.platformTheme == "gtk2" && cfg.style != "adwaita";
+  isQGnome = cfg.platformTheme == "gnome" && builtins.elem cfg.style ["adwaita" "adwaita-dark"];
+  isQtStyle = cfg.platformTheme == "gtk2" && !(builtins.elem cfg.style ["adwaita" "adwaita-dark"]);
 
   packages = if isQGnome then [ pkgs.qgnomeplatform pkgs.adwaita-qt ]
     else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
@@ -55,6 +55,7 @@ in
       style = mkOption {
         type = types.enum [
           "adwaita"
+          "adwaita-dark"
           "cleanlooks"
           "gtk2"
           "motif"
@@ -71,6 +72,7 @@ in
           <variablelist>
             <varlistentry>
               <term><literal>adwaita</literal></term>
+              <term><literal>adwaita-dark</literal></term>
               <listitem><para>Use Adwaita Qt style with
                 <link xlink:href="https://github.com/FedoraQt/adwaita-qt">adwaita</link>
               </para></listitem>

@@ -1,13 +1,14 @@
-{stdenv, fetchurl, apacheAnt, jdk, axis2, dbus_java }:
+{lib, stdenv, fetchurl, apacheAnt, jdk, axis2, dbus_java }:
 
-stdenv.mkDerivation {
-  name = "DisnixWebService-0.9";
+stdenv.mkDerivation rec {
+  pname = "DisnixWebService";
+  version = "0.10.1";
   src = fetchurl {
-    url = https://github.com/svanderburg/DisnixWebService/releases/download/DisnixWebService-0.9/DisnixWebService-0.9.tar.gz;
-    sha256 = "1z7w44bf023c0aqchjfi4mla3qbhsh87mdzx7pqn0sy74cjfgqvl";
+    url = "https://github.com/svanderburg/DisnixWebService/releases/download/DisnixWebService-${version}/DisnixWebService-${version}.tar.gz";
+    sha256 = "02jxbgn9a0c9cr6knzp78bp9wiywzczy89wav7yxhg79vff8a1gr";
   };
   buildInputs = [ apacheAnt jdk ];
-  PREFIX = ''''${env.out}'';
+  PREFIX = "\${env.out}";
   AXIS2_LIB = "${axis2}/lib";
   AXIS2_WEBAPP = "${axis2}/webapps/axis2";
   DBUS_JAVA_LIB = "${dbus_java}/share/java";
@@ -18,11 +19,11 @@ stdenv.mkDerivation {
   '';
   buildPhase = "ant";
   installPhase = "ant install";
-  
+
   meta = {
     description = "A SOAP interface and client for Disnix";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.sander ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -16,10 +16,7 @@ in
 
     services.safeeyes = {
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable the safeeyes OSGi service";
-      };
+      enable = mkEnableOption "the safeeyes OSGi service";
 
     };
 
@@ -29,20 +26,24 @@ in
 
   config = mkIf cfg.enable {
 
+    environment.systemPackages = [ pkgs.safeeyes ];
+
     systemd.user.services.safeeyes = {
       description = "Safeeyes";
 
       wantedBy = [ "graphical-session.target" ];
       partOf   = [ "graphical-session.target" ];
 
+      path = [ pkgs.alsa-utils ];
+
+      startLimitIntervalSec = 350;
+      startLimitBurst = 10;
       serviceConfig = {
         ExecStart = ''
           ${pkgs.safeeyes}/bin/safeeyes
         '';
         Restart = "on-failure";
         RestartSec = 3;
-        StartLimitInterval = 350;
-        StartLimitBurst = 10;
       };
     };
 

@@ -1,16 +1,18 @@
-{ mkXfceDerivation, exo, gtk3, gvfs, glib }:
+{ lib, mkXfceDerivation, gtk3, glib }:
 
 mkXfceDerivation {
   category = "apps";
   pname = "gigolo";
-  version = "0.5.0";
+  version = "0.5.2";
+  odd-unstable = false;
 
-  sha256 = "1lqsxb0d5i8p9vbzx8s4p3rga7va5h1q146xgmsa41j5v40wrlw6";
+  sha256 = "sha256-8UDb4H3zxRKx2y+MRsozQoR3es0fs5ooR/5wBIE11bY=";
 
-  nativeBuildInputs = [ exo ];
-  buildInputs = [ gtk3 glib gvfs ];
+  buildInputs = [ gtk3 glib ];
 
-  meta = {
+  meta = with lib; {
     description = "A frontend to easily manage connections to remote filesystems";
+    license = with licenses; [ gpl2Only ];
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

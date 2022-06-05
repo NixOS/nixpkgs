@@ -6,7 +6,6 @@ let
   cfg = config.services.datadog-agent;
 
   ddConf = {
-    dd_url              = "https://app.datadoghq.com";
     skip_ssl_validation = false;
     confd_path          = "/etc/datadog-agent/conf.d";
     additional_checksd  = "/etc/datadog-agent/checks.d";
@@ -14,6 +13,8 @@ let
   }
   // optionalAttrs (cfg.logLevel != null) { log_level = cfg.logLevel; }
   // optionalAttrs (cfg.hostname != null) { inherit (cfg) hostname; }
+  // optionalAttrs (cfg.ddUrl != null) { dd_url = cfg.ddUrl; }
+  // optionalAttrs (cfg.site != null) { site = cfg.site; }
   // optionalAttrs (cfg.tags != null ) { tags = concatStringsSep ", " cfg.tags; }
   // optionalAttrs (cfg.enableLiveProcessCollection) { process_config = { enabled = "true"; }; }
   // optionalAttrs (cfg.enableTraceAgent) { apm_config = { enabled = true; }; }
@@ -50,7 +51,7 @@ in {
   options.services.datadog-agent = {
     enable = mkOption {
       description = ''
-        Whether to enable the datadog-agent v6 monitoring service
+        Whether to enable the datadog-agent v7 monitoring service
       '';
       default = false;
       type = types.bool;
@@ -58,9 +59,9 @@ in {
 
     package = mkOption {
       default = pkgs.datadog-agent;
-      defaultText = "pkgs.datadog-agent";
+      defaultText = literalExpression "pkgs.datadog-agent";
       description = ''
-        Which DataDog v6 agent package to use. Note that the provided
+        Which DataDog v7 agent package to use. Note that the provided
         package is expected to have an overridable `pythonPackages`-attribute
         which configures the Python environment with the Datadog
         checks.
@@ -75,6 +76,27 @@ in {
       '';
       example = "/run/keys/datadog_api_key";
       type = types.path;
+    };
+
+    ddUrl = mkOption {
+      description = ''
+        Custom dd_url to configure the agent with. Useful if traffic to datadog
+        needs to go through a proxy.
+        Don't use this to point to another datadog site (EU) - use site instead.
+      '';
+      default = null;
+      example = "http://haproxy.example.com:3834";
+      type = types.nullOr types.str;
+    };
+
+    site = mkOption {
+      description = ''
+        The datadog site to point the agent towards.
+        Set to datadoghq.eu to point it to their EU site.
+      '';
+      default = null;
+      example = "datadoghq.eu";
+      type = types.nullOr types.str;
     };
 
     tags = mkOption {
@@ -113,9 +135,11 @@ in {
         package set must be provided.
       '';
 
-      example = {
-        ntp = (pythonPackages: [ pythonPackages.ntplib ]);
-      };
+      example = literalExpression ''
+        {
+          ntp = pythonPackages: [ pythonPackages.ntplib ];
+        }
+      '';
     };
 
     extraConfig = mkOption {
@@ -203,7 +227,7 @@ in {
     };
   };
   config = mkIf cfg.enable {
-    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute ];
+    environment.systemPackages = [ datadogPkg pkgs.sysstat pkgs.procps pkgs.iproute2 ];
 
     users.users.datadog = {
       description = "Datadog Agent User";
@@ -217,7 +241,7 @@ in {
 
     systemd.services = let
       makeService = attrs: recursiveUpdate {
-        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute ];
+        path = [ datadogPkg pkgs.python pkgs.sysstat pkgs.procps pkgs.iproute2 ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           User = "datadog";
@@ -225,7 +249,7 @@ in {
           Restart = "always";
           RestartSec = 2;
         };
-        restartTriggers = [ datadogPkg ] ++ attrNames etcfiles;
+        restartTriggers = [ datadogPkg ] ++  map (x: x.source) (attrValues etcfiles);
       } attrs;
     in {
       datadog-agent = makeService {
@@ -252,7 +276,7 @@ in {
         path = [ ];
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
-          ${pkgs.datadog-process-agent}/bin/agent --config /etc/datadog-agent/datadog.yaml
+          ${pkgs.datadog-process-agent}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
         '';
       });
 

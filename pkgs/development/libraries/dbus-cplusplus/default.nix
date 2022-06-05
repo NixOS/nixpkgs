@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus, glib, pkgconfig, expat }:
+{ lib, stdenv, fetchurl, dbus, glib, pkg-config, expat }:
 
 stdenv.mkDerivation rec {
   pname = "dbus-cplusplus";
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchurl {
       name = "gcc-4.7.patch";
-      url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-libs/"
-          + "dbus-c%2B%2B/files/dbus-c%2B%2B-0.9.0-gcc-4.7.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-libs/"
+          + "dbus-c++/files/dbus-c++-0.9.0-gcc-4.7.patch";
       sha256 = "0rwcz9pvc13b3yfr0lkifnfz0vb5q6dg240bzgf37ni4s8rpc72g";
     })
     (fetchurl {
@@ -31,13 +31,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus glib expat ];
 
   configureFlags = [ "--disable-ecore" "--disable-tests" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://dbus-cplusplus.sourceforge.net;
+  meta = with lib; {
+    homepage = "http://dbus-cplusplus.sourceforge.net";
     description = "C++ API for D-BUS";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

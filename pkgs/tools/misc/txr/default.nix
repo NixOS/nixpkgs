@@ -1,29 +1,31 @@
-{ stdenv, fetchurl, bison, flex, libffi }:
+{ lib, stdenv, fetchurl, libffi, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "txr";
-  version = "230";
+  version = "275";
 
   src = fetchurl {
     url = "http://www.kylheku.com/cgit/txr/snapshot/${pname}-${version}.tar.bz2";
-    sha256 = "03ab9drdqvkfq240pkrx6197jjvvjizjwfx9psjmm6lixksw0kjx";
+    sha256 = "sha256-HmykTyh5F49CBa1w7o/HV6Q5Lsx1Qkxe0JBHQdGxVB4=";
   };
 
-  nativeBuildInputs = [ bison flex ];
   buildInputs = [ libffi ];
-
-  # fix usage of off_t without include
-  postPatch = ''
-    sed -i '1i#include <sys/types.h>' sysif.h
-  '';
 
   enableParallelBuilding = true;
 
   doCheck = true;
   checkTarget = "tests";
 
-  # Remove failing test-- mentions 'usr/bin' so probably related :)
-  preCheck = "rm -rf tests/017";
+  postPatch = ''
+    # Fixup references to /usr/bin in tests
+    substituteInPlace tests/017/realpath.tl --replace /usr/bin /bin
+    substituteInPlace tests/017/realpath.expected --replace /usr/bin /bin
+
+    substituteInPlace tests/018/process.tl --replace /usr/bin/env ${lib.getBin coreutils}/bin/env
+  '';
+
+  # Remove failing tests -- 018/chmod tries setting sticky bit
+  preCheck = "rm -rf tests/018/chmod*";
 
   postInstall = ''
     d=$out/share/vim-plugins/txr
@@ -37,11 +39,11 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Programming language for convenient data munging";
     license = licenses.bsd2;
-    homepage = http://nongnu.org/txr;
-    maintainers = with stdenv.lib.maintainers; [ dtzWill ];
+    homepage = "http://nongnu.org/txr";
+    maintainers = with lib.maintainers; [ dtzWill ];
     platforms = platforms.linux; # Darwin fails although it should work AFAIK
   };
 }

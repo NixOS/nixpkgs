@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, ncurses }:
+{ lib, stdenv, fetchurl, fetchpatch, ncurses }:
 
 stdenv.mkDerivation rec {
   version = "0.7.4";
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
       using two graphs and provides additional info like total amount of
       transfered data and min/max network usage.
     '';
-    homepage = http://www.roland-riegel.de/nload/index.html;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.devhell ];
+    homepage = "http://www.roland-riegel.de/nload/index.html";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.devhell ];
   };
 }

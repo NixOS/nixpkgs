@@ -3,7 +3,7 @@
 , pkgs
 , numpy
 , scipy
-, openmpi
+, mpi
 , enum34
 , protobuf
 , pip
@@ -17,8 +17,8 @@ in
 buildPythonPackage {
   inherit (cntk) name version src;
 
-  nativeBuildInputs = [ swig openmpi ];
-  buildInputs = [ cntk openmpi ];
+  nativeBuildInputs = [ swig mpi ];
+  buildInputs = [ cntk mpi ];
   propagatedBuildInputs = [ numpy scipy enum34 protobuf pip ];
 
   CNTK_LIB_PATH = "${cntk}/lib";
@@ -28,7 +28,7 @@ buildPythonPackage {
 
   postPatch = ''
     cd bindings/python
-    sed -i 's,"libmpi.so.12","${openmpi}/lib/libmpi.so",g' cntk/train/distributed.py
+    sed -i 's,"libmpi.so.12","${mpi}/lib/libmpi.so",g' cntk/train/distributed.py
 
     # Remove distro and libs checks; they aren't compatible with NixOS and besides we guarantee
     # compatibility by providing a package.

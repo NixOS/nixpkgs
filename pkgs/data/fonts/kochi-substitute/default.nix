@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg }:
+{ lib, stdenv, fetchurl, dpkg }:
 
 let version = "20030809";
 in
@@ -42,7 +42,7 @@ stdenv.mkDerivation {
       from the naga10 font.
     '';
     homepage = "https://osdn.net/projects/efont/";
-    license = stdenv.lib.licenses.wadalab;
-    maintainers = [ stdenv.lib.maintainers.auntie ];
+    license = lib.licenses.wadalab;
+    maintainers = [ lib.maintainers.auntie ];
   };
 }

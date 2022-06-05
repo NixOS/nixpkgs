@@ -1,33 +1,57 @@
 { lib
+, aiohttp
+, bidict
 , buildPythonPackage
-, fetchPypi
-, six
-, python-engineio
+, fetchFromGitHub
 , mock
+, msgpack
+, pytestCheckHook
+, python-engineio
+, pythonOlder
+, requests
+, websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "4.4.0";
+  version = "5.6.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "48cba5b827ac665dbf923a4f5ec590812aed5299a831fc43576a9af346272534";
+  disabled = pythonOlder "3.6";
+
+  src = fetchFromGitHub {
+    owner = "miguelgrinberg";
+    repo = "python-socketio";
+    rev = "v${version}";
+    sha256 = "sha256-zsTSz2RHtr4LqqPCkvHcaAw7RvfkHTNDm83OS+SgMUU=";
   };
 
   propagatedBuildInputs = [
-    six
+    aiohttp
+    bidict
     python-engineio
+    requests
+    websocket-client
   ];
 
-  checkInputs = [ mock ];
-  # tests only on github, but latest github release not tagged
-  doCheck = false;
+  checkInputs = [
+    mock
+    msgpack
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "socketio"
+  ];
 
   meta = with lib; {
-    description = "Socket.IO server";
-    homepage = https://github.com/miguelgrinberg/python-socketio/;
-    license = licenses.mit;
-    maintainers = [ maintainers.mic92 ];
+    description = "Python Socket.IO server and client";
+    longDescription = ''
+      Socket.IO is a lightweight transport protocol that enables real-time
+      bidirectional event-based communication between clients and a server.
+    '';
+    homepage = "https://github.com/miguelgrinberg/python-socketio/";
+    license = with licenses; [ mit ];
+    maintainers = with maintainers; [ mic92 ];
   };
 }

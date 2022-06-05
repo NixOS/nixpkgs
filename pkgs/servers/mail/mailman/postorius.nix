@@ -1,28 +1,28 @@
-{ stdenv, buildPythonPackage, fetchPypi, beautifulsoup4, vcrpy, mock
-, django-mailman3, mailmanclient
-}:
+{ lib, python3 }:
+
+with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "postorius";
-  version = "1.2.4";
+  # Note: Mailman core must be on the latest version before upgrading Postorious.
+  # See: https://gitlab.com/mailman/postorius/-/issues/516#note_544571309
+  version = "1.3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1722lnscxfl8wdigf5d80d1qmd5gblr439wa989jxlww0wkjg9fl";
+    sha256 = "sha256-KwzEU9IfcQ6YPZu3jPuFrd6ux/3e2pzoLfTrak/aGmg=";
   };
 
-  buildInputs = [ beautifulsoup4 vcrpy mock ];
-  propagatedBuildInputs = [ django-mailman3 ];
+  propagatedBuildInputs = [ django-mailman3 readme_renderer ];
+  checkInputs = [ beautifulsoup4 vcrpy mock ];
 
-  checkPhase = ''
-    cd $NIX_BUILD_TOP/$sourceRoot
-    PYTHONPATH=.:$PYTHONPATH python example_project/manage.py test --settings=test_settings postorius
-  '';
+  # Tries to connect to database.
+  doCheck = false;
 
-  meta = {
-    homepage = https://www.gnu.org/software/mailman/;
+  meta = with lib; {
+    homepage = "https://docs.mailman3.org/projects/postorius";
     description = "Web-based user interface for managing GNU Mailman";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ globin peti ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ globin qyliss ];
   };
 }

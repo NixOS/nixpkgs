@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, nose }:
+{ lib, buildPythonPackage, fetchFromGitHub, nose }:
 
 buildPythonPackage {
   pname = "ptable";
@@ -18,7 +18,7 @@ buildPythonPackage {
     nosetests --with-coverage --cover-package=prettytable --cover-min-percentage=75
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/kxxoling/PTable";
     description = "A simple Python library designed to make it quick and easy to represent tabular data in visually appealing ASCII tables";
     license = licenses.bsd3;

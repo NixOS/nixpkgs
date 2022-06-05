@@ -1,40 +1,65 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
-, pkgconfig
+, pkg-config
+, meson
+, ninja
 , udev
 , glib
+, gnome
+, vala
+, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 , gobject-introspection
-, gnome3
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgudev";
-  version = "233";
+  version = "237";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "00xvva04lgqamhnf277lg32phjn971wgpc9cxvgf5x13xdq4jz2q";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1al6nr492nzbm8ql02xhzwci2kwb1advnkaky3j9636jf08v41hd";
   };
 
-  nativeBuildInputs = [ pkgconfig gobject-introspection ];
-  buildInputs = [ udev glib ];
+  strictDeps = true;
 
-  # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway.
-  configureFlags = [ "--disable-umockdev" ];
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    vala
+    glib # for glib-mkenums needed during the build
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+  ];
+
+  buildInputs = [
+    udev
+    glib
+  ];
+
+  mesonFlags = [
+    # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway
+    "-Dtests=disabled"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-Dvapi=disabled"
+  ];
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
       versionPolicy = "none";
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library that provides GObject bindings for libudev";
-    homepage = https://wiki.gnome.org/Projects/libgudev;
-    maintainers = [ maintainers.eelco ] ++ gnome3.maintainers;
+    homepage = "https://wiki.gnome.org/Projects/libgudev";
+    maintainers = [ maintainers.eelco ] ++ teams.gnome.members;
     platforms = platforms.linux;
     license = licenses.lgpl2Plus;
   };

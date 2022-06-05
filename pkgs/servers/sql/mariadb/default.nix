@@ -1,53 +1,66 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, makeWrapper, ncurses, zlib, xz, lzo, lz4, bzip2, snappy
-, libiconv, openssl, pcre, boost, judy, bison, libxml2, libkrb5, linux-pam, curl
-, libaio, libevent, jemalloc, cracklib, systemd, numactl, perl
-, fixDarwinDylibNames, cctools, CoreServices, less
-, withoutClient ? false
+{ lib, stdenv, fetchurl, nixosTests, buildPackages
+# Native buildInputs components
+, bison, boost, cmake, fixDarwinDylibNames, flex, makeWrapper, pkg-config
+# Common components
+, curl, libiconv, ncurses, openssl, pcre, pcre2
+, libkrb5, libaio, liburing, systemd
+, CoreServices, cctools, perl
+, jemalloc, less, libedit
+# Server components
+, bzip2, lz4, lzo, snappy, xz, zlib, zstd
+, cracklib, judy, libevent, libxml2
+, linux-pam, numactl, pmdk
+, fmt_8
+, withStorageMroonga ? true, kytea, libsodium, msgpack, zeromq
+, withStorageRocks ? true
 }:
 
-with stdenv.lib;
-
-let # in mariadb # spans the whole file
+let
 
 libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
-mytopEnv = perl.withPackages (p: with p; [ DataDumper DBDmysql DBI TermReadKey ]);
+mytopEnv = buildPackages.perl.withPackages (p: with p; [ DBDmysql DBI TermReadKey ]);
 
-mariadb = server // {
-  inherit client; # MariaDB Client
-  server = server; # MariaDB Server
+mariadbPackage = packageSettings: (server packageSettings) // {
+  client = client packageSettings; # MariaDB Client
+  server = server packageSettings; # MariaDB Server
 };
 
-common = rec { # attributes common to both builds
-  version = "10.3.20";
+commonOptions = packageSettings: rec { # attributes common to both builds
+  inherit (packageSettings) version;
 
   src = fetchurl {
-    urls = [
-      "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz"
-      "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz"
-    ];
-    sha256 = "14n4zfpwhvafz02r95bidmkwq2bz9jj3safqni1h21jfd0nqz0ak";
-    name   = "mariadb-${version}.tar.gz";
+    url = "https://downloads.mariadb.com/MariaDB/mariadb-${version}/source/mariadb-${version}.tar.gz";
+    inherit (packageSettings) sha256;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
 
   buildInputs = [
-    ncurses openssl zlib pcre jemalloc libiconv curl
-  ] ++ optionals stdenv.hostPlatform.isLinux [ libaio systemd libkrb5 ]
-    ++ optionals stdenv.hostPlatform.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
+    curl libiconv ncurses openssl zlib
+  ] ++ (packageSettings.extraBuildInputs or [])
+    ++ lib.optionals stdenv.hostPlatform.isLinux ([ libkrb5 systemd ]
+    ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
+    ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ]);
 
   prePatch = ''
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
 
   patches = [
-    ./cmake-includedir.patch
-  ];
+    ./patch/cmake-includedir.patch
+  ]
+  # Fixes a build issue as documented on
+  # https://jira.mariadb.org/browse/MDEV-26769?focusedCommentId=206073&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-206073
+  ++ lib.optional (!stdenv.hostPlatform.isLinux && lib.versionAtLeast version "10.6") ./patch/macos-MDEV-26769-regression-fix.patch;
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
-    "-DMANUFACTURER=NixOS.org"
+    "-DMANUFACTURER=nixos.org"
     "-DDEFAULT_CHARSET=utf8mb4"
     "-DDEFAULT_COLLATION=utf8mb4_unicode_ci"
     "-DSECURITY_HARDENED=ON"
@@ -66,6 +79,8 @@ common = rec { # attributes common to both builds
     "-DINSTALL_SUPPORTFILESDIR=share/doc/mysql"
     "-DINSTALL_MYSQLTESTDIR=OFF"
     "-DINSTALL_SQLBENCHDIR=OFF"
+    "-DINSTALL_PAMDIR=share/pam/lib/security"
+    "-DINSTALL_PAMDATADIR=share/pam/etc/security"
 
     "-DWITH_ZLIB=system"
     "-DWITH_SSL=system"
@@ -73,59 +88,68 @@ common = rec { # attributes common to both builds
     "-DWITH_SAFEMALLOC=OFF"
     "-DWITH_UNIT_TESTS=OFF"
     "-DEMBEDDED_LIBRARY=OFF"
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # On Darwin without sandbox, CMake will find the system java and attempt to build with java support, but
     # then it will fail during the actual build. Let's just disable the flag explicitly until someone decides
     # to pass in java explicitly.
     "-DCONNECT_WITH_JDBC=OFF"
     "-DCURSES_LIBRARY=${ncurses.out}/lib/libncurses.dylib"
-  ] ++ optionals stdenv.hostPlatform.isMusl [
-    "-DWITHOUT_TOKUDB=1" # mariadb docs say disable this for musl
   ];
 
   postInstall = ''
     # Remove Development components. Need to use libmysqlclient.
     rm "$out"/lib/mysql/plugin/daemon_example.ini
     rm "$out"/lib/{libmariadbclient.a,libmysqlclient.a,libmysqlclient_r.a,libmysqlservices.a}
-    rm "$out"/lib/mysql/plugin/{caching_sha2_password.so,dialog.so,mysql_clear_password.so,sha256_password.so}
-    rm "$out"/bin/{mariadb_config,mysql_config}
+    rm -f "$out"/bin/{mariadb-config,mariadb_config,mysql_config}
     rm -r $out/include
     rm -r $out/lib/pkgconfig
-    rm -r $out/share/{aclocal,pkgconfig}
   '';
 
-  enableParallelBuilding = true;
+  # perlPackages.DBDmysql is broken on darwin
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    wrapProgram $out/bin/mytop --set PATH ${lib.makeBinPath [ less ncurses ]}
+  '';
 
-  passthru.mysqlVersion = "5.7";
+  passthru.tests = let
+    testVersion = "mariadb_${builtins.replaceStrings ["."] [""] (lib.versions.majorMinor (packageSettings.version))}";
+  in {
+    mariadb-galera-rsync = nixosTests.mariadb-galera.${testVersion};
+    mysql = nixosTests.mysql.${testVersion};
+    mysql-autobackup = nixosTests.mysql-autobackup.${testVersion};
+    mysql-backup = nixosTests.mysql-backup.${testVersion};
+    mysql-replication = nixosTests.mysql-replication.${testVersion};
+  };
 
-  meta = {
+  meta = with lib; {
     description = "An enhanced, drop-in replacement for MySQL";
-    homepage    = https://mariadb.org/;
+    homepage    = "https://mariadb.org/";
     license     = licenses.gpl2;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [ thoughtpolice ajs124 das_j ];
     platforms   = platforms.all;
   };
 };
 
-client = stdenv.mkDerivation (common // {
+client = packageSettings: let
+  common = commonOptions packageSettings;
+
+in stdenv.mkDerivation (common // {
   pname = "mariadb-client";
 
   outputs = [ "out" "man" ];
 
   patches = common.patches ++ [
-    ./cmake-plugin-includedir.patch
-    ./cmake-without-plugin-auth-pam.patch
+    ./patch/cmake-plugin-includedir.patch
   ];
 
   cmakeFlags = common.cmakeFlags ++ [
+    "-DPLUGIN_AUTH_PAM=NO"
     "-DWITHOUT_SERVER=ON"
     "-DWITH_WSREP=OFF"
     "-DINSTALL_MYSQLSHAREDIR=share/mysql-client"
   ];
 
   postInstall = common.postInstall + ''
-    rm -r "$out"/share/doc
-    rm "$out"/bin/{mysqltest,mytop,wsrep_sst_rsync_wan}
+    rm "$out"/bin/{mariadb-test,mysqltest}
     libmysqlclient_path=$(readlink -f $out/lib/libmysqlclient${libExt})
     rm "$out"/lib/{libmariadb${libExt},libmysqlclient${libExt},libmysqlclient_r${libExt}}
     mv "$libmysqlclient_path" "$out"/lib/libmysqlclient${libExt}
@@ -133,25 +157,32 @@ client = stdenv.mkDerivation (common // {
   '';
 });
 
-server = stdenv.mkDerivation (common // {
+server = packageSettings: let
+  common = commonOptions packageSettings;
+
+in stdenv.mkDerivation (common // {
   pname = "mariadb-server";
 
   outputs = [ "out" "man" ];
 
-  nativeBuildInputs = common.nativeBuildInputs ++ [ bison ] ++ optional (!stdenv.hostPlatform.isDarwin) makeWrapper;
+  nativeBuildInputs = common.nativeBuildInputs ++ [ bison boost.dev flex ];
 
   buildInputs = common.buildInputs ++ [
-    xz lzo lz4 bzip2 snappy
-    libxml2 boost judy libevent cracklib
-  ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl
-    ++ optional stdenv.hostPlatform.isLinux linux-pam
-    ++ optional (!stdenv.hostPlatform.isDarwin) mytopEnv;
+    bzip2 lz4 lzo snappy xz zstd
+    cracklib judy libevent libxml2
+  ] ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]
+    ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) pmdk.dev
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) mytopEnv
+    ++ lib.optionals withStorageMroonga [ kytea libsodium msgpack zeromq ]
+    ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
 
-  patches = common.patches ++ [
-    ./cmake-without-client.patch
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
-    ./cmake-without-plugin-auth-pam.patch
-  ];
+  patches = common.patches;
+
+  postPatch = ''
+    substituteInPlace scripts/galera_new_cluster.sh \
+      --replace ":-mariadb" ":-mysql"
+  '';
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -164,39 +195,70 @@ server = stdenv.mkDerivation (common // {
     "-DWITH_INNODB_DISALLOW_WRITES=ON"
     "-DWITHOUT_EXAMPLE=1"
     "-DWITHOUT_FEDERATED=1"
-  ] ++ optionals withoutClient [
-    "-DWITHOUT_CLIENT=ON"
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
-    "-DWITHOUT_OQGRAPH=1"
     "-DWITHOUT_TOKUDB=1"
+  ] ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) [
+    "-DWITH_NUMA=ON"
+  ] ++ lib.optional (!withStorageMroonga) [
+    "-DWITHOUT_MROONGA=1"
+  ] ++ lib.optional (!withStorageRocks) [
+    "-DWITHOUT_ROCKSDB=1"
+  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin && withStorageRocks) [
+    "-DWITH_ROCKSDB_JEMALLOC=ON"
+  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
+    "-DWITH_JEMALLOC=yes"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DPLUGIN_AUTH_PAM=NO"
+    "-DPLUGIN_AUTH_PAM_V1=NO"
+    "-DWITHOUT_OQGRAPH=1"
+    "-DWITHOUT_PLUGIN_S3=1"
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # revisit this if nixpkgs supports any architecture whose stack grows upwards
+    "-DSTACK_DIRECTION=-1"
+    "-DCMAKE_CROSSCOMPILING_EMULATOR=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
-  preConfigure = optionalString (!stdenv.hostPlatform.isDarwin) ''
+  preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     patchShebangs scripts/mytop.sh
   '';
 
   postInstall = common.postInstall + ''
+    rm -r "$out"/share/aclocal
     chmod +x "$out"/bin/wsrep_sst_common
-    rm "$out"/bin/{mysql_client_test,mysqltest}
-    rm -r "$out"/data # Don't need testing data
+    rm -f "$out"/bin/{mariadb-client-test,mariadb-test,mysql_client_test,mysqltest}
+  '' + lib.optionalString withStorageMroonga ''
     mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
-  '' + optionalString withoutClient ''
-    ${ # We don't build with GSSAPI on Darwin
-      optionalString (!stdenv.hostPlatform.isDarwin) ''
-        rm "$out"/lib/mysql/plugin/auth_gssapi_client.so
-      ''
-    }
-    rm "$out"/lib/mysql/plugin/client_ed25519.so
-    rm "$out"/lib/{libmysqlclient${libExt},libmysqlclient_r${libExt}}
-  '' + optionalString (!stdenv.hostPlatform.isDarwin) ''
-    sed -i 's/-mariadb/-mysql/' "$out"/bin/galera_new_cluster
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin && lib.versionAtLeast common.version "10.4") ''
+    mv "$out"/OFF/suite/plugins/pam/pam_mariadb_mtr.so "$out"/share/pam/lib/security
+    mv "$out"/OFF/suite/plugins/pam/mariadb_mtr "$out"/share/pam/etc/security
+    rm -r "$out"/OFF
   '';
 
-  # perlPackages.DBDmysql is broken on darwin
-  postFixup = optionalString (!stdenv.hostPlatform.isDarwin) ''
-    wrapProgram $out/bin/mytop --set PATH ${less}/bin/less
-  '';
-
-  CXXFLAGS = optionalString stdenv.hostPlatform.isi686 "-fpermissive";
+  CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
 });
-in mariadb
+in {
+  mariadb_104 = mariadbPackage {
+    # Supported until 2024-06-18
+    version = "10.4.25";
+    sha256 = "1y3ym8pb0pyra3dwy8sbzc4656c4y7g1savgyrsvf1mw2573r5pz";
+  };
+  mariadb_105 = mariadbPackage {
+    # Supported until 2025-06-24
+    version = "10.5.16";
+    sha256 = "19nj7ilk1aqs9zvvzhx4619pgfqjp7ac90ffr3fdaw4viljqfgn1";
+  };
+  mariadb_106 = mariadbPackage {
+    # Supported until 2026-07
+    version = "10.6.8";
+    sha256 = "0f6lkvv0dbq64y7zpks7nvhy1n08gad0i0dp0s2zpgfcb62liaap";
+  };
+  mariadb_107 = mariadbPackage {
+    # Supported until 2023-02
+    version = "10.7.4";
+    sha256 = "0ws17azsw3f26pkphjkyxmmi9qbv9gwidvz0ll6g482m6afrrpbk";
+  };
+  mariadb_108 = mariadbPackage {
+    # Supported until 2023-05
+    version = "10.8.3";
+    sha256 = "14h80lfb9b3rv3fd8nkljbqhx6dmwjnqkz6c3ynixb3na72sszl8";
+  };
+}

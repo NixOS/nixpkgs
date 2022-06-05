@@ -1,4 +1,4 @@
-{ stdenv
+{ lib, stdenv
 , python3
 , fetchFromGitHub
 }:
@@ -27,8 +27,8 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "A program that compares two Nix expressions and determines which attributes changed";
-    homepage = https://github.com/FRidh/niff;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.fridh ];
+    homepage = "https://github.com/FRidh/niff";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.fridh ];
   };
 }

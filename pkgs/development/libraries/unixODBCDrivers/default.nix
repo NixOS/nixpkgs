@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, postgresql, mysql, sqlite, zlib, libxml2, dpkg, lib, openssl, kerberos, libuuid, patchelf, libiconv, fetchFromGitHub }:
+{ fetchurl, stdenv, unixODBC, cmake, postgresql, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fetchFromGitHub }:
 
 # I haven't done any parameter tweaking.. So the defaults provided here might be bad
 
@@ -8,7 +8,7 @@
     version = "10.01.0000";
 
     src = fetchurl {
-      url = "http://ftp.postgresql.org/pub/odbc/versions/src/${pname}-${version}.tar.gz";
+      url = "mirror://postgresql/odbc/versions/src/${pname}-${version}.tar.gz";
       sha256 = "1cyams7157f3gry86x64xrplqi2vyqrq3rqka59gv4lb4rpl7jl7";
     };
 
@@ -19,9 +19,10 @@
       driver = "lib/psqlodbcw.so";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "Official PostgreSQL ODBC Driver";
-      homepage =  https://odbc.postgresql.org/;
+      homepage = "https://odbc.postgresql.org/";
       license = licenses.lgpl2;
       platforms = platforms.linux;
     };
@@ -29,13 +30,13 @@
 
   mariadb = stdenv.mkDerivation rec {
     pname = "mariadb-connector-odbc";
-    version = "3.1.4";
+    version = "3.1.14";
 
     src = fetchFromGitHub {
-      owner = "MariaDB";
+      owner = "mariadb-corporation";
       repo = "mariadb-connector-odbc";
       rev = version;
-      sha256 = "1kbz5mng9vx89cw2sx7gsvhbv4h86zwp31fr0hxqing3cwxhkfgw";
+      sha256 = "0wvy6m9qfvjii3kanf2d1rhfaww32kg0d7m57643f79qb05gd6vg";
       # this driver only seems to build correctly when built against the mariadb-connect-c subrepo
       # (see https://github.com/NixOS/nixpkgs/issues/73258)
       fetchSubmodules = true;
@@ -57,12 +58,13 @@
 
     passthru = {
       fancyName = "MariaDB";
-      driver = if stdenv.isDarwin then "lib/libmaodbc.dylib" else "lib/libmaodbc.so";
+      driver = "lib/libmaodbc${stdenv.hostPlatform.extensions.sharedLibrary}";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "MariaDB ODBC database driver";
-      homepage =  https://downloads.mariadb.org/connector-odbc/;
+      homepage = "https://downloads.mariadb.org/connector-odbc/";
       license = licenses.gpl2;
       platforms = platforms.linux ++ platforms.darwin;
     };
@@ -79,7 +81,7 @@
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ unixODBC mysql ];
+    buildInputs = [ unixODBC mariadb ];
 
     cmakeFlags = [ "-DWITH_UNIXODBC=1" ];
 
@@ -88,9 +90,9 @@
       driver = "lib/libmyodbc3-3.51.12.so";
     };
 
-    meta = with stdenv.lib; {
-      description = "MariaDB ODBC database driver";
-      homepage = https://dev.mysql.com/downloads/connector/odbc/;
+    meta = with lib; {
+      description = "MySQL ODBC database driver";
+      homepage = "https://dev.mysql.com/downloads/connector/odbc/";
       license = licenses.gpl2;
       platforms = platforms.linux;
       broken = true;
@@ -108,7 +110,7 @@
 
     buildInputs = [ unixODBC sqlite zlib libxml2 ];
 
-    configureFlags = [ "--with-odbc=${unixODBC}" ];
+    configureFlags = [ "--with-odbc=${unixODBC}" "--with-sqlite3=${sqlite.dev}" ];
 
     installTargets = [ "install-3" ];
 
@@ -123,9 +125,10 @@
       driver = "lib/libsqlite3odbc.so";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "ODBC driver for SQLite";
-      homepage = http://www.ch-werner.de/sqliteodbc;
+      homepage = "http://www.ch-werner.de/sqliteodbc";
       license = licenses.bsd2;
       platforms = platforms.linux;
       maintainers = with maintainers; [ vlstill ];
@@ -137,12 +140,12 @@
     version = "${versionMajor}.${versionMinor}.${versionAdditional}-1";
 
     versionMajor = "17";
-    versionMinor = "4";
+    versionMinor = "7";
     versionAdditional = "1.1";
 
     src = fetchurl {
-      url = "https://packages.microsoft.com/debian/9/prod/pool/main/m/msodbcsql17/msodbcsql${versionMajor}_${version}_amd64.deb";
-      sha256 = "0jb16irr7qlgd2zshg0vyia7zqipd0pcvwfcr6z807pss1mnzj8w";
+      url = "https://packages.microsoft.com/debian/10/prod/pool/main/m/msodbcsql17/msodbcsql${versionMajor}_${version}_amd64.deb";
+      sha256 = "0vwirnp56jibm3qf0kmi4jnz1w7xfhnsfr8imr0c9hg6av4sk3a6";
     };
 
     nativeBuildInputs = [ dpkg patchelf ];
@@ -157,7 +160,7 @@
     '';
 
     postFixup = ''
-      patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl.out kerberos libuuid stdenv.cc.cc ]} \
+      patchelf --set-rpath ${lib.makeLibraryPath [ unixODBC openssl libkrb5 libuuid stdenv.cc.cc ]} \
         $out/lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}
     '';
 
@@ -166,12 +169,57 @@
       driver = "lib/libmsodbcsql-${versionMajor}.${versionMinor}.so.${versionAdditional}";
     };
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "ODBC Driver 17 for SQL Server";
-      homepage = https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017;
+      homepage = "https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017";
       license = licenses.unfree;
       platforms = platforms.linux;
       maintainers = with maintainers; [ spencerjanssen ];
+    };
+  };
+
+  redshift = stdenv.mkDerivation rec {
+    pname = "redshift-odbc";
+    version = "1.4.49.1000";
+
+    src = fetchurl {
+      url = "https://s3.amazonaws.com/redshift-downloads/drivers/odbc/${version}/AmazonRedshiftODBC-64-bit-${version}-1.x86_64.deb";
+      sha256 = "sha256-r5HvsZjB7+x+ClxtWoONkE1/NAbz90NbHfzxC6tf7jA=";
+    };
+
+    nativeBuildInputs = [ dpkg ];
+
+    unpackPhase = ''
+      dpkg -x $src src
+      cd src
+    '';
+
+    # `unixODBC` is loaded with `dlopen`, so `autoPatchElfHook` cannot see it, and `patchELF` phase would strip the manual patchelf. Thus:
+    # - Manually patchelf with `unixODCB` libraries
+    # - Disable automatic `patchELF` phase
+    installPhase = ''
+      mkdir -p $out/lib
+      cp opt/amazon/redshiftodbc/lib/64/* $out/lib
+      patchelf --set-rpath ${unixODBC}/lib/ $out/lib/libamazonredshiftodbc64.so
+    '';
+
+    dontPatchELF = true;
+
+    buildInputs = [ unixODBC ];
+
+    passthru = {
+      fancyName = "Amazon Redshift (x64)";
+      driver = "lib/libamazonredshiftodbc64.so";
+    };
+
+    meta = with lib; {
+      broken = stdenv.isDarwin;
+      description = "Amazon Redshift ODBC driver";
+      homepage = "https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html";
+      license = licenses.unfree;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ sir4ur0n ];
     };
   };
 }

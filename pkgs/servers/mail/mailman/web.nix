@@ -1,37 +1,46 @@
-{ stdenv, python, hyperkitty, postorius, buildPythonPackage
-, serverEMail ? "postmaster@example.org"
-, archiverKey ? "SecretArchiverAPIKey"
-, allowedHosts ? []
+{ lib, python3
+, sassc, hyperkitty, postorius
 }:
 
-let
+with python3.pkgs;
 
-  allowedHostsString = stdenv.lib.concatMapStringsSep ", " (x: "\""+x+"\"") allowedHosts;
+buildPythonPackage rec {
+  pname = "mailman-web";
+  version = "0.0.5";
+  disabled = pythonOlder "3.8";
 
-in
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-9pvs/VATAsMcGNrj58b/LifysEPTNhrAP57sfp4nX6Q=";
+  };
 
-# We turn those Djando configuration files into a make-shift Python library so
-# that Nix users can use this package as a part of their buildInputs to import
-# the code. Also, this package implicitly provides an environment in which the
-# Django app can be run.
+  postPatch = ''
+    # Django is depended on transitively by hyperkitty and postorius,
+    # and mailman_web has overly restrictive version bounds on it, so
+    # let's remove it.
+    sed -i '/^[[:space:]]*django/Id' setup.cfg
 
-buildPythonPackage {
-  name = "mailman-web-0";
-
-  propagatedBuildInputs = [ hyperkitty postorius ];
-
-  unpackPhase = ":";
-  buildPhase = ":";
-  setuptoolsCheckPhase = ":";
-
-  installPhase = ''
-    d=$out/${python.sitePackages}
-    install -D -m 444 ${./urls.py} $d/urls.py
-    install -D -m 444 ${./wsgi.py} $d/wsgi.py
-    substitute ${./settings.py} $d/settings.py \
-      --subst-var-by SERVER_EMAIL '${serverEMail}' \
-      --subst-var-by ARCHIVER_KEY '${archiverKey}' \
-      --subst-var-by ALLOWED_HOSTS '${allowedHostsString}'
-    chmod 444 $d/settings.py
+    # Upstream seems to mostly target installing on top of existing
+    # distributions, and uses a path appropriate for that, but we are
+    # a distribution, so use a state directory appropriate for a
+    # distro package.
+    substituteInPlace mailman_web/settings/base.py \
+        --replace /opt/mailman/web /var/lib/mailman-web
   '';
+
+  nativeBuildInputs = [ setuptools-scm ];
+  propagatedBuildInputs = [ hyperkitty postorius whoosh ];
+
+  # Tries to check runtime configuration.
+  doCheck = false;
+
+  makeWrapperArgs = [
+    "--suffix PATH : ${lib.makeBinPath [ sassc ]}"
+  ];
+
+  meta = with lib; {
+    description = "Django project for Mailman 3 web interface";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ qyliss m1cr0man ];
+  };
 }

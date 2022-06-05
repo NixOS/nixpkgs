@@ -6,7 +6,7 @@ preFixupHooks+=(_moveToShare)
 
 _moveToShare() {
     forceShare=${forceShare:=man doc info}
-    if [ -z "$forceShare" -o -z "$out" ]; then return; fi
+    if [[ -z "$out" ]]; then return; fi
 
     for d in $forceShare; do
         if [ -d "$out/$d" ]; then

@@ -1,19 +1,31 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, setuptools, swig, verilog }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+, setuptools-scm
+, cocotb-bus
+, pytestCheckHook
+, swig
+, verilog
+}:
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.2.0";
+  version = "1.6.2";
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "091q63jcm87xggqgqi44lw2vjxhl1v4yl0mv2c76hgavb29w4w5y";
+  # - we need to use the tarball from PyPi
+  #   or the full git checkout (with .git)
+  # - using fetchFromGitHub will cause a build failure,
+  #   because it does not include required metadata
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-SY+1727DbWMg6CnmHw8k/VP0dwBRYszn+YyyvZXgvUs=";
   };
 
-  propagatedBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
+
+  buildInputs = [ setuptools ];
 
   postPatch = ''
     patchShebangs bin/*.py
@@ -24,23 +36,23 @@ buildPythonPackage rec {
       cocotb/share/makefiles/simulators/Makefile.*
     do
       substituteInPlace $f --replace 'shell which' 'shell command -v'
-      # replace hardcoded gcc. Remove once https://github.com/cocotb/cocotb/pull/1137 gets merged
-      substituteInPlace $f --replace 'gcc' '$(CC)'
-      substituteInPlace $f --replace 'g++' '$(CXX)'
     done
+
+    # remove circular dependency cocotb-bus from setup.py
+    substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
   '';
 
-  checkInputs = [ swig verilog ];
+  checkInputs = [ cocotb-bus pytestCheckHook swig verilog ];
 
   checkPhase = ''
     export PATH=$out/bin:$PATH
-    make test
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";
-    homepage = https://github.com/cocotb/cocotb;
+    homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;
     maintainers = with maintainers; [ matthuszagh ];
+    broken = stdenv.isDarwin;
   };
 }

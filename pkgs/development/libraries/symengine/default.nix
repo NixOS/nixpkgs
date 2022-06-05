@@ -1,22 +1,27 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
 , cmake
 , gmp
 , flint
 , mpfr
 , libmpc
+, catch
 }:
 
 stdenv.mkDerivation rec {
   pname = "symengine";
-  version = "0.5.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine";
     rev = "v${version}";
-    sha256 = "1zgfhqv43qcfkfdyf1p82bcfv05n6iix6yw6qx1y5bnb7dv74irw";
+    sha256 = "sha256-5KpxBusJCuwrfFWHbrRKlH6Ic7YivYqz2m+BCbNfZp0=";
   };
+
+  postPatch = ''
+    cp ${catch}/include/catch/catch.hpp symengine/utilities/catch/catch.hpp
+  '';
 
   nativeBuildInputs = [ cmake ];
 
@@ -36,9 +41,9 @@ stdenv.mkDerivation rec {
     ctest
   '';
 
-  meta = with stdenv.lib; {
-    description = "SymEngine is a fast symbolic manipulation library";
-    homepage = https://github.com/symengine/symengine;
+  meta = with lib; {
+    description = "A fast symbolic manipulation library";
+    homepage = "https://github.com/symengine/symengine";
     platforms = platforms.unix ++ platforms.windows;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];

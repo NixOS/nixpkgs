@@ -26,6 +26,7 @@ in {
     package = mkOption {
       type = types.package;
       default = pkgs.documize-community;
+      defaultText = literalExpression "pkgs.documize-community";
       description = ''
         Which package to use for documize.
       '';
@@ -130,7 +131,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.documize-server = {
       description = "Documize Wiki";
-      documentation = [ https://documize.com/ ];
+      documentation = [ "https://documize.com/" ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {

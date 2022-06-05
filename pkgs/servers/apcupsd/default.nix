@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, systemd, utillinux, coreutils, wall, hostname, man
+{ lib, stdenv, fetchurl, pkg-config, systemd, util-linux, coreutils, wall, hostname, man
 , enableCgiScripts ? true, gd
 }:
 
@@ -6,15 +6,15 @@ assert enableCgiScripts -> gd != null;
 
 stdenv.mkDerivation rec {
   pname = "apcupsd";
-  name = "${pname}-3.14.14";
+  version = "3.14.14";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.gz";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     sha256 = "0rwqiyzlg9p0szf3x6q1ppvrw6f6dbpn2rc5z623fk3bkdalhxyv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ utillinux man ] ++ stdenv.lib.optional enableCgiScripts gd;
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ util-linux man ] ++ lib.optional enableCgiScripts gd;
 
   prePatch = ''
     sed -e "s,\$(INSTALL_PROGRAM) \$(STRIP),\$(INSTALL_PROGRAM)," \
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
         --with-lock-dir=/run/lock \
         --with-pid-dir=/run \
         --enable-usb \
-        ${stdenv.lib.optionalString enableCgiScripts "--enable-cgi --with-cgi-bin=$out/libexec/cgi-bin"}
+        ${lib.optionalString enableCgiScripts "--enable-cgi --with-cgi-bin=$out/libexec/cgi-bin"}
         "
   '';
 
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Daemon for controlling APC UPSes";
-    homepage = http://www.apcupsd.com/;
+    homepage = "http://www.apcupsd.com/";
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

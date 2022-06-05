@@ -1,24 +1,39 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
 
 buildGoModule rec {
   pname = "corerad";
-  version = "0.1.4";
-
-  goPackagePath = "github.com/mdlayher/corerad";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "corerad";
     rev = "v${version}";
-    sha256 = "0qlmmgdz69gqqn6h5kb3gsjyj7lm6pcfcx9xlmrxhisj914ij76r";
+    sha256 = "sha256-JhdR1UKHnzXIUoe1shb3IZne3q198NLwRROEYuKsnW4=";
   };
 
-  modSha256 = "0vim91yvw0cf9bd10hfanz8azq7q19lp2x61rs44ycx9zm3qdhcw";
+  vendorSha256 = "sha256-w15dRxIBzDN5i4RNEDuSfCHHb4wc4fw1B2wjlTk40iE=";
 
-  meta = with stdenv.lib; {
+  # Since the tarball pulled from GitHub doesn't contain git tag information,
+  # we fetch the expected tag's timestamp from a file in the root of the
+  # repository.
+  preBuild = ''
+    buildFlagsArray=(
+      -ldflags="
+        -X github.com/mdlayher/corerad/internal/build.linkTimestamp=$(<.gittagtime)
+        -X github.com/mdlayher/corerad/internal/build.linkVersion=v${version}
+      "
+    )
+  '';
+
+  passthru.tests = {
+    inherit (nixosTests) corerad;
+  };
+
+  meta = with lib; {
     homepage = "https://github.com/mdlayher/corerad";
-    description = "CoreRAD extensible and observable IPv6 NDP RA daemon";
+    description = "Extensible and observable IPv6 NDP RA daemon";
     license = licenses.asl20;
     maintainers = with maintainers; [ mdlayher ];
+    platforms = platforms.linux;
   };
 }

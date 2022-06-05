@@ -1,59 +1,49 @@
-{ stdenv, lib, fetchurl, unzip
-, qt4 ? null, qmake4Hook ? null
-, withQt5 ? false, qtbase ? null, qtmacextras ? null, qmake ? null
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, qtbase
+, qtmacextras
+, qmake
 , fixDarwinDylibNames
 }:
 
-let
-  # Fix Xcode 8 compilation problem
-  xcodePatch = fetchurl {
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a651d71/qscintilla2/xcode-8.patch";
-    sha256 = "1a88309fdfd421f4458550b710a562c622d72d6e6fdd697107e4a43161d69bc9";
-  };
-
-  pname = "qscintilla-qt${if withQt5 then "5" else "4"}";
-  version = "2.11.2";
-
-in stdenv.mkDerivation rec {
-  inherit pname version;
+stdenv.mkDerivation rec {
+  pname = "qscintilla-qt5";
+  version = "2.13.2";
 
   src = fetchurl {
-    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla_gpl-${version}.tar.gz";
-    sha256 = "18glb2v07mwfz6p8qmwhzcaaczyc36x3gn9wx8ndm7q6d93xr6q2";
+    url = "https://www.riverbankcomputing.com/static/Downloads/QScintilla/${version}/QScintilla_src-${version}.tar.gz";
+    sha256 = "sha256-tsfl8ntR0l8J/mz4Sumn8Idq8NZdjMtVEQnm57JYhfQ=";
   };
 
-  sourceRoot = "QScintilla_gpl-${version}/Qt4Qt5";
+  sourceRoot = "QScintilla_src-${version}/src";
 
-  buildInputs = [ (if withQt5 then qtbase else qt4) ];
+  buildInputs = [ qtbase ];
 
-  propagatedBuildInputs = lib.optional (withQt5 && stdenv.isDarwin) qtmacextras;
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ qtmacextras ];
 
-  nativeBuildInputs = [ unzip ]
-    ++ (if withQt5 then [ qmake ] else [ qmake4Hook ])
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
-
-  patches = (lib.optional (stdenv.isDarwin && withQt5) xcodePatch) ++
-            (lib.optional (!withQt5) ./fix-qt4-build.patch );
+  nativeBuildInputs = [ unzip qmake ]
+    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
   postFixup = ''
-    ln -s $out/lib/libqscintilla2_qt?.so $out/lib/libqscintilla2.so
+    ln -s $out/lib/libqscintilla2_qt5.so $out/lib/libqscintilla2.so
   '';
 
-  enableParallelBuilding = true;
+  dontWrapQtApps = true;
 
-  postPatch = ''
+  preConfigure = ''
     substituteInPlace qscintilla.pro \
       --replace '$$[QT_INSTALL_LIBS]'         $out/lib \
       --replace '$$[QT_INSTALL_HEADERS]'      $out/include \
       --replace '$$[QT_INSTALL_TRANSLATIONS]' $out/translations \
       --replace '$$[QT_HOST_DATA]/mkspecs'    $out/mkspecs \
-      --replace '$$[QT_INSTALL_DATA]/mkspecs' $out/mkspecs \
-      --replace '$$[QT_INSTALL_DATA]'         $out/share${lib.optionalString (! withQt5) "/qt"}
+      --replace '$$[QT_INSTALL_DATA]'         $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Qt port of the Scintilla text editing library";
     longDescription = ''
       QScintilla is a port to Qt of Neil Hodgson's Scintilla C++ editor
@@ -69,8 +59,8 @@ in stdenv.mkDerivation rec {
       proportional fonts, bold and italics, multiple foreground and
       background colours and multiple fonts.
     '';
-    homepage = https://www.riverbankcomputing.com/software/qscintilla/intro;
-    license = with licenses; [ gpl2 gpl3 ]; # and commercial
+    homepage = "https://www.riverbankcomputing.com/software/qscintilla/intro";
+    license = with licenses; [ gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
   };

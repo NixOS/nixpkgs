@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "lwt_camlp4";
-  version = "git-20180325";
+  version = "unstable-2018-03-25";
 
   src = fetchFromGitHub {
     owner = "ocsigen";
@@ -11,7 +11,9 @@ buildDunePackage rec {
     sha256 = "1lv8z6ljfy47yvxmwf5jrvc5d3dc90r1n291x53j161sf22ddrk9";
   };
 
-  minimumOCamlVersion = "4.02";
+  useDune2 = false;
+
+  minimalOCamlVersion = "4.02";
 
   propagatedBuildInputs = [ camlp4 ];
 

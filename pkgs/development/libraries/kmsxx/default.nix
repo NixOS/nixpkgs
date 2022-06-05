@@ -1,30 +1,43 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libdrm
-, withPython ? false, python }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, cmake
+, pkg-config
+, libdrm
+, fmt
+, libevdev
+, withPython ? false
+, python3Packages
+}:
 
 stdenv.mkDerivation {
   pname = "kmsxx";
-  version = "2019-10-28";
+  version = "2021-07-26";
 
   src = fetchFromGitHub {
     owner = "tomba";
     repo = "kmsxx";
     fetchSubmodules = true;
-    rev = "d29da28c7f2a0212d834136fe64fb8ca96a0a235";
-    sha256 = "0r94qjyy3s36s32s1xkzij0g2pfwigmyrshw8ni2xli7mg87g1zm";
+    rev = "54f591ec0de61dd192baf781c9b2ec87d5b461f7";
+    sha256 = "sha256-j+20WY4a2iTKZnYjXhxbNnZZ53K3dHpDMTp+ZulS+7c=";
   };
 
-  enableParallelBuilding = true;
+  # Didn't detect pybind11 without cmake
+  nativeBuildInputs = [ meson ninja pkg-config ] ++ lib.optionals withPython [ cmake ];
+  buildInputs = [ libdrm fmt libevdev ]
+    ++ lib.optionals withPython (with python3Packages; [ python pybind11 ]);
 
-  cmakeFlags = stdenv.lib.optional (!withPython) "-DKMSXX_ENABLE_PYTHON=OFF";
+  dontUseCmakeConfigure = true;
 
-  nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libdrm python ];
+  mesonFlags = lib.optional (!withPython) "-Dpykms=disabled";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C++11 library, utilities and python bindings for Linux kernel mode setting";
-    homepage = https://github.com/tomba/kmsxx;
+    homepage = "https://github.com/tomba/kmsxx";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ gnidorah ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

@@ -1,30 +1,66 @@
-{ stdenv, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
-, pillow, webcolors, funcparserlib
+{ lib
+, buildPythonPackage
+, docutils
+, fetchFromGitHub
+, funcparserlib
+, nose
+, pillow
+, ephem
+, pythonOlder
+, pytestCheckHook
+, reportlab
+, setuptools
+, webcolors
+, python
 }:
 
 buildPythonPackage rec {
   pname = "blockdiag";
-  version = "1.5.3";
+  version = "3.0.0";
+  format = "setuptools";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/blockdiag/blockdiag/get/${version}.tar.bz2";
-    sha256 = "0r0qbmv0ijnqidsgm2rqs162y9aixmnkmzgnzgk52hiy7ydm4k8f";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "blockdiag";
+    repo = "blockdiag";
+    rev = version;
+    sha256 = "sha256-j8FoNUIJJOaahaol1MRPyY2jcPCEIlaAD4bmM2QKFFI=";
   };
 
-  buildInputs = [ pep8 nose unittest2 docutils ];
+  propagatedBuildInputs = [
+    setuptools
+    funcparserlib
+    pillow
+    webcolors
+    reportlab
+    docutils
+  ];
 
-  propagatedBuildInputs = [ pillow webcolors funcparserlib ];
+  checkInputs = [
+    ephem
+    nose
+    pytestCheckHook
+  ];
 
-  # One test fails:
-  #   ...
-  #   FAIL: test_auto_font_detection (blockdiag.tests.test_boot_params.TestBootParams)
-  doCheck = false;
+  pytestFlagsArray = [
+    "src/blockdiag/tests/"
+  ];
 
-  meta = with stdenv.lib; {
+  disabledTests = [
+    # Test require network access
+    "test_app_cleans_up_images"
+  ];
+
+  pythonImportsCheck = [
+    "blockdiag"
+  ];
+
+  meta = with lib; {
     description = "Generate block-diagram image from spec-text file (similar to Graphviz)";
-    homepage = http://blockdiag.com/;
+    homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor ];
+    maintainers = with maintainers; [ bjornfor SuperSandro2000 ];
   };
 }

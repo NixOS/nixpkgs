@@ -1,15 +1,17 @@
-{ lib, buildPythonPackage, fetchPypi, runtimeShell,
+{ lib, buildPythonPackage, fetchFromGitHub, runtimeShell,
   nose, dbus, dbus-python, pygobject3,
   which, pyflakes, pycodestyle, bluez, networkmanager
 }:
 
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.18.3";
+  version = "0.26.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "994a178268b6d74aeb158c0f155cd141e9a0cfae14226a764cd022c4949fe242";
+  src = fetchFromGitHub {
+    owner = "martinpitt";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-kavbWMTgKU/rBIo7RMs9NkwReYQyEdeFwMBSzEM9wa0=";
   };
 
   prePatch = ''
@@ -36,25 +38,29 @@ buildPythonPackage rec {
     "test_cli"
     "test_timedated"
     "test_upower"
+    # needs glib
+    "test_accounts_service"
+    # needs dbus-daemon active
+    "test_systemd"
     # Very slow, consider disabling?
     # "test_networkmanager"
   ];
 
   checkInputs = [
     nose dbus dbus-python which pycodestyle pyflakes
-    pygobject3 bluez bluez.test networkmanager
+    pygobject3 bluez (lib.getOutput "test" bluez) networkmanager
   ];
 
   checkPhase = ''
     runHook preCheck
-    export PATH="$PATH:${bluez.test}/test";
+    export PATH="$PATH:${lib.getOutput "test" bluez}/test";
     nosetests -v
     runHook postCheck
   '';
 
   meta = with lib; {
     description = "Mock D-Bus objects for tests";
-    homepage = https://github.com/martinpitt/python-dbusmock;
+    homepage = "https://github.com/martinpitt/python-dbusmock";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ callahad ];
     platforms = platforms.linux;

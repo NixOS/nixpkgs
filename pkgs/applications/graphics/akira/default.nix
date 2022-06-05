@@ -6,30 +6,31 @@
 , meson
 , ninja
 , pantheon
-, pkgconfig
+, pkg-config
 , python3
 , vala
 , vala-lint
 , wrapGAppsHook
 , cairo
 , glib
-, goocanvas2
+, goocanvas3
 , gtk3
 , gtksourceview3
 , json-glib
 , libarchive
 , libgee
-, libxml2 }:
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   pname = "akira";
-  version = "2019-10-12";
+  version = "0.0.16";
 
   src = fetchFromGitHub {
     owner = "akiraux";
     repo = "Akira";
-    rev = "cab952dee4591b6bde34d670c1f853f5a3ff6b19";
-    sha256 = "1fp3a79hkh6xwwqqdrx4zqq2zhsm236c6fhhl5f2nmi108yxz04q";
+    rev = "v${version}";
+    sha256 = "sha256-qrqmSCwA0kQVFD1gzutks9gMr7My7nw/KJs/VPisa0w=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     vala
     vala-lint
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cairo
     glib
-    goocanvas2
+    goocanvas3
     pantheon.granite
     gtk3
     gtksourceview3
@@ -59,8 +60,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Dprofile=default" ];
 
-  patches = [ ./fix-build-with-vala-0-44-or-later.patch ];
-
   postPatch = ''
     chmod +x build-aux/meson/post_install.py
     patchShebangs build-aux/meson/post_install.py
@@ -69,8 +68,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Native Linux Design application built in Vala and GTK";
     homepage = "https://github.com/akiraux/Akira";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ filalex77 ] ++ pantheon.maintainers;
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ Br1ght0ne neonfuz ] ++ teams.pantheon.members;
     platforms = platforms.linux;
+    mainProgram = "com.github.akiraux.akira";
   };
 }

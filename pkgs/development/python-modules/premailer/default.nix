@@ -1,14 +1,15 @@
-{ lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchPypi, isPy27,
   cssselect, cssutils, lxml, mock, nose, requests, cachetools
 }:
 
 buildPythonPackage rec {
   pname = "premailer";
-  version = "3.6.1";
+  version = "3.10.0";
+  disabled = isPy27; # no longer compatible with urllib
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08pshx7a110k4ll20x0xhpvyn3kkipkrbgxjjn7ncdxs54ihdhgw";
+    sha256 = "d1875a8411f5dc92b53ef9f193db6c0f879dc378d618e0ad292723e388bfe4c2";
   };
 
   buildInputs = [ mock nose ];
@@ -16,7 +17,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Turns CSS blocks into style attributes ";
-    homepage = https://github.com/peterbe/premailer;
+    homepage = "https://github.com/peterbe/premailer";
     license = lib.licenses.bsd3;
   };
 }

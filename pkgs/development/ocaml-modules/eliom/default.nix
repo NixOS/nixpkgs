@@ -1,29 +1,46 @@
-{ stdenv, fetchzip, which, ocsigen_server, ocaml,
-  lwt_react,
-  opaline, ppx_tools, ppx_deriving, findlib
-, ppx_tools_versioned
-, js_of_ocaml-ocamlbuild, js_of_ocaml-ppx, js_of_ocaml-ppx_deriving_json
+{ stdenv
+, lib
+, fetchFromGitHub
+, which
+, ocsigen_server
+, ocaml
+, lwt_react
+, opaline
+, ocamlbuild
+, ppx_deriving
+, findlib
+, js_of_ocaml-ocamlbuild
+, js_of_ocaml-ppx
+, js_of_ocaml-ppx_deriving_json
 , js_of_ocaml-lwt
 , js_of_ocaml-tyxml
 , lwt_ppx
+, ocamlnet
+, ocsipersist
 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.07"
-then throw "eliom is not available for OCaml ${ocaml.version}"
-else
-
-stdenv.mkDerivation rec
-{
+stdenv.mkDerivation rec {
   pname = "eliom";
-  version = "6.8.0";
+  version = "9.4.0";
 
-  src = fetchzip {
-    url = "https://github.com/ocsigen/eliom/archive/${version}.tar.gz";
-    sha256 = "0di4q0wzbnk9sxlaj97ivghzh8qvjb8n17h80y4nmqhys97pldif";
+  src = fetchFromGitHub {
+    owner = "ocsigen";
+    repo = "eliom";
+    rev = version;
+    sha256 = "sha256:1yn8mqxv9yz51x81j8wv1jn7l7crm8azp1m2g4zn5nz2s4nmfv6q";
   };
 
-  buildInputs = [ ocaml which findlib js_of_ocaml-ocamlbuild js_of_ocaml-ppx_deriving_json opaline ppx_tools
-    ppx_tools_versioned
+  nativeBuildInputs = [
+    ocaml
+    which
+    findlib
+    opaline
+    ocamlbuild
+  ];
+  buildInputs = [
+    js_of_ocaml-ocamlbuild
+    js_of_ocaml-ppx_deriving_json
+    ocamlnet
   ];
 
   propagatedBuildInputs = [
@@ -33,18 +50,25 @@ stdenv.mkDerivation rec
     lwt_ppx
     lwt_react
     ocsigen_server
+    ocsipersist
     ppx_deriving
   ];
 
-  installPhase = "opaline -prefix $out -libdir $OCAMLFIND_DESTDIR";
+  strictDeps = true;
+
+  installPhase = ''
+    runHook preInstall
+    opaline -prefix $out -libdir $OCAMLFIND_DESTDIR
+    runHook postInstall
+  '';
 
   setupHook = [ ./setup-hook.sh ];
 
   meta = {
-    homepage = http://ocsigen.org/eliom/;
+    homepage = "http://ocsigen.org/eliom/";
     description = "OCaml Framework for programming Web sites and client/server Web applications";
 
-    longDescription =''Eliom is a framework for programming Web sites
+    longDescription = ''Eliom is a framework for programming Web sites
     and client/server Web applications. It introduces new concepts to
     simplify programming common behaviours and uses advanced static
     typing features of OCaml to check many properties of the Web site
@@ -54,8 +78,8 @@ stdenv.mkDerivation rec
     distinguish both parts and the client side is compiled to JS using
     Ocsigen Js_of_ocaml.'';
 
-    license = stdenv.lib.licenses.lgpl21;
+    license = lib.licenses.lgpl21;
 
-    maintainers = [ stdenv.lib.maintainers.gal_bolle ];
+    maintainers = [ lib.maintainers.gal_bolle ];
   };
 }

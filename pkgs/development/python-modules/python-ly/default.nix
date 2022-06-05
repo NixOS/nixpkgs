@@ -1,21 +1,21 @@
-{ buildPythonPackage, fetchPypi, stdenv }:
+{ buildPythonPackage, fetchPypi, lib }:
 
 buildPythonPackage rec {
   pname = "python-ly";
-  version = "0.9.5";
+  version = "0.9.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x98dv7p8mg26p4816yy8hz4f34zf6hpnnfmr56msgh9jnsm2qfl";
+    sha256 = "d4d2b68eb0ef8073200154247cc9bd91ed7fb2671ac966ef3d2853281c15d7a8";
   };
 
   # tests not shipped on `pypi` and
   # seem to be broken ATM: https://github.com/wbsoft/python-ly/issues/70
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool and library for manipulating LilyPond files";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

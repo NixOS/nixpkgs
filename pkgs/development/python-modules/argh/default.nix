@@ -1,11 +1,10 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
-, pytest
-, py
-, mock
-, glibcLocales
+, fetchpatch
 , iocapture
+, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -17,18 +16,27 @@ buildPythonPackage rec {
     sha256 = "e9535b8c84dc9571a48999094fda7f33e63c3f1b74f3e5f3ac0105a58405bb65";
   };
 
-  checkInputs = [ pytest py mock glibcLocales iocapture ];
+  patches = [
+    # https://github.com/neithere/argh/issues/148
+    (fetchpatch {
+      name = "argh-0.26.2-fix-py3.9-msgs.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-python/argh/files/argh-0.26.2-fix-py3.9-msgs.patch?id=6f194f12a2e30aad7da347848f7b0187e188f983";
+      sha256 = "nBmhF2PXVeS7cBNujzip6Bb601LRHrjmhlGKFr/++Oo=";
+    })
+  ];
 
-  checkPhase = ''
-    export LANG="en_US.UTF-8"
-    py.test
-  '';
+  checkInputs = [
+    iocapture
+    mock
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/neithere/argh/;
+  pythonImportsCheck = [ "argh" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/neithere/argh";
     description = "An unobtrusive argparse wrapper with natural syntax";
-    license = licenses.lgpl2;
+    license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

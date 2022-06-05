@@ -1,34 +1,46 @@
-{ stdenv, fetchurl, perl }:
+{ lib, stdenv, perl, installShellFiles, fetchFromGitHub }:
 
-stdenv.mkDerivation rec{
-  version = "3.03+dfsg2";
+stdenv.mkDerivation rec {
   pname = "cowsay";
+  version = "3.04";
 
-  src = fetchurl {
-    url = "http://http.debian.net/debian/pool/main/c/cowsay/cowsay_${version}.orig.tar.gz";
-    sha256 = "0ghqnkp8njc3wyqx4mlg0qv0v0pc996x2nbyhqhz66bbgmf9d29v";
+  src = fetchFromGitHub {
+    owner = "tnalpgge";
+    repo = "rank-amateur-cowsay";
+    rev = "cowsay-${version}";
+    sha256 = "sha256-9jCaQ6Um6Nl9j0/urrMCRcsGeubRN3VWD3jDM/AshRg=";
   };
 
   buildInputs = [ perl ];
 
-  postBuild = ''
+  nativeBuildInputs = [ installShellFiles ];
+
+  # overriding buildPhase because we don't want to use the install.sh script
+  buildPhase = ''
+    runHook preBuild;
     substituteInPlace cowsay --replace "%BANGPERL%" "!${perl}/bin/perl" \
       --replace "%PREFIX%" "$out"
+    runHook postBuild;
   '';
 
   installPhase = ''
-    mkdir -p $out/{bin,man/man1,share/cows}
-    install -m755 cowsay $out/bin/cowsay
-    ln -s cowsay $out/bin/cowthink
-    install -m644 cowsay.1 $out/man/man1/cowsay.1
-    ln -s cowsay.1 $out/man/man1/cowthink.1
-    install -m644 cows/* -t $out/share/cows/
+    runHook preInstall
+    install -Dm755 cowsay $out/bin/cowsay
+    ln -s $out/bin/cowsay $out/bin/cowthink
+
+    installManPage cowsay.1
+    ln -s $man/share/man/man1/cowsay.1.gz $man/share/man/man1/cowthink.1.gz
+
+    install -Dm644 cows/* -t $out/share/cows/
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  outputs = [ "out" "man" ];
+
+  meta = with lib; {
     description = "A program which generates ASCII pictures of a cow with a message";
-    homepage = https://en.wikipedia.org/wiki/Cowsay;
-    license = licenses.gpl1;
+    homepage = "https://github.com/tnalpgge/rank-amateur-cowsay";
+    license = licenses.gpl3Only;
     platforms = platforms.all;
     maintainers = [ maintainers.rob ];
   };

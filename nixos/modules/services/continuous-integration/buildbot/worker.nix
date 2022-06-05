@@ -1,11 +1,12 @@
 # NixOS module for Buildbot Worker.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
 let
   cfg = config.services.buildbot-worker;
+  opt = options.services.buildbot-worker;
 
   python = cfg.package.pythonModule;
 
@@ -29,7 +30,7 @@ let
 
     with open('${cfg.workerPassFile}', 'r', encoding='utf-8') as passwd_file:
         passwd = passwd_file.read().strip('\r\n')
-    keepalive = 600
+    keepalive = ${toString cfg.keepalive}
     umask = None
     maxdelay = 300
     numcpus = None
@@ -77,6 +78,7 @@ in {
 
       buildbotDir = mkOption {
         default = "${cfg.home}/worker";
+        defaultText = literalExpression ''"''${config.${opt.home}}/worker"'';
         type = types.path;
         description = "Specifies the Buildbot directory.";
       };
@@ -116,17 +118,26 @@ in {
         description = "Specifies the Buildbot Worker connection string.";
       };
 
+      keepalive = mkOption {
+        default = 600;
+        type = types.int;
+        description = "
+          This is a number that indicates how frequently keepalive messages should be sent
+          from the worker to the buildmaster, expressed in seconds.
+        ";
+      };
+
       package = mkOption {
         type = types.package;
         default = pkgs.python3Packages.buildbot-worker;
-        defaultText = "pkgs.python3Packages.buildbot-worker";
+        defaultText = literalExpression "pkgs.python3Packages.buildbot-worker";
         description = "Package to use for buildbot worker.";
-        example = literalExample "pkgs.python2Packages.buildbot-worker";
+        example = literalExpression "pkgs.python2Packages.buildbot-worker";
       };
 
       packages = mkOption {
         default = with pkgs; [ git ];
-        example = literalExample "[ pkgs.git ]";
+        defaultText = literalExpression "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
       };
@@ -136,7 +147,7 @@ in {
   config = mkIf cfg.enable {
     services.buildbot-worker.workerPassFile = mkDefault (pkgs.writeText "buildbot-worker-password" cfg.workerPass);
 
-    users.groups = optional (cfg.group == "bbworker") {
+    users.groups = optionalAttrs (cfg.group == "bbworker") {
       bbworker = { };
     };
 
@@ -182,6 +193,6 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ nand0p ];
+  meta.maintainers = with lib.maintainers; [ ];
 
 }

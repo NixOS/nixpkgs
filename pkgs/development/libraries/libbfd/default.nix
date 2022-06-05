@@ -1,6 +1,6 @@
-{ stdenv
+{ lib, stdenv
 , fetchpatch, gnu-config, autoreconfHook, bison, binutils-unwrapped
-, libiberty, zlib
+, libiberty, libintl, zlib
 }:
 
 stdenv.mkDerivation {
@@ -30,20 +30,20 @@ stdenv.mkDerivation {
   # We update these ourselves
   dontUpdateAutotoolsGnuConfigScripts = true;
 
+  strictDeps = true;
   nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ libiberty zlib.dev ];
+  buildInputs = [ libiberty zlib ] ++ lib.optionals stdenv.isDarwin [ libintl ];
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [
     "--enable-targets=all" "--enable-64-bit-bfd"
     "--enable-install-libbfd"
-    "--enable-shared"
     "--with-system-zlib"
-  ];
+  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A library for manipulating containers of machine code";
     longDescription = ''
       BFD is a library which provides a single interface to read and write
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
       It is associated with GNU Binutils, and elsewhere often distributed with
       it.
     '';
-    homepage = https://www.gnu.org/software/binutils/;
+    homepage = "https://www.gnu.org/software/binutils/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;

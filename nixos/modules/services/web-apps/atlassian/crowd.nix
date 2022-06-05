@@ -96,14 +96,14 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.atlassian-crowd;
-        defaultText = "pkgs.atlassian-crowd";
+        defaultText = literalExpression "pkgs.atlassian-crowd";
         description = "Atlassian Crowd package to use.";
       };
 
       jrePackage = mkOption {
         type = types.package;
         default = pkgs.oraclejre8;
-        defaultText = "pkgs.oraclejre8";
+        defaultText = literalExpression "pkgs.oraclejre8";
         description = "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
       };
     };
@@ -157,6 +157,8 @@ in
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
+        Restart = "on-failure";
+        RestartSec = "10";
         ExecStart = "${pkg}/start_crowd.sh -fg";
       };
     };

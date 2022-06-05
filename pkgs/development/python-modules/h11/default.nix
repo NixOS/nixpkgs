@@ -1,33 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, pytest, fetchpatch }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "h11";
-  version = "0.9.0";
+  version = "0.13.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qfad70h59hya21vrzz8dqyyaiqhac0anl2dx3s3k80gpskvrm1k";
+    sha256 = "sha256-cIE8ETUIeiSKTTjMDhoBgf+rIYgUGpPq9WeUDDlX/wY=";
   };
 
-  patches = [
-    # pytest5 compatability
-    (fetchpatch {
-      url = https://github.com/python-hyper/h11/commit/241e220493a511a5f5a5d472cb88d72661a92ab1.patch;
-      sha256 = "1s3ipf9s41m1lksws3xv3j133q7jnjdqvmgk4sfnm8q7li2dww39";
-    })
-  ];
-
-  checkInputs = [ pytest ];
-
-  checkPhase = ''
-    py.test
-  '';
+  checkInputs = [ pytestCheckHook ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Pure-Python, bring-your-own-I/O implementation of HTTP/1.1";
+    homepage = "https://github.com/python-hyper/h11";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

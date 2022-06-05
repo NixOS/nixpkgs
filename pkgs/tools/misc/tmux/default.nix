@@ -1,11 +1,12 @@
-{ stdenv
+{ lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
-, pkgconfig
-, makeWrapper
+, pkg-config
 , bison
 , ncurses
 , libevent
+, utf8proc
 }:
 
 let
@@ -13,15 +14,15 @@ let
   bashCompletion = fetchFromGitHub {
     owner = "imomaliev";
     repo = "tmux-bash-completion";
-    rev = "fcda450d452f07d36d2f9f27e7e863ba5241200d";
-    sha256 = "092jpkhggjqspmknw7h3icm0154rg21mkhbc71j5bxfmfjdxmya8";
+    rev = "f5d53239f7658f8e8fbaf02535cc369009c436d6";
+    sha256 = "0sq2g3w0h3mkfa6qwqdw93chb5f1hgkz5vdl8yw8mxwdqwhsdprr";
   };
 
 in
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "3.0a";
+  version = "3.2a";
 
   outputs = [ "out" "man" ];
 
@@ -29,11 +30,19 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "0y9lv1yr0x50v3k70vzkc8hfr7yijlsi30p7dr7i8akp3lwmmc7h";
+    sha256 = "0143ylfk7zsl3xmiasb768238gr582cfhsgv3p0h0f13bp8d6q09";
   };
 
+  patches = [
+    # See https://github.com/tmux/tmux/pull/2755
+    (fetchpatch {
+      url = "https://github.com/tmux/tmux/commit/d0a2683120ec5a33163a14b0e1b39d208745968f.patch";
+      sha256 = "070knpncxfxi6k4q64jwi14ns5vm3606cf402h1c11cwnaa84n1g";
+    })
+  ];
+
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     autoreconfHook
     bison
   ];
@@ -41,13 +50,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libevent
-    makeWrapper
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ utf8proc ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "--enable-utf8proc" ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mkdir -p $out/share/bash-completion/completions
@@ -55,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://tmux.github.io/";
+    homepage = "https://tmux.github.io/";
     description = "Terminal multiplexer";
 
     longDescription =
@@ -71,10 +81,10 @@ stdenv.mkDerivation rec {
           * Terminal locking, manually or after a timeout.
           * A clean, easily extended, BSD-licensed codebase, under active development.
       '';
+    changelog = "https://github.com/tmux/tmux/raw/${version}/CHANGES";
+    license = lib.licenses.bsd3;
 
-    license = stdenv.lib.licenses.bsd3;
-
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ thammers fpletz ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thammers fpletz ];
   };
 }

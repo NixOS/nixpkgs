@@ -1,99 +1,78 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, pkgconfig
+, fetchpatch
+, nix-update-script
 , meson
 , ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
+, pkg-config
 , python3
-, libgee
-, clutter-gtk
-, json-glib
-, libgda
-, libgpod
-, libnotify
-, libpeas
-, libsoup
-, zeitgeist
+, vala
+, wrapGAppsHook4
+, glib
+, granite7
 , gst_all_1
-, taglib
-, libdbusmenu
-, libsignon-glib
-, libaccounts-glib
-, elementary-icon-theme
-, wrapGAppsHook
+, gtk4
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
-  version = "5.0.4";
-
-  repoName = "music";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "music";
     rev = version;
-    sha256 = "02qjsf9xnfh043xbls9mll2r1wcdvclw60x8wysv12rhbm90gwvp";
+    sha256 = "sha256-fZbOjZd6udJWM+jWXCmGwt6cyl/lXPsgM9XeTScbqts=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
-  nativeBuildInputs = [
-    desktop-file-utils
-    meson
-    ninja
-    pkgconfig
-    python3
-    vala
-    wrapGAppsHook
+  patches = [
+    # Use file basename for fallback audio object title
+    # https://github.com/elementary/music/pull/710
+    (fetchpatch {
+      url = "https://github.com/elementary/music/commit/97a437edc7652e0b85b7d3c6fd87089c14ec02e2.patch";
+      sha256 = "sha256-VmK5dKfSKWAIxfaKXsC8tjg6Pqq1XSGxJDQOZWJX92w=";
+    })
   ];
 
-  buildInputs = with gst_all_1; [
-    clutter-gtk
-    elementary-icon-theme
-    granite
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+    vala
+    wrapGAppsHook4
+  ];
+
+  buildInputs = [
+    glib
+    granite7
+    gtk4
+  ] ++ (with gst_all_1; [
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
     gstreamer
-    gtk3
-    json-glib
-    libaccounts-glib
-    libdbusmenu
-    libgda
-    libgee
-    libgpod
-    libnotify
-    libpeas
-    libsignon-glib
-    libsoup
-    taglib
-    zeitgeist
-  ];
-
-  mesonFlags = [
-    "-Dplugins=lastfm,audioplayer,cdrom,ipod"
-  ];
+  ]);
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "Music player and library designed for elementary OS";
-    homepage = https://github.com/elementary/music;
-    license = licenses.lgpl2Plus;
+    homepage = "https://github.com/elementary/music";
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
+    mainProgram = "io.elementary.music";
   };
 }

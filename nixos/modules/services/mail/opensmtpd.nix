@@ -17,6 +17,10 @@ in {
 
   ###### interface
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "opensmtpd" "addSendmailToSystemPath" ] [ "services" "opensmtpd" "setSendmail" ])
+  ];
+
   options = {
 
     services.opensmtpd = {
@@ -30,17 +34,14 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.opensmtpd;
-        defaultText = "pkgs.opensmtpd";
+        defaultText = literalExpression "pkgs.opensmtpd";
         description = "The OpenSMTPD package to use.";
       };
 
-      addSendmailToSystemPath = mkOption {
+      setSendmail = mkOption {
         type = types.bool;
         default = true;
-        description = ''
-          Whether to add OpenSMTPD's sendmail binary to the
-          system path or not.
-        '';
+        description = "Whether to set the system sendmail to OpenSMTPD's.";
       };
 
       extraServerArgs = mkOption {
@@ -82,7 +83,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable rec {
     users.groups = {
       smtpd.gid = config.ids.gids.smtpd;
       smtpq.gid = config.ids.gids.smtpq;
@@ -100,6 +101,17 @@ in {
         group = "smtpq";
       };
     };
+
+    security.wrappers.smtpctl = {
+      owner = "root";
+      group = "smtpq";
+      setuid = false;
+      setgid = true;
+      source = "${cfg.package}/bin/smtpctl";
+    };
+
+    services.mail.sendmailSetuidWrapper = mkIf cfg.setSendmail
+      (security.wrappers.smtpctl // { program = "sendmail"; });
 
     systemd.tmpfiles.rules = [
       "d /var/spool/smtpd 711 root - - -"
@@ -119,7 +131,5 @@ in {
       serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
       environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
     };
-
-    environment.systemPackages = mkIf cfg.addSendmailToSystemPath [ sendmail ];
   };
 }

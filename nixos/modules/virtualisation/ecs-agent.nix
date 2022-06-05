@@ -12,7 +12,7 @@ in {
       type = types.path;
       description = "The ECS agent package to use";
       default = pkgs.ecs-agent;
-      defaultText = "pkgs.ecs-agent";
+      defaultText = literalExpression "pkgs.ecs-agent";
     };
 
     extra-environment = mkOption {
@@ -38,9 +38,8 @@ in {
         if [ ! -z "$ECS_DATADIR" ]; then
           mkdir -p "$ECS_DATADIR"
         fi
-        ${cfg.package.bin}/bin/agent
+        ${cfg.package}/bin/agent
       '';
     };
   };
 }
-

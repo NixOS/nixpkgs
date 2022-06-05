@@ -1,30 +1,26 @@
-{ stdenv, fetchurl, meson, ninja, gettext, pkgconfig, glib
-, fixDarwinDylibNames, gobject-introspection, gnome3
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, gettext
+, pkg-config
+, glib
+, fixDarwinDylibNames
+, gobject-introspection
+, gnome
 }:
 
-let
-  pname = "atk";
-  version = "2.34.1";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1jwp16r6p5z66k4b2v8zlzhyshhwlmyi27ippkrgqr8jsary7w6l";
-  };
+  pname = "atk";
+  version = "2.38.0";
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
-
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection ];
-
-  propagatedBuildInputs = [
-    # Required by atk.pc
-    glib
-  ];
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "rE3ipO9L1WZQUpUv4WllfmXolcUFff+zwqgQ9hkaDDY=";
+  };
 
   patches = [
     # meson builds an incorrect .pc file
@@ -32,11 +28,32 @@ stdenv.mkDerivation rec {
     ./fix_pc.patch
   ];
 
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gobject-introspection
+    glib
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
+
+  propagatedBuildInputs = [
+    # Required by atk.pc
+    glib
+  ];
+
+  mesonFlags = [
+    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+  ];
+
   doCheck = true;
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
   };
 
@@ -51,12 +68,12 @@ stdenv.mkDerivation rec {
       control running applications.
     '';
 
-    homepage = http://library.gnome.org/devel/atk/;
+    homepage = "https://gitlab.gnome.org/GNOME/atk";
 
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
 
-    maintainers = with stdenv.lib.maintainers; [ raskin ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 
 }

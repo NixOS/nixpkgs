@@ -1,35 +1,35 @@
-{ boost
+{ lib
+, boost
 , fetchFromGitHub
+, fetchpatch
 , installShellFiles
-, mkDerivationWith
+, mkDerivation
 , muparser
-, pkgconfig
+, pkg-config
 , qmake
 , qtbase
 , qtsvg
 , qttools
 , runtimeShell
-, gcc8Stdenv
 }:
 
-let
-  stdenv = gcc8Stdenv;
-in
-
-# Doesn't build with gcc9
-mkDerivationWith stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "librecad";
-  version = "2.2.0-rc1";
+  version = "2.2.0-rc2";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     rev = version;
-    sha256 = "0kwj838hqzbw95gl4x6scli9gj3gs72hdmrrkzwq5rjxam18k3f3";
+    sha256 = "sha256-RNg7ioMriH4A7V65+4mh8NhsUHs/8IbTt38nVkYilCE=";
   };
 
   patches = [
-    ./fix_qt_5_11_build.patch
+    (fetchpatch {
+      url = "https://github.com/LibreCAD/LibreCAD/pull/1465/commits/4edcbe72679f95cb60979c77a348c1522a20b0f4.patch";
+      sha256 = "sha256-P0G2O5sL7Ip860ByxFQ87TfV/lq06wCQnzPxADGqFPs=";
+      name = "CVE-2021-45342.patch";
+    })
   ];
 
   postPatch = ''
@@ -74,21 +74,16 @@ mkDerivationWith stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     installShellFiles
-    pkgconfig
+    pkg-config
     qmake
     qttools
   ];
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "2D CAD package based on Qt";
     homepage = "https://librecad.org";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kiwi
-      viric
-    ];
+    license = licenses.gpl2Only;
+    maintainers = with maintainers; [ kiwi viric ];
     platforms = platforms.linux;
   };
 }

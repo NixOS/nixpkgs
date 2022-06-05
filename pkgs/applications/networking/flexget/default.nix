@@ -1,17 +1,27 @@
-{ lib, python3Packages }:
+{ lib
+, python3Packages
+, fetchFromGitHub
+}:
 
 python3Packages.buildPythonApplication rec {
-  pname = "FlexGet";
-  version = "3.0.31";
+  pname = "flexget";
+  version = "3.3.15";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "b9edd905556c77b40046b5d7a27151b76a1c9a8c43a4e4153279ad42a784844e";
+  # Fetch from GitHub in order to use `requirements.in`
+  src = fetchFromGitHub {
+    owner = "flexget";
+    repo = "flexget";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-SNAhuiUO8f92LAdnV9q04xK4yT+AVAS+YAHPPtHdMYI=";
   };
 
   postPatch = ''
+    # Symlink requirements.in because upstream uses `pip-compile` which yields
+    # python-version dependent requirements
+    ln -sf requirements.in requirements.txt
+
     # remove dependency constraints
-    sed 's/==\([0-9]\.\?\)\+//' -i requirements.txt
+    sed 's/[~<>=].*//' -i requirements.txt
 
     # "zxcvbn-python" was renamed to "zxcvbn", and we don't have the former in
     # nixpkgs. See: https://github.com/NixOS/nixpkgs/issues/62110
@@ -25,38 +35,46 @@ python3Packages.buildPythonApplication rec {
     # See https://github.com/Flexget/Flexget/blob/master/requirements.in
     APScheduler
     beautifulsoup4
-    cherrypy
-    colorclass
+    click
+    colorama
     feedparser
-    flask-compress
-    flask-cors
-    flask_login
-    flask-restful
-    flask-restplus
-    flask
     guessit
     html5lib
     jinja2
     jsonschema
     loguru
-    progressbar
+    more-itertools
+    psutil
     pynzb
-    pyparsing
     PyRSS2Gen
-    dateutil
+    python-dateutil
     pyyaml
     rebulk
     requests
+    rich
     rpyc
     sqlalchemy
-    terminaltables
+
+    # WebUI requirements
+    cherrypy
+    flask-compress
+    flask-cors
+    flask_login
+    flask-restful
+    flask-restx
+    flask
+    pyparsing
+    werkzeug
     zxcvbn
+
+    # Plugins requirements
+    transmission-rpc
   ];
 
   meta = with lib; {
-    homepage    = "https://flexget.com/";
+    homepage = "https://flexget.com/";
     description = "Multipurpose automation tool for all of your media";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };
 }

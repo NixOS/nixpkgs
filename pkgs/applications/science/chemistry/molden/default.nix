@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, which, gfortran, libGLU, xorg } :
+{ lib, stdenv, fetchurl, which, gfortran, libGLU, xorg } :
 
 stdenv.mkDerivation rec {
-  version = "6.2";
+  version = "6.3";
   pname = "molden";
 
   src = fetchurl {
-    url = "ftp://ftp.cmbi.ru.nl/pub/molgraph/molden/molden${version}.tar.gz";
-    sha256 = "01m5p7v5pz1fi77var50sp1bzlvdckwr6kn4wanvic2jmvgp9q5n";
+    url = "https://ftp.science.ru.nl/Molden//molden${version}.tar.gz";
+    sha256 = "02qi16pz2wffn3cc47dpjqhfafzwfmb79waw4nnhfyir8a4h3cq1";
   };
 
   nativeBuildInputs = [ which ];
@@ -19,7 +19,11 @@ stdenv.mkDerivation rec {
                                   --replace '-I/usr/X11R6/include' "" \
                                   --replace '/usr/local/' $out/ \
                                   --replace 'sudo' "" \
-				                          --replace '-C surf depend' '-C surf'
+                                  --replace '-C surf depend' '-C surf' \
+                                  --replace 'FFLAGS =' 'FFLAGS = -fallow-argument-mismatch'
+
+     substituteInPlace ambfor/makefile --replace 'FFLAGS =' 'FFLAGS = -fallow-argument-mismatch'
+
      sed -in '/^# DO NOT DELETE THIS LINE/q;' surf/Makefile
   '';
 
@@ -29,16 +33,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
      description = "Display and manipulate molecular structures";
-     homepage = http://www.cmbi.ru.nl/molden/;
+     homepage = "http://www3.cmbi.umcn.nl/molden/";
      license = {
        fullName = "Free for academic/non-profit use";
-       url = http://www.cmbi.ru.nl/molden/CopyRight.html;
+       url = "http://www3.cmbi.umcn.nl/molden/CopyRight.html";
        free = false;
      };
      platforms = platforms.linux;
      maintainers = with maintainers; [ markuskowa ];
   };
 }
-

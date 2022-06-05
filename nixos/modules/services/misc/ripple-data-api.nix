@@ -187,7 +187,9 @@ in {
 
     users.users.ripple-data-api =
       { description = "Ripple data api user";
-        uid = config.ids.uids.ripple-data-api;
+        isSystemUser = true;
+        group = "ripple-data-api";
       };
+    users.groups.ripple-data-api = {};
   };
 }

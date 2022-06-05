@@ -1,28 +1,47 @@
-{ stdenv, autoconf, automake, fetchFromGitHub, libgcc, libjpeg_turbo,
-  libpng, libtool, libxml2, pkgconfig, which, xorg }:
+{ lib, stdenv, autoconf, automake, fetchFromGitHub, fetchpatch
+, libgcc, libjpeg_turbo
+, libpng, libtool, libxml2, pkg-config, which, xorg
+, libtirpc
+}:
 stdenv.mkDerivation rec {
   pname = "nx-libs";
-  version = "3.5.99.22";
+  version = "3.5.99.26";
   src = fetchFromGitHub {
     owner = "ArcticaProject";
     repo = "nx-libs";
     rev = version;
-    sha256 = "0ipq93s2knv2xbb919d777mrc7v4k9l5bk0d4x6ji1bgispfa7jl";
+    sha256 = "sha256-qVOdD85sBMxKYx1cSLAGKeODsKKAm9UPBmYzPBbBOzQ=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig which
+  patches = [
+    (fetchpatch {
+      name = "binutils-2.36.patch";
+      url = "https://github.com/ArcticaProject/nx-libs/commit/605a266911b50ababbb3f8a8b224efb42743379c.patch";
+      sha256 = "sha256-kk5ms3i0PrHL74I4OlsqDrdDcCJ0us03cQcBy4zjAoQ=";
+    })
+  ];
+
+  nativeBuildInputs = [ autoconf automake libtool pkg-config which
     xorg.gccmakedep xorg.imake ];
   buildInputs = [ libgcc libjpeg_turbo libpng libxml2 xorg.fontutil
     xorg.libXcomposite xorg.libXdamage xorg.libXdmcp xorg.libXext xorg.libXfont2
     xorg.libXinerama xorg.libXpm xorg.libXrandr xorg.libXtst xorg.pixman
-    xorg.xkbcomp xorg.xkeyboardconfig ];
+    xorg.xkbcomp xorg.xkeyboardconfig libtirpc
+  ];
 
-  enableParallelBuilding = true;
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  NIX_LDFLAGS = [ "-ltirpc" ];
 
   postPatch = ''
     patchShebangs .
     find . -type f -name Makefile -exec sed -i 's|^\(SHELL:=\)/bin/bash$|\1${stdenv.shell}|g' {} \;
     ln -s libNX_X11.so.6.3.0
+  '';
+
+  preConfigure = ''
+    # binutils 2.37 fix
+    # https://github.com/ArcticaProject/nx-libs/issues/1003
+    substituteInPlace nx-X11/config/cf/Imake.tmpl --replace "clq" "cq"
   '';
 
   PREFIX=""; # Don't install to $out/usr/local
@@ -36,9 +55,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "NX X server based on Xnest";
-    homepage = https://github.com/ArcticaProject/nx-libs;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ jD91mZM2 ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/ArcticaProject/nx-libs";
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }

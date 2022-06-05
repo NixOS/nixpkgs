@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , robotframework
@@ -7,12 +7,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.4.0";
+  version = "3.8.0";
   pname = "robotframework-sshlibrary";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "21fa0183776e6061366f517765db479aaa634b707f3dd9d90ef6972adae6a755";
+    sha256 = "aedf8a02bcb7344404cf8575d0ada25d6c7dc2fcb65de2113c4e07c63d2446c2";
   };
 
   # unit tests are impure
@@ -20,9 +20,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ robotframework paramiko scp ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SSHLibrary is a Robot Framework test library for SSH and SFTP";
-    homepage = https://github.com/robotframework/SSHLibrary;
+    homepage = "https://github.com/robotframework/SSHLibrary";
     license = licenses.asl20;
   };
 

@@ -1,7 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
-, qtbase, qtx11extras, qtsvg, makeWrapper
-, vulkan-loader, xorg, python3, python3Packages
-, bison, pcre, automake, autoconf, addOpenGLRunpath
+{ lib
+, fetchFromGitHub
+, nix-update-script
+, cmake
+, pkg-config
+, mkDerivation
+, qtbase
+, qtx11extras
+, qtsvg
+, makeWrapper
+, vulkan-loader
+, libglvnd
+, xorg
+, python3
+, python3Packages
+, bison
+, pcre
+, automake
+, autoconf
+, addOpenGLRunpath
+, waylandSupport ? false
+, wayland
 }:
 let
   custom_swig = fetchFromGitHub {
@@ -10,25 +28,26 @@ let
     rev = "renderdoc-modified-7";
     sha256 = "15r2m5kcs0id64pa2fsw58qll3jyh71jzc04wy20pgsh2326zis6";
   };
-  pythonPackages = python3Packages;
+  cmakeBool = b: if b then "ON" else "OFF";
 in
 mkDerivation rec {
-  version = "1.5";
   pname = "renderdoc";
+  version = "1.18";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "0a05f6qfq90wrf4fixchp9knx4nhqhwjxl02n03a7k56xzxxnlci";
+    sha256 = "sha256-nwERwdNQYY1Fd7llwZHrJBzWDJNdsySRQ3ZvXZjB7YY=";
   };
 
   buildInputs = [
     qtbase qtsvg xorg.libpthreadstubs xorg.libXdmcp qtx11extras vulkan-loader python3
-  ]; # ++ (with pythonPackages; [pyside2 pyside2-tools shiboken2]);
+  ] # ++ (with python3Packages; [pyside2 pyside2-tools shiboken2])
   # TODO: figure out how to make cmake recognise pyside2
+  ++ lib.optional waylandSupport wayland;
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig bison pcre automake autoconf addOpenGLRunpath ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config bison pcre automake autoconf addOpenGLRunpath ];
 
   postUnpack = ''
     cp -r ${custom_swig} swig
@@ -42,6 +61,7 @@ mkDerivation rec {
     "-DBUILD_VERSION_DIST_VER=${version}"
     "-DBUILD_VERSION_DIST_CONTACT=https://github.com/NixOS/nixpkgs/tree/master/pkgs/applications/graphics/renderdoc"
     "-DBUILD_VERSION_STABLE=ON"
+    "-DENABLE_WAYLAND=${cmakeBool waylandSupport}"
   ];
 
   # TODO: define these in the above array via placeholders, once those are widely supported
@@ -52,8 +72,8 @@ mkDerivation rec {
 
   dontWrapQtApps = true;
   preFixup = ''
-    wrapQtApp $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib"
-    wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib"
+    wrapQtApp $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib:${libglvnd}/lib"
+    wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib:${libglvnd}/lib"
   '';
 
   # The only documentation for this so far is in pkgs/build-support/add-opengl-runpath/setup-hook.sh
@@ -61,11 +81,13 @@ mkDerivation rec {
     addOpenGLRunpath $out/lib/librenderdoc.so
   '';
 
-  enableParallelBuilding = true;
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A single-frame graphics debugger";
-    homepage = https://renderdoc.org/;
+    homepage = "https://renderdoc.org/";
     license = licenses.mit;
     longDescription = ''
       RenderDoc is a free MIT licensed stand-alone graphics debugger that
@@ -73,7 +95,7 @@ mkDerivation rec {
       of any application using Vulkan, D3D11, OpenGL or D3D12 across
       Windows 7 - 10, Linux or Android.
     '';
-    maintainers = [maintainers.jansol];
-    platforms = ["i686-linux" "x86_64-linux"];
+    maintainers = [ maintainers.jansol ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

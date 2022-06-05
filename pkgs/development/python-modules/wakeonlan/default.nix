@@ -1,31 +1,44 @@
-{ stdenv, fetchPypi, buildPythonPackage, setuptools_scm, pytest, mock }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "wakeonlan";
-  version = "1.1.6";
+  version = "2.1.0";
+  disabled = pythonOlder "3.6";
+  format = "pyproject";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "5e6013a17004809e676c150689abd94bcc0f12a37ad3fbce1f6270968f95ffa9";
+  src = fetchFromGitHub {
+    owner = "remcohaszing";
+    repo = "pywakeonlan";
+    rev = version;
+    sha256 = "sha256-5ri4bXc0EMNntzmcUZYpRIfaXoex4s5M6psf/9ta17Y=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "setuptools-scm ~= 1.15.7" "setuptools-scm"
-  '';
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
-  checkInputs = [ pytest mock ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  nativeBuildInputs = [ setuptools_scm ];
+  pytestFlagsArray = [
+    "test_wakeonlan.py"
+  ];
 
-  checkPhase = ''
-    py.test
-  '';
+  pythonImportsCheck = [
+    "wakeonlan"
+  ];
 
-  meta = with stdenv.lib; {
-    description = "A small python module for wake on lan";
-    homepage = https://github.com/remcohaszing/pywakeonlan;
-    license = licenses.wtfpl;
+  meta = with lib; {
+    description = "Python module for wake on lan";
+    homepage = "https://github.com/remcohaszing/pywakeonlan";
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

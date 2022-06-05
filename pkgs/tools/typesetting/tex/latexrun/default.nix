@@ -1,4 +1,4 @@
-{ stdenvNoCC, fetchFromGitHub, python3 }:
+{ lib, stdenvNoCC, fetchFromGitHub, python3 }:
 
 stdenvNoCC.mkDerivation {
   pname = "latexrun";
@@ -19,9 +19,9 @@ stdenvNoCC.mkDerivation {
     chmod +x $out/bin/latexrun
   '';
 
-  meta = with stdenvNoCC.lib; {
+  meta = with lib; {
     description = "A 21st century LaTeX wrapper";
-    homepage = https://github.com/aclements/latexrun;
+    homepage = "https://github.com/aclements/latexrun";
     license = licenses.mit;
     maintainers = [ maintainers.lucus16 ];
     platforms = platforms.all;

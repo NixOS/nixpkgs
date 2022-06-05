@@ -1,34 +1,33 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.14";
+  version = "1.2.15";
   pname = "zlog";
 
-  src = fetchzip {
-    name = "${pname}-${version}-src";
-    url = "https://github.com/HardySimpson/zlog/archive/${version}.tar.gz";
-    sha256 = "1qcrfmh2vbarkx7ij3gwk174qmgmhm2j336bfaakln1ixd9lkxa5";
+  src = fetchFromGitHub {
+    owner = "HardySimpson";
+    repo = pname;
+    rev = version;
+    sha256 = "10hzifgpml7jm43y6v8c8q0cr9ziyx9qxznafxyw6glhnlqnb7pb";
   };
 
-  configurePhase = ''
-    sed -i 's;-Werror;;' src/makefile
-  '';
+  patches = [
+    (fetchpatch {
+      name = "CVE-2021-43521.patch";
+      url = "https://github.com/HardySimpson/zlog/commit/a5be8b3a8ddc498de4ad041757285136a55d97e3.patch";
+      sha256 = "sha256-igHXUHN2Ke8Gb5AeDrDwG2aUNRpispgqVlGuASute+8=";
+    })
+  ];
 
-  buildPhase = ''
-    mkdir -p $out
-    make PREFIX=$out
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  installPhase = ''
-    make PREFIX=$out install
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description= "Reliable, high-performance, thread safe, flexible, clear-model, pure C logging library";
-    homepage = http://hardysimpson.github.com/zlog;
+    homepage = "https://hardysimpson.github.io/zlog/";
     license = licenses.lgpl21;
-    platforms = platforms.linux; # cannot test on something else
     maintainers = [ maintainers.matthiasbeyer ];
+    mainProgram = "zlog-chk-conf";
+    platforms = platforms.unix;
   };
 
 }

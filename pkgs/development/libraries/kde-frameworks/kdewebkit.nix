@@ -3,7 +3,7 @@
 }:
 
 mkDerivation {
-  name = "kdewebkit";
+  pname = "kdewebkit";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kconfig kcoreaddons kio kparts ];
   propagatedBuildInputs = [ qtwebkit ];

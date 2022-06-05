@@ -27,8 +27,8 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.dwm-status;
-        defaultText = "pkgs.dwm-status";
-        example = "pkgs.dwm-status.override { enableAlsaUtils = false; }";
+        defaultText = literalExpression "pkgs.dwm-status";
+        example = literalExpression "pkgs.dwm-status.override { enableAlsaUtils = false; }";
         description = ''
           Which dwm-status package to use.
         '';

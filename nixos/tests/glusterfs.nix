@@ -3,11 +3,12 @@ import ./make-test-python.nix ({pkgs, lib, ...}:
 let
   client = { pkgs, ... } : {
     environment.systemPackages = [ pkgs.glusterfs ];
-    fileSystems = pkgs.lib.mkVMOverride
-    [ { mountPoint = "/gluster";
-        fsType = "glusterfs";
-        device = "server1:/gv0";
-    } ];
+    virtualisation.fileSystems =
+      { "/gluster" =
+          { device = "server1:/gv0";
+            fsType = "glusterfs";
+          };
+      };
   };
 
   server = { pkgs, ... } : {
@@ -21,12 +22,12 @@ let
 
     virtualisation.emptyDiskImages = [ 1024 ];
 
-    fileSystems = pkgs.lib.mkVMOverride
-      [ { mountPoint = "/data";
-          device = "/dev/disk/by-label/data";
-          fsType = "ext4";
-        }
-      ];
+    virtualisation.fileSystems =
+      { "/data" =
+          { device = "/dev/disk/by-label/data";
+            fsType = "ext4";
+          };
+      };
   };
 in {
   name = "glusterfs";

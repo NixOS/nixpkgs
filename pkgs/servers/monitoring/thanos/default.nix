@@ -1,29 +1,30 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 buildGoModule rec {
   pname = "thanos";
-  version = "0.7.0";
+  version = "0.25.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "thanos-io";
     repo = "thanos";
-    sha256 = "0yxa1wipab1n9bh95n237c9l1sx1nx7r8snsk4nzpmwr3y1b4nn8";
+    sha256 = "sha256-CAeI+5aC8kSQaKOk/5WCQiQMOX82hogAQGP2Em3DJAw=";
   };
 
-  modSha256 = "0iz16yj41gahsyb6mxbmjs8mjhp5c96dmw75rg9bh5xdh8qh767m";
+  vendorSha256 = "sha256-tHtfS4PnO9n3ckUdaG6dQAIE2D2PG6km4Tqofaab/eg=";
+
+  doCheck = false;
 
   subPackages = "cmd/thanos";
 
-  buildFlagsArray = let t = "github.com/prometheus/common/version"; in ''
-    -ldflags=
-       -X ${t}.Version=${version}
-       -X ${t}.Revision=unknown
-       -X ${t}.Branch=unknown
-       -X ${t}.BuildUser=nix@nixpkgs
-       -X ${t}.BuildDate=unknown
-  '';
+  ldflags = let t = "github.com/prometheus/common/version"; in [
+    "-X ${t}.Version=${version}"
+    "-X ${t}.Revision=unknown"
+    "-X ${t}.Branch=unknown"
+    "-X ${t}.BuildUser=nix@nixpkgs"
+    "-X ${t}.BuildDate=unknown"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Highly available Prometheus setup with long term storage capabilities";
     homepage = "https://github.com/thanos-io/thanos";
     license = licenses.asl20;

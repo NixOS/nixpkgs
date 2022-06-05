@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , numpy
@@ -28,8 +28,8 @@ buildPythonPackage rec {
     pytest --ignore=filterpy/common/tests/test_discretization.py
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/rlabbe/filterpy;
+  meta = with lib; {
+    homepage = "https://github.com/rlabbe/filterpy";
     description = "Kalman filtering and optimal estimation library";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

@@ -1,24 +1,28 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, pytest, pytestcov, mock }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, mock
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "vdf";
-  version = "3.2";
+  version = "3.4";
 
   src = fetchFromGitHub {
     owner = "ValvePython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08rb982hcwc9pr9gl0zfk9266h84fwbz097qjfkss3srwghr1247";
+    hash = "sha256-6ozglzZZNKDtADkHwxX2Zsnkh6BE8WbcRcC9HkTTgPU=";
   };
 
-  checkInputs = [ pytest pytestcov mock ];
-  checkPhase = "make test";
+  checkInputs = [ mock pytestCheckHook ];
+  pythonImportsCheck = [ "vdf" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library for working with Valve's VDF text format";
-    homepage = https://github.com/ValvePython/vdf;
+    homepage = "https://github.com/ValvePython/vdf";
     license = licenses.mit;
-    maintainers = with maintainers; [ metadark ];
+    maintainers = with maintainers; [ kira-bruneau ];
   };
 }

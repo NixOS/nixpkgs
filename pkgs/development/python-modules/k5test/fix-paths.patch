@@ -45,42 +45,74 @@ index e289fac..e2f486a 100644
      if options_raw:
          return options_raw.split('\n')
 diff --git a/k5test/realm.py b/k5test/realm.py
-index f57946b..ad78579 100644
+index 161e5ad..9f50049 100644
 --- a/k5test/realm.py
 +++ b/k5test/realm.py
-@@ -181,19 +181,13 @@ class K5Realm(object):
-             return path
+@@ -90,7 +90,7 @@ class K5Realm(metaclass=abc.ABCMeta):
  
-     def _init_paths(self, **paths):
--        self.kdb5_util = self._discover_path('kdb5_util',
--                                             '/usr/sbin/kdb5_util', paths)
--        self.krb5kdc = self._discover_path('krb5kdc',
--                                           '/usr/sbin/krb5kdc', paths)
--        self.kadmin_local = self._discover_path('kadmin_local',
--                                                '/usr/sbin/kadmin.local',
--                                                paths)
--        self.kprop = self._discover_path('kprop', '/usr/sbin/kprop', paths)
--        self.kadmind = self._discover_path('kadmind',
--                                           '/usr/sbin/kadmind', paths)
--
--        self._kinit = self._discover_path('kinit', '/usr/bin/kinit', paths)
--        self._klist = self._discover_path('klist', '/usr/bin/klist', paths)
-+        self.kdb5_util = '@krb5Full@/bin/kdb5_util'
-+        self.krb5kdc = '@krb5Full@/bin/krb5kdc'
-+        self.kadmin_local = '@krb5Full@/bin/kadmin.local'
-+        self.kprop = '@krb5Full@/bin/kprop'
-+        self.kadmind = '@krb5Full@/bin/kadmind'
-+        self._kinit = '@krb5Full@/bin/kinit'
-+        self._klist = '@krb5Full@/bin/klist'
+         if provider_cls == K5Realm:
+             krb5_config = _discover_path('krb5-config',
+-                                         '/usr/bin/krb5-config', kwargs)
++                                         '@krb5Full@/bin/krb5-config', kwargs)
  
-     def _create_conf(self, profile, filename):
-         with open(filename, 'w') as conf_file:
+             try:
+                 krb5_version = subprocess.check_output(
+@@ -101,7 +101,7 @@ class K5Realm(metaclass=abc.ABCMeta):
+                 # macOS output doesn't contain Heimdal
+                 if 'heimdal' in krb5_version.lower() or (
+                         sys.platform == 'darwin' and
+-                        krb5_config == '/usr/bin/krb5-config'):
++                        krb5_config == '@krb5Full@/bin/krb5-config'):
+                     provider_cls = HeimdalRealm
+                 else:
+                     provider_cls = MITRealm
+@@ -434,14 +434,14 @@ class MITRealm(K5Realm):
+     @property
+     def _default_paths(self):
+         return [
+-            ('kdb5_util', 'kdb5_util', '/usr/sbin/kdb5_util'),
+-            ('krb5kdc', 'krb5kdc', '/usr/sbin/kdb5kdc'),
+-            ('kadmin', 'kadmin', '/usr/bin/admin'),
+-            ('kadmin_local', 'kadmin.local', '/usr/sbin/kadmin.local'),
+-            ('kadmind', 'kadmind', '/usr/sbin/kadmind'),
+-            ('kprop', 'kprop', '/usr/sbin/kprop'),
+-            ('_kinit', 'kinit', '/usr/bin/kinit'),
+-            ('_klist', 'klist', '/usr/bin/klist'),
++            ('kdb5_util', 'kdb5_util', '@krb5Full@/bin/kdb5_util'),
++            ('krb5kdc', 'krb5kdc', '@krb5Full@/bin/kdb5kdc'),
++            ('kadmin', 'kadmin', '@krb5Full@/bin/admin'),
++            ('kadmin_local', 'kadmin.local', '@krb5Full@/bin/kadmin.local'),
++            ('kadmind', 'kadmind', '@krb5Full@/bin/kadmind'),
++            ('kprop', 'kprop', '@krb5Full@/bin/kprop'),
++            ('_kinit', 'kinit', '@krb5Full@/bin/kinit'),
++            ('_klist', 'klist', '@krb5Full@/bin/klist'),
+         ]
+ 
+     @property
+@@ -585,12 +585,12 @@ class HeimdalRealm(K5Realm):
+ 
+         return [
+             ('krb5kdc', 'kdc', os.path.join(base, 'kdc')),
+-            ('kadmin', 'kadmin', '/usr/bin/kadmin'),
+-            ('kadmin_local', 'kadmin', '/usr/bin/kadmin'),
++            ('kadmin', 'kadmin', '@krb5Full@/bin/kadmin'),
++            ('kadmin_local', 'kadmin', '@krb5Full@/bin/kadmin'),
+             ('kadmind', 'kadmind', os.path.join(base, 'kadmind')),
+-            ('_kinit', 'kinit', '/usr/bin/kinit'),
+-            ('_klist', 'klist', '/usr/bin/klist'),
+-            ('_ktutil', 'ktutil', '/usr/bin/ktutil'),
++            ('_kinit', 'kinit', '@krb5Full@/bin/kinit'),
++            ('_klist', 'klist', '@krb5Full@/bin/klist'),
++            ('_ktutil', 'ktutil', '@krb5Full@/bin/ktutil'),
+         ]
+ 
+     @property
 diff --git a/k5test/unit.py b/k5test/unit.py
-index 4ee7f98..543d662 100644
+index 3c64b9e..59da1ab 100644
 --- a/k5test/unit.py
 +++ b/k5test/unit.py
 @@ -38,7 +38,7 @@ _KRB_VERSION = None
- def krb_minversion_test(target_version, problem):
+ def krb_minversion_test(target_version, problem, provider=None):
      global _KRB_VERSION
      if _KRB_VERSION is None:
 -        _KRB_VERSION = _utils.get_output("krb5-config --version")

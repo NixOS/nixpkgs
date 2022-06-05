@@ -1,28 +1,32 @@
-{ stdenv, pythonPackages, fetchpatch }:
+{ lib, fetchFromGitHub, python3, installShellFiles }:
 
-with pythonPackages;
+with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "watson";
-  version = "1.8.0";
+  version = "2.1.0";
 
-  src = fetchPypi {
-    inherit version;
-    pname = "td-watson";
-    sha256 = "1ip66jhbcqifdw1avbhngwym0vv7fsqxgbph11da5wlqwfwp060n";
+  src = fetchFromGitHub {
+    owner = "TailorDev";
+    repo = "Watson";
+    rev = version;
+    sha256 = "sha256-/AASYeMkt18KPJljAjNPRYOpg/T5xuM10LJq4LrFD0g=";
   };
 
-  checkPhase = ''
-    pytest -vs tests
- '';
+  postInstall = ''
+    installShellCompletion --bash --name watson watson.completion
+    installShellCompletion --zsh --name _watson watson.zsh-completion
+    installShellCompletion --fish watson.fish
+  '';
 
-  checkInputs = [ py pytest pytest-datafiles mock pytest-mock pytestrunner ];
-  propagatedBuildInputs = [ requests click arrow ];
+  checkInputs = [ pytestCheckHook pytest-mock mock pytest-datafiles ];
+  propagatedBuildInputs = [ arrow click click-didyoumean requests ];
+  nativeBuildInputs = [ installShellFiles ];
 
-  meta = with stdenv.lib; {
-    homepage = https://tailordev.github.io/Watson/;
+  meta = with lib; {
+    homepage = "https://tailordev.github.io/Watson/";
     description = "A wonderful CLI to track your time!";
     license = licenses.mit;
-    maintainers = with maintainers; [ mguentner nathyong ] ;
+    maintainers = with maintainers; [ mguentner nathyong oxzi ];
   };
 }

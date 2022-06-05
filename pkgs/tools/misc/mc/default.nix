@@ -1,38 +1,96 @@
-{ stdenv, fetchurl, pkgconfig, glib, gpm, file, e2fsprogs
-, libX11, libICE, perl, zip, unzip, gettext, slang, libssh2, openssl}:
+{ lib, stdenv
+, fetchurl
+, pkg-config
+, glib
+, gpm
+, file
+, e2fsprogs
+, libX11
+, libICE
+, perl
+, zip
+, unzip
+, gettext
+, slang
+, libssh2
+, openssl
+, coreutils
+, autoreconfHook
+, autoSignDarwinBinariesHook
+
+# updater only
+, writeScript
+}:
 
 stdenv.mkDerivation rec {
   pname = "mc";
-  version = "4.8.23";
+  version = "4.8.28";
 
   src = fetchurl {
-    url = "http://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
-    sha256 = "077z7phzq3m1sxyz7li77lyzv4rjmmh3wp2vy86pnc4387kpqzyx";
+    url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
+    sha256 = "sha256-6ZTZvppxcumsSkrWIQeSH2qjEuZosFbf5bi867r1OAM=";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config autoreconfHook unzip ]
+    # The preFixup hook rewrites the binary, which invaliates the code
+    # signature. Add the fixup hook to sign the output.
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
 
   buildInputs = [
-    perl glib slang zip unzip file gettext libX11 libICE libssh2 openssl
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+    file
+    gettext
+    glib
+    libICE
+    libX11
+    libssh2
+    openssl
+    slang
+    zip
+  ] ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--enable-vfs-smb" ];
+  configureFlags = [ "PERL=${perl}/bin/perl" ];
 
-  postFixup = ''
+  postPatch = ''
+    substituteInPlace src/filemanager/ext.c \
+      --replace /bin/rm ${coreutils}/bin/rm
+
+    substituteInPlace misc/ext.d/misc.sh.in \
+      --replace /bin/cat ${coreutils}/bin/cat
+  '';
+
+  preFixup = ''
     # remove unwanted build-dependency references
     sed -i -e "s!PKG_CONFIG_PATH=''${PKG_CONFIG_PATH}!PKG_CONFIG_PATH=$(echo "$PKG_CONFIG_PATH" | sed -e 's/./0/g')!" $out/bin/mc
   '';
 
-  meta = {
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+    # libX11.so is loaded dynamically so autopatch doesn't detect it
+    patchelf \
+      --add-needed ${libX11}/lib/libX11.so \
+      $out/bin/mc
+  '';
+
+  passthru.updateScript = writeScript "update-mc" ''
+   #!/usr/bin/env nix-shell
+   #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+   set -eu -o pipefail
+
+   # Expect the text in format of "Current version is: 4.8.27; ...".
+   new_version="$(curl -s https://midnight-commander.org/ | pcregrep -o1 'Current version is: (([0-9]+\.?)+);')"
+   update-source-version mc "$new_version"
+ '';
+
+  meta = with lib; {
     description = "File Manager and User Shell for the GNU Project";
-    homepage = http://www.midnight-commander.org;
-    downloadPage = "http://www.midnight-commander.org/downloads/";
-    repositories.git = git://github.com/MidnightCommander/mc.git;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    updateWalker = true;
+    downloadPage = "https://www.midnight-commander.org/downloads/";
+    homepage = "https://www.midnight-commander.org";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ sander ];
+    platforms = with platforms; linux ++ darwin;
   };
 }

@@ -41,15 +41,11 @@ in
 
     services.prayer = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run the prayer webmail http server.
-        '';
-      };
+      enable = mkEnableOption "the prayer webmail http server";
 
       port = mkOption {
-        default = "2080";
+        default = 2080;
+        type = types.port;
         description = ''
           Port the prayer http server is listening to.
         '';
@@ -86,7 +82,7 @@ in
       serviceConfig.Type = "forking";
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
-        chown ${prayerUser}.${prayerGroup} ${stateDir}
+        chown ${prayerUser}:${prayerGroup} ${stateDir}
       '';
       script = "${prayer}/sbin/prayer --config-file=${prayerCfg}";
     };

@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "s6";
-  version = "2.9.0.1";
-  sha256 = "0mvcjrz8nlj9p2zclmcv22b4y6bqzd2iz38arhgc989vdvrbmkg0";
+  version = "2.11.1.0";
+  sha256 = "sha256-rmTcK6II/4DkrEeSzpDdUmtCvxnJZtx9jrmmhw5Lwjo=";
 
   description = "skarnet.org's small & secure supervision software suite";
 
@@ -34,6 +34,7 @@ buildPackage {
     # remove all s6 executables from build directory
     rm $(find -type f -mindepth 1 -maxdepth 1 -executable)
     rm libs6.*
+    rm ./libs6lockd.a.xyzzy
 
     mv doc $doc/share/doc/s6/html
     mv examples $doc/share/doc/s6/examples

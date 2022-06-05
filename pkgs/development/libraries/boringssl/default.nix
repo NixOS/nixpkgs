@@ -1,38 +1,59 @@
-{ stdenv, fetchgit, cmake, perl, go }:
+{ lib
+, stdenv
+, fetchgit
+, cmake
+, ninja
+, perl
+, buildGoModule
+}:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
-stdenv.mkDerivation {
+buildGoModule {
   pname = "boringssl";
-  version = "2017-02-23";
+  version = "2021-07-09";
 
   src = fetchgit {
     url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "be2ee342d3781ddb954f91f8a7e660c6f59e87e5";
-    sha256 = "022zq7wlkhrg6al7drr3555lam3zw5bb10ylf9mznp83s854f975";
+    rev    = "268a4a6ff3bd656ae65fe41ef1185daa85cfae21";
+    sha256 = "04fja4fdwhc69clmvg8i12zm6ks3sfl3r8i5bxn4x63b9dj5znlx";
   };
 
-  buildInputs = [ cmake perl go ];
-  enableParallelBuilding = true;
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  nativeBuildInputs = [ cmake ninja perl ];
 
-  makeFlags = [ "GOCACHE=$(TMPDIR)/go-cache" ];
+  vendorSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+
+  # hack to get both go and cmake configure phase
+  # (if we use postConfigure then cmake will loop runHook postConfigure)
+  preBuild = ''
+    cmakeConfigurePhase
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    export GOARCH=$(go env GOHOSTARCH)
+  '';
+
+  buildPhase = ''
+    ninjaBuildPhase
+  '';
+
+  # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
+  cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/include $out/lib
+    mkdir -p $bin/bin $dev $out/lib
 
-    mv tool/bssl $out/bin
+    mv tool/bssl $bin/bin
 
     mv ssl/libssl.a           $out/lib
     mv crypto/libcrypto.a     $out/lib
     mv decrepit/libdecrepit.a $out/lib
 
-    mv ../include/openssl $out/include
+    mv ../include $dev
   '';
 
-  meta = with stdenv.lib; {
+  outputs = [ "out" "bin" "dev" ];
+
+  meta = with lib; {
     description = "Free TLS/SSL implementation";
     homepage    = "https://boringssl.googlesource.com";
-    platforms   = platforms.all;
     maintainers = [ maintainers.thoughtpolice ];
     license = with licenses; [ openssl isc mit bsd3 ];
   };

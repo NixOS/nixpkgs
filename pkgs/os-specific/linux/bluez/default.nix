@@ -1,36 +1,39 @@
 { stdenv
 , lib
 , fetchurl
-, alsaLib
+, fetchpatch
+, alsa-lib
 , dbus
+, ell
 , glib
 , json_c
 , libical
-, pkgconfig
+, docutils
+, pkg-config
 , python3
 , readline
 , systemd
 , udev
-}:
-
-stdenv.mkDerivation rec {
-  pname = "bluez";
-  version = "5.52";
-
-  src = fetchurl {
-    url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "02jng21lp6fb3c2bh6vf9y7cj4gaxwk29dfc32ncy0lj0gi4q57p";
-  };
-
+, withExperimental ? false
+}: let
   pythonPath = with python3.pkgs; [
     dbus-python
     pygobject3
     recursivePthLoader
   ];
+in stdenv.mkDerivation rec {
+  pname = "bluez";
+  version = "5.64";
+
+  src = fetchurl {
+    url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
+    sha256 = "sha256-rkN+ZbazBwwZi8WwEJ/pzeueqjhzgOIHL53mX+ih3jQ=";
+  };
 
   buildInputs = [
-    alsaLib
+    alsa-lib
     dbus
+    ell
     glib
     json_c
     libical
@@ -40,16 +43,33 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    docutils
+    pkg-config
     python3.pkgs.wrapPython
   ];
 
-  outputs = [ "out" "dev" "test" ];
+  outputs = [ "out" "dev" ] ++ lib.optional doCheck "test";
+
+  patches = [
+    # https://github.com/bluez/bluez/commit/0905a06410d4a5189f0be81e25eb3c3e8a2199c5
+    # which fixes https://github.com/bluez/bluez/issues/329
+    # and is already merged upstream and not yet in a release.
+    (fetchpatch {
+      name = "StateDirectory_and_ConfigurationDirectory.patch";
+      url = "https://github.com/bluez/bluez/commit/0905a06410d4a5189f0be81e25eb3c3e8a2199c5.patch";
+      sha256 = "sha256-MI6yPTiDLHsSTjLvNqtWnuy2xUMYpSat1WhMbeoedSM=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace tools/hid2hci.rules \
       --replace /sbin/udevadm ${systemd}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
+    # Disable some tests:
+    # - test-mesh-crypto depends on the following kernel settings:
+    #   CONFIG_CRYPTO_[USER|USER_API|USER_API_AEAD|USER_API_HASH|AES|CCM|AEAD|CMAC]
+    if [[ ! -f unit/test-mesh-crypto.c ]]; then echo "unit/test-mesh-crypto.c no longer exists"; false; fi
+    echo 'int main() { return 77; }' > unit/test-mesh-crypto.c
   '';
 
   configureFlags = [
@@ -57,6 +77,7 @@ stdenv.mkDerivation rec {
     "--enable-library"
     "--enable-cups"
     "--enable-pie"
+    "--enable-external-ell"
     "--with-dbusconfdir=${placeholder "out"}/share"
     "--with-dbussystembusdir=${placeholder "out"}/share/dbus-1/system-services"
     "--with-dbussessionbusdir=${placeholder "out"}/share/dbus-1/services"
@@ -69,8 +90,15 @@ stdenv.mkDerivation rec {
     "--enable-nfc"
     "--enable-sap"
     "--enable-sixaxis"
-    "--enable-wiimote"
-  ];
+    "--enable-btpclient"
+    "--enable-hid2hci"
+    "--enable-logger"
+
+    # To provide ciptool, sdptool, and rfcomm (unmaintained)
+    # superseded by new D-Bus APIs
+    "--enable-deprecated"
+  ] ++ lib.optional withExperimental "--enable-experimental";
+
 
   # Work around `make install' trying to create /var/lib/bluetooth.
   installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];
@@ -79,7 +107,7 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform.isx86_64;
 
-  postInstall = ''
+  postInstall = lib.optionalString doCheck ''
     mkdir -p $test/{bin,test}
     cp -a test $test
     pushd $test/test
@@ -94,8 +122,8 @@ stdenv.mkDerivation rec {
       ln -s ../test/$a $test/bin/bluez-$a
     done
     popd
-    wrapPythonProgramsIn $test/test "$test/test $pythonPath"
-
+    wrapPythonProgramsIn $test/test "$test/test ${toString pythonPath}"
+  '' + ''
     # for bluez4 compatibility for NixOS
     mkdir $out/sbin
     ln -s ../libexec/bluetooth/bluetoothd $out/sbin/bluetoothd
@@ -110,15 +138,15 @@ stdenv.mkDerivation rec {
       filename=$(basename $files)
       install -Dm755 tools/$filename $out/bin/$filename
     done
+    install -Dm755 attrib/gatttool $out/bin/gatttool
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bluetooth support for Linux";
-    homepage = http://www.bluez.org/;
+    homepage = "http://www.bluez.org/";
     license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.linux;
-    repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, perl, unzip }:
+{ lib, stdenv, fetchFromGitHub, perl }:
 
 stdenv.mkDerivation rec {
   pname = "zpaq";
@@ -12,27 +12,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ perl /* for pod2man */ ];
-  buildInputs = [ unzip ];
 
-  preBuild = let
-    CPPFLAGS = with stdenv; ""
-      + (lib.optionalString (!isi686 && !isx86_64) "-DNOJIT ")
-      + "-Dunix";
-    CXXFLAGS = "-O3 -DNDEBUG";
-  in ''
-    buildFlagsArray=( "CPPFLAGS=${CPPFLAGS}" "CXXFLAGS=${CXXFLAGS}" )
-  '';
+  CPPFLAGS = [ "-Dunix" ] ++
+    lib.optional (!stdenv.isi686 && !stdenv.isx86_64) "-DNOJIT";
+  CXXFLAGS = [ "-O3" "-DNDEBUG" ];
 
   enableParallelBuilding = true;
 
+  makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ];
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Incremental journaling backup utility and archiver";
-    homepage = http://mattmahoney.net/dc/zpaq.html;
+    homepage = "http://mattmahoney.net/dc/zpaq.html";
     license = licenses.gpl3Plus ;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
-    inherit version;
   };
 }

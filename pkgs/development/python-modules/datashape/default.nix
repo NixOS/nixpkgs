@@ -5,7 +5,7 @@
 , mock
 , numpy
 , multipledispatch
-, dateutil
+, python-dateutil
 }:
 
 let
@@ -29,7 +29,7 @@ in buildPythonPackage rec {
   };
 
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ numpy multipledispatch dateutil ];
+  propagatedBuildInputs = [ numpy multipledispatch python-dateutil ];
 
   # Disable several tests
   # https://github.com/blaze/datashape/issues/232
@@ -42,7 +42,7 @@ in buildPythonPackage rec {
   PYTEST_ADDOPTS = "-k 'not test_record and not test_tuple'";
 
   meta = {
-    homepage = https://github.com/ContinuumIO/datashape;
+    homepage = "https://github.com/ContinuumIO/datashape";
     description = "A data description language";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fridh ];

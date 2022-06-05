@@ -1,25 +1,24 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "lzbench-20170208";
+  pname = "lzbench";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "inikep";
-    repo = "lzbench";
-    rev = "d5e9b58";
-    sha256 = "16xj5fldwl639f0ys5rx54csbfvf35ja34bdl5m068hdn6dr47r5";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "19zlvcjb1qg4fx30rrp6m650660y35736j8szvdxmqh9ipkisyia";
   };
 
   enableParallelBuilding = true;
-
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ stdenv.glibc.static ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp lzbench $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     inherit (src.meta) homepage;
     description = "In-memory benchmark of open-source LZ77/LZSS/LZMA compressors";
     license = licenses.free;

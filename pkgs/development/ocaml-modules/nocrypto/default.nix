@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, topkg
+{ stdenv, lib, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, topkg
 , cpuid, ocb-stubblr, sexplib
 , cstruct, zarith, ppx_sexp_conv, ppx_deriving, writeScriptBin
 , cstruct-lwt ? null
 }:
 
-with stdenv.lib;
+with lib;
 let
   withLwt = cstruct-lwt != null;
   # the build system will call 'cc' with no way to override
@@ -15,8 +15,12 @@ let
   '';
 in
 
+if versionOlder ocaml.version "4.08"
+then throw "nocrypto is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-nocrypto-${version}";
+  pname = "ocaml${ocaml.version}-nocrypto";
   version = "0.5.4";
 
   src = fetchurl {
@@ -52,16 +56,18 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild cc-wrapper ];
-  buildInputs = [ ocamlbuild findlib topkg cpuid ocb-stubblr ];
+  buildInputs = [ topkg cpuid ocb-stubblr ocamlbuild ];
   propagatedBuildInputs = [ cstruct ppx_deriving ppx_sexp_conv sexplib zarith ] ++ optional withLwt cstruct-lwt;
 
-  buildPhase = "${topkg.buildPhase} --with-lwt ${boolToString withLwt}";
+  strictDeps = true;
+
+  buildPhase = "${topkg.buildPhase} --accelerate false --with-lwt ${boolToString withLwt}";
   inherit (topkg) installPhase;
 
   meta = {
-    homepage = https://github.com/mirleft/ocaml-nocrypto;
+    homepage = "https://github.com/mirleft/ocaml-nocrypto";
     description = "Simplest possible crypto to support TLS";
-    license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ vbgl ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
 }

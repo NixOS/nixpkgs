@@ -1,9 +1,9 @@
-{ alsaLib, autoPatchelfHook, fetchurl, gtk3, libnotify
-, makeDesktopItem, makeWrapper, nss, stdenv, udev, xdg_utils
+{ alsa-lib, autoPatchelfHook, fetchurl, gtk3, libnotify
+, makeDesktopItem, makeWrapper, nss, lib, stdenv, udev, xdg-utils
 , xorg
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   bits = "x86_64";
@@ -16,7 +16,7 @@ let
     icon = "wavebox";
     desktopName = name;
     genericName = name;
-    categories = "Network;";
+    categories = [ "Network" ];
   };
 
   tarball = "Wavebox_${replaceStrings ["."] ["_"] (toString version)}_linux_${bits}.tar.gz";
@@ -37,10 +37,10 @@ in stdenv.mkDerivation {
   buildInputs = with xorg; [
     libXdmcp libXScrnSaver libXtst
   ] ++ [
-    alsaLib gtk3 nss
+    alsa-lib gtk3 nss
   ];
 
-  runtimeDependencies = [ udev.lib libnotify ];
+  runtimeDependencies = [ (getLib udev) libnotify ];
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/wavebox
@@ -54,12 +54,12 @@ in stdenv.mkDerivation {
 
   postFixup = ''
     makeWrapper $out/opt/wavebox/Wavebox $out/bin/wavebox \
-      --prefix PATH : ${xdg_utils}/bin
+      --prefix PATH : ${xdg-utils}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Wavebox messaging application";
-    homepage = https://wavebox.io;
+    homepage = "https://wavebox.io";
     license = licenses.mpl20;
     maintainers = with maintainers; [ rawkode ];
     platforms = ["x86_64-linux"];

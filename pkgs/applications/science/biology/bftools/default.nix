@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A bundle of scripts for using Bio-Formats on the command line with bioformats_package.jar already included";
     license = licenses.gpl2;
     platforms = platforms.all;
-    homepage = https://www.openmicroscopy.org/bio-formats/;
+    homepage = "https://www.openmicroscopy.org/bio-formats/";
     maintainers = [ maintainers.tbenst ];
   };
 }

@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
-  inherit (lib) concatStringsSep literalExample mapAttrsToList optional optionalString;
+  inherit (lib) concatStringsSep literalExpression mapAttrsToList optional optionalString;
 
   cfg = config.services.moodle;
   fpm = config.services.phpfpm.pools.moodle;
@@ -40,7 +40,7 @@ let
   $CFG->disableupdateautodeploy = true;
 
   $CFG->pathtogs = '${pkgs.ghostscript}/bin/gs';
-  $CFG->pathtophp = '${pkgs.php}/bin/php';
+  $CFG->pathtophp = '${phpExt}/bin/php';
   $CFG->pathtodu = '${pkgs.coreutils}/bin/du';
   $CFG->aspellpath = '${pkgs.aspell}/bin/aspell';
   $CFG->pathtodot = '${pkgs.graphviz}/bin/dot';
@@ -55,6 +55,9 @@ let
 
   mysqlLocal = cfg.database.createLocally && cfg.database.type == "mysql";
   pgsqlLocal = cfg.database.createLocally && cfg.database.type == "pgsql";
+
+  phpExt = pkgs.php74.withExtensions
+        ({ enabled, all }: with all; [ iconv mbstring curl openssl tokenizer xmlrpc soap ctype zip gd simplexml dom  intl json sqlite3 pgsql pdo_sqlite pdo_pgsql pdo_odbc pdo_mysql pdo mysqli session zlib xmlreader fileinfo filter opcache ]);
 in
 {
   # interface
@@ -64,7 +67,7 @@ in
     package = mkOption {
       type = types.package;
       default = pkgs.moodle;
-      defaultText = "pkgs.moodle";
+      defaultText = literalExpression "pkgs.moodle";
       description = "The Moodle package to use.";
     };
 
@@ -81,7 +84,7 @@ in
       type = mkOption {
         type = types.enum [ "mysql" "pgsql" ];
         default = "mysql";
-        description = ''Database engine to use.'';
+        description = "Database engine to use.";
       };
 
       host = mkOption {
@@ -97,7 +100,7 @@ in
           mysql = 3306;
           pgsql = 5432;
         }.${cfg.database.type};
-        defaultText = "3306";
+        defaultText = literalExpression "3306";
       };
 
       name = mkOption {
@@ -128,7 +131,7 @@ in
           if mysqlLocal then "/run/mysqld/mysqld.sock"
           else if pgsqlLocal then "/run/postgresql"
           else null;
-        defaultText = "/run/mysqld/mysqld.sock";
+        defaultText = literalExpression "/run/mysqld/mysqld.sock";
         description = "Path to the unix socket file to use for authentication.";
       };
 
@@ -140,8 +143,8 @@ in
     };
 
     virtualHost = mkOption {
-      type = types.submodule (import ../web-servers/apache-httpd/per-server-options.nix);
-      example = literalExample ''
+      type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
+      example = literalExpression ''
         {
           hostName = "moodle.example.org";
           adminAddr = "webmaster@example.org";
@@ -222,6 +225,7 @@ in
 
     services.phpfpm.pools.moodle = {
       inherit user group;
+      phpPackage = phpExt;
       phpEnv.MOODLE_CONFIG = "${moodleConfig}";
       phpOptions = ''
         zend_extension = opcache.so
@@ -263,13 +267,13 @@ in
       after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
       environment.MOODLE_CONFIG = moodleConfig;
       script = ''
-        ${pkgs.php}/bin/php ${cfg.package}/share/moodle/admin/cli/check_database_schema.php && rc=$? || rc=$?
+        ${phpExt}/bin/php ${cfg.package}/share/moodle/admin/cli/check_database_schema.php && rc=$? || rc=$?
 
-        [ "$rc" == 1 ] && ${pkgs.php}/bin/php ${cfg.package}/share/moodle/admin/cli/upgrade.php \
+        [ "$rc" == 1 ] && ${phpExt}/bin/php ${cfg.package}/share/moodle/admin/cli/upgrade.php \
           --non-interactive \
           --allow-unstable
 
-        [ "$rc" == 2 ] && ${pkgs.php}/bin/php ${cfg.package}/share/moodle/admin/cli/install_database.php \
+        [ "$rc" == 2 ] && ${phpExt}/bin/php ${cfg.package}/share/moodle/admin/cli/install_database.php \
           --agree-license \
           --adminpass=${cfg.initialPassword}
 
@@ -289,7 +293,7 @@ in
       serviceConfig = {
         User = user;
         Group = group;
-        ExecStart = "${pkgs.php}/bin/php ${cfg.package}/share/moodle/admin/cli/cron.php";
+        ExecStart = "${phpExt}/bin/php ${cfg.package}/share/moodle/admin/cli/cron.php";
       };
     };
 

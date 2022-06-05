@@ -8,7 +8,9 @@ let
 
   configOptions = {
     data_dir = dataDir;
-    ui = cfg.webUi;
+    ui_config = {
+      enabled = cfg.webUi;
+    };
   } // cfg.extraConfig;
 
   configFiles = [ "/etc/consul.json" "/etc/consul-addrs.json" ]
@@ -34,7 +36,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.consul;
-        defaultText = "pkgs.consul";
+        defaultText = literalExpression "pkgs.consul";
         description = ''
           The package used for the Consul agent and CLI.
         '';
@@ -78,13 +80,21 @@ in
             The name of the interface to pull the bind_addr from.
           '';
         };
+      };
 
+      forceAddrFamily = mkOption {
+        type = types.enum [ "any" "ipv4" "ipv6" ];
+        default = "any";
+        description = ''
+          Whether to bind ipv4/ipv6 or both kind of addresses.
+        '';
       };
 
       forceIpv4 = mkOption {
-        type = types.bool;
-        default = false;
+        type = types.nullOr types.bool;
+        default = null;
         description = ''
+          Deprecated: Use consul.forceAddrFamily instead.
           Whether we should force the interfaces to only pull ipv4 addresses.
         '';
       };
@@ -99,6 +109,7 @@ in
 
       extraConfig = mkOption {
         default = { };
+        type = types.attrsOf types.anything;
         description = ''
           Extra configuration options which are serialized to json and added
           to the config.json file.
@@ -120,7 +131,7 @@ in
         package = mkOption {
           description = "Package to use for consul-alerts.";
           default = pkgs.consul-alerts;
-          defaultText = "pkgs.consul-alerts";
+          defaultText = literalExpression "pkgs.consul-alerts";
           type = types.package;
         };
 
@@ -158,10 +169,12 @@ in
 
       users.users.consul = {
         description = "Consul agent daemon user";
-        uid = config.ids.uids.consul;
+        isSystemUser = true;
+        group = "consul";
         # The shell is needed for health checks
         shell = "/run/current-system/sw/bin/bash";
       };
+      users.groups.consul = {};
 
       environment = {
         etc."consul.json".text = builtins.toJSON configOptions;
@@ -169,6 +182,13 @@ in
         etc."consul.d/dummy.json".text = "{ }";
         systemPackages = [ cfg.package ];
       };
+
+      warnings = lib.flatten [
+        (lib.optional (cfg.forceIpv4 != null) ''
+          The option consul.forceIpv4 is deprecated, please use
+          consul.forceAddrFamily instead.
+        '')
+      ];
 
       systemd.services.consul = {
         wantedBy = [ "multi-user.target" ];
@@ -179,27 +199,33 @@ in
             (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
-          ExecStart = "@${cfg.package.bin}/bin/consul consul agent -config-dir /etc/consul.d"
+          ExecStart = "@${cfg.package}/bin/consul consul agent -config-dir /etc/consul.d"
             + concatMapStrings (n: " -config-file ${n}") configFiles;
-          ExecReload = "${cfg.package.bin}/bin/consul reload";
+          ExecReload = "${cfg.package}/bin/consul reload";
           PermissionsStartOnly = true;
           User = if cfg.dropPrivileges then "consul" else null;
           Restart = "on-failure";
           TimeoutStartSec = "infinity";
         } // (optionalAttrs (cfg.leaveOnStop) {
-          ExecStop = "${cfg.package.bin}/bin/consul leave";
+          ExecStop = "${cfg.package}/bin/consul leave";
         });
 
-        path = with pkgs; [ iproute gnugrep gawk consul ];
-        preStart = ''
+        path = with pkgs; [ iproute2 gnugrep gawk consul ];
+        preStart = let
+          family = if cfg.forceAddrFamily == "ipv6" then
+            "-6"
+          else if cfg.forceAddrFamily == "ipv4" then
+            "-4"
+          else
+            "";
+        in ''
           mkdir -m 0700 -p ${dataDir}
           chown -R consul ${dataDir}
 
           # Determine interface addresses
           getAddrOnce () {
-            ip addr show dev "$1" \
-              | grep 'inet${optionalString (cfg.forceIpv4) " "}.*scope global' \
-              | awk -F '[ /\t]*' '{print $3}' | head -n 1
+            ip ${family} addr show dev "$1" scope global \
+              | awk -F '[ /\t]*' '/inet/ {print $3}' | head -n 1
           }
           getAddr () {
             ADDR="$(getAddrOnce $1)"
@@ -229,6 +255,11 @@ in
       };
     }
 
+    # deprecated
+    (mkIf (cfg.forceIpv4 != null && cfg.forceIpv4) {
+      services.consul.forceAddrFamily = "ipv4";
+    })
+
     (mkIf (cfg.alerts.enable) {
       systemd.services.consul-alerts = {
         wantedBy = [ "multi-user.target" ];
@@ -238,7 +269,7 @@ in
 
         serviceConfig = {
           ExecStart = ''
-            ${cfg.alerts.package.bin}/bin/consul-alerts start \
+            ${cfg.alerts.package}/bin/consul-alerts start \
               --alert-addr=${cfg.alerts.listenAddr} \
               --consul-addr=${cfg.alerts.consulAddr} \
               ${optionalString cfg.alerts.watchChecks "--watch-checks"} \

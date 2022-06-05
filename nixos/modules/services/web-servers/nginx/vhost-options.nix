@@ -3,7 +3,7 @@
 # has additional options that affect the web server as a whole, like
 # the user/group to run under.)
 
-{ lib, ... }:
+{ config, lib, ... }:
 
 with lib;
 {
@@ -20,7 +20,7 @@ with lib;
     serverAliases = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = ["www.example.org" "example.org"];
+      example = [ "www.example.org" "example.org" ];
       description = ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
@@ -31,11 +31,11 @@ with lib;
         addr = mkOption { type = str;  description = "IP address.";  };
         port = mkOption { type = int;  description = "Port number."; default = 80; };
         ssl  = mkOption { type = bool; description = "Enable SSL.";  default = false; };
-        extraParameters = mkOption { type = listOf str; description = "Extra parameters of this listen directive."; default = []; example = [ "reuseport" "deferred" ]; };
+        extraParameters = mkOption { type = listOf str; description = "Extra parameters of this listen directive."; default = []; example = [ "backlog=1024" "deferred" ]; };
       }; });
       default = [];
       example = [
-        { addr = "195.154.1.1"; port = 443; ssl = true;}
+        { addr = "195.154.1.1"; port = 443; ssl = true; }
         { addr = "192.154.1.1"; port = 80; }
       ];
       description = ''
@@ -43,7 +43,24 @@ with lib;
         IPv6 addresses must be enclosed in square brackets.
         Note: this option overrides <literal>addSSL</literal>
         and <literal>onlySSL</literal>.
+
+        If you only want to set the addresses manually and not
+        the ports, take a look at <literal>listenAddresses</literal>
       '';
+    };
+
+    listenAddresses = mkOption {
+      type = with types; listOf str;
+
+      description = ''
+        Listen addresses for this virtual host.
+        Compared to <literal>listen</literal> this only sets the addreses
+        and the ports are choosen automatically.
+
+        Note: This option overrides <literal>enableIPv6</literal>
+      '';
+      default = [];
+      example = [ "127.0.0.1" "::1" ];
     };
 
     enableACME = mkOption {
@@ -68,9 +85,12 @@ with lib;
     };
 
     acmeRoot = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
       default = "/var/lib/acme/acme-challenge";
-      description = "Directory for the acme challenge which is PUBLIC, don't put certs or keys in here";
+      description = ''
+        Directory for the acme challenge which is PUBLIC, don't put certs or keys in here.
+        Set to null to inherit from config.security.acme.
+      '';
     };
 
     acmeFallbackHost = mkOption {
@@ -118,6 +138,29 @@ with lib;
       '';
     };
 
+    rejectSSL = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to listen for and reject all HTTPS connections to this vhost. Useful in
+        <link linkend="opt-services.nginx.virtualHosts._name_.default">default</link>
+        server blocks to avoid serving the certificate for another vhost. Uses the
+        <literal>ssl_reject_handshake</literal> directive available in nginx versions
+        1.19.4 and above.
+      '';
+    };
+
+    kTLS = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable kTLS support.
+        Implementing TLS in the kernel (kTLS) improves performance by significantly
+        reducing the need for copying operations between user space and the kernel.
+        Required Nginx version 1.21.4 or later.
+      '';
+    };
+
     sslCertificate = mkOption {
       type = types.path;
       example = "/var/host.cert";
@@ -133,7 +176,7 @@ with lib;
     sslTrustedCertificate = mkOption {
       type = types.nullOr types.path;
       default = null;
-      example = "/var/root.cert";
+      example = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
       description = "Path to root SSL certificate for stapling and client certificates.";
     };
 
@@ -148,6 +191,28 @@ with lib;
         If there is one server block configured to enable http2,then it is
         enabled for all server blocks on this IP.
         See https://stackoverflow.com/a/39466948/263061.
+      '';
+    };
+
+    http3 = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable HTTP 3.
+        This requires using <literal>pkgs.nginxQuic</literal> package
+        which can be achieved by setting <literal>services.nginx.package = pkgs.nginxQuic;</literal>.
+        Note that HTTP 3 support is experimental and
+        *not* yet recommended for production.
+        Read more at https://quic.nginx.org/
+      '';
+    };
+
+    reuseport = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Create an individual listening socket .
+        It is required to specify only once on one of the hosts.
       '';
     };
 
@@ -189,7 +254,7 @@ with lib;
     basicAuth = mkOption {
       type = types.attrsOf types.str;
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           user = "password";
         };
@@ -198,7 +263,7 @@ with lib;
         Basic Auth protection for a vhost.
 
         WARNING: This is implemented to store the password in plain text in the
-        nix store.
+        Nix store.
       '';
     };
 
@@ -207,7 +272,10 @@ with lib;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
-        Can be created via: <command>htpasswd -c &lt;filename&gt; &lt;username&gt;</command>
+        Can be created via: <command>htpasswd -c &lt;filename&gt; &lt;username&gt;</command>.
+
+        WARNING: The generate file contains the users' passwords in a
+        non-cryptographically-securely hashed way.
       '';
     };
 
@@ -216,7 +284,7 @@ with lib;
         inherit lib;
       }));
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "/" = {
             proxyPass = "http://localhost:3000";

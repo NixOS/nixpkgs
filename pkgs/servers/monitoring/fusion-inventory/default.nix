@@ -1,44 +1,31 @@
-{ stdenv, lib, fetchurl, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
+{ lib, perlPackages, nix, dmidecode, pciutils, usbutils, iproute2, nettools
 , fetchFromGitHub, makeWrapper
 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "FusionInventory-Agent";
-  version = "2.3.21";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "fusioninventory";
     repo = "fusioninventory-agent";
     rev = version;
-    sha256 = "034clffcn0agx85macjgml4lyhvvck7idn94pqd2c77pk6crvw2y";
+    sha256 = "1hbp5a9m03n6a80xc8z640zs71qhqk4ifafr6fp0vvzzvq097ip2";
   };
-
-  patches = [
-    ./remove_software_test.patch
-    # support for os-release file
-    (fetchurl {
-      url = https://github.com/fusioninventory/fusioninventory-agent/pull/396.diff;
-      sha256 = "0bxrjmff80ab01n23xggci32ajsah6zvcmz5x4hj6ayy6dzwi6jb";
-    })
-    # support for Nix software inventory
-    (fetchurl {
-      url = https://github.com/fusioninventory/fusioninventory-agent/pull/397.diff;
-      sha256 = "0pyf7mp0zsb3zcqb6yysr1zfp54p9ciwjn1pzayw6s9flmcgrmbw";
-    })
-    ];
 
   postPatch = ''
 
     patchShebangs bin
 
     substituteInPlace "lib/FusionInventory/Agent/Tools/Linux.pm" \
-      --replace /sbin/ip ${iproute}/sbin/ip
+      --replace /sbin/ip ${iproute2}/sbin/ip
     substituteInPlace "lib/FusionInventory/Agent/Task/Inventory/Linux/Networks.pm" \
-      --replace /sbin/ip ${iproute}/sbin/ip
+      --replace /sbin/ip ${iproute2}/sbin/ip
   '';
 
   buildTools = [];
-  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = (with perlPackages; [
     CGI
     DataStructureUtil
     FileCopyRecursive
@@ -68,26 +55,30 @@ perlPackages.buildPerlPackage rec {
     XMLTreePP
   ];
 
+  # Test fails due to "Argument list too long"
+  doCheck = false;
+
   installPhase = ''
     mkdir -p $out
 
     cp -r bin $out
     cp -r lib $out
+    cp -r share $out
 
     for cur in $out/bin/*; do
       if [ -x "$cur" ]; then
         sed -e "s|./lib|$out/lib|" -i "$cur"
-        wrapProgram "$cur" --prefix PATH : ${lib.makeBinPath [nix dmidecode pciutils usbutils nettools iproute]}
+        wrapProgram "$cur" --prefix PATH : ${lib.makeBinPath [nix dmidecode pciutils usbutils nettools iproute2]}
       fi
     done
   '';
 
   outputs = [ "out" ];
 
-  meta = with stdenv.lib; {
-    homepage = http://www.fusioninventory.org;
+  meta = with lib; {
+    homepage = "http://www.fusioninventory.org";
     description = "FusionInventory unified Agent for UNIX, Linux, Windows and MacOSX";
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ maintainers.phile314 ];
   };
 }

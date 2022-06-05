@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, termbox, pcre, uthash, lua5_3 }:
+{ lib, stdenv, fetchFromGitHub, termbox, pcre, uthash, lua5_3, makeWrapper, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "mle";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "adsr";
     repo = "mle";
     rev = "v${version}";
-    sha256 = "053zvxkjx2zwq6lwkycirxz1m9sjc3zi9ic8fvp3mjvbqfri1y3x";
+    sha256 = "16dbwfdd6sqqn7jfaxd5wdy8y9ghbihnz6bgn3xhqcww8rj1sia1";
   };
 
   # Fix location of Lua 5.3 header and library
@@ -18,13 +18,24 @@ stdenv.mkDerivation rec {
     patchShebangs tests/*
   '';
 
+  nativeBuildInputs = [ makeWrapper installShellFiles ];
+
   buildInputs = [ termbox pcre uthash lua5_3 ];
 
   doCheck = true;
 
   installFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = with stdenv.lib; {
+  postInstall = ''
+    installManPage mle.1
+  '';
+
+  postFixup = lib.optionalString stdenv.isDarwin ''
+    wrapProgram $out/bin/mle --prefix DYLD_LIBRARY_PATH : ${termbox}/lib
+  '';
+
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Small, flexible terminal-based text editor";
     homepage = "https://github.com/adsr/mle";
     license = licenses.asl20;

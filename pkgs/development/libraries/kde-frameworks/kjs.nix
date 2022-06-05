@@ -1,12 +1,11 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules, kdoctools,
   pcre, qtbase,
 }:
 
 mkDerivation {
-  name = "kjs";
-  meta = { maintainers = [ lib.maintainers.ttuegel ]; };
+  pname = "kjs";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ pcre qtbase ];
 }

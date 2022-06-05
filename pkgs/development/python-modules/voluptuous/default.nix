@@ -1,19 +1,36 @@
-{ stdenv, buildPythonPackage, fetchPypi, nose }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "voluptuous";
-  version = "0.11.7";
+  version = "0.13.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0mplkcpb5d8wjf8vk195fys4y6a3wbibiyf708imw33lphfk9g1a";
+  src = fetchFromGitHub {
+    owner = "alecthomas";
+    repo = pname;
+    rev = version;
+    hash = "sha256-cz3Bd+/yPh+VOHxzi/W+gbDh/H5Nl/n4jvxDOirmAVk=";
   };
 
-  checkInputs = [ nose ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  meta = with stdenv.lib; {
-    description = "Voluptuous is a Python data validation library";
-    homepage = http://alecthomas.github.io/voluptuous/;
+  pythonImportsCheck = [
+    "voluptuous"
+  ];
+
+  pytestFlagsArray = [
+    "voluptuous/tests/"
+  ];
+
+  meta = with lib; {
+    description = "Python data validation library";
+    homepage = "http://alecthomas.github.io/voluptuous/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ fab ];
   };
 }

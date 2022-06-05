@@ -3,9 +3,9 @@
   { idrisDeps ? []
   , noPrelude ? false
   , noBase ? false
-  , name
+  , pname
   , version
-  , ipkgName ? name
+  , ipkgName ? pname
   , extraBuildInputs ? []
   , idrisBuildOptions ? []
   , idrisTestOptions ? []
@@ -20,7 +20,7 @@ let
   idris-with-packages = with-packages allIdrisDeps;
   newAttrs = builtins.removeAttrs attrs [
     "idrisDeps" "noPrelude" "noBase"
-    "name" "version" "ipkgName" "extraBuildInputs"
+    "pname" "version" "ipkgName" "extraBuildInputs"
   ] // {
     meta = attrs.meta // {
       platforms = attrs.meta.platforms or idris.meta.platforms;
@@ -28,7 +28,8 @@ let
   };
 in
 stdenv.mkDerivation ({
-  name = "idris-${name}-${version}";
+  pname = "idris-${pname}";
+  inherit version;
 
   buildInputs = [ idris-with-packages gmp ] ++ extraBuildInputs;
   propagatedBuildInputs = allIdrisDeps;
@@ -36,9 +37,10 @@ stdenv.mkDerivation ({
   # Some packages use the style
   # opts = -i ../../path/to/package
   # rather than the declarative pkgs attribute so we have to rewrite the path.
-  postPatch = ''
+  patchPhase = ''
     runHook prePatch
     sed -i ${ipkgName}.ipkg -e "/^opts/ s|-i \\.\\./|-i ${idris-with-packages}/libs/|g"
+    runHook postPatch
   '';
 
   buildPhase = ''

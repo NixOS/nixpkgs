@@ -1,10 +1,10 @@
-# Test for NixOS' container support.
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-ephemeral";
+  meta = {
+    maintainers = with lib.maintainers; [ patryk27 ];
+  };
 
-  machine = { pkgs, ... }: {
-    virtualisation.memorySize = 768;
+  nodes.machine = { pkgs, ... }: {
     virtualisation.writableStore = true;
 
     containers.webserver = {
@@ -33,10 +33,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     machine.succeed("nixos-container start webserver")
 
     with subtest("Container got its own root folder"):
-        machine.succeed("ls /run/containers/webserver")
+        machine.succeed("ls /run/nixos-containers/webserver")
 
     with subtest("Container persistent directory is not created"):
-        machine.fail("ls /var/lib/containers/webserver")
+        machine.fail("ls /var/lib/nixos-containers/webserver")
 
     # Since "start" returns after the container has reached
     # multi-user.target, we should now be able to access it.
@@ -49,6 +49,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         machine.fail(f"curl --fail --connect-timeout 2 http://{ip}/ > /dev/null")
 
     with subtest("Container's root folder was removed"):
-        machine.fail("ls /run/containers/webserver")
+        machine.fail("ls /run/nixos-containers/webserver")
   '';
 })

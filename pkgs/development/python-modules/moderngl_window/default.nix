@@ -7,21 +7,21 @@
 , pyglet
 , pillow
 , pyrr
-, pytest
+, glcontext
 }:
 
 buildPythonPackage rec {
   pname = "moderngl_window";
-  version = "1.2.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "moderngl";
     repo = pname;
     rev = version;
-    sha256 = "054w77lyc2nc0dyx76zsrbq2b3xbywdijhb62b2qqm99ldr1k1x5";
+    sha256 = "12a5nl01c9b1ww7sj7i02xa7zmlrgg8jvi8cz004hw98kjcs9li8";
   };
 
-  propagatedBuildInputs = [ numpy moderngl pyglet pillow pyrr ];
+  propagatedBuildInputs = [ numpy moderngl pyglet pillow pyrr glcontext ];
 
   disabled = !isPy3k;
 

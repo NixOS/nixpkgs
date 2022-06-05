@@ -1,26 +1,40 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libusb1, libimobiledevice }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkg-config
+, libimobiledevice
+, libusb1
+}:
 
 stdenv.mkDerivation rec {
   pname = "usbmuxd";
-  version = "2019-03-05";
+  version = "1.1.1+date=2022-04-04";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
-    rev = "b1b0bf390363fa36aff1bc09443ff751943b9c34";
-    sha256 = "176hapckx98h4x0ni947qpkv2s95f8xfwz00wi2w7rgbr6cviwjq";
+    rev = "2839789bdb581ede7c331b9b4e07e0d5a89d7d18";
+    hash = "sha256-wYW6hI0Ti9gKtk/wxIbdY5KaPMs/p+Ve9ceeRqXihQI=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  propagatedBuildInputs = [ libimobiledevice libusb1 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  preConfigure = ''
-    configureFlags="$configureFlags --with-udevrulesdir=$out/lib/udev/rules.d"
-    configureFlags="$configureFlags --with-systemdsystemunitdir=$out/lib/systemd/system"
-  '';
+  propagatedBuildInputs = [
+    libimobiledevice
+    libusb1
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/libimobiledevice/usbmuxd;
+  configureFlags = [
+    "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/libimobiledevice/usbmuxd";
     description = "A socket daemon to multiplex connections from and to iOS devices";
     longDescription = ''
       usbmuxd stands for "USB multiplexing daemon". This daemon is in charge of
@@ -32,7 +46,7 @@ stdenv.mkDerivation rec {
       in parallel. The higher-level layers are handled by libimobiledevice.
     '';
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ infinisil ];
   };
 }

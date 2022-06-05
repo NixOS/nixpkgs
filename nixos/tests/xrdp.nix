@@ -1,6 +1,6 @@
 import ./make-test-python.nix ({ pkgs, ...} : {
   name = "xrdp";
-  meta = with pkgs.stdenv.lib.maintainers; {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [ volth ];
   };
 
@@ -14,7 +14,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     client = { pkgs, ... }: {
       imports = [ ./common/x11.nix ./common/user-account.nix ];
-      services.xserver.displayManager.auto.user = "alice";
+      test-support.displayManager.auto.user = "alice";
       environment.systemPackages = [ pkgs.freerdp ];
       services.xrdp.enable = true;
       services.xrdp.defaultWindowManager = "${pkgs.icewm}/bin/icewm";
@@ -32,13 +32,13 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     client.sleep(5)
 
-    client.execute("xterm &")
+    client.execute("xterm >&2 &")
     client.sleep(1)
     client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:127.0.0.1 /u:${user.name} /p:${user.password}\n")
     client.sleep(5)
     client.screenshot("localrdp")
 
-    client.execute("xterm &")
+    client.execute("xterm >&2 &")
     client.sleep(1)
     client.send_chars("xfreerdp /cert-tofu /w:640 /h:480 /v:server /u:${user.name} /p:${user.password}\n")
     client.sleep(5)

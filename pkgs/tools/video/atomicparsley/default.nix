@@ -1,40 +1,50 @@
-{ stdenv, fetchhg, autoreconfHook, zlib, Cocoa }:
+{ lib, stdenv, fetchFromGitHub, cmake, zlib, Cocoa }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "atomicparsley";
-  version = "0.9.6";
+  version = "20210715.151551.e7ad03a";
 
-  src = fetchhg {
-    url = "https://bitbucket.org/wez/atomicparsley";
-    sha256 = "05n4kbn91ps52h3wi1qb2jwygjsc01qzx4lgkv5mvwl5i49rj8fm";
+  src = fetchFromGitHub {
+    owner = "wez";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-77yWwfdEul4uLsUNX1dLwj8K0ilcuBaTVKMyXDvKVx4=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ zlib ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa ];
+                ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
-  configureFlags = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # AC_FUNC_MALLOC is broken on cross builds.
-    "ac_cv_func_malloc_0_nonnull=yes"
-    "ac_cv_func_realloc_0_nonnull=yes"
-  ];
+  installPhase = ''
+    runHook preInstall
+    install -D AtomicParsley $out/bin/AtomicParsley
+    runHook postInstall
+  '';
 
-  installPhase = "install -D AtomicParsley $out/bin/AtomicParsley";
+  doCheck = true;
 
-  meta = with stdenv.lib; {
-    description = ''
-      A lightweight command line program for reading, parsing and
-      setting metadata into MPEG-4 files
-    '';
+  postPatch = ''
+    patchShebangs tests/test.sh
+  '';
 
-    longDescription = ''
-      This is a maintained fork of the original AtomicParsley.
-    '';
+  # copying files so that we dont need to patch the test.sh
+  checkPhase = ''
+    (
+    cp AtomicParsley ../tests
+    cd ../tests
+    mkdir tests
+    mv *.mp4 tests
+    ./test.sh
+    )
+  '';
 
-    homepage = https://bitbucket.org/wez/atomicparsley;
-    license = licenses.gpl2;
+  meta = with lib; {
+    description = "A CLI program for reading, parsing and setting metadata into MPEG-4 files";
+    homepage = "https://github.com/wez/atomicparsley";
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pjones ];
+    mainProgram = "AtomicParsley";
   };
 }

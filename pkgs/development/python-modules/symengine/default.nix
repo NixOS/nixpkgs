@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchFromGitHub
 , cython
 , cmake
@@ -11,24 +12,33 @@
 
 buildPythonPackage rec {
   pname = "symengine";
-  version = "0.4.0";
+  version = "0.9.2";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "symengine";
     repo = "symengine.py";
     rev = "v${version}";
-    sha256 = "07i9rwxphi4zgwc7y6f6qvq73iym2cx4k1bpd7rmd3wkpgrrfxqx";
+    sha256 = "sha256-ZHplYEG97foy/unOdSokFFkDl4LK5TI4kypHSLpcCM4=";
   };
 
-  postConfigure = ''
-    substituteInPlace setup.py \
-      --replace "\"cmake\"" "\"${cmake}/bin/cmake\""
+  patches = [
+    (fetchpatch {
+      # setuptools 61 compat
+      url = "https://github.com/symengine/symengine.py/commit/987e665e71cf92d1b021d7d573a1b9733408eecf.patch";
+      hash = "sha256-2QbNdw/lKYRIRpOU5BiwF2kK+5Lh2j/Q82MKUIvl0+c=";
+    })
+  ];
 
-    substituteInPlace cmake/FindCython.cmake \
-      --replace "SET(CYTHON_BIN cython" "SET(CYTHON_BIN ${cython}/bin/cython"
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "\"cmake\"" "\"${cmake}/bin/cmake\"" \
+      --replace "'cython>=0.29.24'" "'cython'"
   '';
 
-  buildInputs = [ cython cmake ];
+  nativeBuildUnputs = [ cmake ];
+
+  buildInputs = [ cython ];
 
   checkInputs = [ pytest sympy ];
 
@@ -45,9 +55,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library providing wrappers to SymEngine";
-    homepage = https://github.com/symengine/symengine.py;
+    homepage = "https://github.com/symengine/symengine.py";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
-    broken = true;
   };
 }

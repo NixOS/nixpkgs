@@ -1,8 +1,8 @@
-{ stdenv, xorg, buildGoPackage, fetchFromGitHub }:
+{ lib, xorg, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "go-sct";
-  version = "20180605-${stdenv.lib.strings.substring 0 7 rev}";
+  version = "20180605-${lib.strings.substring 0 7 rev}";
   rev = "eb1e851f2d5017038d2b8e3653645c36d3a279f4";
 
   goPackagePath = "github.com/d4l3k/go-sct";
@@ -18,10 +18,10 @@ buildGoPackage rec {
 
   buildInputs = [ xorg.libX11 xorg.libXrandr ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Color temperature setting library and CLI that operates in a similar way to f.lux and Redshift";
     license = licenses.mit;
-    maintainers = with maintainers; [ rvolosatovs cstrahan ];
+    maintainers = with maintainers; [ cstrahan ];
     platforms = platforms.linux ++ platforms.windows;
   };
 }

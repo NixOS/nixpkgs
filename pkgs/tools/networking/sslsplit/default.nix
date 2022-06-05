@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, openssl, libevent, libpcap, libnet, zlib }:
+{ lib, stdenv, fetchFromGitHub, openssl, libevent, libpcap, libnet, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "sslsplit";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "LIBNET_BASE=${libnet}"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Transparent SSL/TLS interception";
     homepage = "https://www.roe.ch/SSLsplit";
     platforms = platforms.all;

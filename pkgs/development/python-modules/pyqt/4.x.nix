@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, buildPythonPackage, python, dbus-python, sip, qt4, pkgconfig, lndir, dbus, makeWrapper }:
+{ lib, stdenv, fetchurl, buildPythonPackage, python, dbus-python, sip_4, qt4, pkg-config, lndir, dbus, makeWrapper }:
 
 buildPythonPackage rec {
   pname = "PyQt-x11-gpl";
-  version = "4.12";
+  version = "4.12.3";
   format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/PyQt4_gpl_x11-${version}.tar.gz";
-    sha256 = "1nw8r88a5g2d550yvklawlvns8gd5slw53yy688kxnsa65aln79w";
+    sha256 = "0wnlasg62rm5d39nq1yw4namcx2ivxgzl93r5f2vb9s0yaz5l3x0";
   };
 
   postPatch = ''
@@ -16,13 +16,13 @@ buildPythonPackage rec {
     rm -rf "$out/nix-support"
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
-    ${stdenv.lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.isDarwin ''
       export QMAKESPEC="unsupported/macx-clang-libc++" # macOS target after bootstrapping phase \
     ''}
 
     substituteInPlace configure.py \
       --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'" \
-    ${stdenv.lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.isDarwin ''
       --replace "qt_macx_spec = 'macx-g++'" "qt_macx_spec = 'unsupported/macx-clang-libc++'" # for bootstrapping phase \
     ''}
 
@@ -38,14 +38,14 @@ buildPythonPackage rec {
     "--destdir=${placeholder "out"}/${python.sitePackages}"
     "--plugin-destdir=${placeholder "out"}/lib/qt4/plugins"
     "--sipdir=${placeholder "out"}/share/sip/PyQt4"
-    "--dbus=${stdenv.lib.getDev dbus-python}/include/dbus-1.0"
+    "--dbus=${lib.getDev dbus-python}/include/dbus-1.0"
     "--verbose"
   ];
 
-  nativeBuildInputs = [ pkgconfig lndir makeWrapper qt4 ];
+  nativeBuildInputs = [ pkg-config lndir makeWrapper qt4 ];
   buildInputs = [ qt4 dbus ];
 
-  propagatedBuildInputs = [ sip ];
+  propagatedBuildInputs = [ sip_4 ];
 
   postInstall = ''
     for i in $out/bin/*; do
@@ -59,11 +59,11 @@ buildPythonPackage rec {
     qt = qt4;
   };
 
-  meta = {
+  meta = with lib; {
     description = "Python bindings for Qt";
     license = "GPL";
-    homepage = http://www.riverbankcomputing.co.uk;
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.mesaPlatforms;
+    homepage = "http://www.riverbankcomputing.co.uk";
+    maintainers = [ maintainers.sander ];
+    platforms = platforms.mesaPlatforms;
   };
 }

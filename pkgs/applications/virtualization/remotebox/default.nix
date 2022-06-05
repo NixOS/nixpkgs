@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, perl, perlPackages }:
+{ lib, stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "remotebox";
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     cp -pv packagers-readme/*.desktop $out/share/applications
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "VirtualBox client with remote management";
-    homepage = http://remotebox.knobgoblin.org.uk/;
+    homepage = "http://remotebox.knobgoblin.org.uk/";
     license = licenses.gpl2Plus;
     longDescription = ''
       VirtualBox is traditionally considered to be a virtualization solution

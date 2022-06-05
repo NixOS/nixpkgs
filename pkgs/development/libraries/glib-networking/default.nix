@@ -1,10 +1,10 @@
-{ stdenv
+{ lib, stdenv
 , fetchurl
 , substituteAll
 , meson
 , ninja
 , nixosTests
-, pkgconfig
+, pkg-config
 , glib
 , gettext
 , makeWrapper
@@ -12,19 +12,19 @@
 , gnutls
 , p11-kit
 , libproxy
-, gnome3
+, gnome
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.62.2";
+  version = "2.72.0";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0i2mw75297ql72h47vyvff3hqa0kcmqybblj52fqrarb0kfbhi06";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "EAquuzaShQQd5S2kIra3FnidXk11SaOnG6WHuTLggjs=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     makeWrapper
     python3 # for install_script
@@ -74,8 +74,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
+    updateScript = gnome.updateScript {
       packageName = pname;
+      versionPolicy = "odd-unstable";
     };
 
     tests = {
@@ -83,11 +84,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Network-related giomodules for glib";
-    homepage = https://gitlab.gnome.org/GNOME/glib-networking;
+    homepage = "https://gitlab.gnome.org/GNOME/glib-networking";
     license = licenses.lgpl21Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
 }

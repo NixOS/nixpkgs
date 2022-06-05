@@ -1,15 +1,19 @@
-#! @perl@
+#! @perl@/bin/perl
 
 use strict;
 use POSIX;
 use File::Path;
 use File::Slurp;
 use Fcntl ':flock';
-use Getopt::Long qw(:config gnu_getopt);
+use Getopt::Long qw(:config gnu_getopt no_bundling);
 use Cwd 'abs_path';
 use Time::HiRes;
 
+my $nsenter = "@utillinux@/bin/nsenter";
 my $su = "@su@";
+
+my $configurationDirectory = "@configurationDirectory@";
+my $stateDirectory = "@stateDirectory@";
 
 # Ensure a consistent umask.
 umask 0022;
@@ -22,13 +26,28 @@ $ENV{"NIXOS_CONFIG"} = "";
 sub showHelp {
     print <<EOF;
 Usage: nixos-container list
-       nixos-container create <container-name> [--nixos-path <path>] [--system-path <path>] [--config-file <path>] [--config <string>] [--ensure-unique-name] [--auto-start] [--bridge <iface>] [--port <port>] [--host-address <string>] [--local-address <string>]
+       nixos-container create <container-name>
+         [--nixos-path <path>]
+         [--system-path <path>]
+         [--config <string>]
+         [--config-file <path>]
+         [--flake <flakeref>]
+         [--ensure-unique-name]
+         [--auto-start]
+         [--bridge <iface>]
+         [--port <port>]
+         [--host-address <string>]
+         [--local-address <string>]
        nixos-container destroy <container-name>
        nixos-container start <container-name>
        nixos-container stop <container-name>
        nixos-container terminate <container-name>
        nixos-container status <container-name>
-       nixos-container update <container-name> [--config <string>] [--config-file <path>]
+       nixos-container update <container-name>
+         [--config <string>]
+         [--config-file <path>]
+         [--flake <flakeref>]
+         [--nixos-path <path>]
        nixos-container login <container-name>
        nixos-container root-login <container-name>
        nixos-container run <container-name> -- args...
@@ -49,6 +68,24 @@ my $signal;
 my $configFile;
 my $hostAddress;
 my $localAddress;
+my $flake;
+my $flakeAttr = "container";
+
+# Nix passthru flags.
+my @nixFlags;
+my @nixFlags2;
+
+sub copyNixFlags0 { push @nixFlags, "--$_[0]"; }
+sub copyNixFlags1 { push @nixFlags, "--$_[0]", $_[1]; }
+
+# Ugly hack to handle flags that take two arguments, like --option.
+sub copyNixFlags2 {
+    if (scalar(@nixFlags2) % 3 == 0) {
+        push @nixFlags2, "--$_[0]", $_[1];
+    } else {
+        push @nixFlags2, $_[1];
+    }
+}
 
 GetOptions(
     "help" => sub { showHelp() },
@@ -63,7 +100,22 @@ GetOptions(
     "config-file=s" => \$configFile,
     "host-address=s" => \$hostAddress,
     "local-address=s" => \$localAddress,
+    "flake=s" => \$flake,
+    # Nix passthru options.
+    "log-format=s" => \&copyNixFlags1,
+    "option=s{2}" => \&copyNixFlags2,
+    "impure" => \&copyNixFlags0,
+    "update-input=s" => \&copyNixFlags1,
+    "override-input=s{2}" => \&copyNixFlags2,
+    "commit-lock-file" => \&copyNixFlags0,
+    "no-registries" => \&copyNixFlags0,
+    "no-update-lock-file" => \&copyNixFlags0,
+    "no-write-lock-file" => \&copyNixFlags0,
+    "no-allow-dirty" => \&copyNixFlags0,
+    "recreate-lock-file" => \&copyNixFlags0,
     ) or exit 1;
+
+push @nixFlags, @nixFlags2;
 
 if (defined $hostAddress and !defined $localAddress or defined $localAddress and !defined $hostAddress) {
     die "With --host-address set, --local-address is required as well!";
@@ -73,16 +125,27 @@ my $action = $ARGV[0] or die "$0: no action specified\n";
 
 if (defined $configFile and defined $extraConfig) {
     die "--config and --config-file are mutually incompatible. " .
-        "Please define on or the other, but not both";
+        "Please define one or the other, but not both";
+}
+
+if (defined $flake && $flake =~ /^(.*)#([^#"]+)$/) {
+    $flake = $1;
+    $flakeAttr = $2;
 }
 
 # Execute the selected action.
 
-mkpath("/etc/containers", 0, 0755);
-mkpath("/var/lib/containers", 0, 0700);
+mkpath("$configurationDirectory", 0, 0755);
+mkpath("$stateDirectory", 0, 0700);
+
 
 if ($action eq "list") {
-    foreach my $confFile (glob "/etc/containers/*.conf") {
+    foreach my $confFile (glob "$configurationDirectory/*.conf") {
+        # Filter libpod configuration files
+        # From 22.05 and onwards this is not an issue any more as directories dont clash
+        if($confFile eq "/etc/containers/libpod.conf" || $confFile eq "/etc/containers/containers.conf" || $confFile eq "/etc/containers/registries.conf") {
+            next
+        }
         $confFile =~ /\/([^\/]+).conf$/ or next;
         print "$1\n";
     }
@@ -96,8 +159,6 @@ sub writeNixOSConfig {
     my ($nixosConfigFile) = @_;
 
     my $localExtraConfig = "";
-
-
 
     if ($extraConfig) {
         $localExtraConfig = $extraConfig
@@ -121,6 +182,24 @@ EOF
     write_file($nixosConfigFile, $nixosConfig);
 }
 
+sub buildFlake {
+    system("nix", "build", "-o", "$systemPath.tmp", @nixFlags, "--",
+           "$flake#nixosConfigurations.\"$flakeAttr\".config.system.build.toplevel") == 0
+        or die "$0: failed to build container from flake '$flake'\n";
+    $systemPath = readlink("$systemPath.tmp") or die;
+    unlink("$systemPath.tmp");
+}
+
+sub clearContainerState {
+    my ($profileDir, $gcRootsDir, $root, $configFile) = @_;
+
+    safeRemoveTree($profileDir) if -e $profileDir;
+    safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
+    system("chattr", "-i", "$root/var/empty") if -e "$root/var/empty";
+    safeRemoveTree($root) if -e $root;
+    unlink($configFile) or die;
+}
+
 if ($action eq "create") {
     # Acquire an exclusive lock to prevent races with other
     # invocations of ‘nixos-container create’.
@@ -128,15 +207,15 @@ if ($action eq "create") {
     open(my $lock, '>>', $lockFN) or die "$0: opening $lockFN: $!";
     flock($lock, LOCK_EX) or die "$0: could not lock $lockFN: $!";
 
-    my $confFile = "/etc/containers/$containerName.conf";
-    my $root = "/var/lib/containers/$containerName";
+    my $confFile = "$configurationDirectory/$containerName.conf";
+    my $root = "$stateDirectory/$containerName";
 
     # Maybe generate a unique name.
     if ($ensureUniqueName) {
         my $base = $containerName;
         for (my $nr = 0; ; $nr++) {
-            $confFile = "/etc/containers/$containerName.conf";
-            $root = "/var/lib/containers/$containerName";
+            $confFile = "$configurationDirectory/$containerName.conf";
+            $root = "$stateDirectory/$containerName";
             last unless -e $confFile || -e $root;
             $containerName = "$base-$nr";
         }
@@ -150,7 +229,12 @@ if ($action eq "create") {
 
     # Get an unused IP address.
     my %usedIPs;
-    foreach my $confFile2 (glob "/etc/containers/*.conf") {
+    foreach my $confFile2 (glob "$configurationDirectory/*.conf") {
+        # Filter libpod configuration files
+        # From 22.05 and onwards this is not an issue any more as directories dont clash
+        if($confFile2 eq "/etc/containers/libpod.conf" || $confFile2 eq "/etc/containers/containers.conf" || $confFile2 eq "/etc/containers/registries.conf") {
+            next
+        }
         my $s = read_file($confFile2) or die;
         $usedIPs{$1} = 1 if $s =~ /^HOST_ADDRESS=([0-9\.]+)$/m;
         $usedIPs{$1} = 1 if $s =~ /^LOCAL_ADDRESS=([0-9\.]+)$/m;
@@ -176,6 +260,7 @@ if ($action eq "create") {
     push @conf, "HOST_BRIDGE=$bridge\n";
     push @conf, "HOST_PORT=$port\n";
     push @conf, "AUTO_START=$autoStart\n";
+    push @conf, "FLAKE=$flake\n" if defined $flake;
     write_file($confFile, \@conf);
 
     close($lock);
@@ -191,9 +276,16 @@ if ($action eq "create") {
     mkpath($profileDir, 0, 0755);
 
     # Build/set the initial configuration.
+    if (defined $flake) {
+        buildFlake();
+    }
+
     if (defined $systemPath) {
         system("nix-env", "-p", "$profileDir/system", "--set", $systemPath) == 0
-            or die "$0: failed to set initial container configuration\n";
+            or do {
+                clearContainerState($profileDir, "$profileDir/$containerName", $root, $confFile);
+                die "$0: failed to set initial container configuration\n";
+            };
     } else {
         mkpath("$root/etc/nixos", 0, 0755);
 
@@ -203,18 +295,21 @@ if ($action eq "create") {
 
         system("nix-env", "-p", "$profileDir/system",
                "-I", "nixos-config=$nixosConfigFile", "-f", "$nixenvF",
-               "--set", "-A", "system") == 0
-            or die "$0: failed to build initial container configuration\n";
+               "--set", "-A", "system", @nixFlags) == 0
+            or do {
+                clearContainerState($profileDir, "$profileDir/$containerName", $root, $confFile);
+                die "$0: failed to build initial container configuration\n"
+            };
     }
 
     print "$containerName\n" if $ensureUniqueName;
     exit 0;
 }
 
-my $root = "/var/lib/containers/$containerName";
+my $root = "$stateDirectory/$containerName";
 my $profileDir = "/nix/var/nix/profiles/per-container/$containerName";
 my $gcRootsDir = "/nix/var/nix/gcroots/per-container/$containerName";
-my $confFile = "/etc/containers/$containerName.conf";
+my $confFile = "$configurationDirectory/$containerName.conf";
 if (!-e $confFile) {
     if ($action eq "destroy") {
         exit 0;
@@ -269,10 +364,9 @@ sub restartContainer {
 # Run a command in the container.
 sub runInContainer {
     my @args = @_;
-
-    exec("systemd-run", "--machine", $containerName, "--pty", "--quiet", "--", @args);
-
-    die "cannot run ‘systemd-run’: $!\n";
+    my $leader = getLeader;
+    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", @args);
+    die "cannot run ‘nsenter’: $!\n";
 }
 
 # Remove a directory while recursively unmounting all mounted filesystems within
@@ -298,11 +392,7 @@ if ($action eq "destroy") {
 
     terminateContainer if (isContainerRunning);
 
-    safeRemoveTree($profileDir) if -e $profileDir;
-    safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
-    system("chattr", "-i", "$root/var/empty") if -e "$root/var/empty";
-    safeRemoveTree($root) if -e $root;
-    unlink($confFile) or die;
+    clearContainerState($profileDir, $gcRootsDir, $root, $confFile);
 }
 
 elsif ($action eq "restart") {
@@ -326,19 +416,37 @@ elsif ($action eq "status") {
 }
 
 elsif ($action eq "update") {
-    my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
 
-    # FIXME: may want to be more careful about clobbering the existing
-    # configuration.nix.
-    if ((defined $extraConfig && $extraConfig ne "") ||
-         (defined $configFile && $configFile ne "")) {
-        writeNixOSConfig $nixosConfigFile;
+    # Unless overriden on the command line, rebuild the flake recorded
+    # in the container config file. FIXME: read the container config
+    # in a more sensible way.
+    if (!defined $flake && !defined $configFile && !defined $extraConfig) {
+        my $s = read_file($confFile);
+        $s =~ /^FLAKE=(.*)$/m;
+        $flake = $1;
     }
 
-    system("nix-env", "-p", "$profileDir/system",
-           "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
-           "--set", "-A", "system") == 0
-        or die "$0: failed to build container configuration\n";
+    if (defined $flake) {
+        buildFlake();
+        system("nix-env", "-p", "$profileDir/system", "--set", $systemPath) == 0
+            or die "$0: failed to set container configuration\n";
+    } else {
+
+        my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
+
+        # FIXME: may want to be more careful about clobbering the existing
+        # configuration.nix.
+        if ((defined $extraConfig && $extraConfig ne "") ||
+            (defined $configFile && $configFile ne "")) {
+            writeNixOSConfig $nixosConfigFile;
+        }
+
+        my $nixenvF = $nixosPath // "<nixpkgs/nixos>";
+        system("nix-env", "-p", "$profileDir/system",
+               "-I", "nixos-config=$nixosConfigFile", "-f", $nixenvF,
+               "--set", "-A", "system", @nixFlags) == 0
+            or die "$0: failed to build container configuration\n";
+    }
 
     if (isContainerRunning) {
         print STDERR "reloading container...\n";
@@ -364,7 +472,9 @@ elsif ($action eq "run") {
 
 elsif ($action eq "show-ip") {
     my $s = read_file($confFile) or die;
-    $s =~ /^LOCAL_ADDRESS=([0-9\.]+)(\/[0-9]+)?$/m or die "$0: cannot get IP address\n";
+    $s =~ /^LOCAL_ADDRESS=([0-9\.]+)(\/[0-9]+)?$/m
+        or $s =~ /^LOCAL_ADDRESS6=([0-9a-f:]+)(\/[0-9]+)?$/m
+        or die "$0: cannot get IP address\n";
     print "$1\n";
 }
 

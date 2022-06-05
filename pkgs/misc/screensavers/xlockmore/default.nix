@@ -1,17 +1,19 @@
 { stdenv, lib, fetchurl, pam ? null, libX11, libXext, libXinerama
-, libXdmcp, libXt }:
+, libXdmcp, libXt, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "xlockmore-5.61";
+  pname = "xlockmore";
+  version = "5.69";
 
   src = fetchurl {
-    url = "http://sillycycle.com/xlock/${name}.tar.xz";
-    sha256 = "012wsfcphahwwylyfk9c848nwj1v08hpnja2yfs0j8pnq7milnva";
+    url = "http://sillycycle.com/xlock/xlockmore-${version}.tar.xz";
+    sha256 = "sha256-6pJlTAASJoSHZaJRpzvLxHPM7xe3IcwY1TYfWdvW07k=";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 
   # Optionally, it can use GTK.
-  buildInputs = [ pam libX11 libXext libXinerama libXdmcp libXt ];
+  buildInputs = [ pam libX11 libXext.dev libXinerama libXdmcp libXt ];
+  nativeBuildInputs = [ autoreconfHook ];
 
   # Don't try to install `xlock' setuid. Password authentication works
   # fine via PAM without super user privileges.
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Screen locker for the X Window System";
-    homepage = http://sillycycle.com/xlockmore.html;
+    homepage = "http://sillycycle.com/xlockmore.html";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

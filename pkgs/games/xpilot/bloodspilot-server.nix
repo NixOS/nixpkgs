@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, expat }:
+{ lib, stdenv, fetchurl, expat }:
 
 stdenv.mkDerivation rec {
   pname = "bloodspilot-xpilot-fxi-server";
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
     ./server-gcc5.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A multiplayer X11 space combat game (server part)";
-    homepage = http://bloodspilot.sf.net/;
+    homepage = "http://bloodspilot.sf.net/";
     license = licenses.gpl2Plus ;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;

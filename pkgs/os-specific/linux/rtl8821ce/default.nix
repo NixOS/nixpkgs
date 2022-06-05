@@ -1,19 +1,32 @@
-{ stdenv, fetchFromGitHub, kernel, bc }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, kernel
+, bc
+}:
+
 stdenv.mkDerivation rec {
-  name = "rtl8821ce-${kernel.version}-${version}";
-  version = "5.2.5_1.26055.20180108";
+  pname = "rtl8821ce";
+  version = "${kernel.version}-unstable-2021-11-19";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "ab6154e150bbc7d12b0525d4cc1298ae196e45de";
-    sha256 = "1my0hidqnv4s7hi5897m81pq0sjw05np0g27hlkg9fwb83b5kzsg";
+    rev = "ca204c60724d23ab10244f920d4e50759ed1affb";
+    sha256 = "18ma8a8h1l90dss0k6al7q6plwr57jc9g67p22g9917k1jfbhm97";
   };
+
+  # Fixes the build on kernel >= 5.17. Can be removed once https://github.com/tomaspinho/rtl8821ce/pull/267 is merged
+  patches = [(fetchpatch {
+    url = "https://github.com/tomaspinho/rtl8821ce/commit/7b9e55df64b10fed785f22df9f36ed4a30b59d0e.patch";
+    sha256 = "sha256-mpAWOG1aXsklGuDbrRB9Vd36mgeCdctKQaWuuoqEEp0=";
+  })];
 
   hardeningDisable = [ "pic" ];
 
-  nativeBuildInputs = [ bc ];
-  buildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
+  makeFlags = kernel.makeFlags;
 
   prePatch = ''
     substituteInPlace ./Makefile \
@@ -27,11 +40,14 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
   '';
 
-  meta = with stdenv.lib; {
+  enableParallelBuilding = true;
+
+  meta = with lib; {
     description = "Realtek rtl8821ce driver";
     homepage = "https://github.com/tomaspinho/rtl8821ce";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = [ maintainers.hhm ];
+    broken = stdenv.isAarch64 || kernel.kernelAtLeast "5.18";
+    maintainers = with maintainers; [ hhm ivar ];
   };
 }

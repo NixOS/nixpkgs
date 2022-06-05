@@ -1,23 +1,29 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, makeWrapper
-, dnsutils, nmap
-, qtbase, qtscript, qtwebengine }:
+{ lib, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, wrapQtAppsHook
+, dnsutils
+, nmap
+, qtbase
+, qtscript
+, qtwebengine
+}:
 
 stdenv.mkDerivation rec {
   pname = "nmapsi4";
-  version = "0.4.80-20180430";
+  version = "0.5-alpha2";
 
   src = fetchFromGitHub {
     owner = "nmapsi4";
     repo = "nmapsi4";
-    rev = "d7f18e4c1e38dcf9c29cb4496fe14f9ff172861a";
-    sha256 = "10wqyrjzmad1g7lqa65rymbkna028xbp4xcpj442skw8gyrs3994";
+    rev = "v${version}";
+    sha256 = "sha256-q3XfwJ4TGK4E58haN0Q0xRH4GDpKD8VZzyxHe/VwBqY=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   buildInputs = [ qtbase qtscript qtwebengine ];
-
-  enableParallelBuilding = true;
 
   postPatch = ''
     substituteInPlace src/platform/digmanager.cpp \
@@ -45,9 +51,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt frontend for nmap";
-    license     = licenses.gpl2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (src.meta) homepage;
   };

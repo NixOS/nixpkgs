@@ -4,13 +4,10 @@
 , lib
 }:
 
-let
-  version = "release-2019-10-13";
-
-in buildGoPackage {
+buildGoPackage rec{
 
   pname = "boulder";
-  inherit version;
+  version = "release-2019-10-13";
 
   goPackagePath = "github.com/letsencrypt/boulder";
 

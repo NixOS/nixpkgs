@@ -1,64 +1,74 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, pantheon
-, substituteAll
+, nix-update-script
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , vala
 , libgee
+, libgtop
+, libhandy
 , granite
 , gtk3
 , switchboard
-, pciutils
-, elementary-feedback
+, fwupd
+, appstream
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "2.6.1";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1z58d21xrjghvjx0ng53pcxwdk2f5d00dvngcyjja0kf7sixba71";
+    sha256 = "sha256-/8K3xSbzlagOT0zHdXNwEERJP88C+H2I6qJHXwdlTS4=";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      attrPath = "pantheon.${pname}";
-    };
-  };
+  patches = [
+    # Introduces a wallpaper meson flag.
+    # The wallpapaper path does not exist on NixOS, let's just remove the wallpaper.
+    # https://github.com/elementary/switchboard-plug-about/pull/236
+    ./add-wallpaper-option.patch
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     vala
   ];
 
   buildInputs = [
+    appstream
+    fwupd
     granite
     gtk3
     libgee
+    libgtop
+    libhandy
     switchboard
   ];
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit pciutils;
-      elementary_feedback = elementary-feedback;
-    })
+  mesonFlags = [
+    # This option is introduced in add-wallpaper-option.patch
+    "-Dwallpaper=false"
   ];
 
-  meta = with stdenv.lib; {
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
+
+  meta = with lib; {
     description = "Switchboard About Plug";
-    homepage = https://github.com/elementary/switchboard-plug-about;
+    homepage = "https://github.com/elementary/switchboard-plug-about";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = pantheon.maintainers;
+    maintainers = teams.pantheon.members;
   };
 
 }

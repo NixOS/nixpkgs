@@ -1,5 +1,5 @@
-{ stdenv, lib, python, kernel, makeWrapper, writeText
-, gawk, iproute }:
+{ stdenv, lib, python2, python3, kernel, makeWrapper, writeText
+, gawk, iproute2 }:
 
 let
   libexec = "libexec/hypervkvpd";
@@ -9,6 +9,7 @@ let
     inherit (kernel) src version;
 
     nativeBuildInputs = [ makeWrapper ];
+    buildInputs = [ (if lib.versionOlder version "4.19" then python2 else python3) ];
 
     # as of 4.9 compilation will fail due to -Werror=format-security
     hardeningDisable = [ "format" ];
@@ -33,16 +34,12 @@ let
       install -Dm755 hv_get_dhcp_info.sh $out/${libexec}/hv_get_dhcp_info
       install -Dm755 hv_get_dns_info.sh  $out/${libexec}/hv_get_dns_info
 
-      # I don't know why this isn't being handled automatically by fixupPhase
-      substituteInPlace $out/bin/lsvmbus \
-        --replace '/usr/bin/env python' ${python.interpreter}
-
       runHook postInstall
     '';
 
     postFixup = ''
       wrapProgram $out/bin/hv_kvp_daemon \
-        --prefix PATH : $out/bin:${lib.makeBinPath [ gawk iproute ]}
+        --prefix PATH : $out/bin:${lib.makeBinPath [ gawk iproute2 ]}
     '';
   };
 
@@ -86,7 +83,7 @@ in stdenv.mkDerivation {
     Wants=hv-fcopy.service hv-kvp.service hv-vss.service
     EOF
 
-    for f in $lib/lib/systemd/system/* ; do
+    for f in $lib/lib/systemd/system/*.service ; do
       substituteInPlace $f --replace @out@ ${daemons}/bin
     done
 
@@ -98,7 +95,7 @@ in stdenv.mkDerivation {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Integration Services for running NixOS under HyperV";
     longDescription = ''
       This packages contains the daemons that are used by the Hyper-V hypervisor

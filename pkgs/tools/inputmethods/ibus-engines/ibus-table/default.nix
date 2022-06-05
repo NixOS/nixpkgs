@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub
-, autoreconfHook, docbook2x, pkgconfig
+{ lib, stdenv, fetchFromGitHub
+, autoreconfHook, docbook2x, pkg-config
 , gtk3, dconf, gobject-introspection
 , ibus, python3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "ibus-table";
-  version = "1.9.21";
+  version = "1.16.7";
 
   src = fetchFromGitHub {
     owner  = "kaio";
     repo   = "ibus-table";
     rev    = version;
-    sha256 = "1rswbhbfvir443mw3p7xw6calkpfss4fcgn8nhfnrbin49q6w1vm";
+    sha256 = "sha256-rejYxuRhzNmtx11NH3BZe3ODjU5OyZ9sgk6GWnBBXAo=";
   };
 
   postPatch = ''
@@ -27,6 +27,9 @@ stdenv.mkDerivation rec {
         -e "/export IBUS_LOCALEDIR=/ s/^.$//" \
         -i "setup/ibus-setup-table.in"
     substituteInPlace engine/tabcreatedb.py --replace '/usr/share/ibus-table' $out/share/ibus-table
+    substituteInPlace engine/ibus_table_location.py \
+      --replace '/usr/libexec' $out/libexec \
+      --replace '/usr/share/ibus-table/' $out/share/ibus-table/
   '';
 
   buildInputs = [
@@ -34,6 +37,7 @@ stdenv.mkDerivation rec {
     gtk3
     ibus
     (python3.withPackages (pypkgs: with pypkgs; [
+      dbus-python
       pygobject3
       (toPythonModule ibus)
     ]))
@@ -42,7 +46,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoreconfHook
     docbook2x
-    pkgconfig
+    pkg-config
     gobject-introspection
     wrapGAppsHook
   ];
@@ -52,10 +56,10 @@ stdenv.mkDerivation rec {
       --replace "docbook2man" "docbook2man --sgml"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     isIbusEngine = true;
     description  = "An IBus framework for table-based input methods";
-    homepage     = https://github.com/kaio/ibus-table/wiki;
+    homepage     = "https://github.com/kaio/ibus-table/wiki";
     license      = licenses.lgpl21;
     platforms    = platforms.linux;
     maintainers  = with maintainers; [ mudri ];

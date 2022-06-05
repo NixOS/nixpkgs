@@ -4,10 +4,9 @@ import ./make-test-python.nix ({ lib, ... }:
 
   meta.maintainers = with lib.maintainers; [
     jtojnar
-    worldofpeace
   ];
 
-  machine = { config, pkgs, ... }: {
+  nodes.machine = { config, pkgs, ... }: {
     fonts.enableDefaultFonts = true; # Background fonts
     fonts.fonts = with pkgs; [
       noto-fonts-emoji

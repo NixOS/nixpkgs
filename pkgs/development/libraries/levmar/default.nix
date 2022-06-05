@@ -1,16 +1,18 @@
-{ stdenv, fetchurl }:
-        
+{ lib, stdenv, fetchurl }:
+
 stdenv.mkDerivation rec {
-  name = "levmar-2.6";
+  pname = "levmar";
+  version = "2.6";
 
   src = fetchurl {
-    url = "http://www.ics.forth.gr/~lourakis/levmar/${name}.tgz";
+    url = "https://www.ics.forth.gr/~lourakis/levmar/${pname}-${version}.tgz";
     sha256 = "1mxsjip9x782z6qa6k5781wjwpvj5aczrn782m9yspa7lhgfzx1v";
   };
 
   patchPhase = ''
-    sed -i 's/define HAVE_LAPACK/undef HAVE_LAPACK/' levmar.h
+    substituteInPlace levmar.h --replace "define HAVE_LAPACK" "undef HAVE_LAPACK"
     sed -i 's/LAPACKLIBS=.*/LAPACKLIBS=/' Makefile
+    substituteInPlace Makefile --replace "gcc" "${stdenv.cc.targetPrefix}cc"
   '';
 
   installPhase = ''
@@ -19,10 +21,10 @@ stdenv.mkDerivation rec {
     cp liblevmar.a $out/lib
   '';
 
-  meta = { 
+  meta = {
     description = "ANSI C implementations of Levenberg-Marquardt, usable also from C++";
-    homepage = http://www.ics.forth.gr/~lourakis/levmar/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://www.ics.forth.gr/~lourakis/levmar/";
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }

@@ -5,6 +5,7 @@ with lib;
 let
 
   cfg = config.services.rspamd;
+  opt = options.services.rspamd;
   postfixCfg = config.services.postfix;
 
   bindSocketOpts = {options, config, ... }: {
@@ -153,7 +154,7 @@ let
 
       ${concatStringsSep "\n" (mapAttrsToList (name: value: let
           includeName = if name == "rspamd_proxy" then "proxy" else name;
-          tryOverride = if value.extraConfig == "" then "true" else "false";
+          tryOverride = boolToString (value.extraConfig == "");
         in ''
         worker "${value.type}" {
           type = "${value.type}";
@@ -240,7 +241,7 @@ in
         description = ''
           Local configuration files, written into <filename>/etc/rspamd/local.d/{name}</filename>.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           { "redis.conf".source = "/nix/store/.../etc/dir/redis.conf";
             "arc.conf".text = "allow_envfrom_empty = true;";
           }
@@ -253,7 +254,7 @@ in
         description = ''
           Overridden configuration files, written into <filename>/etc/rspamd/override.d/{name}</filename>.
         '';
-        example = literalExample ''
+        example = literalExpression ''
           { "redis.conf".source = "/nix/store/.../etc/dir/redis.conf";
             "arc.conf".text = "allow_envfrom_empty = true;";
           }
@@ -278,15 +279,15 @@ in
           normal = {};
           controller = {};
         };
-        example = literalExample ''
+        example = literalExpression ''
           {
             normal = {
               includes = [ "$CONFDIR/worker-normal.inc" ];
               bindSockets = [{
                 socket = "/run/rspamd/rspamd.sock";
                 mode = "0660";
-                owner = "${cfg.user}";
-                group = "${cfg.group}";
+                owner = "''${config.${opt.user}}";
+                group = "''${config.${opt.group}}";
               }];
             };
             controller = {
@@ -338,10 +339,6 @@ in
             smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
             non_smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
           };
-          example = {
-            smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
-            non_smtpd_milters = ["unix:/run/rspamd/rspamd-milter.sock"];
-          };
         };
       };
     };
@@ -371,6 +368,10 @@ in
     };
     services.postfix.config = mkIf cfg.postfix.enable cfg.postfix.config;
 
+    systemd.services.postfix = mkIf cfg.postfix.enable {
+      serviceConfig.SupplementaryGroups = [ postfixCfg.group ];
+    };
+
     # Allow users to run 'rspamc' and 'rspamadm'.
     environment.systemPackages = [ pkgs.rspamd ];
 
@@ -394,21 +395,50 @@ in
       restartTriggers = [ rspamdDir ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} --user=${cfg.user} --group=${cfg.group} --pid=/run/rspamd.pid -c /etc/rspamd/rspamd.conf -f";
+        ExecStart = "${pkgs.rspamd}/bin/rspamd ${optionalString cfg.debug "-d"} -c /etc/rspamd/rspamd.conf -f";
         Restart = "always";
-        RuntimeDirectory = "rspamd";
-        PrivateTmp = true;
-      };
 
-      preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -p /var/lib/rspamd
-        ${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.group} /var/lib/rspamd
-      '';
+        User = "${cfg.user}";
+        Group = "${cfg.group}";
+        SupplementaryGroups = mkIf cfg.postfix.enable [ postfixCfg.group ];
+
+        RuntimeDirectory = "rspamd";
+        RuntimeDirectoryMode = "0755";
+        StateDirectory = "rspamd";
+        StateDirectoryMode = "0700";
+
+        AmbientCapabilities = [];
+        CapabilityBoundingSet = "";
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        # we need to chown socket to rspamd-milter
+        PrivateUsers = !cfg.postfix.enable;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "strict";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service";
+        UMask = "0077";
+      };
     };
   };
   imports = [
     (mkRemovedOptionModule [ "services" "rspamd" "socketActivation" ]
-	     "Socket activation never worked correctly and could at this time not be fixed and so was removed")
+       "Socket activation never worked correctly and could at this time not be fixed and so was removed")
     (mkRenamedOptionModule [ "services" "rspamd" "bindSocket" ] [ "services" "rspamd" "workers" "normal" "bindSockets" ])
     (mkRenamedOptionModule [ "services" "rspamd" "bindUISocket" ] [ "services" "rspamd" "workers" "controller" "bindSockets" ])
     (mkRemovedOptionModule [ "services" "rmilter" ] "Use services.rspamd.* instead to set up milter service")

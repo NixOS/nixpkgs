@@ -1,28 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, nose
+, pytestCheckHook
 }:
 
-buildPythonPackage rec{
+buildPythonPackage rec {
   pname = "toolz";
-  version = "0.10.0";
+  version = "0.11.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08fdd5ef7c96480ad11c12d472de21acd32359996f69a5259299b540feba4560";
+    sha256 = "6b312d5e15138552f1bda8a4e66c30e236c831b612b2bf0005f8a1df10a4bc33";
   };
 
-  checkInputs = [ nose ];
-
-  checkPhase = ''
-    # https://github.com/pytoolz/toolz/issues/357
-    rm toolz/tests/test_serialization.py
-    nosetests toolz/tests
-  '';
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    homepage = https://github.com/pytoolz/toolz;
+    homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];

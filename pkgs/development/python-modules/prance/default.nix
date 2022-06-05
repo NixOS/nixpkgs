@@ -1,56 +1,64 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , chardet
-, pyyaml
 , requests
+, ruamel-yaml
+, setuptools-scm
 , six
 , semver
-, pytest
-, pytestcov
-, pytestrunner
-, sphinx
+, pytestCheckHook
 , openapi-spec-validator
 }:
 
 buildPythonPackage rec {
   pname = "prance";
-  version = "0.17.0";
+  version = "0.21.8.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "a128d0d5f639a6a19eefedd787a6ce9603634c3908927b1215653e4a8375195f";
+  src = fetchFromGitHub {
+    owner = "RonnyPfannschmidt";
+    repo = pname;
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-kGANMHfWwhW3ZBw2ZVCJZR/bV2EPhcydMKhDeDTVwcQ=";
   };
 
-  buildInputs = [
-    pytestrunner
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
     chardet
-    pyyaml
     requests
+    ruamel-yaml
     six
     semver
   ];
 
   checkInputs = [
-    pytest
-    pytestcov
+    pytestCheckHook
     openapi-spec-validator
   ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "tests_require = dev_require," "tests_require = None,"
+    substituteInPlace setup.cfg \
+      --replace "--cov=prance --cov-report=term-missing --cov-fail-under=90" ""
   '';
 
-  # many tests require network connection
-  doCheck = false;
+  # Disable tests that require network
+  disabledTestPaths = [
+    "tests/test_convert.py"
+  ];
+  disabledTests = [
+    "test_fetch_url_http"
+  ];
+  pythonImportsCheck = [ "prance" ];
 
   meta = with lib; {
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
-    homepage = https://github.com/jfinkhaeuser/prance;
+    homepage = "https://github.com/RonnyPfannschmidt/prance";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];
   };

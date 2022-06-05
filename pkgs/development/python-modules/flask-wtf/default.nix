@@ -1,22 +1,41 @@
-{ stdenv, fetchPypi, buildPythonPackage, flask, wtforms, nose }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, flask
+, itsdangerous
+, wtforms
+, email_validator
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
-  pname = "Flask-WTF";
-  version = "0.14.2";
+  pname = "flask-wtf";
+  version = "1.0.1";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0dncc5as2k61b28k8kal5yh3prmv7zya1jz7kvci7ximzmfda52x";
+    pname = "Flask-WTF";
+    inherit version;
+    sha256 = "34fe5c6fee0f69b50e30f81a3b7ea16aa1492a771fe9ad0974d164610c09a6c9";
   };
 
-  propagatedBuildInputs = [ flask wtforms nose ];
+  propagatedBuildInputs = [
+    flask
+    itsdangerous
+    wtforms
+  ];
 
-  doCheck = false; # requires external service
+  passthru.optional-dependencies = {
+    email = [ email_validator ];
+  };
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  meta = with lib; {
     description = "Simple integration of Flask and WTForms.";
     license = licenses.bsd3;
     maintainers = [ maintainers.mic92 ];
-    homepage = https://github.com/lepture/flask-wtf/;
+    homepage = "https://github.com/lepture/flask-wtf/";
   };
 }

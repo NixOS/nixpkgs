@@ -1,12 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, six }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, six }:
 
 buildPythonPackage rec {
   pname = "cfgv";
-  version = "2.0.1";
+  version = "3.3.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i1iam461bd6bphd402r7payr2m71xivy5zp6k2gjnv67fa8gczd";
+    sha256 = "f5a830efb9ce7a445376bb66ec94c638a9787422f96264c98edc6bdeed8ab736";
   };
 
   propagatedBuildInputs = [ six ];
@@ -16,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Validate configuration and produce human readable error messages";
-    homepage = https://github.com/asottile/cfgv;
+    homepage = "https://github.com/asottile/cfgv";
     license = licenses.mit;
   };
 }

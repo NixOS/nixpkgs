@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libgnomeui, libxml2 }:
+{ lib, stdenv, fetchurl, pkg-config, libgnomeui, libxml2 }:
 
 stdenv.mkDerivation rec {
   pname = "verbiste";
@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "02kzin3pky2q2jnihrch8y0hy043kqqmzxq8j741x80kl0j1qxkm";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libgnomeui libxml2 ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://sarrazip.com/dev/verbiste.html;
+  meta = with lib; {
+    homepage = "http://sarrazip.com/dev/verbiste.html";
     description = "French and Italian verb conjugator";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

@@ -3,9 +3,6 @@
 with lib;
 
 let
-  dataDir  = "/var/lib/pdns-recursor";
-  username = "pdns-recursor";
-
   cfg = config.services.pdns-recursor;
 
   oneOrMore  = type: with types; either type (listOf type);
@@ -21,7 +18,7 @@ let
     else if builtins.isList val then (concatMapStringsSep "," serialize val)
     else "";
 
-  configFile = pkgs.writeText "recursor.conf"
+  configDir = pkgs.writeTextDir "recursor.conf"
     (concatStringsSep "\n"
       (flip mapAttrsToList cfg.settings
         (name: val: "${name}=${serialize val}")));
@@ -33,10 +30,10 @@ in {
     enable = mkEnableOption "PowerDNS Recursor, a recursive DNS server";
 
     dns.address = mkOption {
-      type = types.str;
-      default = "0.0.0.0";
+      type = oneOrMore types.str;
+      default = [ "::" "0.0.0.0" ];
       description = ''
-        IP address Recursor DNS server will bind to.
+        IP addresses Recursor DNS server will bind to.
       '';
     };
 
@@ -50,8 +47,12 @@ in {
 
     dns.allowFrom = mkOption {
       type = types.listOf types.str;
-      default = [ "10.0.0.0/8" "172.16.0.0/12" "192.168.0.0/16" ];
-      example = [ "0.0.0.0/0" ];
+      default = [
+        "127.0.0.0/8" "10.0.0.0/8" "100.64.0.0/10"
+        "169.254.0.0/16" "192.168.0.0/16" "172.16.0.0/12"
+        "::1/128" "fc00::/7" "fe80::/10"
+      ];
+      example = [ "0.0.0.0/0" "::/0" ];
       description = ''
         IP address ranges of clients allowed to make DNS queries.
       '';
@@ -75,7 +76,8 @@ in {
 
     api.allowFrom = mkOption {
       type = types.listOf types.str;
-      default = [ "0.0.0.0/0" ];
+      default = [ "127.0.0.1" "::1" ];
+      example = [ "0.0.0.0/0" "::/0" ];
       description = ''
         IP address ranges of clients allowed to make API requests.
       '';
@@ -99,7 +101,7 @@ in {
 
     forwardZonesRecurse = mkOption {
       type = types.attrs;
-      example = { eth = "127.0.0.1:5353"; };
+      example = { eth = "[::1]:5353"; };
       default = {};
       description = ''
         DNS zones to be forwarded to other recursive servers.
@@ -130,7 +132,7 @@ in {
     settings = mkOption {
       type = configType;
       default = { };
-      example = literalExample ''
+      example = literalExpression ''
         {
           loglevel = 8;
           log-common-errors = true;
@@ -173,45 +175,30 @@ in {
       serve-rfc1918    = cfg.serveRFC1918;
       lua-config-file  = pkgs.writeText "recursor.lua" cfg.luaConfig;
 
+      daemon         = false;
+      write-pid      = false;
       log-timestamp  = false;
       disable-syslog = true;
     };
 
-    users.users.${username} = {
-      home = dataDir;
-      createHome = true;
-      uid = config.ids.uids.pdns-recursor;
+    systemd.packages = [ pkgs.pdns-recursor ];
+
+    systemd.services.pdns-recursor = {
+      wantedBy = [ "multi-user.target" ];
+
+      serviceConfig = {
+        ExecStart = [ "" "${pkgs.pdns-recursor}/bin/pdns_recursor --config-dir=${configDir}" ];
+      };
+    };
+
+    users.users.pdns-recursor = {
+      isSystemUser = true;
+      group = "pdns-recursor";
       description = "PowerDNS Recursor daemon user";
     };
 
-    systemd.services.pdns-recursor = {
-      unitConfig.Documentation = "man:pdns_recursor(1) man:rec_control(1)";
-      description = "PowerDNS recursive server";
-      wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+    users.groups.pdns-recursor = {};
 
-      serviceConfig = {
-        User = username;
-        Restart    ="on-failure";
-        RestartSec = "5";
-        PrivateTmp = true;
-        PrivateDevices = true;
-        AmbientCapabilities = "cap_net_bind_service";
-        ExecStart = ''${pkgs.pdns-recursor}/bin/pdns_recursor \
-          --config-dir=${dataDir} \
-          --socket-dir=${dataDir}
-        '';
-      };
-
-      preStart = ''
-        # Link configuration file into recursor home directory
-        configPath=${dataDir}/recursor.conf
-        if [ "$(realpath $configPath)" != "${configFile}" ]; then
-          rm -f $configPath
-          ln -s ${configFile} $configPath
-        fi
-      '';
-    };
   };
 
   imports = [

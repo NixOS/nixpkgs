@@ -1,24 +1,25 @@
-{ stdenv, fetchFromGitHub, ocamlPackages }:
+{ lib, fetchFromGitHub, ocamlPackages, menhir }:
 
-stdenv.mkDerivation rec {
-	pname = "obelisk";
-	version = "0.4.0";
-	src = fetchFromGitHub {
-		owner = "lelio-brun";
-		repo = "obelisk";
-		rev = "v${version}";
-		sha256 = "0rw85knbwqj2rys1hh5qy8sfdqb4mb1wsriy38n7zcpbwim47vb8";
-	};
+ocamlPackages.buildDunePackage rec {
+  pname = "obelisk";
+  version = "0.6.0";
+  useDune2 = true;
+  src = fetchFromGitHub {
+    owner = "Lelio-Brun";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1jjaqa2b7msl9qd3x7j34vdh1s9alq8hbvzk8a5srb4yyfyim15b";
+  };
 
-	buildInputs = with ocamlPackages; [ ocaml findlib ocamlbuild menhir ];
+  strictDeps = true;
 
-	installFlags = [ "BINDIR=$(out)/bin" ];
+  nativeBuildInputs = [ menhir ];
+  buildInputs = with ocamlPackages; [ re ];
 
-	meta = {
-		description = "A simple tool which produces pretty-printed output from a Menhir parser file (.mly)";
-		license = stdenv.lib.licenses.mit;
-		maintainers = [ stdenv.lib.maintainers.vbgl ];
-		inherit (src.meta) homepage;
-		inherit (ocamlPackages.ocaml.meta) platforms;
-	};
+  meta = {
+    description = "A simple tool which produces pretty-printed output from a Menhir parser file (.mly)";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
+    homepage = "https://github.com/Lelio-Brun/Obelisk";
+  };
 }

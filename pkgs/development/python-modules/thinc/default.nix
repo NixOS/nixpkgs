@@ -1,81 +1,101 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
+, python
 , fetchPypi
-, pythonOlder
-, pytest
-, cython
-, cymem
-, darwin
-, msgpack-numpy
-, msgpack
-, preshed
-, numpy
-, murmurhash
-, pathlib
-, hypothesis
-, tqdm
-, cytoolz
-, plac
-, six
-, mock
-, wrapt
-, dill
+, pytestCheckHook
 , blis
+, catalogue
+, cymem
+, cython
+, contextvars
+, dataclasses
+, Accelerate
+, CoreFoundation
+, CoreGraphics
+, CoreVideo
+, hypothesis
+, mock
+, murmurhash
+, numpy
+, plac
+, pythonOlder
+, preshed
+, pydantic
 , srsly
+, tqdm
+, typing-extensions
 , wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.3.1";
+  version = "8.0.17";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f9bg7iyhwnk8jfras8d4wzq0ypn5na0bdbwkl7y2mr06yrdd0ff";
+    sha256 = "sha256-BCxRiqeZo4vsIqegvyjfgM5hfrfeMrwEl5hwfAo2Fn8=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Accelerate CoreFoundation CoreGraphics CoreVideo
-  ]);
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pydantic>=1.7.4,!=1.8,!=1.8.1,<1.9.0" "pydantic"
+  '';
+
+  buildInputs = [
+    cython
+  ] ++ lib.optionals stdenv.isDarwin [
+    Accelerate
+    CoreFoundation
+    CoreGraphics
+    CoreVideo
+  ];
 
   propagatedBuildInputs = [
-   blis
-   cython
-   cymem
-   msgpack-numpy
-   msgpack
-   preshed
-   numpy
-   murmurhash
-   tqdm
-   cytoolz
-   plac
-   six
-   srsly
-   wrapt
-   dill
-   wasabi
-  ] ++ lib.optional (pythonOlder "3.4") pathlib;
-
+    blis
+    catalogue
+    cymem
+    murmurhash
+    numpy
+    plac
+    preshed
+    srsly
+    tqdm
+    pydantic
+    wasabi
+  ] ++ lib.optional (pythonOlder "3.8") [
+    typing-extensions
+  ] ++ lib.optional (pythonOlder "3.7") [
+    contextvars
+    dataclasses
+  ];
 
   checkInputs = [
     hypothesis
     mock
-    pytest
+    pytestCheckHook
   ];
 
-  # Cannot find cython modules.
-  doCheck = false;
+  # Add native extensions.
+  preCheck = ''
+    export PYTHONPATH=$out/${python.sitePackages}:$PYTHONPATH
 
-  checkPhase = ''
-    pytest thinc/tests
+    # avoid local paths, relative imports wont resolve correctly
+    mv thinc/tests tests
+    rm -r thinc
   '';
 
-  meta = with stdenv.lib; {
+  pythonImportsCheck = [
+    "thinc"
+  ];
+
+  meta = with lib; {
     description = "Practical Machine Learning for NLP in Python";
-    homepage = https://github.com/explosion/thinc;
+    homepage = "https://github.com/explosion/thinc";
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu danieldk sdll ];
-    };
+    maintainers = with maintainers; [ aborsu ];
+  };
 }

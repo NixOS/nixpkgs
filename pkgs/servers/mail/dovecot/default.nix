@@ -1,33 +1,47 @@
-{ stdenv, lib, fetchurl, perl, pkgconfig, systemd, openssl
-, bzip2, zlib, lz4, inotify-tools, pam, libcap
+{ stdenv, lib, fetchurl, perl, pkg-config, systemd, openssl
+, bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
 # Auth modules
 , withMySQL ? false, libmysqlclient
 , withPgSQL ? false, postgresql
 , withSQLite ? true, sqlite
+, withLua ? false, lua5_3
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.3.9.2";
+  pname = "dovecot";
+  version = "2.3.19";
 
-  nativeBuildInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
     [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
     ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL postgresql
-    ++ lib.optional withSQLite sqlite;
+    ++ lib.optional withSQLite sqlite
+    ++ lib.optional withLua lua5_3;
 
   src = fetchurl {
-    url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
-    sha256 = "1yc6hi4hqg4hcc4495sf4m5f1lnargphi6dawj43if21vncgp127";
+    url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
+    hash = "sha256:0ys3zq9b1rgj1cz6a0i9l421y6h2j3b5zak2ia5j9dj1sj9zcwq1";
   };
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
+  postPatch = ''
+    sed -i -E \
+      -e 's!/bin/sh\b!${stdenv.shell}!g' \
+      -e 's!([^[:alnum:]/_-])/bin/([[:alnum:]]+)\b!\1${coreutils}/bin/\2!g' \
+      -e 's!([^[:alnum:]/_-])(head|sleep|cat)\b!\1${coreutils}/bin/\2!g' \
+      src/lib-program-client/test-program-client-local.c
+
+    patchShebangs src/lib-smtp/test-bin/*.sh
+    sed -i -s -E 's!\bcat\b!${coreutils}/bin/cat!g' src/lib-smtp/test-bin/*.sh
+
     patchShebangs src/config/settings-get.pl
+  '' + lib.optionalString stdenv.isLinux ''
+    export systemdsystemunitdir=$out/etc/systemd/system
   '';
 
   # We need this for sysconfdir, see remark below.
@@ -74,19 +88,24 @@ stdenv.mkDerivation rec {
     "lib_cv_va_copy=yes"
     "lib_cv___va_copy=yes"
     "lib_cv_va_val_copy=yes"
-  ] ++ lib.optional (stdenv.isLinux) "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    ++ lib.optional (stdenv.isDarwin) "--enable-static"
+  ] ++ lib.optional stdenv.isLinux "--with-systemd"
+    ++ lib.optional stdenv.isDarwin "--enable-static"
     ++ lib.optional withMySQL "--with-mysql"
     ++ lib.optional withPgSQL "--with-pgsql"
-    ++ lib.optional withSQLite "--with-sqlite";
+    ++ lib.optional withSQLite "--with-sqlite"
+    ++ lib.optional withLua "--with-lua";
 
-  meta = {
-    homepage = https://dovecot.org/;
+  doCheck = !stdenv.isDarwin;
+
+  meta = with lib; {
+    homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz globin ];
-    platforms = stdenv.lib.platforms.unix;
+    license = with licenses; [ mit publicDomain lgpl21Only bsd3 bsdOriginal ];
+    maintainers = with maintainers; [ fpletz globin ajs124 ];
+    platforms = platforms.unix;
   };
   passthru.tests = {
     opensmtpd-interaction = nixosTests.opensmtpd;
+    inherit (nixosTests) dovecot;
   };
 }

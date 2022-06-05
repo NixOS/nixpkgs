@@ -1,35 +1,28 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pytestrunner, pytest, scipy }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, pytest, scipy, pytestCheckHook }:
 
 buildPythonPackage {
   pname = "fastpair";
-  version = "2016-07-05";
+  version = "2021-05-19";
 
   src = fetchFromGitHub {
     owner = "carsonfarmer";
     repo = "fastpair";
-    rev = "92364962f6b695661f35a117bf11f96584128a8d";
-    sha256 = "1pv9sxycxdk567s5gs947rhlqngrb9nn9yh4dhdvg1ix1i8dca71";
+    rev = "d3170fd7e4d6e95312e7e1cb02e84077a3f06379";
+    sha256 = "1l8zgr8awg27lhlkpa2dsvghrb7b12jl1bkgpzg5q7pg8nizl9mx";
   };
 
-  nativeBuildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytest-runner ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest pytestCheckHook ];
 
   propagatedBuildInputs = [
     scipy
   ];
 
-  # Does not support pytest 4 https://github.com/carsonfarmer/fastpair/issues/14
-  doCheck = false;
-
-  checkPhase = ''
-    pytest fastpair
-  '';
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/carsonfarmer/fastpair;
+  meta = with lib; {
+    homepage = "https://github.com/carsonfarmer/fastpair";
     description = "Data-structure for the dynamic closest-pair problem";
     license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    maintainers = with maintainers; [ cmcdragonkai rakesh4g ];
   };
 }

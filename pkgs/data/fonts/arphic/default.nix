@@ -6,7 +6,7 @@ in {
   arphic-ukai = fetchzip {
     name = "arphic-ukai-${version}";
 
-    url = "http://archive.ubuntu.com/ubuntu/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_${version}.orig.tar.bz2";
+    url = "mirror://ubuntu/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_${version}.orig.tar.bz2";
 
     postFetch = ''
       tar -xjvf $downloadedFile --strip-components=1
@@ -20,7 +20,7 @@ in {
 
     meta = with lib; {
       description = "CJK Unicode font Kai style";
-      homepage = https://www.freedesktop.org/wiki/Software/CJKUnifonts/;
+      homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
 
       license = licenses.arphicpl;
       maintainers = [ maintainers.changlinli ];
@@ -31,7 +31,7 @@ in {
   arphic-uming = fetchzip {
     name = "arphic-uming-${version}";
 
-    url = "http://archive.ubuntu.com/ubuntu/pool/main/f/fonts-arphic-uming/fonts-arphic-uming_${version}.orig.tar.bz2";
+    url = "mirror://ubuntu/pool/main/f/fonts-arphic-uming/fonts-arphic-uming_${version}.orig.tar.bz2";
 
     postFetch = ''
       tar -xjvf $downloadedFile --strip-components=1
@@ -45,7 +45,7 @@ in {
 
     meta = with lib; {
       description = "CJK Unicode font Ming style";
-      homepage = https://www.freedesktop.org/wiki/Software/CJKUnifonts/;
+      homepage = "https://www.freedesktop.org/wiki/Software/CJKUnifonts/";
 
       license = licenses.arphicpl;
       maintainers = [ maintainers.changlinli ];

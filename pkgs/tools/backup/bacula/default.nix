@@ -1,16 +1,23 @@
-{ stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline }:
+{ lib, stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline
+, CoreFoundation, IOKit
+}:
 
 stdenv.mkDerivation rec {
-  name = "bacula-9.4.4";
+  pname = "bacula";
+  version = "11.0.6";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/bacula/${name}.tar.gz";
-    sha256 = "1gi0zkkzh6a87xk4sm051hwz5bv4qc4kbl6hk40752knr817mqqg";
+    url    = "mirror://sourceforge/bacula/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AZWgi81PV4rkqc4Nkff4ZzHGNNVrgQU0ci1yGyqe7Lc=";
   };
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+      IOKit
+    ]
     # acl relies on attr, which I can't get to build on darwin
-    ++ stdenv.lib.optional (!stdenv.isDarwin) acl;
+    ++ lib.optional (!stdenv.isDarwin) acl;
 
   configureFlags = [
     "--with-sqlite3=${sqlite.dev}"
@@ -18,7 +25,7 @@ stdenv.mkDerivation rec {
     "--with-logdir=/var/log/bacula"
     "--with-working-dir=/var/lib/bacula"
     "--mandir=\${out}/share/man"
-  ] ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
+  ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
 
   installFlags = [
     "logdir=\${out}/logdir"
@@ -30,11 +37,11 @@ stdenv.mkDerivation rec {
     ln -s $out/sbin/* $out/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Enterprise ready, Network Backup Tool";
-    homepage    = http://bacula.org/;
-    license     = licenses.gpl2;
-    maintainers = with maintainers; [ domenkozar lovek323 eleanor ];
+    homepage    = "http://bacula.org/";
+    license     = with licenses; [ agpl3Only bsd2 ];
+    maintainers = with maintainers; [ lovek323 eleanor ];
     platforms   = platforms.all;
   };
 }

@@ -6,6 +6,23 @@ with lib;
 
 let
   cfg = config.services.fwupd;
+
+  customEtc = {
+    "fwupd/daemon.conf" = {
+      source = pkgs.writeText "daemon.conf" ''
+        [fwupd]
+        DisabledDevices=${lib.concatStringsSep ";" cfg.disabledDevices}
+        DisabledPlugins=${lib.concatStringsSep ";" cfg.disabledPlugins}
+      '';
+    };
+    "fwupd/uefi.conf" = {
+      source = pkgs.writeText "uefi.conf" ''
+        [uefi]
+        OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
+      '';
+    };
+  };
+
   originalEtc =
     let
       mkEtcFile = n: nameValuePair n { source = "${cfg.package}/etc/${n}"; };
@@ -42,28 +59,28 @@ in {
         '';
       };
 
-      blacklistDevices = mkOption {
+      disabledDevices = mkOption {
         type = types.listOf types.str;
         default = [];
         example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
         description = ''
-          Allow blacklisting specific devices by their GUID
+          Allow disabling specific devices by their GUID
         '';
       };
 
-      blacklistPlugins = mkOption {
+      disabledPlugins = mkOption {
         type = types.listOf types.str;
-        default = [ "test" ];
+        default = [];
         example = [ "udev" ];
         description = ''
-          Allow blacklisting specific plugins
+          Allow disabling specific plugins
         '';
       };
 
       extraTrustedKeys = mkOption {
         type = types.listOf types.path;
         default = [];
-        example = literalExample "[ /etc/nixos/fwupd/myfirmware.pem ]";
+        example = literalExpression "[ /etc/nixos/fwupd/myfirmware.pem ]";
         description = ''
           Installing a public key allows firmware signed with a matching private key to be recognized as trusted, which may require less authentication to install than for untrusted files. By default trusted firmware can be upgraded (but not downgraded) without the user or administrator password. Only very few keys are installed by default.
         '';
@@ -81,6 +98,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.fwupd;
+        defaultText = literalExpression "pkgs.fwupd";
         description = ''
           Which fwupd package to use.
         '';
@@ -88,27 +106,20 @@ in {
     };
   };
 
+  imports = [
+    (mkRenamedOptionModule [ "services" "fwupd" "blacklistDevices"] [ "services" "fwupd" "disabledDevices" ])
+    (mkRenamedOptionModule [ "services" "fwupd" "blacklistPlugins"] [ "services" "fwupd" "disabledPlugins" ])
+  ];
 
   ###### implementation
   config = mkIf cfg.enable {
+    # Disable test related plug-ins implicitly so that users do not have to care about them.
+    services.fwupd.disabledPlugins = cfg.package.defaultDisabledPlugins;
+
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc = {
-      "fwupd/daemon.conf" = {
-        source = pkgs.writeText "daemon.conf" ''
-          [fwupd]
-          BlacklistDevices=${lib.concatStringsSep ";" cfg.blacklistDevices}
-          BlacklistPlugins=${lib.concatStringsSep ";" cfg.blacklistPlugins}
-        '';
-      };
-      "fwupd/uefi.conf" = {
-        source = pkgs.writeText "uefi.conf" ''
-          [uefi]
-          OverrideESPMountPoint=${config.boot.loader.efi.efiSysMountPoint}
-        '';
-      };
-
-    } // originalEtc // extraTrustedKeys // testRemote;
+    # customEtc overrides some files from the package
+    environment.etc = originalEtc // customEtc // extraTrustedKeys // testRemote;
 
     services.dbus.packages = [ cfg.package ];
 

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
+{ lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "publicsuffix";
@@ -10,16 +10,13 @@ buildPythonPackage rec {
   };
 
 
-  # fix the ASCII-mode LICENSE file read
   # disable test_fetch and the doctests (which also invoke fetch)
-  patchPhase = stdenv.lib.optionalString isPy3k ''
-    sed -i "s/)\.read(/,encoding='utf-8'\0/" setup.py
-  '' + ''
+  postPatch = ''
     sed -i -e "/def test_fetch/i\\
     \\t@unittest.skip('requires internet')" -e "/def additional_tests():/,+1d" tests.py
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Allows to get the public suffix of a domain name";
     homepage = "https://pypi.python.org/pypi/publicsuffix/";
     license = licenses.mit;

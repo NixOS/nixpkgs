@@ -1,42 +1,67 @@
-{ lib, fetchPypi, buildPythonPackage
-, nose
-, parameterized
-, mock
-, glibcLocales
-, six
-, jdatetime
-, dateutil
-, umalqurra
+{ lib
+, buildPythonPackage
+, isPy3k
+, fetchFromGitHub
+, python-dateutil
 , pytz
-, tzlocal
 , regex
-, ruamel_yaml }:
+, tzlocal
+, hijri-converter
+, convertdate
+, fasttext
+, langdetect
+, parameterized
+, pytestCheckHook
+, GitPython
+, ruamel-yaml
+}:
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "0.7.2";
+  version = "1.1.1";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e1eac8ef28de69a554d5fcdb60b172d526d61924b1a40afbbb08df459a36006b";
+  disabled = !isPy3k;
+
+  src = fetchFromGitHub {
+    owner = "scrapinghub";
+    repo = "dateparser";
+    rev = "v${version}";
+    sha256 = "sha256-bDup3q93Zq+pvwsy/lQy2byOMjG6C/+7813hWQMbZRU=";
   };
-
-  checkInputs = [ nose mock parameterized six glibcLocales ];
-  preCheck =''
-    # skip because of missing convertdate module, which is an extra requirement
-    rm tests/test_jalali.py
-  '';
 
   propagatedBuildInputs = [
     # install_requires
-    dateutil pytz regex tzlocal
+    python-dateutil pytz regex tzlocal
     # extra_requires
-    jdatetime ruamel_yaml umalqurra
+    hijri-converter convertdate fasttext langdetect
   ];
+
+  checkInputs = [
+    parameterized
+    pytestCheckHook
+    GitPython
+    ruamel-yaml
+  ];
+
+  preCheck = ''
+    export HOME="$TEMPDIR"
+  '';
+
+  # Upstream only runs the tests in tests/ in CI, others use git clone
+  pytestFlagsArray = [ "tests" ];
+
+  disabledTests = [
+    # access network
+    "test_custom_language_detect_fast_text_0"
+    "test_custom_language_detect_fast_text_1"
+  ];
+
+  pythonImportsCheck = [ "dateparser" ];
 
   meta = with lib; {
     description = "Date parsing library designed to parse dates from HTML pages";
-    homepage = https://github.com/scrapinghub/dateparser;
+    homepage = "https://github.com/scrapinghub/dateparser";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

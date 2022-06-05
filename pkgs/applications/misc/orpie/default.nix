@@ -1,21 +1,30 @@
-{ stdenv, fetchurl, ocamlPackages, ncurses, gsl }:
+{ lib, fetchFromGitHub, ocamlPackages }:
 
-stdenv.mkDerivation rec {
+ocamlPackages.buildDunePackage rec {
   pname = "orpie";
-  version = "1.5.2";
+  version = "1.6.1";
 
-  src = fetchurl {
-    url = "http://pessimization.com/software/orpie/${pname}-${version}.tar.gz";
-    sha256 = "0v9xgpcf186ni55rkmx008msyszw0ypd6rd98hgwpih8yv3pymfy";
+  useDune2 = true;
+
+  src = fetchFromGitHub {
+    owner = "pelzlpj";
+    repo = pname;
+    rev = "release-${version}";
+    sha256 = "1rx2nl6cdv609pfymnbq53pi3ql5fr4kda8x10ycd9xq2gc4f21g";
   };
 
-  buildInputs = [ ncurses gsl ] ++ (with ocamlPackages; [ ocaml camlp4 ]);
+  patches = [ ./prefix.patch ];
+
+  preConfigure = ''
+    substituteInPlace src/orpie/install.ml.in --replace '@prefix@' $out
+  '';
+
+  buildInputs = with ocamlPackages; [ curses camlp5 num gsl ];
 
   meta = {
-    homepage = https://github.com/pelzlpj/orpie;
-    description = "A fullscreen RPN calculator for the console";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ obadz ];
+    inherit (src.meta) homepage;
+    description = "A Curses-based RPN calculator";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ obadz ];
   };
 }

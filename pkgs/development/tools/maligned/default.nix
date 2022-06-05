@@ -21,8 +21,8 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   meta = with lib; {
-    description = "Tool to detect Go structs that would take less memory if their fields were sorted.";
-    homepage = https://github.com/mdempsky/maligned;
+    description = "Tool to detect Go structs that would take less memory if their fields were sorted";
+    homepage = "https://github.com/mdempsky/maligned";
     license = licenses.bsd3;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.linux ++ platforms.darwin;

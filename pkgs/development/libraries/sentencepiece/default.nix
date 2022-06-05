@@ -1,31 +1,34 @@
-{ config
+{ lib
 , fetchFromGitHub
 , stdenv
-, lib
 , cmake
 , gperftools
+
+, withGPerfTools ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "sentencepiece";
-  version = "0.1.84";
+  version = "0.1.96";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "144y25nj4rwxmgvzqbr7al9fjwh3539ssjswvzrx4gsgfk62lsm0";
+    sha256 = "sha256-jo8XlQJsnWpeeezDjNNhh6T473XMqe8fsApUr82Y3BU=";
   };
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
 
-  nativeBuildInputs = [ cmake gperftools ];
+  buildInputs = lib.optionals withGPerfTools [ gperftools ];
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/google/sentencepiece;
+  outputs = [ "bin" "dev" "out" ];
+
+  meta = with lib; {
+    homepage = "https://github.com/google/sentencepiece";
     description = "Unsupervised text tokenizer for Neural Network-based text generation";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
     maintainers = with maintainers; [ pashashocky ];
   };
 }

@@ -1,40 +1,37 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 , pytest
 , click
-, pytestcov
-, isPy27
-, mock
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pytest-click";
-  version = "0.3";
+  version = "1.1.0";
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Stranger6667";
     repo = "pytest-click";
-    rev = version;
-    sha256 = "1cd15anw8d4rq6qs03j6ag38199rqw7vp0w0w0fm41mvdzr0lwvz";
+    rev = "v${version}";
+    sha256 = "sha256-A/RF+SgPu2yYF3eHEFiZwKJW2VwQ185Ln6S3wn2cS0k=";
   };
 
-  postConfigure = ''
-    substituteInPlace setup.py \
-      --replace "mock==1.0.1" "mock"
-  '';
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
-    pytest
     click
   ];
 
-  checkInputs = [ pytestcov ] ++ lib.optionals isPy27 [ mock ];
+  checkInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "pytest plugin for click";
-    homepage = https://github.com/Stranger6667/pytest-click;
+    homepage = "https://github.com/Stranger6667/pytest-click";
+    changelog = "https://github.com/Stranger6667/pytest-click/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

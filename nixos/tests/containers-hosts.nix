@@ -1,15 +1,12 @@
-# Test for NixOS' container support.
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "containers-hosts";
-  meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ montag451 ];
+  meta = {
+    maintainers = with lib.maintainers; [ montag451 ];
   };
 
-  machine =
+  nodes.machine =
     { lib, ... }:
     {
-      virtualisation.memorySize = 256;
       virtualisation.vlans = [];
 
       networking.bridges.br0.interfaces = [];

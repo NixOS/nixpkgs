@@ -1,20 +1,20 @@
-{fetchFromGitHub , stdenv, python3, gtk3, libwnck3,
+{fetchFromGitHub , lib, stdenv, python3, gtk3, libwnck,
  gobject-introspection, wrapGAppsHook }:
 
 stdenv.mkDerivation  rec {
   pname = "clipster";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "mrichar1";
     repo = "clipster";
     rev = version;
-    sha256 = "0582r8840dk4k4jj1zq6kmyh7z9drcng099bj7f4wvr468nb9z1p";
+    sha256 = "sha256-MLLkFsBBQtb7RFQN+uoEmuCn5bnbkYsqoyWGZtTCI2U=";
   };
 
   pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);
 
-  buildInputs =  [ pythonEnv gtk3 libwnck3 gobject-introspection wrapGAppsHook ];
+  buildInputs =  [ pythonEnv gtk3 libwnck gobject-introspection wrapGAppsHook ];
 
   installPhase = ''
     sed -i 's/python/python3/g' clipster
@@ -22,7 +22,7 @@ stdenv.mkDerivation  rec {
     cp clipster $out/bin/
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "lightweight python clipboard manager";
     longDescription = ''
       Clipster was designed to try to add a good selection of useful features, while avoiding bad design decisions or becoming excessively large.
@@ -43,7 +43,7 @@ stdenv.mkDerivation  rec {
       - Ability to delete items in clipboard history.
     '';
     license = licenses.agpl3;
-    homepage = https://github.com/mrichar1/clipster;
+    homepage = "https://github.com/mrichar1/clipster";
     platforms = platforms.linux;
     maintainers = [ maintainers.magnetophon ];
   };

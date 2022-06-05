@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "soupsieve";
-  version = "1.9.5";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e2c1c5dee4a1c36bcb790e0fabd5492d874b8ebd4617622c4f6a731701060dda";
+    sha256 = "b8d49b1cd4f037c7082a9683dfa1801aa2597fb11c3a1155b7a5b94829b4f1f9";
   };
 
   checkPhase = ''
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = {
     description = "A CSS4 selector implementation for Beautiful Soup";
     license = lib.licenses.mit;
-    homepage = https://github.com/facelessuser/soupsieve;
+    homepage = "https://github.com/facelessuser/soupsieve";
   };
 
 }

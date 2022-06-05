@@ -1,4 +1,4 @@
-{ stdenv
+{ lib
 , buildPythonPackage
 , fetchPypi
 , zope_interface
@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "zope.proxy";
-  version = "4.3.3";
+  version = "4.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "dac4279aa05055d3897ab5e5ee5a7b39db121f91df65a530f8b1ac7f9bd93119";
+    sha256 = "1329846261cf6c552b05579f3cfad199b2d178510d0b4703eb5f7cdd6ebad01a";
   };
 
   propagatedBuildInputs = [ zope_interface ];
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   # circular deps
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/zopefoundation/zope.proxy;
+  meta = with lib; {
+    homepage = "https://github.com/zopefoundation/zope.proxy";
     description = "Generic Transparent Proxies";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

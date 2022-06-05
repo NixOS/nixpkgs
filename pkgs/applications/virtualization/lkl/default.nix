@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bc, python, bison, flex, fuse, libarchive
+{ lib, stdenv, fetchFromGitHub, bc, python3, bison, flex, fuse, libarchive
 , buildPackages }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "dev" "lib" "out" ];
 
-  nativeBuildInputs = [ bc bison flex python ];
+  nativeBuildInputs = [ bc bison flex python3 ];
 
   buildInputs = [ fuse libarchive ];
 
@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   # Fix a /usr/bin/env reference in here that breaks sandboxed builds
   prePatch = "patchShebangs arch/lkl/scripts";
+  # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
+  postPatch = "sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c";
 
   installPhase = ''
     mkdir -p $out/bin $lib/lib $dev
@@ -51,14 +53,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The Linux kernel as a library";
     longDescription = ''
       LKL (Linux Kernel Library) aims to allow reusing the Linux kernel code as
       extensively as possible with minimal effort and reduced maintenance
       overhead
     '';
-    homepage    = https://github.com/lkl/linux/;
+    homepage    = "https://github.com/lkl/linux/";
     platforms   = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" "armv6l-linux" ]; # Darwin probably works too but I haven't tested it
     license     = licenses.gpl2;
     maintainers = with maintainers; [ copumpkin ];

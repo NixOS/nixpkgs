@@ -1,25 +1,39 @@
-{ stdenv, buildPythonPackage, fetchPypi, psutil, docutils }:
+{ lib
+, buildPythonPackage
+, docutils
+, fetchPypi
+, psutil
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "pynisher";
-  version = "0.5.0";
+  version = "0.6.4";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b1079315ad1009de108c9ad701f6ae5274264e64503fc22c2de366d99953f34";
+    hash = "sha256-ER2RqtRxN1wFCakSQV/5AFPvkJEA+s9BJRE4OvEHwSQ=";
   };
 
-  propagatedBuildInputs = [ psutil docutils ];
+  propagatedBuildInputs = [
+    psutil
+    docutils
+  ];
 
-  # no tests in the Pypi archive
+  # No tests in the Pypi archive
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    description = "The pynisher is a little module intended to limit a functions resources.";
-    homepage = https://github.com/sfalkner/pynisher;
+  pythonImportsCheck = [
+    "pynisher"
+  ];
+
+  meta = with lib; {
+    description = "Module intended to limit a functions resources";
+    homepage = "https://github.com/sfalkner/pynisher";
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };
-
 }
-

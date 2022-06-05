@@ -4,12 +4,12 @@ with lib;
 
 {
   name = "xautolock";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ ma27 ];
+  meta.maintainers = with pkgs.lib.maintainers; [ ];
 
   nodes.machine = {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
 
-    services.xserver.displayManager.auto.user = "bob";
+    test-support.displayManager.auto.user = "bob";
     services.xserver.xautolock.enable = true;
     services.xserver.xautolock.time = 1;
   };

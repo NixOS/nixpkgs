@@ -1,23 +1,30 @@
-{ stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
+{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
   pname = "cloc";
-  version = "1.84";
+  version = "1.92";
 
   src = fetchFromGitHub {
     owner = "AlDanial";
     repo = "cloc";
-    rev = version;
-    sha256 = "14xikdwcr6pcnkk2i43zrsj88z8b3mrv0svbnbvxvarw1id83pnn";
+    rev = "v${version}";
+    sha256 = if stdenv.isDarwin then
+      "1hy1hskiw02b7xaxn2qz0v7znj14l49w1anx20z6rkcps7212l5l"
+    else
+      "sha256-tFARxNGXzWw+EN2qwBOhJEj7zwYfC9tVP0sAHqeGwcM=";
   };
 
   setSourceRoot = ''
     sourceRoot=$(echo */Unix)
   '';
 
-  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
-    perl AlgorithmDiff ParallelForkManager RegexpCommon
-  ]);
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = with perlPackages; [
+    perl
+    AlgorithmDiff
+    ParallelForkManager
+    RegexpCommon
+  ];
 
   makeFlags = [ "prefix=" "DESTDIR=$(out)" "INSTALL=install" ];
 
@@ -25,9 +32,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A program that counts lines of source code";
-    homepage = https://github.com/AlDanial/cloc;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ rycee ];
+    homepage = "https://github.com/AlDanial/cloc";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ rycee ];
   };
 }

@@ -1,17 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''cl-colors'';
-  version = ''20180328-git'';
+  baseName = "cl-colors";
+  version = "20180328-git";
 
   parasites = [ "cl-colors-tests" ];
 
-  description = ''Simple color library for Common Lisp'';
+  description = "Simple color library for Common Lisp";
 
   deps = [ args."alexandria" args."anaphora" args."let-plus" args."lift" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-colors/2018-03-28/cl-colors-20180328-git.tgz'';
-    sha256 = ''0anrb3zsi03dixfsjz92y06w93kpn0d0c5142fhx72f5kafwvc4a'';
+    url = "http://beta.quicklisp.org/archive/cl-colors/2018-03-28/cl-colors-20180328-git.tgz";
+    sha256 = "0anrb3zsi03dixfsjz92y06w93kpn0d0c5142fhx72f5kafwvc4a";
   };
 
   packageName = "cl-colors";

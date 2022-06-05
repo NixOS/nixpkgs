@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , pygments }:
 
 buildPythonPackage rec {
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   # No tests included
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/bitprophet/alabaster;
+  meta = with lib; {
+    homepage = "https://github.com/bitprophet/alabaster";
     description = "A Sphinx theme";
     license = licenses.bsd3;
   };

@@ -1,65 +1,83 @@
-{ stdenv, fetchFromGitHub, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
-, libvorbis, libxml2, makeWrapper, movit, pkgconfig, sox, qtbase, qtsvg
-, fftw, vid-stab, opencv3, ladspa-sdk
+{ lib
+, fetchFromGitHub
+, cmake
+, SDL
+, ffmpeg
+, frei0r
+, libjack2
+, libdv
+, libsamplerate
+, libvorbis
+, libxml2
+, movit
+, pkg-config
+, sox
+, qtbase
+, qtsvg
+, fftw
+, vid-stab
+, opencv3
+, ladspa-sdk
+, gitUpdater
+, ladspaPlugins
+, mkDerivation
+, which
 }:
 
-let inherit (stdenv.lib) getDev; in
-
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "mlt";
-  version = "6.18.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "0iiqym15n8kbnjzj0asmm86gs23yykz0va5b475cc4v2vv5admgx";
+    sha256 = "13c5miph9jjbz69dhy0zvbkk5zbb05dr3vraaci0d5fdbrlhyscf";
   };
 
   buildInputs = [
-    SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2
-    makeWrapper movit pkgconfig qtbase qtsvg sox fftw vid-stab opencv3
+    SDL
+    ffmpeg
+    frei0r
+    libjack2
+    libdv
+    libsamplerate
+    libvorbis
+    libxml2
+    movit
+    pkg-config
+    qtbase
+    qtsvg
+    sox
+    fftw
+    vid-stab
+    opencv3
     ladspa-sdk
+    ladspaPlugins
   ];
+
+  nativeBuildInputs = [ cmake which ];
 
   outputs = [ "out" "dev" ];
 
-  # Mostly taken from:
-  # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
-  configureFlags = [
-    "--avformat-swscale" "--enable-gpl" "--enable-gpl" "--enable-gpl3"
-    "--enable-opengl"
+  qtWrapperArgs = [
+    "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
+    "--prefix LADSPA_PATH : ${ladspaPlugins}/lib/ladspa"
   ];
-
-  # mlt is unable to cope with our multi-prefix Qt build
-  # because it does not use CMake or qmake.
-  NIX_CFLAGS_COMPILE = "-I${getDev qtsvg}/include/QtSvg";
-
-  CXXFLAGS = "-std=c++11";
-
-  enableParallelBuilding = true;
-
-  postInstall = ''
-    wrapProgram $out/bin/melt --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1
-
-    # Remove an unnecessary reference to movit.dev.
-    s=${movit.dev}/include
-    t=$(for ((i = 0; i < ''${#s}; i++)); do echo -n X; done)
-    sed -i $out/lib/mlt/libmltopengl.so -e "s|$s|$t|g"
-
-    # Remove an unnecessary reference to movit.dev.
-    s=${qtbase.dev}/include
-    t=$(for ((i = 0; i < ''${#s}; i++)); do echo -n X; done)
-    sed -i $out/lib/mlt/libmltqt.so -e "s|$s|$t|g"
-  '';
 
   passthru = {
     inherit ffmpeg;
   };
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    attrPath = "libsForQt5.mlt";
+    rev-prefix = "v";
+  };
+
+  meta = with lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
-    homepage = https://www.mltframework.org/;
+    homepage = "https://www.mltframework.org/";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

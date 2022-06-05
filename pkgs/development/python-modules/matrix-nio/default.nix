@@ -1,50 +1,96 @@
-{ lib, buildPythonPackage, fetchFromGitHub, git,
-  attrs, future, peewee, h11, h2, atomicwrites, pycryptodome, sphinx, Logbook, jsonschema,
-  python-olm, unpaddedbase64, aiohttp, cachetools }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, Logbook
+, aiofiles
+, aiohttp
+, aiohttp-socks
+, aioresponses
+, atomicwrites
+, attrs
+, cachetools
+, faker
+, future
+, git
+, h11
+, h2
+, hypothesis
+, jsonschema
+, peewee
+, poetry-core
+, pycryptodome
+, pytest-aiohttp
+, pytest-benchmark
+, pytestCheckHook
+, python-olm
+, unpaddedbase64
+}:
 
 buildPythonPackage rec {
-  pname = "nio";
-  version = "0.6";
+  pname = "matrix-nio";
+  version = "0.19.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    sha256 = "0pq5i6ks3pck2kq9m4p3pw9hbvkzs27xkyv68mjnfc6chp2g2mg9";
+    hash = "sha256-+WZk2m05y/bYj8zSuWTzm+rnCC0L9H9WNQ2RLXv7hDk=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'python-olm>=3.1.0' ""
+    substituteInPlace pyproject.toml \
+      --replace 'aiofiles = "^0.6.0"' 'aiofiles = "*"' \
+      --replace 'h11 = "^0.12.0"' 'h11 = "*"' \
+      --replace 'jsonschema = "^3.2.0"' 'jsonschema = "*"' \
+      --replace 'cachetools = { version = "^4.2.1", optional = true }' 'cachetools = { version = "*", optional = true }'
   '';
 
   nativeBuildInputs = [
     git
+    poetry-core
   ];
 
   propagatedBuildInputs = [
+    Logbook
+    aiofiles
+    aiohttp
+    aiohttp-socks
+    atomicwrites
     attrs
+    cachetools
     future
-    peewee
     h11
     h2
-    atomicwrites
-    pycryptodome
-    sphinx
-    Logbook
     jsonschema
+    peewee
+    pycryptodome
     python-olm
     unpaddedbase64
-    aiohttp
-    cachetools
   ];
 
-  doCheck = false;
+  checkInputs = [
+    aioresponses
+    faker
+    hypothesis
+    pytest-aiohttp
+    pytest-benchmark
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [ "--benchmark-disable" ];
+
+  disabledTests = [
+    # touches network
+    "test_connect_wrapper"
+    # time dependent and flaky
+    "test_transfer_monitor_callbacks"
+  ];
 
   meta = with lib; {
-    description = "A Python Matrix client library, designed according to sans I/O principles";
     homepage = "https://github.com/poljar/matrix-nio";
+    description = "A Python Matrix client library, designed according to sans I/O principles";
     license = licenses.isc;
-    maintainers = [ maintainers.tilpner ];
+    maintainers = with maintainers; [ tilpner emily symphorien ];
   };
 }

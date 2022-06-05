@@ -1,32 +1,76 @@
-{ stdenv, python3Packages }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
-  version = "5.8.1";
+  version = "7.8.1";
+  format = "setuptools";
 
-  propagatedBuildInputs = with python3Packages; [
+  src = fetchFromGitHub {
+    owner = "snakemake";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-bb6bu4IiW3zaQ3PP/wgRuIwHihC5/6ZS4YSNRk3Tu4s=";
+  };
+
+  propagatedBuildInputs = with python3.pkgs; [
     appdirs
-    ConfigArgParse
+    configargparse
+    connection-pool
     datrie
     docutils
+    filelock
     GitPython
+    jinja2
     jsonschema
+    nbformat
+    networkx
     psutil
+    pulp
+    pygraphviz
     pyyaml
     ratelimiter
     requests
+    retry
+    smart-open
+    stopit
+    tabulate
+    toposort
     wrapt
+    yte
   ];
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "1r1qi14klmxmmw7vcivp45jrjka5rcwlcfggj5npnfb378fx3hb0";
-  };
+  # See
+  # https://github.com/snakemake/snakemake/blob/main/.github/workflows/main.yml#L99
+  # for the current basic test suite. Tibanna and Tes require extra
+  # setup.
 
-  doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
+  checkInputs = with python3.pkgs; [
+    pandas
+    pytestCheckHook
+    requests-mock
+  ];
 
-  meta = with stdenv.lib; {
-    homepage = http://snakemake.bitbucket.io;
+  disabledTestPaths = [
+    "tests/test_tes.py"
+    "tests/test_tibanna.py"
+    "tests/test_linting.py"
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_github_issue1396"
+    "test_github_issue1460"
+  ];
+
+  pythonImportsCheck = [
+    "snakemake"
+  ];
+
+  meta = with lib; {
+    homepage = "https://snakemake.github.io";
     license = licenses.mit;
     description = "Python-based execution environment for make-like workflows";
     longDescription = ''
@@ -36,6 +80,6 @@ python3Packages.buildPythonApplication rec {
       workflows are essentially Python scripts extended by declarative code to define
       rules. Rules describe how to create output files from input files.
     '';
-    maintainers = with maintainers; [ helkafen renatoGarcia ];
+    maintainers = with maintainers; [ helkafen renatoGarcia veprbl ];
   };
 }

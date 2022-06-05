@@ -1,6 +1,8 @@
-{ stdenv, lib, edk2, utillinux, nasm, iasl
+{ stdenv, lib, edk2, util-linux, nasm, acpica-tools
 , csmSupport ? false, seabios ? null
 , secureBoot ? false
+, httpSupport ? false
+, tpmSupport ? false
 }:
 
 assert csmSupport -> seabios != null;
@@ -20,17 +22,21 @@ let
 in
 
 edk2.mkDerivation projectDscPath {
-  name = "OVMF-${version}";
+  pname = "OVMF";
+  inherit version;
 
   outputs = [ "out" "fd" ];
 
-  buildInputs = [ utillinux nasm iasl ];
+  nativeBuildInputs = [ util-linux nasm acpica-tools ];
+  strictDeps = true;
 
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 
   buildFlags =
-    lib.optional secureBoot "-DSECURE_BOOT_ENABLE=TRUE"
-    ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ];
+    lib.optionals secureBoot [ "-D SECURE_BOOT_ENABLE=TRUE" ]
+    ++ lib.optionals csmSupport [ "-D CSM_ENABLE" "-D FD_SIZE_2MB" ]
+    ++ lib.optionals httpSupport [ "-D NETWORK_HTTP_ENABLE=TRUE" "-D NETWORK_HTTP_BOOT_ENABLE=TRUE" ]
+    ++ lib.optionals tpmSupport [ "-D TPM_ENABLE" "-D TPM2_ENABLE" "-D TPM2_CONFIG_ENABLE"];
 
   postPatch = lib.optionalString csmSupport ''
     cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
@@ -41,11 +47,14 @@ edk2.mkDerivation projectDscPath {
     mkdir -vp $fd/AAVMF
     mv -v $out/FV/QEMU_{EFI,VARS}.fd $fd/FV
 
-    # Uses Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
-    # FIXME: why is it different from Debian dir layout? https://salsa.debian.org/qemu-team/edk2/blob/debian/debian/rules
-    dd of=$fd/AAVMF/QEMU_EFI-pflash.raw       if=/dev/zero bs=1M    count=64
-    dd of=$fd/AAVMF/QEMU_EFI-pflash.raw       if=$fd/FV/QEMU_EFI.fd conv=notrunc
-    dd of=$fd/AAVMF/vars-template-pflash.raw if=/dev/zero bs=1M    count=64
+    # Use Debian dir layout: https://salsa.debian.org/qemu-team/edk2/blob/debian/debian/rules
+    dd of=$fd/FV/AAVMF_CODE.fd  if=/dev/zero bs=1M    count=64
+    dd of=$fd/FV/AAVMF_CODE.fd  if=$fd/FV/QEMU_EFI.fd conv=notrunc
+    dd of=$fd/FV/AAVMF_VARS.fd  if=/dev/zero bs=1M    count=64
+
+    # Also add symlinks for Fedora dir layout: https://src.fedoraproject.org/cgit/rpms/edk2.git/tree/edk2.spec
+    ln -s $fd/FV/AAVMF_CODE.fd $fd/AAVMF/QEMU_EFI-pflash.raw
+    ln -s $fd/FV/AAVMF_VARS.fd $fd/AAVMF/vars-template-pflash.raw
   '' else ''
     mkdir -vp $fd/FV
     mv -v $out/FV/OVMF{,_CODE,_VARS}.fd $fd/FV
@@ -55,8 +64,8 @@ edk2.mkDerivation projectDscPath {
 
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";
-    homepage = https://github.com/tianocore/tianocore.github.io/wiki/OVMF;
-    license = stdenv.lib.licenses.bsd2;
-    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux"];
+    homepage = "https://github.com/tianocore/tianocore.github.io/wiki/OVMF";
+    license = lib.licenses.bsd2;
+    platforms = ["x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin"];
   };
 }

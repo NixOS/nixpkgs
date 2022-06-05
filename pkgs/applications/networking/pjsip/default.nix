@@ -1,17 +1,23 @@
-{ stdenv, fetchurl, openssl, libsamplerate, alsaLib }:
+{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
-  version = "2.9";
+  version = "2.12.1";
 
-  src = fetchurl {
-    url = "https://www.pjsip.org/release/${version}/pjproject-${version}.tar.bz2";
-    sha256 = "0dm6l8fypkimmzvld35zyykbg957cm5zb4ny3lchgv68amwfz1fi";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = "pjproject";
+    rev = version;
+    sha256 = "sha256-HIDL4xzzTu3irzrIOf8qSNCAvHGOMpi8EDeqZb8mMnc=";
   };
 
-  patches = [ ./fix-aarch64.patch ];
+  patches = [
+    ./fix-aarch64.patch
+  ];
 
-  buildInputs = [ openssl libsamplerate alsaLib ];
+  buildInputs = [ openssl libsamplerate ]
+    ++ lib.optional stdenv.isLinux alsa-lib
+    ++ lib.optional stdenv.isDarwin AppKit;
 
   preConfigure = ''
     export LD=$CC
@@ -27,11 +33,13 @@ stdenv.mkDerivation rec {
   # We need the libgcc_s.so.1 loadable (for pthread_cancel to work)
   dontPatchELF = true;
 
-  meta = {
+  meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
-    homepage = https://pjsip.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [olynch];
-    platforms = with stdenv.lib.platforms; linux;
+    homepage = "https://pjsip.org/";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ olynch ];
+    mainProgram = "pjsua";
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

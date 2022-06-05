@@ -4,35 +4,42 @@
 , msrest
 , msrestazure
 , azure-common
+, azure-mgmt-core
 , azure-mgmt-nspkg
-, isPy3k
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerservice";
-  version = "8.1.0";
+  version = "19.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "21fabdd393ba2ff1162a490cfa0d2b72a715da8462b1645bd986241137fc771f";
+    sha256 = "sha256-t06Cesxvjk31aDxkX2Yj0VzFubWbiAc26LzNTIgVEqs=";
   };
 
   propagatedBuildInputs = [
     msrest
     msrestazure
     azure-common
-  ] ++ lib.optionals (!isPy3k) [
-    azure-mgmt-nspkg
+    azure-mgmt-core
   ];
 
   # has no tests
   doCheck = false;
 
+  pythonImportsCheck = [
+    "azure.mgmt.containerservice"
+  ];
+
   meta = with lib; {
     description = "This is the Microsoft Azure Container Service Management Client Library";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ maxwilson ];
   };
 }

@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "html";
+  pname = "html";
   version = "2017-04-23";
 
   idrisDeps = [ idrisscript hrtime webgl ];
@@ -24,7 +24,7 @@ build-idris-package  {
 
   meta = {
     description = "Idris library to interact with HTML";
-    homepage = https://github.com/pierrebeaucamp/idris-html;
+    homepage = "https://github.com/pierrebeaucamp/idris-html";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.brainrape ];
   };

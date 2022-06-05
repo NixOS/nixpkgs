@@ -1,15 +1,16 @@
-{ lib, ruby, buildRubyGem }:
+{ lib, ruby, bundlerApp, bundlerUpdateScript }:
 
-buildRubyGem rec {
-  inherit ruby;
-  name = "${gemName}-${version}";
-  gemName = "brakeman";
-  version = "4.7.2";
-  source.sha256 = "1j1svldxvbl27kpyp9yngfwa0fdqal926sjk0cha7h520wvnz79k";
+bundlerApp rec {
+  pname = "brakeman";
+  exes = [ "brakeman" ];
+  gemdir = ./.;
+
+  passthru.updateScript = bundlerUpdateScript "brakeman";
 
   meta = with lib; {
     description = "Static analysis security scanner for Ruby on Rails";
     homepage = "https://brakemanscanner.org/";
+    changelog = "https://github.com/presidentbeef/brakeman/blob/v${version}/CHANGES.md";
     license = [ licenses.unfreeRedistributable ];
     platforms = ruby.meta.platforms;
     maintainers = [ maintainers.marsam ];

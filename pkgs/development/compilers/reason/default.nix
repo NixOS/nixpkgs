@@ -1,41 +1,61 @@
-{ stdenv, makeWrapper, fetchFromGitHub, ocaml, findlib, dune
-, menhir, merlin-extend, ppx_tools_versioned, utop, cppo
-, ocaml_lwt
+{ lib, callPackage, stdenv, makeWrapper, fetchurl, ocaml, findlib, dune_2
+, fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
 }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-reason-${version}";
-  version = "3.5.1";
+  pname = "ocaml${ocaml.version}-reason";
+  version = "3.8.0";
 
-  src = fetchFromGitHub {
-    owner = "facebook";
-    repo = "reason";
-    rev = "aea245a43eb44034d2fccac7028b640a437af239";
-    sha256 = "0ff7rjxbsg9zkq6sxlm9bkx7yk8x2cvras7z8436msczgd1wmmyf";
+  src = fetchurl {
+    url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
+    sha256 = "sha256:0yc94m3ddk599crg33yxvkphxpy54kmdsl599c320wvn055p4y4l";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    menhir
+  ];
 
-  propagatedBuildInputs = [ menhir merlin-extend ppx_tools_versioned ];
+  buildInputs = [
+    cppo
+    dune_2
+    findlib
+    fix
+    menhir
+    menhirSdk
+    ocaml
+    ppxlib
+    utop
+  ];
 
-  buildInputs = [ ocaml findlib dune cppo utop menhir ];
+  propagatedBuildInputs = [
+    menhirLib
+    merlin-extend
+    ppx_derivers
+  ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
-  inherit (dune) installPhase;
-
-  postInstall = ''
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix=$out --libdir=$OCAMLFIND_DESTDIR
     wrapProgram $out/bin/rtop \
       --prefix PATH : "${utop}/bin" \
-      --prefix CAML_LD_LIBRARY_PATH : "${ocaml_lwt}/lib/ocaml/${ocaml.version}/site-lib" \
-      --prefix OCAMLPATH : "$out/lib/ocaml/${ocaml.version}/site-lib"
+      --prefix CAML_LD_LIBRARY_PATH : "$CAML_LD_LIBRARY_PATH" \
+      --prefix OCAMLPATH : "$OCAMLPATH:$OCAMLFIND_DESTDIR"
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://reasonml.github.io/;
+  passthru.tests = {
+    hello = callPackage ./tests/hello { };
+  };
+
+  meta = with lib; {
+    homepage = "https://reasonml.github.io/";
+    downloadPage = "https://github.com/reasonml/reason";
     description = "Facebook's friendly syntax to OCaml";
     license = licenses.mit;
     inherit (ocaml.meta) platforms;
-    maintainers = [ maintainers.volth ];
+    maintainers = with maintainers; [ ];
   };
 }

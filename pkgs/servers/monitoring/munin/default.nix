@@ -1,20 +1,23 @@
-{ stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
-, python, ruby, jre, nettools, bc
+{ lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
+, python3, ruby, jre, nettools, bc
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.49";
+  version = "2.0.69";
   pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
     repo = "munin";
     rev = version;
-    sha256 = "13m56wh5cq82pwvv4ngav1zyn2sajxxjigljrz8ycjriw0wvncsf";
+    sha256 = "sha256-p273O5JLFX1dA2caV3lVVL9YNTcGMSrC7DWieUfUmqI=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     makeWrapper
+  ];
+
+  buildInputs = [
     which
     coreutils
     rrdtool
@@ -38,7 +41,7 @@ stdenv.mkDerivation rec {
     perlPackages.ListMoreUtils
     perlPackages.LWP
     perlPackages.DBDPg
-    python
+    python3
     ruby
     jre
     # tests
@@ -54,7 +57,7 @@ stdenv.mkDerivation rec {
   # needs to find a local perl module during build
   PERL_USE_UNSAFE_INC = "1";
 
-  # TODO: tests are failing http://munin-monitoring.org/ticket/1390#comment:1
+  # TODO: tests are failing https://munin-monitoring.org/ticket/1390#comment:1
   # NOTE: important, test command always exits with 0, think of a way to abort the build once tests pass
   doCheck = false;
 
@@ -89,6 +92,10 @@ stdenv.mkDerivation rec {
     sed -i '/ENV{PATH}/d' node/lib/Munin/Node/Service.pm
   '';
 
+  # Disable parallel build, errors:
+  #  Can't locate Munin/Common/Defaults.pm in @INC ...
+  enableParallelBuilding = false;
+
   # DESTDIR shouldn't be needed (and shouldn't have worked), but munin
   # developers have forgotten to use PREFIX everywhere, so we use DESTDIR to
   # ensure that everything is installed in $out.
@@ -97,7 +104,7 @@ stdenv.mkDerivation rec {
     "DESTDIR=$(out)"
     "PERLLIB=$(out)/${perlPackages.perl.libPrefix}"
     "PERL=${perlPackages.perl.outPath}/bin/perl"
-    "PYTHON=${python.outPath}/bin/python"
+    "PYTHON=${python3.interpreter}"
     "RUBY=${ruby.outPath}/bin/ruby"
     "JAVARUN=${jre.outPath}/bin/java"
     "PLUGINUSER=munin"
@@ -126,7 +133,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Networked resource monitoring tool";
     longDescription = ''
       Munin is a monitoring tool that surveys all your computers and remembers
@@ -134,9 +141,9 @@ stdenv.mkDerivation rec {
       interface. Munin can help analyze resource trends and 'what just happened
       to kill our performance?' problems.
     '';
-    homepage = http://munin-monitoring.org/;
+    homepage = "https://munin-monitoring.org/";
     license = licenses.gpl2;
-    maintainers = [ maintainers.domenkozar maintainers.bjornfor ];
+    maintainers = [ maintainers.bjornfor ];
     platforms = platforms.linux;
   };
 }

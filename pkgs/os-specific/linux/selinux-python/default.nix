@@ -1,25 +1,26 @@
-{ stdenv, fetchurl, python3
+{ lib, stdenv, fetchurl, python3
 , libselinux, libsemanage, libsepol, setools }:
 
 # this is python3 only because setools only supports python3
 
-with stdenv.lib;
-with python3.pkgs;
+with lib;
 
 stdenv.mkDerivation rec {
   pname = "selinux-python";
-  version = "2.9";
+  version = "3.3";
 
-  inherit (libsepol) se_release se_url;
+  inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${se_release}/selinux-python-${version}.tar.gz";
-    sha256 = "1pjzsyay5535cxcjag7y7k193ajry0s0xc3dqv5905qd7cwval1n";
+    url = "${se_url}/${version}/selinux-python-${version}.tar.gz";
+    sha256 = "1v244hpb45my303793xa4kcn7qnxjgxn4ja7rdn9k1q361hi1nca";
   };
 
-  nativeBuildInputs = [ wrapPython ];
-  buildInputs = [ libsepol python3 ];
-  propagatedBuildInputs = [ libselinux libsemanage setools ipy ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ python3 python3.pkgs.wrapPython ];
+  buildInputs = [ libsepol ];
+  propagatedBuildInputs = [ libselinux libsemanage setools python3.pkgs.ipy ];
 
   postPatch = ''
     substituteInPlace sepolicy/Makefile --replace "echo --root" "echo --prefix"
@@ -32,8 +33,8 @@ stdenv.mkDerivation rec {
     "LOCALEDIR=$(out)/share/locale"
     "BASHCOMPLETIONDIR=$(out)/share/bash-completion/completions"
     "PYTHON=python"
-    "PYTHONLIBDIR=$(out)/${python.sitePackages}"
-    "LIBSEPOLA=${stdenv.lib.getLib libsepol}/lib/libsepol.a"
+    "PYTHONLIBDIR=$(out)/${python3.sitePackages}"
+    "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
 
 
@@ -44,8 +45,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "SELinux policy core utilities written in Python";
     license = licenses.gpl2;
-    homepage = https://selinuxproject.org;
+    homepage = "https://selinuxproject.org";
     platforms = platforms.linux;
   };
 }
-

@@ -1,24 +1,25 @@
-{ stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , cmake
 , git
 
-, llvmPackages_8
+, llvmPackages_11
 , spirv-llvm-translator
 
 , buildWithPatches ? true
 }:
 
 let
-  llvmPkgs = llvmPackages_8 // {
+  llvmPkgs = llvmPackages_11 // {
     inherit spirv-llvm-translator;
   };
 
-  inherit (stdenv.lib) getVersion;
+  inherit (lib) getVersion;
 
   addPatches = component: pkg:
-    with builtins; with stdenv.lib;
+    with builtins; with lib;
     let path = "${passthru.patchesOut}/${component}";
     in pkg.overrideAttrs (super: {
       postPatch = (if super ? postPatch then super.postPatch + "\n" else "") + ''
@@ -30,8 +31,11 @@ let
     });
 
   passthru = rec {
+    spirv-llvm-translator = llvmPkgs.spirv-llvm-translator;
+    llvm = addPatches "llvm" llvmPkgs.llvm;
+    libclang = addPatches "clang" llvmPkgs.libclang;
 
-    clang-unwrapped = addPatches "clang" llvmPkgs.clang-unwrapped;
+    clang-unwrapped = libclang.out;
 
     clang = llvmPkgs.clang.override {
       cc = clang-unwrapped;
@@ -39,32 +43,39 @@ let
 
     patchesOut = stdenv.mkDerivation rec {
       pname = "opencl-clang-patches";
-      inherit (lib) version src patches;
+      inherit (library) version src patches;
+      # Clang patches assume the root is the llvm root dir
+      # but clang root in nixpkgs is the clang sub-directory
+      postPatch = ''
+        for filename in patches/clang/*.patch; do
+          substituteInPlace "$filename" \
+            --replace "a/clang/" "a/" \
+            --replace "b/clang/" "b/"
+        done
+      '';
+
       installPhase = ''
         [ -d patches ] && cp -r patches/ $out || mkdir $out
-        mkdir -p $out/clang $out/spirv
+        mkdir -p $out/clang $out/llvm
       '';
     };
-
-    spirv-llvm-translator = addPatches "spirv" llvmPkgs.spirv-llvm-translator;
-
   };
 
-  lib = let
+  library = let
     inherit (llvmPkgs) llvm;
-    inherit (if buildWithPatches then passthru else llvmPkgs) clang-unwrapped spirv-llvm-translator;
+    inherit (if buildWithPatches then passthru else llvmPkgs) libclang spirv-llvm-translator;
   in
     stdenv.mkDerivation rec {
       pname = "opencl-clang";
-      version = "unstable-2019-08-16";
+      version = "unstable-2022-03-16";
 
       inherit passthru;
 
       src = fetchFromGitHub {
         owner = "intel";
         repo = "opencl-clang";
-        rev = "94af090661d7c953c516c97a25ed053c744a0737";
-        sha256 = "05cg89m62nqjqm705h7gpdz4jd4hiczg8944dcjsvaybrqv3hcm5";
+        rev = "bbdd1587f577397a105c900be114b56755d1f7dc";
+        sha256 = "sha256-qEZoQ6h4XAvSnJ7/gLXBb1qrzeYa6Jp6nij9VFo8MwQ=";
       };
 
       patches = [
@@ -73,20 +84,27 @@ let
         ./opencl-headers-dir.patch
       ];
 
-      nativeBuildInputs = [ cmake git ];
+      # Uses linker flags that are not supported on Darwin.
+      postPatch = lib.optionalString stdenv.isDarwin ''
+        sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
+        substituteInPlace CMakeLists.txt \
+          --replace '-Wl,--no-undefined' ""
+      '';
 
-      buildInputs = [ clang-unwrapped llvm spirv-llvm-translator ];
+      nativeBuildInputs = [ cmake git llvm.dev ];
+
+      buildInputs = [ libclang llvm spirv-llvm-translator ];
 
       cmakeFlags = [
         "-DPREFERRED_LLVM_VERSION=${getVersion llvm}"
-        "-DOPENCL_HEADERS_DIR=${clang-unwrapped}/lib/clang/${getVersion clang-unwrapped}/include/"
+        "-DOPENCL_HEADERS_DIR=${libclang.lib}/lib/clang/${getVersion libclang}/include/"
 
         "-DLLVMSPIRV_INCLUDED_IN_LLVM=OFF"
         "-DSPIRV_TRANSLATOR_DIR=${spirv-llvm-translator}"
       ];
 
-      meta = with stdenv.lib; {
-        homepage    = https://github.com/intel/opencl-clang/;
+      meta = with lib; {
+        homepage    = "https://github.com/intel/opencl-clang/";
         description = "A clang wrapper library with an OpenCL-oriented API and the ability to compile OpenCL C kernels to SPIR-V modules";
         license     = licenses.ncsa;
         platforms   = platforms.all;
@@ -94,4 +112,4 @@ let
       };
     };
 in
-  lib
+  library

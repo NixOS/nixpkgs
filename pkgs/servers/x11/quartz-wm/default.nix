@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xorg, pixman, pkgconfig, AppKit, Foundation, Xplugin }:
+{ lib, stdenv, fetchurl, xorg, pixman, pkg-config, AppKit, Foundation, Xplugin }:
 
 let version = "1.3.1";
 in stdenv.mkDerivation {
@@ -19,10 +19,10 @@ in stdenv.mkDerivation {
     xorg.libXrandr
     xorg.libXext
     pixman
-    pkgconfig
+    pkg-config
     AppKit Xplugin Foundation
   ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     license = licenses.apsl20;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ matthewbauer ];

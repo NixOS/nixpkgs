@@ -1,20 +1,44 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, enum34, hpack, hyperframe }:
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, hpack
+, hyperframe
+, pytestCheckHook
+, hypothesis
+}:
 
 buildPythonPackage rec {
   pname = "h2";
-  version = "3.1.1";
+  version = "4.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d1svhixk3hr78ph3nx8wi7sagx1xrvm712mmk028i2rhb92p8xq";
+    sha256 = "sha256-qDrKCPvnqst5/seIycC6yTY0NWDtnsGLgqE6EsKNKrs=";
   };
 
-  propagatedBuildInputs = [ enum34 hpack hyperframe ];
+  propagatedBuildInputs = [
+    hpack
+    hyperframe
+  ];
 
-  meta = with stdenv.lib; {
+  checkInputs = [
+    pytestCheckHook
+    hypothesis
+  ];
+
+  pythonImportsCheck = [
+    "h2.connection"
+    "h2.config"
+  ];
+
+  meta = with lib; {
     description = "HTTP/2 State-Machine based protocol implementation";
-    homepage = "http://hyper.rtfd.org/";
+    homepage = "https://github.com/python-hyper/h2";
     license = licenses.mit;
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

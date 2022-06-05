@@ -1,11 +1,15 @@
 { lib, fetchzip }:
 
+# Source Sans Pro got renamed to Source Sans 3 (see
+# https://github.com/adobe-fonts/source-sans/issues/192). This is the
+# last version named "Pro". It is useful for backward compatibility
+# with older documents/templates/etc.
 let
   version = "3.006";
 in fetchzip {
   name = "source-sans-pro-${version}";
 
-  url = "https://github.com/adobe-fonts/source-sans-pro/releases/download/${version}R/source-sans-pro-${version}R.zip";
+  url = "https://github.com/adobe-fonts/source-sans/archive/${version}R.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts/{opentype,truetype,variable}
@@ -14,11 +18,11 @@ in fetchzip {
     unzip -j $downloadedFile "*/VAR/*.otf" -d $out/share/fonts/variable
   '';
 
-  sha256 = "11jd50cqiq2s0z39rclg73iiw2j5yzgs1glfs9psw5wbbisgysmr";
+  sha256 = "sha256-uWr/dFyLF65v0o6+oN/3RQoe4ziPspzGB1rgiBkoTYY=";
 
   meta = with lib; {
-    homepage = https://adobe-fonts.github.io/source-sans-pro/;
-    description = "A set of OpenType fonts designed by Adobe for UIs";
+    homepage = "https://adobe-fonts.github.io/source-sans/";
+    description = "Sans serif font family for user interface environments";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];

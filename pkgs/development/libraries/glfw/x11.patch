@@ -1,0 +1,18 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index a0be580e..ba143851 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -219,6 +219,13 @@ if (GLFW_BUILD_X11)
+     if (NOT X11_Xshape_INCLUDE_PATH)
+         message(FATAL_ERROR "X Shape headers not found; install libxext development package")
+     endif()
++
++    target_link_libraries(glfw PRIVATE ${X11_Xrandr_LIB}
++                                       ${X11_Xinerama_LIB}
++                                       ${X11_Xkb_LIB}
++                                       ${X11_Xcursor_LIB}
++                                       ${X11_Xi_LIB}
++                                       ${X11_Xshape_LIB})
+ endif()
+ 
+ if (UNIX AND NOT APPLE)

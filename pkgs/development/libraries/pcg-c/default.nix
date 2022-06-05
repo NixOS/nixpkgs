@@ -1,6 +1,6 @@
-{ stdenv, fetchzip }:
+{ lib, stdenv, fetchzip }:
 
-with stdenv.lib;
+with lib;
 
 stdenv.mkDerivation rec {
   version = "0.94";
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A family of better random number generators";
-    homepage = http://www.pcg-random.org/;
-    license = stdenv.lib.licenses.asl20;
+    homepage = "https://www.pcg-random.org/";
+    license = lib.licenses.asl20;
     longDescription = ''
       PCG is a family of simple fast space-efficient statistically good
       algorithms for random number generation. Unlike many general-purpose RNGs,
@@ -33,7 +33,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     maintainers = [ maintainers.linus ];
-    repositories.git = git://github.com/imneme/pcg-c.git;
     broken = stdenv.isi686; # https://github.com/imneme/pcg-c/issues/11
   };
 }

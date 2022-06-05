@@ -1,31 +1,33 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "k9s";
-  version = "0.9.3";
-  # rev is the release commit, mainly for version command output
-  rev = "1a9a83b34cdd0c9b4e793ed6b4b5c16ea1a949a0";
+  version = "0.25.18";
 
   src = fetchFromGitHub {
     owner  = "derailed";
     repo   = "k9s";
-    rev    = version;
-    sha256 = "0k27mfccz563r18zlbaxll305vrmrx19ym6znsikvqxlmhy86g36";
+    rev    = "v${version}";
+    sha256 = "sha256-iUhMPtFX7qFULegiyhlT4aG9q3deZ8aRqyEcbZ9jY/s=";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -s -w
-      -X github.com/derailed/k9s/cmd.version=${version}
-      -X github.com/derailed/k9s/cmd.commit=${rev}
-  '';
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/derailed/k9s/cmd.version=${version}"
+    "-X github.com/derailed/k9s/cmd.commit=${src.rev}"
+  ];
 
-  modSha256 = "09rwbl8zd06ax5hidm5l1schwqvsr5ndlqh09w1rq9fqjijy649y";
+  vendorSha256 = "sha256-mMob7M9RQlqaVK0DgHpaAK9d1btzfQetnliUqFTvjJQ=";
 
-  meta = with stdenv.lib; {
-    description = "Kubernetes CLI To Manage Your Clusters In Style.";
-    homepage = https://github.com/derailed/k9s;
+  preCheck = "export HOME=$(mktemp -d)";
+
+  # TODO investigate why some config tests are failing
+  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+
+  meta = with lib; {
+    description = "Kubernetes CLI To Manage Your Clusters In Style";
+    homepage = "https://github.com/derailed/k9s";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Gonzih ];
+    maintainers = with maintainers; [ Gonzih markus1189 bryanasdev000 ];
   };
 }

@@ -1,67 +1,114 @@
-{ stdenv, fetchurl
-, libX11, glib, xorg, fontconfig, freetype
-, zlib, libpng12, libICE, libXrender, cups
-, alsaLib, atk, cairo, dbus, expat
-, gdk-pixbuf, gtk2-x11, lzma, pango, zotero
-, sqlite, libuuid, qt5, dpkg }:
+{ lib, stdenv
+, mkDerivation
+, fetchurl
+, dpkg
+, wrapGAppsHook
+, wrapQtAppsHook
+, alsa-lib
+, atk
+, bzip2
+, cairo
+, cups
+, dbus
+, expat
+, ffmpeg
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gperftools
+, gtk2-x11
+, libpng12
+, libtool
+, libuuid
+, libxml2
+, xz
+, nspr
+, nss
+, openssl
+, pango
+, qt4
+, qtbase
+, sqlite
+, unixODBC
+, xorg
+, zlib
+, steam
+, makeWrapper
+}:
 
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
   pname = "wpsoffice";
-  version = "11.1.0.8865";
+  version = "11.1.0.9615";
 
   src = fetchurl {
-    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/8865/wps-office_11.1.0.8865_amd64.deb";
-    sha256 = "1hfpj1ayhzlrnnp72yjzrpd60xsbj9y46m345lqysiaj1hnwdbd8";
+    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9615/wps-office_11.1.0.9615.XA_amd64.deb";
+    sha256 = "0dpd4njpizclllps3qagipycfws935rhj9k5gmdhjfgsk0ns188w";
   };
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
 
-  nativeBuildInputs = [ qt5.wrapQtAppsHook dpkg ];
+  postUnpack = lib.optionalString (version == "11.1.0.9505") ''
+    # distribution is missing libjsapiservice.so, so we should not let
+    # autoPatchelfHook fail on the following dead libraries
+    rm opt/kingsoft/wps-office/office6/{libjsetapi.so,libjswppapi.so,libjswpsapi.so}
+  '';
 
-  meta = {
-    description = "Office program originally named Kingsoft Office";
-    homepage = http://wps-community.org/;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+  nativeBuildInputs = [ dpkg wrapGAppsHook wrapQtAppsHook makeWrapper ];
+
+  meta = with lib; {
+    description = "Office suite, formerly Kingsoft Office";
+    homepage = "https://www.wps.com/";
+    platforms = [ "x86_64-linux" ];
     hydraPlatforms = [];
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    maintainers = [ stdenv.lib.maintainers.mlatus ];
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ mlatus th0rgal ];
   };
 
-  libPath = with xorg; stdenv.lib.makeLibraryPath [
-    libX11
-    libpng12
-    glib
-    libSM
-    libXext
-    fontconfig
-    zlib
-    freetype
-    libICE
-    cups
-    libXrender
-    libxcb
-
-    alsaLib
+  buildInputs = with xorg; [
+    alsa-lib
     atk
+    bzip2
     cairo
-    dbus.daemon.lib
+    dbus.lib
     expat
-    fontconfig.lib
+    ffmpeg
+    fontconfig
+    freetype
     gdk-pixbuf
+    glib
+    gperftools
     gtk2-x11
-    lzma
-    pango
-    zotero
-    sqlite
-    libuuid
+    libICE
+    libSM
+    libX11
+    libX11
+    libXScrnSaver
     libXcomposite
     libXcursor
     libXdamage
+    libXext
     libXfixes
     libXi
     libXrandr
-    libXScrnSaver
+    libXrender
     libXtst
+    libpng12
+    libtool
+    libuuid
+    libxcb
+    libxml2
+    xz
+    nspr
+    nss
+    openssl
+    pango
+    qt4
+    qtbase
+    sqlite
+    unixODBC
+    zlib
+    cups.lib
   ];
 
   dontPatchELF = true;
@@ -70,29 +117,65 @@ stdenv.mkDerivation rec{
   # references to nix own build directory
   noAuditTmpdir = true;
 
-  installPhase = ''
+  unvendoredLibraries = [
+    # Have to use parts of the vendored qt4
+    #"Qt"
+    "SDL2"
+    "bz2"
+    "avcodec"
+    "avdevice"
+    "avformat"
+    "avutil"
+    "swresample"
+    "swscale"
+    "jpeg"
+    "png"
+    # File saving breaks unless we are using vendored llvmPackages_8.libcxx
+    #"c++"
+    "ssl" "crypto"
+    "nspr"
+    "nss"
+    "odbc"
+    "tcmalloc" # gperftools
+  ];
+
+  installPhase = let
+    steam-run = (steam.override {
+      extraPkgs = p: buildInputs;
+    }).run;
+  in ''
     prefix=$out/opt/kingsoft/wps-office
     mkdir -p $out
     cp -r opt $out
     cp -r usr/* $out
-
-    # Avoid forbidden reference error due use of patchelf
-    rm -r *
-
+    for lib in $unvendoredLibraries; do
+      rm -v "$prefix/office6/lib$lib"*.so{,.*}
+    done
     for i in wps wpp et wpspdf; do
-      patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --force-rpath --set-rpath "$(patchelf --print-rpath $prefix/office6/$i):${stdenv.cc.cc.lib}/lib64:${libPath}" \
-        $prefix/office6/$i
-
       substituteInPlace $out/bin/$i \
         --replace /opt/kingsoft/wps-office $prefix
     done
-
     for i in $out/share/applications/*;do
       substituteInPlace $i \
-        --replace /usr/bin $out/bin \
-        --replace /opt/kingsoft/wps-office $prefix
+        --replace /usr/bin $out/bin
+    done
+
+    for i in wps wpp et wpspdf; do
+      mv $out/bin/$i $out/bin/.$i-orig
+      makeWrapper ${steam-run}/bin/steam-run $out/bin/$i \
+        --add-flags $out/bin/.$i-orig \
+        --argv0 $i
+    done
+  '';
+
+  dontWrapQtApps = true;
+  dontWrapGApps = true;
+  postFixup = ''
+    for f in "$out"/bin/*; do
+      echo "Wrapping $f"
+      wrapProgram "$f" \
+        "''${gappsWrapperArgs[@]}" \
+        "''${qtWrapperArgs[@]}"
     done
   '';
 }

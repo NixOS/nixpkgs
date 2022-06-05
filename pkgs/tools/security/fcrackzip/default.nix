@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
   pname = "fcrackzip";
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   # Do not clash with unizp/zipinfo
   postInstall = "mv $out/bin/zipinfo $out/bin/fcrackzip-zipinfo";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "zip password cracker, similar to fzc, zipcrack and others";
-    homepage = http://oldhome.schmorp.de/marc/fcrackzip.html;
+    homepage = "http://oldhome.schmorp.de/marc/fcrackzip.html";
     license = licenses.gpl2;
     maintainers = with maintainers; [ nico202 ];
     platforms = with platforms; unix;

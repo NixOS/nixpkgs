@@ -1,27 +1,48 @@
-{ stdenv, fetchFromGitHub, cmake, bcunit, mbedtls }:
+{ bcunit
+, cmake
+, bc-decaf
+, fetchFromGitLab
+, mbedtls
+, lib
+, stdenv
+}:
 
 stdenv.mkDerivation rec {
   pname = "bctoolbox";
-  version = "0.6.0";
+  version = "5.1.17";
 
-  nativeBuildInputs = [ cmake bcunit ];
-  buildInputs = [ mbedtls ];
+  nativeBuildInputs = [
+    cmake
+  ];
+  buildInputs = [
+    # Made by BC
+    bcunit
 
-  src = fetchFromGitHub {
-    owner = "BelledonneCommunications";
+    # Vendored by BC
+    bc-decaf
+
+    mbedtls
+  ];
+
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
     repo = pname;
     rev = version;
-    sha256 = "1cxx243wyzkd4xnvpyqf97n0rjhfckpvw1vhwnbwshq3q6fra909";
+    sha256 = "sha256-p1rpFFMCYG/c35lqQT673j/Uicxe+PLhaktQfM6uF8Y=";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+  # Do not build static libraries
+  cmakeFlags = [ "-DENABLE_STATIC=NO" "-DENABLE_STRICT=NO" ];
 
-  meta = {
-    inherit version;
+  strictDeps = true;
+
+  meta = with lib; {
     description = "Utilities library for Linphone";
-    homepage = "https://github.com/BelledonneCommunications/bctoolbox";
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://gitlab.linphone.org/BC/public/bctoolbox";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ raskin jluttine ];
+    platforms = platforms.linux;
   };
 }

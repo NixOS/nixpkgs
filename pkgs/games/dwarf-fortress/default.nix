@@ -1,4 +1,4 @@
-{ pkgs, stdenv, stdenvNoCC, gccStdenv, lib, recurseIntoAttrs }:
+{ stdenv, stdenvNoCC, gccStdenv, lib, recurseIntoAttrs, libsForQt5, newScope, texlive, perlPackages, jdk8, jre8 }:
 
 # To whomever it may concern:
 #
@@ -35,62 +35,67 @@
 with lib;
 
 let
-  callPackage = pkgs.newScope self;
+  callPackage = newScope self;
 
   # The latest Dwarf Fortress version. Maintainers: when a new version comes
   # out, ensure that (unfuck|dfhack|twbt) are all up to date before changing
   # this.
-  latestVersion = "0.44.12";
+  latestVersion = "0.47.05";
 
   # Converts a version to a package name.
   versionToName = version: "dwarf-fortress_${lib.replaceStrings ["."] ["_"] version}";
 
-  dwarf-therapist-original = pkgs.qt5.callPackage ./dwarf-therapist {
-    texlive = pkgs.texlive.combine {
-      inherit (pkgs.texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
+  dwarf-therapist-original = libsForQt5.callPackage ./dwarf-therapist {
+    texlive = texlive.combine {
+      inherit (texlive) scheme-basic float caption wrapfig adjmulticol sidecap preprint enumitem;
     };
   };
 
   # A map of names to each Dwarf Fortress package we know about.
-  df-games = lib.listToAttrs (map (dfVersion: {
-    name = versionToName dfVersion;
-    value =
-      let
-        # I can't believe this syntax works. Spikes of Nix code indeed...
-        dwarf-fortress = callPackage ./game.nix {
-          inherit dfVersion;
-          inherit dwarf-fortress-unfuck;
+  df-games = lib.listToAttrs (map
+    (dfVersion: {
+      name = versionToName dfVersion;
+      value =
+        let
+          # I can't believe this syntax works. Spikes of Nix code indeed...
+          dwarf-fortress = callPackage ./game.nix {
+            inherit dfVersion;
+            inherit dwarf-fortress-unfuck;
+          };
+
+          # unfuck is linux-only right now, we will only use it there.
+          dwarf-fortress-unfuck =
+            if stdenv.isLinux then callPackage ./unfuck.nix { inherit dfVersion; }
+            else null;
+
+          twbt = callPackage ./twbt { inherit dfVersion; };
+
+          dfhack = callPackage ./dfhack {
+            inherit (perlPackages) XMLLibXML XMLLibXSLT;
+            inherit dfVersion twbt;
+            stdenv = gccStdenv;
+          };
+
+          dwarf-therapist = libsForQt5.callPackage ./dwarf-therapist/wrapper.nix {
+            inherit dwarf-fortress;
+            dwarf-therapist = dwarf-therapist-original;
+          };
+        in
+        callPackage ./wrapper {
+          inherit (self) themes;
+
+          dwarf-fortress = dwarf-fortress;
+          twbt = twbt;
+          dfhack = dfhack;
+          dwarf-therapist = dwarf-therapist;
+
+          jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
         };
-
-        # unfuck is linux-only right now, we will only use it there.
-        dwarf-fortress-unfuck = if stdenv.isLinux then callPackage ./unfuck.nix { inherit dfVersion; }
-                                else null;
-
-        twbt = callPackage ./twbt { inherit dfVersion; };
-
-        dfhack = callPackage ./dfhack {
-          inherit (pkgs.perlPackages) XMLLibXML XMLLibXSLT;
-          inherit dfVersion twbt;
-          stdenv = gccStdenv;
-        };
-
-        dwarf-therapist = callPackage ./dwarf-therapist/wrapper.nix {
-          inherit dwarf-fortress;
-          dwarf-therapist = dwarf-therapist-original;
-        };
-      in
-      callPackage ./wrapper {
-        inherit (self) themes;
-
-        dwarf-fortress = dwarf-fortress;
-        twbt = twbt;
-        dfhack = dfhack;
-        dwarf-therapist = dwarf-therapist;
-      };
-  }) (lib.attrNames self.df-hashes));
+    })
+    (lib.attrNames self.df-hashes));
 
   self = rec {
-    df-hashes = builtins.fromJSON (builtins.readFile ./game.json);
+    df-hashes = lib.importJSON ./game.json;
 
     # Aliases for the latest Dwarf Fortress and the selected Therapist install
     dwarf-fortress = getAttr (versionToName latestVersion) df-games;
@@ -101,10 +106,12 @@ let
     dwarf-fortress-full = callPackage ./lazy-pack.nix {
       inherit df-games versionToName latestVersion;
     };
-    
+
     soundSense = callPackage ./soundsense.nix { };
 
-    legends-browser = callPackage ./legends-browser {};
+    legends-browser = callPackage ./legends-browser {
+      jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    };
 
     themes = recurseIntoAttrs (callPackage ./themes {
       stdenv = stdenvNoCC;
@@ -115,4 +122,5 @@ let
     cla-theme = themes.cla;
   };
 
-in self // df-games
+in
+self // df-games

@@ -1,4 +1,4 @@
-{ stdenv, python3, fetchFromGitHub }:
+{ lib, python3, fetchFromGitHub }:
 
 let
   inherit (python3.pkgs) buildPythonApplication pytest mock pexpect;
@@ -6,13 +6,13 @@ let
 in
 buildPythonApplication rec {
   pname = "lesspass-cli";
-  version = "9.0.0";
+  version = "9.1.9";
 
   src = fetchFromGitHub {
     owner = repo;
     repo = repo;
     rev = version;
-    sha256 = "1mdv0c0fn4d72iigy8hz4s7kf7q3pg4gjjadxwxyjwsalapnsapk";
+    sha256 = "126zk248s9r72qk9b8j27yvb8gglw49kazwz0sd69b5kkxvhz2dh";
   };
   sourceRoot = "source/cli";
 
@@ -30,9 +30,9 @@ buildPythonApplication rec {
     pytest tests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Stateless password manager";
-    homepage = https://lesspass.com;
+    homepage = "https://lesspass.com";
     maintainers = with maintainers; [ jasoncarr ];
     license = licenses.gpl3;
   };

@@ -1,6 +1,6 @@
 { elk6Version
 , enableUnfree ? true
-, stdenv
+, lib, stdenv
 , makeWrapper
 , fetchurl
 , nodejs-10_x
@@ -8,7 +8,7 @@
 , which
 }:
 
-with stdenv.lib;
+with lib;
 let
   nodejs = nodejs-10_x;
   inherit (builtins) elemAt;
@@ -18,20 +18,20 @@ let
   shas =
     if enableUnfree
     then {
-      x86_64-linux  = "1xwklhqxk5rmdrgy2simwvijzq29kyq5w2w3hy53xh2i1zlnyvq3";
-      x86_64-darwin = "1qpdn28mrpggd55khzqqld6r89l0hb870rigxcw2i8p2yx3jv106";
+      x86_64-linux  = "1a501lavxhckb3l93sbrbqyshicwkk6p89frry4x8p037xcfpy0x";
+      x86_64-darwin = "0zm45af30shhcg3mdhcma6rms1hyrx62rm5jzwnz9kxv4d30skbw";
     }
     else {
-      x86_64-linux  = "1wpnwal2rq5v2bsp5qil9j6dplif7ql5394sy4ia5ghp2fzifxmf";
-      x86_64-darwin = "12z8i0wbw10c097glbpdy350p0h3957433f51qfx2p0ghgkzkhzv";
+      x86_64-linux  = "0wfdipf21apyily7mvlqgyc7m5jpr96zgrryzwa854z3xb2vw8zg";
+      x86_64-darwin = "1nklfx4yz6hsxlljvnvwjy7pncv9mzngl84710xad5jlyras3sdj";
     };
 
 in stdenv.mkDerivation rec {
-  name = "kibana-${optionalString (!enableUnfree) "oss-"}${version}";
+  pname = "kibana${optionalString (!enableUnfree) "-oss"}";
   version = elk6Version;
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${arch}.tar.gz";
+    url = "https://artifacts.elastic.co/downloads/kibana/${pname}-${version}-${plat}-${arch}.tar.gz";
     sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
@@ -42,20 +42,20 @@ in stdenv.mkDerivation rec {
     ./disable-nodejs-version-check.patch
   ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/libexec/kibana $out/bin
     mv * $out/libexec/kibana/
     rm -r $out/libexec/kibana/node
     makeWrapper $out/libexec/kibana/bin/kibana $out/bin/kibana \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ nodejs coreutils which ]}"
+      --prefix PATH : "${lib.makeBinPath [ nodejs coreutils which ]}"
     sed -i 's@NODE=.*@NODE=${nodejs}/bin/node@' $out/libexec/kibana/bin/kibana
   '';
 
   meta = {
     description = "Visualize logs and time-stamped data";
-    homepage = http://www.elasticsearch.org/overview/kibana;
+    homepage = "http://www.elasticsearch.org/overview/kibana";
     license = if enableUnfree then licenses.elastic else licenses.asl20;
     maintainers = with maintainers; [ offline basvandijk ];
     platforms = with platforms; unix;

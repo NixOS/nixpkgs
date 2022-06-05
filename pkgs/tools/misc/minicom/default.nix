@@ -1,20 +1,21 @@
-{ stdenv, fetchgit, autoreconfHook, makeWrapper, pkgconfig
+{ lib, stdenv, fetchFromGitLab, autoreconfHook, makeWrapper, pkg-config
 , lrzsz, ncurses, libiconv }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "minicom";
-  version = "2.7.1";
+  version = "2.8";
 
-  # The repository isn't tagged properly, so we need to use commit refs
-  src = fetchgit {
-    url    = "https://salsa.debian.org/minicom-team/minicom.git";
-    rev    = "6ea8033b6864aa35d14fb8b87e104e4f783635ce";
-    sha256 = "0j95727xni4r122dalp09963gvc1nqa18l1d4wzz8746kw5s2rrb";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "minicom-team";
+    repo = pname;
+    rev = version;
+    sha256 = "165zhi88swvkhl3v17223r0f27hb3y0qzrgl51jkk0my2m4xscgg";
   };
 
-  buildInputs = [ ncurses ] ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ ncurses ] ++ lib.optional stdenv.isDarwin libiconv;
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
 
   enableParallelBuilding = true;
 
@@ -34,13 +35,13 @@ stdenv.mkDerivation {
   postInstall = ''
     for f in $out/bin/*minicom ; do
       wrapProgram $f \
-        --prefix PATH : ${stdenv.lib.makeBinPath [ lrzsz ]}:$out/bin
+        --prefix PATH : ${lib.makeBinPath [ lrzsz ]}:$out/bin
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modem control and terminal emulation program";
-    homepage = https://salsa.debian.org/minicom-team/minicom;
+    homepage = "https://salsa.debian.org/minicom-team/minicom";
     license = licenses.gpl2;
     longDescription = ''
       Minicom is a menu driven communications program. It emulates ANSI

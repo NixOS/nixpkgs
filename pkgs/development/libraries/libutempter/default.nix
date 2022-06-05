@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "1.1.6";
 
   src = fetchurl {
-    url = "http://archive.ubuntu.com/ubuntu/pool/main/libu/libutempter/libutempter_${version}.orig.tar.bz2";
+    url = "mirror://ubuntu/pool/main/libu/libutempter/libutempter_${version}.orig.tar.bz2";
     sha256 = "15y3xbgznjxnfmix4xg3bwmqdvghdw7slbhazb0ybmyf65gmd65q";
   };
 

@@ -1,23 +1,24 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv, lib, buildPythonPackage, fetchFromGitHub
 , cython
 , libxml2
 , libxslt
 , zlib
+, xcodebuild
 }:
 
 buildPythonPackage rec {
   pname = "lxml";
-  version = "4.4.2";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "0h4axgcghshcvh1nn39l64xxhylglm3b00hh2rbi1ifvly5mx24f";
+    rev = "lxml-${version}";
+    sha256 = "sha256-ppyLn8B0YFQivRCOE8TjKGdDDQHbb7UdTUkevznoVC8=";
   };
 
   # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs
-  nativeBuildInputs = [ libxml2.dev libxslt.dev cython ];
+  nativeBuildInputs = [ libxml2.dev libxslt.dev cython ] ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
   buildInputs = [ libxml2 libxslt zlib ];
 
   # tests are meant to be ran "in-place" in the same directory as src
@@ -25,9 +26,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "lxml" "lxml.etree" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pythonic binding for the libxml2 and libxslt libraries";
-    homepage = https://lxml.de;
+    homepage = "https://lxml.de";
     license = licenses.bsd3;
     maintainers = with maintainers; [ jonringer sjourdois ];
   };

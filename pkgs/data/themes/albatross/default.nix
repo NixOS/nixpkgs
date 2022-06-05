@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "Albatross";
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A desktop Suite for Xfce";
-    homepage = https://github.com/shimmerproject/Albatross;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    homepage = "https://github.com/shimmerproject/Albatross";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

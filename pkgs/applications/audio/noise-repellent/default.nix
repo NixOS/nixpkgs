@@ -1,29 +1,31 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, fftwFloat, lv2 }:
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, cmake, libspecbleach, lv2 }:
 
 stdenv.mkDerivation rec {
   pname = "noise-repellent";
-  version = "unstable-2018-12-29";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "lucianodato";
     repo = pname;
-    rev = "9efdd0b41ec184a792087c87cbf5382f455e33ec";
-    sha256 = "0pn9cxapfvb5l62q86bchyfll1290vi0rhrzarb1jpc4ix7kz53c";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    sha256 = "sha256-hMNVzhJZFGFeu5aygLkfq495O0zpaIk41ddzejvDITE=";
   };
 
-  mesonFlags = ("--prefix=${placeholder "out"}/lib/lv2");
-
-  nativeBuildInputs = [ meson ninja pkgconfig ];
-  buildInputs = [
-    fftwFloat lv2
+  mesonFlags = [
+    "--prefix=${placeholder "out"}/lib/lv2"
+    "--buildtype=release"
   ];
 
-  meta = with stdenv.lib; {
+  nativeBuildInputs = [ meson ninja pkg-config cmake ];
+  buildInputs = [
+    libspecbleach lv2
+  ];
+
+  meta = with lib; {
     description = "An lv2 plugin for broadband noise reduction";
-    homepage    = https://github.com/lucianodato/noise-repellent;
+    homepage    = "https://github.com/lucianodato/noise-repellent";
     license     = licenses.gpl3;
     maintainers = [ maintainers.magnetophon ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "i686-darwin"  ];
+    platforms = platforms.unix;
   };
 }

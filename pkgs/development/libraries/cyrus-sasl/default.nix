@@ -1,38 +1,35 @@
-{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext
+{ lib, stdenv, fetchurl, openssl, openldap, libkrb5, db, gettext
 , pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false
-, buildPackages, pruneLibtoolFiles, fetchpatch }:
+, buildPackages, pruneLibtoolFiles, nixosTests }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "cyrus-sasl";
-  version = "2.1.27";
+  version = "2.1.28";
 
   src = fetchurl {
     urls =
-      [ "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
+      [ "https://github.com/cyrusimap/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz"
+        "http://www.cyrusimap.org/releases/${pname}-${version}.tar.gz"
         "http://www.cyrusimap.org/releases/old/${pname}-${version}.tar.gz"
       ];
-    sha256 = "1m85zcpgfdhm43cavpdkhb1s2zq1b31472hq1w1gs3xh94anp1i6";
+    sha256 = "sha256-fM/Gq9Ae1nwaCSSzU+Um8bdmsh9C1FYu5jWo6/xbs4w=";
   };
+
+  patches = [
+    # Fix cross-compilation
+    ./cyrus-sasl-ac-try-run-fix.patch
+  ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook fixDarwinDylibNames pruneLibtoolFiles ];
+  nativeBuildInputs = [ autoreconfHook pruneLibtoolFiles ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs =
-    [ openssl db gettext kerberos ]
+    [ openssl db gettext libkrb5 ]
     ++ lib.optional enableLdap openldap
     ++ lib.optional stdenv.isLinux pam;
-
-  patches = [
-    ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
-    ./cyrus-sasl-ac-try-run-fix.patch
-    (fetchpatch {
-      name = "CVE-2019-19906.patch";
-      url = "https://sources.debian.org/data/main/c/cyrus-sasl2/2.1.27+dfsg-1+deb10u1/debian/patches/0021-CVE-2019-19906.patch";
-      sha256 = "1n4c5wg7l9j8rlbvx8i605j5d39xmj5wm618k8acxl4fmglcmfls";
-    })
-  ];
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
@@ -44,8 +41,12 @@ stdenv.mkDerivation rec {
 
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
+  passthru.tests = {
+    inherit (nixosTests) parsedmarc postfix;
+  };
+
   meta = {
-    homepage = https://www.cyrusimap.org/sasl;
+    homepage = "https://www.cyrusimap.org/sasl";
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
     license = licenses.bsdOriginal;

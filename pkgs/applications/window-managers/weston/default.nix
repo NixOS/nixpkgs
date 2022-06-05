@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, wayland-scanner, python3
 , wayland, libGL, mesa, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
 , colord, lcms2, pipewire ? null
@@ -7,17 +7,17 @@
 # beware of null defaults, as the parameters *are* supplied by callPackage by default
 }:
 
-with stdenv.lib;
+with lib;
 stdenv.mkDerivation rec {
   pname = "weston";
-  version = "7.0.0";
+  version = "10.0.0";
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0r4sj11hq4brv3ryrgp2wmkkfz1h59vh9ih18igzjibagch6s2m0";
+    sha256 = "1bj7wnadr7ssn6xw7k8ki0wpj6np3kjd2pcysfz3h0mr290rc8sw";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland-scanner python3 ];
   buildInputs = [
     wayland libGL mesa libxkbcommon cairo libxcb libXcursor xlibsWrapper udev libdrm
     mtdev libjpeg pam dbus libinput libevdev pango libunwind freerdp vaapi libva
@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
     "-Dremoting=false" # TODO
     "-Dpipewire=${boolToString (pipewire != null)}"
     "-Dimage-webp=${boolToString (libwebp != null)}"
-    "-Dsimple-dmabuf-drm=" # Disables all drivers
     "-Ddemo-clients=false"
     "-Dsimple-clients="
     "-Dtest-junit-xml=false"
@@ -43,10 +42,22 @@ stdenv.mkDerivation rec {
     "-Dxwayland-path=${xwayland.out}/bin/Xwayland"
   ];
 
+  passthru.providedSessions = [ "weston" ];
+
   meta = {
-    description = "Reference implementation of a Wayland compositor";
-    homepage = https://wayland.freedesktop.org/;
-    license = licenses.mit;
+    description = "A lightweight and functional Wayland compositor";
+    longDescription = ''
+      Weston is the reference implementation of a Wayland compositor, as well
+      as a useful environment in and of itself.
+      Out of the box, Weston provides a very basic desktop, or a full-featured
+      environment for non-desktop uses such as automotive, embedded, in-flight,
+      industrial, kiosks, set-top boxes and TVs. It also provides a library
+      allowing other projects to build their own full-featured environments on
+      top of Weston's core. A small suite of example or demo clients are also
+      provided.
+    '';
+    homepage = "https://gitlab.freedesktop.org/wayland/weston";
+    license = licenses.mit; # Expat version
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };

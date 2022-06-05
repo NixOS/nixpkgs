@@ -1,32 +1,43 @@
-{ stdenv, mkDerivationWith, fetchFromGitHub, fetchpatch
-, doxygen, python3Packages, libopenshot
-, wrapGAppsHook, gtk3 }:
-
-let
-  fixPermissions = fetchpatch rec {
-    url = https://github.com/OpenShot/openshot-qt/pull/2973.patch;
-    sha256 = "037rh0p3k4sdzprlpyb73byjq3qhqk5zd0d4iin6bq602r8bbp0n";
-  };
-in
+{ lib
+, stdenv
+, mkDerivationWith
+, fetchFromGitHub
+, doxygen
+, gtk3
+, libopenshot
+, python3Packages
+, qtsvg
+, wrapGAppsHook
+}:
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "openshot-qt";
-  version = "2.4.4";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
     rev = "v${version}";
-    sha256 = "0mg63v36h7l8kv2sgf6x8c1n3ygddkqqwlciz7ccxpbm4x1idqba";
+    sha256 = "0pa8iwl217503bjlqg2zlrw5lxyq5hvxrf5apxrh3843hj1w1myv";
   };
 
-  patches = [ fixPermissions ];
+  nativeBuildInputs = [
+    doxygen
+    wrapGAppsHook
+  ];
 
-  nativeBuildInputs = [ doxygen wrapGAppsHook ];
+  buildInputs = [
+    gtk3
+  ];
 
-  buildInputs = [ gtk3 ];
-
-  propagatedBuildInputs = with python3Packages; [ libopenshot pyqt5_with_qtwebkit requests sip httplib2 pyzmq ];
+  propagatedBuildInputs = with python3Packages; [
+    httplib2
+    libopenshot
+    pyqt5_with_qtwebkit
+    pyzmq
+    requests
+    sip_4
+  ];
 
   dontWrapGApps = true;
   dontWrapQtApps = true;
@@ -38,14 +49,20 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   postFixup = ''
     wrapProgram $out/bin/openshot-qt \
+  ''
+  # Fix toolbar icons on Darwin
+  + lib.optionalString stdenv.isDarwin ''
+      --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/lib/qt-5.12.7/plugins" \
+  ''
+  + ''
       "''${gappsWrapperArgs[@]}" \
       "''${qtWrapperArgs[@]}"
   '';
 
   doCheck = false;
 
-  meta = with stdenv.lib; {
-    homepage = http://openshot.org/;
+  meta = with lib; {
+    homepage = "http://openshot.org/";
     description = "Free, open-source video editor";
     longDescription = ''
       OpenShot Video Editor is a free, open-source video editor for Linux.
@@ -56,6 +73,11 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     '';
     license = with licenses; gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
+  };
+
+  passthru = {
+    inherit libopenshot;
+    inherit (libopenshot) libopenshot-audio;
   };
 }

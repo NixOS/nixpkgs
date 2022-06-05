@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl
+{ lib, stdenv, fetchurl, perl
 , bdftopcf, bdf2psf, mkfontdir
 , fonttosfnt
 , targetsDat  ? null
@@ -18,10 +18,6 @@ stdenv.mkDerivation rec {
   patches = [ ./determinism.patch ];
 
   nativeBuildInputs = [ perl bdftopcf bdf2psf fonttosfnt mkfontdir ];
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash     = "0hzhaakbbcnz5ksi5p8mavw9578rsqlqadkrirrkhfnyqqlrii4j";
 
   # configure sizes, encodings and variants
   preConfigure =
@@ -45,7 +41,7 @@ stdenv.mkDerivation rec {
       else ''cp "${variantsDat}" VARIANTS.dat'');
 
   postBuild = ''
-    # convert bdf to psf and otb fonts
+    # convert bdf fonts to psf
     build=$(pwd)
     mkdir {psf,otb}
     cd ${bdf2psf}/share/bdf2psf
@@ -55,22 +51,38 @@ stdenv.mkDerivation rec {
         --fb "$i" standard.equivalents \
         ascii.set+useful.set+linux.set 512 \
         "$build/psf/$name.psf"
+    done
+    cd -
+
+    # convert unicode bdf fonts to otb
+    for i in $build/genbdf/*-uni.bdf; do
+      name="$(basename $i .bdf)"
       fonttosfnt -v -o "$build/otb/$name.otb" "$i"
     done
-    cd $build
   '';
 
   postInstall = ''
     # install psf fonts
     fontDir="$out/share/consolefonts"
-    mkdir -p "$fontDir"
-    mv -t "$fontDir" psf/*.psf
-    mv -t "$out/share/fonts/X11/misc" otb/*.otb
+    install -m 644 -D psf/*.psf -t "$fontDir"
+
+    # install otb fonts
+    fontDir="$out/share/fonts/X11/misc"
+    install -m 644 -D otb/*.otb -t "$fontDir"
+    mkfontdir "$fontDir"
   '';
 
-  meta = with stdenv.lib; {
+  # Nix with multiple outputs adds several flags
+  # that the ./configure script doesn't understand.
+  configurePhase = ''
+    runHook preConfigure
+    ./configure --prefix="$out"
+    runHook postConfigure
+  '';
+
+  meta = with lib; {
     description = "Monospace bitmap screen fonts for X11";
-    homepage = https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/;
+    homepage = "https://people.mpi-inf.mpg.de/~uwe/misc/uw-ttyp0/";
     license = with licenses; [ free mit ];
     maintainers = with maintainers; [ rnhmjoj ];
   };

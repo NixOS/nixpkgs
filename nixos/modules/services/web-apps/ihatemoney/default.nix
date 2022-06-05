@@ -33,18 +33,21 @@ let
           then "sqlite:////var/lib/ihatemoney/ihatemoney.sqlite"
           else "postgresql:///${db}"}'
         SQLALCHEMY_TRACK_MODIFICATIONS = False
-        MAIL_DEFAULT_SENDER = ("${cfg.defaultSender.name}", "${cfg.defaultSender.email}")
+        MAIL_DEFAULT_SENDER = (r"${cfg.defaultSender.name}", r"${cfg.defaultSender.email}")
         ACTIVATE_DEMO_PROJECT = ${toBool cfg.enableDemoProject}
-        ADMIN_PASSWORD = "${toString cfg.adminHashedPassword /*toString null == ""*/}"
+        ADMIN_PASSWORD = r"${toString cfg.adminHashedPassword /*toString null == ""*/}"
         ALLOW_PUBLIC_PROJECT_CREATION = ${toBool cfg.enablePublicProjectCreation}
         ACTIVATE_ADMIN_DASHBOARD = ${toBool cfg.enableAdminDashboard}
+        SESSION_COOKIE_SECURE = ${toBool cfg.secureCookie}
+        ENABLE_CAPTCHA = ${toBool cfg.enableCaptcha}
+        LEGAL_LINK = r"${toString cfg.legalLink}"
 
         ${cfg.extraConfig}
   '';
 in
   {
     options.services.ihatemoney = {
-      enable = mkEnableOption "ihatemoney webapp. Note that this will set uwsgi to emperor mode running as root";
+      enable = mkEnableOption "ihatemoney webapp. Note that this will set uwsgi to emperor mode";
       backend = mkOption {
         type = types.enum [ "sqlite" "postgresql" ];
         default = "sqlite";
@@ -76,12 +79,24 @@ in
         email = mkOption {
           type = types.str;
           default = "ihatemoney@${config.networking.hostName}";
+          defaultText = literalExpression ''"ihatemoney@''${config.networking.hostName}"'';
           description = "The email of the sender of ihatemoney emails";
         };
+      };
+      secureCookie = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Use secure cookies. Disable this when ihatemoney is served via http instead of https";
       };
       enableDemoProject = mkEnableOption "access to the demo project in ihatemoney";
       enablePublicProjectCreation = mkEnableOption "permission to create projects in ihatemoney by anyone";
       enableAdminDashboard = mkEnableOption "ihatemoney admin dashboard";
+      enableCaptcha = mkEnableOption "a simplistic captcha for some forms";
+      legalLink = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "The URL to a page explaining legal statements about your service, eg. GDPR-related information.";
+      };
       extraConfig = mkOption {
         type = types.str;
         default = "";
@@ -116,16 +131,13 @@ in
       services.uwsgi = {
         enable = true;
         plugins = [ "python3" ];
-        # the vassal needs to be able to setuid
-        user = "root";
-        group = "root";
         instance = {
           type = "emperor";
           vassals.ihatemoney = {
             type = "normal";
             strict = true;
-            uid = user;
-            gid = group;
+            immediate-uid = user;
+            immediate-gid = group;
             # apparently flask uses threads: https://github.com/spiral-project/ihatemoney/commit/c7815e48781b6d3a457eaff1808d179402558f8c
             enable-threads = true;
             module = "wsgi:application";

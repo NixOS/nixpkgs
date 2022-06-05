@@ -1,7 +1,8 @@
-{ stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "M33-Linux-2016-06-23";
+  pname = "M33-Linux";
+  version = "unstable-2016-06-23";
 
   src = fetchFromGitHub {
     owner = "donovan6000";
@@ -15,8 +16,8 @@ stdenv.mkDerivation {
     install -Dm755 90-micro-3d-local.rules $out/lib/udev/rules.d/90-micro-3d-local.rules
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/donovan6000/M3D-Linux;
+  meta = with lib; {
+    homepage = "https://github.com/donovan6000/M3D-Linux";
     description = "A Linux program that can communicate with the Micro 3D printer";
     license = licenses.gpl2;
     platforms = platforms.linux;

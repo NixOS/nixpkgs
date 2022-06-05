@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, libuuid
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libuuid
 , sane-backends, podofo, libjpeg, djvulibre, libxmlxx3, libzip, tesseract
 , intltool, poppler, json-glib
 , ninja
@@ -16,19 +16,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gImageReader";
-  version = "3.3.1";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner= "manisandro";
     repo = "gImageReader";
     rev = "v${version}";
-    sha256 = "17hz2dgxx2j7hsk0lx3riidqvlsg0ylnicjd2gphsi3yp7w20zdj";
+    sha256 = "sha256-lJ4wPLxVN3NERnru8vLreiWMEUip6xeCXAfoT8DcfiQ=";
   };
 
   nativeBuildInputs = [
     cmake ninja
     intltool
-    pkgconfig
+    pkg-config
     pythonEnv
 
     # Gtk specific
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
   # interface type can be where <type> is either gtk, qt5, qt4
   cmakeFlags = [ "-DINTERFACE_TYPE=${variant}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple Gtk/Qt front-end to tesseract-ocr";
-    homepage = https://github.com/manisandro/gImageReader;
+    homepage = "https://github.com/manisandro/gImageReader";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [teto];
     platforms = platforms.linux;

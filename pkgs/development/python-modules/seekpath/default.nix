@@ -1,17 +1,21 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, future, spglib, glibcLocales, pytest }:
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, numpy, future, spglib, glibcLocales, pytest, scipy }:
 
 buildPythonPackage rec {
   pname = "seekpath";
-  version = "1.9.3";
+  version = "2.0.1";
+  disabled = pythonOlder "3.5";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "abc806479f11e7f71c4475a292d849baf15dfa1cbc89ecc602d78415de322c83";
+  src = fetchFromGitHub {
+    owner = "giovannipizzi";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0x592650ynacmx5n5bilj5lja4iw0gf1nfypy82cmy5z363qhqxn";
   };
 
   LC_ALL = "en_US.utf-8";
 
-  propagatedBuildInputs = [ numpy spglib future ];
+  # scipy isn't listed in install_requires, but used in package
+  propagatedBuildInputs = [ numpy spglib future scipy ];
 
   nativeBuildInputs = [ glibcLocales ];
 
@@ -22,7 +26,7 @@ buildPythonPackage rec {
     pytest . -k 'not oI2Y'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A module to obtain and visualize band paths in the Brillouin zone of crystal structures.";
     homepage = "https://github.com/giovannipizzi/seekpath";
     license = licenses.mit;

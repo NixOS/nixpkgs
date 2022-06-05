@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, ronn, libpng, uthash
-, xorg }:
+{ lib, stdenv, coreutils, fetchFromGitHub, autoconf, automake, pkg-config, procps, ronn,
+libpng, uthash , which, xnee, xorg, python3Packages }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.0";
+  version = "1.6.1";
 
   pname = "alttab";
 
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
     owner = "sagb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "028ifp54yl3xq5mj2ww9baga8p56nmrx4ypvj8k35akcaxdpyga9";
+    sha256 = "sha256-g56207IGNDnBIqZmbpcgOLcfAGKwBE0DYu2Dq0bLS8o=";
   };
 
-  nativeBuildInputs = [ 
+  nativeBuildInputs = [
     autoconf
     automake
-    pkgconfig
+    pkg-config
     ronn
   ];
 
@@ -33,12 +33,24 @@ stdenv.mkDerivation rec {
     xorg.libXrender
   ];
 
-  enableParallelBuild = true;
+  enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/sagb/alttab;
+  doCheck = true;
+
+  checkInputs = [
+    coreutils
+    procps
+    python3Packages.xvfbwrapper
+    which
+    xnee
+    xorg.xeyes
+    xorg.xprop
+  ];
+
+  meta = with lib; {
+    homepage = "https://github.com/sagb/alttab";
     description = "X11 window switcher designed for minimalistic window managers or standalone X11 session";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.sgraf ];
   };

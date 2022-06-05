@@ -1,15 +1,29 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitHub, bc, bison, dtc, flex
-, openssl, swig, meson-tools, armTrustedFirmwareAllwinner
-, armTrustedFirmwareRK3328, armTrustedFirmwareRK3399
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, fetchFromGitHub
+, bc
+, bison
+, dtc
+, flex
+, openssl
+, swig
+, meson-tools
+, which
+, armTrustedFirmwareAllwinner
+, armTrustedFirmwareAllwinnerH616
+, armTrustedFirmwareRK3328
+, armTrustedFirmwareRK3399
 , armTrustedFirmwareS905
 , buildPackages
 }:
 
 let
-  defaultVersion = "2019.10";
+  defaultVersion = "2022.01";
   defaultSrc = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
-    sha256 = "053hcrwwlacqh2niisn0zas95zkbffw5aw5sdhixs8lmfdq60vcd";
+    hash = "sha256-gbRUMifbIowD+KG/XdvIE7C7j2VVzkYGTvchpvxoBBM=";
   };
   buildUBoot = {
     version ? null
@@ -29,17 +43,12 @@ let
     src = if src == null then defaultSrc else src;
 
     patches = [
-      # Submitted upstream: https://patchwork.ozlabs.org/patch/1203693/
-      (fetchpatch {
-        url = https://github.com/dezgeg/u-boot/commit/extlinux-path-length-2018-03.patch;
-        sha256 = "07jafdnxvqv8lz256qy29agjc2k1zj5ad4k28r1w5qkhwj4ixmf8";
-      })
-      # Submitted upstream: https://patchwork.ozlabs.org/patch/1203678/
-      (fetchpatch {
-        name = "rockchip-allow-loading-larger-kernels.patch";
-        url = "https://marc.info/?l=u-boot&m=157537843004298&q=raw";
-        sha256 = "0l3l88cc9xkxkraql82pfgpx6nqn4dj7cvfaagh5pzfwkxyw0n3p";
-      })
+      ./0001-configs-rpi-allow-for-bigger-kernels.patch
+
+      # Make U-Boot forward some important settings from the firmware-provided FDT. Fixes booting on BCM2711C0 boards.
+      # See also: https://github.com/NixOS/nixpkgs/issues/135828
+      # Source: https://patchwork.ozlabs.org/project/uboot/patch/20210822143656.289891-1-sjoerd@collabora.com/
+      ./0001-rpi-Copy-properties-from-firmware-dtb-to-the-loaded-.patch
     ] ++ extraPatches;
 
     postPatch = ''
@@ -53,12 +62,18 @@ let
       dtc
       flex
       openssl
-      (buildPackages.python2.withPackages (p: [ p.libfdt ]))
+      (buildPackages.python3.withPackages (p: [
+        p.libfdt
+        p.setuptools # for pkg_resources
+      ]))
       swig
+      which # for scripts/dtc-version.sh
     ];
     depsBuildBuild = [ buildPackages.stdenv.cc ];
 
     hardeningDisable = [ "all" ];
+
+    enableParallelBuilding = true;
 
     makeFlags = [
       "DTC=dtc"
@@ -83,22 +98,23 @@ let
       mkdir -p ${installDir}
       cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
 
+      mkdir -p "$out/nix-support"
+      ${lib.concatMapStrings (file: ''
+        echo "file binary-dist ${installDir}/${builtins.baseNameOf file}" >> "$out/nix-support/hydra-build-products"
+      '') filesToInstall}
+
       runHook postInstall
     '';
-
-    # make[2]: *** No rule to make target 'lib/efi_loader/helloworld.efi', needed by '__build'.  Stop.
-    enableParallelBuilding = false;
 
     dontStrip = true;
 
     meta = with lib; {
-      homepage = http://www.denx.de/wiki/U-Boot/;
+      homepage = "http://www.denx.de/wiki/U-Boot/";
       description = "Boot loader for embedded systems";
       license = licenses.gpl2;
-      maintainers = with maintainers; [ dezgeg samueldr lopsided98 ];
+      maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
   } // removeAttrs args [ "extraMeta" ]);
-
 in {
   inherit buildUBoot;
 
@@ -124,6 +140,18 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootA20OlinuxinoLime2EMMC = buildUBoot {
+    defconfig = "A20-OLinuXino-Lime2-eMMC_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootAmx335xEVM = buildUBoot {
+    defconfig = "am335x_evm_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["MLO" "u-boot.img"];
+  };
+
   ubootBananaPi = buildUBoot {
     defconfig = "Bananapi_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -143,17 +171,17 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
-  ubootBeagleboneBlack = buildUBoot {
-    defconfig = "am335x_boneblack_defconfig";
-    extraMeta.platforms = ["armv7l-linux"];
-    filesToInstall = ["MLO" "u-boot.img"];
-  };
-
   # http://git.denx.de/?p=u-boot.git;a=blob;f=board/solidrun/clearfog/README;hb=refs/heads/master
   ubootClearfog = buildUBoot {
     defconfig = "clearfog_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot-spl.kwb"];
+  };
+
+  ubootCubieboard2 = buildUBoot {
+    defconfig = "Cubieboard2_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
   ubootGuruplug = buildUBoot {
@@ -173,10 +201,32 @@ in {
     '';
   };
 
+  ubootNanoPCT4 = buildUBoot rec {
+    rkbin = fetchFromGitHub {
+      owner = "armbian";
+      repo = "rkbin";
+      rev = "3bd0321cae5ef881a6005fb470009ad5a5d1462d";
+      sha256 = "09r4dzxsbs3pff4sh70qnyp30s3rc7pkc46v1m3152s7jqjasp31";
+    };
+
+    defconfig = "nanopc-t4-rk3399_defconfig";
+
+    extraMeta = {
+      platforms = ["aarch64-linux"];
+      license = lib.licenses.unfreeRedistributableFirmware;
+    };
+    BL31="${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = ["u-boot.itb" "idbloader.img"];
+    postBuild = ''
+      ./tools/mkimage -n rk3399 -T rksd -d ${rkbin}/rk33/rk3399_ddr_800MHz_v1.24.bin idbloader.img
+      cat ${rkbin}/rk33/rk3399_miniloader_v1.19.bin >> idbloader.img
+    '';
+  };
+
   ubootNovena = buildUBoot {
     defconfig = "novena_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
-    filesToInstall = ["u-boot.bin" "SPL"];
+    filesToInstall = ["u-boot-dtb.img" "SPL"];
   };
 
   # Flashing instructions:
@@ -231,6 +281,13 @@ in {
     filesToInstall = ["u-boot-dtb.bin"];
   };
 
+  ubootOlimexA64Olinuxino = buildUBoot {
+    defconfig = "a64-olinuxino-emmc_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootOrangePiPc = buildUBoot {
     defconfig = "orangepi_pc_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -241,6 +298,19 @@ in {
     defconfig = "orangepi_zero_plus2_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootOrangePiZero = buildUBoot {
+    defconfig = "orangepi_zero_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
+  ubootOrangePiZero2 = buildUBoot {
+    defconfig = "orangepi_zero2_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinnerH616}/bl31.bin";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
@@ -271,6 +341,13 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootPinebookPro = buildUBoot {
+    defconfig = "pinebook-pro-rk3399_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img"];
+  };
+
   ubootQemuAarch64 = buildUBoot {
     defconfig = "qemu_arm64_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
@@ -281,6 +358,31 @@ in {
     defconfig = "qemu_arm_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootQemuRiscv64Smode = buildUBoot {
+    defconfig = "qemu-riscv64_smode_defconfig";
+    extraPatches = [
+      # https://patchwork.ozlabs.org/project/uboot/patch/20220128134713.2322800-1-alexandre.ghiti@canonical.com/
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/283391/mbox/";
+        sha256 = "sha256-V0jDpx6O4bFzuaOQejdrRnLiWb5LBTx47T0TZqNtMXk=";
+      })
+    ];
+    extraMeta.platforms = ["riscv64-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootQemuX86 = buildUBoot {
+    defconfig = "qemu-x86_defconfig";
+    extraConfig = ''
+      CONFIG_USB_UHCI_HCD=y
+      CONFIG_USB_EHCI_HCD=y
+      CONFIG_USB_EHCI_GENERIC=y
+      CONFIG_USB_XHCI_HCD=y
+    '';
+    extraMeta.platforms = [ "i686-linux" "x86_64-linux" ];
+    filesToInstall = [ "u-boot.rom" ];
   };
 
   ubootRaspberryPi = buildUBoot {
@@ -303,6 +405,18 @@ in {
 
   ubootRaspberryPi3_64bit = buildUBoot {
     defconfig = "rpi_3_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi4_32bit = buildUBoot {
+    defconfig = "rpi_4_32b_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootRaspberryPi4_64bit = buildUBoot {
+    defconfig = "rpi_4_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["u-boot.bin"];
   };
@@ -344,10 +458,24 @@ in {
 
   ubootRockPro64 = buildUBoot {
     extraMakeFlags = [ "all" "u-boot.itb" ];
+    extraPatches = [
+      # https://patchwork.ozlabs.org/project/uboot/list/?series=237654&archive=both&state=*
+      (fetchpatch {
+        url = "https://patchwork.ozlabs.org/series/237654/mbox/";
+        sha256 = "0aiw9zk8w4msd3v8nndhkspjify0yq6a5f0zdy6mhzs0ilq896c3";
+      })
+    ];
     defconfig = "rockpro64-rk3399_defconfig";
     extraMeta.platforms = ["aarch64-linux"];
     BL31="${armTrustedFirmwareRK3399}/bl31.elf";
     filesToInstall = [ "u-boot.itb" "idbloader.img"];
+  };
+
+  ubootROCPCRK3399 = buildUBoot {
+    defconfig = "roc-pc-rk3399_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = [ "spl/u-boot-spl.bin" "u-boot.itb" "idbloader.img"];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
   };
 
   ubootSheevaplug = buildUBoot {
@@ -379,5 +507,12 @@ in {
     defconfig = "wandboard_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
     filesToInstall = ["u-boot.img" "SPL"];
+  };
+
+  ubootRockPi4 = buildUBoot {
+    defconfig = "rock-pi-4-rk3399_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
+    filesToInstall = [ "u-boot.itb" "idbloader.img"];
   };
 }

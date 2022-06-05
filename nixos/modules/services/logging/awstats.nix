@@ -24,7 +24,7 @@ let
 
       logFile = mkOption {
         type = types.str;
-        example = "/var/spool/nginx/logs/access.log";
+        example = "/var/log/nginx/access.log";
         description = ''
           The log file to be scanned.
 
@@ -51,7 +51,7 @@ let
       hostAliases = mkOption {
         type = types.listOf types.str;
         default = [];
-        example = "[ \"www.example.org\" ]";
+        example = [ "www.example.org" ];
         description = ''
           List of aliases the site has.
         '';
@@ -60,12 +60,12 @@ let
       extraConfig = mkOption {
         type = types.attrsOf types.str;
         default = {};
-        example = literalExample ''
+        example = literalExpression ''
           {
             "ValidHTTPCodes" = "404";
           }
         '';
-        description = "Extra configuration to be appendend to awstats.\${name}.conf.";
+        description = "Extra configuration to be appended to awstats.\${name}.conf.";
       };
 
       webService = {
@@ -106,11 +106,11 @@ in
     configs = mkOption {
       type = types.attrsOf (types.submodule configOpts);
       default = {};
-      example = literalExample ''
+      example = literalExpression ''
         {
           "mysite" = {
             domain = "example.com";
-            logFile = "/var/spool/nginx/logs/access.log";
+            logFile = "/var/log/nginx/access.log";
           };
         }
       '';

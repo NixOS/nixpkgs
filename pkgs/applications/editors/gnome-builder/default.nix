@@ -1,30 +1,32 @@
 { stdenv
+, lib
 , ctags
+, cmark
 , appstream-glib
 , desktop-file-utils
-, docbook_xsl
-, docbook_xml_dtd_43
 , fetchurl
-, fetchpatch
 , flatpak
-, gnome3
+, gnome
 , libgit2-glib
+, gi-docgen
 , gobject-introspection
+, glade
 , gspell
-, gtk-doc
 , gtk3
 , gtksourceview4
 , json-glib
 , jsonrpc-glib
 , libdazzle
+, libhandy
 , libpeas
+, libportal-gtk3
 , libxml2
 , meson
 , ninja
 , ostree
 , pcre
 , pcre2
-, pkgconfig
+, pkg-config
 , python3
 , sysprof
 , template-glib
@@ -33,41 +35,28 @@
 , webkitgtk
 , wrapGAppsHook
 , dbus
-, xvfb_run
-, glib
+, xvfb-run
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-builder";
-  version = "3.34.1";
+  version = "42.1";
+
+  outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19018pq94cxf6fywd7fsmy98x56by5zfmh140pl530gaaw84cvhb";
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "XU1RtwKGW0gBcgHwxgfiSifXIDGo9ciNT86HW1VFZwo=";
   };
-
-  patches = [
-    # Fix build with Meson 0.52
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/c8b862b491cfbbb4f79b24d7cd90e4fb1f37cb9f.patch";
-      sha256 = "0n8kg7nnjqmbnyag1ps6dvrlqrxc94djjncqx10d6y7ijwdxf4w8";
-    })
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/da26dfbf78468f5ed724e022b300a07862a95833.patch";
-      sha256 = "0psa65bzjpjj7vc5rknv2w2dz3p50jjv10s6j2fd6lpw8j2800k4";
-    })
-  ];
 
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
-    docbook_xsl
-    docbook_xml_dtd_43
+    gi-docgen
     gobject-introspection
-    gtk-doc
-    (meson.override ({ inherit stdenv; }))
+    meson
     ninja
-    pkgconfig
+    pkg-config
     python3
     python3.pkgs.wrapPython
     wrapGAppsHook
@@ -75,11 +64,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     ctags
+    cmark
     flatpak
-    gnome3.devhelp
-    gnome3.glade
+    gnome.devhelp
+    glade
     libgit2-glib
     libpeas
+    libportal-gtk3
     vte
     gspell
     gtk3
@@ -87,6 +78,7 @@ stdenv.mkDerivation rec {
     json-glib
     jsonrpc-glib
     libdazzle
+    libhandy
     libxml2
     ostree
     pcre
@@ -100,19 +92,10 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
   ];
 
-  outputs = [ "out" "devdoc" ];
-
-  prePatch = ''
-    patchShebangs build-aux/meson/post_install.py
-  '';
-
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   mesonFlags = [
-    "-Dpython_libprefix=${python3.libPrefix}"
     "-Ddocs=true"
 
     # Making the build system correctly detect clang header and library paths
@@ -123,9 +106,11 @@ stdenv.mkDerivation rec {
     "-Dnetwork_tests=false"
   ];
 
-  # Some tests fail due to being unable to find the Vte typelib, and I don't
-  # understand why. Somebody should look into fixing this.
   doCheck = true;
+
+  postPatch = ''
+    patchShebangs build-aux/meson/post_install.py
+  '';
 
   checkPhase = ''
     export NO_AT_BRIDGE=1
@@ -148,9 +133,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.updateScript = gnome3.updateScript { packageName = pname; };
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput share/doc/libide "$devdoc"
+  '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = gnome.updateScript {
+    packageName = pname;
+  };
+
+  meta = with lib; {
     description = "An IDE for writing GNOME-based software";
     longDescription = ''
       Global search, auto-completion, source code map, documentation
@@ -162,9 +154,9 @@ stdenv.mkDerivation rec {
       currently recommend running gnome-builder inside a nix-shell with
       appropriate dependencies loaded.
     '';
-    homepage = https://wiki.gnome.org/Apps/Builder;
+    homepage = "https://wiki.gnome.org/Apps/Builder";
     license = licenses.gpl3Plus;
-    maintainers = gnome3.maintainers;
+    maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, libunwind, cmake, pcre, gdb}:
+{lib, stdenv, fetchFromGitHub, libunwind, cmake, pcre, gdb}:
 
 stdenv.mkDerivation rec {
   version = "5.9.16";
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = ["-fPIC" "-O2" "-w" "-fpermissive"];
 
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "The Ignominous Profiler";
 
     longDescription = ''
@@ -34,10 +35,10 @@ stdenv.mkDerivation rec {
       details and see the big picture from combined workloads.
     '';
 
-    license = stdenv.lib.licenses.gpl2;
+    license = lib.licenses.gpl2;
 
-    homepage = https://igprof.org/;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ ktf ];
+    homepage = "https://igprof.org/";
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ktf ];
   };
 }

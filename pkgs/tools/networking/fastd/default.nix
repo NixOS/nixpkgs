@@ -1,29 +1,56 @@
-{ stdenv, fetchgit, cmake, bison, pkgconfig
-, libuecc, libsodium, libcap, json_c }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, bison
+, meson
+, ninja
+, pkg-config
+, libmnl
+, libuecc
+, libsodium
+, libcap
+, json_c
+, openssl
+}:
 
 stdenv.mkDerivation rec {
-  version = "18";
   pname = "fastd";
+  version = "22";
 
-  src = fetchgit {
-    url = "git://git.universe-factory.net/fastd";
-    rev = "refs/tags/v${version}";
-    sha256 = "0c9v3igv3812b3jr7jk75a2np658yy00b3i4kpbpdjgvqzc1jrq8";
+  src = fetchFromGitHub {
+    owner  = "Neoraider";
+    repo = "fastd";
+    rev = "v${version}";
+    sha256 = "0qni32j7d3za9f87m68wq8zgalvfxdrx1zxi6l4x7vvmpcw5nhpq";
   };
 
-  postPatch = ''
-    substituteInPlace src/crypto/cipher/CMakeLists.txt \
-      --replace 'add_subdirectory(aes128_ctr)' ""
-  '';
+  nativeBuildInputs = [
+    bison
+    meson
+    ninja
+    pkg-config
+  ];
 
-  nativeBuildInputs = [ pkgconfig bison cmake ];
-  buildInputs = [ libuecc libsodium libcap json_c ];
+  buildInputs = [
+    json_c
+    libcap
+    libsodium
+    libuecc
+    openssl
+  ] ++ lib.optionals (stdenv.isLinux) [
+    libmnl
+  ];
 
-  enableParallelBuilding = true;
+  # some options are only available on x86
+  mesonFlags = lib.optionals (!stdenv.hostPlatform.isx86) [
+    "-Dcipher_salsa20_xmm=disabled"
+    "-Dcipher_salsa2012_xmm=disabled"
+    "-Dmac_ghash_pclmulqdq=disabled"
+  ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and Secure Tunneling Daemon";
-    homepage = https://projects.universe-factory.net/projects/fastd/wiki;
+    homepage = "https://projects.universe-factory.net/projects/fastd/wiki";
     license = with licenses; [ bsd2 bsd3 ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];

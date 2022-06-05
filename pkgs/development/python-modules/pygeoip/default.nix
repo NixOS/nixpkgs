@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi
 , nose }:
 
 buildPythonPackage rec {
@@ -15,9 +15,9 @@ buildPythonPackage rec {
 
   buildInputs = [ nose ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Pure Python GeoIP API";
-    homepage = https://github.com/appliedsec/pygeoip;
+    homepage = "https://github.com/appliedsec/pygeoip";
     license = licenses.lgpl3Plus;
   };
 }

@@ -1,15 +1,18 @@
+/* Generated file. */
 args @ { fetchurl, ... }:
 rec {
-  baseName = ''command-line-arguments'';
-  version = ''20190710-git'';
+  baseName = "command-line-arguments";
+  version = "20210807-git";
 
-  description = ''small library to deal with command-line arguments'';
+  parasites = [ "command-line-arguments/test" ];
 
-  deps = [ ];
+  description = "small library to deal with command-line arguments";
+
+  deps = [ args."alexandria" args."hu_dot_dwim_dot_stefil" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/command-line-arguments/2019-07-10/command-line-arguments-20190710-git.tgz'';
-    sha256 = ''1221nraxk55mwgf6pilhzg5lh98jd0nxrdn2mj1zczj88im01733'';
+    url = "http://beta.quicklisp.org/archive/command-line-arguments/2021-08-07/command-line-arguments-20210807-git.tgz";
+    sha256 = "1ggrzdaw79ls7hk629m31z0pikibqi8x1hyi3fwd0zc8w9k3k6wk";
   };
 
   packageName = "command-line-arguments";
@@ -19,8 +22,11 @@ rec {
 }
 /* (SYSTEM command-line-arguments DESCRIPTION
     small library to deal with command-line arguments SHA256
-    1221nraxk55mwgf6pilhzg5lh98jd0nxrdn2mj1zczj88im01733 URL
-    http://beta.quicklisp.org/archive/command-line-arguments/2019-07-10/command-line-arguments-20190710-git.tgz
-    MD5 77b361a7f4b3b73a88c3a95c7bbffa98 NAME command-line-arguments FILENAME
-    command-line-arguments DEPS NIL DEPENDENCIES NIL VERSION 20190710-git
-    SIBLINGS NIL PARASITES NIL) */
+    1ggrzdaw79ls7hk629m31z0pikibqi8x1hyi3fwd0zc8w9k3k6wk URL
+    http://beta.quicklisp.org/archive/command-line-arguments/2021-08-07/command-line-arguments-20210807-git.tgz
+    MD5 b50ca36f5b2b19d4322ac5b5969fee22 NAME command-line-arguments FILENAME
+    command-line-arguments DEPS
+    ((NAME alexandria FILENAME alexandria)
+     (NAME hu.dwim.stefil FILENAME hu_dot_dwim_dot_stefil))
+    DEPENDENCIES (alexandria hu.dwim.stefil) VERSION 20210807-git SIBLINGS NIL
+    PARASITES (command-line-arguments/test)) */

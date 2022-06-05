@@ -1,16 +1,17 @@
-{ fetchFromGitHub, stdenv, bam, pkgconfig, python, alsaLib
-, libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack
+{ fetchFromGitHub, lib, stdenv, cmake, pkg-config, python3, alsa-lib
+, libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "teeworlds";
-  version = "0.7.3.1";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "teeworlds";
     repo = "teeworlds";
     rev = version;
-    sha256 = "1hfj22xxswqnm1s74ln3dwl63rs4mk9g4yvpf75plswbxd0020la";
+    sha256 = "1l19ksmimg6b8zzjy0skyhh7z11ql7n5gvilkv7ay5x2b9ndbqwz";
     fetchSubmodules = true;
   };
 
@@ -21,30 +22,22 @@ stdenv.mkDerivation rec {
                 '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
   '';
 
-  nativeBuildInputs = [ bam pkgconfig ];
-
-  configurePhase = ''
-    bam config
-  '';
-
-  buildPhase = ''
-    bam conf=release
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin $out/share/teeworlds
-    cp build/x86_64/release/teeworlds{,_srv} $out/bin
-    cp -r build/x86_64/release/data $out/share/teeworlds
-  '';
+  nativeBuildInputs = [ cmake pkg-config icoutils ];
 
   buildInputs = [
-    python alsaLib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack
+    python3 alsa-lib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack
   ];
 
   postInstall = ''
-    mkdir -p $out/share/doc/teeworlds
-    cp -v *.txt $out/share/doc/teeworlds/
+    # Convert and install desktop icon
+    mkdir -p $out/share/pixmaps
+    icotool --extract --index 1 --output $out/share/pixmaps/teeworlds.png $src/other/icons/teeworlds.ico
+
+    # Install menu item
+    install -D $src/other/teeworlds.desktop $out/share/applications/teeworlds.desktop
   '';
+
+  passthru.tests.teeworlds = nixosTests.teeworlds;
 
   meta = {
     description = "Retro multiplayer shooter game";
@@ -56,9 +49,9 @@ stdenv.mkDerivation rec {
       Flag.  You can even design your own maps!
     '';
 
-    homepage = https://teeworlds.com/;
+    homepage = "https://teeworlds.com/";
     license = "BSD-style, see `license.txt'";
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = ["x86_64-linux" "i686-linux"];
+    maintainers = with lib.maintainers; [ astsmtl ];
+    platforms = lib.platforms.linux;
   };
 }

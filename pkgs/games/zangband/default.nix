@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, flex, bison, autoconf, automake, m4, coreutils }:
+{ lib, stdenv, fetchurl, ncurses, flex, bison, autoconf, automake, m4, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "zangband";
@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0kkz6f9myhjnr3308sdab8q186rd55lapvcp38w8qmakdbhc828j";
   };
 
+  nativeBuildInputs = [ autoconf automake ];
   buildInputs = [
-    ncurses flex bison autoconf automake m4
+    ncurses flex bison m4
   ];
 
   preConfigure = ''
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Rogue-like game";
-    license = stdenv.lib.licenses.unfree;
+    license = lib.licenses.unfree;
     broken = true; # broken in runtime, will not get pass character generation
   };
 }

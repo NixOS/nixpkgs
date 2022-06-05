@@ -1,30 +1,28 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pyyaml, jsonschema, six, pytest, mock, isPy3k }:
+{ lib, buildPythonPackage, fetchFromGitHub, pyyaml, jsonschema, six, pytestCheckHook, mock }:
 
 buildPythonPackage rec {
   pname = "swagger-spec-validator";
-  version = "2.4.3";
+  version = "2.7.4";
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "swagger_spec_validator";
-    rev = "v" + version;
-    sha256 = "02f8amc6iq2clxxmrz8hirbb57sizaxijp0higqy16shk63ibalw";
+    rev = "v${version}";
+    sha256 = "sha256-7+kFmtzeze0QlGf6z/M4J4F7z771a5NWewB1S3+bxn4=";
   };
-
-  checkInputs = [
-    pytest
-    mock
-  ];
-
-  checkPhase = ''
-    pytest tests
-  '';
 
   propagatedBuildInputs = [
     pyyaml
     jsonschema
     six
   ];
+
+  checkInputs = [
+    pytestCheckHook
+    mock
+  ];
+
+  pythonImportsCheck = [ "swagger_spec_validator" ];
 
   meta = with lib; {
     homepage = "https://github.com/Yelp/swagger_spec_validator";
@@ -33,5 +31,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ vanschelven ];
   };
 }
-
-
