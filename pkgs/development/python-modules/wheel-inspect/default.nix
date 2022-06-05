@@ -43,10 +43,17 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace tox.ini \
       --replace " --cov=wheel_inspect --no-cov-on-fail" ""
+    substituteInPlace setup.cfg \
+      --replace "entry-points-txt ~= 0.1.0" "entry-points-txt >= 0.1.0"
   '';
 
   pythonImportsCheck = [
     "wheel_inspect"
+  ];
+
+  pytestFlagsArray = [
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   meta = with lib; {
