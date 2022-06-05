@@ -40,5 +40,8 @@ buildPythonPackage rec {
     description = "JSON Web Token implementation in Python";
     homepage = "https://github.com/jpadilla/pyjwt";
     license = licenses.mit;
+    knownVulnerabilities = [
+      "CVE-2022-29217"
+    ];
   };
 }
