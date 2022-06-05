@@ -62,6 +62,14 @@ in {
       '';
     };
 
+    useLocalConfig = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether or not to use local config file(e.g. ~/.config/picom.conf)
+      '';
+    };
+
     experimentalBackends = mkOption {
       type = types.bool;
       default = false;
@@ -320,7 +328,8 @@ in {
       };
 
       serviceConfig = {
-        ExecStart = "${pkgs.picom}/bin/picom --config ${configFile}"
+        ExecStart = "${pkgs.picom}/bin/picom"
+          + (optionalString (!cfg.useLocalConfig) " --config ${configFile}")
           + (optionalString cfg.experimentalBackends " --experimental-backends");
         RestartSec = 3;
         Restart = "always";
