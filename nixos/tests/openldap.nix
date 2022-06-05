@@ -81,12 +81,17 @@ in {
           };
         };
       };
-      declarativeContents."dc=example" = dbContents;
     };
 
     specialisation = {
+      declarativeContents.configuration = { ... }: {
+        services.openldap.declarativeContents."dc=example" = dbContents;
+      };
       mutableConfig.configuration = { ... }: {
-        services.openldap.mutableConfig = true;
+        services.openldap = {
+          declarativeContents."dc=example" = dbContents;
+          mutableConfig = true;
+        };
       };
       manualConfigDir = {
         inheritParentConfig = false;
@@ -108,9 +113,14 @@ in {
       olcRootPW: foobar
     '';
   in ''
+    # Test startup with empty DB
     machine.wait_for_unit("openldap.service")
-    machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"')
-    machine.fail('ldapmodify -D cn=root,cn=config -w configpassword -f ${pkgs.writeText "rootpw.ldif" changeRootPw}')
+
+    with subtest("declarative contents"):
+      machine.succeed('${specializations}/declarativeContents/bin/switch-to-configuration test')
+      machine.wait_for_unit("openldap.service")
+      machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"')
+      machine.fail('ldapmodify -D cn=root,cn=config -w configpassword -f ${pkgs.writeText "rootpw.ldif" changeRootPw}')
 
     with subtest("mutable config"):
       machine.succeed('${specializations}/mutableConfig/bin/switch-to-configuration test')
