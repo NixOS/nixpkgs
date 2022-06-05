@@ -10,12 +10,6 @@ let
     inherit (stdenv) hostPlatform;
   };
 
-  makeOverlayable = mkDerivationSimple:
-    fnOrAttrs:
-      if builtins.isFunction fnOrAttrs
-      then makeDerivationExtensible mkDerivationSimple fnOrAttrs
-      else makeDerivationExtensibleConst mkDerivationSimple fnOrAttrs;
-
   # Based off lib.makeExtensible, with modifications:
   makeDerivationExtensible = mkDerivationSimple: rattrs:
     let
@@ -486,4 +480,7 @@ lib.extendDerivation
   (derivation derivationArg);
 
 in
-  makeOverlayable mkDerivationSimple
+  fnOrAttrs:
+    if builtins.isFunction fnOrAttrs
+    then makeDerivationExtensible mkDerivationSimple fnOrAttrs
+    else makeDerivationExtensibleConst mkDerivationSimple fnOrAttrs
