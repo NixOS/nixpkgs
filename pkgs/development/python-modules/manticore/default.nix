@@ -132,7 +132,5 @@ buildPythonPackage rec {
     license = licenses.agpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ arturcygan ];
-    # m.c.manticore:WARNING: Manticore is only supported on Linux. Proceed at your own risk!
-    broken = stdenv.isDarwin;
   };
 }
