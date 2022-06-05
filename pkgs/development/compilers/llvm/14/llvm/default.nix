@@ -89,6 +89,9 @@ in stdenv.mkDerivation (rec {
     rm test/DebugInfo/X86/convert-inlined.ll
     rm test/DebugInfo/X86/convert-linked.ll
     rm test/tools/dsymutil/X86/op-convert.test
+    rm test/tools/gold/X86/split-dwarf.ll
+    rm test/tools/llvm-dwarfdump/X86/prettyprint_types.s
+    rm test/tools/llvm-dwarfdump/X86/simplified-template-names.s
   '' + optionalString (stdenv.hostPlatform.system == "armv6l-linux") ''
     # Seems to require certain floating point hardware (NEON?)
     rm test/ExecutionEngine/frem.ll
