@@ -2,7 +2,6 @@
 , buildPythonPackage
 , coloredlogs
 , fetchFromGitHub
-, fetchpatch
 , ghostscript
 , img2pdf
 , importlib-metadata
@@ -28,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "13.4.6";
+  version = "13.4.7";
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
@@ -40,7 +39,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-Hd9vsw+UEpE7juYSCiHhXtxaC58OtS/Uy20Jdp6QXPA=";
+    hash = "sha256-jCfMCjh8MdH5K76iyJCgtkgPtpxnCxlXlzttTIzINPk=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -53,11 +52,6 @@ buildPythonPackage rec {
       pngquant = "${lib.getBin pngquant}/bin/pngquant";
       tesseract = "${lib.getBin tesseract4}/bin/tesseract";
       unpaper = "${lib.getBin unpaper}/bin/unpaper";
-    })
-    # https://github.com/ocrmypdf/OCRmyPDF/pull/973
-    (fetchpatch {
-      url = "https://github.com/ocrmypdf/OCRmyPDF/commit/808b24d59f5b541a335006aa6ea7cdc3c991adc0.patch";
-      hash = "sha256-khsH70fWk5fStf94wcRKKX7cCbgD69LtKkngJIqA3+w=";
     })
   ];
 
