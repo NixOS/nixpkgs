@@ -166,8 +166,6 @@ with self; with super; {
 
   wsproto = callPackage ../development/python2-modules/wsproto { };
 
-  vcrpy = callPackage ../development/python2-modules/vcrpy { };
-
   zeek = disabled super.zeek;
 
   zipp = callPackage ../development/python2-modules/zipp { };
