@@ -57,7 +57,7 @@ mkDerivation rec {
 
   postPatch = ''
     # Run calamares without root. Other patches make it functional as a normal user
-    sed -e "s,pkexec calamares,calamares," \
+    sed -e "s,pkexec calamares,calamares -D6," \
         -i calamares.desktop
 
     sed -e "s,X-AppStream-Ignore=true,&\nStartupWMClass=calamares," \
