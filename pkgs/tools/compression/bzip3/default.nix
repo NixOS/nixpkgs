@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-arch-native"
-  ];
+  ] ++ lib.optionals stdenv.isDarwin [ "--disable-link-time-optimization" ];
 
   meta = {
     description = "A better and stronger spiritual successor to BZip2";
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/kspalaiologos/bzip3/blob/${src.rev}/NEWS";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
-    # upstream supports Darwin but I couldn't get it to work
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }
