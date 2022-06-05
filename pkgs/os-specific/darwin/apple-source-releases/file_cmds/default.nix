@@ -17,6 +17,10 @@ appleDerivation {
     sed -i -re "s/name = ([a-zA-Z]+);/name = \1; productName = \1;/" file_cmds.xcodeproj/project.pbxproj
   '';
 
+  # Workaround build failure on -fno-common toolchains:
+  #   duplicate symbol '_chdname' in: ar_io.o tty_subs.o
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   # temporary install phase until xcodebuild has "install" support
   installPhase = ''
     for f in Products/Release/*; do
