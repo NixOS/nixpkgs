@@ -1,14 +1,14 @@
-{ ffmpeg_4, ffmpeg-full, fetchFromGitHub, lib }:
+{ ffmpeg_5, ffmpeg-full, fetchFromGitHub, lib }:
 
-(ffmpeg-full.override { ffmpeg = ffmpeg_4; }).overrideAttrs (old: rec {
+(ffmpeg-full.override { ffmpeg = ffmpeg_5; }).overrideAttrs (old: rec {
   pname = "jellyfin-ffmpeg";
-  version = "4.4.1-4";
+  version = "5.0.1-5";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    sha256 = "0y7iskamlx30f0zknbscpi308y685nbnbf5gr9cj1znr5dlfb0bn";
+    sha256 = "sha256-rFzBAniw2vQGFn2GDlz6NiB/Ow2EZlE3Lu+ceYTStkM=";
   };
 
   postPatch = ''
