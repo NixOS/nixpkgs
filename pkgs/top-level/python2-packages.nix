@@ -18,8 +18,6 @@ with self; with super; {
 
   cheetah = callPackage ../development/python2-modules/cheetah { };
 
-  click = callPackage ../development/python2-modules/click { };
-
   configparser = callPackage ../development/python2-modules/configparser { };
 
   construct = callPackage ../development/python2-modules/construct { };
