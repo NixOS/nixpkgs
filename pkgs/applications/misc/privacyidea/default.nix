@@ -65,17 +65,29 @@ let
           sha256 = "sha256-WUxngH+xYjizDES99082wCzfItHIzake+KDtjav1Ygo=";
         };
       });
-      # Required by flask-babel
       itsdangerous = super.itsdangerous.overridePythonAttrs (old: rec {
-        version = "2.0.1";
+        version = "1.1.0";
         src = old.src.override {
           inherit version;
-          sha256 = "sha256-nnJNaPwikCoUNTUfhMP7hiPzA//8xWaky5Ut+MVyz/A=";
+          sha256 = "321b033d07f2a4136d3ec762eac9f16a10ccd60f53c0c91af90217ace7ba1f19";
         };
       });
-      flask = self.callPackage ../../../development/python2-modules/flask { };
+      flask = super.flask.overridePythonAttrs (old: rec {
+        version = "1.1.4";
+        src = old.src.override {
+          inherit version;
+          sha256 = "0fbeb6180d383a9186d0d6ed954e0042ad9f18e0e8de088b2b419d526927d196";
+        };
+      });
       sqlsoup = super.sqlsoup.overrideAttrs ({ meta ? {}, ... }: {
         meta = meta // { broken = false; };
+      });
+      click = super.click.overridePythonAttrs (old: rec {
+        version = "7.1.2";
+        src = old.src.override {
+          inherit version;
+          sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
+        };
       });
     };
   };
