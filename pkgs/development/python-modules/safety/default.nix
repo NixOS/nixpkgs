@@ -14,7 +14,7 @@ buildPythonPackage rec {
   pname = "safety";
   version = "1.10.3";
 
-  diabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.5";
 
   format = "setuptools";
 
