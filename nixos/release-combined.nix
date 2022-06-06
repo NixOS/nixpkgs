@@ -132,7 +132,7 @@ in rec {
         # fails with kernel >= 5.15 https://github.com/NixOS/nixpkgs/pull/152505#issuecomment-1005049314
         #(onFullSupported "nixos.tests.nfs3.simple")
         (onFullSupported "nixos.tests.nfs4.simple")
-        (onSystems ["x86_64-linux"] "nixos.tests.oci-containers.podman")
+        (onSystems ["x86_64-linux"] "nixos.tests.oci-containers.backend-podman")
         (onFullSupported "nixos.tests.openssh")
         (onFullSupported "nixos.tests.pantheon")
         (onFullSupported "nixos.tests.php.fpm")
