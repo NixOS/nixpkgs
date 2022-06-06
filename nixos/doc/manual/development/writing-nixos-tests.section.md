@@ -393,3 +393,25 @@ with foo_running:
     def foo_running():
         machine.succeed("pgrep -x foo")
     ```
+
+## Adding Python packages to the test script {#ssec-python-packages-in-test-script}
+
+When additional Python libraries are required in the test script, they can be
+added using the parameter `extraPythonPackages`. For example, you could add
+`numpy` like this:
+
+```nix
+import ./make-test-python.nix
+{
+  extraPythonPackages = p: [ p.numpy ];
+
+  nodes = { };
+
+  testScript = ''
+    import numpy as np
+    assert str(np.zeros(4) == "array([0., 0., 0., 0.])")
+  '';
+}
+```
+
+In that case, `numpy` is chosen from the generic `python3Packages`.

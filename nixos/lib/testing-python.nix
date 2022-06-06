@@ -53,12 +53,13 @@ rec {
     , skipTypeCheck ? false
     , passthru ? {}
     , interactive ? false
+    , extraPythonPackages ? (_ :[])
   }:
     let
       # Reifies and correctly wraps the python test driver for
       # the respective qemu version and with or without ocr support
       testDriver = pkgs.callPackage ./test-driver {
-        inherit enableOCR;
+        inherit enableOCR extraPythonPackages;
         qemu_pkg = qemu_test;
         imagemagick_light = imagemagick_light.override { inherit libtiff; };
         tesseract4 = tesseract4.override { enableLanguages = [ "eng" ]; };
@@ -184,6 +185,7 @@ rec {
         (if meta.description or null != null
           then builtins.unsafeGetAttrPos "description" meta
           else builtins.unsafeGetAttrPos "testScript" t)
+    , extraPythonPackages ? (_ : [])
     } @ t:
     let
       mkNodes = qemu_pkg:
@@ -236,13 +238,13 @@ rec {
           );
 
       driver = setupDriverForTest {
-        inherit testScript enableOCR skipTypeCheck skipLint passthru;
+        inherit testScript enableOCR skipTypeCheck skipLint passthru extraPythonPackages;
         testName = name;
         qemu_pkg = pkgs.qemu_test;
         nodes = mkNodes pkgs.qemu_test;
       };
       driverInteractive = setupDriverForTest {
-        inherit testScript enableOCR skipTypeCheck skipLint passthru;
+        inherit testScript enableOCR skipTypeCheck skipLint passthru extraPythonPackages;
         testName = name;
         qemu_pkg = pkgs.qemu;
         nodes = mkNodes pkgs.qemu;
