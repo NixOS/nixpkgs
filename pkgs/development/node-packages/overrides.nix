@@ -162,6 +162,13 @@ final: prev: {
     buildInputs = [ final.node-pre-gyp ];
   };
 
+  gatsby-cli = prev.gatsby-cli.override {
+    postInstall = ''
+      wrapProgram $out/bin/gatsby \
+        --set GATSBY_TELEMETRY_DISABLED 1
+    '';
+  };
+
   git-ssb = prev.git-ssb.override (oldAttrs: {
     buildInputs = [ final.node-gyp-build ];
     meta = oldAttrs.meta // { broken = since "10"; };
