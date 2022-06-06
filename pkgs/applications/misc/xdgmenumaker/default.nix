@@ -23,6 +23,8 @@ python3Packages.buildPythonApplication rec {
 
   strictDeps = false;
 
+  dontWrapGApps = true;
+
   nativeBuildInputs = [
     gobject-introspection
     txt2tags
@@ -45,6 +47,10 @@ python3Packages.buildPythonApplication rec {
   installFlags = [
     "DESTDIR="
   ];
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   passthru.updateScript = gitUpdater {inherit pname version; };
 
