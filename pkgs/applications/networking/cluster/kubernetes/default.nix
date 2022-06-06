@@ -37,15 +37,7 @@ stdenv.mkDerivation rec {
   patches = [ ./fixup-addonmanager-lib-path.patch ];
 
   postPatch = ''
-    # go env breaks the sandbox
-    substituteInPlace "hack/lib/golang.sh" \
-      --replace 'echo "$(go env GOHOSTOS)/$(go env GOHOSTARCH)"' 'echo "${go.GOOS}/${go.GOARCH}"'
-
     substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
-    # hack/update-munge-docs.sh only performs some tests on the documentation.
-    # They broke building k8s; disabled for now.
-    echo "true" > "hack/update-munge-docs.sh"
-
     patchShebangs ./hack
   '';
 

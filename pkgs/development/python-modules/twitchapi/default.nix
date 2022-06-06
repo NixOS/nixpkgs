@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , aiohttp
 , python-dateutil
@@ -10,14 +11,16 @@
 
 buildPythonPackage rec {
   pname = "twitchapi";
-  version = "2.5.3";
+  version = "2.5.4";
+
+  disabled = pythonOlder "3.7";
 
   format = "setuptools";
 
   src = fetchPypi {
     pname = "twitchAPI";
     inherit version;
-    sha256 = "e7987dd8c3d1a3d25fe85ff0c0b0bad492f916c920f618dca8efd6baad3ac704";
+    hash = "sha256-uNXET3V3r3f6c72IF3DEdXfQlrgkn2w5f4ksKBOsihg=";
   };
 
   propagatedBuildInputs = [
