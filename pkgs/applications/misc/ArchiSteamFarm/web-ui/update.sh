@@ -1,10 +1,12 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p nodePackages.node2nix gnused jq curl
+#! nix-shell -I nixpkgs=../../../.. -i bash -p nodePackages.node2nix gnused jq curl
+set -eoux pipefail
 
+pushd ../../../..
 version=$(nix-instantiate --strict --eval -A ArchiSteamFarm.version | jq -r)
+popd
+pushd "$(dirname "$0")"
 ui=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/JustArchiNET/ArchiSteamFarm/contents/ASF-ui?ref=$version" | jq -r .sha)
-
-pushd $(dirname "$0")
 
 curl "https://raw.githubusercontent.com/JustArchiNET/ASF-ui/$ui/package-lock.json" -o package-lock.json
 curl "https://raw.githubusercontent.com/JustArchiNET/ASF-ui/$ui/package.json" -o package.json

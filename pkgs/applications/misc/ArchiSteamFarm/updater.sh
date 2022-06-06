@@ -15,6 +15,7 @@ if [[ "$new_version" == "$old_version" ]]; then
   fi
 fi
 
+asf_path=$(pwd)
 cd ../../../..
 
 nixpkgs_path=$(pwd)
@@ -47,3 +48,5 @@ trap '
   popd
   rm -r "$src"
 ' EXIT
+cd "$asf_path"
+./web-ui/update.sh
