@@ -1718,6 +1718,17 @@
     githubId = 50839;
     name = "Brian Jones";
   };
+  booklearner = {
+    name = "booklearner";
+    email = "hey@booklearner.org";
+    matrix = "@booklearner:matrix.org";
+    github = "booklearner";
+    githubId = 103979114;
+    keys = [{
+      longkeyid = "ed25519/0x0C61C4E5907F76C8";
+      fingerprint = "17C7 95D4 871C 2F87 83C8  053D 0C61 C4E5 907F 76C8";
+    }];
+  };
   bootstrap-prime = {
     email = "bootstrap.prime@gmail.com";
     github = "bootstrap-prime";
@@ -6413,6 +6424,13 @@
     github = "juboba";
     githubId = 1189739;
     name = "Julio Borja Barra";
+  };
+  jugendhacker = {
+    name = "j.r";
+    email = "j.r@jugendhacker.de";
+    github = "jugendhacker";
+    githubId = 12773748;
+    matrix = "@j.r:chaos.jetzt";
   };
   juliendehos = {
     email = "dehos@lisic.univ-littoral.fr";
@@ -13652,6 +13670,17 @@
   wedens = {
     email = "kirill.wedens@gmail.com";
     name = "wedens";
+  };
+  WeebSorceress = {
+    name = "WeebSorceress";
+    email = "hello@weebsorceress.anonaddy.me";
+    matrix = "@weebsorceress:matrix.org";
+    github = "WeebSorceress";
+    githubId = 106774777;
+    keys = [{
+      longkeyid = "rsa4096/0x7F57344317F0FA43";
+      fingerprint = "659A 9BC3 F904 EC24 1461  2EFE 7F57 3443 17F0 FA43";
+    }];
   };
   wegank = {
     name = "Weijia Wang";

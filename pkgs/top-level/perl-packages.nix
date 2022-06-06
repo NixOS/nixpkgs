@@ -23323,6 +23323,19 @@ let
     };
   };
 
+  TextLevenshteinXS = buildPerlPackage {
+    pname = "Text-LevenshteinXS";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JG/JGOLDBERG/Text-LevenshteinXS-0.03.tar.gz";
+      sha256 = "sha256-43T/eyN5Gc5eqSRfNW0ctSzIf9JrOlo4s/Pl/4KgFJE=";
+    };
+    meta = {
+      description = "Levenshtein edit distance in a XS way";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TextLorem = buildPerlModule {
     pname = "Text-Lorem";
     version = "0.3";
@@ -25560,6 +25573,20 @@ let
     meta = {
       homepage = "https://github.com/mikegrb/WebService-Linode";
       description = "Perl Interface to the Linode.com API";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  WebServiceValidatorHTMLW3C = buildPerlModule {
+    pname = "WebService-Validator-HTML-W3C";
+    version = "0.28";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/ST/STRUAN/WebService-Validator-HTML-W3C-0.28.tar.gz";
+      sha256 = "sha256-zLB60zegOuyBob6gqJzSlUaR/1uzZ9+aMrnZEw8XURA=";
+    };
+    buildInputs = [ ClassAccessor LWP ];
+    meta = {
+      description = "Provides access to the W3C's online Markup validator";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

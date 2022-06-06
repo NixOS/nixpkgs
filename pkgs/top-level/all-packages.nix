@@ -629,6 +629,8 @@ with pkgs;
 
   mod = callPackage ../development/tools/mod { };
 
+  mongosh = callPackage ../development/tools/mongosh { };
+
   mysql-shell = callPackage ../development/tools/mysql-shell {
     inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -5558,6 +5560,8 @@ with pkgs;
   cholmod-extra = callPackage ../development/libraries/science/math/cholmod-extra { };
 
   choose = callPackage ../tools/text/choose { };
+
+  conform = callPackage ../applications/version-management/git-and-tools/conform { };
 
   emscripten = callPackage ../development/compilers/emscripten {
     llvmPackages = llvmPackages_13;
@@ -21669,6 +21673,8 @@ with pkgs;
 
   clickhouse-backup = callPackage ../development/tools/database/clickhouse-backup { };
 
+  codeowners = callPackage ../development/tools/codeowners { };
+
   couchdb3 = callPackage ../servers/http/couchdb/3.nix {
     erlang = erlangR22;
   };
@@ -30885,6 +30891,8 @@ with pkgs;
 
   xmountains = callPackage ../applications/graphics/xmountains { };
 
+  xmppc = callPackage ../applications/networking/instant-messengers/xmppc {};
+
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   xpra = callPackage ../tools/X11/xpra { };
@@ -34808,6 +34816,8 @@ with pkgs;
   tvbrowser-bin = callPackage ../applications/misc/tvbrowser/bin.nix { };
 
   tvheadend = callPackage ../servers/tvheadend { };
+
+  uacme = callPackage ../tools/admin/uacme { };
 
   ums = callPackage ../servers/ums { };
 
