@@ -14784,4 +14784,10 @@
     github = "jali-clarke";
     githubId = 17733984;
   };
+  npatsakula = {
+    email = "nikita.patsakula@gmail.com";
+    name = "Patsakula Nikita";
+    github = "npatsakula";
+    githubId = 23001619;
+  };
 }

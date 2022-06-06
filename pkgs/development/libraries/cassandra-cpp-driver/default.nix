@@ -32,5 +32,6 @@
       license = with licenses; [ asl20 ];
       platforms = platforms.x86_64;
       homepage = "https://docs.datastax.com/en/developer/cpp-driver/";
+      maintainers = [ maintainers.npatsakula ];
     };
 }
