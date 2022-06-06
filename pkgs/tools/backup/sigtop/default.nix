@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     repo = "sigtop";
     # `portable` branch
     rev = "945c5844d25e2b130809334cbc8f3fa1cd85aaf9";
-    sha256 = "1gmxyjx7kbr2n33aq84ipa2pfhrdw7v7ggz01qd54nqyvp8hdbzs";
+    sha256 = "sha256-6Ifs8fsNpE3AstNt3Elyy908sQ4JzE1H8DbUeWhGnLE=";
   };
 
   nativeBuildInputs = [ pkg-config ];
