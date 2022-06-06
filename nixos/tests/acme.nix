@@ -1,7 +1,7 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: let
+{ pkgs, lib, ... }: let
   commonConfig = ./common/acme/client;
 
-  dnsServerIP = nodes: nodes.dnsserver.config.networking.primaryIPAddress;
+  dnsServerIP = nodes: nodes.dnsserver.networking.primaryIPAddress;
 
   dnsScript = nodes: let
     dnsAddress = dnsServerIP nodes;
@@ -153,7 +153,7 @@ in {
         description = "Pebble ACME challenge test server";
         wantedBy = [ "network.target" ];
         serviceConfig = {
-          ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.webserver.config.networking.primaryIPAddress}'";
+          ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.webserver.networking.primaryIPAddress}'";
           # Required to bind on privileged ports.
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         };
@@ -175,7 +175,7 @@ in {
       specialisation = {
         # First derivation used to test general ACME features
         general.configuration = { ... }: let
-          caDomain = nodes.acme.config.test-support.acme.caDomain;
+          caDomain = nodes.acme.test-support.acme.caDomain;
           email = config.security.acme.defaults.email;
           # Exit 99 to make it easier to track if this is the reason a renew failed
           accountCreateTester = ''
@@ -316,7 +316,7 @@ in {
 
   testScript = { nodes, ... }:
     let
-      caDomain = nodes.acme.config.test-support.acme.caDomain;
+      caDomain = nodes.acme.test-support.acme.caDomain;
       newServerSystem = nodes.webserver.config.system.build.toplevel;
       switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
     in
@@ -438,7 +438,7 @@ in {
       client.wait_for_unit("default.target")
 
       client.succeed(
-          'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.config.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
+          'curl --data \'{"host": "${caDomain}", "addresses": ["${nodes.acme.networking.primaryIPAddress}"]}\' http://${dnsServerIP nodes}:8055/add-a'
       )
 
       acme.wait_for_unit("network-online.target")
@@ -594,4 +594,4 @@ in {
               wait_for_server()
               check_connection_key_bits(client, test_domain, "384")
     '';
-})
+}

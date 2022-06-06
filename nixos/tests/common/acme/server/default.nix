@@ -18,10 +18,10 @@
 #
 #   example = { nodes, ... }: {
 #     networking.nameservers = [
-#       nodes.acme.config.networking.primaryIPAddress
+#       nodes.acme.networking.primaryIPAddress
 #     ];
 #     security.pki.certificateFiles = [
-#       nodes.acme.config.test-support.acme.caCert
+#       nodes.acme.test-support.acme.caCert
 #     ];
 #   };
 # }
@@ -36,7 +36,7 @@
 #   acme = { nodes, lib, ... }: {
 #     imports = [ ./common/acme/server ];
 #     networking.nameservers = lib.mkForce [
-#       nodes.myresolver.config.networking.primaryIPAddress
+#       nodes.myresolver.networking.primaryIPAddress
 #     ];
 #   };
 #
