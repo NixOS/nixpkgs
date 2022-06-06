@@ -27,6 +27,22 @@ let
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
 
+  inherit
+    (rec {
+      doRunTest = (import ../lib/testing-python.nix { inherit system pkgs; }).runTest;
+      findTests = tree:
+        if tree?recurseForDerivations && tree.recurseForDerivations
+        then mapAttrs (k: findTests) (builtins.removeAttrs tree ["recurseForDerivations"])
+        else callTest ({ test = tree; });
+      runTest = arg: let r = doRunTest arg; in findTests r;
+      runTestOn = systems: arg:
+        if elem system systems then runTest arg
+        else {};
+    })
+    runTest
+    runTestOn
+    ;
+
 in {
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
