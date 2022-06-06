@@ -1,6 +1,6 @@
 { lib, pkgs, ... }: {
   name = "3proxy";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ misuzu ];
   };
 
@@ -92,7 +92,7 @@
       networking.firewall.allowedTCPPorts = [ 3128 9999 ];
     };
 
-    peer3 = { lib, ... }: {
+    peer3 = { lib, pkgs, ... }: {
       networking.useDHCP = false;
       networking.interfaces.eth1 = {
         ipv4.addresses = [
