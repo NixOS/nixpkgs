@@ -146,8 +146,6 @@ with self; with super; {
 
   typing = callPackage ../development/python2-modules/typing { };
 
-  wsproto = callPackage ../development/python2-modules/wsproto { };
-
   zeek = disabled super.zeek;
 
   zipp = callPackage ../development/python2-modules/zipp { };
