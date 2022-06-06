@@ -38,7 +38,7 @@ let
               # virtualisation.vlans option).
               networking.extraHosts = flip concatMapStrings machines
                 (m':
-                  let config = (getAttr m' nodes).config; in
+                  let config = getAttr m' nodes; in
                   optionalString (config.networking.primaryIPAddress != "")
                     ("${config.networking.primaryIPAddress} " +
                       optionalString (config.networking.domain != null)
