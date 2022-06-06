@@ -4,6 +4,7 @@
 , socat
 , iptables
 , iproute2
+, ipset
 , bridge-utils
 , btrfs-progs
 , conntrack-tools
@@ -249,6 +250,7 @@ buildGoModule rec {
     socat
     iptables
     iproute2
+    ipset
     bridge-utils
     ethtool
     util-linux # kubelet wants 'nsenter' from util-linux: https://github.com/kubernetes/kubernetes/issues/26093#issuecomment-705994388
