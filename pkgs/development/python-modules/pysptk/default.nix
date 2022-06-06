@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "pysptk";
-  version = "0.1.20";
+  version = "0.1.21";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "29e8e6a76243f3be728d23450982bd9f916530634079252a490ba7182bef30ca";
+    sha256 = "sha256-AZUDI9AL57tXz7VzPGF9uEeKW4/6JsaBUiFkigl640Q=";
   };
 
   PYSPTK_BUILD_VERSION = 0;
