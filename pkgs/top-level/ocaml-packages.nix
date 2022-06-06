@@ -314,6 +314,8 @@ let
 
     dtoa = callPackage ../development/ocaml-modules/dtoa { };
 
+    dtools = callPackage ../development/ocaml-modules/dtools { };
+
     duff = callPackage ../development/ocaml-modules/duff { };
 
     dum = callPackage ../development/ocaml-modules/dum { };
@@ -346,6 +348,8 @@ let
     dune-rpc = callPackage ../development/ocaml-modules/dune-rpc { };
 
     dune-site = callPackage ../development/ocaml-modules/dune-site { };
+
+    duppy = callPackage ../development/ocaml-modules/duppy { };
 
     duration =  callPackage ../development/ocaml-modules/duration { };
 
@@ -694,6 +698,8 @@ let
       libllvm = pkgs.llvmPackages_10.libllvm;
     };
 
+    lo = callPackage ../development/ocaml-modules/lo { };
+
     logs = callPackage ../development/ocaml-modules/logs { };
 
     lru = callPackage ../development/ocaml-modules/lru { };
@@ -737,6 +743,8 @@ let
     macaddr-sexp = callPackage ../development/ocaml-modules/macaddr/sexp.nix { };
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
+
+    magic = callPackage ../development/ocaml-modules/magic { };
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
 

@@ -665,4 +665,30 @@ def foo_running():
 ```
 </programlisting>
   </section>
+  <section xml:id="ssec-python-packages-in-test-script">
+    <title>Adding Python packages to the test script</title>
+    <para>
+      When additional Python libraries are required in the test script,
+      they can be added using the parameter
+      <literal>extraPythonPackages</literal>. For example, you could add
+      <literal>numpy</literal> like this:
+    </para>
+    <programlisting language="bash">
+import ./make-test-python.nix
+{
+  extraPythonPackages = p: [ p.numpy ];
+
+  nodes = { };
+
+  testScript = ''
+    import numpy as np
+    assert str(np.zeros(4) == &quot;array([0., 0., 0., 0.])&quot;)
+  '';
+}
+</programlisting>
+    <para>
+      In that case, <literal>numpy</literal> is chosen from the generic
+      <literal>python3Packages</literal>.
+    </para>
+  </section>
 </section>
