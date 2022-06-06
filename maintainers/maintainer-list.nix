@@ -6425,6 +6425,13 @@
     githubId = 1189739;
     name = "Julio Borja Barra";
   };
+  jugendhacker = {
+    name = "j.r";
+    email = "j.r@jugendhacker.de";
+    github = "jugendhacker";
+    githubId = 12773748;
+    matrix = "@j.r:chaos.jetzt";
+  };
   juliendehos = {
     email = "dehos@lisic.univ-littoral.fr";
     github = "juliendehos";
