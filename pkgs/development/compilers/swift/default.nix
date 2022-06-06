@@ -9,25 +9,19 @@
 , ninja
 , pkg-config
 , sqlite
-, swig
 , libxml2
-, clang_10
+, clang_13
 , python3
 , ncurses
 , libuuid
-, libbsd
 , icu
 , libgcc
-, autoconf
-, libtool
-, automake
 , libblocksruntime
 , curl
 , rsync
 , git
 , libgit2
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , gnumake
 , file
@@ -50,11 +44,13 @@ let
   # - integration-tests
 
   versions = {
-    swift = "5.5.3";
+    swift = "5.6.2";
     yams = "4.0.2";
-    argumentParser = "0.4.3";
-    format = "swift-5.5-branch";
+    argumentParser = "1.0.3";
+    format = "release/5.6";
     crypto = "1.1.5";
+    nio = "2.31.2";
+    nio-ssl = "2.15.0";
   };
 
   fetchAppleRepo = { repo, rev, sha256 }:
@@ -77,56 +73,82 @@ let
 
     swift = fetchSwiftRelease {
       repo = "swift";
-      sha256 = "0ma96sfvwiv2f4qhzrvcwxi9igzd80930gnaw4r7ra4w190cnag7";
+      sha256 = "sha256-wiRXAXWEksJuy+YQQ+B7tzr2iLkSVkgV6o+wIz7yKJA=";
     };
     cmark = fetchSwiftRelease {
       repo = "swift-cmark";
-      sha256 = "0340j9x2n40yx61ma2pgqfbn3a9ijrh20iwzd1zxqq87rr76hh3z";
+      sha256 = "sha256-f0BoTs4HYdx/aJ9HIGCWMalhl8PvClWD6R4QK3qSgAw=";
     };
     llbuild = fetchSwiftRelease {
       repo = "swift-llbuild";
-      sha256 = "1xmiv7yp9r9iscx3fc3zdp25mriz134k9ny2rchxzi4kifz8h0zc";
+      sha256 = "sha256-SQ6V0zVshIYMjayx+ZpYuLijgQ89tqRnPlXBPf2FYqM=";
     };
     driver = fetchSwiftRelease {
       repo = "swift-driver";
-      sha256 = "1pb7fidgdqxzragqkillkv03vdilrwmcx6x2r4czqvdqj37gy6b6";
+      sha256 = "sha256-D5/C4Rbv5KIsKpy6YbuMxGIGaQkn80PD4Cp0l6bPKzY=";
     };
     toolsSupportCore = fetchSwiftRelease {
       repo = "swift-tools-support-core";
-      sha256 = "0a63193nycir4lffvmb3ky8cfly5kdr2libki2gx4fn6fxmb3a2f";
+      sha256 = "sha256-FbtQCq1sSlzrskCrgzD4iYuo5eGaXrAUUxoNX/BiOfg=";
     };
     swiftpm = fetchSwiftRelease {
       repo = "swift-package-manager";
-      sha256 = "0z90mg837jzwh516pypn48r3wsjf0lqymsyigdhgr7j2sgcckrr1";
+      sha256 = "sha256-esO4Swz3UYngbVgxoV+fkhSC0AU3IaxVjWkgK/s3x68=";
     };
     syntax = fetchSwiftRelease {
       repo = "swift-syntax";
-      sha256 = "0kdgh9a8n28yh12hj8lbz2j66ag83l0lcfyfdg7zdr614zs6i3p1";
+      sha256 = "sha256-C9FPCtq49BvKXtTWWeReYWNrU70pHzT2DhAv3NiTbPU=";
     };
     corelibsXctest = fetchSwiftRelease {
       repo = "swift-corelibs-xctest";
-      sha256 = "12fp3xzsqwcrmyc55h91d3dm64wn3wln47x2fl7sj0s8cn7q12b3";
+      sha256 = "sha256-0hizfnKJaUUA+jXuXzXWk72FmlSyc+UGEf7BTLdJrx4=";
     };
     corelibsFoundation = fetchSwiftRelease {
       repo = "swift-corelibs-foundation";
-      sha256 = "06gkdliihl1l86jx5khzwkjmjk45fq290x033rscramzcdxh7d1b";
+      sha256 = "sha256-8sCL8Ia6yb6bRsJZ52gUJH0jN3lwClM573G8jgUdEhw=";
     };
     corelibsLibdispatch = fetchSwiftRelease {
       repo = "swift-corelibs-libdispatch";
-      sha256 = "1bim5x9z9bqfgs6gdm4nlz1zrwl2x7xh4dn6i5md9ygsplr4ibzf";
+      sha256 = "sha256-1tIskUMnfblnvZaFDQPUMBfWTmBYG98s7rEww7PwZO8=";
       fetchSubmodules = true;
     };
     indexstoreDb = fetchSwiftRelease {
       repo = "indexstore-db";
-      sha256 = "1l1xlzf5kx7x80kf4b7r36glv0jc64d08d1688kmzjq1cfgn6gm2";
+      sha256 = "sha256-/PO4eMiASZN3pjFjBQ1r8vYwGRn6xm3SWaB2HDZlkPs=";
     };
     sourcekitLsp = fetchSwiftRelease {
       repo = "sourcekit-lsp";
-      sha256 = "00fcmd7x5v62n6ajsc0dmzwz6nzy2p72mcs9w6p90adcx7pffqkn";
+      sha256 = "sha256-ttgUC4ZHD3P/xLHllEbACtHVrJ6HXqeVWccXcoPMkts=";
     };
     llvmProject = fetchSwiftRelease {
       repo = "llvm-project";
-      sha256 = "18rn5xg5hpxxsacs0ygjmjpzpc8pq85898kknzc0s0z5m55h45z8";
+      sha256 = "sha256-YVs3lKV2RlaovpYkdGO+vzypolrmXmbKBBP4+osNMYw=";
+    };
+    docc = fetchSwiftRelease {
+      repo = "swift-docc";
+      sha256 = "sha256-rWiaNamZoHTO1bKpubxuT7m1IBOl7amT5M71mNauilY=";
+    };
+    docc-render-artifact = fetchSwiftRelease {
+      repo = "swift-docc-render-artifact";
+      sha256 = "sha256-AX+rtDLhq8drk7N6/hoH3fQioudmmTCnEhR45bME8uU=";
+    };
+    docc-symbolkit = fetchSwiftRelease {
+      repo = "swift-docc-symbolkit";
+      sha256 = "sha256-Xy1TQ5ucDW+MnkeOvVznsATBmwcQ3p1x+ofQ22ofk+o=";
+    };
+    lmdb = fetchSwiftRelease {
+      repo = "swift-lmdb";
+      sha256 = "sha256-i2GkWRWq1W5j8rF4PiHwWgT4Dur5FCY2o44HvUU3vtQ=";
+    };
+    markdown = fetchSwiftRelease {
+      repo = "swift-markdown";
+      sha256 = "sha256-XtFSBiNHhmULjS4OqSpMgUetLu3peRg7l6HpjwVsTj8=";
+    };
+
+    cmark-gfm = fetchAppleRepo {
+      repo = "swift-cmark";
+      rev = "swift-${versions.swift}-RELEASE-gfm";
+      sha256 = "sha256-g28iKmMR2W0r1urf8Fk1HBxAp5OlonNYSVN3Ril66tQ=";
     };
 
     # Projects that have their own versions during each release
@@ -134,23 +156,33 @@ let
     argumentParser = fetchAppleRepo {
       repo = "swift-argument-parser";
       rev = "${versions.argumentParser}";
-      sha256 = "1jkq72fphxzsnynjxk72azp0iz5r2ji7adxrz6w1y2a19pgjdqrp";
+      sha256 = "sha256-vNqkuAwSZNCWvwe6E5BqbXQdIbmIia0dENmmSQ9P8Mo=";
     };
     format = fetchAppleRepo {
       repo = "swift-format";
       rev = "${versions.format}";
-      sha256 = "1hg888ps3fk23q2zf6djkvxyk6zndqvwypmy0s800hmnyf0hzgv4";
+      sha256 = "sha256-1f5sIrv9IbPB7Vnahq1VwH8gT41dcjWldRwvVEaMdto=";
     };
     crypto = fetchAppleRepo {
       repo = "swift-crypto";
       rev = "${versions.crypto}";
-      sha256 = "0918pj3x3wgli3bnrjbvpzck2n6qz5n6f4yc5kljky45wd15f34g";
+      sha256 = "sha256-jwxXQuOF+CnpLMwTZ2z52Fgx2b97yWzXiPTx0Ye8KCQ=";
+    };
+    nio = fetchAppleRepo {
+      repo = "swift-nio";
+      rev = versions.nio;
+      sha256 = "sha256-FscOA/S7on31QCR/MZFjg4ZB3FGJ+rdptZ6MRZJXexE=";
+    };
+    nio-ssl = fetchAppleRepo {
+      repo = "swift-nio-ssl";
+      rev = versions.nio-ssl;
+      sha256 = "sha256-5QGkmkCOXhG3uOdf0bd3Fo1MFekB8/WcveBXGhtVZKo=";
     };
     yams = fetchFromGitHub {
       owner = "jpsim";
       repo = "Yams";
       rev = versions.yams;
-      sha256 = "1nk9b7l6m3wwjkl81npl2l1iwpsxaxb9za53jpwwsbbi1h1h4fbi";
+      sha256 = "sha256-cTkCAwxxLc35laOon1ZXXV8eAxX02oDolJyPauhZado=";
       name = "Yams-${versions.yams}-src";
     };
   };
@@ -160,14 +192,12 @@ let
     glibc
     icu
     libblocksruntime
-    libbsd
     libedit
     libgcc
     libuuid
     libxml2
     ncurses
     sqlite
-    swig
   ];
 
   python = (python3.withPackages (ps: [ps.six]));
@@ -184,11 +214,8 @@ stdenv.mkDerivation {
   version = versions.swift;
 
   nativeBuildInputs = [
-    autoconf
-    automake
     cmake
     git
-    libtool
     makeWrapper
     ninja
     perl
@@ -198,7 +225,7 @@ stdenv.mkDerivation {
     which
   ];
   buildInputs = devInputs ++ [
-    clang_10
+    clang_13
   ];
 
   # TODO: Revisit what needs to be propagated and how.
@@ -233,6 +260,14 @@ stdenv.mkDerivation {
     cp -r ${sources.format} swift-format
     cp -r ${sources.crypto} swift-crypto
     cp -r ${sources.llvmProject} llvm-project
+    cp -r ${sources.cmark-gfm} swift-cmark-gfm
+    cp -r ${sources.docc} swift-docc
+    cp -r ${sources.docc-render-artifact} swift-docc-render-artifact
+    cp -r ${sources.docc-symbolkit} swift-docc-symbolkit
+    cp -r ${sources.lmdb} swift-lmdb
+    cp -r ${sources.markdown} swift-markdown
+    cp -r ${sources.nio} swift-nio
+    cp -r ${sources.nio-ssl} swift-nio-ssl
 
     chmod -R u+w .
   '';
@@ -254,6 +289,7 @@ stdenv.mkDerivation {
     patch -p1 -d swift -i ${./patches/0002-build-presets-linux-allow-custom-install-prefix.patch}
     patch -p1 -d swift -i ${./patches/0003-build-presets-linux-don-t-build-extra-libs.patch}
     patch -p1 -d swift -i ${./patches/0004-build-presets-linux-plumb-extra-cmake-options.patch}
+    patch -p1 -d swift -i ${./patches/0007-build-presets-linux-os-stdlib.patch}
     substituteInPlace swift/cmake/modules/SwiftConfigureSDK.cmake \
       --replace '/usr/include' "${stdenv.cc.libc.dev}/include"
     sed -i swift/utils/build-presets.ini \
@@ -268,7 +304,6 @@ stdenv.mkDerivation {
     # LLVM toolchain patches.
     patch -p1 -d llvm-project/clang -i ${./patches/0005-clang-toolchain-dir.patch}
     patch -p1 -d llvm-project/clang -i ${./patches/0006-clang-purity.patch}
-    patch -p1 -d llvm-project/compiler-rt -i ${../llvm/common/compiler-rt/libsanitizer-no-cyclades-11.patch}
     substituteInPlace llvm-project/clang/lib/Driver/ToolChains/Linux.cpp \
       --replace 'SysRoot + "/lib' '"${glibc}/lib" "' \
       --replace 'SysRoot + "/usr/lib' '"${glibc}/lib" "' \
@@ -295,6 +330,27 @@ stdenv.mkDerivation {
       "swiftbuild_path = os.path.join(args.toolchain, \"bin\", \"swift-build\")"
     substituteInPlace swift-corelibs-xctest/build_script.py \
       --replace usr "$PREFIX"
+
+    # Can be removed in later swift-docc versions, see
+    # https://github.com/apple/swift-docc/commit/bff70b847008f91ac729cfd299a85481eef3f581
+    substituteInPlace swift-docc/build-script-helper.py \
+      --replace \
+      "subprocess.check_output(cmd, env=env).strip(), 'docc')" \
+      "subprocess.check_output(cmd, env=env).strip().decode(), 'docc')"
+
+    # Can be removed in later Swift versions, see
+    # https://github.com/apple/swift/pull/58755
+    substituteInPlace swift/utils/process-stats-dir.py \
+      --replace \
+      "type=argparse.FileType('wb', 0)," \
+      "type=argparse.FileType('w', 0),"
+
+    # Apply Python 3 fix, see
+    # https://github.com/apple/swift/commit/ec6bc595092974628b27b114a472e84162261bbd
+    substituteInPlace swift/utils/swift_build_support/swift_build_support/productpipeline_list_builder.py \
+      --replace \
+      "filter(lambda x: x is not None, pipeline)" \
+      "[p for p in pipeline if p is not None]"
   '';
 
   configurePhase = ''
@@ -312,14 +368,14 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     # Explicitly include C++ headers to prevent errors where stdlib.h is not found from cstdlib.
-    export NIX_CFLAGS_COMPILE="$(< ${clang_10}/nix-support/libcxx-cxxflags) $NIX_CFLAGS_COMPILE"
+    export NIX_CFLAGS_COMPILE="$(< ${clang_13}/nix-support/libcxx-cxxflags) $NIX_CFLAGS_COMPILE"
 
     # During the Swift build, a full local LLVM build is performed and the resulting clang is
     # invoked. This compiler is not using the Nix wrappers, so it needs some help to find things.
     export NIX_LDFLAGS_BEFORE="-rpath ${gccForLibs.lib}/lib -L${gccForLibs.lib}/lib $NIX_LDFLAGS_BEFORE"
 
     # However, we want to use the wrapped compiler whenever possible.
-    export CC="${clang_10}/bin/clang"
+    export CC="${clang_13}/bin/clang"
 
     $SWIFT_SOURCE_ROOT/swift/utils/build-script \
       --preset=buildbot_linux \
@@ -353,6 +409,17 @@ stdenv.mkDerivation {
     # TODO: Fix issue with ld.gold invoked from script finding crtbeginS.o and crtendS.o.
     rm $SWIFT_SOURCE_ROOT/swift/test/IRGen/ELF-remove-autolink-section.swift
 
+    # The following two tests fail because we use don't use the bundled libicu:
+    # [SOURCE_DIR/utils/build-script] ERROR: can't find source directory for libicu (tried /build/src/icu)
+    rm $SWIFT_SOURCE_ROOT/swift/validation-test/BuildSystem/default_build_still_performs_epilogue_opts_after_split.test
+    rm $SWIFT_SOURCE_ROOT/swift/validation-test/BuildSystem/test_early_swift_driver_and_infer.swift
+
+    # TODO: This test fails for some unknown reason
+    rm $SWIFT_SOURCE_ROOT/swift/test/Serialization/restrict-swiftmodule-to-revision.swift
+
+    # This test was flaky in ofborg, see #186476
+    rm $SWIFT_SOURCE_ROOT/swift/test/AutoDiff/compiler_crashers_fixed/sr14290-missing-debug-scopes-in-pullback-trampoline.swift
+
     # TODO: consider using stress-tester and integration-test.
 
     # Match the wrapped version of Swift to be installed.
@@ -379,20 +446,21 @@ stdenv.mkDerivation {
       --set CC $out/bin/clang \
       --suffix C_INCLUDE_PATH : $out/lib/swift/clang/include \
       --suffix CPLUS_INCLUDE_PATH : $out/lib/swift/clang/include \
-      --suffix LIBRARY_PATH : ${lib.makeLibraryPath [icu libgcc libuuid]}
+      --suffix LIBRARY_PATH : ${lib.makeLibraryPath [icu libgcc libuuid]} \
+      --suffix PATH : ${lib.makeBinPath [ stdenv.cc.bintools ]}
 
     wrapProgram $out/bin/swiftc \
       --set CC $out/bin/clang \
       --suffix C_INCLUDE_PATH : $out/lib/swift/clang/include \
       --suffix CPLUS_INCLUDE_PATH : $out/lib/swift/clang/include \
-      --suffix LIBRARY_PATH : ${lib.makeLibraryPath [icu libgcc libuuid]}
+      --suffix LIBRARY_PATH : ${lib.makeLibraryPath [icu libgcc libuuid]} \
+      --suffix PATH : ${lib.makeBinPath [ stdenv.cc.bintools ]}
   '';
 
   # Hack to avoid build and install directories in RPATHs.
   preFixup = "rm -rf $SWIFT_BUILD_ROOT $SWIFT_INSTALL_DIR";
 
   meta = with lib; {
-    broken = true;
     description = "The Swift Programming Language";
     homepage = "https://github.com/apple/swift";
     maintainers = with maintainers; [ dtzWill trepetti dduan ];
