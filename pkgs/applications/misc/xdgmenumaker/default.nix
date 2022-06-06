@@ -5,6 +5,7 @@
 , python3Packages
 , txt2tags
 , wrapGAppsHook
+, gitUpdater
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -44,6 +45,8 @@ python3Packages.buildPythonApplication rec {
   installFlags = [
     "DESTDIR="
   ];
+
+  passthru.updateScript = gitUpdater {inherit pname version; };
 
   meta = with lib; {
     description = "Command line tool that generates XDG menus for several window managers";
