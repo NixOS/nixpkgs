@@ -1718,6 +1718,17 @@
     githubId = 50839;
     name = "Brian Jones";
   };
+  booklearner = {
+    name = "booklearner";
+    email = "hey@booklearner.org";
+    matrix = "@booklearner:matrix.org";
+    github = "booklearner";
+    githubId = 103979114;
+    keys = [{
+      longkeyid = "ed25519/0x0C61C4E5907F76C8";
+      fingerprint = "17C7 95D4 871C 2F87 83C8  053D 0C61 C4E5 907F 76C8";
+    }];
+  };
   bootstrap-prime = {
     email = "bootstrap.prime@gmail.com";
     github = "bootstrap-prime";
