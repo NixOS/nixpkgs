@@ -32,7 +32,9 @@ buildPythonPackage rec {
     beautifulsoup4
     lxml
     requests
-  ] ++ lib.optionals (pythonOlder "3.9") [
+  ]
+  ++ requests.optional-dependencies.socks
+  ++ lib.optionals (pythonOlder "3.9") [
     pytz
   ];
 
