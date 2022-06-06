@@ -11403,6 +11403,21 @@ let
     doCheck = !stdenv.isDarwin;  # openpty fails in the sandbox
   };
 
+  IPCConcurrencyLimit = buildPerlPackage {
+    pname = "IPC-ConcurrencyLimit";
+    version = "0.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATTK/IPC-ConcurrencyLimit-0.17.tar.gz";
+      sha256 = "sha256-Lk11vlLpD8YFg31ajp+yacCofdPTYfMBLA/5Sl+9z+8=";
+    };
+    buildInputs = [ ExtUtilsMakeMaker ];
+    propagatedBuildInputs = [ FilePath IO ];
+    meta = {
+      description = "Lock-based limits on cooperative multi-processing";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   IPCountry = buildPerlPackage {
     pname = "IP-Country";
     version = "2.28";
