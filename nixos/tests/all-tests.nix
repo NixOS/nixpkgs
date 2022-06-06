@@ -44,7 +44,7 @@ let
     ;
 
 in {
-  _3proxy = handleTest ./3proxy.nix {};
+  _3proxy = runTest ./3proxy.nix;
   acme = handleTest ./acme.nix {};
   adguardhome = handleTest ./adguardhome.nix {};
   aesmd = handleTest ./aesmd.nix {};
