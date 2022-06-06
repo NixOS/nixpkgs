@@ -46,8 +46,6 @@ with self; with super; {
 
   jinja2 = callPackage ../development/python2-modules/jinja2 { };
 
-  libcloud = callPackage ../development/python2-modules/libcloud { };
-
   lpod = callPackage ../development/python2-modules/lpod { };
 
   marisa = callPackage ../development/python2-modules/marisa {
