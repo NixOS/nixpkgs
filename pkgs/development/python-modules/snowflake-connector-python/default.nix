@@ -13,6 +13,7 @@
 , pythonOlder
 , pytz
 , requests
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     pyopenssl
     pytz
     requests
+    setuptools
   ];
 
   postPatch = ''
