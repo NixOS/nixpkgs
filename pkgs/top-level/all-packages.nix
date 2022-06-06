@@ -21612,6 +21612,8 @@ with pkgs;
   };
   cassandra = cassandra_3_11;
 
+  cassandra-cpp-driver = callPackage ../development/libraries/cassandra-cpp-driver/default.nix { };
+
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
     java = jre;
   };
