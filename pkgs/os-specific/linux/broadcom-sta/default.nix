@@ -41,6 +41,8 @@ stdenv.mkDerivation {
     ./linux-5.9.patch
     # source: https://github.com/archlinux/svntogit-community/blob/5ec5b248976f84fcd7e3d7fae49ee91289912d12/trunk/012-linux517.patch
     ./linux-5.17.patch
+    # source: https://github.com/archlinux/svntogit-community/blob/packages/broadcom-wl-dkms/trunk/013-linux518.patch
+    ./linux-5.18.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];
