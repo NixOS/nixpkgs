@@ -166,6 +166,26 @@ rec {
           ${lib.optionalString (interactive) "--add-flags --interactive"}
       '');
 
+  evalTest = module: lib.evalModules { modules = testModules ++ [ module ]; };
+  runTest = module: (evalTest module).config.run;
+
+  testModules = [
+    ./testing/driver.nix
+    ./testing/interactive.nix
+    ./testing/legacy.nix
+    ./testing/meta.nix
+    ./testing/name.nix
+    ./testing/network.nix
+    ./testing/nodes.nix
+    ./testing/run.nix
+    ./testing/testScript.nix
+    {
+      config = {
+        hostPkgs = pkgs;
+      };
+    }
+  ];
+
   # Make a full-blown test
   makeTest =
     { machine ? null
