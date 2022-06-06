@@ -9821,6 +9821,12 @@
     githubId = 6931743;
     name = "pasqui23";
   };
+  patricksjackson = {
+    email = "patrick@jackson.dev";
+    github = "patricksjackson";
+    githubId = 160646;
+    name = "Patrick Jackson";
+  };
   patryk27 = {
     email = "pwychowaniec@pm.me";
     github = "Patryk27";
