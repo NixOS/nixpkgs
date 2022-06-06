@@ -1,7 +1,9 @@
 { lib
 , fetchFromGitHub
-, glib
+, atk
+, gdk-pixbuf
 , gobject-introspection
+, pango
 , python3Packages
 , txt2tags
 , wrapGAppsHook
@@ -10,13 +12,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xdgmenumaker";
-  version = "1.5";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "gapan";
     repo = pname;
     rev = version;
-    sha256 = "1vrsp5c1ah7p4dpwd6aqvinpwzd8crdimvyyr3lbm3c6cwpyjmif";
+    sha256 = "Q38m8YrvkkTCY2dByvPj+Ee1DMSUbWvwSDI0kW182bU=";
   };
 
   format = "other";
@@ -32,7 +34,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    glib
+    atk
+    gdk-pixbuf
+    pango
   ];
 
   pythonPath = with python3Packages; [
@@ -42,10 +46,6 @@ python3Packages.buildPythonApplication rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-  ];
-
-  installFlags = [
-    "DESTDIR="
   ];
 
   preFixup = ''
