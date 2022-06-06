@@ -9262,10 +9262,10 @@ let
 
   FutureAsyncAwait = buildPerlModule rec {
     pname = "Future-AsyncAwait";
-    version = "0.52";
+    version = "0.58";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-${version}.tar.gz";
-      sha256 = "0dwij2r51vij91hx808zc2l5q38h55jahzrh73h4rn816jv597yx";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/Future-AsyncAwait-0.58.tar.gz";
+      sha256 = "sha256-OLtJ9jabBUrAUuaNomR/4i0Io605rgNuJ6KRELtOQi4=";
     };
     buildInputs = [ TestRefcount ];
     propagatedBuildInputs = [ Future XSParseKeyword XSParseSublike ];
