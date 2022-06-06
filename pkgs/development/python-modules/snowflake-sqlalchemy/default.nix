@@ -1,8 +1,9 @@
 { buildPythonPackage
 , lib
 , fetchPypi
-, sqlalchemy
+, six
 , snowflake-connector-python
+, sqlalchemy
 }:
 
 buildPythonPackage rec {
@@ -15,8 +16,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    sqlalchemy
+    six
     snowflake-connector-python
+    sqlalchemy
   ];
 
   # Pypi does not include tests
