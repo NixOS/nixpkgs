@@ -1,4 +1,4 @@
-{ lib, hostPkgs, ... }: {
+{ lib, pkgs, ... }: {
   name = "3proxy";
   meta = with lib.maintainers; {
     maintainers = [ misuzu ];
@@ -133,7 +133,7 @@
     };
   };
 
-  testScript = let pkgs = hostPkgs; in ''
+  testScript = ''
     start_all()
 
     peer0.wait_for_unit("network-online.target")

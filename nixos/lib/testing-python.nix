@@ -179,6 +179,7 @@ rec {
     ./testing/network.nix
     ./testing/nodes.nix
     ./testing/params.nix
+    ./testing/pkgs.nix
     ./testing/run.nix
     ./testing/testScript.nix
     {
