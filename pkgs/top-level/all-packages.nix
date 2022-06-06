@@ -26470,8 +26470,6 @@ with pkgs;
 
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
 
-  gradio = callPackage ../applications/audio/gradio { };
-
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
 
   w_scan = callPackage ../applications/video/w_scan { };
