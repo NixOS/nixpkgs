@@ -36,8 +36,6 @@ with self; with super; {
 
   filelock =  callPackage ../development/python2-modules/filelock { };
 
-  flask = callPackage ../development/python2-modules/flask { };
-
   freezegun = callPackage ../development/python2-modules/freezegun { };
 
   futures = callPackage ../development/python2-modules/futures { };
