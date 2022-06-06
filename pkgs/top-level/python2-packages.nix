@@ -26,8 +26,6 @@ with self; with super; {
 
   coverage = callPackage ../development/python2-modules/coverage { };
 
-  cryptography = callPackage ../development/python2-modules/cryptography { };
-
   decorator = callPackage ../development/python2-modules/decorator { };
 
   enum = callPackage ../development/python2-modules/enum { };
