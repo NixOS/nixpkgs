@@ -32,6 +32,10 @@ in stdenv.mkDerivation {
     done
   '';
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: initc.o:(.bss+0x28): multiple definition of `HacksDisable'; cfg.o:(.bss+0x59e3): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   preConfigure = ''
     cd src
     sed -i "/^STRIP/d" configure

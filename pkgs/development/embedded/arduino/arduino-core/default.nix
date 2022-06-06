@@ -244,6 +244,7 @@ stdenv.mkDerivation rec {
     description = "Open-source electronics prototyping platform";
     homepage = "https://www.arduino.cc/";
     license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ antono auntie robberer bjornfor bergey ];
   };

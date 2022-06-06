@@ -26,8 +26,22 @@ let
     featureFlags.minimalModules = {};
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
-in
-{
+
+  allDrivers = getDrivers tests;
+
+  getDrivers = ts:
+    if isDerivation ts
+    then ts.driver or null
+    else if isAttrs ts
+    then recurseIntoAttrs (mapAttrs (k: getDrivers) ts)
+    else null;
+
+  tests = {
+
+  # for typechecking of the scripts and evaluation of
+  # the nodes, without running VMs.
+  inherit allDrivers;
+
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
   adguardhome = handleTest ./adguardhome.nix {};
@@ -152,6 +166,7 @@ in
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
   etebase-server = handleTest ./etebase-server.nix {};
   etesync-dav = handleTest ./etesync-dav.nix {};
+  extra-python-packages = handleTest ./extra-python-packages.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
   fcitx = handleTest ./fcitx {};
   fenics = handleTest ./fenics.nix {};
@@ -620,4 +635,5 @@ in
   zookeeper = handleTest ./zookeeper.nix {};
   zrepl = handleTest ./zrepl.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
-}
+};
+in tests

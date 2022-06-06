@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Generic unit testing framework and methodology for testing any kind of code";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     platforms = platforms.unix;
     license = licenses.asl20;
   };

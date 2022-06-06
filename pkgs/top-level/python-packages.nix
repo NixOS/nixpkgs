@@ -679,6 +679,8 @@ in {
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
+  asn1tools = callPackage ../development/python-modules/asn1tools { };
+
   aspell-python = callPackage ../development/python-modules/aspell-python { };
 
   aspy-refactor-imports = callPackage ../development/python-modules/aspy-refactor-imports { };
@@ -1552,6 +1554,10 @@ in {
   cement = callPackage ../development/python-modules/cement { };
 
   censys = callPackage ../development/python-modules/censys { };
+
+  coincurve = callPackage ../development/python-modules/coincurve {
+    inherit (pkgs) secp256k1;
+  };
 
   connect-box = callPackage ../development/python-modules/connect_box { };
 
@@ -2809,7 +2815,17 @@ in {
 
   etesync = callPackage ../development/python-modules/etesync { };
 
+  eth-abi = callPackage ../development/python-modules/eth-abi { };
+
+  eth-account = callPackage ../development/python-modules/eth-account { };
+
   eth-hash = callPackage ../development/python-modules/eth-hash { };
+
+  eth-keyfile = callPackage ../development/python-modules/eth-keyfile { };
+
+  eth-keys = callPackage ../development/python-modules/eth-keys { };
+
+  eth-rlp = callPackage ../development/python-modules/eth-rlp { };
 
   eth-typing = callPackage ../development/python-modules/eth-typing { };
 
@@ -3918,6 +3934,8 @@ in {
   hetzner = callPackage ../development/python-modules/hetzner { };
 
   heudiconv = callPackage ../development/python-modules/heudiconv { };
+
+  hexbytes = callPackage ../development/python-modules/hexbytes { };
 
   hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
 
@@ -5943,6 +5961,10 @@ in {
 
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
 
+  py-ecc = callPackage ../development/python-modules/py-ecc { };
+
+  py-eth-sig-utils = callPackage ../development/python-modules/py-eth-sig-utils { };
+
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   oasatelematics = callPackage ../development/python-modules/oasatelematics { };
@@ -7584,7 +7606,7 @@ in {
 
   pymbolic = callPackage ../development/python-modules/pymbolic { };
 
-  pymc3 = callPackage ../development/python-modules/pymc3 { };
+  pymc = callPackage ../development/python-modules/pymc { };
 
   pymdstat = callPackage ../development/python-modules/pymdstat { };
 

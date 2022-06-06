@@ -96,6 +96,10 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ cstrahan mdaiter ];
     description = "Dynamo inspired NoSQL DB by Basho";
     platforms   = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # dependencies
+    ];
     license     = licenses.asl20;
     knownVulnerabilities = [ "CVE-2017-3163 - see https://github.com/NixOS/nixpkgs/issues/33876" ];
   };

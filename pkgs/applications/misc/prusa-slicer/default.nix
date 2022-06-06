@@ -1,8 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, cmake, copyDesktopItems, makeDesktopItem, pkg-config, wrapGAppsHook
-, boost, cereal, cgal_5, curl, dbus, eigen, expat, glew, glib, gmp, gtest, gtk3, hicolor-icon-theme
-, ilmbase, libpng, mpfr, nlopt, openvdb, pcre, qhull, systemd, tbb, wxGTK31-gtk3, xorg, fetchpatch
-}:
-stdenv.mkDerivation rec {
+{ stdenv, lib, fetchFromGitHub, cmake, copyDesktopItems, makeDesktopItem
+, pkg-config, wrapGAppsHook, boost, cereal, cgal_5, curl, dbus, eigen, expat
+, glew, glib, gmp, gtest, gtk3, hicolor-icon-theme, ilmbase, libpng, mpfr, nlopt
+, openvdb, pcre, qhull, systemd, tbb, wxGTK31-gtk3, xorg, fetchpatch
+, wxGTK31-gtk3-override ? null }:
+let
+  wxGTK31-gtk3-prusa = wxGTK31-gtk3.overrideAttrs (old: rec {
+    pname = "wxwidgets-prusa3d-patched";
+    version = "3.1.4";
+    src = fetchFromGitHub {
+      owner = "prusa3d";
+      repo = "wxWidgets";
+      rev = "489f6118256853cf5b299d595868641938566cdb";
+      hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
+      fetchSubmodules = true;
+    };
+  });
+  wxGTK31-gtk3-override' = if wxGTK31-gtk3-override == null then wxGTK31-gtk3-prusa else wxGTK31-gtk3-override;
+in stdenv.mkDerivation rec {
   pname = "prusa-slicer";
   version = "2.4.2";
 
@@ -34,7 +48,7 @@ stdenv.mkDerivation rec {
     pcre
     systemd
     tbb
-    wxGTK31-gtk3
+    wxGTK31-gtk3-override'
     xorg.libX11
   ] ++ checkInputs;
 

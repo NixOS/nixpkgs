@@ -239,7 +239,7 @@ in {
     };
 
     environment.sessionVariables.LD_LIBRARY_PATH =
-      lib.optional cfg.jack.enable "${cfg.package.jack}/lib";
+      lib.mkIf cfg.jack.enable [ "${cfg.package.jack}/lib" ];
 
     users = lib.mkIf cfg.systemWide {
       users.pipewire = {

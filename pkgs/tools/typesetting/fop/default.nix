@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://xmlgraphics.apache.org/fop/";
     license = licenses.asl20;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     platforms = platforms.all;
     maintainers = with maintainers; [ bjornfor ];
   };

@@ -35,6 +35,7 @@ let
     meta = with lib; {
       homepage = "http://www.ubnt.com/";
       description = "Controller for Ubiquiti UniFi access points";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.unfree;
       platforms = platforms.unix;
       maintainers = with maintainers; [ erictapen globin patryk27 pennae ];

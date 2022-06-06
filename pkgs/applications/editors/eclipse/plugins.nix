@@ -108,6 +108,7 @@ rec {
     meta = with lib; {
       homepage = "https://github.com/tobiasmelcher/EclipseAceJump";
       description = "Provides fast jumps to text based on initial letter";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.mit;
       platforms = platforms.all;
     };
@@ -130,6 +131,7 @@ rec {
     meta = with lib; {
       homepage = "https://mihai-nita.net/java/#ePluginAEC";
       description = "Adds support for ANSI escape sequences in the Eclipse console";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.all;
     };
@@ -152,6 +154,7 @@ rec {
     meta = with lib; {
       description = "A powerful parser generator for processing structured text or binary files";
       homepage = "https://www.antlr.org/";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
       platforms = platforms.all;
     };
@@ -174,6 +177,7 @@ rec {
     meta = with lib; {
       description = "A powerful parser generator for processing structured text or binary files";
       homepage = "https://www.antlr.org/";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
       platforms = platforms.all;
     };
@@ -196,6 +200,7 @@ rec {
     meta = with lib; {
       homepage = "http://andrei.gmxhome.de/anyedit/";
       description = "Adds new tools to the context menu of text-based editors";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
     };
@@ -218,6 +223,7 @@ rec {
     meta = with lib; {
       homepage = "https://github.com/cypher256/eclipse-encoding-plugin";
       description = "Show file encoding and line ending for the active editor in the eclipse status bar";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
     };
@@ -240,6 +246,7 @@ rec {
     meta = with lib; {
       homepage = "http://andrei.gmxhome.de/bytecode/";
       description = "Shows disassembled bytecode of current java editor or class file";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd2;
       platforms = platforms.all;
     };
@@ -259,6 +266,7 @@ rec {
     meta = with lib; {
       homepage = "https://eclipse.org/cdt/";
       description = "C/C++ development tooling";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.bjornfor ];
@@ -278,6 +286,7 @@ rec {
     meta = with lib; {
       homepage = "https://eclipse-cs.sourceforge.net/";
       description = "Checkstyle integration into the Eclipse IDE";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.lgpl21;
       platforms = platforms.all;
     };
@@ -301,6 +310,7 @@ rec {
     meta = with lib; {
       homepage = "http://eclipsecolorthemes.org/";
       description = "Plugin to switch color themes conveniently and without side effects";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
     };
@@ -333,6 +343,7 @@ rec {
     meta = with lib; {
       homepage = "http://www2.cs.tum.edu/projects/cup/eclipse.php";
       description = "IDE for developing CUP based parsers";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];
     };
@@ -358,6 +369,7 @@ rec {
     meta = with lib; {
       homepage = "https://www.drools.org/";
       description = "Drools is a Business Rules Management System (BRMS) solution";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
     };
   };
@@ -375,6 +387,7 @@ rec {
     meta = with lib; {
       homepage = "https://www.eclemma.org/";
       description = "EclEmma is a free Java code coverage tool for Eclipse";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
     };
@@ -397,6 +410,7 @@ rec {
     meta = with lib; {
       homepage = "http://findbugs.sourceforge.net/";
       description = "Plugin that uses static analysis to look for bugs in Java code";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
     };
@@ -415,6 +429,7 @@ rec {
     meta = with lib; {
       homepage = "https://github.com/ddekany/jbosstools-freemarker";
       description = "Plugin that provides an editor for Apache FreeMarker files";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
     };
   };
 
@@ -431,6 +446,7 @@ rec {
     meta = with lib; {
       homepage = "http://gnuarmeclipse.livius.net/";
       description = "GNU ARM Eclipse Plug-ins";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
       maintainers = [ maintainers.bjornfor ];
@@ -469,6 +485,7 @@ rec {
     meta = with lib; {
       description = "Adds support for JSON files to Eclipse";
       homepage = "https://github.com/boothen/Json-Eclipse-Plugin";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
     };
@@ -491,6 +508,7 @@ rec {
     meta = with lib; {
       homepage = "https://github.com/angelozerr/jdt-codemining";
       description = "Provides JDT Java CodeMining";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
     };
@@ -516,6 +534,7 @@ rec {
     meta = with lib; {
       homepage = "https://github.com/RustDT";
       description = "Rust development tooling";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
     };
@@ -533,6 +552,7 @@ rec {
     meta = with lib; {
       homepage = "http://scala-ide.org/";
       description = "The Scala IDE for Eclipse";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.bsd3;
       platforms = platforms.all;
     };
@@ -551,6 +571,7 @@ rec {
     meta = with lib; {
       homepage = "https://spotbugs.github.io/";
       description = "Plugin that uses static analysis to look for bugs in Java code";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.lgpl21;
       platforms = platforms.all;
     };
@@ -573,6 +594,7 @@ rec {
     meta = with lib; {
       homepage = "https://testng.org/doc/";
       description = "Eclipse plugin for the TestNG testing framework";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.all;
     };
@@ -594,6 +616,7 @@ rec {
     meta = with lib; {
       homepage = "https://github.com/vrapper/vrapper";
       description = "A wrapper to provide a Vim-like input scheme for moving around and editing text";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.gpl3;
       platforms = platforms.all;
       maintainers = [ maintainers.stumoss ];
@@ -617,6 +640,7 @@ rec {
     meta = with lib; {
       homepage = "https://github.com/oyse/yedit";
       description = "A YAML editor plugin for Eclipse";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.epl10;
       platforms = platforms.all;
     };
@@ -634,6 +658,7 @@ rec {
     meta = with lib; {
       homepage = "https://www.eclipse.org/gef/zest/";
       description = "The Eclipse Visualization Toolkit";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       platforms = platforms.all;
       maintainers = [ maintainers.romildo ];
     };
@@ -656,6 +681,7 @@ rec {
     meta = with lib; {
       homepage = "https://ant.apache.org/ivy/ivyde/index.html";
       description = "A plugin which integrates Apache Ivy's dependency management";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.all;
       maintainers = [ maintainers.r3dl3g ];
@@ -683,6 +709,7 @@ rec {
         Apache IvyDE Resolve Visualizer is an optional dependency of Apache IvyDE since
         it requires additional plugins to be installed (Zest).
       '';
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.all;
       maintainers = [ maintainers.r3dl3g ];
@@ -706,6 +733,7 @@ rec {
     meta = with lib; {
       homepage = "https://ant.apache.org/ivy/index.html";
       description = "A popular dependency manager focusing on flexibility and simplicity";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.all;
       maintainers = [ maintainers.r3dl3g ];
@@ -729,6 +757,7 @@ rec {
     meta = with lib; {
       homepage = "https://ant.apache.org/ivy/ivyde/index.html";
       description = "Ant Tasks integrated into Eclipse's Ant runtime";
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.asl20;
       platforms = platforms.all;
       maintainers = [ maintainers.r3dl3g ];

@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A tool for making JavaScript download and run faster";
     homepage = "https://developers.google.com/closure/compiler/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     platforms = platforms.all;
   };
