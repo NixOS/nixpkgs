@@ -30,8 +30,6 @@ with self; with super; {
 
   filelock =  callPackage ../development/python2-modules/filelock { };
 
-  freezegun = callPackage ../development/python2-modules/freezegun { };
-
   futures = callPackage ../development/python2-modules/futures { };
 
   google-apputils = callPackage ../development/python2-modules/google-apputils { };
