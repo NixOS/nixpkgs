@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+{ lib, pkgs, ... }: {
   name = "3proxy";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ misuzu ];
@@ -186,4 +186,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         "${pkgs.wget}/bin/wget -e use_proxy=yes -e http_proxy=http://192.168.0.4:3128 -S -O /dev/null http://127.0.0.1:9999"
     )
   '';
-})
+}
