@@ -2989,6 +2989,8 @@ with pkgs;
 
   clac = callPackage ../tools/misc/clac {};
 
+  map-cmd = callPackage ../tools/misc/map {};
+
   clash = callPackage ../tools/networking/clash {
     buildGoModule = buildGo118Module;
   };
