@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     "--enable-crypt"
     "--enable-modules"
     "--enable-overlays"
+    "--enable-ppolicy"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--with-yielding_select=yes"
     "ac_cv_func_memcmp_working=yes"
