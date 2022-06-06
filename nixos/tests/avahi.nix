@@ -1,38 +1,35 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
-# bool: whether to use networkd in the tests
-, networkd ? false
-} @ args:
-
 # Test whether `avahi-daemon' and `libnss-mdns' work as expected.
-import ./make-test-python.nix {
+{ lib, ... }:
+{
   name = "avahi";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ eelco ];
   };
 
-  nodes = let
-    cfg = { ... }: {
-      services.avahi = {
-        enable = true;
-        nssmdns = true;
-        publish.addresses = true;
-        publish.domain = true;
-        publish.enable = true;
-        publish.userServices = true;
-        publish.workstation = true;
-        extraServiceFiles.ssh = "${pkgs.avahi}/etc/avahi/services/ssh.service";
-      };
-    } // pkgs.lib.optionalAttrs (networkd) {
-      networking = {
-        useNetworkd = true;
-        useDHCP = false;
-      };
+  matrix.variation.value.plain = { };
+  matrix.variation.value.networkd = {
+    defaults.networking = {
+      useNetworkd = true;
+      useDHCP = false;
     };
-  in {
-    one = cfg;
-    two = cfg;
+  };
+
+  defaults = { pkgs, ... }: {
+    services.avahi = {
+      enable = true;
+      nssmdns = true;
+      publish.addresses = true;
+      publish.domain = true;
+      publish.enable = true;
+      publish.userServices = true;
+      publish.workstation = true;
+      extraServiceFiles.ssh = "${pkgs.avahi}/etc/avahi/services/ssh.service";
+    };
+  };
+
+  nodes = {
+    one = { };
+    two = { };
   };
 
   testScript = ''
@@ -76,4 +73,4 @@ import ./make-test-python.nix {
     two.succeed("avahi-browse -r -t _ssh._tcp | tee out >&2")
     two.succeed("test `wc -l < out` -gt 0")
   '';
-} args
+}
