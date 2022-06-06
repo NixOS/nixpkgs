@@ -54,8 +54,6 @@ with self; with super; {
 
   ipaddr = callPackage ../development/python2-modules/ipaddr { };
 
-  itsdangerous = callPackage ../development/python2-modules/itsdangerous { };
-
   jinja2 = callPackage ../development/python2-modules/jinja2 { };
 
   libcloud = callPackage ../development/python2-modules/libcloud { };
