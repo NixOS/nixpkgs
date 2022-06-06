@@ -167,12 +167,13 @@ rec {
       '');
 
   evalTest = module: lib.evalModules { modules = testModules ++ [ module ]; };
-  runTest = module: (evalTest module).config.run;
+  runTest = module: (evalTest module).config.result;
 
   testModules = [
     ./testing/driver.nix
     ./testing/interactive.nix
     ./testing/legacy.nix
+    ./testing/matrix.nix
     ./testing/meta.nix
     ./testing/name.nix
     ./testing/network.nix
