@@ -5561,6 +5561,8 @@ with pkgs;
 
   choose = callPackage ../tools/text/choose { };
 
+  conform = callPackage ../applications/version-management/git-and-tools/conform { };
+
   emscripten = callPackage ../development/compilers/emscripten {
     llvmPackages = llvmPackages_13;
   };
