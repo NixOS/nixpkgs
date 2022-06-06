@@ -12,9 +12,9 @@ stdenv.mkDerivation {
     sha256 = "1gmxyjx7kbr2n33aq84ipa2pfhrdw7v7ggz01qd54nqyvp8hdbzs";
   };
 
-  buildInputs = [ openssl ];
-
   nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ];
 
   makeFlags = [
     "PREFIX=\${out}"
