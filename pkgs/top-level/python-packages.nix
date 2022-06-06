@@ -883,6 +883,8 @@ in {
 
   azure-cosmosdb-table = callPackage ../development/python-modules/azure-cosmosdb-table { };
 
+  azure-data-tables = callPackage ../development/python-modules/azure-data-tables { };
+
   azure-datalake-store = callPackage ../development/python-modules/azure-datalake-store { };
 
   azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
