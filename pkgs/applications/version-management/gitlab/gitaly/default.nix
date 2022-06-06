@@ -11,7 +11,7 @@ let
     gemdir = ./.;
   };
 
-  version = "15.0.1";
+  version = "15.0.2";
   package_version = "v14";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 in
@@ -24,7 +24,7 @@ buildGoModule {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-pNVeXB2A8jYUVir6t8jz6ifBksWucZjUn6RIszXdwJY=";
+    sha256 = "sha256-jwPXar16FOq0xCg3xUXH72YPmoVa91ae3bgz95ZmYo4=";
   };
 
   vendorSha256 = "sha256-/tHKWo09ZV31TSIqlOk36V3y7gNikziUJHf+nS1gHEw=";
