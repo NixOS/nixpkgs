@@ -44,8 +44,6 @@ with self; with super; {
 
   importlib-metadata = callPackage ../development/python2-modules/importlib-metadata { };
 
-  ipaddr = callPackage ../development/python2-modules/ipaddr { };
-
   jinja2 = callPackage ../development/python2-modules/jinja2 { };
 
   libcloud = callPackage ../development/python2-modules/libcloud { };
