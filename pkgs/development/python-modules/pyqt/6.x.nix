@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , python
+, pythonPackages
 , isPy27
 , fetchPypi
 , pkg-config
@@ -97,6 +98,10 @@ in buildPythonPackage rec {
     inherit sip pyqt6_sip;
     multimediaEnabled = withMultimedia;
     WebSocketsEnabled = withWebSockets;
+
+    pyqtwebengine = qt6Packages.callPackage ../pyqtwebengine/6.x.nix {
+      inherit pythonPackages qt6Libs;
+    };
   };
 
   configurePhase = ''
