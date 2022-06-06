@@ -234,9 +234,6 @@ in {
     # TODO(@Artturin): Add this to the main cpython expr
     strictDeps = true;
     pname = "python3-minimal";
-    meta = old.meta // {
-      maintainers = [];
-    };
   });
 
   pypy27 = callPackage ./pypy {
