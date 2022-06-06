@@ -1,24 +1,23 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , lxml
 , pythonOlder
 , xmltodict
 }:
 
 buildPythonPackage rec {
-  pname = "pyialarmxr";
+  pname = "pyialarmxr-homeassistant";
   version = "1.0.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "bigmoby";
-    repo = pname;
-    rev = version;
-    hash = "sha256-Q1NsPLA1W4nxSG/9jlMf6BkC3ZrUrhl8oDX7U4aAjxM=";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-aQHJiSmaGyABHP17oFH+6JQ9zNJ6pj2+PcE+gsRuhaQ=";
   };
+
   propagatedBuildInputs = [
     lxml
     xmltodict
@@ -33,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Library to interface with Antifurto365 iAlarmXR systems";
-    homepage = "https://github.com/bigmoby/pyialarmxr";
+    homepage = "https://pypi.org/project/pyialarmxr-homeassistant/";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
