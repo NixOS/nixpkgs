@@ -1371,8 +1371,8 @@ let
         mktplcRef = {
           name = "language-haskell";
           publisher = "justusadam";
-          version = "3.4.0";
-          sha256 = "0ab7m5jzxakjxaiwmg0jcck53vnn183589bbxh3iiylkpicrv67y";
+          version = "3.6.0";
+          sha256 = "sha256-rZXRzPmu7IYmyRWANtpJp3wp0r/RwB7eGHEJa7hBvoQ=";
         };
         meta = {
           license = lib.licenses.bsd3;
