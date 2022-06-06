@@ -63,6 +63,6 @@ buildPythonPackage rec {
     description = "Tools for parsing the metadata for Mozilla's glean telemetry SDK";
     homepage = "https://github.com/mozilla/glean_parser";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ kvark ];
+    maintainers = with maintainers; [];
   };
 }
