@@ -9,6 +9,7 @@ let
     ./driver.nix
     ./interactive.nix
     ./legacy.nix
+    ./matrix.nix
     ./meta.nix
     ./name.nix
     ./network.nix
