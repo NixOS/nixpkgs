@@ -12012,6 +12012,12 @@
     githubId = 26806;
     name = "Scott Olson";
   };
+  somasis = {
+    email = "kylie@somas.is";
+    github = "somasis";
+    githubId = 264788;
+    name = "Kylie McClain";
+  };
   SomeoneSerge = {
     email = "sergei.kozlukov@aalto.fi";
     matrix = "@ss:someonex.net";
