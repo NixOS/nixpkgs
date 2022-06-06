@@ -25,6 +25,11 @@ fi
 store_src="$(nix-build -A ArchiSteamFarm.src --no-out-link)"
 platforms="$(nix-instantiate --strict --eval --json -A ArchiSteamFarm.meta.platforms | jq -r .[])"
 src="$(mktemp -d /tmp/ArchiSteamFarm-src.XXX)"
+
+trap '
+  rm -r "$src"
+' EXIT
+
 cp -rT "$store_src" "$src"
 chmod -R +w "$src"
 
@@ -44,9 +49,5 @@ for i in $platforms; do
   || echo "Did you set up binformat for $i?";
 done;
 
-trap '
-  popd
-  rm -r "$src"
-' EXIT
 cd "$asf_path"
 ./web-ui/update.sh
