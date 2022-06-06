@@ -46,8 +46,6 @@ with self; with super; {
 
   jinja2 = callPackage ../development/python2-modules/jinja2 { };
 
-  lpod = callPackage ../development/python2-modules/lpod { };
-
   marisa = callPackage ../development/python2-modules/marisa {
     inherit (pkgs) marisa;
   };
