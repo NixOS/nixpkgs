@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, txt2tags, python3Packages, glib, gobject-introspection, wrapGAppsHook }:
+{ lib
+, fetchFromGitHub
+, glib
+, gobject-introspection
+, python3Packages
+, txt2tags
+, wrapGAppsHook
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "xdgmenumaker";
@@ -26,8 +33,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonPath = with python3Packages; [
-    pyxdg
     pygobject3
+    pyxdg
   ];
 
   makeFlags = [
