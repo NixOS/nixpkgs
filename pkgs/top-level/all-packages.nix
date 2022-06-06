@@ -10225,6 +10225,8 @@ with pkgs;
 
   shelldap = callPackage ../tools/misc/shelldap { };
 
+  dt-shell-color-scripts = callPackage ../tools/misc/dt-shell-color-scripts { };
+
   shellspec = callPackage ../tools/misc/shellspec { };
 
   schema2ldif = callPackage ../tools/text/schema2ldif { };
