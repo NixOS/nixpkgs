@@ -5,9 +5,7 @@ let
 
   overrideAzureMgmtPackage = package: version: extension: sha256:
     # check to make sure overriding is even necessary
-    if version == package.version then
-      package
-    else package.overrideAttrs(oldAttrs: rec {
+    package.overrideAttrs(oldAttrs: rec {
       inherit version;
 
       src = py.pkgs.fetchPypi {
@@ -15,14 +13,14 @@ let
         inherit version sha256 extension;
       };
 
-      preBuild = ''
-        rm -f azure_bdist_wheel.py
-        substituteInPlace setup.cfg \
-          --replace "azure-namespace-package = azure-mgmt-nspkg" ""
-      '';
+      #preBuild = ''
+      #  rm -f azure_bdist_wheel.py
+      #  substituteInPlace setup.cfg \
+      #    --replace "azure-namespace-package = azure-mgmt-nspkg" ""
+      #'';
 
-      # force PEP420
-      pythonNamespaces = [ "azure.mgmt" ];
+      ## force PEP420
+      #pythonNamespaces = [ "azure.mgmt" ];
     });
 
   py = python3.override {
