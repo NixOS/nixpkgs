@@ -1,78 +1,66 @@
-test@{ config, lib, ... }:
+test@{ config, lib, params, ... }:
 let
   inherit (lib) optionalString mkOption;
-  inherit (config.params) domain fqdn fqdnOrNull;
+  inherit (params) domain;
   hostName = "ahost";
+  fqdnOrNull = if domain == null then null else fqdn;
+  fqdn = hostName + (optionalString (domain != null) ".${domain}");
 
   getStr = str: # maybeString2String
     let res = builtins.tryEval str;
     in if (res.success && res.value != null) then res.value else "null";
+
 in
 {
-
   meta = with lib.maintainers; {
     maintainers = [ primeos blitz ];
   };
 
-  options.params = {
-    domain = mkOption { };
-    fqdn = mkOption { readOnly = true; default = hostName + (optionalString (domain != null) ".${domain}"); };
-    fqdnOrNull = mkOption {
-      readOnly = true;
-      default =
-        if domain == null then null else fqdn;
-    };
+  name = "hostname-${fqdn}";
+
+  matrix.domain.value.explicit.params.domain = "adomain";
+  matrix.domain.value.implicit.params.domain = null;
+
+  nodes.machine = { lib, pkgs, ... }: {
+    networking.hostName = hostName;
+    networking.domain = domain;
+
+    environment.systemPackages = with pkgs; [
+      inetutils
+    ];
   };
 
-  config = {
-    name = "hostname-${fqdn}";
+  testScript = { nodes, ... }: ''
+    start_all()
 
-    matrix.domain.value.explicit =
-      { params.domain = "adomain"; };
-    matrix.domain.value.implicit =
-      { params.domain = null; };
+    machine = ${hostName}
 
-    nodes.machine = { lib, pkgs, ... }: {
-      networking.hostName = hostName;
-      networking.domain = domain;
+    machine.wait_for_unit("network-online.target")
 
-      environment.systemPackages = with pkgs; [
-        inetutils
-      ];
-    };
+    # Test if NixOS computes the correct FQDN (either a FQDN or an error/null):
+    assert "${getStr nodes.machine.config.networking.fqdn}" == "${getStr fqdnOrNull}"
 
-    testScript = { nodes, ... }: ''
-      start_all()
+    # The FQDN, domain name, and hostname detection should work as expected:
+    assert "${fqdn}" == machine.succeed("hostname --fqdn").strip()
+    assert "${optionalString (domain != null) domain}" == machine.succeed("dnsdomainname").strip()
+    assert (
+        "${hostName}"
+        == machine.succeed(
+            'hostnamectl status | grep "Static hostname" | cut -d: -f2'
+        ).strip()
+    )
 
-      machine = ${hostName}
+    # 127.0.0.1 and ::1 should resolve back to "localhost":
+    assert (
+        "localhost" == machine.succeed("getent hosts 127.0.0.1 | awk '{print $2}'").strip()
+    )
+    assert "localhost" == machine.succeed("getent hosts ::1 | awk '{print $2}'").strip()
 
-      machine.wait_for_unit("network-online.target")
-
-      # Test if NixOS computes the correct FQDN (either a FQDN or an error/null):
-      assert "${getStr nodes.machine.config.networking.fqdn}" == "${getStr fqdnOrNull}"
-
-      # The FQDN, domain name, and hostname detection should work as expected:
-      assert "${fqdn}" == machine.succeed("hostname --fqdn").strip()
-      assert "${optionalString (domain != null) domain}" == machine.succeed("dnsdomainname").strip()
-      assert (
-          "${hostName}"
-          == machine.succeed(
-              'hostnamectl status | grep "Static hostname" | cut -d: -f2'
-          ).strip()
-      )
-
-      # 127.0.0.1 and ::1 should resolve back to "localhost":
-      assert (
-          "localhost" == machine.succeed("getent hosts 127.0.0.1 | awk '{print $2}'").strip()
-      )
-      assert "localhost" == machine.succeed("getent hosts ::1 | awk '{print $2}'").strip()
-
-      # 127.0.0.2 should resolve back to the FQDN and hostname:
-      fqdn_and_host_name = "${optionalString (domain != null) "${hostName}.${domain} "}${hostName}"
-      assert (
-          fqdn_and_host_name
-          == machine.succeed("getent hosts 127.0.0.2 | awk '{print $2,$3}'").strip()
-      )
-    '';
-  };
+    # 127.0.0.2 should resolve back to the FQDN and hostname:
+    fqdn_and_host_name = "${optionalString (domain != null) "${hostName}.${domain} "}${hostName}"
+    assert (
+        fqdn_and_host_name
+        == machine.succeed("getent hosts 127.0.0.2 | awk '{print $2,$3}'").strip()
+    )
+  '';
 }
