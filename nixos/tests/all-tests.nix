@@ -27,6 +27,8 @@ let
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
 
+  runTest = (import ../lib/testing-python.nix { inherit system pkgs; }).runTest;
+
 in {
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
@@ -222,7 +224,7 @@ in {
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
   hockeypuck = handleTest ./hockeypuck.nix { };
   home-assistant = handleTest ./home-assistant.nix {};
-  hostname = handleTest ./hostname.nix {};
+  hostname = runTest ./hostname.nix;
   hound = handleTest ./hound.nix {};
   hub = handleTest ./git/hub.nix {};
   hydra = handleTest ./hydra {};
