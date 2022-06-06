@@ -13020,6 +13020,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  gmqcc = callPackage ../development/compilers/gmqcc {};
+
   gtk-server = callPackage ../development/interpreters/gtk-server {};
 
   # Haskell and GHC
