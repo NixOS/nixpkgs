@@ -1216,6 +1216,8 @@ with pkgs;
 
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
 
+  voms = callPackage ../tools/networking/voms { };
+
   vopono = callPackage ../tools/networking/vopono { };
 
   winbox = callPackage ../tools/admin/winbox {
