@@ -156,8 +156,6 @@ with self; with super; {
 
   typing = callPackage ../development/python2-modules/typing { };
 
-  werkzeug = callPackage ../development/python2-modules/werkzeug { };
-
   wsproto = callPackage ../development/python2-modules/wsproto { };
 
   zeek = disabled super.zeek;
