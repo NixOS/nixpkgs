@@ -35,6 +35,7 @@ lib.warnIf (attrs ? name) "builtPerlPackage: `name' (\"${attrs.name}\") is depre
 (let
   defaultMeta = {
     homepage = "https://metacpan.org/release/${lib.getName attrs}"; # TODO: phase-out `attrs.name`
+    mainProgram = attrs.pname or (builtins.parseDrvName attrs.name).name;
     platforms = perl.meta.platforms;
   };
 

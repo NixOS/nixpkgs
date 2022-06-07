@@ -85,7 +85,20 @@ in lib.makeExtensible (self: {
     sha256 = "sha256-zldZ4SiwkISFXxrbY/UdwooIZ3Z/I6qKxtpc3zD0T/o=";
   };
 
-  stable = self.nix_2_8;
+  nix_2_9 = common {
+    version = "2.9.0";
+    sha256 = "sha256-W6aTsTpCTb+vXQEXDjnKqetOuJmEfSuK2CXvAMqwo74=";
+    patches = [
+      # can be removed when updated to 2.9.1
+      (fetchpatch {
+        name = "fix-segfault-in-git-fetcher";
+        url = "https://github.com/NixOS/nix/commit/bc4759345538c89e1f045aaabcc0cafe4ecca12a.patch";
+        sha256 = "sha256-UrfH4M7a02yfE9X3tA1Pwhw4RacBW+rShYkl7ybG64I=";
+      })
+    ];
+  };
+
+  stable = self.nix_2_9;
 
   # remember to backport updates to the stable branch!
   unstable = lib.lowPrio (common rec {
