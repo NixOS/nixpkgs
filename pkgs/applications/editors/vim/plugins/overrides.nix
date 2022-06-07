@@ -20,8 +20,10 @@
 , dasht
 , direnv
 , fzf
+, gawk
 , gnome
 , himalaya
+, jq
 , khard
 , languagetool
 , llvmPackages
@@ -298,6 +300,18 @@ self: super: {
     prePatch = ''
       rm Makefile
     '';
+  });
+
+  fzf-hoogle-vim = super.fzf-hoogle-vim.overrideAttrs (old: {
+
+    # add this to your lua config to prevent the plugin from trying to write in the
+    # nix store:
+    # vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json'
+    propagatedBuildInputs = [
+      jq
+      gawk
+    ];
+    dependencies = with self; [ fzf-vim ];
   });
 
   fzf-lua = super.fzf-lua.overrideAttrs (old: {
