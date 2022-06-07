@@ -1,4 +1,5 @@
 { stdenvNoCC, fetchurl, newScope, pkgs
+, stdenv, overrideCC
 , xar, cpio, python3, pbzx }:
 
 let
@@ -54,5 +55,21 @@ let
     # questionable aliases
     configd = pkgs.darwin.apple_sdk.frameworks.SystemConfiguration;
     IOKit = pkgs.darwin.apple_sdk.frameworks.IOKit;
+
+    stdenv =
+      let
+        clang = stdenv.cc.override {
+          bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
+          libc = packages.Libsystem;
+        };
+      in
+      if stdenv.isAarch64 then stdenv
+      else
+        (overrideCC stdenv clang).override {
+          targetPlatform = stdenv.targetPlatform // {
+            darwinMinVersion = "10.12";
+            darwinSdkVersion = "11.0";
+          };
+        };
   };
 in packages
