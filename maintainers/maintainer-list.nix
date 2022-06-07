@@ -7056,13 +7056,6 @@
     githubId = 449813;
     name = "Roman Kuznetsov";
   };
-  kvark = {
-    name = "Dzmitry Malyshau";
-    email = "kvark@fastmail.com";
-    matrix = "@kvark:matrix.org";
-    github = "kvark";
-    githubId = 107301;
-  };
   kwohlfahrt = {
     email = "kai.wohlfahrt@gmail.com";
     github = "kwohlfahrt";
