@@ -96,6 +96,7 @@ mapAliases ({
   awesome-4-0 = awesome; # Added 2022-05-05
   aws-okta = throw "aws-okta is on indefinite hiatus. See https://github.com/segmentio/aws-okta/issues/278"; # Added 2022-04-05;
   axoloti = throw "axoloti has been removed: abandoned by upstream"; # Added 2022-05-13
+  azure-vhd-utils = throw "azure-vhd-utils has been dropped due to the lack of maintenance from upstream since 2018"; # Added 2022-06-03
   azureus = throw "azureus is now known as vuze and the version in nixpkgs was really outdated"; # Added 2021-08-02
 
   ### B ###
@@ -385,6 +386,7 @@ mapAliases ({
 
   enblendenfuse = throw "'enblendenfuse' has been renamed to/replaced by 'enblend-enfuse'"; # Converted to throw 2022-02-22
   encryptr = throw "encryptr was removed because it reached end of life"; # Added 2022-02-06
+  envdir = throw "envdir has been dropped due to the lack of maintenance from upstream since 2018"; # Added 2022-06-03
   envelope = throw "envelope has been removed from nixpkgs, as it was unmaintained"; # Added 2021-08-05
   epoxy = libepoxy; # Added 2021-11-11
   epsxe = throw "epsxe has been removed from nixpkgs, as it was unmaintained."; # added 2021-12-15
@@ -1335,7 +1337,6 @@ mapAliases ({
   telepathy_mission_control = throw "'telepathy_mission_control' has been renamed to/replaced by 'telepathy-mission-control'"; # Converted to throw 2022-02-22
   telepathy_qt = throw "'telepathy_qt' has been renamed to/replaced by 'telepathy-qt'"; # Converted to throw 2022-02-22
   telepathy_qt5 = throw "'telepathy_qt5' has been renamed to/replaced by 'libsForQt5.telepathy'"; # Converted to throw 2022-02-22
-  telepathy_salut = throw "'telepathy_salut' has been renamed to/replaced by 'telepathy-salut'"; # Converted to throw 2022-02-22
   telnet = throw "'telnet' has been renamed to/replaced by 'inetutils'"; # Converted to throw 2022-02-22
   terminus = throw "terminus has been removed, it was unmaintained in nixpkgs"; # Added 2021-08-21
   terraform-provider-ibm = throw "'terraform-provider-ibm' has been renamed to/replaced by 'terraform-providers.ibm'"; # Converted to throw 2022-02-22
@@ -1380,6 +1381,7 @@ mapAliases ({
   tuijam = throw "tuijam has been removed because Google Play Music was discontinued"; # Added 2021-03-07
   turbo-geth = throw "turbo-geth has been renamed to erigon"; # Added 2021-08-08
   twister = throw "twister has been removed: abandoned by upstream and python2-only"; # Added 2022-04-26
+  tychus = throw "tychus has been dropped due to the lack of maintenance from upstream since 2018"; # Added 2022-06-03
   typora = throw "Newer versions of typora use anti-user encryption and refuse to start. As such it has been removed"; # Added 2021-09-11
 
   ### U ###
@@ -1449,6 +1451,7 @@ mapAliases ({
   wireguard = throw "'wireguard' has been renamed to/replaced by 'wireguard-tools'"; # Converted to throw 2022-02-22
   wormhole-rs = magic-wormhole-rs; # Added 2022-05-30. preserve, reason: Arch package name, main binary name
   wmii_hg = wmii;
+  ws = throw "ws has been dropped due to the lack of maintenance from upstream since 2018"; # Added 2022-06-03
   wxmupen64plus = throw "wxmupen64plus was removed because the upstream disappeared"; # Added 2022-01-31
 
   ### X ###

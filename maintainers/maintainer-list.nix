@@ -3770,12 +3770,6 @@
     githubId = 57923898;
     name = "Elyhaka";
   };
-  em0lar = {
-    email = "nix@em0lar.dev";
-    github = "em0lar";
-    githubId = 11006031;
-    name = "Leo Maroni";
-  };
   emmabastas = {
     email = "emma.bastas@protonmail.com";
     matrix = "@emmabastas:matrix.org";
@@ -7288,6 +7282,12 @@
     githubId = 8355305;
     name = "leo60228";
   };
+  leona = {
+    email = "nix@leona.is";
+    github = "leona-ya";
+    githubId = 11006031;
+    name = "Leona Maroni";
+  };
   leonardoce = {
     email = "leonardo.cecchi@gmail.com";
     github = "leonardoce";
@@ -10235,6 +10235,12 @@
     githubId = 10473184;
     name = "Jia Xiaodong";
   };
+  pogobanane = {
+    email = "mail@peter-okelmann.de";
+    github = "pogobanane";
+    githubId = 38314551;
+    name = "Peter Okelmann";
+  };
   polarmutex = {
     email = "brian@brianryall.xyz";
     github = "polarmutex";
@@ -12005,6 +12011,12 @@
     github = "solson";
     githubId = 26806;
     name = "Scott Olson";
+  };
+  somasis = {
+    email = "kylie@somas.is";
+    github = "somasis";
+    githubId = 264788;
+    name = "Kylie McClain";
   };
   SomeoneSerge = {
     email = "sergei.kozlukov@aalto.fi";
