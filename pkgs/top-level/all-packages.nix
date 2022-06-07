@@ -3942,6 +3942,24 @@ with pkgs;
 
   meson = callPackage ../development/tools/build-managers/meson { };
 
+  # while building documentation meson may want to run binaries for host
+  # which needs an emulator
+  # example of an error which this fixes
+  # [Errno 8] Exec format error: './gdk3-scan'
+  mesonEmulatorHook =
+    if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      makeSetupHook
+        {
+          name = "mesonEmulatorHook";
+          substitutions = {
+            crossFile = writeText "cross-file.conf" ''
+              [binaries]
+              exe_wrapper = ${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
+            '';
+          };
+        } ../development/tools/build-managers/meson/emulator-hook.sh
+    else throw "mesonEmulatorHook has to be in a cross conditional i.e. (stdenv.buildPlatform != stdenv.hostPlatform)";
+
   meson-tools = callPackage ../misc/meson-tools { };
 
   metabase = callPackage ../servers/metabase { };
