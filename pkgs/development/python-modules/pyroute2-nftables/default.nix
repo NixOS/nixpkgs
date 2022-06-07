@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "pyroute2-nftables";
-  version = "0.6.10";
+  version = "0.6.11";
 
   src = fetchPypi {
     pname = "pyroute2.nftables";
     inherit version;
-    sha256 = "sha256-dUuCTGs7RaEehsAgK7yNw11tE3VGtT5LxDilMVWpCNU=";
+    sha256 = "sha256-2SHAH4HBcXknCa2rdHk1s+ju+IN5ndcLPD8dgSGagqU=";
   };
 
   propagatedBuildInputs = [
