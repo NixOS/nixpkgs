@@ -2710,6 +2710,8 @@ with pkgs;
 
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
+  bluewalker = callPackage ../tools/bluetooth/bluewalker { };
+
   blur-effect = callPackage ../tools/graphics/blur-effect { };
 
   bootiso = callPackage ../tools/cd-dvd/bootiso { };
@@ -21792,7 +21794,7 @@ with pkgs;
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
 
-  grafana-mimir = callPackage ../servers/monitoring/mimir { };
+  mimir = callPackage ../servers/monitoring/mimir { };
 
   promtail = grafana-loki.overrideAttrs (o: {
     pname = "promtail";
@@ -23559,6 +23561,8 @@ with pkgs;
   gops = callPackage ../development/tools/gops { };
 
   gore = callPackage ../development/tools/gore { };
+
+  goresym = callPackage ../development/tools/goresym { };
 
   gotests = callPackage ../development/tools/gotests { };
 

@@ -2,26 +2,18 @@
 
 buildGoModule rec {
   pname = "runitor";
-  version = "0.10.0";
+  version = "0.10.1";
   vendorSha256 = null;
 
   src = fetchFromGitHub {
     owner = "bdd";
     repo = "runitor";
     rev = "v${version}";
-    sha256 = "sha256-96WKMeRkkG6en9JXaZjjnqeZOcLSII3knx8cdjTBAKw=";
+    sha256 = "sha256-qqfaA1WAHkuiyzyQbrSvnmwuRXElArErJ6PtLPOxzsg=";
   };
 
   ldflags = [
-    "-s" "-X main.Version=v${version}"
-  ];
-
-  patches = [
-    (fetchpatch {
-      name = "backport_TestPostRetries-timeout-fix.patch";
-      url = "https://github.com/bdd/runitor/commit/418142585a8387224825637cca3fe275d3c3d147.patch";
-      sha256 = "sha256-cl+KYoiHm2ioFuJVKokZkglIzL/NaEd5JNUuj4g8MUg=";
-    })
+    "-s" "-w" "-X main.Version=v${version}"
   ];
 
   passthru.tests.version = testers.testVersion {
