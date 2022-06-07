@@ -8,7 +8,7 @@
 , lib, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
 , autoconf, libtool
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python3 ? null, py3c ? null, perl ? null
-, sasl ? null, serf ? null
+, sasl ? null, serf ? null, darwin ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -38,7 +38,8 @@ let
       ++ lib.optional httpSupport serf
       ++ lib.optionals pythonBindings [ python3 py3c ]
       ++ lib.optional perlBindings perl
-      ++ lib.optional saslSupport sasl;
+      ++ lib.optional saslSupport sasl
+      ++ lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ CoreServices Security ]);
 
     patches = [ ./apr-1.patch ] ++ extraPatches;
 
@@ -57,7 +58,6 @@ let
       (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
       (lib.withFeatureAs saslSupport "sasl" sasl)
       (lib.withFeatureAs httpSupport "serf" serf)
-      "--disable-keychain"
       "--with-zlib=${zlib.dev}"
       "--with-sqlite=${sqlite.dev}"
     ] ++ lib.optionals javahlBindings [
