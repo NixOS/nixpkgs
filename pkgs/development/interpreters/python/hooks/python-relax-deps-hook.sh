@@ -59,10 +59,11 @@ _pythonRemoveDeps() {
 pythonRelaxDepsHook() {
     pushd dist
 
-    local -r package="$pname-$version"
+    # See https://peps.python.org/pep-0491/#escaping-and-unicode
+    local -r pkg_name="${pname//[^[:alnum:].]/_}-$version"
     local -r unpack_dir="unpacked"
-    local -r metadata_file="$unpack_dir/$package/$package.dist-info/METADATA"
-    local -r wheel=$(echo "$package"*".whl")
+    local -r metadata_file="$unpack_dir/$pkg_name/$pkg_name.dist-info/METADATA"
+    local -r wheel=$(printf "$pkg_name"*".whl")
 
     @pythonInterpreter@ -m wheel unpack --dest "$unpack_dir" "$wheel"
     rm -rf "$wheel"
@@ -72,10 +73,10 @@ pythonRelaxDepsHook() {
 
     if (( "${NIX_DEBUG:-0}" >= 1 )); then
         echo "pythonRelaxDepsHook: resulting METADATA:"
-        cat "$unpack_dir/$package/$package.dist-info/METADATA"
+        cat "$unpack_dir/$pkg_name/$pkg_name.dist-info/METADATA"
     fi
 
-    @pythonInterpreter@ -m wheel pack "$unpack_dir/$package"
+    @pythonInterpreter@ -m wheel pack "$unpack_dir/$pkg_name"
 
     popd
 }
