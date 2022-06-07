@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.6.2";
+  version = "2022.6.3";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -1207,7 +1207,7 @@
       pyialarm
     ];
     "ialarm_xr" = ps: with ps; [
-      pyialarmxr
+      pyialarmxr-homeassistant
     ];
     "iammeter" = ps: with ps; [
     ]; # missing inputs: iammeter
