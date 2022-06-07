@@ -1,7 +1,7 @@
 { stdenv, python3, lib, src, version }:
 
 let
-  buildAzureCliPackage = with py.pkgs; attrs: buildPythonPackage attrs;
+  buildAzureCliPackage = with py.pkgs; buildPythonPackage;
 
   overrideAzureMgmtPackage = package: version: extension: sha256:
     # check to make sure overriding is even necessary
@@ -12,15 +12,6 @@ let
         inherit (oldAttrs) pname;
         inherit version sha256 extension;
       };
-
-      #preBuild = ''
-      #  rm -f azure_bdist_wheel.py
-      #  substituteInPlace setup.cfg \
-      #    --replace "azure-namespace-package = azure-mgmt-nspkg" ""
-      #'';
-
-      ## force PEP420
-      #pythonNamespaces = [ "azure.mgmt" ];
     });
 
   py = python3.override {
