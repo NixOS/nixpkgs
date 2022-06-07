@@ -25867,6 +25867,8 @@ with pkgs;
 
   dr14_tmeter = callPackage ../applications/audio/dr14_tmeter { };
 
+  dragonflydb = callPackage ../servers/nosql/dragonflydb { };
+
   dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
 
   drawing = callPackage ../applications/graphics/drawing { };
