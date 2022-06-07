@@ -2136,6 +2136,8 @@ let
           sha256 = "1bcj546bp0w4yndd0qxwr8grhiwjd1jvf33jgmpm0j96y34vcszz";
         };
         meta = {
+          description = "Show PDF preview in VSCode";
+          homepage = "https://github.com/tomoki1207/vscode-pdfviewer";
           license = lib.licenses.mit;
         };
       };
