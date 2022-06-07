@@ -10104,8 +10104,6 @@ with pkgs;
 
   salt = callPackage ../tools/admin/salt {};
 
-  salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
-
   samim-fonts = callPackage ../data/fonts/samim-fonts {};
 
   saml2aws = callPackage ../tools/security/saml2aws {
@@ -29653,9 +29651,6 @@ with pkgs;
   };
 
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
-  cura_stable = callPackage ../applications/misc/cura/stable.nix {
-    curaengine = curaengine_stable;
-  };
 
   curaengine = callPackage ../applications/misc/curaengine { inherit (python3.pkgs) libarcus; };
 
@@ -30072,8 +30067,6 @@ with pkgs;
   todoman = callPackage ../applications/office/todoman { };
 
   topydo = callPackage ../applications/misc/topydo {};
-
-  torchat = callPackage ../applications/networking/instant-messengers/torchat { };
 
   torrential = callPackage ../applications/networking/p2p/torrential { };
 
