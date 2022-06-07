@@ -289,6 +289,9 @@ let
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
       DRM_I915_GVT_KVMGT = whenAtLeast "4.16" module;
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      # enable HDMI-CEC on RPi boards
+      DRM_VC4_HDMI_CEC = whenAtLeast "4.14" yes;
     };
 
     sound = {
