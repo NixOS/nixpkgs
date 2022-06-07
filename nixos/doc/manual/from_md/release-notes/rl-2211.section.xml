@@ -763,6 +763,14 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>adguardhome</literal> module no longer uses
+          <literal>host</literal> and <literal>port</literal> options,
+          use <literal>settings.bind_host</literal> and
+          <literal>settings.bind_port</literal> instead.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The default <literal>kops</literal> version is now 1.25.1 and
           support for 1.22 and older has been dropped.
         </para>
