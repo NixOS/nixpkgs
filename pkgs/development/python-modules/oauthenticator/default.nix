@@ -15,11 +15,13 @@
 buildPythonPackage rec {
   pname = "oauthenticator";
   version = "15.0.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d1toYgrufnVd10QhJ4nhQqyDRaq4CjWLDjC+7ABNp6Y=";
+    hash = "sha256-d1toYgrufnVd10QhJ4nhQqyDRaq4CjWLDjC+7ABNp6Y=";
   };
 
   propagatedBuildInputs = [
@@ -37,12 +39,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Test are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
+    # Tests are outdated, https://github.com/jupyterhub/oauthenticator/issues/432
     "test_azuread"
     "test_mediawiki"
   ];
 
-  pythonImportsCheck = [ "oauthenticator" ];
+  pythonImportsCheck = [
+    "oauthenticator"
+  ];
 
   meta = with lib; {
     description = "Authenticate JupyterHub users with common OAuth providers, including GitHub, Bitbucket, and more.";
