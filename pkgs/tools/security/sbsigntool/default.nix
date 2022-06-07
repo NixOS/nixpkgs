@@ -3,14 +3,14 @@
 , openssl, libuuid, gnu-efi, libbfd
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "sbsigntool";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/jejb/sbsigntools.git";
-    rev = "v0.9.1";
-    sha256 = "098gxmhjn8acxjw5bq59wq4xhgkpx1xn8kjvxwdzpqkwq9ivrsbp";
+    rev = "v${version}";
+    sha256 = "sha256-dbjdA+hjII/k7wABTTJV5RBdy4KlNkFlBWEaX4zn5vg=";
   };
 
   patches = [ ./autoconf.patch ];
