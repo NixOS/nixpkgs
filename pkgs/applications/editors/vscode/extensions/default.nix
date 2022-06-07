@@ -1804,6 +1804,26 @@ let
         };
       };
 
+      sanaajani.taskrunnercode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "taskrunnercode";
+          publisher = "sanaajani";
+          version = "0.3.0";
+          sha256 = "NVGMM9ugmYZNCWhNmclcGuVJPhJ9h4q2G6nNzVUEpes=";
+        };
+        meta = {
+          description = "Extension to view and run tasks from Explorer pane";
+          longDescription = ''
+            This extension adds an additional "Task Runner" view in your Explorer Pane
+            to visualize and individually run the auto-detected or configured tasks
+            in your project.
+          '';
+          homepage = "https://github.com/sana-ajani/taskrunner-code";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ pbsds ];
+        };
+      };
+
       scala-lang.scala = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "scala";
