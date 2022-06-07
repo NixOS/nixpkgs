@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vrdrd42jsnffh6rq8ap2c6fr4g9fcld89z649fs06bwqx1bzvs7";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [ pkg-config which ];
   buildInputs = lib.optional (!stdenv.isDarwin) alsa-lib;
 
