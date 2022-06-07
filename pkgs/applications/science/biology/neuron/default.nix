@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ readline ncurses which libtool ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Simulation environment for empirically-based simulations of neurons and networks of neurons";
 
     longDescription = "NEURON is a simulation environment for developing and exercising models of

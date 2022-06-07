@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildGoModule
 , fetchFromGitHub
 }:
@@ -17,6 +18,7 @@ buildGoModule rec {
   vendorSha256 = null;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Automatic Linux privilege escalation";
     longDescription = ''
       Automatically exploit low-hanging fruit to pop a root shell. Traitor packages

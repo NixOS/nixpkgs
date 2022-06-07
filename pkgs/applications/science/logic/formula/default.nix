@@ -23,6 +23,7 @@ buildDotnetModule rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Formal Specifications for Verification and Synthesis";
     homepage = "https://github.com/VUISIS/formula-dotnet";
     license = licenses.mspl;

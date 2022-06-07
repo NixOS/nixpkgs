@@ -51,5 +51,8 @@ stdenv.mkDerivation {
     homepage = "http://bulletphysics.org";
     license = licenses.zlib;
     platforms = platforms.unix;
+    # /tmp/nix-build-bullet-2019-03-27.drv-0/source/src/Bullet3Common/b3Vector3.h:297:7: error: argument value 10880 is outside the valid range [0, 255] [-Wargument-outside-range]
+    #                 y = b3_splat_ps(y, 0x80);
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }

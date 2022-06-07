@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , installShellFiles
 , python3Packages
@@ -65,6 +66,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A patch manager implemented on top of Git";
     homepage = "https://stacked-git.github.io/";
     license = licenses.gpl2Only;

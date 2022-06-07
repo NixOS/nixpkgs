@@ -230,6 +230,13 @@ self: super: {
     };
   });
 
+  diffview-nvim = super.diffview-nvim.overrideAttrs (oa: {
+    dependencies = with self; [ plenary-nvim ];
+
+    doInstallCheck = true;
+    nvimRequireCheck = "diffview";
+  });
+
   direnv-vim = super.direnv-vim.overrideAttrs (oa: {
     preFixup = oa.preFixup or "" + ''
       substituteInPlace $out/autoload/direnv.vim \
@@ -314,6 +321,10 @@ self: super: {
 
   ghcid = super.ghcid.overrideAttrs (old: {
     configurePhase = "cd plugins/nvim";
+  });
+
+  gitlinker-nvim = super.gitlinker-nvim.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
   });
 
   gitsigns-nvim = super.gitsigns-nvim.overrideAttrs (old: {
@@ -493,7 +504,7 @@ self: super: {
   });
 
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
-    dependencies = with self; [ plenary-nvim nvim-lspconfig ];
+    dependencies = with self; [ plenary-nvim ];
   });
 
   nvim-lsputils = super.nvim-lsputils.overrideAttrs (old: {
@@ -524,6 +535,10 @@ self: super: {
             ln -s ${grammars} parser
           '';
       });
+  });
+
+  octo-nvim = super.octo-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim plenary-nvim ];
   });
 
   onehalf = super.onehalf.overrideAttrs (old: {
@@ -696,7 +711,7 @@ self: super: {
   });
 
   telescope-nvim = super.telescope-nvim.overrideAttrs (old: {
-    dependencies = with self; [ plenary-nvim popup-nvim ];
+    dependencies = with self; [ plenary-nvim ];
   });
 
   telescope-symbols-nvim = super.telescope-symbols-nvim.overrideAttrs (old: {

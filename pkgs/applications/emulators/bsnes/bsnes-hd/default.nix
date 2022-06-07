@@ -59,6 +59,9 @@ stdenv.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ stevebob ];
     platforms = platforms.unix;
+    # ../nall/traits.hpp:19:14: error: no member named 'is_floating_point_v' in namespace 'std'; did you mean 'is_floating_point'?
+    #   using std::is_floating_point_v;
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
     mainProgram = "bsnes";
   };
 }

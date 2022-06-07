@@ -1,12 +1,12 @@
 { lib, buildGoModule, fetchFromGitHub, symlinkJoin }:
 
 let
-  etcdVersion = "3.5.1";
+  etcdVersion = "3.5.4";
   etcdSrc = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${etcdVersion}";
-    sha256 = "sha256-Ip7JAWbZBZcc8MXd+Sw05QmTs448fQXpQ5XXo6RW+Gs=";
+    sha256 = "sha256-mTQHxLLfNiihvHg5zaTeVNWKuzvE0KBiJdY3qMJHMCM=";
   };
 
   commonMeta = with lib; {
@@ -21,7 +21,7 @@ let
     pname = "etcdserver";
     version = etcdVersion;
 
-    vendorSha256 = "sha256-hJzmxCcwN6MTgE0NpjtFlm8pjZ83clQXv1k5YM8Gmes=";
+    vendorSha256 = "sha256-4djUQvWp9hScua9l1ZTq298zWSeDYRDojEt2AWmarzw=";
 
     src = etcdSrc;
     modRoot = "./server";
@@ -45,7 +45,7 @@ let
     pname = "etcdutl";
     version = etcdVersion;
 
-    vendorSha256 = "sha256-My0kzsN2i8DgPm2yIkbql3VyMXPaHmQSeaa/uK/RFxo=";
+    vendorSha256 = "sha256-nk56XGpNsDwcGrTKithKGnPCX0NhpQmzNSXHk3vmdtg=";
 
     src = etcdSrc;
     modRoot = "./etcdutl";
@@ -56,10 +56,10 @@ let
   };
 
   etcdctl = buildGoModule rec {
-    pname = "etcdutl";
+    pname = "etcdctl";
     version = etcdVersion;
 
-    vendorSha256 = "sha256-XZKBA95UrhbiefnDvpaXcBA0wUjnpH+Pb6yXp7yc4HQ=";
+    vendorSha256 = "sha256-WIMYrXfay6DMz+S/tIc/X4ffMizxub8GS1DDgIR40D4=";
 
     src = etcdSrc;
     modRoot = "./etcdctl";

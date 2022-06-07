@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = "--bin conduit";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
     license = licenses.asl20;

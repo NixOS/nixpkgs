@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Finite Field Linear Algebra Subroutines";
     license = licenses.lgpl21Plus;
     maintainers = teams.sage.members;

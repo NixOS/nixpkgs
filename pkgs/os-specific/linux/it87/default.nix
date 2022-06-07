@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hannesha/it87";
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
-    maintainers = with maintainers; [ yorickvp ];
+    maintainers = teams.lumiguide.members;
   };
 }

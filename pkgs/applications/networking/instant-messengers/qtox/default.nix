@@ -69,6 +69,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Qt Tox client";
     homepage = "https://tox.chat";
     license = licenses.gpl3;

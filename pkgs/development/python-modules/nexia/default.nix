@@ -1,4 +1,5 @@
 { lib
+, aioresponses
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "nexia";
-  version = "0.9.13";
+  version = "1.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0VG8tSwbVTIIsQYAEwzQfXLTDy4df/nS/rbHjYo7xf0=";
+    sha256 = "sha256-f1IUyeOmRmnr7zWoMKF895FKsNgiiCbw7inmXDGZrVw=";
   };
 
   propagatedBuildInputs = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    aioresponses
     requests-mock
     pytestCheckHook
   ];

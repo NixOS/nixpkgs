@@ -38,6 +38,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Python binding to the library exiv2";
     homepage = "https://launchpad.net/py3exiv2";
     license = licenses.gpl3Plus;

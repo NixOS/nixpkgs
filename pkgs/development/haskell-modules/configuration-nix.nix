@@ -620,10 +620,10 @@ self: super: builtins.intersectAttrs super {
       }) super.spago;
 
       spagoOldAeson = spagoDocs.overrideScope (hfinal: hprev: {
-        # spago (and its dependency, bower-json) is not yet updated for aeson-2.0
+        # spago is not yet updated for aeson 2.0
         aeson = hfinal.aeson_1_5_6_0;
-        # bower-json needs aeson_1_5_6_0 and is marked broken without it.
-        bower-json = doDistribute (markUnbroken hprev.bower-json);
+        # bower-json 1.1.0.0 only supports aeson 2.0, so we pull in the older version here.
+        bower-json = hprev.bower-json_1_0_0_1;
       });
 
       # Tests require network access.
@@ -994,7 +994,6 @@ self: super: builtins.intersectAttrs super {
     hls-module-name-plugin
     hls-ormolu-plugin
     hls-pragmas-plugin
-    hls-rename-plugin
     hls-splice-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
@@ -1002,6 +1001,7 @@ self: super: builtins.intersectAttrs super {
   # Flaky tests
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
   hls-class-plugin = dontCheck super.hls-class-plugin;
+  hls-rename-plugin = dontCheck super.hls-rename-plugin;
   hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
   hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;

@@ -14,6 +14,7 @@
 , pytz
 , requests
 , responses
+, setuptools
 , six
 , substituteAll
 , xmlschema
@@ -36,11 +37,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cryptography
-    python-dateutil
     defusedxml
     pyopenssl
+    python-dateutil
     pytz
     requests
+    setuptools
     six
     xmlschema
   ] ++ lib.optionals (pythonOlder "3.9") [

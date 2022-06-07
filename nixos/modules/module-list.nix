@@ -66,6 +66,7 @@
   ./hardware/network/ath-user-regd.nix
   ./hardware/network/b43.nix
   ./hardware/network/intel-2200bg.nix
+  ./hardware/new-lg4ff.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/openrazer.nix
@@ -73,6 +74,7 @@
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
   ./hardware/rtl-sdr.nix
+  ./hardware/saleae-logic.nix
   ./hardware/steam-hardware.nix
   ./hardware/system-76.nix
   ./hardware/tuxedo-keyboard.nix
@@ -981,6 +983,7 @@
   ./services/security/hologram-server.nix
   ./services/security/hologram-agent.nix
   ./services/security/kanidm.nix
+  ./services/security/infnoise.nix
   ./services/security/munge.nix
   ./services/security/nginx-sso.nix
   ./services/security/oauth2_proxy.nix

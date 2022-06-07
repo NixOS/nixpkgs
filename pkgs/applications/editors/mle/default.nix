@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Small, flexible terminal-based text editor";
     homepage = "https://github.com/adsr/mle";
     license = licenses.asl20;

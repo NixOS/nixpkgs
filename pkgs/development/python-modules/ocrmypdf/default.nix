@@ -18,16 +18,16 @@
 , reportlab
 , setuptools-scm
 , setuptools-scm-git-archive
-, stdenv
 , substituteAll
 , tesseract4
 , tqdm
 , unpaper
+, installShellFiles
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "13.4.5";
+  version = "13.4.7";
 
   src = fetchFromGitHub {
     owner = "ocrmypdf";
@@ -35,11 +35,11 @@ buildPythonPackage rec {
     rev = "v${version}";
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
-    # See https://github.com/jbarlow83/OCRmyPDF/issues/841
+    # See https://github.com/ocrmypdf/OCRmyPDF/issues/841
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-5IpJ55Vu9LjGgWJITkAH5fOr+MfovswWhwqbEs/RlzA=";
+    hash = "sha256-jCfMCjh8MdH5K76iyJCgtkgPtpxnCxlXlzttTIzINPk=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -58,6 +58,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools-scm-git-archive
     setuptools-scm
+    installShellFiles
   ];
 
   propagatedBuildInputs = [
@@ -83,6 +84,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "ocrmypdf"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd ocrmypdf \
+      --bash misc/completion/ocrmypdf.bash \
+      --fish misc/completion/ocrmypdf.fish
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/ocrmypdf/OCRmyPDF";

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, sphinx, sphinxcontrib-tikz }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, sphinx, sphinxcontrib-tikz }:
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-bayesnet";
@@ -16,6 +16,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sphinxcontrib.bayesnet" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://github.com/jluttine/sphinx-bayesnet";
     description = "Bayesian networks and factor graphs in Sphinx using TikZ syntax";
     license = licenses.gpl3Only;

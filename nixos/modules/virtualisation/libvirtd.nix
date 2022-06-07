@@ -11,10 +11,9 @@ let
     auth_unix_rw = "polkit"
     ${cfg.extraConfig}
   '';
-  ovmfFilePrefix = if pkgs.stdenv.isAarch64 then "AAVMF" else "OVMF";
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
     ${optionalString cfg.qemu.ovmf.enable ''
-      nvram = [ "/run/libvirt/nix-ovmf/${ovmfFilePrefix}_CODE.fd:/run/libvirt/nix-ovmf/${ovmfFilePrefix}_VARS.fd" ]
+      nvram = [ "/run/libvirt/nix-ovmf/AAVMF_CODE.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.fd", "/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd" ]
     ''}
     ${optionalString (!cfg.qemu.runAsRoot) ''
       user = "qemu-libvirtd"
@@ -36,13 +35,20 @@ let
         '';
       };
 
+      # mkRemovedOptionModule does not work in submodules, do it manually
       package = mkOption {
-        type = types.package;
-        default = pkgs.OVMF;
-        defaultText = literalExpression "pkgs.OVMF";
-        example = literalExpression "pkgs.OVMFFull";
+        type = types.nullOr types.package;
+        default = null;
+        internal = true;
+      };
+
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = [ pkgs.OVMF.fd ];
+        defaultText = literalExpression "[ pkgs.OVMF.fd ]";
+        example = literalExpression "[ pkgs.OVMFFull.fd pkgs.pkgsCross.aarch64-multiplatform.OVMF.fd ]";
         description = ''
-          OVMF package to use.
+          List of OVMF packages to use. Each listed package must contain files names FV/OVMF_CODE.fd and FV/OVMF_VARS.fd or FV/AAVMF_CODE.fd and FV/AAVMF_VARS.fd
         '';
       };
     };
@@ -141,9 +147,9 @@ in
     (mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuOvmf" ]
       [ "virtualisation" "libvirtd" "qemu" "ovmf" "enable" ])
-    (mkRenamedOptionModule
+    (mkRemovedOptionModule
       [ "virtualisation" "libvirtd" "qemuOvmfPackage" ]
-      [ "virtualisation" "libvirtd" "qemu" "ovmf" "package" ])
+      "If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead.")
     (mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuSwtpm" ]
       [ "virtualisation" "libvirtd" "qemu" "swtpm" "enable" ])
@@ -238,12 +244,15 @@ in
 
     assertions = [
       {
-        assertion = config.security.polkit.enable;
-        message = "The libvirtd module currently requires Polkit to be enabled ('security.polkit.enable = true').";
+        assertion = config.virtualisation.libvirtd.qemu.ovmf.package == null;
+        message = ''
+        The option virtualisation.libvirtd.qemu.ovmf.package is superseded by virtualisation.libvirtd.qemu.ovmf.packages.
+        If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead.
+        '';
       }
       {
-        assertion = builtins.elem "fd" cfg.qemu.ovmf.package.outputs;
-        message = "The option 'virtualisation.libvirtd.qemuOvmfPackage' needs a package that has an 'fd' output.";
+        assertion = config.security.polkit.enable;
+        message = "The libvirtd module currently requires Polkit to be enabled ('security.polkit.enable = true').";
       }
     ];
 
@@ -303,10 +312,18 @@ in
           ln -s --force ${cfg.qemu.package}/$helper /run/${dirName}/nix-helpers/
         done
 
-        ${optionalString cfg.qemu.ovmf.enable ''
-          ln -s --force ${cfg.qemu.ovmf.package.fd}/FV/${ovmfFilePrefix}_CODE.fd /run/${dirName}/nix-ovmf/
-          ln -s --force ${cfg.qemu.ovmf.package.fd}/FV/${ovmfFilePrefix}_VARS.fd /run/${dirName}/nix-ovmf/
-        ''}
+        ${optionalString cfg.qemu.ovmf.enable (let
+          ovmfpackage = pkgs.buildEnv {
+            name = "qemu-ovmf";
+            paths = cfg.qemu.ovmf.packages;
+          };
+        in
+          ''
+          ln -s --force ${ovmfpackage}/FV/AAVMF_CODE.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/OVMF_CODE.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/AAVMF_VARS.fd /run/${dirName}/nix-ovmf/
+          ln -s --force ${ovmfpackage}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
+        '')}
       '';
 
       serviceConfig = {

@@ -153,7 +153,6 @@ in
 
   /* Linux on armv7l-hf */
   armv7l-hf = mapTestOnCross lib.systems.examples.armv7l-hf-multiplatform linuxCommon;
-  scaleway-c1 = mapTestOnCross lib.systems.examples.scaleway-c1 linuxCommon;
 
   pogoplug4 = mapTestOnCross lib.systems.examples.pogoplug4 linuxCommon;
 

@@ -42,6 +42,7 @@
 , xorg
 , libgudev
 , wavpack
+, glib
 }:
 
 assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
@@ -57,6 +58,10 @@ stdenv.mkDerivation rec {
     sha256 = "1al4f35mx41cy2h6agvmsqkjfchsyfs0iyxzpv6pnl0xh9pqfriw";
   };
 
+  strictDeps = true;
+
+  depsBuildBuild = [ pkg-config ];
+
   nativeBuildInputs = [
     pkg-config
     python3
@@ -64,7 +69,12 @@ stdenv.mkDerivation rec {
     ninja
     gettext
     nasm
-  ] ++ lib.optionals stdenv.isLinux [
+    orc
+    libshout
+    glib
+  ] ++ lib.optionals qt5Support (with qt5; [
+    qtbase
+  ]) ++ lib.optionals stdenv.isLinux [
     wayland-protocols
   ];
 

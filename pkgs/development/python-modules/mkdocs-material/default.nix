@@ -13,16 +13,16 @@
 
 buildPythonApplication rec {
   pname = "mkdocs-material";
-  version = "8.2.15";
+  version = "8.3.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-6x3ENFPGmtRDMV6YRGlTLCYusmX49LrGBDwicg8sDB0=";
+    hash = "sha256-VcyBsIU2PJ2xh365kNAlO3wno3xushlaj43dIh1GkP8=";
   };
 
   propagatedBuildInputs = [

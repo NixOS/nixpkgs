@@ -187,6 +187,7 @@ in buildPythonPackage {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Computation using data flow graphs for scalable machine learning";
     homepage = "http://tensorflow.org";
     license = licenses.asl20;

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.0.155";
+  version = "2.0.156";
 
   src = fetchFromGitHub {
     owner = "armosec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ZBjwgrF0Pkour1yXMcY4cZt3W2biCzmPd+EYcY4Ppz0=";
+    hash = "sha256-bbTafsHllJQZ9Qn+qFnlr/AdU7NgB/vAvQGIgt/XDNQ=";
   };
   vendorSha256 = "sha256-zj2gDx5333AguLs1Gzu3bYXslDwvPFSbMmOTOFxmq6A=";
 
@@ -45,9 +45,9 @@ buildGoModule rec {
       --replace "TestScanRepository" "SkipScanRepository" \
       --replace "TestGit" "SkipGit"
 
-    # without networking the branch context can't be fetched and is empty
+    # remove test that requires networking
     substituteInPlace core/cautils/scaninfo_test.go \
-      --replace 'assert.Equal(t, "master", ctx.RepoContextMetadata.Branch)' 'assert.Equal(t, "", ctx.RepoContextMetadata.Branch)'
+      --replace "TestSetContextMetadata" "SkipSetContextMetadata"
   '';
 
   postInstall = ''

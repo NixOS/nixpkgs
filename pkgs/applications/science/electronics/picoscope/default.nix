@@ -18,7 +18,7 @@ let
   shared_meta = lib:
     with lib; {
       homepage = "https://www.picotech.com/downloads/linux";
-      maintainers = with maintainers; [ expipiplus1 yorickvp wirew0rm ];
+      maintainers = with maintainers; [ expipiplus1 wirew0rm ] ++ teams.lumiguide.members;
       platforms = [ "x86_64-linux" ];
       license = licenses.unfree;
     };

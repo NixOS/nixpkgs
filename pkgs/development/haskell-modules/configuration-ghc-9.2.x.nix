@@ -100,9 +100,9 @@ self: super: {
       self.data-default
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
-  ghc-lib = self.ghc-lib_9_2_2_20220307;
-  ghc-lib-parser = self.ghc-lib-parser_9_2_2_20220307;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_3;
+  ghc-lib = self.ghc-lib_9_2_3_20220527;
+  ghc-lib-parser = self.ghc-lib-parser_9_2_3_20220527;
+  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_2;
   hashable-time = doJailbreak super.hashable-time;
@@ -146,7 +146,7 @@ self: super: {
   shelly = doJailbreak super.shelly;
   splitmix = doJailbreak super.splitmix;
   tasty-hspec = doJailbreak super.tasty-hspec;
-  th-desugar = self.th-desugar_1_13;
+  th-desugar = self.th-desugar_1_13_1;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
@@ -173,7 +173,7 @@ self: super: {
   ];
 
   # lens >= 5.1 supports 9.2.1
-  lens = doDistribute self.lens_5_1;
+  lens = doDistribute self.lens_5_1_1;
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;

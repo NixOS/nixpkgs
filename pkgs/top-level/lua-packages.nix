@@ -95,6 +95,7 @@ in
     '';
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "Lightweight UNIX I/O and POSIX binding for Lua";
       homepage = "https://www.gitano.org.uk/luxio/";
       license = licenses.mit;

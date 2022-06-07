@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Loads cookies from your browser into a cookiejar object";
     homepage = "https://github.com/borisbabic/browser_cookie3";
     license = licenses.gpl3Only;

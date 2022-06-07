@@ -4,6 +4,7 @@
 , stdenvNoCC
 , fetchurl
 , appimageTools
+, makeWrapper
 }:
 
 let
@@ -25,7 +26,7 @@ stdenvNoCC.mkDerivation {
   inherit version pname;
   src = appimage;
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -45,6 +46,9 @@ stdenvNoCC.mkDerivation {
 
     mkdir -p $out/
     cp -r bin $out/bin
+
+    wrapProgram $out/bin/session-desktop-appimage-${version} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
 
     runHook postInstall
   '';

@@ -1,5 +1,5 @@
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-release-22.05">
-  <title>Release 22.05 (“Quokka”, 2022.05/??)</title>
+  <title>Release 22.05 (“Quokka”, 2022.05/30)</title>
   <itemizedlist spacing="compact">
     <listitem>
       <para>
@@ -16,15 +16,8 @@
     </para>
     <itemizedlist>
       <listitem>
-        <para>
-          Nix has been updated from 2.3 to 2.8. This mainly brings
-          experimental support for Flakes, but also marks the
-          <literal>nix</literal> command as experimental which now has
-          to be enabled via the configuration explicitly. For more
-          information and instructions for upgrades, see the
-          <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/release-notes.html">Release
-          Notes</link>.
-        </para>
+<literallayout>Nix has been updated from 2.3 to 2.8. This mainly brings experimental support for Flakes, but also marks the <literal>nix</literal> command as experimental which now has to be enabled via the configuration explicitly. For more information and instructions for upgrades, see the relase notes for <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.4.html">nix-2.4</link>,
+<link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.5.html">nix-2.5</link>, <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.6.html">nix-2.6</link>, <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.7.html">nix-2.7</link> and <link xlink:href="https://nixos.org/manual/nix/stable/release-notes/rl-2.8.html">nix-2.8</link></literallayout>
       </listitem>
       <listitem>
         <para>
@@ -622,7 +615,7 @@
           version of the <literal>xmonad</literal> module, which will
           break your configuration if you use <literal>launch</literal>
           as entrypoint. The example code the corresponding nixos module
-          was adjusted, you way want to have a look at it.
+          was adjusted, you may want to have a look at it.
         </para>
       </listitem>
       <listitem>
@@ -800,6 +793,13 @@
           in LDIF format, and reimport it after updating your
           <literal>services.openldap.settings</literal>, which
           represents your <literal>cn=config</literal>.
+        </para>
+        <para>
+          Additionally with 2.5 the argon2 module was included in the
+          standard distrubtion and renamed from
+          <literal>pw-argon2</literal> to <literal>argon2</literal>.
+          Remember to update your <literal>olcModuleLoad</literal> entry
+          in <literal>cn=config</literal>.
         </para>
       </listitem>
       <listitem>
@@ -1006,7 +1006,7 @@
     };
 
     extraConfigFiles = [
-      /run/keys/matrix-synapse/secrets.yaml
+      &quot;/run/keys/matrix-synapse/secrets.yaml&quot;
     ];
   };
 }
@@ -1014,7 +1014,9 @@
         <para>
           The secrets in your original config should be migrated into a
           YAML file that is included via
-          <literal>extraConfigFiles</literal>.
+          <literal>extraConfigFiles</literal>. The filename must be
+          quoted to prevent nix from copying it to the (world readable)
+          store.
         </para>
         <para>
           Additionally a few option defaults have been synced up with
@@ -2100,6 +2102,28 @@ cp /var/lib/redis/dump.rdb &quot;/var/lib/redis-mastodon/dump.rdb&quot;
       </listitem>
       <listitem>
         <para>
+          Peertube now uses services.redis.servers to start a new redis
+          server, instead of using a global redis server. This improves
+          compatibility with other services that use redis.
+        </para>
+        <para>
+          Redis database is used for storage only cache and job queue.
+          More information can be found here -
+          <link xlink:href="https://docs.joinpeertube.org/contribute-architecture">Peertube
+          architecture</link>.
+        </para>
+        <para>
+          If you do want to save the redis database, you can use the
+          following commands before upgrade OS:
+        </para>
+        <programlisting language="bash">
+redis-cli save
+sudo mkdir /var/lib/redis-peertube
+sudo cp /var/lib/redis/dump.rdb /var/lib/redis-peertube/dump.rdb
+</programlisting>
+      </listitem>
+      <listitem>
+        <para>
           If you are using Wayland you can choose to use the Ozone
           Wayland support in Chrome and several Electron apps by setting
           the environment variable <literal>NIXOS_OZONE_WL=1</literal>
@@ -2668,6 +2692,14 @@ cp /var/lib/redis/dump.rdb &quot;/var/lib/redis-mastodon/dump.rdb&quot;
           <literal>nss_esr</literal>. This was done to ease maintenance
           of <literal>nss</literal> and dependent high-profile packages
           like <literal>firefox</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The default <literal>scribus</literal> version is now 1.5,
+          while version 1.4 is still available as
+          <literal>scribus_1_4</literal>
+          (<link xlink:href="https://github.com/NixOS/nixpkgs/pull/172700">#172700</link>).
         </para>
       </listitem>
       <listitem>

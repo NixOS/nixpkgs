@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, wafHook }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "pflask";
@@ -10,6 +10,16 @@ stdenv.mkDerivation rec {
     rev = "9ac31ffe2ed29453218aac89ae992abbd6e7cc69";
     hash = "sha256-bAKPUj/EipZ98kHbZiFZZI3hLVMoQpCrYKMmznpSDhg=";
   };
+
+  patches = [
+    # Pull patch pending upstream inclusion for -fno-common toolchain support:
+    #  https://github.com/ghedo/pflask/pull/30
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/ghedo/pflask/commit/73ba32ec48e1e0e4a56b1bceed4635711526e079.patch";
+      hash = "sha256-KVuBS7LbYJQv6NXljpSiGGja7ar7W6A6SKzkEjB1B6U=";
+    })
+  ];
 
   nativeBuildInputs = [ python3 wafHook ];
 

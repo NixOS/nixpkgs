@@ -49,6 +49,7 @@ buildPythonPackage {
   # ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Fast multi-threaded DataFrame library in Rust | Python | Node.js ";
     homepage = "https://github.com/pola-rs/polars";
     license = licenses.asl20;

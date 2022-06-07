@@ -37,6 +37,7 @@ in stdenv.mkDerivation {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://libtorrent.org/";
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;

@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk}:
+{lib, stdenv, fetchurl, cups, dpkg, gnused, makeWrapper, ghostscript, file, a2ps, coreutils, gawk }:
 
 let
   version = "1.1.4-0";
@@ -41,8 +41,8 @@ stdenv.mkDerivation {
 
     sed -i '/GHOST_SCRIPT=/c\GHOST_SCRIPT=gs' $out/opt/brother/Printers/hl3140cw/lpd/psconvertij2
 
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/opt/brother/Printers/hl3140cw/lpd/brhl3140cwfilter
-    patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $out/usr/bin/brprintconf_hl3140cw
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/opt/brother/Printers/hl3140cw/lpd/brhl3140cwfilter
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/usr/bin/brprintconf_hl3140cw
 
     wrapProgram $out/opt/brother/Printers/hl3140cw/lpd/psconvertij2 \
       --prefix PATH ":" ${ lib.makeBinPath [ gnused coreutils gawk ] }

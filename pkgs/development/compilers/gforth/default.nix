@@ -34,6 +34,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "The Forth implementation of the GNU project";
     homepage = "https://github.com/forthy42/gforth";
     license = lib.licenses.gpl3;

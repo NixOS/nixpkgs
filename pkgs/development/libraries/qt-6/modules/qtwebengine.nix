@@ -64,6 +64,7 @@
 , lcms2
 , re2
 , libkrb5
+, xkeyboard_config
 , enableProprietaryCodecs ? true
 }:
 
@@ -115,18 +116,20 @@ qtModule rec {
       patchShebangs .
     )
 
-    # Patch library paths in sources
-    sed -i \
-      -e "s,QLibraryInfo::location(QLibraryInfo::DataPath),QLatin1String(\"$out\"),g" \
-      -e "s,QLibraryInfo::location(QLibraryInfo::TranslationsPath),QLatin1String(\"$out/translations\"),g" \
-      -e "s,QLibraryInfo::location(QLibraryInfo::LibraryExecutablesPath),QLatin1String(\"$out/libexec\"),g" \
-      src/core/web_engine_library_info.cpp
-
     sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
       src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
+
+    substituteInPlace src/3rdparty/chromium/ui/events/ozone/layout/xkb/xkb_keyboard_layout_engine.cc \
+      --replace "/usr/share/X11/xkb" "${xkeyboard_config}/share/X11/xkb"
+
+    # Patch library paths in sources
+    substituteInPlace src/core/web_engine_library_info.cpp \
+      --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
+      --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
+      --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
   '';
 
   cmakeFlags = [
@@ -224,7 +227,14 @@ qtModule rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  postInstall = ''
+    # This is required at runtime
+    mkdir $out/libexec
+    mv $dev/libexec/QtWebEngineProcess $out/libexec
+  '';
+
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A web engine based on the Chromium web browser";
     platforms = platforms.linux;
     # This build takes a long time; particularly on slow architectures

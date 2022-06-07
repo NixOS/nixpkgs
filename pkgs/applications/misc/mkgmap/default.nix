@@ -15,12 +15,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkgmap";
-  version = "4902";
+  version = "4904";
 
   src = fetchsvn {
     url = "https://svn.mkgmap.org.uk/mkgmap/mkgmap/trunk";
     rev = version;
-    sha256 = "sha256-djqa6loaFUYfAhgmF6Lm+4M4Xgzyiw1bXqK4XWqT/tY=";
+    sha256 = "sha256-43gJkpk19Ef3vUbRNt3VDstxCLJl6smsAjtcrovGjEE=";
   };
 
   patches = [
@@ -76,6 +76,10 @@ stdenv.mkDerivation rec {
     description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
     homepage = "https://www.mkgmap.org.uk/";
     downloadPage = "https://www.mkgmap.org.uk/download/mkgmap.html";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.all;

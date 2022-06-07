@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.12.0";
+  version = "0.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "arviz-devs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ClARxgfji/CavEy8g5oeYK7pwSZS1yUIZnBiyTbZ/zU=";
+    hash = "sha256-5P6EXXAAS1Q2eNQuj/5JrDg0lPHfA5K4WaYfKaaXm9s=";
   };
 
   propagatedBuildInputs = [

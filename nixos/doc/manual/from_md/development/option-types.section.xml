@@ -617,6 +617,12 @@
       (<link linkend="ex-submodule-reference">Example: Submodule defined
       as a reference</link>).
     </para>
+    <para>
+      Note that even if your submodule’s options all have a default
+      value, you will still need to provide a default value (e.g. an
+      empty attribute set) if you want to allow users to leave it
+      undefined.
+    </para>
     <anchor xml:id="ex-submodule-direct" />
     <para>
       <emphasis role="strong">Example: Directly defined

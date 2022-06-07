@@ -1,6 +1,5 @@
 { lib
 , fetchurl
-, fetchpatch
 , nixosTests
 , python3
 , ghostscript
@@ -15,11 +14,16 @@
 }:
 
 let
+  # Use specific package versions required by paperless-ngx
   py = python3.override {
     packageOverrides = self: super: {
-      django = super.django_3;
+      django = super.django_4;
 
-      # Incompatible with aioredis 2
+      # django-extensions 3.1.5 is required, but its tests are incompatible with Django 4
+      django-extensions = super.django-extensions.overridePythonAttrs (_: {
+        doCheck = false;
+      });
+
       aioredis = super.aioredis.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.1";
         src = oldAttrs.src.override {
@@ -34,11 +38,12 @@ let
 in
 py.pkgs.pythonPackages.buildPythonApplication rec {
   pname = "paperless-ngx";
-  version = "1.6.0";
+  version = "1.7.1";
 
+  # Fetch the release tarball instead of a git ref because it contains the prebuilt fontend
   src = fetchurl {
-    url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/ngx-${version}/${pname}-${version}.tar.xz";
-    sha256 = "07mrxbwahkm00n9nvssd6d13p80w333g84cd38bzp0l34nzim5zl";
+    url = "https://github.com/paperless-ngx/paperless-ngx/releases/download/v${version}/${pname}-v${version}.tar.xz";
+    hash = "sha256-8vx4hvbIqaChjPyS8Q0ar2bz/pLzEdxoF7P2gBEeFzc=";
   };
 
   format = "other";
@@ -92,6 +97,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     numpy
     ocrmypdf
     pathvalidate
+    pdf2image
     pdfminer-six
     pikepdf
     pillow
@@ -109,6 +115,7 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     python-magic
     pytz
     pyyaml
+    pyzbar
     redis
     regex
     reportlab
@@ -189,6 +196,6 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     description = "A supercharged version of paperless: scan, index, and archive all of your physical documents";
     homepage = "https://paperless-ngx.readthedocs.io/en/latest/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lukegb ];
+    maintainers = with maintainers; [ lukegb gador earvstedt ];
   };
 }

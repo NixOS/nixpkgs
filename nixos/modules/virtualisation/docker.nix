@@ -155,7 +155,6 @@ in
       default = pkgs.docker;
       defaultText = literalExpression "pkgs.docker";
       type = types.package;
-      example = literalExpression "pkgs.docker-edge";
       description = ''
         Docker package to be used in the module.
       '';

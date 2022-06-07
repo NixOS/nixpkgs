@@ -10,37 +10,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "2.9.5";
+  version = "2.10.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
     rev = version;
-    hash = "sha256-MviiA0ja1IaxMPlqu2dhIGBcdEXiEvBYnK9731dihMg=";
+    hash = "sha256-boaQSg0jajWQZKB5wvcP2musVR2/pifT4pU64Y5hiQ0=";
   };
-
-  # make the patch apply
-  prePatch = ''
-    substituteInPlace setup.cfg \
-      --replace "scmrepo==0.0.7" "scmrepo==0.0.10"
-  '';
-
-  patches = [
-    ./dvc-daemon.patch
-    (fetchpatch {
-      url = "https://github.com/iterative/dvc/commit/ab54b5bdfcef3576b455a17670b8df27beb504ce.patch";
-      sha256 = "sha256-wzMK6Br7/+d3EEGpfPuQ6Trj8IPfehdUvOvX3HZlS+o=";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "grandalf==0.6" "grandalf>=0.6" \
-      --replace "scmrepo==0.0.13" "scmrepo"
-    substituteInPlace dvc/daemon.py \
-      --subst-var-by dvc "$out/bin/dcv"
-  '';
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
@@ -48,8 +26,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    appdirs
     aiohttp-retry
+    appdirs
     colorama
     configobj
     configobj
@@ -57,12 +35,15 @@ python3.pkgs.buildPythonApplication rec {
     diskcache
     distro
     dpath
+    dvclive
+    dvc-render
     flatten-dict
     flufl_lock
     funcy
     grandalf
     nanotime
     networkx
+    packaging
     pathspec
     ply
     psutil
@@ -95,6 +76,14 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
   ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "grandalf==0.6" "grandalf>=0.6" \
+      --replace "scmrepo==0.0.19" "scmrepo"
+    substituteInPlace dvc/daemon.py \
+      --subst-var-by dvc "$out/bin/dcv"
+  '';
 
   # Tests require access to real cloud services
   doCheck = false;

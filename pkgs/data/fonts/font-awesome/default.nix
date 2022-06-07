@@ -9,8 +9,10 @@ let
     inherit rev;
 
     postFetch = ''
-      tar xf $downloadedFile --strip=1
-      install -m444 -Dt $out/share/fonts/opentype {fonts,otfs}/*.otf
+      install -m444 -Dt $out/share/fonts/opentype $out/{fonts,otfs}/*.otf
+      shopt -s extglob dotglob
+      rm -rf $out/!(share)
+      shopt -u extglob dotglob
     '';
 
     inherit sha256;
@@ -38,7 +40,7 @@ in
   v4 = font-awesome {
     version = "4.7.0";
     rev = "v4.7.0";
-    sha256 = "1j8i32dq6rrlv3kf2hnq81iqks06kczaxjks7nw3zyq1231winm9";
+    sha256 = "sha256-qdrIwxAB+z+4PXrKrj6bBuiJY0DYQuHm2DRng5sYEck=";
   };
   v5 = font-awesome {
     version = "5.15.3";
@@ -46,6 +48,6 @@ in
   };
   v6 = font-awesome {
     version = "6.1.1";
-    sha256 = "sha256-BjK1PJQFWtKDvfQ2Vh7BoOPqYucyvOG+2Pu/Kh+JpAA";
+    sha256 = "sha256-BjK1PJQFWtKDvfQ2Vh7BoOPqYucyvOG+2Pu/Kh+JpAA=";
   };
 }

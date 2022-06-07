@@ -128,7 +128,7 @@ let
 in {
 
   freeformType =
-    let t = lib.types.attrsOf lib.types.raw;
+    let t = lib.types.lazyAttrsOf lib.types.raw;
     in t // {
       merge = loc: defs:
         let r = t.merge loc defs;
@@ -139,7 +139,7 @@ in {
 
   config = {
     warnings = lib.optionals config.warnUndeclaredOptions (
-      lib.mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared
+      lib.mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or {}
     );
   };
 

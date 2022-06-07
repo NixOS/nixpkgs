@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ m4];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://libsigcplusplus.github.io/libsigcplusplus/";
     description = "A typesafe callback system for standard C++";
     branch = "1.2";

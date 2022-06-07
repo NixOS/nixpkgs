@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pythonOlder
 , substituteAll
+, dbus-python
 , distro
 , jinja2
 , keyring
@@ -10,22 +11,26 @@
 , pygobject3
 , pyxdg
 , systemd
+, ncurses
 , networkmanager
+, pkgs-systemd
+, xdg-utils
 }:
 
 buildPythonPackage rec {
   pname = "protonvpn-nm-lib";
-  version = "3.9.0";
+  version = "3.10.0";
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = pname;
     rev = version;
-    sha256 = "sha256-yV3xeIyPc2DJj5DOa5PA1MHt00bjJ/Y9zZK77s/XRAA=";
+    sha256 = "sha256-WVIQ43J01BQzYhEPDHcoAmUvlsaDw0Z7yLQGajVdedU=";
   };
 
   propagatedBuildInputs = [
+    dbus-python
     distro
     jinja2
     keyring
@@ -33,6 +38,10 @@ buildPythonPackage rec {
     pygobject3
     pyxdg
     systemd
+    ncurses
+    networkmanager
+    pkgs-systemd
+    xdg-utils
   ];
 
   patches = [

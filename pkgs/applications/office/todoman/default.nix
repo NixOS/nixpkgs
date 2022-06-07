@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , python3
 , glibcLocales
 , installShellFiles
@@ -75,6 +76,7 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''

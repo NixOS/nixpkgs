@@ -6,7 +6,7 @@ let
   jamenv = ''
     unset AR
   '' + (if stdenv.isDarwin then ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${SDL.dev}/include/SDL"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${lib.getDev SDL}/include/SDL"
     export GARGLKINI="$out/Applications/Gargoyle.app/Contents/Resources/garglk.ini"
   '' else ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/libexec/gargoyle"
@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "http://ccxvii.net/gargoyle/";
     license = licenses.gpl2Plus;
     description = "Interactive fiction interpreter GUI";

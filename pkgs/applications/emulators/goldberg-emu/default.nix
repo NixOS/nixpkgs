@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://gitlab.com/Mr_Goldberg/goldberg_emulator";
     changelog = "https://gitlab.com/Mr_Goldberg/goldberg_emulator/-/releases";
     description = "Program that emulates steam online features";

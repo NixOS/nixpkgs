@@ -51,6 +51,10 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    sed -i 's|\S*/opt/homebrew.*|pass|' setup.py
+  '';
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [

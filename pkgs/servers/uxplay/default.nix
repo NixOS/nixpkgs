@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/FDH2/UxPlay";
     description = "AirPlay Unix mirroring server";
     license = licenses.gpl3Plus;

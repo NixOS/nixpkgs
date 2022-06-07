@@ -90,6 +90,22 @@ let
         '';
       };
 
+      type = mkOption {
+        type = types.nullOr (types.enum [
+          "unicast" "local" "broadcast" "multicast"
+        ]);
+        default = null;
+        description = ''
+          Type of the route.  See the <literal>Route types</literal> section
+          in the <literal>ip-route(8)</literal> manual page for the details.
+
+          Note that <literal>prohibit</literal>, <literal>blackhole</literal>,
+          <literal>unreachable</literal>, and <literal>throw</literal> cannot
+          be configured per device, so they are not available here. Similarly,
+          <literal>nat</literal> hasn't been supported since kernel 2.6.
+        '';
+      };
+
       via = mkOption {
         type = types.nullOr types.str;
         default = null;
