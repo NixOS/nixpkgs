@@ -9063,6 +9063,8 @@ with pkgs;
     openvpn_24
     openvpn;
 
+  openvpn3 = callPackage ../tools/networking/openvpn3 { };
+
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
   openvpn-auth-ldap = callPackage ../tools/networking/openvpn/openvpn-auth-ldap.nix {
