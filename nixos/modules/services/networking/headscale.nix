@@ -434,7 +434,9 @@ in
           export HEADSCALE_DB_PASS="$(head -n1 ${escapeShellArg cfg.database.passwordFile})"
         ''}
 
-        export HEADSCALE_OIDC_CLIENT_SECRET="$(head -n1 ${escapeShellArg cfg.openIdConnect.clientSecretFile})"
+        ${optionalString (cfg.openIdConnect.clientSecretFile != null) ''
+          export HEADSCALE_OIDC_CLIENT_SECRET="$(head -n1 ${escapeShellArg cfg.openIdConnect.clientSecretFile})"
+        ''}
         exec ${cfg.package}/bin/headscale serve
       '';
 
