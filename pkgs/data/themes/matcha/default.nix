@@ -4,6 +4,7 @@
 , gdk-pixbuf
 , gtk-engine-murrine
 , librsvg
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +40,8 @@ stdenv.mkDerivation rec {
     cp -a src/extra/firefox $out/share/doc/${pname}
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {inherit pname version; };
 
   meta = with lib; {
     description = "A stylish flat Design theme for GTK based desktop environments";
