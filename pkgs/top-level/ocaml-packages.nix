@@ -36,6 +36,8 @@ let
 
     ansiterminal = callPackage ../development/ocaml-modules/ansiterminal { };
 
+    ao = callPackage ../development/ocaml-modules/ao { };
+
     apron = callPackage ../development/ocaml-modules/apron { };
 
     arp = callPackage ../development/ocaml-modules/arp { };
@@ -744,6 +746,8 @@ let
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
+    mad = callPackage ../development/ocaml-modules/mad { };
+
     magic = callPackage ../development/ocaml-modules/magic { };
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
@@ -882,6 +886,8 @@ let
     mlgmp =  callPackage ../development/ocaml-modules/mlgmp { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
+
+    mm = callPackage ../development/ocaml-modules/mm { };
 
     mmap =  callPackage ../development/ocaml-modules/mmap { };
 
@@ -1122,6 +1128,8 @@ let
     posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
 
     posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
+
+    posix-time2 = callPackage ../development/ocaml-modules/posix/time2.nix { };
 
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
@@ -1398,6 +1406,8 @@ let
     uchar = callPackage ../development/ocaml-modules/uchar { };
 
     uecc = callPackage ../development/ocaml-modules/uecc { };
+
+    unix-errno = callPackage ../development/ocaml-modules/unix-errno { };
 
     utop = callPackage ../development/tools/ocaml/utop { };
 

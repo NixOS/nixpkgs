@@ -190,8 +190,8 @@ let
       rm tests/pexpects/exit.py
       rm tests/pexpects/job_summary.py
       rm tests/pexpects/signals.py
-    '' + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) ''
-      # pexpect tests are flaky on aarch64-linux
+    '' + lib.optionalString stdenv.isLinux ''
+      # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
       # See https://github.com/fish-shell/fish-shell/issues/8789
       rm tests/pexpects/exit_handlers.py
     '';

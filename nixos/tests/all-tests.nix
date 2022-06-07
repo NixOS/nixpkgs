@@ -27,21 +27,7 @@ let
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
 
-  allDrivers = getDrivers tests;
-
-  getDrivers = ts:
-    if isDerivation ts
-    then ts.driver or null
-    else if isAttrs ts
-    then recurseIntoAttrs (mapAttrs (k: getDrivers) ts)
-    else null;
-
-  tests = {
-
-  # for typechecking of the scripts and evaluation of
-  # the nodes, without running VMs.
-  inherit allDrivers;
-
+in {
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
   adguardhome = handleTest ./adguardhome.nix {};
@@ -184,7 +170,7 @@ let
   frr = handleTest ./frr.nix {};
   fsck = handleTest ./fsck.nix {};
   ft2-clone = handleTest ./ft2-clone.nix {};
-  grafana-mimir = handleTest ./grafana-mimir.nix {};
+  mimir = handleTest ./mimir.nix {};
   gerrit = handleTest ./gerrit.nix {};
   geth = handleTest ./geth.nix {};
   ghostunnel = handleTest ./ghostunnel.nix {};
@@ -634,5 +620,4 @@ let
   zookeeper = handleTest ./zookeeper.nix {};
   zrepl = handleTest ./zrepl.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
-};
-in tests
+}

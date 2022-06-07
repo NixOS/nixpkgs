@@ -41,7 +41,7 @@ buildDotnetModule rec {
   '';
 
   passthru = {
-    updateScript = ./updater.sh;
+    updateScript = ./update.sh;
     ui = callPackage ./web-ui { };
   };
 
