@@ -2710,6 +2710,8 @@ with pkgs;
 
   bluemix-cli = callPackage ../tools/admin/bluemix-cli { };
 
+  bluewalker = callPackage ../tools/bluetooth/bluewalker { };
+
   blur-effect = callPackage ../tools/graphics/blur-effect { };
 
   bootiso = callPackage ../tools/cd-dvd/bootiso { };
@@ -10042,6 +10044,8 @@ with pkgs;
 
   rw = callPackage ../tools/misc/rw { };
 
+  rwc = callPackage ../tools/system/rwc { };
+
   rxp = callPackage ../tools/text/xml/rxp { };
 
   rzip = callPackage ../tools/compression/rzip { };
@@ -10846,9 +10850,7 @@ with pkgs;
 
   texstudio = libsForQt5.callPackage ../applications/editors/texstudio { };
 
-  textadept = callPackage ../applications/editors/textadept/10 { };
-
-  textadept11 = callPackage ../applications/editors/textadept/11 { stdenv = gcc10StdenvCompat; };
+  textadept = callPackage ../applications/editors/textadept { };
 
   texworks = libsForQt5.callPackage ../applications/editors/texworks { };
 
@@ -16215,10 +16217,7 @@ with pkgs;
 
   sloc = nodePackages.sloc;
 
-  smatch = callPackage ../development/tools/analysis/smatch {
-    buildllvmsparse = false;
-    buildc2xml = false;
-  };
+  smatch = callPackage ../development/tools/analysis/smatch { };
 
   smc = callPackage ../tools/misc/smc { };
 
@@ -21795,7 +21794,7 @@ with pkgs;
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
 
-  grafana-mimir = callPackage ../servers/monitoring/mimir { };
+  mimir = callPackage ../servers/monitoring/mimir { };
 
   promtail = grafana-loki.overrideAttrs (o: {
     pname = "promtail";
@@ -22478,7 +22477,6 @@ with pkgs;
   prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -23563,6 +23561,8 @@ with pkgs;
   gops = callPackage ../development/tools/gops { };
 
   gore = callPackage ../development/tools/gore { };
+
+  goresym = callPackage ../development/tools/goresym { };
 
   gotests = callPackage ../development/tools/gotests { };
 

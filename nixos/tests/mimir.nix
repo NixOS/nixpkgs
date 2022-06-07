@@ -1,5 +1,5 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
-  name = "grafana-mimir";
+  name = "mimir";
   nodes = {
     server = { ... }: {
       environment.systemPackages = [ pkgs.jq ];

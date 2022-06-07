@@ -2334,6 +2334,12 @@
     githubId = 3956062;
     name = "Simon Lackerbauer";
   };
+  cimm = {
+    email = "8k9ft8m5gv@astil.be";
+    github = "cimm";
+    githubId = 68112;
+    name = "Simon";
+  };
   cirno-999 = {
     email = "reverene@protonmail.com";
     github = "cirno-999";
@@ -9855,6 +9861,12 @@
     github = "pasqui23";
     githubId = 6931743;
     name = "pasqui23";
+  };
+  patricksjackson = {
+    email = "patrick@jackson.dev";
+    github = "patricksjackson";
+    githubId = 160646;
+    name = "Patrick Jackson";
   };
   patryk27 = {
     email = "pwychowaniec@pm.me";

@@ -98,7 +98,7 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [
-      (pkgs.runCommandNoCC "captive-browser-desktop-item" { } ''
+      (pkgs.runCommand "captive-browser-desktop-item" { } ''
         install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*.desktop
       '')
     ];

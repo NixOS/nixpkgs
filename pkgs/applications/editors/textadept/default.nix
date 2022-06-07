@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "11.3";
-  pname = "textadept11";
+  pname = "textadept";
 
   nativeBuildInputs = [ pkg-config unzip zip ];
   buildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "An extensible text editor based on Scintilla with Lua scripting.";
     homepage = "http://foicica.com/textadept";
     license = licenses.mit;
-    maintainers = with maintainers; [ raskin mirrexagon ];
+    maintainers = with maintainers; [ raskin mirrexagon patricksjackson ];
     platforms = platforms.linux;
   };
 }
