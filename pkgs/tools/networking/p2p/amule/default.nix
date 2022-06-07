@@ -21,10 +21,11 @@
 }:
 
 # daemon and client are not build monolithic
-assert monolithic || (!monolithic && (enableDaemon || client));
+assert monolithic || (!monolithic && (enableDaemon || client || httpServer));
 
 stdenv.mkDerivation rec {
   pname = "amule"
+    + lib.optionalString httpServer "-web"
     + lib.optionalString enableDaemon "-daemon"
     + lib.optionalString client "-gui";
   version = "2.3.3";
@@ -60,6 +61,10 @@ stdenv.mkDerivation rec {
     "-Dwx_NEED_ADV=ON"
     "-Dwx_NEED_NET=ON"
   ];
+
+  postPatch = ''
+    echo "find_package(Threads)" >> cmake/options.cmake
+  '';
 
   # aMule will try to `dlopen' libupnp and libixml, so help it
   # find them.
