@@ -3386,6 +3386,8 @@ with pkgs;
 
   dtools = callPackage ../development/tools/dtools { };
 
+  dt-shell-color-scripts = callPackage ../tools/misc/dt-shell-color-scripts { };
+
   dtrx = callPackage ../tools/compression/dtrx { };
 
   dua = callPackage ../tools/misc/dua {
