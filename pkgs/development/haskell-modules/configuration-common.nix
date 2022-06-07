@@ -2549,6 +2549,10 @@ self: super: {
     sha256 = "0wxpqazjnal9naibapg63nm7x6qz0lklcfw2m5mzjrh2q9x2cvnd";
   }) super.debian;
 
+  # Test data missing from sdist
+  # https://github.com/ngless-toolkit/ngless/issues/152
+  NGLess = dontCheck super.NGLess;
+
   # Raise version bounds for hspec
   records-sop = appendPatch (fetchpatch {
     url = "https://github.com/kosmikus/records-sop/pull/11/commits/d88831388ab3041190130fec3cdd679a4217b3c7.patch";
