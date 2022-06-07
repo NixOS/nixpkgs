@@ -2351,25 +2351,6 @@ self: super: {
   # Invalid CPP in test suite: https://github.com/cdornan/memory-cd/issues/1
   memory-cd = dontCheck super.memory-cd;
 
-  protolude = appendPatches [
-    # Intermediate Patch, so the next one applies
-    (fetchpatch {
-      name = "integer-gmp-only-symbols.patch";
-      url = "https://github.com/protolude/protolude/commit/84d228a3b5a2adfe5c8aec23176a0301012e54eb.patch";
-      sha256 = "0mk0gxcg8vp73wlz764y24gqmxdrhanp12dfam9xsb6cm34jkjdc";
-    })
-    # Compat with GHC 9.0 (not merged yet)
-    (fetchpatch {
-      name = "protolude-ghc-9.0.patch";
-      url = "https://github.com/protolude/protolude/pull/131/commits/1ca4b4564b4d868022d5bab5330e2c7d9cae11a0.patch";
-      sha256 = "0jrm6715kc8v7v4isi79b3w1i51rs332bkak25ik6zv3i5lgcg68";
-      includes = [
-        "protolude.cabal"
-        "src/**"
-      ];
-    })
-  ] super.protolude;
-
   # https://github.com/haskell/fgl/pull/99
   fgl = doJailbreak super.fgl;
   fgl-arbitrary = doJailbreak super.fgl-arbitrary;
@@ -2485,9 +2466,9 @@ self: super: {
   ema = assert super.ema.version == "0.6.0.0";
     super.ema.overrideScope (self: super: { relude = doJailbreak self.relude_0_7_0_0; });
 
-  # attoparsec bump is on v2 branch, but not released yet
-  irc-core = assert super.irc-core.version == "2.10"; doJailbreak super.irc-core;
-  glirc = assert super.irc-core.version == "2.10"; doJailbreak super.glirc;
+  glirc = super.glirc.override {
+    vty = self.vty_5_35_1;
+  };
 
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
@@ -2567,6 +2548,10 @@ self: super: {
     url = "https://github.com/clinty/debian-haskell/pull/3/commits/47441c8e4a7a00a3c8825eec98bf7a823594f9be.patch";
     sha256 = "0wxpqazjnal9naibapg63nm7x6qz0lklcfw2m5mzjrh2q9x2cvnd";
   }) super.debian;
+
+  # Test data missing from sdist
+  # https://github.com/ngless-toolkit/ngless/issues/152
+  NGLess = dontCheck super.NGLess;
 
   # Raise version bounds for hspec
   records-sop = appendPatch (fetchpatch {
