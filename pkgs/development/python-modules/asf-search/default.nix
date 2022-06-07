@@ -6,7 +6,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "asfadmin";
-    repo = "Discovery-${pname}";
+    repo = "Discovery-asf_search";
     rev = "v${version}";
     sha256 = "1jzah2l1db1p2mv59w9qf0x3a9hk6s5rzy0jnp2smsddvyxfwcyn";
   };
