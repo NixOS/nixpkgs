@@ -21795,7 +21795,7 @@ with pkgs;
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
 
-  grafana-mimir = callPackage ../servers/monitoring/mimir { };
+  mimir = callPackage ../servers/monitoring/mimir { };
 
   promtail = grafana-loki.overrideAttrs (o: {
     pname = "promtail";
