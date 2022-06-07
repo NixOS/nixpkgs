@@ -11,6 +11,8 @@ buildPythonPackage rec {
     sha256 = "1jzah2l1db1p2mv59w9qf0x3a9hk6s5rzy0jnp2smsddvyxfwcyn";
   };
 
+  propagatedBuildInputs = [ pytz shapely importlib-metadata requests python-dateutil ];
+
   doCheck = false;
 
   pythonImportsCheck = [ "asf_search" ];
