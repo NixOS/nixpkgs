@@ -1176,6 +1176,8 @@ with pkgs;
 
   nominatim = callPackage ../servers/nominatim { };
 
+  oversteer = callPackage ../tools/games/oversteer { };
+
   pferd = callPackage ../tools/misc/pferd {};
 
   qFlipper = libsForQt515.callPackage ../tools/misc/qflipper { };
