@@ -13559,6 +13559,17 @@
     email = "kirill.wedens@gmail.com";
     name = "wedens";
   };
+  WeebSorceress = {
+    name = "WeebSorceress";
+    email = "hello@weebsorceress.anonaddy.me";
+    matrix = "@weebsorceress:matrix.org";
+    github = "WeebSorceress";
+    githubId = 106774777;
+    keys = [{
+      longkeyid = "rsa4096/0x7F57344317F0FA43";
+      fingerprint = "659A 9BC3 F904 EC24 1461  2EFE 7F57 3443 17F0 FA43";
+    }];
+  };
   wegank = {
     name = "Weijia Wang";
     email = "contact@weijia.wang";
