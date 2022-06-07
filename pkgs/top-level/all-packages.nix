@@ -27893,6 +27893,8 @@ with pkgs;
 
   lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php74; };
 
+  ltex-ls = callPackage ../tools/text/ltex-ls { };
+
   luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
