@@ -5,6 +5,7 @@
 , python3Packages
 , ffmpeg
 , flac
+, libjxl
 , librsvg
 , gobject-introspection
 , gtk3
@@ -14,6 +15,7 @@
 , mpg123
 , libopenmpt
 , opusfile
+, wavpack
 , pango
 , pulseaudio
 , withDiscordRPC ? false
@@ -21,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tauon";
-  version = "7.1.3";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
     rev = "v${version}";
-    sha256 = "sha256-UadE8qsQxRjE+POHLAUY1tRUInNXsMEqTAP02zSDSZ4=";
+    sha256 = "sha256-wEGdqMKLhKjnxNTgqNQpUpYkMk/FuRAKsWX+P/9nUG4=";
   };
 
   postPatch = ''
@@ -70,6 +72,7 @@ stdenv.mkDerivation rec {
     opusfile
     pango
     pulseaudio
+    wavpack
   ];
 
   pythonPath = with python3Packages; [
@@ -77,12 +80,15 @@ stdenv.mkDerivation rec {
     gst-python
     dbus-python
     isounidecode
+    libjxl
     musicbrainzngs
     mutagen
+    natsort
     pillow
     plexapi
     pulsectl
     pycairo
+    PyChromecast
     pylast
     pygobject3
     pylyrics
