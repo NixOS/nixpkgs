@@ -1163,6 +1163,8 @@ with pkgs;
 
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
+  fastfetch = callPackage ../tools/misc/fastfetch { };
+
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
 
   gamemode = callPackage ../tools/games/gamemode {
