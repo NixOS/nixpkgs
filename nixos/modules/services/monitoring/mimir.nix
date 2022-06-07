@@ -29,7 +29,7 @@ in {
 
   config = mkIf cfg.enable {
     # for mimirtool
-    environment.systemPackages = [ pkgs.mimir ];
+    environment.systemPackages = [ pkgs.grafana-mimir ];
 
     assertions = [{
       assertion = (
