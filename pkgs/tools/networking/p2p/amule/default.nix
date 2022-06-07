@@ -53,6 +53,12 @@ stdenv.mkDerivation rec {
     "-DBUILD_DAEMON=${if enableDaemon then "ON" else "OFF"}"
     "-DBUILD_REMOTEGUI=${if client then "ON" else "OFF"}"
     "-DBUILD_WEBSERVER=${if httpServer then "ON" else "OFF"}"
+    # building only the daemon fails when these are not set... this is
+    # due to mistakes in the Amule cmake code, but it does not cause
+    # extra code to be built...
+    "-Dwx_NEED_GUI=ON"
+    "-Dwx_NEED_ADV=ON"
+    "-Dwx_NEED_NET=ON"
   ];
 
   # aMule will try to `dlopen' libupnp and libixml, so help it
@@ -79,7 +85,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
-    # cmake fails: Cannot specify link libraries for target "wxWidgets::ADV" which is not built by this project.
-    broken = enableDaemon || stdenv.isDarwin;
+    broken = stdenv.isDarwin;
   };
 }
