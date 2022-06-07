@@ -62,6 +62,15 @@
           <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/aiberia/persistent-evdev">persistent-evdev</link>,
+          a daemon to add virtual proxy devices that mirror a physical
+          input device but persist even if the underlying hardware is
+          hot-plugged. Available as
+          <link linkend="opt-services.persistent-evdev.enable">services.persistent-evdev</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">
