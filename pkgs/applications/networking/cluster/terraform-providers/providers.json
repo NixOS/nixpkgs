@@ -518,6 +518,15 @@
     "vendorSha256": "sha256-HrsjhaMlzs+uel5tBlxJD69Kkjl+4qVisWWREANBx40=",
     "version": "5.0.2"
   },
+  "hetznerdns": {
+    "owner": "timohirt",
+    "provider-source-address": "registry.terraform.io/timohirt/hetznerdns",
+    "repo": "terraform-provider-hetznerdns",
+    "rev": "v2.1.0",
+    "sha256": "sha256-QmD9UlQpyvEz4in1I960J0eC6xNtgk5z8tZUxaApOwE=",
+    "vendorSha256": "sha256-Bat/S4e5vzT0/XOhJ9zCWLa4IE4owLC6ec1yvEh+c0Y=",
+    "version": "2.1.0"
+  },
   "htpasswd": {
     "owner": "loafoe",
     "provider-source-address": "registry.terraform.io/loafoe/htpasswd",
