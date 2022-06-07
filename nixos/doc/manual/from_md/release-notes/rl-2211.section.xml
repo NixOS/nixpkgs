@@ -308,6 +308,16 @@
           <literal>services.redis.servers.&lt;name&gt;.save = []</literal>
           instead of using the Redis default.
         </para>
+       </listitem>
+       <listitem>
+        <para>
+          The <literal>kratos</literal> package has been updated from
+          <literal>0.9.0-alpha.3</literal> to <literal>0.10.1</literal>.
+          This is the second beta release for kratos, and does have
+          breaking changes. See the
+          <link xlink:href="https://github.com/ory/kratos/releases/tag/v0.10.0">upstream
+          changelog</link> for more details on those breaking changes.
+        </para>
       </listitem>
       <listitem>
         <para>
