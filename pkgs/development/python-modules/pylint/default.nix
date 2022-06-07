@@ -2,7 +2,6 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
-, pythonAtLeast
 , pythonOlder
 , installShellFiles
 , astroid
@@ -21,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pylint";
-  version = "2.14.0";
+  version = "2.14.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7.2";
@@ -30,7 +29,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nFgSI7Dk+/DEoeSkd3Pv+a/MtZPja89O3BrxrbqcgTo=";
+    sha256 = "sha256-rtyqHRDywv3l8bDgEjQlsh8lvwWbLswOPujFakaLWOw=";
   };
 
   nativeBuildInputs = [
