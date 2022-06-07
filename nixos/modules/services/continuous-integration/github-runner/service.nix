@@ -43,7 +43,7 @@ with lib;
     config.nix.package
   ] ++ cfg.extraPackages;
 
-  serviceConfig = rec {
+  serviceConfig = (rec {
     ExecStart = "${cfg.package}/bin/runsvc.sh";
 
     # Does the following, sequentially:
@@ -160,9 +160,6 @@ with lib;
       "${stateDir}/${currentConfigTokenFilename}"
     ];
 
-    # By default, use a dynamically allocated user
-    DynamicUser = true;
-
     KillMode = "process";
     KillSignal = "SIGTERM";
 
@@ -207,5 +204,7 @@ with lib;
     PrivateNetwork = false;
     # Cannot be true due to Node
     MemoryDenyWriteExecute = false;
-  };
+  }) // (
+    if cfg.user == null then { DynamicUser = true; } else { User = cfg.user; }
+  );
 }
