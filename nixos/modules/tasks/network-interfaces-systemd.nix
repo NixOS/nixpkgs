@@ -95,7 +95,11 @@ in
           DHCP = "yes";
           linkConfig.RequiredForOnline =
             lib.mkDefault config.systemd.network.wait-online.anyInterface;
-          networkConfig.IPv6PrivacyExtensions = "kernel";
+          networkConfig = {
+            IPv6PrivacyExtensions = "kernel";
+          } // optionalAttrs (domains != []) {
+            Domains = concatStringsSep " " domains;
+          };
         };
         networks."99-wireless-client-dhcp" = lib.mkIf cfg.useDHCP {
           # Like above, but this is much more likely to be correct.
@@ -103,7 +107,11 @@ in
           DHCP = "yes";
           linkConfig.RequiredForOnline =
             lib.mkDefault config.systemd.network.wait-online.anyInterface;
-          networkConfig.IPv6PrivacyExtensions = "kernel";
+          networkConfig = {
+            IPv6PrivacyExtensions = "kernel";
+          } // optionalAttrs (domains != []) {
+            Domains = concatStringsSep " " domains;
+          };
           # We also set the route metric to one more than the default
           # of 1024, so that Ethernet is preferred if both are
           # available.
@@ -189,7 +197,11 @@ in
                   TTLPropagate = route.options.ttl-propagate == "enabled";
                 };
             });
-          networkConfig.IPv6PrivacyExtensions = "kernel";
+          networkConfig = {
+            IPv6PrivacyExtensions = "kernel";
+          } // optionalAttrs (i ? domains) {
+            Domains = concatStringsSep " " i.domains;
+          };
           linkConfig = optionalAttrs (i.macAddress != null) {
             MACAddress = i.macAddress;
           } // optionalAttrs (i.mtu != null) {
