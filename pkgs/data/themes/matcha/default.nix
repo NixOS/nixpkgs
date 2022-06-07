@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "matcha-gtk-theme";
-  version = "2021-12-25";
+  version = "2022-06-07";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "1wgq1aypm4cjv7yavlfmqcwahlddvh2gbg2f5ca0djgnpy9vha1g";
+    sha256 = "26xa9EGo2hci08Zw+X/A0Pn0VHxU8yfvRMiRusml+tc=";
   };
 
   buildInputs = [
@@ -28,13 +28,13 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs .
+    patchShebangs install.sh
   '';
 
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/themes
-    name= ./install.sh -d $out/share/themes
+    name= ./install.sh --dest $out/share/themes
     install -D -t $out/share/gtksourceview-3.0/styles src/extra/gedit/matcha.xml
     mkdir -p $out/share/doc/${pname}
     cp -a src/extra/firefox $out/share/doc/${pname}
