@@ -1873,6 +1873,26 @@ let
         };
       };
 
+      shd101wyy.markdown-preview-enhanced = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "shd101wyy";
+          name = "markdown-preview-enhanced";
+          version = "0.6.3";
+          sha256 = "dCWERQ5rHnmYLtYl12gJ+dXLnpMu55WnmF1VfdP0x34=";
+        };
+        meta = {
+          description = "Provides a live preview of markdown using either markdown-it or pandoc";
+          longDescription = ''
+            Markdown Preview Enhanced provides you with many useful functionalities
+            such as automatic scroll sync, math typesetting, mermaid, PlantUML,
+            pandoc, PDF export, code chunk, presentation writer, etc.
+          '';
+          homepage = "https://github.com/shd101wyy/vscode-markdown-preview-enhanced";
+          license = lib.licenses.ncsa;
+          maintainers = with lib.maintainers; [ pbsds ];
+        };
+      };
+
       shyykoserhiy.vscode-spotify = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-spotify";
