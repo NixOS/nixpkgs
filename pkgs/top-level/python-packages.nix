@@ -6421,6 +6421,8 @@ in {
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
+  pgzero = callPackage ../development/python-modules/pgzero { };
+
   phe = callPackage ../development/python-modules/phe { };
 
   phik = callPackage ../development/python-modules/phik { };
