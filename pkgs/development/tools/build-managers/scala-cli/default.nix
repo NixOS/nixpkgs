@@ -1,21 +1,14 @@
-{ stdenv, coreutils, lib, installShellFiles, zlib, autoPatchelfHook, fetchurl }:
+{ stdenv, coreutils, lib, installShellFiles, zlib, autoPatchelfHook, fetchurl, callPackage }:
 
 let
-  version = "0.1.5";
-  assets = {
-    x86_64-darwin = {
-      asset = "scala-cli-x86_64-apple-darwin.gz";
-      sha256 = "1sczbvvhh1ff8mdb6zj4q3fnrz1qsqmr58jlb1s3fy1wv2p5ywxl";
-    };
-    x86_64-linux = {
-      asset = "scala-cli-x86_64-pc-linux.gz";
-      sha256 = "1ahvjgcghh1pmgfsajg0b8bf5aaqxdx0f6b6qgljs0xfqm7zs05v";
-    };
-  };
+  pname = "scala-cli";
+  sources = builtins.fromJSON (builtins.readFile ./sources.json);
+  inherit (sources) version assets;
+
+  platforms = builtins.attrNames assets;
 in
 stdenv.mkDerivation {
-  pname = "scala-cli";
-  inherit version;
+  inherit pname version;
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional stdenv.isLinux autoPatchelfHook;
   buildInputs = [ coreutils zlib stdenv.cc.cc ];
@@ -27,7 +20,6 @@ stdenv.mkDerivation {
       url = "https://github.com/Virtuslab/scala-cli/releases/download/v${version}/${asset.asset}";
       sha256 = asset.sha256;
     };
-
   unpackPhase = ''
     runHook preUnpack
     gzip -d < $src > scala-cli
@@ -61,6 +53,7 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     description = "Command-line tool to interact with the Scala language";
     maintainers = [ maintainers.kubukoz ];
-    platforms = builtins.attrNames assets;
   };
+
+  passthru.updateScript = callPackage ./update.nix { } { inherit platforms pname version; };
 }
