@@ -1129,6 +1129,8 @@ let
 
     posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
 
+    posix-time2 = callPackage ../development/ocaml-modules/posix/time2.nix { };
+
     posix-types = callPackage ../development/ocaml-modules/posix/types.nix { };
 
     postgresql = callPackage ../development/ocaml-modules/postgresql {
@@ -1404,6 +1406,8 @@ let
     uchar = callPackage ../development/ocaml-modules/uchar { };
 
     uecc = callPackage ../development/ocaml-modules/uecc { };
+
+    unix-errno = callPackage ../development/ocaml-modules/unix-errno { };
 
     utop = callPackage ../development/tools/ocaml/utop { };
 
