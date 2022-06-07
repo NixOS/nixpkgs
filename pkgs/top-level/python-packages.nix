@@ -5921,6 +5921,8 @@ in {
 
   ntplib = callPackage ../development/python-modules/ntplib { };
 
+  nudatus = callPackage ../development/python-modules/nudatus { };
+
   Nuitka = callPackage ../development/python-modules/nuitka { };
 
   nulltype = callPackage ../development/python-modules/nulltype { };
