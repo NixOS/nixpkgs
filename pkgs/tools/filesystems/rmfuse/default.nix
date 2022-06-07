@@ -20,6 +20,13 @@ let
           };
         });
 
+        pillow = super.pillow.overridePythonAttrs (old: {
+          meta = old.meta // {
+            knownVulnerabilities = lib.optionals (lib.versionOlder old.version "9.1.1") [
+              "CVE-2022-30595"
+            ];
+          };
+        });
       })
     ];
   }).python.pkgs;
