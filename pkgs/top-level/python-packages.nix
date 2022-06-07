@@ -405,6 +405,8 @@ in {
 
   aioshutil = callPackage ../development/python-modules/aioshutil { };
 
+  aioskybell = callPackage ../development/python-modules/aioskybell { };
+
   aiosignal = callPackage ../development/python-modules/aiosignal { };
 
   aioslimproto = callPackage ../development/python-modules/aioslimproto { };
