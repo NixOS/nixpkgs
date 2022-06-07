@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , requests, cryptography, pybrowserid, hawkauthlib, six
-, grequests, mock, responses, pytest, pyjwt }:
+, grequests, mock, responses, pytest, pyjwt, setuptools }:
 
 buildPythonPackage rec {
   pname = "PyFxA";
@@ -18,6 +18,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyjwt requests cryptography pybrowserid hawkauthlib six
+    setuptools # imports pkg_resources
   ];
 
   checkInputs = [
