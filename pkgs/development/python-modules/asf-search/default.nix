@@ -15,8 +15,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asf_search" ];
 
-  propagatedBuildInputs = [ pytz shapely importlib-metadata requests python-dateutil ];
-
   meta = with lib; {
     description = "Python wrapper for the ASF SearchAPI";
     homepage = "https://github.com/asfadmin/Discovery-asf_search";
