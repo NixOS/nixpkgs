@@ -429,6 +429,8 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ configFile ];
 
+      environment.GIN_MODE = "release";
+
       script = ''
         ${optionalString (cfg.database.passwordFile != null) ''
           export HEADSCALE_DB_PASS="$(head -n1 ${escapeShellArg cfg.database.passwordFile})"
