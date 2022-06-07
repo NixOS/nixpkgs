@@ -32,17 +32,18 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.1195";
+  version = "2.0.1201";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-YzM/YzTeFqNe7ThNH138g13aSzEXK8rzTWit1g27GVw=";
+    hash = "sha256-ZQCUYnoCaVZkXr5rZ/vkEOlADMQmj6OfZ12KBerXdmQ=";
   };
 
   nativeBuildInputs = with py.pkgs; [
+    pythonRelaxDepsHook
     setuptools-scm
   ];
 
@@ -94,12 +95,10 @@ buildPythonApplication rec {
     responses
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "bc-python-hcl2==" "bc-python-hcl2>=" \
-      --replace "prettytable>=3.0.0" "prettytable" \
-      --replace "pycep-parser==0.3.6" "pycep-parser"
-  '';
+  pythonRelaxDeps = [
+    "bc-python-hcl2"
+    "pycep-parser"
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
