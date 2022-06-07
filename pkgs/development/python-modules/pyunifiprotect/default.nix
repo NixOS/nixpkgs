@@ -1,4 +1,5 @@
 { lib
+, aiofiles
 , aiohttp
 , aioshutil
 , buildPythonPackage
@@ -24,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "3.8.0";
+  version = "3.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -33,10 +34,11 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-YFdGWGm+DUi/0l9YBliQH1VgpYEVcHVgLirJTrNmNP4=";
+    hash = "sha256-wURr0R2pcYbvLEcfzUCBFC+HytJV04sbxfXoU4vRTe8=";
   };
 
   propagatedBuildInputs = [
+    aiofiles
     aiohttp
     aioshutil
     packaging
