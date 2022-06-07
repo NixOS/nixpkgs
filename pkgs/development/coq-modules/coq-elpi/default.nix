@@ -7,7 +7,7 @@ with builtins; with lib; let
     { case = "8.13"; out = { version = "1.13.7"; };}
     { case = "8.14"; out = { version = "1.13.7"; };}
     { case = "8.15"; out = { version = "1.14.1"; };}
-  ] { version = "1.14.1"; } );
+  ] {} );
 in mkCoqDerivation {
   pname = "elpi";
   repo  = "coq-elpi";
@@ -49,6 +49,7 @@ in mkCoqDerivation {
   releaseRev = v: "v${v}";
 
   mlPlugin = true;
+  extraNativeBuildInputs = [ which ];
   propagatedBuildInputs = [ elpi ];
 
   meta = {
