@@ -17,6 +17,8 @@
 , cairo
 , gnome
 , substituteAll
+, buildPackages
+, gobject-introspection-unwrapped
 , nixStoreDir ? builtins.storeDir
 , x11Support ? true
 }:
@@ -40,6 +42,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # prelink-rtld, which we use for cross returns 127 when it can't find a library.
+    # https://git.busybox.net/buildroot/tree/package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch
+    ./giscanner-ignore-error-return-codes-from-ldd-wrapper.patch
     # Make g-ir-scanner put absolute path to GIR files it generates
     # so that programs can just dlopen them without having to muck
     # with LD_LIBRARY_PATH environment variable.
@@ -67,7 +72,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_45
     python3
     setupHook # move .gir files
-  ];
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ gobject-introspection-unwrapped ];
 
   buildInputs = [
     python3
@@ -86,7 +91,11 @@ stdenv.mkDerivation rec {
     "--datadir=${placeholder "dev"}/share"
     "-Ddoctool=disabled"
     "-Dcairo=disabled"
-    "-Dgtk_doc=true"
+    "-Dgtk_doc=${lib.boolToString (stdenv.hostPlatform == stdenv.buildPlatform)}"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-Dgi_cross_ldd_wrapper=${buildPackages.prelink}/bin/prelink-rtld"
+    "-Dgi_cross_use_prebuilt_gi=true"
+    "-Dgi_cross_binary_wrapper=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   doCheck = !stdenv.isAarch64;
@@ -95,6 +104,10 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/pull/98316#issuecomment-695785692
   postConfigure = ''
     patchShebangs tools/*
+  '';
+
+  postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    cp -r ${buildPackages.gobject-introspection-unwrapped.devdoc} $devdoc
   '';
 
   preCheck = ''
