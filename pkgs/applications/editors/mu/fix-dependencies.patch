@@ -1,0 +1,33 @@
+diff --git a/setup.py b/setup.py
+index c7f1a86..d7c1fec 100644
+--- a/setup.py
++++ b/setup.py
+@@ -21,19 +21,19 @@ with open(os.path.join(base_dir, 'CHANGES.rst'), encoding='utf8') as f:
+ 
+ 
+ install_requires = [
+-    'PyQt5==5.12.1;"arm" not in platform_machine',
+-    'QScintilla==2.11.1;"arm" not in platform_machine',
+-    'PyQtChart==5.12;"arm" not in platform_machine',
+-    'pycodestyle==2.4.0',
+-    'pyflakes==2.0.0',
+-    'pyserial==3.4',
+-    'qtconsole==4.4.3',
+-    'pgzero==1.2',
++    'PyQt5>=5.12.1;"arm" not in platform_machine',
++    'QScintilla>=2.11.1;"arm" not in platform_machine',
++    'PyQtChart>=5.12;"arm" not in platform_machine',
++    'pycodestyle>=2.4.0',
++    'pyflakes>=2.0.0',
++    'pyserial>=3.4',
++    'qtconsole>=4.4.3',
++    'pgzero>=1.2',
+     'appdirs>=1.4.3',
+     'semver>=2.8.0',
+     'nudatus>=0.0.3',
+     'black>=18.9b0;python_version > "3.5"',
+-    'Flask==1.0.2',
++    'Flask>=1.0.2',
+ ]
+ 
+ 
