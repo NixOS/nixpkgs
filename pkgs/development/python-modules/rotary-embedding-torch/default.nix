@@ -1,15 +1,20 @@
-{ python3Packages, lib }:
+{ buildPythonPackage
+, fetchPypi
+, lib
+, pytorch-bin
+, einops
+}:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "rotary-embedding-torch";
   version = "0.1.5";
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-OgUvFk6fQtbbxZMWHZA6MwA8uRkP3GC3GbO7MflcjPY=";
   };
   propagatedBuildInputs = [
-    python3Packages.pytorch-bin
-    python3Packages.einops
+    pytorch-bin
+    einops
   ];
 
   meta = with lib; {
