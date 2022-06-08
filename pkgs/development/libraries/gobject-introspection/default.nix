@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
-    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 ]);
+    maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 artturin ]);
     platforms = platforms.unix;
     license = with licenses; [ gpl2 lgpl2 ];
 
