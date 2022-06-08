@@ -483,7 +483,7 @@ let
             auth ${p11.control} ${pkgs.pam_p11}/lib/security/pam_p11.so ${pkgs.opensc}/lib/opensc-pkcs11.so
           '') +
           (let u2f = config.security.pam.u2f; in optionalString cfg.u2fAuth ''
-            auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"} ${optionalString (u2f.appId != null) "appid=${u2f.appId}"}
+            auth ${u2f.control} ${pkgs.pam_u2f}/lib/security/pam_u2f.so ${optionalString (u2f.extraConfig != null) "${u2f.extraConfig}"} ${optionalString u2f.debug "debug"} ${optionalString (u2f.authFile != null) "authfile=${u2f.authFile}"} ${optionalString u2f.interactive "interactive"} ${optionalString u2f.cue "cue"} ${optionalString (u2f.appId != null) "appid=${u2f.appId}"}
           '') +
           optionalString cfg.usbAuth ''
             auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so
@@ -926,6 +926,17 @@ in
         description = ''
           Set to prompt a message and wait before testing the presence of a U2F device.
           Recommended if your device doesn’t have a tactile trigger.
+        '';
+      };
+
+      extraConfig = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        example = ''
+          userpresence=1 userverification=0 pinverification=0
+        '';
+        description = ''
+          Literal string to append to the <literal>u2fAuth</literal> line.
         '';
       };
 
