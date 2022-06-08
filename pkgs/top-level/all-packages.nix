@@ -4609,6 +4609,8 @@ with pkgs;
 
   cfdg = callPackage ../tools/graphics/cfdg { };
 
+  cgns = callPackage ../development/libraries/cgns { };
+
   cglm = callPackage ../development/libraries/cglm { };
 
   cgreen = callPackage ../development/libraries/cgreen { };
@@ -11976,7 +11978,9 @@ with pkgs;
 
   zerofree = callPackage ../tools/filesystems/zerofree { };
 
-  zfp = callPackage ../tools/compression/zfp {};
+  zfp = callPackage ../tools/compression/zfp {
+    pythonPackages = python3Packages;
+  };
 
   zfs-autobackup = callPackage ../tools/backup/zfs-autobackup { };
 
@@ -16532,6 +16536,8 @@ with pkgs;
 
   activemq = callPackage ../development/libraries/apache-activemq { };
 
+  adios2 = callPackage ../development/libraries/adios2 { };
+
   adns = callPackage ../development/libraries/adns { };
 
   adslib = callPackage ../development/libraries/adslib { };
@@ -16606,6 +16612,8 @@ with pkgs;
   aspellWithDicts = callPackage ../development/libraries/aspell/aspell-with-dicts.nix {
     aspell = aspell.override { searchNixProfiles = false; };
   };
+
+  atl = callPackage ../development/libraries/atl { };
 
   attr = callPackage ../development/libraries/attr { };
 
@@ -17006,6 +17014,8 @@ with pkgs;
 
   dclib = callPackage ../development/libraries/dclib { };
 
+  dill = callPackage ../development/libraries/dill { };
+
   dillo = callPackage ../applications/networking/browsers/dillo {
     fltk = fltk13;
   };
@@ -17017,6 +17027,8 @@ with pkgs;
   discord-rpc = callPackage ../development/libraries/discord-rpc {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
+
+  diy = callPackage ../development/libraries/diy { };
 
   dlib = callPackage ../development/libraries/dlib { };
 
@@ -17102,9 +17114,15 @@ with pkgs;
 
   exiv2 = callPackage ../development/libraries/exiv2 { };
 
+  exodusII = callPackage ../development/libraries/exodusII { };
+
   expat = callPackage ../development/libraries/expat { };
 
+  exprtk = callPackage ../development/libraries/exprtk { };
+
   eventlog = callPackage ../development/libraries/eventlog { };
+
+  evpath = callPackage ../development/libraries/evpath { };
 
   faac = callPackage ../development/libraries/faac { };
 
@@ -17136,6 +17154,8 @@ with pkgs;
   ffcast = callPackage ../tools/X11/ffcast { };
 
   fflas-ffpack = callPackage ../development/libraries/fflas-ffpack { };
+
+  ffs = callPackage ../development/libraries/ffs { };
 
   forge = callPackage ../development/libraries/forge {
     cudatoolkit = buildPackages.cudatoolkit_11;
@@ -17183,6 +17203,8 @@ with pkgs;
   fftwSinglePrec = fftw.override { precision = "single"; };
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
   fftwLongDouble = fftw.override { precision = "long-double"; };
+
+  fides = callPackage ../development/libraries/fides { };
 
   filter-audio = callPackage ../development/libraries/filter-audio {};
 
@@ -17985,6 +18007,8 @@ with pkgs;
   intltool = callPackage ../development/tools/misc/intltool { };
 
   ios-cross-compile = callPackage ../development/compilers/ios-cross-compile/9.2.nix {};
+
+  ioss = callPackage ../development/libraries/ioss { };
 
   ip2location-c = callPackage ../development/libraries/ip2location-c { };
 
@@ -20052,6 +20076,8 @@ with pkgs;
 
   pe-parse = callPackage ../development/libraries/pe-parse { };
 
+  pegtl = callPackage ../development/libraries/pegtl { };
+
   inherit (callPackage ../development/libraries/physfs {
     inherit (darwin.apple_sdk.frameworks) Foundation Carbon;
   })
@@ -20999,6 +21025,8 @@ with pkgs;
 
   vcg = callPackage ../development/libraries/vcg { };
 
+  verdict = callPackage ../development/libraries/verdict { };
+
   vid-stab = callPackage ../development/libraries/vid-stab {
     inherit (llvmPackages) openmp;
   };
@@ -21057,6 +21085,8 @@ with pkgs;
 
   vtk = vtk_8;
   vtkWithQt5 = vtk_8_withQt5;
+
+  vtk-m = callPackage ../development/libraries/vtk-m { };
 
   vulkan-extension-layer = callPackage ../tools/graphics/vulkan-extension-layer { };
   vulkan-headers = callPackage ../development/libraries/vulkan-headers { };
@@ -21302,6 +21332,8 @@ with pkgs;
   zita-alsa-pcmi = callPackage ../development/libraries/audio/zita-alsa-pcmi { };
 
   zita-resampler = callPackage ../development/libraries/audio/zita-resampler { };
+
+  zoltan = callPackage ../development/libraries/zoltan { };
 
   zz = callPackage ../development/compilers/zz { };
 
