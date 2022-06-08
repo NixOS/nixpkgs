@@ -27,7 +27,7 @@ buildGoModule rec {
     homepage = "https://photoprism.app";
     description = "Photoprism's backend";
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ misterio77 ];
   };
 }
