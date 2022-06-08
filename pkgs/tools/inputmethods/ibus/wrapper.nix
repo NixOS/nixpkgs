@@ -1,26 +1,33 @@
-{ lib, runCommand, makeWrapper, lndir
-, dconf, hicolor-icon-theme, ibus, librsvg, plugins ? []
+{ lib
+, buildEnv
+, makeWrapper
+, dconf
+, hicolor-icon-theme
+, ibus
+, librsvg
+, plugins ? [ ]
 }:
 
-let
+buildEnv {
   name = "ibus-with-plugins-" + lib.getVersion ibus;
-  env = {
-    buildInputs = [ ibus ] ++ plugins;
-    nativeBuildInputs = [ lndir makeWrapper ];
-    propagatedUserEnvPackages = [ hicolor-icon-theme ];
-    paths = [ ibus ] ++ plugins;
-    inherit (ibus) meta;
-  };
-  command = ''
-    for dir in bin etc lib libexec share; do
-        mkdir -p "$out/$dir"
-        for pkg in $paths; do
-            if [ -d "$pkg/$dir" ]; then
-                lndir -silent "$pkg/$dir" "$out/$dir"
-            fi
-        done
-    done
 
+  paths = [ ibus ] ++ plugins;
+
+  pathsToLink = [
+    "/bin"
+    "/etc"
+    "/lib"
+    "/libexec"
+    "/share"
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [ ibus ] ++ plugins;
+
+  postBuild = ''
     for prog in ibus; do
         wrapProgram "$out/bin/$prog" \
           --set GDK_PIXBUF_MODULE_FILE ${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
@@ -60,5 +67,6 @@ let
           --add-flags "--cache=refresh"
     done
   '';
-in
-  runCommand name env command
+
+  inherit (ibus) meta;
+}
