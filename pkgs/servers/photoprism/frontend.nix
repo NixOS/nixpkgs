@@ -41,7 +41,6 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://photoprism.app";
     description = "Photoprism's frontend";
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.agpl3;
     maintainers = with maintainers; [ misterio77 ];
   };
