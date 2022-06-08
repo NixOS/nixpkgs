@@ -16,6 +16,7 @@
 , libftdi1
 , libdc1394
 , gpsd
+, fxload
 , ffmpeg
 , version
 , src
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     indilib libnova curl cfitsio libusb1 zlib boost gsl gpsd
-    libjpeg libgphoto2 libraw libftdi1 libdc1394 ffmpeg fftw
+    libjpeg libgphoto2 libraw libftdi1 libdc1394 ffmpeg fftw fxload
   ];
 
   cmakeFlags = [
