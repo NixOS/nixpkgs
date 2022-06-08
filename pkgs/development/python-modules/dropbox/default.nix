@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , requests
+, setuptools
 , six
 , stone
 , mock
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     requests
+    setuptools
     six
     stone
   ];
