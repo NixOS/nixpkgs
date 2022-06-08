@@ -571,6 +571,7 @@ broken-packages:
   - call-alloy
   - cal-layout
   - call-haskell-from-anything
+  - call-plantuml
   - camfort
   - canon
   - canonical-filepath
@@ -648,6 +649,7 @@ broken-packages:
   - checked
   - Checked
   - checkmate
+  - chez-grater
   - chiasma
   - Chitra
   - choose
@@ -3782,6 +3784,7 @@ broken-packages:
   - pcf-font
   - pcgen
   - PCLT
+  - pcre2
   - pcre-light-extra
   - pdfname
   - pdf-slave-template
@@ -3943,6 +3946,7 @@ broken-packages:
   - polysemy-check
   - polysemy-keyed-state
   - polysemy-kvstore-jsonfile
+  - polysemy-managed
   - polysemy-mocks
   - polysemy-readline
   - polysemy-req
@@ -5504,6 +5508,7 @@ broken-packages:
   - wai-graceful
   - wai-handler-devel
   - wai-handler-fastcgi
+  - wai-handler-hal
   - wai-handler-scgi
   - wai-handler-webkit
   - wai-hmac-auth
@@ -5564,11 +5569,11 @@ broken-packages:
   - webdriver
   - webdriver-snoy
   - web-encodings
-  - webkitgtk3
   - WeberLogic
   - webex-teams-pipes
   - webfinger-client
   - web-inv-route
+  - webkitgtk3
   - webkit-javascriptcore
   - webmention
   - web-output

@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
-  version = "2.14.0";
+  version = "2.14.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-D8t8+rscImUvpHCEFGTzLU5FpAMZ62iHhRfLzUXqGV8=";
+    hash = "sha256-ImE08djcrhhC0VQJmL69hbfUDBALPUyW9IaSh1CIJqs=";
   };
 
   propagatedBuildInputs = [

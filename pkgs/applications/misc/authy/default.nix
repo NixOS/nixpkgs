@@ -1,79 +1,21 @@
-{ alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, autoPatchelfHook
-, cairo
-, cups
-, dbus
-, electron_9
-, expat
+{ autoPatchelfHook
+, electron
 , fetchurl
-, gdk-pixbuf
-, glib
-, gtk3
 , lib
-, libappindicator-gtk3
-, libdbusmenu-gtk3
-, libuuid
 , makeWrapper
-, nspr
-, nss
-, pango
 , squashfsTools
 , stdenv
-, systemd
-, xorg
 }:
-
-let
-  # Currently only works with electron 9
-  electron = electron_9;
-in
 
 stdenv.mkDerivation rec {
   pname = "authy";
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/authy?channel=stable' | jq '.download_url,.version'
-  version = "2.1.0";
-  rev = "9";
-
-  buildInputs = [
-    alsa-lib
-    at-spi2-atk
-    at-spi2-core
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    gdk-pixbuf
-    glib
-    gtk3
-    libappindicator-gtk3
-    libdbusmenu-gtk3
-    libuuid
-    nspr
-    nss
-    pango
-    stdenv.cc.cc
-    systemd
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
-  ];
+  version = "2.2.0";
+  rev = "10";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/H8ZpNgIoPyvmkgxOWw5MSzsXK1wRZiHn_${rev}.snap";
-    sha256 = "sha256-RxjxOYrbneVctyTJTMvoN/UdREohaZWb1kTdEeI6mUU=";
+    sha256 = "sha256-sB9/fVV/qp+DfjxpvzIUHsLkeEu35i2rEv1/JYMytG8=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper squashfsTools ];
@@ -95,25 +37,16 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib/
+    mkdir -p $out/bin $out/share/applications $out/share/pixmaps/apps
 
-    cp -r ./* $out/
-    rm -R ./*
-
-    # The snap package has the `ffmpeg.so` file which is copied over with other .so files
-    mv $out/*.so $out/lib/
+    # Copy only what is needed
+    cp -r resources* $out/
+    cp -r locales* $out/
+    cp meta/gui/authy.desktop $out/share/applications/
+    cp meta/gui/icon.png $out/share/pixmaps/authy.png
 
     # Replace icon name in Desktop file
-    sed -i 's|''${SNAP}/meta/gui/icon.png|authy|g' "$out/meta/gui/authy.desktop"
-
-    # Move the desktop file, icon, binary to their appropriate locations
-    mkdir -p $out/bin $out/share/applications $out/share/pixmaps/apps
-    cp $out/meta/gui/authy.desktop $out/share/applications/
-    cp $out/meta/gui/icon.png $out/share/pixmaps/authy.png
-    cp $out/${pname} $out/bin/${pname}
-
-    # Cleanup
-    rm -r $out/{data-dir,gnome-platform,meta,scripts,usr,*.sh,*.so}
+    sed -i 's|''${SNAP}/meta/gui/icon.png|authy|g' "$out/share/applications/authy.desktop"
 
     runHook postInstall
   '';
