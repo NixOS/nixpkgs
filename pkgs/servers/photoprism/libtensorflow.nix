@@ -51,15 +51,13 @@ stdenv.mkDerivation rec {
   '';
 
   # Patch library to use our libc, libstdc++ and others
-  patchPhase =
-    let
-      rpath = lib.makeLibraryPath [ stdenv.cc.libc stdenv.cc.cc.lib ];
-    in
-    ''
-      chmod -R +w lib
-      patchelf --set-rpath "${rpath}:$out/lib" lib/libtensorflow.so
-      patchelf --set-rpath "${rpath}" lib/libtensorflow_framework.so
-    '';
+  patchPhase = let
+    rpath = lib.makeLibraryPath [ stdenv.cc.libc stdenv.cc.cc.lib ];
+  in ''
+    chmod -R +w lib
+    patchelf --set-rpath "${rpath}:$out/lib" lib/libtensorflow.so
+    patchelf --set-rpath "${rpath}" lib/libtensorflow_framework.so
+  '';
 
   buildPhase = ''
     # Write pkg-config file.
