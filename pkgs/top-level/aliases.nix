@@ -662,6 +662,7 @@ mapAliases ({
   kinetic-cpp-client = throw "kinetic-cpp-client has been removed from nixpkgs, as it's abandoned"; # Added 2020-04-28
   kino = throw "kino has been removed because it was broken and abandoned"; # Added 2021-04-25
   knockknock = throw "knockknock has been removed from nixpkgs because the upstream project is abandoned"; # Added 2022-01-01
+  kodestudio = throw "kodestudio has been removed from nixpkgs, as the nix package has been long unmaintained and out of date."; # Added 2022-06-07
   kodiGBM = kodi-gbm;
   kodiPlain = kodi;
   kodiPlainWayland = kodi-wayland;
