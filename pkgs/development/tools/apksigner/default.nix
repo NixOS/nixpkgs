@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     cat >> build.gradle <<EOF
 
     apply plugin: 'application'
+    mainClassName = "com.android.apksigner.ApkSignerTool"
     sourceSets.main.java.srcDirs = [ 'src/apksigner/java', 'src/main/java' ]
     jar {
         manifest { attributes "Main-Class": "com.android.apksigner.ApkSignerTool" }
