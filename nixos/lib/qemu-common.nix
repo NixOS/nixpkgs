@@ -23,12 +23,42 @@ rec {
     else if (with pkgs.stdenv.hostPlatform; isAarch || isPower) then "ttyAMA0"
     else throw "Unknown QEMU serial device for system '${pkgs.stdenv.hostPlatform.system}'";
 
-  qemuBinary = qemuPkg: {
-    x86_64-linux = "${qemuPkg}/bin/qemu-kvm -cpu max";
-    armv7l-linux = "${qemuPkg}/bin/qemu-system-arm -machine virt,accel=kvm:tcg -cpu max";
-    aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=max,accel=kvm:tcg -cpu max";
-    powerpc64le-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
-    powerpc64-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
-    x86_64-darwin = "${qemuPkg}/bin/qemu-kvm -cpu max";
-  }.${pkgs.stdenv.hostPlatform.system} or "${qemuPkg}/bin/qemu-kvm";
+  qemuBinary = qemuPkg:
+    let
+      hostStdenv = qemuPkg.stdenv;
+      hostSystem = hostStdenv.system;
+      guestSystem = pkgs.stdenv.hostPlatform.system;
+
+      linuxHostGuestMatrix = {
+        x86_64-linux = "${qemuPkg}/bin/qemu-kvm -cpu max";
+        armv7l-linux = "${qemuPkg}/bin/qemu-system-arm -machine virt,accel=kvm:tcg -cpu max";
+        aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=max,accel=kvm:tcg -cpu max";
+        powerpc64le-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
+        powerpc64-linux = "${qemuPkg}/bin/qemu-system-ppc64 -machine powernv";
+        x86_64-darwin = "${qemuPkg}/bin/qemu-kvm -cpu max";
+      };
+      otherHostGuestMatrix = {
+        aarch64-darwin = {
+          aarch64-linux = "${qemuPkg}/bin/qemu-system-aarch64 -machine virt,gic-version=2,accel=hvf:tcg -cpu max";
+        };
+        x86_64-darwin = {
+          x86_64-linux = "${qemuPkg}/bin/qemu-system-x86_64 -machine type=q35,accel=hvf:tcg -cpu max";
+        };
+      };
+
+      throwUnsupportedHostSystem =
+        let
+          supportedSystems = [ "linux" ] ++ (lib.attrNames otherHostGuestMatrix);
+        in
+        throw "Unsupported host system ${hostSystem}, supported: ${lib.concatStringsSep ", " supportedSystems}";
+      throwUnsupportedGuestSystem = guestMap:
+        throw "Unsupported guest system ${guestSystem} for host ${hostSystem}, supported: ${lib.concatStringsSep ", " (lib.attrNames guestMap)}";
+    in
+    if hostStdenv.isLinux then
+      linuxHostGuestMatrix.${guestSystem} or "${qemuPkg}/bin/qemu-kvm"
+    else
+      let
+        guestMap = (otherHostGuestMatrix.${hostSystem} or throwUnsupportedHostSystem);
+      in
+      (guestMap.${guestSystem} or (throwUnsupportedGuestSystem guestMap));
 }
