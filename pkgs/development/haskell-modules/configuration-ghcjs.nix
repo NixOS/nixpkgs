@@ -20,6 +20,7 @@ self: super:
 
   ghcjs-base = dontCheck (self.callPackage ../compilers/ghcjs/ghcjs-base.nix {
     fetchFromGitHub = pkgs.buildPackages.fetchFromGitHub;
+    aeson = self.aeson_1_5_6_0;
   });
 
   # GHCJS does not ship with the same core packages as GHC.
