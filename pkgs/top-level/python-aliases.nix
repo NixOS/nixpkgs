@@ -114,6 +114,7 @@ mapAliases ({
   pyGtkGlade = throw "Glade support for pygtk has been removed"; # added 2022-01-15
   pycallgraph = throw "pycallgraph has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   pycryptodome-test-vectors = throw "pycryptodome-test-vectors has been removed because it is an internal package to pycryptodome"; # added 2022-05-28
+  pyialarmxr = pyialarmxr-homeassistant; # added 2022-06-07
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04

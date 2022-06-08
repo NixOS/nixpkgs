@@ -196,7 +196,10 @@ rec {
     sha256 = "sha256-LkRCumyNHVBSsXRp1ovNMGCeidK/jVCjh9H1HSE1Lm8=";
     vendorSha256 = "sha256-CVgAmPM0nt0Wx+N0qs+IO5KwCWnbfif70EHjBi0bIsQ=";
     patches = [ ./provider-path-0_15.patch ];
-    passthru = { inherit plugins; };
+    passthru = {
+      inherit plugins;
+      tests = { inherit terraform_plugins_test; };
+    };
   };
 
   # Tests that the plugins are being used. Terraform looks at the specific

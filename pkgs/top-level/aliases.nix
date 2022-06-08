@@ -267,6 +267,7 @@ mapAliases ({
   cudnn_cudatoolkit_9_0 = throw "cudnn_cudatoolkit_9_0 has been removed in favor of newer versions"; # Added 2021-04-18
   cudnn_cudatoolkit_9_1 = throw "cudnn_cudatoolkit_9_1 has been removed in favor of newer versions"; # Added 2021-04-18
   cudnn_cudatoolkit_9_2 = throw "cudnn_cudatoolkit_9_2 has been removed in favor of newer versions"; # Added 2021-04-18
+  cura_stable = throw "cura_stable was removed because it was broken and used Python 2"; # added 2022-06-05
   curl_unix_socket = throw "curl_unix_socket has been dropped due to the lack of maintanence from upstream since 2015"; # Added 2022-06-02
   cutensor = throw "cutensor is now part of cudaPackages*"; # Added 2022-04-04
   cutensor_cudatoolkit_10 = throw "cutensor* is now part of cudaPackages*"; # Added 2022-04-04
@@ -538,6 +539,7 @@ mapAliases ({
   graalvm8-ee = throw "graalvm8-ee has been removed because it is unmaintained"; # Added 2022-04-15
   graalvm11-ee = throw "graalvm11-ee has been removed because it is unmaintained"; # Added 2022-04-15
   gradio = throw "gradio has been removed because it is unmaintained, use shortwave instead"; # Added 2022-06-03
+  grafana-mimir = throw "'grafana-mimir' has been renamed to/replaced by 'mimir'"; # Added 2022-06-07
   gr-ais = gnuradio3_7.pkgs.ais; # Added 2019-05-27, changed 2020-10-16
   grantlee5 = throw "'grantlee5' has been renamed to/replaced by 'libsForQt5.grantlee'"; # Converted to throw 2022-02-22
   gr-gsm = gnuradio3_7.pkgs.gsm; # Added 2019-05-27, changed 2020-10-16
@@ -660,6 +662,7 @@ mapAliases ({
   kinetic-cpp-client = throw "kinetic-cpp-client has been removed from nixpkgs, as it's abandoned"; # Added 2020-04-28
   kino = throw "kino has been removed because it was broken and abandoned"; # Added 2021-04-25
   knockknock = throw "knockknock has been removed from nixpkgs because the upstream project is abandoned"; # Added 2022-01-01
+  kodestudio = throw "kodestudio has been removed from nixpkgs, as the nix package has been long unmaintained and out of date."; # Added 2022-06-07
   kodiGBM = kodi-gbm;
   kodiPlain = kodi;
   kodiPlainWayland = kodi-wayland;
@@ -1122,6 +1125,7 @@ mapAliases ({
   prometheus-cups-exporter = throw "outdated and broken by design; removed by developer"; # Added 2021-03-16
   prometheus-dmarc-exporter = dmarc-metrics-exporter; # added 2022-05-31
   prometheus-mesos-exporter = throw "prometheus-mesos-exporter is deprecated and archived by upstream"; # Added 2022-04-05
+  prometheus-unifi-exporter = throw "prometheus-unifi-exporter is deprecated and archived by upstream, use unifi-poller instead"; # Added 2022-06-03
   proxytunnel = throw "proxytunnel has been removed from nixpkgs, because it has not been update upstream since it was added to nixpkgs in 2008 and has therefore bitrotted."; # added 2021-12-15
   pulseaudio-hsphfpd = throw "pulseaudio-hsphfpd upstream has been abandoned"; # Added 2022-03-23
   pulseaudio-modules-bt = throw "pulseaudio-modules-bt has been abandoned, and is superseded by pulseaudio's native bt functionality"; # Added 2022-04-01
@@ -1224,6 +1228,7 @@ mapAliases ({
   s6Networking = throw "'s6Networking' has been renamed to/replaced by 's6-networking'"; # Converted to throw 2022-02-22
   s6PortableUtils = throw "'s6PortableUtils' has been renamed to/replaced by 's6-portable-utils'"; # Converted to throw 2022-02-22
   sagemath = throw "'sagemath' has been renamed to/replaced by 'sage'"; # Converted to throw 2022-02-22
+  salut_a_toi = throw "salut_a_toi was removed because it was broken and used Python 2"; # added 2022-06-05
   sam = throw "'sam' has been renamed to/replaced by 'deadpixi-sam'"; # Converted to throw 2022-02-22
   samsungUnifiedLinuxDriver = throw "'samsungUnifiedLinuxDriver' has been renamed to/replaced by 'samsung-unified-linux-driver'"; # Converted to throw 2022-02-22
   sane-backends-git = sane-backends; # Added 2021-02-19
@@ -1352,6 +1357,7 @@ mapAliases ({
   tex-gyre-pagella-math = throw "'tex-gyre-pagella-math' has been renamed to/replaced by 'tex-gyre-math.pagella'"; # Converted to throw 2022-02-22
   tex-gyre-schola-math = throw "'tex-gyre-schola-math' has been renamed to/replaced by 'tex-gyre-math.schola'"; # Converted to throw 2022-02-22
   tex-gyre-termes-math = throw "'tex-gyre-termes-math' has been renamed to/replaced by 'tex-gyre-math.termes'"; # Converted to throw 2022-02-22
+  textadept11 = textadept; # Added 2022-06-07
   tftp_hpa = throw "'tftp_hpa' has been renamed to/replaced by 'tftp-hpa'"; # Converted to throw 2022-02-22
   thunderbird-68 = throw "Thunderbird 68 reached end of life with its final release 68.12.0 on 2020-08-25";
   thunderbird-bin-68 = thunderbird-68;
@@ -1585,6 +1591,7 @@ mapAliases ({
   todolist = throw "todolist is now ultralist"; # Added 2020-12-27
   tor-browser-bundle = throw "tor-browser-bundle was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead"; # Added 2020-01-10
   tor-browser-unwrapped = throw "tor-browser-unwrapped was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead"; # Added 2020-01-10
+  torchat = throw "torchat was removed because it was broken and requires Python 2"; # added 2022-06-05
   ttyrec = ovh-ttyrec; # Added 2021-01-02
   zplugin = zinit; # Added 2021-01-30
 
