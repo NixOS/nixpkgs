@@ -6,9 +6,10 @@
 , javahlBindings ? false
 , saslSupport ? false
 , lib, stdenv, fetchurl, apr, aprutil, zlib, sqlite, openssl, lz4, utf8proc
+, CoreServices, Security
 , autoconf, libtool
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python3 ? null, py3c ? null, perl ? null
-, sasl ? null, serf ? null, darwin ? null
+, sasl ? null, serf ? null, darwin
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -39,7 +40,7 @@ let
       ++ lib.optionals pythonBindings [ python3 py3c ]
       ++ lib.optional perlBindings perl
       ++ lib.optional saslSupport sasl
-      ++ lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ CoreServices Security ]);
+      ++ lib.optional stdenv.hostPlatform.isDarwin [ CoreServices Security ];
 
     patches = [ ./apr-1.patch ] ++ extraPatches;
 
