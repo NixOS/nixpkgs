@@ -5,6 +5,7 @@
 , protonvpn-nm-lib
 , pythondialog
 , dialog
+, dbus-python
 }:
 
 buildPythonApplication rec {
@@ -25,6 +26,7 @@ buildPythonApplication rec {
     protonvpn-nm-lib
     pythondialog
     dialog
+    dbus-python
   ];
 
   # Project has a dummy test
