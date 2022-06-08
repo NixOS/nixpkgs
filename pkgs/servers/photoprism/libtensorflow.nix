@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
       sha256 = {
         x86_64-linux = "sha256-bZAC3PJxqcjuGM4RcNtzYtkg3FD3SrO5beDsPoKenzc=";
         aarch64-linux = "sha256-qnj4vhSWgrk8SIjzIH1/4waMxMsxMUvqdYZPaSaUJRk=";
-      }.${system} or (throw "Unsupported system");
+      }.${system};
 
       url =
         let
