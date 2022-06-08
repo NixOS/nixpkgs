@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   version = "0.0.0+git20211018";
 
   outputs = [ "out" "dev" ]
+    # remove if cross-compiling gobject-introspection works
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchFromGitLab {
