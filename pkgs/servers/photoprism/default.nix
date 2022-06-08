@@ -56,7 +56,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out/{bin,assets}
     # install backend
-    cp ${backend}/bin/photoprism $out/bin/photoprism
+    ln -s ${backend}/bin/photoprism $out/bin/photoprism
     # install frontend
     cp -r ${frontend}/assets $out/
     # install tensorflow models
