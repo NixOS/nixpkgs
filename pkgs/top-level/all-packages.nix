@@ -28923,6 +28923,8 @@ with pkgs;
 
   ktunnel = callPackage ../applications/networking/cluster/ktunnel { };
 
+  pinniped = callPackage ../applications/networking/cluster/pinniped { };
+
   pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
 
   popeye = callPackage ../applications/networking/cluster/popeye { };
