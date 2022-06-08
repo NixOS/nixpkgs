@@ -13,7 +13,7 @@ let
 in
 stdenv.mkDerivation {
   inherit src version;
-  name = "photoprism-frontend";
+  pname = "photoprism-frontend";
 
   buildInputs = [ nodejs-14_x ];
 
