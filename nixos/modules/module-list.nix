@@ -348,6 +348,7 @@
   ./services/databases/clickhouse.nix
   ./services/databases/cockroachdb.nix
   ./services/databases/couchdb.nix
+  ./services/databases/dragonflydb.nix
   ./services/databases/firebird.nix
   ./services/databases/foundationdb.nix
   ./services/databases/hbase.nix
@@ -605,6 +606,7 @@
   ./services/misc/packagekit.nix
   ./services/misc/paperless.nix
   ./services/misc/parsoid.nix
+  ./services/misc/persistent-evdev.nix
   ./services/misc/plex.nix
   ./services/misc/plikd.nix
   ./services/misc/podgrab.nix
