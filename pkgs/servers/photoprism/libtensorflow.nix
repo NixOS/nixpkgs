@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
           systemName = {
             x86_64-linux = "amd64";
             aarch64-linux = "arm64";
-          }.${system} or (throw "Unsupported system");
+          }.${system};
         in
         "https://dl.photoprism.app/tensorflow/${systemName}/libtensorflow-${systemName}-${version}.tar.gz";
     })
