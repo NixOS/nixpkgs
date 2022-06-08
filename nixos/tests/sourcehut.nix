@@ -246,7 +246,9 @@ in
     #machine.wait_for_unit("buildsrht-worker.service")
 
     # Testing gitsrht
+    machine.wait_for_unit("gitsrht-api.service")
     machine.wait_for_unit("gitsrht.service")
+    machine.wait_for_unit("gitsrht-webhooks.service")
     machine.succeed("curl -sL http://git.${domain} | grep git.${domain}")
   '';
 })
