@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://tensorflow.org/";
+    homepage = "https://dl.photoprism.app/tensorflow/";
     description = "Libtensorflow version for usage with photoprism backend";
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     license = licenses.asl20;
