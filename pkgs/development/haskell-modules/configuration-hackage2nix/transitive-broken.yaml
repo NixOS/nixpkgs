@@ -878,6 +878,7 @@ dont-distribute-packages:
  - cabal-query
  - cabal-test
  - cabal2arch
+ - cabal2json
  - cabalmdvrpm
  - cabalrpmdeps
  - cabocha
@@ -3087,6 +3088,8 @@ dont-distribute-packages:
  - phonetic-languages-simplified-generalized-properties-array
  - phonetic-languages-simplified-lists-examples
  - phonetic-languages-simplified-properties-array
+ - phonetic-languages-simplified-properties-array-common
+ - phonetic-languages-simplified-properties-array-old
  - phonetic-languages-simplified-properties-lists
  - phonetic-languages-simplified-properties-lists-double
  - phonetic-languages-ukrainian
@@ -4200,6 +4203,7 @@ dont-distribute-packages:
  - yesod-auth-fb
  - yesod-auth-ldap
  - yesod-auth-lti13
+ - yesod-auth-simple
  - yesod-colonnade
  - yesod-comments
  - yesod-continuations

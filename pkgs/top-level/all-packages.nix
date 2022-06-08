@@ -386,6 +386,8 @@ with pkgs;
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
+  efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
+
   evans = callPackage ../development/tools/evans { };
 
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
@@ -4756,6 +4758,8 @@ with pkgs;
   anthy = callPackage ../tools/inputmethods/anthy { };
 
   evdevremapkeys = callPackage ../tools/inputmethods/evdevremapkeys { };
+
+  persistent-evdev = python3Packages.callPackage ../servers/persistent-evdev { };
 
   evscript = callPackage ../tools/inputmethods/evscript { };
 
@@ -10103,8 +10107,6 @@ with pkgs;
   saldl = callPackage ../tools/networking/saldl { };
 
   salt = callPackage ../tools/admin/salt {};
-
-  salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
 
   samim-fonts = callPackage ../data/fonts/samim-fonts {};
 
@@ -25241,9 +25243,7 @@ with pkgs;
 
   atlassian-cli = callPackage ../applications/office/atlassian-cli { };
 
-  atomEnv = callPackage ../applications/editors/atom/env.nix {
-    gconf = gnome2.GConf;
-  };
+  atomEnv = callPackage ../applications/editors/atom/env.nix { };
 
   atomPackages = dontRecurseIntoAttrs (callPackage ../applications/editors/atom { });
 
@@ -25868,6 +25868,8 @@ with pkgs;
   doodle = callPackage ../applications/search/doodle { };
 
   dr14_tmeter = callPackage ../applications/audio/dr14_tmeter { };
+
+  dragonflydb = callPackage ../servers/nosql/dragonflydb { };
 
   dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
 
@@ -27893,6 +27895,8 @@ with pkgs;
 
   lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php74; };
 
+  ltex-ls = callPackage ../tools/text/ltex-ls { };
+
   luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
@@ -29653,9 +29657,6 @@ with pkgs;
   };
 
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
-  cura_stable = callPackage ../applications/misc/cura/stable.nix {
-    curaengine = curaengine_stable;
-  };
 
   curaengine = callPackage ../applications/misc/curaengine { inherit (python3.pkgs) libarcus; };
 
@@ -30072,8 +30073,6 @@ with pkgs;
   todoman = callPackage ../applications/office/todoman { };
 
   topydo = callPackage ../applications/misc/topydo {};
-
-  torchat = callPackage ../applications/networking/instant-messengers/torchat { };
 
   torrential = callPackage ../applications/networking/p2p/torrential { };
 

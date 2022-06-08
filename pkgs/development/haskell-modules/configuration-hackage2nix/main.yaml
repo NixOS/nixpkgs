@@ -87,10 +87,6 @@ default-package-overrides:
   - dhall-nix < 1.1.24
   # Temporarily forbid distribution-nixpkgs updates until cabal2nix supports the new version
   - distribution-nixpkgs < 1.7.0
-  # glirc 2.39 is broken: https://github.com/glguy/irc-core/issues/99
-  - glirc == 2.38
-  # glirc 2.38 requires hookup 0.6
-  - hookup == 0.6
 
 extra-packages:
   - aeson < 2                           # required by pantry-0.5.2
@@ -138,6 +134,7 @@ extra-packages:
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
   - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
+  - fourmolu == 0.6.0.0                 # 2022-06-05: Last fourmolu version compatible with hls 1.7/ hls-fourmolu-plugin 1.0.3.0
 
 package-maintainers:
   abbradar:
