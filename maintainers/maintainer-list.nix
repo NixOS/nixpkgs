@@ -8799,17 +8799,6 @@
     githubId = 3073833;
     name = "Massimo Redaelli";
   };
-  mrhedgehog = {
-    name = "Mr Hedgehog";
-    email = "hedgehog@mrhedgehog.xyz";
-    matrix = "@mrhedgehog:jupiterbroadcasting.com";
-    github = "ModdedGamers";
-    githubId = 35778371;
-    keys = [{
-      longkeyid = "rsa4096/0x7D5107866B1C6752";
-      fingerprint = "38A0 29B0 4A7E 4C13 A4BB  86C8 7D51 0786 6B1C 6752";
-    }];
-  };
   mrkkrp = {
     email = "markkarpov92@gmail.com";
     github = "mrkkrp";
@@ -12778,6 +12767,17 @@
     github = "thefenriswolf";
     githubId = 8547242;
     name = "Stefan Rohrbacher";
+  };
+  thehedgeh0g = {
+    name = "The Hedgehog";
+    email = "hedgehog@mrhedgehog.xyz";
+    matrix = "@mrhedgehog:jupiterbroadcasting.com";
+    github = "ModdedGamers";
+    githubId = 35778371;
+    keys = [{
+      longkeyid = "rsa4096/0x7D5107866B1C6752";
+      fingerprint = "38A0 29B0 4A7E 4C13 A4BB  86C8 7D51 0786 6B1C 6752";
+    }];
   };
   thelegy = {
     email = "mail+nixos@0jb.de";
