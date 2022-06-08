@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://photoprism.app";
     description = "Photoprism's frontend";
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ misterio77 ];
   };
 }
