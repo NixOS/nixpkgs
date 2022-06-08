@@ -7472,13 +7472,8 @@ with pkgs;
 
   kfctl = callPackage ../applications/networking/cluster/kfctl { };
 
-  kibana6 = callPackage ../development/tools/misc/kibana/6.x.nix { };
-  kibana6-oss = callPackage ../development/tools/misc/kibana/6.x.nix {
-    enableUnfree = false;
-  };
   kibana7 = callPackage ../development/tools/misc/kibana/7.x.nix { };
-  kibana = kibana6;
-  kibana-oss = kibana6-oss;
+  kibana = kibana7;
 
   kibi = callPackage ../applications/editors/kibi { };
 
@@ -7858,14 +7853,6 @@ with pkgs;
 
   nodejs-slim = nodejs-slim-16_x;
 
-
-  nodejs-10_x = callPackage ../development/web/nodejs/v10.nix {
-    icu = icu67;
-  };
-  nodejs-slim-10_x = callPackage ../development/web/nodejs/v10.nix {
-    enableNpm = false;
-    icu = icu67;
-  };
   nodejs-12_x = callPackage ../development/web/nodejs/v12.nix { };
   nodejs-slim-12_x = callPackage ../development/web/nodejs/v12.nix {
     enableNpm = false;
