@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , bison
 , libevent
@@ -16,11 +17,10 @@ let
     owner = "imomaliev";
     repo = "tmux-bash-completion";
     rev = "f5d53239f7658f8e8fbaf02535cc369009c436d6";
-    sha256 = "0sq2g3w0h3mkfa6qwqdw93chb5f1hgkz5vdl8yw8mxwdqwhsdprr";
+    hash = "sha256-Od+mIceN94q4R7Tt8ueDwZUF2Ui8YY6NcrMOCPh4Ams=";
   };
 
 in
-
 stdenv.mkDerivation rec {
   pname = "tmux";
   version = "3.3";
@@ -31,8 +31,17 @@ stdenv.mkDerivation rec {
     owner = "tmux";
     repo = "tmux";
     rev = version;
-    sha256 = "sha256-Sxj2vXkbbPNRrqJKeIYwI7xdBtwRbl6a6a3yZr7UWW0=";
+    hash = "sha256-Sxj2vXkbbPNRrqJKeIYwI7xdBtwRbl6a6a3yZr7UWW0=";
   };
+
+  patches = [
+    # https://github.com/tmux/tmux/issues/3206
+    (fetchpatch {
+      url = "https://github.com/tmux/tmux/commit/18838fbc877b5c003449fa10df353405c024f0f5.patch";
+      hash = "sha256-OX1EDYiJyzAG6Znn8rRX+TxQ42rY3bMogtpHKKj3g6U=";
+      name = "fix_segfault_with_v3_3.patch";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
