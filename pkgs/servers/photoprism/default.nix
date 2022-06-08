@@ -73,7 +73,7 @@ stdenv.mkDerivation {
     homepage = "https://photoprism.app";
     description = "Personal Photo Management powered by Go and Google TensorFlow";
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    license = licenses.agpl3;
+    license = licenses.agpl3Only;
     maintainers = with maintainers; [ misterio77 ];
   };
 }
