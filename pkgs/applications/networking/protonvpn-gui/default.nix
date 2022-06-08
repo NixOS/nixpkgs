@@ -9,6 +9,7 @@
 , pango
 , webkitgtk
 # Python libs
+, dbus-python
 , protonvpn-nm-lib
 , psutil
 # Optionals
@@ -39,7 +40,8 @@ buildPythonApplication rec {
   ];
 
   buildInputs = [
-    # To avoid enabling strictDeps = false (#56943)
+    dbus-python
+    # To avoid enabling strictDeps = false (#569-43)
     gobject-introspection
     librsvg
     pango
