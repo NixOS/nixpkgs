@@ -19,6 +19,11 @@ buildEnv {
     "/lib"
     "/libexec"
     "/share"
+    # Need to link contents so that the directories are writeable.
+    "/lib/systemd"
+    "/share/dbus-1/services"
+    "/share/systemd/user"
+    "/share/systemd/user/gnome-session.target.wants"
   ];
 
   nativeBuildInputs = [
@@ -65,6 +70,44 @@ buildEnv {
           --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
           --suffix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
           --add-flags "--cache=refresh"
+    done
+
+    ibusPackage="${ibus}"
+
+    # Update services.
+    for service in \
+        "share/dbus-1/services/org.freedesktop.IBus.service" \
+        "share/systemd/user/org.freedesktop.IBus.session.generic.service" \
+        "share/systemd/user/org.freedesktop.IBus.session.GNOME.service"
+    do
+        unlink "$out/$service"
+        substitute "$ibusPackage/$service" "$out/$service" --replace "$ibusPackage/bin" "$out/bin"
+    done
+
+    # Re-create relative symbolic links.
+    for link in \
+        "$out/share/systemd/user/gnome-session.target.wants/"*
+    do
+        target="$link"
+        until [[ "''${target:0:1}" != "/" ]]; do
+            target="$(readlink "$target")"
+        done
+        unlink "$link"
+        ln -s "$target" "$link"
+    done
+
+    # Update absolute symbolic links.
+    for link in \
+        "$out/lib/systemd/user"
+    do
+        target="$(readlink -f "$link")"
+        relativeTarget="''${target#$ibusPackage/}"
+        if [[ "$ibusPackage/$relativeTarget" != "$target" ]]; then
+            >&2 echo "File $link does not point to to a file in $ibusPackage"
+            exit 1
+        fi
+        unlink "$link"
+        ln -s "$out/$relativeTarget" "$link"
     done
   '';
 
