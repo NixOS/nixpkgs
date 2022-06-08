@@ -638,6 +638,8 @@ with pkgs;
 
   umoci = callPackage ../applications/virtualization/umoci {};
 
+  dippi = callPackage ../tools/graphics/dippi {};
+
   dispad = callPackage ../tools/X11/dispad { };
 
   dupeguru = callPackage ../applications/misc/dupeguru { };
