@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "babashka";
     repo = pname;
-    rev = "release_v${version}";
+    rev = "v${version}";
     sha256 = "2H+mDleLp3PQCByRDJtSnuBf7dRhnZAUBOdQ/vHsYgE=";
   };
 
