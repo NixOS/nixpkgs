@@ -18,13 +18,13 @@ let
 in
 pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.8";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = pname;
     rev = "refs/tags/release-${version}";
-    sha256 = "sha256-DG5b3mw6AL4HSF3diGXOqIeH/eXGqLOsbcnPbD6kznE=";
+    sha256 = "sha256-KEKOouTNmmZiPyKo8xCQv6Zkreidtz2DaEbHjuwJJvY=";
   };
 
   nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ]
