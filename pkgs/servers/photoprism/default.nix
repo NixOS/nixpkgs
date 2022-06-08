@@ -58,11 +58,11 @@ stdenv.mkDerivation {
     # install backend
     ln -s ${backend}/bin/photoprism $out/bin/photoprism
     # install frontend
-    cp -r ${frontend}/assets $out/
+    ln -r ${frontend}/assets $out/
     # install tensorflow models
-    cp -r ${nasnet}/nasnet $out/assets
-    cp -r ${nsfw}/nsfw $out/assets
-    cp -r ${facenet}/facenet $out/assets
+    ln -r ${nasnet}/nasnet $out/assets
+    ln -r ${nsfw}/nsfw $out/assets
+    ln -r ${facenet}/facenet $out/assets
 
     runHook postInstall
   '';

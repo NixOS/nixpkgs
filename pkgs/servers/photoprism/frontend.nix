@@ -32,8 +32,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir $out
-    cp -r assets $out/
+    install -Dt $out/assets
 
     runHook postInstall
   '';

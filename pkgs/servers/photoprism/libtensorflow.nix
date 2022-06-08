@@ -15,14 +15,12 @@ stdenv.mkDerivation rec {
         aarch64-linux = "sha256-qnj4vhSWgrk8SIjzIH1/4waMxMsxMUvqdYZPaSaUJRk=";
       }.${system};
 
-      url =
-        let
-          systemName = {
-            x86_64-linux = "amd64";
-            aarch64-linux = "arm64";
-          }.${system};
-        in
-        "https://dl.photoprism.app/tensorflow/${systemName}/libtensorflow-${systemName}-${version}.tar.gz";
+      url = let
+        systemName = {
+          x86_64-linux = "amd64";
+          aarch64-linux = "arm64";
+        }.${system};
+      in "https://dl.photoprism.app/tensorflow/${systemName}/libtensorflow-${systemName}-${version}.tar.gz";
     })
     # Upstream tensorflow tarball (with .h's photoprism's tarball is missing)
     (fetchurl {
