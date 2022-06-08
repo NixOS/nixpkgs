@@ -9602,6 +9602,10 @@ with pkgs;
 
   pwndbg = callPackage ../development/tools/misc/pwndbg { };
 
+  pwninit = callPackage ../development/tools/misc/pwninit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
 
   pydf = callPackage ../applications/misc/pydf { };
