@@ -8,23 +8,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mujmap";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "elizagamedev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-O5CbLgs+MkATPtess0gocgPB9kwD8FMR/urwm6jo2rA=";
+    sha256 = "sha256-Qb9fEPQrdn+Ek9bdOMfaPIxlGGpQ9RfQZOeeqoOf17E=";
   };
 
-  cargoSha256 = "sha256-nOZ+HnzXhVp+tLrNMZO1NmZIhIqlWz0fRMbHVIQkOxI=";
+  cargoSha256 = "sha256-nnAYjutjxtEpDNoWTnlESDO4Haz14wZxY4gdyzdLgBU=";
 
   buildInputs = [
     notmuch
   ] ++ lib.optional stdenv.isDarwin Security;
 
   meta = with lib; {
-    description = "Bridge for synchronizing email and tags between JMAP and notmuch";
+    description = "JMAP integration for notmuch mail";
     homepage = "https://github.com/elizagamedev/mujmap/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ elizagamedev ];
