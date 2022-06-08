@@ -1,6 +1,7 @@
 { lib
 , aws-sdk-cpp
 , boehmgc
+, curl
 , callPackage
 , fetchFromGitHub
 , fetchurl
@@ -31,7 +32,7 @@ let
 
   common = args:
     callPackage
-      (import ./common.nix ({ inherit lib fetchFromGitHub; } // args))
+      (import ./common.nix ({ inherit lib fetchFromGitHub curl; } // args))
       {
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
