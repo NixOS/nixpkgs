@@ -27586,8 +27586,6 @@ with pkgs;
 
   kn = callPackage ../applications/networking/cluster/kn { };
 
-  kodestudio = callPackage ../applications/editors/kodestudio { };
-
   kondo = callPackage ../applications/misc/kondo { };
 
   konversation = libsForQt5.callPackage ../applications/networking/irc/konversation { };
@@ -27894,6 +27892,8 @@ with pkgs;
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
   lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php74; };
+
+  ltex-ls = callPackage ../tools/text/ltex-ls { };
 
   luminanceHDR = libsForQt5.callPackage ../applications/graphics/luminance-hdr { };
 
