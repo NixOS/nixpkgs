@@ -29566,6 +29566,8 @@ with pkgs;
     ncurses = ncurses5;
   };
 
+  stw = callPackage ../applications/misc/stw { };
+
   styx = callPackage ../applications/misc/styx { };
 
   sway-launcher-desktop = callPackage ../applications/misc/sway-launcher-desktop { };
