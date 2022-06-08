@@ -77,7 +77,7 @@ where the builder can do anything it wants, but typically starts with
 source $stdenv/setup
 ```
 
-to let `stdenv` set up the environment (e.g. by resetting `PATH` and populating it from `buildInputs`). If you want, you can still use `stdenv`’s generic builder:
+to let `stdenv` set up the environment (e.g. by resetting `PATH` and populating it from build inputs). If you want, you can still use `stdenv`’s generic builder:
 
 ```bash
 source $stdenv/setup
