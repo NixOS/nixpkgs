@@ -1,7 +1,12 @@
 { lib
 , buildPythonPackage
+, lhapdf
 , nnpdf
+, prompt-toolkit
 , reportengine
+, requests
+, seaborn
+, validobj
 }:
 
 buildPythonPackage rec {
@@ -21,8 +26,13 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    lhapdf
     nnpdf
+    prompt-toolkit
     reportengine
+    requests
+    seaborn
+    validobj
   ];
 
   doCheck = false; # no tests
