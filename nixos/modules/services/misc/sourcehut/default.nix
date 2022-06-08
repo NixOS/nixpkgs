@@ -238,20 +238,32 @@ in
           };
           smtp-user = mkOptionNullOrStr "Outgoing SMTP user.";
           smtp-password = mkOptionNullOrStr "Outgoing SMTP password.";
-          smtp-from = mkOptionNullOrStr "Outgoing SMTP FROM.";
+          smtp-from = mkOption {
+            type = types.str;
+            description = "Outgoing SMTP FROM.";
+          };
           error-to = mkOptionNullOrStr "Address receiving application exceptions";
           error-from = mkOptionNullOrStr "Address sending application exceptions";
-          pgp-privkey = mkOptionNullOrStr ''
-            An absolute file path (which should be outside the Nix-store)
-            to an OpenPGP private key.
+          pgp-privkey = mkOption {
+            type = types.str;
+            description = ''
+              An absolute file path (which should be outside the Nix-store)
+              to an OpenPGP private key.
 
-            Your PGP key information (DO NOT mix up pub and priv here)
-            You must remove the password from your secret key, if present.
-            You can do this with <code>gpg --edit-key [key-id]</code>,
-            then use the <code>passwd</code> command and do not enter a new password.
-          '';
-          pgp-pubkey = mkOptionNullOrStr "OpenPGP public key.";
-          pgp-key-id = mkOptionNullOrStr "OpenPGP key identifier.";
+              Your PGP key information (DO NOT mix up pub and priv here)
+              You must remove the password from your secret key, if present.
+              You can do this with <code>gpg --edit-key [key-id]</code>,
+              then use the <code>passwd</code> command and do not enter a new password.
+            '';
+          };
+          pgp-pubkey = mkOption {
+            type = with types; either path str;
+            description = "OpenPGP public key.";
+          };
+          pgp-key-id = mkOption {
+            type = types.str;
+            description = "OpenPGP key identifier.";
+          };
         };
         options.objects = {
           s3-upstream = mkOption {
