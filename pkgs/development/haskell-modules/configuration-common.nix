@@ -2179,10 +2179,10 @@ self: super: {
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
     ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
   });
 
-  ghc-lib-parser-ex_9_2_0_4 = super.ghc-lib-parser-ex_9_2_0_4.override {
+  ghc-lib-parser-ex_9_2_1_0 = super.ghc-lib-parser-ex_9_2_1_0.override {
     ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
   };
 
