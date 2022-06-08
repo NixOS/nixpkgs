@@ -10248,6 +10248,8 @@ in {
 
   stravalib = callPackage ../development/python-modules/stravalib { };
 
+  streamdeck = callPackage ../development/python-modules/streamdeck { };
+
   streaming-form-data = callPackage ../development/python-modules/streaming-form-data { };
 
   streamlabswater = callPackage ../development/python-modules/streamlabswater { };
