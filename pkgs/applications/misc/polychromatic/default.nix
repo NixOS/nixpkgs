@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-H++kQ3Fxw56avEsSE1ctu5p0s50s0eQ+jL5zXS3AA94=";
   };
 
-  preConfigure = ''
+  postPatch = ''
     patchShebangs scripts
 
     substituteInPlace scripts/build-styles.sh \
@@ -42,7 +42,9 @@ python3Packages.buildPythonApplication rec {
       --replace '$(which sass 2>/dev/null)' '${sassc}/bin/sass'
 
     substituteInPlace pylib/common.py --replace "/usr/share/polychromatic" "$out/share/polychromatic"
+  '';
 
+  preConfigure = ''
     scripts/build-styles.sh
   '';
 
@@ -71,13 +73,6 @@ python3Packages.buildPythonApplication rec {
     libappindicator-gtk3
   ];
 
-  propagatedNativeBuildInputs = [
-    gobject-introspection
-    gtk3
-    gdk-pixbuf
-    imagemagick
-  ];
-
   nativeBuildInputs = with python3Packages; [
     pyqt5
     desktop-file-utils
@@ -86,6 +81,13 @@ python3Packages.buildPythonApplication rec {
     ninja
     meson
     sassc
+  ];
+
+  propagatedNativeBuildInputs = [
+    gobject-introspection
+    gtk3
+    gdk-pixbuf
+    imagemagick
   ];
 
   makeWrapperArgs = [

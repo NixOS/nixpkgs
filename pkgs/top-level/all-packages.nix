@@ -24729,9 +24729,7 @@ with pkgs;
 
   poly = callPackage ../data/fonts/poly { };
 
-  polychromatic = libsForQt5.callPackage ../applications/misc/polychromatic {
-    inherit (pkgs) meson wrapGAppsHook;
-  };
+  polychromatic = libsForQt5.callPackage ../applications/misc/polychromatic { };
 
   polytopes_db = callPackage ../data/misc/polytopes_db { };
 
