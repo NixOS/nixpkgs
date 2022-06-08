@@ -1,17 +1,21 @@
 { lib
-, buildPythonPackage
-, fetchFromGitHub
-, plotly
-, flask
-, flask-compress
+, celery
 , dash-core-components
 , dash-html-components
 , dash-table
-, pytest-mock
+, diskcache
+, fetchFromGitHub
+, flask
+, flask-compress
 , mock
-, pyyaml
+, multiprocess
+, plotly
+, psutil
+, pytest-mock
 , pytestCheckHook
 , pythonOlder
+, pyyaml
+, redis
 }:
 
 buildPythonPackage rec {
@@ -25,7 +29,7 @@ buildPythonPackage rec {
     owner = "plotly";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-Qh5oOkTxEbxXXDX+g9TDa5DiYBlMpnx0yKsn/XMfMF0=";
+    hash = "sha256-Qh5oOkTxEbxXXDX+g9TDa5DiYBlMpnx0yKsn/XMfMF0=";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +40,18 @@ buildPythonPackage rec {
     dash-html-components
     dash-table
   ];
+
+  passthru.optional-dependencies = {
+    celery = [
+      celery
+      redis
+    ];
+    diskcache = [
+      diskcache
+      multiprocess
+      psutil
+    ];
+  };
 
   checkInputs = [
     pytestCheckHook
@@ -50,12 +66,14 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  pythonImportsCheck = [ "dash" ];
+  pythonImportsCheck = [
+    "dash"
+  ];
 
   meta = with lib; {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
     license = licenses.mit;
-    maintainers = [ maintainers.antoinerg ];
+    maintainers = with maintainers; [ antoinerg ];
   };
 }
