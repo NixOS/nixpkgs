@@ -14425,11 +14425,11 @@ with pkgs;
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
   python2 = python27;
-  python3 = python39;
+  python3 = python310;
 
   # pythonPackages further below, but assigned here because they need to be in sync
   python2Packages = dontRecurseIntoAttrs python27Packages;
-  python3Packages = dontRecurseIntoAttrs python39Packages;
+  python3Packages = dontRecurseIntoAttrs python310Packages;
 
   pypy = pypy2;
   pypy2 = pypy27;
@@ -14468,6 +14468,12 @@ with pkgs;
   python39Full = python39.override {
     self = python39Full;
     pythonAttr = "python39Full";
+    bluezSupport = true;
+    x11Support = true;
+  };
+  python310Full = python310.override {
+    self = python310Full;
+    pythonAttr = "python310Full";
     bluezSupport = true;
     x11Support = true;
   };
@@ -26058,7 +26064,7 @@ with pkgs;
 
   eq10q = callPackage ../applications/audio/eq10q { };
 
-  errbot = python3Packages.callPackage ../applications/networking/errbot { };
+  errbot = callPackage ../applications/networking/errbot { };
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 

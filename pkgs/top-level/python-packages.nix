@@ -885,6 +885,8 @@ in {
 
   azure-cosmosdb-table = callPackage ../development/python-modules/azure-cosmosdb-table { };
 
+  azure-data-tables = callPackage ../development/python-modules/azure-data-tables { };
+
   azure-datalake-store = callPackage ../development/python-modules/azure-datalake-store { };
 
   azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
@@ -5914,8 +5916,6 @@ in {
 
   nsapi = callPackage ../development/python-modules/nsapi { };
 
-  ntfy-webpush = callPackage ../tools/misc/ntfy-webpush { };
-
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
@@ -6121,8 +6121,6 @@ in {
   optuna = callPackage ../development/python-modules/optuna { };
 
   opuslib = callPackage ../development/python-modules/opuslib { };
-
-  ordereddict = callPackage ../development/python-modules/ordereddict { };
 
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
 
@@ -10602,6 +10600,8 @@ in {
   };
 
   trio-asyncio = callPackage ../development/python-modules/trio-asyncio { };
+
+  trio-websocket = callPackage ../development/python-modules/trio-websocket { };
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 

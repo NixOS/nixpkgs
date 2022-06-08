@@ -8,27 +8,21 @@
 , pytestCheckHook
 , pytest-xdist
 , sortedcontainers
-, tzdata
 , pythonOlder
 }:
+
 buildPythonPackage rec {
-  # https://hypothesis.readthedocs.org/en/latest/packaging.html
-
-  # Hypothesis has optional dependencies on the following libraries
-  # pytz fake_factory django numpy pytest
-  # If you need these, you can just add them to your environment.
-
   pname = "hypothesis";
-  version = "6.40.0";
+  version = "6.46.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "HypothesisWorks";
-    repo = "hypothesis-python";
+    repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    hash = "sha256-6BC3CTotkMhguueH4NJM8VjbrYhofHqtZEUytcllMwQ=";
+    hash = "sha256-eQ7Ns0k1hOVw8/xiINMei6GbQqDHXrBl+1v8YQeFO9Q=";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
@@ -42,8 +36,6 @@ buildPythonPackage rec {
     pexpect
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.optional (pythonAtLeast "3.9") [
-    tzdata
   ];
 
   inherit doCheck;

@@ -4,7 +4,6 @@
 , python-dateutil
 , jmespath
 , docutils
-, ordereddict
 , simplejson
 , mock
 , nose
@@ -24,7 +23,6 @@ buildPythonPackage rec {
     python-dateutil
     jmespath
     docutils
-    ordereddict
     simplejson
     urllib3
   ];

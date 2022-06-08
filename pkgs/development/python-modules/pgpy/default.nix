@@ -25,6 +25,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # assertions contains extra: IDEA has been deprecated
+    "test_encrypt_bad_cipher"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/SecurityInnovation/PGPy";
     description = "Pretty Good Privacy for Python 2 and 3";

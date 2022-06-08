@@ -8,9 +8,11 @@
 , objgraph
 , path
 , portend
+, pyopenssl
 , pytest-forked
 , pytest-services
 , pytestCheckHook
+, python-memcached
 , pythonAtLeast
 , pythonOlder
 , requests-toolbelt
@@ -38,15 +40,11 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    # required
     cheroot
     portend
     more-itertools
     zc_lockfile
     jaraco_collections
-    # optional
-    routes
-    simplejson
   ];
 
   checkInputs = [
@@ -89,6 +87,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "cherrypy"
   ];
+
+  passthru.optional-dependencies = {
+    json = [ simplejson ];
+    memcached_session = [ python-memcached ];
+    routes_dispatcher = [ routes ];
+    ssl = [ pyopenssl ];
+    # not packaged yet
+    xcgi = [ /* flup */ ];
+  };
 
   meta = with lib; {
     description = "Object-oriented HTTP framework";

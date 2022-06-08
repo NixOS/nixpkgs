@@ -23,6 +23,10 @@ buildPythonPackage rec {
     "testsout"
   ];
 
+  postPatch = ''
+    sed -i 's/httpx>=.*"/httpx"/' setup.py
+  '';
+
   propagatedBuildInputs = [
     httpx
     sanic
