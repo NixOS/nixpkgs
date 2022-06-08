@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   ];
 
   postBuild = ''
-    for module in ${lib.concatStringsSep " " extraContribModules}; do
+    for module in $extraContribModules; do
       make $makeFlags CC=$CC -C contrib/slapd-modules/$module
     done
   '';
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    for module in ${lib.concatStringsSep " " extraContribModules}; do
+    for module in $extraContribModules; do
       make $installFlags install -C contrib/slapd-modules/$module
     done
     chmod +x "$out"/lib/*.{so,dylib}
