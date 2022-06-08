@@ -23,6 +23,8 @@ let
       Name=IBus
       Type=Application
       Exec=${ibusPackage}/bin/ibus-daemon --daemonize --xim ${impanel}
+      # GNOME will launch ibus using systemd
+      NotShowIn=GNOME;
     '';
   };
 in
