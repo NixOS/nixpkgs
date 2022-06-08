@@ -3,12 +3,21 @@
 , fetchPypi
 , git
 , spdx-license-list-data
-, version, src
+, version, src, meta
 }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
+      semantic-version = super.semantic-version.overridePythonAttrs (oldAttrs: rec {
+        version = "2.10.0";
+        src = fetchPypi {
+          pname = "semantic_version";
+          inherit version;
+          sha256 = "sha256-vau20zaZjLs3jUuds6S1ah4yNXAdwF6iaQ2amX7VBBw=";
+        };
+      });
+
       starlette = super.starlette.overridePythonAttrs (oldAttrs: rec {
         version = "0.20.0";
         src = fetchFromGitHub {
@@ -96,6 +105,10 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_lib_complex.py::test_lib_show"
     "commands/test_lib_complex.py::test_lib_stats"
     "commands/test_lib_complex.py::test_search"
+    "misc/test_maintenance.py::test_check_pio_upgrade"
+    "misc/test_misc.py::test_api_cache"
+    "misc/test_misc.py::test_ping_internet_ips"
+    "misc/test_misc.py::test_platformio_cli"
     "package/test_manager.py::test_download"
     "package/test_manager.py::test_install_force"
     "package/test_manager.py::test_install_from_registry"
@@ -108,9 +121,6 @@ with python.pkgs; buildPythonApplication rec {
     "test_builder.py::test_build_unflags"
     "test_builder.py::test_debug_custom_build_flags"
     "test_builder.py::test_debug_default_build_flags"
-    "test_misc.py::test_api_cache"
-    "test_misc.py::test_ping_internet_ips"
-    "test_misc.py::test_platformio_cli"
     "test_pkgmanifest.py::test_packages"
   ]) ++ (map (e: "--ignore=tests/${e}") [
     "commands/pkg/test_install.py"
@@ -126,7 +136,7 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_run.py"
     "commands/test_test.py"
     "commands/test_update.py"
-    "test_ino2cpp.py"
+    "misc/ino2cpp/test_ino2cpp.py"
     "test_maintenance.py"
   ]) ++ [
     "tests"
@@ -147,11 +157,5 @@ with python.pkgs; buildPythonApplication rec {
       --replace "zeroconf==0.38.*" "zeroconf"
   '';
 
-  meta = with lib; {
-    broken = stdenv.isAarch64;
-    description = "An open source ecosystem for IoT development";
-    homepage = "https://platformio.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mog makefu ];
-  };
+  inherit meta;
 }

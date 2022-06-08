@@ -1,11 +1,11 @@
-{ lib, buildFHSUserEnv, version, src }:
+{ lib, buildFHSUserEnv, version, src, meta }:
 
 let
   pio-pkgs = pkgs:
     let
       python = pkgs.python3.override {
         packageOverrides = self: super: {
-          platformio = self.callPackage ./core.nix { inherit version src; };
+          platformio = self.callPackage ./core.nix { inherit version src meta; };
         };
       };
     in
@@ -29,13 +29,7 @@ buildFHSUserEnv {
   # disabled temporarily because fastdiff no longer support 32bit
   # multiPkgs = pio-pkgs;
 
-  meta = with lib; {
-    description = "An open source ecosystem for IoT development";
-    homepage = "https://platformio.org";
-    maintainers = with maintainers; [ mog ];
-    license = licenses.asl20;
-    platforms = with platforms; linux;
-  };
+  inherit meta;
 
   extraInstallCommands = ''
     mkdir -p $out/lib/udev/rules.d
