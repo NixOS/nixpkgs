@@ -1,4 +1,5 @@
 { lib
+, buildPythonPackage
 , celery
 , dash-core-components
 , dash-html-components
