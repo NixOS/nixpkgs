@@ -20590,7 +20590,9 @@ with pkgs;
 
   openexrid-unstable = callPackage ../development/libraries/openexrid-unstable { };
 
-  openldap = callPackage ../development/libraries/openldap { };
+  openldap = callPackage ../development/libraries/openldap {
+    openssl = openssl_1_1;
+  };
 
   opencolorio = callPackage ../development/libraries/opencolorio {
     inherit (darwin.apple_sdk.frameworks) Carbon GLUT Cocoa;
