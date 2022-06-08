@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "quantum-gateway";
-  version = "0.0.6";
+  version = "0.0.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "cisasteelersfan";
     repo = "quantum_gateway";
     rev = version;
-    sha256 = "f2LYOr9xJSfbA/1aHfll5lg7r05o855Zkkk9HuRamP8=";
+    hash = "sha256-jwLfth+UaisPR0p+UHfm6qMXT2eSYWnsYEp0BqyeI9U=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "quantum_gateway"
+  ];
+
+  disabledTests = [
+    # Tests require network features
+    "TestGateway3100"
   ];
 
   meta = with lib; {
