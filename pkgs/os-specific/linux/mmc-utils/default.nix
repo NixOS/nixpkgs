@@ -1,12 +1,11 @@
-{ lib, stdenv, fetchgit }:
+{ lib, stdenv, fetchzip }:
 
 stdenv.mkDerivation {
   pname = "mmc-utils";
   version = "2021-05-11";
 
-  src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git";
-    rev = "43282e80e174cc73b09b81a4d17cb3a7b4dc5cfc";
+  src = fetchzip {
+    url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/snapshot/mmc-utils-43282e80e174cc73b09b81a4d17cb3a7b4dc5cfc.tar.gz";
     sha256 = "0l06ahmprqshh75pkdpagb8fgnp2bwn8q8hwp1yl3laww2ghm8i5";
   };
 
