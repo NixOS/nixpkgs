@@ -12420,8 +12420,6 @@ self: super: with self; {
 
   subarulink = callPackage ../development/python-modules/subarulink { };
 
-  subdownloader = callPackage ../development/python-modules/subdownloader { };
-
   subliminal = callPackage ../development/python-modules/subliminal { };
 
   subprocess-tee = callPackage ../development/python-modules/subprocess-tee { };
