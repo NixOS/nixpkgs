@@ -7,6 +7,7 @@
 , vala
 , gettext
 , itstool
+, desktop-file-utils
 , glib
 , gtk4
 , coreutils
@@ -21,14 +22,14 @@
 
 stdenv.mkDerivation rec {
   pname = "deja-dup";
-  version = "43.2";
+  version = "43.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = version;
-    sha256 = "sha256-iFrPx/m/nTdm7xVVd1SZh5QNpSqI+TCbMfx0/jLgc1c=";
+    sha256 = "sha256-HOIBAzR+7OZ1RO+MSpCQKShcikdtWCjdMUO2rE2TxiM=";
   };
 
   patches = [
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     vala
     gettext
     itstool
+    desktop-file-utils
     wrapGAppsHook4
   ];
 
