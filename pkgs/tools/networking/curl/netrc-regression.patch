@@ -7,7 +7,7 @@ index a56e4b0..9f29593 100644
        userp = NULL;
      }
 +    /* no user was set but a password, set a blank user */
-+    if(userp && !*userp && *passwdp) {
++    if(userp && !*userp && passwdp && *passwdp) {
 +      *userp = strdup("");
 +      if(!*userp)
 +        return CURLE_OUT_OF_MEMORY;
