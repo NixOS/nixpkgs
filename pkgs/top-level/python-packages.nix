@@ -6445,11 +6445,13 @@ in {
 
   pencompy = callPackage ../development/python-modules/pencompy { };
 
+  phonopy = callPackage ../development/python-modules/phonopy { };
+
   pixcat = callPackage ../development/python-modules/pixcat { };
 
-  pyprecice = callPackage ../development/python-modules/pyprecice { };
+  psrpcore = callPackage ../development/python-modules/psrpcore { };
 
-  phonopy = callPackage ../development/python-modules/phonopy { };
+  pyprecice = callPackage ../development/python-modules/pyprecice { };
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
