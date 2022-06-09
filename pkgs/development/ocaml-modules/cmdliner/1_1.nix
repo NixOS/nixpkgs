@@ -1,16 +1,15 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
 
-assert (lib.versionAtLeast ocaml.version "4.03");
-
 stdenv.mkDerivation rec {
   pname = "cmdliner";
-  version = "1.0.4";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "https://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
-    sha256 = "1h04q0zkasd0mw64ggh4y58lgzkhg6yhzy60lab8k8zq9ba96ajw";
+    sha256 = "sha256-oa6Hw6eZQO+NHdWfdED3dtHckm4BmEbdMiAuRkYntfs=";
   };
 
+  minimalOCamlVersion = "4.08";
   nativeBuildInputs = [ ocaml ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://erratique.ch/software/cmdliner";
     description = "An OCaml module for the declarative definition of command line interfaces";
-    license = licenses.bsd3;
+    license = licenses.isc;
     inherit (ocaml.meta) platforms;
     maintainers = [ maintainers.vbgl ];
   };
