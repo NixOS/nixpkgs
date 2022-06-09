@@ -1,5 +1,5 @@
 diff --git a/PPD/Dell-1250c.ppd b/PPD/Dell-1250c.ppd
-index 828ecd6..20f3595 100644
+index 828ecd6..032d6c8 100644
 --- a/PPD/Dell-1250c.ppd
 +++ b/PPD/Dell-1250c.ppd
 @@ -92,15 +92,15 @@
@@ -19,7 +19,7 @@ index 828ecd6..20f3595 100644
 +*FoomaticRIPOption ColorModel: enum CmdLine A
 +*OrderDependency: 120 AnySetup *ColorModel
 +*DefaultColorModel: Color
-+*ColorModel RGB/Color: "%% FoomaticRIPOptionSetting: ColorModel=Color"
++*ColorModel RGB/Color: "%% FoomaticRIPOptionSetting: ColorMode=Color"
 +*FoomaticRIPOptionSetting ColorModel=RGB: "-c "
 +*ColorModel Gray/Monochrome: "%% FoomaticRIPOptionSetting: ColorMode=Monochrome"
 +*FoomaticRIPOptionSetting ColorModel=Gray: " "
