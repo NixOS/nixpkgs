@@ -24731,6 +24731,8 @@ with pkgs;
 
   poly = callPackage ../data/fonts/poly { };
 
+  polychromatic = libsForQt5.callPackage ../applications/misc/polychromatic { };
+
   polytopes_db = callPackage ../data/misc/polytopes_db { };
 
   pop-gtk-theme = callPackage ../data/themes/pop-gtk { };
