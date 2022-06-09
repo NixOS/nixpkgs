@@ -6760,6 +6760,8 @@ in {
 
   picos = callPackage ../development/python-modules/picos { };
 
+  piccolo-theme = callPackage ../development/python-modules/piccolo-theme { };
+
   pid = callPackage ../development/python-modules/pid { };
 
   piep = callPackage ../development/python-modules/piep { };
