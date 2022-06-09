@@ -61,8 +61,9 @@ buildPythonPackage rec {
     "test_bpo_2142_workaround"
     "test_skip_magic_trailing_comma"
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    # exceeds max open files on hydra builders
+    # they exceed max open files on hydra builders
     "test_blackd_supported_version"
+    "test_cors_headers_present"
   ];
 
   propagatedBuildInputs = [
