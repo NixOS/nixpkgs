@@ -17,6 +17,8 @@ stdenv.mkDerivation {
     cp man/mmc.1 $out/share/man/man1/
   '';
 
+  enableParallelBuilding = true;
+
   passthru.updateScript = unstableGitUpdater {
     url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git";
   };
