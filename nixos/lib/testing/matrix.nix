@@ -1,6 +1,11 @@
 { config, lib, extendModules, ... }:
 let
   inherit (lib) mkOption types;
+
+  extendModule = module: extendModules { modules = [ module ]; };
+
+  extend = module: (extendModule module).config.result;
+
   inMatrixModule = choiceName: {
     config = {
       _matrixAttrsDone.${choiceName} = {};
@@ -55,7 +60,7 @@ let
         '';
       };
       value = mkOption {
-        type = types.lazyAttrsOf (extendModules { modules = [ (inMatrixModule choice.name) ]; }).type;
+        type = types.lazyAttrsOf (extendModule (inMatrixModule choice.name)).type;
       };
     };
   };
@@ -124,8 +129,28 @@ in
       nextChoice = (lib.head sortedEnable).name;
     in
       if sortedEnable == []
-      then config.run
+      then
+        {
+          # Make a fixed selection of `run` attributes, so we can return
+          # a result attrset spine (names + thunks) without evaluating
+          # anything heavy.
+          # This makes `extend` next to 0-cost.
+          inherit (config.run)
+            outputs
+            out
+            outPath
+            outputName
+            drvPath
+            meta
+            name
+            system
+            type
+            ;
+
+          inherit extend;
+        } // config.passthru
       else lib.recurseIntoAttrs (
+        { inherit extend; } //
         lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.result) config.matrix.${nextChoice}.value
       );
   };
