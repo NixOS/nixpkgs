@@ -17,6 +17,7 @@
       aarch64-linux = import ./bootstrap-files/aarch64.nix;
       mipsel-linux = import ./bootstrap-files/loongson2f.nix;
       powerpc64le-linux = import ./bootstrap-files/powerpc64le.nix;
+      powerpc64-linux = import ./bootstrap-files/powerpc64.nix;
       riscv64-linux = import ./bootstrap-files/riscv64.nix;
     };
     musl = {
