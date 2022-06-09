@@ -1,0 +1,27 @@
+From d0c20ee4f76aedfbade27f0764f53b2f761c52e8 Mon Sep 17 00:00:00 2001
+From: Raymond Gauthier <jraygauthier@gmail.com>
+Date: Wed, 15 Jun 2022 11:37:21 -0400
+Subject: [PATCH] Remove wrong volatile usage with g_once_init_enter
+
+This fixes the following compiler error we get with gcc 11:
+'__atomic_load' must not be a pointer to a 'volatile' type.
+---
+ src/gstreamer-1.0/gstmetatcamstatistics.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gstreamer-1.0/gstmetatcamstatistics.cpp b/src/gstreamer-1.0/gstmetatcamstatistics.cpp
+index 33637238..55575674 100644
+--- a/src/gstreamer-1.0/gstmetatcamstatistics.cpp
++++ b/src/gstreamer-1.0/gstmetatcamstatistics.cpp
+@@ -19,7 +19,7 @@
+ 
+ GType tcam_statistics_meta_api_get_type (void)
+ {
+-    static volatile GType type;
++    static GType type;
+     static const gchar* tags[] = {"id", "val", NULL};
+ 
+     if (g_once_init_enter(&type))
+-- 
+2.31.1
+
