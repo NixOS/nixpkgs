@@ -47,6 +47,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       # don't restart while changing
       reloadIfChanged = true;
+      environment.USER = "root";
       serviceConfig = {
         Restart = "on-failure";
         EnvironmentFile = cfg.credentialsFile;
