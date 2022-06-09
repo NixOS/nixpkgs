@@ -1,0 +1,22 @@
+--- a/CMakeGlobals.txt
++++ b/CMakeGlobals.txt
+@@ -216,16 +216,8 @@
+ # pandoc version
+ set(PANDOC_VERSION "2.16.2" CACHE INTERNAL "Pandoc version")
+
+-# quarto support
+-if(LINUX AND UNAME_M STREQUAL aarch64)
+-   # disabled on linux aarch64
+-   message(STATUS "quarto does not yet support aarch64 builds of Linux; disabling quarto")
+-   set(QUARTO_ENABLED FALSE CACHE INTERNAL "")
+-else()
+-   # enable by default
+-   set(QUARTO_ENABLED TRUE CACHE INTERNAL "")
+-   add_definitions(-DQUARTO_ENABLED)
+-endif()
++message(STATUS "disabling quarto")
++set(QUARTO_ENABLED FALSE CACHE INTERNAL "")
+
+ # install freedesktop integration files if we are installing into /usr
+ if(NOT DEFINED RSTUDIO_INSTALL_FREEDESKTOP)
+
