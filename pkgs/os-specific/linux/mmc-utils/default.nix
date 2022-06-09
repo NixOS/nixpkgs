@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   version = "2021-05-11";
 
   src = fetchgit {
-    url = "git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git";
+    url = "git://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git";
     rev = "43282e80e174cc73b09b81a4d17cb3a7b4dc5cfc";
     sha256 = "0l06ahmprqshh75pkdpagb8fgnp2bwn8q8hwp1yl3laww2ghm8i5";
   };
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Configure MMC storage devices from userspace";
-    homepage = "http://git.kernel.org/cgit/linux/kernel/git/cjb/mmc-utils.git/";
+    homepage = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/";
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;
