@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Software for Saleae logic analyzers";
     homepage = "https://www.saleae.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

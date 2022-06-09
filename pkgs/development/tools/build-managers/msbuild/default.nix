@@ -143,6 +143,10 @@ EOF
   meta = with lib; {
     description = "Mono version of Microsoft Build Engine, the build platform for .NET, and Visual Studio";
     homepage = "https://github.com/mono/msbuild";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode  # dependencies
+    ];
     license = licenses.mit;
     maintainers = with maintainers; [ jdanek ];
     platforms = platforms.unix;
