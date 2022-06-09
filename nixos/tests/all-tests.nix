@@ -47,7 +47,7 @@ in {
   _3proxy = runTest ./3proxy.nix;
   acme = runTest ./acme.nix;
   adguardhome = runTest ./adguardhome.nix;
-  aesmd = handleTest ./aesmd.nix {};
+  aesmd = runTest ./aesmd.nix;
   agate = handleTest ./web-servers/agate.nix {};
   agda = handleTest ./agda.nix {};
   airsonic = handleTest ./airsonic.nix {};
