@@ -9,7 +9,7 @@
 , CoreServices, Security
 , autoconf, libtool
 , apacheHttpd ? null, expat, swig ? null, jdk ? null, python3 ? null, py3c ? null, perl ? null
-, sasl ? null, serf ? null, darwin
+, sasl ? null, serf ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
