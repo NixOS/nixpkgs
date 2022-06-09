@@ -82,8 +82,7 @@ stdenv.mkDerivation rec {
   # https://github.com/apache/arrow/blob/apache-arrow-8.0.0/cpp/thirdparty/versions.txt
 
   ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = fetchurl {
-    url =
-      "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
+    url = "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
     hash = "sha256-NDMOXOJ2CZ4uiVDZM121qHVomkxqVnUe87HYxTf4h/Y=";
   };
 
