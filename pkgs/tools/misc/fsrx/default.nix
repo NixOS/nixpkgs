@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform, testers, fsrx }:
+{ lib, fetchFromGitHub, rustPlatform, gitUpdater, testers, fsrx }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fsrx";
@@ -13,8 +13,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-5h+ou9FLCG/WWMEQPsCTa1q+PovxUJs+6lzQ0L2bKIs=";
 
-  passthru.tests.version = testers.testVersion {
+  passthru = {
+    updateScript = gitUpdater {
+      inherit pname version;
+      rev-prefix = "v";
+    };
+    tests.version = testers.testVersion {
       package = fsrx;
+    };
   };
 
   meta = with lib; {
