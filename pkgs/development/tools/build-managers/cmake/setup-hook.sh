@@ -24,10 +24,10 @@ cmakeConfigurePhase() {
         fixCmakeFiles .
     fi
 
+    cmakeDir=${cmakeDir:-${src}}
     if [ -z "${dontUseCmakeBuildDir-}" ]; then
         mkdir -p build
         cd build
-        cmakeDir=${cmakeDir:-..}
     fi
 
     if [ -z "${dontAddPrefix-}" ]; then
@@ -119,7 +119,7 @@ cmakeConfigurePhase() {
 
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
-    cmake ${cmakeDir:-.} $cmakeFlags "${cmakeFlagsArray[@]}"
+    cmake ${cmakeDir} $cmakeFlags "${cmakeFlagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
