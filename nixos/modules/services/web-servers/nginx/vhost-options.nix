@@ -281,7 +281,7 @@ with lib;
 
     locations = mkOption {
       type = types.attrsOf (types.submodule (import ./location-options.nix {
-        inherit lib;
+        inherit lib config;
       }));
       default = {};
       example = literalExpression ''
