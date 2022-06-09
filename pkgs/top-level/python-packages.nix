@@ -9468,6 +9468,8 @@ in {
 
   schiene = callPackage ../development/python-modules/schiene { };
 
+  schwifty = callPackage ../development/python-modules/schwifty { };
+
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
