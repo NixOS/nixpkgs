@@ -1,12 +1,16 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , pkg-config
 , rsync
 , libxslt
 , meson
 , ninja
 , python3
+, dbus
+, umockdev
+, libeatmydata
 , gtk-doc
 , docbook-xsl-nons
 , udev
@@ -36,6 +40,15 @@ stdenv.mkDerivation rec {
     sha256 = "gpLsBh4jgiDO8bxic2BTFhjIwc2q/tuAIxykTHqK6UM=";
   };
 
+  patches = [
+    # Fix test
+    # https://gitlab.freedesktop.org/upower/upower/-/merge_requests/150
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/upower/upower/-/commit/a78ee6039054770b466749f8ec4bfbe4c278d697.patch";
+      sha256 = "aUPXnr/2PlOZNb7mQl43hmKe01DtuBUrGnqvwBFRf7Q=";
+    })
+  ];
+
   strictDeps = true;
 
   depsBuildBuild = [
@@ -64,6 +77,16 @@ stdenv.mkDerivation rec {
     libimobiledevice
   ];
 
+  checkInputs = [
+    python3.pkgs.dbus-python
+    python3.pkgs.python-dbusmock
+    python3.pkgs.pygobject3
+    dbus
+    umockdev
+    libeatmydata
+    python3.pkgs.packaging
+  ];
+
   propagatedBuildInputs = [
     glib
   ];
@@ -79,10 +102,30 @@ stdenv.mkDerivation rec {
     "-Dgtk-doc=${lib.boolToString withDocs}"
   ];
 
-  doCheck = false; # fails with "env: './linux/integration-test': No such file or directory"
+  doCheck = true;
 
   postPatch = ''
+    patchShebangs src/linux/integration-test.py
     patchShebangs src/linux/unittest_inspector.py
+  '';
+
+  preCheck = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When running tests, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overwitten during installation.
+    mkdir -p "$out/lib"
+    ln -s "$PWD/libupower-glib/libupower-glib.so" "$out/lib/libupower-glib.so.3"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    # Slow fsync calls can make self-test fail:
+    # https://gitlab.freedesktop.org/upower/upower/-/issues/195
+    eatmydata meson test --print-errorlogs
+
+    runHook postCheck
   '';
 
   postInstall = ''
