@@ -5641,6 +5641,8 @@ in {
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
 
+  myst-parser = callPackage ../development/python-modules/myst-parser { };
+
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
