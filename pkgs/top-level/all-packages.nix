@@ -4288,6 +4288,8 @@ with pkgs;
 
   shab = callPackage ../tools/text/shab { };
 
+  sheldon = callPackage ../tools/misc/sheldon { };
+
   shell-hist = callPackage ../tools/misc/shell-hist { };
 
   shellhub-agent = callPackage ../applications/networking/shellhub-agent { };
