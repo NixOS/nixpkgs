@@ -9893,6 +9893,8 @@ in {
 
   sphinx-better-theme = callPackage ../development/python-modules/sphinx-better-theme { };
 
+  sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
+
   sphinxcontrib-actdiag = callPackage ../development/python-modules/sphinxcontrib-actdiag { };
 
   sphinxcontrib-apidoc = callPackage ../development/python-modules/sphinxcontrib-apidoc { };
