@@ -30313,6 +30313,8 @@ with pkgs;
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
+  trillian-im = callPackage ../applications/networking/instant-messengers/trillian-im { };
+
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
 
   ttyper = callPackage ../applications/misc/ttyper { };
