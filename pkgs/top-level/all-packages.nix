@@ -5670,6 +5670,8 @@ with pkgs;
 
   escrotum = callPackage ../tools/graphics/escrotum { };
 
+  esshader = callPackage ../tools/graphics/esshader { };
+
   etcher = callPackage ../tools/misc/etcher {
     electron = electron_12;
   };
@@ -17162,6 +17164,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks)
       Cocoa CoreServices CoreAudio AVFoundation MediaToolbox
       VideoDecodeAcceleration;
+  };
+
+  ffmpeg_5-full = ffmpeg-full.override {
+    ffmpeg = ffmpeg_5;
   };
 
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
