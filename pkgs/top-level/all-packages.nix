@@ -5670,6 +5670,8 @@ with pkgs;
 
   escrotum = callPackage ../tools/graphics/escrotum { };
 
+  esshader = callPackage ../tools/graphics/esshader { };
+
   etcher = callPackage ../tools/misc/etcher {
     electron = electron_12;
   };
