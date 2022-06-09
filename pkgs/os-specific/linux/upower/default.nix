@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "upower";
-  version = "0.99.17";
+  version = "0.99.19";
 
   outputs = [ "out" "dev" ]
     ++ lib.optionals withDocs [ "devdoc" ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "upower";
     repo = "upower";
     rev = "v${version}";
-    sha256 = "xvvqzGxgkuGcvnO12jnLURNJUoSlnMw2g/mnII+i6Bs=";
+    sha256 = "gpLsBh4jgiDO8bxic2BTFhjIwc2q/tuAIxykTHqK6UM=";
   };
 
   strictDeps = true;
@@ -74,6 +74,7 @@ stdenv.mkDerivation rec {
     "-Dos_backend=linux"
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
+    "-Dudevhwdbdir=${placeholder "out"}/lib/udev/hwdb.d"
     "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "auto" else "disabled"}"
     "-Dgtk-doc=${lib.boolToString withDocs}"
   ];
