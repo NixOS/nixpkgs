@@ -114,8 +114,8 @@ rec {
                 , # This would be remove in the future, Prefer _module.check option instead.
                   check ? true
                   # Internal variable to avoid `_key` collisions regardless
-                  # of `extendModules`. Used in `submoduleWith`.
-                  # Test case: lib/tests/modules, "168767"
+                  # of `extendModules`.
+                  # Test case: lib/tests/modules, "168767", "matrix.nix"
                 , extensionOffset ? 0
                 }:
     let
@@ -345,13 +345,12 @@ rec {
         modules ? [],
         specialArgs ? {},
         prefix ? [],
-        extensionOffset ? length modules,
         }:
           evalModules (evalModulesArgs // {
             modules = regularModules ++ modules;
             specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
             prefix = extendArgs.prefix or evalModulesArgs.prefix;
-            inherit extensionOffset;
+            extensionOffset = extensionOffset + length modules;
           });
 
       type = lib.types.submoduleWith {

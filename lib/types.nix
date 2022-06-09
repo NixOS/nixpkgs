@@ -627,7 +627,6 @@ rec {
           (base.extendModules {
             modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
             prefix = loc;
-            extensionOffset = extensionOffset + length defs;
           }).config;
         emptyValue = { value = {}; };
         getSubOptions = prefix: (base.extendModules
