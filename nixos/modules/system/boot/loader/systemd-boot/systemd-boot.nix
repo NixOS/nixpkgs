@@ -33,6 +33,10 @@ let
     inherit (config.system.nixos) distroName;
 
     memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86plus;
+    
+    xbootMountPoint = if cfg.xbootMountPoint != null
+      then cfg.xbootMountPoint
+      else efi.efiSysMountPoint;
 
     netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
 
@@ -96,6 +100,14 @@ in {
       '';
     };
 
+    xbootMountPoint = mkOption {
+      default = null;
+      type = types.nullOr types.string;
+      description = ''
+        The vfat mount point for installling entries to an XBOOTLOADER partition.
+      '';
+    };
+    
     configurationLimit = mkOption {
       default = null;
       example = 120;
