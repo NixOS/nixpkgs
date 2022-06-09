@@ -332,6 +332,7 @@ checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survive
 # Anonymous submodules don't get nixed by import resolution/deduplication
 # because of an `extendModules` bug, issue 168767.
 checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
+checkConfigOutput '^{ cookie = "accept"; pill = "red"; }$' config.result ./matrix.nix
 
 cat <<EOF
 ====== module tests ======
