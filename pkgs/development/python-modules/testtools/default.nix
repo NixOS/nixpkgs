@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonRelaxDepsHook
 , pbr
 , python-mimeparse
 , extras
@@ -21,7 +20,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pbr python-mimeparse extras ];
   buildInputs = [ traceback2 ];
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   # testscenarios has a circular dependency on testtools
   doCheck = false;

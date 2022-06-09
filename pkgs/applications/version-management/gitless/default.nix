@@ -15,8 +15,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-xo5EWtP2aN8YzP8ro3bnxZwUGUp0PHD0g8hk+Y+gExE=";
   };
 
-  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
-
   propagatedBuildInputs = with python3.pkgs; [
     sh
     pygit2

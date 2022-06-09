@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
-, pythonRelaxDepsHook
 , writeText
 , asttokens
 , pycryptodome
@@ -42,7 +41,6 @@ buildPythonPackage rec {
     # ever since https://github.com/vyperlang/vyper/pull/2816
     git
 
-    pythonRelaxDepsHook
     pytest-runner
     setuptools-scm
   ];

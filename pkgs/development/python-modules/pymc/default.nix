@@ -9,7 +9,6 @@
 , fetchFromGitHub
 , numpy
 , pythonOlder
-, pythonRelaxDepsHook
 , scipy
 , typing-extensions
 }:
@@ -27,10 +26,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-ZMuDQJ+bmrQlrem/OqU/hIie3ZQkAqayU3N8ZtaW7xo=";
   };
-
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
 
   propagatedBuildInputs = [
     aeppl

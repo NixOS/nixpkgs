@@ -5,7 +5,6 @@
 , pysigma
 , pytestCheckHook
 , pythonOlder
-, pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
@@ -24,7 +23,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
