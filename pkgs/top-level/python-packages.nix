@@ -6453,6 +6453,8 @@ in {
 
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
+  pypsrp = callPackage ../development/python-modules/pypsrp { };
+
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
   phx-class-registry = callPackage ../development/python-modules/phx-class-registry { };
