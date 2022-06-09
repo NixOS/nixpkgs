@@ -5074,6 +5074,18 @@ final: prev:
     meta.homepage = "https://github.com/gennaro-tedesco/nvim-jqx/";
   };
 
+  nvim-lastplace = buildVimPluginFrom2Nix {
+    pname = "nvim-lastplace";
+    version = "2021-10-15";
+    src = fetchFromGitHub {
+      owner = "ethanholz";
+      repo = "nvim-lastplace";
+      rev = "30fe710d4417cc67950bbce6b2ec2ac0ff430e12";
+      sha256 = "04sjh0srlv0yxc8x27yaj9cpfaz0dd116nk5pccam84fk8v3bw1h";
+    };
+    meta.homepage = "https://github.com/ethanholz/nvim-lastplace/";
+  };
+
   nvim-lightbulb = buildVimPluginFrom2Nix {
     pname = "nvim-lightbulb";
     version = "2022-06-08";
