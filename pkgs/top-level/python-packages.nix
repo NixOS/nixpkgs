@@ -5729,7 +5729,7 @@ in {
 
   neo = callPackage ../development/python-modules/neo { };
 
-  neo4j-driver = callPackage ../development/python-modules/neo4j-driver { };
+  neo4j = callPackage ../development/python-modules/neo4j { };
 
   nessclient = callPackage ../development/python-modules/nessclient { };
 
