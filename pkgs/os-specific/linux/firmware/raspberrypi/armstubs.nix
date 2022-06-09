@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     description = "Firmware related ARM stubs for the Raspberry Pi";
     homepage = "https://github.com/raspberrypi/tools";
     license = licenses.bsd3;
-    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" ];
+    platforms = [ "armv6l-linux" "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ samueldr ];
   };
 }
