@@ -42,9 +42,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # prelink-rtld, which we use for cross returns 127 when it can't find a library.
-    # https://git.busybox.net/buildroot/tree/package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch
-    ./giscanner-ignore-error-return-codes-from-ldd-wrapper.patch
     # Make g-ir-scanner put absolute path to GIR files it generates
     # so that programs can just dlopen them without having to muck
     # with LD_LIBRARY_PATH environment variable.
