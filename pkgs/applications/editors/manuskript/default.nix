@@ -2,15 +2,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "manuskript";
-  version = "0.13.1";
+  version = "0.14.0";
 
   format = "other";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "olivierkes";
-    rev = version;
-    hash = "sha256-TEmAamNdqBK7bu62tLtJl05wBI6hga84PQSrWiMPROY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-mWLkah4eO1i5sp79xGLCIkr26TpbXxuVxIJ6gudKGWI=";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
