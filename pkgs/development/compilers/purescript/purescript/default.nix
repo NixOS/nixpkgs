@@ -1,57 +1,53 @@
-{ stdenv, pkgs, fetchurl, zlib, gmp, lib }:
+{ stdenv
+, pkgs
+, lib
 
-# from justinwoo/easy-purescript-nix
-# https://github.com/justinwoo/easy-purescript-nix/blob/d383972c82620a712ead4033db14110497bc2c9c/purs.nix
+# set to true for a much smaller closure (2 builds instead of 121) at
+# the expense of risky version-constraint jailbreaking
+, useJailbreak ? false
+}:
 
-let
-  dynamic-linker = stdenv.cc.bintools.dynamicLinker;
+# purescript requires GHC 8.10.7
+(pkgs.haskell.packages.ghc8107.override {
+  overrides = final: prev: {
+    # bower-json 1.0.0.1 requires the use of aeson 1.5.6.0
+    aeson = final.aeson_1_5_6_0;
+    purescript =
+      let purescript = (final.callPackage generated/purescript.nix { });
+      in if !useJailbreak
+         then
+           # purescript hardwires process==1.6.13.1, whereas
+           # hackage2nix-main.yml sets process==1.6.13.2 as part of
+           # the "core" which apparently are unaffected by override.
+           pkgs.haskell.lib.compose.allowInconsistentDependencies
+             purescript
+         else (pkgs.haskell.lib.compose.doJailbreak purescript)
+           .override {
+             bower-json = final.callPackage generated/bower-json.nix { };
+           };
+  } // lib.optionalAttrs (!useJailbreak) {
+    language-javascript = final.callPackage generated/language-javascript.nix { };
+    process = final.callPackage generated/process.nix { };
+    semialign = final.callPackage generated/semialign.nix { };
+    bower-json = final.callPackage generated/bower-json.nix { };
+    witherable = final.callPackage generated/witherable.nix { };
+    vector = pkgs.haskell.lib.compose.dontCheck (final.callPackage generated/vector.nix { });
+    lens = pkgs.haskell.lib.compose.dontCheck (final.callPackage generated/lens.nix { });
+    memory = final.callPackage generated/memory.nix { };
+  };
 
-  patchelf = libPath :
-    if stdenv.isDarwin
-      then ""
-      else
-        ''
-          chmod u+w $PURS
-          patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
-          chmod u-w $PURS
-        '';
-
-in stdenv.mkDerivation rec {
+}).purescript.overrideAttrs (_: {
   pname = "purescript";
   version = "0.15.2";
 
-  # These hashes can be updated automatically by running the ./update.sh script.
-  src =
-    if stdenv.isDarwin
-    then
-    fetchurl {
-      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
-      sha256 = "06fsq9ynfvfqn3ac5jxdj81lmzd6bh84p7jz5qib31h27iy5aq4h";
-    }
-    else
-    fetchurl {
-      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
-      sha256 = "1p37k6briczw6gvw04idkx734ms1swgrx9sl4hi6xwvxkfp1nm0m";
-    };
-
-
-  buildInputs = [ zlib gmp ];
-  libPath = lib.makeLibraryPath buildInputs;
-  dontStrip = true;
-
-  installPhase = ''
-    mkdir -p $out/bin
+  postInstall = ''
     PURS="$out/bin/purs"
-
-    install -D -m555 -T purs $PURS
-    ${patchelf libPath}
-
     mkdir -p $out/share/bash-completion/completions
     $PURS --bash-completion-script $PURS > $out/share/bash-completion/completions/purs-completion.bash
   '';
 
   passthru = {
-    updateScript = ./update.sh;
+    updateScript = ./generate.sh;
     tests = {
       minimal-module = pkgs.callPackage ./test-minimal-module {};
     };
@@ -62,8 +58,8 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.purescript.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     mainProgram = "purs";
     changelog = "https://github.com/purescript/purescript/releases/tag/v${version}";
+    sourceProvenance = [ ];
   };
-}
+})
