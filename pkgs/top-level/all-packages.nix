@@ -28856,8 +28856,6 @@ with pkgs;
 
   pamixer = callPackage ../applications/audio/pamixer { };
 
-  myxer = callPackage ../applications/audio/myxer { };
-
   ncpamixer = callPackage ../applications/audio/ncpamixer { };
 
   pan = callPackage ../applications/networking/newsreaders/pan { };
