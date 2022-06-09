@@ -10,10 +10,9 @@ stdenv.mkDerivation {
     sha256 = "D2QgntRsa6Y39nCkXQupXFbJR++JfBpMeEZE0Gv0btc=";
   };
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "prefix=$(out)" ];
 
-  installPhase = ''
-    make install prefix=$out
+  postInstall = ''
     mkdir -p $out/share/man/man1
     cp man/mmc.1 $out/share/man/man1/
   '';
