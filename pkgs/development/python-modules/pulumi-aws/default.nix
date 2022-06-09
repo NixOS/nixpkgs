@@ -12,14 +12,14 @@
 buildPythonPackage rec {
   pname = "pulumi-aws";
   # version is independant of pulumi's.
-  version = "5.3.0";
+  version = "5.7.2";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi-aws";
-    rev = "v${version}";
-    sha256 = "sha256-LrWiNYJeQQvXJDOxklRO86VSiaadvkOepQVPhh2BBkk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-oy2TBxE9zDbRc6cSml4nwibAAEq3anWngoxj6h4sYbU=";
   };
 
   propagatedBuildInputs = [
