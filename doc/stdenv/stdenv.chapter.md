@@ -961,7 +961,7 @@ Multiple paths can be specified.
 patchShebangs [--build | --host] PATH...
 ```
 
-#### Flags
+##### Flags
 
 `--build`
 : Look up commands available at build time
@@ -969,7 +969,7 @@ patchShebangs [--build | --host] PATH...
 `--host`
 : Look up commands available at run time
 
-#### Examples
+##### Examples
 
 ```sh
 patchShebangs --host /nix/store/<hash>-hello-1.0/bin
