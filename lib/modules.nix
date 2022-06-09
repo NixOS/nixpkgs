@@ -350,7 +350,7 @@ rec {
           evalModules (evalModulesArgs // {
             modules = regularModules ++ modules;
             specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
-            prefix = extendArgs.prefix or evalModulesArgs.prefix;
+            prefix = extendArgs.prefix or evalModulesArgs.prefix or [];
             inherit extensionOffset;
           });
 
