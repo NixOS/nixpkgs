@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, testers, fsrx }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fsrx";
@@ -12,6 +12,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-5h+ou9FLCG/WWMEQPsCTa1q+PovxUJs+6lzQ0L2bKIs=";
+
+  passthru.tests.version = testers.testVersion {
+      package = fsrx;
+  };
 
   meta = with lib; {
     description = "A flow state reader in the terminal";
