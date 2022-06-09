@@ -1,8 +1,8 @@
-import ./make-test-python.nix ({ pkgs, lib, testPackage ? pkgs.cassandra, ... }:
+{ pkgs, lib, params, ... }:
 let
   clusterName = "NixOS Automated-Test Cluster";
 
-  testRemoteAuth = lib.versionAtLeast testPackage.version "3.11";
+  testRemoteAuth = lib.versionAtLeast params.testPackage.version "3.11";
   jmxRoles = [{ username = "me"; password = "password"; }];
   jmxRolesFile = ./cassandra-jmx-roles;
   jmxAuthArgs = "-u ${(builtins.elemAt jmxRoles 0).username} -pw ${(builtins.elemAt jmxRoles 0).password}";
@@ -26,13 +26,11 @@ let
       listenAddress = ipAddress;
       rpcAddress = ipAddress;
       seedAddresses = [ "192.168.1.1" ];
-      package = testPackage;
       maxHeapSize = "${numMaxHeapSize}M";
       heapNewSize = "100M";
       inherit jmxPort;
     };
   nodeCfg = ipAddress: extra: {pkgs, config, ...}: rec {
-    environment.systemPackages = [ testPackage ];
     networking = {
       firewall.allowedTCPPorts = [ 7000 9042 services.cassandra.jmxPort ];
       useDHCP = false;
@@ -42,11 +40,24 @@ let
     };
     services.cassandra = cassandraCfg ipAddress // extra;
   };
+
 in
 {
-  name = "cassandra-${testPackage.version}";
+  name = "cassandra-${params.testPackage.version}";
   meta = {
     maintainers = with lib.maintainers; [ johnazoidberg ];
+  };
+
+  matrix.version.value = {
+    cassandra_2_1 = { params.testPackage = pkgs.cassandra_2_1; };
+    cassandra_2_2 = { params.testPackage = pkgs.cassandra_2_2; };
+    cassandra_3_0 = { params.testPackage = pkgs.cassandra_3_0; };
+    cassandra_3_11 = { params.testPackage = pkgs.cassandra_3_11; };
+  };
+
+  defaults = {
+    services.cassandra.package = params.testPackage;
+    environment.systemPackages = [ params.testPackage ];
   };
 
   nodes = {
@@ -127,6 +138,6 @@ in
   '';
 
   passthru = {
-    inherit testPackage;
+    inherit (params) testPackage;
   };
-})
+}
