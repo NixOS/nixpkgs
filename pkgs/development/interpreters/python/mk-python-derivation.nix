@@ -19,6 +19,7 @@
 , pythonNamespacesHook
 , pythonRemoveBinBytecodeHook
 , pythonRemoveTestsDirHook
+, pythonRelaxDepsHook
 , setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
@@ -78,6 +79,12 @@
 # However, some packages do provide executables with extensions, and thus bytecode is generated.
 , removeBinBytecode ? true
 
+# Relax Python dependencies version.
+# This works by modifying the METADATA inside wheel, so it only works for
+# formats that builds a wheel
+# See `pythonRelaxDeps` and `pythonRemoveDeps` for its usage
+, relaxDeps ? !(builtins.elem format [ "egg" "other" ])
+
 # Several package formats are supported.
 # "setuptools" : Install a common setuptools/distutils based package. This builds a wheel.
 # "wheel" : Install from a pre-compiled wheel.
@@ -124,6 +131,8 @@ let
       setuptools pythonCatchConflictsHook
     ] ++ lib.optionals removeBinBytecode [
       pythonRemoveBinBytecodeHook
+    ] ++ lib.optionals relaxDeps [
+      pythonRelaxDepsHook
     ] ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
       unzip
     ] ++ lib.optionals (format == "setuptools") [

@@ -687,7 +687,6 @@ pkg3>=1.0,<=2.0
 we can do:
 
 ```
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [ "pkg1" "pkg3" ];
   pythonRemoveDeps = [ "pkg2" ];
 ```
@@ -703,7 +702,6 @@ Another option is to pass `true`, that will relax/remove all dependencies, for
 example:
 
 ```
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = true;
 ```
 
@@ -972,7 +970,7 @@ following are specific to `buildPythonPackage`:
 * `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
   variable in wrapped programs.
 * `format ? "setuptools"`: Format of the source. Valid options are
-  `"setuptools"`, `"pyproject"`, `"flit"`, `"wheel"`, and `"other"`.
+  `"setuptools"`, `"pyproject"`, `"flit"`, `"wheel"`, `"egg"`, and `"other"`.
   `"setuptools"` is for when the source has a `setup.py` and `setuptools` is
   used to build a wheel, `flit`, in case `flit` should be used to build a wheel,
   and `wheel` in case a wheel is provided. Use `other` when a custom
@@ -995,6 +993,9 @@ following are specific to `buildPythonPackage`:
 * `postShellHook`: Hook to execute commands after `shellHook`.
 * `removeBinByteCode ? true`: Remove bytecode from `/bin`. Bytecode is only
   created when the filenames end with `.py`.
+* `relaxDeps ? !(builtins.elem format [ "egg" "other" ])`: Relax Python
+  dependencies restrictions for packages build in wheel format. See the
+  dedicated (section)[#using-pythonrelaxdepshook] for more information.
 * `setupPyGlobalFlags ? []`: List of flags passed to `setup.py` command.
 * `setupPyBuildFlags ? []`: List of flags passed to `setup.py build_ext` command.
 

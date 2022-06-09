@@ -4,12 +4,10 @@
 #
 # Example usage in a derivation:
 #
-#   { …, pythonPackages, … }:
+#   { … }:
 #
 #   pythonPackages.buildPythonPackage {
 #     …
-#     nativeBuildInputs = [ pythonPackages.pythonRelaxDepsHook ];
-#
 #     # This will relax the dependency restrictions
 #     # e.g.: abc>1,<=2 -> abc
 #     pythonRelaxDeps = [ "abc" ];
@@ -23,12 +21,18 @@
 #     …
 #   }
 
+_runHook() {
+    # Check if either the env variables are empty or set to 0 (false)
+    return [[ -z "${pythonRelaxDeps:-}" ]] \
+        || [[ "$pythonRelaxDeps" == 0 ]] \
+        || [[ -z "${pythonRemoveDeps:-}" ]] \
+        || [[ "$pythonRemoveDeps" == 0 ]]
+}
+
 _pythonRelaxDeps() {
     local -r metadata_file="$1"
 
-    if [[ -z "${pythonRelaxDeps:-}" ]] || [[ "$pythonRelaxDeps" == 0 ]]; then
-        return
-    elif [[ "$pythonRelaxDeps" == 1 ]]; then
+    if [[ "$pythonRelaxDeps" == 1 ]]; then
         sed -i "$metadata_file" -r \
             -e 's/(Requires-Dist: \S*) \(.*\)/\1/'
     else
@@ -42,9 +46,7 @@ _pythonRelaxDeps() {
 _pythonRemoveDeps() {
     local -r metadata_file="$1"
 
-    if [[ -z "${pythonRemoveDeps:-}" ]] || [[ "$pythonRemoveDeps" == 0 ]]; then
-        return
-    elif [[ "$pythonRemoveDeps" == 1 ]]; then
+    if [[ "$pythonRemoveDeps" == 1 ]]; then
         sed -i "$metadata_file" \
             -e '/Requires-Dist:.*/d'
     else
@@ -57,6 +59,8 @@ _pythonRemoveDeps() {
 }
 
 pythonRelaxDepsHook() {
+    _runHook || return 0
+
     pushd dist
 
     # See https://peps.python.org/pep-0491/#escaping-and-unicode
