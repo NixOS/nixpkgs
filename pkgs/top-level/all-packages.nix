@@ -1286,6 +1286,8 @@ with pkgs;
 
   flycast = callPackage ../applications/emulators/flycast { };
 
+  fsrx = callPackage ../tools/misc/fsrx { };
+
   fsuae = callPackage ../applications/emulators/fs-uae { };
 
   fsuae-launcher = callPackage ../applications/emulators/fs-uae/launcher.nix { };
