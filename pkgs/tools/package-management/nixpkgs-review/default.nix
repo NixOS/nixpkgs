@@ -1,24 +1,36 @@
 { lib
 , python3
 , fetchFromGitHub
-, nix
+
+, bubblewrap
+, cacert
 , git
+, nix
+
+, withSandboxSupport ? false
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "2.6.4";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
     rev = version;
-    sha256 = "sha256-6vKMaCTilPXd8K3AuLqtYInVyyFhdun0o9cX1WRMmWo=";
+    sha256 = "sha256-hGOcLrVPb+bSNA72ZfKE9Mjm2dr/qnuaCkjveHXPcws=";
   };
 
-  makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ nix git ]}"
-  ];
+  makeWrapperArgs =
+    let
+      binPath = [ nix git ] ++ lib.optional withSandboxSupport bubblewrap;
+    in
+    [
+      "--prefix PATH : ${lib.makeBinPath binPath}"
+      "--set NIX_SSL_CERT_FILE ${cacert}/etc/ssl/certs/ca-bundle.crt"
+      # we don't have any runtime deps but nix-review shells might inject unwanted dependencies
+      "--unset PYTHONPATH"
+    ];
 
   doCheck = false;
 

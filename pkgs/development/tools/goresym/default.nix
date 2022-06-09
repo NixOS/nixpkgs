@@ -21,6 +21,6 @@ buildGoModule rec {
     description = "Go symbol recovery tool";
     homepage = "https://github.com/mandiant/GoReSym";
     license = licenses.mit;
-    maintainers = with maintainers; [ mrhedgehog ];
+    maintainers = with maintainers; [ thehedgeh0g ];
   };
 }

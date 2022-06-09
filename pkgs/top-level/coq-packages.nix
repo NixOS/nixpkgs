@@ -151,6 +151,7 @@ in rec {
   coq_8_13 = mkCoq "8.13";
   coq_8_14 = mkCoq "8.14";
   coq_8_15 = mkCoq "8.15";
+  coq_8_16 = mkCoq "8.16";
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
@@ -163,6 +164,7 @@ in rec {
   coqPackages_8_13 = mkCoqPackages coq_8_13;
   coqPackages_8_14 = mkCoqPackages coq_8_14;
   coqPackages_8_15 = mkCoqPackages coq_8_15;
+  coqPackages_8_16 = mkCoqPackages coq_8_16;
   coqPackages = recurseIntoAttrs coqPackages_8_15;
   coq = coqPackages.coq;
 
