@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "db-dtypes";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-db-dtypes-pandas";
-    rev = "v${version}";
-    hash = "sha256-T/cyJ0PY5p/y8CKrmeAa9nvnuRs4hd2UKiYiMHLaa7A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LLKhYLzGUQRx4ciWv1TilYvTOO0sj6rdkPlJLPZ8VXA=";
   };
 
   propagatedBuildInputs = [
