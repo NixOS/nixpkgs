@@ -61,8 +61,7 @@ let
     };
 
     power-management = {
-      CPU_FREQ_DEFAULT_GOV_PERFORMANCE = yes;
-      CPU_FREQ_GOV_SCHEDUTIL           = yes;
+      CPU_FREQ_DEFAULT_GOV_SCHEDUTIL   = yes;
       PM_ADVANCED_DEBUG                = yes;
       PM_WAKELOCKS                     = yes;
       POWERCAP                         = yes;
