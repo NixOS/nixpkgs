@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib, stdenv, fetchFromGitHub, fetchpatch
 , pkg-config
 , autoconf
 , automake111x
@@ -27,6 +27,16 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "18blvgy8hmw3jidz7xrv9yiiilnzcj65m6wxhw58nrnbcqbpydwn";
   };
+
+  patches = [
+    # Pull patch pending upstream inclusion for -fno-common toolchain support:
+    #   https://github.com/joh/alarm-clock/pull/209
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/joh/alarm-clock/commit/969e7ba8225610cce55b14fcb599bc6f7771bd9a.patch";
+      sha256 = "0ajhir22b5ww9pkmzy9mlc9f2lr1q6wgvm9iqzjf4xsg4gm4jy1k";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
