@@ -48,7 +48,7 @@ in {
   acme = runTest ./acme.nix;
   adguardhome = runTest ./adguardhome.nix;
   aesmd = runTest ./aesmd.nix;
-  agate = handleTest ./web-servers/agate.nix {};
+  agate = runTest ./web-servers/agate.nix;
   agda = handleTest ./agda.nix {};
   airsonic = handleTest ./airsonic.nix {};
   allTerminfo = handleTest ./all-terminfo.nix {};
