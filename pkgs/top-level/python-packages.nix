@@ -2010,6 +2010,8 @@ in {
 
   csvw = callPackage ../development/python-modules/csvw { };
 
+  csv-diff = callPackage ../development/python-modules/csv-diff { };
+
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
   cufflinks = callPackage ../development/python-modules/cufflinks { };
@@ -8325,6 +8327,10 @@ in {
   pytest-order = callPackage ../development/python-modules/pytest-order { };
 
   pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
+
+  pytest-pydocstyle = callPackage ../development/python-modules/pytest-pydocstyle { };
+
+  pytest-pycodestyle = callPackage ../development/python-modules/pytest-pycodestyle { };
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
