@@ -1,4 +1,5 @@
 { lib, stdenv, makeWrapper, fetchurl, which, pkg-config
+, fetchFromGitLab
 , ocamlPackages
 , libao, portaudio, alsa-lib, libpulseaudio, libjack2
 , libsamplerate, libmad, taglib, lame, libogg
@@ -20,6 +21,28 @@ let
       "voaacenc" "soundtouch" "gavl" "lo"
     ];
 in
+
+# Liquidsoap 1.4.2 is not compatible with menhir ≥ 20220210
+# Locally override menhir to an earlier version
+let menhirLib = ocamlPackages.menhirLib.overrideAttrs (o: rec {
+    version = "20211128";
+    src = fetchFromGitLab {
+      domain = "gitlab.inria.fr";
+      owner = "fpottier";
+      repo = "menhir";
+      rev = version;
+      sha256 = "sha256-L/zfjPZfn9L7qqqqJGk3Ge52rvujOVPiL8jxfH5R60g=";
+    };
+  });
+
+  menhirSdk = ocamlPackages.menhirSdk.override { inherit menhirLib; };
+
+  menhir = ocamlPackages.menhir.override {
+    inherit menhirLib menhirSdk;
+  };
+
+in
+
 stdenv.mkDerivation {
   name = "${pname}-full-${version}";
 
@@ -59,7 +82,7 @@ stdenv.mkDerivation {
       ocamlPackages.xmlm ocamlPackages.ocaml_pcre
       ocamlPackages.camomile
       ocamlPackages.fdkaac
-      ocamlPackages.srt ocamlPackages.sedlex ocamlPackages.menhir ocamlPackages.menhirLib
+      ocamlPackages.srt ocamlPackages.sedlex menhir menhirLib
     ];
 
   hardeningDisable = [ "format" "fortify" ];
