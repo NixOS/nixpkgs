@@ -2,29 +2,28 @@
 , lib
 , fetchurl
 , fetchzip
-, makeDesktopItem
 , copyDesktopItems
-, imake
 , gccmakedep
+, imake
+, installShellFiles
 , libX11
 , libXext
-, installShellFiles
+, makeDesktopItem
 }:
 
 let
   debian-extras = fetchzip {
     url = "mirror://debian/pool/main/k/koules/koules_1.4-27.debian.tar.xz";
-    sha256 = "0bq1rr6vxqmx2k0dhyrqnwwfiw4h2ycbj576v66vwr0jaq5plil3";
+    hash = "sha256-g0Z6C1YSZL6N2eYUuZgXkPDoOLc4e9jAFL3ivk3OAS8=";
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "koules";
   version = "1.4";
 
   src = fetchurl {
     url = "https://www.ucw.cz/~hubicka/koules/packages/${pname}${version}-src.tar.gz";
-    sha256 = "06x2wkpns14kii9fxmxbmj5lma371qj00hgl7fc5kggfmzz96vy3";
+    hash = "sha256-w2+T/q/uvVmYO/RBACQOZ6hKi6yr1+5SjJMEbe/kohs=";
   };
 
   nativeBuildInputs = [ imake gccmakedep installShellFiles copyDesktopItems ];
@@ -57,20 +56,22 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItems = [ (makeDesktopItem {
-    desktopName = "Koules";
-    name = "koules";
-    exec = "xkoules";
-    icon = "koules";
-    comment = "Push your enemies away, but stay away from obstacles";
-    categories = [ "Game" "ArcadeGame" ];
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Koules";
+      name = "koules";
+      exec = "xkoules";
+      icon = "koules";
+      comment = "Push your enemies away, but stay away from obstacles";
+      categories = [ "Game" "ArcadeGame" ];
+    })
+  ];
 
   meta = with lib; {
-    description = "Fast arcade game based on the fundamental law of body attraction";
     homepage = "https://www.ucw.cz/~hubicka/koules/English/";
+    description = "Fast arcade game based on the fundamental law of body attraction";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
     maintainers = [ maintainers.iblech ];
+    platforms = platforms.linux;
   };
 }
