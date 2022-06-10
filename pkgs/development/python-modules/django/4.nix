@@ -26,15 +26,14 @@
 , docutils
 , geoip2
 , jinja2
-, python-memcached
 , numpy
 , pillow
 , pylibmc
 , pymemcache
 , python
-, pytz
 , pywatchman
 , pyyaml
+, pytz
 , redis
 , selenium
 , tblib
@@ -58,6 +57,9 @@ buildPythonPackage rec {
       src = ./django_4_set_zoneinfo_dir.patch;
       zoneinfo = tzdata + "/share/zoneinfo";
     })
+    # make sure the tests don't remove packages from our pythonpath
+    # and disable failing tests
+    ./django_4_tests.patch
   ] ++ lib.optionals withGdal [
     (substituteAll {
       src = ./django_4_set_geos_gdal_lib.patch;
@@ -66,6 +68,11 @@ buildPythonPackage rec {
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
     })
   ];
+
+  postPatch = ''
+    substituteInPlace tests/utils_tests/test_autoreload.py \
+      --replace "/usr/bin/python" "${python.interpreter}"
+  '';
 
   nativeBuildInputs = [
     setuptools
@@ -85,36 +92,46 @@ buildPythonPackage rec {
     ];
   };
 
-  # Fails to import asgiref in ~200 tests
-  # ModuleNotFoundError: No module named 'asgiref'
-  doCheck = false;
-
   nativeCheckInputs = [
+    # tests/requirements/py3.txt
     aiosmtpd
     docutils
     geoip2
     jinja2
-    python-memcached
     numpy
     pillow
     pylibmc
     pymemcache
-    pytz
     pywatchman
     pyyaml
+    pytz
     redis
     selenium
     tblib
     tzdata
   ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
+  doCheck = !stdenv.isDarwin;
+
+  preCheck = ''
+    # make sure the installed library gets imported
+    rm -rf django
+
+    # provide timezone data, works only on linux
+    export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
+  '';
+
   checkPhase = ''
     runHook preCheck
 
-    ${python.interpreter} tests/runtests.py
+    pushd tests
+    ${python.interpreter} runtests.py --settings=test_sqlite
+    popd
 
     runHook postCheck
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     changelog = "https://docs.djangoproject.com/en/${lib.versions.majorMinor version}/releases/${version}/";
