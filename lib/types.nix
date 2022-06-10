@@ -571,11 +571,6 @@ rec {
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
       , description ? null
-
-        # Internal variable to avoid `_key` collisions regardless
-        # of `extendModules`. Wired through by `evalModules`.
-        # Test case: lib/tests/modules, "168767"
-      , extensionOffset ? 0
       }@attrs:
       let
         inherit (lib.modules) evalModules;
@@ -584,14 +579,14 @@ rec {
           then value: value
           else value: { config = value; };
 
-        allModules = defs: imap1 (n: { value, file }:
+        allModules = defs: map ({ value, file }:
           if isFunction value
           then setFunctionArgs
-                (args: lib.modules.unifyModuleSyntax file "${toString file}-${toString (n + extensionOffset)}" (value args))
+                (args: lib.modules.unifyModuleSyntax file null (value args))
                 (functionArgs value)
           else if isAttrs value
           then
-            lib.modules.unifyModuleSyntax file "${toString file}-${toString (n + extensionOffset)}" (shorthandToModule value)
+            lib.modules.unifyModuleSyntax file null (shorthandToModule value)
           else value
         ) defs;
 
@@ -632,7 +627,6 @@ rec {
           (base.extendModules {
             modules = [ { _module.args.name = last loc; } ] ++ allModules defs;
             prefix = loc;
-            extensionOffset = extensionOffset + length defs;
           }).config;
         emptyValue = { value = {}; };
         getSubOptions = prefix: (base.extendModules

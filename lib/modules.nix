@@ -113,10 +113,6 @@ rec {
                   args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
                   check ? true
-                  # Internal variable to avoid `_key` collisions regardless
-                  # of `extendModules`. Used in `submoduleWith`.
-                  # Test case: lib/tests/modules, "168767"
-                , extensionOffset ? 0
                 }:
     let
       withWarnings = x:
@@ -345,17 +341,15 @@ rec {
         modules ? [],
         specialArgs ? {},
         prefix ? [],
-        extensionOffset ? length modules,
         }:
           evalModules (evalModulesArgs // {
             modules = regularModules ++ modules;
             specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
             prefix = extendArgs.prefix or evalModulesArgs.prefix or [];
-            inherit extensionOffset;
           });
 
       type = lib.types.submoduleWith {
-        inherit modules specialArgs extensionOffset;
+        inherit modules specialArgs;
       };
 
       result = withWarnings {
@@ -461,19 +455,21 @@ rec {
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
       else
         { _file = toString m._file or file;
-          key = toString m.key or key;
           disabledModules = m.disabledModules or [];
           imports = m.imports or [];
           options = m.options or {};
           config = addFreeformType (addMeta (m.config or {}));
+        } // optionalAttrs (m?key || key != null) {
+          key = toString m.key or key;
         }
     else
       { _file = toString m._file or file;
-        key = toString m.key or key;
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
         config = addFreeformType (addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]));
+      } // optionalAttrs (m?key || key != null) {
+        key = toString m.key or key;
       };
 
   applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
