@@ -987,7 +987,7 @@ Interpreter paths that point to a valid Nix store location are not changed.
 
 ::: note
 A script file must be marked as executable, otherwise it will not be
-considered. [Trivial Builders](#chap-trivial-builders) do this automatically where appropriate.
+considered.
 :::
 
 This mechanism ensures that the interpreter for a given script is always found and is exactly the one specified by the build.
