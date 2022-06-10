@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "A simple Result type for Python 3 inspired by Rust, fully type annotated";
     homepage = "https://github.com/rustedpy/result";
     license = licenses.mit;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [];
   };
 }
