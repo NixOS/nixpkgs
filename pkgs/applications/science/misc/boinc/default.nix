@@ -3,8 +3,8 @@ libGLU, libGL, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK30, xcbutil,
 sqlite, gtk2, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
 let
-  majorVersion = "7.18";
-  minorVersion = "1";
+  majorVersion = "7.20";
+  minorVersion = "0";
 in
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${majorVersion}/${version}";
-    sha256 = "sha256-ijkfWTFwwJXvh6f0P5hkzWODxU+Ugz6iQUK+5jEpWXQ=";
+    sha256 = "sha256-W8+ALVO2OHxxBi80ZFgc8RxXneGINCHYNeMXimp9TIw=";
   };
 
   nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];
