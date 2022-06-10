@@ -251,6 +251,8 @@ in {
         ] ++ lib.optional config.security.rtkit.enable "rtkit";
         description = "Pipewire system service user";
         isSystemUser = true;
+        home = "/var/lib/pipewire";
+        createHome = true;
       };
       groups.pipewire.gid = config.ids.gids.pipewire;
     };
