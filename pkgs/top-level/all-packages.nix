@@ -34815,6 +34815,8 @@ with pkgs;
 
   vault = callPackage ../tools/security/vault { };
 
+  vault-medusa = callPackage ../tools/security/vault-medusa { };
+
   vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
 
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
