@@ -4,6 +4,10 @@
 , webkitgtk ? null  # for internal web browser
 , buildEnv, runCommand
 , callPackage
+
+
+
+,fetchzip
 }:
 
 # https://download.eclipse.org/eclipse/downloads/ is the main place to
@@ -144,39 +148,48 @@ in rec {
 
   # Function that assembles a complete Eclipse environment from an
   # Eclipse package and list of Eclipse plugins.
-  eclipseWithPlugins = { eclipse, plugins ? [], jvmArgs ? [] }:
+  eclipseWithPlugins = { eclipse, plugins, jvmArgs ? [] }:
     let
-      # Gather up the desired plugins.
-      pluginEnv = buildEnv {
-        name = "eclipse-plugins";
-        paths =
-          with lib;
-            filter (x: x ? isEclipsePlugin) (closePropagation plugins);
-      };
-
-      # Prepare the JVM arguments to add to the ini file. We here also
-      # add the property indicating the plugin directory.
-      dropinPropName = "org.eclipse.equinox.p2.reconciler.dropins.directory";
-      dropinProp = "-D${dropinPropName}=${pluginEnv}/eclipse/dropins";
-      jvmArgsText = lib.concatStringsSep "\n" (jvmArgs ++ [dropinProp]);
-
-      # Base the derivation name on the name of the underlying
-      # Eclipse.
-      name = (lib.meta.appendToName "with-plugins" eclipse).name;
-    in
-      runCommand name { nativeBuildInputs = [ makeWrapper ]; } ''
-        mkdir -p $out/bin $out/etc
-
-        # Prepare an eclipse.ini with the plugin directory.
-        cat ${eclipse}/eclipse/eclipse.ini - > $out/etc/eclipse.ini <<EOF
-        ${jvmArgsText}
-        EOF
-
-        makeWrapper ${eclipse}/bin/eclipse $out/bin/eclipse \
-          --add-flags "--launcher.ini $out/etc/eclipse.ini"
-
-        ln -s ${eclipse}/share $out/
+      p2Director = ''
+        $out/bin/eclipse \
+          -nosplash \
+          -configuration /build/configuration \
+          -application org.eclipse.equinox.p2.director \
       '';
+      jvmArgsText = lib.strings.concatStrings (map (arg: "${arg}\n") jvmArgs);
+
+      join = strings: lib.strings.concatStringsSep "," strings;
+      pluginRepository = plugin:
+        join (["file:${plugin.out}"] ++ (map pluginRepository plugin.dependencies));
+      pluginInstallIU = plugin:
+        # collect all installable units if none are provided
+        if plugin ? installableUnits
+        then join plugin.installableUnits
+        else ''$(
+          ${p2Director} \
+            -repository '${pluginRepository plugin}' \
+            -list \
+            -listFormat '[''${id},]' \
+            | awk -F'[][]' '{printf $2}'
+        )'';
+      repository = join (map pluginRepository plugins);
+      installIU = join (map pluginInstallIU plugins);
+    in
+      eclipse.overrideAttrs (oldAttrs: {
+        buildCommand = oldAttrs.buildCommand + ''
+          ${p2Director} \
+            -destination $out/eclipse \
+            -repository "${repository}" \
+            -installIU "${installIU}" \
+            -tag AddIUs || {
+              cat /build/configuration/*.log
+              exit 1
+            }
+          cat << EOF >> $out/eclipse/eclipse.ini
+          ${jvmArgsText}
+          EOF
+        '';
+      });
 
   ### Plugins
 

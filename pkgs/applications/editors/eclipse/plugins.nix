@@ -1,14 +1,33 @@
-{ lib, stdenv, fetchurl, fetchzip, unzip }:
+{ lib, stdenv, fetchurl, fetchzip, zip, unzip, xmlstarlet, eclipses }:
 
 rec {
 
-  # A primitive builder of Eclipse plugins. This function is intended
-  # to be used when building more advanced builders.
+  sanitizeUpdateSite = outDir: ''
+    workDir=/build/sanitizeTmp
+    mkdir $workDir
+    pushd $workDir
+    unzip "${outDir}/artifacts.jar"
+    unzip "${outDir}/content.jar"
+    xmlstarlet edit \
+      --inplace \
+      --update "/repository/properties/property[@name='p2.timestamp']/@value" \
+      --value "0" \
+      artifacts.xml content.xml
+    touch artifacts.xml content.xml -t '197001010100'
+    zip -X - artifacts.xml > "${outDir}/artifacts.jar"
+    zip -X - content.xml > "${outDir}/content.jar"
+    popd
+  '';
+
+  # A primitive builder of Eclipse update sites. This function is intended
+  # to be used when building more advanced builders. An Eclipse "plugin" in
+  # nixpkgs is a p2 update site containing a set of features and bundles to
+  # be installed together.
   buildEclipsePluginBase =  { name
                             , buildInputs ? []
                             , passthru ? {}
                             , ... } @ attrs:
-    stdenv.mkDerivation (attrs // {
+    stdenv.mkDerivation ({ dependencies = []; } // attrs // {
       name = "eclipse-plugin-" + name;
 
       buildInputs = buildInputs ++ [ unzip ];
@@ -18,77 +37,126 @@ rec {
       } // passthru;
     });
 
-  # Helper for the common case where we have separate feature and
-  # plugin JARs.
-  buildEclipsePlugin =
-    { name, srcFeature, srcPlugin ? null, srcPlugins ? [], ... } @ attrs:
-      assert srcPlugin == null -> srcPlugins != [];
-      assert srcPlugin != null -> srcPlugins == [];
+  # Mirror a subset of a p2 update site containing the given features and
+  # plugins.
+  mirrorEclipsePlugins = { pname
+                         , version
+                         , repository ? null
+                         , artifactRepository ? null
+                         , metadataRepository ? null
+                         , installableUnit ? null
+                         , installableUnits ? null
+                         , eclipse ? eclipses.eclipse-sdk
+                         , hash
+                         , ... } @ attrs:
+    assert (artifactRepository == null) == (metadataRepository == null);
+    assert (repository == null) != (artifactRepository == null);
+    assert (installableUnit == null) || (installableUnits == null);
 
-      let
+    let
+      ius = map (iu: if builtins.isAttrs iu then iu else { id = iu; version = version; }) (
+        if installableUnit != null
+        then [ installableUnit ]
+        else if installableUnits != null
+        then installableUnits
+        else []
+      );
+      iuEntries = (lib.strings.concatStrings (map (iu: ''<iu id="${iu.id}" version="${iu.version}" />'') ius));
 
-        pSrcs = if (srcPlugin != null) then [ srcPlugin ] else srcPlugins;
+    in
+      buildEclipsePluginBase (attrs // rec {
+        name = "${pname}-${version}";
+        inherit version;
 
-      in
+        buildCommand = ''
+          mkdir -p $out
+          echo '
+            <project name="${name}" default="mirror" basedir="'$out'">
+              <target name="mirror">
+                <p2.mirror raw="true">
+                  <source>
+                    ${if repository != null then "<repository location=\"${repository}\" />" else ""}
+                    ${if metadataRepository != null then "<repository location=\"${metadataRepository}\" kind=\"metadata\" />" else ""}
+                    ${if artifactRepository != null then "<repository location=\"${artifactRepository}\" kind=\"artifact\" />" else ""}
+                  </source>
+                  <destination compressed="true" name="${name}" location="file:'$out'" />
+                  ${iuEntries}
+                  <slicingOptions followStrict="true"/>
+                </p2.mirror>
+              </target>
+            </project>' > /build/build.xml
+          ${eclipse}/bin/eclipse \
+            -noSplash \
+            -configuration /build/configuration \
+            -application org.eclipse.ant.core.antRunner \
+            -buildfile /build/build.xml || {
+              cat /build/configuration/*.log
+              exit 1
+            }
+        '' + (sanitizeUpdateSite "$out");
 
-        buildEclipsePluginBase (attrs // {
-          srcs = [ srcFeature ] ++ pSrcs;
+        nativeBuildInputs = [ zip eclipse xmlstarlet ];
+        outputHash = hash;
+        outputHashMode = "recursive";
 
-          buildCommand = ''
-            dropinDir="$out/eclipse/dropins/${name}"
+        installableUnits = map (iu: "${iu.id}/${iu.version}") ius;
 
-            mkdir -p $dropinDir/features
-            unzip ${srcFeature} -d $dropinDir/features/
+        inherit repository artifactRepository metadataRepository;
+      });
 
-            mkdir -p $dropinDir/plugins
-            for plugin in ${toString pSrcs}; do
-              cp -v $plugin $dropinDir/plugins/$(stripHash $plugin)
-            done
-          '';
-        });
+  # Publish the given plugin and feature jars as a p2 update site.
+  buildEclipsePlugin = { name
+                       , srcFeature ? null
+                       , srcFeatures ? []
+                       , srcPlugin ? null
+                       , srcPlugins ? []
+                       , eclipse ? eclipses.eclipse-sdk
+                       , ... } @ attrs:
+    assert (srcPlugin == null) != (srcPlugins == []);
+    assert (srcFeature != null) -> (srcFeatures == []);
 
-  # Helper for the case where the build directory has the layout of an
-  # Eclipse update site, that is, it contains the directories
-  # `features` and `plugins`. All features and plugins inside these
-  # directories will be installed.
+    let
+      fSrcs = if (srcFeature != null) then [ srcFeature ] else srcFeatures;
+      pSrcs = if (srcPlugin != null) then [ srcPlugin ] else srcPlugins;
+
+    in
+      buildEclipsePluginBase (attrs // {
+        srcs = fSrcs ++ pSrcs;
+
+        buildCommand = ''
+          mkdir features
+          for feature in ${toString fSrcs}; do
+            cp -v $feature features/$(stripHash $feature)
+          done
+
+          mkdir plugins
+          for plugin in ${toString pSrcs}; do
+            cp -v $plugin plugins/$(stripHash $plugin)
+          done
+
+          ${eclipse}/bin/eclipse \
+            -noSplash \
+            -configuration /build/configuration \
+            -application org.eclipse.equinox.p2.publisher.FeaturesAndBundlesPublisher \
+            -metadataRepository file:$out \
+            -artifactRepository file:$out \
+            -publishArtifacts \
+            -source . \
+            -compress || {
+              cat /build/configuration/*.log
+              exit 1
+            }
+        '';
+
+        nativeBuildInputs = [ eclipse ];
+      });
+
+  # Helper for the case where the build directory is already a p2 update site.
   buildEclipseUpdateSite = { name, ... } @ attrs:
     buildEclipsePluginBase (attrs // {
       dontBuild = true;
       doCheck = false;
-
-      installPhase = ''
-        dropinDir="$out/eclipse/dropins/${name}"
-
-        # Install features.
-        cd features
-        for feature in *.jar; do
-          featureName=''${feature%.jar}
-          mkdir -p $dropinDir/features/$featureName
-          unzip $feature -d $dropinDir/features/$featureName
-        done
-        cd ..
-
-        # Install plugins.
-        mkdir -p $dropinDir/plugins
-
-        # A bundle should be unpacked if the manifest matches this
-        # pattern.
-        unpackPat="Eclipse-BundleShape:\\s*dir"
-
-        cd plugins
-        for plugin in *.jar ; do
-          pluginName=''${plugin%.jar}
-          manifest=$(unzip -p $plugin META-INF/MANIFEST.MF)
-
-          if [[ $manifest =~ $unpackPat ]] ; then
-            mkdir $dropinDir/plugins/$pluginName
-            unzip $plugin -d $dropinDir/plugins/$pluginName
-          else
-            cp -v $plugin $dropinDir/plugins/
-          fi
-        done
-        cd ..
-      '';
+      installPhase = "cp -r . $out";
     });
 
   acejump = buildEclipsePlugin rec {
@@ -137,19 +205,13 @@ rec {
     };
   };
 
-  antlr-runtime_4_5 = buildEclipsePluginBase rec {
+  antlr-runtime_4_5 = buildEclipsePlugin rec {
     name = "antlr-runtime-4.5.3";
 
-    src = fetchurl {
+    srcPlugin = fetchurl {
       url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "0lm78i2annlczlc2cg5xvby0g1dyl0sh1y5xc2pymjlmr67a1g4k";
     };
-
-    buildCommand = ''
-      dropinDir="$out/eclipse/dropins/"
-      mkdir -p $dropinDir
-      cp -v $src $dropinDir/${name}.jar
-    '';
 
     meta = with lib; {
       description = "A powerful parser generator for processing structured text or binary files";
@@ -160,19 +222,13 @@ rec {
     };
   };
 
-  antlr-runtime_4_7 = buildEclipsePluginBase rec {
+  antlr-runtime_4_7 = buildEclipsePlugin rec {
     name = "antlr-runtime-4.7.1";
 
-    src = fetchurl {
+    srcPlugin = fetchurl {
       url = "https://www.antlr.org/download/${name}.jar";
       sha256 = "07f91mjclacrvkl8a307w2abq5wcqp0gcsnh0jg90ddfpqcnsla3";
     };
-
-    buildCommand = ''
-      dropinDir="$out/eclipse/dropins/"
-      mkdir -p $dropinDir
-      cp -v $src $dropinDir/${name}.jar
-    '';
 
     meta = with lib; {
       description = "A powerful parser generator for processing structured text or binary files";
@@ -185,15 +241,16 @@ rec {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
-    version = "2.7.1.201709201439";
+    version-core = "2.7.1";
+    version = "${version-core}.201709201439";
 
     srcFeature = fetchurl {
-      url = "http://andrei.gmxhome.de/eclipse/features/AnyEditTools_${version}.jar";
+      url = "https://github.com/iloveeclipse/anyedittools/releases/download/${version-core}/AnyEditTools_${version}.jar";
       sha256 = "1wqzl7wq85m9gil8rnvly45ps0a2m0svw613pg6djs5i7amhnayh";
     };
 
     srcPlugin = fetchurl {
-      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.7.1/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      url = "https://github.com/iloveeclipse/anyedittools/releases/download/${version-core}/de.loskutov.anyedit.AnyEditTools_${version}.jar";
       sha256 = "03iyb6j2srq74iigmg7dk098c2svyv0ygdfql5jqr44a32n07k8q";
     };
 
@@ -227,6 +284,19 @@ rec {
       license = licenses.epl10;
       platforms = platforms.all;
     };
+  };
+
+  bndtools = mirrorEclipsePlugins rec {
+    pname = "bndtools";
+    version = "6.1.0.REL-202111221555-g6b7087b";
+
+    repository = "https://bndtools.jfrog.io/bndtools/update-latest";
+    installableUnits = [
+      "bndtools.main.feature.feature.group"
+      "bndtools.m2e.feature.feature.group"
+      "bndtools.pde.feature.feature.group"
+    ];
+    hash = "sha256:163l714zgx2r5yn19m8jsc9jb9rkhq6215n0ml52fiymkkxcfc8k";
   };
 
   bytecode-outline = buildEclipsePlugin rec {
@@ -453,34 +523,16 @@ rec {
     };
   };
 
-  jsonedit = buildEclipsePlugin rec {
-    name = "jsonedit-${version}";
+  jsonedit = mirrorEclipsePlugins rec {
+    pname = "jsonedit";
     version = "1.1.1";
 
-    srcFeature = fetchurl {
-      url = "https://boothen.github.io/Json-Eclipse-Plugin/features/jsonedit-feature_${version}.jar";
-      sha256 = "0zkg8d8x3l5jpfxi0mz9dn62wmy4fjgpwdikj280fvsklmcw5b86";
-    };
-
-    srcPlugins =
-      let
-        fetch = { n, h }:
-          fetchurl {
-            url = "https://boothen.github.io/Json-Eclipse-Plugin/plugins/jsonedit-${n}_${version}.jar";
-            sha256 = h;
-          };
-      in
-        map fetch [
-          { n = "core"; h = "0svs0aswnhl26cqw6bmw30cisx4cr50kc5njg272sy5c1dqjm1zq"; }
-          { n = "editor"; h = "1q62dinrbb18aywbvii4mlr7rxa20rdsxxd6grix9y8h9776q4l5"; }
-          { n = "folding"; h = "1qh4ijfb1gl9xza5ydi87v1kyima3a9sh7lncwdy1way3pdhln1y"; }
-          { n = "model"; h = "1pr6k2pdfdwx8jqs7gx7wzn3gxsql3sk6lnjha8m15lv4al6d4kj"; }
-          { n = "outline"; h = "1jgr2g16j3id8v367jbgd6kx6g2w636fbzmd8jvkvkh7y1jgjqxm"; }
-          { n = "preferences"; h = "027fhaqa5xbil6dmhvkbpha3pgw6dpmc2im3nlliyds57mdmdb1h"; }
-          { n = "text"; h = "0clywylyidrxlqs0n816nhgjmk1c3xl7sn904ki4q050amfy0wb2"; }
-        ];
-
-    propagatedBuildInputs = [ antlr-runtime_4_7 ];
+    repository = "https://boothen.github.io/Json-Eclipse-Plugin";
+    installableUnits = [
+      "jsonedit-feature.feature.group"
+      { id = "org.antlr.v4.feature.group"; version = "4.7.1"; }
+    ];
+    hash = "sha256:0af5d26lw1yxck5w73wkv57fpjx49pcx58gpflbrbxl3m5pc6js1";
 
     meta = with lib; {
       description = "Adds support for JSON files to Eclipse";
