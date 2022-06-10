@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "oauthenticator";
-  version = "15.0.0";
+  version = "15.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d1toYgrufnVd10QhJ4nhQqyDRaq4CjWLDjC+7ABNp6Y=";
+    hash = "sha256-LjC/Ly3wQL55gjCyoWZikvK6ByiS1CEsZXK0/lmzmGA=";
   };
 
   propagatedBuildInputs = [
