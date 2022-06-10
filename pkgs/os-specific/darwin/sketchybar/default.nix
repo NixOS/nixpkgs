@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xkgNPVrGxmi8377+G1HQ8SdwS0fOnGhwYy43yLRyvF0=";
   };
 
+  # Workaround build failure on -fno-common toolchains:
+  #   duplicate symbol '_g_mach_server' in: sketchybar-f11c76.o workspace.om
+  # TODO: drop when upstream gets a fix for it:
+  #   https://github.com/FelixKratz/SketchyBar/issues/192
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildInputs = [ Carbon Cocoa SkyLight ]
     ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
 
