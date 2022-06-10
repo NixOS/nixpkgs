@@ -1013,6 +1013,10 @@ mapAliases ({
   phwmon = throw "phwmon has been removed: abandoned by upstream"; # Added 2022-04-24
 
   # Obsolete PHP version aliases
+  php74 = throw "php74 has been dropped due to the lack of maintanence from upstream for future releases"; # Added 2022-05-24
+  php74Packages = php74; # Added 2022-05-24
+  php74Extensions = php74; # Added 2022-05-24
+
   php73 = throw "php73 has been dropped due to the lack of maintanence from upstream for future releases"; # Added 2021-06-03
   php73Packages = php73; # Added 2021-06-03
   php73Extensions = php73; # Added 2021-06-03

@@ -1782,7 +1782,7 @@ with pkgs;
   }) arangodb_3_3 arangodb_3_4 arangodb_3_5;
   arangodb = arangodb_3_4;
 
-  arcanist = callPackage ../development/tools/misc/arcanist { php = php74; };
+  arcanist = callPackage ../development/tools/misc/arcanist { php = php81; };
 
   arduino = arduino-core.override { withGui = true; };
 
@@ -14408,13 +14408,6 @@ with pkgs;
   php80Extensions = recurseIntoAttrs php80.extensions;
   php80Packages = recurseIntoAttrs php80.packages;
 
-  # Import PHP74 interpreter, extensions and packages
-  php74 = callPackage ../development/interpreters/php/7.4.nix {
-    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
-  };
-  php74Extensions = recurseIntoAttrs php74.extensions;
-  php74Packages = recurseIntoAttrs php74.packages;
-
 
   picoc = callPackage ../development/interpreters/picoc {};
 
@@ -21718,7 +21711,7 @@ with pkgs;
 
   dspam = callPackage ../servers/mail/dspam { };
 
-  engelsystem = callPackage ../servers/web-apps/engelsystem { php = php74; };
+  engelsystem = callPackage ../servers/web-apps/engelsystem { php = php81; };
 
   envoy = callPackage ../servers/http/envoy {
     jdk = openjdk11_headless;
@@ -27899,7 +27892,7 @@ with pkgs;
 
   lrzsz = callPackage ../tools/misc/lrzsz { };
 
-  lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php74; };
+  lsp-plugins = callPackage ../applications/audio/lsp-plugins { php = php81; };
 
   ltex-ls = callPackage ../tools/text/ltex-ls { };
 
