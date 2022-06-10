@@ -579,15 +579,16 @@ rec {
           then value: value
           else value: { config = value; };
 
-        allModules = defs:
-          map
-            ({ value, file }:
-              if isAttrs value
-              then { _file = file; imports = [ (shorthandToModule value) ]; }
-              else if isFunction value
-              then { _file = file; imports = [ value ]; }
-              else value)
-            defs;
+        allModules = defs: map ({ value, file }:
+          if isFunction value
+          then setFunctionArgs
+                (args: lib.modules.unifyModuleSyntax file null (value args))
+                (functionArgs value)
+          else if isAttrs value
+          then
+            lib.modules.unifyModuleSyntax file null (shorthandToModule value)
+          else value
+        ) defs;
 
         base = evalModules {
           inherit specialArgs;
