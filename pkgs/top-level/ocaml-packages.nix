@@ -239,6 +239,8 @@ let
 
     crunch = callPackage ../development/tools/ocaml/crunch { };
 
+    cry = callPackage ../development/ocaml-modules/cry { };
+
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
     csexp = callPackage ../development/ocaml-modules/csexp { };
@@ -397,6 +399,8 @@ let
 
     ezxmlm = callPackage ../development/ocaml-modules/ezxmlm { };
 
+    faad = callPackage ../development/ocaml-modules/faad { };
+
     facile = callPackage ../development/ocaml-modules/facile { };
 
     faraday = callPackage ../development/ocaml-modules/faraday { };
@@ -459,6 +463,10 @@ let
     };
 
     fpath = callPackage ../development/ocaml-modules/fpath { };
+
+    frei0r = callPackage ../development/ocaml-modules/frei0r {
+      inherit (pkgs) frei0r;
+    };
 
     functoria = callPackage ../development/ocaml-modules/functoria { };
 
@@ -684,6 +692,10 @@ let
 
     lambda-term = callPackage ../development/ocaml-modules/lambda-term { };
 
+    lame = callPackage ../development/ocaml-modules/lame {
+      inherit (pkgs) lame;
+    };
+
     lastfm = callPackage ../development/ocaml-modules/lastfm { };
 
     lens = callPackage ../development/ocaml-modules/lens { };
@@ -693,6 +705,10 @@ let
     letsencrypt-app = callPackage ../development/ocaml-modules/letsencrypt/app.nix { };
 
     letsencrypt-dns = callPackage ../development/ocaml-modules/letsencrypt/dns.nix { };
+
+    lilv = callPackage ../development/ocaml-modules/lilv {
+      inherit (pkgs) lilv;
+    };
 
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
@@ -1179,6 +1195,10 @@ let
 
     sosa = callPackage ../development/ocaml-modules/sosa { };
 
+    soundtouch = callPackage ../development/ocaml-modules/soundtouch {
+      inherit (pkgs) soundtouch;
+    };
+
     spacetime_lib = callPackage ../development/ocaml-modules/spacetime_lib { };
 
     speex = callPackage ../development/ocaml-modules/speex {
@@ -1376,6 +1396,10 @@ let
     stog = callPackage ../applications/misc/stog { };
 
     stringext = callPackage ../development/ocaml-modules/stringext { };
+
+    taglib = callPackage ../development/ocaml-modules/taglib {
+      inherit (pkgs) taglib;
+    };
 
     tcslib = callPackage ../development/ocaml-modules/tcslib { };
 

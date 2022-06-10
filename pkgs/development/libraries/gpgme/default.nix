@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
     # debugging is disabled
     lib.optional (qtbase != null) "-DQT_NO_DEBUG"
     # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
-    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64"
+    ++ lib.optional stdenv.hostPlatform.is32bit "-D_FILE_OFFSET_BITS=64"
   );
 
   doCheck = true;

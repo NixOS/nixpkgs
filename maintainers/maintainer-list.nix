@@ -3588,6 +3588,12 @@
     github = "edlimerkaj";
     githubId = 71988351;
   };
+  elliottslaughter = {
+    name = "Elliott Slaughter";
+    email = "elliottslaughter@gmail.com";
+    github = "elliottslaughter";
+    githubId = 3129;
+  };
   emantor = {
     email = "rouven+nixos@czerwinskis.de";
     github = "emantor";
@@ -14795,5 +14801,11 @@
     name = "Jinnah Ali-Clarke";
     github = "jali-clarke";
     githubId = 17733984;
+  };
+  npatsakula = {
+    email = "nikita.patsakula@gmail.com";
+    name = "Patsakula Nikita";
+    github = "npatsakula";
+    githubId = 23001619;
   };
 }

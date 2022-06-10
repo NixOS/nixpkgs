@@ -4387,6 +4387,8 @@ with pkgs;
 
   apple-music-electron = callPackage ../applications/audio/apple-music-electron { };
 
+  apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
+
   arping = callPackage ../tools/networking/arping { };
 
   arpoison = callPackage ../tools/networking/arpoison { };
@@ -5669,6 +5671,8 @@ with pkgs;
   epstool = callPackage ../tools/graphics/epstool { };
 
   escrotum = callPackage ../tools/graphics/escrotum { };
+
+  esshader = callPackage ../tools/graphics/esshader { };
 
   etcher = callPackage ../tools/misc/etcher {
     electron = electron_12;
@@ -7742,6 +7746,10 @@ with pkgs;
   };
 
   mdbook-plantuml = callPackage ../tools/text/mdbook-plantuml {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
+  mdbook-admonish = callPackage ../tools/text/mdbook-admonish {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
@@ -17164,6 +17172,10 @@ with pkgs;
       VideoDecodeAcceleration;
   };
 
+  ffmpeg_5-full = ffmpeg-full.override {
+    ffmpeg = ffmpeg_5;
+  };
+
   ffmpegthumbnailer = callPackage ../development/libraries/ffmpegthumbnailer { };
 
   ffmpeg-normalize = python3Packages.callPackage ../applications/video/ffmpeg-normalize { };
@@ -21603,6 +21615,8 @@ with pkgs;
   };
   cassandra = cassandra_3_11;
 
+  cassandra-cpp-driver = callPackage ../development/libraries/cassandra-cpp-driver/default.nix { };
+
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
     java = jre;
   };
@@ -22441,6 +22455,7 @@ with pkgs;
   prometheus-minio-exporter = callPackage ../servers/monitoring/prometheus/minio-exporter { };
   prometheus-modemmanager-exporter = callPackage ../servers/monitoring/prometheus/modemmanager-exporter.nix { };
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
+  prometheus-nats-exporter = callPackage ../servers/monitoring/prometheus/nats-exporter.nix { };
   prometheus-nextcloud-exporter = callPackage ../servers/monitoring/prometheus/nextcloud-exporter.nix { };
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-nginxlog-exporter = callPackage ../servers/monitoring/prometheus/nginxlog-exporter.nix { };
@@ -24719,6 +24734,8 @@ with pkgs;
   };
 
   poly = callPackage ../data/fonts/poly { };
+
+  polychromatic = libsForQt5.callPackage ../applications/misc/polychromatic { };
 
   polytopes_db = callPackage ../data/misc/polytopes_db { };
 
@@ -28849,8 +28866,6 @@ with pkgs;
 
   pamixer = callPackage ../applications/audio/pamixer { };
 
-  myxer = callPackage ../applications/audio/myxer { };
-
   ncpamixer = callPackage ../applications/audio/ncpamixer { };
 
   pan = callPackage ../applications/networking/newsreaders/pan { };
@@ -29777,8 +29792,10 @@ with pkgs;
     sublime-merge
     sublime-merge-dev;
 
-  inherit (callPackages ../applications/version-management/subversion { sasl = cyrus_sasl; })
-    subversion;
+  inherit (callPackages ../applications/version-management/subversion {
+    sasl = cyrus_sasl;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  }) subversion;
 
   subversionClient = subversion.override {
     bdbSupport = false;
@@ -29818,9 +29835,7 @@ with pkgs;
 
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
 
-  symbolic-preview = callPackage ../applications/graphics/symbolic-preview {
-    libhandy = libhandy_0;
-  };
+  symbolic-preview = callPackage ../applications/graphics/symbolic-preview { };
 
   symlinks = callPackage ../tools/system/symlinks { };
 
@@ -34173,6 +34188,7 @@ with pkgs;
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
     inherit (darwin.apple_sdk.frameworks) Security;
+    curl = curl.override { patchNetrcRegression = true; };
   });
 
   nix = nixVersions.stable;
