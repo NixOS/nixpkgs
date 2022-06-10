@@ -570,6 +570,7 @@ rec {
       { modules
       , specialArgs ? {}
       , shorthandOnlyDefinesConfig ? false
+      , description ? null
 
         # Internal variable to avoid `_key` collisions regardless
         # of `extendModules`. Wired through by `evalModules`.
@@ -618,10 +619,14 @@ rec {
 
         freeformType = base._module.freeformType;
 
-      in
-      mkOptionType rec {
         name = "submodule";
-        description = freeformType.description or name;
+
+      in
+      mkOptionType {
+        inherit name;
+        description =
+          if description != null then description
+          else freeformType.description or name;
         check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
           (base.extendModules {
@@ -647,9 +652,7 @@ rec {
         functor = defaultFunctor name // {
           type = types.submoduleWith;
           payload = {
-            modules = modules;
-            specialArgs = specialArgs;
-            shorthandOnlyDefinesConfig = shorthandOnlyDefinesConfig;
+            inherit modules specialArgs shorthandOnlyDefinesConfig description;
           };
           binOp = lhs: rhs: {
             modules = lhs.modules ++ rhs.modules;
@@ -666,6 +669,14 @@ rec {
               else if lhs.shorthandOnlyDefinesConfig == rhs.shorthandOnlyDefinesConfig
               then lhs.shorthandOnlyDefinesConfig
               else throw "A submoduleWith option is declared multiple times with conflicting shorthandOnlyDefinesConfig values";
+            description =
+              if lhs.description == null
+              then rhs.description
+              else if rhs.description == null
+              then lhs.description
+              else if lhs.description == rhs.description
+              then lhs.description
+              else throw "A submoduleWith option is declared multiple times with conflicting descriptions";
           };
         };
       };
