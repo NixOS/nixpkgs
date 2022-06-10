@@ -7768,6 +7768,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security DiskArbitration Foundation;
   };
 
+  memray = callPackage ../development/tools/memray { };
+
   memtester = callPackage ../tools/system/memtester { };
 
   mesa-demos = callPackage ../tools/graphics/mesa-demos { };
