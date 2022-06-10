@@ -14,16 +14,12 @@
 , nixosTests
 , gtk3Support ? false
 , gtk3 ? null
-, qt4 ? null
-, qt4Support ? false
 , qt5 ? null
 , qt5Support ? false
 , withLibdnssdCompat ? false
 , python ? null
 , withPython ? false
 }:
-
-assert qt4Support -> qt4 != null;
 
 stdenv.mkDerivation rec {
   pname = "avahi${lib.optionalString withLibdnssdCompat "-compat"}";
@@ -63,8 +59,6 @@ stdenv.mkDerivation rec {
     XMLParser
   ]) ++ lib.optionals gtk3Support [
     gtk3
-  ] ++ lib.optionals qt4Support [
-    qt4
   ] ++ lib.optionals qt5Support [
     qt5
   ];
@@ -81,7 +75,6 @@ stdenv.mkDerivation rec {
     # Use non-deprecated path https://github.com/lathiat/avahi/pull/376
     "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
     (lib.enableFeature gtk3Support "gtk3")
-    (lib.enableFeature qt4Support "qt4")
     (lib.enableFeature qt5Support "qt5")
     (lib.enableFeature withPython "python")
     "--localstatedir=/var"
