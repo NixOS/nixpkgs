@@ -17,8 +17,11 @@
 let
   luaEnv = lua.withPackages(ps: with ps; [
     cassowary
+    cldr
     cosmo
+    fluent
     linenoise
+    loadkit
     lpeg
     lua-zlib
     lua_cliargs
@@ -41,11 +44,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.12.5";
+  version = "0.13.0";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0z9wdiqwarysh3lhxss3w53vq58ml46bdi9ymr853kfl7m4gz5yy";
+    sha256 = "0ff4gcfabr6259nl1nkyfrn2r7mww2q8srvi0wakwxgh427faby3";
   };
 
   configureFlags = [
