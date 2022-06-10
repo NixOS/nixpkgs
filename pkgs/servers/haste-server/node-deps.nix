@@ -67,13 +67,13 @@ let
         sha512 = "8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==";
       };
     };
-    "async-3.2.3" = {
+    "async-3.2.4" = {
       name = "async";
       packageName = "async";
-      version = "3.2.3";
+      version = "3.2.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/async/-/async-3.2.3.tgz";
-        sha512 = "spZRyzKL5l5BZQrr/6m/SqFdBN0q3OCI0f9rjfBzCMBIP4p75P620rR3gTmaksNOhmzgdxcaxdNfMy6anrbM0g==";
+        url = "https://registry.npmjs.org/async/-/async-3.2.4.tgz";
+        sha512 = "iAB+JbDEGXhyIUavoDl9WP/Jj106Kz9DEn1DPgYw5ruDn0e3Wgi3sKFm55sASdGBNOQB8F59d9qQ7deqrHA8wQ==";
       };
     };
     "async-cache-1.1.0" = {
@@ -973,7 +973,7 @@ let
       version = "1.1.14";
       src = fetchurl {
         url = "https://registry.npmjs.org/readable-stream/-/readable-stream-1.1.14.tgz";
-        sha1 = "7cf4c54ef648e3813084c636dd2079e166c081d9";
+        sha512 = "+MeVjFf4L44XUkhM1eYbD8fyEsxcV81pqMSR5gblfcLCHfZvbrqy4/qYHE+/R5HoBUT11WV5O08Cr1n3YXkWVQ==";
       };
     };
     "readable-stream-3.6.0" = {
@@ -1000,7 +1000,7 @@ let
       version = "0.8.1";
       src = fetchurl {
         url = "https://registry.npmjs.org/redis/-/redis-0.8.1.tgz";
-        sha1 = "159f2130599a2f719e44b03f0b4b7612f992fcb2";
+        sha512 = "XiXVEcXsJ6N71BAltCQ5vDOPhWeFyIaOqInVpXnRghK0WAc7ZPwXEjX6rkBCrlsnX6gXOPvsUvAzb5KhvajbiQ==";
       };
     };
     "redis-url-0.1.0" = {
@@ -1009,7 +1009,7 @@ let
       version = "0.1.0";
       src = fetchurl {
         url = "https://registry.npmjs.org/redis-url/-/redis-url-0.1.0.tgz";
-        sha1 = "4da5e5b181b6c0cad6e1a55c7f50a8e6ee7779bb";
+        sha512 = "LVc0kybiwS2FY0uhe7Pjs4hGqHE+ygI3v7WQu+Qmr3acJ5atGid6vc98e2S9FoyIwfAekGWRwBFoRHxJnqW0Qw==";
       };
     };
     "require-directory-2.1.1" = {
@@ -1018,7 +1018,7 @@ let
       version = "2.1.1";
       src = fetchurl {
         url = "https://registry.npmjs.org/require-directory/-/require-directory-2.1.1.tgz";
-        sha1 = "8c64ad5fd30dab1c976e2344ffe7f792a6a6df42";
+        sha512 = "fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==";
       };
     };
     "safe-buffer-5.2.1" = {
@@ -1072,7 +1072,7 @@ let
       version = "0.0.10";
       src = fetchurl {
         url = "https://registry.npmjs.org/stack-trace/-/stack-trace-0.0.10.tgz";
-        sha1 = "547c70b347e8d32b4e108ea1a2a159e5fdde19c0";
+        sha512 = "KGzahc7puUKkzyMt+IqAep+TVNbKP+k2Lmwhub39m1AsTSkaDutx56aDCo+HLDzf/D26BIHTJWNiTG1KAJiQCg==";
       };
     };
     "statuses-1.5.0" = {
@@ -1081,7 +1081,7 @@ let
       version = "1.5.0";
       src = fetchurl {
         url = "https://registry.npmjs.org/statuses/-/statuses-1.5.0.tgz";
-        sha1 = "161c7dac177659fd9811f43771fa99381478628c";
+        sha512 = "OpZ3zP+jT1PI7I8nemJX4AKmAX070ZkYPVWV/AaKTJl+tXCTGyVdC1a4SL8RUQYEwk/f34ZX8UTykN68FwrqAA==";
       };
     };
     "streamsearch-0.1.2" = {
@@ -1090,7 +1090,7 @@ let
       version = "0.1.2";
       src = fetchurl {
         url = "https://registry.npmjs.org/streamsearch/-/streamsearch-0.1.2.tgz";
-        sha1 = "808b9d0e56fc273d809ba57338e929919a1a9f1a";
+        sha512 = "jos8u++JKm0ARcSUTAZXOVC0mSox7Bhn6sBgty73P1f3JGf7yG2clTbBNHUdde/kdvP2FESam+vM6l8jBrNxHA==";
       };
     };
     "string-width-2.1.1" = {
@@ -1117,7 +1117,7 @@ let
       version = "0.10.31";
       src = fetchurl {
         url = "https://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz";
-        sha1 = "62e203bc41766c6c28c9fc84301dab1c5310fa94";
+        sha512 = "ev2QzSzWPYmy9GuqfIVildA4OdcGLeFZQrq5ys6RtiuF+RQQiZWr8TZNyAcuVXyQRYfEO+MsoB/1BuQVhOJuoQ==";
       };
     };
     "string_decoder-1.3.0" = {
@@ -1135,7 +1135,7 @@ let
       version = "4.0.0";
       src = fetchurl {
         url = "https://registry.npmjs.org/strip-ansi/-/strip-ansi-4.0.0.tgz";
-        sha1 = "a8479022eb1ac368a871389b635262c505ee368f";
+        sha512 = "4XaJ2zQdCzROZDivEVIDPkcQn8LMFSa8kj8Gxb/Lnwzv9A8VctNZ+lfivC/sV3ivW8ElJTERXZoPBRrZKkNKow==";
       };
     };
     "strip-ansi-6.0.1" = {
@@ -1341,7 +1341,7 @@ let
     name = "haste";
     packageName = "haste";
     version = "0.1.0";
-    src = ../../../../../../../../../nix/store/83sz6s07psdzc54741nm0qgxfnnb62l7-source;
+    src = ../../../../../../../../../nix/store/sa8y38xfqrbklwvwb484fgx0lgks9wa1-source;
     dependencies = [
       sources."@ungap/promise-all-settled-1.1.2"
       sources."ansi-colors-4.1.1"
@@ -1349,7 +1349,7 @@ let
       sources."ansi-styles-4.3.0"
       sources."anymatch-3.1.2"
       sources."argparse-2.0.1"
-      sources."async-3.2.3"
+      sources."async-3.2.4"
       sources."async-cache-1.1.0"
       sources."balanced-match-1.0.2"
       sources."base64-js-1.5.1"
