@@ -1,23 +1,19 @@
 { lib, stdenv, appimageTools, desktop-file-utils, fetchurl }:
 
 let
-  version = "2020.10.111";
+  version = "2022.4.127";
   name = "p3x-onenote-${version}";
 
   plat = {
     aarch64-linux = "-arm64";
     armv7l-linux = "-armv7l";
-    i386-linux = "-i386";
-    i686-linux = "-i386";
     x86_64-linux = "";
   }.${stdenv.hostPlatform.system};
 
   sha256 = {
-    aarch64-linux = "0a3c0w1312l6k2jvn7cn8priibnh8wg0184zjcli29f9ds1afl5s";
-    armv7l-linux = "172m2d94zzm8q61pvnjy01cl5fg11ad9hfh1han0gycnv3difniy";
-    i386-linux = "12m0i5sb15sbysp5fvhbj4k36950m7kpjr12n88r5fpkyh13ihsp";
-    i686-linux = "12m0i5sb15sbysp5fvhbj4k36950m7kpjr12n88r5fpkyh13ihsp";
-    x86_64-linux = "0bn48r55l5dh8zcf8ijh3z6hlyp3s6fvfyqc1csvnslm63dfkzcq";
+    aarch64-linux = "09sahxil3lcrr40l1fawglmafl643f5anyi9rlhgi2461yghm4qj";
+    armv7l-linux = "14kf455z8705k7ixys4b6rsf1jzsyws6b3gll0bi2ziig0drzzxl";
+    x86_64-linux = "05zr0b06qrlg0kbg58l7wn4jn79jcmzxysm6m30qfmkzliyc33sr";
   }.${stdenv.hostPlatform.system};
 
   src = fetchurl {
@@ -50,6 +46,6 @@ appimageTools.wrapType2 rec {
     description = "Linux Electron Onenote - A Linux compatible version of OneNote";
     license = licenses.mit;
     maintainers = with maintainers; [ tiagolobocastro ];
-    platforms = platforms.linux;
+    platforms = [ "aarch64-linux" "armv7l-linux" "x86_64-linux" ];
   };
 }
