@@ -667,6 +667,8 @@ in {
 
   ase = callPackage ../development/python-modules/ase { };
 
+  asf-search = callPackage ../development/python-modules/asf-search { };
+
   asgi-csrf = callPackage ../development/python-modules/asgi-csrf { };
 
   asgineer = callPackage ../development/python-modules/asgineer { };
