@@ -95,13 +95,13 @@ in lib.makeExtensible (self: {
 
   # remember to backport updates to the stable branch!
   unstable = lib.lowPrio (common rec {
-    version = "2.8";
-    suffix = "pre20220530_${lib.substring 0 7 src.rev}";
+    version = "2.9";
+    suffix = "pre20220610_${lib.substring 0 7 src.rev}";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "af23d38019a47e5bb4cd6585a1678b37c957130c";
-      sha256 = "sha256-RH77Y4IhbTofNYlLQSGKLL0fJAG9iHSwRNvMEZ4M0VQ=";
+      rev = "45ebaab66594692035f028796200a6db2b1fedaf";
+      sha256 = "sha256-82M5jKdGUxQBfYj+8nK2SvfVv4Uo0YrPxiuWV/fnvtI=";
     };
   });
 })
