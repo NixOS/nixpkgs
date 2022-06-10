@@ -556,6 +556,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/align/";
   };
 
+  alpha-nvim = buildVimPluginFrom2Nix {
+    pname = "alpha-nvim";
+    version = "2022-04-22";
+    src = fetchFromGitHub {
+      owner = "goolord";
+      repo = "alpha-nvim";
+      rev = "4781fcfea5ddc1a92d41b32dc325132ed6fce7a8";
+      sha256 = "03i75403lskpgaqv7xp5hk4v6kqb0sv15ciil9jyj735ylhry3qq";
+    };
+    meta.homepage = "https://github.com/goolord/alpha-nvim/";
+  };
+
   aniseed = buildVimPluginFrom2Nix {
     pname = "aniseed";
     version = "2022-05-14";

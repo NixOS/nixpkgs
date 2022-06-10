@@ -4387,6 +4387,8 @@ with pkgs;
 
   apple-music-electron = callPackage ../applications/audio/apple-music-electron { };
 
+  apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
+
   arping = callPackage ../tools/networking/arping { };
 
   arpoison = callPackage ../tools/networking/arpoison { };
@@ -7744,6 +7746,10 @@ with pkgs;
   };
 
   mdbook-plantuml = callPackage ../tools/text/mdbook-plantuml {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
+  mdbook-admonish = callPackage ../tools/text/mdbook-admonish {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
@@ -24738,6 +24744,8 @@ with pkgs;
 
   poly = callPackage ../data/fonts/poly { };
 
+  polychromatic = libsForQt5.callPackage ../applications/misc/polychromatic { };
+
   polytopes_db = callPackage ../data/misc/polytopes_db { };
 
   pop-gtk-theme = callPackage ../data/themes/pop-gtk { };
@@ -29793,8 +29801,10 @@ with pkgs;
     sublime-merge
     sublime-merge-dev;
 
-  inherit (callPackages ../applications/version-management/subversion { sasl = cyrus_sasl; })
-    subversion;
+  inherit (callPackages ../applications/version-management/subversion {
+    sasl = cyrus_sasl;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  }) subversion;
 
   subversionClient = subversion.override {
     bdbSupport = false;

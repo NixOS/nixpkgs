@@ -148,6 +148,14 @@ final: prev: {
     meta = oldAttrs.meta // { broken = since "10"; };
   });
 
+  graphql-language-service-cli = prev.graphql-language-service-cli.override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      wrapProgram "$out/bin/graphql-lsp" \
+        --prefix NODE_PATH : ${final.graphql}/lib/node_modules
+    '';
+  };
+
   hsd = prev.hsd.override {
     buildInputs = [ final.node-gyp-build pkgs.unbound ];
   };
