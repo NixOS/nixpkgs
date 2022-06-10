@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... } : let
+import ../make-test-python.nix ({ pkgs, ... } : let
 
 
   runWithOpenSSL = file: cmd: pkgs.runCommand file {
@@ -27,7 +27,7 @@ import ./make-test-python.nix ({ pkgs, ... } : let
   '';
 
 
-  mailerCerts = import ./common/acme/server/snakeoil-certs.nix;
+  mailerCerts = import ../common/acme/server/snakeoil-certs.nix;
   mailerDomain = mailerCerts.domain;
   registrationSharedSecret = "unsecure123";
   testUser = "alice";
