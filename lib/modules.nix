@@ -113,6 +113,7 @@ rec {
                   args ? {}
                 , # This would be remove in the future, Prefer _module.check option instead.
                   check ? true
+                , attrArgName ? "name"
                 }:
     let
       withWarnings = x:
@@ -341,15 +342,17 @@ rec {
         modules ? [],
         specialArgs ? {},
         prefix ? [],
+        attrArgName ? "name",
         }:
           evalModules (evalModulesArgs // {
             modules = regularModules ++ modules;
             specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
             prefix = extendArgs.prefix or evalModulesArgs.prefix or [];
+            inherit attrArgName;
           });
 
       type = lib.types.submoduleWith {
-        inherit modules specialArgs;
+        inherit modules specialArgs attrArgName;
       };
 
       result = withWarnings {
