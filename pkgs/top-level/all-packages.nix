@@ -7036,6 +7036,8 @@ with pkgs;
     buildGoModule = buildGo118Module;
   };
 
+  healthchecks = callPackage ../servers/web-apps/healthchecks { };
+
   heisenbridge = callPackage ../servers/heisenbridge { };
 
   helio-workstation = callPackage ../applications/audio/helio-workstation { };
