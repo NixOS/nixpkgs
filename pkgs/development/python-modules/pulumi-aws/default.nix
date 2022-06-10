@@ -1,40 +1,43 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, pulumi
 , parver
+, pulumi
+, pythonOlder
 , semver
-, isPy27
 }:
 
 buildPythonPackage rec {
   pname = "pulumi-aws";
-  # version is independant of pulumi's.
+  # Version is independant of pulumi's.
   version = "5.7.2";
-  disabled = isPy27;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi-aws";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-oy2TBxE9zDbRc6cSml4nwibAAEq3anWngoxj6h4sYbU=";
+    hash = "sha256-oy2TBxE9zDbRc6cSml4nwibAAEq3anWngoxj6h4sYbU=";
   };
 
+  sourceRoot = "${src.name}/sdk/python";
+
   propagatedBuildInputs = [
-    pulumi
     parver
+    pulumi
     semver
   ];
 
-  postPatch = ''
-    cd sdk/python
-  '';
-
-  # checks require cloud resources
+  # Checks require cloud resources
   doCheck = false;
-  pythonImportsCheck = ["pulumi_aws"];
+
+  pythonImportsCheck = [
+    "pulumi_aws"
+  ];
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
