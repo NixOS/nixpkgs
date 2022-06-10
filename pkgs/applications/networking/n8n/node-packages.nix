@@ -1102,13 +1102,13 @@ let
         sha512 = "z4oo33lmnvvNRqfUe3YjDGGpqu/L2+wXBIhMtwq6oqZ+exOUAkQYM6zd2VWKF7AIlajOF8ZZuPFfryTG9iLC/w==";
       };
     };
-    "aws-sdk-2.1151.0" = {
+    "aws-sdk-2.1152.0" = {
       name = "aws-sdk";
       packageName = "aws-sdk";
-      version = "2.1151.0";
+      version = "2.1152.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1151.0.tgz";
-        sha512 = "VvyzXAmWrX+klvwzA+9gSTY7blDnZOTl0UTKrqmFL4K7tOLieGLYTUkpUegcPxCjYgEg7JwvYolYUnUKiHa4oA==";
+        url = "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.1152.0.tgz";
+        sha512 = "Lqwk0bDhm3vzpYb3AAM9VgGHeDpbB8+o7UJnP9R+CO23kJfi/XRpKihAcbyKDD/AUQ+O1LJaUVpvaJYLS9Am7w==";
       };
     };
     "aws-sign2-0.7.0" = {
@@ -4504,13 +4504,13 @@ let
         sha512 = "etgt+n4LlOkGSJbBTV9VROHA5R7ekIPS4vfh+bCAoJgRrJWdqJCBbpS3osRJ/HrT7R68MzMiY3L3sDJ/Fd8aBg==";
       };
     };
-    "mappersmith-2.38.1" = {
+    "mappersmith-2.39.0" = {
       name = "mappersmith";
       packageName = "mappersmith";
-      version = "2.38.1";
+      version = "2.39.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/mappersmith/-/mappersmith-2.38.1.tgz";
-        sha512 = "ecZ+YyzBK7r3tC8MTaGo5tySHPhB6f9jdxN706Tux6dMlcE2fgwiBM/bf/+Sz5m2yKlTq5ntiahz7xSPgurD6w==";
+        url = "https://registry.npmjs.org/mappersmith/-/mappersmith-2.39.0.tgz";
+        sha512 = "udHrBOOLU3nI2FK4hlnhoZDOT/UzntUJYWTnlJSgBs8GRNsf10Fyk/M6qAfX9Wn6NfZH/KSO5gZ+xHSPTu0gPA==";
       };
     };
     "material-colors-1.2.6" = {
@@ -4837,13 +4837,13 @@ let
         sha512 = "z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==";
       };
     };
-    "n8n-core-0.121.0" = {
+    "n8n-core-0.121.3" = {
       name = "n8n-core";
       packageName = "n8n-core";
-      version = "0.121.0";
+      version = "0.121.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/n8n-core/-/n8n-core-0.121.0.tgz";
-        sha512 = "dPCj0mVw1KkS+GDNIuvleJh8T0NDDQ62QKUh2YXSdQl7mvtAitKS1qqix3P8HnHYYCWBMjG20mLcnqPAzuA3QQ==";
+        url = "https://registry.npmjs.org/n8n-core/-/n8n-core-0.121.3.tgz";
+        sha512 = "Jg48X3j6MK0OmfNDeo4Ph1RLpdWjxr36aRAJobZHEaf+tT4iQgFNBcC9OChj/IVYG4lVINTIiPstHWJMyNsF0A==";
       };
     };
     "n8n-design-system-0.23.0" = {
@@ -6985,7 +6985,7 @@ let
       version = "2.0.0";
       src = fetchurl {
         url = "https://registry.npmjs.org/supports-color/-/supports-color-2.0.0.tgz";
-        sha1 = "535d045ce6b6363fa40117084629995e9df324c7";
+        sha512 = "KKNVtd6pCYgPIKU4cp2733HWYCpplQhddZLBUryaAHou723x+FRzQ5Df824Fj+IyyuiQTRoub4SnIFfIcrp70g==";
       };
     };
     "supports-color-7.2.0" = {
@@ -7084,7 +7084,7 @@ let
       version = "1.6.0";
       src = fetchurl {
         url = "https://registry.npmjs.org/thenify-all/-/thenify-all-1.6.0.tgz";
-        sha1 = "1a1918d402d8fc3f98fbf234db0bcc8cc10e9726";
+        sha512 = "RNxQH/qI8/t3thXJDwcstUO4zeqo64+Uy/+sNVRBx4Xn2OX+OZ9oP+iJnNFqplFra2ZUVeKCSa2oVWi3T4uVmA==";
       };
     };
     "throttle-debounce-1.1.0" = {
@@ -7102,7 +7102,7 @@ let
       version = "2.3.8";
       src = fetchurl {
         url = "https://registry.npmjs.org/through/-/through-2.3.8.tgz";
-        sha1 = "0dd4c9ffaabc357960b1b724115d7e0e86a2e1f5";
+        sha512 = "w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==";
       };
     };
     "through2-2.0.5" = {
@@ -8020,10 +8020,10 @@ in
   n8n = nodeEnv.buildNodePackage {
     name = "n8n";
     packageName = "n8n";
-    version = "0.181.0";
+    version = "0.181.2";
     src = fetchurl {
-      url = "https://registry.npmjs.org/n8n/-/n8n-0.181.0.tgz";
-      sha512 = "6hYVCqKmnrssazcosXwCAPtz2HGzWJG15jdxrQ/ZRq2XnmdK0cgC9B60/yohIDdtFtvB4F9Tn18CC7HOlUYTJg==";
+      url = "https://registry.npmjs.org/n8n/-/n8n-0.181.2.tgz";
+      sha512 = "ntxmXyiPpRNvvIEG9n9MsMt1WC5ZlP4sLY7W1Ta5oBP66Wacslt2eajL6OiO2yFoJseCkhVRcHR2TwIDk4HeYQ==";
     };
     dependencies = [
       sources."@apidevtools/json-schema-ref-parser-8.0.0"
@@ -8236,7 +8236,7 @@ in
         ];
       })
       sources."avsc-5.7.4"
-      (sources."aws-sdk-2.1151.0" // {
+      (sources."aws-sdk-2.1152.0" // {
         dependencies = [
           sources."buffer-4.9.2"
           sources."events-1.1.1"
@@ -8752,7 +8752,7 @@ in
       })
       sources."make-error-1.3.6"
       sources."make-error-cause-2.3.0"
-      sources."mappersmith-2.38.1"
+      sources."mappersmith-2.39.0"
       sources."material-colors-1.2.6"
       sources."md5-2.3.0"
       sources."media-typer-0.3.0"
@@ -8805,7 +8805,7 @@ in
         ];
       })
       sources."mz-2.7.0"
-      sources."n8n-core-0.121.0"
+      sources."n8n-core-0.121.3"
       sources."n8n-design-system-0.23.0"
       sources."n8n-editor-ui-0.147.0"
       (sources."n8n-nodes-base-0.179.0" // {
