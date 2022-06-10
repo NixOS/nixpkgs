@@ -25,11 +25,11 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i 's/"acme.*"/"acme"/' setup.py
     substituteInPlace setup.py \
-      --replace "cryptography>=2.8,<4.0" "cryptography" \
+      --replace "acme==" "acme>=" \
+      --replace "cryptography>=2.8,<37.0" "cryptography" \
+      --replace "pycognito==" "pycognito>=" \
       --replace "snitun==" "snitun>=" \
-      --replace "pycognito==2022.01.0" "pycognito"
   '';
 
   propagatedBuildInputs = [

@@ -4,7 +4,6 @@
 , fetchFromGitHub
 , asgiref
 , click
-, colorama
 , h11
 , httptools
 , python-dotenv
@@ -37,7 +36,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     asgiref
     click
-    colorama
     h11
     httptools
     python-dotenv

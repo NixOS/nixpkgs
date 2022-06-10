@@ -887,6 +887,8 @@ in {
 
   azure-cosmosdb-table = callPackage ../development/python-modules/azure-cosmosdb-table { };
 
+  azure-data-tables = callPackage ../development/python-modules/azure-data-tables { };
+
   azure-datalake-store = callPackage ../development/python-modules/azure-datalake-store { };
 
   azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
@@ -4315,8 +4317,6 @@ in {
 
   ipaddr = callPackage ../development/python-modules/ipaddr { };
 
-  ipaddress = callPackage ../development/python-modules/ipaddress { };
-
   ipdb = callPackage ../development/python-modules/ipdb { };
 
   ipdbplugin = callPackage ../development/python-modules/ipdbplugin { };
@@ -5292,6 +5292,8 @@ in {
 
   md-toc = callPackage ../development/python-modules/md-toc { };
 
+  mdx-truly-sane-lists = callPackage ../development/python-modules/mdx-truly-sane-lists { };
+
   md2gemini = callPackage ../development/python-modules/md2gemini { };
 
   mdformat = callPackage ../development/python-modules/mdformat { };
@@ -5425,6 +5427,7 @@ in {
 
   mkdocs = callPackage ../development/python-modules/mkdocs { };
   mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
+  mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
@@ -5915,8 +5918,6 @@ in {
 
   nsapi = callPackage ../development/python-modules/nsapi { };
 
-  ntfy-webpush = callPackage ../tools/misc/ntfy-webpush { };
-
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
@@ -6122,8 +6123,6 @@ in {
   optuna = callPackage ../development/python-modules/optuna { };
 
   opuslib = callPackage ../development/python-modules/opuslib { };
-
-  ordereddict = callPackage ../development/python-modules/ordereddict { };
 
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
 
@@ -6902,7 +6901,9 @@ in {
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
-  psutil = callPackage ../development/python-modules/psutil { };
+  psutil = callPackage ../development/python-modules/psutil {
+    inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
+  };
 
   psycopg2 = callPackage ../development/python-modules/psycopg2 { };
 
@@ -7169,8 +7170,6 @@ in {
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
-
-  pycryptodome-test-vectors = callPackage ../development/python-modules/pycryptodome-test-vectors { };
 
   pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
 
@@ -10603,6 +10602,8 @@ in {
   };
 
   trio-asyncio = callPackage ../development/python-modules/trio-asyncio { };
+
+  trio-websocket = callPackage ../development/python-modules/trio-websocket { };
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 

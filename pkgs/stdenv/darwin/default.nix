@@ -486,6 +486,7 @@ rec {
           gmp
           libiconv
           brotli.lib
+          file
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -561,6 +562,7 @@ rec {
           gmp
           libiconv
           brotli.lib
+          file
         ] ++ lib.optional haveKRB5 libkrb5) ++
         (with pkgs."${finalLlvmPackages}"; [
           libcxx
@@ -737,6 +739,7 @@ rec {
         brotli.lib
         cc.expand-response-params
         libxml2.out
+        file
       ] ++ lib.optional haveKRB5 libkrb5
       ++ lib.optionals localSystem.isAarch64 [
         pkgs.updateAutotoolsGnuConfigScriptsHook

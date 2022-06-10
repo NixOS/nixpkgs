@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, pythonOlder
 , brotli
 , brotlicffi
 , buildPythonPackage
@@ -21,6 +22,8 @@ buildPythonPackage rec {
   pname = "requests";
   version = "2.27.1";
 
+  disabled = pythonOlder "3.7";
+
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-aNfFb9WomZiHco7zBKbRLtx7508c+kdxT8i0FFJcmmE=";
@@ -32,23 +35,29 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    brotlicffi
     certifi
+    charset-normalizer
     idna
     urllib3
-    chardet
-  ] ++ lib.optionals isPy3k [
-    brotlicffi
-    charset-normalizer
-  ] ++ lib.optionals isPy27 [
-    brotli
   ];
 
+  passthru.optional-dependencies = {
+    security = [];
+    socks = [
+      pysocks
+    ];
+    use_chardet_on_py3 = [
+      chardet
+    ];
+  };
+
   checkInputs = [
-    pysocks
     pytest-mock
     pytest-xdist
     pytestCheckHook
-  ];
+  ]
+  ++ passthru.optional-dependencies.socks;
 
   # AttributeError: 'KeywordMapping' object has no attribute 'get'
   doCheck = !isPy27;

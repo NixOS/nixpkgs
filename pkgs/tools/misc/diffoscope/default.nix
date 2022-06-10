@@ -77,6 +77,9 @@ python3Packages.buildPythonApplication rec {
     # fails because it fails to determine llvm version
     "test_item3_deflate_llvm_bitcode"
 
+    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character: b'/build/pytest-of-nixbld/pytest-0/\xf0(\x8c('
+    "test_non_unicode_filename"
+
     # disable formatting tests because they can break on black updates
     "test_code_is_black_clean"
   ] ++ lib.optionals stdenv.isDarwin [

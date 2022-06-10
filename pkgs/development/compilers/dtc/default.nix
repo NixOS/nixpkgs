@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchgit, flex, bison, pkg-config, which
-, pythonSupport ? false, python ? null, swig, libyaml
+{ stdenv
+, lib
+, fetchgit
+, fetchpatch
+, flex
+, bison
+, pkg-config
+, which
+, pythonSupport ? false
+, python ? null
+, swig
+, libyaml
 }:
 
 stdenv.mkDerivation rec {
@@ -12,8 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gx9LG3U9etWhPxm7Ox7rOu9X5272qGeHqZtOe68zFs4=";
   };
 
+  patches = [
+    # fix python 3.10 compatibility
+    # based on without requiring the setup.py rework
+    # https://git.kernel.org/pub/scm/utils/dtc/dtc.git/commit/?id=383e148b70a47ab15f97a19bb999d54f9c3e810f
+    ./python-3.10.patch
+  ];
+
+  nativeBuildInputs = [ flex bison pkg-config which ]
+    ++ lib.optionals pythonSupport [ python swig ];
+
   buildInputs = [ libyaml ];
-  nativeBuildInputs = [ flex bison pkg-config which ] ++ lib.optionals pythonSupport [ python swig ];
 
   postPatch = ''
     patchShebangs pylibfdt/

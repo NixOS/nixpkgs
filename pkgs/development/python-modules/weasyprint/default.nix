@@ -2,18 +2,15 @@
 , fetchPypi
 , fetchpatch
 , pytestCheckHook
-, brotli
 , cairosvg
 , flit-core
 , fonttools
 , pydyf
 , pyphen
 , cffi
-, cssselect
-, lxml
+, cssselect2
 , html5lib
-, tinycss
-, zopfli
+, tinycss2
 , glib
 , harfbuzz
 , pango
@@ -23,6 +20,7 @@
 , ghostscript
 , isPy3k
 , substituteAll
+, pillow
 }:
 
 buildPythonPackage rec {
@@ -61,19 +59,15 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    brotli
-    cairosvg
     cffi
-    cssselect
+    cssselect2
     fonttools
     html5lib
-    lxml
-    flit-core
+    pillow
     pydyf
     pyphen
-    tinycss
-    zopfli
-  ];
+    tinycss2
+  ] ++ fonttools.optional-dependencies.woff;
 
   checkInputs = [
     pytestCheckHook

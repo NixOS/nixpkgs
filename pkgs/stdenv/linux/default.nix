@@ -417,7 +417,7 @@ in
         # Simple executable tools
         concatMap (p: [ (getBin p) (getLib p) ]) [
             gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
-            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed
+            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed file
           ]
         # Library dependencies
         ++ map getLib (

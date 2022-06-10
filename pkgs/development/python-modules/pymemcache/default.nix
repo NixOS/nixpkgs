@@ -1,22 +1,24 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, six
-, future
 , mock
+, six
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pymemcache";
-  version = "3.5.1";
+  version = "3.5.2";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pinterest";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DKqfv5gf9gzbnEPQSzy2mAaVYJZL9jmTKyGWVzj40T4=";
+    hash = "sha256-bsiFWZHGJO/07w6mFXzf0JwftJWClE2mTv86h8zT1K0=";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +26,6 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    future
     mock
     pytestCheckHook
   ];
@@ -38,7 +39,9 @@ buildPythonPackage rec {
     "TestClientSocketConnect"
   ];
 
-  pythonImportsCheck = [ "pymemcache" ];
+  pythonImportsCheck = [
+    "pymemcache"
+  ];
 
   meta = with lib; {
     description = "Python memcached client";

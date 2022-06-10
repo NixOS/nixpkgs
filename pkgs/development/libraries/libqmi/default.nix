@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-udev-base-dir=${placeholder "out"}/lib/udev"
-    "--enable-gtk-doc"
-    "--enable-introspection"
+    "--enable-gtk-doc=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "yes" else "no"}"
+    "--enable-introspection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "yes" else "no"}"
   ];
 
   enableParallelBuilding = true;

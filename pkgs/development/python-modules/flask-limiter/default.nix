@@ -6,7 +6,6 @@
 , hiro
 , limits
 , mock
-, ordereddict
 , pymemcache
 , pytestCheckHook
 , redis
@@ -32,7 +31,6 @@ buildPythonPackage rec {
     redis
     flask-restful
     pymemcache
-    ordereddict
   ];
 
   postPatch = ''

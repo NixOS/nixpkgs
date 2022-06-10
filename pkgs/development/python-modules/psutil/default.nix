@@ -1,18 +1,17 @@
 { lib, stdenv, buildPythonPackage, fetchPypi, isPy27, python
-, darwin
+, IOKit
 , pytestCheckHook
 , mock
-, ipaddress
 , unittest2
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.9.0";
+  version = "5.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "869842dbd66bb80c3217158e629d6fceaecc3a3166d3d1faee515b05dd26ca25";
+    sha256 = "sha256-V/GBm12elc37DIgailt9VC7Qt8Ui1XVwaoC+3ISMiVQ=";
   };
 
   # We have many test failures on various parts of the package:
@@ -24,7 +23,7 @@ buildPythonPackage rec {
   #    https://github.com/giampaolo/psutil/issues/1912
   doCheck = false;
   checkInputs = [ pytestCheckHook ]
-  ++ lib.optionals isPy27 [ mock ipaddress unittest2 ];
+  ++ lib.optionals isPy27 [ mock unittest2 ];
   # In addition to the issues listed above there are some that occure due to
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
@@ -42,7 +41,7 @@ buildPythonPackage rec {
     "cpu_freq"
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.IOKit ];
+  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
   pythonImportsCheck = [ "psutil" ];
 
