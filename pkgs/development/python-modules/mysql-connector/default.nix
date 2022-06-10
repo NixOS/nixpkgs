@@ -6,6 +6,7 @@
 , fetchFromGitHub
 , protobuf
 , pythonOlder
+, gcc
 }:
 
 buildPythonPackage rec {
@@ -43,8 +44,11 @@ buildPythonPackage rec {
   # Tests require a running MySQL instance
   doCheck = false;
 
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+    gcc
+  ];
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "A MySQL driver";
     longDescription = ''
       A MySQL driver that does not depend on MySQL C client libraries and
