@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchzip, cups, autoPatchelfHook
+{ stdenv, lib, cups, autoPatchelfHook
 
   # Can either be "EU" or "Global"; it's unclear what the difference is
   , region ? "Global", qt4
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  src = fetchzip {
+  src = fetchTarball {
     url = "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/Kyocera_Linux_PPD_Ver_${lib.replaceChars ["."] ["_"] version}_tar_gz.download.gz";
     sha256 = "11znnlkfssakml7w80gxlz1k59f3nvhph91fkzzadnm9i7a8yjal";
   };
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "CUPS drivers for several Kyocera printers";
     homepage = "https://www.kyoceradocumentsolutions.com";
     license = licenses.unfree;
-    maintainers = [ maintainers.steveej ];
+    maintainers = [ maintainers.steveej maintainers.hexchen ];
     platforms = platforms.linux;
   };
 }
