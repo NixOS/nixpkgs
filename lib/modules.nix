@@ -455,21 +455,19 @@ rec {
         throw "Module `${key}' has an unsupported attribute `${head (attrNames badAttrs)}'. This is caused by introducing a top-level `config' or `options' attribute. Add configuration attributes immediately on the top level instead, or move all of them (namely: ${toString (attrNames badAttrs)}) into the explicit `config' attribute."
       else
         { _file = toString m._file or file;
+          key = toString m.key or key;
           disabledModules = m.disabledModules or [];
           imports = m.imports or [];
           options = m.options or {};
           config = addFreeformType (addMeta (m.config or {}));
-        } // optionalAttrs (m?key || key != null) {
-          key = toString m.key or key;
         }
     else
       { _file = toString m._file or file;
+        key = toString m.key or key;
         disabledModules = m.disabledModules or [];
         imports = m.require or [] ++ m.imports or [];
         options = {};
         config = addFreeformType (addMeta (removeAttrs m ["_file" "key" "disabledModules" "require" "imports" "freeformType"]));
-      } // optionalAttrs (m?key || key != null) {
-        key = toString m.key or key;
       };
 
   applyModuleArgsIfFunction = key: f: args@{ config, options, lib, ... }: if isFunction f then
