@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nbb";
-  version = "0.5.103";
+  version = "0.5.104";
 
   src = fetchFromGitHub {
     owner = "babashka";
