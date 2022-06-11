@@ -4601,7 +4601,6 @@ with pkgs;
 
   libceph = ceph.lib;
   inherit (callPackages ../tools/filesystems/ceph {
-    boost = boost175.override { enablePython = true; python = python3; };
     lua = lua5_4;
   })
     ceph
@@ -4988,6 +4987,8 @@ with pkgs;
   cpio = callPackage ../tools/archivers/cpio { };
 
   cpufetch = callPackage ../tools/misc/cpufetch { };
+
+  crackmapexec = callPackage ../tools/security/crackmapexec { };
 
   crackxls = callPackage ../tools/security/crackxls { };
 

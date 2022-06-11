@@ -6,7 +6,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "neo4j-driver";
+  pname = "neo4j";
   version = "4.4.4";
   format = "setuptools";
 
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     rev = version;
-    sha256 = "sha256-Sd+ZeyJCzqGsBl3rdxfKPD0gYZ49qAfiRbuXaNGpj8M=";
+    hash = "sha256-Sd+ZeyJCzqGsBl3rdxfKPD0gYZ49qAfiRbuXaNGpj8M=";
   };
 
   propagatedBuildInputs = [
