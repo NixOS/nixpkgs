@@ -16407,7 +16407,9 @@ with pkgs;
 
   tflint = callPackage ../development/tools/analysis/tflint { };
 
-  tfsec = callPackage ../development/tools/analysis/tfsec { };
+  tfsec = callPackage ../development/tools/analysis/tfsec {
+    buildGoModule = buildGo118Module;
+  };
 
   todoist = callPackage ../applications/misc/todoist { };
 
