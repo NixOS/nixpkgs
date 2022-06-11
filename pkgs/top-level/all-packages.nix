@@ -6850,6 +6850,8 @@ with pkgs;
 
   pxz = callPackage ../tools/compression/pxz { };
 
+  haguichi = callPackage ../tools/networking/haguichi { };
+
   hans = callPackage ../tools/networking/hans { };
 
   h2 = callPackage ../servers/h2 { };
