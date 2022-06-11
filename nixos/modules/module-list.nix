@@ -169,6 +169,7 @@
   ./programs/gpaste.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
+  ./programs/haguichi.nix
   ./programs/hamster.nix
   ./programs/htop.nix
   ./programs/iftop.nix
@@ -771,6 +772,7 @@
   ./services/networking/ergo.nix
   ./services/networking/ergochat.nix
   ./services/networking/eternal-terminal.nix
+  ./services/networking/expressvpn.nix
   ./services/networking/fakeroute.nix
   ./services/networking/ferm.nix
   ./services/networking/fireqos.nix

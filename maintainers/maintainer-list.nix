@@ -5960,6 +5960,12 @@
     githubId = 1667473;
     name = "Jethro Kuan";
   };
+  jevy = {
+    email = "jevin@quickjack.ca";
+    github = "jevy";
+    githubId = 110620;
+    name = "Jevin Maltais";
+  };
   jfb = {
     email = "james@yamtime.com";
     github = "tftio";
