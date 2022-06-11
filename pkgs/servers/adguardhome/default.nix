@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     description = "Network-wide ads & trackers blocking DNS server";
     platforms = builtins.attrNames sources;
     maintainers = with maintainers; [ numkem iagoq ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
   };
 }

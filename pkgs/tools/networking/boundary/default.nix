@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
       and resilient. It can run in clouds, on-prem, secure enclaves and more,
       and does not require an agent to be installed on every end host.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with maintainers; [ jk techknowlogick ];
   };
