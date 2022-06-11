@@ -320,6 +320,19 @@ rec {
   */
   escape = list: replaceChars list (map (c: "\\${c}") list);
 
+  /* Escape occurence of the element of `list` in `string` by
+     converting to its ASCII value and prefixing it with \\x.
+     Only works for printable ascii characters.
+
+     Type: escapeC = [string] -> string -> string
+
+     Example:
+       escapeC [" "] "foo bar"
+       => "foo\\x20bar"
+
+  */
+  escapeC = list: replaceChars list (map (c: "\\x${ toLower (lib.toHexString (charToInt c))}") list);
+
   /* Quote string to be used safely within the Bourne shell.
 
      Type: escapeShellArg :: string -> string
