@@ -68,7 +68,6 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
-  
   installCheckPhase = ''
     [ $($out/bin/nbb -e '(+ 1 2)') = '3' ]
   '';
