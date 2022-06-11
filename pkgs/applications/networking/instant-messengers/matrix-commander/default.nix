@@ -14,15 +14,15 @@
 , python-olm
 }:
 
-buildPythonApplication {
+buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "2.30.0";
+  version = "2.36.0";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
-    rev = "77cf433af0d2e63a88b8914026795a0da5486b77";
-    sha256 = "sha256-qUyaN0syP2lLRJLCAD5nCWfwR/CW4t/g40a8xDYseIg=";
+    rev = "v${version}";
+    sha256 = "sha256-NjOPVQ9BJ2LI7qIr8R8xWDXuFTVIYnvN4hIzfrTCX9I=";
   };
 
   format = "pyproject";
