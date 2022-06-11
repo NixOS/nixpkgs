@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     makeWrapper '${nodejs}/bin/node' "$out/bin/nbb" \
-    --add-flags "$out/lib/node_modules/nbb/lib/nbb_main.js"
+    --add-flags "$out/lib/nbb_main.js"
 
     runHook postInstall
   '';
