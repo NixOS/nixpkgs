@@ -6976,6 +6976,8 @@ in {
 
   py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
 
+  py-sneakers = callPackage ../development/python-modules/py-sneakers { };
+
   py-tes = callPackage ../development/python-modules/py-tes { };
 
   py-ubjson = callPackage ../development/python-modules/py-ubjson { };
