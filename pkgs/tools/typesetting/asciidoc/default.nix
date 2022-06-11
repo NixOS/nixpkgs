@@ -322,6 +322,9 @@ stdenv.mkDerivation rec {
       the backend output markups (which can be almost any type of SGML/XML
       markup) can be customized and extended by the user.
     '';
+    sourceProvenance = with sourceTypes; [
+      fromSource
+    ] ++ lib.optional _enableDitaaFilter binaryBytecode;
     homepage = "http://www.methods.co.nz/asciidoc/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

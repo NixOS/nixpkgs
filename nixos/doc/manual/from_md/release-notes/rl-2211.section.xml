@@ -40,12 +40,42 @@
   </section>
   <section xml:id="sec-release-22.11-new-services">
     <title>New Services</title>
-    <itemizedlist spacing="compact">
+    <itemizedlist>
       <listitem>
         <para>
           <link xlink:href="https://github.com/jollheef/appvm">appvm</link>,
           Nix based app VMs. Available as
           <link xlink:href="options.html#opt-virtualisation.appvm.enable">virtualisation.appvm</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://dragonflydb.io/">dragonflydb</link>,
+          a modern replacement for Redis and Memcached. Available as
+          <link linkend="opt-services.dragonflydb.enable">services.dragonflydb</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/leetronics/infnoise">infnoise</link>,
+          a hardware True Random Number Generator dongle. Available as
+          <link xlink:href="options.html#opt-services.infnoise.enable">services.infnoise</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/aiberia/persistent-evdev">persistent-evdev</link>,
+          a daemon to add virtual proxy devices that mirror a physical
+          input device but persist even if the underlying hardware is
+          hot-plugged. Available as
+          <link linkend="opt-services.persistent-evdev.enable">services.persistent-evdev</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
+          the CLI client for ExpressVPN. Available as
+          <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
         </para>
       </listitem>
     </itemizedlist>
@@ -85,6 +115,12 @@
           <literal>(with foo; isPower &amp;&amp; is32bit &amp;&amp; isBigEndian)</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          PHP 7.4 is no longer supported due to upstream not supporting
+          this version for the entire lifecycle of the 22.11 release.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-notable-changes">
@@ -107,6 +143,13 @@
           restored multiple times). If your Synapse database already has
           duplicate rows in this table, this could fail with an error
           and require manual remediation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          memtest86+ was updated from 5.00-coreboot-002 to 6.00-beta2.
+          It is now the upstream version from https://www.memtest.org/,
+          as coreboot’s fork is no longer available.
         </para>
       </listitem>
     </itemizedlist>

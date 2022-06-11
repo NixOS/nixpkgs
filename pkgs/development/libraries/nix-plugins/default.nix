@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-AkHsZpYM4EY8SNuF6LhxF2peOjp69ICGc3kOLkDms64=";
   };
 
+  patches = [ ./nix-2.9.patch ];
+
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ nix boost ];

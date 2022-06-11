@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-datatransfer";
-  version = "3.6.1";
+  version = "3.6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
- 
+
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hR5qHucBpq1LS9pIZeovcPMiVbw3dhSeeJxkYH8xuMk=";
+    hash = "sha256-y8W0qwm4rTHlDO8L+/fhIJlfW5PonUhAYBU5wLIZJ94=";
   };
 
   propagatedBuildInputs = [

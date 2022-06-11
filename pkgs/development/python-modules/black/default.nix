@@ -61,6 +61,8 @@ buildPythonPackage rec {
     "test_bpo_2142_workaround"
     "test_skip_magic_trailing_comma"
   ];
+  # multiple tests exceed max open files on hydra builders
+  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
 
   propagatedBuildInputs = [
     aiohttp

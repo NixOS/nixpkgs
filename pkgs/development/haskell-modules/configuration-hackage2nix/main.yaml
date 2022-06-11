@@ -124,9 +124,9 @@ extra-packages:
   - ormolu == 0.2.*                     # 2022-02-21: For ghc 8.8 and 8.10
   - ShellCheck == 0.7.2                 # 2022-02-20: haskell-ci 0.14 needs this
   - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
+  - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - relude == 0.7.0.0                   # 2022-02-25: Needed for ema 0.6
-  - SVGFonts < 1.8                      # 2022-03-19: Needed for Chart-diagrams 1.9.3
   - clay < 0.14                         # 2022-03-20: Needed for neuron 1.0.0.0
   - hspec-golden == 0.1.*               # 2022-04-07: Needed for elm-format
   - tasty-hspec == 1.1.6                # 2022-04-07: Needed for elm-format
@@ -134,6 +134,7 @@ extra-packages:
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
   - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
+  - fourmolu == 0.6.0.0                 # 2022-06-05: Last fourmolu version compatible with hls 1.7/ hls-fourmolu-plugin 1.0.3.0
 
 package-maintainers:
   abbradar:
@@ -608,12 +609,8 @@ dont-distribute-packages:
   - spike
   - web-browser-in-haskell
   - webkit
-  - webkitgtk3
   - webkitgtk3-javascriptcore
   - websnap
-
-  # glade relies on system libglade which is deprecated
-  - glade
 
   # mesos was removed from nixpkgs
   - hs-mesos

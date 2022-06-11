@@ -571,6 +571,7 @@ broken-packages:
   - call-alloy
   - cal-layout
   - call-haskell-from-anything
+  - call-plantuml
   - camfort
   - canon
   - canonical-filepath
@@ -648,6 +649,7 @@ broken-packages:
   - checked
   - Checked
   - checkmate
+  - chez-grater
   - chiasma
   - Chitra
   - choose
@@ -766,13 +768,18 @@ broken-packages:
   - compaREST
   - comparse
   - compdata
+  - compdoc
   - compendium-client
   - competition
   - compilation
   - complex-generic
   - composable-associations-aeson
   - compose-trans
-  - composite-aeson
+  - composite-aeson-path
+  - composite-cassava
+  - composite-dhall
+  - composite-ekg
+  - composite-lens-extra
   - composite-opaleye
   - composition-tree
   - comprehensions-ghc
@@ -1737,6 +1744,7 @@ broken-packages:
   - gitson
   - gitter
   - git-vogue
+  - glade
   - glapp
   - glaze
   - Gleam
@@ -1745,7 +1753,6 @@ broken-packages:
   - gli
   - glicko
   - glider-nlp
-  - glirc
   - GLMatrix
   - global-variables
   - glob-posix
@@ -3082,7 +3089,6 @@ broken-packages:
   - lua-bc
   - luautils
   - lucid2
-  - lucid-htmx
   - lucid-hyperscript
   - luis-client
   - luka
@@ -3778,6 +3784,7 @@ broken-packages:
   - pcf-font
   - pcgen
   - PCLT
+  - pcre2
   - pcre-light-extra
   - pdfname
   - pdf-slave-template
@@ -3939,6 +3946,7 @@ broken-packages:
   - polysemy-check
   - polysemy-keyed-state
   - polysemy-kvstore-jsonfile
+  - polysemy-managed
   - polysemy-mocks
   - polysemy-readline
   - polysemy-req
@@ -4097,9 +4105,8 @@ broken-packages:
   - Pup-Events-Server
   - purebred-email
   - pure-io
+  - purenix
   - pure-priority-queue
-  - purescript-ast
-  - purescript-cst
   - pure-zlib
   - pushbullet
   - pushbullet-types
@@ -4599,6 +4606,7 @@ broken-packages:
   - signable-haskell-protoc
   - signed-multiset
   - simd
+  - simfin
   - simple-actors
   - simpleargs
   - simple-atom
@@ -5079,6 +5087,7 @@ broken-packages:
   - text1
   - text-and-plots
   - text-ascii
+  - text-builder-linear
   - text-containers
   - text-format
   - text-format-heavy
@@ -5499,6 +5508,7 @@ broken-packages:
   - wai-graceful
   - wai-handler-devel
   - wai-handler-fastcgi
+  - wai-handler-hal
   - wai-handler-scgi
   - wai-handler-webkit
   - wai-hmac-auth
@@ -5563,6 +5573,7 @@ broken-packages:
   - webex-teams-pipes
   - webfinger-client
   - web-inv-route
+  - webkitgtk3
   - webkit-javascriptcore
   - webmention
   - web-output

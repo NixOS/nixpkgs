@@ -17,7 +17,12 @@ buildGoModule rec {
 
   doCheck = false;
   installPhase = ''
+    runHook preInstall
     install -D $GOPATH/bin/cmd $out/libexec/docker/cli-plugins/docker-compose
+
+    mkdir -p $out/bin
+    ln -s $out/libexec/docker/cli-plugins/docker-compose $out/bin/docker-compose
+    runHook postInstall
   '';
 
   meta = with lib; {

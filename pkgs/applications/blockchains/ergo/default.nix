@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open protocol that implements modern scientific ideas in the blockchain area";
     homepage = "https://ergoplatform.org/en/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.cc0;
     platforms = platforms.all;
     maintainers = with maintainers; [ mmahut ];

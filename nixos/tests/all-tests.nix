@@ -26,8 +26,8 @@ let
     featureFlags.minimalModules = {};
   };
   evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
-in
-{
+
+in {
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
   adguardhome = handleTest ./adguardhome.nix {};
@@ -112,7 +112,7 @@ in
   croc = handleTest ./croc.nix {};
   cryptpad = handleTest ./cryptpad.nix {};
   deluge = handleTest ./deluge.nix {};
-  dendrite = handleTest ./dendrite.nix {};
+  dendrite = handleTest ./matrix/dendrite.nix {};
   dex-oidc = handleTest ./dex-oidc.nix {};
   dhparams = handleTest ./dhparams.nix {};
   disable-installer-tools = handleTest ./disable-installer-tools.nix {};
@@ -123,7 +123,6 @@ in
   doas = handleTest ./doas.nix {};
   docker = handleTestOn ["x86_64-linux"] ./docker.nix {};
   docker-rootless = handleTestOn ["x86_64-linux"] ./docker-rootless.nix {};
-  docker-edge = handleTestOn ["x86_64-linux"] ./docker-edge.nix {};
   docker-registry = handleTest ./docker-registry.nix {};
   docker-tools = handleTestOn ["x86_64-linux"] ./docker-tools.nix {};
   docker-tools-cross = handleTestOn ["x86_64-linux" "aarch64-linux"] ./docker-tools-cross.nix {};
@@ -152,6 +151,7 @@ in
   etcd-cluster = handleTestOn ["x86_64-linux"] ./etcd-cluster.nix {};
   etebase-server = handleTest ./etebase-server.nix {};
   etesync-dav = handleTest ./etesync-dav.nix {};
+  extra-python-packages = handleTest ./extra-python-packages.nix {};
   fancontrol = handleTest ./fancontrol.nix {};
   fcitx = handleTest ./fcitx {};
   fenics = handleTest ./fenics.nix {};
@@ -170,7 +170,7 @@ in
   frr = handleTest ./frr.nix {};
   fsck = handleTest ./fsck.nix {};
   ft2-clone = handleTest ./ft2-clone.nix {};
-  grafana-mimir = handleTest ./grafana-mimir.nix {};
+  mimir = handleTest ./mimir.nix {};
   gerrit = handleTest ./gerrit.nix {};
   geth = handleTest ./geth.nix {};
   ghostunnel = handleTest ./ghostunnel.nix {};
@@ -301,9 +301,9 @@ in
   mariadb-galera = handleTest ./mysql/mariadb-galera.nix {};
   mastodon = handleTestOn ["x86_64-linux" "i686-linux" "aarch64-linux"] ./web-apps/mastodon.nix {};
   matomo = handleTest ./matomo.nix {};
-  matrix-appservice-irc = handleTest ./matrix-appservice-irc.nix {};
-  matrix-conduit = handleTest ./matrix-conduit.nix {};
-  matrix-synapse = handleTest ./matrix-synapse.nix {};
+  matrix-appservice-irc = handleTest ./matrix/appservice-irc.nix {};
+  matrix-conduit = handleTest ./matrix/conduit.nix {};
+  matrix-synapse = handleTest ./matrix/synapse.nix {};
   mattermost = handleTest ./mattermost.nix {};
   mediatomb = handleTest ./mediatomb.nix {};
   mediawiki = handleTest ./mediawiki.nix {};
@@ -422,7 +422,6 @@ in
   pgjwt = handleTest ./pgjwt.nix {};
   pgmanage = handleTest ./pgmanage.nix {};
   php = handleTest ./php {};
-  php74 = handleTest ./php { php = pkgs.php74; };
   php80 = handleTest ./php { php = pkgs.php80; };
   php81 = handleTest ./php { php = pkgs.php81; };
   pict-rs = handleTest ./pict-rs.nix {};

@@ -1,8 +1,10 @@
 { lib
+, aiofiles
 , aiohttp
 , aioshutil
 , buildPythonPackage
 , fetchFromGitHub
+, ipython
 , packaging
 , pillow
 , poetry-core
@@ -17,12 +19,13 @@
 , python-dotenv
 , pythonOlder
 , pytz
+, termcolor
 , typer
 }:
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "3.7.0";
+  version = "3.9.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -30,21 +33,29 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "briis";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-0adbUKTkbgA4pKrIVFGowD4Wf8brjfkLpfCT/+Mw6vs=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IQ+mjiNxfxG0Zq543Rn5rK/BNPzLGVX9jVTtyW7W9cs=";
   };
 
   propagatedBuildInputs = [
+    aiofiles
     aiohttp
     aioshutil
     packaging
     pillow
     pydantic
     pyjwt
-    python-dotenv
     pytz
     typer
   ];
+
+  passthru.optional-dependencies = {
+    shell = [
+      ipython
+      python-dotenv
+      termcolor
+    ];
+  };
 
   checkInputs = [
     pytest-aiohttp
@@ -56,9 +67,6 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
-    # https://github.com/briis/pyunifiprotect/pull/176
-    substituteInPlace setup.cfg \
-      --replace "asyncio" "aiohttp"
     substituteInPlace pyproject.toml \
       --replace "--cov=pyunifiprotect --cov-append" ""
   '';

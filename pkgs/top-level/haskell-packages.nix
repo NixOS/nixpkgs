@@ -13,13 +13,13 @@ let
     "integer-simple"
     "native-bignum"
     "ghc902"
-    "ghc922"
+    "ghc923"
     "ghcHEAD"
   ];
 
   nativeBignumIncludes = [
     "ghc902"
-    "ghc922"
+    "ghc923"
     "ghcHEAD"
   ];
 
@@ -121,7 +121,7 @@ in {
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
     };
-    ghc922 = callPackage ../development/compilers/ghc/9.2.2.nix {
+    ghc923 = callPackage ../development/compilers/ghc/9.2.3.nix {
       bootPkgs =
         # aarch64 ghc8107Binary exceeds max output size on hydra
         if stdenv.isAarch64 || stdenv.isAarch32 then
@@ -227,9 +227,9 @@ in {
       ghc = bh.compiler.ghc902;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
     };
-    ghc922 = callPackage ../development/haskell-modules {
-      buildHaskellPackages = bh.packages.ghc922;
-      ghc = bh.compiler.ghc922;
+    ghc923 = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc923;
+      ghc = bh.compiler.ghc923;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {

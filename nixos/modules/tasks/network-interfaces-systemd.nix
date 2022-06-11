@@ -142,6 +142,9 @@ in
                 optionalAttrs (route.via != null) {
                   Gateway = route.via;
                 } //
+                optionalAttrs (route.type != null) {
+                  Type = route.type;
+                } //
                 optionalAttrs (route.options ? onlink) {
                   GatewayOnLink = true;
                 } //

@@ -177,7 +177,7 @@ in
 
     services.phpfpm.pools.postfixadmin = {
       user = user;
-      phpPackage = pkgs.php74;
+      phpPackage = pkgs.php81;
       phpOptions = ''
         error_log = 'stderr'
         log_errors = on

@@ -239,7 +239,7 @@ in {
     };
 
     environment.sessionVariables.LD_LIBRARY_PATH =
-      lib.optional cfg.jack.enable "${cfg.package.jack}/lib";
+      lib.mkIf cfg.jack.enable [ "${cfg.package.jack}/lib" ];
 
     users = lib.mkIf cfg.systemWide {
       users.pipewire = {
@@ -251,6 +251,8 @@ in {
         ] ++ lib.optional config.security.rtkit.enable "rtkit";
         description = "Pipewire system service user";
         isSystemUser = true;
+        home = "/var/lib/pipewire";
+        createHome = true;
       };
       groups.pipewire.gid = config.ids.gids.pipewire;
     };
