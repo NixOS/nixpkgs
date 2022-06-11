@@ -51,6 +51,11 @@ in {
 
   imports = [
     (mkAliasOptionModule [ "services" "compton" ] [ "services" "picom" ])
+    (mkRemovedOptionModule [ "services" "picom" "refreshRate" ] ''
+      This option corresponds to `refresh-rate`, which has been unused
+      since picom v6 and was subsequently removed by upstream.
+      See https://github.com/yshui/picom/commit/bcbc410
+    '')
   ];
 
   options.services.picom = {
@@ -235,15 +240,6 @@ in {
       '';
     };
 
-    refreshRate = mkOption {
-      type = types.ints.unsigned;
-      default = 0;
-      example = 60;
-      description = ''
-       Screen refresh rate (0 = automatically detect).
-      '';
-    };
-
     settings = with types;
     let
       scalar = oneOf [ bool int float str ]
@@ -306,7 +302,6 @@ in {
       # other options
       backend          = cfg.backend;
       vsync            = cfg.vSync;
-      refresh-rate     = cfg.refreshRate;
     };
 
     systemd.user.services.picom = {
