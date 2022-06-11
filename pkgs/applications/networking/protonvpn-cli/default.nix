@@ -3,6 +3,7 @@
 , pythonOlder
 , fetchFromGitHub
 , protonvpn-nm-lib
+, dbus-python
 , pythondialog
 , dialog
 }:
@@ -23,6 +24,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     protonvpn-nm-lib
+    dbus-python
     pythondialog
     dialog
   ];
