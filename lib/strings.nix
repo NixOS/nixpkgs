@@ -294,6 +294,21 @@ rec {
       map f (stringToCharacters s)
     );
 
+  /* Convert char to ascii value, must be in printable range
+
+     Type: charToInt :: string -> int
+
+     Example:
+       charToInt "A"
+       => 65
+       charToInt "("
+       => 40
+
+  */
+  charToInt = let
+    table = import ./ascii-table.nix;
+  in c: builtins.getAttr c table;
+
   /* Escape occurrence of the elements of `list` in `string` by
      prefixing it with a backslash.
 
