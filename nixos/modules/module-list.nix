@@ -516,9 +516,15 @@
   ./services/mail/roundcube.nix
   ./services/mail/sympa.nix
   ./services/mail/nullmailer.nix
-  ./services/matrix/matrix-synapse.nix
+  ./services/matrix/appservice-discord.nix
+  ./services/matrix/appservice-irc.nix
+  ./services/matrix/conduit.nix
+  ./services/matrix/dendrite.nix
+  ./services/matrix/mautrix-facebook.nix
+  ./services/matrix/mautrix-telegram.nix
   ./services/matrix/mjolnir.nix
   ./services/matrix/pantalaimon.nix
+  ./services/matrix/synapse.nix
   ./services/misc/ananicy.nix
   ./services/misc/airsonic.nix
   ./services/misc/ankisyncd.nix
@@ -537,7 +543,6 @@
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/confd.nix
-  ./services/misc/dendrite.nix
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
   ./services/misc/duckling.nix
@@ -580,11 +585,6 @@
   ./services/misc/libreddit.nix
   ./services/misc/lifecycled.nix
   ./services/misc/mame.nix
-  ./services/misc/matrix-appservice-discord.nix
-  ./services/misc/matrix-appservice-irc.nix
-  ./services/misc/matrix-conduit.nix
-  ./services/misc/mautrix-facebook.nix
-  ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
   ./services/misc/metabase.nix

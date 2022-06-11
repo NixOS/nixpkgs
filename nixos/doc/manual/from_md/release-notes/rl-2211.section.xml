@@ -108,6 +108,12 @@
           <literal>(with foo; isPower &amp;&amp; is32bit &amp;&amp; isBigEndian)</literal>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          PHP 7.4 is no longer supported due to upstream not supporting
+          this version for the entire lifecycle of the 22.11 release.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-notable-changes">

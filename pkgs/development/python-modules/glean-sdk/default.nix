@@ -63,6 +63,6 @@ buildPythonPackage rec {
     description = "Telemetry client libraries and are a part of the Glean project";
     homepage = "https://mozilla.github.io/glean/book/index.html";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ kvark ];
+    maintainers = [];
   };
 }
