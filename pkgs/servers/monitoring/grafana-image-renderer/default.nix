@@ -25,7 +25,7 @@ mkYarnPackage rec {
     runHook preBuild
 
     pushd deps/renderer
-    npm run build
+    yarn run build
     popd
 
     runHook postBuild
