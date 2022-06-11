@@ -9025,6 +9025,8 @@ with pkgs;
 
   tinyssh = callPackage ../tools/networking/tinyssh { };
 
+  tinystatus = callPackage ../tools/networking/tinystatus { };
+
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh {});
 
   openssh = opensshPackages.openssh.override {
@@ -26923,11 +26925,12 @@ with pkgs;
 
   gosmore = callPackage ../applications/misc/gosmore { stdenv = gcc10StdenvCompat; };
 
-  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel {
-    inherit (darwin) IOKit;
-  };
+  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
 
-  gpsbabel-gui = libsForQt5.callPackage ../applications/misc/gpsbabel/gui.nix { };
+  gpsbabel-gui = gpsbabel.override {
+    withGUI = true;
+    withDoc = true;
+  };
 
   gpscorrelate = callPackage ../applications/misc/gpscorrelate { };
 
