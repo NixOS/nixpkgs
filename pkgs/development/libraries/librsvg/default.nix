@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "librsvg";
-  version = "2.54.3";
+  version = "2.54.4";
 
   outputs = [ "out" "dev" "installedTests" ] ++ lib.optionals withIntrospection [
     "devdoc"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "ZhWPLvRt3iYAJoRsTaEC5KndTlKTAQ8wlJxswm3W7+g=";
+    sha256 = "6hUqJD9qQ8DgNqKMcN4/y83qVmTGgRx4WSvCKezCSDM=";
   };
 
   cargoVendorDir = "vendor";
