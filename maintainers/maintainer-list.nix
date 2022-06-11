@@ -14801,4 +14801,11 @@
     github = "npatsakula";
     githubId = 23001619;
   };
+  winny = {
+    name = "Winston Weinert";
+    email = "nixpkgs@winny.tech";
+    matrix = "@winny:matrix.org";
+    github = "winny-";
+    githubId = 3893828;
+  };
 }

@@ -35445,4 +35445,6 @@ with pkgs;
   honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
 
   mictray = callPackage ../tools/audio/mictray { };
+
+  hw-probe = callPackage ../tools/system/hw-probe { };
 }
