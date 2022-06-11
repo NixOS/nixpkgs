@@ -197,6 +197,7 @@
   ./programs/npm.nix
   ./programs/noisetorch.nix
   ./programs/oblogout.nix
+  ./programs/openvpn3.nix
   ./programs/pantheon-tweaks.nix
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
