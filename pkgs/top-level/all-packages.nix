@@ -21848,6 +21848,8 @@ with pkgs;
 
   hiawatha = callPackage ../servers/http/hiawatha {};
 
+  hoard = callPackage ../tools/misc/hoard { inherit (darwin) Security; };
+
   home-assistant = callPackage ../servers/home-assistant { };
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
