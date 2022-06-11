@@ -28,21 +28,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ babashka cacert git jdk nodejs clojure ];
-
-  configurePhase = ''
-    runHook preConfigure
-
-    mkdir -p .m2
-    substituteInPlace deps.edn --replace ':paths' ':mvn/local-repo "./.m2" :paths'
-    substituteInPlace bb.edn --replace ':paths' ':mvn/local-repo "./.m2" :paths'
-
-    runHook postConfigure
-  '';
-
+  GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt";
+  SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt";
   buildPhase = ''
     runHook preBuild
     export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
     export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+    mkdir -p .m2
+    substituteInPlace deps.edn --replace ':paths' ':mvn/local-repo "./.m2" :paths'
+    substituteInPlace bb.edn --replace ':paths' ':mvn/local-repo "./.m2" :paths'
     export DEPS_CLJ_TOOLS_DIR=${clojure}
     export DEPS_CLJ_TOOLS_VERSION=${clojure.version}
     mkdir .cpcache .gitlibs
