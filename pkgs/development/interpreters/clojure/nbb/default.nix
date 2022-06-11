@@ -67,12 +67,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    simple = runCommand "${pname}-test" {} ''
-      [ $(${nbb}/bin/nbb -e '(+ 1 2)') = '3' ]
-      touch $out
-    '';
-  };
+  doInstallCheck = true;
+  
+  installCheckPhase = ''
+    [ $($out/bin/nbb -e '(+ 1 2)') = '3' ]
+  '';
 
   enableParallelBuilding = true;
 
