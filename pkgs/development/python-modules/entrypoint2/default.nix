@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "entrypoint2";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Z+kG9q2VjYP0i07ewo192CZw6SYZiPa0prY6vJ+zvlY=";
+    sha256 = "sha256-/At/57IazatHpYWrlAfKflxPlstoiFddtrDOuR8OEFo=";
   };
 
   pythonImportsCheck = [ "entrypoint2" ];
