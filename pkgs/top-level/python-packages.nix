@@ -2069,6 +2069,8 @@ in {
 
   daemonocle = callPackage ../development/python-modules/daemonocle { };
 
+  dalle-mini = callPackage ../development/python-modules/dalle-mini { };
+
   daphne = callPackage ../development/python-modules/daphne { };
 
   dasbus = callPackage ../development/python-modules/dasbus { };
