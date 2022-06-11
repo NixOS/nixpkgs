@@ -71,6 +71,13 @@
           <link linkend="opt-services.persistent-evdev.enable">services.persistent-evdev</link>.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
+          the CLI client for ExpressVPN. Available as
+          <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">

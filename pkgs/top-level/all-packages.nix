@@ -392,6 +392,8 @@ with pkgs;
 
   evans = callPackage ../development/tools/evans { };
 
+  expressvpn = callPackage ../applications/networking/expressvpn { };
+
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
 
   frugal = callPackage ../development/tools/frugal { };
