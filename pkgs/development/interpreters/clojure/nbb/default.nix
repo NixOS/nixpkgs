@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     [ $($out/bin/nbb -e '(+ 1 2)') = '3' ]
   '';
+  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   enableParallelBuilding = true;
 
