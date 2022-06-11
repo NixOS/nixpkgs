@@ -51,6 +51,13 @@ stdenv.mkDerivation rec {
     gtk3 # required by libnautilus-extension
   ];
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: nautilus-python-object.o:src/nautilus-python.h:61: multiple definition of
+  #     `_PyNautilusMenu_Type'; nautilus-python.o:src/nautilus-python.h:61: first defined here
+  # TODO: remove it once upstream fixes and releases:
+  #   https://gitlab.gnome.org/GNOME/nautilus-python/-/merge_requests/7
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   makeFlags = [
     "PYTHON_LIB_LOC=${python3}/lib"
   ];
