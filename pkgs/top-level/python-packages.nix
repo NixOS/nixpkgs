@@ -11671,6 +11671,8 @@ in {
 
   zope_size = callPackage ../development/python-modules/zope_size { };
 
+  zope-testbrowser = callPackage ../development/python-modules/zope-testbrowser { };
+
   zope_testing = callPackage ../development/python-modules/zope_testing { };
 
   zope_testrunner = callPackage ../development/python-modules/zope_testrunner { };
