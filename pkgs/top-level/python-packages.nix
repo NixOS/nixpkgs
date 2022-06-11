@@ -11034,6 +11034,8 @@ in {
 
   vpk = callPackage ../development/python-modules/vpk { };
 
+  vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
+
   vsts = callPackage ../development/python-modules/vsts { };
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
