@@ -40,8 +40,9 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    runHook preBuild
-
+    runHook preBuild    
+    export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
+    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     export DEPS_CLJ_TOOLS_DIR=${clojure}
     export DEPS_CLJ_TOOLS_VERSION=${clojure.version}
     mkdir .cpcache .gitlibs
@@ -71,7 +72,6 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     [ $($out/bin/nbb -e '(+ 1 2)') = '3' ]
   '';
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   enableParallelBuilding = true;
 
