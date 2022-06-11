@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "babashka";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hlpn83mmjvc4n7zkqlcbdjjm8v3qs1q56ywgsg0snqdqayw11yf";
+    sha256 = "OCcX3WcbhllQJFlr6lM46H0194JYuhOljdmuc3TG6WA";
   };
 
   nativeBuildInputs = [ makeWrapper ];
