@@ -15,7 +15,7 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.wait_for_unit("plikd")
 
     # Network test
-    machine.wait_for_open_port("8080")
+    machine.wait_for_open_port(8080)
     machine.succeed("curl --fail -v http://localhost:8080")
 
     # Application test
