@@ -1,17 +1,25 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+}:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "pgweb";
-  version = "0.11.7";
+  version = "0.11.11";
 
   src = fetchFromGitHub {
     owner = "sosedoff";
-    repo = pname;
+    repo = "pgweb";
     rev = "v${version}";
-    sha256 = "1df3vixxca80i040apbim80nqni94q882ykn3cglyccyl0iz59ix";
+    sha256 = "sha256-oKUmBrGxExppJ5y4fZOmMOT5XDMsyMvtE9czotdlMPM=";
   };
 
-  goPackagePath = "github.com/sosedoff/pgweb";
+  vendorSha256 = "sha256-Svy0aZKOGL0vrT058szlpS5t7NvzcyRCHRksdmdkckI=";
+
+  ldflags = [ "-s" "-w" ];
+
+  # Tests depend on a PostgreSQL service.
+  doCheck = false;
 
   meta = with lib; {
     description = "A web-based database browser for PostgreSQL";
@@ -19,7 +27,8 @@ buildGoPackage rec {
       A simple postgres browser that runs as a web server. You can view data,
       run queries and examine tables and indexes.
     '';
-    homepage = "https://sosedoff.github.io/pgweb/";
+    homepage = "https://sosedoff.github.io/pgweb";
+    changelog = "https://github.com/sosedoff/pgweb/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ zupo ];
   };
