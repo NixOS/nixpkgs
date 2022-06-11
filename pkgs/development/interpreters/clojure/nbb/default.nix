@@ -5,9 +5,11 @@
 , cacert
 , clojure
 , git
-, graalvm11-ce
+, jdk
 , nbb
 , nodejs
+, fetchMavenArtifact
+, fetchgit
 , fetchFromGitHub
 , makeWrapper
 , runCommand }:
@@ -53,11 +55,14 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = ''
+  installPhase = let
+    classp  = (import ./deps.nix { inherit fetchMavenArtifact fetchgit lib; }).makeClasspaths {};
+  in ''
     runHook preInstall
 
     makeWrapper '${nodejs}/bin/node' "$out/bin/nbb" \
-    --add-flags "$out/lib/nbb_main.js"
+    --add-flags "$out/lib/nbb_main.js" \
+    --add-flags "--classpath ${classp}"
 
     runHook postInstall
   '';
