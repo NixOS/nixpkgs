@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , cryptography
 , pytestCheckHook
 , pythonOlder
