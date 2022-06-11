@@ -62,8 +62,6 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  doInstallCheck = true;
-
   passthru.tests = {
     simple = runCommand "${pname}-test" {} ''
       [ $(${nbb}/bin/nbb -e '(+ 1 2)') = '3' ]
