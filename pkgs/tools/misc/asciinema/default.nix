@@ -2,14 +2,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "asciinema";
-  version = "2.1.0";
+  version = "2.2.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
     rev = "v${version}";
-    sha256 = "1alcz018jrrpasrmgs8nw775a6pf62xq2xgs54c4mb396prdqy4x";
+    sha256 = "sha256-ioSNd0Fjk2Fp05lk3HeokIjNYGU0jQEaIDfcFB18mV0=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/pty_test.py \
+      --replace "python3" "${python3Packages.python}/bin/python"
+  '';
 
   checkInputs = [ glibcLocales python3Packages.nose ];
 
