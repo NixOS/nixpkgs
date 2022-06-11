@@ -2,12 +2,12 @@ Since Linux 4.7, the enum ieee80211_band is no longer used
 
 This shall cause no problem's since both enums ieee80211_band
 and nl80211_band were added in the same commit:
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit?id=13ae75b103e07304a34ab40c9136e9f53e06475c
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=13ae75b103e07304a34ab40c9136e9f53e06475c
 
 This patch refactors the references of IEEE80211_BAND_* to NL80211_BAND_*
 
 Reference:
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit?id=57fbcce37be7c1d2622b56587c10ade00e96afa3
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=57fbcce37be7c1d2622b56587c10ade00e96afa3
 
 --- a/src/wl/sys/wl_cfg80211_hybrid.c	2016-06-13 11:57:36.159340297 -0500
 +++ b/src/wl/sys/wl_cfg80211_hybrid.c	2016-06-13 11:58:18.442323435 -0500
