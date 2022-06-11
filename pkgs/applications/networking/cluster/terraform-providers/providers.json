@@ -883,10 +883,10 @@
     "owner": "OpenNebula",
     "provider-source-address": "registry.terraform.io/OpenNebula/opennebula",
     "repo": "terraform-provider-opennebula",
-    "rev": "v0.4.3",
-    "sha256": "sha256-mnRRMubaz5hin4kG5NK+GMtTPcsIJu6GS8PKDitNszg=",
-    "vendorSha256": null,
-    "version": "0.4.3"
+    "rev": "v0.5.0",
+    "sha256": "sha256-MJQQyU+NmLbIWSQY1BqWKY7q9RrF+HAFIr8AFNg2dWc=",
+    "vendorSha256": "sha256-NOIXn4RWMUz0invWRqAHxVWez7MD0DyWccwcKYz8jTY=",
+    "version": "0.5.0"
   },
   "openstack": {
     "owner": "terraform-provider-openstack",
