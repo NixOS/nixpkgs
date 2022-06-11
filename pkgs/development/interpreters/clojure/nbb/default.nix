@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ babashka cacert git graalvm11-ce nodejs clojure ];
+  buildInputs = [ babashka cacert git jdk nodejs clojure ];
 
   configurePhase = ''
     runHook preConfigure
