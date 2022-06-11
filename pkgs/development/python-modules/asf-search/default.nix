@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "asf_search";
-  version = "3.0.6";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
-    rev = "v${version}";
-    sha256 = "1jzah2l1db1p2mv59w9qf0x3a9hk6s5rzy0jnp2smsddvyxfwcyn";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-9fJp4P2cD11ppU80Av/aJOcqpaBwuYgdWWBTMo/HCeo=";
   };
 
   propagatedBuildInputs = [ pytz shapely importlib-metadata requests python-dateutil ];
