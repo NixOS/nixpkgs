@@ -1,0 +1,15 @@
+
+{
+ :deps {
+        com.github.seancorfield/honeysql {:git/tag "v2.2.891" :git/sha "796c734"}
+        org.clojure/clojure              {:mvn/version "1.11.1"}
+        }
+ :aliases {:nbb
+           {:replace-deps
+            {
+             com.github.seancorfield/honeysql {:git/tag "v2.2.891" :git/sha "796c734"}
+             org.clojure/clojure              {:mvn/version "1.11.1"}
+             }
+            }
+           }
+ }
