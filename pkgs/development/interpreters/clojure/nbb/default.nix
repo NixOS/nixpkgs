@@ -5,7 +5,7 @@
 , cacert
 , clojure
 , git
-, jdk
+, graalvm11-ce
 , nbb
 , nodejs
 , fetchMavenArtifact
@@ -27,11 +27,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ babashka cacert git jdk nodejs clojure ];
+  buildInputs = [ babashka cacert git graalvm11-ce nodejs clojure ];
   GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt";
   SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt";
   buildPhase = ''
     runHook preBuild
+    export JAVA_HOME="${graalvm11-ce}"
     export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
     export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     mkdir -p .m2
