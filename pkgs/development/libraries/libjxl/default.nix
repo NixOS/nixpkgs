@@ -78,15 +78,18 @@ stdenv.mkDerivation rec {
   # conclusively in its README or otherwise; they can best be determined
   # by checking the CMake output for "Could NOT find".
   buildInputs = [
-    brotli
     giflib
     gperftools # provides `libtcmalloc`
-    libhwy
     libjpeg
     libpng
     libwebp
     openexr
     zlib
+  ];
+
+  propagatedBuildInputs = [
+    brotli
+    libhwy
   ];
 
   cmakeFlags = [
