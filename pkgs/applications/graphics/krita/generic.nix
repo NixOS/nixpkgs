@@ -54,10 +54,8 @@ mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
   ];
 
-  postInstall = ''
-    for i in $out/bin/*; do
-      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
-    done
+  preInstall = ''
+    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
 
   meta = with lib; {
