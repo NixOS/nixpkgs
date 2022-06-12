@@ -1,17 +1,33 @@
-{ lib, buildPythonPackage, fetchPypi, EasyProcess, path, pytestCheckHook }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, EasyProcess
+, path
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "entrypoint2";
   version = "1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-/At/57IazatHpYWrlAfKflxPlstoiFddtrDOuR8OEFo=";
+    hash = "sha256-/At/57IazatHpYWrlAfKflxPlstoiFddtrDOuR8OEFo=";
   };
 
-  pythonImportsCheck = [ "entrypoint2" ];
+  checkInputs = [
+    EasyProcess
+    path
+    pytestCheckHook
+  ];
 
-  checkInputs = [ EasyProcess path pytestCheckHook ];
+  pythonImportsCheck = [
+    "entrypoint2"
+  ];
 
   meta = with lib; {
     description = "Easy to use command-line interface for python modules";
