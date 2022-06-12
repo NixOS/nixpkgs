@@ -2,18 +2,18 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, catch2
+, catch2_3
 }:
 
 stdenv.mkDerivation rec {
   pname = "jarowinkler-cpp";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "jarowinkler-cpp";
     rev = "v${version}";
-    hash = "sha256-6dIyCyoPs/2wHyGqlE+NC0pwz5ggS5edhN4Jbltx0jg=";
+    hash = "sha256-3/x0fyaDJTouBKbif0ALgMzht6HMEGHNw8g8zQlUcNk=";
   };
 
   nativeBuildInputs = [
@@ -21,15 +21,14 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = lib.optionals doCheck [
-    "-DRAPIDFUZZ_BUILD_TESTING=ON"
+    "-DJARO_WINKLER_BUILD_TESTING=ON"
   ];
 
   checkInputs = [
-    catch2
+    catch2_3
   ];
 
-  # uses unreleased Catch2 version 3
-  doCheck = false;
+  doCheck = true;
 
   meta = {
     description = "Fast Jaro and Jaro-Winkler distance";
