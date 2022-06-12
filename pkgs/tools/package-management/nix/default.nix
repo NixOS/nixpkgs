@@ -89,6 +89,14 @@ in lib.makeExtensible (self: {
   nix_2_9 = common {
     version = "2.9.1";
     sha256 = "sha256-qNL3lQPBsnStkru3j1ajN/H+knXI+X3dku8/dBfSw3g=";
+    patches = [
+      # add missing --git-dir flags
+      # remove once 2.9.2 is out
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/1a994cc35b33dcfd484e7a96be0e76e23bfb9029.patch";
+        sha256 = "sha256-7rDlqWRSVPijbvrTm4P+YykbMWyJryorXqGLEgg8/Wo=";
+      })
+    ];
   };
 
   stable = self.nix_2_9;
