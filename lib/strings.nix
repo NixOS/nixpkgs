@@ -185,6 +185,16 @@ rec {
   */
   makeBinPath = makeSearchPathOutput "bin" "bin";
 
+  /* Normalize path, removing extranous /s
+
+     Type: normalizePath :: string -> string
+
+     Example:
+       normalizePath "/a//b///c/"
+       => "/a/b/c/"
+  */
+  normalizePath = s: (builtins.foldl' (x: y: if y == "/" && hasSuffix "/" x then x else x+y) "" (splitString "" s));
+
   /* Depending on the boolean `cond', return either the given string
      or the empty string. Useful to concatenate against a bigger string.
 
