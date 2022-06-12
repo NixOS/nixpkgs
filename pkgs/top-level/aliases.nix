@@ -1504,6 +1504,7 @@ mapAliases ({
   qtcurve = libsForQt5.qtcurve; # Added 2020-11-07
   qtile-unwrapped = python3.pkgs.qtile; # Added 2023-05-12
   qtkeychain = throw "the qtkeychain attribute (qt4 version) has been removes, use the qt5 version: libsForQt5.qtkeychain"; # Added 2021-08-04
+  qt-mobility = throw "qt-mobility has been removed, because it depended on qt4"; # Added 2022-06-13
   qtscriptgenerator = throw "'qtscriptgenerator' (Qt4) is unmaintained upstream and not used in nixpkgs"; # Added 2022-06-14
   qtstyleplugin-kvantum-qt4 = throw "qtstyleplugin-kvantum-qt4 has been removed, because it depended on qt4"; # Added 2022-05-26
   quagga = throw "quagga is no longer maintained upstream"; # Added 2021-04-22

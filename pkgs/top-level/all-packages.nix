@@ -21909,8 +21909,6 @@ with pkgs;
 
   gusb = callPackage ../development/libraries/gusb { };
 
-  qt-mobility = callPackage ../development/libraries/qt-mobility { };
-
   qxmpp = libsForQt5.callPackage ../development/libraries/qxmpp { };
 
   gnet = callPackage ../development/libraries/gnet { };
