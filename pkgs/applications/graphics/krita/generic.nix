@@ -61,7 +61,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "A free and open source painting application";
     homepage = "https://krita.org/";
-    maintainers = with maintainers; [ abbradar sifmelcara ];
+    maintainers = with maintainers; [ abbradar sifmelcara nek0 ];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };
