@@ -2605,6 +2605,8 @@ with pkgs;
 
   aws_mturk_clt = callPackage ../tools/misc/aws-mturk-clt { };
 
+  awsls = callPackage ../tools/admin/awsls { };
+
   awstats = callPackage ../tools/system/awstats { };
 
   awsweeper = callPackage ../tools/admin/awsweeper { };
@@ -9061,6 +9063,8 @@ with pkgs;
   inherit (callPackages ../tools/networking/openvpn {})
     openvpn_24
     openvpn;
+
+  openvpn3 = callPackage ../tools/networking/openvpn3 { };
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
@@ -16412,7 +16416,9 @@ with pkgs;
 
   tflint = callPackage ../development/tools/analysis/tflint { };
 
-  tfsec = callPackage ../development/tools/analysis/tfsec { };
+  tfsec = callPackage ../development/tools/analysis/tfsec {
+    buildGoModule = buildGo118Module;
+  };
 
   todoist = callPackage ../applications/misc/todoist { };
 
