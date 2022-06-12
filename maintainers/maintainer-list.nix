@@ -9123,6 +9123,12 @@
     githubId = 166791;
     name = "Neil Mayhew";
   };
+  nek0 = {
+    email = "nek0@nek0.eu";
+    github = "nek0";
+    githubId = 1859691;
+    name = "Amedeo Molnár";
+  };
   nelsonjeppesen = {
     email = "nix@jeppesen.io";
     github = "NelsonJeppesen";
