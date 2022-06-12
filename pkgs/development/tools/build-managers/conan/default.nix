@@ -31,6 +31,11 @@ let newPython = python3.override {
       disabledTests = [
         "test_ec_verify_should_return_false_if_signature_invalid"
       ];
+      meta = oldAttrs.meta // {
+        knownVulnerabilities = [
+          "CVE-2022-29217"
+        ];
+      };
     });
     distro = super.distro.overridePythonAttrs (oldAttrs: rec {
       version = "1.5.0";
