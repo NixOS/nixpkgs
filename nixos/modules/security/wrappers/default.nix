@@ -202,21 +202,15 @@ in
   ###### implementation
   config = {
 
-    assertions = lib.concatLists (lib.mapAttrsToList
-      (name: opts: [
+    assertions = lib.mapAttrsToList
+      (name: opts:
         { assertion = opts.setuid || opts.setgid -> opts.capabilities == "";
           message = ''
             The security.wrappers.${name} wrapper is not valid:
                 setuid/setgid and capabilities are mutually exclusive.
           '';
         }
-        { assertion = lib.pathHasContext (toString opts.source) -> lib.pathExists opts.source;
-          message = ''
-            The security.wrappers.${name} wrapper is not valid:
-                the source store path '${opts.source}' does not exist.
-          '';
-        }
-      ]) wrappers);
+      ) wrappers;
 
     security.wrappers =
       let
@@ -279,5 +273,33 @@ in
             ln --symbolic "$wrapperDir" "${wrapperDir}"
           fi
         '';
+
+    ###### wrappers consistency checks
+    system.extraDependencies = lib.singleton (pkgs.runCommandLocal
+      "ensure-all-wrappers-paths-exist" { }
+      ''
+        # make sure we produce output
+        mkdir -p $out
+
+        echo -n "Checking that Nix store paths of all wrapped programs exist... "
+
+        declare -A wrappers
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v:
+          "wrappers['${n}']='${v.source}'") wrappers)}
+
+        for name in "''${!wrappers[@]}"; do
+          path="''${wrappers[$name]}"
+          if [[ "$path" =~ /nix/store ]] && [ ! -e "$path" ]; then
+            test -t 1 && echo -ne '\033[1;31m'
+            echo "FAIL"
+            echo "The path $path does not exist!"
+            echo 'Please, check the value of `security.wrappers."'$name'".source`.'
+            test -t 1 && echo -ne '\033[0m'
+            exit 1
+          fi
+        done
+
+        echo "OK"
+      '');
   };
 }
