@@ -5,6 +5,8 @@ args@
 , name ? ""
 , developerProgram ? false
 , runPatches ? []
+, autoPatchelfHook
+, autoAddOpenGLRunpathHook
 , addOpenGLRunpath
 , alsa-lib
 , expat
@@ -17,13 +19,20 @@ args@
 , glibc
 , gtk2
 , lib
+, libxkbcommon
+, libkrb5
+, krb5
 , makeWrapper
 , ncurses5
+, numactl
+, nss
 , perl
 , python27
+, pulseaudio
 , requireFile
 , stdenv
 , unixODBC
+, wayland
 , xorg
 , zlib
 }:
@@ -53,12 +62,61 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "doc" ];
 
-  nativeBuildInputs = [ perl makeWrapper addOpenGLRunpath ];
-  buildInputs = [ gdk-pixbuf ]; # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
-  runtimeDependencies = [
-    ncurses5 expat python27 zlib glibc
-    xorg.libX11 xorg.libXext xorg.libXrender xorg.libXt xorg.libXtst xorg.libXi xorg.libXext
-    gtk2 glib fontconfig freetype unixODBC alsa-lib
+  nativeBuildInputs = [
+    perl
+    makeWrapper
+    addOpenGLRunpath
+    autoPatchelfHook
+    autoAddOpenGLRunpathHook
+  ];
+  buildInputs = [
+    # To get $GDK_PIXBUF_MODULE_FILE via setup-hook
+    gdk-pixbuf
+
+    # For autoPatchelf
+    ncurses5
+    expat
+    python27
+    zlib
+    glibc
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXt
+    xorg.libXtst
+    xorg.libXi
+    xorg.libXext
+    xorg.libXdamage
+    xorg.libxcb
+    xorg.xcbutilimage
+    xorg.xcbutilrenderutil
+    xorg.xcbutilwm
+    xorg.xcbutilkeysyms
+    pulseaudio
+    libxkbcommon
+    libkrb5
+    krb5
+    gtk2
+    glib
+    fontconfig
+    freetype
+    numactl
+    nss
+    unixODBC
+    alsa-lib
+    wayland
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [
+    # This is the hardware-dependent userspace driver that comes from
+    # nvidia_x11 package. It must be deployed at runtime in
+    # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
+    # than pinned in runpath
+    "libcuda.so.1"
+
+    # The krb5 expression ships libcom_err.so.3 but cudatoolkit asks for the
+    # older
+    "libcom_err.so.2"
   ];
 
   unpackPhase = ''
@@ -190,7 +248,7 @@ stdenv.mkDerivation rec {
 
   preFixup =
     let rpath = lib.concatStringsSep ":" [
-      (lib.makeLibraryPath (runtimeDependencies ++ [ "$lib" "$out" "$out/nvvm" ]))
+      (lib.makeLibraryPath (buildInputs ++ [ "$lib" "$out" "$out/nvvm" ]))
       "${stdenv.cc.cc.lib}/lib64"
       "$out/jre/lib/amd64/jli"
       "$out/lib64"
