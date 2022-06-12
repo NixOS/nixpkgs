@@ -134,6 +134,10 @@ let
       orga = "Himujjal";
       repo = "tree-sitter-svelte";
     };
+    "tree-sitter-sql" = {
+      orga = "m-novikov";
+      repo = "tree-sitter-sql";
+    };
     "tree-sitter-vim" = {
       orga = "vigoux";
       repo = "tree-sitter-viml";

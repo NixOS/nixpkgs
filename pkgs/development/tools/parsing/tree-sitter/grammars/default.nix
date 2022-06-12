@@ -77,6 +77,7 @@
   tree-sitter-scheme = lib.importJSON ./tree-sitter-scheme.json;
   tree-sitter-scss = lib.importJSON ./tree-sitter-scss.json;
   tree-sitter-sparql = lib.importJSON ./tree-sitter-sparql.json;
+  tree-sitter-sql = lib.importJSON ./tree-sitter-sql.json;
   tree-sitter-supercollider = lib.importJSON ./tree-sitter-supercollider.json;
   tree-sitter-surface = lib.importJSON ./tree-sitter-surface.json;
   tree-sitter-svelte = lib.importJSON ./tree-sitter-svelte.json;
