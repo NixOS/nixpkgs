@@ -87,7 +87,7 @@
 , jackSupport ? stdenv.isLinux, libjack2
 , jemallocSupport ? true, jemalloc
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
-, pgoSupport ? (stdenv.isLinux && stdenv.isx86_64 && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , sndioSupport ? stdenv.isLinux, sndio
