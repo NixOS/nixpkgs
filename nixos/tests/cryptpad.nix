@@ -12,7 +12,7 @@ with lib;
 
   testScript = ''
     machine.wait_for_unit("cryptpad.service")
-    machine.wait_for_open_port("3000")
+    machine.wait_for_open_port(3000)
     machine.succeed("curl -L --fail http://localhost:3000/sheet")
   '';
 })

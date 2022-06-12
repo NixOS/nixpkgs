@@ -27,7 +27,7 @@
 let
   libcxx.dev = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr";
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
   version = "1.1.9";
 
@@ -43,10 +43,6 @@ stdenvNoCC.mkDerivation rec {
   # MoltenVK requires specific versions of its dependencies.
   # Pin them here except for cereal, which is four years old and has several CVEs.
   passthru = {
-    # The patch required to support DXVK may different from version to version. This should never
-    # be used except with DXVK, so there’s no package for it. To emphasize that this patch should
-    # never be used except with DXVK, `dxvk` provides a function for applying this patch.
-    dxvkPatch = ./dxvk-moltenvk-compat.patch;
     glslang = (glslang.overrideAttrs (old: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
@@ -55,7 +51,7 @@ stdenvNoCC.mkDerivation rec {
         hash = "sha256-YLn/Mxuk6mXPGtBBgfwky5Nl1TCAW6i2g+AZLzqVz+A=";
       };
     })).override {
-      inherit (passthru) spirv-headers spirv-tools;
+      inherit (finalAttrs.passthru) spirv-headers spirv-tools;
     };
     spirv-cross = spirv-cross.overrideAttrs (old: {
       cmakeFlags = (old.cmakeFlags or [ ]) ++ [
@@ -84,7 +80,7 @@ stdenvNoCC.mkDerivation rec {
         hash = "sha256-2Mr3HbhRslLpRfwHascl7e/UoPijhrij9Bjg3aCiqBM=";
       };
     })).override {
-      inherit (passthru) spirv-headers;
+      inherit (finalAttrs.passthru) spirv-headers;
     };
     vulkan-headers = vulkan-headers.overrideAttrs (old: {
       src = fetchFromGitHub {
@@ -99,7 +95,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "MoltenVK";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-5ie1IGzZqaYbciFnrBJ1/9V0LEuz7JsEOFXXkG3hJzg=";
   };
 
@@ -117,24 +113,24 @@ stdenvNoCC.mkDerivation rec {
     substituteInPlace MoltenVKShaderConverter/MoltenVKShaderConverter.xcodeproj/project.pbxproj \
       --replace @@sourceRoot@@ $(pwd) \
       --replace @@libcxx@@ "${libcxx.dev}" \
-      --replace @@glslang@@ "${passthru.glslang}" \
-      --replace @@spirv-cross@@ "${passthru.spirv-cross}" \
-      --replace @@spirv-tools@@ "${passthru.glslang.spirv-tools}" \
-      --replace @@spirv-headers@@ "${passthru.glslang.spirv-headers}"
+      --replace @@glslang@@ "${finalAttrs.passthru.glslang}" \
+      --replace @@spirv-cross@@ "${finalAttrs.passthru.spirv-cross}" \
+      --replace @@spirv-tools@@ "${finalAttrs.passthru.glslang.spirv-tools}" \
+      --replace @@spirv-headers@@ "${finalAttrs.passthru.glslang.spirv-headers}"
     substituteInPlace MoltenVK/MoltenVK.xcodeproj/project.pbxproj \
       --replace @@sourceRoot@@ $(pwd) \
       --replace @@libcxx@@ "${libcxx.dev}" \
       --replace @@cereal@@ "${cereal}" \
-      --replace @@spirv-cross@@ "${passthru.spirv-cross}" \
-      --replace @@vulkan-headers@@ "${passthru.vulkan-headers}"
+      --replace @@spirv-cross@@ "${finalAttrs.passthru.spirv-cross}" \
+      --replace @@vulkan-headers@@ "${finalAttrs.passthru.vulkan-headers}"
     substituteInPlace Scripts/create_dylib.sh \
       --replace @@sourceRoot@@ $(pwd) \
-      --replace @@glslang@@ "${passthru.glslang}" \
-      --replace @@spirv-tools@@ "${passthru.glslang.spirv-tools}" \
-      --replace @@spirv-cross@@ "${passthru.spirv-cross}"
+      --replace @@glslang@@ "${finalAttrs.passthru.glslang}" \
+      --replace @@spirv-tools@@ "${finalAttrs.passthru.glslang.spirv-tools}" \
+      --replace @@spirv-cross@@ "${finalAttrs.passthru.spirv-cross}"
     substituteInPlace Scripts/gen_moltenvk_rev_hdr.sh \
       --replace @@sourceRoot@@ $(pwd) \
-      --replace '$(git rev-parse HEAD)' ${src.rev}
+      --replace '$(git rev-parse HEAD)' ${finalAttrs.src.rev}
   '';
 
   dontConfigure = true;
@@ -197,4 +193,4 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.asl20;
     platforms = lib.platforms.darwin;
   };
-}
+})

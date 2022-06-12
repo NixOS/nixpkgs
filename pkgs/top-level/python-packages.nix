@@ -4743,6 +4743,8 @@ in {
 
   kmapper = callPackage ../development/python-modules/kmapper { };
 
+  kml2geojson = callPackage ../development/python-modules/kml2geojson { };
+
   kmsxx = toPythonModule (pkgs.kmsxx.override {
     withPython = true;
   });
@@ -5731,7 +5733,7 @@ in {
 
   neo = callPackage ../development/python-modules/neo { };
 
-  neo4j-driver = callPackage ../development/python-modules/neo4j-driver { };
+  neo4j = callPackage ../development/python-modules/neo4j { };
 
   nessclient = callPackage ../development/python-modules/nessclient { };
 
@@ -6447,11 +6449,15 @@ in {
 
   pencompy = callPackage ../development/python-modules/pencompy { };
 
+  phonopy = callPackage ../development/python-modules/phonopy { };
+
   pixcat = callPackage ../development/python-modules/pixcat { };
+
+  psrpcore = callPackage ../development/python-modules/psrpcore { };
 
   pyprecice = callPackage ../development/python-modules/pyprecice { };
 
-  phonopy = callPackage ../development/python-modules/phonopy { };
+  pypsrp = callPackage ../development/python-modules/pypsrp { };
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
@@ -6975,6 +6981,8 @@ in {
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
   py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
+
+  py-sneakers = callPackage ../development/python-modules/py-sneakers { };
 
   py-tes = callPackage ../development/python-modules/py-tes { };
 
@@ -8883,6 +8891,8 @@ in {
 
   pywemo = callPackage ../development/python-modules/pywemo { };
 
+  pywerview = callPackage ../development/python-modules/pywerview { };
+
   pywick = callPackage ../development/python-modules/pywick { };
 
   pywilight = callPackage ../development/python-modules/pywilight { };
@@ -9141,6 +9151,8 @@ in {
   requests-aws4auth = callPackage ../development/python-modules/requests-aws4auth { };
 
   requests-cache = callPackage ../development/python-modules/requests-cache { };
+
+  requests-credssp = callPackage ../development/python-modules/requests-credssp { };
 
   requests-hawk = callPackage ../development/python-modules/requests-hawk { };
 
@@ -11197,6 +11209,8 @@ in {
   winacl = callPackage ../development/python-modules/winacl { };
 
   winsspi = callPackage ../development/python-modules/winsspi { };
+
+  wktutils = callPackage ../development/python-modules/wktutils { };
 
   wled = callPackage ../development/python-modules/wled { };
 

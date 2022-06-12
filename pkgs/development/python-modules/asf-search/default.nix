@@ -1,21 +1,57 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytz, shapely, importlib-metadata, requests, python-dateutil }:
+{ lib
+, buildPythonPackage
+, dateparser
+, fetchFromGitHub
+, importlib-metadata
+, numpy
+, pytestCheckHook
+, python-dateutil
+, pythonOlder
+, pytz
+, requests
+, requests-mock
+, shapely
+, wktutils
+}:
 
 buildPythonPackage rec {
-  pname = "asf_search";
-  version = "3.0.6";
+  pname = "asf-search";
+  version = "3.2.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
-    rev = "v${version}";
-    sha256 = "1jzah2l1db1p2mv59w9qf0x3a9hk6s5rzy0jnp2smsddvyxfwcyn";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9fJp4P2cD11ppU80Av/aJOcqpaBwuYgdWWBTMo/HCeo=";
   };
 
-  propagatedBuildInputs = [ pytz shapely importlib-metadata requests python-dateutil ];
+  propagatedBuildInputs = [
+    dateparser
+    importlib-metadata
+    numpy
+    python-dateutil
+    pytz
+    requests
+    shapely
+    wktutils
+  ];
 
-  doCheck = false;
+  checkInputs = [
+    pytestCheckHook
+    requests-mock
+  ];
 
-  pythonImportsCheck = [ "asf_search" ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "WKTUtils==" "WKTUtils>="
+  '';
+
+  pythonImportsCheck = [
+    "asf_search"
+  ];
 
   meta = with lib; {
     description = "Python wrapper for the ASF SearchAPI";

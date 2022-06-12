@@ -4969,6 +4969,12 @@
     githubId = 1498782;
     name = "Jesse Haber-Kucharsky";
   };
+  hamburger1984 = {
+    email = "hamburger1984@gmail.com";
+    github = "hamburger1984";
+    githubId = 438976;
+    name = "Andreas Krohn";
+  };
   hamhut1066 = {
     email = "github@hamhut1066.com";
     github = "moredhel";
@@ -5960,6 +5966,12 @@
     githubId = 1667473;
     name = "Jethro Kuan";
   };
+  jevy = {
+    email = "jevin@quickjack.ca";
+    github = "jevy";
+    githubId = 110620;
+    name = "Jevin Maltais";
+  };
   jfb = {
     email = "james@yamtime.com";
     github = "tftio";
@@ -6702,6 +6714,13 @@
     github = "Unkn0wnCat";
     githubId = 8211181;
     name = "Kevin Kandlbinder";
+  };
+  kfears = {
+    email = "kfearsoff@gmail.com";
+    github = "KFearsoff";
+    githubId = 66781795;
+    matrix = "@kfears:matrix.org";
+    name = "KFears";
   };
   kfollesdal = {
     email = "kfollesdal@gmail.com";

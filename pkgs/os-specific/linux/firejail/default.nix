@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "firejail";
-  version = "0.9.68";
+  version = "0.9.70";
 
   src = fetchFromGitHub {
     owner = "netblue30";
     repo = "firejail";
     rev = version;
-    sha256 = "18yy1mykx7h78yj7sz729i3dlsrgi25m17m5x9gbrvsx7f87rw7j";
+    sha256 = "sha256-x1txt0uER66bZN6BD6c/31Zu6fPPwC9kl/3bxEE6Ce8=";
   };
 
   nativeBuildInputs = [
@@ -41,41 +41,6 @@ stdenv.mkDerivation rec {
     # By default fbuilder hardcodes the firejail binary to the install path.
     # On NixOS the firejail binary is a setuid wrapper available in $PATH.
     ./fbuilder-call-firejail-on-path.patch
-
-    # NixOS specific whitelist to resolve binary paths in user environment
-    # Fixes https://github.com/NixOS/nixpkgs/issues/170784
-    # Upstream fix https://github.com/netblue30/firejail/pull/5131
-    # Upstream hopefully fixed in later versions > 0.9.68
-   ./whitelist-nix-profile.patch
-
-    # Fix OpenGL support for various applications including Firefox
-    # Issue: https://github.com/NixOS/nixpkgs/issues/55191
-    # Upstream fix: https://github.com/netblue30/firejail/pull/5132
-    # Hopefully fixed upstream in version > 0.9.68
-    ./fix-opengl-support.patch
-
-    # Fix CVE-2022-31214 by patching in 4 commits from upstream
-    # https://seclists.org/oss-sec/2022/q2/188
-    (fetchpatch {
-      name = "CVE-2022-31214-patch1"; # "fixing CVE-2022-31214"
-      url  = "https://github.com/netblue30/firejail/commit/27cde3d7d1e4e16d4190932347c7151dc2a84c50.patch";
-      sha256 = "sha256-XXmnYCn4TPUvU43HifZDk4tEZQvOho9/7ehU6889nN4=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-31214-patch2"; # "shutdown testing"
-      url  = "https://github.com/netblue30/firejail/commit/04ff0edf74395ddcbbcec955279c74ed9a6c0f86.patch";
-      sha256 = "sha256-PV73hRlvYEQihuljSCQMNO34KJ0hDVFexhirpHcTK1I=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-31214-patch3"; # "CVE-2022-31214: fixing the fix"
-      url  = "https://github.com/netblue30/firejail/commit/dab835e7a0eb287822016f5ae4e87f46e1d363e7.patch";
-      sha256 = "sha256-6plBIliW/nLKR7TdGeB88eQ65JHEasnaRsP3HPXAFyA=";
-    })
-    (fetchpatch {
-      name = "CVE-2022-31214-patch4"; # "CVE-2022-31214: fixing the fix, one more time "
-      url  = "https://github.com/netblue30/firejail/commit/1884ea22a90d225950d81c804f1771b42ae55f54.patch";
-      sha256 = "sha256-inkpcdC5rl5w+CTAwwQVBOELlHTXb8UGlpU+8kMY95s=";
-    })
   ];
 
   prePatch = ''
