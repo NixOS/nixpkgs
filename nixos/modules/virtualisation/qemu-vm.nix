@@ -677,6 +677,7 @@ in
     virtualisation.persistentBootDisk =
       mkOption {
         default = false;
+        type = types.bool;
         description = ''
           If enabled, changes written to <filename>/boot</filename> will be
           synced back to <filename>$TMPDIR/disk.img</filename>.
