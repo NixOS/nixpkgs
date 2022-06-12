@@ -1,5 +1,5 @@
 { lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3
-, enableButteraugli ? false, libjxl, libhwy # Broken
+, enableButteraugli ? false, libjxl # Broken
 , enableVmaf ? true, libvmaf
 }:
 
@@ -19,10 +19,8 @@ stdenv.mkDerivation rec {
     yasm perl cmake pkg-config python3
   ];
 
-  buildInputs = lib.optionals enableButteraugli [
-    libjxl
-    libhwy
-  ] ++ lib.optional enableVmaf libvmaf;
+  propagatedBuildInputs = lib.optional enableButteraugli libjxl
+    ++ lib.optional enableVmaf libvmaf;
 
   preConfigure = ''
     # build uses `git describe` to set the build version
