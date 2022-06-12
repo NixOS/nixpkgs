@@ -2743,7 +2743,6 @@ broken-packages:
   - joy-rewrite
   - jpeg
   - jsaddle-clib
-  - jsaddle-warp
   - jsaddle-wkwebview
   - js-good-parts
   - json2
