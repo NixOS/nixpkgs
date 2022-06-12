@@ -63,20 +63,22 @@ pythonRelaxDepsHook() {
     local -r pkg_name="${pname//[^[:alnum:].]/_}-$version"
     local -r unpack_dir="unpacked"
     local -r metadata_file="$unpack_dir/$pkg_name/$pkg_name.dist-info/METADATA"
-    local -r wheel=$(printf "$pkg_name"*".whl")
 
-    @pythonInterpreter@ -m wheel unpack --dest "$unpack_dir" "$wheel"
-    rm -rf "$wheel"
+    # We generally shouldn't have multiple wheel files, but let's be safer here
+    for wheel in "$pkg_name"*".whl"; do
+        @pythonInterpreter@ -m wheel unpack --dest "$unpack_dir" "$wheel"
+        rm -rf "$wheel"
 
-    _pythonRelaxDeps "$metadata_file"
-    _pythonRemoveDeps "$metadata_file"
+        _pythonRelaxDeps "$metadata_file"
+        _pythonRemoveDeps "$metadata_file"
 
-    if (( "${NIX_DEBUG:-0}" >= 1 )); then
-        echo "pythonRelaxDepsHook: resulting METADATA:"
-        cat "$unpack_dir/$pkg_name/$pkg_name.dist-info/METADATA"
-    fi
+        if (( "${NIX_DEBUG:-0}" >= 1 )); then
+            echo "pythonRelaxDepsHook: resulting METADATA for '$wheel':"
+            cat "$unpack_dir/$pkg_name/$pkg_name.dist-info/METADATA"
+        fi
 
-    @pythonInterpreter@ -m wheel pack "$unpack_dir/$pkg_name"
+        @pythonInterpreter@ -m wheel pack "$unpack_dir/$pkg_name"
+    done
 
     popd
 }
