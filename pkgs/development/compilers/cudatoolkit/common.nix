@@ -107,6 +107,19 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
+  # Prepended to runpaths by autoPatchelf.
+  # The order inherited from older rpath preFixup code
+  runtimeDependencies = [
+    (placeholder "lib")
+    (placeholder "out")
+    "${placeholder "out"}/nvvm"
+    # Is it not handled by autoPatchelf automatically?
+    "${lib.getLib stdenv.cc.cc}/lib64"
+    "${placeholder "out"}/jre/lib/amd64/jli"
+    "${placeholder "out"}/lib64"
+    "${placeholder "out"}/nvvm/lib64"
+  ];
+
   autoPatchelfIgnoreMissingDeps = [
     # This is the hardware-dependent userspace driver that comes from
     # nvidia_x11 package. It must be deployed at runtime in
@@ -116,6 +129,8 @@ stdenv.mkDerivation rec {
 
     # The krb5 expression ships libcom_err.so.3 but cudatoolkit asks for the
     # older
+    # This dependency is asked for by target-linux-x64/CollectX/RedHat/x86_64/libssl.so.10
+    # - do we even want to use nvidia-shipped libssl?
     "libcom_err.so.2"
   ];
 
@@ -247,47 +262,16 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup =
-    let rpath = lib.concatStringsSep ":" [
-      (lib.makeLibraryPath (buildInputs ++ [ "$lib" "$out" "$out/nvvm" ]))
+    let rpath = lib.makeLibraryPath [
+      "$lib"
+      "$out"
+      "$out/nvvm"
       "${stdenv.cc.cc.lib}/lib64"
       "$out/jre/lib/amd64/jli"
       "$out/lib64"
       "$out/nvvm/lib64"
     ];
-    in
-    ''
-      while IFS= read -r -d $'\0' i; do
-        if ! isELF "$i"; then continue; fi
-        echo "patching $i..."
-        if [[ ! $i =~ \.so ]]; then
-          patchelf \
-            --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $i
-        fi
-        if [[ $i =~ libcudart ]]; then
-          patchelf --remove-rpath $i
-        else
-          patchelf --set-rpath "${rpath}" --force-rpath $i
-        fi
-      done < <(find $out $lib $doc -type f -print0)
-    '' + lib.optionalString (lib.versionAtLeast version "11") ''
-      for file in $out/target-linux-x64/*.so; do
-        echo "patching $file..."
-        patchelf --set-rpath "${rpath}:\$ORIGIN" $file
-      done
-    '';
-
-  # Set RPATH so that libcuda and other libraries in
-  # /run/opengl-driver(-32)/lib can be found. See the explanation in
-  # addOpenGLRunpath.  Don't try to figure out which libraries really need
-  # it, just patch all (but not the stubs libraries). Note that
-  # --force-rpath prevents changing RPATH (set above) to RUNPATH.
-  postFixup = ''
-    addOpenGLRunpath --force-rpath {$out,$lib}/lib/lib*.so
-  '' + lib.optionalString (lib.versionAtLeast version "11") ''
-    addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/*
-    addOpenGLRunpath $out/cuda_sanitizer_api/compute-sanitizer/x86/*
-    addOpenGLRunpath $out/target-linux-x64/*
-  '';
+    in "";
 
   # cuda-gdb doesn't run correctly when not using sandboxing, so
   # temporarily disabling the install check.  This should be set to true
