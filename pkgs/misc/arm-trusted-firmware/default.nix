@@ -17,7 +17,7 @@ let
             , platformCanUseHDCPBlob ? false  # set this to true if the platform is able to use hdcp.bin
             , extraMakeFlags ? []
             , extraMeta ? {}
-            , version ? "2.6"
+            , version ? "2.7"
             , ... } @ args:
 
            # delete hdcp.bin if either: the platform is thought to
@@ -33,7 +33,7 @@ let
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "v${version}";
-      sha256 = "sha256-qT9DdTvMcUrvRzgmVf2qmKB+Rb1WOB4p1rM+fsewGcg=";
+      sha256 = "sha256-WDJMMIWZHNqxxAKeHiZDxtPjfsfQAWsbYv+0o0PiJQs=";
     };
 
     patches = lib.optionals deleteHDCPBlobBeforeBuild [
