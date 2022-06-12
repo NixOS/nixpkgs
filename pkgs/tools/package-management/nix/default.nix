@@ -93,15 +93,5 @@ in lib.makeExtensible (self: {
 
   stable = self.nix_2_9;
 
-  # remember to backport updates to the stable branch!
-  unstable = lib.lowPrio (common rec {
-    version = "2.9";
-    suffix = "pre20220610_${lib.substring 0 7 src.rev}";
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "45ebaab66594692035f028796200a6db2b1fedaf";
-      sha256 = "sha256-82M5jKdGUxQBfYj+8nK2SvfVv4Uo0YrPxiuWV/fnvtI=";
-    };
-  });
+  unstable = self.stable;
 })
