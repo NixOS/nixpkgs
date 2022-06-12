@@ -90,18 +90,7 @@ in lib.makeExtensible (self: {
     version = "2.9.1";
     sha256 = "sha256-qNL3lQPBsnStkru3j1ajN/H+knXI+X3dku8/dBfSw3g=";
   };
+  unstable = self.nix_2_9;
 
-  stable = self.nix_2_8;
-
-  # remember to backport updates to the stable branch!
-  unstable = lib.lowPrio (common rec {
-    version = "2.9";
-    suffix = "pre20220610_${lib.substring 0 7 src.rev}";
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "45ebaab66594692035f028796200a6db2b1fedaf";
-      sha256 = "sha256-82M5jKdGUxQBfYj+8nK2SvfVv4Uo0YrPxiuWV/fnvtI=";
-    };
-  });
+  stable = self.nix_2_8; # fixed for release-22.05
 })
