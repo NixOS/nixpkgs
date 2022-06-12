@@ -1,27 +1,57 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, pythonOlder, isPy3k
-, colorlog, pyvmomi, requests, verboselogs
-, psutil, pyopenssl, setuptools
-, mock, pytest-mock, pytestCheckHook, qemu
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, colorlog
+, pyvmomi
+, requests
+, verboselogs
+, pyopenssl
+, setuptools
+, mock
+, pytest-mock
+, pytestCheckHook
+, qemu
 }:
 
 buildPythonPackage rec {
   pname = "cot";
   version = "2.2.1";
-  disabled = !isPy3k;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f4b3553415f90daac656f89d3e82e79b3d751793239bb173a683b4cc0ceb2635";
+    hash = "sha256-9LNVNBX5DarGVvidPoLnmz11F5Mjm7FzpoO0zAzrJjU=";
   };
 
-  propagatedBuildInputs = [ colorlog pyvmomi requests verboselogs pyopenssl setuptools ]
-  ++ lib.optional (pythonOlder "3.3") psutil;
+  propagatedBuildInputs = [
+    colorlog
+    pyvmomi
+    requests
+    verboselogs
+    pyopenssl
+    setuptools
+  ];
 
-  checkInputs = [ mock pytestCheckHook pytest-mock qemu ];
+  checkInputs = [
+    mock
+    pytestCheckHook
+    pytest-mock
+    qemu
+  ];
 
-  # Many tests require network access and/or ovftool (https://code.vmware.com/web/tool/ovf)
-  # try enabling these tests with ovftool once/if it is added to nixpkgs
+  prePatch = ''
+    # argparse is part of the standardlib
+    substituteInPlace setup.py \
+      --replace "'argparse'," ""
+  '';
+
   disabledTests = [
+    # Many tests require network access and/or ovftool (https://code.vmware.com/web/tool/ovf)
+    # try enabling these tests with ovftool once/if it is added to nixpkgs
     "HelperGenericTest"
     "TestCOTAddDisk"
     "TestCOTAddFile"
@@ -34,14 +64,15 @@ buildPythonPackage rec {
     "TestQCOW2"
     "TestRAW"
     "TestVMDKConversion"
+    # CLI test fails with AssertionError
+    "test_help"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_serial_fixup_invalid_host"
   ];
 
-  # argparse is part of the standardlib
-  prePatch = ''
-    substituteInPlace setup.py --replace "'argparse'," ""
-  '';
+  pythonImportsCheck = [
+    "COT"
+  ];
 
   meta = with lib; {
     description = "Common OVF Tool";

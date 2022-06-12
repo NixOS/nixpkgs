@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.17.3.0";
+  version = "0.17.3.2";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "1spsf7m3x4psp9s7mivr6x4886jnbq4i8ll2dl8bv5bsdhcd3pjm";
+    sha256 = "19sgcbli7fc1l6ms7ma6hcz1mmpbnd296lc8a19rl410acpv45zy";
     fetchSubmodules = true;
   };
 

@@ -1,6 +1,6 @@
-{ lib, buildGo117Module, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGo117Module rec {
+buildGoModule rec {
   pname = "nebula";
   version = "1.5.2";
 
@@ -12,8 +12,6 @@ buildGo117Module rec {
   };
 
   vendorSha256 = "5Yv2t5vdUNCcCo2KAm1xCkRVrt6gIasKHLqH7VVPDuU=";
-
-  doCheck = false;
 
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 

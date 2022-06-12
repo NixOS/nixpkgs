@@ -25,7 +25,8 @@ in {
         [ "/dev/sda", "/dev/nvme0n1" ];
       '';
       description = ''
-        Paths to disks that will be monitored.
+        Paths to the disks that will be monitored. Will autodiscover
+        all disks if none given.
       '';
     };
     maxInterval = mkOption {
@@ -41,13 +42,23 @@ in {
   serviceOpts = {
     serviceConfig = {
       AmbientCapabilities = [
+        "CAP_SYS_RAWIO"
         "CAP_SYS_ADMIN"
       ];
       CapabilityBoundingSet = [
+        "CAP_SYS_RAWIO"
         "CAP_SYS_ADMIN"
       ];
       DevicePolicy = "closed";
-      DeviceAllow = lib.mkForce cfg.devices;
+      DeviceAllow = lib.mkOverride 100 (
+        if cfg.devices != [] then
+          cfg.devices
+        else [
+          "block-blkext rw"
+          "block-sd rw"
+          "char-nvme rw"
+        ]
+      );
       ExecStart = ''
         ${pkgs.prometheus-smartctl-exporter}/bin/smartctl_exporter -config ${configFile}
       '';

@@ -113,9 +113,10 @@ in
         };
       };
       services.mysql-backup = {
-        description = "Mysql backup service";
+        description = "MySQL backup service";
         enable = true;
         serviceConfig = {
+          Type = "oneshot";
           User = cfg.user;
         };
         script = backupScript;

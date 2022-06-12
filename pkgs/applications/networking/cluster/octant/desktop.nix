@@ -1,4 +1,4 @@
-{ lib, stdenv, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3, undmg }:
+{ lib, stdenv, appimageTools, fetchurl, undmg }:
 
 let
   pname = "octant-desktop";
@@ -25,7 +25,6 @@ let
 
     profile = ''
       export LC_ALL=C.UTF-8
-      export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
     '';
 
     multiPkgs = null; # no 32bit needed

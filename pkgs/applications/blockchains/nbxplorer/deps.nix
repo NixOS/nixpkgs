@@ -1,18 +1,23 @@
 { fetchNuGet }: [
   (fetchNuGet {
+    pname = "Dapper";
+    version = "2.0.123";
+    sha256 = "15hxrchfgiqnmgf8fqhrf4pb4c8l9igg5qnkw9yk3rkagcqfkk91";
+  })
+  (fetchNuGet {
     pname = "DBTrie";
     version = "1.0.39";
     sha256 = "0kbvl3kf73hrh1w2n3d2wshlxpqsv1pwydhwv2wxigmvs70fn1xp";
   })
   (fetchNuGet {
     pname = "Microsoft.AspNetCore.JsonPatch";
-    version = "3.1.19";
-    sha256 = "1fh3k85k988jw35sf5hvm6jwmvzmslzpfvf3jk3sn3f3s6gyk0an";
+    version = "6.0.1";
+    sha256 = "0rsqng2b8a3zaha9c2x1195das5wwvmnz31xf14ancgha4lxq68r";
   })
   (fetchNuGet {
     pname = "Microsoft.AspNetCore.Mvc.NewtonsoftJson";
-    version = "3.1.19";
-    sha256 = "1nh08kjdc152m85ycwxn1q8r69f0l02p6cac6q57nzlyy5gyj2rs";
+    version = "6.0.1";
+    sha256 = "179b2774s68im71r32lv4nydcp586x86zggs8ml6jcfjrd9fs5b1";
   })
   (fetchNuGet {
     pname = "Microsoft.Azure.Amqp";
@@ -226,8 +231,8 @@
   })
   (fetchNuGet {
     pname = "Newtonsoft.Json";
-    version = "12.0.2";
-    sha256 = "0w2fbji1smd2y7x25qqibf1qrznmv4s6s0jvrbvr6alb7mfyqvh5";
+    version = "13.0.1";
+    sha256 = "0fijg0w6iwap8gvzyjnndds0q4b8anwxxvik7y8vgq97dram4srb";
   })
   (fetchNuGet {
     pname = "Newtonsoft.Json";
@@ -248,6 +253,11 @@
     pname = "NicolasDorier.StandardConfiguration";
     version = "1.0.0.18";
     sha256 = "0lgssxafv6cqlw21fb79fm0fcln0clgsk6zadcwrnjv9vampfw7b";
+  })
+  (fetchNuGet {
+    pname = "Npgsql";
+    version = "6.0.3";
+    sha256 = "1crzgi4dfbn8r381m9rvkma5xi2q7gqdzgxhc36hy3r0y63v1l8q";
   })
   (fetchNuGet {
     pname = "NuGet.Frameworks";
@@ -753,6 +763,11 @@
     pname = "System.Runtime.CompilerServices.Unsafe";
     version = "4.5.0";
     sha256 = "17labczwqk3jng3kkky73m0jhi8wc21vbl7cz5c0hj2p1dswin43";
+  })
+  (fetchNuGet {
+    pname = "System.Runtime.CompilerServices.Unsafe";
+    version = "6.0.0";
+    sha256 = "0qm741kh4rh57wky16sq4m0v05fxmkjjr87krycf5vp9f0zbahbc";
   })
   (fetchNuGet {
     pname = "System.Runtime.Extensions";

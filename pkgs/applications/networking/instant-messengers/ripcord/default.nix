@@ -48,7 +48,7 @@ mkDerivation rec {
     install -Dm755 ${src}/Ripcord $out/Ripcord
     patchelf --replace-needed libsodium.so.18 libsodium.so $out/Ripcord
     makeQtWrapper $out/Ripcord $out/bin/ripcord \
-      --run "cd $out" \
+      --chdir "$out" \
       --set FONTCONFIG_FILE "${fontsConf}" \
       --prefix LD_LIBRARY_PATH ":" "${xorg.libXcursor}/lib" \
       --prefix QT_XKB_CONFIG_ROOT ":" "${xorg.xkeyboardconfig}/share/X11/xkb" \

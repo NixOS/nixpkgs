@@ -5,22 +5,20 @@
 
 buildGoModule rec {
   pname = "rtsp-simple-server";
-  version = "0.17.8";
+  version = "0.17.17";
 
   src = fetchFromGitHub {
     owner = "aler9";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wjF7XTiUw5lPSmNiHvqUz4ZswpzLBoYF9S25dL8VPMU=";
+    hash = "sha256-JHqD9/meOOqR5Uds03/YbhfTVm3QApM64oydB0VqTxM=";
   };
 
-  vendorSha256 = "sha256-rntfePkwNGnyPjIzjLJhBYLTcndHP605Ah/xPcM6sRo=";
+  vendorSha256 = "sha256-8ULyCg36yVSM2En82ZiB+CLak1vQPykgs/i2mNhgebg=";
 
   # Tests need docker
   doCheck = false;
 
-  # In the future, we might need to switch to `main.Version`, considering:
-  # https://github.com/aler9/rtsp-simple-server/issues/503
   ldflags = [
     "-X github.com/aler9/rtsp-simple-server/internal/core.version=v${version}"
   ];

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lilypond";
-  version = "2.22.1";
+  version = "2.22.2";
 
   src = fetchurl {
     url = "http://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
-    sha256 = "sha256-cqwtVMMQwxQcC3gtTgvvkALVUZz0ZjJ1mx8D72lpzDA=";
+    sha256 = "sha256-3ekIVPp94QEvThMEpoYXrqmrMiky7AznaYT2DSaqI74=";
   };
 
   postInstall = ''

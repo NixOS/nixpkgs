@@ -70,11 +70,6 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    export HOME=$(mktemp -d)
-
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_NOLOGO=1
-
     nuget sources Add -Name nixos -Source "$PWD/nixos"
     nuget init "$nugetDeps" "$PWD/nixos"
 
@@ -121,5 +116,6 @@ stdenv.mkDerivation rec {
     # https://github.com/jellyfin/jellyfin/issues/610#issuecomment-537625510
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ nyanloutre minijackson purcell jojosch ];
+    platforms = dotnet-aspnetcore.meta.platforms;
   };
 }

@@ -100,6 +100,7 @@ in {
     change = nodes.configchange.config.system.build.toplevel;
     change2 = nodes.configchange2.config.system.build.toplevel;
   in ''
+    from typing import Dict, List
     base.start()
     base.wait_for_unit("network.target")
     base.wait_for_unit("machines.target")
@@ -109,8 +110,8 @@ in {
         for i in ['dynamic', 'teststop', 'restart', 'reload']:
             assert i in available, f"Expected machine {i} in `machinectl output!"
 
-        for i in range(136, 142):
-            base.wait_until_succeeds(f"ping -c3 10.231.{str(i)}.2 >&2")
+        for j in range(136, 142):
+            base.wait_until_succeeds(f"ping -c3 10.231.{str(j)}.2 >&2")
 
         base.fail("curl 10.231.136.2 -sSf --connect-timeout 10")
 
@@ -126,7 +127,7 @@ in {
         ).split('\n')
         base.succeed("sleep 10")
 
-        units = {}
+        units: Dict[str, List[str]] = {}
         for state in ['stopping', 'starting', 'restarting', 'reloading']:
             units[state] = []
             outline = f"{state} the following units: "

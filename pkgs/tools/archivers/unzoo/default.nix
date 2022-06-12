@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://github.com/museoa/unzoo/";
+    homepage = "https://github.com/museoa/unzoo/";
     description = "Manipulate archives of files in Zoo compressed form";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ AndersonTorres ];

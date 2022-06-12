@@ -4,8 +4,6 @@
 , ninja
 , gettext
 , gst_all_1
-, clutter-gtk
-, clutter-gst
 , python3Packages
 , shared-mime-info
 , pkg-config
@@ -21,6 +19,7 @@
 , grilo
 , grilo-plugins
 , libpeas
+, libhandy
 , adwaita-icon-theme
 , gnome-desktop
 , gsettings-desktop-schemas
@@ -30,11 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "totem";
-  version = "3.38.2";
+  version = "42.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/totem/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "/OVi4rJsvPwMZ4U43MgfncFc5g1aie5DWJB79jQwTEA=";
+    url = "mirror://gnome/sources/totem/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "SvBJHduV34szruOZ06UPnHqxfeiNOvYzVlZ8+I9X5qs=";
   };
 
   nativeBuildInputs = [
@@ -53,17 +52,16 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     grilo
-    clutter-gtk
-    clutter-gst
     totem-pl-parser
     grilo-plugins
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
+    (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
     libpeas
+    libhandy
     shared-mime-info
     gdk-pixbuf
     libxml2

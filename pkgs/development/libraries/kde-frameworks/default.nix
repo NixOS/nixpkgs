@@ -70,8 +70,8 @@ let
         mkDerivation = args:
           let
 
-            inherit (args) name;
-            inherit (srcs.${name}) src version;
+            inherit (args) pname;
+            inherit (srcs.${pname}) src version;
 
             outputs = args.outputs or [ "bin" "dev" "out" ];
             hasSeparateDev = lib.elem "dev" outputs;
@@ -82,7 +82,7 @@ let
             meta =
               let meta = args.meta or {}; in
               meta // {
-                homepage = meta.homepage or "http://www.kde.org";
+                homepage = meta.homepage or "https://kde.org";
                 license = meta.license or license;
                 maintainers = (meta.maintainers or []) ++ maintainers;
                 platforms = meta.platforms or lib.platforms.linux;
@@ -90,8 +90,7 @@ let
               };
 
           in mkDerivation (args // {
-            name = "${name}-${version}";
-            inherit meta outputs setupHook src version;
+            inherit pname meta outputs setupHook src version;
           });
 
       };

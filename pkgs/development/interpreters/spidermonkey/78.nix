@@ -15,7 +15,6 @@
 , rustc
 , rust-cbindgen
 , yasm
-, llvmPackages_12
 , nspr
 }:
 
@@ -35,6 +34,15 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/mozilla-team/firefox/commit/fd6847c9416f9eebde636e21d794d25d1be8791d.patch";
       sha256 = "02b7zwm6vxmk61aj79a6m32s1k5sr0hwm3q1j4v6np9jfyd10g1j";
     })
+
+    # Remove this when updating to 79 - The patches are already applied upstream
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1318905
+
+    # Combination of 3 changesets, modified to apply on 78:
+    # - https://hg.mozilla.org/mozilla-central/rev/06d7e1b6b7e7
+    # - https://hg.mozilla.org/mozilla-central/rev/ec48f15d085c
+    # - https://hg.mozilla.org/mozilla-central/rev/6803dda74d33
+    ./add-riscv64-support.patch
   ];
 
   outputs = [ "out" "dev" ];
@@ -43,7 +51,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoconf213
     cargo
-    llvmPackages_12.llvm # for llvm-objdump
+    rustc.llvmPackages.llvm # for llvm-objdump
     perl
     pkg-config
     python3
@@ -97,6 +105,10 @@ stdenv.mkDerivation rec {
   configurePlatforms = [ ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  # cc-rs insists on using -mabi=lp64 (soft-float) for riscv64,
+  # while we have a double-float toolchain
+  NIX_CFLAGS_COMPILE = lib.optionalString (with stdenv.hostPlatform; isRiscV && is64bit) "-mabi=lp64d";
 
   # Remove unnecessary static lib
   preFixup = ''

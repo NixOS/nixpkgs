@@ -6,7 +6,7 @@
 , fetchFromGitHub
 , freezegun
 , humanize
-, lark-parser
+, lark
 , parse-type
 , pysingleton
 , pytestCheckHook
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    lark-parser
+    lark
     click
     colorful
     tag-expressions

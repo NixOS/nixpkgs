@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A lightweight IDE for Clojure";
     homepage = "https://github.com/arthuredelstein/clooj";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
   };

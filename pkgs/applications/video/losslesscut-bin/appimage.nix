@@ -1,4 +1,4 @@
-{ appimageTools, lib, fetchurl, gtk3, gsettings-desktop-schemas, version }:
+{ appimageTools, lib, fetchurl, version, sha256 }:
 
 let
   pname = "losslesscut";
@@ -11,7 +11,7 @@ let
   src = fetchurl {
     url = "https://github.com/${owner}/${nameRepo}/releases/download/v${version}/${nameSource}";
     name = nameSource;
-    sha256 = "0aqz5ijl5japfzzbcdcd2mmihkb8b2fc2hs9kkm3211yb37c5ygv";
+    inherit sha256;
   };
   extracted = appimageTools.extractType2 {
     inherit name src;
@@ -21,7 +21,6 @@ in appimageTools.wrapType2 {
 
   profile = ''
     export LC_ALL=C.UTF-8
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
   extraPkgs = ps: appimageTools.defaultFhsEnvArgs.multiPkgs ps;

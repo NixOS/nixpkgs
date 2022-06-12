@@ -20,7 +20,7 @@ HACKAGE2NIX="${HACKAGE2NIX:-hackage2nix}"
 # See: https://github.com/NixOS/nixpkgs/pull/122023
 export LC_ALL=C.UTF-8
 
-extraction_derivation='with import ./. {}; runCommand "unpacked-cabal-hashes" { } "tar xf ${all-cabal-hashes} --strip-components=1 --one-top-level=$out"'
+extraction_derivation='with import ./. {}; runCommandLocal "unpacked-cabal-hashes" { } "tar xf ${all-cabal-hashes} --strip-components=1 --one-top-level=$out"'
 unpacked_hackage="$(nix-build -E "$extraction_derivation" --no-out-link)"
 config_dir=pkgs/development/haskell-modules/configuration-hackage2nix
 

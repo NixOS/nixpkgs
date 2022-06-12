@@ -2,7 +2,5 @@
 
 source "https://rubygems.org"
 
-git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
-
 # gem "rails"
-gem 'rrule', '0.4.2', require: false
+gem 'rrule', '0.4.4', require: false

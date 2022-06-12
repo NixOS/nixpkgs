@@ -11,8 +11,11 @@ stdenv.mkDerivation {
     sha256 = "1fw6bzydmnyh2g4x35mcbg0hypnxqhynivk4nakcsx7prr8zr3yh";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ocaml fontconfig ];
+  nativeBuildInputs = [ pkg-config ocaml ];
+  buildInputs = [ fontconfig ];
+
+  strictDeps = true;
+
   makeFlags = [
     "OCAML_STDLIB_DIR=$(out)/lib/ocaml/${lib.getVersion ocaml}/site-lib/"
     "OCAML_HAVE_OCAMLOPT=yes"

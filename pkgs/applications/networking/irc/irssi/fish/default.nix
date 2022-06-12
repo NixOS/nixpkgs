@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    tar xf ${irssi.src}
+    cp -a "${irssi.src}" "./${irssi.name}"
     configureFlags="$configureFlags --with-irssi-source=`pwd`/${irssi.name}"
 
     ./regen.sh
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     cp src/.libs/libfish.so $out/lib/irssi/modules
   '';
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gmp automake autoconf libtool openssl glib ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ gmp libtool openssl glib ];
 
   meta = {
     homepage = "https://github.com/falsovsky/FiSH-irssi";

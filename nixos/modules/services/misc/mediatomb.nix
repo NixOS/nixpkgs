@@ -217,7 +217,6 @@ in {
 
       package = mkOption {
         type = types.package;
-        example = literalExpression "pkgs.mediatomb";
         default = pkgs.gerbera;
         defaultText = literalExpression "pkgs.gerbera";
         description = ''
@@ -367,6 +366,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig.ExecStart = "${binaryCommand} --port ${toString cfg.port} ${interfaceFlag} ${configFlag} --home ${cfg.dataDir}";
       serviceConfig.User = cfg.user;
+      serviceConfig.Group = cfg.group;
     };
 
     users.groups = optionalAttrs (cfg.group == "mediatomb") {

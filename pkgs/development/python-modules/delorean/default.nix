@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, Babel
+, babel
 , humanize
 , python-dateutil
 , tzlocal
@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0d31ay7yq2w7xz7m3ssk5phjbm64b2k8hmgcif22719k29p7hrzy";
   };
 
-  propagatedBuildInputs = [ Babel humanize python-dateutil tzlocal ];
+  propagatedBuildInputs = [ babel humanize python-dateutil tzlocal ];
 
   pythonImportsCheck = [ "delorean" ];
 

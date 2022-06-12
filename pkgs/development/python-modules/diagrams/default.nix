@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "diagrams";
-  version = "0.20.0";
+  version = "0.21.1";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -22,13 +22,12 @@ buildPythonPackage rec {
     owner = "mingrammer";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lcqsy3bvlnlnakjysp8qjhy26bhkp1izi5dvzq2fpsffgxk4si4";
+    sha256 = "sha256-YoXV5ikkBCSVyGmzEqp+7JLy82d7z9sbwS+U/EN3BFk=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'jinja2 = "^2.10"' 'jinja2 = "*"' \
-      --replace 'graphviz = ">=0.13.2,<0.17.0"' 'graphviz = "*"'
+      --replace 'graphviz = ">=0.13.2,<0.20.0"' 'graphviz = "*"'
   '';
 
   preConfigure = ''

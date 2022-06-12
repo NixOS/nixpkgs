@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnupg-pkcs11-scd";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "https://github.com/alonbl/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1mfh9zjbahjd788rq1mzx009pd7p1sq62sbz586rd7szif7pkpgx";
+    sha256 = "sha256-Kb8p53gPkhxtOhH2COKwSDwbtRDFr6hHMJAkndV8Ukk=";
   };
 
   buildInputs = [ pkcs11helper pkg-config openssl ];

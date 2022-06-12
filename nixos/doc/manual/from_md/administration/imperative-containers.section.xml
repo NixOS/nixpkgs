@@ -14,8 +14,9 @@
 </programlisting>
   <para>
     This creates the container’s root directory in
-    <literal>/var/lib/containers/foo</literal> and a small configuration
-    file in <literal>/etc/containers/foo.conf</literal>. It also builds
+    <literal>/var/lib/nixos-containers/foo</literal> and a small
+    configuration file in
+    <literal>/etc/nixos-containers/foo.conf</literal>. It also builds
     the container’s initial system configuration and stores it in
     <literal>/nix/var/nix/profiles/per-container/foo/system</literal>.
     You can modify the initial configuration of the container on the

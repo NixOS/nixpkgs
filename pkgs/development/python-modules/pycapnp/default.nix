@@ -20,16 +20,18 @@ buildPythonPackage rec {
     sha256 = "1xi6df93ggkpmwckwbi356v7m32zv5qry8s45hvsps66dz438kmi";
   };
 
-  buildInputs = [ capnproto cython pkgconfig ];
+  nativeBuildInputs = [ cython pkgconfig ];
 
-  # Tests disabled due to dependency on jinja and various other libraries.
+  buildInputs = [ capnproto ];
+
+  # Tests depend on schema_capnp which fails to generate
   doCheck = false;
 
   pythonImportsCheck = [ "capnp" ];
 
   meta = with lib; {
+    homepage = "https://capnproto.github.io/pycapnp/";
     maintainers = with maintainers; [ cstrahan lukeadams ];
     license = licenses.bsd2;
-    homepage = "https://capnproto.github.io/pycapnp/";
   };
 }

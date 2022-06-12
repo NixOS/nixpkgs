@@ -1,5 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , pythonOlder
+, cython
 , h5py
 , matplotlib
 , numpy
@@ -14,17 +17,21 @@
 
 buildPythonPackage rec {
   pname = "sumo";
-  version = "2.2.5";
+  version = "2.3.0";
+  format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
-  # No tests in Pypi tarball
   src = fetchFromGitHub {
     owner = "SMTG-UCL";
     repo = "sumo";
-    rev = "v${version}";
-    sha256 = "1vwqyv215yf51j1278cn7l8mpqmy1grm9j7z3hxjlz4w65cff324";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-apI5Qt7Wrr4FXKL48iqqIQJDX2BIf3PPz/qIgSO7nuo=";
   };
+
+  nativeBuildInputs = [
+    cython
+  ];
 
   propagatedBuildInputs = [
     spglib
@@ -38,7 +45,23 @@ buildPythonPackage rec {
     castepxbin
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # slight disagreement between caastepxbin versions
+    "test_castep_phonon_read_bands"
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "castepxbin==0.1.0" "castepxbin>=0.1.0"
+  '';
+
+  pythonImportsCheck = [
+    "sumo"
+  ];
 
   meta = with lib; {
     description = "Toolkit for plotting and analysis of ab initio solid-state calculation data";

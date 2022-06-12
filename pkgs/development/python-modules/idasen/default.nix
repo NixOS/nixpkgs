@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "idasen";
-  version = "0.8.1";
+  version = "0.8.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "newAM";
     repo = "idasen";
     rev = "v${version}";
-    sha256 = "122bhbc3zqqm4x1x7a7mydvxxjrdssnqyxyqg0lbgxgn5rm8wbdd";
+    hash = "sha256-tjA7qgU3JYvwSdDH+aWrmKBX1Q9J5/UT7KjiTBxvKAE=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,9 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  pythonImportsCheck = [ "idasen" ];
+  pythonImportsCheck = [
+    "idasen"
+  ];
 
   meta = with lib; {
     description = "Python API and CLI for the ikea IDÅSEN desk";

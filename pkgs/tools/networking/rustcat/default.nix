@@ -25,5 +25,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/robiot/rustcat";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "rcat";
   };
 }

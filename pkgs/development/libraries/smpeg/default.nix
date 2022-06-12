@@ -1,7 +1,7 @@
 { lib, stdenv, fetchsvn, SDL, autoconf, automake, libtool, gtk2, m4, pkg-config, libGLU, libGL, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "smpeg-svn${version}";
+  pname = "smpeg-svn";
   version = "390";
 
   src = fetchsvn {
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     ./format.patch
     ./gcc6.patch
     ./libx11.patch
+    ./gtk.patch
   ];
 
   enableParallelBuilding = true;
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/smpeg-config \
       --prefix PATH ":" "${pkg-config}/bin" \
-      --prefix PKG_CONFIG_PATH ":" "${SDL.dev}/lib/pkgconfig"
+      --prefix PKG_CONFIG_PATH ":" "${lib.getDev SDL}/lib/pkgconfig"
   '';
 
   NIX_LDFLAGS = "-lX11";

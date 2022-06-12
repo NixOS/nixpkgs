@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, which, m4
-, protobuf, boost, zlib, curl, openssl, icu, jemalloc, libtool
+, protobuf, boost170, zlib, curl, openssl, icu, jemalloc, libtool
 , python2Packages, makeWrapper
 }:
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "rethinkdb" ];
 
-  buildInputs = [ protobuf boost zlib curl openssl icu ]
+  buildInputs = [ protobuf boost170 zlib curl openssl icu ]
     ++ lib.optional (!stdenv.isDarwin) jemalloc
     ++ lib.optional stdenv.isDarwin libtool;
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       query language that supports really useful queries like table
       joins and group by, and is easy to setup and learn.
     '';
-    homepage    = "http://www.rethinkdb.com";
+    homepage    = "https://rethinkdb.com";
     license     = lib.licenses.asl20;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ thoughtpolice bluescreen303 ];

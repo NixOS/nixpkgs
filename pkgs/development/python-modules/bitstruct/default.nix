@@ -1,17 +1,28 @@
-{ lib, buildPythonPackage, fetchPypi }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "bitstruct";
-  version = "8.12.1";
+  version = "8.14.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "45b2b932ce6681f5c6ce8cba39abdd423b579b0568c76fa48b1e09c88368ede7";
+    hash = "sha256-04ExvUR7avW49GTEh4eXyHpdnaHJW5NX4HHEJP3l8FU=";
   };
 
+  pythonImportsCheck = [
+    "bitstruct"
+  ];
+
   meta = with lib; {
-    homepage = "https://github.com/eerimoq/bitstruct";
     description = "Python bit pack/unpack package";
+    homepage = "https://github.com/eerimoq/bitstruct";
     license = licenses.mit;
     maintainers = with maintainers; [ jakewaksbaum ];
   };

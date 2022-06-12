@@ -17,12 +17,14 @@ stdenv.mkDerivation rec {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libfpx/files/libfpx-1.3.1_p6-gcc6.patch?id=f28a947813dbc0a1fd1a8d4a712d58a64c48ca01";
       sha256 = "032y8110zgnkdhkdq3745zk53am1x34d912rai8q70k3sskyq22p";
     })
+    # Pull upstream fix for -fno-common:
+    #  https://github.com/ImageMagick/libfpx/pull/1
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/ImageMagick/libfpx/commit/c32b340581ba6c88c5092f374f655c7579b598a6.patch";
+      sha256 = "1gbc0qb2ri1mj9r66wx0yn28fsr7zhhlyz2mwbica8wh34xijgz9";
+    })
   ];
-
-  # This dead code causes a duplicate symbol error in Clang so just remove it
-  postPatch = if stdenv.cc.isClang then ''
-    substituteInPlace jpeg/ejpeg.h --replace "int No_JPEG_Header_Flag" ""
-  '' else null;
 
   meta = with lib; {
     homepage = "http://www.imagemagick.org";

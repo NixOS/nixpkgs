@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchgit, libX11, libXScrnSaver, libXext, glib, dbus, pkg-config, systemd }:
+{ lib, stdenv, fetchFromGitHub, libX11, libXScrnSaver, libXext, glib, dbus, pkg-config, systemd }:
 
 stdenv.mkDerivation {
   pname = "lightum";
   version = "unstable-2014-06-07";
-  src = fetchgit {
-    url = "https://github.com/poliva/lightum";
+
+  src = fetchFromGitHub {
+    owner = "poliva";
+    repo = "lightum";
     rev = "123e6babe0669b23d4c1dfa5511088608ff2baa8";
-    sha256 = "01x24rcrkgksyvqpgkr9zafg3jgs8nqng8yf0hx0kbmcimar8dbp";
+    sha256 = "sha256-dzWUVY2srgk6BM6jZ7FF+snxnPopz3fx9nq+mVkmogc=";
   };
 
   buildInputs = [

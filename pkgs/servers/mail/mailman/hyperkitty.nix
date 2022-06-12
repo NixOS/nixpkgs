@@ -1,32 +1,9 @@
 { lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-
-# dependencies
-, defusedxml
-, django
-, django-gravatar2
-, django-haystack
-, django-mailman3
-, django-paintstore
-, django-q
-, django_compressor
-, django_extensions
-, djangorestframework
-, flufl_lock
-, mistune_2_0
-, networkx
-, psycopg2
-, python-dateutil
-, robot-detection
-
-# tests
-, beautifulsoup4
-, elasticsearch
-, mock
-, whoosh
+, python3
+, fetchpatch
 }:
+
+with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "HyperKitty";
@@ -40,9 +17,21 @@ buildPythonPackage rec {
     sha256 = "sha256-gmkiK8pIHfubbbxNdm/D6L2o722FptxYgINYdIUOn4Y=";
   };
 
+  patches = [
+    # FIXME: backport Python 3.10 support fix, remove for next release
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/551a44a76e46931fc5c1bcb341235d8f579820be.patch";
+      sha256 = "sha256-5XCrvyrDEqH3JryPMoOXSlVVDLQ+PdYBqwGYxkExdvk=";
+      includes = [ "hyperkitty/*" ];
+    })
+  ];
+
   postPatch = ''
     # isort is a development dependency
     sed -i '/isort/d' setup.py
+    # Fix mistune imports for mistune >= 2.0.0
+    # https://gitlab.com/mailman/hyperkitty/-/merge_requests/379
+    sed -i 's/mistune.scanner/mistune.util/' hyperkitty/lib/renderer.py
   '';
 
   propagatedBuildInputs = [
@@ -52,7 +41,7 @@ buildPythonPackage rec {
     django-mailman3
     django-q
     django_compressor
-    django_extensions
+    django-extensions
     djangorestframework
     flufl_lock
     mistune_2_0

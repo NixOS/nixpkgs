@@ -7,7 +7,7 @@
 let
 
   qt5Deps = pkgs: with pkgs.qt5; [ qtbase qtmultimedia ];
-  gnomeDeps = pkgs: with pkgs; [ gnome.zenity gtksourceview gnome.gnome-desktop gnome.libgnome-keyring webkitgtk ];
+  gnomeDeps = pkgs: with pkgs; [ gnome.zenity gtksourceview gnome-desktop gnome.libgnome-keyring webkitgtk ];
   xorgDeps = pkgs: with pkgs.xorg; [
     libX11 libXrender libXrandr libxcb libXmu libpthreadstubs libXext libXdmcp
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite

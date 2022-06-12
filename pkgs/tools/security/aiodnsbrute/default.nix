@@ -9,13 +9,13 @@
 
 buildPythonApplication rec {
   pname = "aiodnsbrute";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "blark";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fs8544kx7vwvc97zpg4rs3lmvnb4vwika5g952rv3bfx4rv3bpg";
+    sha256 = "sha256-cEpk71VoQJZfKeAZummkk7yjtXKSMndgo0VleYiMlWE=";
   };
 
   # https://github.com/blark/aiodnsbrute/pull/8

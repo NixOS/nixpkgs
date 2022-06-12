@@ -1,14 +1,16 @@
 { lib, stdenv, fetchurl, jre, unzip, runtimeShell }:
 
-stdenv.mkDerivation rec {
-  major = "14";
-  minor = "3";
-  version = "${major}.${minor}.0";
+let
+  major = "15";
+  minor = "0";
+  patch = "0";
+in stdenv.mkDerivation rec {
   pname = "umlet";
+  version = "${major}.${minor}.${patch}";
 
   src = fetchurl {
-    url = "http://www.umlet.com/umlet_${major}_${minor}/umlet-standalone-${version}.zip";
-    sha256 = "0jfyxjxsjx29xhs3fl0f574nyncmk9j5jp8zlgd401mcaznn9c7l";
+    url = "https://www.umlet.com/umlet_${major}_${minor}/umlet-standalone-${version}.zip";
+    sha256 = "sha256-gdvhqYGyrFuQhhrkF26wXb3TQLRCLm59/uSxTPmHdAE=";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -43,7 +45,8 @@ stdenv.mkDerivation rec {
       UMLet runs stand-alone or as Eclipse plug-in on Windows, macOS and
       Linux.
     '';
-    homepage = "http://www.umlet.com";
+    homepage = "https://www.umlet.com";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     maintainers = with maintainers; [ oxzi ];
     platforms = platforms.all;

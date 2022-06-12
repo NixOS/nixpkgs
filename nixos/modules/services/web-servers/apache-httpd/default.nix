@@ -370,6 +370,8 @@ let
       cat ${php.phpIni} > $out
       echo "$options" >> $out
     '';
+
+  mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
 in
 
 
@@ -657,7 +659,11 @@ in
           `services.httpd.virtualHosts.<name>.useACMEHost` are mutually exclusive.
         '';
       }
-    ];
+    ] ++ map (name: mkCertOwnershipAssertion {
+      inherit (cfg) group user;
+      cert = config.security.acme.certs.${name};
+      groups = config.users.groups;
+    }) dependentCertNames;
 
     warnings =
       mapAttrsToList (name: hostOpts: ''
@@ -704,20 +710,15 @@ in
 
     services.logrotate = optionalAttrs (cfg.logFormat != "none") {
       enable = mkDefault true;
-      paths.httpd = {
-        path = "${cfg.logDir}/*.log";
-        user = cfg.user;
-        group = cfg.group;
+      settings.httpd = {
+        files = "${cfg.logDir}/*.log";
+        su = "${cfg.user} ${cfg.group}";
         frequency = "daily";
-        keep = 28;
-        extraConfig = ''
-          sharedscripts
-          compress
-          delaycompress
-          postrotate
-            systemctl reload httpd.service > /dev/null 2>/dev/null || true
-          endscript
-        '';
+        rotate = 28;
+        sharedscripts = true;
+        compress = true;
+        delaycompress = true;
+        postrotate = "systemctl reload httpd.service > /dev/null 2>/dev/null || true";
       };
     };
 

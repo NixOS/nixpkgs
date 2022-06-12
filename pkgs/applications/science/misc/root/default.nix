@@ -9,6 +9,7 @@
 , gl2ps
 , glew
 , gsl
+, lapack
 , libX11
 , libXpm
 , libXft
@@ -19,6 +20,7 @@
 , llvm_9
 , lz4
 , xz
+, openblas
 , pcre
 , nlohmann_json
 , pkg-config
@@ -55,11 +57,13 @@ stdenv.mkDerivation rec {
     pcre
     zlib
     zstd
+    lapack
     libxml2
     llvm_9
     lz4
     xz
     gsl
+    openblas
     xxHash
     libAfterImage
     giflib
@@ -103,7 +107,7 @@ stdenv.mkDerivation rec {
 
     # Hardcode path to fix use with cmake
     sed -i cmake/scripts/ROOTConfig.cmake.in \
-      -e 'iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
+      -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
 
     patchShebangs build/unix/
   '' + lib.optionalString noSplash ''
@@ -116,7 +120,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Drpath=ON"
-    "-DCMAKE_CXX_STANDARD=17"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
@@ -153,6 +156,7 @@ stdenv.mkDerivation rec {
     "-Droot7=OFF"
     "-Dsqlite=OFF"
     "-Dssl=OFF"
+    "-Dtmva=ON"
     "-Dvdt=OFF"
     "-Dwebgui=OFF"
     "-Dxml=ON"
@@ -171,7 +175,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
       wrapProgram "$out/bin/$prog" \
-        --prefix PYTHONPATH : "$out/lib"
+        --set PYTHONPATH "$out/lib" \
+        --set ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH "$out/lib"
     done
   '';
 

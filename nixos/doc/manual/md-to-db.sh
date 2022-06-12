@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=channel:nixpkgs-unstable -i bash -p pandoc
+#! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/tarball/21.11 -i bash -p pandoc
 
 # This script is temporarily needed while we transition the manual to
 # CommonMark. It converts the .md files in the regular manual folder

@@ -60,7 +60,7 @@
       libraryHaskellDepends = [
         base binary bytestring containers ghc-prim ghci template-haskell
       ];
-      homepage = "http://github.com/ghcjs";
+      homepage = "https://github.com/ghcjs";
       license = lib.licenses.mit;
     }) {};
 
@@ -71,7 +71,7 @@
       version = "0.1.1.0";
       src = ./.;
       libraryHaskellDepends = [ base ghc-prim ];
-      homepage = "http://github.com/ghcjs";
+      homepage = "https://github.com/ghcjs";
       license = lib.licenses.mit;
     }) {};
 }

@@ -21,6 +21,7 @@ let
       manpage = "${getOutput "man" provider}/share/man/man1/${cmd}.1.gz";
     in runCommand "${cmd}-${provider.name}" {
       meta = {
+        mainProgram = cmd;
         priority = 10;
         platforms = lib.platforms.${stdenv.hostPlatform.parsed.kernel.name} or lib.platforms.all;
       };

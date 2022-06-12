@@ -10,22 +10,24 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "467";
+  version = "487";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
-    rev = "v${version}";
-    sha256 = "sha256-ijIOCabpnaK9ww1cR+HNpCOn8uSwSEuyLWwnT2ypdD4=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-4FYUIEk8KJO4nqONNpLUtxAMud3vdfl50zbKQxC5Hw4=";
   };
 
   nativeBuildInputs = [
     wrapQtAppsHook
+    python3Packages.mkdocs-material
   ];
 
   propagatedBuildInputs = with python3Packages; [
     beautifulsoup4
+    cbor2
     chardet
     cloudscraper
     html5lib
@@ -85,6 +87,7 @@ python3Packages.buildPythonPackage rec {
     # Move the hydrus module and related directories
     mkdir -p $out/${python3Packages.python.sitePackages}
     mv {hydrus,static} $out/${python3Packages.python.sitePackages}
+    mkdocs build -d help
     mv help $out/doc/
 
     # install the hydrus binaries

@@ -1,7 +1,21 @@
-{ lib, fetchurl, cups, libssh, libXpm, nx-libs, openldap, openssh
-, mkDerivation, qtbase, qtsvg, qtx11extras, qttools, phonon, pkg-config }:
+{ lib
+, fetchurl
+, cups
+, libssh
+, libXpm
+, nx-libs
+, openldap
+, openssh
+, qt5
+, qtbase
+, qtsvg
+, qtx11extras
+, qttools
+, phonon
+, pkg-config
+}:
 
-mkDerivation rec {
+qt5.mkDerivation rec {
   pname = "x2goclient";
   version = "4.1.2.2";
 
@@ -10,8 +24,24 @@ mkDerivation rec {
     sha256 = "yZUyZ8QPpnEZrZanO6yx8mYZbaIFnwzc0bjVGZQh0So=";
   };
 
-  buildInputs = [ cups libssh libXpm nx-libs openldap openssh
-                  qtbase qtsvg qtx11extras qttools phonon pkg-config ];
+  buildInputs = [
+    cups
+    libssh
+    libXpm
+    nx-libs
+    openldap
+    openssh
+    qtbase
+    qtsvg
+    qtx11extras
+    qttools
+    phonon
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    qt5.wrapQtAppsHook
+  ];
 
   postPatch = ''
      substituteInPlace src/onmainwindow.cpp --replace "/usr/sbin/sshd" "${openssh}/bin/sshd"
@@ -26,7 +56,7 @@ mkDerivation rec {
 
   installTargets = [ "install_client" "install_man" ];
 
-  qtWrapperArgs = [ "--suffix PATH : ${nx-libs}/bin:${openssh}/libexec" ];
+  qtWrapperArgs = [ "--suffix PATH : ${nx-libs}/bin:${openssh}/libexec" "--set QT_QPA_PLATFORM xcb" ];
 
   meta = with lib; {
     description = "Graphical NoMachine NX3 remote desktop client";

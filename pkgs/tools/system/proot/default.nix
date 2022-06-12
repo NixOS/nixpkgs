@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , talloc
 , pkg-config
 , libarchive
@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "proot";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     repo = "proot";
     owner = "proot-me";
     rev = "v${version}";
-    sha256 = "1ir3a7rp9rvpv9i8gjrkr383sqadgl7f9nflcrfg7q05bxapwiws";
+    sha256 = "sha256-89d1a5QBusra0vd3Ph0lQalXrblBwogi6bNgvvpQL+Q=";
   };
 
   postPatch = ''
@@ -26,13 +26,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libarchive talloc ] ++ lib.optional enablePython python3;
   nativeBuildInputs = [ pkg-config docutils ] ++ lib.optional enablePython swig;
-  patches = [
-    # without this patch the package does not build with python>3.7
-    (fetchpatch {
-      url = "https://github.com/proot-me/proot/pull/285.patch";
-      sha256= "1vncq36pr4v0h63fijga6zrwlsb0vb4pj25zxf1ni15ndxv63pxj";
-    })
-  ];
 
   enableParallelBuilding = true;
 

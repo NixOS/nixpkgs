@@ -40,6 +40,5 @@ stdenv.mkDerivation rec {
     license     = licenses.isc;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
-    repositories.git = "git://github.com/libass/libass.git";
   };
 }

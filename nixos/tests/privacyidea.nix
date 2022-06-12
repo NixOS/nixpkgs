@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ...} : rec {
     maintainers = [ fpletz ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     virtualisation.cores = 2;
 
     services.privacyidea = {

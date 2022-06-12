@@ -1,4 +1,5 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices }:
+
 rustPlatform.buildRustPackage rec {
   pname = "rebazel";
   version = "0.1.4";
@@ -11,6 +12,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-cBAm8LyNKEVJkhZJ+QZU5XtQutb1oNvad8xH70Bi2LM=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {
     description = "tool for expediting bazel build workflows";

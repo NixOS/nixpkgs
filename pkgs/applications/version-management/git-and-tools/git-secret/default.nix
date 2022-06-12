@@ -1,14 +1,11 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, git, gnupg, gawk }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "git-secret";
   version = "0.4.0";
-  repo = "git-secret";
-
-in stdenv.mkDerivation {
-  name = "${repo}-${version}";
 
   src = fetchFromGitHub {
-    inherit repo;
+    repo = "git-secret";
     owner = "sobolevn";
     rev = "v${version}";
     sha256 = "sha256-Mtuj+e/yCDr4XkmYkWUFJB3cqOT5yOMOq9P/QJV1S80=";

@@ -6,11 +6,15 @@
 , sniffio
 , pytest-trio
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "trio-asyncio";
   version = "0.12.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "trio_asyncio";
@@ -34,8 +38,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlagsArray = [
+    # https://github.com/python-trio/trio-asyncio/issues/112
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   disabledTestPaths = [
     "tests/python" # tries to import internal API test.test_asyncio
+  ];
+
+  pythonImportsCheck = [
+    "trio_asyncio"
   ];
 
   meta = with lib; {

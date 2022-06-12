@@ -57,8 +57,6 @@ buildPythonPackage rec {
   # some test in test_buffered_reader.py doesn't seem to return
   disabledTestPaths = [ "tests/test_buffered_reader.py" ];
 
-  pytestFlagsArray = [ "-n" "$NIX_BUILD_CORES" ];
-
   # most tests require `clickhouse`
   # TODO: enable tests after `clickhouse` unbroken
   doCheck = false;

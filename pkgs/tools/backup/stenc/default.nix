@@ -1,8 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 , autoreconfHook
 }:
 
@@ -19,10 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  passthru.updateScript = genericUpdater {
-    inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
-  };
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = {
     description = "SCSI Tape Encryption Manager";

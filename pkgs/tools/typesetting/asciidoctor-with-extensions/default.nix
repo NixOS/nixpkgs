@@ -10,8 +10,9 @@ bundlerApp {
 
   exes = [
     "asciidoctor"
-    "asciidoctor-pdf"
     "asciidoctor-epub3"
+    "asciidoctor-multipage"
+    "asciidoctor-pdf"
     "asciidoctor-revealjs"
   ];
 

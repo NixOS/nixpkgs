@@ -18,23 +18,13 @@ let
 in
 with lib;
 stdenv.mkDerivation rec {
-  name = "${type}krb5-${version}";
-  majorVersion = "1.18"; # remove patches below with next upgrade
-  version = majorVersion;
+  pname = "${type}krb5";
+  version = "1.19.3";
 
   src = fetchurl {
-    url = "https://kerberos.org/dist/krb5/${majorVersion}/krb5-${version}.tar.gz";
-    sha256 = "121c5xsy3x0i4wdkrpw62yhvji6virbh6n30ypazkp0isws3k4bk";
+    url = "https://kerberos.org/dist/krb5/${versions.majorMinor version}/krb5-${version}.tar.gz";
+    sha256 = "1l6wp58zav37g03n2ig5qr0pslz38gh5cxgigbmxkjfxrxilil2n";
   };
-
-  patches = optionals stdenv.hostPlatform.isMusl [
-    # TODO: Remove with next release > 1.18
-    # Patches to fix musl build with 1.18.
-    # Not using `fetchpatch` for these for now to avoid infinite recursion
-    # errors in downstream projects (unclear if it's a nixpkgs issue so far).
-    ./krb5-Fix-Linux-build-error-with-musl-libc.patch
-    ./krb5-Fix-typo-in-musl-build-fix.patch
-  ];
 
   outputs = [ "out" "dev" ];
 

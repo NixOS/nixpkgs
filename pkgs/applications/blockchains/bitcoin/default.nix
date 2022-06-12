@@ -25,7 +25,7 @@
 
 with lib;
 let
-  version = "22.0";
+  version = "23.0";
   majorVersion = versions.major version;
   desktop = fetchurl {
     url = "https://raw.githubusercontent.com/bitcoin-core/packaging/${majorVersion}.x/debian/bitcoin-qt.desktop";
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
       "https://bitcoin.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
-    sha256 = "d0e9d089b57048b1555efa7cd5a63a7ed042482045f6f33402b1df425bf9613b";
+    sha256 = "26748bf49d6d6b4014d0fedccac46bf2bcca42e9d34b3acfd9e3467c415acc05";
   };
 
   nativeBuildInputs =
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       parties. Users hold the crypto keys to their own money and transact directly
       with each other, with the help of a P2P network to check for double-spending.
     '';
-    homepage = "https://bitcoin.org/";
+    homepage = "https://bitcoin.org/en/";
     downloadPage = "https://bitcoincore.org/bin/bitcoin-core-${version}/";
     changelog = "https://bitcoincore.org/en/releases/${version}/";
     maintainers = with maintainers; [ prusnak roconnor ];

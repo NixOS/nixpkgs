@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libcouchbase";
-  version = "3.2.4";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "couchbase";
     repo = "libcouchbase";
     rev = version;
-    sha256 = "sha256-7gHqnhNog0CN92YyvypbHWWUnCDuvGP4oiJjtP9GkIY=";
+    sha256 = "sha256-ffeSrWcvxvMY4mmA/+VoMitoCVUUP91t1lIOcuzNrJY=";
   };
 
   cmakeFlags = [ "-DLCB_NO_MOCK=ON" ];

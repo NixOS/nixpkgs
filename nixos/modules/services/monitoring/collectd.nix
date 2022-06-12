@@ -5,36 +5,15 @@ with lib;
 let
   cfg = config.services.collectd;
 
-  unvalidated_conf = pkgs.writeText "collectd-unvalidated.conf" ''
-    BaseDir "${cfg.dataDir}"
-    AutoLoadPlugin ${boolToString cfg.autoLoadPlugin}
-    Hostname "${config.networking.hostName}"
-
-    LoadPlugin syslog
-    <Plugin "syslog">
-      LogLevel "info"
-      NotifyLevel "OKAY"
-    </Plugin>
-
-    ${concatStrings (mapAttrsToList (plugin: pluginConfig: ''
-      LoadPlugin ${plugin}
-      <Plugin "${plugin}">
-      ${pluginConfig}
-      </Plugin>
-    '') cfg.plugins)}
-
-    ${concatMapStrings (f: ''
-      Include "${f}"
-    '') cfg.include}
-
-    ${cfg.extraConfig}
-  '';
+  baseDirLine = ''BaseDir "${cfg.dataDir}"'';
+  unvalidated_conf = pkgs.writeText "collectd-unvalidated.conf" cfg.extraConfig;
 
   conf = if cfg.validateConfig then
     pkgs.runCommand "collectd.conf" {} ''
       echo testing ${unvalidated_conf}
+      cp ${unvalidated_conf} collectd.conf
       # collectd -t fails if BaseDir does not exist.
-      sed '1s/^BaseDir.*$/BaseDir "."/' ${unvalidated_conf} > collectd.conf
+      substituteInPlace collectd.conf --replace ${lib.escapeShellArgs [ baseDirLine ]} 'BaseDir "."'
       ${package}/bin/collectd -t -C collectd.conf
       cp ${unvalidated_conf} $out
     '' else unvalidated_conf;
@@ -123,7 +102,8 @@ in {
     extraConfig = mkOption {
       default = "";
       description = ''
-        Extra configuration for collectd.
+        Extra configuration for collectd. Use mkBefore to add lines before the
+        default config, and mkAfter to add them below.
       '';
       type = lines;
     };
@@ -131,6 +111,30 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # 1200 is after the default (1000) but before mkAfter (1500).
+    services.collectd.extraConfig = lib.mkOrder 1200 ''
+      ${baseDirLine}
+      AutoLoadPlugin ${boolToString cfg.autoLoadPlugin}
+      Hostname "${config.networking.hostName}"
+
+      LoadPlugin syslog
+      <Plugin "syslog">
+        LogLevel "info"
+        NotifyLevel "OKAY"
+      </Plugin>
+
+      ${concatStrings (mapAttrsToList (plugin: pluginConfig: ''
+        LoadPlugin ${plugin}
+        <Plugin "${plugin}">
+        ${pluginConfig}
+        </Plugin>
+      '') cfg.plugins)}
+
+      ${concatMapStrings (f: ''
+        Include "${f}"
+      '') cfg.include}
+    '';
+
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} - - -"
     ];

@@ -19,10 +19,9 @@ buildPythonPackage rec {
     sha256 = "0hh4cmp93wjyidj48gh07vhx2kjvpwd23xvy79bsjn5qaaf6q4cm";
   };
 
-  # Wheel requires only `numpy`, but the import needs both `jax` and `jaxlib`.
+  # Wheel requires only `numpy`, but the import needs `jax`.
   propagatedBuildInputs = [
     jax
-    jaxlib
   ];
 
   pythonImportsCheck = [
@@ -30,6 +29,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    jaxlib
     pytestCheckHook
   ];
 

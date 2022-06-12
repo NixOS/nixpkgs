@@ -7,10 +7,9 @@ let
 
     # Update script tailored to mate packages from git repository
     mateUpdateScript = { pname, version, odd-unstable ? true, url ? "https://pub.mate-desktop.org/releases" }:
-      pkgs.genericUpdater {
-        inherit pname version odd-unstable;
+      pkgs.httpTwoLevelsUpdater {
+        inherit pname version odd-unstable url;
         attrPath = "mate.${pname}";
-        versionLister = "${pkgs.common-updater-scripts}/bin/list-archive-two-level-versions ${url}";
       };
 
     atril = callPackage ./atril { };
@@ -43,6 +42,7 @@ let
     mate-sensors-applet = callPackage ./mate-sensors-applet { };
     mate-session-manager = callPackage ./mate-session-manager { };
     mate-settings-daemon = callPackage ./mate-settings-daemon { };
+    mate-settings-daemon-wrapped = callPackage ./mate-settings-daemon/wrapped.nix { };
     mate-screensaver = callPackage ./mate-screensaver { };
     mate-system-monitor = callPackage ./mate-system-monitor { };
     mate-terminal = callPackage ./mate-terminal { };
@@ -71,6 +71,7 @@ let
       mate-polkit
       mate-session-manager
       mate-settings-daemon
+      mate-settings-daemon-wrapped
       mate-themes
     ];
 

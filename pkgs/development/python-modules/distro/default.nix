@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "distro";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "83f5e5a09f9c5f68f60173de572930effbcc0287bb84fdc4426cb4168c088424";
+    sha256 = "sha256-FRrsz2DCFkApMrUuQO5HepOfjViJiSc3igKrvoUsHDk=";
   };
 
   # tests are very targeted at individual linux distributions

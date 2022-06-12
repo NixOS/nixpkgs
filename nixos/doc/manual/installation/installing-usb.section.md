@@ -18,7 +18,7 @@ $ diskutil list
 [..]
 $ diskutil unmountDisk diskN
 Unmount of all volumes on diskN was successful
-$ sudo dd if=nix.iso of=/dev/rdiskN
+$ sudo dd if=nix.iso of=/dev/rdiskN bs=1M
 ```
 
 Using the \'raw\' `rdiskN` device instead of `diskN` completes in

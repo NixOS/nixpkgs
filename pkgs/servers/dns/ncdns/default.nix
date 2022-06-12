@@ -22,7 +22,7 @@ let
     rev = "fb9f2b7bc9fcba954d70f63857cc0c3841b1cf47";
     sha256 = "1arkbpbzvhcmz5fhjqg34x2jbjnwmlisapk22rjki17qpamh7zks";
     # ncdns must be put in a subdirectory for this to work.
-    extraPostFetch = ''
+    postFetch = ''
       cp -r --no-preserve=mode "${ncdns}" "$out/ncdns"
     '';
   };

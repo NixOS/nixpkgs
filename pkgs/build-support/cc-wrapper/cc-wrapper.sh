@@ -31,7 +31,7 @@ cxxLibrary=1
 cInclude=1
 
 expandResponseParams "$@"
-linkType=$(checkLinkType "$@")
+linkType=$(checkLinkType "${params[@]}")
 
 declare -i n=0
 nParams=${#params[@]}

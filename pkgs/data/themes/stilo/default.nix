@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "stilo-themes";
-  version = "3.38-1";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = pname;
     rev = "v${version}";
-    sha256 = "09xarzp0j0a8cqzcg0447jl5cgvl6ccj5f00dik1hy2nlrz7d8ad";
+    sha256 = "sha256-YKEDXrOAn7pGWb0VcOx7cKHnuX120yPzqtUVnzyLrDQ=";
   };
 
   nativeBuildInputs = [ meson ninja sassc ];

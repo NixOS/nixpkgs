@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pg-safeupdate";
-  version = "1.2";
+  version = "1.4";
 
   buildInputs = [ postgresql ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "eradman";
     repo   = pname;
     rev    = version;
-    sha256 = "010m57jcv5v8pyfm1cqs3a306y750lvnvla9m5d98v5vdx3349jg";
+    sha256 = "sha256-1cyvVEC9MQGMr7Tg6EUbsVBrMc8ahdFS3+CmDkmAq4Y=";
   };
 
   installPhase = ''

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     rev = "531bb33";
     sha256 = "1sv7s2ykc840cjwbfn7ayy743643x9i1lvk4cd55w9l052xvzj65";
   };
-  buildInputs = [ autoconf automake libtool gmp ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ libtool gmp ];
   preConfigure = "./autogen.sh";
 
   meta = {
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "http://git-annex.mysteryvortex.com/git-annex-utils.html";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ woffs ];
+    mainProgram = "gadu";
     platforms = lib.platforms.all;
   };
 }

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "twentemilieu";
-  version = "0.5.0";
+  version = "0.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,12 +21,13 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-twentemilieu";
     rev = "v${version}";
-    sha256 = "sha256-7HQ0+h8oiyY+TacQdX84K0r994rH0AMZAvZz8PUvQl0=";
+    sha256 = "sha256-k2jdw2H/bNejNUjIEQlEA1KkHHpkyFlSDC1HKUoMIqQ=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov" ""
+      --replace "--cov" "" \
+      --replace '"0.0.0"' '"${version}"'
   '';
 
   nativeBuildInputs = [

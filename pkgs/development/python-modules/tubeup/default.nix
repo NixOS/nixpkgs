@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "tubeup";
-  version = "0.0.27";
+  version = "0.0.31";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "77affb4105fc319d82c56aa5706151a4976b8b504dd252fe3db01443e27cba50";
+    sha256 = "sha256-hoVmkBrXc2AN5K/vZpxby1U7huhXbfFCiy+2Njt+2Lk=";
   };
 
   postPatch = ''

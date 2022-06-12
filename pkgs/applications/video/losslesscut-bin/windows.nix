@@ -3,6 +3,7 @@
 , fetchurl
 , unzip
 , version
+, sha256
 , useMklink ? false
 , customSymlinkCommand ? null
 }:
@@ -18,12 +19,12 @@ let
     else if useMklink then (targetPath: linkPath: "mklink ${targetPath} ${linkPath}")
     else (targetPath: linkPath: "ln -s ${targetPath} ${linkPath}");
 in stdenvNoCC.mkDerivation {
-  inherit pname version;
+  inherit pname version sha256;
 
   src = fetchurl {
     name = nameSource;
     url = "https://github.com/${owner}/${nameRepo}/releases/download/v${version}/${nameSource}";
-    sha256 = "1rq9frab0jl9y1mgmjhzsm734jvz0a646zq2wi5xzzspn4wikhvb";
+    inherit sha256;
   };
 
   nativeBuildInputs = [ unzip ];

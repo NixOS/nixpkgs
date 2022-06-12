@@ -27,7 +27,11 @@ buildDunePackage rec {
     ' libRmath"' '"'
   '';
 
-  buildInputs = [ pkg-config R dune-configurator stdio ];
+  # This currently fails with dune
+  strictDeps = false;
+
+  nativeBuildInputs = [ pkg-config R ];
+  buildInputs = [ dune-configurator stdio R ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

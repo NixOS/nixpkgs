@@ -268,9 +268,14 @@ in {
     };
 
     systemd.services.openldap = {
-      description = "LDAP server";
+      description = "OpenLDAP Server Daemon";
+      documentation = [
+        "man:slapd"
+        "man:slapd-config"
+        "man:slapd-mdb"
+      ];
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       preStart = let
         settingsFile = pkgs.writeText "config.ldif" (lib.concatStringsSep "\n" (attrsToLdif "cn=config" cfg.settings));
 
@@ -306,7 +311,7 @@ in {
           "${openldap}/libexec/slapd" "-u" cfg.user "-g" cfg.group "-F" configDir
           "-h" (lib.concatStringsSep " " cfg.urlList)
         ]);
-        Type = "forking";
+        Type = "notify";
         PIDFile = cfg.settings.attrs.olcPidFile;
       };
     };

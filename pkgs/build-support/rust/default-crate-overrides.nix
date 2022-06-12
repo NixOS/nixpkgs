@@ -170,7 +170,7 @@ in
   };
 
   security-framework-sys = attr: {
-    propagatedBuildInputs = [ Security ];
+    propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
   };
 
   sequoia-openpgp = attrs: {

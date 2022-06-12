@@ -25,7 +25,7 @@ mkDerivation rec {
     desktopName = "lsd2dsl";
     genericName = "lsd2dsl";
     comment = meta.description;
-    categories = "Dictionary;FileTools;Qt;";
+    categories = [ "Dictionary" "FileTools" "Qt" ];
   });
 
   installPhase = ''

@@ -1,28 +1,60 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "starboard";
-  version = "0.12.0";
+  version = "0.15.4";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-6QIQsxqTKERo5x2Knv4IBeNt5KjvfoW0ryFJLlALqrA=";
+    sha256 = "sha256-GhcHvKqYktBAPB443ZjJ3LYRJZorO7IH1OEnEQKUO0g=";
+    # populate values that require us to use git. By doing this in postFetch we
+    # can delete .git afterwards and maintain better reproducibility of the src.
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse HEAD > $out/COMMIT
+      # 0000-00-00T00:00:00Z
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
+  vendorSha256 = "sha256-ozbejIFR0mDgCgca+2yaPRiMMHLOEsC9u+kQUe69spc=";
 
-  vendorSha256 = "sha256-r6wMSeW5Et6hYwoEKufmcOmucuHlYuBDOMuXXMT4W2Y=";
+  nativeBuildInputs = [ installShellFiles ];
 
-  # Don't build and check the integration tests
-  excludedPackages = "itest";
+  subPackages = [ "cmd/starboard" ];
 
   ldflags = [
-    "-s" "-w" "-X main.version=v${version}"
+    "-s"
+    "-w"
+    "-X main.version=v${version}"
   ];
+
+  # ldflags based on metadata from git and source
+  preBuild = ''
+    ldflags+=" -X main.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X main.buildDate=$(cat SOURCE_DATE_EPOCH)"
+  '';
 
   preCheck = ''
     # Remove test that requires networking
     rm pkg/plugin/aqua/client/client_integration_test.go
+
+    # Feed in all but the integration tests for testing
+    # This is because subPackages above limits what is built to just what we
+    # want but also limits the tests
+    getGoDirs() {
+      go list ./... | grep -v itest
+    }
+  '';
+
+  postInstall = ''
+    installShellCompletion --cmd starboard \
+      --bash <($out/bin/starboard completion bash) \
+      --fish <($out/bin/starboard completion fish) \
+      --zsh <($out/bin/starboard completion zsh)
   '';
 
   doInstallCheck = true;

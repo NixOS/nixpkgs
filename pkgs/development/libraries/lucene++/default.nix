@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost gtest zlib ];
 
-  doCheck = true;
-
   postPatch = ''
-     substituteInPlace src/test/CMakeLists.txt \
-            --replace "add_subdirectory(gtest)" ""
+    substituteInPlace src/test/CMakeLists.txt \
+      --replace "add_subdirectory(gtest)" ""
   '';
+
+  doCheck = true;
 
   checkPhase = ''
     runHook preCheck
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mv $out/include/pkgconfig $out/lib/
+    cp $src/src/contrib/include/*h $out/include/lucene++/
   '';
 
   meta = {

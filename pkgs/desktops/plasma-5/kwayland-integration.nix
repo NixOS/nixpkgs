@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kwayland-integration";
+  pname = "kwayland-integration";
   nativeBuildInputs = [ extra-cmake-modules wayland-scanner ];
   buildInputs = [ kguiaddons kidletime kwindowsystem kwayland qtbase wayland-protocols wayland ];
 }

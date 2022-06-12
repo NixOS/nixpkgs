@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/Dc4ts/ChangeTower";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ChangeTower";
   };
 }

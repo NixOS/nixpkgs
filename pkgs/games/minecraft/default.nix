@@ -38,7 +38,7 @@ let
     icon = "minecraft-launcher";
     comment = "Official launcher for Minecraft, a sandbox-building game";
     desktopName = "Minecraft Launcher";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
   envLibPath = lib.makeLibraryPath [
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${envLibPath} \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
       --set JAVA_HOME ${lib.getBin jre} \
-      --run "cd /tmp" \
+      --chdir /tmp \
       "''${gappsWrapperArgs[@]}"
   '';
 

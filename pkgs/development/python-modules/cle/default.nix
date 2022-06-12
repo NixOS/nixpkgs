@@ -15,7 +15,7 @@
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.1.10913";
+  version = "9.2.6";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
@@ -29,13 +29,15 @@ in
 buildPythonPackage rec {
   pname = "cle";
   inherit version;
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-z8hBOqeI7T6Rov00OySDBdzUQ6jeBRseE7sz8VfIJmk=";
+    hash = "sha256-GOrjT5CM+yzboOTgkVriuf1UpNDVhDgGpS8vp4D39W0=";
   };
 
   propagatedBuildInputs = [
@@ -68,6 +70,8 @@ buildPythonPackage rec {
     "test_plt_full_relro"
     # Test fails
     "test_tls_pe_incorrect_tls_data_start"
+    # The required parts is not present on Nix
+    "test_remote_file_map"
   ];
 
   pythonImportsCheck = [

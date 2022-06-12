@@ -22,6 +22,9 @@ buildDunePackage rec {
     moveToOutput bin "''${!outputBin}"
   '';
 
-  meta = wodan.meta // { description = "Wodan clients with Unix integration"; };
+  meta = wodan.meta // {
+    description = "Wodan clients with Unix integration";
+    mainProgram = "wodanc";
+  };
 
 }

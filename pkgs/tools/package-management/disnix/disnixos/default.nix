@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "disnixos";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchurl {
-    url = "https://github.com/svanderburg/disnixos/releases/download/disnixos-${version}/disnixos-${version}.tar.gz";
-    sha256 = "1n2psq1b8bg340i2i0yf5xy2rf78fwqd3wj342wcmq09cv2v8d1b";
+    url = "https://github.com/svanderburg/disnixos/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "0nm7g184xh6xzjz4a40a7kgfnpmq043x6v0cynpffa6wd9jv89s9";
   };
 
   nativeBuildInputs = [ pkg-config ];

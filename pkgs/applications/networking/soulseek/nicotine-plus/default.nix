@@ -1,17 +1,17 @@
-{ lib, fetchFromGitHub, python3Packages, gettext, gdk-pixbuf
+{ stdenv, lib, fetchFromGitHub, python3Packages, gettext, gdk-pixbuf
 , gobject-introspection, gtk3, wrapGAppsHook }:
 
 with lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
-  version = "3.2.0";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "Nicotine-Plus";
     repo = "nicotine-plus";
     rev = version;
-    hash = "sha256-E8b2VRlnMWmBHu919QDPBYuMbrjov9t//bHi1Y/F0Ak=";
+    hash = "sha256-3NXlNd3Zy++efnvcnfIOUP83mdJ5h8BmE4a2uWn5CPQ=";
   };
 
   nativeBuildInputs = [ gettext wrapGAppsHook ];
@@ -35,6 +35,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "A graphical client for the SoulSeek peer-to-peer system";
     homepage = "https://www.nicotine-plus.org";
     license = licenses.gpl3Plus;

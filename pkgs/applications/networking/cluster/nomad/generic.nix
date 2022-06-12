@@ -1,26 +1,29 @@
 { lib
-, buildGoPackage
+, buildGoModule
 , fetchFromGitHub
 , version
 , sha256
+, vendorSha256
 , nvidiaGpuSupport
 , patchelf
 , nvidia_x11
+, nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "nomad";
   inherit version;
-  rev = "v${version}";
 
-  goPackagePath = "github.com/hashicorp/nomad";
   subPackages = [ "." ];
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
-    inherit rev sha256;
+    rev = "v${version}";
+    inherit sha256;
   };
+
+  inherit vendorSha256;
 
   nativeBuildInputs = lib.optionals nvidiaGpuSupport [
     patchelf
@@ -39,11 +42,13 @@ buildGoPackage rec {
     done
   '';
 
+  passthru.tests.nomad = nixosTests.nomad;
+
   meta = with lib; {
     homepage = "https://www.nomadproject.io/";
     description = "A Distributed, Highly Available, Datacenter-Aware Scheduler";
     platforms = platforms.unix;
     license = licenses.mpl20;
-    maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes maxeaubrey ];
+    maintainers = with maintainers; [ rushmorem pradeepchhetri endocrimes maxeaubrey techknowlogick ];
   };
 }

@@ -36,19 +36,10 @@ import ./make-test-python.nix ({pkgs, ...}: {
       };
 
       # Since we want to program the routes that we delegate to the "customer"
-      # into our routing table we must have a way to gain the required privs.
-      # This security wrapper will do in our test setup.
-      #
-      # DO NOT COPY THIS TO PRODUCTION AS IS. Think about it at least twice.
-      # Everyone on the "isp" machine will be able to add routes to the kernel.
-      security.wrappers.add-dhcpd-lease = {
-        owner = "root";
-        group = "root";
-        source = pkgs.writeShellScript "add-dhcpd-lease" ''
-          exec ${pkgs.iproute2}/bin/ip -6 route replace "$1" via "$2"
-        '';
-        capabilities = "cap_net_admin+ep";
-      };
+      # into our routing table we must give dhcpd the required privs.
+      systemd.services.dhcpd6.serviceConfig.AmbientCapabilities =
+        [ "CAP_NET_ADMIN" ];
+
       services = {
         # Configure the DHCPv6 server
         #
@@ -80,7 +71,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
               set Prefix = pick-first-value(binary-to-ascii(16, 16, ":", suffix(option dhcp6.ia-pd, 16)), "n/a");
               set PrefixLength = pick-first-value(binary-to-ascii(10, 8, ":", substring(suffix(option dhcp6.ia-pd, 17), 0, 1)), "n/a");
               log(concat(IP, " ", Prefix, " ", PrefixLength));
-              execute("/run/wrappers/bin/add-dhcpd-lease", concat(Prefix,"/",PrefixLength), IP);
+              execute("${pkgs.iproute2}/bin/ip", "-6", "route", "replace", concat(Prefix,"/",PrefixLength), "via", IP);
             }
           '';
         };

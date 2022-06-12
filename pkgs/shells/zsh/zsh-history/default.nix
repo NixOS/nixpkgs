@@ -13,7 +13,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  vendorSha256 = "13rc1afds5xg30faqz35haha4kxg73b5nvjirbrkc6kna0vhb54z";
+  vendorSha256 = "1863ad97y82fx0an1ysalkxnqjz3zfz228wag9a92wdssl1vwzws";
 
   doCheck = false;
 
@@ -25,10 +25,11 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A CLI to provide enhanced history for your ZSH shell";
-    license = licenses.mit;
     homepage = "https://github.com/b4b4r07/history";
-    platforms = platforms.unix;
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "history";
+    platforms = platforms.unix;
   };
 
   passthru.tests = {

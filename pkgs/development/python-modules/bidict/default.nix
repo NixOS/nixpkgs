@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "bidict";
-  version = "0.21.4";
+  version = "0.22.0";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QshP++b43omK9gc7S+nqfM7c1400dKqETFTknVoHn28=";
+    sha256 = "sha256-XIJrPhXpfMbmFd4pV1aEfCgqebecVDDTv8kJsayfW9g=";
   };
 
   propagatedBuildInputs = [

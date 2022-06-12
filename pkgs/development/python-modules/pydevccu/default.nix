@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "pydevccu";
-  version = "0.0.9";
+  version = "0.1.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -15,13 +15,8 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = pname;
     rev = version;
-    sha256 = "sha256-/4sJ5T17nCcTjg1Me4zTlOEOkK1py9kl2YeLGv4X6us=";
+    sha256 = "sha256-rbxYTpB6ieZBYbbE1AKVEc/lapWlOUMOrSHCkuwkzLg=";
   };
-
-  postPatch = ''
-    # Fix file name, https://github.com/danielperna84/pydevccu/pull/8
-    mv pydevccu/paramset_descriptions/HmIP-STDH.json pydevccu/paramset_descriptions/HmIP-STHD.json
-  '';
 
   # Module has no tests
   doCheck = false;

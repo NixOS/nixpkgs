@@ -1,16 +1,16 @@
-{ lib, fetchFromGitHub, meson, ninja, pkg-config, appstream-glib
+{ stdenv, lib, fetchFromGitHub, meson, ninja, pkg-config, appstream-glib
 , wrapGAppsHook, pythonPackages, gtk3, gnome, gobject-introspection
 , libnotify, libsecret, gst_all_1 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "pithos";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo  = pname;
     rev = version;
-    sha256 = "10nnm55ql86x1qfmq6dx9a1igf7myjxibmvyhd7fyv06vdhfifgy";
+    sha256 = "03j04b1mk2fq0ni2ydpw40fdd36k545z8a1pq9x5c779080cwpla";
   };
 
   format = "other";
@@ -28,6 +28,7 @@ pythonPackages.buildPythonApplication rec {
     (with pythonPackages; [ pygobject3 pylast ]);
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Pandora Internet Radio player for GNOME";
     homepage = "https://pithos.github.io/";
     license = licenses.gpl3;

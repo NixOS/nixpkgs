@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, libtool, pkg-config, gettext, gnused
+{ lib, stdenv, fetchFromGitHub, substituteAll, pkg-config, gnused, autoreconfHook
 , gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
 , expat, libxslt, docbook_xsl, util-linux, mdadm, libgudev, libblockdev, parted
-, gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43, autoconf, automake
+, gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43
 , xfsprogs, f2fs-tools, dosfstools, e2fsprogs, btrfs-progs, exfat, nilfs-utils, ntfs3g
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +26,11 @@ stdenv.mkDerivation rec {
       blkid = "${util-linux}/bin/blkid";
       false = "${coreutils}/bin/false";
       mdadm = "${mdadm}/bin/mdadm";
+      mkswap = "${util-linux}/bin/mkswap";
       sed = "${gnused}/bin/sed";
       sh = "${bash}/bin/sh";
       sleep = "${coreutils}/bin/sleep";
+      swapon = "${util-linux}/bin/swapon";
       true = "${coreutils}/bin/true";
     })
     (substituteAll {
@@ -39,9 +42,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  strictDeps = true;
+  # pkg-config had to be in both to find gtk-doc and gobject-introspection
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
-    autoconf automake pkg-config libtool gettext which gobject-introspection
-    gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl util-linux
+    autoreconfHook which gobject-introspection pkg-config
+    gtk-doc libxslt docbook_xml_dtd_412 docbook_xml_dtd_43 docbook_xsl
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
@@ -51,13 +57,14 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    expat libgudev libblockdev acl systemd glib libatasmart polkit
+    expat libgudev libblockdev acl systemd glib libatasmart polkit util-linux
   ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
     (lib.enableFeature (stdenv.buildPlatform == stdenv.hostPlatform) "gtk-doc")
+    "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
@@ -69,15 +76,21 @@ stdenv.mkDerivation rec {
     "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
 
+  installFlags = [
+    "sysconfdir=${placeholder "out"}/etc"
+  ];
+
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  passthru.tests.vm = nixosTests.udisks2;
 
   meta = with lib; {
     description = "A daemon, tools and libraries to access and manipulate disks, storage devices and technologies";
     homepage = "https://www.freedesktop.org/wiki/Software/udisks/";
     license = with licenses; [ lgpl2Plus gpl2Plus ]; # lgpl2Plus for the library, gpl2Plus for the tools & daemon
-    maintainers = with maintainers; [ johnazoidberg ];
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ johnazoidberg ]);
     platforms = platforms.linux;
   };
 }

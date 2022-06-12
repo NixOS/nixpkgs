@@ -17,15 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-notifications";
-  version = "6.0.0";
-
-  repoName = "notifications";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = repoName;
+    repo = "notifications";
     rev = version;
-    sha256 = "0jfppafbc8jwhhnillylicz4zfds789d8b31ifsx0qijlxa7kji9";
+    sha256 = "sha256-kM//T3P8gMGnCMDJ1caQQGgD6HBOQo0wp2wZGMUUPuU=";
   };
 
   nativeBuildInputs = [

@@ -18,9 +18,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ xorgproto libX11 libXft ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-  ];
+  makeFlags = [ "CC:=$(CC)" ];
+
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     homepage = "https://tools.suckless.org/tabbed";

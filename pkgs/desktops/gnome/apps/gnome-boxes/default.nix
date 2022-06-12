@@ -55,12 +55,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
-  version = "41.2";
+  version = "42.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "u3G2zflFOBjyblV0Tl5ZUN2TJ5PQ6Ot+n/h78Mvvwz0=";
+    sha256 = "lvXQEbdQjbVhvw0WbA6p6LEhgFxA5dnzYRkkXBUXIIA=";
   };
+
+  patches = [
+    # Fix path to libgovf-0.1.so (and libgtk-frdp-0.1.so when enabling rdp meson option)
+    # in the gir file. We patch gobject-introspection to hardcode absolute paths but
+    # our Meson patch will only pass the info when install_dir is absolute as well.
+    ./fix-gir-lib-path.patch
+  ];
 
   doCheck = true;
 

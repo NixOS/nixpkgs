@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "msal";
-  version = "1.16.0";
+  version = "1.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "240fb04dba46a27fd6a3178db8334412d0d02e0be85166f9e05bb45d03399084";
+    sha256 = "sha256-V2r1WGYDi2DtvLMdgxMlob2CQe0nIYbigylo/UcX0gI=";
   };
 
   propagatedBuildInputs = [

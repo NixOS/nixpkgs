@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, autoconf, makeDesktopItem
+{ stdenv, lib, fetchFromGitHub, pkg-config, autoconf, makeDesktopItem, nixosTests
 , libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
 , harfbuzz #substituting glyphs with opentype fonts
 , fribidi, m17n_lib #bidi and encoding
@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mlterm";
-  version = "3.9.1";
+  version = "3.9.2";
 
   src = fetchFromGitHub {
     owner = "arakiken";
     repo = pname;
-    rev = "rel-${lib.replaceStrings [ "." ] [ "_" ] version}"; # 3.9.1 -> rel-3_9_1
-    sha256 = "1hh196kz2n3asv8r8r2bdk5b2w93zq7rw4880ciiq1554h0ib7fj";
+    rev = version;
+    sha256 = "sha256-DvGR3rDegInpnLp3H+rXNXktCGhpjsBBPTRMwodeTro=";
   };
 
   nativeBuildInputs = [ pkg-config autoconf wrapGAppsHook ];
@@ -106,11 +106,11 @@ stdenv.mkDerivation rec {
     comment = "Terminal emulator";
     desktopName = "mlterm";
     genericName = "Terminal emulator";
-    categories = lib.concatStringsSep ";" [
-      "Application" "System" "TerminalEmulator"
-    ];
-    startupNotify = "false";
+    categories = [ "Application" "System" "TerminalEmulator" ];
+    startupNotify = false;
   };
+
+  passthru.tests.test = nixosTests.terminal-emulators.mlterm;
 
   meta = with lib; {
     description = "Multi Lingual TERMinal emulator";

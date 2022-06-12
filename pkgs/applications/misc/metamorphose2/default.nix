@@ -1,41 +1,42 @@
-{ lib, stdenv, fetchgit, makeWrapper, gettext
-, python27, python2Packages
+{ lib, stdenv, fetchFromGitHub, makeWrapper, gettext
+, python3
 }:
 
 stdenv.mkDerivation {
   pname = "metamorphose2";
-  version = "0.9.0beta";
+  version = "0.10.0beta";
 
   # exif-py vendored via submodule
-  # mutagen vendored via copy
-  src = fetchgit {
-    url = "https://github.com/metamorphose/metamorphose2.git";
-    #rev = "refs/tags/v2.${version}"; #for when wxPython3 support is released
-    rev = "d2bdd6a86340b9668e93b35a6a568894c9909d68";
-    sha256 = "0ivcb3c8hidrff0ivl4dnwa2p3ihpqjdbvdig8dhg9mm5phdbabn";
+  src = fetchFromGitHub {
+    owner = "timinaust";
+    repo = "metamorphose2";
+    rev = "ba0666dd02e4f3f58c1dadc309e7ec1cc13fe851";
+    sha256 = "0w9l1vyyswdhdwrmi71g23qyslvhg1xym4ksifd42vwf9dxy55qp";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
+    rm -rf ./src/mutagen
     substituteInPlace messages/Makefile \
       --replace "\$(shell which msgfmt)" "${gettext}/bin/msgfmt"
   '';
 
   postInstall = ''
     rm $out/bin/metamorphose2
-    makeWrapper ${python27}/bin/python $out/bin/metamorphose2 \
+    makeWrapper ${python3.interpreter} $out/bin/metamorphose2 \
       --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out") \
       --add-flags "-O $out/share/metamorphose2/metamorphose2.py -w=3"
   '';
 
-  buildInput = [ gettext python27 ];
+  buildInput = [ gettext python3 ];
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ python2Packages.wxPython python2Packages.pillow ];
+  propagatedBuildInputs = with python3.pkgs; [ mutagen wxPython_4_1 pillow six ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     description = "a graphical mass renaming program for files and folders";
-    homepage    = "https://github.com/metamorphose/metamorphose2";
+    homepage    = "https://github.com/timinaust/metamorphose2";
     license     = with licenses; gpl3Plus;
     maintainers = with maintainers; [ ramkromberg ];
     platforms   = with platforms; linux;

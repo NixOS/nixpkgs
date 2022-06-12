@@ -91,29 +91,9 @@ let
     SERIAL 0 115200
     TIMEOUT ${builtins.toString syslinuxTimeout}
     UI vesamenu.c32
-    MENU TITLE NixOS
     MENU BACKGROUND /isolinux/background.png
-    MENU RESOLUTION 800 600
-    MENU CLEAR
-    MENU ROWS 6
-    MENU CMDLINEROW -4
-    MENU TIMEOUTROW -3
-    MENU TABMSGROW  -2
-    MENU HELPMSGROW -1
-    MENU HELPMSGENDROW -1
-    MENU MARGIN 0
 
-    #                                FG:AARRGGBB  BG:AARRGGBB   shadow
-    MENU COLOR BORDER       30;44      #00000000    #00000000   none
-    MENU COLOR SCREEN       37;40      #FF000000    #00E2E8FF   none
-    MENU COLOR TABMSG       31;40      #80000000    #00000000   none
-    MENU COLOR TIMEOUT      1;37;40    #FF000000    #00000000   none
-    MENU COLOR TIMEOUT_MSG  37;40      #FF000000    #00000000   none
-    MENU COLOR CMDMARK      1;36;40    #FF000000    #00000000   none
-    MENU COLOR CMDLINE      37;40      #FF000000    #00000000   none
-    MENU COLOR TITLE        1;36;44    #00000000    #00000000   none
-    MENU COLOR UNSEL        37;44      #FF000000    #00000000   none
-    MENU COLOR SEL          7;37;40    #FFFFFFFF    #FF5277C3   std
+    ${config.isoImage.syslinuxTheme}
 
     DEFAULT boot
 
@@ -389,10 +369,10 @@ let
     ${lib.optionalString (refindBinary != null) ''
     # GRUB apparently cannot do "chainloader" operations on "CD".
     if [ "\$root" != "cd0" ]; then
-      # Force root to be the FAT partition
-      # Otherwise it breaks rEFInd's boot
-      search --set=root --no-floppy --fs-uuid 1234-5678
       menuentry 'rEFInd' --class refind {
+        # Force root to be the FAT partition
+        # Otherwise it breaks rEFInd's boot
+        search --set=root --no-floppy --fs-uuid 1234-5678
         chainloader (\$root)/EFI/boot/${refindBinary}
       }
     fi
@@ -420,10 +400,8 @@ let
     #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
     ''
       mkdir ./contents && cd ./contents
-      cp -rp "${efiDir}"/EFI .
-      mkdir ./boot
-      cp -p "${config.boot.kernelPackages.kernel}/${config.system.boot.loader.kernelFile}" \
-        "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}" ./boot/
+      mkdir -p ./EFI/boot
+      cp -rp "${efiDir}"/EFI/boot/{grub.cfg,*.efi} ./EFI/boot
 
       # Rewrite dates for everything in the FS
       find . -exec touch --date=2000-01-01 {} +
@@ -441,11 +419,11 @@ let
       faketime "2000-01-01 00:00:00" mkfs.vfat -i 12345678 -n EFIBOOT "$out"
 
       # Force a fixed order in mcopy for better determinism, and avoid file globbing
-      for d in $(find EFI boot -type d | sort); do
+      for d in $(find EFI -type d | sort); do
         faketime "2000-01-01 00:00:00" mmd -i "$out" "::/$d"
       done
 
-      for f in $(find EFI boot -type f | sort); do
+      for f in $(find EFI -type f | sort); do
         mcopy -pvm -i "$out" "$f" "::/$f"
       done
 
@@ -501,7 +479,7 @@ in
                 + lib.optionalString (isx86_32 || isx86_64) "-Xbcj x86"
                 # Untested but should also reduce size for these platforms
                 + lib.optionalString (isAarch32 || isAarch64) "-Xbcj arm"
-                + lib.optionalString (isPowerPC) "-Xbcj powerpc"
+                + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
                 + lib.optionalString (isSparc) "-Xbcj sparc";
       description = ''
         Compression settings to use for the squashfs nix store.
@@ -598,6 +576,37 @@ in
       type = types.nullOr (types.either types.path types.package);
       description = ''
         The grub2 theme used for UEFI boot.
+      '';
+    };
+
+    isoImage.syslinuxTheme = mkOption {
+      default = ''
+        MENU TITLE NixOS
+        MENU RESOLUTION 800 600
+        MENU CLEAR
+        MENU ROWS 6
+        MENU CMDLINEROW -4
+        MENU TIMEOUTROW -3
+        MENU TABMSGROW  -2
+        MENU HELPMSGROW -1
+        MENU HELPMSGENDROW -1
+        MENU MARGIN 0
+
+        #                                FG:AARRGGBB  BG:AARRGGBB   shadow
+        MENU COLOR BORDER       30;44      #00000000    #00000000   none
+        MENU COLOR SCREEN       37;40      #FF000000    #00E2E8FF   none
+        MENU COLOR TABMSG       31;40      #80000000    #00000000   none
+        MENU COLOR TIMEOUT      1;37;40    #FF000000    #00000000   none
+        MENU COLOR TIMEOUT_MSG  37;40      #FF000000    #00000000   none
+        MENU COLOR CMDMARK      1;36;40    #FF000000    #00000000   none
+        MENU COLOR CMDLINE      37;40      #FF000000    #00000000   none
+        MENU COLOR TITLE        1;36;44    #00000000    #00000000   none
+        MENU COLOR UNSEL        37;44      #FF000000    #00000000   none
+        MENU COLOR SEL          7;37;40    #FFFFFFFF    #FF5277C3   std
+      '';
+      type = types.str;
+      description = ''
+        The syslinux theme used for BIOS boot.
       '';
     };
 
@@ -734,13 +743,13 @@ in
         { source = config.system.build.squashfsStore;
           target = "/nix-store.squashfs";
         }
-        { source = config.isoImage.splashImage;
-          target = "/isolinux/background.png";
-        }
         { source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
         }
       ] ++ optionals canx86BiosBoot [
+        { source = config.isoImage.splashImage;
+          target = "/isolinux/background.png";
+        }
         { source = pkgs.substituteAll  {
             name = "isolinux.cfg";
             src = pkgs.writeText "isolinux.cfg-in" isolinuxCfg;
@@ -761,6 +770,9 @@ in
         { source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/boot/grub.cfg") + "/grub";
           target = "/boot/grub";
         }
+        { source = config.isoImage.efiSplashImage;
+          target = "/EFI/boot/efi-background.png";
+        }
       ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
@@ -768,10 +780,6 @@ in
       ] ++ optionals (config.isoImage.grubTheme != null) [
         { source = config.isoImage.grubTheme;
           target = "/EFI/boot/grub-theme";
-        }
-      ] ++ [
-        { source = config.isoImage.efiSplashImage;
-          target = "/EFI/boot/efi-background.png";
         }
       ];
 

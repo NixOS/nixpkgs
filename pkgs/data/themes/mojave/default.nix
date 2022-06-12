@@ -10,24 +10,43 @@
 , optipng
 , sassc
 , which
+, buttonSizeVariants ? [] # default to standard
+, buttonVariants ? [] # default to all
+, colorVariants ? [] # default to all
+, opacityVariants ? [] # default to all
+, themeVariants ? [] # default to MacOS blue
+, wallpapers ? false
+, gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "mojave-gtk-theme";
-  version = "2021-07-20";
+in
+lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] buttonSizeVariants
+lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVariants
+lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
+lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ] opacityVariants
+lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
+
+stdenv.mkDerivation rec {
+  inherit pname;
+  version = "2022-05-12";
 
   srcs = [
     (fetchFromGitHub {
       owner = "vinceliuice";
       repo = pname;
       rev = version;
-      sha256 = "08j70kmjhvh06c3ahcracarrfq4vpy0zsp6zkcivbw4nf3bzp2zc";
+      sha256 = "sha256-VrrxW16J+S21qBoAeVCWs0Q6bRL1jXAK7MOBpdSMJZY=";
     })
+  ]
+  ++
+  lib.optional wallpapers
     (fetchurl {
       url = "https://github.com/vinceliuice/Mojave-gtk-theme/raw/11741a99d96953daf9c27e44c94ae50a7247c0ed/macOS_Mojave_Wallpapers.tar.xz";
       sha256 = "18zzkwm1kqzsdaj8swf0xby1n65gxnyslpw4lnxcx1rphip0rwf7";
     })
-  ];
+  ;
 
   sourceRoot = "source";
 
@@ -76,11 +95,27 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    name= ./install.sh --theme all --dest $out/share/themes
-    install -D -t $out/share/wallpapers ../"macOS Mojave Wallpapers"/*
-    jdupes -l -r $out/share
+
+    name= ./install.sh \
+      ${lib.optionalString (buttonSizeVariants != []) "--small " + builtins.toString buttonSizeVariants} \
+      ${lib.optionalString (buttonVariants != []) "--alt " + builtins.toString buttonVariants} \
+      ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
+      ${lib.optionalString (opacityVariants != []) "--opacity " + builtins.toString opacityVariants} \
+      ${lib.optionalString (themeVariants != []) "--theme " + builtins.toString themeVariants} \
+      --dest $out/share/themes
+
+    ${lib.optionalString wallpapers ''
+      install -D -t $out/share/wallpapers ../"macOS Mojave Wallpapers"/*
+    ''}
+
+    # Replace duplicate files with hardlinks to the first file in each
+    # set of duplicates, reducing the installed size in about 53%
+    jdupes -L -r $out/share
+
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {inherit pname version; };
 
   meta = with lib; {
     description = "Mac OSX Mojave like theme for GTK based desktop environments";

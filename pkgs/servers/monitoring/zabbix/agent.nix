@@ -24,6 +24,10 @@ import ./versions.nix ({ version, sha256 }:
       "--with-libpcre"
       "--with-openssl=${openssl.dev}"
     ];
+    makeFlags = [
+      "AR:=$(AR)"
+      "RANLIB:=$(RANLIB)"
+    ];
 
     postInstall = ''
       cp conf/zabbix_agentd/*.conf $out/etc/zabbix_agentd.conf.d/

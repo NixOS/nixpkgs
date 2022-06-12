@@ -8,7 +8,7 @@
       exec = "SideQuest";
       desktopName = name;
       genericName = "VR App Store";
-      categories = "Settings;PackageManager;";
+      categories = [ "Settings" "PackageManager" ];
     };
 
     sidequest = stdenv.mkDerivation {

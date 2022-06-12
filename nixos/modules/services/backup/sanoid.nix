@@ -51,7 +51,10 @@ let
   datasetOptions = rec {
     use_template = mkOption {
       description = "Names of the templates to use for this dataset.";
-      type = types.listOf (types.enum (attrNames cfg.templates));
+      type = types.listOf (types.str // {
+        check = (types.enum (attrNames cfg.templates)).check;
+        description = "configured template name";
+      });
       default = [ ];
     };
     useTemplate = use_template;

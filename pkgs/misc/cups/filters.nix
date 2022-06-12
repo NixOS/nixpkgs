@@ -1,28 +1,62 @@
-{ lib, stdenv, fetchurl, pkg-config, cups, poppler, poppler_utils, fontconfig
-, libjpeg, libpng, perl, ijs, qpdf, dbus, avahi
-, makeWrapper, coreutils, gnused, bc, gawk, gnugrep, which, ghostscript
-, mupdf, dejavu_fonts, liblouis
+{ lib
+, avahi
+, bc
+, coreutils
+, cups
+, dbus
+, dejavu_fonts
+, fetchurl
+, fontconfig
+, gawk
+, ghostscript
+, gnugrep
+, gnused
+, ijs
+, libjpeg
+, liblouis
+, libpng
+, makeWrapper
+, mupdf
+, perl
+, pkg-config
+, poppler
+, poppler_utils
+, qpdf
+, stdenv
+, which
+, withAvahi ? true
 }:
 
 let
-  binPath = lib.makeBinPath [ coreutils gnused bc gawk gnugrep which ];
+  binPath = lib.makeBinPath [ bc coreutils gawk gnused gnugrep which ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "cups-filters";
-  version = "1.28.10";
+  version = "1.28.12";
 
   src = fetchurl {
     url = "https://openprinting.org/download/cups-filters/${pname}-${version}.tar.xz";
-    sha256 = "sha256-z4yQRpTETPaJtXJORtI9qa5RJdVDdLNAxkIHfMKcqDc=";
+    sha256 = "sha256-RuLqPYhK0iK7hjzmUR5ZzzkO+Og1KVvkSoDlALKjOjo=";
   };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [
-    cups poppler poppler_utils fontconfig libjpeg libpng perl
-    ijs qpdf dbus avahi ghostscript mupdf
+    cups
+    dbus
+    fontconfig
+    ghostscript
+    ijs
+    libjpeg
     liblouis # braille embosser support
-  ];
+    libpng
+    mupdf
+    perl
+    poppler
+    poppler_utils
+    qpdf
+  ] ++ lib.optionals withAvahi [ avahi ];
 
   configureFlags = [
     "--with-mutool-path=${mupdf}/bin/mutool"
@@ -37,7 +71,7 @@ in stdenv.mkDerivation rec {
     "--with-test-font-path=${dejavu_fonts}/share/fonts/truetype/DejaVuSans.ttf"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-  ];
+  ] ++ lib.optionals (!withAvahi) [ "--disable-avahi" ];
 
   makeFlags = [ "CUPS_SERVERBIN=$(out)/lib/cups" "CUPS_DATADIR=$(out)/share/cups" "CUPS_SERVERROOT=$(out)/etc/cups" ];
 

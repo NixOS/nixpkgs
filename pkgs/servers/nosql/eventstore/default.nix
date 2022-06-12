@@ -43,10 +43,6 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    mkdir home
-    export HOME=$PWD/home
-    export DOTNET_CLI_TELEMETRY_OPTOUT=1
-    export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
     export FrameworkPathOverride=${mono}/lib/mono/4.7.1-api
 
     # disable default-source so nuget does not try to download from online-repo

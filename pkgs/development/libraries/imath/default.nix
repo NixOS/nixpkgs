@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "imath";
-  version = "3.1.3";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "imath";
     rev = "v${version}";
-    sha256 = "sha256-LoyV1Wtugva6MTpREstP2rYMrHW2xR0qfEAIV1Fo1Ns=";
+    sha256 = "sha256-pniIhpq2eXAZemq8LavXXv6+tGrBkqZ09Kjvi4aZdu8=";
   };
 
   nativeBuildInputs = [ cmake ];

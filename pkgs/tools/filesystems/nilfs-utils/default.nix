@@ -47,6 +47,5 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license =  with licenses; [ gpl2 lgpl21 ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
-    updateWalker = true;
   };
 }

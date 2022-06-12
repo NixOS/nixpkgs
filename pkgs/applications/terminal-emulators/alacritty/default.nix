@@ -3,9 +3,9 @@
 , fetchFromGitHub
 , fetchpatch
 , rustPlatform
+, nixosTests
 
 , cmake
-, gzip
 , installShellFiles
 , makeWrapper
 , ncurses
@@ -54,20 +54,19 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-kgZEbOGmO+uRKaWR+oQBiGkBzDSuCznUyWNUoMICHhk=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Q/ulRgU6zNLRZUjL83O/Krx85voPWZPZDo65CLp/aOg=";
   };
 
-  cargoSha256 = "sha256-JqnYMDkagWNGliUxi5eqJN92ULsvT7Fwmah8um1xaRw=";
+  cargoSha256 = "sha256-S1V8hDuzp4sf6945gqs8QNVdu8jwPGVYjVbV6EY28Hk=";
 
   nativeBuildInputs = [
     cmake
-    gzip
     installShellFiles
     makeWrapper
     ncurses
@@ -88,18 +87,12 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "terminfo" ];
 
-  patches = [
-    # Handle PTY EIO error for Rust 1.55+
-    (fetchpatch {
-      url = "https://github.com/alacritty/alacritty/commit/58985a4dcbe464230b5d2566ee68e2d34a1788c8.patch";
-      sha256 = "sha256-Z6589yRrQtpx3/vNqkMiGgGsLysd/QyfaX7trqX+k5c=";
-    })
-  ];
-
   postPatch = ''
     substituteInPlace alacritty/src/config/ui_config.rs \
       --replace xdg-open ${xdg-utils}/bin/xdg-open
   '';
+
+  checkFlags = [ "--skip=term::test::mock_term" ]; # broken on aarch64
 
   postInstall = (
     if stdenv.isDarwin then ''
@@ -126,6 +119,7 @@ rustPlatform.buildRustPackage rec {
 
     install -dm 755 "$out/share/man/man1"
     gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
+    gzip -c extra/alacritty-msg.man > "$out/share/man/man1/alacritty-msg.1.gz"
 
     install -Dm 644 alacritty.yml $out/share/doc/alacritty.yml
 
@@ -136,6 +130,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   dontPatchELF = true;
+
+  passthru.tests.test = nixosTests.terminal-emulators.alacritty;
 
   meta = with lib; {
     description = "A cross-platform, GPU-accelerated terminal emulator";

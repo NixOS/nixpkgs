@@ -3,11 +3,11 @@
 
 buildDunePackage rec {
   pname = "hacl_x25519";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchurl {
     url = "https://github.com/mirage/hacl/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "0ppq56i2yhxzz38w120aynnkx10kncl86zvqip9zx0v4974k3k4x";
+    sha256 = "sha256-gWdUqOj5c50ObZjO1uULAmoo1ZIyRFxQUaZuQzLMVy0=";
   };
 
   useDune2 = true;

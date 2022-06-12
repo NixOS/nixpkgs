@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./
-    sed -e 's|/usr/bin|$out/bin|g' -i usr/share/applications/FAHViewer.desktop
+    sed -e "s|/usr/bin|$out/bin|g" -i usr/share/applications/FAHViewer.desktop
   '';
 
   installPhase = ''

@@ -12,13 +12,14 @@
 
 buildPythonPackage rec {
   pname = "diofant";
-  version = "0.12.0";
+  version = "0.13.0";
   disabled = pythonOlder "3.9";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "Diofant";
-    sha256 = "sha256-G0CTSoDSduiWxlrk5XjnX5ldNZ9f7yxaJeUPO3ezJgo=";
+    sha256 = "bac9e086a7156b20f18e3291d6db34e305338039a3c782c585302d377b74dd3c";
   };
 
   nativeBuildInputs = [

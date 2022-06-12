@@ -43,7 +43,7 @@ let
         path = [ pkgs.coreutils ];
 
         preStart = ''
-          ${optionalString (suppl.configFile.path!=null) ''
+          ${optionalString (suppl.configFile.path!=null && suppl.configFile.writable) ''
             (umask 077 && touch -a "${suppl.configFile.path}")
           ''}
           ${optionalString suppl.userControlled.enable ''
@@ -226,10 +226,10 @@ in
               ACTION=="add", SUBSYSTEM=="net", ENV{INTERFACE}=="${i}", TAG+="systemd", ENV{SYSTEMD_WANTS}+="supplicant-${replaceChars [" "] ["-"] iface}.service", TAG+="SUPPLICANT_ASSIGNED"''))}
 
           ${optionalString (hasAttr "WLAN" cfg) ''
-            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="${pkgs.systemd}/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"
+            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="wlan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-wlan@$result.service"
           ''}
           ${optionalString (hasAttr "LAN" cfg) ''
-            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="lan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="${pkgs.systemd}/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
+            ACTION=="add", SUBSYSTEM=="net", ENV{DEVTYPE}=="lan", TAG!="SUPPLICANT_ASSIGNED", TAG+="systemd", PROGRAM="/run/current-system/systemd/bin/systemd-escape -p %E{INTERFACE}", ENV{SYSTEMD_WANTS}+="supplicant-lan@$result.service"
           ''}
         '';
       })];

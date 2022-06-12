@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, stdenv }:
 
 buildGoModule rec {
   pname = "glab";
-  version = "1.21.1";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "profclems";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-naCCJ9s63UPDxRWbVjVikXtGUlM4Lp7vyDHlESEtXeI=";
+    sha256 = "sha256-7w6cbeZYhmV0EXXcWlXFq2pQGGxc5Ok4bba0g3fcgmE=";
   };
 
-  vendorSha256 = "sha256-rciT4UcsLu/vI0PqdTlMjbYXVumzo3ASsopkgiHGM60=";
+  vendorSha256 = "sha256-hGpJXCs5lZ6QQHr6LW1fCT+CVtOaUpYXJPchDPDdbaM=";
 
   ldflags = [
     "-X main.version=${version}"
@@ -23,6 +23,15 @@ buildGoModule rec {
   '';
 
   subPackages = [ "cmd/glab" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    installShellCompletion --cmd glab \
+      --bash <($out/bin/glab completion -s bash) \
+      --fish <($out/bin/glab completion -s fish) \
+      --zsh <($out/bin/glab completion -s zsh)
+  '';
 
   meta = with lib; {
     description = "An open-source GitLab command line tool";

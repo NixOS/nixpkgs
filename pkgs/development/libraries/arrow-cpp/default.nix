@@ -19,9 +19,10 @@
 , grpc
 , gtest
 , jemalloc
-, libnsl
+, libbacktrace
 , lz4
 , minio
+, ninja
 , nlohmann_json
 , openssl
 , perl
@@ -30,6 +31,7 @@
 , rapidjson
 , re2
 , snappy
+, sqlite
 , thrift
 , tzdata
 , utf8proc
@@ -37,7 +39,7 @@
 , zlib
 , zstd
 , enableShared ? !stdenv.hostPlatform.isStatic
-, enableFlight ? !stdenv.isDarwin # libnsl is not supported on darwin
+, enableFlight ? true
 , enableJemalloc ? !(stdenv.isAarch64 && stdenv.isDarwin)
   # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
   # non-existent in older versions
@@ -54,46 +56,55 @@ let
   arrow-testing = fetchFromGitHub {
     owner = "apache";
     repo = "arrow-testing";
-    rev = "1d8525e109a12a8c67c489eba48715a199609153";
-    hash = "sha256-tesDW/1yRyhZtpLbPvCVEsocs6KtstYofxB5GiSMEFM=";
+    rev = "634739c664433cec366b4b9a81d1e1044a8c5eda";
+    hash = "sha256-r1WVgJJsI7v485L6Qb+5i7kFO4Tvxyk1T0JBb4og6pg=";
   };
 
   parquet-testing = fetchFromGitHub {
     owner = "apache";
     repo = "parquet-testing";
-    rev = "d4d485956a643c693b5549e1a62d52ca61c170f1";
-    hash = "sha256-GmOAS8gGhzDI0WzORMkWHRRUl/XBwmNen2d3VefZxxc=";
+    rev = "acd375eb86a81cd856476fca0f52ba6036a067ff";
+    hash = "sha256-z/kmi+4dBO/dsVkJA4NgUoxl0pXi8RWIGvI8MGu/gcc=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "6.0.1";
+  version = "8.0.0";
 
   src = fetchurl {
-    url =
-      "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-N4az0t+VTQeLPmj5jS5a7Lqj+irM8HXXo6E8GHucUpQ=";
+    url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
+    hash = "sha256-rZoFcFEXyYnBFrrprHBJL+AVBQ4bgPsOOP3ktdhjqqM=";
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
-  ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = jemalloc.src;
+  # versions are all taken from
+  # https://github.com/apache/arrow/blob/apache-arrow-8.0.0/cpp/thirdparty/versions.txt
+
+  ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = fetchurl {
+    url = "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
+    hash = "sha256-NDMOXOJ2CZ4uiVDZM121qHVomkxqVnUe87HYxTf4h/Y=";
+  };
 
   ARROW_MIMALLOC_URL = fetchFromGitHub {
-    # From
-    # ./cpp/cmake_modules/ThirdpartyToolchain.cmake
-    # ./cpp/thirdparty/versions.txt
     owner = "microsoft";
     repo = "mimalloc";
-    rev = "v1.7.2";
-    hash = "sha256-yHupYFgC8mJuLUSpuEAfwF7l6Ue4EiuO1Q4qN4T6wWc=";
+    rev = "v1.7.3";
+    hash = "sha256-Ca877VitpWyKmZNHavqgewk/P+tyd2xHDNVqveKh87M=";
   };
 
   ARROW_XSIMD_URL = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
-    rev = "aeec9c872c8b475dedd7781336710f2dd2666cb2";
-    hash = "sha256-vWKdJkieKhaxyAJhijXUmD7NmNvMWd79PskQojulA1w=";
+    rev = "7d1778c3b38d63db7cec7145d939f40bc5d859d1";
+    hash = "sha256-89AysBUVnTdWyMPazeJegnQ6WEH90Ns7qQInZLMSXY4=";
+  };
+
+  ARROW_SUBSTRAIT_URL = fetchFromGitHub {
+    owner = "substrait-io";
+    repo = "substrait";
+    rev = "e1b4c04a1b518912f4c4065b16a1b2c0ac8e14cf";
+    hash = "sha256-56FSjDngsROSHLjMv+OYAIYqphEu3GzgIMHbgh/ZQw0=";
   };
 
   patches = [
@@ -103,6 +114,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    ninja
     autoconf # for vendored jemalloc
     flatbuffers
   ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
@@ -113,7 +125,10 @@ stdenv.mkDerivation rec {
     gflags
     glog
     gtest
+    libbacktrace
     lz4
+    nlohmann_json # alternative JSON parser to rapidjson
+    protobuf # substrait requires protobuf
     rapidjson
     re2
     snappy
@@ -126,7 +141,6 @@ stdenv.mkDerivation rec {
     python3.pkgs.numpy
   ] ++ lib.optionals enableFlight [
     grpc
-    libnsl
     openssl
     protobuf
   ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ]
@@ -149,6 +163,9 @@ stdenv.mkDerivation rec {
     "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
     "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
     "-DARROW_BUILD_TESTS=ON"
+    "-DARROW_BUILD_INTEGRATION=ON"
+    "-DARROW_BUILD_UTILITIES=ON"
+    "-DARROW_EXTRA_ERROR_CONTEXT=ON"
     "-DARROW_VERBOSE_THIRDPARTY_BUILD=ON"
     "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
     "-DThrift_SOURCE=AUTO" # search for Thrift using pkg-config (ThriftConfig.cmake requires OpenSSL and libevent)
@@ -156,14 +173,21 @@ stdenv.mkDerivation rec {
     "-DARROW_COMPUTE=ON"
     "-DARROW_CSV=ON"
     "-DARROW_DATASET=ON"
+    "-DARROW_ENGINE=ON"
+    "-DARROW_FILESYSTEM=ON"
+    "-DARROW_FLIGHT_SQL=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_HDFS=ON"
+    "-DARROW_IPC=ON"
     "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
     "-DARROW_JSON=ON"
     "-DARROW_PLASMA=ON"
     # Disable Python for static mode because openblas is currently broken there.
     "-DARROW_PYTHON=${if enableShared then "ON" else "OFF"}"
     "-DARROW_USE_GLOG=ON"
+    "-DARROW_WITH_BACKTRACE=ON"
     "-DARROW_WITH_BROTLI=ON"
     "-DARROW_WITH_LZ4=ON"
+    "-DARROW_WITH_NLOHMANN_JSON=ON"
     "-DARROW_WITH_SNAPPY=ON"
     "-DARROW_WITH_UTF8PROC=ON"
     "-DARROW_WITH_ZLIB=ON"
@@ -171,8 +195,10 @@ stdenv.mkDerivation rec {
     "-DARROW_MIMALLOC=ON"
     # Parquet options:
     "-DARROW_PARQUET=ON"
+    "-DARROW_SUBSTRAIT=ON"
     "-DPARQUET_BUILD_EXECUTABLES=ON"
     "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
+    "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
     "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
   ] ++ lib.optionals (!enableShared) [
@@ -199,21 +225,12 @@ stdenv.mkDerivation rec {
         "S3RegionResolutionTest.PublicBucket"
         "S3RegionResolutionTest.RestrictedBucket"
         "TestMinioServer.Connect"
-        "TestS3FS.GetFileInfoRoot"
-        "TestS3FS.OpenOutputStreamBackgroundWrites"
-        "TestS3FS.OpenOutputStreamDestructorBackgroundWrites"
-        "TestS3FS.OpenOutputStreamDestructorSyncWrite"
-        "TestS3FS.OpenOutputStreamDestructorSyncWrites"
-        "TestS3FS.OpenOutputStreamMetadata"
-        "TestS3FS.OpenOutputStreamSyncWrites"
+        "TestS3FS.*"
         "TestS3FSGeneric.*"
-      ] ++ lib.optionals enableGcs [
-        "GcsFileSystem.FileSystemCompare"
-        "GcsIntegrationTest.*"
       ];
     in
     lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
-  installCheckInputs = [ perl which ] ++ lib.optional enableS3 minio;
+  installCheckInputs = [ perl which sqlite ] ++ lib.optional enableS3 minio;
   installCheckPhase =
     let
       excludedTests = lib.optionals stdenv.isDarwin [
@@ -221,7 +238,7 @@ stdenv.mkDerivation rec {
         # path on Darwin. See https://github.com/NixOS/nix/pull/1085
         "plasma-external-store-tests"
         "plasma-client-tests"
-      ];
+      ] ++ [ "arrow-gcsfs-test" ];
     in
     ''
       runHook preInstallCheck

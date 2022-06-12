@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch
+{ lib, stdenv, fetchurl
 # native deps.
 , runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
@@ -17,22 +17,14 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.4.3";
+  version = "5.5.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "488729eb93190336b6bca10de0d78ecb7919f77fcab105debc0a644aa7d0a506";
+    sha256 = "4e6f48c74d955f143d603f6072670cb41ab9acdd95d4455d6e74b6908562c55a";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    (fetchpatch { # https://gitlab.nic.cz/knot/knot-resolver/-/merge_requests/1237
-      name = "console.aws.amazon.com-fix.patch";
-      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/f4dabfbec9273703.diff";
-      sha256 = "3J+FDwNQ6CqIGo9pSzhrQZlHX99vXFDpPOBpwpCnOxs=";
-    })
-  ];
 
   # Path fixups for the NixOS service.
   postPatch = ''
@@ -63,7 +55,7 @@ unwrapped = stdenv.mkDerivation rec {
 
   # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns lua.lua libuv gnutls lmdb ]
-    ++ optionals stdenv.isLinux [ systemd libcap_ng ]
+    ++ optionals stdenv.isLinux [ /*lib*/systemd libcap_ng ]
     ++ [ nghttp2 ]
     ## optional dependencies; TODO: dnstap
     ;
@@ -87,8 +79,7 @@ unwrapped = stdenv.mkDerivation rec {
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
 
-  doInstallCheck = with stdenv; hostPlatform == buildPlatform
-    && !(isDarwin && isAarch64); # avoid luarocks, as it's broken ATM on the platform
+  doInstallCheck = with stdenv; hostPlatform == buildPlatform;
   installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx lua.http ];
   installCheckPhase = ''
     meson test --print-errorlogs

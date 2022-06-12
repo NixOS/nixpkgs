@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   # Used during the configure phase
   ENVCMD = "${coreutils}/bin/env";
 
-  nativeBuildInputs = [ coreutils ];
   buildInputs = [ perl ];
 
   meta = with lib; {

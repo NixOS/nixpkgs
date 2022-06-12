@@ -2,51 +2,53 @@
 , pythonPackages
 , qscintilla
 , qtbase
+, qmake
+, qtmacextras
+, stdenv
 }:
 
 let
-  inherit (pythonPackages) buildPythonPackage isPy3k python sip_4 pyqt5;
+  inherit (pythonPackages) buildPythonPackage isPy3k python sip sipbuild pyqt5 pyqt-builder;
 in buildPythonPackage rec {
-  pname = "qscintilla";
+  pname = "qscintilla-qt5";
   version = qscintilla.version;
   src = qscintilla.src;
-  format = "other";
+  format = "pyproject";
 
   disabled = !isPy3k;
 
-  nativeBuildInputs = [ sip_4 qtbase ];
-  buildInputs = [ qscintilla ];
-  propagatedBuildInputs = [ pyqt5 ];
+  nativeBuildInputs = [ sip qmake pyqt-builder qscintilla ];
+  buildInputs = [ qtbase ];
+  propagatedBuildInputs = [ pyqt5 ] ++ lib.optionals stdenv.isDarwin [ qtmacextras ];
 
   dontWrapQtApps = true;
 
   postPatch = ''
-    substituteInPlace Python/configure.py \
-      --replace \
-      "target_config.py_module_dir" \
-      "'$out/${python.sitePackages}'"
-  '';
-
-  preConfigure = ''
-    # configure.py will look for this folder
-    mkdir -p $out/share/sip/PyQt5
-
     cd Python
-    substituteInPlace configure.py \
-      --replace "qmake = {'CONFIG': 'qscintilla2'}" "qmake = {'CONFIG': 'qscintilla2', 'QT': 'widgets printsupport'}"
-    ${python.executable} ./configure.py \
-      --pyqt=PyQt5 \
-      --destdir=$out/${python.sitePackages}/PyQt5 \
-      --stubsdir=$out/${python.sitePackages}/PyQt5 \
-      --apidir=$out/api/${python.libPrefix} \
-      --qsci-incdir=${qscintilla}/include \
-      --qsci-featuresdir=${qscintilla}/mkspecs/features \
-      --qsci-libdir=${qscintilla}/lib \
-      --pyqt-sipdir=${pyqt5}/${python.sitePackages}/PyQt5/bindings \
-      --qsci-sipdir=$out/share/sip/PyQt5 \
-      --sip-incdir=${sip_4}/include
+    cp pyproject-qt5.toml pyproject.toml
+    echo '[tool.sip.project]' >> pyproject.toml
+    echo 'sip-include-dirs = [ "${pyqt5}/${python.sitePackages}/PyQt5/bindings"]' \
+       >> pyproject.toml
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace project.py \
+      --replace \
+      "if self.project.qsci_external_lib:
+                if self.qsci_features_dir is not None:" \
+      "if self.project.qsci_external_lib:
+                self.builder_settings.append('QT += widgets')
+
+                self.builder_settings.append('QT += printsupport')
+
+                if self.qsci_features_dir is not None:"
   '';
 
+  dontConfigure = true;
+
+  build = ''
+    sip-install --qsci-features-dir ${qscintilla}/mkspecs/features \
+    --qsci-include-dir ${qscintilla}/include \
+    --qsci-library-dir ${qscintilla}/lib --api-dir ${qscintilla}/share";
+  '';
   postInstall = ''
     # Needed by pythonImportsCheck to find the module
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"

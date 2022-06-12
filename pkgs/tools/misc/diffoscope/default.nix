@@ -4,16 +4,18 @@
 , gzip, hdf5, imagemagick, jdk, libarchive, libcaca, llvm, lz4, mono, ocaml, oggvideotools, openssh, openssl, pdftk, pgpdump, poppler_utils, procyon, qemu, R
 , radare2, sng, sqlite, squashfsTools, tcpdump, ubootTools, odt2txt, unzip, wabt, xmlbeans, xxd, xz, zip, zstd
 , enableBloat ? false
+# updater only
+, writeScript
 }:
 
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "197";
+  version = "215";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-EKTknFa6gGqd1kpy/k1Vh1Zya+XvBMlU5G6Rg2p66es=";
+    sha256 = "sha256-OiAuR4uY9m6322d93JMFFQrXMLv6XD3D24j7K7BRl10=";
   };
 
   outputs = [ "out" "man" ];
@@ -44,18 +46,18 @@ python3Packages.buildPythonApplication rec {
   pythonPath = [
       binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
       e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
+      libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
       xz zip zstd
     ]
     ++ (with python3Packages; [
       argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python_magic progressbar33 pypdf2 rpm tlsh
+      python-magic progressbar33 pypdf2 rpm tlsh
     ])
     ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
     ++ lib.optionals enableBloat ([
       abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
-      hdf5 imagemagick llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
-    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer ]));
+      hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
+    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer-six ]));
 
   checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 
@@ -64,17 +66,19 @@ python3Packages.buildPythonApplication rec {
     installManPage doc/diffoscope.1
   '';
 
-  # Disable flaky test and a failing one
   disabledTests = [
+    # Disable flaky test and a failing one
     "test_android_manifest"
     "test_sbin_added_to_path"
     "test_diff_meta"
     "test_diff_meta2"
     "test_obj_no_differences"
 
-    # Failing because of file-v5.40 has a slightly different output.
-    # Upstream issue: https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/271
-    "test_text_proper_indentation"
+    # fails because it fails to determine llvm version
+    "test_item3_deflate_llvm_bitcode"
+
+    # disable formatting tests because they can break on black updates
+    "test_code_is_black_clean"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"
@@ -90,6 +94,19 @@ python3Packages.buildPythonApplication rec {
     "tests/comparators/test_device.py"
     "tests/comparators/test_macho.py"
   ];
+
+   passthru = {
+    updateScript = writeScript "update-diffoscope" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of "Latest release: 198 (31 Dec 2021)"'.
+      newVersion="$(curl -s https://diffoscope.org/ | pcregrep -o1 'Latest release: ([0-9]+)')"
+      update-source-version ${pname} "$newVersion"
+    '';
+   };
 
   meta = with lib; {
     description = "Perform in-depth comparison of files, archives, and directories";

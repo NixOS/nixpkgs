@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     description = "Universal script based file extractor and reimporter";
     homepage = "https://aluigi.altervista.org/quickbms.htm";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ samuelgrf ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

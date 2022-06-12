@@ -39,7 +39,9 @@ buildPythonPackage rec {
       --replace '"enum-compat==0.0.3",' "" \
       --replace '"argparse==1.4.0",' "" \
       --replace "click==7.1.2" "click" \
-      --replace "pyscard==2.0.0" "pyscard"
+      --replace "pyscard==2.0.0" "pyscard" \
+      --replace "pycountry==20.7.3" "pycountry" \
+      --replace "terminaltables==3.1.0" "terminaltables"
   '';
 
   pythonImportsCheck = [

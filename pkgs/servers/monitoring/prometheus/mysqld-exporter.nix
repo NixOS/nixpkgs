@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "mysqld_exporter";
-  version = "0.13.0";
+  version = "0.14.0";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "mysqld_exporter";
-    sha256 = "05gb6p65a0ys356qnanwc40klz1izrib37rz5yzyg2ysvamlvmys";
+    sha256 = "sha256-SMcpQNygv/jVLNuQP8V6BH/CmSt5Y4dzYPsboTH2dos=";
   };
 
-  vendorSha256 = "19785rfzlx8h0h8vmg0ghd40h3p4y6ikhgf8rd2qfj5f6qxfhrgv";
+  vendorSha256 = "sha256-M6u+ZBEUqCd6cKVHPvHqRiXLbuWz66GK+ybIQm+5tQE=";
 
   ldflags = let t = "github.com/prometheus/common/version"; in [
     "-s" "-w"
@@ -24,7 +24,9 @@ buildGoModule rec {
   ];
 
   # skips tests with external dependencies, e.g. on mysqld
-  checkFlags = [ "-short" ];
+  preCheck = ''
+    buildFlagsArray+="-short"
+  '';
 
   meta = with lib; {
     description = "Prometheus exporter for MySQL server metrics";

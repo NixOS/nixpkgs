@@ -1,6 +1,10 @@
 { lib, stdenv, fetchurl, fetchpatch
 , autoreconfHook
 
+  # test suite depends on dejagnu which cannot be used during bootstrapping
+  # dejagnu also requires tcl which can't be built statically at the moment
+, doCheck ? !(stdenv.hostPlatform.isStatic)
+, dejagnu
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -19,7 +23,10 @@ stdenv.mkDerivation rec {
 
   patches = [];
 
+  strictDeps = true;
   outputs = [ "out" "dev" "man" "info" ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
@@ -38,6 +45,10 @@ stdenv.mkDerivation rec {
   '';
 
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform; # Don't run the native `strip' when cross-compiling.
+
+  inherit doCheck;
+
+  checkInputs = [ dejagnu ];
 
   meta = with lib; {
     description = "A foreign function call interface library";

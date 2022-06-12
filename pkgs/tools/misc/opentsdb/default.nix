@@ -1,5 +1,5 @@
 { lib, stdenv, autoconf, automake, curl, fetchurl, fetchpatch, jdk8, makeWrapper, nettools
-, python, git
+, python2, git
 }:
 
 let jdk = jdk8; jre = jdk8.jre; in
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ autoconf automake curl jdk nettools python git ];
+  nativeBuildInputs = [ makeWrapper autoconf automake ];
+  buildInputs = [ curl jdk nettools python2 git ];
 
   preConfigure = ''
     patchShebangs ./build-aux/

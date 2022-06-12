@@ -29,6 +29,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1hgdzyz005244f2mh97js9ga0a6s2hcd6iydz07f1hmhsh1j2bwy";
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "An automatic music sorter (based on ID3 tags)";
     homepage = "https://github.com/quebin31/muso";
     license = with licenses; [ gpl3Plus ];

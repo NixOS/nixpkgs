@@ -1,16 +1,17 @@
 { lib, stdenv, fetchFromGitHub, qmake, qtbase, qtsvg, qtx11extras, kwindowsystem
 , libX11, libXext, qttools, wrapQtAppsHook
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "Kvantum";
     rev = "V${version}";
-    sha256 = "0yvxj7r9z890nfq5cadw7ys144c2mnvaplvx4v4ndv7238b741l8";
+    sha256 = "NPMqd7j9Unvw8p/cUNMYWmgrb2ysdMvSSGJ6lJWh4/M=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +29,12 @@ stdenv.mkDerivation rec {
     substituteInPlace style/style.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    attrPath = "libsForQt5.${pname}";
+    rev-prefix = "V";
+  };
 
   meta = with lib; {
     description = "SVG-based Qt5 theme engine plus a config tool and extra themes";

@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "gcsfuse";
-  version = "0.38.0";
+  version = "0.41.1";
 
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
     rev = "v${version}";
-    sha256 = "sha256-5qn20Vqtvuld9/IBW/3j+8C3ac8xJ9kRMTiL6GsOrrE=";
+    sha256 = "sha256-5Kfd033SG1ldF+2QCZ01aa7ts0mA8uPXiLmqZIr94YQ=";
   };
 
   goPackagePath = "github.com/googlecloudplatform/gcsfuse";

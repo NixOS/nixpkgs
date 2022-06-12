@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , cmake
 , meson
 , ninja
@@ -27,6 +28,11 @@ stdenv.mkDerivation rec {
   patches = [
     # https://gitlab.gnome.org/GNOME/retro-gtk/-/merge_requests/150
     ./gio-unix.patch
+    # fix build with meson 0.60 (https://gitlab.gnome.org/GNOME/retro-gtk/-/merge_requests/167)
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/retro-gtk/-/commit/8016c10e7216394bc66281f2d9be740140b6fad6.patch";
+      sha256 = "sha256-HcQnqadK5sJM5mMqi4KERkJM3H+MUl8AJAorpFDsJ68=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -66,5 +72,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.DamienCassou ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/retro-gtk.x86_64-darwin
   };
 }

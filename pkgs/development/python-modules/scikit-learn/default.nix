@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.0.1";
+  version = "1.0.2";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-rCyp27dU1hz+HIO6hINJjvlR0puT7AnW8AKEfyEKmdo=";
+    sha256 = "sha256-tYcJWaVIS2FPJtMcpMF1JLGwMXUiGZ3JhcO0JW4DB2c=";
   };
 
   buildInputs = [
@@ -78,8 +78,6 @@ buildPythonPackage rec {
     # https://github.com/scikit-learn/scikit-learn/issues/17582
     # Since we are overriding '-k' we need to include the 'disabledTests' from above manually.
     "-k" "'not (NuSVC and memmap) ${toString (lib.forEach disabledTests (t: "and not ${t}"))}'"
-
-    "-n" "$NIX_BUILD_CORES"
   ];
 
   preCheck = ''

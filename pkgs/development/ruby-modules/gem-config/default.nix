@@ -26,7 +26,7 @@
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
-, CoreServices, DarwinTools, cctools, libtool
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb
 }@args:
 
 let
@@ -135,12 +135,27 @@ in
     hardeningDisable = [ "format" ];
   };
 
+  rdiscount = attrs: {
+    # Use discount from nixpkgs instead of vendored version
+    dontBuild = false;
+    buildInputs = [ discount ];
+    patches = [
+      # Adapted from Debian:
+      # https://sources.debian.org/data/main/r/ruby-rdiscount/2.1.8-1/debian/patches/01_use-system-libmarkdown.patch
+      ./rdiscount-use-nixpkgs-libmarkdown.patch
+    ];
+  };
+
   ethon = attrs: {
     dontBuild = false;
     postPatch = ''
       substituteInPlace lib/ethon/curls/settings.rb \
         --replace "libcurl" "${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary}"
     '';
+  };
+
+  exiv2 = attrs: {
+    buildFlags = [ "--with-exiv2-lib=${exiv2}/lib" "--with-exiv2-include=${exiv2.dev}/include" ];
   };
 
   fog-dnsimple = attrs:
@@ -403,6 +418,10 @@ in
     '';
   };
 
+  maxmind_geoip2 = attrs: {
+    buildFlags = [ "--with-maxminddb-lib=${libmaxminddb}/lib" "--with-maxminddb-include=${libmaxminddb}/include" ];
+  };
+
   metasploit-framework = attrs: {
     preInstall = ''
       export HOME=$TMPDIR
@@ -539,14 +558,6 @@ in
       "--with-libvirt-include=${libvirt}/include"
       "--with-libvirt-lib=${libvirt}/lib"
     ];
-    dontBuild = false;
-    postPatch = ''
-      # https://gitlab.com/libvirt/libvirt-ruby/-/commit/43543991832c9623c00395092bcfb9e178243ba4
-      substituteInPlace ext/libvirt/common.c \
-        --replace 'st.h' 'ruby/st.h'
-      substituteInPlace ext/libvirt/domain.c \
-        --replace 'st.h' 'ruby/st.h'
-    '';
   };
 
   ruby-lxc = attrs: {

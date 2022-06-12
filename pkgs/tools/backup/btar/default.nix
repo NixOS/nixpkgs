@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: listindex.o:/build/btar-1.1.1/loadindex.h:12: multiple definition of
+  #     `ptr'; main.o:/build/btar-1.1.1/loadindex.h:12: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildInputs = [ librsync ];
 
   makeFlags = [ "PREFIX=$(out)" ];

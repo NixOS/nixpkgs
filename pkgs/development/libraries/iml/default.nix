@@ -24,6 +24,5 @@ stdenv.mkDerivation rec {
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.unix;
     homepage = "https://cs.uwaterloo.ca/~astorjoh/iml.html";
-    updateWalker = true;
   };
 }

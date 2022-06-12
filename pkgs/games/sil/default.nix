@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
     buildFlagsArray+=("LIBS=-lXaw -lXext -lSM -lICE -lXmu -lXt -lX11 -lncurses")
   '';
 
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: main.o:/build/source/Sil/src/externs.h:57: multiple definition of
+  #     `mini_screenshot_char'; variable.o:/build/source/Sil/src/externs.h:57: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   installPhase = ''
     # the makefile doesn't have a sensible install target, so we hav to do it ourselves
     mkdir -p $out/bin

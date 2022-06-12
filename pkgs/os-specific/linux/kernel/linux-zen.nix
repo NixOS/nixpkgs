@@ -2,13 +2,14 @@
 
 let
   # having the full version string here makes it easier to update
-  modDirVersion = "5.15.11-zen1";
+  modDirVersion = "5.18.1-zen1";
   parts = lib.splitString "-" modDirVersion;
   version = lib.elemAt parts 0;
   suffix = lib.elemAt parts 1;
 
   numbers = lib.splitString "." version;
   branch = "${lib.elemAt numbers 0}.${lib.elemAt numbers 1}";
+  rev = if ((lib.elemAt numbers 2) == "0") then "v${branch}-${suffix}" else "v${modDirVersion}";
 in
 
 buildLinux (args // {
@@ -18,12 +19,15 @@ buildLinux (args // {
   src = fetchFromGitHub {
     owner = "zen-kernel";
     repo = "zen-kernel";
-    rev = "v${modDirVersion}";
-    sha256 = "sha256-KOy1bmNnfa8LtnE+03Y+0pr9r1OCimY0bjGsVmGnPN4=";
+    inherit rev;
+    sha256 = "sha256-LCLfLE85NifuskYl2dxLOJEsUNHLegF8ecYyU4xOCtY=";
   };
 
   structuredExtraConfig = with lib.kernel; {
     ZEN_INTERACTIVE = yes;
+    # TODO: Remove once #175433 reaches master
+    # https://nixpk.gs/pr-tracker.html?pr=175433
+    WERROR = no;
   };
 
   extraMeta = {

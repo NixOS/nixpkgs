@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     comment = "Visually query and analyse your XML data";
     desktopName = "BaseX XML Database";
     genericName = "XML database tool";
-    categories = "Development;Utility;Database";
-    mimeType = "text/xml";
+    categories = [ "Development" "Utility" "Database" ];
+    mimeTypes = [ "text/xml" ];
   });
 
   dontBuild = true;
@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
       modes, BaseX offers a client/server architecture.
     '';
     homepage = "https://basex.org/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pymysensors";
-  version = "0.22.1";
+  version = "0.23.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "theolind";
     repo = pname;
     rev = version;
-    sha256 = "sha256-n4khOQspJBeq0w+epdXYZh6I1lI1drB1JewZ6GfzVHs=";
+    sha256 = "0a09w1bzz2pn0w11f7kx8052914kdpgfb7w6hc9s50x8wl9q604h";
   };
 
   propagatedBuildInputs = [

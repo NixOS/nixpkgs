@@ -1,4 +1,5 @@
-{ buildGoModule
+{ stdenv
+, buildGoModule
 , fetchFromGitHub
 , lib
 , nixosTests
@@ -32,6 +33,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A simple TLS proxy with mutual authentication support for securing non-TLS backend applications";
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     license = licenses.asl20;

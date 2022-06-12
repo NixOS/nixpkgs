@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ndpi";
-  version = "4.0";
+  version = "4.2";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "nDPI";
     rev = version;
-    sha256 = "0snzvlracc6s7r2pgdn0jqcc7nxjxzcivsa579h90g5ibhhplv5x";
+    sha256 = "sha256-ZWWuyPGl+hbrfXdtPvCBqMReuJ4FiGx+qiI7qCz6wtQ=";
   };
 
   configureScript = "./autogen.sh";
@@ -34,8 +34,9 @@ stdenv.mkDerivation rec {
       nDPI is a library for deep-packet inspection based on OpenDPI.
     '';
     homepage = "https://www.ntop.org/products/deep-packet-inspection/ndpi/";
-    license = with licenses; lgpl3;
+    license = with licenses; [ lgpl3Plus bsd3 ];
     maintainers = with maintainers; [ takikawa ];
+    mainProgram = "ndpiReader";
     platforms = with platforms; unix;
   };
 }

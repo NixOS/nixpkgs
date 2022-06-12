@@ -1,7 +1,6 @@
-{ lib
-, stdenv
+{ stdenv
+, lib
 , fetchurl
-, fetchpatch
 , autoreconfHook
 , gtk-doc
 , vala
@@ -22,21 +21,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.38.0";
+  version = "3.40.0";
   pname = "gnome-latex";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xqd49pgi82dygqnxj08i1v22b0vwwhx3zvdinhrx4jny339yam8";
+    sha256 = "xad/55vUDjeOooyPRaZjJ/vIzFw7W48PCcAhfufMCpA=";
   };
-
-  patches = [
-    # Fix build with latest tepl.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/Archive/gnome-latex/commit/e1b01186f8a4e5d3fee4c9ccfbedd6d098517df9.patch";
-      sha256 = "H8cbp5hDZoXytEdKE2D/oYHNKIbEFwxQoEaC4JMfGHY=";
-    })
-  ];
 
   nativeBuildInputs = [
     pkg-config

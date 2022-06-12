@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "3.2.2";
+  version = "3.2.4";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
     rev = version;
-    sha256 = "1dgb3s449nasbnqd5xfikxrfhwwilwlgrw9nv4bfkapvkzpdszjk";
+    sha256 = "1008yzxxs1cp1wc0xcc9xskc3f7naxc4srv1sikiank1bc3479ha";
   };
 
   propagatedBuildInputs = [

@@ -496,4 +496,5 @@ in
 
   ];
 
+  meta.buildDocsInSandbox = false;
 }

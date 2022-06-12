@@ -15,7 +15,7 @@
 , nodePackages
 }:
 let
-  nodejs = pkgs.nodejs-12_x;
+  nodejs = pkgs.nodejs-14_x;
   nodeEnv = import ../../../development/node-packages/node-env.nix {
     inherit (pkgs) stdenv lib python2 runCommand writeTextFile writeShellScript;
     inherit pkgs nodejs;

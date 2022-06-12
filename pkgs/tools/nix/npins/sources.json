@@ -1,0 +1,19 @@
+{
+  "pins": {
+    "npins": {
+      "type": "GitRelease",
+      "repository": {
+        "type": "GitHub",
+        "owner": "andir",
+        "repo": "npins"
+      },
+      "pre_releases": false,
+      "version_upper_bound": null,
+      "version": "0.1.0",
+      "revision": "5c9253ff6010f435ab73fbe1e50ae0fdca0ec07b",
+      "url": "https://api.github.com/repos/andir/npins/tarball/0.1.0",
+      "hash": "019fr9xsirld8kap75k18in3krkikqhjn4mglpy3lyhbhc5n1kh6"
+    }
+  },
+  "version": 2
+}

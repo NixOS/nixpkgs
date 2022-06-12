@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "poetry-core";
-  version = "1.0.7";
+  version = "1.0.8";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = version;
-    sha256 = "0v86x8f8pcbviv2cdn7jjbgj3c994qasx0bqk1kr0mj8m6pjwy9z";
+    sha256 = "sha256-cs9SMGD9RdW8Wx/IAMq6gkOUBsney5r19hyGva98grk=";
   };
 
   postPatch = lib.optionalString (pythonOlder "3.8") ''

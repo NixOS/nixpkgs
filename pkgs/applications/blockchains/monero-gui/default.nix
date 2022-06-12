@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.17.3.0";
+  version = "0.17.3.2";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "0rc1p0k16icgfhc7yvkvb8p6570zz0cvigs648l05fcm3mf787rp";
+    sha256 = "10gincmgc0qpsgm94m1fqfy9j8jn9g1gjk12lcqnf77kvcnz37hq";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     icon = "monero";
     desktopName = "Monero";
     genericName = "Wallet";
-    categories  = "Network;Utility;";
+    categories  = [ "Network" "Utility" ];
   };
 
   postInstall = ''

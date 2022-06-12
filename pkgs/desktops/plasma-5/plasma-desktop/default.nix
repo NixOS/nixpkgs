@@ -17,7 +17,7 @@
 }:
 
 mkDerivation {
-  name = "plasma-desktop";
+  pname = "plasma-desktop";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     boost fontconfig ibus libcanberra_kde libpulseaudio libXcursor libXft xorgserver

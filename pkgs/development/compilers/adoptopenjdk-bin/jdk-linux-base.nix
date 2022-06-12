@@ -33,9 +33,9 @@ let
 in
 
 let result = stdenv.mkDerivation rec {
-  name = if sourcePerArch.packageType == "jdk"
-    then "adoptopenjdk-${sourcePerArch.vmType}-bin-${version}"
-    else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin-${version}";
+  pname = if sourcePerArch.packageType == "jdk"
+    then "adoptopenjdk-${sourcePerArch.vmType}-bin"
+    else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin";
 
   version = sourcePerArch.${cpuName}.version or (throw "unsupported CPU ${cpuName}");
 

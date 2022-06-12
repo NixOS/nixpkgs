@@ -33,6 +33,22 @@ class EnvDefault(argparse.Action):
         setattr(namespace, self.dest, values)
 
 
+def writeable_dir(arg: str) -> Path:
+    """Raises an ArgumentTypeError if the given argument isn't a writeable directory
+    Note: We want to fail as early as possible if a directory isn't writeable,
+    since an executed nixos-test could fail (very late) because of the test-driver
+    writing in a directory without proper permissions.
+    """
+    path = Path(arg)
+    if not path.is_dir():
+        raise argparse.ArgumentTypeError("{0} is not a directory".format(path))
+    if not os.access(path, os.W_OK):
+        raise argparse.ArgumentTypeError(
+            "{0} is not a writeable directory".format(path)
+        )
+    return path
+
+
 def main() -> None:
     arg_parser = argparse.ArgumentParser(prog="nixos-test-driver")
     arg_parser.add_argument(
@@ -45,7 +61,7 @@ def main() -> None:
         "-I",
         "--interactive",
         help="drop into a python repl and run the tests interactively",
-        action="store_true",
+        action=argparse.BooleanOptionalAction,
     )
     arg_parser.add_argument(
         "--start-scripts",
@@ -64,6 +80,14 @@ def main() -> None:
         help="vlans to span by the driver",
     )
     arg_parser.add_argument(
+        "-o",
+        "--output_directory",
+        help="""The path to the directory where outputs copied from the VM will be placed.
+                By e.g. Machine.copy_from_vm or Machine.screenshot""",
+        default=Path.cwd(),
+        type=writeable_dir,
+    )
+    arg_parser.add_argument(
         "testscript",
         action=EnvDefault,
         envvar="testScript",
@@ -77,7 +101,11 @@ def main() -> None:
         rootlog.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
     with Driver(
-        args.start_scripts, args.vlans, args.testscript.read_text(), args.keep_vm_state
+        args.start_scripts,
+        args.vlans,
+        args.testscript.read_text(),
+        args.output_directory.resolve(),
+        args.keep_vm_state,
     ) as driver:
         if args.interactive:
             ptpython.repl.embed(driver.test_symbols(), {})
@@ -94,7 +122,7 @@ def generate_driver_symbols() -> None:
     in user's test scripts. That list is then used by pyflakes to lint those
     scripts.
     """
-    d = Driver([], [], "")
+    d = Driver([], [], "", Path())
     test_symbols = d.test_symbols()
     with open("driver-symbols", "w") as fp:
         fp.write(",".join(test_symbols.keys()))

@@ -41,6 +41,8 @@ in stdenv.mkDerivation {
   ];
 
   meta = with lib; {
+    # darwin: never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/libtorrent-rasterbar-1_1_x.x86_64-darwin
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://libtorrent.org/";
     description = "A C++ BitTorrent implementation focusing on efficiency and scalability";
     license = licenses.bsd3;

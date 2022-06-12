@@ -3,7 +3,7 @@
 } :
 
 buildPythonPackage rec {
-  name = "i-pi";
+  pname = "i-pi";
   version = "2.4.0";
 
   src = fetchFromGitHub {

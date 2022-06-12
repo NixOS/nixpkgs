@@ -57,8 +57,11 @@ mkDerivation rec {
       "SPNAV_LIBPATH=${libspnav}/lib"
     ];
 
-  # src/lexer.l:36:10: fatal error: parser.hxx: No such file or directory
-  enableParallelBuilding = false; # true by default due to qmake
+  enableParallelBuilding = true;
+
+  preBuild = ''
+    make objects/parser.cxx
+  '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications

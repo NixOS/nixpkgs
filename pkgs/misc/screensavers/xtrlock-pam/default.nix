@@ -1,17 +1,18 @@
-{ lib, stdenv, fetchgit, python, pkg-config, xlibsWrapper, pam }:
+{ lib, stdenv, fetchFromGitHub, python2, pkg-config, xlibsWrapper, pam }:
 
 stdenv.mkDerivation {
   pname = "xtrlock-pam";
   version = "3.4-post-20150909";
 
-  src = fetchgit {
-    url = "https://github.com/aanatoly/xtrlock-pam";
+  src = fetchFromGitHub {
+    owner = "aanatoly";
+    repo = "xtrlock-pam";
     rev = "6f4920fcfff54791c0779057e9efacbbbbc05df6";
-    sha256 = "1z2wlhi5d05b18pvwz146kp0lkcc6z2mnilk01mk19hzbziyqmsc";
+    sha256 = "sha256-TFfs418fpjBrAJNGW8U3jE0K7jQkfL4vCquAViKkXPw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ python xlibsWrapper pam ];
+  buildInputs = [ python2 xlibsWrapper pam ];
 
   configurePhase = ''
     substituteInPlace .config/options.py --replace /usr/include/security/pam_appl.h ${pam}/include/security/pam_appl.h

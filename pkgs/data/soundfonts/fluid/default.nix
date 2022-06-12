@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "Fluid-3";
+  pname = "Fluid";
+  version = "3";
 
   src = fetchurl {
     url = "https://ftp.osuosl.org/pub/musescore/soundfont/fluid-soundfont.tar.gz";

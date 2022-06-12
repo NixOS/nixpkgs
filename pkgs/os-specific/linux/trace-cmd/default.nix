@@ -1,12 +1,12 @@
 { lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xsl, libxslt, libtraceevent, libtracefs }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "2.9.5";
+  version = "2.9.7";
 
   src = fetchgit {
     url    = "git://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/";
     rev    = "trace-cmd-v${version}";
-    sha256 = "0kc5cldk5i7q2zr2nyz3mvs5v7w0km6lpx7g39sy3pmhshp0wqlq";
+    sha256 = "sha256-04qsTlOVYh/jHVWxaGuqYj4DkUpcEYcpfUqnqhphIMg=";
   };
 
   # Don't build and install html documentation
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "User-space tools for the Linux kernel ftrace subsystem";
     homepage    = "https://www.trace-cmd.org/";
-    license     = licenses.gpl2;
+    license     = with licenses; [ lgpl21Only gpl2Only ];
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice basvandijk ];
   };

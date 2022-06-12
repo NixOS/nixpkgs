@@ -5,7 +5,7 @@
 { config, lib, pkgs }:
 
 let
-  inherit (pkgs) stdenv fetchurl pkg-config intltool glib fetchFromGitHub;
+  inherit (pkgs) stdenv fetchurl fetchpatch pkg-config intltool glib fetchFromGitHub;
 in
 
 lib.makeScope pkgs.newScope (self:
@@ -65,6 +65,45 @@ in
 {
   # Allow overriding GIMP package in the scope.
   inherit (pkgs) gimp;
+
+  bimp = pluginDerivation rec {
+    /* menu:
+       File/Batch Image Manipulation...
+    */
+    pname = "bimp";
+    version = "2.6";
+
+    src = fetchFromGitHub {
+      owner = "alessandrofrancesconi";
+      repo = "gimp-plugin-bimp";
+      rev = "v${version}";
+      hash = "sha256-IJ3+/9UwxJTRo0hUdzlOndOHwso1wGv7Q4UuhbsFkco=";
+    };
+
+    patches = [
+      # Allow overriding installation path
+      # https://github.com/alessandrofrancesconi/gimp-plugin-bimp/pull/311
+      (fetchpatch {
+        url = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp/commit/098edb5f70a151a3f377478fd6e0d08ed56b8ef7.patch";
+        sha256 = "2Afx9fmdn6ztbsll2f2j7mfffMWYWyr4BuBy9ySV6vM=";
+      })
+    ];
+
+    nativeBuildInputs = with pkgs; [ which ];
+
+    installFlags = [
+      "SYSTEM_INSTALL_DIR=${placeholder "out"}/${gimp.targetPluginDir}/bimp"
+    ];
+
+    installTargets = [ "install-admin" ];
+
+    meta = with lib; {
+      description = "Batch Image Manipulation Plugin for GIMP";
+      homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
+      license = licenses.gpl2Plus;
+      maintainers = with maintainers; [ ];
+    };
+  };
 
   gap = pluginDerivation {
     /* menu:

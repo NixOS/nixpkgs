@@ -222,7 +222,7 @@ let
               machine.execute(ru("VBoxManage controlvm ${name} poweroff"))
           machine.succeed("rm -rf ${sharePath}")
           machine.succeed("mkdir -p ${sharePath}")
-          machine.succeed("chown alice.users ${sharePath}")
+          machine.succeed("chown alice:users ${sharePath}")
 
 
       def create_vm_${name}():
@@ -353,7 +353,7 @@ let
   mkVBoxTest = useExtensionPack: vms: name: testScript: makeTest {
     name = "virtualbox-${name}";
 
-    machine = { lib, config, ... }: {
+    nodes.machine = { lib, config, ... }: {
       imports = let
         mkVMConf = name: val: val.machine // { key = "${name}-config"; };
         vmConfigs = mapAttrsToList mkVMConf vms;

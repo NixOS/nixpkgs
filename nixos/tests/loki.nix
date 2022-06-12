@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     maintainers = [ willibutz ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     services.loki = {
       enable = true;
       configFile = "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml";

@@ -5,7 +5,7 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     afm (0.2.2)
-    asciidoctor (2.0.16)
+    asciidoctor (2.0.17)
     asciidoctor-bibtex (0.8.0)
       asciidoctor (~> 2.0)
       bibtex-ruby (~> 5.1)
@@ -23,11 +23,16 @@ GEM
       asciidoctor (>= 1.5.6, < 3.0.0)
       gepub (~> 1.0.0)
       mime-types (~> 3.0)
+    asciidoctor-html5s (0.5.1)
+      asciidoctor (>= 1.5.7, < 3.0)
+      thread_safe (~> 0.3.4)
     asciidoctor-mathematical (0.3.5)
       asciidoctor (~> 2.0)
       asciimath (~> 2.0)
       mathematical (~> 1.6.0)
-    asciidoctor-pdf (1.6.1)
+    asciidoctor-multipage (0.0.15)
+      asciidoctor (>= 2.0.11, < 2.1)
+    asciidoctor-pdf (1.6.2)
       asciidoctor (~> 2.0)
       concurrent-ruby (~> 1.1)
       prawn (~> 2.4.0)
@@ -41,6 +46,9 @@ GEM
       asciidoctor (>= 2.0.0, < 3.0.0)
       concurrent-ruby (~> 1.0)
       thread_safe (~> 0.3.5)
+    asciidoctor-rouge (0.4.0)
+      asciidoctor (>= 1.5.6, < 2.1)
+      rouge (>= 2.2, < 4)
     asciimath (2.0.3)
     bibtex-ruby (5.1.6)
       latex-decode (~> 0.0)
@@ -56,7 +64,7 @@ GEM
       rexml
     csl-styles (1.0.1.11)
       csl (~> 1.0)
-    css_parser (1.10.0)
+    css_parser (1.11.0)
       addressable
     gepub (1.0.15)
       nokogiri (>= 1.8.2, < 2.0)
@@ -69,14 +77,14 @@ GEM
       ruby-enum (~> 0.4)
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2021.1115)
-    mini_portile2 (2.6.1)
+    mime-types-data (3.2022.0105)
+    mini_portile2 (2.7.1)
     namae (1.1.1)
-    nokogiri (1.12.5)
-      mini_portile2 (~> 2.6.1)
+    nokogiri (1.13.1)
+      mini_portile2 (~> 2.7.0)
       racc (~> 1.4)
     pdf-core (0.9.0)
-    pdf-reader (2.6.0)
+    pdf-reader (2.8.0)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
@@ -98,10 +106,10 @@ GEM
       pdf-reader (~> 2.0)
       prawn (~> 2.2)
     public_suffix (4.0.6)
-    pygments.rb (2.2.0)
+    pygments.rb (2.3.0)
     racc (1.6.0)
     rexml (3.2.5)
-    rouge (3.26.1)
+    rouge (3.27.0)
     ruby-enum (0.9.0)
       i18n
     ruby-rc4 (0.1.5)
@@ -120,9 +128,12 @@ DEPENDENCIES
   asciidoctor-bibtex
   asciidoctor-diagram
   asciidoctor-epub3
+  asciidoctor-html5s
   asciidoctor-mathematical
+  asciidoctor-multipage
   asciidoctor-pdf
   asciidoctor-revealjs
+  asciidoctor-rouge
   coderay
   pygments.rb
   rouge

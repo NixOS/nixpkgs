@@ -19,6 +19,7 @@ in {
         port = port;
         tcp.port = tcpPort;
         http.port = httpPort;
+        openFirewall = true;
         buffer = bufferSize;
         streams = {
           mpd = {

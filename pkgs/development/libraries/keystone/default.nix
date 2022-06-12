@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.keystone-engine.org";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ luc65r ];
+    mainProgram = "kstool";
     platforms = platforms.unix;
   };
 }

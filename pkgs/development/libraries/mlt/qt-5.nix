@@ -18,8 +18,7 @@
 , vid-stab
 , opencv3
 , ladspa-sdk
-, genericUpdater
-, common-updater-scripts
+, gitUpdater
 , ladspaPlugins
 , mkDerivation
 , which
@@ -70,9 +69,9 @@ mkDerivation rec {
     inherit ffmpeg;
   };
 
-  passthru.updateScript = genericUpdater {
+  passthru.updateScript = gitUpdater {
     inherit pname version;
-    versionLister = "${common-updater-scripts}/bin/list-git-tags ${src.meta.homepage}";
+    attrPath = "libsForQt5.mlt";
     rev-prefix = "v";
   };
 

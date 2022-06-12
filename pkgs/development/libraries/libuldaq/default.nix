@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libuldaq";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "mccdaq";
     repo = "uldaq";
     rev = "v${version}";
-    sha256 = "0l9ima8ac99yd9vvjvdrmacm95ghv687wiy39zxm00cmghcfv3vj";
+    sha256 = "sha256-DA1mxu94z5xDpGK9OBwD02HXlOATv/slqZ4lz5GM7QM=";
   };
 
   patches = [

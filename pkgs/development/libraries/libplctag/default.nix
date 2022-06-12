@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libplctag";
-  version = "2.4.8";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "libplctag";
     repo = "libplctag";
     rev = "v${version}";
-    sha256 = "sha256-GVYG+ioqGo0k6ClrJu2mijtuBBFc9l6dNexNDNyh5+8=";
+    sha256 = "sha256-Xzdljx08aXwD6pE1f/3YBAjvrSzvs2fcXmmLH04GFyg=";
   };
 
   nativeBuildInputs = [ cmake ];

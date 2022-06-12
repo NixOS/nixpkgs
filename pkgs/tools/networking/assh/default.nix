@@ -1,30 +1,32 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , openssh
 , makeWrapper
+, ps
 }:
 
 buildGoModule rec {
   pname = "assh";
-  version = "2.12.1";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     repo = "advanced-ssh-config";
     owner = "moul";
     rev = "v${version}";
-    sha256 = "1r3fny4k1crpjasgsp09qf0p3l9vg8c0ddbb8jd6qnqnwwprqfxd";
+    sha256 = "sha256-7I4HFinTuVoy1FIiVJqY7vjd5xms0ciuegwhTHRYDKI=";
   };
 
-  vendorSha256 = "14x7m900mxiwgbbxs56pdqsmx56c4qir5j4dz57bwr10rmh25fy4";
-
-  doCheck = false;
+  vendorSha256 = "sha256-2VNMwmZY2sb9ib+v7mRkeZ2zkTUtXMaDvAbd3jyQMZY=";
 
   ldflags = [
     "-s" "-w" "-X moul.io/assh/v2/pkg/version.Version=${version}"
   ];
 
   nativeBuildInputs = [ makeWrapper ];
+
+  checkInputs = lib.optionals stdenv.isDarwin [ ps ];
 
   postInstall = ''
     wrapProgram "$out/bin/assh" \

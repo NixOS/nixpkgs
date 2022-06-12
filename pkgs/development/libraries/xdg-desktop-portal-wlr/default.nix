@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-wlr";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256:13fbzh8bjnhk4xs8j9bpc01q3hy27zpbf0gkk1fnh3hm5pnyfyiv";
+    sha256 = "sha256-weePlNcLmZ3R0IDQ95p0wQvsKTYp+sVlTENJtF8Z78Y=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config wayland-protocols makeWrapper ];

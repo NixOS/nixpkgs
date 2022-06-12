@@ -164,7 +164,7 @@ in {
         StateDirectoryMode = "0750";
         # Hardening
         CapabilityBoundingSet = [ "" ];
-        DeviceAllow = [ "/dev/stdin" ];
+        DeviceAllow = [ "/dev/stdin" "/dev/urandom" ];
         DevicePolicy = "strict";
         IPAddressAllow = mkIf bindLocalhost "localhost";
         IPAddressDeny = mkIf bindLocalhost "any";

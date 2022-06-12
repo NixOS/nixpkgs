@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "onedrive";
-  version = "2.4.14";
+  version = "2.4.17";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-zh9CSvuwZj9B8XPvV23xS0MqnsR+vhfdD8V+k6CjCxQ=";
+    hash = "sha256-+ADAPxAZNDqLKLz6rAProqSDINDiTZhc2trxJFFMQeA=";
   };
 
   nativeBuildInputs = [ autoreconfHook ldc installShellFiles pkg-config ];

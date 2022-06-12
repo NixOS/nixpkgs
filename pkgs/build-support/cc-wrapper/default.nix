@@ -14,6 +14,7 @@
 , nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , propagateDoc ? cc != null && cc ? man
 , extraTools ? [], extraPackages ? [], extraBuildCommands ? ""
+, nixSupport ? {}
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , libcxx ? null
@@ -155,10 +156,13 @@ stdenv.mkDerivation {
             (setenv "NIX_CFLAGS_COMPILE_${suffixSalt}" (concat (getenv "NIX_CFLAGS_COMPILE_${suffixSalt}") " -isystem " arg "/include"))))
         '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
+
+    inherit nixSupport;
   };
 
   dontBuild = true;
   dontConfigure = true;
+  enableParallelBuilding = true;
 
   unpackPhase = ''
     src=$PWD
@@ -521,7 +525,11 @@ stdenv.mkDerivation {
     ##
     ## Extra custom steps
     ##
-    + extraBuildCommands;
+    + extraBuildCommands
+    + lib.strings.concatStringsSep "; "
+      (lib.attrsets.mapAttrsToList
+        (name: value: "echo ${toString value} >> $out/nix-support/${name}")
+        nixSupport);
 
   inherit expand-response-params;
 

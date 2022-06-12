@@ -15,25 +15,8 @@
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
 
-mapAttrs (channel: chromiumPkg: makeTest rec {
-  name = "chromium-${channel}";
-  meta = {
-    maintainers = with maintainers; [ aszlig primeos ];
-    # https://github.com/NixOS/hydra/issues/591#issuecomment-435125621
-    inherit (chromiumPkg.meta) timeout;
-  };
-
-  enableOCR = true;
-
+let
   user = "alice";
-
-  machine.imports = [ ./common/user-account.nix ./common/x11.nix ];
-  machine.virtualisation.memorySize = 2047;
-  machine.test-support.displayManager.auto.user = user;
-  machine.environment = {
-    systemPackages = [ chromiumPkg ];
-    variables."XAUTHORITY" = "/home/alice/.Xauthority";
-  };
 
   startupHTML = pkgs.writeText "chromium-startup.html" ''
     <!DOCTYPE html>
@@ -50,6 +33,27 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
     </body>
     </html>
   '';
+in
+
+mapAttrs (channel: chromiumPkg: makeTest {
+  name = "chromium-${channel}";
+  meta = {
+    maintainers = with maintainers; [ aszlig primeos ];
+    # https://github.com/NixOS/hydra/issues/591#issuecomment-435125621
+    inherit (chromiumPkg.meta) timeout;
+  };
+
+  enableOCR = true;
+
+  nodes.machine = { ... }: {
+    imports = [ ./common/user-account.nix ./common/x11.nix ];
+    virtualisation.memorySize = 2047;
+    test-support.displayManager.auto.user = user;
+    environment = {
+      systemPackages = [ chromiumPkg ];
+      variables."XAUTHORITY" = "/home/alice/.Xauthority";
+    };
+  };
 
   testScript = let
     xdo = name: text: let

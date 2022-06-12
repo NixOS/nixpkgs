@@ -1,5 +1,5 @@
 { lib
-, pkgs
+, fetchFromGitHub
 , python3
 }:
 
@@ -11,21 +11,17 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "prospector";
-  version = "1.5.1";
+  version = "1.7.7";
   format = "pyproject";
-  disabled = pythonOlder "3.6.1";
 
-  src = pkgs.fetchFromGitHub {
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
     owner = "PyCQA";
     repo = pname;
     rev = version;
-    sha256 = "17f822cxrvcvnrzdx1a9fyi9afljq80b6g6z1k2bqa1vs21gwv7l";
+    hash = "sha256-sbPZmVeJtNphtjuZEfKcUgty9bJ3E/2Ya9RuX3u/XEs=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pep8-naming = ">=0.3.3,<=0.10.0"' 'pep8-naming = "*"'
-  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -58,12 +54,21 @@ buildPythonApplication rec {
     pytestCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'requirements-detector = "^0.7"' 'requirements-detector = "*"' \
+      --replace 'pep8-naming = ">=0.3.3,<=0.10.0"' 'pep8-naming = "*"' \
+      --replace 'mccabe = "^0.6.0"' 'mccabe = "*"'
+  '';
+
+  pythonImportsCheck = [
+    "prospector"
+  ];
+
   meta = with lib; {
     description = "Tool to analyse Python code and output information about errors, potential problems, convention violations and complexity";
     homepage = "https://github.com/PyCQA/prospector";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
-      kamadorueda
-    ];
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ kamadorueda ];
   };
 }

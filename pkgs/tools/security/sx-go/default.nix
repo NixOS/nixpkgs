@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildGoModule
 , fetchFromGitHub
 , libpcap
@@ -27,6 +28,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Command-line network scanner";
     homepage = "https://github.com/v-byte-cpu/sx";
     license = licenses.mit;

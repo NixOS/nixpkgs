@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "1.3";
 
   src = fetchurl {
-    url = "http://sunsite.unc.edu/pub/linux/utils/terminal/forktty-${version}.tgz";
-    sha256 = "sha256-6xc5eshCuCIOsDh0r2DizKAeypGH0TRRotZ4itsvpVk=";
+    url = "mirror://ibiblioPubLinux/utils/terminal/${pname}-${version}.tgz";
+    hash = "sha256-6xc5eshCuCIOsDh0r2DizKAeypGH0TRRotZ4itsvpVk=";
   };
 
   preBuild = ''

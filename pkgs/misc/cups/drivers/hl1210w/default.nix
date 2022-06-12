@@ -12,7 +12,8 @@ let
   };
 in
 stdenv.mkDerivation {
-  name = "cups-brother-hl1210W";
+  pname = "cups-brother-hl1210W";
+  inherit version;
 
   srcs = [ lprdeb cupsdeb ];
   nativeBuildInputs = [ makeWrapper ];

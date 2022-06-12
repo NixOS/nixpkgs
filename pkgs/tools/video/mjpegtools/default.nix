@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mjpegtools";
-  version = "2.1.0";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/mjpeg/mjpegtools-${version}.tar.gz";
-    sha256 = "01y4xpfdvd4zgv6fmcjny9mr1gbfd4y2i4adp657ydw6fqyi8kw6";
+    sha256 = "sha256-sYBTbX2ZYLBeACOhl7ANyxAJKaSaq3HRnVX0obIQ9Jo=";
   };
 
   hardeningDisable = [ "format" ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdv libjpeg libpng ]
               ++ lib.optionals (!withMinimal) [ gtk2 libX11 SDL SDL_gfx ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${SDL.dev}/include/SDL";
+  NIX_CFLAGS_COMPILE = lib.optionalString (!withMinimal) "-I${lib.getDev SDL}/include/SDL";
 
   postPatch = ''
     sed -i -e '/ARCHFLAGS=/s:=.*:=:' configure
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A suite of programs for processing MPEG or MJPEG video";
     homepage = "http://mjpeg.sourceforge.net/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
   };

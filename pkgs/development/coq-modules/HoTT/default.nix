@@ -8,7 +8,7 @@ with lib; mkCoqDerivation {
   release."20170921".rev    = "e3557740a699167e6adb1a65855509d55a392fa1";
   release."20170921".sha256 = "0zwfp8g62b50vmmbb2kmskj3v6w7qx1pbf43yw0hr7asdz2zbx5v";
 
-  extraBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [ autoconf automake ];
 
   preConfigure = ''
     patchShebangs ./autogen.sh

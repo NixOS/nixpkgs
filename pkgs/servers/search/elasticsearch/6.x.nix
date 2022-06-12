@@ -62,9 +62,10 @@ stdenv.mkDerivation (rec {
   };
 } // optionalAttrs enableUnfree {
   dontPatchELF = true;
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [ makeWrapper ]
+    ++ optional stdenv.isLinux autoPatchelfHook;
   runtimeDependencies = [ zlib ];
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     for exe in $(find $out/modules/x-pack-ml/platform/linux-x86_64/bin -executable -type f); do
       echo "patching $exe..."
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$exe"

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bingrep";
-  version = "0.8.5";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "m4b";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ayA3aEidZPa5GJgbbm5K3X2Xgd5Eb6TgUU80Gw/p07w=";
+    hash = "sha256-M3BYj1SKQKjEqP9cxaVlh7UeleDbcx6JN+UI6Ez+QJ8=";
   };
 
-  cargoSha256 = "sha256-XcXllex7UEufV5URhH7aqln1tNxwaiAETO3fUKmHf7s=";
+  cargoHash = "sha256-botAoLNg/qTh+cjPXcjo/Ol2Vktj/c5130k5falEuLY=";
 
   meta = with lib; {
     description = "Greps through binaries from various OSs and architectures, and colors them";

@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , pciutils
 , libconfuse
 , alsa-lib
@@ -10,16 +11,25 @@
 }:
 
 stdenv.mkDerivation rec {
-  pkgname = "pommed-light";
+  pname = "pommed-light";
   version = "1.51lw";
-  name = "${pkgname}-${version}";
 
   src = fetchFromGitHub {
     owner = "bytbox";
-    repo = pkgname;
+    repo = "pommed-light";
     rev = "v${version}";
     sha256 = "18fvdwwhcl6s4bpf2f2i389s71c8k4g0yb81am9rdddqmzaw27iy";
   };
+
+  patches = [
+    # Pull fix pending upstream inclusion for -fno-common toolchain support:
+    #   https://github.com/bytbox/pommed-light/pull/38
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/bytbox/pommed-light/commit/5848b49b45a9c3ab047ebd17deb2162daab1e0b8.patch";
+      sha256 = "15rsq2i4rqp4ssab20486a1wgxi2cp87b7nxyk9h23gdwld713vf";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pommed.conf.mactel --replace /usr $out

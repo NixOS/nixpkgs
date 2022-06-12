@@ -1,24 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "libudev-zero";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "illiliti";
     repo = "libudev-zero";
     rev = version;
-    sha256 = "0mln7iwyz7lxz8dx7bx7b47j6yws1dvfq35qsdcwg3wwmd4ngsz6";
+    sha256 = "1dg6zqy8w3gxca8clz6hhv4jyvz8jdwvpmn9y289nrms1zx1jcs5";
   };
-
-  patches = [
-    # Fix static.
-    # https://github.com/illiliti/libudev-zero/pull/48
-    (fetchpatch {
-      url = "https://github.com/illiliti/libudev-zero/commit/505c61819b371a1802e054fe2601e64f2dc6d79e.patch";
-      sha256 = "0y06rgjv73dd7fi3a0dlabcc8ryk3yhbsyrrhnnn3v36y1wz6m0g";
-    })
-  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -31,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/illiliti/libudev-zero";
     description = "Daemonless replacement for libudev";
+    changelog = "https://github.com/illiliti/libudev-zero/releases/tag/${version}";
     maintainers = with maintainers; [ qyliss shamilton ];
     license = licenses.isc;
     platforms = platforms.linux;

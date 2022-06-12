@@ -82,7 +82,7 @@ in
       serviceConfig.Type = "forking";
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
-        chown ${prayerUser}.${prayerGroup} ${stateDir}
+        chown ${prayerUser}:${prayerGroup} ${stateDir}
       '';
       script = "${prayer}/sbin/prayer --config-file=${prayerCfg}";
     };

@@ -4,15 +4,16 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "pure-prompt";
-  version = "1.18.0";
+  version = "1.20.1";
 
   src = fetchFromGitHub {
     owner = "sindresorhus";
     repo = "pure";
     rev = "v${version}";
-    sha256 = "1aa8aczfvclrnd0igiq48jyq4b8fdwvaaj84nzb6w6sjahzs5jcy";
+    sha256 = "sha256-iuLi0o++e0PqK81AKWfIbCV0CTIxq2Oki6U2oEYsr68=";
   };
 
+  strictDeps = true;
   installPhase = ''
     OUTDIR="$out/share/zsh/site-functions"
     mkdir -p "$OUTDIR"

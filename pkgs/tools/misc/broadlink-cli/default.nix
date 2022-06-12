@@ -2,15 +2,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "broadlink-cli";
-  version = "0.17.0";
+  version = "0.18.2";
 
   # the tools are available as part of the source distribution from GH but
   # not pypi, so we have to fetch them here.
   src = fetchFromGitHub {
     owner  = "mjg59";
     repo   = "python-broadlink";
-    rev    = version;
-    sha256 = "sha256-b3A36BdIvyl1RxNO5SyxLIpQmu1UHHekyh6vrFjwpp4=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-JX+Io5EP1OgtP7T+UQtkfCPWE1rd3MTrCYRhU9C0+0c=";
   };
 
   format = "other";

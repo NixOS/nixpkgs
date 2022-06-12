@@ -1,22 +1,16 @@
-{ stdenv, coreutils, lib, installShellFiles, zlib, autoPatchelfHook, fetchurl }:
+{ stdenv, coreutils, lib, installShellFiles, zlib, autoPatchelfHook, fetchurl, callPackage }:
 
 let
-  version = "0.0.9";
-  assets = {
-    x86_64-darwin = {
-      asset = "scala-cli-x86_64-apple-darwin.gz";
-      sha256 = "sha256-1KwJuapqGhMEIMwrJp2LKlpYFtl+OP9DyaMtge9ZedI=";
-    };
-    x86_64-linux = {
-      asset = "scala-cli-x86_64-pc-linux.gz";
-      sha256 = "sha256-IDXO+MgFlnT7VPugcQr/IGLZeD/vWFqJ0D0zVIbTtk4=";
-    };
-  };
+  pname = "scala-cli";
+  sources = builtins.fromJSON (builtins.readFile ./sources.json);
+  inherit (sources) version assets;
+
+  platforms = builtins.attrNames assets;
 in
 stdenv.mkDerivation {
-  pname = "scala-cli";
-  inherit version;
-  nativeBuildInputs = [ autoPatchelfHook installShellFiles ];
+  inherit pname version;
+  nativeBuildInputs = [ installShellFiles ]
+    ++ lib.optional stdenv.isLinux autoPatchelfHook;
   buildInputs = [ coreutils zlib stdenv.cc.cc ];
   src =
     let
@@ -26,7 +20,6 @@ stdenv.mkDerivation {
       url = "https://github.com/Virtuslab/scala-cli/releases/download/v${version}/${asset.asset}";
       sha256 = asset.sha256;
     };
-
   unpackPhase = ''
     runHook preUnpack
     gzip -d < $src > scala-cli
@@ -42,9 +35,9 @@ stdenv.mkDerivation {
   # We need to call autopatchelf before generating completions
   dontAutoPatchelf = true;
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.isLinux ''
     autoPatchelf $out
-
+  '' + ''
     # hack to ensure the completion function looks right
     # as $0 is used to generate the compdef directive
     PATH="$out/bin:$PATH"
@@ -60,6 +53,7 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     description = "Command-line tool to interact with the Scala language";
     maintainers = [ maintainers.kubukoz ];
-    platforms = builtins.attrNames assets;
   };
+
+  passthru.updateScript = callPackage ./update.nix { } { inherit platforms pname version; };
 }

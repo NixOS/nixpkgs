@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, lib, bspwm, makeWrapper, git, bc }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, git
+, bc
+, bspwm
+}:
 
 stdenv.mkDerivation rec {
   pname = "bsp-layout";
@@ -17,14 +24,22 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    substituteInPlace $out/bin/bsp-layout --replace 'bc ' '${bc}/bin/bc '
+    substituteInPlace $out/lib/bsp-layout/layout.sh --replace 'bc ' '${bc}/bin/bc '
+    for layout in tall rtall wide rwide
+    do
+      substituteInPlace "$out/lib/bsp-layout/layouts/$layout.sh" --replace 'bc ' '${bc}/bin/bc '
+    done
   '';
 
   meta = with lib; {
     description = "Manage layouts in bspwm";
+    longDescription = ''
+      bsp-layout is a dynamic layout manager for bspwm, written in bash.
+      It provides layout options to fit most workflows.
+    '';
     homepage = "https://github.com/phenax/bsp-layout";
     license = licenses.mit;
-    maintainers = with maintainers; [ devins2518 ];
+    maintainers = with maintainers; [ devins2518 totoroot ];
     platforms = platforms.linux;
   };
 }

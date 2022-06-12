@@ -8,22 +8,22 @@
 , gdk-pixbuf
 , atk
 , gtk3
-, testVersion
+, testers
 , czkawka
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "czkawka";
-  version = "3.3.1";
+  version = "4.1.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "czkawka";
     rev = version;
-    sha256 = "0p1j5f5jk0cci6bg4jfnnn80gyi9039ni4ma8zwindk7fyn9gpc8";
+    sha256 = "sha256-N7fCYcjhYlFVkvWdFpR5cu98Vy+jStlBkR/vz/k1lLY=";
   };
 
-  cargoSha256 = "1q35c5szavpsnzflw33radg6blzql3sz3jyzyqqz97ac69zns920";
+  cargoSha256 = "sha256-4L7OjJ26Qpl5YuHil7JEYU8xWH65jiyFz0a/ufr7wYQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     gtk3
   ];
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = czkawka;
     command = "czkawka_cli --version";
   };

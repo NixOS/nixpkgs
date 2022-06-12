@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "wraith";
-  version = "1.4.7";
+  version = "1.4.10";
   src = fetchurl {
     url = "mirror://sourceforge/wraithbotpack/wraith-v${version}.tar.gz";
-    sha256 = "0h6liac5y7im0jfm2sj18mibvib7d1l727fjs82irsjj1v9kif3j";
+    sha256 = "1h8159g6wh1hi69cnhqkgwwwa95fa6z1zrzjl219mynbf6vjjzkw";
   };
   hardeningDisable = [ "format" ];
   buildInputs = [ openssl ];
   patches = [ ./configure.patch ./dlopen.patch ];
   postPatch = ''
     substituteInPlace configure        --subst-var-by openssl.dev ${openssl.dev} \
-                                       --subst-var-by openssl.out ${openssl.out}
-    substituteInPlace src/libssl.cc    --subst-var-by openssl ${openssl.out}
-    substituteInPlace src/libcrypto.cc --subst-var-by openssl ${openssl.out}
+                                       --subst-var-by openssl-lib ${lib.getLib openssl}
+    substituteInPlace src/libssl.cc    --subst-var-by openssl ${lib.getLib openssl}
+    substituteInPlace src/libcrypto.cc --subst-var-by openssl ${lib.getLib openssl}
   '';
   installPhase = ''
     mkdir -p $out/bin
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "An IRC channel management bot written purely in C/C++";
     longDescription = ''
       Wraith is an IRC channel management bot written purely in C/C++. It has

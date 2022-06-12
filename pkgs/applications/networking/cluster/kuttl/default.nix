@@ -26,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/kudobuilder/kuttl";
     license = licenses.asl20;
     maintainers = with maintainers; [ diegolelis ];
+    mainProgram = "kubectl-kuttl";
   };
 }

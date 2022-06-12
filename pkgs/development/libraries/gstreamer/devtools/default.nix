@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, cairo
 , meson
 , ninja
 , pkg-config
@@ -12,16 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-devtools";
-  version = "1.18.4";
+  version = "1.20.1";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1kvcabcfzm7wqih3lzgrg9xjbn4xpx43d1m2zkkvab4i8161kggz";
+    sha256 = "0asbapgf485h2gqq0sn9c4qknwi0ccpraf1685ixp2sv23pwgwc1";
   };
-
-  patches = [
-    ./fix_pkgconfig_includedir.patch
-  ];
 
   outputs = [
     "out"
@@ -40,6 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    cairo
     python3
     json-glib
   ];

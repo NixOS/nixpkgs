@@ -11,12 +11,12 @@ let
 in
 
   rr.overrideAttrs (old: {
-    version = "unstable-2021-07-06";
+    version = "unstable-2022-05-12";
 
     src = fetchFromGitHub {
       owner = "mozilla";
       repo = "rr";
-      rev = "0fc21a8d654dabc7fb1991d76343824cb7951ea0";
-      sha256 = "0s851rflxmvxcfw97zmplcwzhv86xmd3my78pi4c7gkj18d621i5";
+      rev = "c96cb688106634ad09af6214aa91252c3a4f74b1";
+      sha256 = "sha256-K4cEQnvBXr/j9qXCgIHLqMrRzm96ushTO5STivRj+Mk=";
     };
   })

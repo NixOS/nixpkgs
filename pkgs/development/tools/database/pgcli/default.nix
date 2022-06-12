@@ -5,7 +5,6 @@
 , cli-helpers
 , click
 , configobj
-, humanize
 , prompt-toolkit
 , psycopg2
 , pygments
@@ -15,25 +14,23 @@
 , keyring
 , pendulum
 , pytestCheckHook
+, sshtunnel
 , mock
 }:
 
 buildPythonApplication rec {
   pname = "pgcli";
-  version = "3.2.0";
-
-  disabled = !isPy3k;
+  version = "3.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6cde97e71996bf910a40b579e5285483c10ea04962a08def01c12433d5f7c6b7";
+    sha256 = "sha256-8DkwGH4n1g32WMqKBPtgHsXXR2xzXysVQsat7Fysj+I=";
   };
 
   propagatedBuildInputs = [
     cli-helpers
     click
     configobj
-    humanize
     prompt-toolkit
     psycopg2
     pygments
@@ -42,15 +39,12 @@ buildPythonApplication rec {
     setproctitle
     keyring
     pendulum
+    sshtunnel
   ];
 
   checkInputs = [ pytestCheckHook mock ];
 
-  disabledTests = [
-    # tests that expect output from an older version of cli-helpers
-    "test_format_output"
-    "test_format_output_auto_expand"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
+  disabledTests = lib.optionals stdenv.isDarwin [ "test_application_name_db_uri" ];
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";

@@ -1,16 +1,15 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=../../../.. -i python3 -p python3
 
-import json
-import urllib.request
-import urllib.error
-from typing import List, Dict, Optional, Any, Tuple
-import logging
-from operator import itemgetter
-import subprocess
-import zipfile
-import io
 import base64
+import json
+import logging
+import subprocess
+import urllib.error
+import urllib.request
+from operator import itemgetter
+from pathlib import Path
+from typing import List, Dict, Optional, Any, Tuple
 
 # We don't want all those deprecated legacy extensions
 # Group extensions by GNOME "major" version for compatibility reasons
@@ -18,15 +17,14 @@ supported_versions = {
     "38": "3.38",
     "40": "40",
     "41": "41",
+    "42": "42",
 }
 
-
-# Some type alias to increase readility of complex compound types
+# Some type alias to increase readability of complex compound types
 PackageName = str
 ShellVersion = str
 Uuid = str
 ExtensionVersion = int
-
 
 # Keep track of all names that have been used till now to detect collisions.
 # This works because we deterministically process all extensions in historical order
@@ -35,6 +33,8 @@ ExtensionVersion = int
 package_name_registry: Dict[ShellVersion, Dict[PackageName, List[Uuid]]] = {}
 for shell_version in supported_versions.keys():
     package_name_registry[shell_version] = {}
+
+updater_dir_path = Path(__file__).resolve().parent
 
 
 def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
@@ -47,28 +47,28 @@ def fetch_extension_data(uuid: str, version: str) -> Tuple[str, str]:
     uuid = uuid.replace("@", "")
     url: str = f"https://extensions.gnome.org/extension-data/{uuid}.v{version}.shell-extension.zip"
 
-    # Yes, we download that file three times:
+    # Download extension and add the zip content to nix-store
+    process = subprocess.run(
+        ["nix-prefetch-url", "--unpack", "--print-path", url], capture_output=True, text=True
+    )
 
-    # The first time is for the maintainter, so they may have a personal backup to fix potential issues
-    # subprocess.run(
-    #     ["wget", url], capture_output=True, text=True
-    # )
+    lines = process.stdout.splitlines()
 
-    # The second time, we extract the metadata.json because we need it too
-    with urllib.request.urlopen(url) as response:
-        data = zipfile.ZipFile(io.BytesIO(response.read()), 'r')
-        metadata = base64.b64encode(data.read('metadata.json')).decode()
+    # Get hash from first line of nix-prefetch-url output
+    hash = lines[0].strip()
 
-    # The third time is to get the file into the store and to get its hash
-    hash = subprocess.run(
-        ["nix-prefetch-url", "--unpack", url], capture_output=True, text=True
-    ).stdout.strip()
+    # Get path from second line of nix-prefetch-url output
+    path = Path(lines[1].strip())
+
+    # Get metadata.json content from nix-store
+    with open(path / "metadata.json", "r") as out:
+        metadata = base64.b64encode(out.read().encode("ascii")).decode()
 
     return hash, metadata
 
 
 def generate_extension_versions(
-    extension_version_map: Dict[ShellVersion, ExtensionVersion], uuid: str
+        extension_version_map: Dict[ShellVersion, ExtensionVersion], uuid: str
 ) -> Dict[ShellVersion, Dict[str, str]]:
     """
     Takes in a mapping from shell versions to extension versions and transforms it the way we need it:
@@ -76,7 +76,9 @@ def generate_extension_versions(
     - Filter out versions that only support old GNOME versions
     - Download the extension and hash it
     """
-    extension_versions: Dict[ShellVersion, Dict[str, str]] = {}
+
+    # Determine extension version per shell version
+    extension_versions: Dict[ShellVersion, ExtensionVersion] = {}
     for shell_version, version_prefix in supported_versions.items():
         # Newest compatible extension version
         extension_version: Optional[int] = max(
@@ -90,19 +92,32 @@ def generate_extension_versions(
         # Extension is not compatible with this GNOME version
         if not extension_version:
             continue
+
+        extension_versions[shell_version] = extension_version
+
+    # Download information once for all extension versions chosen above
+    extension_info_cache: Dict[ExtensionVersion, Tuple[str, str]] = {}
+    for extension_version in sorted(set(extension_versions.values())):
         logging.debug(
-            f"[{shell_version}] Downloading '{uuid}' v{extension_version}"
+            f"[{uuid}] Downloading v{extension_version}"
         )
-        sha256, metadata = fetch_extension_data(uuid, str(extension_version))
-        extension_versions[shell_version] = {
+        extension_info_cache[extension_version] = \
+            fetch_extension_data(uuid, str(extension_version))
+
+    # Fill map
+    extension_versions_full: Dict[ShellVersion, Dict[str, str]] = {}
+    for shell_version, extension_version in extension_versions.items():
+        sha256, metadata = extension_info_cache[extension_version]
+
+        extension_versions_full[shell_version] = {
             "version": str(extension_version),
             "sha256": sha256,
             # The downloads are impure, their metadata.json may change at any time.
-            # Thus, be back it up / pin it to remain deterministic
+            # Thus, we back it up / pin it to remain deterministic
             # Upstream issue: https://gitlab.gnome.org/Infrastructure/extensions-web/-/issues/137
             "metadata": metadata,
         }
-    return extension_versions
+    return extension_versions_full
 
 
 def pname_from_url(url: str) -> Tuple[str, str]:
@@ -111,7 +126,7 @@ def pname_from_url(url: str) -> Tuple[str, str]:
     """
 
     url = url.split("/")  # type: ignore
-    return (url[3], url[2])
+    return url[3], url[2]
 
 
 def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -135,7 +150,7 @@ def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
                    Don't make any assumptions on it, and treat it like an opaque string!
             "link" follows the following schema: "/extension/$number/$string/"
                    The number is monotonically increasing and unique to every extension.
-                   The string is usually derived from the extensions's name (but shortened, kebab-cased and URL friendly).
+                   The string is usually derived from the extension name (but shortened, kebab-cased and URL friendly).
                    It may diverge from the actual name.
             The keys of "shell_version_map" are GNOME Shell version numbers.
 
@@ -180,7 +195,7 @@ def process_extension(extension: Dict[str, Any]) -> Optional[Dict[str, Any]]:
 
     for shell_version in shell_version_map.keys():
         if pname in package_name_registry[shell_version]:
-            logging.warning(f"Package name '{pname}' is colliding.")
+            logging.warning(f"Package name '{pname}' for GNOME '{shell_version}' is colliding.")
             package_name_registry[shell_version][pname].append(uuid)
         else:
             package_name_registry[shell_version][pname] = [uuid]
@@ -209,18 +224,18 @@ def scrape_extensions_index() -> List[Dict[str, Any]]:
         logging.info("Scraping page " + str(page))
         try:
             with urllib.request.urlopen(
-                f"https://extensions.gnome.org/extension-query/?n_per_page=25&page={page}"
+                    f"https://extensions.gnome.org/extension-query/?n_per_page=25&page={page}"
             ) as response:
                 data = json.loads(response.read().decode())["extensions"]
-                responseLength = len(data)
+                response_length = len(data)
 
                 for extension in data:
                     extensions.append(extension)
 
                 # If our page isn't "full", it must have been the last one
-                if responseLength < 25:
+                if response_length < 25:
                     logging.debug(
-                        f"\tThis page only has {responseLength} entries, so it must be the last one."
+                        f"\tThis page only has {response_length} entries, so it must be the last one."
                     )
                     break
         except urllib.error.HTTPError as e:
@@ -249,11 +264,7 @@ if __name__ == "__main__":
             processed_extensions.append(processed_extension)
             logging.debug(f"Processed {num + 1} / {len(raw_extensions)}")
 
-    logging.info(
-        f"Done. Writing results to extensions.json ({len(processed_extensions)} extensions in total)"
-    )
-
-    with open("extensions.json", "w") as out:
+    with open(updater_dir_path / "extensions.json", "w") as out:
         # Manually pretty-print the outer level, but then do one compact line per extension
         # This allows for the diffs to be manageable (one line of change per extension) despite their quantity
         for index, extension in enumerate(processed_extensions):
@@ -265,14 +276,15 @@ if __name__ == "__main__":
             out.write("\n")
         out.write("]\n")
 
-    with open("extensions.json", "r") as out:
+    logging.info(
+        f"Done. Writing results to extensions.json ({len(processed_extensions)} extensions in total)"
+    )
+
+    with open(updater_dir_path / "extensions.json", "r") as out:
         # Check that the generated file actually is valid JSON, just to be sure
         json.load(out)
 
-    logging.info(
-        "Done. Writing name collisions to collisions.json (please check manually)"
-    )
-    with open("collisions.json", "w") as out:
+    with open(updater_dir_path / "collisions.json", "w") as out:
         # Filter out those that are not duplicates
         package_name_registry_filtered: Dict[ShellVersion, Dict[PackageName, List[Uuid]]] = {
             # The outer level keys are shell versions
@@ -283,3 +295,7 @@ if __name__ == "__main__":
         }
         json.dump(package_name_registry_filtered, out, indent=2, ensure_ascii=False)
         out.write("\n")
+
+    logging.info(
+        "Done. Writing name collisions to collisions.json (please check manually)"
+    )

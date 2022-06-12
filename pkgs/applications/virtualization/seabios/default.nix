@@ -1,13 +1,14 @@
-{ lib, stdenv, fetchurl, acpica-tools, python3 }:
+{ lib, stdenv, fetchgit, acpica-tools, python3 }:
 
 stdenv.mkDerivation rec {
 
   pname = "seabios";
-  version = "1.14.0";
+  version = "1.16.0";
 
-  src = fetchurl {
-    url = "https://www.seabios.org/downloads/${pname}-${version}.tar.gz";
-    sha256 = "1zc1brgafbbf5hmdr1qc1p859cabpz73l8sklq83xa4sn9icqw7b";
+  src = fetchgit {
+    url = "https://git.seabios.org/seabios.git";
+    rev = "rel-${version}";
+    sha256 = "0acal1rr7sya86wlhw2mgimabwhjnr0y1pl5zxwb79j8k1w1r8sh";
   };
 
   nativeBuildInputs = [ python3 ];
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.seabios.org";
     license = licenses.lgpl3;
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = with maintainers; [ tstrobel ];
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

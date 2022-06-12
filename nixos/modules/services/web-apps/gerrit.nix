@@ -237,4 +237,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [ edef zimbatm ];
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

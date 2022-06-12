@@ -136,7 +136,7 @@ let
         + concatStringsSep "\n"
           (plainLines
            ++ optional (plainLines != []) ''
-             ${pkgs.mosquitto}/bin/mosquitto_passwd -U "$file"
+             ${cfg.package}/bin/mosquitto_passwd -U "$file"
            ''
            ++ hashedLines));
 
@@ -199,6 +199,7 @@ let
     allow_anonymous = 1;
     allow_zero_length_clientid = 1;
     auto_id_prefix = 1;
+    bind_interface = 1;
     cafile = 1;
     capath = 1;
     certfile = 1;
@@ -295,7 +296,7 @@ let
   };
 
   listenerAsserts = prefix: listener:
-    assertKeysValid prefix freeformListenerKeys listener.settings
+    assertKeysValid "${prefix}.settings" freeformListenerKeys listener.settings
     ++ userAsserts prefix listener.users
     ++ imap0
       (i: v: authAsserts "${prefix}.authPlugins.${toString i}" v)
@@ -397,7 +398,7 @@ let
   };
 
   bridgeAsserts = prefix: bridge:
-    assertKeysValid prefix freeformBridgeKeys bridge.settings
+    assertKeysValid "${prefix}.settings" freeformBridgeKeys bridge.settings
     ++ [ {
       assertion = length bridge.addresses > 0;
       message = "Bridge ${prefix} needs remote broker addresses";
@@ -443,6 +444,15 @@ let
 
   globalOptions = with types; {
     enable = mkEnableOption "the MQTT Mosquitto broker";
+
+    package = mkOption {
+      type = package;
+      default = pkgs.mosquitto;
+      defaultText = literalExpression "pkgs.mosquitto";
+      description = ''
+        Mosquitto package to use.
+      '';
+    };
 
     bridges = mkOption {
       type = attrsOf bridgeOptions;
@@ -517,7 +527,7 @@ let
 
   globalAsserts = prefix: cfg:
     flatten [
-      (assertKeysValid prefix freeformGlobalKeys cfg.settings)
+      (assertKeysValid "${prefix}.settings" freeformGlobalKeys cfg.settings)
       (imap0 (n: l: listenerAsserts "${prefix}.listener.${toString n}" l) cfg.listeners)
       (mapAttrsToList (n: b: bridgeAsserts "${prefix}.bridge.${n}" b) cfg.bridges)
     ];
@@ -556,7 +566,7 @@ in
     systemd.services.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       serviceConfig = {
         Type = "notify";
         NotifyAccess = "main";
@@ -565,7 +575,7 @@ in
         RuntimeDirectory = "mosquitto";
         WorkingDirectory = cfg.dataDir;
         Restart = "on-failure";
-        ExecStart = "${pkgs.mosquitto}/bin/mosquitto -c ${configFile}";
+        ExecStart = "${cfg.package}/bin/mosquitto -c ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
         # Hardening
@@ -620,9 +630,10 @@ in
                ]));
         RemoveIPC = true;
         RestrictAddressFamilies = [
-          "AF_UNIX"  # for sd_notify() call
+          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
+          "AF_NETLINK"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;

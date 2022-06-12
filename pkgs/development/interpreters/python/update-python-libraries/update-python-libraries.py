@@ -242,7 +242,9 @@ DEFAULT_SETUPTOOLS_EXTENSION = 'tar.gz'
 
 FORMATS = {
     'setuptools'        :   DEFAULT_SETUPTOOLS_EXTENSION,
-    'wheel'             :   'whl'
+    'wheel'             :   'whl',
+    'pyproject'         :   'tar.gz',
+    'flit'              :   'tar.gz'
 }
 
 def _determine_fetcher(text):
@@ -281,12 +283,8 @@ def _determine_extension(text, fetcher):
         if extension is None:
             if src_format is None:
                 src_format = 'setuptools'
-            elif src_format == 'flit':
-                raise ValueError("Don't know how to update a Flit package.")
             elif src_format == 'other':
                 raise ValueError("Don't know how to update a format='other' package.")
-            elif src_format == 'pyproject':
-                raise ValueError("Don't know how to update a pyproject package.")
             extension = FORMATS[src_format]
 
     elif fetcher == 'fetchurl':
@@ -342,19 +340,37 @@ def _update_package(path, target):
         raise ValueError("no file available for {}.".format(pname))
 
     text = _replace_value('version', new_version, text)
+    # hashes from pypi are 16-bit encoded sha256's, normalize it to sri to avoid merge conflicts
+    # sri hashes have been the default format since nix 2.4+
+    try:
+        sri_hash = subprocess.check_output(["nix", "hash", "to-sri", "--type", "sha256", new_sha256]).decode('utf-8').strip()
+    except subprocess.CalledProcessError:
+        # nix<2.4 compat
+        sri_hash = subprocess.check_output(["nix", "to-sri", "--type", "sha256", new_sha256]).decode('utf-8').strip()
+
 
     # fetchers can specify a sha256, or a sri hash
     try:
-        text = _replace_value('sha256', new_sha256, text)
+        text = _replace_value('sha256', sri_hash, text)
     except ValueError:
-        # hashes from pypi are 16-bit encoded sha256's, need translate to an sri hash if used with "hash"
-        sri_hash = subprocess.check_output(["nix", "hash", "to-sri", "--type", "sha256", new_sha256]).decode('utf-8').strip()
         text = _replace_value('hash', sri_hash, text)
 
     if fetcher == 'fetchFromGitHub':
-        text = _replace_value('rev', f"{prefix}${{version}}", text)
-        # incase there's no prefix, just rewrite without interpolation
-        text = text.replace('"${version}";', 'version;')
+        # in the case of fetchFromGitHub, it's common to see `rev = version;` or `rev = "v${version}";`
+        # in which no string value is meant to be substituted. However, we can just overwrite the previous value.
+        regex = '(rev\s+=\s+[^;]*;)'
+        regex = re.compile(regex)
+        matches = regex.findall(text)
+        n = len(matches)
+
+        if n == 0:
+            raise ValueError("Unable to find rev value for {}.".format(pname))
+        else:
+            # forcefully rewrite rev, incase tagging conventions changed for a release
+            match = matches[0]
+            text = text.replace(match, f'rev = "refs/tags/{prefix}${{version}}";')
+            # incase there's no prefix, just rewrite without interpolation
+            text = text.replace('"${version}";', 'version;')
 
     with open(path, 'w') as f:
         f.write(text)

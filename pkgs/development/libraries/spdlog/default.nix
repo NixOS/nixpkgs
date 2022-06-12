@@ -36,7 +36,11 @@ let
       '';
 
       doCheck = true;
-      preCheck = "export LD_LIBRARY_PATH=$(pwd)\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH";
+      preCheck =  if stdenv.isDarwin then ''
+        export DYLD_LIBRARY_PATH="$(pwd)''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
+      '' else ''
+        export LD_LIBRARY_PATH="$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
+      '';
 
       meta = with lib; {
         description    = "Very fast, header only, C++ logging library";
@@ -49,8 +53,8 @@ let
 in
 {
   spdlog_1 = generic {
-    version = "1.9.2";
-    sha256 = "sha256-GSUdHtvV/97RyDKy8i+ticnSlQCubGGWHg4Oo+YAr8Y=";
+    version = "1.10.0";
+    sha256 = "sha256-c6s27lQCXKx6S1FhZ/LiKh14GnXMhZtD1doltU4Avws=";
   };
 
   spdlog_0 = generic {

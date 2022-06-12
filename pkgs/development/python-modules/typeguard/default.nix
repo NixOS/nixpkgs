@@ -3,18 +3,18 @@
 , pythonOlder
 , lib
 , setuptools-scm
-, pytest
+, pytestCheckHook
 , typing-extensions
 , glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "2.13.2";
+  version = "2.13.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7e50071590ab997509aa0977609eb5cf9d73d84c1f416cb4fab78b77a9d15326";
+    sha256 = "00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4";
   };
 
   buildInputs = [ setuptools-scm ];
@@ -26,12 +26,17 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace " --cov" ""
   '';
 
-  checkInputs = [ pytest typing-extensions ];
+  checkInputs = [ pytestCheckHook typing-extensions ];
 
-  # mypy tests aren't passing with latest mypy
-  checkPhase = ''
-    py.test . --ignore=tests/mypy
-  '';
+  disabledTestPaths = [
+    # mypy tests aren't passing with latest mypy
+    "tests/mypy"
+  ];
+
+  disabledTests = [
+    # not compatible with python3.10
+    "test_typed_dict"
+  ];
 
   disabled = pythonOlder "3.3";
 

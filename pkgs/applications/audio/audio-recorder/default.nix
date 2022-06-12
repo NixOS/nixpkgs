@@ -2,7 +2,7 @@
 , pkg-config, intltool
 , glib, dbus, gtk3, libappindicator-gtk3, gst_all_1
 , librsvg, wrapGAppsHook
-, pulseaudioSupport ? true, libpulseaudio ? null }:
+, pulseaudioSupport ? true, libpulseaudio }:
 
 stdenv.mkDerivation rec {
   pname = "audio-recorder";

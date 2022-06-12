@@ -1,38 +1,38 @@
 {
   "EncConv": {
     "owner": "Alexey-T",
-    "rev": "2021.01.01",
-    "sha256": "18fp7yz2rl80a6xw7v4bgc4092l74fb6p6z4yf312r7gw7b8naq6"
+    "rev": "2022.04.18",
+    "sha256": "sha256-UV07a9qNzd0JQWCq/eD0K9fA7kxAKj5OP7dOpECo8xw="
   },
   "ATBinHex-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2021.07.02",
-    "sha256": "sha256-XSt2XfHMiF/ZIf07M65u+k5FjacyToL0rWbpcflKcuY="
+    "rev": "2022.04.16",
+    "sha256": "sha256-7ye73KSpoPvvxBNwBC3uloufFE+448RDyNScumk1ViE="
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2021.11.11",
-    "sha256": "sha256-lbRRiA8CHWmosJefTHrP2cTgU8nlK1SmNcppG6Bl54I="
+    "rev": "2022.05.06",
+    "sha256": "sha256-mYZ3mgtUpQ8sry5WmdluHca/CR7RqR9GRrxIoeZFLes="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2021.12.22",
-    "sha256": "sha256-MmRJ3XDq7b9doPFfW7njSOasHej5ut0nYcJMFj+Y/Dc="
+    "rev": "2022.06.01",
+    "sha256": "sha256-dilFwvtD8OLLq7QOPWSG3FeBM12Yy4ztM+CedJQAAaU="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2021.09.14",
-    "sha256": "sha256-6eC75zAtWbM1XEI9OM3iqy/a8Vj1l5WU7HGJBpmoQsA="
+    "rev": "2022.05.04",
+    "sha256": "sha256-6O4RijSejPogokLSBuC6pKrOpihMi/ykS06YyV64Sak="
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2021.12.07",
-    "sha256": "sha256-givCklAHao26psWLI2qK246igxcAQEeIYTGH61FX6Xo="
+    "rev": "2022.05.06",
+    "sha256": "sha256-ppm8Wuxhi5N3Er0f0h9d+v2spwEMr7ksf9tz4vI42+M="
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2021.12.07",
-    "sha256": "sha256-/2Fv/vrpbHSiJro11cjbziUaT4gfwa6y5aQBoYgq3OQ="
+    "rev": "2022.05.23",
+    "sha256": "sha256-/PqEx2Z1TVjnxfeWR9qBZUNzdqDBttuLmSBzIEPe1MY="
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
@@ -41,8 +41,8 @@
   },
   "Emmet-Pascal": {
     "owner": "Alexey-T",
-    "rev": "2020.09.05",
-    "sha256": "0qfiirxnk5g3whx8y8hp54ch3h6gkkd01yf79m95bwar5qvdfybg"
+    "rev": "2022.01.17",
+    "sha256": "sha256-5yqxRW7xFJ4MwHjKnxYL8/HrCDLn30a1gyQRjGMx/qw="
   },
   "CudaText-lexers": {
     "owner": "Alexey-T",

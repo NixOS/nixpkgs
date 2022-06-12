@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchsvn
 , substituteAll
 , jdk
 , jre
@@ -14,11 +15,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkgmap";
-  version = "4836";
+  version = "4904";
 
-  src = fetchurl {
-    url = "https://www.mkgmap.org.uk/download/mkgmap-r${version}-src.tar.gz";
-    sha256 = "nmEl7pN3LW6nqo5IB6GgzcDMHhdAsMySTdANVbybznY=";
+  src = fetchsvn {
+    url = "https://svn.mkgmap.org.uk/mkgmap/mkgmap/trunk";
+    rev = version;
+    sha256 = "sha256-43gJkpk19Ef3vUbRNt3VDstxCLJl6smsAjtcrovGjEE=";
   };
 
   patches = [
@@ -74,6 +76,10 @@ stdenv.mkDerivation rec {
     description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
     homepage = "https://www.mkgmap.org.uk/";
     downloadPage = "https://www.mkgmap.org.uk/download/mkgmap.html";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.all;

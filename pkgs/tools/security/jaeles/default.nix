@@ -14,9 +14,7 @@ buildGoModule rec {
     hash = "sha256-IGB+TYMOOO7fvRfDe9y+JSXuDSMDVJK+N4hS+kezG48=";
   };
 
-  vendorSha256 = "sha256-3CKDkxvr7egHui6d8+25t9Zq2ePMUOULr+1NjEm4GXA=";
-
-  runVend = true;
+  vendorSha256 = "sha256-R2cP5zNuGUs0/KeaGhbQm1m5gVBVhpcFrS/jsph3EBk=";
 
   # Tests want to download signatures
   doCheck = false;

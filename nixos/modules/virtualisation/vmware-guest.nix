@@ -27,6 +27,7 @@ in
       message = "VMWare guest is not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } ];
 
+    boot.initrd.availableKernelModules = [ "mptspi" ];
     boot.initrd.kernelModules = [ "vmw_pvscsi" ];
 
     environment.systemPackages = [ open-vm-tools ];
@@ -63,7 +64,6 @@ in
     environment.etc.vmware-tools.source = "${open-vm-tools}/etc/vmware-tools/*";
 
     services.xserver = mkIf (!cfg.headless) {
-      videoDrivers = mkOverride 50 [ "vmware" ];
       modules = [ xf86inputvmmouse ];
 
       config = ''

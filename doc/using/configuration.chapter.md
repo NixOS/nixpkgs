@@ -164,6 +164,14 @@ There are several ways to tweak how Nix handles a package which has been marked 
 
     Note that `permittedInsecurePackages` is only checked if `allowInsecurePredicate` is not specified.
 
+### `config` Options Reference
+
+The following attributes can be passed in [`config`](#chap-packageconfig).
+
+```{=docbook}
+<include xmlns="http://www.w3.org/2001/XInclude" href="../doc-support/result/config-options.docbook.xml"/>
+```
+
 ## Modify packages via `packageOverrides` {#sec-modify-via-packageOverrides}
 
 You can define a function called `packageOverrides` in your local `~/.config/nixpkgs/config.nix` to override Nix packages. It must be a function that takes pkgs as an argument and returns a modified set of packages.

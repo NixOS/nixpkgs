@@ -11,21 +11,21 @@ let
     name = "cbqn-bytecode-files";
     owner = "dzaima";
     repo = "CBQN";
-    rev = "b000b951aa8f3590b196b4c09056604c0b32a168";
-    hash = "sha256-znW0xOXogP4TfifUmk3cs4aN/9mMSpSD2WJppmeI1Fg=";
+    rev = "c39653c898531a2cdbf4cc5c764df6e37b1894a4";
+    hash = "sha256-JCEmkwh5Rv5+NQoxvefSrYnayU892/Wam+gjMgcQmO0=";
   };
 in
 assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.pre+date=2021-12-13";
+  version = "0.pre+date=2022-05-06";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
-    rev = "e7662b0f6a44add0749fba2a6d7309a5c1eb2601";
-    hash = "sha256-2nfkTZBIGHX5cok6Ea3KSewakZy8Ey8nSO2Fe4xGgvg=";
+    rev = "3496a939b670f8c9ca2a04927378d6b7e9abd68e";
+    hash = "sha256-P+PoY4XF9oEw7VIpmybvPp+jxWHEo2zt1Lamayf1mHg=";
   };
 
   dontConfigure = true;
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '' + (if genBytecode then ''
     ${bqn-path} genRuntime ${mbqn-source}
   '' else ''
-    cp ${cbqn-bytecode-files}/src/gen/{compiler,formatter,runtime0,runtime1,src} src/gen/
+    cp ${cbqn-bytecode-files}/src/gen/{compiles,formatter,runtime0,runtime1,src} src/gen/
   '');
 
   installPhase = ''
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica ];
+    maintainers = with maintainers; [ AndersonTorres sternenseemann synthetica shnarazk ];
     platforms = platforms.all;
   };
 }

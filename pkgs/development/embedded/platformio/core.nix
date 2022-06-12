@@ -9,54 +9,13 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      aiofiles = super.aiofiles.overridePythonAttrs (oldAttrs: rec {
-        version = "0.8.0";
-        src = fetchFromGitHub {
-          owner = "Tinche";
-          repo = "aiofiles";
-          rev = "v${version}";
-          sha256 = "0mr9pzji4vqyf2yzh8yxz5q7fm8mgmkimx1xh49wh625m72pxcap";
-        };
-      });
-
-      asgiref = super.asgiref.overridePythonAttrs (oldAttrs: rec {
-        version = "3.4.1";
-        src = fetchFromGitHub {
-          owner = "django";
-          repo = "asgiref";
-          rev = version;
-          sha256 = "0440321alpqb1cdsmfzmiiy8rpq0ic0wvraalzk39cgrl7mghw39";
-        };
-      });
-
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "8.0.3";
-        src = fetchFromGitHub {
-          owner = "pallets";
-          repo = "click";
-          rev = version;
-          sha256 = "0pxvxgfhqjgsjbgfnilqjki1l24r0rdfd98cl77i71yqdd2f497g";
-        };
-      });
-
       starlette = super.starlette.overridePythonAttrs (oldAttrs: rec {
-        version = "0.17.0";
+        version = "0.20.0";
         src = fetchFromGitHub {
           owner = "encode";
           repo = "starlette";
           rev = version;
-          sha256 = "1g76qpvqzivmwll5ir4bf45jx5kilnkadvy6b7qjisvr402i3qmw";
-        };
-        disabledTestPaths = [];
-      });
-
-      uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
-        version = "0.16.0";
-        src = fetchFromGitHub {
-          owner = "encode";
-          repo = "uvicorn";
-          rev = version;
-          sha256 = "14jih6j4q2qp5c9rgl798i5p51b4y6zkkj434q2l1naw0csphk4s";
+          sha256 = "sha256-bSgPjKqM262PSufz1LHwrdM+uU8xO55Mifv66HRN02Y=";
         };
       });
     };
@@ -80,6 +39,7 @@ with python.pkgs; buildPythonApplication rec {
     pyserial
     requests
     semantic-version
+    spdx-license-list-data.json
     starlette
     tabulate
     uvicorn
@@ -96,6 +56,8 @@ with python.pkgs; buildPythonApplication rec {
   ];
 
   pytestFlagsArray = (map (e: "--deselect tests/${e}") [
+    "commands/pkg/test_exec.py::test_pkg_specified"
+    "commands/pkg/test_exec.py::test_unrecognized_options"
     "commands/test_ci.py::test_ci_boards"
     "commands/test_ci.py::test_ci_build_dir"
     "commands/test_ci.py::test_ci_keep_build_dir"
@@ -105,6 +67,7 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_init.py::test_init_duplicated_boards"
     "commands/test_init.py::test_init_enable_auto_uploading"
     "commands/test_init.py::test_init_ide_atom"
+    "commands/test_init.py::test_init_ide_clion"
     "commands/test_init.py::test_init_ide_eclipse"
     "commands/test_init.py::test_init_ide_vscode"
     "commands/test_init.py::test_init_incorrect_board"
@@ -133,9 +96,6 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_lib_complex.py::test_lib_show"
     "commands/test_lib_complex.py::test_lib_stats"
     "commands/test_lib_complex.py::test_search"
-    "commands/test_test.py::test_local_env"
-    "commands/test_test.py::test_multiple_env_build"
-    "commands/test_test.py::test_setup_teardown_are_compilable"
     "package/test_manager.py::test_download"
     "package/test_manager.py::test_install_force"
     "package/test_manager.py::test_install_from_registry"
@@ -153,12 +113,21 @@ with python.pkgs; buildPythonApplication rec {
     "test_misc.py::test_platformio_cli"
     "test_pkgmanifest.py::test_packages"
   ]) ++ (map (e: "--ignore=tests/${e}") [
+    "commands/pkg/test_install.py"
+    "commands/pkg/test_list.py"
+    "commands/pkg/test_outdated.py"
+    "commands/pkg/test_search.py"
+    "commands/pkg/test_show.py"
+    "commands/pkg/test_uninstall.py"
+    "commands/pkg/test_update.py"
     "commands/test_boards.py"
     "commands/test_check.py"
     "commands/test_platform.py"
+    "commands/test_run.py"
+    "commands/test_test.py"
     "commands/test_update.py"
-    "test_maintenance.py"
     "test_ino2cpp.py"
+    "test_maintenance.py"
   ]) ++ [
     "tests"
   ];
@@ -171,16 +140,17 @@ with python.pkgs; buildPythonApplication rec {
 
   postPatch = ''
     substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
-      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data}'
+      --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
 
     substituteInPlace setup.py \
-      --replace "zeroconf==0.37.*" "zeroconf"
+      --replace "wsproto==1.0.*" "wsproto" \
+      --replace "zeroconf==0.38.*" "zeroconf"
   '';
 
   meta = with lib; {
     broken = stdenv.isAarch64;
     description = "An open source ecosystem for IoT development";
-    homepage = "http://platformio.org";
+    homepage = "https://platformio.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ mog makefu ];
   };

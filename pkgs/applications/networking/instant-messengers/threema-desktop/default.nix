@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "threema-desktop";
-  version = "1.0.3";
+  version = "1.2.0";
 
   src = fetchurl {
     # As Threema only offers a Latest Release url, the plan is to upload each
     # new release url to web.archive.org until their Github releases page gets populated.
-    url = "https://web.archive.org/web/20211027194646/https://releases.threema.ch/web-electron/v1/release/Threema-Latest.deb";
-    sha256 = "sha256-qiFv52nnyfHxCWTePmyxW/MgzFy3EUxmW6n+UIkw7tk=";
+    url = "https://web.archive.org/web/20220408213031if_/https://releases.threema.ch/web-electron/v1/release/Threema-Latest.deb";
+    sha256 = "7c8e1e76ad82a0cf776eb8b0a683a41a00dc8752bb79a24b0ae9d795fdedcde6";
   };
 
   nativeBuildInputs = [

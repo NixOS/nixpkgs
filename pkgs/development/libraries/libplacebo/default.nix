@@ -12,18 +12,19 @@
 , libepoxy
 , libGL
 , xorg
+, libunwind
 }:
 
 stdenv.mkDerivation rec {
   pname = "libplacebo";
-  version = "4.157.0";
+  version = "4.192.1";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08kqsd29h8wm0vz7698wh2mdgpwv6anqc5n7d1spnnamwyfwc64h";
+    sha256 = "13z2f0vwf9fgfzqgkqzvqwa8c8nkymrg5hv7xslfx53dacjfidhy";
   };
 
   nativeBuildInputs = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     libepoxy
     libGL
     xorg.libX11
+    libunwind
   ];
 
   mesonFlags = [

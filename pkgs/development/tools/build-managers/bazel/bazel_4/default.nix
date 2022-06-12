@@ -142,7 +142,8 @@ let
 
     src = srcDepsSet."java_tools_javac11_${system}-v10.6.zip";
 
-    nativeBuildInputs = [ autoPatchelfHook unzip ];
+    nativeBuildInputs = [ unzip ]
+      ++ lib.optional stdenv.isLinux autoPatchelfHook;
     buildInputs = [ gcc-unwrapped ];
 
     sourceRoot = ".";
@@ -196,6 +197,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # source bundles dependencies as jars
+    ];
     license = licenses.asl20;
     maintainers = lib.teams.bazel.members;
     inherit platforms;
@@ -337,12 +342,7 @@ stdenv.mkDerivation rec {
       # fixed-output hashes of the fetch phase need to be spot-checked manually
       downstream = recurseIntoAttrs ({
         inherit bazel-watcher;
-      }
-          # dm-sonnet is only packaged for linux
-      // (lib.optionalAttrs stdenv.isLinux {
-          # TODO(timokau) dm-sonnet is broken currently
-          # dm-sonnet-linux = python3.pkgs.dm-sonnet;
-      }));
+      });
     };
 
   src_for_updater = stdenv.mkDerivation rec {
@@ -488,7 +488,6 @@ stdenv.mkDerivation rec {
       build --host_java_toolchain='${javaToolchain}'
       build --verbose_failures
       build --curses=no
-      build --sandbox_debug
       EOF
 
       # add the same environment vars to compile.sh
@@ -502,7 +501,6 @@ stdenv.mkDerivation rec {
           -e "/\$command \\\\$/a --host_java_toolchain='${javaToolchain}' \\\\" \
           -e "/\$command \\\\$/a --verbose_failures \\\\" \
           -e "/\$command \\\\$/a --curses=no \\\\" \
-          -e "/\$command \\\\$/a --sandbox_debug \\\\" \
           -i scripts/bootstrap/compile.sh
 
       # This is necessary to avoid:
@@ -529,13 +527,13 @@ stdenv.mkDerivation rec {
   # when a command can’t be found in a bazel build, you might also
   # need to add it to `defaultShellPath`.
   nativeBuildInputs = [
-    coreutils
     installShellFiles
     makeWrapper
     python3
     unzip
     which
     zip
+    python3.pkgs.absl-py   # Needed to build fish completion
   ] ++ lib.optionals (stdenv.isDarwin) [ cctools libcxx CoreFoundation CoreServices Foundation ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
@@ -549,8 +547,6 @@ stdenv.mkDerivation rec {
     shopt -s dotglob extglob
     mv !(bazel_src) bazel_src
   '';
-  # Needed to build fish completion
-  propagatedBuildInputs = [ python3.pkgs.absl-py ];
   buildPhase = ''
     runHook preBuild
 
@@ -661,6 +657,10 @@ stdenv.mkDerivation rec {
   postFixup = ''
     mkdir -p $out/nix-support
     echo "${defaultShellPath}" >> $out/nix-support/depends
+    # The string literal specifying the path to the bazel-rc file is sometimes
+    # stored non-contiguously in the binary due to gcc optimisations, which leads
+    # Nix to miss the hash when scanning for dependencies
+    echo "${bazelRC}" >> $out/nix-support/depends
   '' + lib.optionalString stdenv.isDarwin ''
     echo "${cctools}" >> $out/nix-support/depends
   '';

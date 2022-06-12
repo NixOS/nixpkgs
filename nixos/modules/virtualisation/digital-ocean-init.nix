@@ -46,7 +46,7 @@ in {
         RemainAfterExit = true;
       };
       restartIfChanged = false;
-      path = [ pkgs.jq pkgs.gnused pkgs.gnugrep pkgs.systemd config.nix.package config.system.build.nixos-rebuild ];
+      path = [ pkgs.jq pkgs.gnused pkgs.gnugrep config.systemd.package config.nix.package config.system.build.nixos-rebuild ];
       environment = {
         HOME = "/root";
         NIX_PATH = concatStringsSep ":" [

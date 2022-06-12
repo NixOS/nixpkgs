@@ -17,7 +17,7 @@ let
     else if xserverCfg.enable || config.programs.sway.enable then
       "gnome3"
     else
-      null;
+      "curses";
 
 in
 
@@ -149,4 +149,6 @@ in
     ];
   };
 
+  # uses attributes of the linked package
+  meta.buildDocsInSandbox = false;
 }

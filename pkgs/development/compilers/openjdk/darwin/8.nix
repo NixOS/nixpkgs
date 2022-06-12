@@ -23,7 +23,7 @@ let
       zuluVersion = "8.54.0.21";
       jdkVersion = "8.0.292";
       sha256 =
-        if enableJavaFX then "1b05b2e40f707a151b063ebba821270fa930ebfc05712bc1f5a8a112395731a6"
+        if enableJavaFX then "8e901075cde2c31f531a34e8321ea4201970936abf54240a232e9389952afe84"
         else "05w89wfjlfbpqfjnv6wisxmaf13qb28b2223f9264jyx30qszw1c";
     };
   }."${stdenv.hostPlatform.system}";
@@ -79,12 +79,18 @@ let
       EOF
     '';
 
+    # fixupPhase is moving the man to share/man which breaks it because it's a
+    # relative symlink.
+    postFixup = ''
+      ln -nsf ../zulu-${lib.versions.major version}.jdk/Contents/Home/man $out/share/man
+    '';
+
     passthru = {
       jre = jdk;
       home = jdk;
     };
 
-    meta = import ./meta.nix lib;
+    meta = import ./meta.nix lib version;
   };
 in
 jdk

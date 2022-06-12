@@ -1,17 +1,46 @@
-diff --git a/src/server/ConfigInterface.ts b/src/server/ConfigInterface.ts
-index d23badd..1dd2b98 100644
---- a/src/server/ConfigInterface.ts
-+++ b/src/server/ConfigInterface.ts
-@@ -11,9 +11,10 @@ interface ConfigInterface {
-     dbPath: string;
-     dbInfoPath: string;
-     mysql: {
+diff --git a/ormconfig.js b/ormconfig.js
+index 5591853b..838c06cb 100644
+--- a/ormconfig.js
++++ b/ormconfig.js
+@@ -38,8 +38,6 @@ switch (config.dbtype) {
+ 
+     case 'mysql':
+         ormConfig.type = 'mysql';
+-        ormConfig.host = config.mysql.host;
+-        ormConfig.port = config.mysql.port;
+         ormConfig.username = config.mysql.user;
+         ormConfig.password = config.mysql.password;
+         ormConfig.database = config.mysql.database;
+@@ -49,6 +47,12 @@ switch (config.dbtype) {
+         } else {
+             ormConfig.charset = config.mysql.charset;
+         }
++        if (config.mysql.socketPath) {
++            ormConfig.socketPath = config.mysql.socketPath;
++        } else {
++            ormConfig.host = config.mysql.host;
++            ormConfig.port = config.mysql.port;
++        }
+         break;
+ 
+     case 'postgres':
+diff --git a/src/model/IConfigFile.ts b/src/model/IConfigFile.ts
+index 6a502e83..ba84a423 100644
+--- a/src/model/IConfigFile.ts
++++ b/src/model/IConfigFile.ts
+@@ -61,12 +61,13 @@ export default interface IConfigFile {
+         regexp?: boolean;
+     };
+     mysql?: {
 -        host: string;
 +        host?: string;
-+        socketPath?: string;
          user: string;
--        password: string;
-+        password?: string;
+-        port: number;
++        port?: number;
+         password: string;
          database: string;
-         connectTimeout: number;
-         connectionLimit: number;
+         charset?: string;
++        socketPath?: string;
+     };
+     postgres?: {
+         host: string;

@@ -108,7 +108,7 @@ let
             hostprog_check_table);
         in
         [
-          "--argv0" "$0" "--add-flags" (lib.escapeShellArgs flags)
+          "--inherit-argv0" "--add-flags" (lib.escapeShellArgs flags)
         ] ++ lib.optionals withRuby [
           "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
         ] ++ lib.optionals (binPath != "") [

@@ -9,7 +9,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "dwarf-therapist-${dwarf-therapist.version}";
+  pname = "dwarf-therapist";
+  version = dwarf-therapist.version;
 
   wrapper = substituteAll {
     src = ./dwarf-therapist.in;

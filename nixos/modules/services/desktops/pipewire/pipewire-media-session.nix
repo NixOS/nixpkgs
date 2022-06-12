@@ -29,6 +29,8 @@ in {
 
   meta = {
     maintainers = teams.freedesktop.members;
+    # uses attributes of the linked package
+    buildDocsInSandbox = false;
   };
 
   ###### interface
@@ -36,9 +38,8 @@ in {
     services.pipewire.media-session = {
       enable = mkOption {
         type = types.bool;
-        default = config.services.pipewire.enable;
-        defaultText = literalExpression "config.services.pipewire.enable";
-        description = "Example pipewire session manager";
+        default = false;
+        description = "Whether to enable the deprecated example Pipewire session manager";
       };
 
       package = mkOption {
@@ -57,7 +58,7 @@ in {
             Configuration for the media session core. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/media-session.conf
           '';
-          default = {};
+          default = defaults.media-session;
         };
 
         alsa-monitor = mkOption {
@@ -66,7 +67,7 @@ in {
             Configuration for the alsa monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/alsa-monitor.conf
           '';
-          default = {};
+          default = defaults.alsa-monitor;
         };
 
         bluez-monitor = mkOption {
@@ -75,7 +76,7 @@ in {
             Configuration for the bluez5 monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/bluez-monitor.conf
           '';
-          default = {};
+          default = defaults.bluez-monitor;
         };
 
         v4l2-monitor = mkOption {
@@ -84,7 +85,7 @@ in {
             Configuration for the V4L2 monitor. For details see
             https://gitlab.freedesktop.org/pipewire/media-session/-/blob/${cfg.package.version}/src/daemon/media-session.d/v4l2-monitor.conf
           '';
-          default = {};
+          default = defaults.v4l2-monitor;
         };
       };
     };
@@ -94,6 +95,12 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
+
+    # Enable either system or user units.
+    systemd.services.pipewire-media-session.enable = config.services.pipewire.systemWide;
+    systemd.user.services.pipewire-media-session.enable = !config.services.pipewire.systemWide;
+
+    systemd.services.pipewire-media-session.wantedBy = [ "pipewire.service" ];
     systemd.user.services.pipewire-media-session.wantedBy = [ "pipewire.service" ];
 
     environment.etc."pipewire/media-session.d/media-session.conf" = {
@@ -102,6 +109,11 @@ in {
     environment.etc."pipewire/media-session.d/v4l2-monitor.conf" = {
       source = json.generate "v4l2-monitor.conf" configs.v4l2-monitor;
     };
+
+    environment.etc."pipewire/media-session.d/with-audio" =
+      mkIf config.services.pipewire.audio.enable {
+        text = "";
+      };
 
     environment.etc."pipewire/media-session.d/with-alsa" =
       mkIf config.services.pipewire.alsa.enable {

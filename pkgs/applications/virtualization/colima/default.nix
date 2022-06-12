@@ -1,25 +1,39 @@
 { lib
-, buildGoModule
+, buildGo118Module
 , fetchFromGitHub
 , installShellFiles
 , lima
 , makeWrapper
 }:
 
-buildGoModule rec {
+buildGo118Module rec {
   pname = "colima";
-  version = "0.2.2";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vWNkYsT2XF+oMOQ3pb1+/a207js8B+EmVanRQrYE/2A=";
+    sha256 = "sha256-66nKH5jxTzLB9bg2lH1E8Cc0GZ6C/N/+yPYhCVEKOBY=";
+
+    # We need the git revision
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse HEAD > $out/.git-revision
+      rm -rf $out/.git
+    '';
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  vendorSha256 = "sha256-F1ym88JrJWzsBg89Y1ufH4oefIRBwTGOw72BrjtpvBw=";
+  vendorSha256 = "sha256-91Ex3RPWxOHyZcR3Bo+bRdDAFw2mEGiC/uNKjdX2kuw=";
+
+  doCheck = false;
+
+  preConfigure = ''
+    ldflags="-X github.com/abiosoft/colima/config.appVersion=${version}
+              -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/colima \
@@ -35,7 +49,6 @@ buildGoModule rec {
     description = "Container runtimes on MacOS with minimal setup";
     homepage = "https://github.com/abiosoft/colima";
     license = licenses.mit;
-    platforms = platforms.darwin;
     maintainers = with maintainers; [ aaschmid ];
   };
 }

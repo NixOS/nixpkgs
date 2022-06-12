@@ -1,5 +1,5 @@
 { lib, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, gawk, python3Minimal, zlib, pahole
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
 , writeTextFile
 }:
 
@@ -56,7 +56,7 @@ let
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = optional (lib.versionAtLeast version "4.14") libelf;
+  moduleBuildDependencies = [ perl ] ++ optional (lib.versionAtLeast version "4.14") libelf;
 
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
@@ -301,7 +301,6 @@ let
             + ")");
         license = lib.licenses.gpl2Only;
         homepage = "https://www.kernel.org/";
-        repositories.git = "https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git";
         maintainers = lib.teams.linux-kernel.members ++ [
           maintainers.thoughtpolice
         ];
@@ -321,7 +320,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr gawk zstd python3Minimal ]
+  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
       ++ optional  (stdenv.hostPlatform.linux-kernel.target == "uImage") buildPackages.ubootTools
       ++ optional  (lib.versionAtLeast version "4.14" && lib.versionOlder version "5.8") libelf
       # Removed util-linuxMinimal since it should not be a dependency.

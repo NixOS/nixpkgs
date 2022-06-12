@@ -1,4 +1,5 @@
 { buildPythonPackage
+, fetchpatch
 , cirq-aqt
 , cirq-core
 , cirq-google
@@ -13,6 +14,14 @@
 buildPythonPackage rec {
   pname = "cirq";
   inherit (cirq-core) version src meta;
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/quantumlib/Cirq/commit/b832db606e5f1850b1eda168a6d4a8e77d8ec711.patch";
+      name = "pr-5330-prevent-implicit-packages.patch";
+      sha256 = "sha256-HTEH3fFxPiBedaz5GxZjXayvoiazwHysKZIOzqwZmbg=";
+    })
+  ];
 
   propagatedBuildInputs = [
     cirq-aqt

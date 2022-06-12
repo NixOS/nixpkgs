@@ -61,7 +61,7 @@ for bin in $(find $binaryDist -executable -type f) :; do
             uniq;
         )
 
-        if test "$names" = "glibc"; then names="stdenv.glibc"; fi
+        if test "$names" = "glibc"; then names="glibc"; fi
         if echo $names | grep -c "gcc" &> /dev/null; then names="stdenv.cc.cc"; fi
 
         if test $lib != $libPath; then

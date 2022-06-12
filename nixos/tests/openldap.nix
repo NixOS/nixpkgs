@@ -25,7 +25,7 @@ in {
     inherit testScript;
     name = "openldap";
 
-    machine = { pkgs, ... }: {
+    nodes.machine = { pkgs, ... }: {
       environment.etc."openldap/root_password".text = "notapassword";
       services.openldap = {
         enable = true;
@@ -65,7 +65,7 @@ in {
     inherit testScript;
     name = "openldap";
 
-    machine = { pkgs, ... }: {
+    nodes.machine = { pkgs, ... }: {
       services.openldap = {
         enable = true;
         logLevel = "stats acl";
@@ -83,7 +83,7 @@ in {
   manualConfigDir = import ./make-test-python.nix ({ pkgs, ... }: {
     name = "openldap";
 
-    machine = { pkgs, ... }: {
+    nodes.machine = { pkgs, ... }: {
       services.openldap = {
         enable = true;
         configDir = "/var/db/slapd.d";

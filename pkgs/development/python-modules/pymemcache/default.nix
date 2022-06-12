@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, six
 , future
 , mock
 , pytestCheckHook
@@ -8,14 +9,19 @@
 
 buildPythonPackage rec {
   pname = "pymemcache";
-  version = "3.5.0";
+  version = "3.5.1";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pinterest";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-O2qmcLWCUSc1f32irelIZOOuOziOUQXFGcuQJBXPvvM=";
+    sha256 = "sha256-DKqfv5gf9gzbnEPQSzy2mAaVYJZL9jmTKyGWVzj40T4=";
   };
+
+  propagatedBuildInputs = [
+    six
+  ];
 
   checkInputs = [
     future

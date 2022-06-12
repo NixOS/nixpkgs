@@ -13,17 +13,19 @@
 , pytestCheckHook
 , requests
 , isPy3k
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
   pname = "debugpy";
-  version = "1.5.1";
+  version = "1.6.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dPP4stLt5nl9B9afPmH6/hpGKXBsaTpvYZQSHxU6KaY=";
+    sha256 = "sha256-WfZz2SimOTpG8CWNUic8NSp4Qd2JTXk+7JSUEPhuQ6Q=";
   };
 
   patches = [
@@ -67,6 +69,7 @@ buildPythonPackage rec {
   )'';
 
   doCheck = isPy3k;
+
   checkInputs = [
     django
     flask
@@ -79,9 +82,24 @@ buildPythonPackage rec {
   ];
 
   # Override default arguments in pytest.ini
-  pytestFlagsArray = [ "--timeout=0" "-n=$NIX_BUILD_CORES" ];
+  pytestFlagsArray = [
+    "--timeout=0"
+  ];
 
-  pythonImportsCheck = [ "debugpy" ];
+  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+    "test_flask_breakpoint_multiproc"
+    "test_subprocess[program-launch-None]"
+    "test_systemexit[0-zero-uncaught-raised-launch(integratedTerminal)-module]"
+    "test_systemexit[0-zero-uncaught--attach_pid-program]"
+    "test_success_exitcodes[-break_on_system_exit_zero-0-attach_listen(cli)-module]"
+    "test_success_exitcodes[--0-attach_connect(api)-program]"
+    "test_run[code-attach_connect(api)]"
+    "test_subprocess[program-launch-None]"
+  ];
+
+  pythonImportsCheck = [
+    "debugpy"
+  ];
 
   meta = with lib; {
     description = "An implementation of the Debug Adapter Protocol for Python";

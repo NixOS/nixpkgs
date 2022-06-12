@@ -143,6 +143,23 @@ export TMPDIR=${TMPDIR:-$tmpdir}
 
 sub="auto?trusted=1"
 
+# Copy the NixOS/Nixpkgs sources to the target as the initial contents
+# of the NixOS channel.
+if [[ -z $noChannelCopy ]]; then
+    if [[ -z $channelPath ]]; then
+        channelPath="$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")"
+    fi
+    if [[ -n $channelPath ]]; then
+        echo "copying channel..."
+        mkdir -p "$mountPoint"/nix/var/nix/profiles/per-user/root
+        nix-env --store "$mountPoint" "${extraBuildFlags[@]}" --extra-substituters "$sub" \
+                -p "$mountPoint"/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet \
+                "${verbosity[@]}"
+        install -m 0700 -d "$mountPoint"/root/.nix-defexpr
+        ln -sfn /nix/var/nix/profiles/per-user/root/channels "$mountPoint"/root/.nix-defexpr/channels
+    fi
+fi
+
 # Build the system configuration in the target filesystem.
 if [[ -z $system ]]; then
     outLink="$tmpdir/system"
@@ -166,23 +183,6 @@ fi
 nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
         -p "$mountPoint"/nix/var/nix/profiles/system --set "$system" "${verbosity[@]}"
-
-# Copy the NixOS/Nixpkgs sources to the target as the initial contents
-# of the NixOS channel.
-if [[ -z $noChannelCopy ]]; then
-    if [[ -z $channelPath ]]; then
-        channelPath="$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")"
-    fi
-    if [[ -n $channelPath ]]; then
-        echo "copying channel..."
-        mkdir -p "$mountPoint"/nix/var/nix/profiles/per-user/root
-        nix-env --store "$mountPoint" "${extraBuildFlags[@]}" --extra-substituters "$sub" \
-                -p "$mountPoint"/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet \
-                "${verbosity[@]}"
-        install -m 0700 -d "$mountPoint"/root/.nix-defexpr
-        ln -sfn /nix/var/nix/profiles/per-user/root/channels "$mountPoint"/root/.nix-defexpr/channels
-    fi
-fi
 
 # Mark the target as a NixOS installation, otherwise switch-to-configuration will chicken out.
 mkdir -m 0755 -p "$mountPoint/etc"

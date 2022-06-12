@@ -2,16 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "minimap2";
-  version = "2.23";
+  version = "2.24";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "lh3";
     rev = "v${version}";
-    sha256 = "sha256-oNVpSINcXO2eKzOCr/Fl8tSMguRxzmlDNu7hLZeopoQ=";
+    sha256 = "sha256-sEp7/Y5ifV9LTqrkhlkfykTJYMMuc+VtF7PvmIpBxUw=";
   };
 
   buildInputs = [ zlib ];
+
+  makeFlags = lib.optionals stdenv.isAarch64 [ "arm_neon=1" "aarch64=1" ];
 
   installPhase = ''
     mkdir -p $out/bin

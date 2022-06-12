@@ -20,6 +20,9 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+    # Load the i2c-dev module
+    boot.kernelModules = [ "i2c_dev" ];
+
     # Give users access to the "gddccontrol" tool
     environment.systemPackages = [
       pkgs.ddccontrol

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       src = ./nix-purity.patch;
       glibc = stdenv.cc.libc.dev or stdenv.cc.libc;
       openssl_dev = openssl.dev;
-      openssl_out = openssl.out;
+      openssl_lib = lib.getLib openssl;
     })
     # Without nonpriv.patch, pppd --version doesn't work when not run as root.
     ./nonpriv.patch

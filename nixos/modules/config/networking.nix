@@ -196,9 +196,7 @@ in
         protocols.source  = pkgs.iana-etc + "/etc/protocols";
 
         # /etc/hosts: Hostname-to-IP mappings.
-        hosts.source = pkgs.runCommand "hosts" {} ''
-          cat ${escapeShellArgs cfg.hostFiles} > $out
-        '';
+        hosts.source = pkgs.concatText "hosts" cfg.hostFiles;
 
         # /etc/netgroup: Network-wide groups.
         netgroup.text = mkDefault "";

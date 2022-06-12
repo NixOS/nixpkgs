@@ -1,4 +1,6 @@
 { lib
+, pythonOlder
+, pythonAtLeast
 , asynctest
 , buildPythonPackage
 , docutils
@@ -15,6 +17,11 @@
 buildPythonPackage rec {
   pname = "aioimaplib";
   version = "0.9.0";
+  format = "setuptools";
+
+  # Check https://github.com/bamthomas/aioimaplib/issues/75
+  # for Python 3.10 support
+  disabled = pythonOlder "3.5" || pythonAtLeast "3.10";
 
   src = fetchFromGitHub {
     owner = "bamthomas";

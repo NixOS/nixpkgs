@@ -1,6 +1,6 @@
 { lib, stdenv, ocaml_oasis, ocaml, findlib, ocamlbuild }:
 
-{ pname, version, buildInputs ? [], meta ? { platforms = ocaml.meta.platforms or []; },
+{ pname, version, nativeBuildInputs ? [], meta ? { platforms = ocaml.meta.platforms or []; },
   minimumOCamlVersion ? null,
   createFindlibDestdir ? true,
   dontStrip ? true,
@@ -8,17 +8,19 @@
 }@args:
 
 if args ? minimumOCamlVersion &&
-   ! lib.versionAtLeast ocaml.version args.minimumOCamlVersion
+   lib.versionOlder ocaml.version args.minimumOCamlVersion
 then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation (args // {
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  buildInputs = [ ocaml findlib ocamlbuild ocaml_oasis ] ++ buildInputs;
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ocaml_oasis ] ++ nativeBuildInputs;
 
   inherit createFindlibDestdir;
   inherit dontStrip;
+
+  strictDeps = true;
 
   buildPhase = ''
     runHook preBuild

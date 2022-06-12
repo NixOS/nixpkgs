@@ -12,7 +12,7 @@
     <listitem>
       <para>
         <emphasis>Stable channels</emphasis>, such as
-        <link xlink:href="https://nixos.org/channels/nixos-21.11"><literal>nixos-21.11</literal></link>.
+        <link xlink:href="https://nixos.org/channels/nixos-22.05"><literal>nixos-22.05</literal></link>.
         These only get conservative bug fixes and package upgrades. For
         instance, a channel update may cause the Linux kernel on your
         system to be upgraded from 4.19.34 to 4.19.38 (a minor bug fix),
@@ -33,7 +33,7 @@
     <listitem>
       <para>
         <emphasis>Small channels</emphasis>, such as
-        <link xlink:href="https://nixos.org/channels/nixos-21.11-small"><literal>nixos-21.11-small</literal></link>
+        <link xlink:href="https://nixos.org/channels/nixos-22.05-small"><literal>nixos-22.05-small</literal></link>
         or
         <link xlink:href="https://nixos.org/channels/nixos-unstable-small"><literal>nixos-unstable-small</literal></link>.
         These are identical to the stable and unstable channels
@@ -60,8 +60,8 @@
   <para>
     When you first install NixOS, you’re automatically subscribed to the
     NixOS channel that corresponds to your installation source. For
-    instance, if you installed from a 21.11 ISO, you will be subscribed
-    to the <literal>nixos-21.11</literal> channel. To see which NixOS
+    instance, if you installed from a 22.05 ISO, you will be subscribed
+    to the <literal>nixos-22.05</literal> channel. To see which NixOS
     channel you’re subscribed to, run the following as root:
   </para>
   <programlisting>
@@ -76,17 +76,17 @@ nixos https://nixos.org/channels/nixos-unstable
 </programlisting>
   <para>
     (Be sure to include the <literal>nixos</literal> parameter at the
-    end.) For instance, to use the NixOS 21.11 stable channel:
+    end.) For instance, to use the NixOS 22.05 stable channel:
   </para>
   <programlisting>
-# nix-channel --add https://nixos.org/channels/nixos-21.11 nixos
+# nix-channel --add https://nixos.org/channels/nixos-22.05 nixos
 </programlisting>
   <para>
     If you have a server, you may want to use the <quote>small</quote>
     channel instead:
   </para>
   <programlisting>
-# nix-channel --add https://nixos.org/channels/nixos-21.11-small nixos
+# nix-channel --add https://nixos.org/channels/nixos-22.05-small nixos
 </programlisting>
   <para>
     And if you want to live on the bleeding edge:
@@ -146,7 +146,7 @@ system.autoUpgrade.allowReboot = true;
       also specify a channel explicitly, e.g.
     </para>
     <programlisting language="bash">
-system.autoUpgrade.channel = https://nixos.org/channels/nixos-21.11;
+system.autoUpgrade.channel = https://nixos.org/channels/nixos-22.05;
 </programlisting>
   </section>
 </chapter>

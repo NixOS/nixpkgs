@@ -1,6 +1,6 @@
 { lib, buildDunePackage, cstruct }:
 
-if !lib.versionAtLeast (cstruct.version or "1") "3"
+if lib.versionOlder (cstruct.version or "1") "3"
 then cstruct
 else
 

@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
-  version = "1.3.1";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    sha256 = "0d4jzq0zv1xmng0z0q5lb4rz03ikgxdwi68k3r70ac16gb911ixk";
+    sha256 = "0ca00awfzvxiznvd4mgwgxyqxiwvi07j5xxmg5z0l47rcd9fqv0h";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${version}/NEWS";
     license = licenses.mit;
     maintainers = with maintainers; [ primeos ttuegel ];
+    mainProgram = "xkbcli";
     platforms = with platforms; unix;
   };
 }

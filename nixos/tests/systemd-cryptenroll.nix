@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ ymatsiuk ];
   };
 
-  machine = { pkgs, lib, ... }: {
+  nodes.machine = { pkgs, lib, ... }: {
     environment.systemPackages = [ pkgs.cryptsetup ];
     virtualisation = {
       emptyDiskImages = [ 512 ];

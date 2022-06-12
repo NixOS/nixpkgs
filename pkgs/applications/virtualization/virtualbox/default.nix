@@ -23,14 +23,14 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "6.1.28";
+  version = "6.1.34";
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "8d34993d8e9c0cf35e7bd44dd26c8c757f17a3b7d5a64052f945d00fd798ebfe";
+    sha256 = "9c3ce1829432e5b8374f950698587038f45fb0492147dc200e59edb9bb75eb49";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -62,8 +62,8 @@ in stdenv.mkDerivation {
         ${optionalString (!headless) ''
         -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
         ''} -i configure
-    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2
-    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
+    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2
+    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2
 
     grep 'libpulse\.so\.0'      src include -rI --files-with-match | xargs sed -i -e '
       ${optionalString pulseSupport
@@ -97,6 +97,11 @@ in stdenv.mkDerivation {
     ./qtx11extras.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
     ./fix-audio-driver-loading.patch
+    # NOTE: both patches below should be removed when updating to 6.1.35
+    # https://www.virtualbox.org/ticket/20914#comment:6
+    ./linux518.patch
+    # https://www.virtualbox.org/ticket/20904#comment:22
+    ./ffreestanding.patch
   ];
 
   postPatch = ''
@@ -229,5 +234,6 @@ in stdenv.mkDerivation {
     homepage = "https://www.virtualbox.org/";
     maintainers = with maintainers; [ sander ];
     platforms = [ "x86_64-linux" ];
+    mainProgram = "VirtualBox";
   };
 }

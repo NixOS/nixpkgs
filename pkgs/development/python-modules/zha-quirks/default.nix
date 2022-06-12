@@ -4,18 +4,22 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 , zigpy
 }:
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.65";
+  version = "0.0.75";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha-device-handlers";
-    rev = version;
-    sha256 = "sha256-3Lcmc95KotFMlL44zDugIQkHtplMMlyWjSb+SLehaqs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-iwNXyoA85NcgrxqAPydTA3FAW+weE2pdPyijEV4PbSA=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +32,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "zhaquirks" ];
+  pythonImportsCheck = [
+    "zhaquirks"
+  ];
 
   meta = with lib; {
     description = "ZHA Device Handlers are custom quirks implementations for Zigpy";

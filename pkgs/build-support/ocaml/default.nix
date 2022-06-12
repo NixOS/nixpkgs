@@ -21,6 +21,8 @@ stdenv.mkDerivation (args // {
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild camlp4 ] ++ nativeBuildInputs;
 
+  strictDeps = true;
+
   setupHook = if setupHook == null && hasSharedObjects
   then writeText "setupHook.sh" ''
     export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/${pname}/"

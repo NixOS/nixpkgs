@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, isPy27
+, pythonOlder
 , fetchFromGitHub
 , pytestCheckHook
 }:
@@ -9,7 +9,7 @@ buildPythonPackage rec {
   pname = "certifi";
   version = "2021.10.08";
 
-  disabled = isPy27;
+  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/certifi/python-certifi";
     description = "Python package for providing Mozilla's CA Bundle";
     license = licenses.isc;
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [ koral SuperSandro2000 ];
   };
 }

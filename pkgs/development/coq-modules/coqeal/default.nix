@@ -1,6 +1,6 @@
 { coq, mkCoqDerivation, mathcomp, bignums, paramcoq, multinomials,
   mathcomp-real-closed,
-  lib, which, version ? null }:
+  lib, version ? null }:
 
 with lib;
 
@@ -10,7 +10,7 @@ with lib;
 
   inherit version;
   defaultVersion = with versions; switch [ coq.version mathcomp.version ]  [
-      { cases = [ (range "8.10" "8.14") (isGe "1.12.0") ]; out = "1.1.0"; }
+      { cases = [ (range "8.10" "8.15") (isGe "1.12.0") ]; out = "1.1.0"; }
       { cases = [ (isGe "8.10") (range "1.11.0" "1.12.0") ]; out = "1.0.5"; }
       { cases = [ (isGe "8.7") "1.11.0" ]; out = "1.0.4"; }
       { cases = [ (isGe "8.7") "1.10.0" ]; out = "1.0.3"; }
@@ -22,7 +22,6 @@ with lib;
   release."1.0.4".sha256 = "1g5m26lr2lwxh6ld2gykailhay4d0ayql4bfh0aiwqpmmczmxipk";
   release."1.0.3".sha256 = "0hc63ny7phzbihy8l7wxjvn3haxx8jfnhi91iw8hkq8n29i23v24";
 
-  extraBuildInputs = [ which ];
   propagatedBuildInputs = [ mathcomp.algebra bignums paramcoq multinomials ];
 
   meta = {

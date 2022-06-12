@@ -1,40 +1,19 @@
 { lib, fetchFromGitLab, fetchFromGitHub, buildGoModule, ruby
 , bundlerEnv, pkg-config
 # libgit2 + dependencies
-, libgit2, openssl, zlib, pcre, http-parser }:
+, libgit2_1_3_0, openssl, zlib, pcre, http-parser }:
 
 let
-  # git2go 32.0.5 does not support libgit2 1.2.0 or 1.3.0.
-  # It needs a specific commit in between those two releases.
-  libgit2_custom = libgit2.overrideAttrs (oldAttrs: rec {
-    version = "1.2.0";
-    src = fetchFromGitHub {
-      owner = "libgit2";
-      repo = "libgit2";
-      rev = "109b4c887ffb63962c7017a66fc4a1f48becb48e";
-      sha256 = "sha256-w029FHpOv5K49wE1OJMOlkTe+2cv+ORYqEHxs59GDBI=";
-    };
-  });
-
   rubyEnv = bundlerEnv rec {
     name = "gitaly-env";
     inherit ruby;
     copyGemFiles = true;
     gemdir = ./.;
-    gemset =
-      let x = import (gemdir + "/gemset.nix");
-      in x // {
-        # grpc expects the AR environment variable to contain `ar rpc`. See the
-        # discussion in nixpkgs #63056.
-        grpc = x.grpc // {
-          patches = [ ../fix-grpc-ar.patch ];
-          dontBuild = false;
-        };
-      };
   };
 
-  version = "14.6.0";
-  gitaly_package = "gitlab.com/gitlab-org/gitaly/v${lib.versions.major version}";
+  version = "15.0.2";
+  package_version = "v14";
+  gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 in
 
 buildGoModule {
@@ -45,10 +24,10 @@ buildGoModule {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "sha256-YiDZtWRb1PnCAv+UCPRQFoCA12vf3xoHoJ1i/hW+vMg=";
+    sha256 = "sha256-jwPXar16FOq0xCg3xUXH72YPmoVa91ae3bgz95ZmYo4=";
   };
 
-  vendorSha256 = "sha256-ZLd4E3+e25Hqmd6ZyF3X6BveMEg7OF0FX9IvNBWn3v0=";
+  vendorSha256 = "sha256-/tHKWo09ZV31TSIqlOk36V3y7gNikziUJHf+nS1gHEw=";
 
   passthru = {
     inherit rubyEnv;
@@ -58,13 +37,13 @@ buildGoModule {
 
   tags = [ "static,system_libgit2" ];
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ rubyEnv.wrappedRuby libgit2_custom openssl zlib pcre http-parser ];
+  buildInputs = [ rubyEnv.wrappedRuby libgit2_1_3_0 openssl zlib pcre http-parser ];
   doCheck = false;
 
   postInstall = ''
     mkdir -p $ruby
-    cp -rv $src/ruby/{bin,lib,proto,git-hooks} $ruby
-    mv $out/bin/gitaly-git2go $out/bin/gitaly-git2go-${version}
+    cp -rv $src/ruby/{bin,lib,proto} $ruby
+    mv $out/bin/gitaly-git2go-${package_version} $out/bin/gitaly-git2go-${version}
   '';
 
   outputs = [ "out" "ruby" ];
@@ -73,7 +52,7 @@ buildGoModule {
     homepage = "https://gitlab.com/gitlab-org/gitaly";
     description = "A Git RPC service for handling all the git calls made by GitLab";
     platforms = platforms.linux ++ [ "x86_64-darwin" ];
-    maintainers = with maintainers; [ roblabla globin fpletz talyz ];
+    maintainers = with maintainers; [ roblabla globin fpletz talyz yayayayaka ];
     license = licenses.mit;
   };
 }

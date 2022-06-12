@@ -4,24 +4,30 @@
 , authlib
 , requests
 , nose
+, pythonOlder
 , pytz
 , responses
+, zeep
 }:
 
 buildPythonPackage rec {
   pname = "simple-salesforce";
-  version = "1.11.4";
+  version = "1.11.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "17d6g7zfhlgd2n4mimjarl2x4hl7ww2lb4izidlns1hzqm8igg4y";
+    sha256 = "sha256-/uaFEQnilcelHKjbmrnyLm5Mzj2V8P4oEH+cgJn+KvI=";
   };
 
   propagatedBuildInputs = [
     authlib
     requests
+    zeep
   ];
 
   checkInputs = [

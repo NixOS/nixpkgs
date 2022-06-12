@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, nix-update-script
 , python3
 , meson
 , ninja
@@ -18,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "6.2.0";
+  version = "6.2.0"; # nixpkgs-update: no auto update
 
   outputs = [ "out" "dev" ];
 
@@ -51,12 +50,6 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
 
   meta = with lib; {
     description = "An extension to GTK used by elementary OS";

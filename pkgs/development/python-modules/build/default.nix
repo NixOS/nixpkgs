@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "build";
-  version = "0.7.0";
+  version = "0.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "pypa";
     repo = pname;
     rev = version;
-    sha256 = "sha256-kT3Gax/ZCeV8Kb7CBArGWn/qzVSVdMRUoid/8cAovnE=";
+    hash = "sha256-P0DFBYsL2Ce/JwfYss64+CY/IvzYZEiz9wuEslij+oU=";
   };
 
   nativeBuildInputs = [
@@ -52,8 +52,8 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-n"
-    "$NIX_BUILD_CORES"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTests = [

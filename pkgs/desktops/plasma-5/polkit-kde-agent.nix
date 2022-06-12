@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "polkit-kde-agent";
+  pname = "polkit-kde-agent";
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [
     kdbusaddons kwidgetsaddons kcoreaddons kcrash kconfig ki18n kiconthemes

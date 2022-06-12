@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:0q1204qk97i9h14vxxq7phcfpyiin0i1zzk74ixvg4wqy87b62s8";
   };
 
-  buildInputs = [ xercesc getopt cmake ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ xercesc getopt ];
 
   meta = {
     homepage = "https://xalan.apache.org/";

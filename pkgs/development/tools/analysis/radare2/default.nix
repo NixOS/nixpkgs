@@ -44,13 +44,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.5.4";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "sha256-zELmNpbT1JCt0UAzHwzcTDN9QZTLQY0+rG9zVRWxiFg=";
+    sha256 = "sha256-tCFi1m3xyQlG+8FijjQh8PMwg6CIfIxvLkd5xCIZHHo=";
   };
 
   preBuild = ''
@@ -62,13 +62,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    for file in $out/bin/rasm2 $out/bin/ragg2 $out/bin/rabin2 $out/lib/libr_asm.${version}.dylib; do
+    for file in $out/bin/rasm2 $out/bin/ragg2 $out/bin/rabin2 $out/lib/libr_asm.${version}.dylib $out/lib/libr_anal.${version}.dylib; do
       install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $file
     done
-  '';
-
-  postInstall = ''
-    install -D -m755 $src/binr/r2pm/r2pm $out/bin/r2pm
   '';
 
   WITHOUT_PULL = "1";
@@ -114,6 +110,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "unix-like reverse engineering framework and commandline tools";
     homepage = "https://radare.org/";
     license = licenses.gpl2Plus;

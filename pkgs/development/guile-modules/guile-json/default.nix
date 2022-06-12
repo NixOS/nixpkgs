@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-json";
-  version = "4.5.2";
+  version = "4.7.1";
 
   src = fetchurl {
     url = "mirror://savannah/guile-json/${pname}-${version}.tar.gz";
-    sha256 = "GrBG7DaxxEwEGsJ1Vo2Bh4TXH6uaXZX5Eoz+iiUFGTM=";
+    sha256 = "sha256-xTSaI4D2fIphOps698mNITJdRDAjNp5vdhs2bpaUaEM=";
   };
 
   postConfigure = ''
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://savannah.nongnu.org/projects/guile-json";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

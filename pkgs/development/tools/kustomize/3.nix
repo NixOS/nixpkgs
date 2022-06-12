@@ -36,5 +36,6 @@ buildGoModule rec {
     homepage = "https://github.com/kubernetes-sigs/kustomize";
     license = licenses.asl20;
     maintainers = with maintainers; [ carlosdagos vdemeester zaninime Chili-Man saschagrunert ];
+    mainProgram = "kustomize";
   };
 }

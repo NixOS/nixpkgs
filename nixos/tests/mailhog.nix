@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ lib, ... }: {
   name = "mailhog";
   meta.maintainers = with lib.maintainers; [ jojosch ];
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     services.mailhog.enable = true;
 
     environment.systemPackages = with pkgs; [ swaks ];
@@ -12,8 +12,8 @@ import ./make-test-python.nix ({ lib, ... }: {
     start_all()
 
     machine.wait_for_unit("mailhog.service")
-    machine.wait_for_open_port("1025")
-    machine.wait_for_open_port("8025")
+    machine.wait_for_open_port(1025)
+    machine.wait_for_open_port(8025)
     machine.succeed(
         'echo "this is the body of the email" | swaks --to root@example.org --body - --server localhost:1025'
     )

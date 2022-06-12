@@ -1,5 +1,5 @@
 { lib, fetchurl, fetchpatch, buildPythonPackage
-, zip, ffmpeg, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
+, zip, ffmpeg, rtmpdump, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -8,7 +8,6 @@
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
-, phantomjsSupport ? false
 , hlsEncryptedSupport ? true
 , installShellFiles, makeWrapper }:
 
@@ -31,11 +30,12 @@ buildPythonPackage rec {
     #
     #   https://github.com/ytdl-org/youtube-dl/issues/29326
     #
-    # The patch comes from PR https://github.com/ytdl-org/youtube-dl/pull/30188
+    # The patch comes from PR https://github.com/ytdl-org/youtube-dl/pull/30184#issuecomment-1025261055
+    # plus follow-up (1e677567) from https://github.com/ytdl-org/youtube-dl/pull/30582
     (fetchpatch {
       name = "fix-youtube-dl-speed.patch";
-      url = "https://github.com/ytdl-org/youtube-dl/pull/30188.patch";
-      sha256 = "15liban37ina2y4bnykfdywdy4rbkfff2r6vd0kqn2k7rfkcczyz";
+      url = "https://github.com/ytdl-org/youtube-dl/compare/57044eacebc6f2f3cd83c345e1b6e659a22e4773...1e677567cd083d43f55daef0cc74e5fa24575ae3.diff";
+      sha256 = "11s0j3w60r75xx20p0x2j3yc4d3yvz99r0572si8b5qd93lqs4pr";
     })
   ];
 
@@ -51,8 +51,7 @@ buildPythonPackage rec {
       packagesToBinPath =
         [ atomicparsley ]
         ++ lib.optional ffmpegSupport ffmpeg
-        ++ lib.optional rtmpSupport rtmpdump
-        ++ lib.optional phantomjsSupport phantomjs2;
+        ++ lib.optional rtmpSupport rtmpdump;
     in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
   setupPyBuildFlags = [
@@ -70,13 +69,13 @@ buildPythonPackage rec {
     homepage = "https://ytdl-org.github.io/youtube-dl/";
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''
-      youtube-dl is a small, Python-based command-line program
-      to download videos from YouTube.com and a few more sites.
-      youtube-dl is released to the public domain, which means
-      you can modify it, redistribute it or use it however you like.
+      youtube-dl is a small, Python-based command-line program to download
+      videos from YouTube.com and a few more sites.  youtube-dl is released to
+      the public domain, which means you can modify it, redistribute it or use
+      it however you like.
     '';
     license = licenses.publicDomain;
+    maintainers = with maintainers; [ bluescreen303 fpletz ma27 ];
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ bluescreen303 AndersonTorres fpletz ma27 ];
   };
 }

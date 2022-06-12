@@ -6,7 +6,7 @@
   # build
 , cmake
 , ctags
-, pythonPackages
+, python3Packages
 , swig
   # math
 , eigen
@@ -30,13 +30,13 @@
 , lp_solve
 , colpack
   # extra support
-, pythonSupport ? true
+, pythonSupport ? false
 , opencvSupport ? false
 , opencv ? null
 , withSvmLight ? false
 }:
 
-assert pythonSupport -> pythonPackages != null;
+assert pythonSupport -> python3Packages != null;
 assert opencvSupport -> opencv != null;
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!withSvmLight) ./svmlight-scrubber.patch;
 
   nativeBuildInputs = [ cmake swig ctags ]
-    ++ (with pythonPackages; [ python jinja2 ply ]);
+    ++ (with python3Packages; [ python jinja2 ply ]);
 
   buildInputs = [
     eigen
@@ -121,7 +121,7 @@ stdenv.mkDerivation rec {
     nlopt
     lp_solve
     colpack
-  ] ++ lib.optionals pythonSupport (with pythonPackages; [ python numpy ])
+  ] ++ lib.optionals pythonSupport (with python3Packages; [ python numpy ])
     ++ lib.optional opencvSupport opencv;
 
   cmakeFlags = let
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_TESTING=${enableIf doCheck}"
     "-DDISABLE_META_INTEGRATION_TESTS=ON"
     "-DTRAVIS_DISABLE_META_CPP=ON"
-    "-DPythonModular=${enableIf pythonSupport}"
+    "-DINTERFACE_PYTHON=${enableIf pythonSupport}"
     "-DOpenCV=${enableIf opencvSupport}"
     "-DUSE_SVMLIGHT=${enableIf withSvmLight}"
   ];
@@ -175,6 +175,12 @@ stdenv.mkDerivation rec {
     mv $out/share/shogun/examples/cpp $doc/share/doc/shogun/examples
     cp ../examples/undocumented/libshogun/*.cpp $doc/share/doc/shogun/examples/cpp
     rm -r $out/share
+  '';
+
+  postFixup = ''
+    # CMake incorrectly calculates library path from dev prefix
+    substituteInPlace $dev/lib/cmake/shogun/ShogunTargets-release.cmake \
+      --replace "\''${_IMPORT_PREFIX}/lib/" "$out/lib/"
   '';
 
   meta = with lib; {

@@ -20,6 +20,6 @@ in fetchzip {
     homepage = "https://github.com/naver/nanumfont";
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ linarcx ];
+    maintainers = with maintainers; [ ];
   };
 }

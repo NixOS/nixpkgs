@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-session-ctl";
-  version = "40.0";
+  version = "42.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = version;
-    hash = "sha256-gvBmLx8Qoj1vPsOwaZsd9+pTDvU5D7uUts7ZT1pXwNo=";
+    hash = "sha256-XGJVmlxqbJ/1frbzn2TI7BJm449xeLk43xMMqFsLYko=";
   };
 
   nativeBuildInputs = [

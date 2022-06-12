@@ -19,6 +19,7 @@
 , libXrender
 , libglvnd
 , libpulseaudio
+, perl
 , zlib
 , udev # for libudev
 }:
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     libXrender
     libglvnd
     libpulseaudio
+    perl
     zlib
     udev
   ];
@@ -66,9 +68,16 @@ stdenv.mkDerivation rec {
       desktopName = "oh-my-git";
       comment = "An interactive Git learning game!";
       genericName = "An interactive Git learning game!";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
+
+  # patch shebangs so that e.g. the fake-editor script works:
+  # error: /usr/bin/env 'perl': No such file or directory
+  # error: There was a problem with the editor
+  postPatch = ''
+    patchShebangs scripts
+  '';
 
   buildPhase = ''
     runHook preBuild

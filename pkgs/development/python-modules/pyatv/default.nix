@@ -14,13 +14,14 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+, requests
 , srptools
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.9.6";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -29,8 +30,17 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0navm7a0k1679kj7nbkbyl7s2q0wq0xmcnizmnvp0arkd5xqmqv1";
+    sha256 = "sha256-aYNBFtsnSg3PORq72U0PXPFCTVj2+8D2TS3nMau55t4=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest-runner" ""
+    # Remove all version pinning
+
+    substituteInPlace base_versions.txt \
+      --replace "protobuf==3.19.1,<4" "protobuf>=3.19.0,<4"
+  '';
 
   propagatedBuildInputs = [
     aiohttp
@@ -40,6 +50,7 @@ buildPythonPackage rec {
     miniaudio
     netifaces
     protobuf
+    requests
     srptools
     zeroconf
   ];
@@ -51,13 +62,6 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-    # Remove all version pinning
-    sed -i -e "s/==[0-9.]*//" requirements/requirements.txt
-  '';
 
   disabledTestPaths = [
     # Test doesn't work in the sandbox

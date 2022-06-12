@@ -7,7 +7,6 @@
 , ninja
 , python3
 , vala
-, desktop-file-utils
 , gtk3
 , libxml2
 , libhandy
@@ -15,28 +14,25 @@
 , folks
 , libgdata
 , sqlite
+, glib-networking
 , granite
-, elementary-icon-theme
 , evolution-data-server
-, appstream
 , wrapGAppsHook
 , libgee
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "6.3.1";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
     rev = version;
-    sha256 = "sha256-wOu9jvvwG53vzcNa38nk4eREZWW7Cin8el4qApQ8gI8=";
+    sha256 = "sha256-DO3nybH7tb/ISrSQ3+Oj612m64Ov6X0GAWePMbKjCc4=";
   };
 
   nativeBuildInputs = [
-    appstream
-    desktop-file-utils
     libxml2
     meson
     ninja
@@ -47,9 +43,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     evolution-data-server
     folks
+    glib-networking
     granite
     gtk3
     libgdata

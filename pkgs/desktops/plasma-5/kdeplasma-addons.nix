@@ -8,7 +8,7 @@
 }:
 
 mkDerivation {
-  name = "kdeplasma-addons";
+  pname = "kdeplasma-addons";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     kconfig kconfigwidgets kcoreaddons kcmutils kholidays kio

@@ -4,6 +4,7 @@
 , asynctest
 , buildPythonPackage
 , crccheck
+, cryptography
 , fetchFromGitHub
 , pycryptodome
 , pytest-aiohttp
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy";
-  version = "0.42.0";
+  version = "0.46.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,14 +24,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy";
-    rev = version;
-    sha256 = "sha256-kSUFcN3QOZWFBgDrOopkYuUyBE9asO6MXf0H9CMjFlc=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-YCkNjygNSvGNuhP7N1apCWYevl18GASgUFSSTLHj2YU=";
   };
 
   propagatedBuildInputs = [
     aiohttp
     aiosqlite
     crccheck
+    cryptography
     pycryptodome
     voluptuous
   ];

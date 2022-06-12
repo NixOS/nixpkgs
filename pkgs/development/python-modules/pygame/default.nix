@@ -5,7 +5,7 @@
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "2.1.0";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -14,8 +14,8 @@ buildPythonPackage rec {
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The documentation
     # has such files and will be removed.
-    sha256 = "sha256-Pe7BJ+8rXw+hhRv64fI+79gJcU1npQFFAXxECx2+Trw=";
-    extraPostFetch = "rm -rf $out/docs/reST";
+    sha256 = "sha256-v1z6caEMJNXqbcbTmFXoy3KQewHiz6qK4vhNU6Qbukk=";
+    postFetch = "rm -rf $out/docs/reST";
   };
 
   patches = [
@@ -25,6 +25,7 @@ buildPythonPackage rec {
       buildinputs_include = builtins.toJSON (builtins.concatMap (dep: [
         "${lib.getDev dep}/"
         "${lib.getDev dep}/include"
+        "${lib.getDev dep}/include/SDL2"
       ]) buildInputs);
       buildinputs_lib = builtins.toJSON (builtins.concatMap (dep: [
         "${lib.getLib dep}/"
@@ -72,7 +73,7 @@ buildPythonPackage rec {
     description = "Python library for games";
     homepage = "https://www.pygame.org/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.unix;
   };
 }

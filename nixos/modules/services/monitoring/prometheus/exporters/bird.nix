@@ -17,7 +17,7 @@ in
     };
     birdSocket = mkOption {
       type = types.path;
-      default = "/var/run/bird.ctl";
+      default = "/run/bird/bird.ctl";
       description = ''
         Path to BIRD2 (or BIRD1 v4) socket.
       '';

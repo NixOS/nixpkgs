@@ -6,7 +6,7 @@
 cryptpadSrc=$(nix eval '(import ../../../.. {}).cryptpad.src' --raw)
 echo "cryptpad src: $cryptpadSrc"
 
-nix-shell -I nixpkgs=../../../.. -p '(nodePackages.override { nodejs = nodejs-10_x; }).bower2nix' --run "bower2nix $cryptpadSrc/bower.json bower-packages.nix"
+nix-shell -I nixpkgs=../../../.. -p '(nodePackages.override { nodejs = nodejs-12_x; }).bower2nix' --run "bower2nix $cryptpadSrc/bower.json bower-packages.nix"
 
 
 set -euo pipefail

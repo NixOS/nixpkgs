@@ -77,7 +77,7 @@ In Nixpkgs, we have multiple implementations of the BLAS/LAPACK numerical linear
 
     The Nixpkgs attribute is `openblas` for ILP64 (integer width = 64 bits) and `openblasCompat` for LP64 (integer width = 32 bits).  `openblasCompat` is the default.
 
--   [LAPACK reference](http://www.netlib.org/lapack/) (also provides BLAS)
+-   [LAPACK reference](http://www.netlib.org/lapack/) (also provides BLAS and CBLAS)
 
     The Nixpkgs attribute is `lapack-reference`.
 
@@ -117,7 +117,23 @@ $ LD_LIBRARY_PATH=$(nix-build -A mkl)/lib${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH n
 
 Intel MKL requires an `openmp` implementation when running with multiple processors. By default, `mkl` will use Intel's `iomp` implementation if no other is specified, but this is a runtime-only dependency and binary compatible with the LLVM implementation. To use that one instead, Intel recommends users set it with `LD_PRELOAD`. Note that `mkl` is only available on `x86_64-linux` and `x86_64-darwin`. Moreover, Hydra is not building and distributing pre-compiled binaries using it.
 
-For BLAS/LAPACK switching to work correctly, all packages must depend on `blas` or `lapack`. This ensures that only one BLAS/LAPACK library is used at one time. There are two versions of BLAS/LAPACK currently in the wild, `LP64` (integer size = 32 bits) and `ILP64` (integer size = 64 bits). Some software needs special flags or patches to work with `ILP64`. You can check if `ILP64` is used in Nixpkgs with `blas.isILP64` and `lapack.isILP64`. Some software does NOT work with `ILP64`, and derivations need to specify an assertion to prevent this. You can prevent `ILP64` from being used with the following:
+To override `blas` and `lapack` with its reference implementations (i.e. for development purposes), one can use the following overlay:
+
+```nix
+self: super:
+
+{
+  blas = super.blas.override {
+    blasProvider = self.lapack-reference;
+  };
+
+  lapack = super.lapack.override {
+    lapackProvider = self.lapack-reference;
+  };
+}
+```
+
+For BLAS/LAPACK switching to work correctly, all packages must depend on `blas` or `lapack`. This ensures that only one BLAS/LAPACK library is used at one time. There are two versions of BLAS/LAPACK currently in the wild, `LP64` (integer size = 32 bits) and `ILP64` (integer size = 64 bits). The attributes `blas` and `lapack` are `LP64` by default. Their `ILP64` version are provided through the attributes `blas-ilp64` and `lapack-ilp64`. Some software needs special flags or patches to work with `ILP64`. You can check if `ILP64` is used in Nixpkgs with `blas.isILP64` and `lapack.isILP64`. Some software does NOT work with `ILP64`, and derivations need to specify an assertion to prevent this. You can prevent `ILP64` from being used with the following:
 
 ```nix
 { stdenv, blas, lapack, ... }:

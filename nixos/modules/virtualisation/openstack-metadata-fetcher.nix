@@ -14,8 +14,9 @@
     wget ${wgetExtraOptions} "$@"
   }
 
-  wget_imds -O "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path
-  (umask 077 && wget_imds -O "$metaDir/user-data" http://169.254.169.254/1.0/user-data)
-  wget_imds -O "$metaDir/hostname" http://169.254.169.254/1.0/meta-data/hostname
-  wget_imds -O "$metaDir/public-keys-0-openssh-key" http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
+  wget_imds -O "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path || true
+  # When no user-data is provided, the OpenStack metadata server doesn't expose the user-data route.
+  (umask 077 && wget_imds -O "$metaDir/user-data" http://169.254.169.254/1.0/user-data || rm -f "$metaDir/user-data")
+  wget_imds -O "$metaDir/hostname" http://169.254.169.254/1.0/meta-data/hostname || true
+  wget_imds -O "$metaDir/public-keys-0-openssh-key" http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key || true
 ''

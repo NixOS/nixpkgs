@@ -1,12 +1,19 @@
-{ lib, coreutils, python3, gcc, writeText, writeScript, runCommand, makeBinaryWrapper }:
+{ lib
+, stdenv
+, pkgsCross
+, makeBinaryWrapper
+, writeText
+, runCommand
+, runCommandCC
+}:
 
 let
-  env = { buildInputs = [ makeBinaryWrapper ]; };
-  envCheck = runCommand "envcheck" env ''
-    ${gcc}/bin/cc -Wall -Werror -Wpedantic -o $out ${./envcheck.c}
+  env = { nativeBuildInputs = [ makeBinaryWrapper ]; };
+  envCheck = runCommandCC "envcheck" env ''
+    cc -Wall -Werror -Wpedantic -o $out ${./envcheck.c}
   '';
-  makeGoldenTest = testname: runCommand "test-wrapper_${testname}" env ''
-    mkdir -p ./tmp/foo
+  makeGoldenTest = testname: runCommand "make-binary-wrapper-test-${testname}" env ''
+    mkdir -p tmp/foo # for the chdir test
 
     params=$(<"${./.}/${testname}.cmdline")
     eval "makeCWrapper /send/me/flags $params" > wrapper.c
@@ -32,23 +39,23 @@ let
 
     cp wrapper.c $out
   '';
-  tests = let
-    names = [
-      "add-flags"
-      "argv0"
-      "basic"
-      "chdir"
-      "combination"
-      "env"
-      "inherit-argv0"
-      "invalid-env"
-      "prefix"
-      "suffix"
-    ];
-    f = name: lib.nameValuePair name (makeGoldenTest name);
-  in builtins.listToAttrs (builtins.map f names);
-in writeText "make-binary-wrapper-test" ''
-  ${lib.concatStringsSep "\n" (lib.mapAttrsToList (_: test: ''
-    "${test.name}" "${test}"
-  '') tests)}
+  tests = lib.genAttrs [
+    "add-flags"
+    "argv0"
+    "basic"
+    "chdir"
+    "combination"
+    "env"
+    "inherit-argv0"
+    "invalid-env"
+    "overlength-strings"
+    "prefix"
+    "suffix"
+  ] makeGoldenTest // lib.optionalAttrs (! stdenv.isDarwin) {
+    cross = pkgsCross.aarch64-multiplatform.callPackage ./cross.nix { };
+  };
+in
+
+writeText "make-binary-wrapper-tests" ''
+  ${lib.concatStringsSep "\n" (builtins.attrValues tests)}
 '' // tests

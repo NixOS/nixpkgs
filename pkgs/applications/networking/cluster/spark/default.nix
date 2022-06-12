@@ -1,15 +1,30 @@
-{ lib, stdenv, fetchzip, makeWrapper, jdk8, python3Packages, extraPythonPackages ? [], coreutils, hadoop
-, RSupport? true, R
+{ lib
+, stdenv
+, fetchzip
+, makeWrapper
+, jdk8
+, python3Packages
+, extraPythonPackages ? [ ]
+, coreutils
+, hadoopSupport ? true
+, hadoop
+, RSupport ? true
+, R
 }:
 
 with lib;
 
 let
-  spark = { pname, version, src }:
+  spark = { pname, version, sha256, extraMeta ? {} }:
     stdenv.mkDerivation rec {
-      inherit pname version src;
+      inherit pname version;
+      jdk = if hadoopSupport then hadoop.jdk else jdk8;
+      src = fetchzip {
+        url = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
+        sha256 = sha256;
+      };
       nativeBuildInputs = [ makeWrapper ];
-      buildInputs = [ jdk8 python3Packages.python ]
+      buildInputs = [ jdk python3Packages.python ]
         ++ extraPythonPackages
         ++ optional RSupport R;
 
@@ -21,9 +36,11 @@ let
         cp $out/lib/${untarDir}/conf/log4j.properties{.template,}
 
         cat > $out/lib/${untarDir}/conf/spark-env.sh <<- EOF
-        export JAVA_HOME="${jdk8}"
+        export JAVA_HOME="${jdk}"
         export SPARK_HOME="$out/lib/${untarDir}"
+      '' + optionalString hadoopSupport ''
         export SPARK_DIST_CLASSPATH=$(${hadoop}/bin/hadoop classpath)
+      '' + ''
         export PYSPARK_PYTHON="${python3Packages.python}/bin/${python3Packages.python.executable}"
         export PYTHONPATH="\$PYTHONPATH:$PYTHONPATH"
         ${optionalString RSupport ''
@@ -45,31 +62,30 @@ let
       '';
 
       meta = {
-        description      = "Apache Spark is a fast and general engine for large-scale data processing";
-        homepage         = "https://spark.apache.org/";
-        license          = lib.licenses.asl20;
-        platforms        = lib.platforms.all;
-        maintainers      = with maintainers; [ thoughtpolice offline kamilchm illustris ];
-        repositories.git = "git://git.apache.org/spark.git";
-      };
+        description = "Apache Spark is a fast and general engine for large-scale data processing";
+        homepage = "https://spark.apache.org/";
+        sourceProvenance = with sourceTypes; [ binaryBytecode ];
+        license = lib.licenses.asl20;
+        platforms = lib.platforms.all;
+        maintainers = with maintainers; [ thoughtpolice offline kamilchm illustris ];
+      } // extraMeta;
     };
-in {
-  spark3 = spark rec {
+in
+{
+  spark_3_2 = spark rec {
     pname = "spark";
-    version = "3.1.2";
-
-    src = fetchzip {
-      url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
-      sha256 = "1bgh2y6jm7wqy6yc40rx68xkki31i3jiri2yixb1bm0i9pvsj9yf";
-    };
+    version = "3.2.1";
+    sha256 = "0kxdqczwmj6pray0h8h1qhygni9m82jzznw5fbv9hrxrkq1v182d";
   };
-  spark2 = spark rec {
+  spark_3_1 = spark rec {
+    pname = "spark";
+    version = "3.1.3";
+    sha256 = "sha256-RIQyN5YjxFLfNIrETR3Vv99zsHxt77rhOXHIThCI2Y8=";
+  };
+  spark_2_4 = spark rec {
     pname = "spark";
     version = "2.4.8";
-
-    src = fetchzip {
-      url    = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
-      sha256 = "1mkyq0gz9fiav25vr0dba5ivp0wh0mh7kswwnx8pvsmb6wbwyfxv";
-    };
+    sha256 = "1mkyq0gz9fiav25vr0dba5ivp0wh0mh7kswwnx8pvsmb6wbwyfxv";
+    extraMeta.knownVulnerabilities = [ "CVE-2021-38296" ];
   };
 }

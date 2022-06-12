@@ -1,8 +1,8 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , substituteAll
 , pkg-config
 , fetchurl
-, fetchpatch
 , python3Packages
 , gettext
 , itstool
@@ -18,33 +18,20 @@
 , withAlsa ? false, alsa-lib
 , withOss ? false
 , withFlite ? true, flite
-# , withFestival ? false, festival-freebsoft-utils
 , withEspeak ? true, espeak, sonic, pcaudiolib
+, mbrola
 , withPico ? true, svox
-# , withIvona ? false, libdumbtts
 }:
 
 let
-  inherit (lib) optional optionals;
   inherit (python3Packages) python pyxdg wrapPython;
-
-  # speechd hard-codes espeak, even when built without support for it.
-  selectedDefaultModule =
-    if withEspeak then
-      "espeak-ng"
-    else if withPico then
-      "pico"
-    else if withFlite then
-      "flite"
-    else
-      throw "You need to enable at least one output module.";
 in stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
-  version = "0.10.2";
+  version = "0.11.1";
 
   src = fetchurl {
     url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-sGMZ8gHhXlbGKWZTr1vPwwDLNI6XLVF9+LBurHfq4tw=";
+    sha256 = "sha256-0doS7T2shPE3mbai7Dm6LTyiGoST9E3BhVvQupbC3cY=";
   };
 
   patches = [
@@ -52,12 +39,11 @@ in stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       utillinux = util-linux;
     })
-
-    # Fix build with Glib 2.68
-    # https://github.com/brailcom/speechd/pull/462
-    (fetchpatch {
-      url = "https://github.com/brailcom/speechd/commit/a2faab416e42cbdf3d73f98578a89eb7a235e25a.patch";
-      sha256 = "8Q7tUdKKBBtgXZZnj59OcJOkrCNeBR9gkBjhKlpW0hQ=";
+  ] ++ lib.optionals espeak.mbrolaSupport [
+    # Replace FHS paths.
+    (substituteAll {
+      src = ./fix-mbrola-paths.patch;
+      inherit espeak mbrola;
     })
   ];
 
@@ -79,36 +65,39 @@ in stdenv.mkDerivation rec {
     libpulseaudio
     alsa-lib
     python
-  ] ++ optionals withEspeak [
+  ] ++ lib.optionals withEspeak [
     espeak
     sonic
     pcaudiolib
-  ] ++ optional withFlite flite
-    ++ optional withPico svox
-    # TODO: add flint/festival support with festival-freebsoft-utils package
-    # ++ optional withFestival festival-freebsoft-utils
-    # TODO: add Ivona support with libdumbtts package
-    # ++ optional withIvona libdumbtts
-  ;
+  ] ++ lib.optional withFlite [
+    flite
+  ] ++ lib.optional withPico [
+    svox
+  ];
 
-  pythonPath = [ pyxdg ];
+  pythonPath = [
+    pyxdg
+  ];
 
   configureFlags = [
     # Audio method falls back from left to right.
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-  ] ++ optional withPulse "--with-pulse"
-    ++ optional withAlsa "--with-alsa"
-    ++ optional withLibao "--with-libao"
-    ++ optional withOss "--with-oss"
-    ++ optional withEspeak "--with-espeak-ng"
-    ++ optional withPico "--with-pico"
-    # ++ optional withFestival "--with-flint"
-    # ++ optional withIvona "--with-ivona"
-  ;
+  ] ++ lib.optional withPulse [
+  "--with-pulse"
+  ] ++ lib.optional withAlsa [
+    "--with-alsa"
+  ] ++ lib.optional withLibao [
+    "--with-libao"
+  ] ++ lib.optional withOss [
+    "--with-oss"
+  ] ++ lib.optional withEspeak [
+    "--with-espeak-ng"
+  ] ++ lib.optional withPico [
+    "--with-pico"
+  ];
 
   postPatch = ''
-    substituteInPlace config/speechd.conf --replace "DefaultModule espeak" "DefaultModule ${selectedDefaultModule}"
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
   '';
 
@@ -122,7 +111,10 @@ in stdenv.mkDerivation rec {
     description = "Common interface to speech synthesis";
     homepage = "https://devel.freebsoft.org/speechd";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ berce ];
+    maintainers = with maintainers; [
+      berce
+      jtojnar
+    ];
     platforms = platforms.linux;
   };
 }

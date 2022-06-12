@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "snapmaker-luban";
-  version = "4.1.2";
+  version = "4.1.4";
 
   src = fetchurl {
     url = "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
-    sha256 = "sha256-gS3MyXD5B9YQ+EXmIPZ+rDUE5H1AjRL64yXQX+5TM2Q=";
+    sha256 = "sha256-hbqIwX6YCrUQAjvKKWFAUjHvcZycnIA6v6l6qmAMuUI=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       icon = "snapmaker-luban";
       desktopName = "Snapmaker Luban";
       genericName = meta.description;
-      categories = "Office;Printing;";
+      categories = [ "Office" "Printing" ];
     })
   ];
 

@@ -8,46 +8,30 @@ index 74b1a7ff..0a713a32 100644
  elseif(APPLE AND WITH_APP_BUNDLE)
 +    set(CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/Applications")
      set(BUNDLE_INSTALL_DIR "${PROGNAME}.app/Contents")
-     set(CMAKE_INSTALL_MANDIR "${PROGNAME}.app/Contents/Resources/man")
-     set(CLI_INSTALL_DIR "${PROGNAME}.app/Contents/MacOS")
-@@ -369,12 +370,6 @@ set(CMAKE_AUTORCC ON)
+     set(CMAKE_INSTALL_MANDIR "${BUNDLE_INSTALL_DIR}/Resources/man")
+     set(CLI_INSTALL_DIR "${BUNDLE_INSTALL_DIR}/MacOS")
+@@ -470,11 +470,6 @@ set(CMAKE_AUTORCC ON)
  
  if(APPLE)
      set(CMAKE_MACOSX_RPATH TRUE)
--    find_program(MACDEPLOYQT_EXE macdeployqt HINTS ${Qt5_PREFIX}/bin ENV PATH)
+-    find_program(MACDEPLOYQT_EXE macdeployqt HINTS ${Qt5_PREFIX}/bin ${Qt5_PREFIX}/tools/qt5/bin ENV PATH)
 -    if(NOT MACDEPLOYQT_EXE)
 -        message(FATAL_ERROR "macdeployqt is required to build on macOS")
--    else()
--        message(STATUS "Using macdeployqt: ${MACDEPLOYQT_EXE}")
 -    endif()
- elseif(MINGW)
-     find_program(WINDEPLOYQT_EXE windeployqt HINTS ${Qt5_PREFIX}/bin ENV PATH)
-     if(NOT WINDEPLOYQT_EXE)
-diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
-index f142f368..0742512d 100644
---- a/src/CMakeLists.txt
-+++ b/src/CMakeLists.txt
-@@ -351,11 +351,6 @@ if(APPLE AND WITH_APP_BUNDLE)
-     set(CPACK_PACKAGE_FILE_NAME "${PROGNAME}-${KEEPASSXC_VERSION}")
-     include(CPack)
+-    message(STATUS "Using macdeployqt: ${MACDEPLOYQT_EXE}")
+     set(MACDEPLOYQT_EXTRA_BINARIES "")
+ elseif(WIN32)
+     find_program(WINDEPLOYQT_EXE windeployqt HINTS ${Qt5_PREFIX}/bin ${Qt5_PREFIX}/tools/qt5/bin ENV PATH)
+diff --git a/src/post_install/CMakeLists.txt b/src/post_install/CMakeLists.txt
+index 359c891f..a6a061a3 100644
+--- a/src/post_install/CMakeLists.txt
++++ b/src/post_install/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ # The install commands in this subdirectory will be executed after all the install commands in the
+ # current scope are ran. It is required for correct functtioning of macdeployqt.
  
--    add_custom_command(TARGET ${PROGNAME}
--            POST_BUILD
--            COMMAND ${MACDEPLOYQT_EXE} ${PROGNAME}.app
--            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/src
--            COMMENT "Deploying app bundle")
- endif()
- 
- install(TARGETS ${PROGNAME}
-diff --git a/src/autotype/mac/CMakeLists.txt b/src/autotype/mac/CMakeLists.txt
-index 7427450a..a0a58d71 100644
---- a/src/autotype/mac/CMakeLists.txt
-+++ b/src/autotype/mac/CMakeLists.txt
-@@ -8,7 +8,6 @@ if(WITH_APP_BUNDLE)
-     add_custom_command(TARGET keepassx-autotype-cocoa
-             POST_BUILD
-             COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/libkeepassx-autotype-cocoa.so ${PLUGIN_INSTALL_DIR}
--            COMMAND ${MACDEPLOYQT_EXE} ${PROGNAME}.app -executable=${PLUGIN_INSTALL_DIR}/libkeepassx-autotype-cocoa.so -no-plugins
-             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/src
-             COMMENT "Deploying autotype plugin")
- else()
+-if(APPLE AND WITH_APP_BUNDLE)
++if(FALSE)
+     # Run macdeloyqt on the main app and any extra binaries and plugins as specified by the
+     # _MACDEPLOYQT_EXTRA_BINARIES global property.
+     # All install(TARGETS) calls should have already been called.

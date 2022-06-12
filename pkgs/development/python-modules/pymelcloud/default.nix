@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pymelcloud";
-  version = "2.5.6";
+  version = "2.11.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "vilppuvuorinen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-QXOL3MftNibo1wUjz/KTQLNDk7pWL9VH/wd7LpEJOmE=";
+    sha256 = "1q6ny58cn9qy86blxbk6l2iklab7y11b734l7yb1bp35dmy27w26";
   };
 
   propagatedBuildInputs = [

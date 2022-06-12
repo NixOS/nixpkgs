@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ lib, ... }:
     jtojnar
   ];
 
-  machine = { config, pkgs, ... }: {
+  nodes.machine = { config, pkgs, ... }: {
     fonts.enableDefaultFonts = true; # Background fonts
     fonts.fonts = with pkgs; [
       noto-fonts-emoji

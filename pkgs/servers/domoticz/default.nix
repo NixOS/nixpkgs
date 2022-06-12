@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "domoticz";
-  version = "2021.1";
+  version = "2022.1";
 
   src = fetchFromGitHub {
     owner = "domoticz";
     repo = pname;
     rev = version;
-    sha256 = "03s1fx2ilhiq47p99c6iln1fi0rhdcxxsrv1zaww7f7bc744vzbk";
+    sha256 = "sha256-wPSmpk3YeA+dNjx2mBdRkP2Mx/1cfrQOMLV5H5Ti7qU=";
     fetchSubmodules = true;
   };
 

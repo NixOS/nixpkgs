@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drumstick";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/drumstick/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-nmqgS08ZBQ2vBEDtoriNbYLaNQA1DWeDhbRo70rBOP0=";
+    hash = "sha256-V57YnyeOVBXL5qjuCO1j1Ozy9CeaXxadw6ed1suUUIU=";
   };
 
   patches = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     maintainers = [];
     description = "MIDI libraries for Qt5/C++";
-    homepage = "http://drumstick.sourceforge.net/";
+    homepage = "https://drumstick.sourceforge.io/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

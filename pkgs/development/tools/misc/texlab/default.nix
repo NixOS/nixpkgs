@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "3.3.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HX1Mnzq+GsRnUsJERK5gPI5x4op885t+9Vn6vogSK1o=";
+    sha256 = "sha256-hRY1cJFakbq6pU2TKql+eVWvKtNDzVIQkE5BbRW5n5A=";
   };
 
-  cargoSha256 = "sha256-AdzaLqwONI7WEcL8U0OGuyX/pg+BpZbJz9aaSClo47Q=";
+  cargoSha256 = "sha256-VwB02FfoAKL0fEvpvpxfkAR6PcWZFK/d5aVOtUq7f10=";
 
   outputs = [ "out" "man" ];
 
@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     installManPage texlab.1
 
-    # Remove generated dylib of html2md dependency. TexLab statically
+    # Remove generated dylib of human_name dependency. TexLab statically
     # links to the generated rlib and doesn't reference the dylib. I
     # couldn't find any way to prevent building this by passing cargo flags.
-    # See https://gitlab.com/Kanedias/html2md/-/blob/0.2.10/Cargo.toml#L20
-    rm "$out/lib/libhtml2md${stdenv.hostPlatform.extensions.sharedLibrary}"
+    # See https://github.com/djudd/human-name/blob/master/Cargo.toml#L43
+    rm "$out/lib/libhuman_name${stdenv.hostPlatform.extensions.sharedLibrary}"
     rmdir "$out/lib"
   '';
 

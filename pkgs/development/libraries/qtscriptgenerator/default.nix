@@ -1,9 +1,11 @@
 { lib, stdenv, fetchurl, qt4 }:
 
-stdenv.mkDerivation {
-  name = "qtscriptgenerator-0.1.0";
+stdenv.mkDerivation rec {
+  pname = "qtscriptgenerator";
+  version = "0.1.0";
+
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/qtscriptgenerator/qtscriptgenerator-src-0.1.0.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/qtscriptgenerator/qtscriptgenerator-src-${version}.tar.gz";
     sha256 = "0h8zjh38n2wfz7jld0jz6a09y66dbsd2jhm4f2024qfgcmxcabj6";
   };
   buildInputs = [ qt4 ];
@@ -40,6 +42,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "QtScript bindings generator";
     homepage = "https://code.qt.io/cgit/qt-labs/qtscriptgenerator.git/";
     inherit (qt4.meta) platforms;

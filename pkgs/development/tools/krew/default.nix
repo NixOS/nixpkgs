@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "krew";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "krew";
     rev = "v${version}";
-    sha256 = "sha256-P4b8HMkqxzYKz9OgI4pNCjR9Wakh+kIIAnUAkayzGEo=";
+    sha256 = "sha256-aW9yASskwDt+5Lvsdju9ZR/HeZ4x8heWljdhqK0ZTx8=";
   };
 
-  vendorSha256 = "sha256-FQQCHq9f0yY8vSsvWIR7WKq+0c+dgGEnoQmXtoN6Ep0=";
+  vendorSha256 = "sha256-VXGjKzkOpaxyJClwXbxg15xmGdFi6arH8f4nN5/1SA4=";
 
   subPackages = [ "cmd/krew" ];
 

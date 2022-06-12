@@ -46,14 +46,13 @@ let
     };
 
     desktopItem = makeDesktopItem {
-      categories = "Development";
+      categories = [ "Development" ];
       comment = "Simplenote for Linux";
       desktopName = "Simplenote";
       exec = "simplenote %U";
       icon = "simplenote";
       name = "simplenote";
-      startupNotify = "true";
-      type = "Application";
+      startupNotify = true;
     };
 
     dontBuild = true;

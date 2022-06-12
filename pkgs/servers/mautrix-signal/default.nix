@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
-  version = "unstable-2021-11-12";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    rev = "2e57810e964c1701df2e69273c2f8cebbe021464";
-    sha256 = "sha256-xgn01nbY3LR4G1Yk2MgUhq116/wEhG+5vLH6HKqZE+8=";
+    rev = "v${version}";
+    sha256 = "sha256-khtvfZbqBRQyHteil+H/b3EktjRet6DRcKMHmCClNq0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonPackage rec {
     prometheus-client
     pycryptodome
     python-olm
-    python_magic
+    python-magic
     qrcode
     ruamel-yaml
     unpaddedbase64

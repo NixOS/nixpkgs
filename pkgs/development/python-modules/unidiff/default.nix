@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "unidiff";
-  version = "0.7.0";
+  version = "0.7.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "91bb13b4969514a400679d9ae5e29a6ffad85346087677f8b5e2e036af817447";
+    sha256 = "sha256-1fLlOpoA2zIkqMNjSbU4Dg4i0a7GxpSxT7lIPuk8YgU=";
   };
 
   pythonImportsCheck = [ "unidiff" ];

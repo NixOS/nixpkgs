@@ -6,6 +6,7 @@
 , gettext
 , glib
 , gnome
+, gnome-desktop
 , gobject-introspection
 , gsettings-desktop-schemas
 , gtk3
@@ -20,13 +21,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-tweaks";
-  version = "40.0";
+  version = "42.beta";
   format = "other";
   strictDeps = false; # https://github.com/NixOS/nixpkgs/issues/56943
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "+V8/4DGwsBwC95oWWfiJFS03cq4+RN+EA9FGC6Xuw2o=";
+    sha256 = "g/RMwdyK3HcM2tcXtAPLmmzDwN5Q445vHmeLQ0Aa2Gg=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +44,7 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gdk-pixbuf
     glib
-    gnome.gnome-desktop
+    gnome-desktop
     gnome.gnome-settings-daemon
     gnome.gnome-shell
     # Makes it possible to select user themes through the `user-theme` extension

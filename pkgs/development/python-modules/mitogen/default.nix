@@ -1,23 +1,29 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "mitogen";
-  version = "0.3.0";
+  version = "0.3.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mitogen-hq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SotxlsJDIeFd4BN9C7afyyybET5ST2yaoWVEyT/lr48=";
+    sha256 = "sha256-ACd1z9h9RLu6Kho59L2YkXkLtBEywYbO+drUvoZaVlg=";
   };
 
   # Tests require network access and Docker support
   doCheck = false;
 
-  pythonImportsCheck = [ "mitogen" ];
+  pythonImportsCheck = [
+    "mitogen"
+  ];
 
   meta = with lib; {
     description = "Python Library for writing distributed self-replicating programs";

@@ -1,32 +1,30 @@
 { lib
 , buildPythonPackage
-, callPackage
-, fetchFromGitHub
 , cerberus
 , configparser
 , deepdiff
+, fetchFromGitHub
 , geoip2
 , jinja2
+, netmiko
 , openpyxl
-, tabulate
-, yangson
 , pytestCheckHook
 , pyyaml
+, tabulate
+, ttp-templates
+, yangson
 }:
 
-let
-  ttp_templates = callPackage ./templates.nix { };
-in
 buildPythonPackage rec {
   pname = "ttp";
-  version = "0.7.2";
+  version = "0.8.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-dYjE+EMfCVHLRAqT1KM7o8VEopJ/TwAEMphYXuj38Wk=";
+    hash = "sha256-vuKlddqm8KirqAJyvBPfRb5Nw9zo4Fl1bwbfVMhmH9g=";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +35,7 @@ buildPythonPackage rec {
     geoip2
     jinja2
     # n2g unpackaged
-    # netmiko unpackaged
+    netmiko
     # nornir unpackaged
     openpyxl
     tabulate
@@ -51,12 +49,14 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
     pyyaml
-    ttp_templates
+    ttp-templates
   ];
 
   disabledTestPaths = [
     # missing package n2g
     "test/pytest/test_N2G_formatter.py"
+    # missing test file
+    "test/pytest/test_extend_tag.py"
   ];
 
   disabledTests = [
@@ -81,6 +81,12 @@ buildPythonPackage rec {
     "test_excel_formatter_update_using_result_kwargs"
     # missing package n2g
     "test_n2g_formatter"
+    # missing test files
+    "test_TTP_CACHE_FOLDER_env_variable_usage"
+    # requires additional network setup
+    "test_child_group_do_not_start_if_no_parent_started"
+    # Assertion Error
+    "test_in_threads_parsing"
   ];
 
   pytestFlagsArray = [

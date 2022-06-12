@@ -1,24 +1,17 @@
-diff -ur a/gdb/main.c b/gdb/main.c
---- a/gdb/main.c	2020-02-08 13:50:14.000000000 +0100
-+++ b/gdb/main.c	2020-02-24 10:02:07.731806739 +0100
-@@ -567,9 +567,17 @@
-       gdb_sysroot = xstrdup (TARGET_SYSROOT_PREFIX);
-     }
+--- a/gdb/main.c
++++ b/gdb/main.c
+@@ -708,8 +708,12 @@ captured_main_1 (struct captured_main_args *context)
+   if (gdb_sysroot.empty ())
+     gdb_sysroot = TARGET_SYSROOT_PREFIX;
  
 -  debug_file_directory
--    = xstrdup (relocate_gdb_directory (DEBUGDIR,
--				     DEBUGDIR_RELOCATABLE).c_str ());
-+  debug_file_directory = getenv ("NIX_DEBUG_INFO_DIRS");
-+  if (debug_file_directory != NULL)
-+    // This might be updated later using
-+    // $ set debug-file-directory /to/some/path
-+    // which will use xfree. We must then have a xmallocated
-+    // copy of the string that can be xfeed later.
-+    debug_file_directory = xstrdup (debug_file_directory);
+-    = relocate_gdb_directory (DEBUGDIR, DEBUGDIR_RELOCATABLE);
++  const char * nix_debug = getenv ("NIX_DEBUG_INFO_DIRS");
++  if (nix_debug != NULL)
++      debug_file_directory = nix_debug;
 +  else
 +    debug_file_directory
-+      = xstrdup (relocate_gdb_directory (DEBUGDIR,
-+                                         DEBUGDIR_RELOCATABLE).c_str ());
++      = relocate_gdb_directory (DEBUGDIR, DEBUGDIR_RELOCATABLE);
  
    gdb_datadir = relocate_gdb_directory (GDB_DATADIR,
  					GDB_DATADIR_RELOCATABLE);

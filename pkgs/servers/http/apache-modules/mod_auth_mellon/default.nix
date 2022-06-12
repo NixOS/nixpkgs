@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0alfa8hz09jdg29bi1mvhwyr2nl0nvss2a2kybrcjvdw1fx6vijn";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ apacheHttpd autoconf automake curl glib lasso libtool libxml2 libxslt openssl xmlsec ];
+  nativeBuildInputs = [ autoreconfHook pkg-config autoconf automake ];
+  buildInputs = [ apacheHttpd curl glib lasso libtool libxml2 libxslt openssl xmlsec ];
 
   configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs" "--exec-prefix=$out"];
 

@@ -30,6 +30,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
+      --replace "filterwarnings = error" "" \
       --replace "--cov=aiosignal" ""
   '';
 

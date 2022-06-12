@@ -25,8 +25,8 @@ let
       };
 
       connect = mkOption {
-        type = types.int;
-        description = "To which port the decrypted connection should be forwarded.";
+        type = types.either types.str types.int;
+        description = "Port or IP:Port to which the decrypted connection should be forwarded.";
       };
 
       cert = mkOption {

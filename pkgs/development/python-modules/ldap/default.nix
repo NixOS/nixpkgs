@@ -12,6 +12,10 @@ buildPythonPackage rec {
     sha256 = "60464c8fc25e71e0fd40449a24eae482dcd0fb7fcf823e7de627a6525b3e0d12";
   };
 
+  patches = [
+    ./0001-Check-whether-libldap-is-threadsafe-on-startup.patch
+  ];
+
   propagatedBuildInputs = [ pyasn1 pyasn1-modules ];
 
   checkInputs = [ pytestCheckHook ];

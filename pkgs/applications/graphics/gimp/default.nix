@@ -115,6 +115,8 @@ in stdenv.mkDerivation rec {
     libwebp
     libheif
     python
+    # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
+    python2.pkgs.pygtk
     libexif
     xorg.libXpm
     glib-networking
@@ -180,5 +182,6 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jtojnar ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
+    mainProgram = "gimp";
   };
 }

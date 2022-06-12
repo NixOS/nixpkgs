@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "django-anymail";
-  version = "8.4";
+  version = "8.6";
 
   src = fetchFromGitHub {
     owner = "anymail";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "08ac24hrafkk1jg3milfjky3qni1cz5qggp1rgzq9r7ina4akjma";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-hLNILUV7qzqHfh7l3SJAoFveUIRSCHTjEQ3ZC3PhZUY=";
   };
 
   propagatedBuildInputs = [

@@ -90,7 +90,7 @@ mirror://xorg/individual/driver/xf86-video-amdgpu-21.0.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-apm-1.3.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ark-0.7.5.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ast-1.1.5.tar.bz2
-mirror://xorg/individual/driver/xf86-video-ati-19.1.0.tar.bz2
+https://gitlab.freedesktop.org/xorg/driver/xf86-video-ati/-/archive/5eba006e4129e8015b822f9e1d2f1e613e252cda/xf86-video-ati-5eba006e4129e8015b822f9e1d2f1e613e252cda.tar.bz2
 mirror://xorg/individual/driver/xf86-video-chips-1.4.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-cirrus-1.5.3.tar.bz2
 mirror://xorg/individual/driver/xf86-video-dummy-0.3.8.tar.bz2
@@ -104,7 +104,7 @@ mirror://xorg/individual/driver/xf86-video-intel-2.99.917.tar.bz2
 mirror://xorg/individual/driver/xf86-video-mga-2.0.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-neomagic-1.3.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-newport-0.2.4.tar.bz2
-mirror://xorg/individual/driver/xf86-video-nouveau-1.0.17.tar.bz2
+https://gitlab.freedesktop.org/xorg/driver/xf86-video-nouveau/-/archive/3ee7cbca8f9144a3bb5be7f71ce70558f548d268/xf86-video-nouveau-3ee7cbca8f9144a3bb5be7f71ce70558f548d268.tar.bz2
 mirror://xorg/individual/driver/xf86-video-nv-2.1.21.tar.bz2
 mirror://xorg/individual/driver/xf86-video-omap-0.4.5.tar.bz2
 mirror://xorg/individual/driver/xf86-video-openchrome-0.6.0.tar.bz2
@@ -181,6 +181,7 @@ mirror://xorg/individual/lib/libXaw3d-1.6.3.tar.bz2
 mirror://xorg/individual/lib/libxcb-1.14.tar.xz
 mirror://xorg/individual/lib/libXcomposite-0.4.5.tar.bz2
 mirror://xorg/individual/lib/libXcursor-1.2.0.tar.bz2
+mirror://xorg/individual/lib/libxcvt-0.1.1.tar.xz
 mirror://xorg/individual/lib/libXdamage-1.1.5.tar.bz2
 mirror://xorg/individual/lib/libXdmcp-1.1.3.tar.bz2
 mirror://xorg/individual/lib/libXext-1.3.4.tar.bz2

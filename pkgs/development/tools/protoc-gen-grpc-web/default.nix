@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "protoc-gen-grpc-web";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc-web";
     rev = version;
-    sha256 = "sha256-piKpaylzuanhGR+7BzApplv8e/CWPoR9tG3vHrF7WXw=";
+    sha256 = "sha256-NRShN4X9JmCjqPVY/q9oSxSOvv1bP//vM9iOZ6ap5vc=";
   };
 
   sourceRoot = "source/javascript/net/grpc/web/generator";
@@ -17,7 +17,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ protobuf ];
   buildInputs = [ protobuf ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" "STATIC=no" ];
+
+  patches = [
+    # https://github.com/grpc/grpc-web/pull/1210
+    ./optional-static.patch
+  ];
 
   doCheck = true;
   checkInputs = [ protobuf ];

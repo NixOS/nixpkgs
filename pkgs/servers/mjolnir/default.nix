@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mjolnir";
-  version = "1.2.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
     rev = "v${version}";
-    sha256 = "4c9LyQb5SZ1IoBayiP0C0ho4hwJDv49DhsuoQIv9bTs=";
+    sha256 = "887azmXT5PGpcOqtWtKwdoyEtsXGm5DzpNRgEMlgSfM=";
   };
 
   nativeBuildInputs = [

@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "evans";
-  version = "0.10.0";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "ktr0731";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ftt3lnwLk2Zx1DxDmZx2hBqXcxzqUb6I/gEdQJuFsCc=";
+    sha256 = "sha256-rQwoiV87XMz/5GbVOyLDkfIKIgMzBcwY4ln73XCI/so=";
   };
 
   subPackages = [ "." ];
 
-  vendorSha256 = "sha256-WclmINHcgRtbRSZGv+lOgwuImHKVC9cfK8C+f9JBcts=";
+  vendorSha256 = "sha256-3R/HRfr1GjJwkCT6xQ51Y/zRcuvknunYKgVpM6jg+wY=";
 
   meta = with lib; {
     description = "More expressive universal gRPC client";

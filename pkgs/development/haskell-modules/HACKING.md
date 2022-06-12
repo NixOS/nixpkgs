@@ -345,7 +345,7 @@ Here are some additional tips that didn't fit in above.
         [release-haskell.nix](../../top-level/release-haskell.nix).
 
     1.  Update the
-        [Nextcloud Calendar](https://cloud.maralorn.de/apps/calendar/p/Mw5WLnzsP7fC4Zky)
+        [Nextcloud Calendar](https://cloud.maralorn.de/apps/calendar/p/H6migHmKX7xHoTFa)
         and work the new member into the `haskell-updates` rotation.
 
     1.  Optionally, have the new member add themselves to the Haskell

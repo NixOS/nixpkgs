@@ -96,7 +96,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     };
 
   testScript = ''
-    mpc = "${pkgs.mpc_cli}/bin/mpc --wait"
+    mpc = "${pkgs.mpc-cli}/bin/mpc --wait"
 
     # Connects to the given server and attempts to play a tune.
     def play_some_music(server):

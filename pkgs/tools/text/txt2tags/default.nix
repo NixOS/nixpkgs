@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, python }:
+{ lib, stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
   version = "2.6";
@@ -7,13 +7,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   # Python script, needs the interpreter
-  propagatedBuildInputs = [ python ];
+  propagatedBuildInputs = [ python2 ];
 
   installPhase = ''
     mkdir -p "$out/bin"
     mkdir -p "$out/share/doc"
     mkdir -p "$out/share/man/man1/"
-    sed '1s|/usr/bin/env python|${python}/bin/python|' < txt2tags > "$out/bin/txt2tags"
+    sed '1s|/usr/bin/env python|${python2}/bin/python|' < txt2tags > "$out/bin/txt2tags"
     chmod +x "$out/bin/txt2tags"
     gzip - < doc/manpage.man > "$out/share/man/man1/txt2tags.1.gz"
     cp doc/userguide.pdf "$out/share/doc"

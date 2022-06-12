@@ -3,19 +3,25 @@
 , bitstring
 , buildPythonPackage
 , fetchFromGitHub
+, poetry-core
 , pyserial-asyncio
 }:
 
 buildPythonPackage rec {
   pname = "pysml";
-  version = "0.0.5";
+  version = "0.0.7";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "mtdcr";
     repo = pname;
     rev = version;
-    sha256 = "05zgrk49b2y5jflxnjww2kqg1flynl3j4ifm0jr28nk0li5wg2bs";
+    sha256 = "sha256-h8rQOKZozioZ7HmPETC5wBJyz7rMH1Q2wL6lF8G3zQU=";
   };
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     async-timeout

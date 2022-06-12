@@ -1,13 +1,15 @@
-{ lib, stdenv, fetchgit, ldc, dub }:
+{ lib, stdenv, fetchFromGitHub, ldc, dub }:
 
 stdenv.mkDerivation {
   pname = "Literate";
   version = "unstable-2021-01-22";
 
-  src = fetchgit {
-    url = "https://github.com/zyedidia/Literate.git";
+  src = fetchFromGitHub {
+    owner = "zyedidia";
+    repo = "Literate";
     rev = "7004dffec0cff3068828514eca72172274fd3f7d";
-    sha256 = "0x4xgrdskybaa7ssv81grmwyc1k167v3nwj320jvp5l59xxlbcvs";
+    sha256 = "sha256-erNFe0+FlrslEENyO/YxYQbmec0voK31UWr5qVt+nXQ=";
+    fetchSubmodules = true;
   };
 
   buildInputs = [ ldc dub ];
@@ -16,8 +18,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A literate programming tool for any language";
-    homepage    = "http://literate.zbyedidia.webfactional.com/";
+    homepage = "https://zyedidia.github.io/literate/";
     license = licenses.mit;
+    mainProgram = "lit";
     platforms = platforms.unix;
   };
 }

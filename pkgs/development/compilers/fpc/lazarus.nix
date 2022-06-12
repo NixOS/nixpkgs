@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals withQt [ libqt5pas qtbase ];
 
+  # Disable parallel build, errors:
+  #  Fatal: (1018) Compilation aborted
+  enableParallelBuilding = false;
+
   nativeBuildInputs = [
     makeWrapper
   ] ++ lib.optional withQt wrapQtAppsHook;

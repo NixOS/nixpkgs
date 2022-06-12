@@ -2,20 +2,23 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
-, pytest-runner
+, filetype
 , future
-, requests
-, responses
-, requests_oauthlib
-, pytest
 , hypothesis
+, pytestCheckHook
+, pythonOlder
+, requests
+, requests-oauthlib
+, responses
 }:
 
 buildPythonPackage rec {
   pname = "python-twitter";
   version = "3.5";
+  format = "setuptools";
 
-  # No tests in PyPi Tarball
+  disabled = pythonOlder "3.7";
+
   src = fetchFromGitHub {
     owner = "bear";
     repo = pname;
@@ -31,12 +34,30 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ pytest-runner ];
-  propagatedBuildInputs = [ future requests requests_oauthlib ];
-  checkInputs = [ pytest responses hypothesis ];
+  propagatedBuildInputs = [
+    filetype
+    future
+    requests
+    requests-oauthlib
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+    responses
+    hypothesis
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'" ""
+  '';
+
+  pythonImportsCheck = [
+    "twitter"
+  ];
 
   meta = with lib; {
-    description = "A Python wrapper around the Twitter API";
+    description = "Python wrapper around the Twitter API";
     homepage = "https://github.com/bear/python-twitter";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];

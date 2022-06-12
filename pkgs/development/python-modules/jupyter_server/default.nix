@@ -6,10 +6,11 @@
 , pythonOlder
 , pytestCheckHook
 , pytest-tornasync
-, argon2_cffi
+, argon2-cffi
 , jinja2
 , tornado
 , pyzmq
+, ipykernel
 , ipython_genutils
 , traitlets
 , jupyter_core
@@ -43,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    argon2_cffi
+    argon2-cffi
     jinja2
     tornado
     pyzmq
@@ -62,6 +63,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    ipykernel
     pytestCheckHook
     pytest-tornasync
     requests

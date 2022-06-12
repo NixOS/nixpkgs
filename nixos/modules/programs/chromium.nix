@@ -7,6 +7,7 @@ let
 
   defaultProfile = filterAttrs (k: v: v != null) {
     HomepageLocation = cfg.homepageLocation;
+    DefaultSearchProviderEnabled = cfg.defaultSearchProviderEnabled;
     DefaultSearchProviderSearchURL = cfg.defaultSearchProviderSearchURL;
     DefaultSearchProviderSuggestURL = cfg.defaultSearchProviderSuggestURL;
     ExtensionInstallForcelist = cfg.extensions;
@@ -48,6 +49,13 @@ in
         description = "Chromium default homepage";
         default = null;
         example = "https://nixos.org";
+      };
+
+      defaultSearchProviderEnabled = mkOption {
+        type = types.nullOr types.bool;
+        description = "Enable the default search provider.";
+        default = null;
+        example = true;
       };
 
       defaultSearchProviderSearchURL = mkOption {
@@ -100,5 +108,8 @@ in
     # for google-chrome https://www.chromium.org/administrators/linux-quick-start
     environment.etc."opt/chrome/policies/managed/default.json".text = builtins.toJSON defaultProfile;
     environment.etc."opt/chrome/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
+    # for brave
+    environment.etc."brave/policies/managed/default.json".text = builtins.toJSON defaultProfile;
+    environment.etc."brave/policies/managed/extra.json".text = builtins.toJSON cfg.extraOpts;
   };
 }

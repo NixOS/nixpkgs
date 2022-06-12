@@ -1,23 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pythonOlder
-, pyyaml
-, prance
 , marshmallow
-, pytestCheckHook
 , mock
 , openapi-spec-validator
+, prance
+, pytestCheckHook
+, pythonOlder
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "apispec";
-  version = "5.1.1";
-  disabled = pythonOlder "3.6";
+  version = "5.2.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d167890e37f14f3f26b588ff2598af35faa5c27612264ea1125509c8ff860834";
+    hash = "sha256-bqZULh6//p/ZW6Ae8/UTUerGwgCpdFYsdHMFm5zSCqc=";
   };
 
   propagatedBuildInputs = [
@@ -32,12 +34,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "apispec" ];
+  pythonImportsCheck = [
+    "apispec"
+  ];
 
   meta = with lib; {
     description = "A pluggable API specification generator with support for the OpenAPI Specification";
     homepage = "https://github.com/marshmallow-code/apispec";
     license = licenses.mit;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

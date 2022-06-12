@@ -1,16 +1,27 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, wrapQtAppsHook
-, pyface, pygments, numpy, vtk, traitsui, envisage, apptools, pyqt5
+{ lib
+, apptools
+, buildPythonPackage
+, envisage
+, fetchPypi
+, numpy
+, pyface
+, pygments
+, pyqt5
+, pythonOlder
+, traitsui
+, vtk
+, wrapQtAppsHook
 }:
 
 buildPythonPackage rec {
   pname = "mayavi";
   version = "4.7.4";
+  format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "tar.gz";
     sha256 = "ec50e7ec6afb0f9224ad1863d104a0d1ded6c8deb13e720652007aaca2303332";
   };
 
@@ -24,14 +35,27 @@ buildPythonPackage rec {
       --replace "build.build.run(self)" "build.build.run(self); return"
   '';
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
-
-  propagatedBuildInputs = [
-    pyface pygments numpy vtk traitsui envisage apptools pyqt5
+  nativeBuildInputs = [
+    wrapQtAppsHook
   ];
 
-  doCheck = false; # Needs X server
-  pythonImportsCheck = [ "mayavi" ];
+  propagatedBuildInputs = [
+    apptools
+    envisage
+    numpy
+    pyface
+    pygments
+    pyqt5
+    traitsui
+    vtk
+  ];
+
+  # Needs X server
+  doCheck = false;
+
+  pythonImportsCheck = [
+    "mayavi"
+  ];
 
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
@@ -40,7 +64,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "3D visualization of scientific data in Python";
     homepage = "https://github.com/enthought/mayavi";
-    maintainers = with maintainers; [ knedlsepp ];
     license = licenses.bsdOriginal;
+    maintainers = with maintainers; [ knedlsepp ];
   };
 }

@@ -1,4 +1,4 @@
-{stdenv, lib, coreutils, unzip, jq, zip, fetchurl,writeScript,  ...}:
+{stdenv, unzip, jq, zip, fetchurl,writeScript,  ...}:
 
 {
   name
@@ -40,5 +40,5 @@ stdenv.mkDerivation {
     zip -r -q -FS "$out/$UUID.xpi" *
     rm -r "$out/$UUID"
   '';
-  nativeBuildInputs = [ coreutils unzip zip jq  ];
+  nativeBuildInputs = [ unzip zip jq  ];
 }

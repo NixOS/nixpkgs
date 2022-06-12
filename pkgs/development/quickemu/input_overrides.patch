@@ -1,20 +1,29 @@
 diff --git a/quickemu b/quickemu
-index 1a932ac..ab2f752 100755
+index 24e1007..39cd5e4 100755
 --- a/quickemu
 +++ b/quickemu
+@@ -196,7 +196,7 @@ function efi_vars() {
+ 
+   if [ ! -e "${VARS_OUT}" ]; then
+     if [ -e "${VARS_IN}" ]; then
+-      cp "${VARS_IN}" "${VARS_OUT}"
++      cp "${VARS_IN}" "${VARS_OUT}" && chmod +w "${VARS_OUT}"
+     else
+       echo "ERROR! ${VARS_IN} was not found. Please install edk2."
+       exit 1
 @@ -383,7 +383,10 @@ function vm_boot() {
      # https://bugzilla.redhat.com/show_bug.cgi?id=1929357#c5
      case ${secureboot} in
        on)
--        if [ -e "/usr/share/OVMF/OVMF_CODE_4M.secboot.fd" ]; then
+-         if [ -e "/usr/share/OVMF/OVMF_CODE_4M.secboot.fd" ]; then
 +        if [[ ${ENV_EFI_CODE_SECURE} && ${ENV_EFI_CODE_SECURE-x} ]] && [[ ${ENV_EFI_VARS_SECURE} && ${ENV_EFI_VARS_SECURE-x} ]]; then
-+          EFI_CODE="${ENV_EFI_CODE_SECURE}"
-+          efi_vars "${ENV_EFI_VARS_SECURE}" "${EFI_VARS}"
++           EFI_CODE="${ENV_EFI_CODE_SECURE}"
++           efi_vars "${ENV_EFI_VARS_SECURE}" "${EFI_VARS}"
 +        elif [ -e "/usr/share/OVMF/OVMF_CODE_4M.secboot.fd" ]; then
            EFI_CODE="/usr/share/OVMF/OVMF_CODE_4M.secboot.fd"
            efi_vars "/usr/share/OVMF/OVMF_VARS_4M.fd" "${EFI_VARS}"
          elif [ -e "/usr/share/edk2/ovmf/OVMF_CODE.secboot.fd" ]; then
-@@ -402,7 +405,10 @@ function vm_boot() {
+@@ -408,7 +411,10 @@ function vm_boot() {
          fi
          ;;
        *)

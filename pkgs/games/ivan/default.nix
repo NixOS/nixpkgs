@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     icon = "ivan.png";
     desktopName = "IVAN";
     genericName = pname;
-    categories = "Game;AdventureGame;RolePlaying;";
+    categories = [ "Game" "AdventureGame" "RolePlaying" ];
     comment = meta.description;
   };
 
@@ -64,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://attnam.com/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [freepotion];
+    maintainers = with maintainers; [];
   };
 }

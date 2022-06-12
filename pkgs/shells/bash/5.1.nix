@@ -10,6 +10,7 @@
 , readline81 ? null
 , withDocs ? false
 , texinfo ? null
+, forFHSEnv ? false
 }:
 
 with lib;
@@ -39,8 +40,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
     -DSYS_BASH_LOGOUT="/etc/bash_logout"
+  '' + optionalString (!forFHSEnv) ''
     -DDEFAULT_PATH_VALUE="/no-such-path"
     -DSTANDARD_UTILS_PATH="/no-such-path"
+  '' + ''
     -DNON_INTERACTIVE_LOGIN_SHELLS
     -DSSH_SOURCE_BASHRC
   '';
@@ -68,6 +71,7 @@ stdenv.mkDerivation rec {
     "--disable-nls"
   ];
 
+  strictDeps = true;
   # Note: Bison is needed because the patches above modify parse.y.
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ bison ]
@@ -95,7 +99,7 @@ stdenv.mkDerivation rec {
     if interactive
     then ''
       substituteInPlace "$out/bin/bashbug" \
-        --replace '${stdenv.shell}' "$out/bin/bash"
+        --replace '#!/bin/sh' "#!$out/bin/bash"
     ''
     # most space is taken by locale data
     else ''
@@ -124,6 +128,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
 
     maintainers = with maintainers; [ dtzWill ];
+
+    mainProgram = "bash";
   };
 
   passthru = {

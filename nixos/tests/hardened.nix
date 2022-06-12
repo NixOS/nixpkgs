@@ -4,14 +4,14 @@ import ./make-test-python.nix ({ pkgs, ... } : {
     maintainers = [ joachifm ];
   };
 
-  machine =
+  nodes.machine =
     { lib, pkgs, config, ... }:
     with lib;
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       imports = [ ../modules/profiles/hardened.nix ];
       environment.memoryAllocator.provider = "graphene-hardened";
-      nix.useSandbox = false;
+      nix.settings.sandbox = false;
       virtualisation.emptyDiskImages = [ 4096 ];
       boot.initrd.postDeviceCommands = ''
         ${pkgs.dosfstools}/bin/mkfs.vfat -n EFISYS /dev/vdb

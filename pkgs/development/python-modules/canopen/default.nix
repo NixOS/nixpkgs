@@ -5,15 +5,19 @@
 , can
 , canmatrix
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "canopen";
-  version = "1.2.1";
+  version = "2.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18d01d56ff0023795cb336cafd4810a76cf402b98b42139b201fa8c5d4ba8c06";
+    hash = "sha256-vMiqnqg/etpdoNregQOJd75SqTgCwmV2SXKesfggZdk=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +33,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "canopen" ];
+  pythonImportsCheck = [
+    "canopen"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/christiansandberg/canopen/";

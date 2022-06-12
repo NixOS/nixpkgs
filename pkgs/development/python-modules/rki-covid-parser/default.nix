@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "rki-covid-parser";
-  version = "1.3.1";
+  version = "1.3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "thebino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "UTLWBbNjvRuBwc5JD8l+izJu5vODLwS16ExdxUPT14A=";
+    sha256 = "sha256-e0MJjE4zgBPL+vt9EkgsdGrgqUyKK/1S9ZFxy56PUjc=";
   };
 
   propagatedBuildInputs = [

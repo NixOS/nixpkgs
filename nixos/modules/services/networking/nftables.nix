@@ -25,9 +25,10 @@ in
           for more information.
 
           There are other programs that use iptables internally too, such as
-          libvirt.
+          libvirt. For information on how the two firewalls interact, see [2].
 
           [1]: https://github.com/NixOS/nixpkgs/issues/24318#issuecomment-289216273
+          [2]: https://wiki.nftables.org/wiki-nftables/index.php/Troubleshooting#Question_4._How_do_nftables_and_iptables_interact_when_used_on_the_same_system.3F
         '';
     };
     networking.nftables.ruleset = mkOption {
@@ -118,20 +119,11 @@ in
           flush ruleset
           include "${cfg.rulesetFile}"
         '';
-        checkScript = pkgs.writeScript "nftables-check" ''
-          #! ${pkgs.runtimeShell} -e
-          if $(${pkgs.kmod}/bin/lsmod | grep -q ip_tables); then
-            echo "Unload ip_tables before using nftables!" 1>&2
-            exit 1
-          else
-            ${rulesScript}
-          fi
-        '';
       in {
         Type = "oneshot";
         RemainAfterExit = true;
-        ExecStart = checkScript;
-        ExecReload = checkScript;
+        ExecStart = rulesScript;
+        ExecReload = rulesScript;
         ExecStop = "${pkgs.nftables}/bin/nft flush ruleset";
       };
     };

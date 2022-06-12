@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.borgmatic;
-  cfgfile = pkgs.writeText "config.yaml" (builtins.toJSON cfg.settings);
+  settingsFormat = pkgs.formats.yaml { };
+  cfgfile = settingsFormat.generate "config.yaml" cfg.settings;
 in {
   options.services.borgmatic = {
     enable = mkEnableOption "borgmatic";
@@ -14,7 +15,7 @@ in {
         See https://torsion.org/borgmatic/docs/reference/configuration/
       '';
       type = types.submodule {
-        freeformType = with lib.types; attrsOf anything;
+        freeformType = settingsFormat.type;
         options.location = {
           source_directories = mkOption {
             type = types.listOf types.str;

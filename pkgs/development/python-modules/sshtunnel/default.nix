@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , paramiko
-, pytest
+, pytestCheckHook
 , mock
 }:
 
@@ -15,12 +15,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ paramiko ];
 
-  checkInputs = [ pytest mock ];
+  checkInputs = [ pytestCheckHook mock ];
 
   # disable impure tests
-  checkPhase = ''
-    pytest -k 'not connect_via_proxy and not read_ssh_config'
-  '';
+  disabledTests = [
+    "test_get_keys"
+    "connect_via_proxy"
+    "read_ssh_config"
+  ];
 
   meta = with lib; {
     description = "Pure python SSH tunnels";

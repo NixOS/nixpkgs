@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "basemap";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "matplotlib";
     repo = "basemap";
-    rev = "v${version}rel";
-    sha256 = "13lw1iwa8hadpvqdgb06nh881l8c17awzvvwbfwblvb9q9s0lnzp";
+    rev = "v${version}";
+    sha256 = "sha256-onNdOQL4i6GTcuCRel5yanJ2EQ5iYClp+imuBObXF2I=";
   };
 
   propagatedBuildInputs = [ numpy matplotlib pillow pyproj pyshp six ];

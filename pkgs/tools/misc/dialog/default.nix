@@ -8,7 +8,7 @@
 }:
 
 assert withLibrary -> libtool != null;
-assert unicodeSupport -> ncurses.unicode && ncurses != null;
+assert unicodeSupport -> ncurses.unicodeSupport && ncurses != null;
 
 stdenv.mkDerivation rec {
   pname = "dialog";

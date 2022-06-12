@@ -58,9 +58,6 @@
 , qtscript ? null
 , qscintilla ? null
 , qttools ? null
-# - JIT compiler for loops:
-, enableJIT ? false
-, llvm ? null
 , libiconv
 , darwin
 }:
@@ -114,13 +111,18 @@ let
   };
 
   self = mkDerivation rec {
-    version = "6.4.0";
+    version = "7.1.0";
     pname = "octave";
 
     src = fetchurl {
       url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
-      sha256 = "sha256-tI8z1Pzq85TPvqc6jIUAAJNtg6QXOaJPdWi1sKezms0=";
+      sha256 = "sha256-1KnYHz9ntKbgfLeoDcsQrV6RdvzDB2LHCoFYCmS4sLY=";
     };
+
+    patches = [
+      # https://savannah.gnu.org/bugs/?func=detailitem&item_id=62436
+      ./patches/bug62436.patch
+    ];
 
     buildInputs = [
       readline
@@ -173,7 +175,6 @@ let
       texinfo
     ]
     ++ lib.optionals (sundials != null) [ sundials ]
-    ++ lib.optionals enableJIT [ llvm ]
     ++ lib.optionals enableQt [
       qtscript
       qttools
@@ -199,7 +200,6 @@ let
     ++ lib.optionals enableReadline [ "--enable-readline" ]
     ++ lib.optionals stdenv.isDarwin [ "--with-x=no" ]
     ++ lib.optionals enableQt [ "--with-qt=5" ]
-    ++ lib.optionals enableJIT [ "--enable-jit" ]
     ;
 
     # Keep a copy of the octave tests detailed results in the output
@@ -220,7 +220,7 @@ let
       inherit portaudio;
       inherit jdk;
       inherit python;
-      inherit enableQt enableJIT enableReadline enableJava;
+      inherit enableQt enableReadline enableJava;
       buildEnv = callPackage ./build-env.nix {
         octave = self;
         inherit octavePackages wrapOctave;
@@ -236,8 +236,6 @@ let
       license = lib.licenses.gpl3Plus;
       maintainers = with lib.maintainers; [ raskin doronbehar ];
       description = "Scientific Programming Language";
-      # https://savannah.gnu.org/bugs/?func=detailitem&item_id=56425 is the best attempt to fix JIT
-      broken = enableJIT;
       platforms = if overridePlatforms == null then
         (lib.platforms.linux ++ lib.platforms.darwin)
       else overridePlatforms;

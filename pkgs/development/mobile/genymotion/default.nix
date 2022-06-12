@@ -61,7 +61,8 @@ stdenv.mkDerivation rec {
     patchExecutable() {
       patchInterpreter "$1"
       wrapProgram "$out/libexec/genymotion/$1" \
-        --set "LD_LIBRARY_PATH" "${libPath}"
+        --set "LD_LIBRARY_PATH" "${libPath}" \
+        --unset "QML2_IMPORT_PATH"
     }
 
     patchTool() {

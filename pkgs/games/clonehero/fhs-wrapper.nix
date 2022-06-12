@@ -13,7 +13,7 @@ let
     comment = clonehero-unwrapped.meta.description;
     exec = name;
     icon = name;
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 in
 buildFHSUserEnv {

@@ -38,7 +38,7 @@
 , adwaita-icon-theme
 , libGLU, libGL
 , nspr
-, nss
+, nss_latest
 , pango
 , pipewire
 , pciutils
@@ -132,7 +132,7 @@ stdenv.mkDerivation {
       libnotify
       libGLU libGL
       nspr
-      nss
+      nss_latest
       pango
       pipewire
       pciutils

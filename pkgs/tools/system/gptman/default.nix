@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gptman";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "cecton";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-MWrTwVXlV2B8GzYRgI3np6NqqSGPbRZCKpLU7aC1mX0=";
+    sha256 = "sha256-hI3F1E1vdbNDEeJ4FrU0EvR0t64svzUIpI6zaf0CquM=";
   };
 
-  cargoSha256 = "sha256-dVvZTYk17fyurtrJxjUgkxU37rxJubiTAQ1AWMnFP4s=";
+  cargoSha256 = "sha256-3PRGPZGymccRo9dtQZgMMEL29x+GiUkTzgc8uAB/ocQ=";
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 

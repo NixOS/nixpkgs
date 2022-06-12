@@ -1,34 +1,45 @@
 { lib
-, fetchPypi
+, fetchFromGitHub
 , buildPythonPackage
 , setuptools-scm
 , cython
 , pytestCheckHook
-, unittest2
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyclipper";
-  version = "1.3.0";
+  version = "1.3.0.post2";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "zip";
-    sha256 = "48a1b5c585aea10e5b9c0b82d6abe2642fafd9ef158b9921852bc4af815ca20c";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "fonttools";
+    repo = pname;
+    rev = version;
+    hash = "sha256-AFdfzM1zdhmfh3Uu5fFVOMWStbuHxKS3FovZPTeuNFA=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
     cython
   ];
 
-  checkInputs = [ pytestCheckHook unittest2 ];
-  pythonImportsCheck = [ "pyclipper" ];
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pyclipper"
+  ];
 
   meta = with lib; {
     description = "Cython wrapper for clipper library";
-    homepage    = "https://github.com/fonttools/pyclipper";
-    license     = licenses.mit;
+    homepage = "https://github.com/fonttools/pyclipper";
+    license = licenses.mit;
     maintainers = with maintainers; [ matthuszagh ];
   };
 }

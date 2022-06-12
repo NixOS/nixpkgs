@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     defusedxml
     pyaml
     pykeepass
-    python_magic # similar API to "file-magic", but already in nixpkgs.
+    python-magic # similar API to "file-magic", but already in nixpkgs.
     secretstorage
   ];
 

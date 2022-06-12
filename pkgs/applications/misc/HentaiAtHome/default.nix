@@ -13,7 +13,7 @@ buildGraalvmNativeImage rec {
   jar = "${src}/HentaiAtHome.jar";
   dontUnpack = true;
 
-  graalvm = graalvm17-ce;
+  graalvmDrv = graalvm17-ce;
   extraNativeImageBuildArgs = [
     "--enable-url-protocols=http,https"
     "--install-exit-handlers"
@@ -31,6 +31,7 @@ buildGraalvmNativeImage rec {
     homepage = "https://ehwiki.org/wiki/Hentai@Home";
     description =
       "Hentai@Home is an open-source P2P gallery distribution system which reduces the load on the E-Hentai Galleries";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     maintainers = with maintainers; [ terrorjack ];
   };

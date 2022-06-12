@@ -25,6 +25,8 @@
 , elogind
 # needed until gobject-introspection does cross-compile (https://github.com/NixOS/nixpkgs/pull/88222)
 , withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
+# cross build fails on polkit-1-scan (https://github.com/NixOS/nixpkgs/pull/152704)
+, withGtkDoc ? (stdenv.buildPlatform == stdenv.hostPlatform)
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
@@ -57,6 +59,23 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/7ba07551dfcd4ef9a87b8f0d9eb8b91fabcb41b3.patch";
       sha256 = "ebbLILncq1hAZTBMsLm+vDGw6j0iQ0crGyhzyLZQgKA=";
+    })
+    # pkexec: local privilege escalation (CVE-2021-4034)
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/a2bf5c9c83b6ae46cbd5c779d3055bff81ded683.patch";
+      sha256 = "162jkpg2myq0rb0s5k3nfr4pqwv9im13jf6vzj8p5l39nazg5i4s";
+    })
+    # File descriptor leak allows an unprivileged user to cause a crash (CVE-2021-4115)
+    (fetchpatch {
+      name = "CVE-2021-4115.patch";
+      url = "https://src.fedoraproject.org/rpms/polkit/raw/0a203bd46a1e2ec8cc4b3626840e2ea9d0d13a9a/f/CVE-2021-4115.patch";
+      sha256 = "sha256-BivHVVpYB4Ies1YbBDyKwUmNlqq2D1MpMipH9/dZM54=";
+    })
+    # Fix build with meson 0.61
+    # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/99
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/polkit/polkit/-/commit/a96c5119f726225f8d79b222c85d71a9f0e32419.patch";
+      sha256 = "sha256-/hm/m22dKA50sDmw4L1VAlgvCm8CuIyNjHxF/2YgMKo=";
     })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Make netgroup support optional (musl does not have it)
@@ -119,7 +138,7 @@ stdenv.mkDerivation rec {
     "-Dos_type=redhat" # only affects PAM includes
     "-Dintrospection=${lib.boolToString withIntrospection}"
     "-Dtests=${lib.boolToString doCheck}"
-    "-Dgtk_doc=${lib.boolToString true}"
+    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
     "-Dman=true"
   ] ++ lib.optionals stdenv.isLinux [
     "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"

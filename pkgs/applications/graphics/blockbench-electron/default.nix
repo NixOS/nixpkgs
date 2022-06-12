@@ -1,12 +1,12 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_8 }:
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_16 }:
 
 stdenv.mkDerivation rec {
   pname = "blockbench-electron";
-  version = "3.7.5";
+  version = "4.1.1";
 
   src = fetchurl {
     url = "https://github.com/JannisX11/blockbench/releases/download/v${version}/Blockbench_${version}.AppImage";
-    sha256 = "0qqklhncd4khqmgp7jg7wap2rzkrg8b6dflmz0wmm5zxxp5vcy1c";
+    sha256 = "0mqdkjhmylrjjfrm05jv1967qqka5263fgcn9qzax08gcq93s18f";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_8}/bin/electron $out/bin/${pname} \
+    makeWrapper ${electron_16}/bin/electron $out/bin/${pname} \
       --add-flags $out/share/${pname}/resources/app.asar \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
   '';

@@ -30,5 +30,6 @@ stdenv.mkDerivation {
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
+    mainProgram = "RunningX";
   };
 }

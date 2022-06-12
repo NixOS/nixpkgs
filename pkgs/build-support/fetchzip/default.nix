@@ -12,13 +12,17 @@
 , url ? ""
 , urls ? []
 , extraPostFetch ? ""
+, postFetch ? ""
 , name ? "source"
+, nativeBuildInputs ? [ ]
 , # Allows to set the extension for the intermediate downloaded
   # file. This can be used as a hint for the unpackCmdHooks to select
   # an appropriate unpacking tool.
   extension ? null
 , ... } @ args:
 
+
+lib.warnIf (extraPostFetch != "") "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub'."
 (fetchurl (let
   tmpFilename =
     if extension != null
@@ -30,6 +34,8 @@ in {
   recursiveHash = true;
 
   downloadToTemp = true;
+
+  nativeBuildInputs = [ unzip ] ++ nativeBuildInputs;
 
   postFetch =
     ''
@@ -57,14 +63,14 @@ in {
       mv "$unpackDir" "$out"
     '')
     + ''
+      ${postFetch}
+    '' + ''
       ${extraPostFetch}
     ''
+
     # Remove non-owner write permissions
     # Fixes https://github.com/NixOS/nixpkgs/issues/38649
     + ''
       chmod 755 "$out"
     '';
-} // removeAttrs args [ "stripRoot" "extraPostFetch" "extension" ])).overrideAttrs (x: {
-  # Hackety-hack: we actually need unzip hooks, too
-  nativeBuildInputs = x.nativeBuildInputs ++ [ unzip ];
-})
+} // removeAttrs args [ "stripRoot" "extraPostFetch" "postFetch" "extension" "nativeBuildInputs" ]))

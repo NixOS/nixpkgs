@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     changelog = "https://github.com/mbacarella/curses/raw/${version}/CHANGES";
     maintainers = [ maintainers.volth ];
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
   };
 }

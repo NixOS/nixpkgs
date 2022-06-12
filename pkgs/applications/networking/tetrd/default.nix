@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "Share your internet connection from your device to your PC and vice versa through a USB cable";
     homepage = "https://tetrd.app";
     license = licenses.unfree;
-    platforms = platforms.all;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ Madouura ];
   };
 }

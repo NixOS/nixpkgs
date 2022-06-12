@@ -12,11 +12,11 @@ assert enablePrinting -> cups != null;
 
 stdenv.mkDerivation rec {
   pname = "xpdf";
-  version = "4.03";
+  version = "4.04";
 
   src = fetchzip {
     url = "https://dl.xpdfreader.com/xpdf-${version}.tar.gz";
-    sha256 = "09yhvmh1vxjy763nnmawynygp5bh3j4i8ixqja64j11676yl77n6";
+    hash = "sha256-ujH9KDwFRjPIKwdMg79Mab9BfA2HooY5+2PESUgnGDY=";
   };
 
   # Fix "No known features for CXX compiler", see
@@ -42,8 +42,7 @@ stdenv.mkDerivation rec {
     comment = "Views Adobe PDF files";
     icon = "xpdf";
     exec = "xpdf %f";
-    categories = "Office;";
-    terminal = "false";
+    categories = [ "Office" ];
   };
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''

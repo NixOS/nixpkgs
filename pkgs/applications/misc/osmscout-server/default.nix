@@ -1,4 +1,4 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, pkg-config
+{ lib, mkDerivation, fetchFromGitHub, pkg-config
 , qmake, qttools, kirigami2, qtquickcontrols2, qtlocation
 , libosmscout, valhalla, libpostal, osrm-backend, protobuf
 , libmicrohttpd_0_9_70, sqlite, marisa, kyotocabinet, boost
@@ -14,29 +14,15 @@ let
 in
 mkDerivation rec {
   pname = "osmscout-server";
-  version = "1.17.1";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "rinigus";
     repo = "osmscout-server";
     rev = version;
-    sha256 = "0rpsi6nyhcz6bv0jab4vixkxhjmn84xi0q2xz15a097hn46cklx9";
+    sha256 = "sha256-I14nQL0H2rMga+RDdAjykqmf7QIZveA6oGWu5PfZ89s=";
     fetchSubmodules = true;
   };
-
-  # Two patches required to work with valhalla 3.1
-  patches = [
-    # require C++14 to match latest Valhalla
-    (fetchpatch {
-      url = "https://github.com/rinigus/osmscout-server/commit/78b41b9b4c607fe9bfd6fbd61ae31cb7c8a725cd.patch";
-      sha256 = "0gk9mdwa75awl0bj30gm8waj454d8k2yixxwh05m0p550cbv3lg0";
-    })
-    # add Valhalla 3.1 config
-    (fetchpatch {
-      url = "https://github.com/rinigus/osmscout-server/commit/584de8bd47700053960fa139a2d7f8d3d184c876.patch";
-      sha256 = "0liz72n83q93bzzyyiqjkxa6hp9zjx7v9rgsmpwf88gc4caqm2dz";
-    })
-  ];
 
   nativeBuildInputs = [ qmake pkg-config qttools ];
   buildInputs = [
@@ -44,13 +30,6 @@ mkDerivation rec {
     valhalla libosmscout osrm-backend libmicrohttpd_0_9_70
     libpostal sqlite marisa kyotocabinet boost protobuf date
   ];
-
-  # OSMScout server currently defaults to an earlier version of valhalla,
-  # but valhalla 3.1 support has been added. (See patches above)
-  # Replace the default valhalla.json with the valhalla 3.1 version
-  postPatch = ''
-    mv data/valhalla.json-3.1 data/valhalla.json
-  '';
 
   qmakeFlags = [
     "SCOUT_FLAVOR=kirigami" # Choose to build the kirigami UI variant

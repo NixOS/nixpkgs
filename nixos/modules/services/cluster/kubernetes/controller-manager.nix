@@ -171,4 +171,6 @@ in
 
     services.kubernetes.controllerManager.kubeconfig.server = mkDefault top.apiserverAddress;
   };
+
+  meta.buildDocsInSandbox = false;
 }

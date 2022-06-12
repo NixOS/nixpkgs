@@ -13,6 +13,7 @@
 , pyjwt
 , pyquil
 , python-dateutil
+, pythonOlder
 , qcs-api-client
 , retrying
 , rfc3339
@@ -26,6 +27,8 @@ buildPythonPackage rec {
   pname = "cirq-rigetti";
   inherit (cirq-core) version src meta;
 
+  disabled = pythonOlder "3.7";
+
   sourceRoot = "source/${pname}";
 
   postPatch = ''
@@ -36,9 +39,14 @@ buildPythonPackage rec {
       --replace "httpcore~=0.11.1" "httpcore" \
       --replace "httpx~=0.15.5" "httpx" \
       --replace "idna~=2.10" "idna" \
-      --replace "requests~=2.18" "requests" \
       --replace "pyjwt~=1.7.1" "pyjwt" \
-      --replace "qcs-api-client~=0.8.0" "qcs-api-client"
+      --replace "qcs-api-client~=0.8.0" "qcs-api-client" \
+      --replace "iso8601~=0.1.14" "iso8601" \
+      --replace "rfc3986~=1.5.0" "rfc3986" \
+      --replace "pyquil~=3.0.0" "pyquil" \
+      --replace "pydantic~=1.8.2" "pydantic"
+    # Remove outdated test
+    rm cirq_rigetti/service_test.py
   '';
 
   propagatedBuildInputs = [

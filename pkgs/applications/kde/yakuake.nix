@@ -23,6 +23,8 @@ mkDerivation {
     extra-cmake-modules kdoctools
   ];
 
+  outputs = [ "out" "dev" ];
+
   meta = {
     homepage = "https://yakuake.kde.org";
     description = "Quad-style terminal emulator for KDE";

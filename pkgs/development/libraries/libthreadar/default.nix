@@ -1,17 +1,19 @@
-{ lib, stdenv, fetchurl }:
-
-with lib;
+{ lib, stdenv, fetchurl, gcc-unwrapped }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.5";
+  version = "1.4.0";
   pname = "libthreadar";
 
   src = fetchurl {
     url = "mirror://sourceforge/libthreadar/${pname}-${version}.tar.gz";
-    sha256 = "sha256-T5W83Ry3e1hHrnpmSLkfJDYHrVP6YDpXTqmf0WGCjB8=";
+    sha256 = "sha256-LkcVF4AnuslzpIg/S8sGNJQye6iGcQRGqCqAhg8aN5E=";
   };
 
   outputs = [ "out" "dev" ];
+
+  buildInputs = [ gcc-unwrapped ];
+
+  CXXFLAGS = [ "-std=c++14" ];
 
   configureFlags = [
     "--disable-build-html"
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
     rm -r "$out"/share
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "http://libthreadar.sourceforge.net/";
     description = "A C++ library that provides several classes to manipulate threads";
     longDescription = ''

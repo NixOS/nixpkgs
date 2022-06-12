@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , billiard
 , boto3
 , buildPythonPackage
@@ -7,6 +8,7 @@
 , click-didyoumean
 , click-plugins
 , click-repl
+, dnspython
 , fetchPypi
 , kombu
 , moto
@@ -18,18 +20,19 @@
 , pythonOlder
 , pytz
 , vine
+, nixosTests
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "5.2.1";
+  version = "5.2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b41a590b49caf8e6498a57db628e580d5f8dc6febda0f42de5d783aed5b7f808";
+    hash = "sha256-+vvYKTTTD4oAT4Ho96Bi4xQToj1ES+juMyZVORWVjG0=";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +49,7 @@ buildPythonPackage rec {
   checkInputs = [
     boto3
     case
+    dnspython
     moto
     pymongo
     pytest-celery
@@ -65,16 +69,25 @@ buildPythonPackage rec {
   disabledTests = [
     "msgpack"
     "test_check_privileges_no_fchown"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # too many open files on hydra
+    "test_cleanup"
+    "test_with_autoscaler_file_descriptor_safety"
+    "test_with_file_descriptor_safety"
   ];
 
   pythonImportsCheck = [
     "celery"
   ];
 
+  passthru.tests = {
+    inherit (nixosTests) sourcehut;
+  };
+
   meta = with lib; {
     description = "Distributed task queue";
     homepage = "https://github.com/celery/celery/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ fab ];
   };
 }

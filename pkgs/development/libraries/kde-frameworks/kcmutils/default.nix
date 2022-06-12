@@ -6,7 +6,7 @@
 }:
 
 mkDerivation {
-  name = "kcmutils";
+  pname = "kcmutils";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     kcoreaddons kdeclarative ki18n kiconthemes kitemviews kpackage kxmlgui

@@ -1,8 +1,8 @@
 { stdenv, installShellFiles, qemu }:
 
 stdenv.mkDerivation rec {
-  name = "qemu-utils-${version}";
-  version = qemu.version;
+  pname = "qemu-utils";
+  inherit (qemu) version;
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ qemu ];

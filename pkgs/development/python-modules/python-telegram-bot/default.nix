@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "13.8.1";
+  version = "13.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-sGaR5Vw1lDJn7mNtmqcCs1eRVdLzLg4tbX8R8LXnJ/A=";
+    sha256 = "sha256-2vVftvQYuHUjF/0S34JN1xfjIpqH2DgQpM3W5EL2beU=";
   };
 
   propagatedBuildInputs = [

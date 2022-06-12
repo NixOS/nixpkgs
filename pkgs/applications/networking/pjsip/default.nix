@@ -1,14 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit }:
+{ lib, stdenv, fetchFromGitHub, openssl, libsamplerate, alsa-lib, AppKit, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
-  version = "2.11.1";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "pjproject";
     rev = version;
-    sha256 = "sha256-mqtlxQDIFee93wpdn8oNWmMPDyjYTCmVqF6IJvJbRBM=";
+    sha256 = "sha256-HIDL4xzzTu3irzrIOf8qSNCAvHGOMpi8EDeqZb8mMnc=";
   };
 
   patches = [
@@ -34,10 +34,12 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = "https://pjsip.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ olynch ];
+    mainProgram = "pjsua";
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

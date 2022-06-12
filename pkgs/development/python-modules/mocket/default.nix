@@ -5,7 +5,7 @@
 , isPy3k
 , decorator
 , http-parser
-, python_magic
+, python-magic
 , urllib3
 , pytestCheckHook
 , pytest-mock
@@ -19,18 +19,18 @@
 
 buildPythonPackage rec {
   pname = "mocket";
-  version = "3.10.2";
+  version = "3.10.5";
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bb/Uf9xWKRNr27SHzTzI14a0At9Ua5xxBr7XN2d6qfQ=";
+    sha256 = "sha256-rF6ol5T6wH0nNmaP+lHQL8H+XZz1kl7OEe7NNO4MCtw=";
   };
 
   propagatedBuildInputs = [
     decorator
     http-parser
-    python_magic
+    python-magic
     urllib3
   ];
 
@@ -45,6 +45,8 @@ buildPythonPackage rec {
     pook
   ];
 
+  # skip http tests
+  SKIP_TRUE_HTTP = true;
   pytestFlagsArray = [
     # Requires a live Redis instance
     "--ignore=tests/main/test_redis.py"

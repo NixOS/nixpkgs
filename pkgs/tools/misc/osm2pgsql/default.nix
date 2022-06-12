@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osm2pgsql";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0mUGvu5o2MhlriNAUAUoyDrFgTw2weGGbQcBzaauKEQ=";
+    sha256 = "sha256-6FVMv+DowMYdRdsQFL2iwG/V9D2cLWkHUVkmR3/TuUI=";
   };
 
   nativeBuildInputs = [ cmake ];

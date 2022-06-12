@@ -54,7 +54,7 @@ python3Packages.buildPythonApplication rec {
     description = "A modern emoji picker for Linux";
     homepage = "https://github.com/tom-james-watson/emote";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.linux;
   };
 }

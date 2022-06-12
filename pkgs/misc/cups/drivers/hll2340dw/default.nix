@@ -16,7 +16,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "cups-brother-hll2340dw";
+  pname = "cups-brother-hll2340dw";
+  inherit version;
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ cups ghostscript dpkg a2ps ];

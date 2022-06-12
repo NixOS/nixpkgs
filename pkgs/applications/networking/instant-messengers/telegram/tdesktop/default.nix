@@ -1,5 +1,4 @@
-{ mkDerivation
-, lib
+{ lib
 , fetchFromGitHub
 , callPackage
 , pkg-config
@@ -10,9 +9,11 @@
 , wrapQtAppsHook
 , extra-cmake-modules
 , qtbase
+, qtwayland
+, qtsvg
 , qtimageformats
+, qt5compat
 , gtk3
-, kwayland
 , libdbusmenu
 , lz4
 , xxHash
@@ -70,7 +71,7 @@ let
 in
 env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "3.4.3";
+  version = "3.7.3";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -79,7 +80,7 @@ env.mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0w8llqc4ffhp4gkvk6cyxah16yxm15am0msg3qn39fi2qqnm01x8";
+    sha256 = "01b3nrhfbxhq4w63nsjnrhyfsdq3fm4l7sfkasbh8ib4qk3c9vwz";
   };
 
   postPatch = ''
@@ -112,9 +113,11 @@ env.mkDerivation rec {
 
   buildInputs = [
     qtbase
+    qtwayland
+    qtsvg
     qtimageformats
+    qt5compat
     gtk3
-    kwayland
     libdbusmenu
     lz4
     xxHash
@@ -158,8 +161,6 @@ env.mkDerivation rec {
     "-DTDESKTOP_API_HASH=d524b414d21f4d37f08684c1df41ac9c"
     # See: https://github.com/NixOS/nixpkgs/pull/130827#issuecomment-885212649
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
-    # TODO: Remove once QT6 is available in nixpkgs
-    "-DDESKTOP_APP_QT6=OFF"
   ];
 
   postFixup = ''
@@ -189,6 +190,6 @@ env.mkDerivation rec {
     platforms = platforms.linux;
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ oxalica vanilla ];
+    maintainers = with maintainers; [ oxalica ];
   };
 }

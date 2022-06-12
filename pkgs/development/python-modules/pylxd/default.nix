@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "pylxd";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "pylxd";
     rev = version;
-    sha256 = "144frnlsb21mglgyisms790hyrdfx1l91lcd7incch4m4a1cbpp6";
+    sha256 = "sha256-eDRCJYjmBndMnSNuS6HD/2p/KhzqJq2qPAzMk7kC5UM=";
   };
 
   propagatedBuildInputs = [

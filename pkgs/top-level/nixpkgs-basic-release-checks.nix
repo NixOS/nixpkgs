@@ -19,27 +19,53 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
         exit 1
     fi
 
-    # Make sure that derivation paths do not depend on the Nixpkgs path.
-    mkdir $TMPDIR/foo
-    ln -s $(readlink -f $src) $TMPDIR/foo/bar
-    p1=$(nix-instantiate $src --dry-run -A firefox --show-trace)
-    p2=$(nix-instantiate $TMPDIR/foo/bar --dry-run -A firefox --show-trace)
-    if [ "$p1" != "$p2" ]; then
-        echo "Nixpkgs evaluation depends on Nixpkgs path ($p1 vs $p2)!"
-        exit 1
-    fi
+    src2=$TMPDIR/foo
+    cp -rd $src $src2
 
     # Check that all-packages.nix evaluates on a number of platforms without any warnings.
     for platform in ${pkgs.lib.concatStringsSep " " supportedSystems}; do
         header "checking Nixpkgs on $platform"
 
-        nix-env -f $src \
+        # To get a call trace; see https://nixos.org/manual/nixpkgs/stable/#function-library-lib.trivial.warn
+        # Relies on impure eval
+        export NIX_ABORT_ON_WARN=true
+
+        set +e
+        (
+          set -x
+          nix-env -f $src \
+              --show-trace --argstr system "$platform" \
+              --arg config '{ allowAliases = false; }' \
+              --option experimental-features 'no-url-literals' \
+              -qa --drv-path --system-filter \* --system \
+              "''${opts[@]}" 2> eval-warnings.log > packages1
+        )
+        rc=$?
+        set -e
+        if [ "$rc" != "0" ]; then
+          cat eval-warnings.log
+          exit $rc
+        fi
+
+        s1=$(sha1sum packages1 | cut -c1-40)
+        echo $s1
+
+        nix-env -f $src2 \
             --show-trace --argstr system "$platform" \
             --arg config '{ allowAliases = false; }' \
             --option experimental-features 'no-url-literals' \
             -qa --drv-path --system-filter \* --system \
-            "''${opts[@]}" 2>&1 >/dev/null | tee eval-warnings.log
+            "''${opts[@]}" > packages2
 
+        s2=$(sha1sum packages2 | cut -c1-40)
+
+        if [[ $s1 != $s2 ]]; then
+            echo "Nixpkgs evaluation depends on Nixpkgs path"
+            diff packages1 packages2
+            exit 1
+        fi
+
+        # Catch any trace calls not caught by NIX_ABORT_ON_WARN (lib.warn)
         if [ -s eval-warnings.log ]; then
             echo "Nixpkgs on $platform evaluated with warnings, aborting"
             exit 1

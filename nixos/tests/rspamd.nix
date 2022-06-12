@@ -22,7 +22,7 @@ let
   '';
   simple = name: enableIPv6: makeTest {
     name = "rspamd-${name}";
-    machine = {
+    nodes.machine = {
       services.rspamd.enable = true;
       networking.enableIPv6 = enableIPv6;
     };
@@ -52,7 +52,7 @@ in
   ipv4only = simple "ipv4only" false;
   deprecated = makeTest {
     name = "rspamd-deprecated";
-    machine = {
+    nodes.machine = {
       services.rspamd = {
         enable = true;
         workers.normal.bindSockets = [{
@@ -91,7 +91,7 @@ in
 
   bindports = makeTest {
     name = "rspamd-bindports";
-    machine = {
+    nodes.machine = {
       services.rspamd = {
         enable = true;
         workers.normal.bindSockets = [{
@@ -152,7 +152,7 @@ in
   };
   customLuaRules = makeTest {
     name = "rspamd-custom-lua-rules";
-    machine = {
+    nodes.machine = {
       environment.etc."tests/no-muh.eml".text = ''
         From: Sheep1<bah@example.com>
         To: Sheep2<mah@example.com>
@@ -256,7 +256,7 @@ in
   };
   postfixIntegration = makeTest {
     name = "rspamd-postfix-integration";
-    machine = {
+    nodes.machine = {
       environment.systemPackages = with pkgs; [ msmtp ];
       environment.etc."tests/gtube.eml".text = ''
         From: Sheep1<bah@example.com>

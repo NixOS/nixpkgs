@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, unstableGitUpdater
 , substituteAll
 , meson
 , ninja
@@ -44,6 +45,12 @@ stdenv.mkDerivation rec {
     pantheon.granite
     pantheon.wingpanel
   ];
+
+  passthru = {
+    updateScript = unstableGitUpdater {
+      url = "https://github.com/Lafydev/wingpanel-indicator-ayatana.git";
+    };
+  };
 
   meta = with lib; {
     description = "Ayatana Compatibility Indicator for Wingpanel";

@@ -1,7 +1,7 @@
 { lib, buildPecl, fetchFromGitHub, writeText, libcouchbase, zlib, php, substituteAll }:
 let
   pname = "couchbase";
-  version = "3.2.1";
+  version = "3.2.2";
 in
 buildPecl {
   inherit pname version;
@@ -10,13 +10,12 @@ buildPecl {
     owner = "couchbase";
     repo = "php-couchbase";
     rev = "v${version}";
-    sha256 = "sha256-Ti1jo1do0xiY/FAfyG/YI/TTcgFTMWy8cuhorDodUko=";
+    sha256 = "sha256-JpzLR4NcyShl2VTivj+15iAsTTsZmdMIdZYc3dLCbIA=";
   };
 
   configureFlags = [ "--with-couchbase" ];
 
   buildInputs = [ libcouchbase zlib ];
-  internalDeps = lib.optionals (lib.versionOlder php.version "8.0") [ php.extensions.json ];
 
   patches = [
     (substituteAll {

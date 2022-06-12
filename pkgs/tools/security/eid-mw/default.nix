@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
   preConfigure = ''
     mkdir openssl
-    ln -s ${openssl.out}/lib openssl
+    ln -s ${lib.getLib openssl}/lib openssl
     ln -s ${openssl.bin}/bin openssl
     ln -s ${openssl.dev}/include openssl
     export SSL_PREFIX=$(realpath openssl)
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Belgian electronic identity card (eID) middleware";
-    homepage = "https://eid.belgium.be/en/using_your_eid/installing_the_eid_software/linux/";
+    homepage = "https://eid.belgium.be/en";
     license = licenses.lgpl3Only;
     longDescription = ''
       Allows user authentication and digital signatures with Belgian ID cards.

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "privacyidea-ldap-proxy";
-  version = "0.6.2";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "privacyidea";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-U2lg4zDQKn9FQ7O0zSLaijIkXKVjg8wi2ItueF4ACDU=";
+    sha256 = "1i2kgxqd38xvb42qj0a4a35w4vk0fyp3n7w48kqmvrxc77p6r6i8";
   };
 
   propagatedBuildInputs = [ twisted ldaptor configobj ];

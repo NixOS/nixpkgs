@@ -3,7 +3,11 @@
 with lib;
 
 let
+  json = pkgs.formats.json { };
   cfg = config.services.prometheus;
+  checkConfigEnabled =
+    (lib.isBool cfg.checkConfig && cfg.checkConfig)
+      || cfg.checkConfig == "syntax-only";
 
   workingDir = "/var/lib/" + cfg.stateDir;
 
@@ -26,7 +30,7 @@ let
 
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file:
-    if cfg.checkConfig then
+    if checkConfigEnabled then
       pkgs.runCommandLocal
         "${name}-${replaceStrings [" "] [""] what}-checked"
         { buildInputs = [ cfg.package ]; } ''
@@ -34,13 +38,7 @@ let
         promtool ${what} $out
       '' else file;
 
-  # Pretty-print JSON to a file
-  writePrettyJSON = name: x:
-    pkgs.runCommandLocal name { } ''
-      echo '${builtins.toJSON x}' | ${pkgs.jq}/bin/jq . > $out
-    '';
-
-  generatedPrometheusYml = writePrettyJSON "prometheus.yml" promConfig;
+  generatedPrometheusYml = json.generate "prometheus.yml" promConfig;
 
   # This becomes the main config file for Prometheus
   promConfig = {
@@ -63,7 +61,7 @@ let
           pkgs.writeText "prometheus.yml" cfg.configText
         else generatedPrometheusYml;
     in
-    promtoolCheck "check config" "prometheus.yml" yml;
+    promtoolCheck "check config ${lib.optionalString (cfg.checkConfig == "syntax-only") "--syntax-only"}" "prometheus.yml" yml;
 
   cmdlineArgs = cfg.extraFlags ++ [
     "--storage.tsdb.path=${workingDir}/data/"
@@ -74,7 +72,6 @@ let
     }"
     "--web.listen-address=${cfg.listenAddress}:${builtins.toString cfg.port}"
     "--alertmanager.notification-queue-capacity=${toString cfg.alertmanagerNotificationQueueCapacity}"
-    "--alertmanager.timeout=${toString cfg.alertmanagerTimeout}s"
   ] ++ optional (cfg.webExternalUrl != null) "--web.external-url=${cfg.webExternalUrl}"
     ++ optional (cfg.retentionTime != null) "--storage.tsdb.retention.time=${cfg.retentionTime}";
 
@@ -252,8 +249,8 @@ let
   promTypes.scrape_config = types.submodule {
     options = {
       authorization = mkOption {
-        type = types.attrs;
-        default = {};
+        type = types.nullOr types.attrs;
+        default = null;
         description = ''
           Sets the `Authorization` header on every scrape request with the configured credentials.
         '';
@@ -1563,6 +1560,8 @@ in
     (mkRenamedOptionModule [ "services" "prometheus2" ] [ "services" "prometheus" ])
     (mkRemovedOptionModule [ "services" "prometheus" "environmentFile" ]
       "It has been removed since it was causing issues (https://github.com/NixOS/nixpkgs/issues/126083) and Prometheus now has native support for secret files, i.e. `basic_auth.password_file` and `authorization.credentials_file`.")
+    (mkRemovedOptionModule [ "services" "prometheus" "alertmanagerTimeout" ]
+      "Deprecated upstream and no longer had any effect")
   ];
 
   options.services.prometheus = {
@@ -1719,14 +1718,6 @@ in
       '';
     };
 
-    alertmanagerTimeout = mkOption {
-      type = types.int;
-      default = 10;
-      description = ''
-        Alert manager HTTP API timeout (in seconds).
-      '';
-    };
-
     webExternalUrl = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -1738,16 +1729,20 @@ in
     };
 
     checkConfig = mkOption {
-      type = types.bool;
+      type = with types; either bool (enum [ "syntax-only" ]);
       default = true;
+      example = "syntax-only";
       description = ''
         Check configuration with <literal>promtool
         check</literal>. The call to <literal>promtool</literal> is
-        subject to sandboxing by Nix. When credentials are stored in
-        external files (<literal>password_file</literal>,
-        <literal>bearer_token_file</literal>, etc), they will not be
-        visible to <literal>promtool</literal> and it will report
-        errors, despite a correct configuration.
+        subject to sandboxing by Nix.
+
+        If you use credentials stored in external files
+        (<literal>password_file</literal>, <literal>bearer_token_file</literal>, etc),
+        they will not be visible to <literal>promtool</literal>
+        and it will report errors, despite a correct configuration.
+        To resolve this, you may set this option to <literal>"syntax-only"</literal>
+        in order to only syntax check the Prometheus configuration.
       '';
     };
 

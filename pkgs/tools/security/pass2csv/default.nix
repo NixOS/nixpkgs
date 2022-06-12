@@ -6,12 +6,12 @@
 
 buildPythonApplication rec {
   pname = "pass2csv";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qY094A5F7W2exGcsS9AJuO5RrBcAn0cCrJquOc6zGZM=";
+    sha256 = "03a11bd0b0905737f4adb21d87aa1653d84cc1d9b5dcfdfb8a29092245d65db8";
   };
 
   propagatedBuildInputs = [

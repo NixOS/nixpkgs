@@ -1,56 +1,74 @@
 { lib
-, fetchFromGitHub
 , buildPythonPackage
-, numpy
-, nose
-, nbformat
-, nbconvert
-, jupyter
 , chainer
-, pytorch
-, mxnet
-, tensorflow
+, fetchFromGitHub
+, jupyter
 , keras
+  #, mxnet
+, nbconvert
+, nbformat
+, nose
+, numpy
+, parameterized
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "einops";
-  version = "0.3.2";
+  version = "0.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "arogozhnikov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ix094cfh6w4bvx6ymp5dpm35y9nkaibcn1y50g6kwdp4f0473y8";
+    hash = "sha256-n4R4lcRimuOncisCTs2zJWPlqZ+W2yPkvkWAnx4R91s=";
   };
 
   checkInputs = [
+    chainer
+    jupyter
+    keras
+    # mxnet (has issues with some CPUs, segfault)
+    nbconvert
+    nbformat
     nose
     numpy
-    # For notebook tests
-    nbformat
-    nbconvert
-    jupyter
-    # For backend tests
-    chainer
-    pytorch
-    mxnet
-    tensorflow
-    keras
+    parameterized
+    pytestCheckHook
   ];
 
   # No CUDA in sandbox
   EINOPS_SKIP_CUPY = 1;
 
-  checkPhase = ''
-    export HOME=$TMPDIR
-    nosetests -v -w tests
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "einops"
+  ];
+
+  disabledTests = [
+    # Tests are failing as mxnet is not pulled-in
+    # https://github.com/NixOS/nixpkgs/issues/174872
+    "test_all_notebooks"
+    "test_dl_notebook_with_all_backends"
+    "test_backends_installed"
+  ];
+
+  disabledTestPaths = [
+    "tests/test_layers.py"
+  ];
+
+  meta = with lib; {
     description = "Flexible and powerful tensor operations for readable and reliable code";
     homepage = "https://github.com/arogozhnikov/einops";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ yl3dy ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ yl3dy ];
   };
 }
+

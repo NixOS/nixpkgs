@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       comment = meta.description;
       genericName = "starsector";
       desktopName = "Starsector";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 
@@ -57,7 +57,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/starsector.sh \
       --prefix PATH : ${lib.makeBinPath [ openjdk ]} \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
-      --run 'mkdir -p ''${XDG_DATA_HOME:-~/.local/share}/starsector; cd '"$out"
+      --run 'mkdir -p ''${XDG_DATA_HOME:-~/.local/share}/starsector' \
+      --chdir "$out"
     ln -s $out/starsector.sh $out/bin/starsector
 
     runHook postInstall
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open-world single-player space-combat, roleplaying, exploration, and economic game";
     homepage = "https://fractalsoftworks.com";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ bbigras ];
   };

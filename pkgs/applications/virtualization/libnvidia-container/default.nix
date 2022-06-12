@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, addOpenGLRunpath
 , fetchFromGitHub
 , pkg-config
 , libelf
@@ -8,25 +9,31 @@
 , rpcsvc-proto
 , libtirpc
 , makeWrapper
+, substituteAll
+, go
 }:
 let
-  modp-ver = "450.57";
+  modprobeVersion = "495.44";
   nvidia-modprobe = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-modprobe";
-    rev = modp-ver;
-    sha256 = "0r4f6lpbbqqs9932xd2mr7bxn6a3xdalcwq332fc1amrrkgzfyv7";
+    rev = modprobeVersion;
+    sha256 = "sha256-Y3ZOfge/EcmhqI19yWO7UfPqkvY1CHHvFC5l9vYyGuU=";
+  };
+  modprobePatch = substituteAll {
+    src = ./modprobe.patch;
+    inherit modprobeVersion;
   };
 in
 stdenv.mkDerivation rec {
   pname = "libnvidia-container";
-  version = "1.5.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b9yQ1mEo1EkjXMguV0t98OvFEQO4h76EVu154MsB2II=";
+    sha256 = "sha256-7OTawWwjeKU8wIa8I/+aSvAJli4kEua94nJSNyCajpE=";
   };
 
   patches = [
@@ -36,10 +43,52 @@ stdenv.mkDerivation rec {
     # path.
     ./libnvc-ldconfig-and-path-fixes.patch
 
-    # the libnvidia-container Makefile wants to build and install static
-    # libtirpc libraries; this patch prevents that from happening
-    ./avoid-static-libtirpc-build.patch
+    # fix bogus struct declaration
+    ./inline-c-struct.patch
   ];
+
+  postPatch = ''
+    sed -i \
+      -e 's/^REVISION ?=.*/REVISION = ${src.rev}/' \
+      -e 's/^COMPILER :=.*/COMPILER = $(CC)/' \
+      mk/common.mk
+
+    mkdir -p deps/src/nvidia-modprobe-${modprobeVersion}
+    cp -r ${nvidia-modprobe}/* deps/src/nvidia-modprobe-${modprobeVersion}
+    chmod -R u+w deps/src
+    pushd deps/src
+
+    patch -p0 < ${modprobePatch}
+    touch nvidia-modprobe-${modprobeVersion}/.download_stamp
+    popd
+
+    # 1. replace DESTDIR=$(DEPS_DIR) with empty strings to prevent copying
+    #    things into deps/src/nix/store
+    # 2. similarly, remove any paths prefixed with DEPS_DIR
+    # 3. prevent building static libraries because we don't build static
+    #    libtirpc (for now)
+    # 4. prevent installation of static libraries because of step 3
+    # 5. prevent installation of libnvidia-container-go.so twice
+    sed -i Makefile \
+      -e 's#DESTDIR=\$(DEPS_DIR)#DESTDIR=""#g' \
+      -e 's#\$(DEPS_DIR)\$#\$#g' \
+      -e 's#all: shared static tools#all: shared tools#g' \
+      -e '/$(INSTALL) -m 644 $(LIB_STATIC) $(DESTDIR)$(libdir)/d' \
+      -e '/$(INSTALL) -m 755 $(libdir)\/$(LIBGO_SHARED) $(DESTDIR)$(libdir)/d'
+  '';
+
+  enableParallelBuilding = true;
+
+  preBuild = ''
+    HOME="$(mktemp -d)"
+  '';
+
+  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  NIX_LDFLAGS = [ "-L${libtirpc.dev}/lib" "-ltirpc" ];
+
+  nativeBuildInputs = [ pkg-config go rpcsvc-proto makeWrapper ];
+
+  buildInputs = [ libelf libcap libseccomp libtirpc ];
 
   makeFlags = [
     "WITH_LIBELF=yes"
@@ -50,32 +99,14 @@ stdenv.mkDerivation rec {
     "CFLAGS=-DWITH_TIRPC"
   ];
 
-  postPatch = ''
-    sed -i \
-      -e 's/^REVISION ?=.*/REVISION = ${src.rev}/' \
-      -e 's/^COMPILER :=.*/COMPILER = $(CC)/' \
-      mk/common.mk
-
-    mkdir -p deps/src/nvidia-modprobe-${modp-ver}
-    cp -r ${nvidia-modprobe}/* deps/src/nvidia-modprobe-${modp-ver}
-    chmod -R u+w deps/src
-    pushd deps/src
-    patch -p0 < ${./modprobe.patch}
-    touch nvidia-modprobe-${modp-ver}/.download_stamp
-    popd
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/nvidia-container-cli \
-      --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:/run/opengl-driver-32/lib
-  '';
-
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-L${libtirpc.dev}/lib" "-ltirpc" ];
-
-  nativeBuildInputs = [ pkg-config rpcsvc-proto makeWrapper ];
-
-  buildInputs = [ libelf libcap libseccomp libtirpc ];
+  postInstall =
+    let
+      inherit (addOpenGLRunpath) driverLink;
+      libraryPath = lib.makeLibraryPath [ "$out" driverLink "${driverLink}-32" ];
+    in
+    ''
+      wrapProgram $out/bin/nvidia-container-cli --prefix LD_LIBRARY_PATH : ${libraryPath}
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/NVIDIA/libnvidia-container";

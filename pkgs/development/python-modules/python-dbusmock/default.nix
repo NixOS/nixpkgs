@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.19";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
     rev = version;
-    sha256 = "09j338lmrjabbd3fpajr4piz4r20sl33030szfsqfzlwrrmvkyi0";
+    sha256 = "sha256-kavbWMTgKU/rBIo7RMs9NkwReYQyEdeFwMBSzEM9wa0=";
   };
 
   prePatch = ''
@@ -38,6 +38,10 @@ buildPythonPackage rec {
     "test_cli"
     "test_timedated"
     "test_upower"
+    # needs glib
+    "test_accounts_service"
+    # needs dbus-daemon active
+    "test_systemd"
     # Very slow, consider disabling?
     # "test_networkmanager"
   ];

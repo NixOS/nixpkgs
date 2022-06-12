@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   preFixup = ''
-    gappsWrapperArgs+=(--add-flags "--datapath \"$out/share\"");
+    gappsWrapperArgs+=(--add-flags "--datapath $out/share");
   '';
 
   meta = {

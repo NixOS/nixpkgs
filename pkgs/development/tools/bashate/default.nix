@@ -1,5 +1,5 @@
 { lib
-, Babel
+, babel
 , buildPythonApplication
 , fetchPypi
 , fixtures
@@ -21,7 +21,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [
-    Babel
+    babel
     pbr
     setuptools
   ];

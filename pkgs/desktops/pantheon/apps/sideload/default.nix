@@ -2,8 +2,6 @@
 , stdenv
 , desktop-file-utils
 , nix-update-script
-, elementary-gtk-theme
-, elementary-icon-theme
 , fetchFromGitHub
 , flatpak
 , gettext
@@ -32,12 +30,6 @@ stdenv.mkDerivation rec {
     sha256 = "0abpcawmmv5mgzk2i5n9rlairmjr2v9rg9b8c9g7xa085s496bi9";
   };
 
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
-  };
-
   nativeBuildInputs = [
     desktop-file-utils
     gettext
@@ -50,8 +42,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-gtk-theme
-    elementary-icon-theme
     flatpak
     glib
     granite
@@ -65,6 +55,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/elementary/sideload";

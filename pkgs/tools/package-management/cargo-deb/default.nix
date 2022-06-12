@@ -35,6 +35,15 @@ rustPlatform.buildRustPackage rec {
     description = "Generate Debian packages from information in Cargo.toml";
     homepage = "https://github.com/mmstick/cargo-deb";
     license = licenses.mit;
+    # test failures:
+    #   control::tests::generate_scripts_generates_maintainer_scripts_for_unit
+    #   dh_installsystemd::tests::find_units_in_empty_dir_finds_nothing
+    #   dh_lib::tests::apply_with_no_matching_files
+    #   dh_lib::tests::debhelper_script_subst_with_generated_file_only
+    #   dh_lib::tests::debhelper_script_subst_with_no_matching_files
+    #   dh_lib::tests::pkgfile_finds_most_specific_match_without_pkg_file
+    #   dh_lib::tests::pkgfile_finds_most_specific_match_without_unit_file
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
     maintainers = with maintainers; [ Br1ght0ne ];
   };
 }

@@ -2,35 +2,14 @@
   qtbase, mkDerivationWith }:
 
 {
-  stable = with python27Packages; buildPythonPackage rec {
-    pname = "plover";
-    version = "3.1.1";
-
-    meta = with lib; {
-      description = "OpenSteno Plover stenography software";
-      maintainers = with maintainers; [ twey kovirobi ];
-      license     = licenses.gpl2;
-    };
-
-    src = fetchFromGitHub {
-      owner = "openstenoproject";
-      repo = "plover";
-      rev = "v${version}";
-      sha256 = "sha256-LIhTwHMphg+xTR9NKvjAZ6p0mmqPNcZd9C4cgnenmYQ=";
-    };
-
-    nativeBuildInputs     = [ setuptools-scm ];
-    buildInputs           = [ pytest mock ];
-    propagatedBuildInputs = [
-      six setuptools pyserial appdirs hidapi wxPython xlib wmctrl dbus-python
-    ];
-  };
+  stable = throw "plover.stable was removed because it used Python 2. Use plover.dev instead."; # added 2022-06-05
 
   dev = with python3Packages; mkDerivationWith buildPythonPackage rec {
     pname = "plover";
     version = "4.0.0.dev10";
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "OpenSteno Plover stenography software";
       maintainers = with maintainers; [ twey kovirobi ];
       license     = licenses.gpl2;
@@ -48,7 +27,7 @@
     postPatch = "sed -i /PyQt5/d setup.cfg";
 
     checkInputs           = [ pytest mock ];
-    propagatedBuildInputs = [ Babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
+    propagatedBuildInputs = [ babel pyqt5 xlib pyserial appdirs wcwidth setuptools ];
 
     dontWrapQtApps = true;
 

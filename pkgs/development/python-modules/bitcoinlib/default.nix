@@ -17,7 +17,7 @@ in buildPythonPackage rec {
   postPatch = ''
     substituteInPlace bitcoin/core/key.py --replace \
       "ctypes.util.find_library('ssl') or 'libeay32'" \
-      "'${openssl.out}/lib/libssl.${ext}'"
+      "'${lib.getLib openssl}/lib/libssl.${ext}'"
   '';
 
   meta = {

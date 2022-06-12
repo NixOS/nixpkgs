@@ -22,11 +22,13 @@ let
 in
 
 edk2.mkDerivation projectDscPath {
-  name = "OVMF-${version}";
+  pname = "OVMF";
+  inherit version;
 
   outputs = [ "out" "fd" ];
 
-  buildInputs = [ util-linux nasm acpica-tools ];
+  nativeBuildInputs = [ util-linux nasm acpica-tools ];
+  strictDeps = true;
 
   hardeningDisable = [ "format" "stackprotector" "pic" "fortify" ];
 

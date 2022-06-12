@@ -14,6 +14,8 @@ extraUtils="@extraUtils@"
 export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin
 ln -s @extraUtils@/bin /bin
+# hardcoded in util-linux's mount helper search path `/run/wrappers/bin:/run/current-system/sw/bin:/sbin`
+ln -s @extraUtils@/bin /sbin
 
 # Copy the secrets to their needed location
 if [ -d "@extraUtils@/secrets" ]; then
@@ -81,30 +83,35 @@ ln -s /proc/mounts /etc/mtab # to shut up mke2fs
 touch /etc/udev/hwdb.bin # to shut up udev
 touch /etc/initrd-release
 
-# Function for waiting a device to appear.
+# Function for waiting for device(s) to appear.
 waitDevice() {
     local device="$1"
+    # Split device string using ':' as a delimiter as bcachefs
+    # uses this for multi-device filesystems, i.e. /dev/sda1:/dev/sda2:/dev/sda3
+    local IFS=':'
 
     # USB storage devices tend to appear with some delay.  It would be
     # great if we had a way to synchronously wait for them, but
     # alas...  So just wait for a few seconds for the device to
     # appear.
-    if test ! -e $device; then
-        echo -n "waiting for device $device to appear..."
-        try=20
-        while [ $try -gt 0 ]; do
-            sleep 1
-            # also re-try lvm activation now that new block devices might have appeared
-            lvm vgchange -ay
-            # and tell udev to create nodes for the new LVs
-            udevadm trigger --action=add
-            if test -e $device; then break; fi
-            echo -n "."
-            try=$((try - 1))
-        done
-        echo
-        [ $try -ne 0 ]
-    fi
+    for dev in $device; do
+        if test ! -e $dev; then
+            echo -n "waiting for device $dev to appear..."
+            try=20
+            while [ $try -gt 0 ]; do
+                sleep 1
+                # also re-try lvm activation now that new block devices might have appeared
+                lvm vgchange -ay
+                # and tell udev to create nodes for the new LVs
+                udevadm trigger --action=add
+                if test -e $dev; then break; fi
+                echo -n "."
+                try=$((try - 1))
+            done
+            echo
+            [ $try -ne 0 ]
+        fi
+    done
 }
 
 # Mount special file systems.
@@ -227,7 +234,8 @@ done
 mkdir -p /lib
 ln -s @modulesClosure@/lib/modules /lib/modules
 ln -s @modulesClosure@/lib/firmware /lib/firmware
-echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
+# see comment in stage-1.nix for explanation
+echo @extraUtils@/bin/modprobe-kernel > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
     info "loading module $(basename $i)..."
     modprobe $i
@@ -277,6 +285,9 @@ checkFS() {
     # Don't check resilient COWs as they validate the fs structures at mount time
     if [ "$fsType" = btrfs -o "$fsType" = zfs -o "$fsType" = bcachefs ]; then return 0; fi
 
+    # Skip fsck for apfs as the fsck utility does not support repairing the filesystem (no -a option)
+    if [ "$fsType" = apfs ]; then return 0; fi
+
     # Skip fsck for nilfs2 - not needed by design and no fsck tool for this filesystem.
     if [ "$fsType" = nilfs2 ]; then return 0; fi
 
@@ -309,11 +320,7 @@ checkFS() {
 
     echo "checking $device..."
 
-    fsckFlags=
-    if test "$fsType" != "btrfs"; then
-        fsckFlags="-V -a"
-    fi
-    fsck $fsckFlags "$device"
+    fsck -V -a "$device"
     fsckResult=$?
 
     if test $(($fsckResult | 2)) = $fsckResult; then

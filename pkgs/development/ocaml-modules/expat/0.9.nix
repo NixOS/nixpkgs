@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "16n2j3y0jc9xgqyshw9plrwqnjiz30vnpbhahmgxlidbycw8rgjz";
   };
 
-  buildInputs = [ocaml findlib ounit expat];
+  nativeBuildInputs = [ocaml findlib ];
+  buildInputs = [ ounit expat];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

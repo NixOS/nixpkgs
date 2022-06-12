@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "green";
-  version = "3.3.0";
+  version = "3.4.1";
   format = "setuptools";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a4d86f2dfa4ccbc86f24bcb9c9ab8bf34219c876c24e9f0603aab4dfe73bb575";
+    sha256 = "5dda2d2a277012227011f8f21523d70a550ebe5d47cc890fa16b9fcd9a91da53";
   };
 
   patches = [

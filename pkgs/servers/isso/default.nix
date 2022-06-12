@@ -1,4 +1,4 @@
-{ pkgs, nodejs, lib, python3Packages, fetchFromGitHub }:
+{ pkgs, nodejs, lib, python3Packages, fetchFromGitHub, nixosTests }:
 let
   nodeEnv = import ./node-env.nix {
     inherit (pkgs) stdenv lib python2 runCommand writeTextFile;
@@ -16,13 +16,13 @@ in
 with python3Packages; buildPythonApplication rec {
 
   pname = "isso";
-  version = "0.12.5";
+  version = "0.12.6.2";
 
   src = fetchFromGitHub {
     owner = "posativ";
     repo = pname;
-    rev = version;
-    sha256 = "12ccfba2kwbfm9h4zhlxrcigi98akbdm4qi89iglr4z53ygzpay5";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-T5T3EJS8ef8uo+P9qkC+7I70qv+4PFrnhImr04Fz57U=";
   };
 
   propagatedBuildInputs = [
@@ -47,11 +47,16 @@ with python3Packages; buildPythonApplication rec {
     make js
   '';
 
-  checkInputs = [ nose ];
+  checkInputs = [
+    pytest
+    pytest-cov
+  ];
 
   checkPhase = ''
-    ${python.interpreter} setup.py nosetests
+    pytest
   '';
+
+  passthru.tests = { inherit (nixosTests) isso; };
 
   meta = with lib; {
     description = "A commenting server similar to Disqus";

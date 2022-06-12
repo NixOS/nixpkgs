@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, erlang, which, pam }:
+{ stdenv, lib, fetchurl, unzip, erlang, which, pam, nixosTests }:
 
 let
   solrName = "solr-4.10.4-yz-2.tgz";
@@ -90,10 +90,16 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.tests = { inherit (nixosTests) riak; };
+
   meta = with lib; {
     maintainers = with maintainers; [ cstrahan mdaiter ];
     description = "Dynamo inspired NoSQL DB by Basho";
     platforms   = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # dependencies
+    ];
     license     = licenses.asl20;
     knownVulnerabilities = [ "CVE-2017-3163 - see https://github.com/NixOS/nixpkgs/issues/33876" ];
   };

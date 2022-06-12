@@ -9,10 +9,9 @@
 
 with lib;
 
-assert versionAtLeast kernel.version "3.12";
-
 stdenv.mkDerivation {
-  name = "perf-linux-${kernel.version}";
+  pname = "perf-linux";
+  version = kernel.version;
 
   inherit (kernel) src;
 

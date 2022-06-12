@@ -21,8 +21,9 @@ buildDunePackage rec {
 
   meta = {
     description = "Image formats such as PNG and PPM in OCaml";
+    homepage = "https://github.com/rlepigre/ocaml-imagelib";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.vbgl ];
-    homepage = "https://github.com/rlepigre/ocaml-imagelib";
+    mainProgram = "imagetool";
   };
 }

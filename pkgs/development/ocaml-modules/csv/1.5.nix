@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1ca7jgg58j24pccs5fshis726s06fdcjshnwza5kwxpjgdbvc63g";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
@@ -20,13 +22,17 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "ocaml setup.ml -test";
 
-  installPhase = "ocaml setup.ml -install";
+  installPhase = ''
+    runHook preInstall
+    ocaml setup.ml -install
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "A pure OCaml library to read and write CSV files";
     homepage = "https://github.com/Chris00/ocaml-csv";
     license = licenses.lgpl21;
     maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [ ];
+    inherit (ocaml.meta) platforms;
   };
 }

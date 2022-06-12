@@ -6,6 +6,7 @@
 , oslo-config
 , oslo-serialization
 , pbr
+, pythonOlder
 , requests-mock
 , stestr
 , testresources
@@ -14,11 +15,14 @@
 
 buildPythonPackage rec {
   pname = "python-keystoneclient";
-  version = "4.3.0";
+  version = "4.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fd09b7790ce53c20dc94318ec4d76e1cf71908aed59baeb4c7a61c17afd3aad5";
+    hash = "sha256-bX8FxpLn2yaSd4KEx3mubOqLIVmRS0QXpfoL/qHinNw=";
   };
 
   propagatedBuildInputs = [
@@ -40,7 +44,9 @@ buildPythonPackage rec {
     stestr run
   '';
 
-  pythonImportsCheck = [ "keystoneclient" ];
+  pythonImportsCheck = [
+    "keystoneclient"
+  ];
 
   meta = with lib; {
     description = "Client Library for OpenStack Identity";

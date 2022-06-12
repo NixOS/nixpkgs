@@ -2,18 +2,22 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+, pythonOlder
 , yara
 }:
 
 buildPythonPackage rec {
   pname = "yara-python";
-  version = "4.1.3";
+  version = "4.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-python";
     rev = "v${version}";
-    sha256 = "sha256-lOP+OVnMgpP8S+Q3jGRNEAFXAohXgX5Nvl+l4EK5ebs=";
+    hash = "sha256-jNxYuIddMzANZoQ0p7BbRrX6ISpaCA7T6j+iS+FOocg=";
   };
 
   buildInputs = [
@@ -28,9 +32,13 @@ buildPythonPackage rec {
     "--dynamic-linking"
   ];
 
-  pytestFlagsArray = [ "tests.py" ];
+  pytestFlagsArray = [
+    "tests.py"
+  ];
 
-  pythonImportsCheck = [ "yara" ];
+  pythonImportsCheck = [
+    "yara"
+  ];
 
   meta = with lib; {
     description = "Python interface for YARA";

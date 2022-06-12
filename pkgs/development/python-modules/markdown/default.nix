@@ -9,14 +9,16 @@
 
 buildPythonPackage rec {
   pname = "markdown";
-  version = "3.3.5";
+  version = "3.3.7";
 
   disabled = pythonOlder "3.6";
+
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "Markdown";
     inherit version;
-    sha256 = "sha256-JulUa/vN5fzQcr2PYSycG24md8uKrb32UgZnT0bd4Gk=";
+    sha256 = "cbb516f16218e643d8e0a95b309f77eb118cb138d39a4f27851e6a63581db874";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
@@ -28,6 +30,8 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} -m unittest discover
   '';
+
+  pythonImportsCheck = [ "markdown" ];
 
   meta = with lib; {
     description = "A Python implementation of John Gruber's Markdown with Extension support";

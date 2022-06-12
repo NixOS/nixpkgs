@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-sdl2";
-  version = "0.5.0";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "https://files.dthompson.us/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-lWTLctPUDqvN/Y95oOL7LF3czlLJFQ9d9np9dx4DHYU=";
+    hash = "sha256-h0osCURnYTUQFrKw0i7Jd+QCI8piR1NUE2lbxPv87aQ=";
   };
 
   nativeBuildInputs = [

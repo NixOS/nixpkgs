@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gfortran ];
   buildInputs = [ zlib ];
 
+  FFLAGS = [
+    "-std=legacy" # fix build with gfortran 10
+  ];
+
   enableParallelBuilding = true;
 
   meta = {

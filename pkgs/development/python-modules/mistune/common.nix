@@ -1,7 +1,7 @@
-{ lib, buildPythonPackage, fetchPypi, nose, version, sha256 }:
+{ lib, buildPythonPackage, fetchPypi, nose, version, sha256, format ? "setuptools" }:
 
 buildPythonPackage rec {
-  inherit version;
+  inherit version format;
   pname = "mistune";
 
   src = fetchPypi {

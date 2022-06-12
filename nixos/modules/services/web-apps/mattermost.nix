@@ -181,7 +181,7 @@ in
         description = ''
           Plugins to add to the configuration. Overrides any installed if non-null.
           This is a list of paths to .tar.gz files or derivations evaluating to
-          .tar.gz files. All entries will be passed to `mattermost plugin add`.
+          .tar.gz files.
         '';
       };
 

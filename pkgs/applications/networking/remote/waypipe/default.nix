@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "02q8l1qaahmd41h6v3r46akh7xlqz7fpwwsy15qww4jdvypg6vg4";
   };
 
+  strictDeps = true;
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config scdoc ];
-
   buildInputs = [
     # Optional dependencies:
     mesa lz4 zstd ffmpeg libva

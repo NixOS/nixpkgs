@@ -54,12 +54,12 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = true;
     description = "A graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
     changelog = "https://github.com/apache/incubator-age/releases/tag/v${version}";
     maintainers = with maintainers; [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;
-    broken = versionOlder postgresql.version "11.0";
   };
 }

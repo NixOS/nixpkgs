@@ -50,7 +50,8 @@ let
   ;
   pythonEnv = unwrapped.python.withPackages(ps: pythonPkgs);
 
-  name = (lib.appendToName "wrapped" unwrapped).name;
+  pname = unwrapped.pname + "-wrapped";
+  inherit (unwrapped) version;
   makeWrapperArgs = builtins.concatStringsSep " " ([
   ]
     # Emulating wrapGAppsHook & wrapQtAppsHook working together
@@ -59,7 +60,7 @@ let
       || (unwrapped.hasFeature "gr-qtgui")
       ) [
       "--prefix" "XDG_DATA_DIRS" ":" "$out/share"
-      "--prefix" "XDG_DATA_DIRS" ":" "$out/share/gsettings-schemas/${name}"
+      "--prefix" "XDG_DATA_DIRS" ":" "$out/share/gsettings-schemas/${pname}"
       "--prefix" "XDG_DATA_DIRS" ":" "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
       "--prefix" "XDG_DATA_DIRS" ":" "${hicolor-icon-theme}/share"
       # Needs to run `gsettings` on startup, see:
@@ -135,9 +136,9 @@ let
   };
   self = if doWrap then
     stdenv.mkDerivation {
-      inherit name passthru;
+      inherit pname version passthru;
+      nativeBuildInputs = [ makeWrapper ];
       buildInputs = [
-        makeWrapper
         xorg.lndir
       ];
       buildCommand = ''

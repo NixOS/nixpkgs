@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "uTorrent Transport Protocol library";
     homepage = "https://github.com/transmission/libutp";
     license = licenses.mit;
-    maintainers = with maintainers; [ angustrau ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.unix;
   };
 }

@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0001-src-cpp-fix-cmake-3.11-build.patch";
       sha256 = "REsBnbe6vlrZ+iCcw43kR5wy2o6q10RM73xjW5kBsr4=";
     })
+  ] ++ lib.optionals (!stdenv.cc.isClang) [
     # Avoid the bundled version of LZ4 and instead use the system one.
     (fetchpatch {
       url = "https://salsa.debian.org/science-team/flann/-/raw/debian/1.9.1+dfsg-9/debian/patches/0003-Use-system-version-of-liblz4.patch";
@@ -57,12 +58,13 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  propagatedBuildInputs = [ lz4 ];
+  # lz4 unbundling broken for llvm, use internal version
+  propagatedBuildInputs = lib.optional (!stdenv.cc.isClang) lz4;
 
   buildInputs = lib.optionals enablePython [ python3 ];
 
   meta = {
-    homepage = "http://people.cs.ubc.ca/~mariusm/flann/";
+    homepage = "https://github.com/flann-lib/flann";
     license = lib.licenses.bsd3;
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
     maintainers = with lib.maintainers; [viric];

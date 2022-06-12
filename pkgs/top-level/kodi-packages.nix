@@ -1,4 +1,4 @@
-{ lib, newScope, kodi, libretro }:
+{ config, lib, newScope, kodi, libretro }:
 
 with lib;
 
@@ -52,25 +52,9 @@ let self = rec {
 
   a4ksubtitles = callPackage ../applications/video/kodi/addons/a4ksubtitles { };
 
-  controllers = {
-    default = callPackage ../applications/video/kodi/addons/controllers { controller = "default"; };
+  arteplussept = callPackage ../applications/video/kodi/addons/arteplussept { };
 
-    dreamcast = callPackage ../applications/video/kodi/addons/controllers { controller = "dreamcast"; };
-
-    gba = callPackage ../applications/video/kodi/addons/controllers { controller = "gba"; };
-
-    genesis = callPackage ../applications/video/kodi/addons/controllers { controller = "genesis"; };
-
-    mouse = callPackage ../applications/video/kodi/addons/controllers { controller = "mouse"; };
-
-    n64 = callPackage ../applications/video/kodi/addons/controllers { controller = "n64"; };
-
-    nes = callPackage ../applications/video/kodi/addons/controllers { controller = "nes"; };
-
-    ps = callPackage ../applications/video/kodi/addons/controllers { controller = "ps"; };
-
-    snes = callPackage ../applications/video/kodi/addons/controllers { controller = "snes"; };
-  };
+  controller-topology-project = callPackage ../applications/video/kodi/addons/controller-topology-project { };
 
   iagl = callPackage ../applications/video/kodi/addons/iagl { };
 
@@ -160,4 +144,17 @@ let self = rec {
 
   websocket = callPackage ../applications/video/kodi/addons/websocket { };
 
-}; in self
+  xbmcswift2 = callPackage ../applications/video/kodi/addons/xbmcswift2 { };
+
+  typing_extensions = callPackage ../applications/video/kodi/addons/typing_extensions { };
+
+  arrow = callPackage ../applications/video/kodi/addons/arrow { };
+
+  trakt-module = callPackage ../applications/video/kodi/addons/trakt-module { };
+
+  trakt = callPackage ../applications/video/kodi/addons/trakt { };
+}; in self // lib.optionalAttrs config.allowAliases {
+  # deprecated or renamed packages
+
+  controllers = throw "kodi.packages.controllers has been replaced with kodi.packages.controller-topology-project - a package which contains a large number of controller profiles." { };
+}

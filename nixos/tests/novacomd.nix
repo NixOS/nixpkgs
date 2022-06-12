@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ dtzWill ];
   };
 
-  machine = { ... }: {
+  nodes.machine = { ... }: {
     services.novacomd.enable = true;
   };
 

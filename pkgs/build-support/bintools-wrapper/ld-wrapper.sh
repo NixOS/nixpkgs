@@ -30,7 +30,7 @@ expandResponseParams "$@"
 if [[ -n "${NIX_LINK_TYPE_@suffixSalt@:-}" ]]; then
     linkType=$NIX_LINK_TYPE_@suffixSalt@
 else
-    linkType=$(checkLinkType "$@")
+    linkType=$(checkLinkType "${params[@]}")
 fi
 
 if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
@@ -92,11 +92,6 @@ if [ -e @out@/nix-support/add-local-ldflags-before.sh ]; then
     source @out@/nix-support/add-local-ldflags-before.sh
 fi
 
-
-# Specify the target emulation if nothing is passed in ("-m" overrides this
-# environment variable). Ensures we never blindly fallback on targeting the host
-# platform.
-: ${LDEMULATION:=@emulation@}
 
 # Three tasks:
 #

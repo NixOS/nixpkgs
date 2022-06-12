@@ -9,20 +9,34 @@
 , pytestCheckHook
 , pytest-asyncio
 , mock
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
-  version = "2.8.0";
+  version = "2.9.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2a25f7535f21cdeabfccb07fe4a75eae5a47bb36b82025537755b37d3376da46";
+    hash = "sha256-ePJGEBzo5lXBnCDMuZQPVoU9gT4yfDs8YZB50x4xb90=";
   };
 
-  propagatedBuildInputs = [ libcst google-api-core proto-plus ];
+  propagatedBuildInputs = [
+    libcst
+    google-api-core
+    proto-plus
+  ];
 
-  checkInputs = [ google-cloud-testutils mock pandas pytestCheckHook pytest-asyncio ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    pandas
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   disabledTests = [
     # requires credentials

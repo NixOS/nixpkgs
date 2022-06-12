@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , cmake
@@ -10,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "chiabip158";
-  version = "1.0";
+  version = "1.1";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dG6A4n30uPswQWY/Wmi75HK4ZMCDNr9Lt05FRWEPYV8=";
+    hash = "sha256-2iQeiQl/CLq2zwo/mUKBwIwV5wlNYUdUfENGNxeDMU8=";
   };
 
   nativeBuildInputs = [ cmake setuptools-scm ];
@@ -30,6 +31,7 @@ buildPythonPackage rec {
   dontConfigure = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Chia's implementation of BIP 158";
     homepage = "https://www.chia.net/";
     license = licenses.asl20;

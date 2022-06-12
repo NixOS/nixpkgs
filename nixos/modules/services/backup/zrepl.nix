@@ -38,6 +38,9 @@ in
     environment.etc."zrepl/zrepl.yml".source = configFile;
 
     systemd.packages = [ pkgs.zrepl ];
+
+    # Note that pkgs.zrepl copies and adapts the upstream systemd unit, and
+    # the fields defined here only override certain fields from that unit.
     systemd.services.zrepl = {
       requires = [ "local-fs.target" ];
       wantedBy = [ "zfs.target" ];

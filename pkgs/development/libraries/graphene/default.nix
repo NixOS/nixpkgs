@@ -1,5 +1,7 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , pkg-config
 , meson
@@ -17,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "graphene";
-  version = "1.10.6";
+  version = "1.10.8";
 
   outputs = [ "out" ]
     ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" "installedTests" ];
@@ -26,12 +28,21 @@ stdenv.mkDerivation rec {
     owner = "ebassi";
     repo = pname;
     rev = version;
-    sha256 = "v6YH3fRMTzhp7wmU8in9ukcavzHmOAW54EK9ZwQyFxc=";
+    sha256 = "P6JQhSktzvyMHatP/iojNGXPmcsxsFxdYerXzS23ojI=";
   };
 
   patches = [
     # Add option for changing installation path of installed tests.
     ./0001-meson-add-options-for-tests-installation-dirs.patch
+
+    # Disable flaky simd_operators_reciprocal test
+    # https://github.com/ebassi/graphene/issues/246
+    (fetchpatch {
+      url = "https://github.com/ebassi/graphene/commit/4fbdd07ea3bcd0964cca3966010bf71cb6fa8209.patch";
+      sha256 = "uFkkH0u4HuQ/ua1mfO7sJZ7MPrQdV/JON7mTYB4DW80=";
+      includes = [ "tests/simd.c" ];
+      revert = true;
+    })
   ];
 
   depsBuildBuild = [

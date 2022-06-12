@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0y8va5kc2ram38hbk2cibkk64ffrabfv1sh4xm7pjspsba9n5p1y";
   };
 
+  strictDeps = true;
   installPhase = ''
     install -D zsh-history-substring-search.zsh \
       "$out/share/zsh-history-substring-search/zsh-history-substring-search.zsh"

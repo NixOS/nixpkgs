@@ -1,12 +1,12 @@
-{ stdenv, lib, fetchurl, bash }:
+{ stdenv, lib, fetchurl, bash, gitUpdater }:
 
 stdenv.mkDerivation rec {
   pname = "pax-utils";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchurl {
     url = "mirror://gentoo/distfiles/${pname}-${version}.tar.xz";
-    sha256 = "sha256-7sp/vZi8Zr6tSncADCAl2fF+qCAbhCRYgkBs4AubaxQ=";
+    sha256 = "sha256-i67S+cWujgzaG5x1mQhkEBr8ZPrQpGFuEPP/jviRBAs=";
   };
 
   strictDeps = true;
@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ bash ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    url = "https://anongit.gentoo.org/git/proj/pax-utils.git";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     description = "ELF utils that can check files for security relevant properties";

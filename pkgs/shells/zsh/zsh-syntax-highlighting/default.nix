@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "03r6hpb5fy4yaakqm3lbf4xcvd408r44jgpv4lnzl9asp4sb9qc0";
   };
 
+  strictDeps = true;
   buildInputs = [ zsh ];
 
   installFlags = [ "PREFIX=$(out)" ];

@@ -1,11 +1,14 @@
 { stdenv
 , pkgs
 , lib
-, nodejs
+, nodejs-14_x
 , runtimeShell
 }:
 
 let
+  # nodejs-16_x fails with ENOTCACHED
+  nodejs = nodejs-14_x;
+
   nodePackages = import ./node-packages.nix {
     inherit pkgs nodejs;
     inherit (stdenv.hostPlatform) system;

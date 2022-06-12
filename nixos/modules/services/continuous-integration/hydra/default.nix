@@ -99,8 +99,8 @@ in
 
       package = mkOption {
         type = types.package;
-        default = pkgs.hydra-unstable;
-        defaultText = literalExpression "pkgs.hydra-unstable";
+        default = pkgs.hydra_unstable;
+        defaultText = literalExpression "pkgs.hydra_unstable";
         description = "The Hydra package.";
       };
 
@@ -258,8 +258,6 @@ in
         uid = config.ids.uids.hydra-www;
       };
 
-    nix.trustedUsers = [ "hydra-queue-runner" ];
-
     services.hydra.extraConfig =
       ''
         using_frontend_proxy = 1
@@ -277,16 +275,21 @@ in
 
     environment.variables = hydraEnv;
 
-    nix.extraOptions = ''
-      keep-outputs = true
-      keep-derivations = true
+    nix.settings = mkMerge [
+      {
+        keep-outputs = true;
+        keep-derivations = true;
+        trusted-users = [ "hydra-queue-runner" ];
+      }
 
-
-    '' + optionalString (versionOlder (getVersion config.nix.package.out) "2.4pre") ''
-      # The default (`true') slows Nix down a lot since the build farm
-      # has so many GC roots.
-      gc-check-reachability = false
-    '';
+      (mkIf (versionOlder (getVersion config.nix.package.out) "2.4pre")
+        {
+          # The default (`true') slows Nix down a lot since the build farm
+          # has so many GC roots.
+          gc-check-reachability = false;
+        }
+      )
+    ];
 
     systemd.services.hydra-init =
       { wantedBy = [ "multi-user.target" ];
@@ -297,17 +300,21 @@ in
         };
         preStart = ''
           mkdir -p ${baseDir}
-          chown hydra.hydra ${baseDir}
+          chown hydra:hydra ${baseDir}
           chmod 0750 ${baseDir}
 
           ln -sf ${hydraConf} ${baseDir}/hydra.conf
 
           mkdir -m 0700 -p ${baseDir}/www
-          chown hydra-www.hydra ${baseDir}/www
+          chown hydra-www:hydra ${baseDir}/www
 
           mkdir -m 0700 -p ${baseDir}/queue-runner
           mkdir -m 0750 -p ${baseDir}/build-logs
-          chown hydra-queue-runner.hydra ${baseDir}/queue-runner ${baseDir}/build-logs
+          mkdir -m 0750 -p ${baseDir}/runcommand-logs
+          chown hydra-queue-runner.hydra \
+            ${baseDir}/queue-runner \
+            ${baseDir}/build-logs \
+            ${baseDir}/runcommand-logs
 
           ${optionalString haveLocalDB ''
             if ! [ -e ${baseDir}/.db-created ]; then
@@ -335,7 +342,7 @@ in
             rmdir /nix/var/nix/gcroots/per-user/hydra-www/hydra-roots
           fi
 
-          chown hydra.hydra ${cfg.gcRootsDir}
+          chown hydra:hydra ${cfg.gcRootsDir}
           chmod 2775 ${cfg.gcRootsDir}
         '';
         serviceConfig.ExecStart = "${hydra-package}/bin/hydra-init";

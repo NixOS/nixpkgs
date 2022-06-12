@@ -26,10 +26,7 @@ let
 
       containerd.runtimes.runc = {
         runtime_type = "io.containerd.runc.v2";
-      };
-
-      containerd.runtimes."io.containerd.runc.v2".options = {
-        SystemdCgroup = true;
+        options.SystemdCgroup = true;
       };
     };
   };
@@ -199,6 +196,9 @@ in {
       description = "Default location for kubernetes secrets. Not a store location.";
       type = types.path;
       default = cfg.dataDir + "/secrets";
+      defaultText = literalExpression ''
+        config.${opt.dataDir} + "/secrets"
+      '';
     };
   };
 
@@ -310,4 +310,6 @@ in {
                           else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
     })
   ];
+
+  meta.buildDocsInSandbox = false;
 }

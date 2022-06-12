@@ -9,20 +9,15 @@
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
 }:
 
-assert (
-  lib.assertMsg (!withPerl -> stdenv.hostPlatform != stdenv.buildPlatform)
-  "withPerl should not be disabled unless cross compiling"
-);
-
 stdenv.mkDerivation rec {
   pname = "quictls";
-  version = "3.0.0+quick_unstable-2021-11.02";
+  version = "3.0.3+quick_unstable-2022-05.04";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "62d4de00abfa82fc01efa2eba1982a86c4864f39";
-    sha256 = "11mi4bkkyy4qd2wml6p7xcsbps0mabk3bp537rp7n43qnhwyg1g3";
+    rev = "368c9d581b17f0bbe425f8dedeaa7b864a7b29ce";
+    sha256 = "sha256-W3bILxhyeziWQNZUHUg/D9eV8LnmHJqEFwyzWjJrRuc=";
   };
 
   patches = [
@@ -161,7 +156,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://quictls.github.io/openssl/";
+    homepage = "https://quictls.github.io";
     description = "TLS/SSL and crypto library with QUIC APIs";
     license = licenses.openssl;
     platforms = platforms.all;

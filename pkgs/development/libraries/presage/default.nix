@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
       sha256 = "0243nx1ygggmsly7057vndb4pkjxg9rpay5gyqqrq9jjzjzh63dj";
     })
     ./fixed-cppunit-detection.patch
+    # fix gcc11 build
+    (fetchpatch {
+      name = "presage-0.9.1-gcc11.patch";
+      url = "https://build.opensuse.org/public/source/openSUSE:Factory/presage/presage-0.9.1-gcc11.patch?rev=3f8b4b19c99276296d6ea595cc6c431f";
+      sha256 = "sha256-pLrIFXvJHRvv4x9gBIfal4Y68lByDE3XE2NZNiAXe9k=";
+    })
   ];
 
   nativeBuildInputs = [

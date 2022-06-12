@@ -7,11 +7,10 @@
 , libiconv, libobjc, xcbuild, AGL, AppKit, ApplicationServices, Carbon, Cocoa, CoreAudio, CoreBluetooth
 , CoreLocation, CoreServices, DiskArbitration, Foundation, OpenGL, MetalKit, IOKit
 
-, dbus, fontconfig, freetype, glib, harfbuzz, icu, libX11, libXcomposite
-, libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng
-, libxcb, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev
-, xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm
-, zlib, at-spi2-core
+, dbus, fontconfig, freetype, glib, harfbuzz, icu, libdrm, libX11, libXcomposite
+, libXcursor, libXext, libXi, libXrender, libinput, libjpeg, libpng , libxcb
+, libxkbcommon, libxml2, libxslt, openssl, pcre16, pcre2, sqlite, udev, xcbutil
+, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, xcbutilwm , zlib, at-spi2-core
 
   # optional dependencies
 , cups ? null, libmysqlclient ? null, postgresql ? null
@@ -61,6 +60,8 @@ stdenv.mkDerivation {
 
       # Text rendering
       fontconfig freetype
+
+      libdrm
 
       # X11 libs
       libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
@@ -115,6 +116,9 @@ stdenv.mkDerivation {
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5CoreMacros.cmake
     sed -i 's/NO_DEFAULT_PATH//' src/gui/Qt5GuiConfigExtras.cmake.in
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+
+    # https://bugs.gentoo.org/803470
+    sed -i 's/-lpthread/-pthread/' mkspecs/common/linux.conf src/corelib/configure.json
   '' + lib.optionalString (compareVersion "5.15.0" >= 0) ''
     patchShebangs ./bin
   '' + (
@@ -151,6 +155,9 @@ stdenv.mkDerivation {
     ''}
 
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+
+    # paralellize compilation of qtmake, which happens within ./configure
+    export MAKEFLAGS+=" -j$NIX_BUILD_CORES"
   '' + lib.optionalString (compareVersion "5.15.0" >= 0) ''
     ./bin/syncqt.pl -version $version
   '';
@@ -261,7 +268,7 @@ stdenv.mkDerivation {
     "-I" "${harfbuzz.dev}/include"
     "-system-pcre"
     "-openssl-linked"
-    "-L" "${openssl.out}/lib"
+    "-L" "${lib.getLib openssl}/lib"
     "-I" "${openssl.dev}/include"
     "-system-sqlite"
     ''-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql''

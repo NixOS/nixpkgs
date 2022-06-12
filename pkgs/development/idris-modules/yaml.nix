@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "yaml";
+  pname = "yaml";
   version = "2018-01-25";
 
   ipkgName = "Yaml";

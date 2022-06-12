@@ -1,8 +1,8 @@
 diff --git a/bfd/configure.ac b/bfd/configure.ac
-index c5bfbd5d..45ad4c26 100644
+index fec067b2135..377e1f5443f 100644
 --- a/bfd/configure.ac
 +++ b/bfd/configure.ac
-@@ -278,31 +278,19 @@ AC_CACHE_CHECK(linker --as-needed support, bfd_cv_ld_as_needed,
+@@ -292,30 +292,16 @@ AC_CACHE_CHECK(linker --as-needed support, bfd_cv_ld_as_needed,
  
  LT_LIB_M
  
@@ -21,24 +21,22 @@ index c5bfbd5d..45ad4c26 100644
 -  if test -n "$x"; then
 -    SHARED_LIBADD="-L`pwd`/../libiberty/pic -liberty"
 -  fi
+-fi
 -
+ SHARED_LIBADD="$SHARED_LIBADD $LIBINTL"
+ 
+-if test "$enable_shared" = "yes"; then
    case "${host}" in
    # More hacks to build DLLs on Windows.
    *-*-cygwin*)
      SHARED_LDFLAGS="-no-undefined"
--    SHARED_LIBADD="-L`pwd`/../libiberty -liberty -L`pwd`/../intl -lintl -lcygwin -lkernel32"
-+    SHARED_LIBADD="-liberty -lintl -lcygwin -lkernel32"
-   ;;
- 
-   # Use built-in libintl on macOS, since it is not provided by libc.
-   *-*-darwin*)
--    SHARED_LIBADD="-L`pwd`/../libiberty/pic -L`pwd`/../intl -liberty -lintl"
-+    SHARED_LIBADD="-liberty -lintl"
+-    SHARED_LIBADD="-L`pwd`/../libiberty -liberty $SHARED_LIBADD -lcygwin -lkernel32"
++    SHARED_LIBADD="-liberty $SHARED_LIBADD -lcygwin -lkernel32"
    ;;
    esac
  
 diff --git a/opcodes/Makefile.am b/opcodes/Makefile.am
-index 4f06074a..6836c589 100644
+index 0e04b4c05c4..848a02662e7 100644
 --- a/opcodes/Makefile.am
 +++ b/opcodes/Makefile.am
 @@ -51,7 +51,7 @@ libopcodes_la_LDFLAGS += -rpath $(rpath_bfdlibdir)
@@ -50,7 +48,7 @@ index 4f06074a..6836c589 100644
  
  BUILD_LIBS = @BUILD_LIBS@
  BUILD_LIB_DEPS = @BUILD_LIB_DEPS@
-@@ -301,7 +301,7 @@ OFILES = @BFD_MACHINES@
+@@ -303,7 +303,7 @@ OFILES = @BFD_MACHINES@
  # development.sh is used to determine -Werror default.
  CONFIG_STATUS_DEPENDENCIES = $(BFDDIR)/development.sh
  
@@ -59,10 +57,7 @@ index 4f06074a..6836c589 100644
  
  disassemble.lo: disassemble.c
  if am__fastdepCC
-@@ -322,12 +322,21 @@ libopcodes_la_SOURCES =  dis-buf.c disassemble.c dis-init.c
- # old version of libbfd, or to pick up libbfd for the wrong architecture
- # if host != build. So for building with shared libraries we use a
- # hardcoded path to libbfd.so instead of relying on the entries in libbfd.la.
+@@ -327,9 +327,18 @@ libopcodes_la_SOURCES =  dis-buf.c disassemble.c dis-init.c
 -libopcodes_la_DEPENDENCIES = $(OFILES) @SHARED_DEPENDENCIES@
 +libopcodes_la_DEPENDENCIES = $(OFILES) @SHARED_DEPENDENCIES@ libtool-soversion
  libopcodes_la_LIBADD = $(OFILES) @SHARED_LIBADD@
@@ -84,18 +79,19 @@ index 4f06074a..6836c589 100644
  # the build directory so that we don't have to convert all the
  # programs that use libopcodes.a simultaneously.  This is a hack which
 diff --git a/opcodes/configure.ac b/opcodes/configure.ac
-index 00be9c88..6e589ae4 100644
+index e564f067334..5da62a3d58b 100644
 --- a/opcodes/configure.ac
 +++ b/opcodes/configure.ac
-@@ -86,6 +86,7 @@ AC_PROG_INSTALL
+@@ -98,6 +98,8 @@ BFD_64_BIT
+ AC_SUBST(HDEFINES)
+ AC_PROG_INSTALL
  
- AC_CHECK_HEADERS(string.h strings.h stdlib.h limits.h)
- ACX_HEADER_STRING
 +GCC_HEADER_STDINT(bfd_stdint.h)
- 
++
  AC_CHECK_DECLS([basename, stpcpy])
  
-@@ -137,61 +138,27 @@ AC_CACHE_CHECK(linker --as-needed support, bfd_cv_ld_as_needed,
+ # Check if sigsetjmp is available.  Using AC_CHECK_FUNCS won't do
+@@ -148,44 +150,21 @@ AC_CACHE_CHECK(linker --as-needed support, bfd_cv_ld_as_needed,
  
  LT_LIB_M
  
@@ -122,7 +118,7 @@ index 00be9c88..6e589ae4 100644
 -SHARED_LIBADD=
 +SHARED_LIBADD=-liberty
  SHARED_DEPENDENCIES=
- if test "$enable_shared" = "yes"; then
+-if test "$enable_shared" = "yes"; then
 -# When building a shared libopcodes, link against the pic version of libiberty
 -# so that apps that use libopcodes won't need libiberty just to satisfy any
 -# libopcodes references.
@@ -131,32 +127,27 @@ index 00be9c88..6e589ae4 100644
  # Note that linking against libbfd as we do here, which is itself linked
  # against libiberty, may not satisfy all the libopcodes libiberty references
  # since libbfd may not pull in the entirety of libiberty.
+ # Also, jam libintl into the right place in all of this: after libiberty,
+ # which uses it, but before -lcygwin, which it uses.
 -changequote(,)dnl
 -  x=`sed -n -e 's/^[ 	]*PICFLAG[ 	]*=[ 	]*//p' < ../libiberty/Makefile | sed -n '$p'`
 -changequote([,])dnl
 -  if test -n "$x"; then
 -    SHARED_LIBADD="-L`pwd`/../libiberty/pic -liberty"
 -  fi
--
+-fi
+ 
+ SHARED_LIBADD="$SHARED_LIBADD $LIBINTL"
+ 
+@@ -193,11 +172,10 @@ if test "$enable_shared" = "yes"; then
    case "${host}" in
      *-*-cygwin*)
        SHARED_LDFLAGS="-no-undefined"
--      SHARED_LIBADD="-L`pwd`/../bfd -lbfd -L`pwd`/../libiberty -liberty -L`pwd`/../intl -lintl -lcygwin"
-+      SHARED_LIBADD="-lbfd -liberty -lintl -lcygwin"
+-      SHARED_LIBADD="-L`pwd`/../bfd -lbfd -L`pwd`/../libiberty -liberty $SHARED_LIBADD"
++      SHARED_LIBADD="-lbfd -liberty $SHARED_LIBADD"
        ;;
--   *-*-darwin*)
--     SHARED_LIBADD="-Wl,`pwd`/../bfd/.libs/libbfd.dylib ${SHARED_LIBADD}"
--     SHARED_DEPENDENCIES="../bfd/libbfd.la"
--     ;;
      *)
--      case "$host_vendor" in
--        hp)
--          SHARED_LIBADD="-Wl,`pwd`/../bfd/.libs/libbfd.sl ${SHARED_LIBADD}"
--	  ;;
--	*)
--          SHARED_LIBADD="-Wl,`pwd`/../bfd/.libs/libbfd.so ${SHARED_LIBADD}"
--	  ;;
--      esac
+-      SHARED_LIBADD="../bfd/libbfd.la ${SHARED_LIBADD}"
 -      SHARED_DEPENDENCIES="../bfd/libbfd.la"
 +      SHARED_LIBADD="-lbfd ${SHARED_LIBADD}"
        ;;

@@ -1,4 +1,4 @@
-{ lib, stdenv, buildEnv, makeWrapper
+{ lib, stdenv, buildEnv, makeBinaryWrapper
 
 # manually pased
 , python
@@ -27,7 +27,7 @@ let
     inherit ignoreCollisions;
     extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeBinaryWrapper ];
 
     postBuild = ''
       if [ -L "$out/bin" ]; then

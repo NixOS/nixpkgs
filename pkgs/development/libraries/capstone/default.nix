@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
     description = "Advanced disassembly library";
     homepage    = "http://www.capstone-engine.org";
     license     = lib.licenses.bsd3;
-    platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ris ];
+    mainProgram = "cstool";
+    platforms   = lib.platforms.unix;
   };
 }

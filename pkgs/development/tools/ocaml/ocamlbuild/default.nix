@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib }:
 stdenv.mkDerivation rec {
-  name = "ocamlbuild-${version}";
-  version = "0.14.0";
+  pname = "ocaml${ocaml.version}-ocamlbuild";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "ocamlbuild";
     rev = version;
-    sha256 = "1hb5mcdz4wv7sh1pj7dq9q4fgz5h3zg7frpiya6s8zd3ypwzq0kh";
+    sha256 = "sha256-ZL0BwOCWTNDjNkrwNAmzHjHF1Rpg3CUuV4lSqcwDqgI=";
   };
 
   createFindlibDestdir = true;
@@ -31,10 +31,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/ocaml/ocamlbuild/";
     description = "A build system with builtin rules to easily build most OCaml projects";
+    homepage = "https://github.com/ocaml/ocamlbuild/";
     license = licenses.lgpl2;
-    inherit (ocaml.meta) platforms;
     maintainers = with maintainers; [ vbgl ];
+    mainProgram = "ocamlbuild";
+    inherit (ocaml.meta) platforms;
   };
 }

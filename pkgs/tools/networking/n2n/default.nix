@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "n2n";
-  version = "2.8";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "ntop";
     repo = "n2n";
     rev = version;
-    hash = "sha256-2xJ8gYVZJZoKs6PZ/9GacgxQ+/3tmnRntT1AbPe1At4=";
+    hash = "sha256-OXmcc6r+fTHs/tDNF3akSsynB/bVRKB6Fl5oYxmu+E0=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

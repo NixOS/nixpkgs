@@ -20,7 +20,7 @@ with lib;
     serverAliases = mkOption {
       type = types.listOf types.str;
       default = [];
-      example = ["www.example.org" "example.org"];
+      example = [ "www.example.org" "example.org" ];
       description = ''
         Additional names of virtual hosts served by this virtual host configuration.
       '';
@@ -31,11 +31,11 @@ with lib;
         addr = mkOption { type = str;  description = "IP address.";  };
         port = mkOption { type = int;  description = "Port number."; default = 80; };
         ssl  = mkOption { type = bool; description = "Enable SSL.";  default = false; };
-        extraParameters = mkOption { type = listOf str; description = "Extra parameters of this listen directive."; default = []; example = [ "reuseport" "deferred" ]; };
+        extraParameters = mkOption { type = listOf str; description = "Extra parameters of this listen directive."; default = []; example = [ "backlog=1024" "deferred" ]; };
       }; });
       default = [];
       example = [
-        { addr = "195.154.1.1"; port = 443; ssl = true;}
+        { addr = "195.154.1.1"; port = 443; ssl = true; }
         { addr = "192.154.1.1"; port = 80; }
       ];
       description = ''
@@ -204,6 +204,15 @@ with lib;
         Note that HTTP 3 support is experimental and
         *not* yet recommended for production.
         Read more at https://quic.nginx.org/
+      '';
+    };
+
+    reuseport = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Create an individual listening socket .
+        It is required to specify only once on one of the hosts.
       '';
     };
 

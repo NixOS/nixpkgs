@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nspr";
-  version = "4.32";
+  version = "4.34";
 
   src = fetchurl {
     url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    sha256 = "0v3zds1id71j5a5si42a658fjz8nv2f6zp6w4gqrqmdr6ksz8sxv";
+    sha256 = "177rxcf3lglabs7sgwcvf72ww4v56qa71lc495wl13sxs4f03vxy";
   };
 
   patches = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/Reference/NSPR_functions";
     description = "Netscape Portable Runtime, a platform-neutral API for system-level and libc-like functions";
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ ajs124 hexa ];
     platforms = platforms.all;
     license = licenses.mpl20;
   };

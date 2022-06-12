@@ -15,7 +15,7 @@ let
 
   buildInputs = [
     fuse bison flex openssl ncurses readline
-    autoconf automake libtool pkg-config zlib libaio libxml2
+    libtool pkg-config zlib libaio libxml2
     acl sqlite liburcu attr makeWrapper util-linux libtirpc gperftools
     liburing
     (python3.withPackages (pkgs: [
@@ -55,13 +55,13 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "glusterfs";
-  version = "10.0";
+  version = "10.1";
 
   src = fetchFromGitHub {
     owner = "gluster";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-n6HdXs5kLbEI8Gaw2KBtO3i8hhadb+MsshUve/DOYg0=";
+    sha256 = "sha256-vVFC2kQNneaOwrezPehOX32dpJb88ZhGHBApEXc9MOg=";
   };
   inherit buildInputs propagatedBuildInputs;
 
@@ -95,7 +95,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
-  nativeBuildInputs = [ rpcsvc-proto ];
+  nativeBuildInputs = [ rpcsvc-proto autoconf automake ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

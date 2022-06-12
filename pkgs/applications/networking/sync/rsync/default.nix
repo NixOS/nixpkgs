@@ -32,8 +32,7 @@ stdenv.mkDerivation rec {
   patchesSrc = base.upstreamPatchTarball;
 
   srcs = [ mainSrc ] ++ lib.optional enableCopyDevicesPatch patchesSrc;
-  patches = lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff"
-    ++ base.extraPatches;
+  patches = lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";
 
   buildInputs = [ libiconv zlib popt ]
     ++ lib.optional enableACLs acl
@@ -49,15 +48,7 @@ stdenv.mkDerivation rec {
     # disable the included zlib explicitly as it otherwise still compiles and
     # links them even.
     "--with-included-zlib=no"
-  ]
-  # Work around issue with cross-compilation:
-  #     configure.sh: error: cannot run test program while cross compiling
-  # Remove once 3.2.4 or more recent is released.
-  # The following PR should fix the cross-compilation issue.
-  # Test using `nix-build -A pkgsCross.aarch64-multiplatform.rsync`.
-  # https://github.com/WayneD/rsync/commit/b7fab6f285ff0ff3816b109a8c3131b6ded0b484
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--enable-simd=no"
-  ;
+  ];
 
   passthru.tests = { inherit (nixosTests) rsyncd; };
 

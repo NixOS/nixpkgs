@@ -1,8 +1,7 @@
-{ lib, stdenv, fetchurl, libGLU, xlibsWrapper, libXmu, libXi
+{ lib, stdenv, fetchurl, fetchpatch, cmake, libGLU, xlibsWrapper, libXmu, libXi
 , OpenGL
+, enableEGL ? false
 }:
-
-with lib;
 
 stdenv.mkDerivation rec {
   pname = "glew";
@@ -13,48 +12,46 @@ stdenv.mkDerivation rec {
     sha256 = "1qak8f7g1iswgswrgkzc7idk7jmqgwrs58fhg2ai007v7j4q5z6l";
   };
 
-  outputs = [ "bin" "out" "dev" "doc" ];
+  outputs = [ "bin" "out" "dev" ];
 
-  buildInputs = optionals (!stdenv.isDarwin) [ xlibsWrapper libXmu libXi ];
-  propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
-
-  patchPhase = ''
-    sed -i 's|lib64|lib|' config/Makefile.linux
-    substituteInPlace config/Makefile.darwin --replace /usr/local "$out"
-    ${optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-      sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
-    ''}
-  '';
-
-  buildFlags = [ "all" ];
-  installFlags = [ "install.all" ];
-
-  preInstall = ''
-    makeFlagsArray+=(GLEW_DEST=$out BINDIR=$bin/bin INCDIR=$dev/include/GL)
-  '';
-
-  postInstall = ''
-    mkdir -pv $out/share/doc/glew
-    mkdir -p $out/lib/pkgconfig
-    cp glew*.pc $out/lib/pkgconfig
-    cp -r README.md LICENSE.txt doc $out/share/doc/glew
-    rm $out/lib/*.a
-  '';
-
-  makeFlags = [
-    "SYSTEM=${if stdenv.hostPlatform.isMinGW then "mingw" else stdenv.hostPlatform.parsed.kernel.name}"
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "LD=${stdenv.cc.targetPrefix}cc"
-    "AR=${stdenv.cc.targetPrefix}ar"
+  patches = [
+    # https://github.com/nigels-com/glew/pull/342
+    (fetchpatch {
+      url = "https://github.com/nigels-com/glew/commit/966e53fa153175864e151ec8a8e11f688c3e752d.diff";
+      sha256 = "sha256-xsSwdAbdWZA4KVoQhaLlkYvO711i3QlHGtv6v1Omkhw=";
+    })
   ];
 
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ xlibsWrapper libXmu libXi ];
+  propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
+
+  cmakeDir = "cmake";
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+  ] ++ lib.optional enableEGL "-DGLEW_EGL=ON";
+
+  postInstall = ''
+    moveToOutput lib/cmake "''${!outputDev}"
+    moveToOutput lib/pkgconfig "''${!outputDev}"
+
+    cat >> "''${!outputDev}"/lib/cmake/glew/glew-config.cmake <<EOF
+    # nixpkg's workaround for a cmake bug
+    # https://discourse.cmake.org/t/the-findglew-cmake-module-does-not-set-glew-libraries-in-some-cases/989/3
+    set(GLEW_VERSION "$version")
+    set(GLEW_LIBRARIES GLEW::glew\''${_glew_target_postfix})
+    get_target_property(GLEW_INCLUDE_DIRS GLEW::glew\''${_glew_target_postfix} INTERFACE_INCLUDE_DIRECTORIES)
+    EOF
+  '';
 
   meta = with lib; {
-    description = "An OpenGL extension loading library for C(++)";
+    description = "An OpenGL extension loading library for C/C++";
     homepage = "http://glew.sourceforge.net/";
-    license = licenses.free; # different files under different licenses
-      #["BSD" "GLX" "SGI-B" "GPL2"]
-    platforms = platforms.mesaPlatforms;
+    license = with licenses; [ /* modified bsd */ free mit gpl2Only ]; # For full details, see https://github.com/nigels-com/glew#copyright-and-licensing
+    platforms = with platforms;
+      if enableEGL then
+        subtractLists darwin mesaPlatforms
+      else
+        mesaPlatforms;
   };
 }

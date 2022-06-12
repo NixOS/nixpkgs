@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sonarr";
-  version = "3.0.6.1342";
+  version = "3.0.8.1507";
 
   src = fetchurl {
     url = "https://download.sonarr.tv/v3/main/${version}/Sonarr.main.${version}.linux.tar.gz";
-    sha256 = "sha256-6RMthsf60FJLDHB72QJkPeF7vXmjBgcqKujO0IOjVIk=";
+    sha256 = "sha256-O2UvU1juO54gb9LVnEuIXhT0Ux2rEIq2WdmsoWVDh1w=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = "./update.sh";
+    updateScript = ./update.sh;
     tests.smoke-test = nixosTests.sonarr;
   };
 

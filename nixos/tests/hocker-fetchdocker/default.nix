@@ -5,7 +5,7 @@ import ../make-test-python.nix ({ pkgs, ...} : {
     broken = true; # tries to download from registry-1.docker.io - how did this ever work?
   };
 
-  machine = import ./machine.nix;
+  nodes.machine = import ./machine.nix;
 
   testScript = ''
     start_all()

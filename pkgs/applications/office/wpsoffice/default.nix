@@ -142,7 +142,6 @@ stdenv.mkDerivation rec {
   installPhase = let
     steam-run = (steam.override {
       extraPkgs = p: buildInputs;
-      nativeOnly = true;
     }).run;
   in ''
     prefix=$out/opt/kingsoft/wps-office

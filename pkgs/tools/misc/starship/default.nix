@@ -2,30 +2,34 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
-, pkg-config
-, openssl
 , installShellFiles
 , libiconv
+, libgit2
+, pkg-config
+, nixosTests
 , Security
+, Foundation
+, Cocoa
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.1.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Rr0HCr/uJDsBQiKJIPdEL3WOaLgMY2Nq2JGOq4dEUxQ=";
+    sha256 = "sha256-/vP8q2tWDR8EXDekpcONXIgdzRHh3mZzZGY04wb4aA0=";
   };
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = [ libgit2 ] ++ lib.optionals stdenv.isDarwin [ libiconv Security Foundation Cocoa ];
 
-  buildFeatures = lib.optional (!stdenv.isDarwin) "notify-rust";
+  buildNoDefaultFeatures = true;
+  # the "notify" feature is currently broken on darwin
+  buildFeatures = if stdenv.isDarwin then [ "battery" ] else [ "default" ];
 
   postInstall = ''
     for shell in bash fish zsh; do
@@ -34,16 +38,20 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  cargoSha256 = "sha256-UT6t1GbyON/wrIF/oXXhsT3Z61LFjggSPWKpSDHp+PI=";
+  cargoSha256 = "sha256-6y0Du3YGfH+SDbG3NdokJyG+Y1q5cI4UZp6XwFdvYxk=";
 
   preCheck = ''
     HOME=$TMPDIR
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) starship;
+  };
+
   meta = with lib; {
     description = "A minimal, blazing fast, and extremely customizable prompt for any shell";
     homepage = "https://starship.rs";
     license = licenses.isc;
-    maintainers = with maintainers; [ bbigras davidtwco Br1ght0ne Frostman marsam ];
+    maintainers = with maintainers; [ bbigras danth davidtwco Br1ght0ne Frostman marsam ];
   };
 }

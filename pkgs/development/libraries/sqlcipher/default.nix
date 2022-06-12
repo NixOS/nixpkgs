@@ -1,14 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages, readline, ncurses, zlib }:
+{ stdenv, lib, fetchFromGitHub, openssl, tcl, installShellFiles, buildPackages, readline, ncurses, zlib, sqlite }:
 
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
-  version = "4.5.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "sqlcipher";
     repo = "sqlcipher";
     rev = "v${version}";
-    sha256 = "sha256-MFuFyKvOOrDrq9cDPQlNK6/YHSkaRX4qbw/44m5CRh4=";
+    sha256 = "sha256-cvbR3tav6DjIdJB/x2q5Oq7ju9q63z75b6q1uHYY9bE=";
   };
 
   nativeBuildInputs = [ installShellFiles tcl ];
@@ -21,9 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   CFLAGS = [
-    "-DSQLITE_ENABLE_COLUMN_METADATA=1"
-    "-DSQLITE_SECURE_DELETE=1"
-    "-DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
+    # We want feature parity with sqlite
+    sqlite.NIX_CFLAGS_COMPILE
     "-DSQLITE_HAS_CODEC"
   ];
 

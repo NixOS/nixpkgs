@@ -64,13 +64,13 @@ let
   '';
 
   desktopItem = makeDesktopItem {
-    name = "Scene Builder";
+    name = "scenebuilder";
     exec = "scenebuilder";
     icon = "scenebuilder";
     comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
-    desktopName = pname;
-    mimeType = "application/java;application/java-vm;application/java-archive";
-    categories = "Development";
+    desktopName = "Scene Builder";
+    mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+    categories = [ "Development" ];
   };
 
 in stdenv.mkDerivation rec {
@@ -106,8 +106,13 @@ in stdenv.mkDerivation rec {
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
     homepage = "https://gluonhq.com/products/scene-builder/";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.bsd3;
     maintainers = with maintainers; [ wirew0rm ];
     platforms = platforms.all;

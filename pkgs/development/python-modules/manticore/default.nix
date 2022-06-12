@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "manticore";
-  version = "0.3.6";
+  version = "0.3.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "trailofbits";
     repo = "manticore";
     rev = version;
-    sha256 = "sha256-L112YwrBcdcLBeBsPLWt3C57u2WDvGLq50EzW9ojdyg=";
+    hash = "sha256-+17VBfAtkZZIi3SF5Num1Uqg3WjIpgbz3Jx65rD5zkM=";
   };
 
   propagatedBuildInputs = [
@@ -52,9 +52,11 @@ buildPythonPackage rec {
     unicorn
   ];
 
-  # Python API is not used in the code, only z3 from PATH
   postPatch = ''
-    sed -ie s/z3-solver// setup.py
+    # Python API is not used in the code, only z3 from PATH
+    substituteInPlace setup.py \
+      --replace "z3-solver" "" \
+      --replace "crytic-compile==0.2.2" "crytic-compile>=0.2.2"
   '';
 
   checkInputs = [
@@ -122,6 +124,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    # m.c.manticore:WARNING: Manticore is only supported on Linux. Proceed at your own risk!
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Symbolic execution tool for analysis of smart contracts and binaries";
     homepage = "https://github.com/trailofbits/manticore";
     changelog = "https://github.com/trailofbits/manticore/releases/tag/${version}";

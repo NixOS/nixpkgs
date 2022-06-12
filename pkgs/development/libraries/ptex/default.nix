@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, zlib, python, cmake, pkg-config }:
+{ lib, stdenv, fetchFromGitHub, zlib, cmake, pkg-config }:
 
 stdenv.mkDerivation rec
 {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec
   outputs = [ "bin" "dev" "out" "lib" ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ zlib python pkg-config ];
+  buildInputs = [ zlib pkg-config ];
 
   # Can be removed in the next release
   # https://github.com/wdas/ptex/pull/42

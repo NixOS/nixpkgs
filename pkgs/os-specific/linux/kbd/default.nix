@@ -63,11 +63,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ check pam ];
+  NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isStatic "-laudit";
   nativeBuildInputs = [ autoreconfHook pkg-config flex ];
 
   passthru.tests = {
     inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
   };
+  passthru.gzip = gzip;
 
   meta = with lib; {
     homepage = "https://kbd-project.org/";

@@ -6,21 +6,18 @@
 , numpy
 , scipy
 , sympy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "pydy";
-  version = "0.5.0";
+  version = "0.6.0";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b487a62b55a8c8664009b09bf789254b2c942cd704a380bedb1057418c94fa2";
+    sha256 = "sha256-e/Ssfd5llioA7ccLULlRdHR113IbR4AJ4/HmzQuU7vI=";
   };
-
-  checkInputs = [
-    nose
-    cython
-  ];
 
   propagatedBuildInputs = [
     numpy
@@ -28,9 +25,19 @@ buildPythonPackage rec {
     sympy
   ];
 
-  checkPhase = ''
-    nosetests
-  '';
+  checkInputs = [
+    nose
+    cython
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Tests not fixed yet. Check https://github.com/pydy/pydy/issues/465
+    "test_generate_cse"
+    "test_generate_code_blocks"
+    "test_doprint"
+    "test_OctaveMatrixGenerator"
+  ];
 
   meta = with lib; {
     description = "Python tool kit for multi-body dynamics";

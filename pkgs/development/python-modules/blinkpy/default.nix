@@ -5,17 +5,22 @@
 , python-slugify
 , requests
 , pytestCheckHook
+, pythonAtLeast
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "blinkpy";
-  version = "0.18.0";
+  version = "0.19.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fronzbot";
     repo = "blinkpy";
     rev = "v${version}";
-    hash = "sha256-96HoGXVQE5PbUbu0oDOC0es0HXYig4ScTeexiUhGse4=";
+    hash = "sha256-niUGfktP1zVdrRCDy81ou4yAoscnYveHje9423IKcso=";
   };
 
   propagatedBuildInputs = [
@@ -36,6 +41,12 @@ buildPythonPackage rec {
     "blinkpy.camera"
     "blinkpy.helpers.util"
     "blinkpy.sync_module"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.10") [
+    "test_download_video_exit"
+    "test_parse_camera_not_in_list"
+    "test_parse_downloaded_items"
   ];
 
   meta = with lib; {

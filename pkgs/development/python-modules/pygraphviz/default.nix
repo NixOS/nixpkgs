@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pygraphviz";
-  version = "1.7";
+  version = "1.9";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a7bec6609f37cf1e64898c59f075afd659106cf9356c5f387cecaa2e0cdb2304";
+    hash = "sha256-+hj3xs6ig0Gk5GbtDPBWgrCmgoiv6N18lCZ4L3wa4Bw=";
     extension = "zip";
   };
 
@@ -36,8 +36,12 @@ buildPythonPackage rec {
   checkInputs = [ pytest ];
 
   checkPhase = ''
+    runHook preCheck
     pytest --pyargs pygraphviz
+    runHook postCheck
   '';
+
+  pythonImportsCheck = [ "pygraphviz" ];
 
   meta = with lib; {
     description = "Python interface to Graphviz graph drawing package";

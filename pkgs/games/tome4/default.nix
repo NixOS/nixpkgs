@@ -15,10 +15,9 @@ stdenv.mkDerivation rec {
     name = pname;
     exec = "@out@/bin/${pname}";
     icon = pname;
-    terminal = "false";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
-    categories = "Game;RolePlaying;";
+    categories = [ "Game" "RolePlaying" ];
     genericName = pname;
   };
 
@@ -53,7 +52,7 @@ stdenv.mkDerivation rec {
     install -Dm755 t-engine $dir/t-engine
     cp -r bootstrap game $dir
     makeWrapper $dir/t-engine $out/bin/${pname} \
-      --run "cd $dir"
+      --chdir "$dir"
 
     install -Dm755 ${desktop}/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop
     substituteInPlace $out/share/applications/${pname}.desktop \

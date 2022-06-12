@@ -10,11 +10,11 @@ with lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.12.4";
+  version = "2.12.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gscan2pdf/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-UrBt0QkSk7IP4mZYFoxFNJQ1Qmcb53CemvlYfsxjZ/s=";
+    url = "mirror://sourceforge/gscan2pdf/gscan2pdf-${version}.tar.xz";
+    sha256 = "sha256-9ntpUEM3buT3EhneXz9G8bibvzOnEK6Xt0jJcTvLKT0=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -111,8 +111,6 @@ perlPackages.buildPerlPackage rec {
     # # Looks like you failed 1 test of 1.
     # t/169_import_scan.t ........................... Dubious, test returned 1 (wstat 256, 0x100)
     rm t/169_import_scan.t
-    # t/1604_import_multipage_DjVu.t ................ Dubious, test returned 255 (wstat 65280, 0xff00)
-    rm t/1604_import_multipage_DjVu.t
 
     # Disable a test which passes but reports an incorrect status
     # t/0601_Dialog_Scan.t .......................... All 14 subtests passed
