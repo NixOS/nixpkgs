@@ -122,6 +122,10 @@ let
       orga = "MDeiml";
       repo = "tree-sitter-markdown";
     };
+    "tree-sitter-rego" = {
+      orga = "FallenAngel97";
+      repo = "tree-sitter-rego";
+    };
     "tree-sitter-rst" = {
       orga = "stsewd";
       repo = "tree-sitter-rst";
