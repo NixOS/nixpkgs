@@ -24698,8 +24698,6 @@ with pkgs;
 
   primesieve = callPackage ../applications/science/math/primesieve { };
 
-  prison = callPackage ../development/libraries/prison { };
-
   proj = callPackage ../development/libraries/proj { };
 
   proj_7 = callPackage ../development/libraries/proj/7.nix { };
