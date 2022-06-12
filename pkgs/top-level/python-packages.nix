@@ -11200,6 +11200,8 @@ in {
 
   winsspi = callPackage ../development/python-modules/winsspi { };
 
+  wktutils = callPackage ../development/python-modules/wktutils { };
+
   wled = callPackage ../development/python-modules/wled { };
 
   woob = callPackage ../development/python-modules/woob { };
