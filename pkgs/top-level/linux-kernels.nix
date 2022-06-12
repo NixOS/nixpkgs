@@ -244,6 +244,7 @@ in {
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_5_17_hardened = hardenedKernelFor kernels.linux_5_17 { };
+    linux_5_18_hardened = hardenedKernelFor kernels.linux_5_18 { };
 
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
@@ -551,6 +552,7 @@ in {
     linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
     linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
     linux_5_17_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_17 { });
+    linux_5_18_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_18 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -565,7 +567,7 @@ in {
   });
 
   packageAliases = {
-    linux_default = if stdenv.hostPlatform.isi686 then packages.linux_5_10 else packages.linux_5_15;
+    linux_default = if stdenv.hostPlatform.is32bit then packages.linux_5_10 else packages.linux_5_15;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_5_18;
     linux_mptcp = packages.linux_mptcp_95;
