@@ -27,7 +27,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       start_all()
 
       machine.wait_for_unit("meilisearch")
-      machine.wait_for_open_port("7700")
+      machine.wait_for_open_port(7700)
 
       with subtest("check version"):
           version = json.loads(machine.succeed("curl ${apiUrl}/version"))
