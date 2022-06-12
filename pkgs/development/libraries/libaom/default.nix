@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals enableButteraugli [
     libjxl
     libhwy
-  ] ++ lib.optional enableVmaf libvmaf;
+  ];
+  propagatedBuildInputs = lib.optional enableVmaf libvmaf;
 
   preConfigure = ''
     # build uses `git describe` to set the build version
