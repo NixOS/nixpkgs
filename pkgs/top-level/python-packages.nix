@@ -4743,6 +4743,8 @@ in {
 
   kmapper = callPackage ../development/python-modules/kmapper { };
 
+  kml2geojson = callPackage ../development/python-modules/kml2geojson { };
+
   kmsxx = toPythonModule (pkgs.kmsxx.override {
     withPython = true;
   });
