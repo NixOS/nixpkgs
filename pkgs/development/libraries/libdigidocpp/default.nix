@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, cmake, makeWrapper, minizip, pcsclite, opensc, openssl
+{ lib, stdenv, fetchurl, fetchpatch, cmake, minizip, pcsclite, opensc, openssl
 , xercesc, xml-security-c, pkg-config, xsd, zlib, xalanc, xxd }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config xxd ];
+  nativeBuildInputs = [ cmake pkg-config xxd ];
 
   buildInputs = [
     minizip pcsclite opensc openssl xercesc
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "bin" ];
 
-  # replace this hack with a proper cmake variable or environment variable
-  # once https://github.com/open-eid/cmake/pull/34 (or #35) gets merged.
-  postInstall = ''
-    wrapProgram $bin/bin/digidoc-tool \
-      --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
+  # libdigidocpp.so's `PKCS11Signer::PKCS11Signer()` dlopen()s "opensc-pkcs11.so"
+  # itself, so add OpenSC to its DT_RUNPATH after the fixupPhase shrinked it.
+  # https://github.com/open-eid/cmake/pull/35 might be an alternative.
+  postFixup = ''
+    patchelf --add-rpath ${opensc}/lib/pkcs11 $lib/lib/libdigidocpp.so
   '';
 
   meta = with lib; {

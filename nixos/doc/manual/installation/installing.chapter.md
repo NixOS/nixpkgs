@@ -476,6 +476,7 @@ With a partitioned disk.
 ```{=docbook}
 <xi:include href="installing-usb.section.xml" />
 <xi:include href="installing-pxe.section.xml" />
+<xi:include href="installing-kexec.section.xml" />
 <xi:include href="installing-virtualbox-guest.section.xml" />
 <xi:include href="installing-from-other-distro.section.xml" />
 <xi:include href="installing-behind-a-proxy.section.xml" />
