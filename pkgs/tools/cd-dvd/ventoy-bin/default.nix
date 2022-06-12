@@ -24,7 +24,7 @@ let
   }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
 in stdenv.mkDerivation rec {
   pname = "ventoy-bin";
-  version = "1.0.75";
+  version = "1.0.76";
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ]
     ++ lib.optional withQt5 qt5.wrapQtAppsHook;
@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
-    sha256 = "64487c11da3be1aa95ae5631c12fcfefbabf3d27c80d8992145e572c5e44a535";
+    sha256 = "f13c3c81eafe15ae4b3de3d98d240d94eabba7cda8e3330ff1769502ecfa33c0";
   };
   patches = [
     (fetchpatch {
