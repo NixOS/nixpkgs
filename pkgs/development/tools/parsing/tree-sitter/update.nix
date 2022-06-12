@@ -178,6 +178,10 @@ let
       orga = "camdencheek";
       repo = "tree-sitter-go-mod";
     };
+    "tree-sitter-gowork" = {
+      orga = "omertuc";
+      repo = "tree-sitter-go-work";
+    };
     "tree-sitter-graphql" = {
       orga = "bkegley";
       repo = "tree-sitter-graphql";
