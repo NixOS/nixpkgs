@@ -1209,6 +1209,8 @@ with pkgs;
 
   sdlookup = callPackage ../tools/security/sdlookup { };
 
+  smbscan = callPackage ../tools/security/smbscan { };
+
   spectre-cli = callPackage ../tools/security/spectre-cli { };
 
   sx-go = callPackage ../tools/security/sx-go { };
