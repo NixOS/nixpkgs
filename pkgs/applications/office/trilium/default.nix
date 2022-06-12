@@ -1,7 +1,7 @@
-{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, libxshmfence, wrapGAppsHook }:
+{ lib, stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, copyDesktopItems, libxshmfence, wrapGAppsHook }:
 
 let
-  description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases";
+  description = "Hierarchical note taking application with focus on building large personal knowledge bases";
   desktopItem = makeDesktopItem {
     name = "Trilium";
     exec = "trilium";
@@ -11,7 +11,7 @@ let
     categories = [ "Office" ];
   };
 
-  meta = with lib; {
+  metaCommon = with lib; {
     inherit description;
     homepage = "https://github.com/zadam/trilium";
     license = licenses.agpl3Plus;
@@ -33,7 +33,10 @@ in {
   trilium-desktop = stdenv.mkDerivation rec {
     pname = "trilium-desktop";
     inherit version;
-    inherit meta;
+    meta = with metaCommon; {
+      inherit description homepage license sourceProvenance platforms maintainers;
+      mainProgram = "trilium";
+    };
 
     src = fetchurl desktopSource;
 
@@ -41,21 +44,23 @@ in {
       autoPatchelfHook
       makeWrapper
       wrapGAppsHook
+      copyDesktopItems
     ];
 
-    buildInputs = atomEnv.packages ++ [ gtk3 libxshmfence ];
+    buildInputs = atomEnv.packages ++ [ libxshmfence ];
+
+    desktopItems = [ desktopItem ];
 
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
       mkdir -p $out/share/trilium
-      mkdir -p $out/share/{applications,icons/hicolor/128x128/apps}
+      mkdir -p $out/share/icons/hicolor/128x128/apps
 
       cp -r ./* $out/share/trilium
       ln -s $out/share/trilium/trilium $out/bin/trilium
 
       ln -s $out/share/trilium/icon.png $out/share/icons/hicolor/128x128/apps/trilium.png
-      cp ${desktopItem}/share/applications/* $out/share/applications
       runHook postInstall
     '';
 
@@ -73,7 +78,7 @@ in {
   trilium-server = stdenv.mkDerivation rec {
     pname = "trilium-server";
     inherit version;
-    inherit meta;
+    meta = metaCommon;
 
     src = fetchurl serverSource;
 
