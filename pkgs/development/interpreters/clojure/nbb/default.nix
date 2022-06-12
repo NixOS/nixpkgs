@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-OCcX3WcbhllQJFlr6lM46H0194JYuhOljdmuc3TG6WA=";
   };
+  clj-version = "1.11.1.1113";
+  clj-src = fetchurl {
+    url = "https://download.clojure.org/install/clojure-tools-${clj-version}.tar.gz";
+    sha256 = "sha256-DJVKVqBx8zueA5+KuQX4NypaYBoNFKMuDM8jDqdgaiI=";
+  };
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -38,8 +43,9 @@ stdenv.mkDerivation rec {
     mkdir -p .m2
     substituteInPlace deps.edn --replace ':paths' ':mvn/local-repo "./.m2" :paths'
     substituteInPlace bb.edn --replace ':paths' ':mvn/local-repo "./.m2" :paths'
-    export DEPS_CLJ_TOOLS_DIR=${clojure}
-    export DEPS_CLJ_TOOLS_VERSION=${clojure.version}
+    tar -xzvf ${clj-src} -C $(pwd)
+    export DEPS_CLJ_TOOLS_DIR="$(pwd)/clojure-tools"
+    export DEPS_CLJ_TOOLS_VERSION=${clj-version}
     mkdir .cpcache .gitlibs
     export GITLIBS=.gitlibs
     export CLJ_CACHE=.cpcache
