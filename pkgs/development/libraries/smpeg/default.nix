@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     ./format.patch
     ./gcc6.patch
     ./libx11.patch
+    ./gtk.patch
   ];
 
   enableParallelBuilding = true;
