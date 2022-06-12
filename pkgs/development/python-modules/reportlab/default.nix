@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , freetype
 , pillow
@@ -12,16 +13,16 @@ let
   ft = freetype.overrideAttrs (oldArgs: { dontDisableStatic = true; });
 in buildPythonPackage rec {
   pname = "reportlab";
-  version = "3.6.9";
+  version = "3.6.10";
+
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XQzDaCRWrSExUPbb/+fUfqtzfYCeUXwxYQM3a+VI+4Q=";
+    sha256 = "bf8cba95a2d5cf731e8b74c92b4f07d79ef286a2a78b617300e37e51cf955cb2";
   };
-
-  checkInputs = [ glibcLocales ];
-
-  buildInputs = [ ft pillow ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -37,16 +38,24 @@ in buildPythonPackage rec {
     rm tests/test_graphics_charts.py
   '';
 
-  checkPhase = ''
-    cd tests
-    LC_ALL="en_US.UTF-8" ${python.interpreter} runAll.py
-  '';
+  buildInputs = [ ft ];
 
-  # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
-  disabled = isPyPy;
+  propagatedBuildInputs = [ pillow ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    cd tests
+    ${python.interpreter} runAll.py
+
+    runHook postCheck
+  '';
 
   meta = {
     description = "An Open Source Python library for generating PDFs and graphics";
     homepage = "http://www.reportlab.com/";
+    changelog = "https://hg.reportlab.com/hg-public/reportlab/file/tip/CHANGES.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
