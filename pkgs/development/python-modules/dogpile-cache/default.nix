@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "dogpile-cache";
-  version = "1.1.5";
+  version = "1.1.6";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "dogpile.cache";
     inherit version;
-    sha256 = "0f01bdc329329a8289af9705ff40fadb1f82a28c336f3174e12142b70d31c756";
+    sha256 = "sha256-7tweMn5myT8MFah0BWmrdO89iSkELxCPmP3tnjX6/1U=";
   };
 
   preCheck = ''

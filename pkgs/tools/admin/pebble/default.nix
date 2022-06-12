@@ -1,14 +1,12 @@
-{ buildGoPackage
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 , nixosTests
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "pebble";
   version = "2.3.1";
-
-  goPackagePath = "github.com/letsencrypt/${pname}";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
@@ -16,6 +14,8 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "sha256-S9+iRaTSRt4F6yMKK0OJO6Zto9p0dZ3q/mULaipudVo=";
   };
+
+  vendorSha256 = null;
 
   passthru.tests = {
     smoke-test = nixosTests.acme;
