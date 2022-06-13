@@ -39932,8 +39932,6 @@ with pkgs;
 
   pcb = callPackage ../applications/science/electronics/pcb { };
 
-  qucs = callPackage ../applications/science/electronics/qucs { };
-
   qucs-s = qt6Packages.callPackage ../applications/science/electronics/qucs-s { };
 
   xcircuit = callPackage ../applications/science/electronics/xcircuit { };
