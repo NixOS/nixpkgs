@@ -16,6 +16,7 @@
 , libsndfile
 , pango
 , perl
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -51,6 +52,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace scripts/e_gen_menu --replace "/usr/local:" "/run/current-system/sw:/usr/local:"
   '';
+
+  passthru.updateScript = gitUpdater {
+    inherit pname version;
+    url = "https://git.enlightenment.org/e16/e16";
+    rev-prefix = "v";
+  };
 
   meta = with lib; {
     homepage = "https://www.enlightenment.org/e16";
