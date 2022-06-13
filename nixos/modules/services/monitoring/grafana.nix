@@ -124,6 +124,11 @@ let
         default = 1;
         description = "Org id. will default to orgId 1 if not specified.";
       };
+      uid = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = "Custom UID which can be used to reference this datasource in other parts of the configuration, if not specified will be generated automatically.";
+      };
       url = mkOption {
         type = types.str;
         description = "Url of the datasource.";
