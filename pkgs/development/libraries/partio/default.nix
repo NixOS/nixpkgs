@@ -1,36 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU, libGL, zlib, swig, doxygen, xorg }:
+{ lib, stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU, libGL, zlib, swig, doxygen, xorg, python3 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "partio";
-  version = "2018-03-01";
+  version = "1.14.6";
 
   src = fetchFromGitHub {
     owner = "wdas";
     repo = "partio";
-    rev = "8b6ea0d20f1ab77cd7f18390999251e60932de4a";
-    sha256 = "16sdj103v02l2dgq9y9cna9jakafabz9jxzdxsd737ir6wn10ksb";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-S8U5I3dllFzDSocU1mJ8FYCCmBpsOR4n174oiX5hvAM=";
   };
 
   outputs = [ "dev" "out" "lib" ];
 
   nativeBuildInputs = [ unzip cmake doxygen ];
-  buildInputs = [ freeglut libGLU libGL zlib swig xorg.libXi xorg.libXmu ];
-
-  buildPhase = ''
-    make partio
-
-    mkdir $dev
-    mkdir $out
-      '';
+  buildInputs = [ freeglut libGLU libGL zlib swig xorg.libXi xorg.libXmu python3 ];
 
   # TODO:
   # Sexpr support
-
-  installPhase = ''
-    make install prefix=$out
-    mkdir $dev/include/partio
-    mv $dev/include/*.h $dev/include/partio
-  '';
 
   strictDeps = true;
 
