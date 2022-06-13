@@ -8381,6 +8381,8 @@ with pkgs;
 
   mitmproxy = with python3Packages; toPythonApplication mitmproxy;
 
+  mitmproxy2swagger = callPackage ../tools/security/mitmproxy2swagger { };
+
   mjpegtools = callPackage ../tools/video/mjpegtools { };
 
   mjpegtoolsFull = mjpegtools.override {
