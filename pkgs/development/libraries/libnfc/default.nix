@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libusb-compat-0_1 readline ];
 
   configureFlags = [ "sysconfdir=/etc" ];
+  cmakeFlags = lib.optionals stdenv.isDarwin [ "-DLIBNFC_DRIVER_PN532_I2C=OFF" "-DLIBNFC_DRIVER_PN532_SPI=OFF" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Open source library libnfc for Near Field Communication";
     license = licenses.gpl3;
     homepage = "https://github.com/nfc-tools/libnfc";
