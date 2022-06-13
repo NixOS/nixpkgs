@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-annotate";
-  version = "1.0.4";
+  version = "1.0.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0NpMPYcqfVeWrIUBbKodo4rpAr69x1nhtsD2+LWAJ0E=";
+    hash = "sha256-CSaTIPjSGHKCR0Nvet6W8zzz/oWEC0BjIULZ+JaMH9A=";
   };
 
   buildInputs = [
