@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -D -m755 src/vhd2vl $out/bin/vdh2vl
+    install -D -m755 src/vhd2vl $out/bin/vhd2vl
     runHook postInstall
   '';
 
