@@ -1491,6 +1491,7 @@ mapAliases ({
   qcsxcad = libsForQt5.qcsxcad; # Added 2020-11-05
   qtcreator-qt6 = throw "'qtcreator-qt6' has been renamed to/replaced by 'qtcreator', since qt5 version has been removed"; # Added 2023-07-25
   qflipper = qFlipper; # Added 2022-02-11
+  qfsm = throw "qfsm has been removed, because it depended on qt4"; # Added 2022-06-12
   qimageblitz = throw "qimageblitz has been removed from nixpkgs, because it depended on qt4 and was last updated upstream in 2007"; # Added 2022-06-12
   qmetro = throw "qmetro has been removed, because it does not support qt5 (well)"; # Added 2022-05-26
   qmidiroute = throw "qmidiroute has been removed, because it was unmaintained upstream"; # Added 2022-05-26

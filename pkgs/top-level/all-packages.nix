@@ -14626,8 +14626,6 @@ with pkgs;
 
   tweeny = callPackage ../development/libraries/tweeny { };
 
-  qfsm = callPackage ../applications/science/electronics/qfsm { };
-
   tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix { };
 
   tm = callPackage ../tools/system/tm { };
