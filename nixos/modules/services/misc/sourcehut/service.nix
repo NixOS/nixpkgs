@@ -215,12 +215,33 @@ in
     services.nginx = mkIf cfg.nginx.enable {
       virtualHosts."${srv}.${cfg.settings."sr.ht".global-domain}" = mkMerge [ {
         forceSSL = mkDefault true;
-        locations."/".proxyPass = "http://${cfg.listenAddress}:${toString srvCfg.port}";
-        locations."/static" = {
-          root = "${pkgs.sourcehut.${srvsrht}}/${pkgs.sourcehut.python.sitePackages}/${srvsrht}";
-          extraConfig = mkDefault ''
-            expires 30d;
-          '';
+        locations = {
+          "/".proxyPass = "http://${cfg.listenAddress}:${toString srvCfg.port}";
+          "/query" = mkIf (hasAttr "api-origin" cfg.settings."${srv}.sr.ht") {
+            proxyPass = cfg.settings."${srv}.sr.ht".api-origin;
+            extraConfig = ''
+              if ($request_method = 'OPTIONS') {
+                add_header 'Access-Control-Allow-Origin' '*';
+                add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+                add_header 'Access-Control-Allow-Headers' 'User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
+                add_header 'Access-Control-Max-Age' 1728000;
+                add_header 'Content-Type' 'text/plain; charset=utf-8';
+                add_header 'Content-Length' 0;
+                return 204;
+              }
+
+              add_header 'Access-Control-Allow-Origin' '*';
+              add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+              add_header 'Access-Control-Allow-Headers' 'User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
+              add_header 'Access-Control-Expose-Headers' 'Content-Length,Content-Range';
+            '';
+          };
+          "/static" = {
+            root = "${pkgs.sourcehut.${srvsrht}}/${pkgs.sourcehut.python.sitePackages}/${srvsrht}";
+            extraConfig = mkDefault ''
+              expires 30d;
+            '';
+          };
         };
       } cfg.nginx.virtualHost ];
     };
