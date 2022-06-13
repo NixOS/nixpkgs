@@ -2674,6 +2674,18 @@ final: prev:
     meta.homepage = "https://github.com/stsewd/fzf-checkout.vim/";
   };
 
+  fzf-hoogle-vim = buildVimPluginFrom2Nix {
+    pname = "fzf-hoogle.vim";
+    version = "2022-05-01";
+    src = fetchFromGitHub {
+      owner = "monkoose";
+      repo = "fzf-hoogle.vim";
+      rev = "16c08d1534aea2cd1cea1a1e20783bd22f634c77";
+      sha256 = "0k7cdi00ixqdkqmyqnapn5aplyn0w78iwvm7ifyi9j3smz57hzhf";
+    };
+    meta.homepage = "https://github.com/monkoose/fzf-hoogle.vim/";
+  };
+
   fzf-lsp-nvim = buildVimPluginFrom2Nix {
     pname = "fzf-lsp.nvim";
     version = "2022-05-16";
