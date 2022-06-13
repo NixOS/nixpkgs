@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
-  version = "3.3.1";
+  version = "4.1";
 
   src = fetchFromGitHub {
     owner = "espressif";
     repo = "esptool";
     rev = "v${version}";
-    hash = "sha256-9WmiLji7Zoad5WIzgkpvkI9t96sfdkCtFh6zqVxF7qo=";
+    hash = "sha256-X/8RvX39jNn/WGcyWaVY0CULyqfbID+q8PaeCHPHny0=";
   };
 
   postPatch = ''
