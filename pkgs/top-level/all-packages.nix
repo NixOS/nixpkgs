@@ -39534,7 +39534,7 @@ with pkgs;
 
   diylc = callPackage ../applications/science/electronics/diylc { };
 
-  flatcam = callPackage ../applications/science/electronics/flatcam { };
+  flatcam = python3.pkgs.callPackage ../applications/science/electronics/flatcam { };
 
   flopoco = callPackage ../applications/science/electronics/flopoco { };
 
