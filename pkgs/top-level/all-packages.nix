@@ -28918,6 +28918,8 @@ with pkgs;
 
   libopenmpt = callPackage ../development/libraries/audio/libopenmpt { };
 
+  libopenmpt-modplug = callPackage ../development/libraries/audio/libopenmpt-modplug { };
+
   openrazer-daemon = with python3Packages; toPythonApplication openrazer-daemon;
 
   opusfile = callPackage ../applications/audio/opusfile { };
