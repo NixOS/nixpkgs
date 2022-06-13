@@ -10814,6 +10814,8 @@ in {
 
   ukrainealarm = callPackage ../development/python-modules/ukrainealarm { };
 
+  ultraheat-api = callPackage ../development/python-modules/ultraheat-api { };
+
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 
   umap-learn = callPackage ../development/python-modules/umap-learn { };
