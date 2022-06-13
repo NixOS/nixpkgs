@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-doctor";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = "ansible-doctor";
     rev = "v${version}";
-    hash = "sha256-lJKJE9UccknQg8aqt/6qmjKKaICBxaCH5e8fdmie6u8=";
+    hash = "sha256-onRur31Sa95nsXUYFJdAHySm4nIXqP01nT70IFPwLCo=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ buildPythonPackage rec {
       --replace 'Jinja2 = "3.1.2"' 'Jinja2 = "*"' \
       --replace 'anyconfig = "0.13.0"' 'anyconfig = "*"' \
       --replace 'environs = "9.5.0"' 'environs = "*"' \
-      --replace 'jsonschema = "4.4.0"' 'jsonschema = "*"' \
+      --replace 'jsonschema = "4.6.0"' 'jsonschema = "*"' \
       --replace '"ruamel.yaml" = "0.17.21"' '"ruamel.yaml" = "*"'
   '';
 

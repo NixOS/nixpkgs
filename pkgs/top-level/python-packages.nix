@@ -6558,6 +6558,8 @@ in {
 
   pyatome = callPackage ../development/python-modules/pyatome { };
 
+  pycketcasts = callPackage ../development/python-modules/pycketcasts { };
+
   pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
 
   pycoolmasternet-async = callPackage ../development/python-modules/pycoolmasternet-async { };
@@ -10813,6 +10815,8 @@ in {
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
   ukrainealarm = callPackage ../development/python-modules/ukrainealarm { };
+
+  ultraheat-api = callPackage ../development/python-modules/ultraheat-api { };
 
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 
