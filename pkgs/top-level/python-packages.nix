@@ -2071,6 +2071,8 @@ in {
 
   daemonocle = callPackage ../development/python-modules/daemonocle { };
 
+  dalle-mini = callPackage ../development/python-modules/dalle-mini { };
+
   daphne = callPackage ../development/python-modules/daphne { };
 
   dasbus = callPackage ../development/python-modules/dasbus { };
@@ -11047,6 +11049,8 @@ in {
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 
   vpk = callPackage ../development/python-modules/vpk { };
+
+  vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
 
   vsts = callPackage ../development/python-modules/vsts { };
 
