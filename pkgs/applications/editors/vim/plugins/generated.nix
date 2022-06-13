@@ -508,6 +508,18 @@ final: prev:
     meta.homepage = "https://github.com/stevearc/aerial.nvim/";
   };
 
+  ag-nvim = buildVimPluginFrom2Nix {
+    pname = "ag.nvim";
+    version = "2021-07-15";
+    src = fetchFromGitHub {
+      owner = "Numkil";
+      repo = "ag.nvim";
+      rev = "196a78e9287d6f01d6d6e607fb212b40b798b496";
+      sha256 = "0w1dnmhhdipzs1xhmlvzj4b6x0zl4cghcn8qgzmxhrjscv6djrgn";
+    };
+    meta.homepage = "https://github.com/Numkil/ag.nvim/";
+  };
+
   agda-vim = buildVimPluginFrom2Nix {
     pname = "agda-vim";
     version = "2021-10-28";
@@ -3850,6 +3862,18 @@ final: prev:
     meta.homepage = "https://github.com/ray-x/lsp_signature.nvim/";
   };
 
+  lspcontainers-nvim = buildVimPluginFrom2Nix {
+    pname = "lspcontainers.nvim";
+    version = "2022-05-30";
+    src = fetchFromGitHub {
+      owner = "lspcontainers";
+      repo = "lspcontainers.nvim";
+      rev = "3c9d2156a447eb111ec60f4358768eb7510c5d0d";
+      sha256 = "043ylgpzl1ahcf62s6m0y65ddwlxcw79qksqr2304c4vhzv5sv8w";
+    };
+    meta.homepage = "https://github.com/lspcontainers/lspcontainers.nvim/";
+  };
+
   lspkind-nvim = buildVimPluginFrom2Nix {
     pname = "lspkind-nvim";
     version = "2022-04-18";
@@ -5170,6 +5194,18 @@ final: prev:
     meta.homepage = "https://github.com/RishabhRD/nvim-lsputils/";
   };
 
+  nvim-luapad = buildVimPluginFrom2Nix {
+    pname = "nvim-luapad";
+    version = "2022-04-10";
+    src = fetchFromGitHub {
+      owner = "rafcamlet";
+      repo = "nvim-luapad";
+      rev = "3f0d7453987c7bef87d55b8051f252578853399c";
+      sha256 = "0h97hqbx7kbwkqhbq76k5l6rcr2bmdm17g0dps2g82lizmyhpfk0";
+    };
+    meta.homepage = "https://github.com/rafcamlet/nvim-luapad/";
+  };
+
   nvim-metals = buildVimPluginFrom2Nix {
     pname = "nvim-metals";
     version = "2022-06-02";
@@ -6180,6 +6216,18 @@ final: prev:
     meta.homepage = "https://github.com/Xuyuanp/scrollbar.nvim/";
   };
 
+  scss-syntax-vim = buildVimPluginFrom2Nix {
+    pname = "scss-syntax.vim";
+    version = "2019-06-30";
+    src = fetchFromGitHub {
+      owner = "cakebaker";
+      repo = "scss-syntax.vim";
+      rev = "bda22a93d1dcfcb8ee13be1988560d9bb5bd0fef";
+      sha256 = "0p6yy6d7lwi87rvk4c6b2ggrvpddrfksrgdwz993gvxxxbnpwi8q";
+    };
+    meta.homepage = "https://github.com/cakebaker/scss-syntax.vim/";
+  };
+
   securemodelines = buildVimPluginFrom2Nix {
     pname = "securemodelines";
     version = "2019-02-09";
@@ -6421,6 +6469,18 @@ final: prev:
     meta.homepage = "https://github.com/lewis6991/spellsitter.nvim/";
   };
 
+  sphinx-nvim = buildVimPluginFrom2Nix {
+    pname = "sphinx.nvim";
+    version = "2021-08-08";
+    src = fetchFromGitHub {
+      owner = "stsewd";
+      repo = "sphinx.nvim";
+      rev = "65160298c586cab13d94e07ed3ebf4cff20f2be5";
+      sha256 = "0l0cvd8pzf1crb5g2zag3v6gxzfzs38i8pyq30ls3l16phaslnny";
+    };
+    meta.homepage = "https://github.com/stsewd/sphinx.nvim/";
+  };
+
   splice-vim = buildVimPluginFrom2Nix {
     pname = "splice.vim";
     version = "2020-01-15";
@@ -6588,6 +6648,18 @@ final: prev:
       sha256 = "070fzga0b039wjhfzb7s0s422kv3as7ifv94ma6vh62ml6zm6mpl";
     };
     meta.homepage = "https://github.com/peterbjorgensen/sved/";
+  };
+
+  swayconfig-vim = buildVimPluginFrom2Nix {
+    pname = "swayconfig.vim";
+    version = "2022-05-25";
+    src = fetchFromGitHub {
+      owner = "jamespeapen";
+      repo = "swayconfig.vim";
+      rev = "ef79800f4d4864bc3687cfbc92be6dd1988e1fc4";
+      sha256 = "0akkpiybyzddnqfgr8fyb74icyyankzq1fhax586l897c083wvga";
+    };
+    meta.homepage = "https://github.com/jamespeapen/swayconfig.vim/";
   };
 
   swift-vim = buildVimPluginFrom2Nix {
