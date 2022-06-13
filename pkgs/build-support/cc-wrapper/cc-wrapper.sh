@@ -29,7 +29,6 @@ cc1=0
 cxxInclude=1
 cxxLibrary=1
 cInclude=1
-needsTarget=@needsTarget@
 
 expandResponseParams "$@"
 linkType=$(checkLinkType "${params[@]}")
@@ -47,7 +46,6 @@ while (( "$n" < "$nParams" )); do
         -nostdinc) cInclude=0 cxxInclude=0 ;;
         -nostdinc++) cxxInclude=0 ;;
         -nostdlib) cxxLibrary=0 ;;
-        -target|--target=*) needsTarget=0;;
         -x)
             case "$p2" in
                 *-header) dontLink=1 ;;
@@ -161,8 +159,8 @@ if [ "$dontLink" != 1 ]; then
     export NIX_LINK_TYPE_@suffixSalt@=$linkType
 fi
 
-if [ $needsTarget == 1 ]; then
-    extraAfter+=(-target @defaultTarget@)
+if [[ -e @out@/nix-support/add-local-cc-cflags-before.sh ]]; then
+    source @out@/nix-support/add-local-cflags-before.sh
 fi
 
 # As a very special hack, if the arguments are just `-v', then don't

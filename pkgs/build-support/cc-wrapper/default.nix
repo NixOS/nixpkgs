@@ -208,7 +208,6 @@ stdenv.mkDerivation {
     + ''
       export named_cc=${targetPrefix}cc
       export named_cxx=${targetPrefix}c++
-      export needsTarget=0
 
       if [ -e $ccPath/${targetPrefix}gcc ]; then
         wrap ${targetPrefix}gcc $wrapper $ccPath/${targetPrefix}gcc
@@ -216,8 +215,6 @@ stdenv.mkDerivation {
         export named_cc=${targetPrefix}gcc
         export named_cxx=${targetPrefix}g++
       elif [ -e $ccPath/clang ]; then
-        needsTarget=1
-        export defaultTarget=${targetPlatform.config}
         wrap ${targetPrefix}clang $wrapper $ccPath/clang
         ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}clang
@@ -228,8 +225,6 @@ stdenv.mkDerivation {
         wrap ${targetPrefix}g++ $wrapper $ccPath/${targetPrefix}g++
         ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
       elif [ -e $ccPath/clang++ ]; then
-        needsTarget=1
-        export defaultTarget=${targetPlatform.config}
         wrap ${targetPrefix}clang++ $wrapper $ccPath/clang++
         ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
       fi
@@ -517,6 +512,15 @@ stdenv.mkDerivation {
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+    ''
+
+    ##
+    ## General Clang support
+    ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
+    ##
+    + optionalString isClang ''
+      export defaultTarget=${targetPlatform.config}
+      substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
     ''
 
     ##
