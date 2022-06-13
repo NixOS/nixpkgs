@@ -25,7 +25,7 @@ let
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${defaultVersion}.tar.bz2";
     hash = "sha256-gbRUMifbIowD+KG/XdvIE7C7j2VVzkYGTvchpvxoBBM=";
   };
-  buildUBoot = {
+  buildUBoot = lib.makeOverridable ({
     version ? null
   , src ? null
   , filesToInstall
@@ -114,7 +114,7 @@ let
       license = licenses.gpl2;
       maintainers = with maintainers; [ bartsch dezgeg samueldr lopsided98 ];
     } // extraMeta;
-  } // removeAttrs args [ "extraMeta" ]);
+  } // removeAttrs args [ "extraMeta" ]));
 in {
   inherit buildUBoot;
 
