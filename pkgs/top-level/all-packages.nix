@@ -24076,10 +24076,7 @@ with pkgs;
 
   brise = callPackage ../data/misc/brise { };
 
-  cacert = callPackage ../data/misc/cacert {
-    # avoid an infinite recursion through mailcap
-    buildcatrust = with python3Minimal.pkgs; toPythonApplication buildcatrust;
-  };
+  cacert = callPackage ../data/misc/cacert { };
 
   caladea = callPackage ../data/fonts/caladea {};
 
