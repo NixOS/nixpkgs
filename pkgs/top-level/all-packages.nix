@@ -13616,7 +13616,10 @@ with pkgs;
 
   mozart2 = callPackage ../development/compilers/mozart {
     emacs = emacs-nox;
-    jre_headless = jre8_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+  };
+
+  mozart2WithGui = callPackage ../development/compilers/mozart {
+    installDesktop = true;
   };
 
   mozart2-binary = callPackage ../development/compilers/mozart/binary.nix { };
