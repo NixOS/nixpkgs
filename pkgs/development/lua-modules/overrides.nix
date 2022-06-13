@@ -15,13 +15,17 @@ with prev;
   });
 
   busted = prev.busted.overrideAttrs(oa: {
+    nativeBuildInputs = [
+      pkgs.installShellFiles
+    ];
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace "'lua_cliargs = 3.0-1'," "'lua_cliargs >= 3.0-1',"
     '';
     postInstall = ''
-      install -D completions/zsh/_busted $out/share/zsh/site-functions/_busted
-      install -D completions/bash/busted.bash $out/share/bash-completion/completions/busted
+      installShellCompletion --cmd busted \
+        --zsh completions/zsh/_busted \
+        --bash completions/bash/busted.bash
     '';
   });
 
