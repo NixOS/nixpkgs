@@ -1,55 +1,106 @@
-{ lib, stdenv, fetchurl }:
+{ stdenv, lib, autoPatchelfHook, fetchzip, lzma, ncurses5, readline, gmp, mpfr
+, expat, libipt, zlib, dejagnu, sourceHighlight, python3, elfutils, guile, glibc
+}:
 
-if stdenv.hostPlatform != stdenv.targetPlatform
-then builtins.throw "gnatboot can't cross-compile"
-else
+stdenv.mkDerivation rec {
+  pname = "gnatboot";
+  version = "11.2.0-4";
+  src = fetchzip {
+    url =
+      "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-"
+      + version + "/gnat-x86_64-linux-" + version + ".tar.gz";
+    hash = "sha256-8fMBJp6igH+Md5jE4LMubDmC4GLt4A+bZG/Xcz2LAJQ=";
+  };
 
-stdenv.mkDerivation {
-  pname = "gentoo-gnatboot";
-  version = "4.1";
+  nativeBuildInputs = [
+    autoPatchelfHook
+    lzma
+    ncurses5
+    readline
+    gmp
+    mpfr
+    expat
+    libipt
+    zlib
+    dejagnu
+    sourceHighlight
+    python3
+    elfutils
+    guile
+    glibc
+  ];
 
-  src = if stdenv.hostPlatform.system == "i686-linux" then
-    fetchurl {
-      url = "mirror://gentoo/distfiles/gnatboot-4.1-i386.tar.bz2";
-      sha256 = "0665zk71598204bf521vw68i5y6ccqarq9fcxsqp7ccgycb4lysr";
-    }
-  else if stdenv.hostPlatform.system == "x86_64-linux" then
-    fetchurl {
-      url = "mirror://gentoo/distfiles/gnatboot-4.1-amd64.tar.bz2";
-      sha256 = "1li4d52lmbnfs6llcshlbqyik2q2q4bvpir0f7n38nagp0h6j0d4";
-    }
-  else
-    throw "Platform not supported";
+  propagatedNativeBuildInputs = [
+    autoPatchelfHook
+    lzma
+    ncurses5
+    readline
+    gmp
+    mpfr
+    expat
+    libipt
+    zlib
+    dejagnu
+    sourceHighlight
+    python3
+    elfutils
+    guile
+    glibc
+  ];
 
-  dontStrip = 1;
+  buildInputs = [
+    autoPatchelfHook
+    lzma
+    ncurses5
+    readline
+    gmp
+    mpfr
+    expat
+    libipt
+    zlib
+    dejagnu
+    sourceHighlight
+    python3
+    elfutils
+    guile
+    glibc
+  ];
+
+  propagatedBuildInputs = [
+    autoPatchelfHook
+    lzma
+    ncurses5
+    readline
+    gmp
+    mpfr
+    expat
+    libipt
+    zlib
+    dejagnu
+    sourceHighlight
+    python3
+    elfutils
+    guile
+    glibc
+  ];
 
   installPhase = ''
     mkdir -p $out
-    cp -R * $out
-
-    set +e
-    for a in $out/bin/* ; do
-      patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-        --set-rpath $(cat $NIX_CC/nix-support/orig-libc)/lib:$(cat $NIX_CC/nix-support/orig-cc)/lib64:$(cat $NIX_CC/nix-support/orig-cc)/lib $a
-    done
-    set -e
-
-    mv $out/bin/gnatgcc_2wrap $out/bin/gnatgcc
-    ln -s $out/bin/gnatgcc $out/bin/gcc
+    cp -var * $out/
   '';
 
   passthru = {
-    langC = true; # TRICK for gcc-wrapper to wrap it
+    langC = true;
     langCC = false;
     langFortran = false;
     langAda = true;
   };
 
   meta = with lib; {
-    homepage = "https://gentoo.org";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.lucus16 ];
-
+    description = "GNAT, the GNU Ada Translator";
+    homepage = "https://www.gnu.org/software/gnat";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ ethindp ];
     platforms = platforms.linux;
   };
 }
