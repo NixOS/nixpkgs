@@ -6,7 +6,7 @@ with lib; (mkCoqDerivation {
   inherit version;
   displayVersion = { tlc = false; };
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.13" "8.15"; out = "20211215"; }
+    { case = range "8.13" "8.16"; out = "20211215"; }
     { case = range "8.12" "8.13"; out = "20210316"; }
     { case = range "8.10" "8.12"; out = "20200328"; }
     { case = range "8.6"  "8.12"; out = "20181116"; }

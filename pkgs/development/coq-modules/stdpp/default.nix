@@ -6,7 +6,7 @@ with lib; mkCoqDerivation rec {
   domain = "gitlab.mpi-sws.org";
   owner = "iris";
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.13" "8.15"; out = "1.7.0"; }
+    { case = range "8.13" "8.16"; out = "1.7.0"; }
     { case = range "8.12" "8.14"; out = "1.6.0"; }
     { case = range "8.11" "8.13"; out = "1.5.0"; }
     { case = range "8.8" "8.10";  out = "1.4.0"; }
