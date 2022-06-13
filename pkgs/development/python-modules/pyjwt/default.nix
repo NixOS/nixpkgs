@@ -36,5 +36,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/jpadilla/pyjwt";
     license = licenses.mit;
     maintainers = with maintainers; [ prikhi ];
+    knownVulnerabilities = [
+      "CVE-2022-29217"
+    ];
   };
 }
