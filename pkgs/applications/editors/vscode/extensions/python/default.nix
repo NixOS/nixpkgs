@@ -59,13 +59,8 @@ in vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2022.0.1814523869";
-  };
-
-  vsix = fetchurl {
-    name = "${mktplcRef.publisher}-${mktplcRef.name}.zip";
-    url = "https://github.com/microsoft/vscode-python/releases/download/${mktplcRef.version}/ms-python-release.vsix";
-    sha256 = "sha256-JDaimcOUDo9GuFA3mhbbGLwqZE9ejk8pWYc+9PrRhVk=";
+    version = "2022.9.11611009";
+    sha256 = "sha256-rIKxb0WQaJtleukOptShNsKvSaYZPYufu8BKXQUJ5Sg=";
   };
 
   buildInputs = [
