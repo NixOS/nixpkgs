@@ -30286,7 +30286,7 @@ with pkgs;
     inherit (haskell.packages.ghc8107) ghcWithPackages taffybar;
   };
 
-  tagainijisho = callPackage ../applications/office/tagainijisho {};
+  tagainijisho = libsForQt5.callPackage ../applications/office/tagainijisho {};
 
   tahoe-lafs = callPackage ../tools/networking/p2p/tahoe-lafs {};
 
