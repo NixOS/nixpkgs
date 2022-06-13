@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, ncurses5
+{ lib, stdenv, nixosTests, fetchFromGitHub, autoreconfHook, ncurses5
 , enableSdl2 ? false, SDL2, SDL2_image, SDL2_sound, SDL2_mixer, SDL2_ttf
 }:
 
@@ -28,10 +28,14 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "bindir=$(out)/bin" ];
 
+  passthru.tests = {
+    runAngband = nixosTests.angband;
+  };
+
   meta = with lib; {
     homepage = "https://angband.github.io/angband";
     description = "A single-player roguelike dungeon exploration game";
-    maintainers = [ ];
+    maintainers = with maintainers; [ kenran ];
     license = licenses.gpl2;
   };
 }

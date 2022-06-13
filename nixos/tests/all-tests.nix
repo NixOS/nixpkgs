@@ -37,6 +37,7 @@ in {
   airsonic = handleTest ./airsonic.nix {};
   allTerminfo = handleTest ./all-terminfo.nix {};
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
+  angband = handleTest ./angband.nix {};
   apfs = handleTest ./apfs.nix {};
   apparmor = handleTest ./apparmor.nix {};
   atd = handleTest ./atd.nix {};
