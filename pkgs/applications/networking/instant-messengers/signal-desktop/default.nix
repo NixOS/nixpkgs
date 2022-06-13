@@ -149,5 +149,6 @@ in stdenv.mkDerivation rec {
     license     = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ mic92 equirosa ];
     platforms   = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
