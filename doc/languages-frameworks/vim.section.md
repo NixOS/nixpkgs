@@ -277,9 +277,6 @@ my-vim =
        copy paste output2 here
     ];
 
-    # Pathogen would be
-    # vimrcConfig.pathogen.knownPlugins = plugins; # plugins
-    # vimrcConfig.pathogen.pluginNames = ["tlib"];
   };
 ```
 
