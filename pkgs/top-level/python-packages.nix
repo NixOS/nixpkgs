@@ -9344,6 +9344,8 @@ in {
 
   rpi-gpio = callPackage ../development/python-modules/rpi-gpio { };
 
+  rpi-gpio2 = callPackage ../development/python-modules/rpi-gpio2 { };
+
   rply = callPackage ../development/python-modules/rply { };
 
   rpm = toPythonModule (pkgs.rpm.override {
