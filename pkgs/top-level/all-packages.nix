@@ -20277,6 +20277,7 @@ with pkgs;
       inherit bison cups dconf harfbuzz libGL perl gtk3;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit darwin;
+      inherit buildPackages;
       stdenv = if stdenv.cc.isGNU
         then (if (stdenv.targetPlatform.isx86_64) then gcc10Stdenv else gcc9Stdenv)
         else stdenv;
@@ -20289,6 +20290,7 @@ with pkgs;
       inherit bison cups dconf harfbuzz libGL perl gtk3;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit darwin;
+      inherit buildPackages;
       stdenv = if stdenv.cc.isGNU
         then (if (stdenv.targetPlatform.isx86_64) then gcc10Stdenv else gcc9Stdenv)
         else stdenv;
@@ -20301,6 +20303,7 @@ with pkgs;
       inherit bison cups dconf harfbuzz libGL perl gtk3;
       inherit (gst_all_1) gstreamer gst-plugins-base;
       inherit darwin;
+      inherit buildPackages;
     });
 
   libsForQt512 = recurseIntoAttrs (import ./qt5-packages.nix {
