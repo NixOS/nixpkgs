@@ -1,11 +1,10 @@
 { lib
 , python3
-, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
-  version = "0.5.1";
+  version = "0.6.0";
 
   disabled = python3.pythonOlder "3.7";
 
@@ -13,21 +12,11 @@ python3.pkgs.buildPythonApplication rec {
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "22ec361f9a4c86abefbfab541f588597e21bf4fbedf2911f230e560b2ec3503a";
+    sha256 = "70f39b373ead42acb8caf56040f7ebf13ab67aea505511025c09ecf4560f8b1b";
   };
-
-  patches = [
-    # https://github.com/jgosmann/dmarc-metrics-exporter/pull/23
-    (fetchpatch {
-      url = "https://github.com/jgosmann/dmarc-metrics-exporter/commit/3fe401f5dfb9e0304601a2a89ac987ff853b7cba.patch";
-      hash = "sha256-MjVLlFQMp2r3AhBMu1lEmRm0Y2H9FdvCfPgAK5kvwWE=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'python = "^3.7,<3.10"' 'python = "^3.7,<3.11"' \
-      --replace poetry.masonry.api poetry.core.masonry.api \
       --replace '"^' '">='
   '';
 
@@ -63,6 +52,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Export Prometheus metrics from DMARC reports";
     homepage = "https://github.com/jgosmann/dmarc-metrics-exporter";
+    changelog = "https://github.com/jgosmann/dmarc-metrics-exporter/blob/v${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ma27 ];
   };
