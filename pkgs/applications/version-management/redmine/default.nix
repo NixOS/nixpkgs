@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper }:
 
 let
-  version = "4.2.5";
+  version = "4.2.6";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
