@@ -51,7 +51,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     # Test FUSE mountpoint
     ipfs_hash = fuse.succeed(
-        "echo fnord3 | ipfs --api /ip4/127.0.0.1/tcp/2324 add | awk '{ print $2 }'"
+        "echo fnord3 | ipfs --api /ip4/127.0.0.1/tcp/2324 add --quieter"
     )
 
     fuse.succeed(f"cat /ipfs/{ipfs_hash.strip()} | grep fnord3")
