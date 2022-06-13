@@ -219,10 +219,11 @@ in
       rev = "v0.10.15";
       sha256 = "1j216isp0546hycklbr5wi8mlga5hq170hk7f2sm16sfavlkh5gz";
     };
-    inputs = [ pkgs.luajit ];
+    inputs = [ pkgs.luajit pkgs.pcre ];
     preConfigure = ''
       export LUAJIT_LIB="${pkgs.luajit}/lib"
       export LUAJIT_INC="${pkgs.luajit}/include/luajit-2.0"
+      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -lpcre"
     '';
     allowMemoryWriteExecute = true;
   };
