@@ -25,6 +25,7 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
+, pytorch
 , pyyaml
 , requests
 , scikit-learn
@@ -38,7 +39,7 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.12.17";
+  version = "0.12.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -47,7 +48,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "client";
     rev = "v${version}";
-    hash = "sha256-hY01cql/j3ieL1zJoPOM/QZiF0X/ivekFRfX+TvZhyM=";
+    hash = "sha256-9++CFoC8p3cACPyjRbb6i8MdJp8iD9GUh0uHpTiufdg=";
   };
 
   patches = [
@@ -93,12 +94,15 @@ buildPythonPackage rec {
     pytest-mock
     pytest-xdist
     pytestCheckHook
+    pytorch
     scikit-learn
     tqdm
   ];
 
   disabledTestPaths = [
     # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
+    "tests/integrations/test_keras.py"
+    "tests/integrations/test_torch.py"
     "tests/test_cli.py"
     "tests/test_data_types.py"
     "tests/test_file_stream.py"
@@ -111,6 +115,7 @@ buildPythonPackage rec {
     "tests/test_metric_full.py"
     "tests/test_metric_internal.py"
     "tests/test_mode_disabled.py"
+    "tests/test_model_workflows.py"
     "tests/test_mp_full.py"
     "tests/test_public_api.py"
     "tests/test_redir.py"
@@ -119,14 +124,18 @@ buildPythonPackage rec {
     "tests/test_start_method.py"
     "tests/test_tb_watcher.py"
     "tests/test_telemetry_full.py"
+    "tests/test_util.py"
     "tests/wandb_agent_test.py"
     "tests/wandb_artifacts_test.py"
     "tests/wandb_integration_test.py"
     "tests/wandb_run_test.py"
     "tests/wandb_settings_test.py"
     "tests/wandb_sweep_test.py"
+    "tests/wandb_tensorflow_test.py"
     "tests/wandb_verify_test.py"
-    "tests/test_model_workflows.py"
+
+    # Requires metaflow, which is not yet packaged.
+    "tests/integrations/test_metaflow.py"
 
     # Fails and borks the pytest runner as well.
     "tests/wandb_test.py"
