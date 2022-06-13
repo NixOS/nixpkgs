@@ -12945,7 +12945,7 @@ with pkgs;
     inherit (gnome2) libart_lgpl;
   });
 
-  gnat = gnat11;
+  gnat = gnat12;
 
   gnat6 = wrapCC (gcc6.cc.override {
     name = "gnat";
@@ -12976,7 +12976,7 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnat6
+      then buildPackages.gnatboot
       else buildPackages.gnat9;
   });
 
@@ -12992,7 +12992,7 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnat6
+      then buildPackages.gnatboot
       else buildPackages.gnat10;
   });
 
@@ -13008,7 +13008,7 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnat6
+      then buildPackages.gnatboot
       else buildPackages.gnat11;
   });
 
@@ -13024,7 +13024,7 @@ with pkgs;
     gnatboot =
       if stdenv.hostPlatform == stdenv.targetPlatform
          && stdenv.buildPlatform == stdenv.hostPlatform
-      then buildPackages.gnat6
+      then buildPackages.gnatboot
       else buildPackages.gnat12;
   });
 
