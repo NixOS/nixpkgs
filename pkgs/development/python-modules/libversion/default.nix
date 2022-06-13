@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , libversion
 , pkg-config
+, pytestCheckHook
 , pythonOlder
 }:
 
@@ -32,6 +33,15 @@ buildPythonPackage rec {
   buildInputs = [
     libversion
   ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  preCheck = ''
+    # import from $out
+    rm -r libversion
+  '';
 
   pythonImportsCheck = [
     "libversion"
