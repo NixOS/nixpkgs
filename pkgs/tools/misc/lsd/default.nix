@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "0.21.0";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "Peltoche";
     repo = pname;
     rev = version;
-    sha256 = "sha256-4pa8yJjUTO5MUDuljfU9Vo2ZjbsIwWJsJj6VVNfN25A=";
+    sha256 = "sha256-YeSEaamtIjip2nLBw/1/RSkr6ZL0p1GG2pHU14Ry6XU=";
   };
 
-  cargoSha256 = "sha256-P0HJVp2ReJuLSZrArw/EAfLFDOZqswI0nD1SCHwegoE=";
+  cargoSha256 = "sha256-JsPGw5hjNy+yTZiSBeF05o9Zl6pYXxEI4kIDLY6Q54Q=";
 
   nativeBuildInputs = [ installShellFiles pandoc ];
   postInstall = ''

@@ -4969,6 +4969,12 @@
     githubId = 1498782;
     name = "Jesse Haber-Kucharsky";
   };
+  hamburger1984 = {
+    email = "hamburger1984@gmail.com";
+    github = "hamburger1984";
+    githubId = 438976;
+    name = "Andreas Krohn";
+  };
   hamhut1066 = {
     email = "github@hamhut1066.com";
     github = "moredhel";
@@ -9116,6 +9122,12 @@
     github = "neilmayhew";
     githubId = 166791;
     name = "Neil Mayhew";
+  };
+  nek0 = {
+    email = "nek0@nek0.eu";
+    github = "nek0";
+    githubId = 1859691;
+    name = "Amedeo Molnár";
   };
   nelsonjeppesen = {
     email = "nix@jeppesen.io";

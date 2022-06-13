@@ -5,13 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-cli";
-  version = "2.0.2";
+  version = "2.1.5";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-J3YlFsX/maOqWo4ILEMXzIJeQ8vr47ApGGiaBWrUCMs=";
+    hash = "sha256-kl5yOJTMobccZoaIoWwQubCrswPa69I5Kmuox7JqAXs=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,8 +23,10 @@ python3.pkgs.buildPythonApplication rec {
     faraday-plugins
     jsonschema
     log-symbols
+    luddite
     packaging
     pyyaml
+    py-sneakers
     simple-rest-client
     spinners
     tabulate
