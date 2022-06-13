@@ -197,6 +197,7 @@ in mapAttrs (name: { pkg, executable ? name, cmd ? "SHELL=$command ${executable}
 
     with subtest("have the terminal display a colour"):
         # We run this command in the background
+        assert machine.shell is not None
         machine.shell.send(b"(run-in-this-term display-colour |& systemd-cat -t terminal) &\n")
 
         with machine.nested("Waiting for the screen to have pink on it:"):
