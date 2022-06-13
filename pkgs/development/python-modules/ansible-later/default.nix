@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-later";
-  version = "2.0.13";
+  version = "2.0.14";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "thegeeklab";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9xVFvXCHjgF+7asO1ialGIofJwsRRRiydo/Ui2C+Wig=";
+    hash = "sha256-iY+5p6LNrlCTGi61cm2DJdyt8SmAwYqKmXNXescjAVQ=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ buildPythonPackage rec {
       --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail" "" \
       --replace 'PyYAML = "6.0"' 'PyYAML = "*"' \
       --replace 'unidiff = "0.7.3"' 'unidiff = "*"' \
-      --replace 'jsonschema = "4.4.0"' 'jsonschema = "*"'
+      --replace 'jsonschema = "4.6.0"' 'jsonschema = "*"'
   '';
 
   postInstall = ''
