@@ -6473,6 +6473,8 @@ in {
 
   piccata = callPackage ../development/python-modules/piccata { };
 
+  pick = callPackage ../development/python-modules/pick { };
+
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
   picos = callPackage ../development/python-modules/picos { };
