@@ -4682,6 +4682,8 @@ with pkgs;
 
   cmt = callPackage ../applications/audio/cmt {};
 
+  crlfsuite = callPackage ../tools/security/crlfsuite {};
+
   crlfuzz = callPackage ../tools/security/crlfuzz {};
 
   hedgedoc = callPackage ../servers/web-apps/hedgedoc { };
