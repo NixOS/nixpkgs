@@ -32651,7 +32651,6 @@ with pkgs;
   husky = callPackage ../development/tools/misc/husky { };
 
   hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
-  hydrogen_0 = callPackage ../applications/audio/hydrogen/0.nix { }; # Old stable, has GMKit.
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
 

@@ -739,6 +739,7 @@ mapAliases ({
   ht-rust = xh; # Added 2021-02-13
   hydra-flakes = throw "hydra-flakes: Flakes support has been merged into Hydra's master. Please use `hydra_unstable` now"; # Added 2020-04-06
   hydra-unstable = hydra_unstable; # added 2022-05-10
+  hydrogen_0 = throw "hydrogen_0 has been removed, because it depended on qt4"; # Added 2022-06-13
   hyperspace-cli = throw "hyperspace-cli is out of date, and has been deprecated upstream in favour of using the individual repos instead"; # Added 2022-08-29
 
   ### I ###
