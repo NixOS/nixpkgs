@@ -1,14 +1,17 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
 stdenv.mkDerivation rec {
   pname = "haveged";
-  version = "1.9.17";
+  version = "1.9.18";
 
   src = fetchFromGitHub {
     owner = "jirka-h";
     repo = "haveged";
     rev = "v${version}";
-    sha256 = "sha256-uVl+TZVMsf+9aRATQndYMK4l4JfOBvstd1O2nTHyMYU=";
+    hash = "sha256-fyL/J2A13ap582j4gdC8u63Ah67Old+BaO/CLyEeN/g=";
   };
 
   strictDeps = true;
