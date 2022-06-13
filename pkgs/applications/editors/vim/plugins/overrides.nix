@@ -859,7 +859,7 @@ self: super: {
       let
         maple-bin = rustPlatform.buildRustPackage {
           name = "maple";
-          src = old.src;
+          inherit (old) src;
 
           nativeBuildInputs = [
             pkg-config
@@ -874,7 +874,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "0l1x7kprnxa95pbf8ml9ixmj0cmbnnv6nd0v6qry8j67rx8plpmp";
+          cargoSha256 = "sha256-XmQTRmOO/tyA0F6FQQRxZPcVXCYZkEAiNIzU/ismjc0=";
         };
       in
       ''
