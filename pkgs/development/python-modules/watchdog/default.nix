@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "watchdog";
-  version = "2.1.8";
+  version = "2.1.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bQMUkSaGSr0ycV1OkmfSdUzt4lppBSkBOZNWrTvF7P8=";
+    sha256 = "43ce20ebb36a51f21fa376f76d1d4692452b2527ccd601950d69ed36b9e21609";
   };
 
   patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
@@ -43,10 +43,7 @@ buildPythonPackage rec {
       --replace "--cov-report=term-missing" ""
   '';
 
-  disabledTests = [
-    # probably failing because of an encoding related issue
-    "test_create_wrong_encoding"
-  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+  disabledTests = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
     "test_delete"
   ];
 
