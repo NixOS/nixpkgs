@@ -185,6 +185,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.microsoft.com/en-us/edge";
     description = "The web browser from Microsoft";
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ zanculmarktum kuwii ];
   };
