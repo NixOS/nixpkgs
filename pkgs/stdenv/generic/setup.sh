@@ -1022,6 +1022,15 @@ configurePhase() {
             fixLibtool "$i"
         done
 
+        # Make sure `find` is the full `find` from findutils, rather
+        # than from busybox or some other implementation.  This is
+        # analogous to `shellcheck shell=bash` at the top of this
+        # file.
+        if (( $(find --version | grep -q 'GNU findutils') != 0 )); then
+            echo 'the find in $PATH is not findutils'
+            exit -1
+        fi
+
         # replace `/usr/bin/file` with `file` in any `configure`
         # scripts with vendored libtool code.  Preserve mtimes to
         # prevent some packages (e.g. libidn2) from spontaneously
