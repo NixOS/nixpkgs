@@ -1120,6 +1120,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-calc/";
   };
 
+  cmp-clippy = buildVimPluginFrom2Nix {
+    pname = "cmp-clippy";
+    version = "2021-10-24";
+    src = fetchFromGitHub {
+      owner = "vappolinario";
+      repo = "cmp-clippy";
+      rev = "9f8dd021f7b9326407a439105b0c646983191a49";
+      sha256 = "02k0zwjbd98f76f3v46lvd8wfm8wibkh703g8vxr26yv1fwghs4n";
+    };
+    meta.homepage = "https://github.com/vappolinario/cmp-clippy/";
+  };
+
   cmp-cmdline = buildVimPluginFrom2Nix {
     pname = "cmp-cmdline";
     version = "2022-05-02";
@@ -1130,6 +1142,18 @@ final: prev:
       sha256 = "04h6np207781l3wa36l6nqd56lx39s1kycf4jvclgfrr6ddnbv68";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-cmdline/";
+  };
+
+  cmp-cmdline-history = buildVimPluginFrom2Nix {
+    pname = "cmp-cmdline-history";
+    version = "2022-05-04";
+    src = fetchFromGitHub {
+      owner = "dmitmel";
+      repo = "cmp-cmdline-history";
+      rev = "003573b72d4635ce636234a826fa8c4ba2895ffe";
+      sha256 = "1v2xyspm7k9jmnzbfg0js15c6sha7ravf4lddsk85icdw16fxji1";
+    };
+    meta.homepage = "https://github.com/dmitmel/cmp-cmdline-history/";
   };
 
   cmp-conjure = buildVimPluginFrom2Nix {
@@ -1144,6 +1168,66 @@ final: prev:
     meta.homepage = "https://github.com/PaterJason/cmp-conjure/";
   };
 
+  cmp-conventionalcommits = buildVimPluginFrom2Nix {
+    pname = "cmp-conventionalcommits";
+    version = "2021-10-28";
+    src = fetchFromGitHub {
+      owner = "davidsierradz";
+      repo = "cmp-conventionalcommits";
+      rev = "5518362bc4f5dfbc9d242d9379fdec48b6278c5e";
+      sha256 = "02jvz8sjrr4xw0wg5y03gnv5sc78gqvmblmqi02y748qgsd5grb6";
+    };
+    meta.homepage = "https://github.com/davidsierradz/cmp-conventionalcommits/";
+  };
+
+  cmp-copilot = buildVimPluginFrom2Nix {
+    pname = "cmp-copilot";
+    version = "2022-04-11";
+    src = fetchFromGitHub {
+      owner = "hrsh7th";
+      repo = "cmp-copilot";
+      rev = "1f3f31c54bd71e41ed157430702bc2837ea582ab";
+      sha256 = "14nza4r8vr58s74f3fpzlmvrv9lcxzvfvizkz71p47f1zgddhgfs";
+    };
+    meta.homepage = "https://github.com/hrsh7th/cmp-copilot/";
+  };
+
+  cmp-dap = buildVimPluginFrom2Nix {
+    pname = "cmp-dap";
+    version = "2022-04-27";
+    src = fetchFromGitHub {
+      owner = "rcarriga";
+      repo = "cmp-dap";
+      rev = "69f22863739482120f9240919db1ac7d4dea3278";
+      sha256 = "03cxmnbr4sn69dzg1fg4r7rgja4invzfgpid123mhahq6sn7jir9";
+    };
+    meta.homepage = "https://github.com/rcarriga/cmp-dap/";
+  };
+
+  cmp-dictionary = buildVimPluginFrom2Nix {
+    pname = "cmp-dictionary";
+    version = "2022-05-04";
+    src = fetchFromGitHub {
+      owner = "uga-rosa";
+      repo = "cmp-dictionary";
+      rev = "0ba3df56258b48a5a6a0130d31ae3cf4908c9567";
+      sha256 = "1ny42i913w476bwyrlkwkiv14bdakvnkqx26py45f9qlzrfqj2m5";
+    };
+    meta.homepage = "https://github.com/uga-rosa/cmp-dictionary/";
+  };
+
+  cmp-digraphs = buildVimPluginFrom2Nix {
+    pname = "cmp-digraphs";
+    version = "2021-12-13";
+    src = fetchFromGitHub {
+      owner = "dmitmel";
+      repo = "cmp-digraphs";
+      rev = "5efc1f0078d7c5f3ea1c8e3aad04da3fd6e081a9";
+      sha256 = "061rf7c4lfghsryldmgk5inmwa1994imp1j0l94qgaig6s6hb0kg";
+    };
+    meta.homepage = "https://github.com/dmitmel/cmp-digraphs/";
+  };
+
   cmp-emoji = buildVimPluginFrom2Nix {
     pname = "cmp-emoji";
     version = "2021-09-28";
@@ -1156,6 +1240,66 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-emoji/";
   };
 
+  cmp-fish = buildVimPluginFrom2Nix {
+    pname = "cmp-fish";
+    version = "2022-02-17";
+    src = fetchFromGitHub {
+      owner = "mtoohey31";
+      repo = "cmp-fish";
+      rev = "2ce8febeff3e4600acac498b7cde72cc9d2dd7b1";
+      sha256 = "1clarmx43ygwsaxy73cgy86i33vjrfzr53z7ym29ynndb7zlzg6v";
+    };
+    meta.homepage = "https://github.com/mtoohey31/cmp-fish/";
+  };
+
+  cmp-fuzzy-buffer = buildVimPluginFrom2Nix {
+    pname = "cmp-fuzzy-buffer";
+    version = "2022-01-13";
+    src = fetchFromGitHub {
+      owner = "tzachar";
+      repo = "cmp-fuzzy-buffer";
+      rev = "c00e59019c5b3c00cb5590f9ae1fad4446fb855d";
+      sha256 = "0zax13arc36db2w1l0xyriqskknnvg1wxs809737san70gh74p0w";
+    };
+    meta.homepage = "https://github.com/tzachar/cmp-fuzzy-buffer/";
+  };
+
+  cmp-fuzzy-path = buildVimPluginFrom2Nix {
+    pname = "cmp-fuzzy-path";
+    version = "2022-05-08";
+    src = fetchFromGitHub {
+      owner = "tzachar";
+      repo = "cmp-fuzzy-path";
+      rev = "8c1ecaaf8bf16bc4af4eaaaac73ff5a29174406b";
+      sha256 = "0c607vljcf5zwxvfj4s1vmqridwpwql7zynwc38zx9lafv7l2djb";
+    };
+    meta.homepage = "https://github.com/tzachar/cmp-fuzzy-path/";
+  };
+
+  cmp-git = buildVimPluginFrom2Nix {
+    pname = "cmp-git";
+    version = "2022-05-11";
+    src = fetchFromGitHub {
+      owner = "petertriho";
+      repo = "cmp-git";
+      rev = "60e3de62b925ea05c7aa37883408859c72d498fb";
+      sha256 = "0qbfby0b7ix1x5ak130ja2h1ngq0p20jb9msr29bijfy68afpdw1";
+    };
+    meta.homepage = "https://github.com/petertriho/cmp-git/";
+  };
+
+  cmp-greek = buildVimPluginFrom2Nix {
+    pname = "cmp-greek";
+    version = "2022-01-10";
+    src = fetchFromGitHub {
+      owner = "max397574";
+      repo = "cmp-greek";
+      rev = "799110b976f9194055e9d506931ac38171bc6bcd";
+      sha256 = "049xi4ifla86fd5k68vqxwxxq5hg05y24z7yqg671hbw3lzpi0h9";
+    };
+    meta.homepage = "https://github.com/max397574/cmp-greek/";
+  };
+
   cmp-latex-symbols = buildVimPluginFrom2Nix {
     pname = "cmp-latex-symbols";
     version = "2021-09-10";
@@ -1166,6 +1310,42 @@ final: prev:
       sha256 = "17qjw0yp0cmgyjy593qq6rfh7fgfwgb7mxg7a0kg1drjpncwv8gl";
     };
     meta.homepage = "https://github.com/kdheepak/cmp-latex-symbols/";
+  };
+
+  cmp-look = buildVimPluginFrom2Nix {
+    pname = "cmp-look";
+    version = "2022-03-21";
+    src = fetchFromGitHub {
+      owner = "octaltree";
+      repo = "cmp-look";
+      rev = "58dd22adc34d21f95b93407719aa8a894c52c235";
+      sha256 = "107nvm4xgd3bhz0sqxx4bj19xjli4c52r6jyajw50bv0my2afihq";
+    };
+    meta.homepage = "https://github.com/octaltree/cmp-look/";
+  };
+
+  cmp-neosnippet = buildVimPluginFrom2Nix {
+    pname = "cmp-neosnippet";
+    version = "2022-01-06";
+    src = fetchFromGitHub {
+      owner = "notomo";
+      repo = "cmp-neosnippet";
+      rev = "2d14526af3f02dcea738b4cea520e6ce55c09979";
+      sha256 = "0xf3nfkgbrfhac8nadkzq22pzi9gsidax4ddavqkqqivlcgllrgf";
+    };
+    meta.homepage = "https://github.com/notomo/cmp-neosnippet/";
+  };
+
+  cmp-npm = buildVimPluginFrom2Nix {
+    pname = "cmp-npm";
+    version = "2021-10-27";
+    src = fetchFromGitHub {
+      owner = "David-Kunz";
+      repo = "cmp-npm";
+      rev = "4b6166c3feeaf8dae162e33ee319dc5880e44a29";
+      sha256 = "0lkrbj5pswyb161hi424bii394qfdhm7v86x18a5fs2cmkwi0222";
+    };
+    meta.homepage = "https://github.com/David-Kunz/cmp-npm/";
   };
 
   cmp-nvim-lsp = buildVimPluginFrom2Nix {
@@ -1192,6 +1372,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lsp-document-symbol/";
   };
 
+  cmp-nvim-lsp-signature-help = buildVimPluginFrom2Nix {
+    pname = "cmp-nvim-lsp-signature-help";
+    version = "2022-03-29";
+    src = fetchFromGitHub {
+      owner = "hrsh7th";
+      repo = "cmp-nvim-lsp-signature-help";
+      rev = "8014f6d120f72fe0a135025c4d41e3fe41fd411b";
+      sha256 = "1k61aw9mp012h625jqrf311vnsm2rg27k08lxa4nv8kp6nk7il29";
+    };
+    meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lsp-signature-help/";
+  };
+
   cmp-nvim-lua = buildVimPluginFrom2Nix {
     pname = "cmp-nvim-lua";
     version = "2021-10-11";
@@ -1202,6 +1394,18 @@ final: prev:
       sha256 = "11mhpb2jdc7zq7yiwzkks844b7alrdd08h96r6y7p3cxjv1iy5gz";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-nvim-lua/";
+  };
+
+  cmp-nvim-tags = buildVimPluginFrom2Nix {
+    pname = "cmp-nvim-tags";
+    version = "2022-03-31";
+    src = fetchFromGitHub {
+      owner = "quangnguyen30192";
+      repo = "cmp-nvim-tags";
+      rev = "98b15fee0cd64760345be3a30f1a592b5a9abb20";
+      sha256 = "19fgzaxapazrl07q0ikximgm8k77vasz5fras3xnbax7r3bln127";
+    };
+    meta.homepage = "https://github.com/quangnguyen30192/cmp-nvim-tags/";
   };
 
   cmp-nvim-ultisnips = buildVimPluginFrom2Nix {
@@ -1240,6 +1444,18 @@ final: prev:
     meta.homepage = "https://github.com/jc-doyle/cmp-pandoc-references/";
   };
 
+  cmp-pandoc-nvim = buildVimPluginFrom2Nix {
+    pname = "cmp-pandoc.nvim";
+    version = "2022-05-03";
+    src = fetchFromGitHub {
+      owner = "aspeddro";
+      repo = "cmp-pandoc.nvim";
+      rev = "cb2980263e14fb3c1b776edbd2c7a312b67c65ae";
+      sha256 = "0d439njzdnm1qhnig2qr9ywq3q72vpb6wqxwil9czhqzn80swrj9";
+    };
+    meta.homepage = "https://github.com/aspeddro/cmp-pandoc.nvim/";
+  };
+
   cmp-path = buildVimPluginFrom2Nix {
     pname = "cmp-path";
     version = "2022-02-02";
@@ -1250,6 +1466,30 @@ final: prev:
       sha256 = "15ksxnwxssv1yr1ss66mbl5w0layq0f4baisd9ki192alnkd7365";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-path/";
+  };
+
+  cmp-rg = buildVimPluginFrom2Nix {
+    pname = "cmp-rg";
+    version = "2022-01-13";
+    src = fetchFromGitHub {
+      owner = "lukas-reineke";
+      repo = "cmp-rg";
+      rev = "fd92d70ff36b30924401b0cf7d4ce7344c8235f7";
+      sha256 = "0z8knl4l5a7miw081h290s0g4icqqvn6qibr6jx4x71qwqb21w2y";
+    };
+    meta.homepage = "https://github.com/lukas-reineke/cmp-rg/";
+  };
+
+  cmp-snippy = buildVimPluginFrom2Nix {
+    pname = "cmp-snippy";
+    version = "2021-09-20";
+    src = fetchFromGitHub {
+      owner = "dcampos";
+      repo = "cmp-snippy";
+      rev = "9af1635fe40385ffa3dabf322039cb5ae1fd7d35";
+      sha256 = "1ag31kvd2q1awasdrc6pbbbsf0l3c99crz4h03337wj1kcssiixy";
+    };
+    meta.homepage = "https://github.com/dcampos/cmp-snippy/";
   };
 
   cmp-spell = buildVimPluginFrom2Nix {
@@ -1312,6 +1552,30 @@ final: prev:
     meta.homepage = "https://github.com/lukas-reineke/cmp-under-comparator/";
   };
 
+  cmp-vim-lsp = buildVimPluginFrom2Nix {
+    pname = "cmp-vim-lsp";
+    version = "2021-10-26";
+    src = fetchFromGitHub {
+      owner = "dmitmel";
+      repo = "cmp-vim-lsp";
+      rev = "b13312a8c1a74a8747e64117f26f17390e8abfa8";
+      sha256 = "1f43qwxr8l2qj4mq1lfk5z3c0bqs8dlgyy1yj1acpnknrgi8572p";
+    };
+    meta.homepage = "https://github.com/dmitmel/cmp-vim-lsp/";
+  };
+
+  cmp-vimwiki-tags = buildVimPluginFrom2Nix {
+    pname = "cmp-vimwiki-tags";
+    version = "2022-04-25";
+    src = fetchFromGitHub {
+      owner = "pontusk";
+      repo = "cmp-vimwiki-tags";
+      rev = "a9e631c8f4d64e009d253f741b035eb5d1bd404f";
+      sha256 = "0j75bdcxbzm24mkq3lynm1crv5rqhw966aa7l27y12dlp6rbfvn0";
+    };
+    meta.homepage = "https://github.com/pontusk/cmp-vimwiki-tags/";
+  };
+
   cmp-vsnip = buildVimPluginFrom2Nix {
     pname = "cmp-vsnip";
     version = "2021-11-10";
@@ -1322,6 +1586,18 @@ final: prev:
       sha256 = "1vhw2qx8284bskivc2jyijl93g1b1z9hzzbq2l9b4aw6r23frbgc";
     };
     meta.homepage = "https://github.com/hrsh7th/cmp-vsnip/";
+  };
+
+  cmp-zsh = buildVimPluginFrom2Nix {
+    pname = "cmp-zsh";
+    version = "2022-01-18";
+    src = fetchFromGitHub {
+      owner = "tamago324";
+      repo = "cmp-zsh";
+      rev = "1d8133e5637c73b3eb392682ae9661d521738268";
+      sha256 = "0122lf44yqjp01znp7gnc682yx7fikjkzc5njp73lmys76321lz3";
+    };
+    meta.homepage = "https://github.com/tamago324/cmp-zsh/";
   };
 
   cmp_luasnip = buildVimPluginFrom2Nix {
@@ -2660,6 +2936,18 @@ final: prev:
       sha256 = "17iwpqxkvflcimc066n5ljjbx603hpaqzk271r37qxdvk58jpn0w";
     };
     meta.homepage = "https://github.com/BeneCollyridam/futhark-vim/";
+  };
+
+  fuzzy-nvim = buildVimPluginFrom2Nix {
+    pname = "fuzzy.nvim";
+    version = "2022-02-20";
+    src = fetchFromGitHub {
+      owner = "tzachar";
+      repo = "fuzzy.nvim";
+      rev = "d5fee69b54ef400f0ccedf37917c4782e8929424";
+      sha256 = "1xnmwmbrjsfj3v4vk57gcf4l3wl9n8jks50ds8gaawz5bpy54yff";
+    };
+    meta.homepage = "https://github.com/tzachar/fuzzy.nvim/";
   };
 
   fwatch-nvim = buildVimPluginFrom2Nix {
@@ -5288,6 +5576,18 @@ final: prev:
       sha256 = "1fjabqq1dkf6vjcgags0ny049ckhnljzzxlc81wpd1kmk06nyg3k";
     };
     meta.homepage = "https://github.com/dstein64/nvim-scrollview/";
+  };
+
+  nvim-snippy = buildVimPluginFrom2Nix {
+    pname = "nvim-snippy";
+    version = "2022-05-01";
+    src = fetchFromGitHub {
+      owner = "dcampos";
+      repo = "nvim-snippy";
+      rev = "a4512c9a9c0de83494fac66d02e04ff4f0805cae";
+      sha256 = "0vaabj2m84ba3ryl6n5s5rryjg06kjk571z6cmdgccff4lvq9d4v";
+    };
+    meta.homepage = "https://github.com/dcampos/nvim-snippy/";
   };
 
   nvim-solarized-lua = buildVimPluginFrom2Nix {

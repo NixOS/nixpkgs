@@ -194,6 +194,10 @@ checkConfigOutput '^"submodule"$' options.submodule.type.description ./declare-s
 ## Paths should be allowed as values and work as expected
 checkConfigOutput '^true$' config.submodule.enable ./declare-submoduleWith-path.nix
 
+# Check the file location information is propagated into submodules
+checkConfigOutput the-file.nix config.submodule.internalFiles.0 ./submoduleFiles.nix
+
+
 # Check that disabledModules works recursively and correctly
 checkConfigOutput '^true$' config.enable ./disable-recursive/main.nix
 checkConfigOutput '^true$' config.enable ./disable-recursive/{main.nix,disable-foo.nix}
