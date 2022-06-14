@@ -19,8 +19,10 @@
 , code-minimap
 , dasht
 , direnv
+, fish
 , fzf
 , gawk
+, git
 , gnome
 , himalaya
 , jq
@@ -30,12 +32,15 @@
 , meson
 , nim
 , nodePackages
+, pandoc
 , parinfer-rust
+, ripgrep
 , skim
 , sqlite
 , statix
 , stylish-haskell
 , tabnine
+, tmux
 , tup
 , vim
 , which
@@ -45,6 +50,7 @@
 , nodejs
 , xdotool
 , xorg
+, zsh
 
 # test dependencies
 , neovim-unwrapped
@@ -133,6 +139,74 @@ self: super: {
     '';
   });
 
+  cmp-clippy = super.cmp-clippy.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp plenary-nvim ];
+  });
+
+  cmp-copilot = super.cmp-copilot.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp copilot-vim ];
+  });
+
+  cmp-dap = super.cmp-dap.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp nvim-dap ];
+  });
+
+  cmp-dictionary = super.cmp-dictionary.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp ];
+  });
+
+  cmp-digraphs = super.cmp-digraphs.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp ];
+  });
+
+  cmp-fish = super.cmp-fish.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp fish ];
+  });
+
+  cmp-fuzzy-buffer = super.cmp-fuzzy-buffer.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp fuzzy-nvim ];
+  });
+
+  cmp-fuzzy-path = super.cmp-fuzzy-path.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp fuzzy-nvim ];
+  });
+
+  cmp-git = super.cmp-git.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp curl git ];
+  });
+
+  cmp-greek = super.cmp-greek.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp ];
+  });
+
+  cmp-look = super.cmp-look.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp ];
+  });
+
+  cmp-neosnippet = super.cmp-neosnippet.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp neosnippet-vim ];
+  });
+
+  cmp-npm = super.cmp-npm.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp nodejs plenary-nvim ];
+  });
+
+  cmp-nvim-lsp-signature-help = super.cmp-nvim-lsp-signature-help.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp ];
+  });
+
+  cmp-pandoc-nvim = super.cmp-pandoc-nvim.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp pandoc plenary-nvim ];
+  });
+
+  cmp-rg = super.cmp-rg.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp ripgrep ];
+  });
+
+  cmp-snippy = super.cmp-snippy.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp nvim-snippy ];
+  });
+
   cmp-tabnine = super.cmp-tabnine.overrideAttrs (old: {
     buildInputs = [ tabnine ];
 
@@ -140,6 +214,26 @@ self: super: {
       mkdir -p $target/binaries/${tabnine.version}
       ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
+  });
+
+  cmp-nvim-tags = super.cmp-nvim-tags.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp ];
+  });
+
+  cmp-tmux = super.cmp-tmux.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp tmux ];
+  });
+
+  cmp-vimwiki-tags = super.cmp-vimwiki-tags.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp vimwiki ];
+  });
+
+  cmp-vim-lsp = super.cmp-vim-lsp.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp vim-lsp ];
+  });
+
+  cmp-zsh = super.cmp-zsh.overrideAttrs (old: {
+    dependencies = with self; [ nvim-cmp zsh ];
   });
 
   command-t = super.command-t.overrideAttrs (old: {
@@ -293,6 +387,10 @@ self: super: {
         make build
       '';
     });
+
+  fuzzy-nvim = super.fuzzy-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-fzy-native-nvim ];
+  });
 
   fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs (old: {
     # The plugin has a makefile which tries to run tests in a docker container.
