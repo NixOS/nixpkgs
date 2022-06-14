@@ -1028,7 +1028,7 @@ configurePhase() {
         # file.
         if (( $(find --version | grep -q 'GNU findutils') != 0 )); then
             echo 'the find in $PATH is not findutils'
-            exit -1
+            exit 1
         fi
 
         # replace `/usr/bin/file` with `file` in any `configure`
