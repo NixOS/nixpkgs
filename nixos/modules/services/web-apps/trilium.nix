@@ -10,6 +10,7 @@ let
     # Disable automatically generating desktop icon
     noDesktopIcon=true
     noBackup=${lib.boolToString cfg.noBackup}
+    noAuthentication=${lib.boolToString cfg.noAuthentication}
 
     [Network]
     # host setting is relevant only for web deployments - set the host on which the server will listen
@@ -46,6 +47,14 @@ in
       default = false;
       description = lib.mdDoc ''
         Disable periodic database backups.
+      '';
+    };
+
+    noAuthentication = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        If set to true, no password is required to access the web frontend.
       '';
     };
 
