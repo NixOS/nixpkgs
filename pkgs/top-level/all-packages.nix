@@ -28389,6 +28389,8 @@ with pkgs;
 
   normalize = callPackage ../applications/audio/normalize { };
 
+  norouter = callPackage ../tools/networking/norouter { };
+
   mailspring = callPackage ../applications/networking/mailreaders/mailspring {};
 
   mm = callPackage ../applications/networking/instant-messengers/mm { };
