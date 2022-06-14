@@ -4,6 +4,7 @@
 , makeWrapper
 , pkg-config
 , file
+, findutils
 , scdoc
 , openssl
 , zlib
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    findutils   # ensure setup.sh uses $findutils/bin/find, not $busybox/bin/find
     pkg-config
     scdoc
     makeWrapper
