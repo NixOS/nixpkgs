@@ -442,8 +442,7 @@ in {
   netbird = handleTest ./netbird.nix {};
   neo4j = handleTest ./neo4j.nix {};
   netdata = handleTest ./netdata.nix {};
-  networking.networkd = handleTest ./networking.nix { networkd = true; };
-  networking.scripted = handleTest ./networking.nix { networkd = false; };
+  networking = runTest ./networking.nix;
   netbox = handleTest ./web-apps/netbox.nix {};
   # TODO: put in networking.nix after the test becomes more complete
   networkingProxy = handleTest ./networking-proxy.nix {};
