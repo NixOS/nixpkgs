@@ -18309,8 +18309,6 @@ with pkgs;
 
   libbencodetools = callPackage ../development/libraries/libbencodetools { };
 
-  libbluedevil = callPackage ../development/libraries/libbluedevil { };
-
   libbdplus = callPackage ../development/libraries/libbdplus { };
 
   libblockdev = callPackage ../development/libraries/libblockdev { };
