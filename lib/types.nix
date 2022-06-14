@@ -580,7 +580,7 @@ rec {
       let
         inherit (lib.modules) evalModules;
 
-        allModules = defs: imap1 (n: { value, file }:
+        allModules = defs: map ({ value, file }:
           if isAttrs value && shorthandOnlyDefinesConfig
           then { _file = file; config = value; }
           else { _file = file; imports = [ value ]; }
