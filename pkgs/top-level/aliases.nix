@@ -1168,6 +1168,7 @@ mapAliases ({
   qflipper = qFlipper; # Added 2022-02-11
   qmk_firmware = throw "qmk_firmware has been removed because it was broken"; # Added 2021-04-02
   qr-filetransfer = throw ''"qr-filetransfer" has been renamed to "qrcp"''; # Added 2020-12-02
+  qshowdiff = throw "'qshowdiff' (Qt4) is unmaintained and not been updated since its addition in 2010"; # Added 2022-06-14
   qt-3 = throw "qt-3 has been removed from nixpkgs, as it's unmaintained and insecure"; # Added 2021-02-15
   qt5ct = libsForQt5.qt5ct; # Added 2021-12-27
   qtcurve = libsForQt5.qtcurve; # Added 2020-11-07
