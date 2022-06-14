@@ -255,6 +255,8 @@ with pkgs;
 
   authz0 = callPackage ../tools/security/authz0 { };
 
+  atomic-operator = callPackage ../tools/security/atomic-operator { };
+
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack {};
@@ -1208,6 +1210,8 @@ with pkgs;
   sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
 
   sdlookup = callPackage ../tools/security/sdlookup { };
+
+  smbscan = callPackage ../tools/security/smbscan { };
 
   spectre-cli = callPackage ../tools/security/spectre-cli { };
 
@@ -4680,6 +4684,8 @@ with pkgs;
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
   cmt = callPackage ../applications/audio/cmt {};
+
+  crlfsuite = callPackage ../tools/security/crlfsuite {};
 
   crlfuzz = callPackage ../tools/security/crlfuzz {};
 
@@ -8380,6 +8386,8 @@ with pkgs;
 
   mitmproxy = with python3Packages; toPythonApplication mitmproxy;
 
+  mitmproxy2swagger = callPackage ../tools/security/mitmproxy2swagger { };
+
   mjpegtools = callPackage ../tools/video/mjpegtools { };
 
   mjpegtoolsFull = mjpegtools.override {
@@ -8931,6 +8939,8 @@ with pkgs;
   odt2txt = callPackage ../tools/text/odt2txt { };
 
   odyssey = callPackage ../tools/misc/odyssey { };
+
+  offensive-azure = callPackage ../tools/security/offensive-azure { };
 
   offlineimap = callPackage ../tools/networking/offlineimap { };
 
@@ -11423,6 +11433,8 @@ with pkgs;
   watchexec = callPackage ../tools/misc/watchexec {
     inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
   };
+
+  watchlog = callPackage ../tools/misc/watchlog { };
 
   watchman = callPackage ../development/tools/watchman {
     inherit (darwin.apple_sdk.frameworks) CoreServices;

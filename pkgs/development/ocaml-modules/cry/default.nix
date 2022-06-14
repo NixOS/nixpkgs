@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "cry";
-  version = "0.6.5";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-cry";
-    rev = version;
-    sha256 = "1g4smccj27sv8pb9az5hbzxi99swg3d55mp7j25lz30xyabvksc3";
+    rev = "v${version}";
+    sha256 = "sha256-1Omp3LBKGTPVwEBd530H0Djn3xiEjOHLqso6S8yIJSQ=";
   };
 
   meta = with lib; {
