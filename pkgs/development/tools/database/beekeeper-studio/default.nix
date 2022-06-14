@@ -17,10 +17,11 @@ let
   /*   isArm = true; */
   /* }; */
 in (
-  if stdenvNoCC.isDarwin && stdenvNoCC.hostPlatform.isAarch64 then
-    dmg-aarch64
-  else if stdenvNoCC.isDarwin then
-    dmg-x86_64
+  if stdenvNoCC.isDarwin then
+    /* if stdenvNoCC.hostPlatform.isAarch64 then */
+    /*   dmg-aarch64 */
+    /* else */
+      dmg-x86_64
   else
     appimage
 ).overrideAttrs
