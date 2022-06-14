@@ -22090,7 +22090,9 @@ with pkgs;
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders nginxModules.shibboleth ];
   };
 
-  libmodsecurity = callPackage ../tools/security/libmodsecurity { };
+  libmodsecurity = callPackage ../tools/security/libmodsecurity {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
 
   ngircd = callPackage ../servers/irc/ngircd { };
 
