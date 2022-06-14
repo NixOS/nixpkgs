@@ -39,6 +39,8 @@
 # IE: programs coupled with the compiler
 , allowGoReference ? false
 
+, CGO_ENABLED ? go.CGO_ENABLED
+
 , meta ? {}
 
 # Not needed with buildGoModule
@@ -141,6 +143,7 @@ let
 
     GO111MODULE = "on";
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
+    inherit CGO_ENABLED;
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
