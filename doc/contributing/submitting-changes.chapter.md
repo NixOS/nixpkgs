@@ -227,7 +227,7 @@ digraph {
 }
 ```
 
-[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours.
+[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours; these are the blue arrows in the diagram above.  The purple arrows in the diagram above are done manually and much less frequently.  You can get an idea of how often these merges occur by looking at the git history.
 
 
 ### Master branch {#submitting-changes-master-branch}
