@@ -45,6 +45,8 @@
 , gtk3
 , enableVtk ? false
 , vtk
+, enableQt ? false
+, libsForQt5
 , enableFfmpeg ? true
 , ffmpeg
 , enableGStreamer ? true
@@ -250,6 +252,7 @@ stdenv.mkDerivation {
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
     ++ lib.optional enableVtk vtk
+    ++ lib.optional enableQt libsForQt5.full
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
@@ -305,6 +308,7 @@ stdenv.mkDerivation {
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
     (opencvFlag "TBB" enableTbb)
+    (opencvFlag "QT" enableQt)
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
