@@ -237,8 +237,7 @@ Value types are types that take a value parameter.
     One use case for this type is the type of a "default" module that allow the
     user to affect all submodules in an `attrsOf submodule` at once. This is
     more convenient and discoverable than expecting the module user to
-    type-merge with the `attrsOf submodule` option. NixOps uses this type in
-    `network.defaults`.
+    type-merge with the `attrsOf submodule` option.
 
 ## Composed Types {#sec-option-types-composed}
 
