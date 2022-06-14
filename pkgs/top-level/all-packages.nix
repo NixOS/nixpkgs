@@ -6996,6 +6996,8 @@ with pkgs;
 
   hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
 
+  hpccm = with python3Packages; toPythonApplication hpccm;
+
   hping = callPackage ../tools/networking/hping { };
 
   hqplayer-desktop = libsForQt5.callPackage ../applications/audio/hqplayer-desktop { };

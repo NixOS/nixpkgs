@@ -4011,6 +4011,8 @@ in {
 
   hpack = callPackage ../development/python-modules/hpack { };
 
+  hpccm = callPackage ../development/python-modules/hpccm { };
+
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
 
   hsluv = callPackage ../development/python-modules/hsluv { };
