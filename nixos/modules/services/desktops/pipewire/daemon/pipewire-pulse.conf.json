@@ -33,10 +33,6 @@
     }
   ],
   "context.exec": [
-    {
-      "path": "pactl",
-      "args": "load-module module-always-sink"
-    }
   ],
   "stream.properties": {},
   "pulse.properties": {
