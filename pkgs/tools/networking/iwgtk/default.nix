@@ -1,21 +1,21 @@
-{ fetchFromGitHub, gtk3, lib, pkg-config, stdenv }:
+{ fetchFromGitHub, gtk4, lib, pkg-config, stdenv }:
 
 stdenv.mkDerivation rec {
   pname = "iwgtk";
-  version = "0.4";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "j-lentz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "129h7vq9b1r9a5c79hk8d06bj8lgzrnhq55x54hqri9c471jjh0s";
+    sha256 = "pIN8ry9b2pt8wegeQt4sKPAdkYiw9/Am0sSuBY1+OVs=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk3 ];
+  buildInputs = [ gtk4 ];
 
-  makeFlags = [ "prefix=$(out)" ];
+  makeFlags = [ "DESTDIR=$(out)" "PREFIX=''" ];
 
   meta = with lib; {
     description = "Lightweight, graphical wifi management utility for Linux";
