@@ -1920,9 +1920,11 @@ with pkgs;
 
   checkip = callPackage ../tools/networking/checkip { };
 
-  crystfel = callPackage ../applications/science/physics/crystfel { };
+  crystfel = callPackage ../applications/science/physics/crystfel/core.nix { };
 
-  crystfel-headless = callPackage ../applications/science/physics/crystfel { withGui = false; };
+  crystfel-headless = callPackage ../applications/science/physics/crystfel/core.nix { withGui = false; };
+
+  crystfel-scripts = (callPackage ../applications/science/physics/crystfel/scripts.nix { }).all-scripts;
 
   ec2-api-tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
