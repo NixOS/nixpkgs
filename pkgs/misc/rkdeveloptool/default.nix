@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   buildInputs = [ libusb1 ];
 
   # main.cpp:1568:36: error: '%s' directive output may be truncated writing up to 557 bytes into a region of size 5
-  CPPFLAGS = "-Wno-error=format-truncation";
+  CPPFLAGS = lib.optional stdenv.cc.isGNU ["-Wno-error=format-truncation"];
 
   meta = with lib; {
     homepage = "https://github.com/rockchip-linux/rkdeveloptool";
