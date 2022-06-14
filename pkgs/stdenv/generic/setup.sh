@@ -1027,7 +1027,7 @@ configurePhase() {
         # analogous to `shellcheck shell=bash` at the top of this
         # file.
         if (( $(find --version | grep -q 'GNU findutils') != 0 )); then
-            echo 'the find in $PATH is not findutils'
+            echo 'The find contained in $PATH is not the GNU variant from the findutils package.'
             exit 1
         fi
 
