@@ -16,13 +16,13 @@
 
 buildPythonPackage rec {
   pname = "social-auth-core";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-core";
-    rev = version;
-    sha256 = "sha256-kaL6sfAyQlzxszCEbhW7sns/mcOv0U+QgplmUd6oegQ=";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-P9IWnu1/PWVNl/tZZ4bqz0WnruKu/jXASZBoaWXWeYI=";
   };
 
   # Disable checking the code coverage
