@@ -1,6 +1,6 @@
 { config, lib, options, extendModules, moduleType, ... }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption optionalAttrs types;
 
   extendModule = module: extendModules { modules = [ module ]; };
 
@@ -115,6 +115,15 @@ in
       '';
       type = types.raw;
     };
+    minimalResult = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to remove utilities like `extend` from the result.
+
+        We remove these when run on Hydra.
+      '';
+    };
     _matrixRoot = mkOption {
       default = true;
       internal = true;
@@ -186,13 +195,13 @@ in
             system
             type
             ;
-
-          inherit extend;
-        } // config.passthru
+        }
+        // optionalAttrs (!config.minimalResult) { inherit extend; }
+        // config.passthru
       else
         lib.recurseIntoAttrs (
-          { inherit extend; } //
-          lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.result) config.matrix.${nextChoice}.value
+          optionalAttrs (!config.minimalResult) { inherit extend; }
+          // lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.result) config.matrix.${nextChoice}.value
         );
   };
 }

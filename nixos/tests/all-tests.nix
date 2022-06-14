@@ -1,4 +1,4 @@
-{ system, pkgs, callTest }:
+{ system, pkgs, callTest, hydra ? false }:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leafs.
 # The tests not supported by `system` will be replaced with `{}`, so that
@@ -29,10 +29,14 @@ let
 
   inherit
     (rec {
-      doRunTest = (import ../lib/testing-python.nix { inherit system pkgs; }).runTest;
+      doRunTest = (import ../lib/testing-python.nix { inherit system pkgs hydra; }).runTest;
       findTests = tree:
         if tree?recurseForDerivations && tree.recurseForDerivations
-        then mapAttrs (k: findTests) (builtins.removeAttrs tree ["recurseForDerivations"])
+        then
+          mapAttrs
+            (k: findTests)
+            (builtins.removeAttrs tree ["recurseForDerivations"])
+          // optionalAttrs (!hydra) { recurseForDerivations = true; }
         else callTest ({ test = tree; });
       runTest = arg: let r = doRunTest arg; in findTests r;
       runTestOn = systems: arg:

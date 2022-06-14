@@ -22,6 +22,7 @@ let
     import ./tests/all-tests.nix {
       inherit system;
       pkgs = import ./.. { inherit system; };
+      hydra = true;
       callTest = t: {
         ${system} = hydraJob t.test;
       };
@@ -32,6 +33,7 @@ let
         import ./tests/all-tests.nix {
         inherit system;
         pkgs = import ./.. { inherit system; };
+        hydra = true;
         callTest = t: {
           ${system} = hydraJob t.test.driver;
         };
