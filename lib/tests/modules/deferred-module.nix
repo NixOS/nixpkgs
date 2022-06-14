@@ -12,7 +12,7 @@ in
     ({ config, ... }: {
       _file = "generic.nix";
       options.nodes = mkOption {
-        type = lazyAttrsOf (submodule { imports = config.default; });
+        type = lazyAttrsOf (submodule { imports = [ config.default ]; });
         default = {};
       };
       options.default = mkOption {

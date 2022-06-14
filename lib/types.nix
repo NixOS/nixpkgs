@@ -549,7 +549,9 @@ rec {
       name = "deferredModule";
       description = "module";
       check = x: isAttrs x || isFunction x || path.check x;
-      merge = loc: defs: staticModules ++ map (def: lib.setDefaultModuleLocation "${def.file}, via option ${showOption loc}" def.value) defs;
+      merge = loc: defs: {
+        imports = staticModules ++ map (def: lib.setDefaultModuleLocation "${def.file}, via option ${showOption loc}" def.value) defs;
+      };
       inherit (submoduleWith { modules = staticModules; })
         getSubOptions
         getSubModules;

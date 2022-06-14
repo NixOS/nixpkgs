@@ -227,8 +227,9 @@ Value types are types that take a value parameter.
 
     It can be set multiple times.
 
-    Module authors can use its value, which is always a list of module values,
-    in `imports` or in `submoduleWith`'s `modules` parameter.
+    Module authors can use its value in `imports`, in `submoduleWith`'s `modules`
+    or in `evalModules`' `modules` parameter, among other places.
+
     Note that `imports` must be evaluated before the module fixpoint. Because
     of this, deferred modules can only be imported into "other" fixpoints, such
     as submodules.

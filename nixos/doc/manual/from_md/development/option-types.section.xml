@@ -441,14 +441,18 @@
             It can be set multiple times.
           </para>
           <para>
-            Module authors can use its value, which is always a list of
-            module values, in <literal>imports</literal> or in
-            <literal>submoduleWith</literal>’s
-            <literal>modules</literal> parameter. Note that
-            <literal>imports</literal> must be evaluated before the
-            module fixpoint. Because of this, deferred modules can only
-            be imported into <quote>other</quote> fixpoints, such as
-            submodules.
+            Module authors can use its value in
+            <literal>imports</literal>, in
+            <literal>submoduleWith</literal><quote>s
+            <literal>modules</literal> or in
+            <literal>evalModules</literal></quote>
+            <literal>modules</literal> parameter, among other places.
+          </para>
+          <para>
+            Note that <literal>imports</literal> must be evaluated
+            before the module fixpoint. Because of this, deferred
+            modules can only be imported into <quote>other</quote>
+            fixpoints, such as submodules.
           </para>
           <para>
             One use case for this type is the type of a
