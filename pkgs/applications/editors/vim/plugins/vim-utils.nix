@@ -51,9 +51,6 @@ vim-with-plugins in PATH:
       # full documentation at github.com/MarcWeber/vim-addon-manager
     ];
 
-    # there is a pathogen implementation as well, but its startup is slower and [VAM] has more feature
-    # vimrcConfig.pathogen.knownPlugins = vimPlugins; # optional
-    # vimrcConfig.pathogen.pluginNames = ["vim-addon-nix"];
   };
 
 WHAT IS A VIM PLUGIN?
@@ -103,7 +100,7 @@ It might happen than a plugin is not known by vim-pi yet. We encourage you to
 contribute to vim-pi so that plugins can be updated automatically.
 
 
-CREATING DERVITATIONS AUTOMATICALLY BY PLUGIN NAME
+CREATING DERIVATIONS AUTOMATICALLY BY PLUGIN NAME
 ==================================================
 Most convenient is to use a ~/.vim-scripts file putting a plugin name into each line
 as documented by [VAM]'s README.md
@@ -277,24 +274,18 @@ let
   }:
 
     let
-      /* pathogen mostly can set &rtp at startup time. Its used very commonly.
+      /* pathogen mostly can set &rtp at startup time. Deprecated.
       */
       pathogenImpl = let
         knownPlugins = pathogen.knownPlugins or vimPlugins;
 
         plugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) pathogen.pluginNames);
 
-        pluginsEnv = buildEnv {
-          name = "pathogen-plugin-env";
-          paths = map (x: "${x}/${rtpPath}") plugins;
+        pathogenPackages.pathogen = lib.warn "'pathogen' attribute is deprecated. Use 'packages' instead in your vim configuration" {
+          start = plugins;
         };
       in
-      ''
-        let &rtp.=(empty(&rtp)?"":',')."${vimPlugins.vim-pathogen.rtp}"
-        execute pathogen#infect('${pluginsEnv}/{}')
-
-        filetype indent plugin on | syn on
-      '';
+        nativeImpl pathogenPackages;
 
       /* vim-plug is an extremely popular vim plugin manager.
       */

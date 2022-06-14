@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
     domain = "repo.palemoon.org";
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
-    rev = "${version}_Release";
+    rev = "${version}_Release_build2"; # Remove _build2 when bumping past 31.1.0
     fetchSubmodules = true;
-    sha256 = "sha256-82OvD4q89D0rxMdzPEabMGLXXtEt4A7P6p2gKi7o+oA=";
+    sha256 = "sha256-x3n4OeZbnJCPCVjsZJW1nBYlsEYn6fXt80voYWQSNq4=";
   };
 
   nativeBuildInputs = [

@@ -434,5 +434,6 @@ stdenv.mkDerivation rec {
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
     license = licenses.free;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

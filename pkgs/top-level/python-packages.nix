@@ -2069,6 +2069,8 @@ in {
 
   daemonocle = callPackage ../development/python-modules/daemonocle { };
 
+  dalle-mini = callPackage ../development/python-modules/dalle-mini { };
+
   daphne = callPackage ../development/python-modules/daphne { };
 
   dasbus = callPackage ../development/python-modules/dasbus { };
@@ -4548,6 +4550,8 @@ in {
 
   json-schema-for-humans = callPackage ../development/python-modules/json-schema-for-humans { };
 
+  json-stream = callPackage ../development/python-modules/json-stream { };
+
   jsonnet = buildPythonPackage { inherit (pkgs.jsonnet) name src; };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
@@ -5647,6 +5651,8 @@ in {
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
 
+  myst-parser = callPackage ../development/python-modules/myst-parser { };
+
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
 
   nagiosplugin = callPackage ../development/python-modules/nagiosplugin { };
@@ -6471,6 +6477,8 @@ in {
 
   piccata = callPackage ../development/python-modules/piccata { };
 
+  pick = callPackage ../development/python-modules/pick { };
+
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
   picos = callPackage ../development/python-modules/picos { };
@@ -6557,6 +6565,8 @@ in {
   pyatag = callPackage ../development/python-modules/pyatag { };
 
   pyatome = callPackage ../development/python-modules/pyatome { };
+
+  pycketcasts = callPackage ../development/python-modules/pycketcasts { };
 
   pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
 
@@ -8338,6 +8348,8 @@ in {
 
   pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
 
+  pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
+
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
 
   pytest-qt = callPackage ../development/python-modules/pytest-qt { };
@@ -9917,6 +9929,8 @@ in {
 
   sphinx-better-theme = callPackage ../development/python-modules/sphinx-better-theme { };
 
+  sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
+
   sphinxcontrib-actdiag = callPackage ../development/python-modules/sphinxcontrib-actdiag { };
 
   sphinxcontrib-apidoc = callPackage ../development/python-modules/sphinxcontrib-apidoc { };
@@ -10812,6 +10826,8 @@ in {
 
   ukrainealarm = callPackage ../development/python-modules/ukrainealarm { };
 
+  ultraheat-api = callPackage ../development/python-modules/ultraheat-api { };
+
   umalqurra = callPackage ../development/python-modules/umalqurra { };
 
   umap-learn = callPackage ../development/python-modules/umap-learn { };
@@ -11047,6 +11063,8 @@ in {
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { };
 
   vpk = callPackage ../development/python-modules/vpk { };
+
+  vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
 
   vsts = callPackage ../development/python-modules/vsts { };
 

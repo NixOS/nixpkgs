@@ -6,7 +6,7 @@ with lib; mkCoqDerivation {
   owner = "thery";
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = range "8.12" "8.15"; out = "8.15"; }
+    { case = range "8.12" "8.16"; out = "8.15"; }
     { case = range "8.10" "8.11"; out = "8.10"; }
     { case = range "8.8"  "8.9";  out = "8.8"; }
     { case = "8.7";               out = "8.7.2"; }

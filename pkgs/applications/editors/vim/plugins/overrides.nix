@@ -20,8 +20,10 @@
 , dasht
 , direnv
 , fzf
+, gawk
 , gnome
 , himalaya
+, jq
 , khard
 , languagetool
 , llvmPackages
@@ -298,6 +300,18 @@ self: super: {
     prePatch = ''
       rm Makefile
     '';
+  });
+
+  fzf-hoogle-vim = super.fzf-hoogle-vim.overrideAttrs (old: {
+
+    # add this to your lua config to prevent the plugin from trying to write in the
+    # nix store:
+    # vim.g.hoogle_fzf_cache_file = vim.fn.stdpath('cache')..'/hoogle_cache.json'
+    propagatedBuildInputs = [
+      jq
+      gawk
+    ];
+    dependencies = with self; [ fzf-vim ];
   });
 
   fzf-lua = super.fzf-lua.overrideAttrs (old: {
@@ -845,7 +859,7 @@ self: super: {
       let
         maple-bin = rustPlatform.buildRustPackage {
           name = "maple";
-          src = old.src;
+          inherit (old) src;
 
           nativeBuildInputs = [
             pkg-config
@@ -860,7 +874,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "0l1x7kprnxa95pbf8ml9ixmj0cmbnnv6nd0v6qry8j67rx8plpmp";
+          cargoSha256 = "sha256-XmQTRmOO/tyA0F6FQQRxZPcVXCYZkEAiNIzU/ismjc0=";
         };
       in
       ''

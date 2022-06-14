@@ -21,7 +21,7 @@ let
     || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
   allowNonSource = config.allowNonSource or true
-    || builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" == "1";
+    && builtins.getEnv "NIXPKGS_ALLOW_NONSOURCE" != "0";
 
   allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [];
   blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [];

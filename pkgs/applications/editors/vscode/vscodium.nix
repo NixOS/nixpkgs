@@ -59,6 +59,7 @@ in
       homepage = "https://github.com/VSCodium/vscodium";
       downloadPage = "https://github.com/VSCodium/vscodium/releases";
       license = licenses.mit;
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       maintainers = with maintainers; [ synthetica turion bobby285271 ];
       mainProgram = "codium";
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" "armv7l-linux" ];

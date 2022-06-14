@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "dvclive";
-  version = "0.8.2";
+  version = "0.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
-    rev = version;
-    hash = "sha256-ditc4WWTEuO4ACqL87BNgjm1B6Aj6PPWrFX+OoF5jOI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-3kbP8eL/cO/aSAIVrbfGS+vwCTsWoCbNS2orExYt4aw=";
   };
 
   propagatedBuildInputs = [

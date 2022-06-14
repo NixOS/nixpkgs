@@ -2053,7 +2053,8 @@
     "plum_lightpad" = ps: with ps; [
     ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [
-    ]; # missing inputs: pycketcasts
+      pycketcasts
+    ];
     "point" = ps: with ps; [
       aiohttp-cors
       pypoint
