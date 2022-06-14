@@ -1,4 +1,4 @@
-{ config, lib, extendModules, ... }:
+{ config, lib, options, extendModules, moduleType, ... }:
 let
   inherit (lib) mkOption types;
 
@@ -6,11 +6,13 @@ let
 
   extend = module: (extendModule module).config.result;
 
-  inMatrixModule = choiceName: {
-    config = {
-      _matrixAttrsDone.${choiceName} = {};
+  inMatrixModule = choiceName:
+    {
+      config = {
+        _matrixAttrsDone.${choiceName} = { };
+        _matrixRoot = false;
+      };
     };
-  };
 
   choice = choice@{ name, ... }: {
     options = {
@@ -32,7 +34,7 @@ let
           ```
         '';
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
       };
       enable = mkOption {
         type = types.bool;
@@ -60,7 +62,7 @@ let
         '';
       };
       value = mkOption {
-        type = types.lazyAttrsOf (extendModule (inMatrixModule choice.name)).type;
+        type = types.lazyAttrsOf (extendModules { modules = [ (inMatrixModule choice.name) ]; attrArgName = choice.name; }).type;
       };
     };
   };
@@ -98,37 +100,75 @@ in
 
 
       '';
-      default = {};
+      default = { };
     };
     _matrixAttrsDone = mkOption {
-      type = types.attrsOf (types.enum [{}]);
-      default = {};
+      type = types.attrsOf (types.enum [{ }]);
+      default = { };
     };
     result = mkOption {
+      description = ''
+        _Normally computed by the test framework._
+
+        The tests to be run in a single derivation, or nested attrsets
+        of derivations when `matrix` options are set.
+      '';
       type = types.raw;
+    };
+    _matrixRoot = mkOption {
+      default = true;
+      internal = true;
     };
   };
   config = {
-    result = let
-      choicesRemaining = lib.filterAttrs (choice: v: ! config._matrixAttrsDone?${choice}) config.matrix;
-      isBefore = a: b:
-        if lib.elem a.name b.value.after
-        then true
-        else if lib.elem b.name a.value.after
-        then false
-        else a.name < b.name;
-      sorted = lib.toposort isBefore (lib.mapAttrsToList lib.nameValuePair choicesRemaining);
-      sortedList =
-        if sorted ? cycle then
-          throw "The matrix.<choice>.after relation contains a paradox of causality.\n\n> You see, there is only one constant, one universal, it is the only\n> real truth: causality. Action. Reaction. Cause and effect.\n      -- The Merovingian, Matrix Reloaded, Lilly and Lana Wachowski\n\nPlease break the cycle:\n${prettyCycle}"
-        else sorted.result;
-      prettyCycle =
-        lib.concatMapStrings (x: "  ${x.name}     --after-->\n") (sorted.cycle)
-         + "  ${(lib.head sorted.cycle).name}";
-      sortedEnable = lib.filter (c: c.value.enable) sortedList;
-      nextChoice = (lib.head sortedEnable).name;
-    in
-      if sortedEnable == []
+    _module.args =
+      if config._matrixRoot then
+        lib.mapAttrs
+          (k: _: lib.mkOptionDefault (throw ''
+            Test matrix module parameter `${k}` has not been decided yet.
+            This can happen when a matrix definition references a matrix-provided
+            module parameter before its value has been decided.
+
+            If you used it in a matrix.<name>.enable field, you may improve the
+            ordering of decision with matrix.<name>.after.
+
+            If you used it in a matrix.<name>.value submodule, you may reference it
+            by adding the module parameter to the submodule definition itself.
+            For example:
+
+                matrix.foo.value.bar = { config, lib, ${k}, ... }: {
+                  xyz = f ${k};
+                }
+
+            Alternatively, if `xyz` does not need to be within a `matrix` definition,
+            and it is not involved in `matrix` decision making, you can move it up
+            into the general module, so that it references the final parameters,
+            without taking them from a scope where they haven't been decided yet.
+          ''))
+          config.matrix
+      else { };
+
+    result =
+      let
+        choicesRemaining = lib.filterAttrs (choice: v: ! config._matrixAttrsDone?${choice}) config.matrix;
+        isBefore = a: b:
+          if lib.elem a.name b.value.after
+          then true
+          else if lib.elem b.name a.value.after
+          then false
+          else a.name < b.name;
+        sorted = lib.toposort isBefore (lib.mapAttrsToList lib.nameValuePair choicesRemaining);
+        sortedList =
+          if sorted ? cycle then
+            throw "The matrix.<choice>.after relation contains a paradox of causality.\n\n> You see, there is only one constant, one universal, it is the only\n> real truth: causality. Action. Reaction. Cause and effect.\n      -- The Merovingian, Matrix Reloaded, Lilly and Lana Wachowski\n\nPlease break the cycle:\n${prettyCycle}"
+          else sorted.result;
+        prettyCycle =
+          lib.concatMapStrings (x: "  ${x.name}     --after-->\n") (sorted.cycle)
+          + "  ${(lib.head sorted.cycle).name}";
+        sortedEnable = lib.filter (c: c.value.enable) sortedList;
+        nextChoice = (lib.head sortedEnable).name;
+      in
+      if sortedEnable == [ ]
       then
         {
           # Make a fixed selection of `run` attributes, so we can return
@@ -149,9 +189,10 @@ in
 
           inherit extend;
         } // config.passthru
-      else lib.recurseIntoAttrs (
-        { inherit extend; } //
-        lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.result) config.matrix.${nextChoice}.value
-      );
+      else
+        lib.recurseIntoAttrs (
+          { inherit extend; } //
+          lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.result) config.matrix.${nextChoice}.value
+        );
   };
 }
