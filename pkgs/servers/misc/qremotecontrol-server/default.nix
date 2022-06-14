@@ -1,5 +1,6 @@
-{ lib, stdenv
-, fetchurl
+{ lib
+, stdenv
+, fetchgit
 , qmake4Hook
 , qt4
 , xorg
@@ -7,11 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qremotecontrol-server";
-  version = "2.4.1";
+  version = "2.4.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/qrc/${version}/qremotecontrol-${version}.tar.bz2";
-    sha256 = "07hzc9959a56b49jgmcv8ry8b9sppklvqs9kns3qjj3v9d22nbrp";
+  # There is no 2.4.2 release tarball, but there is a git tag
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/qrc/gitcode";
+    rev = version;
+    sha256 = "sha256-i3X575SbrWV8kWWHAhXvKl5aSKFZm0VyrJOiL7eYrCo=";
   };
 
   nativeBuildInputs = [ qmake4Hook ];
