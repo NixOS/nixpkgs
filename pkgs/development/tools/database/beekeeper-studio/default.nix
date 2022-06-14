@@ -35,6 +35,7 @@ in (
     platforms =
       appimage.meta.platforms
       ++ dmg-x86_64.meta.platforms
-      /* ++ dmg-aarch64.meta.platforms; */
+      /* ++ dmg-aarch64.meta.platforms */
+      ;
   };
 })
