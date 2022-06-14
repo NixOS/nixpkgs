@@ -84,6 +84,15 @@ sub debug {
 }
 
 
+# nixpkgs.system
+my ($status, @systemLines) = runCommand("nix-instantiate --impure --eval --expr builtins.currentSystem");
+if ($status != 0 || join("", @systemLines) =~ /error/) {
+    die "Failed to retrieve current system type from nix.\n";
+}
+my $system = substr(@systemLines[0], 0, -1);
+push @attrs, "nixpkgs.system = lib.mkDefault $system;";
+
+
 my $cpuinfo = read_file "/proc/cpuinfo";
 
 
