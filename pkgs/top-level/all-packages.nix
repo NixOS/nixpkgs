@@ -14344,6 +14344,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  graphqlmap = callPackage ../tools/security/graphqlmap { };
+
   groovy = callPackage ../development/interpreters/groovy { };
 
   inherit (callPackages ../applications/networking/cluster/hadoop { })
