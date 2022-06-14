@@ -1,17 +1,11 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
-# bool: whether to use networkd in the tests
-, networkd }:
+{ config, lib, params, pkgs, networkd, testcase, implementation, ... }:
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
+with lib;
 
 let
   qemu-common = import ../lib/qemu-common.nix { inherit (pkgs) lib pkgs; };
 
   router = { config, pkgs, lib, ... }:
-    with pkgs.lib;
     let
       vlanIfs = range 1 (length config.virtualisation.vlans);
     in {
@@ -20,7 +14,6 @@ let
       boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
       networking = {
         useDHCP = false;
-        useNetworkd = networkd;
         firewall.checkReversePath = true;
         firewall.allowedUDPPorts = [ 547 ];
         interfaces = mkOverride 0 (listToAttrs (forEach vlanIfs (n:
@@ -74,12 +67,20 @@ let
       };
     };
 
-  testCases = {
+in {
+  defaults.networking.useNetworkd = lib.mkForce networkd;
+  name = "networking-${testcase}-${implementation}";
+
+  matrix.implementation.value.networkd = { ... }: {
+    _module.args.networkd = true;
+  };
+  matrix.implementation.value.scripted = { ... }: {
+    _module.args.networkd = false;
+  };
+  matrix.testcase.value = {
     loopback = {
-      name = "Loopback";
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: {
         networking.useDHCP = false;
-        networking.useNetworkd = networkd;
       };
       testScript = ''
         start_all()
@@ -90,12 +91,10 @@ let
       '';
     };
     static = {
-      name = "Static";
       nodes.router = router;
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: {
         virtualisation.vlans = [ 1 2 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           defaultGateway = "192.168.1.1";
           defaultGateway6 = "fd00:1234:5678:1::1";
@@ -145,11 +144,9 @@ let
         '';
     };
     routeType = {
-      name = "RouteType";
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: {
         networking = {
           useDHCP = false;
-          useNetworkd = networkd;
           interfaces.eth1.ipv4.routes = [{
             address = "192.168.1.127";
             prefixLength = 32;
@@ -164,12 +161,10 @@ let
       '';
     };
     dhcpDefault = {
-      name = "useDHCP-by-default";
       nodes.router = router;
       nodes.client = { lib, ... }: {
         # Disable test driver default config
         networking.interfaces = lib.mkForce {};
-        networking.useNetworkd = networkd;
         virtualisation.vlans = [ 1 ];
       };
       testScript = ''
@@ -184,12 +179,10 @@ let
       '';
     };
     dhcpSimple = {
-      name = "SimpleDHCP";
       nodes.router = router;
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: {
         virtualisation.vlans = [ 1 2 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           interfaces.eth1 = {
             ipv4.addresses = mkOverride 0 [ ];
@@ -240,12 +233,10 @@ let
         '';
     };
     dhcpOneIf = {
-      name = "OneInterfaceDHCP";
       nodes.router = router;
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: {
         virtualisation.vlans = [ 1 2 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           interfaces.eth1 = {
             ipv4.addresses = mkOverride 0 [ ];
@@ -285,10 +276,9 @@ let
         '';
     };
     bond = let
-      node = address: { pkgs, ... }: with pkgs.lib; {
+      node = address: { pkgs, ... }: {
         virtualisation.vlans = [ 1 2 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           bonds.bond0 = {
             interfaces = [ "eth1" "eth2" ];
@@ -301,7 +291,6 @@ let
         };
       };
     in {
-      name = "Bond";
       nodes.client1 = node "192.168.1.1";
       nodes.client2 = node "192.168.1.2";
       testScript = { ... }:
@@ -325,23 +314,20 @@ let
         '';
     };
     bridge = let
-      node = { address, vlan }: { pkgs, ... }: with pkgs.lib; {
+      node = { address, vlan }: { pkgs, ... }: {
         virtualisation.vlans = [ vlan ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           interfaces.eth1.ipv4.addresses = mkOverride 0
             [ { inherit address; prefixLength = 24; } ];
         };
       };
     in {
-      name = "Bridge";
       nodes.client1 = node { address = "192.168.1.2"; vlan = 1; };
       nodes.client2 = node { address = "192.168.1.3"; vlan = 2; };
-      nodes.router = { pkgs, ... }: with pkgs.lib; {
+      nodes.router = { pkgs, ... }: {
         virtualisation.vlans = [ 1 2 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           bridges.bridge.interfaces = [ "eth1" "eth2" ];
           interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
@@ -373,13 +359,11 @@ let
         '';
     };
     macvlan = {
-      name = "MACVLAN";
       nodes.router = router;
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: {
         environment.systemPackages = [ pkgs.iptables ]; # to debug firewall rules
         virtualisation.vlans = [ 1 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           firewall.logReversePathDrops = true; # to debug firewall rules
           # reverse path filtering rules for the macvlan interface seem
@@ -429,11 +413,9 @@ let
         '';
     };
     fou = {
-      name = "foo-over-udp";
       nodes.machine = { ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           interfaces.eth1.ipv4.addresses = mkOverride 0
             [ { address = "192.168.1.1"; prefixLength = 24; } ];
@@ -475,10 +457,9 @@ let
         '';
     };
     sit = let
-      node = { address4, remote, address6 }: { pkgs, ... }: with pkgs.lib; {
+      node = { address4, remote, address6 }: { pkgs, ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           sits.sit = {
             inherit remote;
@@ -492,7 +473,6 @@ let
         };
       };
     in {
-      name = "Sit";
       # note on firewalling: the two nodes are explicitly asymmetric.
       # client1 sends SIT packets in UDP, but accepts only proto-41 incoming.
       # client2 does the reverse, sending in proto-41 and accepting only UDP incoming.
@@ -538,15 +518,13 @@ let
         '';
     };
     gre = let
-      node = { pkgs, ... }: with pkgs.lib; {
+      node = { pkgs, ... }: {
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           firewall.extraCommands = "ip6tables -A nixos-fw -p gre -j nixos-fw-accept";
         };
       };
     in {
-      name = "GRE";
       nodes.client1 = args@{ pkgs, ... }:
         mkMerge [
           (node args)
@@ -650,10 +628,9 @@ let
         '';
     };
     vlan = let
-      node = address: { pkgs, ... }: with pkgs.lib; {
+      node = address: { pkgs, ... }: {
         #virtualisation.vlans = [ 1 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           vlans.vlan = {
             id = 1;
@@ -666,7 +643,6 @@ let
         };
       };
     in {
-      name = "vlan";
       nodes.client1 = node "192.168.1.1";
       nodes.client2 = node "192.168.1.2";
       testScript = { ... }:
@@ -683,9 +659,7 @@ let
         '';
     };
     virtual = {
-      name = "Virtual";
       nodes.machine = {
-        networking.useNetworkd = networkd;
         networking.useDHCP = false;
         networking.interfaces.tap0 = {
           ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
@@ -743,12 +717,10 @@ let
       '';
     };
     privacy = {
-      name = "Privacy";
       nodes.router = { ... }: {
         virtualisation.vlans = [ 1 ];
         boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           interfaces.eth1.ipv6.addresses = singleton {
             address = "fd00:1234:5678:1::1";
@@ -771,10 +743,9 @@ let
           '';
         };
       };
-      nodes.client_with_privacy = { pkgs, ... }: with pkgs.lib; {
+      nodes.client_with_privacy = { pkgs, ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           interfaces.eth1 = {
             tempAddress = "default";
@@ -784,10 +755,9 @@ let
           };
         };
       };
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
           interfaces.eth1 = {
             tempAddress = "enabled";
@@ -827,9 +797,7 @@ let
         '';
     };
     routes = {
-      name = "routes";
       nodes.machine = {
-        networking.useNetworkd = networkd;
         networking.useDHCP = false;
         networking.interfaces.eth0 = {
           ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
@@ -908,11 +876,9 @@ let
       '';
     };
     rename = {
-      name = "RenameInterface";
       nodes.machine = { pkgs, ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
         };
       } //
@@ -934,11 +900,9 @@ let
     # even with disabled networkd, systemd.network.links should work
     # (as it's handled by udev, not networkd)
     link = {
-      name = "Link";
       nodes.client = { pkgs, ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
-          useNetworkd = networkd;
           useDHCP = false;
         };
         systemd.network.links."50-foo" = {
@@ -959,7 +923,6 @@ let
     wlanInterface = let
       testMac = "06:00:00:00:02:00";
     in {
-      name = "WlanInterface";
       nodes.machine = { pkgs, ... }: {
         boot.kernelModules = [ "mac80211_hwsim" ];
         networking.wlanInterfaces = {
@@ -975,7 +938,4 @@ let
       '';
     };
   };
-
-in mapAttrs (const (attrs: makeTest (attrs // {
-  name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
-}))) testCases
+}
