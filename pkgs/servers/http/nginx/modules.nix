@@ -252,8 +252,8 @@ in
       name = "modsecurity-nginx";
       owner = "SpiderLabs";
       repo = "ModSecurity-nginx";
-      rev = "v1.0.2";
-      sha256 = "sha256-UXiitc3jZlgXlCsDPS+xEFLNRVgRbn8BCCXUEqAWlII=";
+      rev = "v1.0.3";
+      sha256 = "sha256-xp0/eqi5PJlzb9NaUbNnzEqNcxDPyjyNwZOwmlv1+ag=";
     };
     inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
     disableIPC = true;
