@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "qcelemental";
-  version = "0.24.0";
+  version = "0.25.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-XcsR89tu26EG5AcXqmndkESLGWZ8eKmTkjaLziosawE=";
+    sha256 = "sha256-v1yu6yBEtgVsheku/8YaIaXrsVgMzcFlWAuySPhYgyQ=";
   };
 
   propagatedBuildInputs = [
