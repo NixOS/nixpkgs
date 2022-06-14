@@ -4427,6 +4427,8 @@ in {
 
   jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
 
+  jaraco-test = callPackage ../development/python-modules/jaraco-test { };
+
   jaraco_text = callPackage ../development/python-modules/jaraco_text { };
 
   jarowinkler = callPackage ../development/python-modules/jarowinkler { };
