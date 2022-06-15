@@ -9757,8 +9757,6 @@ with pkgs;
 
   qscintilla-qt4 = callPackage ../development/libraries/qscintilla-qt4 { };
 
-  qshowdiff = callPackage ../tools/text/qshowdiff { };
-
   qrcp = callPackage ../tools/networking/qrcp { };
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
