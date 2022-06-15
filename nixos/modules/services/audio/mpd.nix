@@ -215,6 +215,7 @@ in {
     systemd.sockets.mpd = mkIf cfg.startWhenNeeded {
       wantedBy = [ "sockets.target" ];
       listenStreams = [
+        ""  # Note: this is needed to override the upstream unit
         (if pkgs.lib.hasPrefix "/" cfg.network.listenAddress
           then cfg.network.listenAddress
           else "${optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"}${toString cfg.network.port}")
