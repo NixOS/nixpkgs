@@ -1,5 +1,5 @@
 { lib, stdenv
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , isPy3k
 , cli-helpers
@@ -18,7 +18,7 @@
 , mock
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "pgcli";
   version = "3.4.1";
 
