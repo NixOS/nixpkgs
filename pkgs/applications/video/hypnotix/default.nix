@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     rev = version;
-    hash = "sha256-9HWr8zjUuhj/GZdrt1WwpwYNLEl34S9IJ7ikGZBSw3s=";
+    hash = "sha256-Mfj10CPYAI2QObgjbkhEPJ2nx6hsR5BHpmNofmdSz1k=";
   };
 
   patches = [
@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "IPTV streaming application";
     homepage = "https://github.com/linuxmint/hypnotix";
+    changelog = "https://github.com/linuxmint/hypnotix/blob/${src.rev}/debian/changelog";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ dotlambda ];
     platforms = lib.platforms.linux;
