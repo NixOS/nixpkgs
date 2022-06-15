@@ -21559,7 +21559,9 @@ with pkgs;
 
   theft = callPackage ../development/libraries/theft { };
 
-  thrift = callPackage ../development/libraries/thrift { };
+  thrift = callPackage ../development/libraries/thrift {
+    openssl = openssl_1_1;
+  };
 
   thrift-0_10 = callPackage ../development/libraries/thrift/0.10.nix { };
 
