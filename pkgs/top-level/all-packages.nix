@@ -27946,8 +27946,6 @@ with pkgs;
 
   lighthouse-steamvr = callPackage ../tools/misc/lighthouse-steamvr { };
 
-  lighttable = callPackage ../applications/editors/lighttable {};
-
   liblinphone = callPackage ../development/libraries/liblinphone { };
 
   links2 = callPackage ../applications/networking/browsers/links2 { };
