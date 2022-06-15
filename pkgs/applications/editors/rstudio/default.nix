@@ -115,6 +115,7 @@ in
       "-DRSTUDIO_USE_SYSTEM_SOCI=ON"
       "-DRSTUDIO_USE_SYSTEM_BOOST=ON"
       "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON"
+      "-DQUARTO_ENABLED=FALSE"
       "-DPANDOC_VERSION=${pandoc.version}"
       "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
     ] ++ lib.optional (!server) [
@@ -126,7 +127,6 @@ in
       ./r-location.patch
       ./clang-location.patch
       ./use-system-node.patch
-      ./disable-quarto.patch
       ./fix-resources-path.patch
     ];
 
