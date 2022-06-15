@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, autoPatchelfHook, electron, git, curl, expat, gcc, openssl, zlib }:
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron, git }:
 
 stdenv.mkDerivation rec {
   pname = "logseq";
@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
-  buildInputs = [ stdenv.cc.cc curl expat openssl zlib ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -28,6 +27,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/${pname} $out/share/applications
     cp -a ${appimageContents}/{locales,resources} $out/share/${pname}
     cp -a ${appimageContents}/Logseq.desktop $out/share/applications/${pname}.desktop
+
+    # remove the `git` in `dugite` because we want the `git` in `nixpkgs`
+    chmod +w -R $out/share/${pname}/resources/app/node_modules/dugite/git
+    chmod +w $out/share/${pname}/resources/app/node_modules/dugite
+    rm -rf $out/share/${pname}/resources/app/node_modules/dugite/git
+    chmod -w $out/share/${pname}/resources/app/node_modules/dugite
 
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace Exec=Logseq Exec=${pname} \
@@ -37,8 +42,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+    # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-      --prefix PATH : ${lib.makeBinPath [ git ]} \
+      --set "LOCAL_GIT_DIRECTORY" ${git} \
       --add-flags $out/share/${pname}/resources/app
   '';
 
