@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   pname = "hyprland";
   version = "0.6.0beta";
 
+  # When updating Hyprland, the overridden wlroots commit must be bumped to match the commit upstream uses.
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = pname;
