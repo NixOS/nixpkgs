@@ -71,13 +71,13 @@ in {
   defaults.networking.useNetworkd = lib.mkForce networkd;
   name = "networking-${testcase}-${implementation}";
 
-  matrix.implementation.value.networkd.module = { ... }: {
+  matrix.implementation.choice.networkd.module = { ... }: {
     _module.args.networkd = true;
   };
-  matrix.implementation.value.scripted.module = { ... }: {
+  matrix.implementation.choice.scripted.module = { ... }: {
     _module.args.networkd = false;
   };
-  matrix.testcase.value = {
+  matrix.testcase.choice = {
     loopback.module = {
       nodes.client = { pkgs, ... }: {
         networking.useDHCP = false;

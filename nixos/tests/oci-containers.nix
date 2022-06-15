@@ -6,8 +6,8 @@
     maintainers = with lib.maintainers; [ adisbladis benley ] ++ lib.teams.serokell.members;
   };
 
-  matrix.backend.value.docker.module = {};
-  matrix.backend.value.podman.module = {};
+  matrix.backend.choice.docker.module = {};
+  matrix.backend.choice.podman.module = {};
 
   nodes = {
     ${backend} = { pkgs, ... }: {

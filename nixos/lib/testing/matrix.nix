@@ -53,7 +53,7 @@ let
           the cookie, so we skip this choice.
         '';
       };
-      value = mkOption {
+      choice = mkOption {
         type = types.lazyAttrsOf (types.submodule (choiceModule decision.name extendModules));
       };
     };
@@ -96,7 +96,7 @@ in
         You define
 
         ```nix
-          matrix.pill.value.blue.module = { config, ... }: {
+          matrix.pill.choice.blue.module = { config, ... }: {
             defaults.networking.domain = "bed.home.lan";
           };
         ```
@@ -106,7 +106,7 @@ in
         You define
 
         ```nix
-          matrix.pill.value.red.module = { config, ... }: {
+          matrix.pill.choice.red.module = { config, ... }: {
             defaults.networking.domain = "wonderland.example.com";
           };
         ```
@@ -153,16 +153,16 @@ in
           (k: _: lib.mkOptionDefault (throw ''
             Test matrix module parameter `${k}` has not been decided yet.
             This can happen when a matrix definition references a matrix-provided
-            module parameter before its value has been decided.
+            module parameter before its choice has been decided.
 
             If you used it in a matrix.<name>.enable field, you may improve the
             ordering of decision with matrix.<name>.after.
 
-            If you used it in a matrix.<name>.value submodule, you may reference it
+            If you used it in a matrix.<name>.choice submodule, you may reference it
             by adding the module parameter to the submodule definition itself.
             For example:
 
-                matrix.foo.value.bar.module = { config, lib, ${k}, ... }: {
+                matrix.foo.choice.bar.module = { config, lib, ${k}, ... }: {
                   xyz = f ${k};
                 }
 
@@ -218,7 +218,7 @@ in
       else
         lib.recurseIntoAttrs (
           optionalAttrs (!config.minimalResult) { inherit extend; }
-          // lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.module.result) config.matrix.${nextChoice}.value
+          // lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.module.result) config.matrix.${nextChoice}.choice
         );
   };
 }

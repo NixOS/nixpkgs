@@ -48,7 +48,7 @@ in
     maintainers = with lib.maintainers; [ johnazoidberg ];
   };
 
-  matrix.version.value = {
+  matrix.version.choice = {
     cassandra_2_1.module = { params.testPackage = pkgs.cassandra_2_1; };
     cassandra_2_2.module = { params.testPackage = pkgs.cassandra_2_2; };
     cassandra_3_0.module = { params.testPackage = pkgs.cassandra_3_0; };

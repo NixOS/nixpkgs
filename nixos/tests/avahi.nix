@@ -6,8 +6,8 @@
     maintainers = [ eelco ];
   };
 
-  matrix.variation.value.plain.module = { };
-  matrix.variation.value.networkd.module = {
+  matrix.variation.choice.plain.module = { };
+  matrix.variation.choice.networkd.module = {
     defaults.networking = {
       useNetworkd = true;
       useDHCP = false;
