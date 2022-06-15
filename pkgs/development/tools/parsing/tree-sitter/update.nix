@@ -122,6 +122,10 @@ let
       orga = "MDeiml";
       repo = "tree-sitter-markdown";
     };
+    "tree-sitter-rego" = {
+      orga = "FallenAngel97";
+      repo = "tree-sitter-rego";
+    };
     "tree-sitter-rst" = {
       orga = "stsewd";
       repo = "tree-sitter-rst";
@@ -129,6 +133,10 @@ let
     "tree-sitter-svelte" = {
       orga = "Himujjal";
       repo = "tree-sitter-svelte";
+    };
+    "tree-sitter-sql" = {
+      orga = "m-novikov";
+      repo = "tree-sitter-sql";
     };
     "tree-sitter-vim" = {
       orga = "vigoux";
@@ -177,6 +185,10 @@ let
     "tree-sitter-gomod" = {
       orga = "camdencheek";
       repo = "tree-sitter-go-mod";
+    };
+    "tree-sitter-gowork" = {
+      orga = "omertuc";
+      repo = "tree-sitter-go-work";
     };
     "tree-sitter-graphql" = {
       orga = "bkegley";

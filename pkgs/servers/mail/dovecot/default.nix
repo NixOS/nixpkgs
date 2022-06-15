@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot";
-  version = "2.3.19";
+  version = "2.3.19.1";
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs =
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dovecot.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    hash = "sha256:0ys3zq9b1rgj1cz6a0i9l421y6h2j3b5zak2ia5j9dj1sj9zcwq1";
+    hash = "sha256-21q82H1zCWWeprRbLLbunF+XSGsrcZpd0Fp1nh9qXFE=";
   };
 
   enableParallelBuilding = true;

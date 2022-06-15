@@ -30,6 +30,7 @@
   tree-sitter-glimmer = lib.importJSON ./tree-sitter-glimmer.json;
   tree-sitter-glsl = lib.importJSON ./tree-sitter-glsl.json;
   tree-sitter-go = lib.importJSON ./tree-sitter-go.json;
+  tree-sitter-gowork = lib.importJSON ./tree-sitter-gowork.json;
   tree-sitter-godot-resource = lib.importJSON ./tree-sitter-godot-resource.json;
   tree-sitter-gomod = lib.importJSON ./tree-sitter-gomod.json;
   tree-sitter-graphql = lib.importJSON ./tree-sitter-graphql.json;
@@ -68,6 +69,7 @@
   tree-sitter-query = lib.importJSON ./tree-sitter-query.json;
   tree-sitter-r = lib.importJSON ./tree-sitter-r.json;
   tree-sitter-regex = lib.importJSON ./tree-sitter-regex.json;
+  tree-sitter-rego = lib.importJSON ./tree-sitter-rego.json;
   tree-sitter-rst = lib.importJSON ./tree-sitter-rst.json;
   tree-sitter-ruby = lib.importJSON ./tree-sitter-ruby.json;
   tree-sitter-rust = lib.importJSON ./tree-sitter-rust.json;
@@ -75,6 +77,7 @@
   tree-sitter-scheme = lib.importJSON ./tree-sitter-scheme.json;
   tree-sitter-scss = lib.importJSON ./tree-sitter-scss.json;
   tree-sitter-sparql = lib.importJSON ./tree-sitter-sparql.json;
+  tree-sitter-sql = lib.importJSON ./tree-sitter-sql.json;
   tree-sitter-supercollider = lib.importJSON ./tree-sitter-supercollider.json;
   tree-sitter-surface = lib.importJSON ./tree-sitter-surface.json;
   tree-sitter-svelte = lib.importJSON ./tree-sitter-svelte.json;
