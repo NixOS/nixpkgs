@@ -220,6 +220,25 @@ Value types are types that take a value parameter.
         requires using a function:
         `the-submodule = { ... }: { options = { ... }; }`.
 
+`types.deferredModule`
+
+:   Whereas `submodule` represents an option tree, `deferredModule` represents
+    a module value, such as a module file or a configuration.
+
+    It can be set multiple times.
+
+    Module authors can use its value in `imports`, in `submoduleWith`'s `modules`
+    or in `evalModules`' `modules` parameter, among other places.
+
+    Note that `imports` must be evaluated before the module fixpoint. Because
+    of this, deferred modules can only be imported into "other" fixpoints, such
+    as submodules.
+
+    One use case for this type is the type of a "default" module that allow the
+    user to affect all submodules in an `attrsOf submodule` at once. This is
+    more convenient and discoverable than expecting the module user to
+    type-merge with the `attrsOf submodule` option.
+
 ## Composed Types {#sec-option-types-composed}
 
 Composed types are types that take a type as parameter. `listOf

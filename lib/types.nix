@@ -539,6 +539,36 @@ rec {
       modules = toList modules;
     };
 
+    # A module to be imported in some other part of the configuration.
+    deferredModule = deferredModuleWith { };
+
+    # A module to be imported in some other part of the configuration.
+    # `staticModules`' options will be added to the documentation, unlike
+    # options declared via `config`.
+    deferredModuleWith = attrs@{ staticModules ? [] }: mkOptionType {
+      name = "deferredModule";
+      description = "module";
+      check = x: isAttrs x || isFunction x || path.check x;
+      merge = loc: defs: {
+        imports = staticModules ++ map (def: lib.setDefaultModuleLocation "${def.file}, via option ${showOption loc}" def.value) defs;
+      };
+      inherit (submoduleWith { modules = staticModules; })
+        getSubOptions
+        getSubModules;
+      substSubModules = m: deferredModuleWith (attrs // {
+        staticModules = m;
+      });
+      functor = defaultFunctor "deferredModuleWith" // {
+        type = types.deferredModuleWith;
+        payload = {
+          inherit staticModules;
+        };
+        binOp = lhs: rhs: {
+          staticModules = lhs.staticModules ++ rhs.staticModules;
+        };
+      };
+    };
+
     # The type of a type!
     optionType = mkOptionType {
       name = "optionType";
