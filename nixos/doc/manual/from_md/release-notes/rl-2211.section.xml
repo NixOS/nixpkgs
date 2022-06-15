@@ -36,6 +36,36 @@
           PHP now defaults to PHP 8.1, updated from 8.0.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          The NixOS module system now has a type
+          <literal>secretFile</literal> for options which contain the
+          path to a file that should remain secret. This is to avoid
+          mistakes where one writes
+          <literal>services.miniflux.adminCredentialsFile = /etc/secret</literal>
+          instead of
+          <literal>services.miniflux.adminCredentialsFile = &quot;/etc/secret&quot;;</literal>
+          which makes nix copy <literal>/etc/secret</literal> to the
+          store where everyone could read it. A number of modules have
+          been converted to use it. This is a breaking change visible by
+          an error message like this:
+        </para>
+        <programlisting>
+error: A definition for option `services.miniflux.adminCredentialsFile' is not of type `quoted path to a secret file'. Definition values:
+     - In `nixos/lib/build-vms.nix': /etc/secret
+</programlisting>
+        <para>
+          To fix the issue you must assess whether leaking
+          <literal>/etc/secret</literal> to the store and thus all local
+          users is a problem. If it is the case, then add quotes:
+          <literal>services.miniflux.adminCredentialsFile = &quot;/etc/secrets&quot;</literal>.
+          If you notice this during upgrade, your secret probably has
+          already leaked and it may be a good time to change it. If
+          leaking this file is acceptable (for example in a NixOS test),
+          you can keep the old behavior like this:
+          <literal>services.miniflux.adminCredentialsFile = lib.types.secretFile.makeWorldReadable /etc/secret</literal>.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-new-services">

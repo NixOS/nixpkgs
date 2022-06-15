@@ -20,6 +20,23 @@ merging is handled.
     coerced to a string. Even if derivations can be considered as
     paths, the more specific `types.package` should be preferred.
 
+`types.secretFile`
+
+:   A string representing a filesystem path (starting with "/") to a file which
+    is supposed to remain secret.
+    Depending on how the module is implemented, setting an option of type
+    `types.path` to the literal value `/etc/secret_file` can make nix copy the
+    secret file at `nixos-rebuild` time to the store and thus make it world
+    readable. To avoid this behavior, it is enough to quote the path:
+    `"/etc/secret_file"`. This solution is simple, but it is easy to forget
+    about it. `types.secretFile` is design to prevent such mistakes.
+    Compared to `types.path`, this type adds further restrictions:
+    - only strings (as opposed to unquoted paths) are accepted as input.
+    - the string must not start by `/nix/store/`.
+    To bypass these restrictions you can pass the value to the function
+    `types.secretFile.makeWorldReadable`. This can be useful when writing NixOS
+    tests, as in this case the secret file is only an example value.
+
 `types.package`
 
 :   A top-level store path. This can be an attribute set pointing

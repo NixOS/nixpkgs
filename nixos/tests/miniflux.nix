@@ -7,14 +7,14 @@ let
   defaultPort = 8080;
   defaultUsername = "admin";
   defaultPassword = "password";
-  adminCredentialsFile = pkgs.writeText "admin-credentials" ''
+  adminCredentialsFile = lib.types.secretFile.makeWorldReadable (pkgs.writeText "admin-credentials" ''
             ADMIN_USERNAME=${defaultUsername}
             ADMIN_PASSWORD=${defaultPassword}
-          '';
-  customAdminCredentialsFile = pkgs.writeText "admin-credentials" ''
+          '');
+  customAdminCredentialsFile = lib.types.secretFile.makeWorldReadable (pkgs.writeText "admin-credentials" ''
             ADMIN_USERNAME=${username}
             ADMIN_PASSWORD=${password}
-          '';
+          '');
 
 in
 with lib;
