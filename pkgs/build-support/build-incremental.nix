@@ -2,14 +2,14 @@
 rec {
   /* Prepare a derivation for local builds.
     *
-    * This function adds an additional output for a derivation,
-    * containing the build output.
+    * This function prepares incremental builds by provinding,
+    * containing the build output and the sources for cross checking.
     * The build output can be used later to allow incremental builds
-    * by passing the `buildOut` output to the `mkIncrementalBuild` function.
+    * by passing the derivation output to the `mkIncrementalBuild` function.
     *
     * To build a project incrementaly follow these steps:
     * - run prepareIncrementalBuild on the desired derivation
-    *   e.G `incrementalBuildArtifacts = (pkgs.buildIncremental.prepareIncrementalBuild pkgs.virtualbox).incrementalBuildArtifacts;`
+    *   e.G `incrementalBuildArtifacts = (pkgs.buildIncremental.prepareIncrementalBuild pkgs.virtualbox);`
     * - change something you want in the sources of the package( e.G using source override)
     *   changedVBox = pkgs.virtuabox.overrideAttrs (old: {
     *      src = path/to/vbox/sources;
@@ -18,12 +18,16 @@ rec {
     * - enjoy shorter build times
   */
   prepareIncrementalBuild = drv: drv.overrideAttrs (old: {
-    outputs = (old.outputs or [ "out" ]) ++ [ "incrementalBuildArtifacts" ];
-    installPhase = pkgs.lib.optionalString (!(builtins.hasAttr "outputs" old)) ''
-      mkdir -p $out
-    '' + (old.installPhase or "") + ''
-      mkdir -p $incrementalBuildArtifacts
-      cp -r ./* $incrementalBuildArtifacts/
+    outputs = [ "out" ];
+    name = drv.name + "-incrementalBuildArtifacts";
+    preBuild = (old.preBuild or "") + ''
+      mkdir -p $out/sources
+      cp -r ./* $out/sources/
+    '';
+
+    installPhase = ''
+      mkdir -p $out/outputs
+      cp -r ./* $out/outputs/
     '';
   });
 
@@ -32,16 +36,19 @@ rec {
     *
     * Usage:
     * let
-    *   incrementalBuildArtifacts = (prepareIncrementalBuild drv).incrementalBuildArtifacts
+    *   incrementalBuildArtifacts = prepareIncrementalBuild drv
     * in mkIncrementalBuild drv incrementalBuildArtifacts
   */
   mkIncrementalBuild = drv: previousBuildArtifacts: drv.overrideAttrs (old: {
-    prePatch = ''
-      for file in $(diff -r  ./ ${previousBuildArtifacts} --brief | grep  "Files" |sed 's/^Only in \([^:]*\): /\1\//' | sed 's/^Files \(.*\) and .* differ/\1/')
-      do
-        touch $file
-      done
-      ${pkgs.rsync}/bin/rsync -cutU --chown=$USER:$USER --chmod=+w -r ${previousBuildArtifacts}/* .
-    '' + (old.prePatch or "");
+    preBuild = (old.preBuild or "") + ''
+      set +e
+      diff -ur ${previousBuildArtifacts}/sources ./ > sourceDifference.patch
+      set -e
+      shopt -s extglob
+      rm -r !("sourceDifference.patch")
+      ls -al .
+      ${pkgs.rsync}/bin/rsync -cutU --chown=$USER:$USER --chmod=+w -r ${previousBuildArtifacts}/outputs/* .
+      patch -p 1 -i sourceDifference.patch
+    '';
   });
 }
