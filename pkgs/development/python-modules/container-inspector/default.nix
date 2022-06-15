@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "container-inspector";
-  version = "31.0.0";
+  version = "31.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexB";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-YwtyNZsTMb8iFXo/rojvjkKUbMNRCXVamzFykpwYCOk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-44sTZelCT6sGPyMteJZBcPRReTHuO1ZUxeQ0Vp7Zmqo=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
