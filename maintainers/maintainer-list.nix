@@ -6684,6 +6684,13 @@
       fingerprint = "932F 3E8E 1C0F 4A98 95D7  B8B8 B0CA A28A 0295 8308";
     }];
   };
+  kenran = {
+    email = "johannes.maier@mailbox.org";
+    github = "kenranunderscore";
+    githubId = 5188977;
+    matrix = "@kenran_:matrix.org";
+    name = "Johannes Maier";
+  };
   kentjames = {
     email = "jameschristopherkent@gmail.com";
     github = "kentjames";

@@ -10,7 +10,7 @@ get_download_info() {
          https://update.equinox.io/check \
          'Accept:application/json; q=1; version=1; charset=utf-8' \
          'Content-Type:application/json; charset=utf-8' \
-         app_id=app_goVRodbMVm \
+         app_id=app_c3U4eZcDbjV \
          channel=stable \
          os=$1 \
          goarm= \
@@ -31,4 +31,4 @@ get_download_info() {
     get_download_info darwin amd64
     get_download_info darwin arm64
 ) | jq --slurp 'map ({ (.sys): . }) | add' \
-    > pkgs/tools/networking/ngrok-2/versions.json
+    > pkgs/tools/networking/ngrok/versions.json
