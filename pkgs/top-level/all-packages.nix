@@ -28653,8 +28653,6 @@ with pkgs;
 
   spacegun = callPackage ../applications/networking/cluster/spacegun {};
 
-  stride = callPackage ../applications/networking/instant-messengers/stride { };
-
   speedread = callPackage ../applications/misc/speedread { };
 
   station = callPackage ../applications/networking/station { };
