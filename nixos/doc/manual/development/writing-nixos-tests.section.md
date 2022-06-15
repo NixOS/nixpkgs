@@ -50,7 +50,7 @@ Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://
 ```
 
 Overrides can be added by defining an anonymous module in `nixos/tests/all-tests.nix`.
-For the purpose of constructing a test matrix, use the `matrix` options instead.
+For the purpose of constructing a test matrix, [use the `matrix` options](#sec-nixos-test-matrix) instead.
 
 ```nix
   hostname = runTest {
@@ -466,6 +466,141 @@ added using the parameter `extraPythonPackages`. For example, you could add
 ```
 
 In that case, `numpy` is chosen from the generic `python3Packages`.
+
+## Constructing a test matrix {#sec-nixos-test-matrix}
+
+You may want to run variations of your test, or perhaps split long tests into
+a few shorter, focused tests.
+
+While you could roll your own solution with `mapAttrs`, this is actually
+non-trivial because of the requirements imposed by `nix-build`, hydra and
+`passthru.tests`. So instead, we recommend to use the `matrix` test options that
+take care of this for you.
+
+These options work by duplicating the entire test module configuration below
+the `matrix.<decision>.choice.<choice>.module` options.
+Laziness makes this pattern efficient.
+
+The test framework ([`runTest`](#sec-calling-nixos-tests)) takes care of
+traversing the choices one by one, constructing a tree of attribute sets where
+each edge represents a choice.
+
+A parameterized test may look as follows:
+
+```nix
+{ lib, backend, ... }: {
+  name = "foo-${backend}";
+
+  matrix.backend.choice.smtp.module = {};
+  matrix.backend.choice.rest.module = {};
+
+  defaults.services.foo.backend = backend;
+
+  nodes = …;
+  testScript = ''
+    ${lib.optionalString (backend == "rest") ''
+      # extra setup for the rest backend
+    ''}
+    # …
+  '';
+}
+```
+
+`runTest` transforms this to:
+
+```nix
+{
+  backend-rest = «derivation /nix/store/…-foo-rest.drv»;
+  backend-smtp = «derivation /nix/store/…-foo-smtp.drv»;
+
+  # make `nix-build` traverse this attrset to evaluate nested tests
+  recurseForDerivations = true;
+  # …
+}
+```
+
+It has picked up on the `matrix` and only returns the derivations constructed for each choice.
+
+The test related options such as `nodes` at the root of the test configuration still exist there, but are not demanded by `runTest`, so only their copies at each of the choices are evaluated. Hence, the "root" can see the consequences of the choices.
+
+However, some variations aren't simply parametric, but require specific configuration for some choices.
+This can be added in the `module` option:
+
+```nix
+{ lib, params, ... }: {
+  matrix.backend.choice.smtp.module = { params, ... }: {
+    defaults.services.foo.backend = "smtp";
+    nodes.smtpserver = { … };
+    params.setup = "";
+  };
+  matrix.backend.choice.rest.module = { params, ... }: {
+    params.setup = ''
+      # extra setup for the rest backend
+    '';
+  };
+
+  nodes = …;
+  testScript = ''
+    ${params.setup}
+    # …
+  '';
+}
+```
+
+The example shows the solutions to the following problems:
+ - The test cases require different configuration. For example, the `smtp` test sets the backend to `"smtp"` for all nodes, instead of relying on the default value.
+ - One test case requires an extra VM. `nodes.smtpserver` is only defined for the `smtp` test.
+ - One test case needs extra setup to be done in the `testScript`. It uses an ad hoc module argument called `setup` to achieve this.
+
+You may notice that the test appears to pull a `setup` value out of thin air.
+Indeed this would fail if `runTest` had accessed `testScript` directly instead of looking inside the `matrix.<...>.module` options.
+In those `matrix.<...>.module` contexts, the definition of `testScript` is valid.
+Thanks to laziness, the invalid `testScript` is never accessed and never becomes a problem.
+
+You may also notice that there was no use of the `backend` module argument anymore, as all decisions' effects were defined in the `matrix.<...>.module` options. You could re-add the `backend` to the parameter list to combine both styles.
+
+If you have many test cases, but few non-empty `setup` values, you could define a default value for the module argument instead:
+
+```nix
+{ lib, setup, ... }: {
+  _module.args.setup = lib.mkDefault "";
+  matrix.backend.choice.smtp.module = { lib, ... }: {
+    defaults.services.foo.backend = "smtp";
+    nodes.smtpserver = { … };
+  };
+  # …
+}
+```
+
+If you are writing a reusable module, you may declare a regular option instead, using `lib.mkOption`. <!-- TODO refer to a "reusable modules" section in module system docs (to be written) -->
+
+### Multiple decisions {#sec-nixos-test-matrix-multiple-decisions}
+
+And finally, some tests truly form a matrix, as they have two (or more) parameters.
+The following example produces the 6 test derivations that form the Cartesian product of `backend` and `testsuite`.
+
+```nix
+{ backend, testsuite, ... }: {
+  matrix.backend.choice.smtp.module = { … };
+  matrix.backend.choice.rest.module = { … };
+
+  matrix.testsuite.choice = {
+    login-and-basics.module = {
+      testScript = …;
+    };
+    transactions.module = {
+      testScript = …;
+    };
+    advanced-use-cases.module = {
+      testScript = …;
+    };
+  };
+
+  name = "foo-${backend}-${testsuite}";
+
+  nodes.foo = …;
+}
+```
 
 ## Test Options Reference {#sec-test-options-reference}
 
