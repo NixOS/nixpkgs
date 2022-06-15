@@ -341,6 +341,28 @@ in
       '';
     };
 
+    system.preloadLibraries = {
+      enable = lib.mkEnableOption "Whether to generate a /etc/ld-nix.so.preload";
+
+      libraries = mkOption {
+        type = types.listOf types.path;
+        default = [ "${lib.getLib pkgs.glibc}/lib/libc.so.6" ];
+        defaultText = literalExpression ''
+          [ "''${lib.getLib pkgs.glibc}/lib/libc.so.6" ];
+        '';
+        description = ''
+          List of .so paths to be preloaded by glibc.
+          These shared libraries will be loaded before others, see ld.so(8) for more details.
+
+          The main use case for this is to preload new versions of glibc when upgrading a
+          NixOS system. This way, the newer binaries which are linked against a newer version
+          of glibc will be able to load the correct libc symbols.
+
+          Warning: this change affects all binaries on a system, care should be give as to what libraries
+          should be included in this list.
+        '';
+      };
+    };
   };
 
 
@@ -354,6 +376,11 @@ in
         '';
 
     system.build.toplevel = system;
+
+    environment.etc."ld-nix.so.preload" = lib.mkIf config.system.preloadLibraries.enable {
+      enable = true;
+      text = lib.concatStringsSep " " config.system.preloadLibraries.libraries;
+    };
 
   };
 
