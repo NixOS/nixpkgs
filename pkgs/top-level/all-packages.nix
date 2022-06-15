@@ -4631,6 +4631,10 @@ with pkgs;
 
   cgreen = callPackage ../development/libraries/cgreen { };
 
+  chain-bench = callPackage ../tools/security/chain-bench {
+    buildGoModule = buildGo118Module;
+  };
+
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
   checkmake = callPackage ../development/tools/checkmake { };
