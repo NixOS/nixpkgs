@@ -352,6 +352,9 @@ checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survive
 checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
 
 checkConfigOutput '^"foo=qux,bar=xyz"$' config.result ./nested-extendModules-with-name.nix
+
+checkConfigOutput '^"foo=qux,bar=xyz"$' config.result ./nested-extendModules-with-name.nix
+
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
 # doRename adds a warning.
