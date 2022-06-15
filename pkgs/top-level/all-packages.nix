@@ -17087,6 +17087,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+  discord-sh = callPackage ../tools/networking/discord-sh { };
+
   dlib = callPackage ../development/libraries/dlib { };
 
   doctest = callPackage ../development/libraries/doctest { };
