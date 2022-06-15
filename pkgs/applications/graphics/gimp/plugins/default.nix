@@ -229,6 +229,10 @@ in
       Filters/Enhance/Wavelet sharpen
     */
     name = "wavelet-sharpen-0.1.2";
+    # Workaround build failure on -fno-common toolchains like upstream
+    # gcc-10. Otherwise build fails as:
+    #   ld: interface.o:(.bss+0xe0): multiple definition of `fimg'; plugin.o:(.bss+0x40): first defined here
+    NIX_CFLAGS_COMPILE = "-fcommon";
     NIX_LDFLAGS = "-lm";
     src = fetchurl {
       url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz";
