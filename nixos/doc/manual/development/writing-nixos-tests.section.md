@@ -1,9 +1,9 @@
 # Writing Tests {#sec-writing-nixos-tests}
 
-A NixOS test is a Nix expression that has the following structure:
+A NixOS test is a Nix module that has the following structure:
 
 ```nix
-import ./make-test-python.nix {
+{
 
   # One or more machines:
   nodes =
@@ -21,7 +21,10 @@ import ./make-test-python.nix {
 }
 ```
 
-The attribute `testScript` is a bit of Python code that executes the
+We refer to the whole test above as a test module, whereas the values
+in `nodes.<name>` are NixOS modules. (A NixOS configuration is a module.)
+
+The option `testScript` is a bit of Python code that executes the
 test (described below). During the test, it will start one or more
 virtual machines, the configuration of which is described by
 the attribute `nodes`.
@@ -34,7 +37,64 @@ when switching between consoles, and so on. An interesting multi-node test is
 [`nfs/simple.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/nfs/simple.nix).
 It uses two client nodes to test correct locking across server crashes.
 
-There are a few special NixOS configuration options for test VMs:
+## Calling a test {#sec-calling-nixos-tests}
+
+Tests are invoked a bit differently depending on whether the test lives in NixOS or in another project.
+
+### Testing within NixOS {#sec-call-nixos-test-in-nixos}
+
+Test modules can be instantiated into derivations in multiple ways.
+
+Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/all-tests.nix).
+
+```nix
+  hostname = runTest ./hostname.nix;
+```
+
+Overrides can be added by defining an anonymous module in `all-tests.nix`.
+For the purpose of constructing a test matrix, use the `matrix` options instead.
+
+```nix
+  hostname = runTest { imports = [ ./hostname.nix ]; defaults.networking.firewall.enable = false; };
+```
+
+You can run a test with attribute name `mytest` in `all-tests.nix` by invoking:
+
+```shell
+nix-build -A nixosTests.mytest
+```
+
+### Testing outside the NixOS project {#sec-call-nixos-test-outside-nixos}
+
+Outside the `nixpkgs` repository, you can instantiate the test by first acquiring the NixOS library,
+
+```nix
+# regular nix
+let nixos-lib = import (nixpkgs + "/nixos/lib") { };
+in
+```
+
+```nix
+# flake
+let nixos-lib = nixpkgs.lib.nixos;
+in
+```
+
+... and then invoking `runTest`, for example:
+
+```nix
+nixos-lib.runTest {
+  imports = [ ./test.nix ];
+  hostPkgs = pkgs;  # the Nixpkgs package set used outside the VMs
+  defaults.services.foo.package = mypkg;
+}
+```
+
+`runTest` returns a derivation that runs the test, or an attrset tree of such derivations.
+
+## Configuring the nodes {#sec-nixos-test-nodes}
+
+There are a few special NixOS options for test VMs:
 
 `virtualisation.memorySize`
 
@@ -304,7 +364,7 @@ For faster dev cycles it\'s also possible to disable the code-linters
 (this shouldn\'t be commited though):
 
 ```nix
-import ./make-test-python.nix {
+{
   skipLint = true;
   nodes.machine =
     { config, pkgs, ... }:
@@ -336,7 +396,7 @@ Similarly, the type checking of test scripts can be disabled in the following
 way:
 
 ```nix
-import ./make-test-python.nix {
+{
   skipTypeCheck = true;
   nodes.machine =
     { config, pkgs, ... }:
@@ -401,7 +461,6 @@ added using the parameter `extraPythonPackages`. For example, you could add
 `numpy` like this:
 
 ```nix
-import ./make-test-python.nix
 {
   extraPythonPackages = p: [ p.numpy ];
 

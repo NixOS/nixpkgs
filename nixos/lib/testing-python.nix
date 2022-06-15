@@ -14,6 +14,10 @@
 
 with pkgs;
 
+let
+  nixos-lib = import ./default.nix { inherit (pkgs) lib; };
+in
+
 rec {
 
   inherit pkgs;
@@ -168,29 +172,15 @@ rec {
           ${lib.optionalString (interactive) "--add-flags --interactive"}
       '');
 
-  evalTest = module: lib.evalModules { modules = testModules ++ [ module ]; };
-  runTest = module: (evalTest module).config.result;
+  evalTest = module: nixos-lib.evalTest { imports = [ extraTestModule module ]; };
+  runTest = module: nixos-lib.runTest { imports = [ extraTestModule module ]; };
 
-  testModules = [
-    ./testing/driver.nix
-    ./testing/interactive.nix
-    ./testing/legacy.nix
-    ./testing/matrix.nix
-    ./testing/meta.nix
-    ./testing/name.nix
-    ./testing/network.nix
-    ./testing/nodes.nix
-    ./testing/params.nix
-    ./testing/pkgs.nix
-    ./testing/run.nix
-    ./testing/testScript.nix
-    {
-      config = {
-        hostPkgs = pkgs;
-        minimalResult = hydra;
-      };
-    }
-  ];
+  extraTestModule = {
+    config = {
+      hostPkgs = pkgs;
+      minimalResult = hydra;
+    };
+  };
 
   # Make a full-blown test
   makeTest =
