@@ -29,6 +29,5 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/feediron/ttrss_plugin-feediron";
     maintainers = with maintainers; [ milogert ];
     inherit (tt-rss.meta) platforms;
-    ;
   };
 }
