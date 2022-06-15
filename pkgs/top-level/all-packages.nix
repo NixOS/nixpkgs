@@ -2959,6 +2959,8 @@ with pkgs;
 
   catch2 = callPackage ../development/libraries/catch2 { };
 
+  catch2_3 = callPackage ../development/libraries/catch2/3.nix { };
+
   catdoc = callPackage ../tools/text/catdoc { };
 
   catdocx = callPackage ../tools/text/catdocx { };
@@ -9753,8 +9755,6 @@ with pkgs;
   qscintilla = libsForQt5.callPackage ../development/libraries/qscintilla { };
 
   qscintilla-qt4 = callPackage ../development/libraries/qscintilla-qt4 { };
-
-  qshowdiff = callPackage ../tools/text/qshowdiff { };
 
   qrcp = callPackage ../tools/networking/qrcp { };
 
@@ -18312,8 +18312,6 @@ with pkgs;
   libbde = callPackage ../development/libraries/libbde { };
 
   libbencodetools = callPackage ../development/libraries/libbencodetools { };
-
-  libbluedevil = callPackage ../development/libraries/libbluedevil { };
 
   libbdplus = callPackage ../development/libraries/libbdplus { };
 
