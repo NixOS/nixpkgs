@@ -21,6 +21,8 @@ let
   seqAttrsIf = cond: a: lib.mapAttrs (_: v: seqIf cond a v);
 
   eval-config-minimal = import ./eval-config-minimal.nix { inherit lib; };
+
+  testing-lib = import ./testing/default.nix { inherit lib; };
 in
 /*
   This attribute set appears as lib.nixos in the flake, or can be imported
@@ -30,4 +32,10 @@ in
   inherit (seqAttrsIf (!featureFlags?minimalModules) minimalModulesWarning eval-config-minimal)
     evalModules
     ;
+
+  inherit (testing-lib)
+    evalTest
+    runTest
+    ;
+
 }
