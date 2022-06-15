@@ -258,5 +258,8 @@ in {
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/464#note_723554
     systemd.services.pipewire.environment."PIPEWIRE_LINK_PASSIVE" = "1";
     systemd.user.services.pipewire.environment."PIPEWIRE_LINK_PASSIVE" = "1";
+
+    # pipewire-pulse default config expects pactl to be in PATH
+    systemd.user.services.pipewire-pulse.path = lib.mkIf cfg.pulse.enable [ pkgs.pulseaudio ];
   };
 }
