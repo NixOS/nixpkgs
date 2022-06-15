@@ -31818,19 +31818,24 @@ with pkgs;
   freecell-solver = callPackage ../games/freecell-solver { };
 
   freeciv = callPackage ../games/freeciv {
-    autoreconfHook = buildPackages.autoreconfHook269;
-    qt5 = qt514;
+    sdl2Client = false;
+    gtkClient = true;
+    qtClient = false;
   };
 
-  freeciv_gtk = freeciv.override {
-    gtkClient = true;
-    sdlClient = false;
+  freeciv_sdl2 = freeciv.override {
+    sdl2Client = true;
+    gtkClient = false;
+    qtClient = false;
   };
 
   freeciv_qt = freeciv.override {
+    sdl2Client = false;
+    gtkClient = false;
     qtClient = true;
-    sdlClient = false;
   };
+
+  freeciv_gtk = freeciv;
 
   freedink = callPackage ../games/freedink { };
 
