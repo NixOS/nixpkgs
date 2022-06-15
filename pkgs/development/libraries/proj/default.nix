@@ -9,17 +9,18 @@
 , curl
 , gtest
 , nlohmann_json
+, python3
 }:
 
 stdenv.mkDerivation rec {
   pname = "proj";
-  version = "9.0.0";
+  version = "9.0.1";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
-    sha256 = "sha256-zMP+WzC65BFz8g8mF5t7toqxmxCJePysd6WJuqpe8yg=";
+    sha256 = "sha256-Rjdt4Ud6du153ZyHWFtQUEEq95mIb8cIFFjiIHd6JVo=";
   };
 
   outputs = [ "out" "dev" ];
@@ -48,6 +49,10 @@ stdenv.mkDerivation rec {
       '';
 
   doCheck = true;
+
+  passthru.tests = {
+    python = python3.pkgs.pyproj;
+  };
 
   meta = with lib; {
     description = "Cartographic Projections Library";
