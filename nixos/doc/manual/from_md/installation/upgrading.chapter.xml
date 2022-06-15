@@ -95,6 +95,10 @@ nixos https://nixos.org/channels/nixos-unstable
 # nix-channel --add https://nixos.org/channels/nixos-unstable nixos
 </programlisting>
   <para>
+    After you have changed a channel, run
+    <literal>nix-channel --update</literal> to download it.
+  </para>
+  <para>
     You can then upgrade NixOS to the latest version in your chosen
     channel by running
   </para>
