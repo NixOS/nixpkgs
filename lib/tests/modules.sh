@@ -347,8 +347,6 @@ checkConfigOutput 'ok' config.freeformItems.foo.bar ./adhoc-freeformType-survive
 # because of an `extendModules` bug, issue 168767.
 checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
 
-checkConfigOutput '^"foo=qux,bar=xyz"$' config.result ./nested-extendModules-with-name.nix
-
 cat <<EOF
 ====== module tests ======
 $pass Pass
