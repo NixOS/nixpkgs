@@ -120,7 +120,8 @@ env.mkDerivation rec {
     gtk3
     libdbusmenu
     lz4
-    xxHash
+    # FIXME: does not build with system xxHash since https://github.com/NixOS/nixpkgs/pull/163279
+    # xxHash
     ffmpeg
     openalSoft
     minizip
