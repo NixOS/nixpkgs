@@ -334,6 +334,10 @@ let
       orga = "6cdh";
       repo = "tree-sitter-scheme";
     };
+    "tree-sitter-tiger" = {
+      orga = "ambroisie";
+      repo = "tree-sitter-tiger";
+    };
   };
 
   allGrammars =

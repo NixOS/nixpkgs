@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, fetchFromGitHub
-, gn, ninja, python3, glib, pkg-config, icu
+, gn, ninja, python39, glib, pkg-config, icu
 , xcbuild, darwin
 , fetchpatch
 }:
@@ -132,11 +132,11 @@ stdenv.mkDerivation rec {
     myGn
     ninja
     pkg-config
-    python3
+    python39
   ] ++ lib.optionals stdenv.isDarwin [
     xcbuild
     darwin.DarwinTools
-    python3.pkgs.setuptools
+    python39.pkgs.setuptools
   ];
   buildInputs = [ glib icu ];
 

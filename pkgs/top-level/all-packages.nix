@@ -17110,6 +17110,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+  discord-sh = callPackage ../tools/networking/discord-sh { };
+
   dlib = callPackage ../development/libraries/dlib { };
 
   doctest = callPackage ../development/libraries/doctest { };
@@ -18477,8 +18479,6 @@ with pkgs;
   libdbusmenu = callPackage ../development/libraries/libdbusmenu { };
   libdbusmenu-gtk2 = libdbusmenu.override { gtkVersion = "2"; };
   libdbusmenu-gtk3 = libdbusmenu.override { gtkVersion = "3"; };
-
-  libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
 
   libdc1394 = callPackage ../development/libraries/libdc1394 {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -20384,8 +20384,6 @@ with pkgs;
   qt6Packages = recurseIntoAttrs (import ./qt6-packages.nix {
     inherit lib pkgs qt6;
   });
-
-  qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quark-engine = callPackage ../tools/security/quark-engine { };
 
