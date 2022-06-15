@@ -1719,6 +1719,8 @@ in {
 
   click = callPackage ../development/python-modules/click { };
 
+  clickable = callPackage ../development/python-modules/clickable { };
+
   clickclick = callPackage ../development/python-modules/clickclick { };
 
   click-completion = callPackage ../development/python-modules/click-completion { };
