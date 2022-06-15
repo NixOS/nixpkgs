@@ -49,7 +49,8 @@ Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://
   hostname = runTest ./hostname.nix;
 ```
 
-Overrides can be added by defining an anonymous module in `all-tests.nix`.
+Overrides can be added by defining an anonymous module in `nixos/tests/all-tests.nix`.
+For the purpose of constructing a test matrix, use the `matrix` options instead.
 
 ```nix
   hostname = runTest {
@@ -80,7 +81,7 @@ nixos-lib.runTest {
 }
 ```
 
-`runTest` returns a derivation that runs the test.
+`runTest` returns a derivation that runs the test, or a tree of attribute sets containing such derivations.
 
 ## Configuring the nodes {#sec-nixos-test-nodes}
 
