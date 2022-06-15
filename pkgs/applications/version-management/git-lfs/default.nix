@@ -25,7 +25,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   preBuild = ''
-    go generate ./commands
+    GOARCH= go generate ./commands
   '';
 
   postBuild = ''
