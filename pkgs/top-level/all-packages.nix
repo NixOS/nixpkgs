@@ -20356,8 +20356,6 @@ with pkgs;
     inherit lib pkgs qt6;
   });
 
-  qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
-
   quark-engine = callPackage ../tools/security/quark-engine { };
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
