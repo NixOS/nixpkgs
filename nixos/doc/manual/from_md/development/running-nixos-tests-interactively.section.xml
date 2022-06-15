@@ -25,15 +25,28 @@ $ ./result/bin/nixos-test-driver
     completion. This allows you to inspect the state of the VMs after
     the test (e.g. to debug the test script).
   </para>
-  <para>
-    You can re-use the VM states coming from a previous run by setting
-    the <literal>--keep-vm-state</literal> flag.
-  </para>
-  <programlisting>
+  <section xml:id="sec-nixos-test-reuse-vm-state">
+    <title>Reuse VM state</title>
+    <para>
+      You can re-use the VM states coming from a previous run by setting
+      the <literal>--keep-vm-state</literal> flag.
+    </para>
+    <programlisting>
 $ ./result/bin/nixos-test-driver --keep-vm-state
 </programlisting>
-  <para>
-    The machine state is stored in the
-    <literal>$TMPDIR/vm-state-machinename</literal> directory.
-  </para>
+    <para>
+      The machine state is stored in the
+      <literal>$TMPDIR/vm-state-machinename</literal> directory.
+    </para>
+  </section>
+  <section xml:id="sec-nixos-test-interactive-configuration">
+    <title>Interactive-only test configuration</title>
+    <para>
+      You can add configuration that is specific to the interactive test
+      driver, by adding to the <literal>interactive</literal> option,
+      which is copy of the regular test options namespace, which is used
+      by the interactive test driver. This is useful for troubleshooting
+      adaptations that you don’t want to apply to regular test runs.
+    </para>
+  </section>
 </section>

@@ -24,6 +24,8 @@ back into the test driver command line upon its completion. This allows
 you to inspect the state of the VMs after the test (e.g. to debug the
 test script).
 
+## Reuse VM state {#sec-nixos-test-reuse-vm-state}
+
 You can re-use the VM states coming from a previous run by setting the
 `--keep-vm-state` flag.
 
@@ -33,3 +35,11 @@ $ ./result/bin/nixos-test-driver --keep-vm-state
 
 The machine state is stored in the `$TMPDIR/vm-state-machinename`
 directory.
+
+## Interactive-only test configuration {#sec-nixos-test-interactive-configuration}
+
+You can add configuration that is specific to the interactive test driver,
+by adding to the `interactive` option, which is copy of the regular test options
+namespace, which is used by the interactive test driver.
+This is useful for troubleshooting adaptations that you don't want to apply to
+regular test runs.
