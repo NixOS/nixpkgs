@@ -643,7 +643,7 @@ Here are examples of package tests:
 
 Like [package tests](#ssec-package-tests-writing) as shown above, [NixOS module tests](https://nixos.org/manual/nixos/stable/#sec-nixos-tests) can also be linked to a package, so that the tests can be easily run when changing the related package.
 
-For example, assuming we're packaging `nginx`, we can link its module test via `passthru.tests`:
+The basic way to set the `tests` attribute, if we're willing to make some assumptions, is the following. We use the `nginx` package as an example:
 
 ```nix
 { stdenv, lib, nixosTests }:
@@ -652,7 +652,35 @@ stdenv.mkDerivation {
   ...
 
   passthru.tests = {
-    nginx = nixosTests.nginx;
+    # This sets `pkg.tests.nixos` to the nginx test,
+    # where `pkg` may be the `pkgs.nginx` package.
+    nixos = nixosTests.nginx;
+  };
+
+  ...
+}
+```
+
+However, we're not guaranteed that `nixosTests.nginx` uses our package definition.
+Furthermore, some `nixosTests` have a test matrix that tests multiple versions.
+Let's look at `cassandra` for a more complete example:
+
+```nix
+{ stdenv, lib, nixosTests }:
+
+# 1. finalAttrs.finalPackage is the correct package, even after `overrideAttrs`.
+stdenv.mkDerivation (finalAttrs: {
+  ...
+
+  passthru.tests = {
+    # 2. The cassandra test is defined using the module based runner, so we can
+    #    modify it with `extend`.
+    nixos = nixosTests.cassandra.extend {
+      # 3. We don't need to parameterize the package.
+      matrix.version.enable = false;
+      # 4. We set the correct package ourselves instead.
+      params.testPackage = finalAttrs.finalPackage;
+    };
   };
 
   ...
