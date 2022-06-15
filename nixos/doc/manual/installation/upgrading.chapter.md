@@ -72,6 +72,8 @@ And if you want to live on the bleeding edge:
 # nix-channel --add https://nixos.org/channels/nixos-unstable nixos
 ```
 
+After you have changed a channel, run `nix-channel --update` to download it.
+
 You can then upgrade NixOS to the latest version in your chosen channel
 by running
 
