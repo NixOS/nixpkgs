@@ -140,6 +140,12 @@
           instead.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <literal>k3s</literal> no longer supports docker as runtime
+          due to upstream dropping support.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-notable-changes">
