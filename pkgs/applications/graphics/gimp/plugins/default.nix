@@ -250,6 +250,15 @@ in
       rev = "v${version}";
       sha256 = "81ajdZ2zQi/THxnBlSeT36tVTEzrS1YqLGpHMhFTKAo=";
     };
+    patches = [
+      # Pull upstream fix for -fno-common toolchain support:
+      #   https://github.com/carlobaldassi/gimp-lqr-plugin/pull/6
+      (fetchpatch {
+        name = "fno-common.patch";
+        url = "https://github.com/carlobaldassi/gimp-lqr-plugin/commit/ae3464a82e1395fc577cc94999bdc7c4a7bb35f1.patch";
+        sha256 = "EdjZWM6U1bhUmsOnLA8iJ4SFKuAXHIfNPzxZqel+JrY=";
+      })
+    ];
   };
 
   gmic = pkgs.gmic-qt.override {
