@@ -52,7 +52,7 @@ Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://
 ```
 
 Overrides can be added by defining an anonymous module in `all-tests.nix`.
-For the purpose of constructing a test matrix, use the `matrix` options instead.
+For the purpose of constructing a test matrix, [use the `matrix` options](#sec-nixos-test-matrix) instead.
 
 ```nix
   hostname = runTest { imports = [ ./hostname.nix ]; defaults.networking.firewall.enable = false; };
@@ -474,3 +474,112 @@ added using the parameter `extraPythonPackages`. For example, you could add
 ```
 
 In that case, `numpy` is chosen from the generic `python3Packages`.
+
+## Constructing a test matrix {#sec-nixos-test-matrix}
+
+You may want to run variations of your test, or perhaps split long tests into
+a few shorter, focused tests.
+
+While you could roll your own solution with `mapAttrs`, this is actually
+non-trivial because of the requirements imposed by `nix-build`, hydra and
+`passthru.tests`. So instead, we recommend to use the `matrix` test options that
+take care of this for you.
+
+These options work by duplicating the entire test module configuration below
+the `matrix.<decision>.choice.<choice>.module` options.
+Laziness makes this pattern efficient.
+
+The test framework ([`runTest`](#sec-calling-nixos-tests)) takes care of
+traversing the choices.
+
+A parameterized test may look as follows:
+
+```nix
+{ lib, backend, ... }: {
+  name = "foo-${backend}";
+
+  matrix.backend.choice.smtp.module = {};
+  matrix.backend.choice.rest.module = {};
+
+  defaults.services.foo.backend = backend;
+
+  nodes = …;
+  testScript = ''
+    ${lib.optionalString (backend == "rest") ''
+      # extra setup for the rest backend
+    ''}
+    # …
+  '';
+}
+```
+
+Instead of a single derivation, the test framework now returns:
+
+```nix
+{
+  backend-rest = «derivation /nix/store/…-foo-rest.drv»;
+  backend-smtp = «derivation /nix/store/…-foo-smtp.drv»;
+
+  # make nix-build traverse this attrset
+  recurseForDerivations = true;
+  # …
+}
+```
+
+It has picked up on the `matrix` and only returns the derivations constructed for each choice.
+
+The test related options such as `nodes` at the root of the test configuration still exist there, but are not demanded by `runTest`, so only their copies at each of the choices are evaluated. Hence, the "root" can see the consequences of the choices.
+
+However, some variations aren't simply parametric, but require specific configuration for some choices.
+This can be added in the `module` option:
+
+```nix
+{ lib, params, ... }: {
+  matrix.backend.choice.smtp.module = { params, ... }: {
+    defaults.services.foo.backend = "smtp";
+    nodes.smtpserver = { … };
+    params.setup = "";
+  };
+  matrix.backend.choice.rest.module = { params, ... }: {
+    params.setup = ''
+      # extra setup for the rest backend
+    '';
+  };
+
+  nodes = …;
+  testScript = ''
+    ${params.setup}
+    # …
+  '';
+}
+```
+
+And finally, some tests truly form a matrix, as they have two (or more) parameters, such as this example, producing the 6 test derivations that form the Cartesian product of `backend` and `testsuite`.
+
+Note that the modules inside `module` submodule can access their parent's module
+arguments through the lexical scope, where the matrix choice has not been decided
+yet. Any such parameters must be ignored or repeated inside the `module` submodule
+to get the final value.
+
+```nix
+{ backend, testsuite, ... }: {
+  matrix.backend.choice.smtp.module = { … };
+  matrix.backend.choice.rest.module = { … };
+
+  matrix.testsuite.choice = {
+    login-and-basics.module = {
+      testScript = …;
+    };
+    transactions.module = {
+      testScript = …;
+    };
+    advanced-use-cases.module = {
+      testScript = …;
+    };
+  };
+
+  name = "foo-${backend}-${testsuite}";
+
+  nodes.foo = …;
+}
+```

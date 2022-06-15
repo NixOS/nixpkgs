@@ -65,8 +65,9 @@
       <para>
         Overrides can be added by defining an anonymous module in
         <literal>all-tests.nix</literal>. For the purpose of
-        constructing a test matrix, use the <literal>matrix</literal>
-        options instead.
+        constructing a test matrix,
+        <link linkend="sec-nixos-test-matrix">use the
+        <literal>matrix</literal> options</link> instead.
       </para>
       <programlisting language="bash">
   hostname = runTest { imports = [ ./hostname.nix ]; defaults.networking.firewall.enable = false; };
@@ -765,5 +766,136 @@ def foo_running():
       In that case, <literal>numpy</literal> is chosen from the generic
       <literal>python3Packages</literal>.
     </para>
+  </section>
+  <section xml:id="sec-nixos-test-matrix">
+    <title>Constructing a test matrix</title>
+    <para>
+      You may want to run variations of your test, or perhaps split long
+      tests into a few shorter, focused tests.
+    </para>
+    <para>
+      While you could roll your own solution with
+      <literal>mapAttrs</literal>, this is actually non-trivial because
+      of the requirements imposed by <literal>nix-build</literal>, hydra
+      and <literal>passthru.tests</literal>. So instead, we recommend to
+      use the <literal>matrix</literal> test options that take care of
+      this for you.
+    </para>
+    <para>
+      These options work by duplicating the entire test module
+      configuration below the
+      <literal>matrix.&lt;decision&gt;.choice.&lt;choice&gt;.module</literal>
+      options. Laziness makes this pattern efficient.
+    </para>
+    <para>
+      The test framework
+      (<link linkend="sec-calling-nixos-tests"><literal>runTest</literal></link>)
+      takes care of traversing the choices.
+    </para>
+    <para>
+      A parameterized test may look as follows:
+    </para>
+    <programlisting language="bash">
+{ lib, backend, ... }: {
+  name = &quot;foo-${backend}&quot;;
+
+  matrix.backend.choice.smtp.module = {};
+  matrix.backend.choice.rest.module = {};
+
+  defaults.services.foo.backend = backend;
+
+  nodes = …;
+  testScript = ''
+    ${lib.optionalString (backend == &quot;rest&quot;) ''
+      # extra setup for the rest backend
+    ''}
+    # …
+  '';
+}
+</programlisting>
+    <para>
+      Instead of a single derivation, the test framework now returns:
+    </para>
+    <programlisting language="bash">
+{
+  backend-rest = «derivation /nix/store/…-foo-rest.drv»;
+  backend-smtp = «derivation /nix/store/…-foo-smtp.drv»;
+
+  # make nix-build traverse this attrset
+  recurseForDerivations = true;
+  # …
+}
+</programlisting>
+    <para>
+      It has picked up on the <literal>matrix</literal> and only returns
+      the derivations constructed for each choice.
+    </para>
+    <para>
+      The test related options such as <literal>nodes</literal> at the
+      root of the test configuration still exist there, but are not
+      demanded by <literal>runTest</literal>, so only their copies at
+      each of the choices are evaluated. Hence, the <quote>root</quote>
+      can see the consequences of the choices.
+    </para>
+    <para>
+      However, some variations aren’t simply parametric, but require
+      specific configuration for some choices. This can be added in the
+      <literal>module</literal> option:
+    </para>
+    <programlisting language="bash">
+{ lib, params, ... }: {
+  matrix.backend.choice.smtp.module = { params, ... }: {
+    defaults.services.foo.backend = &quot;smtp&quot;;
+    nodes.smtpserver = { … };
+    params.setup = &quot;&quot;;
+  };
+  matrix.backend.choice.rest.module = { params, ... }: {
+    params.setup = ''
+      # extra setup for the rest backend
+    '';
+  };
+
+  nodes = …;
+  testScript = ''
+    ${params.setup}
+    # …
+  '';
+}
+</programlisting>
+    <para>
+      And finally, some tests truly form a matrix, as they have two (or
+      more) parameters, such as this example, producing the 6 test
+      derivations that form the Cartesian product of
+      <literal>backend</literal> and <literal>testsuite</literal>.
+    </para>
+    <para>
+      Note that the modules inside <literal>module</literal> submodule
+      can access their parent’s module arguments through the lexical
+      scope, where the matrix choice has not been decided yet. Any such
+      parameters must be ignored or repeated inside the
+      <literal>module</literal> submodule to get the final value.
+    </para>
+    <programlisting language="bash">
+{ backend, testsuite, ... }: {
+  matrix.backend.choice.smtp.module = { … };
+  matrix.backend.choice.rest.module = { … };
+
+  matrix.testsuite.choice = {
+    login-and-basics.module = {
+      testScript = …;
+    };
+    transactions.module = {
+      testScript = …;
+    };
+    advanced-use-cases.module = {
+      testScript = …;
+    };
+  };
+
+  name = &quot;foo-${backend}-${testsuite}&quot;;
+
+  nodes.foo = …;
+}
+</programlisting>
   </section>
 </section>
