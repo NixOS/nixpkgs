@@ -234,7 +234,7 @@ in {
     environment.etc."pipewire/pipewire.conf" = {
       source = json.generate "pipewire.conf" configs.pipewire;
     };
-    environment.etc."pipewire/pipewire-pulse.conf" = {
+    environment.etc."pipewire/pipewire-pulse.conf" = mkIf cfg.pulse.enable {
       source = json.generate "pipewire-pulse.conf" configs.pipewire-pulse;
     };
 
