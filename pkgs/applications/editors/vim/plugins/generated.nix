@@ -12696,6 +12696,18 @@ final: prev:
     meta.homepage = "https://github.com/catppuccin/nvim/";
   };
 
+  catppuccin-vim = buildVimPluginFrom2Nix {
+    pname = "catppuccin-vim";
+    version = "2022-06-06";
+    src = fetchFromGitHub {
+      owner = "catppuccin";
+      repo = "vim";
+      rev = "eaac7edb19ff11ce049513ac184fff7493817c1f";
+      sha256 = "181jfbw3msf1pccykabnniqry28ikassj39rc36hyz1vii1dq1d0";
+    };
+    meta.homepage = "https://github.com/catppuccin/vim/";
+  };
+
   chad = buildVimPluginFrom2Nix {
     pname = "chad";
     version = "2022-06-09";
