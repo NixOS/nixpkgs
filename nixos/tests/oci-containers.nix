@@ -1,6 +1,4 @@
-{ config, lib, params, ... }:
-let inherit (params) backend;
-in
+{ config, lib, backend, ... }:
 {
   name = "oci-containers-${backend}";
 
@@ -8,8 +6,8 @@ in
     maintainers = with lib.maintainers; [ adisbladis benley ] ++ lib.teams.serokell.members;
   };
 
-  matrix.backend.value.docker.params.backend = "docker";
-  matrix.backend.value.podman.params.backend = "podman";
+  matrix.backend.value.docker.module = {};
+  matrix.backend.value.podman.module = {};
 
   nodes = {
     ${backend} = { pkgs, ... }: {

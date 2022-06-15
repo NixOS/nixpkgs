@@ -6,15 +6,7 @@ let
 
   extend = module: (extendModule module).config.result;
 
-  inMatrixModule = choiceName:
-    {
-      config = {
-        _matrixAttrsDone.${choiceName} = { };
-        _matrixRoot = false;
-      };
-    };
-
-  choice = choice@{ name, ... }: {
+  decisionModule = decision@{ name, ... }: {
     options = {
       after = mkOption {
         description = ''
@@ -62,15 +54,40 @@ let
         '';
       };
       value = mkOption {
-        type = types.lazyAttrsOf (extendModules { modules = [ (inMatrixModule choice.name) ]; attrArgName = choice.name; }).type;
+        type = types.lazyAttrsOf (types.submodule (choiceModule decision.name extendModules));
       };
     };
   };
+
+  choiceModule = decisionName: extendModules: { name, ... }: {
+    options = {
+      module = mkOption {
+        description = ''
+          The effects of making a choice. You can specify any test-level option here.
+
+          NixOS-level options can be specified in the {option}`nodes.<name>` and {option}`defaults` sub-options.
+        '';
+        example = { defaults.services.foo.backend = "xyz"; };
+        type = (extendModules { modules = [ (inMatrixModule decisionName name) ]; }).type;
+        default = { };
+      };
+    };
+  };
+
+  inMatrixModule = decisionName: choiceName:
+    {
+      config = {
+        _module.args.${decisionName} = choiceName;
+        matrixDecisionsMade.${decisionName} = choiceName;
+        matrixIsRoot = false;
+      };
+    };
+
 in
 {
   options = {
     matrix = mkOption {
-      type = types.lazyAttrsOf (types.submodule choice);
+      type = types.lazyAttrsOf (types.submodule decisionModule);
       description = ''
         Wake up, Neo...
 
@@ -79,7 +96,7 @@ in
         You define
 
         ```nix
-          matrix.pill.value.blue = { config, ... }: {
+          matrix.pill.value.blue.module = { config, ... }: {
             defaults.networking.domain = "bed.home.lan";
           };
         ```
@@ -89,7 +106,7 @@ in
         You define
 
         ```nix
-          matrix.pill.value.red = { config, ... }: {
+          matrix.pill.value.red.module = { config, ... }: {
             defaults.networking.domain = "wonderland.example.com";
           };
         ```
@@ -102,8 +119,8 @@ in
       '';
       default = { };
     };
-    _matrixAttrsDone = mkOption {
-      type = types.attrsOf (types.enum [{ }]);
+    matrixDecisionsMade = mkOption {
+      type = types.attrsOf types.str;
       default = { };
     };
     result = mkOption {
@@ -124,14 +141,14 @@ in
         We remove these when run on Hydra.
       '';
     };
-    _matrixRoot = mkOption {
+    matrixIsRoot = mkOption {
       default = true;
       internal = true;
     };
   };
   config = {
     _module.args =
-      if config._matrixRoot then
+      if config.matrixIsRoot then
         lib.mapAttrs
           (k: _: lib.mkOptionDefault (throw ''
             Test matrix module parameter `${k}` has not been decided yet.
@@ -145,7 +162,7 @@ in
             by adding the module parameter to the submodule definition itself.
             For example:
 
-                matrix.foo.value.bar = { config, lib, ${k}, ... }: {
+                matrix.foo.value.bar.module = { config, lib, ${k}, ... }: {
                   xyz = f ${k};
                 }
 
@@ -159,7 +176,7 @@ in
 
     result =
       let
-        choicesRemaining = lib.filterAttrs (choice: v: ! config._matrixAttrsDone?${choice}) config.matrix;
+        choicesRemaining = lib.filterAttrs (choice: v: ! config.matrixDecisionsMade?${choice}) config.matrix;
         isBefore = a: b:
           if lib.elem a.name b.value.after
           then true
@@ -201,7 +218,7 @@ in
       else
         lib.recurseIntoAttrs (
           optionalAttrs (!config.minimalResult) { inherit extend; }
-          // lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.result) config.matrix.${nextChoice}.value
+          // lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.module.result) config.matrix.${nextChoice}.value
         );
   };
 }

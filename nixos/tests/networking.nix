@@ -71,14 +71,14 @@ in {
   defaults.networking.useNetworkd = lib.mkForce networkd;
   name = "networking-${testcase}-${implementation}";
 
-  matrix.implementation.value.networkd = { ... }: {
+  matrix.implementation.value.networkd.module = { ... }: {
     _module.args.networkd = true;
   };
-  matrix.implementation.value.scripted = { ... }: {
+  matrix.implementation.value.scripted.module = { ... }: {
     _module.args.networkd = false;
   };
   matrix.testcase.value = {
-    loopback = {
+    loopback.module = {
       nodes.client = { pkgs, ... }: {
         networking.useDHCP = false;
       };
@@ -90,7 +90,7 @@ in {
         assert "inet6 ::1/128" in loopback_addresses
       '';
     };
-    static = {
+    static.module = {
       nodes.router = router;
       nodes.client = { pkgs, ... }: {
         virtualisation.vlans = [ 1 2 ];
@@ -143,7 +143,7 @@ in {
               client.wait_until_succeeds("ping -c 1 fd00:1234:5678:3::1")
         '';
     };
-    routeType = {
+    routeType.module = {
       nodes.client = { pkgs, ... }: {
         networking = {
           useDHCP = false;
@@ -160,7 +160,7 @@ in {
         client.succeed("ip -4 route list table local | grep 'local 192.168.1.127'")
       '';
     };
-    dhcpDefault = {
+    dhcpDefault.module = {
       nodes.router = router;
       nodes.client = { lib, ... }: {
         # Disable test driver default config
@@ -178,7 +178,7 @@ in {
         client.succeed("ping -c 1 192.168.1.2")
       '';
     };
-    dhcpSimple = {
+    dhcpSimple.module = {
       nodes.router = router;
       nodes.client = { pkgs, ... }: {
         virtualisation.vlans = [ 1 2 ];
@@ -232,7 +232,7 @@ in {
               router.wait_until_succeeds("ping -c 1 fd00:1234:5678:2::2")
         '';
     };
-    dhcpOneIf = {
+    dhcpOneIf.module = {
       nodes.router = router;
       nodes.client = { pkgs, ... }: {
         virtualisation.vlans = [ 1 2 ];
@@ -275,7 +275,7 @@ in {
               router.fail("ping -c 1 192.168.2.2")
         '';
     };
-    bond = let
+    bond.module = let
       node = address: { pkgs, ... }: {
         virtualisation.vlans = [ 1 2 ];
         networking = {
@@ -313,7 +313,7 @@ in {
                   client.succeed('grep -q "Bonding Mode: IEEE 802.3ad Dynamic link aggregation" /proc/net/bonding/bond0')
         '';
     };
-    bridge = let
+    bridge.module = let
       node = { address, vlan }: { pkgs, ... }: {
         virtualisation.vlans = [ vlan ];
         networking = {
@@ -358,7 +358,7 @@ in {
               router.wait_until_succeeds("ping -c 1 192.168.1.3")
         '';
     };
-    macvlan = {
+    macvlan.module = {
       nodes.router = router;
       nodes.client = { pkgs, ... }: {
         environment.systemPackages = [ pkgs.iptables ]; # to debug firewall rules
@@ -412,7 +412,7 @@ in {
               router.wait_until_succeeds("ping -c 1 192.168.1.3")
         '';
     };
-    fou = {
+    fou.module = {
       nodes.machine = { ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
@@ -456,7 +456,7 @@ in {
           } in fous, "fou4 exists"
         '';
     };
-    sit = let
+    sit.module = let
       node = { address4, remote, address6 }: { pkgs, ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
@@ -517,7 +517,7 @@ in {
               client2.wait_until_succeeds("ping -c 1 fc00::2")
         '';
     };
-    gre = let
+    gre.module = let
       node = { pkgs, ... }: {
         networking = {
           useDHCP = false;
@@ -627,7 +627,7 @@ in {
               assert links[0]['linkinfo']['info_data']['ttl'] == 255, "ttl not set for gre6Tunnel"
         '';
     };
-    vlan = let
+    vlan.module = let
       node = address: { pkgs, ... }: {
         #virtualisation.vlans = [ 1 ];
         networking = {
@@ -658,7 +658,7 @@ in {
               client2.succeed("ip addr show dev vlan >&2")
         '';
     };
-    virtual = {
+    virtual.module = {
       nodes.machine = {
         networking.useDHCP = false;
         networking.interfaces.tap0 = {
@@ -716,7 +716,7 @@ in {
             ), "Some virtual interface has not been properly cleaned:\n{}".format(residue)
       '';
     };
-    privacy = {
+    privacy.module = {
       nodes.router = { ... }: {
         virtualisation.vlans = [ 1 ];
         boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
@@ -796,7 +796,7 @@ in {
               )
         '';
     };
-    routes = {
+    routes.module = {
       nodes.machine = {
         networking.useDHCP = false;
         networking.interfaces.eth0 = {
@@ -875,7 +875,7 @@ in {
             ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
       '';
     };
-    rename = {
+    rename.module = {
       nodes.machine = { pkgs, ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
@@ -899,7 +899,7 @@ in {
     };
     # even with disabled networkd, systemd.network.links should work
     # (as it's handled by udev, not networkd)
-    link = {
+    link.module = {
       nodes.client = { pkgs, ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
@@ -920,7 +920,7 @@ in {
         assert "mtu 1442" in client.succeed("ip l show dev foo")
       '';
     };
-    wlanInterface = let
+    wlanInterface.module = let
       testMac = "06:00:00:00:02:00";
     in {
       nodes.machine = { pkgs, ... }: {
