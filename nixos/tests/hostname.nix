@@ -38,7 +38,7 @@ in
     machine.wait_for_unit("network-online.target")
 
     # Test if NixOS computes the correct FQDN (either a FQDN or an error/null):
-    assert "${getStr nodes.machine.config.networking.fqdn}" == "${getStr fqdnOrNull}"
+    assert "${getStr nodes.machine.networking.fqdn}" == "${getStr fqdnOrNull}"
 
     # The FQDN, domain name, and hostname detection should work as expected:
     assert "${fqdn}" == machine.succeed("hostname --fqdn").strip()
