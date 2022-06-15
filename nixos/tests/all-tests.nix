@@ -189,6 +189,7 @@ in {
   google-oslogin = handleTest ./google-oslogin {};
   gotify-server = handleTest ./gotify-server.nix {};
   grafana = handleTest ./grafana.nix {};
+  grafana-agent = handleTest ./grafana-agent.nix {};
   graphite = handleTest ./graphite.nix {};
   graylog = handleTest ./graylog.nix {};
   grocy = handleTest ./grocy.nix {};
