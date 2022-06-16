@@ -10107,8 +10107,6 @@ with pkgs;
 
   s5cmd = callPackage ../tools/networking/s5cmd { };
 
-  s3gof3r = callPackage ../tools/networking/s3gof3r { };
-
   s6-dns = skawarePackages.s6-dns;
 
   s6-linux-init = skawarePackages.s6-linux-init;
