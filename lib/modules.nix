@@ -462,6 +462,7 @@ rec {
           config = addFreeformType (addMeta (m.config or {}));
         }
     else
+      lib.throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module."
       { _file = toString m._file or file;
         key = toString m.key or key;
         disabledModules = m.disabledModules or [];
