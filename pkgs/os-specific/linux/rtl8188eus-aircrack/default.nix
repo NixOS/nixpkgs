@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, bc }:
 
 stdenv.mkDerivation {
   pname = "rtl8188eus-aircrack";
@@ -7,14 +7,26 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "aircrack-ng";
     repo = "rtl8188eus";
-    rev = "6146193406b62e942d13d4d43580ed94ac70c218";
-    sha256 = "sha256-85STELbFB7QmTaM8GvJNlWvAg6KPAXeYRiMb4cGA6RY=";
+    rev = "0958f294f90b49d6bad4972b14f90676e5d858d3";
+    hash = "sha256-dkCcwvOLxqU1IZ/OXTp67akjWgsaH1Cq4N8d9slMRI8=";
   };
 
+  patches = [
+    # Support for kernel version 5.17+
+    (fetchpatch {
+      url = "https://github.com/aircrack-ng/rtl8188eus/commit/a56696c733b134f21cf81084e55b88f46acc1ec2.patch";
+      hash = "sha256-Nky358ymOpYDRDXaemFpSHSQFY1hQBX+BdDIBoGoOck=";
+    })
+
+    # Removed 'extern' from inline function declarations
+    (fetchpatch {
+      url = "https://github.com/aircrack-ng/rtl8188eus/commit/0f1905259ec9b85fd1453be3abd322ff543e12bc.patch";
+      hash = "sha256-cQQmytNth2QY577P7kxqpaw4Id+RfZIgWVgvCN0fQxI=";
+    })
+  ];
+
   nativeBuildInputs = [ bc ];
-
   buildInputs = kernel.moduleBuildDependencies;
-
   hardeningDisable = [ "pic" ];
 
   prePatch = ''
@@ -36,6 +48,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/aircrack-ng/rtl8188eus";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fortuneteller2k ];
-    broken = kernel.kernelAtLeast "5.15" || kernel.isHardened;
+    broken = kernel.isHardened;
   };
 }
