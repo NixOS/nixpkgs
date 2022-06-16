@@ -40,6 +40,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Allows you to expose a web server running on your local machine to the internet";
     homepage = "https://ngrok.com/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ bobvanderlinden brodes ];

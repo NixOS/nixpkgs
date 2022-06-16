@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://plex.tv/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [
