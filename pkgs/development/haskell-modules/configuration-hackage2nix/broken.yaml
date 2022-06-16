@@ -262,7 +262,6 @@ broken-packages:
   - authenticate-ldap
   - authinfo-hs
   - auto
-  - autodocodec
   - autom
   - autonix-deps
   - autopack
@@ -5428,7 +5427,6 @@ broken-packages:
   - validated-types
   - Validation
   - validations
-  - validity-aeson
   - valid-names
   - value-supply
   - vampire
