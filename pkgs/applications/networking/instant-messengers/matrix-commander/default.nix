@@ -11,18 +11,19 @@
 , aiofiles
 , notify2
 , dbus-python
+, xdg
 , python-olm
 }:
 
 buildPythonApplication rec {
   pname = "matrix-commander";
-  version = "2.36.0";
+  version = "2.37.3";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
-    sha256 = "sha256-NjOPVQ9BJ2LI7qIr8R8xWDXuFTVIYnvN4hIzfrTCX9I=";
+    sha256 = "sha256-X5tCPR0EqY1dxViwh8/tEjJM2oo81L3H703pPzWzUv8=";
   };
 
   format = "pyproject";
@@ -53,6 +54,7 @@ buildPythonApplication rec {
     aiofiles
     notify2
     dbus-python
+    xdg
     python-olm
   ];
 
