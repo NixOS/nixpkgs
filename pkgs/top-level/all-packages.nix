@@ -4320,6 +4320,8 @@ with pkgs;
 
   roundcubePlugins = dontRecurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
 
+  routersploit = callPackage ../tools/security/routersploit { };
+
   routinator = callPackage ../servers/routinator {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
