@@ -12,6 +12,8 @@
 , glib
 , gtk3
 , gtk4
+, libadwaita
+, libhandy
 , webkitgtk
 , nix-update-script
 }:
@@ -50,6 +52,9 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     gtk4
     webkitgtk
+    # For extra widgets support.
+    libadwaita
+    libhandy
   ];
 
   # Not compatible with gobject-introspection setup hooks.
