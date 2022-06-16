@@ -358,6 +358,8 @@ with pkgs;
 
   commit-formatter = callPackage ../applications/version-management/commit-formatter { };
 
+  commix = callPackage ../tools/security/commix { };
+
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
