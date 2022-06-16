@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
-  version = "3.9.2";
+  version = "4.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IQ+mjiNxfxG0Zq543Rn5rK/BNPzLGVX9jVTtyW7W9cs=";
+    hash = "sha256-O2+S84Utpid4AuWqRBaVtBJsX85PrFBszrKZHUoMGdc=";
   };
 
   propagatedBuildInputs = [
