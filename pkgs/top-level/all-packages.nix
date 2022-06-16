@@ -23619,6 +23619,8 @@ with pkgs;
     buildGoModule = buildGo118Module;
   };
 
+  golangci-lint-langserver = callPackage ../development/tools/golangci-lint-langserver { };
+
   gocyclo = callPackage ../development/tools/gocyclo { };
 
   godef = callPackage ../development/tools/godef { };
