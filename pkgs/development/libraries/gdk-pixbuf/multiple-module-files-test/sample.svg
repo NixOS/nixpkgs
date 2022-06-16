@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="100"
+   height="100"
+   viewBox="0 0 26.458332 26.458334"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   sodipodi:docname="sample.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     width="500px"
+     inkscape:zoom="1.2433833"
+     inkscape:cx="149.99397"
+     inkscape:cy="154.41738"
+     inkscape:window-width="1920"
+     inkscape:window-height="1043"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <circle
+       style="fill:none;stroke:#000000;stroke-width:0.102516"
+       id="path850"
+       cx="8.4526052"
+       cy="-8.9160681"
+       transform="scale(1,-1)"
+       r="5.6345992" />
+    <circle
+       style="fill:none;stroke:#000000;stroke-width:0.102516"
+       id="circle932"
+       cx="18.96344"
+       cy="-16.351238"
+       transform="scale(1,-1)"
+       r="5.6345992" />
+    <circle
+       style="fill:none;stroke:#000000;stroke-width:0.102516"
+       id="circle934"
+       cx="8.9499512"
+       cy="-18.632587"
+       transform="scale(1,-1)"
+       r="5.6345992" />
+    <circle
+       style="fill:none;stroke:#000000;stroke-width:0.102516"
+       id="circle936"
+       cx="16.902472"
+       cy="-9.5225096"
+       transform="scale(1,-1)"
+       r="5.6345992" />
+    <circle
+       style="fill:none;stroke:#000000;stroke-width:0.102516"
+       id="circle938"
+       cx="12.424177"
+       cy="-16.085842"
+       transform="scale(1,-1)"
+       r="5.6345992" />
+  </g>
+</svg>

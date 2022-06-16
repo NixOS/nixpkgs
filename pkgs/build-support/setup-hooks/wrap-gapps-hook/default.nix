@@ -10,6 +10,7 @@
 , callPackage
 , wrapGAppsHook
 , writeTextFile
+, gdk-pixbuf
 }:
 
 makeSetupHook {
@@ -37,8 +38,12 @@ makeSetupHook {
     makeWrapper
   ];
   substitutions = {
+    standardGdkPixbufModules = lib.makeSearchPathOutput "lib" gdk-pixbuf.cacheFile [ gdk-pixbuf librsvg ];
+    gdkPixbufCacheFile = gdk-pixbuf.cacheFile;
+
     passthru.tests = let
       sample-project = ./tests/sample-project;
+      mock-pixbuf-module = callPackage ./tests/sample-module.nix {};
 
       testLib = callPackage ./tests/lib.nix { };
       inherit (testLib) expectSomeLineContainingYInFileXToMentionZ;
@@ -63,6 +68,19 @@ makeSetupHook {
           ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GIO_EXTRA_MODULES" "${dconf.lib}/lib/gio/modules"}
         ''
       );
+
+      pixbuf-modules = basic.overrideAttrs (old: {extraGdkPixbufModules = [mock-pixbuf-module];});
+
+      pixbuf-modules-check = let
+        tested = pixbuf-modules;
+      in testLib.runTest "pixbuf-modules-check" ''
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE" "${gdk-pixbuf}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE" "${librsvg}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/bin/foo" "GDK_PIXBUF_MODULE_FILE" "${mock-pixbuf-module}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE" "${gdk-pixbuf}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE" "${librsvg}/${gdk-pixbuf.cacheFile}"}
+        ${expectSomeLineContainingYInFileXToMentionZ "${tested}/libexec/bar" "GDK_PIXBUF_MODULE_FILE" "${mock-pixbuf-module}/${gdk-pixbuf.cacheFile}"}
+      '';
 
       # Simple derivation containing a gobject-introspection typelib.
       typelib-Mahjong = stdenv.mkDerivation {

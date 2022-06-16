@@ -19,6 +19,7 @@
 , doCheck ? false
 , makeWrapper
 , lib
+, callPackage
 , withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
 , gobject-introspection
 }:
@@ -42,6 +43,8 @@ stdenv.mkDerivation rec {
   patches = [
     # Move installed tests to a separate output
     ./installed-tests-path.patch
+    # Allow for multiple loaders.cache files specified in $GDK_PIXBUF_MODULE_FILE, delimited by ":"
+    ./multiple-module-files.patch
   ];
 
   # gdk-pixbuf-thumbnailer is not wrapped therefore strictDeps will work
@@ -128,8 +131,6 @@ stdenv.mkDerivation rec {
   # The tests take an excessive amount of time (> 1.5 hours) and memory (> 6 GB).
   inherit doCheck;
 
-  setupHook = ./setup-hook.sh;
-
   separateDebugInfo = stdenv.isLinux;
 
   passthru = {
@@ -140,10 +141,12 @@ stdenv.mkDerivation rec {
 
     tests = {
       installedTests = nixosTests.installed-tests.gdk-pixbuf;
+      multiple-module-files = callPackage ./multiple-module-files-test {};
     };
 
     # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc
     moduleDir = "lib/gdk-pixbuf-2.0/2.10.0/loaders";
+    cacheFile = "lib/gdk-pixbuf-2.0/2.10.0/loaders.cache";
   };
 
   meta = with lib; {

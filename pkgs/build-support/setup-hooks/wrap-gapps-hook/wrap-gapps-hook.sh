@@ -10,8 +10,13 @@ find_gio_modules() {
 addEnvHooks "${targetOffset:?}" find_gio_modules
 
 gappsWrapperArgsHook() {
-    if [ -n "$GDK_PIXBUF_MODULE_FILE" ]; then
-        gappsWrapperArgs+=(--set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE")
+
+    gappsWrapperArgs+=(--prefix GDK_PIXBUF_MODULE_FILE : "@standardGdkPixbufModules@")
+
+    if [ -n "$extraGdkPixbufModules" ]; then
+        for pkg in $extraGdkPixbufModules; do
+            gappsWrapperArgs+=(--prefix GDK_PIXBUF_MODULE_FILE : "$pkg/@gdkPixbufCacheFile@")
+        done
     fi
 
     if [ -n "$GSETTINGS_SCHEMAS_PATH" ]; then
