@@ -1564,6 +1564,8 @@ in {
 
   celery = callPackage ../development/python-modules/celery { };
 
+  celery-redbeat = callPackage ../development/python-modules/celery-redbeat { };
+
   cement = callPackage ../development/python-modules/cement { };
 
   censys = callPackage ../development/python-modules/censys { };
