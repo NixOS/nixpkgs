@@ -6457,9 +6457,7 @@ with pkgs;
   fcitx5-chinese-addons = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-chinese-addons.nix { };
 
   fcitx5-mozc = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix {
-    abseil-cpp = abseil-cpp.override {
-      cxxStandard = "17";
-    };
+    abseil-cpp = abseil-cpp;
   };
 
   fcitx5-unikey = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-unikey.nix { };
@@ -7290,9 +7288,7 @@ with pkgs;
 
   google-cloud-cpp = callPackage ../development/libraries/google-cloud-cpp {
     openssl = openssl_1_1;
-    abseil-cpp = abseil-cpp.override {
-      cxxStandard = "14";
-    };
+    abseil-cpp = abseil-cpp_202111;
   };
 
   google-java-format = callPackage ../development/tools/google-java-format { };
@@ -18953,10 +18949,7 @@ with pkgs;
   grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
 
   grpc = callPackage ../development/libraries/grpc {
-    # grpc builds with c++14 so abseil must also be built that way
-    abseil-cpp = abseil-cpp_202111.override {
-      cxxStandard = "14";
-    };
+    abseil-cpp = abseil-cpp_202111;
   };
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
@@ -35235,7 +35228,6 @@ with pkgs;
     # also be built that way
     abseil-cpp = abseil-cpp.override {
       static = true;
-      cxxStandard = "17";
     };
   };
 
