@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, nix-update-script
+, gitUpdater
 , meson
 , ninja
 , vala
@@ -75,8 +75,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
+    updateScript = gitUpdater {
+      inherit pname version;
+      ignoredVersions = "ci.*";
     };
   };
 
