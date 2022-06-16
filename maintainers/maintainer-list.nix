@@ -5332,6 +5332,12 @@
     githubId = 12491746;
     name = "Masato Yonekawa";
   };
+  hyqhyq3 = {
+    email = "huangyangqi@gmail.com";
+    github = "hyqhyq3";
+    githubId = 1583343;
+    name = "Yangqi Huang";
+  };
   hyshka = {
     name = "Bryan Hyshka";
     email = "bryan@hyshka.com";
