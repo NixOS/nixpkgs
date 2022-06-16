@@ -1,5 +1,5 @@
 { lib, stdenv
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , isPy3k
 , cli-helpers
@@ -18,7 +18,9 @@
 , mock
 }:
 
-buildPythonApplication rec {
+# this is a pythonPackage because of the ipython line magics in pgcli.magic
+# integrating with ipython-sql
+buildPythonPackage rec {
   pname = "pgcli";
   version = "3.4.1";
 
