@@ -76,7 +76,8 @@ let
    sourceFile = "source.dhall";
 
 in
-  runCommand name { } (''
+  runCommand name { impureEnvVars = lib.fetchers.proxyImpureEnvVars; }
+ (''
     set -eu
 
     mkdir -p ${cacheDhall} $out/${cacheDhall}
