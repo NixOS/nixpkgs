@@ -45,15 +45,15 @@ assert with lib.strings; (
 
 stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "31.0.0";
+  version = "31.1.0";
 
   src = fetchFromGitea {
     domain = "repo.palemoon.org";
     owner = "MoonchildProductions";
     repo = "Pale-Moon";
-    rev = "${version}_Release";
+    rev = "${version}_Release_build2"; # Remove _build2 when bumping past 31.1.0
     fetchSubmodules = true;
-    sha256 = "sha256-fIQAQCtjA/9Otft3e9Z4xWgE09sqsdArYQtZqmEgfTc=";
+    sha256 = "sha256-x3n4OeZbnJCPCVjsZJW1nBYlsEYn6fXt80voYWQSNq4=";
   };
 
   nativeBuildInputs = [
