@@ -1001,6 +1001,8 @@ with pkgs;
 
   addlicense = callPackage ../tools/misc/addlicense { };
 
+  adenum  = callPackage ../tools/security/adenum { };
+
   adlplug = callPackage ../applications/audio/adlplug {
     inherit (darwin.apple_sdk.frameworks) Foundation Cocoa Carbon CoreServices ApplicationServices CoreAudio CoreMIDI AudioToolbox Accelerate CoreImage IOKit AudioUnit QuartzCore WebKit DiscRecording CoreAudioKit;
     jack = libjack2;
