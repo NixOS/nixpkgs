@@ -7,16 +7,14 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.4.2";
+  version = "3.5.0.3";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${version}";
-    sha256 = "sha256-bE55VV0SrG8nxCLdpODRalnuAkn+olRdMLUjduavj6M=";
+    hash = "sha256-iNYV86mLM6XuCxtBDcD03Wlf6Uaih4B9IXrMJy1oeOU=";
   };
-
-  sourceRoot = "source/gdal";
 
   nativeBuildInputs = [ autoreconfHook pkg-config unzip ];
 
@@ -90,7 +88,7 @@ stdenv.mkDerivation rec {
   # preCheck rather than preInstallCheck because this is what pytestCheckHook
   # calls (coming from the python world)
   preCheck = ''
-    pushd ../autotest
+    pushd autotest
     # something has made files here read-only by this point
     chmod -R u+w .
 
@@ -115,6 +113,8 @@ stdenv.mkDerivation rec {
     # https://github.com/OSGeo/gdal/issues/5523
     "test_transformer_dem_overrride_srs"
     "test_osr_ct_options_area_of_interest"
+    # ValueError: ZIP does not support timestamps before 1980
+    "test_sentinel2_zipped"
   ] ++ lib.optionals (!stdenv.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
     "test_rda_download_queue"
   ];
   postCheck = ''
-    popd # ../autotest
+    popd # autotest
   '';
 
   meta = {
