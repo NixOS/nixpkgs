@@ -233,6 +233,8 @@ with pkgs;
 
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
+  asusctl = callPackage ../tools/system/asusctl { };
+
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
 
   atuin = callPackage ../tools/misc/atuin {

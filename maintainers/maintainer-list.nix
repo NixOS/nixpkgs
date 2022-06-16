@@ -11416,6 +11416,12 @@
     githubId = 695473;
     name = "Sascha Grunert";
   };
+  sauricat = {
+    email = "linshu1729@protonmail.com";
+    github = "sauricat";
+    githubId = 3533655;
+    name = "Shu Lin";
+  };
   sauyon = {
     email = "s@uyon.co";
     github = "sauyon";
