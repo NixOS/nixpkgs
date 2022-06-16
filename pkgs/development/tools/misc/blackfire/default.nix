@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Blackfire Profiler agent and client";
     homepage = "https://blackfire.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ jtojnar shyim ];
     platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" ];

@@ -190,6 +190,7 @@ in buildPythonPackage {
     broken = stdenv.isDarwin;
     description = "Computation using data flow graphs for scalable machine learning";
     homepage = "http://tensorflow.org";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ jyp abbradar cdepillabout ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];

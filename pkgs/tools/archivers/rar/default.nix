@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Utility for RAR archives";
     homepage = "https://www.rarlab.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ thiagokokada ];
     platforms = with platforms; linux ++ darwin;
