@@ -1703,6 +1703,23 @@ let
         };
       };
 
+      njpwerner.autodocstring = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "autodocstring";
+          publisher = "njpwerner";
+          version = "0.6.1";
+          sha256 = "sha256-NI0cbjsZPW8n6qRTRKoqznSDhLZRUguP7Sa/d0feeoc=";
+        };
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/njpwerner.autodocstring/changelog";
+          description = "Generates python docstrings automatically";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=njpwerner.autodocstring";
+          homepage = "https://github.com/NilsJPWerner/autoDocstring";
+          license = licenses.mit;
+          maintainers = with maintainers; [ kamadorueda ];
+        };
+      };
+
       octref.vetur = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vetur";
