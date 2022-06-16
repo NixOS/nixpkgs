@@ -27,6 +27,11 @@ buildPythonPackage rec {
     hash = "sha256-JGbp2bSI/Rvyys1xMd2o34KlqqBsV6B9LhuuNopayYA=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pkg-config'" "'$(command -v $PKG_CONFIG)'"
+  '';
+
   nativeBuildInputs = [
     cython
     pkg-config

@@ -11,18 +11,22 @@
 
 stdenv.mkDerivation rec {
   pname = "wl-clipboard";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "bugaevc";
     repo = "wl-clipboard";
     rev = "v${version}";
-    sha256 = "0c4w87ipsw09aii34szj9p0xfy0m00wyjpll0gb0aqmwa60p0c5d";
+    sha256 = "sha256-lqtLHLsSChWcYWsfFigj0Xveo9doAr7G31fRSaxm0Lw=";
   };
 
   strictDeps = true;
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner ];
   buildInputs = [ wayland wayland-protocols ];
+
+  mesonFlags = [
+    "-Dfishcompletiondir=share/fish/vendor_completions.d"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/bugaevc/wl-clipboard";
