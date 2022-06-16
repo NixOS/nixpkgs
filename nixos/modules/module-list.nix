@@ -431,6 +431,7 @@
   ./services/games/terraria.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
+  ./services/hardware/asusd.nix
   ./services/hardware/auto-cpufreq.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/bolt.nix
