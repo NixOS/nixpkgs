@@ -75,6 +75,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/jhen0409/react-native-debugger";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     description = "The standalone app based on official debugger of React Native, and includes React Inspector / Redux DevTools";
     maintainers = with maintainers; [ ];
