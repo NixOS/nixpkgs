@@ -173,6 +173,7 @@
       broken = stdenv.isDarwin;
       description = "ODBC Driver 17 for SQL Server";
       homepage = "https://docs.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server?view=sql-server-2017";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
       platforms = platforms.linux;
       maintainers = with maintainers; [ spencerjanssen ];
@@ -217,6 +218,7 @@
       broken = stdenv.isDarwin;
       description = "Amazon Redshift ODBC driver";
       homepage = "https://docs.aws.amazon.com/redshift/latest/mgmt/configure-odbc-connection.html";
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
       license = licenses.unfree;
       platforms = platforms.linux;
       maintainers = with maintainers; [ sir4ur0n ];

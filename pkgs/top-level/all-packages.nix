@@ -358,6 +358,8 @@ with pkgs;
 
   commit-formatter = callPackage ../applications/version-management/commit-formatter { };
 
+  commix = callPackage ../tools/security/commix { };
+
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
@@ -10124,8 +10126,6 @@ with pkgs;
 
   s5cmd = callPackage ../tools/networking/s5cmd { };
 
-  s3gof3r = callPackage ../tools/networking/s3gof3r { };
-
   s6-dns = skawarePackages.s6-dns;
 
   s6-linux-init = skawarePackages.s6-linux-init;
@@ -16082,7 +16082,7 @@ with pkgs;
 
   peg = callPackage ../development/tools/parsing/peg { };
 
-  pgcli = pkgs.python3Packages.pgcli;
+  pgcli = with pkgs.python3Packages; toPythonApplication pgcli;
 
   picotool = callPackage ../development/tools/picotool { };
 
@@ -23640,8 +23640,6 @@ with pkgs;
 
   gofumpt = callPackage ../development/tools/gofumpt { };
 
-  gotags = callPackage ../development/tools/gotags { };
-
   go-task = callPackage ../development/tools/go-task { };
 
   golint = callPackage ../development/tools/golint { };
@@ -28700,8 +28698,6 @@ with pkgs;
   storrent = callPackage ../applications/networking/p2p/storrent { };
 
   spacegun = callPackage ../applications/networking/cluster/spacegun {};
-
-  stride = callPackage ../applications/networking/instant-messengers/stride { };
 
   speedread = callPackage ../applications/misc/speedread { };
 
@@ -34930,12 +34926,6 @@ with pkgs;
   uacme = callPackage ../tools/admin/uacme { };
 
   ums = callPackage ../servers/ums { };
-
-  unity3d = callPackage ../development/tools/unity3d {
-    stdenv = stdenv_32bit;
-    gcc_32bit = pkgsi686Linux.gcc;
-    inherit (gnome2) GConf;
-  };
 
   unityhub = callPackage ../development/tools/unityhub { };
 
