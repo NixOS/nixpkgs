@@ -11858,6 +11858,12 @@
     github = "simarra";
     githubId = 14372987;
   };
+  simoneruffini = {
+    email = "simone.ruffini@tutanota.com";
+    github = "simoneruffini";
+    githubId = 50401154;
+    name = "Simone Ruffini";
+  };
   simonchatts = {
     email = "code@chatts.net";
     github = "simonchatts";
