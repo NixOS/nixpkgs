@@ -3,7 +3,7 @@
 , libX11, libXext, libXinerama, libXi, libXrender, libXrandr, libXtst
 , pkg-config, glib, gdk-pixbuf-xlib, gtk3, gtkmm3, iproute2, dbus, systemd, which
 , libdrm, udev, util-linux
-, withX ? true
+, x11Support ? true
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config ];
   buildInputs = [ fuse3 glib icu libdnet libdrm libmspack libtirpc openssl pam procps rpcsvc-proto udev xercesc ]
-      ++ lib.optionals withX [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
+      ++ lib.optionals x11Support [ gdk-pixbuf-xlib gtk3 gtkmm3 libX11 libXext libXinerama libXi libXrender libXrandr libXtst ];
 
   postPatch = ''
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     "--without-xmlsecurity"
     "--with-udev-rules-dir=${placeholder "out"}/lib/udev/rules.d"
     "--with-fuse=fuse3"
-  ] ++ lib.optional (!withX) "--without-x";
+  ] ++ lib.optional (!x11Support) "--without-x";
 
   enableParallelBuilding = true;
 

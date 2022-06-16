@@ -23562,7 +23562,7 @@ with pkgs;
   ocf-resource-agents = callPackage ../os-specific/linux/ocf-resource-agents { };
 
   open-vm-tools = callPackage ../applications/virtualization/open-vm-tools { };
-  open-vm-tools-headless = open-vm-tools.override { withX = false; };
+  open-vm-tools-headless = open-vm-tools.override { x11Support = false; };
 
   air = callPackage ../development/tools/air { };
 
@@ -26099,7 +26099,7 @@ with pkgs;
   };
 
   emacs28-nox = lowPrio (emacs28.override {
-    withX = false;
+    x11Support = false;
     withNS = false;
     withGTK2 = false;
     withGTK3 = false;

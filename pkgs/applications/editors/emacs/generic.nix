@@ -15,7 +15,7 @@
 , libgccjit, targetPlatform, makeWrapper # native-comp params
 , fetchFromSavannah
 , systemd ? null
-, withX ? !stdenv.isDarwin
+, x11Support ? !stdenv.isDarwin
 , withNS ? stdenv.isDarwin
 , withGTK2 ? false, gtk2-x11 ? null
 , withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
@@ -31,7 +31,7 @@
 , withToolkitScrollBars ? true
 , withPgtk ? false
 , withXinput2 ? false
-, withImageMagick ? lib.versionOlder version "27" && (withX || withNS)
+, withImageMagick ? lib.versionOlder version "27" && (x11Support || withNS)
 , toolkit ? (
   if withGTK2 then "gtk2"
   else if withGTK3 then "gtk3"
@@ -42,10 +42,10 @@
 
 assert (libXft != null) -> libpng != null;      # probably a bug
 assert stdenv.isDarwin -> libXaw != null;       # fails to link otherwise
-assert withNS -> !withX;
+assert withNS -> !x11Support;
 assert withNS -> stdenv.isDarwin;
-assert (withGTK2 && !withNS) -> withX;
-assert (withGTK3 && !withNS) -> withX;
+assert (withGTK2 && !withNS) -> x11Support;
+assert (withGTK3 && !withNS) -> x11Support;
 assert withGTK2 -> !withGTK3 && gtk2-x11 != null;
 assert withGTK3 -> !withGTK2 && gtk3-x11 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
@@ -55,7 +55,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
   NATIVE_FULL_AOT = "1";
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
 } // {
-  pname = pname + lib.optionalString ( !withX && !withNS && !withGTK2 && !withGTK3 ) "-nox";
+  pname = pname + lib.optionalString ( !x11Support && !withNS && !withGTK2 && !withGTK3 ) "-nox";
   inherit version;
 
   patches = patches fetchpatch;
@@ -122,23 +122,23 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
 
   nativeBuildInputs = [ pkg-config makeWrapper ]
     ++ lib.optionals srcRepo [ autoreconfHook texinfo ]
-    ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
+    ++ lib.optional (x11Support && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsa-lib acl gpm gettext jansson harfbuzz.dev ]
     ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
-    ++ lib.optionals withX
+    ++ lib.optionals x11Support
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg giflib libtiff libXft
         gconf cairo ]
-    ++ lib.optionals (withX || withNS) [ librsvg ]
+    ++ lib.optionals (x11Support || withNS) [ librsvg ]
     ++ lib.optionals withImageMagick [ imagemagick ]
-    ++ lib.optionals (stdenv.isLinux && withX) [ m17n_lib libotf ]
-    ++ lib.optional (withX && withGTK2) gtk2-x11
-    ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
-    ++ lib.optional (withX && withMotif) motif
+    ++ lib.optionals (stdenv.isLinux && x11Support) [ m17n_lib libotf ]
+    ++ lib.optional (x11Support && withGTK2) gtk2-x11
+    ++ lib.optionals (x11Support && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
+    ++ lib.optional (x11Support && withMotif) motif
     ++ lib.optional withSQLite3 sqlite
     ++ lib.optional withWebP libwebp
-    ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
+    ++ lib.optionals (x11Support && withXwidgets) [ webkitgtk glib-networking ]
     ++ lib.optionals withNS [ AppKit GSS ImageIO ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ]
     ++ lib.optionals nativeComp [ libgccjit ];
@@ -153,7 +153,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
       (lib.withFeature withNS "ns")) ++
     (if withNS
       then [ "--disable-ns-self-contained" ]
-    else if withX
+    else if x11Support
       then [ "--with-x-toolkit=${toolkit}" "--with-xft" "--with-cairo" ]
       else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
              "--with-gif=no" "--with-tiff=no" ])
@@ -206,7 +206,7 @@ let emacs = stdenv.mkDerivation (lib.optionalAttrs nativeComp {
 
   postFixup = lib.concatStringsSep "\n" [
 
-    (lib.optionalString (stdenv.isLinux && withX && toolkit == "lucid") ''
+    (lib.optionalString (stdenv.isLinux && x11Support && toolkit == "lucid") ''
       patchelf --set-rpath \
         "$(patchelf --print-rpath "$out/bin/emacs"):${lib.makeLibraryPath [ libXcursor ]}" \
         "$out/bin/emacs"

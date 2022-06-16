@@ -17,7 +17,7 @@
 
 assert libX11 != null -> (fontconfig != null && gnused != null && coreutils != null);
 let
-  withX = libX11 != null && !aquaterm && !stdenv.isDarwin;
+  x11Support = libX11 != null && !aquaterm && !stdenv.isDarwin;
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
@@ -35,7 +35,7 @@ in
     ++ lib.optional withTeXLive (texlive.combine { inherit (texlive) scheme-small; })
     ++ lib.optional withLua lua
     ++ lib.optional withCaca libcaca
-    ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
+    ++ lib.optionals x11Support [ libX11 libXpm libXt libXaw ]
     ++ lib.optionals withQt [ qtbase qtsvg ]
     ++ lib.optional withWxGTK wxGTK;
 
@@ -45,14 +45,14 @@ in
   '';
 
   configureFlags = [
-    (if withX then "--with-x" else "--without-x")
+    (if x11Support then "--with-x" else "--without-x")
     (if withQt then "--with-qt=qt5" else "--without-qt")
     (if aquaterm then "--with-aquaterm" else "--without-aquaterm")
   ] ++ lib.optional withCaca "--with-caca";
 
   CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
 
-  postInstall = lib.optionalString withX ''
+  postInstall = lib.optionalString x11Support ''
     wrapProgram $out/bin/gnuplot \
        --prefix PATH : '${gnused}/bin' \
        --prefix PATH : '${coreutils}/bin' \
