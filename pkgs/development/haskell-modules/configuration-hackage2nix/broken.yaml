@@ -864,6 +864,7 @@ broken-packages:
   - CoreDump
   - CoreErlang
   - core-haskell
+  - core-telemetry
   - core-webserver-warp
   - Coroutine
   - coroutine-object
@@ -3127,6 +3128,7 @@ broken-packages:
   - make-hard-links
   - make-monofoldable-foldable
   - mallard
+  - managed-functions
   - mandulia
   - mangopay
   - Map
