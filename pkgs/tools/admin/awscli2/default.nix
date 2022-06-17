@@ -8,11 +8,11 @@ let
   py = python3.override {
     packageOverrides = self: super: {
       awscrt = super.awscrt.overridePythonAttrs (oldAttrs: rec {
-        version = "0.13.5";
+        version = "0.13.11";
         src = self.fetchPypi {
           inherit (oldAttrs) pname;
           inherit version;
-          sha256 = "sha256-dUNljMKsbl6eByhEYivWgRJczTBw3N1RVl8r3e898mg=";
+          sha256 = "sha256-Yx3I3RD57Nx6Cvm4moc5zmMbdsHeYiMghDfbQUor38E=";
         };
       });
       jmespath = super.jmespath.overridePythonAttrs (oldAttrs: rec {
@@ -29,13 +29,13 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.7.3"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.7.8"; # N.B: if you change this, check if overrides are still up-to-date
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    sha256 = "sha256-CM20zBuby1X+XOiphDDtWHUB08Mw7IYf0aZUWIvEAqI=";
+    sha256 = "sha256-6JlBgcHpR2ZfrljS+flxaog/KZQLvPUacJGLMQNsZ5Y=";
   };
 
   propagatedBuildInputs = [
