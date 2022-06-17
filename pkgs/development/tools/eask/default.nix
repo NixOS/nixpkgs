@@ -7,7 +7,7 @@ let
   };
 in
 nodePackages.eask.override {
-  name = "cz-cli";
+  name = "eask";
   meta = with lib; {
     description = "Command-line tool for building and testing Emacs Lisp packages";
     homepage = "https://emacs-eask.github.io/";
