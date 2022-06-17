@@ -47,7 +47,7 @@ in
     user-icons = mkOption {
       type = types.nullOr (types.enum [ "gravatar" "identicon" ]);
       default = null;
-      description = "User icons for history view";
+      description = "Enable specific user icons for history view";
     };
 
     emoji = mkOption {
