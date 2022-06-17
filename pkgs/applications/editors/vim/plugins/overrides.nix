@@ -1027,6 +1027,7 @@ self: super: {
   vim-go = super.vim-go.overrideAttrs (old:
     let
       binPath = lib.makeBinPath [
+        # TODO: package commented packages
         asmfmt
         delve
         errcheck
@@ -1040,11 +1041,15 @@ self: super: {
         golangci-lint
         gomodifytags
         gopls
-        gotags
-        gotools
+        # gorename
+        # gotags
+        gotools # contains staticcheck
+        # guru
         iferr
         impl
+        # keyify
         reftools
+        # revive
       ];
     in
     {
