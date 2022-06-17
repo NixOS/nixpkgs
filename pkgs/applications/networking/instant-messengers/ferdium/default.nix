@@ -1,20 +1,6 @@
-{ lib, mkFranzDerivation, fetchurl, xorg, xdg-utils, buildEnv, writeShellScriptBin }:
+{ lib, mkFranzDerivation, fetchurl, xorg, buildEnv }:
 
-let
-  mkFranzDerivation' = mkFranzDerivation.override {
-    xdg-utils = buildEnv {
-      name = "xdg-utils-for-ferdi";
-      paths = [
-        xdg-utils
-        (lib.hiPrio (writeShellScriptBin "xdg-open" ''
-          unset GDK_BACKEND
-          exec ${xdg-utils}/bin/xdg-open "$@"
-        ''))
-      ];
-    };
-  };
-in
-mkFranzDerivation' rec {
+mkFranzDerivation rec {
   pname = "ferdium";
   name = "Ferdium";
   version = "6.0.0-nightly.65";
