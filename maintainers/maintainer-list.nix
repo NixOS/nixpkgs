@@ -5860,6 +5860,12 @@
       fingerprint = "A506 C38D 5CC8 47D0 DF01  134A DA8B 833B 5260 4E63";
     }];
   };
+  jcs090218 = {
+    email = "jcs090218@gmail.com";
+    github = "jcs090218";
+    githubId = 8685505;
+    name = "Jen-Chieh Shen";
+  };
   jcumming = {
     email = "jack@mudshark.org";
     github = "jcumming";
