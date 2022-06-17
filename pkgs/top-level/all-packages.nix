@@ -35387,6 +35387,8 @@ with pkgs;
 
   omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 
+  omnisharp-roslyn-mono = callPackage ../development/tools/omnisharp-roslyn-mono { };
+
   wasmtime = callPackage ../development/interpreters/wasmtime {};
 
   wfuzz = with python3Packages; toPythonApplication wfuzz;
