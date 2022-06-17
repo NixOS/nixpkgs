@@ -238,10 +238,16 @@ self: super: {
   digit = doJailbreak super.digit;
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
-  hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck super.hnix);
+  # 2022-06-17: Use hnix-store 0.5 until hnix 0.17
+  hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck (
+    super.hnix.overrideScope (hself: hsuper: {
+      hnix-store-core = hself.hnix-store-core_0_5_0_0;
+      hnix-store-remote = hself.hnix-store-remote_0_5_0_0;
+    })
+  ));
   # Too strict bounds on algebraic-graphs
   # https://github.com/haskell-nix/hnix-store/issues/180
-  hnix-store-core = doJailbreak super.hnix-store-core;
+  hnix-store-core_0_5_0_0 = doJailbreak super.hnix-store-core_0_5_0_0;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
