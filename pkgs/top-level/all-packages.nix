@@ -9463,6 +9463,10 @@ with pkgs;
     wxGTK31-gtk3 = wxGTK31-gtk3.override { withWebKit = true; };
   };
 
+  polaris = callPackage ../servers/polaris { };
+
+  polaris-web = callPackage ../servers/polaris/web.nix { };
+
   polipo = callPackage ../servers/polipo { };
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
