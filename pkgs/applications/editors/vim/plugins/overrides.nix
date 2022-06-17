@@ -1031,7 +1031,7 @@ self: super: {
         delve
         errcheck
         go-motion
-        go-tools
+        go-tools # contains staticcheck
         gocode
         gocode-gomod
         godef
@@ -1041,7 +1041,8 @@ self: super: {
         gomodifytags
         gopls
         # gorename
-        gotools # contains staticcheck
+        # gotags
+        gotools
         # guru
         iferr
         impl
