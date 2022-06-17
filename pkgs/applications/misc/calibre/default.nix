@@ -16,7 +16,6 @@
 , hunspell
 , hyphen
 , unrarSupport ? false
-, chmlib
 , python3Packages
 , libusb1
 , libmtp
@@ -66,7 +65,6 @@ mkDerivation rec {
   nativeBuildInputs = [ pkg-config qmake removeReferencesTo wrapGAppsHook ];
 
   buildInputs = [
-    chmlib
     fontconfig
     hunspell
     hyphen
@@ -102,6 +100,7 @@ mkDerivation rec {
       msgpack
       netifaces
       pillow
+      pychm
       pyqt-builder
       pyqt5
       python
