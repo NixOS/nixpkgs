@@ -357,6 +357,10 @@ in {
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
     nvidia_x11             = nvidiaPackages.stable;
 
+    # this is not a replacement for nvidia_x11
+    # only the opensource kernel driver exposed for hydra to build
+    nvidia_x11_beta_open   = nvidiaPackages.beta.open;
+
     openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
 
     ply = callPackage ../os-specific/linux/ply { };
