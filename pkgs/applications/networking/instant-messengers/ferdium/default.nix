@@ -16,7 +16,6 @@ let
 in
 mkFranzDerivation' rec {
   pname = "ferdium";
-  name = "Ferdium";
   version = "6.0.0-nightly.40";
   src = fetchurl {
     url = "https://github.com/ferdium/ferdium-app/releases/download/v6.0.0-nightly.40/ferdium_6.0.0-nightly.40_amd64.deb";
