@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps}
+    mkdir -p $out/{bin,opt/${binaryName},share/pixmaps,share/icons/hicolor/256x256/apps}
     mv * $out/opt/${binaryName}
 
     chmod +x $out/opt/${binaryName}/${binaryName}
@@ -90,7 +90,9 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${
       lib.strings.toLower binaryName
     } || true
+
     ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
+    ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
 
     ln -s "${desktopItem}/share/applications" $out/share/
   '';
