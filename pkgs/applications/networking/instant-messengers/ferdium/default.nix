@@ -1,4 +1,4 @@
-{ lib, mkFranzDerivation, fetchurl, xorg, buildEnv }:
+{ lib, mkFranzDerivation, fetchurl, xorg }:
 
 mkFranzDerivation rec {
   pname = "ferdium";
