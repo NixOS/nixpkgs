@@ -221,9 +221,10 @@ rec {
     let
       f = if isFunction fn then fn else import fn;
       auto = intersectAttrs (functionArgs f) autoArgs;
+      mirrorArgs = mirrorFunctionArgs f;
       origArgs = auto // args;
       pkgs = f origArgs;
-      mkAttrOverridable = name: _: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
+      mkAttrOverridable = name: _: makeOverridable (mirrorArgs (newArgs: (f newArgs).${name})) origArgs;
     in
       if isDerivation pkgs then throw
         ("function `callPackages` was called on a *single* derivation "
