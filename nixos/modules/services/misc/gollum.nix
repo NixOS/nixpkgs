@@ -68,6 +68,12 @@ in
       description = "Disable editing pages";
     };
 
+    local-time = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Use the browser's local timezone instead of the server's for displaying dates.";
+    };
+
     branch = mkOption {
       type = types.str;
       default = "master";
@@ -123,6 +129,7 @@ in
             ${optionalString cfg.emoji "--emoji"} \
             ${optionalString cfg.h1-title "--h1-title"} \
             ${optionalString cfg.no-edit "--no-edit"} \
+            ${optionalString cfg.local-time "--local-time"} \
             ${optionalString (cfg.allowUploads != null) "--allow-uploads ${cfg.allowUploads}"} \
             ${optionalString (cfg.user-icons != null) "--user-icons ${cfg.user-icons}"} \
             ${cfg.stateDir}
