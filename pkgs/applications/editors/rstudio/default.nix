@@ -128,6 +128,7 @@ in
       ./clang-location.patch
       ./use-system-node.patch
       ./fix-resources-path.patch
+      ./pandoc-nix-path.patch
     ];
 
     postPatch = ''
@@ -137,14 +138,14 @@ in
         --replace 'SOCI_LIBRARY_DIR "/usr/lib"' 'SOCI_LIBRARY_DIR "${soci}/lib"'
 
       substituteInPlace src/gwt/build.xml \
-        --replace '/usr/bin/node' '${nodejs}/bin/node'
+        --replace '@node@' ${nodejs}
 
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
         --replace '@libclang@' ${llvmPackages.libclang.lib} \
         --replace '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
 
       substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
-        --replace "bin/pandoc" "${pandoc}/bin/pandoc"
+        --replace '@pandoc@' ${pandoc}/bin/pandoc
     '';
 
     hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
