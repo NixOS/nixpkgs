@@ -2143,6 +2143,8 @@ in {
 
   cryptoparser = callPackage ../development/python-modules/cryptoparser { };
 
+  crysp = callPackage ../development/python-modules/crysp { };
+
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
   csrmesh  = callPackage ../development/python-modules/csrmesh { };
