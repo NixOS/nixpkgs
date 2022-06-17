@@ -135,6 +135,8 @@ extra-packages:
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
   - bower-json == 1.0.0.1               # 2022-05-21: Needed for spago 0.20.9
   - fourmolu == 0.6.0.0                 # 2022-06-05: Last fourmolu version compatible with hls 1.7/ hls-fourmolu-plugin 1.0.3.0
+  - hnix-store-core == 0.5.0.0          # 2022-06-17: Until hnix 0.17
+  - hnix-store-remote == 0.5.0.0        # 2022-06-17: Until hnix 0.17
 
 package-maintainers:
   abbradar:
@@ -347,9 +349,16 @@ package-maintainers:
     - lentil
   sorki:
     - cayenne-lpp
+    - blockfrost-client
+    - data-lens-light
     - data-stm32
     - gcodehs
+    - hnix
+    - hnix-store-core
+    - hnix-store-remote
+    - implicit
     - nix-derivation
+    - nix-diff
     - nix-narinfo
     - ttn
     - ttn-client
@@ -456,6 +465,7 @@ unsupported-platforms:
   HSoM:                                         [ x86_64-darwin, aarch64-darwin ]
   iwlib:                                        [ x86_64-darwin, aarch64-darwin ]
   Jazzkell:                                     [ x86_64-darwin, aarch64-darwin ] # depends on Euterpea
+  jsaddle-hello:                                [ x86_64-darwin, aarch64-darwin ] # depends on jsaddle-webkit2gtk
   jsaddle-webkit2gtk:                           [ x86_64-darwin, aarch64-darwin ]
   keid-core:                                    [ aarch64-linux ]
   keid-geometry:                                [ aarch64-linux ]
