@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i bash -p nix curl jq nix-update
+#! nix-shell -I nixpkgs=../../../.. -i bash -p nix curl jq nix-update
 
 # check if composer2nix is installed
 if ! command -v composer2nix &> /dev/null; then
@@ -7,7 +7,7 @@ if ! command -v composer2nix &> /dev/null; then
   exit 1
 fi
 
-CURRENT_VERSION=$(nix eval --raw '(with import ../../../.. {}; snipe-it.version)')
+CURRENT_VERSION=$(nix eval -f ../../../.. --raw snipe-it.version)
 TARGET_VERSION_REMOTE=$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} https://api.github.com/repos/snipe/snipe-it/releases/latest | jq -r ".tag_name")
 TARGET_VERSION=${TARGET_VERSION_REMOTE:1}
 SNIPE_IT=https://github.com/snipe/snipe-it/raw/$TARGET_VERSION_REMOTE

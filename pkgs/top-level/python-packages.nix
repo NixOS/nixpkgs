@@ -10768,6 +10768,8 @@ in {
 
   types-pytz = callPackage ../development/python-modules/types-pytz { };
 
+  types-pyyaml = callPackage ../development/python-modules/types-pyyaml { };
+
   types-redis = callPackage ../development/python-modules/types-redis { };
 
   types-requests = callPackage ../development/python-modules/types-requests { };
