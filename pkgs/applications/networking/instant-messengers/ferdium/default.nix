@@ -22,7 +22,9 @@ mkFranzDerivation' rec {
     url = "https://github.com/ferdium/ferdium-app/releases/download/v6.0.0-nightly.40/ferdium_6.0.0-nightly.40_amd64.deb";
     sha256 = "sha256-pDVWVUQRJqFyaMGIhMekNzz8DVq+B8M3fD0JC8+7x2E=";
   };
+
   extraBuildInputs = [ xorg.libxshmfence ];
+
   meta = with lib; {
     description = "All your services in one place built by the community";
     homepage = "https://ferdium.org/";
