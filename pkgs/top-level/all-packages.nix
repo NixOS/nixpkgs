@@ -9926,8 +9926,6 @@ with pkgs;
 
   relic = callPackage ../development/tools/relic { };
 
-  alarm-clock-applet = callPackage ../tools/misc/alarm-clock-applet { };
-
   remind = callPackage ../tools/misc/remind { };
 
   remmina = callPackage ../applications/networking/remote/remmina { };
