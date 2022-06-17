@@ -24814,6 +24814,8 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
+  plasma-overdose-kde-theme = callPackage ../data/themes/plasma-overdose-kde-theme { };
+
   papis = with python3Packages; toPythonApplication papis;
 
   paperlike-go = callPackage ../tools/misc/paperlike-go { };
