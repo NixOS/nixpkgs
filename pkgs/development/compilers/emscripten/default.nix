@@ -3,11 +3,12 @@
 , llvmPackages
 , symlinkJoin, makeWrapper, substituteAll
 , mkYarnModules
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.0.0";
+  version = "3.1.10";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    sha256 = "sha256-HlXcPKlmBTwEKgTfeMg6QoMKMbK++bpv2fu1DyolrHs=";
+    sha256 = "03k0pd5hna7khrnn3k3ln38h9w0vyaicfzvfqlqbxi4zz8jikrdb";
     rev = version;
   };
 
@@ -37,6 +38,11 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./0001-emulate-clang-sysroot-include-logic.patch;
       resourceDir = "${llvmEnv}/lib/clang/${llvmPackages.release_version}/";
+    })
+    (fetchpatch {
+      # https://github.com/emscripten-core/emscripten/pull/16986
+      url = "https://github.com/emscripten-core/emscripten/commit/d5ef6937fe395488e23a82c1e582a7ea5c2dab83.patch";
+      sha256 = "sha256-YX5DG8i5x6S7XnU58etEapDd+o5SuzbFIGv8v/9+T3E=";
     })
   ];
 
