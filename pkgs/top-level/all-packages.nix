@@ -32505,6 +32505,8 @@ with pkgs;
 
   ultrastardx = callPackage ../games/ultrastardx { };
 
+  umoria = callPackage ../games/umoria { };
+
   unciv = callPackage ../games/unciv { };
 
   unnethack = callPackage ../games/unnethack { };
