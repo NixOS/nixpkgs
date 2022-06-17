@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  # networkmanager relies on libjansson.so:
+  #   https://github.com/NixOS/nixpkgs/pull/176302#issuecomment-1150239453
+  cmakeFlags = [ "-DJANSSON_BUILD_SHARED_LIBS=ON" ];
+
   meta = with lib; {
     homepage = "https://github.com/akheron/jansson";
     description = "C library for encoding, decoding and manipulating JSON data";
