@@ -11,6 +11,7 @@
 , cookiecutter
 , pluggy
 , pyyaml
+, pytestCheckHook
 , selinux-python
 , subprocess-tee
 }:
@@ -18,6 +19,7 @@
 buildPythonPackage rec {
   pname = "molecule";
   version = "3.5.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -47,6 +49,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools-scm
   ];
+
+  checkInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "molecule" ];
 
