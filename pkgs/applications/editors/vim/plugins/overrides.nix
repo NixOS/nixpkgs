@@ -52,9 +52,6 @@
 , xorg
 , zsh
 
-# test dependencies
-, neovim-unwrapped
-
   # command-t dependencies
 , rake
 , ruby
@@ -235,6 +232,12 @@ self: super: {
   cmp-zsh = super.cmp-zsh.overrideAttrs (old: {
     dependencies = with self; [ nvim-cmp zsh ];
   });
+
+  coc-nginx = buildVimPluginFrom2Nix {
+    pname = "coc-nginx";
+    inherit (nodePackages."@yaegassy/coc-nginx") version meta;
+    src = "${nodePackages."@yaegassy/coc-nginx"}/lib/node_modules/@yaegassy/coc-nginx";
+  };
 
   command-t = super.command-t.overrideAttrs (old: {
     buildInputs = [ ruby rake ];
@@ -1254,6 +1257,7 @@ self: super: {
       "coc-cmake"
       "coc-css"
       "coc-diagnostic"
+      "coc-docker"
       "coc-emmet"
       "coc-eslint"
       "coc-explorer"
@@ -1277,12 +1281,16 @@ self: super: {
       "coc-r-lsp"
       "coc-rls"
       "coc-rust-analyzer"
+      "coc-sh"
       "coc-smartf"
       "coc-snippets"
       "coc-solargraph"
       "coc-stylelint"
+      "coc-sumneko-lua"
+      "coc-sqlfluff"
       "coc-tabnine"
       "coc-texlab"
+      "coc-toml"
       "coc-tslint"
       "coc-tslint-plugin"
       "coc-tsserver"

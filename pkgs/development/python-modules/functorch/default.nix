@@ -6,6 +6,7 @@
 , pytestCheckHook
 , python
 , pytorch
+, pybind11
 , which
 }:
 
@@ -27,6 +28,10 @@ buildPythonPackage rec {
     ninja
     pytorch
     which
+  ];
+
+  buildInputs = [
+    pybind11
   ];
 
   preCheck = ''

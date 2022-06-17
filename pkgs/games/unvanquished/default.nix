@@ -225,6 +225,10 @@ in stdenv.mkDerivation rec {
       mit gpl3Plus lib.licenses.zlib bsd3 # engine
       cc-by-sa-25 cc-by-sa-30 cc-by-30 cc-by-sa-40 cc0 # assets
     ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode  # unvanquished-binary-deps
+    ];
     maintainers = with lib.maintainers; [ afontain ];
     platforms = [ "x86_64-linux" ];
   };

@@ -86,7 +86,10 @@ rec {
         homepage = "https://www.gradle.org/";
         changelog = "https://docs.gradle.org/${version}/release-notes.html";
         downloadPage = "https://gradle.org/next-steps/?version=${version}";
-        sourceProvenance = with sourceTypes; [ binaryBytecode ];
+        sourceProvenance = with sourceTypes; [
+          binaryBytecode
+          binaryNativeCode
+        ];
         license = licenses.asl20;
         platforms = if (supportedPlatforms != null) then supportedPlatforms else platforms.unix;
         maintainers = with maintainers; [ lorenzleutgeb liff ];

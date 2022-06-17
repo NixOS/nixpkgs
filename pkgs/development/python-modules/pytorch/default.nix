@@ -176,6 +176,10 @@ in buildPythonPackage rec {
   USE_MKLDNN = setBool mklDnnSupport;
   USE_MKLDNN_CBLAS = setBool mklDnnSupport;
 
+  # Avoid using pybind11 from git submodule
+  # Also avoids pytorch exporting the headers of pybind11
+  USE_SYSTEM_BIND11 = true;
+
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
     ${python.interpreter} setup.py build --cmake-only
@@ -223,7 +227,7 @@ in buildPythonPackage rec {
     removeReferencesTo
   ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ];
 
-  buildInputs = [ blas blas.provider ]
+  buildInputs = [ blas blas.provider pybind11 ]
     ++ lib.optionals cudaSupport [ cudnn magma nccl ]
     ++ lib.optionals stdenv.isLinux [ numactl ];
 

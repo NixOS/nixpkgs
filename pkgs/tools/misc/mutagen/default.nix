@@ -39,6 +39,7 @@ buildGo118Module rec {
     homepage = "https://mutagen.io/";
     changelog = "https://github.com/mutagen-io/mutagen/releases/tag/v${version}";
     maintainers = [ maintainers.marsam ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
   };
 }
