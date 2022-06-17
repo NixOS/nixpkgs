@@ -439,6 +439,7 @@ in {
   podman = handleTestOn ["x86_64-linux"] ./podman/default.nix {};
   podman-dnsname = handleTestOn ["x86_64-linux"] ./podman/dnsname.nix {};
   podman-tls-ghostunnel = handleTestOn ["x86_64-linux"] ./podman/tls-ghostunnel.nix {};
+  polaris = handleTest ./polaris.nix {};
   pomerium = handleTestOn ["x86_64-linux"] ./pomerium.nix {};
   postfix = handleTest ./postfix.nix {};
   postfix-raise-smtpd-tls-security-level = handleTest ./postfix-raise-smtpd-tls-security-level.nix {};
