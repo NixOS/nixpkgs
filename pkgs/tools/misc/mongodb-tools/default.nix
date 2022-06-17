@@ -17,7 +17,7 @@ let
     "mongofiles"
     "mongotop"
   ];
-  version = "100.5.2";
+  version = "100.5.3";
 
 in buildGoPackage {
   pname = "mongo-tools";
@@ -30,7 +30,7 @@ in buildGoPackage {
     rev = version;
     owner = "mongodb";
     repo = "mongo-tools";
-    sha256 = "sha256-qYTfC7+5XWDCyQQFKmuPmDmwsekDdY6OAerxZgzf8D0=";
+    sha256 = "sha256-8RkpBCFVxKVsu4h2z+rhlwvYfbSDHZUg8erO4+2GRbw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
