@@ -95,6 +95,7 @@ in
           DHCP = "yes";
           linkConfig.RequiredForOnline =
             lib.mkDefault config.systemd.network.wait-online.anyInterface;
+          networkConfig.IPv6PrivacyExtensions = "kernel";
         };
         networks."99-wireless-client-dhcp" = lib.mkIf cfg.useDHCP {
           # Like above, but this is much more likely to be correct.
@@ -102,6 +103,7 @@ in
           DHCP = "yes";
           linkConfig.RequiredForOnline =
             lib.mkDefault config.systemd.network.wait-online.anyInterface;
+          networkConfig.IPv6PrivacyExtensions = "kernel";
           # We also set the route metric to one more than the default
           # of 1024, so that Ethernet is preferred if both are
           # available.
