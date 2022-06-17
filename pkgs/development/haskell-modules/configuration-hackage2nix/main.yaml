@@ -465,6 +465,7 @@ unsupported-platforms:
   HSoM:                                         [ x86_64-darwin, aarch64-darwin ]
   iwlib:                                        [ x86_64-darwin, aarch64-darwin ]
   Jazzkell:                                     [ x86_64-darwin, aarch64-darwin ] # depends on Euterpea
+  jsaddle-hello:                                [ x86_64-darwin, aarch64-darwin ] # depends on jsaddle-webkit2gtk
   jsaddle-webkit2gtk:                           [ x86_64-darwin, aarch64-darwin ]
   keid-core:                                    [ aarch64-linux ]
   keid-geometry:                                [ aarch64-linux ]
