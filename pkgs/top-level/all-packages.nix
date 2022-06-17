@@ -33302,6 +33302,8 @@ with pkgs;
 
   ### SCIENCE/PHYSICS
 
+  dawn = callPackage ../applications/science/physics/dawn {};
+
   elmerfem = callPackage ../applications/science/physics/elmerfem {};
 
   mcfm = callPackage ../applications/science/physics/MCFM {
