@@ -1,6 +1,6 @@
-{ lib, stdenv, writeScriptBin, fetchpatch, fetchFromGitLab, autoreconfHook, pkg-config
+{ lib, stdenv, writeScriptBin, fetchpatch, fetchFromGitLab, autoreconfHook, pkg-config, makeWrapper
 , autoconf-archive, libxslt, boost, gtkmm2, imagemagick, sane-backends
-, tesseract4, udev, libusb1
+, tesseract4, gawk, udev, libusb1
 , withNetworkScan ? false, utsushi-networkscan
 }:
 
@@ -45,6 +45,7 @@ in stdenv.mkDerivation rec {
     autoconf-archive
     fakegit
     libxslt
+    makeWrapper
   ];
 
   buildInputs = [
@@ -75,6 +76,11 @@ in stdenv.mkDerivation rec {
       --replace '"tesseract' '"${tesseract4}/bin/tesseract'
     substituteInPlace filters/get-text-orientation \
       --replace '=tesseract' '=${tesseract4}/bin/tesseract'
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/utsushi \
+      --prefix PATH : ${lib.makeBinPath [ tesseract4 gawk ]}
   '';
 
   configureFlags = [
