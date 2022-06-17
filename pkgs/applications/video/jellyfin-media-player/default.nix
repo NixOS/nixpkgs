@@ -22,22 +22,18 @@
 , qtwebchannel
 , qtwebengine
 , qtx11extras
+, jellyfin-web
 }:
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-iqwOv95JFxQ1j/9B+oBFAp7mD1/1g2EJYvvUKbrDQes=";
-  };
-
-  jmpDist = fetchzip {
-    url = "https://github.com/iwalton3/jellyfin-web-jmp/releases/download/jwc-10.7.3/dist.zip";
-    sha256 = "sha256-P7WEYbVvpaVLwMgqC2e8QtMOaJclg0bX78J1fdGzcCU=";
+    sha256 = "sha256-eDCfqSNkKVm8MC4XA1NhQSByy9zhfyQRPM8OlSKcIvc=";
   };
 
   patches = [
@@ -81,9 +77,8 @@ mkDerivation rec {
   ];
 
   preBuild = ''
-    # copy the webclient-files to the expected "dist" directory
-    mkdir -p dist
-    cp -a ${jmpDist}/* dist
+    # link the jellyfin-web files to the expected "dist" directory
+    ln -s ${jellyfin-web}/share/jellyfin-web dist
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
