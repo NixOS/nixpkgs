@@ -262,7 +262,6 @@ broken-packages:
   - authenticate-ldap
   - authinfo-hs
   - auto
-  - autodocodec
   - autom
   - autonix-deps
   - autopack
@@ -519,6 +518,7 @@ broken-packages:
   - cabal2doap
   - cabal2ebuild
   - cabal2ghci
+  - cabal2json
   - cabal-audit
   - cabal-auto-expose
   - cabal-bundle-clib
@@ -610,6 +610,7 @@ broken-packages:
   - category-traced
   - catnplus
   - cautious-file
+  - cautious-gen
   - cayene-lpp
   - cayley-client
   - cblrepo
@@ -865,6 +866,7 @@ broken-packages:
   - CoreDump
   - CoreErlang
   - core-haskell
+  - core-telemetry
   - core-webserver-warp
   - Coroutine
   - coroutine-object
@@ -929,6 +931,7 @@ broken-packages:
   - ctemplate
   - ctkl
   - cuboid
+  - cuckoo
   - cuckoo-filter
   - curl-aeson
   - curl-runnings
@@ -1361,6 +1364,7 @@ broken-packages:
   - except-exceptions
   - exceptional
   - exceptionfree-readfile
+  - exchangerates
   - execs
   - executor
   - exh
@@ -1476,6 +1480,7 @@ broken-packages:
   - fixed-storable-array
   - fixed-timestep
   - fixed-width
+  - fixer
   - fixfile
   - fixie
   - fix-symbols-gitit
@@ -2210,7 +2215,6 @@ broken-packages:
   - higgledy
   - higherorder
   - highjson
-  - highlight
   - highlight-versions
   - highWaterMark
   - himg
@@ -2744,7 +2748,6 @@ broken-packages:
   - joy-rewrite
   - jpeg
   - jsaddle-clib
-  - jsaddle-warp
   - jsaddle-wkwebview
   - js-good-parts
   - json2
@@ -3096,6 +3099,7 @@ broken-packages:
   - lushtags
   - luthor
   - lvmlib
+  - lvmrun
   - lxd-client
   - lye
   - lz4-frame-conduit
@@ -3129,6 +3133,7 @@ broken-packages:
   - make-hard-links
   - make-monofoldable-foldable
   - mallard
+  - managed-functions
   - mandulia
   - mangopay
   - Map
@@ -3204,6 +3209,7 @@ broken-packages:
   - menoh
   - menshen
   - mergeful
+  - mergeless-persistent
   - merkle-tree
   - messagepack-rpc
   - messente
@@ -3603,6 +3609,7 @@ broken-packages:
   - open-adt
   - OpenAFP
   - openai-servant
+  - openapi3-code-generator
   - openapi-petstore
   - openapi-typed
   - opench-meteo
@@ -4084,6 +4091,7 @@ broken-packages:
   - proto-lens-combinators
   - proto-lens-jsonpb
   - protolude-lifted
+  - proton
   - proton-haskell
   - prototype
   - prove-everywhere-server
@@ -4597,7 +4605,11 @@ broken-packages:
   - shorten-strings
   - short-vec
   - show-prettyprint
+  - Shpadoinkle-backend-pardiff
+  - Shpadoinkle-backend-snabbdom
+  - Shpadoinkle-backend-static
   - Shpadoinkle-console
+  - Shpadoinkle-html
   - Shpadoinkle-isreal
   - shwifty
   - sifflet
@@ -4937,6 +4949,7 @@ broken-packages:
   - supernova
   - supero
   - superrecord
+  - super-user-spark
   - supervisor
   - supervisors
   - supplemented
@@ -4960,6 +4973,11 @@ broken-packages:
   - sws
   - syb-extras
   - syb-with-class
+  - sydtest-hedis
+  - sydtest-mongo
+  - sydtest-persistent-postgresql
+  - sydtest-rabbitmq
+  - sydtest-yesod
   - syfco
   - sym
   - symantic
@@ -5429,7 +5447,6 @@ broken-packages:
   - validated-types
   - Validation
   - validations
-  - validity-aeson
   - valid-names
   - value-supply
   - vampire

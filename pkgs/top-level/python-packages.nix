@@ -5439,6 +5439,7 @@ in {
   mkdocs = callPackage ../development/python-modules/mkdocs { };
   mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
+  mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
@@ -8760,6 +8761,8 @@ in {
 
   pytorch = callPackage ../development/python-modules/pytorch {
     cudaSupport = pkgs.config.cudaSupport or false;
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
+    inherit (pkgs.darwin) libobjc;
   };
 
   pytorch-bin = callPackage ../development/python-modules/pytorch/bin.nix { };
