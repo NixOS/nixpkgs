@@ -24,7 +24,16 @@ let
   version = {
     x86_64-linux = "19.3.0.0.0";
     x86_64-darwin = "19.3.0.0.0";
+    aarch64-linux = "19.10.0.0.0";
   }.${stdenv.hostPlatform.system} or throwSystem;
+
+  # path prefix doesn't correlate consistently with version number
+  path = {
+    x86_64-linux =  "193000";
+    x86_64-darwin = "193000";
+    aarch64-linux = "191000";
+  }.${stdenv.hostPlatform.system} or throwSystem;
+
 
   # hashes per component and architecture
   hashes = {
@@ -34,6 +43,13 @@ let
       sqlplus = "0zj5h84ypv4n4678kfix6jih9yakb277l9hc0819iddc0a5slbi5";
       tools = "1q19blr0gz1c8bq0bnv1njzflrp03hf82ngid966xc6gwmqpkdsk";
       odbc = "1g1z6pdn76dp440fh49pm8ijfgjazx4cvxdi665fsr62h62xkvch";
+    };
+    aarch64-linux = {
+      basic   = "1iis06fsf9w3y8jrzg0xzhsxmmfq2r4biyzcj0wnl0h1dlgyvn8c";
+      sdk     = "0b5kgwdp2z0fycms6z8p3bjps87wslhabn868cgwa57j48vn8npi";
+      sqlplus = "0i4zk32xh717dp7mplbq9zp7hr53f7j4fzd30bngh0p166534xw8";
+      tools   = "0hs7f1sik2jv4a8mjb4w9khlrqblxs90sim6kc7xqwi70w9k81p1";
+      odbc    = "0syyy03avhqpl5zsqn48dgcz78f677xsbxjfzhh13xyrmhh4ir2g";
     };
     x86_64-darwin = {
       basic = "f4335c1d53e8188a3a8cdfb97494ff87c4d0f481309284cf086dc64080a60abd";
@@ -49,32 +65,34 @@ let
 
   # convert platform to oracle architecture names
   arch = {
+    aarch64-linux = "linux.arm64";
     x86_64-linux = "linux.x64";
     x86_64-darwin = "macos.x64";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   shortArch = {
+    aarch64-linux = "linux";
     x86_64-linux = "linux";
     x86_64-darwin = "mac";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   # calculate the filename of a single zip file
-  srcFilename = component: arch: version: rel:
-    "instantclient-${component}-${arch}-${version}" +
+  srcFilename = component: arch: version: path: rel:
+    "${path}/instantclient-${component}-${arch}-${version}" +
     (optionalString (rel != "") "-${rel}") +
-    (optionalString (arch == "linux.x64" || arch == "macos.x64") "dbru") + # ¯\_(ツ)_/¯
+    (optionalString (arch == "linux.x64" || arch == "linux.arm64" || arch == "macos.x64") "dbru") + # ¯\_(ツ)_/¯
     ".zip";
 
   # fetcher for the non clickthrough artifacts
   fetcher = srcFilename: hash: fetchurl {
-    url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/193000/${srcFilename}";
+    url = "https://download.oracle.com/otn_software/${shortArch}/instantclient/${srcFilename}";
     sha256 = hash;
   };
 
   # assemble srcs
   srcs = map
     (component:
-      (fetcher (srcFilename component arch version rels.${component} or "") hashes.${component} or ""))
+      (fetcher (srcFilename component arch version path rels.${component} or "") hashes.${component} or ""))
     components;
 
   pname = "oracle-instantclient";
@@ -127,7 +145,7 @@ stdenv.mkDerivation {
     '';
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     maintainers = with maintainers; [ flokli ];
     hydraPlatforms = [ ];
   };
