@@ -80,6 +80,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://shatteredpixel.com/";
     downloadPage = "https://github.com/00-Evan/shattered-pixel-dungeon/releases";
     description = "Traditional roguelike game with pixel-art graphics and simple interface";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;

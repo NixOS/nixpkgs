@@ -3,6 +3,7 @@
 , langAda ? false
 , langObjC ? stdenv.targetPlatform.isDarwin
 , langObjCpp ? stdenv.targetPlatform.isDarwin
+, langD ? false
 , langGo ? false
 , reproducibleBuild ? true
 , profiledCompiler ? false
@@ -65,6 +66,7 @@ let majorVersion = "10";
         sha256 = ""; # TODO: uncomment and check hash when available.
       }) */
       ++ optional langAda ../gnat-cflags.patch
+      ++ optional langD ../libphobos.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
 
@@ -214,6 +216,7 @@ stdenv.mkDerivation ({
       enableShared
 
       langC
+      langD
       langCC
       langFortran
       langAda
@@ -254,14 +257,14 @@ stdenv.mkDerivation ({
 
   inherit
     (import ../common/extra-target-flags.nix {
-      inherit lib stdenv crossStageStatic libcCross threadsCross;
+      inherit lib stdenv crossStageStatic langD libcCross threadsCross;
     })
     EXTRA_FLAGS_FOR_TARGET
     EXTRA_LDFLAGS_FOR_TARGET
     ;
 
   passthru = {
-    inherit langC langCC langObjC langObjCpp langAda langFortran langGo version;
+    inherit langC langCC langObjC langObjCpp langAda langFortran langGo langD version;
     isGNU = true;
   };
 

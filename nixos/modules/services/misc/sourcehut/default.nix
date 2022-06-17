@@ -83,7 +83,7 @@ let
   python = pkgs.sourcehut.python.withPackages (ps: with ps; [
     gunicorn
     eventlet
-    # For monitoring Celery: sudo -u listssrht celery --app listssrht.process -b redis+socket:///run/redis-sourcehut/redis.sock?virtual_host=5 flower
+    # For monitoring Celery: sudo -u listssrht celery --app listssrht.process -b redis+socket:///run/redis-sourcehut/redis.sock?virtual_host=1 flower
     flower
     # Sourcehut services
     srht
@@ -238,20 +238,32 @@ in
           };
           smtp-user = mkOptionNullOrStr "Outgoing SMTP user.";
           smtp-password = mkOptionNullOrStr "Outgoing SMTP password.";
-          smtp-from = mkOptionNullOrStr "Outgoing SMTP FROM.";
+          smtp-from = mkOption {
+            type = types.str;
+            description = "Outgoing SMTP FROM.";
+          };
           error-to = mkOptionNullOrStr "Address receiving application exceptions";
           error-from = mkOptionNullOrStr "Address sending application exceptions";
-          pgp-privkey = mkOptionNullOrStr ''
-            An absolute file path (which should be outside the Nix-store)
-            to an OpenPGP private key.
+          pgp-privkey = mkOption {
+            type = types.str;
+            description = ''
+              An absolute file path (which should be outside the Nix-store)
+              to an OpenPGP private key.
 
-            Your PGP key information (DO NOT mix up pub and priv here)
-            You must remove the password from your secret key, if present.
-            You can do this with <code>gpg --edit-key [key-id]</code>,
-            then use the <code>passwd</code> command and do not enter a new password.
-          '';
-          pgp-pubkey = mkOptionNullOrStr "OpenPGP public key.";
-          pgp-key-id = mkOptionNullOrStr "OpenPGP key identifier.";
+              Your PGP key information (DO NOT mix up pub and priv here)
+              You must remove the password from your secret key, if present.
+              You can do this with <code>gpg --edit-key [key-id]</code>,
+              then use the <code>passwd</code> command and do not enter a new password.
+            '';
+          };
+          pgp-pubkey = mkOption {
+            type = with types; either path str;
+            description = "OpenPGP public key.";
+          };
+          pgp-key-id = mkOption {
+            type = types.str;
+            description = "OpenPGP key identifier.";
+          };
         };
         options.objects = {
           s3-upstream = mkOption {
@@ -905,6 +917,11 @@ in
       inherit configIniOfService;
       srvsrht = "buildsrht";
       port = 5002;
+      extraServices.buildsrht-api = {
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "5s";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.buildsrht}/bin/buildsrht-api -b ${cfg.listenAddress}:${toString (cfg.builds.port + 100)}";
+      };
       # TODO: a celery worker on the master and worker are apparently needed
       extraServices.buildsrht-worker = let
         qemuPackage = pkgs.qemu_kvm;
@@ -928,13 +945,13 @@ in
           fi
         '';
         serviceConfig = {
-          ExecStart = "${pkgs.sourcehut.buildsrht}/bin/builds.sr.ht-worker";
+          ExecStart = "${pkgs.sourcehut.buildsrht}/bin/buildsrht-worker";
           BindPaths = [ cfg.settings."builds.sr.ht::worker".buildlogs ];
           LogsDirectory = [ "sourcehut/${serviceName}" ];
           RuntimeDirectory = [ "sourcehut/${serviceName}/subdir" ];
           StateDirectory = [ "sourcehut/${serviceName}" ];
           TimeoutStartSec = "1800s";
-          # builds.sr.ht-worker looks up ../config.ini
+          # buildsrht-worker looks up ../config.ini
           WorkingDirectory = "-"+"/run/sourcehut/${serviceName}/subdir";
         };
       };
@@ -952,12 +969,12 @@ in
           ) cfg.builds.images
         );
         image_dir_pre = pkgs.symlinkJoin {
-          name = "builds.sr.ht-worker-images-pre";
+          name = "buildsrht-worker-images-pre";
           paths = image_dirs;
             # FIXME: not working, apparently because ubuntu/latest is a broken link
             # ++ [ "${pkgs.sourcehut.buildsrht}/lib/images" ];
         };
-        image_dir = pkgs.runCommand "builds.sr.ht-worker-images" { } ''
+        image_dir = pkgs.runCommand "buildsrht-worker-images" { } ''
           mkdir -p $out/images
           cp -Lr ${image_dir_pre}/* $out/images
         '';
@@ -1081,6 +1098,11 @@ in
           };
         })
       ];
+      extraServices.gitsrht-api = {
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "5s";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.gitsrht}/bin/gitsrht-api -b ${cfg.listenAddress}:${toString (cfg.git.port + 100)}";
+      };
       extraServices.gitsrht-fcgiwrap = mkIf cfg.nginx.enable {
         serviceConfig = {
           # Socket is passed by gitsrht-fcgiwrap.socket
@@ -1123,6 +1145,11 @@ in
         service = baseService;
         timerConfig.OnCalendar = ["daily"];
         timerConfig.AccuracySec = "1h";
+      };
+      extraServices.hgsrht-api = {
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "5s";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.hgsrht}/bin/hgsrht-api -b ${cfg.listenAddress}:${toString (cfg.hg.port + 100)}";
       };
       extraConfig = mkMerge [
         {
@@ -1184,6 +1211,11 @@ in
       inherit configIniOfService;
       port = 5006;
       webhooks = true;
+      extraServices.listssrht-api = {
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "5s";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.listssrht}/bin/listssrht-api -b ${cfg.listenAddress}:${toString (cfg.lists.port + 100)}";
+      };
       # Receive the mail from Postfix and enqueue them into Redis and PostgreSQL
       extraServices.listssrht-lmtp = {
         wants = [ "postfix.service" ];
@@ -1232,9 +1264,13 @@ in
       inherit configIniOfService;
       port = 5000;
       webhooks = true;
+      extraTimers.metasrht-daily.timerConfig = {
+        OnCalendar = ["daily"];
+        AccuracySec = "1h";
+      };
       extraServices.metasrht-api = {
         serviceConfig.Restart = "always";
-        serviceConfig.RestartSec = "2s";
+        serviceConfig.RestartSec = "5s";
         preStart = "set -x\n" + concatStringsSep "\n\n" (attrValues (mapAttrs (k: s:
           let srvMatch = builtins.match "^([a-z]*)\\.sr\\.ht$" k;
               srv = head srvMatch;
@@ -1247,10 +1283,6 @@ in
           ''
           ) cfg.settings));
         serviceConfig.ExecStart = "${pkgs.sourcehut.metasrht}/bin/metasrht-api -b ${cfg.listenAddress}:${toString (cfg.meta.port + 100)}";
-      };
-      extraTimers.metasrht-daily.timerConfig = {
-        OnCalendar = ["daily"];
-        AccuracySec = "1h";
       };
       extraConfig = mkMerge [
         {
@@ -1348,6 +1380,11 @@ in
       inherit configIniOfService;
       port = 5003;
       webhooks = true;
+      extraServices.todosrht-api = {
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = "5s";
+        serviceConfig.ExecStart = "${pkgs.sourcehut.todosrht}/bin/todosrht-api -b ${cfg.listenAddress}:${toString (cfg.todo.port + 100)}";
+      };
       extraServices.todosrht-lmtp = {
         wants = [ "postfix.service" ];
         unitConfig.JoinsNamespaceOf = optional cfg.postfix.enable "postfix.service";

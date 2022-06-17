@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-servicelinker";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-lAjgwEa2TJDEUU8pwfwkU8EyA1bhLkcAv++I6WHb7Xs=";
+    sha256 = "sha256-QVw6Y9HachwBRwCbF0cSGLCAkSJtNnXBvsj5YX1TmJU=";
     extension = "zip";
   };
 

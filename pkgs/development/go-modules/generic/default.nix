@@ -41,9 +41,6 @@
 
 , meta ? {}
 
-# disabled
-, runVend ? false
-
 # Not needed with buildGoModule
 , goPackagePath ? ""
 
@@ -54,8 +51,6 @@
 , ... }@args':
 
 with builtins;
-
-assert runVend != false -> throw "`runVend` has been replaced by `proxyVendor`";
 
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
 

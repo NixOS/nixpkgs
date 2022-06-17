@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quictls";
-  version = "3.0.2+quick_unstable-2022-03.15";
+  version = "3.0.3+quick_unstable-2022-05.04";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "7f2ab56a2b842b8e6fefc7b9d20eb5ff9c6ef151";
-    sha256 = "sha256-We4ow0mGJFXqYM4PqbGn8qY5IYH/MtNaefrSaJreoRA=";
+    rev = "368c9d581b17f0bbe425f8dedeaa7b864a7b29ce";
+    sha256 = "sha256-W3bILxhyeziWQNZUHUg/D9eV8LnmHJqEFwyzWjJrRuc=";
   };
 
   patches = [
@@ -156,7 +156,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://quictls.github.io/openssl/";
+    homepage = "https://quictls.github.io";
     description = "TLS/SSL and crypto library with QUIC APIs";
     license = licenses.openssl;
     platforms = platforms.all;

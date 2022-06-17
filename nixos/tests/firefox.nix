@@ -54,7 +54,7 @@ import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }: {
 
 
       @contextmanager
-      def audio_recording(machine: Machine) -> None:
+      def record_audio(machine: Machine):
           """
           Perform actions while recording the
           machine audio output.
@@ -64,7 +64,7 @@ import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }: {
           machine.systemctl("stop audio-recorder")
 
 
-      def wait_for_sound(machine: Machine) -> None:
+      def wait_for_sound(machine: Machine):
           """
           Wait until any sound has been emitted.
           """
@@ -94,7 +94,7 @@ import ./make-test-python.nix ({ pkgs, firefoxPackage, ... }: {
           machine.sleep(40)
 
       with subtest("Check whether Firefox can play sound"):
-          with audio_recording(machine):
+          with record_audio(machine):
               machine.succeed(
                   "firefox file://${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/phone-incoming-call.oga >&2 &"
               )

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "metals";
-  version = "0.11.5";
+  version = "0.11.6";
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "sha256-kw+8688E1b7XjEb7AqOExSVu88NqPprKaCuINWqL2wk=";
+    outputHash = "sha256-/tFc7xAuUtx2JgEMLhGaq2FXpt7KQNMi82ODr/gTfhM=";
   };
 
   nativeBuildInputs = [ makeWrapper setJavaClassPath ];

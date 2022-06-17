@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kubernetes";
-  version = "1.23.5";
+  version = "1.23.7";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "sha256-LhJ3gThcsWnawSOmHSzWOG8tfODIPo4dJTMeLKmvMdM=";
+    sha256 = "sha256-YHlcopB47HVLO/4QI8HxjMBzCpcHVnlAz3EOmZI+EG8=";
   };
 
   nativeBuildInputs = [ makeWrapper which go rsync installShellFiles ];
@@ -37,15 +37,7 @@ stdenv.mkDerivation rec {
   patches = [ ./fixup-addonmanager-lib-path.patch ];
 
   postPatch = ''
-    # go env breaks the sandbox
-    substituteInPlace "hack/lib/golang.sh" \
-      --replace 'echo "$(go env GOHOSTOS)/$(go env GOHOSTARCH)"' 'echo "${go.GOOS}/${go.GOARCH}"'
-
     substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
-    # hack/update-munge-docs.sh only performs some tests on the documentation.
-    # They broke building k8s; disabled for now.
-    echo "true" > "hack/update-munge-docs.sh"
-
     patchShebangs ./hack
   '';
 

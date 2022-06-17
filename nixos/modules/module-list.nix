@@ -66,6 +66,7 @@
   ./hardware/network/ath-user-regd.nix
   ./hardware/network/b43.nix
   ./hardware/network/intel-2200bg.nix
+  ./hardware/new-lg4ff.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/openrazer.nix
@@ -73,6 +74,7 @@
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
   ./hardware/rtl-sdr.nix
+  ./hardware/saleae-logic.nix
   ./hardware/steam-hardware.nix
   ./hardware/system-76.nix
   ./hardware/tuxedo-keyboard.nix
@@ -137,6 +139,7 @@
   ./programs/captive-browser.nix
   ./programs/ccache.nix
   ./programs/cdemu.nix
+  ./programs/cfs-zen-tweaks.nix
   ./programs/chromium.nix
   ./programs/clickshare.nix
   ./programs/cnping.nix
@@ -166,6 +169,7 @@
   ./programs/gpaste.nix
   ./programs/gnupg.nix
   ./programs/gphoto2.nix
+  ./programs/haguichi.nix
   ./programs/hamster.nix
   ./programs/htop.nix
   ./programs/iftop.nix
@@ -193,6 +197,7 @@
   ./programs/npm.nix
   ./programs/noisetorch.nix
   ./programs/oblogout.nix
+  ./programs/openvpn3.nix
   ./programs/pantheon-tweaks.nix
   ./programs/partition-manager.nix
   ./programs/plotinus.nix
@@ -345,6 +350,7 @@
   ./services/databases/clickhouse.nix
   ./services/databases/cockroachdb.nix
   ./services/databases/couchdb.nix
+  ./services/databases/dragonflydb.nix
   ./services/databases/firebird.nix
   ./services/databases/foundationdb.nix
   ./services/databases/hbase.nix
@@ -512,9 +518,15 @@
   ./services/mail/roundcube.nix
   ./services/mail/sympa.nix
   ./services/mail/nullmailer.nix
-  ./services/matrix/matrix-synapse.nix
+  ./services/matrix/appservice-discord.nix
+  ./services/matrix/appservice-irc.nix
+  ./services/matrix/conduit.nix
+  ./services/matrix/dendrite.nix
+  ./services/matrix/mautrix-facebook.nix
+  ./services/matrix/mautrix-telegram.nix
   ./services/matrix/mjolnir.nix
   ./services/matrix/pantalaimon.nix
+  ./services/matrix/synapse.nix
   ./services/misc/ananicy.nix
   ./services/misc/airsonic.nix
   ./services/misc/ankisyncd.nix
@@ -533,7 +545,6 @@
   ./services/misc/cpuminer-cryptonight.nix
   ./services/misc/cgminer.nix
   ./services/misc/confd.nix
-  ./services/misc/dendrite.nix
   ./services/misc/devmon.nix
   ./services/misc/dictd.nix
   ./services/misc/duckling.nix
@@ -576,11 +587,6 @@
   ./services/misc/libreddit.nix
   ./services/misc/lifecycled.nix
   ./services/misc/mame.nix
-  ./services/misc/matrix-appservice-discord.nix
-  ./services/misc/matrix-appservice-irc.nix
-  ./services/misc/matrix-conduit.nix
-  ./services/misc/mautrix-facebook.nix
-  ./services/misc/mautrix-telegram.nix
   ./services/misc/mbpfan.nix
   ./services/misc/mediatomb.nix
   ./services/misc/metabase.nix
@@ -602,6 +608,7 @@
   ./services/misc/packagekit.nix
   ./services/misc/paperless.nix
   ./services/misc/parsoid.nix
+  ./services/misc/persistent-evdev.nix
   ./services/misc/plex.nix
   ./services/misc/plikd.nix
   ./services/misc/podgrab.nix
@@ -653,6 +660,7 @@
   ./services/monitoring/do-agent.nix
   ./services/monitoring/fusion-inventory.nix
   ./services/monitoring/grafana.nix
+  ./services/monitoring/grafana-agent.nix
   ./services/monitoring/grafana-image-renderer.nix
   ./services/monitoring/grafana-reporter.nix
   ./services/monitoring/graphite.nix
@@ -733,6 +741,7 @@
   ./services/networking/bitcoind.nix
   ./services/networking/autossh.nix
   ./services/networking/bird.nix
+  ./services/networking/bird-lg.nix
   ./services/networking/bitlbee.nix
   ./services/networking/blockbook-frontend.nix
   ./services/networking/blocky.nix
@@ -765,6 +774,7 @@
   ./services/networking/ergo.nix
   ./services/networking/ergochat.nix
   ./services/networking/eternal-terminal.nix
+  ./services/networking/expressvpn.nix
   ./services/networking/fakeroute.nix
   ./services/networking/ferm.nix
   ./services/networking/fireqos.nix
@@ -877,6 +887,7 @@
   ./services/networking/quassel.nix
   ./services/networking/quorum.nix
   ./services/networking/quicktun.nix
+  ./services/networking/r53-ddns.nix
   ./services/networking/radicale.nix
   ./services/networking/radvd.nix
   ./services/networking/rdnssd.nix
@@ -978,6 +989,7 @@
   ./services/security/hologram-server.nix
   ./services/security/hologram-agent.nix
   ./services/security/kanidm.nix
+  ./services/security/infnoise.nix
   ./services/security/munge.nix
   ./services/security/nginx-sso.nix
   ./services/security/oauth2_proxy.nix
@@ -1233,6 +1245,7 @@
   ./tasks/powertop.nix
   ./testing/service-runner.nix
   ./virtualisation/anbox.nix
+  ./virtualisation/appvm.nix
   ./virtualisation/build-vm.nix
   ./virtualisation/container-config.nix
   ./virtualisation/containerd.nix

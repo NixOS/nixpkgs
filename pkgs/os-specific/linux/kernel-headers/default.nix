@@ -14,6 +14,9 @@ let
 
     ARCH = stdenvNoCC.hostPlatform.linuxArch;
 
+    strictDeps = true;
+    enableParallelBuilding = true;
+
     # It may look odd that we use `stdenvNoCC`, and yet explicit depend on a cc.
     # We do this so we have a build->build, not build->host, C compiler.
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -24,7 +27,7 @@ let
       flex bison python rsync
     ];
 
-    extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
+    extraIncludeDirs = lib.optional (with stdenvNoCC.hostPlatform; isPower && is32bit && isBigEndian) ["ppc"];
 
     inherit patches;
 

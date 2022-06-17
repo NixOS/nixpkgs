@@ -43,6 +43,6 @@ buildPythonPackage rec {
     description = "Send responses to httpx";
     homepage = "https://github.com/Colin-b/pytest_httpx";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab SuperSandro2000 ];
+    maintainers = with maintainers; [ fab ];
   };
 }

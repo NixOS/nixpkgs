@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub, fetchpatch, python3 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "hifi";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-10y0sWpOLbjbGBpOjr1/tJrhcOsCwcm2sSO5kHfmJZA=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-3YCYLhJqZAWIwpwOd8J1+uYsxw0q6jQy35Vp+ttVKhI=";
   };
 
   postPatch = ''

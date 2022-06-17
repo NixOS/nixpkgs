@@ -72,19 +72,6 @@ let
       });
     })
 
-    (self: super: {
-      huawei-lte-api = super.huawei-lte-api.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.18";
-        src = fetchFromGitHub {
-          owner = "Salamek";
-          repo = "huawei-lte-api";
-          rev = version;
-          sha256 = "1qaqxmh03j10wa9wqbwgc5r3ays8wfr7bldvsm45fycr3qfyn5fg";
-        };
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.dicttoxml ];
-      });
-    })
-
     # Pinned due to API changes in pyruckus>0.12
     (self: super: {
       pyruckus = super.pyruckus.overridePythonAttrs (oldAttrs: rec {
@@ -179,7 +166,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.5.5";
+  hassVersion = "2022.6.6";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -197,7 +184,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-uVB3Yg3f0fNkq2rav7hmbJ9IAMg0UIrdMshJVgOharA=";
+    hash = "sha256-scwj3VrSoFk/pSVzfwvGFM5fRci3+7iqr7TAwLantFQ=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -210,24 +197,18 @@ in python.pkgs.buildPythonApplication rec {
 
   postPatch = let
     relaxedConstraints = [
-      "aiohttp"
-      "async_timeout"
       "attrs"
       "awesomeversion"
       "bcrypt"
-      "cryptography"
       "httpx"
-      "jinja2"
-      "pip"
-      "requests"
-      "yarl"
+      "PyJWT"
     ];
   in ''
     sed -r -i \
       ${lib.concatStringsSep "\n" (map (package:
         ''-e 's@${package}[<>=]+.*@${package}@g' \''
       ) relaxedConstraints)}
-    setup.cfg
+      setup.cfg
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
@@ -270,7 +251,6 @@ in python.pkgs.buildPythonApplication rec {
   checkInputs = with python.pkgs; [
     # test infrastructure (selectively from requirement_test.txt)
     freezegun
-    jsonpickle
     pytest-aiohttp
     pytest-freezegun
     pytest-mock
@@ -281,10 +261,6 @@ in python.pkgs.buildPythonApplication rec {
     requests-mock
     respx
     stdlib-list
-    tqdm
-    # required by tests/pylint
-    astroid
-    pylint
     # required by tests/auth/mfa_modules
     pyotp
   ] ++ lib.concatMap (component: getPackages component python.pkgs) [
@@ -308,6 +284,10 @@ in python.pkgs.buildPythonApplication rec {
   ];
 
   disabledTestPaths = [
+    # we neither run nor distribute hassfest
+    "tests/hassfest"
+    # we don't care about code quality
+    "tests/pylint"
     # don't bulk test all components
     "tests/components"
     # pyotp since v2.4.0 complains about the short mock keys, hass pins v2.3.0

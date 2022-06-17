@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , fetchFromGitHub
 }:
@@ -17,6 +18,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-q59hpnXc00OzrJk1KOWbIPQYfIE+7ku9XtTDXHgwQBg=";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Lightning-fast linter for .env files. Written in Rust";
     homepage = "https://dotenv-linter.github.io";
     license = licenses.mit;

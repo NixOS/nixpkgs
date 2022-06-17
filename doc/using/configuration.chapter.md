@@ -176,6 +176,15 @@ You can define a function called `packageOverrides` in your local `~/.config/nix
 }
 ```
 
+## `config` Options Reference {#sec-config-options-reference}
+
+The following attributes can be passed in [`config`](#chap-packageconfig).
+
+```{=docbook}
+<include xmlns="http://www.w3.org/2001/XInclude" href="../doc-support/result/config-options.docbook.xml"/>
+```
+
+
 ## Declarative Package Management {#sec-declarative-package-management}
 
 ### Build an environment {#sec-building-environment}

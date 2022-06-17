@@ -389,7 +389,7 @@ let
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
-    Rhdf5lib = [ pkgs.zlib.dev ];
+    Rhdf5lib = with pkgs; [ zlib.dev hdf5.dev ];
     Rhpc = with pkgs; [ zlib bzip2.dev icu xz.dev mpi pcre.dev ];
     Rhtslib = with pkgs; [ zlib.dev automake autoconf bzip2.dev xz.dev curl.dev ];
     rjags = [ pkgs.jags ];
@@ -997,10 +997,6 @@ let
       patchPhase = "patchShebangs configure";
     });
 
-    Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
-      patches = [ ./patches/Rhdf5lib.patch ];
-    });
-
     rJava = old.rJava.overrideDerivation (attrs: {
       preConfigure = ''
         export JAVA_CPPFLAGS=-I${pkgs.jdk}/include/
@@ -1298,6 +1294,10 @@ let
 
     geomorph = old.geomorph.overrideDerivation (attrs: {
       RGL_USE_NULL = "true";
+    });
+
+    Rhdf5lib = old.Rhdf5lib.overrideDerivation (attrs: {
+      propagatedBuildInputs = attrs.propagatedBuildInputs ++ [ pkgs.hdf5.dev ];
     });
 
     RNifti = old.RNifti.overrideDerivation (attrs: {

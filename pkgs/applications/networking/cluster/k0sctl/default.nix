@@ -1,29 +1,21 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 }:
 
 buildGoModule rec {
   pname = "k0sctl";
-  version = "0.12.6";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-TkkMO6xBHY5t5Rpd0ieSDXMrnQ+Xdq+65Rk93ZkYcUs=";
+    sha256 = "sha256-A50PbZTgv0EfL5aqTiTEOdfRXUgKGzTsRIiMgXItkxI=";
   };
 
-  vendorSha256 = "sha256-nTAuvHcsJiW0XYX5GM1SL8cnOhwdrj6iw8tuAkEWNzQ=";
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/k0sproject/${pname}/commit/22c694ab0335a1e6146d0d3f939ef79d2c005a3d.patch";
-      sha256 = "sha256-Ftq/vbQd5ArdHboDt6NdyuqpFalHVnsQBdpmyDG/t5Q=";
-    })
-  ];
+  vendorSha256 = "sha256-2i6SoixE5RitRuJpOU4LdzN9JY/76c3mjsbsXlQp854=";
 
   ldflags = [
     "-s"

@@ -36,7 +36,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'prettytable = "^3.1.1"' 'prettytable = "*"'
+      --replace 'prettytable = "^3.1.1"' 'prettytable = "*"' \
+      --replace 'pysigma = "^0.5.0"' 'pysigma = "*"'
   '';
 
   pythonImportsCheck = [

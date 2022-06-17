@@ -23,6 +23,7 @@
 , pcre2
 , python3
 , readline
+, rtrlib
 
 # tests
 , nettools
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
     pcre2
     python3
     readline
+    rtrlib
   ] ++ lib.optionals stdenv.isLinux [
     libcap
   ];
@@ -78,6 +80,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/run/frr"
     "--sbindir=$(out)/libexec/frr"
     "--sysconfdir=/etc/frr"
+    "--enable-rpki"
   ];
 
   postPatch = ''

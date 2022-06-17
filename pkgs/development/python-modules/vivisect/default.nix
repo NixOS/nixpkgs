@@ -43,9 +43,9 @@ buildPythonPackage rec {
     cxxfilt
     msgpack
     pycparser
-  ] ++ lib.optionals (withGui) passthru.extras-require.gui;
+  ] ++ lib.optionals (withGui) passthru.optional-dependencies.gui;
 
-  passthru.extras-require.gui = [
+  passthru.optional-dependencies.gui = [
     pyqt5
     pyqtwebengine
   ];

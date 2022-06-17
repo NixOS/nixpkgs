@@ -20,13 +20,13 @@
 
 mkDerivation rec {
   pname = "organicmaps";
-  version = "2022.04.27-2";
+  version = "2022.05.31-10";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    sha256 = "sha256-HsskddXne5xClBZoT3aXP+51VRQQJhlUPda/M20SrH0=";
+    sha256 = "sha256-2GeWa4CQoY7hi24q0/cZBbq1Ofl2Jane9BiZ0N+IsSc=";
     fetchSubmodules = true;
   };
 
@@ -75,12 +75,13 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
+    # darwin: "invalid application of 'sizeof' to a function type"
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://organicmaps.app/";
     description = "Detailed Offline Maps for Travellers, Tourists, Hikers and Cyclists";
     license = licenses.asl20;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
     mainProgram = "OMaps";
-    broken = stdenv.isDarwin; # "invalid application of 'sizeof' to a function type"
   };
 }

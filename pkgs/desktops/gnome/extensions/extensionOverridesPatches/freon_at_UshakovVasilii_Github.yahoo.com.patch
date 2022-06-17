@@ -1,5 +1,5 @@
 diff --git a/hddtempUtil.js b/hddtempUtil.js
-index e5d1d6d..856654b 100644
+index e5d1d6d..23f6289 100644
 --- a/hddtempUtil.js
 +++ b/hddtempUtil.js
 @@ -7,7 +7,7 @@ var HddtempUtil = class extends CommandLineUtil.CommandLineUtil {
@@ -7,7 +7,7 @@ index e5d1d6d..856654b 100644
      constructor() {
          super();
 -        let hddtempArgv = GLib.find_program_in_path('hddtemp');
-+        let hddtempArgv = GLib.find_program_in_path('@hddtemp@/bin/hddtemp');
++        let hddtempArgv = '@hddtemp@/bin/hddtemp';
          if(hddtempArgv) {
              // check if this user can run hddtemp directly.
              if(!GLib.spawn_command_line_sync(hddtempArgv)[3]){
@@ -17,8 +17,8 @@ index e5d1d6d..856654b 100644
          let systemctl = GLib.find_program_in_path('systemctl');
 -        let pidof = GLib.find_program_in_path('pidof');
 -        let nc = GLib.find_program_in_path('nc');
-+        let pidof = GLib.find_program_in_path('@procps@/bin/pidof');
-+        let nc = GLib.find_program_in_path('@netcat@/bin/nc');
++        let pidof = '@procps@/bin/pidof';
++        let nc = '@netcat@/bin/nc';
          let pid = undefined;
  
          if(systemctl) {
@@ -32,7 +32,7 @@ index e5d1d6d..856654b 100644
                  pid = Number(output.trim());
          }
 diff --git a/liquidctlUtil.js b/liquidctlUtil.js
-index 766bf62..7cd4e94 100644
+index 766bf62..2a6faf8 100644
 --- a/liquidctlUtil.js
 +++ b/liquidctlUtil.js
 @@ -8,7 +8,7 @@ const commandLineUtil = Me.imports.commandLineUtil;
@@ -40,12 +40,12 @@ index 766bf62..7cd4e94 100644
      constructor() {
          super();
 -        const path = GLib.find_program_in_path('liquidctl');
-+        const path = GLib.find_program_in_path('@liquidctl@/bin/liquidctl');
++        const path = '@liquidctl@/bin/liquidctl';
          this._argv = path ? [path, 'status', '--json'] : null;
      }
  
 diff --git a/nvmecliUtil.js b/nvmecliUtil.js
-index ae2ea93..2349b9e 100644
+index 98a61df..8a40624 100644
 --- a/nvmecliUtil.js
 +++ b/nvmecliUtil.js
 @@ -3,7 +3,7 @@ const GLib = imports.gi.GLib;
@@ -53,12 +53,12 @@ index ae2ea93..2349b9e 100644
  
  function getNvmeData (argv){
 -    const nvme = GLib.find_program_in_path('nvme')
-+    const nvme = GLib.find_program_in_path('@nvmecli@/bin/nvme')
++    const nvme = '@nvmecli@/bin/nvme'
      return JSON.parse(GLib.spawn_command_line_sync(`${nvme} ${argv} -o json`)[1].toString())
  }
  
 diff --git a/sensorsUtil.js b/sensorsUtil.js
-index 62fa580..c017748 100644
+index bd6de61..5951b17 100644
 --- a/sensorsUtil.js
 +++ b/sensorsUtil.js
 @@ -7,7 +7,7 @@ var SensorsUtil = class extends CommandLineUtil.CommandLineUtil {
@@ -66,12 +66,12 @@ index 62fa580..c017748 100644
      constructor() {
          super();
 -        let path = GLib.find_program_in_path('sensors');
-+        let path = GLib.find_program_in_path('@lm_sensors@/bin/sensors');
++        let path = '@lm_sensors@/bin/sensors';
          // -A: Do not show adapter -j: JSON output
          this._argv = path ? [path, '-A', '-j'] : null;
      }
 diff --git a/smartctlUtil.js b/smartctlUtil.js
-index 03d469b..6057a3b 100644
+index 4888323..66b6c61 100644
 --- a/smartctlUtil.js
 +++ b/smartctlUtil.js
 @@ -3,7 +3,7 @@ const GLib = imports.gi.GLib;
@@ -79,7 +79,7 @@ index 03d469b..6057a3b 100644
  const ByteArray = imports.byteArray;
  function getSmartData (argv){
 -    const smartctl = GLib.find_program_in_path('smartctl')
-+    const smartctl = GLib.find_program_in_path('@smartmontools@/bin/smartctl')
-     return JSON.parse(ByteArray.toString( GLib.spawn_command_line_sync(`${smartctl} ${argv} -j`)[1] ))
++    const smartctl = '@smartmontools@/bin/smartctl'
+     return JSON.parse(ByteArray.toString( GLib.spawn_command_line_sync(`'${smartctl}' ${argv} -j`)[1] ))
  }
  

@@ -18,15 +18,19 @@
 , python-keystoneclient
 , debtcollector
 , callPackage
+, pythonOlder
 }:
 
 buildPythonApplication rec {
   pname = "python-manilaclient";
-  version = "3.3.0";
+  version = "3.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JFfkbJHmDQFbiWXw0Wp+0xSLyXowIHnsw7+5irZwhXo=";
+    hash = "sha256-F41/k7NJigwFNw2946sj3dZDKDH+PkgOjkml9t3Mgtw=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +68,9 @@ buildPythonApplication rec {
     tests = callPackage ./tests.nix { };
   };
 
-  pythonImportsCheck = [ "manilaclient" ];
+  pythonImportsCheck = [
+    "manilaclient"
+  ];
 
   meta = with lib; {
     description = "Client library for OpenStack Manila API";

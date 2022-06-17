@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyshark";
-  version = "0.4.5";
+  version = "0.4.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
     repo = pname;
     # 0.4.5 was the last release which was tagged
     # https://github.com/KimiNewt/pyshark/issues/541
-    rev = "8f8f13aba6ae716aa0a48175255063fe542fdc3b";
-    hash = "sha256-v9CC9hgTABAiJ0qiFZ/9/zMmHzJXKq3neGtTq/ucnT4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-yEpUFihETKta3+Xb8eSyTZ1uSi7ao4OqWzsCgDLLhe8=";
   };
 
   sourceRoot = "${src.name}/src";

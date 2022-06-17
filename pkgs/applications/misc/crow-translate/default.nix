@@ -1,11 +1,11 @@
 { lib
 , stdenv
-, nix-update-script
-, fetchFromGitHub
+, fetchzip
 , substituteAll
 , cmake
 , extra-cmake-modules
 , qttools
+, kwayland
 , leptonica
 , tesseract4
 , qtmultimedia
@@ -16,14 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "crow-translate";
-  version = "2.9.5";
+  version = "2.9.8";
 
-  src = fetchFromGitHub {
-    owner = "crow-translate";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-AzwJJ85vxXsc0+W3QM8citN5f0AD6APQVd9628cfLgI=";
-    fetchSubmodules = true;
+  src = fetchzip {
+    url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}-source.tar.gz";
+    hash = "sha256-ZqiQVpKwGpglSc05Y1r6uScZyG4qnklPXqTGKxpS3f8=";
   };
 
   patches = [
@@ -34,20 +31,25 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    qttools
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ leptonica tesseract4 qtmultimedia qtx11extras ];
+  buildInputs = [
+    kwayland
+    leptonica
+    tesseract4
+    qtmultimedia
+    qtx11extras
+  ];
 
   postInstall = ''
     substituteInPlace $out/share/applications/io.crow_translate.CrowTranslate.desktop \
       --replace "Exec=qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
   '';
-
-  passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
-  };
 
   meta = with lib; {
     description = "A simple and lightweight translator that allows to translate and speak text using Google, Yandex and Bing";

@@ -11,7 +11,7 @@
 , flask_login
 , flask-openid
 , flask_sqlalchemy
-, flask_wtf
+, flask-wtf
 , flask-jwt-extended
 , jsonschema
 , marshmallow
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     flask_login
     flask-openid
     flask_sqlalchemy
-    flask_wtf
+    flask-wtf
     flask-jwt-extended
     jsonschema
     marshmallow

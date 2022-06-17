@@ -62,7 +62,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytest-click
     pytest-mock
-    pytest-pylint
     pytestCheckHook
   ];
 

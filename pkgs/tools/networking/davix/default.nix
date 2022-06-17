@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Toolkit for Http-based file management";
 
     longDescription = "Davix is a toolkit designed for file

@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Daemon for managing SSL/TLS certificates on a server";
     homepage = "https://sslmate.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ wolfangaukang ];
   };

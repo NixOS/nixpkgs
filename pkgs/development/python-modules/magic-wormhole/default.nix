@@ -42,8 +42,8 @@ buildPythonPackage rec {
     click
     humanize
     txtorcon
-  ] ++ autobahn.extras-require.twisted
-  ++ twisted.extras-require.tls;
+  ] ++ autobahn.optional-dependencies.twisted
+  ++ twisted.optional-dependencies.tls;
 
   checkInputs = [
     mock

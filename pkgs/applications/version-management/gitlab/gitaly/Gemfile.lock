@@ -94,7 +94,7 @@ GEM
     jaeger-client (1.1.0)
       opentracing (~> 0.3)
       thrift
-    json (2.6.1)
+    json (2.5.1)
     licensee (9.14.1)
       dotenv (~> 2.0)
       octokit (~> 4.17)

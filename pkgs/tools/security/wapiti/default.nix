@@ -39,8 +39,8 @@ python3.pkgs.buildPythonApplication rec {
     yaswfp
   ] ++ lib.optionals (python3.pythonOlder "3.8") [
     importlib-metadata
-  ] ++ httpx.extras-require.brotli
-    ++ httpx.extras-require.socks;
+  ] ++ httpx.optional-dependencies.brotli
+    ++ httpx.optional-dependencies.socks;
 
   checkInputs = with python3.pkgs; [
     respx

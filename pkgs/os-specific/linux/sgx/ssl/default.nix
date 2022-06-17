@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     sgx-sdk
-    stdenv.glibc
+    stdenv.cc.libc
     which
   ];
 

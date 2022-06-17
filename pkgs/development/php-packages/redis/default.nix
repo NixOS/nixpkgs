@@ -8,8 +8,6 @@ buildPecl {
 
   internalDeps = with php.extensions; [
     session
-  ] ++ lib.optionals (lib.versionOlder php.version "8.0") [
-    json
   ];
 
   meta = with lib; {

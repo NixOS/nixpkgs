@@ -72,7 +72,7 @@ let
       ++ lib.optionals stdenv.isLinux [
         autoPatchelfHook
         nodePackages.asar
-        (wrapGAppsHook.override { makeBinaryWrapper = makeWrapper; })
+        (wrapGAppsHook.override { inherit makeWrapper; })
       ];
 
     dontBuild = true;

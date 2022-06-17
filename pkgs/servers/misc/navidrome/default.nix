@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Navidrome Music Server and Streamer compatible with Subsonic/Airsonic";
     homepage = "https://www.navidrome.org/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ aciceri ];

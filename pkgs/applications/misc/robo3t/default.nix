@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, curl
+, curlWithGnuTls
 , zlib
 , glib
 , xorg
@@ -13,10 +13,6 @@
 , makeDesktopItem
 , makeWrapper
 }:
-
-let
-  curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
-in
 
 stdenv.mkDerivation rec {
   pname = "robo3t";

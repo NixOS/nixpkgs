@@ -4,7 +4,7 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "neofetch";
-  version = "unstable-2020-12-10";
+  version = "unstable-2021-12-10";
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
@@ -19,7 +19,15 @@ stdenvNoCC.mkDerivation rec {
       sha256 = "1fapdg9z79f0j3vw7fgi72b54aw4brn42bjsj48brbvg3ixsciph";
       name = "avoid_overwriting_gio_extra_modules_env_var.patch";
     })
+    # https://github.com/dylanaraps/neofetch/pull/2114
+    (fetchpatch {
+      url = "https://github.com/dylanaraps/neofetch/commit/c4eb4ec7783bb94cca0dbdc96db45a4d965956d2.patch";
+      sha256 = "sha256-F6Q4dUtfmR28VxLbITiLFJ44FjG4T1Cvuz3a0nLisMs=";
+      name = "update_old_nixos_logo.patch";
+    })
   ];
+
+  outputs = [ "out" "man" ];
 
   strictDeps = true;
   buildInputs = [ bash ];

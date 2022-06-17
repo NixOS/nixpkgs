@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -23,6 +24,7 @@ buildPythonPackage rec {
   doCheck = !isPy3k;
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://github.com/erikrose/nose-progressive";
     description = "A testrunner with a progress bar and smarter tracebacks";
     license = licenses.mit;

@@ -207,7 +207,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     description = "Citrix Workspace";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pmenke ];
+    maintainers = with maintainers; [ pmenke michaeladler ];
     inherit homepage;
   };
 }

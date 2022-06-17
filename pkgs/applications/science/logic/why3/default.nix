@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
     # WebIDE
     js_of_ocaml js_of_ocaml-ppx
     # S-expression output for why3pp
-    ppx_deriving ppx_sexp_conv
+    ppx_deriving ppx_sexp_conv ]
+    ++
     # Coq Support
-    coqPackages.coq coqPackages.flocq
-  ];
+    (with coqPackages; [ coq flocq ])
+  ;
 
   propagatedBuildInputs = with ocamlPackages; [ camlzip menhirLib num re sexplib ];
 

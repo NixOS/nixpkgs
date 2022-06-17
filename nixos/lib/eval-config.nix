@@ -50,11 +50,6 @@ let
       # they way through, but has the last priority behind everything else.
       nixpkgs.system = lib.mkDefault system;
 
-      # Stash the value of the `system` argument. When using `nesting.children`
-      # we want to have the same default value behavior (immediately above)
-      # without any interference from the user's configuration.
-      nixpkgs.initialSystem = system;
-
       _module.args.pkgs = lib.mkIf (pkgs_ != null) (lib.mkForce pkgs_);
     };
   };

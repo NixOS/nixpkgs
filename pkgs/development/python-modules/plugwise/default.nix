@@ -1,10 +1,11 @@
-{ lib
+ { lib
 , aiohttp
 , async-timeout
 , buildPythonPackage
 , crcmod
 , defusedxml
 , fetchFromGitHub
+, freezegun
 , jsonpickle
 , munch
 , mypy
@@ -20,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "plugwise";
-  version = "0.18.4";
+  version = "0.20.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "python-plugwise";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-a4mbkwjdLOnoxe4Cj43IXGALqbTKqinoJAiPWfc79/8=";
+    sha256 = "sha256-2ESoMJtoh0f7E427q7IFZZJW2ZcwgnjFDasKbHyF844=";
   };
 
   propagatedBuildInputs = [
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    freezegun
     jsonpickle
     mypy
     pytest-aiohttp

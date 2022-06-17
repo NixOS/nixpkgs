@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "crownstone-uart";
-  version = "2.3.0";
+  version = "2.4.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "crownstone";
     repo = "crownstone-lib-python-uart";
     rev = version;
-    sha256 = "sha256-temf+uvGWMMtnhBpbYtTj6OzKqo3Xaa11Q2VX2+HTZc=";
+    sha256 = "sha256-NGy63o56oWhHcQ9QKo05k/z8ABp3p3T3+uY2O1YyzBk=";
   };
 
   propagatedBuildInputs = [

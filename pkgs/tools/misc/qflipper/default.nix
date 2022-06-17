@@ -102,6 +102,7 @@ mkDerivation {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Cross-platform desktop tool to manage your flipper device";
     homepage = "https://flipperzero.one/";
     license = licenses.gpl3Only;

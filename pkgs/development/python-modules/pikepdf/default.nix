@@ -1,10 +1,10 @@
 { lib
 , attrs
 , buildPythonPackage
-, defusedxml
 , fetchFromGitHub
 , hypothesis
 , pythonOlder
+, importlib-metadata
 , jbig2dec
 , lxml
 , mupdf
@@ -17,15 +17,13 @@
 , python-dateutil
 , python-xmp-toolkit
 , qpdf
-, setuptools
 , setuptools-scm
-, setuptools-scm-git-archive
 , substituteAll
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "5.1.3";
+  version = "5.1.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -37,10 +35,10 @@ buildPythonPackage rec {
     # The content of .git_archival.txt is substituted upon tarball creation,
     # which creates indeterminism if master no longer points to the tag.
     # See https://github.com/jbarlow83/OCRmyPDF/issues/841
-    extraPostFetch = ''
+    postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-jkAwc1bQ1jRDf/qY+xAjiLXXO98qKjyX+J7Lu4tYWoI=";
+    hash = "sha256-DEgxdMVX5gQOsV9EyJtO/MO7padYMZrekanpp+nNvek=";
   };
 
   patches = [
@@ -51,6 +49,13 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    sed -i 's|\S*/opt/homebrew.*|pass|' setup.py
+
+    substituteInPlace setup.py \
+      --replace setuptools_scm_git_archive ""
+  '';
+
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   buildInputs = [
@@ -59,7 +64,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    setuptools-scm-git-archive
     setuptools-scm
   ];
 
@@ -74,11 +78,11 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    defusedxml
     lxml
     packaging
     pillow
-    setuptools
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
   ];
 
   pythonImportsCheck = [ "pikepdf" ];
@@ -88,6 +92,6 @@ buildPythonPackage rec {
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kiwi dotlambda ];
-    changelog = "https://github.com/pikepdf/pikepdf/blob/${version}/docs/release_notes.rst";
+    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.rev}/docs/releasenotes/version${lib.versions.major version}.rst";
   };
 }

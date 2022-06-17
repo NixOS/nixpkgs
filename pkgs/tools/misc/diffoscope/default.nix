@@ -11,11 +11,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "212";
+  version = "216";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-Kr8OHArnLR9AwN/s5QUSzX/puINkK1eu869OaFz3nlw=";
+    sha256 = "sha256-KSmC2mNNzsC2H5xOOQ/3gODsSvFQD95XGtrzbDud0W0=";
   };
 
   outputs = [ "out" "man" ];
@@ -57,7 +57,7 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optionals enableBloat ([
       abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
       hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
-    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer ]));
+    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer-six ]));
 
   checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 

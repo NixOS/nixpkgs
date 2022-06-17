@@ -1,6 +1,6 @@
-{ lib, python3, glibcLocales, docker-compose }:
+{ lib, python3, glibcLocales, docker-compose_1 }:
 let
-  docker_compose = changeVersion (with localPython.pkgs; docker-compose.override {
+  docker_compose = changeVersion (with localPython.pkgs; docker-compose_1.override {
     inherit colorama pyyaml six dockerpty docker jsonschema requests websocket-client paramiko;
   }).overridePythonAttrs "1.25.5" "1ijhg93zs3lswkljnm0rhww7gdy0g94psvsya2741prz2zcbcbks";
 

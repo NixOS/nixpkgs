@@ -25,8 +25,8 @@ buildPythonPackage rec {
     six
     twisted
     autobahn
-  ] ++ autobahn.extras-require.twisted
-  ++ twisted.extras-require.tls;
+  ] ++ autobahn.optional-dependencies.twisted
+  ++ twisted.optional-dependencies.tls;
 
   checkInputs = [
     treq

@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     ./2.71-fix-race.patch
   ];
 
+  strictDeps = true;
   nativeBuildInputs = [ m4 perl texinfo ];
   buildInputs = [ m4 ];
   postBuild = "

@@ -51,7 +51,7 @@ buildGoModule rec {
     description = "API of the Vikunja to-do list app";
     homepage = "https://vikunja.io/";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ em0lar ];
+    maintainers = with lib.maintainers; [ leona ];
     mainProgram = "vikunja";
     platforms = lib.platforms.all;
   };

@@ -11,7 +11,7 @@
   libffi ? null
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
-              || stdenv.targetPlatform.isPowerPC
+              || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc)
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
@@ -215,7 +215,7 @@ stdenv.mkDerivation (rec {
     # GHC is a bit confused on its cross terminology, as these would normally be
     # the *host* tools.
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
+    export CXX="${targetCC}/bin/${targetCC.targetPrefix}c++"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
     export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${lib.optionalString useLdGold ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"

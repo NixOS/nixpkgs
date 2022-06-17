@@ -109,6 +109,10 @@ in stdenv.mkDerivation rec {
     description = "OmniSharp based on roslyn workspaces";
     homepage = "https://github.com/OmniSharp/omnisharp-roslyn";
     platforms = platforms.unix;
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode  # dependencies
+    ];
     license = licenses.mit;
     maintainers = with maintainers; [ tesq0 ericdallo corngood ];
     mainProgram = "omnisharp";

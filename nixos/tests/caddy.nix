@@ -61,7 +61,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     ''
       url = "http://localhost/example.html"
       webserver.wait_for_unit("caddy")
-      webserver.wait_for_open_port("80")
+      webserver.wait_for_open_port(80)
 
 
       def check_etag(url):
@@ -95,13 +95,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           webserver.succeed(
               "${justReloadSystem}/bin/switch-to-configuration test >&2"
           )
-          webserver.wait_for_open_port("8080")
+          webserver.wait_for_open_port(8080)
 
       with subtest("multiple configs are correctly merged"):
           webserver.succeed(
               "${multipleConfigs}/bin/switch-to-configuration test >&2"
           )
-          webserver.wait_for_open_port("8080")
-          webserver.wait_for_open_port("8081")
+          webserver.wait_for_open_port(8080)
+          webserver.wait_for_open_port(8081)
     '';
 })

@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
     description = "GUI tool for experimenting with formal languages topics";
     homepage = "https://www.jflap.org/";
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = [ maintainers.grnnja ];
     platforms = platforms.all;
   };

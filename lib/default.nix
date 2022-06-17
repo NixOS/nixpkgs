@@ -36,6 +36,7 @@ let
 
     # constants
     licenses = callLibs ./licenses.nix;
+    sourceTypes = callLibs ./source-types.nix;
     systems = callLibs ./systems;
 
     # serialization
@@ -70,7 +71,7 @@ let
       info showWarnings nixpkgsVersion version isInOldestRelease
       mod compare splitByAndCompare
       functionArgs setFunctionArgs isFunction toFunction
-      toHexString toBaseDigits;
+      toHexString toBaseDigits inPureEvalMode;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath

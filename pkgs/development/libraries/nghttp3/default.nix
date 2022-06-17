@@ -1,18 +1,20 @@
 { lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config
-, cunit, file, ncurses
+, autoreconfHook, pkg-config, file
+, cunit, ncurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "nghttp3";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-toGTkgJLdSLNWCPJFpT63IxF3xANbvtkhJo5NUg/ZBg=";
+    sha256 = "sha256-1+0ln0J8dqHqmE+fsawhbfbbMNlCkDpJx4xomUuoHdE=";
   };
+
+  outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config file ];
   checkInputs = [ cunit ncurses ];
@@ -20,8 +22,6 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
   '';
-
-  outputs = [ "out" "dev" ];
 
   doCheck = true;
   enableParallelBuilding = true;

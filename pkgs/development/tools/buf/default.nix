@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cKb9pZYEsO1thgtl/8XFJHpNrO6P3OR8Lox/Gf9ccYk=";
+    sha256 = "sha256-Jcj1tpcG64mSVn444isGsK9AcITh171ibECukv3bXDI=";
   };
 
-  vendorSha256 = "sha256-zXLvKEdiIFnmwWQBgbJHCEBe2i7FobgeUOnA3LvHl8w=";
+  vendorSha256 = "sha256-aHGV8UfPn7xsySPXRSzsEpcaz1Ll49Mj1S9izvaIRWY=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -48,13 +48,9 @@ buildGoModule rec {
     runHook preInstall
 
     # Binaries
-    mkdir -p "$out/bin"
     # Only install required binaries, don't install testing binaries
-    for FILE in \
-      "buf" \
-      "protoc-gen-buf-breaking" \
-      "protoc-gen-buf-lint"; do
-      cp "$GOPATH/bin/$FILE" "$out/bin/"
+    for FILE in buf protoc-gen-buf-breaking protoc-gen-buf-lint; do
+      install -D -m 555 -t $out/bin $GOPATH/bin/$FILE
     done
 
     # Completions

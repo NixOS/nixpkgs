@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , asgineer
@@ -14,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "timetagger";
-  version = "22.4.2";
+  version = "22.6.2";
 
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-CWY+5O4Y1dvKQNy1Cclqj4+U6q5vVVj9hZq41MYqXKs=";
+    sha256 = "sha256-8Rl7g0OwjabBI9ekh3+vb+20KsqttvwwzZU0U1ee8dQ=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://timetagger.app";
     license = licenses.gpl3Only;
     description = "Tag your time, get the insight";

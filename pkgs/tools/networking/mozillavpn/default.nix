@@ -47,19 +47,19 @@ let
   };
 
   pname = "mozillavpn";
-  version = "2.8.0";
+  version = "2.8.3";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-UmLYs/J6syfMrjA66K33h8ubYqzvmcGf5spIilVVdVk=";
+    hash = "sha256-eKgoRE/JDEQEFp7xYY60ARDgw/n5VoZpD/Gb/CWzHuo=";
   };
 
   patches = [
     # Rust bridge: Add Cargo.lock file
     (fetchpatch {
-      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/3341/commits/718c7f52756b5a88511da91dafad7af312bb2473.patch";
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/05c9a366cf9dc4e378485c8e9d494f77c35dbb8c.patch";
       hash = "sha256-fG+SATbJpGqpCFXSWEiBo4dYx6RLtJYR0yTdBqN6Fww=";
     })
   ];
@@ -103,7 +103,7 @@ stdenv.mkDerivation {
     inherit src patches;
     name = "${pname}-${version}";
     preBuild = "cd ${cargoRoot}";
-    hash = "sha256-dnbF1hfm3qoZaPrIimhY2bUzlrYaNVUZ+nyp6NbgP3Y=";
+    hash = "sha256-C0wPmGVXbhUs0IzeIMZD6724P0XTOzeK1bzrnUMPlWo=";
   };
 
   postPatch = ''

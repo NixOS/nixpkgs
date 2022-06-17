@@ -33,6 +33,9 @@ mkDerivation rec {
     ./uimod.patch
     # Remove options for unsupported partition types
     ./partitions.patch
+    # Fix setting the kayboard layout on GNOME wayland
+    # By default the module uses the setxkbmap, which will not change the keyboard
+    ./waylandkbd.patch
   ];
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
@@ -57,7 +60,7 @@ mkDerivation rec {
     sed -e "s,pkexec calamares,calamares," \
         -i calamares.desktop
 
-    sed -e "s,X-AppStream-Ignore=true,&\nStartupWMClass=io.calamares.calamares," \
+    sed -e "s,X-AppStream-Ignore=true,&\nStartupWMClass=calamares," \
         -i calamares.desktop
 
     # Fix desktop reference with wayland

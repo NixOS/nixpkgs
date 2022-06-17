@@ -26,7 +26,19 @@ stdenv.mkDerivation {
 
 The main difference between `fetchurl` and `fetchzip` is in how they store the contents. `fetchurl` will store the unaltered contents of the URL within the Nix store. `fetchzip` on the other hand, will decompress the archive for you, making files and directories directly accessible in the future. `fetchzip` can only be used with archives. Despite the name, `fetchzip` is not limited to .zip files and can also be used with any tarball.
 
+## `fetchpatch` {#fetchpatch}
+
 `fetchpatch` works very similarly to `fetchurl` with the same arguments expected. It expects patch files as a source and performs normalization on them before computing the checksum. For example, it will remove comments or other unstable parts that are sometimes added by version control systems and can change over time.
+
+- `relative`: Similar to using `git-diff`'s `--relative` flag, only keep changes inside the specified directory, making paths relative to it.
+- `stripLen`: Remove the first `stripLen` components of pathnames in the patch.
+- `extraPrefix`: Prefix pathnames by this string.
+- `excludes`: Exclude files matching these patterns (applies after the above arguments).
+- `includes`: Include only files matching these patterns (applies after the above arguments).
+- `revert`: Revert the patch.
+
+Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `sha256` argument is changed as well.
+
 
 Most other fetchers return a directory rather than a single file.
 

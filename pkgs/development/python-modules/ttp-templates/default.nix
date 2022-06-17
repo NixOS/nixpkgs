@@ -1,16 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, netmiko
-, pytestCheckHook
-, python
 , pythonOlder
-, ttp
 }:
 
 buildPythonPackage rec {
   pname = "ttp-templates";
-  version = "0.1.3";
+  version = "0.1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,28 +14,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = "ttp_templates";
-    rev = version;
-    hash = "sha256-Qx+z/srYgD67FjXzYrc8xtA99n8shWK7yWj/r/ETN2U=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-yVDJAJXZU4pwvXSKRKUfSHqU23NcdgedOMmynMAD/Po=";
   };
 
-  propagatedBuildInputs = [
-    ttp
-  ];
+  postPatch = ''
+    # Drop circular dependency on ttp
+    substituteInPlace setup.py \
+      --replace '"ttp>=0.6.0"' ""
+  '';
 
-  checkInputs = [
-    netmiko
-    pytestCheckHook
-  ];
-
-  pythonImportsCheck = [
-    "ttp_templates"
-  ];
-
-  pytestFlagsArray = [
-    # The other tests requires data which is no part of the source
-    "test/test_ttp_templates_methods.py"
-    "test/test_yang_openconfig_lldp.py"
-  ];
+  # Circular dependency on ttp
+  doCheck = false;
 
   meta = with lib; {
     description = "Template Text Parser Templates collections";

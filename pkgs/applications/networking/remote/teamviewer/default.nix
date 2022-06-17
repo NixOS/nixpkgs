@@ -6,6 +6,8 @@
 
 mkDerivation rec {
   pname = "teamviewer";
+  # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
+  outputs = [ "out" "dev" ];
   version = "15.29.4";
 
   src = fetchurl {

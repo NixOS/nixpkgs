@@ -103,6 +103,12 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
       revert = true;
     })
+    # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
+      sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
+      revert = true;
+    })
     # make nixos tests that boot from USB more stable
     # https://lists.nongnu.org/archive/html/qemu-devel/2022-05/msg01484.html
     (fetchpatch {

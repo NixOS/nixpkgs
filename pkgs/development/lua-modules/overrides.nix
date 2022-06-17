@@ -15,13 +15,17 @@ with prev;
   });
 
   busted = prev.busted.overrideAttrs(oa: {
+    nativeBuildInputs = [
+      pkgs.installShellFiles
+    ];
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
         --replace "'lua_cliargs = 3.0-1'," "'lua_cliargs >= 3.0-1',"
     '';
     postInstall = ''
-      install -D completions/zsh/_busted $out/share/zsh/site-functions/_busted
-      install -D completions/bash/busted.bash $out/share/bash-completion/completions/busted
+      installShellCompletion --cmd busted \
+        --zsh completions/zsh/_busted \
+        --bash completions/bash/busted.bash
     '';
   });
 
@@ -199,7 +203,7 @@ with prev;
     # until Alloyed/lua-lsp#28
     postConfigure = ''
       substituteInPlace ''${rockspecFilename} \
-        --replace '"lpeglabel ~> 1.5",' '"lpeglabel >= 1.5",'
+        --replace '"dkjson ~> 2.5",' '"dkjson >= 2.5",'
     '';
   });
 
@@ -332,15 +336,23 @@ with prev;
   # we shouldn't use luarocks machinery to build complex cmake components
   libluv = pkgs.stdenv.mkDerivation {
 
-    inherit (prev.luv) pname version meta src;
+    pname = "libluv";
+    inherit (prev.luv) version meta src;
 
       cmakeFlags = [
         "-DBUILD_SHARED_LIBS=ON"
         "-DBUILD_MODULE=OFF"
         "-DWITH_SHARED_LIBUV=ON"
+        "-DLUA_BUILD_TYPE=System"
+        "-DWITH_LUA_ENGINE=${if isLuaJIT then "LuaJit" else "Lua"}"
       ];
 
-      buildInputs = [ pkgs.libuv ];
+      # to make sure we dont use bundled deps
+      postUnpack = ''
+        rm -rf deps/lua deps/libuv
+      '';
+
+      buildInputs = [ pkgs.libuv final.lua ];
 
       nativeBuildInputs = [ pkgs.pkg-config pkgs.cmake ]
         ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.fixDarwinDylibNames ];
@@ -350,18 +362,16 @@ with prev;
 
     buildInputs = [ pkgs.pkg-config pkgs.libuv ];
 
-    doInstallCheck = true;
-
     # Use system libuv instead of building local and statically linking
     extraVariables = {
       "WITH_SHARED_LIBUV" = "ON";
     };
 
     # we unset the LUA_PATH since the hook erases the interpreter defaults (To fix)
-    installCheckPhase = ''
+    # tests is not run since they are not part of the tarball anymore
+    preCheck = ''
       unset LUA_PATH
       rm tests/test-{dns,thread}.lua
-      lua tests/run.lua
     '';
 
     passthru.libluv = final.libluv;
@@ -401,7 +411,7 @@ with prev;
   })).overrideAttrs (old: {
     # Without this, source root is wrongly set to ./readline-2.6/doc
     setSourceRoot = ''
-      sourceRoot=./readline-3.0
+      sourceRoot=./readline-${pkgs.lib.versions.majorMinor old.version}
     '';
   });
 

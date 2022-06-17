@@ -11,16 +11,20 @@
 , proto-plus
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.8.1";
+  version = "3.9.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-DvbHQV71hTsWtjN/D1+bHGLSss+UidCZRi3J0zTa07U=";
+    hash = "sha256-rGN3P4EfSs7bLLca4Y2J1jF1/wPR5Oc1d6iZFjeQHTM=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +37,12 @@ buildPythonPackage rec {
     proto-plus
   ];
 
-  checkInputs = [ google-cloud-testutils mock pytest-asyncio pytestCheckHook ];
+  checkInputs = [
+    google-cloud-testutils
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "google.cloud.asset"

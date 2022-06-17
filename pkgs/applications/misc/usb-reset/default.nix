@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Perform a bus reset on a USB device using its vendor and product ID";
     homepage = "https://github.com/ralight/usb-reset";
     changelog = "https://github.com/ralight/usb-reset/blob/master/ChangeLog.txt";

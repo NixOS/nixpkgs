@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
-  version = "1.77.0";
+  version = "1.77.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ike3yO93q/bna/cnHv1sg+gR7iS9cVmNzLViBsfFdVs=";
+    sha256 = "sha256-S0HXIjZI48A+tMv+gT8UfYqmCI4NOwWAFykfhW73WPc=";
   };
 
   vendorSha256 = null;
@@ -17,8 +17,13 @@ buildGoModule rec {
     # main module (github.com/VictoriaMetrics/VictoriaMetrics) does not contain package
     # github.com/VictoriaMetrics/VictoriaMetrics/app/vmui/packages/vmui/web
     #
-    # This appears to be some of test server for development purposes only.
+    # This appears to be some kind of test server for development purposes only.
     rm -f app/vmui/packages/vmui/web/{go.mod,main.go}
+
+    # Increase timeouts in tests to prevent failure on heavily loaded builders
+    substituteInPlace lib/storage/storage_test.go \
+      --replace "time.After(10 " "time.After(120 " \
+      --replace "time.After(30 " "time.After(120 "
   '';
 
   ldflags = [ "-s" "-w" "-X github.com/VictoriaMetrics/VictoriaMetrics/lib/buildinfo.Version=${version}" ];

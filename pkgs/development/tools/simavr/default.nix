@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   checkTarget = "-C tests run_tests";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A lean and mean Atmel AVR simulator";
     homepage    = "https://github.com/buserror/simavr";
     license     = licenses.gpl3;

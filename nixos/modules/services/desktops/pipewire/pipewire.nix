@@ -234,12 +234,12 @@ in {
     environment.etc."pipewire/pipewire.conf" = {
       source = json.generate "pipewire.conf" configs.pipewire;
     };
-    environment.etc."pipewire/pipewire-pulse.conf" = {
+    environment.etc."pipewire/pipewire-pulse.conf" = mkIf cfg.pulse.enable {
       source = json.generate "pipewire-pulse.conf" configs.pipewire-pulse;
     };
 
     environment.sessionVariables.LD_LIBRARY_PATH =
-      lib.optional cfg.jack.enable "${cfg.package.jack}/lib";
+      lib.mkIf cfg.jack.enable [ "${cfg.package.jack}/lib" ];
 
     users = lib.mkIf cfg.systemWide {
       users.pipewire = {
@@ -251,6 +251,8 @@ in {
         ] ++ lib.optional config.security.rtkit.enable "rtkit";
         description = "Pipewire system service user";
         isSystemUser = true;
+        home = "/var/lib/pipewire";
+        createHome = true;
       };
       groups.pipewire.gid = config.ids.gids.pipewire;
     };
@@ -258,5 +260,8 @@ in {
     # https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/464#note_723554
     systemd.services.pipewire.environment."PIPEWIRE_LINK_PASSIVE" = "1";
     systemd.user.services.pipewire.environment."PIPEWIRE_LINK_PASSIVE" = "1";
+
+    # pipewire-pulse default config expects pactl to be in PATH
+    systemd.user.services.pipewire-pulse.path = lib.mkIf cfg.pulse.enable [ pkgs.pulseaudio ];
   };
 }

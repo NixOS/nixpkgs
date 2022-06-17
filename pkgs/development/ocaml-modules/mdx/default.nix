@@ -31,10 +31,11 @@ buildDunePackage rec {
   '';
 
   meta = {
-    homepage = "https://github.com/realworldocaml/mdx";
     description = "Executable OCaml code blocks inside markdown files";
+    homepage = "https://github.com/realworldocaml/mdx";
     changelog = "https://github.com/realworldocaml/mdx/raw/${version}/CHANGES.md";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.romildo ];
+    mainProgram = "ocaml-mdx";
   };
 }

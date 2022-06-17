@@ -52,7 +52,7 @@ let
     *    testScript = ''
     *      <exporterName>.start()
     *      <exporterName>.wait_for_unit("prometheus-<exporterName>-exporter.service")
-    *      <exporterName>.wait_for_open_port("1234")
+    *      <exporterName>.wait_for_open_port(1234)
     *      <exporterName>.succeed("curl -sSf 'localhost:1234/metrics'")
     *      <exporterName>.shutdown()
     *    '';

@@ -13,7 +13,6 @@
 , tomli
 , typing-extensions
 , GitPython
-, pytest-benchmark
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
@@ -58,7 +57,6 @@ buildPythonPackage rec {
   checkInputs = [
     GitPython
     # https://github.com/PyCQA/pylint/blob/main/requirements_test_min.txt
-    pytest-benchmark
     pytest-timeout
     pytest-xdist
     pytestCheckHook
@@ -74,6 +72,7 @@ buildPythonPackage rec {
   '';
 
   disabledTestPaths = [
+    "tests/benchmark"
     # tests miss multiple input files
     # FileNotFoundError: [Errno 2] No such file or directory
     "tests/pyreverse/test_writer.py"

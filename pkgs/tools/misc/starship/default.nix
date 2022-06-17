@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "1.6.3";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-CZU1pQixbv/Fvqy6lMLXNYWj+2/pplNq+IXloED1Pt8=";
+    sha256 = "sha256-+LfQ7ce8j7LBopV9bo+WjYcZCnwntOToKUHctPMaGXw=";
   };
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     done
   '';
 
-  cargoSha256 = "sha256-5iAo8Gqvbba8W1KXtmFoKx+W1s3dwxR/T+v/R5+S38g=";
+  cargoSha256 = "sha256-XPbirDdSDzIgsukkMYJrS/ghfF3VCplZ4BuOrzIRK0E=";
 
   preCheck = ''
     HOME=$TMPDIR

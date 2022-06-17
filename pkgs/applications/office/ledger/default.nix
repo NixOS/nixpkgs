@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0x6jxwss3wwzbzlwmnwb8yzjk8f9wfawif4f1b74z2qg6hc4r7f6";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "py" ];
 
   buildInputs = [
     (boost.override { enablePython = usePython; python = python3; })
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   # however, that would write to a different nixstore path, pass our own sitePackages location
   prePatch = lib.optionalString usePython ''
     substituteInPlace src/CMakeLists.txt \
-      --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${python3.sitePackages}"'
+      --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${placeholder "py"}/${python3.sitePackages}"'
   '';
 
   patches = [

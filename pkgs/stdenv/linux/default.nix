@@ -31,7 +31,7 @@
   # compatible with or current architecture.
   getCompatibleTools = lib.foldl (v: system:
     if v != null then v
-    else if localSystem.isCompatible (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
+    else if localSystem.canExecute (lib.systems.elaborate { inherit system; }) then archLookupTable.${system}
     else null) null (lib.attrNames archLookupTable);
 
   archLookupTable = table.${localSystem.libc}
@@ -162,7 +162,9 @@ in
       # stage1.
       ${localSystem.libc} = self.stdenv.mkDerivation {
         pname = "bootstrap-stage0-${localSystem.libc}";
+        strictDeps = true;
         version = "bootstrap";
+        enableParallelBuilding = true;
         buildCommand = ''
           mkdir -p $out
           ln -s ${bootstrapTools}/lib $out/lib
@@ -267,8 +269,10 @@ in
         # apparently the interpreter needs to match libc, too.
         bintools = self.stdenvNoCC.mkDerivation {
           inherit (prevStage.bintools.bintools) name;
+          enableParallelBuilding = true;
           dontUnpack = true;
           dontBuild = true;
+          strictDeps = true;
           # We wouldn't need to *copy* all, but it's easier and the result is temporary anyway.
           installPhase = ''
             mkdir -p "$out"/bin
@@ -398,8 +402,11 @@ in
       inherit (prevStage.stdenv) fetchurlBoot;
 
       extraAttrs = {
-        # TODO: remove this!
-        inherit (prevStage) glibc;
+        # remove before 22.11
+        glibc = lib.warn
+          ( "`stdenv.glibc` is deprecated and will be removed in release 22.11."
+           + " Please use `pkgs.glibc` instead.")
+          prevStage.glibc;
 
         inherit bootstrapTools;
         shellPackage = prevStage.bash;

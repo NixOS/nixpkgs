@@ -928,6 +928,9 @@
   "pkgconfig": [
     "poetry-core"
   ],
+  "plux": [
+    "pytest-runner"
+  ],
   "poetry": [
     "poetry-core"
   ],
@@ -981,6 +984,9 @@
   ],
   "pvo": [
     "poetry-core"
+  ],
+  "py-multihash": [
+    "pytest-runner"
   ],
   "py-synologydsm-api": [
     "poetry-core"

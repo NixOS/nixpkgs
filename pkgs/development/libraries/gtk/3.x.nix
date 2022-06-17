@@ -60,7 +60,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.33";
+  version = "3.24.34";
 
   outputs = [ "out" "dev" ] ++ lib.optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "sha256-WIsGUi4l0VeemJtvnYob2/L+E83gGgTpBP80aiJeeAE=";
+    sha256 = "sha256-28afkN3IIbjRRB8AN03B2kMjour6kHjmHtvl7u+oUuw=";
   };
 
   patches = [
@@ -201,6 +201,8 @@ stdenv.mkDerivation rec {
     for f in $dev/bin/gtk-encode-symbolic-svg; do
       wrapProgram $f --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     done
+  '' + lib.optionalString (stdenv.buildPlatform == stdenv.hostPlatform) ''
+    GTK_PATH="''${out:?}/lib/gtk-3.0/3.0.0/immodules/" ''${dev:?}/bin/gtk-query-immodules-3.0 > "''${out:?}/lib/gtk-3.0/3.0.0/immodules.cache"
   '';
 
   # Wrap demos
@@ -211,6 +213,9 @@ stdenv.mkDerivation rec {
       wrapProgram $dev/bin/$program \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}"
     done
+  '' + lib.optionalString stdenv.isDarwin ''
+    # a comment created a cycle between outputs
+    sed '/^# ModulesPath =/d' -i "$out"/lib/gtk-*/*/immodules.cache
   '';
 
   passthru = {

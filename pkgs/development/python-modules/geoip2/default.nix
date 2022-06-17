@@ -4,6 +4,7 @@
 , mocket
 , requests
 , requests-mock
+, urllib3
 , pytestCheckHook
 }:
 
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     substituteInPlace requirements.txt --replace "requests>=2.24.0,<3.0.0" "requests"
   '';
 
-  propagatedBuildInputs = [ aiohttp requests maxminddb ];
+  propagatedBuildInputs = [ aiohttp maxminddb requests urllib3 ];
 
   checkInputs = [
     mocket
@@ -32,7 +33,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "geoip2" ];
 
   meta = with lib; {
-    description = "Python client for GeoIP2 webservice client and database reader";
+    description = "GeoIP2 webservice client and database reader";
     homepage = "https://github.com/maxmind/GeoIP2-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];

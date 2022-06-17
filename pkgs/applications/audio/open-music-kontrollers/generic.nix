@@ -28,6 +28,7 @@ stdenv.mkDerivation {
   ] ++ additionalBuildInputs;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = description;
     homepage = "https://open-music-kontrollers.ch/lv2/${pname}:";
     license = licenses.artistic2;

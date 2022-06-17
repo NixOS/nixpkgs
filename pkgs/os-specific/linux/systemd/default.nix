@@ -340,11 +340,12 @@ stdenv.mkDerivation {
       exit 1
     fi
   ''
-  # Finally patch shebangs that might need patching.
-  # Should no longer be necessary with v251.
-  # https://github.com/systemd/systemd/pull/21749
+  # Finally, patch shebangs in scripts used at build time. This must not patch
+  # scripts that will end up in the output, to avoid build platform references
+  # when cross-compiling.
   + ''
-    patchShebangs .
+    shopt -s extglob
+    patchShebangs tools test src/!(rpm)
   '';
 
   outputs = [ "out" "man" "dev" ];
@@ -603,11 +604,6 @@ stdenv.mkDerivation {
       ${lib.concatStringsSep "\n" (lib.flatten (map mkSubstitute binaryReplacements))}
       ${lib.concatMapStringsSep "\n" mkEnsureSubstituted binaryReplacements}
 
-
-      for dir in tools src/resolve test src/test src/shared; do
-        patchShebangs $dir
-      done
-
       substituteInPlace src/libsystemd/sd-journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
     '';
@@ -688,7 +684,7 @@ stdenv.mkDerivation {
     # runtime; otherwise we can't and we need to reboot.
     interfaceVersion = 2;
 
-    inherit withCryptsetup util-linux kmod kbd;
+    inherit withCryptsetup withHostnamed withImportd withLocaled withMachined withTimedated util-linux kmod kbd;
 
     tests = {
       inherit (nixosTests) switchTest;

@@ -11,18 +11,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  # Note the revision needs to be adjusted.
-  version = "6.3";
+  ver = "6.3";
+  # We pick fresh intermediate release to get a fix for CVE-2022-29458
+  # which was fixed in 20220416 patchset.
+  patchver = "20220507";
+  version = "${ver}-p${patchver}";
   pname = "ncurses" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
-  # We cannot use fetchFromGitHub (which calls fetchzip)
-  # because we need to be able to use fetchurlBoot.
-  src = let
-    # Note the version needs to be adjusted.
-    rev = "v${version}";
-  in fetchurl {
-    url = "https://github.com/mirror/ncurses/archive/${rev}.tar.gz";
-    sha256 = "1mawdjhzl2na2j0dylwc37f5w95rhgyvlwnfhww5rz2r7fgkvayv";
+  src = fetchurl {
+    url = "https://invisible-island.net/archives/ncurses/current/ncurses-${ver}-${patchver}.tgz";
+    sha256 = "02y4n4my5qqhw3fdhdjv1zc9xpyglzlzmzjwq2zcwbwv738255ja";
   };
 
   outputs = [ "out" "dev" "man" ];

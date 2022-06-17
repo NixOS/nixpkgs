@@ -2,7 +2,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , nginx-doc
 
 , nixosTests
-, substituteAll, gd, geoip, perl
+, substituteAll, removeReferencesTo, gd, geoip, perl
 , withDebug ? false
 , withKTLS ? false
 , withStream ? true
@@ -22,7 +22,7 @@ outer@{ lib, stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
 , extraPatches ? []
 , fixPatch ? p: p
 , preConfigure ? ""
-, postInstall ? null
+, postInstall ? ""
 , meta ? null
 , nginx-doc ? outer.nginx-doc
 , passthru ? { tests = {}; }
@@ -158,14 +158,19 @@ stdenv.mkDerivation {
     cp -r ${nginx-doc}/* $doc
   '';
 
-  postInstall = if postInstall != null then postInstall else ''
-    mv $out/sbin $out/bin
-  '';
+  nativeBuildInputs = [ removeReferencesTo ];
+
+  disallowedReferences = map (m: m.src) modules;
+
+  postInstall =
+    let
+      noSourceRefs = lib.concatMapStrings (m: "remove-references-to -t ${m.src} $out/sbin/nginx\n") modules;
+    in noSourceRefs + postInstall;
 
   passthru = {
     modules = modules;
     tests = {
-      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-pubhtml nginx-sandbox nginx-sso;
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-http3 nginx-pubhtml nginx-sandbox nginx-sso;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
     } // passthru.tests;

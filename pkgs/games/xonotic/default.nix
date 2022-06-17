@@ -147,7 +147,7 @@ in rec {
     name = "xonotic-data";
     url = "https://dl.xonotic.org/xonotic-${version}.zip";
     sha256 = "15caj11v9hhr7w55w3rs1rspblzr9lg1crqivbn9pyyq0rif8cpl";
-    extraPostFetch = ''
+    postFetch = ''
       cd $out
       rm -rf $(ls | grep -v "^data$" | grep -v "^key_0.d0pk$")
     '';

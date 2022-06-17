@@ -32,16 +32,18 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
-  version = "2.0.1143";
+  version = "2.0.1217";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = version;
-    hash = "sha256-Kl9/wbjiQ46ysmnE24iQveTEzSTsVF5FHRqG3WWz3DQ=";
+    hash = "sha256-z1MKLFR/js27/9VxbOOx9LxcKTXOMZpOqUtMjPeIpds=";
   };
 
   nativeBuildInputs = with py.pkgs; [
+    pythonRelaxDepsHook
     setuptools-scm
   ];
 
@@ -63,6 +65,7 @@ buildPythonApplication rec {
     docker
     dockerfile-parse
     dpath
+    flake8
     GitPython
     jmespath
     jsonpath-ng
@@ -92,13 +95,10 @@ buildPythonApplication rec {
     responses
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "bc-python-hcl2==0.3.39" "bc-python-hcl2>=0.3.39" \
-      --replace "cyclonedx-python-lib>=0.11.0,<1.0.0" "cyclonedx-python-lib>=0.11.0" \
-      --replace "prettytable>=3.0.0" "prettytable" \
-      --replace "pycep-parser==0.3.4" "pycep-parser"
-  '';
+  pythonRelaxDeps = [
+    "bc-python-hcl2"
+    "pycep-parser"
+  ];
 
   preCheck = ''
     export HOME=$(mktemp -d);

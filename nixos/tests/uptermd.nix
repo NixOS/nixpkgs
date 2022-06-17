@@ -30,16 +30,19 @@ in
     server.wait_for_unit("uptermd.service")
     server.wait_for_unit("network-online.target")
 
+    # wait for upterm port to be reachable
+    client1.wait_until_succeeds("nc -z -v server 1337")
+
     # Add SSH hostkeys from the server to both clients
     # uptermd needs an '@cert-authority entry so we need to modify the known_hosts file
-    client1.execute("sleep 3; mkdir -p ~/.ssh && ssh -o StrictHostKeyChecking=no -p 1337 server ls")
+    client1.execute("mkdir -p ~/.ssh && ssh -o StrictHostKeyChecking=no -p 1337 server ls")
     client1.execute("echo @cert-authority $(cat ~/.ssh/known_hosts) > ~/.ssh/known_hosts")
-    client2.execute("sleep 3; mkdir -p ~/.ssh && ssh -o StrictHostKeyChecking=no -p 1337 server ls")
+    client2.execute("mkdir -p ~/.ssh && ssh -o StrictHostKeyChecking=no -p 1337 server ls")
     client2.execute("echo @cert-authority $(cat ~/.ssh/known_hosts) > ~/.ssh/known_hosts")
 
     client1.wait_for_unit("multi-user.target")
     client1.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
-    client1.wait_until_tty_matches(1, "login: ")
+    client1.wait_until_tty_matches("1", "login: ")
     client1.send_chars("root\n")
     client1.wait_until_succeeds("pgrep -u root bash")
 

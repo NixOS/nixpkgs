@@ -106,9 +106,8 @@ rec {
       xorg.libXi
       xorg.libSM
       xorg.libICE
-      gnome2.GConf
       freetype
-      (curl.override { gnutlsSupport = true; opensslSupport = false; })
+      curlWithGnuTls
       nspr
       nss
       fontconfig

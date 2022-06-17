@@ -77,12 +77,14 @@ let
   testCases = {
     loopback = {
       name = "Loopback";
-      machine.networking.useDHCP = false;
-      machine.networking.useNetworkd = networkd;
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
+        networking.useDHCP = false;
+        networking.useNetworkd = networkd;
+      };
       testScript = ''
         start_all()
-        machine.wait_for_unit("network.target")
-        loopback_addresses = machine.succeed("ip addr show lo")
+        client.wait_for_unit("network.target")
+        loopback_addresses = client.succeed("ip addr show lo")
         assert "inet 127.0.0.1/8" in loopback_addresses
         assert "inet6 ::1/128" in loopback_addresses
       '';
@@ -138,6 +140,25 @@ let
               router.wait_until_succeeds("ping -c 1 192.168.3.1")
               client.wait_until_succeeds("ping -c 1 192.168.3.1")
         '';
+    };
+    routeType = {
+      name = "RouteType";
+      nodes.client = { pkgs, ... }: with pkgs.lib; {
+        networking = {
+          useDHCP = false;
+          useNetworkd = networkd;
+          interfaces.eth1.ipv4.routes = [{
+            address = "192.168.1.127";
+            prefixLength = 32;
+            type = "local";
+          }];
+        };
+      };
+      testScript = ''
+        start_all()
+        client.wait_for_unit("network.target")
+        client.succeed("ip -4 route list table local | grep 'local 192.168.1.127'")
+      '';
     };
     dhcpDefault = {
       name = "useDHCP-by-default";

@@ -81,6 +81,7 @@ python3Packages.buildPythonApplication {
     usbutils
     sip_4
     dbus-python
+    distro
   ] ++ lib.optionals withQt5 [
     pyqt5
     pyqt5_sip

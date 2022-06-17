@@ -29,6 +29,11 @@ buildPythonPackage rec {
     pysigma
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pysigma = "^0.5.0"' 'pysigma = "^0.6.0"'
+  '';
+
   checkInputs = [
     pytestCheckHook
   ];

@@ -6,11 +6,14 @@
 , fetchPypi
 , postgresql
 , openssl
+, sphinxHook
+, sphinx-better-theme
 }:
 
 buildPythonPackage rec {
   pname = "psycopg2";
   version = "2.9.3";
+  outputs = [ "out" "doc" ];
 
   # Extension modules don't work well with PyPy. Use psycopg2cffi instead.
   # c.f. https://github.com/NixOS/nixpkgs/pull/104151#issuecomment-729750892
@@ -23,6 +26,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     postgresql
+    sphinxHook
+    sphinx-better-theme
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -31,6 +36,8 @@ buildPythonPackage rec {
 
   # requires setting up a postgresql database
   doCheck = false;
+
+  sphinxRoot = "doc/src";
 
   meta = with lib; {
     description = "PostgreSQL database adapter for the Python programming language";

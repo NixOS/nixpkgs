@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = lib.optionals stdenv.hostPlatform.isGnu [
-    stdenv.glibc.static
+    stdenv.cc.libc.static
   ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];

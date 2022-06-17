@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{ lib, stdenv, fetchFromGitHub, kernel, fetchpatch }:
 let
   version = "1.0.1";
   sha256 = "0qkgkkjy1isv6ws6hrcal75dxjz98rpnvqbm7agdcc6yv0c17wwh";
@@ -14,6 +14,19 @@ stdenv.mkDerivation {
     rev = version;
     inherit sha256;
   };
+
+  patches = [
+    (fetchpatch {
+      name = "Fix_GCC_declaration-after-statement_error.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/pop-os/system76-io-dkms/pull/5.patch";
+      sha256 = "sha256-G8SM5tdNbeLuwigmo1HKLN9o16WPpowLXxfM7Xi4aRI=";
+    })
+    (fetchpatch {
+      name = "Fix_GCC_unused-function_error.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/pop-os/system76-io-dkms/pull/6.patch";
+      sha256 = "sha256-vCXEzszmXa+wmI84oR8WduN4WnLTZA3M4GX+Jc4p/5o=";
+    })
+  ];
 
   hardeningDisable = [ "pic" ];
 

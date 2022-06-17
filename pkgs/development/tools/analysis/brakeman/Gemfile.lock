@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    brakeman (5.2.2)
+    brakeman (5.2.3)
 
 PLATFORMS
   ruby

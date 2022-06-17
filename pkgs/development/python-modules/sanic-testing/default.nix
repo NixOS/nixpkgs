@@ -9,24 +9,19 @@
 
 buildPythonPackage rec {
   pname = "sanic-testing";
-  version = "0.8.2";
+  version = "22.3.0";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic-testing";
     rev = "v${version}";
-    sha256 = "17fbb78gvic5s9nlcgwj817fq1f9j9d1d7z6n2ahhinmvyzl9gc8";
+    sha256 = "sha256-ZsLQA8rP4RrbVSUy5n0WZs903fnF7jtFqrIe5JVuRIg=";
   };
 
   outputs = [
     "out"
     "testsout"
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "httpx>=0.18,<0.22" "httpx"
-  '';
 
   propagatedBuildInputs = [
     httpx

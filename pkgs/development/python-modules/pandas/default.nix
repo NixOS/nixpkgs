@@ -90,9 +90,17 @@ buildPythonPackage rec {
     "test_comparison_invalid"
     # AssertionError: Regex pattern '"quotechar" must be string, not int'
     "python-kwargs2"
+    # Tests for rounding errors and fails if we have better precision
+    # than expected, e.g. on amd64 with FMA or on arm64
+    # https://github.com/pandas-dev/pandas/issues/38921
+    "test_rolling_var_numerical_issues"
   ] ++ lib.optionals stdenv.isDarwin [
     "test_locale"
     "test_clipboard"
+    # ValueError: cannot reindex on an axis with duplicate labels
+    #
+    # Attempts to reproduce this problem outside of Hydra failed.
+    "test_reindex_timestamp_with_fold"
   ];
 
   # Tests have relative paths, and need to reference compiled C extensions

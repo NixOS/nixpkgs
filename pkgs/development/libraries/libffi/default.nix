@@ -1,7 +1,9 @@
 { lib, stdenv, fetchurl, fetchpatch
 , autoreconfHook
 
-, doCheck ? true # test suite depends on dejagnu which cannot be used during bootstrapping
+  # test suite depends on dejagnu which cannot be used during bootstrapping
+  # dejagnu also requires tcl which can't be built statically at the moment
+, doCheck ? !(stdenv.hostPlatform.isStatic)
 , dejagnu
 }:
 
@@ -21,7 +23,10 @@ stdenv.mkDerivation rec {
 
   patches = [];
 
+  strictDeps = true;
   outputs = [ "out" "dev" "man" "info" ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=

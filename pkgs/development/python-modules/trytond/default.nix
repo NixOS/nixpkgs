@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "6.4.0";
+  version = "6.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3c04d75c2a779b88b8c7ab6dd252cf4fc51f9546bf42760d10dbd1a17f61b288";
+    sha256 = "sha256-ylRyTpTnciZiBeG/Mx9PGBXFdh4q3qENeygY3NDDPKU=";
   };
 
   propagatedBuildInputs = [
@@ -53,9 +53,9 @@ buildPythonPackage rec {
     weasyprint
     gevent
     pillow
-  ] ++ relatorio.extras-require.fodt
-    ++ passlib.extras-require.bcrypt
-    ++ passlib.extras-require.argon2
+  ] ++ relatorio.optional-dependencies.fodt
+    ++ passlib.optional-dependencies.bcrypt
+    ++ passlib.optional-dependencies.argon2
     ++ lib.optional withPostgresql psycopg2;
 
   checkPhase = ''

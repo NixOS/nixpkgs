@@ -16,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "defd50f72b65c5402ab2c573830a6978e5f202ad0d984793c8dde2c4152ebe04";
   };
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     argon2 = [ argon2-cffi ];
     bcrypt = [ bcrypt ];
     totp = [ cryptography ];
@@ -24,9 +24,9 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-  ] ++ passthru.extras-require.argon2
-    ++ passthru.extras-require.bcrypt
-    ++ passthru.extras-require.totp;
+  ] ++ passthru.optional-dependencies.argon2
+    ++ passthru.optional-dependencies.bcrypt
+    ++ passthru.optional-dependencies.totp;
 
   meta = with lib; {
     description = "A password hashing library for Python";

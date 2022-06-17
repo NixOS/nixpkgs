@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "svg.path";
-  version = "6.0";
+  version = "6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X78HaJFzywl3aA4Sl58wHQu2r1NVyjlsww0+ESx5TdU=";
+    hash = "sha256-i0Rx37c2GwibZstC2pZBWO0A6aXKEVuKaaxPXcJHSj8=";
   };
 
   checkInputs = [

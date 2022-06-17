@@ -5,6 +5,7 @@
 , llvmPackages, libffi, libomxil-bellagio, libva-minimal
 , libelf, libvdpau
 , libglvnd, libunwind
+, vulkan-loader
 , galliumDrivers ? ["auto"]
 , vulkanDrivers ? ["auto"]
 , eglPlatforms ? [ "x11" ] ++ lib.optionals stdenv.isLinux [ "wayland" ]
@@ -33,7 +34,7 @@ with lib;
 let
   # Release calendar: https://www.mesa3d.org/release-calendar.html
   # Release frequency: https://www.mesa3d.org/releasing.html#schedule
-  version = "22.0.2";
+  version = "22.0.4";
   branch  = versions.major version;
 
 self = stdenv.mkDerivation {
@@ -47,7 +48,7 @@ self = stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
     ];
-    sha256 = "11b8mcplvis7nadcwi1jf3529i2za2q1bkb7609q0rnfvihaakyz";
+    sha256 = "1m0y8wgy48hmcidsr7sbk5hcw3v0qr8359fd2x34fvl2z9c1z5y7";
   };
 
   # TODO:
@@ -144,7 +145,9 @@ self = stdenv.mkDerivation {
     ++ lib.optionals stdenv.isLinux [ libomxil-bellagio libva-minimal ]
     ++ lib.optionals stdenv.isDarwin [ libunwind ]
     ++ lib.optionals enableOpenCL [ libclc llvmPackages.clang llvmPackages.clang-unwrapped ]
-    ++ lib.optional withValgrind valgrind-light;
+    ++ lib.optional withValgrind valgrind-light
+    # Mesa will not build zink when gallium-drivers=auto
+    ++ lib.optional (elem "zink" galliumDrivers) vulkan-loader;
 
   depsBuildBuild = [ pkg-config ];
 

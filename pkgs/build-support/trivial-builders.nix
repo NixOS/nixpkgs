@@ -10,7 +10,6 @@ rec {
   *
   * Examples:
   * runCommand "name" {envVariable = true;} ''echo hello > $out''
-  * runCommandNoCC "name" {envVariable = true;} ''echo hello > $out'' # equivalent to prior
   * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
   *
   * The `*Local` variants force a derivation to be built locally,
@@ -68,8 +67,10 @@ rec {
     # extra arguments to pass to stdenv.mkDerivation
     , name
     # name of the resulting derivation
+    # TODO(@Artturin): enable strictDeps always
     }: buildCommand:
     stdenv.mkDerivation ({
+      enableParallelBuilding = true;
       inherit buildCommand name;
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);
@@ -527,6 +528,7 @@ rec {
     runCommand name
       (substitutions // {
         inherit meta;
+        strictDeps = true;
       })
       (''
         mkdir -p $out/nix-support

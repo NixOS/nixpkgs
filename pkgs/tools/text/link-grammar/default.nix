@@ -54,6 +54,7 @@ link-grammar = stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A Grammar Checking library";
     homepage = "https://www.abisource.com/projects/link-grammar/";
     changelog = "https://github.com/opencog/link-grammar/blob/link-grammar-${version}/ChangeLog";

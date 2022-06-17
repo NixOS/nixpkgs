@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "RustSec";
     repo = "rustsec";
     rev = "cargo-audit%2Fv${version}";
-    sha256 = "sha256-6Jb7ViVY4YcnNvGarnHWyBPnpz7xiHQjumOmVaA8rzg=";
+    sha256 = "sha256-x91x5XjIRXLhs96r06ITbpHCkHoaCaMXH+VCp6f57Gg=";
   };
 
-  cargoSha256 = "sha256-31zZMjIFnMIzSmTEACFBE4nSMje9SvE9KzZdoxTg4VM=";
+  cargoSha256 = "sha256-/CzRkdo4kfvRwOZsfyu0zL3UnjEKCBj7wj40jlydSDI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Audit Cargo.lock files for crates with security vulnerabilities";
     homepage = "https://rustsec.org";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ basvandijk ];
+    license = with licenses; [ mit /* or */ asl20 ];
+    maintainers = with maintainers; [ basvandijk jk ];
   };
 }

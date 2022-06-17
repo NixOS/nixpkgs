@@ -17,7 +17,7 @@
 , dill
 , flask
 , flask_login
-, flask_wtf
+, flask-wtf
 , flask-appbuilder
 , flask-caching
 , GitPython
@@ -126,7 +126,7 @@ buildPythonPackage rec {
     flask-appbuilder
     flask-caching
     flask_login
-    flask_wtf
+    flask-wtf
     GitPython
     graphviz
     gunicorn

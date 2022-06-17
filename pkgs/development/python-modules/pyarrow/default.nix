@@ -83,12 +83,19 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # Requires loopback networking
     "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
+    "--deselect=pyarrow/tests/test_flight.py::test_never_sends_data"
+    "--deselect=pyarrow/tests/test_flight.py::test_large_descriptor"
+    "--deselect=pyarrow/tests/test_flight.py::test_large_metadata_client"
+    "--deselect=pyarrow/tests/test_flight.py::test_none_action_side_effect"
   ];
 
   dontUseSetuptoolsCheck = true;
   preCheck = ''
     shopt -s extglob
     rm -r pyarrow/!(tests)
+  '' + lib.optionalString stdenv.isDarwin  ''
+    # OSError: [Errno 24] Too many open files
+    ulimit -n 1024
   '';
 
   pythonImportsCheck = [ "pyarrow" ] ++ map (module: "pyarrow.${module}") ([

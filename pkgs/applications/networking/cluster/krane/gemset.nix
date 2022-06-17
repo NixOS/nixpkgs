@@ -5,10 +5,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1jpydd414j0fig3r0f6ci67mchclg6cq2qgqbq9zplrbg40pzfi8";
+      sha256 = "0z05zyc57f8ywvdvls6nx93vrhyyzzpgz729mwampz1qb8vvcspj";
       type = "gem";
     };
-    version = "7.0.2.3";
+    version = "7.0.3";
   };
   addressable = {
     dependencies = ["public_suffix"];
@@ -276,10 +276,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0slr38w21gwizkq4nk6c7l7lcqc2c733zfn5fq1pmbwy5bwiggad";
+      sha256 = "0fkdjic88hh0accp0sbx5mcrr9yaqwampf5c3214212d4i614138";
       type = "gem";
     };
-    version = "1.1.1";
+    version = "1.1.2";
   };
   jwt = {
     groups = ["default"];

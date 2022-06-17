@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "dapr-cli";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "dapr";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-+P1oXG+uvnFDGis5pz9VUQ4n1C7mjuetXz1OtN7IIrg=";
+    sha256 = "sha256-gEYN9r5hHRya1nqle8qHaUaOpuBN8cSLJx2FBRqyztw=";
   };
 
-  vendorSha256 = "sha256-EvOyOy7DFQtFavOC9eBUZRJsj3pNdx7jumVmZ/THdaM=";
+  vendorSha256 = "sha256-RGEoewLDKo+D9Wp/v8PI/LPjCh2rFrdLO/AS4RWFliY=";
 
   nativeBuildInputs = [ installShellFiles ];
 

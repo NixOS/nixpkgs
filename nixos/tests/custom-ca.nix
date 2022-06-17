@@ -11,6 +11,8 @@
 with import ../lib/testing-python.nix { inherit system pkgs; };
 
 let
+  inherit (pkgs) lib;
+
   makeCert = { caName, domain }: pkgs.runCommand "example-cert"
   { buildInputs = [ pkgs.gnutls ]; }
   ''

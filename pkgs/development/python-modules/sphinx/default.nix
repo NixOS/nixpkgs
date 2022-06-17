@@ -40,7 +40,7 @@ buildPythonPackage rec {
     repo = pname;
     rev = "v${version}";
     sha256 = "sha256-Lw9yZWCQpt02SL/McWPcyFRfVhQHC0TejcYRbVw+VxY=";
-    extraPostFetch = ''
+    postFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
         tests/roots/test-images/testimæge.png

@@ -16,14 +16,14 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.33.1";
+  version = "1.34.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-4rx8EHtOSd/lHcSHZCtiXkjJjL7B175cVGvFOZ9Bzi8=";
+    sha256 = "sha256-MGXHIbmoPRyjjYHV/RD9sd8Dn74YVlET2V3d/wJ3blo=";
     fetchSubmodules = true;
   };
 
@@ -49,9 +49,18 @@ in stdenv.mkDerivation rec {
     # Therefore we put it into `/run/netdata`, which is owned
     # by netdata only.
     ./ipc-socket-in-run.patch
-    # This is only needed for 1.33.1, remove on the next release
-    ./fix-protobuf.patch
+
+    # Avoid build-only inputs in closure leaked by configure command:
+    #   https://github.com/NixOS/nixpkgs/issues/175693#issuecomment-1143344162
+    ./skip-CONFIGURE_COMMAND.patch
   ];
+
+  # Guard against unused buld-time development inputs in closure. Without
+  # the ./skip-CONFIGURE_COMMAND.patch patch the closure retains inputs up
+  # to bootstrap tools:
+  #   https://github.com/NixOS/nixpkgs/pull/175719
+  # We pick zlib.dev as a simple canary package with pkg-config input.
+  disallowedReferences = [ zlib.dev ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
@@ -98,6 +107,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = {
+    broken = stdenv.isDarwin;
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
     license = licenses.gpl3Plus;

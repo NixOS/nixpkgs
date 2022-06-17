@@ -148,6 +148,14 @@ final: prev: {
     meta = oldAttrs.meta // { broken = since "10"; };
   });
 
+  graphql-language-service-cli = prev.graphql-language-service-cli.override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      wrapProgram "$out/bin/graphql-lsp" \
+        --prefix NODE_PATH : ${final.graphql}/lib/node_modules
+    '';
+  };
+
   hsd = prev.hsd.override {
     buildInputs = [ final.node-gyp-build pkgs.unbound ];
   };
@@ -202,7 +210,7 @@ final: prev: {
       wrapProgram "$out/bin/makam" --prefix PATH : ${lib.makeBinPath [ nodejs ]}
       ${
         if stdenv.isLinux
-          then "patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""
+          then "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""
           else ""
       }
     '';
@@ -330,7 +338,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-l9MOgNCn/paDE+i1K2fp9NZ+Du4trzPTJsGkaQHVBufTGqzoYHuNk8JfzXuIn0Gte6/ZjyKj652Jq/Lc1tp2yw==";
+      sha512 = "sha512-MLO3JUGJpe5+EVisA/i47+zlyF8Ug0ivvGYG4B9oSXQcPiUHB1ccmnpxqR7o0Up5SQgmxkBiEU//HgR6UuIKOw==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \

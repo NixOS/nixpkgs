@@ -163,6 +163,13 @@ lib.composeManyExtensions [
               attr = "flit-core";
             } else super.argon2-cffi;
 
+      awscrt = super.awscrt.overridePythonAttrs (
+        old: {
+          nativeBuildInputs = [ pkgs.cmake ] ++ old.nativeBuildInputs;
+          dontUseCmakeConfigure = true;
+        }
+      );
+
       bcrypt = super.bcrypt.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.libffi ];
@@ -1098,10 +1105,15 @@ lib.composeManyExtensions [
               url = "https://github.com/python/mypy/commit/f1755259d54330cd087cae763cd5bbbff26e3e8a.patch";
               sha256 = "sha256-5gPahX2X6+/qUaqDQIGJGvh9lQ2EDtks2cpQutgbOHk=";
             })
-          ] ++ lib.optionals (lib.strings.versionAtLeast old.version "0.940") [
+          ] ++ lib.optionals ((lib.strings.versionAtLeast old.version "0.940") && lib.strings.versionOlder old.version "0.960") [
             (pkgs.fetchpatch {
               url = "https://github.com/python/mypy/commit/e7869f05751561958b946b562093397027f6d5fa.patch";
               sha256 = "sha256-waIZ+m3tfvYE4HJ8kL6rN/C4fMjvLEe9UoPbt9mHWIM=";
+            })
+          ] ++ lib.optionals (lib.strings.versionAtLeast old.version "0.960") [
+            (pkgs.fetchpatch {
+              url = "https://github.com/python/mypy/compare/a6166b2f..5b3c9888.patch";
+              sha256 = "sha256-3QY99ctkIv9PoNfcTKF9TZFBwAIVOqPLKBVP6rDQ9FU=";
             })
           ];
         }
@@ -1453,6 +1465,14 @@ lib.composeManyExtensions [
           ];
         }
       );
+
+      pyfftw = super.pyfftw.overridePythonAttrs (old: {
+        buildInputs = (old.buildInputs or [ ]) ++ [
+          pkgs.fftw
+          pkgs.fftwFloat
+          pkgs.fftwLongDouble
+        ];
+      });
 
       pyfuse3 = super.pyfuse3.overridePythonAttrs (old: {
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkg-config ];
@@ -1887,7 +1907,7 @@ lib.composeManyExtensions [
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.geos ];
           inherit (pkgs.python3.pkgs.shapely) GEOS_LIBRARY_PATH;
 
-          GEOS_LIBC = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
+          GEOS_LIBC = lib.optionalString (!stdenv.isDarwin) "${lib.getLib stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
 
           # Fix library paths
           postPatch = old.postPatch or "" + ''
@@ -2346,7 +2366,7 @@ lib.composeManyExtensions [
       });
 
       wtforms = super.wtforms.overridePythonAttrs (old: {
-        buildInputs = (old.buildInputs or [ ]) ++ [ self.babel ];
+        buildInputs = (old.buildInputs or [ ]) ++ [ self.Babel ];
       });
 
     }

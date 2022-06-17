@@ -90,6 +90,10 @@ in
     meta = with lib; {
       description = "Open-source, self-hosted Slack-alternative";
       homepage = "https://www.mattermost.org";
+      sourceProvenance = with sourceTypes; [
+        fromSource
+        binaryNativeCode  # mattermost-webapp
+      ];
       license = with licenses; [ agpl3 asl20 ];
       maintainers = with maintainers; [ fpletz ryantm numinit ];
       platforms = platforms.unix;

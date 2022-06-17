@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-bindgen-cli";
-  version = "0.2.79";
+  version = "0.2.80";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-3kWhhzYmIo/GFieI0i7XVJIZxIaaJHHuDp38k5xcFmI=";
+    sha256 = "sha256-f3XRVuK892TE6xP7eq3aKpl9d3fnOFxLh+/K59iWPAg=";
   };
 
-  cargoSha256 = "sha256-xKYdvcrx3a9AKiRU8yJ3JNQp1Q2pEufwo+in82yTV6c=";
+  cargoSha256 = "sha256-WJ5hPw2mzZB+GMoqo3orhl4fCFYKWXOWqaFj1EMrb2Q=";
 
   nativeBuildInputs = [ pkg-config ];
 

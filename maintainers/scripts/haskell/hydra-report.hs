@@ -1,6 +1,6 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -p "haskellPackages.ghcWithPackages (p: [p.aeson p.req])"
-#! nix-shell -p hydra_unstable
+#! nix-shell -p hydra-unstable
 #! nix-shell -i runhaskell
 
 {-
@@ -20,14 +20,12 @@ Because step 1) is quite expensive and takes roughly ~5 minutes the result is ca
 {-# LANGUAGE DerivingStrategies #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE LambdaCase #-}
-{-# LANGUAGE MultiWayIf #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TupleSections #-}
-{-# OPTIONS_GHC -Wall #-}
 {-# LANGUAGE ViewPatterns #-}
-{-# LANGUAGE TupleSections #-}
+{-# OPTIONS_GHC -Wall #-}
 
 import Control.Monad (forM_, (<=<))
 import Control.Monad.Trans (MonadIO (liftIO))

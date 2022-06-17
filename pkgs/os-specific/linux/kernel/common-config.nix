@@ -29,7 +29,7 @@ let
     mkIf (stdenv.hostPlatform.isAarch32 ||
           stdenv.hostPlatform.isAarch64 ||
           stdenv.hostPlatform.isx86_64 ||
-          (stdenv.hostPlatform.isPowerPC && stdenv.hostPlatform.is64bit) ||
+          (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) ||
           (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit));
 
   options = {
@@ -38,8 +38,9 @@ let
       # Necessary for BTF
       DEBUG_INFO                = mkMerge [
         (whenOlder "5.2" (if (features.debug or false) then yes else no))
-        (whenAtLeast "5.2" yes)
+        (whenBetween "5.2" "5.18" yes)
       ];
+      DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
       DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
       BPF_LSM                   = whenAtLeast "5.7" (option yes);
       DEBUG_KERNEL              = yes;
@@ -288,6 +289,9 @@ let
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
       DRM_I915_GVT_KVMGT = whenAtLeast "4.16" module;
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      # enable HDMI-CEC on RPi boards
+      DRM_VC4_HDMI_CEC = whenAtLeast "4.14" yes;
     };
 
     sound = {
@@ -407,7 +411,7 @@ let
       UDF_FS              = module;
 
       NFSD_V2_ACL            = yes;
-      NFSD_V3                = yes;
+      NFSD_V3                = whenOlder "5.18" yes;
       NFSD_V3_ACL            = yes;
       NFSD_V4                = yes;
       NFSD_V4_SECURITY_LABEL = yes;

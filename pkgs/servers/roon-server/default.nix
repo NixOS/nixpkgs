@@ -16,7 +16,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "roon-server";
-  version = "1.8-935";
+  version = "1.8-943";
 
   src =
     let
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     in
     fetchurl {
       url = "http://download.roonlabs.com/builds/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-      hash = "sha256-6I612imOCqxVlNu6zCXWS/Yy8bnot+0723t3Se4DjLg=";
+      hash = "sha256-osQ0/HhcSO6pirUDjOnw0yUsGUsxZI62ViHc6Lb/rT4=";
     };
 
   dontConfigure = true;
@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
     description = "The music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault steell ];
     platforms = [ "x86_64-linux" ];

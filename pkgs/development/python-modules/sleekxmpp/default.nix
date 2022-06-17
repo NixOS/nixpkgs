@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, dnspython, pyasn1 }:
+{ stdenv, lib, fetchPypi, buildPythonPackage, dnspython, pyasn1 }:
 
 buildPythonPackage rec {
   pname = "sleekxmpp";
@@ -16,6 +16,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "XMPP library for Python";
     license = licenses.mit;
     homepage = "http://sleekxmpp.com/";

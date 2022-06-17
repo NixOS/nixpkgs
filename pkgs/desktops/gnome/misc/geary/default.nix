@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , gtk3
 , vala
@@ -53,6 +54,21 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "1c2nd35500ng28223y5pszc7fh8g16njj34f6p5xc9594lvj0mik";
   };
+
+  patches = [
+    # Fix accessibility issues with initializer of constants (Fix build with vala 0.56)
+    # https://gitlab.gnome.org/GNOME/geary/-/merge_requests/720
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/geary/-/commit/9bd4c82952a0a2c3308c5cc86c0b85650c1fb484.patch";
+      sha256 = "sha256-mSms0MOfw8xHxOrEQwrIv+d4h01xLPgyvX2oWmmFQVw=";
+    })
+    # Util.Cache.Lru: Workaround missing generic type argument (Fix build with vala 0.56)
+    # https://gitlab.gnome.org/GNOME/geary/-/merge_requests/721
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/geary/-/commit/0f75e7a84a39492d0748cec2ba6028e08cae3644.patch";
+      sha256 = "sha256-1ADQqKm3DxtjDGPSThq3c7s5S+q/3u/qr9JQEsLaFMI=";
+    })
+  ];
 
   nativeBuildInputs = [
     appstream-glib

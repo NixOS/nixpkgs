@@ -13,7 +13,7 @@ let
   attrsToText = attrs:
     concatStringsSep "\n" (
       mapAttrsToList (n: v: ''${n}=${escapeIfNeccessary (toString v)}'') attrs
-    );
+    ) + "\n";
 
   osReleaseContents = {
     NAME = "NixOS";

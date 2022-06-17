@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
     cp -r . "$out/libexec/baudline/"
 
-    interpreter="$(echo ${stdenv.glibc.out}/lib/ld-linux*)"
+    interpreter="$(echo ${stdenv.cc.libc}/lib/ld-linux*)"
     for prog in "$out"/libexec/baudline/baudline*; do
         patchelf --interpreter "$interpreter" "$prog"
         ln -sr "$prog" "$out/bin/"

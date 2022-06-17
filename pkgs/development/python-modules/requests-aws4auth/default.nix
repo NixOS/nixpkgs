@@ -28,13 +28,13 @@ buildPythonPackage rec {
     six
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     httpx = [ httpx ];
   };
 
   checkInputs = [
     pytestCheckHook
-  ] ++ passthru.extras-require.httpx;
+  ] ++ passthru.optional-dependencies.httpx;
 
   pythonImportsCheck = [
     "requests_aws4auth"

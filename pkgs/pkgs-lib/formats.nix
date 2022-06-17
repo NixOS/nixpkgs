@@ -357,7 +357,7 @@ rec {
           } // lib.mapAttrs (_name: type: elixirOr type) lib.types;
         };
 
-      generate = name: value: pkgs.runCommandNoCC name
+      generate = name: value: pkgs.runCommand name
         {
           value = toConf value;
           passAsFile = [ "value" ];

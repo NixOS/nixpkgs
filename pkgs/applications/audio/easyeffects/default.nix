@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , calf
 , fftwFloat
-, fmt
+, fmt_8
 , glib
 , gtk4
 , itstool
@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "6.2.4";
+  version = "6.2.5";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-g/qN1Tafh71HdPLHW43Zva9MK6G+qxSnb1aRisuwdBw=";
+    sha256 = "sha256-LvTvNBo3aUGUD4vA04YtINFBjTplhmkxj3FlbTZDTA0=";
   };
 
   nativeBuildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     fftwFloat
-    fmt
+    fmt_8
     glib
     gtk4
     libadwaita

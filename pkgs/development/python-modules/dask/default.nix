@@ -98,7 +98,7 @@ buildPythonPackage rec {
     "dask.diagnostics"
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     complete = [ distributed ];
   };
 

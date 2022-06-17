@@ -20,6 +20,8 @@
 , lib
 , options
 , transformOptions ? lib.id  # function for additional tranformations of the options
+, documentType ? "appendix" # TODO deprecate "appendix" in favor of "none"
+                            #      and/or rename function to moduleOptionDoc for clean slate
 , revision ? "" # Specify revision for the options
 # a set of options the docs we are generating will be merged into, as if by recursiveUpdate.
 # used to split the options doc build into a static part (nixos/modules) and a dynamic part
@@ -45,8 +47,11 @@ let
     else if lib.isFunction x then "<function>"
     else x;
 
-  optionsList = lib.flip map optionsListVisible
-   (opt: transformOptions opt
+  rawOpts = lib.optionAttrSetToDocList options;
+  transformedOpts = map transformOptions rawOpts;
+  filteredOpts = lib.filter (opt: opt.visible && !opt.internal) transformedOpts;
+  optionsList = lib.flip map filteredOpts
+   (opt: opt
     // lib.optionalAttrs (opt ? example) { example = substSpecial opt.example; }
     // lib.optionalAttrs (opt ? default) { default = substSpecial opt.default; }
     // lib.optionalAttrs (opt ? type) { type = substSpecial opt.type; }
@@ -87,9 +92,6 @@ let
           </listitem>
         '';
     in "<itemizedlist>${lib.concatStringsSep "\n" (map (p: describe (unpack p)) packages)}</itemizedlist>";
-
-  # Remove invisible and internal options.
-  optionsListVisible = lib.filter (opt: opt.visible && !opt.internal) (lib.optionAttrSetToDocList options);
 
   optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
 
@@ -161,6 +163,7 @@ in rec {
 
     ${pkgs.python3Minimal}/bin/python ${./sortXML.py} $optionsXML sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \
+      --stringparam documentType '${documentType}' \
       --stringparam revision '${revision}' \
       -o intermediate.xml ${./options-to-docbook.xsl} sorted.xml
     ${pkgs.libxslt.bin}/bin/xsltproc \

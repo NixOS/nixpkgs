@@ -17,8 +17,8 @@ let
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
 
-  databaseConfig = {
-    production = {
+  databaseConfig = let
+    val = {
       adapter = "postgresql";
       database = cfg.databaseName;
       host = cfg.databaseHost;
@@ -26,6 +26,10 @@ let
       encoding = "utf8";
       pool = cfg.databasePool;
     } // cfg.extraDatabaseConfig;
+  in if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.0" then {
+    production.main = val;
+  } else {
+    production = val;
   };
 
   # We only want to create a database if we're actually going to connect to it.
@@ -1184,7 +1188,7 @@ in {
                 fi
 
                 jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
-                   '.production.password = $ENV.db_password' \
+                   '.${if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.0" then "production.main" else "production"}.password = $ENV.db_password' \
                    >'${cfg.statePath}/config/database.yml'
               ''
               else ''

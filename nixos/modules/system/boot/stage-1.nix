@@ -31,6 +31,9 @@ let
   # mounting `/`, like `/` on a loopback).
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
+  # Determine whether zfs-mount(8) is needed.
+  zfsRequiresMountHelper = any (fs: lib.elem "zfsutil" fs.options) fileSystems;
+
   # A utility for enumerating the shared-library dependencies of a program
   findLibs = pkgs.buildPackages.writeShellScriptBin "find-libs" ''
     set -euo pipefail
@@ -106,6 +109,22 @@ let
       for BIN in ${pkgs.busybox}/{s,}bin/*; do
         copy_bin_and_libs $BIN
       done
+
+      ${optionalString zfsRequiresMountHelper ''
+        # Filesystems using the "zfsutil" option are mounted regardless of the
+        # mount.zfs(8) helper, but it is required to ensure that ZFS properties
+        # are used as mount options.
+        #
+        # BusyBox does not use the ZFS helper in the first place.
+        # util-linux searches /sbin/ as last path for helpers (stage-1-init.sh
+        # must symlink it to the store PATH).
+        # Without helper program, both `mount`s silently fails back to internal
+        # code, using default options and effectively ignore security relevant
+        # ZFS properties such as `setuid=off` and `exec=off` (unless manually
+        # duplicated in `fileSystems.*.options`, defeating "zfsutil"'s purpose).
+        copy_bin_and_libs ${pkgs.util-linux}/bin/mount
+        copy_bin_and_libs ${pkgs.zfs}/bin/mount.zfs
+      ''}
 
       # Copy some util-linux stuff.
       copy_bin_and_libs ${pkgs.util-linux}/sbin/blkid
@@ -204,24 +223,29 @@ let
 
       # Run patchelf to make the programs refer to the copied libraries.
       find $out/bin $out/lib -type f | while read i; do
-        if ! test -L $i; then
-          nuke-refs -e $out $i
-        fi
+        nuke-refs -e $out $i
       done
 
       find $out/bin -type f | while read i; do
-        if ! test -L $i; then
-          echo "patching $i..."
-          patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
-        fi
+        echo "patching $i..."
+        patchelf --set-interpreter $out/lib/ld*.so.? --set-rpath $out/lib $i || true
+      done
+
+      find $out/lib -type f \! -name 'ld*.so.?' | while read i; do
+        echo "patching $i..."
+        patchelf --set-rpath $out/lib $i
       done
 
       if [ -z "${toString (pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform)}" ]; then
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
       $out/bin/ash -c 'echo hello world' | grep "hello world"
-      export LD_LIBRARY_PATH=$out/lib
-      $out/bin/mount --help 2>&1 | grep -q "BusyBox"
+      ${if zfsRequiresMountHelper then ''
+        $out/bin/mount -V 1>&1 | grep -q "mount from util-linux"
+        $out/bin/mount.zfs -h 2>&1 | grep -q "Usage: mount.zfs"
+      '' else ''
+        $out/bin/mount --help 2>&1 | grep -q "BusyBox"
+      ''}
       $out/bin/blkid -V 2>&1 | grep -q 'libblkid'
       $out/bin/udevadm --version
       $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
@@ -259,8 +283,6 @@ let
       preferLocalBuild = true;
     } ''
       mkdir -p $out
-
-      echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 
       cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
       cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/

@@ -5,6 +5,7 @@ let
 in
 (buildMozillaMach rec {
   pname = "librewolf";
+  applicationName = "LibreWolf";
   binaryName = "librewolf";
   version = librewolf-src.packageVersion;
   src = librewolf-src.firefox;

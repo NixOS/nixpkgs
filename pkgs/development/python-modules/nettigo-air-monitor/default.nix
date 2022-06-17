@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "1.2.4";
+  version = "1.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-zmmJ3F2Fl4u7vOx1h5Z0LtWL0/5xmZiFRY2NU8Tc0MY=";
+    sha256 = "sha256-O/HJTqmNmnx85AVuhRRxNqS1W0dZyKFSPVFqaBXAuhU=";
   };
 
   propagatedBuildInputs = [
@@ -35,13 +35,6 @@ buildPythonPackage rec {
     pytest-error-for-skips
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-    substituteInPlace setup.cfg \
-      --replace "--cov --cov-report term-missing " ""
-  '';
 
   pythonImportsCheck = [
     "nettigo_air_monitor"

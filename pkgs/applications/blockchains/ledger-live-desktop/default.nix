@@ -2,16 +2,15 @@
 
 let
   pname = "ledger-live-desktop";
-  version = "2.41.3";
-  name = "${pname}-${version}";
+  version = "2.42.0";
 
   src = fetchurl {
     url = "https://github.com/LedgerHQ/${pname}/releases/download/v${version}/${pname}-${version}-linux-x86_64.AppImage";
-    hash = "sha256-Bh3wB5AAgY6l1W3UtWUHW+lJgJ0w6gw23WvEe3/Xs1g=";
+    hash = "sha256-LhpZ2aTPT3XJWeWsl7MCbFsgwSqTHfpdRJD9SveIqQg=";
   };
 
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
   # Hotplug events from udevd are fired into the kernel, which then re-broadcasts them over a
@@ -25,12 +24,12 @@ let
   });
 in
 appimageTools.wrapType2 rec {
-  inherit name src;
+  inherit pname version src;
 
   extraPkgs = pkgs: [ systemdPatched ];
 
   extraInstallCommands = ''
-    mv $out/bin/${name} $out/bin/${pname}
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/ledger-live-desktop.desktop $out/share/applications/ledger-live-desktop.desktop
     install -m 444 -D ${appimageContents}/ledger-live-desktop.png $out/share/icons/hicolor/1024x1024/apps/ledger-live-desktop.png
     ${imagemagick}/bin/convert ${appimageContents}/ledger-live-desktop.png -resize 512x512 ledger-live-desktop_512.png

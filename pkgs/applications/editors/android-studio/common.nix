@@ -222,9 +222,9 @@ in runCommand
       # source-code itself).
       platforms = [ "x86_64-linux" ];
       maintainers = with maintainers; rec {
-        stable = [ ];
-        beta = [ ];
-        canary = [ ];
+        stable = [ alapshin ];
+        beta = [ alapshin ];
+        canary = [ alapshin ];
         dev = canary;
       }."${channel}";
     };

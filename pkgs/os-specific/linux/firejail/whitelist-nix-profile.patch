@@ -1,9 +1,0 @@
---- a/etc/inc/whitelist-common.inc.org	2022-05-06 13:57:17.294206339 +0200
-+++ b/etc/inc/whitelist-common.inc	2022-05-06 13:58:00.108655548 +0200
-@@ -83,3 +83,6 @@
- whitelist ${HOME}/.kde4/share/config/oxygenrc
- whitelist ${HOME}/.kde4/share/icons
- whitelist ${HOME}/.local/share/qt5ct
-+
-+# NixOS specific to resolve binary paths
-+whitelist ${HOME}/.nix-profile
