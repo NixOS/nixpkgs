@@ -135,6 +135,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kmgN7D7tUC3Ki70D+rdS19PW/lrANlU3tc8gu5gsld0=";
   };
 
+  patches = [
+    # https://github.com/NixOS/hydra/pull/1215: scmdiff: Hardcode --git-dir
+    (fetchpatch {
+      url = "https://github.com/NixOS/hydra/commit/b6ea85a601ddac9cb0716d8cb4d446439fa0778f.patch";
+      sha256 = "sha256-QHjwLYQucdkBs6OsFI8kWo5ugkPXXlTgdbGFxKBHAHo=";
+    })
+  ];
+
   buildInputs =
     [
       libpqxx
