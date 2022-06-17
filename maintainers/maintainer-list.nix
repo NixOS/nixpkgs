@@ -6303,6 +6303,12 @@
     githubId = 1843676;
     name = "Jonathan Reeve";
   };
+  jonnybolton = {
+    email = "jonnybolton@gmail.com";
+    github = "jonnybolton";
+    githubId = 8580434;
+    name = "Jonny Bolton";
+  };
   jonringer = {
     email = "jonringer117@gmail.com";
     matrix = "@jonringer:matrix.org";
