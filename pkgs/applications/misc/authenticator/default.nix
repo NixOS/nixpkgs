@@ -25,20 +25,20 @@
 
 stdenv.mkDerivation rec {
   pname = "authenticator";
-  version = "4.1.4";
+  version = "4.1.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Authenticator";
     rev = version;
-    hash = "sha256-606uMEbJd60ehoEEV0w2vz33poR1/18HcsvBMszMZrc=";
+    hash = "sha256-fv7Np3haRCJABlJocKuu+1jevHYrdo+VyiQBpRmHs2g=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-D2kT4IBKxbrL17S+kPyofu1sLPHMuyez6jTiA6kVohs=";
+    hash = "sha256-8GddlDM1lU365GXdrKNhO331/y1p3Om5uZfVLy8TBGI=";
   };
 
   nativeBuildInputs = [
