@@ -29051,8 +29051,6 @@ with pkgs;
 
   phrase-cli = callPackage ../tools/misc/phrase-cli { };
 
-  phraseapp-client = callPackage ../tools/misc/phraseapp-client { };
-
   pianobar = callPackage ../applications/audio/pianobar { };
 
   pianobooster = qt5.callPackage ../applications/audio/pianobooster { stdenv = gcc10StdenvCompat; };
