@@ -2,8 +2,6 @@
 , libxml2, intltool, nettle
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "fpm2";
   version = "0.90";
@@ -16,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gnupg gtk3 libxml2 intltool nettle ];
 
-  meta = {
+  meta = with lib; {
     description = "GTK2 port from Figaro's Password Manager originally developed by John Conneely, with some new enhancements";
     homepage    = "https://als.regnet.cz/fpm2/";
     license     = licenses.gpl2;
