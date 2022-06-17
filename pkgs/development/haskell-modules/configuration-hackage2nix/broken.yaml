@@ -931,6 +931,7 @@ broken-packages:
   - ctemplate
   - ctkl
   - cuboid
+  - cuckoo
   - cuckoo-filter
   - curl-aeson
   - curl-runnings
