@@ -257,7 +257,7 @@ in
       '' + optionalString cfg.autoMigrate ''
         ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -to '${cfg.package.repoVersion}' -y
       '' + ''
-          ipfs --offline config profile apply ${profile}
+          ipfs --offline config profile apply ${profile} >/dev/null
         fi
       '' + optionalString cfg.autoMount ''
         ipfs --offline config Mounts.FuseAllowOther --json true
