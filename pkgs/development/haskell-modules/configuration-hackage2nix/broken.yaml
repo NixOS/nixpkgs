@@ -518,6 +518,7 @@ broken-packages:
   - cabal2doap
   - cabal2ebuild
   - cabal2ghci
+  - cabal2json
   - cabal-audit
   - cabal-auto-expose
   - cabal-bundle-clib
@@ -609,6 +610,7 @@ broken-packages:
   - category-traced
   - catnplus
   - cautious-file
+  - cautious-gen
   - cayene-lpp
   - cayley-client
   - cblrepo
@@ -1361,6 +1363,7 @@ broken-packages:
   - except-exceptions
   - exceptional
   - exceptionfree-readfile
+  - exchangerates
   - execs
   - executor
   - exh
@@ -1476,6 +1479,7 @@ broken-packages:
   - fixed-storable-array
   - fixed-timestep
   - fixed-width
+  - fixer
   - fixfile
   - fixie
   - fix-symbols-gitit
@@ -3204,6 +3208,7 @@ broken-packages:
   - menoh
   - menshen
   - mergeful
+  - mergeless-persistent
   - merkle-tree
   - messagepack-rpc
   - messente
@@ -3603,6 +3608,7 @@ broken-packages:
   - open-adt
   - OpenAFP
   - openai-servant
+  - openapi3-code-generator
   - openapi-petstore
   - openapi-typed
   - opench-meteo
@@ -4084,6 +4090,7 @@ broken-packages:
   - proto-lens-combinators
   - proto-lens-jsonpb
   - protolude-lifted
+  - proton
   - proton-haskell
   - prototype
   - prove-everywhere-server
@@ -4597,7 +4604,11 @@ broken-packages:
   - shorten-strings
   - short-vec
   - show-prettyprint
+  - Shpadoinkle-backend-pardiff
+  - Shpadoinkle-backend-snabbdom
+  - Shpadoinkle-backend-static
   - Shpadoinkle-console
+  - Shpadoinkle-html
   - Shpadoinkle-isreal
   - shwifty
   - sifflet
@@ -4937,6 +4948,7 @@ broken-packages:
   - supernova
   - supero
   - superrecord
+  - super-user-spark
   - supervisor
   - supervisors
   - supplemented
@@ -4960,6 +4972,11 @@ broken-packages:
   - sws
   - syb-extras
   - syb-with-class
+  - sydtest-hedis
+  - sydtest-mongo
+  - sydtest-persistent-postgresql
+  - sydtest-rabbitmq
+  - sydtest-yesod
   - syfco
   - sym
   - symantic

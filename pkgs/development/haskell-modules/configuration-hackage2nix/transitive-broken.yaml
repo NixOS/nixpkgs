@@ -338,10 +338,12 @@ dont-distribute-packages:
  - Shellac-haskeline
  - Shellac-readline
  - ShortestPathProblems
+ - Shpadoinkle-developer-tools
  - Shpadoinkle-disembodied
  - Shpadoinkle-examples
  - Shpadoinkle-router
  - Shpadoinkle-template
+ - Shpadoinkle-widgets
  - SimpleGL
  - SimpleLog
  - SimpleServer
@@ -3737,6 +3739,7 @@ dont-distribute-packages:
  - sweet-egison
  - switch
  - syb-with-class-instances-text
+ - sydtest-amqp
  - sydtest-webdriver
  - sydtest-webdriver-screenshot
  - sydtest-webdriver-yesod
