@@ -2344,6 +2344,8 @@ in {
 
   django-cacheops = callPackage ../development/python-modules/django-cacheops { };
 
+  django-celery-beat = callPackage ../development/python-modules/django-celery-beat { };
+
   django-celery-email = callPackage ../development/python-modules/django-celery-email { };
 
   django_classytags = callPackage ../development/python-modules/django_classytags { };
