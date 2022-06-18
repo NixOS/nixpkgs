@@ -8987,7 +8987,7 @@
     githubId = 4323933;
     name = "Naïm Favier";
     keys = [{
-      fingerprint = "51A0 705E 7DD2 3CBC 5EAA  B43E 49B0 7322 580B 7EE2";
+      fingerprint = "F3EB 4BBB 4E71 99BC 299C  D4E9 95AF CE82 1190 8325";
     }];
   };
   nckx = {
