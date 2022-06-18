@@ -2546,6 +2546,38 @@ buildLuarocksPackage {
   };
 }) {};
 
+sqlite = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, luv
+}:
+buildLuarocksPackage {
+  pname = "sqlite";
+  version = "v1.2.2-0";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/sqlite-v1.2.2-0.rockspec";
+    sha256 = "0jxsl9lpxsbzc6s5bwmh27mglkqz1299lz68vfxayvailwl3xbxm";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/tami5/sqlite.lua.git",
+  "rev": "6c00ab414dc1b69621b145908c582b747f24b46e",
+  "date": "2022-06-17T15:57:13+03:00",
+  "path": "/nix/store/637s46bsvsxfnzmy6ygig3y0vqmf3r8p-sqlite.lua",
+  "sha256": "0ckifx6xxrannn9szacgiiqjsp4rswghxscdl3s411dhas8djj1m",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  propagatedBuildInputs = [ luv ];
+
+  meta = {
+    homepage = "https://github.com/tami5/sqlite.lua";
+    description = "SQLite/LuaJIT binding and a highly opinionated wrapper for storing, retrieving, caching, and persisting [SQLite] databases";
+    license.fullName = "MIT";
+  };
+}) {};
+
 std-_debug = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchgit, lua
 }:

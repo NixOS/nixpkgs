@@ -417,6 +417,23 @@ with prev;
     '';
   });
 
+  sqlite = prev.lib.overrideLuarocks  prev.sqlite (drv: {
+
+    doCheck = true;
+    checkInputs = [ final.plenary-nvim pkgs.neovim-unwrapped ];
+
+    # we override 'luarocks test' because otherwise neovim doesn't find/load the plenary plugin
+    checkPhase = ''
+      export LIBSQLITE="${pkgs.sqlite.out}/lib/libsqlite3.so"
+      export HOME="$TMPDIR";
+
+      nvim --headless -i NONE \
+        -u test/minimal_init.vim --cmd "set rtp+=${pkgs.vimPlugins.plenary-nvim}" \
+        -c "PlenaryBustedDirectory test/auto/ { minimal_init = './test/minimal_init.vim' }"
+    '';
+
+  });
+
   std-_debug = prev.std-_debug.overrideAttrs(oa: {
     # run make to generate lib/std/_debug/version.lua
     preConfigure = ''

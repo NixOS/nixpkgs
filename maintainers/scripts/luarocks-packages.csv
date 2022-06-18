@@ -86,6 +86,7 @@ plenary.nvim,https://github.com/nvim-lua/plenary.nvim.git,,,,lua5_1,
 rapidjson,https://github.com/xpol/lua-rapidjson.git,,,,,
 readline,,,,,,
 say,https://github.com/Olivine-Labs/say.git,,,,,
+sqlite,,,,,,
 std._debug,https://github.com/lua-stdlib/_debug.git,,,,,
 std.normalize,https://github.com/lua-stdlib/normalize.git,,,,,
 stdlib,,,,41.2.2,,vyp
