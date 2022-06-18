@@ -24,4 +24,9 @@ in {
       mv hook.sh $out
     '';
 
+  luarocksCheckHook = callPackage ({ luarocks }:
+    makeSetupHook {
+      name = "luarocks-check-hook";
+      deps = [ luarocks ];
+    } ./luarocks-check-hook.sh) {};
 }
