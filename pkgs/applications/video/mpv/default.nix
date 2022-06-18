@@ -61,7 +61,7 @@
 , libpngSupport      ? true,           libpng
 , openalSupport      ? true,           openalSoft
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio
-, rubberbandSupport  ? stdenv.isLinux, rubberband
+, rubberbandSupport  ? true,           rubberband
 , screenSaverSupport ? true,           libXScrnSaver
 , sdl2Support        ? true,           SDL2
 , sixelSupport       ? false,          libsixel
