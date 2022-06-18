@@ -564,7 +564,7 @@ rec {
   toVimPlugin = drv:
     drv.overrideAttrs(oldAttrs: {
       # dont move the "doc" folder since vim expects it
-      forceShare= [ "man" "info" ];
+      forceShare = [ "man" "info" ];
 
       nativeBuildInputs = oldAttrs.nativeBuildInputs or []
       ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
