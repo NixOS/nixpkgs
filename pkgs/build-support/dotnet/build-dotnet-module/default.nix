@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert }:
+{ lib, stdenvNoCC, linkFarmFromDrvs, callPackage, nuget-to-nix, writeScript, makeWrapper, fetchurl, xml2, dotnetCorePackages, dotnetPackages, mkNugetSource, mkNugetDeps, cacert, srcOnly }:
 
 { name ? "${args.pname}-${args.version}"
 , pname ? name
@@ -115,7 +115,7 @@ in stdenvNoCC.mkDerivation (args // {
       export HOME=$(mktemp -d)
       deps_file="/tmp/${pname}-deps.nix"
 
-      store_src="${args.src}"
+      store_src="${srcOnly args}"
       src="$(mktemp -d /tmp/${pname}.XXX)"
       cp -rT "$store_src" "$src"
       chmod -R +w "$src"
