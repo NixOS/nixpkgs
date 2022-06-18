@@ -88,6 +88,9 @@ stdenv.mkDerivation rec {
     rm dmd/test/runnable/gdb4149.d
     rm dmd/test/runnable/gdb4181.d
 
+    # Grep'd string changed with gdb 12
+    substituteInPlace druntime/test/exceptions/Makefile \
+      --replace 'in D main (' 'in _Dmain ('
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace phobos/std/socket.d --replace "assert(ih.addrList[0] == 0x7F_00_00_01);" ""
   '' + lib.optionalString stdenv.isDarwin ''
