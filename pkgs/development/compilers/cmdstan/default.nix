@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkInputs = [ python3 ];
 
+  CXXFLAGS = lib.optionalString stdenv.isDarwin "-D_BOOST_LGAMMA";
+
   postPatch = ''
     substituteInPlace stan/lib/stan_math/make/libraries \
       --replace "/usr/bin/env bash" "bash"
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
   preFixup = "rm -rf $(pwd)";
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isLinux && stdenv.isAarch64;
     description = "Command-line interface to Stan";
     longDescription = ''
       Stan is a probabilistic programming language implementing full Bayesian
