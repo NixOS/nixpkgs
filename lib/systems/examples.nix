@@ -131,11 +131,25 @@ rec {
   riscv64-embedded = {
     config = "riscv64-none-elf";
     libc = "newlib";
+    # Compile a soft-float libgcc.a (intrinsics). This does not
+    # restrict the buildPackages.gcc to rv32i targets, but defines the
+    # default target arch and ABI.
+    gcc = {
+      arch = "rv32i";
+      abi = "ilp32";
+    };
   };
 
   riscv32-embedded = {
     config = "riscv32-none-elf";
     libc = "newlib";
+    # Compile a soft-float libgcc.a (intrinsics). This does not
+    # restrict the buildPackages.gcc to rv32i targets, but defines the
+    # default target arch and ABI.
+    gcc = {
+      arch = "rv32i";
+      abi = "ilp32";
+    };
   };
 
   mmix = {
