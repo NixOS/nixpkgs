@@ -294,6 +294,14 @@ in
     propagatedBuildInputs = [ gobject-introspection wrapGAppsHook glib ];
   };
 
+  gollum = attrs: {
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace bin/gollum \
+        --replace "/usr/bin/env -S ruby" "${ruby}/bin/ruby"
+    '';
+  };
+
   grpc = attrs: {
     nativeBuildInputs = [ pkg-config ] ++ lib.optional stdenv.isDarwin libtool;
     buildInputs = [ openssl ];
