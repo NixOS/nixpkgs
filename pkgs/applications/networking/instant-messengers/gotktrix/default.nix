@@ -32,6 +32,12 @@ buildGoModule rec {
   # Checking requires a working display
   doCheck = false;
 
+  postInstall = ''
+    echo 'X-Purism-FormFactor=Workstation;Mobile;' >> .nix/com.github.diamondburned.gotktrix.desktop
+    install -Dm444 .nix/com.github.diamondburned.gotktrix.desktop -t $out/share/applications/
+    install -Dm444 .github/logo-256.png -T $out/share/icons/hicolor/256x256/apps/gotktrix.png
+  '';
+
   meta = with lib; {
     description = "Matrix client written in Go using GTK4";
     homepage = "https://github.com/diamondburned/gotktrix";

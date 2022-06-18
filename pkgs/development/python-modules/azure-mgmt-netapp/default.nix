@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-netapp";
-  version = "7.0.0";
+  version = "8.0.0";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ziaddG+6MoPG18OYZyQ9HRx8nfGsz2UbWPC1pWacKto=";
+    hash = "sha256-S0miYNV+mr3IiT5aLlDhiSpwpPMyWQ5m6/ZUrVfCNRM=";
     extension = "zip";
   };
 

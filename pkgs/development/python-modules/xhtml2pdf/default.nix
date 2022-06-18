@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "xhtml2pdf";
-  version = "0.2.7";
+  version = "0.2.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     # Currently it is not possible to fetch from version as there is a branch with the same name
-    rev = "afa72cdbbdaf7d459261c1605263101ffcd999af";
-    sha256 = "sha256-plyIM7Ohnp5UBWz/UDTJa1UeWK9yckSZR16wxmLrpnc=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-zWzg/r18wjzxWyD5QJ7l4pY+4bJTvHjrD11FRuuy8H8=";
   };
 
   propagatedBuildInputs = [

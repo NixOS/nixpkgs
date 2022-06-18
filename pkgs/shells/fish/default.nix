@@ -134,7 +134,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.4.1";
+    version = "3.5.0";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -144,18 +144,8 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-tvI7OEOwTbawqQ/qH28NDkDMAntKcyCYIAhj8oZKlOo=";
+      sha256 = "sha256-KR5Ox8bD/qVNwa7QV849QrNW+m9whlYnssffzsrv0hA=";
     };
-
-    patches = [
-      # merged https://github.com/fish-shell/fish-shell/pull/8978
-      # "create_manpage_completions.py: Do not overstrip commands with dots"
-      (fetchpatch {
-        name = "fix-cmdname-completeion-generator.patch";
-        url = "https://github.com/fish-shell/fish-shell/commit/32d646a5483844e9b1fae4b73f252a34ec0d4c76.patch";
-        sha256 = "sha256-51hqgPHQ7oQbl1i3SfqvGsbkYMe2Jh+sEwCRu2kiv1U=";
-      })
-    ];
 
     # Fix FHS paths in tests
     postPatch = ''

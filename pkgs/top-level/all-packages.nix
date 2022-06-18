@@ -626,6 +626,8 @@ with pkgs;
 
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
+  graphw00f = callPackage ../tools/security/graphw00f { };
+
   opendrop = python3Packages.callPackage ../tools/networking/opendrop { };
 
   owl = callPackage ../tools/networking/owl { };
@@ -1002,6 +1004,8 @@ with pkgs;
   addic7ed-cli = callPackage ../tools/misc/addic7ed-cli { };
 
   addlicense = callPackage ../tools/misc/addlicense { };
+
+  adenum  = callPackage ../tools/security/adenum { };
 
   adlplug = callPackage ../applications/audio/adlplug {
     inherit (darwin.apple_sdk.frameworks) Foundation Cocoa Carbon CoreServices ApplicationServices CoreAudio CoreMIDI AudioToolbox Accelerate CoreImage IOKit AudioUnit QuartzCore WebKit DiscRecording CoreAudioKit;
@@ -1921,13 +1925,13 @@ with pkgs;
 
   iamy = callPackage ../tools/admin/iamy { };
 
+  iam-policy-json-to-terraform = callPackage ../tools/misc/iam-policy-json-to-terraform { };
+
   azure-cli = callPackage ../tools/admin/azure-cli { };
 
   azure-functions-core-tools = callPackage ../development/tools/azure-functions-core-tools { };
 
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
-
-  awless = callPackage ../tools/virtualization/awless { };
 
   bashblog = callPackage ../tools/text/bashblog { };
 
@@ -3858,6 +3862,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  jwt-hack = callPackage ../tools/security/jwt-hack { } ;
+
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   kaldi = callPackage ../tools/audio/kaldi { };
@@ -4366,6 +4372,8 @@ with pkgs;
   rtrtr = callPackage ../servers/rtrtr {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  xlogo = callPackage ../tools/X11/xlogo { };
 
   xmlbeans = callPackage ../tools/misc/xmlbeans { };
 
@@ -6048,6 +6056,10 @@ with pkgs;
     mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
   };
 
+  ferdium = callPackage ../applications/networking/instant-messengers/ferdium {
+    mkFranzDerivation = callPackage ../applications/networking/instant-messengers/franz/generic.nix { };
+  };
+
   fq = callPackage ../development/tools/fq { };
 
   franz = callPackage ../applications/networking/instant-messengers/franz {
@@ -7470,6 +7482,10 @@ with pkgs;
   };
 
   kdbplus = pkgsi686Linux.callPackage ../applications/misc/kdbplus { };
+
+  kdigger = callPackage ../tools/security/kdigger {
+    buildGoModule = buildGo118Module;
+  };
 
   keepalived = callPackage ../tools/networking/keepalived { };
 
@@ -9909,8 +9925,6 @@ with pkgs;
   reiserfsprogs = callPackage ../tools/filesystems/reiserfsprogs { };
 
   relic = callPackage ../development/tools/relic { };
-
-  alarm-clock-applet = callPackage ../tools/misc/alarm-clock-applet { };
 
   remind = callPackage ../tools/misc/remind { };
 
@@ -15861,8 +15875,6 @@ with pkgs;
 
   kubespy = callPackage ../applications/networking/cluster/kubespy { };
 
-  kubicorn = callPackage ../development/tools/kubicorn {  };
-
   kubie = callPackage ../development/tools/kubie {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -20749,6 +20761,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
+  sokol = callPackage ../development/libraries/sokol { };
+
   sonic = callPackage ../development/libraries/sonic { };
 
   sope = callPackage ../development/libraries/sope { };
@@ -21218,7 +21232,7 @@ with pkgs;
   wxGTK30 = callPackage ../development/libraries/wxwidgets/wxGTK30.nix {
     withGtk2 = true;
     inherit (darwin.stubs) setfile;
-    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit;
+    inherit (darwin.apple_sdk.frameworks) AGL AVFoundation Carbon Cocoa Kernel QTKit;
   };
   wxGTK30-gtk2 = wxGTK30.override { withGtk2 = true; };
   wxGTK30-gtk3 = wxGTK30.override { withGtk2 = false; };
@@ -21237,6 +21251,7 @@ with pkgs;
 
   wxSVG = callPackage ../development/libraries/wxSVG {
     wxGTK = wxGTK30-gtk3;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
@@ -22165,7 +22180,9 @@ with pkgs;
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders nginxModules.shibboleth ];
   };
 
-  libmodsecurity = callPackage ../tools/security/libmodsecurity { };
+  libmodsecurity = callPackage ../tools/security/libmodsecurity {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
 
   ngircd = callPackage ../servers/irc/ngircd { };
 
@@ -22845,6 +22862,8 @@ with pkgs;
     abiCompat = config.xorg.abiCompat # `config` because we have no `xorg.override`
       or (if stdenv.isDarwin then "1.18" else null); # 1.19 needs fixing on Darwin
   }) // { inherit xlibsWrapper; } );
+
+  xorg-autoconf = callPackage ../development/tools/misc/xorg-autoconf { };
 
   xwayland = callPackage ../servers/x11/xorg/xwayland.nix { };
 
@@ -24161,6 +24180,8 @@ with pkgs;
 
   andika = callPackage ../data/fonts/andika { };
 
+  androguard = with python3.pkgs; toPythonApplication androguard;
+
   android-udev-rules = callPackage ../os-specific/linux/android-udev-rules { };
 
   ankacoder = callPackage ../data/fonts/ankacoder { };
@@ -24792,6 +24813,8 @@ with pkgs;
   papirus-maia-icon-theme = callPackage ../data/icons/papirus-maia-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
+
+  plasma-overdose-kde-theme = callPackage ../data/themes/plasma-overdose-kde-theme { };
 
   papis = with python3Packages; toPythonApplication papis;
 
@@ -26995,10 +27018,6 @@ with pkgs;
 
   google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
 
-  google-play-music-desktop-player = callPackage ../applications/audio/google-play-music-desktop-player {
-    inherit (gnome2) GConf;
-  };
-
   gosmore = callPackage ../applications/misc/gosmore { stdenv = gcc10StdenvCompat; };
 
   gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
@@ -28324,6 +28343,8 @@ with pkgs;
     mopidy-youtube
     mopidy-ytmusic;
 
+  monocypher = callPackage ../development/libraries/monocypher { };
+
   motif = callPackage ../development/libraries/motif { };
 
   mousai = callPackage ../applications/audio/mousai { };
@@ -29043,8 +29064,6 @@ with pkgs;
   phrasendrescher = callPackage ../tools/security/phrasendrescher { };
 
   phrase-cli = callPackage ../tools/misc/phrase-cli { };
-
-  phraseapp-client = callPackage ../tools/misc/phraseapp-client { };
 
   pianobar = callPackage ../applications/audio/pianobar { };
 
@@ -32486,6 +32505,8 @@ with pkgs;
 
   ultrastardx = callPackage ../games/ultrastardx { };
 
+  umoria = callPackage ../games/umoria { };
+
   unciv = callPackage ../games/unciv { };
 
   unnethack = callPackage ../games/unnethack { };
@@ -33286,6 +33307,8 @@ with pkgs;
   xmedcon = callPackage ../applications/science/medicine/xmedcon { };
 
   ### SCIENCE/PHYSICS
+
+  dawn = callPackage ../applications/science/physics/dawn {};
 
   elmerfem = callPackage ../applications/science/physics/elmerfem {};
 
@@ -35050,6 +35073,8 @@ with pkgs;
 
   wxsqliteplus = callPackage ../development/libraries/wxsqliteplus {
     wxGTK = wxGTK30;
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+    inherit (darwin.stubs) setfile;
   };
 
   x11idle = callPackage ../tools/misc/x11idle {};

@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ntfy-sh";
-  version = "1.25.2";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
     owner = "binwiederhier";
     repo = "ntfy";
     rev = "v${version}";
-    sha256 = "sha256-xf0hk2GpBbjovZ1DIG6unnKQ297p8fjKZmgk/23IKdY=";
+    sha256 = "sha256-LR3orzh/xwmxt5RhmjOacFs8NUp6tKPUwYDdzVFhx4k=";
   };
 
-  vendorSha256 = "sha256-ZZdGve6+g0bhE+iqemWl9XtLRfUn4V3hbdVz/UhrxCA=";
+  vendorSha256 = "sha256-16S3Up1D4PycBY2Wk11cm0F4z5PkQL2reXj1mGpsOv4=";
 
   doCheck = false;
 
