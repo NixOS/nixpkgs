@@ -5003,6 +5003,12 @@
       fingerprint = "74B1 F67D 8E43 A94A 7554  0768 9CCC E364 02CB 49A6";
     }];
   };
+  happyalu = {
+    email = "alok@parlikar.com";
+    github = "happyalu";
+    githubId = 231523;
+    name = "Alok Parlikar";
+  };
   happysalada = {
     email = "raphael@megzari.com";
     matrix = "@happysalada:matrix.org";
