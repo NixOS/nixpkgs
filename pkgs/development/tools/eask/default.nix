@@ -6,7 +6,7 @@ let
     inherit (stdenv.hostPlatform) system;
   };
 in
-nodePackages.eask.override {
+nodePackages.package.override {
   name = "eask";
   meta = with lib; {
     description = "Command-line tool for building and testing Emacs Lisp packages";
