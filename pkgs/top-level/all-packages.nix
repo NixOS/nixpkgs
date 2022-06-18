@@ -16563,6 +16563,8 @@ with pkgs;
 
   xcpretty = callPackage ../development/tools/xcpretty { };
 
+  xmake = callPackage ../development/tools/build-managers/xmake { };
+
   xmlindent = callPackage ../development/web/xmlindent {};
 
   xpwn = callPackage ../development/mobile/xpwn {};
