@@ -8,7 +8,7 @@
 }:
 
 let
-  savesDir = "~/.umoria/";
+  savesDir = "~/.umoria";
 in
 gcc9Stdenv.mkDerivation rec {
   pname = "umoria";
@@ -55,7 +55,7 @@ gcc9Stdenv.mkDerivation rec {
     [[ ! -f ${savesDir}/scores.dat ]] && touch ${savesDir}/scores.dat
     ln -s ${savesDir}/scores.dat scores.dat
 
-    $out/.umoria-unwrapped
+    $out/.umoria-unwrapped ${savesDir}/game.sav
     EOF
 
     chmod +x $out/bin/umoria
