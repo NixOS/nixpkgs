@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tinyalsa";
-  version = "2.0.0";
+  version = "unstable-2022-06-05";
 
   src = fetchFromGitHub {
     owner = "tinyalsa";
     repo = "tinyalsa";
-    rev = "v${version}";
-    hash = "sha256-WFJbew6ApB9InKN1SyRkbVoFlBCFm5uYzazdtsaHM90=";
+    rev = "3d70d227e7dfd1be6f8f420a5aae164a2b4126e0";
+    hash = "sha256-RHeF3VShy+LYFtJK+AEU7swIr5/rnpg2fdllnH9cFCk=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = toString [
-    "-Wno-error=stringop-truncation"
+    "-Wno-error=sign-compare"
   ];
 
   meta = with lib; {
