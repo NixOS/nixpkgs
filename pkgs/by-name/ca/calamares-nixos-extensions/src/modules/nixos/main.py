@@ -246,6 +246,7 @@ cfgusers = """  # Define a user account. Don't forget to set a password with ‘
     isNormalUser = true;
     description = "@@fullname@@";
     extraGroups = [ @@groups@@ ];
+    packages = with pkgs; [@@pkgs@@];
   };
 
 """
@@ -276,7 +277,7 @@ cfgpkgs = """  # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-  #  wget@@pkgs@@
+  #  wget
   ];
 
 """
@@ -546,9 +547,9 @@ def run():
     cfg += cfgpkgs
     # Use firefox as default as a graphical web browser, and add kate to plasma desktop
     if gs.value("packagechooser_packagechooser") == "plasma":
-        catenate(variables, "pkgs", "\n    firefox\n    kate")
+        catenate(variables, "pkgs", "\n      firefox\n      kate\n    #  thunderbird\n    ")
     elif gs.value("packagechooser_packagechooser") != "":
-        catenate(variables, "pkgs", "\n    firefox")
+        catenate(variables, "pkgs", "\n      firefox\n    #  thunderbird\n    ")
     else:
         catenate(variables, "pkgs", "")
 
