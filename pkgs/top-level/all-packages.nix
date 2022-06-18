@@ -6742,6 +6742,8 @@ with pkgs;
 
   grpcurl = callPackage ../tools/networking/grpcurl { };
 
+  grpc-gateway = callPackage ../development/tools/grpc-gateway { };
+
   grpcui = callPackage ../tools/networking/grpcui { };
 
   grpc-tools = callPackage ../development/tools/misc/grpc-tools { };
