@@ -516,7 +516,7 @@ supported-platforms:
   alsa-mixer:                                   [ platforms.linux ]
   alsa-pcm:                                     [ platforms.linux ]
   alsa-seq:                                     [ platforms.linux ]
-  barbly:                                       [ platforms.linux ]
+  barbly:                                       [ platforms.darwin ]
   bindings-parport:                             [ platforms.linux ] # parport is a linux kernel component
   blake3:                                       [ platforms.x86 ] # uses x86 intrinsics
   btrfs:                                        [ platforms.linux ] # depends on linux
