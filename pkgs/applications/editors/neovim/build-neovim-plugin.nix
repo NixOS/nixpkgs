@@ -7,9 +7,7 @@
 }:
 let
   # sanitizeDerivationName
-  normalizeName = name:
-    (lib.concatMapStrings (s: if lib.isList s then "-" else s))
-      ((builtins.split "[.]") name);
+  normalizeName = lib.replaceStrings [ "." ] [ "-" ];
 in
 
 rec {
