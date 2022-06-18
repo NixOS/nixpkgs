@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "3.3.0";
+  version = "3.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2sYMEC+2eorJqhZWmwr9DWO5bGK+BkCIUZ4cZhs/Ofo=";
+    hash = "sha256-XcN979nWXgUwItq8tlnnNisFinr3QEfuWFGKKQenYfI=";
   };
 
   propagatedBuildInputs = [
