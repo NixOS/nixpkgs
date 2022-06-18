@@ -32,4 +32,7 @@ with lib; let hb = mkCoqDerivation {
 hb.overrideAttrs (o:
   optionalAttrs (versions.isGe "1.2.0" o.version || o.version == "dev")
     { buildPhase = "make build"; }
+  //
+  optionalAttrs (versions.isGe "1.1.0" o.version || o.version == "dev")
+  { installFlags = [ "DESTDIR=$(out)" ] ++ o.installFlags; }
 )
