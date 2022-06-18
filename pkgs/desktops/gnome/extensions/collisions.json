@@ -137,6 +137,10 @@
       "fuzzy-clock@keepawayfromfire.co.uk",
       "FuzzyClock@johngoetz"
     ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
+    ],
     "disable-unredirect-fullscreen-windows": [
       "unredirect@vaina.lt",
       "unredirect@aunetx"
@@ -166,6 +170,10 @@
     "lock-keys": [
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
+    ],
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
     ],
     "wireguard-indicator": [
       "wireguard-indicator@gregos.me",
