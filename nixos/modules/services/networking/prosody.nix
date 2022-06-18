@@ -511,8 +511,13 @@ in
 
       dataDir = mkOption {
         type = types.path;
-        description = "Directory where Prosody stores its data";
         default = "/var/lib/prosody";
+        description = ''
+          The prosody home directory used to store all data. If left as the default value
+          this directory will automatically be created before the prosody server starts, otherwise
+          you are responsible for ensuring the directory exists with appropriate ownership
+          and permissions.
+        '';
       };
 
       disco_items = mkOption {
@@ -839,9 +844,8 @@ in
     users.users.prosody = mkIf (cfg.user == "prosody") {
       uid = config.ids.uids.prosody;
       description = "Prosody user";
-      createHome = true;
       inherit (cfg) group;
-      home = "${cfg.dataDir}";
+      home = cfg.dataDir;
     };
 
     users.groups.prosody = mkIf (cfg.group == "prosody") {
@@ -854,28 +858,33 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."prosody/prosody.cfg.lua".source ];
-      serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
-        Type = "forking";
-        RuntimeDirectory = [ "prosody" ];
-        PIDFile = "/run/prosody/prosody.pid";
-        ExecStart = "${cfg.package}/bin/prosodyctl start";
-        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      serviceConfig = mkMerge [
+        {
+          User = cfg.user;
+          Group = cfg.group;
+          Type = "forking";
+          RuntimeDirectory = [ "prosody" ];
+          PIDFile = "/run/prosody/prosody.pid";
+          ExecStart = "${cfg.package}/bin/prosodyctl start";
+          ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
-        MemoryDenyWriteExecute = true;
-        PrivateDevices = true;
-        PrivateMounts = true;
-        PrivateTmp = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-      };
+          MemoryDenyWriteExecute = true;
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+        }
+        (mkIf (cfg.dataDir == "/var/lib/prosody") {
+          StateDirectory = "prosody";
+        })
+      ];
     };
 
   };
