@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://tkashkin.github.io/projects/gamehub";
-    description = "All your games in one place";
+    description = "Unified library for all your games";
     longDescription = ''
       GameHub is a unified library for all your games. It allows you to store
       your games from different platforms into one program to make it easier
