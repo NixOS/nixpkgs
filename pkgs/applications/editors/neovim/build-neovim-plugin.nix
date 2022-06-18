@@ -10,19 +10,17 @@ let
   normalizeName = lib.replaceStrings [ "." ] [ "-" ];
 in
 
-rec {
   # function to create vim plugin from lua packages that are already packaged in
   # luaPackages
-  buildNeovimPluginFrom2Nix = attrs@{
+  {
     # the lua attribute name that matches this vim plugin. Both should be equal
     # in the majority of cases but we make it possible to have different attribute names
     luaAttr ? (normalizeName attrs.pname)
     , ...
-  }:
+  }@attrs:
     let
-      hasMatch = builtins.hasAttr luaAttr lua51Packages;
-      drv = lua51Packages.${luaAttr};
-      luaDrv = lua51Packages.lib.overrideLuarocks drv (drv: {
+      originalLuaDrv = lua51Packages.${luaAttr};
+      luaDrv = lua51Packages.lib.overrideLuarocks originalLuaDrv (drv: {
         extraConfig = ''
           -- to create a flat hierarchy
           lua_modules_path = "lua"
@@ -33,7 +31,5 @@ rec {
             lua51Packages.luarocksMoveDataFolder
           ];
         }));
-
     in
-      finalDrv;
-}
+      finalDrv

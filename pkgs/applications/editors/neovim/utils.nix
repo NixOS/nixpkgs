@@ -187,8 +187,8 @@ in
   inherit makeNeovimConfig;
   inherit legacyWrapper;
 
-  inherit (callPackage ./build-neovim-plugin.nix {
+  buildNeovimPluginFrom2Nix = callPackage ./build-neovim-plugin.nix {
     inherit (vimUtils) buildVimPluginFrom2Nix toVimPlugin;
     inherit buildLuarocksPackage;
-  }) buildNeovimPluginFrom2Nix;
+  };
 }

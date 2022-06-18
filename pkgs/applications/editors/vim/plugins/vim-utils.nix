@@ -205,9 +205,6 @@ let
       ln -sf ${plugin}/${rtpPath} $out/pack/${packageName}/${dir}/${lib.getName plugin}
     '';
 
-    link = pluginPath: if hasLuaModule pluginPath
-      then linkLuaPlugin pluginPath
-      else linkVimlPlugin pluginPath;
 
     packageLinks = packageName: {start ? [], opt ? []}:
     let
@@ -225,9 +222,9 @@ let
       [ "mkdir -p $out/pack/${packageName}/start" ]
       # To avoid confusion, even dependencies of optional plugins are added
       # to `start` (except if they are explicitly listed as optional plugins).
-      ++ (builtins.map (x: link x packageName "start") allPlugins)
+      ++ (builtins.map (x: linkVimlPlugin x packageName "start") allPlugins)
       ++ ["mkdir -p $out/pack/${packageName}/opt"]
-      ++ (builtins.map (x: link x packageName "opt") opt)
+      ++ (builtins.map (x: linkVimlPlugin x packageName "opt") opt)
       # Assemble all python3 dependencies into a single `site-packages` to avoid doing recursive dependency collection
       # for each plugin.
       # This directory is only for python import search path, and will not slow down the startup time.
@@ -290,14 +287,14 @@ let
       /* vim-plug is an extremely popular vim plugin manager.
       */
       plugImpl =
-      (''
+      ''
         source ${vimPlugins.vim-plug.rtp}/plug.vim
         silent! call plug#begin('/dev/null')
 
         '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
 
         call plug#end()
-      '');
+      '';
 
       /*
        vim-addon-manager = VAM
@@ -533,7 +530,8 @@ rec {
     } ./neovim-require-check-hook.sh) {};
 
   inherit (import ./build-vim-plugin.nix {
-    inherit lib stdenv rtpPath vim vimGenDocHook vimCommandCheckHook neovimRequireCheckHook;
+    inherit lib stdenv rtpPath vim vimGenDocHook
+      toVimPlugin vimCommandCheckHook neovimRequireCheckHook;
   }) buildVimPlugin buildVimPluginFrom2Nix;
 
 

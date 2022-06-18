@@ -11,8 +11,7 @@ let
 
   inherit (lib) extends;
 
-  initialPackages = self: {
-  };
+  initialPackages = self: { };
 
   plugins = callPackage ./generated.nix {
     inherit buildVimPluginFrom2Nix;
