@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "django-reversion";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-C63jw5k4dFEIfwxng14NPRhtdn3mpcW6U6iOr8Pyccg=";
+    sha256 = "sha256-orJqS4SxEzgTbKnWRXpK8wcJkseoliOzSQCaEj8o6h0=";
   };
 
   # tests assume the availability of a mysql/postgresql database
