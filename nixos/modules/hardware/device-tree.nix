@@ -36,14 +36,11 @@ let
           /plugin/;
           / {
                   compatible = "raspberrypi";
-                  fragment@0 {
-                          target-path = "/soc";
-                          __overlay__ {
-                                  pps {
-                                          compatible = "pps-gpio";
-                                          status = "okay";
-                                  };
-                          };
+          };
+          &{/soc} {
+                  pps {
+                          compatible = "pps-gpio";
+                          status = "okay";
                   };
           };
         '';
