@@ -5217,6 +5217,8 @@ with pkgs;
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
+  dnsmon-go = callPackage ../tools/networking/dnsmon-go { };
+
   dnspeep = callPackage ../tools/security/dnspeep { };
 
   dnsproxy = callPackage ../tools/networking/dnsproxy { };
