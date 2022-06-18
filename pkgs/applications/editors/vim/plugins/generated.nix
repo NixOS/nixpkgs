@@ -2527,7 +2527,7 @@ final: prev:
     meta.homepage = "https://github.com/nvim-lua/diagnostic-nvim/";
   };
 
-  diffview-nvim = buildNeovimPluginFrom2Nix {
+  diffview-nvim = buildVimPluginFrom2Nix {
     pname = "diffview.nvim";
     version = "2022-06-09";
     src = fetchFromGitHub {
@@ -3154,7 +3154,7 @@ final: prev:
     meta.homepage = "https://github.com/ruifm/gitlinker.nvim/";
   };
 
-  gitsigns-nvim = buildNeovimPluginFrom2Nix {
+  gitsigns-nvim = buildVimPluginFrom2Nix {
     pname = "gitsigns.nvim";
     version = "2022-05-26";
     src = fetchFromGitHub {
@@ -4282,7 +4282,7 @@ final: prev:
     meta.homepage = "https://github.com/iamcco/markdown-preview.nvim/";
   };
 
-  marks-nvim = buildNeovimPluginFrom2Nix {
+  marks-nvim = buildVimPluginFrom2Nix {
     pname = "marks.nvim";
     version = "2022-05-13";
     src = fetchFromGitHub {
@@ -5110,7 +5110,7 @@ final: prev:
     meta.homepage = "https://github.com/RRethy/nvim-base16/";
   };
 
-  nvim-biscuits = buildNeovimPluginFrom2Nix {
+  nvim-biscuits = buildVimPluginFrom2Nix {
     pname = "nvim-biscuits";
     version = "2022-05-31";
     src = fetchFromGitHub {

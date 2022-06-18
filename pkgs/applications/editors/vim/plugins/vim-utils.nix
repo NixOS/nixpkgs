@@ -537,12 +537,6 @@ rec {
   }) buildVimPlugin buildVimPluginFrom2Nix;
 
 
-  # TODO placeholder to ease working on automatic plugin detection
-  # this should be a luarocks "flat" install with appropriate vim hooks
-  buildNeovimPluginFrom2Nix = attrs: let drv = (buildVimPluginFrom2Nix attrs); in drv.overrideAttrs(oa: {
-    nativeBuildInputs = oa.nativeBuildInputs ++ [ neovimRequireCheckHook ];
-  });
-
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {
     packages ? {},
@@ -566,4 +560,21 @@ rec {
       nativePlugins = lib.concatMap ({start?[], opt?[], knownPlugins?vimPlugins}: start++opt) nativePluginsConfigs;
     in
       nativePlugins ++ nonNativePlugins;
+
+  toVimPlugin = drv:
+    drv.overrideAttrs(oldAttrs: {
+      # dont move the "doc" folder since vim expects it
+      forceShare= [ "man" "info" ];
+
+      nativeBuildInputs = oldAttrs.nativeBuildInputs or []
+      ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+        vimCommandCheckHook vimGenDocHook
+        # many neovim plugins keep using buildVimPlugin
+        neovimRequireCheckHook
+      ];
+
+      passthru = (oldAttrs.passthru or {}) // {
+        vimPlugin = true;
+      };
+    });
 }
