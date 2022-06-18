@@ -446,6 +446,8 @@ with pkgs;
 
   protoc-gen-go-vtproto = callPackage ../development/tools/protoc-gen-go-vtproto { };
 
+  protoc-gen-grpc-gateway = callPackage ../development/tools/protoc-gen-grpc-gateway { };
+
   protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web { };
 
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
