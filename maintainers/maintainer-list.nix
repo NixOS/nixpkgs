@@ -6303,6 +6303,12 @@
     githubId = 1843676;
     name = "Jonathan Reeve";
   };
+  jonnybolton = {
+    email = "jonnybolton@gmail.com";
+    github = "jonnybolton";
+    githubId = 8580434;
+    name = "Jonny Bolton";
+  };
   jonringer = {
     email = "jonringer117@gmail.com";
     matrix = "@jonringer:matrix.org";
@@ -7847,6 +7853,12 @@
     github = "magnetophon";
     githubId = 7645711;
     name = "Bart Brouns";
+  };
+  magnouvean = {
+    email = "rg0zjsyh@anonaddy.me";
+    github = "magnouvean";
+    githubId = 85435692;
+    name = "Maxwell Berg";
   };
   mahe = {
     email = "matthias.mh.herrmann@gmail.com";

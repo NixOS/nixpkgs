@@ -119,6 +119,7 @@ rec {
       {
         inherit testName;
         nativeBuildInputs = [ makeWrapper mypy ];
+        buildInputs = [ testDriver ];
         testScript = testScript';
         preferLocalBuild = true;
         passthru = passthru // {
@@ -138,13 +139,10 @@ rec {
           echo "${builtins.toString vlanNames}" >> testScriptWithTypes
           echo -n "$testScript" >> testScriptWithTypes
 
-          # set pythonpath so mypy knows where to find the imports. this requires the py.typed file.
-          export PYTHONPATH='${./test-driver}'
           mypy  --no-implicit-optional \
                 --pretty \
                 --no-color-output \
                 testScriptWithTypes
-          unset PYTHONPATH
         ''}
 
         echo -n "$testScript" >> $out/test-script
