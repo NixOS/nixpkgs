@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) escapeShellArgs mkEnableOption mkIf mkOption types;
+  inherit (lib) mkEnableOption mkIf mkOption types;
 
   cfg = config.services.tempo;
 
@@ -10,8 +10,8 @@ in {
   options.services.tempo = {
     enable = mkEnableOption "Grafana Tempo";
 
-    configuration = mkOption {
-      type = (pkgs.formats.json {}).type;
+    settings = mkOption {
+      type = settingsFormat.type;
       default = {};
       description = ''
         Specify the configuration for Tempo in Nix.
@@ -33,12 +33,11 @@ in {
 
     assertions = [{
       assertion = (
-        (cfg.configuration == {} -> cfg.configFile != null) &&
-        (cfg.configFile != null -> cfg.configuration == {})
+        (cfg.settings == {}) != (cfg.configFile != null)
       );
       message  = ''
-        Please specify either
-        'services.tempo.configuration' or
+        Please specify a configuration for Tempo with either
+        'services.tempo.settings' or
         'services.tempo.configFile'.
       '';
     }];
@@ -49,7 +48,7 @@ in {
 
       serviceConfig = let
         conf = if cfg.configFile == null
-               then settingsFormat.generate "config.yaml" cfg.configuration
+               then settingsFormat.generate "config.yaml" cfg.settings
                else cfg.configFile;
       in
       {
