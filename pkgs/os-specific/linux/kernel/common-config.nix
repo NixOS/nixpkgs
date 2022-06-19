@@ -41,7 +41,8 @@ let
         (whenBetween "5.2" "5.18" yes)
       ];
       DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
-      DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
+      # Disabled on 32-bit platforms, fails to build on 5.15+ with `Failed to parse base BTF 'vmlinux': -22`
+      DEBUG_INFO_BTF            = whenAtLeast "5.2" (option (if stdenv.hostPlatform.is32bit && (versionAtLeast version "5.15") then no else yes));
       BPF_LSM                   = whenAtLeast "5.7" (option yes);
       DEBUG_KERNEL              = yes;
       DEBUG_DEVRES              = no;
