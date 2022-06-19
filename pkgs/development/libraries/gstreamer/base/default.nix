@@ -36,7 +36,6 @@
 , enableCdparanoia ? (!stdenv.isDarwin)
 , cdparanoia
 , glib
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
 , gobject-introspection
 }:
 
@@ -61,10 +60,10 @@ stdenv.mkDerivation rec {
     orc
     glib
     gstreamer
+    gobject-introspection
+
     # docs
     # TODO add hotdoc here
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
   ] ++ lib.optional enableWayland wayland;
 
   buildInputs = [
@@ -77,6 +76,7 @@ stdenv.mkDerivation rec {
     libjpeg
     tremor
     libGL
+    gobject-introspection
   ] ++ lib.optional (!stdenv.isDarwin) [
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
@@ -91,8 +91,6 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableWayland [
     wayland
     wayland-protocols
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
   ] ++ lib.optional enableCocoa Cocoa
     ++ lib.optional enableCdparanoia cdparanoia;
 
@@ -106,7 +104,7 @@ stdenv.mkDerivation rec {
     "-Dgl-graphene=disabled" # not packaged in nixpkgs as of writing
     # See https://github.com/GStreamer/gst-plugins-base/blob/d64a4b7a69c3462851ff4dcfa97cc6f94cd64aef/meson_options.txt#L15 for a list of choices
     "-Dgl_winsys=${lib.concatStringsSep "," (lib.optional enableX11 "x11" ++ lib.optional enableWayland "wayland" ++ lib.optional enableCocoa "cocoa")}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
+    "-Dintrospection=enabled"
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-Dtests=disabled"
   ]
