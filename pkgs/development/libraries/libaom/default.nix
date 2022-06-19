@@ -1,15 +1,15 @@
 { lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3
-, enableButteraugli ? false, libjxl # Broken
+, enableButteraugli ? true, libjxl
 , enableVmaf ? true, libvmaf
 }:
 
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    sha256 = "sha256-g6QkKLrk+SH1s5fRmseAQMmM6y4QwmKmVDPxdbqGmwg=";
+    sha256 = "sha256-NgzpVxQmsgOPzKkGpJIJrLiNQcruhpEoCi/CYJx5b3A=";
     stripRoot = false;
   };
 
