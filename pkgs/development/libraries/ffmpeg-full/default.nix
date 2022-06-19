@@ -101,7 +101,9 @@
 , libXext ? null # Xlib support
 , libxml2 ? null # libxml2 support, for IMF and DASH demuxers
 , xz ? null # xz-utils
-, nvenc ? !stdenv.isDarwin && !stdenv.isAarch64, nv-codec-headers ? null # NVIDIA NVENC support
+, nv-codec-headers ? null
+, nvdec ? !stdenv.isDarwin && !stdenv.isAarch64 # NVIDIA NVDEC support
+, nvenc ? !stdenv.isDarwin && !stdenv.isAarch64 # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
@@ -375,6 +377,8 @@ stdenv.mkDerivation rec {
     (enableFeature libxcbshapeExtlib "libxcb-shape")
     (enableFeature (libxml2 != null) "libxml2")
     (enableFeature (xz != null) "lzma")
+    (enableFeature nvdec "cuvid")
+    (enableFeature nvdec "nvdec")
     (enableFeature nvenc "nvenc")
     (enableFeature (openal != null) "openal")
     #(enableFeature opencl "opencl")
@@ -441,7 +445,7 @@ stdenv.mkDerivation rec {
     ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
     ++ optionals isLinux [ alsa-lib libraw1394 libv4l vulkan-loader glslang ]
     ++ optional (isLinux && !isAarch64 && libmfx != null) libmfx
-    ++ optional nvenc nv-codec-headers
+    ++ optional (nvdec || nvenc) nv-codec-headers
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
                                    MediaToolbox VideoDecodeAcceleration
                                    libiconv ];
