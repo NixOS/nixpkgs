@@ -49,13 +49,6 @@ in
       };
 
       default = {
-        server = {
-          # Don't bind on 0.0.0.0
-          grpc_listen_address = "127.0.0.1";
-          http_listen_address = "127.0.0.1";
-          # Don't bind on the default port 80
-          http_listen_port = 9090;
-        };
         metrics = {
           wal_directory = "\${STATE_DIRECTORY}";
           global.scrape_interval = "5s";
