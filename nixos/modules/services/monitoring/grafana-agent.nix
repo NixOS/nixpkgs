@@ -7,7 +7,7 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [ flokli zimbatm ];
   };
 
   options.services.grafana-agent = {
