@@ -1314,19 +1314,6 @@ self: super: {
   x509-validation = dontCheck super.x509-validation;
   tls = dontCheck super.tls;
 
-  patch = appendPatches [
-    # 2022-02-27: https://github.com/reflex-frp/patch/pull/40 for bump bounds
-    (fetchpatch {
-      url = "https://github.com/reflex-frp/patch/commit/15ea4956e04264b9be2fe4644119a709b196708f.patch";
-      sha256 = "sha256-la97DCjeVu82AaQv2my+UhmB/jBmMyxxpRAwhEB1RGc=";
-    })
-    # 2022-03-13: https://github.com/reflex-frp/patch/pull/41 for ghc 9.0 compat
-    (fetchpatch {
-      url = "https://github.com/reflex-frp/patch/commit/fee3addcfc982c7b70489a8a64f208ab2360bdb7.patch";
-      sha256 = "sha256-/CTiHSs+Z4dyL5EJx949XD0zzSAy5s4hzchmNkb0YOk=";
-    })
-  ] super.patch;
-
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
     postPatch = old.postPatch or "" + ''
