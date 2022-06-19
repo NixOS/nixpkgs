@@ -2309,6 +2309,8 @@ with pkgs;
 
   gitless = callPackage ../applications/version-management/gitless { };
 
+  gitls = callPackage ../tools/security/gitls { };
+
   gistyc = with python3Packages; toPythonApplication gistyc;
 
   gitlint = python3Packages.callPackage ../tools/misc/gitlint { };
@@ -12065,7 +12067,7 @@ with pkgs;
   zinnia = callPackage ../tools/inputmethods/zinnia { };
   tegaki-zinnia-japanese = callPackage ../tools/inputmethods/tegaki-zinnia-japanese { };
 
-  zimwriterfs = callPackage ../tools/text/zimwriterfs { };
+  zim-tools = callPackage ../tools/text/zim-tools { };
 
   zld = callPackage ../development/tools/zld { };
 
@@ -16365,6 +16367,10 @@ with pkgs;
   spoofer-gui = callPackage ../tools/networking/spoofer { withGUI = true; };
 
   spooles = callPackage ../development/libraries/science/math/spooles {};
+
+  spr = callPackage ../development/tools/spr {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   spruce = callPackage ../development/tools/misc/spruce {};
 
@@ -21917,6 +21923,8 @@ with pkgs;
 
   fusionInventory = callPackage ../servers/monitoring/fusion-inventory { };
 
+  gamehub = callPackage ../games/gamehub { };
+
   gatling = callPackage ../servers/http/gatling { };
 
   gitlab-pages = callPackage ../servers/http/gitlab-pages { };
@@ -26622,6 +26630,8 @@ with pkgs;
 
   gjay = callPackage ../applications/audio/gjay { };
 
+  sherlock = callPackage ../tools/security/sherlock { };
+
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
 
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
@@ -28173,7 +28183,7 @@ with pkgs;
       canonicaljson;
   };
 
-  matrix-commander = callPackage ../applications/networking/instant-messengers/matrix-commander { };
+  matrix-commander = python3Packages.callPackage ../applications/networking/instant-messengers/matrix-commander { };
 
   matrix-dl = callPackage ../applications/networking/instant-messengers/matrix-dl { };
 
@@ -30919,7 +30929,7 @@ with pkgs;
   xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 
   xdg-utils = callPackage ../tools/X11/xdg-utils {
-    w3m = w3m-batch;
+    w3m = buildPackages.w3m-batch;
   };
 
   xdgmenumaker = callPackage ../applications/misc/xdgmenumaker { };
@@ -32265,6 +32275,8 @@ with pkgs;
     boost = boost16x;
     target = "server";
   };
+
+  pokete = callPackage ../games/pokete { };
 
   powermanga = callPackage ../games/powermanga { };
 
@@ -35540,12 +35552,12 @@ with pkgs;
 
   btcdeb = callPackage ../applications/blockchains/btcdeb { };
 
-  inherit (callPackage ../applications/networking/instant-messengers/jami {
+  jami = callPackages ../applications/networking/instant-messengers/jami {
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
     jack = libjack2;
-  })
-    jami-daemon jami-libclient jami-client-gnome jami-client-qt;
+  };
+  inherit (jami) jami-daemon jami-libclient jami-client-qt;
 
   jitsi-meet-electron = callPackage ../applications/networking/instant-messengers/jitsi-meet-electron {
     electron = electron_17;

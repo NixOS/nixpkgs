@@ -12,13 +12,13 @@
 
 mkDerivation rec {
   pname = "kiwix";
-  version = "2.0.5";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "${pname}-desktop";
     rev = version;
-    sha256 = "12v43bcg4g8fcp02y2srsfdvcb7dpl4pxb9z7a235006s0kfv8yn";
+    sha256 = "sha256-ks2d/guMp5pb2tiwGxNp3htQVm65MsYvZ/6tNjGXNr8=";
   };
 
   nativeBuildInputs = [

@@ -560,6 +560,12 @@
     githubId = 36147;
     name = "Alireza Meskin";
   };
+  alkasm = {
+    email = "alexreynolds00@gmail.com";
+    github = "alkasm";
+    githubId = 9651002;
+    name = "Alexander Reynolds";
+  };
   alkeryn = {
     email = "plbraundev@gmail.com";
     github = "Alkeryn";
@@ -12440,6 +12446,12 @@
     github = "sveitser";
     githubId = 1040871;
     name = "Mathis Antony";
+  };
+  sven-of-cord = {
+    email = "sven@cord.com";
+    github = "sven-of-cord";
+    githubId = 98333944;
+    name = "Sven Over";
   };
   svend = {
     email = "svend@svends.net";

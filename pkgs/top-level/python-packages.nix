@@ -9519,6 +9519,8 @@ in {
 
   scramp = callPackage ../development/python-modules/scramp { };
 
+  scrap-engine = callPackage ../development/python-modules/scrap-engine { };
+
   scrapy = callPackage ../development/python-modules/scrapy { };
 
   scrapy-deltafetch = callPackage ../development/python-modules/scrapy-deltafetch { };
