@@ -56,7 +56,7 @@ in
           # Don't bind on the default port 80
           http_listen_port = 9090;
         };
-        prometheus = {
+        metrics = {
           wal_directory = "\${STATE_DIRECTORY}";
           global.scrape_interval = "5s";
         };
@@ -69,7 +69,7 @@ in
       };
 
       example = {
-        loki.configs = [{
+        logs.configs = [{
           name = "default";
           scrape_configs = [
             {
