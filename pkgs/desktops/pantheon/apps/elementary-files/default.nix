@@ -5,7 +5,6 @@
 , pkg-config
 , meson
 , ninja
-, gettext
 , vala
 , python3
 , desktop-file-utils
@@ -21,7 +20,6 @@
 , bamf
 , sqlite
 , zeitgeist
-, glib-networking
 , libcloudproviders
 , libgit2-glib
 , wrapGAppsHook
@@ -30,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.1.2";
+  version = "6.1.3";
 
   outputs = [ "out" "dev" ];
 
@@ -38,13 +36,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-g9g4wJXjjudk4Qt96XGUiV/X86Ae2lqhM+psh9h+XFE=";
+    sha256 = "sha256-aA3cerBKvxrh5vmDrLeWyLfbz7YjeN0aoTCX9NnVWhQ=";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
-    gettext
-    glib-networking
     meson
     ninja
     pkg-config
