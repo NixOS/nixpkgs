@@ -28,9 +28,7 @@ for i in $($LD_BINARY $out/bin/find $out -type f -executable); do
     interp=$($LD_BINARY ./patchelf --print-interpreter $i 2>/dev/null || echo)
 
     # patchelf --set-interpreter only if a nuke-ref'd interpreter is found
-    if [ -n "${interp}" ] && [ -z "${interp##/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-*/lib*/*}" ] &&
-       # do not --set-interprerter libpthread.so or libc.so due to patchelf bug 368:
-       [ -n "${i##*/lib*/libpthread*.so}" ] && [ -n "${i##*/lib*/libc*.so}" ]; then
+    if [ -n "${interp}" ] && [ -z "${interp##/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-*/lib*/*}" ]; then
       echo patching interpreter of "$i"
       $LD_BINARY ./patchelf --set-interpreter $out/$LD_BINARY "$i"
     fi
