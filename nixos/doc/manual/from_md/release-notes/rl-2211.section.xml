@@ -147,6 +147,16 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>networking.wireless.environmentFile</literal>
+          option is deprecated and replaced with
+          <literal>networking.wireless.environmentFiles</literal>, which
+          allows multiple environment files to be configured.
+          Configurations using the deprecated option will print a
+          warning when rebuilt.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           memtest86+ was updated from 5.00-coreboot-002 to 6.00-beta2.
           It is now the upstream version from https://www.memtest.org/,
           as coreboot’s fork is no longer available.

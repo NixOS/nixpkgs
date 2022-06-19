@@ -109,8 +109,7 @@ let
       path = [ package ];
       serviceConfig.RuntimeDirectory = "wpa_supplicant";
       serviceConfig.RuntimeDirectoryMode = "700";
-      serviceConfig.EnvironmentFile = mkIf (cfg.environmentFile != null)
-        (builtins.toString cfg.environmentFile);
+      serviceConfig.EnvironmentFile = map builtins.toString cfg.environmentFiles;
 
       script =
       ''
@@ -221,9 +220,18 @@ in {
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/run/secrets/wireless.env";
         description = ''
-          File consisting of lines of the form <literal>varname=value</literal>
+          Deprecated, use
+          <literal>networking.wireless.environmentFiles</literal> instead.
+        '';
+      };
+
+      environmentFiles = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        example = [ "/run/secrets/wireless.env" ];
+        description = ''
+          Files consisting of lines of the form <literal>varname=value</literal>
           to define variables for the wireless configuration.
 
           See section "EnvironmentFile=" in <citerefentry>
@@ -512,6 +520,14 @@ in {
           '';
       }
     ];
+
+    warnings = optional (cfg.environmentFile != null) ''
+      The option networking.wireless.environmentFile is deprecated, please use
+      networking.wireless.environmentFiles instead.
+    '';
+
+    networking.wireless.environmentFiles = mkIf (cfg.environmentFile != null)
+        (singleton cfg.environmentFile);
 
     hardware.wirelessRegulatoryDatabase = true;
 

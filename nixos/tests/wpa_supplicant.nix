@@ -51,12 +51,12 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       };
 
       # secrets
-      environmentFile = pkgs.writeText "wpa-secrets" ''
+      environmentFiles = lib.singleton (pkgs.writeText "wpa-secrets" ''
         PSK_NIXOS_TEST="reproducibility"
         PSK_VALID="S0m3BadP4ssw0rd";
         # taken from https://github.com/minimaxir/big-list-of-naughty-strings
         PSK_SPECIAL=",./;'[]\-= <>?:\"{}|_+ !@#$%^\&*()`~";
-      '';
+      '');
     };
 
   };
