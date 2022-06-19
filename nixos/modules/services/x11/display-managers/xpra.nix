@@ -25,7 +25,7 @@ in
         type = types.nullOr types.str;
         description = "Bind xpra to TCP";
       };
-      
+
       desktop = mkOption {
         type = types.nullOr types.str;
         default = null;
