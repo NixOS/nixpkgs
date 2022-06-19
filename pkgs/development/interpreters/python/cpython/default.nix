@@ -144,7 +144,19 @@ let
     # The configure script uses "arm" as the CPU name for all 32-bit ARM
     # variants when cross-compiling, but native builds include the version
     # suffix, so we do the same.
-    pythonHostPlatform = "${parsed.kernel.name}-${parsed.cpu.name}";
+    pythonHostPlatform = let
+      cpu = {
+        # According to PEP600, Python's name for the Power PC
+        # architecture is "ppc", not "powerpc".  Without the Rosetta
+        # Stone below, the PEP600 requirement that "${ARCH} matches
+        # the return value from distutils.util.get_platform()" fails.
+        # https://peps.python.org/pep-0600/
+        powerpc = "ppc";
+        powerpcle = "ppcle";
+        powerpc64 = "ppc64";
+        powerpc64le = "ppc64le";
+      }.${parsed.cpu.name} or parsed.cpu.name;
+    in "${parsed.kernel.name}-${cpu}";
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
     multiarchCpu =
