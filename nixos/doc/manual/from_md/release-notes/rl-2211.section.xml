@@ -94,7 +94,7 @@
         <para>
           <link xlink:href="https://www.grafana.com/oss/tempo/">Grafana
           Tempo</link>, a distributed tracing store. Available as
-          <link linkend="opt-services.tempo">services.tempo</link>.
+          <link linkend="opt-services.tempo.enable">services.tempo</link>.
         </para>
       </listitem>
     </itemizedlist>
