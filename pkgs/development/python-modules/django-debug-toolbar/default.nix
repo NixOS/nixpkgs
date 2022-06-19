@@ -12,13 +12,15 @@
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
   version = "3.4";
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-tXQZcQvdGEtcIAtER1s2HSVkGHW0sdrnC+i01+RuSXg=";
+    hash = "sha256-tXQZcQvdGEtcIAtER1s2HSVkGHW0sdrnC+i01+RuSXg=";
   };
 
   propagatedBuildInputs = [
@@ -42,11 +44,11 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Configurable set of panels that display debug information about the current request/response";
     homepage = "https://github.com/jazzband/django-debug-toolbar";
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
-    maintainers =  with lib.maintainers; [ yuu ];
-    license = lib.licenses.bsd3;
-  };
+    license = licenses.bsd3;
+    maintainers =  With maintainers; [ yuu ];
+};
 }
