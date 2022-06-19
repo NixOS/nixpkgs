@@ -62,6 +62,11 @@ in
       };
 
       example = {
+        metrics.global.remote_write = [{
+          url = "\${METRICS_REMOTE_WRITE_URL}";
+          basic_auth.username = "\${METRICS_REMOTE_WRITE_USERNAME}";
+          basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/metrics_remote_write_password";
+        }];
         logs.configs = [{
           name = "default";
           scrape_configs = [
@@ -94,13 +99,6 @@ in
             basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/logs_remote_write_password";
           }];
         }];
-        integrations = {
-          prometheus_remote_write = [{
-            url = "\${METRICS_REMOTE_WRITE_URL}";
-            basic_auth.username = "\${METRICS_REMOTE_WRITE_USERNAME}";
-            basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/metrics_remote_write_password";
-          }];
-        };
       };
     };
   };
