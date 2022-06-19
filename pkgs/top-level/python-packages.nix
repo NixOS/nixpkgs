@@ -2440,7 +2440,7 @@ in {
 
   djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
 
-  django_reversion = callPackage ../development/python-modules/django_reversion { };
+  django-reversion = callPackage ../development/python-modules/django-reversion { };
 
   django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
 
@@ -4248,6 +4248,8 @@ in {
   incomfort-client = callPackage ../development/python-modules/incomfort-client { };
 
   incremental = callPackage ../development/python-modules/incremental { };
+
+  infinity = callPackage ../development/python-modules/infinity { };
 
   inflect = callPackage ../development/python-modules/inflect { };
 
@@ -10472,6 +10474,8 @@ in {
   threadpool = callPackage ../development/python-modules/threadpool { };
 
   threadpoolctl = callPackage ../development/python-modules/threadpoolctl { };
+
+  threat9-test-bed = callPackage ../development/python-modules/threat9-test-bed { };
 
   three-merge = callPackage ../development/python-modules/three-merge { };
 

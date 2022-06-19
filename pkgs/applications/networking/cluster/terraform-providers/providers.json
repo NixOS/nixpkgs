@@ -1253,10 +1253,10 @@
     "owner": "hashicorp",
     "provider-source-address": "registry.terraform.io/hashicorp/vsphere",
     "repo": "terraform-provider-vsphere",
-    "rev": "v2.1.1",
-    "sha256": "sha256-Xu5BMmOHEX+ctPu8374BDGsRC5hnvzji5oI69ptIi3Y=",
-    "vendorSha256": null,
-    "version": "2.1.1"
+    "rev": "v2.2.0",
+    "sha256": "sha256-UwhIGK1zQ++IuwAKH9i+Dlu2vvXkMYL+s1P03qKSe3E=",
+    "vendorSha256": "sha256-160GDEQfymeCJpjYOoWP5sGQ0PJHw9kKPaefmbF5Ig4=",
+    "version": "2.2.0"
   },
   "vultr": {
     "owner": "vultr",

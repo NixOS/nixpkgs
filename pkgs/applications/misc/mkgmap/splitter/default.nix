@@ -14,12 +14,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "splitter";
-  version = "651";
+  version = "652";
 
   src = fetchsvn {
     url = "https://svn.mkgmap.org.uk/mkgmap/splitter/trunk";
     rev = version;
-    sha256 = "sha256-j6U+Wvxef151NEwkpuv4VdMac/cOT9YZUgkt+YPGCuk=";
+    sha256 = "sha256-yCdVOT8if3AImD4Q63gKfMep7WZsrCgV+IXfP4ZL3Qw=";
   };
 
   patches = [

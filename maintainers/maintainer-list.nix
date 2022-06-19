@@ -2933,7 +2933,7 @@
     name = "David Rusu";
   };
   davidtwco = {
-    email = "nix@david.davidtw.co";
+    email = "david@davidtw.co";
     github = "davidtwco";
     githubId = 1295100;
     name = "David Wood";

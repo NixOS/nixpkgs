@@ -103,6 +103,7 @@ stdenv.mkDerivation rec {
       use of the Vulkan API.
     '';
     homepage    = "https://github.com/KhronosGroup/Vulkan-Tools";
+    hydraPlatforms = [ "x86_64-linux" "i686-linux" ];
     platforms   = platforms.unix;
     license     = licenses.asl20;
     maintainers = [ maintainers.ralith ];

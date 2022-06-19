@@ -4332,6 +4332,8 @@ with pkgs;
 
   roundcubePlugins = dontRecurseIntoAttrs (callPackage ../servers/roundcube/plugins { });
 
+  routersploit = callPackage ../tools/security/routersploit { };
+
   routinator = callPackage ../servers/routinator {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -5217,6 +5219,8 @@ with pkgs;
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
+  dnsmon-go = callPackage ../tools/networking/dnsmon-go { };
+
   dnspeep = callPackage ../tools/security/dnspeep { };
 
   dnsproxy = callPackage ../tools/networking/dnsproxy { };
@@ -5484,7 +5488,7 @@ with pkgs;
   };
 
   rage = callPackage ../tools/security/rage {
-    inherit (darwin.apple_sdk.frameworks) Foundation Security;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
   rar2fs = callPackage ../tools/filesystems/rar2fs { };
@@ -22916,6 +22920,8 @@ with pkgs;
 
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
+  tinyalsa = callPackage ../os-specific/linux/tinyalsa { };
+
   alsa-firmware = callPackage ../os-specific/linux/alsa-project/alsa-firmware { };
   alsa-lib = callPackage ../os-specific/linux/alsa-project/alsa-lib { };
   alsa-oss = callPackage ../os-specific/linux/alsa-project/alsa-oss { };
@@ -29597,6 +29603,8 @@ with pkgs;
 
   seatd = callPackage ../applications/misc/seatd { };
 
+  secrets-extractor = callPackage ../tools/security/secrets-extractor { };
+
   secretscanner = callPackage ../tools/security/secretscanner { };
 
   semiphemeral = callPackage ../tools/misc/semiphemeral { };
@@ -32458,6 +32466,8 @@ with pkgs;
   tintin = throw "tintin has been removed due to lack of maintainers";
 
   tinyfugue = callPackage ../games/tinyfugue { };
+
+  titanion = callPackage ../games/titanion { };
 
   tome2 = callPackage ../games/tome2 { };
 
