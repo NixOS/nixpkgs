@@ -1161,17 +1161,6 @@ self: super: {
   # https://github.com/elliottt/hsopenid/issues/15
   openid = markBroken super.openid;
 
-  # Version constraints on test dependency tasty-golden need to be relaxed:
-  # https://github.com/nomeata/arbtt/pull/146
-  arbtt = doJailbreak (overrideCabal (drv: {
-    # The test suite needs the packages's executables in $PATH to succeed.
-    preCheck = ''
-      for i in $PWD/dist/build/*; do
-        export PATH="$i:$PATH"
-      done
-    '';
-  }) super.arbtt);
-
   # https://github.com/erikd/hjsmin/issues/32
   hjsmin = dontCheck super.hjsmin;
 

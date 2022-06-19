@@ -99,6 +99,19 @@ self: super: builtins.intersectAttrs super {
   ormolu = enableSeparateBinOutput super.ormolu;
   ghcid = enableSeparateBinOutput super.ghcid;
 
+  arbtt = overrideCabal (drv: {
+    # The test suite needs the packages's executables in $PATH to succeed.
+    preCheck = ''
+      for i in $PWD/dist/build/*; do
+        export PATH="$i:$PATH"
+      done
+    '';
+    # One test uses timezone data
+    testToolDepends = drv.testToolDepends or [] ++ [
+      pkgs.tzdata
+    ];
+  }) super.arbtt;
+
   hzk = overrideCabal (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
     configureFlags = [ "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper" ];
