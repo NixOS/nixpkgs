@@ -5218,6 +5218,8 @@ with pkgs;
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
+  dnsmon-go = callPackage ../tools/networking/dnsmon-go { };
+
   dnspeep = callPackage ../tools/security/dnspeep { };
 
   dnsproxy = callPackage ../tools/networking/dnsproxy { };
@@ -5485,7 +5487,7 @@ with pkgs;
   };
 
   rage = callPackage ../tools/security/rage {
-    inherit (darwin.apple_sdk.frameworks) Foundation Security;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
   rar2fs = callPackage ../tools/filesystems/rar2fs { };
@@ -29606,6 +29608,8 @@ with pkgs;
 
   seatd = callPackage ../applications/misc/seatd { };
 
+  secrets-extractor = callPackage ../tools/security/secrets-extractor { };
+
   secretscanner = callPackage ../tools/security/secretscanner { };
 
   semiphemeral = callPackage ../tools/misc/semiphemeral { };
@@ -32467,6 +32471,8 @@ with pkgs;
   tintin = throw "tintin has been removed due to lack of maintainers";
 
   tinyfugue = callPackage ../games/tinyfugue { };
+
+  titanion = callPackage ../games/titanion { };
 
   tome2 = callPackage ../games/tome2 { };
 

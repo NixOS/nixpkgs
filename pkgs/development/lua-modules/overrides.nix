@@ -15,7 +15,7 @@ with prev;
   });
 
   busted = prev.busted.overrideAttrs(oa: {
-    nativeBuildInputs = [
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
       pkgs.installShellFiles
     ];
     postConfigure = ''
@@ -30,9 +30,6 @@ with prev;
   });
 
   cqueues = (prev.lib.overrideLuarocks prev.cqueues (drv: {
-    nativeBuildInputs = [
-      pkgs.gnum4
-    ];
     externalDeps = [
       { name = "CRYPTO"; dep = pkgs.openssl; }
       { name = "OPENSSL"; dep = pkgs.openssl; }
@@ -46,6 +43,11 @@ with prev;
       date = head rel;
       rev = last (splitString "-" (last rel));
     in "${date}-${rev}";
+
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+      pkgs.gnum4
+    ];
+
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
     # version, which doesn't work well for us, so modify it
     postConfigure = let inherit (prev.cqueues) pname; in ''
@@ -111,8 +113,8 @@ with prev;
     propagatedBuildInputs = with pkgs.lib; optional (!isLuaJIT) luaffi;
   });
 
-  lgi = prev.lib.overrideLuarocks prev.lgi (drv: {
-    nativeBuildInputs = [
+  lgi = prev.lgi.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
       pkgs.pkg-config
     ];
     buildInputs = [
@@ -413,6 +415,23 @@ with prev;
     setSourceRoot = ''
       sourceRoot=./readline-${pkgs.lib.versions.majorMinor old.version}
     '';
+  });
+
+  sqlite = prev.lib.overrideLuarocks  prev.sqlite (drv: {
+
+    doCheck = true;
+    checkInputs = [ final.plenary-nvim pkgs.neovim-unwrapped ];
+
+    # we override 'luarocks test' because otherwise neovim doesn't find/load the plenary plugin
+    checkPhase = ''
+      export LIBSQLITE="${pkgs.sqlite.out}/lib/libsqlite3.so"
+      export HOME="$TMPDIR";
+
+      nvim --headless -i NONE \
+        -u test/minimal_init.vim --cmd "set rtp+=${pkgs.vimPlugins.plenary-nvim}" \
+        -c "PlenaryBustedDirectory test/auto/ { minimal_init = './test/minimal_init.vim' }"
+    '';
+
   });
 
   std-_debug = prev.std-_debug.overrideAttrs(oa: {

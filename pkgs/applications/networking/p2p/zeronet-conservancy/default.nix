@@ -1,18 +1,19 @@
 { lib
 , fetchFromGitHub
 , python3Packages
+, nixosTests
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "zeronet-conservancy";
-  version = "0.7.5";
+  version = "0.7.6";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "zeronet-conservancy";
     repo = "zeronet-conservancy";
     rev = "v${version}";
-    sha256 = "sha256-cq0q5hXEhazHPJODNJ8iL0qAB5DJW6ANST4r/rslvXk=";
+    sha256 = "sha256-tWNU7UJVWB+aRLam6WKV/HaRRTIQvlEgxe4xJYKpXJY=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -34,6 +35,10 @@ python3Packages.buildPythonApplication rec {
       --set PYTHONPATH "$PYTHONPATH" \
       --set PATH ${python3Packages.python}/bin
   '';
+
+  passthru.tests = {
+    nixos-test = nixosTests.zeronet-conservancy;
+  };
 
   meta = with lib; {
     description = "A fork/continuation of the ZeroNet project";
