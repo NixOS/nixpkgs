@@ -44,11 +44,15 @@ buildPythonPackage rec {
     runHook postCheck
   '';
 
+  pythonImportsCheck = [
+    "debug_toolbar"
+  ];
+
   meta = with lib; {
     description = "Configurable set of panels that display debug information about the current request/response";
     homepage = "https://github.com/jazzband/django-debug-toolbar";
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
     license = licenses.bsd3;
-    maintainers =  With maintainers; [ yuu ];
+    maintainers = with maintainers; [ yuu ];
 };
 }
