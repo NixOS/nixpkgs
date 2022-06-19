@@ -32239,6 +32239,8 @@ with pkgs;
     target = "server";
   };
 
+  pokete = callPackage ../games/pokete { };
+
   powermanga = callPackage ../games/powermanga { };
 
   prboom-plus = callPackage ../games/prboom-plus { };
