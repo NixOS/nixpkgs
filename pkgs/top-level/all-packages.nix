@@ -16350,6 +16350,10 @@ with pkgs;
 
   spooles = callPackage ../development/libraries/science/math/spooles {};
 
+  spr = callPackage ../development/tools/spr {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   spruce = callPackage ../development/tools/misc/spruce {};
 
   sqlc = callPackage ../development/tools/database/sqlc { };
