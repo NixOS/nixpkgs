@@ -50,6 +50,5 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://lxgr-linux.github.io/pokete";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.unix;
   };
 }
