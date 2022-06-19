@@ -27011,6 +27011,10 @@ with pkgs;
     gtk = gtk3;
   };
 
+  hollywood = callPackage ../applications/misc/hollywood {
+    inherit (python3Packages) pygments;
+  };
+
   hors = callPackage ../development/tools/hors {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
