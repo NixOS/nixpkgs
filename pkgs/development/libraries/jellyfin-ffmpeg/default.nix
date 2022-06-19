@@ -1,6 +1,14 @@
-{ ffmpeg_5, ffmpeg-full, fetchFromGitHub, lib }:
+{ ffmpeg_5
+, ffmpeg-full
+, nv-codec-headers-11
+, fetchFromGitHub
+, lib
+}:
 
-(ffmpeg-full.override { ffmpeg = ffmpeg_5; }).overrideAttrs (old: rec {
+(ffmpeg-full.override {
+  ffmpeg = ffmpeg_5;
+  nv-codec-headers = nv-codec-headers-11;
+}).overrideAttrs (old: rec {
   pname = "jellyfin-ffmpeg";
   version = "5.0.1-5";
 
