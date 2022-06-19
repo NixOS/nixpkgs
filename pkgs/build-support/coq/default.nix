@@ -104,7 +104,7 @@ stdenv.mkDerivation (removeAttrs ({
 // (optionalAttrs setCOQBIN { COQBIN = "${coq}/bin/"; })
 // (optionalAttrs (!args?installPhase && !args?useMelquiondRemake) {
   installFlags =
-    [ "DESTDIR=$(out)" ] ++ coqlib-flags ++ docdir-flags ++
+    coqlib-flags ++ docdir-flags ++
     extraInstallFlags;
 })
 // (optionalAttrs useDune2 {

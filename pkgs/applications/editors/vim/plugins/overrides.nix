@@ -103,7 +103,6 @@
 , golint
 , gomodifytags
 , gopls
-, gotags
 , gotools
 , iferr
 , impl
@@ -1042,7 +1041,6 @@ self: super: {
         gomodifytags
         gopls
         # gorename
-        # gotags
         gotools # contains staticcheck
         # guru
         iferr
