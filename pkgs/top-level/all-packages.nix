@@ -21892,6 +21892,8 @@ with pkgs;
 
   fusionInventory = callPackage ../servers/monitoring/fusion-inventory { };
 
+  gamehub = callPackage ../games/gamehub { };
+
   gatling = callPackage ../servers/http/gatling { };
 
   gitlab-pages = callPackage ../servers/http/gitlab-pages { };
