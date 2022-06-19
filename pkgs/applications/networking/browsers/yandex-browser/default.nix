@@ -50,11 +50,11 @@
 
 stdenv.mkDerivation rec {
   pname = "yandex-browser";
-  version = "22.1.3.907-1";
+  version = "22.5.0.1879-1";
 
   src = fetchurl {
     url = "http://repo.yandex.ru/yandex-browser/deb/pool/main/y/${pname}-beta/${pname}-beta_${version}_amd64.deb";
-    sha256 = "sha256-7dbFqNzZP2CyseK0xD9zcvecIuueZfMy5KgN8gRRLEk=";
+    sha256 = "5cfd6f170e3b4c06ec4c50bd1efae04174b5a6073371e89f9ca3641b6cf7e790";
   };
 
   nativeBuildInputs = [
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     cp $TMP/ya/{usr/share,opt} $out/ -R
     substituteInPlace $out/share/applications/yandex-browser-beta.desktop --replace /usr/ $out/
-    ln -sf $out/opt/yandex/browser-beta/yandex_browser $out/bin/yandex-browser
+    ln -sf $out/opt/yandex/browser-beta/yandex_browser $out/bin/yandex-browser-beta
   '';
 
   runtimeDependencies = map lib.getLib [
