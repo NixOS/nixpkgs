@@ -7,7 +7,7 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [ flokli zimbatm ];
   };
 
   options.services.grafana-agent = {
@@ -49,14 +49,7 @@ in
       };
 
       default = {
-        server = {
-          # Don't bind on 0.0.0.0
-          grpc_listen_address = "127.0.0.1";
-          http_listen_address = "127.0.0.1";
-          # Don't bind on the default port 80
-          http_listen_port = 9090;
-        };
-        prometheus = {
+        metrics = {
           wal_directory = "\${STATE_DIRECTORY}";
           global.scrape_interval = "5s";
         };
@@ -69,7 +62,12 @@ in
       };
 
       example = {
-        loki.configs = [{
+        metrics.global.remote_write = [{
+          url = "\${METRICS_REMOTE_WRITE_URL}";
+          basic_auth.username = "\${METRICS_REMOTE_WRITE_USERNAME}";
+          basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/metrics_remote_write_password";
+        }];
+        logs.configs = [{
           name = "default";
           scrape_configs = [
             {
@@ -101,13 +99,6 @@ in
             basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/logs_remote_write_password";
           }];
         }];
-        integrations = {
-          prometheus_remote_write = [{
-            url = "\${METRICS_REMOTE_WRITE_URL}";
-            basic_auth.username = "\${METRICS_REMOTE_WRITE_USERNAME}";
-            basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/metrics_remote_write_password";
-          }];
-        };
       };
     };
   };

@@ -125,7 +125,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://diffoscope.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg ma27 danielfullmer ];
+    maintainers = with maintainers; [ dezgeg danielfullmer ];
     platforms = platforms.unix;
   };
 }
