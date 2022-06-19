@@ -140,6 +140,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>bsp-layout</literal> no longer uses the command
+          <literal>cycle</literal> to switch to other window layouts, as
+          it got replaced by the commands <literal>previous</literal>
+          and <literal>next</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP 7.4 is no longer supported due to upstream not supporting
           this version for the entire lifecycle of the 22.11 release.
         </para>
