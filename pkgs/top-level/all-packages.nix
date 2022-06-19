@@ -26593,6 +26593,8 @@ with pkgs;
 
   gjay = callPackage ../applications/audio/gjay { };
 
+  sherlock = callPackage ../tools/security/sherlock { };
+
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
 
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
