@@ -1613,20 +1613,8 @@ self: super: {
 
   reflex-dom-pandoc = super.reflex-dom-pandoc.override { clay = dontCheck self.clay_0_13_3; };
 
-  # 2022-03-16: Pull request for ghc 9 compat: https://github.com/reflex-frp/reflex/pull/467
-  reflex = overrideCabal (drv: {
-    patches = drv.patches or [] ++ [
-      (fetchpatch {
-        url = "https://github.com/reflex-frp/reflex/compare/469b4ab4a755cad76b8d4d6c9ad482d02686b4ae.patch";
-        sha256 = "04sxzxpx7xhr6p4n76rg1ci8zjfzs19lr21ziwsfig8zmdg22i7q";
-      })
-    ];
-    doCheck = false;
-    # hackage revision seems to have DOS newlines
-    prePatch = drv.prePatch or "" + ''
-      ${pkgs.buildPackages.dos2unix}/bin/dos2unix reflex.cabal
-    '';
-  }) super.reflex;
+  # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
+  reflex = dontCheck super.reflex;
 
   # 2020-11-19: jailbreaking because of pretty-simple bound out of date
   # https://github.com/kowainik/stan/issues/408
