@@ -98,6 +98,7 @@ buildPythonApplication rec {
     zc_lockfile
   ] ++ lib.optional enableGoogle [
     google-cloud-storage
+    gcsfs
   ] ++ lib.optional enableAWS [
     boto3
   ] ++ lib.optional enableAzure [
