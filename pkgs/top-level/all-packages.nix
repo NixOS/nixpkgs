@@ -14468,6 +14468,8 @@ with pkgs;
 
   ngn-k = callPackage ../development/interpreters/ngn-k { };
 
+  nbb = callPackage ../development/interpreters/clojure/nbb { };
+
   obb = callPackage ../development/interpreters/clojure/obb.nix { };
 
   octave = callPackage ../development/interpreters/octave {

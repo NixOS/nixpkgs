@@ -10205,6 +10205,12 @@
     githubId = 358550;
     name = "Philip Lykke Carlsen";
   };
+  PlumpMath = {
+    email = "plumpmath@hotmail.com";
+    github = "PlumpMath";
+    githubId = 1218365;
+    name = "Lee Jong Hoon";
+  };
   plumps = {
     email = "maks.bronsky@web.de";
     github = "plumps";
