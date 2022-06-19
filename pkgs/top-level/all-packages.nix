@@ -12049,7 +12049,7 @@ with pkgs;
   zinnia = callPackage ../tools/inputmethods/zinnia { };
   tegaki-zinnia-japanese = callPackage ../tools/inputmethods/tegaki-zinnia-japanese { };
 
-  zimwriterfs = callPackage ../tools/text/zimwriterfs { };
+  zim-tools = callPackage ../tools/text/zim-tools { };
 
   zld = callPackage ../development/tools/zld { };
 
