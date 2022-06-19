@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aiomusiccast";
-  version = "0.14.3";
+  version = "0.14.4";
 
   format = "pyproject";
   disabled = pythonOlder "3.8";
@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vigonotion";
     repo = "aiomusiccast";
-    rev = version;
-    hash = "sha256-ELdNxeU9dajWr4VeOyuvNrSi7B+ImVJM/BlZsw3tcKE=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vSf4Fcioz+ZrXCaFQQbHzhz7vOknCOEFJXduXJlO/wE=";
   };
 
   postPatch = ''

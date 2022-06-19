@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "ppx_yojson_conv_lib";
-  version = "0.14.0";
+  version = "0.15.0";
 
   useDune2 = true;
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "janestreet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12s3xshayy1f8cp9lk6zqwnw60n7cdap55gkksz5w65gdd8bfxmf";
+    sha256 = "sha256-Hpg4AKAe7Q5P5UkBpH+5l1nZbIVA2Dr1Q30D4zkrjGo=";
   };
 
   propagatedBuildInputs = [ yojson ];
