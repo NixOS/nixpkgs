@@ -20,12 +20,12 @@ runCommand "dbus-1"
     allowSubstitutes = false;
 
     nativeBuildInputs = [
-      libxslt
+      libxslt.bin
       findXMLCatalogs
     ];
 
     buildInputs = [
-      dbus
+      dbus.out
     ];
   }
   ''
