@@ -1,5 +1,5 @@
-{ stdenv
-, lib
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pyannotate
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "09269320f8d218728247436f7ade96f33cf3fe85840b40632142d9f8968c1fd0";
+    hash = "sha256-CSaTIPjSGHKCR0Nvet6W8zzz/oWEC0BjIULZ+JaMH9A=";
   };
 
   buildInputs = [
@@ -23,6 +23,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pyannotate
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pytest>=3.2.0,<7.0.0" "pytest>=3.2.0"
+  '';
 
   # Module has no tests
   doCheck = false;

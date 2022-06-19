@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , nixosTests
 , python3
-, python3Packages
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,9 +15,10 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-KjmpFetNhNM5tL34e/Pn1i3hc86JZglubSMsHZWu198=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     advocate
     backports_abc
+    chardet
     flask-babel
     flask_login
     flask_principal

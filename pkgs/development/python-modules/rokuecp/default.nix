@@ -8,6 +8,7 @@
 , fetchFromGitHub
 , poetry-core
 , pytest-asyncio
+, pytest-freezegun
 , pytestCheckHook
 , pythonOlder
 , xmltodict
@@ -43,8 +44,9 @@ buildPythonPackage rec {
 
   checkInputs = [
     aresponses
-    pytestCheckHook
     pytest-asyncio
+    pytest-freezegun
+    pytestCheckHook
   ];
 
   postPatch = ''
@@ -59,6 +61,9 @@ buildPythonPackage rec {
     "test_get_dns_state"
     # Assertion issue
     "test_guess_stream_format"
+    "test_update_tv"
+    "test_get_apps_single_app"
+    "test_get_tv_channels_single_channel"
   ];
 
   pythonImportsCheck = [

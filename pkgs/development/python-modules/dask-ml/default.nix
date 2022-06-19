@@ -13,7 +13,6 @@
 , scikit-learn
 , scipy
 , setuptools-scm
-, toolz
 }:
 
 buildPythonPackage rec {
@@ -33,7 +32,6 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    dask
     dask-glm
     distributed
     multipledispatch
@@ -43,8 +41,8 @@ buildPythonPackage rec {
     pandas
     scikit-learn
     scipy
-    toolz
-  ];
+  ] ++ dask.optional-dependencies.array
+    ++ dask.optional-dependencies.dataframe;
 
   # has non-standard build from source, and pypi doesn't include tests
   doCheck = false;
