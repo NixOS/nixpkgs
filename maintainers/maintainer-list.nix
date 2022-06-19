@@ -12709,6 +12709,12 @@
     githubId = 139251;
     name = "Tom Hunger";
   };
+  tejasag = {
+    name = "Tejas Agarwal";
+    email = "tejasagarwalbly@gmail.com";
+    github = "tejasag";
+    githubId = 67542663;
+  };
   telotortium = {
     email = "rirelan@gmail.com";
     github = "telotortium";
