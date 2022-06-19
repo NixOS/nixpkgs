@@ -34009,6 +34009,8 @@ with pkgs;
 
   terminal-parrot = callPackage ../applications/misc/terminal-parrot { };
 
+  em100 = callPackage ../misc/drivers/em100 { };
+
   epson-alc1100 = callPackage ../misc/drivers/epson-alc1100 { };
 
   epson-escpr = callPackage ../misc/drivers/epson-escpr { };
