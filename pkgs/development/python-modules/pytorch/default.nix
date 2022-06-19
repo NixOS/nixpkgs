@@ -10,6 +10,7 @@
 
   # Build inputs
   numactl,
+  CoreServices, libobjc,
 
   # Propagated build inputs
   numpy, pyyaml, cffi, click, typing-extensions,
@@ -145,7 +146,7 @@ in buildPythonPackage rec {
     # https://github.com/pytorch/pytorch/issues/70297
     # https://github.com/google/breakpad/commit/605c51ed96ad44b34c457bbca320e74e194c317e
     ./breakpad-sigstksz.patch
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     # pthreadpool added support for Grand Central Dispatch in April
     # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
     # that is available starting with macOS 10.13. However, our current
@@ -225,7 +226,8 @@ in buildPythonPackage rec {
 
   buildInputs = [ blas blas.provider ]
     ++ lib.optionals cudaSupport [ cudnn magma nccl ]
-    ++ lib.optionals stdenv.isLinux [ numactl ];
+    ++ lib.optionals stdenv.isLinux [ numactl ]
+    ++ lib.optionals stdenv.isDarwin [ CoreServices libobjc ];
 
   propagatedBuildInputs = [
     cffi
@@ -291,15 +293,6 @@ in buildPythonPackage rec {
 
     install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libtorch.dylib
 
-    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_observers.dylib
-    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_observers.dylib
-
-    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_module_test_dynamic.dylib
-    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_module_test_dynamic.dylib
-
-    install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libcaffe2_detectron_ops.dylib
-    install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libcaffe2_detectron_ops.dylib
-
     install_name_tool -change @rpath/libtorch.dylib $lib/lib/libtorch.dylib $lib/lib/libshm.dylib
     install_name_tool -change @rpath/libc10.dylib $lib/lib/libc10.dylib $lib/lib/libshm.dylib
   '';
@@ -315,12 +308,11 @@ in buildPythonPackage rec {
   };
 
   meta = with lib; {
-    # darwin: error: use of undeclared identifier 'noU'; did you mean 'no'?
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Open source, prototype-to-production deep learning platform";
     homepage    = "https://pytorch.org/";
     license     = licenses.bsd3;
-    platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
     maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+    platforms   = with platforms; linux ++ lib.optionals (!cudaSupport) darwin;
+    broken = stdenv.isLinux && stdenv.isAarch64;
   };
 }
