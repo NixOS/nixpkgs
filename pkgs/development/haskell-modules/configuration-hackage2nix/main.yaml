@@ -532,6 +532,7 @@ supported-platforms:
   gtk-mac-integration:                          [ platforms.darwin ]
   gtk3-mac-integration:                         [ platforms.darwin ]
   hommage-ds:                                   [ platforms.windows ]
+  hpapi:                                        [ platforms.linux ] # limited by pkgs.papi
   hsignal:                                      [ platforms.x86 ] # -msse2
   HFuse:                                        [ platforms.linux ]
   hw-prim-bits:                                 [ platforms.x86 ] # x86 assembler
