@@ -1,6 +1,6 @@
 { hello, buildIncremental, runCommandNoCC, texinfo, stdenv, rsync }:
 let
-  baseHello = buildIncremental.prepareIncrementalBuild hello;
+  baseHelloArtifacts = buildIncremental.prepareIncrementalBuild hello;
   patchedHello = hello.overrideAttrs (old: {
     buildInputs = [ texinfo ];
     src = runCommandNoCC "patch-hello-src" { } ''
@@ -10,17 +10,17 @@ let
       patch -p1 < ${./hello.patch}
     '';
   });
-  incrementalBuiltHello = buildIncremental.mkIncrementalBuild patchedHello baseHello.incrementalBuildArtifacts;
+  incrementalBuiltHello = buildIncremental.mkIncrementalBuild patchedHello baseHelloArtifacts;
 
   incrementalBuiltHelloWithCheck = incrementalBuiltHello.overrideAttrs (old: {
     doCheck = true;
     checkPhase = ''
       echo "checking if unchanged source file is not recompiled"
-        [ "$(stat --format="%Y" lib/exitfail.o)" = "$(stat --format="%Y" ${baseHello.incrementalBuildArtifacts}/lib/exitfail.o)" ]
+        [ "$(stat --format="%Y" lib/exitfail.o)" = "$(stat --format="%Y" ${baseHelloArtifacts}/outputs/lib/exitfail.o)" ]
     '';
   });
 
-  baseHelloRemoveFile = buildIncremental.prepareIncrementalBuild (hello.overrideAttrs (old: {
+  baseHelloRemoveFileArtifacts = buildIncremental.prepareIncrementalBuild (hello.overrideAttrs (old: {
     patches = [ ./hello-additionalFile.patch ];
   }));
 
@@ -41,7 +41,7 @@ let
     '';
   });
 
-  incrementalBuiltHelloWithRemovedFile = buildIncremental.mkIncrementalBuild patchedHelloRemoveFile baseHelloRemoveFile.incrementalBuildArtifacts;
+  incrementalBuiltHelloWithRemovedFile = buildIncremental.mkIncrementalBuild patchedHelloRemoveFile baseHelloRemoveFileArtifacts;
 in
 stdenv.mkDerivation {
   name = "patched-hello-returns-correct-output";
