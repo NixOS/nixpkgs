@@ -845,7 +845,7 @@ self: super: builtins.intersectAttrs super {
 
   rel8 = addTestToolDepend pkgs.postgresql super.rel8;
 
-  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_7; });
+  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_7; };
   hercules-ci-cnix-expr =
