@@ -7148,6 +7148,8 @@ with pkgs;
 
   deco = callPackage ../applications/misc/deco { };
 
+  decoder = callPackage ../tools/security/decoder { };
+
   icoutils = callPackage ../tools/graphics/icoutils { };
 
   idutils = callPackage ../tools/misc/idutils { };
