@@ -10273,6 +10273,8 @@ in {
 
   tablib = callPackage ../development/python-modules/tablib { };
 
+  tabula-py = callPackage ../development/python-modules/tabula-py { };
+
   tabulate = callPackage ../development/python-modules/tabulate { };
 
   tabview = callPackage ../development/python-modules/tabview { };
