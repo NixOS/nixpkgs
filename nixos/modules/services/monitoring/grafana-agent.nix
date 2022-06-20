@@ -61,45 +61,50 @@ in
         };
       };
 
-      example = {
-        metrics.global.remote_write = [{
-          url = "\${METRICS_REMOTE_WRITE_URL}";
-          basic_auth.username = "\${METRICS_REMOTE_WRITE_USERNAME}";
-          basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/metrics_remote_write_password";
-        }];
-        logs.configs = [{
-          name = "default";
-          scrape_configs = [
-            {
-              job_name = "journal";
-              journal = {
-                max_age = "12h";
-                labels.job = "systemd-journal";
-              };
-              relabel_configs = [
+      example = literalExpression ''
+        lib.mkMerge [
+          options.services.grafana-agent.settings.default
+          {
+            metrics.global.remote_write = [{
+              url = "\''${METRICS_REMOTE_WRITE_URL}";
+              basic_auth.username = "\''${METRICS_REMOTE_WRITE_USERNAME}";
+              basic_auth.password_file = "\''${CREDENTIALS_DIRECTORY}/metrics_remote_write_password";
+            }];
+            logs.configs = [{
+              name = "default";
+              scrape_configs = [
                 {
-                  source_labels = [ "__journal__systemd_unit" ];
-                  target_label = "systemd_unit";
-                }
-                {
-                  source_labels = [ "__journal__hostname" ];
-                  target_label = "nodename";
-                }
-                {
-                  source_labels = [ "__journal_syslog_identifier" ];
-                  target_label = "syslog_identifier";
+                  job_name = "journal";
+                  journal = {
+                    max_age = "12h";
+                    labels.job = "systemd-journal";
+                  };
+                  relabel_configs = [
+                    {
+                      source_labels = [ "__journal__systemd_unit" ];
+                      target_label = "systemd_unit";
+                    }
+                    {
+                      source_labels = [ "__journal__hostname" ];
+                      target_label = "nodename";
+                    }
+                    {
+                      source_labels = [ "__journal_syslog_identifier" ];
+                      target_label = "syslog_identifier";
+                    }
+                  ];
                 }
               ];
-            }
-          ];
-          positions.filename = "\${STATE_DIRECTORY}/loki_positions.yaml";
-          clients = [{
-            url = "\${LOGS_REMOTE_WRITE_URL}";
-            basic_auth.username = "\${LOGS_REMOTE_WRITE_USERNAME}";
-            basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/logs_remote_write_password";
-          }];
-        }];
-      };
+              positions.filename = "\''${STATE_DIRECTORY}/loki_positions.yaml";
+              clients = [{
+                url = "\''${LOGS_REMOTE_WRITE_URL}";
+                basic_auth.username = "\''${LOGS_REMOTE_WRITE_USERNAME}";
+                basic_auth.password_file = "\''${CREDENTIALS_DIRECTORY}/logs_remote_write_password";
+              }];
+            }];
+          }
+        ]
+      '';
     };
   };
 
