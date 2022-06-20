@@ -160,7 +160,7 @@ if [ "$dontLink" != 1 ]; then
 fi
 
 if [[ -e @out@/nix-support/add-local-cc-cflags-before.sh ]]; then
-    source @out@/nix-support/add-local-cflags-before.sh
+    source @out@/nix-support/add-local-cc-cflags-before.sh
 fi
 
 # As a very special hack, if the arguments are just `-v', then don't
