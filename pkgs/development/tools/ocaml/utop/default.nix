@@ -6,8 +6,6 @@ buildDunePackage rec {
   pname = "utop";
   version = "2.9.2";
 
-  useDune2 = true;
-
   minimalOCamlVersion = "4.03";
 
   src = fetchurl {
