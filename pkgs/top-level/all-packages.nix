@@ -2487,6 +2487,8 @@ with pkgs;
 
   gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
 
+  gosca = callPackage ../development/tools/gosca { };
+
   gosh = callPackage ../tools/security/gosh { };
 
   gospider = callPackage ../tools/security/gospider { };
