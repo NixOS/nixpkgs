@@ -29,7 +29,7 @@ let
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.7.8"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.7.9"; # N.B: if you change this, check if overrides are still up-to-date
 
   src = fetchFromGitHub {
     owner = "aws";
