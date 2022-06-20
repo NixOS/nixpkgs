@@ -724,7 +724,6 @@ in
           ++ optionals cfg.distributedBuilds [ pkgs.gzip ];
 
         environment = cfg.envVars
-          // { CURL_CA_BUNDLE = "/etc/ssl/certs/ca-certificates.crt"; }
           // config.networking.proxy.envVars;
 
         unitConfig.RequiresMountsFor = "/nix/store";
