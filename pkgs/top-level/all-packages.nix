@@ -22796,6 +22796,7 @@ with pkgs;
   };
 
   tt-rss = callPackage ../servers/tt-rss { };
+  tt-rss-plugin-feediron = callPackage ../servers/tt-rss/plugin-feediron { };
   tt-rss-plugin-ff-instagram = callPackage ../servers/tt-rss/plugin-ff-instagram { };
   tt-rss-plugin-auth-ldap = callPackage ../servers/tt-rss/plugin-auth-ldap { };
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
