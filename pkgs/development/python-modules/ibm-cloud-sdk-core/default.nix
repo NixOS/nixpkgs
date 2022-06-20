@@ -4,6 +4,7 @@
 , pyjwt
 , pytestCheckHook
 , python-dateutil
+, pythonOlder
 , requests
 , responses
 , tox
@@ -11,11 +12,14 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.15.1";
+  version = "3.15.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-bGTr8Qf7ywlbsl6/FEJEjFB/bqyyMwfmjVVAsrgmkTg=";
+    hash = "sha256-CuVem9b7NhDsC2tXCg/+1DWZAqSHqJ0GuWZCmA/kesE=";
   };
 
   propagatedBuildInputs = [
