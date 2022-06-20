@@ -13,13 +13,13 @@ buildPythonPackage rec {
   pname = "aiounifi";
   version = "32";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-YKkZMOlV4DPScNohU+M2J71CrIT3cHCHrzp4PIOAc5E=";
+    hash = "sha256-YKkZMOlV4DPScNohU+M2J71CrIT3cHCHrzp4PIOAc5E=";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +37,9 @@ buildPythonPackage rec {
     "--asyncio-mode=auto"
   ];
 
-  pythonImportsCheck = [ "aiounifi" ];
+  pythonImportsCheck = [
+    "aiounifi"
+  ];
 
   meta = with lib; {
     description = "Python library for communicating with Unifi Controller API";
