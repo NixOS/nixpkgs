@@ -1,98 +1,177 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchurl
-, makeWrapper
-, dpkg
+, fetchgit
+, fetchFromGitHub
+, git
+, pkgconfig
+, cmake
+, coreutils
+, autoconf
+, automake
+, libtool
+, luajit
+, luarocks
+, luaPackages
+, perl
+, which
+, python27
 , glib
 , gnutar
 , gtk3-x11
-, luajit
 , sdcv
 , SDL2
-, noto-fonts
-, nerdfonts }:
+, nerdfonts
+}:
 let
-  font-droid = nerdfonts.override { fonts = [ "DroidSansMono" ]; };
-  noto-rev = "a19de47f845dbd4c61b884c7ff90ce993555d05d";
-  files =
-   [{name = "NotoSans-Regular.ttf"; path="NotoSans"; hash = "sha256-PIOX7JZQ0O+FvQf8IJnakfqWTrsp2+OaOLlGF373nZs=";}
-   {name = "NotoSans-Bold.ttf"; path="NotoSans"; hash = "sha256-Dz9gi6+NiEgPOZdHhxs3QUTq+eb4iA0ssZz8o6wlZpc=";}
-   {name = "NotoSans-Italic.ttf"; path="NotoSans"; hash = "sha256-e9NTALuKb2qi9DFKAgLH/iy51QeKkDM5uLg0CnjzwxI=";}
-   {name = "NotoSans-BoldItalic.ttf"; path="NotoSans"; hash = "sha256-65qbrVz3qIzDBlc7qeIjm5VEPihcyE9fAsOISMGwb5E=";}
-   {name = "NotoSerif-Regular.ttf"; path="NotoSerif"; hash = "sha256-yPZpzrLJxgzPVRmLMF4IqZf/ynmjjMfutVHmQ8vmZQU=";}
-   {name = "NotoSerif-Bold.ttf"; path="NotoSerif"; hash = "sha256-OyCGqGm83tKutEFvwoHO7J1s48BnVs2hn492NjYgTn0=";}
-   {name = "NotoSerif-Italic.ttf"; path="NotoSerif"; hash = "sha256-Dqgda1T8iqXf8P1uvnz6Qx6ebPdHqNSqM1gfoKrM/+o=";}
-   {name = "NotoSerif-BoldItalic.ttf"; path="NotoSerif"; hash = "sha256-T7hzcUW0pQPVSK9LUXr9/FMuRKlqwVN4JX6CV0EzTuw=";}
-   {name = "NotoSansArabicUI-Regular.ttf"; path="NotoSansArabicUI"; hash = "sha256-bD2IHntzr/sjDSDne0SgvSp1yl7IdaT6AJea2lyYk1I=";}
-   {name = "NotoSansArabicUI-Bold.ttf"; path="NotoSansArabicUI"; hash = "sha256-hNQH1vKll+8brsc5j/mPmHaYpm5dc00srqo9UJ6ECf0=";}
-   {name = "NotoSansDevanagariUI-Regular.ttf"; path="NotoSansDevanagariUI"; hash = "sha256-fC6cKx7J0qpMFTOyRn/EFIRmZnQ1msJGK8bOsYXY6QA=";}
-   {name = "NotoSansBengaliUI-Regular.ttf"; path="NotoSansBengaliUI"; hash = "sha256-+v5m3SVUYqKXiK6bdW28AZ/7TUPHT+PWCc4csUMmH0w=";}
-   ];
-  getFont = {name, path, hash}: fetchurl {
-    url =  "https://github.com/googlefonts/noto-fonts/raw/${noto-rev}/hinted/ttf/${path}/${name}";
-    sha256 = hash;
-    passthru = {inherit name; };
-  };
-  noto-fonts-cjk = fetchurl {
-    url =
-      let
-        version = "165c01b46ea533872e002e0785ff17e44f6d97d8";
-      in
-      "https://github.com/googlefonts/noto-cjk/raw/${version}/Sans/OTF/SimplifiedChinese/NotoSansCJKsc-Regular.otf";
-    sha256 = "sha256-LHYlT2/Def3fzgp+hPtThbsTXT45kpT27rZoDQNlt0s=";
-    passthru = {name = "NotoSansCJKsc-Regular.otf"; };
-  };
-  noto-fonts = map getFont files ++ [noto-fonts-cjk];
-in stdenv.mkDerivation rec {
+
+  # maybe this should go in lib/attrs.nix?
+  mapAttrsToConcatStringSep = sep: func: val:
+    lib.concatStringsSep sep (lib.mapAttrsToList func val);
+
+  # read the vendored.nix file and add additional attrs which can be
+  # computed from those which are hand-maintained (see vendored.nix)
+  vendored = lib.mapAttrs (name: attrs:
+    with attrs;
+    let
+      isGit = attrs?tag || attrs?rev;
+      dest = if isGit
+             then "base/thirdparty/${name}/build/git_checkout/${name}"
+             else "base/thirdparty/${name}/build/downloads/${filename}";
+      fetched =
+        if isGit
+        then fetchgit {
+          inherit (attrs) url hash;
+          leaveDotGit = true;
+          rev = attrs.tag or attrs.rev;
+        }
+        else fetchurl {
+          inherit (attrs) url hash;
+        };
+    in attrs // { inherit isGit dest fetched; })
+    (import ./vendored.nix);
+
+  fonts = import ./fonts.nix { inherit lib fetchurl nerdfonts; };
+
   pname = "koreader";
   version = "2022.05.1";
 
-  src = fetchurl {
-    url =
-      "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-    sha256 = "sha256-Uz8fzF/SdKNRywoIb8B/iHRuXDwRyw7wH7bL9vRzPfY=";
+in stdenv.mkDerivation {
+  inherit pname version;
+
+  src = fetchFromGitHub {
+    owner = "koreader";
+    repo = "koreader";
+    rev = "v${version}";
+    hash = "sha256-ndVbuL2kspyv5FSBwdAEJEKR9xBh/VbTuC6tHOQqXc0=";
+    fetchSubmodules = true;
   };
 
-  sourceRoot = ".";
-  nativeBuildInputs = [ makeWrapper dpkg ];
+  postUnpack =
+    # fetch the vendored deps and put them where koreader expects them to be
+    mapAttrsToConcatStringSep "\n"
+      (name: attrs: with attrs; ''
+        mkdir -p $(dirname $sourceRoot/${dest})
+        ln -s ${fetched} $sourceRoot/${dest}
+        chmod -R u+w $sourceRoot/${dest}
+        '')
+      vendored;
+
+  prePatch = ''
+    substituteInPlace \
+      base/thirdparty/openssl/build/git_checkout/openssl/config \
+      --replace /usr/bin/env ${coreutils}/bin/env
+
+    # when setting --libdir explicitly, newer libtools like nixpkgs'
+    # expect a trailing slash; otherwise you get "cannot install...to
+    # a directory not ending in"
+    substituteInPlace \
+      base/thirdparty/harfbuzz/CMakeLists.txt \
+      --replace BINARY_DIR}/lib BINARY_DIR}/lib/
+    '';
+
+  patches = [
+    # koreader's build scripts silently delete uncommitted changes
+    ./patches/dont-obliterate-uncommitted-stuff.patch
+
+    # koreader vendors lua, but does not vendor luarocks, so headaches
+    # arise if the non-vendored luarocks is not based on exactly the
+    # same version of lua as the one which is vendored.
+    ./patches/do-not-override-lua-paths.patch
+
+    # omit lua-Spore from the build.  this is obviously unacceptable
+    # for merging, but at the moment it can't find luajson, and I
+    # can't seem to get the build process to use the one from nixpkgs.
+    ./patches/omit-lua-spore.patch
+  ];
+
+  postPatch =
+    # Fetchgit does not fetch git tags when cloning a repo, since the
+    # set of tags delivered by 'git clone' is not covered by the
+    # commit hash and will change over time as upstream adds/removes
+    # tags.  However koreader expects to find the fetched tag in the
+    # local clone; if it doesn't, it will try to fetch from the
+    # origin.  So we recreate the tag.  Before doing so we add a
+    # commit for any uncommitted changes created in the prePatch and
+    # patch phases above.
+    #
+    # This cannot be done earlier than postPatch because the patching
+    # will change the tag's commit.
+    #
+    # Note that we cannot apply patches to any of the vendored
+    # dependencies which koreader references by commit-hash -- unless
+    # we patch the commit-hash in koreader's cmake files.  Only the
+    # tag-referenced dependencies are malleable.
+    mapAttrsToConcatStringSep "\n"
+      (name: attrs: lib.optionalString (attrs?tag) ''
+        git -C ${attrs.dest} config --local user.email "you@example.com"
+        git -C ${attrs.dest} config --local user.name  "Your Name"
+        git -C ${attrs.dest} add -A
+        git -C ${attrs.dest} commit -m postPatch || true
+        git -C ${attrs.dest} tag -f ${attrs.tag}
+        '')
+      vendored;
+
+  nativeBuildInputs = [
+    git
+    cmake
+    autoconf
+    automake
+    libtool
+    pkgconfig
+    which
+    perl
+    coreutils
+    luarocks
+    python27
+  ];
+
   buildInputs = [
     glib
+    luajit
     gnutar
     gtk3-x11
-    luajit
     sdcv
     SDL2
+    luaPackages.luajson
   ];
-  unpackCmd = "dpkg-deb -x ${src} .";
 
-  dontConfigure = true;
-  dontBuild = true;
+  dontUseCmakeConfigure = true;
+  dontUseCmakeBuildDir = true;
 
-  installPhase = ''
-    mkdir -p $out
-    cp -R usr/* $out/
-    ln -sf ${luajit}/bin/luajit $out/lib/koreader/luajit
-    ln -sf ${sdcv}/bin/sdcv $out/lib/koreader/sdcv
-    ln -sf ${gnutar}/bin/tar $out/lib/koreader/tar
-    find $out -xtype l -delete
-    notoFonts=(${lib.concatStringsSep " " noto-fonts})
-    notoFontsTargets=(${lib.concatStringsSep " " (map (x: x.name) noto-fonts)})
-    for i in ''${!notoFonts[@]}; do
-      file=''${notoFonts[$i]}
-      target=''${notoFontsTargets[$i]}
-      cp "$file" "$out/lib/koreader/fonts/noto/$target"
-    done
-    ln -s "${font-droid}/share/fonts/opentype/NerdFonts/Droid Sans Mono Nerd Font Complete Mono.otf" $out/lib/koreader/fonts/droid/DroidSansMono.ttf
-    wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [ gtk3-x11 SDL2 glib ]
-    }
-  '';
+  makeFlags = [
+    "PARALLEL_JOBS=$NIX_BUILD_CORES"
+  ];
+
+  # koreader does not have a separate `make install` target
+  installPhase = fonts.installPhase;
 
   meta = with lib; {
     homepage = "https://github.com/koreader/koreader";
     description =
       "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
-    platforms = intersectLists platforms.x86_64 platforms.linux;
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ contrun neonfuz];
+    maintainers = with maintainers; [ contrun neonfuz amjoseph ];
+    sourceProvenance = [ ];
   };
 }

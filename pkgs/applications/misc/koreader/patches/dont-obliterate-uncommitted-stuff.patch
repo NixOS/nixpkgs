@@ -1,0 +1,13 @@
+diff --git a/Makefile.third b/Makefile.third
+index a5c0c541..e7a2e5f3 100644
+--- a/base/Makefile.third
++++ b/base/Makefile.third
+@@ -5,7 +5,7 @@
+ fetchthirdparty:
+ 	git submodule init
+ 	git submodule sync
+-	git submodule foreach --recursive git reset --hard
++	#git submodule foreach --recursive git reset --hard
+ 	git submodule update
+ 	@echo "cleaning up crengine checkout..."
+ 	@rm -rf thirdparty/kpvcrlib/crengine/thirdparty

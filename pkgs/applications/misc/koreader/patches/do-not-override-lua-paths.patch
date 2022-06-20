@@ -1,0 +1,39 @@
+diff --git a/base/thirdparty/lua-Spore/CMakeLists.txt b/base/thirdparty/lua-Spore/CMakeLists.txt
+index 9094e372..3d78eedd 100644
+--- a/base/thirdparty/lua-Spore/CMakeLists.txt
++++ b/base/thirdparty/lua-Spore/CMakeLists.txt
+@@ -25,7 +25,7 @@ if(DEFINED LIBFLAG)
+     set(BUILD_CMD "${BUILD_CMD} LIBFLAG=\"${LIBFLAG}\"")
+ endif()
+ set(BUILD_CMD "${BUILD_CMD} CC=\"${CC}\" CFLAGS=\"${CFLAGS}\" LD=\"${LD}\"")
+-set(BUILD_CMD "${BUILD_CMD} LUA_INCDIR=\"${LUA_INCDIR}\" LUA_LIBDIR=\"${LUA_LIBDIR}\"")
++#set(BUILD_CMD "${BUILD_CMD} LUA_INCDIR=\"${LUA_INCDIR}\" LUA_LIBDIR=\"${LUA_LIBDIR}\"")
+ 
+ set(PATCH_CMD sh -c "mkdir -p doc && ${ISED} \"s| 'luasocket|--'luasocket|g\" ${LUA_SPORE_ROCKSPEC}")
+ 
+diff --git a/base/thirdparty/lua-htmlparser/CMakeLists.txt b/base/thirdparty/lua-htmlparser/CMakeLists.txt
+index 762cadf9..db44bb53 100644
+--- a/base/thirdparty/lua-htmlparser/CMakeLists.txt
++++ b/base/thirdparty/lua-htmlparser/CMakeLists.txt
+@@ -25,7 +25,7 @@ if(DEFINED LIBFLAG)
+     set(BUILD_CMD "${BUILD_CMD} LIBFLAG=\"${LIBFLAG}\"")
+ endif()
+ set(BUILD_CMD "${BUILD_CMD} CC=\"${CC}\" CFLAGS=\"${CFLAGS}\" LD=\"${LD}\"")
+-set(BUILD_CMD "${BUILD_CMD} LUA_INCDIR=\"${LUA_INCDIR}\" LUA_LIBDIR=\"${LUA_LIBDIR}\"")
++#set(BUILD_CMD "${BUILD_CMD} LUA_INCDIR=\"${LUA_INCDIR}\" LUA_LIBDIR=\"${LUA_LIBDIR}\"")
+ 
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+diff --git a/base/thirdparty/lua-rapidjson/CMakeLists.txt b/base/thirdparty/lua-rapidjson/CMakeLists.txt
+index 1ccbe754..afcd7043 100644
+--- a/base/thirdparty/lua-rapidjson/CMakeLists.txt
++++ b/base/thirdparty/lua-rapidjson/CMakeLists.txt
+@@ -29,7 +29,7 @@ endif()
+ set(BUILD_CMD sh -c "${LUAROCKS} make --tree=${OUTPUT_DIR}/rocks ${LUA_RAPIDJSON_ROCKSPEC}")
+ set(BUILD_CMD "${BUILD_CMD} CC=\"${CC}\" CXX=\"${CXX}\"")
+ set(BUILD_CMD "${BUILD_CMD} CFLAGS=\"${CFLAGS}\" CXXFLAGS=\"${CXXFLAGS}\" LDFLAGS=\"${LDFLAGS} ${LIBFLAG}\"")
+-set(BUILD_CMD "${BUILD_CMD} LUA_INCDIR=\"${LUA_INCDIR}\" LUA_LIBDIR=\"${LUA_LIBDIR}\"")
++#set(BUILD_CMD "${BUILD_CMD} LUA_INCDIR=\"${LUA_INCDIR}\" LUA_LIBDIR=\"${LUA_LIBDIR}\"")
+ if(DEFINED LUALIB)
+     set(BUILD_CMD "${BUILD_CMD} LUALIB=\"${LUALIB}\"")
+ endif()
