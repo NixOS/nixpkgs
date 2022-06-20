@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, vtk_9, libX11, libGL, Cocoa, OpenGL }:
+{ lib, stdenv, fetchFromGitHub, cmake, vtk, libX11, libGL, Cocoa, OpenGL }:
 
 stdenv.mkDerivation rec {
   pname = "f3d";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ vtk_9 ]
+  buildInputs = [ vtk ]
     ++ lib.optionals stdenv.isLinux [ libGL libX11 ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
