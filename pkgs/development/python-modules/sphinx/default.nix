@@ -52,7 +52,7 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "docutils>=0.14,<0.18" "docutils>=0.14"
 
-    # remove impurity caused by date inclusion 
+    # remove impurity caused by date inclusion
     # https://github.com/sphinx-doc/sphinx/blob/master/setup.cfg#L4-L6
     substituteInPlace setup.cfg \
       --replace "tag_build = .dev" "" \
