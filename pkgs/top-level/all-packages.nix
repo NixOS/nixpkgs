@@ -27640,6 +27640,8 @@ with pkgs;
 
   josm = callPackage ../applications/misc/josm { };
 
+  js8call = qt5.callPackage ../applications/radio/js8call { };
+
   jwm = callPackage ../applications/window-managers/jwm { };
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
