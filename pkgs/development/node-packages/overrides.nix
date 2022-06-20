@@ -26,6 +26,18 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
+  "@forge/cli" = prev."@forge/cli".override {
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = with pkgs; [
+      libsecret
+      final.node-gyp-build
+      final.node-pre-gyp
+    ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.Security
+    ];
+  };
+
   "@hyperspace/cli" = prev."@hyperspace/cli".override {
     nativeBuildInputs = [ pkgs.makeWrapper ];
     buildInputs = [ final.node-gyp-build ];

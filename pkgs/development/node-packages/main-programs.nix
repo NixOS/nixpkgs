@@ -16,6 +16,7 @@
   "@astrojs/language-server" = "astro-ls";
   "@bitwarden/cli" = "bw";
   "@commitlint/cli" = "commitlint";
+  "@forge/cli" = "forge";
   "@gitbeaker/cli" = "gitbeaker";
   "@google/clasp" = "clasp";
   "@hyperspace/cli" = "hyp";
