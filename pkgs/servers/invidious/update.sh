@@ -60,7 +60,7 @@ info "Running scripts/fetch-player-dependencies.cr..."
 git -C "$git_dir" reset --hard "$new_rev"
 (cd "$git_dir" && crystal run scripts/fetch-player-dependencies.cr -- --minified)
 rm -f "$git_dir/assets/videojs/.gitignore"
-videojs_new_sha256=$(nix hash-path --type sha256 --base32 "$git_dir/assets/videojs")
+videojs_new_sha256=$(nix-hash --type sha256 --base32 "$git_dir/assets/videojs")
 json_set '.videojs.sha256' "$videojs_new_sha256"
 
 if git -C "$git_dir" diff-tree --quiet "${old_rev}..${new_rev}" -- 'shard.lock'; then
