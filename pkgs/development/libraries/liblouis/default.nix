@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/liblouis/liblouis/commit/528f38938e9f539a251d9de92ad1c1b90401c4d0.patch";
       sha256 = "0hlhqsvd5wflg70bd7bmssnchk8znzbr93in0zpspzbyap6xz112";
     })
+    (fetchpatch {
+      name = "CVE-2022-26981.patch";
+      url = "https://github.com/liblouis/liblouis/commit/73751be7a5617bfff4a735ae095203a2d3ec50ef.patch";
+      sha256 = "sha256-PvGG62QHVslrClZP903AYCBof6jDzNe4L8eFU8X0vF4=";
+    })
   ];
 
   outputs = [ "out" "dev" "man" "info" "doc" ];
