@@ -45,11 +45,7 @@
 
     More fields may be added in the future, however, in order to comply with GDPR this file should stay as minimal as possible.
 
-    When editing this file:
-     * keep the list alphabetically sorted
-     * test the validity of the format with:
-         nix-build lib/tests/maintainers.nix
-
+    Please keep the list alphabetically sorted.
     See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
 */
 {

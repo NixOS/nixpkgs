@@ -19,10 +19,7 @@
 
   More fields may be added in the future.
 
-  When editing this file:
-   * keep the list alphabetically sorted
-   * test the validity of the format with:
-       nix-build lib/tests/teams.nix
+  Please keep the list alphabetically sorted.
   */
 
 { lib }:
