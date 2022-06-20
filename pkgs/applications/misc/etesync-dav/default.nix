@@ -52,7 +52,8 @@ in python.pkgs.buildPythonApplication rec {
     flask-wtf
     (python.pkgs.toPythonModule (radicale3.override { python3 = python; }))
     setuptools
-  ];
+  ]
+  ++ python.pkgs.requests.optional-dependencies.socks;
 
   doCheck = false;
 
