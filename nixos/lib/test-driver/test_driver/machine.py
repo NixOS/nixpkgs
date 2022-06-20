@@ -549,18 +549,27 @@ class Machine:
 
         return (rc, output.decode())
 
-    def shell_interact(self) -> None:
-        """Allows you to interact with the guest shell
+    def shell_interact(self, address: Optional[str] = None) -> None:
+        """Allows you to interact with the guest shell for debugging purposes.
 
-        Should only be used during test development, not in the production test."""
+        @address string passed to socat that will be connected to the guest shell.
+        Check the `Running Tests interactivly` chapter of NixOS manual for an example.
+        """
         self.connect()
-        self.log("Terminal is ready (there is no initial prompt):")
+
+        if address is None:
+            address = "READLINE,prompt=$ "
+            self.log("Terminal is ready (there is no initial prompt):")
 
         assert self.shell
-        subprocess.run(
-            ["socat", "READLINE,prompt=$ ", f"FD:{self.shell.fileno()}"],
-            pass_fds=[self.shell.fileno()],
-        )
+        try:
+            subprocess.run(
+                ["socat", address, f"FD:{self.shell.fileno()}"],
+                pass_fds=[self.shell.fileno()],
+            )
+            # allow users to cancel this command without breaking the test
+        except KeyboardInterrupt:
+            pass
 
     def console_interact(self) -> None:
         """Allows you to interact with QEMU's stdin
