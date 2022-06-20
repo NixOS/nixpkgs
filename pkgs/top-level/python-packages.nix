@@ -6163,6 +6163,8 @@ in {
 
   oscrypto = callPackage ../development/python-modules/oscrypto { };
 
+  oscpy = callPackage ../development/python-modules/oscpy { };
+
   oset = callPackage ../development/python-modules/oset { };
 
   osmnx = callPackage ../development/python-modules/osmnx { };
