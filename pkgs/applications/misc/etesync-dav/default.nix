@@ -51,6 +51,7 @@ in python.pkgs.buildPythonApplication rec {
     flask
     flask-wtf
     (python.pkgs.toPythonModule (radicale3.override { python3 = python; }))
+    setuptools
   ];
 
   doCheck = false;
