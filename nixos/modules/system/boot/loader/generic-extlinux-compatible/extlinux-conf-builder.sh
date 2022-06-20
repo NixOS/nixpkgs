@@ -37,9 +37,7 @@ done
 
 [ "$timeout" = "" -o "$default" = "" ] && usage
 
-if [[ -n "@copyKernels@" ]]; then
-    mkdir -p $target/nixos
-fi
+mkdir -p $target/nixos
 mkdir -p $target/extlinux
 
 # Convert a path to a file in the Nix store such as
@@ -55,7 +53,7 @@ declare -A filesCopied
 copyToKernelsDir() {
     local src=$(readlink -f "$1")
     # Don't copy if on same filesystem, just point to the original.
-    if [[ -z "@copyKernels@" && $(stat -f -c %i $src) = $(stat -f -c %i $target/) ]]; then
+    if [[ -z "@copyKernels@" && $(stat -f -c %i $src) = $(stat -f -c %i $target/nixos) ]]; then
         # Replace /nix/store with storePath
         echo "${src/#\/nix\/store/@storePath@}"
         return
