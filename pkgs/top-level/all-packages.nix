@@ -22910,6 +22910,8 @@ with pkgs;
 
   ### SERVERS / GEOSPATIAL
 
+  geoserver = callPackage ../servers/geospatial/geoserver { };
+
   mapcache = callPackage ../servers/geospatial/mapcache { };
 
   mapserver = callPackage ../servers/geospatial/mapserver { };
