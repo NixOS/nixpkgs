@@ -26,9 +26,10 @@ let
 
     # Linux
     "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
-    "armv7l-linux" "i686-linux" "m68k-linux" "mipsel-linux" "mips64el-linux"
-    "powerpc64-linux" "powerpc64le-linux" "riscv32-linux"
-    "riscv64-linux" "s390-linux" "s390x-linux" "x86_64-linux"
+    "armv7l-linux" "i686-linux" "m68k-linux" "microblaze-linux"
+    "microblazeel-linux" "mipsel-linux" "mips64el-linux" "powerpc64-linux"
+    "powerpc64le-linux" "riscv32-linux" "riscv64-linux" "s390-linux"
+    "s390x-linux" "x86_64-linux"
 
     # MMIXware
     "mmix-mmixware"
@@ -40,9 +41,9 @@ let
 
     # none
     "aarch64_be-none" "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none"
-    "msp430-none" "or1k-none" "m68k-none" "powerpc-none" "powerpcle-none"
-    "riscv32-none" "riscv64-none" "rx-none" "s390-none" "s390x-none" "vc4-none"
-    "x86_64-none"
+    "microblaze-none" "microblazeel-none" "msp430-none" "or1k-none" "m68k-none"
+    "powerpc-none" "powerpcle-none" "riscv32-none" "riscv64-none" "rx-none"
+    "s390-none" "s390x-none" "vc4-none" "x86_64-none"
 
     # OpenBSD
     "i686-openbsd" "x86_64-openbsd"
@@ -71,6 +72,7 @@ in {
   x86           = filterDoubles predicates.isx86;
   i686          = filterDoubles predicates.isi686;
   x86_64        = filterDoubles predicates.isx86_64;
+  microblaze    = filterDoubles predicates.isMicroBlaze;
   mips          = filterDoubles predicates.isMips;
   mmix          = filterDoubles predicates.isMmix;
   riscv         = filterDoubles predicates.isRiscV;
