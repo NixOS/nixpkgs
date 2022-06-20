@@ -560,6 +560,12 @@
     githubId = 36147;
     name = "Alireza Meskin";
   };
+  alkasm = {
+    email = "alexreynolds00@gmail.com";
+    github = "alkasm";
+    githubId = 9651002;
+    name = "Alexander Reynolds";
+  };
   alkeryn = {
     email = "plbraundev@gmail.com";
     github = "Alkeryn";
@@ -2522,6 +2528,13 @@
       longkeyid = "rsa4096/0xB37E0F2371016A4C";
       fingerprint = "68B8 0D57 B2E5 4AC3 EC1F  49B0 B37E 0F23 7101 6A4C";
     }];
+  };
+  colinsane = {
+    name = "Colin Sane";
+    email = "colin@uninsane.org";
+    matrix = "@colin:uninsane.org";
+    github = "uninsane";
+    githubId = 106709944;
   };
   collares = {
     email = "mauricio@collares.org";
@@ -12441,6 +12454,12 @@
     githubId = 1040871;
     name = "Mathis Antony";
   };
+  sven-of-cord = {
+    email = "sven@cord.com";
+    github = "sven-of-cord";
+    githubId = 98333944;
+    name = "Sven Over";
+  };
   svend = {
     email = "svend@svends.net";
     github = "svend";
@@ -12696,6 +12715,12 @@
     github = "teh";
     githubId = 139251;
     name = "Tom Hunger";
+  };
+  tejasag = {
+    name = "Tejas Agarwal";
+    email = "tejasagarwalbly@gmail.com";
+    github = "tejasag";
+    githubId = 67542663;
   };
   telotortium = {
     email = "rirelan@gmail.com";

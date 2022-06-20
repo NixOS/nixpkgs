@@ -43,6 +43,7 @@ buildPythonApplication rec {
     cachecontrol
     cyclonedx-python-lib
     html5lib
+    lockfile
     packaging
     pip-api
     progress

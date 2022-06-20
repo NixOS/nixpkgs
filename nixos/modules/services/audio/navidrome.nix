@@ -45,6 +45,8 @@ in {
         RootDirectory = "/run/navidrome";
         ReadWritePaths = "";
         BindReadOnlyPaths = [
+          # navidrome uses online services to download additional album metadata / covers
+          "${config.environment.etc."ssl/certs/ca-certificates.crt".source}:/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
         ] ++ lib.optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder;
         CapabilityBoundingSet = "";

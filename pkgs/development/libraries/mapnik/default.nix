@@ -1,12 +1,15 @@
 { lib, stdenv, fetchzip
 , boost, cairo, freetype, gdal, harfbuzz, icu, libjpeg, libpng, libtiff
 , libwebp, libxml2, proj, python3, python ? python3, sqlite, zlib
+, sconsPackages
 
 # supply a postgresql package to enable the PostGIS input plugin
 , postgresql ? null
 }:
 
-stdenv.mkDerivation rec {
+let
+  scons = sconsPackages.scons_3_0_1;
+in stdenv.mkDerivation rec {
   pname = "mapnik";
   version = "3.1.0";
 
@@ -16,10 +19,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-qqPqN4vs3ZsqKgnx21yQhX8OzHca/0O+3mvQ/vnC5EY=";
   };
 
+  postPatch = ''
+    substituteInPlace configure \
+      --replace '$PYTHON scons/scons.py' ${scons}/bin/scons
+    rm -r scons
+  '';
+
   # a distinct dev output makes python-mapnik fail
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [ scons ];
 
   buildInputs = [
     boost cairo freetype gdal harfbuzz icu libjpeg libpng libtiff
