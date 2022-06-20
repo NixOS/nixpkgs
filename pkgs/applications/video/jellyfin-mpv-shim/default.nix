@@ -13,11 +13,11 @@
 
 buildPythonApplication rec {
   pname = "jellyfin-mpv-shim";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "Nh2bSmzxInZgZmmelsXih6lRartDKjbC0/CB1gYiLcQ=";
+    sha256 = "sha256-JiSC6WjrLsWk3/m/EHq7KNXaJ6rqT2fG9TT1jPvYlK0=";
   };
 
   propagatedBuildInputs = [
