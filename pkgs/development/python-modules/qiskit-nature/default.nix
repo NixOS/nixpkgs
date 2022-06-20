@@ -64,6 +64,10 @@ buildPythonPackage rec {
     homepage = "https://qiskit.org";
     downloadPage = "https://github.com/QISKit/qiskit-nature/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode  # drivers/gaussiand/gauopen/*.so
+    ];
     license = licenses.asl20;
     maintainers = with maintainers; [ drewrisinger ];
   };
