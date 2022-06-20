@@ -4,8 +4,6 @@ buildDunePackage rec {
    pname = "ocaml-migrate-parsetree";
    version = "2.4.0";
 
-   useDune2 = true;
-
    minimalOCamlVersion = "4.02";
 
    src = fetchurl {
