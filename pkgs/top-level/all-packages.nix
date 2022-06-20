@@ -25764,8 +25764,6 @@ with pkgs;
     inherit (xorg) libSM;
   };
 
-  clickshare-csc1 = callPackage ../applications/video/clickshare-csc1 { };
-
   cligh = python3Packages.callPackage ../development/tools/github/cligh {};
 
   clight = callPackage ../applications/misc/clight { };
