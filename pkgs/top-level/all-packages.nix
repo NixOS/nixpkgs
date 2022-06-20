@@ -5232,6 +5232,8 @@ with pkgs;
 
   dnsmon-go = callPackage ../tools/networking/dnsmon-go { };
 
+  dnsmonster = callPackage ../tools/networking/dnsmonster { };
+
   dnspeep = callPackage ../tools/security/dnspeep { };
 
   dnsproxy = callPackage ../tools/networking/dnsproxy { };
