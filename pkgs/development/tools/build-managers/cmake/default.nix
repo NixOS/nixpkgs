@@ -20,18 +20,23 @@
 , SystemConfiguration
 , ps
 , isBootstrap ? false
-, useNcurses ? false
 , useOpenSSL ? !isBootstrap
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
-, withQt5 ? false
-, buildDocs ? (!isBootstrap && (useNcurses || withQt5))
+, uiToolkits ? [] # can contain "ncurses" and/or "qt5"
+, buildDocs ? !(isBootstrap || (uiToolkits == []))
 }:
 
+let
+  cursesUI = lib.elem "ncurses" uiToolkits;
+  qt5UI = lib.elem "qt5" uiToolkits;
+in
+# Accepts only "ncurses" and "qt5" as possible uiToolkits
+assert lib.subtractLists [ "ncurses" "qt5" ] uiToolkits == [];
 stdenv.mkDerivation rec {
   pname = "cmake"
     + lib.optionalString isBootstrap "-boot"
-    + lib.optionalString useNcurses "-cursesUI"
-    + lib.optionalString withQt5 "-qt5UI";
+    + lib.optionalString cursesUI "-cursesUI"
+    + lib.optionalString qt5UI "-qt5UI";
   version = "3.22.3";
 
   src = fetchurl {
@@ -67,7 +72,7 @@ stdenv.mkDerivation rec {
     setupHook
   ]
   ++ lib.optionals buildDocs [ texinfo ]
-  ++ lib.optionals withQt5 [ wrapQtAppsHook ];
+  ++ lib.optionals qt5UI [ wrapQtAppsHook ];
 
   buildInputs = lib.optionals useSharedLibraries [
     bzip2
@@ -80,8 +85,8 @@ stdenv.mkDerivation rec {
     rhash
   ]
   ++ lib.optional useOpenSSL openssl
-  ++ lib.optional useNcurses ncurses
-  ++ lib.optional withQt5 qtbase
+  ++ lib.optional cursesUI ncurses
+  ++ lib.optional qt5UI qtbase
   ++ lib.optional (stdenv.isDarwin && !isBootstrap) SystemConfiguration;
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
@@ -102,7 +107,7 @@ stdenv.mkDerivation rec {
   ] ++ (if useSharedLibraries
         then [ "--no-system-jsoncpp" "--system-libs" ]
         else [ "--no-system-libs" ]) # FIXME: cleanup
-  ++ lib.optional withQt5 "--qt-gui"
+  ++ lib.optional qt5UI "--qt-gui"
   ++ lib.optionals buildDocs [
     "--sphinx-build=${sphinx}/bin/sphinx-build"
     "--sphinx-info"
@@ -129,7 +134,7 @@ stdenv.mkDerivation rec {
 
     "-DCMAKE_USE_OPENSSL=${if useOpenSSL then "ON" else "OFF"}"
     # Avoid depending on frameworks.
-    "-DBUILD_CursesDialog=${if useNcurses then "ON" else "OFF"}"
+    "-DBUILD_CursesDialog=${if cursesUI then "ON" else "OFF"}"
   ];
 
   # make install attempts to use the just-built cmake
@@ -160,6 +165,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ ttuegel lnl7 ];
     platforms = platforms.all;
-    broken = (withQt5 && stdenv.isDarwin);
+    broken = (qt5UI && stdenv.isDarwin);
   };
 }
