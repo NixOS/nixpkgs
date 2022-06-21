@@ -1855,6 +1855,39 @@ buildLuarocksPackage {
   };
 }) {};
 
+luajson = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
+, fetchgit, lua, lpeg
+}:
+buildLuarocksPackage {
+  pname = "luajson";
+  version = "1.3.4-1";
+  knownRockspec = (fetchurl {
+    url    = "https://luarocks.org/luajson-1.3.4-1.rockspec";
+    sha256 = "1zcj3bv7k7qh6f9fh4fsard0aydb84yg3mr070kf6s4hmryj0bpr";
+  }).outPath;
+  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
+  "url": "https://github.com/harningt/luajson.git",
+  "rev": "7660d0b6230b0df7e978ab278304529f5acb8359",
+  "date": "2017-01-31T23:44:11-05:00",
+  "path": "/nix/store/9bbxfwarcims2685npizf5jmpdl42fpc-luajson",
+  "sha256": "0hl0fii62hrzba1ra9l0l1yhq50xvfargwq7ncmfz9s6vs66r8i5",
+  "fetchLFS": false,
+  "fetchSubmodules": true,
+  "deepClone": false,
+  "leaveDotGit": false
+}
+ '') ["date" "path"]) ;
+
+  disabled = with lua; (luaOlder "5.1");
+  propagatedBuildInputs = [ lua lpeg ];
+
+  meta = {
+    homepage = "http://github.com/harningt/luajson";
+    description = "customizable JSON decoder/encoder";
+    license.fullName = "MIT/X11";
+  };
+}) {};
+
 lualogging = callPackage({ buildLuarocksPackage, luaOlder, luaAtLeast
 , fetchgit, luasocket
 }:
