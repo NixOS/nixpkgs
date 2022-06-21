@@ -225,6 +225,8 @@ with pkgs;
 
   ani-cli = callPackage ../applications/video/ani-cli { };
 
+  anime-downloader = callPackage ../applications/video/anime-downloader { };
+
   aocd = with python3Packages; toPythonApplication aocd;
 
   aesfix = callPackage ../tools/security/aesfix { };
@@ -28487,7 +28489,9 @@ with pkgs;
 
   nload = callPackage ../applications/networking/nload { };
 
-  nali = callPackage ../applications/networking/nali { };
+  nali = callPackage ../applications/networking/nali {
+    buildGoModule = buildGo118Module;
+   };
 
   normalize = callPackage ../applications/audio/normalize { };
 
