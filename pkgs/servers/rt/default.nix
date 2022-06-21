@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rt";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     repo = pname;
     rev = "${pname}-${version}";
     owner = "bestpractical";
-    sha256 = "1qqh6w094x7dljz001va802v4s6mixs9lkhs2cs47lf5ph3vwq2q";
+    sha256 = "1qdvbsmdynjw2v0clnmhdmrky7w4dsiysv92n7d7jdbawnicqahn";
   };
 
   patches = [
@@ -88,6 +88,7 @@ stdenv.mkDerivation rec {
         MozillaCA
         NetCIDR
         NetIP
+        ParallelForkManager
         PathDispatcher
         PerlIOeol
         Plack
