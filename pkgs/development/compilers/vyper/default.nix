@@ -69,5 +69,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/vyperlang/vyper";
     license = licenses.asl20;
     maintainers = with maintainers; [ siraben ];
+    knownVulnerabilities = [
+      "CVE-2022-29255"
+    ];
   };
 }
