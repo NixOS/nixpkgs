@@ -207,7 +207,7 @@ in stdenv.mkDerivation {
     patchShebangs $out/bin/koreader
 
     mkdir -p $out/lib
-    cp -rL koreader-emulator-$($(CC) -dumpmachine)/koreader $out/lib/koreader
+    cp -rL koreader-emulator-$(${stdenv.cc} -dumpmachine)/koreader $out/lib/koreader
 
     '' + fonts.installPhase;
 
