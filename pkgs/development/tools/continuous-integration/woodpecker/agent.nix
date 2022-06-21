@@ -1,29 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGoModule, callPackage, fetchFromGitHub }:
 let
-  inherit (import ./common.nix { inherit lib fetchFromGitHub; })
-    meta
-    version
-    src
-    ;
+  common = callPackage ./common.nix { };
 in
 buildGoModule {
   pname = "woodpecker-agent";
-  inherit version src;
+  inherit (common) version src ldflags postBuild;
   vendorSha256 = null;
 
   subPackages = "cmd/agent";
 
-  CGO_ENABLED = false;
+  CGO_ENABLED = 0;
 
-  ldflags = [
-    "-s"
-    "-w"
-    ''-extldflags "-static"''
-    "-X github.com/woodpecker-ci/woodpecker/version.Version=${version}"
-  ];
-
-  meta = meta // {
+  meta = common.meta // {
     description = "Woodpecker Continuous Integration agent";
-    mainProgram = "agent";
   };
 }
