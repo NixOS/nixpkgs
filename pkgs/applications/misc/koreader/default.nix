@@ -204,6 +204,7 @@ in stdenv.mkDerivation {
 
     mkdir -p $out/bin
     cp platform/debian/koreader.sh $out/bin/koreader
+    patchShebangs $out/bin/koreader
 
     mkdir -p $out/lib
     cp -rL koreader-emulator-$($(CC) -dumpmachine)/koreader $out/lib/koreader
