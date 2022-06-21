@@ -191,6 +191,7 @@ let
       systemd.services."vboxtestlog-${name}@" = {
         description = "VirtualBox Test Machine Log For ${name}";
         serviceConfig.StandardInput = "socket";
+        serviceConfig.StandardOutput = "journal";
         serviceConfig.SyslogIdentifier = "GUEST-${name}";
         serviceConfig.ExecStart = "${pkgs.coreutils}/bin/cat";
       };
