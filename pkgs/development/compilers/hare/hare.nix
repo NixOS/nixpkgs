@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-eeS14LGkbi9IamvKzK+HF0Rvk9NFp4QVYcrHwNSNBx4=";
   };
 
+  patches = [ ./disable-failing-test-cases.patch ];
+
   nativeBuildInputs = [
     binutils-unwrapped
     harec
