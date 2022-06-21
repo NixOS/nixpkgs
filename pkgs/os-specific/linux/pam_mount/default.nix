@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, util-linux }:
+{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, libtool, pam, libHX, libxml2, pcre, perl, openssl, cryptsetup, util-linux, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "pam_mount";
@@ -42,5 +42,9 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2 gpl3 lgpl21 lgpl3 ];
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
+  };
+
+  passthru.tests = {
+    cryptHomeLuks = nixosTests.crypthomeluks;
   };
 }
