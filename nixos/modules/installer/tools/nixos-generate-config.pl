@@ -89,7 +89,7 @@ my ($status, @systemLines) = runCommand("nix-instantiate --impure --eval --expr 
 if ($status != 0 || join("", @systemLines) =~ /error/) {
     die "Failed to retrieve current system type from nix.\n";
 }
-my $system = substr(@systemLines[0], 0, -1);
+chomp(my $system = @systemLines[0]);
 push @attrs, "nixpkgs.hostPlatform = lib.mkDefault $system;";
 
 
