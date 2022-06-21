@@ -350,6 +350,8 @@ with pkgs;
 
   colorz = callPackage ../tools/misc/colorz { };
 
+  colorpanes = callPackage ../tools/misc/colorpanes { };
+
   colorpicker = callPackage ../tools/misc/colorpicker { };
 
   comedilib = callPackage ../development/libraries/comedilib {  };
@@ -1233,6 +1235,8 @@ with pkgs;
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
+  tfplugindocs = callPackage ../development/tools/tfplugindocs { };
+
   thumbs = callPackage ../tools/misc/thumbs { };
 
   tnat64 = callPackage ../tools/networking/tnat64 { };
@@ -1244,6 +1248,12 @@ with pkgs;
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy-bin = callPackage ../tools/cd-dvd/ventoy-bin { };
+  ventoy-bin-full = ventoy-bin.override {
+    withCryptsetup = true;
+    withXfs = true;
+    withExt4 = true;
+    withNtfs = true;
+  };
 
   voms = callPackage ../tools/networking/voms { };
 
@@ -2476,6 +2486,8 @@ with pkgs;
   git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
 
   gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
+
+  gosca = callPackage ../development/tools/gosca { };
 
   gosh = callPackage ../tools/security/gosh { };
 
@@ -5214,13 +5226,17 @@ with pkgs;
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
 
-  dnscontrol = callPackage ../applications/networking/dnscontrol { };
+  dnscontrol = callPackage ../applications/networking/dnscontrol {
+    buildGoModule = buildGo118Module;
+  };
 
   dnsenum = callPackage ../tools/security/dnsenum { };
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
   dnsmon-go = callPackage ../tools/networking/dnsmon-go { };
+
+  dnsmonster = callPackage ../tools/networking/dnsmonster { };
 
   dnspeep = callPackage ../tools/security/dnspeep { };
 
@@ -6747,6 +6763,8 @@ with pkgs;
 
   grpcurl = callPackage ../tools/networking/grpcurl { };
 
+  grpc-gateway = callPackage ../development/tools/grpc-gateway { };
+
   grpcui = callPackage ../tools/networking/grpcui { };
 
   grpc-tools = callPackage ../development/tools/misc/grpc-tools { };
@@ -7123,6 +7141,8 @@ with pkgs;
   bc-decaf = callPackage ../development/libraries/bc-decaf { };
 
   deco = callPackage ../applications/misc/deco { };
+
+  decoder = callPackage ../tools/security/decoder { };
 
   icoutils = callPackage ../tools/graphics/icoutils { };
 
@@ -8727,13 +8747,9 @@ with pkgs;
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
   nomad_1_2 = callPackage ../applications/networking/cluster/nomad/1.2.nix {
     buildGoModule = buildGo117Module;
-    inherit (linuxPackages) nvidia_x11;
-    nvidiaGpuSupport = config.cudaSupport or false;
   };
   nomad_1_3 = callPackage ../applications/networking/cluster/nomad/1.3.nix {
     buildGoModule = buildGo117Module;
-    inherit (linuxPackages) nvidia_x11;
-    nvidiaGpuSupport = config.cudaSupport or false;
   };
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
@@ -21003,7 +21019,7 @@ with pkgs;
 
   tinyxml-2 = callPackage ../development/libraries/tinyxml-2 { };
 
-  tiscamera = callPackage ../os-specific/linux/tiscamera { stdenv = gcc10StdenvCompat; };
+  tiscamera = callPackage ../os-specific/linux/tiscamera { };
 
   tivodecode = callPackage ../applications/video/tivodecode { };
 
@@ -22784,6 +22800,7 @@ with pkgs;
   };
 
   tt-rss = callPackage ../servers/tt-rss { };
+  tt-rss-plugin-feediron = callPackage ../servers/tt-rss/plugin-feediron { };
   tt-rss-plugin-ff-instagram = callPackage ../servers/tt-rss/plugin-ff-instagram { };
   tt-rss-plugin-auth-ldap = callPackage ../servers/tt-rss/plugin-auth-ldap { };
   tt-rss-theme-feedly = callPackage ../servers/tt-rss/theme-feedly { };
@@ -25751,8 +25768,6 @@ with pkgs;
   claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (xorg) libSM;
   };
-
-  clickshare-csc1 = callPackage ../applications/video/clickshare-csc1 { };
 
   cligh = python3Packages.callPackage ../development/tools/github/cligh {};
 

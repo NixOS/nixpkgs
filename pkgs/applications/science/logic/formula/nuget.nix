@@ -1,7 +1,7 @@
 { fetchNuGet }: [
   (fetchNuGet { pname = "Antlr4.Runtime.Standard"; version = "4.7.2"; sha256 = "1pmrpsgqjfj0nzr1zqzk1m2fm0ynd4nklwq3dhvww08yjg5s0586"; })
   (fetchNuGet { pname = "Microsoft.AspNetCore.App.Ref"; version = "5.0.0"; sha256 = "0d7sjr89zwq0wxirf8la05hfalv9nhvlczg1c7a508k8aw79jvfg"; })
-  (fetchNuGet { pname = "Microsoft.NETCore.App.Host.linux-x64"; version = "5.0.16"; sha256 = "19wv518vwn15a61qb1z9zmrg8mbf7pzw1c3n23wn22h4ssrhmxjb"; })
+  (fetchNuGet { pname = "Microsoft.NETCore.App.Host.linux-x64"; version = "5.0.17"; sha256 = "1lc2jhr4ikffi5ylyf8f6ya6k0hdj0wp1l0017grrwd4m5ajj4vv"; })
   (fetchNuGet { pname = "Microsoft.NETCore.App.Ref"; version = "5.0.0"; sha256 = "1p62khf9zk23lh91lvz7plv3g1nzmm3b5szqrcm6mb8w3sjk03wi"; })
   (fetchNuGet { pname = "Microsoft.NETCore.Platforms"; version = "1.1.0"; sha256 = "08vh1r12g6ykjygq5d3vq09zylgb84l63k49jc4v8faw9g93iqqm"; })
   (fetchNuGet { pname = "Microsoft.NETCore.Targets"; version = "1.1.0"; sha256 = "193xwf33fbm0ni3idxzbr5fdq3i2dlfgihsac9jj7whj0gd902nh"; })

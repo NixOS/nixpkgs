@@ -80,6 +80,11 @@ stdenv.mkDerivation rec {
                 potential close to the membrane), and where cell membrane properties are complex,
                 involving many ion-specific channels, ion accumulation, and second messengers";
 
+    sourceProvenance = with sourceTypes; [
+      fromSource
+    ] ++ lib.optionals (python != null) [
+      binaryNativeCode  # "geometry3d" bundled libraries
+    ];
     license     = licenses.bsd3;
     homepage    = "http://www.neuron.yale.edu/neuron";
     maintainers = [ maintainers.adev ];
