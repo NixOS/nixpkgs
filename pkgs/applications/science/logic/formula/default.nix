@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildDotnetModule, dotnetCorePackages }:
+{ lib, stdenv, fetchFromGitHub, buildDotnetModule, dotnetCorePackages, unstableGitUpdater }:
 
 buildDotnetModule rec {
   pname = "formula-dotnet";
@@ -21,6 +21,8 @@ buildDotnetModule rec {
       --add-flags "$out/lib/formula-dotnet/CommandLine.dll" \
       --prefix DYLD_LIBRARY_PATH : $out/lib/formula-dotnet/runtimes/macos/native
   '';
+
+  passthru.updateScript = unstableGitUpdater { url = meta.homepage; };
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
