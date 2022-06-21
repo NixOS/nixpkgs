@@ -37,7 +37,7 @@
     url = "https://github.com/curl/curl.git";
     tag = "curl-7_80_0";
     rev = "9e560d11aad028de74addc0d1edfefa5667884f4";
-    hash = "sha256-BW+qr62R+wQ8N88yaR342SdVCA6kee0MJLInlvNmkME=";
+    hash = "sha256-JTgazRsPm4F8RIs38wPq/lC/xhkdzMFuYb65WE94u3Q=";
   };
   czmq = {
     url = "https://github.com/zeromq/czmq.git";
@@ -77,7 +77,7 @@
   harfbuzz = {
     url = "https://github.com/harfbuzz/harfbuzz.git";
     tag = "3.0.0";
-    hash = "sha256-vW9OSgjRc0pd0CVwab3+9fiCw/CXfqjaZ3//Sucxceo=";
+    hash = "sha256-aLz/wzwZMF5fW5kPxNsIz76FNFbwI1hK4sOJQJQeyTM=";
   };
   kobo-usbms = {
     url = "https://github.com/koreader/KoboUSBMS.git";
@@ -178,7 +178,7 @@
     url = "https://github.com/openssl/openssl.git";
     tag = "OpenSSL_1_1_1l";
     rev = "fb047ebc87b18bdc4cf9ddee9ee1f5ed93e56aff";
-    hash = "sha256-ghIx/XDFaDojMxT8CzEqOzrAeA7d0GL6ONh7IouWyo4=";
+    hash = "sha256-kqw27bTZP0WIFaCxDSxT/WTvP7qw2PQGcnaydVRKFro=";
   };
   popen-noshell = {
     url = "https://github.com/famzah/popen-noshell.git";
@@ -214,7 +214,7 @@
     url = "https://github.com/facebook/zstd.git";
     tag = "v1.5.0";
     rev = "a488ba114ec17ea1054b9057c26a046fc122b3b6";
-    hash = "sha256-VMmOQLWN342TWQboBXCPGMBcs3HY7fvc4FiL0HYTIcM=";
+    hash = "sha256-FpK/zI6FAbdiYyWMAQALGQ3rkMkNWHNo0BmsarcaG5w=";
   };
   zsync2 = {
     url = "https://github.com/NiLuJe/zsync2.git";
