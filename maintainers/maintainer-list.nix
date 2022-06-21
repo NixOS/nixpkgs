@@ -704,7 +704,6 @@
     github = "a-m-joseph";
     githubId = 54836058;
     keys = [{
-      longkeyid = "rsa3072/0xE70247B64C13EEBE";
       fingerprint = "AD25 6548 09B0 F2A5 D246  1AFF E702 47B6 4C13 EEBE";
     }];
   };
