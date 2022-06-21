@@ -203,7 +203,7 @@ in stdenv.mkDerivation {
     cp platform/debian/koreader.1 $out/share/man/man1
 
     mkdir -p $out/bin
-    cp source/platform/debian/koreader.sh $out/bin/koreader
+    cp platform/debian/koreader.sh $out/bin/koreader
 
     mkdir -p $out/lib
     cp -rL koreader-emulator-$($(CC) -dumpmachine)/koreader $out/lib/koreader
