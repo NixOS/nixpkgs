@@ -2487,6 +2487,8 @@ with pkgs;
 
   gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
 
+  gosca = callPackage ../development/tools/gosca { };
+
   gosh = callPackage ../tools/security/gosh { };
 
   gospider = callPackage ../tools/security/gospider { };
@@ -5242,13 +5244,17 @@ with pkgs;
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
 
-  dnscontrol = callPackage ../applications/networking/dnscontrol { };
+  dnscontrol = callPackage ../applications/networking/dnscontrol {
+    buildGoModule = buildGo118Module;
+  };
 
   dnsenum = callPackage ../tools/security/dnsenum { };
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
   dnsmon-go = callPackage ../tools/networking/dnsmon-go { };
+
+  dnsmonster = callPackage ../tools/networking/dnsmonster { };
 
   dnspeep = callPackage ../tools/security/dnspeep { };
 
@@ -8759,13 +8765,9 @@ with pkgs;
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
   nomad_1_2 = callPackage ../applications/networking/cluster/nomad/1.2.nix {
     buildGoModule = buildGo117Module;
-    inherit (linuxPackages) nvidia_x11;
-    nvidiaGpuSupport = config.cudaSupport or false;
   };
   nomad_1_3 = callPackage ../applications/networking/cluster/nomad/1.3.nix {
     buildGoModule = buildGo117Module;
-    inherit (linuxPackages) nvidia_x11;
-    nvidiaGpuSupport = config.cudaSupport or false;
   };
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
