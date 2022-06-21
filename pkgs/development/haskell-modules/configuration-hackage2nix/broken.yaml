@@ -4225,7 +4225,6 @@ broken-packages:
   - readme-lhs
   - readshp
   - really-simple-xml-parser
-  - reanimate-svg
   - reasonable-lens
   - reason-export
   - record
