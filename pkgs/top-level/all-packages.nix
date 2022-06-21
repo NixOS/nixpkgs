@@ -4155,6 +4155,8 @@ with pkgs;
 
   ossutil = callPackage ../tools/admin/ossutil {};
 
+  osv-detector = callPackage ../tools/security/osv-detector {};
+
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
