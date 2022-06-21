@@ -181,20 +181,20 @@ rec {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
-    version = "2.7.1.201709201439";
+    version = "2.7.2.202006062100";
 
     srcFeature = fetchurl {
-      url = "http://andrei.gmxhome.de/eclipse/features/AnyEditTools_${version}.jar";
-      sha256 = "1wqzl7wq85m9gil8rnvly45ps0a2m0svw613pg6djs5i7amhnayh";
+      url = "https://github.com/iloveeclipse/plugins/blob/latest/features/AnyEditTools_${version}.jar";
+      sha256 = "0dwwwvz8by10f5gnws1ahmg02g6v4xbaqcwc0cydvv1h52cyb40g";
     };
 
     srcPlugin = fetchurl {
-      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.7.1/de.loskutov.anyedit.AnyEditTools_${version}.jar";
-      sha256 = "03iyb6j2srq74iigmg7dk098c2svyv0ygdfql5jqr44a32n07k8q";
+      url = "https://github.com/iloveeclipse/plugins/blob/latest/plugins/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      sha256 = "1ip8dk92ka7bczw1bkbs3zkclmwr28ds5q1wrzh525wb70x8v6fi";
     };
 
     meta = with lib; {
-      homepage = "http://andrei.gmxhome.de/anyedit/";
+      homepage = "https://github.com/iloveeclipse/plugins";
       description = "Adds new tools to the context menu of text-based editors";
       license = licenses.epl10;
       platforms = platforms.all;
