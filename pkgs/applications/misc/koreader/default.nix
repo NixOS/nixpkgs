@@ -185,6 +185,9 @@ in stdenv.mkDerivation {
   dontUseCmakeConfigure = true;
   dontUseCmakeBuildDir = true;
 
+  # nativeBuildInputs=[cmake] enables this; we must re-disable it
+  enableParallelBuilding = false;
+
   makeFlags = [
     "PARALLEL_JOBS=$NIX_BUILD_CORES"
   ];
