@@ -60,6 +60,7 @@ luaevent,,,,,,
 luaexpat,,,,1.4.1-1,,arobyn flosse
 luaffi,,,http://luarocks.org/dev,,,
 luafilesystem,,,,1.7.0-2,,flosse
+luajson,,,,,,
 lualogging,,,,,,
 luaossl,,,,,lua5_1,
 luaposix,,,,34.1.1-1,,vyp lblasc
