@@ -16,6 +16,7 @@
 , perl
 , which
 , python27
+, python3
 , glib
 , gnutar
 , gtk3-x11
@@ -88,6 +89,17 @@ in stdenv.mkDerivation {
     substituteInPlace \
       base/thirdparty/harfbuzz/CMakeLists.txt \
       --replace BINARY_DIR}/lib BINARY_DIR}/lib/
+
+    for A in \
+      base/thirdparty/glib/build/git_checkout/glib/gobject/glib-mkenums.in \
+      base/thirdparty/glib/build/git_checkout/glib/glib/gtester-report.in \
+      base/thirdparty/glib/build/git_checkout/glib/gobject/tests/taptestrunner.py \
+      base/thirdparty/glib/build/git_checkout/glib/gio/gio-querymodules-wrapper.py \
+      base/thirdparty/glib/build/git_checkout/glib/gio/tests/gengiotypefuncs.py \
+      base/thirdparty/glib/build/git_checkout/glib/gio/gdbus-2.0/codegen/gdbus-codegen.in \
+      base/thirdparty/glib/build/git_checkout/glib/gobject/glib-mkenums.in \
+      base/thirdparty/glib/build/git_checkout/glib/gobject/glib-genmarshal.in \
+      ; do substituteInPlace $A --replace /usr/bin/env ${coreutils}/bin/env; done
     '';
 
   patches = [
@@ -157,6 +169,7 @@ in stdenv.mkDerivation {
     coreutils
     luarocks
     python27
+    python3
   ];
 
   buildInputs = [
