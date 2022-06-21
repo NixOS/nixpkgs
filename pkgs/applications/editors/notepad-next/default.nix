@@ -1,30 +1,31 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, libsForQt5, stdenv }:
+{ mkDerivation, lib, fetchFromGitHub, qmake, qttools, qtx11extras, stdenv }:
 
 mkDerivation rec {
   pname = "notepad-next";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "dail8859";
     repo = "NotepadNext";
     rev = "v${version}";
-    sha256 = "sha256-J7Ngt6YtAAZsza2lN0d1lX3T8gNJHp60sCwwaLMGBHQ=";
+    sha256 = "sha256-LyUV85wW6FGlkV0qSIfkLMHpXXj1qvRnGZuYy8ASwZ8=";
     # External dependencies - https://github.com/dail8859/NotepadNext/issues/135
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ qmake libsForQt5.qt5.qttools ];
-  qmakeFlags = [ "src/NotepadNext.pro" ];
+  nativeBuildInputs = [ qmake qttools ];
+  buildInputs = [ qtx11extras ];
 
-  # References
-  #  https://github.com/dail8859/NotepadNext/blob/master/doc/Building.md
-  #  https://github.com/dail8859/NotepadNext/pull/124
+  qmakeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "src/NotepadNext.pro"
+  ];
+
   postPatch = ''
-    substituteInPlace ./src/NotepadNext/NotepadNext.pro --replace /usr $out
+    substituteInPlace src/i18n.pri \
+      --replace 'EXTRA_TRANSLATIONS = \' "" \
+      --replace '$$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm' ""
   '';
-
-  # Upstream suggestion: https://github.com/dail8859/NotepadNext/issues/135
-  CXXFLAGS = "-std=gnu++1z";
 
   meta = with lib; {
     homepage = "https://github.com/dail8859/NotepadNext";
