@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       nixos = nixosTests.cassandra.extend {
         matrix.version.enable = false;
-        params.testPackage = finalAttrs.finalPackage;
+        _module.args.testPackage = finalAttrs.finalPackage;
       };
     };
 

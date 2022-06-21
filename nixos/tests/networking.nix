@@ -1,4 +1,4 @@
-{ config, lib, params, pkgs, networkd, testcase, implementation, ... }:
+{ config, lib, pkgs, networkd, testcase, implementation, ... }:
 
 with lib;
 

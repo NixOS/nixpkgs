@@ -534,21 +534,21 @@ However, some variations aren't simply parametric, but require specific configur
 This can be added in the `module` option:
 
 ```nix
-{ lib, params, ... }: {
-  matrix.backend.choice.smtp.module = { params, ... }: {
+{ lib, setup, ... }: {
+  matrix.backend.choice.smtp.module = { ... }: {
     defaults.services.foo.backend = "smtp";
     nodes.smtpserver = { … };
-    params.setup = "";
+    _module.args.setup = "";
   };
-  matrix.backend.choice.rest.module = { params, ... }: {
-    params.setup = ''
+  matrix.backend.choice.rest.module = { ... }: {
+    _module.args.setup = ''
       # extra setup for the rest backend
     '';
   };
 
   nodes = …;
   testScript = ''
-    ${params.setup}
+    ${setup}
     # …
   '';
 }

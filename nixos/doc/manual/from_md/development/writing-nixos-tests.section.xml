@@ -843,21 +843,21 @@ def foo_running():
       <literal>module</literal> option:
     </para>
     <programlisting language="bash">
-{ lib, params, ... }: {
-  matrix.backend.choice.smtp.module = { params, ... }: {
+{ lib, setup, ... }: {
+  matrix.backend.choice.smtp.module = { ... }: {
     defaults.services.foo.backend = &quot;smtp&quot;;
     nodes.smtpserver = { … };
-    params.setup = &quot;&quot;;
+    _module.args.setup = &quot;&quot;;
   };
-  matrix.backend.choice.rest.module = { params, ... }: {
-    params.setup = ''
+  matrix.backend.choice.rest.module = { ... }: {
+    _module.args.setup = ''
       # extra setup for the rest backend
     '';
   };
 
   nodes = …;
   testScript = ''
-    ${params.setup}
+    ${setup}
     # …
   '';
 }
