@@ -952,14 +952,23 @@ rec {
           # when the number of layers equals:
           #      maxLayers-1, maxLayers, and maxLayers+1, 0
           store_layers="$(
-            paths |
-              jq -sR '
-                rtrimstr("\n") | split("\n")
-                  | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
+            if [[ $availableLayers -eq 1 ]]; then
+              paths |
+                jq -sR '
+                  rtrimstr("\n") | split("\n")
+                  | (.[:0] | map([.])) + [ .[0:] ]
                   | map(select(length > 0))
-              ' \
-                --argjson maxLayers "$availableLayers"
+                '
+            else
+              paths |
+                jq -sR --argjson maxLayers $availableLayers '
+                  rtrimstr("\n") | split("\n")
+                  | (.[:$maxLayers-2] | map([.])) + [ .[$maxLayers-2:-1] ] + [ [.[-1]] ]
+                  | map(select(length > 0))
+                '
+            fi
           )"
+
 
           cat ${baseJson} | jq '
             . + {
