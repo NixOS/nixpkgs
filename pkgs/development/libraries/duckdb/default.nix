@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
   patches = [
     ./version.patch
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/duckdb/duckdb/pull/3927.patch";
+      name = "fix-tpce-test.patch";
+      url = "https://github.com/duckdb/duckdb/commit/82e13a4bb9f0683af6c52468af2fb903cce4286d.patch";
       sha256 = "sha256-m0Bs0DOJQtkadbKZKk88NHyBFJkjxXUsiWYciuRIJLU=";
     })
   ];
