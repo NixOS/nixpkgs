@@ -12003,6 +12003,12 @@
     githubId = 6022042;
     name = "Sam Parkinson";
   };
+  samhug = {
+    email = "s@m-h.ug";
+    github = "samhug";
+    githubId = 171470;
+    name = "Sam Hug";
+  };
   samlich = {
     email = "nixos@samli.ch";
     github = "samlich";
