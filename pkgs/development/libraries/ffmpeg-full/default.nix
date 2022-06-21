@@ -105,7 +105,8 @@
 , nvdec ? !stdenv.isDarwin && !stdenv.isAarch64 # NVIDIA NVDEC support
 , nvenc ? !stdenv.isDarwin && !stdenv.isAarch64 # NVIDIA NVENC support
 , openal ? null # OpenAL 1.1 capture support
-#, opencl ? null # OpenCL code
+, ocl-icd ? null # OpenCL ICD
+, opencl-headers ? null # OpenCL headers
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
 #, opencv ? null # Video filtering
 , openglExtlib ? false, libGL ? null, libGLU ? null # OpenGL rendering
@@ -166,7 +167,7 @@
  *
  * Not packaged:
  *   aacplus avisynth cdio-paranoia crystalhd libavc1394 libiec61883
- *   libnut libquvi nvenc opencl oss shine twolame
+ *   libnut libquvi nvenc oss shine twolame
  *   utvideo vo-aacenc vo-amrwbenc xvmc zvbi blackmagic-design-desktop-video
  *
  * Need fixes to support Darwin:
@@ -381,7 +382,7 @@ stdenv.mkDerivation rec {
     (enableFeature nvdec "nvdec")
     (enableFeature nvenc "nvenc")
     (enableFeature (openal != null) "openal")
-    #(enableFeature opencl "opencl")
+    (enableFeature (ocl-icd != null && opencl-headers != null) "opencl")
     (enableFeature (opencore-amr != null && version3Licensing) "libopencore-amrnb")
     #(enableFeature (opencv != null) "libopencv")
     (enableFeature openglExtlib "opengl")
@@ -435,7 +436,7 @@ stdenv.mkDerivation rec {
     bzip2 celt dav1d fontconfig freetype frei0r fribidi game-music-emu gnutls gsm
     libjack2 ladspaH lame libaom libass libbluray libbs2b libcaca libdc1394 libmodplug libmysofa
     libogg libopus librsvg libssh libtheora libvdpau libvorbis libvpx libwebp libX11
-    libxcb libXv libXext libxml2 xz openal openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
+    libxcb libXv libXext libxml2 xz openal ocl-icd opencl-headers openjpeg libpulseaudio rav1e svt-av1 rtmpdump opencore-amr
     samba SDL2 soxr speex srt vid-stab vo-amrwbenc x264 x265 xavs xvidcore
     zeromq4 zimg zlib openh264
   ] ++ optionals openglExtlib [ libGL libGLU ]
