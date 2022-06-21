@@ -25,7 +25,7 @@ buildDotnetModule rec {
   passthru.updateScript = unstableGitUpdater { url = meta.homepage; };
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = stdenv.isLinux && stdenv.isAarch64;
     description = "Formal Specifications for Verification and Synthesis";
     homepage = "https://github.com/VUISIS/formula-dotnet";
     license = licenses.mspl;
