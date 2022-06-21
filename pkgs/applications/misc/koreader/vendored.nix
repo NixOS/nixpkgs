@@ -194,9 +194,9 @@
     hash = "sha256-mJ9LrQ/l0SRmueg+IfGnS0NcNheGdOZ2Gl7KMFiK6is=";
   };
   tar = {
-    url = "https://git.savannah.gnu.org/git/tar.git";
-    tag = "release_1_32";
-    hash = "sha256-IidDRRTj3QgXXRTKnfz4bhfxGJEhm3q+D5PzV2QCYdM=";
+    url = "http://ftpmirror.gnu.org/tar/tar-1.34.tar.gz";
+    hash = "sha256-A9kIz1doz+a3rViMkhxu0hrKv7K3m3iNEzBFNQdkeu0=";
+    filename = "tar-1.34.tar.gz";
   };
   tesseract = {
     url = "https://github.com/tesseract-ocr/tesseract.git";
