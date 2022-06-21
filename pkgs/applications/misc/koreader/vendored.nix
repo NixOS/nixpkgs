@@ -31,6 +31,11 @@
     hash = "sha256-x30NoxAq7JwH9DZx5gYR6/+JqZbvFZSXzo5Z0HV4axI=";
     filename = "gettext-0.21.tar.gz";
   };
+  libffi = {
+    url = "https://sourceware.org/pub/libffi/libffi-3.3.tar.gz";
+    hash = "sha256-cvunkicD3fp6Ao1ROsFahcjVTI1n9V+lpIAohdxlIFY=";
+    filename = "libffi-3.3.tar.gz";
+  };
 
   # vendored git repos
   curl = {
