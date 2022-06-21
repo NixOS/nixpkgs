@@ -142,6 +142,7 @@ with lib.maintainers; {
       tomberek
     ];
     scope = "Maintain the Cosmopolitan LibC and related programs.";
+    shortName = "Cosmopolitan";
   };
 
   deshaw = {

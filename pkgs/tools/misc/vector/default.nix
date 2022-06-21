@@ -30,19 +30,19 @@
 
 let
   pname = "vector";
-  version = "0.22.1";
+  version = "0.22.2";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "timberio";
+    owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Or8YxzSqPzuRNgPDwyUxHKmXpbYA5+x7qcC03WWWuHc=";
+    sha256 = "sha256-5vfV58UvukD4CGAKUzew/se6wZw+JLSpDs8nwNihuWg=";
   };
 
-  cargoSha256 = "sha256-V+b2s2XTahfN97yzwI9u4/DwhkvloRwJJXCzjAcolTs=";
+  cargoSha256 = "sha256-FlWwUIau7QJsH3ax4y3yz+iBRP/KaEB/eHzUPTq0+tQ=";
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
