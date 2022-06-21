@@ -72,7 +72,7 @@ in stdenv.mkDerivation {
     mapAttrsToConcatStringSep "\n"
       (name: attrs: with attrs; ''
         mkdir -p $(dirname $sourceRoot/${dest})
-        ln -s ${fetched} $sourceRoot/${dest}
+        cp -ar ${fetched} $sourceRoot/${dest}
         chmod -R u+w $sourceRoot/${dest}
         '')
       vendored;
