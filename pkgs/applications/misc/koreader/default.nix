@@ -195,7 +195,7 @@ in stdenv.mkDerivation {
   # koreader does not have a separate `make install` target
   installPhase = ''
     mkdir $out
-    cp -L koreader-emulator-*/koreader/* $out
+    cp -rL koreader-emulator-*/koreader/* $out
     '' + fonts.installPhase;
 
   meta = with lib; {
