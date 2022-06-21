@@ -113,6 +113,9 @@ in stdenv.mkDerivation {
     # for merging, but at the moment it can't find luajson, and I
     # can't seem to get the build process to use the one from nixpkgs.
     ./patches/omit-lua-spore.patch
+
+    # had to disable sdcv; will re-enable soon
+    ./patches/disable-sdcv.patch
   ];
 
   postPatch =

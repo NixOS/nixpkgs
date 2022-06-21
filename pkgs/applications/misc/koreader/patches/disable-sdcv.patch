@@ -1,0 +1,33 @@
+diff --git a/Makefile b/Makefile
+index f8d8cefb..d884f77d 100644
+--- a/base/Makefile
++++ b/base/Makefile
+@@ -27,7 +27,6 @@ all: $(OUTPUT_DIR)/libs $(if $(ANDROID),,$(LUAJIT)) \
+ 		$(LUA_SPORE_ROCK) \
+ 		$(if $(ANDROID),$(LPEG_DYNLIB) $(LPEG_RE),) \
+ 		$(if $(WIN32),,$(ZMQ_LIB) $(CZMQ_LIB)) \
+-		$(if $(WIN32),,$(OUTPUT_DIR)/sdcv) \
+ 		$(if $(MACOS),$(OUTPUT_DIR)/koreader,) \
+ 		$(if $(MACOS),$(SDL2_LIB),) \
+ 		$(if $(or $(CERVANTES),$(KINDLE),$(KOBO)),$(OUTPUT_DIR)/dropbear,) \
+@@ -42,7 +41,6 @@ all: $(OUTPUT_DIR)/libs $(if $(ANDROID),,$(LUAJIT)) \
+ 		$(if $(or $(CERVANTES),$(KINDLE),$(KOBO),$(POCKETBOOK),$(REMARKABLE),$(SONY_PRSTUX)),$(OUTPUT_DIR)/zsync2,)
+ ifeq ($(DO_STRIP),1)
+ 	STRIP_FILES="\
+-		$(if $(WIN32),,$(OUTPUT_DIR)/sdcv) \
+ 		$(if $(or $(ANDROID),$(DARWIN),$(WIN32)),,$(OUTPUT_DIR)/tar) \
+ 		$(if $(or $(CERVANTES),$(KINDLE),$(KOBO)),$(OUTPUT_DIR)/dropbear,) \
+ 		$(if $(or $(CERVANTES),$(KINDLE),$(KOBO)),$(OUTPUT_DIR)/sftp-server,) \
+diff --git a/Makefile.defs b/Makefile.defs
+index 26febdef..d9b8922a 100644
+--- a/base/Makefile.defs
++++ b/base/Makefile.defs
+@@ -968,7 +968,7 @@ CMAKE_THIRDPARTY_LIBS := $(CMAKE_THIRDPARTY_LIBS),libk2pdfopt,tesseract,leptonic
+ CMAKE_THIRDPARTY_LIBS := $(CMAKE_THIRDPARTY_LIBS),lj-wpaclient
+ CMAKE_THIRDPARTY_LIBS := $(CMAKE_THIRDPARTY_LIBS),lua-htmlparser,lua-rapidjson,lua-Spore,luasec,luasocket,libffi,glib,lodepng,minizip
+ CMAKE_THIRDPARTY_LIBS := $(CMAKE_THIRDPARTY_LIBS),djvulibre,mupdf,freetype2,harfbuzz,giflib,libpng,zlib
+-CMAKE_THIRDPARTY_LIBS := $(CMAKE_THIRDPARTY_LIBS),tar,sdcv,libiconv,gettext,libjpeg-turbo,popen-noshell,sqlite
++CMAKE_THIRDPARTY_LIBS := $(CMAKE_THIRDPARTY_LIBS),tar,libiconv,gettext,libjpeg-turbo,popen-noshell,sqlite
+ CMAKE_THIRDPARTY_LIBS := $(CMAKE_THIRDPARTY_LIBS),openssl,dropbear,openssh
+ CMAKE_THIRDPARTY_LIBS := $(CMAKE_THIRDPARTY_LIBS),curl,zsync2
+ CMAKE_THIRDPARTY_LIBS := $(CMAKE_THIRDPARTY_LIBS),fbink
