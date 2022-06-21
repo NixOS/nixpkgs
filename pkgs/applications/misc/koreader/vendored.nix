@@ -36,189 +36,186 @@
   curl = {
     url = "https://github.com/curl/curl.git";
     tag = "curl-7_80_0";
-    rev = "9e560d11aad028de74addc0d1edfefa5667884f4";
-    hash = "sha256-JTgazRsPm4F8RIs38wPq/lC/xhkdzMFuYb65WE94u3Q=";
+    hash = "sha256-kzozc0Io+1f4UMivSV2IhzJDQXmad4wNhXN/Y2Lsg3Q=";
   };
   czmq = {
     url = "https://github.com/zeromq/czmq.git";
     rev = "2a0ddbc4b2dde623220d7f4980ddd60e910cfa78";
-    hash = "sha256-njdKRMc9a7gL1hwG6cs/bZqCqtc59NRAud4UKedRvRo=";
+    hash = "sha256-p4Cl2PLVgRQ0S4qr3VClJXjvAd2LUBU9oRUvOCfVnyw=";
   };
   djvulibre = {
     url = "https://gitlab.com/koreader/djvulibre.git";
     tag = "release.3.5.28";
-    hash = "sha256-zN6YfF4yFS+HhJMgnDsz+KYlCUZVinq16TUwHT+TSeE=";
+    hash = "sha256-J/FuNKAgBtpQHPywNVdQ1d44LRMUQJw3pK8+Ml2Ai+0=";
   };
   fbink = {
     url = "https://github.com/NiLuJe/FBInk.git";
     rev = "b7a81463502c8a445e85edd8e1903dca0ede7f5f";
-    hash = "sha256-nEDlmY8w/jgJvM+9uOYvbhbTlFKBQ7iWTSAA8U7nt2M=";
+    hash = "sha256-eBb3Gm6QdkEKR5b+2NSsS7IXSM37yA1CRv4U0GpeI2c=";
   };
   freetype2 = {
     url = "https://gitlab.com/koreader/freetype2.git";
     tag = "VER-2-11-1";
-    hash = "sha256-fmwVVMBJeuSJJHhNi3kA5F2Hn2GEdjIoA+ftv0k4ta0=";
+    hash = "sha256-UEn5Renp7EK9hTNRLiV7sec70zvY8mrLRwJoZ6aUJEE=";
   };
   fribidi = {
     url = "https://github.com/fribidi/fribidi.git";
     tag = "v1.0.11";
-    hash = "sha256-XxeKQxERM0cSmjTi0GkeouVumW8tvgEp3eS9YkcINus=";
+    hash = "sha256-2y4oN02X88JG2h7366owwcYVkMJJFntgMDcNNmYYTGg=";
   };
   giflib = {
     url = "https://gitlab.com/koreader/giflib.git";
     tag = "5.1.4";
-    hash = "sha256-gj6kzvhdReEkQ4sOQ/QCf+q/NX4Agyq3oRG3OEqU9Yg=";
+    hash = "sha256-znbY4tliXHXVLBd8sTKrbglOdCUb7xhcCQsDDWcQfhw=";
   };
   glib = {
     url = "https://github.com/GNOME/glib.git";
     tag = "2.58.3";
-    hash = "sha256-hP7bk2YnWGIWaPRxpiNs3iPsapBejtodfDzjJe5Lu5M=";
+    hash = "sha256-KmJXCJ6h2QhPyK1axk+Y9+yJzO0wnCczcogopxGShJc=";
   };
   harfbuzz = {
     url = "https://github.com/harfbuzz/harfbuzz.git";
     tag = "3.0.0";
-    hash = "sha256-aLz/wzwZMF5fW5kPxNsIz76FNFbwI1hK4sOJQJQeyTM=";
+    hash = "sha256-yRRr4RcnbwoZ1Hn3+zbbocKFyBSLYx/exaAHNGsPINA=";
   };
   kobo-usbms = {
     url = "https://github.com/koreader/KoboUSBMS.git";
     tag = "v1.3.1";
-    hash = "sha256-klwrjW6ESbgcytGEF3RwQJbJMXejCw6dtEWO39hm/uA=";
+    hash = "sha256-u2q4+yIL6fCnhk3jTyxc+Ihcjvt8v7n69E5CiGF4s5Q=";
   };
   leptonica = {
     url = "https://github.com/DanBloomberg/leptonica.git";
     tag = "1.74.1";
-    hash = "sha256-ZOXQT5G2TuCcEubI6Gxj4Eur9GwRx5mMVYwLGiuuypA=";
+    hash = "sha256-SDXKam768xvZZvTbXe3sssvZyeLEEiY97Vrzx8hoc6g=";
   };
   libjpeg-turbo = {
     url = "https://github.com/libjpeg-turbo/libjpeg-turbo.git";
     tag = "2.1.2";
-    hash = "sha256-EjF3SHtMUjnlGpMbc15Q2VZGwUpIDUk/D9XZRrz8i88=";
+    hash = "sha256-npiO8l+9uXdFvgThgMKij6K3O4RPuQt2dXcFbA1AszM=";
   };
   libk2pdfopt = {
     url = "https://github.com/koreader/libk2pdfopt.git";
     rev = "24b7e6bc136667c98feaa1b519a99dd880b05ebe";
-    hash = "sha256-Yf09fkMBtncvbN7ZJRoTTN/H+n+W2+mNAk0qfe1Bjws=";
+    hash = "sha256-hwyucSELK8xOh0s6qj85FVmbn7IHEb/g/48qiLqKElY=";
   };
   libpng = {
     url = "https://github.com/glennrp/libpng.git";
     tag = "v1.6.37";
-    hash = "sha256-Y4kqabOlWolGSjRnNdrWAp2ZYXeJM5IPL2zeYgjgzHk=";
+    hash = "sha256-O/NsIIhjvJpp1Nl+Pj1GLJkR+nBqu+ymY5vcy/IU0GE=";
   };
   libunibreak = {
     url = "https://github.com/adah1972/libunibreak.git";
     tag = "libunibreak_4_3";
-    hash = "sha256-SO8pq9HORjWMwnSCeawz4CgTtIidEwWCXlxXwK761vM=";
+    hash = "sha256-nd4i0JYVRPIpx2lCBjUEHcBEcpFno/ZtczoyH3SP46U=";
   };
   libzmq = {
     url = "https://github.com/zeromq/libzmq";
     rev = "883e95b22e0bffffa72312ea1fec76199afbe458";
-    hash = "sha256-DIoduffXly4En235SWXn7efKwOzOmijZH4s1G1VMZNw=";
+    hash = "sha256-R76EREtHsqcoKxKrgT8gfEf9pIWdLTBXvF9cDvjEf3E=";
   };
   lj-wpaclient = {
     url = "https://github.com/koreader/lj-wpaclient.git";
     rev = "4f95110298b89d80e762215331159657ae36b4ef";
-    hash = "sha256-8W2FAmy3OON6qTJ+kHeCTWpvGrk79rvXjDH+MREBl0Q=";
+    hash = "sha256-hAd1Bqyg7S7ms50JO4m5RKzW41UHSBiYX/NJ6V4x9iY=";
   };
   lodepng = {
     url = "https://github.com/lvandeve/lodepng.git";
     rev = "5601b8272a6850b7c5d693dd0c0e16da50be8d8d";
-    hash = "sha256-5Rv8Oa10LmlbFKrat9grWk4cwRVmdj8Dt6IrKnrjxpI=";
+    hash = "sha256-dD8QoyOoGov6VENFNTXWRmen4nYYleoZ8+4TpICNSpo=";
   };
   lua-htmlparser = {
     url = "https://github.com/msva/lua-htmlparser";
     rev = "4f6437ebd123c3e552a595fc818fdd952888fff2";
-    hash = "sha256-OoJQRT08191w6w7yiqd6vALGn2aac6d5U2WkmZdM730=";
+    hash = "sha256-FfAwUlH1/LjNIGNYP8TaToqjgfcY0knoXSRKYMDuggQ=";
   };
   luajit = {
     url = "https://github.com/LuaJIT/LuaJIT";
     rev = "20aea93915a0d31138cb00e17cc15eb849e3b806";
-    hash = "sha256-ijUHj6aBi2gOfnVe4MqBVUrv+qURxrYGgoeNJvRNvT4=";
+    hash = "sha256-eV/HxLV46xXJgNEF1KKQcyeWdk2LtxUwKRBnNWzd4Cw=";
   };
   lua-rapidjson = {
     url = "https://github.com/xpol/lua-rapidjson";
     rev = "242b40c8eaceb0cc43bcab88309736461cac1234";
-    hash = "sha256-eRErWXxU2r7Clvy+DS2huwcGf9Y+7BfVFy/djJjpOVo=";
+    hash = "sha256-y/czEVPtCt4uN1n49Qi7BrgZmkG+SDXlM5D2GvvO2qg=";
   };
   luasec = {
     url = "https://github.com/brunoos/luasec";
     tag = "v1.1.0";
-    hash = "sha256-qduxVKL/jaacspAuiEkLFlcJ42gp/DLuLZ7I24ObLTY=";
+    hash = "sha256-Op5huv75Rw1hqqtEjtadKWffrWv9Lov/gxcUXWOA7BM=";
   };
   luasocket = {
     url = "https://github.com/diegonehab/luasocket";
     rev = "5b18e475f38fcf28429b1cc4b17baee3b9793a62";
-    hash = "sha256-oU1yoYGgiVLGTL/5ObOBGEHIxrxyrdEkhSAVqVj1z5w=";
+    hash = "sha256-yu+AV0u8qrrvlNRefizhUJZsqgR9L64urxu0UAR+cAA=";
   };
   lua-Spore = {
     url = "https://framagit.org/fperrad/lua-Spore";
     tag = "0.3.3";
-    hash = "sha256-lk9xThweQvqp3KiW4932osh+UpuG15F/gkrMsxikDUU=";
+    hash = "sha256-wb7ykJsndoq0DazHpfXieUcBBptowYqD/eTTN/EK/6g=";
   };
   minizip = {
     url = "https://github.com/nmoinvaz/minizip";
     rev = "0b46a2b4ca317b80bc53594688883f7188ac4d08";
-    hash = "sha256-X99bVbX4b04DrTgikhDVp2vjJPc6WFhvcf9245Ce0IA=";
+    hash = "sha256-P/3MMMGYDqD9NmkYvw/thKpUNa3wNOSlBBjANHSonAg=";
   };
   mupdf = {
     url = "https://github.com/ArtifexSoftware/mupdf.git";
     tag = "1.13.0";
-    hash = "sha256-EmlIj5ht9sauspug7LlcDtxvBtT69d8szW5NCohVz3c=";
+    hash = "sha256-pQejRon9fO9A1mhz3oLjBr1j4HveDLcQIWjR1/Rpy5Q=";
   };
   nanosvg = {
     url = "https://github.com/memononen/nanosvg.git";
     rev = "3cdd4a9d788695699799b37d492e45e2c3625790";
-    hash = "sha256-Y5oRLkuGZw53ed6KJ0od+R0ay1BvG8e0GdVy1oU7qFM=";
+    hash = "sha256-8/WT9t5AJCcat3ZYb9VJZwz0Uisb8TqNV2sU2YV6vBE=";
   };
   openssh = {
     url = "https://github.com/openssh/openssh-portable.git";
     tag = "V_8_6_P1";
-    hash = "sha256-7GeprBVc1fodsjY6BGn3YE8Qd/N20/dznlo+G5t7kFc=";
+    hash = "sha256-yjIpSbe5pt9sEV2MZYGztxejg/aBFfKO8ieRvoLN2KA=";
   };
   openssl = {
     url = "https://github.com/openssl/openssl.git";
     tag = "OpenSSL_1_1_1l";
-    rev = "fb047ebc87b18bdc4cf9ddee9ee1f5ed93e56aff";
-    hash = "sha256-kqw27bTZP0WIFaCxDSxT/WTvP7qw2PQGcnaydVRKFro=";
+    hash = "sha256-NGk1K/cY3pciooYVTLX8l3eJz7KB2Ojvtds1HAP5mWY=";
   };
   popen-noshell = {
     url = "https://github.com/famzah/popen-noshell.git";
     rev = "e715396a4951ee91c40a98d2824a130f158268bb";
-    hash = "sha256-pOxrnT2S/yIPLa8ddQmOAs/yK625644WpohEDie9zlU=";
+    hash = "sha256-JeBZMsg6ZUGSnyZ4eds4w63gM/L73EsAnLaHOPpL6iM=";
   };
   sdcv = {
     url = "https://github.com/Dushistov/sdcv.git";
     rev = "d054adb37c635ececabc31b147c968a480d1891a";
-    hash = "sha256-lwAP9l3Vg3J9wiXt/hv5aBmkq2DlQT1GIGks3muGOfw=";
+    hash = "sha256-mJ9LrQ/l0SRmueg+IfGnS0NcNheGdOZ2Gl7KMFiK6is=";
   };
   tar = {
     url = "https://git.savannah.gnu.org/git/tar.git";
     tag = "release_1_32";
-    hash = "sha256-BB/UWRRh8azh9K9LO8lADth4zN+l9zRfsvlCDTCz620=";
+    hash = "sha256-IidDRRTj3QgXXRTKnfz4bhfxGJEhm3q+D5PzV2QCYdM=";
   };
   tesseract = {
     url = "https://github.com/tesseract-ocr/tesseract.git";
     rev = "60176fc5ae5e7f6bdef60c926a4b5ea03de2bfa7";
-    hash = "sha256-l1MNpnFpZ4oN5dzZzEpU3jVSKq9NuQA+iynE1ZyzsYk=";
+    hash = "sha256-FQvlrJ+Uy7+wtUxBuS5NdoToUwNRhYw2ju8Ya8MLyQw=";
   };
   turbo = {
     url = "https://github.com/kernelsauce/turbo";
     tag = "v2.1.3";
-    hash = "sha256-9JQblyePY7kx7KPoFM/A3TDVou+GPOgYjq6szLPN8YA=";
+    hash = "sha256-vBRkFdc5a0FIt15HBz3TnqMZ+GGsqjEefnfJEpuVTBs=";
   };
   utf8proc = {
     url = "https://github.com/JuliaStrings/utf8proc.git";
     tag = "v2.6.1";
-    hash = "sha256-umtOYRD7hzHyKqPbFwI9DkWOJap7ZEAq6jfVP4Jr6YA=";
+    hash = "sha256-h6MVgyNFM4t6Ay0m9gAKIE1HF9qlW9Xl0nr+maMyDP8=";
   };
   zstd = {
     url = "https://github.com/facebook/zstd.git";
     tag = "v1.5.0";
-    rev = "a488ba114ec17ea1054b9057c26a046fc122b3b6";
-    hash = "sha256-FpK/zI6FAbdiYyWMAQALGQ3rkMkNWHNo0BmsarcaG5w=";
+    hash = "sha256-R+Y10gd3GE17AJ5zIXGI4tuOdyCikdZXwbkMllAHjEU=";
   };
   zsync2 = {
     url = "https://github.com/NiLuJe/zsync2.git";
     rev = "e618d18f6a7cbf350cededa17ddfe8f76bdf0b5c";
-    hash = "sha256-/TDyP2aq7es+1WEEmzv0Fulijr/MWU4cvFZocbh55lY=";
+    hash = "sha256-S0vxCON1l6S+NWlnRPfm7R07DVkvkG+6QW5LNvXBlA8=";
   };
 }

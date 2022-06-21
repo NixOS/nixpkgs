@@ -42,7 +42,7 @@ let
         if isGit
         then fetchgit {
           inherit (attrs) url hash;
-          leaveDotGit = true;
+          #leaveDotGit = true;   # can't use this due to https://github.com/NixOS/nixpkgs/issues/8567
           rev = attrs.rev or "refs/tags/${attrs.tag}";
         }
         else fetchurl {
@@ -91,8 +91,18 @@ in stdenv.mkDerivation {
     '';
 
   patches = [
+
+    # we can't use leaveDotGit=true because the .git/ directory's
+    # packing is not deterministic (see
+    # https://github.com/NixOS/nixpkgs/issues/8567).  So instead we
+    # patch koreader to use the default branch of our clones.  Note
+    # that if upstream changes the commits, this patch will fail to
+    # apply (which we want), and we will notice that adjustment is
+    # needed.
+    ./patches/eliminate-commit-hashes.patch
+
     # koreader's build scripts silently delete uncommitted changes
-    ./patches/dont-obliterate-uncommitted-stuff.patch
+    #./patches/dont-obliterate-uncommitted-stuff.patch
 
     # koreader vendors lua, but does not vendor luarocks, so headaches
     # arise if the non-vendored luarocks is not based on exactly the
@@ -122,12 +132,13 @@ in stdenv.mkDerivation {
     # which koreader references by tag rather than by commit-hash --
     # unless we patch the commit-hash in koreader's cmake files.
     mapAttrsToConcatStringSep "\n"
-      (name: attrs: lib.optionalString (attrs?tag) ''
+      (name: attrs: lib.optionalString (attrs.isGit) ''
+        git -C ${attrs.dest} init
         git -C ${attrs.dest} config --local user.email "you@example.com"
         git -C ${attrs.dest} config --local user.name  "Your Name"
         git -C ${attrs.dest} add -A
         git -C ${attrs.dest} commit -m postPatch || true
-        git -C ${attrs.dest} tag -f ${attrs.tag}
+        git -C ${attrs.dest} tag -f ${attrs.tag or "nixpkgs-tag"}
         '')
       vendored;
 

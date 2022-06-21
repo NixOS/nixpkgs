@@ -1,0 +1,208 @@
+diff --git a/base/thirdparty/czmq/CMakeLists.txt b/base/thirdparty/czmq/CMakeLists.txt
+index d3d55231..83b360fd 100644
+--- a/base/thirdparty/czmq/CMakeLists.txt
++++ b/base/thirdparty/czmq/CMakeLists.txt
+@@ -41,7 +41,7 @@ set(PATCH_CMD2 "${KO_PATCH} ${CMAKE_CURRENT_SOURCE_DIR}/czmq_default_source_defi
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/zeromq/czmq.git
+-    2a0ddbc4b2dde623220d7f4980ddd60e910cfa78
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/fbink/CMakeLists.txt b/base/thirdparty/fbink/CMakeLists.txt
+index 6c9c7a1f..b46f89c3 100644
+--- a/base/thirdparty/fbink/CMakeLists.txt
++++ b/base/thirdparty/fbink/CMakeLists.txt
+@@ -67,7 +67,7 @@ endif()
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/NiLuJe/FBInk.git
+-    b7a81463502c8a445e85edd8e1903dca0ede7f5f
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/libk2pdfopt/CMakeLists.txt b/base/thirdparty/libk2pdfopt/CMakeLists.txt
+index d23ca6c8..aa432b5e 100644
+--- a/base/thirdparty/libk2pdfopt/CMakeLists.txt
++++ b/base/thirdparty/libk2pdfopt/CMakeLists.txt
+@@ -44,7 +44,7 @@ endif()
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/koreader/libk2pdfopt.git
+-    24b7e6bc136667c98feaa1b519a99dd880b05ebe
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/libzmq/CMakeLists.txt b/base/thirdparty/libzmq/CMakeLists.txt
+index 1188d7ae..484f8111 100644
+--- a/base/thirdparty/libzmq/CMakeLists.txt
++++ b/base/thirdparty/libzmq/CMakeLists.txt
+@@ -45,7 +45,7 @@ set(CLEAR_BUILD_DIR ${CMAKE_COMMAND} -E remove_directory ${BINARY_DIR} COMMAND $
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/zeromq/libzmq
+-    883e95b22e0bffffa72312ea1fec76199afbe458
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/lj-wpaclient/CMakeLists.txt b/base/thirdparty/lj-wpaclient/CMakeLists.txt
+index 91815751..0ddbd8c2 100644
+--- a/base/thirdparty/lj-wpaclient/CMakeLists.txt
++++ b/base/thirdparty/lj-wpaclient/CMakeLists.txt
+@@ -10,7 +10,7 @@ ep_get_source_dir(SOURCE_DIR)
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/koreader/lj-wpaclient.git
+-    4f95110298b89d80e762215331159657ae36b4ef
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/lodepng/CMakeLists.txt b/base/thirdparty/lodepng/CMakeLists.txt
+index f78c9706..717b4cf5 100644
+--- a/base/thirdparty/lodepng/CMakeLists.txt
++++ b/base/thirdparty/lodepng/CMakeLists.txt
+@@ -24,7 +24,7 @@ endif()
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/lvandeve/lodepng.git
+-    5601b8272a6850b7c5d693dd0c0e16da50be8d8d
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/lua-htmlparser/CMakeLists.txt b/base/thirdparty/lua-htmlparser/CMakeLists.txt
+index 762cadf9..6e41ea98 100644
+--- a/base/thirdparty/lua-htmlparser/CMakeLists.txt
++++ b/base/thirdparty/lua-htmlparser/CMakeLists.txt
+@@ -30,7 +30,7 @@ set(BUILD_CMD "${BUILD_CMD} LUA_INCDIR=\"${LUA_INCDIR}\" LUA_LIBDIR=\"${LUA_LIBD
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/msva/lua-htmlparser
+-    4f6437ebd123c3e552a595fc818fdd952888fff2
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/lua-rapidjson/CMakeLists.txt b/base/thirdparty/lua-rapidjson/CMakeLists.txt
+index 1ccbe754..7bf83c75 100644
+--- a/base/thirdparty/lua-rapidjson/CMakeLists.txt
++++ b/base/thirdparty/lua-rapidjson/CMakeLists.txt
+@@ -40,7 +40,7 @@ endif()
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/xpol/lua-rapidjson
+-    242b40c8eaceb0cc43bcab88309736461cac1234
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/luajit/CMakeLists.txt b/base/thirdparty/luajit/CMakeLists.txt
+index 0c6f519e..74b5c955 100644
+--- a/base/thirdparty/luajit/CMakeLists.txt
++++ b/base/thirdparty/luajit/CMakeLists.txt
+@@ -74,7 +74,7 @@ set(PATCH_CMD "${KO_PATCH} ${CMAKE_CURRENT_SOURCE_DIR}/koreader-luajit-makefile-
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/LuaJIT/LuaJIT
+-    20aea93915a0d31138cb00e17cc15eb849e3b806
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/luasocket/CMakeLists.txt b/base/thirdparty/luasocket/CMakeLists.txt
+index ee0526b7..0ef54b49 100644
+--- a/base/thirdparty/luasocket/CMakeLists.txt
++++ b/base/thirdparty/luasocket/CMakeLists.txt
+@@ -35,7 +35,7 @@ set(BUILD_CMD "${BUILD_CMD_STR} LUAINC=\"${LUAINC}\" -j${PARALLEL_JOBS} all")
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/diegonehab/luasocket
+-    5b18e475f38fcf28429b1cc4b17baee3b9793a62
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/minizip/CMakeLists.txt b/base/thirdparty/minizip/CMakeLists.txt
+index 0b73299f..f3e8f408 100644
+--- a/base/thirdparty/minizip/CMakeLists.txt
++++ b/base/thirdparty/minizip/CMakeLists.txt
+@@ -28,7 +28,7 @@ set(BUILD_CMD_STR -j${PARALLEL_JOBS} -C aes CC=${CC} LDFLAGS=${LDFLAGS} AR=${AR}
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/nmoinvaz/minizip
+-    0b46a2b4ca317b80bc53594688883f7188ac4d08
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/nanosvg/CMakeLists.txt b/base/thirdparty/nanosvg/CMakeLists.txt
+index ce80cafa..1d2e6461 100644
+--- a/base/thirdparty/nanosvg/CMakeLists.txt
++++ b/base/thirdparty/nanosvg/CMakeLists.txt
+@@ -10,7 +10,7 @@ ep_get_source_dir(SOURCE_DIR)
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/memononen/nanosvg.git
+-    3cdd4a9d788695699799b37d492e45e2c3625790
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/popen-noshell/CMakeLists.txt b/base/thirdparty/popen-noshell/CMakeLists.txt
+index e5051e4e..d96e75a9 100644
+--- a/base/thirdparty/popen-noshell/CMakeLists.txt
++++ b/base/thirdparty/popen-noshell/CMakeLists.txt
+@@ -27,7 +27,7 @@ set(BUILD_CMD sh -c "${KO_MAKE_RECURSIVE} -j${PARALLEL_JOBS} ${MAKE_ENV_VAR}")
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/famzah/popen-noshell.git
+-    e715396a4951ee91c40a98d2824a130f158268bb
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/sdcv/CMakeLists.txt b/base/thirdparty/sdcv/CMakeLists.txt
+index bcd4b6a7..d6f0f245 100644
+--- a/base/thirdparty/sdcv/CMakeLists.txt
++++ b/base/thirdparty/sdcv/CMakeLists.txt
+@@ -78,7 +78,7 @@ set(WITH_READLINE False CACHE BOOL "")
+ # Force utf8 command line parsing, and accept not-found -u dictnames
+ set(PATCH_CMD1 "${KO_PATCH_SH} ${CMAKE_CURRENT_SOURCE_DIR}/sdcv-locale-hack.patch")
+ 
+-set(SDCV_GIT_COMMIT d054adb37c635ececabc31b147c968a480d1891a)
++set(SDCV_GIT_COMMIT nixpkgs-tag)
+ 
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+diff --git a/base/thirdparty/tesseract/CMakeLists.txt b/base/thirdparty/tesseract/CMakeLists.txt
+index fb5de7ca..982c410e 100644
+--- a/base/thirdparty/tesseract/CMakeLists.txt
++++ b/base/thirdparty/tesseract/CMakeLists.txt
+@@ -14,7 +14,7 @@ endif()
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/tesseract-ocr/tesseract.git
+-    60176fc5ae5e7f6bdef60c926a4b5ea03de2bfa7
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
+diff --git a/base/thirdparty/zsync2/CMakeLists.txt b/base/thirdparty/zsync2/CMakeLists.txt
+index e7663cae..1bb9c5d7 100644
+--- a/base/thirdparty/zsync2/CMakeLists.txt
++++ b/base/thirdparty/zsync2/CMakeLists.txt
+@@ -72,7 +72,7 @@ endif()
+ ko_write_gitclone_script(
+     GIT_CLONE_SCRIPT_FILENAME
+     https://github.com/NiLuJe/zsync2.git
+-    e618d18f6a7cbf350cededa17ddfe8f76bdf0b5c
++    nixpkgs-tag
+     ${SOURCE_DIR}
+ )
+ 
