@@ -24591,6 +24591,7 @@ with pkgs;
   };
 
   koreader = callPackage ../applications/misc/koreader {};
+  koreader-bin = callPackage ../applications/misc/koreader/bin.nix {};
 
   kreative-square-fonts = callPackage ../data/fonts/kreative-square-fonts { };
 
