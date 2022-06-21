@@ -4173,6 +4173,8 @@ with pkgs;
 
   ossutil = callPackage ../tools/admin/ossutil {};
 
+  osv-detector = callPackage ../tools/security/osv-detector {};
+
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7468,6 +7470,8 @@ with pkgs;
   jsonwatch = callPackage ../tools/misc/jsonwatch {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  jsubfinder = callPackage ../tools/security/jsubfinder { };
 
   jtc = callPackage ../development/tools/jtc { };
 
@@ -27832,6 +27836,7 @@ with pkgs;
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes { };
   kubectl = callPackage ../applications/networking/cluster/kubernetes/kubectl.nix { };
+  kubectl-convert = kubectl.convert;
 
   kubemqctl = callPackage ../applications/networking/cluster/kubemqctl { };
 
