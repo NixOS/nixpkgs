@@ -78,7 +78,9 @@ let
     then linkFarmFromDrvs "${name}-project-references" projectReferences
     else null;
 
-  _nugetDeps = mkNugetDeps { inherit name; nugetDeps = import nugetDeps; };
+  _nugetDeps = if lib.isDerivation nugetDeps
+    then nugetDeps
+    else mkNugetDeps { inherit name; nugetDeps = import nugetDeps; };
 
   nuget-source = mkNugetSource {
     name = "${name}-nuget-source";
