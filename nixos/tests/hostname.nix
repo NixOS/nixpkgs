@@ -1,7 +1,6 @@
-test@{ config, lib, params, ... }:
+test@{ config, lib, domain, ... }:
 let
   inherit (lib) optionalString mkOption;
-  inherit (params) domain;
   hostName = "ahost";
   fqdnOrNull = if domain == null then null else fqdn;
   fqdn = hostName + (optionalString (domain != null) ".${domain}");
@@ -18,8 +17,8 @@ in
 
   name = "hostname-${fqdn}";
 
-  matrix.domain.choice.explicit.module.params.domain = "adomain";
-  matrix.domain.choice.implicit.module.params.domain = null;
+  matrix.domain.choice.explicit.module._module.args.domain = "adomain";
+  matrix.domain.choice.implicit.module._module.args.domain = null;
 
   nodes.machine = { lib, pkgs, ... }: {
     networking.hostName = hostName;

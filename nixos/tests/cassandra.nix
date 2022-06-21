@@ -1,8 +1,8 @@
-{ pkgs, lib, params, ... }:
+{ pkgs, lib, testPackage, ... }:
 let
   clusterName = "NixOS Automated-Test Cluster";
 
-  testRemoteAuth = lib.versionAtLeast params.testPackage.version "3.11";
+  testRemoteAuth = lib.versionAtLeast testPackage.version "3.11";
   jmxRoles = [{ username = "me"; password = "password"; }];
   jmxRolesFile = ./cassandra-jmx-roles;
   jmxAuthArgs = "-u ${(builtins.elemAt jmxRoles 0).username} -pw ${(builtins.elemAt jmxRoles 0).password}";
@@ -43,21 +43,21 @@ let
 
 in
 {
-  name = "cassandra-${params.testPackage.version}";
+  name = "cassandra-${testPackage.version}";
   meta = {
     maintainers = with lib.maintainers; [ johnazoidberg ];
   };
 
   matrix.version.choice = {
-    cassandra_2_1.module = { params.testPackage = pkgs.cassandra_2_1; };
-    cassandra_2_2.module = { params.testPackage = pkgs.cassandra_2_2; };
-    cassandra_3_0.module = { params.testPackage = pkgs.cassandra_3_0; };
-    cassandra_3_11.module = { params.testPackage = pkgs.cassandra_3_11; };
+    cassandra_2_1.module = { _module.args.testPackage = pkgs.cassandra_2_1; };
+    cassandra_2_2.module = { _module.args.testPackage = pkgs.cassandra_2_2; };
+    cassandra_3_0.module = { _module.args.testPackage = pkgs.cassandra_3_0; };
+    cassandra_3_11.module = { _module.args.testPackage = pkgs.cassandra_3_11; };
   };
 
   defaults = {
-    services.cassandra.package = params.testPackage;
-    environment.systemPackages = [ params.testPackage ];
+    services.cassandra.package = testPackage;
+    environment.systemPackages = [ testPackage ];
   };
 
   nodes = {
@@ -138,6 +138,6 @@ in
   '';
 
   passthru = {
-    inherit (params) testPackage;
+    inherit testPackage;
   };
 }

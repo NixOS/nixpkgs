@@ -14,7 +14,6 @@ let
     ./name.nix
     ./network.nix
     ./nodes.nix
-    ./params.nix
     ./pkgs.nix
     ./run.nix
     ./testScript.nix

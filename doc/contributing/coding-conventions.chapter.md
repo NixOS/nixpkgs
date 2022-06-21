@@ -698,7 +698,7 @@ stdenv.mkDerivation (finalAttrs: {
       # 3. We don't need to parameterize the package.
       matrix.version.enable = false;
       # 4. We set the correct package ourselves instead.
-      params.testPackage = finalAttrs.finalPackage;
+      _module.args.testPackage = finalAttrs.finalPackage;
     };
   };
 
