@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "hare";
-  version = "0.pre+date=2022-04-27";
+  version = "unstable-2022-06-18";
 
   src = fetchFromSourcehut {
     name = pname + "-src";
     owner = "~sircmpwn";
     repo = pname;
-    rev = "1bfb2e6dee850c675a8831b41420800d3c62c2a0";
-    hash = "sha256-1b7U5u3PM3jmnH/OnY9O++GTPyVOdFkJ0fwJBoDZgSU=";
+    rev = "ac9b2c35c09d555e09dbd81c5ed95bdfa14313ba";
+    hash = "sha256-eeS14LGkbi9IamvKzK+HF0Rvk9NFp4QVYcrHwNSNBx4=";
   };
 
   nativeBuildInputs = [
@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
         runHook preConfigure
 
         export HARECACHE="$NIX_BUILD_TOP/.harecache"
+        export BINOUT="$NIX_BUILD_TOP/.bin"
         cat ${config-file} > config.mk
 
         runHook postConfigure
