@@ -190,6 +190,7 @@ in stdenv.mkDerivation {
 
   makeFlags = [
     "PARALLEL_JOBS=$NIX_BUILD_CORES"
+    "IS_RELEASE=1"
   ];
 
   # koreader does not have a separate `make install` target
