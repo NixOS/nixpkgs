@@ -36,7 +36,8 @@
   curl = {
     url = "https://github.com/curl/curl.git";
     tag = "curl-7_80_0";
-    hash = "sha256-JTgazRsPm4F8RIs38wPq/lC/xhkdzMFuYb65WE94u3Q=";
+    rev = "9e560d11aad028de74addc0d1edfefa5667884f4";
+    hash = "sha256-BW+qr62R+wQ8N88yaR342SdVCA6kee0MJLInlvNmkME=";
   };
   czmq = {
     url = "https://github.com/zeromq/czmq.git";
@@ -176,7 +177,8 @@
   openssl = {
     url = "https://github.com/openssl/openssl.git";
     tag = "OpenSSL_1_1_1l";
-    hash = "sha256-kP+Ef9rYgbbgAUP6bDcQXSWcxsvYDuOsF26SP7dzrS4=";
+    rev = "fb047ebc87b18bdc4cf9ddee9ee1f5ed93e56aff";
+    hash = "sha256-ghIx/XDFaDojMxT8CzEqOzrAeA7d0GL6ONh7IouWyo4=";
   };
   popen-noshell = {
     url = "https://github.com/famzah/popen-noshell.git";
@@ -211,7 +213,8 @@
   zstd = {
     url = "https://github.com/facebook/zstd.git";
     tag = "v1.5.0";
-    hash = "sha256-FpK/zI6FAbdiYyWMAQALGQ3rkMkNWHNo0BmsarcaG5w=";
+    rev = "a488ba114ec17ea1054b9057c26a046fc122b3b6";
+    hash = "sha256-VMmOQLWN342TWQboBXCPGMBcs3HY7fvc4FiL0HYTIcM=";
   };
   zsync2 = {
     url = "https://github.com/NiLuJe/zsync2.git";
