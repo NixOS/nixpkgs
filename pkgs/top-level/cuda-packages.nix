@@ -43,6 +43,16 @@ let
     };
   in { inherit cutensor; };
 
+  tensorrtExtension = final: prev: let
+    ### Tensorrt
+
+    inherit (final) cudaMajorMinorVersion cudaMajorVersion;
+
+    # TODO: Add derivations for TensorRT versions that support older CUDA versions.
+
+    tensorrt = final.callPackage ../development/libraries/science/math/tensorrt/8.nix { };
+  in { inherit tensorrt; };
+
   extraPackagesExtension = final: prev: {
 
     nccl = final.callPackage ../development/libraries/science/math/nccl { };
@@ -58,7 +68,7 @@ let
 
   };
 
-  composedExtension = composeManyExtensions [
+  composedExtension = composeManyExtensions ([
     extraPackagesExtension
     (import ../development/compilers/cudatoolkit/extension.nix)
     (import ../development/compilers/cudatoolkit/redist/extension.nix)
@@ -67,6 +77,7 @@ let
     (import ../test/cuda/cuda-samples/extension.nix)
     (import ../test/cuda/cuda-library-samples/extension.nix)
     cutensorExtension
-  ];
+  ] ++ (lib.optional (lib.strings.versionAtLeast cudaVersion "11.0") tensorrtExtension));
+  # We only package the current version of TensorRT, which requires CUDA 11.
 
 in (scope.overrideScope' composedExtension)
