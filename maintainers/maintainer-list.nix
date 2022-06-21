@@ -13908,6 +13908,12 @@
     githubId = 1962985;
     name = "Vincenzo Mantova";
   };
+  xyenon = {
+    name = "XYenon";
+    email = "i@xyenon.bid";
+    github = "xyenon";
+    githubId = 20698483;
+  };
   xzfc = {
     email = "xzfcpw@gmail.com";
     github = "xzfc";
