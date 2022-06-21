@@ -23,12 +23,12 @@ in
         default = false;
         type = types.bool;
         description =
-          ''
+          mdDoc ''
             Setting this option enables the Xen hypervisor, a
             virtualisation technology that allows multiple virtual
-            machines, known as <emphasis>domains</emphasis>, to run
+            machines, known as *domains*, to run
             concurrently on the physical machine.  NixOS runs as the
-            privileged <emphasis>Domain 0</emphasis>.  This option
+            privileged *Domain 0*.  This option
             requires a reboot to take effect.
           '';
       };
