@@ -1,15 +1,30 @@
-{ stdenv, lib, fetchurl, pkg-config
-, bzip2, curlMinimal, expat, libarchive, xz, zlib, libuv, rhash
+{ lib
+, stdenv
 , buildPackages
-# darwin attributes
+, bzip2
+, curlMinimal
+, expat
+, fetchurl
+, libarchive
+, libuv
+, ncurses
+, openssl
+, pkg-config
+, qtbase
+, rhash
+, sphinx
+, texinfo
+, wrapQtAppsHook
+, xz
+, zlib
 , SystemConfiguration
 , ps
 , isBootstrap ? false
+, useNcurses ? false
+, useOpenSSL ? !isBootstrap
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
-, useOpenSSL ? !isBootstrap, openssl
-, useNcurses ? false, ncurses
-, withQt5 ? false, qtbase, wrapQtAppsHook
-, buildDocs ? (!isBootstrap && (useNcurses || withQt5)), sphinx, texinfo
+, withQt5 ? false
+, buildDocs ? (!isBootstrap && (useNcurses || withQt5))
 }:
 
 stdenv.mkDerivation rec {
@@ -40,23 +55,34 @@ stdenv.mkDerivation rec {
   # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
   ++ lib.optional stdenv.isDarwin ./darwin-always-set-runtime-c-flag.patch;
 
-  outputs = [ "out" ]
-    ++ lib.optionals buildDocs [ "man" "info" ];
+  outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
   setOutputFlags = false;
 
   setupHook = ./setup-hook.sh;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ setupHook pkg-config ]
-    ++ lib.optionals buildDocs [ texinfo ]
-    ++ lib.optionals withQt5 [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    setupHook
+  ]
+  ++ lib.optionals buildDocs [ texinfo ]
+  ++ lib.optionals withQt5 [ wrapQtAppsHook ];
 
-  buildInputs = lib.optionals useSharedLibraries [ bzip2 curlMinimal expat libarchive xz zlib libuv rhash ]
-    ++ lib.optional useOpenSSL openssl
-    ++ lib.optional useNcurses ncurses
-    ++ lib.optional withQt5 qtbase
-    ++ lib.optional (stdenv.isDarwin && !isBootstrap) SystemConfiguration;
+  buildInputs = lib.optionals useSharedLibraries [
+    bzip2
+    curlMinimal
+    expat
+    libarchive
+    xz
+    zlib
+    libuv
+    rhash
+  ]
+  ++ lib.optional useOpenSSL openssl
+  ++ lib.optional useNcurses ncurses
+  ++ lib.optional withQt5 qtbase
+  ++ lib.optional (stdenv.isDarwin && !isBootstrap) SystemConfiguration;
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin ps;
 
@@ -73,18 +99,21 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "CXXFLAGS=-Wno-elaborated-enum-base"
     "--docdir=share/doc/${pname}${version}"
-  ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
+  ] ++ (if useSharedLibraries
+        then [ "--no-system-jsoncpp" "--system-libs" ]
+        else [ "--no-system-libs" ]) # FIXME: cleanup
   ++ lib.optional withQt5 "--qt-gui"
   ++ lib.optionals buildDocs [
     "--sphinx-build=${sphinx}/bin/sphinx-build"
-    "--sphinx-man"
     "--sphinx-info"
+    "--sphinx-man"
   ]
   # Workaround https://gitlab.kitware.com/cmake/cmake/-/issues/20568
   ++ lib.optionals stdenv.hostPlatform.is32bit [
     "CFLAGS=-D_FILE_OFFSET_BITS=64"
     "CXXFLAGS=-D_FILE_OFFSET_BITS=64"
-  ] ++ [
+  ]
+  ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
     # http://www.cmake.org/Wiki/CMake_Cross_Compiling
@@ -118,19 +147,19 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   meta = with lib; {
-    broken = (withQt5 && stdenv.isDarwin);
     homepage = "https://cmake.org/";
-    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/release/${lib.versions.majorMinor version}.html";
-    description = "Cross-Platform Makefile Generator";
+    description = "Cross-platform, open-source build system generator";
     longDescription = ''
-      CMake is an open-source, cross-platform family of tools designed to
-      build, test and package software. CMake is used to control the software
+      CMake is an open-source, cross-platform family of tools designed to build,
+      test and package software. CMake is used to control the software
       compilation process using simple platform and compiler independent
-      configuration files, and generate native makefiles and workspaces that
-      can be used in the compiler environment of your choice.
+      configuration files, and generate native makefiles and workspaces that can
+      be used in the compiler environment of your choice.
     '';
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ttuegel lnl7 ];
+    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/release/${lib.versions.majorMinor version}.html";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ ttuegel lnl7 ];
+    platforms = platforms.all;
+    broken = (withQt5 && stdenv.isDarwin);
   };
 }
