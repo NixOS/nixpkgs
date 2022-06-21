@@ -111,9 +111,9 @@ let
 , # Target is not included by default because most programs don't care.
   # Including it then would cause needless mass rebuilds.
   #
-  # TODO(@Ericson2314): Make [ "build" "host" ] always the default.
+  # TODO(@Ericson2314): Make [ "build" "host" ] always the default / resolve #87909
   configurePlatforms ? lib.optionals
-    (stdenv.hostPlatform != stdenv.buildPlatform)
+    (stdenv.hostPlatform != stdenv.buildPlatform || config.configurePlatformsByDefault)
     [ "build" "host" ]
 
 # TODO(@Ericson2314): Make unconditional / resolve #33599
