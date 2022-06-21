@@ -974,7 +974,7 @@ self: super: {
             libiconv
           ];
 
-          cargoSha256 = "sha256-XmQTRmOO/tyA0F6FQQRxZPcVXCYZkEAiNIzU/ismjc0=";
+          cargoSha256 = "sha256-9Vr1gpggfAQlMgM/s8j6FTTYFppHql2PQ7cPtg1wNmo=";
         };
       in
       ''
@@ -1106,7 +1106,7 @@ self: super: {
       vim-markdown-composer-bin = rustPlatform.buildRustPackage rec {
         pname = "vim-markdown-composer-bin";
         inherit (super.vim-markdown-composer) src version;
-        cargoSha256 = "0q0i6kyihswrjrfdj4p3z54b779sdg2wz38z943ypj6dqphhcklx";
+        cargoSha256 = "sha256-Vie8vLTplhaVU4E9IohvxERfz3eBpd62m8/1Ukzk8e4=";
       };
     in
     super.vim-markdown-composer.overrideAttrs (oldAttrs: rec {
