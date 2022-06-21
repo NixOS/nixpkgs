@@ -43,7 +43,7 @@ let
         then fetchgit {
           inherit (attrs) url hash;
           leaveDotGit = true;
-          rev = attrs.tag or attrs.rev;
+          rev = attrs.rev or attrs.tag;
         }
         else fetchurl {
           inherit (attrs) url hash;
