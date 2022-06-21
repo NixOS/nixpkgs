@@ -1931,6 +1931,8 @@ with pkgs;
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { };
 
+  aws-sso-cli = callPackage ../tools/admin/aws-sso-cli { };
+
   aws-vault = callPackage ../tools/admin/aws-vault { };
 
   aws-workspaces = callPackage ../applications/networking/remote/aws-workspaces { };
@@ -7076,6 +7078,8 @@ with pkgs;
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
   hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
+
+  hpccm = with python3Packages; toPythonApplication hpccm;
 
   hping = callPackage ../tools/networking/hping { };
 
@@ -18049,7 +18053,7 @@ with pkgs;
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
-  hydra_unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nixVersions.nix_2_8; };
+  hydra_unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nixVersions.nix_2_9; };
 
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
