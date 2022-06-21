@@ -106,22 +106,21 @@ in stdenv.mkDerivation {
   ];
 
   postPatch =
-    # Fetchgit does not fetch git tags when cloning a repo, since the
-    # set of tags delivered by 'git clone' is not covered by the
-    # commit hash and will change over time as upstream adds/removes
-    # tags.  However koreader expects to find the fetched tag in the
-    # local clone; if it doesn't, it will try to fetch from the
-    # origin.  So we recreate the tag.  Before doing so we add a
-    # commit for any uncommitted changes created in the prePatch and
-    # patch phases above.
+    # Koreader expects to find the fetched tag in the local clone; if
+    # it doesn't, it will try to fetch from the origin.  Fetchgit does
+    # not fetch git tags when cloning a repo, since the set of tags
+    # delivered by 'git clone' is not covered by the commit hash and
+    # will change over time as upstream adds/removes tags.  So we must
+    # manually recreate the tag that koreader expects to find.
     #
-    # This cannot be done earlier than postPatch because the patching
-    # will change the tag's commit.
+    # Before creating the tag, we add a commit for any uncommitted
+    # changes which may have been created by the prePatch and patch
+    # phases above.  This is why the tag-creation step can happen no
+    # earlier than postPatch.
     #
-    # Note that we cannot apply patches to any of the vendored
-    # dependencies which koreader references by commit-hash -- unless
-    # we patch the commit-hash in koreader's cmake files.  Only the
-    # tag-referenced dependencies are malleable.
+    # Note: we can apply patches only to the vendored dependencies
+    # which koreader references by tag rather than by commit-hash --
+    # unless we patch the commit-hash in koreader's cmake files.
     mapAttrsToConcatStringSep "\n"
       (name: attrs: lib.optionalString (attrs?tag) ''
         git -C ${attrs.dest} config --local user.email "you@example.com"
