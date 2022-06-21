@@ -195,8 +195,19 @@ in stdenv.mkDerivation {
 
   # koreader does not have a separate `make install` target
   installPhase = ''
-    mkdir $out
-    cp -rL koreader-emulator-*/koreader/* $out
+    mkdir -p $out
+
+    mkdir -p $out/share/{applications,pixmaps,man/man1}
+    cp platform/debian/koreader.desktop $out/share/applications/
+    cp resources/koreader.png $out/share/pixmaps/
+    cp platform/debian/koreader.1 $out/share/man/man1
+
+    mkdir -p $out/bin
+    cp source/platform/debian/koreader.sh $out/bin/koreader
+
+    mkdir -p $out/lib
+    cp -rL koreader-emulator-$($(CC) -dumpmachine)/koreader $out/lib/koreader
+
     '' + fonts.installPhase;
 
   meta = with lib; {
