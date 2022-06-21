@@ -137,7 +137,7 @@ in stdenv.mkDerivation {
         git -C ${attrs.dest} config --local user.email "you@example.com"
         git -C ${attrs.dest} config --local user.name  "Your Name"
         git -C ${attrs.dest} add -A
-        git -C ${attrs.dest} commit -m postPatch || true
+        git -C ${attrs.dest} commit --quiet -m postPatch || true
         git -C ${attrs.dest} tag -f ${attrs.tag or "nixpkgs-tag"}
         '')
       vendored;
