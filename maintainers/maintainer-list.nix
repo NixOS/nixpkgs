@@ -3363,10 +3363,6 @@
     githubId = 6199462;
     name = "Dmytro Rets";
   };
-  drewkett = {
-    email = "burkett.andrew@gmail.com";
-    name = "Andrew Burkett";
-  };
   drewrisinger = {
     email = "drisinger+nixpkgs@gmail.com";
     github = "drewrisinger";
