@@ -58,6 +58,16 @@ in stdenv.mkDerivation rec {
       url = "https://github.com/prusa3d/PrusaSlicer/commit/76f4d6fa98bda633694b30a6e16d58665a634680.patch";
       sha256 = "1r806ycp704ckwzgrw1940hh1l6fpz0k1ww3p37jdk6mygv53nv6";
     })
+
+    # Both needed for https://github.com/prusa3d/PrusaSlicer/issues/8238
+    (fetchpatch {
+      url = "https://github.com/prusa3d/PrusaSlicer/commit/408e56f0390f20aaf793e0aa0c70c4d9544401d4.patch";
+      sha256 = "sha256:0vyxhzgvpma35mkrghlywmqwqbny55k9y3xcrmn2wqrpn660ycdz";
+    })
+    (fetchpatch {
+      url = "https://github.com/prusa3d/PrusaSlicer/commit/926ae0471800abd1e5335e251a5934570eb8f6ff.patch";
+      sha256 = "sha256:0vagamb2sj3ysp6692wa85fqg3cqm7zagyxscdba2646nywj00dl";
+    })
   ];
 
   doCheck = true;
