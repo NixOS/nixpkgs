@@ -11728,10 +11728,6 @@
     githubId = 158321;
     name = "Stewart Mackenzie";
   };
-  sjourdois = {
-    email = "sjourdois@gmail.com";
-    name = "Stéphane ‘kwisatz’ Jourdois";
-  };
   skeidel = {
     email = "svenkeidel@gmail.com";
     github = "svenkeidel";
