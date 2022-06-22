@@ -8733,10 +8733,6 @@
     githubId = 839693;
     name = "Ingolf Wanger";
   };
-  msackman = {
-    email = "matthew@wellquite.org";
-    name = "Matthew Sackman";
-  };
   mschneider = {
     email = "markus.schneider.sic+nix@gmail.com";
     name = "Markus Schneider";
