@@ -59,9 +59,17 @@ let
 
     nativeBuildInputs = [ rubyEnv.wrappedRuby rubyEnv.bundler nodejs yarn git cacert ];
 
-    # Since version 12.6.0, the rake tasks need the location of git,
-    # so we have to apply the location patches here too.
-    patches = [ ./remove-hardcoded-locations.patch ];
+    patches = [
+      # Since version 12.6.0, the rake tasks need the location of git,
+      # so we have to apply the location patches here too.
+      ./remove-hardcoded-locations.patch
+
+      # Gitlab edited the default database config since [1] and the
+      # installer complains about valid keywords only being "main" and "ci".
+      #
+      # [1]: https://gitlab.com/gitlab-org/gitlab/-/commit/99c0fac52b10cd9df62bbe785db799352a2d9028
+      ./Remove-geo-from-database.yml.patch
+    ];
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
