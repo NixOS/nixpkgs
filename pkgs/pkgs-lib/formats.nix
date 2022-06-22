@@ -50,25 +50,25 @@ rec {
       };
     in valueType;
 
-    generate = name: value: pkgs.runCommand name {
-      nativeBuildInputs = [ pkgs.jq ];
+    generate = name: value: pkgs.callPackage ({ runCommand, jq }: runCommand name {
+      nativeBuildInputs = [ jq ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
     } ''
       jq . "$valuePath"> $out
-    '';
+    '') {};
 
   };
 
   yaml = {}: {
 
-    generate = name: value: pkgs.runCommand name {
-        nativeBuildInputs = [ pkgs.remarshal ];
-        value = builtins.toJSON value;
-        passAsFile = [ "value" ];
-      } ''
-        json2yaml "$valuePath" "$out"
-      '';
+    generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
+      nativeBuildInputs = [ remarshal ];
+      value = builtins.toJSON value;
+      passAsFile = [ "value" ];
+    } ''
+      json2yaml "$valuePath" "$out"
+    '') {};
 
     type = with lib.types; let
       valueType = nullOr (oneOf [
@@ -161,13 +161,13 @@ rec {
       };
     in valueType;
 
-    generate = name: value: pkgs.runCommand name {
-      nativeBuildInputs = [ pkgs.remarshal ];
+    generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
+      nativeBuildInputs = [ remarshal ];
       value = builtins.toJSON value;
       passAsFile = [ "value" ];
     } ''
       json2toml "$valuePath" "$out"
-    '';
+    '') {};
 
   };
 
