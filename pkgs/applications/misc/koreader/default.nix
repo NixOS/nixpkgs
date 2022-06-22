@@ -243,7 +243,9 @@ in stdenv.mkDerivation {
 
     mkdir -p $out/lib
     cp -rL koreader-emulator-$(${stdenv.cc}/bin/cc -dumpmachine)/koreader $out/lib/koreader
-    ${patchelf}/bin/patchelf --shrink-rpath $out/lib/koreader/libs/*.so*
+    ${patchelf}/bin/patchelf --add-rpath $out/lib/koreader/libs/ $out/lib/koreader/libs/*.so*
+    ${patchelf}/bin/patchelf --allowed-rpath-prefixes /nix/store --shrink-rpath $out/lib/koreader/libs/*.so*
+
     runHook postInstall
     '';
 
