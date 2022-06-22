@@ -578,10 +578,6 @@
     githubId = 11599075;
     name = "Pierre-Louis Braun";
   };
-  all = {
-    email = "nix-commits@lists.science.uu.nl";
-    name = "Nix Committers";
-  };
   allonsy = {
     email = "linuxbash8@gmail.com";
     github = "allonsy";
