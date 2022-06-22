@@ -13493,10 +13493,6 @@
     github = "wdavidw";
     githubId = 46896;
   };
-  wedens = {
-    email = "kirill.wedens@gmail.com";
-    name = "wedens";
-  };
   WeebSorceress = {
     name = "WeebSorceress";
     email = "hello@weebsorceress.anonaddy.me";
