@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "parts";
-  version = "1.3.0";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-NrhNpWyzqwn1bNnuqmcyKcUED0A4v7VJE4ZlTHFafJY=";
+    sha256 = "sha256-Qs6+3dWG5sjSmeQiL/Q2evn5TImEX0Yk/nCIe5uIMp4=";
   };
 
   # Project has no tests
