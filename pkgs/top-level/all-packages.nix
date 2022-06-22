@@ -21865,7 +21865,9 @@ with pkgs;
     gn = gn1924;
   };
 
-  ergochat = callPackage ../servers/irc/ergochat { };
+  ergochat = callPackage ../servers/irc/ergochat {
+    buildGoModule = buildGo118Module;
+  };
 
   etcd = etcd_3_3;
   etcd_3_3 = callPackage ../servers/etcd/3.3.nix { };
