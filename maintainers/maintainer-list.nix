@@ -4435,10 +4435,6 @@
     githubId = 36706276;
     name = "Fufezan Mihai";
   };
-  funfunctor = {
-    email = "eocallaghan@alterapraxis.com";
-    name = "Edward O'Callaghan";
-  };
   fusion809 = {
     email = "brentonhorne77@gmail.com";
     github = "fusion809";
