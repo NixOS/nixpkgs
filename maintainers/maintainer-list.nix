@@ -14131,12 +14131,6 @@
     githubId = 3449926;
     name = "David Costa";
   };
-  zauberpony = {
-    email = "elmar@athmer.org";
-    github = "zauberpony";
-    githubId = 250877;
-    name = "Elmar Athmer";
-  };
   zakkor = {
     email = "edward.dalbon@gmail.com";
     github = "zakkor";
