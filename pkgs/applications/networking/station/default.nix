@@ -36,6 +36,6 @@ in appimageTools.wrapType2 rec {
     homepage = "https://getstation.com";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ lattfein ];
+    maintainers = with maintainers; [ ];
   };
 }
