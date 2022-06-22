@@ -13607,10 +13607,6 @@
     githubId = 20464732;
     name = "Willi Butz";
   };
-  willtim = {
-    email = "tim.williams.public@gmail.com";
-    name = "Tim Philip Williams";
-  };
   willcohen = {
     email = "willcohen@users.noreply.github.com";
     github = "willcohen";
