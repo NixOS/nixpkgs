@@ -1,4 +1,4 @@
-{ callPackage, fetchpatch, zlib, Foundation }:
+{ callPackage, Foundation }:
 /*
   Add new graal versions and products here and then see update.nix on how to
   generate the sources.
@@ -7,15 +7,6 @@
 let
   mkGraal = opts: callPackage (import ./mkGraal.nix opts) {
     inherit Foundation;
-    # remove this once zlib 1.2.13 is released
-    zlib = zlib.overrideAttrs (oldAttrs: {
-      patches = (oldAttrs.patches or [ ]) ++ [
-        (fetchpatch {
-          url = "https://github.com/madler/zlib/commit/ec3df00224d4b396e2ac6586ab5d25f673caa4c2.patch";
-          sha256 = "sha256-jSa3OCigBdpWFDllCWC2rgE9GxCNR0yjsc+bpwPDBEA=";
-        })
-      ];
-    });
   };
 
   /*
