@@ -1,0 +1,13 @@
+diff --git a/thirdparty/sdcv/CMakeLists.txt b/thirdparty/sdcv/CMakeLists.txt
+index b0fc5cc9..db7a293e 100644
+--- a/base/thirdparty/sdcv/CMakeLists.txt
++++ b/base/thirdparty/sdcv/CMakeLists.txt
+@@ -90,7 +90,7 @@ ko_write_gitclone_script(
+ download_project(
+     PROJ ${PROJECT_NAME}
+     GIT_REPOSITORY
+-    https://github.com/Dushistov/sdcv.git
++    ${CMAKE_BINARY_DIR}/../git_checkout/sdcv
+     GIT_TAG
+     ${SDCV_GIT_COMMIT}
+     #DOWNLOAD_COMMAND ${CMAKE_COMMAND} -P ${GIT_CLONE_SCRIPT_FILENAME}

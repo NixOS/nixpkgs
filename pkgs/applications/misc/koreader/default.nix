@@ -126,8 +126,10 @@ in stdenv.mkDerivation {
     # can't seem to get the build process to use the one from nixpkgs.
     ./patches/omit-lua-spore.patch
 
-    # had to disable sdcv; will re-enable soon
-    ./patches/disable-sdcv.patch
+    # unlike all the other vendored projects, sdcv is downloaded using
+    # download_project rather than ko_write_gitclone_script, so it
+    # requires a different approach.
+    ./patches/redirect-sdcv.patch
   ];
 
   postPatch =
