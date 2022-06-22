@@ -9901,13 +9901,6 @@
     githubId = 152312;
     name = "Periklis Tsirakidis";
   };
-  petabyteboy = {
-    email = "milan@petabyte.dev";
-    matrix = "@milan:petabyte.dev";
-    github = "petabyteboy";
-    githubId = 3250809;
-    name = "Milan Pässler";
-  };
   petercommand = {
     email = "petercommand@gmail.com";
     github = "petercommand";
