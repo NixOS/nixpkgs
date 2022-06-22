@@ -29,6 +29,23 @@ let
   mapAttrsToConcatStringSep = sep: func: val:
     lib.concatStringsSep sep (lib.mapAttrsToList func val);
 
+  # This reassembles a `.src.rock` from an installed lua package, so
+  # it can be reinstalled in the local "tree" used during koreader's
+  # build process.
+  # maybe this should go in `buildLuaRocksPackage` as a `passthru`?
+  makeSourceRock = luaPackageName:
+     luaPackages.${luaPackageName}.overrideAttrs (oa: {
+        postInstall = ''
+          $LUAROCKS pack --tree=$out ${oa.pname}
+          rm -rf $out
+          mkdir -p $out
+          mv *.rock $out/
+          '';
+      });
+
+  luaPackages_lpeg_src_rock    = makeSourceRock "lpeg";
+  luaPackages_luajson_src_rock = makeSourceRock "luajson";
+
   # read the vendored.nix file and add additional attrs which can be
   # computed from those which are hand-maintained (see vendored.nix)
   vendored = lib.mapAttrs (name: attrs:
@@ -121,7 +138,7 @@ in stdenv.mkDerivation {
     # omit lua-Spore from the build.  this is obviously unacceptable
     # for merging, but at the moment it can't find luajson, and I
     # can't seem to get the build process to use the one from nixpkgs.
-    ./patches/omit-lua-spore.patch
+    #./patches/omit-lua-spore.patch
 
     # unlike all the other vendored projects, sdcv is downloaded using
     # download_project rather than ko_write_gitclone_script, so it
@@ -179,6 +196,8 @@ in stdenv.mkDerivation {
     sdcv
     SDL2
     luaPackages.luajson
+    luaPackages_lpeg_src_rock
+    luaPackages_luajson_src_rock
   ];
 
   dontUseCmakeConfigure = true;
@@ -186,6 +205,11 @@ in stdenv.mkDerivation {
 
   # nativeBuildInputs=[cmake] enables this; we must re-disable it
   enableParallelBuilding = false;
+
+  preBuild = ''
+    ${luarocks}/bin/luarocks install --tree=base/build/${MACHINE}/rocks ${luaPackages_lpeg_src_rock}/*.rock
+    ${luarocks}/bin/luarocks install --tree=base/build/${MACHINE}/rocks ${luaPackages_luajson_src_rock}/*.rock
+    '';
 
   makeFlags = [
     "PARALLEL_JOBS=$NIX_BUILD_CORES"
