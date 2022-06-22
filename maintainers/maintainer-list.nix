@@ -2791,12 +2791,6 @@
     githubId = 24708079;
     name = "Dan Eads";
   };
-  danharaj = {
-    email = "dan@obsidian.systems";
-    github = "danharaj";
-    githubId = 23366017;
-    name = "Dan Haraj";
-  };
   danielbarter = {
     email = "danielbarter@gmail.com";
     github = "danielbarter";
