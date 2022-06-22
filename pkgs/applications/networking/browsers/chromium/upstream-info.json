@@ -45,19 +45,19 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "102.0.5005.115",
-    "sha256": "1rj7vy824vn513hiivc90lnxvxyi2s0qkdmfqsdssv9v6zjl079h",
-    "sha256bin64": "0b32sscbjnvr98lk962i9k2srckv2s7fp9pifmsv5jlwndjhzm7y",
+    "version": "103.0.5060.53",
+    "sha256": "00di0nw6h3kb0qp2wp3ny3zsar1ayn1lyx5zr28dl1h5cwaaxjqf",
+    "sha256bin64": "19wxd4jl6fyjpcpy2331ckz6dgzrfj52wvdkp0kb18n0sym17fyn",
     "deps": {
       "gn": {
-        "version": "2022-04-14",
+        "version": "2022-05-11",
         "url": "https://gn.googlesource.com/gn",
-        "rev": "fd9f2036f26d83f9fcfe93042fb952e5a7fe2167",
-        "sha256": "0b5xs0chcv3hfhy71rycsmgxnqbm375a333hwav8929k9cbi5p9h"
+        "rev": "578a7fe4c3c6b0bc2ae1fd2e37f14857d09895bf",
+        "sha256": "03dqfrdpf5xxl64dby3qmbwpzdq2gsa8g7xl438py3a629rgxg63"
       },
       "ungoogled-patches": {
-        "rev": "102.0.5005.115-1",
-        "sha256": "1z2xkxxviggyyksga74cqa4v73gynlgzi22ckg8yv84qxrklik6p"
+        "rev": "103.0.5060.53-1",
+        "sha256": "1g5ciwzrhg9g13gvhrwqf19djk9jhj1d6nx2f6a8d5ch1mhi2z8s"
       }
     }
   }
