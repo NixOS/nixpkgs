@@ -210,8 +210,7 @@ in stdenv.mkDerivation {
 
     mkdir -p $out/lib
     cp -rL koreader-emulator-$(${stdenv.cc}/bin/cc -dumpmachine)/koreader $out/lib/koreader
-
-    '' + fonts.installPhase;
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/koreader/koreader";
