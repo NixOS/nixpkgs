@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, python, requests, gnugrep }:
+{ lib, buildPythonPackage, fetchFromGitHub, python, requests }:
 
 let
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ok_min=401
 
     if ! ${python.interpreter} tests/runtests.py -d ${json-ld}/test-suite 2>&1 | tee test.out; then
-      ok_count=$(${gnugrep}/bin/grep -F '... ok' test.out | wc -l)
+      ok_count=$(grep -F '... ok' test.out | wc -l)
       if [[ $ok_count -lt $ok_min ]]; then
         echo "Less than $ok_min tests passed ($ok_count). Failing the build."
         exit 1
