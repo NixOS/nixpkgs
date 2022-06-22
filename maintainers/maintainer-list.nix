@@ -7844,10 +7844,6 @@
     githubId = 26470037;
     name = "Markus Kowalewski";
   };
-  markWot = {
-    email = "markus@wotringer.de";
-    name = "Markus Wotringer";
-  };
   marijanp = {
     name = "Marijan Petričević";
     email = "marijan.petricevic94@gmail.com";
