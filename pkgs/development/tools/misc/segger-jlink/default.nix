@@ -14,60 +14,60 @@ let
   supported = {
     x86_64-linux = {
       name = "x86_64";
-      sha256 = "0cmd9ny6mslj9260scply573gbmn6k5r9wyxmcbjb14k4b3sldic";
+      sha256 = "90aa7e4f5eae6e60fd41978111b3ff124ba0269562d0d0ec3110d3cb4bb51fe2";
     };
     i686-linux = {
       name = "i386";
-      sha256 = "1jjh5a8y17ma369s9k0xlyr8i10v2r1kxmv0i9v4cix5dnjyq0pp";
+      sha256 = "18aea42cd17591cada78af7cba0f94a9d851e9d29995b6c8e1e7033d0af35d1c";
     };
     aarch64-linux = {
       name = "arm64";
-      sha256 = "0p3gjv36a82xyps20drm7h0vm0jmz5gd930ynwr3iy46md41hgyv";
+      sha256 = "db410c1df80748827b4e25ff3abceee29e28305a0a7e30e4e39bb5c7e32f1aa2";
     };
     armv7l-linux = {
       name = "arm";
-      sha256 = "0z9q3mqhfwb341mk5p1d3vp6mfwffcdk68968jy1qr2ga2s34wpb";
+      sha256 = "abcdaf44aeb2ad4e769709ec4fe971e259b23d297a98f58199c7bdf26db82e84";
     };
   };
 
   platform = supported.${system} or (throw "unsupported platform ${system}");
 
-  version = "750";
+  version = "766";
 
   url = "https://www.segger.com/downloads/jlink/JLink_Linux_V${version}_${platform.name}.tgz";
-
-  assert !acceptLicense -> throw ''
-    Use of the "SEGGER JLink Software and Documentation pack" requires the
-    acceptance of the following licenses:
-
-      - SEGGER Downloads Terms of Use [1]
-      - SEGGER Software Licensing [2]
-
-    You can express acceptance by setting acceptLicense to true in your
-    configuration. Note that this is not a free license so it requires allowing
-    unfree licenses as well.
-
-    configuration.nix:
-      nixpkgs.config.allowUnfree = true;
-      nixpkgs.config.segger-jlink.acceptLicense = true;
-
-    config.nix:
-      allowUnfree = true;
-      segger-jlink.acceptLicense = true;
-
-    [1]: ${url}
-    [2]: https://www.segger.com/purchase/licensing/
-  '';
 
 in stdenv.mkDerivation {
   pname = "segger-jlink";
   inherit version;
 
-  src = fetchurl {
-    inherit url;
-    inherit (platform) sha256;
-    curlOpts = "--data accept_license_agreement=accepted";
-  };
+  src =
+    assert !acceptLicense -> throw ''
+      Use of the "SEGGER JLink Software and Documentation pack" requires the
+      acceptance of the following licenses:
+
+        - SEGGER Downloads Terms of Use [1]
+        - SEGGER Software Licensing [2]
+
+      You can express acceptance by setting acceptLicense to true in your
+      configuration. Note that this is not a free license so it requires allowing
+      unfree licenses as well.
+
+      configuration.nix:
+        nixpkgs.config.allowUnfree = true;
+        nixpkgs.config.segger-jlink.acceptLicense = true;
+
+      config.nix:
+        allowUnfree = true;
+        segger-jlink.acceptLicense = true;
+
+      [1]: ${url}
+      [2]: https://www.segger.com/purchase/licensing/
+    '';
+      fetchurl {
+        inherit url;
+        inherit (platform) sha256;
+        curlOpts = "--data accept_license_agreement=accepted";
+      };
 
   # Currently blocked by patchelf bug
   # https://github.com/NixOS/patchelf/pull/275
@@ -131,6 +131,6 @@ in stdenv.mkDerivation {
     homepage = "https://www.segger.com/downloads/jlink/#J-LinkSoftwareAndDocumentationPack";
     license = licenses.unfree;
     platforms = attrNames supported;
-    maintainers = with maintainers; [ FlorianFranzen reardencode ];
+    maintainers = with maintainers; [ FlorianFranzen ];
   };
 }
