@@ -216,6 +216,8 @@ with pkgs;
 
   ani-cli = callPackage ../applications/video/ani-cli { };
 
+  anime-downloader = callPackage ../applications/video/anime-downloader { };
+
   aocd = with python3Packages; toPythonApplication aocd;
 
   aesfix = callPackage ../tools/security/aesfix { };
