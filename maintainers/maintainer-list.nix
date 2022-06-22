@@ -6116,10 +6116,6 @@
     githubId = 336631;
     name = "Joel Moberg";
   };
-  joelteon = {
-    email = "me@joelt.io";
-    name = "Joel Taylor";
-  };
   joepie91 = {
     email = "admin@cryto.net";
     matrix = "@joepie91:pixie.town";
