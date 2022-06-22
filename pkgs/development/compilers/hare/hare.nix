@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     qbe
   ];
 
+  setupHook = ./setup-hook.sh;
   strictDeps = true;
 
   configurePhase =
