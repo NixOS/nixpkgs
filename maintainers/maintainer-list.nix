@@ -1342,10 +1342,6 @@
     githubId = 35324;
     name = "Badi' Abdul-Wahid";
   };
-  balajisivaraman = {
-    email = "sivaraman.balaji@gmail.com";
-    name = "Balaji Sivaraman";
-  };
   balodja = {
     email = "balodja@gmail.com";
     github = "balodja";
