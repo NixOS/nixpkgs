@@ -117,6 +117,18 @@ in stdenv.mkDerivation {
       base/thirdparty/glib/build/git_checkout/glib/gio/tests/gengiotypefuncs.py \
       base/thirdparty/glib/build/git_checkout/glib/gio/gdbus-2.0/codegen/gdbus-codegen.in \
       ; do substituteInPlace $A --replace /usr/bin/env ${coreutils}/bin/env; done
+
+    substituteInPlace \
+      base/Makefile.defs \
+      --replace \
+        -Wl,-rpath,\'\$\$ORIGIN\' \
+        -Wl,-rpath,\'$out/lib/koreader/libs/\'
+
+    substituteInPlace \
+      base/Makefile.defs \
+      --replace \
+        -Wl,-rpath,\'\$\(ORIGIN_CMAKE_TO_AUTOCFG\)\' \
+        -Wl,-rpath,\'$out/lib/koreader/libs/\'
     '';
 
   patches = [
