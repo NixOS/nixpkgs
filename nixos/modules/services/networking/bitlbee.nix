@@ -174,6 +174,7 @@ in
         serviceConfig = {
           DynamicUser = true;
           StateDirectory = "bitlbee";
+          ReadWritePaths = [ cfg.configDir ];
           ExecStart = "${bitlbeePkg}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
         };
       };

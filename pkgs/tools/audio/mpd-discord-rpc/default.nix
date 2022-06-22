@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mpd-discord-rpc";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-jwsfUepGJ7IB1H6Er1EszYkkYIOSyuFvTX7NF9UhhGo=";
+    sha256 = "sha256-/QWIoP6KcrI8cYTh3x2lQz7nPSvzb1zRWg8TFoYY9vE=";
   };
 
-  cargoSha256 = "sha256-4MUfjXWDZmfsUzvWo8I2fgzm4jOfX1ZgHYqUmxXJ/BU=";
+  cargoSha256 = "sha256-46PS1+ud7GYuMOJMp93Hf7+nlngvgL67zedaF44TcYY=";
 
   nativeBuildInputs = [ pkg-config ];
 
