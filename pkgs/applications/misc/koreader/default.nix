@@ -46,6 +46,10 @@ let
   luaPackages_lpeg_src_rock    = makeSourceRock "lpeg";
   luaPackages_luajson_src_rock = makeSourceRock "luajson";
 
+  # this needs to exactly match `${stdenv.cc}/bin/cc -dumpmachine`,
+  # which it should... we hope.
+  MACHINE = stdenv.buildPlatform.config;
+
   # read the vendored.nix file and add additional attrs which can be
   # computed from those which are hand-maintained (see vendored.nix)
   vendored = lib.mapAttrs (name: attrs:
