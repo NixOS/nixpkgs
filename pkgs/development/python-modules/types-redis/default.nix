@@ -5,12 +5,12 @@
 
 buildPythonPackage rec {
   pname = "types-redis";
-  version = "4.3.0";
+  version = "4.3.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9L2b5qt0Hx2pEFzwpORiiG3B1drkbW0/a3/X6B/+uig=";
+    sha256 = "sha256-UGlozmdNd1Nnz9GzS1TcposREd/bkwFQ06zNqV7FcDo=";
   };
 
   # Module doesn't have tests
