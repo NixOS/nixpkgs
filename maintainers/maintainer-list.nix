@@ -8239,10 +8239,6 @@
     githubId = 6412377;
     name = "Samuel Ruprecht";
   };
-  metabar = {
-    email = "softs@metabarcoding.org";
-    name = "Celine Mercier";
-  };
   kira-bruneau = {
     email = "kira.bruneau@pm.me";
     name = "Kira Bruneau";
