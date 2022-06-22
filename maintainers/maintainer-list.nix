@@ -9421,10 +9421,6 @@
     githubId = 7249506;
     name = "oida";
   };
-  okasu = {
-    email = "oka.sux@gmail.com";
-    name = "Okasu";
-  };
   olcai = {
     email = "dev@timan.info";
     github = "olcai";
