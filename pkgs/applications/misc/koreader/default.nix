@@ -22,7 +22,6 @@
 , gtk3-x11
 , sdcv
 , SDL2
-, nerdfonts
 }:
 let
 
@@ -51,8 +50,6 @@ let
         };
     in attrs // { inherit isGit dest fetched; })
     (import ./vendored.nix);
-
-  fonts = import ./fonts.nix { inherit lib fetchurl nerdfonts; };
 
   pname = "koreader";
   version = "2022.05.1";
