@@ -301,6 +301,8 @@ rec {
       ) listOfAttrs
     ) [{}] (attrNames attrsOfLists);
 
+  /* Alias for `cartesianProductOfSets`. */
+  X = cartesianProductOfSets;
 
   /* Utility function that creates a {name, value} pair as expected by
      builtins.listToAttrs.
