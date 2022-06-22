@@ -2739,7 +2739,7 @@ in {
 
   emailthreads = callPackage ../development/python-modules/emailthreads { };
 
-  email_validator = callPackage ../development/python-modules/email-validator { };
+  email-validator = callPackage ../development/python-modules/email-validator { };
 
   embrace = callPackage ../development/python-modules/embrace { };
 
