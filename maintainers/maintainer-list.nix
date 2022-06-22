@@ -8941,10 +8941,6 @@
       fingerprint = "7A10 AB8E 0BEC 566B 090C  9BE3 D812 6E55 9CE7 C35D";
     }];
   };
-  Nate-Devv = {
-    email = "natedevv@gmail.com";
-    name = "Nathan Moore";
-  };
   nathanruiz = {
     email = "nathanruiz@protonmail.com";
     github = "nathanruiz";
