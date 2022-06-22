@@ -83,50 +83,18 @@ boot.kernel.sysctl.&quot;net.ipv4.tcp_keepalive_time&quot; = 120;
     available parameters, run <literal>sysctl -a</literal>.
   </para>
   <section xml:id="sec-linux-config-customizing">
-    <title>Customize your kernel</title>
+    <title>Building a customized kernel</title>
     <para>
-      The first step before compiling the kernel is to generate an
-      appropriate <literal>.config</literal> configuration. Either you
-      pass your own config via the <literal>configfile</literal> setting
-      of <literal>linuxKernel.manualConfig</literal>:
+      You can customize the default kernel configuration by overriding
+      the arguments for your kernel package:
     </para>
     <programlisting language="bash">
-custom-kernel = let base_kernel = linuxKernel.kernels.linux_4_9;
-  in super.linuxKernel.manualConfig {
-    inherit (super) stdenv hostPlatform;
-    inherit (base_kernel) src;
-    version = &quot;${base_kernel.version}-custom&quot;;
-
-    configfile = /home/me/my_kernel_config;
-    allowImportFromDerivation = true;
-};
-</programlisting>
-    <para>
-      You can edit the config with this snippet (by default
-      <literal>make menuconfig</literal> won't work out of the box on
-      nixos):
-    </para>
-    <programlisting>
-nix-shell -E 'with import &lt;nixpkgs&gt; {}; kernelToOverride.overrideAttrs (o: {nativeBuildInputs=o.nativeBuildInputs ++ [ pkg-config ncurses ];})'
-</programlisting>
-    <para>
-      or you can let nixpkgs generate the configuration. Nixpkgs
-      generates it via answering the interactive kernel utility
-      <literal>make config</literal>. The answers depend on parameters
-      passed to
-      <literal>pkgs/os-specific/linux/kernel/generic.nix</literal>
-      (which you can influence by overriding
-      <literal>extraConfig, autoModules, modDirVersion, preferBuiltin, extraConfig</literal>).
-    </para>
-    <programlisting language="bash">
-mptcp93.override ({
-  name=&quot;mptcp-local&quot;;
-
+let
+  baseKernel = pkgs.linuxKernel.kernels.linux_5_15;
+in baseKernel.override ({
   ignoreConfigErrors = true;
   autoModules = false;
   kernelPreferBuiltin = true;
-
-  enableParallelBuilding = true;
 
   extraConfig = ''
     DEBUG_KERNEL y
@@ -136,6 +104,35 @@ mptcp93.override ({
     DEBUG_INFO y
   '';
 });
+</programlisting>
+    <para>
+      See <literal>pkgs/os-specific/linux/kernel/generic.nix</literal>
+      for details on how these arguments affect the generated
+      configuration.
+    </para>
+    <para>
+      If you already have a generated configuration file, you can build
+      a kernel that uses it with
+      <literal>linuxKernel.manualConfig</literal>:
+    </para>
+    <programlisting language="bash">
+let
+  baseKernel = pkgs.linuxKernel.kernels.linux_5_15;
+in pkgs.linuxKernel.manualConfig {
+  inherit (pkgs) stdenv hostPlatform;
+  inherit (baseKernel) src;
+  version = &quot;${baseKernel.version}-custom&quot;;
+
+  configfile = /home/me/my_kernel_config;
+  allowImportFromDerivation = true;
+};
+</programlisting>
+    <para>
+      Finally, to use your customized kernel package in your NixOS
+      configuration, set
+    </para>
+    <programlisting language="bash">
+boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
 </programlisting>
   </section>
   <section xml:id="sec-linux-config-developing-modules">
