@@ -40,7 +40,7 @@ let
           rm -rf $out
           mkdir -p $out
           mv *.rock $out/
-          '';
+          '' + oa.postInstall or "";
       });
 
   luaPackages_lpeg_src_rock    = makeSourceRock "lpeg";
