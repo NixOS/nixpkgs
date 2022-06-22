@@ -6461,10 +6461,6 @@
     githubId = 46386452;
     name = "Jeroen Wijenbergh";
   };
-  jwilberding = {
-    email = "jwilberding@afiniate.com";
-    name = "Jordan Wilberding";
-  };
   jwoudenberg = {
     email = "nixpkgs@jasperwoudenberg.com";
     github = "jwoudenberg";
