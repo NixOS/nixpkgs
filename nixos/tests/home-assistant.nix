@@ -172,12 +172,8 @@ in {
       new_pid = hass.succeed("systemctl show --property=MainPID home-assistant.service")
       assert pid != new_pid, "The PID of the process shoudl change when the HA binary changes"
 
-    with subtest("Print log to ease debugging"):
-        output_log = hass.succeed("cat ${configDir}/home-assistant.log")
-        print("\n### home-assistant.log ###\n")
-        print(output_log + "\n")
-
     with subtest("Check that no errors were logged"):
+        output_log = hass.succeed("cat ${configDir}/home-assistant.log")
         assert "ERROR" not in output_log
 
     with subtest("Check systemd unit hardening"):
