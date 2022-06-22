@@ -13613,10 +13613,6 @@
     githubId = 5185341;
     name = "Will Cohen";
   };
-  winden = {
-    email = "windenntw@gmail.com";
-    name = "Antonio Vargas Gonzalez";
-  };
   winpat = {
     email = "patrickwinter@posteo.ch";
     github = "winpat";
