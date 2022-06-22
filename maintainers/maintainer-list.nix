@@ -6768,10 +6768,6 @@
     github = "kjeremy";
     githubId = 4325700;
   };
-  kkallio = {
-    email = "tierpluspluslists@gmail.com";
-    name = "Karn Kallio";
-  };
   klden = {
     name = "Kenzyme Le";
     email = "kl@kenzymele.com";
