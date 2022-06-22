@@ -12047,6 +12047,12 @@
     githubId = 7512804;
     name = "Martin Langlotz";
   };
+  stargate01 = {
+    email = "christoph.honal@web.de";
+    github = "StarGate01";
+    githubId = 6362238;
+    name = "Christoph Honal";
+  };
   steamwalker = {
     email = "steamwalker@xs4all.nl";
     github = "steamwalker";
