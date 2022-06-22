@@ -1670,12 +1670,6 @@
     githubId = 37907;
     name = "Julian Stecklina";
   };
-  bloomvdomino = {
-    name = "Laura Fäßler";
-    email = "0x@ytex.de";
-    github = "bloomvdomino";
-    githubId = 33204710;
-  };
   bluescreen303 = {
     email = "mathijs@bluescreen303.nl";
     github = "bluescreen303";
