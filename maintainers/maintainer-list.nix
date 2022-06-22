@@ -7511,10 +7511,6 @@
     githubId = 1597330;
     name = "Leonardo Romor";
   };
-  lrworth = {
-    email = "luke@worth.id.au";
-    name = "Luke Worth";
-  };
   lschuermann = {
     email = "leon.git@is.currently.online";
     matrix = "@leons:is.currently.online";
