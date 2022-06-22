@@ -92,6 +92,7 @@ in buildPythonPackage {
 
     pushd dist
 
+    orig_name="$(echo ./*.whl)"
     wheel unpack --dest unpacked ./*.whl
     rm ./*.whl
     (
@@ -109,6 +110,7 @@ in buildPythonPackage {
         -e "/Requires-Dist: tensorflow-io-gcs-filesystem/d"
     )
     wheel pack ./unpacked/tensorflow*
+    mv *.whl $orig_name # avoid changes to the _os_arch.whl suffix
 
     popd
   '';
@@ -188,7 +190,6 @@ in buildPythonPackage {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Computation using data flow graphs for scalable machine learning";
     homepage = "http://tensorflow.org";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
