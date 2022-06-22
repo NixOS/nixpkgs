@@ -13,12 +13,16 @@ dotnetConfigureHook() {
         parallelFlag="--disable-parallel"
     fi
 
+    if [ -z "${dontDotnetSetNugetSource}" ]; then
+        nugetSourceFlag="--source \"@nugetSource@/lib\""
+    fi
+
     for project in ${projectFile[@]} ${testProjectFile[@]}; do
         env \
             dotnet restore "$project" \
                 -p:ContinuousIntegrationBuild=true \
                 -p:Deterministic=true \
-                --source "@nugetSource@/lib" \
+                ${nugetSourceFlag-} \
                 ${parallelFlag-} \
                 ${dotnetRestoreFlags[@]} \
                 ${dotnetFlags[@]}

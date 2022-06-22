@@ -99,9 +99,11 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `dotnetPackFlags` can be used to pass flags to `dotnet pack`. Used only if `packNupkg` is set to `true`.
 * `dotnetFlags` can be used to pass flags to all of the above phases.
 
-When packaging a new application, you need to fetch it's dependencies. You can set `nugetDeps` to an empty string to make the derivation temporarily evaluate, and then run `nix-build -A package.passthru.fetch-deps` to generate it's dependency fetching script. After running the script, you should have the location of the generated lockfile printed to the console. This can be copied to a stable directory. Note that if either `projectFile` or `nugetDeps` are unset, this script cannot be generated!
+When packaging a new application, you need to fetch it's nuget dependencies. You can run `nix-build -A attrpath.passthru.fetch-deps-impure --option sandbox false` to generate it's dependency lockfile. The contents of the `result` symlink this creates can be copied to a stable directory, and `nugetDeps` will need to be set to its path. Note that this process requires networking, so the sandbox must be disabled.
 
-Here is an example `default.nix`, using some of the previously discussed arguments:
+If you would rather build the lockfile without an impure derivation, you can generate a bash script with `nix-build -A attrpath.passthru.fetch-deps` which will generate the lockfile as well. Note that `fetch-deps-impure` is preferred as it mimics the behaviour of `dotnet restore` used in the parent derivation, while `fetch-deps` does not. Note that if either `projectFile` or `nugetDeps` are unset this script cannot be generated.
+
+Here is an example `default.nix` using some of the previously discussed arguments:
 ```nix
 { lib, buildDotnetModule, dotnetCorePackages, ffmpeg }:
 
@@ -119,7 +121,7 @@ in buildDotnetModule rec {
   projectReferences = [ referencedProject ]; # `referencedProject` must contain `nupkg` in the folder structure.
 
   dotnet-sdk = dotnetCorePackages.sdk_3_1;
-  dotnet-runtime = dotnetCorePackages.net_5_0;
+  dotnet-runtime = dotnetCorePackages.runtime_3_1;
   dotnetFlags = [ "--runtime linux-x64" ];
 
   executables = [ "foo" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
