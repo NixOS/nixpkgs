@@ -1,15 +1,18 @@
 { lib, fetchFromGitHub }:
-rec {
+let
   version = "0.15.3";
+  srcSha256 = "sha256-HOOH3H2SXLcT2oW/xL80TO+ZSI+Haulnznpb4hlCQow=";
+  yarnSha256 = "sha256-x9g0vSoexfknqLejgcNIigmkFnqYsmhcQNTOStcj68o=";
+in
+{
+  inherit version yarnSha256;
 
   src = fetchFromGitHub {
     owner = "woodpecker-ci";
     repo = "woodpecker";
     rev = "v${version}";
-    sha256 = "sha256-HOOH3H2SXLcT2oW/xL80TO+ZSI+Haulnznpb4hlCQow=";
+    sha256 = srcSha256;
   };
-
-  yarnSha256 = "sha256-x9g0vSoexfknqLejgcNIigmkFnqYsmhcQNTOStcj68o=";
 
   postBuild = ''
     cd $GOPATH/bin

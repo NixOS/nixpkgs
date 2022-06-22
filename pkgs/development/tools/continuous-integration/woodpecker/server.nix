@@ -17,6 +17,8 @@ buildGoModule {
 
   passthru = {
     inherit woodpecker-frontend;
+
+    updateScript = ./update.sh;
   };
 
   meta = common.meta // {
