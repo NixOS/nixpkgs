@@ -11,6 +11,7 @@
 , yajl
 , nixosTests
 , criu
+, fetchpatch
 }:
 
 let
@@ -47,6 +48,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YXbyGUY/E8odjljDok+yYyU8yZSyUFc22zumrUuuXXQ=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Should dropped in next release after 1.4.5
+    (fetchpatch {
+      name = "usrbin-paths.patch";
+      url = "https://github.com/containers/crun/commit/dd29f7f7f713c49784ac30f7cdca33b2ef94d5b8.patch";
+      sha256 = "sha256-kHHix8CUL+c8HbOe5qx4PeF1P19113U4bRZyleMUjqk=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
 
