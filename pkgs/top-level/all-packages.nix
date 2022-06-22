@@ -33774,6 +33774,8 @@ with pkgs;
 
   openroad = libsForQt5.callPackage ../applications/science/electronics/openroad { };
 
+  openboardview = callPackage ../applications/science/electronics/openboardview { };
+
   pcb = callPackage ../applications/science/electronics/pcb { };
 
   qucs = callPackage ../applications/science/electronics/qucs { };
