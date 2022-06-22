@@ -8239,12 +8239,6 @@
     githubId = 1788114;
     name = "Meghea Iulian";
   };
-  mehandes = {
-    email = "niewskici@gmail.com";
-    github = "mehandes";
-    githubId = 32581276;
-    name = "Matt Deming";
-  };
   meisternu = {
     email = "meister@krutt.org";
     github = "meisternu";
