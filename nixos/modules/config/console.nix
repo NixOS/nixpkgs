@@ -159,7 +159,11 @@ in
           "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
           "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
           "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
-          "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # keyboard layouts are compressed
+          "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # Fonts and keyboard layouts are compressed
+        ] ++ optionals (hasPrefix builtins.storeDir cfg.font) [
+          "${cfg.font}"
+        ] ++ optionals (hasPrefix builtins.storeDir cfg.keyMap) [
+          "${cfg.keyMap}"
         ];
 
         systemd.services.reload-systemd-vconsole-setup =
