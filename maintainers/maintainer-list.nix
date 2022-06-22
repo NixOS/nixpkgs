@@ -11750,10 +11750,6 @@
     githubId = 266500;
     name = "Sven Keidel";
   };
-  skrzyp = {
-    email = "jot.skrzyp@gmail.com";
-    name = "Jakub Skrzypnik";
-  };
   skykanin = {
     email = "skykanin@users.noreply.github.com";
     github = "skykanin";
