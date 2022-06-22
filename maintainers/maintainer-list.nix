@@ -2162,10 +2162,6 @@
     githubId = 89596;
     name = "Florian Friesdorf";
   };
-  chattered = {
-    email = "me@philscotted.com";
-    name = "Phil Scott";
-  };
   chekoopa = {
     email = "chekoopa@mail.ru";
     github = "chekoopa";
