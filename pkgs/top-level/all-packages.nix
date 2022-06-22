@@ -28848,6 +28848,8 @@ with pkgs;
 
   diff-pdf = callPackage ../applications/misc/diff-pdf { wxGTK = wxGTK31; };
 
+  diffuse = callPackage ../applications/misc/diffuse { };
+
   mlocate = callPackage ../tools/misc/mlocate { };
 
   plocate = callPackage ../tools/misc/plocate { };
