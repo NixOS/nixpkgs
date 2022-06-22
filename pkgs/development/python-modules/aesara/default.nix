@@ -6,6 +6,8 @@
 , etuples
 , fetchFromGitHub
 , filelock
+, jax
+, jaxlib
 , logical-unification
 , minikanren
 , numba
@@ -19,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "aesara";
-  version = "2.7.2";
+  version = "2.7.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +30,7 @@ buildPythonPackage rec {
     owner = "aesara-devs";
     repo = "aesara";
     rev = "refs/tags/rel-${version}";
-    hash = "sha256-NJxklOpIbSbi/SB/rafBNllpnNb1yWLVpyB2f/U0i78=";
+    hash = "sha256-LeZEWKSfVmU7k7qMjniUjwoDJ5xJUHoYux7Qy5/w4Cg=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +49,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    jax
+    jaxlib
     numba
     numba-scipy
     pytestCheckHook

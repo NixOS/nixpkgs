@@ -70,6 +70,11 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Session and Caching library with WSGI Middleware";
+    homepage = "https://github.com/bbangert/beaker";
+    license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ domenkozar ];
+    knownVulnerabilities = [
+      "CVE-2013-7489"
+    ];
   };
 }
