@@ -32,6 +32,7 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isLinux [
     jeepney
     secretstorage
+    dbus-python
   ];
 
   pythonImportsCheck = [
