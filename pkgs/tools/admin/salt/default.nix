@@ -8,11 +8,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
-  version = "3004.1";
+  version = "3004.2";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-fzRKJDJkik8HjapazMaNzf/hCVzqE+wh5QQTVg8Ewpg=";
+    hash = "sha256-L6ZE9iANTja1WEbLNytuZ7bKD77AaX8djXPncbZl7XA=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -29,9 +29,6 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./fix-libcrypto-loading.patch
-
-    # Bug in 3004.1: https://github.com/saltstack/salt/pull/61856
-    ./0001-Fix-Jinja2-3.1.0.patch
   ];
 
   postPatch = ''
