@@ -7665,10 +7665,6 @@
     githubId = 3044438;
     name = "Lucas Savva";
   };
-  m3tti = {
-    email = "mathaeus.peter.sander@gmail.com";
-    name = "Mathaeus Sander";
-  };
   ma27 = {
     email = "maximilian@mbosch.me";
     matrix = "@ma27:nicht-so.sexy";
