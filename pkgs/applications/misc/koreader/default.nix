@@ -25,7 +25,7 @@
 }:
 let
 
-  # maybe this should go in lib/attrs.nix?
+  # Maybe this should go in lib/attrs.nix?
   mapAttrsToConcatStringSep = sep: func: val:
     lib.concatStringsSep sep (lib.mapAttrsToList func val);
 
