@@ -10477,10 +10477,6 @@
     githubId = 25647735;
     name = "Victor Freire";
   };
-  ravloony = {
-    email = "ravloony@gmail.com";
-    name = "Tom Macdonald";
-  };
   rawkode = {
     email = "david.andrew.mckay@gmail.com";
     github = "rawkode";
