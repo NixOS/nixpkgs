@@ -78,7 +78,7 @@ let
           so delivering a highly-availabile service on top of a cluster of
           computers, each of which may be prone to failures.
         '';
-        maintainers = with maintainers; [ volth illustris ];
+        maintainers = with maintainers; [ illustris ];
         platforms = attrNames sha256;
       };
     };

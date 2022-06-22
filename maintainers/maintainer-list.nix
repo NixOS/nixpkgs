@@ -13541,12 +13541,6 @@
     githubId = 5604643;
     name = "Mikhail Volkhov";
   };
-  volth = {
-    email = "jaroslavas@volth.com";
-    github = "volth";
-    githubId = 508305;
-    name = "Jaroslavas Pocepko";
-  };
   vonfry = {
     email = "nixos@vonfry.name";
     github = "Vonfry";

@@ -80,7 +80,7 @@ in stdenv.mkDerivation {
     homepage = "http://www.mucommander.com/";
     description = "Cross-platform file manager";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ volth ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }
