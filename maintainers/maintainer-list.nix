@@ -8883,12 +8883,6 @@
     githubId = 220262;
     name = "Ion Mudreac";
   };
-  muflax = {
-    email = "mail@muflax.com";
-    github = "muflax";
-    githubId = 69918;
-    name = "Stefan Dorn";
-  };
   multun = {
     email = "victor.collod@epita.fr";
     github = "multun";

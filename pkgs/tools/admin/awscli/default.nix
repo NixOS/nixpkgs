@@ -90,6 +90,6 @@ with py.pkgs; buildPythonApplication rec {
     homepage = "https://aws.amazon.com/cli/";
     description = "Unified tool to manage your AWS services";
     license = licenses.asl20;
-    maintainers = with maintainers; [ muflax ];
+    maintainers = with maintainers; [ ];
   };
 }
