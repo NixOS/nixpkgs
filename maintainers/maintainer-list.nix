@@ -4483,12 +4483,6 @@
     githubId = 893115;
     name = "Mateusz Kowalczyk";
   };
-  fuwa = {
-    email = "echowss@gmail.com";
-    github = "fuwa0529";
-    githubId = 40521440;
-    name = "Haruka Akiyama";
-  };
   fuzen = {
     email = "me@fuzen.cafe";
     github = "Fuzen-py";
