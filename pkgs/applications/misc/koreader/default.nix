@@ -29,11 +29,11 @@ let
   mapAttrsToConcatStringSep = sep: func: val:
     lib.concatStringsSep sep (lib.mapAttrsToList func val);
 
-  # This reassembles a `.src.rock` from an installed lua package, so
-  # it can be reinstalled in the local "tree" used during koreader's
-  # build process.
-  # maybe this should go in `buildLuaRocksPackage` as a `passthru`?
-  makeSourceRock = luaPackageName:
+  # This reassembles a `.rock` from an installed lua package, so it
+  # can be reinstalled in the local "tree" used during koreader's
+  # build process.  Maybe this should go in `buildLuaRocksPackage` as
+  # a `passthru`?
+  buildLuaRock = luaPackageName:
      luaPackages.${luaPackageName}.overrideAttrs (oa: {
         postInstall = ''
           $LUAROCKS pack --tree=$out ${oa.pname}
@@ -42,9 +42,6 @@ let
           mv *.rock $out/
           '' + oa.postInstall or "";
       });
-
-  luaPackages_lpeg_src_rock    = makeSourceRock "lpeg";
-  luaPackages_luajson_src_rock = makeSourceRock "luajson";
 
   # this needs to exactly match `${stdenv.cc}/bin/cc -dumpmachine`,
   # which it should... we hope.
@@ -211,8 +208,6 @@ in stdenv.mkDerivation {
     sdcv
     SDL2
     luaPackages.luajson
-    luaPackages_lpeg_src_rock
-    luaPackages_luajson_src_rock
   ];
 
   dontUseCmakeConfigure = true;
@@ -222,8 +217,8 @@ in stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   preBuild = ''
-    ${luarocks}/bin/luarocks install --tree=base/build/${MACHINE}/rocks ${luaPackages_lpeg_src_rock}/*.rock
-    ${luarocks}/bin/luarocks install --tree=base/build/${MACHINE}/rocks ${luaPackages_luajson_src_rock}/*.rock
+    ${luarocks}/bin/luarocks install --tree=base/build/${MACHINE}/rocks ${buildLuaRock "lpeg"}/*.rock
+    ${luarocks}/bin/luarocks install --tree=base/build/${MACHINE}/rocks ${buildLuaRock "luajson"}/*.rock
     '';
 
   makeFlags = [
