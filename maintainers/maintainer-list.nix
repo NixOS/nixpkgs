@@ -3796,10 +3796,6 @@
     githubId = 5085029;
     name = "Emanuele Peruffo";
   };
-  epitrochoid = {
-    email = "mpcervin@uncg.edu";
-    name = "Mabry Cervin";
-  };
   equirosa = {
     email = "eduardo@eduardoquiros.com";
     github = "equirosa";
