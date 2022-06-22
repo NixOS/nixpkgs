@@ -6614,6 +6614,8 @@
   };
   karolchmist = {
     email = "info+nix@chmist.com";
+    github = "karolchmist";
+    githubId = 1927188;
     name = "karolchmist";
   };
   kayhide = {
