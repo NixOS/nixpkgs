@@ -121,7 +121,7 @@ let
     optional optionals optionalString;
 
   jre' = jre_minimal.override {
-    modules = [ "java.base" "java.desktop" "java.logging" ];
+    modules = [ "java.base" "java.desktop" "java.logging" "java.sql" ];
   };
 
   importVariant = f: import (./. + "/src-${variant}/${f}");
