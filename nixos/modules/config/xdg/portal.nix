@@ -1,6 +1,14 @@
 { config, pkgs, lib, ... }:
 
-with lib;
+let
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkRenamedOptionModule
+    teams
+    types;
+in
 
 {
   imports = [
