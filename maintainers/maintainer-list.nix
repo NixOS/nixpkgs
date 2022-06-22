@@ -11285,10 +11285,6 @@
     githubId = 5104601;
     name = "schnusch";
   };
-  schristo = {
-    email = "schristopher@konputa.com";
-    name = "Scott Christopher";
-  };
   sciencentistguy = {
     email = "jamie@quigley.xyz";
     name = "Jamie Quigley";
