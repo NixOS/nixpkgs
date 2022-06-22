@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , pytestCheckHook
 , atpublic
@@ -72,6 +73,14 @@ buildPythonPackage rec {
     rev = version;
     hash = "sha256-7ywDMAHQAl39kiHfxVkq7voUEKqbb9Zq8qlaug7+ukI=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ibis-project/ibis/commit/a6f64c6c32b49098d39bb205952cbce4bdfea657.patch";
+      sha256 = "sha256-puVMjiJXWk8C9yhuXPD9HKrgUBYcYmUPacQz5YO5xYQ=";
+      includes = [ "pyproject.toml" ];
+    })
+  ];
 
   nativeBuildInputs = [ poetry-core ];
 

@@ -3,9 +3,7 @@
 let
   generic = args: let
     imported = import ./generic.nix args;
-  in if lib.versionAtLeast args.version "391"
-    && stdenv.hostPlatform.system != "x86_64-linux" then null
-  else callPackage imported {
+  in callPackage imported {
     lib32 = (pkgsi686Linux.callPackage imported {
       libsOnly = true;
       kernel = null;
@@ -21,6 +19,7 @@ rec {
     then generic {
       version = "515.48.07";
       sha256_64bit = "sha256-4odkzFsTwy52NwUT2ur8BcKJt37gURVSRQ8aAOMa4eM=";
+      openSha256 = "sha256-EGIrdabPr+AhQxXhFb8XXumuPxC+U6XEeIeSYFvA/q4=";
       settingsSha256 = "sha256-XwdMsAAu5132x2ZHqjtFvcBJk6Dao7I86UksxrOkknU=";
       persistencedSha256 = "sha256-BTfYNDJKe4tOvV71/1JJSPltJua0Mx/RvDcWT5ccRRY=";
     }
@@ -32,6 +31,7 @@ rec {
   beta = generic {
     version = "515.43.04";
     sha256_64bit = "sha256-PodaTTUOSyMW8rtdtabIkSLskgzAymQyfToNlwxPPcc=";
+    openSha256 = "sha256-1bAr5dWZ4jnY3Uo2JaEz/rhw2HuW9LZ5bACmA1VG068=";
     settingsSha256 = "sha256-j47LtP6FNTPfiXFh9KwXX8vZOQzlytA30ZfW9N5F2PY=";
     persistencedSha256 = "sha256-hULBy0wnVpLH8I0L6O9/HfgvJURtE2whpXOgN/vb3Wo=";
   };
@@ -46,6 +46,7 @@ rec {
     settingsSha256 = "sha256-fq6RlD6g3uylvvTjE4MmaQwxPJYU0u6IMfpPVzks0tI=";
     persistencedSha256 = "sha256-eHvauvh8Wd+b8DK6B3ZWNjoWGztupWrR8iog9ok58io=";
     url = "https://developer.nvidia.com/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
+    broken = kernel.kernelAtLeast "5.17";
   };
 
   # Update note:

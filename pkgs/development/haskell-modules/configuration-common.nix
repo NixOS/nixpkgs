@@ -238,10 +238,16 @@ self: super: {
   digit = doJailbreak super.digit;
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
-  hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck super.hnix);
+  # 2022-06-17: Use hnix-store 0.5 until hnix 0.17
+  hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck (
+    super.hnix.overrideScope (hself: hsuper: {
+      hnix-store-core = hself.hnix-store-core_0_5_0_0;
+      hnix-store-remote = hself.hnix-store-remote_0_5_0_0;
+    })
+  ));
   # Too strict bounds on algebraic-graphs
   # https://github.com/haskell-nix/hnix-store/issues/180
-  hnix-store-core = doJailbreak super.hnix-store-core;
+  hnix-store-core_0_5_0_0 = doJailbreak super.hnix-store-core_0_5_0_0;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
@@ -2096,15 +2102,18 @@ self: super: {
     };
   } self.haskell-ci;
 
-  large-hashable = lib.pipe super.large-hashable [
-    # 2022-03-21: use version from git which includes support for GHC 9.0.1
+  large-hashable = lib.pipe (super.large-hashable.override {
+    # https://github.com/factisresearch/large-hashable/commit/5ec9d2c7233fc4445303564047c992b693e1155c
+    utf8-light = null;
+  }) [
+    # 2022-03-21: use version from git which supports GHC 9.{0,2} and aeson 2.0
     (assert super.large-hashable.version == "0.1.0.4"; overrideSrc {
-      version = "unstable-2021-11-01";
+      version = "unstable-2022-06-10";
       src = pkgs.fetchFromGitHub {
         owner = "factisresearch";
         repo = "large-hashable";
-        rev = "b4e6b3d23c2b1af965ffcc055f5405ff673e66cf";
-        sha256 = "1bgf37qfzdyjhpgnj9aipwzpa06nc7b1g4f64xsmknyds7ffhixz";
+        rev = "4d149c828c185bcf05556d1660f79ff1aec7eaa1";
+        sha256 = "141349qcw3m93jw95jcha9rsg2y8sn5ca5j59cv8xmci38k2nam0";
       };
     })
     # Provide newly added dependencies
@@ -2117,15 +2126,12 @@ self: super: {
         self.inspection-testing
       ];
     }))
-    # 2022-03-21: patch for aeson 2.0
-    # https://github.com/factisresearch/large-hashable/pull/22
-    (appendPatches [
-      (fetchpatch {
-        name = "large-hashable-aeson-2.0.patch";
-        url = "https://github.com/factisresearch/large-hashable/commit/7094ef0ba55b4848cb57bae73d119acfb496a4c9.patch";
-        sha256 = "0ckiii0s697h817z65jwlmjzqw2ckpm815wqcnxjigf6v9kxps8j";
-      })
-    ])
+    # https://github.com/factisresearch/large-hashable/issues/24
+    (overrideCabal (drv: {
+      testFlags = drv.testFlags or [] ++ [
+        "-n" "^Data.LargeHashable.Tests.Inspection:genericSumGetsOptimized$"
+      ];
+    }))
   ];
 
   # BSON defaults to requiring network instead of network-bsd which is
@@ -2179,10 +2185,10 @@ self: super: {
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
     ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
   });
 
-  ghc-lib-parser-ex_9_2_0_4 = super.ghc-lib-parser-ex_9_2_0_4.override {
+  ghc-lib-parser-ex_9_2_1_0 = super.ghc-lib-parser-ex_9_2_1_0.override {
     ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
   };
 

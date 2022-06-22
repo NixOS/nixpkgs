@@ -13,7 +13,7 @@ deployAndroidPackage {
       zlib
       ncurses5
       stdenv.cc.cc
-      i686.glibc
+      pkgs_i686.glibc
       expat
       freetype
       nss

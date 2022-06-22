@@ -21,6 +21,7 @@
 { lib
 , pkgs
 , stdenv
+, fetchpatch
 
 # build time
 , autoconf
@@ -219,6 +220,12 @@ buildStdenv.mkDerivation ({
   ];
 
   patches = [
+    (fetchpatch {
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
+      name = "rust-cbindgen-0.24.2-compat.patch";
+      url = "https://raw.githubusercontent.com/canonical/firefox-snap/5622734942524846fb0eb7108918c8cd8557fde3/patches/fix-ftbfs-newer-cbindgen.patch";
+      hash = "sha256-+wNZhkDB3HSknPRD4N6cQXY7zMT/DzNXx29jQH0Gb1o=";
+    })
   ]
   ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch

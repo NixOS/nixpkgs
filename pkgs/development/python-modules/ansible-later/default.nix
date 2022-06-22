@@ -63,7 +63,7 @@ buildPythonPackage rec {
       --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --cov-append --no-cov-on-fail" "" \
       --replace 'PyYAML = "6.0"' 'PyYAML = "*"' \
       --replace 'unidiff = "0.7.3"' 'unidiff = "*"' \
-      --replace 'jsonschema = "4.6.0"' 'jsonschema = "*"'
+      --replace 'jsonschema = "' 'jsonschema = "^'
   '';
 
   postInstall = ''

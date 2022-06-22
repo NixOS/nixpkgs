@@ -2,7 +2,7 @@
 , ensureNewerSourcesHook
 , cmake, pkg-config
 , which, git
-, boost
+, boost175
 , libxml2, zlib, lz4
 , openldap, lttng-ust
 , babeltrace, gperf
@@ -21,7 +21,7 @@
 , doxygen
 , graphviz
 , fmt
-, python3
+, python39
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -104,7 +104,13 @@ let
     meta = getMeta "Ceph common module for code shared by manager modules";
   };
 
-  python = python3;
+  # Boost 1.75 is not compatible with Python 3.10
+  python = python39;
+
+  boost = boost175.override {
+    enablePython = true;
+    inherit python;
+  };
 
   ceph-python-env = python.withPackages (ps: [
     ps.sphinx

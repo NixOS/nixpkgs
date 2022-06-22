@@ -1,4 +1,6 @@
 { lib
+, buildLuarocksPackage
+, callPackage
 , vimUtils
 , nodejs
 , neovim-unwrapped
@@ -184,4 +186,9 @@ in
 {
   inherit makeNeovimConfig;
   inherit legacyWrapper;
+
+  buildNeovimPluginFrom2Nix = callPackage ./build-neovim-plugin.nix {
+    inherit (vimUtils) buildVimPluginFrom2Nix toVimPlugin;
+    inherit buildLuarocksPackage;
+  };
 }

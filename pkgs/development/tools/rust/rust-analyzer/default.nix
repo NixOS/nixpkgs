@@ -12,14 +12,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2022-05-17";
-  cargoSha256 = "sha256-H0nuS56mvo5YUAUOsEnR4Cv3iFKixoHK83BcM1PFMA8=";
+  version = "2022-06-13";
+  cargoSha256 = "sha256-pNYhX6Jh/NPIVf7labyDKxk8siHFABMSsJ3ZVBWowUo=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-vrVpgQYUuJPgK1NMb1nxlCdxjoYo40YkUbZpH2Z2mwM=";
+    sha256 = "sha256-IArOOdvfz+864Rs7fgHolfYfcjYTlvWebeEsJgnfyqI=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional useMimalloc "mimalloc";
 
-  RUST_ANALYZER_REV = version;
+  CFG_RELEASE = version;
 
   inherit doCheck;
   preCheck = lib.optionalString doCheck ''

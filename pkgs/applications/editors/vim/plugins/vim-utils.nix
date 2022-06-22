@@ -205,9 +205,6 @@ let
       ln -sf ${plugin}/${rtpPath} $out/pack/${packageName}/${dir}/${lib.getName plugin}
     '';
 
-    link = pluginPath: if hasLuaModule pluginPath
-      then linkLuaPlugin pluginPath
-      else linkVimlPlugin pluginPath;
 
     packageLinks = packageName: {start ? [], opt ? []}:
     let
@@ -225,9 +222,9 @@ let
       [ "mkdir -p $out/pack/${packageName}/start" ]
       # To avoid confusion, even dependencies of optional plugins are added
       # to `start` (except if they are explicitly listed as optional plugins).
-      ++ (builtins.map (x: link x packageName "start") allPlugins)
+      ++ (builtins.map (x: linkVimlPlugin x packageName "start") allPlugins)
       ++ ["mkdir -p $out/pack/${packageName}/opt"]
-      ++ (builtins.map (x: link x packageName "opt") opt)
+      ++ (builtins.map (x: linkVimlPlugin x packageName "opt") opt)
       # Assemble all python3 dependencies into a single `site-packages` to avoid doing recursive dependency collection
       # for each plugin.
       # This directory is only for python import search path, and will not slow down the startup time.
@@ -290,14 +287,14 @@ let
       /* vim-plug is an extremely popular vim plugin manager.
       */
       plugImpl =
-      (''
+      ''
         source ${vimPlugins.vim-plug.rtp}/plug.vim
         silent! call plug#begin('/dev/null')
 
         '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
 
         call plug#end()
-      '');
+      '';
 
       /*
        vim-addon-manager = VAM
@@ -533,15 +530,10 @@ rec {
     } ./neovim-require-check-hook.sh) {};
 
   inherit (import ./build-vim-plugin.nix {
-    inherit lib stdenv rtpPath vim vimGenDocHook vimCommandCheckHook neovimRequireCheckHook;
+    inherit lib stdenv rtpPath vim vimGenDocHook
+      toVimPlugin vimCommandCheckHook neovimRequireCheckHook;
   }) buildVimPlugin buildVimPluginFrom2Nix;
 
-
-  # TODO placeholder to ease working on automatic plugin detection
-  # this should be a luarocks "flat" install with appropriate vim hooks
-  buildNeovimPluginFrom2Nix = attrs: let drv = (buildVimPluginFrom2Nix attrs); in drv.overrideAttrs(oa: {
-    nativeBuildInputs = oa.nativeBuildInputs ++ [ neovimRequireCheckHook ];
-  });
 
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {
@@ -566,4 +558,21 @@ rec {
       nativePlugins = lib.concatMap ({start?[], opt?[], knownPlugins?vimPlugins}: start++opt) nativePluginsConfigs;
     in
       nativePlugins ++ nonNativePlugins;
+
+  toVimPlugin = drv:
+    drv.overrideAttrs(oldAttrs: {
+      # dont move the "doc" folder since vim expects it
+      forceShare = [ "man" "info" ];
+
+      nativeBuildInputs = oldAttrs.nativeBuildInputs or []
+      ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+        vimCommandCheckHook vimGenDocHook
+        # many neovim plugins keep using buildVimPlugin
+        neovimRequireCheckHook
+      ];
+
+      passthru = (oldAttrs.passthru or {}) // {
+        vimPlugin = true;
+      };
+    });
 }

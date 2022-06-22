@@ -98,6 +98,7 @@ let
           useNetworkd = networkd;
           useDHCP = false;
           defaultGateway = "192.168.1.1";
+          defaultGateway6 = "fd00:1234:5678:1::1";
           interfaces.eth1.ipv4.addresses = mkOverride 0 [
             { address = "192.168.1.2"; prefixLength = 24; }
             { address = "192.168.1.3"; prefixLength = 32; }
@@ -139,6 +140,8 @@ let
           with subtest("Test default gateway"):
               router.wait_until_succeeds("ping -c 1 192.168.3.1")
               client.wait_until_succeeds("ping -c 1 192.168.3.1")
+              router.wait_until_succeeds("ping -c 1 fd00:1234:5678:3::1")
+              client.wait_until_succeeds("ping -c 1 fd00:1234:5678:3::1")
         '';
     };
     routeType = {

@@ -4,7 +4,7 @@
 , autoconf213
 , pkg-config
 , perl
-, python3
+, python39
 , zip
 , buildPackages
 , which
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     rustc.llvmPackages.llvm # for llvm-objdump
     perl
     pkg-config
-    python3
+    python39
     rust-cbindgen
     rustc
     which

@@ -338,17 +338,10 @@ dont-distribute-packages:
  - Shellac-haskeline
  - Shellac-readline
  - ShortestPathProblems
- - Shpadoinkle
- - Shpadoinkle-backend-pardiff
- - Shpadoinkle-backend-snabbdom
- - Shpadoinkle-backend-static
  - Shpadoinkle-developer-tools
  - Shpadoinkle-disembodied
  - Shpadoinkle-examples
- - Shpadoinkle-html
- - Shpadoinkle-lens
  - Shpadoinkle-router
- - Shpadoinkle-streaming
  - Shpadoinkle-template
  - Shpadoinkle-widgets
  - SimpleGL
@@ -650,7 +643,6 @@ dont-distribute-packages:
  - apiary-websockets
  - apis
  - apotiki
- - appendful-persistent
  - approx-rand-test
  - arbor-monad-metric-datadog
  - archive-tar-bytestring
@@ -692,10 +684,6 @@ dont-distribute-packages:
  - audiovisual
  - aura
  - authoring
- - autodocodec-openapi3
- - autodocodec-schema
- - autodocodec-swagger2
- - autodocodec-yaml
  - automata
  - autonix-deps-kf5
  - avers
@@ -878,7 +866,6 @@ dont-distribute-packages:
  - cabal-query
  - cabal-test
  - cabal2arch
- - cabal2json
  - cabalmdvrpm
  - cabalrpmdeps
  - cabocha
@@ -923,7 +910,6 @@ dont-distribute-packages:
  - categorical-algebra
  - category
  - category-extras
- - cautious-gen
  - cctools-workqueue
  - cef3-simple
  - ceilometer-common
@@ -1040,7 +1026,6 @@ dont-distribute-packages:
  - commsec-keyexchange
  - comonad-random
  - compact-mutable
- - compactable
  - compdata-automata
  - compdata-dags
  - compdata-param
@@ -1140,7 +1125,6 @@ dont-distribute-packages:
  - csv-enumerator
  - ctpl
  - cube
- - cuckoo
  - curryer-rpc
  - cursedcsv
  - cv-combinators
@@ -1387,7 +1371,6 @@ dont-distribute-packages:
  - eventsource-stub-store
  - every-bit-counts
  - exception-monads-fd
- - exchangerates
  - exference
  - exinst-aeson
  - exinst-bytes
@@ -1445,7 +1428,6 @@ dont-distribute-packages:
  - feed-translator
  - feed2lj
  - feed2twitter
- - feedback
  - fei-base
  - fei-dataiter
  - fei-datasets
@@ -1474,7 +1456,6 @@ dont-distribute-packages:
  - fixed-point-vector
  - fixed-point-vector-space
  - fixed-precision
- - fixer
  - fixhs
  - flac-picture
  - flashblast
@@ -1573,17 +1554,7 @@ dont-distribute-packages:
  - geni-util
  - geniconvert
  - geniserver
- - genvalidity-aeson
- - genvalidity-appendful
- - genvalidity-hspec-aeson
  - genvalidity-mergeful
- - genvalidity-mergeless
- - genvalidity-sydtest
- - genvalidity-sydtest-aeson
- - genvalidity-sydtest-hashable
- - genvalidity-sydtest-lens
- - genvalidity-sydtest-persistent
- - genvalidity-typed-uuid
  - geodetic
  - geolite-csv
  - getemx
@@ -1598,7 +1569,6 @@ dont-distribute-packages:
  - ghc-session
  - ghc-tags-plugin
  - ghci-pretty
- - ghcjs-dom-hello
  - ghcjs-dom-webkit
  - ghcjs-fetch
  - ghcjs-hplay
@@ -1964,7 +1934,6 @@ dont-distribute-packages:
  - hascat-setup
  - hascat-system
  - hashable-accelerate
- - hashes
  - hashflare
  - hask-home
  - haskades
@@ -2207,6 +2176,7 @@ dont-distribute-packages:
  - hs-ix
  - hs-opentelemetry-exporter-in-memory
  - hs-opentelemetry-exporter-otlp
+ - hs-opentelemetry-instrumentation-cloudflare
  - hs-opentelemetry-instrumentation-conduit
  - hs-opentelemetry-instrumentation-http-client
  - hs-opentelemetry-instrumentation-persistent
@@ -2433,7 +2403,6 @@ dont-distribute-packages:
  - jobqueue
  - join
  - jordan-openapi
- - jsaddle-hello
  - jsc
  - jsmw
  - json-ast-json-encoder
@@ -2703,6 +2672,8 @@ dont-distribute-packages:
  - majordomo
  - majority
  - make-package
+ - managed-functions-http-connector
+ - managed-functions-json
  - manatee
  - manatee-all
  - manatee-anything
@@ -2751,7 +2722,6 @@ dont-distribute-packages:
  - memis
  - memory-hexstring
  - mergeful-persistent
- - mergeless-persistent
  - merkle-patricia-db
  - meta-par-accelerate
  - metaplug
@@ -2987,7 +2957,6 @@ dont-distribute-packages:
  - opc-xml-da-client
  - open-adt-tutorial
  - openai-hs
- - openapi3-code-generator
  - opencv-extra
  - openpgp-Crypto
  - openpgp-crypto-api
@@ -3200,7 +3169,6 @@ dont-distribute-packages:
  - proto3-wire
  - protobuf-native
  - protocol-buffers-descriptor-fork
- - proton
  - psc-ide
  - psql
  - ptera
@@ -3452,9 +3420,6 @@ dont-distribute-packages:
  - runtime-arbitrary
  - rv
  - s-expression
- - safe-coloured-text-gen
- - safe-coloured-text-layout
- - safe-coloured-text-layout-gen
  - safe-coupling
  - safe-plugins
  - safer-file-handles
@@ -3762,7 +3727,6 @@ dont-distribute-packages:
  - sump
  - sunroof-examples
  - sunroof-server
- - super-user-spark
  - supercollider-ht
  - supercollider-midi
  - superconstraints
@@ -3775,25 +3739,10 @@ dont-distribute-packages:
  - sweet-egison
  - switch
  - syb-with-class-instances-text
- - sydtest
- - sydtest-aeson
  - sydtest-amqp
- - sydtest-hedgehog
- - sydtest-hedis
- - sydtest-hspec
- - sydtest-mongo
- - sydtest-persistent
- - sydtest-persistent-postgresql
- - sydtest-persistent-sqlite
- - sydtest-process
- - sydtest-rabbitmq
- - sydtest-servant
- - sydtest-typed-process
- - sydtest-wai
  - sydtest-webdriver
  - sydtest-webdriver-screenshot
  - sydtest-webdriver-yesod
- - sydtest-yesod
  - sylvia
  - sym-plot
  - symantic-atom
@@ -3895,7 +3844,6 @@ dont-distribute-packages:
  - to-string-instances
  - toboggan
  - todos
- - token-limiter-concurrent
  - toktok
  - tomlcheck
  - tonatona
@@ -3977,7 +3925,6 @@ dont-distribute-packages:
  - typed-admin
  - typed-encoding-encoding
  - typed-streams
- - typed-uuid
  - typelevel
  - typelevel-rewrite-rules
  - typesafe-precure

@@ -61,6 +61,7 @@ mapAliases ({
   django_extensions = django-extensions; # added 2022-01-09
   django_guardian = django-guardian; # added 2022-05-19
   django_modelcluster = django-modelcluster; # added 2022-04-02
+  django_reversion = django-reversion; # added 2022-06-18
   django_polymorphic = django-polymorphic; # added 2022-05-24
   django_redis = django-redis; # added 2021-10-11
   django_taggit = django-taggit; # added 2021-10-11
@@ -84,6 +85,7 @@ mapAliases ({
   hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
   IMAPClient = imapclient; # added 2021-10-28
+  ipaddress = throw "ipaddress has been removed because it is no longer required since python 2.7."; # added 2022-05-30
   jupyter_client = jupyter-client; # added 2021-10-15
   Keras = keras; # added 2021-11-25
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
@@ -96,6 +98,7 @@ mapAliases ({
   mailman-web = throw "Please use pkgs.mailman-web"; # added 2022-04-29
   net2grid = gridnet; # add 2022-04-22
   nose-cover3 = throw "nose-cover3 has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-02-16
+  ordereddict = throw "ordereddict has been removed because it is only useful on unsupported python versions."; # added 2022-05-28
   pam = python-pam; # added 2020-09-07.
   PasteDeploy = pastedeploy; # added 2021-10-07
   pathpy = path; # added 2022-04-12
@@ -111,6 +114,7 @@ mapAliases ({
   pydrive = throw "pydrive is broken and deprecated and has been replaced with pydrive2."; # added 2022-06-01
   pyGtkGlade = throw "Glade support for pygtk has been removed"; # added 2022-01-15
   pycallgraph = throw "pycallgraph has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
+  pycryptodome-test-vectors = throw "pycryptodome-test-vectors has been removed because it is an internal package to pycryptodome"; # added 2022-05-28
   pyialarmxr = pyialarmxr-homeassistant; # added 2022-06-07
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0

@@ -9,14 +9,14 @@
 
 buildPythonApplication rec {
   pname = "glances";
-  version = "3.2.5";
+  version = "3.2.6.4";
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "v${version}";
-    sha256 = "sha256-kTnUP7WvmEw4VazjLrGb0FhSdz+/OadzgwDXs1SA02o=";
+    sha256 = "sha256-i88bz6AwfDbqC+7yvr7uDofAqBwQmnfoKbt3iJz4Ft8=";
   };
 
   # Some tests fail in the sandbox (they e.g. require access to /sys/class/power_supply):

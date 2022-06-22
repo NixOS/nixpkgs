@@ -147,6 +147,11 @@ installPhase() {
         fi
     fi
 
+    if [ -n "$firmware" ]; then
+        # Install the GSP firmware
+        install -Dm644 firmware/gsp.bin $firmware/lib/firmware/nvidia/$version/gsp.bin
+    fi
+
     # All libs except GUI-only are installed now, so fixup them.
     for libname in $(find "$out/lib/" $(test -n "$lib32" && echo "$lib32/lib/") $(test -n "$bin" && echo "$bin/lib/") -name '*.so.*')
     do

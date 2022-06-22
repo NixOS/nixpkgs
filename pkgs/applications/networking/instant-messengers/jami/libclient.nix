@@ -22,6 +22,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     jami-daemon
+    jami-daemon.ffmpeg
   ];
 
   patches = [

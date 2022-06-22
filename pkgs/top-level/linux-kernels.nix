@@ -357,6 +357,10 @@ in {
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
     nvidia_x11             = nvidiaPackages.stable;
 
+    # this is not a replacement for nvidia_x11
+    # only the opensource kernel driver exposed for hydra to build
+    nvidia_x11_beta_open   = nvidiaPackages.beta.open;
+
     openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
 
     ply = callPackage ../os-specific/linux/ply { };
@@ -567,7 +571,7 @@ in {
   });
 
   packageAliases = {
-    linux_default = if stdenv.hostPlatform.is32bit then packages.linux_5_10 else packages.linux_5_15;
+    linux_default = packages.linux_5_15;
     # Update this when adding the newest kernel major version!
     linux_latest = packages.linux_5_18;
     linux_mptcp = packages.linux_mptcp_95;

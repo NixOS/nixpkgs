@@ -24,11 +24,11 @@ buildPythonPackage rec {
   doCheck = !isPy3k;
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "https://github.com/erikrose/nose-progressive";
     description = "A testrunner with a progress bar and smarter tracebacks";
     license = licenses.mit;
     maintainers = with maintainers; [ domenkozar ];
+    broken = true; # relies on 2to3 conversion, which was removed from setuptools>=58.0
   };
 
 }

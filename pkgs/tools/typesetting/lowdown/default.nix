@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lowdown";
-  version = "0.11.1";
+  version = "1.0.0";
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "1l0055g8v0dygyxvk5rchp4sn1g2lakbf6hhq0wkj6nxkfpl43mkyc4vpb02r7v6iqfdwq4461dmdi78blsb3nj8b1gcjx75v7x9pa1";
+    sha512 = "2izqgzk677y511kms09c0hgar2ax5cd5hspr8djsa3qykaxq0688xkgfad00bl6j0jpixna714ipvqa0gxm480iz2sma7qhdgr6bl4x";
   };
 
   # Upstream always passes GNU-style "soname", but cctools expects "install_name".
