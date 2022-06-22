@@ -206,6 +206,6 @@ in buildPythonApplication rec {
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ tstrobel offline numinit mvnetbiz ];
+    maintainers = with maintainers; [ offline numinit mvnetbiz ];
   };
 }
