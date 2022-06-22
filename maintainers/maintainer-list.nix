@@ -4453,10 +4453,6 @@
     githubId = 17859309;
     name = "Fuzen";
   };
-  fuzzy-id = {
-    email = "hacking+nixos@babibo.de";
-    name = "Thomas Bach";
-  };
   fxfactorial = {
     email = "edgar.factorial@gmail.com";
     github = "fxfactorial";
