@@ -109,14 +109,13 @@ in stdenv.mkDerivation {
       --replace BINARY_DIR}/lib BINARY_DIR}/lib/
 
     for A in \
-      base/thirdparty/glib/build/git_checkout/glib/gobject/glib-mkenums.in \
       base/thirdparty/glib/build/git_checkout/glib/glib/gtester-report.in \
+      base/thirdparty/glib/build/git_checkout/glib/gobject/glib-mkenums.in \
       base/thirdparty/glib/build/git_checkout/glib/gobject/tests/taptestrunner.py \
+      base/thirdparty/glib/build/git_checkout/glib/gobject/glib-genmarshal.in \
       base/thirdparty/glib/build/git_checkout/glib/gio/gio-querymodules-wrapper.py \
       base/thirdparty/glib/build/git_checkout/glib/gio/tests/gengiotypefuncs.py \
       base/thirdparty/glib/build/git_checkout/glib/gio/gdbus-2.0/codegen/gdbus-codegen.in \
-      base/thirdparty/glib/build/git_checkout/glib/gobject/glib-mkenums.in \
-      base/thirdparty/glib/build/git_checkout/glib/gobject/glib-genmarshal.in \
       ; do substituteInPlace $A --replace /usr/bin/env ${coreutils}/bin/env; done
     '';
 
