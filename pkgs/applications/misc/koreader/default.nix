@@ -233,6 +233,7 @@ in stdenv.mkDerivation {
 
   # koreader does not have a separate `make install` target
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
 
     mkdir -p $out/share/{applications,pixmaps,man/man1}
@@ -246,6 +247,7 @@ in stdenv.mkDerivation {
 
     mkdir -p $out/lib
     cp -rL koreader-emulator-$(${stdenv.cc}/bin/cc -dumpmachine)/koreader $out/lib/koreader
+    runHook postInstall
     '';
 
   meta = with lib; {
