@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lorien";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "mbrlabs";
     repo = "Lorien";
     rev = "v${version}";
-    sha256 = "sha256-Uoozqc+St/CAWor7sWwQzi/1Vavc4wmVd5BDfJAsKHw=";
+    sha256 = "sha256-x81Obana2BEGrYSoJHDdCkL6UaULfQGQ94tlrH5+kdY=";
   };
 
   nativeBuildInputs = [
