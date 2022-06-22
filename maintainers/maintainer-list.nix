@@ -2860,10 +2860,6 @@
     githubId = 7589338;
     name = "Daniel Șerbănescu";
   };
-  dasuxullebt = {
-    email = "christoph.senjak@googlemail.com";
-    name = "Christoph-Simon Senjak";
-  };
   datafoo = {
     email = "34766150+datafoo@users.noreply.github.com";
     github = "datafoo";

@@ -100,6 +100,6 @@ mkDerivation rec {
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jagajaga dasuxullebt jraygauthier ];
+    maintainers = with maintainers; [ jagajaga jraygauthier ];
   };
 }
