@@ -15,6 +15,10 @@ buildGoModule {
 
   CGO_ENABLED = 1;
 
+  passthru = {
+    inherit woodpecker-frontend;
+  };
+
   meta = common.meta // {
     description = "Woodpecker Continuous Integration server";
   };
