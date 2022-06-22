@@ -94,7 +94,7 @@ let
           The new IDE extends the IntelliJ platform with the coding assistance
           and tool integrations specific for the Go language
         '';
-        maintainers = [ maintainers.miltador ];
+        maintainers = [ ];
       };
     }).overrideAttrs (attrs: {
       postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
@@ -206,7 +206,7 @@ let
           apps, services and libraries, Unity games, ASP.NET and
           ASP.NET Core web applications.
         '';
-        maintainers = [ maintainers.miltador ];
+        maintainers = [ ];
       };
     }).overrideAttrs (attrs: {
       postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''

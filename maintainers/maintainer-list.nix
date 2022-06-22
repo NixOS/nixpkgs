@@ -8358,10 +8358,6 @@
     githubId = 5378535;
     name = "Milo Gertjejansen";
   };
-  miltador = {
-    email = "miltador@yandex.ua";
-    name = "Vasiliy Solovey";
-  };
   mimame = {
     email = "miguel.madrid.mencia@gmail.com";
     github = "mimame";
