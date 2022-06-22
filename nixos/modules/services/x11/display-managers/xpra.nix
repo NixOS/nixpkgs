@@ -26,6 +26,13 @@ in
         description = "Bind xpra to TCP";
       };
 
+      desktop = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "gnome-shell";
+        description = "Start a desktop environment instead of seamless mode";
+      };
+
       auth = mkOption {
         type = types.str;
         default = "pam";
@@ -222,7 +229,7 @@ in
     services.xserver.displayManager.job.execCmd = ''
       ${optionalString (cfg.pulseaudio)
         "export PULSE_COOKIE=/run/pulse/.config/pulse/cookie"}
-      exec ${pkgs.xpra}/bin/xpra start \
+      exec ${pkgs.xpra}/bin/xpra ${if cfg.desktop == null then "start" else "start-desktop --start=${cfg.desktop}"} \
         --daemon=off \
         --log-dir=/var/log \
         --log-file=xpra.log \
