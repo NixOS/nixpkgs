@@ -9371,10 +9371,6 @@
     githubId = 20391;
     name = "Nahum Shalman";
   };
-  nslqqq = {
-    email = "nslqqq@gmail.com";
-    name = "Nikita Mikhailov";
-  };
   nthorne = {
     email = "notrupertthorne@gmail.com";
     github = "nthorne";
