@@ -1,4 +1,4 @@
-{ branch ? "stable", pkgs, lib, stdenv }:
+{ branch ? "stable", pkgs, lib, stdenv, withOpenASAR ? false }:
 let
   inherit (pkgs) callPackage fetchurl;
   versions = if stdenv.isLinux then {
@@ -61,8 +61,11 @@ let
       ++ lib.optionals (branch == "ptb") [ "aarch64-darwin" ];
   };
   package = if stdenv.isLinux then ./linux.nix else ./darwin.nix;
+
+  openasar = if withOpenASAR then callPackage ./openasar.nix { } else null;
+
   packages = (builtins.mapAttrs
-    (_: value: callPackage package (value // { inherit src version; meta = meta // { mainProgram = value.binaryName; }; }))
+    (_: value: callPackage package (value // { inherit src version openasar; meta = meta // { mainProgram = value.binaryName; }; }))
     {
       stable = rec {
         pname = "discord";
