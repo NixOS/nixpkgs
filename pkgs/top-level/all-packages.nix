@@ -15383,20 +15383,27 @@ with pkgs;
 
   ctmg = callPackage ../tools/security/ctmg { };
 
-  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake {
+  cmake = callPackage ../development/tools/build-managers/cmake {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+    inherit (libsForQt5) qtbase wrapQtAppsHook;
   };
 
-  cmakeMinimal = libsForQt5.callPackage ../development/tools/build-managers/cmake {
+  cmakeMinimal = callPackage ../development/tools/build-managers/cmake {
     isBootstrap = true;
+    qtbase = null;
+    wrapQtAppsHook = null;
     # There is no SystemConfiguration in bootstrapTools, so this version gets
     # patched to remove that dependency.
     SystemConfiguration = null;
   };
 
-  cmakeCurses = cmake.override { useNcurses = true; };
+  cmakeCurses = cmake.override {
+    uiToolkits = [ "ncurses" ];
+  };
 
-  cmakeWithGui = cmakeCurses.override { withQt5 = true; };
+  cmakeWithGui = cmake.override {
+    uiToolkits = [ "ncurses" "qt5" ];
+  };
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
 
