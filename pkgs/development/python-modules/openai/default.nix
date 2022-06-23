@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "0.19.0";
+  version = "0.20.0";
 
   disabled = pythonOlder "3.7.1";
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "v${version}";
-    sha256 = "sha256-v/EBmKIzHGPR2KGLUqyWlTSZjV2MqALYRRofCXRjH24=";
+    sha256 = "sha256-kG7gsLAOoBCt7pxViO1Zhil2FGHigPEMJfBjdIp2th8=";
   };
 
   propagatedBuildInputs = [
