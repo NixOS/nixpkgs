@@ -217,6 +217,7 @@ let
 
 
       def create_vm_${name}():
+          cleanup_${name}()
           vbm("createvm --name ${name} ${createFlags}")
           vbm("modifyvm ${name} ${vmFlags}")
           vbm("setextradata ${name} VBoxInternal/PDM/HaltOnReset 1")
@@ -224,7 +225,6 @@ let
           vbm("storageattach ${name} ${diskFlags}")
           vbm("sharedfolder add ${name} ${sharedFlags}")
           vbm("sharedfolder add ${name} ${nixstoreFlags}")
-          cleanup_${name}()
 
           ${mkLog "$HOME/VirtualBox VMs/${name}/Logs/VBox.log" "HOST-${name}"}
 
