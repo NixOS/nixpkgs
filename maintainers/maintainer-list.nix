@@ -3900,10 +3900,6 @@
     githubId = 2544204;
     name = "Erik Skytthe";
   };
-  Esteth = {
-    email = "adam.copp@gmail.com";
-    name = "Adam Copp";
-  };
   ethancedwards8 = {
     email = "ethan@ethancedwards.com";
     github = "ethancedwards8";
