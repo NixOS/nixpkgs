@@ -21030,6 +21030,8 @@ with pkgs;
 
   tidyp = callPackage ../development/libraries/tidyp { };
 
+  tidal-hifi = callPackage ../applications/audio/tidal-hifi { };
+
   tinycdb = callPackage ../development/libraries/tinycdb { };
 
   tinyxml = tinyxml2;
