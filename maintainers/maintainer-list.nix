@@ -1627,10 +1627,6 @@
     githubId = 30630233;
     name = "Timo Triebensky";
   };
-  bjg = {
-    email = "bjg@gnu.org";
-    name = "Brian Gough";
-  };
   bjornfor = {
     email = "bjorn.forsman@gmail.com";
     github = "bjornfor";
