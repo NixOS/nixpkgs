@@ -213,6 +213,23 @@
 
   <xsl:template match="attr[@name = 'declarations' or @name = 'definitions']">
     <simplelist>
+      <!--
+        Example:
+          opt.declarations = [ { name = "foo/bar.nix"; url = "https://github.com/....."; } ];
+      -->
+      <xsl:for-each select="list/attrs[attr[@name = 'name']]">
+        <member><filename>
+          <xsl:if test="attr[@name = 'url']">
+            <xsl:attribute name="xlink:href"><xsl:value-of select="attr[@name = 'url']/string/@value"/></xsl:attribute>
+          </xsl:if>
+          <xsl:value-of select="attr[@name = 'name']/string/@value"/>
+        </filename></member>
+      </xsl:for-each>
+
+      <!--
+        When the declarations/definitions are raw strings,
+        fall back to hardcoded location logic, specific to Nixpkgs.
+      -->
       <xsl:for-each select="list/string">
         <member><filename>
           <!-- Hyperlink the filename either to the NixOS Subversion

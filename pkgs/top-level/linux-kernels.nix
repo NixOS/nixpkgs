@@ -282,6 +282,8 @@ in {
 
     apfs = callPackage ../os-specific/linux/apfs { };
 
+    ax99100 = callPackage ../os-specific/linux/ax99100 {};
+
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};

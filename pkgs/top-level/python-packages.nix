@@ -10014,6 +10014,8 @@ in {
 
   sphinx-autobuild = callPackage ../development/python-modules/sphinx-autobuild { };
 
+  sphinx-basic-ng = callPackage ../development/python-modules/sphinx-basic-ng { };
+
   sphinx-copybutton = callPackage ../development/python-modules/sphinx-copybutton { };
 
   sphinx-inline-tabs = callPackage ../development/python-modules/sphinx-inline-tabs { };
