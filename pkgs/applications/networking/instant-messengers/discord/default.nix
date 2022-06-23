@@ -1,6 +1,5 @@
-{ branch ? "stable", pkgs, lib, stdenv, withOpenASAR ? false }:
+{ branch ? "stable", callPackage, fetchurl, lib, stdenv, withOpenASAR ? false }:
 let
-  inherit (pkgs) callPackage fetchurl;
   versions = if stdenv.isLinux then {
     stable = "0.0.18";
     ptb = "0.0.29";
