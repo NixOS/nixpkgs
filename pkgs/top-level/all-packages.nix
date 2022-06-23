@@ -1147,8 +1147,6 @@ with pkgs;
 
   cope = callPackage ../tools/misc/cope { };
 
-  dterm = callPackage ../tools/misc/dterm { };
-
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
@@ -1582,6 +1580,8 @@ with pkgs;
   ctx = callPackage ../applications/terminal-emulators/ctx { };
 
   darktile = callPackage ../applications/terminal-emulators/darktile { };
+
+  dterm = callPackage ../applications/terminal-emulators/dterm { };
 
   eterm = callPackage ../applications/terminal-emulators/eterm { };
 
