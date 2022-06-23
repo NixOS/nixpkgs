@@ -46,19 +46,17 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Don't search in non-Nix locations such as /usr, but do search in our libc.
-    ./search-path.patch
-
+    ./001-search-path.diff
     # Don't depend on frameworks.
-    ./application-services.patch
-
+    ./002-application-services.diff
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
-    ./libuv-application-services.patch
-
-  ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch
+    ./003-libuv-application-services.diff
+  ]
+  ++ lib.optional stdenv.isCygwin ./004-cygwin.diff
   # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
-  ++ lib.optional (stdenv.isDarwin && isBootstrap) ./remove-systemconfiguration-dep.patch
+  ++ lib.optional (stdenv.isDarwin && isBootstrap) ./005-remove-systemconfiguration-dep.diff
   # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
-  ++ lib.optional stdenv.isDarwin ./darwin-always-set-runtime-c-flag.patch;
+  ++ lib.optional stdenv.isDarwin ./006-darwin-always-set-runtime-c-flag.diff;
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
   setOutputFlags = false;
