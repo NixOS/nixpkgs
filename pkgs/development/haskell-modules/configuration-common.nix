@@ -678,9 +678,6 @@ self: super: {
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
 
-  # 2022-03-24: Strict aeson bound:
-  arch-web = throwIfNot (super.arch-web.version == "0.1.0") "arch-web: remove jailbreak after update"  doJailbreak super.arch-web;
-
   # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
   # https://github.com/augustss/djinn/pull/8
   djinn = appendPatch (fetchpatch {
@@ -1164,17 +1161,6 @@ self: super: {
   # https://github.com/elliottt/hsopenid/issues/15
   openid = markBroken super.openid;
 
-  # Version constraints on test dependency tasty-golden need to be relaxed:
-  # https://github.com/nomeata/arbtt/pull/146
-  arbtt = doJailbreak (overrideCabal (drv: {
-    # The test suite needs the packages's executables in $PATH to succeed.
-    preCheck = ''
-      for i in $PWD/dist/build/*; do
-        export PATH="$i:$PATH"
-      done
-    '';
-  }) super.arbtt);
-
   # https://github.com/erikd/hjsmin/issues/32
   hjsmin = dontCheck super.hjsmin;
 
@@ -1327,19 +1313,6 @@ self: super: {
   # tls test suite fails: upstream https://github.com/vincenthz/hs-tls/issues/434
   x509-validation = dontCheck super.x509-validation;
   tls = dontCheck super.tls;
-
-  patch = appendPatches [
-    # 2022-02-27: https://github.com/reflex-frp/patch/pull/40 for bump bounds
-    (fetchpatch {
-      url = "https://github.com/reflex-frp/patch/commit/15ea4956e04264b9be2fe4644119a709b196708f.patch";
-      sha256 = "sha256-la97DCjeVu82AaQv2my+UhmB/jBmMyxxpRAwhEB1RGc=";
-    })
-    # 2022-03-13: https://github.com/reflex-frp/patch/pull/41 for ghc 9.0 compat
-    (fetchpatch {
-      url = "https://github.com/reflex-frp/patch/commit/fee3addcfc982c7b70489a8a64f208ab2360bdb7.patch";
-      sha256 = "sha256-/CTiHSs+Z4dyL5EJx949XD0zzSAy5s4hzchmNkb0YOk=";
-    })
-  ] super.patch;
 
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
@@ -1640,20 +1613,8 @@ self: super: {
 
   reflex-dom-pandoc = super.reflex-dom-pandoc.override { clay = dontCheck self.clay_0_13_3; };
 
-  # 2022-03-16: Pull request for ghc 9 compat: https://github.com/reflex-frp/reflex/pull/467
-  reflex = overrideCabal (drv: {
-    patches = drv.patches or [] ++ [
-      (fetchpatch {
-        url = "https://github.com/reflex-frp/reflex/compare/469b4ab4a755cad76b8d4d6c9ad482d02686b4ae.patch";
-        sha256 = "04sxzxpx7xhr6p4n76rg1ci8zjfzs19lr21ziwsfig8zmdg22i7q";
-      })
-    ];
-    doCheck = false;
-    # hackage revision seems to have DOS newlines
-    prePatch = drv.prePatch or "" + ''
-      ${pkgs.buildPackages.dos2unix}/bin/dos2unix reflex.cabal
-    '';
-  }) super.reflex;
+  # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
+  reflex = dontCheck super.reflex;
 
   # 2020-11-19: jailbreaking because of pretty-simple bound out of date
   # https://github.com/kowainik/stan/issues/408
