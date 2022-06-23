@@ -14017,6 +14017,12 @@ with pkgs;
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  rust-bindgen-kernel-unwrapped = callPackage ../development/tools/rust/bindgen/unwrapped-kernel.nix {};
+  rust-bindgen-kernel = callPackage ../development/tools/rust/bindgen {
+    rust-bindgen-unwrapped = rust-bindgen-kernel-unwrapped;
+  };
+
   rust-script = callPackage ../development/tools/rust/rust-script { };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
