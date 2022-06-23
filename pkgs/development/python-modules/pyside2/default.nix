@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pyside2";
-  version = "5.15.2";
+  version = "5.15.5";
 
   src = fetchurl {
     url = "https://download.qt.io/official_releases/QtForPython/pyside2/PySide2-${version}-src/pyside-setup-opensource-src-${version}.tar.xz";
-    sha256 = "060ljj1nzyp4zfz2vasbv2i7gs5rfkkjwxxbisd0fdw01d5m01mk";
+    sha256 = "0cwvw6695215498rsbm2xzkwaxdr3w7zfvy4kc62c01k6pxs881r";
   };
 
   patches = [
