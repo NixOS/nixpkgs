@@ -1275,6 +1275,9 @@ dont-distribute-packages:
  - dobutokO4
  - doc-review
  - dom-parser
+ - domain
+ - domain-aeson
+ - domain-cereal
  - dormouse-client
  - dotparse
  - doublezip
@@ -1939,6 +1942,8 @@ dont-distribute-packages:
  - haskades
  - haskdeep
  - haskeem
+ - haskell-admin
+ - haskell-admin-managed-functions
  - haskell-aliyun
  - haskell-bitmex-client
  - haskell-docs
@@ -2169,6 +2174,7 @@ dont-distribute-packages:
  - hranker
  - hreq-client
  - hreq-conduit
+ - hriemann
  - hs
  - hs-blake2
  - hs-ffmpeg
@@ -2490,7 +2496,6 @@ dont-distribute-packages:
  - labyrinth
  - labyrinth-server
  - laika
- - lambda-calculator
  - lambda-devs
  - lambda-options
  - lambdaFeed
@@ -3316,6 +3321,7 @@ dont-distribute-packages:
  - regions-monadsfd
  - regions-monadstf
  - regions-mtl
+ - registry-aeson
  - registry-hedgehog
  - registry-hedgehog-aeson
  - registry-messagepack

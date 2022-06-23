@@ -123,7 +123,8 @@ rec {
    */
   doDistribute = overrideCabal (drv: {
     # lib.platforms.all is the default value for platforms (since GHC can cross-compile)
-    hydraPlatforms = drv.platforms or lib.platforms.all;
+    hydraPlatforms = lib.subtractLists (drv.badPlatforms or [])
+      (drv.platforms or lib.platforms.all);
   });
   /* dontDistribute disables the distribution of binaries for the package
      via hydra.

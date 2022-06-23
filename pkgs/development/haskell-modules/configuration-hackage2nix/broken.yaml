@@ -493,6 +493,7 @@ broken-packages:
   - buster
   - Buster
   - butter
+  - buttplug-hs-core
   - bv-little
   - byline
   - bytearray-parsing
@@ -2065,6 +2066,7 @@ broken-packages:
   - hasql-explain-tests
   - hasql-generic
   - hasql-implicits
+  - hasql-resource-pool
   - hasql-simple
   - hasql-streams-example
   - hasql-url
@@ -2556,6 +2558,7 @@ broken-packages:
   - hweblib
   - hw-fingertree-strict
   - hwhile
+  - hw-lazy
   - hw-mquery
   - hworker
   - hw-playground-linear
@@ -2664,6 +2667,7 @@ broken-packages:
   - interruptible
   - interval
   - interval-algebra
+  - interval-patterns
   - IntFormats
   - int-multimap
   - intricacy
@@ -2816,6 +2820,7 @@ broken-packages:
   - kawaii
   - Kawaii-Parser
   - kawhi
+  - kazura-queue
   - kdesrc-build-extra
   - kdt
   - kd-tree
@@ -3951,6 +3956,7 @@ broken-packages:
   - polynom
   - polynomial-algebra
   - polysemy-check
+  - polysemy-http
   - polysemy-keyed-state
   - polysemy-kvstore-jsonfile
   - polysemy-managed
@@ -4230,6 +4236,7 @@ broken-packages:
   - reason-export
   - record
   - record-encode
+  - record-impl
   - records
   - record-wrangler
   - recursion-schemes-ext
@@ -5625,6 +5632,7 @@ broken-packages:
   - winery
   - wires
   - wiring
+  - witness
   - witty
   - wkt
   - wkt-geom
@@ -5733,6 +5741,7 @@ broken-packages:
   - YamlReference
   - yaml-rpc
   - yaml-union
+  - yaml-unscrambler
   - yampa2048
   - yampa-glfw
   - yampa-gloss

@@ -1147,6 +1147,8 @@ with pkgs;
 
   cope = callPackage ../tools/misc/cope { };
 
+  dterm = callPackage ../tools/misc/dterm { };
+
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
@@ -26761,7 +26763,7 @@ with pkgs;
   fragments = callPackage ../applications/networking/p2p/fragments { };
 
   freecad = libsForQt5.callPackage ../applications/graphics/freecad {
-    boost = python3Packages.boost169;
+    boost = python3Packages.boost;
     inherit (python3Packages)
       GitPython
       matplotlib

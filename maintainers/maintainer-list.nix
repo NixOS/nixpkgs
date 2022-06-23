@@ -1177,6 +1177,12 @@
     github = "attila-lendvai";
     githubId = 840345;
   };
+  auchter = {
+    name = "Michael Auchter";
+    email = "a@phire.org";
+    github = "auchter";
+    githubId = 1190483;
+  };
   auntie = {
     email = "auntieNeo@gmail.com";
     github = "auntieNeo";
