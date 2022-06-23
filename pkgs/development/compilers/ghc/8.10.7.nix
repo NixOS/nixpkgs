@@ -96,6 +96,9 @@ let
   # build the haddock program (removing the `enableHaddockProgram` option).
   ''
     HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
+    # Build haddocks for boot packages with hyperlinking
+    EXTRA_HADDOCK_OPTS += --hyperlinked-source --quickjump
+
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
     INTEGER_LIBRARY = ${if enableIntegerSimple then "integer-simple" else "integer-gmp"}
   '' + lib.optionalString (targetPlatform != hostPlatform) ''
