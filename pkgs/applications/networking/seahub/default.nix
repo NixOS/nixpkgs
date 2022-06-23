@@ -19,13 +19,13 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "8.0.8";
+  version = "9.0.6";
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "c51346155b2f31e038c3a2a12e69dcc6665502e2"; # using a fixed revision because upstream may re-tag releases :/
-    sha256 = "0dagiifxllfk73xdzfw2g378jccpzplhdrmkwbaakbhgbvvkg92k";
+    rev = "876b7ba9b680fc668e89706aff535593772ae921"; # using a fixed revision because upstream may re-tag releases :/
+    sha256 = "sha256-GHvJlm5DVt3IVJnqJu8YobNNqbjdPd08s4DCdQQRQds=";
   };
 
   dontBuild = true;
@@ -52,6 +52,7 @@ python.pkgs.buildPythonApplication rec {
     openpyxl
     requests
     requests-oauthlib
+    chardet
     pyjwt
     pycryptodome
     qrcode
