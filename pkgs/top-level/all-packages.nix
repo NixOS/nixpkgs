@@ -1147,6 +1147,8 @@ with pkgs;
 
   cope = callPackage ../tools/misc/cope { };
 
+  dterm = callPackage ../tools/misc/dterm { };
+
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
