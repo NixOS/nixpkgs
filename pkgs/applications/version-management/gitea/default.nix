@@ -12,8 +12,6 @@
 , nixosTests
 }:
 
-with lib;
-
 buildGoPackage rec {
   pname = "gitea";
   version = "1.16.8";
@@ -36,19 +34,18 @@ buildGoPackage rec {
   ];
 
   postPatch = ''
-    patchShebangs .
     substituteInPlace modules/setting/setting.go --subst-var data
   '';
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = optional pamSupport pam;
+  buildInputs = lib.optional pamSupport pam;
 
   preBuild =
     let
-      tags = optional pamSupport "pam"
-        ++ optional sqliteSupport "sqlite sqlite_unlock_notify";
-      tagsString = concatStringsSep " " tags;
+      tags = lib.optional pamSupport "pam"
+        ++ lib.optional sqliteSupport "sqlite sqlite_unlock_notify";
+      tagsString = lib.concatStringsSep " " tags;
     in
     ''
       export buildFlagsArray=(
@@ -66,14 +63,14 @@ buildGoPackage rec {
     cp -R ./go/src/${goPackagePath}/options/locale $out/locale
 
     wrapProgram $out/bin/gitea \
-      --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
+      --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
   goPackagePath = "code.gitea.io/gitea";
 
   passthru.tests.gitea = nixosTests.gitea;
 
-  meta = {
+  meta = with lib; {
     description = "Git with a cup of tea";
     homepage = "https://gitea.io";
     license = licenses.mit;
