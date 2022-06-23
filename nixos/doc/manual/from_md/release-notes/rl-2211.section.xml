@@ -178,6 +178,14 @@
     <itemizedlist>
       <listitem>
         <para>
+          The <literal>xplr</literal> package has been updated from
+          0.18.0 to 0.19.0, which brings some breaking changes. See the
+          <link xlink:href="https://github.com/sayanarijit/xplr/releases/tag/v0.19.0">upstream
+          release notes</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the Saleae Logic device family,
           providing the options
           <literal>hardware.saleae-logic.enable</literal> and

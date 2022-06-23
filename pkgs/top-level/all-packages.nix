@@ -8248,6 +8248,8 @@ with pkgs;
 
   longview = callPackage ../servers/monitoring/longview { };
 
+  lorien = callPackage ../applications/graphics/lorien { };
+
   lout = callPackage ../tools/typesetting/lout { };
 
   lr = callPackage ../tools/system/lr { };

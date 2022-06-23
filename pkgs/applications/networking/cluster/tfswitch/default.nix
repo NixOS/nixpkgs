@@ -1,13 +1,13 @@
 { buildGoModule, lib, fetchFromGitHub }:
 buildGoModule rec {
   pname = "tfswitch";
-  version = "0.13.1250";
+  version = "0.13.1275";
 
   src = fetchFromGitHub {
     owner = "warrensbox";
     repo = "terraform-switcher";
     rev = version;
-    sha256 = "sha256-OfQUwAv7PgjcDLE4Wm6I8pAHeLV9sHlLHRVqTB13B4c=";
+    sha256 = "sha256-yuoJkVztLtlr4xOa4muWKquwAb8lo2IQpD7PLxEQfpg=";
   };
 
   vendorSha256 = "sha256-jM9xYwBshBpaT4duBTvVwYUOapQfUbq9kL7EaRIGfQY=";
