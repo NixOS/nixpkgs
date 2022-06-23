@@ -7641,10 +7641,6 @@
     githubId = 39707188;
     name = "Lynn Dong";
   };
-  lyt = {
-    email = "wheatdoge@gmail.com";
-    name = "Tim Liou";
-  };
   m00wl = {
     name = "Moritz Lumme";
     email = "moritz.lumme@gmail.com";
