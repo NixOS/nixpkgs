@@ -943,8 +943,13 @@ rec {
 
           # Create $maxLayers worth of Docker Layers, one layer per store path
           # unless there are more paths than $maxLayers. In that case, create
-          # $maxLayers-1 for the most popular layers, and smush the remainaing
-          # store paths in to one final layer.
+          # $maxLayers-2 for the most popular store paths, and smush the
+          # remainaing store paths in to the second to last layer. The final
+          # layer is reserved for the least popular store path, which is the
+          # top level derivation. Placing this store path in an independent
+          # layer is a convenient way to ensure that the application binary
+          # can change from commit to commit with minimal impact on other
+          # layers, reducing the upload size when pushing new containers.
           #
           # The following code is fiddly w.r.t. ensuring every layer is
           # created, and that no paths are missed. If you change the
