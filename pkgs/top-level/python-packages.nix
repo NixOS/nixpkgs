@@ -7552,7 +7552,7 @@ in {
 
   pylaunches = callPackage ../development/python-modules/pylaunches { };
 
-  PyLD = callPackage ../development/python-modules/PyLD { };
+  pyld = callPackage ../development/python-modules/pyld { };
 
   pylev = callPackage ../development/python-modules/pylev { };
 
