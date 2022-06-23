@@ -20,13 +20,13 @@
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.27.1";
+  version = "2.28.0";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aNfFb9WomZiHco7zBKbRLtx7508c+kdxT8i0FFJcmmE=";
+    hash = "sha256-1WhyOn69JYddjR6vXfoGjNL8gZSy5IPXsffIGRjb7Gs=";
   };
 
   patches = [
