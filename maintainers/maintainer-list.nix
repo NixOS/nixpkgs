@@ -7703,6 +7703,7 @@
   };
   lux = {
     email = "lux@lux.name";
+    github = "luxferresum";
     githubId = 1208273;
     matrix = "@lux:ontheblueplanet.com";
     name = "Lux";
