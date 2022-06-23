@@ -6,6 +6,7 @@ let
   cfg = config.services.tailscale;
   firewallOn = config.networking.firewall.enable;
   rpfMode = config.networking.firewall.checkReversePath;
+  isNetworkd = config.networking.useNetworkd;
   rpfIsStrict = rpfMode == true || rpfMode == "strict";
 in {
   meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 ];
@@ -68,6 +69,18 @@ in {
       # version mismatches on restart for compatibility with other
       # linux distros.
       stopIfChanged = false;
+    };
+
+    networking.dhcpcd.denyInterfaces = [ cfg.interfaceName ];
+
+    systemd.network.networks."50-tailscale" = mkIf isNetworkd {
+      matchConfig = {
+        Name = cfg.interfaceName;
+      };
+      linkConfig = {
+        Unmanaged = true;
+        ActivationPolicy = "manual";
+      };
     };
   };
 }
