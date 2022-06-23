@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
-  version = "6.5.0";
+  version = "6.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
-    hash = "sha256-N2O0/C75EGO6crUCFGUiJLLQqfMVRNVQRZb1xKhHzXs=";
+    hash = "sha256-jDuxOBLpZnvIP4x2BkAlEenC/nnWeG8SlSLnlpPuCWs=";
   };
 
   propagatedBuildInputs = [
