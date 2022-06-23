@@ -1511,6 +1511,23 @@ let
         };
       };
 
+      mattn.lisp = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "lisp";
+          publisher = "mattn";
+          version = "0.1.12";
+          sha256 = "sha256-x6aFrcX0YElEFEr0qA669/LPlab15npmXd5Q585pIEw=";
+        };
+        meta = with lib; {
+          description = "Lisp syntax for vscode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mattn.lisp";
+          homepage = "https://github.com/mattn/vscode-lisp";
+          changelog = "https://marketplace.visualstudio.com/items/mattn.lisp/changelog";
+          license = licenses.mit;
+          maintainers = with maintainers; [ kamadorueda ];
+        };
+      };
+
       mhutchie.git-graph = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "git-graph";
