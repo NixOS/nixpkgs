@@ -41,6 +41,7 @@ let
       '';
       meta = with lib;
         shared_meta lib // {
+          sourceProvenance = with sourceTypes; [ binaryNativeCode ];
           description = "library for picotech oscilloscope software";
         };
     }) { };
@@ -132,6 +133,7 @@ in stdenv.mkDerivation rec {
         PicoScope for Linux, PicoScope for macOS and PicoScope for Windows
         users, or exported in text, CSV and MathWorks MATLAB 4 formats.
       '';
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
     };
 }
 

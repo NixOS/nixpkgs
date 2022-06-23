@@ -230,6 +230,10 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "PC emulator";
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     license = licenses.gpl2;
     homepage = "https://www.virtualbox.org/";
     maintainers = with maintainers; [ sander ];

@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
     broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Open source bibliography reference manager";
     homepage = "https://www.jabref.org";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.gebner ];

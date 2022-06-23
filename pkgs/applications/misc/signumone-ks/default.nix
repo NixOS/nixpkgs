@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Digital signature tool for Costa Rican electronic invoicing";
     homepage = "https://signum.one/download.html";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.unfree;
     maintainers = with maintainers; [ wolfangaukang ];
     platforms = [ "x86_64-linux" ];
