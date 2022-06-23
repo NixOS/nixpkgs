@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-S6OVKYulhvEPRqNXBsvZ7m2W4cbdnrpZKPAo3SfD+9s=";
   };
 
+  strictDeps = true;
+
+  # uses a custom configure script
+  # Bad option --build=x86_64-unknown-linux-gnu.
+  configurePlatforms = [ ];
   patches = [ ./fix-configure-path.patch ];
   configureScript = "./configure.sh";
   configureFlags = [

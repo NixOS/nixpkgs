@@ -53,6 +53,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TZeW+9buJvCOudHsLTMITFpRUlmNpo71efc3xswJoPw=";
   };
 
+  postPatch = ''
+    substituteInPlace ./configure \
+      --replace 'CC="''${HOST}-''${CC}"' 'CC="''${CC}"'
+  '';
+
   preBuild = ''
     cp -r ${arm64} libr/asm/arch/arm/v35arm64/arch-arm64
     chmod -R +w libr/asm/arch/arm/v35arm64/arch-arm64
