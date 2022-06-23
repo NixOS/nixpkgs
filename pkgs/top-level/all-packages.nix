@@ -35602,6 +35602,7 @@ with pkgs;
 
   xsos = callPackage ../os-specific/linux/xsos { };
 
+  xmcp = callPackage ../tools/x11/xmcp { };
 
   zk = callPackage ../applications/office/zk {};
 
