@@ -1026,7 +1026,7 @@ configurePhase() {
         # scripts with vendored libtool code.  Preserve mtimes to
         # prevent some packages (e.g. libidn2) from spontaneously
         # autoreconf'ing themselves
-        CONFIGURE_MTIME_REFERENCE=$(mktemp configure.mtime.reference.XXX)
+        CONFIGURE_MTIME_REFERENCE=$(mktemp configure.mtime.reference.XXXXXX)
         find . \
           -executable \
           -type f \
