@@ -16545,6 +16545,13 @@ with pkgs;
   rust-cbindgen = callPackage ../development/tools/rust/cbindgen {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  # These bindgen versions are for the Linux kernel build.
+  rust-bindgen-0_56-kernel-unwrapped = callPackage ../development/tools/rust/bindgen/unwrapped-0_56-kernel.nix {};
+  rust-bindgen-0_56-kernel = callPackage ../development/tools/rust/bindgen {
+    rust-bindgen-unwrapped = rust-bindgen-0_56-kernel-unwrapped;
+  };
+
   rust-script = callPackage ../development/tools/rust/rust-script { };
   rustup = callPackage ../development/tools/rust/rustup {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
