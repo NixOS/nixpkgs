@@ -596,6 +596,12 @@
     githubId = 60479013;
     name = "Alma Cemerlic";
   };
+  alternateved = {
+    email = "alternateved@pm.me";
+    github = "alternateved";
+    githubId = 45176912;
+    name = "Tomasz Hołubowicz";
+  };
   alunduil = {
     email = "alunduil@gmail.com";
     github = "alunduil";
