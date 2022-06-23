@@ -14,8 +14,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib libpng libjpeg ]
     ++ lib.optionals stdenv.isDarwin [ Foundation SystemConfiguration ];
 
+  # do not generate universal binary on Darwin
+  # because it is not supported by Nix's clang
+  postPatch = ''
+    substituteInPlace configure --replace "-arch x86_64 -arch arm64" ""
+  '';
+
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Converts HTML files to PostScript and PDF";
     homepage    = "https://michaelrsweet.github.io/htmldoc";
     changelog   = "https://github.com/michaelrsweet/htmldoc/releases/tag/v${version}";
