@@ -137,6 +137,10 @@ let
           (lib.enableFeature docSupport "install-doc")
           (lib.withFeature jemallocSupport "jemalloc")
           (lib.withFeatureAs docSupport "ridir" "${placeholder "devdoc"}/share/ri")
+          # ruby enables -O3 for gcc, however our compiler hardening wrapper
+          # overrides that by enabling `-O2` which is the minimum optimization
+          # needed for `_FORTIFY_SOURCE`.
+        ] ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3" ++ [
         ] ++ ops stdenv.isDarwin [
           # on darwin, we have /usr/include/tk.h -- so the configure script detects
           # that tk is installed

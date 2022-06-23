@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3 }:
+{ lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3
+, enableButteraugli ? false, libjxl # Broken
+, enableVmaf ? true, libvmaf
+}:
 
 stdenv.mkDerivation rec {
   pname = "libaom";
@@ -16,6 +19,9 @@ stdenv.mkDerivation rec {
     yasm perl cmake pkg-config python3
   ];
 
+  propagatedBuildInputs = lib.optional enableButteraugli libjxl
+    ++ lib.optional enableVmaf libvmaf;
+
   preConfigure = ''
     # build uses `git describe` to set the build version
     cat > $NIX_BUILD_TOP/git << "EOF"
@@ -32,6 +38,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
     "-DENABLE_TESTS=OFF"
+  ] ++ lib.optionals enableButteraugli [
+    "-DCONFIG_TUNE_BUTTERAUGLI=1"
+  ] ++ lib.optionals enableVmaf [
+    "-DCONFIG_TUNE_VMAF=1"
   ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
     # CPU detection isn't supported on Darwin and breaks the aarch64-darwin build:
     "-DCONFIG_RUNTIME_CPU_DETECT=0"
@@ -58,7 +68,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = "https://aomedia.org/av1-features/get-started/";
     changelog   = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
-    maintainers = with maintainers; [ primeos kiloreux ];
+    maintainers = with maintainers; [ primeos kiloreux dandellion ];
     platforms   = platforms.all;
     license = licenses.bsd2;
   };

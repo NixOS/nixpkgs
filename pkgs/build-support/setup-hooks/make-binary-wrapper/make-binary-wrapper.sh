@@ -15,17 +15,19 @@ assertExecutable() {
 # makeWrapper EXECUTABLE OUT_PATH ARGS
 
 # ARGS:
-# --argv0       NAME    : set the name of the executed process to NAME
-#                         (if unset or empty, defaults to EXECUTABLE)
-# --inherit-argv0       : the executable inherits argv0 from the wrapper.
-#                         (use instead of --argv0 '$0')
-# --set         VAR VAL : add VAR with value VAL to the executable's environment
-# --set-default VAR VAL : like --set, but only adds VAR if not already set in
-#                         the environment
-# --unset       VAR     : remove VAR from the environment
-# --chdir       DIR     : change working directory (use instead of --run "cd DIR")
-# --add-flags   FLAGS   : add FLAGS to invocation of executable
-# TODO(@ncfavier): --append-flags
+# --argv0        NAME    : set the name of the executed process to NAME
+#                          (if unset or empty, defaults to EXECUTABLE)
+# --inherit-argv0        : the executable inherits argv0 from the wrapper.
+#                          (use instead of --argv0 '$0')
+# --set          VAR VAL : add VAR with value VAL to the executable's environment
+# --set-default  VAR VAL : like --set, but only adds VAR if not already set in
+#                          the environment
+# --unset        VAR     : remove VAR from the environment
+# --chdir        DIR     : change working directory (use instead of --run "cd DIR")
+# --add-flags    ARGS    : prepend ARGS to the invocation of the executable
+#                          (that is, *before* any arguments passed on the command line)
+# --append-flags ARGS    : append ARGS to the invocation of the executable
+#                          (that is, *after* any arguments passed on the command line)
 
 # --prefix          ENV SEP VAL   : suffix/prefix ENV with VAL, separated by SEP
 # --suffix
@@ -83,7 +85,7 @@ makeDocumentedCWrapper() {
 # makeCWrapper EXECUTABLE ARGS
 # ARGS: same as makeWrapper
 makeCWrapper() {
-    local argv0 inherit_argv0 n params cmd main flagsBefore flags executable length
+    local argv0 inherit_argv0 n params cmd main flagsBefore flagsAfter flags executable length
     local uses_prefix uses_suffix uses_assert uses_assert_success uses_stdio uses_asprintf
     executable=$(escapeStringLiteral "$1")
     params=("$@")
@@ -150,6 +152,13 @@ makeCWrapper() {
                 n=$((n + 1))
                 [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
             ;;
+            --append-flags)
+                flags="${params[n + 1]}"
+                flagsAfter="$flagsAfter $flags"
+                uses_assert=1
+                n=$((n + 1))
+                [ $n -ge "$length" ] && main="$main#error makeCWrapper: $p takes 1 argument"$'\n'
+            ;;
             --argv0)
                 argv0=$(escapeStringLiteral "${params[n + 1]}")
                 inherit_argv0=
@@ -165,8 +174,7 @@ makeCWrapper() {
             ;;
         esac
     done
-    # shellcheck disable=SC2086
-    [ -z "$flagsBefore" ] || main="$main"${main:+$'\n'}$(addFlags $flagsBefore)$'\n'$'\n'
+    [[ -z "$flagsBefore" && -z "$flagsAfter" ]] || main="$main"${main:+$'\n'}$(addFlags "$flagsBefore" "$flagsAfter")$'\n'$'\n'
     [ -z "$inherit_argv0" ] && main="${main}argv[0] = \"${argv0:-${executable}}\";"$'\n'
     main="${main}return execv(\"${executable}\", argv);"$'\n'
 
@@ -184,21 +192,25 @@ makeCWrapper() {
 }
 
 addFlags() {
-    local result n flag flags var
+    local n flag before after var
+    # shellcheck disable=SC2086
+    before=($1) after=($2)
     var="argv_tmp"
-    flags=("$@")
-    for ((n = 0; n < ${#flags[*]}; n += 1)); do
-        flag=$(escapeStringLiteral "${flags[$n]}")
-        result="$result${var}[$((n+1))] = \"$flag\";"$'\n'
-    done
-    printf '%s\n' "char **$var = calloc($((n+1)) + argc, sizeof(*$var));"
+    printf '%s\n' "char **$var = calloc(${#before[@]} + argc + ${#after[@]} + 1, sizeof(*$var));"
     printf '%s\n' "assert($var != NULL);"
     printf '%s\n' "${var}[0] = argv[0];"
-    printf '%s' "$result"
+    for ((n = 0; n < ${#before[@]}; n += 1)); do
+        flag=$(escapeStringLiteral "${before[n]}")
+        printf '%s\n' "${var}[$((n + 1))] = \"$flag\";"
+    done
     printf '%s\n' "for (int i = 1; i < argc; ++i) {"
-    printf '%s\n' "    ${var}[$n + i] = argv[i];"
+    printf '%s\n' "    ${var}[${#before[@]} + i] = argv[i];"
     printf '%s\n' "}"
-    printf '%s\n' "${var}[$n + argc] = NULL;"
+    for ((n = 0; n < ${#after[@]}; n += 1)); do
+        flag=$(escapeStringLiteral "${after[n]}")
+        printf '%s\n' "${var}[${#before[@]} + argc + $n] = \"$flag\";"
+    done
+    printf '%s\n' "${var}[${#before[@]} + argc + ${#after[@]}] = NULL;"
     printf '%s\n' "argv = $var;"
 }
 
@@ -363,6 +375,10 @@ formatArgs() {
                 shift 1
             ;;
             --add-flags)
+                formatArgsLine 1 "$@"
+                shift 1
+            ;;
+            --append-flags)
                 formatArgsLine 1 "$@"
                 shift 1
             ;;

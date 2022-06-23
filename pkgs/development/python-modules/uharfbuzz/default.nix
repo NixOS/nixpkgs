@@ -6,6 +6,7 @@
 , cython
 , setuptools-scm
 , pytestCheckHook
+, ApplicationServices
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,10 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  buildInputs = [
+    ApplicationServices
+  ];
+
   checkInputs = [
     pytestCheckHook
   ];
@@ -42,6 +47,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/harfbuzz/uharfbuzz";
     license = licenses.asl20;
     maintainers = with maintainers; [ wolfangaukang ];
-    broken = stdenv.isDarwin;
   };
 }

@@ -6,6 +6,7 @@
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withP11-kit ? !stdenv.hostPlatform.isStatic, p11-kit
 , withSecurity ? false, Security  # darwin Security.framework
+# certificate compression - only zlib now, more possible: zstd, brotli
 }:
 
 assert guileBindings -> guile != null;
@@ -21,11 +22,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
-  version = "3.7.3";
+  version = "3.7.6";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
-    sha256 = "16n4yvw3792gcdxkikjmhddr6cbs4wlk027zfxlhmchsqcxw8ngw";
+    sha256 = "1zv2097v9f6f4c66q7yn3c6gggjk9jz38095ma7v3gs5lccmf1kp";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];

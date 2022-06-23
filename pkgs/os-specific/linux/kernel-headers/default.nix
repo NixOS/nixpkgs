@@ -93,6 +93,9 @@ in {
       };
       patches = [
          ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+
+         # 5.19 backport. Can be removed on update.
+         ./restore-__bitwise__.patch
       ];
     };
 }

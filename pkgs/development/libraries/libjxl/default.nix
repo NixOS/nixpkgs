@@ -1,10 +1,7 @@
 { stdenv, lib, fetchFromGitHub
 , fetchpatch
-, asciidoc
 , brotli
 , cmake
-, graphviz
-, doxygen
 , giflib
 , gperftools
 , gtest
@@ -14,8 +11,12 @@
 , libwebp
 , openexr
 , pkg-config
-, python3
 , zlib
+, buildDocs ? true
+, asciidoc
+, graphviz
+, doxygen
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -50,13 +51,14 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    asciidoc # for docs
     cmake
-    graphviz # for docs via doxygen component `dot`
-    doxygen # for docs
     gtest
     pkg-config
-    python3 # for docs
+  ] ++ lib.optionals buildDocs [
+    asciidoc
+    graphviz
+    doxygen
+    python3
   ];
 
   # Functionality not currently provided by this package
@@ -76,15 +78,18 @@ stdenv.mkDerivation rec {
   # conclusively in its README or otherwise; they can best be determined
   # by checking the CMake output for "Could NOT find".
   buildInputs = [
-    brotli
     giflib
     gperftools # provides `libtcmalloc`
-    libhwy
     libjpeg
     libpng
     libwebp
     openexr
     zlib
+  ];
+
+  propagatedBuildInputs = [
+    brotli
+    libhwy
   ];
 
   cmakeFlags = [
