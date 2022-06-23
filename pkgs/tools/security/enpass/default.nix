@@ -2,7 +2,8 @@
 , glib, libGLU, libGL, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk3, pango
 , makeWrapper , python3Packages, lib
-, lsof, curl, libuuid, cups, mesa, xz, libxkbcommon
+, lsof, curl, libuuid, cups, mesa, xz, libxkbcommon, libcap
+, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil
 }:
 
 let

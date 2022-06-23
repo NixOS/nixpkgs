@@ -1,8 +1,8 @@
 {
   "amd64": {
-    "path": "pool/main/e/enpass/enpass_6.6.1.809_amd64.deb",
-    "sha256": "b1b9bd67653c3163bd80b340150ecf123552cbe4af23c350fbadea8ffd7939ba",
-    "version": "6.6.1.809"
+    "path": "pool/main/e/enpass/enpass_6.8.1.1063_amd64.deb",
+    "sha256": "QrM/gQHn49zcxoCcXn2xPtH2xgRd2ljDrjBFsxkXxAo=",
+    "version": "6.8.1.1063"
   },
   "i386": {
     "path": "pool/main/e/enpass/enpass_5.6.9_i386.deb",
