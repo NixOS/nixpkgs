@@ -14028,10 +14028,6 @@
     githubId = 1557253;
     name = "Lennart Eichhorn";
   };
-  zef = {
-    email = "zef@zef.me";
-    name = "Zef Hemel";
-  };
   zeratax = {
     email = "mail@zera.tax";
     github = "zeratax";
