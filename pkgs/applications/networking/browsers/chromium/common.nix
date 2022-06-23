@@ -160,10 +160,6 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
-    ] ++ optionals (versionRange "102" "103") [
-      # https://dawn-review.googlesource.com/c/dawn/+/88582
-      # Wrap get_gitHash in try-catch to prevent failures in tarball builds.
-      ./patches/m102-fix-dawn_version_generator-failure.patch
     ];
 
     postPatch = ''
