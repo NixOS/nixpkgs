@@ -47,12 +47,10 @@ stdenv.mkDerivation rec {
     xcbutilwm
   ];
 
-  # patch includes to build using nix supplied header files instead of the submodule header files
-  prePatch = ''
-    sed -Ei 's/"\.\.\/wlroots\/include\/([a-zA-Z0-9./_-]+)"/<\1>/g' src/includes.hpp
-  '';
-
+  # build with system wlroots
   postPatch = ''
+    sed -Ei 's/"\.\.\/wlroots\/include\/([a-zA-Z0-9./_-]+)"/<\1>/g' src/includes.hpp
+
     make protocols
   '';
 
