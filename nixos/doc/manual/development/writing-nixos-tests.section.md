@@ -21,6 +21,11 @@ import ./make-test-python.nix {
 }
 ```
 
+For the test to be actually used by NixOS' automatic testing framework, it has
+to be put into `nixos/tests/allTests.nix`. In doing so it is available for
+package testing in `nixosTests` as well (see:
+[Linking NixOS tests to package](#sec-linking-nixos-tests-to-packages)).
+
 The attribute `testScript` is a bit of Python code that executes the
 test (described below). During the test, it will start one or more
 virtual machines, the configuration of which is described by
