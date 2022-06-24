@@ -51,6 +51,11 @@ buildPythonPackage rec {
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
 
+  postInstall = ''
+    rm $out/lib/python*/site-packages/LICENSE
+    rm $out/lib/python*/site-packages/README.md
+  '';
+
   meta = with lib; {
     description = "Plotter generative art environment";
     homepage = "https://github.com/abey79/vsketch/";

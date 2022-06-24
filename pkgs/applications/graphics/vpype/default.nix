@@ -53,6 +53,11 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml --replace 'setuptools = "^51.0.0"' 'setuptools = "^61.0.0"'
   '';
 
+  postInstall = ''
+    rm $out/lib/python*/site-packages/LICENSE
+    rm $out/lib/python*/site-packages/README.md
+  '';
+
   meta = with lib; {
     description = "The Swiss Army knife of vector graphics for pen plotters";
     homepage = "https://github.com/abey79/vpype/";
