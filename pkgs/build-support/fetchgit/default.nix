@@ -28,7 +28,7 @@ in
   # needed for netrcPhase
   netrcImpureEnvVars ? []
 , meta ? {}
-, allowedRequisites ? null
+, allowedRequisites ? []
 }:
 
 /* NOTE:
