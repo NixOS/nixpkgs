@@ -459,7 +459,7 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
 
   headless = ''
     create_vm_headless()
-    machine.succeed(ru("VBoxHeadless --startvm headless & disown %1"))
+    machine.succeed(ru("VBoxHeadless --startvm headless >&2 & disown %1"))
     wait_for_startup_headless()
     wait_for_vm_boot_headless()
     shutdown_vm_headless()
