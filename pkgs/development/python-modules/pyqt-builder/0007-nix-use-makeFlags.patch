@@ -1,0 +1,38 @@
+From 63207f26eccb7b0201546a5a1bdfafe05dc40a81 Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Fri, 24 Jun 2022 10:11:46 +0200
+Subject: [PATCH] nix: use makeFlags
+
+---
+ pyqtbuild/builder.py | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/pyqtbuild/builder.py b/pyqtbuild/builder.py
+index 143c0aa..7f79b21 100644
+--- a/pyqtbuild/builder.py
++++ b/pyqtbuild/builder.py
+@@ -668,6 +668,10 @@ macx {
+ 
+         args = [self._find_make()]
+ 
++        # nix
++        if os.environ.get("makeFlags"):
++            args += shlex.split(os.environ.get("makeFlags"))
++
+         if makefile_target is not None:
+             args.append(makefile_target)
+ 
+@@ -687,6 +691,10 @@ macx {
+ 
+         args = [self._find_make()]
+ 
++        # nix
++        if os.environ.get("makeFlags"):
++            args += shlex.split(os.environ.get("makeFlags"))
++
+         if install:
+             args.append('install')
+         elif project.py_platform != 'win32' and self.jobs:
+-- 
+2.36.1
+

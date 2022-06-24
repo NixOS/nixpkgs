@@ -1,0 +1,34 @@
+From 93a8a80a80eb70097f0b1b470d64979b9aa2b93a Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Fri, 24 Jun 2022 09:30:32 +0200
+Subject: [PATCH] nix: use cmakeFlags
+
+---
+ pyqtbuild/builder.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/pyqtbuild/builder.py b/pyqtbuild/builder.py
+index 2ba22d0..143c0aa 100644
+--- a/pyqtbuild/builder.py
++++ b/pyqtbuild/builder.py
+@@ -25,6 +25,7 @@
+ import os
+ import sys
+ import sysconfig
++import shlex
+ 
+ from sipbuild import (Buildable, BuildableModule, Builder, Option, Project,
+         PyProjectOptionException, UserException)
+@@ -726,6 +727,9 @@ macx {
+         # cmake: CMakeLists.txt -> Makefile
+         args = [self.cmake]
+         args.append("-D" + "CMAKE_INSTALL_PREFIX=.") # default is /var/empty
++        # nix
++        if os.environ.get("cmakeFlags"):
++            args += shlex.split(os.environ.get("cmakeFlags"))
+         args.append(".")
+         if self.debug:
+             print(f"pyqtbuild/builder.py: args = {args}")
+-- 
+2.36.1
+

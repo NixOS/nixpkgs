@@ -1,0 +1,28 @@
+From ee6f2ab530c399b0aaa9d0943f92324990db2b7d Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Mon, 13 Jun 2022 14:41:12 +0200
+Subject: [PATCH 3/5] wrap string in quotes
+
+workaround for bug in qmake2cmake
+---
+ pyqtbuild/builder.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/pyqtbuild/builder.py b/pyqtbuild/builder.py
+index 1111bf6..de2fdb1 100644
+--- a/pyqtbuild/builder.py
++++ b/pyqtbuild/builder.py
+@@ -259,7 +259,9 @@ class QmakeBuilder(Builder):
+                     ' '.join(
+                             ['install_' + installable.name
+                                     for installable in project.installables])))
+-            pro_lines.append('distinfo.extra = {}'.format(' '.join(args)))
++            # assume that args is escaped already
++            # see get_sip_distinfo_command_line in sip-6.6.1/sipbuild/project.py
++            pro_lines.append('distinfo.extra = "{}"'.format(' '.join(args)))
+             pro_lines.append(
+                     'distinfo.path = {}'.format(self.qmake_quote(target_dir)))
+             pro_lines.append('INSTALLS += distinfo')
+-- 
+2.36.1
+

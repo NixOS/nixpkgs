@@ -1,0 +1,79 @@
+From a7213604bf26170c59a1c543942d419576130c5f Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Mon, 13 Jun 2022 14:42:37 +0200
+Subject: [PATCH 4/5] find exe with _app suffix
+
+workaround for bug in qmake2cmake
+---
+ pyqtbuild/builder.py | 36 +++++++++++++++++++++++++++++++-----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
+
+diff --git a/pyqtbuild/builder.py b/pyqtbuild/builder.py
+index de2fdb1..1649186 100644
+--- a/pyqtbuild/builder.py
++++ b/pyqtbuild/builder.py
+@@ -611,6 +611,8 @@ macx {
+ 
+         project = self.project
+ 
++        platform_exe = [] # list of candidates
++
+         # Guess the name of make and set the default target and platform
+         # specific name of the executable.
+         if project.py_platform == 'win32':
+@@ -622,15 +624,36 @@ macx {
+                 platform_exe = os.path.join('release', exe + '.exe')
+         else:
+             makefile_target = None
++            # linux/mac: no file extension
++            # qmake2cmake can rename exe to f"{exe}_app"
++            # example: QtQml -> QtQml_app
++            # see qmake2cmake/pro2cmake.py
++            # "# Avoid collision between executable name and QML module directory "
++            # "(QTBUG-98568).\n"
++            # -> use a list of filename candidates
++            exe_candidates = [
++                exe,
++                f"{exe}_app"
++            ]
++            platform_exe = []
+ 
+             if project.py_platform == 'darwin':
+-                platform_exe = os.path.join(exe + '.app', 'Contents', 'MacOS',
+-                        exe)
++                for e in exe_candidates:
++                    platform_exe.append(
++                        os.path.join(exe + '.app', 'Contents', 'MacOS', e)
++                    )
+             else:
+-                platform_exe = os.path.join('.', exe)
++                for e in exe_candidates:
++                    platform_exe.append(
++                        os.path.join('.', e)
++                    )
++
++        if type(platform_exe) == str:
++            platform_exe = [platform_exe]
+ 
+         # Make sure the executable doesn't exist.
+-        self._remove_file(platform_exe)
++        for f in platform_exe:
++            self._remove_file(f)
+ 
+         args = [self._find_make()]
+ 
+@@ -639,7 +662,10 @@ macx {
+ 
+         project.run_command(args, fatal=fatal)
+ 
+-        return platform_exe if os.path.isfile(platform_exe) else None
++        for candidate in platform_exe:
++            if os.path.isfile(candidate):
++                return candidate
++        return None
+ 
+     def _run_project_make(self, install=False):
+         """ Run make on the project.  The Makefile must be in the current
+-- 
+2.36.1
+

@@ -1,0 +1,35 @@
+From ab7cacc2f72a761a30fa7403d9eb37b1f0ffa75b Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Mon, 13 Jun 2022 14:43:09 +0200
+Subject: [PATCH] nix: use NIX_BUILD_CORES to build faster by default
+
+---
+ pyqtbuild/builder.py | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/pyqtbuild/builder.py b/pyqtbuild/builder.py
+index 1649186..2ba22d0 100644
+--- a/pyqtbuild/builder.py
++++ b/pyqtbuild/builder.py
+@@ -293,8 +293,18 @@ class QmakeBuilder(Builder):
+         options = super().get_options()
+ 
+         # Add our new options.
++
++        default_jobs = 1
++
++        # nix
++        if os.environ.get("enableParallelBuilding", False):
++            n = os.environ.get("NIX_BUILD_CORES", None)
++            if n:
++                default_jobs = int(n)
++
+         options.append(
+                 Option('jobs', option_type=int,
++                        default=default_jobs,
+                         help="run N make jobs in parallel", metavar='N'))
+ 
+         options.append(
+-- 
+2.36.1
+

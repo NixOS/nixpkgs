@@ -1,0 +1,102 @@
+From cf10caf18ca44c046e91c2cb0923e671846c0cb8 Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Mon, 13 Jun 2022 14:38:51 +0200
+Subject: [PATCH 1/5] use cmake instead of qmake
+
+---
+ pyqtbuild/builder.py | 62 +++++++++++++++++++++++++++++---------------
+ 1 file changed, 41 insertions(+), 21 deletions(-)
+
+diff --git a/pyqtbuild/builder.py b/pyqtbuild/builder.py
+index c3934e0..bad600d 100644
+--- a/pyqtbuild/builder.py
++++ b/pyqtbuild/builder.py
+@@ -60,17 +60,26 @@ class QmakeBuilder(Builder):
+                         os.path.abspath(os.path.dirname(sys.argv[0])),
+                         self._sip_distinfo)
+ 
+-            # Check we have a qmake.
+-            if self.qmake is None:
+-                self.qmake = self._find_exe('qmake')
+-                if self.qmake is None:
+-                    raise PyProjectOptionException('qmake',
+-                            "specify a working qmake or add it to PATH")
+-            elif not self._is_exe(self.qmake):
+-                raise PyProjectOptionException('qmake',
+-                        "'{0}' is not a working qmake".format(self.qmake))
+-
+-            self.qmake = self._quote(os.path.abspath(self.qmake))
++            def find_exe(name):
++                nonlocal self
++                val = None
++                if hasattr(self, name):
++                    val = getattr(self, name)
++                if val is None:
++                    val = self._find_exe(name)
++                    if val is None:
++                        raise PyProjectOptionException(name,
++                            f"specify a working {name} or add it to PATH")
++                elif not self._is_exe(val):
++                    raise PyProjectOptionException(name,
++                        f"'{val}' is not a working {name}")
++                val = self._quote(os.path.abspath(val))
++                return val
++
++            # qmake is still needed. TODO remove?
++            self.qmake = find_exe("qmake")
++            self.qmake2cmake_all = find_exe("qmake2cmake_all")
++            self.cmake = find_exe("cmake")
+ 
+             # Use qmake to get the Qt configuration.
+             self._get_qt_configuration()
+@@ -642,26 +651,37 @@ macx {
+         """ Run qmake against a .pro file.  fatal is set if a qmake failure is
+         considered a fatal error, otherwise False is returned if qmake fails.
+         The current directory must contain the .pro file.
++
++        patched version:
++        run qmake2cmake
++        run cmake
+         """
+ 
+         # Make sure the Makefile doesn't exist.
+         mf_name = 'Makefile'
+         self._remove_file(mf_name)
+ 
+-        # Build the command line.
+-        args = [self.qmake]
+-
+-        # If the spec is the same as the default then we don't need to specify
+-        # it.
+-        if self.spec != self.qt_configuration['QMAKE_SPEC']:
+-            args.append('-spec')
+-            args.append(self.spec)
++        # qmake2cmake_all: *.pro -> CMakeLists.txt
++        args = [self.qmake2cmake_all]
+ 
+-        if recursive:
+-            args.append('-recursive')
++        args.append("--min-qt-version")
++        args.append("6.3.0")
+ 
++        args.append("--main-file")
+         args.append(os.path.basename(pro_name))
+ 
++        args.append(".")
++
++        if self.debug:
++            print(f"pyqtbuild/builder.py: args = {args}")
++        self.project.run_command(args, fatal=fatal)
++
++        # cmake: CMakeLists.txt -> Makefile
++        args = [self.cmake]
++        args.append("-D" + "CMAKE_INSTALL_PREFIX=.") # default is /var/empty
++        args.append(".")
++        if self.debug:
++            print(f"pyqtbuild/builder.py: args = {args}")
+         self.project.run_command(args, fatal=fatal)
+ 
+         # Check that the Makefile was created.
+-- 
+2.36.1
+

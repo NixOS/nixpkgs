@@ -1,0 +1,25 @@
+From 24317fb31f4a82eeafbeac1edc929200bc349e10 Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Sat, 9 Jul 2022 21:30:46 +0200
+Subject: [PATCH] fix: tool=wheel: use sip-distinfo from PATH
+
+---
+ pyqtbuild/builder.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyqtbuild/builder.py b/pyqtbuild/builder.py
+index 7f79b21..be43eda 100644
+--- a/pyqtbuild/builder.py
++++ b/pyqtbuild/builder.py
+@@ -65,7 +65,7 @@ class QmakeBuilder(Builder):
+             # it.  However for our own frontends we want to use the version
+             # corresponding to the frontend (and, anyway, the frontend may not
+             # be on PATH).
+-            if tool != 'pep517':
++            if not tool in {'pep517', 'wheel'}:
+                 self._sip_distinfo = os.path.join(
+                         os.path.abspath(os.path.dirname(sys.argv[0])),
+                         self._sip_distinfo)
+-- 
+2.36.1
+

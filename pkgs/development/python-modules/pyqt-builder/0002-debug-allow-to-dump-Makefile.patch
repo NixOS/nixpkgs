@@ -1,0 +1,49 @@
+From 450e740a4b613b47a153962bd1474956bc3ff394 Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Mon, 13 Jun 2022 14:40:32 +0200
+Subject: [PATCH 2/5] debug: allow to dump Makefile
+
+---
+ pyqtbuild/builder.py | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/pyqtbuild/builder.py b/pyqtbuild/builder.py
+index bad600d..1111bf6 100644
+--- a/pyqtbuild/builder.py
++++ b/pyqtbuild/builder.py
+@@ -32,6 +32,12 @@ from sipbuild import (Buildable, BuildableModule, Builder, Option, Project,
+ from .installable import QmakeTargetInstallable
+ 
+ 
++def dump_file(file):
++    with open(file, "r") as fh:
++        for num, line in enumerate(fh, start=1):
++            print(f"{file}:{num} {line}", end="")
++
++
+ class QmakeBuilder(Builder):
+     """ A project builder that uses qmake as the underlying build system. """
+ 
+@@ -44,6 +50,9 @@ class QmakeBuilder(Builder):
+         self.qt_version_str = ''
+         self.qt_version_tag = ''
+ 
++        self.debug = os.environ.get("PYQT_BUILDER_DEBUG", False)
++        self.debug_dump_make_files = os.environ.get("PYQT_BUILDER_debug_dump_make_filesS", False)
++
+         # Assume for the moment that this will be found on PATH.
+         self._sip_distinfo = 'sip-distinfo'
+ 
+@@ -686,6 +695,9 @@ macx {
+ 
+         # Check that the Makefile was created.
+         if os.path.isfile(mf_name):
++            if self.debug or self.debug_dump_make_files:
++                print(f"\npyqtbuild/builder.py: Produced Makefile: {mf_name}:")
++                dump_file(mf_name)
+             return True
+ 
+         if fatal:
+-- 
+2.36.1
+
