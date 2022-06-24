@@ -111,6 +111,10 @@ let
     !allowNonSource &&
     !allowNonSourcePredicate attrs;
 
+  # Allow specific packages whose licenses were blocklisted
+  allowBlocklistedLicensePredicate = config.allowBlocklistedLicensePredicate or (x: false);
+  hasBlocklistedException = attrs: allowBlocklistedLicensePredicate attrs;
+
   showLicenseOrSourceType = value: toString (map (v: v.shortName or "unknown") (lib.lists.toList value));
   showLicense = showLicenseOrSourceType;
   showSourceType = showLicenseOrSourceType;
@@ -122,7 +126,7 @@ let
     non-source = remediate_allowlist "NonSource" (remediate_predicate "allowNonSourcePredicate");
     broken = remediate_allowlist "Broken" (x: "");
     unsupported = remediate_allowlist "UnsupportedSystem" (x: "");
-    blocklisted = x: "";
+    blocklisted = remediate_allowlist "Blocklisted" (remediate_predicate "allowBlocklistedLicensePredicate");
     insecure = remediate_insecure;
     broken-outputs = remediateOutputsToInstall;
     unknown-meta = x: "";
@@ -133,12 +137,14 @@ let
     Broken = "NIXPKGS_ALLOW_BROKEN";
     UnsupportedSystem = "NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM";
     NonSource = "NIXPKGS_ALLOW_NONSOURCE";
+    Blocklisted = "NIXPKGS_ALLOW_BLOCKLISTED";
   }.${allow_attr};
   remediation_phrase = allow_attr: {
     Unfree = "unfree packages";
     Broken = "broken packages";
     UnsupportedSystem = "packages that are unsupported for this system";
     NonSource = "packages not built from source";
+    Blocklisted = "packages that have a blocklisted license";
   }.${allow_attr};
   remediate_predicate = predicateConfigAttr: attrs:
     ''
@@ -361,7 +367,7 @@ let
     # --- Put checks that can be ignored here ---
     else if hasDeniedUnfreeLicense attrs && !(hasAllowlistedLicense attrs) then
       { valid = "no"; reason = "unfree"; errormsg = "has an unfree license (‘${showLicense attrs.meta.license}’)"; }
-    else if hasBlocklistedLicense attrs then
+    else if hasBlocklistedLicense attrs && !(hasBlocklistedException attrs) then
       { valid = "no"; reason = "blocklisted"; errormsg = "has a blocklisted license (‘${showLicense attrs.meta.license}’)"; }
     else if hasDeniedNonSourceProvenance attrs then
       { valid = "no"; reason = "non-source"; errormsg = "contains elements not built from source (‘${showSourceType attrs.meta.sourceProvenance}’)"; }
