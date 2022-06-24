@@ -94,6 +94,16 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  c3d2 = {
+    members = [
+      astro
+      SuperSandro2000
+    ];
+    scope = "Maintain packages used in the C3D2 hackspace";
+    shortName = "c3d2";
+    enableFeatureFreezePing = true;
+  };
+
   cinnamon = {
     members = [
       mkg20001
