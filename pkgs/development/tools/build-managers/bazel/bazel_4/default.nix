@@ -257,7 +257,7 @@ stdenv.mkDerivation rec {
       runLocal = name: attrs: script:
       let
         attrs' = removeAttrs attrs [ "buildInputs" ];
-        buildInputs = [ python3 which ] ++ (attrs.buildInputs or []);
+        buildInputs = attrs.buildInputs or [];
       in
       runCommandCC name ({
         inherit buildInputs;
