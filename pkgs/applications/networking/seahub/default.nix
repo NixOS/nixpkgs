@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , python3
 , makeWrapper
+, nixosTests
 }:
 let
   # Seahub 8.x.x does not support django-webpack-loader >=1.x.x
@@ -70,6 +71,9 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     inherit python;
     pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
+    tests = {
+      inherit (nixosTests) seafile;
+    };
   };
 
   meta = with lib; {
