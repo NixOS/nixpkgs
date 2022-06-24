@@ -1139,6 +1139,8 @@ with pkgs;
 
   asleap = callPackage ../tools/networking/asleap { };
 
+  butler = callPackage ../games/itch/butler.nix { };
+
   cf-vault = callPackage ../tools/admin/cf-vault { };
 
   bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
@@ -2434,8 +2436,6 @@ with pkgs;
   ipgrep = callPackage ../tools/networking/ipgrep { };
 
   itch = callPackage ../games/itch {};
-
-  itch-setup = callPackage ../games/itch-setup {};
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
