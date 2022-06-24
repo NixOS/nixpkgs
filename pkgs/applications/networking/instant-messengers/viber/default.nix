@@ -101,6 +101,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "https://www.viber.com";
     description = "An instant messaging and Voice over IP (VoIP) app";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ jagajaga ];

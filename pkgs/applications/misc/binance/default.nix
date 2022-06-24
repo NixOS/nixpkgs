@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Binance Cryptoexchange Official Desktop Client";
     homepage = "https://www.binance.com/en/desktop-download";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ wolfangaukang ];
     platforms = [ "x86_64-linux" ];

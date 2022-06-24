@@ -40,6 +40,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://wiki.univention.de/index.php?title=Installing-signed-GPLPV-drivers";
     maintainers = [ maintainers.tstrobel ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     license = licenses.gpl2;
   };
