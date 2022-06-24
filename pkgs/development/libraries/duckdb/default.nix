@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     })
     (fetchpatch {
       name = "fix-list-type-metadata.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/duckdb/duckdb/pull/3953.patch";
+      url = "https://github.com/duckdb/duckdb/commit/26d123fdc57273903573c72b1ddafc52f365e378.patch";
       sha256 = "sha256-ttqs5EjeSLhZQOXc43Y5/N5IYSESQTD1FZWV1uJ15Fo=";
     })
   ];
