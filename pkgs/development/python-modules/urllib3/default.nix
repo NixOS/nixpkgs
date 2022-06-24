@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   # FIXME: remove backwards compatbility hack
   propagatedBuildInputs = passthru.optional-dependencies.brotli
-    ++ passthru.optional-dependencies.secure;
+    ++ passthru.optional-dependencies.socks;
 
   checkInputs = [
     python-dateutil
