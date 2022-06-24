@@ -57,7 +57,7 @@ buildRustPackage rec {
     '';
     homepage = "https://gitlab.com/timvisee/ffsend";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lilyball equirosa ];
+    maintainers = with maintainers; [ lilyball equirosa marsam ];
     platforms = platforms.unix;
   };
 }
