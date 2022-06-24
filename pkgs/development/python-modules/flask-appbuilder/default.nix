@@ -5,7 +5,7 @@
 , apispec
 , colorama
 , click
-, email_validator
+, email-validator
 , flask
 , flask-babel
 , flask_login
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     apispec
     colorama
     click
-    email_validator
+    email-validator
     flask
     flask-babel
     flask_login
