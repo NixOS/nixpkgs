@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , duckdb
 , google-cloud-storage
 , mypy
@@ -13,10 +14,12 @@
 
 buildPythonPackage rec {
   pname = "duckdb";
-  inherit (duckdb) version src;
+  inherit (duckdb) version src patches;
   format = "setuptools";
 
-  sourceRoot = "source/tools/pythonpkg";
+  preConfigure = ''
+    cd tools/pythonpkg
+  '';
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
