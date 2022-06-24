@@ -1,5 +1,5 @@
 { lib, stdenv, cmake, python3, fetchFromGitHub, emscripten,
-  gtest, lit, nodejs, filecheck
+  gtest, lit, nodejs, filecheck, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
     rev = "version_${version}";
     sha256 = "sha256-HMPoiuTvYhTDaBUfSOfh/Dt4FdO9jGqUaFpi92pnscI=";
   };
+
+  patches = [
+    # https://github.com/WebAssembly/binaryen/pull/4321
+    (fetchpatch {
+      url = "https://github.com/WebAssembly/binaryen/commit/93b8849d9f98ef7ed812938ff0b3219819c2be77.patch";
+      sha256 = "sha256-Duan/B9A+occ5Lj2SbRX793xIfhzHbdYPI5PyTNCZoU=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake python3 ];
 
