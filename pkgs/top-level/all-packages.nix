@@ -1147,8 +1147,6 @@ with pkgs;
 
   cope = callPackage ../tools/misc/cope { };
 
-  dterm = callPackage ../tools/misc/dterm { };
-
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
@@ -1582,6 +1580,8 @@ with pkgs;
   ctx = callPackage ../applications/terminal-emulators/ctx { };
 
   darktile = callPackage ../applications/terminal-emulators/darktile { };
+
+  dterm = callPackage ../applications/terminal-emulators/dterm { };
 
   eterm = callPackage ../applications/terminal-emulators/eterm { };
 
@@ -2402,6 +2402,10 @@ with pkgs;
   hilbish = callPackage ../shells/hilbish { };
 
   hime = callPackage ../tools/inputmethods/hime {};
+
+  himitsu = callPackage ../tools/security/himitsu { };
+
+  himitsu-firefox = callPackage ../tools/security/himitsu-firefox { };
 
   hinit = haskell.lib.compose.justStaticExecutables haskellPackages.hinit;
 
@@ -35658,6 +35662,7 @@ with pkgs;
 
   xsos = callPackage ../os-specific/linux/xsos { };
 
+  xmcp = callPackage ../tools/x11/xmcp { };
 
   zk = callPackage ../applications/office/zk {};
 
