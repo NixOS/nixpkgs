@@ -9594,7 +9594,7 @@ with pkgs;
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
 
   poedit = callPackage ../tools/text/poedit {
-    wxGTK31-gtk3 = wxGTK31-gtk3.override { withWebKit = true; };
+    wxGTK30-gtk3 = wxGTK30-gtk3.override { withWebKit = true; };
   };
 
   polipo = callPackage ../servers/polipo { };
@@ -35327,19 +35327,16 @@ with pkgs;
 
   mpvc = callPackage ../applications/misc/mpvc { };
 
-  discord = import ../applications/networking/instant-messengers/discord {
+  discord = callPackage ../applications/networking/instant-messengers/discord {
     branch = "stable";
-    inherit pkgs lib stdenv;
   };
 
-  discord-ptb = import ../applications/networking/instant-messengers/discord {
+  discord-ptb = callPackage ../applications/networking/instant-messengers/discord {
     branch = "ptb";
-    inherit pkgs lib stdenv;
   };
 
-  discord-canary = import ../applications/networking/instant-messengers/discord {
+  discord-canary = callPackage ../applications/networking/instant-messengers/discord {
     branch = "canary";
-    inherit pkgs lib stdenv;
   };
 
   golden-cheetah = libsForQt5.callPackage ../applications/misc/golden-cheetah {};
