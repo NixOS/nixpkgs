@@ -1662,11 +1662,7 @@ self: super: {
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
-  hercules-ci-agent =
-    assert super.hercules-ci-agent.version == "0.9.5"; # >0.9.5: remove source override as sdist will be fixed
-    overrideSrc
-      { src = pkgs.fetchFromGitHub { owner = "hercules-ci"; repo = "hercules-ci-agent"; rev = "hercules-ci-agent-0.9.5"; sha256 = "sha256-7d8lf4g8CWHTzIOmma8UKvFIi1Og6RqPH9Lt+6iA4pw="; } + "/hercules-ci-agent"; }
-      (generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent);
+  hercules-ci-agent = generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent;
 
   # Test suite doesn't compile with aeson 2.0
   # https://github.com/hercules-ci/hercules-ci-agent/pull/387
