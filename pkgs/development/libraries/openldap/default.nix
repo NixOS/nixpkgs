@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 
-# dependencies
+  # dependencies
 , cyrus_sasl
 , db
 , groff
@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     "devdoc"
   ];
 
-  enableParallelBuilding = true;
+  # Fails to build with 48 cores because of ld not finding slapd-common.o
+  enableParallelBuilding = false;
 
   nativeBuildInputs = [
     groff
@@ -59,9 +60,9 @@ stdenv.mkDerivation rec {
     "ac_cv_func_memcmp_working=yes"
   ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
-  makeFlags= [
+  makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
-    "STRIP="  # Disable install stripping as it breaks cross-compiling. We strip binaries anyway in fixupPhase.
+    "STRIP=" # Disable install stripping as it breaks cross-compiling. We strip binaries anyway in fixupPhase.
     "prefix=${placeholder "out"}"
     "sysconfdir=${placeholder "out"}/etc"
     "systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
@@ -116,6 +117,6 @@ stdenv.mkDerivation rec {
     description = "An open source implementation of the Lightweight Directory Access Protocol";
     license = licenses.openldap;
     maintainers = with maintainers; [ ajs124 das_j hexa ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }
