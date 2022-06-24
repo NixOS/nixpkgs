@@ -2502,6 +2502,8 @@ with pkgs;
 
   itch = callPackage ../games/itch {};
 
+  kestrel = callPackage ../tools/security/kestrel { };
+
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
 
   leetcode-cli = callPackage ../applications/misc/leetcode-cli { };
