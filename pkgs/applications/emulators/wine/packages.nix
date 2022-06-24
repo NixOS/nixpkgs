@@ -28,6 +28,7 @@ in with src; {
     monos =  [ mono ];
     configureFlags = [ "--enable-win64" ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    mainProgram = "wine64";
   };
   wineWow = callPackage ./base.nix {
     pname = "wine-wow";
