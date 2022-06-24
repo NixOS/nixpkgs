@@ -33,5 +33,6 @@ python3Packages.buildPythonApplication {
     description = "Bandcamp autotagger plugin for beets.";
     license = lib.licenses.gpl2;
     inherit (beets.meta) platforms;
+    maintainers = with lib.maintainers; [ rrix ];
   };
 }
