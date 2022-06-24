@@ -9782,6 +9782,8 @@ in {
 
   sip = callPackage ../development/python-modules/sip { };
 
+  sip-pyqt6 = callPackage ../development/python-modules/sip/pyqt6.nix { };
+
   sip_4 = callPackage ../development/python-modules/sip/4.x.nix { };
 
   six = callPackage ../development/python-modules/six { };

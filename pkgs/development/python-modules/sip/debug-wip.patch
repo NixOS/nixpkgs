@@ -1,0 +1,34 @@
+diff --git a/sipbuild/module/abi_version.py b/sipbuild/module/abi_version.py
+index 51ea381..779affa 100644
+--- a/sipbuild/module/abi_version.py
++++ b/sipbuild/module/abi_version.py
+@@ -103,7 +103,7 @@ def resolve_abi_version(abi_version, module=True):
+ 
+     # Check we meet the minimum requirement.
+     if int(abi_minor_version) < minimum_minor_version:
+-        raise UserException(f"'{abi_version}' is not a supported ABI version") from None
++        raise UserException(f"{abi_major_version}.{abi_minor_version} is not a supported ABI version. Minimum ABI version: {abi_major_version}.{minimum_minor_version}. Please update sip") from None
+ 
+     if module:
+         # Return the module's version.
+diff --git a/sipbuild/project.py b/sipbuild/project.py
+index 629d0b2..6e6ce5b 100644
+--- a/sipbuild/project.py
++++ b/sipbuild/project.py
+@@ -160,6 +160,7 @@ class Project(AbstractProject, Configurable):
+         Option('quiet', option_type=bool,
+                 help="disable all progress messages"),
+         Option('verbose', option_type=bool,
++                default=os.environ.get("SIP_DEBUG"),
+                 help="enable verbose progress messages"),
+         Option('name', help="the name used in sdist and wheel file names",
+                 metavar="NAME", tools=['sdist', 'wheel']),
+@@ -878,7 +879,7 @@ class Project(AbstractProject, Configurable):
+ 
+         # Add the user configurable options to the parser.
+         all_options = {}
+-        
++
+         options = self.get_options()
+         if len(self.bindings) < 2:
+             # Remove the options that only make sense where the project has

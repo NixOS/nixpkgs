@@ -1,0 +1,57 @@
+From c6cc3a790734d754845785d2556eaaa3d3cc4c1b Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Thu, 7 Jul 2022 20:10:23 +0200
+Subject: [PATCH] sipbuild/module/abi_version.py: raise exceptions from None
+
+---
+ sipbuild/module/abi_version.py | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/sipbuild/module/abi_version.py b/sipbuild/module/abi_version.py
+index 827a8e0..51ea381 100644
+--- a/sipbuild/module/abi_version.py
++++ b/sipbuild/module/abi_version.py
+@@ -61,11 +61,11 @@ def get_sip_module_version(abi_major_version):
+     # These are internal errors and should never happen.
+     if abi_minor_version is None:
+         raise ValueError(
+-                f"'SIP_ABI_MINOR_VERSION' not found for ABI {abi_major_version}")
++                f"'SIP_ABI_MINOR_VERSION' not found for ABI {abi_major_version}") from None
+ 
+     if patch_version is None:
+         raise ValueError(
+-                f"'SIP_MODULE_PATCH_VERSION' not found for ABI {abi_major_version}")
++                f"'SIP_MODULE_PATCH_VERSION' not found for ABI {abi_major_version}") from None
+ 
+     return f'{abi_major_version}.{abi_minor_version}.{patch_version}'
+ 
+@@ -80,7 +80,7 @@ def resolve_abi_version(abi_version, module=True):
+ 
+         if not os.path.isdir(get_module_source_dir(abi_major_version)):
+             raise UserException(
+-                    f"'{abi_version}' is not a supported ABI version")
++                    f"'{abi_version}' is not a supported ABI version") from None
+ 
+         if len(parts) == 1:
+             minimum_minor_version = 0
+@@ -92,7 +92,7 @@ def resolve_abi_version(abi_version, module=True):
+ 
+             if len(parts) > 2 or minimum_minor_version is None:
+                 raise UserException(
+-                        f"'{abi_version}' is not a valid ABI version")
++                        f"'{abi_version}' is not a valid ABI version") from None
+     else:
+         abi_major_version = sorted(os.listdir(_module_source_dir), key=int)[-1]
+         minimum_minor_version = 0
+@@ -103,7 +103,7 @@ def resolve_abi_version(abi_version, module=True):
+ 
+     # Check we meet the minimum requirement.
+     if int(abi_minor_version) < minimum_minor_version:
+-        raise UserException(f"'{abi_version}' is not a supported ABI version")
++        raise UserException(f"'{abi_version}' is not a supported ABI version") from None
+ 
+     if module:
+         # Return the module's version.
+-- 
+2.36.1
+

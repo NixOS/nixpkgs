@@ -1,0 +1,70 @@
+From 4aca4a966ebdc8fbf6ac0b88c0b92d660bce6117 Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Mon, 13 Jun 2022 22:56:44 +0200
+Subject: [PATCH 3/4] debug: dump generated files on SIP_DEBUG_DUMP_FILES
+
+---
+ sipbuild/bindings.py | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/sipbuild/bindings.py b/sipbuild/bindings.py
+index 0b5f72a..80844da 100644
+--- a/sipbuild/bindings.py
++++ b/sipbuild/bindings.py
+@@ -35,6 +35,13 @@ from .module import copy_nonshared_sources
+ from .version import SIP_VERSION
+ 
+ 
++def dump_file(file):
++    "print file contents with line numbers"
++    with open(file, "r") as fh:
++        for num, line in enumerate(fh, start=1):
++            print(f"{file}:{num} {line}", end="")
++
++
+ class Bindings(Configurable):
+     """ The encapsulation of a module's bindings. """
+ 
+@@ -125,6 +132,7 @@ class Bindings(Configurable):
+ 
+         self.project = project
+         self.name = name
++        self.debug_dump_files = os.environ.get("SIP_DEBUG_DUMP_FILES", False)
+ 
+         self.initialise_options(kwargs)
+ 
+@@ -201,6 +209,9 @@ class Bindings(Configurable):
+             generateExtracts(pt, extracts)
+ 
+         # Generate any type hints file.
++        # NOTE(milahu) the *.pyi files are included
++        # in the official PyQt6 wheel release from pypi.org
++        # but they are not built with our config
+         if self.pep484_pyi and not self.internal:
+             project.progress(
+                     "Generating the {0} .pyi file".format(buildable.target))
+@@ -223,10 +234,21 @@ class Bindings(Configurable):
+ 
+         if header:
+             buildable.headers.append(header)
++            if self.debug_dump_files:
++                print(f"sipbuild/bindings.py: {self.name}: Generated header file: {header}")
++                dump_file(header)
+ 
+         buildable.headers.extend(self.headers)
++        if self.debug_dump_files:
++            for f in self.headers:
++                print(f"sipbuild/bindings.py: {self.name}: Extra header file: {f}")
++                dump_file(f)
+ 
+         buildable.sources.extend(sources)
++        if self.debug_dump_files:
++            for f in sources:
++                print(f"sipbuild/bindings.py: {self.name}: Generated source file: {f}")
++                dump_file(f)
+ 
+         # Add the sip module code if it is not shared.
+         buildable.include_dirs.append(buildable.build_dir)
+-- 
+2.36.1
+

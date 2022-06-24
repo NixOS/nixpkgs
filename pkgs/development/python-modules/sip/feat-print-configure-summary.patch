@@ -1,0 +1,46 @@
+From 90b10d5550446601832e7c10c8e8f08f6f68bed0 Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Fri, 17 Jun 2022 18:43:09 +0200
+Subject: [PATCH 2/4] feat: print configure summary
+
+---
+ sipbuild/project.py | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/sipbuild/project.py b/sipbuild/project.py
+index 9c48ddd..7f28d71 100644
+--- a/sipbuild/project.py
++++ b/sipbuild/project.py
+@@ -164,6 +164,7 @@ class Project(AbstractProject, Configurable):
+         self.root_dir = os.getcwd()
+         self.bindings = collections.OrderedDict()
+         self.bindings_factories = []
++        self.all_binding_names = []
+         self.builder = None
+         self.buildables = []
+         self.installables = []
+@@ -617,9 +618,18 @@ class Project(AbstractProject, Configurable):
+         self.verify_configuration(tool)
+ 
+         if tool in Option.BUILD_TOOLS and self.bindings:
+-            self.progress(
+-                    "These bindings will be built: {}.".format(
+-                            ', '.join(self.bindings.keys())))
++            print("\n\n" + "---- Configure summary ----")
++            print("\n" + "These bindings will be built:" + "\n")
++            for name in self.all_binding_names:
++                is_buildable = name in self.bindings
++                x = "x" if is_buildable else " "
++                disabled_features_str = ""
++                if is_buildable:
++                    binding = self.bindings[name]
++                    if binding.disabled_features:
++                        disabled_features_str = ". disabled features: " + ", ".join(binding.disabled_features)
++                print(f"  [{x}] {name}{disabled_features_str}")
++            print("\n")
+ 
+     def update(self, tool):
+         """ This should be re-implemented by any user supplied sub-class to
+-- 
+2.36.1
+

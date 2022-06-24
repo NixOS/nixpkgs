@@ -1,0 +1,24 @@
+From ad940395f0eb2ad7774d327af0a7895b6db02236 Mon Sep 17 00:00:00 2001
+From: Milan Hauth <milahu@gmail.com>
+Date: Fri, 17 Jun 2022 18:45:14 +0200
+Subject: [PATCH 1/4] fix: unbuffer make output
+
+---
+ sipbuild/project.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/sipbuild/project.py b/sipbuild/project.py
+index b63fae3..9c48ddd 100644
+--- a/sipbuild/project.py
++++ b/sipbuild/project.py
+@@ -564,6 +564,7 @@ class Project(AbstractProject, Configurable):
+         for line in self.read_command_pipe(args, and_stderr=True, fatal=fatal):
+             if self.verbose:
+                 sys.stdout.write(line)
++                sys.stdout.flush() # unbuffer output from make
+ 
+     def setup(self, pyproject, tool, tool_description):
+         """ Complete the configuration of the project. """
+-- 
+2.36.1
+

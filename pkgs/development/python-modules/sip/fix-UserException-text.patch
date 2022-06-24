@@ -1,0 +1,13 @@
+diff --git a/sipbuild/exceptions.py b/sipbuild/exceptions.py
+index 20763a1..838828c 100755
+--- a/sipbuild/exceptions.py
++++ b/sipbuild/exceptions.py
+@@ -33,7 +33,7 @@ class UserException(Exception):
+         optional detail.
+         """
+ 
+-        super().__init__()
++        super().__init__(text)
+ 
+         self.text = text
+         self.detail = detail
