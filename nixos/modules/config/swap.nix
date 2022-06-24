@@ -221,11 +221,13 @@ in
               ''
                 ${optionalString (sw.size != null) ''
                   currentSize=$(( $(stat -c "%s" "${sw.device}" 2>/dev/null || echo 0) / 1024 / 1024 ))
-                  if [ "${toString sw.size}" != "$currentSize" ]; then
-                    dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
-                    chmod 0600 ${sw.device}
-                    ${optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
+                  if test "${toString sw.size}" -gt "$currentSize"; then
+                    fallocate --length="${toString sw.size}M" --zero-range "${sw.device}"
+                  else
+                    truncate --size="${toString sw.size}M" "${sw.device}"
                   fi
+                  chmod 0600 ${sw.device}
+                  ${optionalString (!sw.randomEncryption.enable) "mkswap ${sw.realDevice}"}
                 ''}
                 ${optionalString sw.randomEncryption.enable ''
                   cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} \
