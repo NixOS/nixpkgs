@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "abey79";
     repo = "vsketch";
     rev = "0d937c851ac528bf182d0b71eb42ead525848c60";
-    sha256 = "sha256-J04/yRAIMuCt6z+FT+bkV+h8sz7igg/mMyVsMOEMJhE="; 
+    sha256 = "sha256-J04/yRAIMuCt6z+FT+bkV+h8sz7igg/mMyVsMOEMJhE=";
   };
 
   format = "pyproject";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
   propagatedBuildInputs = [
     vpype pnoise qasync watchfiles
-    shapely numpy pyside2 
-    colorama cookiecutter matplotlib multiprocess 
+    shapely numpy pyside2
+    colorama cookiecutter matplotlib multiprocess
 
     poetry-core
   ];

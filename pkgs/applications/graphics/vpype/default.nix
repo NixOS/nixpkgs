@@ -43,7 +43,7 @@ buildPythonPackage rec {
     cachetools click multiprocess numpy pnoise shapely scipy setuptools
     svgelements svgwrite tomli asteval
 
-    matplotlib glcontext moderngl pillow pyside2 
+    matplotlib glcontext moderngl pillow pyside2
 
     poetry-core
   ];
