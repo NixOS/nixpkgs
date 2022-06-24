@@ -70,7 +70,7 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python;
-    pythonPath = python3.pkgs.makePythonPath propagatedBuildInputs;
+    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
     tests = {
       inherit (nixosTests) seafile;
     };
