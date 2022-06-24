@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "railroad-diagrams";
-  version = "1.1.1";
+  version = "2.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8a1ec227666be2000e76794aa740f77987f1586077aae4d090d2633b3064c976";
+    sha256 = "sha256-wRClrA4I/DWNw/hL5rowQMn0R61c6qiNg9Ho6nXqi+4=";
   };
 
   # this is a dependency of pyparsing, which is a dependency of pytest
