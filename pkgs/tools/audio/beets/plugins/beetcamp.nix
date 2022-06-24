@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, beets, python3Packages }:
+{ lib,
+  fetchFromGitHub,
+  python3Packages,
+  beets,
+
+  propagateBeets ? false
+}:
 
 python3Packages.buildPythonApplication {
   pname = "beets-beetcamp";
@@ -13,7 +19,8 @@ python3Packages.buildPythonApplication {
 
   format = "pyproject";
 
-  propagatedBuildInputs = with python3Packages; [ setuptools poetry requests cached-property pycountry dateutil ordered-set ];
+  propagatedBuildInputs = with python3Packages; [ setuptools poetry requests cached-property pycountry dateutil ordered-set ]
+                                                ++ (lib.optional propagateBeets [ beets ]);
 
   checkInputs = with python3Packages; [
     # pytestCheckHook
