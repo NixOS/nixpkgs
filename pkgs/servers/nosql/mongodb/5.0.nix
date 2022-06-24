@@ -22,5 +22,6 @@ buildMongoDB {
     ./forget-build-dependencies-4-4.patch
     ./asio-no-experimental-string-view-4-4.patch
     ./fix-build-with-boost-1.79-5_0.patch
+    ./fix-gcc-Wno-exceptions-5.0.patch
   ];
 }
