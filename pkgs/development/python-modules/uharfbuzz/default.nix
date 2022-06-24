@@ -32,9 +32,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    ApplicationServices
-  ];
+  buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
   checkInputs = [
     pytestCheckHook

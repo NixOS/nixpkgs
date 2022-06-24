@@ -1,15 +1,14 @@
-{ lib, stdenv, kubernetes }:
+{ lib, buildGoModule, kubernetes }:
 
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "kubectl";
 
   inherit (kubernetes)
-    disallowedReferences
-    GOFLAGS
+    buildPhase
+    doCheck
     nativeBuildInputs
-    postBuild
-    postPatch
     src
+    vendorSha256
     version
     ;
 
@@ -18,7 +17,7 @@ stdenv.mkDerivation rec {
   WHAT = lib.concatStringsSep " " [
     "cmd/kubectl"
     "cmd/kubectl-convert"
-    ];
+  ];
 
   installPhase = ''
     runHook preInstall
