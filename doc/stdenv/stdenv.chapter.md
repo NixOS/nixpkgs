@@ -1153,9 +1153,9 @@ A few libraries automatically add to `NIX_LDFLAGS` their library, making their s
 
 The `validatePkgConfig` hook validates all pkg-config (`.pc`) files in a package. This helps catching some common errors in pkg-config files, such as undefined variables.
 
-### cmake {#cmake}
+### CMake {#cmake}
 
-Overrides the default configure phase to run the CMake command. By default, we use the Make generator of CMake. In addition, dependencies are added automatically to CMAKE_PREFIX_PATH so that packages are correctly detected by CMake. Some additional flags are passed in to give similar behavior to configure-based packages. You can disable this hook’s behavior by setting configurePhase to a custom value, or by setting dontUseCmakeConfigure. cmakeFlags controls flags passed only to CMake. By default, parallel building is enabled as CMake supports parallel building almost everywhere. When Ninja is also in use, CMake will detect that and use the ninja generator.
+Adds dependencies to the CMAKE_PREFIX_PATH, CMAKE_LIBRARY_PATH, CMAKE_INCLUDE_PATH and CMAKE_FRAMEWORK_PATH environment variables (cannot be disabled). Overrides the `configurePhase` to run the CMake configure and generate step (disable by setting `dontUseCmakeConfigure`, or `configurePhase`). The `configurePhase` adds the content of `cmakeFlags` to the command run. The build, install and check phases are not modified. If `ninja` is a dependency, the Ninja setup hook applies. Otherwise, the Make-based phases are used. The `configurePhase` selects the adequate CMake generator for the build, install and check phases to work. As a result, to prevent a Ninja-based build, you need to disable all three phases, as described in the section below. Enables parallel building (disable by setting `enableParallelBuilding` to 0).
 
 ### xcbuildHook {#xcbuildhook}
 
@@ -1187,9 +1187,9 @@ What value to set [`-Dwrap_mode=`](https://mesonbuild.com/Builtin-options.html#c
 
 Disables using Meson’s `configurePhase`.
 
-### ninja {#ninja}
+### Ninja {#ninja}
 
-Overrides the build, install, and check phase to run ninja instead of make. You can disable this behavior with the `dontUseNinjaBuild`, `dontUseNinjaInstall`, and `dontUseNinjaCheck`, respectively. Parallel building is enabled by default in Ninja.
+Overrides the build, install, and check phase to run Ninja instead of Make. You can disable this behavior with the `dontUseNinjaBuild`, `dontUseNinjaInstall`, and `dontUseNinjaCheck`, respectively. Parallel building is enabled by default in Ninja.
 
 ### unzip {#unzip}
 
