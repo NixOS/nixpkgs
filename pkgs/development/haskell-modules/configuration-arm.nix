@@ -112,6 +112,7 @@ self: super: {
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
   hls-rename-plugin = dontCheck super.hls-rename-plugin;
   hls-fourmolu-plugin = dontCheck super.hls-fourmolu-plugin;
+  hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
 } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch32 {
   # AARCH32-SPECIFIC OVERRIDES
 
