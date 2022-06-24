@@ -103,6 +103,7 @@ stdenv.mkDerivation rec {
     description = "Peer-to-peer ephemeral public communities";
     homepage = "https://getaether.net/";
     downloadPage = "https://getaether.net/download/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ maxhille ];
     # other platforms could be supported by building from source

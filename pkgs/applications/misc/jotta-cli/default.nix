@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage     = "https://www.jottacloud.com/";
     downloadPage = "https://repo.jotta.us/archives/linux/";
     maintainers  = with maintainers; [ evenbrenden ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license      = licenses.unfree;
     platforms    = [ "x86_64-linux" ];
   };

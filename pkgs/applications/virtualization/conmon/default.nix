@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WxRMY43Z9OytY1kc91VVmqLn5cl0UC/0Zj8x3vpsaBQ=";
+    sha256 = "sha256-KDAm+Djk1AaA3zXhxywT6HknT0tVCEZLS27nO9j/WgM=";
   };
 
   nativeBuildInputs = [ pkg-config ];

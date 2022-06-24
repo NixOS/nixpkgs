@@ -58,6 +58,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "TeamSpeak voice communication server";
     homepage = "https://teamspeak.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arobyn gerschtli ];

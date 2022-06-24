@@ -88,6 +88,10 @@ buildFHSUserEnv {
     homepage = "https://www.qoppa.com/${pname}/";
     description = "An easy to use, full-featured PDF editing software";
     longDescription = longDescription;
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.unfree;
     platforms = platforms.linux;
     mainProgram = pname;

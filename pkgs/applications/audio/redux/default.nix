@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Sample-based instrument, with a powerful phrase sequencer";
     homepage = "https://www.renoise.com/products/redux";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ mihnea-s ];
     platforms = [ "x86_64-linux" ];
