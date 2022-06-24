@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , qttools
 , darwin
@@ -57,6 +58,11 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
 
   patches = [
+    # pending "autostart: Linux: Exec= filename not absolute path"
+    (fetchpatch {
+      url = "https://github.com/keepassxreboot/keepassxc/pull/8191/commits/4e0a2cd39ddbdb30b9308494381e6fb494ca8481.patch";
+      sha256 = "sha256-E/Wp72lODu5Z32PPuyxwu4NwmjJTPJ4tJDvqepohdA0=";
+    })
     ./darwin.patch
   ];
 
