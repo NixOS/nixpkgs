@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An open-source alternative to Notion";
     homepage = "https://www.appflowy.io/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${version}";
     maintainers = with maintainers; [ darkonion0 ];

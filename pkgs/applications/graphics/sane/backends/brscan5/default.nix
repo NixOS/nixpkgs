@@ -102,6 +102,7 @@ stdenv.mkDerivation rec {
     description = "Brother brscan5 sane backend driver";
     homepage = "https://www.brother.com";
     platforms = [ "i686-linux" "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ mattchrist ];
   };

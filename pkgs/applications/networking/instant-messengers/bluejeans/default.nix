@@ -127,6 +127,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day";
     homepage = "https://www.bluejeans.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];

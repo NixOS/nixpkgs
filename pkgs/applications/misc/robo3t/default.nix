@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
     homepage = "https://robomongo.org/";
     description = "Query GUI for mongodb. Formerly called Robomongo";
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ eperuffo ];
   };

@@ -1041,6 +1041,22 @@ let
         };
       };
 
+      grapecity.gc-excelviewer = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gc-excelviewer";
+          publisher = "grapecity";
+          version = "4.2.55";
+          sha256 = "sha256-yHl6ZTGIKOEsqmyeYtgDUhNAN9uRpoFApA7FKkPWW3E=";
+        };
+        meta = with lib; {
+          description = "Edit Excel spreadsheets and CSV files in Visual Studio Code and VS Code for the Web";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=grapecity.gc-excelviewer";
+          homepage = "https://github.com/jjuback/gc-excelviewer";
+          license = licenses.mit;
+          maintainers = with maintainers; [ kamadorueda ];
+        };
+      };
+
       humao.rest-client = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "humao";
@@ -1286,8 +1302,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "8.23.0";
-          sha256 = "sha256-IHLsAuTi+GBZViL2KozudebNY745RiOYNATzabQfnOY=";
+          version = "8.27.2";
+          sha256 = "sha256-scvT6cjlMrfG4yrhWlUwGM7ozu1E0xAryPRpV7FGCas=";
         };
         meta = with lib; {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";
@@ -1492,6 +1508,23 @@ let
         meta = {
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
+      mattn.lisp = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "lisp";
+          publisher = "mattn";
+          version = "0.1.12";
+          sha256 = "sha256-x6aFrcX0YElEFEr0qA669/LPlab15npmXd5Q585pIEw=";
+        };
+        meta = with lib; {
+          description = "Lisp syntax for vscode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mattn.lisp";
+          homepage = "https://github.com/mattn/vscode-lisp";
+          changelog = "https://marketplace.visualstudio.com/items/mattn.lisp/changelog";
+          license = licenses.mit;
+          maintainers = with maintainers; [ kamadorueda ];
         };
       };
 
@@ -2369,8 +2402,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.21.5";
-          sha256 = "1v1xs1wcigisr6xip31i02cfryxrb157sla34y59pwlnhc5x1gny";
+          version = "1.22.2";
+          sha256 = "sha256-dtIlgODzRdoMKnG9050ZcCX3w15A/R3FaMc+ZylvBbU=";
         };
         meta = {
           license = lib.licenses.mit;

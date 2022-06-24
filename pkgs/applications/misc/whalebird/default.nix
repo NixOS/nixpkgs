@@ -82,6 +82,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Electron based Mastodon, Pleroma and Misskey client for Windows, Mac and Linux";
     homepage = "https://whalebird.social";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = with maintainers; [ wolfangaukang colinsane ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

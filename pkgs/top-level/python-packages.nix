@@ -1356,11 +1356,6 @@ in {
     enablePython = true;
   });
 
-  boost169 = toPythonModule (pkgs.boost169.override {
-    inherit (self) python numpy;
-    enablePython = true;
-  });
-
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
 
   boost-histogram = callPackage ../development/python-modules/boost-histogram {
@@ -7557,7 +7552,7 @@ in {
 
   pylaunches = callPackage ../development/python-modules/pylaunches { };
 
-  PyLD = callPackage ../development/python-modules/PyLD { };
+  pyld = callPackage ../development/python-modules/pyld { };
 
   pylev = callPackage ../development/python-modules/pylev { };
 

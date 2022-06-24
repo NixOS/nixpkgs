@@ -102,6 +102,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The TeamSpeak voice communication tool";
     homepage = "https://teamspeak.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = {
       fullName = "Teamspeak client license";
       url = "https://www.teamspeak.com/en/privacy-and-terms/";

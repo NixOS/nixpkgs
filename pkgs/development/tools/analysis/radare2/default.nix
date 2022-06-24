@@ -31,8 +31,8 @@ let
   arm64 = fetchFromGitHub {
     owner = "radareorg";
     repo = "vector35-arch-arm64";
-    rev = "3c5eaba46dab72ecb7d5f5b865a13fdeee95b464";
-    sha256 = "sha256-alcGEi+D8CptXzfznnuxQKCvU2mbzn2sQge5jSqLVpg=";
+    rev = "9ab2b0bedde459dc86e079718333de4a63bbbacb";
+    sha256 = "sha256-2KLtjgCqHzBBlo9ImZ8WJ1bsWy/kdJCjCFxlLE+HxoI=";
   };
   armv7 = fetchFromGitHub {
     owner = "radareorg";
@@ -44,13 +44,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "radare2";
-  version = "5.7.0";
+  version = "5.7.2";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "sha256-tCFi1m3xyQlG+8FijjQh8PMwg6CIfIxvLkd5xCIZHHo=";
+    sha256 = "sha256-TZeW+9buJvCOudHsLTMITFpRUlmNpo71efc3xswJoPw=";
   };
 
   preBuild = ''
@@ -110,7 +110,6 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "unix-like reverse engineering framework and commandline tools";
     homepage = "https://radare.org/";
     license = licenses.gpl2Plus;

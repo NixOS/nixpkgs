@@ -29,6 +29,10 @@ let
     homepage = "https://www.geogebra.org/";
     maintainers = with maintainers; [ sikmir imsofi ];
     license = with licenses; [ gpl3 cc-by-nc-sa-30 geogebra ];
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode  # some jars include native binaries
+    ];
     platforms = with platforms; linux ++ darwin;
     hydraPlatforms = [];
   };

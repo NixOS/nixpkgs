@@ -30,7 +30,6 @@ let
       linux_5_4_hardened
       linux_5_10_hardened
       linux_5_15_hardened
-      linux_5_17_hardened
       linux_5_18_hardened
 
       linux_testing;

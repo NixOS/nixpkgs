@@ -33,6 +33,65 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>nixpkgs.hostPlatform</literal> and
+          <literal>nixpkgs.buildPlatform</literal> options have been
+          added. These cover and override the
+          <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
+          options.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>hostPlatform</literal> is the platform or
+              <quote><literal>system</literal></quote> string of the
+              NixOS system described by the configuration.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>buildPlatform</literal> is the platform that is
+              responsible for building the NixOS configuration. It
+              defaults to the <literal>hostPlatform</literal>, for a
+              non-cross build configuration. To cross compile, set
+              <literal>buildPlatform</literal> to a different value.
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          The new options convey the same information, but with fewer
+          options, and following the Nixpkgs terminology.
+        </para>
+        <para>
+          The existing options
+          <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
+          have not been formally deprecated, to allow for evaluation of
+          the change and to allow for a transition period so that in
+          time the ecosystem can switch without breaking compatibility
+          with any supported NixOS release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>nixos-generate-config</literal> now generates
+          configurations that can be built in pure mode. This is
+          achieved by setting the new
+          <literal>nixpkgs.hostPlatform</literal> option.
+        </para>
+        <para>
+          You may have to unset the <literal>system</literal> parameter
+          in <literal>lib.nixosSystem</literal>, or similarly remove
+          definitions of the
+          <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
+          options.
+        </para>
+        <para>
+          Alternatively, you can remove the
+          <literal>hostPlatform</literal> line and use NixOS like you
+          would in NixOS 22.05 and earlier.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP now defaults to PHP 8.1, updated from 8.0.
         </para>
       </listitem>
@@ -176,6 +235,14 @@
   <section xml:id="sec-release-22.11-notable-changes">
     <title>Other Notable Changes</title>
     <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>xplr</literal> package has been updated from
+          0.18.0 to 0.19.0, which brings some breaking changes. See the
+          <link xlink:href="https://github.com/sayanarijit/xplr/releases/tag/v0.19.0">upstream
+          release notes</link> for more details.
+        </para>
+      </listitem>
       <listitem>
         <para>
           A new module was added for the Saleae Logic device family,

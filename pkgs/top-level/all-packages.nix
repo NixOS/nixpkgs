@@ -1147,6 +1147,8 @@ with pkgs;
 
   cope = callPackage ../tools/misc/cope { };
 
+  dterm = callPackage ../tools/misc/dterm { };
+
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
@@ -2083,7 +2085,9 @@ with pkgs;
 
   botamusique = callPackage ../tools/audio/botamusique { };
 
-  boulder = callPackage ../tools/admin/boulder { };
+  boulder = callPackage ../tools/admin/boulder {
+    buildGoModule = buildGo118Module;
+  };
 
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
 
@@ -4090,6 +4094,8 @@ with pkgs;
   nfstrace = callPackage ../tools/networking/nfstrace { };
 
   nix-direnv = callPackage ../tools/misc/nix-direnv { };
+
+  nixel = callPackage ../tools/nix/nixel { };
 
   nix-output-monitor = callPackage ../tools/nix/nix-output-monitor { };
 
@@ -8228,6 +8234,8 @@ with pkgs;
 
   longview = callPackage ../servers/monitoring/longview { };
 
+  lorien = callPackage ../applications/graphics/lorien { };
+
   lout = callPackage ../tools/typesetting/lout { };
 
   lr = callPackage ../tools/system/lr { };
@@ -9798,7 +9806,7 @@ with pkgs;
 
   qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
 
-  qjoypad = callPackage ../tools/misc/qjoypad { };
+  qjoypad = libsForQt5.callPackage ../tools/misc/qjoypad { };
 
   qmk = callPackage ../tools/misc/qmk { };
 
@@ -12808,6 +12816,9 @@ with pkgs;
     isl = if !stdenv.isDarwin then isl_0_11 else null;
 
     cloog = if !stdenv.isDarwin then cloog_0_18_0 else null;
+
+    # Build fails on Darwin with clang
+    stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
   }));
 
   gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
@@ -13838,11 +13849,11 @@ with pkgs;
   buildRustCrateHelpers = callPackage ../build-support/rust/build-rust-crate/helpers.nix { };
   cratesIO = callPackage ../build-support/rust/crates-io.nix { };
 
-  cargo-web = callPackage ../development/tools/cargo-web {
+  cargo-web = callPackage ../development/tools/rust/cargo-web {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
-  cargo-flamegraph = callPackage ../development/tools/cargo-flamegraph {
+  cargo-flamegraph = callPackage ../development/tools/rust/cargo-flamegraph {
     inherit (darwin.apple_sdk.frameworks) Security;
     inherit (linuxPackages) perf;
   };
@@ -13851,9 +13862,9 @@ with pkgs;
 
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
-  cargo-about = callPackage ../tools/package-management/cargo-about { };
+  cargo-about = callPackage ../development/tools/rust/cargo-about { };
   cargo-all-features = callPackage ../development/tools/rust/cargo-all-features { };
-  cargo-audit = callPackage ../tools/package-management/cargo-audit {
+  cargo-audit = callPackage ../development/tools/rust/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
@@ -13867,29 +13878,29 @@ with pkgs;
   cargo-deadlinks = callPackage ../development/tools/rust/cargo-deadlinks {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-deb = callPackage ../tools/package-management/cargo-deb {
+  cargo-deb = callPackage ../development/tools/rust/cargo-deb {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-deps = callPackage ../tools/package-management/cargo-deps { };
-  cargo-download = callPackage ../tools/package-management/cargo-download { };
-  cargo-edit = callPackage ../tools/package-management/cargo-edit {
+  cargo-deps = callPackage ../development/tools/rust/cargo-deps { };
+  cargo-download = callPackage ../development/tools/rust/cargo-download { };
+  cargo-edit = callPackage ../development/tools/rust/cargo-edit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-kcov = callPackage ../tools/package-management/cargo-kcov { };
-  cargo-graph = callPackage ../tools/package-management/cargo-graph { };
-  cargo-license = callPackage ../tools/package-management/cargo-license { };
+  cargo-kcov = callPackage ../development/tools/rust/cargo-kcov { };
+  cargo-graph = callPackage ../development/tools/rust/cargo-graph { };
+  cargo-license = callPackage ../development/tools/rust/cargo-license { };
   cargo-llvm-lines = callPackage ../development/tools/rust/cargo-llvm-lines { };
-  cargo-outdated = callPackage ../tools/package-management/cargo-outdated {
+  cargo-outdated = callPackage ../development/tools/rust/cargo-outdated {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
-  cargo-release = callPackage ../tools/package-management/cargo-release {
+  cargo-release = callPackage ../development/tools/rust/cargo-release {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-rr = callPackage ../development/tools/rust/cargo-rr { };
   cargo-tarpaulin = callPackage ../development/tools/analysis/cargo-tarpaulin {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-update = callPackage ../tools/package-management/cargo-update {
+  cargo-update = callPackage ../development/tools/rust/cargo-update {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -23446,8 +23457,6 @@ with pkgs;
   linux_5_10_hardened = linuxKernel.kernels.linux_5_10_hardened;
   linuxPackages_5_15_hardened = linuxKernel.packages.linux_5_15_hardened;
   linux_5_15_hardened = linuxKernel.kernels.linux_5_15_hardened;
-  linuxPackages_5_17_hardened = linuxKernel.packages.linux_5_17_hardened;
-  linux_5_17_hardened = linuxKernel.kernels.linux_5_17_hardened;
   linuxPackages_5_18_hardened = linuxKernel.packages.linux_5_18_hardened;
   linux_5_18_hardened = linuxKernel.kernels.linux_5_18_hardened;
 
@@ -25825,7 +25834,7 @@ with pkgs;
 
   complete-alias = callPackage ../tools/misc/complete-alias { };
 
-  confclerk = callPackage ../applications/misc/confclerk { };
+  confclerk = libsForQt5.callPackage ../applications/misc/confclerk { };
 
   copyq = libsForQt5.callPackage ../applications/misc/copyq { };
 
@@ -26761,7 +26770,7 @@ with pkgs;
   fragments = callPackage ../applications/networking/p2p/fragments { };
 
   freecad = libsForQt5.callPackage ../applications/graphics/freecad {
-    boost = python3Packages.boost169;
+    boost = python3Packages.boost;
     inherit (python3Packages)
       GitPython
       matplotlib
@@ -31617,7 +31626,13 @@ with pkgs;
 
   runescape = callPackage ../games/runescape-launcher { };
 
-  sm64ex = callPackage ../games/sm64ex { };
+  sm64ex = callPackage ../games/sm64ex {
+    branch = "sm64ex";
+  };
+
+  sm64ex-coop = callPackage ../games/sm64ex {
+    branch = "sm64ex-coop";
+  };
 
   snipes = callPackage ../games/snipes { };
 
@@ -33624,7 +33639,7 @@ with pkgs;
   z3 = z3_4_8;
   z3_4_4_0 = callPackage ../applications/science/logic/z3/4.4.0.nix {
     python = python2;
-    stdenv = gcc49Stdenv;
+    stdenv = if stdenv.isDarwin then stdenv else gcc49Stdenv;
   };
   z3-tptp = callPackage ../applications/science/logic/z3/tptp.nix {};
 
@@ -34728,7 +34743,7 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  rss-glx = callPackage ../misc/screensavers/rss-glx { stdenv = gcc10StdenvCompat; };
+  rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
   run-scaled = callPackage ../tools/X11/run-scaled { };
 
