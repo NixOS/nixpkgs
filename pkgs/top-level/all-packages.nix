@@ -35621,7 +35621,7 @@ with pkgs;
 
   mictray = callPackage ../tools/audio/mictray { };
 
-  vpype = python3Packages.callPackage ../applications/graphics/vpype { };
+  vpype = with python3Packages; toPythonApplication (callPackage ../applications/graphics/vpype { });
 
-  vsketch = python3Packages.callPackage ../applications/graphics/vsketch { };
+  vsketch = with python3Packages; toPythonApplication (callPackage ../applications/graphics/vsketch { });
 }
