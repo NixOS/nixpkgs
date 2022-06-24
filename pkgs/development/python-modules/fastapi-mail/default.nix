@@ -3,7 +3,7 @@
 , aiosmtplib
 , blinker
 , buildPythonPackage
-, email_validator
+, email-validator
 , fakeredis
 , fastapi
 , fetchFromGitHub
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     aioredis
     aiosmtplib
     blinker
-    email_validator
+    email-validator
     fakeredis
     fastapi
     httpx
