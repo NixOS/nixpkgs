@@ -73,6 +73,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://schleuder.org/">schleuder</link>, a
+          mailing list manager with PGP support. Enable using
+          <link linkend="opt-services.schleuder.enable">services.schleuder</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
           the CLI client for ExpressVPN. Available as
           <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
