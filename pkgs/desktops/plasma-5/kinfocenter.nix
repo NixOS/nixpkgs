@@ -24,6 +24,11 @@
 , libraw1394
 , libGLU
 , pciutils
+, aha
+, glxinfo
+, vulkan-tools
+, wayland-utils
+, xdpyinfo
 }:
 
 mkDerivation {
@@ -53,10 +58,12 @@ mkDerivation {
     libGLU
     pciutils
   ];
-  preFixup = ''
-    # fix wrong symlink of infocenter pointing to a 'systemsettings5' binary in
-    # the same directory, while it is actually located in a completely different
-    # store path
-    ln -sf ${lib.getBin systemsettings}/bin/systemsettings5 $out/bin/kinfocenter
+  postFixup = ''
+    rm $out/bin/kinfocenter
+    # 'kinfocenter' simply opens 'systemsettings5', which checks
+    # the executable name to see in which mode it should open
+    makeWrapper ${lib.getBin systemsettings}/bin/systemsettings5 $out/bin/kinfocenter \
+      --argv0 $pname \
+      --prefix PATH : ${lib.makeBinPath [ aha glxinfo pciutils vulkan-tools wayland-utils xdpyinfo ]}
   '';
 }
