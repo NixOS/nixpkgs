@@ -619,6 +619,7 @@ mapAliases ({
   iops = throw "iops was removed: upstream is gone"; # Added 2022-02-06
   iproute = iproute2; # moved from top-level 2021-03-14
   ipsecTools = throw "ipsecTools has benn removed, because it was no longer maintained upstream"; # Added 2021-12-15
+  itch-setup = throw "itch-setup has benn removed, use itch instead"; # Added 2022-06-02
 
   ### J ###
 

@@ -15,13 +15,13 @@
 
 buildGoModule rec {
   pname = "dsq";
-  version = "0.20.1";
+  version = "0.20.2";
 
   src = fetchFromGitHub {
     owner = "multiprocessio";
     repo = "dsq";
     rev = version;
-    hash = "sha256-zTrIs6Q/+PW6CKCx1L8VaXhc1ZAqbb+Od+LJNjPCOTs=";
+    hash = "sha256-dgx1rFdhEtvyH/N3AtQE89ASBoE3CLl+ZFWwWWYe0II=";
   };
 
   vendorSha256 = "sha256-bLaBBWChK2RKXd/rX9m9UfHu8zt0j8TOm5S2M02U91A=";

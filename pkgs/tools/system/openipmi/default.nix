@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "A user-level library that provides a higher-level abstraction of IPMI and generic services";
     license = with licenses; [ gpl2Only lgpl2Only ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ arezvov SuperSandro2000 ];
+    maintainers = with maintainers; [ arezvov ] ++ teams.c3d2.members;
   };
 }

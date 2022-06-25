@@ -144,6 +144,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://schleuder.org/">schleuder</link>, a
+          mailing list manager with PGP support. Enable using
+          <link linkend="opt-services.schleuder.enable">services.schleuder</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
           the CLI client for ExpressVPN. Available as
           <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
@@ -260,6 +267,12 @@
           restored multiple times). If your Synapse database already has
           duplicate rows in this table, this could fail with an error
           and require manual remediation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>zfs</literal> was updated from 2.1.4 to 2.1.5,
+          enabling it to be used with Linux kernel 5.18.
         </para>
       </listitem>
       <listitem>

@@ -515,6 +515,7 @@
   ./services/mail/rspamd.nix
   ./services/mail/rss2email.nix
   ./services/mail/roundcube.nix
+  ./services/mail/schleuder.nix
   ./services/mail/sympa.nix
   ./services/mail/nullmailer.nix
   ./services/matrix/appservice-discord.nix
@@ -893,6 +894,7 @@
   ./services/networking/redsocks.nix
   ./services/networking/resilio.nix
   ./services/networking/robustirc-bridge.nix
+  ./services/networking/routedns.nix
   ./services/networking/rpcbind.nix
   ./services/networking/rxe.nix
   ./services/networking/sabnzbd.nix

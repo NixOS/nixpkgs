@@ -1,11 +1,11 @@
-{ stdenv
-, lib
+{ lib
+, buildGoModule
 , fetchFromGitHub
 , which
-, go
 , makeWrapper
 , rsync
 , installShellFiles
+, runtimeShell
 , kubectl
 , nixosTests
 
@@ -19,7 +19,7 @@
   ]
 }:
 
-stdenv.mkDerivation rec {
+buildGoModule rec {
   pname = "kubernetes";
   version = "1.23.8";
 
@@ -30,23 +30,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mu+jBSypoMNxOugLbS3foH4C4AqSZnlic4Bf1v9dYc8=";
   };
 
-  nativeBuildInputs = [ makeWrapper which go rsync installShellFiles ];
+  vendorSha256 = null;
+
+  doCheck = false;
+
+  nativeBuildInputs = [ makeWrapper which rsync installShellFiles ];
 
   outputs = [ "out" "man" "pause" ];
 
   patches = [ ./fixup-addonmanager-lib-path.patch ];
 
-  postPatch = ''
-    substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
-    patchShebangs ./hack
-  '';
-
   WHAT = lib.concatStringsSep " " ([
     "cmd/kubeadm"
   ] ++ components);
 
-  postBuild = ''
+  buildPhase = ''
+    runHook preBuild
+    substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${runtimeShell}"
+    patchShebangs ./hack ./cluster/addons/addon-manager
+    make "SHELL=${runtimeShell}" "WHAT=$WHAT"
     ./hack/update-generated-docs.sh
+    runHook postBuild
   '';
 
   installPhase = ''
@@ -69,7 +73,6 @@ stdenv.mkDerivation rec {
       --subst-var out
 
     chmod +x $out/bin/kube-addons
-    patchShebangs $out/bin/kube-addons
     wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
 
     cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons-lib.sh
@@ -79,10 +82,6 @@ stdenv.mkDerivation rec {
       --zsh <($out/bin/kubeadm completion zsh)
     runHook postInstall
   '';
-
-  disallowedReferences = [ go ];
-
-  GOFLAGS = [ "-trimpath" ];
 
   meta = with lib; {
     description = "Production-Grade Container Scheduling and Management";
