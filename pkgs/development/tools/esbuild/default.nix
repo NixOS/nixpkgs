@@ -13,6 +13,8 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
 
+  ldflags = [ "-s" "-w" ];
+
   meta = with lib; {
     description = "An extremely fast JavaScript bundler";
     homepage = "https://esbuild.github.io";
