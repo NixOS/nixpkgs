@@ -40,7 +40,7 @@ let
           name = tested.name;
 
           meta = {
-            maintainers = tested.meta.maintainers;
+            maintainers = tested.meta.maintainers or [];
           };
 
           nodes.machine = { ... }: {
