@@ -15308,6 +15308,8 @@ with pkgs;
 
   corundum = callPackage ../development/tools/corundum { };
 
+  confluencepot = callPackage ../servers/confluencepot {};
+
   confluent-platform = callPackage ../servers/confluent-platform {};
 
   ctags = callPackage ../development/tools/misc/ctags { };
