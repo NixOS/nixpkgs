@@ -10438,6 +10438,8 @@ with pkgs;
     jdk = jdk11;
   };
 
+  speek = libsForQt5.callPackage ../applications/networking/instant-messengers/speek { };
+
   spglib = callPackage ../development/libraries/spglib {
     inherit (llvmPackages) openmp;
   };
