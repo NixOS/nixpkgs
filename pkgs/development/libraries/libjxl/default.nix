@@ -69,9 +69,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ] ++ lib.optionals buildDocs [
     asciidoc
-    graphviz
     doxygen
     python3
+  ];
+
+  depsBuildBuild = lib.optionals buildDocs [
+    graphviz
   ];
 
   # Functionality not currently provided by this package
@@ -125,6 +128,8 @@ stdenv.mkDerivation rec {
     # * the `gdk-pixbuf` one, which allows applications like `eog` to load jpeg-xl files
     # * the `gimp` one, which allows GIMP to load jpeg-xl files
     # "-DJPEGXL_ENABLE_PLUGINS=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
+   "-DJPEGXL_STATIC=ON"
   ];
 
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
