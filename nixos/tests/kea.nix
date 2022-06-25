@@ -1,4 +1,5 @@
 import ./make-test-python.nix ({ pkgs, lib, ...}: {
+  name = "kea";
   meta.maintainers = with lib.maintainers; [ hexa ];
 
   nodes = {
