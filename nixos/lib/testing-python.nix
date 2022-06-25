@@ -8,8 +8,6 @@
 , specialArgs ? { }
   # Modules to add to each VM
 , extraConfigurations ? [ ]
-  # Whether the returned attributes must be minimal for hydra
-, hydra ? false
 }:
 
 with pkgs;
@@ -28,7 +26,6 @@ rec {
   extraTestModule = {
     config = {
       hostPkgs = pkgs;
-      minimalResult = hydra;
     };
   };
 

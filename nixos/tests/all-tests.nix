@@ -1,4 +1,17 @@
-{ system, pkgs, callTest, hydra ? false }:
+{ system,
+  pkgs,
+
+  # Projects the test configuration into a the desired value; usually
+  # the test runner: `config: config.test`.
+  callTest,
+
+  # Function that adds attributes to the intermediate attrsets that lead
+  # up to the actual tests, ie the intermediate nodes of the test tree,
+  # uninstantiated test matrix, etc.
+  exposeIntermediateAttrs ?
+    attrs: {},
+
+}:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leafs.
 # The tests not supported by `system` will be replaced with `{}`, so that
@@ -29,15 +42,18 @@ let
 
   inherit
     (rec {
-      doRunTest = (import ../lib/testing-python.nix { inherit system pkgs hydra; }).runTest;
+      doRunTest = arg: (import ../lib/testing-python.nix { inherit system pkgs; }).runTest {
+        imports = [ arg { inherit exposeIntermediateAttrs callTest; } ];
+      };
       findTests = tree:
         if tree?recurseForDerivations && tree.recurseForDerivations
         then
           mapAttrs
             (k: findTests)
             (builtins.removeAttrs tree ["recurseForDerivations"])
-          // optionalAttrs (!hydra) { recurseForDerivations = true; }
-        else callTest ({ test = tree; });
+          // exposeIntermediateAttrs tree
+        else callTest tree;
+
       runTest = arg: let r = doRunTest arg; in findTests r;
       runTestOn = systems: arg:
         if elem system systems then runTest arg

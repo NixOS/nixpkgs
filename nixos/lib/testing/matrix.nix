@@ -4,7 +4,7 @@ let
 
   extendModule = module: extendModules { modules = [ module ]; };
 
-  extend = module: (extendModule module).config.result;
+  extend = module: config.callTest ((extendModule module).config.result);
 
   decisionModule = decision@{ name, ... }: {
     options = {
@@ -132,18 +132,39 @@ in
       '';
       type = types.raw;
     };
-    minimalResult = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Whether to remove utilities like `extend` from the result.
-
-        We remove these when run on Hydra.
-      '';
-    };
     matrixIsRoot = mkOption {
       default = true;
       internal = true;
+    };
+    extend = mkOption {
+      description = ''
+        A function that allows the test modules to be extended, while returning
+        the matrix result.
+      '';
+      readOnly = true;
+      default = extend;
+    };
+
+    callTest = mkOption {
+      description = ''
+        A function that select the right attribute(s) from the test config,
+        for the purpose that the config was created.
+      '';
+      internal = true;
+      example = lib.literalExpression ''
+        config: config.test
+      '';
+      default = config: config.test;
+    };
+    exposeIntermediateAttrs = mkOption {
+      description = ''
+        A function that adds attributes from `config` to the {option}`result`
+        for the intermediate nodes of the test tree - ie the returned attrsets
+        representing choices.
+      '';
+      type = types.functionTo (types.lazyAttrsOf types.raw);
+      default = config: {};
+      defaultText = lib.literalExpression "config: { }";
     };
   };
   config = {
@@ -195,30 +216,10 @@ in
         nextChoice = (lib.head sortedEnable).name;
       in
       if sortedEnable == [ ]
-      then
-        {
-          # Make a fixed selection of `run` attributes, so we can return
-          # a result attrset spine (names + thunks) without evaluating
-          # anything heavy.
-          # This makes `extend` next to 0-cost.
-          inherit (config.run)
-            outputs
-            out
-            outPath
-            outputName
-            drvPath
-            meta
-            name
-            system
-            type
-            ;
-        }
-        // optionalAttrs (!config.minimalResult) { inherit extend; }
-        // config.passthru
+      then config
       else
         lib.recurseIntoAttrs (
-          optionalAttrs (!config.minimalResult) { inherit extend; }
-          // lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.module.result) config.matrix.${nextChoice}.choice
-        );
+          lib.mapAttrs' (k: v: lib.nameValuePair "${nextChoice}-${k}" v.module.result) config.matrix.${nextChoice}.choice
+        ) // config.exposeIntermediateAttrs config;
   };
 }

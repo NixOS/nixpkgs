@@ -12,22 +12,22 @@ in
       '';
     };
 
-    run = mkOption {
+    test = mkOption {
       type = types.package;
       description = ''
-        Derivation that runs the test.
+        Derivation that runs the test as its "build" process.
       '';
     };
   };
 
   config = {
-    run = hostPkgs.stdenv.mkDerivation {
-      name = "vm-test-run-${config.name}";
+    test = lib.lazyDerivation { # lazyDerivation improves performance when only passthru items and/or meta are used.
+      derivation = hostPkgs.stdenv.mkDerivation {
+        name = "vm-test-run-${config.name}";
 
-      requiredSystemFeatures = [ "kvm" "nixos-test" ];
+        requiredSystemFeatures = [ "kvm" "nixos-test" ];
 
-      buildCommand =
-        ''
+        buildCommand = ''
           mkdir -p $out
 
           # effectively mute the XMLLogger
@@ -36,9 +36,11 @@ in
           ${config.driver}/bin/nixos-test-driver -o $out
         '';
 
-      passthru = config.passthru;
+        passthru = config.passthru;
 
-      meta = config.meta;
+        meta = config.meta;
+      };
+      inherit (config) passthru meta;
     };
 
     # useful for inspection (debugging / exploration)
