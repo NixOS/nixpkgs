@@ -2,6 +2,7 @@ let
   name = "pam";
 in
 import ../make-test-python.nix ({ pkgs, ... }: {
+  name = "pam-file-contents";
 
   nodes.machine = { ... }: {
     imports = [ ../../modules/profiles/minimal.nix ];
