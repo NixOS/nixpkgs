@@ -93,11 +93,15 @@ let
       specialisation = mkOption {
         type = types.attrsOf (types.submodule {
           options.configuration = mkOption {
-            type = types.submodule ({
-              config.virtualisation.test.nodeName =
-                # assert regular.config.virtualisation.test.nodeName != "configuration";
-                regular.config.virtualisation.test.nodeName;
-            });
+            type = types.submoduleWith {
+              modules = [
+                {
+                  config.virtualisation.test.nodeName =
+                    # assert regular.config.virtualisation.test.nodeName != "configuration";
+                    regular.config.virtualisation.test.nodeName;
+                }
+              ];
+            };
           };
         });
       };
