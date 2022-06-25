@@ -13,10 +13,10 @@ let
 in
 stdenv.mkDerivation rec {
   inherit pname;
-  version = "10.7.2";
+  version = "10.8.0";
   src = fetchurl {
-    url = "https://github.com/betaflight/${pname}/releases/download/${version}/${pname}_${version}_linux64.zip";
-    sha256 = "sha256-FDmtFRUupPKiHeF3Xvh/VagqMo+FJi8I7mhTz0VDs3o=";
+    url = "https://github.com/betaflight/${pname}/releases/download/${version}/${pname}_${version}_linux64-portable.zip";
+    sha256 = "sha256-Xn0ga2Z1UKd++TriL47ulV6idVTNBR8uiSW7FnL7r1g=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook unzip ];
