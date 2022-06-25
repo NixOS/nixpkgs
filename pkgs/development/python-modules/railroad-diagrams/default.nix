@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "railroad-diagrams";
-  version = "2.0.3";
+  version = "2.0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wRClrA4I/DWNw/hL5rowQMn0R61c6qiNg9Ho6nXqi+4=";
+    hash = "sha256-dBP/oZRYO9UQ78PkZo9h1aOL7soYa7fDbuptDW8D+0U=";
   };
 
   # This is a dependency of pyparsing, which is a dependency of pytest
