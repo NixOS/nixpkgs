@@ -2046,6 +2046,12 @@
     githubId = 1516457;
     name = "Christian Albrecht";
   };
+  CactiChameleon9 = {
+    email = "h19xjkkp@duck.com";
+    github = "CactiChameleon9";
+    githubId = 51231053;
+    name = "Daniel";
+  };
   callahad = {
     email = "dan.callahan@gmail.com";
     github = "callahad";
