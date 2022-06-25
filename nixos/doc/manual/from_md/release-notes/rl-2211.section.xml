@@ -190,6 +190,16 @@
         </para>
       </listitem>
       <listitem>
+          <literal>i18n.supportedLocales</literal> is now by default
+          only generated with the default locale set in
+          <literal>i18n.defaultLocale</literal>. This got copied over
+          from the minimal profile and reduces the final system size by
+          200MB. If you require all locales installed set the option to
+          <literal>[ &quot;all&quot; ]</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
         <para>
           The <literal>isPowerPC</literal> predicate, found on
           <literal>platform</literal> attrsets
