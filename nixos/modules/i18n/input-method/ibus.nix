@@ -67,7 +67,7 @@ in
     programs.dconf.packages = [ ibusPackage ];
 
     services.dbus.packages = [
-      ibusAutostart
+      ibusPackage
     ];
 
     environment.variables = {
