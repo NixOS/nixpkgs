@@ -17,7 +17,8 @@ let
       #!${pkgs.runtimeShell} -xe
       export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.util-linux ]}"
 
-      mkdir -p /run/dbus
+      mkdir -p /run/dbus /var
+      ln -s /run /var
       cat > /etc/passwd <<EOF
       root:x:0:0::/root:/bin/false
       messagebus:x:1:1::/run/dbus:/bin/false
@@ -309,10 +310,7 @@ let
   ];
 
   dhcpScript = pkgs: ''
-    ${pkgs.dhcp}/bin/dhclient \
-      -lf /run/dhcp.leases \
-      -pf /run/dhclient.pid \
-      -v eth0 eth1
+    ${pkgs.dhcpcd}/bin/dhcpcd eth0 eth1
 
     otherIP="$(${pkgs.netcat}/bin/nc -l 1234 || :)"
     ${pkgs.iputils}/bin/ping -I eth1 -c1 "$otherIP"
