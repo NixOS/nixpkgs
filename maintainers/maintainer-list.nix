@@ -78,6 +78,13 @@
       fingerprint = "2536 9E86 1AA5 9EB7 4C47  B138 6510 870A 77F4 9A99";
     }];
   };
+  _0xC45 = {
+    email = "jason@0xc45.com";
+    name = "Jason Vigil";
+    github = "0xC45";
+    githubId = 56617252;
+    matrix = "@oxc45:matrix.org";
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
