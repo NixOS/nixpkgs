@@ -7709,6 +7709,10 @@ with pkgs;
 
   lnch = callPackage ../tools/misc/lnch { };
 
+  lnx = callPackage ../servers/search/lnx {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
+  };
+
   loadlibrary = callPackage ../tools/misc/loadlibrary { };
 
   loc = callPackage ../development/misc/loc { };
