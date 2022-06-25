@@ -22,6 +22,7 @@ let
               # when the test framework is used by Nixpkgs NixOS tests.
               nixpkgs.config.allowAliases = false;
             })
+          config.extraBaseModules
         ] ++ optional config.minimal ../../modules/testing/minimal-kernel.nix;
     };
 
@@ -44,6 +45,14 @@ in
     defaults = mkOption {
       description = ''
         NixOS configuration that is applied to all {option}`nodes`.
+      '';
+      type = types.deferredModule;
+      default = { };
+    };
+
+    extraBaseModules = mkOption {
+      description = ''
+        NixOS configuration that is applied to all {option}`nodes` and can not be undone with [`specialisation.<name>.inheritParentConfig`](https://search.nixos.org/options?show=specialisation.%3Cname%3E.inheritParentConfig&from=0&size=50&sort=relevance&type=packages&query=specialisation).
       '';
       type = types.deferredModule;
       default = { };
