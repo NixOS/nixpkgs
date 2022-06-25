@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , rustPlatform
 , substituteAll
 , desktop-file-utils
@@ -19,31 +18,26 @@
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
     rev = "v${version}";
-    hash = "sha256-vQ0hlwsrY0WOUc/ppleE+kKRGHPt/ScEChXrkukln3U=";
+    hash = "sha256-D5QkNgscvNaPEykbcR451Wx8Mvn7HTuQE/22lp95Kbo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-IKUh5gkXTpmMToDaec+CpCIQqJjwJM2ZrmGQhZeTDsg=";
+    hash = "sha256-c4nYlPyc7D1AMOfHjhoDJox+i83+H1YKfWzR3i6bmng=";
   };
 
   patches = [
     (substituteAll {
       src = ./borg-path.patch;
       borg = "${borgbackup}/bin/borg";
-    })
-    (fetchpatch {
-      name = "use-gtk4-update-icon-cache.patch";
-      url = "https://gitlab.gnome.org/World/pika-backup/-/merge_requests/64.patch";
-      hash = "sha256-AttGQGWealvTIvPwBl5M6FiC4Al/UD4/XckUAxM38SE=";
     })
   ];
 
