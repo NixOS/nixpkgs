@@ -126,6 +126,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    # Expose libraries and cli tools
+    inherit ETL synfig;
+  };
+
   meta = with lib; {
     description = "A 2D animation program";
     homepage = "http://www.synfig.org";
