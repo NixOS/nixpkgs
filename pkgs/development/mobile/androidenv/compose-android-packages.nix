@@ -3,7 +3,7 @@
 }:
 
 { toolsVersion ? "26.1.1"
-, platformToolsVersion ? "33.0.1"
+, platformToolsVersion ? "33.0.2"
 , buildToolsVersions ? [ "32.0.0" ]
 , includeEmulator ? false
 , emulatorVersion ? "31.3.7"
@@ -11,7 +11,7 @@
 , includeSources ? false
 , includeSystemImages ? false
 , systemImageTypes ? [ "google_apis_playstore" ]
-, abiVersions ? [ "armeabi-v7a" ]
+, abiVersions ? [ "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
 , ndkVersion ? "24.0.8215888"
@@ -181,7 +181,7 @@ rec {
   makeNdkBundle = ndkVersion:
     import ./ndk-bundle {
       inherit deployAndroidPackage os autoPatchelfHook makeWrapper pkgs pkgsHostHost lib platform-tools stdenv;
-      package = packages.ndk-bundle.${ndkVersion};
+      package = packages.ndk-bundle.${ndkVersion} or packages.ndk.${ndkVersion};
     };
 
   # All NDK bundles.
