@@ -1,16 +1,16 @@
-{ fetchFromGitHub, lib, python3Packages }:
+{ fetchFromGitHub, lib, python3 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "jinja2-cli";
   version = "0.8.2";
   format = "setuptools";
 
-  src = python3Packages.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
     sha256 = "sha256-oWuxRUEREo4gb1aMlZOM3vW1oTmSk3j3K7jPYXnhjlA=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python3.pkgs; [
     jinja2
     pyyaml
     toml
