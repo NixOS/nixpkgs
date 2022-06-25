@@ -9560,6 +9560,8 @@ with pkgs;
 
   pm2 = nodePackages.pm2;
 
+  pmenu = callPackage ../tools/X11/pmenu { };
+
   pngcheck = callPackage ../tools/graphics/pngcheck { };
 
   pngcrush = callPackage ../tools/graphics/pngcrush { };
@@ -15377,6 +15379,8 @@ with pkgs;
   corrosion = callPackage ../development/tools/build-managers/corrosion { };
 
   corundum = callPackage ../development/tools/corundum { };
+
+  confluencepot = callPackage ../servers/confluencepot {};
 
   confluent-platform = callPackage ../servers/confluent-platform {};
 
