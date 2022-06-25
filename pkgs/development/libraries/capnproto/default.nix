@@ -21,9 +21,6 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = lib.optional (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) "-DEXTERNAL_CAPNP";
 
-  # Upstream 77ac9154440bcc216fda1092fd5bb51da62ae09c, modified to apply to v0.10.1.  Drop on update.
-  patches = lib.optional stdenv.hostPlatform.isMusl ./musl-no-fibers.patch;
-
   meta = with lib; {
     homepage    = "https://capnproto.org/";
     description = "Cap'n Proto cerealization protocol";
