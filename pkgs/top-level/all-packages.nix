@@ -9991,6 +9991,8 @@ with pkgs;
 
   reftools = callPackage ../development/tools/reftools { };
 
+  regpg = callPackage ../tools/security/regpg { };
+
   remote-touchpad = callPackage ../tools/inputmethods/remote-touchpad { };
 
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
