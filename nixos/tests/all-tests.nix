@@ -24,9 +24,18 @@ with pkgs.lib;
 
 let
   discoverTests = val:
-    if !isAttrs val then val
-    else if hasAttr "test" val then callTest val
-    else mapAttrs (n: s: discoverTests s) val;
+    if isAttrs val
+    then
+      if hasAttr "test" val then callTest val
+      else mapAttrs (n: s: discoverTests s) val
+    else if isFunction val
+      then
+        # Tests based on make-test-python.nix will return the second lambda
+        # in that file, which are then forwarded to the test definition
+        # following the `import make-test-python.nix` expression
+        # (if it is a function).
+        discoverTests (val { inherit system pkgs; })
+      else val;
   handleTest = path: args:
     discoverTests (import path ({ inherit system pkgs; } // args));
   handleTestOn = systems: path: args:
