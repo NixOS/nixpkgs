@@ -7,13 +7,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cvehound";
-  version = "1.0.9";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "evdenis";
     repo = "cvehound";
-    rev = version;
-    hash = "sha256-qwQfpelY1Air3wVQ3RziM/+MNOR3jiKmLpO2w6kXZwM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-4+0Virpsq4mwOIpostS87VYTX8hsumXEL1w8FiOrNtA=";
   };
 
   makeWrapperArgs = [
