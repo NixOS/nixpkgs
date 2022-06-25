@@ -35221,6 +35221,8 @@ with pkgs;
 
   tusk = callPackage ../applications/office/tusk { };
 
+  tradingview = callPackage ../applications/office/tradingview { };
+
   trufflehog = callPackage ../tools/security/trufflehog { };
 
   tvbrowser-bin = callPackage ../applications/misc/tvbrowser/bin.nix { };
