@@ -26435,6 +26435,8 @@ with pkgs;
 
   fnc = callPackage ../applications/version-management/fnc { };
 
+  focus = callPackage ../tools/X11/focus { };
+
   focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
 
   foliate = callPackage ../applications/office/foliate { };
