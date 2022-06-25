@@ -1,4 +1,16 @@
-{lib, stdenv, fetchurl, pkg-config, xlibsWrapper, libXext, libGLU, libGL, imagemagick6, libtiff, bzip2}:
+{ lib
+, stdenv
+, fetchurl
+, autoconf
+, pkg-config
+, xlibsWrapper
+, libXext
+, libGLU
+, libGL
+, imagemagick6
+, libtiff
+, bzip2
+}:
 
 stdenv.mkDerivation rec {
   version = "0.9.1";
@@ -9,8 +21,12 @@ stdenv.mkDerivation rec {
     sha256 = "1aikafjqrfmv23jnrrm5d56dg6injh4l67zjdxzdapv9chw7g3cg";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoconf pkg-config ];
   buildInputs = [ libGLU libGL xlibsWrapper imagemagick6 libtiff bzip2 ];
+
+  patches = [
+    ./cstddef.patch
+  ];
 
   NIX_CFLAGS_COMPILE = "-I${imagemagick6.dev}/include/ImageMagick";
   NIX_LDFLAGS= "-rpath ${libXext}/lib";
