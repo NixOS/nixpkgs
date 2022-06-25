@@ -5,11 +5,9 @@ and additional libraries.
 
 Loading can be deferred; see examples.
 
-At the moment we support three different methods for managing plugins:
+At the moment we support two different methods for managing plugins:
 
 - Vim packages (*recommended*)
-- VAM (=vim-addon-manager)
-- Pathogen
 - vim-plug
 
 ## Custom configuration {#custom-configuration}
@@ -211,100 +209,6 @@ neovim.override {
     ];
   };
 }
-```
-
-## Managing plugins with VAM {#managing-plugins-with-vam}
-
-### Handling dependencies of Vim plugins {#handling-dependencies-of-vim-plugins}
-
-VAM introduced .json files supporting dependencies without versioning
-assuming that "using latest version" is ok most of the time.
-
-### Example {#example}
-
-First create a vim-scripts file having one plugin name per line. Example:
-
-```vim
-"tlib"
-{'name': 'vim-addon-sql'}
-{'filetype_regex': '\%(vim)$', 'names': ['reload', 'vim-dev-plugin']}
-```
-
-A discrete vim-scripts file can be read by VAM as well like this:
-
-```vim
-call vam#Scripts(expand('~/.vim-scripts'), {})
-```
-
-Create a default.nix file:
-
-```nix
-{ nixpkgs ? import <nixpkgs> {}, compiler ? "ghc7102" }:
-nixpkgs.vim_configurable.customize { name = "vim"; vimrcConfig.vam.pluginDictionaries = [ "vim-addon-vim2nix" ]; }
-```
-
-Create a generate.vim file:
-
-```vim
-ActivateAddons vim-addon-vim2nix
-let vim_scripts = "vim-scripts"
-call nix#ExportPluginsForNix({
-\  'path_to_nixpkgs': eval('{"'.substitute(substitute(substitute($NIX_PATH, ':', ',', 'g'), '=',':', 'g'), '\([:,]\)', '"\1"',"g").'"}')["nixpkgs"],
-\  'cache_file': '/tmp/vim2nix-cache',
-\  'try_catch': 0,
-\  'plugin_dictionaries': ["vim-addon-manager"]+map(readfile(vim_scripts), 'eval(v:val)')
-\ })
-```
-
-Then run
-
-```bash
-nix-shell -p vimUtils.vim_with_vim2nix --command "vim -c 'source generate.vim'"
-```
-
-You should get a Vim buffer with the nix derivations (output1) and vam.pluginDictionaries (output2).
-You can add your Vim to your system's configuration file like this and start it by "vim-my":
-
-```nix
-my-vim =
-  let plugins = let inherit (vimUtils) buildVimPluginFrom2Nix; in {
-    copy paste output1 here
-  }; in vim_configurable.customize {
-    name = "vim-my";
-
-    vimrcConfig.vam.knownPlugins = plugins; # optional
-    vimrcConfig.vam.pluginDictionaries = [
-       copy paste output2 here
-    ];
-
-  };
-```
-
-Sample output1:
-
-```nix
-"reload" = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-  name = "reload";
-  src = fetchgit {
-    url = "https://github.com/xolox/vim-reload";
-    rev = "0a601a668727f5b675cb1ddc19f6861f3f7ab9e1";
-    sha256 = "0vb832l9yxj919f5hfg6qj6bn9ni57gnjd3bj7zpq7d4iv2s4wdh";
-  };
-  dependencies = ["nim-misc"];
-
-};
-[...]
-```
-
-Sample output2:
-
-```nix
-[
-  ''vim-addon-manager''
-  ''tlib''
-  { "name" = ''vim-addon-sql''; }
-  { "filetype_regex" = ''\%(vim)$$''; "names" = [ ''reload'' ''vim-dev-plugin'' ]; }
-]
 ```
 
 ## Adding new plugins to nixpkgs {#adding-new-plugins-to-nixpkgs}
