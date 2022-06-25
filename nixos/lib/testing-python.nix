@@ -26,7 +26,6 @@ rec {
   extraTestModule = {
     config = {
       hostPkgs = pkgs;
-      minimalResult = hydra;
     };
   };
 
