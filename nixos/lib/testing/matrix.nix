@@ -77,7 +77,7 @@ let
   inMatrixModule = decisionName: choiceName:
     {
       config = {
-        _module.args.${decisionName} = choiceName;
+        _module.args.${decisionName} = lib.mkDefault choiceName;
         matrixDecisionsMade.${decisionName} = choiceName;
         matrixIsRoot = false;
       };
