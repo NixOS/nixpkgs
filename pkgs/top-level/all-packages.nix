@@ -265,6 +265,8 @@ with pkgs;
 
   bada-bib = callPackage ../applications/science/misc/bada-bib {};
 
+  banana-accounting = callPackage ../applications/office/banana-accounting {};
+
   bakelite = callPackage ../tools/backup/bakelite { };
 
   beyond-identity = callPackage ../tools/security/beyond-identity {};
