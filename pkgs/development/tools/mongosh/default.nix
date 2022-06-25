@@ -4,6 +4,7 @@ let
   nodePackages = import ./gen/composition.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
+    nodejs = pkgs.nodejs-16_x;
   };
 in
 nodePackages.mongosh.override {
