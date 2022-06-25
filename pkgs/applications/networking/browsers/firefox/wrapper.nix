@@ -97,12 +97,15 @@ let
 
       nameArray = builtins.map(a: a.name) (if usesNixExtensions then nixExtensions else []);
 
+      requiresSigning = browser ? MOZ_REQUIRE_SIGNING
+                     -> toString browser.MOZ_REQUIRE_SIGNING != "";
+
       # Check that every extension has a unqiue .name attribute
       # and an extid attribute
       extensions = if nameArray != (lib.unique nameArray) then
         throw "Firefox addon name needs to be unique"
-      else if ! (lib.hasSuffix "esr" browser.name) then
-        throw "Nix addons are only supported in Firefox ESR"
+      else if requiresSigning && !lib.hasSuffix "esr" browser.name then
+        throw "Nix addons are only supported without signature enforcement (eg. Firefox ESR)"
       else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
