@@ -5924,7 +5924,7 @@ with pkgs;
   };
 
   ffsend = callPackage ../tools/misc/ffsend {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Security AppKit;
+    inherit (darwin.apple_sdk.frameworks) Security AppKit;
   };
 
   fgallery = callPackage ../tools/graphics/fgallery { };
