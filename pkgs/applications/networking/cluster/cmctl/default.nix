@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cmctl";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "cert-manager";
     repo = "cert-manager";
     rev = "v${version}";
-    sha256 = "sha256-h7GyzjVrfyMHY7yuNmmsym6KGKCQr5R71gjPBTUeMCg=";
+    sha256 = "sha256-IR+z3+f9Pa7wQAP4EVya7fb7FnndaUY7F2ckTzpEuCA=";
   };
 
   vendorSha256 = "sha256-UYw9WdQ6VwzuuiOsa1yovkLZG7NmLYSW51p8UhmQMeI=";
