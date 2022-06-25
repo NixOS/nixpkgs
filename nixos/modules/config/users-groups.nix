@@ -6,12 +6,6 @@ let
   ids = config.ids;
   cfg = config.users;
 
-  isPasswdCompatible = str: !(hasInfix ":" str || hasInfix "\n" str);
-  passwdEntry = type: lib.types.addCheck type isPasswdCompatible // {
-    name = "passwdEntry ${type.name}";
-    description = "${type.description}, not containing newlines or colons";
-  };
-
   # Check whether a password hash will allow login.
   allowsLogin = hash:
     hash == "" # login without password
@@ -60,7 +54,7 @@ let
     options = {
 
       name = mkOption {
-        type = passwdEntry types.str;
+        type = types.passwdEntry types.str;
         apply = x: assert (builtins.stringLength x < 32 || abort "Username '${x}' is longer than 31 characters which is not allowed!"); x;
         description = ''
           The name of the user account. If undefined, the name of the
@@ -69,7 +63,7 @@ let
       };
 
       description = mkOption {
-        type = passwdEntry types.str;
+        type = types.passwdEntry types.str;
         default = "";
         example = "Alice Q. User";
         description = ''
@@ -134,7 +128,7 @@ let
       };
 
       home = mkOption {
-        type = passwdEntry types.path;
+        type = types.passwdEntry types.path;
         default = "/var/empty";
         description = "The user's home directory.";
       };
@@ -169,7 +163,7 @@ let
       };
 
       shell = mkOption {
-        type = types.nullOr (types.either types.shellPackage (passwdEntry types.path));
+        type = types.nullOr (types.either types.shellPackage (types.passwdEntry types.path));
         default = pkgs.shadow;
         defaultText = literalExpression "pkgs.shadow";
         example = literalExpression "pkgs.bashInteractive";
@@ -349,7 +343,7 @@ let
     options = {
 
       name = mkOption {
-        type = passwdEntry types.str;
+        type = types.passwdEntry types.str;
         description = ''
           The name of the group. If undefined, the name of the attribute set
           will be used.
