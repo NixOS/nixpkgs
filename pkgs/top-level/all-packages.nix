@@ -2495,7 +2495,9 @@ with pkgs;
     buildGoModule = buildGo118Module;
   };
 
-  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
+  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix {
+    buildGoModule = buildGo118Module;
+  };
 
   git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix {
     buildGoModule = buildGo118Module;
