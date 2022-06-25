@@ -28796,9 +28796,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
-  synfigstudio = callPackage ../applications/graphics/synfigstudio {
-    mlt-qt5 = libsForQt514.mlt;
-  };
+  synfigstudio = callPackage ../applications/graphics/synfigstudio { };
 
   taxi = callPackage ../applications/networking/ftp/taxi { };
 
