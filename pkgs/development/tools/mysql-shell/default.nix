@@ -100,9 +100,6 @@ stdenv.mkDerivation rec{
       -DFORCE_UNSUPPORTED_COMPILER=1 -S ../mysql-${version} -B ../mysql-${version}/build
 
     cmake --build ../mysql-${version}/build --parallel ''${NIX_BUILD_CORES:-1} --target mysqlclient mysqlxclient
-
-    # Get libv8_monolith
-    mkdir -p ../v8/lib && ln -s ${v8}/lib/libv8.a ../v8/lib/libv8_monolith.a
   '';
 
   cmakeFlags = [
@@ -115,7 +112,7 @@ stdenv.mkDerivation rec{
     "-DWITH_PROTOBUF=${protobuf}"
     "-DHAVE_V8=1"
     "-DV8_INCLUDE_DIR=${v8}/include"
-    "-DV8_LIB_DIR=../v8/lib"
+    "-DV8_LIB_DIR=${v8}/lib"
     "-DHAVE_PYTHON=1"
   ];
 
