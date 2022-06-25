@@ -6,7 +6,7 @@
 , libevent
 , ncurses
 , pkg-config
-, systemd
+, withSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic, systemd
 , utf8proc
 }:
 
@@ -43,13 +43,13 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libevent
-  ] ++ lib.optionals stdenv.isLinux [ systemd ]
+  ] ++ lib.optionals withSystemd [ systemd ]
   ++ lib.optionals stdenv.isDarwin [ utf8proc ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-  ] ++ lib.optionals stdenv.isLinux [ "--enable-systemd" ]
+  ] ++ lib.optionals withSystemd [ "--enable-systemd" ]
   ++ lib.optionals stdenv.isDarwin [ "--enable-utf8proc" ];
 
   enableParallelBuilding = true;
