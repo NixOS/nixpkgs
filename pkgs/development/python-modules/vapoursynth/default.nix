@@ -3,10 +3,12 @@
 buildPythonPackage {
   pname = "vapoursynth";
 
-  inherit (vapoursynth) src version;
+  inherit (vapoursynth) version src;
+
   nativeBuildInputs = [
     cython
   ];
+
   buildInputs = [
     vapoursynth
   ];
