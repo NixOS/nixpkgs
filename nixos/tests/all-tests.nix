@@ -1,4 +1,11 @@
-{ system, pkgs, callTest }:
+{ system,
+  pkgs,
+
+  # Projects the test configuration into a the desired value; usually
+  # the test runner: `config: config.test`.
+  callTest,
+
+}:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leafs.
 # The tests not supported by `system` will be replaced with `{}`, so that
@@ -29,11 +36,17 @@ let
 
   inherit
     (rec {
-      doRunTest = (import ../lib/testing-python.nix { inherit system pkgs; }).runTest;
+      doRunTest = arg: (import ../lib/testing-python.nix { inherit system pkgs; }).runTest {
+        imports = [ arg { inherit callTest; } ];
+      };
       findTests = tree:
         if tree?recurseForDerivations && tree.recurseForDerivations
-        then mapAttrs (k: findTests) (builtins.removeAttrs tree ["recurseForDerivations"])
-        else callTest ({ test = tree; });
+        then
+          mapAttrs
+            (k: findTests)
+            (builtins.removeAttrs tree ["recurseForDerivations"])
+        else callTest tree;
+
       runTest = arg: let r = doRunTest arg; in findTests r;
       runTestOn = systems: arg:
         if elem system systems then runTest arg
