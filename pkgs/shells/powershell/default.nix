@@ -7,10 +7,10 @@ let archString = if stdenv.isAarch64 then "arm64"
     platformString = if stdenv.isDarwin then "osx"
                      else if stdenv.isLinux then "linux"
                      else throw "unsupported platform";
-    platformSha = if (stdenv.isDarwin && stdenv.isx86_64) then "sha256-VF8C9JXVureJnMTyQD4SDeq/whyQOpk1dFtu6cJQRO8="
-                     else if (stdenv.isDarwin && stdenv.isAarch64) then "sha256-WqQQFdFTgIGi0fEtHjHf2rtP2l5YqdMQZH09O+34JTo="
-                     else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-oKlX6NfTOxrxMkH+vWGMMTyVJqD2F2CB5qx+8EvNBE8="
-                     else if (stdenv.isLinux && stdenv.isAarch64) then "sha256-sWOmylDyy6n8SbnVDY5+wSJ2PPEd+vuoxbMU2iECyxY="
+    platformSha = if (stdenv.isDarwin && stdenv.isx86_64) then "sha256-bcLyf/sIaFoS1xS4RLPPC9lVFa94IfQlWeXhyXUTsd0="
+                     else if (stdenv.isDarwin && stdenv.isAarch64) then "sha256-2UACjUtyQ611iXmwyiWrGwRVA0FT1cLLMKnY0y4SgoQ="
+                     else if (stdenv.isLinux && stdenv.isx86_64) then "sha256-5AZGwxpEqn3X20rCxPcvuqcQib689ui+e0jvri92EdA="
+                     else if (stdenv.isLinux && stdenv.isAarch64) then "sha256-90Sz32hm+EcK3nFJOGGCSqIEtW7w48G8mizXvcLb8WU="
                      else throw "unsupported platform";
     platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
                      else if stdenv.isLinux then "LD_LIBRARY_PATH"
@@ -20,7 +20,7 @@ let archString = if stdenv.isAarch64 then "arm64"
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.2.3";
+  version = "7.2.4";
 
   src = fetchzip {
     url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-${platformString}-${archString}.tar.gz";

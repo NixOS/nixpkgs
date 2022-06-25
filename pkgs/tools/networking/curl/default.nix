@@ -3,6 +3,7 @@
 , c-aresSupport ? false, c-ares ? null
 , gnutlsSupport ? false, gnutls ? null
 , gsaslSupport ? false, gsasl ? null
+, patchNetrcRegression ? false
 , gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
     # disable gss becuase of: undefined reference to `k5_bcmp'
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
     # quiche: support ca-fallback
     # https://github.com/curl/curl/commit/fdb5e21b4dd171a96cf7c002ee77bb08f8e58021
     ./7.83.1-quiche-support-ca-fallback.patch
-  ];
+  ] ++ lib.optional patchNetrcRegression ./netrc-regression.patch;
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
@@ -171,14 +172,12 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString scpSupport ''
     sed '/^dependency_libs/s|${lib.getDev libssh2}|${lib.getLib libssh2}|' -i "$out"/lib/*.la
   '' + lib.optionalString gnutlsSupport ''
-    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so
-    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4
-    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4.4.0
+    ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4
+    ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4.4.0
   '';
 
   passthru = {
-    # Additional checking with support http3 protocol.
-    tests.nginx-http3 = nixosTests.nginx-http3;
     inherit opensslSupport openssl;
     tests = {
       inherit curlpp coeurl;
@@ -186,6 +185,8 @@ stdenv.mkDerivation rec {
       ocaml-curly = ocamlPackages.curly;
       php-curl = phpExtensions.curl;
       pycurl = python3.pkgs.pycurl;
+      # Additional checking with support http3 protocol.
+      inherit (nixosTests) nginx-http3;
     };
   };
 

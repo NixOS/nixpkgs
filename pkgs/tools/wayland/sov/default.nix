@@ -17,7 +17,6 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace src/sov/main.c --replace '/usr' $out
   '';
-
   nativeBuildInputs = [ meson pkg-config wayland-scanner ninja ];
   buildInputs = [ wayland wayland-protocols freetype ];
 

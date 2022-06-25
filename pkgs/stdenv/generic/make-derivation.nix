@@ -10,14 +10,8 @@ let
     inherit (stdenv) hostPlatform;
   };
 
-  makeOverlayable = mkDerivationSimple:
-    fnOrAttrs:
-      if builtins.isFunction fnOrAttrs
-      then makeDerivationExtensible mkDerivationSimple fnOrAttrs
-      else makeDerivationExtensibleConst mkDerivationSimple fnOrAttrs;
-
   # Based off lib.makeExtensible, with modifications:
-  makeDerivationExtensible = mkDerivationSimple: rattrs:
+  makeDerivationExtensible = rattrs:
     let
       # NOTE: The following is a hint that will be printed by the Nix cli when
       # encountering an infinite recursion. It must not be formatted into
@@ -48,14 +42,14 @@ let
                     f0 self super
                   else x;
             in
-              makeDerivationExtensible mkDerivationSimple
+              makeDerivationExtensible
                 (self: let super = rattrs self; in super // f self super))
           args;
     in finalPackage;
 
   # makeDerivationExtensibleConst == makeDerivationExtensible (_: attrs),
   # but pre-evaluated for a slight improvement in performance.
-  makeDerivationExtensibleConst = mkDerivationSimple: attrs:
+  makeDerivationExtensibleConst = attrs:
     mkDerivationSimple
       (f0:
         let
@@ -67,12 +61,10 @@ let
                 f0 self super
               else x;
         in
-          makeDerivationExtensible mkDerivationSimple (self: attrs // f self attrs))
+          makeDerivationExtensible (self: attrs // f self attrs))
       attrs;
 
-in
-
-makeOverlayable (overrideAttrs:
+  mkDerivationSimple = overrideAttrs:
 
 
 # `mkDerivation` wraps the builtin `derivation` function to
@@ -119,9 +111,9 @@ makeOverlayable (overrideAttrs:
 , # Target is not included by default because most programs don't care.
   # Including it then would cause needless mass rebuilds.
   #
-  # TODO(@Ericson2314): Make [ "build" "host" ] always the default.
+  # TODO(@Ericson2314): Make [ "build" "host" ] always the default / resolve #87909
   configurePlatforms ? lib.optionals
-    (stdenv.hostPlatform != stdenv.buildPlatform)
+    (stdenv.hostPlatform != stdenv.buildPlatform || config.configurePlatformsByDefault)
     [ "build" "host" ]
 
 # TODO(@Ericson2314): Make unconditional / resolve #33599
@@ -132,7 +124,7 @@ makeOverlayable (overrideAttrs:
 # InstallCheck phase
 , doInstallCheck ? config.doCheckByDefault or false
 
-, # TODO(@Ericson2314): Make always true and remove
+, # TODO(@Ericson2314): Make always true and remove / resolve #178468
   strictDeps ? if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform
 
 , enableParallelBuilding ? config.enableParallelBuildingByDefault
@@ -485,6 +477,10 @@ lib.extendDerivation
    # should be made available to Nix expressions using the
    # derivation (e.g., in assertions).
    passthru)
-  (derivation derivationArg)
+  (derivation derivationArg);
 
-)
+in
+  fnOrAttrs:
+    if builtins.isFunction fnOrAttrs
+    then makeDerivationExtensible fnOrAttrs
+    else makeDerivationExtensibleConst fnOrAttrs

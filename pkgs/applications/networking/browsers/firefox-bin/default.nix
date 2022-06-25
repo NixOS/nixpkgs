@@ -206,6 +206,7 @@ stdenv.mkDerivation {
     description = "Mozilla Firefox, free web browser (binary package)";
     homepage = "http://www.mozilla.org/firefox/";
     license = licenses.mpl20;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames mozillaPlatforms;
     hydraPlatforms = [];
     maintainers = with maintainers; [ taku0 lovesegfault ];

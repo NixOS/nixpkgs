@@ -938,6 +938,22 @@ let
   ];
 
   otherOverrides = old: new: {
+    gifski = old.gifski.overrideDerivation (attrs: {
+      cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
+        src = attrs.src;
+        sourceRoot = "gifski/src/myrustlib";
+        hash = "sha256-vBrTQ+5JZA8554Aasbqw7mbaOfJNQjrOpG00IXAcamI=";
+      };
+
+      cargoRoot = "src/myrustlib";
+
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.rustPlatform.cargoSetupHook
+        pkgs.cargo
+        pkgs.rustc
+      ];
+    });
+
     stringi = old.stringi.overrideDerivation (attrs: {
       postInstall = let
         icuName = "icudt52l";

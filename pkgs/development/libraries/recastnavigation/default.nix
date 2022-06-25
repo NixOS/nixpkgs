@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libGL SDL2 libGLU ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/recastnavigation/recastnavigation";
     description = "Navigation-mesh Toolset for Games";
     license = licenses.zlib;

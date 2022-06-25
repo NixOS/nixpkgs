@@ -24,11 +24,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.13.0";
+  version = "2.13.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-COD7SnGNlnplTnDNpXz5MgGGkyndHPW4pCZ8V8XEyNM=";
+    sha256 = "sha256-q9R4zv8aCrqV6UzquNyCD0B7zA8AM9xUaEDN3CmjaVg=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     jinja2
     packaging
     pyyaml
-    resolvelib
+    resolvelib # This library is a PITA, since ansible requires a very old version of it
     # optional dependencies
     junit-xml
     lxml
@@ -73,9 +73,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
+    changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -17,8 +17,11 @@
 let
   luaEnv = lua.withPackages(ps: with ps; [
     cassowary
+    cldr
     cosmo
+    fluent
     linenoise
+    loadkit
     lpeg
     lua-zlib
     lua_cliargs
@@ -41,11 +44,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.12.5";
+  version = "0.13.1";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0z9wdiqwarysh3lhxss3w53vq58ml46bdi9ymr853kfl7m4gz5yy";
+    sha256 = "09mvydgv81pkp2nz9rkz32n3df21cfc2aslpqrivf3svr6sp9hxy";
   };
 
   configureFlags = [
@@ -59,19 +62,23 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
   buildInputs = [
+    luaEnv
     harfbuzz
     icu
     fontconfig
     libiconv
-    luaEnv
   ]
   ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
   checkInputs = [
     poppler_utils
   ];
+  passthru = {
+    # So it will be easier to inspect this environment, in comparison to others
+    inherit luaEnv;
+  };
 
-  preConfigure = ''
+  postPatch = ''
     patchShebangs build-aux/*.sh
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i -e 's|@import AppKit;|#import <AppKit/AppKit.h>|' src/macfonts.m
@@ -100,6 +107,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" "man" "dev" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A typesetting system";
     longDescription = ''
       SILE is a typesetting system; its job is to produce beautiful

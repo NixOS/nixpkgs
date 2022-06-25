@@ -15,13 +15,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gkraken";
-  version = "1.1.6";
+  version = "1.2.0";
 
   src = fetchFromGitLab {
     owner = "leinardi";
     repo = "gkraken";
     rev = version;
-    sha256 = "085zz6m7c3xzsrvkw50gbbz8l9fmswxj2hjya2f52dvgs8daijdy";
+    sha256 = "0hxlh0319rl28iba02917z3n6d5cq2qcgpj2ng31bkjjhlvvfm2g";
   };
 
   format = "other";

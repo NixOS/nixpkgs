@@ -109,6 +109,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "info" "man" ];
 
+  strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     bison
@@ -192,6 +193,9 @@ stdenv.mkDerivation {
   # Remove on next bump. It's a vestige of past conditional. Stays here to avoid
   # mass rebuild.
   postFixup = "";
+
+  # Break dependency on pkgsBuildBuild.gcc when building a cross-binutils
+  stripDebugList = if stdenv.hostPlatform != stdenv.targetPlatform then "bin lib ${stdenv.hostPlatform.config}" else null;
 
   # INFO: Otherwise it fails with:
   # `./sanity.sh: line 36: $out/bin/size: not found`

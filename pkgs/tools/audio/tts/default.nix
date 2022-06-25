@@ -31,14 +31,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.6.1";
+  version = "0.6.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-YzMR/Tl1UvjdSqV/h4lYR6DuarEqEIM7RReqYznFU4Q=";
+    sha256 = "sha256-n27a1s3Dpe5Hd3JryD4fPAjRcNc0YR1fpop+uhYA6sQ=";
   };
 
   postPatch = let
@@ -132,6 +132,8 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   disabledTestPaths = [
+    # Requires network acccess to download models
+    "tests/aux_tests/test_remove_silence_vad_script.py"
     # phonemes mismatch between espeak-ng and gruuts phonemizer
     "tests/text_tests/test_phonemizer.py"
     # no training, it takes too long
@@ -146,7 +148,6 @@ python.pkgs.buildPythonApplication rec {
     "tests/tts_tests/test_tacotron2_d-vectors_train.py"
     "tests/tts_tests/test_tacotron2_speaker_emb_train.py"
     "tests/tts_tests/test_tacotron2_train.py"
-    "tests/tts_tests/test_tacotron2_train_fsspec_path.py"
     "tests/tts_tests/test_tacotron_train.py"
     "tests/tts_tests/test_vits_d-vectors_train.py"
     "tests/tts_tests/test_vits_multilingual_speaker_emb_train.py"

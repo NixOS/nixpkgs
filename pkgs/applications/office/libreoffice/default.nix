@@ -121,7 +121,7 @@ let
     optional optionals optionalString;
 
   jre' = jre_minimal.override {
-    modules = [ "java.base" "java.desktop" "java.logging" ];
+    modules = [ "java.base" "java.desktop" "java.logging" "java.sql" ];
   };
 
   importVariant = f: import (./. + "/src-${variant}/${f}");
@@ -584,6 +584,8 @@ in
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = "https://libreoffice.org/";
+    # at least one jar in dependencies
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

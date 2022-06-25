@@ -6,6 +6,9 @@ let
   cfg = config.services.trickster;
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "trickster" "origin" ] [ "services" "trickster" "origin-url" ])
+  ];
 
   options = {
     services.trickster = {
@@ -58,11 +61,19 @@ in
         '';
       };
 
-      origin = mkOption {
+      origin-type = mkOption {
+        type = types.enum [ "prometheus" "influxdb" ];
+        default = "prometheus";
+        description = ''
+          Type of origin (prometheus, influxdb)
+        '';
+      };
+
+      origin-url = mkOption {
         type = types.str;
         default = "http://prometheus:9090";
         description = ''
-          URL to the Prometheus Origin. Enter it like you would in grafana, e.g., http://prometheus:9090 (default http://prometheus:9090).
+          URL to the Origin. Enter it like you would in grafana, e.g., http://prometheus:9090 (default http://prometheus:9090).
         '';
       };
 
@@ -87,7 +98,7 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.trickster = {
-      description = "Dashboard Accelerator for Prometheus";
+      description = "Reverse proxy cache and time series dashboard accelerator";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
@@ -96,7 +107,8 @@ in
           ${cfg.package}/bin/trickster \
           -log-level ${cfg.log-level} \
           -metrics-port ${toString cfg.metrics-port} \
-          -origin ${cfg.origin} \
+          -origin-type ${cfg.origin-type} \
+          -origin-url ${cfg.origin-url} \
           -proxy-port ${toString cfg.proxy-port} \
           ${optionalString (cfg.configFile != null) "-config ${cfg.configFile}"} \
           ${optionalString (cfg.profiler-port != null) "-profiler-port ${cfg.profiler-port}"} \

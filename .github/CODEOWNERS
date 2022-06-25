@@ -98,13 +98,13 @@
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
 # Haskell
-/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn @expipiplus1
-/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn @expipiplus1
-/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn @expipiplus1
-/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn @expipiplus1
-/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn @expipiplus1
-/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn @expipiplus1
-/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn @expipiplus1
+/doc/languages-frameworks/haskell.section.md  @cdepillabout @sternenseemann @maralorn
+/maintainers/scripts/haskell                  @cdepillabout @sternenseemann @maralorn
+/pkgs/development/compilers/ghc               @cdepillabout @sternenseemann @maralorn
+/pkgs/development/haskell-modules             @cdepillabout @sternenseemann @maralorn
+/pkgs/test/haskell                            @cdepillabout @sternenseemann @maralorn
+/pkgs/top-level/release-haskell.nix           @cdepillabout @sternenseemann @maralorn
+/pkgs/top-level/haskell-packages.nix          @cdepillabout @sternenseemann @maralorn
 
 # Perl
 /pkgs/development/interpreters/perl @stigtsp @zakame

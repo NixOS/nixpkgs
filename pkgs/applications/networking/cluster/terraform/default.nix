@@ -192,11 +192,14 @@ rec {
   };
 
   terraform_1 = mkTerraform {
-    version = "1.2.1";
-    sha256 = "sha256-zvpKL7SsUeDu7pHSJTYbbJcn7kDcGk5M2jBMkkBLMtE=";
-    vendorSha256 = "sha256-2w0XAoja3DwztI3WxvLCUqrjW1PzSR6BU0T8TtM3TAw=";
+    version = "1.2.3";
+    sha256 = "sha256-hkPlufjlvmI5tKz1VTY5RztuDKEsgjrLR+f7HRrJmkA=";
+    vendorSha256 = "sha256-1RKnNF3NC0fGiU2VKz43UBGP33QrLxESVuH6IV6kYqA=";
     patches = [ ./provider-path-0_15.patch ];
-    passthru = { inherit plugins; };
+    passthru = {
+      inherit plugins;
+      tests = { inherit terraform_plugins_test; };
+    };
   };
 
   # Tests that the plugins are being used. Terraform looks at the specific

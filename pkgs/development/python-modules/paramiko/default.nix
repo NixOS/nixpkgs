@@ -2,24 +2,25 @@
 , bcrypt
 , buildPythonPackage
 , cryptography
+, fetchpatch
 , fetchPypi
+, gssapi
 , invoke
 , mock
 , pyasn1
 , pynacl
 , pytest-relaxed
 , pytestCheckHook
-, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
-  version = "2.10.4";
+  version = "2.11.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-PS5lC2gSzm0WCr/3AdbvRDTsl5NLE+lc8a09pw/7XFg=";
+    sha256 = "sha256-AD5r7nwDTCH7sFG/g9wKnuQQYgTdPFMFTHFFLMTsOTg=";
   };
 
   patches = [
@@ -32,11 +33,9 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    bcrypt
     cryptography
     pyasn1
-    pynacl
-  ];
+  ] ++ passthru.optional-dependencies.ed25519; # remove on 3.0 update
 
   checkInputs = [
     invoke
@@ -61,6 +60,12 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.optional-dependencies = {
+    gssapi = [ pyasn1 gssapi ];
+    ed25519 = [ pynacl bcrypt ];
+    invoke = [ invoke ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/paramiko/paramiko/";

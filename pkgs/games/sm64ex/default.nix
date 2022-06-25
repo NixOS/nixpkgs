@@ -1,71 +1,55 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , fetchFromGitHub
-, python3
-, pkg-config
-, audiofile
-, SDL2
-, hexdump
-, requireFile
-, compileFlags ? [ ]
-, region ? "us"
-, baseRom ? requireFile {
-    name = "baserom.${region}.z64";
-    message = ''
-      This nix expression requires that baserom.${region}.z64 is
-      already part of the store. To get this file you can dump your Super Mario 64 cartridge's contents
-      and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
-      Note that if you are not using a US baserom, you must overwrite the "region" attribute with either "eu" or "jp".
-    '';
-    sha256 = {
-      "us" = "17ce077343c6133f8c9f2d6d6d9a4ab62c8cd2aa57c40aea1f490b4c8bb21d91";
-      "eu" = "c792e5ebcba34c8d98c0c44cf29747c8ee67e7b907fcc77887f9ff2523f80572";
-      "jp" = "9cf7a80db321b07a8d461fe536c02c87b7412433953891cdec9191bfad2db317";
-    }.${region};
-  }
+, callPackage
+, autoPatchelfHook
+, branch
 }:
 
-stdenv.mkDerivation rec {
-  pname = "sm64ex";
-  version = "unstable-2021-11-30";
+{
+  sm64ex = callPackage ./generic.nix {
+    pname = "sm64ex";
+    version = "0.pre+date=2021-11-30";
 
-  src = fetchFromGitHub {
-    owner = "sm64pc";
-    repo = "sm64ex";
-    rev = "db9a6345baa5acb41f9d77c480510442cab26025";
-    sha256 = "sha256-q7JWDvNeNrDpcKVtIGqB1k7I0FveYwrfqu7ZZK7T8F8=";
+    src = fetchFromGitHub {
+      owner = "sm64pc";
+      repo = "sm64ex";
+      rev = "db9a6345baa5acb41f9d77c480510442cab26025";
+      sha256 = "sha256-q7JWDvNeNrDpcKVtIGqB1k7I0FveYwrfqu7ZZK7T8F8=";
+    };
+
+    extraMeta = {
+      homepage = "https://github.com/sm64pc/sm64ex";
+      description = "Super Mario 64 port based off of decompilation";
+    };
   };
 
-  nativeBuildInputs = [ python3 pkg-config ];
-  buildInputs = [ audiofile SDL2 hexdump ];
+  sm64ex-coop = callPackage ./generic.nix {
+    pname = "sm64ex-coop";
+    version = "0.pre+date=2022-05-14";
 
-  makeFlags = [ "VERSION=${region}" ] ++ compileFlags
-    ++ lib.optionals stdenv.isDarwin [ "OSX_BUILD=1" ];
+    src = fetchFromGitHub {
+      owner = "djoslin0";
+      repo = "sm64ex-coop";
+      rev = "8200b175607fe2939f067d496627c202a15fe24c";
+      sha256 = "sha256-c1ZmMBtvYYcaJ/WxkZBVvNGVCeSXfm8NKe/BiAIJtks=";
+    };
 
-  inherit baseRom;
+    extraNativeBuildInputs = [
+      autoPatchelfHook
+    ];
 
-  preBuild = ''
-    patchShebangs extract_assets.py
-    cp $baseRom ./baserom.${region}.z64
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp build/${region}_pc/sm64.${region}.f3dex2e $out/bin/sm64ex
-  '';
-
-  enableParallelBuilding = true;
-
-  meta = with lib; {
-    homepage = "https://github.com/sm64pc/sm64ex";
-    description = "Super Mario 64 port based off of decompilation";
-    longDescription = ''
-      Super Mario 64 port based off of decompilation.
-      Note that you must supply a baserom yourself to extract assets from.
-      If you are not using an US baserom, you must overwrite the "region" attribute with either "eu" or "jp".
-      If you would like to use patches sm64ex distributes as makeflags, add them to the "compileFlags" attribute.
+    postInstall = let
+      sharedLib = stdenv.hostPlatform.extensions.sharedLibrary;
+    in ''
+      mkdir -p $out/lib
+      cp $src/lib/bass/libbass{,_fx}${sharedLib} $out/lib
+      cp $src/lib/discordsdk/libdiscord_game_sdk${sharedLib} $out/lib
     '';
-    license = licenses.unfree;
-    maintainers = with maintainers; [ ivar ];
-    platforms = platforms.unix;
+
+    extraMeta = {
+      homepage = "https://github.com/djoslin0/sm64ex-coop";
+      description = "Super Mario 64 online co-op mod, forked from sm64ex";
+    };
   };
-}
+}.${branch}

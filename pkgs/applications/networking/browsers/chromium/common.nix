@@ -160,13 +160,9 @@ let
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
       ./patches/widevine-79.patch
-    ] ++ optionals (versionRange "102" "103") [
-      # https://dawn-review.googlesource.com/c/dawn/+/88582
-      # Wrap get_gitHash in try-catch to prevent failures in tarball builds.
-      ./patches/m102-fix-dawn_version_generator-failure.patch
     ];
 
-    postPatch = optionalString (chromiumVersionAtLeast "102") ''
+    postPatch = ''
       # Workaround/fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1313361:
       substituteInPlace BUILD.gn \
         --replace '"//infra/orchestrator:orchestrator_all",' ""
@@ -174,7 +170,6 @@ let
       substituteInPlace build/config/compiler/BUILD.gn \
         --replace '"-Xclang",' "" \
         --replace '"-no-opaque-pointers",' ""
-    '' + ''
       # remove unused third-party
       for lib in ${toString gnSystemLibraries}; do
         if [ -d "third_party/$lib" ]; then
@@ -194,7 +189,7 @@ let
           --replace "/usr/bin/env -S make -f" "/usr/bin/make -f"
       fi
       chmod -x third_party/webgpu-cts/src/tools/run_deno
-      ${lib.optionalString (chromiumVersionAtLeast "102") "chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno"}
+      chmod -x third_party/dawn/third_party/webgpu-cts/tools/run_deno
 
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
       substituteInPlace sandbox/linux/suid/client/setuid_sandbox_host.cc \

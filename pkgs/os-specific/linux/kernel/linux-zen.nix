@@ -2,7 +2,7 @@
 
 let
   # having the full version string here makes it easier to update
-  modDirVersion = "5.17.7-zen1";
+  modDirVersion = "5.18.5-zen1";
   parts = lib.splitString "-" modDirVersion;
   version = lib.elemAt parts 0;
   suffix = lib.elemAt parts 1;
@@ -20,11 +20,14 @@ buildLinux (args // {
     owner = "zen-kernel";
     repo = "zen-kernel";
     inherit rev;
-    sha256 = "sha256-sjXe+L9ZTtHDPLFY5d7Ui0NU0s7fw0qLfXIDnRxpKvE=";
+    sha256 = "sha256-q6a8Wyzs6GNQ39mV+q/9N6yo/kXS9ZH+QTfGka42gk4=";
   };
 
   structuredExtraConfig = with lib.kernel; {
     ZEN_INTERACTIVE = yes;
+    # TODO: Remove once #175433 reaches master
+    # https://nixpk.gs/pr-tracker.html?pr=175433
+    WERROR = no;
   };
 
   extraMeta = {

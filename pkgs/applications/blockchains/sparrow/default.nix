@@ -20,11 +20,11 @@
 
 let
   pname = "sparrow";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1wdibpbhv3g6qk42ddfc5vyqkkwprczy45w5wi115qg3g1rf1in7";
+    sha256 = "0zk33w664fky3ir6cqm6walc80fjhg9s0hnrllrc2hrxrqnrn88p";
   };
 
   launcher = writeScript "sparrow" ''
@@ -225,6 +225,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A modern desktop Bitcoin wallet application supporting most hardware wallets and built on common standards such as PSBT, with an emphasis on transparency and usability.";
     homepage = "https://sparrowwallet.com";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.asl20;
     maintainers = with maintainers; [ emmanuelrosa _1000101 ];
     platforms = [ "x86_64-linux" ];

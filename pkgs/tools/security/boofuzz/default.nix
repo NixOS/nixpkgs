@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , python3
 }:
@@ -50,5 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/jtpereyda/boofuzz";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ fab ];
+    # FAILED unit_tests/test_monitors.py::TestProcessMonitor::test_set_options_persistent
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }

@@ -46,6 +46,7 @@ in stdenv.mkDerivation rec {
       Linux.
     '';
     homepage = "https://www.umlet.com";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3;
     maintainers = with maintainers; [ oxzi ];
     platforms = platforms.all;

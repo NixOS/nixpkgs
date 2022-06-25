@@ -2,7 +2,6 @@
 , buildPythonPackage
 , fetchFromGitHub
 , selenium
-, six
 , flask
 , pytestCheckHook
 }:
@@ -20,7 +19,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     selenium
-    six
   ];
 
   checkInputs = [
@@ -28,8 +26,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # driver is present and fails with a different error during loading
+    "test_local_driver_not_present"
+  ];
+
   disabledTestPaths = [
     "samples"
+    # TODO: requires optional dependencies which should be defined in passthru.optional-dependencies.$name
     "tests/test_djangoclient.py"
     "tests/test_flaskclient.py"
     "tests/test_popups.py"

@@ -199,6 +199,10 @@ stdenv.mkDerivation rec {
     homepage = "https://mindustrygame.github.io/";
     downloadPage = "https://github.com/Anuken/Mindustry/releases";
     description = "A sandbox tower defense game";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz petabyteboy ];
     platforms = platforms.x86_64;

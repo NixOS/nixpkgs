@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyhiveapi";
-  version = "0.5.3";
+  version = "0.5.11";
 
   format = "pyproject";
 
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Pyhass";
     repo = "Pyhiveapi";
-    rev = "v${version}";
-    hash = "sha256-QBn+yKZN461npdhGngTnFeewE40dPZ+5TkUf5Xacajk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7Zval0LPuL3QUgDwpG91ybbL7gSWm4DxxZ/yXzkBES8=";
   };
 
   postPatch = ''

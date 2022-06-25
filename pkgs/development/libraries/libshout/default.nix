@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ libvorbis libtheora speex ];
 

@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qogir-theme";
-  version = "2022-04-29";
+  version = "2022-05-29";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "oFGJ29He7ZmryW/Eg+JLM9C3FzNjmKjzNtyXDHGuhwo=";
+    sha256 = "z8o/1Qc7XmefX9CuVr0Gq2MmKw2NlkUk+5Lz0Z593do=";
   };
 
   nativeBuildInputs = [

@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ gettext perlPackages.perl perlPackages.LocaleGettext ];
   buildInputs = [ perlPackages.LocaleGettext libintl ];
 

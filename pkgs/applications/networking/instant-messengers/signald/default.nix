@@ -103,6 +103,10 @@ in stdenv.mkDerivation rec {
       clients.
     '';
     homepage = "https://signald.org";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ expipiplus1 ma27 ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];

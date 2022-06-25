@@ -50,10 +50,6 @@ in
 
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
-        apply = list: list ++
-        [
-          pkgs.pantheon.pantheon-agent-geoclue2
-        ];
       };
 
       extraWingpanelIndicators = mkOption {
@@ -96,6 +92,9 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
+      services.xserver.desktopManager.pantheon.sessionPath = utils.removePackagesByName [
+        pkgs.pantheon.pantheon-agent-geoclue2
+      ] config.environment.pantheon.excludePackages;
 
       services.xserver.displayManager.sessionPackages = [ pkgs.pantheon.elementary-session-settings ];
 
@@ -177,19 +176,28 @@ in
       networking.networkmanager.enable = mkDefault true;
 
       # Global environment
-      environment.systemPackages = with pkgs; [
+      environment.systemPackages = (with pkgs.pantheon; [
+        elementary-session-settings
+        elementary-settings-daemon
+        gala
+        gnome-settings-daemon
+        (switchboard-with-plugs.override {
+          plugs = cfg.extraSwitchboardPlugs;
+        })
+        (wingpanel-with-indicators.override {
+          indicators = cfg.extraWingpanelIndicators;
+        })
+      ]) ++ utils.removePackagesByName ((with pkgs; [
         desktop-file-utils
-        glib
+        glib # for gsettings program
         gnome-menus
         gnome.adwaita-icon-theme
-        gtk3.out
-        hicolor-icon-theme
+        gtk3.out # for gtk-launch program
         onboard
         qgnomeplatform
-        shared-mime-info
         sound-theme-freedesktop
-        xdg-user-dirs
-      ] ++ (with pkgs.pantheon; [
+        xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+      ]) ++ (with pkgs.pantheon; [
         # Artwork
         elementary-gtk-theme
         elementary-icon-theme
@@ -199,30 +207,20 @@ in
         # Desktop
         elementary-default-settings
         elementary-dock
-        elementary-session-settings
         elementary-shortcut-overlay
-        gala
-        (switchboard-with-plugs.override {
-          plugs = cfg.extraSwitchboardPlugs;
-        })
-        (wingpanel-with-indicators.override {
-          indicators = cfg.extraWingpanelIndicators;
-        })
 
         # Services
         elementary-capnet-assist
         elementary-notifications
-        elementary-settings-daemon
-        gnome-settings-daemon
         pantheon-agent-geoclue2
         pantheon-agent-polkit
-      ]);
-
-      programs.evince.enable = mkDefault true;
-      programs.file-roller.enable = mkDefault true;
+      ])) config.environment.pantheon.excludePackages;
 
       # Settings from elementary-default-settings
       environment.etc."gtk-3.0/settings.ini".source = "${pkgs.pantheon.elementary-default-settings}/etc/gtk-3.0/settings.ini";
+
+      xdg.mime.enable = true;
+      xdg.icons.enable = true;
 
       xdg.portal.enable = true;
       xdg.portal.extraPortals = with pkgs.pantheon; [
@@ -271,6 +269,9 @@ in
     })
 
     (mkIf serviceCfg.apps.enable {
+      programs.evince.enable = mkDefault true;
+      programs.file-roller.enable = mkDefault true;
+
       environment.systemPackages = utils.removePackagesByName ([
         pkgs.gnome.gnome-font-viewer
       ] ++ (with pkgs.pantheon; [

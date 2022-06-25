@@ -30,6 +30,10 @@ javaPackages.mavenfod rec {
   meta = with lib; {
     homepage = "https://github.com/Captain-P-Goldfish/scim-for-keycloak";
     description = "A third party module that extends Keycloak with SCIM functionality";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # dependencies
+    ];
     license = licenses.bsd3;
     maintainers = with maintainers; [ mkg20001 ];
   };

@@ -511,6 +511,8 @@ patches = [
 
 Otherwise, you can add a `.patch` file to the `nixpkgs` repository. In the interest of keeping our maintenance burden to a minimum, only patches that are unique to `nixpkgs` should be added in this way.
 
+If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`. Check [](#fetchpatch) for details.
+
 ```nix
 patches = [ ./0001-changes.patch ];
 ```
@@ -537,17 +539,6 @@ If you do need to do create this sort of patch file, one way to do so is with gi
     ```ShellSession
     $ git diff -a > nixpkgs/pkgs/the/package/0001-changes.patch
     ```
-
-If a patch is available online but does not cleanly apply, it can be modified in some fixed ways by using additional optional arguments for `fetchpatch`:
-
-- `relative`: Similar to using `git-diff`'s `--relative` flag, only keep changes inside the specified directory, making paths relative to it.
-- `stripLen`: Remove the first `stripLen` components of pathnames in the patch.
-- `extraPrefix`: Prefix pathnames by this string.
-- `excludes`: Exclude files matching these patterns (applies after the above arguments).
-- `includes`: Include only files matching these patterns (applies after the above arguments).
-- `revert`: Revert the patch.
-
-Note that because the checksum is computed after applying these effects, using or modifying these arguments will have no effect unless the `sha256` argument is changed as well.
 
 ## Package tests {#sec-package-tests}
 

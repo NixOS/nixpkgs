@@ -3,7 +3,7 @@
 , buildPythonPackage
 , setuptools-scm
 , attrs
-, pdfminer
+, pdfminer-six
 , commoncode
 , plugincode
 , binaryornot
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
-    pdfminer
+    pdfminer-six
     commoncode
     plugincode
     binaryornot

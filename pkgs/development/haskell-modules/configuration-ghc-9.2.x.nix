@@ -100,9 +100,9 @@ self: super: {
       self.data-default
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
-  ghc-lib = self.ghc-lib_9_2_2_20220307;
-  ghc-lib-parser = self.ghc-lib-parser_9_2_2_20220307;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_3;
+  ghc-lib = self.ghc-lib_9_2_3_20220527;
+  ghc-lib-parser = self.ghc-lib-parser_9_2_3_20220527;
+  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_2;
   hashable-time = doJailbreak super.hashable-time;
@@ -146,7 +146,7 @@ self: super: {
   shelly = doJailbreak super.shelly;
   splitmix = doJailbreak super.splitmix;
   tasty-hspec = doJailbreak super.tasty-hspec;
-  th-desugar = self.th-desugar_1_13;
+  th-desugar = self.th-desugar_1_13_1;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
@@ -173,7 +173,7 @@ self: super: {
   ];
 
   # lens >= 5.1 supports 9.2.1
-  lens = doDistribute self.lens_5_1;
+  lens = doDistribute self.lens_5_1_1;
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;
@@ -206,9 +206,13 @@ self: super: {
   regex-rure = doDistribute (markUnbroken super.regex-rure);
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
+
+  # 2022-06-05: this is not the latest version of fourmolu because
+  # hls-fourmolu-plugin 1.0.3.0 doesn‘t support a newer one.
   fourmolu = super.fourmolu_0_6_0_0;
   # hls-fourmolu-plugin in this version has a to strict upper bound of fourmolu <= 0.5.0.0
   hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.3.0"; doJailbreak super.hls-fourmolu-plugin;
+
   hls-ormolu-plugin = assert super.hls-ormolu-plugin.version == "1.0.2.1"; doJailbreak super.hls-ormolu-plugin;
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed

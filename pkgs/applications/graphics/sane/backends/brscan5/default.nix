@@ -2,7 +2,7 @@
 let
   myPatchElf = file: with lib; ''
     patchelf --set-interpreter \
-      ${stdenv.glibc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
+      ${stdenv.cc.libc}/lib/ld-linux${optionalString stdenv.is64bit "-x86-64"}.so.2 \
       ${file}
   '';
   system = stdenv.hostPlatform.system;
@@ -102,6 +102,7 @@ stdenv.mkDerivation rec {
     description = "Brother brscan5 sane backend driver";
     homepage = "https://www.brother.com";
     platforms = [ "i686-linux" "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ mattchrist ];
   };

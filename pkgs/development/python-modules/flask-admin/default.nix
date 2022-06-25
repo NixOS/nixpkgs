@@ -2,7 +2,7 @@
 , arrow
 , buildPythonPackage
 , colour
-, email_validator
+, email-validator
 , enum34
 , fetchPypi
 , flask
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   checkInputs = [
     arrow
     colour
-    email_validator
+    email-validator
     flask_sqlalchemy
     flask-babelex
     flask-mongoengine

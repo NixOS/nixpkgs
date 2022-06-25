@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ lgpl21Only gpl2Only mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
+    broken = kernel.kernelAtLeast "5.18";
   };
 }

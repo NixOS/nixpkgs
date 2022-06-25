@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eEUhOrKqb2hHWanY+knpY9FBEnjkkFTB+x6BZgMBpbo=";
   };
 
-  postPatch = if stdenv.isDarwin then ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace Makefile \
       --replace '-soname' '-install_name' \
       --replace 'lib$(NAME).so' 'lib$(NAME).dylib'
-  '' else null;
+  '';
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -27,12 +27,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = if stdenv.isDarwin then ''
+  postInstall = lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libfreeaptx.dylib.0 $out/lib/libfreeaptx.dylib.0 $out/bin/freeaptxdec
     install_name_tool -change libfreeaptx.dylib.0 $out/lib/libfreeaptx.dylib.0 $out/bin/freeaptxenc
     install_name_tool -id $out/lib/libfreeaptx.dylib $out/lib/libfreeaptx.dylib
     install_name_tool -id $out/lib/libfreeaptx.dylib.0 $out/lib/libfreeaptx.dylib.0
-  '' else null;
+  '';
 
   meta = with lib; {
     description = "Free Implementation of Audio Processing Technology codec (aptX)";

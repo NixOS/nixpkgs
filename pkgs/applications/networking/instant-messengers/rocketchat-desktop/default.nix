@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Official Desktop client for Rocket.Chat";
     homepage = "https://github.com/RocketChat/Rocket.Chat.Electron";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = with maintainers; [ gbtb ];
     platforms = platforms.x86_64;

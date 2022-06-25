@@ -1,9 +1,6 @@
-{ localSystem ? { system = builtins.currentSystem; }
-, crossSystem ? null
-}:
+{ pkgs ? import ../../.. {} }:
 
 let
-  pkgs = import ../../.. { inherit localSystem crossSystem; };
   libc = pkgs.stdenv.cc.libc;
 in with pkgs; rec {
 

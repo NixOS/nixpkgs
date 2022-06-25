@@ -2,19 +2,28 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, catch2
+, catch2_3
 }:
 
 stdenv.mkDerivation rec {
   pname = "rapidfuzz-cpp";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "rapidfuzz-cpp";
     rev = "v${version}";
-    hash = "sha256-331iW0nu5MlxuKNTgMkRSASnglxn+hEWBhRMnw0lY2Y=";
+    hash = "sha256-Tf7nEMXiem21cvQHPnYnCvOOLg0KBBnNQDaYIcHcm2g=";
   };
+
+  patches = lib.optionals doCheck [
+    ./dont-fetch-project-options.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace test/CMakeLists.txt \
+      --replace WARNINGS_AS_ERRORS ""
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -25,11 +34,10 @@ stdenv.mkDerivation rec {
   ];
 
   checkInputs = [
-    catch2
+    catch2_3
   ];
 
-  # uses unreleased Catch2 version 3
-  doCheck = false;
+  doCheck = true;
 
   meta = {
     description = "Rapid fuzzy string matching in C++ using the Levenshtein Distance";

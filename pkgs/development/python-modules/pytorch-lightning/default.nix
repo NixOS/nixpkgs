@@ -14,15 +14,15 @@
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
-  version = "1.6.3";
+  version = "1.6.4";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "PyTorchLightning";
     repo = pname;
-    rev = version;
-    hash = "sha256-MEUFrj84y5lQfwbC9s9fJNOKo+Djeh+E/eDc8KeX7V4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-X1xPyE53uo/eWPjQdXiObAnjgWc/Y/K+077Ypi5ZzcE=";
   };
 
   propagatedBuildInputs = [

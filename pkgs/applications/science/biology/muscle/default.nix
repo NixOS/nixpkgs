@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "A multiple sequence alignment method with reduced time and space complexity";
     license     = licenses.publicDomain;
     homepage    = "https://www.drive5.com/muscle/";

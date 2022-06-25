@@ -79,6 +79,7 @@ in mkDerivation {
       can always download the latest version from makemkv.com that will reset the
       expiration date.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     homepage = "http://makemkv.com";
     platforms = [ "x86_64-linux" ];

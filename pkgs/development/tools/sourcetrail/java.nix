@@ -1,4 +1,4 @@
-{ pkgs, javaPackages }:
+{ lib, pkgs, javaPackages }:
 
 let
   javaIndexer = javaPackages.mavenbuild {
@@ -17,6 +17,7 @@ let
 
     meta = {
       description = "Java indexer for Sourcetrail";
+      sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     };
   };
 in

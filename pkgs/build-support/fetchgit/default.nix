@@ -28,6 +28,7 @@ in
   # needed for netrcPhase
   netrcImpureEnvVars ? []
 , meta ? {}
+, allowedRequisites ? null
 }:
 
 /* NOTE:
@@ -91,5 +92,10 @@ stdenvNoCC.mkDerivation {
     "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
   ];
 
-  inherit preferLocalBuild meta;
+
+  inherit preferLocalBuild meta allowedRequisites;
+
+  passthru = {
+    gitRepoUrl = url;
+  };
 }

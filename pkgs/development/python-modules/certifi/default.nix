@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "certifi";
-  version = "2021.10.08";
+  version = "2022.05.18.1";
 
   disabled = pythonOlder "3.5";
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "python-certifi";
     rev = version;
-    sha256 = "sha256-SFb/spVHK15b53ZG1P147DcTjs1dqR0+MBXzpE+CWpo=";
+    sha256 = "sha256-uDNVzKcT45mz0zXBwPkttKV21fEcgbRamE3+QutNLjA=";
   };
 
   checkInputs = [

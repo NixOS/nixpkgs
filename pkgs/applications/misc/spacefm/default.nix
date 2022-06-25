@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
     ./x11-only.patch
   ];
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: spacefm-item-prop.o:src/settings.h:123: multiple definition of
+  #     `xsets'; vfs/spacefm-vfs-file-info.o:src/settings.h:123: first defined here
+  # TODO: can be removed once https://github.com/IgnorantGuru/spacefm/pull/772
+  # or equivalent is merged upstream.
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   configureFlags = [
     "--with-bash-path=${pkgs.bash}/bin/bash"
   ];

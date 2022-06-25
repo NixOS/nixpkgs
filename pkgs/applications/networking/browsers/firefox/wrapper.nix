@@ -97,12 +97,15 @@ let
 
       nameArray = builtins.map(a: a.name) (if usesNixExtensions then nixExtensions else []);
 
+      requiresSigning = browser ? MOZ_REQUIRE_SIGNING
+                     -> toString browser.MOZ_REQUIRE_SIGNING != "";
+
       # Check that every extension has a unqiue .name attribute
       # and an extid attribute
       extensions = if nameArray != (lib.unique nameArray) then
         throw "Firefox addon name needs to be unique"
-      else if ! (lib.hasSuffix "esr" browser.name) then
-        throw "Nix addons are only supported in Firefox ESR"
+      else if requiresSigning && !lib.hasSuffix "esr" browser.name then
+        throw "Nix addons are only supported without signature enforcement (eg. Firefox ESR)"
       else builtins.map (a:
         if ! (builtins.hasAttr "extid" a) then
         throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchfirefoxaddon"
@@ -118,28 +121,27 @@ let
         lib.optionalAttrs usesNixExtensions {
           ExtensionSettings = {
             "*" = {
-                blocked_install_message = "You can't have manual extension mixed with nix extensions";
-                installation_mode = "blocked";
-              };
-
+              blocked_install_message = "You can't have manual extension mixed with nix extensions";
+              installation_mode = "blocked";
+            };
           } // lib.foldr (e: ret:
-              ret // {
-                "${e.extid}" = {
-                  installation_mode = "allowed";
-                };
-              }
-            ) {} extensions;
-          } // lib.optionalAttrs usesNixExtensions {
-            Extensions = {
-              Install = lib.foldr (e: ret:
-                ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
-                ) [] extensions;
-            };
-          } // lib.optionalAttrs smartcardSupport {
-            SecurityDevices = {
-              "OpenSC PKCS#11 Module" = "onepin-opensc-pkcs11.so";
-            };
-          }
+            ret // {
+              "${e.extid}" = {
+                installation_mode = "allowed";
+              };
+            }
+          ) {} extensions;
+
+          Extensions = {
+            Install = lib.foldr (e: ret:
+              ret ++ [ "${e.outPath}/${e.extid}.xpi" ]
+            ) [] extensions;
+          };
+        } // lib.optionalAttrs smartcardSupport {
+          SecurityDevices = {
+            "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
+          };
+        }
         // extraPolicies;
       };
 

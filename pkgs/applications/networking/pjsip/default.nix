@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A multimedia communication library written in C, implementing standard based protocols such as SIP, SDP, RTP, STUN, TURN, and ICE";
     homepage = "https://pjsip.org/";
     license = licenses.gpl2Plus;

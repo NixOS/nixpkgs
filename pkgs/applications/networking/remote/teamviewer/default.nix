@@ -6,6 +6,8 @@
 
 mkDerivation rec {
   pname = "teamviewer";
+  # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
+  outputs = [ "out" "dev" ];
   version = "15.29.4";
 
   src = fetchurl {
@@ -94,6 +96,7 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.teamviewer.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
     platforms = [ "x86_64-linux" ];

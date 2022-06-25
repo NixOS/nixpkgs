@@ -22,8 +22,6 @@ buildGoModule rec {
     "-X github.com/cloudnativelabs/kube-router/pkg/version.BuildDate=Nix"
   ];
 
-  checkFlags = [ "-short" ];
-
   passthru.tests.version = testers.testVersion {
     package = kube-router;
   };

@@ -9,6 +9,7 @@
 , python
 , pythonOlder
 , requirements-parser
+, sortedcontainers
 , setuptools
 , toml
 , types-setuptools
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
-  version = "2.4.0";
+  version = "2.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-IrMXHWeksEmON3LxJvQ3WSKwQTY0aRZ8XItWMr3p4gw=";
+    hash = "sha256-UM5z8FEu+Pua/LToraGh8N6V3ujUnu4F6lJec+4cUg4=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     packageurl-python
     requirements-parser
     setuptools
+    sortedcontainers
     toml
     types-setuptools
     types-toml

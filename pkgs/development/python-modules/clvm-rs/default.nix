@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchFromGitHub
 , buildPythonPackage
 , rustPlatform
@@ -68,6 +69,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "clvm_rs" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://chialisp.com/";
     description = "Rust implementation of clvm";
     license = licenses.asl20;

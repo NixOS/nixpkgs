@@ -50,7 +50,7 @@ in
   getLuaCPath = drv: getPath drv luaLib.luaCPathList;
 
   inherit (callPackage ../development/interpreters/lua-5/hooks { inherit (args) lib;})
-    lua-setup-hook;
+    luarocksMoveDataFolder luarocksCheckHook lua-setup-hook;
 
   inherit lua callPackage;
   inherit buildLuaPackage buildLuarocksPackage buildLuaApplication;
@@ -95,6 +95,7 @@ in
     '';
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       description = "Lightweight UNIX I/O and POSIX binding for Lua";
       homepage = "https://www.gitano.org.uk/luxio/";
       license = licenses.mit;

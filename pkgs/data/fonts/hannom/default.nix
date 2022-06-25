@@ -7,9 +7,14 @@ in fetchzip {
 
   url = "mirror://sourceforge/vietunicode/hannom/hannom%20v${version}/hannomH.zip";
 
+  stripRoot = false;
+
   postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+    mkdir -p $out/share/fonts/truetype
+    mv $out/*.ttf -t $out/share/fonts/truetype
+    shopt -s extglob dotglob
+    rm -rf $out/!(share)
+    shopt -u extglob dotglob
   '';
 
   sha256 = "sha256-zOYJxEHl4KM0ncVQDBs9+e3z8DxzF2ef3pRj0OVSuUo=";

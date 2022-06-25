@@ -22,6 +22,8 @@ with pkgs;
   cc-wrapper-libcxx-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.libcxxStdenv; };
   stdenv-inputs = callPackage ./stdenv-inputs { };
 
+  config = callPackage ./config.nix { };
+
   haskell = callPackage ./haskell { };
 
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };

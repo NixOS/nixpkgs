@@ -125,6 +125,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Network simulation tool from Cisco";
     homepage = "https://www.netacad.com/courses/packet-tracer";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lucasew ];
     platforms = [ "x86_64-linux" ];

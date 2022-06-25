@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.0.2";
 
   src = fetchFromGitHub {
-    owner = "01org";
+    owner = "intel";
     repo = "intel-hybrid-driver";
     rev = version;
     sha256 = "sha256-uYX7RoU1XVzcC2ea3z/VBjmT47xmzK67Y4LaiFXyJZ8=";
@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmrt libdrm libva libX11 libGL wayland ];
 
   enableParallelBuilding = true;
+
+  # Workaround build failure on -fno-common toolchains like upstream gcc-10.
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   configureFlags = [
     "--enable-drm"

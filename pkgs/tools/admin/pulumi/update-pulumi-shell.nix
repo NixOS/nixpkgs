@@ -5,4 +5,3 @@ mkShell {
     pkgs.gh
   ];
 }
-

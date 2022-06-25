@@ -49,7 +49,7 @@ let
     # By default we set url to src.url
     if [[ -z "$url" ]]; then
         url="$(${nix}/bin/nix-instantiate $systemArg --eval -E \
-                   "with import ./. {}; $UPDATE_NIX_ATTR_PATH.src.url or $UPDATE_NIX_ATTR_PATH.src.meta.homepage" \
+                   "with import ./. {}; $UPDATE_NIX_ATTR_PATH.src.gitRepoUrl" \
             | tr -d '"')"
     fi
 

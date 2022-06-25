@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , cmake
 , cython_3
+, ninja
 , rapidfuzz-capi
 , scikit-build
 , jarowinkler
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cmake
     cython_3
+    ninja
     rapidfuzz-capi
     scikit-build
   ];

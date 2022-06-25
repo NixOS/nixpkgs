@@ -48,6 +48,8 @@ let
    "8.14.1".sha256     = "0sx78pgx0qw8v7v2r32zzy3l161zipzq95iacda628girim7psnl";
    "8.15.0".sha256     = "sha256:1ma76wfrpfsl72yh10w1ys2a0vi0mdc2jc79kdc8nrmxkhpw1nxx";
    "8.15.1".sha256     = "sha256:1dsa04jzkx5pw69pmxn0l55q4w88lg6fvz7clbga0bazzsfnsgd6";
+   "8.15.2".sha256     = "sha256:0gn8dz69scxnxaq6ycb3x34bjfk9wlp1y2xn8w69kg9fm4b6gkc7";
+   "8.16+rc1".sha256   = "sha256-dU+E0Mz7MVntbQIeG9I59ANBaHaXXSrjCRdoqZ5TO60=";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
@@ -70,9 +72,9 @@ let
       { case = range "8.7" "8.10";  out = ocamlPackages_4_09; }
       { case = range "8.5" "8.6";   out = ocamlPackages_4_05; }
     ] ocamlPackages_4_12;
-  ocamlNativeBuildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib ]
-    ++ optional (coqAtLeast "8.14") ocamlPackages.dune_2;
-  ocamlBuildInputs = []
+  ocamlNativeBuildInputs = with ocamlPackages; [ ocaml findlib ]
+    ++ optional (coqAtLeast "8.14") dune_2;
+  ocamlPropagatedBuildInputs = [ ]
     ++ optional (!coqAtLeast "8.10") ocamlPackages.camlp5
     ++ optional (!coqAtLeast "8.13") ocamlPackages.num
     ++ optional (coqAtLeast "8.13") ocamlPackages.zarith;
@@ -82,7 +84,8 @@ self = stdenv.mkDerivation {
 
   passthru = {
     inherit coq-version;
-    inherit ocamlPackages ocamlBuildInputs ocamlNativeBuildInputs;
+    inherit ocamlPackages ocamlNativeNuildInputs;
+    inherit ocamlPropagatedBuildInputs ocamlPropagatedNativeBuildInputs;
     # For compatibility
     inherit (ocamlPackages) ocaml camlp5 findlib num ;
     emacsBufferSetup = pkgs: ''
@@ -136,12 +139,14 @@ self = stdenv.mkDerivation {
     ++ optional buildIde copyDesktopItems
     ++ optional (buildIde && coqAtLeast "8.10") wrapGAppsHook
     ++ optional (!coqAtLeast "8.6") gnumake42;
-  buildInputs = [ ncurses ] ++ ocamlBuildInputs
+  buildInputs = [ ncurses ]
     ++ optionals buildIde
       (if coqAtLeast "8.10"
        then [ ocamlPackages.lablgtk3-sourceview3 glib gnome.adwaita-icon-theme ]
        else [ ocamlPackages.lablgtk ])
   ;
+
+  propagatedBuildInputs = ocamlPropagatedBuildInputs;
 
   postPatch = ''
     UNAME=$(type -tp uname)

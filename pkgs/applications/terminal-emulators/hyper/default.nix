@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
     description = "A terminal built on web technologies";
     homepage    = "https://hyper.is/";
     maintainers = with maintainers; [ puffnfresh fabiangd ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.mit;
     platforms   = [ "x86_64-linux" ];
   };

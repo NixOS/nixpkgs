@@ -19,6 +19,7 @@
 , gst-plugins-base
 , gtk3
 , dconf
+, buildPackages
 
   # options
 , developerBuild ? false
@@ -83,9 +84,8 @@ let
       qtwebsockets = callPackage ./modules/qtwebsockets.nix { };
       qtwebview = callPackage ./modules/qtwebview.nix { };
 
-      wrapQtAppsHook = makeSetupHook
-        {
-          deps = [ self.qtbase.dev self.qtwayland.dev makeWrapper ];
+      wrapQtAppsHook = makeSetupHook {
+          deps = [ buildPackages.makeWrapper ];
         } ./hooks/wrap-qt-apps-hook.sh;
     };
 

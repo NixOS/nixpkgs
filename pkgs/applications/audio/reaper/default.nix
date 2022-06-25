@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Digital audio workstation";
     homepage = "https://www.reaper.fm/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ jfrankenau ilian orivej uniquepointer ];

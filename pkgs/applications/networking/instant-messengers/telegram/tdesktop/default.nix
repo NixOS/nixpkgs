@@ -9,6 +9,7 @@
 , wrapQtAppsHook
 , extra-cmake-modules
 , qtbase
+, qtwayland
 , qtsvg
 , qtimageformats
 , qt5compat
@@ -70,7 +71,7 @@ let
 in
 env.mkDerivation rec {
   pname = "telegram-desktop";
-  version = "3.7.3";
+  version = "4.0.0";
   # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
 
   # Telegram-Desktop with submodules
@@ -79,7 +80,7 @@ env.mkDerivation rec {
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "01b3nrhfbxhq4w63nsjnrhyfsdq3fm4l7sfkasbh8ib4qk3c9vwz";
+    sha256 = "16j5rvlqr2bb1dkc7cc920ylhw3sp4qnqvm1aznnnjzcimqb8xf0";
   };
 
   postPatch = ''
@@ -112,6 +113,7 @@ env.mkDerivation rec {
 
   buildInputs = [
     qtbase
+    qtwayland
     qtsvg
     qtimageformats
     qt5compat

@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
   ] ++ (lib.optional stdenv.isSunOS ./implement-getgrouplist.patch);
 
   postPatch = ''
+    # We need to generate the file ourselves.
+    # https://gitlab.freedesktop.org/dbus/dbus/-/merge_requests/317
+    rm doc/catalog.xml
+
     substituteInPlace bus/Makefile.am \
       --replace 'install-data-hook:' 'disabled:' \
       --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/run/dbus' ':'
@@ -97,6 +101,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  makeFlags = [
+    # Fix paths in XML catalog broken by mismatching build/install datadir.
+    "dtddir=${placeholder "out"}/share/xml/dbus-1"
+  ];
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"

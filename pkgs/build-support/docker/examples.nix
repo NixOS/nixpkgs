@@ -9,6 +9,16 @@
 
 { pkgs, buildImage, buildLayeredImage, fakeNss, pullImage, shadowSetup, buildImageWithNixDb, pkgsCross }:
 
+let
+  nixosLib = import ../../../nixos/lib {
+    # Experimental features need testing too, but there's no point in warning
+    # about it, so we enable the feature flag.
+    featureFlags.minimalModules = {};
+  };
+  evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
+
+in
+
 rec {
   # 1. basic example
   bash = buildImage {
@@ -581,6 +591,37 @@ rec {
     config.Cmd = [ "hello" ];
     includeStorePaths = false;
   };
+
+  etc =
+    let
+      inherit (pkgs) lib;
+      nixosCore = (evalMinimalConfig ({ config, ... }: {
+        imports = [
+          pkgs.pkgsModule
+          ../../../nixos/modules/system/etc/etc.nix
+        ];
+        environment.etc."some-config-file" = {
+          text = ''
+            127.0.0.1 localhost
+            ::1 localhost
+          '';
+          # For executables:
+          # mode = "0755";
+        };
+      }));
+    in pkgs.dockerTools.streamLayeredImage {
+      name = "etc";
+      tag = "latest";
+      enableFakechroot = true;
+      fakeRootCommands = ''
+        mkdir -p /etc
+        ${nixosCore.config.system.build.etcActivationCommands}
+      '';
+      config.Cmd = pkgs.writeScript "etc-cmd" ''
+        #!${pkgs.busybox}/bin/sh
+        ${pkgs.busybox}/bin/cat /etc/some-config-file
+      '';
+    };
 
   # Example export of the bash image
   exportBash = pkgs.dockerTools.exportImage { fromImage = bash; };

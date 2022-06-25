@@ -162,6 +162,7 @@ in stdenv.mkDerivation {
     description = "A freeware web browser developed by Google";
     homepage = "https://www.google.com/chrome/browser/";
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ primeos ];
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # will try to merge PRs and respond to issues but I'm not actually using

@@ -18,8 +18,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       # container available within the VM, because we don't have network access.
       virtualisation.additionalPaths = let
         emptyContainer = import ../lib/eval-config.nix {
-          inherit (config.nixpkgs.localSystem) system;
           modules = lib.singleton {
+            nixpkgs = { inherit (config.nixpkgs) localSystem; };
+
             containers.foo.config = {
               system.stateVersion = "18.03";
             };

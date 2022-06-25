@@ -42,7 +42,7 @@ in
 
     client1.wait_for_unit("multi-user.target")
     client1.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
-    client1.wait_until_tty_matches(1, "login: ")
+    client1.wait_until_tty_matches("1", "login: ")
     client1.send_chars("root\n")
     client1.wait_until_succeeds("pgrep -u root bash")
 

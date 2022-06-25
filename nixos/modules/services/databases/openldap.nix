@@ -312,6 +312,7 @@ in {
           "-h" (lib.concatStringsSep " " cfg.urlList)
         ]);
         Type = "notify";
+        NotifyAccess = "all";
         PIDFile = cfg.settings.attrs.olcPidFile;
       };
     };

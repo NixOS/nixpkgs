@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper
 , pkg-config, intltool
-, perl, gettext, libX11, libXext, libXi, libXt
+, perl, perlPackages, gettext, libX11, libXext, libXi, libXt
 , libXft, libXinerama, libXrandr, libXxf86vm, libGL, libGLU, gle
 , gtk2, gdk-pixbuf, gdk-pixbuf-xlib, libxml2, pam
 , systemd, coreutils
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     perl gettext libX11 libXext libXi libXt
     libXft libXinerama libXrandr libXxf86vm libGL libGLU gle
     gtk2 gdk-pixbuf gdk-pixbuf-xlib libxml2 pam
+    perlPackages.LWPProtocolHttps perlPackages.MozillaCA
   ] ++ lib.optional withSystemd systemd;
 
   preConfigure = ''
@@ -44,7 +45,8 @@ stdenv.mkDerivation rec {
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
         --prefix PATH : "$out/libexec/xscreensaver" \
-        --prefix PATH : "${lib.makeBinPath [ coreutils ]}"
+        --prefix PATH : "${lib.makeBinPath [ coreutils perl ]}" \
+        --prefix PERL5LIB ':' $PERL5LIB
     done
   '' + lib.optionalString forceInstallAllHacks ''
     make -j$NIX_BUILD_CORES -C hacks/glx dnalogo

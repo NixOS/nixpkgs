@@ -1,4 +1,4 @@
-{ lib, hwdata, pkg-config, lxc, buildGo118Package, fetchurl, fetchpatch
+{ lib, hwdata, pkg-config, lxc, buildGo118Package, fetchurl
 , makeWrapper, acl, rsync, gnutar, xz, btrfs-progs, gzip, dnsmasq, attr
 , squashfsTools, iproute2, iptables, libcap
 , dqlite, raft-canonical, sqlite-replication, udev
@@ -11,13 +11,16 @@
 
 buildGo118Package rec {
   pname = "lxd";
-  version = "5.1";
+  version = "5.3";
 
   goPackagePath = "github.com/lxc/lxd";
 
   src = fetchurl {
-    url = "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz";
-    sha256 = "sha256-MZ9Ok1BuIUTtqigLAYX7N8Q3TPfXRopeXIwbZ4GJJQo=";
+    urls = [
+      "https://linuxcontainers.org/downloads/lxd/lxd-${version}.tar.gz"
+      "https://github.com/lxc/lxd/releases/download/lxd-${version}/lxd-${version}.tar.gz"
+    ];
+    sha256 = "sha256-DRdKCfp0nL3lg5O/Wm7vX2grO/DBuyhHRi85XI5laZU=";
   };
 
   postPatch = ''
@@ -57,6 +60,7 @@ buildGo118Package rec {
   meta = with lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
     homepage = "https://linuxcontainers.org/lxd/";
+    changelog = "https://github.com/lxc/lxd/releases/tag/lxd-${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fpletz marsam ];
     platforms = platforms.linux;

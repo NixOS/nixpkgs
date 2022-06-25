@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" "strictoverflow"];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "http://www.nsnam.org";
     license = licenses.gpl3;
     description = "A discrete time event network simulator";

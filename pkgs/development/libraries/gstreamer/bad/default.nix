@@ -93,6 +93,7 @@
 , Foundation
 , MediaToolbox
 , enableGplPlugins ? true
+, bluezSupport ? stdenv.isLinux
 }:
 
 stdenv.mkDerivation rec {
@@ -181,8 +182,9 @@ stdenv.mkDerivation rec {
     mjpegtools
     faad2
     x265
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals bluezSupport [
     bluez
+  ] ++ lib.optionals stdenv.isLinux [
     libva # vaapi requires libva -> libdrm -> libpciaccess, which is Linux-only in nixpkgs
     wayland
     wayland-protocols
@@ -264,12 +266,12 @@ stdenv.mkDerivation rec {
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
+    "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
   ]
   ++ lib.optionals (!stdenv.isLinux) [
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
   ]
   ++ lib.optionals stdenv.isDarwin [
-    "-Dbluez=disabled"
     "-Dchromaprint=disabled"
     "-Ddirectfb=disabled"
     "-Dflite=disabled"

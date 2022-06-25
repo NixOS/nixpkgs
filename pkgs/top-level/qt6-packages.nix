@@ -17,4 +17,7 @@ let
 in
 
 (qt6 // {
+  # LIBRARIES
+
+  quazip = callPackage ../development/libraries/quazip { };
 })))

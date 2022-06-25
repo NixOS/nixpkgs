@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     ./stdint.patch
   ];
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: include/dieharder/parse.h:21: multiple definition of `splitbuf';
+  #     include/dieharder/parse.h:21: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildInputs = [ gsl ];
 
   passthru = {
@@ -22,6 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A Random Number Generator test suite";
     homepage = "https://webhome.phy.duke.edu/~rgb/General/dieharder.php";
     license = licenses.gpl2Plus;

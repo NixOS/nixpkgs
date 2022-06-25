@@ -51,9 +51,6 @@ vim-with-plugins in PATH:
       # full documentation at github.com/MarcWeber/vim-addon-manager
     ];
 
-    # there is a pathogen implementation as well, but its startup is slower and [VAM] has more feature
-    # vimrcConfig.pathogen.knownPlugins = vimPlugins; # optional
-    # vimrcConfig.pathogen.pluginNames = ["vim-addon-nix"];
   };
 
 WHAT IS A VIM PLUGIN?
@@ -103,7 +100,7 @@ It might happen than a plugin is not known by vim-pi yet. We encourage you to
 contribute to vim-pi so that plugins can be updated automatically.
 
 
-CREATING DERVITATIONS AUTOMATICALLY BY PLUGIN NAME
+CREATING DERIVATIONS AUTOMATICALLY BY PLUGIN NAME
 ==================================================
 Most convenient is to use a ~/.vim-scripts file putting a plugin name into each line
 as documented by [VAM]'s README.md
@@ -208,9 +205,6 @@ let
       ln -sf ${plugin}/${rtpPath} $out/pack/${packageName}/${dir}/${lib.getName plugin}
     '';
 
-    link = pluginPath: if hasLuaModule pluginPath
-      then linkLuaPlugin pluginPath
-      else linkVimlPlugin pluginPath;
 
     packageLinks = packageName: {start ? [], opt ? []}:
     let
@@ -228,9 +222,9 @@ let
       [ "mkdir -p $out/pack/${packageName}/start" ]
       # To avoid confusion, even dependencies of optional plugins are added
       # to `start` (except if they are explicitly listed as optional plugins).
-      ++ (builtins.map (x: link x packageName "start") allPlugins)
+      ++ (builtins.map (x: linkVimlPlugin x packageName "start") allPlugins)
       ++ ["mkdir -p $out/pack/${packageName}/opt"]
-      ++ (builtins.map (x: link x packageName "opt") opt)
+      ++ (builtins.map (x: linkVimlPlugin x packageName "opt") opt)
       # Assemble all python3 dependencies into a single `site-packages` to avoid doing recursive dependency collection
       # for each plugin.
       # This directory is only for python import search path, and will not slow down the startup time.
@@ -277,36 +271,30 @@ let
   }:
 
     let
-      /* pathogen mostly can set &rtp at startup time. Its used very commonly.
+      /* pathogen mostly can set &rtp at startup time. Deprecated.
       */
       pathogenImpl = let
         knownPlugins = pathogen.knownPlugins or vimPlugins;
 
         plugins = findDependenciesRecursively (map (pluginToDrv knownPlugins) pathogen.pluginNames);
 
-        pluginsEnv = buildEnv {
-          name = "pathogen-plugin-env";
-          paths = map (x: "${x}/${rtpPath}") plugins;
+        pathogenPackages.pathogen = lib.warn "'pathogen' attribute is deprecated. Use 'packages' instead in your vim configuration" {
+          start = plugins;
         };
       in
-      ''
-        let &rtp.=(empty(&rtp)?"":',')."${vimPlugins.vim-pathogen.rtp}"
-        execute pathogen#infect('${pluginsEnv}/{}')
-
-        filetype indent plugin on | syn on
-      '';
+        nativeImpl pathogenPackages;
 
       /* vim-plug is an extremely popular vim plugin manager.
       */
       plugImpl =
-      (''
+      ''
         source ${vimPlugins.vim-plug.rtp}/plug.vim
         silent! call plug#begin('/dev/null')
 
         '' + (lib.concatMapStringsSep "\n" (pkg: "Plug '${pkg.rtp}'") plug.plugins) + ''
 
         call plug#end()
-      '');
+      '';
 
       /*
        vim-addon-manager = VAM
@@ -454,8 +442,8 @@ rec {
 
           mkdir -p "$out/bin"
           for exe in ${
-            if standalone then "{,g,r,rg,e}vim {,g}vimdiff"
-            else "{,g,r,rg,e}{vim,view} {,g}vimdiff ex"
+            if standalone then "{,g,r,rg,e}vim {,g}vimdiff vi"
+            else "{,g,r,rg,e}{vim,view} {,g}vimdiff ex vi"
           }; do
             if [[ -e ${vim}/bin/$exe ]]; then
               dest="$out/bin/${executableName}"
@@ -542,15 +530,10 @@ rec {
     } ./neovim-require-check-hook.sh) {};
 
   inherit (import ./build-vim-plugin.nix {
-    inherit lib stdenv rtpPath vim vimGenDocHook vimCommandCheckHook neovimRequireCheckHook;
+    inherit lib stdenv rtpPath vim vimGenDocHook
+      toVimPlugin vimCommandCheckHook neovimRequireCheckHook;
   }) buildVimPlugin buildVimPluginFrom2Nix;
 
-
-  # TODO placeholder to ease working on automatic plugin detection
-  # this should be a luarocks "flat" install with appropriate vim hooks
-  buildNeovimPluginFrom2Nix = attrs: let drv = (buildVimPluginFrom2Nix attrs); in drv.overrideAttrs(oa: {
-    nativeBuildInputs = oa.nativeBuildInputs ++ [ neovimRequireCheckHook ];
-  });
 
   # used to figure out which python dependencies etc. neovim needs
   requiredPlugins = {
@@ -575,4 +558,21 @@ rec {
       nativePlugins = lib.concatMap ({start?[], opt?[], knownPlugins?vimPlugins}: start++opt) nativePluginsConfigs;
     in
       nativePlugins ++ nonNativePlugins;
+
+  toVimPlugin = drv:
+    drv.overrideAttrs(oldAttrs: {
+      # dont move the "doc" folder since vim expects it
+      forceShare = [ "man" "info" ];
+
+      nativeBuildInputs = oldAttrs.nativeBuildInputs or []
+      ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+        vimCommandCheckHook vimGenDocHook
+        # many neovim plugins keep using buildVimPlugin
+        neovimRequireCheckHook
+      ];
+
+      passthru = (oldAttrs.passthru or {}) // {
+        vimPlugin = true;
+      };
+    });
 }

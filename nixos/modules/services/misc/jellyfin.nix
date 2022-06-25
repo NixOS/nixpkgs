@@ -53,7 +53,10 @@ in
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = "jellyfin";
+        StateDirectoryMode = "0700";
         CacheDirectory = "jellyfin";
+        CacheDirectoryMode = "0700";
+        UMask = "0077";
         ExecStart = "${cfg.package}/bin/jellyfin --datadir '/var/lib/${StateDirectory}' --cachedir '/var/cache/${CacheDirectory}'";
         Restart = "on-failure";
 

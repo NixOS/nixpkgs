@@ -34,6 +34,6 @@ stdenv.mkDerivation {
     license = with licenses; [ gpl2 lgpl21 ];
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
-    broken = stdenv.isDarwin || python.isPy310;
+    broken = stdenv.isDarwin;
   };
 }

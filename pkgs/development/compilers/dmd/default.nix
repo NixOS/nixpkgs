@@ -109,6 +109,10 @@ stdenv.mkDerivation rec {
     rm dmd/test/runnable/gdb15729.sh
     rm dmd/test/runnable/gdb4149.d
     rm dmd/test/runnable/gdb4181.d
+
+    # Grep'd string changed with gdb 12
+    substituteInPlace druntime/test/exceptions/Makefile \
+      --replace 'in D main (' 'in _Dmain ('
   ''
 
   + lib.optionalString stdenv.isLinux ''
@@ -196,6 +200,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Official reference compiler for the D language";
     homepage = "https://dlang.org/";
     # Everything is now Boost licensed, even the backend.

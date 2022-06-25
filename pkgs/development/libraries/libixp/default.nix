@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ txt2tags ];
 
   meta = {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/0intro/libixp";
     description = "Portable, simple C-language 9P client and server libary";
     maintainers = with lib.maintainers; [ kovirobi ];

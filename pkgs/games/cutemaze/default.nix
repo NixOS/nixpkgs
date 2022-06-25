@@ -4,6 +4,8 @@
 , cmake
 , qttools
 , wrapQtAppsHook
+, qtbase
+, qtwayland
 , qtsvg
 }:
 
@@ -22,7 +24,11 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [ qtsvg ];
+  buildInputs = [
+    qtbase
+    qtwayland
+    qtsvg
+  ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
