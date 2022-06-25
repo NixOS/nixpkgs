@@ -143,8 +143,7 @@ with python.pkgs; buildPythonApplication rec {
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
 
     substituteInPlace setup.py \
-      --replace "wsproto==1.0.*" "wsproto" \
-      --replace "zeroconf==0.38.*" "zeroconf"
+      --replace 'uvicorn==%s" % ("0.17.*"' 'uvicorn==%s" % ("0.18.*"'
   '';
 
   meta = with lib; {
