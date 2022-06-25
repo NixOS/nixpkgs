@@ -2503,7 +2503,9 @@ with pkgs;
     buildGoModule = buildGo118Module;
   };
 
-  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
+  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix {
+    buildGoModule = buildGo118Module;
+  };
 
   gosca = callPackage ../development/tools/gosca { };
 
