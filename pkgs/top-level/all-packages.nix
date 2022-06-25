@@ -9469,6 +9469,8 @@ with pkgs;
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
+  pingu = callPackage ../tools/networking/pingu { };
+
   pinnwand = callPackage ../servers/pinnwand { };
 
   pinsel = callPackage ../tools/misc/pinsel { };
