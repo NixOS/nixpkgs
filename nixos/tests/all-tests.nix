@@ -5,6 +5,12 @@
   # the test runner: `config: config.test`.
   callTest,
 
+  # Function that adds attributes to the intermediate attrsets that lead
+  # up to the actual tests, ie the intermediate nodes of the test tree,
+  # uninstantiated test matrix, etc.
+  exposeIntermediateAttrs ?
+    attrs: {},
+
 }:
 # The return value of this function will be an attrset with arbitrary depth and
 # the `anything` returned by callTest at its test leafs.
@@ -45,15 +51,16 @@ let
 
   inherit
     (rec {
-      doRunTest = arg: ((import ../lib/testing-python.nix { inherit system pkgs; }).evalTest {
-        imports = [ arg ];
-      }).config.result;
+      doRunTest = arg: (import ../lib/testing-python.nix { inherit system pkgs; }).runTest {
+        imports = [ arg { inherit exposeIntermediateAttrs callTest; } ];
+      };
       findTests = tree:
         if tree?recurseForDerivations && tree.recurseForDerivations
         then
           mapAttrs
             (k: findTests)
             (builtins.removeAttrs tree ["recurseForDerivations"])
+          // exposeIntermediateAttrs tree
         else callTest tree;
 
       runTest = arg: let r = doRunTest arg; in findTests r;
