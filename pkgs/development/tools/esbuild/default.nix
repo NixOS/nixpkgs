@@ -19,6 +19,6 @@ buildGoModule rec {
     description = "An extremely fast JavaScript bundler";
     homepage = "https://esbuild.github.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ lucus16 ];
+    maintainers = with maintainers; [ lucus16 marsam ];
   };
 }
