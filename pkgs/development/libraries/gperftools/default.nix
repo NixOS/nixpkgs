@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gperftools";
-  version = "2.9.1";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "sha256-loUlC6mtR3oyS5opSmicCnfUqcefSk8+kKDcHNmC/oo=";
+    sha256 = "sha256-lUX9T31cYZEi+0DgF52EDSL9yiSHa8ToMxhpQFKHOGk=";
   };
 
   patches = [
