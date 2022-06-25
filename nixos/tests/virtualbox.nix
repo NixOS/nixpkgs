@@ -466,6 +466,8 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
   '';
 
   host-usb-permissions = ''
+    import sys
+
     user_usb = remove_uuids(vbm("list usbhost"))
     print(user_usb, file=sys.stderr)
     root_usb = remove_uuids(machine.succeed("VBoxManage list usbhost"))
