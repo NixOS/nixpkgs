@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mu";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner  = "djcb";
     repo   = "mu";
     rev    = "v${version}";
-    sha256 = "rb8R04eU/rG7PXx/horYk0+/3AgbxYYZtxy4ACILOZ8=";
+    sha256 = "dFYITyO9znocf9fv3eh2h83NM3RDYcpDV/uxOISChZo=";
   };
 
   postPatch = ''

@@ -6,17 +6,17 @@
 }:
 
 buildGoModule rec {
-  pname = "git-credential-gopass";
+  pname = "gopass-hibp";
   version = "1.14.3";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ggdQL8BU56zE5figmbfHKlZ7WGZ7z5nKunXTy3kn170=";
+    sha256 = "sha256-JwZZ2VaSD9xkLny5sFeku5rN4FitI1dyW56JSWPMagM=";
   };
 
-  vendorSha256 = "sha256-fwqkiPzrfo83NweuGONRx8+MOE4wQxg2Xk4/1kZwnCM=";
+  vendorSha256 = "sha256-YySkVWdfGIT5qz0jTGlLEHoO0vGY0iNZ/oG9IZCjwRE=";
 
   subPackages = [ "." ];
 
@@ -27,13 +27,13 @@ buildGoModule rec {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/git-credential-gopass --prefix PATH : "${lib.makeBinPath [ gopass ]}"
+    wrapProgram $out/bin/gopass-hibp --prefix PATH : "${lib.makeBinPath [ gopass ]}"
   '';
 
   meta = with lib; {
-    description = "Manage git credentials using gopass";
-    homepage = "https://github.com/gopasspw/git-credential-gopass";
+    description = "Gopass haveibeenpwnd.com integration";
+    homepage = "https://www.gopass.pw/";
     license = licenses.mit;
-    maintainers = with maintainers; [ benneti ];
+    maintainers = with maintainers; [ sikmir ];
   };
 }
