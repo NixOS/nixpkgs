@@ -36,6 +36,12 @@ in
       [ "services" "xserver" "desktopManager" "xfce" "extraSessionCommands" ]
       [ "services" "xserver" "displayManager" "sessionCommands" ])
     (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "xfce" "screenLock" ] "")
+
+    # added 2022-06-26
+    # thunar has its own module
+    (mkRenamedOptionModule
+      [ "services" "xserver" "desktopManager" "xfce" "thunarPlugins" ]
+      [ "programs" "thunar" "plugins" ])
   ];
 
   options = {
@@ -44,15 +50,6 @@ in
         type = types.bool;
         default = false;
         description = "Enable the Xfce desktop environment.";
-      };
-
-      thunarPlugins = mkOption {
-        default = [];
-        type = types.listOf types.package;
-        example = literalExpression "[ pkgs.xfce.thunar-archive-plugin ]";
-        description = ''
-          A list of plugin that should be installed with Thunar.
-        '';
       };
 
       noDesktop = mkOption {
@@ -110,8 +107,6 @@ in
       xfce4-settings
       xfce4-taskmanager
       xfce4-terminal
-
-      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
     ] # TODO: NetworkManager doesn't belong here
       ++ optional config.networking.networkmanager.enable networkmanagerapplet
       ++ optional config.powerManagement.enable xfce4-power-manager
@@ -129,6 +124,8 @@ in
         xfce4-panel
         xfdesktop
       ] ++ optional cfg.enableScreensaver xfce4-screensaver;
+
+    programs.thunar.enable = true;
 
     environment.pathsToLink = [
       "/share/xfce4"
@@ -170,7 +167,6 @@ in
 
     # Systemd services
     systemd.packages = with pkgs.xfce; [
-      (thunar.override { thunarPlugins = cfg.thunarPlugins; })
       xfce4-notifyd
     ];
 

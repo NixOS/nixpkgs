@@ -299,6 +299,18 @@
           as coreboot’s fork is no longer available.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          There is a new module for the <literal>thunar</literal>
+          program (the Xfce file manager), which depends on the
+          <literal>xfconf</literal> dbus service, and also has a dbus
+          service and a systemd unit. The option
+          <literal>services.xserver.desktopManager.xfce.thunarPlugins</literal>
+          has been renamed to
+          <literal>programs.thunar.plugins</literal>, and in a future
+          release it may be removed.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
