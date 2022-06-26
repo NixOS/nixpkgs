@@ -26,13 +26,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "gnome-todo";
+  pname = "endeavour";
   version = "unstable-2022-06-12";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "gnome-todo";
+    owner = "World";
+    repo = "Endeavour";
     rev = "ad4e15f0b58860caf8c6d497795b83b594a9c3e5";
     sha256 = "HRufLoZou9ssQ/qoDG8anhOAtl8IYvFpyjq/XJlsotQ=";
   };
@@ -82,13 +82,13 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = unstableGitUpdater {
-      url = "https://gitlab.gnome.org/GNOME/gnome-todo.git";
+      url = "https://gitlab.gnome.org/World/Endeavour.git";
     };
   };
 
   meta = with lib; {
     description = "Personal task manager for GNOME";
-    homepage = "https://wiki.gnome.org/Apps/Todo";
+    homepage = "https://gitlab.gnome.org/World/Endeavour";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
