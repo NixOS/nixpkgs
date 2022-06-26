@@ -2495,11 +2495,21 @@ with pkgs;
     buildGoModule = buildGo118Module;
   };
 
-  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix { };
+  gopass-hibp = callPackage ../tools/security/gopass/hibp.nix {
+    buildGoModule = buildGo118Module;
+  };
 
-  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix { };
+  gopass-jsonapi = callPackage ../tools/security/gopass/jsonapi.nix {
+    buildGoModule = buildGo118Module;
+  };
 
-  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix { };
+  git-credential-gopass = callPackage ../tools/security/gopass/git-credential.nix {
+    buildGoModule = buildGo118Module;
+  };
+
+  gopass-summon-provider = callPackage ../tools/security/gopass/summon.nix {
+    buildGoModule = buildGo118Module;
+  };
 
   gosca = callPackage ../development/tools/gosca { };
 
