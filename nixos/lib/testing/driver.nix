@@ -52,6 +52,7 @@ let
         nativeBuildInputs = [
           hostPkgs.makeWrapper
         ] ++ lib.optionals (!config.skipTypeCheck) [ hostPkgs.mypy ];
+        buildInputs = [ testDriver ];
         testScript = config.testScriptString;
         preferLocalBuild = true;
         passthru = config.passthru;
@@ -73,13 +74,10 @@ let
 
           cat -n testScriptWithTypes
 
-          # set pythonpath so mypy knows where to find the imports. this requires the py.typed file.
-          export PYTHONPATH='${../test-driver}'
           mypy  --no-implicit-optional \
                 --pretty \
                 --no-color-output \
                 testScriptWithTypes
-          unset PYTHONPATH
         ''}
 
         echo -n "$testScript" >> $out/test-script
