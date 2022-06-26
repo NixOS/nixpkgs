@@ -1218,6 +1218,7 @@ mapAliases ({
   retroArchCores = throw "retroArchCores has been removed. Please use overrides instead, e.g.: `retroarch.override { cores = with libretro; [ ... ]; }`"; # Added 2021-11-19
   retroshare06 = retroshare;
   rfkill = throw "rfkill has been removed, as it's included in util-linux"; # Added 2020-08-23
+  riak = throw "riak has been removed due to lack of maintainer to update the package"; # Added 2022-06-22
   riak-cs = throw "riak-cs is not maintained anymore"; # Added 2020-10-14
   rimshot = throw "rimshot has been removed, because it is broken and no longer maintained upstream"; # Added 2022-01-15
   ring-daemon = jami-daemon; # Added 2021-10-26
