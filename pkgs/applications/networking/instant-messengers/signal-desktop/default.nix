@@ -82,6 +82,7 @@ in stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     (lib.getLib systemd)
+    libappindicator-gtk3
     libnotify
     libdbusmenu
     xdg-utils
