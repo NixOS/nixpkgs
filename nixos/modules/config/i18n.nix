@@ -53,8 +53,18 @@ with lib;
 
       supportedLocales = mkOption {
         type = types.listOf types.str;
-        default = [ (config.i18n.defaultLocale + "/UTF-8") ];
-        defaultText = literalExpression "[ (config.i18n.defaultLocale + \"/UTF-8\") ]";
+        default = builtins.map (l: l + "/UTF-8")
+          (unique (
+            [ config.i18n.defaultLocale ] ++
+            (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
+          ));
+        defaultText = literalExpression ''
+          builtins.map (l: l + "/UTF-8")
+            (unique (
+              [ config.i18n.defaultLocale ] ++
+              (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
+            ))
+        '';
         example = ["en_US.UTF-8/UTF-8" "nl_NL.UTF-8/UTF-8" "nl_NL/ISO-8859-1"];
         description = ''
           List of locales that the system should support.  The value

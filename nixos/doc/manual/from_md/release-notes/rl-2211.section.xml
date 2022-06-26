@@ -192,10 +192,12 @@
       <listitem>
         <para>
           <literal>i18n.supportedLocales</literal> is now by default
-          only generated with the default locale set in
-          <literal>i18n.defaultLocale</literal>. This got copied over
-          from the minimal profile and reduces the final system size by
-          200MB. If you require all locales installed set the option to
+          only generated with the locales set in
+          <literal>i18n.defaultLocale</literal> and
+          <literal>i18n.extraLocaleSettings</literal>. This got
+          partially copied over from the minimal profile and reduces the
+          final system size by up to 200MB. If you require all locales
+          installed set the option to
           <literal>[ &quot;all&quot; ]</literal>.
         </para>
       </listitem>
