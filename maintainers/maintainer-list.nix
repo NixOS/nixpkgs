@@ -6520,6 +6520,12 @@
     githubId = 66669;
     name = "Jeff Zellner";
   };
+  k3a = {
+    email = "git+nix@catmail.app";
+    name = "Mario Hros";
+    github = "k3a";
+    githubId = 966992;
+  };
   k4leg = {
     name = "k4leg";
     email = "python.bogdan@gmail.com";
