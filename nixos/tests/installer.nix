@@ -324,6 +324,9 @@ let
             desktop-file-utils
             docbook5
             docbook_xsl_ns
+            (docbook-xsl-ns.override {
+              withManOptDedupPatch = true;
+            })
             kmod.dev
             libarchive.dev
             libxml2.bin
@@ -333,6 +336,7 @@ let
             perlPackages.ListCompare
             perlPackages.XMLLibXML
             python3Minimal
+            python3Packages.mistune
             shared-mime-info
             sudo
             texinfo
