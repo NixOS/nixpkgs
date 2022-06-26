@@ -4,6 +4,7 @@
 , fetchPypi
 , python
 , pythonOlder
+, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -11,7 +12,8 @@ buildPythonPackage rec {
   version = "3.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  # Supports Python 2.7 and 3.4+
+  disabled = isPy3k && pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
