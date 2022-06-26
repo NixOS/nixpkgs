@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "io-page";
-  version = "2.4.0";
+  version = "3.0.0";
 
-  minimalOCamlVersion = "4.02.3";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
-    sha256 = "sha256-gMr0AfnDifHM912TstgkI+Q0FxB1rAyb0Abfospt9EI=";
+    url = "https://github.com/mirage/${pname}/releases/download/v${version}/${pname}-${version}.tbz";
+    sha256 = "sha256-DjbKdNkFa6YQgJDLmLsuvyrweb4/TNvqAiggcj/3hu4=";
   };
 
   propagatedBuildInputs = [ cstruct bigarray-compat ];
