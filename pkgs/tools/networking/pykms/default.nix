@@ -52,6 +52,9 @@ pypkgs.buildPythonApplication rec {
 
     substituteInPlace pykms_DB2Dict.py \
       --replace "'KmsDataBase.xml'" "'$siteDir/KmsDataBase.xml'"
+
+    substituteInPlace Etrigan.py \
+      --replace 'from collections import Sequence' 'from collections.abc import Sequence'
   '';
 
   format = "other";
