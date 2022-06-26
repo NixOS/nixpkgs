@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/erikarvstedt/extra-container";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.earvstedt ];
+    maintainers = [ maintainers.erikarvstedt ];
   };
 }
