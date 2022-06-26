@@ -58,17 +58,18 @@ assert buildType == "release" || buildType == "debug";
 
 let
 
-  cargoDeps =
+  cargoDeps = finalAttrs:
     if cargoVendorDir != null then null
     else if cargoLock != null then importCargoLock cargoLock
     else fetchCargoTarball ({
-      inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
+      inherit (finalAttrs) src;
+      inherit srcs sourceRoot unpackPhase cargoUpdateHook;
       name = cargoDepsName;
       patches = cargoPatches;
-    } // lib.optionalAttrs (args ? cargoHash) {
-      hash = args.cargoHash;
-    } // lib.optionalAttrs (args ? cargoSha256) {
-      sha256 = args.cargoSha256;
+    } // lib.optionalAttrs (finalAttrs ? cargoHash) {
+      hash = finalAttrs.cargoHash;
+    } // lib.optionalAttrs (finalAttrs ? cargoSha256) {
+      sha256 = finalAttrs.cargoSha256;
     } // depsExtraArgs);
 
   # If we have a cargoSha256 fixed-output derivation, validate it at build time
@@ -97,10 +98,11 @@ in
 # See https://os.phil-opp.com/testing/ for more information.
 assert useSysroot -> !(args.doCheck or true);
 
-stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ]) // lib.optionalAttrs useSysroot {
+stdenv.mkDerivation (finalAttrs: ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "cargoLock" ]) // lib.optionalAttrs useSysroot {
   RUSTFLAGS = "--sysroot ${sysroot} " + (args.RUSTFLAGS or "");
 } // {
-  inherit buildAndTestSubdir cargoDeps;
+  inherit buildAndTestSubdir;
+  cargoDeps = cargoDeps finalAttrs;
 
   cargoBuildType = buildType;
 
@@ -150,10 +152,10 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   strictDeps = true;
 
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
+  passthru = { cargoDeps = cargoDeps finalAttrs; } // (args.passthru or {});
 
   meta = {
     # default to Rust's platforms
     platforms = rustc.meta.platforms;
   } // meta;
-})
+}))

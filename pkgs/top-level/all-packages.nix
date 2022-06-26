@@ -394,6 +394,24 @@ with pkgs;
 
   deadnix = callPackage ../development/tools/deadnix { };
 
+  deadnix1 = (deadnix.overrideAttrs (finalAttrs: previousAttrs: {
+    version = finalAttrs.src.rev;
+    src = fetchFromGitHub {
+      owner = "astro";
+      repo = "deadnix";
+      rev = "83c42cc64d190ecb72f5929eab0f64fe88e25dc4";
+      sha256 = "sha256-npyHYIJW7HyGIFpCZZK+t5JM/v2LsyFhAGJxX1DXO7E=";
+    };
+
+    cargoSha256 = "sha256-kZ4Bd0ba63QBHLAy7WwaR6KCZ3RwuPgp3h8+PKF9LQQ=";
+    # no longer necessary to override cargoDeps
+    #cargoDeps = previousAttrs.cargoDeps.overrideAttrs (lib.const {
+    #  name = "deadnix-vendor.tar.gz";
+    #  inherit (finalAttrs) src;
+    #  outputHash = "sha256-9U8cZ8+oa9n1kP3WgYSpk9deC3zBECH/YSTNA9e4jsc=";
+    #});
+  }));
+
   dsq = callPackage ../tools/misc/dsq { buildGoModule = buildGo118Module; };
 
   each = callPackage ../tools/text/each { };
