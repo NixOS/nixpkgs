@@ -32,9 +32,9 @@
     }
   },
   "dev": {
-    "version": "104.0.5112.12",
-    "sha256": "040xi7cwgxi1hahv8is088gma2cyz8xhsb62jfq5ahzjx2d93qp9",
-    "sha256bin64": "1av8wn3x7m9gixh8s0mv8w0hxlk80dh7y7x3fska5fjplf4x94ij",
+    "version": "104.0.5112.20",
+    "sha256": "0adzdk3m2l4pjlk82sqavwgxf6a5darbiwchmlrsxc58p9xxag4s",
+    "sha256bin64": "13p2w4wwd8ji5ydgz4x7w2q4rmn74w3z2fl999q7zaq1cra21pzd",
     "deps": {
       "gn": {
         "version": "2022-06-08",
