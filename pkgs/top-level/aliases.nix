@@ -1370,12 +1370,6 @@ mapAliases ({
   telepathy_qt5 = throw "'telepathy_qt5' has been renamed to/replaced by 'libsForQt5.telepathy'"; # Converted to throw 2022-02-22
   telnet = throw "'telnet' has been renamed to/replaced by 'inetutils'"; # Converted to throw 2022-02-22
   terminus = throw "terminus has been removed, it was unmaintained in nixpkgs"; # Added 2021-08-21
-  terraform-provider-ibm = throw "'terraform-provider-ibm' has been renamed to/replaced by 'terraform-providers.ibm'"; # Converted to throw 2022-02-22
-  terraform-provider-libvirt = throw "'terraform-provider-libvirt' has been renamed to/replaced by 'terraform-providers.libvirt'"; # Converted to throw 2022-02-22
-  terraform-provider-lxd = terraform-providers.lxd; # Added 2020-03-16
-  terraform_0_12 = throw "terraform_0_12 has been removed from nixpkgs on 2021/01";
-  terraform_1_0 = throw "terraform_1_0 has been renamed to terraform_1"; # Added 2021-12-08
-  terraform_1_0_0 = throw "terraform_1_0_0 has been renamed to terraform_1"; # Added 2021-06-15
   tesseract_4 = throw "'tesseract_4' has been renamed to/replaced by 'tesseract4'"; # Converted to throw 2022-02-22
   testVersion = testers.testVersion; # Added 2022-04-20
   invalidateFetcherByDrvHash = testers.invalidateFetcherByDrvHash; # Added 2022-05-05
