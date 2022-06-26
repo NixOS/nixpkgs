@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/phenax/bsp-layout";
     license = licenses.mit;
-    maintainers = with maintainers; [ devins2518 totoroot ];
+    maintainers = with maintainers; [ totoroot ];
     platforms = platforms.linux;
   };
 }
