@@ -45,11 +45,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.15.5";
+  version = "4.16.2";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "sha256-aRFeM4MZN7pRUb4CR5QxR3Za7OZYunQ/RHQWcq1o0X8=";
+    hash = "sha256-oLegbVs/0TjMe0lOAQrQtS49X6aEk6RGGaf5Z0Z/hZw=";
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
     bison
     flex
     perl
+    perl.pkgs.JSON
     perl.pkgs.ParseYapp
     libxslt
     buildPackages.stdenv.cc

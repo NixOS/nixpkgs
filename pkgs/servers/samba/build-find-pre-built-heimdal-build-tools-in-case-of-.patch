@@ -49,7 +49,7 @@ index 1c7801f705e..edcab15a88e 100644
 @@ -6,3 +6,14 @@ if not conf.env['BISON']:
 
  conf.define('USING_EMBEDDED_HEIMDAL', 1)
- conf.RECURSE('source4/heimdal_build')
+ conf.RECURSE('third_party/heimdal_build')
 +
 +def check_system_heimdal_binary(name):
 +    if conf.LIB_MAY_BE_BUNDLED(name):
