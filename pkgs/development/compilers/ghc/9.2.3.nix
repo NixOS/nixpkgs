@@ -101,6 +101,9 @@ let
   # build the haddock program (removing the `enableHaddockProgram` option).
   ''
     HADDOCK_DOCS = ${if enableHaddockProgram then "YES" else "NO"}
+    # Build haddocks for boot packages with hyperlinking
+    EXTRA_HADDOCK_OPTS += --hyperlinked-source --quickjump
+
     DYNAMIC_GHC_PROGRAMS = ${if enableShared then "YES" else "NO"}
     BIGNUM_BACKEND = ${if enableNativeBignum then "native" else "gmp"}
   '' + lib.optionalString (targetPlatform != hostPlatform) ''

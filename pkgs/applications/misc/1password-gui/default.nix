@@ -131,6 +131,7 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multi-platform password manager";
     homepage = "https://1password.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ timstott savannidgerinel maxeaubrey sebtm ];
     platforms = [ "x86_64-linux" ];

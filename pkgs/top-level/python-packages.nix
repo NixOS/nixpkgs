@@ -617,6 +617,8 @@ in {
 
   archinfo = callPackage ../development/python-modules/archinfo { };
 
+  archspec = callPackage ../development/python-modules/archspec { };
+
   area = callPackage ../development/python-modules/area { };
 
   arelle = callPackage ../development/python-modules/arelle {
@@ -1350,11 +1352,6 @@ in {
   # Build boost for this specific Python version
   # TODO: use separate output for libboost_python.so
   boost = toPythonModule (pkgs.boost.override {
-    inherit (self) python numpy;
-    enablePython = true;
-  });
-
-  boost169 = toPythonModule (pkgs.boost169.override {
     inherit (self) python numpy;
     enablePython = true;
   });
@@ -2737,7 +2734,7 @@ in {
 
   emailthreads = callPackage ../development/python-modules/emailthreads { };
 
-  email_validator = callPackage ../development/python-modules/email-validator { };
+  email-validator = callPackage ../development/python-modules/email-validator { };
 
   embrace = callPackage ../development/python-modules/embrace { };
 
@@ -4016,6 +4013,8 @@ in {
   howdoi = callPackage ../development/python-modules/howdoi { };
 
   hpack = callPackage ../development/python-modules/hpack { };
+
+  hpccm = callPackage ../development/python-modules/hpccm { };
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
 
@@ -6164,6 +6163,8 @@ in {
 
   oscrypto = callPackage ../development/python-modules/oscrypto { };
 
+  oscpy = callPackage ../development/python-modules/oscpy { };
+
   oset = callPackage ../development/python-modules/oset { };
 
   osmnx = callPackage ../development/python-modules/osmnx { };
@@ -7553,7 +7554,7 @@ in {
 
   pylaunches = callPackage ../development/python-modules/pylaunches { };
 
-  PyLD = callPackage ../development/python-modules/PyLD { };
+  pyld = callPackage ../development/python-modules/pyld { };
 
   pylev = callPackage ../development/python-modules/pylev { };
 
@@ -10010,6 +10011,8 @@ in {
 
   sphinx-autobuild = callPackage ../development/python-modules/sphinx-autobuild { };
 
+  sphinx-basic-ng = callPackage ../development/python-modules/sphinx-basic-ng { };
+
   sphinx-copybutton = callPackage ../development/python-modules/sphinx-copybutton { };
 
   sphinx-inline-tabs = callPackage ../development/python-modules/sphinx-inline-tabs { };
@@ -10285,6 +10288,8 @@ in {
   };
 
   tablib = callPackage ../development/python-modules/tablib { };
+
+  tabula-py = callPackage ../development/python-modules/tabula-py { };
 
   tabulate = callPackage ../development/python-modules/tabulate { };
 
@@ -10996,6 +11001,10 @@ in {
   validphys2 = callPackage ../development/python-modules/validphys2 { };
 
   vallox-websocket-api = callPackage ../development/python-modules/vallox-websocket-api { };
+
+  vapoursynth = callPackage ../development/python-modules/vapoursynth {
+    inherit (pkgs) vapoursynth;
+  };
 
   variants = callPackage ../development/python-modules/variants { };
 

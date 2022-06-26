@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GUI for managing Git and GitHub.";
     homepage = "https://desktop.github.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     maintainers = with maintainers; [ dan4ik605743 ];
     platforms = platforms.linux;

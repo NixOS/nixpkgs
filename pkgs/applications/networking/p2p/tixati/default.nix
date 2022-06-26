@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Torrent client";
     homepage = "http://www.tixati.com";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ volth ];

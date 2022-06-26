@@ -1,4 +1,12 @@
-{ lib, fetchFromGitHub, gobject-introspection, gtk3, gtksourceview3, webkitgtk, wrapGAppsHook, python3Packages }:
+{ lib
+, fetchFromGitHub
+, gobject-introspection
+, gtk3
+, gtksourceview3
+, webkitgtk
+, wrapGAppsHook
+, python3Packages
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
@@ -8,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CyYGTXdQsGpDR/gpqViEQO1xUPHaXTES592nRJixa1o=";
+    hash = "sha256-CyYGTXdQsGpDR/gpqViEQO1xUPHaXTES592nRJixa1o=";
   };
 
   buildInputs = [
@@ -20,9 +28,16 @@ python3Packages.buildPythonApplication rec {
     # any Pokemon, and clicking Stats and Moves tab.
     webkitgtk
   ];
-  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook
+  ];
+
   propagatedBuildInputs = with python3Packages; [
+    cairosvg
     natsort
+    ndspy
     packaging
     pycairo
     pygal
@@ -36,6 +51,7 @@ python3Packages.buildPythonApplication rec {
     skytemple-files
     skytemple-icons
     skytemple-ssb-debugger
+    tilequant
   ];
 
   doCheck = false; # there are no tests

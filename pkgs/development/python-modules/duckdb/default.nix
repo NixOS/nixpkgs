@@ -1,9 +1,11 @@
 { lib
 , buildPythonPackage
 , duckdb
+, google-cloud-storage
 , mypy
 , numpy
 , pandas
+, psutil
 , pybind11
 , setuptools-scm
 , pytestCheckHook
@@ -29,7 +31,9 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    google-cloud-storage
     mypy
+    psutil
     pytestCheckHook
   ];
 

@@ -334,6 +334,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Industry standard desktop hypervisor for x86-64 architecture";
     homepage = "https://www.vmware.com/products/workstation-pro.html";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ deinferno ];

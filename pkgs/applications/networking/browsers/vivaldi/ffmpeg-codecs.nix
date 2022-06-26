@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Additional support for proprietary codecs for Vivaldi";
     homepage    = "https://ffmpeg.org/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.lgpl21;
     maintainers = with maintainers; [ betaboon cawilliamson lluchs ];
     platforms   = [ "x86_64-linux" ];

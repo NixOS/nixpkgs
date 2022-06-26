@@ -141,7 +141,6 @@
   ./programs/cdemu.nix
   ./programs/cfs-zen-tweaks.nix
   ./programs/chromium.nix
-  ./programs/clickshare.nix
   ./programs/cnping.nix
   ./programs/command-not-found/command-not-found.nix
   ./programs/criu.nix
@@ -366,7 +365,6 @@
   ./services/databases/pgmanage.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
-  ./services/databases/riak.nix
   ./services/databases/victoriametrics.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
@@ -431,6 +429,7 @@
   ./services/games/terraria.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
+  ./services/hardware/argonone.nix
   ./services/hardware/auto-cpufreq.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/bolt.nix
@@ -516,6 +515,7 @@
   ./services/mail/rspamd.nix
   ./services/mail/rss2email.nix
   ./services/mail/roundcube.nix
+  ./services/mail/schleuder.nix
   ./services/mail/sympa.nix
   ./services/mail/nullmailer.nix
   ./services/matrix/appservice-discord.nix
@@ -894,6 +894,7 @@
   ./services/networking/redsocks.nix
   ./services/networking/resilio.nix
   ./services/networking/robustirc-bridge.nix
+  ./services/networking/routedns.nix
   ./services/networking/rpcbind.nix
   ./services/networking/rxe.nix
   ./services/networking/sabnzbd.nix

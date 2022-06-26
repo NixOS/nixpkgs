@@ -34,6 +34,7 @@
 , libmtp
 , liboggz
 , libopus
+, libplacebo
 , libpulseaudio
 , libraw1394
 , librsvg
@@ -123,6 +124,7 @@ stdenv.mkDerivation rec {
     libmtp
     liboggz
     libopus
+    libplacebo
     libpulseaudio
     libraw1394
     librsvg

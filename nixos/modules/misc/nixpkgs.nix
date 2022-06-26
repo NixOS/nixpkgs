@@ -55,9 +55,46 @@ let
     check = builtins.isAttrs;
   };
 
-  defaultPkgs = import ../../.. {
-    inherit (cfg) config overlays localSystem crossSystem;
-  };
+  hasBuildPlatform = opt.buildPlatform.highestPrio < (mkOptionDefault {}).priority;
+  hasHostPlatform = opt.hostPlatform.isDefined;
+  hasPlatform = hasHostPlatform || hasBuildPlatform;
+
+  # Context for messages
+  hostPlatformLine = optionalString hasHostPlatform "${showOptionWithDefLocs opt.hostPlatform}";
+  buildPlatformLine = optionalString hasBuildPlatform "${showOptionWithDefLocs opt.buildPlatform}";
+  platformLines = optionalString hasPlatform ''
+    Your system configuration configures nixpkgs with platform parameters:
+    ${hostPlatformLine
+    }${buildPlatformLine
+    }'';
+
+  legacyOptionsDefined =
+    optional (opt.localSystem.highestPrio < (mkDefault {}).priority) opt.system
+    ++ optional (opt.localSystem.highestPrio < (mkOptionDefault {}).priority) opt.localSystem
+    ++ optional (opt.crossSystem.highestPrio < (mkOptionDefault {}).priority) opt.crossSystem
+    ;
+
+  defaultPkgs =
+    if opt.hostPlatform.isDefined
+    then
+      let isCross = cfg.buildPlatform != cfg.hostPlatform;
+          systemArgs =
+            if isCross
+            then {
+              localSystem = cfg.buildPlatform;
+              crossSystem = cfg.hostPlatform;
+            }
+            else {
+              localSystem = cfg.hostPlatform;
+            };
+      in
+      import ../../.. ({
+        inherit (cfg) config overlays;
+      } // systemArgs)
+    else
+      import ../../.. {
+        inherit (cfg) config overlays localSystem crossSystem;
+      };
 
   finalPkgs = if opt.pkgs.isDefined then cfg.pkgs.appendOverlays cfg.overlays else defaultPkgs;
 
@@ -157,6 +194,46 @@ in
       '';
     };
 
+    hostPlatform = mkOption {
+      type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
+      example = { system = "aarch64-linux"; config = "aarch64-unknown-linux-gnu"; };
+      # Make sure that the final value has all fields for sake of other modules
+      # referring to this. TODO make `lib.systems` itself use the module system.
+      apply = lib.systems.elaborate;
+      defaultText = literalExpression
+        ''(import "''${nixos}/../lib").lib.systems.examples.aarch64-multiplatform'';
+      description = ''
+        Specifies the platform where the NixOS configuration will run.
+
+        To cross-compile, set also <code>nixpkgs.buildPlatform</code>.
+
+        Ignored when <code>nixpkgs.pkgs</code> is set.
+      '';
+    };
+
+    buildPlatform = mkOption {
+      type = types.either types.str types.attrs; # TODO utilize lib.systems.parsedPlatform
+      default = cfg.hostPlatform;
+      example = { system = "x86_64-linux"; config = "x86_64-unknown-linux-gnu"; };
+      # Make sure that the final value has all fields for sake of other modules
+      # referring to this.
+      apply = lib.systems.elaborate;
+      defaultText = literalExpression
+        ''config.nixpkgs.hostPlatform'';
+      description = ''
+        Specifies the platform on which NixOS should be built.
+        By default, NixOS is built on the system where it runs, but you can
+        change where it's built. Setting this option will cause NixOS to be
+        cross-compiled.
+
+        For instance, if you're doing distributed multi-platform deployment,
+        or if you're building machines, you can set this to match your
+        development system and/or build farm.
+
+        Ignored when <code>nixpkgs.pkgs</code> is set.
+      '';
+    };
+
     localSystem = mkOption {
       type = types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = { inherit (cfg) system; };
@@ -176,10 +253,13 @@ in
         deployment, or when building virtual machines. See its
         description in the Nixpkgs manual for more details.
 
-        Ignored when <code>nixpkgs.pkgs</code> is set.
+        Ignored when <code>nixpkgs.pkgs</code> or <code>hostPlatform</code> is set.
       '';
     };
 
+    # TODO deprecate. "crossSystem" is a nonsense identifier, because "cross"
+    #      is a relation between at least 2 systems in the context of a
+    #      specific build step, not a single system.
     crossSystem = mkOption {
       type = types.nullOr types.attrs; # TODO utilize lib.systems.parsedPlatform
       default = null;
@@ -193,7 +273,7 @@ in
         should be set as null, the default. See its description in the
         Nixpkgs manual for more details.
 
-        Ignored when <code>nixpkgs.pkgs</code> is set.
+        Ignored when <code>nixpkgs.pkgs</code> or <code>hostPlatform</code> is set.
       '';
     };
 
@@ -216,8 +296,7 @@ in
         </programlisting>
         See <code>nixpkgs.localSystem</code> for more information.
 
-        Ignored when <code>nixpkgs.localSystem</code> is set.
-        Ignored when <code>nixpkgs.pkgs</code> is set.
+        Ignored when <code>nixpkgs.pkgs</code>, <code>nixpkgs.localSystem</code> or <code>nixpkgs.hostPlatform</code> is set.
       '';
     };
   };
@@ -240,10 +319,23 @@ in
             else "nixpkgs.localSystem";
           pkgsSystem = finalPkgs.stdenv.targetPlatform.system;
         in {
-          assertion = nixosExpectedSystem == pkgsSystem;
+          assertion = !hasPlatform -> nixosExpectedSystem == pkgsSystem;
           message = "The NixOS nixpkgs.pkgs option was set to a Nixpkgs invocation that compiles to target system ${pkgsSystem} but NixOS was configured for system ${nixosExpectedSystem} via NixOS option ${nixosOption}. The NixOS system settings must match the Nixpkgs target system.";
         }
       )
+      {
+        assertion = hasPlatform -> legacyOptionsDefined == [];
+        message = ''
+          Your system configures nixpkgs with the platform parameter${optionalString hasBuildPlatform "s"}:
+          ${hostPlatformLine
+          }${buildPlatformLine
+          }
+          However, it also defines the legacy options:
+          ${concatMapStrings showOptionWithDefLocs legacyOptionsDefined}
+          For a future proof system configuration, we recommend to remove
+          the legacy definitions.
+        '';
+      }
     ];
   };
 

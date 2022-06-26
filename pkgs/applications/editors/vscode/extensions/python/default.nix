@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, vscode-utils, extractNuGet
+{ lib, stdenv, fetchurl, fetchpatch, vscode-utils, extractNuGet
 , icu, curl, openssl, liburcu, lttng-ust, autoPatchelfHook
 , python3, musl
 , pythonUseFixed ? false       # When `true`, the python default setting will be fixed to specified.
@@ -28,6 +28,17 @@ let
       url = "https://lttng.org/files/lttng-ust/lttng-ust-${version}.tar.bz2";
       sha256 = "0ddwk0nl28bkv2xb78gz16a2bvlpfbjmzwfbgwf5p1cq46dyvy86";
     };
+    patches = (oldAttrs.patches or []) ++ [
+      # Pull upstream fix for -fno-common toolchain. Without it build fails on
+      # upstream gcc-10 as:
+      #   ld: libustsnprintf.a(libustsnprintf_la-core.o):snprintf/core.c:23: multiple definition of
+      #     `ust_loglevel'; ustctl.o:liblttng-ust-ctl/ustctl.c:80: first defined here
+      (fetchpatch {
+        name = "fno-common.patch";
+        url = "https://github.com/lttng/lttng-ust/commit/21a934df4c683e73e0a66a9afca33573fcf9d789.patch";
+        sha256 = "122lw9rdmr80gmz7814235ibqs47c6pzvg0ryh01805x0cymx74z";
+      })
+    ];
   });
 
   pythonDefaultsTo = if pythonUseFixed then "${python3}/bin/python" else "python";

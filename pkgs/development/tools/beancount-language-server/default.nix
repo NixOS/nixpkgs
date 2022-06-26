@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "beancount-language-server";
-  version = "1.1.1";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "polarmutex";
     repo = "beancount-language-server";
     rev = "v${version}";
-    sha256 = "sha256-CkwNxamkErRo3svJNth2F8NSqlJNX+1S/srKu6Z+mX4=";
+    sha256 = "sha256-AbljduMz4mz5InsHKCq0K6i9F/lBgvdy0+W8aclr0R0=";
   };
 
-  cargoSha256 = "sha256-NTUs9ADTn+KoE08FikRHrdptZkrUqnjVIlcr8RtDvic=";
+  cargoSha256 = "sha256-jrxVMGJk4o9aROtFZBc8G/HP5xm9MjVyewww1DzrRdM=";
 
   doInstallCheck = true;
   postInstallCheck = ''

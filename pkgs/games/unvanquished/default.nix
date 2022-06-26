@@ -2,6 +2,7 @@
 , stdenv
 , fetchzip
 , fetchFromGitHub
+, fetchpatch
 , SDL2
 , buildFHSUserEnv
 , cmake
@@ -138,6 +139,24 @@ in stdenv.mkDerivation rec {
     cp -r ${unvanquished-binary-deps}/* daemon/external_deps/linux64-${binary-deps-version}/
     chmod +w -R daemon/external_deps/linux64-${binary-deps-version}/
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "fix-sdl-eventqueue-part1.patch";
+      url = "https://github.com/DaemonEngine/Daemon/commit/3a978c485f2a7e02c0bc5aeed2c7c4378026cb33.patch";
+      sha256 = "sha256-wVDscGf5zOOmivItNK913l0cfNFR6RpApewrxbmfG8s=";
+      stripLen = 1;
+      extraPrefix = "daemon/";
+    })
+    (fetchpatch {
+      name = "fix-sdl-eventqueue-part2.patch";
+      url = "https://github.com/DaemonEngine/Daemon/commit/54f98909c8871a57efb40263b215b81f22010b22.patch";
+      sha256 = "sha256-9qlyJnUEyZgFaclpXthKHm3qq+cW4E4LMOpLukcwBCU=";
+      stripLen = 1;
+      extraPrefix = "daemon/";
+      excludes = [ "*/CMakeLists.txt" ];
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

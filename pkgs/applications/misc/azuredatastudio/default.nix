@@ -166,6 +166,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ xavierzwirtz ];
     description = "A data management tool that enables working with SQL Server, Azure SQL DB and SQL DW";
     homepage = "https://docs.microsoft.com/en-us/sql/azure-data-studio/download-azure-data-studio";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
   };

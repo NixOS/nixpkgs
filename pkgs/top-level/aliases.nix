@@ -177,6 +177,7 @@ mapAliases ({
   cipherscan = throw "cipherscan was removed from nixpkgs, as it was unmaintained"; # added 2021-12-11
   citra = citra-nightly; # added 2022-05-17
   ckb = throw "'ckb' has been renamed to/replaced by 'ckb-next'"; # Converted to throw 2022-02-22
+  clickshare-csc1 = throw "'clickshare-csc1' has been removed as it requires qt4 which is being removed"; # Added 2022-06-16
   inherit (libsForQt5.mauiPackages) clip; # added 2022-05-17
   cpp-ipfs-api = cpp-ipfs-http-client; # Project has been renamed. Added 2022-05-15
   creddump = throw "creddump has been removed from nixpkgs as the upstream has abandoned the project"; # Added 2022-01-01
@@ -618,6 +619,7 @@ mapAliases ({
   iops = throw "iops was removed: upstream is gone"; # Added 2022-02-06
   iproute = iproute2; # moved from top-level 2021-03-14
   ipsecTools = throw "ipsecTools has benn removed, because it was no longer maintained upstream"; # Added 2021-12-15
+  itch-setup = throw "itch-setup has benn removed, use itch instead"; # Added 2022-06-02
 
   ### J ###
 
@@ -1216,6 +1218,7 @@ mapAliases ({
   retroArchCores = throw "retroArchCores has been removed. Please use overrides instead, e.g.: `retroarch.override { cores = with libretro; [ ... ]; }`"; # Added 2021-11-19
   retroshare06 = retroshare;
   rfkill = throw "rfkill has been removed, as it's included in util-linux"; # Added 2020-08-23
+  riak = throw "riak has been removed due to lack of maintainer to update the package"; # Added 2022-06-22
   riak-cs = throw "riak-cs is not maintained anymore"; # Added 2020-10-14
   rimshot = throw "rimshot has been removed, because it is broken and no longer maintained upstream"; # Added 2022-01-15
   ring-daemon = jami-daemon; # Added 2021-10-26
@@ -1367,12 +1370,9 @@ mapAliases ({
   telepathy_qt5 = throw "'telepathy_qt5' has been renamed to/replaced by 'libsForQt5.telepathy'"; # Converted to throw 2022-02-22
   telnet = throw "'telnet' has been renamed to/replaced by 'inetutils'"; # Converted to throw 2022-02-22
   terminus = throw "terminus has been removed, it was unmaintained in nixpkgs"; # Added 2021-08-21
-  terraform-provider-ibm = throw "'terraform-provider-ibm' has been renamed to/replaced by 'terraform-providers.ibm'"; # Converted to throw 2022-02-22
-  terraform-provider-libvirt = throw "'terraform-provider-libvirt' has been renamed to/replaced by 'terraform-providers.libvirt'"; # Converted to throw 2022-02-22
-  terraform-provider-lxd = terraform-providers.lxd; # Added 2020-03-16
-  terraform_0_12 = throw "terraform_0_12 has been removed from nixpkgs on 2021/01";
-  terraform_1_0 = throw "terraform_1_0 has been renamed to terraform_1"; # Added 2021-12-08
-  terraform_1_0_0 = throw "terraform_1_0_0 has been renamed to terraform_1"; # Added 2021-06-15
+  terraform_0_13 = throw "terraform_0_13 has been removed from nixpkgs"; # Added 2022-06-26
+  terraform_0_14 = throw "terraform_0_14 has been removed from nixpkgs"; # Added 2022-06-26
+  terraform_0_15 = throw "terraform_0_15 has been removed from nixpkgs"; # Added 2022-06-26
   tesseract_4 = throw "'tesseract_4' has been renamed to/replaced by 'tesseract4'"; # Converted to throw 2022-02-22
   testVersion = testers.testVersion; # Added 2022-04-20
   invalidateFetcherByDrvHash = testers.invalidateFetcherByDrvHash; # Added 2022-05-05

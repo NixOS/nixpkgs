@@ -4,11 +4,12 @@
 , fetchPypi
 , sphinx
 , beautifulsoup4
+, sphinx-basic-ng
 }:
 
 buildPythonPackage rec {
   pname = "furo";
-  version = "2022.4.7";
+  version = "2022.6.21";
   format = "wheel";
   disable = pythonOlder "3.6";
 
@@ -16,12 +17,13 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    sha256 = "sha256-fz49L7l3SDWQ+Oyyws1RG9gmYbecGO+yTelVi8nN8tc=";
+    sha256 = "sha256-Bhto4yM0Xif8ugJM8zoed/Pf2NmYdBC+gidJpwbirdY=";
   };
 
   propagatedBuildInputs = [
     sphinx
     beautifulsoup4
+    sphinx-basic-ng
   ];
 
   installCheckPhase = ''

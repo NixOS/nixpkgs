@@ -33,6 +33,65 @@
       </listitem>
       <listitem>
         <para>
+          The <literal>nixpkgs.hostPlatform</literal> and
+          <literal>nixpkgs.buildPlatform</literal> options have been
+          added. These cover and override the
+          <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
+          options.
+        </para>
+        <itemizedlist spacing="compact">
+          <listitem>
+            <para>
+              <literal>hostPlatform</literal> is the platform or
+              <quote><literal>system</literal></quote> string of the
+              NixOS system described by the configuration.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>buildPlatform</literal> is the platform that is
+              responsible for building the NixOS configuration. It
+              defaults to the <literal>hostPlatform</literal>, for a
+              non-cross build configuration. To cross compile, set
+              <literal>buildPlatform</literal> to a different value.
+            </para>
+          </listitem>
+        </itemizedlist>
+        <para>
+          The new options convey the same information, but with fewer
+          options, and following the Nixpkgs terminology.
+        </para>
+        <para>
+          The existing options
+          <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
+          have not been formally deprecated, to allow for evaluation of
+          the change and to allow for a transition period so that in
+          time the ecosystem can switch without breaking compatibility
+          with any supported NixOS release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>nixos-generate-config</literal> now generates
+          configurations that can be built in pure mode. This is
+          achieved by setting the new
+          <literal>nixpkgs.hostPlatform</literal> option.
+        </para>
+        <para>
+          You may have to unset the <literal>system</literal> parameter
+          in <literal>lib.nixosSystem</literal>, or similarly remove
+          definitions of the
+          <literal>nixpkgs.{system,localSystem,crossSystem}</literal>
+          options.
+        </para>
+        <para>
+          Alternatively, you can remove the
+          <literal>hostPlatform</literal> line and use NixOS like you
+          would in NixOS 22.05 and earlier.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP now defaults to PHP 8.1, updated from 8.0.
         </para>
       </listitem>
@@ -85,6 +144,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://schleuder.org/">schleuder</link>, a
+          mailing list manager with PGP support. Enable using
+          <link linkend="opt-services.schleuder.enable">services.schleuder</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://www.expressvpn.com">expressvpn</link>,
           the CLI client for ExpressVPN. Available as
           <link linkend="opt-services.expressvpn.enable">services.expressvpn</link>.
@@ -125,6 +191,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>i18n.supportedLocales</literal> is now by default
+          only generated with the default locale set in
+          <literal>i18n.defaultLocale</literal>. This got copied over
+          from the minimal profile and reduces the final system size by
+          200MB. If you require all locales installed set the option to
+          <literal>[ &quot;all&quot; ]</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>isPowerPC</literal> predicate, found on
           <literal>platform</literal> attrsets
           (<literal>hostPlatform</literal>,
@@ -148,8 +224,28 @@
       </listitem>
       <listitem>
         <para>
+          The Barco ClickShare driver/client package
+          <literal>pkgs.clickshare-csc1</literal> and the option
+          <literal>programs.clickshare-csc1.enable</literal> have been
+          removed, as it requires <literal>qt4</literal>, which reached
+          its end-of-life 2015 and will no longer be supported by
+          nixpkgs.
+          <link xlink:href="https://www.barco.com/de/support/knowledge-base/4380-can-i-use-linux-os-with-clickshare-base-units">According
+          to Barco</link> many of their base unit models can be used
+          with Google Chrome and the Google Cast extension.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP 7.4 is no longer supported due to upstream not supporting
           this version for the entire lifecycle of the 22.11 release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          riak package removed along with
+          <literal>services.riak</literal> module, due to lack of
+          maintainer to update the package.
         </para>
       </listitem>
       <listitem>
@@ -173,6 +269,14 @@
     <itemizedlist>
       <listitem>
         <para>
+          The <literal>xplr</literal> package has been updated from
+          0.18.0 to 0.19.0, which brings some breaking changes. See the
+          <link xlink:href="https://github.com/sayanarijit/xplr/releases/tag/v0.19.0">upstream
+          release notes</link> for more details.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           A new module was added for the Saleae Logic device family,
           providing the options
           <literal>hardware.saleae-logic.enable</literal> and
@@ -188,6 +292,12 @@
           restored multiple times). If your Synapse database already has
           duplicate rows in this table, this could fail with an error
           and require manual remediation.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>zfs</literal> was updated from 2.1.4 to 2.1.5,
+          enabling it to be used with Linux kernel 5.18.
         </para>
       </listitem>
       <listitem>
