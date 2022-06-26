@@ -1,18 +1,19 @@
-{ lib
+{ stdenv
+, lib
 , buildGoModule
 , fetchFromGitHub
 }:
 
 buildGoModule rec {
   pname = "boulder";
-  version = "release-2022-05-31";
-  rev = "99dcb9a5b31be576a55e33184581c942421bc172";
+  version = "2022-06-21";
+  rev = "09f87bb31a57f9a04932b7175fab1e3cabffd86f";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "boulder";
-    rev = version;
-    sha256 = "sha256-x1Vf8agwVTgSkDVEdAnG3div+MzRsMi96jKJRc2s8Ks=";
+    rev = "release-${version}";
+    sha256 = "sha256-Q5fMM3UXMFqmpJks1xnINeKBA7dDam4bfczO3D43Yoo=";
   };
 
   vendorSha256 = null;
@@ -47,5 +48,6 @@ buildGoModule rec {
     '';
     license = licenses.mpl20;
     maintainers = with maintainers; [ azahi ];
+    broken = stdenv.isDarwin;
   };
 }
