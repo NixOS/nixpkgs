@@ -1,6 +1,5 @@
 { lib, stdenv
-, fetchgit
-, unstableGitUpdater
+, fetchurl
 , callPackage
 }:
 
@@ -17,10 +16,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  passthru = {
-    tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
-    updateScript = unstableGitUpdater { };
-  };
+  passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
 
   meta = with lib; {
     homepage = "https://c9x.me/compile/";
