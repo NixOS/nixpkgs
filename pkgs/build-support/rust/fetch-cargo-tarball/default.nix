@@ -71,6 +71,8 @@ in stdenv.mkDerivation ({
 
     cargo vendor $name --respect-source-config | cargo-vendor-normalise > $CARGO_CONFIG
 
+    # Create an empty vendor directory when there is no dependency to vendor
+    mkdir -p $name
     # Add the Cargo.lock to allow hash invalidation
     cp Cargo.lock.orig $name/Cargo.lock
 
