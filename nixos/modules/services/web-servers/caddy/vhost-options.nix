@@ -40,9 +40,7 @@ in
 
         <emphasis>Note that this option does not create any certificates, nor
         does it add subdomains to existing ones – you will need to create them
-        manually using <xref linkend="opt-security.acme.certs"/>. Additionally,
-        you should probably add the <literal>caddy</literal> user to the
-        <literal>acme</literal> group to grant access to the certificates.</emphasis>
+        manually using <xref linkend="opt-security.acme.certs"/>.</emphasis>
       '';
     };
 

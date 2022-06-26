@@ -308,7 +308,6 @@ in
         StateDirectory = mkIf (cfg.dataDir == "/var/lib/caddy") [ "caddy" ];
         LogsDirectory = mkIf (cfg.logDir == "/var/log/caddy") [ "caddy" ];
         Restart = "on-abnormal";
-        SupplementaryGroups = mkIf (length acmeVHosts != 0) [ "acme" ];
 
         # TODO: attempt to upstream these options
         NoNewPrivileges = true;
@@ -331,9 +330,12 @@ in
 
     security.acme.certs =
       let
-        reloads = map (useACMEHost: nameValuePair useACMEHost { reloadServices = [ "caddy.service" ]; }) acmeHosts;
+        certCfg = map (useACMEHost: nameValuePair useACMEHost {
+          group = mkDefault cfg.group;
+          reloadServices = [ "caddy.service" ];
+        }) acmeHosts;
       in
-        listToAttrs reloads;
+        listToAttrs certCfg;
 
   };
 }
