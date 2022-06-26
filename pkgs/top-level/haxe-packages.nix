@@ -59,6 +59,13 @@ let
         } // attrs.meta;
       });
 
+    format = buildHaxeLib {
+      libname = "format";
+      version = "3.5.0";
+      sha256 = "sha256-5vZ7b+P74uGx0Gb7X/+jbsx5048dO/jv5nqCDtw5y/A=";
+      meta.description = "A Haxe Library for supporting different file formats";
+    };
+
     hxcpp = buildHaxeLib rec {
       libname = "hxcpp";
       version = "4.1.15";
