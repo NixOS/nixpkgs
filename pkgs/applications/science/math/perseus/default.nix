@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     '';
     homepage = "http://people.maths.ox.ac.uk/nanda/perseus/index.html";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ erikryb mrbitt ];
+    maintainers = with lib.maintainers; [ erikryb ];
     platforms = lib.platforms.linux;
   };
 }
