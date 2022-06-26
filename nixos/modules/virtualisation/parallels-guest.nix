@@ -4,6 +4,7 @@ with lib;
 
 let
   prl-tools = config.hardware.parallels.package;
+  aarch64 = pkgs.stdenv.hostPlatform.system == "aarch64-linux";
 in
 
 {
@@ -45,8 +46,11 @@ in
 
   config = mkIf config.hardware.parallels.enable {
     services.xserver = {
-      drivers = singleton
-        { name = "prlvideo"; modules = [ prl-tools ]; };
+      drivers = [
+        { name = "prlvideo"; modules = [ prl-tools ]; display = true; }
+        { name = "prlvidel"; modules = [ prl-tools ]; display = true; }
+        { name = "prlvidex"; modules = [ prl-tools ]; display = true; }
+      ];
 
       screenSection = ''
         Option "NoMTRR"
@@ -72,7 +76,7 @@ in
 
     boot.extraModulePackages = [ prl-tools ];
 
-    boot.kernelModules = [ "prl_tg" "prl_eth" "prl_fs" "prl_fs_freeze" ];
+    boot.kernelModules = [ "prl_tg" "prl_eth" "prl_fs" "prl_fs_freeze" ] ++ optional aarch64 "prl_notifier";
 
     services.timesyncd.enable = false;
 
