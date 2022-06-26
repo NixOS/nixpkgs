@@ -8,6 +8,8 @@ let
     "ghc8102BinaryMinimal"
     "ghc8107Binary"
     "ghc8107BinaryMinimal"
+    "ghc922Binary"
+    "ghc922BinaryMinimal"
     "ghcjs"
     "ghcjs810"
     "integer-simple"
@@ -72,6 +74,14 @@ in {
     };
 
     ghc8107BinaryMinimal = callPackage ../development/compilers/ghc/8.10.7-binary.nix {
+      llvmPackages = pkgs.llvmPackages_12;
+      minimal = true;
+    };
+
+    ghc922Binary = callPackage ../development/compilers/ghc/9.2.2-binary.nix {
+      llvmPackages = pkgs.llvmPackages_12;
+    };
+    ghc922BinaryMinimal = callPackage ../development/compilers/ghc/9.2.2-binary.nix {
       llvmPackages = pkgs.llvmPackages_12;
       minimal = true;
     };
@@ -210,6 +220,18 @@ in {
       buildHaskellPackages = bh.packages.ghc8107BinaryMinimal;
       ghc = bh.compiler.ghc8107BinaryMinimal;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc922Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc922Binary;
+      ghc = bh.compiler.ghc922Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc922BinaryMinimal = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc922BinaryMinimal;
+      ghc = bh.compiler.ghc922BinaryMinimal;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc884 = callPackage ../development/haskell-modules {
