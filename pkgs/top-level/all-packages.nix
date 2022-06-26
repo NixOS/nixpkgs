@@ -7727,6 +7727,10 @@ with pkgs;
 
   lnch = callPackage ../tools/misc/lnch { };
 
+  lnx = callPackage ../servers/search/lnx {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
+  };
+
   loadlibrary = callPackage ../tools/misc/loadlibrary { };
 
   loc = callPackage ../development/misc/loc { };
@@ -29089,6 +29093,8 @@ with pkgs;
   vivaldi-widevine = callPackage ../applications/networking/browsers/vivaldi/widevine.nix { };
 
   libopenmpt = callPackage ../development/libraries/audio/libopenmpt { };
+
+  libopenmpt-modplug = callPackage ../development/libraries/audio/libopenmpt-modplug { };
 
   openrazer-daemon = with python3Packages; toPythonApplication openrazer-daemon;
 
