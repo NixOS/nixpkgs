@@ -916,7 +916,6 @@ in {
             priority = 100;
             extraConfig = ''
               allow all;
-              log_not_found off;
               access_log off;
             '';
           };
