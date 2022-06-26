@@ -89,7 +89,8 @@ in {
     };
     datadir = mkOption {
       type = types.str;
-      defaultText = "config.services.nextcloud.home";
+      default = config.services.nextcloud.home;
+      defaultText = literalExpression "config.services.nextcloud.home";
       description = ''
         Data storage path of nextcloud.  Will be <xref linkend="opt-services.nextcloud.home" /> by default.
         This folder will be populated with a config.php and data folder which contains the state of the instance (excl the database).";
@@ -628,8 +629,6 @@ in {
           else if versionOlder stateVersion "22.05" then nextcloud22
           else nextcloud24
         );
-
-      services.nextcloud.datadir = mkOptionDefault config.services.nextcloud.home;
 
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "24" then pkgs.php80
