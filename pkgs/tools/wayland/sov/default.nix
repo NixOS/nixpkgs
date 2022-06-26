@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6FdZ3UToeIAARxrOqSWBX+ALrlr4s2J0bj9c3l9ZTyQ=";
   };
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace src/sov/main.c --replace '/usr' $out
   '';
   nativeBuildInputs = [ meson pkg-config wayland-scanner ninja ];
