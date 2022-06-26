@@ -13,7 +13,9 @@ stdenv.mkDerivation {
   };
 
   sourceRoot = ".";
+  
   NIX_CFLAGS_COMPILE = [ "-std=c++14" ];  # Otherwise it does not compile 
+  
   buildPhase = ''
     g++ Pers.cpp -O3 -fpermissive -o perseus
   '';
