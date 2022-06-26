@@ -66,6 +66,13 @@ let
       meta.description = "A Haxe Library for supporting different file formats";
     };
 
+    heaps = buildHaxeLib {
+      libname = "heaps";
+      version = "1.9.1";
+      sha256 = "sha256-i5EIKnph80eEEHvGXDXhIL4t4+RW7OcUV5zb2f3ItlI=";
+      meta.description = "The GPU Game Framework";
+    };
+
     hlopenal = buildHaxeLib {
       libname = "hlopenal";
       version = "1.5.0";
