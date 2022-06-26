@@ -254,7 +254,7 @@ nixBuild() {
 
 nixFlakeBuild() {
     logVerbose "Building in flake mode."
-    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot ]]
+    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot && "$action" != test && "$action" != dry-activate ]]
     then
         runCmd nix "${flakeFlags[@]}" build "$@"
         readlink -f ./result
