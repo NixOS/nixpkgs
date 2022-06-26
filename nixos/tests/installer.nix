@@ -324,6 +324,9 @@ let
             desktop-file-utils
             docbook5
             docbook_xsl_ns
+            (docbook-xsl-ns.override {
+              withManOptDedupPatch = true;
+            })
             kmod.dev
             libarchive.dev
             libxml2.bin
