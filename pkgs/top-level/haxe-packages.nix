@@ -73,6 +73,13 @@ let
       meta.description = "OpenAL support for Haxe/HL";
     };
 
+    hlsdl = buildHaxeLib {
+      libname = "hlsdl";
+      version = "1.10.0";
+      sha256 = "sha256-kmC2EMDy1mv0jFjwDj+m0CUvKal3V7uIGnMxJBRYGms=";
+      meta.description = "SDL/GL support for Haxe/HL";
+    };
+
     hxcpp = buildHaxeLib rec {
       libname = "hxcpp";
       version = "4.1.15";
