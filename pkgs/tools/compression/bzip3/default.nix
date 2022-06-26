@@ -2,11 +2,12 @@
 , stdenv
 , fetchFromGitHub
 , autoreconfHook
+, pkg-config
 }:
 
 stdenv.mkDerivation rec {
   pname = "bzip3";
-  version = "1.1.3";
+  version = "1.1.4";
 
   outputs = [ "bin" "dev" "out" ];
 
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "kspalaiologos";
     repo = "bzip3";
     rev = version;
-    hash = "sha256-puGtaL76p4BzSiTPf3qFgXN4pz90CDU9dziGIszk3to=";
+    hash = "sha256-rbJUvFm8WYgQLNpbX6kcXb5qAGAJfylTo4HgOvZVCu8=";
   };
 
   postPatch = ''
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+    pkg-config
   ];
 
   configureFlags = [
