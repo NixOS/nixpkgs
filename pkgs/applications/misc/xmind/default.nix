@@ -1,25 +1,31 @@
-{ stdenv, lib, fetchzip, fetchurl, gtk2, jre, libXtst, makeWrapper, makeDesktopItem, runtimeShell }:
+{ lib,
+  stdenv,
+  fetchzip,
+  gtk2,
+  jre8,
+  libXtst,
+  copyDesktopItems,
+  makeWrapper,
+  makeDesktopItem,
+  runtimeShell,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xmind";
-  version = "8-update8";
+  version = "8-update9";
 
   src = fetchzip {
     url = "https://xmind.net/xmind/downloads/${pname}-${version}-linux.zip";
     stripRoot = false;
-    sha256 = "1p68z0b4brgiyybz190alqv716ncql49vsksm41y90mcjd8s4jhn";
-  };
-
-  srcIcon = fetchurl {
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/xmind.png?h=xmind";
-    sha256 = "0jxq2fiq69q9ly0m6hx2qfybqad22sl42ciw636071khpqgc885f";
+    sha256 = "sha256-l2nEqdQtM3DtLC0b7VpdePH8PcW9YEsGS1YQH8f5C7Q=";
   };
 
   preferLocalBuild = true;
 
   patches = [ ./java-env-config-fixes.patch ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper unzip ];
 
   dontBuild = true;
   dontPatchELF = true;
@@ -27,27 +33,37 @@ stdenv.mkDerivation rec {
 
   libPath = lib.makeLibraryPath [ gtk2 libXtst ];
 
-  desktopItem = makeDesktopItem {
-    name = "XMind";
-    exec = "XMind";
-    icon = "xmind";
-    desktopName = "XMind";
-    comment = meta.description;
-    categories = [ "Office" ];
-    mimeTypes = [ "application/xmind" "x-scheme-handler/xmind" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "XMind";
+      exec = "XMind";
+      icon = "xmind";
+      desktopName = "XMind";
+      comment = meta.description;
+      categories = [ "Office" ];
+      mimeTypes = [ "application/xmind" "x-scheme-handler/xmind" ];
+    })
+  ];
 
   installPhase = let
     targetDir = if stdenv.hostPlatform.system == "i686-linux"
       then "XMind_i386"
       else "XMind_amd64";
   in ''
-    mkdir -p $out/{bin,libexec/configuration/,share/{applications/,fonts/,icons/hicolor/scalable/apps/}}
+    runHook preInstall
+
+    mkdir -p $out/{bin,libexec/configuration,share/fonts}
     cp -r ${targetDir}/{configuration,p2,XMind{,.ini}} $out/libexec
     cp -r {plugins,features} $out/libexec/
     cp -r fonts $out/share/fonts/
-    cp "${desktopItem}/share/applications/XMind.desktop" $out/share/applications/XMind.desktop
-    cp ${srcIcon} $out/share/icons/hicolor/scalable/apps/xmind.png
+
+    for size in 16 32 48 64 128 256; do
+      cathy=$(find plugins -name "org.xmind.cathy_*.jar" | head)
+      out_dir=$out/share/icons/hicolor/"$size"x"$size"
+      mkdir -p $out_dir
+      unzip -j $cathy icons/xmind.$size.png -d $out_dir
+      mv $out_dir/xmind.$size.png $out_dir/xmind.png
+    done
 
     patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       $out/libexec/XMind
@@ -67,7 +83,9 @@ stdenv.mkDerivation rec {
     EOF
     chmod +x $out/bin/XMind
 
-    ln -s ${jre} $out/libexec/jre
+    ln -s ${jre8} $out/libexec/jre
+
+    runHook postInstall
   '';
 
   meta = with lib; {
