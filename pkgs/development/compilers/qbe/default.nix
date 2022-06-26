@@ -6,12 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qbe";
-  version = "unstable-2022-04-11";
+  version = "1.0";
 
-  src = fetchgit {
-    url = "git://c9x.me/qbe.git";
-    rev = "2caa26e388b1c904d2f12fb09f84df7e761d8331";
-    sha256 = "sha256-TNKHKX/PbrNIQJ+Q50KemfcigEBKe7gmJzTjB6ofYL8=";
+  src = fetchurl {
+    url = "https://c9x.me/compile/release/qbe-${version}.tar.xz";
+    sha256 = "257ef3727c462795f8e599771f18272b772beb854aacab97e0fda70c13745e0c";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -31,3 +30,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
+
