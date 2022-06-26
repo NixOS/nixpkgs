@@ -3,17 +3,8 @@
   pkgs ? import ../.. { inherit system config; },
   debug ? false,
   enableUnfree ? false,
-  # Nested KVM virtualization (https://www.linux-kvm.org/page/Nested_Guests)
-  # requires a modprobe flag on the build machine: (kvm-amd for AMD CPUs)
-  #   boot.extraModprobeConfig = "options kvm-intel nested=Y";
-  # Without this VirtualBox will use SW virtualization and will only be able
-  # to run 32-bit guests.
-  useKvmNestedVirt ? false,
-  # Whether to run 64-bit guests instead of 32-bit. Requires nested KVM.
-  use64bitGuest ? false
+  use64bitGuest ? true
 }:
-
-assert use64bitGuest -> useKvmNestedVirt;
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
@@ -359,8 +350,7 @@ let
         vmConfigs = mapAttrsToList mkVMConf vms;
       in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
-      virtualisation.qemu.options =
-        if useKvmNestedVirt then ["-cpu" "kvm64,vmx=on"] else [];
+      virtualisation.qemu.options = ["-cpu" "kvm64,vmx=on"];
       virtualisation.virtualbox.host.enable = true;
       test-support.displayManager.auto.user = "alice";
       users.users.alice.extraGroups = let
