@@ -649,6 +649,7 @@ in {
 
     { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
+        after = [ "nextcloud-setup.service" ];
         timerConfig.OnBootSec = "5m";
         timerConfig.OnUnitActiveSec = "5m";
         timerConfig.Unit = "nextcloud-cron.service";
@@ -839,12 +840,14 @@ in {
           serviceConfig.User = "nextcloud";
         };
         nextcloud-cron = {
+          after = [ "nextcloud-setup.service" ];
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
           serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${cfg.package}/cron.php";
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
+          after = [ "nextcloud-setup.service" ];
           serviceConfig.Type = "oneshot";
           serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
           serviceConfig.User = "nextcloud";
