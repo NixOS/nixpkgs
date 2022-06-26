@@ -32073,6 +32073,8 @@ with pkgs;
     wine = wineWowPackages.unstable;
   };
 
+  graphwar = callPackage ../games/graphwar { };
+
   gtetrinet = callPackage ../games/gtetrinet {
     inherit (gnome2) GConf libgnome libgnomeui;
   };
