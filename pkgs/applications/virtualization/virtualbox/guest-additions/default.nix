@@ -159,6 +159,6 @@ in stdenv.mkDerivation rec {
     license = "GPL";
     maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.linux;
-    broken = kernel.kernelAtLeast "5.17";
+    broken = kernel.kernelAtLeast (if stdenv.hostPlatform.is32bit then "5.10" else "5.17");
   };
 }
