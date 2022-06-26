@@ -66,6 +66,13 @@ let
       meta.description = "A Haxe Library for supporting different file formats";
     };
 
+    hlopenal = buildHaxeLib {
+      libname = "hlopenal";
+      version = "1.5.0";
+      sha256 = "sha256-mJWFGBJPPAhVwsB2HzMfk4szSyjMT4aw543YhVqIan4=";
+      meta.description = "OpenAL support for Haxe/HL";
+    };
+
     hxcpp = buildHaxeLib rec {
       libname = "hxcpp";
       version = "4.1.15";
