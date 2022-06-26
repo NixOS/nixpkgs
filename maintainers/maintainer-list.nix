@@ -14392,4 +14392,10 @@
     github = "melias122";
     githubId = 1027766;
   };
+  Soupstraw = {
+    name = "Joosep Jääger";
+    email = "joosep.jaager@gmail.com";
+    github = "Soupstraw";
+    githubId = 6863341;
+  };
 }
