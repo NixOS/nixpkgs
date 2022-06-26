@@ -196,6 +196,6 @@ py.pkgs.pythonPackages.buildPythonApplication rec {
     description = "A supercharged version of paperless: scan, index, and archive all of your physical documents";
     homepage = "https://paperless-ngx.readthedocs.io/en/latest/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ lukegb gador earvstedt ];
+    maintainers = with maintainers; [ lukegb gador erikarvstedt ];
   };
 }

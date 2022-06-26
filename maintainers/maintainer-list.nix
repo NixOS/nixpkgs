@@ -3518,7 +3518,7 @@
     githubId = 424946;
     name = "James Earl Douglas";
   };
-  earvstedt = {
+  erikarvstedt = {
     email = "erik.arvstedt@gmail.com";
     matrix = "@erikarvstedt:matrix.org";
     github = "erikarvstedt";

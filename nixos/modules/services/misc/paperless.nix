@@ -83,7 +83,7 @@ let
   };
 in
 {
-  meta.maintainers = with maintainers; [ earvstedt Flakebi ];
+  meta.maintainers = with maintainers; [ erikarvstedt Flakebi ];
 
   imports = [
     (mkRenamedOptionModule [ "services" "paperless-ng" ] [ "services" "paperless" ])
