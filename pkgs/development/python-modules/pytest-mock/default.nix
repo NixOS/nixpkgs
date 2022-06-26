@@ -1,6 +1,5 @@
 { lib
 , buildPythonPackage
-, fetchpatch
 , fetchPypi
 , pytest
 , pytest-asyncio
@@ -10,20 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.7.0";
+  version = "3.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-URK9ksyfGG7pbhqS78hJaepJSTnDrq05xQ9CHEzGlTQ=";
+    hash = "sha256-LG11bV07+Y4ugHl6lZyn+B9Hnn0fX1cWEbD91tF0UkA=";
   };
-
-  patches = [
-    (fetchpatch {
-      # pytest7 compatbilitya
-      url = "https://github.com/pytest-dev/pytest-mock/commit/0577f1ad051fb8d0da94ea22dcb02346d74064b2.patch";
-      hash = "sha256-eim4v7U8Mjigr462bXI0pKH/M0ANBzSRc0lT4RpbZ0w=";
-    })
-  ];
 
   nativeBuildInputs = [ setuptools-scm ];
 
