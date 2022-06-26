@@ -5,7 +5,7 @@
 , guileBindings ? config.gnutls.guile or false, guile
 , tpmSupport ? false, trousers, which, nettools, libunistring
 , withP11-kit ? !stdenv.hostPlatform.isStatic, p11-kit
-, withSecurity ? false, Security  # darwin Security.framework
+, withSecurity ? true, Security  # darwin Security.framework
 # certificate compression - only zlib now, more possible: zstd, brotli
 }:
 

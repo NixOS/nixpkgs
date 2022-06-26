@@ -65,11 +65,6 @@ stdenv.mkDerivation rec {
     patchShebangs build-aux/meson/postinstall.py
   '';
 
-  mesonFlags = [
-    # TODO: https://github.com/NixOS/nixpkgs/issues/36468
-    "-Dc_args=-I${glib.dev}/include/gio-unix-2.0"
-  ];
-
   postInstall = ''
     cp ${src}/data/icons/*.svg $out/share/icons/hicolor/scalable/apps/
     cp ${src}/data/icons/*.svg $out/share/icons/hicolor/symbolic/apps/
