@@ -11002,6 +11002,10 @@ in {
 
   vallox-websocket-api = callPackage ../development/python-modules/vallox-websocket-api { };
 
+  vapoursynth = callPackage ../development/python-modules/vapoursynth {
+    inherit (pkgs) vapoursynth;
+  };
+
   variants = callPackage ../development/python-modules/variants { };
 
   varint = callPackage ../development/python-modules/varint { };

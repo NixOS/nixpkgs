@@ -365,7 +365,6 @@
   ./services/databases/pgmanage.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
-  ./services/databases/riak.nix
   ./services/databases/victoriametrics.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix

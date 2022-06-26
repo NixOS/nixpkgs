@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, writeScript, makeWrapper, ncurses, libX11 }:
+{ pkgs, lib, stdenv, fetchFromGitHub, writeScript, makeWrapper, ncurses, libX11 }:
 
 let
   setup = writeScript "setup" ''
@@ -46,6 +46,13 @@ in stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    saveDirCreation = pkgs.runCommand "save-dir-creation" {} ''
+      HOME=$(pwd) ${lib.getExe pkgs.sil-q} --help
+      test -d .sil && touch $out
+    '';
+  };
 
   meta = {
     description = "A roguelike game set in the First Age of Middle-earth";

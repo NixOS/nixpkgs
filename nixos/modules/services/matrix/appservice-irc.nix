@@ -153,6 +153,9 @@ in {
     systemd.services.matrix-appservice-irc = {
       description = "Matrix-IRC bridge";
       before = [ "matrix-synapse.service" ]; # So the registration can be used by Synapse
+      after = lib.optionals (cfg.settings.database.engine == "postgres") [
+        "postgresql.service"
+      ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
