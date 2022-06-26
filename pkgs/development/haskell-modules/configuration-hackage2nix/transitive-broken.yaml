@@ -3810,6 +3810,7 @@ dont-distribute-packages:
  - test-simple
  - testbench
  - text-all
+ - text-builder-dev_0_3_3
  - text-generic-pretty
  - text-json-qq
  - text-locale-encoding
