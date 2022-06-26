@@ -11088,6 +11088,11 @@
     githubId = 61306;
     name = "Rene Treffer";
   };
+  rudraveermandal = {
+    name = "Rudraveer Mandal";
+    email = "0xrudraveermandal@gmail.com";
+    github = "RudraveerMandal";
+  };
   rushmorem = {
     email = "rushmore@webenchanter.com";
     github = "rushmorem";
@@ -14061,12 +14066,6 @@
     github = "yuriaisaka";
     githubId = 687198;
     name = "Yuri Aisaka";
-  };
-  yurkobb = {
-    name = "Yury Bulka";
-    email = "setthemfree@privacyrequired.com";
-    github = "yurkobb";
-    githubId = 479389;
   };
   yurrriq = {
     email = "eric@ericb.me";
