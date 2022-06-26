@@ -11,8 +11,10 @@
 , xdg-utils
 , which
 
-, jackSupport ? true, libjack2
-, pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
+, jackSupport ? true
+, jackLibrary
+, pulseaudioSupport ? config.pulseaudio or true
+, libpulseaudio
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
   runtimeDependencies = [
     gtk3 # libSwell needs libgdk-3.so.0
   ]
-  ++ lib.optional jackSupport libjack2
+  ++ lib.optional jackSupport jackLibrary
   ++ lib.optional pulseaudioSupport libpulseaudio;
 
   dontBuild = true;
@@ -79,6 +81,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ jfrankenau ilian orivej uniquepointer ];
+    maintainers = with maintainers; [ jfrankenau ilian orivej uniquepointer viraptor ];
   };
 }
