@@ -27,6 +27,7 @@ import ./make-test-python.nix (
         };
       };
     testScript = ''
+      import os
       start_all()
 
       # Create a fake cache with Nginx service the static files
@@ -41,7 +42,7 @@ import ./make-test-python.nix (
       drvHash = drvName.split("-")[0]
       server.wait_for_unit("nar-serve.service")
       server.succeed(
-          "curl -o hello -f http://localhost:8383/nix/store/{}/bin/hello".format(drvHash)
+          "curl -o hello -f http://localhost:8383/{}/bin/hello".format(drvHash)
       )
     '';
   }
