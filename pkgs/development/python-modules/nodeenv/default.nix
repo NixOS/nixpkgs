@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "nodeenv";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3ef13ff90291ba2a4a7a4ff9a979b63ffdd00a464dbe04acf0ea6471517a4c2b";
+    sha256 = "sha256-4Of337hfxTlMb+Ho+pgTGiRz4EMRpFr7ZQj3zxg2+is=";
   };
 
   propagatedBuildInputs = [
