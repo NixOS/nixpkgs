@@ -26232,6 +26232,8 @@ with pkgs;
 
   inherit (gnome) empathy;
 
+  endeavour = callPackage ../applications/misc/endeavour { };
+
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
   entangle = callPackage ../applications/video/entangle {
