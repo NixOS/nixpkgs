@@ -26919,6 +26919,8 @@ with pkgs;
   # Git with SVN support, but without GUI.
   gitSVN = lowPrio (git.override { svnSupport = true; });
 
+  git-autofixup = perlPackages.GitAutofixup;
+
   git-doc = lib.addMetaAttrs {
     description = "Additional documentation for Git";
     longDescription = ''
