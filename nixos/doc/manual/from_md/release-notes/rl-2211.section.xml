@@ -216,6 +216,14 @@
       </listitem>
       <listitem>
         <para>
+          <literal>bsp-layout</literal> no longer uses the command
+          <literal>cycle</literal> to switch to other window layouts, as
+          it got replaced by the commands <literal>previous</literal>
+          and <literal>next</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The Barco ClickShare driver/client package
           <literal>pkgs.clickshare-csc1</literal> and the option
           <literal>programs.clickshare-csc1.enable</literal> have been
