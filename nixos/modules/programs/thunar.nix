@@ -33,12 +33,13 @@ in {
 
       services.dbus.packages = [
         package
-        pkgs.xfce.xfconf
       ];
 
       systemd.packages = [
         package
       ];
+
+      programs.xfconf.enable = true;
     }
   );
 }

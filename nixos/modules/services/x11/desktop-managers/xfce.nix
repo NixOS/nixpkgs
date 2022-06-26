@@ -4,10 +4,9 @@ with lib;
 
 let
   cfg = config.services.xserver.desktopManager.xfce;
+
 in
-
 {
-
   meta = {
     maintainers = teams.xfce.members;
   };
@@ -95,7 +94,6 @@ in
       exo
       garcon
       libxfce4ui
-      xfconf
 
       mousepad
       parole
@@ -125,6 +123,7 @@ in
         xfdesktop
       ] ++ optional cfg.enableScreensaver xfce4-screensaver;
 
+    programs.xfconf.enable = true;
     programs.thunar.enable = true;
 
     environment.pathsToLink = [
