@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.9.6";
+  version = "0.10.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
