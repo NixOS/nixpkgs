@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyroute2-ndb";
-  version = "0.6.12";
+  version = "0.6.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyroute2.ndb";
     inherit version;
-    hash = "sha256-Oc+uaqftRH6Dw3Sa2G1rZ3Mx2u81ErKIyz8xhnA1QgI=";
+    hash = "sha256-CbH1XyYEPOZMkz6CJP0IREpJjzgeXcSDvJ9CjLrwkBo=";
   };
 
   propagatedBuildInputs = [

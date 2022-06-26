@@ -191,6 +191,16 @@
       </listitem>
       <listitem>
         <para>
+          <literal>i18n.supportedLocales</literal> is now by default
+          only generated with the default locale set in
+          <literal>i18n.defaultLocale</literal>. This got copied over
+          from the minimal profile and reduces the final system size by
+          200MB. If you require all locales installed set the option to
+          <literal>[ &quot;all&quot; ]</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <literal>isPowerPC</literal> predicate, found on
           <literal>platform</literal> attrsets
           (<literal>hostPlatform</literal>,
@@ -221,6 +231,13 @@
         <para>
           PHP 7.4 is no longer supported due to upstream not supporting
           this version for the entire lifecycle of the 22.11 release.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          riak package removed along with
+          <literal>services.riak</literal> module, due to lack of
+          maintainer to update the package.
         </para>
       </listitem>
       <listitem>

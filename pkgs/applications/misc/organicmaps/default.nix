@@ -8,7 +8,6 @@
 , which
 , python3
 , rsync
-, makeWrapper
 , qtbase
 , qtsvg
 , libGLU
@@ -20,13 +19,13 @@
 
 mkDerivation rec {
   pname = "organicmaps";
-  version = "2022.05.31-10";
+  version = "2022.06.18-2";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    sha256 = "sha256-2GeWa4CQoY7hi24q0/cZBbq1Ofl2Jane9BiZ0N+IsSc=";
+    sha256 = "sha256-FlytRGiqGr9L5ZwL1slbPjagJKsleOXM8+loPmtfccI=";
     fetchSubmodules = true;
   };
 
@@ -45,7 +44,6 @@ mkDerivation rec {
     which
     python3
     rsync
-    makeWrapper
   ];
 
   # Most dependencies are vendored
@@ -62,16 +60,6 @@ mkDerivation rec {
   # Yes, this is PRE configure. The configure phase uses cmake
   preConfigure = ''
     bash ./configure.sh
-  '';
-
-  # Tell the program that the read-only and the read-write data locations
-  # are different, and create the read-write one.
-  # https://github.com/organicmaps/organicmaps/issues/2387
-  postInstall = ''
-    wrapProgram $out/bin/OMaps \
-      --add-flags "-resources_path $out/share/organicmaps/data" \
-      --add-flags '-data_path "''${XDG_DATA_HOME:-''${HOME}/.local/share}/OMaps"' \
-      --run 'mkdir -p "''${XDG_DATA_HOME:-''${HOME}/.local/share}/OMaps"'
   '';
 
   meta = with lib; {

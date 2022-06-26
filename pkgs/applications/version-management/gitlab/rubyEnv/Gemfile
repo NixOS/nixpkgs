@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 6.1.4.7'
 
-gem 'bootsnap', '~> 1.9.4', require: false
+gem 'bootsnap', '~> 1.12.0', require: false
 
 # Responders respond_to and respond_with
 gem 'responders', '~> 3.0'
@@ -17,7 +17,7 @@ gem 'view_component', '~> 2.50.0'
 gem 'default_value_for', '~> 3.4.0'
 
 # Supported DBs
-gem 'pg', '~> 1.1'
+gem 'pg', '~> 1.3.0'
 
 gem 'rugged', '~> 1.2'
 gem 'grape-path-helpers', '~> 1.7.0'
@@ -55,7 +55,7 @@ gem 'omniauth-authentiq', '~> 0.3.3'
 gem 'gitlab-omniauth-openid-connect', '~> 0.9.0', require: 'omniauth_openid_connect'
 gem 'omniauth-salesforce', '~> 1.0.5'
 gem 'omniauth-atlassian-oauth2', '~> 0.2.0'
-gem 'rack-oauth2', '~> 1.16.0'
+gem 'rack-oauth2', '~> 1.19.0'
 gem 'jwt', '~> 2.1.0'
 
 # Kerberos authentication. EE-only
@@ -97,10 +97,10 @@ gem 'net-ldap', '~> 0.16.3'
 # API
 gem 'grape', '~> 1.5.2'
 gem 'grape-entity', '~> 0.10.0'
-gem 'rack-cors', '~> 1.0.6', require: 'rack/cors'
+gem 'rack-cors', '~> 1.1.0', require: 'rack/cors'
 
 # GraphQL API
-gem 'graphql', '~> 1.11.10'
+gem 'graphql', '~> 1.13.12'
 gem 'graphiql-rails', '~> 1.8'
 gem 'apollo_upload_server', '~> 2.1.0'
 gem 'graphql-docs', '~> 1.6.0', group: [:development, :test]
@@ -121,7 +121,7 @@ gem 'carrierwave', '~> 1.3'
 gem 'mini_magick', '~> 4.10.1'
 
 # for backups
-gem 'fog-aws', '~> 3.12'
+gem 'fog-aws', '~> 3.14'
 # Locked until fog-google resolves https://github.com/fog/fog-google/issues/421.
 # Also see config/initializers/fog_core_patch.rb.
 gem 'fog-core', '= 2.1.0'
@@ -130,7 +130,7 @@ gem 'fog-local', '~> 0.6'
 gem 'fog-openstack', '~> 1.0'
 gem 'fog-rackspace', '~> 0.1.1'
 gem 'fog-aliyun', '~> 0.3'
-gem 'gitlab-fog-azure-rm', '~> 1.2.0', require: 'fog/azurerm'
+gem 'gitlab-fog-azure-rm', '~> 1.3.0', require: 'fog/azurerm'
 
 # for Google storage
 gem 'google-api-client', '~> 0.33'
@@ -167,10 +167,10 @@ gem 'asciidoctor', '~> 2.0.10'
 gem 'asciidoctor-include-ext', '~> 0.4.0', require: false
 gem 'asciidoctor-plantuml', '~> 0.0.12'
 gem 'asciidoctor-kroki', '~> 0.5.0', require: false
-gem 'rouge', '~> 3.27.0'
+gem 'rouge', '~> 3.29.0'
 gem 'truncato', '~> 0.7.11'
 gem 'bootstrap_form', '~> 4.2.0'
-gem 'nokogiri', '~> 1.12'
+gem 'nokogiri', '~> 1.13.6'
 gem 'escape_utils', '~> 1.1'
 
 # Calendar rendering
@@ -181,9 +181,9 @@ gem 'diffy', '~> 3.3'
 gem 'diff_match_patch', '~> 0.1.0'
 
 # Application server
-gem 'rack', '~> 2.2.3'
-# https://github.com/sharpstone/rack-timeout/blob/master/README.md#rails-apps-manually
-gem 'rack-timeout', '~> 0.5.1', require: 'rack/timeout/base'
+gem 'rack', '~> 2.2.3.0'
+# https://github.com/zombocom/rack-timeout/blob/master/README.md#rails-apps-manually
+gem 'rack-timeout', '~> 0.6.0', require: 'rack/timeout/base'
 
 group :puma do
   gem 'puma', '~> 5.6.2', require: false
@@ -219,7 +219,7 @@ gem 'ruby-progressbar', '~> 1.10'
 gem 'settingslogic', '~> 2.0.9'
 
 # Linear-time regex library for untrusted regular expressions
-gem 're2', '~> 1.2.0'
+gem 're2', '~> 1.4.0'
 
 # Misc
 
@@ -301,7 +301,7 @@ gem 'base32', '~> 0.3.0'
 gem 'gitlab-license', '~> 2.1.0'
 
 # Protect against bruteforcing
-gem 'rack-attack', '~> 6.3.0'
+gem 'rack-attack', '~> 6.6.0'
 
 # Sentry integration
 gem 'sentry-raven', '~> 3.1'
@@ -311,12 +311,12 @@ gem 'sentry-sidekiq', '~> 5.1.1'
 
 # PostgreSQL query parsing
 #
-gem 'pg_query', '~> 2.1'
+gem 'pg_query', '~> 2.1.0'
 
 gem 'premailer-rails', '~> 1.10.3'
 
 # LabKit: Tracing and Correlation
-gem 'gitlab-labkit', '~> 0.22.0'
+gem 'gitlab-labkit', '~> 0.23.0'
 # Thrift is a dependency of gitlab-labkit, we want a version higher than 0.14.0
 # because of https://gitlab.com/gitlab-org/gitlab/-/issues/321900
 gem 'thrift', '>= 0.14.0'
@@ -344,7 +344,7 @@ gem 'prometheus-client-mmap', '~> 0.15.0', require: 'prometheus/client'
 gem 'warning', '~> 1.2.0'
 
 group :development do
-  gem 'lefthook', '~> 0.7.0', require: false
+  gem 'lefthook', '~> 0.8.0', require: false
   gem 'rubocop'
   gem 'solargraph', '~> 0.44.3', require: false
 
@@ -381,7 +381,7 @@ group :development, :test do
   gem 'spring', '~> 2.1.0'
   gem 'spring-commands-rspec', '~> 1.0.4'
 
-  gem 'gitlab-styles', '~> 7.0.0', require: false
+  gem 'gitlab-styles', '~> 7.1.0', require: false
 
   gem 'haml_lint', '~> 0.36.0', require: false
   gem 'bundler-audit', '~> 0.7.0.1', require: false
@@ -402,10 +402,12 @@ group :development, :test do
   gem 'test_file_finder', '~> 0.1.3'
 
   gem 'sigdump', '~> 0.2.4', require: 'sigdump/setup'
+
+  gem 'pact', '~> 1.12'
 end
 
 group :development, :test, :danger do
-  gem 'gitlab-dangerfiles', '~> 3.0', require: false
+  gem 'gitlab-dangerfiles', '~> 3.4.0', require: false
 end
 
 group :development, :test, :coverage do
@@ -477,13 +479,13 @@ gem 'sys-filesystem', '~> 1.4.3'
 gem 'net-ntp'
 
 # SSH keys support
-gem 'ssh_data', '~> 1.2'
+gem 'ssh_data', '~> 1.3'
 
 # Spamcheck GRPC protocol definitions
 gem 'spamcheck', '~> 0.1.0'
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 14.10.0-rc1'
+gem 'gitaly', '~> 15.1.0-rc1'
 
 # KAS GRPC protocol definitions
 gem 'kas-grpc', '~> 0.0.2'
@@ -503,7 +505,7 @@ gem 'gitlab-experiment', '~> 0.7.1'
 
 # Structured logging
 gem 'lograge', '~> 0.5'
-gem 'grape_logging', '~> 1.7'
+gem 'grape_logging', '~> 1.8'
 
 # DNS Lookup
 gem 'gitlab-net-dns', '~> 0.9.1'
@@ -545,3 +547,5 @@ gem 'ipaddress', '~> 0.8.3'
 gem 'parslet', '~> 1.8'
 
 gem 'ipynbdiff', '0.4.7'
+
+gem 'ed25519', '~> 1.3.0'

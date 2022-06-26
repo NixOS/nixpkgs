@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyroute2-ethtool";
-  version = "0.6.12";
+  version = "0.6.13";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyroute2.ethtool";
     inherit version;
-    hash = "sha256-MwIRm/DezL7yCN682Yckxd23+iri2V6HCokF4G36apU=";
+    hash = "sha256-Cmh/6g/Nd9kHTHwYujXZufcOQhfr5opofiAECEc6O9Q=";
   };
 
   propagatedBuildInputs = [
