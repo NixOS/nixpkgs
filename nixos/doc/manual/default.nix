@@ -133,12 +133,12 @@ let
           # ^ redirect assumes xmllint doesn’t print to stdout
       }
 
-      lintrng manual-combined.xml
-      lintrng man-pages-combined.xml
-
       mkdir $out
       cp manual-combined.xml $out/
       cp man-pages-combined.xml $out/
+
+      lintrng $out/manual-combined.xml
+      lintrng $out/man-pages-combined.xml
     '';
 
   olinkDB = runCommand "manual-olinkdb"
