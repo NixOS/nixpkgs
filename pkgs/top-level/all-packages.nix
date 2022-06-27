@@ -30256,7 +30256,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  tig = callPackage ../applications/version-management/git-and-tools/tig { };
+  tig = callPackage ../applications/version-management/git-and-tools/tig {
+    readline = readline81;
+  };
 
   tilemaker = callPackage ../applications/misc/tilemaker { };
 
