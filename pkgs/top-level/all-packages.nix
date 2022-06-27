@@ -9582,6 +9582,8 @@ with pkgs;
 
   pngquant = callPackage ../tools/graphics/pngquant { };
 
+  po4a = perlPackages.Po4a;
+
   podiff = callPackage ../tools/text/podiff { };
 
   podman = callPackage ../applications/virtualization/podman/wrapper.nix { };
