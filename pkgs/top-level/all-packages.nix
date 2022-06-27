@@ -7471,7 +7471,7 @@ with pkgs;
 
   jo = callPackage ../development/tools/jo { };
 
-  joshuto = callPackage ../applications/misc/joshuto {
+  joshuto = callPackage ../applications/file-managers/joshuto {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
   };
 
