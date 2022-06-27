@@ -28714,7 +28714,7 @@ with pkgs;
 
   nali = callPackage ../applications/networking/nali {
     buildGoModule = buildGo118Module;
-   };
+  };
 
   normalize = callPackage ../applications/audio/normalize { };
 
