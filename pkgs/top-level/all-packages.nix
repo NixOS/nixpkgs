@@ -30871,7 +30871,7 @@ with pkgs;
 
   wordgrinder = callPackage ../applications/office/wordgrinder { };
 
-  worker = callPackage ../applications/misc/worker { };
+  worker = callPackage ../applications/file-managers/worker { };
 
   workrave = callPackage ../applications/misc/workrave {
     inherit (python27Packages) cheetah;
