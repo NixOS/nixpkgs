@@ -52,7 +52,6 @@ Tests that are part of NixOS are added to [`nixos/tests/all-tests.nix`](https://
 ```
 
 Overrides can be added by defining an anonymous module in `all-tests.nix`.
-For the purpose of constructing a test matrix, use the `matrix` options instead.
 
 ```nix
   hostname = runTest { imports = [ ./hostname.nix ]; defaults.networking.firewall.enable = false; };
@@ -476,3 +475,11 @@ added using the parameter `extraPythonPackages`. For example, you could add
 ```
 
 In that case, `numpy` is chosen from the generic `python3Packages`.
+
+## Test Options Reference {#sec-test-options-reference}
+
+The following options can be used when writing tests.
+
+```{=docbook}
+<xi:include href="../../generated/test-options-db.xml" xpointer="test-options-list"/>
+```
