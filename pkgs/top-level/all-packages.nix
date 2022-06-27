@@ -328,7 +328,7 @@ with pkgs;
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
-  clifm = callPackage ../applications/misc/clifm { };
+  clifm = callPackage ../applications/file-managers/clifm { };
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
 
