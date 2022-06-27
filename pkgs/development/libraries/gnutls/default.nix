@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./nix-ssl-cert-file.patch ]
     # Disable native add_system_trust.
+    # FIXME: apparently it's not enough to drop the framework anymore; maybe related to
+    # https://gitlab.com/gnutls/gnutls/-/commit/c19cb93d492e45141bfef9b926dfeba36003261c
     ++ lib.optional (isDarwin && !withSecurity) ./no-security-framework.patch;
 
   # Skip some tests:
@@ -74,7 +76,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ lzo lzip libtasn1 libidn2 zlib gmp libunistring unbound gettext libiconv ]
     ++ lib.optional (withP11-kit) p11-kit
-    ++ lib.optional (isDarwin && withSecurity) Security
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers
     ++ lib.optional guileBindings guile;
 
@@ -82,7 +83,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (isDarwin && !withSecurity) [ autoconf automake ]
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
-  propagatedBuildInputs = [ nettle ];
+  propagatedBuildInputs = [ nettle ]
+    # Builds dynamically linking against gnutls seem to need the framework now.
+    ++ lib.optional (isDarwin && withSecurity) Security;
 
   inherit doCheck;
   # stdenv's `NIX_SSL_CERT_FILE=/no-cert-file.crt` breaks tests.
