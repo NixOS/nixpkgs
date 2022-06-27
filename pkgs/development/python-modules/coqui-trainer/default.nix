@@ -21,8 +21,6 @@ buildPythonPackage {
   inherit pname version;
   format = "pyproject";
 
-  disabled = pythonAtLeast "3.10"; # https://github.com/coqui-ai/Trainer/issues/22
-
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "Trainer";
