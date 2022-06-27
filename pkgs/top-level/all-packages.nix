@@ -7670,7 +7670,7 @@ with pkgs;
 
   less = callPackage ../tools/misc/less { };
 
-  lf = callPackage ../tools/misc/lf {};
+  lf = callPackage ../applications/file-managers/lf { };
 
   lha = callPackage ../tools/archivers/lha { };
 
