@@ -1,4 +1,4 @@
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-writing-nixos-tests">
+<section xmlns="http://docbook.org/ns/docbook"  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec-writing-nixos-tests">
   <title>Writing Tests</title>
   <para>
     A NixOS test is a Nix module that has the following structure:
@@ -897,5 +897,12 @@ def foo_running():
   nodes.foo = …;
 }
 </programlisting>
+  </section>
+  <section xml:id="sec-test-options-reference">
+    <title>Test Options Reference</title>
+    <para>
+      The following options can be used when writing tests.
+    </para>
+    <xi:include href="../../generated/test-options-db.xml" xpointer="test-options-list"/>
   </section>
 </section>

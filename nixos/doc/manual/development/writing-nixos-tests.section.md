@@ -583,3 +583,11 @@ to get the final value.
   nodes.foo = …;
 }
 ```
+
+## Test Options Reference {#sec-test-options-reference}
+
+The following options can be used when writing tests.
+
+```{=docbook}
+<xi:include href="../../generated/test-options-db.xml" xpointer="test-options-list"/>
+```
