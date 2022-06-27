@@ -1,6 +1,6 @@
-{ hello, buildIncremental, runCommandNoCC, texinfo, stdenv, rsync }:
+{ hello, incrementalBuildTools, runCommandNoCC, texinfo, stdenv, rsync }:
 let
-  baseHelloArtifacts = buildIncremental.prepareIncrementalBuild hello;
+  baseHelloArtifacts = incrementalBuildTools.prepareIncrementalBuild hello;
   patchedHello = hello.overrideAttrs (old: {
     buildInputs = [ texinfo ];
     src = runCommandNoCC "patch-hello-src" { } ''
@@ -10,7 +10,7 @@ let
       patch -p1 < ${./hello.patch}
     '';
   });
-  incrementalBuiltHello = buildIncremental.mkIncrementalBuild patchedHello baseHelloArtifacts;
+  incrementalBuiltHello = incrementalBuildTools.mkIncrementalBuild patchedHello baseHelloArtifacts;
 
   incrementalBuiltHelloWithCheck = incrementalBuiltHello.overrideAttrs (old: {
     doCheck = true;
@@ -20,7 +20,7 @@ let
     '';
   });
 
-  baseHelloRemoveFileArtifacts = buildIncremental.prepareIncrementalBuild (hello.overrideAttrs (old: {
+  baseHelloRemoveFileArtifacts = incrementalBuildTools.prepareIncrementalBuild (hello.overrideAttrs (old: {
     patches = [ ./hello-additionalFile.patch ];
   }));
 
@@ -41,7 +41,7 @@ let
     '';
   });
 
-  incrementalBuiltHelloWithRemovedFile = buildIncremental.mkIncrementalBuild patchedHelloRemoveFile baseHelloRemoveFileArtifacts;
+  incrementalBuiltHelloWithRemovedFile = incrementalBuildTools.mkIncrementalBuild patchedHelloRemoveFile baseHelloRemoveFileArtifacts;
 in
 stdenv.mkDerivation {
   name = "patched-hello-returns-correct-output";
