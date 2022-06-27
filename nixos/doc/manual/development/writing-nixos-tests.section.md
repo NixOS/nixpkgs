@@ -602,6 +602,40 @@ The following example produces the 6 test derivations that form the Cartesian pr
 }
 ```
 
+### Ordering and caveats {#sec-nixos-test-matrix-ordering}
+
+It is usually sufficient to think only about the final test configuration where all decisions have been made, but it is possible to access non-final test configurations, on purpose or by accident.
+
+This possibility is useful when the availability of some choices depends on previous choices, to construct something akin to a decision tree rather than a matrix. See [`matrix.<name>.enable`](#opt-matrix._name_.enable).
+
+However, it can also be unexpected, when you use a "free variable" in `matrix.<...>.module`; a variable from the lexical scope, rather module arguments declared by the expression following `module =`. For example:
+
+```nix
+{ y, ... }: {
+  matrix.x.choice.foo.module =
+    # the following expression has `y` as a free variable:
+    {
+      # this `y` does not come from the final configuration, but rather from
+      # an incomplete configuration where `x` has not been decided yet.
+      bar = y;
+    };
+  matrix.y = …;
+}
+```
+
+The dependency on `y` can be fixed by declaring it as a module argument, so that it comes from the final test configuration.
+
+```nix
+{ ... }: {
+  matrix.x.choice.foo.module = { y, ... }: {
+    bar = y;
+  };
+  matrix.y = …;
+}
+```
+
+You could also fix it by [ordering](See [`matrix.<decision>.after`](#opt-matrix._name_.after).) `x` to be decided after `y`. This is only preferable for dependencies that aren't in `matrix.<...>.module`.
+
 ## Test Options Reference {#sec-test-options-reference}
 
 The following options can be used when writing tests.
