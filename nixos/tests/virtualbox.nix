@@ -349,7 +349,7 @@ let
         vmConfigs = mapAttrsToList mkVMConf vms;
       in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
-      virtualisation.qemu.options = ["-cpu" "kvm64,vmx=on"];
+      virtualisation.qemu.options = ["-cpu" "kvm64,svm=on,vmx=on"];
       virtualisation.virtualbox.host.enable = true;
       test-support.displayManager.auto.user = "alice";
       users.users.alice.extraGroups = let
