@@ -10640,7 +10640,7 @@ with pkgs;
       Carbon Cocoa ScriptingBridge SkyLight;
   };
 
-  spaceFM = callPackage ../applications/misc/spacefm { };
+  spaceFM = callPackage ../applications/file-managers/spacefm { };
 
   speech-denoiser = callPackage ../applications/audio/speech-denoiser {};
 
