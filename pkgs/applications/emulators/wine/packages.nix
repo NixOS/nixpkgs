@@ -41,5 +41,6 @@ in with src; {
     monos =  [ mono ];
     buildScript = ./builder-wow.sh;
     platforms = [ "x86_64-linux" ];
+    mainProgram = "wine64";
   };
 }
