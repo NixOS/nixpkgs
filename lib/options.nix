@@ -242,6 +242,8 @@ rec {
           in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
         subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
       in
+        # To find infinite recursion in NixOS option docs:
+        # builtins.trace opt.loc
         [ docOption ] ++ optionals subOptionsVisible subOptions) (collect isOption options);
 
 

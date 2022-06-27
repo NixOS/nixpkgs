@@ -57,19 +57,21 @@ def convertMD(options: Dict[str, Any]) -> str:
             try:
                 return super(Renderer, self)._get_method(name)
             except AttributeError:
-                def not_supported(children, **kwargs):
-                    raise NotImplementedError("md node not supported yet", name, children, **kwargs)
+                def not_supported(*args, **kwargs):
+                    raise NotImplementedError("md node not supported yet", name, args, **kwargs)
                 return not_supported
 
         def text(self, text):
             return escape(text)
         def paragraph(self, text):
             return text + "\n\n"
+        def newline(self):
+            return "<literallayout>\n</literallayout>"
         def codespan(self, text):
-            return f"<literal>{text}</literal>"
+            return f"<literal>{escape(text)}</literal>"
         def block_code(self, text, info=None):
             info = f" language={quoteattr(info)}" if info is not None else ""
-            return f"<programlisting{info}>\n{text}</programlisting>"
+            return f"<programlisting{info}>\n{escape(text)}</programlisting>"
         def link(self, link, text=None, title=None):
             if link[0:1] == '#':
                 attr = "linkend"
@@ -102,6 +104,8 @@ def convertMD(options: Dict[str, Any]) -> str:
             # a single paragraph and the original docbook string is no longer
             # available to restore the trailer.
             return f"<{tag}><para>{text.rstrip()}</para></{tag}>"
+        def block_quote(self, text):
+            return f"<blockquote><para>{text}</para></blockquote>"
         def command(self, text):
             return f"<command>{escape(text)}</command>"
         def option(self, text):
@@ -194,7 +198,7 @@ overrides = pivot(json.load(open(sys.argv[2 + optOffset], 'r')))
 for (k, v) in options.items():
     # The _module options are not declared in nixos/modules
     if v.value['loc'][0] != "_module":
-        v.value['declarations'] = list(map(lambda s: f'nixos/modules/{s}', v.value['declarations']))
+        v.value['declarations'] = list(map(lambda s: f'nixos/modules/{s}' if isinstance(s, str) else s, v.value['declarations']))
 
 # merge both descriptions
 for (k, v) in overrides.items():
