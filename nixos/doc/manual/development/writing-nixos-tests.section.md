@@ -530,17 +530,17 @@ It has picked up on the `matrix` and only returns the derivations constructed fo
 
 The test related options such as `nodes` at the root of the test configuration still exist there, but are not demanded by `runTest`, so only their copies at each of the choices are evaluated. Hence, the "root" can see the consequences of the choices.
 
-However, some variations aren't simply parametric, but require specific configuration for some choices.
-This can be added in the `module` option:
+Some variations aren't simply parametric, but require specific configuration for some choices.
+These can be added in the `module` submodule:
 
 ```nix
 { lib, setup, ... }: {
-  matrix.backend.choice.smtp.module = { ... }: {
+  matrix.backend.choice.smtp.module = { lib, setup, ... }: {
     defaults.services.foo.backend = "smtp";
     nodes.smtpserver = { … };
     _module.args.setup = "";
   };
-  matrix.backend.choice.rest.module = { ... }: {
+  matrix.backend.choice.rest.module = { lib, setup, ... }: {
     _module.args.setup = ''
       # extra setup for the rest backend
     '';

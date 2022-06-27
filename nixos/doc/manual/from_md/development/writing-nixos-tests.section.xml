@@ -838,18 +838,18 @@ def foo_running():
       can see the consequences of the choices.
     </para>
     <para>
-      However, some variations aren’t simply parametric, but require
-      specific configuration for some choices. This can be added in the
-      <literal>module</literal> option:
+      Some variations aren’t simply parametric, but require specific
+      configuration for some choices. These can be added in the
+      <literal>module</literal> submodule:
     </para>
     <programlisting language="bash">
 { lib, setup, ... }: {
-  matrix.backend.choice.smtp.module = { ... }: {
+  matrix.backend.choice.smtp.module = { lib, setup, ... }: {
     defaults.services.foo.backend = &quot;smtp&quot;;
     nodes.smtpserver = { … };
     _module.args.setup = &quot;&quot;;
   };
-  matrix.backend.choice.rest.module = { ... }: {
+  matrix.backend.choice.rest.module = { lib, setup, ... }: {
     _module.args.setup = ''
       # extra setup for the rest backend
     '';
