@@ -6003,6 +6003,12 @@
     githubId = 2502736;
     name = "James Hillyerd";
   };
+  jiegec = {
+    name = "Jiajie Chen";
+    email = "c@jia.je";
+    github = "jiegec";
+    githubId = 6127678;
+  };
   jiehong = {
     email = "nixos@majiehong.com";
     github = "Jiehong";
