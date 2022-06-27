@@ -210,6 +210,10 @@ in {
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      # https://guidovranken.com/2022/06/27/notes-on-openssl-remote-memory-corruption/
+      # https://github.com/openssl/openssl/commit/4d8a88c134df634ba610ff8db1eb8478ac5fd345.patch
+      3.0/rsa-fix-bn_reduce_once_in_place-call-for-rsaz_mod_exp_avx512_x2.patch
+
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
