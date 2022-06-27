@@ -193,7 +193,7 @@ let
   };
 
   mailOption =
-    if foldr (n: a: a || n ? mail) false (attrValues cfg.settings)
+    if foldr (n: a: a || (n.mail or false) != false) false (attrValues cfg.settings)
     then "--mail=${pkgs.mailutils}/bin/mail"
     else "";
 in
