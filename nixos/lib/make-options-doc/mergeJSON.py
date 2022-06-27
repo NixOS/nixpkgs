@@ -65,6 +65,8 @@ def convertMD(options: Dict[str, Any]) -> str:
             return escape(text)
         def paragraph(self, text):
             return text + "\n\n"
+        def newline(self):
+            return "<literallayout>\n</literallayout>"
         def codespan(self, text):
             return f"<literal>{text}</literal>"
         def block_code(self, text, info=None):
