@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
     ./002-application-services.diff
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
     ./003-libuv-application-services.diff
+    # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
+    ./006-darwin-always-set-runtime-c-flag.diff
   ]
   ++ lib.optional stdenv.isCygwin ./004-cygwin.diff
   # Derived from https://github.com/curl/curl/commit/31f631a142d855f069242f3e0c643beec25d1b51
-  ++ lib.optional (stdenv.isDarwin && isBootstrap) ./005-remove-systemconfiguration-dep.diff
-  # On Darwin, always set CMAKE_SHARED_LIBRARY_RUNTIME_C_FLAG.
-  ++ lib.optional stdenv.isDarwin ./006-darwin-always-set-runtime-c-flag.diff;
+  ++ lib.optional isBootstrap ./005-remove-systemconfiguration-dep.diff;
 
   outputs = [ "out" ] ++ lib.optionals buildDocs [ "man" "info" ];
   setOutputFlags = false;
