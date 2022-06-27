@@ -10,13 +10,16 @@
 assert appliance == null || lib.isDerivation appliance;
 assert javaSupport -> jdk != null;
 
+let
+  ocaml = ocamlPackages.ocaml;
+in
 stdenv.mkDerivation rec {
   pname = "libguestfs";
-  version = "1.48.0";
+  version = "1.48.3";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
-    sha256 = "sha256-FoH93t/PSEym3uxUIwMwoy3vvTDCqx+BeI4lLLXQSCk=";
+    sha256 = "sha256-vSb7QOsSvrn932nDJo3U23p8x3g26uhSkgPUdlMUxqk=";
   };
 
   strictDeps = true;
@@ -38,9 +41,9 @@ stdenv.mkDerivation rec {
     substituteInPlace run.in        --replace '#!/bin/bash' '#!${stdenv.shell}'
     substituteInPlace ocaml-link.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
 
-    # $(OCAMLLIB) is read-only "${ocamlPackages.ocaml}/lib/ocaml"
-    substituteInPlace ocaml/Makefile.am            --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
-    substituteInPlace ocaml/Makefile.in            --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
+    # $(OCAMLLIB) is read-only "${ocaml}/lib/ocaml/${ocaml.version}/site-lib"
+    substituteInPlace ocaml/Makefile.am            --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml/${ocaml.version}/site-lib'
+    substituteInPlace ocaml/Makefile.in            --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml/${ocaml.version}/site-lib'
 
     # some scripts hardcore /usr/bin/env which is not available in the build env
     patchShebangs .
