@@ -57,8 +57,8 @@ def convertMD(options: Dict[str, Any]) -> str:
             try:
                 return super(Renderer, self)._get_method(name)
             except AttributeError:
-                def not_supported(children, **kwargs):
-                    raise NotImplementedError("md node not supported yet", name, children, **kwargs)
+                def not_supported(*args, **kwargs):
+                    raise NotImplementedError("md node not supported yet", name, args, **kwargs)
                 return not_supported
 
         def text(self, text):
