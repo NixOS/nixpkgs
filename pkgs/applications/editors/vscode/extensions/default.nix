@@ -30,6 +30,18 @@ let
   #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
+      _1Password.op-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "1Password";
+          name = "op-vscode";
+          version = "1.0.0";
+          sha256 = "sha256-ZeKTP3WKjyuR/ryBdJRHXJT+l2gbY4QnWNTsN9+4nOA=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       _4ops.terraform = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "4ops";
@@ -40,18 +52,6 @@ let
         meta = {
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ kamadorueda ];
-        };
-      };
-      
-      _1Password.op-vscode = buildVscodeMarketplaceExtension {
-        mktplcRef = {
-          publisher = "1Password";
-          name = "op-vscode";
-          version = "1.0.0";
-          sha256 = "sha256-ZeKTP3WKjyuR/ryBdJRHXJT+l2gbY4QnWNTsN9+4nOA=";
-        };
-        meta = {
-          license = lib.licenses.mit;
         };
       };
 
