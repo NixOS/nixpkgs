@@ -1,4 +1,4 @@
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="sec-writing-nixos-tests">
+<section xmlns="http://docbook.org/ns/docbook"  xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xml:id="sec-writing-nixos-tests">
   <title>Writing Tests</title>
   <para>
     A NixOS test is a module that has the following structure:
@@ -67,9 +67,7 @@
 </programlisting>
       <para>
         Overrides can be added by defining an anonymous module in
-        <literal>all-tests.nix</literal>. For the purpose of
-        constructing a test matrix, use the <literal>matrix</literal>
-        options instead.
+        <literal>all-tests.nix</literal>.
       </para>
       <programlisting language="bash">
   hostname = runTest { imports = [ ./hostname.nix ]; defaults.networking.firewall.enable = false; };
@@ -769,5 +767,12 @@ def foo_running():
       In that case, <literal>numpy</literal> is chosen from the generic
       <literal>python3Packages</literal>.
     </para>
+  </section>
+  <section xml:id="sec-test-options-reference">
+    <title>Test Options Reference</title>
+    <para>
+      The following options can be used when writing tests.
+    </para>
+    <xi:include href="../../generated/test-options-db.xml" xpointer="test-options-list"/>
   </section>
 </section>
