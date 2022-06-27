@@ -8,6 +8,7 @@
 , yarn
 , fixup_yarn_lock
 , nodejs
+, jitsi-meet
 , conf ? { }
 }:
 
@@ -65,6 +66,7 @@ mkYarnPackage rec {
     runHook preInstall
 
     cp -R webapp $out
+    cp ${jitsi-meet}/libs/external_api.min.js $out/jitsi_external_api.min.js
     echo "${version}" > "$out/version"
     jq -s '.[0] * .[1]' "config.sample.json" "${configOverrides}" > "$out/config.json"
 
