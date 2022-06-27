@@ -9892,7 +9892,7 @@ with pkgs;
 
   rambox-pro = callPackage ../applications/networking/instant-messengers/rambox/pro.nix { };
 
-  ranger = callPackage ../applications/misc/ranger { };
+  ranger = callPackage ../applications/file-managers/ranger { };
 
   rar = callPackage ../tools/archivers/rar { };
 
