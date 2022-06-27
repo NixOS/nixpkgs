@@ -68,6 +68,7 @@ with lib;
       prey-bash-client is deprecated upstream
     '')
     (mkRemovedOptionModule [ "services" "quagga" ] "the corresponding package has been removed from nixpkgs")
+    (mkRemovedOptionModule [ "services" "railcar" ] "the corresponding package has been removed from nixpkgs")
     (mkRemovedOptionModule [ "services" "seeks" ] "")
     (mkRemovedOptionModule [ "services" "ssmtp" ] ''
       The ssmtp package and the corresponding module have been removed due to

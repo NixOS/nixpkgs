@@ -1202,6 +1202,7 @@ mapAliases ({
   ### R ###
 
   radare2-cutter = cutter; # Added 2021-03-30
+  railcar = throw "'railcar' has been removed, as the upstream project has been abandoned"; # Added 2022-06-27
   raspberrypi-tools = throw "raspberrypi-tools has been removed in favor of identical 'libraspberrypi'"; # Added 2020-12-24
   rawdog = throw "rawdog has been removed from nixpkgs as it still requires python2"; # Added 2022-01-01
   rdiff_backup = throw "'rdiff_backup' has been renamed to/replaced by 'rdiff-backup'"; # Converted to throw 2022-02-22
