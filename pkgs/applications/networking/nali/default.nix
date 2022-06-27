@@ -11,6 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-7NUUX4hDwvMBBQvxiB7P/lNHKgxwOFObdD6DUd0vX5c=";
   };
 
+  ldflags = [ "-X 'github.com/zu1k/nali/internal/constant.Version=${version}'" "-w" "-s" ];
   vendorSha256 = "sha256-Ld5HehK5MnPwl6KtIl0b4nQRiXO4DjKVPL1iti/WBIQ=";
   subPackages = [ "." ];
 
