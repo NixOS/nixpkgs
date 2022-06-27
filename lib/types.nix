@@ -297,6 +297,27 @@ rec {
         merge = mergeEqualOption;
     };
 
+    # Specialized subdomains of float
+    floats = {
+      /* A float with a fixed range.
+       *
+       * Example:
+       *   (floats.between 0.0 100.0).check (-0.1)
+       *   => false
+       *   (floats.between 0.0 100.0).check (101.0)
+       *   => false
+       *   (floats.between 0.0 1.0).check 0.5
+       *   => true
+       */
+      between = lowest: highest:
+        assert lib.assertMsg (lowest <= highest)
+          "floats.between: lowest must be smaller than highest";
+        addCheck float (x: x >= lowest && x <= highest) // {
+          name = "floatBetween";
+          description = "float between ${toString lowest} and ${toString highest}";
+        };
+    };
+
     str = mkOptionType {
       name = "str";
       description = "string";
