@@ -5,7 +5,7 @@
 , gtk3
 , mcomix
 , python3
-, testVersion
+, testers
 , wrapGAppsHook
 
 # Recommended Dependencies:
@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
     )
   '';
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = mcomix;
   };
 
