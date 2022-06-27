@@ -1,12 +1,16 @@
 testModuleArgs@{ config, lib, hostPkgs, nodes, moduleType, ... }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption types mdDoc;
   inherit (types) either str functionTo;
 in
 {
   options = {
     testScript = mkOption {
       type = either str (functionTo str);
+      description = ''
+        A series of python declarations and statements that you write to perform
+        the test.
+      '';
     };
     testScriptString = mkOption {
       type = str;
@@ -21,9 +25,11 @@ in
     };
     withoutTestScriptReferences = mkOption {
       type = moduleType;
-      description = ''
+      description = mdDoc ''
         A parallel universe where the testScript is invalid and has no references.
       '';
+      internal = true;
+      visible = false;
     };
   };
   config = {

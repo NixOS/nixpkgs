@@ -22,12 +22,12 @@ A NixOS test is a module that has the following structure:
 ```
 
 We refer to the whole test above as a test module, whereas the values
-in `nodes.<name>` are NixOS modules. (A NixOS configuration is a module.)
+in [`nodes.<name>`](#opt-nodes) are NixOS modules themselves.
 
-The option `testScript` is a bit of Python code that executes the
+The option [`testScript`](#opt-testScript) is a piece of Python code that executes the
 test (described below). During the test, it will start one or more
 virtual machines, the configuration of which is described by
-the attribute `nodes`.
+the option [`nodes`](#opt-nodes).
 
 An example of a single-node test is
 [`login.nix`](https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/login.nix).
@@ -58,7 +58,7 @@ For the purpose of constructing a test matrix, use the `matrix` options instead.
   hostname = runTest { imports = [ ./hostname.nix ]; defaults.networking.firewall.enable = false; };
 ```
 
-You can run a test with attribute name `mytest` in `all-tests.nix` by invoking:
+You can run a test with attribute name `mytest` in `nixos/tests/all-tests.nix` by invoking:
 
 ```shell
 nix-build -A nixosTests.mytest
@@ -181,7 +181,7 @@ The following methods are available on machine objects:
     least one will be returned.
 
     ::: {.note}
-    This requires passing `enableOCR` to the test attribute set.
+    This requires [`enableOCR`](#opt-enableOCR) to be set to `true`.
     :::
 
 `get_screen_text`
@@ -190,7 +190,7 @@ The following methods are available on machine objects:
     machine\'s screen using optical character recognition.
 
     ::: {.note}
-    This requires passing `enableOCR` to the test attribute set.
+    This requires [`enableOCR`](#opt-enableOCR) to be set to `true`.
     :::
 
 `send_monitor_command`
@@ -301,7 +301,7 @@ The following methods are available on machine objects:
     `get_screen_text` and `get_screen_text_variants`).
 
     ::: {.note}
-    This requires passing `enableOCR` to the test attribute set.
+    This requires [`enableOCR`](#opt-enableOCR) to be set to `true`.
     :::
 
 `wait_for_console_text`

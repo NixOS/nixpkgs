@@ -1,6 +1,6 @@
 { config, lib, hostPkgs, ... }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) mkOption types literalMD mdDoc;
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
@@ -106,13 +106,13 @@ in
   options = {
 
     driver = mkOption {
-      description = "Script that runs the test.";
+      description = mdDoc "Package containing a script that runs the test.";
       type = types.package;
-      defaultText = lib.literalDocBook "set by the test framework";
+      defaultText = literalMD "set by the test framework";
     };
 
     hostPkgs = mkOption {
-      description = "Nixpkgs attrset used outside the nodes.";
+      description = mdDoc "Nixpkgs attrset used outside the nodes.";
       type = types.raw;
       example = lib.literalExpression ''
         import nixpkgs { inherit system config overlays; }
@@ -120,34 +120,39 @@ in
     };
 
     qemu.package = mkOption {
-      description = "Which qemu package to use.";
+      description = mdDoc "Which qemu package to use for the virtualisation of [{option}`nodes`](#opt-nodes).";
       type = types.package;
       default = hostPkgs.qemu_test;
       defaultText = "hostPkgs.qemu_test";
     };
 
     enableOCR = mkOption {
-      description = ''
+      description = mdDoc ''
         Whether to enable Optical Character Recognition functionality for
-        testing graphical programs.
+        testing graphical programs. See [Machine objects](`ssec-machine-objects`).
       '';
       type = types.bool;
       default = false;
     };
 
     extraPythonPackages = mkOption {
-      description = ''
+      description = mdDoc ''
         Python packages to add to the test driver.
 
         The argument is a Python package set, similar to `pkgs.pythonPackages`.
+      '';
+      example = lib.literalExpression ''
+        p: [ p.numpy ]
       '';
       type = types.functionTo (types.listOf types.package);
       default = ps: [ ];
     };
 
     extraDriverArgs = mkOption {
-      description = ''
+      description = mdDoc ''
         Extra arguments to pass to the test driver.
+
+        They become part of [{option}`driver`](#opt-driver) via `wrapProgram`.
       '';
       type = types.listOf types.str;
       default = [];
@@ -156,11 +161,19 @@ in
     skipLint = mkOption {
       type = types.bool;
       default = false;
+      description = mdDoc ''
+        Do not run the linters. This may speed up your iteration cycle, but it is not something you should commit.
+      '';
     };
 
     skipTypeCheck = mkOption {
       type = types.bool;
       default = false;
+      description = mdDoc ''
+        Disable type checking. This must not be enabled for new NixOS tests.
+
+        This may speed up your iteration cycle, unless you're working on the [{option}`testScript`](#opt-testScript).
+      '';
     };
   };
 

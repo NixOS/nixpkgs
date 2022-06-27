@@ -23,14 +23,17 @@
 </programlisting>
   <para>
     We refer to the whole test above as a test module, whereas the
-    values in <literal>nodes.&lt;name&gt;</literal> are NixOS modules.
-    (A NixOS configuration is a module.)
+    values in
+    <link linkend="opt-nodes"><literal>nodes.&lt;name&gt;</literal></link>
+    are NixOS modules themselves.
   </para>
   <para>
-    The option <literal>testScript</literal> is a bit of Python code
-    that executes the test (described below). During the test, it will
-    start one or more virtual machines, the configuration of which is
-    described by the attribute <literal>nodes</literal>.
+    The option
+    <link linkend="opt-testScript"><literal>testScript</literal></link>
+    is a piece of Python code that executes the test (described below).
+    During the test, it will start one or more virtual machines, the
+    configuration of which is described by the option
+    <link linkend="opt-nodes"><literal>nodes</literal></link>.
   </para>
   <para>
     An example of a single-node test is
@@ -73,7 +76,7 @@
 </programlisting>
       <para>
         You can run a test with attribute name <literal>mytest</literal>
-        in <literal>all-tests.nix</literal> by invoking:
+        in <literal>nixos/tests/all-tests.nix</literal> by invoking:
       </para>
       <programlisting>
 nix-build -A nixosTests.mytest
@@ -270,8 +273,9 @@ start_all()
           </para>
           <note>
             <para>
-              This requires passing <literal>enableOCR</literal> to the
-              test attribute set.
+              This requires
+              <link linkend="opt-enableOCR"><literal>enableOCR</literal></link>
+              to be set to <literal>true</literal>.
             </para>
           </note>
         </listitem>
@@ -287,8 +291,9 @@ start_all()
           </para>
           <note>
             <para>
-              This requires passing <literal>enableOCR</literal> to the
-              test attribute set.
+              This requires
+              <link linkend="opt-enableOCR"><literal>enableOCR</literal></link>
+              to be set to <literal>true</literal>.
             </para>
           </note>
         </listitem>
@@ -527,8 +532,9 @@ start_all()
           </para>
           <note>
             <para>
-              This requires passing <literal>enableOCR</literal> to the
-              test attribute set.
+              This requires
+              <link linkend="opt-enableOCR"><literal>enableOCR</literal></link>
+              to be set to <literal>true</literal>.
             </para>
           </note>
         </listitem>
