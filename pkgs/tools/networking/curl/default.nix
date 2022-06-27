@@ -63,21 +63,18 @@ assert zstdSupport -> zstd != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.83.1";
+  version = "7.84.0";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "sha256-9Tmjb7RKgmDsXZd+Tg290u7intkPztqpvDyfeKETv/A=";
+    sha256 = "sha256-cC+ybnMZCjvXcHGqFG9Qe5gXzE384hjSq4fwDNO8BZ0=";
   };
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
-    # quiche: support ca-fallback
-    # https://github.com/curl/curl/commit/fdb5e21b4dd171a96cf7c002ee77bb08f8e58021
-    ./7.83.1-quiche-support-ca-fallback.patch
   ] ++ lib.optional patchNetrcRegression ./netrc-regression.patch;
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
