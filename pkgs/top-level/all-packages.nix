@@ -31030,7 +31030,7 @@ with pkgs;
   win-pvdrivers = callPackage ../applications/virtualization/driver/win-pvdrivers { };
   win-signed-gplpv-drivers = callPackage ../applications/virtualization/driver/win-signed-gplpv-drivers { };
 
-  xfe = callPackage ../applications/misc/xfe {
+  xfe = callPackage ../applications/file-managers/xfe {
     fox = fox_1_6;
   };
 
