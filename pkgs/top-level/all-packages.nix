@@ -8774,7 +8774,7 @@ with pkgs;
 
   nitter = callPackage ../servers/nitter { };
 
-  noice = callPackage ../applications/misc/noice { };
+  noice = callPackage ../applications/file-managers/noice { };
 
   noip = callPackage ../tools/networking/noip { };
 
