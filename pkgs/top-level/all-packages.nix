@@ -8900,7 +8900,7 @@ with pkgs;
 
   nmapsi4 = libsForQt5.callPackage ../tools/security/nmap/qt.nix { };
 
-  nnn = callPackage ../applications/misc/nnn { };
+  nnn = callPackage ../applications/file-managers/nnn { };
 
   sfm = callPackage ../applications/file-managers/sfm { };
 
