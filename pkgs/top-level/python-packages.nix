@@ -10848,7 +10848,9 @@ in {
 
   ueagle = callPackage ../development/python-modules/ueagle { };
 
-  uharfbuzz = callPackage ../development/python-modules/uharfbuzz { };
+  uharfbuzz = callPackage ../development/python-modules/uharfbuzz {
+    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   ujson = callPackage ../development/python-modules/ujson { };
 

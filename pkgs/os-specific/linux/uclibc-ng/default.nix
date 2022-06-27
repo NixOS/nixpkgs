@@ -1,9 +1,14 @@
-{ lib, stdenv, buildPackages
-, fetchurl, linuxHeaders, libiconvReal
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, linuxHeaders
+, libiconvReal
 , extraConfig ? ""
 }:
 
 let
+  isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
   configParser = ''
     function parseconfig {
         set -x
@@ -36,12 +41,13 @@ let
     UCLIBC_HAS_RPC y
     DO_C99_MATH y
     UCLIBC_HAS_PROGRAM_INVOCATION_NAME y
+    UCLIBC_HAS_RESOLVER_SUPPORT y
     UCLIBC_SUSV4_LEGACY y
     UCLIBC_HAS_THREADS_NATIVE y
     KERNEL_HEADERS "${linuxHeaders}/include"
   '' + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
     UCLIBC_HAS_FPU n
-  '' + lib.optionalString (stdenv.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
+  '' + lib.optionalString (stdenv.isAarch32 && isCross) ''
     CONFIG_ARM_EABI y
     ARCH_WANTS_BIG_ENDIAN n
     ARCH_BIG_ENDIAN n
@@ -49,18 +55,14 @@ let
     ARCH_LITTLE_ENDIAN y
     UCLIBC_HAS_FPU n
   '';
-
-  version = "1.0.38";
 in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "uclibc-ng";
-  inherit version;
+  version = "1.0.41";
 
   src = fetchurl {
-    url = "https://downloads.uclibc-ng.org/releases/${version}/uClibc-ng-${version}.tar.bz2";
-    # from "${url}.sha256";
-    sha256 = "sha256-7wexvOOfDpIsM3XcdhHxESz7GsOW+ZkiA0dfiN5rHrU=";
+    url = "https://downloads.uclibc-ng.org/releases/${version}/uClibc-ng-${version}.tar.xz";
+    sha256 = "sha256-syqSoCGNlZItaXZGTm71Hi66z7zbYFggRY2du4ph4CU=";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -78,7 +80,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "stackprotector" ];
 
   # Cross stripping hurts.
-  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
+  dontStrip = isCross;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -86,7 +88,7 @@ stdenv.mkDerivation {
     "ARCH=${stdenv.hostPlatform.linuxArch}"
     "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
     "VERBOSE=1"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  ] ++ lib.optionals (isCross) [
     "CROSS=${stdenv.cc.targetPrefix}"
   ];
 
@@ -95,24 +97,45 @@ stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out
     make $makeFlags PREFIX=$out VERBOSE=1 install
     (cd $out/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
     # libpthread.so may not exist, so I do || true
     sed -i s@/lib/@$out/lib/@g $out/lib/libc.so $out/lib/libpthread.so || true
-  '';
 
-  passthru = {
-    # Derivations may check for the existance of this attribute, to know what to link to.
-    libiconv = libiconvReal;
-  };
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://uclibc-ng.org";
-    description = "A small implementation of the C library";
-    maintainers = with maintainers; [ rasendubi ];
-    license = licenses.lgpl2;
+    description = "Embedded C library";
+    longDescription = ''
+      uClibc-ng is a small C library for developing embedded Linux systems. It
+      is much smaller than the GNU C Library, but nearly all applications
+      supported by glibc also work perfectly with uClibc-ng.
+
+      Porting applications from glibc to uClibc-ng typically involves just
+      recompiling the source code. uClibc-ng supports shared libraries and
+      threading. It currently runs on standard Linux and MMU-less (also known as
+      uClinux) systems with support for Aarch64, Alpha, ARC, ARM, AVR32,
+      Blackfin, CRIS, C-Sky, C6X, FR-V, H8/300, HPPA, i386, IA64, KVX, LM32,
+      M68K/Coldfire, Metag, Microblaze, MIPS, MIPS64, NDS32, NIOS2, OpenRISC,
+      PowerPC, RISCV64, Sparc, Sparc64, SuperH, Tile, X86_64 and XTENSA
+      processors. Alpha, FR-V, HPPA, IA64, LM32, NIOS2, Tile and Sparc64 are
+      experimental and need more testing.
+    '';
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ rasendubi AndersonTorres ];
     platforms = platforms.linux;
-    broken = stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64;
+    badPlatforms = platforms.aarch64;
   };
+
+  passthru = {
+    # Derivations may check for the existance of this attribute, to know what to
+    # link to.
+    libiconv = libiconvReal;
+  };
+
 }

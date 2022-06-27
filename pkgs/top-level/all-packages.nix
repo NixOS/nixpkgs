@@ -1,8 +1,8 @@
 /* The top-level package collection of nixpkgs.
- * It is sorted by categories corresponding to the folder names
- * in the /pkgs folder. Inside the categories packages are roughly
- * sorted by alphabet, but strict sorting has been long lost due
- * to merges. Please use the full-text search of your editor. ;)
+ * It is sorted by categories corresponding to the folder names in the /pkgs
+ * folder. Inside the categories packages are roughly sorted by alphabet, but
+ * strict sorting has been long lost due to merges. Please use the full-text
+ * search of your editor. ;)
  * Hint: ### starts category names.
  */
 { lib, noSysDirs, config, overlays }:
@@ -4032,6 +4032,24 @@ with pkgs;
   merriweather-sans = callPackage ../data/fonts/merriweather-sans { };
 
   meson = callPackage ../development/tools/build-managers/meson { };
+
+  # while building documentation meson may want to run binaries for host
+  # which needs an emulator
+  # example of an error which this fixes
+  # [Errno 8] Exec format error: './gdk3-scan'
+  mesonEmulatorHook =
+    if (stdenv.buildPlatform != stdenv.targetPlatform) then
+      makeSetupHook
+        {
+          name = "mesonEmulatorHook";
+          substitutions = {
+            crossFile = writeText "cross-file.conf" ''
+              [binaries]
+              exe_wrapper = ${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
+            '';
+          };
+        } ../development/tools/build-managers/meson/emulator-hook.sh
+    else throw "mesonEmulatorHook has to be in a cross conditional i.e. (stdenv.buildPlatform != stdenv.hostPlatform)";
 
   meson-tools = callPackage ../misc/meson-tools { };
 
@@ -17697,7 +17715,14 @@ with pkgs;
   relibc = callPackage ../development/libraries/relibc { };
 
   # Only supported on Linux
-  glibcLocales = if stdenv.hostPlatform.isLinux then callPackage ../development/libraries/glibc/locales.nix { } else null;
+  glibcLocales =
+    if stdenv.hostPlatform.isLinux
+    then callPackage ../development/libraries/glibc/locales.nix { }
+    else null;
+  glibcLocalesUtf8 =
+    if stdenv.hostPlatform.isLinux
+    then callPackage ../development/libraries/glibc/locales.nix { allLocales = false; }
+    else null;
 
   glibcInfo = callPackage ../development/libraries/glibc/info.nix { };
 
@@ -17763,7 +17788,10 @@ with pkgs;
   gns3-gui = gns3Packages.guiStable;
   gns3-server = gns3Packages.serverStable;
 
-  gobject-introspection = callPackage ../development/libraries/gobject-introspection {
+  gobject-introspection = if (stdenv.hostPlatform != stdenv.targetPlatform)
+    then callPackage ../development/libraries/gobject-introspection/wrapper.nix { } else gobject-introspection-unwrapped;
+
+  gobject-introspection-unwrapped = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
     inherit (darwin) cctools;
   };
@@ -18372,7 +18400,10 @@ with pkgs;
 
   libantlr3c = callPackage ../development/libraries/libantlr3c {};
 
-  libaom = callPackage ../development/libraries/libaom { };
+  libaom = callPackage ../development/libraries/libaom {
+    # Remove circular dependency for libavif
+    libjxl = libjxl.override { buildDocs = false; };
+  };
 
   libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
@@ -24196,11 +24227,15 @@ with pkgs;
     buildBarebox
     bareboxTools;
 
-  uclibc = callPackage ../os-specific/linux/uclibc { };
+  uclibc-ng = callPackage ../os-specific/linux/uclibc-ng { };
 
-  uclibcCross = callPackage ../os-specific/linux/uclibc {
+  uclibc-ng-cross = callPackage ../os-specific/linux/uclibc-ng {
     stdenv = crossLibcStdenv;
   };
+
+  # Aliases
+  uclibc = uclibc-ng;
+  uclibcCross = uclibc-ng-cross;
 
   eudev = callPackage ../os-specific/linux/eudev { util-linux = util-linuxMinimal; };
 

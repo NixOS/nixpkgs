@@ -5,6 +5,7 @@
 , jsonschema
 , mock
 , parameterized
+, pytest-env
 , pytestCheckHook
 , pythonOlder
 , pyyaml
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.42.0";
+  version = "1.46.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "serverless-application-model";
     rev = "v${version}";
-    sha256 = "sha256-pjcRsmxPL4lbgDopW+wKQRkRcqebLPTd95JTL8PiWtc=";
+    sha256 = "sha256-SLGxpRbTuK+Lxww45dfHIMwwxV5vhlnYyG4WqG45aNg=";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   checkInputs = [
     mock
     parameterized
+    pytest-env
     pytestCheckHook
     pyyaml
   ];

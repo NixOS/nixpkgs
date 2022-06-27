@@ -1026,15 +1026,15 @@ configurePhase() {
         # scripts with vendored libtool code.  Preserve mtimes to
         # prevent some packages (e.g. libidn2) from spontaneously
         # autoreconf'ing themselves
-        CONFIGURE_MTIME_REFERENCE=$(mktemp configure.mtime.reference.XXX)
+        CONFIGURE_MTIME_REFERENCE=$(mktemp configure.mtime.reference.XXXXXX)
         find . \
           -executable \
           -type f \
           -name configure \
-          -execdir grep -l 'GNU Libtool is free software; you can redistribute it and/or modify' {} \; \
-          -execdir touch -r {} "$CONFIGURE_MTIME_REFERENCE" \; \
-          -execdir sed -i s_/usr/bin/file_file_g {} \;    \
-          -execdir touch -r "$CONFIGURE_MTIME_REFERENCE" {} \;
+          -exec grep -l 'GNU Libtool is free software; you can redistribute it and/or modify' {} \; \
+          -exec touch -r {} "$CONFIGURE_MTIME_REFERENCE" \; \
+          -exec sed -i s_/usr/bin/file_file_g {} \;    \
+          -exec touch -r "$CONFIGURE_MTIME_REFERENCE" {} \;
         rm -f "$CONFIGURE_MTIME_REFERENCE"
     fi
 

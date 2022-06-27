@@ -298,14 +298,6 @@ stdenv.mkDerivation {
     ''
 
     ##
-    ## General Clang support
-    ##
-    + optionalString isClang ''
-
-      echo "-target ${targetPlatform.config}" >> $out/nix-support/cc-cflags
-    ''
-
-    ##
     ## GCC libs for non-GCC support
     ##
     + optionalString useGccForLibs ''
@@ -522,6 +514,15 @@ stdenv.mkDerivation {
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
+    ''
+
+    ##
+    ## General Clang support
+    ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
+    ##
+    + optionalString isClang ''
+      export defaultTarget=${targetPlatform.config}
+      substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
     ''
 
     ##

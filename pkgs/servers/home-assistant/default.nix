@@ -213,6 +213,7 @@ in python.pkgs.buildPythonApplication rec {
       "cryptography"
       "httpx"
       "PyJWT"
+      "requests"
     ];
   in ''
     sed -r -i \
