@@ -29309,7 +29309,7 @@ with pkgs;
 
   ponymix = callPackage ../applications/audio/ponymix { };
 
-  portfolio-filemanager = callPackage ../applications/misc/portfolio-filemanager { };
+  portfolio-filemanager = callPackage ../applications/file-managers/portfolio-filemanager { };
 
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
 
