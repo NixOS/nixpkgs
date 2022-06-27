@@ -89,7 +89,8 @@ in {
     };
     datadir = mkOption {
       type = types.str;
-      defaultText = "config.services.nextcloud.home";
+      default = config.services.nextcloud.home;
+      defaultText = literalExpression "config.services.nextcloud.home";
       description = ''
         Data storage path of nextcloud.  Will be <xref linkend="opt-services.nextcloud.home" /> by default.
         This folder will be populated with a config.php and data folder which contains the state of the instance (excl the database).";
@@ -629,8 +630,6 @@ in {
           else nextcloud24
         );
 
-      services.nextcloud.datadir = mkOptionDefault config.services.nextcloud.home;
-
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "24" then pkgs.php80
         # FIXME: Use PHP 8.1 with Nextcloud 24 and higher, once issues like this one are fixed:
@@ -650,6 +649,7 @@ in {
 
     { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
+        after = [ "nextcloud-setup.service" ];
         timerConfig.OnBootSec = "5m";
         timerConfig.OnUnitActiveSec = "5m";
         timerConfig.Unit = "nextcloud-cron.service";
@@ -840,12 +840,14 @@ in {
           serviceConfig.User = "nextcloud";
         };
         nextcloud-cron = {
+          after = [ "nextcloud-setup.service" ];
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
           serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${cfg.package}/cron.php";
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
+          after = [ "nextcloud-setup.service" ];
           serviceConfig.Type = "oneshot";
           serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
           serviceConfig.User = "nextcloud";
@@ -914,7 +916,6 @@ in {
             priority = 100;
             extraConfig = ''
               allow all;
-              log_not_found off;
               access_log off;
             '';
           };
