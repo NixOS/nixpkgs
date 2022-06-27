@@ -4996,7 +4996,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
-  clex = callPackage ../tools/misc/clex { };
+  clex = callPackage ../applications/file-managers/clex { };
 
   client-ip-echo = callPackage ../servers/misc/client-ip-echo { };
 
