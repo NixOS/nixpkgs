@@ -2,38 +2,38 @@
 , fetchFromGitHub, autoreconfHook
 , installShellFiles
 , enableStandardFeatures ? false
-, sourceHighlight ? null
-, highlight ? null
-, pygments ? null
-, graphviz ? null
-, texlive ? null
-, dblatexFull ? null
-, libxslt ? null
-, w3m ? null
-, lynx ? null
-, imagemagick ? null
-, lilypond ? null
-, libxml2 ? null
-, docbook_xml_dtd_45 ? null
-, docbook_xsl_ns ? null
-, docbook_xsl ? null
-, fop ? null
-, epubcheck ? null
-, gnused ? null
-, coreutils ? null
+, sourceHighlight
+, highlight
+, pygments
+, graphviz
+, texlive
+, dblatexFull
+, libxslt
+, w3m
+, lynx
+, imagemagick
+, lilypond
+, libxml2
+, docbook_xml_dtd_45
+, docbook_xsl_ns
+, docbook_xsl
+, fop
+, epubcheck
+, gnused
+, coreutils
 
 # if true, enable all the below filters and backends
 , enableExtraPlugins ? false
 
 # unzip is needed to extract filter and backend plugins
-, unzip ? null
+, unzip
 # filters
-, enableDitaaFilter ? false, jre ? null
-, enableMscgenFilter ? false, mscgen ? null
-, enableDiagFilter ? false, blockdiag ? null, seqdiag ? null, actdiag ? null, nwdiag ? null
-, enableQrcodeFilter ? false, qrencode ? null
-, enableMatplotlibFilter ? false, matplotlib ? null, numpy ? null
-, enableAafigureFilter ? false, aafigure ? null, recursivePthLoader ? null
+, enableDitaaFilter ? false, jre
+, enableMscgenFilter ? false, mscgen
+, enableDiagFilter ? false, blockdiag, seqdiag, actdiag, nwdiag
+, enableQrcodeFilter ? false, qrencode
+, enableMatplotlibFilter ? false, matplotlib, numpy
+, enableAafigureFilter ? false, aafigure, recursivePthLoader
 # backends
 , enableDeckjsBackend ? false
 , enableOdfBackend ? false
@@ -43,37 +43,6 @@
 
 , buildPackages
 }:
-
-assert enableStandardFeatures ->
-  sourceHighlight != null &&
-  highlight != null &&
-  pygments != null &&
-  graphviz != null &&
-  texlive != null &&
-  dblatexFull != null &&
-  libxslt != null &&
-  w3m != null &&
-  lynx != null &&
-  imagemagick != null &&
-  lilypond != null &&
-  libxml2 != null &&
-  docbook_xml_dtd_45 != null &&
-  docbook_xsl_ns != null &&
-  docbook_xsl != null &&
-  (fop != null || !enableJava) &&
-  epubcheck != null &&
-  gnused != null &&
-  coreutils != null;
-
-# filters
-assert enableExtraPlugins || enableDitaaFilter || enableMscgenFilter || enableDiagFilter || enableQrcodeFilter || enableAafigureFilter -> unzip != null;
-assert (enableExtraPlugins && enableJava) || enableDitaaFilter -> jre != null;
-assert enableExtraPlugins || enableMscgenFilter -> mscgen != null;
-assert enableExtraPlugins || enableDiagFilter -> blockdiag != null && seqdiag != null && actdiag != null && nwdiag != null;
-assert enableExtraPlugins || enableMatplotlibFilter -> matplotlib != null && numpy != null;
-assert enableExtraPlugins || enableAafigureFilter -> aafigure != null && recursivePthLoader != null;
-# backends
-assert enableExtraPlugins || enableDeckjsBackend || enableOdfBackend -> unzip != null;
 
 let
 
