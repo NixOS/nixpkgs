@@ -28577,7 +28577,7 @@ with pkgs;
 
   mu-repo = python3Packages.callPackage ../applications/misc/mu-repo { };
 
-  mucommander = callPackage ../applications/misc/mucommander { };
+  mucommander = callPackage ../applications/file-managers/mucommander { };
 
   multimarkdown = callPackage ../tools/typesetting/multimarkdown { };
 
