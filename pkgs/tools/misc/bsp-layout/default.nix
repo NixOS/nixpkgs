@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bsp-layout";
-  version = "unstable-2021-05-10";
+  version = "unstable-2022-06-19";
 
   src = fetchFromGitHub {
     owner = "phenax";
     repo = pname;
-    rev = "726b850b79eabdc6f4d236cff52e434848cb55e3";
-    sha256 = "1wqlzbz7l9vz37gin2zckrnxkkabnd7x5mi9pb0x96w4yhld5mx6";
+    rev = "181d38443778e81df2d4bc3639063c3ae608f9c7";
+    sha256 = "sha256-4NKI+OnOTYGaJnaPvSoXGJdSSzMo9AjYRLOomp9onoo=";
   };
 
   nativeBuildInputs = [ makeWrapper git bc ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/phenax/bsp-layout";
     license = licenses.mit;
-    maintainers = with maintainers; [ devins2518 totoroot ];
+    maintainers = with maintainers; [ totoroot ];
     platforms = platforms.linux;
   };
 }

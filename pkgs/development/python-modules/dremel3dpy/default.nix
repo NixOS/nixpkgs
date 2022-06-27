@@ -2,28 +2,34 @@
 , async-timeout
 , buildPythonPackage
 , fetchPypi
+, imageio
+, imutils
 , pythonOlder
 , requests
 , urllib3
+, tqdm
 , validators
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "dremel3dpy";
-  version = "0.3.4";
+  version = "1.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zKbHKdgMx76cYGPvPVSm39si0LfyDA4L1CcKaQzEpCw=";
+    hash = "sha256-mf0YjK0nnuNnWgP20yqSgwc0SJfbqnvZqW0MKEXFTg8=";
   };
 
   propagatedBuildInputs = [
     async-timeout
+    imageio
+    imutils
     requests
+    tqdm
     urllib3
     validators
     yarl

@@ -45,26 +45,15 @@ in stdenv.mkDerivation rec {
   patchFlags = [ "-p1" "-d" "src/vboxguest-${version}" ];
 
   unpackPhase = ''
-    ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''
-        isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
-        chmod 755 ./VBoxLinuxAdditions.run
-        # An overflow leads the is-there-enough-space check to fail when there's too much space available, so fake how much space there is
-        sed -i 's/\$leftspace/16383/' VBoxLinuxAdditions.run
-        ./VBoxLinuxAdditions.run --noexec --keep
-      ''
-      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
-    }
+    isoinfo -J -i $src -x /VBoxLinuxAdditions.run > ./VBoxLinuxAdditions.run
+    chmod 755 ./VBoxLinuxAdditions.run
+    # An overflow leads the is-there-enough-space check to fail when there's too much space available, so fake how much space there is
+    sed -i 's/\$leftspace/16383/' VBoxLinuxAdditions.run
+    ./VBoxLinuxAdditions.run --noexec --keep
 
     # Unpack files
     cd install
-    ${if stdenv.hostPlatform.system == "i686-linux" then ''
-        tar xfvj VBoxGuestAdditions-x86.tar.bz2
-      ''
-      else if stdenv.hostPlatform.system == "x86_64-linux" then ''
-        tar xfvj VBoxGuestAdditions-amd64.tar.bz2
-      ''
-      else throw ("Architecture: "+stdenv.hostPlatform.system+" not supported for VirtualBox guest additions")
-    }
+    tar xfvj VBoxGuestAdditions-${if stdenv.hostPlatform.is32bit then "x86" else "amd64"}.tar.bz2
   '';
 
   buildPhase = ''
@@ -155,9 +144,10 @@ in stdenv.mkDerivation rec {
       This add-on provides support for dynamic resizing of the X Display, shared
       host/guest clipboard support and guest OpenGL support.
     '';
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = "GPL";
     maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.linux;
-    broken = kernel.kernelAtLeast "5.17";
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    broken = kernel.kernelAtLeast (if stdenv.hostPlatform.is32bit then "5.10" else "5.17");
   };
 }

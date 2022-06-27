@@ -1053,6 +1053,22 @@ let
         };
       };
 
+      grapecity.gc-excelviewer = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "gc-excelviewer";
+          publisher = "grapecity";
+          version = "4.2.55";
+          sha256 = "sha256-yHl6ZTGIKOEsqmyeYtgDUhNAN9uRpoFApA7FKkPWW3E=";
+        };
+        meta = with lib; {
+          description = "Edit Excel spreadsheets and CSV files in Visual Studio Code and VS Code for the Web";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=grapecity.gc-excelviewer";
+          homepage = "https://github.com/jjuback/gc-excelviewer";
+          license = licenses.mit;
+          maintainers = with maintainers; [ kamadorueda ];
+        };
+      };
+
       humao.rest-client = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "humao";
@@ -1504,6 +1520,23 @@ let
         meta = {
           license = lib.licenses.mit;
           maintainers = with lib.maintainers; [ kamadorueda ];
+        };
+      };
+
+      mattn.lisp = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "lisp";
+          publisher = "mattn";
+          version = "0.1.12";
+          sha256 = "sha256-x6aFrcX0YElEFEr0qA669/LPlab15npmXd5Q585pIEw=";
+        };
+        meta = with lib; {
+          description = "Lisp syntax for vscode";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=mattn.lisp";
+          homepage = "https://github.com/mattn/vscode-lisp";
+          changelog = "https://marketplace.visualstudio.com/items/mattn.lisp/changelog";
+          license = licenses.mit;
+          maintainers = with maintainers; [ kamadorueda ];
         };
       };
 

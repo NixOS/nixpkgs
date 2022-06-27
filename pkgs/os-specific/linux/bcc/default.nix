@@ -77,6 +77,8 @@ python.pkgs.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
 
+  outputs = [ "out" "man" ];
+
   passthru.tests = {
     bpf = nixosTests.bpf;
   };

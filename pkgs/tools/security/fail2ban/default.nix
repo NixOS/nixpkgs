@@ -27,6 +27,12 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/fail2ban/fail2ban/commit/5ac303df8a171f748330d4c645ccbf1c2c7f3497.patch";
       sha256 = "sha256-aozQJHwPcJTe/D/PLQzBk1YH3OAP6Qm7wO7cai5CVYI=";
     })
+    # fix use of MutableMapping with Python >= 3.10
+    # https://github.com/fail2ban/fail2ban/issues/3142
+    (fetchpatch {
+      url = "https://github.com/fail2ban/fail2ban/commit/294ec73f629d0e29cece3a1eb5dd60b6fccea41f.patch";
+      sha256 = "sha256-Eimm4xjBDYNn5QdTyMqGgT5EXsZdd/txxcWJojXlsFE=";
+    })
   ];
 
   preConfigure = ''

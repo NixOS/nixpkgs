@@ -78,6 +78,13 @@
       fingerprint = "2536 9E86 1AA5 9EB7 4C47  B138 6510 870A 77F4 9A99";
     }];
   };
+  _0xC45 = {
+    email = "jason@0xc45.com";
+    name = "Jason Vigil";
+    github = "0xC45";
+    githubId = 56617252;
+    matrix = "@oxc45:matrix.org";
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
@@ -595,6 +602,12 @@
     github = "a1mac";
     githubId = 60479013;
     name = "Alma Cemerlic";
+  };
+  alternateved = {
+    email = "alternateved@pm.me";
+    github = "alternateved";
+    githubId = 45176912;
+    name = "Tomasz Hołubowicz";
   };
   alunduil = {
     email = "alunduil@gmail.com";
@@ -3505,7 +3518,7 @@
     githubId = 424946;
     name = "James Earl Douglas";
   };
-  earvstedt = {
+  erikarvstedt = {
     email = "erik.arvstedt@gmail.com";
     matrix = "@erikarvstedt:matrix.org";
     github = "erikarvstedt";
@@ -5990,6 +6003,12 @@
     githubId = 2502736;
     name = "James Hillyerd";
   };
+  jiegec = {
+    name = "Jiajie Chen";
+    email = "c@jia.je";
+    github = "jiegec";
+    githubId = 6127678;
+  };
   jiehong = {
     email = "nixos@majiehong.com";
     github = "Jiehong";
@@ -6347,6 +6366,13 @@
     github = "jsierles";
     githubId = 82;
   };
+  jsimonetti = {
+    email = "jeroen+nixpkgs@simonetti.nl";
+    matrix = "@jeroen:simonetti.nl";
+    name = "Jeroen Simonetti";
+    github = "jsimonetti";
+    githubId = 5478838;
+  };
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
@@ -6499,6 +6525,12 @@
     github = "sofuture";
     githubId = 66669;
     name = "Jeff Zellner";
+  };
+  k3a = {
+    email = "git+nix@catmail.app";
+    name = "Mario Hros";
+    github = "k3a";
+    githubId = 966992;
   };
   k4leg = {
     name = "k4leg";
@@ -14041,6 +14073,12 @@
     github = "yuriaisaka";
     githubId = 687198;
     name = "Yuri Aisaka";
+  };
+  yurkobb = {
+    name = "Yury Bulka";
+    email = "setthemfree@privacyrequired.com";
+    github = "yurkobb";
+    githubId = 479389;
   };
   yurrriq = {
     email = "eric@ericb.me";

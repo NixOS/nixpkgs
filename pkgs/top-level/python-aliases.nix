@@ -69,6 +69,7 @@ mapAliases ({
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
+  email_validator = email-validator; # added 2022-06-22
   fake_factory = throw "fake_factory has been removed because it is unused and deprecated by upstream since 2016."; # added 2022-05-30
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
   flask_testing = flask-testing; # added 2022-04-25
@@ -117,6 +118,7 @@ mapAliases ({
   pycryptodome-test-vectors = throw "pycryptodome-test-vectors has been removed because it is an internal package to pycryptodome"; # added 2022-05-28
   pyialarmxr = pyialarmxr-homeassistant; # added 2022-06-07
   pylibgen = throw "pylibgen is unmaintained upstreamed, and removed from nixpkgs"; # added 2020-06-20
+  PyLD = pyld; # added 2022-06-22
   pymc3 = pymc; # added 2022-06-05, module was rename starting with 4.0.0
   pymssql = throw "pymssql has been abandoned upstream."; # added 2020-05-04
   pyreadability = readability-lxml; # added 2022-05-24

@@ -1,26 +1,17 @@
-{ lib, fetchFromGitHub, fetchpatch, buildGoModule, testers, temporal-cli }:
+{ lib, fetchFromGitHub, buildGoModule, testers, temporal-cli }:
 
 buildGoModule rec {
   pname = "temporal-cli";
-  version = "1.16.1";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "tctl";
     rev = "v${version}";
-    sha256 = "sha256-WNdu/62/VmxTmzAvzx3zIlcAAlEmpN0yKzQOSUtrL8s=";
+    sha256 = "sha256-KLcCFQJlFeioIhqrbkhgoNPcbAYvy1ESG8x9Y/I7+nw=";
   };
 
-  patches = [
-    # Fix tests
-    (fetchpatch {
-      name = "fix-tests.patch";
-      url = "https://github.com/temporalio/tctl/pull/203/commits/2b113da137a3a925e8fbd7c18bdaaefc31397db4.patch";
-      sha256 = "sha256-HFPwbmLZ2uPHzaHvYoB4MTZvMVyzvUKggA76/bh50DQ=";
-    })
-  ];
-
-  vendorSha256 = "sha256-WF3T+HNisfR0JoKkHCC77kmHmsGZ9NfQ7UCwOmpCG/o=";
+  vendorSha256 = "sha256-kczmoP32/V0HHeC3Mr+giuMB+McVTNeC2F+t1ohY4/U=";
 
   ldflags = [ "-s" "-w" ];
 

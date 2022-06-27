@@ -2734,7 +2734,7 @@ in {
 
   emailthreads = callPackage ../development/python-modules/emailthreads { };
 
-  email_validator = callPackage ../development/python-modules/email-validator { };
+  email-validator = callPackage ../development/python-modules/email-validator { };
 
   embrace = callPackage ../development/python-modules/embrace { };
 
@@ -3032,6 +3032,8 @@ in {
   filebrowser_safe = callPackage ../development/python-modules/filebrowser_safe { };
 
   filebytes = callPackage ../development/python-modules/filebytes { };
+
+  filecheck = callPackage ../development/python-modules/filecheck { };
 
   filelock = callPackage ../development/python-modules/filelock { };
 
@@ -6163,6 +6165,8 @@ in {
 
   oscrypto = callPackage ../development/python-modules/oscrypto { };
 
+  oscpy = callPackage ../development/python-modules/oscpy { };
+
   oset = callPackage ../development/python-modules/oset { };
 
   osmnx = callPackage ../development/python-modules/osmnx { };
@@ -7552,7 +7556,7 @@ in {
 
   pylaunches = callPackage ../development/python-modules/pylaunches { };
 
-  PyLD = callPackage ../development/python-modules/PyLD { };
+  pyld = callPackage ../development/python-modules/pyld { };
 
   pylev = callPackage ../development/python-modules/pylev { };
 
@@ -10999,6 +11003,10 @@ in {
   validphys2 = callPackage ../development/python-modules/validphys2 { };
 
   vallox-websocket-api = callPackage ../development/python-modules/vallox-websocket-api { };
+
+  vapoursynth = callPackage ../development/python-modules/vapoursynth {
+    inherit (pkgs) vapoursynth;
+  };
 
   variants = callPackage ../development/python-modules/variants { };
 

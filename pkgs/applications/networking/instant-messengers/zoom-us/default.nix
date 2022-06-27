@@ -183,6 +183,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://zoom.us/";
     description = "zoom.us video conferencing application";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
     maintainers = with maintainers; [ danbst tadfisher doronbehar ];

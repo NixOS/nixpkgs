@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation rec {
   pname = "chatty";
-  version = "0.6.4";
+  version = "0.6.7";
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     repo = "chatty";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-uDuSx+tWv6DV93/99QUcUKZaWA9kNW8phHZhetYlG/M=";
+    hash = "sha256-W4w/00mRgjfyQmLQ81/EAN+80qk7kDkBmMPJnOU+AIc=";
   };
 
   postPatch = ''
@@ -83,6 +83,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "XMPP and SMS messaging via libpurple and ModemManager";
     homepage = "https://source.puri.sm/Librem5/chatty";
+    changelog = "https://source.puri.sm/Librem5/chatty/-/blob/${src.rev}/NEWS";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda tomfitzhenry ];
     platforms = platforms.linux;

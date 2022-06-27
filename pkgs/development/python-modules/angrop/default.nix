@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , progressbar
 , pythonOlder
+, pythonRelaxDepsHook
 , tqdm
 }:
 
@@ -21,10 +22,18 @@ buildPythonPackage rec {
     hash = "sha256-qaDAicmYZxLPTl17il61ij01prRv2H4xxe07Xg4KWhI=";
   };
 
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
   propagatedBuildInputs = [
     angr
     progressbar
     tqdm
+  ];
+
+  pythonRelaxDeps = [
+    "angr"
   ];
 
   # Tests have additional requirements, e.g., angr binaries

@@ -236,7 +236,7 @@ in
       gitit = 202;
       riemanntools = 203;
       subsonic = 204;
-      riak = 205;
+      # riak = 205; # unused, remove 2022-07-22
       #shout = 206; # dynamically allocated as of 2021-09-18
       gateone = 207;
       namecoin = 208;
@@ -553,7 +553,7 @@ in
       gitit = 202;
       riemanntools = 203;
       subsonic = 204;
-      riak = 205;
+      # riak = 205;#unused, removed 2022-06-22
       #shout = 206; #unused
       gateone = 207;
       namecoin = 208;

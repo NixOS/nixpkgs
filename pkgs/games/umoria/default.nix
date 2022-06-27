@@ -8,7 +8,7 @@
 }:
 
 let
-  savesDir = "~/.umoria/";
+  savesDir = "~/.umoria";
 in
 gcc9Stdenv.mkDerivation rec {
   pname = "umoria";
@@ -38,24 +38,22 @@ gcc9Stdenv.mkDerivation rec {
 
     RUNDIR=\$(mktemp -d)
 
-    cleanup() {
-      rm -rf \$RUNDIR
-    }
-
-    trap cleanup EXIT
+    # Print the directory, so users have access to dumps, and let the system
+    # take care of cleaning up temp files.
+    echo "Running umoria in \$RUNDIR"
 
     cd \$RUNDIR
-    mkdir data
-
-    for i in $out/data/*; do
-      ln -s \$i "data/\$(basename \$i)"
-    done
+    ln -sn $out/data \$RUNDIR/data
 
     mkdir -p ${savesDir}
     [[ ! -f ${savesDir}/scores.dat ]] && touch ${savesDir}/scores.dat
     ln -s ${savesDir}/scores.dat scores.dat
 
-    $out/.umoria-unwrapped
+    if [ \$# -eq 0 ]; then
+       $out/.umoria-unwrapped ${savesDir}/game.sav
+    else
+       $out/.umoria-unwrapped "\$@"
+    fi
     EOF
 
     chmod +x $out/bin/umoria
@@ -74,7 +72,7 @@ gcc9Stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     badPlatforms = [ "aarch64-darwin" ];
-    maintainers = [ maintainers.aciceri ];
+    maintainers = with maintainers; [ aciceri kenran ];
     license = licenses.gpl3Plus;
   };
 }

@@ -27,7 +27,8 @@ in
     postInstall = ''
       patchShebangs node_modules/
       npm run build
-      ln -s $out/lib/node_modules/asf-ui/dist $out/lib/dist
+      cp -r $out/lib/node_modules/asf-ui/dist $out/lib/dist
+      rm -rf $out/lib/node_modules/
     '';
 
     meta = with lib; {

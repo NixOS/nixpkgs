@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "eth-typing";
-  version = "3.0.0";
+  version = "3.1.0";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-typing";
     rev = "v${version}";
-    sha256 = "sha256-9rrnDFPWAmrUkr2mVTVi/8DTJdg4hzGaU0UbpwG5mtY=";
+    sha256 = "sha256-Xk/IfW1zuNbGdYAxXTNL9kL+ZW1bWruZ21KFV9+lv/E=";
   };
 
   checkInputs = [

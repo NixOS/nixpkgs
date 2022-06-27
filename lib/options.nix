@@ -7,6 +7,7 @@ let
     collect
     concatLists
     concatMap
+    concatMapStringsSep
     elemAt
     filter
     foldl'
@@ -339,6 +340,11 @@ rec {
         else ": " + value;
     in "\n- In `${def.file}'${result}"
   ) defs;
+
+  showOptionWithDefLocs = opt: ''
+      ${showOption opt.loc}, with values defined in:
+      ${concatMapStringsSep "\n" (defFile: "  - ${defFile}") opt.files}
+    '';
 
   unknownModule = "<unknown-file>";
 
