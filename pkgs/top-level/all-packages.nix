@@ -3041,7 +3041,7 @@ with pkgs;
 
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
-  cfm = callPackage ../applications/misc/cfm { };
+  cfm = callPackage ../applications/file-managers/cfm { };
 
   charliecloud = callPackage ../applications/virtualization/charliecloud { };
 
