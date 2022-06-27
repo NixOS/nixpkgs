@@ -298,12 +298,6 @@
       </listitem>
       <listitem>
         <para>
-          <literal>zfs</literal> was updated from 2.1.4 to 2.1.5,
-          enabling it to be used with Linux kernel 5.18.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           memtest86+ was updated from 5.00-coreboot-002 to 6.00-beta2.
           It is now the upstream version from https://www.memtest.org/,
           as coreboot’s fork is no longer available.
