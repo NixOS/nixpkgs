@@ -19108,7 +19108,7 @@ with pkgs;
 
   libmad = callPackage ../development/libraries/libmad { };
 
-  llama = callPackage ../applications/misc/llama { };
+  llama = callPackage ../applications/file-managers/llama { };
 
   malcontent = callPackage ../development/libraries/malcontent { };
 
