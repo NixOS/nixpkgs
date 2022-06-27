@@ -1,21 +1,18 @@
-
-{ mkDerivation, lib, fetchurl, cmake, gettext, pkg-config, extra-cmake-modules
+{ mkDerivation, lib, cmake, gettext, pkg-config, extra-cmake-modules
 , qtquickcontrols, qtwebkit, qttools, kde-cli-tools, qtbase
 , kconfig, kdeclarative, kdoctools, kiconthemes, ki18n, kitemmodels, kitemviews
 , kjobwidgets, kcmutils, kio, knewstuff, knotifyconfig, kparts, ktexteditor
 , threadweaver, kxmlgui, kwindowsystem, grantlee, kcrash, karchive, kguiaddons
 , plasma-framework, krunner, kdevelop-pg-qt, shared-mime-info, libkomparediff2
-, libksysguard, konsole, llvmPackages, makeWrapper, kpurpose, boost
+, libksysguard, konsole, llvmPackages_13, makeWrapper, kpurpose, boost
+, qtwebengine, cppcheck
 }:
 
+let
+  llvmPackages = llvmPackages_13;
+in
 mkDerivation rec {
   pname = "kdevelop";
-  version = "5.6.2";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/${pname}/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "sha256-D4a8P+U/dhwePj91RFd6DEFDO+i/8xDPLnKfdvQ2O/Y=";
-  };
 
   nativeBuildInputs = [
     cmake gettext pkg-config extra-cmake-modules makeWrapper
@@ -32,6 +29,7 @@ mkDerivation rec {
     kjobwidgets kcmutils kio knewstuff knotifyconfig kparts ktexteditor
     threadweaver kxmlgui kwindowsystem grantlee plasma-framework krunner
     shared-mime-info libksysguard konsole kcrash karchive kguiaddons kpurpose
+    cppcheck qtwebengine
   ];
 
   # https://cgit.kde.org/kdevelop.git/commit/?id=716372ae2e8dff9c51e94d33443536786e4bd85b
