@@ -8902,7 +8902,7 @@ with pkgs;
 
   nnn = callPackage ../applications/misc/nnn { };
 
-  sfm = callPackage ../applications/misc/sfm { };
+  sfm = callPackage ../applications/file-managers/sfm { };
 
   shfm = callPackage ../applications/misc/shfm { };
 
