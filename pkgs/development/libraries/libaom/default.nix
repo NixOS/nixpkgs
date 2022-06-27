@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
     changelog   = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
     maintainers = with maintainers; [ primeos kiloreux dandellion ];
     platforms   = platforms.all;
+    outputsToInstall = [ "bin" ];
     license = licenses.bsd2;
   };
 }
