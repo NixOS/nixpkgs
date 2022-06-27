@@ -200,7 +200,7 @@ in {
     withDocs = true;
   };
 
-  openssl_3_0 = common {
+  openssl_3 = common {
     version = "3.0.3";
     sha256 = "sha256-7gB4rc7x3l8APGLIDMllJ3IWCcbzu0K3eV3zH4tVjAs=";
     patches = [
