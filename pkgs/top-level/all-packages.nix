@@ -26785,8 +26785,7 @@ with pkgs;
 
   gtk-pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { withGtk3 = true; };
 
-  hydrus = python39Packages.callPackage ../applications/graphics/hydrus {
-    python3Packages = python39Packages;
+  hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
     inherit miniupnpc_2 swftools;
     inherit (qt5) wrapQtAppsHook;
   };
