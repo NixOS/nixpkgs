@@ -281,8 +281,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "0.0.83";
-          sha256 = "1giybf12p0h0fm950w9bwvzdk77771zfkylrqs9h0lhbdzr92qbl";
+          version = "0.0.86";
+          sha256 = "sha256-XZd2xTcTqT6LytVwN+CybaFT71nwdobgZQQddMFdjU4=";
         };
         meta = {
           license = lib.licenses.mit;
