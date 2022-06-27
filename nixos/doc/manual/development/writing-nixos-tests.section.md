@@ -22,7 +22,7 @@ A NixOS test is a module that has the following structure:
 ```
 
 We refer to the whole test above as a test module, whereas the values
-in [`nodes.<name>`](#test-opt-nodes) are NixOS modules themselves.
+in [`nodes.<name>`](#test-opt-nodes) are NixOS modules. (Each NixOS configuration is defined by a module.)
 
 The option [`testScript`](#test-opt-testScript) is a piece of Python code that executes the
 test (described below). During the test, it will start one or more

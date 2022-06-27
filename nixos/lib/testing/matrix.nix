@@ -1,6 +1,6 @@
 { config, lib, options, extendModules, moduleType, ... }:
 let
-  inherit (lib) mkOption optionalAttrs types;
+  inherit (lib) mkOption optionalAttrs types mdDoc;
 
   extendModule = module: extendModules { modules = [ module ]; };
 
@@ -9,7 +9,7 @@ let
   decisionModule = decision@{ name, ... }: {
     options = {
       after = mkOption {
-        description = ''
+        description = mdDoc ''
           > You've already made the choice, now you have to understand it.
 
           Some choices depend on other choices.
@@ -31,7 +31,7 @@ let
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = ''
+        description = mdDoc ''
           > But if you already know, how can I make a choice?
 
           > Because you didn't come here to make the choice, you've already made it. You're here to try to understand why you made it.
@@ -55,6 +55,13 @@ let
       };
       choice = mkOption {
         type = types.lazyAttrsOf (types.submodule (choiceModule decision.name extendModules));
+        description = ''
+          A attribute set where each attribute name corresponds to a choice; a single outcome of the decision.
+
+          When you define `matrix.foo.choice.bar`, it creates a copy of the test configuration inside `matrix.foo.choice.bar.module`, where the module argument `foo` will be set to `bar`.
+
+          `runTest` will traverse all matrix choices, so that in all the final test configurations it returns, a choice for `foo` has been made.
+        '';
       };
     };
   };
@@ -62,7 +69,7 @@ let
   choiceModule = decisionName: extendModules: { name, ... }: {
     options = {
       module = mkOption {
-        description = ''
+        description = mdDoc ''
           The effects of making a choice. You can specify any test-level option here.
 
           NixOS-level options can be specified in the {option}`nodes.<name>` and {option}`defaults` sub-options.
@@ -70,6 +77,7 @@ let
         example = { defaults.services.foo.backend = "xyz"; };
         type = (extendModules { modules = [ (inMatrixModule decisionName name) ]; }).type;
         default = { };
+        visible = "shallow";
       };
     };
   };
@@ -88,7 +96,7 @@ in
   options = {
     matrix = mkOption {
       type = types.lazyAttrsOf (types.submodule decisionModule);
-      description = ''
+      description = mdDoc ''
         Wake up, Neo...
 
         Like every other test, it is born into a prison that it cannot smell or taste or touch. A prison for the mind... Unfortunately, no one can be told what the matrix option is. You have to see it for yourself. This is your last chance. After this, there is no turning back.
@@ -122,9 +130,10 @@ in
     matrixDecisionsMade = mkOption {
       type = types.attrsOf types.str;
       default = { };
+      internal = true;
     };
     result = mkOption {
-      description = ''
+      description = mdDoc ''
         _Normally computed by the test framework._
 
         The tests to be run in a single derivation, or nested attrsets
@@ -137,16 +146,31 @@ in
       internal = true;
     };
     extend = mkOption {
-      description = ''
-        A function that allows the test modules to be extended, while returning
-        the matrix result.
+      description = mdDoc ''
+        A function that allows the test modules to be extended.
+
+        This can be used for overriding a test, and even for undoing a choice
+        in a test matrix. For example, in package `tests` (such as `passthru.tests`),
+        you want to test exactly that package, and only that package. For example:
+
+        ```nix
+        passthru.tests.nixos = nixosTests.foo.extend {
+          matrix.version.enable = false;
+          _module.args.testPackage = ...;
+        };
+        ```
+
+        See also [a more complete description in the nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#ssec-nixos-tests-linking).
+
+        It is a bit like calling `extendModules` but returning a result of `runTest` somehow.
       '';
       readOnly = true;
       default = extend;
+      type = types.functionTo types.raw;
     };
 
     callTest = mkOption {
-      description = ''
+      description = mdDoc ''
         A function that select the right attribute(s) from the test config,
         for the purpose that the config was created.
       '';
@@ -157,7 +181,7 @@ in
       default = config: config.test;
     };
     exposeIntermediateAttrs = mkOption {
-      description = ''
+      description = mdDoc ''
         A function that adds attributes from `config` to the {option}`result`
         for the intermediate nodes of the test tree - ie the returned attrsets
         representing choices.
@@ -165,6 +189,7 @@ in
       type = types.functionTo (types.lazyAttrsOf types.raw);
       default = config: {};
       defaultText = lib.literalExpression "config: { }";
+      internal = true;
     };
   };
   config = {
