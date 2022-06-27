@@ -7,7 +7,7 @@
 , rustPlatform
 , Security
 , stdenv
-, testVersion
+, testers
 }:
 
 let
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = gfold;
     command = "gfold --version";
     inherit version;

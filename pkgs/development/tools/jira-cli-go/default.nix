@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, less, more, installShellFiles, testVersion, jira-cli-go }:
+{ lib, buildGoModule, fetchFromGitHub, less, more, installShellFiles, testers, jira-cli-go }:
 
 buildGoModule rec {
   pname = "jira-cli-go";
@@ -22,7 +22,7 @@ buildGoModule rec {
 
   checkInputs = [ less more ]; # Tests expect a pager in $PATH
 
-  passthru.tests.version = testVersion {
+  passthru.tests.version = testers.testVersion {
     package = jira-cli-go;
     command = "jira version";
     inherit version;
