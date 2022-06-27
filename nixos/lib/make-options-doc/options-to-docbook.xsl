@@ -14,6 +14,7 @@
   <xsl:param name="revision" />
   <xsl:param name="documentType" />
   <xsl:param name="program" />
+  <xsl:param name="variablelistId" />
 
 
   <xsl:template match="/expr/list">
@@ -31,7 +32,8 @@
   </xsl:template>
 
   <xsl:template name="variable-list">
-      <variablelist xml:id="configuration-variable-list">
+      <variablelist>
+      <xsl:attribute name="id" namespace="http://www.w3.org/XML/1998/namespace"><xsl:value-of select="$variablelistId"/></xsl:attribute>
         <xsl:for-each select="attrs">
           <xsl:variable name="id" select="
             concat('opt-',
