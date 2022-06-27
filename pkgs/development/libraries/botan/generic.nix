@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, python3, bzip2, zlib, gmp, boost
+{ lib
+, stdenv
+, fetchurl
+, boost
+, bzip2
+, gmp
+, python3
+, sqlite
+, xz
+, zlib
 # Passed by version specific builders
 , baseVersion, revision, hash
 , sourceExtension ? "tar.xz"
@@ -29,13 +38,35 @@ stdenv.mkDerivation rec {
   patches = extraPatches;
   inherit postPatch;
 
-  nativeBuildInputs = [ python3 ];
-  buildInputs = [ bzip2 zlib gmp boost ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  nativeBuildInputs = [
+    python3
+  ];
+
+  buildInputs = [
+    boost
+    bzip2
+    gmp
+    sqlite
+    xz
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
+    Security
+  ];
 
   configurePhase = ''
     runHook preConfigure
-    python configure.py --prefix=$out --with-bzip2 --with-zlib ${extraConfigureFlags}${lib.optionalString stdenv.cc.isClang " --cc=clang"} ${lib.optionalString stdenv.hostPlatform.isAarch64 " --cpu=aarch64"}
+    python configure.py \
+      --prefix=$out \
+      --with-boost \
+      --with-bzip2 \
+      --with-lzma \
+      --with-sqlite3 \
+      --with-zlib \
+      --with-os-features=getrandom,getentropy \
+      ${lib.optionalString stdenv.cc.isClang "--cc=clang"} \
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 "--cpu=aarch64"} \
+      ${extraConfigureFlags}
     runHook postConfigure
   '';
 
@@ -56,6 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Cryptographic algorithms library";
+    homepage = "https://botan.randombit.net/";
     maintainers = with maintainers; [ raskin thillux ];
     platforms = platforms.unix;
     license = licenses.bsd2;
