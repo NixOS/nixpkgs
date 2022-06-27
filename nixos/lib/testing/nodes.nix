@@ -13,7 +13,7 @@ let
       baseModules = (import ../../modules/module-list.nix) ++
         [
           ./nixos-test-base.nix
-          { key = "nodes"; _module.args.nodes = nodes; }
+          { key = "nodes"; _module.args.nodes = config.nodesCompat; }
           ({ config, ... }:
             {
               virtualisation.qemu.package = testModuleArgs.config.qemu.package;
