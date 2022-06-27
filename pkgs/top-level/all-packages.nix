@@ -207,6 +207,10 @@ with pkgs;
       }
     '');
 
+  chkservice = callPackage ../tools/admin/chkservice {
+    stdenv = gcc10StdenvCompat;
+  };
+
   addOpenGLRunpath = callPackage ../build-support/add-opengl-runpath { };
 
   quickemu = callPackage ../development/quickemu { };
