@@ -6516,6 +6516,18 @@ final: prev:
     meta.homepage = "https://github.com/vmware-archive/salt-vim/";
   };
 
+  satellite-nvim = buildVimPluginFrom2Nix {
+    pname = "satellite.nvim";
+    version = "2022-06-26";
+    src = fetchFromGitHub {
+      owner = "lewis6991";
+      repo = "satellite.nvim";
+      rev = "320e3c54b507486e3ed0c9dacc656fdf54b40057";
+      sha256 = "1qkx0mcrmqgvpx9gmncblkm7km4ap3hvkcp65dqc9nn2h4w63hvy";
+    };
+    meta.homepage = "https://github.com/lewis6991/satellite.nvim/";
+  };
+
   scrollbar-nvim = buildVimPluginFrom2Nix {
     pname = "scrollbar.nvim";
     version = "2022-06-16";
