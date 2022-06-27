@@ -157,6 +157,7 @@
   ./programs/fish.nix
   ./programs/flashrom.nix
   ./programs/flexoptix-app.nix
+  ./programs/foliate.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
   ./programs/gamemode.nix

@@ -326,6 +326,14 @@
       </listitem>
       <listitem>
         <para>
+          There is a new module for the
+          <link xlink:href="https://johnfactotum.github.io/foliate/">Foliate</link>
+          eBook viewer under the <literal>programs.foliate</literal>
+          NixOS options.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           There is a new module for the <literal>thunar</literal>
           program (the Xfce file manager), which depends on the
           <literal>xfconf</literal> dbus service, and also has a dbus
