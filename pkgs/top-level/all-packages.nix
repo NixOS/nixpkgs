@@ -24212,6 +24212,7 @@ with pkgs;
     nlsSupport = false;
     ncursesSupport = false;
     systemdSupport = false;
+    translateManpages = false;
   } else util-linux;
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
