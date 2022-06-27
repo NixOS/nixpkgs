@@ -11418,9 +11418,9 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  vifm = callPackage ../applications/misc/vifm { };
+  vifm = callPackage ../applications/file-managers/vifm { };
 
-  vifm-full = callPackage ../applications/misc/vifm {
+  vifm-full = vifm.override {
     mediaSupport = true;
     inherit lib udisks2 python3;
   };
