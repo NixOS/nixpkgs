@@ -47,6 +47,7 @@ rec {
           then builtins.unsafeGetAttrPos "description" meta
           else builtins.unsafeGetAttrPos "testScript" t)
     , extraPythonPackages ? (_ : [])
+    , interactive ? {}
     } @ t:
       runTest {
         imports = [
