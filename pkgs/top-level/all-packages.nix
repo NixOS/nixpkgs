@@ -28706,7 +28706,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
-  pcmanfm = callPackage ../applications/misc/pcmanfm { };
+  pcmanfm = callPackage ../applications/file-managers/pcmanfm { };
 
   pcmanfm-qt = lxqt.pcmanfm-qt;
 
