@@ -8904,7 +8904,7 @@ with pkgs;
 
   sfm = callPackage ../applications/file-managers/sfm { };
 
-  shfm = callPackage ../applications/misc/shfm { };
+  shfm = callPackage ../applications/file-managers/shfm { };
 
   noise-repellent = callPackage ../applications/audio/noise-repellent { };
 
