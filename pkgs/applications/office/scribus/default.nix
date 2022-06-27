@@ -36,24 +36,14 @@ in
 mkDerivation rec {
   pname = "scribus";
 
-  version = "1.5.7";
+  version = "1.5.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-devel/${pname}-${version}.tar.xz";
-    sha256 = "sha256-MYMWss/Hp2GR0+DT+MImUUfa6gVwFiAo4kPCktgm+M4=";
+    hash = "sha256-R4Fuj89tBXiP8WqkSZ+X/yJDHHd6d4kUmwqItFHha3Q=";
   };
 
   patches = [
-    # For harfbuzz >= 2.9.0
-    (fetchpatch {
-      url = "https://github.com/scribusproject/scribus/commit/1b546978bc4ea0b2a73fbe4d7cf947887e865162.patch";
-      sha256 = "sha256-noRCaN63ZYFfXmAluEYXdFPNOk3s5W3KBAsLU1Syxv4=";
-    })
-    # For harfbuzz >= 3.0
-    (fetchpatch {
-      url = "https://github.com/scribusproject/scribus/commit/68ec41169eaceea4a6e1d6f359762a191c7e61d5.patch";
-      sha256 = "sha256-xhp65qVvaof0md1jb3XHZw7uFX1RtNxPfUOaVnvZV1Y=";
-    })
     # For Poppler 22.02
     (fetchpatch {
       url = "https://github.com/scribusproject/scribus/commit/85c0dff3422fa3c26fbc2e8d8561f597ec24bd92.patch";
@@ -65,24 +55,8 @@ mkDerivation rec {
     })
     # For Poppler 22.03
     (fetchpatch {
-      url = "https://github.com/scribusproject/scribus/commit/553d1fd5f76ffb3743583b88c78a7232b076a965.patch";
-      sha256 = "56JrEG3eCzyALTH04yjzurKRj2PocpjO6b4PusMRxjY=";
-    })
-    (fetchpatch {
-      url = "https://github.com/scribusproject/scribus/commit/1f82e38be0782b065910f5fb4cece23f690349ae.patch";
-      sha256 = "qektUfel5KeA327D3THyqi8dznP1SQQFToUC5Kd0+W4=";
-    })
-    (fetchpatch {
       url = "https://github.com/scribusproject/scribus/commit/f19410ac3b27e33dd62105746784e61e85b90a1d.patch";
       sha256 = "JHdgntYcioYatPeqpmym3c9dORahj0CinGOzbGtA4ds=";
-    })
-    (fetchpatch {
-      url = "https://github.com/scribusproject/scribus/commit/e013e8126d2100e8e56dea5b836ad43275429389.patch";
-      sha256 = "+siPNtJq9Is9V2PgADeQJB+b4lkl5g8uk6zKBu10Jqw=";
-    })
-    (fetchpatch {
-      url = "https://github.com/scribusproject/scribus/commit/48263954a7dee0be815b00f417ae365ab26cdd85.patch";
-      sha256 = "1WE9kALFw79bQH88NUafXaZ1Y/vJEKTIWxlk5c+opsQ=";
     })
     # For Poppler 22.04
     (fetchpatch {
