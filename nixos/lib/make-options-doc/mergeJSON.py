@@ -104,6 +104,8 @@ def convertMD(options: Dict[str, Any]) -> str:
             # a single paragraph and the original docbook string is no longer
             # available to restore the trailer.
             return f"<{tag}><para>{text.rstrip()}</para></{tag}>"
+        def block_quote(self, text):
+            return f"<blockquote><para>{text}</para></blockquote>"
         def command(self, text):
             return f"<command>{escape(text)}</command>"
         def option(self, text):
