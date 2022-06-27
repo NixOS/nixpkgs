@@ -2659,6 +2659,8 @@ with pkgs;
 
   awsls = callPackage ../tools/admin/awsls { };
 
+  awsrm = callPackage ../tools/admin/awsrm { };
+
   awstats = callPackage ../tools/system/awstats { };
 
   awsweeper = callPackage ../tools/admin/awsweeper { };
@@ -13686,6 +13688,8 @@ with pkgs;
   };
 
   microscheme = callPackage ../development/compilers/microscheme { };
+
+  millet = callPackage ../development/tools/millet {};
 
   mint = callPackage ../development/compilers/mint { };
 
@@ -25092,6 +25096,8 @@ with pkgs;
 
   stdmanpages = callPackage ../data/documentation/std-man-pages { };
 
+  starfetch = callPackage ../tools/misc/starfetch { };
+
   starship = callPackage ../tools/misc/starship {
     inherit (darwin.apple_sdk.frameworks) Security Foundation Cocoa;
   };
@@ -28893,6 +28899,8 @@ with pkgs;
 
   diff-pdf = callPackage ../applications/misc/diff-pdf { wxGTK = wxGTK31; };
 
+  diffuse = callPackage ../applications/misc/diffuse { };
+
   mlocate = callPackage ../tools/misc/mlocate { };
 
   plocate = callPackage ../tools/misc/plocate { };
@@ -32126,6 +32134,8 @@ with pkgs;
 
   icbm3d = callPackage ../games/icbm3d { };
 
+  infra-arcana = callPackage ../games/infra-arcana { };
+
   ingen = callPackage ../applications/audio/ingen { };
 
   ideogram = callPackage ../applications/graphics/ideogram { };
@@ -33718,6 +33728,8 @@ with pkgs;
   };
 
   why3 = callPackage ../applications/science/logic/why3 { };
+
+  wayback-machine-archiver = callPackage ../tools/misc/wayback-machine-archiver { };
 
   workcraft = callPackage ../applications/science/logic/workcraft {};
 

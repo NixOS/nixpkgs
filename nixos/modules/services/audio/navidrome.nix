@@ -48,6 +48,7 @@ in {
           # navidrome uses online services to download additional album metadata / covers
           "${config.environment.etc."ssl/certs/ca-certificates.crt".source}:/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
+          "/etc"
         ] ++ lib.optional (cfg.settings ? MusicFolder) cfg.settings.MusicFolder;
         CapabilityBoundingSet = "";
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
