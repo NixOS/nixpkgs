@@ -12,6 +12,8 @@
 with pkgs;
 
 let
+  inherit (lib) hasPrefix removePrefix;
+
   lib = pkgs.lib;
 
   docbook_xsl_ns = pkgs.docbook-xsl-ns.override {

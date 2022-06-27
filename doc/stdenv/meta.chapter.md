@@ -213,6 +213,8 @@ runCommand "my-package-test" {
 
 A timeout (in seconds) for building the derivation. If the derivation takes longer than this time to build, it can fail due to breaking the timeout. However, all computers do not have the same computing power, hence some builders may decide to apply a multiplicative factor to this value. When filling this value in, try to keep it approximately consistent with other values already present in `nixpkgs`.
 
+This setting may be lost when the package is used as a dependency instead of being presented directly an evaluation process that handles the `meta.timeout` attribute. Meta attributes are not stored in the derivation.
+
 ### `hydraPlatforms` {#var-meta-hydraPlatforms}
 
 The list of Nix platform types for which the Hydra instance at `hydra.nixos.org` will build the package. (Hydra is the Nix-based continuous build system.) It defaults to the value of `meta.platforms`. Thus, the only reason to set `meta.hydraPlatforms` is if you want `hydra.nixos.org` to build the package on a subset of `meta.platforms`, or not at all, e.g.

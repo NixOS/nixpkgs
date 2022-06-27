@@ -1,21 +1,29 @@
 { config, hostPkgs, lib, ... }:
 let
-  inherit (lib) types mkOption;
+  inherit (lib) types mkOption mdDoc;
 in
 {
   options = {
     passthru = mkOption {
       type = types.lazyAttrsOf types.raw;
-      description = ''
+      description = mdDoc ''
         Attributes to add to the returned derivations,
         but are not necessarily part of the build.
+
+        This is a bit like doing `drv // { myAttr = true; }` (which would be lost by `overrideAttrs`).
+        It does not change the actual derivation, but adds the attribute nonetheless, so that
+        consumers of what would be `drv` have more information.
       '';
     };
 
     test = mkOption {
       type = types.package;
-      description = ''
+      # TODO: can the interactive driver be configured to access the network?
+      description = mdDoc ''
         Derivation that runs the test as its "build" process.
+
+        This implies that NixOS tests run isolated from the network, making them
+        more dependable.
       '';
     };
   };
