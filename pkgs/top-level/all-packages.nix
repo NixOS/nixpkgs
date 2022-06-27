@@ -12050,7 +12050,7 @@ with pkgs;
 
   ytfzf = callPackage ../tools/misc/ytfzf { };
 
-  ytree = callPackage ../tools/misc/ytree { };
+  ytree = callPackage ../applications/file-managers/ytree { };
 
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
 
