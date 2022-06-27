@@ -49,6 +49,8 @@ let
   # Use this rather than `rec { ... }` below for sake of overlays.
   inherit (pkgs.haskell) compiler packages;
 
+  sphinx = buildPackages.sphinx_offline;
+
 in {
   lib = haskellLibUncomposable;
 
@@ -97,7 +99,7 @@ in {
           packages.ghc8102Binary
         else
           packages.ghc865Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit sphinx;
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
@@ -110,7 +112,7 @@ in {
           packages.ghc8107BinaryMinimal
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -126,7 +128,7 @@ in {
           packages.ghc8107BinaryMinimal
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit sphinx;
       inherit (buildPackages.darwin) autoSignDarwinBinariesHook xattr;
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
@@ -138,7 +140,7 @@ in {
           packages.ghc8107BinaryMinimal
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -148,7 +150,7 @@ in {
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs = packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
