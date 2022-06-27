@@ -1620,7 +1620,7 @@ with pkgs;
 
   mrxvt = callPackage ../applications/terminal-emulators/mrxvt { };
 
-  nimmm = callPackage ../applications/terminal-emulators/nimmm { };
+  nimmm = callPackage ../applications/file-managers/nimmm { };
 
   roxterm = callPackage ../applications/terminal-emulators/roxterm { };
 
