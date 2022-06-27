@@ -443,6 +443,18 @@ let
         };
       };
 
+      bierner.markdown-mermaid = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-mermaid";
+          publisher = "bierner";
+          version = "1.14.2";
+          sha256 = "RZyAY2d3imnLhm1mLur+wTx/quxrNWYR9PCjC+co1FE=";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
       bradlc.vscode-tailwindcss = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-tailwindcss";
