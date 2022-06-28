@@ -229,7 +229,7 @@ rec {
     ...
     }@args:
     assert !listsAsDuplicateKeys || listToValue == null;
-    {
+    rec {
 
     type = with lib.types; let
 
@@ -238,8 +238,9 @@ rec {
         int
         float
         str
+        secret
       ]) // {
-        description = "INI atom (null, bool, int, float or string)";
+        description = "INI atom (null, bool, int, float, string or secret)";
       };
 
       iniAtom =
@@ -267,6 +268,34 @@ rec {
           else value;
       in pkgs.writeText name (lib.generators.toINI (removeAttrs args ["listToValue"]) transformedValue);
 
+    # Extract secrets from the settings and generate a script which
+    # performs the secret replacements.
+    configWithSecrets = path: config:
+      let
+        secrets = lib.catAttrs "_secret" (lib.collect lib.isSecret config);
+        configFile = generate path config;
+        mkSecretReplacement = index: secret: ''
+          ${pkgs.replace-secret}/bin/replace-secret \
+             ${builtins.hashString "sha256" secret.path} \
+             ${if secret.type == "file-path" then
+                 ''<(echo "$CREDENTIALS_DIRECTORY/secret-${builtins.hashString "sha1" path}-${toString index}")''
+               else if secret.type == "file-content" || secret.type == "file-content-encrypted" then
+                 ''"$CREDENTIALS_DIRECTORY/secret-${builtins.hashString "sha1" path}-${toString index}"''
+               else throw "unrecognized secret type: ${secret.type}"} \
+             ${lib.escapeShellArg path}
+        '';
+      in
+        {
+          systemdServiceConfig = mkSystemdCredentials "secret-${builtins.hashString "sha1" path}" secrets;
+          creationScript = pkgs.writeScript "${path}-secrets-replacement.sh" ''
+            set -o errexit -o pipefail -o nounset -o errtrace
+            shopt -s inherit_errexit
+
+            umask u=rwx,g=,o=
+            cp ${configFile} ${path}
+            ${lib.concatStrings (lib.imap1 mkSecretReplacement secrets)}
+          '';
+        };
   };
 
   keyValue = {
