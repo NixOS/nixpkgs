@@ -119,7 +119,8 @@ stdenv.mkDerivation rec{
     "-DHAVE_PYTHON=1"
   ];
 
-  CXXFLAGS = [ "-DV8_COMPRESS_POINTERS=1" "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1" ];
+  CXXFLAGS = lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64))
+    [ "-DV8_COMPRESS_POINTERS=1" "-DV8_31BIT_SMIS_ON_64BIT_ARCH=1" ];
 
   meta = with lib; {
     homepage = "https://dev.mysql.com/doc/mysql-shell/${lib.versions.majorMinor version}/en/";
