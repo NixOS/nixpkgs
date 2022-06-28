@@ -10677,6 +10677,12 @@
     githubId = 1142322;
     name = "Martin Lavoie";
   };
+  regadas = {
+    email = "oss@regadas.email";
+    name = "Filipe Regadas";
+    github = "regadas";
+    githubId = 163899;
+  };
   regnat = {
     email = "regnat@regnat.ovh";
     github = "regnat";

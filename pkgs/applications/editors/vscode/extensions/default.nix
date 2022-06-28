@@ -30,6 +30,18 @@ let
   #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
     {
+      _1Password.op-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "1Password";
+          name = "op-vscode";
+          version = "1.0.0";
+          sha256 = "sha256-ZeKTP3WKjyuR/ryBdJRHXJT+l2gbY4QnWNTsN9+4nOA=";
+        };
+        meta = {
+          license = lib.licenses.mit;
+        };
+      };
+
       _4ops.terraform = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "4ops";
@@ -269,8 +281,8 @@ let
         mktplcRef = {
           name = "vscode-neovim";
           publisher = "asvetliakov";
-          version = "0.0.83";
-          sha256 = "1giybf12p0h0fm950w9bwvzdk77771zfkylrqs9h0lhbdzr92qbl";
+          version = "0.0.86";
+          sha256 = "sha256-XZd2xTcTqT6LytVwN+CybaFT71nwdobgZQQddMFdjU4=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -437,6 +449,18 @@ let
           publisher = "bierner";
           version = "0.2.1";
           sha256 = "1lcg2b39jydl40wcfrbgshl2i1r58k92c7dipz0hl1fa1v23vj4v";
+        };
+        meta = with lib; {
+          license = licenses.mit;
+        };
+      };
+
+      bierner.markdown-mermaid = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "markdown-mermaid";
+          publisher = "bierner";
+          version = "1.14.2";
+          sha256 = "RZyAY2d3imnLhm1mLur+wTx/quxrNWYR9PCjC+co1FE=";
         };
         meta = with lib; {
           license = licenses.mit;
