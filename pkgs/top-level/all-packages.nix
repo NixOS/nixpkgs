@@ -34441,7 +34441,9 @@ with pkgs;
 
   colima = callPackage ../applications/virtualization/colima { };
 
-  lima = callPackage ../applications/virtualization/lima { };
+  lima = callPackage ../applications/virtualization/lima/wrapper.nix { };
+
+  lima-unwrapped = callPackage ../applications/virtualization/lima { };
 
   logtop = callPackage ../tools/misc/logtop { };
 

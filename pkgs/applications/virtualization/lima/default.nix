@@ -2,7 +2,6 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
-, qemu
 , makeWrapper
 }:
 
@@ -36,8 +35,6 @@ buildGoModule rec {
     runHook preInstall
     mkdir -p $out
     cp -r _output/* $out
-    wrapProgram $out/bin/limactl \
-      --prefix PATH : ${lib.makeBinPath [ qemu ]}
     installShellCompletion --cmd limactl \
       --bash <($out/bin/limactl completion bash) \
       --fish <($out/bin/limactl completion fish) \
