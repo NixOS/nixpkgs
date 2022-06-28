@@ -18356,6 +18356,8 @@ with pkgs;
   LASzip = callPackage ../development/libraries/LASzip { };
   LASzip2 = callPackage ../development/libraries/LASzip/LASzip2.nix { };
 
+  lcm = callPackage ../development/libraries/lcm {};
+
   lcms = lcms1;
 
   lcms1 = callPackage ../development/libraries/lcms { };
