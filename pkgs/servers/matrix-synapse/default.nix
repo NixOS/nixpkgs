@@ -11,11 +11,11 @@ in
 with python3.pkgs;
 buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.59.1";
+  version = "1.61.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EASd+tlPIYQpQP2OOHJSPDzgJZyVoigVfcC2b2c2A2o=";
+    sha256 = "sha256-IB7YIqmWIJMxZVFWIF6HggVgjkCSok3YYMykV72p4us=";
   };
 
   buildInputs = [ openssl ];
