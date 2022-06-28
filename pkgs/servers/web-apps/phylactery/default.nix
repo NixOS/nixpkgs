@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromSourcehut }:
+{ lib, buildGoPackage, fetchFromSourcehut, nixosTests }:
 
 buildGoPackage rec {
   pname = "phylactery";
@@ -15,6 +15,7 @@ buildGoPackage rec {
 
   # Upstream repo doesn't provide any test.
   doCheck = false;
+  passthru.tests.phylactery = nixosTests.phylactery;
 
   meta = with lib; {
     description = "Old school comic web server";
