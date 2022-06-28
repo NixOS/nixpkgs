@@ -17,19 +17,19 @@ stdenv.mkDerivation rec {
   version = "1.8.1";
 
   src = fetchFromGitHub {
-    owner  = "djcb";
-    repo   = "mu";
-    rev    = "v${version}";
+    owner = "djcb";
+    repo = "mu";
+    rev = "v${version}";
     sha256 = "dFYITyO9znocf9fv3eh2h83NM3RDYcpDV/uxOISChZo=";
   };
 
   postPatch = ''
-      # Fix mu4e-builddir (set it to $out)
-      substituteInPlace mu4e/mu4e-config.el.in \
-        --replace "@abs_top_builddir@" "$out"
-      substituteInPlace lib/utils/mu-utils.cc \
-        --replace "/bin/rm" "${coreutils}/bin/rm"
-    '';
+    # Fix mu4e-builddir (set it to $out)
+    substituteInPlace mu4e/mu4e-config.el.in \
+      --replace "@abs_top_builddir@" "$out"
+    substituteInPlace lib/utils/mu-utils.cc \
+      --replace "/bin/rm" "${coreutils}/bin/rm"
+  '';
 
   buildInputs = [ emacs glib gmime3 texinfo xapian ];
 
@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.djcbsoftware.nl/code/mu/";
     changelog = "https://github.com/djcb/mu/releases/tag/v${version}";
     maintainers = with maintainers; [ antono chvp peterhoeg ];
-    platforms = platforms.mesaPlatforms;
+    platforms = platforms.unix;
   };
 }
