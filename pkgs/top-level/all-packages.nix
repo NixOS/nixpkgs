@@ -24698,6 +24698,7 @@ with pkgs;
 
   iosevka = callPackage ../data/fonts/iosevka {};
   iosevka-bin = callPackage ../data/fonts/iosevka/bin.nix {};
+  iosevka-comfy = recurseIntoAttrs (callPackages ../data/fonts/iosevka/comfy.nix {});
 
   ipafont = callPackage ../data/fonts/ipafont {};
   ipaexfont = callPackage ../data/fonts/ipaexfont {};
