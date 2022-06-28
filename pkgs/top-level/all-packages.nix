@@ -14496,6 +14496,8 @@ with pkgs;
   hadoop3 = hadoop_3_3;
   hadoop = hadoop3;
 
+  hashlink = callPackage ../development/interpreters/hashlink { };
+
   io = callPackage ../development/interpreters/io { };
 
   ivy = callPackage ../development/interpreters/ivy { };
