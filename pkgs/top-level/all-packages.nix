@@ -12107,6 +12107,8 @@ with pkgs;
 
   yamllint = with python3Packages; toPythonApplication yamllint;
 
+  yamlpath = callPackage ../development/tools/yamlpath { };
+
   yaml-merge = callPackage ../tools/text/yaml-merge { };
 
   yeshup = callPackage ../tools/system/yeshup { };
