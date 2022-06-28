@@ -152,7 +152,7 @@ let
       klines = callPackage ./klines.nix {};
       kmag = callPackage ./kmag.nix {};
       kmahjongg = callPackage ./kmahjongg.nix {};
-      kmail = callPackage ./kmail.nix {};
+      kmail = callPackage ./kmail.nix {pimExternalApplications = callPackage ./pimExternalApplications.nix {};};
       kmail-account-wizard = callPackage ./kmail-account-wizard.nix {};
       kmailtransport = callPackage ./kmailtransport.nix {};
       kmbox = callPackage ./kmbox.nix {};
@@ -170,7 +170,7 @@ let
       kolourpaint = callPackage ./kolourpaint.nix {};
       kompare = callPackage ./kompare.nix {};
       konsole = callPackage ./konsole.nix {};
-      kontact = callPackage ./kontact.nix {};
+      kontact = callPackage ./kontact.nix {pimExternalApplications = callPackage ./pimExternalApplications.nix {};};
       kontactinterface = callPackage ./kontactinterface.nix {};
       konquest = callPackage ./konquest.nix {};
       konqueror = callPackage ./konqueror.nix {};
