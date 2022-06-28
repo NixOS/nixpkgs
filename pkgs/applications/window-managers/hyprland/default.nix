@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "hyprland";
-  version = "0.6.0beta";
+  version = "0.6.1beta";
 
   # When updating Hyprland, the overridden wlroots commit must be bumped to match the commit upstream uses.
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SHElAr8ZnLirEX8qd4vRyNaorUMi0lAEn/v5+GIlA5c=";
+    sha256 = "sha256-0Msqe2ErAJvnO1zHoB2k6TkDhTYnHRGkvJrfSG12dTU=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,9 @@ stdenv.mkDerivation rec {
   # build with system wlroots
   postPatch = ''
     sed -Ei 's/"\.\.\/wlroots\/include\/([a-zA-Z0-9./_-]+)"/<\1>/g' src/includes.hpp
+  '';
 
+  preConfigure = ''
     make protocols
   '';
 
