@@ -31,7 +31,7 @@ buildGo118Module rec {
 
   buildPhase = ''
     runHook preBuild
-    make build VERSION=0.4.2 REVISION=$(git rev-parse --short HEAD)
+    make build VERSION=${version} REVISION=$(git rev-parse --short HEAD)
     runHook postBuild
   '';
 
