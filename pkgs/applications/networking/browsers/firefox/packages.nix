@@ -48,6 +48,7 @@ rec {
     tests = [ nixosTests.firefox-esr-102 ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-102-unwrapped";
+      versionPrefix = "102";
       versionSuffix = "esr";
     };
   };
@@ -74,6 +75,7 @@ rec {
     tests = [ nixosTests.firefox-esr-91 ];
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-91-unwrapped";
+      versionPrefix = "91";
       versionSuffix = "esr";
     };
   };
