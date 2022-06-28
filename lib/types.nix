@@ -104,6 +104,40 @@ rec {
     binOp   = a: b: null;
   };
 
+
+  isSecret = isType "secret";
+  mkSecret = path:
+    assert lib.assertMsg (types.path.check path)
+      "lib.mkSecret: argument must be a path";
+    {
+      _type = "secret";
+      _secret = {
+        type = "file-content";
+        inherit path;
+      };
+    };
+  mkEncryptedSecret = path:
+    assert lib.assertMsg (types.path.check path)
+      "lib.mkEncryptedSecret: argument must be a path";
+    {
+      _type = "secret";
+      _secret = {
+        type = "file-content-encrypted";
+        inherit path;
+      };
+    };
+  mkSecretFile = path:
+    assert lib.assertMsg (types.path.check path)
+      "lib.mkSecretFile: argument must be a path";
+    {
+      _type = "secret";
+      _secret = {
+        type = "file-path";
+        inherit path;
+      };
+    };
+
+
   isOptionType = isType "option-type";
   mkOptionType =
     { # Human-readable representation of the type, should be equivalent to
@@ -272,6 +306,13 @@ rec {
       description = "boolean";
       descriptionClass = "noun";
       check = isBool;
+      merge = mergeEqualOption;
+    };
+
+    secret = mkOptionType {
+      name = "secret";
+      description = "secret";
+      check = isSecret;
       merge = mergeEqualOption;
     };
 

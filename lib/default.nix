@@ -142,7 +142,8 @@ let
       unknownModule mkOption mkPackageOption mkPackageOptionMD
       mdDoc literalMD;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor
-      isOptionType mkOptionType;
+      isOptionType mkOptionType isSecret mkSecret mkEncryptedSecret
+      mkSecretFile;
     inherit (self.asserts)
       assertMsg assertOneOf;
     inherit (self.debug) traceIf traceVal traceValFn
