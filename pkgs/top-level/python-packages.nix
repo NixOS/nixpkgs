@@ -5449,7 +5449,10 @@ in {
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
   mkdocs-minify = callPackage ../development/python-modules/mkdocs-minify { };
   mkdocs-redirects = callPackage ../development/python-modules/mkdocs-redirects { };
+
   mkdocstrings = callPackage ../development/python-modules/mkdocstrings { };
+
+  mkdocstrings-python = callPackage ../development/python-modules/mkdocstrings-python { };
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
