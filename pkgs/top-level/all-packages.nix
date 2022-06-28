@@ -1582,6 +1582,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
   };
 
+  krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
+
   lf = callPackage ../applications/file-managers/lf { };
 
   llama = callPackage ../applications/file-managers/llama { };
@@ -27927,8 +27929,6 @@ with pkgs;
   krane = callPackage ../applications/networking/cluster/krane { };
 
   krita = libsForQt5.callPackage ../applications/graphics/krita { };
-
-  krusader = libsForQt5.callPackage ../applications/misc/krusader { };
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
