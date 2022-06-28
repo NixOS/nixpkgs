@@ -12998,6 +12998,13 @@
     githubId = 6740669;
     name = "Tom Smeets";
   };
+  tomsiewert = {
+    email = "tom@siewert.io";
+    matrix = "@tom:frickel.earth";
+    github = "tomsiewert";
+    githubId = 8794235;
+    name = "Tom Siewert";
+  };
   toonn = {
     email = "nixpkgs@toonn.io";
     matrix = "@toonn:matrix.org";
