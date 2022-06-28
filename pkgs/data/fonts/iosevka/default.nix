@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     export HOME=$TMPDIR
     runHook preBuild
-    npm run build --no-update-notifier -- --jCmd=$NIX_BUILD_CORES ttf::$pname >/dev/null
+    npm run build --no-update-notifier -- --jCmd=$NIX_BUILD_CORES ttf::$pname
     runHook postBuild
   '';
 

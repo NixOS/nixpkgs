@@ -351,6 +351,7 @@
   ./services/databases/cockroachdb.nix
   ./services/databases/couchdb.nix
   ./services/databases/dragonflydb.nix
+  ./services/databases/dgraph.nix
   ./services/databases/firebird.nix
   ./services/databases/foundationdb.nix
   ./services/databases/hbase.nix
