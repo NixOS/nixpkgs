@@ -3,18 +3,7 @@
 let
   cfg = config.services.parsedmarc;
   opt = options.services.parsedmarc;
-  isSecret = v: isAttrs v && v ? _secret && isString v._secret;
-  ini = pkgs.formats.ini {
-    mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" rec {
-      mkValueString = v:
-        if isInt           v then toString v
-        else if isString   v then v
-        else if true  ==   v then "True"
-        else if false ==   v then "False"
-        else if isSecret   v then hashString "sha256" v._secret
-        else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
-    };
-  };
+  ini = pkgs.formats.ini {};
   inherit (builtins) elem isAttrs isString isInt isList typeOf hashString;
 in
 {
@@ -225,7 +214,7 @@ in
             };
 
             password = lib.mkOption {
-              type = with lib.types; nullOr (either path (attrsOf path));
+              type = with lib.types; nullOr (coercedTo path lib.mkSecret secret);
               default = null;
               description = lib.mdDoc ''
                 The IMAP server password.
@@ -235,7 +224,6 @@ in
                 attrset or not (refer to [](#opt-services.parsedmarc.settings) for
                 details).
               '';
-              apply = x: if isAttrs x || x == null then x else { _secret = x; };
             };
           };
 
@@ -273,7 +261,7 @@ in
             };
 
             password = lib.mkOption {
-              type = with lib.types; nullOr (either path (attrsOf path));
+              type = with lib.types; nullOr (coercedTo path lib.mkSecret secret);
               default = null;
               description = lib.mdDoc ''
                 The SMTP server password.
@@ -283,7 +271,6 @@ in
                 attrset or not (refer to [](#opt-services.parsedmarc.settings) for
                 details).
               '';
-              apply = x: if isAttrs x || x == null then x else { _secret = x; };
             };
 
             from = lib.mkOption {
@@ -325,7 +312,7 @@ in
             };
 
             password = lib.mkOption {
-              type = with lib.types; nullOr (either path (attrsOf path));
+              type = with lib.types; nullOr (coercedTo path lib.mkSecret secret);
               default = null;
               description = lib.mdDoc ''
                 The password to use when connecting to Elasticsearch,
@@ -336,7 +323,6 @@ in
                 attrset or not (refer to [](#opt-services.parsedmarc.settings) for
                 details).
               '';
-              apply = x: if isAttrs x || x == null then x else { _secret = x; };
             };
 
             ssl = lib.mkOption {
@@ -455,7 +441,7 @@ in
           port = 143;
           ssl = false;
           user = cfg.provision.localMail.recipientName;
-          password = "${pkgs.writeText "imap-password" "@imap-password@"}";
+          password = lib.mkSecret "${pkgs.writeText "imap-password" "@imap-password@"}";
         };
         mailbox = {
           watch = true;
@@ -470,34 +456,23 @@ in
         # list interesting options in `settings` without them always
         # ending up in the resulting config.
         filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null [] {} ])) cfg.settings;
-
-        # Extract secrets (attributes set to an attrset with a
-        # "_secret" key) from the settings and generate the commands
-        # to run to perform the secret replacements.
-        secretPaths = lib.catAttrs "_secret" (lib.collect isSecret filteredConfig);
-        parsedmarcConfig = ini.generate "parsedmarc.ini" filteredConfig;
-        mkSecretReplacement = file: ''
-          replace-secret ${lib.escapeShellArgs [ (hashString "sha256" file) file "/run/parsedmarc/parsedmarc.ini" ]}
-        '';
-        secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
+        configWithSecrets = ini.configWithSecrets "/run/parsedmarc/parsedmarc.ini" filteredConfig;
       in
         {
           wantedBy = [ "multi-user.target" ];
           after = [ "postfix.service" "dovecot2.service" "elasticsearch.service" ];
-          path = with pkgs; [ replace-secret openssl shadow ];
+          path = with pkgs; [ openssl shadow ];
           serviceConfig = {
             ExecStartPre = let
               startPreFullPrivileges = ''
                 set -o errexit -o pipefail -o nounset -o errtrace
                 shopt -s inherit_errexit
 
-                umask u=rwx,g=,o=
-                cp ${parsedmarcConfig} /run/parsedmarc/parsedmarc.ini
+                ${configWithSecrets.creationScript}
                 chown parsedmarc:parsedmarc /run/parsedmarc/parsedmarc.ini
-                ${secretReplacements}
               '' + lib.optionalString cfg.provision.localMail.enable ''
                 openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
-                replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
+                ${pkgs.replace-secret}/bin/replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini
                 echo "Setting new randomized password for user '${cfg.provision.localMail.recipientName}'."
                 cat <(echo -n "${cfg.provision.localMail.recipientName}:") /run/parsedmarc/dmarc_user_passwd | chpasswd
               '';
@@ -530,7 +505,7 @@ in
             LockPersonality = true;
             SystemCallArchitectures = "native";
             ExecStart = "${pkgs.python3Packages.parsedmarc}/bin/parsedmarc -c /run/parsedmarc/parsedmarc.ini";
-          };
+          } // configWithSecrets.systemdServiceConfig;
         };
 
     users.users.${cfg.provision.localMail.recipientName} = lib.mkIf cfg.provision.localMail.enable {
