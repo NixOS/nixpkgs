@@ -22,8 +22,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-DUSE_KMOD";
 
   preConfigure = ''
-    sed -i 's|/usr|/|' Makefile
-
     # Remove blanket -Werror. Fails for minor error on gcc-11.
     substituteInPlace usr/Makefile --replace ' -Werror ' ' '
   '';
@@ -32,11 +30,12 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "INSTALL=install"
     "SED=sed"
+    "prefix=/"
+    "manprefix=/share"
   ];
 
   installFlags = [
     "install"
-    "install_systemd"
   ];
 
   postInstall = ''
