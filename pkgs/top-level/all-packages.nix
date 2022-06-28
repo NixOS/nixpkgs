@@ -16154,6 +16154,8 @@ with pkgs;
     sdk = true;
   };
 
+  nrf-command-line-tools = callPackage ../development/tools/misc/nrf-command-line-tools { };
+
   nrf5-sdk = callPackage ../development/libraries/nrf5-sdk { };
 
   nrfutil = callPackage ../development/tools/misc/nrfutil { };
@@ -16396,6 +16398,8 @@ with pkgs;
   scc = callPackage ../development/tools/misc/scc { };
 
   scss-lint = callPackage ../development/tools/scss-lint { };
+
+  segger-jlink = callPackage ../development/tools/misc/segger-jlink { };
 
   segger-ozone = callPackage ../development/tools/misc/segger-ozone { };
 
