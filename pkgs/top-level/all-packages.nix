@@ -19843,6 +19843,8 @@ with pkgs;
 
   leptonica = callPackage ../development/libraries/leptonica { };
 
+  lerc = callPackage ../development/libraries/lerc { };
+
   lib2geom = callPackage ../development/libraries/lib2geom { };
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
