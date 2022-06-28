@@ -3787,6 +3787,8 @@ in {
 
   gridnet = callPackage ../development/python-modules/gridnet { };
 
+  griffe = callPackage ../development/python-modules/griffe { };
+
   grip = callPackage ../development/python-modules/grip { };
 
   groestlcoin_hash = callPackage ../development/python-modules/groestlcoin_hash { };
