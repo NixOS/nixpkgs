@@ -10380,6 +10380,8 @@ in {
 
   tatsu = callPackage ../development/python-modules/tatsu { };
 
+  taxi = callPackage ../development/python-modules/taxi { };
+
   tblib = callPackage ../development/python-modules/tblib { };
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };

@@ -29051,6 +29051,8 @@ with pkgs;
 
   taxi = callPackage ../applications/networking/ftp/taxi { };
 
+  taxi-cli = with python3Packages; toPythonApplication taxi;
+
   librep = callPackage ../development/libraries/librep { };
 
   rep-gtk = callPackage ../development/libraries/rep-gtk { };
