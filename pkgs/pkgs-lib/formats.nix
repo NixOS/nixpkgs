@@ -177,7 +177,7 @@ rec {
       };
   };
 
-  yaml = {}: {
+  yaml = {}@args: {
 
     generate = name: value: pkgs.callPackage ({ runCommand, remarshal }: runCommand name {
       nativeBuildInputs = [ remarshal ];
@@ -201,6 +201,23 @@ rec {
       };
     in valueType;
 
+    # Extract secrets from the settings and generate a script which
+    # performs the secret replacements.
+    configWithSecrets = path: config:
+      let
+        configWithSecretsJSON = (json args).configWithSecrets "${path}-tmp" config;
+      in
+      configWithSecretsJSON // {
+        creationScript = pkgs.writeScript "${path}-secrets-replacement.sh" ''
+          set -o errexit -o pipefail -o nounset -o errtrace
+          shopt -s inherit_errexit
+
+          umask u=rwx,g=,o=
+          ${configWithSecretsJSON.creationScript}
+          ${pkgs.remarshal}/bin/json2yaml ${lib.escapeShellArgs [ "${path}-tmp" path ]}
+          rm "${path}-tmp"
+        '';
+      };
   };
 
   ini = {
