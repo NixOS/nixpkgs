@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "ua-parser";
-  version = "0.10.0";
+  version = "0.15.0";
 
   format = "setuptools";
 
@@ -16,12 +16,17 @@ buildPythonPackage rec {
     repo = "uap-python";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-kaTAfUtHj2vH7i7eIU61efuB4/XVHoc/z6o3ny+sgrQ=";
+    hash = "sha256-CwwVaToy5se5dZ4m1EHn8qgvprK82/Sgpos4lHedIUc=";
   };
 
   patches = [
     ./dont-fetch-submodule.patch
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "pyyaml ~= 5.4.0" pyyaml
+  '';
 
   nativeBuildInputs = [
     pyyaml
