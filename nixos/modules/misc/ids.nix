@@ -3,7 +3,7 @@
 
 # IMPORTANT!
 # We only add static uids and gids for services where it is not feasible
-# to change uids/gids on service start, in example a service with a lot of
+# to change uids/gids on service start, for example a service with a lot of
 # files. Please also check if the service is applicable for systemd's
 # DynamicUser option and does not need a uid/gid allocation at all.
 # Systemd can also change ownership of service directories using the
