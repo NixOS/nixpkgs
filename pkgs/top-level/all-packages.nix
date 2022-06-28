@@ -34303,6 +34303,8 @@ with pkgs;
 
   gowitness = callPackage ../tools/security/gowitness { };
 
+  gridsite = callPackage ../misc/gridsite { };
+
   guetzli = callPackage ../applications/graphics/guetzli { };
 
   gummi = callPackage ../applications/misc/gummi { };
