@@ -16951,6 +16951,8 @@ with pkgs;
 
   ormolu = haskellPackages.ormolu.bin;
 
+  canl-c = callPackage ../development/libraries/canl-c { };
+
   capnproto = callPackage ../development/libraries/capnproto { };
 
   capnproto-java = callPackage ../development/tools/capnproto-java { };
