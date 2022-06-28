@@ -13,7 +13,7 @@
 
 buildPythonApplication rec {
   pname = "mkdocs-material";
-  version = "8.3.7";
+  version = "8.3.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonApplication rec {
     owner = "squidfunk";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LOsgWRjKFZ+ZkJkQzDStNNBUh+AwlI8zZcUBz7L/Ook=";
+    hash = "sha256-MkcrCpHfnMphQK+8lWAy0DV+f1Od6yz3/gv3wFW6xaE=";
   };
 
   propagatedBuildInputs = [
