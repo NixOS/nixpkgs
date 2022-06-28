@@ -179,8 +179,8 @@ in {
         description = mdDoc ''
           Folders which should be shared by Syncthing.
 
-          Note that you can still add devices manually, but those changes
-          will be reverted on restart if [overrideDevices](#opt-services.syncthing.overrideDevices)
+          Note that you can still add folders manually, but those changes
+          will be reverted on restart if [overrideFolders](#opt-services.syncthing.overrideFolders)
           is enabled.
         '';
         example = literalExpression ''

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "dremel3dpy";
-  version = "1.0.1";
+  version = "1.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wqfCzS9dhRN/zerrC6g/O8tn0k1IC0wBdZMfWumtBds=";
+    hash = "sha256-mf0YjK0nnuNnWgP20yqSgwc0SJfbqnvZqW0MKEXFTg8=";
   };
 
   propagatedBuildInputs = [

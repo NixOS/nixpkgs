@@ -1,19 +1,18 @@
 { config, stdenv, lib, fetchurl, fetchpatch
 , perl, pkg-config
 , libcap, libtool, libxml2, openssl, libuv, nghttp2, jemalloc
-, enableGSSAPI ? true, libkrb5
 , enablePython ? false, python3
-, enableSeccomp ? false, libseccomp
+, enableGSSAPI ? true, libkrb5
 , buildPackages, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "bind";
-  version = "9.18.3";
+  version = "9.18.4";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-CtjadzvZPLoO9mzIGZlpjr35w+UfrtXlyMHrdcrSrm8=";
+    sha256 = "sha256-8neuUBWaAMMA65JqnF1RlTA4qTa9gkLWkT37bqxCdh0=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -25,7 +24,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs = [ libtool libxml2 openssl libuv nghttp2 jemalloc ]
     ++ lib.optional stdenv.isLinux libcap
-    ++ lib.optional enableSeccomp libseccomp
     ++ lib.optional enableGSSAPI libkrb5
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
 
@@ -33,25 +31,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--localstatedir=/var"
-    "--with-libtool"
-    (if enablePython then "--with-python" else "--without-python")
-    "--without-atf"
-    "--without-dlopen"
-    "--without-docbook-xsl"
-    "--without-idn"
-    "--without-idnlib"
     "--without-lmdb"
-    "--without-libjson"
-    "--without-pkcs11"
-    "--without-purify"
-    "--with-randomdev=/dev/random"
-    "--with-ecdsa"
-    "--with-gost"
-    "--without-eddsa"
-    "--with-aes"
-  ] ++ lib.optional stdenv.isLinux "--with-libcap=${libcap.dev}"
-    ++ lib.optional enableSeccomp "--enable-seccomp"
-    ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
+  ] ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
 
   postInstall = ''

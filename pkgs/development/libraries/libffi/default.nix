@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  configurePlatforms = [ "build" "host" ];
+
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=
     "--enable-pax_emutramp"
