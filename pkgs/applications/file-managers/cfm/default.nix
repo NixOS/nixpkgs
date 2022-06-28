@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+}:
 
 stdenv.mkDerivation rec {
   pname = "cfm";
@@ -17,10 +20,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    homepage = "https://github.com/willeccles/cfm";
     description = "Simple and fast TUI file manager with no dependencies";
     license = licenses.mpl20;
     maintainers = with maintainers; [ lom ];
-    homepage = "https://github.com/willeccles/cfm";
     platforms = platforms.all;
   };
 }
