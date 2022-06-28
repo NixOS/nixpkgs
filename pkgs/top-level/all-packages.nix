@@ -1578,6 +1578,10 @@ with pkgs;
 
   clifm = callPackage ../applications/file-managers/clifm { };
 
+  doublecmd = callPackage  ../applications/file-managers/doublecmd {
+    inherit (qt5) wrapQtAppsHook;
+  };
+
   joshuto = callPackage ../applications/file-managers/joshuto {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
   };
