@@ -44,19 +44,19 @@ let
 
   # Zoom versions are released at different times for each platform
   version = {
-    aarch64-darwin = "5.11.0.8323";
-    x86_64-darwin = "5.11.0.8323";
+    aarch64-darwin = "5.11.1.8356";
+    x86_64-darwin = "5.11.1.8356";
     x86_64-linux = "5.10.6.3192";
    }.${system} or throwSystem;
 
   srcs = {
     aarch64-darwin = fetchurl {
        url = "https://zoom.us/client/${version}/Zoom.pkg?archType=arm64";
-       sha256 = "0ncry393mw7cz123fbq4n41zlvdf6wp95a64vxh9kwwb6xhf6rp5";
+       sha256 = "0cwplzza8vv4nzxf35i2p4gfnna4dpgp0ddqbpdxl8cxrikq5rji";
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${version}/Zoom.pkg";
-      sha256 = "06p2cycj7d5nlw634m90680qb0yvdbz23zgyr9d414zji9d6v994";
+      sha256 = "12s4z80n1qk1vcp5vppabj6fxanm4q7pjj7mggalmjbj6984fsza";
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
