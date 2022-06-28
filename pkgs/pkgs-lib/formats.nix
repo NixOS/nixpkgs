@@ -329,7 +329,7 @@ rec {
     generate = name: value: pkgs.writeText name (lib.generators.toGitINI value);
   };
 
-  toml = {}: json {} // {
+  toml = {}@args: json args // {
     type = with lib.types; let
       valueType = oneOf [
         bool
@@ -352,6 +352,23 @@ rec {
       json2toml "$valuePath" "$out"
     '') {};
 
+    # Extract secrets from the settings and generate a script which
+    # performs the secret replacements.
+    configWithSecrets = path: config:
+      let
+        configWithSecretsJSON = (json args).configWithSecrets "${path}-tmp" config;
+      in
+      configWithSecretsJSON // {
+        creationScript = pkgs.writeScript "${path}-secrets-replacement.sh" ''
+          set -o errexit -o pipefail -o nounset -o errtrace
+          shopt -s inherit_errexit
+
+          umask u=rwx,g=,o=
+          ${configWithSecretsJSON.creationScript}
+          ${pkgs.remarshal}/bin/json2toml ${lib.escapeShellArgs [ "${path}-tmp" path ]}
+          rm "${path}-tmp"
+        '';
+      };
   };
 
   /* For configurations of Elixir project, like config.exs or runtime.exs
