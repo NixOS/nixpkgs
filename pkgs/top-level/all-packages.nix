@@ -3903,6 +3903,19 @@ with pkgs;
 
   humioctl = callPackage ../applications/logging/humioctl {};
 
+  hyprland = callPackage ../applications/window-managers/hyprland {
+    wlroots = wlroots.overrideAttrs (_: {
+      version = "unstable-2022-06-07";
+      src = fetchFromGitLab {
+        domain = "gitlab.freedesktop.org";
+        owner = "wlroots";
+        repo = "wlroots";
+        rev = "b89ed9015c3fbe8d339e9d65cf70fdca6e5645bc";
+        sha256 = "sha256-8y3u8CoigjoZOVbA2wCWBHlDNEakv0AVxU46/cOC00s=";
+      };
+    });
+  };
+
   hyx = callPackage ../tools/text/hyx { };
 
   icdiff = callPackage ../tools/text/icdiff {};
