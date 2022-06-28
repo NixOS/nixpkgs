@@ -2,12 +2,11 @@
 , buildGo118Module
 , fetchFromGitHub
 , installShellFiles
-, lima
+, lima-unwrapped
 , makeWrapper
 , git
 , perl
 , qemu
-, gvproxy
 , openssl
 }:
 
@@ -16,10 +15,10 @@ buildGo118Module rec {
   version = "0.4.2";
 
   src = fetchFromGitHub {
-    owner = "tricktron";
+    owner = "abiosoft";
     repo = pname;
-    rev = "28099f15bb701ada2a0eecfc195b5b1638a50491";
-    sha256 = "BOb0aqSdW7LWCaJA/PVAjNtvqCRbLwdOgWOM1G5jX6k=";
+    rev = "1cfe5f21ed3769f3248945cb886b73ed3f3f816d";
+    sha256 = "kKLqapQbmwmuJ4Vfgjd9HjCVtFIdHpTORI4FSixJGaw=";
     # We need the git revision
     leaveDotGit = true;
   };
@@ -50,7 +49,7 @@ buildGo118Module rec {
 
   postInstall = ''
     wrapProgram $out/bin/colima \
-      --prefix PATH : ${lib.makeBinPath [ lima qemu gvproxy ]}
+      --prefix PATH : ${lib.makeBinPath [ lima-unwrapped qemu ]}
 
     installShellCompletion --cmd colima \
       --bash <($out/bin/colima completion bash) \
