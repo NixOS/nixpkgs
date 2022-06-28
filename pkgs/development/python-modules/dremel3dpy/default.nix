@@ -35,11 +35,6 @@ buildPythonPackage rec {
     yarl
   ];
 
-  postPatch = ''
-    # Ignore the pinning
-    sed -i -e "s/==[0-9.]*//" setup.py
-  '';
-
   # Module has no tests
   doCheck = false;
 
