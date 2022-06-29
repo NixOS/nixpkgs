@@ -85,6 +85,12 @@
     githubId = 56617252;
     matrix = "@oxc45:matrix.org";
   };
+  _0xd61 = {
+    email = "dgl@degit.co";
+    name = "Daniel Glinka";
+    github = "0xd61";
+    githubId = 8351869;
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
