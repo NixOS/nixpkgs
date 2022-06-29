@@ -26,6 +26,7 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , libxslt
+, enableDaemon ? !stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     "-Dlibcolordcompat=true"
     "-Dsane=true"
     "-Dvapi=true"
+    "-Ddaemon=${lib.boolToString enableDaemon}"
     "-Ddaemon_user=colord"
   ];
 
@@ -83,10 +85,11 @@ stdenv.mkDerivation rec {
     gusb
     lcms2
     libgudev
-    polkit
     sane-backends
     sqlite
     systemd
+  ] ++ lib.optionals enableDaemon [
+    polkit
   ];
 
   postInstall = ''
