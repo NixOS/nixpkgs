@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --with-prefsdir=$out/share"
   '';
 
+  enableParallelBuilding = true;
+
   installPhase = ''
     runHook preInstall
     install -D -m 0555 freesweep $out/bin/freesweep
