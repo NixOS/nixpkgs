@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "boxx";
-  version = "0.10.1";
+  version = "0.10.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YYR13JS9otoylS3ds0jK7d0jOxbhafaQd8fSxIiREi4=";
+    hash = "sha256-HnEXvge1R2GAcrP+2yEecwIlT95/oKrWiK+TB9+CRxs=";
   };
 
   propagatedBuildInputs = [

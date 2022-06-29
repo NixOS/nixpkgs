@@ -275,6 +275,10 @@ with pkgs;
 
   bingo = callPackage ../development/tools/bingo {};
 
+  binserve = callPackage ../servers/binserve {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   bootstrap-studio = callPackage ../development/web/bootstrap-studio {};
 
   breakpad = callPackage ../development/misc/breakpad { };
@@ -3629,6 +3633,8 @@ with pkgs;
   eternal-terminal = callPackage ../tools/networking/eternal-terminal {};
 
   extrude = callPackage ../tools/security/extrude { };
+
+  fastly = callPackage ../misc/fastly {};
 
   f2 = callPackage ../tools/misc/f2 {};
 
@@ -26118,6 +26124,7 @@ with pkgs;
     mpris2 = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
     musical-spectrum = callPackage ../applications/audio/deadbeef/plugins/musical-spectrum.nix { };
     statusnotifier = callPackage ../applications/audio/deadbeef/plugins/statusnotifier.nix { };
+    playlist-manager = callPackage ../applications/audio/deadbeef/plugins/playlist-manager.nix { };
   };
 
   deadbeef-with-plugins = callPackage ../applications/audio/deadbeef/wrapper.nix {
@@ -30486,6 +30493,8 @@ with pkgs;
   tremc = callPackage ../applications/networking/p2p/tremc { };
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
+
+  trillian-im = callPackage ../applications/networking/instant-messengers/trillian-im { };
 
   trojita = libsForQt5.callPackage ../applications/networking/mailreaders/trojita { };
 
@@ -35801,4 +35810,6 @@ with pkgs;
   honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
 
   mictray = callPackage ../tools/audio/mictray { };
+
+  swift-corelibs-libdispatch = callPackage ../development/libraries/swift-corelibs-libdispatch { };
 }

@@ -1,10 +1,30 @@
 { config, pkgs, lib, ... }:
 
-with lib;
+let
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkRenamedOptionModule
+    teams
+    types;
+in
 
 {
   imports = [
     (mkRenamedOptionModule [ "services" "flatpak" "extraPortals" ] [ "xdg" "portal" "extraPortals" ])
+
+    ({ config, lib, options, ... }:
+      let
+        from = [ "xdg" "portal" "gtkUsePortal" ];
+        fromOpt = lib.getAttrFromPath from options;
+      in
+      {
+        warnings = lib.mkIf config.xdg.portal.gtkUsePortal [
+          "The option `${lib.showOption from}' defined in ${lib.showFiles fromOpt.files} has been deprecated. Setting the variable globally with `environment.sessionVariables' NixOS option can have unforseen side-effects."
+        ];
+      }
+    )
   ];
 
   meta = {
@@ -32,11 +52,12 @@ with lib;
 
     gtkUsePortal = mkOption {
       type = types.bool;
+      visible = false;
       default = false;
       description = ''
         Sets environment variable <literal>GTK_USE_PORTAL</literal> to <literal>1</literal>.
-        This is needed for packages ran outside Flatpak to respect and use XDG Desktop Portals.
-        For example, you'd need to set this for non-flatpak Firefox to use native filechoosers.
+        This will force GTK-based programs ran outside Flatpak to respect and use XDG Desktop Portals
+        for features like file chooser but it is an unsupported hack that can easily break things.
         Defaults to <literal>false</literal> to respect its opt-in nature.
       '';
     };

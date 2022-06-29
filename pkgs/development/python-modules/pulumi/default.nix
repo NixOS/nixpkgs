@@ -13,15 +13,11 @@
 
 
 # for tests
-, tox
 , go
 , pulumictl
-, bash
 , pylint
 , pytest
 , pytest-timeout
-, coverage
-, black
 , wheel
 , pytest-asyncio
 
@@ -55,15 +51,11 @@ buildPythonPackage rec {
     pulumi-bin
     pulumictl
     mypy
-    bash
     go
-    tox
     pytest
     pytest-timeout
-    coverage
     pytest-asyncio
     wheel
-    black
   ];
 
   sourceRoot="source/sdk/python/lib";
