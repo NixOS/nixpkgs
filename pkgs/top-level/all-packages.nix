@@ -25353,7 +25353,9 @@ with pkgs;
 
   vegur = callPackage ../data/fonts/vegur { };
 
-  vegeta = callPackage ../tools/networking/vegeta { };
+  vegeta = callPackage ../tools/networking/vegeta {
+    buildGoModule = buildGo117Module;
+  };
 
   venta = callPackage ../data/themes/venta { };
 
