@@ -1,5 +1,5 @@
 { lib
-, runCommand
+, runCommandLocal
 , makeWrapper
 , lima-unwrapped
 , qemu
@@ -17,13 +17,11 @@ let
   );
 
 in
-runCommand lima.name
+runCommandLocal lima.name
 {
   name = "${lima.pname}-wrapper-${lima.version}";
 
   inherit (lima) pname version passthru;
-
-  preferLocalBuild = true;
 
   meta = builtins.removeAttrs lima.meta [ "outputsToInstall" ];
 
@@ -33,5 +31,5 @@ runCommand lima.name
     mkdir -p $out/bin
     ln -s ${lima-unwrapped}/share $out/share
     makeWrapper ${lima-unwrapped}/bin/limactl $out/bin/limactl \
-      --prefix PATH : ${binPath}
+      --prefix PATH : ${lib.escapeShellArg binPath}
   ''
