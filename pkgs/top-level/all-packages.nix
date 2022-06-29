@@ -3634,6 +3634,8 @@ with pkgs;
 
   extrude = callPackage ../tools/security/extrude { };
 
+  fastly = callPackage ../misc/fastly {};
+
   f2 = callPackage ../tools/misc/f2 {};
 
   f3 = callPackage ../tools/filesystems/f3 { };
