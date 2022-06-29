@@ -17607,7 +17607,9 @@ with pkgs;
 
   ganv = callPackage ../development/libraries/ganv { };
 
-  garble = callPackage ../build-support/go/garble.nix { };
+  garble = callPackage ../build-support/go/garble.nix {
+    buildGoModule = buildGo117Module;
+  };
 
   gcab = callPackage ../development/libraries/gcab { };
 
