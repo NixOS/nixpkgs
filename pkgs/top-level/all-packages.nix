@@ -3753,7 +3753,9 @@ with pkgs;
 
   gdu = callPackage ../tools/system/gdu { };
 
-  go-chromecast = callPackage ../applications/video/go-chromecast { };
+  go-chromecast = callPackage ../applications/video/go-chromecast {
+    buildGoModule = buildGo117Module;
+  };
 
   go-containerregistry = callPackage ../development/tools/go-containerregistry { };
   inherit (go-containerregistry) crane gcrane;
