@@ -28402,7 +28402,9 @@ with pkgs;
 
   mapmap = libsForQt5.callPackage ../applications/video/mapmap { };
 
-  marathonctl = callPackage ../tools/virtualization/marathonctl { } ;
+  marathonctl = callPackage ../tools/virtualization/marathonctl {
+    buildGoModule = buildGo117Module;
+  };
 
   markdown-pp = callPackage ../tools/text/markdown-pp { };
 
