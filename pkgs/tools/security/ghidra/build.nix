@@ -176,7 +176,7 @@ in stdenv.mkDerivation rec {
       binaryBytecode  # deps
     ];
     license = licenses.asl20;
-    maintainers = [ "roblabla" ];
+    maintainers = with maintainers; [ roblabla ];
   };
 
 }

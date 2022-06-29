@@ -29,6 +29,6 @@ buildGoModule rec {
     homepage = "https://github.com/square/certstrap";
     changelog = "https://github.com/square/certstrap/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ volth ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "homeconnect";
-  version = "0.7.0";
+  version = "0.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/h0dEVmP0R9tVt56mvu72Ksrvnuox1FA7BgrZMOhV6Q=";
+    hash = "sha256-yEBi/9FVvLYYGMvsVZO94oGXEqXOdtHQ0G+6o2LEmOQ=";
   };
 
   propagatedBuildInputs = [
