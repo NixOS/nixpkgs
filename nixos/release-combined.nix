@@ -156,6 +156,7 @@ in rec {
         (onSystems ["i686-linux"] "nixos.tests.zfs.installer")
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
+        (onFullSupported "nixpkgs.tests.packageTestsForChannelBlockers.curl.withCheck")
         ["nixpkgs.tarball"]
       ];
     };
