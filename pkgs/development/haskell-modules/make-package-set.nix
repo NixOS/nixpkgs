@@ -549,7 +549,7 @@ in package-set { inherit pkgs lib callPackage; } self // {
       src,
       name ? if src?name then "${src.name}-sdist.tar.gz" else "source.tar.gz"
     }:
-      pkgs.runCommandNoCCLocal name
+      pkgs.runCommandLocal name
         {
           inherit src;
           nativeBuildInputs = [ buildHaskellPackages.cabal-install ];
