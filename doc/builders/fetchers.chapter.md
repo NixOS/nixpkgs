@@ -1,10 +1,10 @@
 # Fetchers {#chap-pkgs-fetchers}
 
-Nixpkgs provides fetchers for different protocols and services. Fetcher's are functions that simplify downloading files.
+Nixpkgs provides fetchers for different protocols and services. Fetchers are functions that simplify downloading files.
 
 ## Caveats
 
-Fetcher's store their output in the nix store, or cache, using Nix's [_fixed output derivation_](https://nixos.org/manual/nix/stable/#fixed-output-drvs). Later, Nix can reuse the downloaded contents via their hash. While the caching improves performance, it can lead to some confusion. For example, consider the following fetcher:
+Fetchers store their output in the nix store, or cache, using Nix's [_fixed output derivation_](https://nixos.org/manual/nix/stable/#fixed-output-drvs). Later, Nix can reuse the downloaded contents via their hash. While the caching improves performance, it can lead to some confusion. For example, consider the following fetcher:
 
 ```nix
 fetchurl {
