@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.18.1";
+  version = "0.18.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    hash = "sha256-FvdrwBWlBcALiFFAQlsdf2EyExUqsRDER4a+eyVofN0=";
+    hash = "sha256-nxtDqYh2OmDtoV10CEBGYQrQBf+Xtuf5k9yR6UfCgYc=";
   };
 
   outputs = [
