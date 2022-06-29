@@ -36015,6 +36015,7 @@ with pkgs;
 
   gplates = libsForQt5.callPackage ../applications/science/misc/gplates {
     boost = boost175;
+    python3 = python39;
   };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
