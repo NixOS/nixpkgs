@@ -29,10 +29,10 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Tool for generating Bash/Fish/Zsh autocompletions based on `--help` output";
     homepage = "https://github.com/dim-an/cod/";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
+    broken = true;
   };
 }
