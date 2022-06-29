@@ -12,13 +12,13 @@
 
 buildGo118Module rec {
   pname = "colima";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
-    rev = "1cfe5f21ed3769f3248945cb886b73ed3f3f816d";
-    sha256 = "kKLqapQbmwmuJ4Vfgjd9HjCVtFIdHpTORI4FSixJGaw=";
+    rev = "v${version}";
+    sha256 = "6zF/tDWBirvDJ+l21UVzb/pAwRvLuPOpGnkLdmp6qU0=";
     # We need the git revision
     leaveDotGit = true;
   };
