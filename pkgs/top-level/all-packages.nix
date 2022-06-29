@@ -35137,10 +35137,6 @@ with pkgs;
   texlive = recurseIntoAttrs
     (callPackage ../tools/typesetting/tex/texlive { });
 
-  ib-tws = callPackage ../applications/office/ib/tws { jdk=oraclejdk8; };
-
-  ib-controller = callPackage ../applications/office/ib/controller { jdk=oraclejdk8; };
-
   vcluster = callPackage ../applications/networking/cluster/vcluster {};
 
   vnote = libsForQt5.callPackage ../applications/office/vnote { };
