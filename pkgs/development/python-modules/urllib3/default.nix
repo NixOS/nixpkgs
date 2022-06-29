@@ -2,14 +2,10 @@
 , brotli
 , brotlicffi
 , buildPythonPackage
-, certifi
-, cryptography
 , python-dateutil
 , fetchPypi
 , isPyPy
-, idna
 , mock
-, pyopenssl
 , pysocks
 , pytest-freezegun
 , pytest-timeout
@@ -65,7 +61,9 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
-    secure = [ certifi cryptography idna pyopenssl ];
+    # we are removing secure dependencies as they are no longer relevant with py3:
+    # https://urllib3.readthedocs.io/en/stable/reference/contrib/pyopenssl.html
+    # secure = [ certifi cryptography idna pyopenssl ];
     socks = [ pysocks ];
   };
 
