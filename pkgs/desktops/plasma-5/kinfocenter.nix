@@ -22,6 +22,6 @@ mkDerivation {
     # fix wrong symlink of infocenter pointing to a 'systemsettings5' binary in
     # the same directory, while it is actually located in a completely different
     # store path
-    ln -sf ${lib.getBin systemsettings}/bin/systemsettings5 $out/bin/kinfocenter
+    ln -sf ${lib.getBin systemsettings}/bin/systemsettings5 $out/bin/systemsettings5
   '';
 }
