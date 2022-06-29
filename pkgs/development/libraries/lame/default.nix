@@ -11,10 +11,6 @@
 , debugSupport ? false # Debugging (disables optimizations)
 }:
 
-let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
-in
-
 with lib;
 stdenv.mkDerivation rec {
   pname = "lame";
@@ -37,16 +33,16 @@ stdenv.mkDerivation rec {
     ++ optional sndfileFileIOSupport libsndfile;
 
   configureFlags = [
-    (mkFlag nasmSupport "nasm")
-    (mkFlag cpmlSupport "cpml")
-    #(mkFlag efenceSupport "efence")
+    (enableFeature nasmSupport "nasm")
+    (enableFeature cpmlSupport "cpml")
+    #(enableFeature efenceSupport "efence")
     (if sndfileFileIOSupport then "--with-fileio=sndfile" else "--with-fileio=lame")
-    (mkFlag analyzerHooksSupport "analyzer-hooks")
-    (mkFlag decoderSupport "decoder")
-    (mkFlag frontendSupport "frontend")
-    (mkFlag frontendSupport "dynamic-frontends")
-    #(mkFlag mp3xSupport "mp3x")
-    (mkFlag mp3rtpSupport "mp3rtp")
+    (enableFeature analyzerHooksSupport "analyzer-hooks")
+    (enableFeature decoderSupport "decoder")
+    (enableFeature frontendSupport "frontend")
+    (enableFeature frontendSupport "dynamic-frontends")
+    #(enableFeature mp3xSupport "mp3x")
+    (enableFeature mp3rtpSupport "mp3rtp")
     (if debugSupport then "--enable-debug=alot" else "")
   ];
 
