@@ -5,7 +5,6 @@
 , jpegSupport ? true, libjpeg # JPEG image format
 , tiffSupport ? true, libtiff # TIFF image format
 , gifSupport ? true, giflib # GIF image format
-#, wicSupport ? true # Windows Imaging Component
 , alignedSupport ? false # Force aligned memory operations
 , swap16bitcspSupport ? false # Byte swap for 16bit color spaces
 , experimentalSupport ? false # Experimental code
@@ -14,55 +13,49 @@
 , libwebpdecoderSupport ? true # Build libwebpdecoder
 }:
 
-let
-  mkFlag = optSet: flag: if optSet then "--enable-${flag}" else "--disable-${flag}";
-in
-
-with lib;
 stdenv.mkDerivation rec {
   pname = "libwebp";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner  = "webmproject";
     repo   = pname;
     rev    = "v${version}";
-    hash   = "sha256-KrvB5d3KNmujbfekWaevz2JZrWtK3PjEG9NEzRBYIDw=";
+    hash   = "sha256-WF2HZPS7mbotk+d1oLM/JC5l/FWfkrk+T3Z6EW9oYEI=";
   };
 
   prePatch = "patchShebangs .";
 
   configureFlags = [
-    (mkFlag threadingSupport "threading")
-    (mkFlag openglSupport "gl")
-    (mkFlag pngSupport "png")
-    (mkFlag jpegSupport "jpeg")
-    (mkFlag tiffSupport "tiff")
-    (mkFlag gifSupport "gif")
-    #(mkFlag (wicSupport && stdenv.isCygwin) "wic")
-    (mkFlag alignedSupport "aligned")
-    (mkFlag swap16bitcspSupport "swap-16bit-csp")
-    (mkFlag experimentalSupport "experimental")
-    (mkFlag libwebpmuxSupport "libwebpmux")
-    (mkFlag libwebpdemuxSupport "libwebpdemux")
-    (mkFlag libwebpdecoderSupport "libwebpdecoder")
+    (lib.enableFeature threadingSupport "threading")
+    (lib.enableFeature openglSupport "gl")
+    (lib.enableFeature pngSupport "png")
+    (lib.enableFeature jpegSupport "jpeg")
+    (lib.enableFeature tiffSupport "tiff")
+    (lib.enableFeature gifSupport "gif")
+    (lib.enableFeature alignedSupport "aligned")
+    (lib.enableFeature swap16bitcspSupport "swap-16bit-csp")
+    (lib.enableFeature experimentalSupport "experimental")
+    (lib.enableFeature libwebpmuxSupport "libwebpmux")
+    (lib.enableFeature libwebpdemuxSupport "libwebpdemux")
+    (lib.enableFeature libwebpdecoderSupport "libwebpdecoder")
   ];
 
   nativeBuildInputs = [ autoreconfHook libtool ];
   buildInputs = [ ]
-    ++ optionals openglSupport [ freeglut libGL libGLU ]
-    ++ optional pngSupport libpng
-    ++ optional jpegSupport libjpeg
-    ++ optional tiffSupport libtiff
-    ++ optional gifSupport giflib;
+    ++ lib.optionals openglSupport [ freeglut libGL libGLU ]
+    ++ lib.optionals pngSupport [ libpng ]
+    ++ lib.optionals jpegSupport [ libjpeg ]
+    ++ lib.optionals tiffSupport [ libtiff ]
+    ++ lib.optionals gifSupport [ giflib ];
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with lib; {
     description = "Tools and library for the WebP image format";
     homepage = "https://developers.google.com/speed/webp/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ codyopel ];
+    maintainers = with maintainers; [ ajs124 ];
   };
 }
