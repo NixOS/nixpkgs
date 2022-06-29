@@ -22018,7 +22018,9 @@ with pkgs;
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
 
-  dendrite = callPackage ../servers/dendrite { };
+  dendrite = callPackage ../servers/dendrite {
+    buildGoModule = buildGo117Module;
+  };
 
   dex-oidc = callPackage ../servers/dex { };
 
