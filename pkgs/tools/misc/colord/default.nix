@@ -18,7 +18,7 @@
 , ninja
 , vala
 , libgudev
-, wrapGAppsHook
+, wrapGAppsNoGuiHook
 , shared-mime-info
 , sane-backends
 , docbook_xsl
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     pkg-config
     shared-mime-info
     vala
-    wrapGAppsHook
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
