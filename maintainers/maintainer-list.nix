@@ -2031,6 +2031,12 @@
     githubId = 1945;
     name = "Casey Rodarmor";
   };
+  catap = {
+    email = "kirill@korins.ky";
+    github = "catap";
+    githubId = 37775;
+    name = "Kirill A. Korinsky";
+  };
   catern = {
     email = "sbaugh@catern.com";
     github = "catern";
