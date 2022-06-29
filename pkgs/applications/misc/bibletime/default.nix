@@ -59,6 +59,6 @@ mkDerivation rec {
     homepage = "http://www.bibletime.info/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.piotr ];
+    maintainers = [ ];
   };
 }

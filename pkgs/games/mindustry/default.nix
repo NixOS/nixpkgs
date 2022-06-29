@@ -204,7 +204,7 @@ stdenv.mkDerivation rec {
       binaryBytecode  # deps
     ];
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz petabyteboy ];
+    maintainers = with maintainers; [ fgaz ];
     platforms = platforms.x86_64;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293

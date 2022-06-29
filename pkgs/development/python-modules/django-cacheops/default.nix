@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "A slick ORM cache with automatic granular event-driven invalidation for Django";
     homepage = "https://github.com/Suor/django-cacheops";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

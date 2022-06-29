@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Sexy and simple python charting";
     homepage = "http://www.pygal.org";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ sjourdois ];
+    maintainers = with maintainers; [ ];
   };
 }
