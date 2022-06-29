@@ -20,4 +20,6 @@ in
   # LIBRARIES
 
   quazip = callPackage ../development/libraries/quazip { };
+
+  qt6ct = callPackage ../tools/misc/qt6ct { };
 })))

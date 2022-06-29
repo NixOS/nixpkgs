@@ -1,0 +1,22 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b029931..23d50b7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -39,17 +39,7 @@ else()
+     message(FATAL_ERROR "Could NOT find lrelease executable")
+ endif()
+ 
+-get_filename_component(QT_QTPATHS_EXECUTABLE ${QT_LRELEASE_EXECUTABLE} DIRECTORY)
+-set(QT_QTPATHS_EXECUTABLE ${QT_QTPATHS_EXECUTABLE}/qtpaths)
+-
+-if(EXISTS ${QT_QTPATHS_EXECUTABLE})
+-    message(STATUS "Found qtpaths executable: " ${QT_QTPATHS_EXECUTABLE})
+-else()
+-    message(FATAL_ERROR "Could NOT find qtpaths executable")
+-endif()
+-
+ #execute_process(COMMAND ${QT_QTPATHS_EXECUTABLE} -query QT_INSTALL_PLUGINS OUTPUT_VARIABLE PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+-execute_process(COMMAND ${QT_QTPATHS_EXECUTABLE} --plugin-dir OUTPUT_VARIABLE PLUGINDIR OUTPUT_STRIP_TRAILING_WHITESPACE)
+ message(STATUS "Plugin path: " ${PLUGINDIR})
+ 
+ message(STATUS "Generating translations ...")
