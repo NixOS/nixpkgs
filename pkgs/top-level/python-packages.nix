@@ -6759,6 +6759,8 @@ in {
 
   Pmw = callPackage ../development/python-modules/Pmw { };
 
+  pnoise = callPackage ../development/python-modules/pnoise { };
+
   pocket = callPackage ../development/python-modules/pocket { };
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
@@ -8976,6 +8978,8 @@ in {
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
+  qasync = callPackage ../development/python-modules/qasync { };
+
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
   qcengine = callPackage ../development/python-modules/qcengine { };
@@ -10262,6 +10266,8 @@ in {
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
+  svgelements = callPackage ../development/python-modules/svgelements { };
+
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
@@ -11115,7 +11121,11 @@ in {
 
   vpk = callPackage ../development/python-modules/vpk { };
 
+  vpype = callPackage ../applications/graphics/vpype { };
+
   vqgan-jax = callPackage ../development/python-modules/vqgan-jax { };
+
+  vsketch = callPackage ../applications/graphics/vsketch { };
 
   vsts = callPackage ../development/python-modules/vsts { };
 

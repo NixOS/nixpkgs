@@ -14547,4 +14547,11 @@
     github = "npatsakula";
     githubId = 23001619;
   };
+
+  rrix = {
+    email = "nixpkgs@whatthefuck.computer";
+    name = "Ryan Rix";
+    github = "rrix";
+    githubId = 138102;
+  };
 }

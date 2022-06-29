@@ -35817,4 +35817,8 @@ with pkgs;
   honeyvent = callPackage ../servers/tracing/honeycomb/honeyvent { };
 
   mictray = callPackage ../tools/audio/mictray { };
+
+  vpype = with python3Packages; toPythonApplication (callPackage ../applications/graphics/vpype { });
+
+  vsketch = with python3Packages; toPythonApplication (callPackage ../applications/graphics/vsketch { });
 }
