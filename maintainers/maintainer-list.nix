@@ -11762,6 +11762,12 @@
     githubId = 602439;
     name = "Serguei Narojnyi";
   };
+  snapdgn = {
+    email = "snapdgn@proton.me";
+    name = "Nitish Kumar";
+    github = "snapdgn";
+    githubId = 85608760;
+  };
   snicket2100 = {
     email = "57048005+snicket2100@users.noreply.github.com";
     github = "snicket2100";

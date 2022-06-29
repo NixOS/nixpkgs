@@ -275,6 +275,10 @@ with pkgs;
 
   bingo = callPackage ../development/tools/bingo {};
 
+  binserve = callPackage ../servers/binserve {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   bootstrap-studio = callPackage ../development/web/bootstrap-studio {};
 
   breakpad = callPackage ../development/misc/breakpad { };
