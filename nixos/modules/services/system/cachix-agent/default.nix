@@ -45,8 +45,11 @@ in {
       after = ["network-online.target"];
       path = [ config.nix.package ];
       wantedBy = [ "multi-user.target" ];
+
       # don't restart while changing
-      reloadIfChanged = true;
+      restartIfChanged = false;
+      unitConfig.X-StopOnRemoval = false;
+
       environment.USER = "root";
       serviceConfig = {
         Restart = "on-failure";
