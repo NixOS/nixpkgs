@@ -2420,6 +2420,12 @@
     githubId = 20808761;
     name = "cmfwyp";
   };
+  cmm = {
+    email = "repo@cmm.kakpryg.net";
+    github = "cmm";
+    githubId = 718298;
+    name = "Michael Livshin";
+  };
   cobbal = {
     email = "andrew.cobb@gmail.com";
     github = "cobbal";
@@ -7716,6 +7722,12 @@
     githubId = 31056089;
     name = "Tom Ho";
   };
+  majiir = {
+    email = "majiir@nabaal.net";
+    github = "Majiir";
+    githubId = 963511;
+    name = "Majiir Paktu";
+  };
   makefu = {
     email = "makefu@syntax-fehler.de";
     github = "makefu";
@@ -11755,6 +11767,12 @@
     github = "snaar";
     githubId = 602439;
     name = "Serguei Narojnyi";
+  };
+  snapdgn = {
+    email = "snapdgn@proton.me";
+    name = "Nitish Kumar";
+    github = "snapdgn";
+    githubId = 85608760;
   };
   snicket2100 = {
     email = "57048005+snicket2100@users.noreply.github.com";
