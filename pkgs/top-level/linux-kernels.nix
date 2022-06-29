@@ -438,6 +438,11 @@ in {
 
     rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
 
+    rust-bindgen-kernel-unwrapped = callPackage ../development/tools/rust/bindgen/unwrapped-kernel.nix {};
+    rust-bindgen-kernel = callPackage ../development/tools/rust/bindgen {
+      rust-bindgen-unwrapped = rust-bindgen-kernel-unwrapped;
+    };
+
     sysdig = callPackage ../os-specific/linux/sysdig {};
 
     systemtap = callPackage ../development/tools/profiling/systemtap { };
