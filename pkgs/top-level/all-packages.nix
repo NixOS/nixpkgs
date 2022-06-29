@@ -27922,7 +27922,9 @@ with pkgs;
 
   k3sup = callPackage ../applications/networking/cluster/k3sup {};
 
-  kconf = callPackage ../applications/networking/cluster/kconf { };
+  kconf = callPackage ../applications/networking/cluster/kconf {
+    buildGoModule = buildGo117Module;
+  };
 
   kail = callPackage ../tools/networking/kail {  };
 
@@ -28061,7 +28063,9 @@ with pkgs;
 
   kubebuilder = callPackage ../applications/networking/cluster/kubebuilder { };
 
-  kuttl = callPackage ../applications/networking/cluster/kuttl { };
+  kuttl = callPackage ../applications/networking/cluster/kuttl {
+    buildGoModule = buildGo117Module;
+  };
 
   kubectl-doctor = callPackage ../applications/networking/cluster/kubectl-doctor { };
 
