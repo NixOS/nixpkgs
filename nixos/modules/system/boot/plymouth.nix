@@ -184,9 +184,14 @@ in
           mkdir $out
           cp -r ${themesEnv}/share/plymouth/themes/${cfg.theme} $out
           # Copy more themes if the theme depends on others
-          for theme in $(grep -hRo '/etc/plymouth/themes/.*$' ${themesEnv} | xargs -n1 basename); do
-              if [[ -d "${themesEnv}/theme" ]]; then
-                  cp -r "${themesEnv}/theme" $out
+          for theme in $(grep -hRo '/etc/plymouth/themes/.*$' $out | xargs -n1 basename); do
+              if [[ -d "${themesEnv}/share/plymouth/themes/$theme" ]]; then
+                  if [[ ! -d "$out/$theme" ]]; then
+                    echo "Adding dependent theme: $theme"
+                    cp -r "${themesEnv}/share/plymouth/themes/$theme" $out
+                  fi
+              else
+                echo "Missing theme dependency: $theme"
               fi
           done
         '';
