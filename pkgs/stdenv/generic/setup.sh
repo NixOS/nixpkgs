@@ -771,9 +771,18 @@ substitute() {
 }
 
 substituteInPlace() {
-    local fileName="$1"
-    shift
-    substitute "$fileName" "$fileName" "$@"
+    local -a fileNames=()
+    for arg in "$@"; do
+        if [[ "$arg" = "--"* ]]; then
+            break
+        fi
+        fileNames+=("$arg")
+        shift
+    done
+
+    for file in "${fileNames[@]}"; do
+        substitute "$file" "$file" "$@"
+    done
 }
 
 _allFlags() {
