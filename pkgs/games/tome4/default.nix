@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Tales of Maj'eyal (rogue-like game)";
     homepage = "https://te4.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ chattered peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = with platforms; [ "i686-linux" "x86_64-linux" ];
   };
 }

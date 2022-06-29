@@ -40,7 +40,7 @@ let
       description = "Low-latency, high quality voice chat software";
       homepage = "https://mumble.info";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ petabyteboy infinisil felixsinger ];
+      maintainers = with maintainers; [ infinisil felixsinger ];
       platforms = platforms.linux;
     };
   });

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://davmail.sourceforge.net/";
     description = "A Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
-    maintainers = [ maintainers.hinton ];
+    maintainers = [ ];
     platforms = platforms.all;
     license = licenses.gpl2Plus;
   };

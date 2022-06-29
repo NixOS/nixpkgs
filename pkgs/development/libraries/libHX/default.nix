@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       and functions commonly needed, such as maps, deques, linked lists, string formatting
       and autoresizing, option and config file parsing, type checking casts and more.
       '';
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
     platforms = platforms.linux;
     license = with licenses; [ gpl3 lgpl21Plus wtfpl ];
   };

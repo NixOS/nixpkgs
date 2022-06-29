@@ -113,7 +113,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Moneyplex online banking software";
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     license = licenses.unfree;

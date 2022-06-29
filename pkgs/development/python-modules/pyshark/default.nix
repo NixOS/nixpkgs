@@ -50,6 +50,6 @@ buildPythonPackage rec {
     description = "Python wrapper for tshark, allowing Python packet parsing using Wireshark dissectors";
     homepage = "https://github.com/KimiNewt/pyshark/";
     license = licenses.mit;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

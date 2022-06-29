@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.interactivebrokers.com";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
-    maintainers = [ maintainers.tstrobel ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }
