@@ -20967,23 +20967,6 @@ with pkgs;
 
   sphinx = with python3Packages; toPythonApplication sphinx;
 
-  # A variation of sphinx that is only suitable for offline use as it excludes
-  # pyopenssl, which is broken on aarch64-darwin.
-  # https://github.com/NixOS/nixpkgs/issues/175875
-  sphinx_offline =
-    if !(stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isAarch64)
-    then sphinx
-    else
-      sphinx.override (o: {
-        requests = pkgsBuildTarget.python3Packages.requests.override (o: {
-          urllib3 = pkgsBuildTarget.python3Packages.urllib3.overrideAttrs (o: {
-            # urllib3 adds the optional pyopenssl to propagatedBuildInputs
-            # pkgs/development/python-modules/urllib3/default.nix
-            propagatedBuildInputs = [];
-          });
-        });
-      });
-
   sphinx-autobuild = with python3Packages; toPythonApplication sphinx-autobuild;
 
   sphinx-serve = with python3Packages; toPythonApplication sphinx-serve;
