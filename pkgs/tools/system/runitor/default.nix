@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch, testers, runitor }:
+{ lib, buildGoModule, fetchFromGitHub, testers, runitor }:
 
 buildGoModule rec {
   pname = "runitor";
