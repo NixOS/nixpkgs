@@ -23915,7 +23915,9 @@ with pkgs;
 
   go-migrate = callPackage ../development/tools/go-migrate { };
 
-  go-mockery = callPackage ../development/tools/go-mockery { };
+  go-mockery = callPackage ../development/tools/go-mockery {
+    buildGoModule = buildGo117Module;
+  };
 
   gomacro = callPackage ../development/tools/gomacro { };
 
