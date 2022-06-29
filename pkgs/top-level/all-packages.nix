@@ -8628,7 +8628,9 @@ with pkgs;
     docbook-xsl = docbook_xsl;
   };
 
-  mole = callPackage ../tools/networking/mole { };
+  mole = callPackage ../tools/networking/mole {
+    buildGoModule = buildGo117Module;
+  };
 
   morgen = callPackage ../applications/office/morgen {
     electron = electron_15;
