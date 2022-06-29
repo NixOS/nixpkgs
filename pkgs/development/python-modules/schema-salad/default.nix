@@ -32,9 +32,8 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    black
     pytestCheckHook
-  ];
+  ] ++ passthru.optional-dependencies.pycodegen;
 
   disabledTests = [
     # Setup for these tests requires network access
@@ -47,6 +46,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "schema_salad"
   ];
+
+  passthru.optional-dependencies = {
+    pycodegen = [ black ];
+  };
 
   meta = with lib; {
     description = "Semantic Annotations for Linked Avro Data";
