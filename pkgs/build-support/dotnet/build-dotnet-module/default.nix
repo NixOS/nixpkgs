@@ -88,6 +88,15 @@ let
     deps = [ _nugetDeps ] ++ lib.optional (localDeps != null) localDeps;
   };
 
+  # Used by fetch-deps script to restore dependencies for
+  # all platforms supported by the package
+  systemToDotnetRid = {
+    "x86_64-linux" = "linux-x64";
+    "aarch64-linux" = "linux-arm64";
+    "x86_64-darwin" = "osx-x64";
+    "aarch64-darwin" = "osx-arm64";
+  };
+
 in stdenvNoCC.mkDerivation (args // {
   nativeBuildInputs = args.nativeBuildInputs or [] ++ [
     dotnetConfigureHook
@@ -131,13 +140,17 @@ in stdenvNoCC.mkDerivation (args // {
       mkdir -p "$HOME/nuget_pkgs"
 
       for project in "${lib.concatStringsSep "\" \"" ((lib.toList projectFile) ++ lib.optionals (testProjectFile != "") (lib.toList testProjectFile))}"; do
-        ${dotnet-sdk}/bin/dotnet restore "$project" \
-          ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
-          -p:ContinuousIntegrationBuild=true \
-          -p:Deterministic=true \
-          --packages "$HOME/nuget_pkgs" \
-          ${lib.optionalString (dotnetRestoreFlags != []) (builtins.toString dotnetRestoreFlags)} \
-          ${lib.optionalString (dotnetFlags != []) (builtins.toString dotnetFlags)}
+        for rid in "${lib.concatStringsSep "\" \"" (lib.attrVals args.meta.platforms systemToDotnetRid)}"; do
+          echo "Restoring $project for platform $rid"
+          ${dotnet-sdk}/bin/dotnet restore "$project" \
+            ${lib.optionalString (!enableParallelBuilding) "--disable-parallel"} \
+            -p:ContinuousIntegrationBuild=true \
+            -p:Deterministic=true \
+            --packages "$HOME/nuget_pkgs" \
+            -r "$rid" \
+            ${lib.optionalString (dotnetRestoreFlags != []) (builtins.toString dotnetRestoreFlags)} \
+            ${lib.optionalString (dotnetFlags != []) (builtins.toString dotnetFlags)}
+        done
       done
 
       echo "Writing lockfile..."
