@@ -19,7 +19,7 @@
     import ./androidndk-pkgs.nix {
       inherit lib;
       inherit (buildPackages)
-        makeWrapper;
+        makeWrapper python autoPatchelfHook;
       inherit (pkgs)
         stdenv
         runCommand wrapBintoolsWith wrapCCWith;
@@ -49,7 +49,7 @@
     import ./androidndk-pkgs.nix {
       inherit lib;
       inherit (buildPackages)
-        makeWrapper;
+        makeWrapper python autoPatchelfHook;
       inherit (pkgs)
         stdenv
         runCommand wrapBintoolsWith wrapCCWith;
