@@ -18,9 +18,13 @@ buildGo118Module rec {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "6zF/tDWBirvDJ+l21UVzb/pAwRvLuPOpGnkLdmp6qU0=";
+    sha256 = "tieQOqcbTT6ODUEcLLwWUD7tDOAb6mklbUecjeVjhRc=";
     # We need the git revision
     leaveDotGit = true;
+    postFetch = ''
+       git -C $out rev-parse --short HEAD > $out/.git-revision
+       rm -rf $out/.git
+    '';
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper git openssl ];
@@ -31,7 +35,7 @@ buildGo118Module rec {
 
   buildPhase = ''
     runHook preBuild
-    make build VERSION=${version} REVISION=$(git rev-parse --short HEAD)
+    make build VERSION=${version} REVISION=$(cat .git-revision)
     runHook postBuild
   '';
 
