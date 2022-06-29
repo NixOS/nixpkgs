@@ -1,5 +1,4 @@
-{ lib, stdenv
-, makeWrapper, python
+{ lib, stdenv, makeWrapper
 , runCommand, wrapBintoolsWith, wrapCCWith, autoPatchelfHook
 , buildAndroidndk, androidndk, targetAndroidndkPkgs
 }:
@@ -24,30 +23,18 @@ let
     i686-unknown-linux-android = {
       triple = "i686-linux-android";
       arch = "x86";
-      # LEGACY
-      toolchain = "x86";
-      gccVer = "4.9";
     };
     x86_64-unknown-linux-android = {
       triple = "x86_64-linux-android";
       arch = "x86_64";
-      # LEGACY
-      toolchain = "x86_64";
-      gccVer = "4.9";
     };
     armv7a-unknown-linux-androideabi = {
       arch = "arm";
       triple = "arm-linux-androideabi";
-      # LEGACY
-      toolchain = "arm-linux-androideabi";
-      gccVer = "4.9";
     };
     aarch64-unknown-linux-android = {
       arch = "arm64";
       triple = "aarch64-linux-android";
-      # LEGACY
-      toolchain = "aarch64-linux-android";
-      gccVer = "4.9";
     };
   }.${config} or
     (throw "Android NDK doesn't support ${config}, as far as we know");
@@ -70,7 +57,7 @@ rec {
   binaries = stdenv.mkDerivation {
     pname = "${targetConfig}-ndk-toolchain";
     inherit (androidndk) version;
-    nativeBuildInputs = [ makeWrapper python autoPatchelfHook ];
+    nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
     propagatedBuildInputs = [ androidndk ];
     passthru = {
       isClang = true; # clang based cc, but bintools ld
@@ -82,16 +69,10 @@ rec {
     dontPatch = true;
     autoPatchelfIgnoreMissingDeps = true;
     installPhase = ''
-      if [ ! -d ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double} ]; then
-        # LEGACY: make-standalone-toolchain is deprecated
-        #         https://developer.android.com/ndk/guides/standalone_toolchain
-        ${androidndk}/libexec/android-sdk/ndk-bundle/build/tools/make-standalone-toolchain.sh --arch=${targetInfo.arch} --install-dir=$out/toolchain --platform=${sdkVer} --force
-      else
-        # https://developer.android.com/ndk/guides/other_build_systems
-        mkdir -p $out
-        cp -r ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double} $out/toolchain
-        find $out/toolchain -type d -exec chmod 777 {} \;
-      fi
+      # https://developer.android.com/ndk/guides/other_build_systems
+      mkdir -p $out
+      cp -r ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double} $out/toolchain
+      find $out/toolchain -type d -exec chmod 777 {} \;
 
       if [ ! -d $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${sdkVer} ]; then
         echo "NDK does not contain libraries for SDK version ${sdkVer}";
@@ -116,17 +97,8 @@ rec {
         ln -s $f ''${f/${targetInfo.triple}/${targetConfig}}
       done
 
-      # LEGACY: get rid of gcc and g++, otherwise wrapCCWith will use them instead of clang
-      rm -f $out/bin/${targetConfig}-gcc $out/bin/${targetConfig}-g++
-
-      # LEGACY: ld doesn't properly include transitive library dependencies.
-      #         Let's use gold instead
       rm -f $out/bin/${targetConfig}-ld
-      if [[ -f  $out/bin/${targetConfig}-ld.gold ]]; then
-        ln -s $out/bin/${targetConfig}-ld.gold $out/bin/${targetConfig}-ld
-      else
-        ln -s $out/bin/lld $out/bin/${targetConfig}-ld
-      fi
+      ln -s $out/bin/lld $out/bin/${targetConfig}-ld
 
       (cd $out/bin;
         for tool in llvm-*; do
@@ -156,18 +128,12 @@ rec {
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = ''
       echo "-D__ANDROID_API__=${stdenv.targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
-      if [ ! -d ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${hostInfo.double} ]; then
-        # LEGACY: probably won't work for any recent android
-        echo "--gcc-toolchain=${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/${targetInfo.toolchain}-${targetInfo.gccVer}/prebuilt/${hostInfo.double}" >> $out/nix-support/cc-cflags
-        echo "-fuse-ld=$out/bin/${targetConfig}-ld.gold -L${binaries}/lib" >> $out/nix-support/cc-ldflags
-      else
-        # Android needs executables linked with -pie since version 5.0
-        # Use -fPIC for compilation, and link with -pie if no -shared flag used in ldflags
-        echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
-        echo "-z,noexecstack -z,relro -z,now" >> $out/nix-support/cc-ldflags
-        echo 'if [[ ! " $@ " =~ " -shared " ]]; then NIX_LDFLAGS_${suffixSalt}+=" -pie"; fi' >> $out/nix-support/add-flags.sh
-        echo "-Xclang -mnoexecstack" >> $out/nix-support/cc-cxxflags
-      fi
+      # Android needs executables linked with -pie since version 5.0
+      # Use -fPIC for compilation, and link with -pie if no -shared flag used in ldflags
+      echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
+      echo "-z,noexecstack -z,relro -z,now" >> $out/nix-support/cc-ldflags
+      echo 'if [[ ! " $@ " =~ " -shared " ]]; then NIX_LDFLAGS_${suffixSalt}+=" -pie"; fi' >> $out/nix-support/add-flags.sh
+      echo "-Xclang -mnoexecstack" >> $out/nix-support/cc-cxxflags
       if [ ${targetInfo.triple} == arm-linux-androideabi ]; then
         # https://android.googlesource.com/platform/external/android-cmake/+/refs/heads/cmake-master-dev/android.toolchain.cmake
         echo "--fix-cortex-a8" >> $out/nix-support/cc-ldflags
@@ -181,12 +147,7 @@ rec {
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
   libraries = runCommand "bionic-prebuilt" {} ''
-    if [ -d ${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt ]; then
-      lpath=${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}
-    else
-      # LEGACY
-      lpath=${buildAndroidndk}/libexec/android-sdk/ndk-bundle/platforms/android-${sdkVer}/arch-${hostInfo.arch}/usr/${if hostInfo.arch == "x86_64" then "lib64" else "lib"}
-    fi
+    lpath=${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}
     if [ ! -d $lpath ]; then
       echo "NDK does not contain libraries for SDK version ${sdkVer} <$lpath>"
       exit 1
