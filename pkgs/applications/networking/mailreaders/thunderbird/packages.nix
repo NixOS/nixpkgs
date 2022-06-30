@@ -1,6 +1,7 @@
 { stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests }:
 
 rec {
+  thunderbird = thunderbird-102;
   thunderbird-91 = (buildMozillaMach rec {
     pname = "thunderbird";
     version = "91.11.0";
@@ -35,7 +36,7 @@ rec {
 
     pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
   };
-  thunderbird = (buildMozillaMach rec {
+  thunderbird-102 = (buildMozillaMach rec {
     pname = "thunderbird";
     version = "102.0";
     application = "comm/mail";
@@ -61,7 +62,7 @@ rec {
       license = licenses.mpl20;
     };
     updateScript = callPackage ./update.nix {
-      attrPath = "thunderbird-unwrapped";
+      attrPath = "thunderbird-102-unwrapped";
     };
   }).override {
     geolocationSupport = false;
