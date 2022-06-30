@@ -6,8 +6,8 @@ import ./make-test-python.nix {
       { ... }:
 
       {
-	virtualisation.memorySize = 4096;
-	virtualisation.diskSize = 1024;
+        virtualisation.memorySize = 4096;
+        virtualisation.diskSize = 1024;
 
         services.neo4j.enable = true;
         # require tls certs to be available

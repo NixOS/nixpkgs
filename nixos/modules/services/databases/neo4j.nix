@@ -57,7 +57,7 @@ let
 
     # HTTP Connector
     ${optionalString (cfg.http.enable) ''
-      dbms.connector.http.enabled=${boolToString cfg.https.enable}
+      dbms.connector.http.enabled=${boolToString cfg.http.enable}
       dbms.connector.http.listen_address=${cfg.http.listenAddress}
       dbms.connector.http.advertised_address=${cfg.http.listenAddress}
     ''}
