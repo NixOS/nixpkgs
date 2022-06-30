@@ -16,9 +16,9 @@ in
 
   ###### interface
 
-  options = {
+  options.services.radvd = {
 
-    services.radvd.enable = mkOption {
+    enable = mkOption {
       type = types.bool;
       default = false;
       description =
@@ -32,7 +32,16 @@ in
         '';
     };
 
-    services.radvd.config = mkOption {
+    package = mkOption {
+      type = types.package;
+      default = pkgs.radvd;
+      defaultText = literalExpression "pkgs.radvd";
+      description = ''
+        The RADVD package to use for the RADVD service.
+      '';
+    };
+
+    config = mkOption {
       type = types.lines;
       example =
         ''
@@ -67,7 +76,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig =
-          { ExecStart = "@${pkgs.radvd}/bin/radvd radvd -n -u radvd -C ${confFile}";
+          { ExecStart = "@${cfg.package}/bin/radvd radvd -n -u radvd -C ${confFile}";
             Restart = "always";
           };
       };
