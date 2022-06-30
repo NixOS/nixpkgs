@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "quictls";
-  version = "3.0.3+quick_unstable-2022-05.04";
+  version = "3.0.5+quick_unstable-2022-07.05";
 
   src = fetchFromGitHub {
     owner = "quictls";
     repo = "openssl";
-    rev = "368c9d581b17f0bbe425f8dedeaa7b864a7b29ce";
-    sha256 = "sha256-W3bILxhyeziWQNZUHUg/D9eV8LnmHJqEFwyzWjJrRuc=";
+    rev = "75e940831d0570d6b020cfebf128ae500f424867";
+    sha256 = "sha256-1HBGKafcCbM0RZWLvyl3vpSfGBsAcGDgjz1Nm/qclWM=";
   };
 
   patches = [
