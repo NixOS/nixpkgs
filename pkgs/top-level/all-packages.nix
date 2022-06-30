@@ -21117,6 +21117,8 @@ with pkgs;
 
   unicon-lang = callPackage ../development/interpreters/unicon-lang {};
 
+  updfparser = callPackage ../development/libraries/updfparser { };
+
   tsocks = callPackage ../development/libraries/tsocks { };
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
