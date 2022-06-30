@@ -61,13 +61,6 @@ let
       dbms.connector.http.listen_address=${cfg.http.listenAddress}
       dbms.connector.http.advertised_address=${cfg.http.listenAddress}
     ''}
-    ${optionalString (!cfg.http.enable) ''
-      # It is not possible to disable the HTTP connector. To fully prevent
-      # clients from connecting to HTTP, block the HTTP port (7474 by default)
-      # via firewall. listen_address is set to the loopback interface to
-      # prevent remote clients from connecting.
-      dbms.connector.http.listen_address=127.0.0.1
-    ''}
 
     # HTTPS Connector
     dbms.connector.https.enabled=${boolToString cfg.https.enable}
@@ -340,13 +333,10 @@ in {
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc ''
-          The HTTP connector is required for Neo4j, and cannot be disabled.
-          Setting this option to `false` will force the HTTP
-          connector's {option}`listenAddress` to the loopback
-          interface to prevent connection of remote clients. To prevent all
-          clients from connecting, block the HTTP port (7474 by default) by
-          firewall.
+        description = ''
+          Enable the HTTP connector for Neo4j. Setting this option to
+          <literal>false</literal> will stop Neo4j from listening for incoming
+          connections on the HTTPS port (7474 by default).
         '';
       };
 
