@@ -18,10 +18,9 @@ index 777e82d16b..b6abc2bba0 100644
  Before=sysinit.target systemd-tmpfiles-setup-dev.service
  ConditionCapability=CAP_SYS_MODULE
 -ConditionFileNotEmpty=/lib/modules/%v/modules.devname
-+ConditionFileNotEmpty=/run/booted-system/kernel-modules/lib/modules/%v/modules.devname
- 
+
  [Service]
  Type=oneshot
--- 
+--
 2.34.0
 

@@ -592,6 +592,9 @@ in
     systemd.services.systemd-importd.environment = proxy_env;
     systemd.services.systemd-pstore.wantedBy = [ "sysinit.target" ]; # see #81138
 
+    # NixOS has kernel modules in a different location
+    systemd.services.kmod-static-nodes.unitConfig.ConditionFileNotEmpty = "/run/booted-system/kernel-modules/lib/modules/%v/modules.devname";
+
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
     systemd.services.systemd-random-seed.unitConfig.ConditionVirtualization = "!container";

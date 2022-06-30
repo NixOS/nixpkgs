@@ -420,6 +420,10 @@ in {
       services."systemd-makefs@" = lib.mkIf needMakefs { unitConfig.IgnoreOnIsolate = true; };
       services."systemd-growfs@" = lib.mkIf needGrowfs { unitConfig.IgnoreOnIsolate = true; };
 
+      # make sure all the /dev nodes are set up
+      services.kmod-static-nodes.unitConfig.ConditionFileNotEmpty = "/lib/modules/%v/modules.devname";
+      services.systemd-tmpfiles-setup-dev.wantedBy = ["sysinit.target"];
+
       services.initrd-nixos-activation = {
         after = [ "initrd-fs.target" ];
         requiredBy = [ "initrd.target" ];
