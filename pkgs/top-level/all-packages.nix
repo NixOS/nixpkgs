@@ -4572,21 +4572,17 @@ with pkgs;
   arpoison = callPackage ../tools/networking/arpoison { };
 
   asciidoc = callPackage ../tools/typesetting/asciidoc {
-    inherit (python3.pkgs) matplotlib numpy aafigure recursivePthLoader;
+    inherit (python3.pkgs) pygments matplotlib numpy aafigure recursivePthLoader;
+    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
+    w3m = w3m-batch;
     enableStandardFeatures = false;
   };
 
   asciidoc-full = asciidoc.override {
-    inherit (python3.pkgs) pygments;
-    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
-    w3m = w3m-batch;
     enableStandardFeatures = true;
   };
 
   asciidoc-full-with-plugins = asciidoc.override {
-    inherit (python3.pkgs) pygments;
-    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
-    w3m = w3m-batch;
     enableStandardFeatures = true;
     enableExtraPlugins = true;
   };
