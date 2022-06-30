@@ -6657,6 +6657,8 @@ in {
 
   pysolcast = callPackage ../development/python-modules/pysolcast { };
 
+  pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
+
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
