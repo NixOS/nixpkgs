@@ -21227,7 +21227,9 @@ with pkgs;
 
   umockdev = callPackage ../development/libraries/umockdev { };
 
-  unconvert = callPackage ../development/tools/unconvert { };
+  unconvert = callPackage ../development/tools/unconvert {
+    buildGoModule = buildGo117Module;
+  };
 
   unibilium = callPackage ../development/libraries/unibilium { };
 
