@@ -14175,7 +14175,6 @@ with pkgs;
     coursier = coursier.override { jre = jdk8; };
   };
 
-  metal = callPackage ../development/libraries/metal { };
   metals = callPackage ../development/tools/metals { };
   scalafix = callPackage ../development/tools/scalafix {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
