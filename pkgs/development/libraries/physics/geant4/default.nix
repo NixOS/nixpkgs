@@ -1,7 +1,5 @@
 { enableMultiThreading ? true
-, enableG3toG4         ? false
 , enableInventor       ? false
-, enableGDML           ? false
 , enableQT             ? false
 , enableXM             ? false
 , enableOpenGLX11      ? true
@@ -11,13 +9,10 @@
 # Standard build environment with cmake.
 , lib, stdenv, fetchurl, fetchpatch, cmake
 
-# Optional system packages, otherwise internal GEANT4 packages are used.
 , clhep ? null # not packaged currently
 , expat
-, zlib
-
-# For enableGDML.
 , xercesc
+, zlib
 
 # For enableQT.
 , qtbase
@@ -59,8 +54,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DGEANT4_INSTALL_DATA=OFF"
-    "-DGEANT4_USE_GDML=${if enableGDML then "ON" else "OFF"}"
-    "-DGEANT4_USE_G3TOG4=${if enableG3toG4 then "ON" else "OFF"}"
+    "-DGEANT4_USE_GDML=ON"
+    "-DGEANT4_USE_G3TOG4=ON"
     "-DGEANT4_USE_QT=${if enableQT then "ON" else "OFF"}"
     "-DGEANT4_USE_XM=${if enableXM then "ON" else "OFF"}"
     "-DGEANT4_USE_OPENGL_X11=${if enableOpenGLX11 then "ON" else "OFF"}"
@@ -68,8 +63,8 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_PYTHON=${if enablePython then "ON" else "OFF"}"
     "-DGEANT4_USE_RAYTRACER_X11=${if enableRaytracerX11 then "ON" else "OFF"}"
     "-DGEANT4_USE_SYSTEM_CLHEP=${if clhep != null then "ON" else "OFF"}"
-    "-DGEANT4_USE_SYSTEM_EXPAT=${if expat != null then "ON" else "OFF"}"
-    "-DGEANT4_USE_SYSTEM_ZLIB=${if zlib != null then "ON" else "OFF"}"
+    "-DGEANT4_USE_SYSTEM_EXPAT=ON"
+    "-DGEANT4_USE_SYSTEM_ZLIB=ON"
     "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DXQuartzGL_INCLUDE_DIR=${libGL.dev}/include"
@@ -93,8 +88,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
     ++ lib.optionals enablePython [ boost_python python3 ];
 
-  propagatedBuildInputs = [ clhep expat zlib libGL ]
-    ++ lib.optionals enableGDML [ xercesc ]
+  propagatedBuildInputs = [ clhep expat xercesc zlib libGL ]
     ++ lib.optionals enableXM [ motif ]
     ++ lib.optionals enableQT [ qtbase ];
 
