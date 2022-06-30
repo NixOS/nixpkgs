@@ -33,6 +33,7 @@
 , fontsConf
 , gtk3Support ? false
 , gtk3 ? null
+, extraGIPackages ? [ ]
 }:
 
 # needed for beautiful.gtk to work
@@ -41,7 +42,6 @@ assert gtk3Support -> gtk3 != null;
 let
   luaEnv = lua.withPackages (ps: [ ps.lgi ps.ldoc ]);
 in
-
 stdenv.mkDerivation rec {
   pname = "awesome";
   version = "4.3";
@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
   FONTCONFIG_FILE = toString fontsConf;
 
   propagatedUserEnvPkgs = [ hicolor-icon-theme ];
+
   buildInputs = [
     cairo
     librsvg
@@ -121,7 +122,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional lua.pkgs.isLuaJIT "-DLUA_LIBRARY=${lua}/lib/libluajit-5.1.so"
   ;
 
-  GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";
+  GI_TYPELIB_PATH =
+    let
+      mkTypeLibPath = pkg: "${pkg}/lib/girepository-1.0";
+      extraGITypeLibPaths = lib.forEach extraGIPackages mkTypeLibPath;
+    in
+    lib.concatStringsSep ":" (extraGITypeLibPaths ++ [ (mkTypeLibPath pango.out) ]);
+
   # LUA_CPATH and LUA_PATH are used only for *building*, see the --search flags
   # below for how awesome finds the libraries it needs at runtime.
   LUA_CPATH = "${luaEnv}/lib/lua/${lua.luaversion}/?.so";
