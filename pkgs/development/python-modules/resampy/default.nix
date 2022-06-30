@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "resampy";
-  version = "0.2.2";
+  version = "0.3.0";
 
   # No tests in PyPi Archive
   src = fetchFromGitHub {
     owner = "bmcfee";
     repo = pname;
-    rev = version;
-    sha256 = "0qmkxl5sbgh0j73n667vyi7ywzh09iaync91yp1j5rrcmwsn0qfs";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-OVj5dQafIoKeA04yTGBKTinldMjEccxrdiuRFIvRzcE=";
   };
 
   checkInputs = [ pytest pytest-cov ];
