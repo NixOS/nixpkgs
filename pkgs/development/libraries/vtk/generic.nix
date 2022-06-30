@@ -73,6 +73,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DVTK_VERSIONED_INSTALL=OFF"
   ] ++ optionals enableQt [
     "-D${if lib.versionOlder version "9.0" then "VTK_Group_Qt:BOOL=ON" else "VTK_GROUP_ENABLE_Qt:STRING=YES"}"
   ] ++ optionals (enableQt && lib.versionOlder version "8.0") [
@@ -90,22 +91,13 @@ in stdenv.mkDerivation rec {
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
   '';
 
-  preFixup = ''
-    for lib in $out/lib/libvtk*.so; do
-      ln -s $lib $out/lib/"$(basename "$lib" | sed -e 's/-[[:digit:]]*.[[:digit:]]*//g')"
-    done
-
-    mv $out/include/vtk-${majorVersion}/* $out/include
-    rmdir $out/include/vtk-${majorVersion}
-    ln -s $out/include $out/include/vtk-${majorVersion}
-  '';
-
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Open source libraries for 3D computer graphics, image processing and visualization";
     homepage = "https://www.vtk.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp tfmoraes lheckemann ];
     platforms = with platforms; unix;
+    # /nix/store/xxxxxxx-apple-framework-Security/Library/Frameworks/Security.framework/Headers/Authorization.h:192:7: error: variably modified 'bytes' at file scope
+    broken = stdenv.isDarwin && (lib.versions.major majorVersion == "7" || lib.versions.major majorVersion == "8");
   };
 }
