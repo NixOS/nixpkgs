@@ -203,6 +203,7 @@ in {
   haste-server = handleTest ./haste-server.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
+  healthchecks = handleTest ./web-apps/healthchecks.nix {};
   hbase1 = handleTest ./hbase.nix { package=pkgs.hbase1; };
   hbase2 = handleTest ./hbase.nix { package=pkgs.hbase2; };
   hbase3 = handleTest ./hbase.nix { package=pkgs.hbase3; };
