@@ -37,8 +37,12 @@ in (lib.filterAttrs (attr: _: (prev ? "${attr}")) {
   ];
 
   nsight_compute = prev.nsight_compute.overrideAttrs (oldAttrs: {
-    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.qt5.wrapQtAppsHook ];
-    buildInputs = oldAttrs.buildInputs ++ [ pkgs.libsForQt5.qt5.qtwebview ];
+    nativeBuildInputs = oldAttrs.nativeBuildInputs
+      ++ lib.optionals (lib.versionOlder   prev.nsight_compute.version "2022.2.0") [ pkgs.qt5.wrapQtAppsHook ]
+      ++ lib.optionals (lib.versionAtLeast prev.nsight_compute.version "2022.2.0") [ pkgs.qt6.wrapQtAppsHook ];
+      buildInputs = oldAttrs.buildInputs
+      ++ lib.optionals (lib.versionOlder   prev.nsight_compute.version "2022.2.0") [ pkgs.qt5.qtwebview ]
+      ++ lib.optionals (lib.versionAtLeast prev.nsight_compute.version "2022.2.0") [ pkgs.qt6.qtwebview ];
   });
 
   nsight_systems = prev.nsight_systems.overrideAttrs (oldAttrs: {
