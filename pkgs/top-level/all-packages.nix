@@ -16191,6 +16191,8 @@ with pkgs;
 
   nrf5-sdk = callPackage ../development/libraries/nrf5-sdk { };
 
+  nrfconnect = callPackage ../tools/bluetooth/nrfconnect { };
+
   nrfutil = callPackage ../development/tools/misc/nrfutil { };
 
   obelisk = callPackage ../development/tools/ocaml/obelisk { menhir = ocamlPackages.menhir; };
