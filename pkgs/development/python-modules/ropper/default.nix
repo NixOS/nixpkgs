@@ -1,32 +1,45 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , capstone
 , filebytes
-, pytest
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "ropper";
-  version = "1.13.6";
+  version = "1.13.7";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6e4226f5ef01951c7df87029535e051c6deb3f156f7511613fb69e8a7f4801fb";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "sashs";
+    repo = "Ropper";
+    rev = "v${version}";
+    hash = "sha256-3tWWIYqh/G/b7Z6BMua5bRvtSh4SibT6pv/NArhmqPE=";
   };
-  # XXX tests rely on user-writeable /dev/shm to obtain process locks and return PermissionError otherwise
-  # workaround: sudo chmod 777 /dev/shm
-  checkPhase = ''
-    py.test testcases
-  '';
-  doCheck = false; # Tests not included in archive
 
-  checkInputs = [pytest];
-  propagatedBuildInputs = [ capstone filebytes ];
+  propagatedBuildInputs = [
+    capstone
+    filebytes
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "ropper"
+  ];
+
   meta = with lib; {
+    broken = stdenv.isDarwin;
+    description = "Show information about files in different file formats";
     homepage = "https://scoding.de/ropper/";
     license = licenses.bsd3;
-    description = "Show information about files in different file formats";
     maintainers = with maintainers; [ bennofs ];
   };
 }

@@ -9,15 +9,17 @@ let
 in
 buildGoModule rec {
   pname = "pomerium-cli";
-  version = pomerium.version;
+  inherit (pomerium) version;
+
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256:0230b22xjnpykj8bcdahzzlsvlrd63z2cmg6yb246c5ngjs835q1";
+    hash = "sha256-AZeBtHy2MEPE8uZVJv4wLdOt6f9QNbaQnP5a2YVYYAg=";
   };
 
-  vendorSha256 = "sha256:0xx22lmh6wip1d1bjrp4lgab3q9yilw54v4lg24lf3xhbsr5si9b";
+  vendorSha256 = "sha256-K0Vdsl6wD0eJeJRsUjiNPuGx1KPkZrlCCzdyAysVonc=";
+
   subPackages = [
     "cmd/pomerium-cli"
   ];
@@ -45,7 +47,11 @@ buildGoModule rec {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 $GOPATH/bin/pomerium-cli $out/bin/pomerium-cli
+
+    runHook postInstall
   '';
 
   meta = with lib; {

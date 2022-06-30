@@ -32,19 +32,18 @@ stdenv.mkDerivation {
     mkdir -p "$out/lib/firmware/brcm"
 
     # Wifi firmware
-    shopt -s extglob
-    for filename in firmware-nonfree/brcm/brcmfmac434??{,s}-sdio.*; do
-      cp "$filename" "$out/lib/firmware/brcm"
-    done
+    cp -rv "$NIX_BUILD_TOP/firmware-nonfree/debian/config/brcm80211/." "$out/lib/firmware/"
 
     # Bluetooth firmware
-    cp bluez-firmware/broadcom/*.hcd "$out/lib/firmware/brcm"
+    cp -rv "$NIX_BUILD_TOP/bluez-firmware/broadcom/." "$out/lib/firmware/brcm"
+
+    # CM4 symlink must be added since it's missing from upstream
+    pushd $out/lib/firmware/brcm &>/dev/null
+    ln -s "./brcmfmac43455-sdio.txt" "$out/lib/firmware/brcm/brcmfmac43455-sdio.raspberrypi,4-compute-module.txt"
+    popd &>/dev/null
+
     runHook postInstall
   '';
-
-  outputHashMode = "recursive";
-  outputHashAlgo = "sha256";
-  outputHash = "sha256-Fw8EC1jzszWg9rNH01oaOIHnSYDuF6ov6ulmIAPuNz4=";
 
   meta = with lib; {
     description = "Firmware for builtin Wifi/Bluetooth devices in the Raspberry Pi 3+ and Zero W";

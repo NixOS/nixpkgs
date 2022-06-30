@@ -1,17 +1,17 @@
-{ lib, python3Packages, slurp }:
+{ lib, buildPythonApplication, fetchFromGitHub, slurp }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "swaytools";
-  version = "0.1.0";
+  version = "0.1.1";
 
-  src = python3Packages.fetchPypi {
-    inherit pname version;
-    sha256 = "1eb89259cbe027a0fa6bfc06ecf94e89b15e6f7b4965104e5b661c916ce7408c";
+  src = fetchFromGitHub {
+    owner = "tmccombs";
+    repo = "swaytools";
+    rev = version;
+    sha256 = "sha256-6Ec7MPqBia0PW+pBTAItLusWMg1wlFfEaxoh20/2uHg=";
   };
 
   propagatedBuildInputs = [ slurp ];
-
-  passthru.updateScript = ./update.py;
 
   meta = with lib; {
     homepage = "https://github.com/tmccombs/swaytools";

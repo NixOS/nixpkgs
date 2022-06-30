@@ -55,6 +55,11 @@ trim_trailing_whitespace = unset
 [*.lock]
 indent_size = unset
 
+# trailing whitespace is an actual syntax element of classic Markdown/
+# CommonMark to enforce a line break
+[*.md]
+trim_trailing_whitespace = unset
+
 [eggs.nix]
 trim_trailing_whitespace = unset
 

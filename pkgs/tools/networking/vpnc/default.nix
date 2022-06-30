@@ -31,6 +31,8 @@ stdenv.mkDerivation {
     patchShebangs src/makeman.pl
   '';
 
+  enableParallelBuilding = true;
+
   meta = with lib; {
     homepage = "https://davidepucci.it/doc/vpnc/";
     description = "Virtual private network (VPN) client for Cisco's VPN concentrators";

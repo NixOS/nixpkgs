@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "0ipz3fd65rqkxlb02sql0awc3vnslrwb2pfrsnpfnf8bfgxpbh9g";
   };
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     websocket = [
       websocket-client
     ];

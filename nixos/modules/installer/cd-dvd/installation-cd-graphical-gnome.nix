@@ -1,8 +1,6 @@
 # This module defines a NixOS installation CD that contains GNOME.
 
-{ lib, ... }:
-
-with lib;
+{ ... }:
 
 {
   imports = [ ./installation-cd-graphical-base.nix ];

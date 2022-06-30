@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  enableParallelBuilding = true;
+
   configureFlags = [ "--disable-doc" ];
 
   buildInputs = [ parted glib libuuid gtkmm3 libxml2 polkit.bin gnome.adwaita-icon-theme  ];

@@ -17,7 +17,7 @@
 , dill
 , flask
 , flask_login
-, flask_wtf
+, flask-wtf
 , flask-appbuilder
 , flask-caching
 , GitPython
@@ -126,7 +126,7 @@ buildPythonPackage rec {
     flask-appbuilder
     flask-caching
     flask_login
-    flask_wtf
+    flask-wtf
     GitPython
     graphviz
     gunicorn
@@ -243,5 +243,7 @@ buildPythonPackage rec {
     homepage = "https://airflow.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple costrouc ingenieroariel ];
+    # requires extremely outdated versions of multiple dependencies
+    broken = true;
   };
 }

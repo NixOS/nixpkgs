@@ -26,16 +26,11 @@ buildDotnetModule rec {
   projectFile = "osu.Desktop/osu.Desktop.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-
   nativeBuildInputs = [ copyDesktopItems ];
 
-  preConfigure = ''
-    dotnetFlags+=(
-      --runtime linux-x64
-    )
-  '';
+  dotnetFlags = [
+    "--runtime linux-x64"
+  ];
 
   runtimeDeps = [
     ffmpeg

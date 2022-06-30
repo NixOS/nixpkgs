@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
-, pkg-config, cmake, gnumake, yasm, python3Packages
+, pkg-config, cmake, yasm, python3Packages
 , libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
 , gettext, pcre-cpp, yajl, fribidi, which
@@ -169,7 +169,7 @@ in stdenv.mkDerivation {
       doxygen
       makeWrapper
       which
-      pkg-config gnumake
+      pkg-config
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
       jre_headless yasm gettext python3Packages.python flatbuffers
 

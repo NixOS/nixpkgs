@@ -1,51 +1,18 @@
 { lib
 , stdenv
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, autoPatchelfHook
-, cairo
-, cups
-, dbus
-, dpkg
-, expat
 , fetchurl
-, gdk-pixbuf
-, glib
-, gtk3
-, libdrm
-, libxkbcommon
+, dpkg
+, electron_16
 , makeWrapper
-, mesa
 , nixosTests
-, nspr
-, nss
-, pango
-, pciutils
-, systemd
+, nodePackages
 , undmg
-, writeShellScriptBin
-, xorg
 }:
 
 let
   inherit (stdenv.hostPlatform) system;
 
   version = "3.1.0";
-
-  # At first start, the program checks for supported operating systems by calling `lsb_release -a`
-  # and only runs when it finds Debian/Ubuntu. So we present us as Debian an make it happy.
-  fake-lsb-release = writeShellScriptBin "lsb_release" ''
-    echo "Distributor ID: Debian"
-    echo "Description:    Debian GNU/Linux 10 (buster)"
-    echo "Release:        10"
-    echo "Codename:       buster"
-  '';
-
-  binPath = lib.makeBinPath [
-    fake-lsb-release
-  ];
 
   systemArgs = rec {
     x86_64-linux = rec {
@@ -54,68 +21,41 @@ let
         sha256 = "sha256-jSP+H9ej9Wd+swBZSy9uMi2ExSTZ191FGZhqaocTl7w=";
       };
 
-      dontUnpack = true;
-
       nativeBuildInputs = [
-        autoPatchelfHook
         dpkg
         makeWrapper
+        nodePackages.asar
       ];
 
-      buildInputs = runtimeDependencies;
-
-      runtimeDependencies = [
-        alsa-lib
-        at-spi2-atk
-        at-spi2-core
-        atk
-        cairo
-        cups
-        dbus
-        expat
-        gdk-pixbuf
-        glib
-        gtk3
-        libdrm
-        libxkbcommon
-        mesa
-        nspr
-        nss
-        pango
-        pciutils
-        systemd
-        xorg.libX11
-        xorg.libXcomposite
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXrandr
-        xorg.libxcb
-        xorg.libxshmfence
-      ];
+      unpackPhase = "dpkg-deb -x $src .";
 
       installPhase = ''
-        dpkg-deb -x $src $out
         mkdir -p $out/bin
+        mv usr/share $out/share
+        mkdir -p $out/share/breitbandmessung/resources
 
-        chmod -R g-w $out
+        asar e opt/Breitbandmessung/resources/app.asar $out/share/breitbandmessung/resources
 
-        addAutoPatchelfSearchPath --no-recurse $out/opt/Breitbandmessung
-        autoPatchelfFile $out/opt/Breitbandmessung/breitbandmessung
+        # At first start, the program checks for supported operating systems by using the `bizzby-lsb-release`
+        # module and only runs when it finds Debian/Ubuntu. So we present us as Debian and make it happy.
+        cat <<EOF > $out/share/breitbandmessung/resources/node_modules/bizzby-lsb-release/lib/lsb-release.js
+        module.exports = function release() {
+          return {
+            distributorID: "Debian",
+            description: "Debian GNU/Linux 10 (buster)",
+            release: "10",
+            codename: "buster"
+          }
+        }
+        EOF
 
-        makeWrapper $out/opt/Breitbandmessung/breitbandmessung $out/bin/breitbandmessung \
-          --prefix PATH : ${binPath}
-
-        mv $out/usr/share $out/share
-        rmdir $out/usr
+        makeWrapper ${electron_16}/bin/electron $out/bin/breitbandmessung \
+          --add-flags $out/share/breitbandmessung/resources/build/electron.js
 
         # Fix the desktop link
         substituteInPlace $out/share/applications/breitbandmessung.desktop \
           --replace /opt/Breitbandmessung $out/bin
       '';
-
-      dontAutoPatchelf = true;
-      dontPatchELF = true;
     };
 
     x86_64-darwin = {
@@ -147,6 +87,7 @@ stdenv.mkDerivation ({
     description = "Broadband internet speed test app from the german Bundesnetzagentur";
     homepage = "https://www.breitbandmessung.de";
     license = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ b4dm4n ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };

@@ -35,14 +35,14 @@
 
 mkDerivation rec {
   pname = "recoll";
-  version = "1.31.0";
+  version = "1.32.0";
 
   src = fetchurl {
     url = "https://www.lesbonscomptes.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-TtkfohzeT0HO6ywCMNxrODW1DnJg5KMFkx9AbDfQt+c=";
+    sha256 = "sha256-4kt6g5MVZTyYLSH7q2z72nzAsU6fatC0vTebEKhSA6E=";
   };
 
-  configureFlags = [ "--enable-recollq" "--disable-webkit" ]
+  configureFlags = [ "--enable-recollq" "--disable-webkit" "--without-systemd" ]
     ++ lib.optionals (!withGui) [ "--disable-qtgui" "--disable-x11mon" ]
     ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
 
@@ -87,6 +87,9 @@ mkDerivation rec {
     done
   '' + lib.optionalString stdenv.isLinux ''
     substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
+  '' + lib.optionalString (stdenv.isDarwin && withGui) ''
+    mkdir $out/Applications
+    mv $out/bin/recoll.app $out/Applications
   '';
 
   enableParallelBuilding = true;

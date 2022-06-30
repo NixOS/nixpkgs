@@ -5,13 +5,13 @@
 , apispec
 , colorama
 , click
-, email_validator
+, email-validator
 , flask
 , flask-babel
 , flask_login
 , flask-openid
 , flask_sqlalchemy
-, flask_wtf
+, flask-wtf
 , flask-jwt-extended
 , jsonschema
 , marshmallow
@@ -56,13 +56,13 @@ buildPythonPackage rec {
     apispec
     colorama
     click
-    email_validator
+    email-validator
     flask
     flask-babel
     flask_login
     flask-openid
     flask_sqlalchemy
-    flask_wtf
+    flask-wtf
     flask-jwt-extended
     jsonschema
     marshmallow

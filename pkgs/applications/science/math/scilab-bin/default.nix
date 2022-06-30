@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://www.scilab.org/";
     description = "Scientific software package for numerical computations (Matlab lookalike)";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     # see http://www.scilab.org/legal_notice
     license = "Scilab";
   };

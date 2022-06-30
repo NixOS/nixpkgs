@@ -25,7 +25,6 @@ buildDotnetModule rec {
   executables = [ "inklecate" ];
 
   dotnet-runtime = dotnetCorePackages.runtime_3_1;
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
 
   meta = with lib; {
     description = "Compiler for ink, inkle's scripting language";

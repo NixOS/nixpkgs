@@ -14,6 +14,7 @@ let
     lovelace = [ PyChromecast ];
     nest = [ av ];
     onboarding = [ pymetno radios rpi-bad-power ];
+    raspberry_pi = [ rpi-bad-power ];
     tomorrowio = [ pyclimacell ];
     version = [ aioaseko ];
     voicerss = [ mutagen ];
@@ -71,7 +72,6 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
 
     meta = old.meta // {
       broken = lib.elem component [
-        "airtouch4"
         "bsblan"
         "dnsip"
         "efergy"

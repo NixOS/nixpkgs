@@ -96,7 +96,7 @@ We use jbidwatcher as an example for a discontinued project here.
 
 1. Have Nixpkgs checked out locally and up to date.
 1. Create a new branch for your change, e.g. `git checkout -b jbidwatcher`
-1. Remove the actual package including its directory, e.g. `rm -rf pkgs/applications/misc/jbidwatcher`
+1. Remove the actual package including its directory, e.g. `git rm -rf pkgs/applications/misc/jbidwatcher`
 1. Remove the package from the list of all packages (`pkgs/top-level/all-packages.nix`).
 1. Add an alias for the package name in `pkgs/top-level/aliases.nix` (There is also `pkgs/applications/editors/vim/plugins/aliases.nix`. Package sets typically do not have aliases, so we can't add them there.)
 
@@ -227,7 +227,7 @@ digraph {
 }
 ```
 
-[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours.
+[This GitHub Action](https://github.com/NixOS/nixpkgs/blob/master/.github/workflows/periodic-merge-6h.yml) brings changes from `master` to `staging-next` and from `staging-next` to `staging` every 6 hours; these are the blue arrows in the diagram above.  The purple arrows in the diagram above are done manually and much less frequently.  You can get an idea of how often these merges occur by looking at the git history.
 
 
 ### Master branch {#submitting-changes-master-branch}
@@ -236,7 +236,7 @@ The `master` branch is the main development branch. It should only see non-break
 
 ### Staging branch {#submitting-changes-staging-branch}
 
-The `staging` branch is a development branch where mass-rebuilds go. It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
+The `staging` branch is a development branch where mass-rebuilds go. Mass rebuilds are commits that cause rebuilds for many packages, like more than 500 (or perhaps, if it's 'light' packages, 1000). It should only see non-breaking mass-rebuild commits. That means it is not to be used for testing, and changes must have been well tested already. If the branch is already in a broken state, please refrain from adding extra new breakages.
 
 ### Staging-next branch {#submitting-changes-staging-next-branch}
 

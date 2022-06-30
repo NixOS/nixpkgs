@@ -2,20 +2,22 @@
 
 buildGoModule rec {
   pname = "bingo";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "bwplotka";
     repo = "bingo";
     rev = "v${version}";
-    sha256 = "sha256-4D8YaA/AH1gIp5iwD7WEAdBl73sqwHpfOe7bnxVcRcw=";
+    sha256 = "sha256-t2nkY+mwek2NcbCwCkI3Mc1ULEJIjatBjChBdnKFAg8=";
   };
 
-  vendorSha256 = "sha256-xrz9FpwZd+FboVVTWSqGHRguGwrwE9cSFEEtulzbfDQ=";
+  vendorSha256 = "sha256-TCbwIHDg2YaLIscCoGPRBv5G3YSJ+qn/koOjPh+KKRY=";
 
   patches = [
     # Do not execute `go` command when invoking `bingo version`.
     ./version_go.patch
+    # Specific to v0.6.0. `v0.6` -> `v0.6.0`
+    ./bingo_version.patch
   ];
 
   postPatch = ''

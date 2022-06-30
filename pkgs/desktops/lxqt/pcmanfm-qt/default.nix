@@ -15,13 +15,13 @@
 
 mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "1g7pl9ygk4k72rsrcsfjnr7h2yzp3pfmlc5wq6bhyq9rqpr5yv7l";
+    sha256 = "AgNupKdjSigrgY2U9bnkQCV0BrRCw2X9WR4jUH6YmEU=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,6 @@ mkDerivation rec {
     description = "File manager and desktop icon manager (Qt port of PCManFM and libfm)";
     license = licenses.gpl2Plus;
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

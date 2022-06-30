@@ -1,20 +1,16 @@
-{ addOpenGLRunpath
-, cudatoolkit
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
-, lib
+, addOpenGLRunpath
+, cudatoolkit
 , pkg-config
 , sha256
-, stdenv
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "cuda-samples";
   version = lib.versions.majorMinor cudatoolkit.version;
-in
-
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
@@ -31,7 +27,7 @@ stdenv.mkDerivation {
   patches = lib.optionals (version == "11.3") [
     (fetchpatch {
       url = "https://github.com/NVIDIA/cuda-samples/commit/5c3ec60faeb7a3c4ad9372c99114d7bb922fda8d.patch";
-      sha256 = "sha256:15bydf59scmfnldz5yawbjacdxafi50ahgpzq93zlc5xsac5sz6i";
+      sha256 = "sha256-0XxdmNK9MPpHwv8+qECJTvXGlFxc+fIbta4ynYprfpU=";
     })
   ];
 

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitLab, ocaml, findlib, bzip2, autoreconfHook }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "bz2 is not available for OCaml ${ocaml.version}"
 else
 

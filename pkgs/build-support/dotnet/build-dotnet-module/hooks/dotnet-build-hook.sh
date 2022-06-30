@@ -1,4 +1,5 @@
-declare -a projectFile testProjectFile dotnetBuildFlags dotnetFlags
+# inherit arguments from derivation
+dotnetBuildFlags=( ${dotnetBuildFlags[@]-} )
 
 dotnetBuildHook() {
     echo "Executing dotnetBuildHook"
@@ -27,8 +28,8 @@ dotnetBuildHook() {
                 --configuration "@buildType@" \
                 --no-restore \
                 ${versionFlag-} \
-                "${dotnetBuildFlags[@]}"  \
-                "${dotnetFlags[@]}"
+                ${dotnetBuildFlags[@]}  \
+                ${dotnetFlags[@]}
     done
 
     runHook postBuild

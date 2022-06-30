@@ -37,8 +37,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    nixos = nixosTests.zookeeper;
+  passthru = {
+    tests = {
+      nixos = nixosTests.zookeeper;
+    };
+    inherit jre;
   };
 
   meta = with lib; {

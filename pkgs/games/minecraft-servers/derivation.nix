@@ -29,6 +29,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Minecraft Server";
     homepage = "https://minecraft.net";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfreeRedistributable;
     platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice tomberek costrouc jyooru ];

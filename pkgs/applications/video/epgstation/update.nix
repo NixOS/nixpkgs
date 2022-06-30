@@ -2,19 +2,17 @@
 , version
 , homepage
 , lib
-, common-updater-scripts
-, genericUpdater
+, gitUpdater
 , writers
 , jq
 , yq
 }:
 
 let
-  updater = genericUpdater {
+  updater = gitUpdater {
     inherit pname version;
     attrPath = lib.toLower pname;
     rev-prefix = "v";
-    versionLister = "${common-updater-scripts}/bin/list-git-tags --url=${homepage}";
   };
   updateScript = builtins.elemAt updater 0;
   updateArgs = map (lib.escapeShellArg) (builtins.tail updater);

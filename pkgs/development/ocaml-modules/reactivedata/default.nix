@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, react, opaline }:
 
-if !lib.versionAtLeast ocaml.version "4.04"
+if lib.versionOlder ocaml.version "4.04"
 then throw "reactiveData is not available for OCaml ${ocaml.version}"
 else
 

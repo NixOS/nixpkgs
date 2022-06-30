@@ -79,8 +79,6 @@ rec {
     useLLVM = true;
   };
 
-  scaleway-c1 = armv7l-hf-multiplatform // platforms.scaleway-c1;
-
   pogoplug4 = {
     config = "armv5tel-unknown-linux-gnueabi";
   } // platforms.pogoplug4;
@@ -142,6 +140,11 @@ rec {
 
   mmix = {
     config = "mmix-unknown-mmixware";
+    libc = "newlib";
+  };
+
+  rx-embedded = {
+    config = "rx-none-elf";
     libc = "newlib";
   };
 
@@ -302,8 +305,6 @@ rec {
   };
 
   # BSDs
-
-  amd64-netbsd = lib.warn "The amd64-netbsd system example is deprecated. Use x86_64-netbsd instead." x86_64-netbsd;
 
   x86_64-netbsd = {
     config = "x86_64-unknown-netbsd";

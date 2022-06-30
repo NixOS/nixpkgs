@@ -5,25 +5,24 @@
 , mediastreamer
 , openh264
 , pkg-config
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 stdenv.mkDerivation rec {
   pname = "msopenh264";
-  # Using master branch for linphone-desktop caused a chain reaction that many
-  # of its dependencies needed to use master branch too.
-  version = "unstable-2020-03-03";
+  version = "linphone-4.4.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
     owner = "public";
     group = "BC";
     repo = pname;
-    rev = "2c3abf52824ad23a4caae7565ef158ef91767704";
-    sha256 = "140hs5lzpshzswvl39klcypankq3v2qck41696j22my7s4wsa0hr";
+    rev = "5603a432be2ed10f5d5a5ce068ef83ab2a996d6b";
+    sha256 = "sha256-AqZ7tsNZw2Djgyo1JBJbT/c3eQVyEn6r3CT6DQLD/B8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook cmake pkg-config ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ mediastreamer openh264 ];
 
   # Do not build static libraries
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "H.264 encoder/decoder plugin for mediastreamer2";
+    description = "H.264 encoder/decoder plugin for mediastreamer2. Part of the Linphone project.";
     homepage = "https://www.linphone.org/technical-corner/mediastreamer2";
     license = licenses.gpl2;
     platforms = platforms.linux;

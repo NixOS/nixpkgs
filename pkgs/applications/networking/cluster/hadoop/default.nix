@@ -65,6 +65,7 @@ let
         homepage = "https://hadoop.apache.org/";
         description = "Framework for distributed processing of large data sets across clusters of computers";
         license = licenses.asl20;
+        sourceProvenance = with sourceTypes; [ binaryBytecode ];
 
         longDescription = ''
           The Apache Hadoop software library is a framework that allows for
@@ -77,7 +78,7 @@ let
           so delivering a highly-availabile service on top of a cluster of
           computers, each of which may be prone to failures.
         '';
-        maintainers = with maintainers; [ volth illustris ];
+        maintainers = with maintainers; [ illustris ];
         platforms = attrNames sha256;
       };
     };

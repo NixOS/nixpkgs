@@ -10,8 +10,8 @@
 , rev-prefix ? ""
 , odd-unstable ? false
 , patchlevel-unstable ? false
-# explicit url is useful when git protocol is used only for tags listing
-# while actual release is referred by tarball
+# an explicit url is needed when src.meta.homepage or src.url don't
+# point to a git repo (eg. when using fetchurl, fetchzip, ...)
 , url ? null
 }:
 

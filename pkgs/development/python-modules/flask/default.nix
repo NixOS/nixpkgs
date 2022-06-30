@@ -13,12 +13,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.1.1";
+  version = "2.1.2";
   pname = "Flask";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qMm9PlWOyZZG0Xepc5xB3x3tBilIC0yNKXVBLzyVGcg=";
+    sha256 = "sha256-MV3tLd+KYoFWftsnOTAQ/jQGGIuvv+ZaMznVeH2J5Hc=";
   };
 
   propagatedBuildInputs = [

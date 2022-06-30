@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib, libGLU, libGL, freeglut } :
 
-if !lib.versionAtLeast ocaml.version "4.03"
+if lib.versionOlder ocaml.version "4.03"
 then throw "lablgl is not available for OCaml ${ocaml.version}"
 else
 
@@ -39,10 +39,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html";
     description = "OpenGL bindings for ocaml";
+    homepage = "http://wwwfun.kurims.kyoto-u.ac.jp/soft/lsl/lablgl.html";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub vbgl ];
+    mainProgram = "lablglut";
     broken = stdenv.isDarwin;
   };
 }

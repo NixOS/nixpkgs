@@ -13,12 +13,12 @@
 let font-droid = nerdfonts.override { fonts = [ "DroidSansMono" ]; };
 in stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2022.03.1";
+  version = "2022.05.1";
 
   src = fetchurl {
     url =
       "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-    sha256 = "sha256-ZoqITWPR60G4xY9InrtIY9rCWUk0PidGFZokHLWl5ps=";
+    sha256 = "sha256-Uz8fzF/SdKNRywoIb8B/iHRuXDwRyw7wH7bL9vRzPfY=";
   };
 
   sourceRoot = ".";
@@ -56,6 +56,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/koreader/koreader";
     description =
       "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = intersectLists platforms.x86_64 platforms.linux;
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ contrun neonfuz];

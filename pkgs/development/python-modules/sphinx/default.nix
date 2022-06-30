@@ -4,7 +4,7 @@
 , pythonOlder
 , fetchFromGitHub
 # propagatedBuildInputs
-, Babel
+, babel
 , alabaster
 , docutils
 , imagesize
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     repo = pname;
     rev = "v${version}";
     sha256 = "sha256-Lw9yZWCQpt02SL/McWPcyFRfVhQHC0TejcYRbVw+VxY=";
-    extraPostFetch = ''
+    postFetch = ''
       cd $out
       mv tests/roots/test-images/testimäge.png \
         tests/roots/test-images/testimæge.png
@@ -51,10 +51,16 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace setup.py \
       --replace "docutils>=0.14,<0.18" "docutils>=0.14"
+
+    # remove impurity caused by date inclusion
+    # https://github.com/sphinx-doc/sphinx/blob/master/setup.cfg#L4-L6
+    substituteInPlace setup.cfg \
+      --replace "tag_build = .dev" "" \
+      --replace "tag_date = true" ""
   '';
 
   propagatedBuildInputs = [
-    Babel
+    babel
     alabaster
     docutils
     imagesize

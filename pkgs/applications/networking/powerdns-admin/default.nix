@@ -15,8 +15,26 @@ let
         version = "1.16.0";
         src = oldAttrs.src.override {
           inherit version;
+          extension = "zip";
           sha256 = "36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01";
         };
+        # Needs networking for some tests
+        doCheck = false;
+      });
+
+      # The bravado-core dependency is incompatible with jschonschema 4.0:
+      # https://github.com/Yelp/bravado-core/pull/385
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "3.2.0";
+
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-yKhbKNN3zHc35G4tnytPRO48Dh3qxr9G3e/HGH0weXo=";
+        };
+
+        SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+        doCheck = false;
       });
     };
   };

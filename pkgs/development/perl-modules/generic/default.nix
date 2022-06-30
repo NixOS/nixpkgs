@@ -5,6 +5,10 @@
 , outputs ? [ "out" "devdoc" ]
 , src ? null
 
+# enabling or disabling does nothing for perl packages so set it explicitly
+# to false to not change hashes when enableParallelBuildingByDefault is enabled
+, enableParallelBuilding ? false
+
 , doCheck ? true
 , checkTarget ? "test"
 
@@ -31,6 +35,7 @@ lib.warnIf (attrs ? name) "builtPerlPackage: `name' (\"${attrs.name}\") is depre
 (let
   defaultMeta = {
     homepage = "https://metacpan.org/release/${lib.getName attrs}"; # TODO: phase-out `attrs.name`
+    mainProgram = attrs.pname or (builtins.parseDrvName attrs.name).name;
     platforms = perl.meta.platforms;
   };
 
@@ -51,7 +56,7 @@ lib.warnIf (attrs ? name) "builtPerlPackage: `name' (\"${attrs.name}\") is depre
 
     fullperl = buildPerl;
 
-    inherit outputs src doCheck checkTarget;
+    inherit outputs src doCheck checkTarget enableParallelBuilding;
     inherit PERL_AUTOINSTALL AUTOMATED_TESTING PERL_USE_UNSAFE_INC;
 
     meta = defaultMeta // (attrs.meta or { });

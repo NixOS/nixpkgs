@@ -13,16 +13,17 @@
 , buildPackages }:
 
 let
-  version = "5.8.1";
+  version = "5.9";
 in
 
 stdenv.mkDerivation {
   pname = "zsh";
   inherit version;
+  outputs = [ "out" "doc" "info" "man" ];
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
-    sha256 = "sha256-tpc1ILrOYAtHeSACabHl155fUFrElSBYwRrVu/DdmRk=";
+    sha256 = "sha256-m40ezt1bXoH78ZGOh2dSp92UjgXBoNuhCrhjhC1FrNU=";
   };
 
   patches = [
@@ -30,7 +31,8 @@ stdenv.mkDerivation {
     ./tz_completion.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook perl groff texinfo ]
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook perl groff texinfo pcre]
                       ++ lib.optionals stdenv.isLinux [ util-linux yodl ];
 
   buildInputs = [ ncurses pcre ];
@@ -49,9 +51,8 @@ stdenv.mkDerivation {
   checkFlags = map (T: "TESTNUM=${T}") (lib.stringToCharacters "ABCDEVW");
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = ''
     make install.info install.html
-    '' + ''
     mkdir -p $out/etc/
     cat > $out/etc/zprofile <<EOF
 if test -e /etc/NIXOS; then
@@ -81,6 +82,10 @@ EOF
       ${lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
     ''}
     mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
+
+    rm $out/bin/zsh-${version}
+    mkdir -p $out/share/doc/
+    mv $out/share/zsh/htmldoc $out/share/doc/zsh-$version
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
 
@@ -96,7 +101,7 @@ EOF
     '';
     license = "MIT-like";
     homepage = "https://www.zsh.org/";
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [ pSub artturin ];
     platforms = lib.platforms.unix;
   };
 

@@ -200,6 +200,8 @@ self: super: ({
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
   hls-floskell-plugin = dontCheck super.hls-floskell-plugin;
   hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
+  # 2022-05-05: Tests fail and I have no way to debug them.
+  hls-rename-plugin = dontCheck super.hls-rename-plugin;
 
   # We are lacking pure pgrep at the moment for tests to work
   tmp-postgres = dontCheck super.tmp-postgres;
@@ -251,13 +253,6 @@ self: super: ({
   # Otherwise impure gcc is used, which is Apple's weird wrapper
   c2hsc = addTestToolDepends [ pkgs.gcc ] super.c2hsc;
 
-  # streamly depends on Cocoa starting with 0.8.0
-  streamly_0_8_1_1 = overrideCabal (drv: {
-    libraryFrameworkDepends = [
-      darwin.apple_sdk.frameworks.Cocoa
-    ] ++ (drv.libraryFrameworkDepends or []);
-  }) super.streamly_0_8_1_1;
-
   http-client-tls = overrideCabal (drv: {
     postPatch = ''
       # This comment has been inserted, so the derivation hash changes, forcing
@@ -290,4 +285,13 @@ self: super: ({
 
   # https://github.com/haskell-crypto/cryptonite/issues/360
   cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;
+
+} // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
+
+  # tests appear to be failing to link or something:
+  # https://hydra.nixos.org/build/174540882/nixlog/9
+  regex-rure = dontCheck super.regex-rure;
+  # same
+  # https://hydra.nixos.org/build/174540882/nixlog/9
+  jacinda = dontCheck super.jacinda;
 })

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "eventlet";
-  version = "0.33.0";
+  version = "0.33.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "eventlet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kE/eYBbaTt1mPGoUIMhonvFBlQOdAfPU5GvCvPaRHvs=";
+    hash = "sha256-8tIvvTTCcIG56VaPZMhdzAKnFRsYV3YC9xcf47nh838=";
   };
 
   propagatedBuildInputs = [
@@ -59,6 +59,8 @@ buildPythonPackage rec {
     "test_patcher_existing_locks_locked"
     # broken with pyopenssl 22.0.0
     "test_sendall_timeout"
+  ] ++ lib.optionals stdenv.isAarch64 [
+    "test_fork_after_monkey_patch"
   ];
 
   disabledTestPaths = [

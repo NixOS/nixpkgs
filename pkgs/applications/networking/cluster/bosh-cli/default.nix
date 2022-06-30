@@ -39,5 +39,6 @@ buildGoModule rec {
     changelog = "https://github.com/cloudfoundry/bosh-cli/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ris ];
+    mainProgram = "bosh";
   };
 }

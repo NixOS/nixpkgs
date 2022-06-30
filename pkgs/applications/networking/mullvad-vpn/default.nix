@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ Br1ght0ne ymarkus flexagoon ];

@@ -20,14 +20,15 @@ stdenv.mkDerivation rec {
   doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   meta = with lib; {
-    homepage = "https://uriparser.github.io/";
     description = "Strictly RFC 3986 compliant URI parsing library";
     longDescription = ''
       uriparser is a strictly RFC 3986 compliant URI parsing and handling library written in C.
       API documentation is available on uriparser website.
     '';
+    homepage = "https://uriparser.github.io/";
     license = licenses.bsd3;
-    platforms = platforms.unix;
     maintainers = with maintainers; [ bosu ];
+    mainProgram = "uriparse";
+    platforms = platforms.unix;
   };
 }

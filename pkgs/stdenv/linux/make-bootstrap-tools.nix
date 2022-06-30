@@ -1,9 +1,6 @@
-{ localSystem ? { system = builtins.currentSystem; }
-, crossSystem ? null
-}:
+{ pkgs ? import ../../.. {} }:
 
 let
-  pkgs = import ../../.. { inherit localSystem crossSystem; };
   libc = pkgs.stdenv.cc.libc;
 in with pkgs; rec {
 
@@ -235,7 +232,7 @@ in with pkgs; rec {
 
   bootstrapTools =
     let extraAttrs = lib.optionalAttrs
-      (config.contentAddressedByDefault or false)
+      config.contentAddressedByDefault
       {
         __contentAddressed = true;
         outputHashAlgo = "sha256";

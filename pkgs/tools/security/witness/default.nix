@@ -2,25 +2,25 @@
 
 buildGoModule rec {
   pname = "witness";
-  version = "0.1.7";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "testifysec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-fkY3/UmHzggmysrae8VCY3NMBxC/LcWoQcXBELEzJlM=";
+    sha256 = "sha256-BRYp8gp3TNZrl6fRNHOIgdhCVCN+N2lReFk+0FxCUxY=";
   };
-  vendorSha256 = "sha256-ajWIjQXLvFQB1AVYyGjyWMrWIyue/d1uU5HHNf4/UcU=";
+  vendorSha256 = "sha256-/NniYty50dO44VUTfVq9b8dbT3le4uZ2ZoDN4IjLBto=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   # We only want the witness binary, not the helper utilities for generating docs.
-  subPackages = [ "cmd/witness" ];
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/testifysec/witness/cmd/witness/cmd.Version=v${version}"
+    "-X github.com/testifysec/witness/cmd.Version=v${version}"
   ];
 
   # Feed in all tests for testing

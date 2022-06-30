@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "jorio";
     repo = pname;
     rev = version;
-    sha256 = "sha256:1371inw11rzfrxmc3v4gv5axp56bxjbcr0mhqm4x839401bfq5mf";
+    sha256 = "sha256-rhbsVgAkDdRJxbCCzJbsy5TbVdmP7MFqz+7nELiN4Yw=";
     fetchSubmodules = true;
   };
 
@@ -57,10 +57,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A port of Bugdom, a 1999 Macintosh game by Pangea Software, for modern operating systems";
     homepage = "https://github.com/jorio/Bugdom";
-    license = with licenses; [
-      cc-by-sa-40
-    ];
+    license = with licenses; [ cc-by-sa-40 ];
     maintainers = with maintainers; [ lux ];
+    mainProgram = "Bugdom";
     platforms = platforms.unix;
   };
 }

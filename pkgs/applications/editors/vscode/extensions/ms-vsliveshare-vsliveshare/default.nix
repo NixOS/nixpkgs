@@ -43,7 +43,6 @@ in ((vscode-utils.override { stdenv = gccStdenv; }).buildVscodeMarketplaceExtens
   };
 }).overrideAttrs({ nativeBuildInputs ? [], buildInputs ? [], ... }: {
   nativeBuildInputs = nativeBuildInputs ++ [
-    bash
     jq
     autoPatchelfHook
     makeWrapper

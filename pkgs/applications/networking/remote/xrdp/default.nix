@@ -98,7 +98,7 @@ let
       description = "An open source RDP server";
       homepage = "https://github.com/neutrinolabs/xrdp";
       license = licenses.asl20;
-      maintainers = [ maintainers.volth ];
+      maintainers = [ ];
       platforms = platforms.linux;
     };
   };

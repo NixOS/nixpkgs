@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mikroskeem m3tti ];
+    maintainers = with maintainers; [ mikroskeem ];
     mainProgram = "quake";
   };
 }

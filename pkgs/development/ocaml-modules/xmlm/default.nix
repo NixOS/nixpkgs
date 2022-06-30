@@ -4,7 +4,7 @@ let
   webpage = "https://erratique.ch/software/${pname}";
 in
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 then throw "xmlm is not available for OCaml ${ocaml.version}"
 else
 
@@ -27,8 +27,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An OCaml streaming codec to decode and encode the XML data format";
     homepage = webpage;
-    platforms = ocaml.meta.platforms or [];
-    maintainers = [ maintainers.vbgl ];
     license = licenses.bsd3;
+    maintainers = [ maintainers.vbgl ];
+    mainProgram = "xmltrip";
+    inherit (ocaml.meta) platforms;
   };
 }

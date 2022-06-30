@@ -244,9 +244,9 @@ stdenv.mkDerivation {
     echo '"(build info elided)"' > modules/core/version_string.inc
   '';
 
-  buildInputs =
-    [ zlib pcre hdf5 boost gflags protobuf ]
+  buildInputs = [ zlib pcre boost gflags protobuf ]
     ++ lib.optional enablePython pythonPackages.python
+    ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) hdf5
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
     ++ lib.optional enableVtk vtk

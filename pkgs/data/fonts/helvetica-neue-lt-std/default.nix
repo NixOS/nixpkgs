@@ -7,12 +7,17 @@ in fetchzip {
 
   url = "https://web.archive.org/web/20190823153624/http://ephifonts.com/downloads/helvetica-neue-lt-std.zip";
 
+  stripRoot = false;
+
   postFetch = ''
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile "Helvetica Neue LT Std/*.otf" -d $out/share/fonts/opentype
+    install -Dm644 $out/'Helvetica Neue LT Std'/*.otf -t $out/share/fonts/opentype
+    shopt -s extglob dotglob
+    rm -rf $out/!(share)
+    shopt -u extglob dotglob
   '';
 
-  sha256 = "0ampp9vf9xw0sdppl4lb9i9h75ywljhdcqmzh45mx2x9m7h6xgg9";
+  sha256 = "sha256-gM/QXrKI2xrrCBYt4R+Fk5Tj0AIkrnCP/pwgh0A/MyI=";
 
   meta = with lib; {
     homepage = "https://web.archive.org/web/20190926040940/http://www.ephifonts.com/free-helvetica-font-helvetica-neue-lt-std.html";

@@ -5,7 +5,6 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, six
 , twisted
 , zope_interface
 }:
@@ -21,7 +20,6 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    six
     twisted
     zope_interface
   ];

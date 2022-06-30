@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.8.1";
+  version = "3.8.3";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-BaSpw7TiBymCvoP0/z1zynWKQJH/PjbbGf85ZI9LOZw=";
+    sha256 = "0mplyla4zcai3qld7is7bl5wn2kzhp87w87yi13wpqnw06i6ij4b";
   };
 
   format = "pyproject";
@@ -81,8 +81,8 @@ buildPythonPackage rec {
     "test_filename_without_dir"
     "test_overwrite"
     "test_options"
-  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) [
-    # aarch64-only (?) failure, unknown reason so far
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) [
+    # unknown reason so far
     # https://github.com/adobe-type-tools/afdko/issues/1425
     "test_spec"
   ] ++ lib.optionals (stdenv.hostPlatform.isi686) [

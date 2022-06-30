@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, cmdliner, seq, stdlib-shims }:
 
-if !lib.versionAtLeast ocaml.version "4.05"
+if lib.versionOlder ocaml.version "4.05"
 then throw "fmt is not available for OCaml ${ocaml.version}"
 else
 
@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [ topkg ];
-  propagatedBuildInputs = [ cmdliner seq stdlib-shims ];
+  buildInputs = [ cmdliner topkg ];
+  propagatedBuildInputs = [ seq stdlib-shims ];
 
   strictDeps = true;
 

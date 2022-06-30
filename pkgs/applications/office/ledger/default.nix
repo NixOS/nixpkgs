@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python3
-, texinfo, gnused, usePython ? true }:
+, fetchpatch, installShellFiles, texinfo, gnused, usePython ? true }:
 
 stdenv.mkDerivation rec {
   pname = "ledger";
@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "0x6jxwss3wwzbzlwmnwb8yzjk8f9wfawif4f1b74z2qg6hc4r7f6";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "py" ];
 
   buildInputs = [
     (boost.override { enablePython = usePython; python = python3; })
     gmp mpfr libedit gnused
   ] ++ lib.optional usePython python3;
 
-  nativeBuildInputs = [ cmake texinfo ];
+  nativeBuildInputs = [ cmake texinfo installShellFiles ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -31,10 +31,23 @@ stdenv.mkDerivation rec {
   # however, that would write to a different nixstore path, pass our own sitePackages location
   prePatch = lib.optionalString usePython ''
     substituteInPlace src/CMakeLists.txt \
-      --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${python3.sitePackages}"'
+      --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${placeholder "py"}/${python3.sitePackages}"'
   '';
 
+  patches = [
+    # Add support for $XDG_CONFIG_HOME. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/ledger/ledger/commit/c79674649dee7577d6061e3d0776922257520fd0.patch";
+      sha256 = "sha256-vwVQnY9EUCXPzhDJ4PSOmQStb9eF6H0yAOiEmL6sAlk=";
+      excludes = [ "doc/NEWS.md" ];
+    })
+  ];
+
   installTargets = [ "doc" "install" ];
+
+  postInstall = ''
+    installShellCompletion --cmd ledger --bash $src/contrib/ledger-completion.bash
+  '';
 
   meta = with lib; {
     homepage = "https://ledger-cli.org/";
@@ -49,6 +62,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.all;
-    maintainers = with maintainers; [ jwiegley ];
+    maintainers = with maintainers; [ jwiegley marsam ];
   };
 }

@@ -93,11 +93,6 @@ if [ -e @out@/nix-support/add-local-ldflags-before.sh ]; then
 fi
 
 
-# Specify the target emulation if nothing is passed in ("-m" overrides this
-# environment variable). Ensures we never blindly fallback on targeting the host
-# platform.
-: ${LDEMULATION:=@emulation@}
-
 # Three tasks:
 #
 #   1. Find all -L... switches for rpath

@@ -208,6 +208,6 @@ stdenv.mkDerivation rec {
     homepage = "https://enlightenment.org/";
     license = with licenses; [ bsd2 lgpl2Only licenses.zlib ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

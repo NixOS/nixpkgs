@@ -17,6 +17,7 @@ let
     lxqt-build-tools = callPackage ./lxqt-build-tools {};
     libsysstat = callPackage ./libsysstat {};
     liblxqt = callPackage ./liblxqt {};
+    qtxdg-tools = callPackage ./qtxdg-tools {};
 
     ### CORE 1
     libfm-qt = callPackage ./libfm-qt {};
@@ -49,6 +50,7 @@ let
     screengrab = callPackage ./screengrab {};
     qlipper = callPackage ./qlipper {};
     lxqt-archiver = callPackage ./lxqt-archiver {};
+    xdg-desktop-portal-lxqt = callPackage ./xdg-desktop-portal-lxqt {};
 
     preRequisitePackages = [
       libsForQt5.kwindowsystem # provides some QT5 plugins needed by lxqt-panel
@@ -92,7 +94,6 @@ let
     optionalPackages = [
       ### LXQt project
       qterminal
-      compton-conf
       obconf-qt
       lximage-qt
       lxqt-archiver
@@ -101,11 +102,8 @@ let
       qps
       screengrab
 
-      ### Qlipper
-      qlipper
-
       ### Default icon theme
-      libsForQt5.oxygen-icons5
+      libsForQt5.breeze-icons
 
       ### Screen saver
       pkgs.xscreensaver

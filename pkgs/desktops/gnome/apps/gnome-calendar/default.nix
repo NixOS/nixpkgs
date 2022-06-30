@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "42.0";
+  version = "42.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "tj9z9VAy/BOQRC+UzfazyrnJHHdN3S5cYez+ydLF6ao=";
+    sha256 = "rnzGOq6WoCqlmbbWo0hYX0529ylTbznvt0QwKwW1+70=";
   };
 
   nativeBuildInputs = [

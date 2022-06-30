@@ -1,22 +1,19 @@
-{ buildGoPackage
-, lib
-, fetchFromGitHub
-}:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  pname = "motion-unstable";
-  version = "2018-04-09";
-  rev = "218875ebe23806e7af82f3b5b14bb3355534f679";
-
-  goPackagePath = "github.com/fatih/motion";
+buildGoModule rec {
+  pname = "motion";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    inherit rev;
-
     owner = "fatih";
     repo = "motion";
-    sha256 = "08lp61hmb77p0cknf71jp8lssplxad3ddyqjxh8x3cr0bmn9ykr9";
+    rev = "v${version}";
+    sha256 = "sha256-bD6Mm9/LOzguoK/xMpVEeT7G8j1shCsMv14wFostlW4=";
   };
+
+  vendorSha256 = "sha256-pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
     description = "Navigation and insight in Go";

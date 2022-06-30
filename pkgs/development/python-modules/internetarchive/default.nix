@@ -2,11 +2,9 @@
 , fetchPypi
 , pytest
 , tqdm
-, pyyaml
 , docopt
 , requests
 , jsonpatch
-, args
 , schema
 , responses
 , lib
@@ -18,24 +16,22 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "3.0.0";
+  version = "3.0.2";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fRcqsT8p/tqXUpU2/9lAEF1IT8Cy5KK0+jKaeVwZshI=";
+    sha256 = "sha256-3oVkZcLvaFIYTQi/1ZwMoBkEhls3OiezgwNKxrQSjrY=";
   };
 
   propagatedBuildInputs = [
     tqdm
-    pyyaml
     docopt
     requests
     jsonpatch
-    args
     schema
-    setuptools
+    setuptools # needs pkg_resources at runtime
     urllib3
   ];
 
@@ -56,5 +52,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/jjjake/internetarchive/raw/v${version}/HISTORY.rst";
     license = licenses.agpl3Plus;
     maintainers = [ maintainers.marsam ];
+    mainProgram = "ia";
   };
 }

@@ -22,6 +22,8 @@ if ! [ -f "$SSL_CERT_FILE" ]; then
     curl+=(--insecure)
 fi
 
+eval "curl+=($curlOptsList)"
+
 curl+=(
     $curlOpts
     $NIX_CURL_FLAGS

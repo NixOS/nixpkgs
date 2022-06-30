@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
       homepage = "https://github.com/torakiki/pdfsam";
       description = "Multi-platform software designed to extract pages, split, merge, mix and rotate PDF files";
+      sourceProvenance = with sourceTypes; [
+        binaryBytecode
+        binaryNativeCode
+      ];
       license = licenses.agpl3;
       platforms = platforms.all;
       maintainers = with maintainers; [ _1000101 ];

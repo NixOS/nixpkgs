@@ -42,11 +42,20 @@ let
     '';
     netrcImpureEnvVars = [ "${varBase}USERNAME" "${varBase}PASSWORD" ];
   };
+
+  gitRepoUrl = "${baseUrl}.git";
+
   fetcherArgs = (if useFetchGit
     then {
-      inherit rev deepClone fetchSubmodules sparseCheckout; url = "${baseUrl}.git";
+      inherit rev deepClone fetchSubmodules sparseCheckout; url = gitRepoUrl;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
-    else { url = "${baseUrl}/archive/${rev}.tar.gz"; }
+    else {
+      url = "${baseUrl}/archive/${rev}.tar.gz";
+
+      passthru = {
+        inherit gitRepoUrl;
+      };
+    }
   ) // privateAttrs // passthruAttrs // { inherit name; };
 in
 

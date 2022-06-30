@@ -39,10 +39,9 @@
 # IE: programs coupled with the compiler
 , allowGoReference ? false
 
-, meta ? {}
+, CGO_ENABLED ? go.CGO_ENABLED
 
-# disabled
-, runVend ? false
+, meta ? {}
 
 # Not needed with buildGoModule
 , goPackagePath ? ""
@@ -54,8 +53,6 @@
 , ... }@args':
 
 with builtins;
-
-assert runVend != false -> throw "`runVend` has been replaced by `proxyVendor`";
 
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
 
@@ -79,12 +76,11 @@ let
     GO111MODULE = "on";
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND" "SOCKS_SERVER"
+      "GIT_PROXY_COMMAND" "SOCKS_SERVER" "GOPROXY"
     ];
 
     configurePhase = args.modConfigurePhase or ''
       runHook preConfigure
-
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
       cd "${modRoot}"
@@ -147,6 +143,7 @@ let
 
     GO111MODULE = "on";
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
+    inherit CGO_ENABLED;
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure

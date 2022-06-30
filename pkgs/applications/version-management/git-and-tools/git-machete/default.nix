@@ -1,5 +1,7 @@
 { lib
 , buildPythonApplication
+, pytest-mock
+, pytestCheckHook
 , fetchFromGitHub
 , installShellFiles
 , git
@@ -10,18 +12,18 @@
 
 buildPythonApplication rec {
   pname = "git-machete";
-  version = "3.8.0";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "virtuslab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WVPcyooShgFPZaIfEzV2zUA6tCHhuTM8MbrGVNr0neM=";
+    sha256 = "sha256-BhR1dE6+K7UKaCbLmWPtLMyq0oIj/xYenXp5s7kRINc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  checkInputs = [ git ];
+  checkInputs = [ git pytest-mock pytestCheckHook ];
 
   postInstall = ''
     installShellCompletion --bash --name git-machete completion/git-machete.completion.bash

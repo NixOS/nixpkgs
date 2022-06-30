@@ -8,13 +8,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.11";
+  version = "1.12";
   pname = "Flask-Compress";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9WnzLERtayXKjjR9UAOgUxgR73MmeABbADb8HJ6xwhw=";
+    sha256 = "sha256-4hWUmfOdYYpNVroEhOe1i1eVa5osbTUQ8JX1uxS3r8U=";
   };
 
   nativeBuildInputs = [

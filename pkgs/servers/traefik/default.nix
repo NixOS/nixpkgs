@@ -1,32 +1,33 @@
-{ lib, fetchzip, buildGoModule, go-bindata, nixosTests }:
+{ lib, fetchzip, buildGoModule, nixosTests }:
 
 buildGoModule rec {
   pname = "traefik";
-  version = "2.6.3";
+  version = "2.7.2";
 
+  # Archive with static assets for webui
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    sha256 = "sha256-OaKgX3qwiJM/EPprV1r3CbUnxOaWl7BTMcS5v+tmHoo=";
+    sha256 = "sha256-AJbvK3hr+cNYcoN+3Zz5WruTvWfh1junEnhRzvXVN+U=";
     stripRoot = false;
   };
 
-  vendorSha256 = "sha256-tqrfCpZ/fRYZBZ/SBAvvJebLBeD2M/AVJEPiseehJHY=";
+  vendorSha256 = "sha256-T36d8mjbThlH1mukcHgaYlhq/P46ShTHgM9zcH4L7dc=";
 
   subPackages = [ "cmd/traefik" ];
-
-  nativeBuildInputs = [ go-bindata ];
-
-  passthru.tests = { inherit (nixosTests) traefik; };
 
   preBuild = ''
     go generate
 
     CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
 
-    buildFlagsArray+=("-ldflags=\
-      -X github.com/traefik/traefik/v2/pkg/version.Version=${version} \
-      -X github.com/traefik/traefik/v2/pkg/version.Codename=$CODENAME")
+    buildFlagsArray+=("-ldflags= -s -w \
+      -X github.com/traefik/traefik/v${lib.versions.major version}/pkg/version.Version=${version} \
+      -X github.com/traefik/traefik/v${lib.versions.major version}/pkg/version.Codename=$CODENAME")
   '';
+
+  doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) traefik; };
 
   meta = with lib; {
     homepage = "https://traefik.io";

@@ -34,6 +34,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--bin" "xprite-native" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     homepage = "https://github.com/rickyhan/xprite-editor";
     description = "Pixel art editor";
     license = licenses.gpl3;

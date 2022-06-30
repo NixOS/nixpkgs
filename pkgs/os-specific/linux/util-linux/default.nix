@@ -1,7 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow, libcap_ng
+{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
+, capabilitiesSupport ? true
+, libcap_ng
 , ncursesSupport ? true
-, ncurses, pam
-, systemdSupport ? stdenv.isLinux
+, ncurses
+, pamSupport ? true
+, pam
+, systemdSupport ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
 , systemd
 , nlsSupport ? true
 }:
@@ -59,7 +63,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib pam libcap_ng ]
+  buildInputs = [ zlib ]
+    ++ lib.optionals pamSupport [ pam ]
+    ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]
     ++ lib.optionals systemdSupport [ systemd ];
 

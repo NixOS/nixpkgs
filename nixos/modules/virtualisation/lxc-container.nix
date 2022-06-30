@@ -63,18 +63,18 @@ in
         default = {};
         example = literalExpression ''
           {
-            # create /etc/hostname on container creation
+            # create /etc/hostname on container creation. also requires networking.hostName = "" to be set
             "hostname" = {
               enable = true;
               target = "/etc/hostname";
-              template = builtins.writeFile "hostname.tpl" "{{ container.name }}";
+              template = builtins.toFile "hostname.tpl" "{{ container.name }}";
               when = [ "create" ];
             };
             # create /etc/nixos/hostname.nix with a configuration for keeping the hostname applied
             "hostname-nix" = {
               enable = true;
               target = "/etc/nixos/hostname.nix";
-              template = builtins.writeFile "hostname-nix.tpl" "{ ... }: { networking.hostName = "{{ container.name }}"; }";
+              template = builtins.toFile "hostname-nix.tpl" "{ ... }: { networking.hostName = \"{{ container.name }}\"; }";
               # copy keeps the file updated when the container is changed
               when = [ "create" "copy" ];
             };
@@ -82,7 +82,7 @@ in
             "configuration-nix" = {
               enable = true;
               target = "/etc/nixos/configuration.nix";
-              template = builtins.writeFile "configuration-nix" "{{ config_get(\"user.user-data\", properties.default) }}";
+              template = builtins.toFile "configuration-nix" "{{ config_get(\"user.user-data\", properties.default) }}";
               when = [ "create" ];
             };
           };

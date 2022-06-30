@@ -50,11 +50,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    # darwin: build times out
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "A simple Lisp with an integrated database";
     homepage = "https://picolisp.com/";
     license = licenses.mit;
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # times out
     maintainers = with maintainers; [ raskin tohl ];
   };
 

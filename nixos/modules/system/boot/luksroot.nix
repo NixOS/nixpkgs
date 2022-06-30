@@ -992,6 +992,7 @@ in
       ];
       storePaths = [
         "${config.boot.initrd.systemd.package}/lib/systemd/systemd-cryptsetup"
+        "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-cryptsetup-generator"
       ];
 
     };

@@ -156,7 +156,10 @@ rec {
             type = types.lazyAttrsOf types.raw;
             # Only render documentation once at the root of the option tree,
             # not for all individual submodules.
-            internal = prefix != [];
+            # Allow merging option decls to make this internal regardless.
+            ${if prefix == []
+              then null  # unset => visible
+              else "internal"} = true;
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
@@ -342,7 +345,7 @@ rec {
           evalModules (evalModulesArgs // {
             modules = regularModules ++ modules;
             specialArgs = evalModulesArgs.specialArgs or {} // specialArgs;
-            prefix = extendArgs.prefix or evalModulesArgs.prefix;
+            prefix = extendArgs.prefix or evalModulesArgs.prefix or [];
           });
 
       type = lib.types.submoduleWith {
@@ -459,6 +462,7 @@ rec {
           config = addFreeformType (addMeta (m.config or {}));
         }
     else
+      lib.throwIfNot (isAttrs m) "module ${file} (${key}) does not look like a module."
       { _file = toString m._file or file;
         key = toString m.key or key;
         disabledModules = m.disabledModules or [];

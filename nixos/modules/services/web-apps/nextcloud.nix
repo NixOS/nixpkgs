@@ -91,7 +91,8 @@ in {
     };
     datadir = mkOption {
       type = types.str;
-      defaultText = "config.services.nextcloud.home";
+      default = config.services.nextcloud.home;
+      defaultText = literalExpression "config.services.nextcloud.home";
       description = ''
         Data storage path of nextcloud.  Will be <xref linkend="opt-services.nextcloud.home" /> by default.
         This folder will be populated with a config.php and data folder which contains the state of the instance (excl the database).";
@@ -155,11 +156,11 @@ in {
     package = mkOption {
       type = types.package;
       description = "Which package to use for the Nextcloud instance.";
-      relatedPackages = [ "nextcloud22" "nextcloud23" ];
+      relatedPackages = [ "nextcloud23" "nextcloud24" ];
     };
     phpPackage = mkOption {
       type = types.package;
-      relatedPackages = [ "php74" "php80" ];
+      relatedPackages = [ "php80" "php81" ];
       defaultText = "pkgs.php";
       description = ''
         PHP package to use for Nextcloud.
@@ -524,6 +525,29 @@ in {
         The nextcloud-occ program preconfigured to target this Nextcloud instance.
       '';
     };
+    globalProfiles = mkEnableOption "global profiles" // {
+      description = ''
+        Makes user-profiles globally available under <literal>nextcloud.tld/u/user.name</literal>.
+        Even though it's enabled by default in Nextcloud, it must be explicitly enabled
+        here because it has the side-effect that personal information is even accessible to
+        unauthenticated users by default.
+
+        By default, the following properties are set to <quote>Show to everyone</quote>
+        if this flag is enabled:
+        <itemizedlist>
+        <listitem><para>About</para></listitem>
+        <listitem><para>Full name</para></listitem>
+        <listitem><para>Headline</para></listitem>
+        <listitem><para>Organisation</para></listitem>
+        <listitem><para>Profile picture</para></listitem>
+        <listitem><para>Role</para></listitem>
+        <listitem><para>Twitter</para></listitem>
+        <listitem><para>Website</para></listitem>
+        </itemizedlist>
+
+        Only has an effect in Nextcloud 23 and later.
+      '';
+    };
 
     extraOptions = mkOption {
       type = jsonFormat.type;
@@ -552,16 +576,29 @@ in {
       '';
     };
     
-    nginx.recommendedHttpHeaders = mkOption {
-      type = types.bool;
-      default = true;
-      description = "Enable additional recommended HTTP response headers";
+    nginx = {
+      recommendedHttpHeaders = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Enable additional recommended HTTP response headers";
+      };
+      hstsMaxAge = mkOption {
+        type = types.ints.positive;
+        default = 15552000;
+        description = ''
+          Value for the <code>max-age</code> directive of the HTTP
+          <code>Strict-Transport-Security</code> header.
+
+          See section 6.1.1 of IETF RFC 6797 for detailed information on this
+          directive and header.
+        '';
+      };
     };
   };
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
-        latest = 23;
+        latest = 24;
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
@@ -597,6 +634,7 @@ in {
         ++ (optional (versionOlder cfg.package.version "21") (upgradeWarning 20 "21.05"))
         ++ (optional (versionOlder cfg.package.version "22") (upgradeWarning 21 "21.11"))
         ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
+        ++ (optional (versionOlder cfg.package.version "24") (upgradeWarning 23 "22.05"))
         ++ (optional isUnsupportedMariadb ''
             You seem to be using MariaDB at an unsupported version (i.e. at least 10.6)!
             Please note that this isn't supported officially by Nextcloud. You can either
@@ -617,15 +655,18 @@ in {
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if versionOlder stateVersion "21.11" then nextcloud21
           else if versionOlder stateVersion "22.05" then nextcloud22
-          else nextcloud23
+          else nextcloud24
         );
 
-      services.nextcloud.datadir = mkOptionDefault config.services.nextcloud.home;
-
       services.nextcloud.phpPackage =
-        if versionOlder cfg.package.version "21" then pkgs.php74
+        if versionOlder cfg.package.version "24" then pkgs.php80
+        # FIXME: Use PHP 8.1 with Nextcloud 24 and higher, once issues like this one are fixed:
+        #
+        # https://github.com/nextcloud/twofactor_totp/issues/1192
+        #
+        # else if versionOlder cfg.package.version "24" then pkgs.php80
+        # else pkgs.php81;
         else pkgs.php80;
     }
 
@@ -637,6 +678,7 @@ in {
 
     { systemd.timers.nextcloud-cron = {
         wantedBy = [ "timers.target" ];
+        after = [ "nextcloud-setup.service" ];
         timerConfig.OnBootSec = "5m";
         timerConfig.OnUnitActiveSec = "5m";
         timerConfig.Unit = "nextcloud-cron.service";
@@ -679,6 +721,8 @@ in {
               if x == null then "false"
               else boolToString x;
 
+          nextcloudGreaterOrEqualThan = req: versionAtLeast cfg.package.version req;
+
           overrideConfig = pkgs.writeText "nextcloud-config.php" ''
             <?php
             ${optionalString requiresReadSecretFunction ''
@@ -716,7 +760,7 @@ in {
               'skeletondirectory' => '${cfg.skeletonDirectory}',
               ${optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
               'log_type' => 'syslog',
-              'log_level' => '${builtins.toString cfg.logLevel}',
+              'loglevel' => '${builtins.toString cfg.logLevel}',
               ${optionalString (c.overwriteProtocol != null) "'overwriteprotocol' => '${c.overwriteProtocol}',"}
               ${optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
               ${optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
@@ -736,6 +780,7 @@ in {
               'trusted_domains' => ${writePhpArrary ([ cfg.hostName ] ++ c.extraTrustedDomains)},
               'trusted_proxies' => ${writePhpArrary (c.trustedProxies)},
               ${optionalString (c.defaultPhoneRegion != null) "'default_phone_region' => '${c.defaultPhoneRegion}',"}
+              ${optionalString (nextcloudGreaterOrEqualThan "23") "'profile.enabled' => ${boolToString cfg.globalProfiles},"}
               ${objectstoreConfig}
             ];
 
@@ -844,7 +889,7 @@ in {
             ${occ}/bin/nextcloud-occ config:system:delete trusted_domains
 
             ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
-                # Try to enable apps (don't fail when one of them cannot be enabled , eg. due to incompatible version)
+                # Try to enable apps
                 ${occ}/bin/nextcloud-occ app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
             ''}
 
@@ -854,12 +899,14 @@ in {
           serviceConfig.User = "nextcloud";
         };
         nextcloud-cron = {
+          after = [ "nextcloud-setup.service" ];
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
           serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${cfg.package}/cron.php";
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
+          after = [ "nextcloud-setup.service" ];
           serviceConfig.Type = "oneshot";
           serviceConfig.ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
           serviceConfig.User = "nextcloud";
@@ -904,7 +951,7 @@ in {
         # FIXME(@Ma27) Nextcloud isn't compatible with mariadb 10.6,
         # this is a workaround.
         # See https://help.nextcloud.com/t/update-to-next-cloud-21-0-2-has-get-an-error/117028/22
-        settings = {
+        settings = mkIf (versionOlder cfg.package.version "24") {
           mysqld = {
             innodb_read_only_compressed = 0;
           };
@@ -928,7 +975,6 @@ in {
             priority = 100;
             extraConfig = ''
               allow all;
-              log_not_found off;
               access_log off;
             '';
           };
@@ -1016,7 +1062,9 @@ in {
             add_header X-Permitted-Cross-Domain-Policies none;
             add_header X-Frame-Options sameorigin;
             add_header Referrer-Policy no-referrer;
-            add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
+          ''}
+          ${optionalString (cfg.https) ''
+            add_header Strict-Transport-Security "max-age=${toString cfg.nginx.hstsMaxAge}; includeSubDomains" always;
           ''}
           client_max_body_size ${cfg.maxUploadSize};
           fastcgi_buffers 64 4K;

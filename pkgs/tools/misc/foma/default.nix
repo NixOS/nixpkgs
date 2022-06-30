@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "foma";
-  version = "0.9.18alpha";
+  version = "0.10.0alpha";
 
   src = fetchFromGitHub {
     owner = "mhulden";
     repo = "foma";
-    rev = "4456a40e81f46e3fe909c5a97a15fcf1d2a3b6c1";
-    sha256 = "188yxj8wahlj2yf93rj1vx549j5cq0085d2jmj3vwzbfjq1mi1f0";
+    rev = "82f9acdef234eae8b7619ccc3a386cc0d7df62bc";
+    sha256 = "1vf01l18j8cksnavbabcckp9gg692w6v5lg81xrzv6f5v14zp4nr";
   };
 
   sourceRoot = "source/foma";

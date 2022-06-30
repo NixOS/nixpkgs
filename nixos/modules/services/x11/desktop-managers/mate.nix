@@ -73,6 +73,7 @@ in
     services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
     services.gvfs.enable = true;
     services.upower.enable = config.powerManagement.enable;
+    services.xserver.libinput.enable = mkDefault true;
 
     security.pam.services.mate-screensaver.unixAuth = true;
 

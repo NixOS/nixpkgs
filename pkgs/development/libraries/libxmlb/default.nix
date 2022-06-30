@@ -1,9 +1,8 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , docbook_xml_dtd_43
-, docbook_xsl
+, docbook-xsl-nons
 , glib
 , gobject-introspection
 , gtk-doc
@@ -18,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libxmlb";
-  version = "0.3.7";
+  version = "0.3.9";
 
   outputs = [ "out" "lib" "dev" "devdoc" "installedTests" ];
 
@@ -26,23 +25,16 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    sha256 = "sha256-ZzA1YJYxTR91X79NU9dWd11Ze+PX2wuZeumuEuNdC48=";
+    sha256 = "sha256-4WTuwxpIsE7gHXFiuWuZeu2JMGzPLpsmS1KTEdR3ztg=";
   };
 
   patches = [
     ./installed-tests-path.patch
-    # Fix darwin build, can be removed on next release
-    # `--version-script` isn't supported by the macOS linker
-    # https://github.com/hughsie/libxmlb/pull/119
-    (fetchpatch {
-      url = "https://github.com/hughsie/libxmlb/commit/d83aac5bd78cfbbfa2ecd428ff54b811071dfe4d.patch";
-      sha256 = "sha256-UNRMbyNzdxfTZ8xV6J8a622hPnr3mowooP1q8Dg19yw=";
-    })
   ];
 
   nativeBuildInputs = [
     docbook_xml_dtd_43
-    docbook_xsl
+    docbook-xsl-nons
     gobject-introspection
     gtk-doc
     meson

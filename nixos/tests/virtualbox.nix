@@ -3,17 +3,8 @@
   pkgs ? import ../.. { inherit system config; },
   debug ? false,
   enableUnfree ? false,
-  # Nested KVM virtualization (https://www.linux-kvm.org/page/Nested_Guests)
-  # requires a modprobe flag on the build machine: (kvm-amd for AMD CPUs)
-  #   boot.extraModprobeConfig = "options kvm-intel nested=Y";
-  # Without this VirtualBox will use SW virtualization and will only be able
-  # to run 32-bit guests.
-  useKvmNestedVirt ? false,
-  # Whether to run 64-bit guests instead of 32-bit. Requires nested KVM.
-  use64bitGuest ? false
+  use64bitGuest ? true
 }:
-
-assert use64bitGuest -> useKvmNestedVirt;
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
 with pkgs.lib;
@@ -26,7 +17,8 @@ let
       #!${pkgs.runtimeShell} -xe
       export PATH="${lib.makeBinPath [ pkgs.coreutils pkgs.util-linux ]}"
 
-      mkdir -p /run/dbus
+      mkdir -p /run/dbus /var
+      ln -s /run /var
       cat > /etc/passwd <<EOF
       root:x:0:0::/root:/bin/false
       messagebus:x:1:1::/run/dbus:/bin/false
@@ -200,6 +192,7 @@ let
       systemd.services."vboxtestlog-${name}@" = {
         description = "VirtualBox Test Machine Log For ${name}";
         serviceConfig.StandardInput = "socket";
+        serviceConfig.StandardOutput = "journal";
         serviceConfig.SyslogIdentifier = "GUEST-${name}";
         serviceConfig.ExecStart = "${pkgs.coreutils}/bin/cat";
       };
@@ -222,10 +215,11 @@ let
               machine.execute(ru("VBoxManage controlvm ${name} poweroff"))
           machine.succeed("rm -rf ${sharePath}")
           machine.succeed("mkdir -p ${sharePath}")
-          machine.succeed("chown alice.users ${sharePath}")
+          machine.succeed("chown alice:users ${sharePath}")
 
 
       def create_vm_${name}():
+          cleanup_${name}()
           vbm("createvm --name ${name} ${createFlags}")
           vbm("modifyvm ${name} ${vmFlags}")
           vbm("setextradata ${name} VBoxInternal/PDM/HaltOnReset 1")
@@ -233,7 +227,6 @@ let
           vbm("storageattach ${name} ${diskFlags}")
           vbm("sharedfolder add ${name} ${sharedFlags}")
           vbm("sharedfolder add ${name} ${nixstoreFlags}")
-          cleanup_${name}()
 
           ${mkLog "$HOME/VirtualBox VMs/${name}/Logs/VBox.log" "HOST-${name}"}
 
@@ -317,10 +310,7 @@ let
   ];
 
   dhcpScript = pkgs: ''
-    ${pkgs.dhcp}/bin/dhclient \
-      -lf /run/dhcp.leases \
-      -pf /run/dhclient.pid \
-      -v eth0 eth1
+    ${pkgs.dhcpcd}/bin/dhcpcd eth0 eth1
 
     otherIP="$(${pkgs.netcat}/bin/nc -l 1234 || :)"
     ${pkgs.iputils}/bin/ping -I eth1 -c1 "$otherIP"
@@ -359,8 +349,7 @@ let
         vmConfigs = mapAttrsToList mkVMConf vms;
       in [ ./common/user-account.nix ./common/x11.nix ] ++ vmConfigs;
       virtualisation.memorySize = 2048;
-      virtualisation.qemu.options =
-        if useKvmNestedVirt then ["-cpu" "kvm64,vmx=on"] else [];
+      virtualisation.qemu.options = ["-cpu" "kvm64,svm=on,vmx=on"];
       virtualisation.virtualbox.host.enable = true;
       test-support.displayManager.auto.user = "alice";
       users.users.alice.extraGroups = let
@@ -468,7 +457,7 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
 
   headless = ''
     create_vm_headless()
-    machine.succeed(ru("VBoxHeadless --startvm headless & disown %1"))
+    machine.succeed(ru("VBoxHeadless --startvm headless >&2 & disown %1"))
     wait_for_startup_headless()
     wait_for_vm_boot_headless()
     shutdown_vm_headless()
@@ -476,6 +465,8 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
   '';
 
   host-usb-permissions = ''
+    import sys
+
     user_usb = remove_uuids(vbm("list usbhost"))
     print(user_usb, file=sys.stderr)
     root_usb = remove_uuids(machine.succeed("VBoxManage list usbhost"))

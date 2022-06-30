@@ -17,6 +17,7 @@ rec {
     head
     isInt
     isList
+    isAttrs
     isString
     match
     parseDrvName
@@ -253,7 +254,7 @@ rec {
       => false
   */
   hasInfix = infix: content:
-    builtins.match ".*${escapeRegex infix}.*" content != null;
+    builtins.match ".*${escapeRegex infix}.*" "${content}" != null;
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,
@@ -323,6 +324,66 @@ rec {
        => "'one' 'two three' 'four'\\''five'"
   */
   escapeShellArgs = concatMapStringsSep " " escapeShellArg;
+
+  /* Test whether the given name is a valid POSIX shell variable name.
+
+     Type: string -> bool
+
+     Example:
+       isValidPosixName "foo_bar000"
+       => true
+       isValidPosixName "0-bad.jpg"
+       => false
+  */
+  isValidPosixName = name: match "[a-zA-Z_][a-zA-Z0-9_]*" name != null;
+
+  /* Translate a Nix value into a shell variable declaration, with proper escaping.
+
+     The value can be a string (mapped to a regular variable), a list of strings
+     (mapped to a Bash-style array) or an attribute set of strings (mapped to a
+     Bash-style associative array). Note that "string" includes string-coercible
+     values like paths or derivations.
+
+     Strings are translated into POSIX sh-compatible code; lists and attribute sets
+     assume a shell that understands Bash syntax (e.g. Bash or ZSH).
+
+     Type: string -> (string | listOf string | attrsOf string) -> string
+
+     Example:
+       ''
+         ${toShellVar "foo" "some string"}
+         [[ "$foo" == "some string" ]]
+       ''
+  */
+  toShellVar = name: value:
+    lib.throwIfNot (isValidPosixName name) "toShellVar: ${name} is not a valid shell variable name" (
+    if isAttrs value && ! isCoercibleToString value then
+      "declare -A ${name}=(${
+        concatStringsSep " " (lib.mapAttrsToList (n: v:
+          "[${escapeShellArg n}]=${escapeShellArg v}"
+        ) value)
+      })"
+    else if isList value then
+      "declare -a ${name}=(${escapeShellArgs value})"
+    else
+      "${name}=${escapeShellArg value}"
+    );
+
+  /* Translate an attribute set into corresponding shell variable declarations
+     using `toShellVar`.
+
+     Type: attrsOf (string | listOf string | attrsOf string) -> string
+
+     Example:
+       let
+         foo = "value";
+         bar = foo;
+       in ''
+         ${toShellVars { inherit foo bar; }}
+         [[ "$foo" == "$bar" ]]
+       ''
+  */
+  toShellVars = vars: concatStringsSep "\n" (lib.mapAttrsToList toShellVar vars);
 
   /* Turn a string into a Nix expression representing that string
 

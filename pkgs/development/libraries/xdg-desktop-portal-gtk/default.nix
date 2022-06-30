@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-gtk";
-  version = "1.12.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = pname;
     rev = version;
-    sha256 = "I1ZoDqZQPfPwPr4Ybk+syz+YEkrK2ReflZaJJWD4Nsk=";
+    sha256 = "I9xQgiE3lNb2vRodO5R1y40lqoOKzALskrVePidant4=";
   };
 
   nativeBuildInputs = [

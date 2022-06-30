@@ -86,6 +86,7 @@ let
       dragon = callPackage ./dragon.nix {};
       elisa = callPackage ./elisa.nix {};
       eventviews = callPackage ./eventviews.nix {};
+      falkon = callPackage ./falkon.nix {};
       ffmpegthumbs = callPackage ./ffmpegthumbs.nix { };
       filelight = callPackage ./filelight.nix {};
       granatier = callPackage ./granatier.nix {};
@@ -97,7 +98,7 @@ let
       kaccounts-providers = callPackage ./kaccounts-providers.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
-      kalarmcal = callPackage ./kalarmcal.nix {};
+      kalendar = callPackage ./kalendar.nix {};
       kalzium = callPackage ./kalzium.nix {};
       kamoso = callPackage ./kamoso.nix {};
       kapman = callPackage ./kapman.nix {};
@@ -121,6 +122,11 @@ let
       kdenlive = callPackage ./kdenlive {};
       kdepim-runtime = callPackage ./kdepim-runtime {};
       kdepim-addons = callPackage ./kdepim-addons.nix {};
+      kdevelop-pg-qt = callPackage ./kdevelop/kdevelop-pg-qt.nix {};
+      kdevelop-unwrapped = callPackage ./kdevelop/kdevelop.nix {};
+      kdev-php = callPackage ./kdevelop/kdev-php.nix {};
+      kdev-python = callPackage ./kdevelop/kdev-python.nix {};
+      kdevelop = callPackage ./kdevelop/wrapper.nix {};
       kdf = callPackage ./kdf.nix {};
       kdialog = callPackage ./kdialog.nix {};
       kdiamond = callPackage ./kdiamond.nix {};
@@ -153,6 +159,7 @@ let
       kmime = callPackage ./kmime.nix {};
       kmines = callPackage ./kmines.nix {};
       kmix = callPackage ./kmix.nix {};
+      kmousetool = callPackage ./kmousetool.nix {};
       kmplot = callPackage ./kmplot.nix {};
       knavalbattle = callPackage ./knavalbattle.nix {};
       knetwalk = callPackage ./knetwalk.nix {};
@@ -219,6 +226,7 @@ let
       print-manager = callPackage ./print-manager.nix {};
       rocs = callPackage ./rocs.nix {};
       skanlite = callPackage ./skanlite.nix {};
+      skanpage = callPackage ./skanpage.nix {};
       spectacle = callPackage ./spectacle.nix {};
       yakuake = callPackage ./yakuake.nix {};
       zanshin = callPackage ./zanshin.nix {};

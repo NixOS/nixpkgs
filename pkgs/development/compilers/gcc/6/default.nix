@@ -341,6 +341,7 @@ stdenv.mkDerivation ({
     '';
 
     platforms = lib.platforms.unix;
+    badPlatforms = [ "aarch64-darwin" ];
   };
 }
 

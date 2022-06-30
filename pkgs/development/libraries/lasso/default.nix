@@ -1,22 +1,49 @@
-{ lib, stdenv, autoconf, automake, autoreconfHook, fetchurl, glib, gobject-introspection, gtk-doc, libtool, libxml2, libxslt, openssl, pkg-config, python27Packages, xmlsec, zlib }:
+{ lib, stdenv
+, autoreconfHook
+, fetchurl
+, glib
+, gobject-introspection
+, gtk-doc
+, libtool
+, libxml2
+, libxslt
+, openssl
+, pkg-config
+, python3
+, xmlsec
+, zlib
+}:
 
 stdenv.mkDerivation rec {
-
   pname = "lasso";
   version = "2.8.0";
 
   src = fetchurl {
     url = "https://dev.entrouvert.org/lasso/lasso-${version}.tar.gz";
-    sha256 = "sha256-/8vVhR2YWGx+HK9DutZhZCEaO2HRK/hgoFmESP+fKzg=";
-
+    hash = "sha256-/8vVhR2YWGx+HK9DutZhZCEaO2HRK/hgoFmESP+fKzg=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config autoconf automake ];
-  buildInputs = [ glib gobject-introspection gtk-doc libtool libxml2 libxslt openssl python27Packages.six xmlsec zlib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    python3
+  ];
+
+  buildInputs = [
+    glib
+    gobject-introspection
+    gtk-doc
+    libtool
+    libxml2
+    libxslt
+    openssl
+    python3.pkgs.six
+    xmlsec
+    zlib
+  ];
 
   configurePhase = ''
     ./configure --with-pkg-config=$PKG_CONFIG_PATH \
-                --disable-python \
                 --disable-perl \
                 --prefix=$out
   '';
@@ -28,5 +55,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ womfoo ];
   };
-
 }

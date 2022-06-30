@@ -11,12 +11,12 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nix-eval-jobs";
-  version = "0.0.5";
+  version = "2.9.0";
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-3/F9q6MRebTltJzuhIukHrxgUyd5pi34IzaklfdvKe4=";
+    hash = "sha256-fN9D1rqJ4UFmCykTK8cU0oPWqN3wR8m9/zQ6fwVdBcY=";
   };
   buildInputs = [
     boost

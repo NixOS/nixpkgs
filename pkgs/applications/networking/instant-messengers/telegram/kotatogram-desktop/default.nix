@@ -98,6 +98,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    ./kf594.patch
     ./shortcuts-binary-path.patch
     # let it build with nixpkgs 10.12 sdk
     ./kotato-10.12-sdk.patch
@@ -216,6 +217,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Kotatogram – experimental Telegram Desktop fork";
     longDescription = ''
       Unofficial desktop client for the Telegram messenger, based on Telegram Desktop.

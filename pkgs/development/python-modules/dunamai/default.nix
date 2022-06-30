@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "dunamai";
-  version = "1.11.1";
+  version = "1.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = "dunamai";
-    rev = "v${version}";
-    sha256 = "sha256-nkE9QBziCQA/aN+Z0OuqJlf5FJ4fidE7u5Gt25zjX0c=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-SyHml8TIcqU7KQE4IuTZbp+Jktao7ReJHQyHV8wKeWg=";
   };
 
   nativeBuildInputs = [

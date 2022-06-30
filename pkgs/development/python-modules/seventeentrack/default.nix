@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "seventeentrack";
-  version = "2022.04.5";
+  version = "2022.04.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "McSwindler";
     repo = pname;
     rev = version;
-    hash = "sha256-IaR0Cfs3FL4Vguc2NLdPaunk23zC8B93Iyqe9xY/hWY=";
+    hash = "sha256-vMdRXcd0es/LjgsVyWItSLFzlSTEa3oaA6lr/NL4i8U=";
   };
 
   nativeBuildInputs = [

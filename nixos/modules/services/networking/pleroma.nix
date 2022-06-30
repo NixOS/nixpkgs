@@ -1,7 +1,6 @@
 { config, options, lib, pkgs, stdenv, ... }:
 let
   cfg = config.services.pleroma;
-  cookieFile = "/var/lib/pleroma/.cookie";
 in {
   options = {
     services.pleroma = with lib; {
@@ -9,7 +8,7 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.pleroma.override { inherit cookieFile; };
+        default = pkgs.pleroma;
         defaultText = literalExpression "pkgs.pleroma";
         description = "Pleroma package to use.";
       };
@@ -101,6 +100,7 @@ in {
       after = [ "network-online.target" "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."/pleroma/config.exs".source ];
+      environment.RELEASE_COOKIE = "/var/lib/pleroma/.cookie";
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
@@ -118,10 +118,10 @@ in {
         # Better be safe than sorry migration-wise.
         ExecStartPre =
           let preScript = pkgs.writers.writeBashBin "pleromaStartPre" ''
-            if [ ! -f "${cookieFile}" ] || [ ! -s "${cookieFile}" ]
+            if [ ! -f /var/lib/pleroma/.cookie ]
             then
               echo "Creating cookie file"
-              dd if=/dev/urandom bs=1 count=16 | ${pkgs.hexdump}/bin/hexdump -e '16/1 "%02x"' > "${cookieFile}"
+              dd if=/dev/urandom bs=1 count=16 | hexdump -e '16/1 "%02x"' > /var/lib/pleroma/.cookie
             fi
             ${cfg.package}/bin/pleroma_ctl migrate
           '';

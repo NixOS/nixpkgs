@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "reuse";
-  version = "0.14.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "fsfe";
     repo = "reuse-tool";
     rev = "v${version}";
-    sha256 = "1pjc8pckacjlrb8xypyca7jq8ii4an7m5b1g7941d7kkhnlbzm7v";
+    sha256 = "0yplsbd5251s8cabazbdqb00jqv8ibbgal7fhj5pfxv5lsz17vkv";
   };
 
   propagatedBuildInputs = with python3Packages; [

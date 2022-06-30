@@ -1,33 +1,49 @@
 { rustPlatform, lib, fetchFromGitHub
-, zlib, elfutils, openssl
-, cmake, python3, pkg-config, protobuf, perl, llvmPackages
+, zlib, openssl
+, pkg-config, protobuf, llvmPackages
 }:
 rustPlatform.buildRustPackage rec {
-  #https://github.com/near/nearcore
   pname = "nearcore";
-  version = "1.25.0";
+  version = "1.27.0";
+
+  # https://github.com/near/nearcore/tags
   src = fetchFromGitHub {
     owner = "near";
     repo = "nearcore";
     # there is also a branch for this version number, so we need to be explicit
     rev = "refs/tags/${version}";
-    sha256 = "sha256-7hiBqJLGIf+kNKJvMQ7KtGZm/SWLY3pT7YDlwbm3HDM=";
+    sha256 = "sha256-B9HqUa0mBSvsCPzxPt4NqpV99rV4lmQ9Q/z9lxob9oM=";
   };
 
-  cargoSha256 = "sha256-EGv4CibSHL9oTAdWK7d/SOzZWPcEB16hTWlWHjKU4wc=";
+  cargoSha256 = "sha256-6GIt3J6y/O8XaHQJKRSPRgK2XbghMLif4e2Btdww9Ng=";
+
+  postPatch = ''
+    substituteInPlace neard/build.rs \
+      --replace 'get_git_version()?' '"nix:${version}"'
+  '';
+
+  CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";
+  CARGO_PROFILE_RELEASE_LTO = "fat";
+  NEAR_RELEASE_BUILD = "release";
+
+  OPENSSL_NO_VENDOR = 1; # we want to link to OpenSSL provided by Nix
 
   # don't build SDK samples that require wasm-enabled rust
-  cargoBuildFlags = [ "-p" "neard" ];
+  buildAndTestSubdir = "neard";
   doCheck = false; # needs network
 
-  buildInputs = [ zlib elfutils openssl ];
+  buildInputs = [
+    zlib
+    openssl
+  ];
+
   nativeBuildInputs = [
-    cmake
-    python3
     pkg-config
     protobuf
-    perl
   ];
+
+  # fat LTO requires ~3.4GB RAM
+  requiredSystemFeatures = [ "big-parallel" ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
   BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${llvmPackages.libclang.lib}/lib/clang/${lib.getVersion llvmPackages.clang}/include";
@@ -35,8 +51,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Reference client for NEAR Protocol";
     homepage = "https://github.com/near/nearcore";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.unix;
+    license = licenses.gpl3;
+    maintainers = with maintainers; [ mic92 mikroskeem ];
+    # only x86_64 is supported in nearcore because of sse4+ support, macOS might
+    # be also possible
+    platforms = [ "x86_64-linux" ];
   };
 }

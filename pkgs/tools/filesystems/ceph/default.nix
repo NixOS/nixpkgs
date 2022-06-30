@@ -2,14 +2,14 @@
 , ensureNewerSourcesHook
 , cmake, pkg-config
 , which, git
-, boost
+, boost175
 , libxml2, zlib, lz4
 , openldap, lttng-ust
 , babeltrace, gperf
 , gtest
 , cunit, snappy
 , makeWrapper
-, leveldb, oathToolkit
+, leveldb, oath-toolkit
 , libnl, libcap_ng
 , rdkafka
 , nixosTests
@@ -21,7 +21,7 @@
 , doxygen
 , graphviz
 , fmt
-, python3
+, python39
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -104,7 +104,13 @@ let
     meta = getMeta "Ceph common module for code shared by manager modules";
   };
 
-  python = python3;
+  # Boost 1.75 is not compatible with Python 3.10
+  python = python39;
+
+  boost = boost175.override {
+    enablePython = true;
+    inherit python;
+  };
 
   ceph-python-env = python.withPackages (ps: [
     ps.sphinx
@@ -161,7 +167,7 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy lz4 oathToolkit leveldb libnl libcap_ng rdkafka
+      snappy lz4 oath-toolkit leveldb libnl libcap_ng rdkafka
       cryptsetup sqlite lua icu bzip2
     ] ++ lib.optionals stdenv.isLinux [
       linuxHeaders util-linux libuuid udev keyutils liburing optLibaio optLibxfs optZfs

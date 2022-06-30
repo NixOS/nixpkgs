@@ -11,6 +11,7 @@
 , newScope
 , lib
 , fetchurl
+, gcc10Stdenv
 }:
 
 # When adding a kernel:
@@ -159,14 +160,11 @@ in {
       ];
     };
 
-    linux_5_16 = callPackage ../os-specific/linux/kernel/linux-5.16.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
+    linux_5_16 = throw "linux 5.16 was removed because it has reached its end of life upstream";
 
-    linux_5_17 = callPackage ../os-specific/linux/kernel/linux-5.17.nix {
+    linux_5_17 = throw "linux 5.17 was removed because it has reached its end of life upstream";
+
+    linux_5_18 = callPackage ../os-specific/linux/kernel/linux-5.18.nix {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
@@ -186,7 +184,7 @@ in {
        else testing;
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix rec {
-      kernel = linux_5_16;
+      kernel = linux_5_18;
       kernelPatches = kernel.kernelPatches;
    };
 
@@ -198,19 +196,23 @@ in {
       ];
     };
 
-    linux_zen = callPackage ../os-specific/linux/kernel/linux-zen.nix {
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
+    # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
+    # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
+    zenKernels = callPackage ../os-specific/linux/kernel/zen-kernels.nix;
 
-    linux_lqx = callPackage ../os-specific/linux/kernel/linux-lqx.nix {
+    linux_zen = (zenKernels {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
       ];
-    };
+    }).zen;
+
+    linux_lqx = (zenKernels {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+      ];
+    }).lqx;
 
     # This contains both the STABLE and EDGE variants of the XanMod kernel
     xanmodKernels = callPackage ../os-specific/linux/kernel/xanmod-kernels.nix;
@@ -240,6 +242,7 @@ in {
     linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 { };
     linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
+    linux_5_18_hardened = hardenedKernelFor kernels.linux_5_18 { };
 
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
@@ -275,9 +278,9 @@ in {
       });
     };
 
-    anbox = callPackage ../os-specific/linux/anbox/kmod.nix { };
-
     apfs = callPackage ../os-specific/linux/apfs { };
+
+    ax99100 = callPackage ../os-specific/linux/ax99100 {};
 
     batman_adv = callPackage ../os-specific/linux/batman-adv {};
 
@@ -341,6 +344,8 @@ in {
 
     mbp2018-bridge-drv = callPackage ../os-specific/linux/mbp-modules/mbp2018-bridge-drv { };
 
+    new-lg4ff = callPackage ../os-specific/linux/new-lg4ff { };
+
     nvidiabl = callPackage ../os-specific/linux/nvidiabl { };
 
     nvidiaPackages = dontRecurseIntoAttrs (lib.makeExtensible (_: callPackage ../os-specific/linux/nvidia-x11 { }));
@@ -351,6 +356,10 @@ in {
     nvidia_x11_beta        = nvidiaPackages.beta;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
     nvidia_x11             = nvidiaPackages.stable;
+
+    # this is not a replacement for nvidia_x11
+    # only the opensource kernel driver exposed for hydra to build
+    nvidia_x11_beta_open   = nvidiaPackages.beta.open;
 
     openrazer = callPackage ../os-specific/linux/openrazer/driver.nix { };
 
@@ -468,6 +477,8 @@ in {
 
     vmm_clock = callPackage ../os-specific/linux/vmm_clock { };
 
+    vmware = callPackage ../os-specific/linux/vmware { };
+
     wireguard = if lib.versionOlder kernel.version "5.6" then callPackage ../os-specific/linux/wireguard { } else null;
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
@@ -503,8 +514,9 @@ in {
     linux_5_4 = recurseIntoAttrs (packagesFor kernels.linux_5_4);
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
-    linux_5_16 = recurseIntoAttrs (packagesFor kernels.linux_5_16);
-    linux_5_17 = recurseIntoAttrs (packagesFor kernels.linux_5_17);
+    linux_5_16 = throw "linux 5.16 was removed because it reached its end of life upstream"; # Added 2022-04-23
+    linux_5_17 = throw "linux 5.17 was removed because it reached its end of life upstream"; # Added 2022-06-23
+    linux_5_18 = recurseIntoAttrs (packagesFor kernels.linux_5_18);
   };
 
   rtPackages = {
@@ -529,11 +541,21 @@ in {
 
     linux_hardened = recurseIntoAttrs (hardenedPackagesFor packageAliases.linux_default.kernel { });
 
-    linux_4_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_14 { });
-    linux_4_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_19 { });
-    linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 { });
+    linux_4_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_14 {
+      stdenv = gcc10Stdenv;
+      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
+    });
+    linux_4_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_19 {
+      stdenv = gcc10Stdenv;
+      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
+    });
+    linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 {
+      stdenv = gcc10Stdenv;
+      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
+    });
     linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
     linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
+    linux_5_18_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_18 { });
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -548,9 +570,9 @@ in {
   });
 
   packageAliases = {
-    linux_default = if stdenv.hostPlatform.isi686 then packages.linux_5_10 else packages.linux_5_15;
+    linux_default = packages.linux_5_15;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_5_17;
+    linux_latest = packages.linux_5_18;
     linux_mptcp = packages.linux_mptcp_95;
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_5_10;

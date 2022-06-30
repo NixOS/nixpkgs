@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , substituteAll
 , buildPythonPackage
 , fetchPypi
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   dontConfigure = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Chia proof of space library";
     homepage = "https://www.chia.net/";
     license = licenses.asl20;

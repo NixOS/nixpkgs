@@ -1,10 +1,10 @@
 diff --git a/src/sage_docbuild/__init__.py b/src/sage_docbuild/__init__.py
-index 8a5c1a19d2..21fd192642 100644
+index b12d56a3c9..df9d949ed1 100644
 --- a/src/sage_docbuild/__init__.py
 +++ b/src/sage_docbuild/__init__.py
-@@ -89,27 +89,6 @@ def builder_helper(type):
+@@ -88,30 +88,6 @@ def builder_helper(type):
      """
-     Returns a function which builds the documentation for
+     Return a function which builds the documentation for
      output type ``type``.
 -
 -    TESTS:
@@ -19,10 +19,13 @@ index 8a5c1a19d2..21fd192642 100644
 -        ....:     raise BaseException("abort pool operation")
 -        sage: original_runsphinx, sage_docbuild.sphinxbuild.runsphinx = sage_docbuild.sphinxbuild.runsphinx, raiseBaseException
 -
+-        sage: from sage.misc.temporary_file import tmp_dir
+-        sage: os.environ['SAGE_DOC'] = tmp_dir()
+-        sage: sage.env.var('SAGE_DOC') # random
 -        sage: from sage_docbuild import builder_helper, build_ref_doc
 -        sage: from sage_docbuild import _build_many as build_many
 -        sage: helper = builder_helper("html")
--        sage: try:
+-        sage: try:  # optional - sagemath_doc_html
 -        ....:     build_many(build_ref_doc, [("docname", "en", "html", {})])
 -        ....: except Exception as E:
 -        ....:     "Non-exception during docbuild: abort pool operation" in str(E)
@@ -30,7 +33,7 @@ index 8a5c1a19d2..21fd192642 100644
      """
      def f(self, *args, **kwds):
          output_dir = self._output_dir(type)
-@@ -131,10 +110,9 @@ def builder_helper(type):
+@@ -139,10 +115,9 @@ def builder_helper(type):
          logger.debug(build_command)
  
          # Run Sphinx with Sage's special logger
@@ -44,10 +47,10 @@ index 8a5c1a19d2..21fd192642 100644
              if ABORT_ON_ERROR:
                  raise
 diff --git a/src/sage_docbuild/sphinxbuild.py b/src/sage_docbuild/sphinxbuild.py
-index d917c3e9d4..551cc8028a 100644
+index a39c99ffe9..73be823684 100644
 --- a/src/sage_docbuild/sphinxbuild.py
 +++ b/src/sage_docbuild/sphinxbuild.py
-@@ -327,3 +327,8 @@ def runsphinx():
+@@ -330,3 +330,8 @@ def runsphinx():
          sys.stderr = saved_stderr
          sys.stdout.flush()
          sys.stderr.flush()

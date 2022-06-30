@@ -8,7 +8,7 @@ let
   # compression type and filename extension.
   compressorName = fullCommand: builtins.elemAt (builtins.match "([^ ]*/)?([^ ]+).*" fullCommand) 1;
 in
-{ stdenvNoCC, perl, cpio, ubootTools, lib, pkgsBuildHost, makeInitrdNGTool, patchelf, runCommand, glibc
+{ stdenvNoCC, perl, cpio, ubootTools, lib, pkgsBuildHost, makeInitrdNGTool, patchelf, runCommand
 # Name of the derivation (not of the resulting file!)
 , name ? "initrd"
 
@@ -72,7 +72,7 @@ in
   passAsFile = ["contents"];
   contents = lib.concatMapStringsSep "\n" ({ object, symlink, ... }: "${object}\n${if symlink == null then "" else symlink}") contents + "\n";
 
-  nativeBuildInputs = [makeInitrdNGTool patchelf glibc cpio] ++ lib.optional makeUInitrd ubootTools;
+  nativeBuildInputs = [makeInitrdNGTool patchelf cpio] ++ lib.optional makeUInitrd ubootTools;
 } ''
   mkdir ./root
   make-initrd-ng "$contentsPath" ./root

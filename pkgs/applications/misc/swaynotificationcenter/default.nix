@@ -4,6 +4,7 @@
 , meson
 , ninja
 , pkg-config
+, scdoc
 , vala
 , gtk3
 , glib
@@ -20,16 +21,16 @@
 
 stdenv.mkDerivation rec {
   pname = "SwayNotificationCenter";
-  version = "0.3";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayNotificationCenter";
     rev = "v${version}";
-    hash = "sha256-gXo/V2FHkHZBRmaimqJCzi0BqS4tP9IniIlubBmK5u0=";
+    hash = "sha256-+vMlhBCLxvqfPRO2U9015srhY/2sd1DoV27kzNDjsqs=";
   };
 
-  nativeBuildInputs = [ gobject-introspection meson ninja pkg-config vala wrapGAppsHook ];
+  nativeBuildInputs = [ gobject-introspection meson ninja pkg-config scdoc vala wrapGAppsHook ];
 
   buildInputs = [ dbus dbus-glib gdk-pixbuf glib gtk-layer-shell gtk3 json-glib libhandy librsvg ];
 

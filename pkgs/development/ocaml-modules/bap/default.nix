@@ -10,7 +10,7 @@
 , z3
 }:
 
-if !lib.versionAtLeast ocaml.version "4.08"
+if lib.versionOlder ocaml.version "4.08"
 then throw "BAP is not available for OCaml ${ocaml.version}"
 else
 
@@ -75,7 +75,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Platform for binary analysis. It is written in OCaml, but can be used from other languages.";
     homepage = "https://github.com/BinaryAnalysisPlatform/bap/";
-    maintainers = [ maintainers.maurer ];
     license = licenses.mit;
+    maintainers = [ maintainers.maurer ];
+    mainProgram = "bap";
   };
 }

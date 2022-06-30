@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     homepage = "https://haproxy.org";
     changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor version}/src/CHANGELOG";
     license = with licenses; [ gpl2Plus lgpl21Only ];
-    maintainers = with maintainers; [ fuzzy-id ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux ++ darwin;
   };
 }

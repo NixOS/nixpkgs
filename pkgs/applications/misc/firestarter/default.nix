@@ -99,6 +99,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     homepage = "https://tu-dresden.de/zih/forschung/projekte/firestarter";
     description = "Processor Stress Test Utility";
     platforms = platforms.linux;

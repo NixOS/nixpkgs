@@ -41,7 +41,7 @@ let
     # none
     "aarch64_be-none" "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none"
     "msp430-none" "or1k-none" "m68k-none" "powerpc-none" "powerpcle-none"
-    "riscv32-none" "riscv64-none" "s390-none" "s390x-none" "vc4-none"
+    "riscv32-none" "riscv64-none" "rx-none" "s390-none" "s390x-none" "vc4-none"
     "x86_64-none"
 
     # OpenBSD
@@ -74,6 +74,9 @@ in {
   mips          = filterDoubles predicates.isMips;
   mmix          = filterDoubles predicates.isMmix;
   riscv         = filterDoubles predicates.isRiscV;
+  riscv32       = filterDoubles predicates.isRiscV32;
+  riscv64       = filterDoubles predicates.isRiscV64;
+  rx            = filterDoubles predicates.isRx;
   vc4           = filterDoubles predicates.isVc4;
   or1k          = filterDoubles predicates.isOr1k;
   m68k          = filterDoubles predicates.isM68k;

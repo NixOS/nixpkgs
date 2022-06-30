@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-trace";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JkKW9vJAAkw3sHYDapRvu5jjunV8oWSg/ykDmd1wpyA=";
+    sha256 = "sha256-nxyd8zE8PEQupVutLWhLD4I1jNhhJ0ARpTi52f21iBE=";
   };
 
   propagatedBuildInputs = [ google-api-core google-cloud-core proto-plus ];

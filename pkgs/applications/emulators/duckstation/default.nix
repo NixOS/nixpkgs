@@ -90,8 +90,9 @@ mkDerivation rec {
     runHook postCheck
   '';
 
+  # Libpulseaudio fixes https://github.com/NixOS/nixpkgs/issues/171173
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio vulkan-loader ]}"
   ];
 
   meta = with lib; {
@@ -102,5 +103,3 @@ mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-# TODO: default sound backend (cubeb) does not work, but SDL does. Strangely,
-# switching to cubeb while a game is running makes it work.

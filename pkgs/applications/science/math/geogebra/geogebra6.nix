@@ -48,7 +48,7 @@ let
   };
 
   darwinPkg = stdenv.mkDerivation {
-    inherit pname version meta;
+    inherit pname version;
 
     src = fetchurl {
       urls = [
@@ -66,6 +66,10 @@ let
       install -dm755 $out/Applications
       unzip $src -d $out/Applications
     '';
+
+    meta = meta // {
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    };
   };
 in
 if stdenv.isDarwin

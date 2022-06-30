@@ -20,7 +20,8 @@ python3.pkgs.buildPythonApplication rec {
     passlib
     vobject
     python-dateutil
-  ];
+    pytz # https://github.com/Kozea/Radicale/issues/816
+  ] ++ passlib.optional-dependencies.bcrypt;
 
   checkInputs = with python3.pkgs; [
     pytestCheckHook

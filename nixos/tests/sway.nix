@@ -4,6 +4,12 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ primeos synthetica ];
   };
 
+  # testScriptWithTypes:49: error: Cannot call function of unknown type
+  #           (machine.succeed if succeed else machine.execute)(
+  #           ^
+  # Found 1 error in 1 file (checked 1 source file)
+  skipTypeCheck = true;
+
   nodes.machine = { config, ... }: {
     # Automatically login on tty1 as a normal user:
     imports = [ ./common/user-account.nix ];

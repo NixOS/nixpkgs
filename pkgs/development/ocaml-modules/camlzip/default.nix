@@ -64,7 +64,7 @@ stdenv.mkDerivation {
       for reading from and writing to compressed files in these formats.
     '';
     license = "LGPL+linking exceptions";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = with maintainers; [ maggesi ];
   };
 }

@@ -6,13 +6,13 @@
 
 mkDerivation rec {
   pname = "stellarium";
-  version = "0.22.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
-    sha256 = "sha256-scG/SS9emEmrZunv6n3Vzcchoh0Cf9rDOkuxAMnxNk4=";
+    sha256 = "sha256-zDYZBV/76BDWWfiug0fFvMe3pdE4xfKgSmVJJd3Qu9Y=";
   };
 
   nativeBuildInputs = [ cmake perl wrapQtAppsHook ];
@@ -29,6 +29,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Free open-source planetarium";
     homepage = "http://stellarium.org/";
     license = licenses.gpl2;

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyhumps";
-  version = "3.5.3";
+  version = "3.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "nficano";
     repo = "humps";
     rev = "v${version}";
-    hash = "sha256-6F61y0niPPuZBci15j68MFXzzBBimvbZ24+i9AZ7XJs=";
+    hash = "sha256-MxynGgl0bgRUNPdyGqtEpIo1OFEKsSfXFiG4lAL0aPQ=";
   };
 
   nativeBuildInputs = [
@@ -33,8 +33,8 @@ buildPythonPackage rec {
     # Fix naming, https://github.com/nficano/humps/pull/246
     (fetchpatch {
       name = "fix-naming.patch";
-      url = "https://github.com/nficano/humps/commit/118f6bce785d170b10dd3afee467d26dcc8b425d.patch";
-      sha256 = "sha256-oQxkLsihnHZlHiZEupwG9Dr1Ss1w+KjDsBtbEVDced4=";
+      url = "https://github.com/nficano/humps/commit/04739529247ec6c6715a0242a209863d8c66a24d.patch";
+      sha256 = "sha256-6nCKO8BHSPXuT5pE/T/6Dsb6qKVdtRV22Ijbbgtm6ao=";
     })
   ];
 

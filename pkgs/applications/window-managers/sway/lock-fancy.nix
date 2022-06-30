@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, coreutils, grim, gawk, jq, swaylock
-, imagemagick, getopt, fontconfig, wmctrl, makeWrapper
+, imagemagick, getopt, fontconfig, wmctrl, makeWrapper, bash
 }:
 
 let
@@ -30,7 +30,9 @@ in stdenv.mkDerivation rec {
       --replace "/usr/share" "$out/share"
   '';
 
+  strictDeps = true;
   nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ bash ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
@@ -44,6 +46,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://github.com/Big-B/swaylock-fancy";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

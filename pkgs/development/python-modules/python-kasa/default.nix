@@ -3,6 +3,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , importlib-metadata
+, pydantic
 , poetry-core
 , pytest-asyncio
 , pytest-mock
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.4.3";
+  version = "0.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-r1PoOxFPA4zYFEpw+BakzDAJ13IMfcZpTJWkRt/q4go=";
+    sha256 = "sha256-9zCUYB+TYgDMoTHpR0u42Usq2EKp8vtzlTgU82eXxl8=";
   };
 
   nativeBuildInputs = [
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     asyncclick
     importlib-metadata
+    pydantic
   ];
 
   checkInputs = [

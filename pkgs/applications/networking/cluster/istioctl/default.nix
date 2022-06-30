@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "istioctl";
-  version = "1.13.2";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "istio";
     repo = "istio";
     rev = version;
-    sha256 = "sha256-7YtszdwauTz9LfZ77d13fDU6vQm5hiJrIOiqpqIginQ=";
+    sha256 = "sha256-Y8Bo2niIyvBE3BPpnSanFrR8ZHIUdG7iKSOyD6YadIM=";
   };
-  vendorSha256 = "sha256-AOcWkcw+2DcgBxvxRO/sdb339a7hmI7Oy5I4kW4oE+k=";
+  vendorSha256 = "sha256-MnSOWJwTOQmHnABRYNJwU9kOr7g51rkUaERksupBTb4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -25,6 +25,11 @@ buildGoModule rec {
   in ["-s" "-w" "${lib.concatMapStringsSep " " (attr: "-X ${attr}") attrs}"];
 
   subPackages = [ "istioctl/cmd/istioctl" ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/istioctl version --remote=false | grep ${version} > /dev/null
+  '';
 
   postInstall = ''
     $out/bin/istioctl collateral --man --bash --zsh

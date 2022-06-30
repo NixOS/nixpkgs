@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus-community/json_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ willibutz ];
+    mainProgram = "json_exporter";
   };
 }

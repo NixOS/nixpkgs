@@ -17,12 +17,12 @@
 
 # tests
 , aiosmtpd
-, argon2_cffi
+, argon2-cffi
 , bcrypt
 , docutils
 , geoip2
 , jinja2
-, memcached
+, python-memcached
 , numpy
 , pillow
 , pylibmc
@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "4.0.4";
+  version = "4.0.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ToF3hYUkQXVjzAQw8p6iSZRtgx6ssAaKFFVoZYffQLU=";
+    hash = "sha256-90MaXecneWbzeFVXw5KEMzR9mYweZFkyRQE3iikeWqs=";
   };
 
   patches = lib.optional withGdal
@@ -70,13 +70,13 @@ buildPythonPackage rec {
 
   checkInputs = [
     aiosmtpd
-    argon2_cffi
+    argon2-cffi
     asgiref
     bcrypt
     docutils
     geoip2
     jinja2
-    memcached
+    python-memcached
     numpy
     pillow
     pylibmc

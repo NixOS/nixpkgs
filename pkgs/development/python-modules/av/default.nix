@@ -18,15 +18,16 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "9.1.1";
+  version = "9.2.0";
   format = "pyproject";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mikeboers";
     repo = "PyAV";
     rev = "v${version}";
-    hash = "sha256-/6C5GE9zANPy0xaptu/+pIupOLDra/R7TJ41YLGszUs=";
+    hash = "sha256-I7j+EzpvgKCNY8TbcaHsaWtetyvmno6YYhQTer2+Ds0=";
   };
 
   nativeBuildInputs = [
@@ -98,6 +99,11 @@ buildPythonPackage rec {
     "--deselect=tests/test_subtitles.py::TestSubtitle::test_movtext"
     "--deselect=tests/test_subtitles.py::TestSubtitle::test_vobsub"
     "--deselect=tests/test_videoframe.py::TestVideoFrameImage::test_roundtrip"
+  ];
+
+  disabledTests = [
+    # urlopen fails during DNS resolution
+    "test_writing_to_custom_io"
   ];
 
   disabledTestPaths = [

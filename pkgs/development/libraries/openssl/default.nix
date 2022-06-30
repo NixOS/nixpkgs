@@ -7,6 +7,7 @@
 # This will cause c_rehash to refer to perl via the environment, but otherwise
 # will produce a perfectly functional openssl binary and library.
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
+, removeReferencesTo
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -112,7 +113,11 @@ let
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
-      ++ lib.optional (lib.versionAtLeast version "1.1.0" && static) "no-shared";
+      ++ lib.optional (lib.versionAtLeast version "1.1.0" && static) "no-shared"
+      # This introduces a reference to the CTLOG_FILE which is undesired when
+      # trying to build binaries statically.
+      ++ lib.optional static "no-ct"
+      ;
 
     makeFlags = [
       "MANDIR=$(man)/share/man"
@@ -126,13 +131,16 @@ let
     enableParallelBuilding = true;
 
     postInstall =
-    lib.optionalString (!static) ''
+    (if static then ''
+      # OPENSSLDIR has a reference to self
+      ${removeReferencesTo}/bin/remove-references-to -t $out $out/lib/*.a
+    '' else ''
       # If we're building dynamic libraries, then don't install static
       # libraries.
       if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
           rm "$out/lib/"*.a
       fi
-    '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
+    '') + lib.optionalString (!stdenv.hostPlatform.isWindows)
       # Fix bin/c_rehash's perl interpreter line
       #
       # - openssl 1_0_2: embeds a reference to buildPackages.perl
@@ -178,8 +186,8 @@ in {
 
 
   openssl_1_1 = common rec {
-    version = "1.1.1n";
-    sha256 = "sha256-QNzrUaT2pSdb3g5r8g70uRv8Mu1XwFUuLo4VRjNysXo=";
+    version = "1.1.1p";
+    sha256 = "sha256-v2G2Kqpmx8djmUKpTeTJroKAwI8X1OrC5EZE2fyKzm8=";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
@@ -192,15 +200,19 @@ in {
     withDocs = true;
   };
 
-  openssl_3_0 = common {
-    version = "3.0.2";
-    sha256 = "sha256-mOkczq1NR1auPJzeXgkZGo5YbZ9NUIOOfsCdZBHf22M=";
+  openssl_3 = common {
+    version = "3.0.4";
+    sha256 = "sha256-KDGEPppmigq0eOcCCtY9LWXlH3KXdHLcc+/O+6/AwA8=";
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
+
+      # https://guidovranken.com/2022/06/27/notes-on-openssl-remote-memory-corruption/
+      # https://github.com/openssl/openssl/commit/4d8a88c134df634ba610ff8db1eb8478ac5fd345.patch
+      3.0/rsa-fix-bn_reduce_once_in_place-call-for-rsaz_mod_exp_avx512_x2.patch
 
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch

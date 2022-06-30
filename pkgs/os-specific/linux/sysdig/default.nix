@@ -1,27 +1,50 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, kernel, installShellFiles, pkg-config
 , luajit, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, elfutils, tbb, protobuf, grpc
+, libyamlcpp, nlohmann_json
 }:
 
 with lib;
 let
   # Compare with https://github.com/draios/sysdig/blob/dev/cmake/modules/falcosecurity-libs.cmake
-  libsRev = "2160111cd088aea9ae2235d3385ecb0b1ab6623c";
-  libsSha256 = "sha256-TOuxXtrxujyAjzAtlX3/eCfM16mwxnmZ6Wg44SG0dTs=";
+  libsRev = "e5c53d648f3c4694385bbe488e7d47eaa36c229a";
+  libsSha256 = "sha256-pG10y5PpDqaF/cq8oAvax5B/ls2UTRQd7tCfBjWVf0U=";
+
+  # Compare with https://github.com/falcosecurity/libs/blob/master/cmake/modules/valijson.cmake#L17
+  valijson = fetchFromGitHub {
+    owner = "tristanpenman";
+    repo = "valijson";
+    rev = "v0.6";
+    sha256 = "sha256-ZD19Q2MxMQd3yEKbY90GFCrerie5/jzgO8do4JQDoKM=";
+  };
+
 in
 stdenv.mkDerivation rec {
   pname = "sysdig";
-  version = "0.28.0";
+  version = "0.29.3";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "sha256-oE3vCmOw+gcmvGqj7Xk5injpNC/YThckJMNg5XRFhME=";
+    sha256 = "sha256-dMLeroOd9CgvmgQdPfX8oBxQSyksZi/hP4vO03JhlF0=";
   };
 
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
   buildInputs = [
-    luajit ncurses jsoncpp libb64 openssl curl jq gcc elfutils tbb protobuf grpc
+    luajit
+    ncurses
+    libb64
+    openssl
+    curl
+    jq
+    gcc
+    elfutils
+    tbb
+    protobuf
+    grpc
+    libyamlcpp
+    jsoncpp
+    nlohmann_json
   ] ++ optionals (kernel != null) kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
@@ -34,7 +57,7 @@ stdenv.mkDerivation rec {
       sha256 = libsSha256;
     }} libs
     chmod -R +w libs
-    cmakeFlagsArray+=("-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs")
+    cmakeFlagsArray+=("-DFALCOSECURITY_LIBS_SOURCE_DIR=$(pwd)/libs" "-DVALIJSON_INCLUDE=${valijson}/include")
   '';
 
   cmakeFlags = [
@@ -47,6 +70,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))";
 
   preConfigure = ''
+    if ! grep -q "${libsRev}" cmake/modules/falcosecurity-libs.cmake; then
+      echo "falcosecurity-libs checksum needs to be updated!"
+      exit 1
+    fi
     cmakeFlagsArray+=(-DCMAKE_EXE_LINKER_FLAGS="-ltbb -lcurl -labsl_synchronization")
   '' + optionalString (kernel != null) ''
     export INSTALL_MOD_PATH="$out"

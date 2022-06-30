@@ -54,10 +54,10 @@ let
       hashedPassword = mkOption {
         type = uniq (nullOr str);
         default = null;
-        description = ''
+        description = mdDoc ''
           Specifies the hashed password for the MQTT User.
-          To generate hashed password install <literal>mosquitto</literal>
-          package and use <literal>mosquitto_passwd</literal>.
+          To generate hashed password install `mosquitto`
+          package and use `mosquitto_passwd`.
         '';
       };
 
@@ -65,11 +65,11 @@ let
         type = uniq (nullOr types.path);
         example = "/path/to/file";
         default = null;
-        description = ''
+        description = mdDoc ''
           Specifies the path to a file containing the
           hashed password for the MQTT user.
-          To generate hashed password install <literal>mosquitto</literal>
-          package and use <literal>mosquitto_passwd</literal>.
+          To generate hashed password install `mosquitto`
+          package and use `mosquitto_passwd`.
         '';
       };
 
@@ -155,24 +155,24 @@ let
     options = {
       plugin = mkOption {
         type = path;
-        description = ''
-          Plugin path to load, should be a <literal>.so</literal> file.
+        description = mdDoc ''
+          Plugin path to load, should be a `.so` file.
         '';
       };
 
       denySpecialChars = mkOption {
         type = bool;
-        description = ''
-          Automatically disallow all clients using <literal>#</literal>
-          or <literal>+</literal> in their name/id.
+        description = mdDoc ''
+          Automatically disallow all clients using `#`
+          or `+` in their name/id.
         '';
         default = true;
       };
 
       options = mkOption {
         type = attrsOf optionType;
-        description = ''
-          Options for the auth plugin. Each key turns into a <literal>auth_opt_*</literal>
+        description = mdDoc ''
+          Options for the auth plugin. Each key turns into a `auth_opt_*`
            line in the config.
         '';
         default = {};
@@ -199,6 +199,7 @@ let
     allow_anonymous = 1;
     allow_zero_length_clientid = 1;
     auto_id_prefix = 1;
+    bind_interface = 1;
     cafile = 1;
     capath = 1;
     certfile = 1;
@@ -238,8 +239,8 @@ let
 
       address = mkOption {
         type = nullOr str;
-        description = ''
-          Address to listen on. Listen on <literal>0.0.0.0</literal>/<literal>::</literal>
+        description = mdDoc ''
+          Address to listen on. Listen on `0.0.0.0`/`::`
           when unset.
         '';
         default = null;
@@ -247,10 +248,10 @@ let
 
       authPlugins = mkOption {
         type = listOf authPluginOptions;
-        description = ''
+        description = mdDoc ''
           Authentication plugin to attach to this listener.
-          Refer to the <link xlink:href="https://mosquitto.org/man/mosquitto-conf-5.html">
-          mosquitto.conf documentation</link> for details on authentication plugins.
+          Refer to the [mosquitto.conf documentation](https://mosquitto.org/man/mosquitto-conf-5.html)
+          for details on authentication plugins.
         '';
         default = [];
       };
@@ -295,7 +296,7 @@ let
   };
 
   listenerAsserts = prefix: listener:
-    assertKeysValid prefix freeformListenerKeys listener.settings
+    assertKeysValid "${prefix}.settings" freeformListenerKeys listener.settings
     ++ userAsserts prefix listener.users
     ++ imap0
       (i: v: authAsserts "${prefix}.authPlugins.${toString i}" v)
@@ -397,7 +398,7 @@ let
   };
 
   bridgeAsserts = prefix: bridge:
-    assertKeysValid prefix freeformBridgeKeys bridge.settings
+    assertKeysValid "${prefix}.settings" freeformBridgeKeys bridge.settings
     ++ [ {
       assertion = length bridge.addresses > 0;
       message = "Bridge ${prefix} needs remote broker addresses";
@@ -471,10 +472,10 @@ let
 
     includeDirs = mkOption {
       type = listOf path;
-      description = ''
+      description = mdDoc ''
         Directories to be scanned for further config files to include.
         Directories will processed in the order given,
-        <literal>*.conf</literal> files in the directory will be
+        `*.conf` files in the directory will be
         read in case-sensistive alphabetical order.
       '';
       default = [];
@@ -526,7 +527,7 @@ let
 
   globalAsserts = prefix: cfg:
     flatten [
-      (assertKeysValid prefix freeformGlobalKeys cfg.settings)
+      (assertKeysValid "${prefix}.settings" freeformGlobalKeys cfg.settings)
       (imap0 (n: l: listenerAsserts "${prefix}.listener.${toString n}" l) cfg.listeners)
       (mapAttrsToList (n: b: bridgeAsserts "${prefix}.bridge.${n}" b) cfg.bridges)
     ];
@@ -629,9 +630,10 @@ in
                ]));
         RemoveIPC = true;
         RestrictAddressFamilies = [
-          "AF_UNIX"  # for sd_notify() call
+          "AF_UNIX"
           "AF_INET"
           "AF_INET6"
+          "AF_NETLINK"
         ];
         RestrictNamespaces = true;
         RestrictRealtime = true;

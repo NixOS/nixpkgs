@@ -23,5 +23,6 @@ buildGoModule rec {
       to install the wakatime CLI interface manually.
     '';
     license = licenses.bsd3;
+    mainProgram = "wakatime-cli";
   };
 }

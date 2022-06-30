@@ -332,6 +332,19 @@ repository):
     '';
 ```
 
+Similarly, the type checking of test scripts can be disabled in the following
+way:
+
+```nix
+import ./make-test-python.nix {
+  skipTypeCheck = true;
+  nodes.machine =
+    { config, pkgs, ... }:
+    { configuration…
+    };
+}
+```
+
 ## Failing tests early {#ssec-failing-tests-early}
 
 To fail tests early when certain invariables are no longer met (instead of waiting for the build to time out), the decorator `polling_condition` is provided. For example, if we are testing a program `foo` that should not quit after being started, we might write the following:
@@ -380,3 +393,25 @@ with foo_running:
     def foo_running():
         machine.succeed("pgrep -x foo")
     ```
+
+## Adding Python packages to the test script {#ssec-python-packages-in-test-script}
+
+When additional Python libraries are required in the test script, they can be
+added using the parameter `extraPythonPackages`. For example, you could add
+`numpy` like this:
+
+```nix
+import ./make-test-python.nix
+{
+  extraPythonPackages = p: [ p.numpy ];
+
+  nodes = { };
+
+  testScript = ''
+    import numpy as np
+    assert str(np.zeros(4) == "array([0., 0., 0., 0.])")
+  '';
+}
+```
+
+In that case, `numpy` is chosen from the generic `python3Packages`.

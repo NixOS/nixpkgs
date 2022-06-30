@@ -1,5 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
+, fetchpatch
 , go
 , lib
 , pkg-config
@@ -13,6 +14,7 @@
 , qtquickcontrols2
 , qttools
 , qtwebsockets
+, rustPlatform
 , stdenv
 , which
 , wireguard-tools
@@ -45,24 +47,34 @@ let
   };
 
   pname = "mozillavpn";
-  version = "2.7.1";
+  version = "2.8.3";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-i551UkCOwWnioe1YgCNZAlYiQJ4YDDBMoDZhfbkLTbs=";
+    hash = "sha256-eKgoRE/JDEQEFp7xYY60ARDgw/n5VoZpD/Gb/CWzHuo=";
   };
 
+  patches = [
+    # Rust bridge: Add Cargo.lock file
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/05c9a366cf9dc4e378485c8e9d494f77c35dbb8c.patch";
+      hash = "sha256-fG+SATbJpGqpCFXSWEiBo4dYx6RLtJYR0yTdBqN6Fww=";
+    })
+  ];
+
   netfilter-go-modules = (buildGoModule {
-    inherit pname version src;
-    vendorSha256 = "sha256-KFYMim5U8WlJHValvIBQgEN+17SDv0JVbH03IiyfDc0=";
+    inherit pname version src patches;
+    vendorSha256 = "KFYMim5U8WlJHValvIBQgEN+17SDv0JVbH03IiyfDc0=";
     modRoot = "linux/netfilter";
   }).go-modules;
 
+  cargoRoot = "extension/bridge";
+
 in
 stdenv.mkDerivation {
-  inherit pname version src;
+  inherit pname version src patches cargoRoot;
 
   buildInputs = [
     polkit
@@ -81,9 +93,18 @@ stdenv.mkDerivation {
     python3.pkgs.pyyaml
     qmake
     qttools
+    rustPlatform.cargoSetupHook
+    rustPlatform.rust.cargo
     which
     wrapQtAppsHook
   ];
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src patches;
+    name = "${pname}-${version}";
+    preBuild = "cd ${cargoRoot}";
+    hash = "sha256-C0wPmGVXbhUs0IzeIMZD6724P0XTOzeK1bzrnUMPlWo=";
+  };
 
   postPatch = ''
     for file in linux/*.service linux/extra/*.desktop src/platforms/linux/daemon/*.service; do
@@ -93,11 +114,15 @@ stdenv.mkDerivation {
 
   preBuild = ''
     ln -s '${netfilter-go-modules}' linux/netfilter/vendor
-    python3 scripts/generate_glean.py
-    python3 scripts/importLanguages.py
+    python3 scripts/utils/generate_glean.py
+    python3 scripts/utils/import_languages.py --qt_path '${lib.getDev qttools}/bin'
   '';
 
-  qmakeFlags = [ "USRPATH=$(out)" "ETCPATH=$(out)/etc" ];
+  qmakeFlags = [
+    "USRPATH=$(out)"
+    "ETCPATH=$(out)/etc"
+    "CONFIG-=debug" # https://github.com/mozilla-mobile/mozilla-vpn-client/pull/3539
+  ];
   qtWrapperArgs =
     [ "--prefix" "PATH" ":" (lib.makeBinPath [ wireguard-tools ]) ];
 

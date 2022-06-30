@@ -59,5 +59,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/KevinMusgrave/pytorch-metric-learning/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+    broken = true;  # requires faiss which is unpackaged
   };
 }

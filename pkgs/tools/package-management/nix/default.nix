@@ -1,6 +1,7 @@
 { lib
 , aws-sdk-cpp
 , boehmgc
+, curl
 , callPackage
 , fetchFromGitHub
 , fetchurl
@@ -31,7 +32,7 @@ let
 
   common = args:
     callPackage
-      (import ./common.nix ({ inherit lib fetchFromGitHub; } // args))
+      (import ./common.nix ({ inherit lib fetchFromGitHub curl; } // args))
       {
         inherit Security storeDir stateDir confDir;
         boehmgc = boehmgc-nix;
@@ -81,20 +82,24 @@ in lib.makeExtensible (self: {
   };
 
   nix_2_8 = common {
-    version = "2.8.0";
-    sha256 = "sha256-gWYNlEyleqkPfxtGXeq6ggjzJwcXJVdieJxA1Obly9s=";
+    version = "2.8.1";
+    sha256 = "sha256-zldZ4SiwkISFXxrbY/UdwooIZ3Z/I6qKxtpc3zD0T/o=";
   };
 
-  stable = self.nix_2_8;
+  nix_2_9 = common {
+    version = "2.9.1";
+    sha256 = "sha256-qNL3lQPBsnStkru3j1ajN/H+knXI+X3dku8/dBfSw3g=";
+    patches = [
+      # add missing --git-dir flags
+      # remove once 2.9.2 is out
+      (fetchpatch {
+        url = "https://github.com/NixOS/nix/commit/1a994cc35b33dcfd484e7a96be0e76e23bfb9029.patch";
+        sha256 = "sha256-7rDlqWRSVPijbvrTm4P+YykbMWyJryorXqGLEgg8/Wo=";
+      })
+    ];
+  };
 
-  unstable = lib.lowPrio (common rec {
-    version = "2.8";
-    suffix = "pre20220411_${lib.substring 0 7 src.rev}";
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "f7276bc948705f452b2bfcc2a08bc44152f1d5a8";
-      sha256 = "sha256-brqGGdr2CzqufY3NXU8tGm6QbCTSFGfboruU2cUWhu8=";
-    };
-  });
+  stable = self.nix_2_9;
+
+  unstable = self.stable;
 })

@@ -8,7 +8,6 @@
 , fakechroot
 , fakeNss
 , fakeroot
-, findutils
 , go
 , jq
 , jshon
@@ -556,7 +555,7 @@ rec {
           };
       result = runCommand "docker-image-${baseName}.tar.gz"
         {
-          nativeBuildInputs = [ jshon pigz coreutils findutils jq moreutils ];
+          nativeBuildInputs = [ jshon pigz jq moreutils ];
           # Image name must be lowercase
           imageName = lib.toLower name;
           imageTag = if tag == null then "" else tag;

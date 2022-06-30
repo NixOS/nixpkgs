@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
-, certifi
 , fetchPypi
 , flaky
+, httpx
 , importlib-metadata
 , pytestCheckHook
 , pythonOlder
@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "4.5.0";
+  version = "5.0.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YoALculx2trEDD1vU4xhiCGdb1OFPdxI1p2fwlZZAY8=";
+    hash = "sha256-UBi2bCtGMtcavYEDtz5m5N0UxmCaj3un5aomxzbfLfg=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    certifi
+    httpx
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];

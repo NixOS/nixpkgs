@@ -26,9 +26,6 @@ buildDotnetModule rec {
     sha256 = "09wjygkdr9sr0hwv77czi0x5xw8y585k9pghdm5s3iqjn9gbb45k";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
-
   projectFile = "Ryujinx.sln";
   nugetDeps = ./deps.nix;
 
@@ -58,6 +55,10 @@ buildDotnetModule rec {
     pulseaudio
   ];
 
+  makeWrapperArgs = [
+    "--suffix PATH : ${lib.getBin ffmpeg}"
+  ];
+
   patches = [
     ./appdir.patch # Ryujinx attempts to write to the nix store. This patch redirects it to "~/.config/Ryujinx" on Linux.
   ];
@@ -66,11 +67,6 @@ buildDotnetModule rec {
     # workaround for https://github.com/Ryujinx/Ryujinx/issues/2349
     mkdir -p $out/lib/sndio-6
     ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6
-
-    # Ryujinx tries to use ffmpeg from PATH
-    makeWrapperArgs+=(
-      --suffix PATH : ${lib.makeBinPath [ ffmpeg ]}
-    )
   '';
 
   preFixup = ''

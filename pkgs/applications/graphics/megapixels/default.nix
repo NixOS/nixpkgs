@@ -5,7 +5,7 @@
 , meson
 , ninja
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook4
 , libepoxy
 , gtk4
 , zbar
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook4
   ];
 
   buildInputs = [
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   preFixup = optionalString (tiffSupport || jpgSupport) ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${runtimePath}
+      --prefix PATH : ${lib.escapeShellArg runtimePath}
     )
   '';
 

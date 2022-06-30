@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libiconv, gettext, xxd }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, libiconv, gettext, xxd }:
 
 stdenv.mkDerivation rec {
   pname = "dosfstools";
@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-2gxB0lQixiHOHw8uTetHekaM57fvUd9zOzSxWnvUz/c=";
   };
+
+  patches = [
+    # macOS build fixes backported from master
+    # TODO: remove on the next release
+    (fetchpatch {
+      url = "https://github.com/dosfstools/dosfstools/commit/77ffb87e8272760b3bb2dec8f722103b0effb801.patch";
+      sha256 = "sha256-xHxIs3faHK/sK3vAVoG8JcTe4zAV+ZtkozWIIFBvPWI=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ]
     ++ lib.optional stdenv.isDarwin libiconv;

@@ -8,20 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl8821ce";
-  version = "${kernel.version}-unstable-2021-11-19";
+  version = "${kernel.version}-unstable-2022-06-01";
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
-    rev = "ca204c60724d23ab10244f920d4e50759ed1affb";
-    sha256 = "18ma8a8h1l90dss0k6al7q6plwr57jc9g67p22g9917k1jfbhm97";
+    rev = "be733dc86781c68571650b395dd0fa6b53c0a039";
+    sha256 = "sha256-4PgISOjCSSGymz96VwE4jzcUiOEO+Ocuk2kJVIA+TQM=";
   };
-
-  # Fixes the build on kernel >= 5.17. Can be removed once https://github.com/tomaspinho/rtl8821ce/pull/267 is merged
-  patches = [(fetchpatch {
-    url = "https://github.com/tomaspinho/rtl8821ce/commit/7b9e55df64b10fed785f22df9f36ed4a30b59d0e.patch";
-    sha256 = "sha256-mpAWOG1aXsklGuDbrRB9Vd36mgeCdctKQaWuuoqEEp0=";
-  })];
 
   hardeningDisable = [ "pic" ];
 

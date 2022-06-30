@@ -1,6 +1,7 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -55,6 +56,13 @@ mkDerivation rec {
     sha256 = "sha256-Xq9hDUTCQr79Zzjk0CsiXclVTHK6nrSowukIQqVdrKY=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/OpenMW/openmw/-/merge_requests/1239.diff";
+      sha256 = "sha256-RhbIGeE6GyqnipisiMTwWjcFnIiR055hUPL8IkjPgZw=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   buildInputs = [
@@ -83,10 +91,5 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abbradar marius851000 ];
     platforms = platforms.linux;
-
-    # 2021-10-13, doesn't compile with glibc-2.34, maintainers prefer a fix on glibc's end.
-    # Can be marked as un-broken as soon as https://gitlab.com/OpenMW/openmw/-/merge_requests/1239
-    # is resolved and a patch is appliable here.
-    broken = true;
   };
 }

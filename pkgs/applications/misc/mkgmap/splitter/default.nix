@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchsvn
 , substituteAll
 , jdk
 , jre
@@ -13,11 +14,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "splitter";
-  version = "647";
+  version = "652";
 
-  src = fetchurl {
-    url = "https://www.mkgmap.org.uk/download/splitter-r${version}-src.tar.gz";
-    sha256 = "j9TJ+9WuItueztWjYoD9s9x8wfsga2QCIY5X2+s3Z1c=";
+  src = fetchsvn {
+    url = "https://svn.mkgmap.org.uk/mkgmap/splitter/trunk";
+    rev = version;
+    sha256 = "sha256-yCdVOT8if3AImD4Q63gKfMep7WZsrCgV+IXfP4ZL3Qw=";
   };
 
   patches = [
@@ -70,6 +72,10 @@ stdenv.mkDerivation rec {
     description = "Utility for splitting OpenStreetMap maps into tiles";
     homepage = "https://www.mkgmap.org.uk/";
     downloadPage = "https://www.mkgmap.org.uk/download/splitter.html";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.all;

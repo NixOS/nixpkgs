@@ -18,13 +18,13 @@
 
 mkDerivation rec {
   pname = "lxqt-powermanagement";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "0dwz8z3463dz49d5k5bh7splb1zdi617xc4xzlqxxrxbf3n8x4ix";
+    sha256 = "+FpJD5PEH2/HOSWDQEwMX2sV2JJH0kjcoohBolhSP1A=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,6 @@ mkDerivation rec {
     description = "Power management module for LXQt";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    maintainers = teams.lxqt.members;
   };
 }

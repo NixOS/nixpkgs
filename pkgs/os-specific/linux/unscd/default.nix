@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     description = "Less buggy replacement for the glibc name service cache daemon";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ petabyteboy ];
+    maintainers = with maintainers; [ ];
   };
 }

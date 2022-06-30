@@ -3,7 +3,7 @@
 , fetchPypi
 , django
 , pillow
-, python_magic
+, python-magic
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "6569d5c3e13c69ab8912ba5100084aa5abcdcffb8d1f5abc085b226e7bbd65b3";
   };
-  propagatedBuildInputs = [ pillow python_magic ];
+  propagatedBuildInputs = [ pillow python-magic ];
 
   checkInputs = [ django ];
 

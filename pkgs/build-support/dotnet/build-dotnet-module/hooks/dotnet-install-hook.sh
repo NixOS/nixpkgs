@@ -1,4 +1,5 @@
-declare -a projectFile dotnetInstallFlags dotnetFlags
+# inherit arguments from derivation
+dotnetInstallFlags=( ${dotnetInstallFlags[@]-} )
 
 dotnetInstallHook() {
     echo "Executing dotnetInstallHook"
@@ -14,8 +15,8 @@ dotnetInstallHook() {
                 --configuration "@buildType@" \
                 --no-build \
                 --no-self-contained \
-                "${dotnetInstallFlags[@]}"  \
-                "${dotnetFlags[@]}"
+                ${dotnetInstallFlags[@]}  \
+                ${dotnetFlags[@]}
     done
 
     if [[ "${packNupkg-}" ]]; then
@@ -27,8 +28,8 @@ dotnetInstallHook() {
                     --output "$out/share" \
                     --configuration "@buildType@" \
                     --no-build \
-                    "${dotnetPackFlags[@]}"  \
-                    "${dotnetFlags[@]}"
+                    ${dotnetPackFlags[@]}  \
+                    ${dotnetFlags[@]}
         done
     fi
 

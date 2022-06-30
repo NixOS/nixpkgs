@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
     fig2dev
   ];
 
+  # Workaround build on -fno-common toolchains like upstream gcc-10.
+  # Otherwise built fails as:
+  #   ld: inout.o:/build/chemtool-1.6.14/ct1.h:279: multiple definition of
+  #     `outtype'; draw.o:/build/chemtool-1.6.14/ct1.h:279: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ fig2dev ]}")
   '';

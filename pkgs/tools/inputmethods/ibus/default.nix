@@ -27,7 +27,6 @@
 , python3
 , json-glib
 , libnotify ? null
-, enablePython2Library ? false
 , enableUI ? true
 , withWayland ? false
 , libxkbcommon ? null
@@ -91,6 +90,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs --build data/dconf/make-dconf-override-db.sh
     cp ${buildPackages.gtk-doc}/share/gtk-doc/data/gtk-doc.make .
+    substituteInPlace bus/services/org.freedesktop.IBus.session.GNOME.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
+    substituteInPlace bus/services/org.freedesktop.IBus.session.generic.service.in --replace "ExecStart=sh" "ExecStart=${runtimeShell}"
   '';
 
   preAutoreconf = "touch ChangeLog";
@@ -100,8 +101,6 @@ stdenv.mkDerivation rec {
     (enableFeature (dconf != null) "dconf")
     (enableFeature (libnotify != null) "libnotify")
     (enableFeature withWayland "wayland")
-    (enableFeature enablePython2Library "python-library")
-    (enableFeature enablePython2Library "python2") # XXX: python2 library does not work anyway
     (enableFeature enableUI "ui")
     "--enable-gtk4"
     "--enable-install-tests"

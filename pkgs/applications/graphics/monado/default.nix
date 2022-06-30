@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitLab
-, fetchpatch
 , writeText
 , cmake
 , doxygen
@@ -36,6 +35,8 @@
 , vulkan-loader
 , wayland
 , wayland-protocols
+, wayland-scanner
+, libdrm
 , zlib
 # Set as 'false' to build monado without service support, i.e. allow VR
 # applications linking against libopenxr_monado.so to use OpenXR standalone
@@ -46,24 +47,15 @@
 
 stdenv.mkDerivation rec {
   pname = "monado";
-  version = "21.0.0";
+  version = "unstable-2022-05-28";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
-    owner = pname;
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "07zxs96i3prjqww1f68496cl2xxqaidx32lpfyy0pn5am4c297zc";
+    owner = "monado";
+    repo = "monado";
+    rev = "011bcbdcff227e25507e5f2d81a83a2bbe478856";
+    sha256 = "sha256-8velNKSCZJtKO8ATwXDl1nU8RbxZ8TeyGiUQFOXifuI=";
   };
-
-  patches = [
-    # https://github.com/NixOS/nixpkgs/issues/137245
-    # Fix warning after Vulkan 1.2.174 VK_NULL_HANDLE change
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/c47775a95d8e139a2f234063793eb6726f830510.patch";
-      sha256 = "093ymvi9ifpk4vyjcwhhci9cnscxwbv5f80xdbppcqa0j92nmkmp";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -75,6 +67,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DXRT_FEATURE_SERVICE=${if serviceSupport then "ON" else "OFF"}"
+    "-DXRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH=ON"
   ];
 
   buildInputs = [
@@ -105,7 +98,9 @@ stdenv.mkDerivation rec {
     vulkan-headers
     vulkan-loader
     wayland
+    wayland-scanner
     wayland-protocols
+    libdrm
     zlib
   ];
 
@@ -130,5 +125,6 @@ stdenv.mkDerivation rec {
     license = licenses.boost;
     maintainers = with maintainers; [ expipiplus1 prusnak ];
     platforms = platforms.linux;
+    mainProgram = "monado-cli";
   };
 }

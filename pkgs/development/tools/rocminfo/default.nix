@@ -7,13 +7,13 @@
   # compilers to determine the desired target.
 , defaultTargets ? []}:
 stdenv.mkDerivation rec {
-  version = "5.0.1";
+  version = "5.1.1";
   pname = "rocminfo";
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "rocminfo";
     rev = "rocm-${version}";
-    sha256 = "sha256-H9JdrDS/pbvYMKkayu/1rrXusHeXBH1CO9jYArsbCNI=";
+    sha256 = "sha256-x+QJJtUvgtNS4116tJFWdJOUS8yV4o10mbTAUuxerkE=";
   };
 
   enableParallelBuilding = true;

@@ -29,6 +29,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Unfree binary release of the TI MSP430 FET debug driver";
     homepage = "https://www.ti.com/tool/MSPDS";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ aerialx ];

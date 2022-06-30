@@ -1,5 +1,7 @@
 { pkgspath ? ../../.., test-pkgspath ? pkgspath
-, system ? builtins.currentSystem, crossSystem ? null, bootstrapFiles ? null
+, localSystem ? { system = builtins.currentSystem; }
+, crossSystem ? null
+, bootstrapFiles ? null
 }:
 
 let cross = if crossSystem != null
@@ -11,7 +13,7 @@ let cross = if crossSystem != null
               in (import "${pkgspath}/pkgs/stdenv/darwin" args').stagesDarwin;
            }
       else {};
-in with import pkgspath ({ inherit system; } // cross // custom-bootstrap);
+in with import pkgspath ({ inherit localSystem; } // cross // custom-bootstrap);
 
 let
   llvmPackages = llvmPackages_11;
@@ -364,7 +366,7 @@ in rec {
   test-pkgs = import test-pkgspath {
     # if the bootstrap tools are for another platform, we should be testing
     # that platform.
-    system = if crossSystem != null then crossSystem else system;
+    localSystem = if crossSystem != null then crossSystem else localSystem;
 
     stdenvStages = args: let
         args' = args // { inherit bootstrapLlvmVersion bootstrapFiles; };

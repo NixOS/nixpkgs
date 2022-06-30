@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
-  version = "1.1.0";
+  version = "1.1.2";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
-    hash = "sha256-+bgCD2jy3M0gEAtbB+nOptQGEXXkvk1idoggJz4UMy0=";
+    hash = "sha256-OyjuUWfKE8GoGFCmaCS7YAf5GAS0VwMPht7cvFtkA/Y=";
   };
 
   nativeBuildInputs = [

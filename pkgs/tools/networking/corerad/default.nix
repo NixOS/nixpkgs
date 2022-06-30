@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "corerad";
-  version = "1.1.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "corerad";
     rev = "v${version}";
-    sha256 = "sha256-1v7jAYLIflXIKY0zltzkre4sNv9qqWxFGWrQuOBr2s0=";
+    sha256 = "sha256-JhdR1UKHnzXIUoe1shb3IZne3q198NLwRROEYuKsnW4=";
   };
 
-  vendorSha256 = "sha256-oS9nI1BELDLFksN+NbLT1Eklg67liOvcRbxtGdYGJJA=";
+  vendorSha256 = "sha256-w15dRxIBzDN5i4RNEDuSfCHHb4wc4fw1B2wjlTk40iE=";
 
   # Since the tarball pulled from GitHub doesn't contain git tag information,
   # we fetch the expected tag's timestamp from a file in the root of the

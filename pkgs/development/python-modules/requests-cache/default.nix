@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "requests-cache";
-  version = "0.9.3";
+  version = "0.9.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "reclosedev";
     repo = "requests-cache";
     rev = "v${version}";
-    hash = "sha256-9eA2fx+j6WLbEkLaemwEuoWLUWlS0iF5AkR2YienN5g=";
+    hash = "sha256-9OlWMom/0OMlbPd3evjIaX75Gjlu+F8vKBJwX4Z58qQ=";
   };
 
   nativeBuildInputs = [

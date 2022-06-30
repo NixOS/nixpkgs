@@ -14,7 +14,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [ twisted certifi ]
-    ++ twisted.extras.tls
+    ++ twisted.optional-dependencies.tls
     ++ lib.optional enableGUI pyside2;
   nativeBuildInputs = lib.optionals enableGUI [ qt5.wrapQtAppsHook ];
 

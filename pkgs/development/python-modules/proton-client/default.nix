@@ -1,10 +1,13 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+, substituteAll
 , bcrypt
 , pyopenssl
 , python-gnupg
+, pytestCheckHook
 , requests
 , openssl
 }:
@@ -30,14 +33,21 @@ buildPythonPackage rec {
 
   buildInputs = [ openssl ];
 
-  # This patch is supposed to indicate where to load OpenSSL library,
-  # but it is not working as intended.
-  #patchPhase = ''
-  #  substituteInPlace proton/srp/_ctsrp.py --replace \
-  #    "ctypes.cdll.LoadLibrary('libssl.so.10')" "'${lib.getLib openssl}/lib/libssl.so'"
-  #'';
-  # Regarding the issue above, I'm disabling tests for now
-  doCheck = false;
+  patches = [
+    # Patches library by fixing the openssl path
+    (substituteAll {
+      src = ./0001-OpenSSL-path-fix.patch;
+      openssl = openssl.out;
+      ext = stdenv.hostPlatform.extensions.sharedLibrary;
+    })
+  ];
+
+  checkInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    #ValueError: Invalid modulus
+    "test_modulus_verification"
+  ];
 
   pythonImportsCheck = [ "proton" ];
 
@@ -46,5 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ProtonMail/proton-python-client";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];
+    platforms = platforms.linux;
   };
 }

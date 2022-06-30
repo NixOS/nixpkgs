@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "pyfritzhome";
-  version = "0.6.4";
+  version = "0.6.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "hthiery";
     repo = "python-fritzhome";
     rev = version;
-    sha256 = "sha256-JCaB3E8KCfncwnTKIb0shB2qYpsKwBkrPZdC5lAJ1KQ=";
+    hash = "sha256-0wfC4lQeTghN2uDUO8Rn2+G8BYOh2UfCZBDJmTw6Lb0=";
   };
 
   propagatedBuildInputs = [

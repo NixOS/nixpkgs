@@ -116,6 +116,9 @@ stdenv.mkDerivation {
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5CoreMacros.cmake
     sed -i 's/NO_DEFAULT_PATH//' src/gui/Qt5GuiConfigExtras.cmake.in
     sed -i '/PATHS.*NO_DEFAULT_PATH/ d' mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
+
+    # https://bugs.gentoo.org/803470
+    sed -i 's/-lpthread/-pthread/' mkspecs/common/linux.conf src/corelib/configure.json
   '' + lib.optionalString (compareVersion "5.15.0" >= 0) ''
     patchShebangs ./bin
   '' + (

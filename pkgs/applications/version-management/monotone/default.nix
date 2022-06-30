@@ -2,6 +2,7 @@
 , lua, pcre, sqlite, perl, pkg-config, expect, less
 , bzip2, gmp, openssl
 , autoreconfHook, texinfo
+, fetchpatch
 }:
 
 let
@@ -33,6 +34,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./monotone-1.1-Adapt-to-changes-in-pcre-8.42.patch
     ./monotone-1.1-adapt-to-botan2.patch
+    (fetchpatch {
+      name = "rm-clang-float128-hack.patch";
+      url = "https://github.com/7c6f434c/monotone-mirror/commit/5f01a3a9326a8dbdae7fc911b208b7c319e5f456.patch";
+      revert = true;
+      sha256 = "0fzjdv49dx5lzvqhkvk50lkccagwx8h0bfha4a0k6l4qh36f9j7c";
+    })
   ];
 
   postPatch = ''

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma";
-  version = "0.5.0";
+  version = "0.6.4";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -19,8 +19,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma";
-    rev = "v${version}";
-    hash = "sha256-HGF8Tu28ksIfaCKAbnJv6sDmoQrDDjteVLxbJN1HH3U=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-qOGde74wImDYxNzGlZJfRLBHyRg6U/cgxbWDKIg90/U=";
   };
 
   nativeBuildInputs = [
@@ -35,11 +35,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'pyparsing = "^3.0.7"' 'pyparsing = "*"' \
-  '';
 
   pythonImportsCheck = [
     "sigma"

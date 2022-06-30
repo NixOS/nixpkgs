@@ -19,7 +19,10 @@
 
   More fields may be added in the future.
 
-  Please keep the list alphabetically sorted.
+  When editing this file:
+   * keep the list alphabetically sorted
+   * test the validity of the format with:
+       nix-build lib/tests/teams.nix
   */
 
 { lib }:
@@ -91,6 +94,16 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+  c3d2 = {
+    members = [
+      astro
+      SuperSandro2000
+    ];
+    scope = "Maintain packages used in the C3D2 hackspace";
+    shortName = "c3d2";
+    enableFeatureFreezePing = true;
+  };
+
   cinnamon = {
     members = [
       mkg20001
@@ -139,6 +152,7 @@ with lib.maintainers; {
       tomberek
     ];
     scope = "Maintain the Cosmopolitan LibC and related programs.";
+    shortName = "Cosmopolitan";
   };
 
   deshaw = {
@@ -195,6 +209,18 @@ with lib.maintainers; {
     ];
     scope = "Maintain the Emacs editor and packages.";
     shortName = "Emacs";
+    enableFeatureFreezePing = true;
+  };
+
+  enlightenment = {
+    members = [
+      romildo
+    ];
+    githubTeams = [
+      "enlightenment"
+    ];
+    scope = "Maintain Enlightenment desktop environment and related packages.";
+    shortName = "Enlightenment";
     enableFeatureFreezePing = true;
   };
 
@@ -299,7 +325,6 @@ with lib.maintainers; {
   jitsi = {
     members = [
       cleeyv
-      petabyteboy
       ryantm
       yuka
     ];
@@ -341,6 +366,40 @@ with lib.maintainers; {
     ];
     scope = "Maintain the Linux kernel.";
     shortName = "Linux Kernel";
+  };
+
+  lumiguide = {
+    # Verify additions by approval of an already existing member of the team.
+    members = [
+      roelvandijk
+      lucus16
+    ];
+    scope = "Group registration for LumiGuide employees who collectively maintain packages.";
+    shortName = "Lumiguide employees";
+  };
+
+  lumina = {
+    members = [
+      romildo
+    ];
+    githubTeams = [
+      "lumina"
+    ];
+    scope = "Maintain lumina desktop environment and related packages.";
+    shortName = "Lumina";
+    enableFeatureFreezePing = true;
+  };
+
+  lxqt = {
+    members = [
+      romildo
+    ];
+    githubTeams = [
+      "lxqt"
+    ];
+    scope = "Maintain LXQt desktop environment and related packages.";
+    shortName = "LXQt";
+    enableFeatureFreezePing = true;
   };
 
   marketing = {
@@ -407,6 +466,19 @@ with lib.maintainers; {
     scope = "Maintain nixpkgs module system internals.";
     shortName = "NixOS Modules / internals";
     enableFeatureFreezePing = true;
+  };
+
+  numtide = {
+    members = [
+      mic92
+      flokli
+      jfroche
+      tazjin
+      zimbatm
+    ];
+    enableFeatureFreezePing = true;
+    scope = "Group registration for Numtide team members who collectively maintain packages.";
+    shortName = "Numtide team";
   };
 
   openstack = {

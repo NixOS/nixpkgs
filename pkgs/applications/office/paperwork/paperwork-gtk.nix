@@ -138,7 +138,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p curl common-updater-scripts
-    version=$(list-git-tags https://gitlab.gnome.org/World/OpenPaperwork/paperwork.git | sed 's/^v//' | sort -V | tail -n1)
+    version=$(list-git-tags | sed 's/^v//' | sort -V | tail -n1)
     update-source-version paperwork "$version" --file=pkgs/applications/office/paperwork/src.nix
     docs_version="$(curl https://gitlab.gnome.org/World/OpenPaperwork/paperwork/-/raw/$version/paperwork-gtk/src/paperwork_gtk/model/help/screenshot.sh | grep TEST_DOCS_TAG= | cut -d'"' -f2)"
     update-source-version paperwork.sample_docs "$docs_version" --file=pkgs/applications/office/paperwork/src.nix --version-key=rev

@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "upwork";
-  version = "5.6.10.7";
+  version = "5.6.10.13";
 
   src = fetchurl {
-    url = "https://upwork-usw2-desktopapp.upwork.com/binaries/v5_6_10_7_f806fd1250954801/${pname}_${version}_amd64.deb";
-    sha256 = "6fe11cd53ffb66a02aa771153c4f58af34fea25847ee5bc13802fec9b0db0280";
+    url = "https://upwork-usw2-desktopapp.upwork.com/binaries/v5_6_10_13_3c485d1dd2af4f61/${pname}_${version}_amd64.deb";
+    sha256 = "c3e1ecf14c99596f434edf93a2e08f031fbaa167025d1280cf19f68b829d6b79";
   };
 
   nativeBuildInputs = [
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Online freelancing platform desktop application for time tracking";
     homepage = "https://www.upwork.com/ab/downloads/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ zakkor wolfangaukang ];

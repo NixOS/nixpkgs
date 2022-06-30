@@ -20,13 +20,13 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "bottles";
-  version = "2022.4.14-trento-1";
+  version = "2022.5.28-trento-3";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = pname;
     rev = version;
-    sha256 = "16cb01fhxa64f8fadwpr0mawfmchig6xlbx20mz4q9yh5fnagywj";
+    sha256 = "sha256-KIDLRqDLFTsVAczRpTchnUtKJfVHqbYzf8MhIR5UdYY=";
   };
 
   postPatch = ''
@@ -100,7 +100,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://usebottles.com/";
     downloadPage = "https://github.com/bottlesdevs/Bottles/releases";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ bloomvdomino psydvl shamilton ];
+    maintainers = with maintainers; [ psydvl shamilton ];
     platforms = platforms.linux;
   };
 }

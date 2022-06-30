@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/ipmitool/ipmitool/commit/e824c23316ae50beb7f7488f2055ac65e8b341f2.patch";
       sha256 = "sha256-X7MnoX2fzByRpRY4p33xetT+V2aehlQ/qU+aeaqtTUY=";
     })
+    # Pull upstream patch to support upstream gcc-10:
+    #   https://github.com/ipmitool/ipmitool/pull/180
+    (fetchpatch {
+      name = "fno-common.patch";
+      url = "https://github.com/ipmitool/ipmitool/commit/51c7e0822f531469cf860dfa5d010c87b284b747.patch";
+      sha256 = "sha256-5UszUdVw3s2S5RCm5Exq4mqDqiYcN62in1O5+TZu9YA=";
+    })
   ];
 
   buildInputs = [ openssl ];

@@ -9,32 +9,13 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      semantic-version = super.semantic-version.overridePythonAttrs (oldAttrs: rec {
-        version = "2.9.0";
-        src = fetchPypi {
-          pname = "semantic_version";
-          version = version;
-          sha256 = "1chjd8019wnwb5mnd4x4jw9f8nhzg0xnapsdznk0fpiyamrlixdb";
-        };
-      });
-
       starlette = super.starlette.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.0";
+        version = "0.20.0";
         src = fetchFromGitHub {
           owner = "encode";
           repo = "starlette";
           rev = version;
-          sha256 = "1dpj33cggjjvpd3qdf6hv04z5ckcn9f5dfn98p5a8hx262kgsr9p";
-        };
-      });
-
-      uvicorn = super.uvicorn.overridePythonAttrs (oldAttrs: rec {
-        version = "0.17.0";
-        src = fetchFromGitHub {
-          owner = "encode";
-          repo = "uvicorn";
-          rev = version;
-          sha256 = "142x8skb1yfys6gndfaay2r240j56dkr006p49pw4y9i0v85kynp";
+          sha256 = "sha256-bSgPjKqM262PSufz1LHwrdM+uU8xO55Mifv66HRN02Y=";
         };
       });
     };
@@ -75,6 +56,8 @@ with python.pkgs; buildPythonApplication rec {
   ];
 
   pytestFlagsArray = (map (e: "--deselect tests/${e}") [
+    "commands/pkg/test_exec.py::test_pkg_specified"
+    "commands/pkg/test_exec.py::test_unrecognized_options"
     "commands/test_ci.py::test_ci_boards"
     "commands/test_ci.py::test_ci_build_dir"
     "commands/test_ci.py::test_ci_keep_build_dir"
@@ -84,6 +67,7 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_init.py::test_init_duplicated_boards"
     "commands/test_init.py::test_init_enable_auto_uploading"
     "commands/test_init.py::test_init_ide_atom"
+    "commands/test_init.py::test_init_ide_clion"
     "commands/test_init.py::test_init_ide_eclipse"
     "commands/test_init.py::test_init_ide_vscode"
     "commands/test_init.py::test_init_incorrect_board"
@@ -112,9 +96,6 @@ with python.pkgs; buildPythonApplication rec {
     "commands/test_lib_complex.py::test_lib_show"
     "commands/test_lib_complex.py::test_lib_stats"
     "commands/test_lib_complex.py::test_search"
-    "commands/test_test.py::test_local_env"
-    "commands/test_test.py::test_multiple_env_build"
-    "commands/test_test.py::test_setup_teardown_are_compilable"
     "package/test_manager.py::test_download"
     "package/test_manager.py::test_install_force"
     "package/test_manager.py::test_install_from_registry"
@@ -132,12 +113,21 @@ with python.pkgs; buildPythonApplication rec {
     "test_misc.py::test_platformio_cli"
     "test_pkgmanifest.py::test_packages"
   ]) ++ (map (e: "--ignore=tests/${e}") [
+    "commands/pkg/test_install.py"
+    "commands/pkg/test_list.py"
+    "commands/pkg/test_outdated.py"
+    "commands/pkg/test_search.py"
+    "commands/pkg/test_show.py"
+    "commands/pkg/test_uninstall.py"
+    "commands/pkg/test_update.py"
     "commands/test_boards.py"
     "commands/test_check.py"
     "commands/test_platform.py"
+    "commands/test_run.py"
+    "commands/test_test.py"
     "commands/test_update.py"
-    "test_maintenance.py"
     "test_ino2cpp.py"
+    "test_maintenance.py"
   ]) ++ [
     "tests"
   ];

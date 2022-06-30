@@ -1,8 +1,8 @@
 { stdenv
 , lib
 , fetchurl
-, qt4
 , SDL
+, qt4
 }:
 
 stdenv.mkDerivation rec {
@@ -11,10 +11,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://tw2.bitbusters.club/downloads/tworld-${version}-src.tar.gz";
-    sha256 = "sha256:1y55v2shk2xxcds7bdwdjaq9lka31sgdp2469zqnvldchwbvcb2i";
+    hash = "sha256-USy2F4es0W3xT4aI254OQ02asJKNt3V0Y72LCbXYpfg=";
   };
 
-  buildInputs = [ qt4 SDL ];
+  buildInputs = [ SDL qt4 ];
+
   enableParallelBuilding = true;
 
   postConfigure = ''
@@ -36,10 +37,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Tile World 2: Tile World is a reimplementation of the game Chip's Challenge";
     homepage = "https://tw2.bitbusters.club/";
+    description = "Tile World 2: Tile World is a reimplementation of the game Chip's Challenge";
     license = licenses.gpl2Plus;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ drperceptron ];
+    platforms = platforms.linux;
   };
 }

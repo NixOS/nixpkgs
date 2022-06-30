@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "2.1.0";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Werkzeug";
     inherit version;
-    sha256 = "sha256-m1VGaj6Z4TsfBoamYRfTm9qFqZIWbgp5rt/PNYYyj3o=";
+    sha256 = "sha256-HOCOgJPtZ9Y41jh5/Rujc1gX96gN42dNKT9ZhPJftuY=";
   };
 
   propagatedBuildInputs = lib.optionals (!stdenv.isDarwin) [
@@ -63,6 +63,6 @@ buildPythonPackage rec {
       utility libraries.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

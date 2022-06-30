@@ -4,17 +4,15 @@
 , ApplicationServices
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
-  version = "R57";
+  version = "59";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
-    rev    = version;
-    sha256 = "sha256-tPQ1SOIpFevOYzL9a8Lc5+dv2egVX1CY3km8yWVv+Sk=";
+    rev    = "R${version}";
+    sha256 = "sha256-6w7GSC5ZNIhLpulni4sKq0OvuxHlTJRilBFGH5PQW8U=";
   };
 
   patches = [
@@ -25,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     zimg libass
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
-  ] ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ];
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
 
   enableParallelBuilding = true;
 
@@ -52,11 +50,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A video processing framework with the future in mind";
     homepage    = "http://www.vapoursynth.com/";
     license     = licenses.lgpl21;
     platforms   = platforms.x86_64;
     maintainers = with maintainers; [ rnhmjoj sbruder tadeokondrak ];
   };
-
 }

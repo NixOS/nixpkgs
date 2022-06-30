@@ -10,7 +10,7 @@
 
 buildPythonApplication rec {
   pname = "expiringdict";
-  version = "1.2.1";
+  version = "1.2.2";
 
   # use fetchFromGitHub instead of fetchPypi because the test suite of
   # the package is not included into the PyPI tarball
@@ -18,7 +18,7 @@ buildPythonApplication rec {
     owner = "mailgun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "07g1vxznmim78bankfl9brr01s31sksdcpwynq1yryh6xw9ri5xs";
+    sha256 = "sha256-vRhJSHIqc51I+s/wndtfANM44CKW3QS1iajqyoSBf0I=";
   };
 
   checkInputs = [

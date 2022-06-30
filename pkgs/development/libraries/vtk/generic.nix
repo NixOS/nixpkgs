@@ -73,6 +73,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DVTK_VERSIONED_INSTALL=OFF"
   ] ++ optionals enableQt [
     "-D${if lib.versionOlder version "9.0" then "VTK_Group_Qt:BOOL=ON" else "VTK_GROUP_ENABLE_Qt:STRING=YES"}"
   ] ++ optionals (enableQt && lib.versionOlder version "8.0") [
@@ -88,16 +89,6 @@ in stdenv.mkDerivation rec {
     sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/' ./ThirdParty/libxml2/vtklibxml2/xmlschemas.c
     sed -i 's/fprintf(output, shift)/fprintf(output, "%s", shift)/g' ./ThirdParty/libxml2/vtklibxml2/xpath.c
-  '';
-
-  preFixup = ''
-    for lib in $out/lib/libvtk*.so; do
-      ln -s $lib $out/lib/"$(basename "$lib" | sed -e 's/-[[:digit:]]*.[[:digit:]]*//g')"
-    done
-
-    mv $out/include/vtk-${majorVersion}/* $out/include
-    rmdir $out/include/vtk-${majorVersion}
-    ln -s $out/include $out/include/vtk-${majorVersion}
   '';
 
   meta = with lib; {

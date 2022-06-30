@@ -5,23 +5,21 @@
 , importlib-metadata
 , pytestCheckHook
 
-# large-rebuild downstream dependencies
+# large-rebuild downstream dependencies and applications
 , flask
 , black
-
-# applications
 , magic-wormhole
 , mitmproxy
 }:
 
 buildPythonPackage rec {
   pname = "click";
-  version = "8.1.2";
+  version = "8.1.3";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-R5cH/hTZ7JoHV2GLehAKCuTE4jb6xbf4DKaAKBQaGnI=";
+    sha256 = "sha256-doLcivswKXABZ0V16gDRgU2AjWo2r0Fagr1IHTe6e44=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [

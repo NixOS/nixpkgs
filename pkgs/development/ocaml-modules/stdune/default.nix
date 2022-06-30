@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, dune_3, dyn, ordering }:
+{ lib, buildDunePackage, dune_3, dyn, ordering, csexp }:
 
 buildDunePackage {
   pname = "stdune";
@@ -7,7 +7,11 @@ buildDunePackage {
 
   dontAddPrefix = true;
 
-  propagatedBuildInputs = [ dyn ordering ];
+  propagatedBuildInputs = [ dyn ordering csexp ];
+
+  preBuild = ''
+    rm -r vendor/csexp
+  '';
 
   meta = dune_3.meta // {
     description = "Dune's unstable standard library";

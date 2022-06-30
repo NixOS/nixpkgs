@@ -42,6 +42,10 @@ let
     version = "8.06.11";
     sha256 = "1zjpg9jvs6i9jvbgn6zgispwqiv8rxvaszxcx9ha9fax3wzhv9qy";
   };
+  "4.14" = mkNewParam {
+    version = "8.06.12";
+    sha256 = "sha256:17fmb13l18isgwr38hg9r5a0nayf2hhw6acj5153cy1sygsdg3b5";
+  };
  };
  param = params . ${lib.versions.majorMinor ocaml.version}
    or (throw "labltk is not available for OCaml ${ocaml.version}");

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "5.15.0";
+  version = "5.18.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    sha256 = "0mjdwxr2hhqkfa8xg0v74v3n27sjvlwm90jqnmx0587b60wbzlhk";
+    hash = "sha256-Ho2IAb3sjNTK02DOO70Sw1qX8ryPfIyVgNGQOw6Mw1s=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];

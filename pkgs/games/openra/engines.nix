@@ -1,4 +1,4 @@
-{ buildOpenRAEngine, fetchFromGitHub, extraPostFetch }:
+{ buildOpenRAEngine, fetchFromGitHub, postFetch }:
 
 let
   buildUpstreamOpenRAEngine = { version, rev, sha256 }: name: (buildOpenRAEngine {
@@ -9,7 +9,7 @@ let
     src = fetchFromGitHub {
       owner = "OpenRA";
       repo = "OpenRA" ;
-      inherit rev sha256 extraPostFetch;
+      inherit rev sha256 postFetch;
     };
   } name).overrideAttrs (origAttrs: {
     postInstall = ''

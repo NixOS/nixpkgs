@@ -11,5 +11,5 @@ buildDunePackage {
     awa cstruct mtime lwt cstruct-unix mirage-crypto-rng
   ];
 
-  inherit (awa) meta;
+  meta = awa.meta // { mainProgram = "awa_lwt_server"; };
 }
