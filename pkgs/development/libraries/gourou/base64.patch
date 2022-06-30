@@ -1,0 +1,13 @@
+diff --git a/src/bytearray.cpp b/src/bytearray.cpp
+index 0bfbbabff45e..427f3d275bdd 100644
+--- a/src/bytearray.cpp
++++ b/src/bytearray.cpp
+@@ -18,7 +18,7 @@
+ */
+ #include <string.h>
+ 
+-#include <base64/Base64.h>
++#include <base64.h>
+ 
+ #include <bytearray.h>
+ 

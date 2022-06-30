@@ -17889,6 +17889,8 @@ with pkgs;
 
   elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
 
+  gourou = callPackage ../development/libraries/gourou { };
+
   gtk2 = callPackage ../development/libraries/gtk/2.x.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
