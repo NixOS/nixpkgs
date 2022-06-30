@@ -9738,6 +9738,8 @@ in {
 
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
 
+  simple-rlp = callPackage ../development/python-modules/simple-rlp { };
+
   simple-salesforce = callPackage ../development/python-modules/simple-salesforce { };
 
   simple-websocket-server = callPackage ../development/python-modules/simple-websocket-server { };
