@@ -7,6 +7,7 @@
 # This will cause c_rehash to refer to perl via the environment, but otherwise
 # will produce a perfectly functional openssl binary and library.
 , withPerl ? stdenv.hostPlatform == stdenv.buildPlatform
+, removeReferencesTo
 }:
 
 stdenv.mkDerivation rec {
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     !(stdenv.hostPlatform.useLLVM or false) &&
     stdenv.cc.isGNU;
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl removeReferencesTo ];
   buildInputs = lib.optional withCryptodev cryptodev
     # perl is included to allow the interpreter path fixup hook to set the
     # correct interpreter in c_rehash.
@@ -111,7 +112,11 @@ stdenv.mkDerivation rec {
     # OpenSSL needs a specific `no-shared` configure flag.
     # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
     # for a comprehensive list of configuration options.
-    ++ lib.optional static "no-shared";
+    ++ lib.optional static "no-shared"
+    # This introduces a reference to the CTLOG_FILE which is undesired when
+    # trying to build binaries statically.
+    ++ lib.optional static "no-ct"
+    ;
 
   makeFlags = [
     "MANDIR=$(man)/share/man"
@@ -124,13 +129,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString (!static) ''
+  postInstall = (if static then ''
+    # OPENSSLDIR has a reference to self
+    ${removeReferencesTo}/bin/remove-references-to -t $out $out/lib/*.a
+  '' else ''
     # If we're building dynamic libraries, then don't install static
     # libraries.
     if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib $out/lib/*.dll)" ]; then
         rm "$out/lib/"*.a
     fi
-  '' + lib.optionalString (!stdenv.hostPlatform.isWindows)
+  '') + lib.optionalString (!stdenv.hostPlatform.isWindows)
     # Fix bin/c_rehash's perl interpreter line
     #
     # - openssl 1_0_2: embeds a reference to buildPackages.perl
