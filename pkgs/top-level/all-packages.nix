@@ -1015,7 +1015,9 @@ with pkgs;
 
   addic7ed-cli = callPackage ../tools/misc/addic7ed-cli { };
 
-  addlicense = callPackage ../tools/misc/addlicense { };
+  addlicense = callPackage ../tools/misc/addlicense {
+    buildGoModule = buildGo118Module;
+  };
 
   adenum  = callPackage ../tools/security/adenum { };
 
@@ -7409,7 +7411,9 @@ with pkgs;
   ipfs-migrator-unwrapped = callPackage ../applications/networking/ipfs-migrator/unwrapped.nix { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
-  ipget = callPackage ../applications/networking/ipget { };
+  ipget = callPackage ../applications/networking/ipget {
+    buildGoModule = buildGo118Module;
+  };
 
   i-pi = with python3Packages; toPythonApplication i-pi;
 
@@ -16189,6 +16193,8 @@ with pkgs;
   nrf-command-line-tools = callPackage ../development/tools/misc/nrf-command-line-tools { };
 
   nrf5-sdk = callPackage ../development/libraries/nrf5-sdk { };
+
+  nrfconnect = callPackage ../tools/bluetooth/nrfconnect { };
 
   nrfutil = callPackage ../development/tools/misc/nrfutil { };
 
@@ -29292,6 +29298,8 @@ with pkgs;
   phrasendrescher = callPackage ../tools/security/phrasendrescher { };
 
   phrase-cli = callPackage ../tools/misc/phrase-cli { };
+
+  phylactery = callPackage ../servers/web-apps/phylactery { };
 
   pianobar = callPackage ../applications/audio/pianobar { };
 

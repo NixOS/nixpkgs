@@ -249,12 +249,12 @@ in rec {
   gruvbox = mkTmuxPlugin {
     pluginName = "gruvbox";
     rtpFilePath = "gruvbox-tpm.tmux";
-    version = "unstable-2019-05-05";
+    version = "unstable-2022-04-19";
     src = fetchFromGitHub {
       owner = "egel";
       repo = "tmux-gruvbox";
-      rev = "6149fd8b5d6924925b4d5aa6935039780e94f3d6";
-      sha256 = "1ykr4yardavd0x7yfrnshd4b0gi8p31pji7i79ib0nss134zncpb";
+      rev = "3f9e38d7243179730b419b5bfafb4e22b0a969ad";
+      sha256 = "1l0kq77rk3cbv0rvh7bmfn90vvqqmywn9jk6gbl9mg3qbynq5wcf";
     };
   };
 
