@@ -28032,6 +28032,8 @@ with pkgs;
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
+  ktunnel = callPackage ../applications/networking/cluster/ktunnel { };
+
   pgo-client = callPackage ../applications/networking/cluster/pgo-client { };
 
   popeye = callPackage ../applications/networking/cluster/popeye { };
