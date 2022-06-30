@@ -6,24 +6,24 @@ let
 
   cfg = config.services.mattermost;
 
-  database = "postgres://${cfg.localDatabaseUser}:${cfg.localDatabasePassword}@localhost:5432/${cfg.localDatabaseName}?sslmode=disable&connect_timeout=10";
+  database = "postgres://${cfg.databaseUser}:${cfg.databasePassword}@${cfg.databaseHost}:${toString cfg.databasePort}/${cfg.databaseName}?sslmode=disable&connect_timeout=10";
 
   postgresPackage = config.services.postgresql.package;
 
   createDb = {
     statePath ? cfg.statePath,
-    localDatabaseUser ? cfg.localDatabaseUser,
-    localDatabasePassword ? cfg.localDatabasePassword,
-    localDatabaseName ? cfg.localDatabaseName,
+    databaseUser ? cfg.databaseUser,
+    databasePassword ? cfg.databasePassword,
+    databaseName ? cfg.databaseName,
     useSudo ? true
   }: ''
     if ! test -e ${escapeShellArg "${statePath}/.db-created"}; then
       ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${escapeShellArg config.services.postgresql.superUser} \\"}
         ${postgresPackage}/bin/psql postgres -c \
-          "CREATE ROLE ${localDatabaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${localDatabasePassword}'"
+          "CREATE ROLE ${databaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${databasePassword}'"
       ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${escapeShellArg config.services.postgresql.superUser} \\"}
         ${postgresPackage}/bin/createdb \
-          --owner ${escapeShellArg localDatabaseUser} ${escapeShellArg localDatabaseName}
+          --owner ${escapeShellArg databaseUser} ${escapeShellArg databaseName}
       touch ${escapeShellArg "${statePath}/.db-created"}
     fi
   '';
@@ -185,35 +185,53 @@ in
         '';
       };
 
-      localDatabaseCreate = mkOption {
+      databaseCreate = mkOption {
         type = types.bool;
-        default = true;
+        default = cfg.databaseHost == "localhost";
+        defaultText = ''
+          config.services.mattermost.databaseHost == "localhost"
+        '';
         description = ''
           Create a local PostgreSQL database for Mattermost automatically.
         '';
       };
 
-      localDatabaseName = mkOption {
+      databaseName = mkOption {
         type = types.str;
         default = "mattermost";
         description = ''
-          Local Mattermost database name.
+          Mattermost database name.
         '';
       };
 
-      localDatabaseUser = mkOption {
+      databaseUser = mkOption {
         type = types.str;
         default = "mattermost";
         description = ''
-          Local Mattermost database username.
+          Mattermost database username.
         '';
       };
 
-      localDatabasePassword = mkOption {
+      databasePassword = mkOption {
         type = types.str;
-        default = "mmpgsecret";
         description = ''
-          Password for local Mattermost database user.
+          Password for Mattermost database user.
+        '';
+      };
+
+      databaseHost = mkOption {
+        type = types.str;
+        default = "localhost";
+        description = ''
+          Mattermost database host.
+        '';
+      };
+
+      databasePort = mkOption {
+        type = types.int;
+        default = 5432;
+        description = ''
+          Mattermost database port.
         '';
       };
 
@@ -268,7 +286,7 @@ in
         mattermost.gid = config.ids.gids.mattermost;
       };
 
-      services.postgresql.enable = cfg.localDatabaseCreate;
+      services.postgresql.enable = cfg.databaseCreate;
 
       # The systemd service will fail to execute the preStart hook
       # if the WorkingDirectory does not exist
@@ -302,7 +320,7 @@ in
 
           rm -f "${cfg.statePath}/config/config.json"
           echo "$new_config" > "${cfg.statePath}/config/config.json"
-        '' + lib.optionalString cfg.localDatabaseCreate (createDb {}) + ''
+        '' + lib.optionalString cfg.databaseCreate (createDb {}) + ''
           # Don't change permissions recursively on the data, current, and symlinked directories (see ln -sf command above).
           # This dramatically decreases startup times for installations with a lot of files.
           find . -maxdepth 1 -not -name data -not -name client -not -name templates -not -name i18n -not -name fonts -not -name bin -not -name . \
@@ -322,7 +340,7 @@ in
           RestartSec = "10";
           LimitNOFILE = "49152";
         };
-        unitConfig.JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
+        unitConfig.JoinsNamespaceOf = mkIf cfg.databaseCreate "postgresql.service";
       };
     })
     (mkIf cfg.matterircd.enable {
