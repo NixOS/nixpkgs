@@ -2,6 +2,7 @@
 , isPy27
 , buildPythonPackage
 , fetchPypi
+, setuptools
 , setuptools-scm
 , importlib-metadata
 , typing ? null
@@ -22,6 +23,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
