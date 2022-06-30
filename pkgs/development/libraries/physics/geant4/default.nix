@@ -106,10 +106,7 @@ stdenv.mkDerivation rec {
   setupHook = ./geant4-hook.sh;
 
   passthru = {
-    data = import ./datasets.nix {
-          inherit lib stdenv fetchurl;
-          geant_version = version;
-      };
+    data = callPackage ./datasets.nix {};
 
     tests = callPackage ./tests.nix {};
 
