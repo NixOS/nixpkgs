@@ -1,5 +1,5 @@
 { lib
-, buildGo118Module
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , lima
@@ -7,7 +7,7 @@
 , qemu
 }:
 
-buildGo118Module rec {
+buildGoModule rec {
   pname = "colima";
   version = "0.4.3";
 

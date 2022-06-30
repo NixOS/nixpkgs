@@ -34454,7 +34454,7 @@ with pkgs;
 
   idsk = callPackage ../tools/filesystems/idsk { stdenv = gcc10StdenvCompat; };
 
-  colima = callPackage ../applications/virtualization/colima { };
+  colima = callPackage ../applications/virtualization/colima { buildGoModule = buildGo118Module; };
 
   lima = callPackage ../applications/virtualization/lima { };
 
