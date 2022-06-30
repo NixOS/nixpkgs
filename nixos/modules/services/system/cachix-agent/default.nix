@@ -17,6 +17,12 @@ in {
       defaultText = "config.networking.hostName";
     };
 
+    verbose = mkOption {
+      type = types.bool;
+      description = "Enable verbose output";
+      default = false;
+    };
+
     profile = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -54,7 +60,7 @@ in {
       serviceConfig = {
         Restart = "on-failure";
         EnvironmentFile = cfg.credentialsFile;
-        ExecStart = "${cfg.package}/bin/cachix deploy agent ${cfg.name} ${if cfg.profile != null then profile else ""}";
+        ExecStart = "${cfg.package}/bin/cachix ${lib.optionalString cfg.verbose "--verbose"} deploy agent ${cfg.name} ${if cfg.profile != null then profile else ""}";
       };
     };
   };
