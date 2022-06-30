@@ -2,12 +2,9 @@
 , buildGo118Module
 , fetchFromGitHub
 , installShellFiles
-, lima-unwrapped
+, lima
 , makeWrapper
-, git
-, perl
 , qemu
-, openssl
 }:
 
 buildGo118Module rec {
@@ -22,38 +19,32 @@ buildGo118Module rec {
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
-       git -C $out rev-parse --short HEAD > $out/.git-revision
-       rm -rf $out/.git
+      git -C $out rev-parse --short HEAD > $out/.git-revision
+      rm -rf $out/.git
     '';
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper git openssl ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
 
   vendorSha256 = "jDzDwK7qA9lKP8CfkKzfooPDrHuHI4OpiLXmX9vOpOg=";
 
   CGO_ENABLED = 0;
 
-  buildPhase = ''
-    runHook preBuild
-    make build VERSION=${version} REVISION=$(cat .git-revision)
-    runHook postBuild
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/abiosoft/colima/config.appVersion=${version}"
+  ];
+
+  preBuild = ''
+    ldflags+=" -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
   '';
 
-  checkPhase = ''
-    runHook preCheck
-    make test
-    runHook postCheck
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    make install INSTALL_DIR=$out/bin
-    runHook postInstall
-  '';
+  subPackages = [ "cmd/colima" ];
 
   postInstall = ''
     wrapProgram $out/bin/colima \
-      --prefix PATH : ${lib.makeBinPath [ lima-unwrapped qemu ]}
+      --prefix PATH : ${lib.makeBinPath [ lima qemu ]}
 
     installShellCompletion --cmd colima \
       --bash <($out/bin/colima completion bash) \
