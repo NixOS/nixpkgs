@@ -71,6 +71,9 @@ stdenv.mkDerivation rec {
     "-DGEANT4_USE_SYSTEM_EXPAT=${if expat != null then "ON" else "OFF"}"
     "-DGEANT4_USE_SYSTEM_ZLIB=${if zlib != null then "ON" else "OFF"}"
     "-DGEANT4_BUILD_MULTITHREADED=${if enableMultiThreading then "ON" else "OFF"}"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DXQuartzGL_INCLUDE_DIR=${libGL.dev}/include"
+    "-DXQuartzGL_gl_LIBRARY=${libGL}/lib/libGL.dylib"
   ] ++ lib.optionals (enableMultiThreading && enablePython) [
     "-DGEANT4_BUILD_TLS_MODEL=global-dynamic"
   ] ++ lib.optionals enableInventor [
@@ -128,7 +131,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.geant4.org";
     license = licenses.g4sl;
-    maintainers = with maintainers; [ omnipotententity ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ omnipotententity veprbl ];
+    platforms = platforms.unix;
   };
 }
