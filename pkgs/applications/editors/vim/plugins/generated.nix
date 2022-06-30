@@ -4954,6 +4954,18 @@ final: prev:
     meta.homepage = "https://github.com/zah/nim.vim/";
   };
 
+  nlsp-settings-nvim = buildVimPluginFrom2Nix {
+    pname = "nlsp-settings.nvim";
+    version = "2022-06-29";
+    src = fetchFromGitHub {
+      owner = "tamago324";
+      repo = "nlsp-settings.nvim";
+      rev = "5e9c189ec5180a498aee7e1c4aa83195108ae16f";
+      sha256 = "0pvk9ajshivlc2av5rhxpvz07942a3smlj49a3kh0blchff5plan";
+    };
+    meta.homepage = "https://github.com/tamago324/nlsp-settings.nvim/";
+  };
+
   nlua-nvim = buildVimPluginFrom2Nix {
     pname = "nlua.nvim";
     version = "2021-12-14";
