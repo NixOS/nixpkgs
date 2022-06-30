@@ -4131,7 +4131,9 @@ with pkgs;
 
   meson-tools = callPackage ../misc/meson-tools { };
 
-  metabase = callPackage ../servers/metabase { };
+  metabase = callPackage ../servers/metabase {
+    jdk11 = jdk11_headless;
+  };
 
   micropad = callPackage ../applications/office/micropad {
     electron = electron_17;
