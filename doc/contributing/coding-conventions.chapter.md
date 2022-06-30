@@ -338,6 +338,10 @@ A (typically large) program with a distinct user interface, primarily used inter
 
   - `applications/terminal-emulators` (e.g. `alacritty` or `rxvt` or `termite`)
 
+- **If it’s a _file manager_:**
+
+  - `applications/file-managers` (e.g. `mc` or `ranger` or `pcmanfm`)
+
 - **If it’s for _video playback / editing_:**
 
   - `applications/video` (e.g. `vlc`)

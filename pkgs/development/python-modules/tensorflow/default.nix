@@ -76,7 +76,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.9.0";
+  version = "2.9.1";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -190,7 +190,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      hash = "sha256-9VsgNvl+2gxxkC4F+pq4ABuOONpcf96Qbk46shDRpVY=";
+      hash = "sha256-kILNvwHi29F8BClYsZw+7RT2t6x57AsAHURVTfs5uOE=";
     };
 
     # On update, it can be useful to steal the changes from gentoo

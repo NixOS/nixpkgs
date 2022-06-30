@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "1.10.1";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-XABpC2g4/e6/2HsHzrBUs6OW1lzgGBYlFAatVcA/vD8=";
+    sha256 = "12n2xbpw2901cvzw467saqqsgs4mwrzp7fs5j2vlyl7kwpcr0pj0";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error -Wno-error=sign-compare";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     install -Dm755 module/evdi.ko $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/evdi/evdi.ko
     install -Dm755 library/libevdi.so $out/lib/libevdi.so
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "Extensible Virtual Display Interface";

@@ -351,6 +351,7 @@
   ./services/databases/cockroachdb.nix
   ./services/databases/couchdb.nix
   ./services/databases/dragonflydb.nix
+  ./services/databases/dgraph.nix
   ./services/databases/firebird.nix
   ./services/databases/foundationdb.nix
   ./services/databases/hbase.nix
@@ -1056,6 +1057,7 @@
   ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/grocy.nix
+  ./services/web-apps/healthchecks.nix
   ./services/web-apps/hedgedoc.nix
   ./services/web-apps/hledger-web.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix

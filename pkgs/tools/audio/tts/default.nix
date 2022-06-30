@@ -31,14 +31,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.6.2";
+  version = "0.7.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-n27a1s3Dpe5Hd3JryD4fPAjRcNc0YR1fpop+uhYA6sQ=";
+    sha256 = "sha256-ch+711soRfZj1egyaF0+6NrUJtf7JqfZuxQ4eDf1zas=";
   };
 
   postPatch = let
@@ -50,6 +50,7 @@ python.pkgs.buildPythonApplication rec {
       "numpy"
       "umap-learn"
       "unidic-lite"
+      "pyworld"
     ];
   in ''
     sed -r -i \
@@ -129,6 +130,9 @@ python.pkgs.buildPythonApplication rec {
     "test_text_to_ids_phonemes_with_eos_bos_and_blank"
     # Takes too long
     "test_parametrized_wavernn_dataset"
+
+    # requires network
+    "test_voice_conversion"
   ];
 
   disabledTestPaths = [

@@ -40,6 +40,6 @@ stdenv.mkDerivation ({
     inherit (ocaml.meta) platforms;
     description = ''Ropes ("heavyweight strings") in OCaml'';
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ volth ];
+    maintainers = with lib.maintainers; [ ];
   };
 } // param.extra)

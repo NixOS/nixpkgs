@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ jonringer sjourdois ];
+    maintainers = with maintainers; [ jonringer ];
   };
 }

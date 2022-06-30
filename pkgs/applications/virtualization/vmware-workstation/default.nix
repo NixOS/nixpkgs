@@ -158,6 +158,8 @@ stdenv.mkDerivation rec {
     cp -r $unpacked/sbin/* $out/bin/
 
     cp -r $unpacked/lib/libconf $out/lib/vmware/
+    rm $out/lib/vmware/libconf/etc/fonts/fonts.conf
+
     cp -r $unpacked/lib/bin $out/lib/vmware/
     cp -r $unpacked/lib/lib $out/lib/vmware/
     cp -r $unpacked/lib/scripts $out/lib/vmware/

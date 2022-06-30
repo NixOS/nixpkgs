@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "PAM module to mount volumes for a user session";
     homepage = "https://pam-mount.sourceforge.net/";
     license = with licenses; [ gpl2 gpl3 lgpl21 lgpl3 ];
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }
