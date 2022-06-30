@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl makeWrapper ];
   buildInputs = [ perl bash ];
   strictDeps = true;
-  preConfigure = ''
+  postPatch = ''
     patchShebangs --build configure
     substituteInPlace configure --replace '/etc/bash_completion.d' '/share/bash-completion/completions'
   '';
