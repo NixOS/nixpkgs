@@ -374,6 +374,13 @@
       </listitem>
       <listitem>
         <para>
+          Neo4j was updated from version 3 to version 4. See this
+          <link xlink:href="https://neo4j.com/docs/upgrade-migration-guide/current/">migration
+          guide</link> on how to migrate your Neo4j instance.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Matrix Synapse now requires entries in the
           <literal>state_group_edges</literal> table to be unique, in
           order to prevent accidentally introducing duplicate
