@@ -4,6 +4,7 @@
 , func-timeout
 , jaraco_itertools
 , pythonOlder
+, setuptools
 , setuptools-scm
 }:
 
@@ -20,6 +21,7 @@ let zipp = buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+    setuptools
     setuptools-scm
   ];
 
