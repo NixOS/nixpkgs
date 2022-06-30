@@ -1,5 +1,6 @@
 { fetchFromGitHub
 , lib, stdenv
+, fetchpatch
 , autoreconfHook
 , pkg-config
 , gettext
@@ -20,6 +21,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-vuD+afTOzldhfCRG5ghnWulNhip7BaTE7GfPhxXSMFw=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2022-26981.patch";
+      url = "https://github.com/liblouis/liblouis/commit/73751be7a5617bfff4a735ae095203a2d3ec50ef.patch";
+      sha256 = "sha256-PvGG62QHVslrClZP903AYCBof6jDzNe4L8eFU8X0vF4=";
+    })
+  ];
 
   outputs = [ "out" "dev" "man" "info" "doc" ];
 
