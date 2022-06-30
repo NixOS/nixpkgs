@@ -1011,7 +1011,9 @@ with pkgs;
 
   addic7ed-cli = callPackage ../tools/misc/addic7ed-cli { };
 
-  addlicense = callPackage ../tools/misc/addlicense { };
+  addlicense = callPackage ../tools/misc/addlicense {
+    buildGoModule = buildGo118Module;
+  };
 
   adenum  = callPackage ../tools/security/adenum { };
 
