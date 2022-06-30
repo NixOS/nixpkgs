@@ -81,11 +81,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =  [
     cmake
-  ] ++ lib.optionals enableQt [
-    wrapQtAppsHook
   ];
 
-  dontWrapQtApps = !enableQt;
+  propagatedNativeBuildInputs = lib.optionals enableQt [
+    wrapQtAppsHook
+  ];
+  dontWrapQtApps = true; # no binaries
 
   buildInputs = [ libGLU xlibsWrapper libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
