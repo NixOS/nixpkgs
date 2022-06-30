@@ -15,8 +15,8 @@
 , protobuf
 , pyblake2
 , requests
-, rlp
 , shamir-mnemonic
+, simple-rlp
 , typing-extensions
 , trezor-udev-rules
 , pytestCheckHook
@@ -24,13 +24,13 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.13.0";
+  version = "0.13.2";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4571aa09dbfe88b31eb2f16c7c359b4809621b75a04b7b5bc9dbffe17046c99a";
+    sha256 = "cdb696fd01dad6a0cb23b61ea3a4867bb51cecda5cb2a77366fb6a53bff58ac4";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -47,8 +47,8 @@ buildPythonPackage rec {
     protobuf
     pyblake2
     requests
-    rlp
     shamir-mnemonic
+    simple-rlp
     typing-extensions
   ] ++ lib.optionals stdenv.isLinux [
     trezor-udev-rules
