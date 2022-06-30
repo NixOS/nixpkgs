@@ -18,14 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "hyprland";
-  version = "0.6.1beta";
+  version = "0.8.1beta";
 
   # When updating Hyprland, the overridden wlroots commit must be bumped to match the commit upstream uses.
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0Msqe2ErAJvnO1zHoB2k6TkDhTYnHRGkvJrfSG12dTU=";
+    sha256 = "sha256-qyRH3omJmqCnuCSe6//7voGdYBZOLO/BWJt0sXyPztg=";
   };
 
   nativeBuildInputs = [
@@ -47,9 +47,16 @@ stdenv.mkDerivation rec {
     xcbutilwm
   ];
 
-  # build with system wlroots
+  patches = [
+    ./system-wlroots.patch
+  ];
+
   postPatch = ''
+    # build with system wlroots
     sed -Ei 's/"\.\.\/wlroots\/include\/([a-zA-Z0-9./_-]+)"/<\1>/g' src/includes.hpp
+
+    # fix hardcoded /usr paths
+    substituteInPlace src/render/OpenGL.cpp --replace "/usr" "$out"
   '';
 
   preConfigure = ''
@@ -58,7 +65,7 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     pushd ../hyprctl
-    $CXX -std=c++20 -w ./main.cpp -o ./hyprctl
+    $CXX -std=c++23 -w ./main.cpp -o ./hyprctl
     popd
   '';
 
@@ -66,10 +73,15 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     install -m755 ./Hyprland $out/bin
     install -m755 ../hyprctl/hyprctl $out/bin
+
+    mkdir -p $out/share/hyprland
+    install ../assets/wall_2K.png $out/share/hyprland
+    install ../assets/wall_4K.png $out/share/hyprland
+    install ../assets/wall_8K.png $out/share/hyprland
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/vaxerski/Hyprland";
+    homepage = "https://github.com/hyprwm/Hyprland";
     description = "A dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = licenses.bsd3;
     platforms = platforms.linux;

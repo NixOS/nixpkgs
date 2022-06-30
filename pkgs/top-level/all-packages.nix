@@ -3904,14 +3904,15 @@ with pkgs;
   humioctl = callPackage ../applications/logging/humioctl {};
 
   hyprland = callPackage ../applications/window-managers/hyprland {
+    stdenv = gcc12Stdenv;
     wlroots = wlroots.overrideAttrs (_: {
-      version = "unstable-2022-06-07";
+      version = "unstable-2022-07-12";
       src = fetchFromGitLab {
         domain = "gitlab.freedesktop.org";
         owner = "wlroots";
         repo = "wlroots";
-        rev = "b89ed9015c3fbe8d339e9d65cf70fdca6e5645bc";
-        sha256 = "sha256-8y3u8CoigjoZOVbA2wCWBHlDNEakv0AVxU46/cOC00s=";
+        rev = "5dc1d4671dd2ca3c1f0f09587c463fdbb542f0a4";
+        sha256 = "sha256-xtQ0zwJZwN8sciruveM10CzKz6TWxBY8SyXa8E4jly4=";
       };
     });
   };
