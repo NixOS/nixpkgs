@@ -739,12 +739,11 @@ in {
               ${objectstoreConfig}
             ];
 
-            $EXTRACONFIG = nix_decode_json_file(
+            $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
               "${jsonFormat.generate "nextcloud-extraOptions.json" cfg.extraOptions}",
               "decoding json extra options file failed"
-            );
+            ));
 
-            $CONFIG = array_replace_recursive($CONFIG, $EXTRACONFIG);
             ${optionalString (cfg.secretFile != null) ''
               $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
                 "${cfg.secretFile}",
