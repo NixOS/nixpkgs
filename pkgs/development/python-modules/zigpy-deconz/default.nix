@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-deconz";
-  version = "0.16.0";
+  version = "0.18.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-MEYe8DGx338ze1t36Fh0Zl8GgBpk2Wmx0EKnewjnTws=";
+    hash = "sha256-2M25g3iJWW6kT17P9PVAPD09E5QXuOJN75yjWsLY/cI=";
   };
 
   propagatedBuildInputs = [
