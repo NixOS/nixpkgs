@@ -4,23 +4,44 @@ let
 in
 with lib;
 {
-  options.services.mullvad-vpn.enable = mkOption {
-    type = types.bool;
-    default = false;
-    description = ''
-      This option enables Mullvad VPN daemon.
-      This sets <option>networking.firewall.checkReversePath</option> to "loose", which might be undesirable for security.
-    '';
+  options.services.mullvad-vpn = {
+    enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        This option enables Mullvad VPN daemon.
+        This sets <option>networking.firewall.checkReversePath</option> to "loose", which might be undesirable for security.
+      '';
+    };
+
+    excludeWrapper = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        This option activates the wrapper that allows the use of mullvad-exclude.
+        Might have minor security impact, so consider disabling if you do not use the feature.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     boot.kernelModules = [ "tun" ];
+
+    environment.systemPackages = [ pkgs.mullvad-vpn ];
 
     # mullvad-daemon writes to /etc/iproute2/rt_tables
     networking.iproute2.enable = true;
 
     # See https://github.com/NixOS/nixpkgs/issues/113589
     networking.firewall.checkReversePath = "loose";
+
+    # https://github.com/NixOS/nixpkgs/issues/176603
+    security.wrappers.mullvad-exclude = mkIf cfg.excludeWrapper {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${pkgs.mullvad-vpn}/bin/mullvad-exclude";
+    };
 
     systemd.services.mullvad-daemon = {
       description = "Mullvad VPN daemon";
