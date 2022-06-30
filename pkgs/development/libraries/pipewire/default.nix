@@ -70,7 +70,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.52";
+    version = "0.3.53";
 
     outputs = [
       "out"
@@ -88,7 +88,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-JWmO36+OF2O9sLB+Z0znwm3TH+O+pEv3cXnuwP6Wy1E=";
+      sha256 = "sha256-mIrBuJ+Lf5kw7xQ6TQ2mRVrdlhyzG0mw0hK9Y7kR1a4=";
     };
 
     patches = [
@@ -104,11 +104,13 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-      # Remove 44.1KHz from allowed rates (multiple regressions reported)
-      # To be removed when 0.3.53 is released
+
+      # audioconvert: ensure temp buffers are large enough
+      # Fixes a segfault in mpv
+      # Remove when updating past 0.3.53
       (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/16a7c274989f47b0c0d8ba192a30316b545bd26a.patch";
-        sha256 = "sha256-VZ7ChjcR/PGfmH2DmLxfIhd3mj9668l9zLO4k2KBoqg=";
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/9af94508886b19bb398f4e2a777447ca42907c2f.patch";
+        sha256 = "sha256-kmtEAWfA1FrmzSwCcGqvoOreY59kmLRQeByxyrSr8tA=";
       })
     ];
 
