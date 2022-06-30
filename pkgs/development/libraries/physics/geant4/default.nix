@@ -111,6 +111,8 @@ stdenv.mkDerivation rec {
       };
 
     tests = callPackage ./tests.nix {};
+
+    inherit enableQt;
   };
 
   # Set the myriad of envars required by Geant4 if we use a nix-shell.
