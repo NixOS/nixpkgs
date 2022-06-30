@@ -1,6 +1,7 @@
 { enableMultiThreading ? true
 , enableInventor       ? false
-, enableQT             ? false
+, enableQT             ? false # deprecated name
+, enableQt             ? enableQT
 , enableXM             ? false
 , enableOpenGLX11      ? true
 , enablePython         ? false
@@ -14,7 +15,7 @@
 , xercesc
 , zlib
 
-# For enableQT.
+# For enableQt.
 , qtbase
 , wrapQtAppsHook
 
@@ -26,7 +27,7 @@
 , soxt
 , libXpm
 
-# For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
+# For enableQt, enableXM, enableOpenGLX11, enableRaytracerX11.
 , libGLU, libGL
 , xlibsWrapper
 , libXmu
@@ -43,6 +44,8 @@ let
   boost_python = boost.override { enablePython = true; python = python3; };
 in
 
+lib.warnIf (enableQT != false) "geant4: enableQT is deprecated, please use enableQt"
+
 stdenv.mkDerivation rec {
   version = "11.0.0";
   pname = "geant4";
@@ -56,7 +59,7 @@ stdenv.mkDerivation rec {
     "-DGEANT4_INSTALL_DATA=OFF"
     "-DGEANT4_USE_GDML=ON"
     "-DGEANT4_USE_G3TOG4=ON"
-    "-DGEANT4_USE_QT=${if enableQT then "ON" else "OFF"}"
+    "-DGEANT4_USE_QT=${if enableQt then "ON" else "OFF"}"
     "-DGEANT4_USE_XM=${if enableXM then "ON" else "OFF"}"
     "-DGEANT4_USE_OPENGL_X11=${if enableOpenGLX11 then "ON" else "OFF"}"
     "-DGEANT4_USE_INVENTOR=${if enableInventor then "ON" else "OFF"}"
@@ -78,11 +81,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =  [
     cmake
-  ] ++ lib.optionals enableQT [
+  ] ++ lib.optionals enableQt [
     wrapQtAppsHook
   ];
 
-  dontWrapQtApps = !enableQT;
+  dontWrapQtApps = !enableQt;
 
   buildInputs = [ libGLU xlibsWrapper libXmu ]
     ++ lib.optionals enableInventor [ libXpm coin3d soxt motif ]
@@ -90,12 +93,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ clhep expat xercesc zlib libGL ]
     ++ lib.optionals enableXM [ motif ]
-    ++ lib.optionals enableQT [ qtbase ];
+    ++ lib.optionals enableQt [ qtbase ];
 
   postFixup = ''
     # Don't try to export invalid environment variables.
     sed -i 's/export G4\([A-Z]*\)DATA/#export G4\1DATA/' "$out"/bin/geant4.sh
-  '' + lib.optionalString enableQT ''
+  '' + lib.optionalString enableQt ''
     wrapQtAppsHook
   '';
 
