@@ -218,8 +218,8 @@ let
         mktplcRef = {
           name = "nord-visual-studio-code";
           publisher = "arcticicestudio";
-          version = "0.18.0";
-          sha256 = "sha256-Uo6peR+2ZNX6nwJ0Yar32Pe0rfBZ+f6ef1cYhUvVUbE=";
+          version = "0.19.0";
+          sha256 = "sha256-awbqFv6YuYI0tzM/QbHRTUl4B2vNUdy52F4nPmv+dRU=";
         };
         meta = with lib; {
           description = "An arctic, north-bluish clean and elegant Visual Studio Code theme.";
