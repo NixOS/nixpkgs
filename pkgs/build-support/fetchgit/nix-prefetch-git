@@ -105,10 +105,6 @@ for arg; do
     fi
 done
 
-if test -n $deepClone; then
-    leaveDotGit=true
-fi
-
 if test -z "$url"; then
     usage
 fi
