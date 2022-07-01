@@ -38,6 +38,7 @@
   ./config/users-groups.nix
   ./config/vte.nix
   ./config/zram.nix
+  ./flake/source-info.nix
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/bladeRF.nix
