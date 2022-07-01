@@ -4368,6 +4368,8 @@ with pkgs;
 
   reg = callPackage ../tools/virtualization/reg { };
 
+  rex = callPackage ../tools/system/rex { };
+
   river = callPackage ../applications/window-managers/river { };
 
   rivercarro = callPackage ../applications/misc/rivercarro { };
