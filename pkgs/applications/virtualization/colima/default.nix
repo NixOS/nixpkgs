@@ -5,6 +5,9 @@
 , lima
 , makeWrapper
 , qemu
+, testers
+, colima
+, runCommand
 }:
 
 buildGoModule rec {
@@ -46,6 +49,11 @@ buildGoModule rec {
       --fish <($out/bin/colima completion fish) \
       --zsh <($out/bin/colima completion zsh)
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = colima;
+    command = "HOME=$(mktemp -d) colima version";
+  };
 
   meta = with lib; {
     description = "Container runtimes on MacOS (and Linux) with minimal setup";
