@@ -26862,6 +26862,8 @@ with pkgs;
 
   feh = callPackage ../applications/graphics/feh { };
 
+  feishu = callPackage ../applications/networking/instant-messengers/feishu {};
+
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
 
   buildMozillaMach = opts: callPackage (import ../applications/networking/browsers/firefox/common.nix opts) {};
