@@ -16670,6 +16670,10 @@ with pkgs;
 
   java-language-server = callPackage ../development/tools/java/java-language-server { };
 
+  jprofiler = callPackage ../development/tools/java/jprofiler {
+    jdk = jdk11;
+  };
+
   jhiccup = callPackage ../development/tools/java/jhiccup { };
 
   valgrind = callPackage ../development/tools/analysis/valgrind {
