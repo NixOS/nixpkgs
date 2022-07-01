@@ -1,4 +1,4 @@
-{ config, pkgs, lib, nodejs, stdenv }:
+{ config, pkgs, lib, nodejs, stdenv, inspectedSrcTypesJSONExtension }:
 
 let
   inherit (lib) composeManyExtensions extends makeExtensible mapAttrs;
@@ -21,6 +21,7 @@ let
 
   extensions = composeManyExtensions [
     aliases
+    (inspectedSrcTypesJSONExtension ./inspected-src-types.generated.json)
     mainProgramOverrides
     (import ./overrides.nix { inherit pkgs nodejs; })
   ];
