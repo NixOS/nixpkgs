@@ -132,12 +132,17 @@ let
     libraries ? [],
     ghc ? pkgs.ghc,
     ghcArgs ? [],
+    threadedRuntime ? true,
     strip ? true
   }:
-    makeBinWriter {
+    let
+      appendIfNotSet = el: list: if elem el list then list else list ++ [ el ];
+      ghcArgs' = if threadedRuntime then appendIfNotSet "-threaded" ghcArgs else ghcArgs;
+
+    in makeBinWriter {
       compileScript = ''
         cp $contentPath tmp.hs
-        ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs} tmp.hs
+        ${ghc.withPackages (_: libraries )}/bin/ghc ${lib.escapeShellArgs ghcArgs'} tmp.hs
         mv tmp $out
       '';
       inherit strip;

@@ -85,7 +85,7 @@ let
         (lib.overrideDerivation
           (fetchurl {
             inherit name url sha256;
-            curlOpts = [
+            curlOptsList = [
               "--get"
               "--data-urlencode" "username@username"
               "--data-urlencode" "token@token"

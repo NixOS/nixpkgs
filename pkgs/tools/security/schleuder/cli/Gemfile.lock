@@ -12,10 +12,11 @@ GEM
     thor (0.20.3)
 
 PLATFORMS
+  aarch64-linux
   x86_64-linux
 
 DEPENDENCIES
   schleuder-cli!
 
 BUNDLED WITH
-   2.3.6
+   2.3.9

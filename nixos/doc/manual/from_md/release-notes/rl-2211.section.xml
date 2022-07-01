@@ -315,6 +315,13 @@
           release it may be removed.
         </para>
       </listitem>
+      <listitem>
+        <para>
+          There is a new module for the <literal>xfconf</literal>
+          program (the Xfce configuration storage system), which has a
+          dbus service.
+        </para>
+      </listitem>
     </itemizedlist>
   </section>
 </section>
