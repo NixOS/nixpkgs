@@ -9984,6 +9984,8 @@ in {
 
   sphinx-comments = callPackage ../development/python-modules/sphinx-comments { };
 
+  sphinx-design = callPackage ../development/python-modules/sphinx-design { };
+
   sphinx-external-toc = callPackage ../development/python-modules/sphinx-external-toc { };
 
   sphinx-jupyterbook-latex = callPackage ../development/python-modules/sphinx-jupyterbook-latex { };
