@@ -5676,6 +5676,8 @@ in {
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
 
+  myst-nb = callPackage ../development/python-modules/myst-nb { };
+
   myst-parser = callPackage ../development/python-modules/myst-parser { };
 
   nad-receiver = callPackage ../development/python-modules/nad-receiver { };
