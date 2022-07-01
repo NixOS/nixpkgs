@@ -1,4 +1,4 @@
-{ pname, version, src, openasar, meta, stdenv, binaryName, desktopName, lib, undmg }:
+{ pname, version, src, openasar, meta, stdenv, binaryName, desktopName, lib, undmg, withOpenASAR }:
 
 stdenv.mkDerivation {
   inherit pname version src meta;
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  postInstall = lib.strings.optionalString (openasar != null) ''
+  postInstall = lib.strings.optionalString withOpenASAR ''
     cp -f ${openasar} $out/Applications/${desktopName}.app/Contents/Resources/app.asar
   '';
 }
