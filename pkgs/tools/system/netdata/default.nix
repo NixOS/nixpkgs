@@ -7,6 +7,7 @@
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withCloud ? (!stdenv.isDarwin), json_c
+, withConnPrometheus ? false, snappy
 , withSsl ? true, openssl
 , withDebug ? false
 }:
@@ -37,7 +38,9 @@ in stdenv.mkDerivation rec {
     ++ optionals withDBengine [ judy lz4.dev ]
     ++ optionals withIpmi [ freeipmi ]
     ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
-    ++ optionals withCloud [ json_c protobuf ]
+    ++ optionals withCloud [ json_c ]
+    ++ optionals withConnPrometheus [ snappy ]
+    ++ optionals (withCloud || withConnPrometheus) [ protobuf ]
     ++ optionals withSsl [ openssl.dev ];
 
   patches = [
