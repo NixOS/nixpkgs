@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast implementation of bencode";
     homepage = "https://github.com/breezy-team/fastbencode";
-    license = licenses.gpl2Only;
+    license = licenses.gpl2Plus;
     maintainers = [ maintainers.marsam ];
   };
 }
