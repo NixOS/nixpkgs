@@ -3262,7 +3262,9 @@ in {
 
   fontmake = callPackage ../development/python-modules/fontmake { };
 
-  skia-pathops = callPackage ../development/python-modules/skia-pathops { };
+  skia-pathops = callPackage ../development/python-modules/skia-pathops {
+    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL;
+  };
 
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
 
