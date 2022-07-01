@@ -5,6 +5,11 @@ let
   privateBuildPlan = builtins.readFile ./comfy-private-build-plans.toml;
   overrideAttrs = (attrs: {
     version = "0.1.0";
+
+    passthru = {
+      updateScript = ./update-comfy.sh;
+    };
+
     meta = with lib; {
       homepage = "https://github.com/protesilaos/iosevka-comfy";
       description = ''
