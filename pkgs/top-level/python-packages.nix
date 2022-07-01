@@ -9994,6 +9994,8 @@ in {
 
   sphinx-jupyterbook-latex = callPackage ../development/python-modules/sphinx-jupyterbook-latex { };
 
+  sphinx-multitoc-numbering = callPackage ../development/python-modules/sphinx-multitoc-numbering { };
+
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
 
   sphinx-thebe = callPackage ../development/python-modules/sphinx-thebe { };
