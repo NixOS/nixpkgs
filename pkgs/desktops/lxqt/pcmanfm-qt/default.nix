@@ -7,6 +7,7 @@
 , qtbase
 , qttools
 , qtx11extras
+, qtimageformats
 , libfm-qt
 , menu-cache
 , lxmenu-data
@@ -34,6 +35,7 @@ mkDerivation rec {
     qtbase
     qttools
     qtx11extras
+    qtimageformats # add-on module to support more image file formats
     libfm-qt
     libfm-qt
     menu-cache
