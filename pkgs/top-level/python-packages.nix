@@ -9986,6 +9986,8 @@ in {
 
   sphinx-external-toc = callPackage ../development/python-modules/sphinx-external-toc { };
 
+  sphinx-jupyterbook-latex = callPackage ../development/python-modules/sphinx-jupyterbook-latex { };
+
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
 
   sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
