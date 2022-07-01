@@ -57,6 +57,10 @@ in {
   kernels = recurseIntoAttrs (lib.makeExtensible (self: with self;
     let callPackage = newScope self; in {
 
+    # NOTE: PLEASE DO NOT ADD NEW VENDOR KERNELS TO NIXPKGS.
+    # New vendor kernels should go to nixos-hardware instead.
+    # e.g. https://github.com/NixOS/nixos-hardware/tree/master/microsoft/surface/kernel
+
     linux_mptcp_95 = callPackage ../os-specific/linux/kernel/linux-mptcp-95.nix {
       kernelPatches = linux_4_19.kernelPatches;
     };
