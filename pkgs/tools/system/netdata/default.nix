@@ -30,14 +30,14 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
-  buildInputs = [ curl.dev zlib.dev protobuf libuv ]
+  buildInputs = [ curl.dev zlib.dev libuv ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
     ++ optionals withCups [ cups ]
     ++ optionals withDBengine [ judy lz4.dev ]
     ++ optionals withIpmi [ freeipmi ]
     ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
-    ++ optionals withCloud [ json_c ]
+    ++ optionals withCloud [ json_c protobuf ]
     ++ optionals withSsl [ openssl.dev ];
 
   patches = [
@@ -94,9 +94,8 @@ in stdenv.mkDerivation rec {
     "--disable-ebpf"
   ] ++ optional (!withDBengine) [
     "--disable-dbengine"
-  ] ++ optionals withCloud [
-    "--enable-cloud"
-    "--with-aclk-ng"
+  ] ++ optional (!withCloud) [
+    "--disable-cloud"
   ];
 
   postFixup = ''
