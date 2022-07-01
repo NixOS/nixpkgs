@@ -20,7 +20,12 @@ buildImage {
   fromImageName = null;
   fromImageTag = "latest";
 
-  contents = pkgs.redis;
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ pkgs.redis ];
+    pathsToLink = [ "/bin" ];
+  };
+
   runAsRoot = ''
     #!${pkgs.runtimeShell}
     mkdir -p /data
@@ -46,7 +51,7 @@ The above example will build a Docker image `redis/latest` from the given base i
 
 - `fromImageTag` can be used to further specify the tag of the base image within the repository, in case an image contains multiple tags. By default it's `null`, in which case `buildImage` will peek the first tag available for the base image.
 
-- `contents` is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as `ADD contents/ /` in a `Dockerfile`. By default it's `null`.
+- `copyToRoot` is a derivation that will be copied in the new layer of the resulting image. This can be similarly seen as `ADD contents/ /` in a `Dockerfile`. By default it's `null`.
 
 - `runAsRoot` is a bash script that will run as root in an environment that overlays the existing layers of the base image with the new resulting layer, including the previously copied `contents` derivation. This can be similarly seen as `RUN ...` in a `Dockerfile`.
 
@@ -81,7 +86,11 @@ pkgs.dockerTools.buildImage {
   name = "hello";
   tag = "latest";
   created = "now";
-  contents = pkgs.hello;
+  copyToRoot = pkgs.buildEnv {
+    name = "image-root";
+    paths = [ pkgs.hello ];
+    pathsToLink = [ "/bin" ];
+  };
 
   config.Cmd = [ "/bin/hello" ];
 }
