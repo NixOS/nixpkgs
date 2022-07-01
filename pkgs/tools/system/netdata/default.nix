@@ -1,9 +1,9 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
-, curl, libcap, libuuid, lm_sensors, zlib, protobuf
+, curl, libcap, libuuid, lm_sensors, zlib, protobuf, libuv
 , withCups ? false, cups
-, withDBengine ? true, libuv, lz4, judy
+, withDBengine ? true, judy, lz4
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withCloud ? (!stdenv.isDarwin), json_c
@@ -30,11 +30,11 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
-  buildInputs = [ curl.dev zlib.dev protobuf ]
+  buildInputs = [ curl.dev zlib.dev protobuf libuv ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
     ++ optionals withCups [ cups ]
-    ++ optionals withDBengine [ libuv lz4.dev judy ]
+    ++ optionals withDBengine [ judy lz4.dev ]
     ++ optionals withIpmi [ freeipmi ]
     ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
     ++ optionals withCloud [ json_c ]
@@ -92,6 +92,8 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-ebpf"
+  ] ++ optional (!withDBengine) [
+    "--disable-dbengine"
   ] ++ optionals withCloud [
     "--enable-cloud"
     "--with-aclk-ng"
