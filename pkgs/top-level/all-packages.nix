@@ -9452,6 +9452,8 @@ with pkgs;
 
   p0f = callPackage ../tools/security/p0f { };
 
+  pngloss = callPackage ../tools/graphics/pngloss { };
+
   pngout = callPackage ../tools/graphics/pngout { };
 
   patch = gnupatch;
