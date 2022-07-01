@@ -46,6 +46,5 @@ buildGo118Module rec {
     homepage = "https://www.mattermost.org";
     license = with licenses; [ agpl3 asl20 ];
     maintainers = with maintainers; [ fpletz ryantm numinit kranzes ];
-    platforms = [ "x86_64-linux" ];
   };
 }
