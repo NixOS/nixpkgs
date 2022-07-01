@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, pipewire
 , makeWrapper
 , xar
 , cpio
@@ -44,23 +45,23 @@ let
 
   # Zoom versions are released at different times for each platform
   version = {
-    aarch64-darwin = "5.10.4.6592";
-    x86_64-darwin = "5.10.4.6592";
-    x86_64-linux = "5.10.6.3192";
+    aarch64-darwin =import ./arm64-darwin-version.nix;
+    x86_64-darwin = import ./x86_64-darwin-version.nix;
+    x86_64-linux = import ./x86_64-linux-version.nix;
    }.${system} or throwSystem;
 
   srcs = {
     aarch64-darwin = fetchurl {
-       url = "https://zoom.us/client/${version}/Zoom.pkg?archType=arm64";
-       sha256 = "0jg5f9hvb67hhfnifpx5fzz65fcijldy1znlia6pqflxwci3m5rq";
+      url = "https://zoom.us/client/${version}/Zoom.pkg?archType=arm64";
+      sha256 = import ./arm64-darwin-sha.nix;
     };
     x86_64-darwin = fetchurl {
       url = "https://zoom.us/client/${version}/Zoom.pkg";
-      sha256 = "1p83691bid8kz5mw09x6l9zvjglfszi5vbhfmbbpiqhiqcxlfz83";
+      sha256 = import ./x86_64-darwin-sha.nix;
     };
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.pkg.tar.xz";
-      sha256 = "8QIkF5+875VFoGK6T0CROsqML6bJDG934c1gkuz8Klk=";
+      sha256 = import ./x86_64-linux-sha.nix;
     };
   };
 
@@ -76,6 +77,7 @@ let
     expat
     libdrm
     libGL
+    pipewire
     fontconfig
     freetype
     gtk3

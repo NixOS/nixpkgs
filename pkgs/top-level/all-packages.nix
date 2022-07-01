@@ -2584,8 +2584,6 @@ with pkgs;
     buildGoModule = buildGo118Module;
   };
 
-  gosca = callPackage ../development/tools/gosca { };
-
   gosh = callPackage ../tools/security/gosh { };
 
   gospider = callPackage ../tools/security/gospider { };
@@ -16391,6 +16389,10 @@ with pkgs;
 
   reviewdog = callPackage ../development/tools/misc/reviewdog { };
 
+  revive = callPackage ../development/tools/revive {
+    buildGoModule = buildGo118Module;
+  };
+
   rman = callPackage ../development/tools/misc/rman { };
 
   rnix-lsp = callPackage ../development/tools/rnix-lsp { };
@@ -23889,8 +23891,6 @@ with pkgs;
   gomacro = callPackage ../development/tools/gomacro { };
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
-
-  go-langserver = callPackage ../development/tools/go-langserver { };
 
   gopls = callPackage ../development/tools/gopls {
     buildGoModule = buildGo118Module;

@@ -2,21 +2,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "audible-cli";
-  version = "0.1.3";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0i71vwq2bhndndb0mlx21bc5jkv75cr60max5iaxk23agg3xpgwv";
+    sha256 = "1dalil8aaywdshf48d45ap4mgzxbyzhklr8nga7qhpwi22w84cgz";
   };
 
-  propagatedBuildInputs = with python3Packages; [ aiofiles audible click httpx pillow tabulate toml tqdm packaging setuptools ];
+  propagatedBuildInputs = with python3Packages; [ aiofiles audible click httpx pillow tabulate toml tqdm packaging setuptools questionary ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "httpx==0.20.*" "httpx" \
-      --replace "audible==0.7.2" "audible"
+      --replace "httpx>=0.20.0,<0.24.0" "httpx" \
+      --replace "audible>=0.8.2" "audible"
   '';
 
   meta = with lib; {
