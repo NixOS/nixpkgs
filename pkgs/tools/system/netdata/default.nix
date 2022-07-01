@@ -1,7 +1,8 @@
 { lib, stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkg-config, makeWrapper
 , CoreFoundation, IOKit, libossp_uuid
 , nixosTests
-, curl, libcap, libuuid, lm_sensors, zlib, protobuf, libuv
+, curl, jemalloc, libuv, zlib
+, libcap, libuuid, lm_sensors, protobuf
 , withCups ? false, cups
 , withDBengine ? true, judy, lz4
 , withIpmi ? (!stdenv.isDarwin), freeipmi
@@ -32,7 +33,7 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf ];
-  buildInputs = [ curl.dev zlib.dev libuv ]
+  buildInputs = [ curl.dev jemalloc libuv zlib.dev ]
     ++ optionals stdenv.isDarwin [ CoreFoundation IOKit libossp_uuid ]
     ++ optionals (!stdenv.isDarwin) [ libcap.dev libuuid.dev ]
     ++ optionals withCups [ cups ]
@@ -97,6 +98,7 @@ in stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--disable-ebpf"
+    "--with-jemalloc=${jemalloc}"
   ] ++ optional (!withDBengine) [
     "--disable-dbengine"
   ] ++ optional (!withCloud) [
