@@ -257,6 +257,10 @@ with pkgs;
 
   activate-linux = callPackage ../applications/misc/activate-linux { };
 
+  arti = callPackage ../tools/security/arti {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
   authy = callPackage ../applications/misc/authy { };
 
   authz0 = callPackage ../tools/security/authz0 { };
@@ -9447,6 +9451,8 @@ with pkgs;
   pulumi-bin = callPackage ../tools/admin/pulumi { };
 
   p0f = callPackage ../tools/security/p0f { };
+
+  pngloss = callPackage ../tools/graphics/pngloss { };
 
   pngout = callPackage ../tools/graphics/pngout { };
 

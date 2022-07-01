@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "airwindows-lv2";
-  version = "1.0";
+  version = "5.0";
   src = fetchFromGitHub {
     owner = "hannesbraun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-xokV4Af0evdo73D9JObzAmY1wD0aUyXiI0Z7BUN0m+M=";
+    sha256 = "sha256-sLkcEEYez0Z3pkhMCC7raiwe/m9Tk/lFmOuybZvFqSk=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
