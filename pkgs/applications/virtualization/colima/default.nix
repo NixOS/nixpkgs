@@ -30,14 +30,9 @@ buildGoModule rec {
 
   CGO_ENABLED = 1;
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/abiosoft/colima/config.appVersion=${version}"
-  ];
-
-  preBuild = ''
-    ldflags+=" -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
+  preConfigure = ''
+    ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${version} \
+    -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
   '';
 
   subPackages = [ "cmd/colima" ];
