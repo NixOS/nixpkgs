@@ -8,7 +8,7 @@
 , gtk3
 , json-glib
 , libgee
-, utillinux
+, util-linux
 , vte
 , xapps
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     while IFS="" read -r -d $'\0' FILE; do
       substituteInPlace "$FILE" \
-        --replace "/sbin/blkid" "${utillinux}/bin/blkid"
+        --replace "/sbin/blkid" "${util-linux}/bin/blkid"
     done < <(find ./src -mindepth 1 -name "*.vala" -type f -print0)
     substituteInPlace ./src/Utility/IconManager.vala \
       --replace "/usr/share" "$out/share"

@@ -116,7 +116,7 @@ let
       gptfdisk
       nix
       parted
-      utillinux
+      util-linux
       zfs
     ]
   );
