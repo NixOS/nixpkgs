@@ -206,19 +206,18 @@ let
 
     # LUKS
     open_normally() {
-        ${if (dev.keyFile != null) then ''
+        ${optionalString (dev.keyFile != null) ''
         if wait_target "key file" ${dev.keyFile}; then
             ${csopen} --key-file=${dev.keyFile} \
               ${optionalString (dev.keyFileSize != null) "--keyfile-size=${toString dev.keyFileSize}"} \
-              ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"}
+              ${optionalString (dev.keyFileOffset != null) "--keyfile-offset=${toString dev.keyFileOffset}"} \
+                && return 0
         else
             ${if dev.fallbackToPassword then "echo" else "die"} "${dev.keyFile} is unavailable"
-            echo " - failing back to interactive password prompt"
-            do_open_passphrase
         fi
-        '' else ''
-        do_open_passphrase
+        echo " - failing back to interactive password prompt"
         ''}
+        do_open_passphrase
     }
 
     ${optionalString (luks.yubikeySupport && (dev.yubikey != null)) ''
@@ -654,8 +653,8 @@ in
             type = types.bool;
             description = ''
               Whether to fallback to interactive passphrase prompt if the keyfile
-              cannot be found. This will prevent unattended boot should the keyfile
-              go missing.
+              cannot be found or is unusable. This will prevent unattended boot
+              should the keyfile go missing.
             '';
           };
 
