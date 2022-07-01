@@ -2043,6 +2043,8 @@ with pkgs;
 
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
 
+  changelogger = callPackage ../tools/misc/changelogger { };
+
   chezmoi = callPackage ../tools/misc/chezmoi { };
 
   chipsec = callPackage ../tools/security/chipsec {
@@ -34560,7 +34562,7 @@ with pkgs;
 
   runit = callPackage ../tools/system/runit { };
 
-  runitor = callPackage ../tools/system/runitor { };
+  runitor = callPackage ../tools/system/runitor { buildGoModule = buildGo118Module; };
 
   refind = callPackage ../tools/bootloaders/refind { };
 
