@@ -143,6 +143,9 @@ in {
             language = "python";
             logo32 = "''${env.sitePackages}/ipykernel/resources/logo-32x32.png";
             logo64 = "''${env.sitePackages}/ipykernel/resources/logo-64x64.png";
+            extraPaths = {
+              "cool.txt" = pkgs.writeText "cool" "cool content";
+            };
           };
         }
       '';

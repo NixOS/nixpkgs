@@ -48,6 +48,7 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace requirements/base.txt \
       --replace "aws_lambda_builders==" "aws-lambda-builders #" \
       --replace "click~=7.1" "click~=8.1" \
+      --replace "cookiecutter~=1.7.2" "cookiecutter>=1.7.2" \
       --replace "dateparser~=1.0" "dateparser>=0.7" \
       --replace "docker~=4.2.0" "docker>=4.2.0" \
       --replace "Flask~=1.1.2" "Flask~=2.0" \

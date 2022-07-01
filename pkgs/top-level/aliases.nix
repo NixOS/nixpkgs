@@ -530,8 +530,10 @@ mapAliases ({
   google-gflags = gflags; # Added 2019-07-25
   google-musicmanager = throw "google-musicmanager has been removed because Google Play Music was discontinued"; # Added 2021-03-07
   google-music-scripts = throw "google-music-scripts has been removed because Google Play Music was discontinued"; # Added 2021-03-07
+  gosca = throw "gosca has been dropped due to the lack of maintanence from upstream since 2018"; # Added 2022-06-30
   gotags = throw "gotags has been dropped due to the lack of maintenance from upstream since 2018"; # Added 2022-06-03
   google-play-music-desktop-player = throw "GPMDP shows a black screen, upstream homepage is dead, use 'ytmdesktop' instead"; # Added 2022-06-16
+  go-langserver = throw "go-langserver has been replaced by gopls"; # Added 2022-06-30
   go-mk = throw "go-mk has been dropped due to the lack of maintanence from upstream since 2015"; # Added 2022-06-02
   go-pup = throw "'go-pup' has been renamed to/replaced by 'pup'"; # Converted to throw 2022-02-22
   go-repo-root = throw "go-repo-root has been dropped due to the lack of maintanence from upstream since 2014"; # Added 2022-06-02
