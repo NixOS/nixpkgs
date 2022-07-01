@@ -12,6 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "tztkOg1Wl9HzltdDFEjoht2AVmh4lXjj4aKCd8lShDU=";
   };
 
+  patches = [
+    # Pull fix pending upstream inclusion for parallel builds
+    #  https://sourceforge.net/p/gnu-efi/patches/84/
+    (fetchurl {
+      name = "parallel-build.patch";
+      url = "https://sourceforge.net/p/gnu-efi/patches/84/attachment/0001-lib-Makefile-add-.o-file-dependency-on-libsubdirs-ta.patch";
+      sha256 = "sha256-+2UwV2lopdB/tazib1BLzO1E3GgB1L8dZsSQKWVoLwA=";
+    })
+  ];
+
   buildInputs = [ pciutils ];
 
   hardeningDisable = [ "stackprotector" ];

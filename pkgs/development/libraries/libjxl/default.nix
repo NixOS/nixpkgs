@@ -48,6 +48,17 @@ stdenv.mkDerivation rec {
       url = "https://github.com/libjxl/libjxl/commit/204f87a5e4d684544b13900109abf040dc0b402b.patch";
       sha256 = "sha256-DoAaYWLmQ+R9GZbHMTYGe0gBL9ZesgtB+2WhmbARna8=";
     })
+
+    # fix build with asciidoc wrapped in shell script
+    (fetchpatch {
+      url = "https://github.com/libjxl/libjxl/commit/b8ec58c58c6281987f42ebec892f513824c0cc0e.patch";
+      hash = "sha256-g8U+YVhLfgSHJ+PWJgvVOI66+FElJSC8IgSRodNnsMw=";
+    })
+    (fetchpatch {
+      url = "https://github.com/libjxl/libjxl/commit/ca8e276aacf63a752346a6a44ba673b0af993237.patch";
+      excludes = [ "AUTHORS" ];
+      hash = "sha256-9VXy1LdJ0JhYbCGPNMySpnGLBxUrr8BYzE+oU3LnUGw=";
+    })
   ];
 
   nativeBuildInputs = [
