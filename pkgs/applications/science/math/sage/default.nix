@@ -9,7 +9,7 @@
 # is always preferred, see `sage-src.nix` for that.
 
 let
-  inherit (pkgs) symlinkJoin callPackage nodePackages lib;
+  inherit (pkgs) symlinkJoin callPackage nodePackages;
 
   python3 = pkgs.python3.override {
     packageOverrides = self: super: {
@@ -46,7 +46,7 @@ let
     # just one 16x16 logo is available
     logo32 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
     logo64 = "${sage-src}/src/doc/common/themes/sage/static/sageicon.png";
-  } // lib.optionalAttrs withDoc { extraPaths = { "doc" = "${sagedoc}/share/doc/sage/html/en"; }; };
+  };
 
   jupyter-kernel-specs = pkgs.jupyter-kernel.create {
     definitions = pkgs.jupyter-kernel.default // {
