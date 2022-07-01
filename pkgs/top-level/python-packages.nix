@@ -4611,6 +4611,8 @@ in {
 
   jupyter-c-kernel = callPackage ../development/python-modules/jupyter-c-kernel { };
 
+  jupyter-cache = callPackage ../development/python-modules/jupyter-cache { };
+
   jupyter-client = callPackage ../development/python-modules/jupyter-client { };
 
   jupyter_console = callPackage ../development/python-modules/jupyter_console { };
