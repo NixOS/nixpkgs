@@ -1,6 +1,7 @@
 { lib
 , python3
 , openssl
+, fetchpatch
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
 , extraInputs ? []
@@ -29,6 +30,10 @@ python3.pkgs.buildPythonApplication rec {
 
   patches = [
     ./fix-libcrypto-loading.patch
+    (fetchpatch {
+      url = "https://github.com/saltstack/salt/commit/6ec8b90e402ff3fa8f27c7da70ece898592416bc.patch";
+      hash = "sha256-OQCJeG12cp2EZ0BErp6yqsqhv023923rVFDHAFUfF6c=";
+    })
   ];
 
   postPatch = ''
