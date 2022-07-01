@@ -6466,6 +6466,8 @@ in {
 
   netmap = callPackage ../development/python-modules/netmap { };
 
+  onetimepad = callPackage ../development/python-modules/onetimepad { };
+
   openai = callPackage ../development/python-modules/openai { };
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
@@ -6654,6 +6656,8 @@ in {
   pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
 
   pysolcast = callPackage ../development/python-modules/pysolcast { };
+
+  pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 

@@ -1,17 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper
+{ lib, stdenv, fetchurl, pkg-config, makeWrapper
 , libsndfile, jack2
 , libGLU, libGL, lv2, cairo
 , ladspaH, php }:
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.1.31";
+  version = "1.2.1";
 
-  src = fetchFromGitHub {
-    owner = "sadko4u";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-P1woSkenSlVUwWr3q0sNv8K2fVtTa6zWwKfSHQgg9Xw=";
+  src = fetchurl {
+    url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
+    sha256 = "sha256-wHibZJbrgy7t0z2rRDe1FUAG38BW/dR0JgoKVWYCn60=";
   };
 
   nativeBuildInputs = [ pkg-config php makeWrapper ];
@@ -19,22 +17,15 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    "ETC_PATH=$(out)/etc"
   ];
 
   NIX_CFLAGS_COMPILE = "-DLSP_NO_EXPERIMENTAL";
 
-  doCheck = true;
-
-  checkPhase = ''
-    runHook preCheck
-    TEST_PATH=$(pwd)".build-test"
-    make OBJDIR=$TEST_PATH test
-    $TEST_PATH/lsp-plugins-test utest
-    runHook postCheck
+  configurePhase = ''
+    make config PREFIX=${placeholder "out"}
   '';
 
-  buildFlags = [ "release" ];
+  doCheck = true;
 
   enableParallelBuilding = true;
 
