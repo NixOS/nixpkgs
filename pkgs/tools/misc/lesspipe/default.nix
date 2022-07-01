@@ -4,15 +4,25 @@ stdenv.mkDerivation rec {
   pname = "lesspipe";
   version = "2.05";
 
+  src = fetchFromGitHub {
+    owner = "wofr06";
+    repo = "lesspipe";
+    rev = "v${version}";
+    sha256 = "sha256-mRgOndoDpyMnlj/BIoqwpZzuth4eA6yoB2VFZOigRw4=";
+  };
+
   nativeBuildInputs = [ perl makeWrapper ];
   buildInputs = [ perl bash ];
   strictDeps = true;
+
   postPatch = ''
     patchShebangs --build configure
     substituteInPlace configure --replace '/etc/bash_completion.d' '/share/bash-completion/completions'
   '';
+
   configureFlags = [ "--shell=${bash}/bin/bash" "--prefix=/" ];
   configurePlatforms = [ ];
+
   dontBuild = true;
 
   installFlags = [ "DESTDIR=$(out)" ];
@@ -22,13 +32,6 @@ stdenv.mkDerivation rec {
       wrapProgram "$out/bin/$f" --prefix-each PATH : "${lib.makeBinPath [ file gnused procps ]}"
     done
   '';
-
-  src = fetchFromGitHub {
-    owner = "wofr06";
-    repo = "lesspipe";
-    rev = "v${version}";
-    sha256 = "sha256-mRgOndoDpyMnlj/BIoqwpZzuth4eA6yoB2VFZOigRw4=";
-  };
 
   meta = with lib; {
     description = "A preprocessor for less";
