@@ -28249,6 +28249,8 @@ with pkgs;
     portaudio = null;
   };
 
+  lokinet = callPackage ../applications/networking/p2p/lokinet { };
+
   losslesscut-bin = callPackage ../applications/video/losslesscut-bin { };
 
   loxodo = callPackage ../applications/misc/loxodo { };
