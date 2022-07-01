@@ -7,6 +7,7 @@
 , withIpmi ? (!stdenv.isDarwin), freeipmi
 , withNetfilter ? (!stdenv.isDarwin), libmnl, libnetfilter_acct
 , withCloud ? (!stdenv.isDarwin), json_c
+, withConnPubSub ? false, google-cloud-cpp, grpc
 , withConnPrometheus ? false, snappy
 , withSsl ? true, openssl
 , withDebug ? false
@@ -39,6 +40,7 @@ in stdenv.mkDerivation rec {
     ++ optionals withIpmi [ freeipmi ]
     ++ optionals withNetfilter [ libmnl libnetfilter_acct ]
     ++ optionals withCloud [ json_c ]
+    ++ optionals withConnPubSub [ google-cloud-cpp grpc ]
     ++ optionals withConnPrometheus [ snappy ]
     ++ optionals (withCloud || withConnPrometheus) [ protobuf ]
     ++ optionals withSsl [ openssl.dev ];
