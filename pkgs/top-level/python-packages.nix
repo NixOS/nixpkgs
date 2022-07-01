@@ -9982,6 +9982,8 @@ in {
 
   sphinx-better-theme = callPackage ../development/python-modules/sphinx-better-theme { };
 
+  sphinx-comments = callPackage ../development/python-modules/sphinx-comments { };
+
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
 
   sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
