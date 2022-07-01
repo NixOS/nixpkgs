@@ -1,15 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, nodejs, bash, nodePackages }:
+{ lib, stdenv, fetchFromGitHub, nodejs, bash, nodePackages, unzip }:
 
+let
+  # OpenAsar fails with default unzip, throwing  "lchmod (file attributes) error: Operation not supported"
+  unzipFix =
+    if stdenv.isLinux then
+      unzip.overrideAttrs (oldAttrs: {
+        buildFlags = oldAttrs.buildFlags ++ [ "LOCAL_UNZIP=-DNO_LCHMOD" ];
+      })
+    else
+      unzip;
+in
 stdenv.mkDerivation rec {
-  version = "unstable-2022-06-10";
   pname = "openasar";
+  version = "unstable-2022-06-27";
 
   src = fetchFromGitHub {
     owner = "GooseMod";
     repo = "OpenAsar";
-    rev = "c6f2f5eb7827fea14cb4c54345af8ff6858c633a";
-    sha256 = "m6e/WKGgkR8vjKcHSNdWE25MmDQM1Z3kgB24OJgbw/w=";
+    rev = "6f7505fb91a07035d3661a3a7bf68b3018ddfd82";
+    sha256 = "2tb6OgYOnpryiyk7UH39sgzwtGJf9hNOpy74YqLI+Uk=";
   };
+
+  postPatch = ''
+    # Hardcode unzip path
+    substituteInPlace ./src/updater/moduleUpdater.js \
+      --replace \'unzip\' \'${unzipFix}/bin/unzip\'
+    # Remove auto-update feature
+    echo "module.exports = async () => log('AsarUpdate', 'Removed');" > ./src/asarUpdate.js
+  '';
 
   buildPhase = ''
     runHook preBuild
