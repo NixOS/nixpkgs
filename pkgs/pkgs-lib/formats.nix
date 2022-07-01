@@ -135,6 +135,55 @@ rec {
 
   };
 
+  keyValue = {
+    # Represents lists as duplicate keys
+    listsAsDuplicateKeys ? false,
+    # Alternative to listsAsDuplicateKeys, converts list to non-list
+    # listToValue :: [Atom] -> Atom
+    listToValue ? null,
+    ...
+    }@args:
+    assert !listsAsDuplicateKeys || listToValue == null;
+    {
+
+    type = with lib.types; let
+
+      singleAtom = nullOr (oneOf [
+        bool
+        int
+        float
+        str
+      ]) // {
+        description = "atom (null, bool, int, float or string)";
+      };
+
+      atom =
+        if listsAsDuplicateKeys then
+          coercedTo singleAtom lib.singleton (listOf singleAtom) // {
+            description = singleAtom.description + " or a list of them for duplicate keys";
+          }
+        else if listToValue != null then
+          coercedTo singleAtom lib.singleton (nonEmptyListOf singleAtom) // {
+            description = singleAtom.description + " or a non-empty list of them";
+          }
+        else
+          singleAtom;
+
+    in attrsOf atom;
+
+    generate = name: value:
+      let
+        transformedValue =
+          if listToValue != null
+          then
+            lib.mapAttrs (key: val:
+              if lib.isList val then listToValue val else val
+            ) value
+          else value;
+      in pkgs.writeText name (lib.generators.toKeyValue (removeAttrs args ["listToValue"]) transformedValue);
+
+  };
+
   gitIni = { listsAsDuplicateKeys ? false, ... }@args: {
 
     type = with lib.types; let
