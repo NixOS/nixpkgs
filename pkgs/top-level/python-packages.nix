@@ -9984,6 +9984,8 @@ in {
 
   sphinx-comments = callPackage ../development/python-modules/sphinx-comments { };
 
+  sphinx-external-toc = callPackage ../development/python-modules/sphinx-external-toc { };
+
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
 
   sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
