@@ -1,0 +1,15 @@
+diff --git a/icon-validator/validate-icon.c b/icon-validator/validate-icon.c
+index 9e885070..d02eeb8c 100644
+--- a/icon-validator/validate-icon.c
++++ b/icon-validator/validate-icon.c
+@@ -156,8 +156,8 @@ rerun_in_sandbox (const char *arg_width,
+             "--unshare-ipc",
+             "--unshare-net",
+             "--unshare-pid",
+-            "--ro-bind", "/usr", "/usr",
+-            "--ro-bind-try", "/etc/ld.so.cache", "/etc/ld.so.cache",
++            "--ro-bind", "@storeDir@", "@storeDir@",
++            "--ro-bind", "/run/current-system", "/run/current-system",
+             "--ro-bind", validate_icon, validate_icon,
+             NULL);
+ 

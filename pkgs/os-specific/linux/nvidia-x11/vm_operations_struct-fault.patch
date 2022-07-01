@@ -1,0 +1,31 @@
+https://devtalk.nvidia.com/default/topic/1025051/fully-working-patches-2-of-them-for-nvidia-driver-340-104-compiler-installer-file-and-linux-kernels-4-13-amp-4-14/?offset=5
+--- a/kernel/uvm/nvidia_uvm_lite.c
++++ b/kernel/uvm/nvidia_uvm_lite.c
+@@ -818,8 +818,15 @@ done:
+ }
+
+ #if defined(NV_VM_OPERATIONS_STRUCT_HAS_FAULT)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 11, 0)
+ int _fault(struct vm_area_struct *vma, struct vm_fault *vmf)
++#else
++int _fault(struct vm_fault *vmf)
++#endif
+ {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 11, 0)
++    struct vm_area_struct *vma = vmf->vma;
++#endif
+ #if defined(NV_VM_FAULT_HAS_ADDRESS)
+     unsigned long vaddr = vmf->address;
+ #else
+@@ -866,7 +873,11 @@ static struct vm_operations_struct uvmlite_vma_ops =
+ // it's dealing with anonymous mapping (see handle_pte_fault).
+ //
+ #if defined(NV_VM_OPERATIONS_STRUCT_HAS_FAULT)
++#if LINUX_VERSION_CODE < KERNEL_VERSION(4, 11, 0)
+ int _sigbus_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
++#else
++int _sigbus_fault(struct vm_fault *vmf)
++#endif
+ {
+     vmf->page = NULL;
+     return VM_FAULT_SIGBUS;

@@ -1,0 +1,74 @@
+From 439e2effe1cc372925daf6d5c28569663ffb93ed Mon Sep 17 00:00:00 2001
+From: Tadeo Kondrak <me@tadeo.ca>
+Date: Mon, 25 Jan 2021 11:17:44 -0700
+Subject: [PATCH] Call weak function to allow adding preloaded plugins after
+ compile
+
+---
+ src/core/vscore.cpp | 19 +++++++++++++++++++
+ src/core/vscore.h   |  5 +++++
+ 2 files changed, 24 insertions(+)
+
+diff --git a/src/core/vscore.cpp b/src/core/vscore.cpp
+index f8e69062..4ce4c623 100644
+--- a/src/core/vscore.cpp
++++ b/src/core/vscore.cpp
+@@ -1791,6 +1791,20 @@ void VSCore::destroyFilterInstance(VSNode *node) {
+     freeDepth--;
+ }
+ 
++extern "C" {
++void __attribute__((weak)) VSLoadPluginsNix(void (*load)(void *data, const char *path), void *data);
++
++struct VSLoadPluginsNixCallbackData {
++    VSCore *core;
++    const char *filter;
++};
++
++static void VSLoadPluginsNixCallback(void *data, const char *path) {
++    auto callbackData = static_cast<VSLoadPluginsNixCallbackData *>(data);
++    callbackData->core->loadAllPluginsInPath(path, callbackData->filter);
++}
++}
++
+ VSCore::VSCore(int flags) :
+     numFilterInstances(1),
+     numFunctionInstances(0),
+@@ -1918,6 +1932,11 @@ VSCore::VSCore(int flags) :
+     } // If neither exists, an empty string will do.
+ #endif
+ 
++    if (VSLoadPluginsNix != nullptr) {
++        VSLoadPluginsNixCallbackData data{this, filter.c_str()};
++        VSLoadPluginsNix(VSLoadPluginsNixCallback, &data);
++    }
++
+     VSMap *settings = readSettings(configFile);
+     const char *error = vs_internal_vsapi.mapGetError(settings);
+     if (error) {
+diff --git a/src/core/vscore.h b/src/core/vscore.h
+index 2ce0f56b..2982b133 100644
+--- a/src/core/vscore.h
++++ b/src/core/vscore.h
+@@ -985,6 +985,9 @@ public:
+     std::string getV3ArgString() const;
+ };
+ 
++extern "C" {
++static void VSLoadPluginsNixCallback(void *data, const char *path);
++}
+ 
+ struct VSPlugin {
+     friend struct VSPluginFunction;
+@@ -1140,6 +1143,8 @@ public:
+ 
+     explicit VSCore(int flags);
+     void freeCore();
++
++    friend void VSLoadPluginsNixCallback(void *data, const char *path);
+ };
+ 
+ #endif // VSCORE_H
+-- 
+2.32.0
+

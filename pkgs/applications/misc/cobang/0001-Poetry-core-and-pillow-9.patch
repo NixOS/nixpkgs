@@ -1,0 +1,31 @@
+From 324a267b0e5505c9124874581bc48fb174fb2542 Mon Sep 17 00:00:00 2001
+From: "P. R. d. O" <d.ol.rod@tutanota.com>
+Date: Fri, 4 Mar 2022 07:03:17 -0600
+Subject: [PATCH] Pillow update
+
+---
+ pyproject.toml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 5dc25e0..b3ba397 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -11,7 +11,7 @@ readme = "README.rst"
+ [tool.poetry.dependencies]
+ python = "^3.7"
+ logbook = "^1.5.3"
+-Pillow = "^8.2.0"
++Pillow = "^9.0.0"
+ requests = "^2.24.0"
+ kiss-headers = "^2.2.3"
+ single-version = "^1.5.1"
+@@ -33,4 +33,4 @@ skip-string-normalization = true
+ 
+ [build-system]
+ requires = ["poetry>=0.12"]
+-build-backend = "poetry.masonry.api"
++build-backend = "poetry.core.masonry.api"
+-- 
+2.35.1
+

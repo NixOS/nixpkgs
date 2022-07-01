@@ -1,0 +1,32 @@
+From e6f6d1529d1725e8c1ed3c96eecc4aea43417aea Mon Sep 17 00:00:00 2001
+From: Matthew Maurer <matthew.r.maurer@gmail.com>
+Date: Sun, 19 Apr 2020 15:50:01 -0700
+Subject: [PATCH] Remove attempt to work around libcurses dependency issues.
+
+BAP doesn't actually link against libcurses, LLVM does. By adding
+-lcurses to this file, we accidentally broke linking on any systems
+where LLVM got linked against libncurses (not libcurses) without a
+libcurses compatibility shim.
+
+Overall, we should get -l flags from llvm-config, not attempt to
+shoehorn them in later, as this is fragile.
+---
+ oasis/llvm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/oasis/llvm b/oasis/llvm
+index 966c407..fba3fb4 100644
+--- a/oasis/llvm
++++ b/oasis/llvm
+@@ -31,7 +31,7 @@ Library bap_llvm
+                  Bap_llvm_ogre_samples,
+                  Bap_llvm_ogre_types
+   CCOpt:         $cc_optimization
+-  CCLib:         $llvm_lib $cxxlibs $llvm_ldflags -lcurses
++  CCLib:         $llvm_lib $cxxlibs $llvm_ldflags -lncurses
+   CSources:      llvm_disasm.h,
+                  llvm_disasm.c,
+                  llvm_stubs.c,
+-- 
+2.22.0
+

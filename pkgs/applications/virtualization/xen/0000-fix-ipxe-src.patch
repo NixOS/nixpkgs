@@ -1,0 +1,27 @@
+hack to make etherboot use prefetched ipxe
+
+diff --git a/tools/firmware/etherboot/Makefile b/tools/firmware/etherboot/Makefile
+index a0578d2..64428a0 100644
+--- a/tools/firmware/etherboot/Makefile
++++ b/tools/firmware/etherboot/Makefile
+@@ -16,6 +16,7 @@ IPXE_TARBALL_URL ?= $(XEN_EXTFILES_URL)/ipxe-git-$(IPXE_GIT_TAG).tar.gz
+ 
+ D=ipxe
+ T=ipxe.tar.gz
++G=ipxe.git
+ 
+ ROMS = $(addprefix $D/src/bin/, $(addsuffix .rom, $(ETHERBOOT_NICS)))
+ 
+@@ -36,9 +37,9 @@ $T:
+ 	fi
+ 	mv _$T $T
+ 
+-$D/src/arch/i386/Makefile: $T Config
+-	rm -rf $D
+-	gzip -dc $T | tar xf -
++$D/src/arch/i386/Makefile: $G Config
++	mkdir $D
++	cp -a $G/* $D
+ 	for i in $$(cat patches/series) ; do                 \
+ 	    patch -d $D -p1 --quiet <patches/$$i || exit 1 ; \
+ 	done

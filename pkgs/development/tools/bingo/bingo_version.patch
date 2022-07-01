@@ -1,0 +1,13 @@
+diff --git a/pkg/version/version.go b/pkg/version/version.go
+index 30f8f30..11c12a0 100644
+--- a/pkg/version/version.go
++++ b/pkg/version/version.go
+@@ -6,7 +6,7 @@ package version
+ import "github.com/Masterminds/semver"
+ 
+ // Version returns 'bingo' version.
+-const Version = "v0.6"
++const Version = "v0.6.0"
+ 
+ var (
+ 	Go114 = semver.MustParse("1.14")

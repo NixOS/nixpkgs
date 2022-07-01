@@ -1,0 +1,38 @@
+From d84eee9450b3b6f6155074915efc61bedcc8d446 Mon Sep 17 00:00:00 2001
+From: Dominique Leuenberger <dimstar@opensuse.org>
+Date: Sun, 27 Nov 2011 21:36:41 +0100
+Subject: [PATCH] Fix: Only glib.h can be included
+
+---
+ libgnomecups/gnome-cups-i18n.c |    2 +-
+ libgnomecups/gnome-cups-init.h |    3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/libgnomecups/gnome-cups-i18n.c b/libgnomecups/gnome-cups-i18n.c
+index 8987c5c..127756d 100644
+--- a/libgnomecups/gnome-cups-i18n.c
++++ b/libgnomecups/gnome-cups-i18n.c
+@@ -1,5 +1,5 @@
+ #include <config.h>
+-#include <glib/gmacros.h>
++#include <glib.h>
+ #include "gnome-cups-i18n.h"
+ 
+ #ifdef ENABLE_NLS
+diff --git a/libgnomecups/gnome-cups-init.h b/libgnomecups/gnome-cups-init.h
+index 22b682a..c4600fc 100644
+--- a/libgnomecups/gnome-cups-init.h
++++ b/libgnomecups/gnome-cups-init.h
+@@ -1,8 +1,7 @@
+ #ifndef GNOME_CUPS_INIT
+ #define GNOME_CUPS_INIT
+ 
+-#include <glib/gtypes.h>
+-#include <glib/gmacros.h>
++#include <glib.h>
+ 
+ G_BEGIN_DECLS
+ 
+-- 
+1.7.7
+

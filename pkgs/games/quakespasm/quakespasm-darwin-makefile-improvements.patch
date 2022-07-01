@@ -1,0 +1,92 @@
+--- a/Makefile.darwin	2021-09-12 14:42:51.000000000 +0300
++++ b/Makefile.darwin	2021-09-12 15:09:16.000000000 +0300
+@@ -49,6 +49,7 @@
+ LIPO ?= lipo
+ 
+ STRIP ?= strip
++PKG_CONFIG ?= pkg-config
+ 
+ CPUFLAGS=
+ LDFLAGS =
+@@ -84,9 +85,6 @@
+ USE_RPATH=1
+ endif
+ CFLAGS += $(CPUFLAGS)
+-ifeq ($(USE_RPATH),1)
+-LDFLAGS+=-Wl,-rpath,@executable_path/../Frameworks
+-endif
+ 
+ ifneq ($(DEBUG),0)
+ DFLAGS += -DDEBUG
+@@ -115,19 +113,14 @@
+ # not relying on sdl-config command and assuming
+ # /Library/Frameworks/SDL.framework is available
+ SDL_CFLAGS =-D_GNU_SOURCE=1 -D_THREAD_SAFE
+-SDL_CFLAGS+=-DSDL_FRAMEWORK -DNO_SDL_CONFIG
+ ifeq ($(USE_SDL2),1)
+-SDL_FRAMEWORK_NAME = SDL2
++SDL_CONFIG ?= sdl2-config
+ else
+-SDL_FRAMEWORK_NAME = SDL
+-endif
+-# default to our local SDL[2].framework for build
+-SDL_FRAMEWORK_PATH ?=../MacOSX
+-ifneq ($(SDL_FRAMEWORK_PATH),)
+-SDL_LIBS  +=-F$(SDL_FRAMEWORK_PATH)
+-SDL_CFLAGS+=-F$(SDL_FRAMEWORK_PATH)
++SDL_CONFIG ?= sdl2-config
+ endif
+-SDL_LIBS  +=-Wl,-framework,$(SDL_FRAMEWORK_NAME) -Wl,-framework,Cocoa
++SDL_CFLAGS := $(shell $(SDL_CONFIG) --cflags)
++SDL_LIBS   := $(shell $(SDL_CONFIG) --libs)
++SDL_LIBS  += -Wl,-framework,Cocoa
+ 
+ NET_LIBS   :=
+ 
+@@ -164,38 +157,26 @@
+ endif
+ ifeq ($(USE_CODEC_FLAC),1)
+ CFLAGS+= -DUSE_CODEC_FLAC
+-CODEC_INC = -I../MacOSX/codecs/include
+-CODEC_LINK= -L../MacOSX/codecs/lib
+ CODECLIBS+= -lFLAC
+ endif
+ ifeq ($(USE_CODEC_OPUS),1)
+-CFLAGS+= -DUSE_CODEC_OPUS
+-CODEC_INC = -I../MacOSX/codecs/include
+-CODEC_LINK= -L../MacOSX/codecs/lib
+-CODECLIBS+= -lopusfile -lopus -logg
++CFLAGS+= -DUSE_CODEC_OPUS $(shell $(PKG_CONFIG) --cflags opusfile)
++CODECLIBS+= $(shell $(PKG_CONFIG) --libs   opusfile)
+ endif
+ ifeq ($(USE_CODEC_VORBIS),1)
+ CFLAGS+= -DUSE_CODEC_VORBIS $(cpp_vorbisdec)
+-CODEC_INC = -I../MacOSX/codecs/include
+-CODEC_LINK= -L../MacOSX/codecs/lib
+ CODECLIBS+= $(lib_vorbisdec)
+ endif
+ ifeq ($(USE_CODEC_MP3),1)
+ CFLAGS+= -DUSE_CODEC_MP3
+-CODEC_INC = -I../MacOSX/codecs/include
+-CODEC_LINK= -L../MacOSX/codecs/lib
+ CODECLIBS+= $(lib_mp3dec)
+ endif
+ ifeq ($(USE_CODEC_MIKMOD),1)
+ CFLAGS+= -DUSE_CODEC_MIKMOD
+-CODEC_INC = -I../MacOSX/codecs/include
+-CODEC_LINK= -L../MacOSX/codecs/lib
+ CODECLIBS+= -lmikmod
+ endif
+ ifeq ($(USE_CODEC_XMP),1)
+ CFLAGS+= -DUSE_CODEC_XMP
+-CODEC_INC = -I../MacOSX/codecs/include
+-CODEC_LINK= -L../MacOSX/codecs/lib
+ CODECLIBS+= -lxmp
+ endif
+ ifeq ($(USE_CODEC_UMX),1)
+@@ -332,3 +313,5 @@
+ clean:
+ 	rm -f $(shell find . \( -name '*~' -o -name '#*#' -o -name '*.o' -o -name '*.res' -o -name $(DEFAULT_TARGET) \) -print)
+ 
++install:	quakespasm
++	install -D -m 755 quakespasm /usr/local/games/quake
