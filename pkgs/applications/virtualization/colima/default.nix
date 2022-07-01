@@ -7,7 +7,6 @@
 , qemu
 , testers
 , colima
-, runCommand
 }:
 
 buildGoModule rec {
