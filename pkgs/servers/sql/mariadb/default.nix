@@ -234,6 +234,7 @@ in stdenv.mkDerivation (common // {
   '';
 
   CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isRiscV "-latomic";
 });
 in {
   mariadb_104 = mariadbPackage {
