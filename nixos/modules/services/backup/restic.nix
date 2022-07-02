@@ -222,6 +222,22 @@ in
             A script that must run after finishing the backup process.
           '';
         };
+
+        niceness = mkOption {
+          type = types.ints.between (-20) 19;
+          default = 10;
+          description = ''
+            Backup process niceness.
+          '';
+        };
+
+        ioSchedulingClass = mkOption {
+          type = types.enum [ "idle" "best-effort" "realtime" ];
+          default = "best-effort";
+          description = ''
+            IO scheduling class for the backup process (see ionice(1) for a quick description).
+          '';
+        };
       };
     }));
     default = { };
@@ -296,6 +312,8 @@ in
               RuntimeDirectory = "restic-backups-${name}";
               CacheDirectory = "restic-backups-${name}";
               CacheDirectoryMode = "0700";
+              Nice = backup.niceness;
+              IOSchedulingClass = backup.ioSchedulingClass;
             } // optionalAttrs (backup.environmentFile != null) {
               EnvironmentFile = backup.environmentFile;
             };
