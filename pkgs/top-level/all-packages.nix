@@ -29632,6 +29632,8 @@ with pkgs;
 
   roomeqwizard = callPackage ../applications/audio/roomeqwizard { };
 
+  radioboat = callPackage ../applications/audio/radioboat { };
+
   radiotray-ng = callPackage ../applications/audio/radiotray-ng {
     wxGTK = wxGTK30;
   };
