@@ -11,6 +11,17 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-shared"
+
+    # Workaround a52dec's configure bug: when 'inline' keyword is supported
+    # (ac_cv_c_inline=inline detection) it gets substituted to __attribute__((alwaus_inline))
+    # and effectively removes 'inline' keyword. That causes build failures on darwin
+    # when function is present in multiple translation units:
+    #   https://hydra.nixos.org/build/181576456
+    # By setting 'ac_cv_c_inline=yes' we both keep 'inline' keyword and
+    # don't substitute it for _attribute__(()) annotation.
+
+    # Check it fails first:
+    # "ac_cv_c_inline=yes"
   ];
 
   makeFlags = [
