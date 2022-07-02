@@ -1,6 +1,7 @@
-{ fetchurl
+{ stdenv
 , lib
-, stdenv
+, fetchurl
+, fetchpatch
 , meson
 , ninja
 , pkg-config
@@ -28,6 +29,20 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./installed-tests-path.patch
+
+    # Install data for pi test.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/geocode-glib/-/commit/0eb5c21cf4deb2c45aedf5a4393d4208b8dc6d58.patch";
+      sha256 = "DmaPzGEu7f+gjjb2HSZ3+ZMc4EJSsba9ufsVysB0UPA=";
+    })
+    # Fix pi test.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/geocode-glib/-/commit/464bb3bae5525566a7f41d157f73575cc4f3b5f8.patch";
+      sha256 = "qSjXR8eKl+E38Zp7/Kgge/FxOLHYUJgRSR68okc3No0=";
+      postFetch = ''
+        substituteInPlace $out --replace "LC_MESSAGES" "LC_ALL"
+      '';
+    })
   ];
 
   nativeBuildInputs = [
