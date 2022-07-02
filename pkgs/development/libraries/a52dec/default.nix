@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "oh1ySrOzkzMwGUNTaH34LEdbXfuZdRPu9MJd5shl7DM=";
   };
 
+  # Trigger build failure on darwin to test a fix for it.
+  # TODO: remove me before the review.
+  NIX_CFLAGS_COMPILE = "-fno-common";
+
   configureFlags = [
     "--enable-shared"
   ];
