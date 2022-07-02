@@ -60,6 +60,13 @@ in {
         '';
       };
 
+      group = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "wheel";
+        description = "Group to grant access to the Yggdrasil control socket. If <code>null</code>, only root can access the socket.";
+      };
+
       openMulticastPort = mkOption {
         type = bool;
         default = false;
@@ -147,7 +154,6 @@ in {
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
 
-        User = "yggdrasil";
         DynamicUser = true;
         StateDirectory = "yggdrasil";
         RuntimeDirectory = "yggdrasil";
@@ -168,7 +174,9 @@ in {
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @resources";
-      };
+      } // (if (cfg.group != null) then {
+        Group = cfg.group;
+      } else {});
     };
 
     networking.dhcpcd.denyInterfaces = cfg.denyDhcpcdInterfaces;
