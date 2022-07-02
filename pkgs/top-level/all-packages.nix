@@ -11206,6 +11206,12 @@ with pkgs;
 
   toybox = callPackage ../tools/misc/toybox { };
 
+  trackma = callPackage ../tools/misc/trackma { };
+
+  trackma-curses = trackma.override { withCurses = true; };
+
+  trackma-gtk = trackma.override { withGtk = true; };
+
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
   tpm-quote-tools = callPackage ../tools/security/tpm-quote-tools { };
@@ -25375,6 +25381,8 @@ with pkgs;
 
   uw-ttyp0 = callPackage ../data/fonts/uw-ttyp0 { inherit (xorg) fonttosfnt mkfontdir; };
 
+  u001-font = callPackage ../data/fonts/u001 { };
+
   vanilla-dmz = callPackage ../data/icons/vanilla-dmz { };
 
   vdrsymbols = callPackage ../data/fonts/vdrsymbols { };
@@ -35838,4 +35846,6 @@ with pkgs;
   mictray = callPackage ../tools/audio/mictray { };
 
   swift-corelibs-libdispatch = callPackage ../development/libraries/swift-corelibs-libdispatch { };
+
+  swaysettings = callPackage ../applications/misc/swaysettings { };
 }

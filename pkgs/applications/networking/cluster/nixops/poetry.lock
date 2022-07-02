@@ -19,14 +19,14 @@ python-versions = "*"
 
 [[package]]
 name = "boto3"
-version = "1.24.6"
+version = "1.24.16"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">= 3.7"
 
 [package.dependencies]
-botocore = ">=1.27.6,<1.28.0"
+botocore = ">=1.27.16,<1.28.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.6.0,<0.7.0"
 
@@ -35,7 +35,7 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.27.6"
+version = "1.27.16"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
@@ -51,7 +51,7 @@ crt = ["awscrt (==0.13.8)"]
 
 [[package]]
 name = "certifi"
-version = "2022.5.18.1"
+version = "2022.6.15"
 description = "Python package for providing Mozilla's CA Bundle."
 category = "main"
 optional = false
@@ -116,7 +116,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "jmespath"
-version = "1.0.0"
+version = "1.0.1"
 description = "JSON Matching Expressions"
 category = "main"
 optional = false
@@ -463,8 +463,8 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.8"
-content-hash = "57d7c155ae4259912291b1315f9c2fd6c918fad9ef54d1e8011f800b649f9647"
+python-versions = "^3.9"
+content-hash = "781bb4378f4491b427372322c3ec71131ed7a28e0a166e0bc43969b016b5d926"
 
 [metadata.files]
 apache-libcloud = [
@@ -476,16 +476,16 @@ boto = [
     {file = "boto-2.49.0.tar.gz", hash = "sha256:ea0d3b40a2d852767be77ca343b58a9e3a4b00d9db440efb8da74b4e58025e5a"},
 ]
 boto3 = [
-    {file = "boto3-1.24.6-py3-none-any.whl", hash = "sha256:1c13d555172cf88eb645af2429e4a7f42be85e365d6ffc110c952a556d3f8808"},
-    {file = "boto3-1.24.6.tar.gz", hash = "sha256:4af6a8bc5110b5f9d2fbd00a3c110e4c4cc36fae78d05afa354831f5789e363b"},
+    {file = "boto3-1.24.16-py3-none-any.whl", hash = "sha256:2c6f7e4103d41ca07d6b934a6612e4b9a2666eae36e8289f88726868534b8de2"},
+    {file = "boto3-1.24.16.tar.gz", hash = "sha256:422c000ff2ee5226e89fe427a9c4c09db095d69c179a3bcc3cfba37cbc5e787e"},
 ]
 botocore = [
-    {file = "botocore-1.27.6-py3-none-any.whl", hash = "sha256:eeebe304161db6828413dc358ea80ece52f4ddbc8ecde4dd58978d5861a09293"},
-    {file = "botocore-1.27.6.tar.gz", hash = "sha256:97c909a6ec5ad421573c18ae67fc6ea4232502cd30cffaf03bfcb584d9df652d"},
+    {file = "botocore-1.27.16-py3-none-any.whl", hash = "sha256:f117d59899d21beeb200130d7af2090a8112d702a06e2c2794ef576bcea36773"},
+    {file = "botocore-1.27.16.tar.gz", hash = "sha256:b3b9710902f675a11f5bfd46afda770150530876ae6541d099584462bf949fd1"},
 ]
 certifi = [
-    {file = "certifi-2022.5.18.1-py3-none-any.whl", hash = "sha256:f1d53542ee8cbedbe2118b5686372fb33c297fcd6379b050cca0ef13a597382a"},
-    {file = "certifi-2022.5.18.1.tar.gz", hash = "sha256:9c5705e395cd70084351dd8ad5c41e65655e08ce46f2ec9cf6c2c08390f71eb7"},
+    {file = "certifi-2022.6.15-py3-none-any.whl", hash = "sha256:fe86415d55e84719d75f8b69414f6438ac3547d2078ab91b67e779ef69378412"},
+    {file = "certifi-2022.6.15.tar.gz", hash = "sha256:84c85a9078b11105f04f3036a9482ae10e4621616db313fe045dd24743a0820d"},
 ]
 cffi = [
     {file = "cffi-1.15.0-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:c2502a1a03b6312837279c8c1bd3ebedf6c12c4228ddbad40912d671ccc8a962"},
@@ -572,8 +572,8 @@ idna = [
     {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
 ]
 jmespath = [
-    {file = "jmespath-1.0.0-py3-none-any.whl", hash = "sha256:e8dcd576ed616f14ec02eed0005c85973b5890083313860136657e24784e4c04"},
-    {file = "jmespath-1.0.0.tar.gz", hash = "sha256:a490e280edd1f57d6de88636992d05b71e97d69a26a19f058ecf7d304474bf5e"},
+    {file = "jmespath-1.0.1-py3-none-any.whl", hash = "sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980"},
+    {file = "jmespath-1.0.1.tar.gz", hash = "sha256:90261b206d6defd58fdd5e85f478bf633a2901798906be2ad389150c5c60edbe"},
 ]
 jsonpickle = [
     {file = "jsonpickle-2.2.0-py2.py3-none-any.whl", hash = "sha256:de7f2613818aa4f234138ca11243d6359ff83ae528b2185efdd474f62bcf9ae1"},
