@@ -44,9 +44,7 @@ extStoreName="${extPublisher}-${extName}"
 
 
 function rm_tmpdir() {
-  #echo "Removing \`tmpDir='$tmpDir'\`"
-  rm -rf -- "$tmpDir"
-  unset tmpDir
+  rm -rf "$tmpDir"
   trap - INT TERM HUP EXIT
 }
 function make_trapped_tmpdir() {

@@ -37,9 +37,8 @@ prefetchExtensionUnpacked() {
   1>&2 echo "zipStorePath='$zipStorePath'"
 
   function rm_tmpdir() {
-    1>&2 printf "rm -rf -- %q\n" "$tmpDir"
-    rm -rf -- "$tmpDir"
-    unset tmpDir
+    1>&2 printf "rm -rf %q\n" "$tmpDir"
+    rm -rf "$tmpDir"
     trap - INT TERM HUP EXIT
   }
   function make_trapped_tmpdir() {
