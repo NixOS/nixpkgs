@@ -97,6 +97,12 @@
     github = "1000teslas";
     githubId = 47207223;
   };
+  _2gn = {
+    name = "Hiram Tanner";
+    email = "101851090+2gn@users.noreply.github.com";
+    github = "2gn";
+    githubId = 101851090;
+  };
   _3699n = {
     email = "nicholas@nvk.pm";
     github = "3699n";
@@ -2030,6 +2036,12 @@
     github = "casey";
     githubId = 1945;
     name = "Casey Rodarmor";
+  };
+  catap = {
+    email = "kirill@korins.ky";
+    github = "catap";
+    githubId = 37775;
+    name = "Kirill A. Korinsky";
   };
   catern = {
     email = "sbaugh@catern.com";

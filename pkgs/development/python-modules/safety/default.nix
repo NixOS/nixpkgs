@@ -7,21 +7,33 @@
 , requests
 , packaging
 , dparse
+, ruamel-yaml
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "1.10.3";
+  version = "2.0.0";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MOOU0CogrEm39lKS0Z04+pJ6j5WCzf060a27xmxkGtU=";
+    sha256 = "d739d00a9e4203cfaba34540c822a73ca1d327159ed7776b3dce09391f81c35d";
   };
+
+  postPatch = ''
+    substituteInPlace safety/safety.py \
+      --replace "telemetry=True" "telemetry=False"
+    substituteInPlace safety/cli.py \
+      --replace "telemetry', default=True" "telemetry', default=False"
+  '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     setuptools
@@ -29,6 +41,7 @@ buildPythonPackage rec {
     requests
     packaging
     dparse
+    ruamel-yaml
   ];
 
   checkInputs = [
@@ -37,6 +50,7 @@ buildPythonPackage rec {
 
   # Disable tests depending on online services
   disabledTests = [
+    "test_announcements_if_is_not_tty"
     "test_check_live"
     "test_check_live_cached"
   ];
@@ -48,6 +62,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Checks installed dependencies for known vulnerabilities";
     homepage = "https://github.com/pyupio/safety";
+    changelog = "https://github.com/pyupio/safety/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ thomasdesr dotlambda ];
   };

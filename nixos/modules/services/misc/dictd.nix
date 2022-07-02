@@ -45,6 +45,10 @@ in
     # get the command line client on system path to make some use of the service
     environment.systemPackages = [ pkgs.dict ];
 
+    environment.etc."dict.conf".text = ''
+      server localhost
+    '';
+
     users.users.dictd =
       { group = "dictd";
         description = "DICT.org dictd server";

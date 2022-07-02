@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "C library for accessing the PostgreSQL parser outside of the server environment";
     changelog = "https://github.com/pganalyze/libpg_query/raw/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    platforms = platforms.x86_64;
+    platforms = platforms.unix;
     maintainers = [ maintainers.marsam ];
   };
 }

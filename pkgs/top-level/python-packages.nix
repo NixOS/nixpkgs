@@ -6466,6 +6466,8 @@ in {
 
   netmap = callPackage ../development/python-modules/netmap { };
 
+  onetimepad = callPackage ../development/python-modules/onetimepad { };
+
   openai = callPackage ../development/python-modules/openai { };
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
@@ -6654,6 +6656,8 @@ in {
   pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
 
   pysolcast = callPackage ../development/python-modules/pysolcast { };
+
+  pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
@@ -11633,6 +11637,8 @@ in {
 
   zope_broken = callPackage ../development/python-modules/zope_broken { };
 
+  zope-cachedescriptors = callPackage ../development/python-modules/zope-cachedescriptors { };
+
   zope_component = callPackage ../development/python-modules/zope_component { };
 
   zope_configuration = callPackage ../development/python-modules/zope_configuration { };
@@ -11668,6 +11674,8 @@ in {
   zope_schema = callPackage ../development/python-modules/zope_schema { };
 
   zope_size = callPackage ../development/python-modules/zope_size { };
+
+  zope-testbrowser = callPackage ../development/python-modules/zope-testbrowser { };
 
   zope_testing = callPackage ../development/python-modules/zope_testing { };
 

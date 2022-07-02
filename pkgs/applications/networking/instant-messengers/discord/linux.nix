@@ -5,7 +5,7 @@
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript
-, common-updater-scripts }:
+, common-updater-scripts, withOpenASAR }:
 
 stdenv.mkDerivation rec {
   inherit pname version src meta;
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postInstall = lib.strings.optionalString (openasar != null) ''
+  postInstall = lib.strings.optionalString withOpenASAR ''
     cp -f ${openasar} $out/opt/${binaryName}/resources/app.asar
   '';
 
