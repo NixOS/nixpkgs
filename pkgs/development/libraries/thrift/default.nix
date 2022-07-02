@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , boost
 , zlib
 , libevent
@@ -60,6 +61,11 @@ stdenv.mkDerivation rec {
     # ToStringTest.cpp is failing from some reason due to locale issue, this
     # doesn't disable all UnitTests as in Darwin.
     ./disable-failing-test.patch
+    (fetchpatch {
+      name = "tests-expired-certs.diff"; # https://github.com/apache/thrift/pull/2629
+      url = "https://github.com/apache/thrift/commit/54765854873e19b8ba50a0ec8080dd92d8323851.diff";
+      sha256 = "wnG2MjY0DtAhVcEdcxu77tDa4T9Xm2pMYZU2wXLx2OA=";
+    })
   ];
 
   cmakeFlags = [
