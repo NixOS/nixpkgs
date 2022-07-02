@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "blackbox_exporter";
-  version = "0.21.0";
+  version = "0.21.1";
   rev = "v${version}";
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "prometheus";
     repo = "blackbox_exporter";
-    sha256 = "sha256-u7MCZnzzEoPSk/SVlFRSc47YikQJ0lIxE4wchSN+aec=";
+    sha256 = "sha256-57+bNoLUfB98WqDUe8ysRdoG87RhKXttmkA//ucSqbQ=";
   };
 
   vendorSha256 = "sha256-7V5WEEy/Rz1QjscPD2Kz+viGkKQsWjs+8QN/3W7D+Ik=";

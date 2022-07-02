@@ -97,6 +97,8 @@ let
   ] ++ optionals enableIscsi [
     libiscsi
     openiscsi
+  ] ++ optionals enableZfs [
+    zfs
   ]);
 in
 

@@ -62,10 +62,15 @@ let
   };
   package = if stdenv.isLinux then ./linux.nix else ./darwin.nix;
 
-  openasar = if withOpenASAR then callPackage ./openasar.nix { } else null;
+  openasar = callPackage ./openasar.nix { };
 
   packages = (builtins.mapAttrs
-    (_: value: callPackage package (value // { inherit src version openasar; meta = meta // { mainProgram = value.binaryName; }; }))
+    (_: value: callPackage package
+      (value // {
+        inherit src version openasar withOpenASAR;
+        meta = meta // { mainProgram = value.binaryName; };
+      })
+    )
     {
       stable = rec {
         pname = "discord";
