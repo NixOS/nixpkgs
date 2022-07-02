@@ -1,4 +1,4 @@
-{ pname, version, src, openasar, meta, stdenv, binaryName, desktopName, lib, undmg, withOpenASAR }:
+{ pname, version, src, openasar, meta, stdenv, binaryName, desktopName, lib, undmg, withOpenASAR ? false }:
 
 stdenv.mkDerivation {
   inherit pname version src meta;

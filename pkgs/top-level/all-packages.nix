@@ -35501,15 +35501,21 @@ with pkgs;
 
   mpvc = callPackage ../applications/misc/mpvc { };
 
-  discord = callPackage ../applications/networking/instant-messengers/discord {
+  discord = import ../applications/networking/instant-messengers/discord {
+    inherit lib stdenv;
+    inherit (pkgs) callPackage fetchurl;
     branch = "stable";
   };
 
-  discord-ptb = callPackage ../applications/networking/instant-messengers/discord {
+  discord-ptb = import ../applications/networking/instant-messengers/discord {
+    inherit lib stdenv;
+    inherit (pkgs) callPackage fetchurl;
     branch = "ptb";
   };
 
-  discord-canary = callPackage ../applications/networking/instant-messengers/discord {
+  discord-canary = import ../applications/networking/instant-messengers/discord {
+    inherit lib stdenv;
+    inherit (pkgs) callPackage fetchurl;
     branch = "canary";
   };
 
