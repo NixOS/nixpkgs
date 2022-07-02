@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , construct
+, packaging
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
@@ -22,6 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     construct
+    packaging
   ];
 
   checkInputs = [

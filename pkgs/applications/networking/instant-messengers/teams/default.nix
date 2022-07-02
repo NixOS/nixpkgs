@@ -28,6 +28,7 @@ let
     description = "Microsoft Teams";
     homepage = "https://teams.microsoft.com";
     downloadPage = "https://teams.microsoft.com/downloads";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ liff tricktron ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
@@ -57,7 +58,12 @@ let
     ];
 
     preFixup = ''
-      gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin")
+      gappsWrapperArgs+=(
+        --prefix PATH : "${coreutils}/bin:${gawk}/bin"
+
+        # fix for https://docs.microsoft.com/en-us/answers/questions/298724/open-teams-meeting-link-on-linux-doens39t-work.html?childToView=309406#comment-309406
+        --append-flags '--disable-namespace-sandbox --disable-setuid-sandbox'
+      )
     '';
 
 
@@ -118,15 +124,6 @@ let
         echo "Adding runtime dependencies to RPATH of Node module $mod"
         patchelf --set-rpath "$runtime_rpath:$mod_rpath" "$mod"
       done;
-
-      # fix for https://docs.microsoft.com/en-us/answers/questions/298724/open-teams-meeting-link-on-linux-doens39t-work.html?childToView=309406#comment-309406
-      wrapped=$out/bin/.teams-old
-      mv "$out/bin/teams" "$wrapped"
-      cat > "$out/bin/teams" << EOF
-      #! ${runtimeShell}
-      exec $wrapped "\$@" --disable-namespace-sandbox --disable-setuid-sandbox
-      EOF
-      chmod +x "$out/bin/teams"
     '';
   };
 

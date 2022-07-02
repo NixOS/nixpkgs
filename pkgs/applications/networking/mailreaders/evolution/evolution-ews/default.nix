@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.44.1";
+  version = "3.44.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "LJNidefwnQtOtWgMVb/4Xw2A0lU4R2Gm0Z3XfOaU/oM=";
+    sha256 = "hcysooh6+FvwSORzx7bELF9WQasFpbxM/Oo04rb1vhc=";
   };
 
   nativeBuildInputs = [ cmake gettext intltool pkg-config ];

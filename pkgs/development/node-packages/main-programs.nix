@@ -16,6 +16,7 @@
   "@astrojs/language-server" = "astro-ls";
   "@bitwarden/cli" = "bw";
   "@commitlint/cli" = "commitlint";
+  "@forge/cli" = "forge";
   "@gitbeaker/cli" = "gitbeaker";
   "@google/clasp" = "clasp";
   "@hyperspace/cli" = "hyp";
@@ -31,6 +32,7 @@
   "@webassemblyjs/wasm-strip" = "wasm-strip";
   "@webassemblyjs/wasm-text-gen" = "wasmgen";
   "@webassemblyjs/wast-refmt" = "wast-refmt";
+  aws-cdk = "cdk";
   balanceofsatoshis = "bos";
   carbon-now-cli = "carbon-now";
   cdk8s-cli = "cdk8s";
@@ -49,6 +51,7 @@
   git-run = "gr";
   gitmoji-cli = "gitmoji";
   graphql-cli = "graphql";
+  graphql-language-service-cli = "graphql-lsp";
   grunt-cli = "grunt";
   gulp-cli = "gulp";
   kaput-cli = "kaput";

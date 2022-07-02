@@ -66,6 +66,10 @@ stdenv.mkDerivation rec {
     homepage = "https://imagej.net/software/fiji/";
     description = "batteries-included distribution of ImageJ2, bundling a lot of plugins which facilitate scientific image analysis";
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = with lib.licenses; [ gpl2Plus gpl3Plus bsd2 publicDomain ];
     maintainers = with maintainers; [ zane ];
   };

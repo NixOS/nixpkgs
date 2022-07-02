@@ -20,6 +20,10 @@ buildPythonPackage rec {
     sha256 = "sha256-bQMUkSaGSr0ycV1OkmfSdUzt4lppBSkBOZNWrTvF7P8=";
   };
 
+  patches = lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    ./force-kqueue.patch
+  ];
+
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 
   propagatedBuildInputs = [
@@ -42,6 +46,8 @@ buildPythonPackage rec {
   disabledTests = [
     # probably failing because of an encoding related issue
     "test_create_wrong_encoding"
+  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+    "test_delete"
   ];
 
   disabledTestPaths = [
@@ -58,8 +64,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/gorakhargosh/watchdog";
     license = licenses.asl20;
     maintainers = with maintainers; [ goibhniu ];
-    # error: use of undeclared identifier 'kFSEventStreamEventFlagItemCloned'
-    # builds fine on aarch64-darwin
-    broken = stdenv.isDarwin && !stdenv.isAarch64;
   };
 }

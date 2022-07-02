@@ -6,13 +6,14 @@
 , libjwt
 , libyaml
 , json_c
+, http-parser
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "22.05.0.1";
+  version = "22.05.2.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "0bc8kycrc5a8kqffbd03k22z38f7z8fj725iniq8hz6srhf5nxgs";
+    sha256 = "1zfv5n7cqqn3c78h2svjazbdkdchyrk54prn2bq5diw80wgcmyrc";
   };
 
   outputs = [ "out" "dev" ];
@@ -53,10 +54,12 @@ stdenv.mkDerivation rec {
       libmysqlclient ncurses gtk2 lz4 rdma-core
       lua hwloc numactl readline freeipmi shadow.su
       pmix json_c libjwt libyaml dbus libbpf
+      http-parser
   ] ++ lib.optionals enableX11 [ xorg.xauth ];
 
   configureFlags = with lib;
     [ "--with-freeipmi=${freeipmi}"
+      "--with-http-parser=${http-parser}"
       "--with-hwloc=${hwloc.dev}"
       "--with-json=${json_c.dev}"
       "--with-jwt=${libjwt}"

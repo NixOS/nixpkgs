@@ -1,19 +1,25 @@
 { lib
+, stdenv
 , buildPythonPackage
-, fetchFromGitHub
 , pythonOlder
-, brotlipy
-, zopfli
+, isPyPy
+, fetchFromGitHub
+, setuptools-scm
+, fs
 , lxml
+, brotli
+, brotlicffi
+, zopfli
+, unicodedata2
+, lz4
 , scipy
 , munkres
-, unicodedata2
+, matplotlib
 , sympy
-, reportlab
-, sphinx
+, xattr
+, skia-pathops
+, uharfbuzz
 , pytestCheckHook
-, glibcLocales
-, setuptools-scm
 }:
 
 buildPythonPackage rec {
@@ -31,28 +37,32 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  # all dependencies are optional, but
-  # we run the checks with them
+  passthru.optional-dependencies = let
+    extras = {
+      ufo = [ fs ];
+      lxml = [ lxml ];
+      woff = [ (if isPyPy then brotlicffi else brotli) zopfli ];
+      unicode = lib.optional (pythonOlder "3.11") unicodedata2;
+      graphite = [ lz4 ];
+      interpolatable = [ (if isPyPy then munkres else scipy) ];
+      plot = [ matplotlib ];
+      symfont = [ sympy ];
+      type1 = lib.optional stdenv.isDarwin xattr;
+      pathops = [ skia-pathops ];
+      repacker = [ uharfbuzz ];
+    };
+  in extras // {
+    all = lib.concatLists (lib.attrValues extras);
+  };
 
   checkInputs = [
     pytestCheckHook
-    # etree extra
-    lxml
-    # woff extra
-    brotlipy
-    zopfli
-    # interpolatable extra
-    scipy
-    munkres
-    # symfont
-    sympy
-    # pens
-    reportlab
-    sphinx
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    # unicode extra
-    unicodedata2
-  ];
+  ] ++ lib.concatLists (lib.attrVals [
+    "woff"
+    "interpolatable"
+    "pathops"
+    "repacker"
+  ] passthru.optional-dependencies);
 
   pythonImportsCheck = [ "fontTools" ];
 

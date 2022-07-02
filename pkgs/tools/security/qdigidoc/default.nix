@@ -35,10 +35,14 @@ mkDerivation rec {
     qttranslations
   ];
 
-  # replace this hack with a proper cmake variable or environment variable
-  # once https://github.com/open-eid/cmake/pull/34 (or #35) gets merged.
+  # qdigidoc4's `QPKCS11::reload()` dlopen()s "opensc-pkcs11.so" in QLibrary,
+  # i.e. OpenSC's module is searched for in libQt5Core's DT_RUNPATH and fixing
+  # qdigidoc4's DT_RUNPATH has no effect on Linux (at least OpenBSD's ld.so(1)
+  # searches the program's runtime path as well).
+  # LD_LIBRARY_PATH takes precedence for all calling objects, see dlopen(3).
+  # https://github.com/open-eid/cmake/pull/35 might be an alternative.
   qtWrapperArgs = [
-      "--prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/"
+    "--prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/"
   ];
 
   meta = with lib; {

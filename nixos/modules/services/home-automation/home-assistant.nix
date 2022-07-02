@@ -369,6 +369,17 @@ in {
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.config.http.server_port ];
 
+    # symlink the configuration to /etc/home-assistant
+    environment.etc = lib.mkMerge [
+      (lib.mkIf (cfg.config != null && !cfg.configWritable) {
+        "home-assistant/configuration.yaml".source = configFile;
+      })
+
+      (lib.mkIf (cfg.lovelaceConfig != null && !cfg.lovelaceConfigWritable) {
+        "home-assistant/ui-lovelace.yaml".source = lovelaceConfigFile;
+      })
+    ];
+
     systemd.services.home-assistant = {
       description = "Home Assistant";
       after = [
@@ -378,18 +389,22 @@ in {
         "mysql.service"
         "postgresql.service"
       ];
+      reloadTriggers = [
+        configFile
+        lovelaceConfigFile
+      ];
       preStart = let
         copyConfig = if cfg.configWritable then ''
           cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
         '' else ''
           rm -f "${cfg.configDir}/configuration.yaml"
-          ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
+          ln -s /etc/home-assistant/configuration.yaml "${cfg.configDir}/configuration.yaml"
         '';
         copyLovelaceConfig = if cfg.lovelaceConfigWritable then ''
           cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
         '' else ''
           rm -f "${cfg.configDir}/ui-lovelace.yaml"
-          ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+          ln -s /etc/home-assistant/ui-lovelace.yaml "${cfg.configDir}/ui-lovelace.yaml"
         '';
       in
         (optionalString (cfg.config != null) copyConfig) +

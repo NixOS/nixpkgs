@@ -168,35 +168,15 @@ rec {
   # Constructor for other terraform versions
   mkTerraform = attrs: pluggable (generic attrs);
 
-  terraform_0_13 = mkTerraform {
-    version = "0.13.7";
-    sha256 = "1cahnmp66dk21g7ga6454yfhaqrxff7hpwpdgc87cswyq823fgjn";
-    patches = [ ./provider-path.patch ];
-    passthru = { inherit plugins; };
-  };
-
-  terraform_0_14 = mkTerraform {
-    version = "0.14.11";
-    sha256 = "1yi1jj3n61g1kn8klw6l78shd23q79llb7qqwigqrx3ki2mp279j";
-    vendorSha256 = "sha256-tWrSr6JCS9s+I0T1o3jgZ395u8IBmh73XGrnJidWI7U=";
-    patches = [ ./provider-path.patch ];
-    passthru = { inherit plugins; };
-  };
-
-  terraform_0_15 = mkTerraform {
-    version = "0.15.5";
-    sha256 = "18f4a6l24s3cym7gk40agxikd90i56q84wziskw1spy9rgv2yx6d";
-    vendorSha256 = "sha256-oFvoEsDunJR4IULdGwS6nHBKWEgUehgT+nNM41W/GYo=";
-    patches = [ ./provider-path-0_15.patch ];
-    passthru = { inherit plugins; };
-  };
-
   terraform_1 = mkTerraform {
-    version = "1.2.2";
-    sha256 = "sha256-LkRCumyNHVBSsXRp1ovNMGCeidK/jVCjh9H1HSE1Lm8=";
-    vendorSha256 = "sha256-CVgAmPM0nt0Wx+N0qs+IO5KwCWnbfif70EHjBi0bIsQ=";
+    version = "1.2.4";
+    sha256 = "sha256-FpRn0cFO3/CKdFDeAIu02Huez4Jpunpf6QH9KFVn2lQ=";
+    vendorSha256 = "sha256-1RKnNF3NC0fGiU2VKz43UBGP33QrLxESVuH6IV6kYqA=";
     patches = [ ./provider-path-0_15.patch ];
-    passthru = { inherit plugins; };
+    passthru = {
+      inherit plugins;
+      tests = { inherit terraform_plugins_test; };
+    };
   };
 
   # Tests that the plugins are being used. Terraform looks at the specific

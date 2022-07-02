@@ -171,8 +171,12 @@ in stdenv.mkDerivation rec {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     homepage = "https://ghidra-sre.org/";
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.asl20;
-    maintainers = [ "roblabla" ];
+    maintainers = with maintainers; [ roblabla ];
   };
 
 }

@@ -84,15 +84,18 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "5.17"; in
+  linuxHeaders = let version = "5.18"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
-        sha256 = "1cdi43x4c3l4chznh57gm55szycj4wjlxl1dss1ilnfvvmhyypsm";
+        sha256 = "1vjwhl4s8qxfg1aabn8xnpjza3qzrjcp5450h9qpjvl999lg3wsi";
       };
       patches = [
          ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+
+         # 5.19 backport. Can be removed on update.
+         ./restore-__bitwise__.patch
       ];
     };
 }

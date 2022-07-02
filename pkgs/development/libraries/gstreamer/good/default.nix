@@ -72,7 +72,9 @@ stdenv.mkDerivation rec {
     orc
     libshout
     glib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals qt5Support (with qt5; [
+    qtbase
+  ]) ++ lib.optionals stdenv.isLinux [
     wayland-protocols
   ];
 

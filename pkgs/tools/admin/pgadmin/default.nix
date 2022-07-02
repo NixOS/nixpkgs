@@ -10,11 +10,11 @@
 
 let
   pname = "pgadmin";
-  version = "6.9";
+  version = "6.10";
 
   src = fetchurl {
     url = "https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${version}/source/pgadmin4-${version}.tar.gz";
-    sha256 = "sha256-C/0UDbPUuKCF9BBrDdlETGl7ALpFOmGaaxHVHxrIPVo=";
+    sha256 = "sha256-wl7qC0p1NLX4+ulb4AGNPU6D0r838t6t/IYwJZcDnVQ=";
   };
 
   yarnDeps = mkYarnModules {
@@ -68,7 +68,7 @@ let
     boto3
   ];
 
-  # override necessary on pgadmin4 6.9
+  # override necessary on pgadmin4 6.10
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec {
     flask = prev.flask.overridePythonAttrs (oldAttrs: rec {
       version = "2.0.3";

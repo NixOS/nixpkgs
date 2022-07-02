@@ -58,6 +58,7 @@ stdenv.mkDerivation rec {
       models and sketches.
     '';
     homepage = "https://www.archimatetool.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ earldouglas ];

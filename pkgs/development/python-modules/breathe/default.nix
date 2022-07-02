@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "breathe";
-  version = "4.33.1";
+  version = "4.34.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "michaeljones";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-S4wxlxluRjwlRGCa5Os/J3EpdekI/CEPMWw6j/wlZbw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OOc3XQjqQa0cVpA+/HHco+koL+0whUm5qC7x3xiEdwQ=";
   };
 
   propagatedBuildInputs = [

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cosign";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9zA50tnUWR8dglPvMagiGcJDkPHs7yXuqYV2jnRdWqA=";
+    sha256 = "sha256-l+jM0GCjaqbaoIcjUgnIZJqSGIsirWMwJWPrilBdps8=";
   };
 
   buildInputs = lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
@@ -16,7 +16,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorSha256 = "sha256-buOdutDZUFu+GbjyF0Ql8QAXpNEv2ej0mwjSZMHDmdA=";
+  vendorSha256 = "sha256-mZeCQOnAVZrJmi9F+y7QPPXXl48f7HAjJCmri01hYew=";
 
   subPackages = [
     "cmd/cosign"

@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.0.156";
+  version = "2.0.158";
 
   src = fetchFromGitHub {
     owner = "armosec";

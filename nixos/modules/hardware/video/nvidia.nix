@@ -183,6 +183,14 @@ in
       '';
       example = literalExpression "config.boot.kernelPackages.nvidiaPackages.legacy_340";
     };
+
+    hardware.nvidia.open = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Whether to use the open source kernel module
+      '';
+    };
   };
 
   config = let
@@ -230,6 +238,11 @@ in
           builtins.pathExists (cfg.package.out + "/lib/systemd/system-sleep/nvidia")
         );
         message = "Required files for driver based power management don't exist.";
+      }
+
+      {
+        assertion = cfg.open -> (cfg.package ? open && cfg.package ? firmware);
+        message = "This version of NVIDIA driver does not provide a corresponding opensource kernel driver";
       }
     ];
 
@@ -364,7 +377,8 @@ in
       ++ optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
         "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
-    boot.extraModulePackages = [ nvidia_x11.bin ];
+    boot.extraModulePackages = if cfg.open then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
+    hardware.firmware = lib.optional cfg.open nvidia_x11.firmware;
 
     # nvidia-uvm is required by CUDA applications.
     boot.kernelModules = [ "nvidia-uvm" ] ++
@@ -372,7 +386,8 @@ in
 
     # If requested enable modesetting via kernel parameter.
     boot.kernelParams = optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
-      ++ optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1";
+      ++ optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
+      ++ optional cfg.open "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1";
 
     services.udev.extraRules =
       ''

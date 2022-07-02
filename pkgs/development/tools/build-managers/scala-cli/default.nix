@@ -1,5 +1,16 @@
-{ stdenv, coreutils, lib, installShellFiles, zlib, autoPatchelfHook, fetchurl, callPackage }:
+{ stdenv
+, coreutils
+, lib
+, installShellFiles
+, zlib
+, autoPatchelfHook
+, fetchurl
+, makeWrapper
+, callPackage
+, jre
+}:
 
+assert lib.versionAtLeast jre.version "17.0.0";
 let
   pname = "scala-cli";
   sources = builtins.fromJSON (builtins.readFile ./sources.json);
@@ -9,7 +20,7 @@ let
 in
 stdenv.mkDerivation {
   inherit pname version;
-  nativeBuildInputs = [ installShellFiles ]
+  nativeBuildInputs = [ installShellFiles makeWrapper ]
     ++ lib.optional stdenv.isLinux autoPatchelfHook;
   buildInputs = [ coreutils zlib stdenv.cc.cc ];
   src =
@@ -28,7 +39,9 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 scala-cli $out/bin/scala-cli
+    install -Dm755 scala-cli $out/bin/.scala-cli-wrapped
+    makeWrapper $out/bin/.scala-cli-wrapped $out/bin/scala-cli \
+      --set JAVA_HOME ${jre.home}
     runHook postInstall
   '';
 
@@ -50,6 +63,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://scala-cli.virtuslab.org";
     downloadPage = "https://github.com/VirtusLab/scala-cli/releases/v${version}";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
     description = "Command-line tool to interact with the Scala language";
     maintainers = [ maintainers.kubukoz ];

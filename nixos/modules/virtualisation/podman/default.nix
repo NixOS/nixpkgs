@@ -153,6 +153,12 @@ in
       systemd.sockets.podman.wantedBy = [ "sockets.target" ];
       systemd.sockets.podman.socketConfig.SocketGroup = "podman";
 
+      systemd.user.services.podman.serviceConfig = {
+        ExecStart = [ "" "${cfg.package}/bin/podman $LOGGING system service" ];
+      };
+
+      systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
+
       systemd.tmpfiles.packages = [
         # The /run/podman rule interferes with our podman group, so we remove
         # it and let the systemd socket logic take care of it.

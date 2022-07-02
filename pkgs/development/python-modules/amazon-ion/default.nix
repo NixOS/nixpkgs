@@ -41,6 +41,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python implementation of Amazon Ion";
     homepage = "https://github.com/amzn/ion-python";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     license = licenses.asl20;
     maintainers = with maintainers; [ terlar ];
   };

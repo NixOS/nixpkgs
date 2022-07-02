@@ -10,7 +10,6 @@ rec {
   *
   * Examples:
   * runCommand "name" {envVariable = true;} ''echo hello > $out''
-  * runCommandNoCC "name" {envVariable = true;} ''echo hello > $out'' # equivalent to prior
   * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
   *
   * The `*Local` variants force a derivation to be built locally,

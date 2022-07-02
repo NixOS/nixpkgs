@@ -30,13 +30,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "terra";
-  version = "1.0.0-beta3_${builtins.substring 0 7 src.rev}";
+  version = "1.0.0-beta5";
 
   src = fetchFromGitHub {
     owner = "terralang";
     repo = "terra";
-    rev = "99ff93f8c60c89bbe2dc7c63eab9bfe2f4c4833e";
-    sha256 = "0ww54xjvv6p8jwsh6hml3v527zgnv2gj58gpb818bbg4k1jwa5fl";
+    rev = "bcc5a81649cb91aaaff33790b39c87feb5f7a4c2";
+    sha256 = "0jb147vbvix3zvrq6ln321jdxjgr6z68pdrirjp4zqmx78yqlcx3";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -84,7 +84,7 @@ in stdenv.mkDerivation rec {
     description = "A low-level counterpart to Lua";
     homepage = "https://terralang.org/";
     platforms = platforms.x86_64;
-    maintainers = with maintainers; [ jb55 seylerius thoughtpolice ];
+    maintainers = with maintainers; [ jb55 seylerius thoughtpolice elliottslaughter ];
     license = licenses.mit;
   };
 }

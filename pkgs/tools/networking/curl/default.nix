@@ -3,6 +3,7 @@
 , c-aresSupport ? false, c-ares ? null
 , gnutlsSupport ? false, gnutls ? null
 , gsaslSupport ? false, gsasl ? null
+, patchNetrcRegression ? false
 , gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
     # disable gss becuase of: undefined reference to `k5_bcmp'
@@ -77,7 +78,7 @@ stdenv.mkDerivation rec {
     # quiche: support ca-fallback
     # https://github.com/curl/curl/commit/fdb5e21b4dd171a96cf7c002ee77bb08f8e58021
     ./7.83.1-quiche-support-ca-fallback.patch
-  ];
+  ] ++ lib.optional patchNetrcRegression ./netrc-regression.patch;
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;

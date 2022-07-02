@@ -1,14 +1,20 @@
-{ ffmpeg_4, ffmpeg-full, fetchFromGitHub, lib }:
+{ ffmpeg_5-full
+, nv-codec-headers-11
+, fetchFromGitHub
+, lib
+}:
 
-(ffmpeg-full.override { ffmpeg = ffmpeg_4; }).overrideAttrs (old: rec {
+(ffmpeg_5-full.override {
+  nv-codec-headers = nv-codec-headers-11;
+}).overrideAttrs (old: rec {
   pname = "jellyfin-ffmpeg";
-  version = "4.4.1-4";
+  version = "5.0.1-7";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    sha256 = "0y7iskamlx30f0zknbscpi308y685nbnbf5gr9cj1znr5dlfb0bn";
+    sha256 = "sha256-jMd7tEEfiHqTp4q8c6EvbjL0KyJ6ucj4ZNrKOJLJ1Mc=";
   };
 
   postPatch = ''
@@ -18,8 +24,6 @@
 
     ${old.postPatch or ""}
   '';
-
-  doCheck = false; # https://github.com/jellyfin/jellyfin-ffmpeg/issues/79
 
   meta = with lib; {
     description = "${old.meta.description} (Jellyfin fork)";

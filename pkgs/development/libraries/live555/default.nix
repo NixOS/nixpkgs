@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "live555";
-  version = "2022.02.07";
+  version = "2022.06.16";
 
   src = fetchurl {
     urls = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       "https://download.videolan.org/contrib/live555/live.${version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz"
     ];
-    sha256 = "sha256-bwwfinHOtQa8v5abArSww2l7ThXa623LqYcsh0XOksY=";
+    sha256 = "sha256-84OUQw++RNqH3sAY4S6yXRJXZY+5T0VdTIUqELuVdV0=";
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin darwin.cctools;
@@ -42,27 +42,21 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
 
-    ./genMakefiles ${{
-      x86_64-darwin = "macosx-catalina";
-      i686-linux = "linux";
-      x86_64-linux = "linux-64bit";
-      aarch64-linux = "linux-64bit";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}")}
+    ./genMakefiles ${
+      if stdenv.isLinux then
+        "linux"
+      else if stdenv.isDarwin then
+        "macosx-catalina"
+      else
+        throw "Unsupported platform ${stdenv.hostPlatform.system}"}
 
     runHook postConfigure
   '';
 
-  installPhase = ''
-    runHook preInstall
-
-    for dir in BasicUsageEnvironment groupsock liveMedia UsageEnvironment; do
-      install -dm755 $out/{bin,lib,include/$dir}
-      install -m644 $dir/*.a "$out/lib"
-      install -m644 $dir/include/*.h* "$out/include/$dir"
-    done
-
-    runHook postInstall
-  '';
+  makeFlags = [
+    "DESTDIR=${placeholder "out"}"
+    "PREFIX="
+  ];
 
   enableParallelBuilding = true;
 
@@ -77,6 +71,5 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }

@@ -12,7 +12,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Version of Pulumi from
 # https://www.pulumi.com/docs/get-started/install/versions/
-VERSION="3.31.0"
+VERSION="3.35.2"
 
 # An array of plugin names. The respective repository inside Pulumi's
 # Github organization is called pulumi-$name by convention.
@@ -109,8 +109,6 @@ function genSrcs() {
   local tmpdir
   tmpdir="$(mktemp -d)"
 
-  local i=0
-
   for plugVers in "${plugins[@]}"; do
     local plug=${plugVers%=*}
     local version=${plugVers#*=}
@@ -118,7 +116,6 @@ function genSrcs() {
     # https://github.com/pulumi/pulumi/blob/06d4dde8898b2a0de2c3c7ff8e45f97495b89d82/pkg/workspace/plugins.go#L197
     local url="https://api.pulumi.com/releases/plugins/pulumi-resource-${plug}-v${version}-${1}-${2}.tar.gz"
     genSrc "${url}" "${plug}" "${tmpdir}" &
-    ((++i))
   done
 
   wait

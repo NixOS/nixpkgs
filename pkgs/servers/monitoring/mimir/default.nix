@@ -18,7 +18,7 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    inherit (nixosTests) grafana-mimir;
+    inherit (nixosTests) mimir;
   };
 
   ldflags = let t = "github.com/grafana/mimir/pkg/util/version";

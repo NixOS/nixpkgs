@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec  {
   pname = "kora-icon-theme";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub  {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
-    sha256 = "sha256-3TKjd2Lblb+/zFq7rkdgnD1dJU3kis7QZi7Ui74IWzA=";
+    sha256 = "sha256-OwuePPn4seHbzv81pnTEP1Q0Tp1ywZIEmw+dx3bDoXw=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec  {
     homepage = "https://github.com/bikass/kora";
     license = with licenses; [ gpl3Only ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bloomvdomino ];
+    maintainers = with maintainers; [ ];
   };
 }

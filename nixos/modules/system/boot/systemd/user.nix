@@ -14,6 +14,7 @@ let
     generateUnits
     targetToUnit
     serviceToUnit
+    sliceToUnit
     socketToUnit
     timerToUnit
     pathToUnit;

@@ -8,7 +8,40 @@
 , enableSSH ? false
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+
+      grandalf = super.grandalf.overridePythonAttrs (oldAttrs: rec {
+        version = "0.6";
+        src = fetchFromGitHub {
+          owner = "bdcht";
+          repo = "grandalf";
+          rev = "v${version}";
+          hash = "sha256-T4pVzjz1WbfBA2ybN4IRK73PD/eb83YUW0BZrBESNLg=";
+        };
+        postPatch = ''
+          substituteInPlace setup.py \
+            --replace "setup_requires=['pytest-runner',]," ""
+        '';
+      });
+
+      scmrepo = super.scmrepo.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.19";
+        src = fetchFromGitHub {
+          owner = "iterative";
+          repo = "scmrepo";
+          rev = "refs/tags/${version}";
+          hash = "sha256-f/KV3NfIumkZcg9r421QhdyPU/274aAU4b78myi+fFY=";
+        };
+      });
+
+    };
+  };
+in
+with py.pkgs;
+
+buildPythonApplication rec {
   pname = "dvc";
   version = "2.10.2";
   format = "setuptools";
@@ -20,12 +53,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-boaQSg0jajWQZKB5wvcP2musVR2/pifT4pU64Y5hiQ0=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = with py.pkgs; [
     setuptools-scm
     setuptools-scm-git-archive
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with py.pkgs; [
     aiohttp-retry
     appdirs
     colorama
@@ -78,9 +111,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "grandalf==0.6" "grandalf>=0.6" \
-      --replace "scmrepo==0.0.19" "scmrepo"
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';

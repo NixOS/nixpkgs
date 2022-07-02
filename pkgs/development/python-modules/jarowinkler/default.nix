@@ -3,32 +3,42 @@
 , pythonOlder
 , fetchFromGitHub
 , cmake
+, ninja
 , cython
 , rapidfuzz-capi
 , scikit-build
+, setuptools
+, jarowinkler-cpp
 , hypothesis
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "jarowinkler";
-  version = "1.0.2";
+  version = "1.0.5";
 
   disabled = pythonOlder "3.6";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "JaroWinkler";
     rev = "v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-zVAcV6xxqyfXRUcyWo9PcOdagcexJc/D5k4g5ag3hbY=";
+    hash = "sha256-5LWJeNfQ0d8wiqjIha+CCcmBf+GU36VTYFqRlg4+6qA=";
   };
 
   nativeBuildInputs = [
     cmake
     cython
+    ninja
     rapidfuzz-capi
     scikit-build
+    setuptools
+  ];
+
+  buildInputs = [
+    jarowinkler-cpp
   ];
 
   dontUseCmakeConfigure = true;
@@ -48,6 +58,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for fast approximate string matching using Jaro and Jaro-Winkler similarity";
     homepage = "https://github.com/maxbachmann/JaroWinkler";
+    changelog = "https://github.com/maxbachmann/JaroWinkler/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };

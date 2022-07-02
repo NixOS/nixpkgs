@@ -68,6 +68,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.gov.br/receitafederal/pt-br";
     license = licenses.unfree;
     platforms = platforms.all;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     maintainers = with maintainers; [ atila ];
   };
 }

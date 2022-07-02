@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://opalang.org/";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.kkallio ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 }

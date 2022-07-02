@@ -3,7 +3,7 @@
 , aiosmtplib
 , blinker
 , buildPythonPackage
-, email_validator
+, email-validator
 , fakeredis
 , fastapi
 , fetchFromGitHub
@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi-mail";
-  version = "1.0.8";
+  version = "1.0.9";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,9 +27,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sabuhish";
     repo = pname;
-    rev = version;
-    hash = "sha256-PkA7qkdDUd7mrtvb6IbCzFRq6X0M3iKY+FKuNConJ5A=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-2Nb+FzmhsKvauT/yOCLHCEld8r+6niu9kV6EmjhC6S0=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'fastapi = "^0.75.0"' 'fastapi = "*"' \
+      --replace 'httpx = "^0.22.0"' 'httpx = "*"'
+  '';
 
   nativeBuildInputs = [
     poetry-core
@@ -39,7 +45,7 @@ buildPythonPackage rec {
     aioredis
     aiosmtplib
     blinker
-    email_validator
+    email-validator
     fakeredis
     fastapi
     httpx

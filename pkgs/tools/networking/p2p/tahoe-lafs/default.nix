@@ -31,6 +31,9 @@ python3Packages.buildPythonApplication rec {
 
     sed -i 's/"zope.interface.*"/"zope.interface"/' src/allmydata/_auto_deps.py
     sed -i 's/"pycrypto.*"/"pycrypto"/' src/allmydata/_auto_deps.py
+
+    # incompatible with latest autobahn
+    rm src/allmydata/test/web/test_logs.py
   '';
 
   # Remove broken and expensive tests.
@@ -95,6 +98,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://tahoe-lafs.org/";
     license = [ licenses.gpl2Plus /* or */ "TGPPLv1+" ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
-    platforms = platforms.gnu ++ platforms.linux;
+    platforms = platforms.linux;
   };
 }

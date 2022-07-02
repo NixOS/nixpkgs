@@ -21,15 +21,16 @@ index bdb4fb8..1363a67 100755
  #[ -x "$MSMTP" ] || \
  #  log -e 1 "msmtpq : can't find the msmtp executable [ $MSMTP ]"   # if not found - complain ; quit
  ##
-@@ -70,9 +70,8 @@ MSMTP=msmtp
+@@ -70,9 +70,9 @@ MSMTP=msmtp
  ##            ( chmod 0700 msmtp.queue )
  ##
  ## the queue dir - modify this to reflect where you'd like it to be  (no quotes !!)
 -Q=~/.msmtp.queue
--[ -d "$Q" ] || \
--  err '' "msmtpq : can't find msmtp queue directory [ $Q ]" ''     # if not present - complain ; quit
+-[ -d "$Q" ] || mkdir -m 0700 "$Q" || \
+-  err '' "msmtpq : can't find or create msmtp queue directory [ $Q ]" ''     # if not present - complain ; quit
 +Q=${MSMTP_QUEUE:-~/.msmtp.queue}
-+test -d "$Q" || mkdir -p "$Q"
++[ -d "$Q" ] || mkdir -m 0700 -p "$Q" || \
++   err '' "msmtpq : can't find or create msmtp queue directory [ $Q ]" ''     # if not present - complain ; quit
  ##
  ## set the queue log file var to the location of the msmtp queue log file
  ##   where it is or where you'd like it to be

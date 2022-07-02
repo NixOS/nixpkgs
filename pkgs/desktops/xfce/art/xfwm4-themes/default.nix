@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "Themes for Xfce";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ volth ] ++ teams.xfce.members;
+    maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }

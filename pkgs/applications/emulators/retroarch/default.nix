@@ -126,7 +126,12 @@ stdenv.mkDerivation rec {
 
   # Workaround for the following error affecting newer versions of Clang:
   # ./config.def.h:xxx:x: error: 'TARGET_OS_TV' is not defined, evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.cc.isClang [ "-Wno-undef-prefix" ];
+  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isClang [ "-Wno-undef-prefix" ]
+    # Workaround build failure on -fno-common toolchains:
+    #   duplicate symbol '_apple_platform' in:ui_cocoa.o cocoa_common.o
+    # TODO: drop when upstream gets a fix for it:
+    #   https://github.com/libretro/RetroArch/issues/14025
+    ++ lib.optionals stdenv.isDarwin [ "-fcommon" ];
 
   meta = with lib; {
     homepage = "https://libretro.com";

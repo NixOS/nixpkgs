@@ -85,6 +85,10 @@ stdenv.mkDerivation rec {
       and save to Evernote.
     '';
     homepage = "https://www.xmind.net/";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ michalrus ];

@@ -54,16 +54,14 @@ mkDerivation rec {
     "-DCMAKE_BUILD_TYPE=RelWithDebInfo"
   ];
 
-  postInstall = ''
-    for i in $out/bin/*; do
-      wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
-    done
+  preInstall = ''
+    qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
   '';
 
   meta = with lib; {
     description = "A free and open source painting application";
     homepage = "https://krita.org/";
-    maintainers = with maintainers; [ abbradar sifmelcara ];
+    maintainers = with maintainers; [ abbradar sifmelcara nek0 ];
     platforms = platforms.linux;
     license = licenses.gpl3Only;
   };

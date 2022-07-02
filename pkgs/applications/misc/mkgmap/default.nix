@@ -76,6 +76,10 @@ stdenv.mkDerivation rec {
     description = "Create maps for Garmin GPS devices from OpenStreetMap (OSM) data";
     homepage = "https://www.mkgmap.org.uk/";
     downloadPage = "https://www.mkgmap.org.uk/download/mkgmap.html";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.all;

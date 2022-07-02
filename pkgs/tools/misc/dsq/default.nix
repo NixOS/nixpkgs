@@ -9,42 +9,36 @@
 , python3
 , curl
 , jq
+, p7zip
 , dsq
 }:
 
 buildGoModule rec {
   pname = "dsq";
-  version = "0.16.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "multiprocessio";
     repo = "dsq";
     rev = version;
-    hash = "sha256-emBLYiNOHYp3XsaY172DDtIdquj3U3U/Q6bogC3rvFQ=";
+    hash = "sha256-jwJw56Z/Y0vnsybE/FfXXHtz0W0J80Q5rrRRoINbjkM=";
   };
 
-  vendorSha256 = "sha256-ZZDZ3FWgOpRJB+X1hrlP8Hh1n3l7jUd39H5MDz88wOs=";
+  vendorSha256 = "sha256-7KQDaDM151OFfTYRPOit4MAmwgEzvLOYFWCjXhVmFT0=";
 
   ldflags = [ "-X" "main.Version=${version}" ];
 
-  checkInputs = [ python3 curl jq ];
+  checkInputs = [ python3 curl jq p7zip ];
 
-  preCheck =
-    let
-      taxiCsv = fetchurl {
-        url = "https://s3.amazonaws.com/nyc-tlc/trip+data/yellow_tripdata_2021-04.csv";
-        hash = "sha256-CXJPraOYAy5tViDcBi9gxI/rJ3ZXqOa/nJ/d+aREV+M=";
-      };
-    in
-    ''
-      substituteInPlace scripts/test.py \
-        --replace '${taxiCsv.url}' file://${taxiCsv} \
-        --replace 'dsq latest' 'dsq ${version}'
-    '';
+  preCheck = ''
+    substituteInPlace scripts/test.py \
+      --replace 'dsq latest' 'dsq ${version}'
+  '';
 
   checkPhase = ''
     runHook preCheck
 
+    7z e testdata/taxi.csv.7z
     cp "$GOPATH/bin/dsq" .
     python3 scripts/test.py
 

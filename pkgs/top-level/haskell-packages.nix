@@ -8,6 +8,8 @@ let
     "ghc8102BinaryMinimal"
     "ghc8107Binary"
     "ghc8107BinaryMinimal"
+    "ghc922Binary"
+    "ghc922BinaryMinimal"
     "ghcjs"
     "ghcjs810"
     "integer-simple"
@@ -47,6 +49,8 @@ let
   # Use this rather than `rec { ... }` below for sake of overlays.
   inherit (pkgs.haskell) compiler packages;
 
+  sphinx = buildPackages.sphinx_offline;
+
 in {
   lib = haskellLibUncomposable;
 
@@ -76,6 +80,14 @@ in {
       minimal = true;
     };
 
+    ghc922Binary = callPackage ../development/compilers/ghc/9.2.2-binary.nix {
+      llvmPackages = pkgs.llvmPackages_12;
+    };
+    ghc922BinaryMinimal = callPackage ../development/compilers/ghc/9.2.2-binary.nix {
+      llvmPackages = pkgs.llvmPackages_12;
+      minimal = true;
+    };
+
     ghc884 = callPackage ../development/compilers/ghc/8.8.4.nix {
       bootPkgs =
         # aarch64 ghc865Binary gets SEGVs due to haskell#15449 or similar
@@ -87,7 +99,7 @@ in {
           packages.ghc8102Binary
         else
           packages.ghc865Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit sphinx;
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
@@ -100,7 +112,7 @@ in {
           packages.ghc8107BinaryMinimal
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -116,7 +128,7 @@ in {
           packages.ghc8107BinaryMinimal
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit sphinx;
       inherit (buildPackages.darwin) autoSignDarwinBinariesHook xattr;
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
@@ -128,7 +140,7 @@ in {
           packages.ghc8107BinaryMinimal
         else
           packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -138,7 +150,7 @@ in {
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
       bootPkgs = packages.ghc8107Binary;
-      inherit (buildPackages.python3Packages) sphinx;
+      inherit sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -210,6 +222,18 @@ in {
       buildHaskellPackages = bh.packages.ghc8107BinaryMinimal;
       ghc = bh.compiler.ghc8107BinaryMinimal;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.10.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc922Binary = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc922Binary;
+      ghc = bh.compiler.ghc922Binary;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
+      packageSetConfig = bootstrapPackageSet;
+    };
+    ghc922BinaryMinimal = callPackage ../development/haskell-modules {
+      buildHaskellPackages = bh.packages.ghc922BinaryMinimal;
+      ghc = bh.compiler.ghc922BinaryMinimal;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
       packageSetConfig = bootstrapPackageSet;
     };
     ghc884 = callPackage ../development/haskell-modules {

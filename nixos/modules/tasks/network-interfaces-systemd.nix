@@ -59,15 +59,14 @@ in
         genericNetwork = override:
           let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
             ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
-          in optionalAttrs (gateway != [ ]) {
-            routes = override [
-              {
+              makeGateway = gateway: {
                 routeConfig = {
                   Gateway = gateway;
                   GatewayOnLink = false;
                 };
-              }
-            ];
+              };
+          in optionalAttrs (gateway != [ ]) {
+            routes = override (map makeGateway gateway);
           } // optionalAttrs (domains != [ ]) {
             domains = override domains;
           };
@@ -89,20 +88,22 @@ in
           # more likely to result in interfaces being configured to
           # use DHCP when they shouldn't.
 
-          # We set RequiredForOnline to false, because it's fairly
-          # common for such devices to have multiple interfaces and
-          # only one of them to be connected (e.g. a laptop with
-          # ethernet and WiFi interfaces). Maybe one day networkd will
-          # support "any"-style RequiredForOnline...
+          # When wait-online.anyInterface is enabled, RequiredForOnline really
+          # means "sufficient for online", so we can enable it.
+          # Otherwise, don't block the network coming online because of default networks.
           matchConfig.Name = ["en*" "eth*"];
           DHCP = "yes";
-          linkConfig.RequiredForOnline = lib.mkDefault false;
+          linkConfig.RequiredForOnline =
+            lib.mkDefault config.systemd.network.wait-online.anyInterface;
+          networkConfig.IPv6PrivacyExtensions = "kernel";
         };
         networks."99-wireless-client-dhcp" = lib.mkIf cfg.useDHCP {
           # Like above, but this is much more likely to be correct.
           matchConfig.WLANInterfaceType = "station";
           DHCP = "yes";
-          linkConfig.RequiredForOnline = lib.mkDefault false;
+          linkConfig.RequiredForOnline =
+            lib.mkDefault config.systemd.network.wait-online.anyInterface;
+          networkConfig.IPv6PrivacyExtensions = "kernel";
           # We also set the route metric to one more than the default
           # of 1024, so that Ethernet is preferred if both are
           # available.

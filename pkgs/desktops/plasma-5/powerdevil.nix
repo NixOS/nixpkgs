@@ -1,5 +1,5 @@
 {
-  mkDerivation, fetchpatch,
+  mkDerivation,
   extra-cmake-modules, kdoctools,
   bluez-qt, kactivities, kauth, kconfig, kdbusaddons,
   kglobalaccel, ki18n, kidletime, kio, knotifyconfig, kwayland, libkscreen,

@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/DaveMDS/python-efl";
     platforms = platforms.linux;
     license = with licenses; [ gpl3 lgpl3 ];
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx ] ++ teams.enlightenment.members;
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

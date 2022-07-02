@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-weZTOVFBlB6TxFs8pLWfyB7WD/bn3ljBjX2tVi1Zc/I=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "siobrultech_protocols==" "siobrultech_protocols>="
+  '';
+
   propagatedBuildInputs = [
     aiohttp
     siobrultech-protocols

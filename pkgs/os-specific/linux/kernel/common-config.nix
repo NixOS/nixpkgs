@@ -41,7 +41,8 @@ let
         (whenBetween "5.2" "5.18" yes)
       ];
       DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
-      DEBUG_INFO_BTF            = whenAtLeast "5.2" (option yes);
+      # Disabled on 32-bit platforms, fails to build on 5.15+ with `Failed to parse base BTF 'vmlinux': -22`
+      DEBUG_INFO_BTF            = whenAtLeast "5.2" (option (if stdenv.hostPlatform.is32bit && (versionAtLeast version "5.15") then no else yes));
       BPF_LSM                   = whenAtLeast "5.7" (option yes);
       DEBUG_KERNEL              = yes;
       DEBUG_DEVRES              = no;
@@ -289,6 +290,9 @@ let
       # Intel GVT-g graphics virtualization supports 64-bit only
       DRM_I915_GVT = whenAtLeast "4.16" yes;
       DRM_I915_GVT_KVMGT = whenAtLeast "4.16" module;
+    } // optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      # enable HDMI-CEC on RPi boards
+      DRM_VC4_HDMI_CEC = whenAtLeast "4.14" yes;
     };
 
     sound = {
@@ -917,6 +921,9 @@ let
       TASK_DELAY_ACCT = yes;
       TASK_XACCT = yes;
       TASK_IO_ACCOUNTING = yes;
+
+      # Fresh toolchains frequently break -Werror build for minor issues.
+      WERROR = whenAtLeast "5.15" no;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

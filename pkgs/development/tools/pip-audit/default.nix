@@ -25,14 +25,14 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "pip-audit";
-  version = "2.3.1";
+  version = "2.4.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-W7g2ZV1Xf1s5sGRJiZdQcreBD6zp1/VRQPGs+VIOJE0=";
+    hash = "sha256-l1oefdveAmmkRKnEOvdVp4efYd/nFkyDyVP5dxAG1CI=";
   };
 
   nativeBuildInputs = [
@@ -43,10 +43,12 @@ buildPythonApplication rec {
     cachecontrol
     cyclonedx-python-lib
     html5lib
+    lockfile
     packaging
     pip-api
     progress
     resolvelib
+    rich
   ];
 
   checkInputs = [

@@ -19,20 +19,20 @@
 
 stdenv.mkDerivation rec {
   pname = "amberol";
-  version = "0.6.3";
+  version = "0.8.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-KV3nYJbLaQxpMpC7aCzfpNMe9bYpZKrdoOtYA++eC74=";
+    hash = "sha256-spVZOFqnY4cNbIY1ED3Zki6yPMoFDNG5BtuD456hPs4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-UjHL/5iVht2jPnOiYjoIKWJdvwQQkNuKfF8rpi48j3c=";
+    hash = "sha256-8PEAyQ8JW45d/Lut3hUSKCzV7JjFTpvKGra5dj3byo4=";
   };
 
   postPatch = ''
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://gitlab.gnome.org/ebassi/amberol";
+    homepage = "https://gitlab.gnome.org/World/amberol";
     description = "A small and simple sound and music player";
     maintainers = with maintainers; [ linsui ];
     license = licenses.gpl3Plus;

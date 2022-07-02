@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-windows";
-  version = "0.1.0";
+  version = "0.1.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-windows";
-    rev = "v${version}";
-    hash = "sha256-BO6hiPLwEJX0sICqMZfcO4tqljdS+93Z1kG8IWsV9og=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ATDWhHY9tjuQbfIFgoGhz8qsluH9hTSI9zdPmP8GPWE=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +28,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pysigma
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pysigma = "^0.5.0"' 'pysigma = "^0.6.0"'
+  '';
 
   checkInputs = [
     pytestCheckHook

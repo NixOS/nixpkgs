@@ -49,6 +49,11 @@ in stdenv.mkDerivation rec {
   # build fails otherwise
   enableParallelBuilding = false;
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: raima/startup.o:/build/cde-2.3.2/lib/DtSearch/raima/dbtype.h:408: multiple definition of
+  #     `__SK__'; raima/alloc.o:/build/cde-2.3.2/lib/DtSearch/raima/dbtype.h:408: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   makeFlags = [
     "World"
     "BOOTSTRAPCFLAGS=-I${xorgproto}/include/X11"

@@ -26,12 +26,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "4.10";
+  version = "4.11";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-f9S7kZ9uOTiKtHv6Ea9vo/Wem5vWlcfU6SCK+Fy5yTs=";
+    hash = "sha256-+BTt4w174N7Ar7KujQNii5rjTISLaDEuTFre2UwQKxk=";
   };
 
   nativeBuildInputs = [
@@ -206,7 +206,7 @@ stdenv.mkDerivation rec {
       - Financial Calculations
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar AndersonTorres ];
+    maintainers = with maintainers; [ domenkozar AndersonTorres rski ];
     platforms = platforms.unix;
   };
 }

@@ -6,7 +6,7 @@
 , cmake
 , curl
 , nasm
-, openmpt123
+, libopenmpt
 , p7zip
 , libgme
 , libpng
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
     curl
     libgme
     libpng
-    openmpt123
+    libopenmpt
     SDL2
     SDL2_mixer
     zlib
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DSRB2_ASSET_DIRECTORY=/build/source/assets"
     "-DGME_INCLUDE_DIR=${libgme}/include"
-    "-DOPENMPT_INCLUDE_DIR=${openmpt123}/include"
+    "-DOPENMPT_INCLUDE_DIR=${libopenmpt.dev}/include"
     "-DSDL2_MIXER_INCLUDE_DIR=${SDL2_mixer}/include/SDL2"
     "-DSDL2_INCLUDE_DIR=${SDL2.dev}/include/SDL2"
   ];

@@ -99,6 +99,19 @@ self: super: builtins.intersectAttrs super {
   ormolu = enableSeparateBinOutput super.ormolu;
   ghcid = enableSeparateBinOutput super.ghcid;
 
+  arbtt = overrideCabal (drv: {
+    # The test suite needs the packages's executables in $PATH to succeed.
+    preCheck = ''
+      for i in $PWD/dist/build/*; do
+        export PATH="$i:$PATH"
+      done
+    '';
+    # One test uses timezone data
+    testToolDepends = drv.testToolDepends or [] ++ [
+      pkgs.tzdata
+    ];
+  }) super.arbtt;
+
   hzk = overrideCabal (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
     configureFlags = [ "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper" ];
@@ -759,39 +772,8 @@ self: super: builtins.intersectAttrs super {
     })
     (generateOptparseApplicativeCompletion "pnbackup" super.pinboard-notes-backup);
 
-  # set more accurate set of platforms instead of maintaining
-  # an ever growing list of platforms to exclude via unsupported-platforms
-  cpuid = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.cpuid;
-
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
-
-  # passes the -msse2 flag which only works on x86 platforms
-  hsignal = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.hsignal;
-
-  # uses x86 intrinsics
-  blake3 = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.blake3;
-
-  # uses x86 intrinsics, see also https://github.com/NixOS/nixpkgs/issues/122014
-  crc32c = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.crc32c;
-
-  # uses x86 intrinsics
-  seqalign = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.seqalign;
-
-  # uses x86 intrinsics
-  geomancy = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.geomancy;
 
   hlint = overrideCabal (drv: {
     postInstall = ''
@@ -810,16 +792,6 @@ self: super: builtins.intersectAttrs super {
       pkgs.zlib
     ] ++ (drv.librarySystemDepends or []);
   }) super.taglib;
-
-  # uses x86 assembler
-  inline-asm = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.inline-asm;
-
-  # uses x86 assembler in C bits
-  hw-prim-bits = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.hw-prim-bits;
 
   # random 1.2.0 has tests that indirectly depend on
   # itself causing an infinite recursion at evaluation
@@ -924,6 +896,9 @@ self: super: builtins.intersectAttrs super {
       && buildPlatform.isx86;
   } super.hashes;
 
+  # Tries to access network
+  aws-sns-verify = dontCheck super.aws-sns-verify;
+
   # procex relies on close_range which has been introduced in Linux 5.9,
   # the test suite seems to force the use of this feature (or the fallback
   # mechanism is broken), so we can't run the test suite on machines with a
@@ -940,6 +915,13 @@ self: super: builtins.intersectAttrs super {
       fi
     '' + (drv.postConfigure or "");
   }) super.procex;
+
+  # Test suite wants to run main executable
+  fourmolu_0_7_0_1 = overrideCabal (drv: {
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/fourmolu:$PATH"
+    '';
+  }) super.fourmolu_0_7_0_1;
 
   # Apply a patch which hardcodes the store path of graphviz instead of using
   # whatever graphviz is in PATH.

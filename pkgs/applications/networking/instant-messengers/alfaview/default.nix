@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alfaview";
-  version = "8.45.0";
+  version = "8.47.0";
 
   src = fetchurl {
     url = "https://production-alfaview-assets.alfaview.com/stable/linux/${pname}_${version}.deb";
-    sha256 = "sha256-qSLKPtBjhbPGX9axbQnyCb+Tcq47xDMvVGj18hEPw28=";
+    sha256 = "sha256-KpFLKl5ifncO3lQbEowwLavsfvNcYyrlvNINqAvNWBY=";
   };
 
   nativeBuildInputs = [
@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Video-conferencing application, specialized in virtual online meetings, seminars, training sessions and conferences";
     homepage = "https://alfaview.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ wolfangaukang hexchen ];
     platforms = [ "x86_64-linux" ];

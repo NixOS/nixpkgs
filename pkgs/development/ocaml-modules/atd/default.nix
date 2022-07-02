@@ -20,7 +20,7 @@ buildDunePackage rec {
     description = "Syntax for cross-language type definitions";
     homepage = "https://github.com/mjambon/atd";
     license = licenses.mit;
-    maintainers = with maintainers; [ aij jwilberding ];
+    maintainers = with maintainers; [ aij ];
     mainProgram = "atdcat";
   };
 }

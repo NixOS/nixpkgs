@@ -78,10 +78,13 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = "apache-arrow-${version}/cpp";
 
-  ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = jemalloc.src;
-
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-8.0.0/cpp/thirdparty/versions.txt
+
+  ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = fetchurl {
+    url = "https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2";
+    hash = "sha256-NDMOXOJ2CZ4uiVDZM121qHVomkxqVnUe87HYxTf4h/Y=";
+  };
 
   ARROW_MIMALLOC_URL = fetchFromGitHub {
     owner = "microsoft";

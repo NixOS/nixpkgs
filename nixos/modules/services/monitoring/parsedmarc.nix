@@ -3,7 +3,19 @@
 let
   cfg = config.services.parsedmarc;
   opt = options.services.parsedmarc;
-  ini = pkgs.formats.ini {};
+  isSecret = v: isAttrs v && v ? _secret && isString v._secret;
+  ini = pkgs.formats.ini {
+    mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" rec {
+      mkValueString = v:
+        if isInt           v then toString v
+        else if isString   v then v
+        else if true  ==   v then "True"
+        else if false ==   v then "False"
+        else if isSecret   v then hashString "sha256" v._secret
+        else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+    };
+  };
+  inherit (builtins) elem isAttrs isString isInt isList typeOf hashString;
 in
 {
   options.services.parsedmarc = {
@@ -107,11 +119,35 @@ in
     };
 
     settings = lib.mkOption {
+      example = lib.literalExpression ''
+        {
+          imap = {
+            host = "imap.example.com";
+            user = "alice@example.com";
+            password = { _secret = "/run/keys/imap_password" };
+            watch = true;
+          };
+          splunk_hec = {
+            url = "https://splunkhec.example.com";
+            token = { _secret = "/run/keys/splunk_token" };
+            index = "email";
+          };
+        }
+      '';
       description = ''
         Configuration parameters to set in
         <filename>parsedmarc.ini</filename>. For a full list of
         available parameters, see
         <link xlink:href="https://domainaware.github.io/parsedmarc/#configuration-file" />.
+
+        Settings containing secret data should be set to an attribute
+        set containing the attribute <literal>_secret</literal> - a
+        string pointing to a file containing the value the option
+        should be set to. See the example to get a better picture of
+        this: in the resulting <filename>parsedmarc.ini</filename>
+        file, the <literal>splunk_hec.token</literal> key will be set
+        to the contents of the
+        <filename>/run/keys/splunk_token</filename> file.
       '';
 
       type = lib.types.submodule {
@@ -170,11 +206,18 @@ in
             };
 
             password = lib.mkOption {
-              type = with lib.types; nullOr path;
+              type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
               description = ''
-                The path to a file containing the IMAP server password.
+                The IMAP server password.
+
+                Always handled as a secret whether the value is
+                wrapped in a <literal>{ _secret = ...; }</literal>
+                attrset or not (refer to <xref
+                linkend="opt-services.parsedmarc.settings" /> for
+                details).
               '';
+              apply = x: if isAttrs x || x == null then x else { _secret = x; };
             };
 
             watch = lib.mkOption {
@@ -228,11 +271,18 @@ in
             };
 
             password = lib.mkOption {
-              type = with lib.types; nullOr path;
+              type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
               description = ''
-                The path to a file containing the SMTP server password.
+                The SMTP server password.
+
+                Always handled as a secret whether the value is
+                wrapped in a <literal>{ _secret = ...; }</literal>
+                attrset or not (refer to <xref
+                linkend="opt-services.parsedmarc.settings" /> for
+                details).
               '';
+              apply = x: if isAttrs x || x == null then x else { _secret = x; };
             };
 
             from = lib.mkOption {
@@ -274,12 +324,19 @@ in
             };
 
             password = lib.mkOption {
-              type = with lib.types; nullOr path;
+              type = with lib.types; nullOr (either path (attrsOf path));
               default = null;
               description = ''
-                The path to a file containing the password to use when
-                connecting to Elasticsearch, if required.
+                The password to use when connecting to Elasticsearch,
+                if required.
+
+                Always handled as a secret whether the value is
+                wrapped in a <literal>{ _secret = ...; }</literal>
+                attrset or not (refer to <xref
+                linkend="opt-services.parsedmarc.settings" /> for
+                details).
               '';
+              apply = x: if isAttrs x || x == null then x else { _secret = x; };
             };
 
             ssl = lib.mkOption {
@@ -299,63 +356,6 @@ in
               '';
             };
           };
-
-          kafka = {
-            hosts = lib.mkOption {
-              default = [];
-              type = with lib.types; listOf str;
-              apply = x: if x == [] then null else lib.concatStringsSep "," x;
-              description = ''
-                A list of Apache Kafka hosts to publish parsed reports
-                to.
-              '';
-            };
-
-            user = lib.mkOption {
-              type = with lib.types; nullOr str;
-              default = null;
-              description = ''
-                Username to use when connecting to Kafka, if
-                required.
-              '';
-            };
-
-            password = lib.mkOption {
-              type = with lib.types; nullOr path;
-              default = null;
-              description = ''
-                The path to a file containing the password to use when
-                connecting to Kafka, if required.
-              '';
-            };
-
-            ssl = lib.mkOption {
-              type = with lib.types; nullOr bool;
-              default = null;
-              description = ''
-                Whether to use an encrypted SSL/TLS connection.
-              '';
-            };
-
-            aggregate_topic = lib.mkOption {
-              type = with lib.types; nullOr str;
-              default = null;
-              example = "aggregate";
-              description = ''
-                The Kafka topic to publish aggregate reports on.
-              '';
-            };
-
-            forensic_topic = lib.mkOption {
-              type = with lib.types; nullOr str;
-              default = null;
-              example = "forensic";
-              description = ''
-                The Kafka topic to publish forensic reports on.
-              '';
-            };
-          };
-
         };
 
       };
@@ -404,21 +404,14 @@ in
         enable = cfg.provision.grafana.datasource || cfg.provision.grafana.dashboard;
         datasources =
           let
-            pkgVer = lib.getVersion config.services.elasticsearch.package;
-            esVersion =
-              if lib.versionOlder pkgVer "7" then
-                "60"
-              else if lib.versionOlder pkgVer "8" then
-                "70"
-              else
-                throw "When provisioning parsedmarc grafana datasources: unknown Elasticsearch version.";
+            esVersion = lib.getVersion config.services.elasticsearch.package;
           in
             lib.mkIf cfg.provision.grafana.datasource [
               {
                 name = "dmarc-ag";
                 type = "elasticsearch";
                 access = "proxy";
-                url = "localhost:9200";
+                url = "http://localhost:9200";
                 jsonData = {
                   timeField = "date_range";
                   inherit esVersion;
@@ -428,7 +421,7 @@ in
                 name = "dmarc-fo";
                 type = "elasticsearch";
                 access = "proxy";
-                url = "localhost:9200";
+                url = "http://localhost:9200";
                 jsonData = {
                   timeField = "date_range";
                   inherit esVersion;
@@ -467,12 +460,17 @@ in
         # lists, empty attrsets and null. This makes it possible to
         # list interesting options in `settings` without them always
         # ending up in the resulting config.
-        filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! builtins.elem v [ null [] {} ])) cfg.settings;
+        filteredConfig = lib.converge (lib.filterAttrsRecursive (_: v: ! elem v [ null [] {} ])) cfg.settings;
+
+        # Extract secrets (attributes set to an attrset with a
+        # "_secret" key) from the settings and generate the commands
+        # to run to perform the secret replacements.
+        secretPaths = lib.catAttrs "_secret" (lib.collect isSecret filteredConfig);
         parsedmarcConfig = ini.generate "parsedmarc.ini" filteredConfig;
-        mkSecretReplacement = file:
-          lib.optionalString (file != null) ''
-            replace-secret '${file}' '${file}' /run/parsedmarc/parsedmarc.ini
-          '';
+        mkSecretReplacement = file: ''
+          replace-secret ${lib.escapeShellArgs [ (hashString "sha256" file) file "/run/parsedmarc/parsedmarc.ini" ]}
+        '';
+        secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
       in
         {
           wantedBy = [ "multi-user.target" ];
@@ -487,10 +485,7 @@ in
                 umask u=rwx,g=,o=
                 cp ${parsedmarcConfig} /run/parsedmarc/parsedmarc.ini
                 chown parsedmarc:parsedmarc /run/parsedmarc/parsedmarc.ini
-                ${mkSecretReplacement cfg.settings.smtp.password}
-                ${mkSecretReplacement cfg.settings.imap.password}
-                ${mkSecretReplacement cfg.settings.elasticsearch.password}
-                ${mkSecretReplacement cfg.settings.kafka.password}
+                ${secretReplacements}
               '' + lib.optionalString cfg.provision.localMail.enable ''
                 openssl rand -hex 64 >/run/parsedmarc/dmarc_user_passwd
                 replace-secret '@imap-password@' '/run/parsedmarc/dmarc_user_passwd' /run/parsedmarc/parsedmarc.ini

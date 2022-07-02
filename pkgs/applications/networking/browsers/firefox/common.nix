@@ -21,6 +21,7 @@
 { lib
 , pkgs
 , stdenv
+, fetchpatch
 
 # build time
 , autoconf
@@ -87,7 +88,7 @@
 , jackSupport ? stdenv.isLinux, libjack2
 , jemallocSupport ? true, jemalloc
 , ltoSupport ? (stdenv.isLinux && stdenv.is64bit), overrideCC, buildPackages
-, pgoSupport ? (stdenv.isLinux && stdenv.isx86_64 && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, pgoSupport ? (stdenv.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.isLinux, libpulseaudio
 , sndioSupport ? stdenv.isLinux, sndio
@@ -219,6 +220,12 @@ buildStdenv.mkDerivation ({
   ];
 
   patches = [
+    (fetchpatch {
+      # https://bugzilla.mozilla.org/show_bug.cgi?id=1773259
+      name = "rust-cbindgen-0.24.2-compat.patch";
+      url = "https://raw.githubusercontent.com/canonical/firefox-snap/5622734942524846fb0eb7108918c8cd8557fde3/patches/fix-ftbfs-newer-cbindgen.patch";
+      hash = "sha256-+wNZhkDB3HSknPRD4N6cQXY7zMT/DzNXx29jQH0Gb1o=";
+    })
   ]
   ++ lib.optional (lib.versionAtLeast version "86") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "90" && lib.versionOlder version "95") ./no-buildconfig-ffx90.patch
@@ -328,7 +335,7 @@ buildStdenv.mkDerivation ({
     # please get your own set of keys at https://location.services.mozilla.com/api.
     echo "dfd7836c-d458-4917-98bb-421c82d3c8a0" > $TMPDIR/mls-api-key
     configureFlagsArray+=("--with-mozilla-api-keyfile=$TMPDIR/mls-api-key")
-  '' + lib.optionalString enableOfficialBranding ''
+  '' + lib.optionalString (enableOfficialBranding && !stdenv.is32bit) ''
     export MOZILLA_OFFICIAL=1
   '';
 

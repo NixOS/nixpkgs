@@ -16,14 +16,14 @@ with lib;
 let
   go-d-plugin = callPackage ./go.d.plugin.nix {};
 in stdenv.mkDerivation rec {
-  version = "1.34.1";
+  version = "1.35.1";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "sha256-MGXHIbmoPRyjjYHV/RD9sd8Dn74YVlET2V3d/wJ3blo=";
+    sha256 = "sha256-wYphy3+DlT0UpQ5su/LkMJRIcABiBR+fIL/0w9bUeS0=";
     fetchSubmodules = true;
   };
 
@@ -100,6 +100,8 @@ in stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
   '';
+
+  enableParallelBuild = true;
 
   passthru = {
     inherit withIpmi;

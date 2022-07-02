@@ -69,6 +69,8 @@ buildPythonApplication rec {
     "test_missing_cache_dir"
     "test_sorting_null_values"
     "test_xdg_existant"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_sorting_fields"
   ];
 
   pythonImportsCheck = [
@@ -76,7 +78,6 @@ buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://github.com/pimutils/todoman";
     description = "Standards-based task manager based on iCalendar";
     longDescription = ''

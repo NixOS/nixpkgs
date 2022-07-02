@@ -94,6 +94,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A decentralized bitcoin exchange network";
     homepage = "https://bisq.network";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ juaningan emmanuelrosa ];
     platforms = [ "x86_64-linux" ];

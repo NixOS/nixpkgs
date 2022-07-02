@@ -26,6 +26,18 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
+  "@forge/cli" = prev."@forge/cli".override {
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = with pkgs; [
+      libsecret
+      final.node-gyp-build
+      final.node-pre-gyp
+    ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.Security
+    ];
+  };
+
   "@hyperspace/cli" = prev."@hyperspace/cli".override {
     nativeBuildInputs = [ pkgs.makeWrapper ];
     buildInputs = [ final.node-gyp-build ];
@@ -147,6 +159,14 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
     meta = oldAttrs.meta // { broken = since "10"; };
   });
+
+  graphql-language-service-cli = prev.graphql-language-service-cli.override {
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      wrapProgram "$out/bin/graphql-lsp" \
+        --prefix NODE_PATH : ${final.graphql}/lib/node_modules
+    '';
+  };
 
   hsd = prev.hsd.override {
     buildInputs = [ final.node-gyp-build pkgs.unbound ];
@@ -330,7 +350,7 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-l9MOgNCn/paDE+i1K2fp9NZ+Du4trzPTJsGkaQHVBufTGqzoYHuNk8JfzXuIn0Gte6/ZjyKj652Jq/Lc1tp2yw==";
+      sha512 = "sha512-Dtsar03XpCBkcEb2ooGWO/WcgblDTLzGhPcustbehwlFXuTMliMDRzXsfygsgYwQoZnAUKRd1rhpvBNEUziOVw==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \

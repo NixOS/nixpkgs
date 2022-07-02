@@ -209,6 +209,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "CUPS Linux drivers for Canon printers";
     homepage = "http://www.canon.com/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [
       # please consider maintaining if you are updating this package

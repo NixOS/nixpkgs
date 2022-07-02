@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.6.1";
+  version = "2022.6.7";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -1207,7 +1207,7 @@
       pyialarm
     ];
     "ialarm_xr" = ps: with ps; [
-      pyialarmxr
+      pyialarmxr-homeassistant
     ];
     "iammeter" = ps: with ps; [
     ]; # missing inputs: iammeter
@@ -2053,7 +2053,8 @@
     "plum_lightpad" = ps: with ps; [
     ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [
-    ]; # missing inputs: pycketcasts
+      pycketcasts
+    ];
     "point" = ps: with ps; [
       aiohttp-cors
       pypoint

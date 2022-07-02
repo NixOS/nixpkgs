@@ -29,6 +29,7 @@ let
       meta = with lib; {
         inherit description license;
         homepage = "http://saxon.sourceforge.net/";
+        sourceProvenance = with sourceTypes; [ binaryBytecode ];
         maintainers = with maintainers; [ rvl ];
         platforms = platforms.all;
       };

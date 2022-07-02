@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Library to choose unique available network ports";
     homepage = "https://github.com/google/python_portpicker";
     license = licenses.asl20;
-    maintainers = with maintainers; [ danharaj ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -53,7 +53,7 @@ in {
                else cfg.configFile;
       in
       {
-        ExecStart = "${pkgs.grafana-mimir}/bin/mimir --config.file=${conf}";
+        ExecStart = "${pkgs.mimir}/bin/mimir --config.file=${conf}";
         DynamicUser = true;
         Restart = "always";
         ProtectSystem = "full";

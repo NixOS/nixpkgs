@@ -1,0 +1,23 @@
+https://github.com/libffi/libffi/issues/668
+--- a/src/powerpc/linux64.S
++++ b/src/powerpc/linux64.S
+@@ -29,6 +29,8 @@
+ #include <fficonfig.h>
+ #include <ffi.h>
+ 
++	.machine altivec
++
+ #ifdef POWERPC64
+ 	.hidden	ffi_call_LINUX64
+ 	.globl	ffi_call_LINUX64
+--- a/src/powerpc/linux64_closure.S
++++ b/src/powerpc/linux64_closure.S
+@@ -30,6 +30,8 @@
+ 
+ 	.file	"linux64_closure.S"
+ 
++	.machine altivec
++
+ #ifdef POWERPC64
+ 	FFI_HIDDEN (ffi_closure_LINUX64)
+ 	.globl  ffi_closure_LINUX64

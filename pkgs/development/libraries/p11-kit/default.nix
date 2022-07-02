@@ -59,9 +59,10 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-trust-paths=${lib.concatStringsSep ":" [
-      "/etc/ssl/trust-source"               # p11-kit trust source
-      "/etc/ssl/certs/ca-certificates.crt"  # NixOS + Debian/Ubuntu/Arch/Gentoo...
-      "/etc/pki/tls/certs/ca-bundle.crt"    # Fedora/CentOS
+      "/etc/ssl/trust-source"                  # p11-kit trust source
+      "/etc/ssl/certs/ca-certificates.crt"     # NixOS + Debian/Ubuntu/Arch/Gentoo...
+      "/etc/pki/tls/certs/ca-bundle.crt"       # Fedora/CentOS
+      "/var/lib/ca-certificates/ca-bundle.pem" # openSUSE
     ]}"
   ];
 

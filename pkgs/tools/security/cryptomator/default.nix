@@ -110,6 +110,10 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Free client-side encryption for your cloud files";
     homepage = "https://cryptomator.org";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ bachp ];
     platforms = platforms.linux;

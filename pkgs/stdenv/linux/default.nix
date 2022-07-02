@@ -417,7 +417,7 @@ in
         # Simple executable tools
         concatMap (p: [ (getBin p) (getLib p) ]) [
             gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
-            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed
+            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed file
           ]
         # Library dependencies
         ++ map getLib (
@@ -436,8 +436,16 @@ in
         inherit (prevStage)
           gzip bzip2 xz bash coreutils diffutils findutils gawk
           gnumake gnused gnutar gnugrep gnupatch patchelf
-          attr acl zlib pcre libunistring libidn2;
+          attr acl zlib pcre libunistring;
         ${localSystem.libc} = getLibc prevStage;
+
+        # Hack: avoid libidn2.{bin,dev} referencing bootstrap tools.  There's a logical cycle.
+        libidn2 = import ../../development/libraries/libidn2/no-bootstrap-reference.nix {
+          inherit lib;
+          inherit (prevStage) libidn2;
+          inherit (self) stdenv runCommandLocal patchelf libunistring;
+        };
+
       } // lib.optionalAttrs (super.stdenv.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
         inherit (prevStage) binutils binutils-unwrapped;

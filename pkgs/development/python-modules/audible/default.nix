@@ -2,21 +2,23 @@
 
 buildPythonPackage rec {
   pname = "audible";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "Audible";
-    rev = "v${version}";
-    sha256 = "0fsb5av4s7fvpn0iryl8jj3lwffwlxgbwj46l3fidy0l58nq3b1d";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-SIEDBuMCC/Hap2mGVbKEFic96ClN369SEsV06Sg+poY=";
   };
 
   propagatedBuildInputs = [ beautifulsoup4 httpx pbkdf2 pillow pyaes rsa ];
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'httpx>=0.20.*,<=0.22.*' 'httpx'
+    sed -i "s/httpx.*/httpx',/" setup.py
   '';
+
+  # has no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "audible"];
 

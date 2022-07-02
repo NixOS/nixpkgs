@@ -238,10 +238,16 @@ self: super: {
   digit = doJailbreak super.digit;
 
   # 2020-06-05: HACK: does not pass own build suite - `dontCheck`
-  hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck super.hnix);
+  # 2022-06-17: Use hnix-store 0.5 until hnix 0.17
+  hnix = generateOptparseApplicativeCompletion "hnix" (dontCheck (
+    super.hnix.overrideScope (hself: hsuper: {
+      hnix-store-core = hself.hnix-store-core_0_5_0_0;
+      hnix-store-remote = hself.hnix-store-remote_0_5_0_0;
+    })
+  ));
   # Too strict bounds on algebraic-graphs
   # https://github.com/haskell-nix/hnix-store/issues/180
-  hnix-store-core = doJailbreak super.hnix-store-core;
+  hnix-store-core_0_5_0_0 = doJailbreak super.hnix-store-core_0_5_0_0;
 
   # Fails for non-obvious reasons while attempting to use doctest.
   focuslist = dontCheck super.focuslist;
@@ -671,9 +677,6 @@ self: super: {
 
   # https://github.com/pxqr/base32-bytestring/issues/4
   base32-bytestring = dontCheck super.base32-bytestring;
-
-  # 2022-03-24: Strict aeson bound:
-  arch-web = throwIfNot (super.arch-web.version == "0.1.0") "arch-web: remove jailbreak after update"  doJailbreak super.arch-web;
 
   # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
   # https://github.com/augustss/djinn/pull/8
@@ -1158,17 +1161,6 @@ self: super: {
   # https://github.com/elliottt/hsopenid/issues/15
   openid = markBroken super.openid;
 
-  # Version constraints on test dependency tasty-golden need to be relaxed:
-  # https://github.com/nomeata/arbtt/pull/146
-  arbtt = doJailbreak (overrideCabal (drv: {
-    # The test suite needs the packages's executables in $PATH to succeed.
-    preCheck = ''
-      for i in $PWD/dist/build/*; do
-        export PATH="$i:$PATH"
-      done
-    '';
-  }) super.arbtt);
-
   # https://github.com/erikd/hjsmin/issues/32
   hjsmin = dontCheck super.hjsmin;
 
@@ -1321,19 +1313,6 @@ self: super: {
   # tls test suite fails: upstream https://github.com/vincenthz/hs-tls/issues/434
   x509-validation = dontCheck super.x509-validation;
   tls = dontCheck super.tls;
-
-  patch = appendPatches [
-    # 2022-02-27: https://github.com/reflex-frp/patch/pull/40 for bump bounds
-    (fetchpatch {
-      url = "https://github.com/reflex-frp/patch/commit/15ea4956e04264b9be2fe4644119a709b196708f.patch";
-      sha256 = "sha256-la97DCjeVu82AaQv2my+UhmB/jBmMyxxpRAwhEB1RGc=";
-    })
-    # 2022-03-13: https://github.com/reflex-frp/patch/pull/41 for ghc 9.0 compat
-    (fetchpatch {
-      url = "https://github.com/reflex-frp/patch/commit/fee3addcfc982c7b70489a8a64f208ab2360bdb7.patch";
-      sha256 = "sha256-/CTiHSs+Z4dyL5EJx949XD0zzSAy5s4hzchmNkb0YOk=";
-    })
-  ] super.patch;
 
   # 2022-03-16: lens bound can be loosened https://github.com/ghcjs/jsaddle-dom/issues/19
   jsaddle-dom = overrideCabal (old: {
@@ -1634,20 +1613,8 @@ self: super: {
 
   reflex-dom-pandoc = super.reflex-dom-pandoc.override { clay = dontCheck self.clay_0_13_3; };
 
-  # 2022-03-16: Pull request for ghc 9 compat: https://github.com/reflex-frp/reflex/pull/467
-  reflex = overrideCabal (drv: {
-    patches = drv.patches or [] ++ [
-      (fetchpatch {
-        url = "https://github.com/reflex-frp/reflex/compare/469b4ab4a755cad76b8d4d6c9ad482d02686b4ae.patch";
-        sha256 = "04sxzxpx7xhr6p4n76rg1ci8zjfzs19lr21ziwsfig8zmdg22i7q";
-      })
-    ];
-    doCheck = false;
-    # hackage revision seems to have DOS newlines
-    prePatch = drv.prePatch or "" + ''
-      ${pkgs.buildPackages.dos2unix}/bin/dos2unix reflex.cabal
-    '';
-  }) super.reflex;
+  # 2022-06-19: Disable checks because of https://github.com/reflex-frp/reflex/issues/475
+  reflex = dontCheck super.reflex;
 
   # 2020-11-19: jailbreaking because of pretty-simple bound out of date
   # https://github.com/kowainik/stan/issues/408
@@ -1695,11 +1662,7 @@ self: super: {
   # waiting for aeson bump
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
-  hercules-ci-agent =
-    assert super.hercules-ci-agent.version == "0.9.5"; # >0.9.5: remove source override as sdist will be fixed
-    overrideSrc
-      { src = pkgs.fetchFromGitHub { owner = "hercules-ci"; repo = "hercules-ci-agent"; rev = "hercules-ci-agent-0.9.5"; sha256 = "sha256-7d8lf4g8CWHTzIOmma8UKvFIi1Og6RqPH9Lt+6iA4pw="; } + "/hercules-ci-agent"; }
-      (generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent);
+  hercules-ci-agent = generateOptparseApplicativeCompletion "hercules-ci-agent" super.hercules-ci-agent;
 
   # Test suite doesn't compile with aeson 2.0
   # https://github.com/hercules-ci/hercules-ci-agent/pull/387
@@ -2096,15 +2059,18 @@ self: super: {
     };
   } self.haskell-ci;
 
-  large-hashable = lib.pipe super.large-hashable [
-    # 2022-03-21: use version from git which includes support for GHC 9.0.1
+  large-hashable = lib.pipe (super.large-hashable.override {
+    # https://github.com/factisresearch/large-hashable/commit/5ec9d2c7233fc4445303564047c992b693e1155c
+    utf8-light = null;
+  }) [
+    # 2022-03-21: use version from git which supports GHC 9.{0,2} and aeson 2.0
     (assert super.large-hashable.version == "0.1.0.4"; overrideSrc {
-      version = "unstable-2021-11-01";
+      version = "unstable-2022-06-10";
       src = pkgs.fetchFromGitHub {
         owner = "factisresearch";
         repo = "large-hashable";
-        rev = "b4e6b3d23c2b1af965ffcc055f5405ff673e66cf";
-        sha256 = "1bgf37qfzdyjhpgnj9aipwzpa06nc7b1g4f64xsmknyds7ffhixz";
+        rev = "4d149c828c185bcf05556d1660f79ff1aec7eaa1";
+        sha256 = "141349qcw3m93jw95jcha9rsg2y8sn5ca5j59cv8xmci38k2nam0";
       };
     })
     # Provide newly added dependencies
@@ -2117,15 +2083,12 @@ self: super: {
         self.inspection-testing
       ];
     }))
-    # 2022-03-21: patch for aeson 2.0
-    # https://github.com/factisresearch/large-hashable/pull/22
-    (appendPatches [
-      (fetchpatch {
-        name = "large-hashable-aeson-2.0.patch";
-        url = "https://github.com/factisresearch/large-hashable/commit/7094ef0ba55b4848cb57bae73d119acfb496a4c9.patch";
-        sha256 = "0ckiii0s697h817z65jwlmjzqw2ckpm815wqcnxjigf6v9kxps8j";
-      })
-    ])
+    # https://github.com/factisresearch/large-hashable/issues/24
+    (overrideCabal (drv: {
+      testFlags = drv.testFlags or [] ++ [
+        "-n" "^Data.LargeHashable.Tests.Inspection:genericSumGetsOptimized$"
+      ];
+    }))
   ];
 
   # BSON defaults to requiring network instead of network-bsd which is
@@ -2179,10 +2142,10 @@ self: super: {
   # 2022-03-21: Newest stylish-haskell needs ghc-lib-parser-9_2
   stylish-haskell = (super.stylish-haskell.override {
     ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
-    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_4;
+    ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
   });
 
-  ghc-lib-parser-ex_9_2_0_4 = super.ghc-lib-parser-ex_9_2_0_4.override {
+  ghc-lib-parser-ex_9_2_1_0 = super.ghc-lib-parser-ex_9_2_1_0.override {
     ghc-lib-parser = super.ghc-lib-parser_9_2_3_20220527;
   };
 
@@ -2351,25 +2314,6 @@ self: super: {
   # Invalid CPP in test suite: https://github.com/cdornan/memory-cd/issues/1
   memory-cd = dontCheck super.memory-cd;
 
-  protolude = appendPatches [
-    # Intermediate Patch, so the next one applies
-    (fetchpatch {
-      name = "integer-gmp-only-symbols.patch";
-      url = "https://github.com/protolude/protolude/commit/84d228a3b5a2adfe5c8aec23176a0301012e54eb.patch";
-      sha256 = "0mk0gxcg8vp73wlz764y24gqmxdrhanp12dfam9xsb6cm34jkjdc";
-    })
-    # Compat with GHC 9.0 (not merged yet)
-    (fetchpatch {
-      name = "protolude-ghc-9.0.patch";
-      url = "https://github.com/protolude/protolude/pull/131/commits/1ca4b4564b4d868022d5bab5330e2c7d9cae11a0.patch";
-      sha256 = "0jrm6715kc8v7v4isi79b3w1i51rs332bkak25ik6zv3i5lgcg68";
-      includes = [
-        "protolude.cabal"
-        "src/**"
-      ];
-    })
-  ] super.protolude;
-
   # https://github.com/haskell/fgl/pull/99
   fgl = doJailbreak super.fgl;
   fgl-arbitrary = doJailbreak super.fgl-arbitrary;
@@ -2485,9 +2429,9 @@ self: super: {
   ema = assert super.ema.version == "0.6.0.0";
     super.ema.overrideScope (self: super: { relude = doJailbreak self.relude_0_7_0_0; });
 
-  # attoparsec bump is on v2 branch, but not released yet
-  irc-core = assert super.irc-core.version == "2.10"; doJailbreak super.irc-core;
-  glirc = assert super.irc-core.version == "2.10"; doJailbreak super.glirc;
+  glirc = super.glirc.override {
+    vty = self.vty_5_35_1;
+  };
 
   # 2022-02-25: Unmaintained and to strict upper bounds
   paths = doJailbreak super.paths;
@@ -2567,6 +2511,10 @@ self: super: {
     url = "https://github.com/clinty/debian-haskell/pull/3/commits/47441c8e4a7a00a3c8825eec98bf7a823594f9be.patch";
     sha256 = "0wxpqazjnal9naibapg63nm7x6qz0lklcfw2m5mzjrh2q9x2cvnd";
   }) super.debian;
+
+  # Test data missing from sdist
+  # https://github.com/ngless-toolkit/ngless/issues/152
+  NGLess = dontCheck super.NGLess;
 
   # Raise version bounds for hspec
   records-sop = appendPatch (fetchpatch {

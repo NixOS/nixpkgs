@@ -1,17 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, which }:
+{ lib
+, stdenv
+, fetchpatch
+, fetchFromGitHub
+, rustPlatform
+, CoreServices
+, which
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "dotter";
-  version = "0.12.10";
+  version = "0.12.11";
 
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
     rev = "v${version}";
-    hash = "sha256-uSM7M//3LHzdLSOruTyu46sp1a6LeodT2cCEFsuoPW4=";
+    hash = "sha256-7K0p20FqaYFzOmUAeq1ousAPCeqE4AZoARF3UY4p4bY=";
   };
 
-  cargoHash = "sha256-JpMEC2HjAQLQiXHSE6L0HBDc0vLhd465wDK2+35aBXA=";
+  cargoHash = "sha256-BN6cdRmhvMjYQlaEa840+syuVKKUQ59TPMKicm40MTk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

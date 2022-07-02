@@ -103,6 +103,10 @@ in stdenv.mkDerivation {
       Command line and GUI tools for produce Java source code from Android Dex
       and Apk files.
     '';
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ delroth ];

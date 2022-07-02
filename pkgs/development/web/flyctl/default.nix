@@ -1,17 +1,17 @@
-{ buildGoModule, fetchFromGitHub, lib, testers, flyctl }:
+{ lib, buildGoModule, fetchFromGitHub, testers, flyctl }:
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.0.330";
+  version = "0.0.346";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    sha256 = "sha256-lgyr2NgurOZPqJv8ZUD8ut7ELxMZqLZ+rXYTjZauv8Y=";
+    sha256 = "sha256-CUv/zF323tplvyAfpTWGALFV3RKpkMmxiXx3gX8ZO3A=";
   };
 
-  vendorSha256 = "sha256-T1E2VJiaGKhk/rDVKYEju3AyDPEUMGFNvj/KrMjLKEc=";
+  vendorSha256 = "sha256-x2mJ1FO/a4eMHpEPLGdatUoY+Bt0RGElENJYUEsqcMU=";
 
   subPackages = [ "." ];
 
@@ -46,6 +46,6 @@ buildGoModule rec {
     downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjanse jsierles techknowlogick ];
+    maintainers = with maintainers; [ aaronjanse jsierles techknowlogick viraptor ];
   };
 }

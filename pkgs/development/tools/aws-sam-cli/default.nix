@@ -5,11 +5,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "1.37.0";
+  version = "1.52.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    hash = "sha256-XE3g2mKwAiaJvi0ShVScnCKrmz7ujaQgOeFXuYwtP4g=";
+    hash = "sha256-ldr0X+I5+Nfb+WBDOe0m202WOuccGUI5HFL3fpbBNPo=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -36,15 +36,24 @@ python3.pkgs.buildPythonApplication rec {
     wrapProgram $out/bin/sam --set  SAM_CLI_TELEMETRY 0
   '';
 
+  patches = [
+    # Click 8.1 removed `get_terminal_size`, recommending
+    # `shutil.get_terminal_size` instead.
+    # (https://github.com/pallets/click/pull/2130)
+    ./support-click-8-1.patch
+  ];
+
   # fix over-restrictive version bounds
   postPatch = ''
     substituteInPlace requirements/base.txt \
       --replace "aws_lambda_builders==" "aws-lambda-builders #" \
-      --replace "click~=7.1" "click~=8.0" \
+      --replace "click~=7.1" "click~=8.1" \
+      --replace "cookiecutter~=1.7.2" "cookiecutter>=1.7.2" \
       --replace "dateparser~=1.0" "dateparser>=0.7" \
       --replace "docker~=4.2.0" "docker>=4.2.0" \
       --replace "Flask~=1.1.2" "Flask~=2.0" \
       --replace "jmespath~=0.10.0" "jmespath" \
+      --replace "MarkupSafe==2.0.1" "MarkupSafe #" \
       --replace "PyYAML~=5.3" "PyYAML #" \
       --replace "regex==" "regex #" \
       --replace "requests==" "requests #" \

@@ -1,32 +1,12 @@
 { lib
-, ansi
-, buildPythonApplication
-, colorlog
-, daemonize
-, deepmerge
-, dulwich
 , fetchFromGitHub
-, flask
 , glibcLocales
-, hypchat
-, irc
-, jinja2
-, markdown
-, mock
-, pyasn1
-, pyasn1-modules
-, pygments
-, pygments-markdown-lexer
-, pyopenssl
-, pytestCheckHook
-, requests
-, slackclient
-, sleekxmpp
-, telegram
-, webtest
+, python39
 }:
 
-buildPythonApplication rec {
+let
+  python3 = python39;
+in python3.pkgs.buildPythonApplication rec {
   pname = "errbot";
   version = "6.1.7";
 
@@ -41,7 +21,7 @@ buildPythonApplication rec {
 
   buildInputs = [ glibcLocales ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     ansi
     colorlog
     daemonize
@@ -64,7 +44,7 @@ buildPythonApplication rec {
     webtest
   ];
 
-  checkInputs = [
+  checkInputs = with python3.pkgs; [
     mock
     pytestCheckHook
   ];

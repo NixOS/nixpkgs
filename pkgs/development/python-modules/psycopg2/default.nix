@@ -34,14 +34,17 @@ buildPythonPackage rec {
     openssl
   ];
 
+  sphinxRoot = "doc/src";
+
   # requires setting up a postgresql database
   doCheck = false;
 
-  sphinxRoot = "doc/src";
+  pythonImportsCheck = [ "psycopg2" ];
 
   meta = with lib; {
     description = "PostgreSQL database adapter for the Python programming language";
     homepage = "https://www.psycopg.org";
     license = with licenses; [ lgpl3 zpl20 ];
+    maintainers = with maintainers; [ ];
   };
 }

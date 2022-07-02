@@ -17,8 +17,8 @@ let
   shas =
     if enableUnfree
     then {
-      x86_64-linux  = "698b6000788e123b647c988993f710c6d9bc44eb8c8e6f97d6b18a695a61f0a6";
-      x86_64-darwin = "35e50e05fba0240aa5b138bc1c81f67addaf557701f8df41c682b5bc708f7455";
+      x86_64-linux  = "35e50e05fba0240aa5b138bc1c81f67addaf557701f8df41c682b5bc708f7455";
+      x86_64-darwin = "698b6000788e123b647c988993f710c6d9bc44eb8c8e6f97d6b18a695a61f0a6";
       aarch64-linux = "69694856fde11836eb1613bf3a2ba31fbdc933f58c8527b6180f6122c8bb528b";
     }
     else {

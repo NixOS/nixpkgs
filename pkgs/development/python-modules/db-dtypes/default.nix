@@ -6,17 +6,21 @@
 , pandas
 , pyarrow
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "db-dtypes";
-  version = "1.0.1";
+  version = "1.0.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-db-dtypes-pandas";
-    rev = "v${version}";
-    hash = "sha256-T/cyJ0PY5p/y8CKrmeAa9nvnuRs4hd2UKiYiMHLaa7A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LLKhYLzGUQRx4ciWv1TilYvTOO0sj6rdkPlJLPZ8VXA=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +34,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "db_dtypes" ];
+  pythonImportsCheck = [
+    "db_dtypes"
+  ];
 
   meta = with lib; {
     description = "Pandas Data Types for SQL systems (BigQuery, Spanner)";

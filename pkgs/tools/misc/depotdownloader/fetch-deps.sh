@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p nuget-to-nix dotnet-sdk_5
+#!nix-shell -I nixpkgs=../../../../. -i bash -p nuget-to-nix dotnet-sdk
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 

@@ -1,5 +1,5 @@
 { lib
-, bluepy
+, bleak
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
-  version = "0.13.3";
+  version = "0.14.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,11 +16,11 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     rev = version;
-    hash = "sha256-Zgpnw4It3yyy9RQqt5SxeJXl1Z3J3Rp9baLfiw5Bgow=";
+    hash = "sha256-6u7PqYv7Q5rVzsUnoQi495svX8puBz0Oj3SGgcpJrcQ=";
   };
 
   propagatedBuildInputs = [
-    bluepy
+    bleak
   ];
 
   # Project has no tests

@@ -18,17 +18,17 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.84.0";
+    version = "1.86.0";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
       rev = version;
-      hash = "sha256-ZG3siulXVHTbdSd9tmenljFODZ3LWX+BXn6OJfrbEYA=";
+      hash = "sha256-VLS93Ffeit2rVmXxYkXcnf8eDA3DC2/wKYZTh56QCk0=";
     };
     cargoDeps = rustPlatform.fetchCargoTarball {
       inherit src;
       name = "${old.pname}-${version}";
-      hash = "sha256-vQ+A4dEWh5+BgWOdxd7GTPuHk6M6bHgGnZcWNwR/Urs=";
+      hash = "sha256-4rpoDQ3o0WdWg/TmazTI+J0hL/MxwHcNMXWMq7GE7Tk=";
     };
   });
   electronExec = if stdenv.isDarwin then
@@ -46,13 +46,13 @@ let
   });
 in nodePackages.deltachat-desktop.override rec {
   pname = "deltachat-desktop";
-  version = "1.30.0";
+  version = "1.30.1";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-vp6vqoQvkAe7QPy4210r/5c1GNaGWgYvG0LyLqtCAxw=";
+    hash = "sha256-gZjZbXiqhFVfThZOsvL/nKkf6MX+E3KB5ldEAIuzBYA=";
   };
 
   nativeBuildInputs = [
@@ -122,6 +122,7 @@ in nodePackages.deltachat-desktop.override rec {
     homepage = "https://github.com/deltachat/deltachat-desktop";
     changelog = "https://github.com/deltachat/deltachat-desktop/blob/${src.rev}/CHANGELOG.md";
     license = licenses.gpl3Plus;
+    mainProgram = "deltachat";
     maintainers = with maintainers; [ dotlambda ];
   };
 }

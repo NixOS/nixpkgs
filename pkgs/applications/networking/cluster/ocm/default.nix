@@ -1,22 +1,28 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, ocm }:
+{ lib, buildGoModule, fetchFromGitHub, stdenv, testers, ocm }:
 
 buildGoModule rec {
   pname = "ocm";
-  version = "0.1.62";
+  version = "0.1.63";
 
   src = fetchFromGitHub {
     owner = "openshift-online";
     repo = "ocm-cli";
     rev = "v${version}";
-    sha256 = "0kv0zcx6wdlyid37ygzg05xyyk77ybd2qcdgbswjv6crcjh1xdrd";
+    sha256 = "sha256-wBKW2WS1+JmWOFCArmrlVfUTEqFYF7aq1OBrUo7e4ac=";
   };
 
-  vendorSha256 = "sha256-nXUrbF9mcHy8G7c+ktQixBmmf6x066gpuaZ0eUsJQwc=";
+  vendorSha256 = "sha256-LyQ/F+E0y1gQtpGSyPEB2z2ImorA7mjY3QjrRORakIo=";
+
+  # Strip the final binary.
+  ldflags = [ "-s" "-w" ];
 
   # Tests expect the binary to be located in the root directory.
   preCheck = ''
     ln -s $GOPATH/bin/ocm ocm
   '';
+
+  # Tests fail in Darwin sandbox.
+  doCheck = !stdenv.isDarwin;
 
   passthru.tests.version = testers.testVersion {
     package = ocm;
