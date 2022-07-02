@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ics";
-  version = "0.7";
+  version = "0.7.1";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ics-py";
     repo = "ics-py";
-    rev = "v${version}";
-    sha256 = "0rrdc9rcxc3ys6rml81b8m8qdlisk78a34bdib0wy65hlkmyyykn";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-scT8TKZb88HYFN8Y1rGgoJLfSxD0jjbvZYpXsCXw9uo=";
   };
 
   propagatedBuildInputs = [
