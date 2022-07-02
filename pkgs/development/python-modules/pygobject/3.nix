@@ -48,6 +48,10 @@ buildPythonPackage rec {
     cairo
   ];
 
+  mesonFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-Dtests=false"
+  ];
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;
