@@ -4336,8 +4336,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "echasnovski";
       repo = "mini.nvim";
-      rev = "a6d8d3a31a1a552be2f86b2df9abfa9dfa6aebe6";
-      sha256 = "05c0gdklsf7rfiz6qpf1pb50b9ff4xzqns3fhwxzxxmdll1qwh61";
+      rev = "1ec280c1d000813a268b16028d040824285a043f";
+      sha256 = "0anafgqcrdg6ryb47aa3w3k8liw906dk601xgfnsvg46g2yss37p";
     };
     meta.homepage = "https://github.com/echasnovski/mini.nvim/";
   };
@@ -5032,8 +5032,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "MunifTanjim";
       repo = "nui.nvim";
-      rev = "796dc8293be59acc0c0d53b99e7dca7c32db4413";
-      sha256 = "19hdg4d0azzsijn20mq14h74f7vb01v1mv3dbcqdv5pyby50r8a6";
+      rev = "acb7287c4a07efbc48bb8b6e6a2cc0baa872d35c";
+      sha256 = "1xnaxk0blpika1v3cmr84n0gs24q3gmy72r824yr3sjgiqf2q4xl";
     };
     meta.homepage = "https://github.com/MunifTanjim/nui.nvim/";
   };
