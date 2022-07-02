@@ -15,5 +15,7 @@ in
 stdenv.mkDerivation (args // {
   name = "${name}-source";
   installPhase = "cp -r . $out";
+  outputs = [ "out" ];
+  separateDebugInfo = false;
   phases = ["unpackPhase" "patchPhase" "installPhase"];
 })
