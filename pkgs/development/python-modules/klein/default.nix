@@ -60,6 +60,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/klein";
     license = licenses.mit;
     maintainers = with maintainers; [ exarkun ];
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }
