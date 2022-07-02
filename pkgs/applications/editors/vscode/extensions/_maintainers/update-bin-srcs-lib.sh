@@ -39,11 +39,10 @@ prefetchExtensionUnpacked() {
   function rm_tmpdir() {
     1>&2 printf "rm -rf %q\n" "$tmpDir"
     rm -rf "$tmpDir"
-    trap - INT TERM HUP EXIT
   }
   function make_trapped_tmpdir() {
     tmpDir=$(mktemp -d)
-    trap rm_tmpdir INT TERM HUP EXIT
+    trap rm_tmpdir EXIT
   }
 
   1>&2 echo
