@@ -33,7 +33,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
-  version = "0.11.1";
+  version = "0.12";
 
   outputs = [ "out" "devdoc" ];
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "hadess";
     repo = "power-profiles-daemon";
     rev = version;
-    sha256 = "sha256-qU9A9U2R3UioC7bo8Pc0IIsHIjghb6gsG4pTAg6tp9E=";
+    sha256 = "sha256-2eMFPGVLwTBIlaB1zM3BzHrhydgBEm+kvx+VIZdUDPM=";
   };
 
   nativeBuildInputs = [
@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dgtk_doc=true"
+    "-Dtests=true"
   ];
 
   doCheck = true;
