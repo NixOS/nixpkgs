@@ -217,6 +217,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    # Change 5s timeout for init to 30s
+    substituteInPlace t/lib/HydraTestContext.pm \
+      --replace 'expectOkay(5, ("hydra-init"));' 'expectOkay(30, ("hydra-init"));'
+  '';
+
   preCheck = ''
     patchShebangs .
     export LOGNAME=''${LOGNAME:-foo}
