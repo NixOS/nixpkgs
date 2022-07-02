@@ -55,6 +55,12 @@ in mkLicense lset) ({
     fullName = "GNU Affero General Public License v3.0 or later";
   };
 
+  aladdin = {
+    spdxId = "Aladdin";
+    fullName = "Aladdin Free Public License";
+    free = false;
+  };
+
   amazonsl = {
     fullName = "Amazon Software License";
     url = "https://aws.amazon.com/asl/";
