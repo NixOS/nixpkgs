@@ -42,6 +42,7 @@
 , swig
 , vtk
 , wrapQtAppsHook
+, wrapGAppsHook
 , xercesc
 , zlib
 }:
@@ -64,6 +65,7 @@ mkDerivation rec {
     pyside2-tools
     gfortran
     wrapQtAppsHook
+    wrapGAppsHook
   ];
 
   buildInputs = [
