@@ -31572,7 +31572,7 @@ with pkgs;
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
-  erigon = callPackage ../applications/blockchains/erigon.nix { };
+  erigon = callPackage ../applications/blockchains/erigon.nix { buildGoModule = buildGo118Module; };
 
   exodus = callPackage ../applications/blockchains/exodus { };
 
