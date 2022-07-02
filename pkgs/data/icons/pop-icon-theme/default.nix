@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , meson
 , ninja
@@ -8,7 +8,7 @@
 , hicolor-icon-theme
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "pop-icon-theme";
   version = "2021-11-17";
 

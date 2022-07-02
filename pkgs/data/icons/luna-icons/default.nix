@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, stdenvNoCC
 , fetchFromGitHub
 , gtk3
 , breeze-icons
@@ -8,7 +8,7 @@
 , gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "luna-icons";
   version = "2.0";
 
