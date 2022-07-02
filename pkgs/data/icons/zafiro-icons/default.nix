@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, gtk3, breeze-icons, gnome-icon-theme, numix-icon-theme, numix-icon-theme-circle, hicolor-icon-theme }:
+{ lib, stdenvNoCC, fetchFromGitHub, gtk3, breeze-icons, gnome-icon-theme, numix-icon-theme, numix-icon-theme-circle, hicolor-icon-theme }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "zafiro-icons";
   version = "1.1";
 
