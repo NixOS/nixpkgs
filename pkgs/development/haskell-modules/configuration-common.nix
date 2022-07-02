@@ -2348,12 +2348,6 @@ self: super: {
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
 
-  # compatibility with random-fu 0.3 https://github.com/mokus0/misfortune/pull/5
-  misfortune = appendPatch ./patches/misfortune-ghc9.patch (overrideCabal (drv: {
-    revision = null;
-    editedCabalFile = null;
-  }) super.misfortune);
-
   # GHC 9 support https://github.com/lambdabot/dice/pull/2
   dice = appendPatch (fetchpatch {
     name = "dice-ghc9.patch";
