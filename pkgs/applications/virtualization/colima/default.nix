@@ -55,10 +55,9 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "Container runtimes on MacOS (and Linux) with minimal setup";
+    description = "Container runtimes with minimal setup";
     homepage = "https://github.com/abiosoft/colima";
     license = licenses.mit;
-    mainProgram = "colima";
     platforms = [ "aarch64-linux" "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ aaschmid tricktron ];
   };
