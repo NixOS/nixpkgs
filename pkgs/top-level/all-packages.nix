@@ -32484,6 +32484,8 @@ with pkgs;
 
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
+  opensoldat = callPackage ../games/opensoldat { };
+
   portmod = callPackage ../games/portmod { };
 
   tetrio-desktop = callPackage ../games/tetrio-desktop { };
@@ -32701,8 +32703,6 @@ with pkgs;
   # solarus and solarus-quest-editor must use the same version of Qt.
   solarus = libsForQt5.callPackage ../games/solarus { };
   solarus-quest-editor = libsForQt5.callPackage ../development/tools/solarus-quest-editor { };
-
-  soldat-unstable = callPackage ../games/soldat-unstable { };
 
   sollya = callPackage ../development/interpreters/sollya { };
 
