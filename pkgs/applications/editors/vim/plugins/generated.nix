@@ -5032,8 +5032,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "MunifTanjim";
       repo = "nui.nvim";
-      rev = "2d33512836cb603d58cb538e716a02c44547c6ab";
-      sha256 = "0axdjxdnp78lyln7z5l4nqxa5vmcl7wlpsxk7x64wxkdgk0qfdlq";
+      rev = "796dc8293be59acc0c0d53b99e7dca7c32db4413";
+      sha256 = "19hdg4d0azzsijn20mq14h74f7vb01v1mv3dbcqdv5pyby50r8a6";
     };
     meta.homepage = "https://github.com/MunifTanjim/nui.nvim/";
   };
