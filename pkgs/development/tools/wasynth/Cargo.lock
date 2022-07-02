@@ -25,7 +25,7 @@ checksum = "2fff2a6927b3bb87f9595d67196a70493f627687a71d87a0d692242c33f58c11"
 
 [[package]]
 name = "codegen-luajit"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "wasm-ast",
  "wasmparser",
@@ -33,7 +33,7 @@ dependencies = [
 
 [[package]]
 name = "codegen-luau"
-version = "0.7.0"
+version = "0.11.0"
 dependencies = [
  "wasm-ast",
  "wasmparser",
@@ -52,7 +52,7 @@ dependencies = [
 
 [[package]]
 name = "dev-test"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "codegen-luajit",
  "codegen-luau",
@@ -62,6 +62,12 @@ dependencies = [
  "wasm-smith",
  "wast",
 ]
+
+[[package]]
+name = "flagset"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cda653ca797810c02f7ca4b804b40b8b95ae046eb989d356bce17919a8c25499"
 
 [[package]]
 name = "glob"
@@ -204,30 +210,32 @@ checksum = "fc72304796d0818e357ead4e000d19c9c174ab23dc11093ac919054d20a6a7fc"
 
 [[package]]
 name = "wasm-ast"
-version = "0.10.0"
+version = "0.11.0"
 dependencies = [
  "wasmparser",
 ]
 
 [[package]]
 name = "wasm-encoder"
-version = "0.7.0"
+version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49cfbd7c23474849807ecde008c82eb38d303b07ec61d48f45b65f3c8cdd2770"
+checksum = "31f0c17267a5ffd6ae3d897589460e21db1673c84fb7016b909c9691369a75ea"
 dependencies = [
  "leb128",
 ]
 
 [[package]]
 name = "wasm-smith"
-version = "0.8.0"
+version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "440458e050ee2731e85af3368ee58e23d4728d597809a88f841a24778876f2b6"
+checksum = "c85cf25be85aac46356216b4662eb5768347046449a45c938ae1443b788665bb"
 dependencies = [
  "arbitrary",
+ "flagset",
  "indexmap",
  "leb128",
  "wasm-encoder",
+ "wasmparser",
 ]
 
 [[package]]
@@ -241,11 +249,12 @@ dependencies = [
 
 [[package]]
 name = "wast"
-version = "41.0.0"
+version = "42.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f882898b8b817cc4edc16aa3692fdc087b356edc8cc0c2164f5b5181e31c3870"
+checksum = "badcb03f976f983ff0daf294da9697be659442f61e6b0942bb37a2b6cbfe9dd4"
 dependencies = [
  "leb128",
  "memchr",
  "unicode-width",
+ "wasm-encoder",
 ]
