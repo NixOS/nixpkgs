@@ -6,6 +6,8 @@
 , libftdi1
 , libusb1
 , udev
+, hidapi
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +27,8 @@ stdenv.mkDerivation rec {
     libftdi1
     libusb1
     udev
+    hidapi
+    zlib
   ];
 
   meta = with lib; {
