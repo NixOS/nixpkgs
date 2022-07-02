@@ -11601,6 +11601,18 @@ final: prev:
     meta.homepage = "https://github.com/alx741/vim-stylishask/";
   };
 
+  vim-substrata = buildVimPluginFrom2Nix {
+    pname = "vim-substrata";
+    version = "2021-03-23";
+    src = fetchFromGitHub {
+      owner = "arzg";
+      repo = "vim-substrata";
+      rev = "f7b71f31d2ffa91715964b14b41ad4009d4d97f6";
+      sha256 = "1cpmyr63xjx5nm5h619xwryjaljq1kdf3msdrdr082ljci2830z2";
+    };
+    meta.homepage = "https://github.com/arzg/vim-substrata/";
+  };
+
   vim-subversive = buildVimPluginFrom2Nix {
     pname = "vim-subversive";
     version = "2022-01-26";
