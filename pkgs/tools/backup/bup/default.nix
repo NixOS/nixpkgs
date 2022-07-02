@@ -1,9 +1,15 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper
 , perl, pandoc, python3Packages, git
 , par2cmdline ? null, par2Support ? true
+# Disabled on aarch64-darwin since tornado depends on pyOpenSSL which doesn't
+# work on this platform. See:
+#    https://github.com/NixOS/nixpkgs/pull/172397
+, webSupport ? !(stdenv.isDarwin && stdenv.isAarch64)
 }:
 
 assert par2Support -> par2cmdline != null;
+
+assert webSupport -> python3Packages.tornado != null;
 
 let version = "0.32"; in
 
@@ -23,8 +29,9 @@ stdenv.mkDerivation {
   buildInputs = [
     git
     (python3Packages.python.withPackages
-      (p: with p; [ setuptools tornado ]
-        ++ lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]))
+      (p: with p; [ setuptools ]
+        ++ lib.optionals (!stdenv.isDarwin) [ pyxattr pylibacl fuse ]
+        ++ lib.optionals (webSupport) [ tornado ]))
   ];
   nativeBuildInputs = [ pandoc perl makeWrapper ];
 
