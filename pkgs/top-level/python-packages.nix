@@ -7545,6 +7545,8 @@ in {
 
   pyinsteon = callPackage ../development/python-modules/pyinsteon { };
 
+  pyinstrument = callPackage ../development/python-modules/pyinstrument { };
+
   pyintesishome = callPackage ../development/python-modules/pyintesishome { };
 
   pyipma = callPackage ../development/python-modules/pyipma { };
