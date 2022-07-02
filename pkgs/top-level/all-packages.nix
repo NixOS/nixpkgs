@@ -8727,7 +8727,9 @@ with pkgs;
 
   nearcore = callPackage ../applications/blockchains/nearcore { };
 
-  nebula = callPackage ../tools/networking/nebula { };
+  nebula = callPackage ../tools/networking/nebula {
+    buildGoModule = buildGo118Module;
+  };
 
   nemiver = callPackage ../development/tools/nemiver { };
 
