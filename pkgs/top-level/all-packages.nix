@@ -406,6 +406,10 @@ with pkgs;
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
+  edgedb = callPackage ../tools/networking/edgedb {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
   evans = callPackage ../development/tools/evans { };
