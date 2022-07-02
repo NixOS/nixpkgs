@@ -5632,8 +5632,8 @@ final: prev:
     src = fetchFromGitHub {
       owner = "kyazdani42";
       repo = "nvim-tree.lua";
-      rev = "cbbc799e6c5784fba9b6a842000caaebf07fa122";
-      sha256 = "0n0s4iyh5qf8g4x54sxmv8iq5fmc3nih609pzw5aw98dw3dj9d3c";
+      rev = "21516f447baf42f6f11421a017cd69306d5d5ff3";
+      sha256 = "13zsr6vpsmbaxzwd6hi5ng2n2ny6qhvzkwsi0srkc84xpw7ndp4m";
     };
     meta.homepage = "https://github.com/kyazdani42/nvim-tree.lua/";
   };
