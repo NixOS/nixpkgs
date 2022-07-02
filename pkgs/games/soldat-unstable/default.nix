@@ -5,12 +5,12 @@
 
 let
   base = stdenv.mkDerivation rec {
-    pname = "soldat-base";
+    pname = "opensoldat-base";
     version = "unstable-2021-09-05";
 
     src = fetchFromGitHub {
       name = "base";
-      owner = "Soldat";
+      owner = "opensoldat";
       repo = "base";
       rev = "6c74d768d511663e026e015dde788006c74406b5";
       sha256 = "175gmkdccy8rnkd95h2zqldqfydyji1hfby8b1qbnl8wz4dh08mz";
@@ -28,7 +28,7 @@ let
     '';
 
     meta = with lib; {
-      description = "Soldat's base game content";
+      description = "Opensoldat's base game content";
       license = licenses.cc-by-40;
       platforms = platforms.all;
       inherit (src.meta) homepage;
@@ -38,27 +38,22 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "soldat";
-  version = "unstable-2021-11-01";
+  pname = "opensoldat";
+  version = "unstable-2022-07-02";
 
   src = fetchFromGitHub {
-    name = "soldat";
-    owner = "Soldat";
-    repo = "soldat";
-    rev = "7780d2948b724970af9f2aaf4fb4e4350d5438d9";
-    sha256 = "0r39d1394q7kabsgq6vpdlzwsajxafsg23i0r273nggfvs3m805z";
+    name = "opensoldat";
+    owner = "opensoldat";
+    repo = "opensoldat";
+    rev = "9574f5791b7993067f03d2df03d625908bc3762f";
+    sha256 = "0kyxzikd4ngx3nshjw0411x61zqq1b7l01lxw41rlcy4nad3r0vi";
   };
-
-  patches = [
-    # Don't build GameNetworkingSockets as an ExternalProject,
-    # see https://github.com/Soldat/soldat/issues/73
-    ./gamenetworkingsockets-no-external.patch
-  ];
 
   nativeBuildInputs = [ fpc makeWrapper autoPatchelfHook cmake ];
 
   cmakeFlags = [
     "-DADD_ASSETS=OFF" # We provide base's smods via nix
+    "-DBUILD_GNS=OFF" # Don't build GameNetworkingSockets as an ExternalProject
   ];
 
   buildInputs = [ SDL2 freetype physfs openal gamenetworkingsockets ];
@@ -69,6 +64,7 @@ stdenv.mkDerivation rec {
   # let them write their state and configuration files
   # to $XDG_CONFIG_HOME/soldat/soldat{,server} unless
   # the user specifies otherwise.
+  # TODO(@sternenseemann): rename config dir to opensoldat
   postInstall = ''
     for p in $out/bin/soldatserver $out/bin/soldat; do
       configDir="\''${XDG_CONFIG_HOME:-\$HOME/.config}/soldat/$(basename "$p")"
@@ -82,7 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Soldat is a unique 2D (side-view) multiplayer action game";
+    description = "Opensoldat is a unique 2D (side-view) multiplayer action game";
     license = [ licenses.mit base.meta.license ];
     inherit (src.meta) homepage;
     maintainers = [ maintainers.sternenseemann ];
@@ -90,6 +86,6 @@ stdenv.mkDerivation rec {
     # portability currently mainly limited by fpc
     # in nixpkgs which doesn't work on darwin,
     # aarch64 and arm support should be possible:
-    # https://github.com/Soldat/soldat/issues/45
+    # https://github.com/opensoldat/opensoldat/issues/45
   };
 }
