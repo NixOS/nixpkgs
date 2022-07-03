@@ -1210,7 +1210,6 @@ mapAliases ({
   redkite = throw "redkite was archived by upstream"; # Added 2021-04-12
   redshift-wlr = throw "redshift-wlr has been replaced by gammastep"; # Added 2021-12-25
   reicast = throw "reicast has been removed from nixpkgs as it is unmaintained, please use flycast instead"; # Added 2022-03-07
-  renpy = throw "renpy has been removed from nixpkgs, it was unmaintained and the latest packaged version required python2"; # Added 2022-01-12
 
   # 3 resholve aliases below added 2022-04-08; drop after 2022-11-30?
   resholvePackage = throw "resholvePackage has been renamed to resholve.mkDerivation";
