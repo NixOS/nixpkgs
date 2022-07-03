@@ -264,8 +264,8 @@ in
       name = "moreheaders";
       owner = "openresty";
       repo = "headers-more-nginx-module";
-      rev = "v0.33";
-      sha256 = "1cgdjylrdd69vlkwwmn018hrglzjwd83nqva1hrapgcfw12f7j53";
+      rev = "e536bc595d8b490dbc9cf5999ec48fca3f488632";
+      sha256 = "sha256-gxLgs07XdFLcV4lv4JpiG2WGeLhBk13FRyzI0FOUjyA=";
     };
   };
 
