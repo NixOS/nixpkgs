@@ -8,6 +8,7 @@
 , openssl
 , udev
 , zlib
+, pcsclite
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcbor openssl zlib ]
     ++ lib.optionals stdenv.isDarwin [ hidapi ]
-    ++ lib.optionals stdenv.isLinux [ udev ];
+    ++ lib.optionals stdenv.isLinux [ udev pcsclite ];
 
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
@@ -33,6 +34,7 @@ stdenv.mkDerivation rec {
     "-DUSE_HIDAPI=1"
   ] ++ lib.optionals stdenv.isLinux [
     "-DNFC_LINUX=1"
+    "-DUSE_PCSC=1"
   ];
 
   meta = with lib; {
