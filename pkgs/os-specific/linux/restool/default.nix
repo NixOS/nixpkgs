@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, bash, coreutils, dtc, file, gawk, gnugrep, gnused }:
+{ stdenv, lib, fetchgit, bash, coreutils, dtc, file, gawk, gnugrep, gnused, which }:
 
 stdenv.mkDerivation rec {
   pname = "restool";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ file ];
-  buildInputs = [ bash coreutils dtc gawk gnugrep gnused ];
+  buildInputs = [ bash coreutils dtc gawk gnugrep gnused which ];
 
   makeFlags = [
     "prefix=$(out)"
