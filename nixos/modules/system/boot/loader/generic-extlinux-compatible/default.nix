@@ -65,13 +65,22 @@ in
         '';
       };
 
+      copyKernels = mkOption {
+        default = true;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Whether the builder should copy kernels, initial ramdisks and device
+          trees to `/boot`.
+        '';
+      };
     };
   };
 
   config = let
     builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}"
       + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}"
-      + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
+      + lib.optionalString (!cfg.useGenerationDeviceTree) " -r"
+      + lib.optionalString cfg.copyKernels " -k";
   in
     mkIf cfg.enable {
       system.build.installBootLoader = "${builder} ${builderArgs} -c";
