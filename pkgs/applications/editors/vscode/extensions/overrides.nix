@@ -7,6 +7,8 @@
 , clojure-lsp
 , callPackage
 , racket-minimal
+, alejandra
+, python3Packages
 }:
 
 let inherit (lib) maintainers licenses;
@@ -154,4 +156,103 @@ self: super: {
   jdinhlife.gruvbox.meta.maintainers = with maintainers; [ imgabe ];
   jnoortheen.nix-ide.meta.maintainers = with maintainers; [ SuperSandro2000 ];
   johnpapa.vscode-peacock.meta.license = licenses.mit;
+  kamadorueda.alejandra = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "alejandra";
+      publisher = "kamadorueda";
+      version = "1.0.0";
+      sha256 = "sha256-COlEjKhm8tK5XfOjrpVUDQ7x3JaOLiYoZ4MdwTL8ktk=";
+    };
+    nativeBuildInputs = [ jq moreutils ];
+    postInstall = ''
+      cd "$out/$installPrefix"
+
+      jq -e '
+        .contributes.configuration.properties."alejandra.program".default =
+          "${alejandra}/bin/alejandra" |
+        .contributes.configurationDefaults."alejandra.program" =
+          "${alejandra}/bin/alejandra"
+      ' \
+      < package.json \
+      | sponge package.json
+    '';
+    meta = with lib; {
+      description = "The Uncompromising Nix Code Formatter";
+      homepage = "https://github.com/kamadorueda/alejandra";
+      license = licenses.unlicense;
+      maintainers = with maintainers; [ kamadorueda ];
+    };
+  };
+  kddejong.vscode-cfn-lint =
+    let
+      inherit (python3Packages) cfn-lint;
+    in
+    buildVscodeMarketplaceExtension {
+      mktplcRef = {
+        name = "vscode-cfn-lint";
+        publisher = "kddejong";
+        version = "0.21.0";
+        sha256 = "sha256-IueXiN+077tiecAsVCzgYksWYTs00mZv6XJVMtRJ/PQ=";
+      };
+
+      nativeBuildInputs = [ jq moreutils ];
+
+      buildInputs = [ cfn-lint ];
+
+      postInstall = ''
+        cd "$out/$installPrefix"
+        jq '.contributes.configuration.properties."cfnLint.path".default = "${cfn-lint}/bin/cfn-lint"' package.json | sponge package.json
+      '';
+
+      meta = with lib; {
+        description = "CloudFormation Linter IDE integration, autocompletion, and documentation";
+        homepage = "https://github.com/aws-cloudformation/cfn-lint-visual-studio-code";
+        license = lib.licenses.asl20;
+        maintainers = with maintainers; [ wolfangaukang ];
+      };
+    };
+  lokalise.i18n-ally.meta.license = lib.licenses.mit;
+  mads-hartmann.bash-ide-vscode.meta.maintainers = with lib.maintainers; [ kamadorueda ];
+  mattn.lisp.meta.maintainers = with maintainers; [ kamadorueda ];
+  mhutchie.git-graph.meta.license = lib.licenses.mit;
+  mishkinf.goto-next-previous-member.meta.license = lib.licenses.mit;
+  mskelton.one-dark-theme.meta.license = lib.licenses.mit;
+  ms-azuretools.vscode-docker.meta.license = lib.licenses.mit;
+  ms-ceintl = callPackage ./language-packs.nix { }; # non-English language packs
+  ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp { };
+  ms-vscode.cpptools = callPackage ./cpptools { };
+  ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
+  ms-vscode.theme-tomorrowkit.meta = {
+    license = licenses.mit;
+    maintainers = with maintainers; [ ratsclub ];
+  };
+  ms-pyright.pyright.meta.maintainers = with maintainers; [ ratsclub ];
+  ms-python.python = callPackage ./python {
+    extractNuGet = callPackage ./python/extract-nuget.nix { };
+  };
+  msjsdiag.debugger-for-chrome.meta.license = lib.licenses.mit;
+  ms-toolsai.jupyter = callPackage ./ms-toolsai-jupyter { };
+  ms-vscode.anycode.meta.license = lib.licenses.mit;
+  # Search for "latest" doesn't seem to work for this extension.
+  naumovs.color-highlight = buildVscodeMarketplaceExtension {
+    mktplcRef = {
+      name = "color-highlight";
+      publisher = "naumovs";
+      version = "2.5.0";
+      sha256 = "sha256-dYMDV84LEGXUjt/fbsSy3BVM5SsBHcPaDDll8KjPIWY=";
+    };
+    meta = with lib; {
+      changelog = "https://marketplace.visualstudio.com/items/naumovs.color-highlight/changelog";
+      description = "Highlight web colors in your editor";
+      downloadPage = "https://marketplace.visualstudio.com/items?itemName=naumovs.color-highlight";
+      homepage = "https://github.com/enyancc/vscode-ext-color-highlight";
+      license = licenses.gpl3Only;
+      maintainers = with maintainers; [ datafoo ];
+    };
+  };
+  njpwerner.autodocstring.meta = {
+    license = licenses.mit;
+    maintainers = with maintainers; [ kamadorueda ];
+  };
+  octref.vetur.meta.license = lib.licenses.mit;
 }

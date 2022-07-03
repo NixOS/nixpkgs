@@ -62,7 +62,8 @@ val nixLicenses =
     "Unlicense" -> List("unlicense"),
     "MIT OR Apache-2.0" -> List("mit", "asl20"),
     "GPL-3.0" -> List("gpl3"),
-    "GPL-3.0-or-later" -> List("gpl3Plus")
+    "GPL-3.0-or-later" -> List("gpl3Plus"),
+    "ISC" -> List("isc")
   )
 
 case class Extension(
