@@ -239,6 +239,15 @@
       </listitem>
       <listitem>
         <para>
+          MongoDB’s packages were updated to each latest major version
+          and versions older than 4.0 marked with
+          <literal>meta.known Vulnerabilities</literal> to flag as EOLed
+          by upstream yet still in tree to provide a clean upgrade path,
+          also MongoDB 5.x is the default version from now on.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           PHP 7.4 is no longer supported due to upstream not supporting
           this version for the entire lifecycle of the 22.11 release.
         </para>

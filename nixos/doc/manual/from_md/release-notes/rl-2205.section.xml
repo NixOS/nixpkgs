@@ -2504,15 +2504,6 @@ sudo cp /var/lib/redis/dump.rdb /var/lib/redis-peertube/dump.rdb
       </listitem>
       <listitem>
         <para>
-          MongoDB’s packages were updated to each latest major version
-          and versions older than 4.0 marked with
-          <literal>meta.known Vulnerabilities</literal> to flag as EOLed
-          by upstream yet still in tree to provide a clean upgrade path,
-          also MongoDB 5.x is the default version from now on.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           <literal>services.mattermost.plugins</literal> has been added
           to allow the declarative installation of Mattermost plugins.
           Plugins are automatically repackaged using autoPatchelf.
