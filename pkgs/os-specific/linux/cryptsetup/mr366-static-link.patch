@@ -1,0 +1,22 @@
+From 836017eb3f443c7133d8d585e093f5eb8653e405 Mon Sep 17 00:00:00 2001
+From: Graham Christensen <graham@grahamc.com>
+Date: Sun, 3 Jul 2022 19:43:45 +0000
+Subject: [PATCH] libcryptsetup.pc: declare private dependencies
+
+Otherwise statically linking against it fails.
+---
+ lib/libcryptsetup.pc.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/libcryptsetup.pc.in b/lib/libcryptsetup.pc.in
+index f3d3fb14..2d1378b6 100644
+--- a/lib/libcryptsetup.pc.in
++++ b/lib/libcryptsetup.pc.in
+@@ -8,3 +8,4 @@ Description: cryptsetup library
+ Version: @LIBCRYPTSETUP_VERSION@
+ Cflags: -I${includedir}
+ Libs: -L${libdir} -lcryptsetup
++Requires.private: uuid, json-c, devmapper, libcrypto, blkid
+-- 
+GitLab
+

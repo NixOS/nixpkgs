@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   # Disable 4 test cases that fail in a sandbox
-  patches = [ ./disable-failing-tests.patch ];
+  patches = [ ./disable-failing-tests.patch ./mr366-static-link.patch ];
 
   postPatch = ''
     patchShebangs tests
