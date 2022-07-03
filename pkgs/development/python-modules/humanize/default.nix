@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Python humanize utilities";
     homepage = "https://github.com/python-humanize/humanize";
     license = licenses.mit;
-    maintainers = with maintainers; [ rmcgibbo ];
+    maintainers = with maintainers; [ rmcgibbo Luflosi ];
   };
 }
