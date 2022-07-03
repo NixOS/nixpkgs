@@ -20,6 +20,8 @@ import scala.concurrent.duration._
 import cats.implicits._
 import cats.data.NonEmptyList
 
+val MaxConcurrentRequests = 10
+
 def nixPrefetchExtension(
     publisher: String,
     name: String,
@@ -142,8 +144,7 @@ object Generator extends IOApp.Simple:
                 (publisher, name)
               }
               .parEvalMap(
-                // max concurrent requests
-                10
+                MaxConcurrentRequests
               ) { case (publisher, name) =>
                 for {
                   manifest <- manifest(publisher, name)(client)
