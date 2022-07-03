@@ -27156,6 +27156,8 @@ with pkgs;
 
   jmusicbot = callPackage ../applications/audio/jmusicbot { };
 
+  junction = callPackage ../applications/misc/junction { };
+
   lemonade = callPackage ../applications/misc/lemonade { };
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
