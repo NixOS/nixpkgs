@@ -3,6 +3,13 @@ let
   generic =
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper, fetchpatch
+      , autoreconfHook269
+      , perl
+      , docbook_xml_dtd_45
+      , docbook_xml_dtd_42
+      , libxslt
+      , docbook-xsl-nons
+      , runCommand
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemd, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
 
@@ -68,6 +75,12 @@ let
     nativeBuildInputs = [
       makeWrapper
       pkg-config
+      # We are patching configure.ac
+      autoreconfHook269
+      perl
+      (if atLeast "13" then docbook_xml_dtd_45 else docbook_xml_dtd_42)
+      libxslt
+      docbook-xsl-nons
     ]
       ++ lib.optionals jitSupport [ llvmPackages.llvm.dev nukeReferences patchelf ];
 
@@ -110,6 +123,20 @@ let
         src = ./locale-binary-path.patch;
         locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
+
+      # Remove references to output paths from configure flags
+      # recorded in the software.
+      (if atLeast "14" then ./patches/remove-refs-from-configure-flags.patch
+      else if atLeast "13" then
+        runCommand
+          "remove-refs-from-configure-flags.patch"
+          {
+            patch = ./patches/remove-refs-from-configure-flags.patch;
+          }
+          ''
+            substitute "$patch" "$out" --replace "configure.ac" "configure.in"
+          ''
+      else ./patches/remove-refs-from-configure-flags-upto-12.patch)
 
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
       let

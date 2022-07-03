@@ -1,0 +1,13 @@
+--- a/src/Makefile.global.in
++++ b/src/Makefile.global.in
+@@ -75,7 +75,7 @@ endif # not PGXS
+ vpathsearch = `for f in $(addsuffix /$(1),$(subst :, ,. $(VPATH))); do test -r $$f && echo $$f && break; done`
+ 
+ # Saved arguments from configure
+-configure_args = @configure_args@
++configure_args = $(shell echo '@configure_args@' | sed -E 's~/nix/store/.{32}-~/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-~g')
+ 
+ 
+ ##########################################################################
+diff --git a/src/common/Makefile b/src/common/Makefile
+index 873fbb6..b6476b4 100644

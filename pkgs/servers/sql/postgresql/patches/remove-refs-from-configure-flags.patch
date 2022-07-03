@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 6c6f997..6e39e94 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -27,7 +27,7 @@ AC_COPYRIGHT([Copyright (c) 1996-2022, PostgreSQL Global Development Group])
+ AC_CONFIG_SRCDIR([src/backend/access/common/heaptuple.c])
+ AC_CONFIG_AUX_DIR(config)
+ AC_PREFIX_DEFAULT(/usr/local/pgsql)
+-AC_DEFINE_UNQUOTED(CONFIGURE_ARGS, ["$ac_configure_args"], [Saved arguments from configure])
++AC_DEFINE_UNQUOTED(CONFIGURE_ARGS, ["`echo "$ac_configure_args" | sed -E 's~/nix/store/.{32}-~/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-~g'`"], [Saved arguments from configure])
+ 
+ [PG_MAJORVERSION=`expr "$PACKAGE_VERSION" : '\([0-9][0-9]*\)'`]
+ [PG_MINORVERSION=`expr "$PACKAGE_VERSION" : '.*\.\([0-9][0-9]*\)'`]
