@@ -1,7 +1,7 @@
 { lib, stdenv
-, fetchpatch
-, fetchurl
+, fetchurl, unzip
 , hdf5
+, libxml2
 , m4
 , curl # for DAP
 , removeReferencesTo
@@ -10,25 +10,13 @@
 let
   inherit (hdf5) mpiSupport mpi;
 in stdenv.mkDerivation rec {
-  pname = "netcdf";
-  version = "4.8.0"; # Remove patch mentioned below on upgrade
+  pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
+  version = "4.9.0";
 
   src = fetchurl {
-    url = "https://www.unidata.ucar.edu/downloads/netcdf/ftp/${pname}-c-${version}.tar.gz";
-    sha256 = "1mfn8qi4k0b8pyar3wa8v0npj69c7rhgfdlppdwmq5jqk88kb5k7";
+    url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
+    hash = "sha256-TJVgIrecCOXhTu6N9RsTwo5hIcK35/qtwhs3WUlAC0k=";
   };
-
-  patches = [
-    # Fixes:
-    #     *** Checking vlen of compound file...Sorry! Unexpected result, tst_h_atts3.c, line: 289
-    #     FAIL tst_h_atts3 (exit status: 2)
-    # TODO: Remove with next netcdf release (see https://github.com/Unidata/netcdf-c/pull/1980)
-    (fetchpatch {
-      name = "netcdf-Fix-tst_h_atts3-for-hdf5-1.12.patch";
-      url = "https://github.com/Unidata/netcdf-c/commit/9fc8ae62a8564e095ff17f4612874581db0e4db5.patch";
-      sha256 = "128kxz5jikq32x5qjmi0xdngi0k336rf6bvbcppvlk5gibg5nk7v";
-    })
-  ];
 
   postPatch = ''
     patchShebangs .
@@ -40,7 +28,13 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ m4 removeReferencesTo ];
-  buildInputs = [ hdf5 curl mpi ];
+
+  buildInputs = [
+    curl
+    hdf5
+    libxml2
+    mpi
+  ];
 
   passthru = {
     inherit mpiSupport mpi;
@@ -60,14 +54,18 @@ in stdenv.mkDerivation rec {
     remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"
   '';
 
-  doCheck = !mpiSupport;
+  doCheck = !(mpiSupport || (stdenv.isDarwin && stdenv.isAarch64));
+  checkInputs = [ unzip ];
+
+  preCheck = ''
+    export HOME=$TEMP
+  '';
 
   meta = {
-      description = "Libraries for the Unidata network Common Data Format";
-      platforms = lib.platforms.unix;
-      homepage = "https://www.unidata.ucar.edu/software/netcdf/";
-      license = {
-        url = "https://www.unidata.ucar.edu/software/netcdf/docs/copyright.html";
-      };
+    description = "Libraries for the Unidata network Common Data Format";
+    platforms = lib.platforms.unix;
+    homepage = "https://www.unidata.ucar.edu/software/netcdf/";
+    changelog = "https://docs.unidata.ucar.edu/netcdf-c/${version}/RELEASE_NOTES.html";
+    license = lib.licenses.bsd3;
   };
 }

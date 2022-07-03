@@ -76,7 +76,7 @@ in
 
       script = ''
         ${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${user} \
-            -c 'HOME="${cfg.dataDir}" ${pkgs.amuleDaemon}/bin/amuled'
+            -c 'HOME="${cfg.dataDir}" ${pkgs.amule-daemon}/bin/amuled'
       '';
     };
   };

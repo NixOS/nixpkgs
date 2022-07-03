@@ -6,8 +6,9 @@
 , buildPythonPackage
 , cachetools
 , fetchFromGitHub
-, poetry
+, poetry-core
 , pytest-asyncio
+, pytest-freezegun
 , pytestCheckHook
 , pythonOlder
 , xmltodict
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "rokuecp";
-  version = "0.14.0";
+  version = "0.16.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -25,12 +26,11 @@ buildPythonPackage rec {
     owner = "ctalkington";
     repo = "python-rokuecp";
     rev = version;
-    hash = "sha256-B8tcYcBtgPkT6REDC7vhHmfO/MjMRQgR3PkF0pfjbyk=";
+    hash = "sha256-MeugjIZorwO8d0Yb7bthI6f4NNo6GX9JrRbxrVSdWv0=";
   };
 
   nativeBuildInputs = [
-    # Requires poetry not poetry-core
-    poetry
+    poetry-core
   ];
 
   propagatedBuildInputs = [
@@ -44,20 +44,26 @@ buildPythonPackage rec {
 
   checkInputs = [
     aresponses
-    pytestCheckHook
     pytest-asyncio
+    pytest-freezegun
+    pytestCheckHook
   ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
       --replace " --cov" ""
   '';
 
   disabledTests = [
-    # https://github.com/ctalkington/python-rokuecp/issues/249
+    # Network related tests are having troube in the sandbox
     "test_resolve_hostname"
+    "test_get_dns_state"
     # Assertion issue
     "test_guess_stream_format"
+    "test_update_tv"
+    "test_get_apps_single_app"
+    "test_get_tv_channels_single_channel"
   ];
 
   pythonImportsCheck = [

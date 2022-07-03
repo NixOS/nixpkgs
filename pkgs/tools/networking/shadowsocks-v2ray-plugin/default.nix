@@ -18,6 +18,7 @@ buildGoModule rec {
     homepage = "https://github.com/shadowsocks/v2ray-plugin/";
     license = licenses.mit;
     maintainers = [ maintainers.ahrzb ];
+    mainProgram = "v2ray-plugin";
   };
 }
 

@@ -20,6 +20,7 @@
 , pythonOlder
 , rope
 , setuptools
+, setuptools-scm
 , stdenv
 , ujson
 , yapf
@@ -36,7 +37,8 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
-  version = "1.3.3";
+  version = "1.4.1";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -44,13 +46,18 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-F8f9NAjPWkm01D/KwFH0oA6nQ3EF4ZVCCckZTL4A35Y=";
+    sha256 = "sha256-rEfjxHw2NIVIa8RepxLPiXkRFhcGWLzm6w43n60zkFE=";
   };
 
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
-      --replace "--cov pylsp --cov test" ""
+      --replace "--cov pylsp --cov test" "" \
+      --replace "mccabe>=0.6.0,<0.7.0" "mccabe"
+  '';
+
+  preBuild = ''
+    export SETUPTOOLS_SCM_PRETEND_VERSION=${version}
   '';
 
   propagatedBuildInputs = [
@@ -58,6 +65,7 @@ buildPythonPackage rec {
     pluggy
     python-lsp-jsonrpc
     setuptools
+    setuptools-scm
     ujson
   ] ++ lib.optional withAutopep8 autopep8
   ++ lib.optional withFlake8 flake8
@@ -79,10 +87,7 @@ buildPythonPackage rec {
   # pyqt5 is broken on aarch64-darwin
   ++ lib.optionals (!stdenv.isDarwin || !stdenv.isAarch64) [ pyqt5 ];
 
-  disabledTests = [
-    # pytlint output changed
-    "test_lint_free_pylint"
-  ] ++ lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config"
+  disabledTests = lib.optional (!withPycodestyle) "test_workspace_loads_pycodestyle_config"
   # pyqt5 is broken on aarch64-darwin
   ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) "test_pyqt_completion";
 

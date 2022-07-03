@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, stdlib-shims, ounit }:
+{ lib, fetchurl, buildDunePackage, stdlib-shims, dune-configurator, ounit }:
 
 buildDunePackage rec {
   pname = "sha";
@@ -10,6 +10,8 @@ buildDunePackage rec {
   };
 
   useDune2 = true;
+
+  buildInputs = [ dune-configurator ];
 
   propagatedBuildInputs = [
     stdlib-shims

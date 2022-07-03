@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, pkg-config, gtk2, intltool,
+{ lib, stdenv, fetchurl, pkg-config, gtk2, intltool,
 GConf, enchant, isocodes, gnome-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "gtkhtml-3.32.2";
+  pname = "gtkhtml";
+  version = "3.32.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtkhtml/3.32/${name}.tar.bz2";
+    url = "mirror://gnome/sources/gtkhtml/${lib.versions.majorMinor version}/gtkhtml-${version}.tar.bz2";
     sha256 = "17z3jwvpn8waz7bhwrk7a6vs9pad6sqmlxxcqwvxxq89ywy0ail7";
   };
 

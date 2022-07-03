@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pynndescent";
-  version = "0.5.6";
+  version = "0.5.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YfsxiFuqxGnWeTPix8k1tu3rsG7kmOLw+d/JfFnTclw=";
+    hash = "sha256-7LOVJV+janSLWHC0ugMA6g99qLGWSGS47dYld6hN/X0=";
   };
 
   propagatedBuildInputs = [
@@ -32,6 +32,16 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # numpy.core._exceptions._UFuncNoLoopError
+    "test_sparse_nn_descent_query_accuracy_angular"
+    "test_nn_descent_query_accuracy_angular"
+    "test_alternative_distances"
+    # scipy: ValueError: Unknown Distance Metric: wminkowski
+    # https://github.com/scikit-learn/scikit-learn/pull/21741
+    "test_weighted_minkowski"
   ];
 
   pythonImportsCheck = [

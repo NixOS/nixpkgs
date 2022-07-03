@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchPypi
 , redis
-, memcached
+, python-memcached
 , msgpack
 }:
 
@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     redis
-    memcached
+    python-memcached
     msgpack
   ];
 

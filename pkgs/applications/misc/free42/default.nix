@@ -74,8 +74,7 @@ stdenv.mkDerivation rec {
       exec = "free42bin";
       type = "Application";
       comment = meta.description;
-      categories = "Utility;Calculator;";
-      terminal = "false";
+      categories = [ "Utility" "Calculator" ];
     })
     (makeDesktopItem {
       name = "com.thomasokken.free42dec";
@@ -84,8 +83,7 @@ stdenv.mkDerivation rec {
       exec = "free42dec";
       type = "Application";
       comment = meta.description;
-      categories = "Utility;Calculator;";
-      terminal = "false";
+      categories = [ "Utility" "Calculator" ];
     })
   ];
 

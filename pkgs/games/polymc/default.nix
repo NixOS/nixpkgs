@@ -1,43 +1,39 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , jdk8
 , jdk
 , zlib
 , file
-, makeWrapper
+, wrapQtAppsHook
 , xorg
 , libpulseaudio
 , qtbase
 , libGL
+, quazip
+, glfw
+, openal
 , msaClientID ? ""
+, jdks ? [ jdk jdk8 ]
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "polymc";
-  version = "1.0.6";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "PolyMC";
     repo = "PolyMC";
     rev = version;
-    sha256 = "sha256-KgLWbZxtxTpuFdMOJNyADYw9rMWoLgczrbSrH4qv6NI=";
+    sha256 = "sha256-hqsyS82UzgCUZ9HjoPKjOLE49fwLntRAh3mVrTsmi3o=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake file makeWrapper ];
-  buildInputs = [ qtbase jdk8 zlib ];
+  nativeBuildInputs = [ cmake file jdk wrapQtAppsHook ];
+  buildInputs = [ qtbase zlib quazip ];
 
-  postPatch = ''
-    # hardcode jdk paths
-    substituteInPlace launcher/java/JavaUtils.cpp \
-      --replace 'scanJavaDir("/usr/lib/jvm")' 'javas.append("${jdk}/lib/openjdk/bin/java")' \
-      --replace 'scanJavaDir("/usr/lib32/jvm")' 'javas.append("${jdk8}/lib/openjdk/bin/java")'
-  '';
-
-  cmakeFlags = [ "-DLauncher_LAYOUT=lin-system" ] ++
-               lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ];
+  cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ];
 
   dontWrapQtApps = true;
 
@@ -50,12 +46,14 @@ mkDerivation rec {
       libXxf86vm
       libpulseaudio
       libGL
+      glfw
+      openal
     ];
   in ''
     # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
-    wrapProgram $out/bin/polymc \
-      "''${qtWrapperArgs[@]}" \
+    wrapQtApp $out/bin/polymc \
       --set GAME_LIBRARY_PATH /run/opengl-driver/lib:${libpath} \
+      --prefix POLYMC_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks} \
       --prefix PATH : ${lib.makeBinPath [ xorg.xrandr ]}
   '';
 
@@ -68,6 +66,7 @@ mkDerivation rec {
       their associated options with a simple interface.
     '';
     platforms = platforms.linux;
+    changelog = "https://github.com/PolyMC/PolyMC/releases/tag/${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cleverca22 starcraft66 ];
   };

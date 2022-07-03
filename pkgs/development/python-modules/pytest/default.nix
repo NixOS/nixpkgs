@@ -1,56 +1,48 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, isPy3k, isPyPy
-, pythonAtLeast, fetchpatch
-, atomicwrites
+{ lib
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, isPyPy
+, writeText
+
+# build
+, setuptools-scm
+
+# propagates
 , attrs
-, hypothesis
 , iniconfig
-, more-itertools
 , packaging
-, pathlib2
 , pluggy
 , py
+, tomli
+
+# tests
+, hypothesis
 , pygments
-, setuptools
-, setuptools-scm
-, six
-, toml
-, wcwidth
-, writeText
 }:
 
 buildPythonPackage rec {
   pname = "pytest";
-  version = "6.2.5";
-  disabled = !isPy3k;
+  version = "7.1.1";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "131b36680866a76e6781d13f101efb86cf674ebb9762eb70d3082b6f29889e89";
+    sha256 = "sha256-hBEyyu9rGtF6mv3kbcT2z6WaBflVWq5RUfc73yggymM=";
   };
 
-  patches = lib.optionals (pythonAtLeast "3.10") [
-    (fetchpatch {
-      # Fix test_errors_in_xfail_skip_expressions for Python 3.10.1, remove after 6.2.5
-      url = "https://github.com/pytest-dev/pytest/commit/913439f5e5691f391e2969b3c8f0a49e50dce43a.patch";
-      sha256 = "0hsl3lww6bx5k99cp8gj0fy9rg02kcfbwiiwjx2y8vbhwd5ns41p";
-    })
+  nativeBuildInputs = [
+    setuptools-scm
   ];
 
-  nativeBuildInputs = [ setuptools-scm ];
-
   propagatedBuildInputs = [
-    atomicwrites
     attrs
     iniconfig
-    more-itertools
     packaging
     pluggy
     py
-    setuptools
-    six
-    toml
-    wcwidth
-  ] ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+    tomli
+  ];
 
   checkInputs = [
     hypothesis
@@ -59,17 +51,13 @@ buildPythonPackage rec {
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
 
-  preCheck = ''
-    # don't test bash builtins
-    rm testing/test_argcomplete.py
-  '';
-
   # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
   # test_missing_required_plugins will emit deprecation warning which is treated as error
   checkPhase = ''
     runHook preCheck
     $out/bin/py.test -x testing/ \
       --ignore=testing/test_junitxml.py \
+      --ignore=testing/test_argcomplete.py \
       -k "not test_collect_pyargs_with_testpaths and not test_missing_required_plugins"
 
     # tests leave behind unreproducible pytest binaries in the output directory, remove:
@@ -95,7 +83,7 @@ buildPythonPackage rec {
     # - files are not needed after tests are finished
     pytestRemoveBytecodePhase () {
         # suffix is defined at:
-        #    https://github.com/pytest-dev/pytest/blob/6.2.5/src/_pytest/assertion/rewrite.py#L51-L53
+        #    https://github.com/pytest-dev/pytest/blob/7.1.1/src/_pytest/assertion/rewrite.py#L51-L53
         find $out -name "*-pytest-*.py[co]" -delete
     }
     preDistPhases+=" pytestRemoveBytecodePhase"

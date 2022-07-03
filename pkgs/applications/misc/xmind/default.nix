@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     icon = "xmind";
     desktopName = "XMind";
     comment = meta.description;
-    categories = "Office;";
-    mimeType = "application/xmind;x-scheme-handler/xmind";
+    categories = [ "Office" ];
+    mimeTypes = [ "application/xmind" "x-scheme-handler/xmind" ];
   };
 
   installPhase = let
@@ -85,6 +85,10 @@ stdenv.mkDerivation rec {
       and save to Evernote.
     '';
     homepage = "https://www.xmind.net/";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ michalrus ];

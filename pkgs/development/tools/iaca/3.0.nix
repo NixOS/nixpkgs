@@ -13,11 +13,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp iaca $out/bin
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $out/bin/iaca
+    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 $out/bin/iaca
   '';
   meta = {
     description = "Intel Architecture Code Analyzer";
     homepage = "https://software.intel.com/en-us/articles/intel-architecture-code-analyzer/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kazcw ];

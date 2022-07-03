@@ -1,15 +1,19 @@
 { stdenv, fetchurl, fetchpatch, perl, file, nettools, iputils, iproute2, makeWrapper
 , coreutils, gnused, openldap ? null
 , buildPackages, lib
+
+# client and relay are end of life, remove after 4.4.3
+, withClient ? false
+, withRelay ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "dhcp";
-  version = "4.4.2-P1";
+  version = "4.4.3";
 
   src = fetchurl {
     url = "https://ftp.isc.org/isc/dhcp/${version}/${pname}-${version}.tar.gz";
-    sha256 = "06jsr0cg5rsmyibshrpcb9za0qgwvqccashdma7mlm1rflrh8pmh";
+    sha256 = "sha256-Dj7GtMKgXsAUiHS82ZmmbQVRg3jXdCH2B/sLydATWBg=";
   };
 
   patches =
@@ -18,20 +22,6 @@ stdenv.mkDerivation rec {
       # patch, the hostname doesn't get set properly if the old
       # hostname (i.e. before reboot) is equal to the new hostname.
       ./set-hostname.patch
-
-      (fetchpatch {
-        # upstream build fix against -fno-common compilers like >=gcc-10
-        url = "https://gitlab.isc.org/isc-projects/dhcp/-/commit/6c7e61578b1b449272dbb40dd8b98d03dad8a57a.patch";
-        sha256 = "1g37ix0yf9zza8ri8bg438ygcjviniblfyb20y4gzc8lysy28m8b";
-      })
-
-      # Fix parallel build failure, the patch is pending upstream inclusion:
-      #  https://gitlab.isc.org/isc-projects/dhcp/-/merge_requests/76
-      (fetchpatch {
-        name = "parallel-make.patch";
-        url = "https://gitlab.isc.org/isc-projects/dhcp/-/commit/46d101b97c5a3b19a3f63f7b60e5f88994a64e22.patch";
-        sha256 = "1y3nsmqjzcg4bhp1xmqp47v7rkl3bpcildkx6mlrg255yvxapmdp";
-      })
     ];
 
   nativeBuildInputs = [ perl makeWrapper ];
@@ -77,6 +67,10 @@ stdenv.mkDerivation rec {
         --replace /sbin/ip ${iproute2}/sbin/ip
       wrapProgram "$out/sbin/dhclient-script" --prefix PATH : \
         "${nettools}/bin:${nettools}/sbin:${iputils}/bin:${coreutils}/bin:${gnused}/bin"
+    '' + lib.optionalString (!withClient) ''
+      rm $out/sbin/{dhclient,dhclient-script,.dhclient-script-wrapped}
+    '' + lib.optionalString (!withRelay) ''
+      rm $out/sbin/dhcrelay
     '';
 
   preConfigure =
@@ -103,5 +97,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.isc.org/dhcp/";
     license = licenses.mpl20;
     platforms = platforms.unix;
+    knownVulnerabilities = lib.optional (withClient || withRelay) "The client and relay component of the dhcp package have reached their end of life";
   };
 }

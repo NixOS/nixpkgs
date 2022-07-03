@@ -8,13 +8,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "auditwheel";
-  version = "4.0.0";
-
-  disabled = python3.pkgs.pythonOlder "3.6";
+  version = "5.1.2";
+  format = "setuptools";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "03a079fe273f42336acdb5953ff5ce7578f93ca6a832b16c835fe337a1e2bd4a";
+    hash = "sha256-PuWDABSTHqhK9c0GXGN7ZhTvoD2biL2Pv8kk5+0B1ro=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -26,15 +25,17 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  # integration tests require docker and networking
-  disabledTestPaths = [ "tests/integration" ];
-
   checkInputs = with python3.pkgs; [
     pretend
     pytestCheckHook
   ];
 
-  # ensure that there are no undeclared deps
+  # Integration tests require docker and networking
+  disabledTestPaths = [
+    "tests/integration"
+  ];
+
+  # Ensure that there are no undeclared deps
   postCheck = ''
     PATH= PYTHONPATH= $out/bin/auditwheel --version > /dev/null
   '';

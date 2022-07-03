@@ -1,8 +1,17 @@
-{ buildPythonPackage, fetchFromGitHub, lib, netaddr, six, nose }:
+{ buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, lib
+, poetry-core
+, netaddr
+, six
+, python
+}:
 
 buildPythonPackage rec {
   pname = "pyrad";
   version = "2.4";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pyradius";
@@ -11,19 +20,43 @@ buildPythonPackage rec {
     sha256 = "sha256-oqgkE0xG/8cmLeRZdGoHkaHbjtByeJwzBJwEdxH8oNY=";
   };
 
-  propagatedBuildInputs = [ netaddr six ];
-  checkInputs = [ nose ];
+  patches = [
+    (fetchpatch {
+      # Migrate to poetry-core
+      url = "https://github.com/pyradius/pyrad/commit/a4b70067dd6269e14a2f9530d820390a8a454231.patch";
+      hash = "sha256-1We9wrVY3Or3GLIKK6hZvEjVYv6JOaahgP9zOMvgErE=";
+    })
+  ];
 
-  checkPhase = ''
-    nosetests -e testBind
+  nativeBuildInputs = [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = [
+    netaddr
+    six
+  ];
+
+  preCheck = ''
+    substituteInPlace tests/testServer.py \
+      --replace "def testBind(self):" "def dontTestBind(self):" \
+      --replace "def testBindv6(self):" "def dontTestBindv6(self):"
   '';
 
-  pythonImportsCheck = [ "pyrad" ];
+  checkPhase = ''
+    runHook preCheck
+    ${python.interpreter} -m unittest discover
+    runHook postCheck
+  '';
+
+  pythonImportsCheck = [
+    "pyrad"
+  ];
 
   meta = with lib; {
     description = "Python RADIUS Implementation";
-    homepage = "https://bitbucket.org/zzzeek/sqlsoup";
+    homepage = "https://github.com/pyradius/pyrad";
     license = licenses.bsd3;
-    maintainers = [ maintainers.globin ];
+    maintainers = with maintainers; [ globin ];
   };
 }

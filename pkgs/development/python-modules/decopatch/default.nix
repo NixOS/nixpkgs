@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "decopatch";
-  version = "1.4.9";
+  version = "1.4.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tYgsjPDVsB0hi04E9nYtB7ModCDqUJcG9Zlxw9b+xW8=";
+    hash = "sha256-lX9JyT9BUBgsI/j7UdE7syE+DxenngnIzKcFdZi1VyA=";
   };
 
   nativeBuildInputs = [

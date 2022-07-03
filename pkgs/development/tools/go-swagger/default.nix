@@ -24,5 +24,6 @@ buildGoModule rec {
     homepage = "https://github.com/go-swagger/go-swagger";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "swagger";
   };
 }

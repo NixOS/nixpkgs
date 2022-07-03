@@ -23,15 +23,15 @@ let
   ];
 
   lightworks = stdenv.mkDerivation rec {
-    version = "2021.2.1";
-    rev = "128456";
+    version = "2022.1.1";
+    rev = "132926";
     pname = "lightworks";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "https://cdn.lwks.com/releases/${version}/lightworks_${lib.versions.majorMinor version}_r${rev}.deb";
-          sha256 = "sha256-GkTg43IUF1NgEm/wT9CZw68Dw/R2BYBU/F4bsCxQowQ=";
+          url = "https://cdn.lwks.com/releases/${version}/lightworks_${version}_r${rev}.deb";
+          sha256 = "sha256-f2lxfv0sFESpDnINDKlfVcR0pySAueMeOMbkgBWzz7Q=";
         }
       else throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
@@ -85,6 +85,7 @@ in buildFHSUserEnv {
   meta = {
     description = "Professional Non-Linear Video Editor";
     homepage = "https://www.lwks.com/";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ antonxy vojta001 ];
     platforms = [ "x86_64-linux" ];

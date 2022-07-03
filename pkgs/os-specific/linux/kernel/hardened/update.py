@@ -219,7 +219,16 @@ failures = False
 
 # Match each kernel version with the best patch version.
 releases = {}
+i = 0
 for release in repo.get_releases():
+    # Dirty workaround to make sure that we don't run into issues because
+    # GitHub's API only allows fetching the last 1000 releases.
+    # It's not reliable to exit earlier because not every kernel minor may
+    # have hardened patches, hence the naive search below.
+    i += 1
+    if i > 500:
+        break
+
     version = parse_version(release.tag_name)
     # needs to look like e.g. 5.6.3-hardened1
     if len(version) < 4:

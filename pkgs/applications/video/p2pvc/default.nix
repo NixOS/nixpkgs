@@ -1,7 +1,8 @@
 { lib, stdenv, pkg-config, fetchFromGitHub, opencv2, ncurses, portaudio }:
 
 stdenv.mkDerivation {
-  name = "p2pvc";
+  pname = "p2pvc";
+  version = "unstable-2015-02-12";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ opencv2 ncurses portaudio ];

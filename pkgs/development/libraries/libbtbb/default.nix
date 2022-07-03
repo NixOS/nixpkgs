@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake }:
+{ stdenv, lib, fetchFromGitHub, cmake, CoreServices }:
 
 stdenv.mkDerivation rec {
   pname = "libbtbb";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1byv8174xam7siakr1p0523x97wkh0fmwmq341sd3g70qr2g767d";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with lib; {
     description = "Bluetooth baseband decoding library";

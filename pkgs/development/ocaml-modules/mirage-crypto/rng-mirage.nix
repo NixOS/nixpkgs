@@ -3,7 +3,7 @@
 , logs, lwt
 }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "mirage-crypto-rng-mirage";
 
   inherit (mirage-crypto-rng) version src useDune2 minimumOCamlVersion;
@@ -13,6 +13,8 @@ buildDunePackage {
 
   propagatedBuildInputs = [ duration cstruct mirage-crypto-rng mirage-runtime
                             mirage-time mirage-clock logs lwt ];
+
+  strictDeps = !doCheck;
 
   meta = mirage-crypto-rng.meta // {
     description = "Entropy collection for a cryptographically secure PRNG";

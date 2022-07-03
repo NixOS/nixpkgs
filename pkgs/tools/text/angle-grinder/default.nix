@@ -21,5 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rcoh/angle-grinder";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];
+    mainProgram = "agrind";
   };
 }

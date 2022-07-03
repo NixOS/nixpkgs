@@ -1,4 +1,4 @@
-{lib, rustPlatform, fetchFromGitHub, fetchurl, SDL2, makeWrapper, makeDesktopItem}:
+{ stdenv, lib, rustPlatform, fetchFromGitHub, fetchurl, SDL2, makeWrapper, makeDesktopItem}:
 
 let
   desktopFile = makeDesktopItem {
@@ -6,7 +6,7 @@ let
     exec = "@out@/bin/syzygy";
     comment = "A puzzle game";
     desktopName = "System Syzygy";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 in
 rustPlatform.buildRustPackage rec {
@@ -35,6 +35,7 @@ rustPlatform.buildRustPackage rec {
 
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A story and a puzzle game, where you solve a variety of puzzle";
     homepage = "https://mdsteele.games/syzygy";
     license = licenses.gpl3Plus;

@@ -24,13 +24,13 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.26.4";
+  version = "1.26.6";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Xn8OqeEihLxZS9QZtrhzau2zLg9SzQrrigK70PoImhU=";
+    sha256 = "sha256-6Y5pJg6N/F97zvkyo4r6MoThi79kI53AvlHNOmOCpFA=";
   };
 
   propagatedBuildInputs = [
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     sed -i setup.py -e "/pip>=/c\'pip',"
     substituteInPlace setup.py \
       --replace "typing==3.6.4" "typing" \
-      --replace "attrs>=19.3.0,<21.3.0" "attrs"
+      --replace "jmespath>=0.9.3,<1.0.0" "jmespath>=0.9.3,<2.0.0"
   '';
 
   disabledTestPaths = [

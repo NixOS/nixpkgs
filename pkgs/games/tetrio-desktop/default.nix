@@ -4,6 +4,7 @@
 , autoPatchelfHook
 , alsa-lib
 , cups
+, libpulseaudio
 , libX11
 , libXScrnSaver
 , libXtst
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
   version = "8.0.0";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20211130172544/https://tetr.io/about/desktop/builds/TETR.IO%20Setup.deb";
+    url = "https://web.archive.org/web/20211228025517if_/https://tetr.io/about/desktop/builds/TETR.IO%20Setup.deb";
     name = "tetrio-desktop.deb";
     sha256 = "1nlblfhrph4cw8rpic9icrs78mzrxyskl7ggyy2i8bk9i07i21xf";
   };
@@ -43,6 +44,7 @@ stdenv.mkDerivation rec {
   libPath = lib.makeLibraryPath [
     alsa-lib
     cups
+    libpulseaudio
     libX11
     libXScrnSaver
     libXtst

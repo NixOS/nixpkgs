@@ -1,5 +1,5 @@
 { lib, stdenv, fetchurl, sconsPackages, boost, gperftools, pcre-cpp, snappy, zlib, libyamlcpp
-, sasl, openssl, libpcap, curl, Security, CoreFoundation, cctools }:
+, sasl, openssl, libpcap, python3, curl, Security, CoreFoundation, cctools, xz }:
 
 # Note:
 # The command line tools are written in Go as part of a different package (mongodb-tools)
@@ -8,12 +8,12 @@ with lib;
 
 { version, sha256, patches ? []
 , license ? lib.licenses.sspl
-}@args:
+}:
 
 let
   variants = if versionAtLeast version "4.2"
     then rec { python = scons.python.withPackages (ps: with ps; [ pyyaml cheetah3 psutil setuptools ]);
-            scons = sconsPackages.scons_latest;
+            scons = sconsPackages.scons_3_1_2.override { python = python3; }; # 4.2 < mongodb <= 5.0.x needs scons 3.x built with python3
             mozjsVersion = "60";
             mozjsReplace = "defined(HAVE___SINCOS)";
           }
@@ -44,7 +44,9 @@ in stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ variants.scons ];
+  nativeBuildInputs = [ variants.scons ]
+    ++ lib.optionals (versionAtLeast version "4.4") [ xz ];
+
   buildInputs = [
     boost
     curl
@@ -70,7 +72,6 @@ in stdenv.mkDerivation rec {
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
-
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
@@ -95,7 +96,8 @@ in stdenv.mkDerivation rec {
     "--use-sasl-client"
     "--disable-warnings-as-errors"
     "VARIANT_DIR=nixos" # Needed so we don't produce argument lists that are too long for gcc / ld
-  ] ++ map (lib: "--use-system-${lib}") system-libraries;
+  ] ++ lib.optionals (versionAtLeast version "4.4") [ "--link-model=static" ]
+    ++ map (lib: "--use-system-${lib}") system-libraries;
 
   preBuild = ''
     sconsFlags+=" CC=$CC"
@@ -119,7 +121,9 @@ in stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  prefixKey = "--prefix=";
+  installTargets = if (versionAtLeast version "4.4") then "install-core" else "install";
+
+  prefixKey = if (versionAtLeast version "4.4") then "DESTDIR=" else "--prefix=";
 
   enableParallelBuilding = true;
 

@@ -72,6 +72,7 @@ let
     downloadPage = "https://www.ibm.com/support/pages/ibm-spectrum-protect-downloads-latest-fix-packs-and-interim-fixes";
     platforms = [ "x86_64-linux" ];
     mainProgram = "dsmc";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.yarny ];
     description = "IBM Spectrum Protect (Tivoli Storage Manager) CLI and API";
@@ -106,10 +107,10 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
-    version = "8.1.13.3";
+    version = "8.1.14.0";
     src = fetchurl {
       url = mkSrcUrl version;
-      sha256 = "1dwczf236drdaf4jcfzz5154vdwvxf5zraxhrhiddl6n80hnvbcd";
+      sha256 = "1iczc4w8rwzqnw01r89kwxcdr7pnwh3nqr3a0q8ncrxrhsy3qwn0";
     };
     inherit meta passthru;
 

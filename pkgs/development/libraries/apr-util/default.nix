@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       substituteInPlace $f \
         --replace "${expat.dev}/lib" "${expat.out}/lib" \
         --replace "${db.dev}/lib" "${db.out}/lib" \
-        --replace "${openssl.dev}/lib" "${openssl.out}/lib"
+        --replace "${openssl.dev}/lib" "${lib.getLib openssl}/lib"
     done
 
     # Give apr1 access to sed for runtime invocations.

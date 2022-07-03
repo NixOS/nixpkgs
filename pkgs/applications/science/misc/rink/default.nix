@@ -2,17 +2,17 @@
 , libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.6.2";
+  version = "0.6.3";
   pname = "rink";
 
   src = fetchFromGitHub {
     owner = "tiffany352";
     repo = "rink-rs";
     rev = "v${version}";
-    sha256 = "sha256-l2Rj15zaJm94EHwvOssfvYQNOoWj45Nq9M85n+A0vo4=";
+    sha256 = "sha256-AhC3c6CpV0tlD6d/hFWt7hGj2UsXsOCeujkRSDlpvCM=";
   };
 
-  cargoSha256 = "sha256-GhuvwVkDRFjC6BghaNMFZZG9hResTN1u0AuvIXlFmig=";
+  cargoSha256 = "sha256-Xo5iYwL4Db+GWMl5UXbPmj0Y0PJYR4Q0aUGnYCd+NB8=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]

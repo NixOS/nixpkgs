@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, efl }:
+{ lib, stdenv, fetchurl, meson, ninja, pkg-config, python3, efl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "terminology";
@@ -24,11 +24,13 @@ stdenv.mkDerivation rec {
     patchShebangs data/colorschemes/*.py
   '';
 
+  passthru.tests.test = nixosTests.terminal-emulators.terminology;
+
   meta = with lib; {
     description = "Powerful terminal emulator based on EFL";
     homepage = "https://www.enlightenment.org/about-terminology";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
+    maintainers = with maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
   };
 }

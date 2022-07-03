@@ -209,7 +209,7 @@ in {
 
       port = lib.mkOption {
         type = lib.types.nullOr lib.types.port;
-        default = if cfg.redis.createLocally && cfg.redis.enableUnixSocket then null else 6379;
+        default = if cfg.redis.createLocally && cfg.redis.enableUnixSocket then null else 31638;
         defaultText = lib.literalExpression ''
           if config.${opt.redis.createLocally} && config.${opt.redis.enableUnixSocket}
           then null
@@ -320,6 +320,7 @@ in {
         };
         storage = {
           tmp = lib.mkDefault "/var/lib/peertube/storage/tmp/";
+          bin = lib.mkDefault "/var/lib/peertube/storage/bin/";
           avatars = lib.mkDefault "/var/lib/peertube/storage/avatars/";
           videos = lib.mkDefault "/var/lib/peertube/storage/videos/";
           streaming_playlists = lib.mkDefault "/var/lib/peertube/storage/streaming-playlists/";
@@ -333,8 +334,17 @@ in {
           plugins = lib.mkDefault "/var/lib/peertube/storage/plugins/";
           client_overrides = lib.mkDefault "/var/lib/peertube/storage/client-overrides/";
         };
+        import = {
+          videos = {
+            http = {
+              youtube_dl_release = {
+                python_path = "${pkgs.python3}/bin/python";
+              };
+            };
+          };
+        };
       }
-      (lib.mkIf cfg.redis.enableUnixSocket { redis = { socket = "/run/redis/redis.sock"; }; })
+      (lib.mkIf cfg.redis.enableUnixSocket { redis = { socket = "/run/redis-peertube/redis.sock"; }; })
     ];
 
     systemd.tmpfiles.rules = [
@@ -380,7 +390,7 @@ in {
 
       environment = env;
 
-      path = with pkgs; [ bashInteractive ffmpeg nodejs-16_x openssl yarn youtube-dl ];
+      path = with pkgs; [ bashInteractive ffmpeg nodejs-16_x openssl yarn python3 ];
 
       script = ''
         #!/bin/sh
@@ -431,13 +441,17 @@ in {
       enable = true;
     };
 
-    services.redis = lib.mkMerge [
+    services.redis.servers.peertube = lib.mkMerge [
       (lib.mkIf cfg.redis.createLocally {
         enable = true;
       })
+      (lib.mkIf (cfg.redis.createLocally && !cfg.redis.enableUnixSocket) {
+        bind = "127.0.0.1";
+        port = cfg.redis.port;
+      })
       (lib.mkIf (cfg.redis.createLocally && cfg.redis.enableUnixSocket) {
-        unixSocket = "/run/redis/redis.sock";
-        unixSocketPerm = 770;
+        unixSocket = "/run/redis-peertube/redis.sock";
+        unixSocketPerm = 660;
       })
     ];
 
@@ -455,7 +469,7 @@ in {
         };
       })
       (lib.attrsets.setAttrByPath [ cfg.user "packages" ] [ cfg.package peertubeEnv peertubeCli pkgs.ffmpeg pkgs.nodejs-16_x pkgs.yarn ])
-      (lib.mkIf cfg.redis.enableUnixSocket {${config.services.peertube.user}.extraGroups = [ "redis" ];})
+      (lib.mkIf cfg.redis.enableUnixSocket {${config.services.peertube.user}.extraGroups = [ "redis-peertube" ];})
     ];
 
     users.groups = lib.optionalAttrs (cfg.group == "peertube") {

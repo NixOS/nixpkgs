@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, which, autoconf,
+{ lib, mkCoqDerivation, autoconf,
   coq, ssreflect, version ? null }:
 
 with lib; mkCoqDerivation {
@@ -7,7 +7,7 @@ with lib; mkCoqDerivation {
   domain = "gitlab.inria.fr";
   inherit version;
   defaultVersion = with versions; switch coq.coq-version [
-    { case = isGe "8.8" ;        out = "3.2.0"; }
+    { case = range "8.8" "8.15"; out = "3.2.0"; }
     { case = range "8.8" "8.13"; out = "3.1.0"; }
     { case = range "8.5" "8.9";  out = "3.0.2"; }
   ] null;
@@ -16,7 +16,7 @@ with lib; mkCoqDerivation {
   release."3.0.2".sha256 = "1rqfbbskgz7b1bcpva8wh3v3456sq2364y804f94sc8y5sij23nl";
   releaseRev = v: "coquelicot-${v}";
 
-  nativeBuildInputs = [ which autoconf ];
+  nativeBuildInputs = [ autoconf ];
   propagatedBuildInputs = [ ssreflect ];
   useMelquiondRemake.logpath = "Coquelicot";
 

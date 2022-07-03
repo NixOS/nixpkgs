@@ -2,29 +2,50 @@
 
 # lists all available tags from a git repository
 
-scriptName=list-git-tags # do not use the .wrapped name
+echo "# pname=$UPDATE_NIX_ATTR_PATH" > /tmp/test.txt
 
-usage() {
-    echo "Usage: $scriptName <repository url> [<package name> [<debug file path>]]"
-}
+url="" # git repository url
+pname="" # package name
+file="" # file for writing debugging information
 
-repo="$1" # git repository url
-pname="$2" # package name
-file="$3" # file for writing debugging information
+while (( $# > 0 )); do
+    flag="$1"
+    shift 1
+    case "$flag" in
+        --url=*)
+            url="${flag#*=}"
+            ;;
+        --pname=*)
+            pname="${flag#*=}"
+            ;;
+        --file=*)
+            file="${flag#*=}"
+            ;;
+        *)
+            echo "$0: unknown option ‘${flag}’"
+            exit 1
+            ;;
+    esac
+done
 
-if [ -z "$repo" ]; then
-    echo "$scriptName: Missing git repository url"
-    usage
-    exit 1
+# By default we set url to src.url or src.meta.homepage
+if [[ -z "$url" ]]; then
+    url="$(nix-instantiate $systemArg --eval -E \
+               "with import ./. {}; $UPDATE_NIX_ATTR_PATH.src.meta.homepage or $UPDATE_NIX_ATTR_PATH.src.url" \
+        | tr -d '"')"
+fi
+
+if [[ -z "$pname" ]]; then
+    pname="$UPDATE_NIX_ATTR_PATH"
 fi
 
 # print a debugging message
-if [ -n "$file" ]; then
-    echo "# Listing tags for $pname at $repo" >> $file
+if [[ -n "$file" ]]; then
+    echo "# Listing tags for '$pname' at $url" >> $file
 fi
 
 # list all tags from the remote repository
-tags=$(git ls-remote --tags --refs "$repo")
+tags=$(git ls-remote --tags --refs "$url")
 
 # keep only the version part of the tag
 tags=$(echo "$tags" | cut --delimiter=/ --field=3)

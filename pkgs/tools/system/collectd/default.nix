@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--disable-werror"
-  ] ++ plugins.configureFlags;
+  ] ++ plugins.configureFlags
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "--with-fp-layout=nothing" ];
 
   # do not create directories in /var during installPhase
   postConfigure = ''

@@ -34,6 +34,8 @@ qt5.mkDerivation {
     description = "Turn your Android device into wireless headphones / wireless speaker";
     homepage = "https://georgielabs.net/";
     maintainers = with maintainers; [ mkg20001 ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
   };
 }

@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "smartgithg";
-  version = "20.2.5";
+  version = "21.2.2";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
-    sha256 = "05f3yhzf6mvr6c5v6qvjrx97pzrrnkh9mp444zlkbnpgnrsmdc6v";
+    sha256 = "10v6sg0lmjby3v8g3sk2rzzvdx5p69ia4zz2c0hbf30rk0p6gqn3";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -65,23 +65,19 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     icon = "smartgit";
     desktopName = "SmartGit";
-    categories = concatStringsSep ";" [
+    categories = [
       "Application"
       "Development"
       "RevisionControl"
     ];
-    mimeType = concatStringsSep ";" [
+    mimeTypes = [
       "x-scheme-handler/git"
       "x-scheme-handler/smartgit"
       "x-scheme-handler/sourcetree"
     ];
-    startupNotify = "true";
-    extraEntries = ''
-      Keywords=git
-      StartupWMClass=${name}
-      Version=1.0
-      Encoding=UTF-8
-    '';
+    startupNotify = true;
+    startupWMClass = name;
+    keywords = [ "git" ];
   };
 
   meta = with lib; {

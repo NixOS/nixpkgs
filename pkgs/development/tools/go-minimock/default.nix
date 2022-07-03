@@ -26,5 +26,6 @@ buildGoModule rec {
     description = "A golang mock generator from interfaces";
     license = licenses.mit;
     maintainers = with maintainers; [ svrana ];
+    mainProgram = "minimock";
   };
 }

@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://git.metabarcoding.org/obitools/ecopcr/wikis/home";
     license = licenses.cecill20;
-    maintainers = [ maintainers.metabar ];
+    maintainers = [ ];
   };
 }

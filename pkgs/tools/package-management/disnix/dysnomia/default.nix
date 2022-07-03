@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, netcat
 
 # Optional packages
-, systemd ? null, ejabberd ? null, mysql ? null, postgresql ? null, subversion ? null
+, systemd ? null, ejabberd ? null, mariadb ? null, postgresql ? null, subversion ? null
 , mongodb ? null, mongodb-tools ? null, influxdb ? null, supervisor ? null, docker ? null
 , nginx ? null, s6-rc ? null, xinetd ? null
 
@@ -26,7 +26,7 @@
 , getopt
 }:
 
-assert enableMySQLDatabase -> mysql != null;
+assert enableMySQLDatabase -> mariadb != null;
 assert enablePostgreSQLDatabase -> postgresql != null;
 assert enableSubversionRepository -> subversion != null;
 assert enableEjabberdDump -> ejabberd != null;
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ getopt netcat ]
     ++ lib.optional stdenv.isLinux systemd
     ++ lib.optional enableEjabberdDump ejabberd
-    ++ lib.optional enableMySQLDatabase mysql.out
+    ++ lib.optional enableMySQLDatabase mariadb.out
     ++ lib.optional enablePostgreSQLDatabase postgresql
     ++ lib.optional enableSubversionRepository subversion
     ++ lib.optionals enableMongoDatabase [ mongodb mongodb-tools ]

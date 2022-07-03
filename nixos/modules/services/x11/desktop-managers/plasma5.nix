@@ -234,11 +234,11 @@ in
     (mkIf (cfg.enable || cfg.mobile.enable) {
 
       security.wrappers = {
-        kcheckpass = {
+        kscreenlocker_greet = {
           setuid = true;
           owner = "root";
           group = "root";
-          source = "${getBin libsForQt5.kscreenlocker}/libexec/kcheckpass";
+          source = "${getBin libsForQt5.kscreenlocker}/libexec/kscreenlocker_greet";
         };
         start_kdeinit = {
           setuid = true;
@@ -519,7 +519,7 @@ in
         with plasma5; with kdeApplications; with kdeFrameworks;
         [
           # Basic packages without which Plasma Mobile fails to work properly.
-          plasma-phone-components
+          plasma-mobile
           plasma-nano
           pkgs.maliit-framework
           pkgs.maliit-keyboard
@@ -573,7 +573,7 @@ in
         };
       };
 
-      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-phone-components ];
+      services.xserver.displayManager.sessionPackages = [ pkgs.libsForQt5.plasma5.plasma-mobile ];
     })
   ];
 }

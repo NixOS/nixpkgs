@@ -13,9 +13,14 @@ let
   # Fetch a diff between `base` and `rev` on sage's git server.
   # Used to fetch trac tickets by setting the `base` to the last release and the
   # `rev` to the last commit of the ticket.
-  fetchSageDiff = { base, name, rev, sha256, squashed ? false, ...}@args: (
+  #
+  # We don't use sage's own build system (which builds all its
+  # dependencies), so we exclude changes to "build/" from patches by
+  # default to avoid conflicts.
+  fetchSageDiff = { base, name, rev, sha256, squashed ? false, excludes ? [ "build/*" ]
+                  , ...}@args: (
     fetchpatch ({
-      inherit name sha256;
+      inherit name sha256 excludes;
 
       # There are three places to get changes from:
       #
@@ -49,38 +54,23 @@ let
                "https://github.com/sagemath/sagetrac-mirror/compare/${base}...${rev}.diff"
              ]
              else [ "https://git.sagemath.org/sage.git/patch?id2=${base}&id=${rev}" ];
-
-      # We don't care about sage's own build system (which builds all its dependencies).
-      # Exclude build system changes to avoid conflicts.
-      excludes = [ "build/*" ];
-    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" ])
+    } // builtins.removeAttrs args [ "rev" "base" "sha256" "squashed" "excludes" ])
   );
 in
 stdenv.mkDerivation rec {
-  version = "9.5";
+  version = "9.6";
   pname = "sage-src";
 
   src = fetchFromGitHub {
     owner = "sagemath";
     repo = "sage";
     rev = version;
-    sha256 = "sha256-uOsLpsGpcIGs8Xr82X82MElnTB2E908gytyNJ8WVD5w=";
+    sha256 = "sha256-QY8Yga3hD1WhSCtA2/PVry8hHlMmC31J8jCBFtWgIU0=";
   };
 
   # Patches needed because of particularities of nix or the way this is packaged.
   # The goal is to upstream all of them and get rid of this list.
   nixPatches = [
-    # Since https://trac.sagemath.org/ticket/32174, some external features are
-    # marked as "safe" and get auto-detected, in which case the corresponding
-    # optional tests are executed. We disable auto-detection of safe features if
-    # we are doctesting with an "--optional" argument which does not include
-    # "sage", because tests from autodetected features expect context provided
-    # by running basic sage tests. This is necessary to test sagemath_doc_html
-    # separately. See https://trac.sagemath.org/ticket/26110 for a related
-    # upstream discussion (from the time when Sage still had optional py2/py3
-    # tags).
-    ./patches/Only-test-external-software-when-all-of-sage-is.patch
-
     # Fixes a potential race condition which can lead to transient doctest failures.
     ./patches/fix-ecl-race.patch
 
@@ -119,42 +109,14 @@ stdenv.mkDerivation rec {
     # https://trac.sagemath.org/ticket/32959
     ./patches/linbox-1.7-upgrade.patch
 
-    # To emit better tracebacks, IPython 8 parses Python files using the ast
-    # module (via the stack_data package). Since Cython is a superset of Python,
-    # this results in no Cython code being printed in tracebacks. Fixing this
-    # properly is tracked in https://github.com/alexmojaki/stack_data/issues/21,
-    # but for now we just disable the corresponding test. An alternative would
-    # be to revert IPython's IPython/core/ultratb.py, but this would need to be
-    # Sage-specific (since it would worsen tracebacks for pure Python code).
-    # Sage tracks this at https://trac.sagemath.org/ticket/33170
-    ./patches/no-cython-sources-in-tracebacks-on-ipython8.patch
+    # adapted from https://trac.sagemath.org/ticket/23712#comment:22
+    ./patches/tachyon-renamed-focallength.patch
 
-    # https://trac.sagemath.org/ticket/32968
-    (fetchSageDiff {
-      base = "9.5";
-      name = "sphinx-4.3-update.patch";
-      rev = "fc84f82f52b6f05f512cb359ec7c100f93cf8841";
-      sha256 = "sha256-bBbfdcnw/9LUOlY8rHJRbFJEdMXK4shosqTNaobTS1Q=";
-    })
-
-    # https://trac.sagemath.org/ticket/33189
-    (fetchSageDiff {
-      base = "9.5";
-      name = "arb-2.22-update.patch";
-      rev = "53532ddd4e2dc92469c1590ebf0c40f8f69bf579";
-      sha256 = "sha256-6SoSBvIlqvNwZV3jTB6uPdUtaWIOeNmddi2poK/WvGs=";
-    })
-
-    # TODO: This will not be necessary when Sphinx 4.4.1 is released,
-    # since some warnings introduced in 4.4.0 will be disabled by then
-    # (https://github.com/sphinx-doc/sphinx/pull/10126).
-    # https://trac.sagemath.org/ticket/33272
-    (fetchSageDiff {
-      base = "9.5";
-      name = "sphinx-4.4-warnings.patch";
-      rev = "97d7958bed441cf2ccc714d88f83d3a8426bc085";
-      sha256 = "sha256-y1STE0oxswnijGCsBw8eHWWqpmT1XMznIfA0vvX9pFA=";
-    })
+    # docutils 0.18.1 now triggers Sphinx warnings. tolerate them for
+    # now, because patching Sphinx is not feasible. remove when Sphinx
+    # 5.0 hits nixpkgs.
+    # https://github.com/sphinx-doc/sphinx/pull/10372
+    ./patches/docutils-0.18.1-deprecation.patch
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

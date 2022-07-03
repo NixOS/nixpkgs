@@ -23,7 +23,9 @@ buildPythonPackage rec {
       --replace "from setuptools.command.build_py import Mixin2to3" "from distutils.util import Mixin2to3"
   '';
 
-  preBuild = ''
+  preBuild = lib.optionalString
+      ((python.isPy3k or false) && (python.pname != "pypy3"))
+  ''
     2to3 -wn nose functional_tests unit_tests
   '';
 
@@ -39,8 +41,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A unittest-based testing framework for python that makes writing and running tests easier";
-    homepage = "http://readthedocs.org/docs/nose/";
+    homepage = "https://nose.readthedocs.io/";
     license = licenses.lgpl3;
+    maintainers = with maintainers; [ ];
   };
-
 }

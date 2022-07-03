@@ -9,17 +9,18 @@
 , SDL2
 , lttng-ust
 , numactl
+, dotnetCorePackages
 }:
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2022.205.0";
+  version = "2022.409.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    sha256 = "sha256-CzXgj3990qWOwIjhbU8vO29nDO/7HrGDtsc67VIenPI=";
+    sha256 = "sha256-qG9797SA0iMq9IF5SzQLgnhoUd2FKSAVXUPem1LQc1M=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -27,11 +28,9 @@ buildDotnetModule rec {
 
   nativeBuildInputs = [ copyDesktopItems ];
 
-  preConfigure = ''
-    dotnetFlags+=(
-      --runtime linux-x64
-    )
-  '';
+  dotnetFlags = [
+    "--runtime linux-x64"
+  ];
 
   runtimeDeps = [
     ffmpeg
@@ -63,7 +62,7 @@ buildDotnetModule rec {
     icon = "osu!";
     comment = meta.description;
     type = "Application";
-    categories = "Game;";
+    categories = [ "Game" ];
   })];
 
   meta = with lib; {

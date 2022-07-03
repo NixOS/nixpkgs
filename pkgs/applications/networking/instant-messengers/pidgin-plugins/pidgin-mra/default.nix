@@ -1,16 +1,14 @@
-{ lib, stdenv, fetchgit, pkg-config, pidgin } :
+{ lib, stdenv, fetchFromGitHub, pkg-config, pidgin } :
 
-let
-  version = "54b2992";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "pidgin-mra";
-  inherit version;
+  version = "unstable-2014-07-08";
 
-  src = fetchgit {
-    url = "https://github.com/dreadatour/pidgin-mra";
-    rev = version;
-    sha256 = "1adq57g11kw7bfpivyvfk3nlpjkc8raiw4bzn3gn4nx3m0wl99vw";
+  src = fetchFromGitHub {
+    owner = "dreadatour";
+    repo = "pidgin-mra";
+    rev = "54b299266265cde800289b2d51f13b81f6bf379c";
+    sha256 = "sha256-fKdEOaijW2LfsH8RHlVGbMpL7Zhu+x2vW4fPEN4puKk=";
   };
 
   nativeBuildInputs = [ pkg-config ];

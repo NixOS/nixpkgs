@@ -4,19 +4,19 @@
 
 let
   pname = "bcompare";
-  version = "4.4.0.25886";
+  version = "4.4.2.26348";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://www.scootersoftware.com/${pname}-${version}_amd64.deb";
-      sha256 = "sha256-zQZrCjXzoOZ5o5M4t1n5/HhGoGTcZSj5rlf9Uz9UZko=";
+      sha256 = "sha256-GotORErgPs7IPXATbBfIisDCNwp8csl7pDSwV77FylA=";
     };
 
     x86_64-darwin = fetchurl {
       url = "https://www.scootersoftware.com/BCompareOSX-${version}.zip";
-      sha256 = "sha256-dez30a1sp+4XuBBYhu07Vpn1+AUmX0Ni7aad7hy2ajQ=";
+      sha256 = "sha256-XqmtW2EGyFmOzCooXczP3mtMN5UVQCCx7DJnVDlzAko=";
     };
 
     aarch64-darwin = srcs.x86_64-darwin;
@@ -86,6 +86,7 @@ let
       You can then merge the changes, synchronize your files, and generate reports for your records.
     '';
     homepage = "https://www.scootersoftware.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ ktor arkivm ];
     platforms = builtins.attrNames srcs;

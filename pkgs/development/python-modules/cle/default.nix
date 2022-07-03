@@ -15,21 +15,21 @@
 
 let
   # The binaries are following the argr projects release cycle
-  version = "9.1.11752";
+  version = "9.2.8";
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
     owner = "angr";
     repo = "binaries";
     rev = "v${version}";
-    sha256 = "1qlrxfj1n34xvwkac6mbcc7zmixxbp34fj7lkf0fvp7zcz1rpla1";
+    hash = "sha256-LpYi5Ty6OBcW0zokCliMDhujJ7tPPl1XdPs5ad1tv5s=";
   };
 
 in
 buildPythonPackage rec {
   pname = "cle";
   inherit version;
-  format = "setuptools";
+  format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "angr";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-pnbFnv/te7U2jB6gNRvE9DQssBkFsara1g6Gtqf+WVo=";
+    hash = "sha256-VwZSGWJ3XT34kkpXOiUfObGRK28nb54XZ4iskg7xetk=";
   };
 
   propagatedBuildInputs = [
@@ -66,10 +66,11 @@ buildPythonPackage rec {
     "test_ppc_rel24_relocation"
     "test_ppc_addr16_ha_relocation"
     "test_ppc_addr16_lo_relocation"
-    # Binary not found, seems to be missing in the current binaries release
     "test_plt_full_relro"
     # Test fails
     "test_tls_pe_incorrect_tls_data_start"
+    # The required parts is not present on Nix
+    "test_remote_file_map"
   ];
 
   pythonImportsCheck = [

@@ -29,12 +29,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  patches = [
-    ./compiler-rt-codesign.patch # Revert compiler-rt commit that makes codesign mandatory
-    # https://github.com/llvm/llvm-project/commit/68d5235cb58f988c71b403334cd9482d663841ab.diff but the compiler-rt part of the path is stripped
-    ./68d5235cb58f988c71b403334cd9482d663841ab.patch
-    ];
-
+  prePatch = ''
+    cd compiler-rt
+  '';
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra

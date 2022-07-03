@@ -23,6 +23,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/Kamal-Sadek/Liberal-Crime-Squad";
     maintainers = [ maintainers.rardiol ];
+    mainProgram = "crimesquad";
     license = licenses.gpl2;
     platforms = platforms.all;
   };

@@ -1,44 +1,29 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3
-}:
+{ lib, nimPackages, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  pname = "tridactyl-native";
-  # this is actually the version of tridactyl itself; the native messenger will
-  # probably not change with every tridactyl version
-  version = "1.20.4";
+nimPackages.buildNimPackage rec {
+  pname = "tridactly-native";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "tridactyl";
-    repo = "tridactyl";
-    rev = version;
-    sha256 = "sha256-BjjRB9VadQ/MSwNK2QLbcTDoRs6Ua+5MONHtmfq4xz0=";
+    repo = "native_messenger";
+    rev = "5cc315da79a1caa8fd5b27b192377d8824a311c1";
+    sha256 = "sha256-9IyVDJgdZleeNltD1b4PfqxeWAtFsPHtmq1ZC5Z0O9k=";
   };
-  sourceRoot = "source/native";
-
-  nativeBuildInputs = [
-    python3.pkgs.wrapPython
-  ];
-
-  buildPhase = ''
-    sed -i -e "s|REPLACE_ME_WITH_SED|$out/share/tridactyl/native_main.py|" "tridactyl.json"
-  '';
+  buildInputs = with nimPackages; [ tempfile ];
 
   installPhase = ''
     mkdir -p "$out/lib/mozilla/native-messaging-hosts"
+    sed -i -e "s|REPLACE_ME_WITH_SED|$out/bin/native_main|" "tridactyl.json"
     cp tridactyl.json "$out/lib/mozilla/native-messaging-hosts/"
-
-    mkdir -p "$out/share/tridactyl"
-    cp native_main.py "$out/share/tridactyl"
-    wrapPythonProgramsIn "$out/share/tridactyl"
   '';
 
   meta = with lib; {
-    description = "Tridactyl native messaging host application";
-    homepage = "https://github.com/tridactyl/tridactyl";
-    license = licenses.asl20;
+    description =
+      "Native messenger for Tridactyl, a vim-like Firefox webextension";
+    homepage = "https://github.com/tridactyl/native_messenger";
+    license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ timokau ];
+    maintainers = with maintainers; [ timokau dit7ya ];
   };
 }

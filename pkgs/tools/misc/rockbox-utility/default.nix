@@ -1,9 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, cryptopp
-, libusb1, qtbase, qttools, makeWrapper
-, qmake, withEspeak ? false, espeak ? null
-, qt5 }:
-
-let inherit (lib) getDev; in
+{ lib
+, stdenv
+, fetchurl
+, cryptopp
+, libusb1
+, makeWrapper
+, pkg-config
+, qt5
+, withEspeak ? false, espeak ? null
+}:
 
 stdenv.mkDerivation  rec {
   pname = "rockbox-utility";
@@ -11,22 +15,40 @@ stdenv.mkDerivation  rec {
 
   src = fetchurl {
     url = "https://download.rockbox.org/rbutil/source/RockboxUtility-v${version}-src.tar.bz2";
-    sha256 = "0zm9f01a810y7aq0nravbsl0vs9vargwvxnfl4iz9qsqygwlj69y";
+    hash = "sha256-PhlJ+fNY4/Qjoc72zV9WO+kNqF5bZQuwOh4EpAJwqX4=";
   };
 
-  buildInputs = [ cryptopp libusb1 qtbase qttools ]
-    ++ lib.optional withEspeak espeak;
-  nativeBuildInputs = [ makeWrapper pkg-config qmake qt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    qt5.qmake
+    qt5.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    cryptopp
+    libusb1
+    qt5.qtbase
+    qt5.qttools
+  ]
+  ++ lib.optional withEspeak espeak;
 
   postPatch = ''
     sed -i rbutil/rbutilqt/rbutilqt.pro \
-        -e '/^lrelease.commands =/ s|$$\[QT_INSTALL_BINS\]/lrelease -silent|${getDev qttools}/bin/lrelease|'
+        -e '/^lrelease.commands =/ s|$$\[QT_INSTALL_BINS\]/lrelease -silent|${lib.getDev qt5.qttools}/bin/lrelease|'
   '';
 
   preConfigure = ''
     cd rbutil/rbutilqt
     lrelease rbutilqt.pro
   '';
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: libmkimxboot.a(elf.c.o):utils/imxtools/sbtools/misc.h:43: multiple definition of `g_nr_keys';
+  #     libmkimxboot.a(mkimxboot.c.o):utils/imxtools/sbtools/misc.h:43: first defined here
+  # TODO: try to remove with 1.5.1 update.
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
     runHook preInstall
@@ -48,10 +70,10 @@ stdenv.mkDerivation  rec {
   enableParallelBuilding = false;
 
   meta = with lib; {
-    description = "Open source firmware for mp3 players";
     homepage = "https://www.rockbox.org";
-    license = licenses.gpl2;
+    description = "Open source firmware for digital music players";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres goibhniu ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ goibhniu ];
   };
 }

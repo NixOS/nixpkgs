@@ -3,6 +3,8 @@
 stdenv.mkDerivation {
   name = "expand-response-params";
   src = ./expand-response-params.c;
+  strictDeps = true;
+  enableParallelBuilding = true;
   # Work around "stdenv-darwin-boot-2 is not allowed to refer to path
   # /nix/store/...-expand-response-params.c"
   unpackPhase = ''

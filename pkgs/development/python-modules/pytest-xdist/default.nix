@@ -9,6 +9,7 @@
 , pytest
 , pytest-forked
 , psutil
+, pexpect
 }:
 
 buildPythonPackage rec {
@@ -25,8 +26,14 @@ buildPythonPackage rec {
   buildInputs = [
     pytest
   ];
-  checkInputs = [ pytestCheckHook filelock ];
+  checkInputs = [ pytestCheckHook filelock pexpect ];
   propagatedBuildInputs = [ execnet pytest-forked psutil ];
+
+  pytestFlagsArray = [
+    # pytest can already use xdist at this point
+    "--numprocesses=$NIX_BUILD_CORES"
+    "--forked"
+  ];
 
   # access file system
   disabledTests = [
@@ -39,6 +46,8 @@ buildPythonPackage rec {
     # flakey
     "test_internal_errors_propagate_to_controller"
   ];
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";

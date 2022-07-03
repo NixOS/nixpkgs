@@ -27,18 +27,17 @@
 , libwebp
 , appstream
 , wrapGAppsHook
-, elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.7.4";
+  version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "photos";
     rev = version;
-    sha256 = "sha256-NhF/WgS6IOwgALSCNyFNxz8ROVTb+mUX+lBtnWEyhEI=";
+    sha256 = "sha256-zM32+bva+QD1Z/0vUD7K0/tnSzo+7GGLjJ1ytr64c0I=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +52,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    elementary-icon-theme
     geocode-glib
     gexiv2
     granite

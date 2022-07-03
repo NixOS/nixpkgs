@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-opencl-runtime";
-  version = "4.5.2";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-OpenCL-Runtime";
     rev = "rocm-${version}";
-    hash = "sha256-0OGYF4urlscr8tMkQwo2yATXwN0DjB092KQ+CBEhfIA=";
+    hash = "sha256-O7q3uTjspO/rZ2+8+g7pRfBXsCRaEr4DZxEqABHbOeY=";
   };
 
   nativeBuildInputs = [ cmake rocm-cmake ];
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DAMD_OPENCL_PATH=${src}"
     "-DROCCLR_PATH=${rocclr}"
+    "-DCPACK_PACKAGING_INSTALL_PREFIX=/opt/rocm/opencl"
   ];
 
   dontStrip = true;

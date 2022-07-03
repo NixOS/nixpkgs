@@ -32,6 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libffi boehmgc openssl zlib ] ++ lib.optional odbcSupport libiodbc;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "An R6RS/R7RS Scheme system";
     longDescription = ''
       Sagittarius Scheme is a free Scheme implementation supporting

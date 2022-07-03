@@ -9,13 +9,8 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, # N.B. the defult is intentionally not from an `isStatic`. See
-  # https://gcc.gnu.org/install/configure.html - this is about target
-  # platform libraries not host platform ones unlike normal. But since
-  # we can't rebuild those without also rebuilding the compiler itself,
-  # we opt to always build everything unlike our usual policy.
-  enableShared ? true
-, enableLTO ? true
+, enableShared ? !stdenv.targetPlatform.isStatic
+, enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf
@@ -63,22 +58,12 @@ with lib;
 with builtins;
 
 let majorVersion = "9";
-    /*
-      If you update, please build on aarch64-linux
-      and check braces adjacent to `cplusplus` lines in file
-      ./result/lib/gcc/aarch64-unknown-linux-gnu/9.*.0/include/arm_acle.h
-    */
-    version = "${majorVersion}.3.0";
+    version = "${majorVersion}.5.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-      # Fix ICE: Max. number of generated reload insns per insn is achieved (90)
-      #
-      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96796
-      #
-      # This patch can most likely be removed by a post 9.3.0-release.
-      [ ./avoid-cycling-subreg-reloads.patch ]
+      [ ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional targetPlatform.isNetBSD ../libstdc++-netbsd-ctypes.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
@@ -94,8 +79,7 @@ let majorVersion = "9";
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch
-
-      ++ [ ../libsanitizer-no-cyclades-9.patch ];
+      ;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -112,7 +96,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "1la2yy27ziasyf0jvzk58y1i5b5bq2h176qil550bxhifs39gqbi";
+    sha256 = "13ygjmd938m0wmy946pxdhz9i1wq7z4w10l6pvidak0xxxj9yxi7";
   };
 
   inherit patches;
@@ -285,7 +269,7 @@ stdenv.mkDerivation ({
   };
 
   enableParallelBuilding = true;
-  inherit enableMultilib;
+  inherit enableShared enableMultilib;
 
   inherit (stdenv) is64bit;
 
@@ -307,6 +291,7 @@ stdenv.mkDerivation ({
     maintainers = lib.teams.gcc.members;
 
     platforms = lib.platforms.unix;
+    badPlatforms = [ "aarch64-darwin" ];
   };
 }
 

@@ -1,14 +1,14 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, poppler, cmake, ninja, libcprime, libcsys }:
+{ mkDerivation, lib, fetchFromGitLab, qtbase, poppler, qtwebengine, cmake, ninja, libcprime, libcsys }:
 
 mkDerivation rec {
   pname = "corepdf";
-  version = "4.2.0";
+  version = "4.3.0";
 
   src = fetchFromGitLab {
     owner = "cubocore/coreapps";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-HeOklgCwJ5h3DeelJOZqasG+eC9DGG3R0Cqg2yPKYhM=";
+    sha256 = "sha256-VwJ3H/jNP3u5C+LATPUSftiWm89upx77fN3NqzTnU7Y=";
   };
 
   nativeBuildInputs = [
@@ -19,6 +19,7 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     poppler
+    qtwebengine
     libcprime
     libcsys
   ];

@@ -1,5 +1,5 @@
 { lib
-, brotli
+, stdenv
 , brotlicffi
 , buildPythonPackage
 , certifi
@@ -7,23 +7,22 @@
 , charset-normalizer
 , fetchPypi
 , idna
-, isPy27
-, isPy3k
 , pysocks
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
-, trustme
+, pythonOlder
 , urllib3
 }:
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.27.1";
+  version = "2.28.0";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aNfFb9WomZiHco7zBKbRLtx7508c+kdxT8i0FFJcmmE=";
+    hash = "sha256-1WhyOn69JYddjR6vXfoGjNL8gZSy5IPXsffIGRjb7Gs=";
   };
 
   patches = [
@@ -31,34 +30,30 @@ buildPythonPackage rec {
     ./0001-Prefer-NixOS-Nix-default-CA-bundles-over-certifi.patch
   ];
 
-  postPatch = ''
-    # Use latest idna
-    substituteInPlace setup.py \
-      --replace ",<3" ""
-  '';
-
   propagatedBuildInputs = [
+    brotlicffi
     certifi
+    charset-normalizer
     idna
     urllib3
-    chardet
-  ] ++ lib.optionals (isPy3k) [
-    brotlicffi
-    charset-normalizer
-  ] ++ lib.optionals (isPy27) [
-    brotli
   ];
 
+  passthru.optional-dependencies = {
+    security = [];
+    socks = [
+      pysocks
+    ];
+    use_chardet_on_py3 = [
+      chardet
+    ];
+  };
+
   checkInputs = [
-    pysocks
     pytest-mock
     pytest-xdist
     pytestCheckHook
-    trustme
-  ];
-
-  # AttributeError: 'KeywordMapping' object has no attribute 'get'
-  doCheck = !isPy27;
+  ]
+  ++ passthru.optional-dependencies.socks;
 
   disabledTests = [
     # Disable tests that require network access and use httpbin
@@ -74,6 +69,15 @@ buildPythonPackage rec {
     "test_use_proxy_from_environment"
     "TestRequests"
     "TestTimeout"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Fatal Python error: Aborted
+    "test_basic_response"
+    "test_text_response"
+  ];
+
+  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # Fatal Python error: Aborted
+    "tests/test_lowlevel.py"
   ];
 
   pythonImportsCheck = [

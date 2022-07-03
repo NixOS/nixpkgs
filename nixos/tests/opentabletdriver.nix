@@ -6,7 +6,7 @@ in {
     maintainers = with pkgs.lib.maintainers; [ thiagokokada ];
   };
 
-  machine = { pkgs, ... }:
+  nodes.machine = { pkgs, ... }:
     {
       imports = [
         ./common/user-account.nix

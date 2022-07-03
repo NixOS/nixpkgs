@@ -16,5 +16,6 @@ buildDunePackage {
 
   meta = dns.meta // {
     description = "Pure DNS resolver API";
+    mainProgram = "dns-client.unix";
   };
 }

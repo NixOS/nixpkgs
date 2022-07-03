@@ -13,7 +13,7 @@ Co-authored-by: Yaroslav Bolyukin <iam@lach.pw>
 ---
  src/nixos_utils.h     | 41 +++++++++++++++++++++++++++++++++++++++++
  src/service_utils.h   |  4 +++-
- src/waylandclient.cpp |  5 ++++-
+ src/waylandwindow.cpp |  5 ++++-
  3 files changed, 48 insertions(+), 2 deletions(-)
  create mode 100644 src/nixos_utils.h
 
@@ -63,11 +63,11 @@ index 0000000..726065d
 +
 +}// namespace
 +
-+#endif // SERVICE_UTILS_H
-diff --git a/src/service_utils.h b/src/service_utils.h
++#endif // NIXOS_UTILS_H
+diff --git a/src/utils/serviceutils.h b/src/utils/serviceutils.h
 index 8a70c1f..475b15d 100644
---- a/src/service_utils.h
-+++ b/src/service_utils.h
+--- a/src/utils/serviceutils.h
++++ b/src/utils/serviceutils.h
 @@ -19,6 +19,7 @@
  #include <QLoggingCategory>
  //KF
@@ -87,10 +87,10 @@ index 8a70c1f..475b15d 100644
      // needed to be able to use the logging category in a header static function
      static QLoggingCategory KWIN_UTILS ("KWIN_UTILS", QtWarningMsg);
      const auto servicesFound = KApplicationTrader::query([&executablePath] (const KService::Ptr &service) {
-diff --git a/src/waylandclient.cpp b/src/waylandclient.cpp
+diff --git a/src/waylandwindow.cpp b/src/waylandwindow.cpp
 index fd2c0c1..ae8cf96 100644
---- a/src/waylandclient.cpp
-+++ b/src/waylandclient.cpp
+--- a/src/waylandwindow.cpp
++++ b/src/waylandwindow.cpp
 @@ -10,6 +10,7 @@
  #include "screens.h"
  #include "wayland_server.h"
@@ -99,9 +99,9 @@ index fd2c0c1..ae8cf96 100644
  
  #include <KWaylandServer/display.h>
  #include <KWaylandServer/clientbuffer.h>
-@@ -173,7 +174,9 @@ void WaylandClient::updateIcon()
+@@ -173,7 +174,9 @@ void WaylandWindow::updateIcon()
  
- void WaylandClient::updateResourceName()
+ void WaylandWindow::updateResourceName()
  {
 -    const QFileInfo fileInfo(surface()->client()->executablePath());
 +    const QString in_path = surface()->client()->executablePath();

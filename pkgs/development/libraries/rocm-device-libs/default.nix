@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rocm-device-libs";
-  version = "4.5.2";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "RadeonOpenCompute";
     repo = "ROCm-Device-Libs";
     rev = "rocm-${version}";
-    hash = "sha256-UeunsDRLhmsDOzesiEgYIzYotwecehB6VswshzdRwjw=";
+    hash = "sha256-kmCk+BpM1QCJzEAkru2LK3CGwVXNUEZBFicmwnrPcx8=";
   };
 
   nativeBuildInputs = [ cmake ];

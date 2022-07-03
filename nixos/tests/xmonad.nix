@@ -13,7 +13,9 @@ let
     import System.Environment (getArgs)
     import System.FilePath ((</>))
 
-    main = launch $ def { startupHook = startup } `additionalKeysP` myKeys
+    main = do
+      dirs <- getDirectories
+      launch (def { startupHook = startup } `additionalKeysP` myKeys) dirs
 
     startup = isSessionStart >>= \sessInit ->
       spawn "touch /tmp/${name}"
@@ -23,14 +25,15 @@ let
 
     compiledConfig = printf "xmonad-%s-%s" arch os
 
-    compileRestart resume =
-      whenX (recompile True) $
+    compileRestart resume = do
+      dirs <- asks directories
+
+      whenX (recompile dirs True) $
         when resume writeStateToFile
           *> catchIO
             ( do
-                dir <- getXMonadDataDir
                 args <- getArgs
-                executeFile (dir </> compiledConfig) False args Nothing
+                executeFile (cacheDir dirs </> compiledConfig) False args Nothing
             )
   '';
 
@@ -55,7 +58,7 @@ in {
     maintainers = [ nequissimus ivanbrennan ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     test-support.displayManager.auto.user = "alice";
     services.xserver.displayManager.defaultSession = "none+xmonad";
@@ -94,7 +97,7 @@ in {
 
     # set up the new config
     machine.succeed("mkdir -p ${user.home}/.xmonad")
-    machine.copy_from_host("${newConfig}", "${user.home}/.xmonad/xmonad.hs")
+    machine.copy_from_host("${newConfig}", "${user.home}/.config/xmonad/xmonad.hs")
 
     # recompile xmonad using the new config
     machine.send_key("alt-ctrl-q")

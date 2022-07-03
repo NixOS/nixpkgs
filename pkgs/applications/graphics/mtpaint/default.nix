@@ -4,14 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  p_name  = "mtPaint";
-  ver_maj = "3.50";
-  ver_min = "01";
-  name = "${p_name}-${ver_maj}.${ver_min}";
+  pname  = "mtPaint";
+  version = "3.50.01";
 
   src = fetchFromGitHub {
     owner = "wjaguar";
-    repo = p_name;
+    repo = "mtPaint";
     rev = "a4675ff5cd9fcd57d291444cb9f332b48f11243f";
     sha256 = "04wqxz8i655gz5rnz90cksy8v6m2jhcn1j8rzhqpp5xhawlmq24y";
   };

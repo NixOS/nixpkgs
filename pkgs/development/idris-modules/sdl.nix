@@ -6,7 +6,7 @@
 , SDL_gfx
 }:
 build-idris-package  {
-  name = "sdl";
+  pname = "sdl";
   version = "2017-03-24";
 
   idrisDeps = [ effects ];

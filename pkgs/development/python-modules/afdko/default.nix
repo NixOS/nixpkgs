@@ -13,13 +13,13 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.7.1";
+  version = "3.8.3";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05hj2mw3ppfjaig5zdk5db9vfrbbq5gmv5rzggmvvrj0yyfpr0pd";
+    sha256 = "0mplyla4zcai3qld7is7bl5wn2kzhp87w87yi13wpqnw06i6ij4b";
   };
 
   format = "pyproject";
@@ -40,12 +40,6 @@ buildPythonPackage rec {
 
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
-
-    # Fix compatibility with latest fonttools.
-    (fetchpatch {
-      url = "https://github.com/adobe-type-tools/afdko/commit/120752c50a562e4f6c12ff4be1e3bd96ed664e82.patch";
-      sha256 = "RDGIpNAuCmK+zqZOeOK7ddCjr9BuqPpcnbnxdtoE48M=";
-    })
   ];
 
   # setup.py will always (re-)execute cmake in buildPhase
@@ -87,10 +81,12 @@ buildPythonPackage rec {
     "test_filename_without_dir"
     "test_overwrite"
     "test_options"
-  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) [
-    # aarch64-only (?) failure, unknown reason so far
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isRiscV) [
+    # unknown reason so far
     # https://github.com/adobe-type-tools/afdko/issues/1425
     "test_spec"
+  ] ++ lib.optionals (stdenv.hostPlatform.isi686) [
+    "test_type1mm_inputs"
   ];
 
   passthru.tests = {

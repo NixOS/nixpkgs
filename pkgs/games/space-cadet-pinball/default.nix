@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchzip
-, cmake, SDL2, SDL2_mixer
+, cmake, SDL2, SDL2_mixer, Cocoa
 , unrar-wrapper, makeWrapper
 , fetchpatch
 }:
@@ -33,12 +33,21 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     SDL2
     SDL2_mixer
-    cmake
     makeWrapper
-  ];
+  ] ++ lib.optional stdenv.isDarwin Cocoa;
+
+  # Darwin needs a custom installphase since it is excluded from the cmake install
+  # https://github.com/k4zmu2a/SpaceCadetPinball/blob/0f88e43ba261bc21fa5c3ef9d44969a2a079d0de/CMakeLists.txt#L221
+  installPhase = lib.optionalString stdenv.isDarwin ''
+    runHook preInstall
+    mkdir -p $out/bin
+    install ../bin/SpaceCadetPinball $out/bin
+    runHook postInstall
+  '';
 
   postInstall = ''
     mkdir -p $out/lib/SpaceCadetPinball
@@ -57,5 +66,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ unfree mit ];
     maintainers = [ maintainers.hqurve ];
     platforms = platforms.all;
+    mainProgram = "SpaceCadetPinball";
   };
 }

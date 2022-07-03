@@ -27,6 +27,8 @@ in
 , # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
   # needed for netrcPhase
   netrcImpureEnvVars ? []
+, meta ? {}
+, allowedRequisites ? null
 }:
 
 /* NOTE:
@@ -90,5 +92,10 @@ stdenvNoCC.mkDerivation {
     "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
   ];
 
-  inherit preferLocalBuild;
+
+  inherit preferLocalBuild meta allowedRequisites;
+
+  passthru = {
+    gitRepoUrl = url;
+  };
 }

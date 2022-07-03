@@ -1,7 +1,7 @@
 # This test runs CRI-O and verifies via critest
 import ./make-test-python.nix ({ pkgs, ... }: {
   name = "cri-o";
-  maintainers = with pkgs.lib.maintainers; teams.podman.members;
+  meta.maintainers = with pkgs.lib.maintainers; teams.podman.members;
 
   nodes = {
     crio = {

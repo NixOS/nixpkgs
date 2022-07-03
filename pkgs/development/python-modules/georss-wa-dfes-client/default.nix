@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "georss-wa-dfes-client";
-  version = "0.3";
+  version = "0.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-georss-wa-dfes-client";
     rev = "v${version}";
-     hash = "sha256-R7so5EYsKGrOdEXVZ44A+kgTA3pIW6W/R4hzw+Yx0wU=";
+     hash = "sha256-s7qGTlWFdOtw0eMK7idld7HPOxO8CjODCmUi0WmRLdI=";
   };
 
   propagatedBuildInputs = [

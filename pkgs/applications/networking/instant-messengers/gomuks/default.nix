@@ -40,10 +40,10 @@ buildGoModule rec {
       makeDesktopItem {
         name = "net.maunium.gomuks.desktop";
         exec = "@out@/bin/gomuks";
-        terminal = "true";
+        terminal = true;
         desktopName = "Gomuks";
         genericName = "Matrix client";
-        categories = "Network;Chat";
+        categories = [ "Network" "Chat" ];
         comment = meta.description;
       }
     }/* $out/

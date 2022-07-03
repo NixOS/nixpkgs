@@ -5,7 +5,7 @@ import ../make-test-python.nix ({ lib, php, ... }: {
   name = "php-${php.version}-httpd-pcre-jit-test";
   meta.maintainers = lib.teams.php.members;
 
-  machine = { lib, pkgs, ... }: {
+  nodes.machine = { lib, pkgs, ... }: {
     time.timeZone = "UTC";
     services.httpd = {
       enable = true;

@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = "make clean";
-  buildInputs = [ocaml findlib gmp mpfr ncurses];
+  nativeBuildInputs = [ocaml findlib ];
+  buildInputs = [ gmp mpfr ncurses];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 

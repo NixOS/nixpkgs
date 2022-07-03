@@ -1,29 +1,23 @@
 { lib, stdenv, fetchurl, pkg-config, fontconfig, autoreconfHook, DiskArbitration
-, withJava ? false, jdk ? null, ant ? null
-, withAACS ? false, libaacs ? null
-, withBDplus ? false, libbdplus ? null
-, withMetadata ? true, libxml2 ? null
-, withFonts ? true, freetype ? null
+, withJava ? false, jdk, ant
+, withAACS ? false, libaacs
+, withBDplus ? false, libbdplus
+, withMetadata ? true, libxml2
+, withFonts ? true, freetype
 }:
 
 with lib;
-
-assert withJava -> jdk != null && ant != null;
-assert withAACS -> libaacs != null;
-assert withBDplus -> libbdplus != null;
-assert withMetadata -> libxml2 != null;
-assert withFonts -> freetype != null;
 
 # Info on how to use:
 # https://wiki.archlinux.org/index.php/BluRay
 
 stdenv.mkDerivation rec {
   pname = "libbluray";
-  version  = "1.3.0";
+  version  = "1.3.1";
 
   src = fetchurl {
     url = "http://get.videolan.org/libbluray/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-4tuvmehOCpcl9Jhby4XUHlLCJhzGUdiISxt5C17wFvk=";
+    sha256 = "sha256-wksPQcW3N7u2XFRP5jSVY3p3HBClGd/IAudp8RK0O3U=";
   };
 
   patches = optional withJava ./BDJ-JARFILE-path.patch;

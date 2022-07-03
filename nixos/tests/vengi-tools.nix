@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     maintainers = [ fgaz ];
   };
 
-  machine = { config, pkgs, ... }: {
+  nodes.machine = { config, pkgs, ... }: {
     imports = [
       ./common/x11.nix
     ];
@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       # OCR on voxedit's window is very expensive, so we avoid wasting a try
       # by letting the window load fully first
       machine.sleep(15)
-      machine.wait_for_text("Palette")
+      machine.wait_for_text("Solid")
       machine.screenshot("screen")
     '';
 })

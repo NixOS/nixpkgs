@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "nitransforms";
-  version = "21.0.0";
+  version = "22.0.0";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "njJqHqXVxldyGfmdM8GmgKdgIT4kMYLzcM5+ayR2EDo=";
+    sha256 = "sha256-iV9TEIGogIfbj+fmOGftoQqEdtZiewbHEw3hYlMEP4c=";
   };
 
   buildInputs = [ setuptools-scm toml ];

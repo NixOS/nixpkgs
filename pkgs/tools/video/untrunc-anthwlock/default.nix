@@ -27,6 +27,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Restore a truncated mp4/mov (improved version of ponchio/untrunc)";
     homepage = "https://github.com/anthwlock/untrunc";
     license = licenses.gpl2;

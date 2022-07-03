@@ -1,4 +1,4 @@
-{ stdenv, gnutar, findutils, fetchurl, ... }:
+{ stdenv, fetchurl, ... }:
 { name
 , url
 , version
@@ -12,11 +12,6 @@ stdenv.mkDerivation {
   src = fetchurl {
     inherit url sha256;
   };
-
-  nativeBuildInputs = [
-    gnutar
-    findutils
-  ];
 
   unpackPhase = ''
     tar -xzpf $src

@@ -1,31 +1,127 @@
-{ stdenv, fetchurl, lib, pam, python3, libxslt, perl, ArchiveZip, box2d, gettext
-, IOCompress, zlib, libjpeg, expat, freetype, libwpd
-, libxml2, db, curl, fontconfig, libsndfile, neon
-, bison, flex, zip, unzip, gtk3, libmspack, getopt, file, cairo, which
-, icu, boost, jdk, ant, cups, xorg, fontforge, jre_minimal
-, openssl, gperf, cppunit, poppler, util-linux
-, librsvg, libGLU, libGL, bsh, CoinMP, libwps, libabw, libmysqlclient
-, autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
-, libwpg, dbus-glib, clucene_core, libcdr, lcms
-, unixODBC, mdds, sane-backends, mythes, libexttextcat, libvisio
-, fontsConf, pkg-config, bluez5, libtool, carlito
-, libatomic_ops, graphite2, harfbuzz, libodfgen, libzmf
-, librevenge, libe-book, libmwaw, glm, gst_all_1
-, gdb, commonsLogging, librdf_rasqal, wrapGAppsHook
-, gnome, glib, ncurses, libepoxy, gpgme
-, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "zh-CN" ]
+{ stdenv
+, fetchurl
+, lib
+, pam
+, python3
+, libxslt
+, perl
+, ArchiveZip
+, box2d
+, gettext
+, IOCompress
+, zlib
+, libjpeg
+, expat
+, freetype
+, libwpd
+, libxml2
+, db
+, curl
+, fontconfig
+, libsndfile
+, neon
+, bison
+, flex
+, zip
+, unzip
+, gtk3
+, libmspack
+, getopt
+, file
+, cairo
+, which
+, icu
+, boost
+, jdk
+, ant
+, cups
+, xorg
+, fontforge
+, jre_minimal
+, openssl
+, gperf
+, cppunit
+, poppler
+, util-linux
+, librsvg
+, libGLU
+, libGL
+, bsh
+, CoinMP
+, libwps
+, libabw
+, libmysqlclient
+, autoconf
+, automake
+, openldap
+, bash
+, hunspell
+, librdf_redland
+, nss
+, nspr
+, libwpg
+, dbus-glib
+, clucene_core
+, libcdr
+, lcms
+, unixODBC
+, mdds
+, sane-backends
+, mythes
+, libexttextcat
+, libvisio
+, fontsConf
+, pkg-config
+, bluez5
+, libtool
+, carlito
+, libatomic_ops
+, graphite2
+, harfbuzz
+, libodfgen
+, libzmf
+, librevenge
+, libe-book
+, libmwaw
+, glm
+, gst_all_1
+, gdb
+, commonsLogging
+, librdf_rasqal
+, wrapGAppsHook
+, gnome
+, glib
+, ncurses
+, libepoxy
+, gpgme
+, abseil-cpp
+, langs ? [ "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sl" "uk" "zh-CN" ]
 , withHelp ? true
-, kdeIntegration ? false, mkDerivation ? null, qtbase ? null, qtx11extras ? null
-, ki18n ? null, kconfig ? null, kcoreaddons ? null, kio ? null, kwindowsystem ? null
+, kdeIntegration ? false
+, mkDerivation ? null
+, qtbase ? null
+, qtx11extras ? null
+, ki18n ? null
+, kconfig ? null
+, kcoreaddons ? null
+, kio ? null
+, kwindowsystem ? null
 , wrapQtAppsHook ? null
 , variant ? "fresh"
+, symlinkJoin
 } @ args:
 
 assert builtins.elem variant [ "fresh" "still" ];
 
 let
+  inherit (lib)
+    flatten flip
+    concatMapStrings concatMapStringsSep concatStringsSep
+    getDev getLib
+    optional optionals optionalString;
+
   jre' = jre_minimal.override {
-    modules = [ "java.base" "java.desktop" ];
+    modules = [ "java.base" "java.desktop" "java.logging" "java.sql" ];
   };
 
   importVariant = f: import (./. + "/src-${variant}/${f}");
@@ -34,27 +130,43 @@ let
 
   inherit (primary-src) major minor subdir version;
 
-  langsSpaces = lib.concatStringsSep " " langs;
+  langsSpaces = concatStringsSep " " langs;
 
   mkDrv = if kdeIntegration then mkDerivation else stdenv.mkDerivation;
 
   srcs = {
     third_party =
-      map (x : ((fetchurl {inherit (x) url sha256 name;}) // {inherit (x) md5name md5;}))
-      (importVariant "download.nix" ++ [
-        (rec {
-          name = "unowinreg.dll";
-          url = "https://dev-www.libreoffice.org/extern/${md5name}";
-          sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
-          md5 = "185d60944ea767075d27247c3162b3bc";
-          md5name = "${md5}-${name}";
-        })
-      ]);
+      map (x: ((fetchurl { inherit (x) url sha256 name; }) // { inherit (x) md5name md5; }))
+        (importVariant "download.nix" ++ [
+          (rec {
+            name = "unowinreg.dll";
+            url = "https://dev-www.libreoffice.org/extern/${md5name}";
+            sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
+            md5 = "185d60944ea767075d27247c3162b3bc";
+            md5name = "${md5}-${name}";
+          })
+        ]);
 
     translations = primary-src.translations;
     help = primary-src.help;
   };
-in (mkDrv rec {
+
+  # See `postPatch` for details
+  kdeDeps = symlinkJoin {
+    name = "libreoffice-kde-dependencies-${version}";
+    paths = flatten (map (e: [ (getDev e) (getLib e) ]) [
+      qtbase
+      qtx11extras
+      kconfig
+      kcoreaddons
+      ki18n
+      kio
+      kwindowsystem
+    ]);
+  };
+
+in
+(mkDrv rec {
   pname = "libreoffice";
   inherit version;
 
@@ -71,10 +183,10 @@ in (mkDrv rec {
 
   postUnpack = ''
     mkdir -v $sourceRoot/${tarballPath}
-  '' + (lib.flip lib.concatMapStrings srcs.third_party (f: ''
-      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
-      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
-    ''))
+  '' + (flip concatMapStrings srcs.third_party (f: ''
+    ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
+    ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
+  ''))
   + ''
     ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
     ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
@@ -82,20 +194,35 @@ in (mkDrv rec {
     tar -xf ${srcs.translations}
   '';
 
-  patches = [ ./skip-failed-test-with-icu70.patch ];
+  patches = [
+    ./skip-failed-test-with-icu70.patch
+
+    # Fix build with poppler 22.03
+    (fetchurl {
+      url = "https://github.com/archlinux/svntogit-packages/raw/f82958b9538f86e41b51f1ba7134968d2f3788d1/trunk/poppler-22.03.0.patch";
+      sha256 = "5h4qJmx6Q3Q3dHUlSi8JXBziN2mAswGVWk5aDTLTwls=";
+    })
+
+    # Fix build with poppler 22.04
+    ./poppler-22-04-0.patch
+  ];
 
   ### QT/KDE
   #
-  # We have to resort to the ugly patching of configure.ac as it assumes that
-  # the first directory that contains headers and libraries during the check
-  # contains all the relevant headers/libs which doesn't work with both as they
-  # are in multiple directories due to each having their own derivation.
-  postPatch = let
-    inc = e: path:
-      "${lib.getDev e}/include/KF5/${path}";
-    libs = list:
-      lib.concatMapStringsSep " " (e: "-L${lib.getLib e}/lib") list;
-  in ''
+  # configure.ac assumes that the first directory that contains headers and
+  # libraries during its checks contains *all* the relevant headers/libs which
+  # obviously doesn't work for us, so we have 2 options:
+  #
+  # 1. patch configure.ac in order to specify the direct paths to various Qt/KDE
+  # dependencies which is ugly and brittle, or
+  #
+  # 2. use symlinkJoin to pull in the relevant dependencies and just patch in
+  # that path which is *also* ugly, but far less likely to break
+  #
+  # The 2nd option is not very Nix'y, but I'll take robust over nice any day.
+  # Additionally, it's much easier to fix if LO breaks on the next upgrade (just
+  # add the missing dependencies to it).
+  postPatch = ''
     substituteInPlace shell/source/unix/exec/shellexec.cxx \
       --replace /usr/bin/xdg-open ${if kdeIntegration then "kde-open5" else "xdg-open"}
 
@@ -108,20 +235,12 @@ in (mkDrv rec {
     substituteInPlace configure.ac --replace \
       'GPGMEPP_CFLAGS=-I/usr/include/gpgme++' \
       'GPGMEPP_CFLAGS=-I${gpgme.dev}/include/gpgme++'
-  '' + lib.optionalString kdeIntegration ''
-      substituteInPlace configure.ac \
-        --replace '$QT5INC'             ${qtbase.dev}/include \
-        --replace '$QT5LIB'             ${qtbase.out}/lib \
-        --replace '-I$qt5_incdir '      '-I${qtx11extras.dev}/include '\
-        --replace '-L$qt5_libdir '      '${libs [ qtbase qtx11extras ]} ' \
-        --replace '$KF5INC'             ${kcoreaddons.dev}/include \
-        --replace '$KF5LIB'             ${kcoreaddons.out}/lib \
-        --replace '$kf5_incdir/KCore'   ${inc kcoreaddons "KCore"} \
-        --replace '$kf5_incdir/KI18n'   ${inc ki18n "KI18n"} \
-        --replace '$kf5_incdir/KConfig' ${inc kconfig "KConfig"} \
-        --replace '$kf5_incdir/KWindow' ${inc kwindowsystem "KWindow"} \
-        --replace '$kf5_incdir/KIO'     ${inc kio "KIO"} \
-        --replace '-L$kf5_libdir '      '${libs [ kconfig kcoreaddons ki18n kio kwindowsystem ]} '
+  '' + optionalString kdeIntegration ''
+    substituteInPlace configure.ac \
+      --replace '$QT5INC ' '$QT5INC ${kdeDeps}/include ' \
+      --replace '$QT5LIB ' '$QT5LIB ${kdeDeps}/lib ' \
+      --replace '$KF5INC ' '$KF5INC ${kdeDeps}/include ${kdeDeps}/include/KF5 '\
+      --replace '$KF5LIB ' '$KF5LIB ${kdeDeps}/lib '
   '';
 
   dontUseCmakeConfigure = true;
@@ -165,7 +284,6 @@ in (mkDrv rec {
       # this I actually hate, this should be a data consistency test!
       sed -e '/CPPUNIT_TEST(testTdf115013);/d' -i sw/qa/extras/uiwriter/uiwriter.cxx
       # rendering-dependent test
-      sed -e '/CPPUNIT_ASSERT_EQUAL(11148L, pOleObj->GetLogicRect().getWidth());/d ' -i sc/qa/unit/subsequent_filters-test.cxx
       # tilde expansion in path processing checks the existence of $HOME
       sed -e 's@OString sSysPath("~/tmp");@& return ; @' -i sal/qa/osl/file/osl_File.cxx
       # fails on systems using ZFS, see https://github.com/NixOS/nixpkgs/issues/19071
@@ -178,9 +296,6 @@ in (mkDrv rec {
       # one more fragile test?
       sed -e '/CPPUNIT_TEST(testTdf77014);/d' -i sw/qa/extras/uiwriter/uiwriter.cxx
       # rendering-dependent tests
-      sed -e '/CPPUNIT_TEST(testCustomColumnWidthExportXLSX)/d' -i sc/qa/unit/subsequent_export-test.cxx
-      sed -e '/CPPUNIT_TEST(testColumnWidthExportFromODStoXLSX)/d' -i sc/qa/unit/subsequent_export-test.cxx
-      sed -e '/CPPUNIT_TEST(testChartImportXLS)/d' -i sc/qa/unit/subsequent_filters-test.cxx
       sed -e '/CPPUNIT_TEST(testLegacyCellAnchoredRotatedShape)/d' -i sc/qa/unit/filters-test.cxx
       sed -zre 's/DesktopLOKTest::testGetFontSubset[^{]*[{]/& return; /' -i desktop/qa/desktop_lib/test_desktop_lib.cxx
       sed -z -r -e 's/DECLARE_OOXMLEXPORT_TEST[(]testFlipAndRotateCustomShape,[^)]*[)].[{]/& return;/' -i sw/qa/extras/ooxmlexport/ooxmlexport7.cxx
@@ -211,37 +326,6 @@ in (mkDrv rec {
       sed -e '/CPPUNIT_TEST(testTdf113818);/d' -i './sd/qa/unit/export-tests.cxx'
       sed -e '/CPPUNIT_TEST(testTdf119629);/d' -i './sd/qa/unit/export-tests.cxx'
       sed -e '/CPPUNIT_TEST(testTdf113822);/d' -i './sd/qa/unit/export-tests.cxx'
-      sed -e '/CPPUNIT_TEST(test);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testConditionalFormatExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF16LErtlSHA1);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA1);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA256ODF12);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_UTF8SHA256W3C);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testProtectionKeyODS_XL_SHA1);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testColorScaleExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testDataBarExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testNamedRangeBugfdo62729);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testRichTextExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testFormulaRefSheetNameODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCellValuesExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCellNoteExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testFormatExportODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testEmbeddedChartODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCellAnchoredGroupXLS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testCeilingFloorODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testRelativePathsODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testSheetProtectionODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testSwappedOutImageExport);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testLinkedGraphicRT);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testImageWithSpecialID);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testAbsNamedRangeHTML);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testMoveCellAnchoredShapesODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testRefStringUnspecified);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testHeaderImageODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testTdf88657ODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testExponentWithoutSignFormatXLSX);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testHiddenRepeatedRowsODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
-      sed -e '/CPPUNIT_TEST(testHyperlinkTargetFrameODS);/d' -i './sc/qa/unit/subsequent_export-test.cxx'
       sed -e '/CPPUNIT_TEST(testTdf105739);/d' -i './sd/qa/unit/export-tests-ooxml2.cxx'
       sed -e '/CPPUNIT_TEST(testPageBitmapWithTransparency);/d' -i './sd/qa/unit/export-tests-ooxml2.cxx'
       sed -e '/CPPUNIT_TEST(testTdf115005);/d' -i './sd/qa/unit/export-tests-ooxml2.cxx'
@@ -262,18 +346,16 @@ in (mkDrv rec {
     ''
     # This to avoid using /lib:/usr/lib at linking
     + ''
-    sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
+      sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
 
-    find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
+      find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
     '';
 
   makeFlags = [ "SHELL=${bash}/bin/bash" ];
 
   enableParallelBuilding = true;
 
-  buildPhase = ''
-    make build-nocheck
-  '';
+  buildTargets = [ "build-nocheck" ];
 
   doCheck = true;
 
@@ -301,19 +383,18 @@ in (mkDrv rec {
 
     mkdir -p $dev
     cp -r include $dev
-  '' + lib.optionalString kdeIntegration ''
-      for prog in $out/bin/*
-      do
-        wrapQtApp $prog
-      done
+  '' + optionalString kdeIntegration ''
+    for prog in $out/bin/*; do
+      wrapQtApp $prog
+    done
   '';
 
   dontWrapQtApps = true;
 
   configureFlags = [
     (if withHelp then "" else "--without-help")
-    "--with-boost=${boost.dev}"
-    "--with-boost-libdir=${boost.out}/lib"
+    "--with-boost=${getDev boost}"
+    "--with-boost-libdir=${getLib boost}/lib"
     "--with-beanshell-jar=${bsh}"
     "--with-vendor=NixOS"
     "--disable-report-builder"
@@ -322,7 +403,7 @@ in (mkDrv rec {
     "--enable-dbus"
     "--enable-release-build"
     "--enable-epm"
-    "--with-ant-home=${ant}/lib/ant"
+    "--with-ant-home=${getLib ant}/lib/ant"
     "--with-system-cairo"
     "--with-system-libs"
     "--with-system-headers"
@@ -370,44 +451,128 @@ in (mkDrv rec {
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
     "--without-system-xmlsec"
-  ] ++ lib.optionals kdeIntegration [
+  ] ++ optionals kdeIntegration [
     "--enable-kf5"
     "--enable-qt5"
     "--enable-gtk3-kde5"
   ];
 
-  checkPhase = ''
-    make unitcheck
-    make slowcheck
-  '';
+  checkTarget = concatStringsSep " " [
+    "unitcheck"
+    "slowcheck"
+  ];
 
   nativeBuildInputs = [
-    gdb fontforge autoconf automake bison pkg-config libtool jdk
-  ] ++ lib.optional (!kdeIntegration) wrapGAppsHook
-    ++ lib.optional kdeIntegration wrapQtAppsHook;
+    autoconf
+    automake
+    bison
+    fontforge
+    gdb
+    jdk
+    libtool
+    pkg-config
+  ]
+  ++ [ (if kdeIntegration then wrapQtAppsHook else wrapGAppsHook) ];
 
-  buildInputs = with xorg;
-    [ ant ArchiveZip boost box2d cairo clucene_core
-      IOCompress cppunit cups curl db dbus-glib expat file flex fontconfig
-      freetype getopt gperf gtk3
-      hunspell icu jre' lcms libcdr libexttextcat unixODBC libjpeg
-      libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
-      libXaw libXext libXi libXinerama libxml2 libxslt libXtst
-      libXdmcp libpthreadstubs libGLU libGL mythes
-      glib libmysqlclient
-      neon nspr nss openldap openssl pam perl pkg-config poppler
-      python3 sane-backends unzip which zip zlib
-      mdds bluez5 libwps libabw libzmf
-      libxshmfence libatomic_ops graphite2 harfbuzz gpgme util-linux
-      librevenge libe-book libmwaw glm ncurses libepoxy
-      libodfgen CoinMP librdf_rasqal gnome.adwaita-icon-theme gettext
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly
-      gst-libav
-    ])
-    ++ lib.optional kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
+  buildInputs = with xorg; [
+    ArchiveZip
+    CoinMP
+    IOCompress
+    abseil-cpp
+    ant
+    bluez5
+    boost
+    box2d
+    cairo
+    clucene_core
+    cppunit
+    cups
+    curl
+    db
+    dbus-glib
+    expat
+    file
+    flex
+    fontconfig
+    freetype
+    getopt
+    gettext
+    glib
+    glm
+    gnome.adwaita-icon-theme
+    gperf
+    gpgme
+    graphite2
+    gtk3
+    harfbuzz
+    hunspell
+    icu
+    jre'
+    lcms
+    libGL
+    libGLU
+    libX11
+    libXaw
+    libXdmcp
+    libXext
+    libXi
+    libXinerama
+    libXtst
+    libabw
+    libatomic_ops
+    libcdr
+    libe-book
+    libepoxy
+    libexttextcat
+    libjpeg
+    libmspack
+    libmwaw
+    libmysqlclient
+    libodfgen
+    libpthreadstubs
+    librdf_rasqal
+    librdf_redland
+    librevenge
+    librsvg
+    libsndfile
+    libvisio
+    libwpd
+    libwpg
+    libwps
+    libxml2
+    libxshmfence
+    libxslt
+    libzmf
+    mdds
+    mythes
+    ncurses
+    neon
+    nspr
+    nss
+    openldap
+    openssl
+    pam
+    perl
+    pkg-config
+    poppler
+    python3
+    sane-backends
+    unixODBC
+    unzip
+    util-linux
+    which
+    zip
+    zlib
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ])
+  ++ optionals kdeIntegration [ qtbase qtx11extras kcoreaddons kio ];
 
   passthru = {
     inherit srcs;
@@ -419,6 +584,8 @@ in (mkDrv rec {
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite, a variant of openoffice.org";
     homepage = "https://libreoffice.org/";
+    # at least one jar in dependencies
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl3;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

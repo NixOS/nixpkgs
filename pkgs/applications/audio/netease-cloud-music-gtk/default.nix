@@ -11,7 +11,6 @@
 , wrapGAppsHook
 , fetchurl
 , fetchFromGitHub
-, makeDesktopItem
 }:
 rustPlatform.buildRustPackage rec {
   pname = "netease-cloud-music-gtk";

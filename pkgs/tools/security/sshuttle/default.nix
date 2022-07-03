@@ -11,11 +11,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sshuttle";
-  version = "1.0.5";
+  version = "1.1.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "fd8c691aac2cb80933aae7f94d9d9e271a820efc5c48e73408f1a90da426a1bd";
+    sha256 = "sha256-IfuRvfOStQ5422uNdelbc6ydr9Nh4mV+eE5nRWEhkxU=";
   };
 
   patches = [ ./sudo.patch ];
@@ -27,9 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ makeWrapper python3Packages.setuptools-scm ];
 
-  propagatedBuildInputs = [ python3Packages.psutil ];
-
-  checkInputs = with python3Packages; [ mock pytestCheckHook flake8 ];
+  checkInputs = with python3Packages; [ pytestCheckHook ];
 
   postInstall = ''
     wrapProgram $out/bin/sshuttle \
@@ -45,6 +43,6 @@ python3Packages.buildPythonApplication rec {
       Works with Linux and Mac OS and supports DNS tunneling.
     '';
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ domenkozar carlosdagos ];
+    maintainers = with maintainers; [ domenkozar carlosdagos SuperSandro2000 ];
   };
 }

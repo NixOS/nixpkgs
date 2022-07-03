@@ -17,7 +17,7 @@ let
       else "sshg-fw-ipset";
   in pkgs.writeText "sshguard.conf" ''
     BACKEND="${pkgs.sshguard}/libexec/${backend}"
-    LOGREADER="LANG=C ${pkgs.systemd}/bin/journalctl ${args}"
+    LOGREADER="LANG=C ${config.systemd.package}/bin/journalctl ${args}"
   '';
 
 in {

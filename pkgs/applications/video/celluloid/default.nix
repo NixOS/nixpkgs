@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "celluloid";
-  version = "0.22";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "celluloid-player";
     repo = "celluloid";
     rev = "v${version}";
-    hash = "sha256-QGN8YLtyb9YVNDK2ZDQwHJVg6UTIQssfNK9lQqxMNKQ=";
+    hash = "sha256-YKDud/UJJx9ko5k+Oux8mUUme0MXaRMngESE14Hhxv8=";
   };
 
   nativeBuildInputs = [
@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs meson-post-install.py src/generate-authors.py
-    # Remove this for next release
-    substituteInPlace meson-post-install.py --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   doCheck = true;

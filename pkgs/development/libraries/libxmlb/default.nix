@@ -1,7 +1,8 @@
-{ lib, stdenv
+{ stdenv
+, lib
 , fetchFromGitHub
 , docbook_xml_dtd_43
-, docbook_xsl
+, docbook-xsl-nons
 , glib
 , gobject-introspection
 , gtk-doc
@@ -11,11 +12,12 @@
 , python3
 , shared-mime-info
 , nixosTests
+, xz
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxmlb";
-  version = "0.3.1";
+  version = "0.3.9";
 
   outputs = [ "out" "lib" "dev" "devdoc" "installedTests" ];
 
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    sha256 = "sha256-4gJBmSbo5uGj12Y2Ov4gmS8nJshQxuBM9BAevY/lwjg=";
+    sha256 = "sha256-4WTuwxpIsE7gHXFiuWuZeu2JMGzPLpsmS1KTEdR3ztg=";
   };
 
   patches = [
@@ -32,18 +34,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     docbook_xml_dtd_43
-    docbook_xsl
+    docbook-xsl-nons
     gobject-introspection
     gtk-doc
     meson
     ninja
     pkg-config
-    (python3.withPackages (pkgs: with pkgs; [ setuptools ]))
+    python3
     shared-mime-info
   ];
 
   buildInputs = [
     glib
+    xz
   ];
 
   mesonFlags = [
@@ -69,6 +72,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hughsie/libxmlb";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

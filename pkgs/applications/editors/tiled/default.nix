@@ -3,13 +3,13 @@
 
 mkDerivation rec {
   pname = "tiled";
-  version = "1.8.1";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "bjorn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-JmnJUpbOPAkURTgRDLuTf1Mqh+simog1BE6s5+mA20Q=";
+    sha256 = "sha256-QYA2krbwH807BkzVST+/+sjSR6So/aGY/YenEjYxE48=";
   };
 
   nativeBuildInputs = [ pkg-config qmake ];

@@ -6,35 +6,65 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.0.147";
+  version = "2.0.158";
 
   src = fetchFromGitHub {
     owner = "armosec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-5ESAvLCAQ6ttpuc3YGkUwUvvhHZj+QYXyx30fhVSP1Y=";
+    hash = "sha256-bbTafsHllJQZ9Qn+qFnlr/AdU7NgB/vAvQGIgt/XDNQ=";
   };
+  vendorSha256 = "sha256-zj2gDx5333AguLs1Gzu3bYXslDwvPFSbMmOTOFxmq6A=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  vendorSha256 = "sha256-xbOUggbu/4bNT07bD3TU/7CIDvgi6OtZLQzSqQykwRY=";
-
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/armosec/kubescape/clihandler/cmd.BuildNumber=v${version}"
+    "-X github.com/armosec/kubescape/v2/core/cautils.BuildNumber=v${version}"
   ];
 
+  subPackages = [ "." ];
+
+  preCheck = ''
+    # Feed in all but the integration tests for testing
+    # This is because subPackages above limits what is built to just what we
+    # want but also limits the tests
+    # Skip httphandler tests - the checkPhase doesn't care about excludedPackages
+    getGoDirs() {
+      go list ./... | grep -v httphandler
+    }
+
+    # remove tests that use networking
+    rm core/pkg/resourcehandler/urlloader_test.go
+
+    # remove tests that use networking
+    substituteInPlace core/pkg/resourcehandler/repositoryscanner_test.go \
+      --replace "TestScanRepository" "SkipScanRepository" \
+      --replace "TestGit" "SkipGit"
+
+    # remove test that requires networking
+    substituteInPlace core/cautils/scaninfo_test.go \
+      --replace "TestSetContextMetadata" "SkipSetContextMetadata"
+  '';
+
   postInstall = ''
-    # Running kubescape to generate completions outputs error warnings
-    # but does not crash and completes successfully
-    # https://github.com/armosec/kubescape/issues/200
     installShellCompletion --cmd kubescape \
       --bash <($out/bin/kubescape completion bash) \
       --fish <($out/bin/kubescape completion fish) \
       --zsh <($out/bin/kubescape completion zsh)
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/kubescape --help
+    # `--version` vs `version` shows the version without checking for latest
+    # if the flag is missing the BuildNumber may have moved
+    $out/bin/kubescape --version | grep "v${version}"
+    runHook postInstallCheck
   '';
 
   meta = with lib; {

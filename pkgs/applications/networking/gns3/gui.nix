@@ -1,6 +1,16 @@
-{ stable, branch, version, sha256Hash, mkOverride, commonOverrides }:
+{ stable
+, branch
+, version
+, sha256Hash
+, mkOverride
+, commonOverrides
+}:
 
-{ lib, python3, fetchFromGitHub, wrapQtAppsHook }:
+{ lib
+, python3
+, fetchFromGitHub
+, wrapQtAppsHook
+}:
 
 let
   defaultOverrides = commonOverrides ++ [
@@ -34,21 +44,33 @@ in python.pkgs.buildPythonPackage rec {
     sha256 = sha256Hash;
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ];
+
   propagatedBuildInputs = with python.pkgs; [
-    sentry-sdk psutil jsonschema # tox for check
-    # Runtime dependencies
-    sip_4 (pyqt5.override { withWebSockets = true; }) distro setuptools
+    distro
+    jsonschema
+    psutil
+    sentry-sdk
+    setuptools
+    sip_4 (pyqt5.override { withWebSockets = true; })
   ];
 
   doCheck = false; # Failing
+
   dontWrapQtApps = true;
+
   postFixup = ''
       wrapQtApp "$out/bin/gns3"
   '';
+
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "sentry-sdk==1.3.1" "sentry-sdk>=1.3.1" \
+      --replace "sentry-sdk==" "sentry-sdk>=" \
+      --replace "psutil==" "psutil>=" \
+      --replace "distro==" "distro>=" \
+      --replace "setuptools==" "setuptools>="
   '';
 
   meta = with lib; {

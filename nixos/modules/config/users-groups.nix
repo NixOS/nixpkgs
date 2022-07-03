@@ -48,7 +48,7 @@ let
     services such as SSH, or indirectly via <command>su</command> or
     <command>sudo</command>). This should only be used for e.g. bootable
     live systems. Note: this is different from setting an empty password,
-    which ca be achieved using <option>users.users.&lt;name?&gt;.password</option>.
+    which can be achieved using <option>users.users.&lt;name?&gt;.password</option>.
 
     If set to <literal>null</literal> (default) this user will not
     be able to log in using a password (i.e. via <command>login</command>
@@ -137,6 +137,12 @@ let
         type = passwdEntry types.path;
         default = "/var/empty";
         description = "The user's home directory.";
+      };
+
+      homeMode = mkOption {
+        type = types.strMatching "[0-7]{1,5}";
+        default = "700";
+        description = "The user's home directory mode in numeric format. See chmod(1). The mode is only applied if <option>users.users.&lt;name&gt;.createHome</option> is true.";
       };
 
       cryptHomeLuks = mkOption {
@@ -319,6 +325,7 @@ let
           group = mkDefault "users";
           createHome = mkDefault true;
           home = mkDefault "/home/${config.name}";
+          homeMode = mkDefault "700";
           useDefaultShell = mkDefault true;
           isSystemUser = mkDefault false;
         })
@@ -430,7 +437,7 @@ let
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (_: u:
       { inherit (u)
-          name uid group description home createHome isSystemUser
+          name uid group description home homeMode createHome isSystemUser
           password passwordFile hashedPassword
           autoSubUidGidRange subUidRanges subGidRanges
           initialPassword initialHashedPassword;

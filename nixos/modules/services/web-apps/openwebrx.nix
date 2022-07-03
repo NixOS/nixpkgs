@@ -19,6 +19,7 @@ in
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
         csdr
+        digiham
         alsaUtils
         netcat
       ];

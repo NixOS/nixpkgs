@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "11.3.0";
+  version = "13.3.4";
 
   src = fetchPypi {
     pname = "Faker";
     inherit version;
-    hash = "sha256-rb5WfmTaahCX/qyraZAA4a0W4Xplkqjwrh7gt/vxmIc=";
+    hash = "sha256-GIlhBl+1x46mOfQhdvVRAPcskMOjF5rGyVXEvXErBRE=";
   };
 
   propagatedBuildInputs = [

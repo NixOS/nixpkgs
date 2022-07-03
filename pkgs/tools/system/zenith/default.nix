@@ -5,25 +5,28 @@
 , IOKit
 , nvidiaSupport ? false
 , makeWrapper
+, llvmPackages
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
-  version = "0.12.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = pname;
     rev = version;
-    sha256 = "1bn364rmp0q86rd7vgv4n7x09cdf9m4njcaq92jnk85ni6h147ax";
+    sha256 = "sha256-N/DvPVYGM/DjTvKvOlR60q6rvNyfAQlnvFnFG5nbUmQ=";
   };
 
-  cargoSha256 = "0c2mk2bcz4qjyqmf11yqhnhy4pqxr77b3c1gvr5jfmjshx4ff7v2";
+  cargoSha256 = "sha256-Y/vvRJpv82Uc+Bu3lbZxRsu4TL6sAjz5AWHAHkwh98Y=";
 
-  nativeBuildInputs = lib.optional nvidiaSupport makeWrapper;
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
+  nativeBuildInputs = [ llvmPackages.clang ] ++ lib.optional nvidiaSupport makeWrapper;
+  buildInputs = [ llvmPackages.libclang ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
 
   buildFeatures = lib.optional nvidiaSupport "nvidia";
+
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
 
   postInstall = lib.optionalString nvidiaSupport ''
     wrapProgram $out/bin/zenith \
@@ -31,6 +34,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Sort of like top or htop but with zoom-able charts, network, and disk usage"
       + lib.optionalString nvidiaSupport ", and NVIDIA GPU usage";
     homepage = "https://github.com/bvaisvil/zenith";

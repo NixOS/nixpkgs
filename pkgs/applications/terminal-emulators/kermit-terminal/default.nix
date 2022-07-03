@@ -6,6 +6,7 @@
 , pcre
 , pkg-config
 , vte
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -30,6 +31,8 @@ stdenv.mkDerivation rec {
     pcre
     vte
   ];
+
+  passthru.tests.test = nixosTests.terminal-emulators.kermit;
 
   meta = with lib; {
     homepage = "https://github.com/orhun/kermit";

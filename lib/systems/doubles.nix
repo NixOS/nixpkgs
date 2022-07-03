@@ -26,7 +26,7 @@ let
 
     # Linux
     "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
-    "armv7l-linux" "i686-linux" "m68k-linux" "mipsel-linux"
+    "armv7l-linux" "i686-linux" "m68k-linux" "mipsel-linux" "mips64el-linux"
     "powerpc64-linux" "powerpc64le-linux" "riscv32-linux"
     "riscv64-linux" "s390-linux" "s390x-linux" "x86_64-linux"
 
@@ -41,7 +41,7 @@ let
     # none
     "aarch64_be-none" "aarch64-none" "arm-none" "armv6l-none" "avr-none" "i686-none"
     "msp430-none" "or1k-none" "m68k-none" "powerpc-none" "powerpcle-none"
-    "riscv32-none" "riscv64-none" "s390-none" "s390x-none" "vc4-none"
+    "riscv32-none" "riscv64-none" "rx-none" "s390-none" "s390x-none" "vc4-none"
     "x86_64-none"
 
     # OpenBSD
@@ -74,6 +74,9 @@ in {
   mips          = filterDoubles predicates.isMips;
   mmix          = filterDoubles predicates.isMmix;
   riscv         = filterDoubles predicates.isRiscV;
+  riscv32       = filterDoubles predicates.isRiscV32;
+  riscv64       = filterDoubles predicates.isRiscV64;
+  rx            = filterDoubles predicates.isRx;
   vc4           = filterDoubles predicates.isVc4;
   or1k          = filterDoubles predicates.isOr1k;
   m68k          = filterDoubles predicates.isM68k;
@@ -87,7 +90,11 @@ in {
   darwin        = filterDoubles predicates.isDarwin;
   freebsd       = filterDoubles predicates.isFreeBSD;
   # Should be better, but MinGW is unclear.
-  gnu           = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; }) ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabi; }) ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabihf; });
+  gnu           = filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnu; })
+                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabi; })
+                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnueabihf; })
+                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnuabin32; })
+                  ++ filterDoubles (matchAttrs { kernel = parse.kernels.linux; abi = parse.abis.gnuabi64; });
   illumos       = filterDoubles predicates.isSunOS;
   linux         = filterDoubles predicates.isLinux;
   netbsd        = filterDoubles predicates.isNetBSD;

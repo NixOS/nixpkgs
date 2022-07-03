@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... } : {
     maintainers = [ julm ];
   };
 
-  machine =
+  nodes.machine =
     { lib, pkgs, config, ... }:
     with lib;
     {

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "telepresence2";
-  version = "2.4.10";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "telepresenceio";
     repo = "telepresence";
     rev = "v${version}";
-    sha256 = "sha256-OM0kMQYYHjk17x4VmrIXyTq/DxXnTrt6oRHEdV+1+Ns=";
+    sha256 = "sha256-v6E1v89cVL4N8eKJ5pKU6BwQWZF5lLs4VLGhUS5J1rA=";
   };
 
   # The Helm chart is go:embed'ed as a tarball in the binary.
@@ -21,7 +21,7 @@ buildGoModule rec {
     go run ./build-aux/package_embedded_chart/main.go ${src.rev}
   '';
 
-  vendorSha256 = "sha256-J7Qj0g479K6k0pXmZzQ3T4VG4Vdj7Sc9Xhuy4Ke/xkU=";
+  vendorSha256 = "sha256-RDXP7faijMujAV19l9NmI4xk0Js6DE5YZoHRo2GHyoU=";
 
   ldflags = [
     "-s" "-w" "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
@@ -34,5 +34,6 @@ buildGoModule rec {
     homepage = "https://www.getambassador.io/docs/telepresence/2.1/quick-start/";
     license = licenses.asl20;
     maintainers = with maintainers; [ mausch ];
+    mainProgram = "telepresence";
   };
 }

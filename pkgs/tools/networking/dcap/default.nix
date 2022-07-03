@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "dCache access protocol client library";
     homepage = "https://github.com/dCache/dcap";
     changelog = "https://github.com/dCache/dcap/blob/master/ChangeLog";

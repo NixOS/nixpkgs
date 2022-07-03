@@ -5,7 +5,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "jheiling-js";
+  pname = "jheiling-js";
   version = "2016-03-09";
 
   ipkgName = "js";

@@ -9,21 +9,21 @@
 , appstream-glib
 , python3Packages
 , glib
-, gtk3
-, libhandy
+, gtk4
+, libadwaita
 , gobject-introspection
 , gst_all_1
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "blanket";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "blanket";
-    rev = version;
-    sha256 = "00i821zqfbigxmc709322r16z75qsw4rg23yhv35gza9sl65bzkg";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-4gthT1x76IfXWkLaLMPtFS4TRlRGk5Enbu/k1jAHzwE=";
   };
 
   nativeBuildInputs = [
@@ -37,8 +37,8 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     glib
-    gtk3
-    libhandy
+    gtk4
+    libadwaita
     gobject-introspection
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base

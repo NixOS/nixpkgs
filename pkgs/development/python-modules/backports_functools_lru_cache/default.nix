@@ -3,10 +3,7 @@
 , fetchPypi
 , setuptools-scm
 , isPy3k
-, pytest
-, pytest-black
-, pytest-flake8
-, pytest-cov
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -20,12 +17,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
 
-  checkInputs = [ pytest pytest-flake8 pytest-black pytest-cov ];
-  # ironically, they fail a linting test, and pytest.ini forces that test suite
-  checkPhase = ''
-    rm backports/functools_lru_cache.py
-    pytest -k 'not format'
-  '';
+  checkInputs = [ pytestCheckHook ];
 
   # Test fail on Python 2
   doCheck = isPy3k;

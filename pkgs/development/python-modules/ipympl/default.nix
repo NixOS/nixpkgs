@@ -3,20 +3,21 @@
 , fetchPypi
 , ipykernel
 , ipywidgets
+, matplotlib
 }:
 
 buildPythonPackage rec {
   pname = "ipympl";
-  version = "0.8.7";
+  version = "0.9.1";
   format = "wheel";
 
   src = fetchPypi {
     inherit pname version format;
-    sha256 = "11c3d01f0555f855c51a960964e3ab4dff38e6ccd1a4695205fe250341a9eb99";
+    sha256 = "sha256-NQW0ctQSF4/RFeJVdk0efnYy1sgunebWKyVDijU3RoA=";
   };
 
 
-  propagatedBuildInputs = [ ipykernel ipywidgets ];
+  propagatedBuildInputs = [ ipykernel ipywidgets matplotlib ];
 
   # There are no unit tests in repository
   doCheck = false;

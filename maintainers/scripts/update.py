@@ -88,6 +88,10 @@ async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, bra
         async with merge_lock:
             await check_subprocess('git', 'add', *change['files'], cwd=worktree)
             commit_message = '{attrPath}: {oldVersion} → {newVersion}'.format(**change)
+            if 'commitMessage' in change:
+                commit_message = change['commitMessage']
+            elif 'commitBody' in change:
+                commit_message = commit_message + '\n\n' + change['commitBody']
             await check_subprocess('git', 'commit', '--quiet', '-m', commit_message, cwd=worktree)
             await check_subprocess('git', 'cherry-pick', branch)
 

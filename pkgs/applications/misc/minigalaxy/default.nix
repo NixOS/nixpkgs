@@ -8,7 +8,7 @@
 , gtk3
 , python3
 , python3Packages
-, steam-run-native
+, steam-run
 , unzip
 , webkitgtk
 , wrapGAppsHook
@@ -30,6 +30,10 @@ python3Packages.buildPythonApplication rec {
     env HOME=$PWD LC_ALL=en_US.UTF-8 pytest
     runHook postCheck
   '';
+
+  # Cannot find GSettings schemas when opening settings,
+  # probably https://github.com/NixOS/nixpkgs/issues/56943
+  strictDeps = false;
 
   nativeBuildInputs = [
     gettext
@@ -54,14 +58,14 @@ python3Packages.buildPythonApplication rec {
     python3.pkgs.requests
     python3.pkgs.setuptools
     python3.pkgs.simplejson
-    steam-run-native
+    steam-run
     unzip
     webkitgtk
   ];
 
   # Run Linux games using the Steam Runtime by using steam-run in the wrapper
   postFixup = ''
-    sed -e 's#exec -a "$0"#exec -a "$0" ${steam-run-native}/bin/steam-run#' -i $out/bin/minigalaxy
+    sed -e 's#exec -a "$0"#exec -a "$0" ${steam-run}/bin/steam-run#' -i $out/bin/minigalaxy
   '';
 
   meta = with lib; {

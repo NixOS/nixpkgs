@@ -15,8 +15,7 @@ buildDunePackage rec {
     sha256 = "2a37ffaa352a1e145ef3d80ac28661213c69a741b238623e59f29e3d5a12c537";
   };
 
-  buildInputs = [ ppx_sexp_conv ];
-  propagatedBuildInputs = [ astring ipaddr ipaddr-sexp sexplib uri logs ];
+  propagatedBuildInputs = [ astring ipaddr ipaddr-sexp sexplib uri logs ppx_sexp_conv ];
 
   meta = {
     description = "A network connection establishment library";

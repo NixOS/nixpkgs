@@ -11,7 +11,7 @@
     rev = "94cb3a2eb96b3f17a1a3bd0e6f7da97c0e1d8f57";
     sha256 = "sha256-LzjqunX/T8khF2UjPlPYiQOwMGem8MqPYneR2LdZ5Fg=";
   };
-  libuvc-src = fetchgit {
+  libuvc-src = fetchFromGitHub {
     owner = "libuvc";
     repo = "libuvc";
     rev = "b2b01ae6a2875d05c99eb256bb15815018d6e837";

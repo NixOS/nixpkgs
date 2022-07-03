@@ -27,5 +27,6 @@ buildGoModule rec {
     homepage = "https://overdodactyl.github.io/ShadowFox/";
     license = licenses.mit;
     maintainers = with maintainers; [ infinisil ];
+    mainProgram = "shadowfox-updater";
   };
 }

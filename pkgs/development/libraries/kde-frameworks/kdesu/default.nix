@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kdesu";
+  pname = "kdesu";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kcoreaddons ki18n kpty kservice qtbase ];
   propagatedBuildInputs = [ kpty ];

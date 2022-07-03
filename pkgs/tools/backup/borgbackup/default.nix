@@ -13,11 +13,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.17";
+  version = "1.2.1";
+  format = "pyproject";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0x0ncy0b0bmf586hbdgrif3gjmkdw760vfnfxndr493v07y29fbs";
+    sha256 = "sha256-n5zi0ZI8szoUfubQgXfYYJdFZ3IbEUL8pnkUoC5kxjM=";
   };
 
   postPatch = ''
@@ -27,6 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeBuildInputs = with python3.pkgs; [
+    cython
     setuptools-scm
     # For building documentation:
     sphinx
@@ -43,11 +45,9 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    cython
-    llfuse
+    msgpack
     packaging
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    pyfuse3
+    (if stdenv.isLinux then pyfuse3 else llfuse)
   ];
 
   preConfigure = ''
@@ -82,13 +82,13 @@ python3.pkgs.buildPythonApplication rec {
 
   checkInputs = with python3.pkgs; [
     e2fsprogs
+    python-dateutil
     pytest-benchmark
     pytest-xdist
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
-    "--numprocesses" "auto"
     "--benchmark-skip"
     "--pyargs" "borg.testsuite"
   ];
@@ -100,12 +100,15 @@ python3.pkgs.buildPythonApplication rec {
     "test_fuse_mount_hardlinks"
     "test_fuse_mount_options"
     "test_fuse_versions_view"
+    "test_migrate_lock_alive"
     "test_readonly_mount"
     # Error: Permission denied while trying to write to /var/{,tmp}
     "test_get_cache_dir"
     "test_get_keys_dir"
     "test_get_security_dir"
     "test_get_config_dir"
+    # https://github.com/borgbackup/borg/issues/6573
+    "test_basic_functionality"
   ];
 
   preCheck = ''
@@ -123,6 +126,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
+    mainProgram = "borg";
     maintainers = with maintainers; [ flokli dotlambda globin ];
   };
 }

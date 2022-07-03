@@ -3,19 +3,20 @@
 , lxml, fs # for fonttools extras
 , setuptools-scm
 , pytestCheckHook, pytest-cov, pytest-xdist
+, runAllTests ? false, psautohint # for passthru.tests
 }:
 
 buildPythonPackage rec {
   pname = "psautohint";
-  version = "2.3.1";
+  version = "2.4.0";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1knh428af0lvzijvd72i30jcvx9n6ga0hai69kxg8386jdpmmvkg";
+    sha256 = "125nx7accvbk626qlfar90va1995kp9qfrz6a978q4kv2kk37xai";
     fetchSubmodules = true; # data dir for tests
   };
 
@@ -34,10 +35,7 @@ buildPythonPackage rec {
     pytest-cov
     pytest-xdist
   ];
-  disabledTests = [
-    # Test that fails on pytest >= v6
-    # https://github.com/adobe-type-tools/psautohint/issues/284#issuecomment-742800965
-    "test_hashmap_old_version"
+  disabledTests = lib.optionals (!runAllTests) [
     # Slow tests, reduces test time from ~5 mins to ~30s
     "test_mmufo"
     "test_flex_ufo"
@@ -47,6 +45,10 @@ buildPythonPackage rec {
     "test_mmhint"
     "test_otf"
   ];
+
+  passthru.tests = {
+    fullTestsuite = psautohint.override { runAllTests = true; };
+  };
 
   meta = with lib; {
     description = "Script to normalize the XML and other data inside of a UFO";

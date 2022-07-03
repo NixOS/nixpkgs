@@ -14,24 +14,18 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-fpjzc2HiWP6nV8YZOwxsIOhy4ht/tQqcvCkcLMIFUaQ=";
 
   nativeBuildInputs = with pkgs; [
-    clang
-    llvmPackages.libclang
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = with pkgs; [
     pkg-config
-    clangStdenv
-    llvmPackages.libclang.lib
     rocksdb
   ];
-
-  preBuild = with pkgs; ''
-    export LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
-  '';
 
   cargoBuildFlags = "--bin conduit";
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "A Matrix homeserver written in Rust";
     homepage = "https://conduit.rs/";
     license = licenses.asl20;

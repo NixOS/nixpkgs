@@ -21,5 +21,6 @@ buildGoModule rec {
     homepage = "https://github.com/UnifiedPush/common-proxies";
     license = licenses.mit;
     maintainers = with maintainers; [ yuka ];
+    mainProgram = "up_rewrite";
   };
 }

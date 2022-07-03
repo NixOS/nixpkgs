@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+, setuptools
 , unasync
 , boto3
 , botocore
@@ -13,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pyhiveapi";
-  version = "0.5.1";
+  version = "0.5.11";
 
   format = "pyproject";
 
@@ -22,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Pyhass";
     repo = "Pyhiveapi";
-    rev = "v${version}";
-    hash = "sha256-/M1OjApc0l0EzNI4hs4KO6woCOmTPveTFCyj5MjM5EE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7Zval0LPuL3QUgDwpG91ybbL7gSWm4DxxZ/yXzkBES8=";
   };
 
   postPatch = ''
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+    setuptools
     unasync
   ];
 

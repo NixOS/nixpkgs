@@ -44,5 +44,6 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.free;
     platforms   = lib.platforms.darwin;
     maintainers = [ lib.maintainers.jwiegley ];
+    mainProgram = "sml";
   };
 }

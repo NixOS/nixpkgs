@@ -20,12 +20,12 @@ in
 
 mkDerivation rec {
   pname = "qtcreator";
-  version = "5.0.2";
+  version = "5.0.3";
   baseVersion = builtins.concatStringsSep "." (lib.take 2 (builtins.splitVersion version));
 
   src = fetchurl {
     url = "http://download.qt-project.org/official_releases/${pname}/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
-    sha256 = "1bf07150226da46237f26f5eaa9f090ce81ed79b9bc75e0dfa6328043e360103";
+    sha256 = "1sz21ijzvhf5avblikffykbqa8zdq3sbg32g2dmyxv5w211v3lvz";
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative elfutils.dev ] ++

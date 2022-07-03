@@ -1,12 +1,13 @@
 { lib, stdenv, nim, nim_builder }:
 
-{ strictDeps ? true, nativeBuildInputs ? [ ], configurePhase ? null
-, buildPhase ? null, checkPhase ? null, installPhase ? null, meta ? { }, ...
-}@attrs:
+{ strictDeps ? true, depsBuildBuild ? [ ], nativeBuildInputs ? [ ]
+, configurePhase ? null, buildPhase ? null, checkPhase ? null
+, installPhase ? null, meta ? { }, ... }@attrs:
 
 stdenv.mkDerivation (attrs // {
   inherit strictDeps;
-  nativeBuildInputs = [ nim nim_builder ] ++ nativeBuildInputs;
+  depsBuildBuild = [ nim_builder ] ++ depsBuildBuild;
+  nativeBuildInputs = [ nim ] ++ nativeBuildInputs;
 
   configurePhase = if isNull configurePhase then ''
     runHook preConfigure
@@ -38,6 +39,7 @@ stdenv.mkDerivation (attrs // {
     installPhase;
 
   meta = meta // {
+    platforms = meta.platforms or nim.meta.platforms;
     maintainers = (meta.maintainers or [ ]) ++ [ lib.maintainers.ehmry ];
   };
 })

@@ -36,12 +36,12 @@ let
 
       # register new services
       ${concatStringsSep "\n" (mapAttrsToList (name: service: ''
-        if echo "$NEW_SERVICES" | grep -xq ${name}; then
+        if echo "$NEW_SERVICES" | grep -xq "${name}"; then
           bash -c ${escapeShellArg (concatStringsSep " \\\n " ([
             "set -a && source ${service.registrationConfigFile} &&"
             "gitlab-runner register"
             "--non-interactive"
-            "--name ${name}"
+            (if service.description != null then "--description \"${service.description}\"" else "--name '${name}'")
             "--executor ${service.executor}"
             "--limit ${toString service.limit}"
             "--request-concurrency ${toString service.requestConcurrency}"
@@ -363,6 +363,13 @@ in
               Custom environment variables injected to build environment.
               For secrets you can use <option>registrationConfigFile</option>
               with <literal>RUNNER_ENV</literal> variable set.
+            '';
+          };
+          description = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = ''
+              Name/description of the runner.
             '';
           };
           executor = mkOption {

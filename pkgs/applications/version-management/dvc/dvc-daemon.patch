@@ -12,7 +12,7 @@ index 9854a0e1..fefdd613 100644
 -    file_path = os.path.abspath(inspect.stack()[0][1])
 -    env["PYTHONPATH"] = os.path.dirname(os.path.dirname(file_path))
 +    cmd = [ "@dvc@" , "daemon", "-q"] + args
-+    env = None
++    env = os.environ.copy()
      env[DVC_DAEMON] = "1"
  
      _spawn(cmd, env)

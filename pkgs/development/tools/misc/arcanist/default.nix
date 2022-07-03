@@ -5,6 +5,8 @@
 , php
 , lib, stdenv
 , installShellFiles
+, which
+, python3
 }:
 
 # Make a custom wrapper. If `wrapProgram` is used, arcanist thinks .arc-wrapped is being
@@ -14,7 +16,7 @@
 let makeArcWrapper = toolset: ''
   cat << WRAPPER > $out/bin/${toolset}
   #!$shell -e
-  export PATH='${php}/bin/'\''${PATH:+':'}\$PATH
+  export PATH='${php}/bin:${which}/bin'\''${PATH:+':'}\$PATH
   exec ${php}/bin/php $out/libexec/arcanist/bin/${toolset} "\$@"
   WRAPPER
   chmod +x $out/bin/${toolset}
@@ -23,16 +25,21 @@ let makeArcWrapper = toolset: ''
 in
 stdenv.mkDerivation {
   pname = "arcanist";
-  version = "20200711";
+  version = "20220517";
 
   src = fetchFromGitHub {
     owner = "phacility";
     repo = "arcanist";
-    rev = "2565cc7b4d1dbce6bc7a5b3c4e72ae94be4712fe";
-    sha256 = "0jiv4aj4m5750dqw9r8hizjkwiyxk4cg4grkr63sllsa2dpiibxw";
+    rev = "85c953ebe4a6fef332158fd757d97c5a58682d3a";
+    sha256 = "0x847fw74mzrbhzpgc4iqgvs6dsf4svwfa707dsbxi78fn2lxbl7";
   };
 
-  buildInputs = [ php ];
+  patches = [
+    ./dont-require-python3-in-path.patch
+    ./shellcomplete-strlen-null.patch
+  ];
+
+  buildInputs = [ php python3 ];
 
   nativeBuildInputs = [ bison flex installShellFiles ];
 

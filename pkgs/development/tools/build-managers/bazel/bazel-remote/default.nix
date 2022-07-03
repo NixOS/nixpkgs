@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "bazel-remote";
-  version = "2.3.3";
+  version = "2.3.7";
 
   src = fetchFromGitHub {
     owner = "buchgr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-3ZN/SCTQ5k0X4cqnrpp8Yt1QDnYkT2RbMLKpDfdWaxk=";
+    sha256 = "sha256-5VxPCfartTRYCmjwNrH7SM0o7IQ4+Tq8Q2IM8hFWyVc=";
   };
 
-  vendorSha256 = "sha256-UhES+jJil6+JmGH27p/LC/b5rZfHC4RIjA9nCFeB7Ao=";
+  vendorSha256 = "sha256-wXgW7HigMIeUZAcZpm5TH9thfCHmpz+M42toWHgwIYo=";
 
   doCheck = false;
 

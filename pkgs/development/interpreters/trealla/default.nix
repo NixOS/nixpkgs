@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/infradig/trealla";
     license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
+    mainProgram = "tpl";
     platforms = platforms.all;
   };
 }

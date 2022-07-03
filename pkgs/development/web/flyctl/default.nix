@@ -1,32 +1,51 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ lib, buildGoModule, fetchFromGitHub, testers, flyctl }:
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.0.297";
+  version = "0.0.346";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    sha256 = "sha256-Ug/dGHj3prgmiIr6tkEYveTwGPUI0ivy6UtuU5QoJ2U=";
+    sha256 = "sha256-CUv/zF323tplvyAfpTWGALFV3RKpkMmxiXx3gX8ZO3A=";
   };
+
+  vendorSha256 = "sha256-x2mJ1FO/a4eMHpEPLGdatUoY+Bt0RGElENJYUEsqcMU=";
+
+  subPackages = [ "." ];
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/superfly/flyctl/internal/buildinfo.commit=${src.rev}"
+    "-X github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z"
+    "-X github.com/superfly/flyctl/internal/buildinfo.environment=production"
+    "-X github.com/superfly/flyctl/internal/buildinfo.version=${version}"
+  ];
 
   preBuild = ''
     go generate ./...
   '';
 
-  subPackages = [ "." ];
+  preCheck = ''
+    HOME=$(mktemp -d)
+  '';
 
-  vendorSha256 = "sha256-EwMPPZOZ0xE1DKvaU7+PrUH+Ty6ut3UYJZSY4EqXFWo=";
+  postCheck = ''
+    go test ./... -ldflags="-X 'github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z'"
+  '';
 
-  doCheck = false;
-
-  ldflags = [ "-s" "-w" "-X github.com/superfly/flyctl/flyctl.Version=${version}" "-X github.com/superfly/flyctl/flyctl.Commit=${src.rev}" "-X github.com/superfly/flyctl/flyctl.BuildDate=1970-01-01T00:00:00+0000" "-X github.com/superfly/flyctl/flyctl.Environment=production" ];
+  passthru.tests.version = testers.testVersion {
+    package = flyctl;
+    command = "HOME=$(mktemp -d) flyctl version";
+    version = "v${flyctl.version}";
+  };
 
   meta = with lib; {
     description = "Command line tools for fly.io services";
+    downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjanse jsierles ];
+    maintainers = with maintainers; [ aaronjanse jsierles techknowlogick viraptor ];
   };
 }

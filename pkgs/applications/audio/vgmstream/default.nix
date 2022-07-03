@@ -1,26 +1,35 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config
-, mpg123, ffmpeg, libvorbis, libao, jansson
+, mpg123, ffmpeg, libvorbis, libao, jansson, speex
 }:
+let
+  vgmstreamVersion = "r1702-5596-00bdb165b";
+in
 stdenv.mkDerivation rec {
-  pname   = "vgmstream";
-  version = "r1050-3448-g77cc431b";
+  pname = "vgmstream";
+  version = "unstable-2022-02-21";
 
   src = fetchFromGitHub {
-    owner  = "vgmstream";
-    repo   = "vgmstream";
-    rev    = version;
-    sha256 = "030q02c9li14by7vm00gn6v3m4dxxmfwiy9iyz3xsgzq1i7pqc1d";
+    owner = "vgmstream";
+    repo = "vgmstream";
+    rev = "00bdb165ba6b55420bbd5b21f54c4f7a825d15a0";
+    sha256 = "18g1yqlnf48hi2xn2z2wajnjljpdbfdqmcmi7y8hi1r964ypmfcr";
   };
+
+  passthru.updateScript = ./update.sh;
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ mpg123 ffmpeg libvorbis libao jansson ];
+  buildInputs = [ mpg123 ffmpeg libvorbis libao jansson speex ];
 
-  # There's no nice way to build the audacious plugin without a circular dependency
-  cmakeFlags = [ "-DBUILD_AUDACIOUS=OFF" ];
+  cmakeFlags = [
+    # There's no nice way to build the audacious plugin without a circular dependency
+    "-DBUILD_AUDACIOUS=OFF"
+    # It always tries to download it, no option to use the system one
+    "-DUSE_CELT=OFF"
+  ];
 
-  preConfigure = ''
-    echo "#define VERSION \"${version}\"" > cli/version.h
+  postConfigure = ''
+    echo "#define VGMSTREAM_VERSION \"${vgmstreamVersion}\"" > ../version.h
   '';
 
   meta = with lib; {

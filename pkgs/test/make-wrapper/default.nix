@@ -62,8 +62,9 @@ runCommand "make-wrapper-test"
     (mkWrapperBinary { name = "test-unset"; args = [ "--unset" "VAR" ]; })
     (mkWrapperBinary { name = "test-run"; args = [ "--run" "echo bar" ]; })
     (mkWrapperBinary { name = "test-run-and-set"; args = [ "--run" "export VAR=foo" "--set" "VAR" "bar" ]; })
-    (mkWrapperBinary { name = "test-args"; args = [ "--add-flags" "abc" ]; wrapped = wrappedBinaryArgs; })
+    (mkWrapperBinary { name = "test-args"; args = [ "--add-flags" "abc" "--append-flags" "xyz" ]; wrapped = wrappedBinaryArgs; })
     (mkWrapperBinary { name = "test-prefix"; args = [ "--prefix" "VAR" ":" "abc" ]; })
+    (mkWrapperBinary { name = "test-prefix-noglob"; args = [ "--prefix" "VAR" ":" "./*" ]; })
     (mkWrapperBinary { name = "test-suffix"; args = [ "--suffix" "VAR" ":" "abc" ]; })
     (mkWrapperBinary { name = "test-prefix-and-suffix"; args = [ "--prefix" "VAR" ":" "foo" "--suffix" "VAR" ":" "bar" ]; })
     (mkWrapperBinary { name = "test-prefix-multi"; args = [ "--prefix" "VAR" ":" "abc:foo:foo" ]; })
@@ -88,10 +89,10 @@ runCommand "make-wrapper-test"
     # --unset works
     + mkTest "VAR=foo test-unset" "VAR="
 
-    # --add-flags works
-    + mkTest "test-args" "abc"
-    # given flags are appended
-    + mkTest "test-args foo" "abc foo"
+    # --add-flags and --append-flags work
+    + mkTest "test-args" "abc xyz"
+    # given flags are kept
+    + mkTest "test-args foo" "abc foo xyz"
 
     # --run works
     + mkTest "test-run" "bar\nVAR="
@@ -112,6 +113,8 @@ runCommand "make-wrapper-test"
     # Only append the value once when given multiple times in a parameter
     # to makeWrapper
     + mkTest "test-prefix" "VAR=abc"
+    # --prefix doesn't expand globs
+    + mkTest "VAR=f?oo test-prefix-noglob" "VAR=./*:f?oo"
 
 
     # --suffix works

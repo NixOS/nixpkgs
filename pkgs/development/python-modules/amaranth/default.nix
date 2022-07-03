@@ -57,6 +57,10 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace "Jinja2~=2.11" "Jinja2>=2.11" \
       --replace "pyvcd~=0.2.2" "pyvcd"
+
+    # jinja2.contextfunction was removed in jinja2 v3.1
+    substituteInPlace amaranth/build/plat.py \
+      --replace "@jinja2.contextfunction" "@jinja2.pass_context"
   '';
 
   pythonImportsCheck = [ "amaranth" ];

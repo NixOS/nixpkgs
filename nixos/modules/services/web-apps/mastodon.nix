@@ -9,6 +9,8 @@ let
     RAILS_ENV = "production";
     NODE_ENV = "production";
 
+    LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
+
     # mastodon-web concurrency.
     WEB_CONCURRENCY = toString cfg.webProcesses;
     MAX_THREADS = toString cfg.webThreads;
@@ -121,7 +123,7 @@ in {
 
           Make sure that websockets are forwarded properly. You might want to set up caching
           of some requests. Take a look at mastodon's provided nginx configuration at
-          <code>https://github.com/tootsuite/mastodon/blob/master/dist/nginx.conf</code>.
+          <code>https://github.com/mastodon/mastodon/blob/master/dist/nginx.conf</code>.
         '';
         type = lib.types.bool;
         default = false;
@@ -292,7 +294,7 @@ in {
         port = lib.mkOption {
           description = "Redis port.";
           type = lib.types.port;
-          default = 6379;
+          default = 31637;
         };
       };
 
@@ -603,8 +605,10 @@ in {
       enable = true;
       hostname = lib.mkDefault "${cfg.localDomain}";
     };
-    services.redis = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") {
+    services.redis.servers.mastodon = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") {
       enable = true;
+      port = cfg.redis.port;
+      bind = "127.0.0.1";
     };
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;

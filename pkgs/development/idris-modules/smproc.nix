@@ -4,7 +4,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "smproc";
+  pname = "smproc";
   version = "2018-02-08";
 
   idrisDeps = [ contrib ];

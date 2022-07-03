@@ -1,20 +1,19 @@
-{ lib, stdenv, substituteAll, fetchFromGitHub, fetchpatch, glib, glib-networking, libgtop, gnome }:
+{ lib, stdenv, substituteAll, fetchFromGitHub, glib, glib-networking, libgtop, gnome }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-system-monitor";
-  version = "unstable-2021-09-07";
+  version = "unstable-2022-02-04";
 
   src = fetchFromGitHub {
     owner = "paradoxxxzero";
     repo = "gnome-shell-system-monitor-applet";
-    rev = "133f9f32bca5d159515d709bbdee81bf497ebdc5";
-    sha256 = "1vz1s1x22xmmzaayrzv5jyzlmxslhfaybbnv959szvfp4mdrhch9";
+    rev = "2c6eb0a447bfc9f1a07c61956c92a55c874baf16";
+    hash = "sha256-JuRRlvqlqneqUdgezKGl2yg7wFYGCCo51q9CBwrxTBY=";
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     glib
-    glib-networking
-    libgtop
+    gnome.gnome-shell
   ];
 
   patches = [
@@ -24,25 +23,13 @@ stdenv.mkDerivation rec {
       gtop_path = "${libgtop}/lib/girepository-1.0";
       glib_net_path = "${glib-networking}/lib/girepository-1.0";
     })
-    # Support GNOME 41
-    (fetchpatch {
-      url = "https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/718/commits/f4ebc29afa707326b977230329e634db169f55b1.patch";
-      sha256 = "0ndnla41mvrww6ldf9d55ar1ibyj8ak5pp1dkjg75jii9slgzjqb";
-    })
   ];
 
-  buildPhase = ''
-    runHook preBuild
-    glib-compile-schemas --targetdir="system-monitor@paradoxxx.zero.gmail.com/schemas" "system-monitor@paradoxxx.zero.gmail.com/schemas"
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/share/gnome-shell/extensions
-    cp -r "system-monitor@paradoxxx.zero.gmail.com" $out/share/gnome-shell/extensions
-    runHook postInstall
-  '';
+  makeFlags = [
+    "VERSION=${version}"
+    "INSTALLBASE=$(out)/share/gnome-shell/extensions"
+    "SUDO="
+  ];
 
   passthru = {
     extensionUuid = "system-monitor@paradoxxx.zero.gmail.com";

@@ -148,7 +148,7 @@ in
     redis = {
       host = mkOption {
         type = types.str;
-        default = "unix:/run/redis-sourcehut-${srvsrht}/redis.sock?db=0";
+        default = "unix:///run/redis-sourcehut-${srvsrht}/redis.sock?db=0";
         example = "redis://shared.wireguard:6379/0";
         description = ''
           The redis host URL. This is used for caching and temporary storage, and must

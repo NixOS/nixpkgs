@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "flask-bcrypt";
-  version = "0.7.1";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "maxcountryman";
     repo = pname;
     rev = version;
-    sha256 = "0036gag3nj7fzib23lbbpwhlrn1s0kkrfwk5pd90y4cjcfqh8z9x";
+    sha256 = "sha256-WlIholi/nzq6Ikc0LS6FhG0Q5Kz0kvvAlA2YJ7EksZ4=";
   };
 
   propagatedBuildInputs = [
@@ -23,8 +23,14 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    ${python.interpreter} test_bcrypt.py
+    runHook preCheck
+    ${python.interpreter} -m unittest discover
+    runHook postCheck
   '';
+
+  pythonImportsCheck = [
+    "flask_bcrypt"
+  ];
 
   meta = with lib; {
     description = "Brcrypt hashing for Flask";

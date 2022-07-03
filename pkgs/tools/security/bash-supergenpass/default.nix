@@ -40,9 +40,10 @@ stdenv.mkDerivation {
 
       supergenpass will ask for your master password interactively, and it will not be displayed on your terminal.
     '';
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fgaz ];
     homepage = "https://github.com/lanzz/bash-supergenpass";
+    license = licenses.mit;
+    maintainers = with maintainers; [ fgaz ];
+    mainProgram = "supergenpass";
+    platforms = platforms.all;
   };
 }

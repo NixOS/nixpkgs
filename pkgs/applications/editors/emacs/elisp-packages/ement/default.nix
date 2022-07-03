@@ -5,23 +5,31 @@
 , plz
 , cl-lib
 , ts
+, magit-section
+, taxy-magit-section
+, taxy
+, svg-lib
 }:
 
 trivialBuild {
   pname = "ement";
-  version = "unstable-2021-10-08";
+  version = "unstable-2022-05-14";
 
   src = fetchFromGitHub {
     owner = "alphapapa";
     repo = "ement.el";
-    rev = "c951737dc855604aba389166bb0e7366afadc533";
-    sha256 = "00iwwz4hzg4g59wrb5df6snqz3ppvrsadhfp61w1pa8gvg2z9bvy";
+    rev = "961d650377f9e7440e47c36c0386e899f5b2d86b";
+    sha256 = "sha256-4KTSPgso7UvzCRKNFI3YaPR1t4DUwggO4KtBYLm0W4Y=";
   };
 
   packageRequires = [
     plz
     cl-lib
     ts
+    magit-section
+    taxy-magit-section
+    taxy
+    svg-lib
   ];
 
   patches = [

@@ -157,6 +157,8 @@ in
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
+        Restart = "on-failure";
+        RestartSec = "10";
         ExecStart = "${pkg}/start_crowd.sh -fg";
       };
     };

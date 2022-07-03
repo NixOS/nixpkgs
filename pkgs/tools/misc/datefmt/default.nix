@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, datefmt, testVersion }:
+{ lib, stdenv, fetchurl, datefmt, testers }:
 
 stdenv.mkDerivation rec {
   pname = "datefmt";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  passthru.tests.version = testVersion { package = datefmt; };
+  passthru.tests.version = testers.testVersion { package = datefmt; };
 
   meta = with lib; {
     homepage = "https://jb55.com/datefmt";

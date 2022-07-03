@@ -2,7 +2,6 @@
 , lib
 , callPackage
 , fetchFromGitHub
-, rust
 , rustPlatform
 , installShellFiles
 , libiconv
@@ -17,15 +16,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.18.2";
+  version = "1.23.2";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-vWA2Y1y5KatodTqr1+YwUXA2WYqQPMIMgXPuyRzmQW4=";
+    sha256 = "sha256-rygBiDIZ8W51GIu36+g6zFOnIvmGe+HLGZg7x/pRFJ0=";
   };
-  cargoSha256 = "sha256-Go0Rj/NI56CZnRaR8QvOtOFNq/qpyujzpzVr3IHkEcg=";
+  cargoSha256 = "sha256-q7yZZXws58QuEfC0J+fZo8QyYUWx6sOKfphmIurxVkU=";
+
+  postPatch = ''
+    # upstream uses lld on aarch64-darwin for faster builds
+    # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
+    substituteInPlace .cargo/config --replace '"-C", "link-arg=-fuse-ld=lld"' ""
+  '';
 
   # Install completions post-install
   nativeBuildInputs = [ installShellFiles ];

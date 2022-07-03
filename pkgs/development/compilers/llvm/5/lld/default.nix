@@ -28,8 +28,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" ];
 
   meta = llvm_meta // {
+    broken = stdenv.isDarwin;
     homepage = "https://lld.llvm.org/";
-    description = "The LLVM linker";
+    description = "The LLVM linker (unwrapped)";
     longDescription = ''
       LLD is a linker from the LLVM project that is a drop-in replacement for
       system linkers and runs much faster than them. It also provides features

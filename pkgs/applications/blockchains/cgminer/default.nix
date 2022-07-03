@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "0l1ms3nxnjzh4mpiadikvngcr9k3jnjqy3yna207za0va0c28dj5";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ autoconf automake libtool curl ncurses ocl-icd opencl-headers
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ libtool curl ncurses ocl-icd opencl-headers
     xorg.libX11 xorg.libXext xorg.libXinerama jansson libusb1 ];
 
   configureScript = "./autogen.sh";
@@ -38,6 +38,13 @@ stdenv.mkDerivation rec {
                      "--enable-klondike"
                      "--enable-keccak"
                      "--enable-bflsc"];
+
+  # Workaround build failure on -fno-common toolchains like upstream
+  # gcc-10. Otherwise build fails as:
+  #   ld: cgminer-driver-modminer.o:/build/source/miner.h:285:
+  #     multiple definition of `bitforce_drv'; cgminer-cgminer.o:/build/source/miner.h:285:
+  #     first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = with lib; {
     description = "CPU/GPU miner in c for bitcoin";

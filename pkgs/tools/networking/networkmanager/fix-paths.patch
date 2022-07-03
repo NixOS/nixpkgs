@@ -1,8 +1,8 @@
 diff --git a/data/84-nm-drivers.rules b/data/84-nm-drivers.rules
-index e398cb9f2f..a43d61864f 100644
+index 148acade5c..6395fbfbe5 100644
 --- a/data/84-nm-drivers.rules
 +++ b/data/84-nm-drivers.rules
-@@ -7,6 +7,6 @@ ACTION!="add|change", GOTO="nm_drivers_end"
+@@ -7,6 +7,6 @@ ACTION!="add|change|move", GOTO="nm_drivers_end"
  # Determine ID_NET_DRIVER if there's no ID_NET_DRIVER or DRIVERS (old udev?)
  ENV{ID_NET_DRIVER}=="?*", GOTO="nm_drivers_end"
  DRIVERS=="?*", GOTO="nm_drivers_end"
@@ -24,19 +24,19 @@ index e23b3a5282..c7246a3b61 100644
  ExecStart=@sbindir@/NetworkManager --no-daemon
  Restart=on-failure
 diff --git a/src/core/devices/nm-device.c b/src/core/devices/nm-device.c
-index 21863b9533..c9b709659d 100644
+index a11486d54b..de8e9022c6 100644
 --- a/src/core/devices/nm-device.c
 +++ b/src/core/devices/nm-device.c
-@@ -13994,14 +13994,14 @@ nm_device_start_ip_check(NMDevice *self)
-             gw = nm_ip4_config_best_default_route_get(priv->ip_config_4);
+@@ -13571,14 +13571,14 @@ nm_device_start_ip_check(NMDevice *self)
+             gw = nm_l3_config_data_get_best_default_route(l3cd, AF_INET);
              if (gw) {
                  _nm_utils_inet4_ntop(NMP_OBJECT_CAST_IP4_ROUTE(gw)->gateway, buf);
 -                ping_binary = nm_utils_find_helper("ping", "/usr/bin/ping", NULL);
 +                ping_binary = "@iputils@/bin/ping";
                  log_domain  = LOGD_IP4;
              }
-         } else if (priv->ip_config_6 && priv->ip_state_6 == NM_DEVICE_IP_STATE_DONE) {
-             gw = nm_ip6_config_best_default_route_get(priv->ip_config_6);
+         } else if (priv->ip_data_6.state == NM_DEVICE_IP_STATE_READY) {
+             gw = nm_l3_config_data_get_best_default_route(l3cd, AF_INET6);
              if (gw) {
                  _nm_utils_inet6_ntop(&NMP_OBJECT_CAST_IP6_ROUTE(gw)->gateway, buf);
 -                ping_binary = nm_utils_find_helper("ping6", "/usr/bin/ping6", NULL);
@@ -65,10 +65,10 @@ index 21a01e0b04..091c98428f 100644
        '--lib-path', meson.current_build_dir(),
        '--gir', '@INPUT@',
 diff --git a/src/libnm-platform/nm-platform-utils.c b/src/libnm-platform/nm-platform-utils.c
-index 6435dcc482..214d01194e 100644
+index 9ad030df76..8d800fb1c0 100644
 --- a/src/libnm-platform/nm-platform-utils.c
 +++ b/src/libnm-platform/nm-platform-utils.c
-@@ -2097,7 +2097,7 @@ nmp_utils_modprobe(GError **error, gboolean suppress_error_logging, const char *
+@@ -2207,7 +2207,7 @@ nmp_utils_modprobe(GError **error, gboolean suppress_error_logging, const char *
  
      /* construct the argument list */
      argv = g_ptr_array_sized_new(4);
@@ -78,13 +78,13 @@ index 6435dcc482..214d01194e 100644
      g_ptr_array_add(argv, (char *) arg1);
  
 diff --git a/src/libnmc-base/nm-vpn-helpers.c b/src/libnmc-base/nm-vpn-helpers.c
-index 72691e34c2..95495b6585 100644
+index e2c0c394bd..1a507aa0d4 100644
 --- a/src/libnmc-base/nm-vpn-helpers.c
 +++ b/src/libnmc-base/nm-vpn-helpers.c
 @@ -198,25 +198,8 @@ nm_vpn_openconnect_authenticate_helper(const char *host,
      gs_free const char **output_v = NULL;
-     const char *const *  iter;
-     const char *         path;
+     const char *const   *iter;
+     const char          *path;
 -    const char *const    DEFAULT_PATHS[] = {
 -        "/sbin/",
 -        "/usr/sbin/",

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "limnoria";
-  version = "2022.2.3";
+  version = "2022.4.22";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Jc11hS+WrRnjgYOUpc+GdkRoNV/DUJhQK6rI2lUkEIA=";
+    hash = "sha256-NKRxt25uvMBvSpY8vk4Vr56NmnW2VTpOLBHUzM2j/yc=";
   };
 
   propagatedBuildInputs = [

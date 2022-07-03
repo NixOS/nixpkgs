@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "timg";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "timg";
     rev = "v${version}";
-    sha256 = "1lanr2y9rchl0xmycsyl0bhnh9mrmr5dj46pglw4lykz4rxslzcx";
+    sha256 = "1gdwg15fywya6k6pajkx86kv2d8k85pmisnq53b02br5i01y4k41";
   };
 
   buildInputs = [ graphicsmagick ffmpeg libexif libjpeg openslide zlib ];

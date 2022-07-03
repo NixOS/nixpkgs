@@ -1,0 +1,25 @@
+From 942d4fd37786941bae91b769ef6499a4b4da6843 Mon Sep 17 00:00:00 2001
+From: "P. R. d. O" <d.ol.rod@tutanota.com>
+Date: Sat, 9 Apr 2022 12:40:59 -0600
+Subject: [PATCH] Updating pytest-aiohttp version
+
+---
+ setup.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index fe33d9a..694fab4 100644
+--- a/setup.py
++++ b/setup.py
+@@ -85,7 +85,7 @@ setup(
+     tests_require=[
+         'pytest>=6.1.1', 'requests-mock>=1.8.0',
+         'freezegun>=1.1.0', 'certomancer~=0.8.1',
+-        'aiohttp~=3.8.0', 'pytest-aiohttp~=0.3.0',
++        'aiohttp~=3.8.0', 'pytest-aiohttp~=1.0.3',
+         'python-pae==0.1.0'
+     ],
+     keywords="signature pdf pades digital-signature pkcs11"
+-- 
+2.35.1
+

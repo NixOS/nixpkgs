@@ -58,6 +58,5 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    repositories.svn = "https://svn.code.sf.net/p/qmmp-dev/code";
   };
 }

@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
@@ -8,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "python-fsutil";
-  version = "0.6.0";
+  version = "0.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = pname;
-    rev = version;
-    hash = "sha256-DY0QGHD7HdLnKnbPV17UZl9u3Ac9YZdYvQXLOzmRGos=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Swq0kAZTM/zP3LXMkzZnp8KTI0YzGPIbWV2kKV1Dw0k=";
   };
 
   propagatedBuildInputs = [
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Module with file-system utilities";
     homepage = "https://github.com/fabiocaccamo/python-fsutil";
     license = licenses.mit;

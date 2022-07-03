@@ -5,12 +5,11 @@
 , pythonOlder
 
 # Build dependencies
-, glibcLocales
+, setuptools
 
 # Runtime dependencies
 , appnope
 , backcall
-, black
 , decorator
 , jedi
 , matplotlib-inline
@@ -28,22 +27,21 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "8.0.1";
+  version = "8.4.0";
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x19sj4dlq7r4p1mqnpx9245r8dwvpjwd8n34snfm37a452lsmmb";
+    sha256 = "f2db3a10254241d9b447232cec8b424847f338d9d36f9a577a6192c332a46abd";
   };
 
-  buildInputs = [
-    glibcLocales
+  nativeBuildInputs = [
+    setuptools
   ];
 
   propagatedBuildInputs = [
     backcall
-    black
     decorator
     jedi
     matplotlib-inline
@@ -56,8 +54,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     appnope
   ];
-
-  LC_ALL="en_US.UTF-8";
 
   pythonImportsCheck = [
     "IPython"
@@ -76,9 +72,18 @@ buildPythonPackage rec {
     testpath
   ];
 
+  disabledTests = [
+    # UnboundLocalError: local variable 'child' referenced before assignment
+    "test_system_interrupt"
+  ] ++ lib.optionals (stdenv.isDarwin) [
+    # FileNotFoundError: [Errno 2] No such file or directory: 'pbpaste'
+    "test_clipboard_get"
+  ];
+
   meta = with lib; {
     description = "IPython: Productive Interactive Computing";
-    homepage = "http://ipython.org/";
+    homepage = "https://ipython.org/";
+    changelog = "https://github.com/ipython/ipython/blob/${version}/docs/source/whatsnew/version${lib.versions.major version}.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ bjornfor fridh ];
   };

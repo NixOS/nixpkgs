@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ... } : {
     maintainers = [ evils ];
   };
 
-  machine = { pkgs, ... }: {
+  nodes.machine = { pkgs, ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
     hardware.rasdaemon = {
       enable = true;

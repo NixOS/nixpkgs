@@ -24,7 +24,7 @@ in
 
 
 mkDerivation {
-  name = "breeze-plymouth";
+  pname = "breeze-plymouth";
   nativeBuildInputs = [ extra-cmake-modules ] ++ lib.optionals (logoFile != null) [ imagemagick netpbm perl ];
   buildInputs = [ plymouth ];
   patches = [

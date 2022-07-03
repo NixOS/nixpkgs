@@ -3,13 +3,12 @@
 , webkitgtk, discount, json-glib }:
 
 stdenv.mkDerivation rec {
-  name = "${product}-${version}";
-  product = "pdfpc";
+  pname = "pdfpc";
   version = "4.5.0";
 
   src = fetchFromGitHub {
-    repo = product;
-    owner = product;
+    repo = "pdfpc";
+    owner = "pdfpc";
     rev = "v${version}";
     sha256 = "0bmy51w6ypz927hxwp5g7wapqvzqmsi3w32rch6i3f94kg1152ck";
   };

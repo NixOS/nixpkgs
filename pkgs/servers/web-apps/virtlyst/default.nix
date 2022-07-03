@@ -18,9 +18,13 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib
-    cp src/libVirtlyst.so $out/lib
+    cp src/libVirtlyst${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib
     cp -r ../root $out
+
+    runHook postInstall
   '';
 
   patches = [ ./add-admin-password-env.patch ];
@@ -29,6 +33,7 @@ stdenv.mkDerivation rec {
     description = "Web interface to manage virtual machines with libvirt";
     homepage = "https://github.com/cutelyst/Virtlyst";
     license = licenses.agpl3Plus;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];
   };
 }

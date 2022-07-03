@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , gettext
 , meson
 , ninja
@@ -26,33 +25,18 @@
 , json-glib
 , systemd
 , dbus
-, substituteAll
 }:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.2.1";
+  version = "3.3.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "GEfgiznm5h2EhzWqH5f32WwDggFlP6DXy56Bs365wDo=";
+    sha256 = "Wtb1vJd4Hr9V7NaUfNSuf/QZJRZYDRC9g4Dx3UcZbtI=";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit asciidoc;
-    })
-
-    # Filter out hidden (wrapped) subcommands
-    # https://gitlab.gnome.org/GNOME/tracker/-/merge_requests/481
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/tracker/-/commit/8c28c24e447f13da8cf804cd7a00f9b909c5d3f9.patch";
-      sha256 = "EYo1nOtEr4semaPC5wk6A7bliRXu8qsBHaltd0DEI6Y=";
-    })
-  ];
 
   nativeBuildInputs = [
     meson
@@ -95,11 +79,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postPatch = ''
-    patchShebangs utils/g-ir-merge/g-ir-merge
     patchShebangs utils/data-generators/cc/generate
-    patchShebangs tests/functional-tests/test-runner.sh.in
-    patchShebangs tests/functional-tests/*.py
-    patchShebangs examples/python/endpoint.py
   '';
 
   preCheck = ''
@@ -119,7 +99,9 @@ stdenv.mkDerivation rec {
 
     dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      meson test --print-errorlogs
+      meson test \
+        --timeout-multiplier 2 \
+        --print-errorlogs
 
     runHook postCheck
   '';

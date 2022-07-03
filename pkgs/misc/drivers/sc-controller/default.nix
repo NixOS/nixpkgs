@@ -8,13 +8,13 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
-  version = "0.4.8.6";
+  version = "0.4.8.7";
 
   src = fetchFromGitHub {
     owner  = "Ryochan7";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "1fgizgzm79zl9r2kkwvh1gf9lnxaix15283xxk6bz843inr8b88k";
+    sha256 = "03514sb1spaxdr7x1gq7b54z74in4kd060adj6sq1xjj6d9b297i";
   };
 
   # see https://github.com/NixOS/nixpkgs/issues/56943

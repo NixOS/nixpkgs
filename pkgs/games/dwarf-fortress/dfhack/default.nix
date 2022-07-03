@@ -131,6 +131,9 @@ let
 
     patches = [ ./fix-stonesense.patch ];
 
+    # gcc 11 fix
+    NIX_CFLAGS_COMPILE = "-fpermissive";
+
     # As of
     # https://github.com/DFHack/dfhack/commit/56e43a0dde023c5a4595a22b29d800153b31e3c4,
     # dfhack gets its goodies from the directory above the Dwarf_Fortress

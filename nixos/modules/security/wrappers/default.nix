@@ -92,14 +92,13 @@ let
     , permissions
     , ...
     }:
-    assert (lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "4.3");
     ''
       cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
       echo -n "${source}" > "$wrapperDir/${program}.real"
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
-      chown ${owner}.${group} "$wrapperDir/${program}"
+      chown ${owner}:${group} "$wrapperDir/${program}"
 
       # Set desired capabilities on the file plus cap_setpcap so
       # the wrapper program can elevate the capabilities set on
@@ -127,7 +126,7 @@ let
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
-      chown ${owner}.${group} "$wrapperDir/${program}"
+      chown ${owner}:${group} "$wrapperDir/${program}"
 
       chmod "u${if setuid then "+" else "-"}s,g${if setgid then "+" else "-"}s,${permissions}" "$wrapperDir/${program}"
     '';

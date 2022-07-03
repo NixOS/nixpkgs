@@ -12,6 +12,7 @@
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, vivaldi-widevine ? null
 , commandLineArgs ? ""
+, pulseSupport ? stdenv.isLinux, libpulseaudio
 }:
 
 let
@@ -19,11 +20,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "5.1.2567.39-1";
+  version = "5.3.2679.61-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "140idghryk132nyb8np011xiwzgh518n0fxrkjnnvi3c67shq7qc";
+    sha256 = "0cxsdcksv29dxync8rxrn30kr68qzf615085nhkk0ava7jdlvz9g";
   };
 
   unpackPhase = ''
@@ -40,7 +41,8 @@ in stdenv.mkDerivation rec {
     freetype fontconfig libXrender libuuid expat glib nss nspr
     libxml2 pango cairo
     libdrm mesa
-  ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
+  ] ++ lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs
+    ++ lib.optional pulseSupport libpulseaudio;
 
   libPath = lib.makeLibraryPath buildInputs
     + lib.optionalString (stdenv.is64bit)
@@ -99,6 +101,7 @@ in stdenv.mkDerivation rec {
     description = "A Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ otwieracz badmutex ];
     platforms   = [ "x86_64-linux" ];
   };

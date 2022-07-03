@@ -6,20 +6,20 @@
 
 stdenv.mkDerivation rec {
   pname = "capnproto";
-  version = "0.9.1";
+  version = "0.10.1";
 
   # release tarballs are missing some ekam rules
   src = fetchFromGitHub {
     owner = "capnproto";
     repo = "capnproto";
     rev = "v${version}";
-    sha256 = "0cbiwkmd29abih8rjjm35dfkrkr8c6axbzq3fkryay6jyvpi42c5";
+    sha256 = "sha256-VdeoTU802kAqTdu8CJTIhy3xHM3ZCPqb5YNUS2k1x7E=";
   };
 
   nativeBuildInputs = [ cmake ]
-    ++ lib.optional (!(stdenv.hostPlatform.isCompatible stdenv.buildPlatform)) capnproto;
+    ++ lib.optional (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) capnproto;
 
-  cmakeFlags = lib.optional (!(stdenv.hostPlatform.isCompatible stdenv.buildPlatform)) "-DEXTERNAL_CAPNP";
+  cmakeFlags = lib.optional (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) "-DEXTERNAL_CAPNP";
 
   meta = with lib; {
     homepage    = "https://capnproto.org/";

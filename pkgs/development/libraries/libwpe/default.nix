@@ -6,7 +6,9 @@
 , libxkbcommon
 , libGL
 , ninja
-, libX11 }:
+, libX11
+, webkitgtk
+}:
 
 stdenv.mkDerivation rec {
   pname = "libwpe";
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "General-purpose library for WPE WebKit";
     license = licenses.bsd2;
     homepage = "https://wpewebkit.org";
-    maintainers = with maintainers; [ matthewbauer ];
+    maintainers = webkitgtk.meta.maintainers ++ (with maintainers; [ matthewbauer ]);
     platforms = platforms.linux;
   };
 }

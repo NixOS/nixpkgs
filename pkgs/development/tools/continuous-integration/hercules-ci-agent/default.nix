@@ -12,7 +12,7 @@ let
           ${o.postInstall or ""}
           mkdir -p $out/libexec
           mv $out/bin/hercules-ci-agent $out/libexec
-          makeWrapper $out/libexec/hercules-ci-agent $out/bin/hercules-ci-agent --prefix PATH : ${makeBinPath bundledBins}
+          makeWrapper $out/libexec/hercules-ci-agent $out/bin/hercules-ci-agent --prefix PATH : ${lib.escapeShellArg (makeBinPath bundledBins)}
         '';
       })
       (addBuildDepends [ makeWrapper ] (justStaticExecutables haskellPackages.hercules-ci-agent));

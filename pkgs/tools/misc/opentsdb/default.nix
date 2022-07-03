@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ autoconf automake curl jdk nettools python2 git ];
+  nativeBuildInputs = [ makeWrapper autoconf automake ];
+  buildInputs = [ curl jdk nettools python2 git ];
 
   preConfigure = ''
     patchShebangs ./build-aux/

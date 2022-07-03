@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withStatic ./enable-static.patch;
 
   nativeBuildInputs = [ ocaml findlib ];
-  buildInputs = [ ocaml findlib ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
-
 
   meta = {
     description = "Legacy Num library for arbitrary-precision integer and rational arithmetic";

@@ -4,13 +4,19 @@
 , fetchpatch
 , fetchurl
 , pkg-config
-, util-linux
+, coreutils
 , libuuid
 , libaio
+, substituteAll
 , enableCmdlib ? false
 , enableDmeventd ? false
-, udevSupport ? !stdenv.targetPlatform.isStatic, udev ? null
-, onlyLib ? stdenv.targetPlatform.isStatic
+, udevSupport ? !stdenv.hostPlatform.isStatic, udev
+, onlyLib ? stdenv.hostPlatform.isStatic
+  # Otherwise we have a infinity recursion during static compilation
+, enableUtilLinux ? !stdenv.hostPlatform.isStatic, util-linux
+, enableVDO ? false, vdo
+, enableMdadm ? false, mdadm
+, enableMultipath ? false, multipath-tools
 , nixosTests
 }:
 
@@ -18,7 +24,7 @@
 assert enableDmeventd -> enableCmdlib;
 
 stdenv.mkDerivation rec {
-  pname = "lvm2" + lib.optionalString enableDmeventd "-with-dmeventd";
+  pname = "lvm2" + lib.optionalString enableDmeventd "-with-dmeventd" + lib.optionalString enableVDO "-with-vdo";
   inherit version;
 
   src = fetchurl {
@@ -33,6 +39,8 @@ stdenv.mkDerivation rec {
     udev
   ] ++ lib.optionals (!onlyLib) [
     libuuid
+  ] ++ lib.optionals enableVDO [
+    vdo
   ];
 
   configureFlags = [
@@ -56,13 +64,16 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals udevSupport [
     "--enable-udev_rules"
     "--enable-udev_sync"
-  ] ++ lib.optionals stdenv.targetPlatform.isStatic [
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "--enable-static_link"
+  ] ++  lib.optionals enableVDO [
+    "--enable-vdo"
   ];
 
   preConfigure = ''
     sed -i /DEFAULT_SYS_DIR/d Makefile.in
     sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in
+  '' + lib.optionalString (lib.versionOlder version "2.03.15") ''
     substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
       --replace /usr/bin/udevadm /run/current-system/systemd/bin/udevadm
     # https://github.com/lvmteam/lvm2/issues/36
@@ -76,13 +87,29 @@ stdenv.mkDerivation rec {
     substituteInPlace make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
   '' + lib.optionalString (lib.versionAtLeast version "2.03") ''
     substituteInPlace libdm/make.tmpl.in --replace "@systemdsystemunitdir@" "$out/lib/systemd/system"
+
+    substituteInPlace scripts/blk_availability_systemd_red_hat.service.in \
+      --replace '/usr/bin/true' '${coreutils}/bin/true'
   '';
 
   postConfigure = ''
     sed -i 's|^#define LVM_CONFIGURE_LINE.*$|#define LVM_CONFIGURE_LINE "<removed>"|g' ./include/configure.h
   '';
 
-  patches = [
+  patches = lib.optionals (lib.versionAtLeast version "2.03.15") [
+    # fixes paths to and checks for tools
+    # TODO: needs backport to LVM 2.02 used by static/musl
+    (substituteAll (let
+      optionalTool = cond: pkg: if cond then pkg else "/run/current-system/sw";
+    in {
+      src = ./fix-blkdeactivate.patch;
+      inherit coreutils;
+      util_linux = optionalTool enableUtilLinux util-linux;
+      mdadm = optionalTool enableMdadm mdadm;
+      multipath_tools = optionalTool enableMultipath multipath-tools;
+      vdo = optionalTool enableVDO vdo;
+    }))
+  ] ++ lib.optionals (lib.versionOlder version "2.03.15") [
     # Musl fixes from Alpine.
     ./fix-stdio-usage.patch
     (fetchpatch {
@@ -90,7 +117,7 @@ stdenv.mkDerivation rec {
       url = "https://git.alpinelinux.org/aports/plain/main/lvm2/mallinfo.patch?h=3.7-stable&id=31bd4a8c2dc00ae79a821f6fe0ad2f23e1534f50";
       sha256 = "0g6wlqi215i5s30bnbkn8w7axrs27y3bnygbpbnf64wwx7rxxlj0";
     })
-  ] ++ lib.optionals stdenv.targetPlatform.isStatic [
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     ./no-shared.diff
   ];
 
@@ -113,7 +140,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = lib.optionalString onlyLib ''
-    install -D -t $out/lib libdm/ioctl/libdevmapper.${if stdenv.targetPlatform.isStatic then "a" else "so"}
+    install -D -t $out/lib libdm/ioctl/libdevmapper.${if stdenv.hostPlatform.isStatic then "a" else "so"}
     make -C libdm install_include
     make -C libdm install_pkgconfig
   '';

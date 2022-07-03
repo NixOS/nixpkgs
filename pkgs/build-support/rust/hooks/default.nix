@@ -1,6 +1,7 @@
 { buildPackages
 , callPackage
 , cargo
+, clang
 , diffutils
 , lib
 , makeSetupHook
@@ -92,4 +93,13 @@ in {
           rustBuildPlatform rustTargetPlatform rustTargetPlatformSpec;
       };
     } ./maturin-build-hook.sh) {};
+
+    bindgenHook = callPackage ({}: makeSetupHook {
+      name = "rust-bindgen-hook";
+      substitutions = {
+        libclang = clang.cc.lib;
+        inherit clang;
+      };
+    }
+    ./rust-bindgen-hook.sh) {};
 }

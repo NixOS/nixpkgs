@@ -3,14 +3,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "probe-run";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "1nfbpdx378p988q75hka9r8zp3xb9zy3dnagcxmha6dca5dhgsdm";
+    sha256 = "sha256-7o0aRiCxWoDoMysXIPyiBqH/8TtFo87im6Y0OFL0cTA=";
   };
 
-  cargoSha256 = "05p3vmar00215x4mwsvs5knf4wrwmpq52rmbbi6b4qaqs3gqaghy";
+  cargoSha256 = "sha256-vREz3FTZXMrc18LXIycJXX6SgW6IKGIgL/+79dMfNjk=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libusb1 ]
@@ -21,6 +21,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/knurling-rs/probe-run";
     changelog = "https://github.com/knurling-rs/probe-run/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ hoverbear ];
+    maintainers = with maintainers; [ hoverbear newam ];
   };
 }

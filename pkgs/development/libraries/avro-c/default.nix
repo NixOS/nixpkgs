@@ -1,4 +1,4 @@
-{ lib, stdenv, cmake, fetchurl, pkg-config, jansson, zlib }:
+{ lib, stdenv, cmake, fetchurl, pkg-config, jansson, snappy, xz, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "avro-c";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
 
-  buildInputs = [ jansson zlib ];
+  buildInputs = [ jansson snappy xz zlib ];
 
   meta = with lib; {
     description = "A C library which implements parts of the Avro Specification";

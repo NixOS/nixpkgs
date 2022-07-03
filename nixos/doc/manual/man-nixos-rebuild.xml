@@ -92,6 +92,10 @@
    </arg>
 
    <arg>
+    <option>--no-flake</option>
+   </arg>
+
+   <arg>
     <option>--override-input</option> <replaceable>input-name</replaceable> <replaceable>flake-uri</replaceable>
    </arg>
 
@@ -544,6 +548,14 @@
       (<replaceable>user@host</replaceable>). You can also set ssh options by
       defining the <envar>NIX_SSHOPTS</envar> environment variable.
      </para>
+
+     <para>
+      Note that <command>nixos-rebuild</command> honors the
+      <literal>nixpkgs.crossSystem</literal> setting of the given configuration
+      but disregards the true architecture of the target host. Hence the
+      <literal>nixpkgs.crossSystem</literal> setting has to match the target
+      platform or else activation will fail.
+     </para>
     </listitem>
    </varlistentry>
 
@@ -590,6 +602,20 @@
       <literal>nixosConfigurations.<replaceable>name</replaceable></literal>. If
       <replaceable>name</replaceable> is omitted, it default to the
       current host name.
+     </para>
+    </listitem>
+   </varlistentry>
+
+   <varlistentry>
+    <term>
+     <option>--no-flake</option>
+    </term>
+    <listitem>
+     <para>
+      Do not imply <option>--flake</option> if
+      <filename>/etc/nixos/flake.nix</filename> exists. With this
+      option, it is possible to build non-flake NixOS configurations
+      even if the current NixOS systems uses flakes.
      </para>
     </listitem>
    </varlistentry>

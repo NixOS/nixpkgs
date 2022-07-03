@@ -10,6 +10,7 @@
 , freetype
 , pkg-config
 , which
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype.dev}/include/freetype2";
   '';
+
+  passthru.tests.test = nixosTests.terminal-emulators.mrxvt;
 
   meta = with lib; {
     description = "Lightweight multitabbed feature-rich X11 terminal emulator";

@@ -32,7 +32,8 @@ rec {
   '';
 
   sizedLogo = size: stdenv.mkDerivation {
-    name = ''octave-logo-${octave.version}-${size}x${size}.png'';
+    pname = "octave-logo-${size}x${size}.png";
+    inherit (octave) version;
 
     src = octave.src;
 

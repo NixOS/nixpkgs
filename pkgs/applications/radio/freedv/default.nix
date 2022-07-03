@@ -1,16 +1,18 @@
-{ lib
+{ config
+, lib
 , stdenv
 , fetchFromGitHub
 , cmake
 , codec2
+, libpulseaudio
 , libsamplerate
 , libsndfile
 , lpcnetfreedv
 , portaudio
-, pulseaudio
 , speexdsp
 , hamlib
 , wxGTK31-gtk3
+, pulseSupport ? config.pulseaudio or stdenv.isLinux
 }:
 
 stdenv.mkDerivation rec {
@@ -33,17 +35,19 @@ stdenv.mkDerivation rec {
     speexdsp
     hamlib
     wxGTK31-gtk3
-  ] ++ (if stdenv.isLinux then [ pulseaudio ] else [ portaudio ]);
+  ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ]);
 
   cmakeFlags = [
     "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
     "-DUSE_STATIC_DEPS:BOOL=FALSE"
-  ] ++ lib.optionals stdenv.isLinux [ "-DUSE_PULSEAUDIO:BOOL=TRUE" ];
+  ] ++ lib.optionals pulseSupport [ "-DUSE_PULSEAUDIO:BOOL=TRUE" ];
 
   meta = with lib; {
     homepage = "https://freedv.org/";
     description = "Digital voice for HF radio";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ mvs ];
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;  # see https://github.com/NixOS/nixpkgs/issues/165422
   };
 }

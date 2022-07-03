@@ -4,6 +4,7 @@
 
   # build inputs
 , atk
+, file
 , gdk-pixbuf
 , glib-networking
 , gnome-desktop
@@ -17,7 +18,7 @@
 
   # check inputs
 , xvfb-run
-, nose
+, nose2
 , flake8
 
   # python dependencies
@@ -30,7 +31,7 @@
 , pyyaml
 , requests
 , keyring
-, python_magic
+, python-magic
 
   # commands that lutris needs
 , xrandr
@@ -83,13 +84,13 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-original";
-  version = "0.5.9.1";
+  version = "0.5.10.1";
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
-    rev = "v${version}";
-    sha256 = "sha256-ykPJneCKbFKv0x/EDo9PkRb1LkMeFeYzTDmvE3ShNe0=";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-Bf8UEGEM6M4PKoX/qKQNb9XxrxLcjKZD1vR3R2/PykI=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -103,6 +104,7 @@ buildPythonApplication rec {
     libnotify
     pango
     webkitgtk
+    python-magic
   ] ++ gstDeps;
 
   propagatedBuildInputs = [
@@ -115,22 +117,22 @@ buildPythonApplication rec {
     pillow
     dbus-python
     keyring
-    python_magic
+    python-magic
   ];
 
-  checkInputs = [ xvfb-run nose flake8 ] ++ requiredTools;
+  postPatch = ''
+    substituteInPlace lutris/util/magic.py \
+      --replace "'libmagic.so.1'" "'${lib.getLib file}/lib/libmagic.so.1'"
+  '';
+
+
+  checkInputs = [ xvfb-run nose2 flake8 ] ++ requiredTools;
   preCheck = "export HOME=$PWD";
   checkPhase = ''
     runHook preCheck
     xvfb-run -s '-screen 0 800x600x24' make test
     runHook postCheck
   '';
-
-  # unhardcodes xrandr and fixes nosetests
-  # upstream in progress: https://github.com/lutris/lutris/pull/3754
-  patches = [
-    ./fixes.patch
-  ];
 
   # avoid double wrapping
   dontWrapGApps = true;
@@ -146,7 +148,7 @@ buildPythonApplication rec {
     homepage = "https://lutris.net";
     description = "Open Source gaming platform for GNU/Linux";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chiiruno ];
+    maintainers = with maintainers; [ Madouura ];
     platforms = platforms.linux;
   };
 }

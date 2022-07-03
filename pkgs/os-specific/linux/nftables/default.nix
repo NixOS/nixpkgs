@@ -1,47 +1,43 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, file, flex
+{ lib, stdenv, fetchurl, pkg-config, bison, flex
 , asciidoc, libxslt, findXMLCatalogs, docbook_xml_dtd_45, docbook_xsl
 , libmnl, libnftnl, libpcap
-, gmp, jansson, readline
+, gmp, jansson, libedit
+, autoreconfHook
 , withDebugSymbols ? false
 , withPython ? false , python3
 , withXtables ? true , iptables
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
-  version = "1.0.1";
+  version = "1.0.4";
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.bz2";
-    sha256 = "08x4xw0s5sap3q7jfr91v7mrkxrydi4dvsckw85ims0qb1ibmviw";
+    hash = "sha256-kn+x/qH2haMowQz3ketlXX4e1J0xDupcsxAd/Y1sujU=";
   };
 
   nativeBuildInputs = [
-    pkg-config bison file flex
+    autoreconfHook
+    pkg-config bison flex
     asciidoc docbook_xml_dtd_45 docbook_xsl findXMLCatalogs libxslt
   ];
 
   buildInputs = [
     libmnl libnftnl libpcap
-    gmp jansson readline
-  ] ++ optional withXtables iptables
-    ++ optional withPython python3;
-
-  preConfigure = ''
-    substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file
-  '';
+    gmp jansson libedit
+  ] ++ lib.optional withXtables iptables
+    ++ lib.optional withPython python3;
 
   configureFlags = [
     "--with-json"
-    "--with-cli=readline"  # TODO: maybe switch to editline
-  ] ++ optional (!withDebugSymbols) "--disable-debug"
-    ++ optional (!withPython) "--disable-python"
-    ++ optional withPython "--enable-python"
-    ++ optional withXtables "--with-xtables";
+    "--with-cli=editline"
+  ] ++ lib.optional (!withDebugSymbols) "--disable-debug"
+    ++ lib.optional (!withPython) "--disable-python"
+    ++ lib.optional withPython "--enable-python"
+    ++ lib.optional withXtables "--with-xtables";
 
-  meta = {
+  meta = with lib; {
     description = "The project that aims to replace the existing {ip,ip6,arp,eb}tables framework";
     homepage = "https://netfilter.org/projects/nftables/";
     license = licenses.gpl2Only;

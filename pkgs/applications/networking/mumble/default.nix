@@ -1,60 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, qt5
+{ lib, stdenv, fetchFromGitHub, pkg-config, qt5, cmake
 , avahi, boost, libopus, libsndfile, protobuf, speex, libcap
 , alsa-lib, python3
 , rnnoise
-, jackSupport ? false, libjack2
-, speechdSupport ? false, speechd
-, pulseSupport ? false, libpulseaudio
-, iceSupport ? false, zeroc-ice
-, grpcSupport ? false, grpc, which
 , nixosTests
+, poco
+, flac
+, libogg
+, libvorbis
+, grpcSupport ? false, grpc, which
+, iceSupport ? true, zeroc-ice
+, jackSupport ? false, libjack2
+, pipewireSupport ? true, pipewire
+, pulseSupport ? true, libpulseaudio
+, speechdSupport ? false, speechd
 }:
 
 let
-  generic = overrides: source: qt5.mkDerivation (source // overrides // {
+  generic = overrides: source: stdenv.mkDerivation (source // overrides // {
     pname = overrides.type;
     version = source.version;
 
-    patches = (source.patches or [])
-      ++ [ ./fix-rnnoise-argument.patch ];
-
-    nativeBuildInputs = [ pkg-config python3 qt5.qmake ]
+    nativeBuildInputs = [ cmake pkg-config python3 qt5.wrapQtAppsHook qt5.qttools ]
       ++ (overrides.nativeBuildInputs or [ ]);
 
-    buildInputs = [ boost protobuf avahi ]
+    buildInputs = [ avahi boost poco protobuf ]
       ++ (overrides.buildInputs or [ ]);
 
-    qmakeFlags = [
-      "CONFIG+=c++11"
-      "CONFIG+=shared"
-      "CONFIG+=no-g15"
-      "CONFIG+=packaged"
-      "CONFIG+=no-update"
-      "CONFIG+=no-embed-qt-translations"
-      "CONFIG+=bundled-celt"
-      "CONFIG+=no-bundled-opus"
-      "CONFIG+=no-bundled-speex"
-      "DEFINES+=PLUGIN_PATH=${placeholder "out"}/lib/mumble"
-    ] ++ lib.optional (!speechdSupport) "CONFIG+=no-speechd"
-      ++ lib.optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
-      ++ (overrides.configureFlags or [ ]);
+    cmakeFlags = [
+      "-D g15=OFF"
+    ] ++ (overrides.configureFlags or [ ]);
 
     preConfigure = ''
        patchShebangs scripts
-    '';
-
-    makeFlags = [ "release" ];
-
-    installPhase = ''
-      runHook preInstall
-
-      ${overrides.installPhase}
-
-      # doc stuff
-      mkdir -p $out/share/man/man1
-      install -Dm644 man/mum* $out/share/man/man1/
-
-      runHook postInstall
     '';
 
     passthru.tests.connectivity = nixosTests.mumble;
@@ -63,7 +40,7 @@ let
       description = "Low-latency, high quality voice chat software";
       homepage = "https://mumble.info";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ petabyteboy infinisil felixsinger ];
+      maintainers = with maintainers; [ infinisil felixsinger ];
       platforms = platforms.linux;
     };
   });
@@ -72,66 +49,63 @@ let
     type = "mumble";
 
     nativeBuildInputs = [ qt5.qttools ];
-    buildInputs = [ libopus libsndfile speex qt5.qtsvg rnnoise ]
-      ++ lib.optional stdenv.isLinux alsa-lib
+    buildInputs = [ flac libogg libopus libsndfile libvorbis qt5.qtsvg rnnoise speex ]
+      ++ lib.optional (!jackSupport) alsa-lib
       ++ lib.optional jackSupport libjack2
       ++ lib.optional speechdSupport speechd
-      ++ lib.optional pulseSupport libpulseaudio;
+      ++ lib.optional pulseSupport libpulseaudio
+      ++ lib.optional pipewireSupport pipewire;
 
     configureFlags = [
-      "CONFIG+=no-server"
-    ];
+      "-D server=OFF"
+      "-D bundled-celt=ON"
+      "-D bundled-opus=OFF"
+      "-D bundled-speex=OFF"
+      "-D bundled-rnnoise=OFF"
+      "-D bundle-qt-translations=OFF"
+      "-D update=OFF"
+      "-D overlay-xcompile=OFF"
+      "-D oss=OFF"
+    ] ++ lib.optional (!speechdSupport) "-D speechd=OFF"
+      ++ lib.optional (!pulseSupport) "-D pulseaudio=OFF"
+      ++ lib.optional (!pipewireSupport) "-D pipewire=OFF"
+      ++ lib.optional jackSupport "-D alsa=OFF -D jackaudio=ON";
 
     NIX_CFLAGS_COMPILE = lib.optional speechdSupport "-I${speechd}/include/speech-dispatcher";
 
-    installPhase = ''
-      # bin stuff
-      install -Dm755 release/mumble $out/bin/mumble
-      install -Dm755 scripts/mumble-overlay $out/bin/mumble-overlay
-
-      # lib stuff
-      mkdir -p $out/lib/mumble
-      cp -P release/libmumble.so* $out/lib
-      cp -P release/libcelt* $out/lib/mumble
-      cp -P release/plugins/* $out/lib/mumble
-
-      # icons
-      install -Dm644 scripts/mumble.desktop $out/share/applications/mumble.desktop
-      install -Dm644 icons/mumble.svg $out/share/icons/hicolor/scalable/apps/mumble.svg
+    postFixup = ''
+      wrapProgram $out/bin/mumble \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath (lib.optional pulseSupport libpulseaudio ++ lib.optional pipewireSupport pipewire)}"
     '';
   } source;
 
   server = source: generic {
     type = "murmur";
 
-    postPatch = lib.optionalString iceSupport ''
-      grep -Rl '/usr/share/Ice' . | xargs sed -i 's,/usr/share/Ice/,${zeroc-ice.dev}/share/ice/,g'
-    '';
-
     configureFlags = [
-      "CONFIG+=no-client"
-    ] ++ lib.optional (!iceSupport) "CONFIG+=no-ice"
-      ++ lib.optional grpcSupport "CONFIG+=grpc";
+      "-D client=OFF"
+    ] ++ lib.optional (!iceSupport) "-D ice=OFF"
+      ++ lib.optionals iceSupport [
+        "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
+        "-D CMAKE_PREFIX_PATH=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
+        "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
+      ]
+      ++ lib.optional grpcSupport "-D grpc=ON";
 
     buildInputs = [ libcap ]
       ++ lib.optional iceSupport zeroc-ice
       ++ lib.optionals grpcSupport [ grpc which ];
-
-    installPhase = ''
-      # bin stuff
-      install -Dm755 release/murmurd $out/bin/murmurd
-    '';
   } source;
 
   source = rec {
-    version = "1.3.4";
+    version = "unstable-1.4.231";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
-      rev = version;
-      sha256 = "sha256-njovShQpW0JNeeE8VugdmGzDk3fKG8/fcJoBgdyTZug=";
+      rev = "9e0e274d6a9d8a9919267e747d05d0500d150560";
+      sha256 = "0whvb4nlf7gjf2v7wsaq0ir18mshhw5wi8c9q9qz43wnh42nn2qi";
       fetchSubmodules = true;
     };
   };

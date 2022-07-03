@@ -1,21 +1,17 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, libiconv }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "resvg";
-  version = "0.21.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-I0I6gb2jG0ZeEp6WwDipe43wuek43CWm0zGBX2hAros=";
+    sha256 = "sha256-GiRLunAfDBqJtaq2ccQ3tvPDfmTg5OklkI6apAiMYL0=";
   };
 
-  cargoSha256 = "sha256-EdbyaVrHjjVUNmQM96VKCeU3ss1G/N4OZxFMLvFgRqY=";
-
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
-
-  doCheck = false;
+  cargoSha256 = "sha256-rFhmR3H2u5LBBUCK5mCfHvIevFjbIe+CQLS535mJ53w=";
 
   meta = with lib; {
     description = "An SVG rendering library";

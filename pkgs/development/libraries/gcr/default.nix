@@ -1,5 +1,6 @@
 { lib, stdenv
 , fetchurl
+, fetchpatch
 , pkg-config
 , meson
 , ninja
@@ -15,7 +16,7 @@
 , openssh
 , systemd
 , gobject-introspection
-, makeWrapper
+, wrapGAppsHook
 , libxslt
 , vala
 , gnome
@@ -34,6 +35,16 @@ stdenv.mkDerivation rec {
     sha256 = "CQn8SeqK1IMtJ1ZP8v0dxmZpbioHxzlBxIgp5gVy2gE=";
   };
 
+  patches = [
+    # Pull upstream fix for meson-0.60:
+    #  https://gitlab.gnome.org/GNOME/gcr/-/merge_requests/81
+    (fetchpatch {
+      name = "meson-0.60.patch";
+      url = "https://gitlab.gnome.org/GNOME/gcr/-/commit/b3ca1d02bb0148ca787ac4aead164d7c8ce2c4d8.patch";
+      sha256 = "15gwxkcm5q5p87p5lrqwgykpzx5gmk179xd3481yak93yhbvy165";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     meson
@@ -42,7 +53,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     libxslt
-    makeWrapper
+    wrapGAppsHook
     vala
     shared-mime-info
   ];
@@ -83,11 +94,6 @@ stdenv.mkDerivation rec {
 
     chmod +x meson_post_install.py
     patchShebangs meson_post_install.py
-  '';
-
-  preFixup = ''
-    wrapProgram "$out/bin/gcr-viewer" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
   passthru = {

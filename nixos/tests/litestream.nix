@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ jwygoda ];
   };
 
-  machine =
+  nodes.machine =
     { pkgs, ... }:
     { services.litestream = {
         enable = true;

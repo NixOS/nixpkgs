@@ -315,7 +315,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
                 "docker inspect ${pkgs.dockerTools.examples.cross.imageName} "
                 + "| ${pkgs.jq}/bin/jq -r .[].Architecture"
             ).strip()
-            == "${if pkgs.system == "aarch64-linux" then "amd64" else "arm64"}"
+            == "${if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then "amd64" else "arm64"}"
         )
 
     with subtest("buildLayeredImage doesn't dereference /nix/store symlink layers"):
@@ -418,6 +418,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             "docker run --rm layered-image-with-path bash -c '[[ -e /hello.txt ]]'",
             "docker rmi layered-image-with-path",
         )
+
+    with subtest("etc"):
+        docker.succeed("${examples.etc} | docker load")
+        docker.succeed("docker run --rm etc | grep localhost")
+        docker.succeed("docker image rm etc:latest")
 
   '';
 })

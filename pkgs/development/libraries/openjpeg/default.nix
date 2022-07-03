@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libpng libtiff lcms2 ];
 
-  doCheck = (testsSupport && !stdenv.isAarch64); # tests fail on aarch64-linux
+  doCheck = (testsSupport && !stdenv.isAarch64 && !stdenv.hostPlatform.isPower64); # tests fail on aarch64-linux and powerpc64
   checkPhase = ''
     substituteInPlace ../tools/ctest_scripts/travis-ci.cmake \
       --replace "JPYLYZER_EXECUTABLE=" "JPYLYZER_EXECUTABLE=\"${jpylyzer}/bin/jpylyzer\" # "

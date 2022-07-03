@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     "--with-tkconfig=${tk}/lib"
   ];
 
+  CXXFLAGS = " --std=c++11 ";
+
   hardeningDisable = [ "format" ];
 
   patchPhase = ''

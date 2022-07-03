@@ -51,7 +51,7 @@ in
 
     services.unifi.openFirewall = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = ''
         Whether or not to open the minimum required ports on the firewall.
 
@@ -84,10 +84,6 @@ in
   };
 
   config = mkIf cfg.enable {
-
-    warnings = optional
-      (options.services.unifi.openFirewall.highestPrio >= (mkOptionDefault null).priority)
-      "The current services.unifi.openFirewall = true default is deprecated and will change to false in 22.11. Set it explicitly to silence this warning.";
 
     users.users.unifi = {
       isSystemUser = true;

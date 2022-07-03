@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ndcri2ddzqlsxvy1b607ajyd4dxpiagzx331yyi7hf3ijph129f";
   };
 
-  buildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake ];
+  buildInputs = [ libtool ];
 
   preConfigure = "./autogen.sh";
 

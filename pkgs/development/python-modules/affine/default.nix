@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "affine";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00jil4q3b17qml6azim7s7zar6qb1vhsf0g888y637m23bpms11f";
+    sha256 = "sha256-1nbeZhV61q+Z/9lOD1Tonfw1sPtyUurS7QrS3KQxvdA=";
   };
 
   checkInputs = [ pytest ];

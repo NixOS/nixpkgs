@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, gnome, gettext }:
+{ stdenv
+, lib
+, fetchurl
+, meson
+, ninja
+, gnome
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-backgrounds";
-  version = "41.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-backgrounds/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "HaGsDSYb7fD80shbSAvGVQXiPPUfEUMSbA03cX5pMUU=";
-  };
-
-  passthru = {
-    updateScript = gnome.updateScript { packageName = "gnome-backgrounds"; attrPath = "gnome.gnome-backgrounds"; };
+    sha256 = "TH/hoJ9FnF93GJpZglJPzgXYiJRJVdZ5kQ8jRgbBKV0=";
   };
 
   patches = [
@@ -20,9 +22,22 @@ stdenv.mkDerivation rec {
     ./stable-dir.patch
   ];
 
-  nativeBuildInputs = [ meson ninja pkg-config gettext ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
+
+  passthru = {
+    updateScript = gnome.updateScript {
+      packageName = "gnome-backgrounds";
+      attrPath = "gnome.gnome-backgrounds";
+    };
+  };
 
   meta = with lib; {
+    description = "Default wallpaper set for GNOME";
+    homepage = "https://gitlab.gnome.org/GNOME/gnome-backgrounds";
+    license = licenses.cc-by-sa-30;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };

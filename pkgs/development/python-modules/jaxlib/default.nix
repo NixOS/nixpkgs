@@ -18,11 +18,6 @@
 , wheel
 , which
 
-  # Build-time and runtime CUDA dependencies:
-, cudatoolkit ? null
-, cudnn ? null
-, nccl ? null
-
   # Python dependencies:
 , absl-py
 , flatbuffers
@@ -42,12 +37,15 @@
   # CUDA flags:
 , cudaCapabilities ? [ "sm_35" "sm_50" "sm_60" "sm_70" "sm_75" "compute_80" ]
 , cudaSupport ? false
+, cudaPackages ? {}
 
   # MKL:
 , mklSupport ? true
 }:
 
 let
+
+  inherit (cudaPackages) cudatoolkit cudnn nccl;
 
   pname = "jaxlib";
   version = "0.3.0";
@@ -57,6 +55,8 @@ let
     homepage = "https://github.com/google/jax";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
+    platforms = [ "x86_64-linux" "aarch64-darwin" "x86_64-darwin"];
+    hydraPlatforms = ["x86_64-linux" ]; # Don't think anybody is checking the darwin builds
   };
 
   cudatoolkit_joined = symlinkJoin {
@@ -216,9 +216,9 @@ let
     fetchAttrs = {
       sha256 =
         if cudaSupport then
-          "1k0rjxqjm703gd9navwzx5x3874b4dxamr62m1fxhm79d271zxis"
+          "0d2rqwk9n4a6c51m4g21rxymv85kw2sdksni30cdx3pdcdbqgic7"
         else
-          "0ivah1w41jcj13jm740qzwx5h0ia8vbj71pjgd0zrfk3c92kll41";
+          "0q540mwmh7grig0qq48ynzqi0gynimxnrq7k97wribqpkx99k39d";
     };
 
     buildAttrs = {
@@ -259,7 +259,13 @@ buildPythonPackage {
 
   src = "${bazel-build}/jaxlib-${version}-cp${builtins.replaceStrings ["."] [""] python.pythonVersion}-none-manylinux2010_${stdenv.targetPlatform.linuxArch}.whl";
 
+  # Note that cudatoolkit is necessary since jaxlib looks for "ptxas" in $PATH.
+  # See https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621 for
+  # more info.
   postInstall = lib.optionalString cudaSupport ''
+    mkdir -p $out/bin
+    ln -s ${cudatoolkit}/bin/ptxas $out/bin/ptxas
+
     find $out -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
       addOpenGLRunpath "$lib"
       patchelf --set-rpath "${cudatoolkit}/lib:${cudatoolkit.lib}/lib:${cudnn}/lib:${nccl}/lib:$(patchelf --print-rpath "$lib")" "$lib"

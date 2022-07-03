@@ -26,8 +26,36 @@
       </listitem>
       <listitem>
         <para>
-          <literal>iptables</literal> now uses
-          <literal>nf_tables</literal> backend.
+          <literal>iptables</literal> is now using
+          <literal>nf_tables</literal> under the hood, by using
+          <literal>iptables-nft</literal>, similar to
+          <link xlink:href="https://wiki.debian.org/nftables#Current_status">Debian</link>
+          and
+          <link xlink:href="https://fedoraproject.org/wiki/Changes/iptables-nft-default">Fedora</link>.
+          This means, <literal>ip[6]tables</literal>,
+          <literal>arptables</literal> and <literal>ebtables</literal>
+          commands will actually show rules from some specific tables in
+          the <literal>nf_tables</literal> kernel subsystem. In case
+          you’re migrating from an older release without rebooting,
+          there might be cases where you end up with iptable rules
+          configured both in the legacy <literal>iptables</literal>
+          kernel backend, as well as in the <literal>nf_tables</literal>
+          backend. This can lead to confusing firewall behaviour. An
+          <literal>iptables-save</literal> after switching will complain
+          about <quote>iptables-legacy tables present</quote>. It’s
+          probably best to reboot after the upgrade, or manually
+          removing all legacy iptables rules (via the
+          <literal>iptables-legacy</literal> package).
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          systemd got an <literal>nftables</literal> backend, and
+          configures (networkd) rules in their own
+          <literal>io.systemd.*</literal> tables. Check
+          <literal>nft list ruleset</literal> to see these rules, not
+          <literal>iptables-save</literal> (which only shows
+          <literal>iptables</literal>-created rules.
         </para>
       </listitem>
       <listitem>
@@ -541,8 +569,9 @@
       <listitem>
         <para>
           The NixOS VM test framework,
-          <literal>pkgs.nixosTest</literal>/<literal>make-test-python.nix</literal>,
-          now requires detaching commands such as
+          <literal>pkgs.nixosTest</literal>/<literal>make-test-python.nix</literal>
+          (<literal>pkgs.testers.nixosTest</literal> since 22.05), now
+          requires detaching commands such as
           <literal>succeed(&quot;foo &amp;&quot;)</literal> and
           <literal>succeed(&quot;foo | xclip -i&quot;)</literal> to
           close stdout. This can be done with a redirect such as
@@ -1427,6 +1456,17 @@ Superuser created successfully.
           Unprivileged access can be reenabled via the
           <literal>kernel.unprivileged_bpf_disabled</literal> sysctl
           knob.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>/usr</literal> will always be included in the initial
+          ramdisk. See the
+          <literal>fileSystems.&lt;name&gt;.neededForBoot</literal>
+          option. If any files exist under <literal>/usr</literal>
+          (which is not typical for NixOS), they will be included in the
+          initial ramdisk, increasing its size to a possibly problematic
+          extent.
         </para>
       </listitem>
     </itemizedlist>

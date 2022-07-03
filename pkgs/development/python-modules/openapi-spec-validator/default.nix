@@ -1,17 +1,23 @@
 { lib, buildPythonPackage, isPy27, fetchPypi
 , jsonschema, openapi-schema-validator, pyyaml, six, pathlib
-, mock, pytest, pytest-cov, pytest-flake8, tox, setuptools }:
+, mock, pytest, pytest-cov, pytest-flake8, tox, setuptools
+, poetry-core
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.3.1";
+  version = "0.4.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3d70e6592754799f7e77a45b98c6a91706bdd309a425169d17d8e92173e198a2";
+    sha256 = "sha256-l/JYhQr8l7BI98JlOFXg+I+masEDwr5Qd8eWCsoq1Jo=";
   };
 
-  propagatedBuildInputs = [ jsonschema openapi-schema-validator pyyaml six setuptools ]
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [ jsonschema openapi-schema-validator pyyaml six setuptools requests ]
     ++ (lib.optionals (isPy27) [ pathlib ]);
 
   checkInputs = [ mock pytest pytest-cov pytest-flake8 tox ];

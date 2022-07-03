@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-graphviz";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "dylanowen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yY8ZdRNP0G9dwrwUtNZIaodIlEK4GRgZQ5D1GpLhDGg=";
+    sha256 = "sha256-HTHGb23wc10iAWXX/TNMXjTLWm+OSf1WWW1+/aQRcsk=";
   };
 
-  cargoSha256 = "sha256-d8/xa2Aq6g0Kvqq11kzVTp1oooN6dPowpKW0uenBevw=";
+  cargoSha256 = "sha256-7z/4brKY9vpic8mv1b4P/8DE+VyColYnPPoPmY9891M=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
 

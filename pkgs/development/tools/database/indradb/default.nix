@@ -3,6 +3,7 @@
 , lib
 , rustPlatform
 , rustfmt
+, protobuf
 }:
 let
   src = fetchFromGitHub {
@@ -30,7 +31,9 @@ in
 
     buildAndTestSubdir = "server";
 
-    nativeBuildInputs = [ rustfmt ];
+    PROTOC = "${protobuf}/bin/protoc";
+
+    nativeBuildInputs = [ rustfmt rustPlatform.bindgenHook ];
 
     # test rely on libindradb and it can't be found
     # failure at https://github.com/indradb/indradb/blob/master/server/tests/plugins.rs#L63
@@ -44,7 +47,9 @@ in
 
     cargoSha256 = "sha256-pxan6W/CEsOxv8DbbytEBuIqxWn/C4qT4ze/RnvESOM=";
 
-    nativeBuildInputs = [ rustfmt ];
+    PROTOC = "${protobuf}/bin/protoc";
+
+    nativeBuildInputs = [ rustfmt rustPlatform.bindgenHook ];
 
     buildAndTestSubdir = "client";
   };

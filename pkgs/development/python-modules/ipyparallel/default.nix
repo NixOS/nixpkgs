@@ -9,23 +9,26 @@
 , ipython
 , jupyter-client
 , ipykernel
+, packaging
+, psutil
 , tornado
+, tqdm
 , isPy3k
 , futures ? null
 }:
 
 buildPythonPackage rec {
   pname = "ipyparallel";
-  version = "8.1.0";
+  version = "8.2.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "63f7e136e88f890e9802522fa5475dd81e7614ba06a8cfe4f80cc3056fdb7d73";
+    sha256 = "sha256-8mdHPFL8aohsa4Fq2xVb7Asne8fSJPs/q+uDg05zPHI=";
   };
 
   buildInputs = [ nose ];
 
-  propagatedBuildInputs = [ python-dateutil ipython_genutils decorator pyzmq ipython jupyter-client ipykernel tornado
+  propagatedBuildInputs = [ python-dateutil ipython_genutils decorator pyzmq ipython jupyter-client ipykernel packaging psutil tornado tqdm
   ] ++ lib.optionals (!isPy3k) [ futures ];
 
   # Requires access to cluster

@@ -1,11 +1,13 @@
 { lib
 , brotli
+, brotlicffi
 , buildPythonPackage
+, certifi
 , cryptography
 , python-dateutil
 , fetchPypi
+, isPyPy
 , idna
-, isPy27
 , mock
 , pyopenssl
 , pysocks
@@ -18,22 +20,17 @@
 
 buildPythonPackage rec {
   pname = "urllib3";
-  version = "1.26.8";
+  version = "1.26.9";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Dnwz2aY+fd/LhngKrIe+/C+930bFjbtIfghV987sKDw=";
+    hash = "sha256-qrrxZHeAal4d0ZqkH4wreVDdPHRjYtfjIj2+beasRI4=";
   };
 
-  propagatedBuildInputs = [
-    brotli
-    pysocks
-  ] ++ lib.optionals isPy27 [
-    cryptography
-    idna
-    pyopenssl
-  ];
+  # FIXME: remove backwards compatbility hack
+  propagatedBuildInputs = passthru.optional-dependencies.brotli
+    ++ passthru.optional-dependencies.secure;
 
   checkInputs = [
     python-dateutil
@@ -65,6 +62,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "urllib3"
   ];
+
+  passthru.optional-dependencies = {
+    brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
+    secure = [ certifi cryptography idna pyopenssl ];
+    socks = [ pysocks ];
+  };
 
   meta = with lib; {
     description = "Powerful, sanity-friendly HTTP client for Python";

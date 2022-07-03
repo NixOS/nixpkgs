@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     fnvhash
-    python_magic
+    python-magic
   ] ++ [
     wireshark-cli
   ];

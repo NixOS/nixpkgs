@@ -15,7 +15,6 @@
 , freetype
 , libass
 , libpthreadstubs
-, mujs
 , nv-codec-headers
 , lua
 , libuchardet
@@ -56,6 +55,7 @@
 , cmsSupport         ? true,           lcms2
 , dvdnavSupport      ? stdenv.isLinux, libdvdnav
 , jackaudioSupport   ? false,          libjack2
+, javascriptSupport  ? true,           mujs
 , libpngSupport      ? true,           libpng
 , openalSupport      ? true,           openalSoft
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio
@@ -108,6 +108,7 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature archiveSupport  "libarchive")
     (lib.enableFeature cddaSupport     "cdda")
     (lib.enableFeature dvdnavSupport   "dvdnav")
+    (lib.enableFeature javascriptSupport "javascript")
     (lib.enableFeature openalSupport   "openal")
     (lib.enableFeature sdl2Support     "sdl2")
     (lib.enableFeature sixelSupport    "sixel")
@@ -134,7 +135,6 @@ in stdenv.mkDerivation rec {
     libpthreadstubs
     libuchardet
     luaEnv
-    mujs
   ] ++ lib.optionals alsaSupport        [ alsa-lib ]
     ++ lib.optionals archiveSupport     [ libarchive ]
     ++ lib.optionals bluraySupport      [ libbluray ]
@@ -145,6 +145,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optionals drmSupport         [ libdrm mesa ]
     ++ lib.optionals dvdnavSupport      [ libdvdnav libdvdnav.libdvdread ]
     ++ lib.optionals jackaudioSupport   [ libjack2 ]
+    ++ lib.optionals javascriptSupport  [ mujs ]
     ++ lib.optionals libpngSupport      [ libpng ]
     ++ lib.optionals openalSupport      [ openalSoft ]
     ++ lib.optionals pulseSupport       [ libpulseaudio ]

@@ -63,6 +63,9 @@ let
       nukeReferences
     ];
 
+    # avoid pub phase
+    dontBuild = true;
+
     installPhase = ''
       . ${../fetchgit/deterministic-git}
 
@@ -76,6 +79,7 @@ let
       flutter config --enable-linux-desktop
       flutter packages get
       flutter build linux || true # so it downloads tools
+      ${lib.optionalString (args ? flutterExtraFetchCommands) args.flutterExtraFetchCommands}
 
       RES="$TMP"
 
@@ -127,6 +131,7 @@ let
     '';
 
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+    SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
@@ -207,6 +212,7 @@ let
 
     # ensure we're using a lockfile for the right package version
     if [ -e pubspec.lock ]; then
+      # FIXME: currently this is broken. in theory this should not break, but flutter has it's own way of doing things.
       # diff -u pubspec.lock $depsFolder/pubspec.lock
       true
     else
@@ -248,9 +254,10 @@ let
     mkdir -p $out/bin
     mv $built $out/app
 
-    for f in $built/data/flutter_assets/assets/*.desktop; do
+    for f in $(find $out/app -iname "*.desktop" -type f); do
       install -D $f $out/share/applications/$(basename $f)
     done
+
     for f in $(find $out/app -maxdepth 1 -type f); do
       ln -s $f $out/bin/$(basename $f)
     done

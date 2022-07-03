@@ -1,40 +1,43 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "syft";
-  version = "0.37.10";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-j3/WE13djrgI7S6YISg9kPIkV0IR0C65QU8zj0z0MVg=";
+    sha256 = "sha256-VsiQa3W/5eG5/U4sGRvYPa0MDYrayXIJtbutPnH/vUI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
     postFetch = ''
       cd "$out"
-      commit="$(git rev-parse HEAD)"
-      source_date_epoch="$(git log --date=format:'%Y-%m-%dT%H:%M:%SZ' -1 --pretty=%ad)"
-      substituteInPlace "$out/internal/version/build.go" \
-        --replace 'gitCommit = valueNotProvided' "gitCommit = \"$commit\"" \
-        --replace 'buildDate = valueNotProvided' "buildDate = \"$source_date_epoch\""
+      git rev-parse HEAD > $out/COMMIT
+      # 0000-00-00T00:00:00Z
+      date -u -d "@$(git log -1 --pretty=%ct)" "+%Y-%m-%dT%H:%M:%SZ" > $out/SOURCE_DATE_EPOCH
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorSha256 = "sha256-gIcPxSzWzldR9UX4iB2fkwc0BfATT1B+Nge+sGefmj8=";
+  vendorSha256 = "sha256-NENKogPlp6upMkRULnkkqMep9U7cI+CR+6TDF38T2vk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  subPackages = [ "." ];
+  subPackages = [ "cmd/syft" ];
 
   ldflags = [
     "-s"
     "-w"
     "-X github.com/anchore/syft/internal/version.version=${version}"
-    "-X github.com/anchore/syft/internal/version.gitTreeState=clean"
     "-X github.com/anchore/syft/internal/version.gitDescription=v${version}"
+    "-X github.com/anchore/syft/internal/version.gitTreeState=clean"
   ];
+
+  preBuild = ''
+    ldflags+=" -X github.com/anchore/syft/internal/version.gitCommit=$(cat COMMIT)"
+    ldflags+=" -X github.com/anchore/syft/internal/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
+  '';
 
   # tests require a running docker instance
   doCheck = false;
@@ -49,6 +52,17 @@ buildGoModule rec {
       --zsh <($out/bin/syft completion zsh)
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    export SYFT_CHECK_FOR_APP_UPDATE=false
+    $out/bin/syft --help
+    $out/bin/syft version | grep "${version}"
+
+    runHook postInstallCheck
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/anchore/syft";
     changelog = "https://github.com/anchore/syft/releases/tag/v${version}";
@@ -60,5 +74,8 @@ buildGoModule rec {
     '';
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ jk ];
+    # Need updated macOS SDK
+    # https://github.com/NixOS/nixpkgs/issues/101229
+    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }

@@ -1,96 +1,106 @@
-{ config, lib, stdenv, fetchFromGitHub
+{ lib, config, clangStdenv, fetchFromGitHub
 , autoconf
 , automake
 , libtool
 , intltool
 , pkg-config
 , jansson
+, swift-corelibs-libdispatch
 # deadbeef can use either gtk2 or gtk3
-, gtk2Support ? false, gtk2 ? null
-, gtk3Support ? true, gtk3 ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
+, gtk2Support ? false, gtk2
+, gtk3Support ? true, gtk3, gsettings-desktop-schemas, wrapGAppsHook
 # input plugins
-, vorbisSupport ? true, libvorbis ? null
-, mp123Support ? true, libmad ? null
-, flacSupport ? true, flac ? null
-, wavSupport ? true, libsndfile ? null
-, cdaSupport ? true, libcdio ? null, libcddb ? null
-, aacSupport ? true, faad2 ? null
-, opusSupport ? true, opusfile ? null
-, wavpackSupport ? false, wavpack ? null
-, ffmpegSupport ? false, ffmpeg ? null
-, apeSupport ? true, yasm ? null
+, vorbisSupport ? true, libvorbis
+, mp123Support ? true, libmad
+, flacSupport ? true, flac
+, wavSupport ? true, libsndfile
+, cdaSupport ? true, libcdio, libcddb
+, aacSupport ? true, faad2
+, opusSupport ? true, opusfile
+, wavpackSupport ? false, wavpack
+, ffmpegSupport ? false, ffmpeg
+, apeSupport ? true, yasm
 # misc plugins
-, zipSupport ? true, libzip ? null
-, artworkSupport ? true, imlib2 ? null
-, hotkeysSupport ? true, libX11 ? null
-, osdSupport ? true, dbus ? null
+, zipSupport ? true, libzip
+, artworkSupport ? true, imlib2
+, hotkeysSupport ? true, libX11
+, osdSupport ? true, dbus
 # output plugins
-, alsaSupport ? true, alsa-lib ? null
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
+, alsaSupport ? true, alsa-lib
+, pulseSupport ? config.pulseaudio or true, libpulseaudio
 # effect plugins
-, resamplerSupport ? true, libsamplerate ? null
-, overloadSupport ? true, zlib ? null
+, resamplerSupport ? true, libsamplerate
+, overloadSupport ? true, zlib
 # transports
-, remoteSupport ? true, curl ? null
+, remoteSupport ? true, curl
 }:
 
 assert gtk2Support || gtk3Support;
-assert gtk2Support -> gtk2 != null;
-assert gtk3Support -> gtk3 != null && gsettings-desktop-schemas != null && wrapGAppsHook != null;
-assert vorbisSupport -> libvorbis != null;
-assert mp123Support -> libmad != null;
-assert flacSupport -> flac != null;
-assert wavSupport -> libsndfile != null;
-assert cdaSupport -> (libcdio != null && libcddb != null);
-assert aacSupport -> faad2 != null;
-assert opusSupport -> opusfile != null;
-assert zipSupport -> libzip != null;
-assert ffmpegSupport -> ffmpeg != null;
-assert apeSupport -> yasm != null;
-assert artworkSupport -> imlib2 != null;
-assert hotkeysSupport -> libX11 != null;
-assert osdSupport -> dbus != null;
-assert alsaSupport -> alsa-lib != null;
-assert pulseSupport -> libpulseaudio != null;
-assert resamplerSupport -> libsamplerate != null;
-assert overloadSupport -> zlib != null;
-assert wavpackSupport -> wavpack != null;
-assert remoteSupport -> curl != null;
 
-stdenv.mkDerivation rec {
+let
+  inherit (lib) optionals;
+
+  version = "1.9.1";
+in clangStdenv.mkDerivation {
   pname = "deadbeef";
-  version = "1.8.4";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "DeaDBeeF-Player";
     repo = "deadbeef";
+    fetchSubmodules = true;
     rev = version;
-    sha256 = "161b0ll8v4cjgwwmk137hzvh0jidlkx56vjkpnr70f0x4jzv2nll";
+    sha256 = "sha256-e3bAGpkRPIqVWl0nvSZ61JpIQZw24mqE9218SWHBCFo=";
   };
 
-  buildInputs = with lib; [ jansson ]
-    ++ optional gtk2Support gtk2
-    ++ optionals gtk3Support [ gtk3 gsettings-desktop-schemas ]
-    ++ optional vorbisSupport libvorbis
-    ++ optional mp123Support libmad
-    ++ optional flacSupport flac
-    ++ optional wavSupport libsndfile
-    ++ optionals cdaSupport [ libcdio libcddb ]
-    ++ optional aacSupport faad2
-    ++ optional opusSupport opusfile
-    ++ optional zipSupport libzip
-    ++ optional ffmpegSupport ffmpeg
-    ++ optional apeSupport yasm
-    ++ optional artworkSupport imlib2
-    ++ optional hotkeysSupport libX11
-    ++ optional osdSupport dbus
-    ++ optional alsaSupport alsa-lib
-    ++ optional pulseSupport libpulseaudio
-    ++ optional resamplerSupport libsamplerate
-    ++ optional overloadSupport zlib
-    ++ optional wavpackSupport wavpack
-    ++ optional remoteSupport curl
-    ;
+  buildInputs = [
+    jansson
+    swift-corelibs-libdispatch
+  ] ++ optionals gtk2Support [
+    gtk2
+  ] ++ optionals gtk3Support [
+    gtk3
+    gsettings-desktop-schemas
+  ] ++ optionals vorbisSupport [
+    libvorbis
+  ] ++ optionals mp123Support [
+    libmad
+  ] ++ optionals flacSupport [
+    flac
+  ] ++ optionals wavSupport [
+    libsndfile
+  ] ++ optionals cdaSupport [
+    libcdio
+    libcddb
+  ] ++ optionals aacSupport [
+    faad2
+  ] ++ optionals opusSupport [
+    opusfile
+  ] ++ optionals zipSupport [
+    libzip
+  ] ++ optionals ffmpegSupport [
+    ffmpeg
+  ] ++ optionals apeSupport [
+    yasm
+  ] ++ optionals artworkSupport [
+    imlib2
+  ] ++ optionals hotkeysSupport [
+    libX11
+  ] ++ optionals osdSupport [
+    dbus
+  ] ++ optionals alsaSupport [
+    alsa-lib
+  ] ++ optionals pulseSupport [
+    libpulseaudio
+  ] ++ optionals resamplerSupport [
+    libsamplerate
+  ] ++ optionals overloadSupport [
+    zlib
+  ] ++ optionals wavpackSupport [
+    wavpack
+  ] ++ optionals remoteSupport [
+    curl
+  ];
 
   nativeBuildInputs = [
     autoconf
@@ -98,7 +108,9 @@ stdenv.mkDerivation rec {
     intltool
     libtool
     pkg-config
-  ] ++ lib.optional gtk3Support wrapGAppsHook;
+  ] ++ optionals gtk3Support [
+    wrapGAppsHook
+  ];
 
   enableParallelBuilding = true;
 
@@ -112,6 +124,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.abbradar ];
-    repositories.git = "https://github.com/Alexey-Yakovenko/deadbeef";
   };
 }

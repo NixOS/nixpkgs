@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "22.2.2";
+  version = "22.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9QnimA9y5mVgJA9LkDVC+eNyp6Ltvw+fErtoSVL/1iw=";
+    hash = "sha256-WTIuK5kPPqft4u44dN5NDJJKxIPrZGCJjZ5pR6HgOxw=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ buildPythonPackage rec {
     "test_find_unreleased_information"
     # CLI test fails
     "test_missing_cmd"
+    "test_update_file_changed"
   ];
 
   pythonImportsCheck = [

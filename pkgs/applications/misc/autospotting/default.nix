@@ -1,28 +1,28 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage {
+buildGoModule rec {
   pname = "autospotting";
-  version = "unstable-2018-11-17";
-  goPackagePath = "github.com/AutoSpotting/AutoSpotting";
+  version = "unstable-2022-02-17";
 
   src = fetchFromGitHub {
-    owner = "AutoSpotting";
+    owner = "cloudutil";
     repo = "AutoSpotting";
-    rev = "122ab8f292a2f718dd85e79ec22acd455122907e";
-    sha256 = "0p48lgig9kblxvgq1kggczkn4qdbx6ciq9c8x0179i80vl4jf7v6";
+    rev = "f295a1f86c4a21144fc7fe28a69da5668fb7ad0c";
+    sha256 = "sha256-n5R5RM2fv3JWqtbSsyb7GWS4032dkgcihAKbpjB/5PM=";
   };
 
-  # patching path where repository used to exist
-  postPatch = ''
-    sed -i "s+github.com/cristim/autospotting/core+github.com/AutoSpotting/AutoSpotting/core+" autospotting.go
-  '';
+  vendorSha256 = "sha256-w7OHGZ7zntu8ZlI5gA19Iq7TKR23BQk9KpkUO+njL9Q=";
+
+  excludedPackages = [ "scripts" ];
+
+  ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    homepage = "https://github.com/AutoSpotting/AutoSpotting";
     description = "Automatically convert your existing AutoScaling groups to up to 90% cheaper spot instances with minimal configuration changes";
-    license = licenses.free;
-    maintainers = [ maintainers.costrouc ];
+    homepage = "https://github.com/cloudutil/AutoSpotting";
+    license = licenses.osl3;
+    maintainers = with maintainers; [ costrouc ];
+    mainProgram = "AutoSpotting";
     platforms = platforms.unix;
   };
-
 }

@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "oxygen";
+  pname = "oxygen";
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [
     frameworkintegration kcmutils kcompletion kconfig kdecoration kguiaddons

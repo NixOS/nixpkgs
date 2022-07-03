@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "nm-tray";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "palinek";
     repo = pname;
     rev = version;
-    sha256 = "08c86kd613wlvw9571q7a3lb7g6skyyasjw6h1g543rbl4jn2c2v";
+    sha256 = "sha256-JTH1cmkgdW2aRWMYPRvOAvCJz0ClCIpjUtcWcqJQGSU=";
   };
 
   postPatch = ''

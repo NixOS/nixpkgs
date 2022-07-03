@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, python3 }:
 
 buildGoModule rec {
   pname = "cod";
@@ -15,9 +15,19 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X main.GitSha=${src.rev}" ];
 
-  doCheck = false;
+  checkInputs = [ python3 ];
+
+  preCheck = ''
+    pushd test/binaries/
+    for f in *.py; do
+      patchShebangs ''$f
+    done
+    popd
+    export COD_TEST_BINARY="''${NIX_BUILD_TOP}/go/bin/cod"
+  '';
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Tool for generating Bash/Fish/Zsh autocompletions based on `--help` output";
     homepage = "https://github.com/dim-an/cod/";
     license = licenses.asl20;

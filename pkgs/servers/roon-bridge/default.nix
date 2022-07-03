@@ -11,24 +11,23 @@
 }:
 stdenv.mkDerivation rec {
   pname = "roon-bridge";
-  version = "1.8-880";
+  version = "1.8-943";
 
   src =
     let
       urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "00" ] version;
       inherit (stdenv.targetPlatform) system;
-      noSuchSystem = throw "Unsupposed system: ${system}";
     in
       {
         x86_64-linux = fetchurl {
           url = "http://download.roonlabs.com/builds/RoonBridge_linuxx64_${urlVersion}.tar.bz2";
-          sha256 = "sha256-YTLy3D1CQR1hlsGw2MmZtxHT82T0PCYZxD4adt2m1+o=";
+          hash = "sha256-knmy2zlRh+ehvYKHC7UN60pMCt8bYPuo9kTz2m0pOW0";
         };
         aarch64-linux = fetchurl {
           url = "http://download.roonlabs.com/builds/RoonBridge_linuxarmv8_${urlVersion}.tar.bz2";
-          sha256 = "sha256-aCQtYMUIzwhmYJW4a8cFzIRuxyMVIkeaJH4w1Lasp3M=";
+          hash = "sha256-urMhtBUjP4HpV9EDZOLLnfnMqhmsWPx0M2+Xdvc8YnU=";
         };
-      }.${system} or noSuchSystem;
+      }.${system} or (throw "Unsupposed system: ${system}");
 
   dontConfigure = true;
   dontBuild = true;
@@ -68,7 +67,7 @@ stdenv.mkDerivation rec {
       ${fixBin "${placeholder "out"}/Bridge/RoonBridgeHelper"}
 
       mkdir -p $out/bin
-      makeWrapper "$out/Bridge/RoonBridge" "$out/bin/RoonBridge" --run "cd $out"
+      makeWrapper "$out/Bridge/RoonBridge" "$out/bin/RoonBridge" --chdir "$out"
 
       runHook postInstall
     '';
@@ -77,6 +76,7 @@ stdenv.mkDerivation rec {
     description = "The music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
     platforms = [ "aarch64-linux" "x86_64-linux" ];

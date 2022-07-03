@@ -6,19 +6,22 @@
 , pyserial-asyncio
 , pytest-asyncio
 , pytestCheckHook
+, pythonOlder
 , zigpy
 }:
 
 buildPythonPackage rec {
   pname = "zigpy-deconz";
-  version = "0.14.0";
+  version = "0.16.0";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-PctS09twk8SRK3pTJvQU8drsqhmrPnMge2WO+VY84U8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-MEYe8DGx338ze1t36Fh0Zl8GgBpk2Wmx0EKnewjnTws=";
   };
 
   propagatedBuildInputs = [

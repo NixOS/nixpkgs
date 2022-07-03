@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitLab, ocaml, findlib, camlp4, config-file, lablgtk, xmlm }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 || lib.versionAtLeast ocaml.version "4.13"
 then throw "lablgtk-extras is not available for OCaml ${ocaml.version}"
 else
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bbdp5j18s582mmyd7qiaq1p08g2ag4gl7x65pmzahbhg719hjda";
   };
 
-  buildInputs = [ ocaml findlib camlp4 ];
+  nativeBuildInputs = [ ocaml findlib camlp4 ];
   propagatedBuildInputs = [ config-file lablgtk xmlm ];
 
   createFindlibDestdir = true;

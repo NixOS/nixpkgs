@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-gnutella";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "gtk-gnutella";
     repo = "gtk-gnutella";
     rev = "v${version}";
-    sha256 = "sha256-Hk5KPXSJ2s0J/stW3Qgvu6p6RG5VCvuWx1UlMR+3JO4=";
+    sha256 = "sha256-LbSUdU+a9G8qL7gCZVJQ6UQMATpOMtktY6FeOkUuaYI=";
   };
 
   nativeBuildInputs = [

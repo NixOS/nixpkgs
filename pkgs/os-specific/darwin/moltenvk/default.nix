@@ -27,9 +27,9 @@
 let
   libcxx.dev = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr";
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.1.7";
+  version = "1.1.9";
 
   buildInputs = [
     AppKit
@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
     QuartzCore
   ];
 
-  outputs = [ "out" "bin" ];
+  outputs = [ "out" "bin" "dev" ];
 
   # MoltenVK requires specific versions of its dependencies.
   # Pin them here except for cereal, which is four years old and has several CVEs.
@@ -47,11 +47,11 @@ stdenvNoCC.mkDerivation rec {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "glslang";
-        rev = "2742e959347ae2fac58acd0d022c92a0ff1f24bf";
-        hash = "sha256-Q0sk4bPj/skPat1n4GJyuXAlZqpfEn4Td8Bm2IBNUqE=";
+        rev = "9bb8cfffb0eed010e07132282c41d73064a7a609";
+        hash = "sha256-YLn/Mxuk6mXPGtBBgfwky5Nl1TCAW6i2g+AZLzqVz+A=";
       };
     })).override {
-      inherit (passthru) spirv-headers spirv-tools;
+      inherit (finalAttrs.passthru) spirv-headers spirv-tools;
     };
     spirv-cross = spirv-cross.overrideAttrs (old: {
       cmakeFlags = (old.cmakeFlags or [ ]) ++ [
@@ -60,40 +60,34 @@ stdenvNoCC.mkDerivation rec {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Cross";
-        rev = "131278458ea8eebe6a6e9c476fbcf71278726e1a";
-        hash = "sha256-LrRYDFGv3Zxfy4qRNLwM2OOa8jbcq0ttPxDamCH21xU=";
+        rev = "0d4ce028bf8b8a94d325dc1e1c20446153ba19c4";
+        hash = "sha256-OluTxOEfDIGMdrXhvIifjpMgZBvyh9ofLKxKt0dX5ZU=";
       };
     });
     spirv-headers = spirv-headers.overrideAttrs (_: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "spirv-headers";
-        rev = "b42ba6d92faf6b4938e6f22ddd186dbdacc98d78";
-        hash = "sha256-ks9JCj5rj+Xu++7z5RiHDkU3/sFXhcScw8dATfB/ot0";
+        rev = "4995a2f2723c401eb0ea3e10c81298906bf1422b";
+        hash = "sha256-LkIrTFWYvZffLVJJW3152um5LTEsMJEDEsIhBAdhBlk=";
       };
     });
     spirv-tools = (spirv-tools.overrideAttrs (old: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "spirv-tools";
-        rev = "45dd184c790d6bfc78a5a74a10c37e888b1823fa";
-        hash = "sha256-DSqZlwfNTbN4fyIrVBKltm5U2U4GthW3L+Ksw4lSVG8=";
-      };
-      meta = old.meta // {
-        platforms = old.meta.platforms ++ lib.platforms.darwin;
+        rev = "eed5c76a57bb965f2e1b56d1dc40b50910b5ec1d";
+        hash = "sha256-2Mr3HbhRslLpRfwHascl7e/UoPijhrij9Bjg3aCiqBM=";
       };
     })).override {
-      inherit (passthru) spirv-headers;
+      inherit (finalAttrs.passthru) spirv-headers;
     };
     vulkan-headers = vulkan-headers.overrideAttrs (old: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "Vulkan-Headers";
-        rev = "1dace16d8044758d32736eb59802d171970e9448";
-        hash = "sha256-C6YgxWcinI3QumcWmoJaiTAf0u6jSDc8sCIarn2t04k";
-      };
-      meta = old.meta // {
-        platforms = old.meta.platforms ++ lib.platforms.darwin;
+        rev = "76f00ef6cbb1886eb1162d1fa39bee8b51e22ee8";
+        hash = "sha256-FqrcFHsUS8e4ZgZpxVc8nNZWdNltniFmMjyyWVoNc7w=";
       };
     });
   };
@@ -101,8 +95,8 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "MoltenVK";
-    rev = "v${version}";
-    hash = "sha256-I9QcjyE09qclWPCLAVfKEaifP89q1ftLh9cXWy9m7kw=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-5ie1IGzZqaYbciFnrBJ1/9V0LEuz7JsEOFXXkG3hJzg=";
   };
 
   patches = [
@@ -119,24 +113,24 @@ stdenvNoCC.mkDerivation rec {
     substituteInPlace MoltenVKShaderConverter/MoltenVKShaderConverter.xcodeproj/project.pbxproj \
       --replace @@sourceRoot@@ $(pwd) \
       --replace @@libcxx@@ "${libcxx.dev}" \
-      --replace @@glslang@@ "${passthru.glslang}" \
-      --replace @@spirv-cross@@ "${passthru.spirv-cross}" \
-      --replace @@spirv-tools@@ "${passthru.glslang.spirv-tools}" \
-      --replace @@spirv-headers@@ "${passthru.glslang.spirv-headers}"
+      --replace @@glslang@@ "${finalAttrs.passthru.glslang}" \
+      --replace @@spirv-cross@@ "${finalAttrs.passthru.spirv-cross}" \
+      --replace @@spirv-tools@@ "${finalAttrs.passthru.glslang.spirv-tools}" \
+      --replace @@spirv-headers@@ "${finalAttrs.passthru.glslang.spirv-headers}"
     substituteInPlace MoltenVK/MoltenVK.xcodeproj/project.pbxproj \
       --replace @@sourceRoot@@ $(pwd) \
       --replace @@libcxx@@ "${libcxx.dev}" \
       --replace @@cereal@@ "${cereal}" \
-      --replace @@spirv-cross@@ "${passthru.spirv-cross}" \
-      --replace @@vulkan-headers@@ "${passthru.vulkan-headers}"
+      --replace @@spirv-cross@@ "${finalAttrs.passthru.spirv-cross}" \
+      --replace @@vulkan-headers@@ "${finalAttrs.passthru.vulkan-headers}"
     substituteInPlace Scripts/create_dylib.sh \
       --replace @@sourceRoot@@ $(pwd) \
-      --replace @@glslang@@ "${passthru.glslang}" \
-      --replace @@spirv-tools@@ "${passthru.glslang.spirv-tools}" \
-      --replace @@spirv-cross@@ "${passthru.spirv-cross}"
+      --replace @@glslang@@ "${finalAttrs.passthru.glslang}" \
+      --replace @@spirv-tools@@ "${finalAttrs.passthru.glslang.spirv-tools}" \
+      --replace @@spirv-cross@@ "${finalAttrs.passthru.spirv-cross}"
     substituteInPlace Scripts/gen_moltenvk_rev_hdr.sh \
       --replace @@sourceRoot@@ $(pwd) \
-      --replace '$(git rev-parse HEAD)' ${src.rev}
+      --replace '$(git rev-parse HEAD)' ${finalAttrs.src.rev}
   '';
 
   dontConfigure = true;
@@ -172,15 +166,16 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p "$out/lib" "$out/share/vulkan/icd.d" "$bin/bin"
+    mkdir -p "$out/lib" "$out/share/vulkan/icd.d" "$bin/bin" "$dev/include/MoltenVK"
     cp outputs/bin/MoltenVKShaderConverter "$bin/bin/"
     cp outputs/lib/libMoltenVK.dylib "$out/lib/"
+    cp MoltenVK/MoltenVK/API/* "$dev/include/MoltenVK"
     ${cctools}/bin/install_name_tool -id "$out/lib/libMoltenVK.dylib" "$out/lib/libMoltenVK.dylib"
     # FIXME: https://github.com/NixOS/nixpkgs/issues/148189
     /usr/bin/codesign -s - -f "$out/lib/libMoltenVK.dylib"
     install -m644 MoltenVK/icd/MoltenVK_icd.json "$out/share/vulkan/icd.d/MoltenVK_icd.json"
     substituteInPlace $out/share/vulkan/icd.d/MoltenVK_icd.json \
-      --replace ./libMoltenVK.dylib "$out/share/vulkan/icd.d/MoltenVK_icd.json"
+      --replace ./libMoltenVK.dylib "$out/lib/libMoltenVK.dylib"
   '';
 
   sandboxProfile = ''
@@ -194,7 +189,8 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/KhronosGroup/MoltenVK";
     changelog = "https://github.com/KhronosGroup/MoltenVK/releases";
     maintainers = [ lib.maintainers.reckenrode ];
+    hydraPlatforms = [ ]; # Prevent building on Hydra until MoltenVK no longer requires Xcode.
     license = lib.licenses.asl20;
     platforms = lib.platforms.darwin;
   };
-}
+})

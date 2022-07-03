@@ -1,36 +1,23 @@
-{ lib
-, python3
-, fetchFromGitHub
-, wrapQtAppsHook
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  wrapQtAppsHook,
 }:
-
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      scipy = super.scipy.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0ndw7zyxd2dj37775mc75zm4fcyiipnqxclc45mkpxy8lvrvpqfy";
-        };
-        doCheck = false;
-      });
-    };
-  };
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "nanovna-saver";
-  version = "0.3.8";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "NanoVNA-Saver";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0z83rwpnbbs1n74mx8dgh1d1crp90mannj9vfy161dmy4wzc5kpv";
+    sha256 = "1n1bh46spdyk7kgvv95hyfy9f904czhzlvk41vliqkak56hj2ss1";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     cython
     scipy
     pyqt5

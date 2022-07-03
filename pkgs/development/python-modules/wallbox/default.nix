@@ -2,22 +2,24 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, aenum
 , requests
 , simplejson
 }:
 
 buildPythonPackage rec {
   pname = "wallbox";
-  version = "0.4.6";
+  version = "0.4.9";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "651c61e2264258382d1f54c4f0bf6bcd198482a744d8f1db3dd73084c240d9bb";
+    sha256 = "90e664cf7d99eb1baf20a9ff5fd415dfa14ddafabcefd606e15b5bcd25f969e9";
   };
 
   propagatedBuildInputs = [
+    aenum
     requests
     simplejson
   ];

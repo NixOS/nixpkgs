@@ -14,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "librosa";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zSFnXTuYWPjRs7FDKzYONoFFvtN4B+HxOwcRqozTkP0=";
+    sha256 = "sha256-ftXW4/RUbl48KEBpH53cVoePkUo1pQBg31/KKybUthQ=";
   };
 
   propagatedBuildInputs = [ joblib matplotlib six scikit-learn decorator audioread resampy soundfile pooch ];

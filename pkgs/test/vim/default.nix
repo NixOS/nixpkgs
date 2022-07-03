@@ -23,11 +23,6 @@ in
     vimrcConfig.vam.pluginDictionaries = [{name = "vim-nix"; }];
   };
 
-  test_vim_with_vim_nix_using_pathogen = vim_configurable.customize {
-    name = "vim-with-vim-addon-nix-using-pathogen";
-    vimrcConfig.pathogen.pluginNames = [ "vim-nix" ];
-  };
-
   test_vim_with_vim_nix_using_plug = vim_configurable.customize {
     name = "vim-with-vim-addon-nix-using-plug";
     vimrcConfig.plug.plugins = with vimPlugins; [ vim-nix ];

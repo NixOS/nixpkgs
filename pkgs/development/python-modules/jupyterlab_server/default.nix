@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , jsonschema
@@ -6,7 +7,7 @@
 , requests
 , pytestCheckHook
 , pyjson5
-, Babel
+, babel
 , jupyter_server
 , openapi-core
 , pytest-tornasync
@@ -16,19 +17,23 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "2.10.3";
+  version = "2.12.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3fb84a5813d6d836ceda773fb2d4e9ef3c7944dbc1b45a8d59d98641a80de80a";
+    sha256 = "sha256-AOD0tMOZ9Vk4Mj6hDPktkVKI/hJ1PjXRBp9soItyq78=";
   };
 
   postPatch = ''
-    sed -i "/^addopts/d" pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace "--cov jupyterlab_server --cov-report term-missing --cov-report term:skip-covered" ""
+
+    # translation tests try to install additional packages into read only paths
+    rm -r tests/translations/
   '';
 
-  propagatedBuildInputs = [ requests jsonschema pyjson5 Babel jupyter_server ];
+  propagatedBuildInputs = [ requests jsonschema pyjson5 babel jupyter_server ];
 
   checkInputs = [
     openapi-core
@@ -37,11 +42,10 @@ buildPythonPackage rec {
     ruamel-yaml
   ];
 
-  pytestFlagsArray = [ "--pyargs" "jupyterlab_server" ];
-
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "JupyterLab Server";
     homepage = "https://jupyter.org";
     license = licenses.bsdOriginal;

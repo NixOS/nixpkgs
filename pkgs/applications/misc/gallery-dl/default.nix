@@ -2,20 +2,24 @@
 
 buildPythonApplication rec {
   pname = "gallery_dl";
-  version = "1.20.5";
+  version = "1.22.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-UJAoxRybEYxQY+7l/szSj9fy1J552yaxF3MdaEmDiQQ=";
+    sha256 = "sha256-6nveSEpi5fdlf6ooUXFrX1WaVDOQi6mvgDGAGgwi1zc=";
   };
 
   propagatedBuildInputs = [ requests yt-dlp ];
 
   checkInputs = [ pytestCheckHook ];
+
   pytestFlagsArray = [
     # requires network access
     "--ignore=test/test_results.py"
     "--ignore=test/test_downloader.py"
+
+    # incompatible with pytestCheckHook
+    "--ignore=test/test_ytdl.py"
   ];
 
   meta = with lib; {

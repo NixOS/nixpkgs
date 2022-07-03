@@ -69,11 +69,16 @@ in
         CERTIFICATE_KEY_FILE = "key.pem";
       };
       startLimitIntervalSec = 60;
+      script = ''
+        if [[ -v CREDENTIALS_DIRECTORY ]]; then
+          cd "$CREDENTIALS_DIRECTORY"
+        fi
+        exec "${pkgs.pomerium}/bin/pomerium" -config "${cfgFile}"
+      '';
 
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = [ "pomerium" ];
-        ExecStart = "${pkgs.pomerium}/bin/pomerium -config ${cfgFile}";
 
         PrivateUsers = false;  # breaks CAP_NET_BIND_SERVICE
         MemoryDenyWriteExecute = false;  # breaks LuaJIT
@@ -99,7 +104,6 @@ in
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
 
-        WorkingDirectory = mkIf (cfg.useACMEHost != null) "$CREDENTIALS_DIRECTORY";
         LoadCredential = optionals (cfg.useACMEHost != null) [
           "fullchain.pem:/var/lib/acme/${cfg.useACMEHost}/fullchain.pem"
           "key.pem:/var/lib/acme/${cfg.useACMEHost}/key.pem"
@@ -124,7 +128,7 @@ in
         Type = "oneshot";
         TimeoutSec = 60;
         ExecCondition = "/run/current-system/systemd/bin/systemctl -q is-active pomerium.service";
-        ExecStart = "/run/current-system/systemd/bin/systemctl restart pomerium.service";
+        ExecStart = "/run/current-system/systemd/bin/systemctl --no-block restart pomerium.service";
       };
     };
   });

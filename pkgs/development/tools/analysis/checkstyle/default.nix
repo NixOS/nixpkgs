@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  version = "9.3";
+  version = "10.3";
   pname = "checkstyle";
 
   src = fetchurl {
     url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
-    sha256 = "sha256-Aq0zB+RgWafE+K9sX2H0d7xf2RDlavsUXEWQTJXSE6w=";
+    sha256 = "sha256-3n5gXGHznrLGL9hudk1nZs1GJ5V2qzqVPCtn1fqujB0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
       Conventions, but is highly configurable.
     '';
     homepage = "http://checkstyle.sourceforge.net/";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl21;
     maintainers = with maintainers; [ pSub ];
     platforms = jre.meta.platforms;

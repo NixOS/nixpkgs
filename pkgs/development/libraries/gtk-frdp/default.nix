@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gtk-frdp";
-  version = "unstable-2021-10-01";
+  version = "unstable-2022-04-11";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = pname;
-    rev = "9c15c1202ed66fe20334e33d798cc5ebd39917f0";
-    sha256 = "2YOLpyd26qWQKvneH4ww2DS8h/ZNYDmfbYIjQDvDMko=";
+    rev = "d7f408fb23adc01db14c708b35b74a317418de4b";
+    sha256 = "EyReJX3f7G5+EEB/gbLTnrxdltedbzm7Bg02hCb+XO0=";
   };
 
   nativeBuildInputs = [
@@ -40,8 +40,6 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = unstableGitUpdater {
-      # The updater tries src.url by default, which does not exist for fetchFromGitHub (fetchurl).
-      url = "${meta.homepage}.git";
       branch = "gtk-frdp-0-1";
     };
   };

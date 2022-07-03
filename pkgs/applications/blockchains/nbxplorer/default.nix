@@ -2,19 +2,18 @@
 
 buildDotnetModule rec {
   pname = "nbxplorer";
-  version = "2.2.20";
+  version = "2.3.26";
 
   src = fetchFromGitHub {
     owner = "dgarage";
     repo = "NBXplorer";
     rev = "v${version}";
-    sha256 = "sha256-C3REnfecNwf3dtk6aLYAEsedHRlIrQZAokXtf6KI8U0=";
+    sha256 = "sha256-PaunSwbIf9hGmZeS8ZI4M0C6T76bLCalnS4/x9TWrtY=";
   };
 
   projectFile = "NBXplorer/NBXplorer.csproj";
   nugetDeps = ./deps.nix;
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
   postFixup = ''
@@ -23,7 +22,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
-    maintainers = with maintainers; [ kcalvinalvin earvstedt ];
+    maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
     license = licenses.mit;
     platforms = platforms.linux;
   };

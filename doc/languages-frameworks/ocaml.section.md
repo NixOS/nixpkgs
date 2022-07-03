@@ -38,8 +38,12 @@ Here is a simple package example.
 
 - It uses the `fetchFromGitHub` fetcher to get its source.
 
-- `useDune2 = true` ensures that the latest version of Dune is used for the
-  build (this may become the default value in a future release).
+- `duneVersion = "2"` ensures that Dune version 2 is used for the
+  build (this is the default; valid values are `"1"`, `"2"`, and `"3"`);
+  note that there is also a legacy `useDune2` boolean attribute:
+  set to `false` it corresponds to `duneVersion = "1"`; set to `true` it
+  corresponds to `duneVersion = "2"`. If both arguments (`duneVersion` and
+  `useDune2`) are given, the second one (`useDune2`) is silently ignored.
 
 - It sets the optional `doCheck` attribute such that tests will be run with
   `dune runtest -p angstrom` after the build (`dune build -p angstrom`) is
@@ -67,7 +71,7 @@ Here is a simple package example.
 buildDunePackage rec {
   pname = "angstrom";
   version = "0.15.0";
-  useDune2 = true;
+  duneVersion = "2";
 
   minimalOCamlVersion = "4.04";
 

@@ -6,21 +6,21 @@
 }:
 
 let
-  nnueFile = "nn-6762d36ad265.nnue";
+  nnueFile = "nn-13406b1dcbe0.nnue";
   nnue = fetchurl {
     url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
-    sha256 = "0727dsxfpns9fkyir95fybibqmigk5h45k154b2c5rk5s9md6qk7";
+    sha256 = "sha256-E0BrHcvgo238XgfaUdjbOLekXX2kMHjsJadiTCuDI28=";
   };
 in
 rustPlatform.buildRustPackage rec {
   pname = "fishnet";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "niklasf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1Gl2vJFn9yVYH62yBJefAOBX/jJaFAdSZj2Lj3imcps=";
+    sha256 = "sha256-nVRG60sSpTqfqhCclvWoeyHR0+oO1Jn1PgftigDGq5c=";
     fetchSubmodules = true;
   };
 
@@ -29,7 +29,13 @@ rustPlatform.buildRustPackage rec {
     cp -v '${nnue}' 'Fairy-Stockfish/src/${nnueFile}'
   '';
 
-  cargoSha256 = "sha256-/s7Yyi2FUh+EDvgaHLgZ/FA6kk2FQrZr3L3B76fqTuc=";
+  cargoSha256 = "sha256-BJK7M/pjHRj74xoeciavhkK2YRpeogkELIuXetX73so=";
+
+  # TODO: Cargo.lock is out of date, so fix it. Likely not necessary anymore in
+  # the next update.
+  cargoPatches = [
+    ./Cargo.lock.patch
+  ];
 
   meta = with lib; {
     description = "Distributed Stockfish analysis for lichess.org";

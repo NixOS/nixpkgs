@@ -1,15 +1,19 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, libtool, curl
-, python3, munge, perl, pam, zlib, shadow, coreutils
+, python3, munge, perl, pam, shadow, coreutils, dbus, libbpf
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, xorg, lz4, rdma-core, nixosTests
 , pmix
+, libjwt
+, libyaml
+, json_c
+, http-parser
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "21.08.5.1";
+  version = "22.05.2.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -18,7 +22,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "sha256-2ctJnCZCziPnfWeDNvvcE0tPGVdhzjjhqMWJhWhitGo=";
+    sha256 = "1zfv5n7cqqn3c78h2svjazbdkdchyrk54prn2bq5diw80wgcmyrc";
   };
 
   outputs = [ "out" "dev" ];
@@ -46,21 +50,26 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config libtool python3 ];
   buildInputs = [
-    curl python3 munge perl pam zlib
+    curl python3 munge perl pam
       libmysqlclient ncurses gtk2 lz4 rdma-core
       lua hwloc numactl readline freeipmi shadow.su
-      pmix
+      pmix json_c libjwt libyaml dbus libbpf
+      http-parser
   ] ++ lib.optionals enableX11 [ xorg.xauth ];
 
   configureFlags = with lib;
     [ "--with-freeipmi=${freeipmi}"
+      "--with-http-parser=${http-parser}"
       "--with-hwloc=${hwloc.dev}"
+      "--with-json=${json_c.dev}"
+      "--with-jwt=${libjwt}"
       "--with-lz4=${lz4.dev}"
       "--with-munge=${munge}"
-      "--with-zlib=${zlib}"
+      "--with-yaml=${libyaml}"
       "--with-ofed=${rdma-core}"
       "--sysconfdir=/etc/slurm"
       "--with-pmix=${pmix}"
+      "--with-bpf=${libbpf}"
     ] ++ (optional (gtk2 == null)  "--disable-gtktest")
       ++ (optional (!enableX11) "--disable-x11");
 

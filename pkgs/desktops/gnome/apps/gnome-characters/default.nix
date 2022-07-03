@@ -7,26 +7,26 @@
 , gettext
 , gnome
 , glib
-, gtk3
+, gtk4
 , pango
-, wrapGAppsHook
+, wrapGAppsHook4
 , python3
+, desktop-file-utils
 , gobject-introspection
 , gjs
 , libunistring
-, libhandy
+, libadwaita
 , gsettings-desktop-schemas
-, adwaita-icon-theme
 , gnome-desktop
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-characters";
-  version = "41.0";
+  version = "42.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-characters/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "0yw6mimfwn0fij8zncjb4rg8bnazd1z47rmzq85lk6807nlyqag1";
+    sha256 = "XaD/uBb4prRPMDdEyoJ6NAgBGMHJONjXmvF7f+Z5gPg=";
   };
 
   nativeBuildInputs = [
@@ -36,39 +36,39 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapGAppsHook
+    desktop-file-utils
+    wrapGAppsHook4
   ];
 
 
   buildInputs = [
-    adwaita-icon-theme
     gjs
     glib
     gnome-desktop # for typelib
     gsettings-desktop-schemas
-    gtk3
+    gtk4
     libunistring
-    libhandy
+    libadwaita
     pango
   ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
+
+    # https://gitlab.gnome.org/GNOME/gnome-characters/-/merge_requests/70
+    substituteInPlace meson_post_install.py \
+      --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
   '';
 
   dontWrapGApps = true;
 
-  # Fixes https://github.com/NixOS/nixpkgs/issues/31168
   postFixup = ''
-    for file in $out/share/org.gnome.Characters/org.gnome.Characters \
-       $out/share/org.gnome.Characters/org.gnome.Characters.BackgroundService
-    do
-      sed -e $"2iimports.package._findEffectiveEntryPointName = () => \'$(basename $file)\' " \
-        -i $file
-
-      wrapGApp "$file"
-    done
+    # Fixes https://github.com/NixOS/nixpkgs/issues/31168
+    file="$out/share/org.gnome.Characters/org.gnome.Characters"
+    sed -e $"2iimports.package._findEffectiveEntryPointName = () => \'$(basename $file)\' " \
+      -i $file
+    wrapGApp "$file"
   '';
 
   passthru = {

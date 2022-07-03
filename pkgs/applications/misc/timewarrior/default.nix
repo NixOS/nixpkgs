@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "https://timewarrior.net";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer mrVanDalo ];
+    mainProgram = "timew";
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

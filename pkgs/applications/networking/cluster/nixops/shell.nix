@@ -5,6 +5,6 @@ pkgs.mkShell {
     pkgs.poetry2nix.cli
     pkgs.pkg-config
     pkgs.libvirt
-    pkgs.poetry
+    pkgs.python39Packages.poetry
   ];
 }

@@ -1,22 +1,30 @@
-{ lib, buildDotnetModule, fetchFromGitHub, makeDesktopItem, copyDesktopItems
-, dotnetCorePackages, libX11, libgdiplus, ffmpeg
-, SDL2_mixer, openal, libsoundio, sndio, pulseaudio
-, gtk3, gdk-pixbuf, wrapGAppsHook
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+, libX11
+, libgdiplus
+, ffmpeg
+, SDL2_mixer
+, openal
+, libsoundio
+, sndio
+, pulseaudio
+, gtk3
+, gdk-pixbuf
+, wrapGAppsHook
 }:
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.0.7168"; # Versioning is based off of the official appveyor builds: https://ci.appveyor.com/project/gdkchan/ryujinx
+  version = "1.1.100"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "6e0799580f0d1b473a79471c5d365c6524d97a86";
-    sha256 = "145sn9xkjxj79292faypcdmpmbxm1w70q0iprg6pfymf9920gvfv";
+    rev = "26a881176eb6513a98889648e0d5b7fe647cd0e3";
+    sha256 = "09wjygkdr9sr0hwv77czi0x5xw8y585k9pghdm5s3iqjn9gbb45k";
   };
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   projectFile = "Ryujinx.sln";
   nugetDeps = ./deps.nix;
@@ -28,7 +36,6 @@ buildDotnetModule rec {
   executables = [ "Ryujinx" ];
 
   nativeBuildInputs = [
-    copyDesktopItems
     wrapGAppsHook
   ];
 
@@ -41,7 +48,6 @@ buildDotnetModule rec {
     gtk3
     libX11
     libgdiplus
-    ffmpeg
     SDL2_mixer
     openal
     libsoundio
@@ -49,42 +55,50 @@ buildDotnetModule rec {
     pulseaudio
   ];
 
+  makeWrapperArgs = [
+    "--suffix PATH : ${lib.getBin ffmpeg}"
+  ];
+
   patches = [
-    ./log.patch # Without this, Ryujinx attempts to write logs to the nix store. This patch makes it write to "~/.config/Ryujinx/Logs" on Linux.
+    ./appdir.patch # Ryujinx attempts to write to the nix store. This patch redirects it to "~/.config/Ryujinx" on Linux.
   ];
 
   preInstall = ''
-    # TODO: fix this hack https://github.com/Ryujinx/Ryujinx/issues/2349
+    # workaround for https://github.com/Ryujinx/Ryujinx/issues/2349
     mkdir -p $out/lib/sndio-6
     ln -s ${sndio}/lib/libsndio.so $out/lib/sndio-6/libsndio.so.6
-
-    makeWrapperArgs+=(
-      --suffix LD_LIBRARY_PATH : "$out/lib/sndio-6"
-    )
-
-    for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ${src}/Ryujinx/Ui/Resources/Logo_Ryujinx.png $out/share/icons/hicolor/''${i}x$i/apps/ryujinx.png
-    done
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "Ryujinx";
-    name = "ryujinx";
-    exec = "Ryujinx";
-    icon = "ryujinx";
-    comment = meta.description;
-    type = "Application";
-    categories = "Game;";
-  })];
+  preFixup = ''
+    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps,mime/packages}
+    pushd ${src}/distribution/linux
+
+    install -D ./ryujinx.desktop $out/share/applications/ryujinx.desktop
+    install -D ./ryujinx-mime.xml $out/share/mime/packages/ryujinx-mime.xml
+    install -D ./ryujinx-logo.svg $out/share/icons/hicolor/scalable/apps/ryujinx.svg
+
+    substituteInPlace $out/share/applications/ryujinx.desktop --replace \
+      "Exec=Ryujinx" "Exec=$out/bin/Ryujinx"
+
+    popd
+  '';
+
+  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
-    description = "Experimental Nintendo Switch Emulator written in C#";
     homepage = "https://ryujinx.org/";
-    license = licenses.mit;
     changelog = "https://github.com/Ryujinx/Ryujinx/wiki/Changelog";
-    maintainers = [ maintainers.ivar ];
+    description = "Experimental Nintendo Switch Emulator written in C#";
+    longDescription = ''
+      Ryujinx is an open-source Nintendo Switch emulator, created by gdkchan,
+      written in C#. This emulator aims at providing excellent accuracy and
+      performance, a user-friendly interface and consistent builds. It was
+      written from scratch and development on the project began in September
+      2017.
+    '';
+    license = licenses.mit;
+    maintainers = with maintainers; [ ivar jk ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "Ryujinx";
   };
-  passthru.updateScript = ./updater.sh;
 }

@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  name = "libksysguard";
+  pname = "libksysguard";
   patches = [
     ./0001-qdiriterator-follow-symlinks.patch
   ];

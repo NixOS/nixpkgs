@@ -13,10 +13,6 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-O63QEo0/+m9cYktMg4+RloLuUfAlCG0eGkxpHPFg/Cw=";
 
-  doCheck = false;
-
-  subPackages = [ "." ];
-
   meta = with lib; {
     description = "Enrich `go test` outputs with text decorations";
     homepage = "https://github.com/kyoh86/richgo";

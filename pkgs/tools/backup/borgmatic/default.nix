@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.5.18";
+  version = "1.6.4";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-dX1U1zza8zMhDiTLE+DgtN6RLRciLks4NDOukpKH/po=";
+    sha256 = "sha256-2kQ+KO69RxpIQkrkD6n7l9ti9ITwdpHYK7LuXYUo3ck=";
   };
 
   checkInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];

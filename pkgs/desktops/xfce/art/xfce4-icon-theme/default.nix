@@ -28,11 +28,7 @@ stdenv.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  passthru.updateScript = xfce.updateScript {
-    inherit pname version;
-    attrPath = "xfce.${pname}";
-    versionLister = xfce.archiveLister category pname;
-  };
+  passthru.updateScript = xfce.archiveUpdater { inherit category pname version; };
 
   meta = with lib; {
     homepage = "https://www.xfce.org/";

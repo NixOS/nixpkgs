@@ -16,12 +16,9 @@ stdenv.mkDerivation rec {
   preBuild = ''
     substituteInPlace Makefile --replace "modules_install" "INSTALL_MOD_PATH=$out modules_install"
     sed -i '/depmod/d' Makefile
-    export PATH=${kmod}/sbin:$PATH
   '';
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
-
-  buildInputs = [ kmod ];
+  nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
   postInstall = ''
     make install-utils PREFIX=$bin
@@ -29,7 +26,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "bin" ];
 
-  makeFlags = [
+  makeFlags = kernel.makeFlags ++ [
     "KERNELRELEASE=${kernel.modDirVersion}"
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];

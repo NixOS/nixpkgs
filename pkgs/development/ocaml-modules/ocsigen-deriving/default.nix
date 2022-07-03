@@ -9,7 +9,7 @@
 , num
 }:
 
-if !lib.versionAtLeast ocaml.version "4.03"
+if lib.versionOlder ocaml.version "4.03"
 then throw "ocsigen-deriving is not available of OCaml ${ocaml.version}"
 else
 
@@ -26,7 +26,10 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  buildInputs = [ ocaml findlib ocamlbuild oasis camlp4 num ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild oasis camlp4 ];
+  buildInputs = [ oasis camlp4 ocamlbuild num ];
+
+  strictDeps = true;
 
   meta = {
     homepage = "https://github.com/ocsigen/deriving";

@@ -90,7 +90,7 @@ installPhase() {
             fi
 
             # nvidia currently only supports x86_64 and i686
-            if [ "$system" = "i686-linux" ]; then
+            if [ "$i" == "$lib32" ]; then
                 install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.i686.json
             else
                 install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.x86_64.json
@@ -145,6 +145,11 @@ installPhase() {
             cp nvidia-application-profiles-*-rc $bin/share/nvidia/nvidia-application-profiles-rc
             cp nvidia-application-profiles-*-key-documentation $bin/share/nvidia/nvidia-application-profiles-key-documentation
         fi
+    fi
+
+    if [ -n "$firmware" ]; then
+        # Install the GSP firmware
+        install -Dm644 firmware/gsp.bin $firmware/lib/firmware/nvidia/$version/gsp.bin
     fi
 
     # All libs except GUI-only are installed now, so fixup them.

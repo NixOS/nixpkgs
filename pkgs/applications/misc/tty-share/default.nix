@@ -1,7 +1,6 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-# Upstream has a `./vendor` directory with all deps which we rely upon.
-buildGoPackage rec {
+buildGoModule rec {
   pname = "tty-share";
   version = "2.2.1";
 
@@ -12,7 +11,10 @@ buildGoPackage rec {
     sha256 = "sha256-aAqKfi0ZX0UB07yGY6x0HcMspvq4rcJXKHSONxAwMlc=";
   };
 
-  goPackagePath = "github.com/elisescu/tty-share";
+  # Upstream has a `./vendor` directory with all deps which we rely upon.
+  vendorSha256 = null;
+
+  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   meta = with lib; {
     homepage = "https://tty-share.com";

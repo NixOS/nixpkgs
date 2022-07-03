@@ -5,11 +5,12 @@
 , pyserial
 , pytestCheckHook
 , pythonOlder
+, six
 }:
 
 buildPythonPackage rec {
   pname = "aurorapy";
-  version = "0.2.6";
+  version = "0.2.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +19,7 @@ buildPythonPackage rec {
     owner = "energievalsabbia";
     repo = pname;
     rev = version;
-    hash = "sha256-DMlzzLe94dbeHjESmLc045v7vQ//IEsngAv7TeVznHE=";
+    hash = "sha256-rGwfGq3zdoG9NCGqVN29Q4bWApk5B6CRdsW9ctWgOec=";
   };
 
   propagatedBuildInputs = [
@@ -28,6 +29,7 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
+    six
   ];
 
   pythonImportsCheck = [

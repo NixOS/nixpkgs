@@ -8,13 +8,8 @@
 , profiledCompiler ? false
 , langJit ? false
 , staticCompiler ? false
-, # N.B. the defult is intentionally not from an `isStatic`. See
-  # https://gcc.gnu.org/install/configure.html - this is about target
-  # platform libraries not host platform ones unlike normal. But since
-  # we can't rebuild those without also rebuilding the compiler itself,
-  # we opt to always build everything unlike our usual policy.
-  enableShared ? true
-, enableLTO ? true
+, enableShared ? !stdenv.targetPlatform.isStatic
+, enableLTO ? !stdenv.hostPlatform.isStatic
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, libmpc, gettext, which, patchelf
@@ -159,7 +154,10 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" "pie" ];
 
-  outputs = if langJava || langGo then ["out" "man" "info"]
+  # When targetting darwin, libgcc_ext.10.{4,5}.dylib are created as
+  # MH_DYLIB_STUB files, which install_name_tool can't change, so we
+  # get a cycle between $out and $lib.
+  outputs = if langJava || langGo || targetPlatform.isDarwin then ["out" "man" "info"]
     else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
@@ -311,7 +309,7 @@ stdenv.mkDerivation ({
   };
 
   enableParallelBuilding = true;
-  inherit enableMultilib;
+  inherit enableShared enableMultilib;
 
   inherit (stdenv) is64bit;
 
@@ -333,7 +331,6 @@ stdenv.mkDerivation ({
     maintainers = with lib.maintainers; [ veprbl ];
 
     platforms = lib.platforms.unix;
-    badPlatforms = [ "x86_64-darwin" ];
   };
 }
 

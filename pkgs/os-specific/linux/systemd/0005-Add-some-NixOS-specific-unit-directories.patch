@@ -1,4 +1,4 @@
-From ddcfae6de8c460903c5db8c536ffeb5771e976f8 Mon Sep 17 00:00:00 2001
+From 90d1a90d3147e9c8db5caec8befabda270e755d4 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 19 Dec 2014 14:46:17 +0100
 Subject: [PATCH 05/19] Add some NixOS-specific unit directories
@@ -14,10 +14,10 @@ Also, remove /usr and /lib as these don't exist on NixOS.
  2 files changed, 6 insertions(+), 19 deletions(-)
 
 diff --git a/src/basic/path-lookup.c b/src/basic/path-lookup.c
-index 05eb17d66c..1cd141d012 100644
+index 6fb8c40e7a..142ecdecec 100644
 --- a/src/basic/path-lookup.c
 +++ b/src/basic/path-lookup.c
-@@ -91,11 +91,7 @@ int xdg_user_data_dir(char **ret, const char *suffix) {
+@@ -92,11 +92,7 @@ int xdg_user_data_dir(char **ret, const char *suffix) {
  }
  
  static const char* const user_data_unit_paths[] = {
@@ -29,7 +29,7 @@ index 05eb17d66c..1cd141d012 100644
          NULL
  };
  
-@@ -613,15 +609,13 @@ int lookup_paths_init(
+@@ -614,15 +610,13 @@ int lookup_paths_init(
                                          persistent_config,
                                          SYSTEM_CONFIG_UNIT_DIR,
                                          "/etc/systemd/system",
@@ -46,7 +46,7 @@ index 05eb17d66c..1cd141d012 100644
                                          STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -637,14 +631,11 @@ int lookup_paths_init(
+@@ -638,14 +632,11 @@ int lookup_paths_init(
                                          persistent_config,
                                          USER_CONFIG_UNIT_DIR,
                                          "/etc/systemd/user",
@@ -62,7 +62,7 @@ index 05eb17d66c..1cd141d012 100644
                                          STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -794,7 +785,6 @@ char **generator_binary_paths(UnitFileScope scope) {
+@@ -795,7 +786,6 @@ char **generator_binary_paths(UnitFileScope scope) {
                  case UNIT_FILE_SYSTEM:
                          add = strv_new("/run/systemd/system-generators",
                                         "/etc/systemd/system-generators",
@@ -70,7 +70,7 @@ index 05eb17d66c..1cd141d012 100644
                                         SYSTEM_GENERATOR_DIR);
                          break;
  
-@@ -802,7 +792,6 @@ char **generator_binary_paths(UnitFileScope scope) {
+@@ -803,7 +793,6 @@ char **generator_binary_paths(UnitFileScope scope) {
                  case UNIT_FILE_USER:
                          add = strv_new("/run/systemd/user-generators",
                                         "/etc/systemd/user-generators",
@@ -78,7 +78,7 @@ index 05eb17d66c..1cd141d012 100644
                                         USER_GENERATOR_DIR);
                          break;
  
-@@ -841,12 +830,10 @@ char **env_generator_binary_paths(bool is_system) {
+@@ -842,12 +831,10 @@ char **env_generator_binary_paths(bool is_system) {
                  if (is_system)
                          add = strv_new("/run/systemd/system-environment-generators",
                                          "/etc/systemd/system-environment-generators",
@@ -122,5 +122,5 @@ index fc0f8c34fa..162432e77f 100644
  
  systemd_sleep_dir=${root_prefix}/lib/systemd/system-sleep
 -- 
-2.33.1
+2.34.0
 

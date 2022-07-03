@@ -18,20 +18,25 @@
 , buildPythonApplication
 , procps
 , gtksourceview4
+, nixosTests
   # Change the default log level to debug for easier debugging of package issues
 , withDebugLogLevel ? false
   # Xmodmap is an optional dependency
   # If you use Xmodmap to set keyboard mappings (or your DE does)
   # it is required to correctly map keys
 , withXmodmap ? true
+  # Some tests are flakey under high CPU load and could cause intermittent
+  # failures when building. Override this to true to run tests anyway
+  # See upstream issue: https://github.com/sezanzeb/input-remapper/issues/306
+, withDoCheck ? false
   # Version and rev and hash are package arguments to allow overriding
   # while ensuring the values in prePatch and src match
   # https://discourse.nixos.org/t/avoid-rec-expresions-in-nixpkgs/8293/7
   # The names are prefixed with input_remapper to avoid potential
   # collisions with package names
-, input_remapper_version ? "unstable-2022-02-09"
-, input_remapper_src_rev ? "55227e0b5a28d21d7333c6c8ea1c691e56fd35c4"
-, input_remapper_src_hash ? "sha256-kzGlEaYN/JfAgbI0aMLr5mwObYOL43X7QU/ihDEBQFg="
+, input_remapper_version ? "1.4.2"
+, input_remapper_src_rev ? "af20f87a1298153e765b840a2164ba63b9ef937a"
+, input_remapper_src_hash ? "sha256-eG4Fx1z74Bq1HrfmzOuULQLziGdWnHLax8y2dymjWsI="
 }:
 
 let
@@ -65,7 +70,7 @@ buildPythonApplication {
     substituteInPlace inputremapper/logger.py --replace "logger.setLevel(logging.INFO)"  "logger.setLevel(logging.DEBUG)"
   '');
 
-  doCheck = true;
+  doCheck = withDoCheck;
   checkInputs = [
     psutil
   ];
@@ -145,6 +150,8 @@ buildPythonApplication {
     # Only install input-remapper prefixed binaries, we don't care about deprecated key-mapper ones
     install -m755 -D -t $out/bin/ bin/input-remapper*
   '';
+
+  passthru.tests = nixosTests.input-remapper;
 
   meta = with lib; {
     description = "An easy to use tool to change the mapping of your input device buttons";

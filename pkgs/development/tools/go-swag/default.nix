@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "go-swag";
-  version = "1.7.9-p1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "swaggo";
     repo = "swag";
     rev = "v${version}";
-    sha256 = "sha256-JzPCNUoO3biNJLYKLkyJvVG/L7pqWBthtBuZL+Lc21U=";
+    sha256 = "sha256-axvc3iwAfsKunheLLKmUThZh27axRh/GJRcKy9EfEBw=";
   };
 
   vendorSha256 = "sha256-QphjiJSQRULphWjrJ8RzrUblTDYL/fYoSNT3+g0tP48=";
@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/swaggo/swag";
     license = licenses.mit;
     maintainers = with maintainers; [ stephenwithph ];
+    mainProgram = "swag";
   };
 }

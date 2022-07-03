@@ -1,37 +1,22 @@
-diff -ru3 SDL2-2.0.14/sdl2-config.cmake.in SDL2-2.0.14-new/sdl2-config.cmake.in
---- SDL2-2.0.14/sdl2-config.cmake.in	2020-12-21 18:44:36.000000000 +0100
-+++ SDL2-2.0.14-new/sdl2-config.cmake.in	2021-01-16 23:53:40.721121792 +0100
-@@ -6,7 +6,8 @@
- set(SDL2_PREFIX "@prefix@")
- set(SDL2_EXEC_PREFIX "@prefix@")
- set(SDL2_LIBDIR "@libdir@")
--set(SDL2_INCLUDE_DIRS "@includedir@/SDL2")
-+set(SDL2_INCLUDE_DIRS "@includedir@/SDL2" $ENV{SDL2_PATH})
+diff --git a/sdl2-config.cmake.in b/sdl2-config.cmake.in
+index c570511fa..ca694f595 100644
+--- a/sdl2-config.cmake.in
++++ b/sdl2-config.cmake.in
+@@ -7,7 +7,8 @@ set(includedir "@includedir@")
+ set(SDL2_PREFIX "${prefix}")
+ set(SDL2_EXEC_PREFIX "${exec_prefix}")
+ set(SDL2_LIBDIR "${libdir}")
+-set(SDL2_INCLUDE_DIRS "${includedir}/SDL2")
++set(SDL2_INCLUDE_DIRS "${includedir}/SDL2" $ENV{SDL2_PATH})
 +separate_arguments(SDL2_INCLUDE_DIRS)
  set(SDL2_LIBRARIES "-L${SDL2_LIBDIR} @SDL_RLD_FLAGS@ @SDL_LIBS@")
  string(STRIP "${SDL2_LIBRARIES}" SDL2_LIBRARIES)
  
-@@ -20,14 +21,14 @@
- 
-   add_library(SDL2::SDL2 SHARED IMPORTED)
-   set_target_properties(SDL2::SDL2 PROPERTIES
--    INTERFACE_INCLUDE_DIRECTORIES "@includedir@/SDL2"
-+    INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIRS}"
-     IMPORTED_LINK_INTERFACE_LANGUAGES "C"
-     IMPORTED_LOCATION "@libdir@/${CMAKE_SHARED_LIBRARY_PREFIX}SDL2${CMAKE_SHARED_LIBRARY_SUFFIX}"
-     INTERFACE_LINK_LIBRARIES "${SDL2_EXTRA_LINK_FLAGS}")
- 
-   add_library(SDL2::SDL2-static STATIC IMPORTED)
-   set_target_properties(SDL2::SDL2-static PROPERTIES
--    INTERFACE_INCLUDE_DIRECTORIES "@includedir@/SDL2"
-+    INTERFACE_INCLUDE_DIRECTORIES "${SDL2_INCLUDE_DIRS}"
-     IMPORTED_LINK_INTERFACE_LANGUAGES "C"
-     IMPORTED_LOCATION "@libdir@/${CMAKE_STATIC_LIBRARY_PREFIX}SDL2${CMAKE_STATIC_LIBRARY_SUFFIX}"
-     INTERFACE_LINK_LIBRARIES "${SDL2_EXTRA_LINK_FLAGS_STATIC}")
-diff -ru3 SDL2-2.0.14/sdl2-config.in SDL2-2.0.14-new/sdl2-config.in
---- SDL2-2.0.14/sdl2-config.in	2020-12-21 18:44:36.000000000 +0100
-+++ SDL2-2.0.14-new/sdl2-config.in	2021-01-16 23:57:11.940353171 +0100
-@@ -42,7 +42,11 @@
+diff --git a/sdl2-config.in b/sdl2-config.in
+index 5a2aed292..7c55f0a28 100644
+--- a/sdl2-config.in
++++ b/sdl2-config.in
+@@ -42,7 +42,11 @@ while test $# -gt 0; do
        echo @SDL_VERSION@
        ;;
      --cflags)
@@ -44,3 +29,6 @@ diff -ru3 SDL2-2.0.14/sdl2-config.in SDL2-2.0.14-new/sdl2-config.in
        ;;
  @ENABLE_SHARED_TRUE@    --libs)
  @ENABLE_SHARED_TRUE@      echo -L@libdir@ @SDL_RLD_FLAGS@ @SDL_LIBS@
+-- 
+2.33.1
+

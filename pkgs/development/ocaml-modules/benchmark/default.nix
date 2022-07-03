@@ -9,15 +9,18 @@ stdenv.mkDerivation rec {
     sha256 = "16wi8ld7c3mq77ylpgbnj8qqqqimyzwxs47v06vyrwpma5pab5xa";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ocaml_pcre ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ ocaml_pcre ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
   meta = {
     homepage = "http://ocaml-benchmark.forge.ocamlcore.org/";
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     description = "Benchmark running times of code";
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ volth ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

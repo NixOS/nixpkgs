@@ -47,13 +47,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "65.0.0";
+  version = "68.0.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    sha256 = "1zphcpfrzic9ialx3xxi2ywzxnllys667vy140bgdshzr798sg2p";
+    sha256 = "0m09r0w98dja9y1yp1vq5hdh46lw0k60aa0xfkdy5zlva568cb7c";
   };
 
   nativeBuildInputs = [
@@ -116,9 +116,6 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   checkPhase = phase "Check" "tests:run_unit";
-
-  CXXFLAGS = optional stdenv.cc.isClang "-std=c++17";
-  LDFLAGS = optional stdenv.cc.isClang "-lc++fs";
 
   dontWrapQtApps = true;
 

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "threema-desktop";
-  version = "1.0.3";
+  version = "1.2.13";
 
   src = fetchurl {
     # As Threema only offers a Latest Release url, the plan is to upload each
     # new release url to web.archive.org until their Github releases page gets populated.
-    url = "https://web.archive.org/web/20211027194646/https://releases.threema.ch/web-electron/v1/release/Threema-Latest.deb";
-    sha256 = "sha256-qiFv52nnyfHxCWTePmyxW/MgzFy3EUxmW6n+UIkw7tk=";
+    url = "https://web.archive.org/web/20220621152620id_/https://releases.threema.ch/web-electron/v1/release/Threema-Latest.deb";
+    sha256 = "sha256-X16GMxUIKUloj0FxhzWQKUBf4zwfSBVg0cwLgGxHPHE=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Desktop client for Threema, a privacy-focused end-to-end encrypted mobile messenger";
     homepage = "https://threema.ch";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ wolfangaukang ];
     platforms = [ "x86_64-linux" ];

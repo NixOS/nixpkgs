@@ -20,14 +20,14 @@
   exception_page = {
     owner = "crystal-loot";
     repo = "exception_page";
-    rev = "v0.2.0";
-    sha256 = "0nlgnh5iykbr1v2132342k2mz6s2laws6nkgqsqlwhhcr4gb4jcx";
+    rev = "v0.2.2";
+    sha256 = "1c8askb9b7621jjz5pjj6b8pdbhw3r1l3dym6swg1saspf5j3jwi";
   };
   kemal = {
     owner = "kemalcr";
     repo = "kemal";
-    rev = "v1.1.0";
-    sha256 = "07vlvddy4mba9li2bvskzqzywwq55cyvlgkz13q6dsl4zfgc96ca";
+    rev = "v1.1.2";
+    sha256 = "1149q4qw0zrws5asqqr4snrdi67xsmisdcq58zcrbgqgsxgly9d0";
   };
   kilt = {
     owner = "jeromegn";
@@ -59,10 +59,22 @@
     rev = "v0.4.1";
     sha256 = "1l08cydkdidq9yyil1wl240hvk41iycv04jrg6nx5mkvzw4z1bzg";
   };
+  spectator = {
+    owner = "icy-arctic-fox";
+    repo = "spectator";
+    rev = "v0.10.4";
+    sha256 = "0rcxq2nbslvwrd8m9ajw6dzaw3hagxmkdy9s8p34cgnr4c9dijdq";
+  };
   sqlite3 = {
     owner = "crystal-lang";
     repo = "crystal-sqlite3";
     rev = "v0.18.0";
     sha256 = "03nnvpchhq9f9ywsm3pk2rrj4a3figw7xs96zdziwgr5znkz6x93";
+  };
+  ameba = {
+    owner = "crystal-ameba";
+    repo = "ameba";
+    rev = "v0.14.3";
+    sha256 = "1cfr95xi6hsyxw1wlrh571hc775xhwmssk3k14i8b7dgbwfmm5x1";
   };
 }

@@ -8,7 +8,7 @@
 , extlib
 }:
 
-if !lib.versionAtLeast ocaml.version "4.04"
+if lib.versionOlder ocaml.version "4.04"
 then throw "javalib is not available for OCaml ${ocaml.version}"
 else
 
@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-du1h+S+A7CetMXofsYxdGeSsobCgspDB9oUE9WNUbbo=";
   };
 
-  buildInputs = [ which ocaml findlib ];
+  nativeBuildInputs = [ which ocaml findlib ];
+
+  strictDeps = true;
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 

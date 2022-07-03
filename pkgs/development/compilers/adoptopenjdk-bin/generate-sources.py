@@ -15,6 +15,7 @@ arch_to_nixos = {
     "x64": ("x86_64",),
     "aarch64": ("aarch64",),
     "arm": ("armv6l", "armv7l"),
+    "ppc64le": ("powerpc64le",),
 }
 
 def get_sha256(url):

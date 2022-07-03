@@ -6,11 +6,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hVzTHpAOOuHVMoo3Ejv//irsUBoddLzdEvDSonWAYOQ=";
+    sha256 = "sha256-l3DS2DhExTeKc+FBMNy3YKvIVlZsqgpB/FuXoN7V2SY=";
   };
 
   checkInputs = with python3Packages; [
@@ -44,7 +44,6 @@ python3Packages.buildPythonApplication rec {
     '';
     changelog = "https://github.com/streamlink/streamlink/raw/${version}/CHANGELOG.md";
     license = licenses.bsd2;
-    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ dezgeg zraexy DeeUnderscore ];
   };
 }

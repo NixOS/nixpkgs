@@ -13,12 +13,28 @@ let
                       else
                         pkgs.postgresql_12;
 
+  # Git 2.36.1 seemingly contains a commit-graph related bug which is
+  # easily triggered through GitLab, so we downgrade it to 2.35.x
+  # until this issue is solved. See
+  # https://gitlab.com/gitlab-org/gitlab/-/issues/360783#note_992870101.
+  gitPackage =
+    let
+      version = "2.35.3";
+    in
+      pkgs.git.overrideAttrs (oldAttrs: rec {
+        inherit version;
+        src = pkgs.fetchurl {
+          url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
+          sha256 = "sha256-FenbT5vy7Z//MMtioAxcfAkBAV9asEjNtOiwTd7gD6I=";
+        };
+      });
+
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
 
-  databaseConfig = {
-    production = {
+  databaseConfig = let
+    val = {
       adapter = "postgresql";
       database = cfg.databaseName;
       host = cfg.databaseHost;
@@ -26,6 +42,10 @@ let
       encoding = "utf8";
       pool = cfg.databasePool;
     } // cfg.extraDatabaseConfig;
+  in if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.0" then {
+    production.main = val;
+  } else {
+    production = val;
   };
 
   # We only want to create a database if we're actually going to connect to it.
@@ -37,7 +57,7 @@ let
     prometheus_listen_addr = "localhost:9236"
 
     [git]
-    bin_path = "${pkgs.git}/bin/git"
+    bin_path = "${gitPackage}/bin/git"
 
     [gitaly-ruby]
     dir = "${cfg.packages.gitaly.ruby}"
@@ -133,7 +153,7 @@ let
       };
       workhorse.secret_file = "${cfg.statePath}/.gitlab_workhorse_secret";
       gitlab_kas.secret_file = "${cfg.statePath}/.gitlab_kas_secret";
-      git.bin_path = "git";
+      git.bin_path = "${gitPackage}/bin/git";
       monitoring = {
         ip_whitelist = [ "127.0.0.0/8" "::1/128" ];
         sidekiq_exporter = {
@@ -179,7 +199,7 @@ let
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
-          --run 'cd ${cfg.packages.gitlab}/share/gitlab'
+          --chdir '${cfg.packages.gitlab}/share/gitlab'
      '';
   };
 
@@ -193,7 +213,7 @@ let
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
-          --run 'cd ${cfg.packages.gitlab}/share/gitlab'
+          --chdir '${cfg.packages.gitlab}/share/gitlab'
      '';
   };
 
@@ -848,10 +868,7 @@ in {
 
         extraConfig = mkOption {
           type = types.lines;
-          default = ''
-            copytruncate
-            compress
-          '';
+          default = "";
           description = ''
             Extra logrotate config options for this path. Refer to
             <link xlink:href="https://linux.die.net/man/8/logrotate"/> for details.
@@ -977,13 +994,14 @@ in {
     # Enable rotation of log files
     services.logrotate = {
       enable = cfg.logrotate.enable;
-      paths = {
+      settings = {
         gitlab = {
-          path = "${cfg.statePath}/log/*.log";
-          user = cfg.user;
-          group = cfg.group;
+          files = "${cfg.statePath}/log/*.log";
+          su = "${cfg.user} ${cfg.group}";
           frequency = cfg.logrotate.frequency;
-          keep = cfg.logrotate.keep;
+          rotate = cfg.logrotate.keep;
+          copytruncate = true;
+          compress = true;
           extraConfig = cfg.logrotate.extraConfig;
         };
       };
@@ -1186,7 +1204,7 @@ in {
                 fi
 
                 jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
-                   '.production.password = $ENV.db_password' \
+                   '.${if lib.versionAtLeast (lib.getVersion cfg.packages.gitlab) "15.0" then "production.main" else "production"}.password = $ENV.db_password' \
                    >'${cfg.statePath}/config/database.yml'
               ''
               else ''
@@ -1273,7 +1291,7 @@ in {
       });
       path = with pkgs; [
         postgresqlPackage
-        git
+        gitPackage
         ruby
         openssh
         nodejs
@@ -1304,7 +1322,7 @@ in {
       path = with pkgs; [
         openssh
         procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
-        git
+        gitPackage
         cfg.packages.gitaly.rubyEnv
         cfg.packages.gitaly.rubyEnv.wrappedRuby
         gzip
@@ -1349,7 +1367,7 @@ in {
       partOf = [ "gitlab.target" ];
       path = with pkgs; [
         exiftool
-        git
+        gitPackage
         gnutar
         gzip
         openssh
@@ -1410,7 +1428,7 @@ in {
       environment = gitlabEnv;
       path = with pkgs; [
         postgresqlPackage
-        git
+        gitPackage
         openssh
         nodejs
         procps

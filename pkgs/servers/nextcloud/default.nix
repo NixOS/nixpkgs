@@ -33,32 +33,28 @@ let
     };
   };
 in {
-  nextcloud20 = throw ''
-    Nextcloud v20 has been removed from `nixpkgs` as the support for it was dropped
-    by upstream in 2021-10. Please upgrade to at least Nextcloud v21 by declaring
+  nextcloud22 = throw ''
+    Nextcloud v22 has been removed from `nixpkgs` as the support for is dropped
+    by upstream in 2022-07. Please upgrade to at least Nextcloud v23 by declaring
 
-        services.nextcloud.package = pkgs.nextcloud21;
+        services.nextcloud.package = pkgs.nextcloud23;
 
     in your NixOS config.
 
-    WARNING: if you were on Nextcloud 19 on NixOS 21.05 you have to upgrade to Nextcloud 20
-    first on 21.05 because Nextcloud doesn't support upgrades accross multiple major versions!
+    WARNING: if you were on Nextcloud 21 on NixOS 21.11 you have to upgrade to Nextcloud 22
+    first on 21.11 because Nextcloud doesn't support upgrades accross multiple major versions!
   '';
 
-  nextcloud21 = generic {
-    version = "21.0.9";
-    sha256 = "sha256-p6bvgTXmmjGN3TRQpG88f3YPksh0QzWG9j9KnEjcrqE=";
-  };
-
-  nextcloud22 = generic {
-    version = "22.2.5";
-    sha256 = "sha256-gb5N0u5tu4/nI2xIpjXwm2hiSDCrBhIDyN6gKGOsdS8=";
-  };
-
   nextcloud23 = generic {
-    version = "23.0.2";
-    sha256 = "sha256-ngJGLTjqq2RX/KgHe9Rv54w6qtRC6RpuEuMvp9UbxO4=";
+    version = "23.0.6";
+    sha256 = "34fbc3a6c16a623f57971b8c4df7c5e62b3650728edec7d05ec116b295040548";
   };
+
+  nextcloud24 = generic {
+    version = "24.0.2";
+    sha256 = "30d6cac1265dff221836bec46a937dcafd7e7d52ee59b939841750b514e5033d";
+  };
+
   # tip: get she sha with:
   # curl 'https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2.sha256'
 }

@@ -3,7 +3,7 @@
 
 # IMPORTANT!
 # We only add static uids and gids for services where it is not feasible
-# to change uids/gids on service start, in example a service with a lot of
+# to change uids/gids on service start, for example a service with a lot of
 # files. Please also check if the service is applicable for systemd's
 # DynamicUser option and does not need a uid/gid allocation at all.
 # Systemd can also change ownership of service directories using the
@@ -82,14 +82,14 @@ in
       git = 41;
       #fourstore = 42; # dropped in 20.03
       #fourstorehttp = 43; # dropped in 20.03
-      virtuoso = 44;
+      #virtuoso = 44;  dropped module
       #rtkit = 45; # dynamically allocated 2021-09-03
       dovecot2 = 46;
       dovenull2 = 47;
       prayer = 49;
       mpd = 50;
       clamav = 51;
-      fprot = 52;
+      #fprot = 52; # unused
       # bind = 53; #dynamically allocated as of 2021-09-03
       wwwrun = 54;
       #adm = 55; # unused
@@ -236,7 +236,7 @@ in
       gitit = 202;
       riemanntools = 203;
       subsonic = 204;
-      riak = 205;
+      # riak = 205; # unused, remove 2022-07-22
       #shout = 206; # dynamically allocated as of 2021-09-18
       gateone = 207;
       namecoin = 208;
@@ -412,7 +412,7 @@ in
       prayer = 49;
       mpd = 50;
       clamav = 51;
-      fprot = 52;
+      #fprot = 52; # unused
       #bind = 53; # unused
       wwwrun = 54;
       adm = 55;
@@ -553,7 +553,7 @@ in
       gitit = 202;
       riemanntools = 203;
       subsonic = 204;
-      riak = 205;
+      # riak = 205;#unused, removed 2022-06-22
       #shout = 206; #unused
       gateone = 207;
       namecoin = 208;

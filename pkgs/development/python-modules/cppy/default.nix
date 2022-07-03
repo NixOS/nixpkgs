@@ -1,23 +1,28 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, pythonOlder
+, pytestCheckHook
+, setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "cppy";
-  version = "1.1.0";
+  version = "1.2.1";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4eda6f1952054a270f32dc11df7c5e24b259a09fddf7bfaa5f33df9fb4a29642";
+    sha256 = "sha256-g7Q78XsQhawVxd69tCFU8Ti5KCNLIURzWJgfadDW/hs=";
   };
 
-  # Headers-only library, no tests
-  doCheck = false;
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
-  # Not supported
-  disabled = !isPy3k;
+  checkInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "cppy" ];
 
   meta = {
     description = "C++ headers for C extension development";

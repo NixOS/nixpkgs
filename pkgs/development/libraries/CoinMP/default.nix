@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "13d3j1sdcjzpijp4qks3n0zibk649ac3hhv88hkk8ffxrc6gnn9l";
   };
 
+  enableParallelBuilding = true;
+
   hardeningDisable = [ "format" ];
 
   meta = with lib; {

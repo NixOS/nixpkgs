@@ -106,6 +106,9 @@ in
           ConditionFileNotEmpty = ""; # override upstream
         };
         serviceConfig = {
+          User = "step-ca";
+          Group = "step-ca";
+          UMask = "0077";
           Environment = "HOME=%S/step-ca";
           WorkingDirectory = ""; # override upstream
           ReadWriteDirectories = ""; # override upstream
@@ -126,6 +129,14 @@ in
           StateDirectory = "step-ca";
         };
       };
+
+      users.users.step-ca = {
+        home = "/var/lib/step-ca";
+        group = "step-ca";
+        isSystemUser = true;
+      };
+
+      users.groups.step-ca = {};
 
       networking.firewall = lib.mkIf cfg.openFirewall {
         allowedTCPPorts = [ cfg.port ];

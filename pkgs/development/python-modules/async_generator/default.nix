@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy35, pytest, pytest-asyncio }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "async-generator";
@@ -12,17 +17,16 @@ buildPythonPackage rec {
     sha256 = "6ebb3d106c12920aaae42ccb6f787ef5eefdcdd166ea3d628fa8476abe712144";
   };
 
-  # no longer compatible with pytest-asyncio
-  doCheck = false;
-  checkInputs = [ pytest pytest-asyncio ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    pytest -W error -ra -v --pyargs async_generator
-  '';
+  pythonImportsCheck = [ "async_generator" ];
 
   meta = with lib; {
     description = "Async generators and context managers for Python 3.5+";
     homepage = "https://github.com/python-trio/async_generator";
     license = with licenses; [ mit asl20 ];
+    maintainers = with maintainers; [ dotlambda ];
   };
 }

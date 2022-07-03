@@ -5,7 +5,7 @@
 }:
 
 mkDerivation {
-  name = "kidletime";
+  pname = "kidletime";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtx11extras ];
   propagatedBuildInputs = [ qtbase ];

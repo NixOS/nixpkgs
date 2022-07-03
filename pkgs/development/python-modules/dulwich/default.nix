@@ -12,11 +12,12 @@
 , mock
 , pkgs
 , urllib3
+, paramiko
 , pythonOlder
 }:
 
 buildPythonPackage rec {
-  version = "0.20.32";
+  version = "0.20.43";
   pname = "dulwich";
   format = "setuptools";
 
@@ -24,7 +25,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3FSYsHK9wSwe/+9LYgLNKkVCuxxtu03c/IxtU+CLSIw=";
+    hash = "sha256-/MIWTgE7OQqe46EJ1+97ldjeKDsueJuwfpSqMRXjKeo=";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -43,6 +44,7 @@ buildPythonPackage rec {
     gpgme
     pkgs.gnupg
     mock
+    paramiko
   ];
 
   doCheck = !stdenv.isDarwin;

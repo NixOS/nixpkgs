@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "ormar";
-  version = "0.10.24";
+  version = "0.11.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,8 +32,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "collerek";
     repo = pname;
-    rev = version;
-    hash = "sha256-zKugeGDcYDI4VKspJPWeZCBubTqMxxfOVQCuF4pC49E=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-L0Tc/MmXDeNbUaHgWaxaY8lu+wUhq1ereqpya150SBg=";
   };
 
   nativeBuildInputs = [
@@ -70,8 +70,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace 'SQLAlchemy = ">=1.3.18,<=1.4.29"' 'SQLAlchemy = ">=1.3.18"' \
-      --replace 'databases = ">=0.3.2,!=0.5.0,!=0.5.1,!=0.5.2,!=0.5.3,<0.5.5"' 'databases = ">=0.5.5"'
+      --replace 'SQLAlchemy = ">=1.3.18,<=1.4.31"' 'SQLAlchemy = ">=1.3.18"' \
+      --replace 'databases = ">=0.3.2,!=0.5.0,!=0.5.1,!=0.5.2,!=0.5.3,<=0.5.5"' 'databases = ">=0.5.5"'
   '';
 
   disabledTests = [
@@ -84,8 +84,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/collerek/ormar";
     description = "Async ORM with fastapi in mind and pydantic validation";
+    homepage = "https://github.com/collerek/ormar";
     license = licenses.mit;
     maintainers = with maintainers; [ andreasfelix ];
   };

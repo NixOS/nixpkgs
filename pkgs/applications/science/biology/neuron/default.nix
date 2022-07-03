@@ -14,7 +14,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "neuron";
+  pname = "neuron${lib.optionalString useMpi "-mpi"}";
   version = "7.5";
 
   nativeBuildInputs = [ which pkg-config automake autoconf libtool ];
@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ readline ncurses which libtool ];
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "Simulation environment for empirically-based simulations of neurons and networks of neurons";
 
     longDescription = "NEURON is a simulation environment for developing and exercising models of
@@ -79,6 +80,11 @@ stdenv.mkDerivation rec {
                 potential close to the membrane), and where cell membrane properties are complex,
                 involving many ion-specific channels, ion accumulation, and second messengers";
 
+    sourceProvenance = with sourceTypes; [
+      fromSource
+    ] ++ lib.optionals (python != null) [
+      binaryNativeCode  # "geometry3d" bundled libraries
+    ];
     license     = licenses.bsd3;
     homepage    = "http://www.neuron.yale.edu/neuron";
     maintainers = [ maintainers.adev ];

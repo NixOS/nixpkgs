@@ -1,9 +1,9 @@
 { lib
 , fetchpatch
 , kernel
-, date ? "2022-01-12"
-, commit ? "0e6eb60f8be14b02e0a76cb330f4b22c80ec82e9"
-, diffHash ? "091w4r7h93s5rv8hk65aix7l0rr4bd504mv998j7x360bqlb7vpi"
+, date ? "2022-04-25"
+, commit ? "bdf6d7c1350497bc7b0be6027a51d9330645672d"
+, diffHash ? "09bcbklvfj9i9czjdpix2iz7fvjksmavaljx8l92ay1i9fapjmhc"
 , kernelPatches # must always be defined in bcachefs' all-packages.nix entry because it's also a top-level attribute supplied by callPackage
 , argsOverride ? {}
 , ...
@@ -16,7 +16,8 @@
 
     extraMeta = {
       branch = "master";
-      maintainers = with lib.maintainers; [ davidak chiiruno ];
+      maintainers = with lib.maintainers; [ davidak Madouura ];
+      broken = true;
     };
   } // argsOverride;
 

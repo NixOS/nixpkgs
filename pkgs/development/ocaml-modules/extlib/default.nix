@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0npq4hq3zym8nmlyji7l5cqk6drx2rkcx73d60rxqh5g8dla8p4k";
   };
 
-  buildInputs = [ ocaml findlib cppo ];
+  nativeBuildInputs = [ ocaml findlib cppo ];
+
+  strictDeps = true;
 
   createFindlibDestdir = true;
 
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ygrek/ocaml-extlib";
     description = "Enhancements to the OCaml Standard Library modules";
     license = lib.licenses.lgpl21Only;
-    platforms = ocaml.meta.platforms or [];
+    inherit (ocaml.meta) platforms;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 }

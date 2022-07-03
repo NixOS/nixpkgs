@@ -1,6 +1,8 @@
 { lib
+, bazel_4
 , buildBazelPackage
 , fetchFromGitHub
+, fetchpatch
 , stdenv
 , cmake
 , gn
@@ -8,7 +10,11 @@
 , jdk
 , ninja
 , python3
+, linuxHeaders
 , nixosTests
+
+# v8 (upstream default), wavm, wamr, wasmtime, disabled
+, wasmRuntime ? "wamr"
 }:
 
 let
@@ -17,23 +23,24 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.19.1";
-    commit = "a2a1e3eed4214a38608ec223859fcfa8fb679b14";
+    version = "1.21.4";
+    rev = "782ba5e5ab9476770378ec9f1901803e0d38ac41";
   };
 in
 buildBazelPackage rec {
   pname = "envoy";
-  version = srcVer.version;
+  inherit (srcVer) version;
+  bazel = bazel_4;
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "envoy";
-    rev = srcVer.commit;
-    hash = "sha256:1v1hv4blrppnhllsxd9d3k2wl6nhd59r4ydljy389na3bb41jwf9";
+    inherit (srcVer) rev;
+    hash = "sha256-SthKDMQs5yNU0iouAPVsDeCPKcsBXmO9ebDwu58UQRs=";
 
-    extraPostFetch = ''
+    postFetch = ''
       chmod -R +w $out
       rm $out/.bazelversion
-      echo ${srcVer.commit} > $out/SOURCE_VERSION
+      echo ${srcVer.rev} > $out/SOURCE_VERSION
       sed -i 's/GO_VERSION = ".*"/GO_VERSION = "host"/g' $out/bazel/dependency_imports.bzl
     '';
   };
@@ -48,6 +55,21 @@ buildBazelPackage rec {
       --replace '"''$$WEE8_BUILD_ARGS"' '"''$$WEE8_BUILD_ARGS use_gold=false"'
   '';
 
+  patches = [
+    # make linux/tcp.h relative. drop when upgrading to >1.21
+    (fetchpatch {
+      url = "https://github.com/envoyproxy/envoy/commit/68448aae7a78a3123097b6ea96016b270457e7b8.patch";
+      sha256 = "123kv3x37p8fgfp29jhw5xg5js5q5ipibs8hsm7gzfd5bcllnpfh";
+    })
+
+    # fix issues with brotli and GCC 11.2.0+ (-Werror=vla-parameter)
+    ./bump-brotli.patch
+
+    # fix linux-aarch64 WAMR builds
+    # (upstream WAMR only detects aarch64 on Darwin, not Linux)
+    ./fix-aarch64-wamr.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     python3
@@ -57,8 +79,15 @@ buildBazelPackage rec {
     ninja
   ];
 
+  buildInputs = [
+    linuxHeaders
+  ];
+
   fetchAttrs = {
-    sha256 = "sha256:0vnl0gq6nhvyzz39jg1bvvna0xyhxalg71bp1jbxib7ql026004r";
+    sha256 = {
+      x86_64-linux = "sha256-/SA+WFHcMjk6iLwuEmuBIzy3pMhw7TThIEx292dv6IE=";
+      aarch64-linux = "sha256-0XdeirdIP7+nKy8zZbr2uHN2RZ4ZFOJt9i/+Ow1s/W4=";
+    }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     preInstall = ''
@@ -84,7 +113,7 @@ buildBazelPackage rec {
     dontUseGnConfigure = true;
     dontUseNinjaInstall = true;
     preConfigure = ''
-      sed -i 's,#!/usr/bin/env bash,#!${stdenv.shell},' $bazelOut/external/rules_foreign_cc/tools/build_defs/framework.bzl
+      sed -i 's,#!/usr/bin/env bash,#!${stdenv.shell},' $bazelOut/external/rules_foreign_cc/foreign_cc/private/framework/toolchains/linux_commands.bzl
 
       # Add paths to Nix store back.
       sed -i \
@@ -108,11 +137,18 @@ buildBazelPackage rec {
     "--noexperimental_strict_action_env"
     "--cxxopt=-Wno-maybe-uninitialized"
     "--cxxopt=-Wno-uninitialized"
+    "--cxxopt=-Wno-error=type-limits"
+
+    "--define=wasm=${wasmRuntime}"
+  ];
+  bazelFetchFlags = [
+    "--define=wasm=${wasmRuntime}"
   ];
 
   passthru.tests = {
-    # No tests for Envoy itself (yet), but it's tested as a core component of Pomerium.
-    inherit (nixosTests) pomerium;
+    envoy = nixosTests.envoy;
+    # tested as a core component of Pomerium
+    pomerium = nixosTests.pomerium;
   };
 
   meta = with lib; {
@@ -120,6 +156,6 @@ buildBazelPackage rec {
     description = "Cloud-native edge and service proxy";
     license = licenses.asl20;
     maintainers = with maintainers; [ lukegb ];
-    platforms = [ "x86_64-linux" ];  # Other platforms will generate different fetch hashes.
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }

@@ -1,4 +1,4 @@
-From 3b9983969de2a86929768f6362ed41c20dd13bd3 Mon Sep 17 00:00:00 2001
+From d668df39728c992ec0c691ef6e76664e7121f5bd Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Thu, 7 Jul 2016 02:47:13 +0300
 Subject: [PATCH 08/19] Fix hwdb paths
@@ -24,5 +24,5 @@ index 5ddc2211e6..ee621eec46 100644
 +        "/etc/udev/hwdb.bin\0"
 +
 -- 
-2.33.1
+2.34.0
 

@@ -7,7 +7,7 @@
   kio, knotifications, knotifyconfig, kservice, kwidgetsaddons,
   kwindowsystem, kxmlgui, phonon,
 
-  kimap, akonadi, akonadi-contacts, akonadi-mime, kalarmcal, kcalendarcore, kcalutils,
+  kimap, akonadi, akonadi-contacts, akonadi-mime, kcalendarcore, kcalutils,
   kholidays, kidentitymanagement, libkdepim, mailcommon, kmailtransport, kmime,
   pimcommon, kpimtextedit, messagelib,
 
@@ -31,7 +31,7 @@ mkDerivation {
     kio knotifications knotifyconfig kservice kwidgetsaddons kwindowsystem
     kxmlgui phonon
 
-    kimap akonadi akonadi-contacts akonadi-mime kalarmcal kcalendarcore
+    kimap akonadi akonadi-contacts akonadi-mime kcalendarcore
     kcalutils kholidays kidentitymanagement libkdepim mailcommon kmailtransport
     kmime pimcommon kpimtextedit messagelib
 

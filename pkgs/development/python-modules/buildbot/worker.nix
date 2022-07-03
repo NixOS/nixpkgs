@@ -1,5 +1,26 @@
-{ lib, buildPythonPackage, fetchPypi, buildbot, setuptoolsTrial, mock, twisted,
-  future, coreutils, nixosTests }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, buildbot
+
+# patch
+, coreutils
+
+# propagates
+, autobahn
+, future
+, msgpack
+, twisted
+
+# tests
+, mock
+, parameterized
+, psutil
+, setuptoolsTrial
+
+# passthru
+, nixosTests
+}:
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
@@ -7,17 +28,30 @@ buildPythonPackage (rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SFZ0Q51hrBb7eBMGzvVOhc/ogFCIO/Mo7U9652WJ2GU=";
+    sha256 = "sha256-HZH3TdH5dhr3f6ev25O3SgPPNbiFGMmAp9DHwcb/2MA=";
   };
-
-  propagatedBuildInputs = [ twisted future ];
-
-  checkInputs = [ setuptoolsTrial mock ];
 
   postPatch = ''
     substituteInPlace buildbot_worker/scripts/logwatcher.py \
       --replace /usr/bin/tail "${coreutils}/bin/tail"
   '';
+
+  nativeBuildInputs = [
+    setuptoolsTrial
+  ];
+
+  propagatedBuildInputs = [
+    autobahn
+    future
+    msgpack
+    twisted
+  ];
+
+  checkInputs = [
+    mock
+    parameterized
+    psutil
+  ];
 
   passthru.tests = {
     smoke-test = nixosTests.buildbot;

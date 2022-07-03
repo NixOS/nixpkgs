@@ -10,6 +10,7 @@ let
   interpreter = (
     poetry2nix.mkPoetryPackages {
       projectDir = ./.;
+      python = pkgs.python39;
       overrides = [
         poetry2nix.defaultPoetryOverrides
         (import ./poetry-git-overlay.nix { inherit pkgs; })
@@ -18,6 +19,8 @@ let
 
             nixops = super.nixops.overridePythonAttrs (
               old: {
+                version = "${old.version}-pre-${lib.substring 0 7 super.nixops.src.rev or "dirty"}";
+
                 postPatch = ''
                   substituteInPlace nixops/args.py --subst-var version
                 '';

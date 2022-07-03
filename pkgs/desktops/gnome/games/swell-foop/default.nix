@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "swell-foop";
-  version = "41.0.1";
+  version = "41.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "YEL/MTxsh9VkgnxwNpazsgkTbD/Dn+Jkpu+k4wWTg9g=";
+    sha256 = "JD96VeXnU6UQhu7CVoMg12ktWxWmanI6tZFwXg2O9t0=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,6 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     libgnome-games-support
-    gnome.adwaita-icon-theme
     clutter
     clutter-gtk
   ];
@@ -66,7 +65,7 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Apps/Swell%20Foop";
     description = "Puzzle game, previously known as Same GNOME";
     maintainers = teams.gnome.members;
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
 }

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "cftime";
-  version = "1.5.2";
+  version = "1.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "375d37d9ab8bf501c048e44efce2276296e3d67bb276e891e0e93b0a8bbb988a";
+    sha256 = "sha256-URIV9F7XzHnq2EAg6I4fxHa4q6cbR9L83vjmUkJAaSc=";
   };
 
   nativeBuildInputs = [

@@ -8,6 +8,9 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
       environment.systemPackages = with pkgs; [ wireguard-tools ];
       systemd.network = {
         enable = true;
+        config = {
+          routeTables.custom = 23;
+        };
         netdevs = {
           "90-wg0" = {
             netdevConfig = { Kind = "wireguard"; Name = "wg0"; };
@@ -39,6 +42,7 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
             address = [ "10.0.0.${nodeId}/32" ];
             routes = [
               { routeConfig = { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; }; }
+              { routeConfig = { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; Table = "custom"; }; }
             ];
           };
           "30-eth1" = {
@@ -86,6 +90,12 @@ testScript = ''
     start_all()
     node1.wait_for_unit("systemd-networkd-wait-online.service")
     node2.wait_for_unit("systemd-networkd-wait-online.service")
+
+    # ================================
+    # Networkd Config
+    # ================================
+    node1.succeed("grep RouteTable=custom:23 /etc/systemd/networkd.conf")
+    node1.succeed("sudo ip route show table custom | grep '10.0.0.0/24 via 10.0.0.1 dev wg0 proto static'")
 
     # ================================
     # Wireguard

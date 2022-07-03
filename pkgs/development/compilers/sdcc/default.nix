@@ -10,11 +10,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sdcc";
-  version = "4.1.0";
+  version = "4.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${version}.tar.bz2";
-    sha256 = "0gskzli17ghnn5qllvn4d56qf9bvvclqjh63nnj63p52smvggvc1";
+    sha256 = "sha256-tJuuHSO81gV6gsT/5WE/nNDLz9HpQOnYTEv+nfCowFM=";
   };
 
   buildInputs = [ boost gputils texinfo zlib ];

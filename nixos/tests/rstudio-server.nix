@@ -14,12 +14,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
       };
     };
 
-    users.testuser = {
-      uid = 1000;
-      group = "testgroup";
-    };
-    groups.testgroup.gid = 1000;
-
     testScript = ''
       machine.wait_for_unit("rstudio-server.service")
       machine.succeed("curl -f -vvv -s http://127.0.0.1:8787")

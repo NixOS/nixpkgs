@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-j5IQ0hBefoF8p966YrfZgYCw7ht5twJhYi4l0NneukQ=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ automake autoconf libtool m4 sqlite ];
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ libtool m4 sqlite ];
 
   configureScript = "./autogen.sh";
 

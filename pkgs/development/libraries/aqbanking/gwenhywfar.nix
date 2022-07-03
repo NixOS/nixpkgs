@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-openssl-includes=${openssl.dev}/include"
-    "--with-openssl-libs=${openssl.out}/lib"
+    "--with-openssl-libs=${lib.getLib openssl}/lib"
   ];
 
   preConfigure = ''

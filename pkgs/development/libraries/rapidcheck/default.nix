@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A C++ framework for property based testing inspired by QuickCheck";
     inherit (src.meta) homepage;
-    maintainers = with maintainers; [ jb55 ];
+    maintainers = with maintainers; [ ];
     license = licenses.bsd2;
     platforms = platforms.all;
   };

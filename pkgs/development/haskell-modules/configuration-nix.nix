@@ -95,9 +95,22 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
-  niv = enableSeparateBinOutput super.niv;
+  niv = enableSeparateBinOutput (generateOptparseApplicativeCompletion "niv" super.niv);
   ormolu = enableSeparateBinOutput super.ormolu;
   ghcid = enableSeparateBinOutput super.ghcid;
+
+  arbtt = overrideCabal (drv: {
+    # The test suite needs the packages's executables in $PATH to succeed.
+    preCheck = ''
+      for i in $PWD/dist/build/*; do
+        export PATH="$i:$PATH"
+      done
+    '';
+    # One test uses timezone data
+    testToolDepends = drv.testToolDepends or [] ++ [
+      pkgs.tzdata
+    ];
+  }) super.arbtt;
 
   hzk = overrideCabal (drv: {
     preConfigure = "sed -i -e /include-dirs/d hzk.cabal";
@@ -163,6 +176,7 @@ self: super: builtins.intersectAttrs super {
   network-transport-tcp = dontCheck super.network-transport-tcp;
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   oidc-client = dontCheck super.oidc-client;            # the spec runs openid against google.com
+  persistent-migration = dontCheck super.persistent-migration; # spec requires pg_ctl binary
   pipes-mongodb = dontCheck super.pipes-mongodb;        # http://hydra.cryp.to/build/926195/log/raw
   pixiv = dontCheck super.pixiv;
   raven-haskell = dontCheck super.raven-haskell;        # http://hydra.cryp.to/build/502053/log/raw
@@ -212,18 +226,11 @@ self: super: builtins.intersectAttrs super {
   }) super.tz;
 
   # Nix-specific workaround
-  xmonad = appendPatch ./patches/xmonad-nix.patch (dontCheck super.xmonad);
-  xmonad_0_17_0 = doDistribute (appendPatch ./patches/xmonad_0_17_0-nix.patch (super.xmonad_0_17_0));
+  xmonad = appendPatch ./patches/xmonad_0_17_0-nix.patch (dontCheck super.xmonad);
 
-  # Need matching xmonad version
-  xmonad-contrib_0_17_0 = doDistribute (super.xmonad-contrib_0_17_0.override {
-    xmonad = self.xmonad_0_17_0;
-  });
-
-  xmonad-extras_0_17_0 = doDistribute (super.xmonad-extras_0_17_0.override {
-    xmonad = self.xmonad_0_17_0;
-    xmonad-contrib = self.xmonad-contrib_0_17_0;
-  });
+  # https://hydra.nixos.org/build/128665302/nixlog/3
+  # Disable tests because they require a running dbus session
+  xmonad-dbus = dontCheck super.xmonad-dbus;
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
@@ -488,19 +495,21 @@ self: super: builtins.intersectAttrs super {
   # The tests expect additional solvers on the path, replace the
   # available ones also with hard coded paths, and remove the missing
   # ones from the test.
+  # TODO(@sternenseemann): package cvc5 and re-enable tests
   sbv = overrideCabal (drv: {
     postPatch = ''
       sed -i -e 's|"abc"|"${pkgs.abc-verifier}/bin/abc"|' Data/SBV/Provers/ABC.hs
+      sed -i -e 's|"bitwuzla"|"${pkgs.bitwuzla}/bin/bitwuzla"|' Data/SBV/Provers/Bitwuzla.hs
       sed -i -e 's|"boolector"|"${pkgs.boolector}/bin/boolector"|' Data/SBV/Provers/Boolector.hs
+      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
       sed -i -e 's|"yices-smt2"|"${pkgs.yices}/bin/yices-smt2"|' Data/SBV/Provers/Yices.hs
       sed -i -e 's|"z3"|"${pkgs.z3}/bin/z3"|' Data/SBV/Provers/Z3.hs
-    '' + (if pkgs.stdenv.isAarch64 then ''
-      sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
-    ''
-    else ''
-      sed -i -e 's|"cvc4"|"${pkgs.cvc4}/bin/cvc4"|' Data/SBV/Provers/CVC4.hs
-      sed -i -e 's|\[abc, boolector, cvc4, mathSAT, yices, z3, dReal\]|[abc, boolector, cvc4, yices, z3]|' SBVTestSuite/SBVConnectionTest.hs
-    '');
+
+      # Solvers we don't provide are removed from tests
+      sed -i -e 's|, cvc5||' SBVTestSuite/SBVConnectionTest.hs
+      sed -i -e 's|, mathSAT||' SBVTestSuite/SBVConnectionTest.hs
+      sed -i -e 's|, dReal||' SBVTestSuite/SBVConnectionTest.hs
+    '';
   }) super.sbv;
 
   # The test-suite requires a running PostgreSQL server.
@@ -567,6 +576,7 @@ self: super: builtins.intersectAttrs super {
   # Tests require internet
   http-download = dontCheck super.http-download;
   pantry = dontCheck super.pantry;
+  pantry_0_5_2_1 = dontCheck super.pantry_0_5_2_1;
 
   # gtk2hs-buildtools is listed in setupHaskellDepends, but we
   # need it during the build itself, too.
@@ -622,8 +632,15 @@ self: super: builtins.intersectAttrs super {
         '';
       }) super.spago;
 
+      spagoOldAeson = spagoDocs.overrideScope (hfinal: hprev: {
+        # spago is not yet updated for aeson 2.0
+        aeson = hfinal.aeson_1_5_6_0;
+        # bower-json 1.1.0.0 only supports aeson 2.0, so we pull in the older version here.
+        bower-json = hprev.bower-json_1_0_0_1;
+      });
+
       # Tests require network access.
-      spagoWithoutChecks = dontCheck spagoDocs;
+      spagoWithoutChecks = dontCheck spagoOldAeson;
     in
     spagoWithoutChecks;
 
@@ -700,11 +717,6 @@ self: super: builtins.intersectAttrs super {
     testToolDepends = [ pkgs.git pkgs.mercurial ] ++ drv.testToolDepends or [];
   }) super.retrie_1_2_0_0;
 
-  nix-output-monitor = overrideCabal {
-    # Can't ran the golden-tests with nix, because they call nix
-    testTarget = "unit-tests";
-  } super.nix-output-monitor;
-
   haskell-language-server = overrideCabal (drv: {
     # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
     # by default. Unless we reflect this in the generic builder, GHC is going to
@@ -760,39 +772,8 @@ self: super: builtins.intersectAttrs super {
     })
     (generateOptparseApplicativeCompletion "pnbackup" super.pinboard-notes-backup);
 
-  # set more accurate set of platforms instead of maintaining
-  # an ever growing list of platforms to exclude via unsupported-platforms
-  cpuid = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.cpuid;
-
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
-
-  # passes the -msse2 flag which only works on x86 platforms
-  hsignal = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.hsignal;
-
-  # uses x86 intrinsics
-  blake3 = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.blake3;
-
-  # uses x86 intrinsics, see also https://github.com/NixOS/nixpkgs/issues/122014
-  crc32c = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.crc32c;
-
-  # uses x86 intrinsics
-  seqalign = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.seqalign;
-
-  # uses x86 intrinsics
-  geomancy = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.geomancy;
 
   hlint = overrideCabal (drv: {
     postInstall = ''
@@ -812,20 +793,15 @@ self: super: builtins.intersectAttrs super {
     ] ++ (drv.librarySystemDepends or []);
   }) super.taglib;
 
-  # uses x86 assembler
-  inline-asm = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.inline-asm;
-
-  # uses x86 assembler in C bits
-  hw-prim-bits = overrideCabal {
-    platforms = pkgs.lib.platforms.x86;
-  } super.hw-prim-bits;
-
   # random 1.2.0 has tests that indirectly depend on
   # itself causing an infinite recursion at evaluation
   # time
   random = dontCheck super.random;
+
+  # mockery's tests depend on hspec-discover which dependso on mockery for its tests
+  mockery = dontCheck super.mockery;
+  # same for logging-facade
+  logging-facade = dontCheck super.logging-facade;
 
   # Since this package is primarily used by nixpkgs maintainers and is probably
   # not used to link against by anyone, we can make it’s closure smaller and
@@ -862,18 +838,21 @@ self: super: builtins.intersectAttrs super {
       buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.makeWrapper ];
       postInstall = drv.postInstall or "" + ''
         wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
-          pkgs.lib.makeBinPath [ pkgs.nvchecker pkgs.nix-prefetch-git ]
+          pkgs.lib.makeBinPath [ pkgs.nvchecker pkgs.nix-prefetch ]
         }"
       '';
     }) super.nvfetcher);
 
   rel8 = addTestToolDepend pkgs.postgresql super.rel8;
 
-  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_4; });
+  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_7; });
 
-  hercules-ci-agent = appendConfigureFlag "-fnix-2_4" (super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_4; });
-  hercules-ci-cnix-expr = appendConfigureFlag "-fnix-2_4" (super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_4; });
-  hercules-ci-cnix-store = appendConfigureFlag "-fnix-2_4" (super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_4; });
+  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_7; };
+  hercules-ci-cnix-expr =
+    addTestToolDepend pkgs.git (
+      super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_7; }
+    );
+  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_7; };
 
   # Enable extra optimisations which increase build time, but also
   # later compiler performance, so we should do this for user's benefit.
@@ -917,6 +896,9 @@ self: super: builtins.intersectAttrs super {
       && buildPlatform.isx86;
   } super.hashes;
 
+  # Tries to access network
+  aws-sns-verify = dontCheck super.aws-sns-verify;
+
   # procex relies on close_range which has been introduced in Linux 5.9,
   # the test suite seems to force the use of this feature (or the fallback
   # mechanism is broken), so we can't run the test suite on machines with a
@@ -933,6 +915,13 @@ self: super: builtins.intersectAttrs super {
       fi
     '' + (drv.postConfigure or "");
   }) super.procex;
+
+  # Test suite wants to run main executable
+  fourmolu_0_7_0_1 = overrideCabal (drv: {
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/fourmolu:$PATH"
+    '';
+  }) super.fourmolu_0_7_0_1;
 
   # Apply a patch which hardcodes the store path of graphviz instead of using
   # whatever graphviz is in PATH.
@@ -981,23 +970,27 @@ self: super: builtins.intersectAttrs super {
 {
   inherit (super)
     hls-brittany-plugin
-    hls-call-hierarchy-plugin
-    hls-class-plugin
     hls-eval-plugin
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-module-name-plugin
     hls-ormolu-plugin
     hls-pragmas-plugin
-    hls-rename-plugin
-    hls-selection-range-plugin
     hls-splice-plugin;
   # Tests have file permissions expections that don‘t work with the nix store.
   hls-stylish-haskell-plugin = dontCheck super.hls-stylish-haskell-plugin;
 
   # Flaky tests
   hls-hlint-plugin = dontCheck super.hls-hlint-plugin;
+  hls-class-plugin = dontCheck super.hls-class-plugin;
+  hls-rename-plugin = dontCheck super.hls-rename-plugin;
   hls-alternate-number-format-plugin = dontCheck super.hls-alternate-number-format-plugin;
   hls-qualify-imported-names-plugin = dontCheck super.hls-qualify-imported-names-plugin;
   hls-haddock-comments-plugin = dontCheck super.hls-haddock-comments-plugin;
+  hls-tactics-plugin = dontCheck super.hls-tactics-plugin;
+  hls-call-hierarchy-plugin = dontCheck super.hls-call-hierarchy-plugin;
+  hls-selection-range-plugin = dontCheck super.hls-selection-range-plugin;
+
+  # Wants to execute cabal-install to (re-)build itself
+  hint = dontCheck super.hint;
 }

@@ -39,10 +39,9 @@
 # IE: programs coupled with the compiler
 , allowGoReference ? false
 
-, meta ? {}
+, CGO_ENABLED ? go.CGO_ENABLED
 
-# disabled
-, runVend ? false
+, meta ? {}
 
 # Not needed with buildGoModule
 , goPackagePath ? ""
@@ -54,8 +53,6 @@
 , ... }@args':
 
 with builtins;
-
-assert runVend != false -> throw "`runVend` has been replaced by `proxyVendor`";
 
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
 
@@ -79,12 +76,11 @@ let
     GO111MODULE = "on";
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-      "GIT_PROXY_COMMAND" "SOCKS_SERVER"
+      "GIT_PROXY_COMMAND" "SOCKS_SERVER" "GOPROXY"
     ];
 
     configurePhase = args.modConfigurePhase or ''
       runHook preConfigure
-
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
       cd "${modRoot}"
@@ -147,19 +143,20 @@ let
 
     GO111MODULE = "on";
     GOFLAGS = lib.optionals (!proxyVendor) [ "-mod=vendor" ] ++ lib.optionals (!allowGoReference) [ "-trimpath" ];
+    inherit CGO_ENABLED;
 
     configurePhase = args.configurePhase or ''
       runHook preConfigure
 
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
+      export GOPROXY=off
       export GOSUMDB=off
       cd "$modRoot"
-    '' + lib.optionalString (go-modules != "") ''
+    '' + lib.optionalString (vendorSha256 != null) ''
       ${if proxyVendor then ''
         export GOPROXY=file://${go-modules}
       '' else ''
-        export GOPROXY=off
         rm -rf vendor
         cp -r --reflink=auto ${go-modules} vendor
       ''}
@@ -171,13 +168,20 @@ let
     buildPhase = args.buildPhase or ''
       runHook preBuild
 
+      exclude='\(/_\|examples\|Godeps\|testdata'
+      if [[ -n "$excludedPackages" ]]; then
+        IFS=' ' read -r -a excludedArr <<<$excludedPackages
+        printf -v excludedAlternates '%s\\|' "''${excludedArr[@]}"
+        excludedAlternates=''${excludedAlternates%\\|} # drop final \| added by printf
+        exclude+='\|'"$excludedAlternates"
+      fi
+      exclude+='\)'
+
       buildGoDir() {
         local d; local cmd;
         cmd="$1"
         d="$2"
         . $TMPDIR/buildFlagsArray
-        echo "$d" | grep -q "\(/_\|examples\|Godeps\|testdata\)" && return 0
-        [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
         local OUT
         if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" ''${tags:+-tags=${lib.concatStringsSep "," tags}} ''${ldflags:+-ldflags="$ldflags"} -v -p $NIX_BUILD_CORES $d 2>&1)"; then
           if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
@@ -197,7 +201,7 @@ let
         if [ -n "$subPackages" ]; then
           echo "$subPackages" | sed "s,\(^\| \),\1./,g"
         else
-          find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique
+          find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique | grep -v "$exclude"
         fi
       }
 

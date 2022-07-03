@@ -2,33 +2,35 @@
 
 deployAndroidPackage {
   inherit package os;
-  buildInputs = [ autoPatchelfHook makeWrapper ]
-  ++ lib.optionals (os == "linux") [
-    pkgs.glibc
-    pkgs.xorg.libX11
-    pkgs.xorg.libXext
-    pkgs.xorg.libXdamage
-    pkgs.xorg.libXfixes
-    pkgs.xorg.libxcb
-    pkgs.xorg.libXcomposite
-    pkgs.xorg.libXcursor
-    pkgs.xorg.libXi
-    pkgs.xorg.libXrender
-    pkgs.xorg.libXtst
-    pkgs.libcxx
-    pkgs.libGL
-    pkgs.libpulseaudio
-    pkgs.libuuid
-    pkgs.zlib
-    pkgs.ncurses5
-    pkgs.stdenv.cc.cc
-    pkgs_i686.glibc
-    pkgs.expat
-    pkgs.freetype
-    pkgs.nss
-    pkgs.nspr
-    pkgs.alsa-lib
-  ];
+  buildInputs = [ makeWrapper ]
+    ++ lib.optionals (os == "linux") (with pkgs; [
+      autoPatchelfHook
+      glibc
+      libcxx
+      libGL
+      libpulseaudio
+      libuuid
+      zlib
+      ncurses5
+      stdenv.cc.cc
+      pkgs_i686.glibc
+      expat
+      freetype
+      nss
+      nspr
+      alsa-lib
+    ]) ++ (with pkgs.xorg; [
+      libX11
+      libXext
+      libXdamage
+      libXfixes
+      libxcb
+      libXcomposite
+      libXcursor
+      libXi
+      libXrender
+      libXtst
+    ]);
   patchInstructions = lib.optionalString (os == "linux") ''
     addAutoPatchelfSearchPath $packageBaseDir/lib
     addAutoPatchelfSearchPath $packageBaseDir/lib64

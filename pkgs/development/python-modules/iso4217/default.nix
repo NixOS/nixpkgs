@@ -16,7 +16,7 @@ let
 in
 buildPythonPackage rec {
   pname = "iso4217";
-  version = "1.8";
+  version = "1.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "dahlia";
     repo = pname;
     rev = version;
-    hash = "sha256-L0vx6Aan6D1lusgBh/pcT373ZTxbtWpQnFKB2V0dxlA=";
+    hash = "sha256-7VrXAP/Qyzy2BDTmFwDlxHvF7HhndJsDMt/qHcsmhzs=";
   };
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [

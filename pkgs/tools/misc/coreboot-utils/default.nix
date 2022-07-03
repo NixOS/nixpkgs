@@ -7,7 +7,7 @@ let
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
     license = with licenses; [ gpl2Only gpl2Plus ];
-    maintainers = with maintainers; [ petabyteboy felixsinger yuka ];
+    maintainers = with maintainers; [ felixsinger yuka ];
     platforms = platforms.linux;
   };
 
@@ -53,6 +53,7 @@ let
       pname = "intelmetool";
       meta.description = "Dump interesting things about Management Engine";
       buildInputs = [ pciutils zlib ];
+      meta.platforms = [ "x86_64-linux" "i686-linux" ];
     };
     cbfstool = generic {
       pname = "cbfstool";
@@ -77,6 +78,7 @@ let
       pname = "inteltool";
       meta.description = "Provides information about Intel CPU/chipset hardware configuration (register contents, MSRs, etc)";
       buildInputs = [ pciutils zlib ];
+      meta.platforms = [ "x86_64-linux" "i686-linux" ];
     };
     amdfwtool = generic {
       pname = "amdfwtool";

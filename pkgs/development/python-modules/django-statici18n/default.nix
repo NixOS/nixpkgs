@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, django, django_appconf }:
+{ lib, buildPythonPackage, fetchPypi, django, django-appconf }:
 
 buildPythonPackage rec {
   pname = "django-statici18n";
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "dbcdac190d93e0b4eabcab8875c8eb68795eceb442f926843ec5cbe1432fe628";
   };
 
-  propagatedBuildInputs = [ django django_appconf ];
+  propagatedBuildInputs = [ django django-appconf ];
 
   # pypi package does not contains test harness
   # source tarball requires setting up a config

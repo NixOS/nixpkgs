@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-/EK1CKJ0IR7fkKSpQkONbWcz6uhUoAwK430ljNYsV5U=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace \
+        "add_executable(ursadb_test Tests.cpp)" "" \
+      --replace \
+        "target_link_libraries(ursadb_test ursa)" ""
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     cp ursadb $out/bin/

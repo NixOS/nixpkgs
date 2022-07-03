@@ -48,7 +48,7 @@ mkDerivation rec {
     install -Dm755 ${src}/Ripcord $out/Ripcord
     patchelf --replace-needed libsodium.so.18 libsodium.so $out/Ripcord
     makeQtWrapper $out/Ripcord $out/bin/ripcord \
-      --run "cd $out" \
+      --chdir "$out" \
       --set FONTCONFIG_FILE "${fontsConf}" \
       --prefix LD_LIBRARY_PATH ":" "${xorg.libXcursor}/lib" \
       --prefix QT_XKB_CONFIG_ROOT ":" "${xorg.xkeyboardconfig}/share/X11/xkb" \
@@ -60,6 +60,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "Desktop chat client for Slack and Discord";
     homepage = "https://cancel.fm/ripcord/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # See: https://cancel.fm/ripcord/shareware-redistribution/
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ infinisil ];

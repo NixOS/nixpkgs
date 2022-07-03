@@ -7,15 +7,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libunistring";
-  version = "0.9.10";
+  version = "1.0";
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/${pname}-${version}.tar.gz";
-    sha256 = "02v17za10mxnj095x4pvm80jxyqwk93kailfc2j8xa1r6crmnbm8";
+    sha256 = "sha256-PAGEwOSS18IIzjHSXdHSxY8MPtbLvgMsWySM3a0xhUQ=";
   };
 
   outputs = [ "out" "dev" "info" "doc" ];
 
+  strictDeps = true;
   propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
 
   configureFlags = [

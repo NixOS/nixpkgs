@@ -15,9 +15,12 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "gcc" "\$(CC)"
   '';
 
-  buildInputs = [ ocaml findlib expat ounit ];
+  nativeBuildInputs = [ ocaml findlib ];
+  buildInputs = [ expat ounit ];
 
-  doCheck = !lib.versionAtLeast ocaml.version "4.06";
+  strictDeps = true;
+
+  doCheck = lib.versionOlder ocaml.version "4.06";
   checkTarget = "testall";
 
   createFindlibDestdir = true;

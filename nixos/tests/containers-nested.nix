@@ -5,7 +5,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   meta = with pkgs.lib.maintainers; { maintainers = [ sorki ]; };
 
-  machine = { lib, ... }:
+  nodes.machine = { lib, ... }:
     let
       makeNested = subConf: {
         containers.nested = {

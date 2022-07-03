@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ncurses }:
 
-if !lib.versionAtLeast ocaml.version "4.02"
+if lib.versionOlder ocaml.version "4.02"
 || lib.versionAtLeast ocaml.version "4.12"
 then throw "dune 1 is not available for OCaml ${ocaml.version}"
 else

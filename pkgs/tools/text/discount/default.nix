@@ -1,36 +1,28 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.7";
+  version = "2.2.7b";
   pname = "discount";
 
   src = fetchFromGitHub {
     owner = "Orc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0p2gznrsvv82zxbajqir8y2ap1ribbgagqg1bzhv3i81p2byhjh7";
+    sha256 = "sha256-S6OVKYulhvEPRqNXBsvZ7m2W4cbdnrpZKPAo3SfD+9s=";
   };
 
-  patches = [
-    ./fix-configure-path.patch
-
-    # Fix parallel make depends:
-    # - https://github.com/Orc/discount/commit/e42188e6c4c30d9de668cf98d98dd0c13ecce7cf.patch
-    # - https://github.com/Orc/discount/pull/245
-    ./parallel-make.patch
-  ];
+  patches = [ ./fix-configure-path.patch ];
   configureScript = "./configure.sh";
-
   configureFlags = [
-    "--enable-all-features"
-    "--pkg-config"
     "--shared"
-    "--with-fenced-code"
-    # Use deterministic mangling
-    "--debian-glitch"
+    "--debian-glitch" # use deterministic mangling
+    "--pkg-config"
+    "--h1-title"
   ];
 
   enableParallelBuilding = true;
+  installTargets = [ "install.everything" ];
+
   doCheck = true;
 
   postFixup = lib.optionalString stdenv.isDarwin ''
@@ -42,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.pell.portland.or.us/~orc/Code/discount/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ shell ];
+    mainProgram = "markdown";
     platforms = platforms.unix;
   };
 }

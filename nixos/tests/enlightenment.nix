@@ -6,7 +6,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     maintainers = [ romildo ];
   };
 
-  machine = { ... }:
+  nodes.machine = { ... }:
   {
     imports = [ ./common/user-account.nix ];
     services.xserver.enable = true;

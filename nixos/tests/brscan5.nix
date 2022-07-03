@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ mattchrist ];
   };
 
-  machine = { pkgs, ... }:
+  nodes.machine = { pkgs, ... }:
     {
       nixpkgs.config.allowUnfree = true;
       hardware.sane = {

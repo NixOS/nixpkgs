@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
 {
   name = "bees";
 
-  machine = { config, pkgs, ... }: {
+  nodes.machine = { config, pkgs, ... }: {
     boot.initrd.postDeviceCommands = ''
       ${pkgs.btrfs-progs}/bin/mkfs.btrfs -f -L aux1 /dev/vdb
       ${pkgs.btrfs-progs}/bin/mkfs.btrfs -f -L aux2 /dev/vdc

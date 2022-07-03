@@ -9,7 +9,7 @@ let
     comment = "A SNES emulator";
     desktopName = "zsnes";
     genericName = "zsnes";
-    categories = "Game;";
+    categories = [ "Game" ];
   };
 
 in stdenv.mkDerivation {
@@ -31,6 +31,10 @@ in stdenv.mkDerivation {
       patch -p1 < "debian/patches/$i"
     done
   '';
+
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: initc.o:(.bss+0x28): multiple definition of `HacksDisable'; cfg.o:(.bss+0x59e3): first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
 
   preConfigure = ''
     cd src

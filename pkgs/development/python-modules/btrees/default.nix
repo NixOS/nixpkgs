@@ -6,15 +6,20 @@
 , transaction
 , zope_testrunner
 , python
+, pythonOlder
 }:
 
 buildPythonPackage rec {
-  pname = "BTrees";
-  version = "4.9.2";
+  pname = "btrees";
+  version = "4.10.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "d33323655924192c4ac998d9ee3002e787915d19c1e17a6baf47c9a63d9556e3";
+    pname = "BTrees";
+    inherit version;
+    hash = "sha256-1qsONBDQdNcVQkXW3GSTrobxtQvWCA0TEOuz7N6l3rY=";
   };
 
   propagatedBuildInputs = [

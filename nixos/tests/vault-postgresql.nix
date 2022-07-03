@@ -11,7 +11,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
   meta = with pkgs.lib.maintainers; {
     maintainers = [ lnl7 roberth ];
   };
-  machine = { lib, pkgs, ... }: {
+  nodes.machine = { lib, pkgs, ... }: {
     environment.systemPackages = [ pkgs.vault ];
     environment.variables.VAULT_ADDR = "http://127.0.0.1:8200";
     services.vault.enable = true;

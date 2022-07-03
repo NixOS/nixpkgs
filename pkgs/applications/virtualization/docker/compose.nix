@@ -2,22 +2,27 @@
 
 buildGoModule rec {
   pname = "docker-compose";
-  version = "2.2.3";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "compose";
     rev = "v${version}";
-    sha256 = "sha256-c6rwRFJ/9moukd56qrmHxOeULhSPHCU0Cj+vw4TQ8+Q=";
+    sha256 = "sha256-D3+qDWxg3e5/3UIMz8FZDuxmQHmTv0NJVT/otGYedtw=";
   };
 
-  vendorSha256 = "sha256-W+bcjUXPZjldjhgaGsUKS1vSvS3yP/kH0QqwyvhL7Ww=";
+  vendorSha256 = "sha256-WxLQfu65Gr+ao/pM8B2uiS88sNT72Klhz7ZIrEadW5g=";
 
   ldflags = [ "-X github.com/docker/compose/v2/internal.Version=${version}" "-s" "-w" ];
 
   doCheck = false;
   installPhase = ''
+    runHook preInstall
     install -D $GOPATH/bin/cmd $out/libexec/docker/cli-plugins/docker-compose
+
+    mkdir -p $out/bin
+    ln -s $out/libexec/docker/cli-plugins/docker-compose $out/bin/docker-compose
+    runHook postInstall
   '';
 
   meta = with lib; {

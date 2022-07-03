@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, vte, gtk3, ncurses, pcre2, wrapGAppsHook }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, vte, gtk3, ncurses, pcre2, wrapGAppsHook, nixosTests }:
 
 let
 
@@ -57,7 +57,10 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "terminfo" ];
 
-  passthru = { inherit vte-ng; };
+  passthru = {
+    inherit vte-ng;
+    tests = nixosTests.terminal-emulators.termite;
+  };
 
   postInstall = ''
     mkdir -p $terminfo/share

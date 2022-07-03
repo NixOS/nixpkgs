@@ -17,20 +17,31 @@
 , dbus
 }:
 
+let
+  themes = fetchFromGitLab {
+    domain = "source.puri.sm";
+    owner = "Librem5";
+    repo = "feedbackd-device-themes";
+    rev = "v0.0.20220523";
+    sha256 = "sha256-RyUZj+tpJSYhyoK+E98CTIoHwXwBdB1YHVnO5821exo=";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "feedbackd";
   # Not an actual upstream project release,
   # only a Debian package release that is tagged in the upstream repo
-  version = "0.0.0+git20211018";
+  version = "0.0.0+git20220520";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [ "out" "dev" ]
+    # remove if cross-compiling gobject-introspection works
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${version}";
-    hash = "sha256-jqKRHcxISK54xq/tQm6zV+J+U71eKh04OVTNHDDy65E=";
+    hash = "sha256-4ftPC6LnX0kKFYVyH85yCH43B3YjuaZM5rzr8TGgZvc=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +63,13 @@ stdenv.mkDerivation rec {
     libgudev
   ];
 
-  mesonFlags = [ "-Dgtk_doc=true" "-Dman=true" ];
+  mesonFlags = [
+    "-Dgtk_doc=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
+    "-Dman=true"
+    # TODO(mindavi): introspection broken due to https://github.com/NixOS/nixpkgs/issues/72868
+    #                can be removed if cross-compiling gobject-introspection works.
+    "-Dintrospection=${if (stdenv.buildPlatform == stdenv.hostPlatform) then "enabled" else "disabled"}"
+  ];
 
   checkInputs = [
     dbus
@@ -63,6 +80,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/lib/udev/rules.d
     sed "s|/usr/libexec/|$out/libexec/|" < $src/debian/feedbackd.udev > $out/lib/udev/rules.d/90-feedbackd.rules
+    cp ${themes}/data/* $out/share/feedbackd/themes/
   '';
 
   meta = with lib; {

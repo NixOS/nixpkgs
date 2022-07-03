@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     homepage = "http://findbugs.sourceforge.net/";
     maintainers = with maintainers; [ pSub ];
     platforms = with platforms; unix;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl3;
   };
 }

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "genact";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1hc4jwk5rr1yw3pfvriash7b03j181k8c9y7m3sglkk8xnff219c";
+    sha256 = "sha256-ouDaOs72vivJBZVwcJhv4YoPKQOEBctUTqubvrpoBtI=";
   };
 
-  cargoSha256 = "0a5ic6c7fvmg2kh3qprzffnpw40cmrgbscrlhxxs3m7nxfjdh7bc";
+  cargoSha256 = "sha256-csubycZaBUHPp8XJ1C+nWw7DzVGVJm38/Dgw41qUMYQ=";
 
   meta = with lib; {
     description = "A nonsense activity generator";

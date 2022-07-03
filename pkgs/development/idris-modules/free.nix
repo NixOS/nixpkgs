@@ -3,7 +3,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "free";
+  pname = "free";
   version = "2017-07-03";
 
   ipkgName = "idris-free";

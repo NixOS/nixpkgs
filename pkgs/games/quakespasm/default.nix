@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
       name = "quakespasm";
       exec = "quake";
       desktopName = "Quakespasm";
-      categories = "Game;";
+      categories = [ "Game" ];
     })
   ];
 
@@ -93,6 +93,7 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = platforms.unix;
-    maintainers = with maintainers; [ mikroskeem m3tti ];
+    maintainers = with maintainers; [ mikroskeem ];
+    mainProgram = "quake";
   };
 }

@@ -13,7 +13,10 @@ buildDunePackage rec {
     sha256 = "120w72fqymjp6ibicbp31jyx9yv34mdvgkr0zdfpzvfb7lgd8rc7";
   };
 
-  buildInputs = [ cppo cmdliner re ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ cppo ];
+  buildInputs = [ cmdliner re ];
 
   propagatedBuildInputs = [ ocp-indent ];
 

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, react, opaline }:
 
-if !lib.versionAtLeast ocaml.version "4.04"
+if lib.versionOlder ocaml.version "4.04"
 then throw "reactiveData is not available for OCaml ${ocaml.version}"
 else
 
@@ -15,8 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YLkacIbjxZQ/ThgSxjTqviBYih6eW2GX5H7iybQDv1A=";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opaline ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild opaline ];
   propagatedBuildInputs = [ react ];
+
+  strictDeps = true;
 
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";
 

@@ -21,6 +21,7 @@ stdenv.mkDerivation {
     license     = licenses.bsd2;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ copumpkin ];
+    mainProgram = "micro_httpd";
   };
 }
 

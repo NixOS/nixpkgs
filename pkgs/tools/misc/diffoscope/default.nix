@@ -11,11 +11,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "204";
+  version = "217";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-JYo/4pqe2ISpLHn90hTBtr0ffviX8m4lWgVb6zwceP4=";
+    sha256 = "sha256-JS6lzxOsE3K4gH3VHsRY5Iucq5PBH3jFD5lSmNZWEG4=";
   };
 
   outputs = [ "out" "man" ];
@@ -46,18 +46,18 @@ python3Packages.buildPythonApplication rec {
   pythonPath = [
       binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
       e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
+      libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
       xz zip zstd
     ]
     ++ (with python3Packages; [
-      argcomplete black debian defusedxml jsondiff jsbeautifier libarchive-c
-      python_magic progressbar33 pypdf2 rpm tlsh
+      argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
+      python-magic progressbar33 pypdf2 rpm tlsh
     ])
     ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
     ++ lib.optionals enableBloat ([
       abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
-      hdf5 imagemagick llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
-    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer ]));
+      hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
+    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer-six ]));
 
   checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 
@@ -66,20 +66,22 @@ python3Packages.buildPythonApplication rec {
     installManPage doc/diffoscope.1
   '';
 
-  # Disable flaky test and a failing one
   disabledTests = [
+    # Disable flaky test and a failing one
     "test_android_manifest"
     "test_sbin_added_to_path"
     "test_diff_meta"
     "test_diff_meta2"
     "test_obj_no_differences"
 
-    # Failing because of file-v5.40 has a slightly different output.
-    # Upstream issue: https://salsa.debian.org/reproducible-builds/diffoscope/-/issues/271
-    "test_text_proper_indentation"
-
     # fails because it fails to determine llvm version
     "test_item3_deflate_llvm_bitcode"
+
+    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character: b'/build/pytest-of-nixbld/pytest-0/\xf0(\x8c('
+    "test_non_unicode_filename"
+
+    # disable formatting tests because they can break on black updates
+    "test_code_is_black_clean"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable flaky tests on Darwin
     "test_non_unicode_filename"
@@ -123,7 +125,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://diffoscope.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg ma27 danielfullmer ];
+    maintainers = with maintainers; [ dezgeg danielfullmer ];
     platforms = platforms.unix;
   };
 }

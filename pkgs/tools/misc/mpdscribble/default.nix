@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mpdscribble";
-  version = "0.23";
+  version = "0.24";
 
   src = fetchurl {
     url = "https://www.musicpd.org/download/mpdscribble/${version}/mpdscribble-${version}.tar.xz";
-    sha256 = "0s66zqscb44p88cl3kcv5jkjcqsskcnrv7xgrjhzrchf2kcpwf53";
+    sha256 = "sha256-9rTLp0izuH5wUnC0kjyOI+lMLgD+3VC+sUaNvi+yqOc=";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];

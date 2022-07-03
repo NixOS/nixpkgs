@@ -40,6 +40,8 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_interact_syntax_error"
+    # Output and the sandbox don't work well together
+    "test_interact_multiple_indented_lines"
   ];
 
   pythonImportsCheck = [

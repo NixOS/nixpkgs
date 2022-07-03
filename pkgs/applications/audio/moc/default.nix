@@ -1,7 +1,8 @@
 { lib, stdenv, fetchurl, pkg-config
 , ncurses, db , popt, libtool
+, libiconv, CoreServices
 # Sound sub-systems
-, alsaSupport ? true, alsa-lib
+, alsaSupport ? (!stdenv.isDarwin), alsa-lib
 , pulseSupport ? true, libpulseaudio, autoreconfHook
 , jackSupport ? true, libjack2
 , ossSupport ? true
@@ -64,7 +65,8 @@ in stdenv.mkDerivation rec {
     ++ opt wavpackSupport wavpack
     # Misc
     ++ opt curlSupport curl
-    ++ opt samplerateSupport libsamplerate;
+    ++ opt samplerateSupport libsamplerate
+    ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ];
 
   configureFlags = [
     # Sound sub-systems
@@ -97,6 +99,6 @@ in stdenv.mkDerivation rec {
     homepage = "http://moc.daper.net/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ aethelz pSub jagajaga ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

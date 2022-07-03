@@ -1,22 +1,18 @@
-{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests }:
-
-let
-  common = opts: callPackage (import ./common.nix opts) {};
-in
+{ stdenv, lib, callPackage, fetchurl, fetchpatch, nixosTests, buildMozillaMach }:
 
 rec {
-  firefox = common rec {
+  firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "97.0.1";
+    version = "102.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "8620aace77167593aab5acd230860eb3e67eeddc49c0aad0491b5dc20bd0ddb6089dbb8975aed241426f57b2ad772238b04d03b95390175f580cbd80bb6d5f6c";
+      sha512 = "c7dd6d8d74c46573b16d097a5e5d230669e5778cd680b3b6f30510e989d21543138ced3bb013998b76614aa380b28efd8542450c591d8b724e03bd163d012057";
     };
 
     meta = {
       description = "A web browser built from Firefox source tree";
       homepage = "http://www.mozilla.com/en-US/firefox/";
-      maintainers = with lib.maintainers; [ eelco lovesegfault hexa ];
+      maintainers = with lib.maintainers; [ lovesegfault hexa ];
       platforms = lib.platforms.unix;
       badPlatforms = lib.platforms.darwin;
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
@@ -30,12 +26,39 @@ rec {
     };
   };
 
-  firefox-esr-91 = common rec {
+  firefox-esr-102 = buildMozillaMach rec {
     pname = "firefox-esr";
-    version = "91.6.0esr";
+    version = "102.0esr";
+    applicationName = "Mozilla Firefox ESR";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "3dd1929f93cdd087a93fc3597f32d9005c986b59832954e01a8c2472b179c92ad611eaa73d3fc000a08b838a0b70da73ff5ba82d6009160655ba6894cf04520e";
+      sha512 = "76494363ffdbd33b61912ac72b5cc15450e4b2936898c84fcf3980ccfa6d7ecc05524a63a60827d6caba999ada5cfd6f121e893ba0587778ce11654d0daf21d7";
+    };
+
+    meta = {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+      homepage = "http://www.mozilla.com/en-US/firefox/";
+      maintainers = with lib.maintainers; [ hexa ];
+      platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
+      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
+                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
+      license = lib.licenses.mpl20;
+    };
+    tests = [ nixosTests.firefox-esr-102 ];
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-102-unwrapped";
+      versionSuffix = "esr";
+    };
+  };
+
+  firefox-esr-91 = buildMozillaMach rec {
+    pname = "firefox-esr";
+    version = "91.11.0esr";
+    applicationName = "Mozilla Firefox ESR";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
+      sha512 = "bff3a399c03bd1cdaaec0b6963b1558aa35b6338b6c02042ffd65fec0aedd344d01718692e881332f5f352c32da15ba09a20a09ee072200b47ae840bc0585a96";
     };
 
     meta = {
@@ -53,30 +76,5 @@ rec {
       attrPath = "firefox-esr-91-unwrapped";
       versionSuffix = "esr";
     };
-  };
-
-  librewolf =
-  let
-    librewolf-src = callPackage ./librewolf { };
-  in
-  (common rec {
-    pname = "librewolf";
-    binaryName = "librewolf";
-    version = librewolf-src.packageVersion;
-    src = librewolf-src.firefox;
-    inherit (librewolf-src) extraConfigureFlags extraPostPatch extraPassthru;
-
-    meta = {
-      description = "A fork of Firefox, focused on privacy, security and freedom";
-      homepage = "https://librewolf.net/";
-      maintainers = with lib.maintainers; [ squalus ];
-      inherit (firefox.meta) platforms badPlatforms broken maxSilent license;
-    };
-    updateScript = callPackage ./librewolf/update.nix {
-      attrPath = "librewolf-unwrapped";
-    };
-  }).override {
-    crashreporterSupport = false;
-    enableOfficialBranding = false;
   };
 }

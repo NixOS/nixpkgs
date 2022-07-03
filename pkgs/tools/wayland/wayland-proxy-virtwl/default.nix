@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , ocamlPackages
-, buildPackages
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -23,8 +22,9 @@ ocamlPackages.buildDunePackage rec {
   useDune2 = true;
   minimumOCamlVersion = "4.08";
 
+  strictDeps = true;
   nativeBuildInputs = [
-    buildPackages.ocamlPackages.ppx_cstruct
+    ocamlPackages.ppx_cstruct
   ];
 
   buildInputs = with ocamlPackages; [
@@ -32,6 +32,7 @@ ocamlPackages.buildDunePackage rec {
     cmdliner
     logs
     cstruct-lwt
+    ppx_cstruct
   ];
 
   doCheck = true;

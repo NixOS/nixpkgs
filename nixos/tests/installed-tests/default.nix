@@ -43,7 +43,7 @@ let
             maintainers = tested.meta.maintainers;
           };
 
-          machine = { ... }: {
+          nodes.machine = { ... }: {
             imports = [
               testConfig
             ] ++ optional withX11 ../common/x11.nix;
@@ -84,12 +84,15 @@ let
 in
 
 {
+  appstream = callInstalledTest ./appstream.nix {};
+  appstream-qt = callInstalledTest ./appstream-qt.nix {};
   colord = callInstalledTest ./colord.nix {};
   flatpak = callInstalledTest ./flatpak.nix {};
   flatpak-builder = callInstalledTest ./flatpak-builder.nix {};
   fwupd = callInstalledTest ./fwupd.nix {};
   gcab = callInstalledTest ./gcab.nix {};
   gdk-pixbuf = callInstalledTest ./gdk-pixbuf.nix {};
+  geocode-glib = callInstalledTest ./geocode-glib.nix {};
   gjs = callInstalledTest ./gjs.nix {};
   glib-networking = callInstalledTest ./glib-networking.nix {};
   gnome-photos = callInstalledTest ./gnome-photos.nix {};
@@ -104,6 +107,5 @@ in
   malcontent = callInstalledTest ./malcontent.nix {};
   ostree = callInstalledTest ./ostree.nix {};
   pipewire = callInstalledTest ./pipewire.nix {};
-  power-profiles-daemon = callInstalledTest ./power-profiles-daemon.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }

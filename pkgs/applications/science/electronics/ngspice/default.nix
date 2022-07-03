@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ngspice";
-  version = "34";
+  version = "37";
 
   src = fetchurl {
     url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
-    sha256 = "sha256-ImP//GaUdUlyr3By7wHP5irHkIANrWUbwpC/yueb17U=";
+    sha256 = "1gpcic6b6xk3g4956jcsqljf33kj5g43cahmydq6m8rn39sadvlv";
   };
 
   nativeBuildInputs = [ flex bison ];

@@ -7,26 +7,12 @@ let
   defaultAddress = "localhost:8080";
 
   dbUser = "miniflux";
-  dbPassword = "miniflux";
-  dbHost = "localhost";
   dbName = "miniflux";
-
-  defaultCredentials = pkgs.writeText "miniflux-admin-credentials" ''
-    ADMIN_USERNAME=admin
-    ADMIN_PASSWORD=password
-  '';
 
   pgbin = "${config.services.postgresql.package}/bin";
   preStart = pkgs.writeScript "miniflux-pre-start" ''
     #!${pkgs.runtimeShell}
-    db_exists() {
-      [ "$(${pgbin}/psql -Atc "select 1 from pg_database where datname='$1'")" == "1" ]
-    }
-    if ! db_exists "${dbName}"; then
-      ${pgbin}/psql postgres -c "CREATE ROLE ${dbUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${dbPassword}'"
-      ${pgbin}/createdb --owner "${dbUser}" "${dbName}"
-      ${pgbin}/psql "${dbName}" -c "CREATE EXTENSION IF NOT EXISTS hstore"
-    fi
+    ${pgbin}/psql "${dbName}" -c "CREATE EXTENSION IF NOT EXISTS hstore"
   '';
 in
 
@@ -54,11 +40,10 @@ in
       };
 
       adminCredentialsFile = mkOption  {
-        type = types.nullOr types.path;
-        default = null;
+        type = types.path;
         description = ''
-          File containing the ADMIN_USERNAME, default is "admin", and
-          ADMIN_PASSWORD (length >= 6), default is "password"; in the format of
+          File containing the ADMIN_USERNAME and
+          ADMIN_PASSWORD (length >= 6) in the format of
           an EnvironmentFile=, as described by systemd.exec(5).
         '';
         example = "/etc/nixos/miniflux-admin-credentials";
@@ -70,16 +55,24 @@ in
 
     services.miniflux.config =  {
       LISTEN_ADDR = mkDefault defaultAddress;
-      DATABASE_URL = "postgresql://${dbUser}:${dbPassword}@${dbHost}/${dbName}?sslmode=disable";
+      DATABASE_URL = "user=${dbUser} host=/run/postgresql dbname=${dbName}";
       RUN_MIGRATIONS = "1";
       CREATE_ADMIN = "1";
     };
 
-    services.postgresql.enable = true;
+    services.postgresql = {
+      enable = true;
+      ensureUsers = [ {
+        name = dbUser;
+        ensurePermissions = {
+          "DATABASE ${dbName}" = "ALL PRIVILEGES";
+        };
+      } ];
+      ensureDatabases = [ dbName ];
+    };
 
     systemd.services.miniflux-dbsetup = {
       description = "Miniflux database setup";
-      wantedBy = [ "multi-user.target" ];
       requires = [ "postgresql.service" ];
       after = [ "network.target" "postgresql.service" ];
       serviceConfig = {
@@ -92,17 +85,16 @@ in
     systemd.services.miniflux = {
       description = "Miniflux service";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "postgresql.service" ];
+      requires = [ "miniflux-dbsetup.service" ];
       after = [ "network.target" "postgresql.service" "miniflux-dbsetup.service" ];
 
       serviceConfig = {
         ExecStart = "${pkgs.miniflux}/bin/miniflux";
+        User = dbUser;
         DynamicUser = true;
         RuntimeDirectory = "miniflux";
         RuntimeDirectoryMode = "0700";
-        EnvironmentFile = if cfg.adminCredentialsFile == null
-        then defaultCredentials
-        else cfg.adminCredentialsFile;
+        EnvironmentFile = cfg.adminCredentialsFile;
         # Hardening
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "" ];
@@ -119,7 +111,7 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

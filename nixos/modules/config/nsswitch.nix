@@ -95,11 +95,14 @@ with lib;
   config = {
     assertions = [
       {
-        # Prevent users from disabling nscd, with nssModules being set.
-        # If disabling nscd is really necessary, it's still possible to opt out
-        # by forcing config.system.nssModules to [].
         assertion = config.system.nssModules.path != "" -> config.services.nscd.enable;
-        message = "Loading NSS modules from system.nssModules (${config.system.nssModules.path}), requires services.nscd.enable being set to true.";
+        message = ''
+          Loading NSS modules from system.nssModules (${config.system.nssModules.path}),
+          requires services.nscd.enable being set to true.
+
+          If disabling nscd is really necessary, it is possible to disable loading NSS modules
+          by setting `system.nssModules = lib.mkForce [];` in your configuration.nix.
+        '';
       }
     ];
 

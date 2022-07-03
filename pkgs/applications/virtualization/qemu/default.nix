@@ -1,9 +1,10 @@
 { lib, stdenv, fetchurl, fetchpatch, python3, python3Packages, zlib, pkg-config, glib, buildPackages
 , perl, pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
-, makeWrapper, runtimeShell
+, makeWrapper, runtimeShell, removeReferencesTo
 , attr, libcap, libcap_ng, socat
 , CoreServices, Cocoa, Hypervisor, rez, setfile
+, guestAgentSupport ? with stdenv.hostPlatform; isLinux || isSunOS || isWindows
 , numaSupport ? stdenv.isLinux && !stdenv.isAarch32, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
@@ -40,16 +41,16 @@ stdenv.mkDerivation rec {
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
-  version = "6.2.0";
+  version = "7.0.0";
 
   src = fetchurl {
     url= "https://download.qemu.org/qemu-${version}.tar.xz";
-    sha256 = "0iavlsy9hin8k38230j8lfmyipx3965zljls1dp34mmc8n75vqb8";
+    sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ makeWrapper pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme ]
+  nativeBuildInputs = [ makeWrapper removeReferencesTo pkg-config flex bison meson ninja perl python3 python3Packages.sphinx python3Packages.sphinx_rtd_theme ]
     ++ lib.optionals gtkSupport [ wrapGAppsHook ]
     ++ lib.optionals stdenv.isDarwin [ sigtool ];
 
@@ -82,20 +83,40 @@ stdenv.mkDerivation rec {
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
-  outputs = [ "out" "ga" ];
+  outputs = [ "out" ] ++ lib.optional guestAgentSupport "ga";
   # On aarch64-linux we would shoot over the Hydra's 2G output limit.
   separateDebugInfo = !(stdenv.isAarch64 && stdenv.isLinux);
 
   patches = [
     ./fix-qemu-ga.patch
-    ./9p-ignore-noatime.patch
+
+    # QEMU upstream does not demand compatibility to pre-10.13, so 9p-darwin
+    # support on nix requires utimensat fallback. The patch adding this fallback
+    # set was removed during the process of upstreaming this functionality, and
+    # will still be needed in nix until the macOS SDK reaches 10.13+.
+    ./provide-fallback-for-utimensat.patch
     # Cocoa clipboard support only works on macOS 10.14+
+    ./revert-ui-cocoa-add-clipboard-support.patch
+    # Standard about panel requires AppKit and macOS 10.13+
     (fetchpatch {
-      url = "https://gitlab.com/qemu-project/qemu/-/commit/7e3e20d89129614f4a7b2451fe321cc6ccca3b76.diff";
-      sha256 = "09xz06g57wxbacic617pq9c0qb7nly42gif0raplldn5lw964xl2";
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/99eb313ddbbcf73c1adcdadceba1423b691c6d05.diff";
+      sha256 = "sha256-gTRf9XENAfbFB3asYCXnw4OV4Af6VE1W56K2xpYDhgM=";
       revert = true;
     })
-  ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+    # Workaround for upstream issue with nested virtualisation: https://gitlab.com/qemu-project/qemu/-/issues/1008
+    (fetchpatch {
+      url = "https://gitlab.com/qemu-project/qemu/-/commit/3e4546d5bd38a1e98d4bd2de48631abf0398a3a2.diff";
+      sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
+      revert = true;
+    })
+    # make nixos tests that boot from USB more stable
+    # https://lists.nongnu.org/archive/html/qemu-devel/2022-05/msg01484.html
+    (fetchpatch {
+      url = "https://gitlab.com/raboof/qemu/-/commit/3fb5e8fe4434130b1167a995b2a01c077cca2cd5.patch";
+      sha256 = "sha256-evzrN3i4ntc/AFG0C0rezQpQbWcnx74nXO+5DLErX8o=";
+    })
+  ]
+    ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
@@ -132,7 +153,6 @@ stdenv.mkDerivation rec {
     "--disable-strip" # We'll strip ourselves after separating debug info.
     "--enable-docs"
     "--enable-tools"
-    "--enable-guest-agent"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     # Always use our Meson, not the bundled version, which doesn't
@@ -140,6 +160,7 @@ stdenv.mkDerivation rec {
     "--meson=meson"
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     "--cpu=${stdenv.hostPlatform.uname.processor}"
+    (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional numaSupport "--enable-numa"
     ++ lib.optional seccompSupport "--enable-seccomp"
     ++ lib.optional smartcardSupport "--enable-smartcard"
@@ -171,10 +192,12 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # the .desktop is both invalid and pointless
     rm -f $out/share/applications/qemu.desktop
-
-    # copy qemu-ga (guest agent) to separate output
+  '' + lib.optionalString guestAgentSupport ''
+    # move qemu-ga (guest agent) to separate output
     mkdir -p $ga/bin
-    cp $out/bin/qemu-ga $ga/bin/
+    mv $out/bin/qemu-ga $ga/bin/
+    ln -s $ga/bin/qemu-ga $out/bin
+    remove-references-to -t $out $ga/bin/qemu-ga
   '' + lib.optionalString gtkSupport ''
     # wrap GTK Binaries
     for f in $out/bin/qemu-system-*; do
@@ -219,6 +242,7 @@ stdenv.mkDerivation rec {
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = ''
+    ln -s $out/libexec/virtiofsd $out/bin
     ln -s $out/bin/qemu-system-${stdenv.hostPlatform.qemuArch} $out/bin/qemu-kvm
   '';
 
@@ -239,5 +263,6 @@ stdenv.mkDerivation rec {
     mainProgram = "qemu-kvm";
     maintainers = with maintainers; [ eelco qyliss ];
     platforms = platforms.unix;
+    priority = 10; # Prefer virtiofsd from the virtiofsd package.
   };
 }

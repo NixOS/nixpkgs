@@ -5,7 +5,7 @@ self = rec {
   name = "ql-to-nix";
   env = buildEnv { name = name; paths = buildInputs; };
   buildInputs = [
-    gcc stdenv
+    gcc
     openssl fuse libuv libmysqlclient libfixposix libev sqlite
     freetds
     lispPackages.quicklisp-to-nix lispPackages.quicklisp-to-nix-system-info

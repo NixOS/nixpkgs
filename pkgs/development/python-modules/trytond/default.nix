@@ -1,8 +1,8 @@
 { lib
-, buildPythonApplication
+, buildPythonPackage
 , fetchPypi
 , pythonOlder
-, mock
+, defusedxml
 , lxml
 , relatorio
 , genshi
@@ -12,36 +12,30 @@
 , werkzeug
 , wrapt
 , passlib
-, pillow
-, bcrypt
 , pydot
 , python-Levenshtein
-, simplejson
 , html2text
-, psycopg2
-, withPostgresql ? true
+, weasyprint
+, gevent
+, pillow
+, withPostgresql ? true, psycopg2
+, python
 }:
 
-buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "trytond";
-  version = "6.2.3";
+  version = "6.4.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9be5d27aff9ae9b0ab73a8805145b2cc89900b9b513e6d5bfce89e9b7167f8f4";
+    sha256 = "sha256-ylRyTpTnciZiBeG/Mx9PGBXFdh4q3qENeygY3NDDPKU=";
   };
 
-  # Tells the tests which database to use
-  DB_NAME = ":memory:";
-
-  buildInputs = [
-    mock
-  ];
-
   propagatedBuildInputs = [
+    defusedxml
     lxml
     relatorio
     genshi
@@ -50,20 +44,29 @@ buildPythonApplication rec {
     python-sql
     werkzeug
     wrapt
-    pillow
     passlib
 
     # extra dependencies
-    bcrypt
     pydot
     python-Levenshtein
-    simplejson
     html2text
-  ] ++ lib.optional withPostgresql psycopg2;
+    weasyprint
+    gevent
+    pillow
+  ] ++ relatorio.optional-dependencies.fodt
+    ++ passlib.optional-dependencies.bcrypt
+    ++ passlib.optional-dependencies.argon2
+    ++ lib.optional withPostgresql psycopg2;
 
-  # If unset, trytond will try to mkdir /homeless-shelter
-  preCheck = ''
+  checkPhase = ''
+    runHook preCheck
+
     export HOME=$(mktemp -d)
+    export TRYTOND_DATABASE_URI="sqlite://"
+    export DB_NAME=":memory:";
+    ${python.interpreter} -m unittest discover -s trytond.tests
+
+    runHook postCheck
   '';
 
   meta = with lib; {
@@ -77,6 +80,7 @@ buildPythonApplication rec {
       modularity, scalability and security.
     '';
     homepage = "http://www.tryton.org/";
+    changelog = "https://hg.tryton.org/trytond/file/${version}/CHANGELOG";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ udono johbo ];
   };

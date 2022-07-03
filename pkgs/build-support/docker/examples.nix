@@ -9,6 +9,16 @@
 
 { pkgs, buildImage, buildLayeredImage, fakeNss, pullImage, shadowSetup, buildImageWithNixDb, pkgsCross }:
 
+let
+  nixosLib = import ../../../nixos/lib {
+    # Experimental features need testing too, but there's no point in warning
+    # about it, so we enable the feature flag.
+    featureFlags.minimalModules = {};
+  };
+  evalMinimalConfig = module: nixosLib.evalModules { modules = [ module ]; };
+
+in
+
 rec {
   # 1. basic example
   bash = buildImage {
@@ -97,7 +107,7 @@ rec {
   };
   # Same example, but re-fetches every time the fetcher implementation changes.
   # NOTE: Only use this for testing, or you'd be wasting a lot of time, network and space.
-  testNixFromDockerHub = pkgs.invalidateFetcherByDrvHash pullImage {
+  testNixFromDockerHub = pkgs.testers.invalidateFetcherByDrvHash pullImage {
     imageName = "nixos/nix";
     imageDigest = "sha256:85299d86263a3059cf19f419f9d286cc9f06d3c13146a8ebbb21b3437f598357";
     sha256 = "19fw0n3wmddahzr20mhdqv6jkjn1kanh6n2mrr08ai53dr8ph5n7";
@@ -486,7 +496,7 @@ rec {
   cross = let
     # Cross compile for x86_64 if on aarch64
     crossPkgs =
-      if pkgs.system == "aarch64-linux" then pkgsCross.gnu64
+      if pkgs.stdenv.hostPlatform.system == "aarch64-linux" then pkgsCross.gnu64
       else pkgsCross.aarch64-multiplatform;
   in crossPkgs.dockerTools.buildImage {
     name = "hello-cross";
@@ -581,6 +591,37 @@ rec {
     config.Cmd = [ "hello" ];
     includeStorePaths = false;
   };
+
+  etc =
+    let
+      inherit (pkgs) lib;
+      nixosCore = (evalMinimalConfig ({ config, ... }: {
+        imports = [
+          pkgs.pkgsModule
+          ../../../nixos/modules/system/etc/etc.nix
+        ];
+        environment.etc."some-config-file" = {
+          text = ''
+            127.0.0.1 localhost
+            ::1 localhost
+          '';
+          # For executables:
+          # mode = "0755";
+        };
+      }));
+    in pkgs.dockerTools.streamLayeredImage {
+      name = "etc";
+      tag = "latest";
+      enableFakechroot = true;
+      fakeRootCommands = ''
+        mkdir -p /etc
+        ${nixosCore.config.system.build.etcActivationCommands}
+      '';
+      config.Cmd = pkgs.writeScript "etc-cmd" ''
+        #!${pkgs.busybox}/bin/sh
+        ${pkgs.busybox}/bin/cat /etc/some-config-file
+      '';
+    };
 
   # Example export of the bash image
   exportBash = pkgs.dockerTools.exportImage { fromImage = bash; };

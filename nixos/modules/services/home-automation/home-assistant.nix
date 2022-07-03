@@ -135,7 +135,7 @@ in {
     };
 
     config = mkOption {
-      type = types.submodule {
+      type = types.nullOr (types.submodule {
         freeformType = format.type;
         options = {
           # This is a partial selection of the most common options, so new users can quickly
@@ -244,7 +244,7 @@ in {
             };
           };
         };
-      };
+      });
       example = literalExpression ''
         {
           homeassistant = {
@@ -349,10 +349,6 @@ in {
       '';
       description = ''
         The Home Assistant package to use.
-        Override <literal>extraPackages</literal> or <literal>extraComponents</literal> in order to add additional dependencies.
-        If you specify <option>config</option> and do not set <option>autoExtraComponents</option>
-        to <literal>false</literal>, overriding <literal>extraComponents</literal> will have no effect.
-        Avoid <literal>home-assistant.overridePythonAttrs</literal> if you use <literal>autoExtraComponents</literal>.
       '';
     };
 
@@ -364,7 +360,25 @@ in {
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    assertions = [
+      {
+        assertion = cfg.openFirewall -> !isNull cfg.config;
+        message = "openFirewall can only be used with a declarative config";
+      }
+    ];
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.config.http.server_port ];
+
+    # symlink the configuration to /etc/home-assistant
+    environment.etc = lib.mkMerge [
+      (lib.mkIf (cfg.config != null && !cfg.configWritable) {
+        "home-assistant/configuration.yaml".source = configFile;
+      })
+
+      (lib.mkIf (cfg.lovelaceConfig != null && !cfg.lovelaceConfigWritable) {
+        "home-assistant/ui-lovelace.yaml".source = lovelaceConfigFile;
+      })
+    ];
 
     systemd.services.home-assistant = {
       description = "Home Assistant";
@@ -375,18 +389,22 @@ in {
         "mysql.service"
         "postgresql.service"
       ];
+      reloadTriggers = [
+        configFile
+        lovelaceConfigFile
+      ];
       preStart = let
         copyConfig = if cfg.configWritable then ''
           cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
         '' else ''
           rm -f "${cfg.configDir}/configuration.yaml"
-          ln -s ${configFile} "${cfg.configDir}/configuration.yaml"
+          ln -s /etc/home-assistant/configuration.yaml "${cfg.configDir}/configuration.yaml"
         '';
         copyLovelaceConfig = if cfg.lovelaceConfigWritable then ''
           cp --no-preserve=mode ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
         '' else ''
           rm -f "${cfg.configDir}/ui-lovelace.yaml"
-          ln -s ${lovelaceConfigFile} "${cfg.configDir}/ui-lovelace.yaml"
+          ln -s /etc/home-assistant/ui-lovelace.yaml "${cfg.configDir}/ui-lovelace.yaml"
         '';
       in
         (optionalString (cfg.config != null) copyConfig) +

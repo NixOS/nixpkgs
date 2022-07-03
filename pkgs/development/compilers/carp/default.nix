@@ -11,6 +11,12 @@ haskellPackages.mkDerivation rec {
     sha256 = "sha256-o7NLd7jC1BvcoVzbD18LvHg/SqOnfn9yELUrpg2uZtY=";
   };
 
+  # -Werror breaks build with GHC >= 9.0
+  # https://github.com/carp-lang/Carp/issues/1386
+  postPatch = ''
+    substituteInPlace CarpHask.cabal --replace "-Werror" ""
+  '';
+
   buildTools = [ makeWrapper ];
 
   executableHaskellDepends = with haskellPackages; [

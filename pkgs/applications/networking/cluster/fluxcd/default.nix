@@ -1,9 +1,9 @@
 { lib, buildGoModule, fetchFromGitHub, fetchzip, installShellFiles }:
 
 let
-  version = "0.26.3";
-  sha256 = "0j6zvcjykk775nnj8s0n5154lqslgfpi8884gh6sv204z2drfjff";
-  manifestsSha256 = "1pfk0fj228zy0m1cz0400l4r41l7p0gsdq5lqnl3a8vgb4f6i41q";
+  version = "0.31.3";
+  sha256 = "16c6rr0hzlzlfc5xsphp23s3rxavkgfcsblzm15wzd85c2ahm81l";
+  manifestsSha256 = "1nr44h5sy97ki2vn2426i2idnnc4pv1n3j6n4p11mf73dy9qzgzp";
 
   manifests = fetchzip {
     url =
@@ -23,7 +23,7 @@ in buildGoModule rec {
     inherit sha256;
   };
 
-  vendorSha256 = "sha256-34hSbOB7n9OFpVqe8y1+jAC3j0HEBg9LhYOvVGH9kLY=";
+  vendorSha256 = "sha256-vHRk6oADEvDmYCeBK/puGSMd4L9K1x/CVPtuYZY9klk=";
 
   postUnpack = ''
     cp -r ${manifests} source/cmd/flux/manifests
@@ -65,6 +65,7 @@ in buildGoModule rec {
     '';
     homepage = "https://fluxcd.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jlesquembre bryanasdev000 ];
+    maintainers = with maintainers; [ bryanasdev000 jlesquembre superherointj ];
+    mainProgram = "flux";
   };
 }

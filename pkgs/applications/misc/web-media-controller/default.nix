@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     description = "MPRIS proxy for usage with 'Web Media Controller' web extension";
     license = licenses.unlicense;
     maintainers = with maintainers; [ doronbehar ];
+    mainProgram = "web-media-controller";
     platforms = platforms.all;
   };
 }

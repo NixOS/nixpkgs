@@ -44,5 +44,6 @@ buildDunePackage {
 
   meta = dns.meta // {
     description = "Unix command line utilities using uDNS";
+    mainProgram = "odns";
   };
 }

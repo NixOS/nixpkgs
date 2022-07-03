@@ -18,13 +18,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
-  version = "0.4.3";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
-    hash = "sha256-rfk/csJJATXI1JvAHn2K/+fVLsqmkKxIbNWlcu1EhYY=";
+    hash = "sha256-IP56jOiiIK9EW4D5yEdLc49rUzcvegAX3Yyk2ERK/pE=";
   };
 
   format = "other";
@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3
     pyxdg
-    pdfminer
+    pdfminer-six
     pycairo
     pexpect
   ];

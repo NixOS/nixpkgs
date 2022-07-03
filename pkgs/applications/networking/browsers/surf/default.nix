@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  installFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   # Add run-time dependencies to PATH. Append them to PATH so the user can
   # override the dependencies with their own PATH.

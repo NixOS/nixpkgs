@@ -90,6 +90,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
     slave.fail("systemctl is-enabled jenkins.service")
 
+    slave.succeed("java -fullversion")
+
     with subtest("jobs are declarative"):
         # Check that jobs are created on disk.
         master.wait_for_unit("jenkins-job-builder")

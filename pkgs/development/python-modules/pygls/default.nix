@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , setuptools-scm
 , pydantic
+, toml
 , typeguard
 , mock
 , pytest-asyncio
@@ -13,6 +14,7 @@
 buildPythonPackage rec {
   pname = "pygls";
   version = "0.11.3";
+  format = "setuptools";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
@@ -27,6 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pydantic
+    toml
     typeguard
   ];
   # We don't know why an early version of pydantic is required, see:

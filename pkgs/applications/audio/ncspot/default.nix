@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, ncurses, openssl, libiconv
+{ stdenv, lib, fetchFromGitHub, rustPlatform, pkg-config, ncurses, openssl
 , withALSA ? true, alsa-lib
 , withPulseAudio ? false, libpulseaudio
 , withPortAudio ? false, portaudio
@@ -7,25 +7,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "0.9.5";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    sha256 = "sha256-HnP0dXKkMssDAhrsA99bTCVGdov9t5+1y8fJ+BWTM80=";
+    sha256 = "sha256-lZ7wFhXJ9I4IcHLLoyMTnq3MJDtUNcVdMHYLThuN7c8=";
   };
 
-  # Upstream now only supports rust 1.58+, but this version is not yet available in nixpkgs.
-  # See https://github.com/hrkfdn/ncspot/issues/714
-  patches = [ ./rust_1_57_support.patch ];
-
-  cargoSha256 = "sha256-g6UMwirsSV+/NtFIfEZrz5h/OitPQcDeSawh7wq4TLI=";
+  cargoSha256 = "sha256-JLNB196GWpLyCrZ8fBH8+1RF1fa6PhdwFw6RW3fUARM=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ ncurses openssl ]
-    ++ lib.optional stdenv.isDarwin libiconv
+  buildInputs = [ ncurses ]
+    ++ lib.optional stdenv.isLinux openssl
     ++ lib.optional withALSA alsa-lib
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio

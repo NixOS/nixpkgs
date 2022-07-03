@@ -12,11 +12,11 @@ let
   };
 in stdenv.mkDerivation rec {
   inherit pname;
-  version = "1.3.74";
+  version = "1.3.76";
 
   src = fetchurl {
     url = "https://firmware.ardupilot.org/Tools/MissionPlanner/MissionPlanner-${version}.zip";
-    sha256 = "1cgpmsmmnbzw1lwsdafp8yklk1rwc61yf12vc1ahcc6bl7q2385x";
+    sha256 = "sha256-vdunUGwLjDKf1LDhtyTQAExddecyWc1TdZOyuu0qMlk=";
   };
 
   nativeBuildInputs = [ makeWrapper mono unzip ];

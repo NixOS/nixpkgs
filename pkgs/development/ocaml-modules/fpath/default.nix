@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, astring }:
 
-if !lib.versionAtLeast ocaml.version "4.03"
+if lib.versionOlder ocaml.version "4.03"
 then throw "fpath is not available for OCaml ${ocaml.version}"
 else
 
@@ -13,9 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "03z7mj0sqdz465rc4drj1gr88l9q3nfs374yssvdjdyhjbqqzc0j";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
+  buildInputs = [ topkg ];
 
   propagatedBuildInputs = [ astring ];
+
+  strictDeps = true;
 
   inherit (topkg) buildPhase installPhase;
 

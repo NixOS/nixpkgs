@@ -124,6 +124,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dusb-acl-helper-dir=${placeholder "out"}/bin"
     "-Dusb-ids-path=${hwdata}/share/hwdata/usb.ids"
+  ] ++ lib.optionals (!withPolkit) [
+    "-Dpolkit=disabled"
   ];
 
   meta = with lib; {

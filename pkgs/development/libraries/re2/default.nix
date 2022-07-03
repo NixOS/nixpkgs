@@ -1,24 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, nix-update-script }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, nix-update-script
+
+# for passthru.tests
+, bazel
+, chromium
+, grpc
+, haskellPackages
+, mercurial
+, ninja
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "re2";
-  version = "2021-11-01";
+  version = "2022-04-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = version;
-    sha256 = "sha256-q8u7xNp6n17F6twPoVkix8iCKPWUN+qg6rhSR4Dv+bI=";
+    sha256 = "sha256-ywmXIAyVWYMKBOsAndcq7dFYpn9ZgNz5YWTPjylXxsk=";
   };
-
-  patches = [
-    # Pull upstreal fix for parallel testing.
-    (fetchpatch {
-      name = "parallel-tests.patch";
-      url = "https://github.com/google/re2/commit/9262284a7edc1b83e7172f4ec2d7967d695e7420.patch";
-      sha256 = "1knhfx9cs4841r09jw4ha6mdx9qwpvlcxvd04i8vr84kd0lilqms";
-    })
-  ];
 
   preConfigure = ''
     substituteInPlace Makefile --replace "/usr/local" "$out"
@@ -29,6 +33,11 @@ stdenv.mkDerivation rec {
   buildFlags = lib.optionals stdenv.hostPlatform.isStatic [ "static" ];
 
   enableParallelBuilding = true;
+  # Broken when shared/static are tested in parallel:
+  #   cp: cannot create regular file 'obj/testinstall.cc': File exists
+  #   make: *** [Makefile:334: static-testinstall] Error 1
+  # Will be fixed by https://code-review.googlesource.com/c/re2/+/59830
+  enableParallelChecking = false;
 
   preCheck = "patchShebangs runtests";
   doCheck = true;
@@ -42,6 +51,16 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = nix-update-script {
       attrPath = pname;
+    };
+    tests = {
+      inherit
+        chromium
+        grpc
+        mercurial;
+      inherit (python3.pkgs)
+        fb-re2
+        google-re2;
+      haskellPackages-re2 = haskellPackages.re2;
     };
   };
 

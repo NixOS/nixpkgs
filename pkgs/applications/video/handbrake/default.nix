@@ -11,7 +11,7 @@
 , lib
 , fetchFromGitHub
   # For tests
-, testVersion
+, testers
 , runCommand
 , fetchurl
   # Main build tools
@@ -230,7 +230,7 @@ let self = stdenv.mkDerivation rec {
         HandBrakeCLI -i ${testMkv} -o test.mkv -e x264 -q 20 -B 160
         test -e test.mkv
       '';
-    version = testVersion { package = self; command = "HandBrakeCLI --version"; };
+    version = testers.testVersion { package = self; command = "HandBrakeCLI --version"; };
   };
 
   meta = with lib; {

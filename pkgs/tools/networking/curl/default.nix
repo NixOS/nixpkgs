@@ -1,8 +1,9 @@
-{ lib, stdenv, fetchurl, pkg-config, perl
+{ lib, stdenv, fetchurl, pkg-config, perl, nixosTests
 , brotliSupport ? false, brotli ? null
 , c-aresSupport ? false, c-ares ? null
 , gnutlsSupport ? false, gnutls ? null
 , gsaslSupport ? false, gsasl ? null
+, patchNetrcRegression ? false
 , gssSupport ? with stdenv.hostPlatform; (
     !isWindows &&
     # disable gss becuase of: undefined reference to `k5_bcmp'
@@ -24,6 +25,14 @@
 , wolfsslSupport ? false, wolfssl ? null
 , zlibSupport ? true, zlib ? null
 , zstdSupport ? false, zstd ? null
+
+# for passthru.tests
+, coeurl
+, curlpp
+, haskellPackages
+, ocamlPackages
+, phpExtensions
+, python3
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -54,19 +63,22 @@ assert zstdSupport -> zstd != null;
 
 stdenv.mkDerivation rec {
   pname = "curl";
-  version = "7.81.0";
+  version = "7.83.1";
 
   src = fetchurl {
     urls = [
       "https://curl.haxx.se/download/${pname}-${version}.tar.bz2"
       "https://github.com/curl/curl/releases/download/${lib.replaceStrings ["."] ["_"] pname}-${version}/${pname}-${version}.tar.bz2"
     ];
-    sha256 = "sha256-Hno41wGOwGDx8W34OYVPCInpThIsTPpdOjfC3Fbx4lg=";
+    sha256 = "sha256-9Tmjb7RKgmDsXZd+Tg290u7intkPztqpvDyfeKETv/A=";
   };
 
   patches = [
     ./7.79.1-darwin-no-systemconfiguration.patch
-  ];
+    # quiche: support ca-fallback
+    # https://github.com/curl/curl/commit/fdb5e21b4dd171a96cf7c002ee77bb08f8e58021
+    ./7.83.1-quiche-support-ca-fallback.patch
+  ] ++ lib.optional patchNetrcRegression ./netrc-regression.patch;
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
   separateDebugInfo = stdenv.isLinux;
@@ -107,10 +119,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
       # Build without manual
       "--disable-manual"
-      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback
-      # to nss-cacert from the default profile.
-      "--without-ca-bundle"
-      "--without-ca-path"
       (lib.enableFeature c-aresSupport "ares")
       (lib.enableFeature ldapSupport "ldap")
       (lib.enableFeature ldapSupport "ldaps")
@@ -134,12 +142,27 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--disable-shared"
       "--enable-static"
+    ] ++ lib.optionals stdenv.isDarwin [
+      # Disable default CA bundle, use NIX_SSL_CERT_FILE or fallback to nss-cacert from the default profile.
+      # Without this curl might detect /etc/ssl/cert.pem at build time on macOS, causing curl to ignore NIX_SSL_CERT_FILE.
+      "--without-ca-bundle"
+      "--without-ca-path"
     ];
 
   CXX = "${stdenv.cc.targetPrefix}c++";
   CXXCPP = "${stdenv.cc.targetPrefix}c++ -E";
 
-  doCheck = false; # expensive, fails
+  doCheck = true;
+  preCheck = ''
+    patchShebangs tests/
+  '' + lib.optionalString stdenv.isDarwin ''
+    # bad interaction with sandbox if enabled?
+    rm tests/data/test1453
+    rm tests/data/test1086
+  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
+    # different resolving behaviour?
+    rm tests/data/test1592
+  '';
 
   postInstall = ''
     moveToOutput bin/curl-config "$dev"
@@ -149,13 +172,22 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString scpSupport ''
     sed '/^dependency_libs/s|${lib.getDev libssh2}|${lib.getLib libssh2}|' -i "$out"/lib/*.la
   '' + lib.optionalString gnutlsSupport ''
-    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so
-    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4
-    ln $out/lib/libcurl.so $out/lib/libcurl-gnutls.so.4.4.0
+    ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}
+    ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4
+    ln $out/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/libcurl-gnutls${stdenv.hostPlatform.extensions.sharedLibrary}.4.4.0
   '';
 
   passthru = {
     inherit opensslSupport openssl;
+    tests = {
+      inherit curlpp coeurl;
+      haskell-curl = haskellPackages.curl;
+      ocaml-curly = ocamlPackages.curly;
+      php-curl = phpExtensions.curl;
+      pycurl = python3.pkgs.pycurl;
+      # Additional checking with support http3 protocol.
+      inherit (nixosTests) nginx-http3;
+    };
   };
 
   meta = with lib; {

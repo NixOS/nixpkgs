@@ -1,4 +1,4 @@
-{ callPackage, makeFontsConf, gnome2, buildFHSUserEnv }:
+{ callPackage, makeFontsConf, gnome2, buildFHSUserEnv, tiling_wm ? false }:
 
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
@@ -7,18 +7,19 @@ let
     };
     inherit (gnome2) GConf gnome_vfs;
     inherit buildFHSUserEnv;
+    inherit tiling_wm;
   };
   stableVersion = {
-    version = "2021.1.1.21"; # "Android Studio Bumblebee (2021.1.1 Patch 1)"
-    sha256Hash = "PeMJIILfaunTlpR4EV76qQlTlZDcWoKes61qe9W9oqQ=";
+    version = "2021.2.1.14"; # "Android Studio Chipmunk (2021.2.1)"
+    sha256Hash = "1cy7ngm160w819ikrd459kg6lnk1k16jjnjm3d0aksmlws5b12z9";
   };
   betaVersion = {
-    version = "2021.2.1.8"; # "Android Studio Chipmunk (2021.2.1) Beta 1"
-    sha256Hash = "bPfs4kw7czG9CbEgrzn0bQXdT03jyqPVqtaIuVBFSmc=";
+    version = "2021.2.1.11"; # "Android Studio Chipmunk (2021.2.1) Beta 4"
+    sha256Hash = "0in8x6v957y9hsnz5ak845pdpvgvnvlm0s6r9y8f27zkm947vbjd";
   };
   latestVersion = { # canary & dev
-    version = "2021.3.1.1"; # "Android Studio Dolphin (2021.3.1) Canary 1"
-    sha256Hash = "W3pNQBM7WdDScQo5b8q5Va5NTgl73uZu0ks/zDMb4aA=";
+    version = "2021.3.1.9"; # "Android Studio Dolphin (2021.3.1) Canary 9"
+    sha256Hash = "0nx26xwy67mnbkz37m3nw354siv152sa6zx94pxrvbnxxgppigfb";
   };
 in {
   # Attributes are named by their corresponding release channels

@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     maintainers = with lib.maintainers; [ veehaitch ];
   };
 
-  machine = { lib, ... }: {
+  nodes.machine = { lib, ... }: {
     services.aesmd = {
       enable = true;
       settings = {

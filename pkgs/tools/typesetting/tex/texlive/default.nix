@@ -4,10 +4,9 @@
 */
 { stdenv, lib, fetchurl, runCommand, writeText, buildEnv
 , callPackage, ghostscriptX, harfbuzz
-, makeWrapper, python3, ruby, perl
+, makeWrapper, python3, ruby, perl, gnused, gnugrep, coreutils
 , useFixedHashes ? true
 , recurseIntoAttrs
-, fetchpatch
 }:
 let
   # various binaries (compiled)
@@ -24,7 +23,7 @@ let
   # function for creating a working environment from a set of TL packages
   combine = import ./combine.nix {
     inherit bin combinePkgs buildEnv lib makeWrapper writeText
-      stdenv python3 ruby perl;
+      stdenv python3 ruby perl gnused gnugrep coreutils;
     ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
 
@@ -57,22 +56,15 @@ let
         deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
       };
 
+      # override cyclic dependency until #167226 is fixed
+      xecjk = orig.xecjk // {
+        deps = removeAttrs orig.xecjk.deps [ "ctex" ];
+      };
+
       texdoc = orig.texdoc // {
         # build Data.tlpdb.lua (part of the 'tlType == "run"' package)
-        postUnpack = let
-          # commit that ensures reproducibility of Data.tlpdb.lua
-          # remove on the next texdoc update
-          reproPatch = fetchpatch {
-            name = "make-data-tlpdb-lua-reproducible.patch";
-            url = "https://github.com/TeX-Live/texdoc/commit/82aff83d5453a887c1117b9e771a98bddd8a605a.patch";
-            sha256 = "0y04y468i7db4p5bsyyhgzip8q4fi1756x9a15ndha9xfnasbf44";
-            stripLen = 2;
-            extraPrefix = "scripts/texdoc/";
-          };
-        in ''
+        postUnpack = ''
           if [[ -f "$out"/scripts/texdoc/texdoc.tlu ]]; then
-            patch -p1 -d "$out" < "${reproPatch}"
-
             unxz --stdout "${tlpdb}" > texlive.tlpdb
 
             # create dummy doc file to ensure that texdoc does not return an error
@@ -123,20 +115,21 @@ let
         ++ combinePkgs (attrs.deps or {});
     };
 
-  snapshot = {
-    year = "2021";
-    month = "12";
-    day = "27";
-  };
+  # for daily snapshots
+  # snapshot = {
+  #   year = "2022";
+  #   month = "03";
+  #   day = "22";
+  # };
 
   tlpdb = fetchurl {
     # use the same mirror(s) as urlPrefixes below
     urls = [
-      #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
-      #"ftp://tug.org/texlive/historic/2019/tlnet-final/tlpkg/texlive.tlpdb.xz"
-      "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
+      "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      "ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/tlpkg/texlive.tlpdb.xz"
+      #"https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/tlpkg/texlive.tlpdb.xz"
     ];
-    hash = "sha512-PcXTctrO0aL5C7Ci1J2Z5fa5WqKONhOK2q0FnSbT5+iP9WWSCljyQiHE8C4LYMMHii48y6AJVRkjVIukI3+rUQ==";
+    hash = "sha256-qSV6OZmGHCom2w85WXm84ohMrGGJLZ2Vzj9talDNiOo=";
   };
 
   # create a derivation that contains an unpacked upstream TL package
@@ -157,11 +150,11 @@ let
       # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
         # tlnet-final snapshot
-        #"http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive"
-        #"ftp://tug.org/texlive/historic/2019/tlnet-final/archive"
+        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive"
+        "ftp://tug.org/texlive/historic/${bin.texliveYear}/tlnet-final/archive"
 
         # Daily snapshots hosted by one of the texlive release managers
-        "https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
+        #"https://texlive.info/tlnet-archive/${snapshot.year}/${snapshot.month}/${snapshot.day}/tlnet/archive"
       ];
 
     in runCommand "texlive-${tlName}"
@@ -209,7 +202,8 @@ in
           (combine {
             ${pname} = attrs;
             extraName = "combined" + lib.removePrefix "scheme" pname;
-            extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
+            extraVersion = "-final";
+            #extraVersion = ".${snapshot.year}${snapshot.month}${snapshot.day}";
           })
         )
         { inherit (tl)

@@ -15,6 +15,10 @@ buildGoModule rec {
 
   doCheck = false;
 
+  postPatch = ''
+    patchShebangs .buildkite/steps/{lint,run-local}.sh
+  '';
+
   subPackages = [ "cmd/bk" ];
 
   ldflags = [ "-s" "-w" "-X main.VERSION=${version}" ];
@@ -24,5 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/buildkite/cli";
     license = licenses.mit;
     maintainers = with maintainers; [ groodt ];
+    mainProgram = "bk";
   };
 }

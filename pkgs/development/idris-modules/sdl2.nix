@@ -7,7 +7,7 @@
 , SDL2_gfx
 }:
 build-idris-package rec {
-  name = "sdl2";
+  pname = "sdl2";
   version = "0.1.1";
 
   idrisDeps = [ effects ];

@@ -147,7 +147,9 @@ let
 in
 
 stdenv.mkDerivation rec {
-  pname = "asciidoc";
+  pname = "asciidoc"
+    + lib.optionalString enableStandardFeatures "-full"
+    + lib.optionalString enableExtraPlugins "-with-plugins";
   version = "9.1.0";
 
   # Note: a substitution to improve reproducibility should be updated once 10.0.0 is
@@ -320,6 +322,9 @@ stdenv.mkDerivation rec {
       the backend output markups (which can be almost any type of SGML/XML
       markup) can be customized and extended by the user.
     '';
+    sourceProvenance = with sourceTypes; [
+      fromSource
+    ] ++ lib.optional _enableDitaaFilter binaryBytecode;
     homepage = "http://www.methods.co.nz/asciidoc/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

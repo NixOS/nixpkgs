@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-spellcheck";
-  version = "0.10.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "drahnr";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-AKk25/j9Ao7ss8+2x+A5ohZ4P1wQ8uW5DVIBCHqFSPU=";
+    sha256 = "sha256-ZiRa4XYnY4fwbMenRLnvFQms66tIyGbm5saK8gN39ag=";
   };
 
-  cargoSha256 = "sha256-6zTZXSW8poePNZy48F6u5tF1LEDQt4f9qv7W/pdIBbI=";
+  cargoSha256 = "sha256-gWQbhFPdBDhPZY1LHxFlWO9xG4AXfyhZp0UnZ3Y86/Y=";
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 

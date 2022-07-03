@@ -4,12 +4,16 @@
 , fetchFromGitHub
 , karton-core
 , malduck
+, pythonOlder
 , regex
 }:
 
 buildPythonPackage rec {
   pname = "karton-autoit-ripper";
   version = "1.1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
@@ -27,14 +31,17 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
-      --replace "autoit-ripper==1.0.0" "autoit-ripper" \
-      --replace "malduck==3.1.0" "malduck>=3.1.0" \
-      --replace "regex==2020.2.20" "regex>=2020.2.20"
+      --replace "autoit-ripper==" "autoit-ripper>=" \
+      --replace "malduck==" "malduck>=" \
+      --replace "regex==" "regex>="
   '';
 
-  # Project has no tests
+  # Module has no tests
   doCheck = false;
-  pythonImportsCheck = [ "karton.autoit_ripper" ];
+
+  pythonImportsCheck = [
+    "karton.autoit_ripper"
+  ];
 
   meta = with lib; {
     description = "AutoIt script ripper for Karton framework";

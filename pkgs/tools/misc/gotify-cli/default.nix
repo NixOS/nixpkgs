@@ -26,5 +26,6 @@ buildGoModule rec {
     homepage = "https://github.com/gotify/cli";
     description = "A command line interface for pushing messages to gotify/server";
     maintainers = with maintainers; [ ma27 ];
+    mainProgram = "gotify";
   };
 }

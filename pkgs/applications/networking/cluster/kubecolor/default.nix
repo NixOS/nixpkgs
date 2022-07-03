@@ -13,11 +13,13 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-C1K7iEugA4HBLthcOI7EZ6H4YHW6el8X6FjVN1BeJR0=";
 
+  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+
   meta = with lib; {
     description = "Colorizes kubectl output";
     homepage = "https://github.com/hidetatz/kubecolor";
     changelog = "https://github.com/hidetatz/kubecolor/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.ivankovnatsky ];
+    maintainers = with maintainers; [ ivankovnatsky SuperSandro2000 ];
   };
 }

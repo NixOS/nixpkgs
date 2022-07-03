@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder
+{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder
 , pytest, nose, glibcLocales
 , numpy, scipy, matplotlib, h5py }:
 
@@ -23,6 +23,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     homepage = "http://www.bayespy.org";
     description = "Variational Bayesian inference tools for Python";
     license = licenses.mit;

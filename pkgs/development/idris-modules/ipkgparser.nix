@@ -6,7 +6,7 @@
 , lib
 }:
 build-idris-package  {
-  name = "ipkgparser";
+  pname = "ipkgparser";
   version = "2017-11-14";
 
   idrisDeps = [ contrib effects lightyear ];

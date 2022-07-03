@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qmk-udev-rules";
-  version = "0.13.23";
+  version = "0.15.25";
 
   src = fetchFromGitHub {
     owner = "qmk";
     repo = "qmk_firmware";
     rev = version;
-    sha256 = "08d2ri9g6lky3ixd5h0scm95hgc52lcjr3vcnmpdxn780q9ygmkm";
+    sha256 = "4U1/9DgoKZ1Al76lZ2P8x4LIvtqaJPLq81cCSCy+9iE=";
   };
 
   dontBuild = true;

@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "17xqiclaqs4hmnb92p9z6z9a1xfr31vcn8nlnj8ykk57by31vfza";
   };
 
-  buildInputs = [ perl gmp mpfr ocaml findlib camlidl ];
+  nativeBuildInputs = [ perl ocaml findlib camlidl ];
+  buildInputs = [ gmp mpfr ];
+
+  strictDeps = true;
 
   prefixKey = "-prefix ";
   configureFlags = [
@@ -19,8 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   postConfigure = ''
-    sed -i Makefile \
-      -e 's|^	/bin/rm |	rm |'
+    substituteInPlace Makefile --replace "/bin/rm" "rm"
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
   '';
 

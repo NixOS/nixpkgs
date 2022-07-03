@@ -2,39 +2,69 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
-, pytestCheckHook
-, hypothesis
-, pandas
+, cmake
+, cython_3
+, ninja
+, rapidfuzz-capi
+, scikit-build
+, setuptools
+, jarowinkler
 , numpy
+, hypothesis
+, jarowinkler-cpp
+, pandas
+, pytestCheckHook
+, rapidfuzz-cpp
+, taskflow
 }:
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
-  version = "1.9.1";
+  version = "2.1.0";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
+
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "v${version}";
-    fetchSubmodules = true;
-    sha256 = "sha256-aZqsQHrxmPqZARkqR1hWaj7XndOlCJjmWk1Cosx4skA=";
+    hash = "sha256-bvuT31qxYj/agEtPIJf/6YAOe6CGpEmaKpfNocw4wYQ=";
   };
 
+  nativeBuildInputs = [
+    cmake
+    cython_3
+    ninja
+    rapidfuzz-capi
+    scikit-build
+    setuptools
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  buildInputs = [
+    jarowinkler-cpp
+    rapidfuzz-cpp
+    taskflow
+  ];
+
   propagatedBuildInputs = [
+    jarowinkler
     numpy
   ];
 
   checkInputs = [
-    pytestCheckHook
     hypothesis
     pandas
+    pytestCheckHook
   ];
 
-  disabledTests = [
-    "test_levenshtein_block" # hypothesis data generation too slow
-  ];
+  preCheck = ''
+    # import from $out
+    rm -r rapidfuzz
+  '';
 
   pythonImportsCheck = [
     "rapidfuzz.fuzz"
@@ -46,6 +76,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Rapid fuzzy string matching";
     homepage = "https://github.com/maxbachmann/RapidFuzz";
+    changelog = "https://github.com/maxbachmann/RapidFuzz/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
   };
