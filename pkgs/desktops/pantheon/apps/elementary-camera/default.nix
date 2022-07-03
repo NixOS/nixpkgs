@@ -40,6 +40,18 @@ stdenv.mkDerivation rec {
       url = "https://github.com/elementary/camera/commit/ead143b7e3246c5fa9bb37c95d491fb07cea9e04.patch";
       sha256 = "sha256-2zGigUi6DpjJx8SEvAE3Q3jrm7MggOvLc72lAPMPvs4=";
     })
+    # Fix jpeg pipeline
+    # https://github.com/elementary/camera/pull/212
+    (fetchpatch {
+      url = "https://github.com/elementary/camera/commit/bb4c9e1eaef51469e562e6befce289b5822f281c.patch";
+      sha256 = "sha256-UMciKs7k7QKHFaH7zazGRtkhP6+f38U2ZR3lE5fF22A=";
+    })
+    # Add image/jpeg caps to device filter to support MJPEG webcams
+    # https://github.com/elementary/camera/pull/237
+    (fetchpatch {
+      url = "https://github.com/elementary/camera/commit/2159d4142fb044f5724f883e8669726080da60ec.patch";
+      sha256 = "sha256-snXtYRes9O27S51G4q13F4cV+zfRdki8FXwoR9DLJP4=";
+    })
   ];
 
   nativeBuildInputs = [
