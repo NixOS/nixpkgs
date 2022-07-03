@@ -15,10 +15,6 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-nGAG+7FqEktc55i5Q2urKh52vm/i6kX4kvS2AVUAUjA=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    pytest-runner
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
     aiocache
     aiosqlite
@@ -30,6 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     httpcore
     httpx
     humanize
+    importlib-metadata
     loguru
     Mako
     markupsafe
@@ -37,10 +34,8 @@ python3.pkgs.buildPythonApplication rec {
     sqlalchemy
     tld
     yaswfp
-  ] ++ lib.optionals (python3.pythonOlder "3.8") [
-    importlib-metadata
   ] ++ httpx.optional-dependencies.brotli
-    ++ httpx.optional-dependencies.socks;
+  ++ httpx.optional-dependencies.socks;
 
   checkInputs = with python3.pkgs; [
     respx
@@ -51,6 +46,8 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     # Ignore pinned versions
     sed -i -e "s/==[0-9.]*//;s/>=[0-9.]*//" setup.py
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' ""
     substituteInPlace setup.cfg \
       --replace " --cov --cov-report=xml" ""
   '';
@@ -119,8 +116,9 @@ python3.pkgs.buildPythonApplication rec {
     # TypeError: Expected bytes or bytes-like object got: <class 'str'>
     "test_persister_upload"
   ];
+
   disabledTestPaths = [
-    # requires sslyze
+    # Requires sslyze which is obsolete and was removed
     "tests/attack/test_mod_ssl.py"
   ];
 
