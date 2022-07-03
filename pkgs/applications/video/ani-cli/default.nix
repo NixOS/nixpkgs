@@ -4,6 +4,8 @@
 , lib
 , gnugrep
 , gnused
+, gawk
+, ffmpeg
 , curl
 , openssl
 , mpv
@@ -12,13 +14,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "ani-cli";
-  version = "2.2";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "pystardust";
     repo = "ani-cli";
     rev = "v${version}";
-    sha256 = "sha256-B/bIGrSQmKZFh3PpsbwivR2QKLMHIypWLxWuufiFHw4=";
+    sha256 = "LSyqcJX+bPW/qtO3FaZh9RaXW2xeGc/9tdC2CmhDwUw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -26,12 +28,15 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 ani-cli $out/bin/ani-cli
+    install -Dm755 ./bin/ani-cli $out/bin/ani-cli
+
+    mv ./lib $out/
 
     wrapProgram $out/bin/ani-cli \
-      --prefix PATH : ${lib.makeBinPath [ gnugrep gnused curl openssl mpv aria2 ]}
+      --prefix PATH : ${lib.makeBinPath [ gnugrep gnused curl openssl mpv aria2 gawk ffmpeg ]}
 
     runHook postInstall
+
   '';
 
   meta = with lib; {
