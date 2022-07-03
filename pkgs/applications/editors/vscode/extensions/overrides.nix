@@ -82,7 +82,7 @@ self: super: {
       license = licenses.mit;
     };
   };
-  bodil.file-browser.license = licenses.lgpl3Plus;
+  bodil.file-browser.meta.license = licenses.lgpl3Plus;
   chenglou92.rescript-vscode = callPackage ./rescript { };
   christian-kohler.path-intellisense.meta.license = licenses.mit;
   cmschuetz12.wal.meta.license = licenses.mit;
