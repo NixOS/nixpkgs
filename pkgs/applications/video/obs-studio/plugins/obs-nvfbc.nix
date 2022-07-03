@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-nvfbc";
-  version = "0.0.5";
+  version = "0.0.6";
 
   src = fetchFromGitLab {
     owner = "fzwoch";
     repo = "obs-nvfbc";
     rev = "v${version}";
-    sha256 = "sha256-Si+TGYWpNPtUUFT+M571lCYslPyeYX92MdYV9EGgcyQ=";
+    sha256 = "sha256-WoqtppgIcjE0n9atsvAZrXvBVi2rWCIIFDXTgblQK9I=";
   };
 
   nativeBuildInputs = [ meson pkg-config ninja ];
