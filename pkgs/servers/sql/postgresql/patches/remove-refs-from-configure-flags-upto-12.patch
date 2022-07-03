@@ -11,3 +11,26 @@
  ##########################################################################
 diff --git a/src/common/Makefile b/src/common/Makefile
 index 873fbb6..b6476b4 100644
+--- a/src/common/Makefile
++++ b/src/common/Makefile
+@@ -29,13 +29,13 @@ STD_CPPFLAGS := $(filter-out -I$(top_srcdir)/src/include -I$(top_builddir)/src/i
+ STD_LDFLAGS := $(filter-out -L$(top_builddir)/src/common -L$(top_builddir)/src/port,$(LDFLAGS))
+ override CPPFLAGS += -DVAL_CONFIGURE="\"$(configure_args)\""
+ override CPPFLAGS += -DVAL_CC="\"$(CC)\""
+-override CPPFLAGS += -DVAL_CPPFLAGS="\"$(STD_CPPFLAGS)\""
+-override CPPFLAGS += -DVAL_CFLAGS="\"$(CFLAGS)\""
+-override CPPFLAGS += -DVAL_CFLAGS_SL="\"$(CFLAGS_SL)\""
+-override CPPFLAGS += -DVAL_LDFLAGS="\"$(STD_LDFLAGS)\""
+-override CPPFLAGS += -DVAL_LDFLAGS_EX="\"$(LDFLAGS_EX)\""
+-override CPPFLAGS += -DVAL_LDFLAGS_SL="\"$(LDFLAGS_SL)\""
+-override CPPFLAGS += -DVAL_LIBS="\"$(LIBS)\""
++override CPPFLAGS += -DVAL_CPPFLAGS="\"$(shell echo '$(STD_CPPFLAGS)' | sed -E 's~/nix/store/.{32}-~/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-~g')\""
++override CPPFLAGS += -DVAL_CFLAGS="\"$(shell echo '$(CFLAGS)' | sed -E 's~/nix/store/.{32}-~/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-~g')\""
++override CPPFLAGS += -DVAL_CFLAGS_SL="\"$(shell echo '$(CFLAGS_SL)' | sed -E 's~/nix/store/.{32}-~/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-~g')\""
++override CPPFLAGS += -DVAL_LDFLAGS="\"$(shell echo '$(STD_LDFLAGS)' | sed -E 's~/nix/store/.{32}-~/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-~g')\""
++override CPPFLAGS += -DVAL_LDFLAGS_EX="\"$(shell echo '$(LDFLAGS_EX)' | sed -E 's~/nix/store/.{32}-~/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-~g')\""
++override CPPFLAGS += -DVAL_LDFLAGS_SL="\"$(shell echo '$(LDFLAGS_SL)' | sed -E 's~/nix/store/.{32}-~/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-~g')\""
++override CPPFLAGS += -DVAL_LIBS="\"$(shell echo '$(LIBS)' | sed -E 's~/nix/store/.{32}-~/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-~g')\""
+ 
+ override CPPFLAGS := -DFRONTEND $(CPPFLAGS)
+ LIBS += $(PTHREAD_LIBS)
