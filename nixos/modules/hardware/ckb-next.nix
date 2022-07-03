@@ -48,6 +48,6 @@ in
     };
 
     meta = {
-      maintainers = with lib.maintainers; [ ];
+      maintainers = with lib.maintainers; [ superherointj ];
     };
   }
