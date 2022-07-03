@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "OBS Studio source plugin for NVIDIA FBC API";
+    homepage = "https://gitlab.com/fzwoch/obs-nvfbc";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ babbaj ];
     platforms = [ "x86_64-linux" ];
