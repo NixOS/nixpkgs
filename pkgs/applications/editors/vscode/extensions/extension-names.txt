@@ -1,5 +1,1 @@
-Arjun.swagger-viewer
-alexdima.copy-relative-path
-alygin.vscode-tlaplus
-antfu.icons-carbon
-antfu.slidev
+1Password.op-vscode
