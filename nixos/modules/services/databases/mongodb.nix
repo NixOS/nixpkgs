@@ -125,8 +125,8 @@ in
      # ‘system.stateVersion’ to maintain compatibility with existing
      # systems!
      # Remember to change the default version at pkgs/top-level/all-packages.nix too between NixOS versions
-     mkDefault (if versionAtLeast config.system.stateVersion "22.05" then pkgs.mongodb-5_0
-           else if versionAtLeast config.system.stateVersion "21.11" then pkgs.mongodb-3_4
+     mkDefault (if versionAtLeast config.system.stateVersion "22.11" then pkgs.mongodb-5_0
+           else if versionAtLeast config.system.stateVersion "22.05" then pkgs.mongodb-3_4
            else throw "please set your desired package for state version ${config.system.stateVersion}");
 
     users.users.mongodb = mkIf (cfg.user == "mongodb")
