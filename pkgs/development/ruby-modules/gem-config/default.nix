@@ -573,11 +573,19 @@ in
   };
 
   ruby-terminfo = attrs: {
+    dontBuild = false;
     buildInputs = [ ncurses ];
     buildFlags = [
       "--with-cflags=-I${ncurses.dev}/include"
       "--with-ldflags=-L${ncurses.out}/lib"
     ];
+
+    patches = [
+      # This patch is created by diffing gemfile and github repo akr/ruby-terminfo at ruby-terminfo-0.2
+      ./ruby-terminfo-0.2.diff
+    ];
+
+    version = "0.2";
   };
 
   ruby-vips = attrs: {

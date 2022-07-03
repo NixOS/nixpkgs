@@ -1,0 +1,436 @@
+diff --git a/ChangeLog b/ChangeLog
+index 9b2670a..fa9f6f1 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,44 @@
++2009-03-06  Tanaka Akira  <akr@fsij.org>
++
++	* version 0.2 released.
++
++2008-12-30  Tanaka Akira  <akr@fsij.org>
++
++	* terminfo.c (rt_wcswidth): check the return value of wcwidth.
++
++2008-12-30  Tanaka Akira  <akr@fsij.org>
++
++	* terminfo.c: prefer ruby/io.h over rubyio.h.
++	  include wchar.h.
++	  (FILENO): condition refined.
++	  (rt_wcswidth): new method TermInfo.wcswidth.
++
++	* extconf.rb: check ruby/io.h and ruby/encoding.h.
++	  
++2007-05-30  Tanaka Akira  <akr@fsij.org>
++
++	* terminfo.c (TermInfo.ctermid): defined.
++
++	* lib/terminfo.rb, sample/resize: use TermInfo.ctermid instead of
++	  "/dev/tty".
++
++2007-05-29  Tanaka Akira  <akr@fsij.org>
++
++	* sample/resize: new sample program.
++
++2007-04-29  Tanaka Akira  <akr@fsij.org>
++
++	* lib/terminfo.rb (TermInfo.default_object): Use File::NOCTTY for
++	  opening /dev/tty to avoid acquire a controlling terminal.
++
++2007-04-19  Tanaka Akira  <akr@fsij.org>
++
++	* extconf.rb, terminfo.c: try ncurses.h when ncurses is used.
++	  NetBSD has curses.h which is incompatible with ncurses.
++
++	* terminfo.c: define del_curterm empty on FreeBSD and OpenBSD to
++	  avoid warning and core dump.
++
+ 2007-04-10  Tanaka Akira  <akr@fsij.org>
+ 
+ 	* version 0.1 released.
+diff --git a/README b/README
+index 00ae893..a25bda8 100644
+--- a/README
++++ b/README
+@@ -1,5 +1,7 @@
+ = ruby-terminfo - terminfo binding for Ruby
+ 
++ruby-terminfo is a terminfo binding for Ruby
++
+ == Author
+ 
+ Tanaka Akira <akr@fsij.org>
+@@ -13,6 +15,7 @@ http://www.a-k-r.org/ruby-terminfo/
+ * easy to use method, control, for combination of tigetstr/tparm/tputs.
+ * low-level terminfo binding (setupterm, tigetflag, tigetnum, tigetstr, tparm, tputs)
+ * TIOCGWINSZ/TIOCSWINSZ ioctl for screen size 
++* ctermid to avoid hardcoding /dev/tty.
+ 
+ == Usage
+ 
+@@ -25,7 +28,7 @@ http://www.a-k-r.org/ruby-terminfo/
+ === low level methods
+ 
+   require 'terminfo'
+-  t = TermInfo.new(ENV["TERM"], STDOUT)
++  t = TermInfo.new(ENV["TERM"], File.open(TermInfo.ctermid, "r+"))
+   print t.tputs(t.tparm(t.tigetstr("cuf"), 7), 1)  # cursor forward 7 columns
+   p TermInfo.tiocgwinsz(STDOUT)                    # use TIOCGWINSZ
+ 
+@@ -35,7 +38,7 @@ http://www.a-k-r.org/ruby-terminfo/
+ 
+ == Download
+ 
+-* latest release: http://www.a-k-r.org/ruby-terminfo/ruby-terminfo-0.1.tar.gz
++* latest release: http://www.a-k-r.org/ruby-terminfo/ruby-terminfo-0.2.tar.gz
+ 
+ * development version in Subversion repository:
+ 
+@@ -54,27 +57,27 @@ http://www.a-k-r.org/ruby-terminfo/rdoc/classes/TermInfo.html
+ 
+ == License
+ 
+-The modified BSD licence
+-
+-  Redistribution and use in source and binary forms, with or without
+-  modification, are permitted provided that the following conditions are met:
+-  
+-   1. Redistributions of source code must retain the above copyright notice, this
+-      list of conditions and the following disclaimer.
+-   2. Redistributions in binary form must reproduce the above copyright notice,
+-      this list of conditions and the following disclaimer in the documentation
+-      and/or other materials provided with the distribution.
+-   3. The name of the author may not be used to endorse or promote products
+-      derived from this software without specific prior written permission.
+-  
+-  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+-  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+-  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+-  EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+-  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
+-  OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+-  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+-  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+-  IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
+-  OF SUCH DAMAGE.
+ 
++Redistribution and use in source and binary forms, with or without
++modification, are permitted provided that the following conditions are met:
++
++(1) Redistributions of source code must retain the above copyright notice, this
++    list of conditions and the following disclaimer.
++(2) Redistributions in binary form must reproduce the above copyright notice,
++    this list of conditions and the following disclaimer in the documentation
++    and/or other materials provided with the distribution.
++(3) The name of the author may not be used to endorse or promote products
++    derived from this software without specific prior written permission.
++
++THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
++WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
++MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
++EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
++EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT
++OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
++INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
++CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
++IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY
++OF SUCH DAMAGE.
++
++(The modified BSD licence)
+diff --git a/extconf.rb b/extconf.rb
+index b1320bc..4477286 100644
+--- a/extconf.rb
++++ b/extconf.rb
+@@ -30,24 +30,51 @@
+ 
+ require 'mkmf'
+ 
+-# GNU/Linux     -lncurses
+-# FreeBSD       -lncurses
+-# HP-UX         -lcurses
++# Debian GNU/Linux 4.0 (etch)   curses.h, term.h, -lncurses     (ncurses.h is linked to curses.h)
++# FreeBSD 6.2                   curses.h, term.h, -lncurses     (ncurses.h is linked to curses.h)
++# OpenBSD 4.0                   curses.h, term.h, -lncurses     (curses.h includes ncurses.h by default)
++# HP-UX 11i v3                  term.h, -lcurses
++# SunOS 5.10                    curses.h, term.h, -lcurses
+ 
+-have_library("ncurses", "setupterm") or
+-have_library("curses", "setupterm") 
++# NetBSD 3.1 with ncurses       ncurses.h, -lncurses    (curses.h is incompatible for ncurses)
+ 
+-have_type("rb_io_t", ["ruby.h", "rubyio.h"])
+-have_struct_member("rb_io_t", "fd", ["ruby.h", "rubyio.h"])
+-have_struct_member("OpenFile", "fd", ["ruby.h", "rubyio.h"])
++have_header("curses.h")
++have_header("term.h")
+ 
+-create_header
+-create_makefile('terminfo')
++have_func("ctermid", "stdio.h")
+ 
+-open("Makefile", "a") {|mfile|
+-  mfile.puts <<'End'
++has_setupterm = true
++if have_library("ncurses", "setupterm")
++  have_header("ncurses.h")
++elsif have_library("curses", "setupterm") 
++else
++  has_setupterm = false
++end
++
++have_header("wchar.h")
++
++rubyio_h = nil
++rubyio_h = "ruby/io.h" if have_header("ruby/io.h")
++rubyio_h = "rubyio.h" unless rubyio_h
++
++if have_type("rb_io_t", ["ruby.h", rubyio_h])
++  have_struct_member("rb_io_t", "fd", ["ruby.h", rubyio_h])
++else
++  have_struct_member("OpenFile", "fd", ["ruby.h", rubyio_h])
++end
++
++have_header("ruby/encoding.h")
++
++if has_setupterm
++  create_header
++  create_makefile('terminfo')
++
++  open("Makefile", "a") {|mfile|
++    mfile.puts <<'End'
+ rdoc:
+ 	rdoc --op rdoc terminfo.c lib/terminfo.rb
+ End
+-}
+-
++  }
++else
++  puts "terminfo library not found"
++end
+diff --git a/lib/terminfo.rb b/lib/terminfo.rb
+index e2c1f3a..a829324 100644
+--- a/lib/terminfo.rb
++++ b/lib/terminfo.rb
+@@ -33,7 +33,7 @@ require 'terminfo.so'
+ class TermInfo
+   def TermInfo.default_object
+     unless defined? @default_terminfo
+-      io = open("/dev/tty", "r+")
++      io = File.open(TermInfo.ctermid, File::RDWR|File::NOCTTY)
+       io.sync = true
+       @default_terminfo = TermInfo.new(ENV['TERM'], io)
+     end
+diff --git a/sample/resize b/sample/resize
+new file mode 100755
+index 0000000..a62f45b
+--- /dev/null
++++ b/sample/resize
+@@ -0,0 +1,57 @@
++#!/usr/bin/env ruby
++
++# xterm's "resize" command clone.
++#
++# It assumes VT100 compatible terminal.
++
++require 'terminfo'
++require 'termios'
++
++def stty(io)
++  termios = Termios.getattr(io)
++  old = Marshal.load(Marshal.dump(termios))
++  begin
++    yield termios
++  ensure
++    Termios.setattr(io, Termios::TCSADRAIN, old)
++  end
++end
++
++def noecho_raw(io)
++  stty(io) {|termios|
++    termios.iflag &= ~(Termios::ISTRIP|Termios::PARMRK|Termios::INLCR|Termios::ICRNL|Termios::IGNCR|Termios::IXON|Termios::IXOFF)
++    termios.oflag &= ~(Termios::OPOST|Termios::ONLCR|Termios::OCRNL|Termios::ONOCR|Termios::ONLRET)
++    termios.lflag &= ~(Termios::ISIG|Termios::ICANON|Termios::ECHO|Termios::IEXTEN)
++    termios.cc[Termios::VMIN] = 1
++    termios.cc[Termios::VTIME] = 0
++    Termios.setattr(io, Termios::TCSADRAIN, termios)
++    yield
++  }
++end
++
++tty = File.open(TermInfo.ctermid, "r+")
++tty.sync = true
++
++str = nil
++noecho_raw(tty) {
++  tty.print(
++    "\e7" +             # DECSC -- Save Cursor (DEC Private)
++    "\e[999;999H" +     # CUP -- Cursor Position
++    "\e[6n")            # DSR -- Device Status Report
++  str = tty.readpartial(16)
++  tty.print "\e8"       # DECRC -- Restore Cursor (DEC Private)
++}
++
++exit false if /\e\[(\d+);(\d+)R/ !~ str
++
++rows = $1.to_i
++cols = $2.to_i
++
++TermInfo.tiocswinsz(tty, rows, cols)
++
++print <<"End"
++COLUMNS=#{cols};
++LINES=#{rows};
++export COLUMNS LINES;
++End
++
+diff --git a/terminfo.c b/terminfo.c
+index 34e7edb..074c4c4 100644
+--- a/terminfo.c
++++ b/terminfo.c
+@@ -30,13 +30,30 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+ 
+ #include "ruby.h"
+-#include "rubyio.h"
++#ifdef HAVE_RUBY_IO_H
++# include "ruby/io.h"
++#else
++# include "rubyio.h"
++#endif
+ #include "extconf.h"
+ 
++#if defined(HAVE_NCURSES_H)
++#include <ncurses.h>
++#elif defined(HAVE_CURSES_H)
+ #include <curses.h>
++#endif
++
++#ifdef HAVE_TERM_H
+ #include <term.h>
++#endif
++
+ #include <termios.h>
+ #include <sys/ioctl.h>
++#include <unistd.h>
++
++#ifdef HAVE_WCHAR_H
++#include <wchar.h>
++#endif
+ 
+ static VALUE cTermInfo;
+ static VALUE eTermInfoError;
+@@ -45,6 +62,23 @@ static VALUE eTermInfoError;
+ typedef OpenFile rb_io_t;
+ #endif
+ 
++#if defined(HAVE_RB_IO_T_FD) || defined(HAVE_ST_FD)
++# define FILENO(fptr) (fptr->fd)
++#else
++# define FILENO(fptr) fileno(fptr->f)
++#endif
++
++#if (defined(__FreeBSD__) && __FreeBSD_cc_version <= 602001) || \
++    defined(__OpenBSD__)
++/*
++  * warning on FreeBSD
++    http://www.FreeBSD.org/cgi/query-pr.cgi?pr=108117&cat=
++  * core dump on OpenBSD
++    http://cvs.openbsd.org/cgi-bin/query-pr-wrapper?full=yes&textonly=yes&numbers=5447
++*/
++#define del_curterm(oterm) do {} while(0)
++#endif
++
+ static void
+ rt_free(void *ptr)
+ {
+@@ -250,14 +284,6 @@ rt_tputs(VALUE self, VALUE v_str, VALUE v_affcnt)
+   return output;
+ }
+ 
+-#if defined(HAVE_ST_FD)
+-# define FILENO(fptr) (fptr->fd)
+-#elif defined(HAVE_RB_IO_T_FD)
+-# define FILENO(fptr) fileno(fptr->fd)
+-#else
+-# define FILENO(fptr) fileno(fptr->f)
+-#endif
+-
+ /*
+  * TermInfo.tiocgwinsz(io) => [row, col]
+  *
+@@ -313,6 +339,67 @@ rt_tiocswinsz(VALUE self, VALUE io, VALUE row, VALUE col)
+ #endif
+ }
+ 
++/*
++ * TermInfo.ctermid
++ *
++ * TermInfo.ctermid returns a pathname for the current controling terminal,
++ * such as "/dev/tty".
++ */
++static VALUE
++rt_ctermid(VALUE self)
++{
++#ifdef HAVE_CTERMID
++  char buf[L_ctermid];
++  return rb_str_new2(ctermid(buf));
++#else
++  return rb_str_new2("/dev/tty");
++#endif
++}
++
++/*
++ * TermInfo.wcswidth(str)
++ *
++ * TermInfo.wcswidth returns a the number of columns of str,
++ * according to current locale.
++ */
++static VALUE
++rt_wcswidth(VALUE self, VALUE str)
++{
++  char *s;
++  size_t l, r;
++  mbstate_t mbs;
++  wchar_t wc;
++  long cols;
++  int width;
++
++#ifdef HAVE_RUBY_ENCODING_H
++  /* The encoding of str is assumed to be the locale encoding on Ruby 1.8. */
++  str = rb_str_encode(str, rb_enc_from_encoding(rb_locale_encoding()), 0, Qnil);
++#endif
++
++  memset(&mbs,0,sizeof(mbstate_t));
++
++  s = StringValueCStr(str);
++  l = RSTRING_LEN(str);
++
++  cols = 0;
++  while (0 < l) {
++    r = mbrtowc(&wc, s, l, &mbs);
++    if (r == 0)
++      rb_raise(rb_eArgError, "NUL found");
++
++    width = wcwidth(wc);
++    if (width == -1)
++      rb_raise(rb_eArgError, "non-printable charactor found");
++    cols += width;
++
++    l -= r;
++    s += r;
++  }
++
++  return LONG2NUM(cols);
++}
++
+ void
+ Init_terminfo()
+ {
+@@ -333,4 +420,8 @@ Init_terminfo()
+ 
+   rb_define_module_function(cTermInfo, "tiocgwinsz", rt_tiocgwinsz, 1);
+   rb_define_module_function(cTermInfo, "tiocswinsz", rt_tiocswinsz, 3);
++
++  rb_define_module_function(cTermInfo, "ctermid", rt_ctermid, 0);
++
++  rb_define_module_function(cTermInfo, "wcswidth", rt_wcswidth, 1);
+ }
