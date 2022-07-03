@@ -471,11 +471,11 @@ let
         mktplcRef = {
           name = "vscode-tailwindcss";
           publisher = "bradlc";
-          version = "0.6.13";
-          sha256 = "098vrm28b7jpzk0c2d0cgxvdw4jsswzf18cx1m9jwsm1j40fp5f4";
+          version = "0.8.6";
+          sha256 = "sha256-v15KuD3eYFCsrworCJ1SZAMkyZKztAwWKmfwmbirleI=";
         };
         meta = with lib; {
-          license = licenses.mpl20;
+          license = licenses.mit;
         };
       };
 
