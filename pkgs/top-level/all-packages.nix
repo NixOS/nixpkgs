@@ -2268,6 +2268,8 @@ with pkgs;
 
   deltachat-cursed = callPackage ../applications/networking/instant-messengers/deltachat-cursed { };
 
+  delayarchitect = callPackage ../applications/audio/delayarchitect { };
+
   deltachat-desktop = callPackage ../applications/networking/instant-messengers/deltachat-desktop {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -11207,6 +11209,12 @@ with pkgs;
   toxvpn = callPackage ../tools/networking/toxvpn { };
 
   toybox = callPackage ../tools/misc/toybox { };
+
+  trackma = callPackage ../tools/misc/trackma { };
+
+  trackma-curses = trackma.override { withCurses = true; };
+
+  trackma-gtk = trackma.override { withGtk = true; };
 
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
@@ -25387,6 +25395,8 @@ with pkgs;
 
   uw-ttyp0 = callPackage ../data/fonts/uw-ttyp0 { inherit (xorg) fonttosfnt mkfontdir; };
 
+  u001-font = callPackage ../data/fonts/u001 { };
+
   vanilla-dmz = callPackage ../data/icons/vanilla-dmz { };
 
   vdrsymbols = callPackage ../data/fonts/vdrsymbols { };
@@ -35292,6 +35302,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  wasynth = callPackage ../development/tools/wasynth { };
+
   wavegain = callPackage ../applications/audio/wavegain { };
 
   wcalc = callPackage ../applications/misc/wcalc { };
@@ -35850,4 +35862,6 @@ with pkgs;
   mictray = callPackage ../tools/audio/mictray { };
 
   swift-corelibs-libdispatch = callPackage ../development/libraries/swift-corelibs-libdispatch { };
+
+  swaysettings = callPackage ../applications/misc/swaysettings { };
 }

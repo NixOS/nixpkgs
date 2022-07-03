@@ -126,13 +126,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2022-06-16";
+  version = "2022-06-30";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "fb26435fe9a54f13143e69a545b8f3cecffaed96";
-    sha256 = "sha256-kmgN7D7tUC3Ki70D+rdS19PW/lrANlU3tc8gu5gsld0=";
+    rev = "f2f82b3eeed652e7fc076adf6dcd5a72baaaed18";
+    sha256 = "sha256-WPcwFX3q0Y0uMLVN853Xvn3e7RnOOHt8yTLbOBzz5oE=";
   };
 
   patches = [
@@ -216,6 +216,12 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    # Change 5s timeout for init to 30s
+    substituteInPlace t/lib/HydraTestContext.pm \
+      --replace 'expectOkay(5, ("hydra-init"));' 'expectOkay(30, ("hydra-init"));'
+  '';
 
   preCheck = ''
     patchShebangs .

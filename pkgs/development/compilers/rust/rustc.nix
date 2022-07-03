@@ -188,5 +188,8 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ madjar cstrahan globin havvy ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
+    # rustc can't generate binaries for dynamically linked Musl.
+    # https://github.com/NixOS/nixpkgs/issues/179242
+    broken = stdenv.targetPlatform.isMusl && !stdenv.targetPlatform.isStatic;
   };
 }

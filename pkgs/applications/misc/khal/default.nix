@@ -1,12 +1,12 @@
-{ lib, stdenv, pkgs, python3, fetchpatch, glibcLocales }:
+{ lib, stdenv, pkgs, python3, fetchpatch, glibcLocales, installShellFiles }:
 
 with python3.pkgs; buildPythonApplication rec {
   pname = "khal";
-  version = "0.10.4";
+  version = "0.10.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3fdb980a9a61c0206d7a82b16f77b408a4f341a2b866b9c9fcf6a641850d129f";
+    sha256 = "sha256-Tu+3rDAqJthgbbOSgXWHpO2UwnoVvy6iEWFKRk/PDHY=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ with python3.pkgs; buildPythonApplication rec {
     pkginfo
     freezegun
   ];
-  nativeBuildInputs = [ setuptools-scm sphinx sphinxcontrib_newsfeed ];
+  nativeBuildInputs = [ setuptools-scm sphinx sphinxcontrib_newsfeed installShellFiles ];
   checkInputs = [
     glibcLocales
     pytestCheckHook
@@ -34,8 +34,11 @@ with python3.pkgs; buildPythonApplication rec {
   LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
-    # zsh completion
-    install -D misc/__khal $out/share/zsh/site-functions/__khal
+    # shell completions
+    installShellCompletion --cmd khal \
+      --bash <(_KHAL_COMPLETE=bash_source $out/bin/khal) \
+      --fish <(_KHAL_COMPLETE=zsh_source $out/bin/khal) \
+      --zsh <(_KHAL_COMPLETE=fish_source $out/bin/khal)
 
     # man page
     PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib_newsfeed ])}/bin:$PATH" \
@@ -47,14 +50,6 @@ with python3.pkgs; buildPythonApplication rec {
   '';
 
   doCheck = !stdenv.isAarch64;
-
-  disabledTests = [
-    # This test is failing due to https://github.com/pimutils/khal/issues/1065
-    "test_print_ics_command"
-
-    # Mocking breaks in this testcase
-    "test_import_from_stdin"
-  ];
 
   meta = with lib; {
     broken = stdenv.isDarwin;
