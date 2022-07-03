@@ -12,7 +12,9 @@ let
   };
 
 
-  vlans = map (m: m.virtualisation.vlans) (lib.attrValues config.nodes);
+  vlans = map (m: (
+    m.virtualisation.vlans ++
+    (lib.mapAttrsToList (_: v: v.vlan) m.virtualisation.interfaces))) (lib.attrValues config.nodes);
   vms = map (m: m.system.build.vm) (lib.attrValues config.nodes);
 
   nodeHostNames =

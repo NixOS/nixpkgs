@@ -93,17 +93,18 @@ in {
     static.module = {
       nodes.router = router;
       nodes.client = { pkgs, ... }: {
-        virtualisation.vlans = [ 1 2 ];
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        virtualisation.interfaces.enp2s0.vlan = 2;
         networking = {
           useDHCP = false;
           defaultGateway = "192.168.1.1";
           defaultGateway6 = "fd00:1234:5678:1::1";
-          interfaces.eth1.ipv4.addresses = mkOverride 0 [
+          interfaces.enp1s0.ipv4.addresses = [
             { address = "192.168.1.2"; prefixLength = 24; }
             { address = "192.168.1.3"; prefixLength = 32; }
             { address = "192.168.1.10"; prefixLength = 32; }
           ];
-          interfaces.eth2.ipv4.addresses = mkOverride 0 [
+          interfaces.enp2s0.ipv4.addresses = [
             { address = "192.168.2.2"; prefixLength = 24; }
           ];
         };
@@ -181,19 +182,12 @@ in {
     dhcpSimple.module = {
       nodes.router = router;
       nodes.client = { pkgs, ... }: {
-        virtualisation.vlans = [ 1 2 ];
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        virtualisation.interfaces.enp2s0.vlan = 2;
         networking = {
           useDHCP = false;
-          interfaces.eth1 = {
-            ipv4.addresses = mkOverride 0 [ ];
-            ipv6.addresses = mkOverride 0 [ ];
-            useDHCP = true;
-          };
-          interfaces.eth2 = {
-            ipv4.addresses = mkOverride 0 [ ];
-            ipv6.addresses = mkOverride 0 [ ];
-            useDHCP = true;
-          };
+          interfaces.enp1s0.useDHCP = true;
+          interfaces.enp2s0.useDHCP = true;
         };
       };
       testScript = { ... }:
@@ -204,10 +198,10 @@ in {
           router.wait_for_unit("network-online.target")
 
           with subtest("Wait until we have an ip address on each interface"):
-              client.wait_until_succeeds("ip addr show dev eth1 | grep -q '192.168.1'")
-              client.wait_until_succeeds("ip addr show dev eth1 | grep -q 'fd00:1234:5678:1:'")
-              client.wait_until_succeeds("ip addr show dev eth2 | grep -q '192.168.2'")
-              client.wait_until_succeeds("ip addr show dev eth2 | grep -q 'fd00:1234:5678:2:'")
+              client.wait_until_succeeds("ip addr show dev enp1s0 | grep -q '192.168.1'")
+              client.wait_until_succeeds("ip addr show dev enp1s0 | grep -q 'fd00:1234:5678:1:'")
+              client.wait_until_succeeds("ip addr show dev enp2s0 | grep -q '192.168.2'")
+              client.wait_until_succeeds("ip addr show dev enp2s0 | grep -q 'fd00:1234:5678:2:'")
 
           with subtest("Test vlan 1"):
               client.wait_until_succeeds("ping -c 1 192.168.1.1")
@@ -235,15 +229,14 @@ in {
     dhcpOneIf.module = {
       nodes.router = router;
       nodes.client = { pkgs, ... }: {
-        virtualisation.vlans = [ 1 2 ];
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        virtualisation.interfaces.enp2s0.vlan = 2;
         networking = {
           useDHCP = false;
-          interfaces.eth1 = {
-            ipv4.addresses = mkOverride 0 [ ];
+          interfaces.enp1s0 = {
             mtu = 1343;
             useDHCP = true;
           };
-          interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
         };
       };
       testScript = { ... }:
@@ -255,10 +248,10 @@ in {
               router.wait_for_unit("network.target")
 
           with subtest("Wait until we have an ip address on each interface"):
-              client.wait_until_succeeds("ip addr show dev eth1 | grep -q '192.168.1'")
+              client.wait_until_succeeds("ip addr show dev enp1s0 | grep -q '192.168.1'")
 
           with subtest("ensure MTU is set"):
-              assert "mtu 1343" in client.succeed("ip link show dev eth1")
+              assert "mtu 1343" in client.succeed("ip link show dev enp1s0")
 
           with subtest("Test vlan 1"):
               client.wait_until_succeeds("ping -c 1 192.168.1.1")
@@ -277,15 +270,14 @@ in {
     };
     bond.module = let
       node = address: { pkgs, ... }: {
-        virtualisation.vlans = [ 1 2 ];
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        virtualisation.interfaces.enp2s0.vlan = 2;
         networking = {
           useDHCP = false;
           bonds.bond0 = {
-            interfaces = [ "eth1" "eth2" ];
+            interfaces = [ "enp1s0" "enp2s0" ];
             driverOptions.mode = "802.3ad";
           };
-          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
-          interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
           interfaces.bond0.ipv4.addresses = mkOverride 0
             [ { inherit address; prefixLength = 30; } ];
         };
@@ -315,23 +307,21 @@ in {
     };
     bridge.module = let
       node = { address, vlan }: { pkgs, ... }: {
-        virtualisation.vlans = [ vlan ];
+        virtualisation.interfaces.enp1s0.vlan = vlan;
         networking = {
           useDHCP = false;
-          interfaces.eth1.ipv4.addresses = mkOverride 0
-            [ { inherit address; prefixLength = 24; } ];
+          interfaces.enp1s0.ipv4.addresses = [ { inherit address; prefixLength = 24; } ];
         };
       };
     in {
       nodes.client1 = node { address = "192.168.1.2"; vlan = 1; };
       nodes.client2 = node { address = "192.168.1.3"; vlan = 2; };
       nodes.router = { pkgs, ... }: {
-        virtualisation.vlans = [ 1 2 ];
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        virtualisation.interfaces.enp2s0.vlan = 2;
         networking = {
           useDHCP = false;
-          bridges.bridge.interfaces = [ "eth1" "eth2" ];
-          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
-          interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
+          bridges.bridge.interfaces = [ "enp1s0" "enp2s0" ];
           interfaces.bridge.ipv4.addresses = mkOverride 0
             [ { address = "192.168.1.1"; prefixLength = 24; } ];
         };
@@ -362,21 +352,16 @@ in {
       nodes.router = router;
       nodes.client = { pkgs, ... }: {
         environment.systemPackages = [ pkgs.iptables ]; # to debug firewall rules
-        virtualisation.vlans = [ 1 ];
+        virtualisation.interfaces.enp1s0.vlan = 1;
         networking = {
           useDHCP = false;
           firewall.logReversePathDrops = true; # to debug firewall rules
           # reverse path filtering rules for the macvlan interface seem
           # to be incorrect, causing the test to fail. Disable temporarily.
           firewall.checkReversePath = false;
-          macvlans.macvlan.interface = "eth1";
-          interfaces.eth1 = {
-            ipv4.addresses = mkOverride 0 [ ];
-            useDHCP = true;
-          };
-          interfaces.macvlan = {
-            useDHCP = true;
-          };
+          macvlans.macvlan.interface = "enp1s0";
+          interfaces.enp1s0.useDHCP = true;
+          interfaces.macvlan.useDHCP = true;
         };
       };
       testScript = { ... }:
@@ -388,7 +373,7 @@ in {
               router.wait_for_unit("network.target")
 
           with subtest("Wait until we have an ip address on each interface"):
-              client.wait_until_succeeds("ip addr show dev eth1 | grep -q '192.168.1'")
+              client.wait_until_succeeds("ip addr show dev enp1s0 | grep -q '192.168.1'")
               client.wait_until_succeeds("ip addr show dev macvlan | grep -q '192.168.1'")
 
           with subtest("Print lots of diagnostic information"):
@@ -414,22 +399,21 @@ in {
     };
     fou.module = {
       nodes.machine = { ... }: {
-        virtualisation.vlans = [ 1 ];
+        virtualisation.interfaces.enp1s0.vlan = 1;
         networking = {
           useDHCP = false;
-          interfaces.eth1.ipv4.addresses = mkOverride 0
-            [ { address = "192.168.1.1"; prefixLength = 24; } ];
+          interfaces.enp1s0.ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
           fooOverUDP = {
             fou1 = { port = 9001; };
             fou2 = { port = 9002; protocol = 41; };
             fou3 = mkIf (!networkd)
               { port = 9003; local.address = "192.168.1.1"; };
             fou4 = mkIf (!networkd)
-              { port = 9004; local = { address = "192.168.1.1"; dev = "eth1"; }; };
+              { port = 9004; local = { address = "192.168.1.1"; dev = "enp1s0"; }; };
           };
         };
         systemd.services = {
-          fou3-fou-encap.after = optional (!networkd) "network-addresses-eth1.service";
+          fou3-fou-encap.after = optional (!networkd) "network-addresses-enp1s0.service";
         };
       };
       testScript = { ... }:
@@ -452,22 +436,21 @@ in {
               "gue": None,
               "family": "inet",
               "local": "192.168.1.1",
-              "dev": "eth1",
+              "dev": "enp1s0",
           } in fous, "fou4 exists"
         '';
     };
     sit.module = let
       node = { address4, remote, address6 }: { pkgs, ... }: {
-        virtualisation.vlans = [ 1 ];
+        virtualisation.interfaces.enp1s0.vlan = 1;
         networking = {
           useDHCP = false;
           sits.sit = {
             inherit remote;
             local = address4;
-            dev = "eth1";
+            dev = "enp1s0";
           };
-          interfaces.eth1.ipv4.addresses = mkOverride 0
-            [ { address = address4; prefixLength = 24; } ];
+          interfaces.enp1s0.ipv4.addresses = [ { address = address4; prefixLength = 24; } ];
           interfaces.sit.ipv6.addresses = mkOverride 0
             [ { address = address6; prefixLength = 64; } ];
         };
@@ -744,25 +727,21 @@ in {
         };
       };
       nodes.client_with_privacy = { pkgs, ... }: {
-        virtualisation.vlans = [ 1 ];
+        virtualisation.interfaces.enp1s0.vlan = 1;
         networking = {
           useDHCP = false;
-          interfaces.eth1 = {
+          interfaces.enp1s0 = {
             tempAddress = "default";
-            ipv4.addresses = mkOverride 0 [ ];
-            ipv6.addresses = mkOverride 0 [ ];
             useDHCP = true;
           };
         };
       };
       nodes.client = { pkgs, ... }: {
-        virtualisation.vlans = [ 1 ];
+        virtualisation.interfaces.enp1s0.vlan = 1;
         networking = {
           useDHCP = false;
-          interfaces.eth1 = {
+          interfaces.enp1s0 = {
             tempAddress = "enabled";
-            ipv4.addresses = mkOverride 0 [ ];
-            ipv6.addresses = mkOverride 0 [ ];
             useDHCP = true;
           };
         };
@@ -777,9 +756,9 @@ in {
 
           with subtest("Wait until we have an ip address"):
               client_with_privacy.wait_until_succeeds(
-                  "ip addr show dev eth1 | grep -q 'fd00:1234:5678:1:'"
+                  "ip addr show dev enp1s0 | grep -q 'fd00:1234:5678:1:'"
               )
-              client.wait_until_succeeds("ip addr show dev eth1 | grep -q 'fd00:1234:5678:1:'")
+              client.wait_until_succeeds("ip addr show dev enp1s0 | grep -q 'fd00:1234:5678:1:'")
 
           with subtest("Test vlan 1"):
               client_with_privacy.wait_until_succeeds("ping -c 1 fd00:1234:5678:1::1")
@@ -875,27 +854,24 @@ in {
             ), "The IPv6 routing table has not been properly cleaned:\n{}".format(ipv6Residue)
       '';
     };
-    rename.module = {
+    rename.module = if networkd then {
       nodes.machine = { pkgs, ... }: {
         virtualisation.vlans = [ 1 ];
         networking = {
           useDHCP = false;
         };
-      } //
-      (if networkd
-       then { systemd.network.links."10-custom_name" = {
-                matchConfig.MACAddress = "52:54:00:12:01:01";
-                linkConfig.Name = "custom_name";
-              };
-            }
-       else { boot.initrd.services.udev.rules = ''
-               SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", ATTR{address}=="52:54:00:12:01:01", KERNEL=="eth*", NAME="custom_name"
-              '';
-            });
+        systemd.network.links."10-custom_name" = {
+          matchConfig.MACAddress = "52:54:00:12:01:01";
+          linkConfig.Name = "custom_name";
+        };
+      };
       testScript = ''
         machine.succeed("udevadm settle")
         print(machine.succeed("ip link show dev custom_name"))
       '';
+    } else {
+      nodes = {};
+      testScript = "";
     };
     # even with disabled networkd, systemd.network.links should work
     # (as it's handled by udev, not networkd)
