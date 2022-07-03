@@ -30027,12 +30027,19 @@ with pkgs;
   thunderbird-91 = wrapThunderbird thunderbird-91-unwrapped { };
   thunderbird-91-wayland = wrapThunderbird thunderbird-91-unwrapped { forceWayland = true; };
 
-  thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
+  thunderbird-102-unwrapped = thunderbirdPackages.thunderbird-102;
+  thunderbird-102 = wrapThunderbird thunderbird-102-unwrapped { };
+  thunderbird-102-wayland = wrapThunderbird thunderbird-102-unwrapped { forceWayland = true; };
+
+  thunderbird-bin = thunderbird-bin-91;
+  thunderbird-bin-unwrapped = thunderbird-bin-91-unwrapped;
+
+  thunderbird-bin-102 = wrapThunderbird thunderbird-bin-unwrapped {
     applicationName = "thunderbird";
     pname = "thunderbird-bin";
     desktopName = "Thunderbird";
   };
-  thunderbird-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+  thunderbird-bin-102-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     inherit (gnome) adwaita-icon-theme;
     generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
   };
