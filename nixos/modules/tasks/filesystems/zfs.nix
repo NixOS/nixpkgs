@@ -549,7 +549,7 @@ in
                 zfs load-key -a
               ''
               else concatMapStrings (fs: ''
-                zfs load-key ${fs}
+                zfs load-key -- ${escapeShellArg fs}
               '') cfgZfs.requestEncryptionCredentials}
         '') rootPools));
 
@@ -701,7 +701,7 @@ in
           # expand every pool. Otherwise we want to enumerate
           # just the specifically provided list of pools.
           poolListProvider = if cfgExpandOnBoot == "all"
-            then "$(zpool list -H | awk '{print $1}')"
+            then "$(zpool list -H -o name)"
             else lib.escapeShellArgs cfgExpandOnBoot;
         in
         {
