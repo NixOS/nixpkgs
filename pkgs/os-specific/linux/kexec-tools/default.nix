@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, fetchurl, zlib }:
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "kexec-tools";
@@ -11,6 +11,14 @@ stdenv.mkDerivation rec {
     ];
     sha256 = "qmPNbH3ZWwbOumJAp/3GeSeJytp1plXmcUmHF1IkJBs=";
   };
+
+  patches = [
+    # Use ELFv2 ABI on ppc64be
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/void-linux/void-packages/6c1192cbf166698932030c2e3de71db1885a572d/srcpkgs/kexec-tools/patches/ppc64-elfv2.patch";
+      sha256 = "19wzfwb0azm932v0vhywv4221818qmlmvdfwpvvpfyw4hjsc2s1l";
+    })
+  ];
 
   hardeningDisable = [ "format" "pic" "relro" "pie" ];
 
