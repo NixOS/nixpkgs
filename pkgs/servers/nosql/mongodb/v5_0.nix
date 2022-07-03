@@ -6,8 +6,8 @@ let
   };
   variants = if stdenv.isLinux then
     {
-      version = "5.0.8";
-      sha256 = "sha256-ku8ZQ4VZfwSbymBNT/aG9jAn5JSEMdWJzsXNYDKGRZE=";
+      version = "5.0.9";
+      sha256 = "sha256-eRTcEptFgC8LWCDs3TkvCFBp2dCC981/uQf66P8hvdo=";
     }
   else
     {
