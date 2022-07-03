@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , cython
 , ninja
@@ -7,6 +8,9 @@
 , fetchPypi
 , gn
 , pytestCheckHook
+, xcodebuild
+, ApplicationServices
+, OpenGL
 }:
 
 buildPythonPackage rec {
@@ -26,7 +30,10 @@ buildPythonPackage rec {
         'build_cmd = [sys.executable, build_skia_py, "--no-fetch-gn", "--no-virtualenv", "--gn-path", "${gn}/bin/gn", build_dir]'
   '';
 
-  nativeBuildInputs = [ cython ninja setuptools-scm ];
+  nativeBuildInputs = [ cython ninja setuptools-scm ]
+    ++ lib.optionals stdenv.isDarwin [ xcodebuild ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL ];
 
   propagatedBuildInputs = [ setuptools ];
 
