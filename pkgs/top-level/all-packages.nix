@@ -9798,6 +9798,8 @@ with pkgs;
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
+  renpy = callPackage ../development/interpreters/renpy { };
+
   rep = callPackage ../development/tools/rep { };
 
   repseek = callPackage ../applications/science/biology/repseek { };
