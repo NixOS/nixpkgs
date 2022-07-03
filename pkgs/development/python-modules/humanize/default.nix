@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchFromGitHub
 , freezegun
+, gettext
 , importlib-metadata
 , pytestCheckHook
 , pythonOlder
@@ -27,6 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+    gettext
   ];
 
   propagatedBuildInputs = [
@@ -34,6 +36,14 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ];
+
+  postBuild = ''
+    scripts/generate-translation-binaries.sh
+  '';
+
+  postInstall = ''
+    cp -r 'src/humanize/locale' "$out/lib/"*'/site-packages/humanize/'
+  '';
 
   checkInputs = [
     freezegun
