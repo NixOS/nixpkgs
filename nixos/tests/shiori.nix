@@ -8,6 +8,21 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
     { ... }:
     { services.shiori.enable = true; };
 
+  nodes.content_server =
+    { ... }:
+    {
+      services.nginx = {
+        enable = true;
+        virtualHosts."content_server".locations."/".root = pkgs.writeTextDir "index.html" ''
+          <!DOCTYPE html>
+          <title>Example Bookmark</title>
+          <p>Hello, world!</p>
+        '';
+      };
+
+      networking.firewall.allowedTCPPorts = [ 80 ];
+    };
+
   testScript = let
     authJSON = pkgs.writeText "auth.json" (builtins.toJSON {
       username = "shiori";
@@ -16,7 +31,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
     });
 
   insertBookmark = {
-    url = "http://example.org";
+    url = "http://content_server/";
     title = "Example Bookmark";
   };
 
@@ -24,10 +39,15 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
   in ''
     import json
 
+    start_all()
+
     machine.wait_for_unit("shiori.service")
     machine.wait_for_open_port(8080)
     machine.succeed("curl --fail http://localhost:8080/")
     machine.succeed("curl --fail --location http://localhost:8080/ | grep -i shiori")
+
+    content_server.wait_for_open_port(80)
+    machine.succeed("curl --fail http://content_server/")
 
     with subtest("login"):
         auth_json = machine.succeed(
