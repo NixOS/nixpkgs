@@ -41,6 +41,7 @@ let
     jpoissonnier.vscode-styled-components = super.jpoissonnier.vscode-styled-components;
     elixir-lsp.vscode-elixir-ls = super.JakeBecker.elixir-ls;
     jakebecker.elixir-ls = super.JakeBecker.elixir-ls;
+    matklad.rust-analyzer = super.rust-lang.rust-analyzer;
   };
 
   # overlays will be applied left to right, overrides should come after aliases.
