@@ -157,6 +157,16 @@
         </para>
       </listitem>
     </itemizedlist>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          <literal>pkgs.dockerTools.buildLayeredImage</literal> has a
+          new option <literal>useRandomLayers</literal> that if set then
+          packages are distributed randomly in the image layers, so that
+          layer sizes are more uniform.
+        </para>
+      </listitem>
+    </itemizedlist>
   </section>
   <section xml:id="sec-release-22.11-incompatibilities">
     <title>Backward Incompatibilities</title>

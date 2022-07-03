@@ -815,6 +815,9 @@ rec {
     , # We pick 100 to ensure there is plenty of room for extension. I
       # believe the actual maximum is 128.
       maxLayers ? 100
+    , # Whether or not to place the packages in random layers for more uniform
+      # layer size.
+      useRandomLayers ? false
     , # Whether to include store paths in the image. You generally want to leave
       # this on, but tooling may disable this to insert the store paths more
       # efficiently via other means, such as bind mounting the host store.
@@ -890,7 +893,7 @@ rec {
 
         conf = runCommand "${baseName}-conf.json"
           {
-            inherit fromImage maxLayers created;
+            inherit fromImage maxLayers created useRandomLayers;
             imageName = lib.toLower name;
             passthru.imageTag =
               if tag != null
@@ -951,15 +954,27 @@ rec {
           # following lines, double-check that your code behaves properly
           # when the number of layers equals:
           #      maxLayers-1, maxLayers, and maxLayers+1, 0
-          store_layers="$(
-            paths |
-              jq -sR '
-                rtrimstr("\n") | split("\n")
-                  | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
-                  | map(select(length > 0))
-              ' \
-                --argjson maxLayers "$availableLayers"
-          )"
+          if [ "$useRandomLayers" = '1' ]; then
+            store_layers="$(
+              paths | sort -R --random-source=/dev/zero |
+                jq -sR '
+                  rtrimstr("\n") | split("\n")
+                    | [([range(0;length)] | map((. % $maxLayers))), .] | transpose | group_by(.[0]) | map(. | map(.[1]))
+                    | map(select(length > 0))
+                ' \
+                  --argjson maxLayers "$availableLayers"
+            )"
+          else
+            store_layers="$(
+              paths |
+                jq -sR '
+                  rtrimstr("\n") | split("\n")
+                    | (.[:$maxLayers-1] | map([.])) + [ .[$maxLayers-1:] ]
+                    | map(select(length > 0))
+                ' \
+                  --argjson maxLayers "$availableLayers"
+            )"
+          fi
 
           cat ${baseJson} | jq '
             . + {
