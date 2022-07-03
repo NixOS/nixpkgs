@@ -11461,6 +11461,13 @@
     githubId = 543055;
     name = "Shadaj Laddad";
   };
+  shadowrz = {
+    email = "shadowrz+nixpkgs@disroot.org";
+    matrix = "@ShadowRZ:matrixim.cc";
+    github = "ShadowRZ";
+    githubId = 23130178;
+    name = "夜坂雅";
+  };
   shahrukh330 = {
     email = "shahrukh330@gmail.com";
     github = "shahrukh330";
