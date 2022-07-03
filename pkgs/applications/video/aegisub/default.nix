@@ -2,13 +2,17 @@
 , config
 , stdenv
 , fetchFromGitHub
-, autoreconfHook
 , boost
+, cmake
+, expat
+, harfbuzz
 , ffmpeg
 , ffms
 , fftw
 , fontconfig
 , freetype
+, fribidi
+, glib
 , icu
 , intltool
 , libGL
@@ -17,16 +21,22 @@
 , libass
 , libiconv
 , libuchardet
+, luajit
+, pcre
 , pkg-config
 , which
 , wxGTK
 , zlib
 
+, CoreText
+, CoreFoundation
+, AppKit
+, Carbon
+, IOKit
+, Cocoa
+
 , spellcheckSupport ? true
 , hunspell ? null
-
-, automationSupport ? true
-, luajit ? null
 
 , openalSupport ? false
 , openal ? null
@@ -40,10 +50,10 @@
 , portaudioSupport ? false
 , portaudio ? null
 
+, useBundledLuaJIT ? false
 }:
 
 assert spellcheckSupport -> (hunspell != null);
-assert automationSupport -> (luajit != null);
 assert openalSupport -> (openal != null);
 assert alsaSupport -> (alsa-lib != null);
 assert pulseaudioSupport -> (libpulseaudio != null);
@@ -55,31 +65,34 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "aegisub";
-  version = "3.3.2";
+  version = "3.3.2-20220612";
 
   src = fetchFromGitHub {
     owner = "wangqr";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Er0g8fJyx7zjNVpKw7zUHE40hU10BdYlZohlqJq2LE0=";
+    rev = "91f8b5f91eb960bad19899c10af08aca34f9b697";
+    sha256 = "sha256-lPkPWSsncsBKJHDnma9cUXsQJynruT9JpPkMTHdQ/e8=";
   };
 
-  patches = [ ./no-git.patch ];
-
   nativeBuildInputs = [
-    autoreconfHook
     intltool
     luajit52
     pkg-config
     which
+    cmake
   ];
+
   buildInputs = [
     boost
+    expat
     ffmpeg
     ffms
     fftw
     fontconfig
     freetype
+    fribidi
+    glib
+    harfbuzz
     icu
     libGL
     libGLU
@@ -87,22 +100,24 @@ stdenv.mkDerivation rec {
     libass
     libiconv
     libuchardet
+    pcre
     wxGTK
     zlib
   ]
+  ++ lib.optionals stdenv.isDarwin [
+    CoreText
+    CoreFoundation
+    AppKit
+    Carbon
+    IOKit
+    Cocoa
+  ]
   ++ optional alsaSupport alsa-lib
-  ++ optional automationSupport luajit52
   ++ optional openalSupport openal
   ++ optional portaudioSupport portaudio
   ++ optional pulseaudioSupport libpulseaudio
   ++ optional spellcheckSupport hunspell
   ;
-
-  configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--with-system-luajit"
-    "FORCE_GIT_VERSION=${version}"
-  ];
 
   enableParallelBuilding = true;
 
@@ -111,7 +126,20 @@ stdenv.mkDerivation rec {
     "relro"
   ];
 
-  postInstall = "ln -s $out/bin/aegisub-* $out/bin/aegisub";
+  patches = lib.optionals (!useBundledLuaJIT) [
+    ./remove-bundled-luajit.patch
+  ];
+
+  NIX_CFLAGS_COMPILE = "-I${luajit52}/include";
+  NIX_CFLAGS_LINK = "-L${luajit52}/lib";
+
+  configurePhase = ''
+    export FORCE_GIT_VERSION=${version}
+    # Workaround for a Nixpkgs bug; remove when the fix arrives
+    mkdir build-dir
+    cd build-dir
+    cmake -DCMAKE_INSTALL_PREFIX=$out ..
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/wangqr/Aegisub";
@@ -126,6 +154,6 @@ stdenv.mkDerivation rec {
     # softwares - so the resulting program will be GPL
     license = licenses.bsd3;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = platforms.unix;
   };
 }
