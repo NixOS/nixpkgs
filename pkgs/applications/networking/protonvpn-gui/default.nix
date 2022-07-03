@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , wrapGAppsHook
 , gdk-pixbuf
+, glib-networking
 , gobject-introspection
 , imagemagick
 , librsvg
@@ -34,6 +35,7 @@ buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
+    glib-networking # needed for the login captcha
     protonvpn-nm-lib
     psutil
   ];
