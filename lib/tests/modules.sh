@@ -153,7 +153,7 @@ checkConfigOutput '^true$' "$@" ./define-module-check.nix
 # Check coerced value.
 checkConfigOutput '^"42"$' config.value ./declare-coerced-value.nix
 checkConfigOutput '^"24"$' config.value ./declare-coerced-value.nix ./define-value-string.nix
-checkConfigError 'A definition for option .* is not.*string or signed integer convertible to it.*. Definition values:\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
+checkConfigError 'A definition for option .* is not.*\(string\) or \(signed integer\) convertible to it.*. Definition values:\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
 
 # Check coerced value with unsound coercion
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
@@ -326,7 +326,7 @@ checkConfigOutput "bar" config.priorities ./raw.nix
 
 ## Option collision
 checkConfigError \
-  'The option .set. in module .*/declare-set.nix. would be a parent of the following options, but its type .attribute set of signed integer. does not support nested options.\n\s*- option[(]s[)] with prefix .set.enable. in module .*/declare-enable-nested.nix.' \
+  'The option .set. in module .*/declare-set.nix. would be a parent of the following options, but its type .attribute set of \(signed integer\). does not support nested options.\n\s*- option[(]s[)] with prefix .set.enable. in module .*/declare-enable-nested.nix.' \
   config.set \
   ./declare-set.nix ./declare-enable-nested.nix
 

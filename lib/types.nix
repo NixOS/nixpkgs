@@ -397,7 +397,7 @@ rec {
 
     listOf = elemType: mkOptionType rec {
       name = "listOf";
-      description = "list of ${elemType.description}";
+      description = "list of (${elemType.description})";
       check = isList;
       merge = loc: defs:
         map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
@@ -420,13 +420,13 @@ rec {
     nonEmptyListOf = elemType:
       let list = addCheck (types.listOf elemType) (l: l != []);
       in list // {
-        description = "non-empty " + list.description;
+        description = "non-empty (${list.description})";
         emptyValue = { }; # no .value attr, meaning unset
       };
 
     attrsOf = elemType: mkOptionType rec {
       name = "attrsOf";
-      description = "attribute set of ${elemType.description}";
+      description = "attribute set of (${elemType.description})";
       check = isAttrs;
       merge = loc: defs:
         mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
@@ -449,7 +449,7 @@ rec {
     # error that it's not defined. Use only if conditional definitions don't make sense.
     lazyAttrsOf = elemType: mkOptionType rec {
       name = "lazyAttrsOf";
-      description = "lazy attribute set of ${elemType.description}";
+      description = "lazy attribute set of (${elemType.description})";
       check = isAttrs;
       merge = loc: defs:
         zipAttrsWith (name: defs:
@@ -522,7 +522,7 @@ rec {
 
     functionTo = elemType: mkOptionType {
       name = "functionTo";
-      description = "function that evaluates to a(n) ${elemType.description}";
+      description = "function that evaluates to a(n) (${elemType.description})";
       check = isFunction;
       merge = loc: defs:
         fnArgs: (mergeDefinitions (loc ++ [ "[function body]" ]) elemType (map (fn: { inherit (fn) file; value = fn.value fnArgs; }) defs)).mergedValue;
@@ -727,7 +727,7 @@ rec {
     # Either value of type `t1` or `t2`.
     either = t1: t2: mkOptionType rec {
       name = "either";
-      description = "${t1.description} or ${t2.description}";
+      description = "(${t1.description}) or (${t2.description})";
       check = x: t1.check x || t2.check x;
       merge = loc: defs:
         let
@@ -765,7 +765,7 @@ rec {
           coercedType.description})";
       mkOptionType rec {
         name = "coercedTo";
-        description = "${finalType.description} or ${coercedType.description} convertible to it";
+        description = "(${finalType.description}) or (${coercedType.description}) convertible to it";
         check = x: (coercedType.check x && finalType.check (coerceFunc x)) || finalType.check x;
         merge = loc: defs:
           let
