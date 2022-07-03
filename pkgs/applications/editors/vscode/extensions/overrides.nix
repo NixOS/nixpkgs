@@ -22,11 +22,7 @@ let inherit (lib) maintainers licenses;
 in
 # note: this doesn't seem to work well with aliases, gonna need help on that
 self: super: {
-  _4ops.terraform.meta.maintainers = with maintainers; [ kamadorueda ];
-  angular.ng-template.meta.maintainers = with maintainers; [ ratsclub ];
   antyos.openscad.meta.license = licenses.gpl3;
-  apollographql.vscode-apollo.meta.maintainers = with maintainers; [ datafoo ];
-  arcticicestudio.nord-visual-studio-code.meta.maintainers = with maintainers; [ imgabe ];
   arjun.swagger-viewer.meta.license = licenses.mit;
   asciidoctor.asciidoctor-vscode = buildVscodeMarketplaceExtension {
     mktplcRef = {
@@ -51,7 +47,6 @@ self: super: {
   };
 
   asvetliakov.vscode-neovim.meta.license = licenses.mit;
-  attilabuti.brainfuck-syntax.meta.maintainers = with maintainers; [ superherointj ];
   ms-python.vscode-pylance.meta.license = licenses.unfree;
   b4dm4n.nixpkgs-fmt = buildVscodeMarketplaceExtension {
     mktplcRef = {
@@ -70,7 +65,6 @@ self: super: {
     };
   };
   baccata.scaladex-search.meta.license = licenses.asl20;
-  badochov.ocaml-formatter.meta.maintainers = with maintainers; [ superherointj ];
   bbenoist.nix.meta.license = licenses.mit;
   betterthantomorrow.calva = buildVscodeMarketplaceExtension {
     mktplcRef = {
@@ -89,32 +83,16 @@ self: super: {
     };
   };
   bodil.file-browser.license = licenses.lgpl3Plus;
-  bungcip.better-toml.maintainers = with maintainers; [ datafoo ];
   chenglou92.rescript-vscode = callPackage ./rescript { };
-  christian-kohler.path-intellisense.meta = {
-    license = licenses.mit;
-    maintainers = with maintainers; [ imgabe ];
-  };
+  christian-kohler.path-intellisense.meta.license = licenses.mit;
   cmschuetz12.wal.meta.license = licenses.mit;
   coenraads.bracket-pair-colorizer.meta.license = licenses.mit;
   coenraads.bracket-pair-colorizer-2.meta.license = licenses.mit;
-  coolbear.systemd-unit-file.meta.maintainers = with maintainers; [ kamadorueda ];
   cweijan.vscode-database-client2.meta.license = licenses.mit;
-  daohong-emilio.yash.meta.maintainers = with maintainers; [ kamadorueda ];
-  davidanson.vscode-markdownlint.meta.maintainers = with maintainers; [ datafoo ];
-  davidlday.languagetool-linter.meta.maintainers = with maintainers; [ ebbertd ];
-  denoland.vscode-deno.meta.maintainers = with maintainers; [ ratsclub ];
   disneystreaming.smithy.meta.license = licenses.asl20;
-  divyanshuagrawal.competitive-programming-helper.meta.maintainers = with maintainers; [ arcticlimer ];
   dotjoshjohnson.xml.meta.license = licenses.mit;
-  eamodio.gitlens.meta = {
-    license = licenses.mit;
-    maintainers = with maintainers; [ ratsclub ];
-  };
-  editorconfig.editorconfig.meta.maintainers = with maintainers; [ dbirks ];
+  eamodio.gitlens.meta.license = licenses.mit;
   edonet.vscode-command-runner.meta.license = licenses.mit;
-  elmtooling.elm-ls-vscode.meta.maintainers = with maintainers; [ mcwitt ];
-  esbenp.prettier-vscode.meta.maintainers = with maintainers; [ datafoo ];
   eugleo.magic-racket = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "magic-racket";
@@ -135,31 +113,11 @@ self: super: {
       license = licenses.agpl3Only;
     };
   };
-  faustinoaq.lex-flex-yacc-bison.meta.maintainers = with maintainers; [ emilytrau ];
-  foam.foam-vscode.meta.maintainers = with maintainers; [ ratsclub ];
-  foxundermoon.shell-format.meta = {
-    license = licenses.mit;
-    maintainers = with maintainers; [ dbirks ];
-  };
-  gencer.html-slim-scss-css-class-completion.meta = {
-    license = licenses.mit;
-    maintainers = with maintainers; [ superherointj ];
-  };
-  gitlab.gitlab-workflow.meta.maintainers = with maintainers; [ superherointj ];
-  grapecity.gc-excelviewer.meta = {
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
-  };
-  jkillian.custom-local-formatters.meta.maintainers = with maintainers; [ kamadorueda ];
+  foxundermoon.shell-format.meta.license = licenses.mit;
+  gencer.html-slim-scss-css-class-completion.meta.license = licenses.mit;
+  grapecity.gc-excelviewer.meta.license = licenses.mit;
   github.copilot.meta.license = licenses.unfree;
-  github.github-vscode-theme.meta.maintainers = with maintainers; [ hugolgst ];
   hashicorp.terraform = callPackage ./terraform { };
-  iciclesoft.workspacesort.meta.maintainers = with maintainers; [ dbirks ];
-  ionide.ionide-fsharp.meta.maintainers = with maintainers; [ ratsclub ];
-  irongeek.vscode-env.meta.maintainers = with maintainers; [ superherointj ];
-  jakebecker.elixir-ls.meta.maintainers = with maintainers; [ datafoo ];
-  jdinhlife.gruvbox.meta.maintainers = with maintainers; [ imgabe ];
-  jnoortheen.nix-ide.meta.maintainers = with maintainers; [ SuperSandro2000 ];
   johnpapa.vscode-peacock.meta.license = licenses.mit;
   kamadorueda.alejandra = buildVscodeMarketplaceExtension {
     mktplcRef = {
@@ -217,8 +175,6 @@ self: super: {
       };
     };
   lokalise.i18n-ally.meta.license = licenses.mit;
-  mads-hartmann.bash-ide-vscode.meta.maintainers = with maintainers; [ kamadorueda ];
-  mattn.lisp.meta.maintainers = with maintainers; [ kamadorueda ];
   mhutchie.git-graph.meta.license = licenses.mit;
   mishkinf.goto-next-previous-member.meta.license = licenses.mit;
   mskelton.one-dark-theme.meta.license = licenses.mit;
@@ -227,11 +183,7 @@ self: super: {
   ms-dotnettools.csharp = callPackage ./ms-dotnettools-csharp { };
   ms-vscode.cpptools = callPackage ./cpptools { };
   ms-vscode-remote.remote-ssh = callPackage ./remote-ssh { };
-  ms-vscode.theme-tomorrowkit.meta = {
-    license = licenses.mit;
-    maintainers = with maintainers; [ ratsclub ];
-  };
-  ms-pyright.pyright.meta.maintainers = with maintainers; [ ratsclub ];
+  ms-vscode.theme-tomorrowkit.meta.license = licenses.mit;
   ms-python.python = callPackage ./python {
     extractNuGet = callPackage ./python/extract-nuget.nix { };
   };
@@ -255,13 +207,8 @@ self: super: {
       maintainers = with maintainers; [ datafoo ];
     };
   };
-  njpwerner.autodocstring.meta = {
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
-  };
+  njpwerner.autodocstring.meta.license = licenses.mit;
   octref.vetur.meta.license = licenses.mit;
-  oderwat.indent-rainbow.meta.maintainers = with maintainers; [ imgabe ];
-  phoenixframework.phoenix.meta.maintainers = with maintainers; [ superherointj ];
   redhat.java = {
     buildInputs = [ jdk ];
     meta = {
@@ -270,32 +217,18 @@ self: super: {
     };
   };
   rust-lang.rust-analyzer = callPackage ./rust-analyzer { };
-  ocamllabs.ocaml-platform.meta.maintainers = with maintainers; [ ratsclub ];
   pkief.material-icon-theme.meta.license = licenses.mit;
   pkief.material-product-icons.meta.license = licenses.mit;
-  prisma.prisma.meta.maintainers = with maintainers; [ superherointj ];
   ryu1kn.partial-diff.meta.license = licenses.mit;
   scala-lang.scala.meta.license = licenses.mit;
   serayuzgur.crates.meta.license = licenses.mit;
-  shardulm94.trailing-spaces.meta.maintainers = with maintainers; [ kamadorueda ];
   silvenon.mdx.meta.license = licenses.mit;
-  skellock.just.meta.maintainers = with maintainers; [ maximsmol ];
   skyapps.fish-vscode.meta.license = licenses.mit;
   slevesque.vscode-multiclip.meta.license = licenses.mit;
-  stefanjarina.vscode-eex-snippets.meta.maintainers = with maintainers; [ superherointj ];
-  stephlin.vscode-tmux-keybinding.meta = {
-    license = licenses.mit;
-    maintainers = with maintainers; [ dbirks ];
-  };
-  stkb.rewrap.meta = {
-    license = licenses.asl20;
-    maintainers = with maintainers; [ datafoo ];
-  };
-  streetsidesoftware.code-spell-checker.meta.maintainers = with maintainers; [ datafoo ];
-  svsool.markdown-memo.meta.maintainers = with maintainers; [ ratsclub ];
+  stephlin.vscode-tmux-keybinding.meta.license = licenses.mit;
+  stkb.rewrap.meta.license = licenses.asl20;
   tabnine.tabnine-vscode.meta.license = licenses.mit;
   tamasfe.even-better-toml.meta.license = licenses.mit;
-  theangryepicbanana.language-pascal.meta.maintainers = with maintainers; [ superherointj ];
   timonwong.shellcheck = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "shellcheck";
@@ -314,7 +247,6 @@ self: super: {
   };
   tobiasalthoff.atom-material-theme.meta.license = licenses.mit;
   tomoki1207.pdf.meta.license = licenses.mit;
-  usernamehw.errorlens.meta.maintainers = with maintainers; [ imgabe ];
   vadimcn.vscode-lldb = callPackage ./vscode-lldb { };
   valentjn.vscode-ltex = vscode-utils.buildVscodeMarketplaceExtension rec {
     mktplcRef = {
@@ -343,14 +275,10 @@ self: super: {
       maintainers = [ maintainers._0xbe7a ];
     };
   };
-  viktorqvarfordt.vscode-pitch-black-theme.meta = {
-    license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
-  };
+  viktorqvarfordt.vscode-pitch-black-theme.meta.license = licenses.mit;
   ms-vsliveshare.vsliveshare = callPackage ./ms-vsliveshare-vsliveshare { };
   vspacecode.vspacecode.meta.license = licenses.mit;
   vspacecode.whichkey.meta.license = lib.licenses.mit;
-  xaver.clang-format.meta.maintainers = [ maintainers.zeratax ];
   xyz.local-history.meta.license = lib.licenses.mit;
   llvm-org.lldb-vscode = llvmPackages_8.lldb;
   WakaTime.vscode-wakatime = callPackage ./wakatime { };
