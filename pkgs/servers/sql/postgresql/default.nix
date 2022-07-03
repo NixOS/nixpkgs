@@ -54,8 +54,7 @@ let
 
     hardeningEnable = lib.optionals (!stdenv'.cc.isClang) [ "pie" ];
 
-    outputs = [ "out" "lib" "doc" "man" ];
-    setOutputFlags = false; # $out retains configureFlags :-/
+    outputs = [ "out" "dev" "lib" "doc" "man" ];
 
     buildInputs = [
       zlib
@@ -100,7 +99,6 @@ let
       "--with-libxml"
       "--with-icu"
       "--sysconfdir=/etc"
-      "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
       (lib.optionalString enableSystemd "--with-systemd")
@@ -115,7 +113,12 @@ let
       (if atLeast "16" then ./patches/disable-normalize_exec_path.patch
        else ./patches/disable-resolve_symlinks.patch)
       ./patches/less-is-more.patch
-      ./patches/hardcode-pgxs-path.patch
+
+      # Hardcode the path to pgxs and other dirs so that pg_config returns the path in the package,
+      # rather than one relative to the location pg_config was executed in.
+      # The placeholders are resolved in postPatch.
+      ./patches/hardcode-pg_config-paths.patch
+
       ./patches/specify_pkglibdir_at_runtime.patch
       ./patches/findstring.patch
 
@@ -137,6 +140,9 @@ let
             substitute "$patch" "$out" --replace "configure.ac" "configure.in"
           ''
       else ./patches/remove-refs-from-configure-flags-upto-12.patch)
+
+      # Patch out includedir path references in libraries and programs.
+      ./patches/prevent-output-cycle.patch
 
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
       let
@@ -190,8 +196,9 @@ let
     LC_ALL = "C";
 
     postPatch = ''
-      # Hardcode the path to pgxs so pg_config returns the path in $out
-      substituteInPlace "src/common/config_info.c" --replace HARDCODED_PGXS_PATH "$out/lib"
+      # Substitute placeholders from hardcode-pg_config-paths.patch
+      substituteInPlace "src/common/config_info.c" --subst-var out
+      substituteInPlace "src/bin/pg_config/pg_config.c" --subst-var dev
     '' + lib.optionalString jitSupport ''
         # Force lookup of jit stuff in $out instead of $lib
         substituteInPlace src/backend/jit/jit.c --replace pkglib_path \"$out/lib\"
@@ -205,9 +212,11 @@ let
         moveToOutput "lib/libpgcommon*.a" "$out"
         moveToOutput "lib/libpgport*.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
+        moveToOutput "bin/pg_config" "$dev"
+        moveToOutput "lib/pgxs" "$dev"
 
         # Prevent a retained dependency on gcc-wrapper.
-        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/ld ld
+        substituteInPlace "$dev/lib/pgxs/src/Makefile.global" --replace ${stdenv'.cc}/bin/ld ld
 
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
