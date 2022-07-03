@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null && enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.3.4";
+  version = "2.3.6";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-80aOyvsdf5rXtR/R23rr8XzridLvqKBc8vObTUBUAq4=";
+    sha256 = "sha256-Iff+L8XC8hQYSrBQl37HqOME5Yv64qsJj+xp+Pq9qcE=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -34,6 +34,9 @@ stdenv.mkDerivation rec {
     ./tests-add-test-cases-for-import-without-uid.patch
     ./allow-import-of-previously-known-keys-even-without-UI.patch
     ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
+
+    # Patch from upstream 34c649b36013, https://dev.gnupg.org/T6027
+    ./CVE-2022-34903-g10-fix-garbled-status-messages-in-NOTATION_DATA.patch
   ];
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
