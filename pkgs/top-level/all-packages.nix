@@ -22367,7 +22367,6 @@ with pkgs;
 
   nginxQuic = callPackage ../servers/http/nginx/quic.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
-    pcre = pcre2;
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -22379,7 +22378,6 @@ with pkgs;
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
     openssl = openssl_3;
-    pcre = pcre2;
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -22389,7 +22387,6 @@ with pkgs;
   nginxMainline = callPackage ../servers/http/nginx/mainline.nix {
     zlib = zlib-ng.override { withZlibCompat = true; };
     openssl = openssl_3;
-    pcre = pcre2;
     withKTLS = true;
     withPerl = false;
     # We don't use `with` statement here on purpose!
@@ -30374,8 +30371,19 @@ with pkgs;
   thunderbird = wrapThunderbird thunderbird-unwrapped { };
   thunderbird-wayland = wrapThunderbird thunderbird-unwrapped { forceWayland = true; };
 
-  thunderbird-bin = thunderbird-bin-91;
-  thunderbird-bin-unwrapped = thunderbird-bin-91-unwrapped;
+  thunderbird-91-unwrapped = thunderbirdPackages.thunderbird-91;
+  thunderbird-91 = wrapThunderbird thunderbird-91-unwrapped { };
+  thunderbird-91-wayland = wrapThunderbird thunderbird-91-unwrapped { forceWayland = true; };
+
+  thunderbird-bin = wrapThunderbird thunderbird-bin-unwrapped {
+    applicationName = "thunderbird";
+    pname = "thunderbird-bin";
+    desktopName = "Thunderbird";
+  };
+  thunderbird-bin-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
+    inherit (gnome) adwaita-icon-theme;
+    generated = import ../applications/networking/mailreaders/thunderbird-bin/release_sources.nix;
+  };
 
   thunderbird-bin-91 = wrapThunderbird thunderbird-bin-91-unwrapped {
     applicationName = "thunderbird";
@@ -30384,6 +30392,7 @@ with pkgs;
   };
   thunderbird-bin-91-unwrapped = callPackage ../applications/networking/mailreaders/thunderbird-bin {
     inherit (gnome) adwaita-icon-theme;
+    generated = import ../applications/networking/mailreaders/thunderbird-bin/91_sources.nix;
   };
 
   thunderbolt = callPackage ../os-specific/linux/thunderbolt {};
@@ -31561,7 +31570,7 @@ with pkgs;
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
-  erigon = callPackage ../applications/blockchains/erigon.nix { };
+  erigon = callPackage ../applications/blockchains/erigon.nix { buildGoModule = buildGo118Module; };
 
   exodus = callPackage ../applications/blockchains/exodus { };
 
