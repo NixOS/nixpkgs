@@ -60,7 +60,9 @@ val nixLicenses =
     "MPL-2.0" -> List("mpl20"),
     "BSD-3-Clause" -> List("bsd3"),
     "Unlicense" -> List("unlicense"),
-    "MIT OR Apache-2.0" -> List("mit", "asl20")
+    "MIT OR Apache-2.0" -> List("mit", "asl20"),
+    "GPL-3.0" -> List("gpl3"),
+    "GPL-3.0-or-later" -> List("gpl3Plus")
   )
 
 case class Extension(
@@ -71,16 +73,15 @@ case class Extension(
     license: Option[String]
 ) {
   def metaString = license match
-    case None => ""
     case Some(nixLicenses(knownLicenses)) =>
       s"""
       |  meta.license = ${knownLicenses
         .map(l => s"lib.licenses.$l")
         .mkString("[ ", " ", " ]")};""".stripMargin
-    case Some(unknownLicense) =>
+    case other =>
       // side effect
       println(
-        s"${Console.YELLOW}Unknown license for $publisher.$name: $unknownLicense${Console.RESET}"
+        s"${Console.YELLOW}Unknown license for $publisher.$name: $other${Console.RESET}. Add it in overrides.nix."
       )
       ""
 
@@ -123,7 +124,9 @@ object Generator extends IOApp.Simple:
     .readAll(Path("./extension-names.txt"))
     .through(fs2.text.utf8.decode)
     .through(fs2.text.lines)
-    .filterNot(_.trim.isEmpty)
+    .map(_.trim)
+    .filterNot(_.isEmpty)
+    .filterNot(_.startsWith("#"))
 
   def run =
     allExtensions

@@ -1,7 +1,5 @@
 # todo walk through these
 
-b4dm4n.vscode-nixpkgs-fmt -> b4dm4n.nixpkgs-fmt
-
 eugleo.magic-racket -> evzen-wybitul.magic-racket
 elixir-lsp.vscode-elixir-ls -> removed, it was a duplicate of JakeBecker.elixir-ls
 

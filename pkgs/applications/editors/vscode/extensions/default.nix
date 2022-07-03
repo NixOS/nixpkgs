@@ -29,18 +29,22 @@ let
   # "${mktplcRef.publisher}.${mktplcRef.name}".
   #
   baseExtensions = self: lib.mapAttrs (_n: lib.recurseIntoAttrs)
-    (callPackage ./_maintainers/generated.nix { inherit buildVscodeMarketplaceExtension; });
+    (callPackage ./generated.nix { inherit buildVscodeMarketplaceExtension; });
 
+  overrides = callPackage ./overrides.nix { };
   aliases = self: super: {
     # aliases
     ms-vscode = lib.recursiveUpdate super.ms-vscode { inherit (super.golang) go; };
+    Arjun = super.arjun;
+    b4dm4n = lib.recursiveUpdate super.b4dm4n { vscode-nixpkgs-fmt = super.b4dm4n.nixpkgs-fmt; };
+    eugleo.magic-racket = super.evzen-wybitul.magic-racket;
+    jpoissonnier.vscode-styled-components = super.jpoissonnier.vscode-styled-components;
+    elixir-lsp.vscode-elixir-ls = super.JakeBecker.elixir-ls;
+    jakebecker.elixir-ls = super.JakeBecker.elixir-ls;
   };
 
-  # TODO: add overrides overlay, so that we can have a generated.nix
-  # then apply extension specific modifcations to packages.
-
   # overlays will be applied left to right, overrides should come after aliases.
-  overlays = lib.optionals config.allowAliases [ aliases ];
+  overlays = (lib.optionals config.allowAliases [ aliases ]) ++ [ overrides ];
 
   toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
 in
