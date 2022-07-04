@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "kupiqu";
     repo = "SierraBreezeEnhanced";
     rev = "V${version}";
-    sha256 = "G1Ra7ld34AMPLZM0+3iEJHRFRMHVewZKTTXfmiu7PAk=";
+    sha256 = "sha256-G1Ra7ld34AMPLZM0+3iEJHRFRMHVewZKTTXfmiu7PAk=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
