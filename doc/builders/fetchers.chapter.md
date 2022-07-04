@@ -4,7 +4,7 @@ Nixpkgs provides fetchers for different protocols and services. Fetchers are fun
 
 ## Caveats
 
-Fetchers store their output in the nix store, or cache, using Nix's [_fixed output derivation_](https://nixos.org/manual/nix/stable/#fixed-output-drvs). Later, Nix can reuse the downloaded contents via their hash. While the caching improves performance, it can lead to some confusion. For example, consider the following fetcher:
+Fetchers create [_fixed output derivations_](https://nixos.org/manual/nix/stable/#fixed-output-drvs) from downloaded files. Later, Nix can reuse the downloaded files via their hash. While the caching improves performance, it can lead to some confusion. For example, consider the following fetcher:
 
 ```nix
 fetchurl {
@@ -33,7 +33,7 @@ fetchurl {
 
 Hash mismatches generate an error message containing the correct sha256.
 
-A similar problem arises when changing a fetcher's implementation. Changes may cause a fixed output derivation to fail. Failures can go undetected if the output of the derivation already exists in the nix store or cache. The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent this. It uses the derivation hash in the output's name to invalidate the cache.
+A similar problem arises while testing changes to a fetcher's implementation. If the output of the derivation already exists in the nix store or cache, test failures can go undetected. The [`invalidateFetcherByDrvHash`](#tester-invalidateFetcherByDrvHash) function helps prevent reusing cached derivations.
 
 ## `fetchurl` and `fetchzip` {#fetchurl}
 
