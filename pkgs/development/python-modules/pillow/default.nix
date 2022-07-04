@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, fetchpatch
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
@@ -13,23 +12,15 @@
 
 import ./generic.nix (rec {
   pname = "pillow";
-  version = "9.1.1";
+  version = "9.2.0";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Pillow";
     inherit version;
-    sha256 = "sha256-dQJTmTm1PXVl89Edh8eOfskA08cpRdTuDi8lDVmDCaA=";
+    sha256 = "sha256-deY2/T4PuHJpPyPMuKX/LNV4gBJR86T2hUxqXUN9PAQ=";
   };
-
-  patches = [
-    # Fix failing test with libtiff 4.4.0
-    (fetchpatch {
-      url = "https://github.com/python-pillow/Pillow/commit/40a918d274182b7d7c063d7797fb77d967982c4a.patch";
-      sha256 = "sha256-f8m3Xt3V3pHggK1JEc2tnPmrTVPFjfV4YJqwE1KM1pA=";
-    })
-  ];
 
   passthru.tests = {
     inherit imageio matplotlib pilkit pydicom reportlab;
