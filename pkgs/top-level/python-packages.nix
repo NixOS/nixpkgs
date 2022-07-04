@@ -5702,6 +5702,8 @@ in {
     enablePython = true; # ... and its Python bindings
   })).python;
 
+  niapy = callPackage ../development/python-modules/niapy { };
+
   nibabel = callPackage ../development/python-modules/nibabel { };
 
   nidaqmx = callPackage ../development/python-modules/nidaqmx { };
