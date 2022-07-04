@@ -51,7 +51,7 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 1. Autoconf has multiple `[cpu]` fields for 32-bit x86 systems (`i386-`, `i486-`, `i586-`, and `i686-`).  Multiarch uses `i386-` for all of them.
 2. The 32-bit ARM ABI for systems with hardware floating point is incompatible with the ABI for systems without floating point.  Autoconf tuples use the same tuples (`arm-*-*eabi`) for both of these ABIs; multiarch distinguishes between them as `arm-*-*eabi` and `arm-*-*eabihf`.
 
-This field should be *canonicalized*.  The rules for canonicalizing a tuple are kept in the `config.guess` file in the source code for `autoconf`.
+This field should be *canonicalized*.  The rules for canonicalizing a tuple are kept in the `config.sub` file in the source code for `autoconf`. The script is also available via the `gnu-config` package in nixpkgs.
 
 `parsed`
 
