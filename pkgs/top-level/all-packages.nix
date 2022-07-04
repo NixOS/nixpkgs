@@ -22604,7 +22604,6 @@ with pkgs;
   mongodb-5_0 = callPackage ../servers/nosql/mongodb/v5_0.nix {
     sasl = cyrus_sasl;
     boost = boost17x.override { enableShared = false; };
-    stdenv = if stdenv.cc.isGNU then gcc10Stdenv else stdenv;
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
