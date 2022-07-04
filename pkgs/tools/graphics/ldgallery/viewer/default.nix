@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkgs, nodejs-12_x, pandoc, CoreServices }:
+{ lib, stdenv, fetchFromGitHub, pkgs, nodejs-14_x, pandoc, CoreServices }:
 
 with lib;
 
@@ -18,7 +18,7 @@ let
     inherit (stdenv.hostPlatform) system;
 
     # some native node dependencies still require NodeJS 12 with Python 2
-    nodejs = nodejs-12_x;
+    nodejs = nodejs-14_x;
   };
 
   nodePkg = nodePackages.package.override {
