@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "oh1ySrOzkzMwGUNTaH34LEdbXfuZdRPu9MJd5shl7DM=";
   };
 
+  NIX_CFLAGS_COMPILE = "-fno-common";
+
   configureFlags = [
+    # TODO: disable 'inline' clobber
     "--enable-shared"
   ];
 
