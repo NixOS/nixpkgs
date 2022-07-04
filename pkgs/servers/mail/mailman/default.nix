@@ -1,9 +1,9 @@
 { newScope, lib, python3 }:
 
 let
-  callPackage = newScope self;
+  self = lib.makeExtensible (self: let inherit (self) callPackage; in {
+    callPackage = newScope self;
 
-  self = lib.makeExtensible (self: {
     python3 = callPackage ./python.nix { inherit python3; };
 
     hyperkitty = callPackage ./hyperkitty.nix { };
