@@ -38,5 +38,6 @@ stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ valodim ];
+    broken = true;
   };
 }
