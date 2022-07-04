@@ -56,6 +56,19 @@ stdenv.mkDerivation (finalAttrs: rec {
     # - https://hg.mozilla.org/mozilla-central/rev/ec48f15d085c
     # - https://hg.mozilla.org/mozilla-central/rev/6803dda74d33
     ./add-riscv64-support.patch
+  ] ++ lib.optionals (lib.versionAtLeast version "102") [
+    # Patches required by GJS
+    # https://discourse.gnome.org/t/gnome-43-to-depend-on-spidermonkey-102/10658
+    # Install ProfilingCategoryList.h
+    (fetchpatch {
+      url = "https://hg.mozilla.org/releases/mozilla-esr102/raw-rev/33147b91e42b79f4c6dd3ec11cce96746018407a";
+      sha256 = "sha256-xJFJZMYJ6P11HQDZbr48GFgybpAeVcu3oLIFEyyMjBI=";
+    })
+    # Fix embeder build
+    (fetchpatch {
+      url = "https://hg.mozilla.org/releases/mozilla-esr102/raw-rev/1fa20fb474f5d149cc32d98df169dee5e6e6861b";
+      sha256 = "sha256-eCisKjNxy9SLr9KoEE2UB26BflUknnR7PIvnpezsZeA=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -123,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   # while we have a double-float toolchain
   NIX_CFLAGS_COMPILE = lib.optionalString (with stdenv.hostPlatform; isRiscV && is64bit && lib.versionOlder version "91") "-mabi=lp64d";
 
-  postPatch = ''
+  postPatch = lib.optionalString (lib.versionOlder version "102") ''
     # This patch is a manually applied fix of
     #   https://bugzilla.mozilla.org/show_bug.cgi?id=1644600
     # Once that bug is fixed, this can be removed.
