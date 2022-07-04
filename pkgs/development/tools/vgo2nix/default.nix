@@ -36,5 +36,8 @@ buildGoModule {
     license = licenses.mit;
     maintainers = with maintainers; [ adisbladis ];
     mainProgram = "vgo2nix";
+    # vendoring fails with cryptic error:
+    # reading file:///nix/store/..../github.com/orivej/e/@v/v0.0.0-20180728214217-ac3492690fda.zip: no such file or directory
+    broken = true;
   };
 }
