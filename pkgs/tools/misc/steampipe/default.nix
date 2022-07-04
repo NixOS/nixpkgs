@@ -11,7 +11,7 @@ buildGoModule rec {
     sha256 = "sha256-Qq8i/uU2TtrEpvTPFmnZdku2vNo5O240dAT2OQKel1U=";
   };
 
-  vendorSha256 = "sha256-pEQG9BHhsVDVSOoKJBocLXMLjmP72RM+GXz4nYD4D7s=";
+  vendorSha256 = "sha256-e4dpWD3a1mJzAqaW0na6pq+HIqJwK8tDIA+ENdyqyAU=";
   proxyVendor = true;
 
   nativeBuildInputs = [ installShellFiles ];
@@ -30,10 +30,10 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     homepage = "https://steampipe.io/";
     description = "select * from cloud;";
     license = licenses.agpl3;
     maintainers = with maintainers; [ hardselius ];
+    broken = stdenv.isDarwin;
   };
 }
