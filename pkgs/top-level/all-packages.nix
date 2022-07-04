@@ -8259,6 +8259,7 @@ with pkgs;
   nodejs-slim-16_x = callPackage ../development/web/nodejs/v16.nix {
     enableNpm = false;
   };
+  nodejs-16_x-openssl_1_1 = callPackage ../development/web/nodejs/v16.nix { };
   nodejs-18_x = callPackage ../development/web/nodejs/v18.nix { };
   nodejs-slim-18_x = callPackage ../development/web/nodejs/v18.nix {
     enableNpm = false;
@@ -12389,6 +12390,9 @@ with pkgs;
   yarn = callPackage ../development/tools/yarn  { };
 
   yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { };
+  yarn2nix-moretea-openssl_1_1 = callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
+    nodejs = nodejs.override { openssl = openssl_1_1; };
+  };
 
   inherit (yarn2nix-moretea)
     yarn2nix
