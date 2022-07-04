@@ -9,7 +9,6 @@ buildGoModule rec {
     repo = "git-lfs";
     rev = "v${version}";
     sha256 = "sha256-3gVUPfZs5GViEA3D7Zm5NdxhuEz9DhwPLoQqHFdGCrI=";
-    leaveDotGit = true;
   };
 
   vendorSha256 = null;
