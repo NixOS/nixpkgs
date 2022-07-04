@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchurl
 , gettext
 , meson
@@ -37,6 +38,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "Wtb1vJd4Hr9V7NaUfNSuf/QZJRZYDRC9g4Dx3UcZbtI=";
   };
+
+  patches = [
+    ./fix-test-order.patch
+  ];
+
+  postPatch = ''
+    patchShebangs utils/data-generators/cc/generate
+  '';
 
   nativeBuildInputs = [
     meson
@@ -77,11 +86,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  patches = [ ./drop-sparql-test.patch ];
-  postPatch = ''
-    patchShebangs utils/data-generators/cc/generate
-  '';
 
   preCheck = ''
     # (tracker-store:6194): Tracker-CRITICAL **: 09:34:07.722: Cannot initialize database: Could not open sqlite3 database:'/homeless-shelter/.cache/tracker/meta.db': unable to open database file
