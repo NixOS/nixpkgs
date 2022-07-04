@@ -389,7 +389,7 @@ in {
         AUTH_LDAP_SERVER_URI = "${cfg.ldap.serverUri}"
         AUTH_LDAP_BIND_DN = "${cfg.ldap.bindDn}"
         with open("${cfg.ldap.bindPasswordFile}") as f:
-            AUTH_LDAP_BIND_PASSWORD = f.read()
+            AUTH_LDAP_BIND_PASSWORD = f.read().rstrip('\n')
         AUTH_LDAP_USER_SEARCH = LDAPSearch("${cfg.ldap.userSearch.ou}",
             ldap.SCOPE_SUBTREE, "${cfg.ldap.userSearch.query}")
         AUTH_LDAP_GROUP_TYPE = ${cfg.ldap.groupSearch.type}()
