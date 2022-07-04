@@ -35835,6 +35835,10 @@ with pkgs;
 
   zk = callPackage ../applications/office/zk {};
 
+  zetk = callPackage ../applications/office/zetk {};
+  
+  namedtype = callPackage ../development/libraries/namedtype {};
+
   zktree = callPackage ../applications/misc/zktree {};
 
   zrythm = callPackage ../applications/audio/zrythm {

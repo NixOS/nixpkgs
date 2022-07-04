@@ -1,0 +1,27 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 54edcbd..ae4f32f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -100,22 +100,6 @@ if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR)
+   )
+ endif()
+ 
+-#
+-# Get CPM (CMake Package Manager)
+-#
+-include(cmake/CPM.cmake)
+-
+-# Add clang-format CMake script
+-cpmaddpackage(
+-  NAME Format.cmake
+-  VERSION 1.7.3
+-  GITHUB_REPOSITORY TheLartians/Format.cmake
+-  OPTIONS # set to yes skip cmake formatting
+-  "FORMAT_SKIP_CMAKE NO"
+-  # path to exclude (optional, supports regular expressions)
+-  "CMAKE_FORMAT_EXCLUDE cmake/CPM.cmake"
+-)
+-
+ #
+ # Version derivation based on git tag
+ #
