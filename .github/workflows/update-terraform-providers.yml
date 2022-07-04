@@ -5,8 +5,15 @@ on:
     - cron: "14 3 * * 1"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   tf-providers:
+    permissions:
+      contents: write  # for peter-evans/create-pull-request to create branch
+      issues: write  # for peter-evans/create-or-update-comment to create or update comment
+      pull-requests: write  # for peter-evans/create-pull-request to create a PR
     if: github.repository_owner == 'NixOS' && github.ref == 'refs/heads/master' # ensure workflow_dispatch only runs on master
     runs-on: ubuntu-latest
     steps:
