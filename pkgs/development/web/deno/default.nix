@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
     # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
-    substituteInPlace .cargo/config --replace '"-C", "link-arg=-fuse-ld=lld"' ""
+    substituteInPlace .cargo/config.toml --replace '"-C", "link-arg=-fuse-ld=lld"' ""
   '';
 
   # Install completions post-install
