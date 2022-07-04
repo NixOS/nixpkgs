@@ -529,8 +529,6 @@ let
 
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
-    io-page-unix = callPackage ../development/ocaml-modules/io-page/unix.nix { };
-
     ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
 
     ipaddr-cstruct = callPackage ../development/ocaml-modules/ipaddr/cstruct.nix { };
