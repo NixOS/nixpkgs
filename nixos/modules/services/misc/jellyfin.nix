@@ -49,7 +49,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      # This is mostly follows: https://github.com/jellyfin/jellyfin/blob/master/debian/jellyfin.service
+      # This is mostly follows: https://github.com/jellyfin/jellyfin/blob/master/fedora/jellyfin.service
       # Upstream also disable some hardenings when running in LXC, we do the same with the isContainer option
       serviceConfig = rec {
         Type = "simple";
