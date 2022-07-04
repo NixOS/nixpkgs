@@ -10,6 +10,7 @@ buildMongoDB {
   sha256 = "sha256-ebg3R6P+tjRvizDzsl7mZzhTfqIaRJPfHBu0IfRvtS8=";
   patches = [
     ./forget-build-dependencies-4-4.patch
+    ./fix-gcc-Wno-exceptions-4.4.patch
    (fetchpatch {
       name = "mongodb-4.4.1-gcc11.patch";
       url = "https://raw.githubusercontent.com/gentoo/gentoo/7168257cad6ea7c4856b01c5703d0ed5b764367c/dev-db/mongodb/files/mongodb-4.4.1-gcc11.patch";
