@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
       url = "https://git.netfilter.org/iptables/patch/?id=f319389525b066b7dc6d389c88f16a0df3b8f189";
       sha256 = "sha256-rOxCEWZoI8Ac5fQDp286YHAwvreUAoDVAbomboKrGyM=";
     })
+    # fix Musl build
+    (fetchpatch {
+      url = "https://git.netfilter.org/iptables/patch/?id=0e7cf0ad306cdf95dc3c28d15a254532206a888e";
+      sha256 = "18mnvqfxzd7ifq3zjb4vyifcyadpxdi8iqcj8wsjgw23n49lgrbj";
+    })
   ];
 
   outputs = [ "out" "dev" "man" ];

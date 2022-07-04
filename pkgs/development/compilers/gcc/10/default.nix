@@ -53,11 +53,11 @@ with lib;
 with builtins;
 
 let majorVersion = "10";
-    version = "${majorVersion}.3.0";
+    version = "${majorVersion}.4.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-    patches = [ ./gcc10-asan-glibc-2.34.patch ]
+    patches = [ ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional (noSysDirs && hostPlatform.isRiscV) ../no-sys-dirs-riscv.patch
@@ -72,8 +72,6 @@ let majorVersion = "10";
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch
-
-      ++ [ ../libsanitizer-no-cyclades.patch ]
 
       ++ optional (buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform) (fetchpatch {
         url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
@@ -95,7 +93,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "0i6378ig6h397zkhd7m4ccwjx5alvzrf2hm27p1pzwjhlv0h9x34";
+    sha256 = "1wg4xdizkksmwi66mvv2v4pk3ja8x64m7v9gzhykzd3wrmdpsaf9";
   };
 
   inherit patches;

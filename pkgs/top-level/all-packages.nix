@@ -4585,21 +4585,17 @@ with pkgs;
   arpoison = callPackage ../tools/networking/arpoison { };
 
   asciidoc = callPackage ../tools/typesetting/asciidoc {
-    inherit (python3.pkgs) matplotlib numpy aafigure recursivePthLoader;
+    inherit (python3.pkgs) pygments matplotlib numpy aafigure recursivePthLoader;
+    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
+    w3m = w3m-batch;
     enableStandardFeatures = false;
   };
 
   asciidoc-full = asciidoc.override {
-    inherit (python3.pkgs) pygments;
-    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
-    w3m = w3m-batch;
     enableStandardFeatures = true;
   };
 
   asciidoc-full-with-plugins = asciidoc.override {
-    inherit (python3.pkgs) pygments;
-    texlive = texlive.combine { inherit (texlive) scheme-minimal dvipng; };
-    w3m = w3m-batch;
     enableStandardFeatures = true;
     enableExtraPlugins = true;
   };
@@ -13955,18 +13951,18 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_61 = callPackage ../development/compilers/rust/1_61.nix {
+  rust_1_62 = callPackage ../development/compilers/rust/1_62.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_14 = llvmPackages_14.libllvm;
   };
-  rust = rust_1_61;
+  rust = rust_1_62;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { stdenv = gcc10StdenvCompat; };
 
-  rustPackages_1_61 = rust_1_61.packages.stable;
-  rustPackages = rustPackages_1_61;
+  rustPackages_1_62 = rust_1_62.packages.stable;
+  rustPackages = rustPackages_1_62;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
 
@@ -14855,7 +14851,9 @@ with pkgs;
 
   inherit (ocamlPackages) reason;
 
-  buildRubyGem = callPackage ../development/ruby-modules/gem { };
+  buildRubyGem = callPackage ../development/ruby-modules/gem {
+    inherit (darwin) libobjc;
+  };
   defaultGemConfig = callPackage ../development/ruby-modules/gem-config {
     inherit (darwin) DarwinTools cctools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -15509,20 +15507,27 @@ with pkgs;
 
   ctmg = callPackage ../tools/security/ctmg { };
 
-  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake {
+  cmake = callPackage ../development/tools/build-managers/cmake {
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+    inherit (libsForQt5) qtbase wrapQtAppsHook;
   };
 
-  cmakeMinimal = libsForQt5.callPackage ../development/tools/build-managers/cmake {
+  cmakeMinimal = callPackage ../development/tools/build-managers/cmake {
     isBootstrap = true;
+    qtbase = null;
+    wrapQtAppsHook = null;
     # There is no SystemConfiguration in bootstrapTools, so this version gets
     # patched to remove that dependency.
     SystemConfiguration = null;
   };
 
-  cmakeCurses = cmake.override { useNcurses = true; };
+  cmakeCurses = cmake.override {
+    uiToolkits = [ "ncurses" ];
+  };
 
-  cmakeWithGui = cmakeCurses.override { withQt5 = true; };
+  cmakeWithGui = cmake.override {
+    uiToolkits = [ "ncurses" "qt5" ];
+  };
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
 
@@ -21020,23 +21025,6 @@ with pkgs;
 
   sphinx = with python3Packages; toPythonApplication sphinx;
 
-  # A variation of sphinx that is only suitable for offline use as it excludes
-  # pyopenssl, which is broken on aarch64-darwin.
-  # https://github.com/NixOS/nixpkgs/issues/175875
-  sphinx_offline =
-    if !(stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isAarch64)
-    then sphinx
-    else
-      sphinx.override (o: {
-        requests = pkgsBuildTarget.python3Packages.requests.override (o: {
-          urllib3 = pkgsBuildTarget.python3Packages.urllib3.overrideAttrs (o: {
-            # urllib3 adds the optional pyopenssl to propagatedBuildInputs
-            # pkgs/development/python-modules/urllib3/default.nix
-            propagatedBuildInputs = [];
-          });
-        });
-      });
-
   sphinx-autobuild = with python3Packages; toPythonApplication sphinx-autobuild;
 
   sphinx-serve = with python3Packages; toPythonApplication sphinx-serve;
@@ -23429,7 +23417,7 @@ with pkgs;
 
     # latest 6.8 mysteriously fails to parse '@headings single':
     #   https://lists.gnu.org/archive/html/bug-texinfo/2021-09/msg00011.html
-    texinfo = texinfo6_7;
+    texinfo = buildPackages.texinfo6_7;
   };
 
   gpm-ncurses = gpm.override { inherit ncurses; };
