@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "phylactery";
-  version = "0.1.1";
+  version = "0.1.2";
 
   goPackagePath = "git.sr.ht/~cnx/phylactery";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "~cnx";
     repo = pname;
     rev = version;
-    sha256 = "sha256-HcpdPQ1WOMFNdfsZb//GvUVBCbmS3jARbcXjchlv2oE=";
+    sha256 = "sha256-HQN6wJ/4YeuQaDcNgdHj0RgYnn2NxXGRfxybmv60EdQ=";
   };
 
   # Upstream repo doesn't provide any test.

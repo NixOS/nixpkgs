@@ -13,7 +13,6 @@
 , pytest-localserver
 , responses
 , rsa
-, pyopenssl
 }:
 
 buildPythonPackage rec {
@@ -29,7 +28,6 @@ buildPythonPackage rec {
     cachetools
     pyasn1-modules
     rsa
-    pyopenssl
     pyu2f
   ];
 
