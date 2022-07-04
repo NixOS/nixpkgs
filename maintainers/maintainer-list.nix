@@ -3742,12 +3742,6 @@
     githubId = 2536303;
     name = "Enno Lohmeier";
   };
-  elseym = {
-    email = "elseym@me.com";
-    github = "elseym";
-    githubId = 907478;
-    name = "Simon Waibl";
-  };
   elvishjerricco = {
     email = "elvishjerricco@gmail.com";
     github = "ElvishJerricco";
