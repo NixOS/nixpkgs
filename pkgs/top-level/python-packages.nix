@@ -2647,6 +2647,8 @@ in {
 
   durus = callPackage ../development/python-modules/durus {  };
 
+  dvc-data = callPackage ../development/python-modules/dvc-data {  };
+
   dvc-objects = callPackage ../development/python-modules/dvc-objects {  };
 
   dvc-render = callPackage ../development/python-modules/dvc-render {  };
