@@ -247,6 +247,7 @@
 , "prebuild-install"
 , "prettier"
 , "prettier_d_slim"
+, "prettier-plugin-astro"
 , "prettier-plugin-toml"
 , "prisma"
 , "@prisma/language-server"
