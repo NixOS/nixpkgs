@@ -24363,6 +24363,8 @@ with pkgs;
 
   wooting-udev-rules = callPackage ../os-specific/linux/wooting-udev-rules { };
 
+  teensy-udev-rules = callPackage ../os-specific/linux/teensy-udev-rules { };
+
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
   wpa_supplicant_ro_ssids = wpa_supplicant.override {
