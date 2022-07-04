@@ -44,7 +44,7 @@ The exact schema these fields follow is a bit ill-defined due to a long and conv
 
 `config`
 
-: This is a 3-, 4-, or 5- component shorthand for the platform.  Examples of this would be `x86_64-unknown-linux-gnux32`, `aarch64-apple-darwin14`, and `mips64el-unknown-linux-muslabin32`.  This is a standard format [pioneered by autoconf](https://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/System-Type.html#System-Type) and adopted by LLVM.  For 32-bit arm, nixpkgs adopts the [multiarch solution](https://wiki.debian.org/Multiarch/Tuples#Used_solution) to the problem of distinguishing between `arm-*-*-*` and `armhf-*-*-*`, which are linker-incompatible due to having different calling conventions.
+: This is a 3-, 4-, or 5- component shorthand for the platform.  Examples of this would be `x86_64-unknown-linux-gnux32`, `aarch64-apple-darwin14`, and `mips64el-unknown-linux-muslabin32`.  This is a standard format [pioneered by autoconf](https://www.gnu.org/software/autoconf/manual/autoconf-2.65/html_node/System-Type.html#System-Type) and adopted by LLVM.
 
 In the 5-part form, this corresponds to `[cpu]-[vendor]-[os]-[libc][abi]`; note that there is no hyphen separating the `[libc]` field from the `[abi]` field. This format is strictly more informative than the "Nix system double", the format used by the nix interpreter.  This needs a better name than `config`!
 
