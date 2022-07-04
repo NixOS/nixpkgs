@@ -28,7 +28,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  vendorSha256 = "jDzDwK7qA9lKP8CfkKzfooPDrHuHI4OpiLXmX9vOpOg=";
+  vendorSha256 = "sha256-jDzDwK7qA9lKP8CfkKzfooPDrHuHI4OpiLXmX9vOpOg=";
 
   CGO_ENABLED = 1;
 
