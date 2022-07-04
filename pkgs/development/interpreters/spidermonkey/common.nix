@@ -1,6 +1,7 @@
 { version, hash }:
 
-{ lib
+{ callPackage
+, lib
 , stdenv
 , fetchurl
 , fetchpatch
@@ -28,7 +29,7 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "spidermonkey";
   inherit version;
 
@@ -160,6 +161,10 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/js${lib.versions.major version} $out/bin/js
   '';
 
+  passthru.tests.run = callPackage ./test.nix {
+    spidermonkey = finalAttrs.finalPackage;
+  };
+
   meta = with lib; {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://spidermonkey.dev/";
@@ -167,4 +172,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ abbradar lostnet ];
     platforms = platforms.linux;
   };
-}
+})
