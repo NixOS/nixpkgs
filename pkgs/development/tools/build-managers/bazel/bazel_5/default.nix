@@ -26,15 +26,15 @@
 }:
 
 let
-  version = "5.1.1";
+  version = "5.2.0";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "f107wdNEaSskAPN2X9S1wLY26056insXkjCVx7VqT3g=";
+    sha256 = "sha256-ggqU27FAce1tjCZs8MCA7LJlpe6mUwdXlInEZiwtWCo=";
   };
 
-  # Update with `eval $(nix-build -A bazel.updater)`,
+  # Update with `eval $(nix-build -A bazel_5.updater)`,
   # then add new dependencies from the dict in ./src-deps.json as required.
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
@@ -211,7 +211,7 @@ stdenv.mkDerivation rec {
 
   # Additional tests that check bazel’s functionality. Execute
   #
-  #     nix-build . -A bazel.tests
+  #     nix-build . -A bazel_5.tests
   #
   # in the nixpkgs checkout root to exercise them locally.
   passthru.tests =
