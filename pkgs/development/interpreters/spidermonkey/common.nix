@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     ./add-riscv64-support.patch
   ];
 
-  postPatch = ''
+  postPatch = lib.optionalString (lib.versionOlder version "102") ''
     # This patch is a manually applied fix of
     #   https://bugzilla.mozilla.org/show_bug.cgi?id=1644600
     # Once that bug is fixed, this can be removed.
