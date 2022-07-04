@@ -32,6 +32,23 @@ with lib;
 
     systemd.packages = [ pkgs.rtkit ];
 
+    # Stop spamming the log and fix sd_notify().
+    # This bind-mounts the notify socket so the `Status` line
+    # in `systemctl status` work which makes the constant debug
+    # logging redundant.
+    # See also:
+    # - https://github.com/heftig/rtkit/issues/22
+    # - https://github.com/heftig/rtkit/issues/27
+    systemd.services.rtkit-daemon = {
+      environment.NOTIFY_SOCKET = "/fs/sd-notify";
+      serviceConfig = {
+        BindPaths = "/run/systemd/notify:/proc/fs/sd-notify";
+        TemporaryFileSystem = "/proc/fs";
+        # Only log LOG_INFO and higher
+        LogLevelMax = 6;
+      };
+    };
+
     services.dbus.packages = [ pkgs.rtkit ];
 
     users.users.rtkit =
