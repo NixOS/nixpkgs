@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "s3-credentials";
-  version = "0.11";
+  version = "0.12";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "simonw";
     repo = pname;
-    rev = version;
-    hash = "sha256-t6Q+/2k93cEk+eeFm9aOvZNb1IcUzt66iApfH2FvHbw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-NDUm/RhlmuZwB3fwwom2Y9PcF6J4+G29WHE7lqdDP3Y=";
   };
 
   propagatedBuildInputs = [

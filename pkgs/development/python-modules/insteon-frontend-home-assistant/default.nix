@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "insteon-frontend-home-assistant";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-s0MjB1dTsUy1cAMWo/0r+wTiO6/h0aOiPQ3d+1pHsyM=";
+    sha256 = "sha256-AP8yf2eEBT8LWs03hKihCgbBkS9sEUg5NkYdagFiqwA=";
   };
 
   # upstream has no tests
