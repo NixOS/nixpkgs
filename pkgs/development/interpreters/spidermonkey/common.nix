@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     description = "Mozilla's JavaScript engine written in C/C++";
     homepage = "https://spidermonkey.dev/";
     license = licenses.mpl20; # TODO: MPL/GPL/LGPL tri-license for 78.
-    maintainers = with maintainers; [ abbradar lostnet ];
+    maintainers = with maintainers; [ abbradar lostnet catap ];
     platforms = platforms.linux;
   };
 })
