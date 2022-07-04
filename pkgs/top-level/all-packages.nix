@@ -33156,9 +33156,7 @@ with pkgs;
 
   astral = callPackage ../applications/science/biology/astral { };
 
-  archimedes = callPackage ../applications/science/electronics/archimedes {
-    stdenv = gcc6Stdenv;
-  };
+  archimedes = callPackage ../applications/science/electronics/archimedes { };
 
   bayescan = callPackage ../applications/science/biology/bayescan { };
 
