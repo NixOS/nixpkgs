@@ -14,7 +14,6 @@
 , pkg-config
 , python3
 , python39
-, rust-cbindgen
 , rustc
 , which
 , zip
@@ -48,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     pkg-config
     # 78 requires python up to 3.9
     (if lib.versionOlder version "91" then python39 else python3)
-    rust-cbindgen
     rustc
     rustc.llvmPackages.llvm # for llvm-objdump
     which
