@@ -168,7 +168,7 @@ let
         port = cfg.registry.externalPort;
         key = cfg.registry.keyFile;
         api_url = "http://${config.services.dockerRegistry.listenAddress}:${toString config.services.dockerRegistry.port}/";
-        issuer = "gitlab-issuer";
+        issuer = cfg.registry.issuer;
       };
       extra = {};
       uploads.storage_path = cfg.statePath;
