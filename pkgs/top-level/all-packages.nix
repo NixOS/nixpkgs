@@ -4918,10 +4918,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
-  cryptpad = callPackage ../servers/web-apps/cryptpad {
-    nodejs = nodejs-12_x;
-  };
-
   ethash = callPackage ../development/libraries/ethash { };
 
   ethminer = callPackage ../tools/misc/ethminer { cudaSupport = config.cudaSupport or true; };
