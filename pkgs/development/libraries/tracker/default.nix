@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  patches = [ ./drop-sparql-test.patch ];
   postPatch = ''
     patchShebangs utils/data-generators/cc/generate
   '';

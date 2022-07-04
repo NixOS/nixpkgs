@@ -1,0 +1,9 @@
+https://gitlab.gnome.org/GNOME/tracker/-/issues/370
+--- a/tests/libtracker-data/meson.build
++++ b/tests/libtracker-data/meson.build
+@@ -14,5 +14,4 @@
+ libtracker_data_slow_tests = [
+     'ontology',
+-    'sparql'
+ ]
+ 
