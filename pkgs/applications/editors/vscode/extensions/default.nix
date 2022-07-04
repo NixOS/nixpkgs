@@ -471,11 +471,11 @@ let
         mktplcRef = {
           name = "vscode-tailwindcss";
           publisher = "bradlc";
-          version = "0.6.13";
-          sha256 = "098vrm28b7jpzk0c2d0cgxvdw4jsswzf18cx1m9jwsm1j40fp5f4";
+          version = "0.8.6";
+          sha256 = "sha256-v15KuD3eYFCsrworCJ1SZAMkyZKztAwWKmfwmbirleI=";
         };
         meta = with lib; {
-          license = licenses.mpl20;
+          license = licenses.mit;
         };
       };
 
@@ -2426,8 +2426,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.22.2";
-          sha256 = "sha256-dtIlgODzRdoMKnG9050ZcCX3w15A/R3FaMc+ZylvBbU=";
+          version = "1.23.1";
+          sha256 = "sha256-k3z3n+29vqvC/FqjrHUBnYIVcKuJpiT+nITbqVm0Low=";
         };
         meta = {
           license = lib.licenses.mit;
