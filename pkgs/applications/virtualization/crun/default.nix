@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (lib.elem stdenv.hostPlatform.system criu.meta.platforms) criu;
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   # we need this before autoreconfHook does its thing in order to initialize
   # config.h with the correct values
