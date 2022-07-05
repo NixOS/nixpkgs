@@ -12228,6 +12228,8 @@ with pkgs;
 
   zinit = callPackage ../shells/zsh/zinit {} ;
 
+  zint = qt6Packages.callPackage ../development/libraries/zint { };
+
   zs-apc-spdu-ctl = callPackage ../tools/networking/zs-apc-spdu-ctl { };
 
   zs-wait4host = callPackage ../tools/networking/zs-wait4host { };
