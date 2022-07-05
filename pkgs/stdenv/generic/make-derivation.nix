@@ -330,6 +330,37 @@ else let
         ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
         ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
+      cmakeFlags =
+        let
+          explicitFlags =
+            if lib.isString cmakeFlags then lib.warn
+                "String 'cmakeFlags' is deprecated and will be removed in release 23.05. Please use a list of strings. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
+                [cmakeFlags]
+            else if cmakeFlags == null then
+              lib.warn
+                "Null 'cmakeFlags' is deprecated and will be removed in release 23.05. Please use a empty list instead '[]'. Derivation name: ${derivationArg.name}, file: ${pos.file or "unknown file"}"
+                []
+            else
+              cmakeFlags;
+
+          crossFlags = [
+            "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" (lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"
+          ] ++ lib.optionals (stdenv.hostPlatform.uname.processor != null) [
+            "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
+          ] ++ lib.optionals (stdenv.hostPlatform.uname.release != null) [
+            "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
+          ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+            "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+          ] ++ lib.optionals (stdenv.buildPlatform.uname.system != null) [
+            "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
+          ] ++ lib.optionals (stdenv.buildPlatform.uname.processor != null) [
+            "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
+          ] ++ lib.optionals (stdenv.buildPlatform.uname.release != null) [
+            "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}"
+          ];
+        in
+          explicitFlags ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) crossFlags;
+
       inherit patches;
 
       inherit doCheck doInstallCheck;
@@ -342,19 +373,6 @@ else let
       outputHashAlgo = attrs.outputHashAlgo or "sha256";
       outputHashMode = attrs.outputHashMode or "recursive";
     } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
-      cmakeFlags =
-        (/**/ if lib.isString cmakeFlags then [cmakeFlags]
-         else if cmakeFlags == null      then []
-         else                                     cmakeFlags)
-      ++ [ "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" (
-           lib.optional (!stdenv.hostPlatform.isRedox) stdenv.hostPlatform.uname.system)}"]
-      ++ lib.optional (stdenv.hostPlatform.uname.processor != null) "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
-      ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.uname.release}"
-      ++ lib.optional (stdenv.hostPlatform.isDarwin) "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-      ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
-      ++ lib.optional (stdenv.buildPlatform.uname.processor != null) "-DCMAKE_HOST_SYSTEM_PROCESSOR=${stdenv.buildPlatform.uname.processor}"
-      ++ lib.optional (stdenv.buildPlatform.uname.release != null) "-DCMAKE_HOST_SYSTEM_VERSION=${stdenv.buildPlatform.uname.release}";
-
       mesonFlags = if mesonFlags == null then null else let
         # See https://mesonbuild.com/Reference-tables.html#cpu-families
         cpuFamily = platform: with platform;
