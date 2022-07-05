@@ -16,6 +16,10 @@ metacharacters, incorrect unescaping of XML entities—and the list goes on.
 
 Always review the generated changes!
 
+Some known limitations:
+  - Does not transform literalDocBook items
+  - Replacements can occur in non-option code, such as string literals
+
 
 EOF
 
