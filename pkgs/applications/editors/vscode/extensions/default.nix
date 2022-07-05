@@ -1522,6 +1522,18 @@ let
         };
       };
 
+      lucperkins.vrl-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "lucperkins";
+          name = "vrl-vscode";
+          version = "0.1.4";
+          sha256 = "sha256-xcGa43iPwUR6spOJGTmmWA1dOMNMQEdiuhMZPYZ+dTU=";
+        };
+        meta = {
+          license = lib.licenses.mpl20;
+        };
+      };
+
       mads-hartmann.bash-ide-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "mads-hartmann";
