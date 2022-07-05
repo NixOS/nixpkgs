@@ -6,7 +6,7 @@ let
   cfg = config.services.privacyidea;
   opt = options.services.privacyidea;
 
-  uwsgi = pkgs.uwsgi.override { plugins = [ "python3" ]; };
+  uwsgi = pkgs.uwsgi.override { plugins = [ "python3" ]; python3 = pkgs.python39; };
   python = uwsgi.python3;
   penv = python.withPackages (const [ pkgs.privacyidea ]);
   logCfg = pkgs.writeText "privacyidea-log.cfg" ''
