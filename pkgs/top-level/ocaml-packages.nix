@@ -519,7 +519,9 @@ let
 
     hpack = callPackage ../development/ocaml-modules/hpack { };
 
-    hxd = callPackage ../development/ocaml-modules/hxd { };
+    hxd = callPackage ../development/ocaml-modules/hxd {
+      cmdliner = cmdliner_1_1;
+    };
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
