@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fuse3 ];
 
+  enableParallelBuilding = true;
+  strictDeps = true;
+
   passthru.tests = { inherit (nixosTests) podman; };
 
   meta = with lib; {
