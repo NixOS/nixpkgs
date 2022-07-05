@@ -3233,6 +3233,8 @@ with pkgs;
 
   clipman = callPackage ../tools/wayland/clipman { };
 
+  hyprpaper = callPackage ../tools/wayland/hyprpaper { };
+
   kabeljau = callPackage ../games/kabeljau { };
 
   kanshi = callPackage ../tools/wayland/kanshi { };
