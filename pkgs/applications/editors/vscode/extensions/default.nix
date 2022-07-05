@@ -1530,6 +1530,9 @@ let
           sha256 = "sha256-xcGa43iPwUR6spOJGTmmWA1dOMNMQEdiuhMZPYZ+dTU=";
         };
         meta = {
+          description = "VS Code extension for Vector Remap Language (VRL)";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=lucperkins.vrl-vscode";
+          homepage = "https://github.com/lucperkins/vrl-vscode";
           license = lib.licenses.mpl20;
           maintainers = with lib.maintainers; [ lucperkins ];
         };
