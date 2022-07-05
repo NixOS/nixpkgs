@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = [ qemu ];
+  disallowedRequisites = [ qemu ];
   unpackPhase = "true";
 
   installPhase = ''
