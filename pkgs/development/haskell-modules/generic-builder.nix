@@ -196,6 +196,7 @@ let
     "--prefix=$out"
     "--libdir=\\$prefix/lib/\\$compiler"
     "--libsubdir=\\$abi/\\$libname"
+    "--with-compiler=${ghcCommand}"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghcNameWithPrefix}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
   ] ++ optionals stdenv.hasCC [
@@ -273,11 +274,11 @@ let
   setupCommand = "./Setup";
 
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
-  ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
+  ghcCommand = "${ghc}/bin/${ghc.targetPrefix}${ghcCommand'}";
 
   ghcNameWithPrefix = "${ghc.targetPrefix}${ghc.haskellCompilerName}";
 
-  nativeGhcCommand = "${nativeGhc.targetPrefix}ghc";
+  nativeGhcCommand = "${nativeGhc}/bin/${nativeGhc.targetPrefix}ghc";
 
   buildPkgDb = ghcName: packageConfDir: ''
     # If this dependency has a package database, then copy the contents of it,
