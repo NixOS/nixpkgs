@@ -1,27 +1,31 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, flatten-dict
+, fsspec
 , funcy
-, pytestCheckHook
+, pygtrie
 , pytest-mock
-, pytest-test-utils
+, pytestCheckHook
 , pythonOlder
 , setuptools-scm
-, tabulate
+, shortuuid
+, tqdm
+, typing-extensions
 }:
 
 buildPythonPackage rec {
-  pname = "dvc-render";
-  version = "0.0.6";
+  pname = "dvc-objects";
+  version = "0.0.18";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-l0efiCLoOVuSYoHWYYyu8FT1yosdFl6BeogzJyNKltw=";
+    rev = version;
+    hash = "sha256-mkL+E+PQqm+L7ejccJ0FFpXmIsi26KzfBnzlSuaC3ds=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -31,23 +35,27 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    flatten-dict
+    fsspec
     funcy
-    tabulate
+    pygtrie
+    shortuuid
+    tqdm
+    typing-extensions
   ];
 
   checkInputs = [
-    pytestCheckHook
     pytest-mock
-    pytest-test-utils
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
-    "dvc_render"
+    "dvc_objects"
   ];
 
   meta = with lib; {
-    description = "Library for rendering DVC plots";
-    homepage = "https://github.com/iterative/dvclive";
+    description = "Library for DVC objects";
+    homepage = "https://github.com/iterative/dvc-objects";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

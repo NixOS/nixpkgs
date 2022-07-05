@@ -8,57 +8,24 @@
 , enableSSH ? false
 }:
 
-let
-  py = python3.override {
-    packageOverrides = self: super: {
-
-      grandalf = super.grandalf.overridePythonAttrs (oldAttrs: rec {
-        version = "0.6";
-        src = fetchFromGitHub {
-          owner = "bdcht";
-          repo = "grandalf";
-          rev = "v${version}";
-          hash = "sha256-T4pVzjz1WbfBA2ybN4IRK73PD/eb83YUW0BZrBESNLg=";
-        };
-        postPatch = ''
-          substituteInPlace setup.py \
-            --replace "setup_requires=['pytest-runner',]," ""
-        '';
-      });
-
-      scmrepo = super.scmrepo.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.19";
-        src = fetchFromGitHub {
-          owner = "iterative";
-          repo = "scmrepo";
-          rev = "refs/tags/${version}";
-          hash = "sha256-f/KV3NfIumkZcg9r421QhdyPU/274aAU4b78myi+fFY=";
-        };
-      });
-
-    };
-  };
-in
-with py.pkgs;
-
-buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "dvc";
-  version = "2.10.2";
+  version = "2.12.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = pname;
     rev = version;
-    hash = "sha256-boaQSg0jajWQZKB5wvcP2musVR2/pifT4pU64Y5hiQ0=";
+    hash = "sha256-d1Tjqomr8Lcf+X+LZgi0wHlxXBUqHq/nAzDBbrxHAl4=";
   };
 
-  nativeBuildInputs = with py.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
     setuptools-scm-git-archive
   ];
 
-  propagatedBuildInputs = with py.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp-retry
     appdirs
     colorama
@@ -69,6 +36,7 @@ buildPythonApplication rec {
     distro
     dpath
     dvclive
+    dvc-data
     dvc-render
     flatten-dict
     flufl_lock
@@ -97,13 +65,17 @@ buildPythonApplication rec {
     voluptuous
     zc_lockfile
   ] ++ lib.optional enableGoogle [
+    gcsfs
     google-cloud-storage
   ] ++ lib.optional enableAWS [
+    aiobotocore
     boto3
+    s3fs
   ] ++ lib.optional enableAzure [
-    azure-storage-blob
+    azure-identity
+    knack
   ] ++ lib.optional enableSSH [
-    paramiko
+    bcrypt
   ] ++ lib.optionals (pythonOlder "3.8") [
     importlib-metadata
   ] ++ lib.optionals (pythonOlder "3.9") [
@@ -111,6 +83,11 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "grandalf==0.6" "grandalf" \
+      --replace "scmrepo==0.0.25" "scmrepo" \
+      --replace "dvc-data==0.0.16" "dvc-data" \
+      --replace "dvc-render==0.0.6" "dvc-render"
     substituteInPlace dvc/daemon.py \
       --subst-var-by dvc "$out/bin/dcv"
   '';
