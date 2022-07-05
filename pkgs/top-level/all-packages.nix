@@ -8063,7 +8063,7 @@ with pkgs;
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
 
-  nixpacks = callPackge ../applications/virtualization/nixpacks { };
+  nixpacks = callPackage ../applications/virtualization/nixpacks { };
 
   nkeys = callPackage ../tools/system/nkeys { };
 
