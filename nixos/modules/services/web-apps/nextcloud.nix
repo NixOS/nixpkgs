@@ -555,7 +555,7 @@ in {
       description = ''
         Extra options which should be appended to nextcloud's config.php file.
       '';
-      example = literalExample '' {
+      example = literalExpression '' {
         redis = {
           host = "/run/redis/redis.sock";
           port = 0;
@@ -575,7 +575,7 @@ in {
         <programlisting>{"redis":{"password":"secret"}}</programlisting>.
       '';
     };
-    
+
     nginx = {
       recommendedHttpHeaders = mkOption {
         type = types.bool;

@@ -2,7 +2,7 @@ import ../make-test-python.nix ({ pkgs, ...}: let
   adminpass = "hunter2";
   adminuser = "custom-admin-username";
 in {
-  name = "nextcloud-with-secrets-file";
+  name = "nextcloud-with-declarative-redis";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eqyiel ];
   };
@@ -19,6 +19,7 @@ in {
         hostName = "nextcloud";
         caching = {
           apcu = false;
+          redis = true;
           memcached = false;
         };
         config = {
@@ -32,6 +33,22 @@ in {
           '');
         };
         secretFile = "/etc/nextcloud-secrets.json";
+
+        extraOptions.redis = {
+          host = "/run/redis/redis.sock";
+          port = 0;
+          dbindex = 0;
+          timeout = 1.5;
+          # password handled via secretfile below
+        };
+        extraOptions.memcache = {
+          local = "\OC\Memcache\Redis";
+          locking = "\OC\Memcache\Redis";
+        };
+      };
+
+      services.redis = {
+        enable = true;
       };
 
       systemd.services.nextcloud-setup= {
@@ -39,10 +56,6 @@ in {
         after = [
           "postgresql.service"
         ];
-      };
-
-      services.redis = {
-        enable = true;
       };
 
       services.postgresql = {
@@ -61,15 +74,7 @@ in {
       environment.etc."nextcloud-secrets.json".text = ''
         {
           "redis": {
-            "host": "/run/redis/redis.sock",
-            "port": 0,
-            "dbindex": 0,
-            "password": "secret",
-            "timeout": 1.5
-          },
-          "memcache": {
-            "local": "\\OC\\Memcache\\Redis",
-            "locking": "\\OC\\Memcache\\Redis"
+            "password": "secret"
           }
         }
       '';

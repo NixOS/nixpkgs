@@ -16,11 +16,7 @@ foldl
       inherit system pkgs;
       nextcloudVersion = ver;
     };
-    "with-declarative-redis${toString ver}" = import ./with-declarative-redis.nix {
-      inherit system pkgs;
-      nextcloudVersion = ver;
-    };
-    "with-secrets${toString ver}" = import ./with-secrets.nix {
+    "with-declarative-redis-and-secrets${toString ver}" = import ./with-declarative-redis-and-secrets.nix {
       inherit system pkgs;
       nextcloudVersion = ver;
     };
