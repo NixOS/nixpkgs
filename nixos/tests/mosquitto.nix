@@ -59,6 +59,8 @@ in {
     maintainers = with maintainers; [ pennae peterhoeg ];
   };
 
+  skipTypeCheck = true;
+
   nodes = let
     client = { pkgs, ... }: {
       environment.systemPackages = with pkgs; [ mosquitto ];
