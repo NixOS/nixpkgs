@@ -78,6 +78,6 @@ buildPythonPackage rec {
     description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
     license = licenses.mit;
-    maintainers = with maintainers; [ elseym ];
+    maintainers = with maintainers; [ ];
   };
 }

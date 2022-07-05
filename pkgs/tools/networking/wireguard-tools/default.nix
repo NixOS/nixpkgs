@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
     homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ elseym ericsagnes zx2c4 globin ma27 d-xo ];
+    maintainers = with maintainers; [ ericsagnes zx2c4 globin ma27 d-xo ];
     platforms = platforms.unix;
   };
 }
