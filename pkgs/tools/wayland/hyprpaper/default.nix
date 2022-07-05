@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, gitMinimal
 , libjpeg
 , mesa
 , pango
@@ -20,13 +19,11 @@ stdenv.mkDerivation rec {
     owner = "hyprwm";
     repo = pname;
     rev = "e15912e9817d79bb988085c88e313fac5ab60940";
-    leaveDotGit = true;
-    sha256 = "sha256-1P4U6fSaiiUYAvoL8EdFPBbtLh5v/S2RMSuSpbISGFc=";
+    sha256 = "sha256-UZSRcj+CckUDllBtmlIcwA+xXUonpJZl3zC151IV3f0=";
   };
 
   nativeBuildInputs = [
     cmake
-    gitMinimal
     pkg-config
     wayland-scanner
   ];
@@ -39,6 +36,11 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ];
 
+  prePatch = ''
+    substituteInPlace src/main.cpp \
+      --replace GIT_COMMIT_HASH '"${src.rev}"'
+  '';
+
   preConfigure = ''
     make protocols
   '';
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/hyprwm/hyprpaper";
-    description = "A blazing fast wayland wallpaper utility.";
+    description = "A blazing fast wayland wallpaper utility";
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wozeparrot ];
