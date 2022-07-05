@@ -10,7 +10,8 @@
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
-# logitech-udev-rules instead of adding this to services.udev.packages on NixOS
+# `logitech-udev-rules`, which is an alias to `udev` output of this derivation,
+# instead of adding this to `services.udev.packages` on NixOS,
 python3Packages.buildPythonApplication rec {
   pname = "solaar";
   version = "1.1.4";
