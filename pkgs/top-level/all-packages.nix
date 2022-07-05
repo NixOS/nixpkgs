@@ -11002,7 +11002,9 @@ with pkgs;
 
   trackma-curses = trackma.override { withCurses = true; };
 
-  trackma-gtk = trackma.override { withGtk = true; };
+  trackma-gtk = trackma.override { withGTK = true; };
+
+  trackma-qt = trackma.override { withQT = true; };
 
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
