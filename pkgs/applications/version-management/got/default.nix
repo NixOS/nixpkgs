@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "got";
-  version = "0.70";
+  version = "0.73";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
-    sha256 = "0kh7idgbiil58l043lkyjy9lz81yj03b6b3d7ra62jkrkzc4wlrf";
+    sha256 = "0x583h9f6jnqfwy48b43s1myrgbngn128m4ivmf9gcsvfiz3lxgh";
   };
 
   nativeBuildInputs = [ pkg-config ];
