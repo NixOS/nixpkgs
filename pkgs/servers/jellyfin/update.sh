@@ -29,7 +29,11 @@ chmod -R +w "$src"
 pushd "$src"
 
 mkdir ./nuget_tmp.packages
+
+dotnet restore Jellyfin.Server --packages ./nuget_tmp.packages --runtime linux-x86
 dotnet restore Jellyfin.Server --packages ./nuget_tmp.packages --runtime linux-x64
+dotnet restore Jellyfin.Server --packages ./nuget_tmp.packages --runtime linux-arm
+dotnet restore Jellyfin.Server --packages ./nuget_tmp.packages --runtime linux-arm64
 
 nuget-to-nix ./nuget_tmp.packages > "$nugetDepsFile"
 

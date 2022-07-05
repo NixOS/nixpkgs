@@ -406,6 +406,10 @@ with pkgs;
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
 
+  edgedb = callPackage ../tools/networking/edgedb {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
 
   evans = callPackage ../development/tools/evans { };
@@ -14772,6 +14776,8 @@ with pkgs;
 
   pythonDocs = recurseIntoAttrs (callPackage ../development/interpreters/python/cpython/docs {});
 
+  check-jsonschema = callPackage ../development/tools/check-jsonschema {};
+
   pypi2nix = callPackage ../development/tools/pypi2nix {};
 
   pypi-mirror = callPackage ../development/tools/pypi-mirror {};
@@ -14870,6 +14876,8 @@ with pkgs;
     inherit (darwin) libiconv libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   })
+    mkRubyVersion
+    mkRuby
     ruby_2_7
     ruby_3_0
     ruby_3_1;
@@ -30710,6 +30718,10 @@ with pkgs;
 
   vimv = callPackage ../tools/misc/vimv { };
 
+  vimv-rs = callPackage ../tools/misc/vimv-rs {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
+
   qpdfview = libsForQt5.callPackage ../applications/misc/qpdfview {};
 
   qtile = callPackage ../applications/window-managers/qtile { };
@@ -33158,9 +33170,7 @@ with pkgs;
 
   astral = callPackage ../applications/science/biology/astral { };
 
-  archimedes = callPackage ../applications/science/electronics/archimedes {
-    stdenv = gcc6Stdenv;
-  };
+  archimedes = callPackage ../applications/science/electronics/archimedes { };
 
   bayescan = callPackage ../applications/science/biology/bayescan { };
 
@@ -34521,7 +34531,7 @@ with pkgs;
 
   idsk = callPackage ../tools/filesystems/idsk { stdenv = gcc10StdenvCompat; };
 
-  colima = callPackage ../applications/virtualization/colima { };
+  colima = callPackage ../applications/virtualization/colima { buildGoModule = buildGo118Module; };
 
   lima = callPackage ../applications/virtualization/lima { };
 

@@ -16,7 +16,7 @@ buildPythonPackage rec {
     repo = "uap-python";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-CwwVaToy5se5dZ4m1EHn8qgvprK82/Sgpos4lHedIUc=";
+    hash = "sha256-TtOj1ZL8+4T95AgF9ErvI+0W35WQ23snFhCyCbuRjxM=";
   };
 
   patches = [
