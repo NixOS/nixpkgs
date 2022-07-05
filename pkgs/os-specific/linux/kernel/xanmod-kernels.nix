@@ -7,7 +7,7 @@ let
     hash = "sha256-B7WPFY9SnqL3nwNxxXPjxdRAYMT8H5OpwQsZIRm5aD0=";
   };
 
-  devVariant = {
+  ttVariant = {
     version = "5.15.47";
     suffix = "xanmod1-tt";
     hash = "sha256-/0cfH59Oe62cF92tNNXfKKFnPztY4hjiVbvCth59HJU=";
@@ -86,6 +86,6 @@ let
 in
 {
   stable = xanmodKernelFor stableVariant;
-  dev = xanmodKernelFor devVariant;
+  tt = xanmodKernelFor ttVariant;
   edge = xanmodKernelFor edgeVariant;
 }
