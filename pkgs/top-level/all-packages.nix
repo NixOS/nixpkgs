@@ -11318,6 +11318,10 @@ with pkgs;
 
   ttylog = callPackage ../tools/misc/ttylog { };
 
+  txtpbfmt = callPackage ../development/tools/txtpbfmt {
+    buildGoModule = buildGo118Module;
+  };
+
   ipbt = callPackage ../tools/misc/ipbt { };
 
   tuhi = callPackage ../applications/misc/tuhi { };
