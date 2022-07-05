@@ -426,6 +426,8 @@ with pkgs;
 
   glade = callPackage ../development/tools/glade { };
 
+  goda = callPackage ../development/tools/goda { };
+
   gojq = callPackage ../development/tools/gojq { };
 
   gpick = callPackage ../tools/misc/gpick { };
