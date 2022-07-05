@@ -30704,6 +30704,10 @@ with pkgs;
 
   vimv = callPackage ../tools/misc/vimv { };
 
+  vimv-rs = callPackage ../tools/misc/vimv-rs {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
+
   qpdfview = libsForQt5.callPackage ../applications/misc/qpdfview {};
 
   qtile = callPackage ../applications/window-managers/qtile { };
