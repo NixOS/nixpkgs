@@ -14927,7 +14927,8 @@ with pkgs;
     electron_15
     electron_16
     electron_17
-    electron_18;
+    electron_18
+    electron_19;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 

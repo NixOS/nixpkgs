@@ -27,8 +27,9 @@ let
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
     maintainers = with maintainers; [ travisbhartwell manveru prusnak ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ]
-      ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]
+      ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
+      ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     knownVulnerabilities = optional (versionOlder version "15.0.0") "Electron version ${version} is EOL";
   };
 
@@ -43,16 +44,17 @@ let
   };
 
   tags = {
-    i686-linux = "linux-ia32";
     x86_64-linux = "linux-x64";
     armv7l-linux = "linux-armv7l";
     aarch64-linux = "linux-arm64";
     x86_64-darwin = "darwin-x64";
-    aarch64-darwin = "darwin-arm64";
+  } // lib.optionalAttrs (lib.versionAtLeast version "11.0.0") {
+     aarch64-darwin = "darwin-arm64";
+  } // lib.optionalAttrs (lib.versionOlder version "19.0.0") {
+    i686-linux = "linux-ia32";
   };
 
-  get = as: platform: as.${platform.system} or
-    "Unsupported system: ${platform.system}";
+  get = as: platform: as.${platform.system} or (throw "Unsupported system: ${platform.system}");
 
   common = platform: {
     inherit pname version meta;
