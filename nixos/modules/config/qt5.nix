@@ -18,6 +18,7 @@ let
 in
 
 {
+  meta.maintainers = [ maintainers.romildo ];
 
   options = {
     qt5 = {
