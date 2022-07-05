@@ -3,13 +3,13 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+, gitMinimal
 , libjpeg
 , mesa
 , pango
 , wayland
 , wayland-protocols
 , wayland-scanner
-, wlroots
 }:
 
 stdenv.mkDerivation rec {
@@ -20,11 +20,13 @@ stdenv.mkDerivation rec {
     owner = "hyprwm";
     repo = pname;
     rev = "e15912e9817d79bb988085c88e313fac5ab60940";
-    sha256 = "sha256-UZSRcj+CckUDllBtmlIcwA+xXUonpJZl3zC151IV3f0=";
+    leaveDotGit = true;
+    sha256 = "sha256-1P4U6fSaiiUYAvoL8EdFPBbtLh5v/S2RMSuSpbISGFc=";
   };
 
   nativeBuildInputs = [
     cmake
+    gitMinimal
     pkg-config
     wayland-scanner
   ];
