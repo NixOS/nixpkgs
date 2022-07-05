@@ -5,13 +5,12 @@
 , openssl
 , zlib
 , libuv
-, fetchpatch
 # External poll is required for e.g. mosquitto, but discouraged by the maintainer.
 , withExternalPoll ? false
 }:
 
 let
-  generic = { version, sha256, patches ? [] }: stdenv.mkDerivation rec {
+  generic = { version, hash, patches ? [] }: stdenv.mkDerivation rec {
     pname = "libwebsockets";
     inherit version;
 
@@ -19,7 +18,7 @@ let
       owner = "warmcat";
       repo = "libwebsockets";
       rev = "v${version}";
-      inherit sha256;
+      inherit hash;
     };
 
     inherit patches;
@@ -63,15 +62,7 @@ let
 
 in {
   libwebsockets_4_3 = generic {
-    version = "4.3.1";
-    sha256 = "sha256-lB3JHh058cQc5rycLnHk3JAOgtku0nRCixN5U6lPKq8=";
-    patches = [
-      # fixes the propagated cmake files, fixing the build of ttyd
-      # see also https://github.com/tsl0922/ttyd/issues/918
-      (fetchpatch {
-        url = "https://github.com/warmcat/libwebsockets/commit/99a8b9c4422bed45c8b7412a1e121056f2a6132a.patch";
-        hash = "sha256-zHBo2ZEayvibM+jzeVaZqySxghaOLUglpSFwuGhl6HM=";
-      })
-    ];
+    version = "4.3.2";
+    hash = "sha256-why8LAcc4XN0JdTJ1JoNWijKENL5mOHBsi9K4wpYr2c=";
   };
 }
