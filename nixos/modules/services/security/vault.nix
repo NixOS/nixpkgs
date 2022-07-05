@@ -208,7 +208,7 @@ in
         ExecStart = "${cfg.package}/bin/vault server ${configOptions}";
         ExecReload = "${pkgs.coreutils}/bin/kill -SIGHUP $MAINPID";
         StateDirectory = "vault";
-        # In `dev` mode vault will put it's token here
+        # In `dev` mode vault will put its token here
         Environment = lib.optional (cfg.dev) "HOME=/var/lib/vault";
         PrivateDevices = true;
         PrivateTmp = true;
