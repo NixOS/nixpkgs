@@ -27,6 +27,7 @@ buildBazelPackage rec {
   removeRulesCC = false;
 
   bazel = bazel_5;
+  bazelBuildFlags = lib.optionals stdenv.cc.isClang [ "--cxxopt=-x" "--cxxopt=c++" "--host_cxxopt=-x" "--host_cxxopt=c++" ];
   bazelTarget = "//ibazel";
 
   fetchAttrs = {
@@ -84,7 +85,5 @@ buildBazelPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
     platforms = platforms.all;
-    # broken on darwin, see https://github.com/NixOS/nixpkgs/issues/105573
-    broken = stdenv.isDarwin;
   };
 }
