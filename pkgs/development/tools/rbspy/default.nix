@@ -5,6 +5,7 @@
 , fetchpatch
 , ruby
 , which
+, nix-update-script
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
@@ -42,6 +43,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ ruby which ];
+
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
 
   meta = with lib; {
     broken = (stdenv.isLinux && stdenv.isAarch64);
