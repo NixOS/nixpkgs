@@ -768,11 +768,8 @@ in {
               ${optionalString (c.dbuser != null) "'dbuser' => '${c.dbuser}',"}
               ${optionalString (c.dbtableprefix != null) "'dbtableprefix' => '${toString c.dbtableprefix}',"}
               ${optionalString (c.dbpassFile != null) ''
-                  dbpassword' => nix_read_file(
-                    ${c.dbpassFile},
-                     "Cannot start Nextcloud, dbpass file %s set by NixOS doesn't seem to "
-                    . "exist! Please make sure that the file exists and has appropriate "
-                    . "permissions for user & group 'nextcloud'!"
+                  'dbpassword' => nix_read_secret(
+                    "${c.dbpassFile}"
                   ),
                 ''
               }
