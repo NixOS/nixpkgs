@@ -78,6 +78,10 @@ stdenv.mkDerivation rec {
     # quiche: support ca-fallback
     # https://github.com/curl/curl/commit/fdb5e21b4dd171a96cf7c002ee77bb08f8e58021
     ./7.83.1-quiche-support-ca-fallback.patch
+    ./CVE-2022-32205.patch
+    ./CVE-2022-32206.patch
+    ./CVE-2022-32207.patch
+    ./CVE-2022-32208.patch
   ] ++ lib.optional patchNetrcRegression ./netrc-regression.patch;
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
