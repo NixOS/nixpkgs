@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  enableParallelBuilding = true;
+  strictDeps = true;
+
   passthru.tests = { inherit (nixosTests) cri-o podman; };
 
   meta = with lib; {
