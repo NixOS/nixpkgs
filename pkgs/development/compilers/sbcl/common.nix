@@ -29,7 +29,16 @@ stdenv.mkDerivation rec {
       # Fix segfault on ARM when reading large core files
       url = "https://github.com/sbcl/sbcl/commit/8fa3f76fba2e8572e86ac6fc5754e6b2954fc774.patch";
       sha256 = "1ic531pjnws1k3xd03a5ixbq8cn10dlh2nfln59k0vbm0253g3lv";
-    });
+    })
+  ++ lib.optionals (lib.versionAtLeast version "2.1.10") [
+      # Fix pending upstream inclusion on -fno-common toolchains:
+      #   https://bugs.launchpad.net/sbcl/+bug/1980570
+      (fetchpatch {
+        name = "darwin-fno-common.patch";
+        url = "https://bugs.launchpad.net/sbcl/+bug/1980570/+attachment/5600916/+files/0001-src-runtime-fix-fno-common-build-on-darwin.patch";
+        sha256 = "0avpwgjdaxxdpq8pfvv9darfn4ql5dgqq7zaf3nmxnvhh86ngzij";
+      })
+  ];
 
   postPatch = ''
     echo '"${version}.nixos"' > version.lisp-expr

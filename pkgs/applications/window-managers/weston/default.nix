@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, meson, ninja, pkg-config, wayland-scanner, python3
+{ lib, stdenv, fetchurl, fetchpatch, meson, ninja, pkg-config, wayland-scanner, python3
 , wayland, libGL, mesa, libxkbcommon, cairo, libxcb
 , libXcursor, xlibsWrapper, udev, libdrm, mtdev, libjpeg, pam, dbus, libinput, libevdev
 , colord, lcms2, pipewire ? null
@@ -16,6 +16,14 @@ stdenv.mkDerivation rec {
     url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
     sha256 = "1bj7wnadr7ssn6xw7k8ki0wpj6np3kjd2pcysfz3h0mr290rc8sw";
   };
+
+  patches = [
+    # Fix race condition in build system
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/0d3e438d080433ed5d203c876e7de6c7f8a14f98.patch";
+      sha256 = "sha256-d9NG1vUIuL4jpXqCo0myz/97JuFYesH+8kJnegQXeMU=";
+    })
+  ];
 
   nativeBuildInputs = [ meson ninja pkg-config wayland-scanner python3 ];
   buildInputs = [

@@ -260,6 +260,9 @@ let
     ) args; in self;
 
 in {
+  mkRubyVersion = rubyVersion;
+  mkRuby = generic;
+
   ruby_2_7 = generic {
     version = rubyVersion "2" "7" "6" "";
     sha256 = "042xrdk7hsv4072bayz3f8ffqh61i8zlhvck10nfshllq063n877";

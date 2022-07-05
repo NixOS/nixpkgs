@@ -1063,7 +1063,7 @@ in {
         chown ${cfg.user}:${cfg.group} ${cfg.registry.certFile}
       '';
 
-      serviceConfig = {
+      unitConfig = {
         ConditionPathExists = "!${cfg.registry.certFile}";
       };
     };

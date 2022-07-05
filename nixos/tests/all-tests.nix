@@ -384,6 +384,7 @@ in {
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   node-red = handleTest ./node-red.nix {};
   nomad = handleTest ./nomad.nix {};
+  non-default-filesystems = handleTest ./non-default-filesystems.nix {};
   noto-fonts = handleTest ./noto-fonts.nix {};
   novacomd = handleTestOn ["x86_64-linux"] ./novacomd.nix {};
   nsd = handleTest ./nsd.nix {};
@@ -519,6 +520,7 @@ in {
   step-ca = handleTestOn ["x86_64-linux"] ./step-ca.nix {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
+  swap-partition = handleTest ./swap-partition.nix {};
   sway = handleTest ./sway.nix {};
   switchTest = handleTest ./switch-test.nix {};
   sympa = handleTest ./sympa.nix {};
@@ -588,6 +590,7 @@ in {
   uwsgi = handleTest ./uwsgi.nix {};
   v2ray = handleTest ./v2ray.nix {};
   vault = handleTest ./vault.nix {};
+  vault-dev = handleTest ./vault-dev.nix {};
   vault-postgresql = handleTest ./vault-postgresql.nix {};
   vaultwarden = handleTest ./vaultwarden.nix {};
   vector = handleTest ./vector.nix {};

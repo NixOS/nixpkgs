@@ -2204,6 +2204,8 @@ in {
 
   deeptoolsintervals = callPackage ../development/python-modules/deeptoolsintervals { };
 
+  deepwave = callPackage ../development/python-modules/deepwave { };
+
   deep-translator = callPackage ../development/python-modules/deep-translator { };
 
   deezer-py = callPackage ../development/python-modules/deezer-py { };
@@ -2645,9 +2647,13 @@ in {
 
   durus = callPackage ../development/python-modules/durus {  };
 
-  dvclive = callPackage ../development/python-modules/dvclive {  };
+  dvc-data = callPackage ../development/python-modules/dvc-data {  };
+
+  dvc-objects = callPackage ../development/python-modules/dvc-objects {  };
 
   dvc-render = callPackage ../development/python-modules/dvc-render {  };
+
+  dvclive = callPackage ../development/python-modules/dvclive {  };
 
   dwdwfsapi = callPackage ../development/python-modules/dwdwfsapi { };
 
@@ -3262,7 +3268,9 @@ in {
 
   fontmake = callPackage ../development/python-modules/fontmake { };
 
-  skia-pathops = callPackage ../development/python-modules/skia-pathops { };
+  skia-pathops = callPackage ../development/python-modules/skia-pathops {
+    inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL;
+  };
 
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
 
@@ -4607,7 +4615,11 @@ in {
 
   jupyter = callPackage ../development/python-modules/jupyter { };
 
+  jupyter-book = callPackage ../development/python-modules/jupyter-book { };
+
   jupyter-c-kernel = callPackage ../development/python-modules/jupyter-c-kernel { };
+
+  jupyter-cache = callPackage ../development/python-modules/jupyter-cache { };
 
   jupyter-client = callPackage ../development/python-modules/jupyter-client { };
 
@@ -5671,6 +5683,8 @@ in {
   mysqlclient = callPackage ../development/python-modules/mysqlclient { };
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
+
+  myst-nb = callPackage ../development/python-modules/myst-nb { };
 
   myst-parser = callPackage ../development/python-modules/myst-parser { };
 
@@ -7248,6 +7262,8 @@ in {
   pydantic = callPackage ../development/python-modules/pydantic { };
 
   pydash = callPackage ../development/python-modules/pydash { };
+
+  pydata-sphinx-theme = callPackage ../development/python-modules/pydata-sphinx-theme { };
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
@@ -9976,7 +9992,23 @@ in {
 
   sphinx-better-theme = callPackage ../development/python-modules/sphinx-better-theme { };
 
+  sphinx-book-theme = callPackage ../development/python-modules/sphinx-book-theme { };
+
+  sphinx-comments = callPackage ../development/python-modules/sphinx-comments { };
+
+  sphinx-design = callPackage ../development/python-modules/sphinx-design { };
+
+  sphinx-external-toc = callPackage ../development/python-modules/sphinx-external-toc { };
+
+  sphinx-jupyterbook-latex = callPackage ../development/python-modules/sphinx-jupyterbook-latex { };
+
+  sphinx-multitoc-numbering = callPackage ../development/python-modules/sphinx-multitoc-numbering { };
+
   sphinx-pytest = callPackage ../development/python-modules/sphinx-pytest { };
+
+  sphinx-thebe = callPackage ../development/python-modules/sphinx-thebe { };
+
+  sphinx-togglebutton = callPackage ../development/python-modules/sphinx-togglebutton { };
 
   sphinxcontrib-actdiag = callPackage ../development/python-modules/sphinxcontrib-actdiag { };
 
