@@ -1,4 +1,4 @@
-{lib, stdenv, fetchurl}:
+{ lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   pname = "a52dec";
@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--enable-shared"
+  ];
+
+  NIX_CFLAGS_COMPILE = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    "-std=gnu89"
   ];
 
   makeFlags = [
