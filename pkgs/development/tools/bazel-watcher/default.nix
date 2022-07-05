@@ -1,4 +1,5 @@
 { buildBazelPackage
+, bazel_5
 , fetchFromGitHub
 , git
 , go
@@ -13,18 +14,19 @@ let
 in
 buildBazelPackage rec {
   pname = "bazel-watcher";
-  version = "0.14.0";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
     rev = "v${version}";
-    sha256 = "0gigl1lg8sb4bj5crvj54329ws4yirldbncs15f96db6vhp0ig7r";
+    sha256 = "sha256-yRXta6pPhgIonTL0q9GSzNQg/jHMIeC7xvfVYrZMmnc=";
   };
 
   nativeBuildInputs = [ go git python3 ];
   removeRulesCC = false;
 
+  bazel = bazel_5;
   bazelTarget = "//ibazel";
 
   fetchAttrs = {
@@ -32,6 +34,8 @@ buildBazelPackage rec {
 
     preBuild = ''
       patchShebangs .
+
+      echo ${bazel_5.version} > .bazelversion
     '';
 
     preInstall = ''
@@ -56,7 +60,7 @@ buildBazelPackage rec {
       sed -e '/^FILE:@bazel_gazelle_go_repository_tools.*/d' -i $bazelOut/external/\@*.marker
     '';
 
-    sha256 = "1j175z3d4fbi4pl35py7yjq7ywrvwin6id131jv32hx0ck4g1m46";
+    sha256 = "sha256-vij20VMBlKTBOACjH+XP4Z15BOmXYvlmErkVgjOln3M=";
   };
 
   buildAttrs = {
@@ -66,10 +70,11 @@ buildBazelPackage rec {
       patchShebangs .
 
       substituteInPlace ibazel/BUILD --replace '{STABLE_GIT_VERSION}' ${version}
+      echo ${bazel_5.version} > .bazelversion
     '';
 
     installPhase = ''
-      install -Dm755 bazel-bin/ibazel/*_pure_stripped/ibazel $out/bin/ibazel
+      install -Dm755 bazel-bin/ibazel/ibazel_/ibazel $out/bin/ibazel
     '';
   };
 
