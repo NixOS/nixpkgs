@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, clippy }:
+{ lib, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nixpacks";
@@ -12,13 +12,6 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     sha256 = "UxdK2e5VYcOEYdZn0oGRFIVGiwnPixiZ3rOnqJDSQO8=";
   };
-  # skip `cargo test` due tests FHS dependency
-  checkPhase = ''
-    runHook preCheck
-    cargo check
-    cargo clippy
-    runHook postCheck
-  '';
   meta = with lib; {
     description = "App source + Nix packages + Docker = Image Resources";
     homepage = "https://github.com/railwayapp/nixpacks";
