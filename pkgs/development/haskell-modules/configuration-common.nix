@@ -379,6 +379,7 @@ self: super: {
   posix-pty = dontCheck super.posix-pty; # https://github.com/merijn/posix-pty/issues/12
   postgresql-binary = dontCheck super.postgresql-binary; # needs a running postgresql server
   postgresql-simple-migration = dontCheck super.postgresql-simple-migration;
+  powerdns = dontCheck super.powerdns; # Tests require networking and external services
   process-streaming = dontCheck super.process-streaming;
   punycode = dontCheck super.punycode;
   pwstore-cli = dontCheck super.pwstore-cli;

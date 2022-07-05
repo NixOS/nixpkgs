@@ -4014,7 +4014,6 @@ broken-packages:
   - postmaster
   - potato-tool
   - potoki-core
-  - powerdns
   - powermate
   - powerpc
   - powerqueue-levelmem
