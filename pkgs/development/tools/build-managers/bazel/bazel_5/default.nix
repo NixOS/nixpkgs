@@ -126,7 +126,9 @@ let
   platforms = lib.platforms.linux ++ lib.platforms.darwin;
 
   system = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
-  arch = stdenv.hostPlatform.parsed.cpu.name;
+
+  # on aarch64 Darwin, `uname -m` returns "arm64"
+  arch = with stdenv.hostPlatform; if isDarwin && isAarch64 then "arm64" else parsed.cpu.name;
 
   bazelRC = writeTextFile {
     name = "bazel-rc";
