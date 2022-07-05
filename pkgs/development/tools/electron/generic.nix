@@ -39,7 +39,7 @@ let
   };
 
   headersFetcher = vers: hash: fetchurl {
-    url = "https://atom.io/download/electron/v${vers}/node-v${vers}-headers.tar.gz";
+    url = "https://artifacts.electronjs.org/headers/dist/v${vers}/node-v${vers}-headers.tar.gz";
     sha256 = hash;
   };
 
