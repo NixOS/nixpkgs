@@ -8234,6 +8234,8 @@ in {
 
   pyproj = callPackage ../development/python-modules/pyproj { };
 
+  pyproject-metadata = callPackage ../development/python-modules/pyproject-metadata { };
+
   pyprosegur = callPackage ../development/python-modules/pyprosegur { };
 
   pyptlib = callPackage ../development/python-modules/pyptlib { };
