@@ -15,14 +15,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
-  version = "1.13.3";
+  version = "1.14.0";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-OiBmgXGyxEIS7rkRmJbEZdoWPk27j+QD5I+mqJSSxH0=";
+    sha256 = "sha256-1QL2EUq/lAev1HiXmPZ8n9sCYjWUTd5aWmmyCR6UsDw=";
   };
 
-  cargoHash = "sha256-qc68n8bxKuzqnhwS+d33hC4PWZJG1UQMytQUGyJd1bc=";
+  cargoHash = "sha256-pw4eWIwAtrNvCumcjxR7TVdo2Imm+sM1elkUKYVQSkQ=";
 
   nativeBuildInputs = [
     installShellFiles
