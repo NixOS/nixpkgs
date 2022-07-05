@@ -1,26 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, testers, hwatch, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hwatch";
-  version = "0.3.6";
+  version = "0.3.7";
 
   src = fetchFromGitHub {
     owner = "blacknon";
     repo = pname;
-    # prefix, because just "0.3.6' causes the download to silently fail:
-    # $ curl -v https://github.com/blacknon/hwatch/archive/0.3.6.tar.gz
-    # ...
-    # < HTTP/2 300
-    # ...
-    # the given path has multiple possibilities: #<Git::Ref:0x00007fbb2e52bed0>, #<Git::Ref:0x00007fbb2e52ae40>
     rev = "refs/tags/${version}";
-    sha256 = "sha256-uaAgA6DWwYVT9mQh55onW+qxIC2i9GVuimctTJpUgfA=";
+    sha256 = "sha256-FVqvwqsHkV/yK5okL1p6TiNUGDK2ZnzVNO4UDVkG+zM=";
   };
 
-  cargoSha256 = "sha256-Xt3Z6ax3Y45KZhTYMBr/Rfx1o+ZAoPYj51SN5hnrXQM=";
+  cargoSha256 = "sha256-E4qh2cfpVNUa9OyJowSsaHU7pYiNu7IpxwISP0djVRA=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd hwatch \
+      --bash $src/completion/bash/hwatch-completion.bash \
+      --fish $src/completion/fish/hwatch.fish \
+      --zsh $src/completion/zsh/_hwatch \
+  '';
+
+  passthru.tests.version = testers.testVersion {
+    package = hwatch;
+    command = "hwatch --version";
+    version = version;
+  };
 
   meta = with lib; {
-    homepage = "https://github.com/blackmon/hwatch";
+    homepage = "https://github.com/blacknon/hwatch";
     description= "Modern alternative to the watch command";
     longDescription = ''
       A modern alternative to the watch command, records the differences in
