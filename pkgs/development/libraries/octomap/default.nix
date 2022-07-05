@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "octomap";
-  version = "1.9.7";
+  version = "1.9.8";
 
   src = fetchFromGitHub {
     owner = "OctoMap";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1pb58w6vka7wzs533lcy7i6y5nwjfrzy6b35fhrb1dhq2mgszc79";
+    hash = "sha256-qE5i4dGugm7tR5tgDCpbla/R7hYR/PI8BzrZQ4y6Yz8=";
   };
   sourceRoot = "source/octomap";
 
