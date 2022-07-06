@@ -166,7 +166,11 @@ in {
             save = mkOption {
               type = with types; listOf (listOf int);
               default = [ [900 1] [300 10] [60 10000] ];
-              description = "The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.";
+              description = mdDoc ''
+                The schedule in which data is persisted to disk, represented as a list of lists where the first element represent the amount of seconds and the second the number of changes.
+
+                If set to the empty list (`[]`) then RDB persistence will be disabled (useful if you are using AOF or don't want any persistence).
+              '';
             };
 
             slaveOf = mkOption {
@@ -268,7 +272,11 @@ in {
               syslog-enabled = config.syslog;
               databases = config.databases;
               maxclients = config.maxclients;
-              save = map (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}") config.save;
+              save = if config.save == []
+                then ''""'' # Disable saving with `save = ""`
+                else map
+                  (d: "${toString (builtins.elemAt d 0)} ${toString (builtins.elemAt d 1)}")
+                  config.save;
               dbfilename = "dump.rdb";
               dir = "/var/lib/${redisName name}";
               appendOnly = config.appendOnly;
