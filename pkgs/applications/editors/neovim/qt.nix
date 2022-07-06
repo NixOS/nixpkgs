@@ -1,7 +1,10 @@
-{ stdenv, makeWrapper, neovim, neovim-qt-unwrapped }:
+{ stdenv, lib, makeWrapper, wrapperArgs ? [], neovim, neovim-qt-unwrapped }:
+
+with lib;
 
 let
   unwrapped = neovim-qt-unwrapped;
+  wrapperArgsStr = if isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 in
 stdenv.mkDerivation {
   pname = "neovim-qt";
@@ -15,7 +18,8 @@ stdenv.mkDerivation {
       --prefix PATH : ${neovim}/bin
   '' else ''
     makeWrapper ${unwrapped}/bin/nvim-qt $out/bin/nvim-qt \
-      --prefix PATH : ${neovim}/bin
+      --prefix PATH : ${neovim}/bin \
+      ${wrapperArgsStr}
 
     # link .desktop file
     mkdir -p $out/share/pixmaps
