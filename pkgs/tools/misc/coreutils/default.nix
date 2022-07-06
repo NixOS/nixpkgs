@@ -123,7 +123,12 @@ stdenv.mkDerivation rec {
       # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
       # don't know why it is not properly detected cross building with glibc.
       "fu_cv_sys_stat_statfs2_bsize=yes"
-    ];
+    ]
+    # /proc/uptime is available on Linux and produces accurate results even if
+    # the boot time is set to the epoch because the system has no RTC. We
+    # explicitly enable it for cases where it can't be detected automatically,
+    # such as when cross-compiling.
+    ++ optional stdenv.hostPlatform.isLinux "gl_cv_have_proc_uptime=yes";
 
   # The tests are known broken on Cygwin
   # (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
