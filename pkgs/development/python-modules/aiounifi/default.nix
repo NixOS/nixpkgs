@@ -3,6 +3,7 @@
 , aioresponses
 , buildPythonPackage
 , fetchFromGitHub
+, orjson
 , pytest-aiohttp
 , pytest-asyncio
 , pytestCheckHook
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "33";
+  version = "34";
 
   disabled = pythonOlder "3.9";
 
@@ -19,11 +20,12 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-MXzUQOC5Y33RgRKf5BPbA9VfQKKdRjawF9kW4QmSHkU=";
+    hash = "sha256-NxxM1rU781QTfNWfE6maNovPZNDwU54ST1lxhTKmmBA=";
   };
 
   propagatedBuildInputs = [
     aiohttp
+    orjson
   ];
 
   checkInputs = [
