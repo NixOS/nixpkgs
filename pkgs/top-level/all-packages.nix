@@ -16048,6 +16048,8 @@ with pkgs;
 
   krew = callPackage ../development/tools/krew { };
 
+  kube-bench = callPackage ../tools/security/kube-bench { };
+
   kube-hunter = callPackage ../tools/security/kube-hunter { };
 
   kubeaudit = callPackage ../tools/security/kubeaudit { };
