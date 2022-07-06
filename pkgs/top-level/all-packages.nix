@@ -8094,9 +8094,7 @@ with pkgs;
 
   librest_1_0 = callPackage ../development/libraries/librest/1.0.nix { };
 
-  inherit (callPackages ../development/libraries/libwebsockets { })
-    libwebsockets_4_3;
-  libwebsockets = libwebsockets_4_3;
+  libwebsockets = callPackage ../development/libraries/libwebsockets { };
 
   licensee = callPackage ../tools/package-management/licensee { };
 
