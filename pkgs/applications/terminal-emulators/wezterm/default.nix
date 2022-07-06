@@ -21,6 +21,7 @@
 , CoreGraphics
 , Cocoa
 , Foundation
+, darwin
 , libiconv
 , nixosTests
 , runCommand
@@ -71,6 +72,9 @@ rustPlatform.buildRustPackage rec {
     CoreGraphics
     Foundation
     libiconv
+  ] ++ lib.optionals (stdenv.isDarwin && (builtins.hasAttr "UserNotifications" darwin.apple_sdk.frameworks)) [
+    # added in macOS 11
+    darwin.apple_sdk.frameworks.UserNotifications
   ];
 
   postInstall = ''
@@ -118,8 +122,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
     maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.unix;
-    # Fails on missing UserNotifications framework while linking
-    broken = stdenv.isDarwin;
+    platforms = platforms.darwin ++ platforms.unix;
   };
 }
