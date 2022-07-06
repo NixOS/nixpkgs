@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, ocaml
+{ lib, fetchurl, buildDunePackage
 , dune-configurator
 , bos, ctypes, fmt, logs
 , mdx, alcotest, crowbar, junit_alcotest, ezjsonm
