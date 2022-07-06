@@ -21950,6 +21950,8 @@ with pkgs;
   atlassian-crowd = callPackage ../servers/atlassian/crowd.nix { };
   atlassian-jira = callPackage ../servers/atlassian/jira.nix { };
 
+  authelia-bin = callPackage ../servers/authelia { };
+
   cadvisor = callPackage ../servers/monitoring/cadvisor { };
 
   cassandra_2_1 = callPackage ../servers/nosql/cassandra/2.1.nix {
