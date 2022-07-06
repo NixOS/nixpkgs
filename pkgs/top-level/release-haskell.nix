@@ -381,9 +381,6 @@ let
         compilerNames.ghc902
         compilerNames.ghc923
       ];
-      purescript = [
-        compilerNames.ghc8107
-      ];
       purescript-cst = [
         compilerNames.ghc8107
       ];

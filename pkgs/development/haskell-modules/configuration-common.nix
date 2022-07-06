@@ -2556,9 +2556,6 @@ self: super: {
   # dependencies to avoid version mismatches in their dependency closure.
   # TODO(@cdepillabout): maybe unify with the spago overlay in configuration-nix.nix?
   purescriptOverlay = self: super: {
-    # Purescript targets Stackage LTS 18, so we need to downgrade a few things
-    aeson = self.aeson_1_5_6_0;
-    bower-json = self.bower-json_1_0_0_1;
     # As of 2021-11-08, the latest release of `language-javascript` is 0.7.1.0,
     # but it has a problem with parsing the `async` keyword.  It doesn't allow
     # `async` to be used as an object key:
@@ -2566,11 +2563,20 @@ self: super: {
     language-javascript = self.language-javascript_0_7_0_0;
   };
 
-  # Doesn't support GHC >= 9.0 (something related to instance resolution and TH)
-  purescriptBrokenFlag = drv:
+  # Don't support GHC >= 9.0 yet and need aeson 1.5.*
+  purescriptStOverride = drv:
+    let
+      overlayed = drv.overrideScope (
+        lib.composeExtensions
+          purescriptOverlay
+          (self: super: {
+            aeson = self.aeson_1_5_6_0;
+          })
+      );
+    in
     if lib.versionAtLeast self.ghc.version "9.0"
-    then dontDistribute (markBroken drv)
-    else drv;
+    then dontDistribute (markBroken overlayed)
+    else overlayed;
 in {
   purescript =
     lib.pipe
@@ -2586,13 +2592,11 @@ in {
         doJailbreak
         # Generate shell completions
         (generateOptparseApplicativeCompletion "purs")
-
-        purescriptBrokenFlag
       ];
 
-  purescript-cst = purescriptBrokenFlag (super.purescript-cst.overrideScope purescriptOverlay);
+  purescript-cst = purescriptStOverride super.purescript-cst;
 
-  purescript-ast = purescriptBrokenFlag (super.purescript-ast.overrideScope purescriptOverlay);
+  purescript-ast = purescriptStOverride super.purescript-ast;
 
-  purenix = super.purenix.overrideScope purescriptOverlay;
+  purenix = purescriptStOverride super.purenix;
 })
