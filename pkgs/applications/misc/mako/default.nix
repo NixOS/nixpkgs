@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mako";
-  version = "1.6";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RcPwZ5NeO9vxwPWfgj5x3wVdCYGKumnYT3ngHEAWfW0=";
+    sha256 = "sha256-CT4J7PDmTapQPi2OjXrnS6zqJwkVJTBtmwlZ2lp6f0I=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook ];
