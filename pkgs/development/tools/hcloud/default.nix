@@ -21,7 +21,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    for shell in bash zsh; do
+    for shell in bash fish zsh; do
       $out/bin/hcloud completion $shell > hcloud.$shell
       installShellCompletion hcloud.$shell
     done
