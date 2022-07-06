@@ -23932,6 +23932,8 @@ with pkgs;
 
   quicktemplate = callPackage ../development/tools/quicktemplate { };
 
+  linux_logo = callPackage ../tools/misc/linux-logo { };
+
   linux-pam = callPackage ../os-specific/linux/pam { };
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
