@@ -4,16 +4,16 @@ let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.20.1";
+      version = "1.20.3";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
         rev = "v${version}";
-        hash = "sha256-QJevD/meVPEHnfwT1Eu3cwfVFU+ab/16eJBl6cuhGdA=";
+        hash = "sha256-8sxCTPFdf5VDysANUYqic6zq5gipTL6wmPXstJc+6bA=";
       };
 
-      vendorSha256 = "sha256-NuiT2GytWaGkgSyl+qoe9DjCCL7wSHc6FU8C6rsy6Vc=";
+      vendorSha256 = "sha256-CJFKY69Iz8GrVpvUdDveMQQFj6RXApfgYjP7B1wfgfo=";
 
       doCheck = false;
 
