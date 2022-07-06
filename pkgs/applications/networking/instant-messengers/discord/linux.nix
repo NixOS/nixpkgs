@@ -5,7 +5,7 @@
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
 , libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript
-, common-updater-scripts, withOpenASAR }:
+, common-updater-scripts, withOpenASAR ? false }:
 
 stdenv.mkDerivation rec {
   inherit pname version src meta;

@@ -6,7 +6,7 @@ let
 
   cfg = config.services.mailman;
 
-  inherit (pkgs.mailmanPackages.buildEnvs { withHyperkitty = cfg.hyperkitty.enable; })
+  inherit (pkgs.mailmanPackages.buildEnvs { withHyperkitty = cfg.hyperkitty.enable; withLDAP = cfg.ldap.enable; })
     mailmanEnv webEnv;
 
   withPostgresql = config.services.postgresql.enable;
@@ -85,6 +85,114 @@ in {
         type = types.bool;
         default = false;
         description = "Enable Mailman on this host. Requires an active MTA on the host (e.g. Postfix).";
+      };
+
+      ldap = {
+        enable = mkEnableOption "LDAP auth";
+        serverUri = mkOption {
+          type = types.str;
+          example = "ldaps://ldap.host";
+          description = ''
+            LDAP host to connect against.
+          '';
+        };
+        bindDn = mkOption {
+          type = types.str;
+          example = "cn=root,dc=nixos,dc=org";
+          description = ''
+            Service account to bind against.
+          '';
+        };
+        bindPasswordFile = mkOption {
+          type = types.str;
+          example = "/run/secrets/ldap-bind";
+          description = ''
+            Path to the file containing the bind password of the servie account
+            defined by <xref linkend="opt-services.mailman.ldap.bindDn" />.
+          '';
+        };
+        superUserGroup = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "cn=admin,ou=groups,dc=nixos,dc=org";
+          description = ''
+            Group where a user must be a member of to gain superuser rights.
+          '';
+        };
+        userSearch = {
+          query = mkOption {
+            type = types.str;
+            example = "(&(objectClass=inetOrgPerson)(|(uid=%(user)s)(mail=%(user)s)))";
+            description = ''
+              Query to find a user in the LDAP database.
+            '';
+          };
+          ou = mkOption {
+            type = types.str;
+            example = "ou=users,dc=nixos,dc=org";
+            description = ''
+              Organizational unit to look up a user.
+            '';
+          };
+        };
+        groupSearch = {
+          type = mkOption {
+            type = types.enum [
+              "posixGroup" "groupOfNames" "memberDNGroup" "nestedMemberDNGroup" "nestedGroupOfNames"
+              "groupOfUniqueNames" "nestedGroupOfUniqueNames" "activeDirectoryGroup" "nestedActiveDirectoryGroup"
+              "organizationalRoleGroup" "nestedOrganizationalRoleGroup"
+            ];
+            default = "posixGroup";
+            apply = v: "${toUpper (substring 0 1 v)}${substring 1 (stringLength v) v}Type";
+            description = ''
+              Type of group to perform a group search against.
+            '';
+          };
+          query = mkOption {
+            type = types.str;
+            example = "(objectClass=groupOfNames)";
+            description = ''
+              Query to find a group associated to a user in the LDAP database.
+            '';
+          };
+          ou = mkOption {
+            type = types.str;
+            example = "ou=groups,dc=nixos,dc=org";
+            description = ''
+              Organizational unit to look up a group.
+            '';
+          };
+        };
+        attrMap = {
+          username = mkOption {
+            default = "uid";
+            type = types.str;
+            description = ''
+              LDAP-attribute that corresponds to the <literal>username</literal>-attribute in mailman.
+            '';
+          };
+          firstName = mkOption {
+            default = "givenName";
+            type = types.str;
+            description = ''
+              LDAP-attribute that corresponds to the <literal>firstName</literal>-attribute in mailman.
+            '';
+          };
+          lastName = mkOption {
+            default = "sn";
+            type = types.str;
+            description = ''
+              LDAP-attribute that corresponds to the <literal>lastName</literal>-attribute in mailman.
+            '';
+          };
+          email = mkOption {
+            default = "mail";
+            type = types.str;
+            description = ''
+              LDAP-attribute that corresponds to the <literal>email</literal>-attribute in mailman.
+            '';
+          };
+        };
       };
 
       enablePostfix = mkOption {
@@ -274,6 +382,34 @@ in {
 
       with open('/var/lib/mailman-web/settings_local.json') as f:
           globals().update(json.load(f))
+
+      ${optionalString (cfg.ldap.enable) ''
+        import ldap
+        from django_auth_ldap.config import LDAPSearch, ${cfg.ldap.groupSearch.type}
+        AUTH_LDAP_SERVER_URI = "${cfg.ldap.serverUri}"
+        AUTH_LDAP_BIND_DN = "${cfg.ldap.bindDn}"
+        with open("${cfg.ldap.bindPasswordFile}") as f:
+            AUTH_LDAP_BIND_PASSWORD = f.read().rstrip('\n')
+        AUTH_LDAP_USER_SEARCH = LDAPSearch("${cfg.ldap.userSearch.ou}",
+            ldap.SCOPE_SUBTREE, "${cfg.ldap.userSearch.query}")
+        AUTH_LDAP_GROUP_TYPE = ${cfg.ldap.groupSearch.type}()
+        AUTH_LDAP_GROUP_SEARCH = LDAPSearch("${cfg.ldap.groupSearch.ou}",
+            ldap.SCOPE_SUBTREE, "${cfg.ldap.groupSearch.query}")
+        AUTH_LDAP_USER_ATTR_MAP = {
+          ${concatStrings (flip mapAttrsToList cfg.ldap.attrMap (key: value: ''
+            "${key}": "${value}",
+          ''))}
+        }
+        ${optionalString (cfg.ldap.superUserGroup != null) ''
+          AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+            "is_superuser": "${cfg.ldap.superUserGroup}"
+          }
+        ''}
+        AUTHENTICATION_BACKENDS = (
+            "django_auth_ldap.backend.LDAPBackend",
+            "django.contrib.auth.backends.ModelBackend"
+        )
+      ''}
     '';
 
     services.nginx = mkIf (cfg.serve.enable && cfg.webHosts != []) {
