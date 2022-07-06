@@ -19859,8 +19859,6 @@ with pkgs;
     sdk = true;
   };
 
-  nrf-command-line-tools = callPackage ../development/tools/misc/nrf-command-line-tools { };
-
   nrf5-sdk = callPackage ../development/libraries/nrf5-sdk { };
 
   nrfconnect = callPackage ../tools/bluetooth/nrfconnect { };
