@@ -84,6 +84,7 @@ buildBazelPackage rec {
     description = "Tools for building Bazel targets when source files change";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
+    mainProgram = "ibazel";
     platforms = platforms.all;
   };
 }
