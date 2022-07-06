@@ -420,6 +420,8 @@ with pkgs;
 
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
 
+  frece = callPackage ../development/tools/frece { };
+
   frugal = callPackage ../development/tools/frugal { };
 
   glade = callPackage ../development/tools/glade { };
@@ -21404,10 +21406,7 @@ with pkgs;
   vulkan-tools-lunarg = callPackage ../tools/graphics/vulkan-tools-lunarg { };
   vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
 
-  vxl = callPackage ../development/libraries/vxl {
-    libpng = libpng12;
-    stdenv = gcc6Stdenv; # upstream code incompatible with gcc7
-  };
+  vxl = callPackage ../development/libraries/vxl { };
 
   waffle = callPackage ../development/libraries/waffle { };
 
@@ -28562,9 +28561,7 @@ with pkgs;
 
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
-  xmr-stak = callPackage ../applications/misc/xmr-stak {
-    stdenvGcc6 = gcc6Stdenv;
-  };
+  xmr-stak = callPackage ../applications/misc/xmr-stak { };
 
   xmrig = callPackage ../applications/misc/xmrig { };
 
@@ -29434,6 +29431,8 @@ with pkgs;
   pithos = callPackage ../applications/audio/pithos {
     pythonPackages = python3Packages;
   };
+
+  pineapple-pictures = libsForQt5.callPackage ../applications/graphics/pineapple-pictures { };
 
   pinfo = callPackage ../applications/misc/pinfo { };
 
@@ -32355,7 +32354,7 @@ with pkgs;
 
   manaplus = callPackage ../games/manaplus { };
 
-  mars = callPackage ../games/mars { stdenv = gcc10StdenvCompat; };
+  mars = callPackage ../games/mars { };
 
   megaglest = callPackage ../games/megaglest { };
 
