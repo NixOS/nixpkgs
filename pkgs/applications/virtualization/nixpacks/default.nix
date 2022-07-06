@@ -4,6 +4,8 @@ rustPlatform.buildRustPackage rec {
   pname = "nixpacks";
   version = "v0.1.7";
   cargoSha256 = "iA8ODh1NmUBfyH6syvVD32jDeLYG2LeLTo2lQoO93lc=";
+  # skip test due FHS dependency
+  doCheck = false;
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = pname;
