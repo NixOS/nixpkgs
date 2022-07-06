@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   # Install a binary that is used by openwebrx
   postInstall = ''
-    install -Dm0755 src/freedv_rx $out/bin/
+    install -Dm0755 src/freedv_rx -t $out/bin/
   '';
 
   # Swap keyword order to satisfy SWIG parser
