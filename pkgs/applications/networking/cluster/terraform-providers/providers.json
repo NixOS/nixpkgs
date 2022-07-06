@@ -367,10 +367,10 @@
     "owner": "equinix",
     "provider-source-address": "registry.terraform.io/equinix/equinix",
     "repo": "terraform-provider-equinix",
-    "rev": "v1.5.0",
-    "sha256": "sha256-+NrEP5x9/ymNb2qSdMyHNu7rjUtYxDT5Nv70vMxfTJw=",
-    "vendorSha256": "sha256-5MSZ4Mw6P5cI+COOq5SLTXqaVTr+zOix+w983rgcS+g=",
-    "version": "1.5.0"
+    "rev": "v1.6.0",
+    "sha256": "sha256-wvx0dZS38i5B7Jpaaa9iuv93PyzNAaKCxxU8OxklOhE=",
+    "vendorSha256": "sha256-tWMmwCFWwRvsFC/Bu4Eax+uopxN3ijRP9qr35bcg6qQ=",
+    "version": "1.6.0"
   },
   "exoscale": {
     "owner": "exoscale",
