@@ -14589,4 +14589,10 @@
     github = "npatsakula";
     githubId = 23001619;
   };
+  eigengrau = {
+    email = "seb@schattenkopie.de";
+    name = "Sebastian Reuße";
+    github = "eigengrau";
+    githubId = 4939947;
+  };
 }
