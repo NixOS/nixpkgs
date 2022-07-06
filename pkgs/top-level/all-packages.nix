@@ -12565,6 +12565,8 @@ with pkgs;
     tex = texlive.combined.scheme-full;
   };
 
+  bun = callPackage ../development/web/bun { };
+
   cakelisp = callPackage ../development/compilers/cakelisp { };
 
   ciao = callPackage ../development/compilers/ciao { };
