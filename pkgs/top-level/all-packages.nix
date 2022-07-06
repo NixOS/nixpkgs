@@ -27319,6 +27319,10 @@ with pkgs;
 
   google-chrome-dev = google-chrome.override { chromium = chromiumDev; channel = "dev"; };
 
+  go-graft = callPackage ../applications/networking/go-graft {
+    buildGoModule = buildGo118Module;
+  };
+
   gosmore = callPackage ../applications/misc/gosmore { stdenv = gcc10StdenvCompat; };
 
   gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
