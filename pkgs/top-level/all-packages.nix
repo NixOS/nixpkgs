@@ -21651,6 +21651,8 @@ with pkgs;
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
+  zint = callPackage ../development/libraries/zint { };
+
   zita-convolver = callPackage ../development/libraries/audio/zita-convolver { };
 
   zita-alsa-pcmi = callPackage ../development/libraries/audio/zita-alsa-pcmi { };
