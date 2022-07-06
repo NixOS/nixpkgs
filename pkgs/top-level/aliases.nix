@@ -220,6 +220,7 @@ mapAliases ({
   cpuminer-multi = throw "cpuminer-multi has been removed: deleted by upstream"; # Added 2022-01-07
   crafty = throw "crafty has been removed: deleted by upstream"; # Added 2022-01-07
   cryptol = throw "cryptol was removed due to prolonged broken build"; # Added 2020-08-21
+  cryptpad = throw "cryptpad has been removed, because it was unmaintained in nixpkgs"; # Added 2022-07-04
   ctl = throw "ctl has been removed: abandoned by upstream"; # Added 2022-05-13
 
   # CUDA Toolkit
@@ -952,7 +953,8 @@ mapAliases ({
   nmap-unfree = nmap; # Added 2021-04-06
   nmap-graphical = throw "nmap graphical support has been removed due to its python2 dependency"; # Added 2022-04-26
   nmap_graphical = throw "nmap graphical support has been removed due to its python2 dependency"; # Modified 2022-04-26
-  nodejs-10_x = throw "nodejs-10_X has been removed. Use a newer version instead."; # Added 2022-05-31
+  nodejs-10_x = throw "nodejs-10_x has been removed. Use a newer version instead."; # Added 2022-05-31
+  nodejs-12_x = throw "nodejs-12_x has been removed. Use a newer version instead."; # Added 2022-07-04
   nologin = throw "'nologin' has been renamed to/replaced by 'shadow'"; # Converted to throw 2022-02-22
   nomad_1_1 = throw "nomad_1_1 has been removed because it's outdated. Use a a newer version instead"; # Added 2022-05-22
   nordic-polar = throw "nordic-polar was removed on 2021-05-27, now integrated in nordic"; # Added 2021-05-27
