@@ -8,10 +8,10 @@
 { lib, stdenv, fetchzip, writeText, pkg-config, gnumake42
 , customOCamlPackages ? null
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12, ncurses
-, buildIde ? true
+, buildIde ? null # default is true for Coq < 8.14 and false for Coq >= 8.14
 , glib, gnome, wrapGAppsHook, makeDesktopItem, copyDesktopItems
 , csdp ? null
-, version, coq-version ? null,
+, version, coq-version ? null
 }@args:
 let lib' = lib; in
 let lib = import ../../../../build-support/coq/extra-lib.nix {lib = lib';}; in
@@ -59,6 +59,7 @@ let
   version = fetched.version;
   coq-version = args.coq-version or (if version != "dev" then versions.majorMinor version else "dev");
   coqAtLeast = v: coq-version == "dev" || versionAtLeast coq-version v;
+  buildIde = args.buildIde or (!coqAtLeast "8.14");
   ideFlags = optionalString (buildIde && !coqAtLeast "8.10")
     "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt";
   csdpPatch = if csdp != null then ''
