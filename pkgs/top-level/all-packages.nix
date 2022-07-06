@@ -25508,6 +25508,8 @@ with pkgs;
 
   adobe-reader = pkgsi686Linux.callPackage ../applications/misc/adobe-reader { };
 
+  adl = callPackage ../applications/video/adl { };
+
   appvm = callPackage ../applications/virtualization/appvm { };
 
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
