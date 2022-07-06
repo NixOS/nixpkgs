@@ -71,10 +71,10 @@ with pkgs;
       #
       # TODO It would be much better to pass the `stdenvNoCC` and *unwrapped*
       # cc, bintools, compiler-rt equivalent, etc. and create all final stdenvs
-      # as part of the stage. Then we would never be tempted to override a
-      # later thing to to create an earlier thing (leading to infinite
-      # recursion) and we also would still respect the stage arguments choices
-      # for these things.
+      # as part of the stage. Then we would never be tempted to override a later
+      # thing to to create an earlier thing (leading to infinite recursion) and
+      # we also would still respect the stage arguments choices for these
+      # things.
       overrideCC stdenv buildPackages.llvmPackages.clangNoCompilerRt
     else mkStdenvNoLibs stdenv;
 
@@ -88,7 +88,8 @@ with pkgs;
   ### Helper functions.
   inherit lib config overlays;
 
-  # do not import 'appendToName' to get consistent package-names with the same set of package-parameters: https://github.com/NixOS/nixpkgs/issues/68519
+  # do not import 'appendToName' to get consistent package-names with the same
+  # set of package-parameters: https://github.com/NixOS/nixpkgs/issues/68519
   inherit (lib) lowPrio hiPrio makeOverridable;
 
   inherit (lib) recurseIntoAttrs;
@@ -295,7 +296,8 @@ with pkgs;
 
   elfcat = callPackage ../tools/misc/elfcat { };
 
-  # Zip file format only allows times after year 1980, which makes e.g. Python wheel building fail with:
+  # Zip file format only allows times after year 1980, which makes e.g. Python
+  # wheel building fail with:
   # ValueError: ZIP does not support timestamps before 1980
   ensureNewerSourcesForZipFilesHook = ensureNewerSourcesHook { year = "1980"; };
 
@@ -35435,6 +35437,8 @@ with pkgs;
   xmagnify = callPackage ../tools/X11/xmagnify { };
 
   xosd = callPackage ../misc/xosd { };
+
+  xosview = callPackage ../tools/X11/xosview { };
 
   xosview2 = callPackage ../tools/X11/xosview2 { };
 

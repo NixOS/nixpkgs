@@ -113,13 +113,13 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
-  version = "8.4.0";
+  version = "8.5.0";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7E4YChbPc2X83+iNPB1A3BD+g9dXG7UqGzFiuRMSrmI=";
+    sha256 = "sha256-x6TnMFYjcUSdQZd9ctN2hITCAl9TGVb7/qAObGb9xMk=";
     fetchSubmodules = true;
   };
 

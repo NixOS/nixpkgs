@@ -66,6 +66,7 @@ in with self; {
   BSgenome_Ggallus_UCSC_galGal4_masked = derive2 { name="BSgenome.Ggallus.UCSC.galGal4.masked"; version="1.3.99"; sha256="0fvqimjf1xvgka4nw66nd0rbyb7r93v8cyw33776lhfv68ny058v"; depends=[BSgenome BSgenome_Ggallus_UCSC_galGal4]; };
   BSgenome_Ggallus_UCSC_galGal5 = derive2 { name="BSgenome.Ggallus.UCSC.galGal5"; version="1.4.2"; sha256="0gi82xr2b3fn3wi608nmqp3cgjx63rm82wy24p9l0s1qqh2z3jdb"; depends=[BSgenome]; };
   BSgenome_Ggallus_UCSC_galGal6 = derive2 { name="BSgenome.Ggallus.UCSC.galGal6"; version="1.4.2"; sha256="00b0awki35xkfjsvv9x1h0sykg5jbf36a37hj4spw028bkg8k7v2"; depends=[BSgenome]; };
+  BSgenome_Gmax_NCBI_Gmv40 = derive2 { name="BSgenome.Gmax.NCBI.Gmv40"; version="4.0"; sha256="0w6pa6pcjmxy9zj21m4c585s7fihy3hcg0ysbjkizlsskmlva0dr"; depends=[BSgenome]; };
   BSgenome_Hsapiens_1000genomes_hs37d5 = derive2 { name="BSgenome.Hsapiens.1000genomes.hs37d5"; version="0.99.1"; sha256="1cg0g5fqmsvwyw2p9hp2yy4ilk21jkbbrnpgqvb5c36ihjwvc7sr"; depends=[BSgenome]; };
   BSgenome_Hsapiens_NCBI_GRCh38 = derive2 { name="BSgenome.Hsapiens.NCBI.GRCh38"; version="1.3.1000"; sha256="0y75qdq578fh6420vbvsbwmdw8jvr3g06qli2h3vj3pxmjykh9c1"; depends=[BSgenome]; };
   BSgenome_Hsapiens_NCBI_T2T_CHM13v2_0 = derive2 { name="BSgenome.Hsapiens.NCBI.T2T.CHM13v2.0"; version="1.5.0"; sha256="080zq71fl1cx7sxi2il5v0mfj79hw93qy3fr1514fax8vslh5lfz"; depends=[BSgenome]; };
