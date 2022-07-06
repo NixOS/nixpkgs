@@ -21418,10 +21418,7 @@ with pkgs;
   vulkan-tools-lunarg = callPackage ../tools/graphics/vulkan-tools-lunarg { };
   vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
 
-  vxl = callPackage ../development/libraries/vxl {
-    libpng = libpng12;
-    stdenv = gcc6Stdenv; # upstream code incompatible with gcc7
-  };
+  vxl = callPackage ../development/libraries/vxl { };
 
   waffle = callPackage ../development/libraries/waffle { };
 
