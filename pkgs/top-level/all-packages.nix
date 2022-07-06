@@ -35452,6 +35452,8 @@ with pkgs;
 
   xosd = callPackage ../misc/xosd { };
 
+  xosview = callPackage ../tools/X11/xosview { };
+
   xosview2 = callPackage ../tools/X11/xosview2 { };
 
   xow_dongle-firmware = callPackage ../os-specific/linux/firmware/xow_dongle-firmware { };
