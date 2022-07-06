@@ -66,6 +66,19 @@ in lib.makeExtensible (self: {
   xcode_12_1 = requireXcode "12.1" "1widy74dk43wx8iqgd7arzf6q4kzdmaz8pfwymzs8chnq9dqr3wp";
   xcode_12_2 = requireXcode "12.2" "17i0wf4pwrxwfgjw7rpw9mcd59nkmys1k5h2rqsw81snzyxy9j0v";
   xcode_12_3 = requireXcode "12.3" "0kwf1y4llysf1p0nsbqyzccn7d77my0ldagr5fi3by4k0xy3d189";
+  xcode_12_4 = requireXcode "12.4" "sha256-Qw4j+XFry85/AviHQVhjjjKLAfmRNNwMGN5G8FheJwQ=";
+  xcode_12_5 = requireXcode "12.5" "sha256-xiGffnV0P9Ojd6IrJSXILUX4oznPif7zm00WAksn3qU=";
+  xcode_12_5_1 = requireXcode "12.5.1" "sha256-zL0kS86ZzBkIrKLPKvWguDvXj9Tqbr7uR/VZaT/uZ9A=";
+  xcode_13 = requireXcode "13" "sha256-uTY6d5DBu4OOQLkxs3ExDfLXh50rE2LLlqtCbk3Qn6E=";
+  xcode_13_1 = requireXcode "13.1" "sha256-vd+4eFVaAyvXsdaExcfbDZSXOwkpt+rEbkBYSMjdUEA=";
+  xcode_13_2 = requireXcode "13.2" "sha256-guJXm/QnMfvUZwAcJwoy0QeO+DpDcUhs8AxVKvm9tYQ=";
+  xcode_13_2_1 = requireXcode "13.2.1" "sha256-r832Uu+Q8utK4zN0CtwiMCvMYT5HstWInyq4cNIaZJM=";
+  xcode_13_3 = requireXcode "13.3" "sha256-p2zaWMpmUeNHQtYOOaVdhCt3cgapvzL3l73/J+UwzCE=";
+  xcode_13_3_1 = requireXcode "13.3.1" "sha256-j71vpJVJpyj/IOlL+4+5lYgOlhf/zn+7ExIHbxL51cQ=";
+  xcode_13_4 = requireXcode "13.4" "sha256-IY1coss90GlBeJg/HQPMU8v2rOOxsqlY5q+2Qxe8nnY=";
+  xcode_13_4_1 = requireXcode "13.4.1" "sha256-Jk8fLgvnODoIhuVJqfV0KrpBBL40fRrHJbFmm44NRKE=";
+  xcode_14 = requireXcode "14" "sha256-E+wjPgQx/lbYAsauksdmGsygL5VPBA8R9pHB93eA7T0=";
+  xcode_14_1 = requireXcode "14.1" "sha256-QJGAUVIhuDYyzDNttBPv5lIGOfvkYqdOFSUAr5tlkfs=";
   xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if (stdenv.targetPlatform ? xcodeVer) then stdenv.targetPlatform.xcodeVer else "12.3")}";
 })
 
