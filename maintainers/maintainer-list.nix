@@ -3744,6 +3744,12 @@
     githubId = 537775;
     name = "Emery Hemingway";
   };
+  eigengrau = {
+    email = "seb@schattenkopie.de";
+    name = "Sebastian Reuße";
+    github = "eigengrau";
+    githubId = 4939947;
+  };
   eikek = {
     email = "eike.kettner@posteo.de";
     github = "eikek";
