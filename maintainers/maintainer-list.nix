@@ -11918,7 +11918,7 @@
     name = "Spencer Whitt";
   };
   squalus = {
-    email = "squalus@tuta.io";
+    email = "squalus@squalus.net";
     github = "squalus";
     githubId = 36899624;
     name = "squalus";
