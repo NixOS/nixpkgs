@@ -783,7 +783,7 @@ in {
 
             $CONFIG = array_replace_recursive($CONFIG, nix_decode_json_file(
               "${jsonFormat.generate "nextcloud-extraOptions.json" cfg.extraOptions}",
-              "decoding json extra options file failed"
+              "impossible: this should never happen (decoding generated extraOptions file %s failed)"
             ));
 
             ${optionalString (cfg.secretFile != null) ''
