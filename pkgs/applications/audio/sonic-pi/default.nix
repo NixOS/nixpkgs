@@ -18,7 +18,6 @@
 }:
 
 let
-
   pname = "sonic-pi";
   version = "3.3.1";
   src = fetchFromGitHub {
