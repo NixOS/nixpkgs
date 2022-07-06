@@ -1,4 +1,4 @@
-{ branch ? "stable", callPackage, fetchurl, lib, stdenv, withOpenASAR ? false }:
+{ branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
   versions = if stdenv.isLinux then {
     stable = "0.0.18";
@@ -67,7 +67,7 @@ let
   packages = (builtins.mapAttrs
     (_: value: callPackage package
       (value // {
-        inherit src version openasar withOpenASAR;
+        inherit src version openasar;
         meta = meta // { mainProgram = value.binaryName; };
       })
     )

@@ -6,6 +6,7 @@
 , pytest-mock
 , pytest-test-utils
 , pythonOlder
+, setuptools-scm
 , tabulate
 }:
 
@@ -22,6 +23,12 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-l0efiCLoOVuSYoHWYYyu8FT1yosdFl6BeogzJyNKltw=";
   };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    setuptools-scm
+  ];
 
   propagatedBuildInputs = [
     funcy

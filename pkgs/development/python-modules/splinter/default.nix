@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "splinter";
-  version = "0.18.0";
+  version = "0.18.1";
 
   disabled = isPy27;
 
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cobrateam";
     repo = "splinter";
-    rev = version;
-    hash = "sha256-kJ5S/fBesaxTbxCQ0yBR30+CfCV6U5jgbfDZA7eF6ac=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-5d39e9omc223ugBfVMIsMZh8+NPVxc6q7p2gwZ0fF0o=";
   };
 
   propagatedBuildInputs = [

@@ -16,10 +16,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ python-utils ];
 
-  # depends on unmaintained pytest-pep8
-  # https://github.com/WoLpH/python-progressbar/issues/241
-  doCheck = false;
-
   pythonImportsCheck = [ "progressbar" ];
 
   meta = with lib; {

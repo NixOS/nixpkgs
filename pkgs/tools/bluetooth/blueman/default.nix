@@ -9,11 +9,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.2.5";
+  version = "2.3";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-yfPAqU3HyAvTIwS7Jf3tIU/jC3AY6e9Gsvy9HYA8fHw=";
+    sha256 = "sha256-M7pgl9M08XmJwIlPeCRrXgHTFJn5CoZOuTtc5WJv2uo=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  gnome.adwaita-icon-theme iproute2 libappindicator networkmanager ]
+                  gnome.adwaita-icon-theme iproute2 networkmanager ]
                 ++ pythonPath
                 ++ lib.optional withPulseAudio libpulseaudio;
 
