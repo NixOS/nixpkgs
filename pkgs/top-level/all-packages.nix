@@ -1069,7 +1069,10 @@ with pkgs;
 
   aether-lv2 = callPackage ../applications/audio/aether-lv2 { };
 
-  acme-client = callPackage ../tools/networking/acme-client { stdenv = gccStdenv; };
+  acme-client = callPackage ../tools/networking/acme-client {
+    stdenv = gccStdenv;
+    libressl = libressl_3_4;
+  };
 
   adrgen = callPackage ../tools/misc/adrgen { };
 
