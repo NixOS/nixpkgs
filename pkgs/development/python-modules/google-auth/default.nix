@@ -48,8 +48,8 @@ buildPythonPackage rec {
     "google.oauth2"
   ];
 
-  # Disable tests related to pyopenssl
   disabledTestPaths = [
+    # Disable tests related to pyopenssl
     "tests/transport/test__mtls_helper.py"
     "tests/transport/test_requests.py"
     "tests/transport/test_urllib3.py"
