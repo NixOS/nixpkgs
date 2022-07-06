@@ -1,21 +1,30 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, kube-linter }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, kube-linter }:
 
 buildGoModule rec {
   pname = "kube-linter";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = pname;
     rev = version;
-    sha256 = "ZqnD9zsh+r1RL34o1nAkvO1saKe721ZJ2+DgBjmsH58=";
+    sha256 = "XAsPbl9fqYk2nhDxRg5wyPwciwSpfigoBZ4hzdWAVgw=";
   };
 
-  vendorSha256 = "sha256-tm1+2jsktNrw8S7peJz7w8k3+JwAYUgKfKWuQ8zIfvk=";
+  vendorSha256 = "sha256-0bjAIHSjw0kHrh9CzJHv1UAaBJDn6381055eOHufvCw=";
 
   ldflags = [
     "-s" "-w" "-X golang.stackrox.io/kube-linter/internal/version.version=${version}"
   ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd kube-linter \
+      --bash <($out/bin/kube-linter completion bash) \
+      --fish <($out/bin/kube-linter completion fish) \
+      --zsh <($out/bin/kube-linter completion zsh)
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = kube-linter;
@@ -27,5 +36,6 @@ buildGoModule rec {
     homepage = "https://kubelinter.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ mtesseract stehessel ];
+    platforms = platforms.all;
   };
 }
