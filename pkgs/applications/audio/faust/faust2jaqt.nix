@@ -5,6 +5,7 @@
 , alsa-lib
 , which
 , writeText
+, runtimeShell
 }:
 
 faust.wrapWithBuildEnv rec {
@@ -31,7 +32,7 @@ faust.wrapWithBuildEnv rec {
     for p in $FILES; do
       binary=$(basename --suffix=.dsp "$p")
       touch "$binary"-temp-wrap.sh
-      echo '#!/usr/bin/env bash' >> "$binary"-temp-wrap.sh
+      echo '#!${runtimeShell}' >> "$binary"-temp-wrap.sh
       echo 'export QT_PLUGIN_PATH=${qtbase}/${qtbase.qtPluginPrefix}' >> "$binary"-temp-wrap.sh
       echo "./."$binary"-wrapped" >> "$binary"-temp-wrap.sh
       mv "$binary" ."$binary"-wrapped
