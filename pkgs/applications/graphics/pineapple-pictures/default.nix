@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A homebrew lightweight image viewer";
+    description = "Homebrew lightweight image viewer";
     homepage = "https://github.com/BLumia/pineapple-pictures";
     license = licenses.mit;
     platforms = platforms.linux;
