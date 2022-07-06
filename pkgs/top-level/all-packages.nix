@@ -4860,6 +4860,8 @@ with pkgs;
 
   citrix_workspace = citrix_workspace_22_05_0;
 
+  cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
+
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_21_01_0
     citrix_workspace_21_03_0
