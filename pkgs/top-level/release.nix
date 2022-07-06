@@ -97,6 +97,7 @@ let
               jobs.lib-tests
               jobs.pkgs-lib-tests
               jobs.stdenv.x86_64-linux
+              jobs.tests.packageTestsForChannelBlockers.curl.withCheck.x86_64-linux
               jobs.cargo.x86_64-linux
               jobs.go.x86_64-linux
               jobs.linux.x86_64-linux
@@ -133,6 +134,7 @@ let
             ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools
             ++ lib.optionals supportDarwin.x86_64 [
               jobs.stdenv.x86_64-darwin
+              jobs.tests.packageTestsForChannelBlockers.curl.withCheck.x86_64-darwin
               jobs.cargo.x86_64-darwin
               jobs.cachix.x86_64-darwin
               jobs.go.x86_64-darwin
