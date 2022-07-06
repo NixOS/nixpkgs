@@ -420,6 +420,8 @@ with pkgs;
 
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
 
+  frece = callPackage ../development/tools/frece { };
+
   frugal = callPackage ../development/tools/frugal { };
 
   glade = callPackage ../development/tools/glade { };
