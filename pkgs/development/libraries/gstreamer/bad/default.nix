@@ -123,9 +123,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base
     orc
-    # gobject-introspection has to be in both nativeBuildInputs and
-    # buildInputs. The build tries to link against libgirepository-1.0.so
-    gobject-introspection
     json-glib
     ldacbt
     libass
@@ -294,8 +291,6 @@ stdenv.mkDerivation rec {
     # `applemedia/videotexturecache.h` requires `gst/gl/gl.h`,
     # but its meson build system does not declare the dependency.
     "-Dapplemedia=disabled"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "-Dintrospection=disabled"
   ] ++ (if enableGplPlugins then [
     "-Dgpl=enabled"
   ] else [
