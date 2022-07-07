@@ -7,32 +7,24 @@
 , qtbase
 , bluez
 , ffmpeg
-, libao
-, libGLU
-, libGL
-, pcre
-, gettext
 , libXrandr
 , libusb1
-, libpthreadstubs
 , libXext
-, libXxf86vm
-, libXinerama
-, libSM
-, libXdmcp
-, readline
 , openal
 , udev
 , libevdev
-, portaudio
 , curl
 , alsa-lib
 , miniupnpc
 , enet
+, fmt_8
+, libGL
+, libiconv
 , mbedtls
+, pugixml
 , soundtouch
 , sfml
-, fmt
+, xxHash
 , xz
 , vulkan-loader
 , libpulseaudio
@@ -66,31 +58,23 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     ffmpeg
-    libao
-    libGLU
     libGL
-    pcre
-    gettext
-    libpthreadstubs
+    libiconv
     libpulseaudio
     libXrandr
     libXext
-    libXxf86vm
-    libXinerama
-    libSM
-    readline
     openal
-    libXdmcp
-    portaudio
     libusb1
     libpng
     hidapi
     miniupnpc
     enet
+    fmt_8
     mbedtls
+    pugixml
     soundtouch
     sfml
-    fmt
+    xxHash
     xz
     qtbase
   ] ++ lib.optionals stdenv.isLinux [
@@ -107,6 +91,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    "-DDISTRIBUTOR=NixOS"
     "-DUSE_SHARED_ENET=ON"
     "-DENABLE_LTO=ON"
   ] ++ lib.optionals stdenv.isDarwin [
@@ -121,9 +106,7 @@ stdenv.mkDerivation rec {
   ];
 
   # - Allow Dolphin to use nix-provided libraries instead of building them
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace 'DISTRIBUTOR "None"' 'DISTRIBUTOR "NixOS"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt --replace 'if(NOT APPLE)' 'if(true)'
     substituteInPlace CMakeLists.txt --replace 'if(LIBUSB_FOUND AND NOT APPLE)' 'if(LIBUSB_FOUND)'
   '';
