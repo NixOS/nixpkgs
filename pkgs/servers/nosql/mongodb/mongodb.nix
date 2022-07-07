@@ -72,6 +72,7 @@ in stdenv.mkDerivation rec {
         --replace "env = Environment(" "env = Environment(ENV = os.environ,"
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/third_party/mozjs-${variants.mozjsVersion}/extract/js/src/jsmath.cpp --replace '${variants.mozjsReplace}' 0
+  '' + lib.optionalString (stdenv.isDarwin && versionOlder version "3.6") ''
     substituteInPlace src/third_party/s2/s1angle.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s1interval.cc --replace drem remainder
     substituteInPlace src/third_party/s2/s2cap.cc --replace drem remainder
