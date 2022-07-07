@@ -158,7 +158,6 @@ stdenv.mkDerivation rec {
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
     "-Dx11_backend=${lib.boolToString x11Support}"
     "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
   ];
 
   doCheck = false; # needs X11

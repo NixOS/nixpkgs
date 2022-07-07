@@ -6,6 +6,7 @@
 , expat
 , pam
 , meson
+, mesonEmulatorHook
 , ninja
 , perl
 , rsync
@@ -23,10 +24,6 @@
 , useSystemd ? stdenv.isLinux
 , systemd
 , elogind
-# needed until gobject-introspection does cross-compile (https://github.com/NixOS/nixpkgs/pull/88222)
-, withIntrospection ? (stdenv.buildPlatform == stdenv.hostPlatform)
-# cross build fails on polkit-1-scan (https://github.com/NixOS/nixpkgs/pull/152704)
-, withGtkDoc ? (stdenv.buildPlatform == stdenv.hostPlatform)
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
@@ -88,6 +85,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  depsBuildBuild = [
+    pkg-config
+  ];
+
   nativeBuildInputs = [
     glib
     gtk-doc
@@ -97,7 +98,8 @@ stdenv.mkDerivation rec {
     ninja
     perl
     rsync
-    (python3.withPackages (pp: with pp; [
+    gobject-introspection
+    (python3.pythonForBuild.withPackages (pp: with pp; [
       dbus-python
       (python-dbusmock.overridePythonAttrs (attrs: {
         # Avoid dependency cycle.
@@ -109,17 +111,18 @@ stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_412
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
     expat
     pam
     spidermonkey_78
+    dbus
   ] ++ lib.optionals stdenv.isLinux [
     # On Linux, fall back to elogind when systemd support is off.
     (if useSystemd then systemd else elogind)
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
   ];
 
   propagatedBuildInputs = [
@@ -136,9 +139,7 @@ stdenv.mkDerivation rec {
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "-Dpolkitd_user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "-Dos_type=redhat" # only affects PAM includes
-    "-Dintrospection=${lib.boolToString withIntrospection}"
     "-Dtests=${lib.boolToString doCheck}"
-    "-Dgtk_doc=${lib.boolToString withGtkDoc}"
     "-Dman=true"
   ] ++ lib.optionals stdenv.isLinux [
     "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"

@@ -44,10 +44,6 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  mesonFlags = [
-    "-Dintrospection=${lib.boolToString (stdenv.buildPlatform == stdenv.hostPlatform)}"
-  ];
-
   doCheck = true;
 
   passthru = {

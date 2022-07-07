@@ -2,6 +2,7 @@
 , fetchurl
 , ninja
 , meson
+, mesonEmulatorHook
 , pkg-config
 , vala
 , gobject-introspection
@@ -34,6 +35,8 @@ stdenv.mkDerivation rec {
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   buildInputs = [
