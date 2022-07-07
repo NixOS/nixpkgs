@@ -13,7 +13,6 @@ in buildMongoDB {
   sha256 = "sha256-EJpIerW4zcGJvHfqJ65fG8yNsLRlUnRkvYfC+jkoFJ4=";
   patches = [ ./forget-build-dependencies.patch ]
     ++ lib.optionals stdenv.isDarwin [
-      ./asio-no-experimental-string-view.patch
       (fetchpatch {
         name = "fix double link of isNamedError.";
         url = "https://github.com/mongodb/mongo/commit/9c6751b9765d269b667324bb2efe1ca76a916d20.patch";
