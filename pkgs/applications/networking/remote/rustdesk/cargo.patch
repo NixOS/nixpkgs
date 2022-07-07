@@ -1,0 +1,50 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index c3e139e..b77d8bd 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1761,11 +1761,11 @@ dependencies = [
+ 
+ [[package]]
+ name = "magnum-opus"
+-version = "0.3.4-2"
+-source = "git+https://github.com/open-trade/magnum-opus#ad0836164abf4a4df69009b1ee08eabe3a13b33f"
++version = "0.4.0"
++source = "git+https://github.com/TheRadioGuy/magnum-opus#171e1d021004626f7444d1e39b98f50bc3cb2604"
+ dependencies = [
+- "bindgen 0.59.1",
+- "target_build_utils",
++ "libc",
++ "opusic-sys",
+ ]
+ 
+ [[package]]
+@@ -2188,6 +2188,16 @@ version = "0.1.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "28988d872ab76095a6e6ac88d99b54fd267702734fd7ffe610ca27f533ddb95a"
+ 
++[[package]]
++name = "opusic-sys"
++version = "0.3.6"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "5eace752ce07a037241dba8f02c654799f051e431b27028056bcb480e83b54f5"
++dependencies = [
++ "cmake",
++ "libc",
++]
++
+ [[package]]
+ name = "parity-tokio-ipc"
+ version = "0.7.2"
+diff --git a/Cargo.toml b/Cargo.toml
+index 75504a0..43e1624 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -32,7 +32,7 @@ libc = "0.2"
+ parity-tokio-ipc = { git = "https://github.com/open-trade/parity-tokio-ipc" }
+ flexi_logger = "0.17"
+ runas = "0.2"
+-magnum-opus = { git = "https://github.com/open-trade/magnum-opus" }
++magnum-opus = { git = "https://github.com/TheRadioGuy/magnum-opus" }
+ dasp = { version = "0.11", features = ["signal", "interpolate-linear", "interpolate"], optional = true }
+ rubato = { version = "0.8", optional = true }
+ samplerate = { version = "0.2", optional = true }

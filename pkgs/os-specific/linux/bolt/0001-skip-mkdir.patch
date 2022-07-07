@@ -1,0 +1,12 @@
+diff --git a/scripts/meson-install.sh b/scripts/meson-install.sh
+index 859ae81..05a1c58 100644
+--- a/scripts/meson-install.sh
++++ b/scripts/meson-install.sh
+@@ -7,5 +7,5 @@ fi
+ 
+ BOLT_DBDIR=$1
+ 
+-echo "Creating database dir: ${BOLT_DBDIR}"
+-mkdir -p "${DESTDIR}/${BOLT_DBDIR}"
++# echo "Creating database dir: ${BOLT_DBDIR}"
++# mkdir -p "${DESTDIR}/${BOLT_DBDIR}"

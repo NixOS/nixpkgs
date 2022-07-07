@@ -1,0 +1,69 @@
+diff --git a/meson.build b/meson.build
+index 2ed9027..1f6bbf2 100644
+--- a/meson.build
++++ b/meson.build
+@@ -38,6 +38,7 @@ g_ir_compiler = find_program('g-ir-compiler', required: false)
+ 
+ conf.set('PACKAGE_NAME', meson.project_name())
+ conf.set_quoted('VERSION', meson.project_version())
++conf.set_quoted('LIBDIR', get_option('prefix') / get_option('libdir'))
+ 
+ # glibc versions somewhere between 2.28 and 2.34
+ if cc.has_function('__fxstatat', prefix: '#include <sys/stat.h>')
+@@ -148,7 +149,7 @@ hacked_gir = custom_target('UMockdev-1.0 hacked gir',
+ 
+ if g_ir_compiler.found()
+ umockdev_typelib = custom_target('UMockdev-1.0 typelib',
+-  command: [g_ir_compiler, '--output', '@OUTPUT@', '-l', 'libumockdev.so.0', '@INPUT@'],
++  command: [g_ir_compiler, '--output', '@OUTPUT@', '-l', get_option('prefix') / get_option('libdir') / 'libumockdev.so.0', '@INPUT@'],
+   input: hacked_gir,
+   output: 'UMockdev-1.0.typelib',
+   install: true,
+diff --git a/src/config.vapi b/src/config.vapi
+index 5269dd0..a2ec46d 100644
+--- a/src/config.vapi
++++ b/src/config.vapi
+@@ -2,5 +2,6 @@
+ namespace Config {
+     public const string PACKAGE_NAME;
+     public const string VERSION;
++    public const string LIBDIR;
+ }
+ 
+diff --git a/src/umockdev-record.vala b/src/umockdev-record.vala
+index 8434d32..68c7f8e 100644
+--- a/src/umockdev-record.vala
++++ b/src/umockdev-record.vala
+@@ -435,7 +435,7 @@ main (string[] args)
+         preload = "";
+     else
+         preload = preload + ":";
+-    Environment.set_variable("LD_PRELOAD", preload + "libumockdev-preload.so.0", true);
++    Environment.set_variable("LD_PRELOAD", preload + Config.LIBDIR + "/libumockdev-preload.so.0", true);
+ 
+     try {
+         root_dir = DirUtils.make_tmp("umockdev.XXXXXX");
+diff --git a/src/umockdev-run.vala b/src/umockdev-run.vala
+index 9a1ba10..6df2522 100644
+--- a/src/umockdev-run.vala
++++ b/src/umockdev-run.vala
+@@ -95,7 +95,7 @@ main (string[] args)
+         preload = "";
+     else
+         preload = preload + ":";
+-    Environment.set_variable ("LD_PRELOAD", preload + "libumockdev-preload.so.0", true);
++    Environment.set_variable ("LD_PRELOAD", preload + Config.LIBDIR + "/libumockdev-preload.so.0", true);
+ 
+     var testbed = new UMockdev.Testbed ();
+ 
+diff --git a/src/umockdev-wrapper b/src/umockdev-wrapper
+index 6ce4dcd..706c49a 100755
+--- a/src/umockdev-wrapper
++++ b/src/umockdev-wrapper
+@@ -1,5 +1,5 @@
+ #!/bin/sh
+ # Wrapper program to preload the libumockdev library, so that test programs can
+ # set $UMOCKDEV_DIR for redirecting sysfs and other queries to a test bed.
+-exec env LD_PRELOAD=libumockdev-preload.so.0:$LD_PRELOAD "$@"
++exec env LD_PRELOAD=@LIBDIR@/libumockdev-preload.so.0:$LD_PRELOAD "$@"
+ 

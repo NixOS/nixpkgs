@@ -1,0 +1,38 @@
+diff --git a/Telegram/SourceFiles/core/application.cpp b/Telegram/SourceFiles/core/application.cpp
+index 2a092c6ea..de46dd269 100644
+--- a/Telegram/SourceFiles/core/application.cpp
++++ b/Telegram/SourceFiles/core/application.cpp
+@@ -1173,7 +1173,7 @@ void Application::startShortcuts() {
+ 
+ void Application::RegisterUrlScheme() {
+ 	base::Platform::RegisterUrlScheme(base::Platform::UrlSchemeDescriptor{
+-		.executable = cExeDir() + cExeName(),
++		.executable = qsl("kotatogram-desktop"),
+ 		.arguments = qsl("-workdir \"%1\"").arg(cWorkingDir()),
+ 		.protocol = qsl("tg"),
+ 		.protocolName = qsl("Telegram Link"),
+diff --git a/Telegram/SourceFiles/platform/linux/specific_linux.cpp b/Telegram/SourceFiles/platform/linux/specific_linux.cpp
+index 26168baa7..00d2525a0 100644
+--- a/Telegram/SourceFiles/platform/linux/specific_linux.cpp
++++ b/Telegram/SourceFiles/platform/linux/specific_linux.cpp
+@@ -303,19 +303,11 @@ bool GenerateDesktopFile(
+ 
+ 	QFile target(targetFile);
+ 	if (target.open(QIODevice::WriteOnly)) {
+-		fileText = fileText.replace(
+-			QRegularExpression(
+-				qsl("^TryExec=.*$"),
+-				QRegularExpression::MultilineOption),
+-			qsl("TryExec=%1").arg(
+-				QString(cExeDir() + cExeName()).replace('\\', "\\\\")));
+-
+ 		fileText = fileText.replace(
+ 			QRegularExpression(
+ 				qsl("^Exec=kotatogram-desktop(.*)$"),
+ 				QRegularExpression::MultilineOption),
+-			qsl("Exec=%1 -workdir %2\\1").arg(
+-				EscapeShellInLauncher(cExeDir() + cExeName()),
++			qsl("Exec=kotatogram-desktop -workdir %1\\1").arg(
+ 				EscapeShellInLauncher(cWorkingDir())));
+ 
+ 		fileText = fileText.replace(

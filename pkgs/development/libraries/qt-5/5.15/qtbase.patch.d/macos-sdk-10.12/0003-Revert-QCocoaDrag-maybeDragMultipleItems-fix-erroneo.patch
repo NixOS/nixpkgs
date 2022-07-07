@@ -1,0 +1,27 @@
+From d1626c55d10537274c6f365855342a1c619a4c3a Mon Sep 17 00:00:00 2001
+From: Dmitry Kalinkin <dmitry.kalinkin@gmail.com>
+Date: Mon, 7 Dec 2020 12:32:32 -0500
+Subject: [PATCH 3/6] Revert "QCocoaDrag::maybeDragMultipleItems - fix
+ erroneous size check"
+
+This reverts commit b8a03411784803c07ecc1f769860756d6fdc04cd.
+---
+ src/plugins/platforms/cocoa/qcocoadrag.mm | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/plugins/platforms/cocoa/qcocoadrag.mm b/src/plugins/platforms/cocoa/qcocoadrag.mm
+index c6ee4323ce..ab6863a432 100644
+--- a/src/plugins/platforms/cocoa/qcocoadrag.mm
++++ b/src/plugins/platforms/cocoa/qcocoadrag.mm
+@@ -187,7 +187,7 @@ bool QCocoaDrag::maybeDragMultipleItems()
+     const auto &qtUrls = m_drag->mimeData()->urls();
+     NSPasteboard *dragBoard = [NSPasteboard pasteboardWithName:NSPasteboardNameDrag];
+ 
+-    if (qtUrls.size() <= 1) {
++    if (int(dragBoard.pasteboardItems.count) == 1 && qtUrls.size() <= 1) {
+         // Good old -dragImage: works perfectly for this ...
+         return false;
+     }
+-- 
+2.21.0
+
