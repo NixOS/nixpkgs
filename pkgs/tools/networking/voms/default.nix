@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec{
   pname = "voms-unstable";
-  version = "2021-05-04";
+  version = "2022-06-14";
 
   src = fetchFromGitHub {
     owner = "italiangrid";
     repo = "voms";
-    rev = "61563152fce3a4e6860dd8ab8ab6e72b7908d8b8";
-    sha256 = "LNR0G4XrgxqjQmjyaKoZJLNoxtAGiTM93FG3jIU1u+Y=";
+    rev = "8e99bb96baaf197f0f557836e2829084bb1bb00e"; # develop branch
+    hash = "sha256-FG4fHO2lsQ3t/ZaKT9xY+xqdQHfdtzi5ULtxLhdPnss=";
   };
 
   nativeBuildInputs = [
