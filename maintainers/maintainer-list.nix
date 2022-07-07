@@ -12658,6 +12658,7 @@
     github = "thiagokokada";
     githubId = 844343;
     name = "Thiago K. Okada";
+    matrix = "@k0kada:matrix.org";
   };
   thibaultlemaire = {
     email = "thibault.lemaire@protonmail.com";
