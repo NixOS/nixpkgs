@@ -547,6 +547,8 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  show-in-file-manager = callPackage ../development/python-modules/show-in-file-manager { };
+
   ansicolors = callPackage ../development/python-modules/ansicolors { };
 
   ansiconv = callPackage ../development/python-modules/ansiconv { };
