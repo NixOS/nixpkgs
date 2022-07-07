@@ -10,11 +10,13 @@ let
   isQtStyle = cfg.platformTheme == "gtk2" && !(builtins.elem cfg.style ["adwaita" "adwaita-dark"]);
   isQt5ct = cfg.platformTheme == "qt5ct";
   isLxqt = cfg.platformTheme == "lxqt";
+  isKde = cfg.platformTheme == "kde";
 
   packages = if isQGnome then [ pkgs.qgnomeplatform pkgs.adwaita-qt ]
     else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
     else if isQt5ct then [ pkgs.libsForQt5.qt5ct ]
     else if isLxqt then [ pkgs.lxqt.lxqt-qtplugin pkgs.lxqt.lxqt-config ]
+    else if isKde then [ pkgs.libsForQt5.plasma-integration pkgs.libsForQt5.systemsettings ]
     else throw "`qt5.platformTheme` ${cfg.platformTheme} and `qt5.style` ${cfg.style} are not compatible.";
 
 in
@@ -33,6 +35,7 @@ in
           "gnome"
           "lxqt"
           "qt5ct"
+          "kde"
         ];
         example = "gnome";
         relatedPackages = [
@@ -40,6 +43,7 @@ in
           ["libsForQt5" "qtstyleplugins"]
           ["libsForQt5" "qt5ct"]
           ["lxqt" "lxqt-qtplugin"]
+          ["libsForQt5" "plasma-integration"]
         ];
         description = ''
           Selects the platform theme to use for Qt5 applications.</para>
@@ -70,6 +74,10 @@ in
                 <link xlink:href="https://sourceforge.net/projects/qt5ct/">qt5ct</link>
                 application.
               </para></listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><literal>kde</literal></term>
+              <listitem><para>Use Qt settings from Plasma.</para></listitem>
             </varlistentry>
           </variablelist>
         '';
@@ -119,7 +127,7 @@ in
 
     environment.variables.QT_QPA_PLATFORMTHEME = cfg.platformTheme;
 
-    environment.variables.QT_STYLE_OVERRIDE = mkIf (! (isQt5ct || isLxqt)) cfg.style;
+    environment.variables.QT_STYLE_OVERRIDE = mkIf (! (isQt5ct || isLxqt || isKde)) cfg.style;
 
     environment.systemPackages = packages;
 
