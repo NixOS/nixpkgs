@@ -6705,6 +6705,12 @@
     githubId = 845652;
     name = "Kier Davis";
   };
+  kilimnik = {
+    email = "mail@kilimnik.de";
+    github = "killercup";
+    githubId = 5883283;
+    name = "Daniel Kilimnik";
+  };
   killercup = {
     email = "killercup@gmail.com";
     github = "killercup";
