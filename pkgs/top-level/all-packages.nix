@@ -4054,6 +4054,8 @@ with pkgs;
 
   lifeograph = callPackage ../applications/editors/lifeograph { };
 
+  limitcpu = callPackage ../tools/misc/limitcpu { };
+
   link-grammar = callPackage ../tools/text/link-grammar { };
 
   linuxptp = callPackage ../os-specific/linux/linuxptp { };

@@ -6329,6 +6329,12 @@
     github = "jsimonetti";
     githubId = 5478838;
   };
+  jsoo1 = {
+    email = "jsoo1@asu.edu";
+    github = "jsoo1";
+    name = "John Soo";
+    githubId = 10039785;
+  };
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
