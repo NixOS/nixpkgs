@@ -23516,7 +23516,9 @@ with pkgs;
 
   zookeeper = callPackage ../servers/zookeeper { };
 
-  zookeeper_mt = callPackage ../development/libraries/zookeeper_mt { };
+  zookeeper_mt = callPackage ../development/libraries/zookeeper_mt {
+    openssl = openssl_1_1;
+  };
 
   xqilla = callPackage ../development/tools/xqilla { stdenv = gcc10StdenvCompat; };
 
