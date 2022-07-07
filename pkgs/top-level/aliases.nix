@@ -1293,6 +1293,7 @@ mapAliases ({
   smbclient = throw "'smbclient' has been renamed to/replaced by 'samba'"; # Converted to throw 2022-02-22
   smugline = throw "smugline has been removed from nixpkgs, as it's unmaintained and depends on deprecated libraries"; # Added 2020-11-04
   snack = throw "snack has been removed: broken for 5+ years"; # Added 2022-04-21
+  soldat-unstable = opensoldat; # Added 2022-07-02
   solr_8 = solr; # Added 2021-01-30
 
   # Added 2020-02-10

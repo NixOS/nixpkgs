@@ -12,13 +12,13 @@
 buildDotnetModule rec {
   pname = "archisteamfarm";
   # nixpkgs-update: no auto update
-  version = "5.2.6.3";
+  version = "5.2.7.7";
 
   src = fetchFromGitHub {
     owner = "justarchinet";
     repo = pname;
     rev = version;
-    sha256 = "sha256-ZsBOF3ZFZ0aicaAJ5j+6DQPwDyloxSafae8FTKSdwAI=";
+    sha256 = "sha256-2yx6YjMsJixtaiWse65p5VeZoiSumdIjaPIlfq9Mdmw=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;

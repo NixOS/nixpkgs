@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "sphinx-jinja";
-  version = "2.0.1";
+  version = "2.0.2";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-3lMY1InG1PaAqhIrp5kovE6t+kTTpTKS3ir+WI/+RAY=";
+    sha256 = "sha256-xiMrWaiUE5dwvh3G0LAKN55CiM54FXkE4fhHPeo+Bxg=";
   };
 
   propagatedBuildInputs = [ sphinx ];

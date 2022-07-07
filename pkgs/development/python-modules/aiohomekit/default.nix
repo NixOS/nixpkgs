@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, chacha20poly1305-reuseable
 , commentjson
 , cryptography
 , fetchFromGitHub
@@ -12,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "0.7.17";
+  version = "0.7.20";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-vgRiqA3xNvuw3nIzl45RXdmcbDW6OTxvReSH5SVcNEs=";
+    sha256 = "sha256-g7N+CIBJCMnW4FjN502SahhSpPS1p7AXZvduteHu+Z4=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +30,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    chacha20poly1305-reuseable
     commentjson
     cryptography
     zeroconf

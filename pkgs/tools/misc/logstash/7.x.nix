@@ -68,6 +68,11 @@ let
     meta = with lib; {
       description = "Logstash is a data pipeline that helps you process logs and other event data from a variety of systems";
       homepage = "https://www.elastic.co/products/logstash";
+      sourceProvenance = with sourceTypes; [
+        fromSource
+        binaryBytecode  # source bundles dependencies as jars
+        binaryNativeCode  # bundled jruby includes native code
+      ];
       license = if enableUnfree then licenses.elastic else licenses.asl20;
       platforms = platforms.unix;
       maintainers = with maintainers; [ wjlroe offline basvandijk ];

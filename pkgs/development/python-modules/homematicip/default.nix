@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "homematicip";
-  version = "1.0.2";
+  version = "1.0.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "coreGreenberet";
     repo = "homematicip-rest-api";
     rev = version;
-    sha256 = "sha256-j2ansly05auevlcDY5TFz6PZR/pNIGIbtkJuU8L5b0o=";
+    sha256 = "sha256-rTTYJ/2R+/FLuL3rTWT7ieixN+Gv9GhwkUaKPfLqUGc=";
   };
 
   propagatedBuildInputs = [
