@@ -2558,21 +2558,9 @@ self: super: {
     lsp-types = self.lsp-types_1_5_0_0;
   });
 
-  # A delay between futhark package uploads caused us to end up with conflicting
-  # versions of futhark and futhark-manifest
-  futhark = assert super.futhark.version == "0.21.12"; overrideCabal (drv: {
-    editedCabalFile = null;
-    revision = null;
-    version = "0.21.13";
-    sha256 = "0bzqlsaaqbbi47zvmvv7hd6hcz54hzw676rh9nxcjxgff3hzqb08";
-    libraryHaskellDepends = drv.libraryHaskellDepends or [] ++ [
-      self.fgl
-      self.fgl-visualize
-      self.co-log-core
-    ];
-  }) (super.futhark.override {
+  futhark = super.futhark.override {
     lsp = self.lsp_1_5_0_0;
-  });
+  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
