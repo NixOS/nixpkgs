@@ -4983,6 +4983,8 @@ with pkgs;
     inherit (gnome) gnome-common;
   };
 
+  m17-cxx-demod = callPackage ../applications/radio/m17-cxx-demod { };
+
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
