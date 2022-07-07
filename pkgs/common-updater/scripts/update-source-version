@@ -196,7 +196,7 @@ tempHash=$(printf '%0*d' "$hashLength" 0)
 if [[ -n "$sri" ]]; then
     # SRI hashes only support base64
     # SRI hashes need to declare the hash type as part of the hash
-    tempHash="$(nix hash to-sri --type "$oldHashAlgo" "$tempHash" 2>/dev/null \
+    tempHash="$(nix --extra-experimental-features nix-command hash to-sri --type "$oldHashAlgo" "$tempHash" 2>/dev/null \
         || nix to-sri --type "$oldHashAlgo" "$tempHash" 2>/dev/null)" \
         || die "Failed to convert hash to SRI representation!"
 fi
@@ -242,7 +242,7 @@ if [[ -z "$newHash" ]]; then
 
     if [[ -n "$sri" ]]; then
         # nix-build preserves the hashing scheme so we can just convert the result to SRI using the old type
-        newHash="$(nix hash to-sri --type "$oldHashAlgo" "$newHash" 2>/dev/null \
+        newHash="$(nix --extra-experimental-features nix-command hash to-sri --type "$oldHashAlgo" "$newHash" 2>/dev/null \
             || nix to-sri --type "$oldHashAlgo" "$newHash" 2>/dev/null)" \
             || die "Failed to convert hash to SRI representation!"
     fi
