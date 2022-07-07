@@ -7748,6 +7748,8 @@ in {
 
   pyiqvia = callPackage ../development/python-modules/pyiqvia { };
 
+  pyisbn = callPackage ../development/python-modules/pyisbn { };
+
   pyjet = callPackage ../development/python-modules/pyjet { };
 
   pyjks = callPackage ../development/python-modules/pyjks { };
