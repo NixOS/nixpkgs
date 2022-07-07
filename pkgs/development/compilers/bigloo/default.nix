@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bigloo";
-  version = "4.4b";
+  version = "4.4c-4";
 
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
-    sha256 = "sha256-oxOSJwKWmwo7PYAwmeoFrKaYdYvmvQquWXyutolc488=";
+    sha256 = "sha256-TtcahsbXYsNTUunwSHGhH+kPpdvJdOcoqG2eginXxw8=";
   };
 
   nativeBuildInputs = [ autoconf automake libtool ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
     # dyld: Library not loaded: /nix/store/w3liqjlrcmzc0sf2kgwjprqgqwqx8z47-libunistring-1.0/lib/libunistring.2.dylib
-    #  Referenced from: /private/tmp/nix-build-bigloo-4.4b.drv-0/bigloo-4.4b/bin/bigloo
+    #  Referenced from: /private/tmp/nix-build-bigloo-4.4c-4.drv-0/bigloo-4.4c-4/bin/bigloo
     #  Reason: Incompatible library version: bigloo requires version 5.0.0 or later, but libunistring.2.dylib provides version 4.0.0
     broken      = (stdenv.isDarwin && stdenv.isx86_64);
 
