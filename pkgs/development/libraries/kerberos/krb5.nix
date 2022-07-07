@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
-  preConfigure = "cd ./src";
+  sourceRoot = "krb5-${version}/src";
 
   buildPhase = optionalString libOnly ''
     MAKE="make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES"
