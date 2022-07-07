@@ -1,8 +1,8 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, cmake
-, wrapQtAppsHook, qtbase, bluez, ffmpeg, libao, libGLU, libGL, pcre, gettext
-, libXrandr, libusb1, libpthreadstubs, libXext, libXxf86vm, libXinerama
-, libSM, libXdmcp, readline, openal, udev, libevdev, portaudio, curl, alsa-lib
-, miniupnpc, enet, mbedtls, soundtouch, sfml, xz, writeScript
+, wrapQtAppsHook, qtbase, bluez, ffmpeg
+, libXrandr, libusb1, libXext
+, openal, udev, libevdev, curl, alsa-lib
+, miniupnpc, enet, fmt_8, libGL, libiconv, mbedtls, pugixml, soundtouch, sfml, xxHash, xz, writeScript
 , vulkan-loader ? null, libpulseaudio ? null
 
 # - Inputs used for Darwin
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.isLinux wrapQtAppsHook;
 
   buildInputs = [
-    curl ffmpeg libao libGLU libGL pcre gettext libpthreadstubs libpulseaudio
-    libXrandr libXext libXxf86vm libXinerama libSM readline openal libXdmcp
-    portaudio libusb1 libpng hidapi miniupnpc enet mbedtls soundtouch sfml xz
+    curl ffmpeg libGL libiconv libpulseaudio
+    libXrandr libXext openal
+    libusb1 libpng hidapi miniupnpc enet fmt_8 mbedtls pugixml soundtouch sfml xxHash xz
     qtbase
   ] ++ lib.optionals stdenv.isLinux [
     bluez udev libevdev alsa-lib vulkan-loader
@@ -35,8 +35,9 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DUSE_SHARED_ENET=ON"
+    "-DDISTRIBUTOR=NixOS"
     "-DENABLE_LTO=ON"
+    "-DUSE_SHARED_ENET=ON"
     "-DDOLPHIN_WC_REVISION=${src.rev}"
     "-DDOLPHIN_WC_DESCRIBE=${version}"
     "-DDOLPHIN_WC_BRANCH=master"
@@ -52,9 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   # - Allow Dolphin to use nix-provided libraries instead of building them
-  postPatch = ''
-    sed -i -e 's,DISTRIBUTOR "None",DISTRIBUTOR "NixOS",g' CMakeLists.txt
-  '' + lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     sed -i -e 's,if(NOT APPLE),if(true),g' CMakeLists.txt
     sed -i -e 's,if(LIBUSB_FOUND AND NOT APPLE),if(LIBUSB_FOUND),g' \
       CMakeLists.txt
