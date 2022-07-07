@@ -19,16 +19,16 @@ in
 with lib;
 stdenv.mkDerivation rec {
   pname = "${type}krb5";
-  version = "1.19.3";
+  version = "1.20";
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${versions.majorMinor version}/krb5-${version}.tar.gz";
-    sha256 = "1l6wp58zav37g03n2ig5qr0pslz38gh5cxgigbmxkjfxrxilil2n";
+    sha256 = "sha256-fgIr3TyFGDAXP5+qoAaiMKDg/a1MlT6Fv/S/DaA24S8";
   };
 
   outputs = [ "out" "dev" ];
 
-  configureFlags = [ "--with-tcl=no" "--localstatedir=/var/lib"]
+  configureFlags = [ "--localstatedir=/var/lib" ]
     # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
     # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
     ++ optional staticOnly [ "--enable-static" "--disable-shared" ]
