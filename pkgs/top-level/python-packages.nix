@@ -7926,7 +7926,7 @@ in {
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.nix { };
 
-  pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { };
+  pyqt5 = callPackage ../development/python-modules/pyqt/5.nix { };
 
   pyqt5_sip = callPackage ../development/python-modules/pyqt/sip.nix { };
 
