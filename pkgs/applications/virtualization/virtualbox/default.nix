@@ -3,6 +3,7 @@
 , libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib
+, fetchpatch
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin
@@ -98,8 +99,12 @@ in stdenv.mkDerivation {
     # https://github.com/NixOS/nixpkgs/issues/123851
     ./fix-audio-driver-loading.patch
     # NOTE: both patches below should be removed when updating to 6.1.35
-    # https://www.virtualbox.org/ticket/20914#comment:6
-    ./linux518.patch
+    # https://www.virtualbox.org/ticket/20914#comment:15
+    (fetchpatch {
+      url = "https://www.virtualbox.org/raw-attachment/ticket/20914/vbox-linux-5.19.patch";
+      hash = "sha512-NNiMf8kUuM/PimrQCOacYLkrf7UFPh6ZdPsXKyLlsqWfWQXkG92Fv3qZXvg8weE1Z/SBsFTuHICEI4b4l1wZFw==";
+      extraPrefix = "/";
+    })
     # https://www.virtualbox.org/ticket/20904#comment:22
     ./ffreestanding.patch
   ];
