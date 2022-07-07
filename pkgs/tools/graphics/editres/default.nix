@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "editres";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchurl {
     url = "mirror://xorg/individual/app/editres-${version}.tar.gz";
-    sha256 = "10mbgijb6ac6wqb2grpy9mrazzw68jxjkxr9cbdf1111pa64yj19";
+    sha256 = "sha256-LVbWB3vHZ6+n4DD+ssNy/mvok/7EApoj9FodVZ/YRq4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
