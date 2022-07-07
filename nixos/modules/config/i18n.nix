@@ -55,14 +55,18 @@ with lib;
         type = types.listOf types.str;
         default = builtins.map (l: l + "/UTF-8")
           (unique (
-            [ config.i18n.defaultLocale ] ++
-            (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
+            [
+              "C.UTF-8"
+              config.i18n.defaultLocale
+            ] ++ (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
           ));
         defaultText = literalExpression ''
           builtins.map (l: l + "/UTF-8")
             (unique (
-              [ config.i18n.defaultLocale ] ++
-              (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
+              [
+                "C.UTF-8"
+                config.i18n.defaultLocale
+              ] ++ (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
             ))
         '';
         example = ["en_US.UTF-8/UTF-8" "nl_NL.UTF-8/UTF-8" "nl_NL/ISO-8859-1"];
