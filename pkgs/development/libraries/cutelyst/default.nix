@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cutelyst";
-  version = "2.14.2";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "cutelyst";
     repo = "cutelyst";
     rev = "v${version}";
-    sha256 = "sha256-JUffOeUTeaZvEssP5hfSGipeRuQ7FzLF4bOizCFhe5o=";
+    sha256 = "sha256-kJvs4m1uxLuKMc3r7m66GIflH3mJKrfaXq3iDz0XDdY=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
