@@ -23358,6 +23358,8 @@ with pkgs;
   # unstable until the first 1.x release
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
 
+  fsverity-utils = callPackage ../os-specific/linux/fsverity-utils { };
+
   fwanalyzer = callPackage ../tools/filesystems/fwanalyzer { };
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { };
