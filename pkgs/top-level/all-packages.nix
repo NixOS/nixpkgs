@@ -21933,6 +21933,8 @@ with pkgs;
 
     mod_itk = callPackage ../servers/http/apache-modules/mod_itk { };
 
+    mod_mbtiles = callPackage ../servers/http/apache-modules/mod_mbtiles { };
+
     php = pkgs.php.override { inherit apacheHttpd; };
 
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
