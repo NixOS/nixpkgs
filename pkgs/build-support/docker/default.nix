@@ -332,7 +332,7 @@ rec {
     , # JSON containing configuration and metadata for this layer.
       baseJson
     , # Files to add to the layer.
-      contents ? null
+      copyToRoot ? null
     , # When copying the contents into the image, preserve symlinks to
       # directories (see `rsync -K`).  Otherwise, transform those symlinks
       # into directories.
@@ -344,7 +344,8 @@ rec {
     }:
     runCommand "docker-layer-${name}"
       {
-        inherit baseJson contents extraCommands;
+        inherit baseJson extraCommands;
+        contents = copyToRoot;
         nativeBuildInputs = [ jshon rsync tarsum ];
       }
       ''
@@ -390,7 +391,8 @@ rec {
     , # Script to run as root. Bash.
       runAsRoot
     , # Files to add to the layer. If null, an empty layer will be created.
-      contents ? null
+      # To add packages to /bin, use `buildEnv` or similar.
+      copyToRoot ? null
     , # When copying the contents into the image, preserve symlinks to
       # directories (see `rsync -K`).  Otherwise, transform those symlinks
       # into directories.
@@ -418,9 +420,9 @@ rec {
 
       inherit fromImage fromImageName fromImageTag diskSize;
 
-      preMount = lib.optionalString (contents != null && contents != [ ]) ''
+      preMount = lib.optionalString (copyToRoot != null && copyToRoot != [ ]) ''
         echo "Adding contents..."
-        for item in ${escapeShellArgs (map (c: "${c}") (toList contents))}; do
+        for item in ${escapeShellArgs (map (c: "${c}") (toList copyToRoot))}; do
           echo "Adding $item..."
           rsync -a${if keepContentsDirlinks then "K" else "k"} --chown=0:0 $item/ layer/
         done
@@ -500,7 +502,7 @@ rec {
     , # Tag of the parent image; will be read from the image otherwise.
       fromImageTag ? null
     , # Files to put on the image (a nix store path or list of paths).
-      contents ? null
+      copyToRoot ? null
     , # When copying the contents into the image, preserve symlinks to
       # directories (see `rsync -K`).  Otherwise, transform those symlinks
       # into directories.
@@ -517,10 +519,20 @@ rec {
       diskSize ? 1024
     , # Time of creation of the image.
       created ? "1970-01-01T00:00:01Z"
+    , # Deprecated.
+      contents ? null
     ,
     }:
 
     let
+      checked =
+        lib.warnIf (contents != null)
+          "in docker image ${name}: The contents parameter is deprecated. Change to copyToRoot if the contents are designed to be copied to the root filesystem, such as when you use `buildEnv` or similar between contents and your packages. Use copyToRoot = buildEnv { ... }; or similar if you intend to add packages to /bin."
+        lib.throwIf (contents != null && copyToRoot != null) "in docker image ${name}: You can not specify both contents and copyToRoot."
+        ;
+
+      rootContents = if copyToRoot == null then contents else copyToRoot;
+
       baseName = baseNameOf name;
 
       # Create a JSON blob of the configuration. Set the date to unix zero.
@@ -545,13 +557,15 @@ rec {
           mkPureLayer
             {
               name = baseName;
-              inherit baseJson contents keepContentsDirlinks extraCommands uid gid;
+              inherit baseJson keepContentsDirlinks extraCommands uid gid;
+              copyToRoot = rootContents;
             } else
           mkRootLayer {
             name = baseName;
             inherit baseJson fromImage fromImageName fromImageTag
-              contents keepContentsDirlinks runAsRoot diskSize
+              keepContentsDirlinks runAsRoot diskSize
               extraCommands;
+            copyToRoot = rootContents;
           };
       result = runCommand "docker-image-${baseName}.tar.gz"
         {
@@ -715,7 +729,7 @@ rec {
       '';
 
     in
-    result;
+    checked result;
 
   # Merge the tarballs of images built with buildImage into a single
   # tarball that contains all images. Running `docker load` on the resulting
@@ -776,12 +790,14 @@ rec {
   # contents. The main purpose is to be able to use nix commands in
   # the container.
   # Be careful since this doesn't work well with multilayer.
-  buildImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }: (
+  # TODO: add the dependencies of the config json.
+  buildImageWithNixDb = args@{ copyToRoot ? contents, contents ? null, extraCommands ? "", ... }: (
     buildImage (args // {
-      extraCommands = (mkDbExtraCommand contents) + extraCommands;
+      extraCommands = (mkDbExtraCommand copyToRoot) + extraCommands;
     })
   );
 
+  # TODO: add the dependencies of the config json.
   buildLayeredImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }: (
     buildLayeredImage (args // {
       extraCommands = (mkDbExtraCommand contents) + extraCommands;

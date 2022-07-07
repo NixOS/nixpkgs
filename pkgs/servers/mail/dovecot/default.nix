@@ -2,6 +2,7 @@
 , bzip2, zlib, lz4, inotify-tools, pam, libcap, coreutils
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
+, fetchpatch
 # Auth modules
 , withMySQL ? false, libmysqlclient
 , withPgSQL ? false, postgresql
@@ -57,6 +58,11 @@ stdenv.mkDerivation rec {
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
     ./2.3.x-module_dir.patch
+    # fix CVE-2022-30550
+    (fetchpatch {
+      url = "https://github.com/dovecot/core/compare/7bad6a24%5E..a1022072.patch";
+      hash = "sha256-aSyRcQreyA9j8QwkODHqPpRuS3vzouVatEWCqhh+r+8=";
+    })
   ];
 
   configureFlags = [

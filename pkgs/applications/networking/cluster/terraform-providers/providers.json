@@ -367,10 +367,10 @@
     "owner": "equinix",
     "provider-source-address": "registry.terraform.io/equinix/equinix",
     "repo": "terraform-provider-equinix",
-    "rev": "v1.5.0",
-    "sha256": "sha256-+NrEP5x9/ymNb2qSdMyHNu7rjUtYxDT5Nv70vMxfTJw=",
-    "vendorSha256": "sha256-5MSZ4Mw6P5cI+COOq5SLTXqaVTr+zOix+w983rgcS+g=",
-    "version": "1.5.0"
+    "rev": "v1.6.0",
+    "sha256": "sha256-wvx0dZS38i5B7Jpaaa9iuv93PyzNAaKCxxU8OxklOhE=",
+    "vendorSha256": "sha256-tWMmwCFWwRvsFC/Bu4Eax+uopxN3ijRP9qr35bcg6qQ=",
+    "version": "1.6.0"
   },
   "exoscale": {
     "owner": "exoscale",
@@ -738,10 +738,10 @@
     "owner": "equinix",
     "provider-source-address": "registry.terraform.io/equinix/metal",
     "repo": "terraform-provider-metal",
-    "rev": "v3.2.2",
-    "sha256": "sha256-sQMvTWGjj4UpmyvH1o+NjBHglKvpXPP7H8vfrNxJaKQ=",
-    "vendorSha256": null,
-    "version": "3.2.2"
+    "rev": "v3.3.0",
+    "sha256": "sha256-1HTSDVMk2VhoYRLInrBK3bDuYU0SwyhBV1p5A2tlU/I=",
+    "vendorSha256": "sha256-QxbZv6YMa5/I4bTeQBNdmG3EKtLEmstnH7HMiZzFJrI=",
+    "version": "3.3.0"
   },
   "minio": {
     "owner": "aminueza",

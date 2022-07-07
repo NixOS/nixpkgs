@@ -1047,7 +1047,6 @@
   ./services/web-apps/code-server.nix
   ./services/web-apps/baget.nix
   ./services/web-apps/convos.nix
-  ./services/web-apps/cryptpad.nix
   ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
   ./services/web-apps/documize.nix
@@ -1275,7 +1274,6 @@
   ./virtualisation/parallels-guest.nix
   ./virtualisation/podman/default.nix
   ./virtualisation/qemu-guest-agent.nix
-  ./virtualisation/railcar.nix
   ./virtualisation/spice-usb-redirection.nix
   ./virtualisation/virtualbox-guest.nix
   ./virtualisation/virtualbox-host.nix

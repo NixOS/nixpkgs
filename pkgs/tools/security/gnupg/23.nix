@@ -37,6 +37,9 @@ stdenv.mkDerivation rec {
 
     # Patch from upstream 34c649b36013, https://dev.gnupg.org/T6027
     ./CVE-2022-34903-g10-fix-garbled-status-messages-in-NOTATION_DATA.patch
+
+    # Patch for DoS vuln from https://seclists.org/oss-sec/2022/q3/27
+    ./v3-0001-Disallow-compressed-signatures-and-certificates.patch
   ];
   postPatch = ''
     sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
