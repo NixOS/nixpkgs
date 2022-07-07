@@ -76,9 +76,7 @@ stdenv.mkDerivation rec {
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
         --replace '${"$"}{LIBDIR}/python' \
-                  '${python}' \
-        --replace '${"$"}{LIBDIR}/openmp' \
-                  '${llvmPackages.openmp}'
+                  '${python}'
       substituteInPlace build_files/cmake/platform/platform_apple.cmake \
         --replace '${"$"}{LIBDIR}/python' \
                   '${python}' \
@@ -159,8 +157,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    # darwin.patch doesn't apply anymore, needs update
-    broken = stdenv.isDarwin;
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
     # They comment two licenses: GPLv2 and Blender License, but they
