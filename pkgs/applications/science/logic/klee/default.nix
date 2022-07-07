@@ -58,13 +58,13 @@ clang.stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    llvmPackages_11.llvm
-    z3
-    stp
     cryptominisat
     gperftools
-    sqlite
     lit # Configure phase checking for lit
+    llvmPackages_11.llvm
+    sqlite
+    stp
+    z3
   ];
 
   nativeBuildInputs = [
