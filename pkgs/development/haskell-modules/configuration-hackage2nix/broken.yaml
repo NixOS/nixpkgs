@@ -1604,7 +1604,6 @@ broken-packages:
   - fused-effects-resumable
   - fused-effects-squeal
   - fusion
-  - futhark
   - futhask
   - futun
   - future
