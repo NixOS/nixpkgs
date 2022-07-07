@@ -845,14 +845,14 @@ self: super: builtins.intersectAttrs super {
 
   rel8 = addTestToolDepend pkgs.postgresql super.rel8;
 
-  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_7; });
+  cachix = generateOptparseApplicativeCompletion "cachix" (super.cachix.override { nix = pkgs.nixVersions.nix_2_9; });
 
-  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_7; };
+  hercules-ci-agent = super.hercules-ci-agent.override { nix = pkgs.nixVersions.nix_2_9; };
   hercules-ci-cnix-expr =
     addTestToolDepend pkgs.git (
-      super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_7; }
+      super.hercules-ci-cnix-expr.override { nix = pkgs.nixVersions.nix_2_9; }
     );
-  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_7; };
+  hercules-ci-cnix-store = super.hercules-ci-cnix-store.override { nix = pkgs.nixVersions.nix_2_9; };
 
   # Enable extra optimisations which increase build time, but also
   # later compiler performance, so we should do this for user's benefit.
