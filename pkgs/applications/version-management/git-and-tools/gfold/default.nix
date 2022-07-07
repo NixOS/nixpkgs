@@ -10,12 +10,9 @@
 , testers
 }:
 
-let
+rustPlatform.buildRustPackage rec {
   pname = "gfold";
   version = "4.0.1";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "nickgerace";
@@ -35,8 +32,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = with lib; {
-    description =
-      "CLI tool to help keep track of your Git repositories, written in Rust";
+    description = "CLI tool for tracking Git repositories";
     homepage = "https://github.com/nickgerace/gfold";
     license = licenses.asl20;
     maintainers = [ maintainers.shanesveller ];
