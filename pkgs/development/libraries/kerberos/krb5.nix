@@ -50,22 +50,29 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "krb5-${version}/src";
 
+  libFolders = [ "util" "include" "lib" "build-tools" ];
+
   buildPhase = optionalString libOnly ''
+    runHook preBuild
+
     MAKE="make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES"
-    (cd util; $MAKE)
-    (cd include; $MAKE)
-    (cd lib; $MAKE)
-    (cd build-tools; $MAKE)
+    for folder in $libFolders; do
+      $MAKE -C $folder
+    done
+
+    runHook postBuild
   '';
 
   installPhase = optionalString libOnly ''
+    runHook preInstall
+
     mkdir -p "$out"/{bin,sbin,lib/pkgconfig,share/{et,man/man1}} \
       "$dev"/include/{gssapi,gssrpc,kadm5,krb5}
-    (cd util; $MAKE install)
-    (cd include; $MAKE install)
-    (cd lib; $MAKE install)
-    (cd build-tools; $MAKE install)
-    ${postInstall}
+    for folder in $libFolders; do
+      $MAKE -C $folder install
+    done
+
+    runHook postInstall
   '';
 
   # not via outputBin, due to reference from libkrb5.so
