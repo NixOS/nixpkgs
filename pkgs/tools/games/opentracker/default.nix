@@ -57,6 +57,12 @@ buildDotnetModule rec {
   meta = with lib; {
     description = "A tracking application for A Link to the Past Randomizer";
     homepage = "https://github.com/trippsc2/OpenTracker";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      # deps
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.mit;
     maintainers = [ maintainers.ivar ];
     mainProgram = "OpenTracker";

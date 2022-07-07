@@ -39,6 +39,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Redpanda is a streaming data platform for developers. Kafka API compatible. 10x faster. No ZooKeeper. No JVM! ";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsl11;
     homepage = "https://redpanda.com/";
     maintainers = with maintainers; [ happysalada ];

@@ -87,6 +87,10 @@ default-package-overrides:
   - dhall-nix < 1.1.24
   # Temporarily forbid distribution-nixpkgs updates until cabal2nix supports the new version
   - distribution-nixpkgs < 1.7.0
+  # patch is primarily used by reflex packages not all of which are patch 0.0.7 compatible yet
+  - patch < 0.0.7
+  - reflex < 0.8.2.1
+  - reflex-dom-core < 0.7.0.2
 
 extra-packages:
   - aeson < 2                           # required by pantry-0.5.2

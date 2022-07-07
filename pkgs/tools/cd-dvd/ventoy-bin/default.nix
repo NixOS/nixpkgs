@@ -187,6 +187,7 @@ in stdenv.mkDerivation rec {
       800+ image files are tested.  90%+ distros in DistroWatch supported.
     '';
     changelog = "https://www.ventoy.net/doc_news.html";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "mipsel-linux" ];
     maintainers = with maintainers; [ k4leg ];
