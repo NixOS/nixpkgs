@@ -24447,7 +24447,9 @@ with pkgs;
 
   pam_mysql = callPackage ../os-specific/linux/pam_mysql { };
 
-  pam_p11 = callPackage ../os-specific/linux/pam_p11 { };
+  pam_p11 = callPackage ../os-specific/linux/pam_p11 {
+    openssl = openssl_1_1;
+  };
 
   pam_pgsql = callPackage ../os-specific/linux/pam_pgsql { };
 
