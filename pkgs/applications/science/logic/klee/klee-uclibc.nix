@@ -36,10 +36,10 @@ clang.stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     clang
+    curl
     llvmPackages_11.llvm
     python3
     which
-    curl
   ];
 
   # Some uClibc sources depend on Linux headers.
