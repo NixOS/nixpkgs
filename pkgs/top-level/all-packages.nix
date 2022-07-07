@@ -33605,6 +33605,8 @@ with pkgs;
 
   gmsh = callPackage ../applications/science/math/gmsh { };
 
+  wcpg = callPackage ../development/libraries/science/math/wcpg { };
+
   zn_poly = callPackage ../development/libraries/science/math/zn_poly { };
 
   ### SCIENCE/MOLECULAR-DYNAMICS
