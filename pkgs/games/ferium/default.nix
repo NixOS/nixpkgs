@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ferium";
-  version = "4.1.1";
+  version = "4.1.5";
 
   src = fetchFromGitHub {
     owner = "gorilla-devs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "5DYdeK6JdA7oLBkjP3WkwLwlBitdf4Yt2dNP7P0INN0=";
+    sha256 = "sha256-NxrV8mi7xsr+x9oOp78DkHoPls0JLm5eol/8q9NwuTs=";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "7rpxHfe+pWarPJ72WSXjgr63YctZ5+RrsEgmw7o66VI=";
+  cargoSha256 = "sha256-hR2PKQqSvtSBOOhZKW2IsGGjuU4jCdLMeruAHxErQtU=";
 
   buildNoDefaultFeatures = true; # by default pulls in GTK 3 just for its directory picker
 
