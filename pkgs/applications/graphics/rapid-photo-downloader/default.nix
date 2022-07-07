@@ -6,11 +6,11 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.18";
+  version = "0.9.33";
 
   src = fetchurl {
     url = "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "15p7sssg6vmqbm5xnc4j5dr89d7gl7y5qyq44a240yl5aqkjnybw";
+    sha256 = "1hhcv8v1k8xl9c5mbfs41bznqz4i3f6asim2dklvmi7q6ngmrqsp";
   };
 
   # Disable version check and fix install tests
@@ -47,6 +47,8 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+    babel
+    packaging
     pyqt5
     pygobject3
     gphoto2
@@ -64,6 +66,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     requests
     colorlog
     pyprind
+    show-in-file-manager
     tenacity
   ];
 
