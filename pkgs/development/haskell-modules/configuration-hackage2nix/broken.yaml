@@ -3181,7 +3181,6 @@ broken-packages:
   - matrix-market
   - matrix-sized
   - matroid
-  - matterhorn
   - maude
   - maxent-learner-hw
   - maybench
