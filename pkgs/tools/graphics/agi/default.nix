@@ -60,7 +60,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/google/agi/";
     description = "Android GPU Inspector";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.ivar ];
