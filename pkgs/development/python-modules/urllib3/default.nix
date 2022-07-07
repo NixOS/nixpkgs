@@ -14,6 +14,7 @@
 , pytest-freezegun
 , pytest-timeout
 , pytestCheckHook
+, stdenv
 , tornado
 , trustme
 }:
@@ -65,7 +66,11 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
-    secure = [ certifi cryptography idna pyopenssl ];
+    # pyopenssl is broken on aarch64-darwin
+    # and it is hardly used by dependent packages
+    # https://github.com/NixOS/nixpkgs/pull/172397
+    secure = [ certifi cryptography idna ] ++
+      lib.optional (!(stdenv.isDarwin && stdenv.isAarch64)) [ pyopenssl ];
     socks = [ pysocks ];
   };
 
