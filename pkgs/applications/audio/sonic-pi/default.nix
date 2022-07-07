@@ -2,7 +2,6 @@
 , lib
 , qtbase
 , fetchFromGitHub
-, fftwSinglePrec
 , ruby
 , erlang
 , aubio
@@ -14,14 +13,11 @@
 , boost
 , bash
 , jack2
-, supercollider
+, supercollider-with-sc3-plugins
 , qwt
 }:
 
 let
-
-  supercollider_single_prec = supercollider.override {  fftw = fftwSinglePrec; };
-
   pname = "sonic-pi";
   version = "3.3.1";
   src = fetchFromGitHub {
@@ -62,7 +58,7 @@ mkDerivation rec {
     qwt
     ruby
     aubio
-    supercollider_single_prec
+    supercollider-with-sc3-plugins
     boost
     erlang
     alsa-lib
@@ -122,18 +118,18 @@ mkDerivation rec {
   dontWrapQtApps = true;
   preFixup = ''
     wrapQtApp "$out/bin/sonic-pi" \
-      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider erlang] }
+      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider-with-sc3-plugins erlang] }
     makeWrapper \
       $out/app/server/ruby/bin/sonic-pi-server.rb \
       $out/bin/sonic-pi-server \
-      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider erlang ] }
+      --prefix PATH : ${lib.makeBinPath [ bash jack2 ruby supercollider-with-sc3-plugins erlang ] }
   '';
 
   meta = {
     homepage = "https://sonic-pi.net/";
     description = "Free live coding synth for everyone originally designed to support computing and music lessons within schools";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Phlogistique kamilchm c0deaddict sohalt ];
+    maintainers = with lib.maintainers; [ Phlogistique kamilchm c0deaddict sohalt lilyinstarlight ];
     platforms = lib.platforms.linux;
   };
 }

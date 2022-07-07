@@ -3,7 +3,7 @@
 buildDunePackage rec {
   pname = "yaml-sexp";
 
-  inherit (yaml) version src useDune2;
+  inherit (yaml) version src;
 
   propagatedBuildInputs = [ yaml ppx_sexp_conv sexplib ];
 
