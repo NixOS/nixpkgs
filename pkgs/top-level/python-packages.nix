@@ -12574,7 +12574,7 @@ self: super: with self; {
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
 
-  zeek = (toPythonModule (pkgs.zeek.override {
+  zeek = (toPythonModule (pkgs.zeek.broker.override {
     python3 = python;
   })).py;
 
