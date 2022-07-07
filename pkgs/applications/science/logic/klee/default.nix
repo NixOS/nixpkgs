@@ -68,8 +68,8 @@ clang.stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake
     clang
+    cmake
   ];
 
   checkInputs = [
