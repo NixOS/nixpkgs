@@ -4117,6 +4117,7 @@ broken-packages:
   - provenience
   - proxy-kindness
   - proxy-mapping
+  - psc-ide
   - pseudo-trie
   - PSQueue
   - PTQ
@@ -4134,6 +4135,7 @@ broken-packages:
   - pure-io
   - purenix
   - pure-priority-queue
+  - purescript-tsd-gen
   - pure-zlib
   - pushbullet
   - pushbullet-types
@@ -5846,6 +5848,7 @@ broken-packages:
   - zendesk-api
   - zeno
   - zeolite-lang
+  - zephyr
   - zeromq4-clone-pattern
   - zeromq4-conduit
   - zeromq4-patterns
