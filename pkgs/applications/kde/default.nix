@@ -173,6 +173,7 @@ let
       konquest = callPackage ./konquest.nix {};
       konsole = callPackage ./konsole.nix {};
       kontact = callPackage ./kontact.nix {};
+      konversation = callPackage ./konversation.nix {};
       kontactinterface = callPackage ./kontactinterface.nix {};
       korganizer = callPackage ./korganizer.nix {};
       kpat = callPackage ./kpat.nix {};
