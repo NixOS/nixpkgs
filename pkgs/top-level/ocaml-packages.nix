@@ -505,6 +505,8 @@ let
     hacl-star = callPackage ../development/ocaml-modules/hacl-star { };
     hacl-star-raw = callPackage ../development/ocaml-modules/hacl-star/raw.nix { };
 
+    happy-eyeballs = callPackage ../development/ocaml-modules/happy-eyeballs { };
+
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };
@@ -519,7 +521,9 @@ let
 
     hpack = callPackage ../development/ocaml-modules/hpack { };
 
-    hxd = callPackage ../development/ocaml-modules/hxd { };
+    hxd = callPackage ../development/ocaml-modules/hxd {
+      cmdliner = cmdliner_1_1;
+    };
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
@@ -528,8 +532,6 @@ let
     integers = callPackage ../development/ocaml-modules/integers { };
 
     io-page = callPackage ../development/ocaml-modules/io-page { };
-
-    io-page-unix = callPackage ../development/ocaml-modules/io-page/unix.nix { };
 
     ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
 

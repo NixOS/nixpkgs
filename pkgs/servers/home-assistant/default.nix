@@ -30,6 +30,20 @@ let
   defaultOverrides = [
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
+    (self: super: {
+      bsblan = super.bsblan.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.0";
+        postPatch = null;
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ super.cattrs ];
+        src = fetchFromGitHub {
+          owner = "liudger";
+          repo = "python-bsblan";
+          rev = "v.${version}";
+          hash = "sha256-yzlHcIb5QlG+jAgEtKlAcY7rESiUY7nD1YwqK63wgcg=";
+        };
+      });
+    })
+
     # pytest-aiohttp>0.3.0 breaks home-assistant tests
     (self: super: {
       pytest-aiohttp = super.pytest-aiohttp.overridePythonAttrs (oldAttrs: rec {
@@ -176,7 +190,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.6.7";
+  hassVersion = "2022.7.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -194,7 +208,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-RR0CsPOzOdWRPSgmKGl3egrPXS1CDI+ODWZeLkVCSGQ=";
+    hash = "sha256-DDRut+3wJutXcQVOf2KU+XuHs5XuKkd5R7dQIXwOIrU=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -203,6 +217,7 @@ in python.pkgs.buildPythonApplication rec {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getBin ffmpeg}/bin/ffmpeg";
     })
+    ./patches/wilight-import.patch
   ];
 
   postPatch = let
@@ -212,15 +227,16 @@ in python.pkgs.buildPythonApplication rec {
       "bcrypt"
       "cryptography"
       "httpx"
+      "orjson"
       "PyJWT"
       "requests"
     ];
   in ''
     sed -r -i \
       ${lib.concatStringsSep "\n" (map (package:
-        ''-e 's@${package}[<>=]+.*@${package}@g' \''
+        ''-e 's/${package}[<>=]+.*/${package}",/g' \''
       ) relaxedConstraints)}
-      setup.cfg
+      pyproject.toml
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
   '';
 
@@ -239,13 +255,13 @@ in python.pkgs.buildPythonApplication rec {
     httpx
     ifaddr
     jinja2
+    lru-dict
+    orjson
     pip
     pyjwt
     python-slugify
-    pytz
     pyyaml
     requests
-    ruamel-yaml
     voluptuous
     voluptuous-serialize
     yarl

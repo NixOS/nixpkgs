@@ -3,18 +3,17 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
-, fetchpatch
 }:
 
 buildGoModule rec {
   pname = "kdigger";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "quarkslab";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-j4HIwfRIUpV25DmbQ+9go8aJMEYaFDPxrdr/zGWBeVU=";
+    sha256 = "sha256-xNOfxJJa0KbrxP1YRDEhnJEmKmpWzXchJWZ/2StR2O0=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -26,17 +25,11 @@ buildGoModule rec {
   };
   vendorSha256 = "sha256-3vn3MsE/4lBw89wgYgzm0RuJJ5RQTkgS6O74PpfFcUk=";
 
-  patches = [
-    (fetchpatch {
-      name = "simplify-ldflags.patch";
-      url = "https://github.com/quarkslab/kdigger/pull/2.patch";
-      sha256 = "sha256-d/NdoAdnheVgdqr2EF2rNn3gJvbjRZtOKFw2DqWR8TY=";
-    })
-  ];
-
   nativeBuildInputs = [ installShellFiles ];
 
+  # static to be easily copied into containers since it's an in-pod pen-testing tool
   CGO_ENABLED = 0;
+
   ldflags = [
     "-s"
     "-w"
@@ -76,7 +69,6 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ jk ];
-    # aarch64-linux support progress - https://github.com/quarkslab/kdigger/issues/3
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
   };
 }

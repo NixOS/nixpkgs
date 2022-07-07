@@ -1,19 +1,25 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, redis
 , requests
-, six }:
+, six
+}:
 
 buildPythonPackage rec {
   pname = "spotipy";
-  version = "2.19.0";
+  version = "2.20.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kE9ugT26g3dY6VEMG+5R18ohfxaSRmJaE+aTcz3DNUM=";
+    sha256 = "sha256-4mqZt1vi/EI3WytLNV3ET6Hlnvx3OvoXt4ThpMCoGMk=";
   };
 
-  propagatedBuildInputs = [ requests six ];
+  propagatedBuildInputs = [
+    redis
+    requests
+    six
+  ];
 
   # tests want to access the spotify API
   doCheck = false;

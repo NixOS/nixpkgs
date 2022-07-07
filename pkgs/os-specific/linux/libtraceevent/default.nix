@@ -1,18 +1,19 @@
-{ lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl }:
+{ lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "libtraceevent";
-  version = "1.5.1";
+  version = "1.6.1";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git";
     rev = "libtraceevent-${version}";
-    sha256 = "sha256-g4dB8QhCG6SgZVAU3TCtb70vYYh1KN7FrcldzTGAUnI=";
+    sha256 = "sha256-Yt7W+ouEZ/pJEKyY2Cgh+mYG0qz0lOIou5JufAD9Zd0=";
   };
 
   # Don't build and install html documentation
   postPatch = ''
     sed -i -e '/^all:/ s/html//' -e '/^install:/ s/install-html//' Documentation/Makefile
+    substituteInPlace scripts/utils.mk --replace /bin/pwd ${coreutils}/bin/pwd
   '';
 
   outputs = [ "out" "dev" "devman" ];

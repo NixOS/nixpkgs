@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~technomancy/fnlfmt";
     license = licenses.lgpl3Plus;
     platforms = lua.meta.platforms;
-    maintainers = with maintainers; [ gpanders chiroptical ];
+    maintainers = with maintainers; [ chiroptical ];
   };
 }

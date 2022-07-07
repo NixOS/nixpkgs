@@ -1,12 +1,12 @@
 { buildDunePackage, dns, dns-client, dns-mirage, dns-resolver, dns-tsig
 , dns-server, duration, randomconv, lwt, mirage-time, mirage-clock
-, mirage-random, mirage-stack, metrics
+, mirage-random, tcpip, metrics
 }:
 
 buildDunePackage {
   pname = "dns-stub";
 
-  inherit (dns) version src useDune2 minimumOCamlVersion;
+  inherit (dns) version src;
 
   propagatedBuildInputs = [
     dns
@@ -21,7 +21,7 @@ buildDunePackage {
     mirage-time
     mirage-clock
     mirage-random
-    mirage-stack
+    tcpip
     metrics
   ];
 

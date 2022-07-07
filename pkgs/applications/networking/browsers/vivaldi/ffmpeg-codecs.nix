@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "chromium-codecs-ffmpeg-extra";
-  version = "102.0.5005.49";
+  version = "103.0.5060.53";
 
   src = fetchurl {
-    url = "https://launchpadlibrarian.net/601067148/${pname}_${version}-0ubuntu0.18.04.1_amd64.deb";
-    sha256 = "sha256-b0oTDOi9VY+8v4JUAGkqdcum4uis08/v+COTx8eHBXg=";
+    url = "https://launchpadlibrarian.net/607589056/${pname}_${version}-0ubuntu0.18.04.1_amd64.deb";
+    sha256 = "sha256-Tsp5Y6sCn+mKrLGZSAWGFoSTHiyfANQ5VA7pesU1HyU=";
   };
 
   buildInputs = [ dpkg ];

@@ -287,6 +287,13 @@
       </listitem>
       <listitem>
         <para>
+          The Redis module now disables RDB persistence when
+          <literal>services.redis.servers.&lt;name&gt;.save = []</literal>
+          instead of using the Redis default.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Matrix Synapse now requires entries in the
           <literal>state_group_edges</literal> table to be unique, in
           order to prevent accidentally introducing duplicate
@@ -298,9 +305,23 @@
       </listitem>
       <listitem>
         <para>
+          <literal>dockerTools.buildImage</literal> deprecates the
+          misunderstood <literal>contents</literal> parameter, in favor
+          of <literal>copyToRoot</literal>. Use
+          <literal>copyToRoot = buildEnv { ... };</literal> or similar
+          if you intend to add packages to <literal>/bin</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           memtest86+ was updated from 5.00-coreboot-002 to 6.00-beta2.
           It is now the upstream version from https://www.memtest.org/,
           as coreboot’s fork is no longer available.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Add udev rules for the Teensy family of microcontrollers.
         </para>
       </listitem>
       <listitem>

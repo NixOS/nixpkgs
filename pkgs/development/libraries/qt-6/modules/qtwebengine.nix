@@ -57,7 +57,6 @@
 , ffmpeg
 , lib
 , stdenv
-, fetchpatch
 , glib
 , libxml2
 , libxslt
@@ -92,16 +91,6 @@ qtModule rec {
   # ninja builds some components with -Wno-format,
   # which cannot be set at the same time as -Wformat-security
   hardeningDisable = [ "format" ];
-
-  patches = [
-    # drop UCHAR_TYPE override to fix build with system ICU
-    (fetchpatch {
-      url = "https://code.qt.io/cgit/qt/qtwebengine-chromium.git/patch/?id=75f0f4eb";
-      stripLen = 1;
-      extraPrefix = "src/3rdparty/";
-      sha256 = "sha256-3aMcVXJg+v+UbsSO27g6MA6/uVkWUxyQsMD1EzlzXDs=";
-    })
-  ];
 
   postPatch = ''
     # Patch Chromium build tools

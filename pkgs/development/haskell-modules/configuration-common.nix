@@ -99,7 +99,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0a0jnahljd46vzjgcwlzjhrrjgn40s0zfjklh63aa9w9x0zkvbin";
+      sha256 = "0pr2fnaq3fa6lcly39xssl89v65h0wa26ikv5g30fm8y6z5rkqqd";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -353,7 +353,10 @@ self: super: {
   matplotlib = dontCheck super.matplotlib;
 
   # https://github.com/matterhorn-chat/matterhorn/issues/679 they do not want to be on stackage
-  matterhorn = doJailbreak super.matterhorn;
+  # Needs brick ^>= 0.70
+  matterhorn = doJailbreak (super.matterhorn.overrideScope (self: super: {
+    brick = self.brick_0_70_1;
+  }));
 
   memcache = dontCheck super.memcache;
   metrics = dontCheck super.metrics;
@@ -379,6 +382,7 @@ self: super: {
   posix-pty = dontCheck super.posix-pty; # https://github.com/merijn/posix-pty/issues/12
   postgresql-binary = dontCheck super.postgresql-binary; # needs a running postgresql server
   postgresql-simple-migration = dontCheck super.postgresql-simple-migration;
+  powerdns = dontCheck super.powerdns; # Tests require networking and external services
   process-streaming = dontCheck super.process-streaming;
   punycode = dontCheck super.punycode;
   pwstore-cli = dontCheck super.pwstore-cli;
@@ -2348,12 +2352,6 @@ self: super: {
   # https://github.com/kuribas/mfsolve/issues/8
   mfsolve = dontCheck super.mfsolve;
 
-  # compatibility with random-fu 0.3 https://github.com/mokus0/misfortune/pull/5
-  misfortune = appendPatch ./patches/misfortune-ghc9.patch (overrideCabal (drv: {
-    revision = null;
-    editedCabalFile = null;
-  }) super.misfortune);
-
   # GHC 9 support https://github.com/lambdabot/dice/pull/2
   dice = appendPatch (fetchpatch {
     name = "dice-ghc9.patch";
@@ -2556,14 +2554,31 @@ self: super: {
   # has been resolved.
   lucid-htmx = doJailbreak super.lucid-htmx;
 
+  lsp_1_5_0_0 = doDistribute (super.lsp_1_5_0_0.override {
+    lsp-types = self.lsp-types_1_5_0_0;
+  });
+
+  # A delay between futhark package uploads caused us to end up with conflicting
+  # versions of futhark and futhark-manifest
+  futhark = assert super.futhark.version == "0.21.12"; overrideCabal (drv: {
+    editedCabalFile = null;
+    revision = null;
+    version = "0.21.13";
+    sha256 = "0bzqlsaaqbbi47zvmvv7hd6hcz54hzw676rh9nxcjxgff3hzqb08";
+    libraryHaskellDepends = drv.libraryHaskellDepends or [] ++ [
+      self.fgl
+      self.fgl-visualize
+      self.co-log-core
+    ];
+  }) (super.futhark.override {
+    lsp = self.lsp_1_5_0_0;
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super // (let
   # We need to build purescript with these dependencies and thus also its reverse
   # dependencies to avoid version mismatches in their dependency closure.
   # TODO(@cdepillabout): maybe unify with the spago overlay in configuration-nix.nix?
   purescriptOverlay = self: super: {
-    # Purescript targets Stackage LTS 18, so we need to downgrade a few things
-    aeson = self.aeson_1_5_6_0;
-    bower-json = self.bower-json_1_0_0_1;
     # As of 2021-11-08, the latest release of `language-javascript` is 0.7.1.0,
     # but it has a problem with parsing the `async` keyword.  It doesn't allow
     # `async` to be used as an object key:
@@ -2571,11 +2586,20 @@ self: super: {
     language-javascript = self.language-javascript_0_7_0_0;
   };
 
-  # Doesn't support GHC >= 9.0 (something related to instance resolution and TH)
-  purescriptBrokenFlag = drv:
+  # Don't support GHC >= 9.0 yet and need aeson 1.5.*
+  purescriptStOverride = drv:
+    let
+      overlayed = drv.overrideScope (
+        lib.composeExtensions
+          purescriptOverlay
+          (self: super: {
+            aeson = self.aeson_1_5_6_0;
+          })
+      );
+    in
     if lib.versionAtLeast self.ghc.version "9.0"
-    then dontDistribute (markBroken drv)
-    else drv;
+    then dontDistribute (markBroken overlayed)
+    else overlayed;
 in {
   purescript =
     lib.pipe
@@ -2591,13 +2615,11 @@ in {
         doJailbreak
         # Generate shell completions
         (generateOptparseApplicativeCompletion "purs")
-
-        purescriptBrokenFlag
       ];
 
-  purescript-cst = purescriptBrokenFlag (super.purescript-cst.overrideScope purescriptOverlay);
+  purescript-cst = purescriptStOverride super.purescript-cst;
 
-  purescript-ast = purescriptBrokenFlag (super.purescript-ast.overrideScope purescriptOverlay);
+  purescript-ast = purescriptStOverride super.purescript-ast;
 
-  purenix = super.purenix.overrideScope purescriptOverlay;
+  purenix = purescriptStOverride super.purenix;
 })

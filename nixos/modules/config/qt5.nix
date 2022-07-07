@@ -8,14 +8,19 @@ let
 
   isQGnome = cfg.platformTheme == "gnome" && builtins.elem cfg.style ["adwaita" "adwaita-dark"];
   isQtStyle = cfg.platformTheme == "gtk2" && !(builtins.elem cfg.style ["adwaita" "adwaita-dark"]);
+  isQt5ct = cfg.platformTheme == "qt5ct";
+  isLxqt = cfg.platformTheme == "lxqt";
 
   packages = if isQGnome then [ pkgs.qgnomeplatform pkgs.adwaita-qt ]
     else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
+    else if isQt5ct then [ pkgs.libsForQt5.qt5ct ]
+    else if isLxqt then [ pkgs.lxqt.lxqt-qtplugin pkgs.lxqt.lxqt-config ]
     else throw "`qt5.platformTheme` ${cfg.platformTheme} and `qt5.style` ${cfg.style} are not compatible.";
 
 in
 
 {
+  meta.maintainers = [ maintainers.romildo ];
 
   options = {
     qt5 = {
@@ -26,11 +31,15 @@ in
         type = types.enum [
           "gtk2"
           "gnome"
+          "lxqt"
+          "qt5ct"
         ];
         example = "gnome";
         relatedPackages = [
           "qgnomeplatform"
           ["libsForQt5" "qtstyleplugins"]
+          ["libsForQt5" "qt5ct"]
+          ["lxqt" "lxqt-qtplugin"]
         ];
         description = ''
           Selects the platform theme to use for Qt5 applications.</para>
@@ -46,6 +55,20 @@ in
               <term><literal>gnome</literal></term>
               <listitem><para>Use GNOME theme with
                 <link xlink:href="https://github.com/FedoraQt/QGnomePlatform">qgnomeplatform</link>
+              </para></listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><literal>lxqt</literal></term>
+              <listitem><para>Use LXQt style set using the
+                <link xlink:href="https://github.com/lxqt/lxqt-config">lxqt-config-appearance</link>
+                application.
+              </para></listitem>
+            </varlistentry>
+            <varlistentry>
+              <term><literal>qt5ct</literal></term>
+              <listitem><para>Use Qt style set using the
+                <link xlink:href="https://sourceforge.net/projects/qt5ct/">qt5ct</link>
+                application.
               </para></listitem>
             </varlistentry>
           </variablelist>
@@ -96,7 +119,7 @@ in
 
     environment.variables.QT_QPA_PLATFORMTHEME = cfg.platformTheme;
 
-    environment.variables.QT_STYLE_OVERRIDE = cfg.style;
+    environment.variables.QT_STYLE_OVERRIDE = mkIf (! (isQt5ct || isLxqt)) cfg.style;
 
     environment.systemPackages = packages;
 

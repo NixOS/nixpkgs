@@ -3742,12 +3742,6 @@
     githubId = 2536303;
     name = "Enno Lohmeier";
   };
-  elseym = {
-    email = "elseym@me.com";
-    github = "elseym";
-    githubId = 907478;
-    name = "Simon Waibl";
-  };
   elvishjerricco = {
     email = "elvishjerricco@gmail.com";
     github = "ElvishJerricco";
@@ -6335,6 +6329,12 @@
     github = "jsimonetti";
     githubId = 5478838;
   };
+  jsoo1 = {
+    email = "jsoo1@asu.edu";
+    github = "jsoo1";
+    name = "John Soo";
+    githubId = 10039785;
+  };
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
@@ -7206,10 +7206,14 @@
     name = "Daniel Kuehn";
   };
   leo60228 = {
-    email = "iakornfeld@gmail.com";
+    email = "leo@60228.dev";
+    matrix = "@leo60228:matrix.org";
     github = "leo60228";
     githubId = 8355305;
     name = "leo60228";
+    keys = [{
+      fingerprint = "5BE4 98D5 1C24 2CCD C21A  4604 AC6F 4BA0 78E6 7833";
+    }];
   };
   leona = {
     email = "nix@leona.is";
@@ -11924,7 +11928,7 @@
     name = "Spencer Whitt";
   };
   squalus = {
-    email = "squalus@tuta.io";
+    email = "squalus@squalus.net";
     github = "squalus";
     githubId = 36899624;
     name = "squalus";

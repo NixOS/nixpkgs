@@ -1335,7 +1335,7 @@ mapAttrs
       '';
 
       meta = with maintainers; {
-        maintainers = [ willibutz elseym ];
+        maintainers = [ willibutz ];
       };
     }
   )))

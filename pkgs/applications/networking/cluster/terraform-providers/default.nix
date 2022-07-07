@@ -60,19 +60,11 @@ let
   special-providers =
     {
       brightbox = automated-providers.brightbox.override { mkProviderGoModule = buildGo118Module; };
-      # remove with >= 1.6.0
-      # https://github.com/equinix/terraform-provider-equinix/commit/5b4d6415d23dc2ee56988c4b1458fbb51c8cc750
-      equinix = automated-providers.equinix.overrideAttrs (a: {
-        src = a.src.overrideAttrs (a: {
-          postFetch = (a.postFetch or "") + lib.optionalString (!stdenv.isDarwin) ''
-            rm $out/cmd/migration-tool/README.md
-          '';
-        });
-      });
       # mkisofs needed to create ISOs holding cloud-init data,
       # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
       libvirt = automated-providers.libvirt.overrideAttrs (_: { propagatedBuildInputs = [ cdrtools ]; });
       linode = automated-providers.linode.override { mkProviderGoModule = buildGo118Module; };
+      utils = automated-providers.utils.override { mkProviderGoModule = buildGo118Module; };
     };
 
   # Put all the providers we not longer support in this list.

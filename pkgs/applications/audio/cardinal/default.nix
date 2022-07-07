@@ -1,9 +1,7 @@
 {
   stdenv
 , fetchFromGitHub
-, fetchpatch
 , fetchurl
-, fetchzip
 , freetype
 , jansson
 , lib
@@ -23,12 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cardinal";
-  version = "22.04";
+  version = "22.06";
 
   src = fetchurl {
     url =
-      "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal-${version}.tar.xz";
-    sha256 = "sha256-7As4CckwByrTynOOpwAXa1R9Bpp/ft537f+PvAgz/BE=";
+      "https://github.com/DISTRHO/Cardinal/releases/download/${version}/cardinal+deps-${version}.tar.xz";
+    sha256 = "sha256-h7pNoLpB7XkWHZUCQfvJsSnOn37DcP9xuH9kxtfmCos=";
   };
 
   prePatch = ''
@@ -55,6 +53,7 @@ stdenv.mkDerivation rec {
     speexdsp
   ];
 
+  hardeningDisable = [ "format" ];
   makeFlags = [ "SYSDEPS=true" "PREFIX=$(out)" ];
 
   meta = {
@@ -63,8 +62,5 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.all;
-    # ../../utils/CarlaPluginUI.cpp:31:10: fatal error: 'Cocoa/Cocoa.h' file not found
-    # # import <Cocoa/Cocoa.h>
-    broken = stdenv.isDarwin;
   };
 }

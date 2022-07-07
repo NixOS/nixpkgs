@@ -310,14 +310,18 @@ let
         mktplcRef = {
           name = "vscode-pylance";
           publisher = "MS-python";
-          version = "2022.1.5";
-          sha256 = "1b5ihrac9xsq35a39vlq7krr1ffqpdjxdlhv9s056hs033kayazl";
+          version = "2022.7.11";
+          sha256 = "sha256-JatjLZXO7iwpBwjL1hrNafBiF81CaozWWANyRm8A36Y=";
         };
 
         buildInputs = [ nodePackages.pyright ];
 
-        meta = {
-          license = lib.licenses.unfree;
+        meta = with lib; {
+          changelog = "https://marketplace.visualstudio.com/items/ms-python.vscode-pylance/changelog";
+          description = "A performant, feature-rich language server for Python in VS Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.vscode-pylance";
+          homepage = "https://github.com/microsoft/pylance-release";
+          license = licenses.unfree;
         };
       };
 
@@ -471,11 +475,11 @@ let
         mktplcRef = {
           name = "vscode-tailwindcss";
           publisher = "bradlc";
-          version = "0.6.13";
-          sha256 = "098vrm28b7jpzk0c2d0cgxvdw4jsswzf18cx1m9jwsm1j40fp5f4";
+          version = "0.8.6";
+          sha256 = "sha256-v15KuD3eYFCsrworCJ1SZAMkyZKztAwWKmfwmbirleI=";
         };
         meta = with lib; {
-          license = licenses.mpl20;
+          license = licenses.mit;
         };
       };
 
@@ -1522,6 +1526,22 @@ let
         };
       };
 
+      lucperkins.vrl-vscode = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "lucperkins";
+          name = "vrl-vscode";
+          version = "0.1.4";
+          sha256 = "sha256-xcGa43iPwUR6spOJGTmmWA1dOMNMQEdiuhMZPYZ+dTU=";
+        };
+        meta = {
+          description = "VS Code extension for Vector Remap Language (VRL)";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=lucperkins.vrl-vscode";
+          homepage = "https://github.com/lucperkins/vrl-vscode";
+          license = lib.licenses.mpl20;
+          maintainers = with lib.maintainers; [ lucperkins ];
+        };
+      };
+
       mads-hartmann.bash-ide-vscode = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "mads-hartmann";
@@ -1912,6 +1932,22 @@ let
         };
         meta = {
           license = lib.licenses.mit;
+        };
+      };
+
+      piousdeer.adwaita-theme = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "adwaita-theme";
+          publisher = "piousdeer";
+          version = "1.0.7";
+          sha256 = "zfG9ktxOCUOJaNrWtblq+ktSMppwp1SaB/39F1qfQew=";
+        };
+        meta = with lib; {
+          description = "Theme for the GNOME desktop";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=piousdeer.adwaita-theme";
+          homepage = "https://github.com/piousdeer/vscode-adwaita";
+          license = licenses.gpl3;
+          maintainers = with maintainers; [ wyndon ];
         };
       };
 
@@ -2426,8 +2462,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.22.2";
-          sha256 = "sha256-dtIlgODzRdoMKnG9050ZcCX3w15A/R3FaMc+ZylvBbU=";
+          version = "1.23.1";
+          sha256 = "sha256-k3z3n+29vqvC/FqjrHUBnYIVcKuJpiT+nITbqVm0Low=";
         };
         meta = {
           license = lib.licenses.mit;
