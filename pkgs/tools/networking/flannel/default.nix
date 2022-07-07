@@ -4,7 +4,7 @@ with lib;
 
 buildGoModule rec {
   pname = "flannel";
-  version = "0.18.0";
+  version = "0.18.1";
   rev = "v${version}";
 
   vendorSha256 = null;
@@ -13,7 +13,7 @@ buildGoModule rec {
     inherit rev;
     owner = "flannel-io";
     repo = "flannel";
-    sha256 = "sha256-cxdbXhj79xp5jT5xY3cIzt5XYndPC+TWIrxBjAvbP0g=";
+    sha256 = "sha256-l0W896miwnILQo3VWozV1aMNZoSerydUzWltl7D9y1E=";
   };
 
   ldflags = [ "-X github.com/flannel-io/flannel/version.Version=${rev}" ];
