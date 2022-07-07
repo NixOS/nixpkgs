@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , nix-update-script
 , # base build deps
   meson
@@ -37,6 +38,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-3NrzOsL0MekxMMXCFubEkazzSWFNsjUsX8n2ECcr7yY=";
   };
+
+  patches = [
+    # fix sound not working in VMs
+    # FIXME: drop in next release
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/c16e637c329bc9dda8544b18f5bd47a8d63ee253.patch";
+      sha256 = "sha256-xhhAlhOovwIjwAxXxvHRTG4GzpIPYvKQE2F4ZP1Udq8=";
+    })
+  ];
 
   nativeBuildInputs = [
     meson
