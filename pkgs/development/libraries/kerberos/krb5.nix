@@ -16,13 +16,12 @@
 let
   libOnly = type == "lib";
 in
-with lib;
 stdenv.mkDerivation rec {
   pname = "${type}krb5";
   version = "1.20";
 
   src = fetchurl {
-    url = "https://kerberos.org/dist/krb5/${versions.majorMinor version}/krb5-${version}.tar.gz";
+    url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor version}/krb5-${version}.tar.gz";
     sha256 = "sha256-fgIr3TyFGDAXP5+qoAaiMKDg/a1MlT6Fv/S/DaA24S8";
   };
 
@@ -31,28 +30,28 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--localstatedir=/var/lib" ]
     # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
     # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
-    ++ optional staticOnly [ "--enable-static" "--disable-shared" ]
-    ++ optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
-    ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+    ++ lib.optional staticOnly [ "--enable-static" "--disable-shared" ]
+    ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=""''
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
        [ "krb5_cv_attr_constructor_destructor=yes,yes"
          "ac_cv_func_regcomp=yes"
          "ac_cv_printf_positional=yes"
        ];
 
   nativeBuildInputs = [ pkg-config perl ]
-    ++ optional (!libOnly) bison
+    ++ lib.optional (!libOnly) bison
     # Provides the mig command used by the build scripts
-    ++ optional stdenv.isDarwin bootstrap_cmds;
+    ++ lib.optional stdenv.isDarwin bootstrap_cmds;
 
   buildInputs = [ openssl ]
-    ++ optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
-    ++ optionals (!libOnly) [ openldap libedit ];
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
+    ++ lib.optionals (!libOnly) [ openldap libedit ];
 
   sourceRoot = "krb5-${version}/src";
 
   libFolders = [ "util" "include" "lib" "build-tools" ];
 
-  buildPhase = optionalString libOnly ''
+  buildPhase = lib.optionalString libOnly ''
     runHook preBuild
 
     MAKE="make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES"
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = optionalString libOnly ''
+  installPhase = lib.optionalString libOnly ''
     runHook preInstall
 
     mkdir -p "$out"/{bin,sbin,lib/pkgconfig,share/{et,man/man1}} \
@@ -83,7 +82,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = false; # fails with "No suitable file for testing purposes"
 
-  meta = {
+  meta = with lib; {
     description = "MIT Kerberos 5";
     homepage = "http://web.mit.edu/kerberos/";
     license = licenses.mit;
