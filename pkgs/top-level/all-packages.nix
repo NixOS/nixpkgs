@@ -25090,6 +25090,8 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
+  papirus-folders = callPackage ../data/misc/papirus-folders { };
+
   plasma-overdose-kde-theme = callPackage ../data/themes/plasma-overdose-kde-theme { };
 
   papis = with python3Packages; toPythonApplication papis;
