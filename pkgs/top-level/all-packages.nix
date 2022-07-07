@@ -24623,6 +24623,7 @@ with pkgs;
   statifier = callPackage ../os-specific/linux/statifier { };
 
   sysdig = callPackage ../os-specific/linux/sysdig {
+    openssl = openssl_1_1;
     kernel = null;
   }; # sysdig is a client, for a driver look at linuxPackagesFor
 
