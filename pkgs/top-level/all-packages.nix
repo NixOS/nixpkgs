@@ -969,7 +969,7 @@ with pkgs;
   writers = callPackage ../build-support/writers {};
 
   # lib functions depending on pkgs
-  inherit (import ../pkgs-lib { inherit lib pkgs; }) formats;
+  inherit (import ../pkgs-lib { inherit lib pkgs; }) formats callOverlay callOverlays;
 
   testers = callPackage ../build-support/testers {};
 
