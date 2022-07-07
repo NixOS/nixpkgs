@@ -6137,7 +6137,7 @@ with pkgs;
   };
 
   lp_solve = callPackage ../applications/science/math/lp_solve {
-    inherit (darwin) cctools;
+    inherit (darwin) cctools autoSignDarwinBinariesHook;
   };
 
   fabric-installer = callPackage ../tools/games/minecraft/fabric-installer { };
