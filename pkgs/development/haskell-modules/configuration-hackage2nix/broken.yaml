@@ -262,6 +262,7 @@ broken-packages:
   - authenticate-ldap
   - authinfo-hs
   - auto
+  - autodocodec-yaml
   - autom
   - autonix-deps
   - autopack
@@ -1134,6 +1135,7 @@ broken-packages:
   - direct-plugins
   - direm
   - dirtree
+  - discord-haskell
   - discordian-calendar
   - discord-types
   - discrete
@@ -1314,6 +1316,7 @@ broken-packages:
   - enum-text
   - enum-utf8
   - envelope
+  - env-extra
   - env-parser
   - envstatus
   - epanet-haskell
@@ -1417,6 +1420,7 @@ broken-packages:
   - fast-nats
   - fastpbkdf2
   - FastPush
+  - fast-tags
   - FastxPipe
   - fathead-util
   - fb
@@ -1600,6 +1604,7 @@ broken-packages:
   - fused-effects-resumable
   - fused-effects-squeal
   - fusion
+  - futhark
   - futhask
   - futun
   - future
@@ -1659,6 +1664,7 @@ broken-packages:
   - gentlemark
   - geocode-google
   - GeocoderOpenCage
+  - geodetics
   - geodetic-types
   - GeoIp
   - geojson-types
@@ -2843,6 +2849,7 @@ broken-packages:
   - khph
   - kickass-torrents-dump-parser
   - kickchan
+  - ki-unlifted
   - kleene-list
   - kmonad
   - kmp-dfa
@@ -3174,6 +3181,7 @@ broken-packages:
   - matrix-market
   - matrix-sized
   - matroid
+  - matterhorn
   - maude
   - maxent-learner-hw
   - maybench
@@ -4417,6 +4425,7 @@ broken-packages:
   - ruin
   - runhs
   - runmany
+  - rustls
   - rws
   - RxHaskell
   - rz-pipe

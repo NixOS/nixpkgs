@@ -1026,6 +1026,7 @@ dont-distribute-packages:
  - commsec-keyexchange
  - comonad-random
  - compact-mutable
+ - compactable
  - compdata-automata
  - compdata-dags
  - compdata-param
@@ -1431,6 +1432,7 @@ dont-distribute-packages:
  - feed-translator
  - feed2lj
  - feed2twitter
+ - feedback
  - fei-base
  - fei-dataiter
  - fei-datasets
@@ -1558,6 +1560,11 @@ dont-distribute-packages:
  - geniconvert
  - geniserver
  - genvalidity-mergeful
+ - genvalidity-sydtest
+ - genvalidity-sydtest-aeson
+ - genvalidity-sydtest-hashable
+ - genvalidity-sydtest-lens
+ - genvalidity-sydtest-persistent
  - geodetic
  - geolite-csv
  - getemx
@@ -1937,6 +1944,7 @@ dont-distribute-packages:
  - hascat-setup
  - hascat-system
  - hashable-accelerate
+ - hashes
  - hashflare
  - hask-home
  - haskades
@@ -2248,6 +2256,7 @@ dont-distribute-packages:
  - hts
  - htsn-import
  - http-client-auth
+ - http-client-rustls
  - http-enumerator
  - http-pony
  - http2-client-exe
@@ -3174,7 +3183,6 @@ dont-distribute-packages:
  - proto3-wire
  - protobuf-native
  - protocol-buffers-descriptor-fork
- - psc-ide
  - psql
  - ptera
  - ptera-core
@@ -3187,7 +3195,6 @@ dont-distribute-packages:
  - pure-cdb
  - pure-priority-queue-tests
  - purescript-iso
- - purescript-tsd-gen
  - pursuit-client
  - push-notify
  - push-notify-apn
@@ -3426,6 +3433,9 @@ dont-distribute-packages:
  - runtime-arbitrary
  - rv
  - s-expression
+ - safe-coloured-text-gen
+ - safe-coloured-text-layout
+ - safe-coloured-text-layout-gen
  - safe-coupling
  - safe-plugins
  - safer-file-handles
@@ -3549,6 +3559,7 @@ dont-distribute-packages:
  - shady-graphics
  - shake-ats
  - shake-bindist
+ - shake-futhark
  - shake-minify-css
  - shake-plus-extended
  - shakebook
@@ -3745,7 +3756,17 @@ dont-distribute-packages:
  - sweet-egison
  - switch
  - syb-with-class-instances-text
+ - sydtest
+ - sydtest-aeson
  - sydtest-amqp
+ - sydtest-hedgehog
+ - sydtest-hspec
+ - sydtest-persistent
+ - sydtest-persistent-sqlite
+ - sydtest-process
+ - sydtest-servant
+ - sydtest-typed-process
+ - sydtest-wai
  - sydtest-webdriver
  - sydtest-webdriver-screenshot
  - sydtest-webdriver-yesod
@@ -3851,6 +3872,7 @@ dont-distribute-packages:
  - to-string-instances
  - toboggan
  - todos
+ - token-limiter-concurrent
  - toktok
  - tomlcheck
  - tonatona
@@ -4202,7 +4224,6 @@ dont-distribute-packages:
  - yuuko
  - z85
  - zasni-gerna
- - zephyr
  - zephyr-copilot
  - zeromq3-conduit
  - zeromq3-haskell
