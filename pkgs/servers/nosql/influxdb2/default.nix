@@ -1,4 +1,4 @@
-{ buildGoModule
+{ buildGo118Module
 , fetchFromGitHub
 , fetchurl
 , go-bindata
@@ -12,15 +12,15 @@
 }:
 
 let
-  version = "2.1.1";
-  ui_version = "2.1.2";
-  libflux_version = "0.139.0";
+  version = "2.3.0";
+  ui_version = "Master";
+  libflux_version = "0.171.0";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb";
     rev = "v${version}";
-    sha256 = "sha256-wf01DhB1ampZuWPkHUEOf3KJK4GjeOAPL3LG2+g4NGY=";
+    sha256 = "sha256-kBrv9LWZq7hlJmjXFl7maqFRttfChXJwD5SjeQmr8Ps=";
   };
 
   ui = fetchurl {
@@ -35,10 +35,10 @@ let
       owner = "influxdata";
       repo = "flux";
       rev = "v${libflux_version}";
-      sha256 = "sha256-cELeWZXGVLFoPYfBoBP8NeLBVFIb5o+lWyto42BLyXY=";
+      sha256 = "sha256-v9MUR+PcxAus91FiHYrMN9MbNOTWewh7MT6/t/QWQcM=";
     };
     sourceRoot = "source/libflux";
-    cargoSha256 = "sha256-wFgawxgqZqoPnOXJD3r5t2n7Y2bTAkBbBxeBtFEF7N4=";
+    cargoSha256 = "sha256-oAMoGGdR0QEjSzZ0/J5J9s/ekSlryCcRBSo5N2r70Ko=";
     nativeBuildInputs = [ llvmPackages.libclang ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
     LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
@@ -60,14 +60,14 @@ let
     '';
   };
 
-in buildGoModule {
+in buildGo118Module {
   pname = "influxdb";
   version = version;
   src = src;
 
   nativeBuildInputs = [ go-bindata pkg-config ];
 
-  vendorSha256 = "sha256-GVLAzVJzSsC10ZWDZPP8upydwZG21E+zQ6sMKm1lCY0=";
+  vendorSha256 = "sha256-2IarpdE31D7vUnXEEf9ipwG755ChNTtdo1cu6CW0H5o=";
   subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
@@ -81,7 +81,7 @@ in buildGoModule {
         exit 1
       fi
 
-      ui_ver=$(grep influxdata/ui/releases scripts/fetch-ui-assets.sh | ${perl}/bin/perl -pe 's#.*/OSS-([^/]+)/.*#$1#')
+      ui_ver=$(grep -m 1 influxdata/ui/releases scripts/fetch-ui-assets.sh | ${perl}/bin/perl -pe 's#.*/OSS-([^/]+)/.*#$1#')
       if [ "$ui_ver" != "${ui_version}" ]; then
         echo "scripts/fetch-ui-assets.sh wants UI $ui_ver, but nix derivation provides ${ui_version}"
         exit 1
