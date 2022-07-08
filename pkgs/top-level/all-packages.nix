@@ -33986,6 +33986,8 @@ with pkgs;
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
+  nvc = callPackage ../applications/science/electronics/nvc { };
+
   openems = callPackage ../applications/science/electronics/openems {
     qcsxcad = libsForQt5.qcsxcad;
   };
