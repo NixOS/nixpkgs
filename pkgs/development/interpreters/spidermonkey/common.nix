@@ -40,6 +40,28 @@ stdenv.mkDerivation (finalAttrs: rec {
     inherit hash;
   };
 
+  patches = lib.optionals (lib.versionAtLeast version "102") [
+    # use pkg-config at all systems
+    ./always-check-for-pkg-config.patch
+    ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot.patch
+  ] ++ lib.optionals (lib.versionOlder version "91") [
+    # Fix build failure on armv7l using Debian patch
+    # Upstream bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1526653
+    (fetchpatch {
+      url = "https://salsa.debian.org/mozilla-team/firefox/commit/fd6847c9416f9eebde636e21d794d25d1be8791d.patch";
+      hash = "sha512-K8U3Qyo7g4si2r/8kJdXyRoTrDHAY48x/YJ7YL+YBwlpfNQcHxX+EZvhRzW8FHYW+f7kOnJu9QykhE8PhSQ9zQ==";
+    })
+
+    # Remove this when updating to 79 - The patches are already applied upstream
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1318905
+
+    # Combination of 3 changesets, modified to apply on 78:
+    # - https://hg.mozilla.org/mozilla-central/rev/06d7e1b6b7e7
+    # - https://hg.mozilla.org/mozilla-central/rev/ec48f15d085c
+    # - https://hg.mozilla.org/mozilla-central/rev/6803dda74d33
+    ./add-riscv64-support.patch
+  ];
+
   outputs = [ "out" "dev" ];
   setOutputFlags = false; # Configure script only understands --includedir
 
@@ -69,38 +91,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     readline
     zlib
   ];
-
-  patches = lib.optional (lib.versionAtLeast version "102") [
-    # use pkg-config at all systems
-    ./always-check-for-pkg-config.patch
-    ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot.patch
-  ] ++ lib.optional (lib.versionOlder version "91") [
-    # Fix build failure on armv7l using Debian patch
-    # Upstream bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1526653
-    (fetchpatch {
-      url = "https://salsa.debian.org/mozilla-team/firefox/commit/fd6847c9416f9eebde636e21d794d25d1be8791d.patch";
-      hash = "sha512-K8U3Qyo7g4si2r/8kJdXyRoTrDHAY48x/YJ7YL+YBwlpfNQcHxX+EZvhRzW8FHYW+f7kOnJu9QykhE8PhSQ9zQ==";
-    })
-
-    # Remove this when updating to 79 - The patches are already applied upstream
-    # https://bugzilla.mozilla.org/show_bug.cgi?id=1318905
-
-    # Combination of 3 changesets, modified to apply on 78:
-    # - https://hg.mozilla.org/mozilla-central/rev/06d7e1b6b7e7
-    # - https://hg.mozilla.org/mozilla-central/rev/ec48f15d085c
-    # - https://hg.mozilla.org/mozilla-central/rev/6803dda74d33
-    ./add-riscv64-support.patch
-  ];
-
-  postPatch = lib.optionalString (lib.versionOlder version "102") ''
-    # This patch is a manually applied fix of
-    #   https://bugzilla.mozilla.org/show_bug.cgi?id=1644600
-    # Once that bug is fixed, this can be removed.
-    # This is needed in, for example, `zeroad`.
-    substituteInPlace js/public/StructuredClone.h \
-         --replace "class SharedArrayRawBufferRefs {" \
-                   "class JS_PUBLIC_API SharedArrayRawBufferRefs {"
-  '';
 
   preConfigure = ''
     ${lib.optionalString (lib.versionOlder version "91") ''
@@ -169,6 +159,16 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   enableParallelBuilding = true;
+
+  postPatch = lib.optionalString (lib.versionOlder version "102") ''
+    # This patch is a manually applied fix of
+    #   https://bugzilla.mozilla.org/show_bug.cgi?id=1644600
+    # Once that bug is fixed, this can be removed.
+    # This is needed in, for example, `zeroad`.
+    substituteInPlace js/public/StructuredClone.h \
+         --replace "class SharedArrayRawBufferRefs {" \
+                   "class JS_PUBLIC_API SharedArrayRawBufferRefs {"
+  '';
 
   passthru.tests.run = callPackage ./test.nix {
     spidermonkey = finalAttrs.finalPackage;
