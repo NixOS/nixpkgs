@@ -10,6 +10,9 @@ on:
   #   branches:
   #    - master
   #    - release-**
+permissions:
+  contents: read
+
 jobs:
   tests:
     runs-on: ubuntu-latest
