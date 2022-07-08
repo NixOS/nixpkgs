@@ -783,26 +783,74 @@ rec {
     else
       false;
 
-  /* Parse a string as an int.
+  /* Parse a string as an int. Does not support parsing of integers with preceding zero due to
+  ambiguity between zero-padded and octal numbers.
 
      Type: string -> int
 
      Example:
+
        toInt "1337"
        => 1337
+
        toInt "-4"
        => -4
+
        toInt " 123 "
        => 123
+
        toInt "00024"
-       => 24
+       => error: [json.exception.parse_error.101] parse error at line 1, column 2: syntax error
+       while parsing value - unexpected number literal; expected end of input
+
        toInt "3.14"
        => error: floating point JSON numbers are not supported
   */
   # Obviously, it is a bit hacky to use fromJSON this way.
   toInt = str:
     let
-      # RegEx: Match any leading whitespace, then any zero padding, and capture any remaining
+      # RegEx: Match any leading whitespace, then any digits, and finally match any trailing
+      # whitespace.
+      strippedInput = match "[[:space:]]*([[:digit:]]+)[[:space:]]*" str;
+
+      # RegEx: Match any leading whitespace, then a leading '0', then at least one digit following
+      # after, and finally match any trailing whitespace.
+      isLeadingZero = match "[[:space:]]*0[[:digit:]]+[[:space:]]*" str == [];
+
+      # Attempt to parse input
+      parsedInput = fromJSON (elemAt strippedInput 0);
+    in
+      if isLeadingZero
+      then throw "Ambiguity in ${str} between octal and zero padded integer."
+      else if strippedInput != null && isInt parsedInput
+      then parsedInput
+      else throw "Could not convert ${str} to int.";
+
+
+  /* Parse a string as a base 10 int. This supports parsing of zero-padded integers.
+
+     Type: string -> int
+
+     Example:
+       toIntBase10 "1337"
+       => 1337
+
+       toIntBase10 "-4"
+       => -4
+
+       toIntBase10 " 123 "
+       => 123
+
+       toIntBase10 "00024"
+       => 24
+
+       toIntBase10 "3.14"
+       => error: floating point JSON numbers are not supported
+  */
+  # Obviously, it is a bit hacky to use fromJSON this way.
+  toIntBase10 = str:
+    let
+      # RegEx: Match any leading whitespace, then match any zero padding, capture any remaining
       # digits after that, and finally match any trailing whitespace.
       strippedInput = match "[[:space:]]*0*([[:digit:]]+)[[:space:]]*" str;
 

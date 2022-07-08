@@ -339,20 +339,6 @@ runTests {
     (0 == toInt " 0")
     (0 == toInt "0 ")
     (0 == toInt " 0 ")
-    # Zero Padding
-    (123 == toInt "0123")
-    (123 == toInt "0000123")
-    (0 == toInt "000000")
-    # Whitespace and Zero Padding
-    (123 == toInt " 0123")
-    (123 == toInt "0123 ")
-    (123 == toInt " 0123 ")
-    (123 == toInt " 0000123")
-    (123 == toInt "0000123 ")
-    (123 == toInt " 0000123 ")
-    (0 == toInt " 000000")
-    (0 == toInt "000000 ")
-    (0 == toInt " 000000 ")
   ];
 
   testToIntFails = testAllTrue [
@@ -360,10 +346,52 @@ runTests {
     ( builtins.tryEval (toInt "123 123") == { success = false; value = false; } )
     ( builtins.tryEval (toInt "0 123") == { success = false; value = false; } )
     ( builtins.tryEval (toInt " 0d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "00") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "01") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt "002") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " 002 ") == { success = false; value = false; } )
     ( builtins.tryEval (toInt " foo ") == { success = false; value = false; } )
     ( builtins.tryEval (toInt " foo 123 ") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt " foo 00123 ") == { success = false; value = false; } )
-    ( builtins.tryEval (toInt " foo00123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toInt " foo123 ") == { success = false; value = false; } )
+  ];
+
+  testToIntBase10 = testAllTrue [
+    # Naive
+    (123 == toIntBase10 "123")
+    (0 == toIntBase10 "0")
+    # Whitespace Padding
+    (123 == toIntBase10 " 123")
+    (123 == toIntBase10 "123 ")
+    (123 == toIntBase10 " 123 ")
+    (123 == toIntBase10 "   123   ")
+    (0 == toIntBase10 " 0")
+    (0 == toIntBase10 "0 ")
+    (0 == toIntBase10 " 0 ")
+    # Zero Padding
+    (123 == toIntBase10 "0123")
+    (123 == toIntBase10 "0000123")
+    (0 == toIntBase10 "000000")
+    # Whitespace and Zero Padding
+    (123 == toIntBase10 " 0123")
+    (123 == toIntBase10 "0123 ")
+    (123 == toIntBase10 " 0123 ")
+    (123 == toIntBase10 " 0000123")
+    (123 == toIntBase10 "0000123 ")
+    (123 == toIntBase10 " 0000123 ")
+    (0 == toIntBase10 " 000000")
+    (0 == toIntBase10 "000000 ")
+    (0 == toIntBase10 " 000000 ")
+  ];
+
+  testToIntBase10Fails = testAllTrue [
+    ( builtins.tryEval (toIntBase10 "") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 "123 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 "0 123") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " 0d ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo 123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo 00123 ") == { success = false; value = false; } )
+    ( builtins.tryEval (toIntBase10 " foo00123 ") == { success = false; value = false; } )
   ];
 
 # LISTS
