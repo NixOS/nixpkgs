@@ -1,4 +1,4 @@
-{ pkgs, stdenv, lib, fetchFromGitHub, dataDir ? "/var/lib/snipe-it" }:
+{ pkgs, stdenv, lib, fetchFromGitHub, dataDir ? "/var/lib/snipe-it", mariadb }:
 
 let
   package = (import ./composition.nix {
@@ -13,6 +13,7 @@ let
       ln -s ${dataDir}/public/uploads $out/public/uploads
       ln -s ${dataDir}/bootstrap/cache $out/bootstrap/cache
       chmod +x $out/artisan
+      substituteInPlace config/database.php --replace "env('DB_DUMP_PATH', '/usr/local/bin')" "env('DB_DUMP_PATH', '${mariadb}/bin')"
     '';
   });
 
