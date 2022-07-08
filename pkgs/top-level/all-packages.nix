@@ -29801,7 +29801,9 @@ with pkgs;
 
   rdup = callPackage ../tools/backup/rdup { };
 
-  reaper = callPackage ../applications/audio/reaper { };
+  reaper = callPackage ../applications/audio/reaper {
+    jackLibrary = libjack2; # Another option is "pipewire.jack".
+  };
 
   recapp = callPackage ../applications/video/recapp { };
 
