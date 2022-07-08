@@ -19,6 +19,7 @@
 , zip
 , autoconf213
 , yasm
+, xcbuild
 
 # runtime
 , icu
@@ -26,6 +27,8 @@
 , nspr
 , readline
 , zlib
+, libobjc
+, libiconv
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
@@ -56,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: rec {
     # - https://hg.mozilla.org/mozilla-central/rev/6803dda74d33
     ./add-riscv64-support.patch
   ] ++ lib.optionals (lib.versionAtLeast version "102") [
+    # use pkg-config at all systems
+    ./always-check-for-pkg-config.patch
+    ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot.patch
+
     # Patches required by GJS
     # https://discourse.gnome.org/t/gnome-43-to-depend-on-spidermonkey-102/10658
     # Install ProfilingCategoryList.h
@@ -84,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: rec {
   ] ++ lib.optionals (lib.versionOlder version "91") [
     autoconf213
     yasm # to buid icu? seems weird
+  ] ++ lib.optionals stdenv.isDarwin [
+    xcbuild
   ];
 
   buildInputs = [
@@ -91,6 +100,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     nspr
     readline
     zlib
+  ] ++ lib.optionals stdenv.isDarwin [
+    libobjc
+    libiconv
   ];
 
   depsBuildBuild = [
@@ -152,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   '' + lib.optionalString (lib.versionAtLeast version "91") ''
     export M4=m4
     export AWK=awk
+    export AS=$CC
     export AC_MACRODIR=$PWD/build/autoconf/
 
     pushd js/src
@@ -181,6 +194,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     homepage = "https://spidermonkey.dev/";
     license = licenses.mpl20; # TODO: MPL/GPL/LGPL tri-license for 78.
     maintainers = with maintainers; [ abbradar lostnet catap ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })
