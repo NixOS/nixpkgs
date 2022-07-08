@@ -580,7 +580,8 @@ rec {
         else let
           # Prepares the type definitions for mergeOptionDecls, which
           # annotates submodules types with file locations
-          optionModules = map ({ value, file }:
+          optionModules = map ({ value, file, priority ? null }@args:
+            lib.throwIf (args ? priority) "optionType definitions cannot be ordered"
             {
               _file = file;
               # There's no way to merge types directly from the module system,
@@ -605,10 +606,12 @@ rec {
       let
         inherit (lib.modules) evalModules;
 
-        allModules = defs: map ({ value, file }:
-          if isAttrs value && shorthandOnlyDefinesConfig
-          then { _file = file; config = value; }
-          else { _file = file; imports = [ value ]; }
+        allModules = defs: map ({ value, file, priority ? null }@args:
+          lib.throwIf (args ? priority) "submodule definitions cannot be ordered" (
+            if isAttrs value && shorthandOnlyDefinesConfig
+            then { _file = file; config = value; }
+            else { _file = file; imports = [ value ]; }
+          )
         ) defs;
 
         base = evalModules {
