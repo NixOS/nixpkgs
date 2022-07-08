@@ -1,46 +1,49 @@
 import ../make-test-python.nix ({ pkgs, version ? 4, ... }:
 
-let
+  let
+    inherit (pkgs.lib) optionalString;
 
-  client =
-    { pkgs, ... }:
-    { virtualisation.fileSystems =
-        { "/data" =
-           { # nfs4 exports the export with fsid=0 as a virtual root directory
-             device = if (version == 4) then "server:/" else "server:/data";
-             fsType = "nfs";
-             options = [ "vers=${toString version}" ];
-           };
+    client =
+      { pkgs, ... }:
+      {
+        virtualisation.fileSystems = {
+          "/data" =
+            {
+              # nfs4 exports the export with fsid=0 as a virtual root directory
+              device = if (version == 4) then "server:/" else "server:/data";
+              fsType = "nfs";
+              options = [ "vers=${toString version}" ];
+            };
         };
-      networking.firewall.enable = false; # FIXME: only open statd
+        networking.firewall.enable = false; # FIXME: only open statd
+      };
+
+  in
+
+  {
+    name = "nfs";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ eelco ];
     };
 
-in
+    nodes =
+      {
+        client1 = client;
+        client2 = client;
 
-{
-  name = "nfs";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ eelco ];
-  };
-
-  nodes =
-    { client1 = client;
-      client2 = client;
-
-      server =
-        { ... }:
-        { services.nfs.server.enable = true;
-          services.nfs.server.exports =
-            ''
+        server =
+          { ... }:
+          {
+            services.nfs.server.enable = true;
+            services.nfs.server.exports = ''
               /data 192.168.1.0/255.255.255.0(rw,no_root_squash,no_subtree_check,fsid=0)
             '';
-          services.nfs.server.createMountPoints = true;
-          networking.firewall.enable = false; # FIXME: figure out what ports need to be allowed
-        };
-    };
+            services.nfs.server.createMountPoints = true;
+            networking.firewall.enable = false; # FIXME: figure out what ports need to be allowed
+          };
+      };
 
-  testScript =
-    ''
+    testScript = ''
       import time
 
       server.wait_for_unit("nfs-server")
@@ -65,25 +68,27 @@ in
       with subtest("can get a lock"):
           client2.succeed("time flock -n -s /data/lock true")
 
-      with subtest("client 2 fails to acquire lock held by client 1"):
-          client1.succeed("flock -x /data/lock -c 'touch locked; sleep 100000' >&2 &")
-          client1.wait_for_file("locked")
-          client2.fail("flock -n -s /data/lock true")
+      ${optionalString (version == 4) ''
+        with subtest("client 2 fails to acquire lock held by client 1"):
+            client1.succeed("flock -x /data/lock -c 'touch locked; sleep 100000' >&2 &")
+            client1.wait_for_file("locked")
+            client2.fail("flock -n -s /data/lock true")
 
-      with subtest("client 2 obtains lock after resetting client 1"):
-          client2.succeed(
-              "flock -x /data/lock -c 'echo acquired; touch locked; sleep 100000' >&2 &"
-          )
-          client1.crash()
-          client1.start()
-          client2.wait_for_file("locked")
+        with subtest("client 2 obtains lock after resetting client 1"):
+            client2.succeed(
+                "flock -x /data/lock -c 'echo acquired; touch locked; sleep 100000' >&2 &"
+            )
+            client1.crash()
+            client1.start()
+            client2.wait_for_file("locked")
 
-      with subtest("locks survive server reboot"):
-          client1.wait_for_unit("data.mount")
-          server.shutdown()
-          server.start()
-          client1.succeed("touch /data/xyzzy")
-          client1.fail("time flock -n -s /data/lock true")
+        with subtest("locks survive server reboot"):
+            client1.wait_for_unit("data.mount")
+            server.shutdown()
+            server.start()
+            client1.succeed("touch /data/xyzzy")
+            client1.fail("time flock -n -s /data/lock true")
+      ''}
 
       with subtest("unmounting during shutdown happens quickly"):
           t1 = time.monotonic()
@@ -91,4 +96,4 @@ in
           duration = time.monotonic() - t1
           assert duration < 30, f"shutdown took too long ({duration} seconds)"
     '';
-})
+  })
