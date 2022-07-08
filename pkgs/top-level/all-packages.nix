@@ -9706,6 +9706,10 @@ with pkgs;
     wxGTK30-gtk3 = wxGTK30-gtk3.override { withWebKit = true; };
   };
 
+  polaris = callPackage ../servers/polaris { };
+
+  polaris-web = callPackage ../servers/polaris/web.nix { };
+
   polipo = callPackage ../servers/polipo { };
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
@@ -20947,6 +20951,9 @@ with pkgs;
     s6-networking-man-pages = callPackage ../data/documentation/s6-networking-man-pages {
       inherit buildManPages;
     };
+    s6-portable-utils-man-pages = callPackage ../data/documentation/s6-portable-utils-man-pages {
+      inherit buildManPages;
+    };
 
     mdevd = callPackage ../os-specific/linux/mdevd { };
     nsss = callPackage ../development/libraries/nsss { };
@@ -25291,6 +25298,8 @@ with pkgs;
   s6-man-pages = skawarePackages.s6-man-pages;
 
   s6-networking-man-pages = skawarePackages.s6-networking-man-pages;
+
+  s6-portable-utils-man-pages = skawarePackages.s6-portable-utils-man-pages;
 
   scientifica = callPackage ../data/fonts/scientifica { };
 

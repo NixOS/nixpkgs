@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "nats-py";
-  version = "2.1.3";
+  version = "2.1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-anQBy+TOEGJhAv1C5AvLL1KNLD/jiHA7Tze92Ir7Ie8=";
+    hash = "sha256-gLNMKLkufy/+zS5quH/UYXBIBfkZUyHtB0TiPNEBw6I=";
   };
 
   propagatedBuildInputs = [

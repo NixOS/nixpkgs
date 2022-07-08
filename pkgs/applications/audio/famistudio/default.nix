@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation rec {
   pname = "famistudio";
-  version = "3.3.0";
+  version = "3.3.1";
 
   src = fetchzip {
     url = "https://github.com/BleuBleu/FamiStudio/releases/download/${version}/FamiStudio${lib.strings.concatStrings (lib.splitVersion version)}-LinuxAMD64.zip";
     stripRoot = false;
-    sha256 = "1r7y7z3s3b0zm7lvdgr9z70iall1swzlr3npx7g5azz6vza00vva";
+    sha256 = "sha256-Bgry+cRsmC+aBff6EaeHoGBygpiZS5SmgICPU32zO+c=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];

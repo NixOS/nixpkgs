@@ -4,7 +4,7 @@ with lib; mkCoqDerivation {
   pname = "color";
   owner = "fblanqui";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with versions; switch coq.version [
     {case = range "8.12" "8.16"; out = "1.8.2"; }
     {case = range "8.10" "8.11"; out = "1.7.0"; }
     {case = range "8.8"  "8.9";  out = "1.6.0"; }
