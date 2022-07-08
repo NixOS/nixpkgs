@@ -31,8 +31,10 @@ stdenv.mkDerivation {
   postPatch = ''
     sed -i -e "s:\(^\s*ACLOCAL_AMFLAGS.*\)\s@P4EST_SC_AMFLAGS@\s*$:\1 -I ${p4est-sc}/share/aclocal:" Makefile.am
   '';
-  preConfigure = ''
+  preAutoreconf = ''
     echo "2.8.0" > .tarball-version
+  '';
+  preConfigure = ''
     ${if mpiSupport then "unset CC" else ""}
   '';
 
