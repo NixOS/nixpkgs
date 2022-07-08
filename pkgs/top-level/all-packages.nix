@@ -32399,6 +32399,8 @@ with pkgs;
 
   megaglest = callPackage ../games/megaglest { };
 
+  melvor-mod-manager = callPackage ../games/melvor-mod-manager { };
+
   methane = callPackage ../games/methane { };
 
   mindustry = callPackage ../games/mindustry {

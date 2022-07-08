@@ -1,0 +1,78 @@
+{
+  "name": "melvor-mod-manager",
+  "version": "0.4.2",
+  "private": true,
+  "description": "Melvor Mod Manager (M3)",
+  "author": {
+    "name": "Chase Strackbein",
+    "email": "chase@cherrymace.com"
+  },
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps"
+  },
+  "main": "background.js",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "cheerio": "=1.0.0-rc.10",
+    "core-js": "^3.6.5",
+    "decompress": "^4.2.1",
+    "electron-dl": "^3.2.1",
+    "electron-updater": "^4.3.9",
+    "electron-window-state": "^5.0.3",
+    "fs-extra": "^10.0.0",
+    "open": "^8.2.1",
+    "simple-git": "^2.48.0",
+    "userscript-parser": "^2.2.2",
+    "vue": "^2.6.11",
+    "vue-router": "^3.2.0",
+    "vuetify": "^2.5.6",
+    "vuex": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "^4.5.13",
+    "@vue/cli-plugin-vuex": "^4.5.13",
+    "@vue/cli-service": "^4.5.15",
+    "babel-eslint": "^10.1.0",
+    "electron": "^15.3.0",
+    "electron-builder": "^22.11.7",
+    "electron-devtools-installer": "^3.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "material-design-icons-iconfont": "^6.1.0",
+    "sass": "~1.32.0",
+    "sass-loader": "^10.0.0",
+    "vue-cli-plugin-electron-builder": "^2.1.1",
+    "vue-cli-plugin-vuetify": "^2.4.1",
+    "vue-template-compiler": "^2.6.11",
+    "vuetify-loader": "^1.7.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/CherryMace/melvor-mod-manager"
+}
