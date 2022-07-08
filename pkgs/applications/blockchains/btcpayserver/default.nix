@@ -1,4 +1,7 @@
-{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
 , altcoinSupport ? false }:
 
 buildDotnetModule rec {
@@ -19,8 +22,9 @@ buildDotnetModule rec {
 
   buildType = if altcoinSupport then "Altcoins-Release" else "Release";
 
+  # darwin uses case-insensitive filesystem so these two can be the same file
   postFixup = ''
-    mv $out/bin/{BTCPayServer,btcpayserver}
+    mv $out/bin/{BTCPayServer,btcpayserver} || :
   '';
 
   meta = with lib; {
@@ -28,6 +32,6 @@ buildDotnetModule rec {
     homepage = "https://btcpayserver.org";
     maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
