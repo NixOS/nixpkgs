@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lsp-plugins";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "https://github.com/sadko4u/${pname}/releases/download/${version}/${pname}-src-${version}.tar.gz";
-    sha256 = "sha256-wHibZJbrgy7t0z2rRDe1FUAG38BW/dR0JgoKVWYCn60=";
+    sha256 = "0g1q31wkxb9w792ip9qlh0gvq8gz80c3ssi2zd3pzmp6ikk7k8wi";
   };
 
   nativeBuildInputs = [ pkg-config php makeWrapper ];
