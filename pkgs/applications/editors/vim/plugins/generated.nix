@@ -12708,6 +12708,18 @@ final: prev:
     meta.homepage = "https://github.com/ziglang/zig.vim/";
   };
 
+  zk-nvim = buildVimPluginFrom2Nix {
+    pname = "zk-nvim";
+    version = "2022-06-30";
+    src = fetchFromGitHub {
+      owner = "mickael-menu";
+      repo = "zk-nvim";
+      rev = "fab4bb7fd95edd9eaab7cd7bb517a291351e0574";
+      sha256 = "009mnwbn2g58apcvi3s11w1q0pcxfnw25rb023n6vy107qfszncz";
+    };
+    meta.homepage = "https://github.com/mickael-menu/zk-nvim/";
+  };
+
   zoomwintab-vim = buildVimPluginFrom2Nix {
     pname = "zoomwintab.vim";
     version = "2021-10-10";
