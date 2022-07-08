@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "omnilogic";
-  version = "0.4.6";
+  version = "0.4.9";
 
   disabled = pythonOlder "3.4";
 
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "djtimca";
     repo = "omnilogic-api";
-    rev = version;
-    hash = "sha256-XyAniuUr/Kt8VfBtovD4kKLG+ehOqE26egEG7j8q9LY=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-U+3FI/2qLuPayURP8V+SGuIQK14FWGOgJtpJnmsmulA=";
   };
 
   propagatedBuildInputs = [

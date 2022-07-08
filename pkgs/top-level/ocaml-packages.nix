@@ -505,6 +505,8 @@ let
     hacl-star = callPackage ../development/ocaml-modules/hacl-star { };
     hacl-star-raw = callPackage ../development/ocaml-modules/hacl-star/raw.nix { };
 
+    happy-eyeballs = callPackage ../development/ocaml-modules/happy-eyeballs { };
+
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
     herelib = callPackage ../development/ocaml-modules/herelib { };

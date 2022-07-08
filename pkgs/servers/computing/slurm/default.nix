@@ -48,13 +48,13 @@ stdenv.mkDerivation rec {
   # this doesn't fix tests completely at least makes slurmd to launch
   hardeningDisable = [ "bindnow" ];
 
-  nativeBuildInputs = [ pkg-config libtool python3 ];
+  nativeBuildInputs = [ pkg-config libtool python3 perl ];
   buildInputs = [
-    curl python3 munge perl pam
-      libmysqlclient ncurses gtk2 lz4 rdma-core
-      lua hwloc numactl readline freeipmi shadow.su
-      pmix json_c libjwt libyaml dbus libbpf
-      http-parser
+    curl python3 munge pam
+    libmysqlclient ncurses gtk2 lz4 rdma-core
+    lua hwloc numactl readline freeipmi shadow.su
+    pmix json_c libjwt libyaml dbus libbpf
+    http-parser
   ] ++ lib.optionals enableX11 [ xorg.xauth ];
 
   configureFlags = with lib;

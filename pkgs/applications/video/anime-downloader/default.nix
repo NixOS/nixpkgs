@@ -11,12 +11,6 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-Uk2mtsSrb8fCD9JCFzvLBzMEB7ViVDrKPSOKy9ALJ6o=";
   };
 
-  buildInputs = with python3.pkgs; [
-    jsbeautifier
-    pycryptodome
-    requests
-  ];
-
   propagatedBuildInputs = [
     aria2
     mpv
@@ -27,8 +21,11 @@ python3.pkgs.buildPythonApplication rec {
     click
     coloredlogs
     fuzzywuzzy
+    jsbeautifier
+    pycryptodome
     pySmartDL
     pyqt5
+    requests
     requests-cache
     selenium
     tabulate

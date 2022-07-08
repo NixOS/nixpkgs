@@ -472,6 +472,10 @@ with pkgs;
 
   protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web { };
 
+  protoc-gen-connect-go = callPackage ../development/tools/protoc-gen-connect-go {
+    buildGoModule = buildGo118Module;
+  };
+
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
@@ -4054,6 +4058,8 @@ with pkgs;
 
   lifeograph = callPackage ../applications/editors/lifeograph { };
 
+  limitcpu = callPackage ../tools/misc/limitcpu { };
+
   link-grammar = callPackage ../tools/text/link-grammar { };
 
   linuxptp = callPackage ../os-specific/linux/linuxptp { };
@@ -4982,6 +4988,8 @@ with pkgs;
   libskk = callPackage ../development/libraries/libskk {
     inherit (gnome) gnome-common;
   };
+
+  m17-cxx-demod = callPackage ../applications/radio/m17-cxx-demod { };
 
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
 
@@ -15173,7 +15181,8 @@ with pkgs;
     electron_15
     electron_16
     electron_17
-    electron_18;
+    electron_18
+    electron_19;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -21924,6 +21933,8 @@ with pkgs;
 
     mod_itk = callPackage ../servers/http/apache-modules/mod_itk { };
 
+    mod_mbtiles = callPackage ../servers/http/apache-modules/mod_mbtiles { };
+
     php = pkgs.php.override { inherit apacheHttpd; };
 
     subversion = pkgs.subversion.override { httpServer = true; inherit apacheHttpd; };
@@ -23353,6 +23364,8 @@ with pkgs;
   fscryptctl = callPackage ../os-specific/linux/fscryptctl { };
   # unstable until the first 1.x release
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
+
+  fsverity-utils = callPackage ../os-specific/linux/fsverity-utils { };
 
   fwanalyzer = callPackage ../tools/filesystems/fwanalyzer { };
 
@@ -25090,6 +25103,8 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
+  papirus-folders = callPackage ../data/misc/papirus-folders { };
+
   plasma-overdose-kde-theme = callPackage ../data/themes/plasma-overdose-kde-theme { };
 
   papis = with python3Packages; toPythonApplication papis;
@@ -25836,6 +25851,8 @@ with pkgs;
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
   blender = callPackage  ../applications/misc/blender {
+    # LLVM 11 crashes when compiling GHOST_SystemCocoa.mm
+    stdenv = if stdenv.isDarwin then llvmPackages_10.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
 
@@ -25980,6 +25997,8 @@ with pkgs;
   };
 
   bookworm = callPackage ../applications/office/bookworm { };
+
+  bookletimposer = callPackage ../applications/office/bookletimposer { };
 
   boops = callPackage ../applications/audio/boops { };
 
@@ -29198,6 +29217,11 @@ with pkgs;
   openorienteering-mapper = libsForQt5.callPackage ../applications/gis/openorienteering-mapper { };
 
   openscad = libsForQt5.callPackage ../applications/graphics/openscad {};
+
+  open-stage-control = callPackage ../applications/audio/open-stage-control {
+    electron = electron_15;
+    nodejs = nodejs-16_x;
+  };
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
 
@@ -32476,6 +32500,8 @@ with pkgs;
 
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
+  opensoldat = callPackage ../games/opensoldat { };
+
   portmod = callPackage ../games/portmod { };
 
   tetrio-desktop = callPackage ../games/tetrio-desktop { };
@@ -32693,8 +32719,6 @@ with pkgs;
   # solarus and solarus-quest-editor must use the same version of Qt.
   solarus = libsForQt5.callPackage ../games/solarus { };
   solarus-quest-editor = libsForQt5.callPackage ../development/tools/solarus-quest-editor { };
-
-  soldat-unstable = callPackage ../games/soldat-unstable { };
 
   sollya = callPackage ../development/interpreters/sollya { };
 
@@ -33589,6 +33613,8 @@ with pkgs;
   ipopt = callPackage ../development/libraries/science/math/ipopt { };
 
   gmsh = callPackage ../applications/science/math/gmsh { };
+
+  wcpg = callPackage ../development/libraries/science/math/wcpg { };
 
   zn_poly = callPackage ../development/libraries/science/math/zn_poly { };
 
