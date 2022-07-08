@@ -1,4 +1,8 @@
-{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages }:
+{ lib
+, buildDotnetModule
+, fetchFromGitHub
+, dotnetCorePackages
+}:
 
 buildDotnetModule rec {
   pname = "nbxplorer";
@@ -16,14 +20,15 @@ buildDotnetModule rec {
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_6_0;
 
+  # macOS has a case-insensitive filesystem, so these two can be the same file
   postFixup = ''
-    mv $out/bin/{NBXplorer,nbxplorer}
+    mv $out/bin/{NBXplorer,nbxplorer} || :
   '';
 
   meta = with lib; {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
     maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }
