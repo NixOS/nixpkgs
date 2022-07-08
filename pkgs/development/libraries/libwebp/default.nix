@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
     hash   = "sha256-XX6qOWlIl8TqOQMiGpmmDVKwQnM1taG6lrqq1ZFVk5s=";
   };
 
-  prePatch = "patchShebangs .";
-
   configureFlags = [
     (lib.enableFeature threadingSupport "threading")
     (lib.enableFeature openglSupport "gl")
