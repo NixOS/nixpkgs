@@ -923,8 +923,6 @@ let
 
     nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
 
-    noise = callPackage ../development/ocaml-modules/noise { };
-
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
     notty = callPackage ../development/ocaml-modules/notty { };
