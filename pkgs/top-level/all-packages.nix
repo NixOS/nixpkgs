@@ -781,6 +781,8 @@ with pkgs;
     inherit curl stdenv;
   };
 
+  fetchit = callPackage ../applications/networking/cluster/fetchit { };
+
   fetchzip = callPackage ../build-support/fetchzip { }
     // {
       tests = pkgs.tests.fetchzip;
