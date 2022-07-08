@@ -40752,6 +40752,8 @@ with pkgs;
 
   wifi-password = callPackage ../os-specific/darwin/wifi-password { };
 
+  whoogle-search = callPackage ../applications/networking/whoogle-search { };
+
   qubes-core-vchan-xen = callPackage ../applications/qubes/qubes-core-vchan-xen { };
 
   coz = callPackage ../development/tools/analysis/coz { };
