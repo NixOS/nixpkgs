@@ -2108,6 +2108,15 @@
     githubId = 977929;
     name = "Cody Allen";
   };
+  celestefox = {
+    name = "Celeste Fox";
+    email = "celeste@foxgirl.tech";
+    github = "celestefox";
+    githubId = 2127318;
+    keys = [{
+      fingerprint = "3CFA E523 AEBA 8362 9A66  5D5E 361D 4D53 3A25 164A";
+    }];
+  };
   centromere = {
     email = "nix@centromere.net";
     github = "centromere";
