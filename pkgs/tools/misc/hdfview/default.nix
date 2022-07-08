@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/lib
     cp -a build/dist/HDFView/bin/HDFView $out/bin/
     cp -a build/dist/HDFView/lib/app $out/lib/
+    cp -a build/dist/HDFView/lib/libapplauncher.so $out/lib/
     ln -s ${jdk}/lib/openjdk $out/lib/runtime
 
     mkdir -p $out/share/applications $out/share/icons/hicolor/32x32/apps
