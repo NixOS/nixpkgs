@@ -354,6 +354,7 @@ in
             plasma-browser-integration
             konsole
             oxygen
+            (lib.getBin qttools) # Expose qdbus in PATH
           ];
         in
         requiredPackages
