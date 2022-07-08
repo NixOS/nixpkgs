@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "UxdK2e5VYcOEYdZn0oGRFIVGiwnPixiZ3rOnqJDSQO8=";
   };
 
-  cargoSha256 = "iA8ODh1NmUBfyH6syvVD32jDeLYG2LeLTo2lQoO93lc=";
+  cargoSha256 = "sha256-dJdPs4BJ1R2ZbGmGmvBerLPVqUHn5b/fz9C0kEnxA6U=";
 
   # skip test due FHS dependency
   doCheck = false;
