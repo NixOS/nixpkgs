@@ -19,6 +19,7 @@
 , zip
 , autoconf213
 , yasm
+, xcbuild
 
 # runtime
 , icu
@@ -26,6 +27,8 @@
 , nspr
 , readline
 , zlib
+, libobjc
+, libiconv
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
@@ -54,16 +57,24 @@ stdenv.mkDerivation (finalAttrs: rec {
   ] ++ lib.optionals (lib.versionOlder version "91") [
     autoconf213
     yasm # to buid icu? seems weird
+  ] ++ lib.optionals stdenv.isDarwin [
+    xcbuild
+    libobjc
+    libiconv
   ];
 
   buildInputs = [
-    icu
+    (if lib.versionOlder version "91" then icu67 else icu)
     nspr
     readline
     zlib
   ];
 
-  patches = lib.optional (lib.versionOlder version "91") [
+  patches = lib.optional (lib.versionAtLeast version "102") [
+    # use pkg-config at all systems
+    ./always-check-for-pkg-config.patch
+    ./allow-system-s-nspr-and-icu-on-bootstrapped-sysroot.patch
+  ] ++ lib.optional (lib.versionOlder version "91") [
     # Fix build failure on armv7l using Debian patch
     # Upstream bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1526653
     (fetchpatch {
@@ -101,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     ${lib.optionalString (lib.versionAtLeast version "91") ''
     export M4=m4
     export AWK=awk
+    export AS=$CC
     export AC_MACRODIR=$PWD/build/autoconf/
 
     pushd js/src
@@ -116,9 +128,9 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   configureFlags = [
-    "--with-intl-api"
     "--with-system-icu"
     "--with-system-nspr"
+    "--with-intl-api"
     "--with-system-zlib"
     # Fedora and Arch disable optimize, but it doesn't seme to be necessary
     # It turns on -O3 which some gcc version had a problem with:
@@ -167,6 +179,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     homepage = "https://spidermonkey.dev/";
     license = licenses.mpl20; # TODO: MPL/GPL/LGPL tri-license for 78.
     maintainers = with maintainers; [ abbradar lostnet catap ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })
