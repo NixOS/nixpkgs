@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
     owner = "railwayapp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "UxdK2e5VYcOEYdZn0oGRFIVGiwnPixiZ3rOnqJDSQO8=";
+    sha256 = "sha256-UxdK2e5VYcOEYdZn0oGRFIVGiwnPixiZ3rOnqJDSQO8=";
   };
 
   cargoSha256 = "sha256-dJdPs4BJ1R2ZbGmGmvBerLPVqUHn5b/fz9C0kEnxA6U=";
