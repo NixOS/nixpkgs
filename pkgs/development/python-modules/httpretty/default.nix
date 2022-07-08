@@ -1,19 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, tornado
-, requests
-, httplib2
 , sure
-, nose
-, nose-exclude
-, coverage
-, rednose
-, nose-randomly
 , six
-, mock
 , pytest
 , freezegun
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -31,24 +23,19 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ nose sure coverage mock rednose pytest
-    # Following not declared in setup.py
-    nose-randomly requests tornado httplib2 nose-exclude freezegun
+  checkInputs = [
+    sure
+    freezegun
+    pytestCheckHook
   ];
 
-  checkPhase = ''
-    nosetests tests/unit # functional tests cause trouble requiring /etc/protocol
-  '';
+  disabledTestPaths = [
+    "tests/bugfixes"
+    "tests/functional"
+    "tests/pyopenssl"
+  ];
 
   __darwinAllowLocalNetworking = true;
-
-  # Those flaky tests are failing intermittently on all platforms
-  NOSE_EXCLUDE = lib.concatStringsSep "," [
-    "tests.functional.test_httplib2.test_callback_response"
-    "tests.functional.test_requests.test_streaming_responses"
-    "tests.functional.test_httplib2.test_callback_response"
-    "tests.functional.test_requests.test_httpretty_should_allow_adding_and_overwritting_by_kwargs_u2"
-  ];
 
   meta = with lib; {
     homepage = "https://httpretty.readthedocs.org/";
