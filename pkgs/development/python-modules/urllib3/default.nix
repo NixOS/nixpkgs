@@ -4,16 +4,16 @@
 , buildPythonPackage
 , certifi
 , cryptography
-, python-dateutil
 , fetchPypi
-, isPyPy
 , idna
+, isPyPy
 , mock
 , pyopenssl
 , pysocks
 , pytest-freezegun
 , pytest-timeout
 , pytestCheckHook
+, python-dateutil
 , tornado
 , trustme
 }:
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   # FIXME: remove backwards compatbility hack
   propagatedBuildInputs = passthru.optional-dependencies.brotli
-    ++ passthru.optional-dependencies.secure;
+    ++ passthru.optional-dependencies.socks;
 
   checkInputs = [
     python-dateutil
@@ -65,6 +65,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
+    # Use carefully since pyopenssl is not supported aarch64-darwin
     secure = [ certifi cryptography idna pyopenssl ];
     socks = [ pysocks ];
   };

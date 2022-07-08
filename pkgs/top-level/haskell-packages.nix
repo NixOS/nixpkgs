@@ -49,8 +49,6 @@ let
   # Use this rather than `rec { ... }` below for sake of overlays.
   inherit (pkgs.haskell) compiler packages;
 
-  sphinx = buildPackages.sphinx_offline;
-
 in {
   lib = haskellLibUncomposable;
 
@@ -99,7 +97,7 @@ in {
           packages.ghc8102Binary
         else
           packages.ghc865Binary;
-      inherit sphinx;
+      inherit (buildPackages.python3Packages) sphinx;
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_7;
       llvmPackages = pkgs.llvmPackages_7;
     };
@@ -110,9 +108,12 @@ in {
         # Musl bindists do not exist for ghc 8.6.5, so we use 8.10.* for them
         if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          # to my (@a-m-joseph) knowledge there are no newer official binaries for this platform
+          packages.ghc865Binary
         else
           packages.ghc8107Binary;
-      inherit sphinx;
+      inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -126,9 +127,11 @@ in {
         # the oldest ghc with aarch64-darwin support is 8.10.5
         if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc8107
         else
           packages.ghc8107Binary;
-      inherit sphinx;
+      inherit (buildPackages.python3Packages) sphinx;
       inherit (buildPackages.darwin) autoSignDarwinBinariesHook xattr;
       buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_12;
       llvmPackages = pkgs.llvmPackages_12;
@@ -138,9 +141,11 @@ in {
         # aarch64 ghc8107Binary exceeds max output size on hydra
         if stdenv.isAarch64 || stdenv.isAarch32 then
           packages.ghc8107BinaryMinimal
+        else if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc8107
         else
           packages.ghc8107Binary;
-      inherit sphinx;
+      inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
@@ -149,8 +154,12 @@ in {
       llvmPackages = pkgs.llvmPackages_12;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
-      bootPkgs = packages.ghc8107Binary;
-      inherit sphinx;
+      bootPkgs =
+        if stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian then
+          packages.ghc8107
+        else
+          packages.ghc8107Binary;
+      inherit (buildPackages.python3Packages) sphinx;
       # Need to use apple's patched xattr until
       # https://github.com/xattr/xattr/issues/44 and
       # https://github.com/xattr/xattr/issues/55 are solved.
