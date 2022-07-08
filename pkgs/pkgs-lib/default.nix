@@ -19,9 +19,12 @@
   */
   callOverlay = overlay:
     let
-      result = overlay (pkgs.extend overlay) pkgs;
+      newPkgs = overlay newPkgs pkgs // {
+        pkgs = newPkgs;
+        callPackage = pkgs.lib.callPackageWith newPkgs;
+      };
     in
-    result;
+    overlay newPkgs pkgs;
 
   /*
     Return attribute set of packages from overlays
@@ -33,6 +36,6 @@
       => { a = 42; b = 123; }
   */
   callOverlays = overlays:
-      pkgs.callOverlay (lib.composeManyExtensions overlays);
+    pkgs.callOverlay (lib.composeManyExtensions overlays);
 }
 
