@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
-  version = "2.29.2";
+  version = "2.30.0";
 
   # includes stanc binaries needed to build cmdstand
   src = fetchurl {
     url = "https://github.com/stan-dev/cmdstan/releases/download/v${version}/cmdstan-${version}.tar.gz";
-    sha256 = "sha256-VntTH6c//fcGyqF+szROHftB6GmTyvi6QIdf+RAzUVM=";
+    sha256 = "sha256-AJwuoAQ6pKkcA6x4ky5k88/0+qPnNBOi4CadW+LY3mw=";
   };
 
   buildFlags = [ "build" ];
