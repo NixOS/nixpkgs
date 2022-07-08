@@ -1244,6 +1244,8 @@ with pkgs;
 
   nominatim = callPackage ../servers/nominatim { };
 
+  ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
+
   pferd = callPackage ../tools/misc/pferd {};
 
   qFlipper = libsForQt515.callPackage ../tools/misc/qflipper { };
