@@ -6,14 +6,14 @@
 
 buildGoModule rec {
   pname = "boulder";
-  version = "2022-06-21";
+  version = "2022-07-05";
   rev = "09f87bb31a57f9a04932b7175fab1e3cabffd86f";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
     repo = "boulder";
     rev = "release-${version}";
-    sha256 = "sha256-Q5fMM3UXMFqmpJks1xnINeKBA7dDam4bfczO3D43Yoo=";
+    sha256 = "sha256-wwpn9pk4uY1WLyMcTblcd4hIMHAvvOX9X4U+tp3se4Y=";
   };
 
   vendorSha256 = null;
