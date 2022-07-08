@@ -472,6 +472,7 @@ in {
       "d ${cfg.dataDir}/storage/framework/views    0700 ${user} ${group} - -"
       "d ${cfg.dataDir}/storage/logs               0700 ${user} ${group} - -"
       "d ${cfg.dataDir}/storage/uploads            0700 ${user} ${group} - -"
+      "d ${cfg.dataDir}/storage/private_uploads    0700 ${user} ${group} - -"
     ];
 
     users = {
