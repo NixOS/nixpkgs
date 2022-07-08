@@ -13,6 +13,20 @@ buildGoModule rec {
 
   vendorSha256 = "sha256-cpY+lYM/nAX3nUaFknrRAavxDk8UDzJkoqFjJ1/KWeg=";
 
+  ldflags = [
+    "-X main.themesPath=${placeholder "out"}/share/alps/themes"
+    "-X git.sr.ht/~migadu/alps.PluginDir=${placeholder "out"}/share/alps/plugins"
+  ];
+
+  postPatch = ''
+    substituteInPlace plugin.go --replace "const PluginDir" "var PluginDir"
+  '';
+
+  postInstall = ''
+    mkdir -p "$out/share/alps"
+    cp -r themes plugins "$out/share/alps/"
+  '';
+
   proxyVendor = true;
 
   meta = with lib; {
