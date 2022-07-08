@@ -56,7 +56,9 @@ let
     hasAttr getAttr optional optionals optionalString optionalAttrs maintainers platforms;
 
   # Dependencies that are required to build kernel modules
-  moduleBuildDependencies = [ perl ] ++ optional (lib.versionAtLeast version "4.14") libelf;
+  moduleBuildDependencies = [ perl ]
+    ++ optional (lib.versionAtLeast version "4.14") libelf
+    ++ optional (lib.versionAtLeast version "5.13") zstd;
 
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
