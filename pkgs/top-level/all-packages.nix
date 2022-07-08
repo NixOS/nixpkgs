@@ -10015,6 +10015,10 @@ with pkgs;
 
   ratt = callPackage ../applications/misc/ratt { };
 
+  rbfeeder = callPackage ../applications/radio/rbfeeder {
+    inherit (darwin) DarwinTools;
+  };
+
   rc = callPackage ../shells/rc { };
 
   rcon = callPackage ../tools/networking/rcon { };
