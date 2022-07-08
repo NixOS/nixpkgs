@@ -7,6 +7,7 @@
 , async_unix
 , cohttp
 , conduit-async
+, core_unix
 , uri
 , uri-sexp
 , logs
@@ -25,8 +26,6 @@ buildDunePackage {
   inherit (cohttp)
     version
     src
-    minimumOCamlVersion
-    useDune2
     ;
 
   buildInputs = [ ppx_sexp_conv ];
@@ -38,6 +37,7 @@ buildDunePackage {
     async_unix
     async
     base
+    core_unix
     magic-mime
     logs
     fmt

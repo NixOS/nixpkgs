@@ -32,7 +32,6 @@
 , gnutar
 , json-glib
 , libcap
-, libdwarf
 , libsoup
 , libyaml
 , ostree
@@ -106,7 +105,6 @@ in stdenv.mkDerivation rec {
     glib
     json-glib
     libcap
-    libdwarf
     libsoup
     libxml2
     libyaml
