@@ -921,8 +921,6 @@ let
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
-    nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
-
     nonstd =  callPackage ../development/ocaml-modules/nonstd { };
 
     notty = callPackage ../development/ocaml-modules/notty { };
