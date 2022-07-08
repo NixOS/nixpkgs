@@ -90,8 +90,8 @@ import ./make-test-python.nix ({ pkgs, ... } : {
 
       # Test Nix dæmon usage
       with subtest("nix-daemon cannot be used by all users"):
-          machine.fail("su -l nobody -s /bin/sh -c 'nix ping-store'")
-          machine.succeed("su -l alice -c 'nix ping-store'")
+          machine.fail("su -l nobody -s /bin/sh -c 'nix --extra-experimental-features nix-command ping-store'")
+          machine.succeed("su -l alice -c 'nix --extra-experimental-features nix-command ping-store'")
 
 
       # Test kernel image protection
