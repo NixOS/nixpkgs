@@ -141,6 +141,7 @@ extra-packages:
   - fourmolu == 0.6.0.0                 # 2022-06-05: Last fourmolu version compatible with hls 1.7/ hls-fourmolu-plugin 1.0.3.0
   - hnix-store-core == 0.5.0.0          # 2022-06-17: Until hnix 0.17
   - hnix-store-remote == 0.5.0.0        # 2022-06-17: Until hnix 0.17
+  - vty == 5.35.1                       # 2022-07-08: needed for glirc-2.39.0.1
 
 package-maintainers:
   abbradar:
