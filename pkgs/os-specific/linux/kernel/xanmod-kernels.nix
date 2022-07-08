@@ -39,9 +39,6 @@ let
         # AMD P-state driver
         X86_AMD_PSTATE = yes;
 
-        # Linux RNG framework
-        LRNG = whenOlder "5.18" yes;
-
         # Paragon's NTFS3 driver
         NTFS3_FS = module;
         NTFS3_LZX_XPRESS = yes;
