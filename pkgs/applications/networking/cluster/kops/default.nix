@@ -49,12 +49,6 @@ in
 rec {
   mkKops = generic;
 
-  kops_1_21 = mkKops rec {
-    version = "1.21.4";
-    sha256 = "sha256-f2xOVa3N/GH5IoI6H/QwDdKTeQoF/kEHX6lNytCZ9cs=";
-    rev = "v${version}";
-  };
-
   kops_1_22 = mkKops rec {
     version = "1.22.4";
     sha256 = "sha256-osU7yI77ZALGrAGuP8qAgv+ogDRn+BSVmcjPbi/WEKE=";
