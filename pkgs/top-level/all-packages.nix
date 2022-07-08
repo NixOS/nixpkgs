@@ -26233,6 +26233,10 @@ with pkgs;
 
   setools = callPackage ../os-specific/linux/setools { };
 
+  pyamlboot = callPackage ../tools/pyamlboot {
+    pythonPackages = python3Packages;
+  };
+
   seturgent = callPackage ../os-specific/linux/seturgent { };
 
   sgx-azure-dcap-client = callPackage ../os-specific/linux/sgx/azure-dcap-client { };
