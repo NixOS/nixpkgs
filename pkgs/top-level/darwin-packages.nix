@@ -70,7 +70,7 @@ in
 
 impure-cmds // appleSourcePackages // chooseLibs // {
 
-  inherit apple_sdk;
+  inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0;
 
   stdenvNoCF = stdenv.override {
     extraBuildInputs = [];
