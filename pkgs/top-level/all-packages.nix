@@ -781,6 +781,8 @@ with pkgs;
     inherit curl stdenv;
   };
 
+  fetchit = callPackage ../applications/networking/cluster/fetchit { };
+
   fetchzip = callPackage ../build-support/fetchzip { }
     // {
       tests = pkgs.tests.fetchzip;
@@ -4861,6 +4863,8 @@ with pkgs;
   circus = callPackage ../tools/networking/circus { };
 
   citrix_workspace = citrix_workspace_22_05_0;
+
+  cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_21_01_0
@@ -11975,6 +11979,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation IOBluetooth;
   };
 
+  wipefreespace = callPackage ../tools/filesystems/wipefreespace {};
+
   woeusb = callPackage ../tools/misc/woeusb { };
 
   woeusb-ng = callPackage ../tools/misc/woeusb-ng { };
@@ -12231,6 +12237,8 @@ with pkgs;
   zplug = callPackage ../shells/zsh/zplug { };
 
   zinit = callPackage ../shells/zsh/zinit {} ;
+
+  zint = qt6Packages.callPackage ../development/libraries/zint { };
 
   zs-apc-spdu-ctl = callPackage ../tools/networking/zs-apc-spdu-ctl { };
 
@@ -29779,7 +29787,9 @@ with pkgs;
 
   rdup = callPackage ../tools/backup/rdup { };
 
-  reaper = callPackage ../applications/audio/reaper { };
+  reaper = callPackage ../applications/audio/reaper {
+    jackLibrary = libjack2; # Another option is "pipewire.jack".
+  };
 
   recapp = callPackage ../applications/video/recapp { };
 

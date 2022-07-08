@@ -7,7 +7,6 @@
 , jq
 , yarn
 , fixup_yarn_lock
-, nodejs
 , jitsi-meet
 , conf ? { }
 }:
