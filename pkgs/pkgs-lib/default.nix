@@ -14,7 +14,7 @@
     Type: callOverlay :: (pkgs -> pkgs -> attrs) -> attrs
 
     Example:
-      evalOverlay (final: prev: { a = 42; })
+      callOverlay (final: prev: { a = 42; })
       => { a = 42 }
   */
   callOverlay = overlay:
