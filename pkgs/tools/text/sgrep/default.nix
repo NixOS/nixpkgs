@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, m4, makeWrapper }:
+{ stdenv, sgrep, fetchurl, runCommand, lib, m4, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "sgrep";
@@ -14,6 +14,14 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/sgrep \
       --prefix PATH : ${lib.makeBinPath [ m4 ]}
+  '';
+
+  passthru.tests.smokeTest = runCommand "test-sgrep" { } ''
+    expr='"<foo>" __ "</foo>"'
+    data="<foo>1</foo><bar>2</bar>"
+    ${sgrep}/bin/sgrep "$expr" <<<$data >$out
+    read result <$out
+    [[ $result = 1 ]]
   '';
 
   meta = with lib; {
