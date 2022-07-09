@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    cp -var * $out/
+    cp -ar * $out/
   '';
 
   passthru = {
