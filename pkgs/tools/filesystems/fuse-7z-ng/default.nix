@@ -1,22 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, fuse, p7zip, autoconf, automake, pkg-config, makeWrapper }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fuse
+, p7zip
+, cmake
+, pkg-config
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "fuse-7z-ng";
-  version = "unstable-2014-06-08";
+  version = "unstable-2018-07-20";
 
   src = fetchFromGitHub {
     owner = "kedazo";
     repo = pname;
-    rev = "eb5efb1f304c2b7bc2e0389ba06c9bf2ac4b932c";
-    sha256 = "17v1gcmg5q661b047zxjar735i4d3508dimw1x3z1pk4d1zjhp3x";
+    rev = "7b28cbdba1c2b51cbe3f4521336a1e833bf9cb97";
+    sha256 = "sha256-oNljJTTZuO5XgbUwsiKlkoyf0S7AJglKU8fUBeUoyaQ=";
   };
 
-  nativeBuildInputs = [ pkg-config makeWrapper autoconf automake ];
+  nativeBuildInputs = [ pkg-config makeWrapper cmake ];
+
   buildInputs = [ fuse ];
 
-  preConfigure = "./autogen.sh";
+  #preConfigure = "./autogen.sh";
 
   libs = lib.makeLibraryPath [ p7zip ]; # 'cause 7z.so is loaded manually
+
   postInstall = ''
     wrapProgram $out/bin/${pname} --suffix LD_LIBRARY_PATH : "${libs}/p7zip"
 
@@ -35,5 +44,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ onny ];
   };
 }
