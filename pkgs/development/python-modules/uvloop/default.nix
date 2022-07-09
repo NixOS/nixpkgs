@@ -68,11 +68,11 @@ buildPythonPackage rec {
     # Work around "OSError: AF_UNIX path too long"
     # https://github.com/MagicStack/uvloop/issues/463
     export TMPDIR="/tmp"
+  '' + ''
     # pyopenssl is not well supported by upstream
     # https://github.com/NixOS/nixpkgs/issues/175875
     substituteInPlace tests/test_tcp.py \
       --replace "from OpenSSL import SSL as openssl_ssl" ""
-  '' + ''
     # force using installed/compiled uvloop vs source by moving tests to temp dir
     export TEST_DIR=$(mktemp -d)
     cp -r tests $TEST_DIR
