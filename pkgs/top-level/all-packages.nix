@@ -386,6 +386,8 @@ with pkgs;
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
 
+  copilot-cli = callPackage ../tools/admin/copilot-cli { };
+
   cp437 = callPackage ../tools/misc/cp437 { };
 
   cpm = callPackage ../development/tools/cpm { };
