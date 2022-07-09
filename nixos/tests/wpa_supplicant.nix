@@ -64,8 +64,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
         # network that should be tested
 
         # secrets
-        environmentFile = pkgs.writeText "wpa-secrets" ''
-          PSK_NIXOS_TEST="reproducibility"
+        secretsFile = pkgs.writeText "wpa-secrets" ''
+          psk_nixos_test="reproducibility"
         '';
       };
     };
@@ -95,19 +95,13 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
             psk = "password";
             authProtocols = [ "SAE" ];
           };
-
-          # secrets substitution test cases
-          test1.psk = "@PSK_VALID@";              # should be replaced
-          test2.psk = "@PSK_SPECIAL@";            # should be replaced
-          test3.psk = "@PSK_MISSING@";            # should not be replaced
-          test4.psk = "P@ssowrdWithSome@tSymbol"; # should not be replaced
         };
 
         # secrets
-        environmentFile = pkgs.writeText "wpa-secrets" ''
-          PSK_VALID="S0m3BadP4ssw0rd";
+        secretsFile = pkgs.writeText "wpa-secrets" ''
+          psk_valid="S0m3BadP4ssw0rd";
           # taken from https://github.com/minimaxir/big-list-of-naughty-strings
-          PSK_SPECIAL=",./;'[]\-= <>?:\"{}|_+ !@#$%^\&*()`~";
+          psk_special=",./;'[]\-= <>?:\"{}|_+ !@#$%^\&*()`~";
         '';
       };
     };
@@ -117,7 +111,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       networking.wireless = {
         fallbackToWPA2 = false;
         networks.nixos-test-sae = {
-          psk = "@PSK_NIXOS_TEST@";
+          pskRaw = "ext:psk_nixos_test";
           authProtocols = [ "SAE" ];
         };
       };
@@ -128,7 +122,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       networking.wireless = {
         fallbackToWPA2 = false;
         networks.nixos-test-mixed = {
-          psk = "@PSK_NIXOS_TEST@";
+          pskRaw = "ext:psk_nixos_test";
           authProtocols = [ "SAE" ];
         };
       };
@@ -139,7 +133,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       networking.wireless = {
         fallbackToWPA2 = true;
         networks.nixos-test-mixed = {
-          psk = "@PSK_NIXOS_TEST@";
+          pskRaw = "ext:psk_nixos_test";
           authProtocols = [ "WPA-PSK-SHA256" ];
         };
       };
@@ -150,7 +144,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       networking.wireless = {
         fallbackToWPA2 = true;
         networks.nixos-test-wpa2 = {
-          psk = "@PSK_NIXOS_TEST@";
+          pskRaw = "ext:psk_nixos_test";
           authProtocols = [ "WPA-PSK-SHA256" ];
         };
       };
@@ -159,30 +153,20 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
 
   testScript =
     ''
-      config_file = "/run/wpa_supplicant/wpa_supplicant.conf"
-
-      with subtest("Configuration file is inaccessible to other users"):
-          basic.wait_for_file(config_file)
-          basic.fail(f"sudo -u nobody ls {config_file}")
-
-      with subtest("Secrets variables have been substituted"):
-          basic.fail(f"grep -q @PSK_VALID@ {config_file}")
-          basic.fail(f"grep -q @PSK_SPECIAL@ {config_file}")
-          basic.succeed(f"grep -q @PSK_MISSING@ {config_file}")
-          basic.succeed(f"grep -q P@ssowrdWithSome@tSymbol {config_file}")
-
-      with subtest("WPA2 fallbacks have been generated"):
-          assert int(basic.succeed(f"grep -c sae-only {config_file}")) == 1
-          assert int(basic.succeed(f"grep -c mixed-wpa {config_file}")) == 2
-
-      # save file for manual inspection
-      basic.copy_from_vm(config_file)
-
       with subtest("Daemon is running and accepting connections"):
           basic.wait_for_unit("wpa_supplicant-wlan1.service")
           status = basic.succeed("wpa_cli -i wlan1 status")
           assert "Failed to connect" not in status, \
                  "Failed to connect to the daemon"
+
+      with subtest("WPA2 fallbacks have been generated"):
+          command = basic.succeed("ps -o cmd -p $(pgrep wpa_supplicant)")
+          config_file = command.split("-c")[1].strip()
+          assert int(basic.succeed(f"grep -c sae-only {config_file}")) == 1
+          assert int(basic.succeed(f"grep -c mixed-wpa {config_file}")) == 2
+
+      # save file for manual inspection
+      basic.copy_from_vm(config_file)
 
       machineSae.wait_for_unit("hostapd.service")
       machineSae.copy_from_vm("/run/hostapd/wlan0.hostapd.conf")
