@@ -12,10 +12,13 @@
 buildPythonPackage rec {
   pname = "h5netcdf";
   version = "1.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-d2cE+s2LgiRtbUBoxQXDibO3C5v5kgzPusfzXNxjTaw=";
+    hash = "sha256-d2cE+s2LgiRtbUBoxQXDibO3C5v5kgzPusfzXNxjTaw=";
   };
 
  nativeBuildInputs = [
@@ -31,14 +34,16 @@ buildPythonPackage rec {
     netcdf4
   ];
 
-  disabled = pythonOlder "3.6";
-
   dontUseSetuptoolsCheck = true;
 
-  meta = {
+  pythonImportsCheck = [
+    "h5netcdf"
+  ];
+
+  meta = with lib; {
     description = "netCDF4 via h5py";
     homepage = "https://github.com/shoyer/h5netcdf";
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ];
   };
-
 }
