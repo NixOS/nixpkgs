@@ -800,8 +800,7 @@ rec {
        => 123
 
        toInt "00024"
-       => error: [json.exception.parse_error.101] parse error at line 1, column 2: syntax error
-       while parsing value - unexpected number literal; expected end of input
+       => error: Ambiguity in interpretation of 00024 between octal and zero padded integer.
 
        toInt "3.14"
        => error: floating point JSON numbers are not supported
@@ -821,7 +820,7 @@ rec {
       parsedInput = fromJSON (elemAt strippedInput 0);
     in
       if isLeadingZero
-      then throw "Ambiguity in ${str} between octal and zero padded integer."
+      then throw "Ambiguity in interpretation of ${str} between octal and zero padded integer."
       else if strippedInput != null && isInt parsedInput
       then parsedInput
       else throw "Could not convert ${str} to int.";
