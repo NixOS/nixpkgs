@@ -14,8 +14,14 @@ on:
     # Merge every 6 hours
     - cron:  '0 */6 * * *'
 
+permissions:
+  contents: read
+
 jobs:
   periodic-merge:
+    permissions:
+      contents: write  # for devmasx/merge-branch to merge branches
+      issues: write  # for peter-evans/create-or-update-comment to create or update comment
     if: github.repository_owner == 'NixOS'
     runs-on: ubuntu-latest
     strategy:
