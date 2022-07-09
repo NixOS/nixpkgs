@@ -31390,6 +31390,8 @@ with pkgs;
 
   xnee = callPackage ../tools/X11/xnee { };
 
+  xnotify = callPackage ../tools/X11/xnotify { };
+
   xvidcap = callPackage ../applications/video/xvidcap {
     inherit (gnome2) scrollkeeper libglade;
   };

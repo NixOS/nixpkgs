@@ -8,15 +8,19 @@
 , extractcode-7z
 , pytestCheckHook
 , pytest-xdist
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "extractcode";
   version = "31.0.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-gIGTkum8+BKfdNiQT+ipjA3+0ngjVoQnNygsAoMRPYg=";
+    hash = "sha256-gIGTkum8+BKfdNiQT+ipjA3+0ngjVoQnNygsAoMRPYg=";
   };
 
   dontConfigure = true;
@@ -51,6 +55,7 @@ buildPythonPackage rec {
     "test_can_extract_qcow2_vm_image_as_tarball"
     "test_can_extract_qcow2_vm_image_not_as_tarball"
     "test_can_listfs_from_qcow2_image"
+    "test_get_extractor_qcow2"
   ];
 
   pythonImportsCheck = [

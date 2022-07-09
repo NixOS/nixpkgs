@@ -7,7 +7,6 @@
   python3,
   ripgrep,
   stdenv,
-  testVersion,
   timg,
   xdg-utils,
   xsel,
