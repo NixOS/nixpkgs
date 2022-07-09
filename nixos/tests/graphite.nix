@@ -19,7 +19,6 @@ import ./make-test-python.nix ({ pkgs, ... } :
           };
           carbon.enableCache = true;
           seyren.enable = false;  # Implicitely requires openssl-1.0.2u which is marked insecure
-          beacon.enable = true;
         };
       };
   };
@@ -29,7 +28,6 @@ import ./make-test-python.nix ({ pkgs, ... } :
     one.wait_for_unit("default.target")
     one.wait_for_unit("graphiteWeb.service")
     one.wait_for_unit("graphiteApi.service")
-    one.wait_for_unit("graphite-beacon.service")
     one.wait_for_unit("carbonCache.service")
     # The services above are of type "simple". systemd considers them active immediately
     # even if they're still in preStart (which takes quite long for graphiteWeb).

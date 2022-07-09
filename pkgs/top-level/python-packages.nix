@@ -3755,8 +3755,6 @@ in {
 
   graphite_api = callPackage ../development/python-modules/graphite-api { };
 
-  graphite_beacon = callPackage ../development/python-modules/graphite_beacon { };
-
   graphite-web = callPackage ../development/python-modules/graphite-web { };
 
   graphene = callPackage ../development/python-modules/graphene { };
@@ -10656,7 +10654,7 @@ in {
   # Used by circus and grab-site, 2020-08-29
   tornado_4 = callPackage ../development/python-modules/tornado/4.nix { };
 
-  # Used by streamlit, graphite_beacon, 2021-01-29
+  # Used by streamlit, 2021-01-29
   tornado_5 = callPackage ../development/python-modules/tornado/5.nix { };
 
   torrequest = callPackage ../development/python-modules/torrequest { };
