@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, perl, bison, bootstrap_cmds
 , openssl, openldap, libedit, keyutils
+, nixosTests
 
 # Extra Arguments
 , type ? ""
@@ -89,5 +90,8 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix ++ platforms.windows;
   };
 
-  passthru.implementation = "krb5";
+  passthru = {
+    implementation = "krb5";
+    tests = { inherit (nixosTests) kerberos; };
+  };
 }
