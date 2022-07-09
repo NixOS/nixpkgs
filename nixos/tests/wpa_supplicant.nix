@@ -65,8 +65,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
         # network that should be tested
 
         # secrets
-        environmentFile = pkgs.writeText "wpa-secrets" ''
-          PSK_NIXOS_TEST="reproducibility"
+        secretsFile = pkgs.writeText "wpa-secrets" ''
+          psk_nixos_test="reproducibility"
         '';
       };
     };
@@ -96,22 +96,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
             psk = "password";
             authProtocols = [ "SAE" ];
           };
-
-          # secrets substitution test cases
-          test1.psk = "@PSK_VALID@";              # should be replaced
-          test2.psk = "@PSK_SPECIAL@";            # should be replaced
-          test3.psk = "@PSK_MISSING@";            # should not be replaced
-          test4.psk = "P@ssowrdWithSome@tSymbol"; # should not be replaced
-          test5.psk = "@PSK_AWK_REGEX@";          # should be replaced
         };
-
-        # secrets
-        environmentFile = pkgs.writeText "wpa-secrets" ''
-          PSK_VALID="S0m3BadP4ssw0rd";
-          # taken from https://github.com/minimaxir/big-list-of-naughty-strings
-          PSK_SPECIAL=",./;'[]\/\-= <>?:\"{}|_+ !@#$%^&*()`~";
-          PSK_AWK_REGEX="PassowrdWith&symbol";
-        '';
       };
     };
 
@@ -135,7 +120,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       networking.wireless = {
         fallbackToWPA2 = false;
         networks.nixos-test-sae = {
-          psk = "@PSK_NIXOS_TEST@";
+          pskRaw = "ext:psk_nixos_test";
           authProtocols = [ "SAE" ];
         };
       };
@@ -146,7 +131,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       networking.wireless = {
         fallbackToWPA2 = false;
         networks.nixos-test-mixed = {
-          psk = "@PSK_NIXOS_TEST@";
+          pskRaw = "ext:psk_nixos_test";
           authProtocols = [ "SAE" ];
         };
       };
@@ -157,7 +142,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       networking.wireless = {
         fallbackToWPA2 = true;
         networks.nixos-test-mixed = {
-          psk = "@PSK_NIXOS_TEST@";
+          pskRaw = "ext:psk_nixos_test";
           authProtocols = [ "WPA-PSK-SHA256" ];
         };
       };
@@ -168,7 +153,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
       networking.wireless = {
         fallbackToWPA2 = true;
         networks.nixos-test-wpa2 = {
-          psk = "@PSK_NIXOS_TEST@";
+          pskRaw = "ext:psk_nixos_test";
           authProtocols = [ "WPA-PSK-SHA256" ];
         };
       };
@@ -177,18 +162,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
 
   testScript =
     ''
-      config_file = "/run/wpa_supplicant/wpa_supplicant.conf"
-
-      with subtest("Configuration file is inaccessible to other users"):
-          basic.wait_for_file(config_file)
-          basic.fail(f"sudo -u nobody ls {config_file}")
-
-      with subtest("Secrets variables have been substituted"):
-          basic.fail(f"grep -q @PSK_VALID@ {config_file}")
-          basic.fail(f"grep -q @PSK_SPECIAL@ {config_file}")
-          basic.succeed(f"grep -q @PSK_MISSING@ {config_file}")
-          basic.succeed(f"grep -q P@ssowrdWithSome@tSymbol {config_file}")
-          basic.succeed(f"grep -q 'PassowrdWith&symbol' {config_file}")
+      # get the configuration file
+      basic.wait_for_unit("wpa_supplicant-wlan1.service")
+      cmdline = basic.succeed("cat /proc/$(pgrep wpa)/cmdline").split('\x00')
+      config_file = cmdline[cmdline.index("-c") + 1]
 
       with subtest("WPA2 fallbacks have been generated"):
           assert int(basic.succeed(f"grep -c sae-only {config_file}")) == 1
@@ -204,7 +181,6 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
                  "Failed to connect to the daemon"
 
       with subtest("Daemon can be configured imperatively"):
-          imperative.wait_for_unit("wpa_supplicant-wlan1.service")
           imperative.wait_until_succeeds("wpa_cli -i wlan1 status")
           imperative.succeed("wpa_cli -i wlan1 add_network")
           imperative.succeed("wpa_cli -i wlan1 set_network 0 ssid '\"nixos-test\"'")
