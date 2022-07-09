@@ -32273,6 +32273,8 @@ with pkgs;
 
   ideogram = callPackage ../applications/graphics/ideogram { };
 
+  instaloader = python3Packages.callPackage ../tools/misc/instaloader { };
+
   instead = callPackage ../games/instead { };
 
   instead-launcher = callPackage ../games/instead-launcher { };
