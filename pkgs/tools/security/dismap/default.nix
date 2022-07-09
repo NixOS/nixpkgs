@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "dismap";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "zhzyker";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WaQdDcBvv4mHdPFAB+spC64YeT3jlfyMYNsTjBILjwA=";
+    sha256 = "sha256-YjjiS6iLIQvrPS378v2nyrgwWBJ9YtDeNTPz0ze05mU=";
   };
 
   vendorSha256 = "sha256-GnchyE2TswvjYlehhMYesZruTTwyTorfR+17K0RXXFY=";
