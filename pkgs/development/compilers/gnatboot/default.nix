@@ -5,10 +5,9 @@
 stdenv.mkDerivation rec {
   pname = "gnatboot";
   version = "11.2.0-4";
+
   src = fetchzip {
-    url =
-      "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-"
-      + version + "/gnat-x86_64-linux-" + version + ".tar.gz";
+    url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-${version}/gnat-x86_64-linux-${version}.tar.gz";
     hash = "sha256-8fMBJp6igH+Md5jE4LMubDmC4GLt4A+bZG/Xcz2LAJQ=";
   };
 
