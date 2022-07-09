@@ -11,76 +11,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-8fMBJp6igH+Md5jE4LMubDmC4GLt4A+bZG/Xcz2LAJQ=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    lzma
-    ncurses5
-    readline
-    gmp
-    mpfr
-    expat
-    libipt
-    zlib
-    dejagnu
-    sourceHighlight
-    python3
-    elfutils
-    guile
-    glibc
-  ];
-
   propagatedNativeBuildInputs = [
     autoPatchelfHook
-    lzma
-    ncurses5
-    readline
-    gmp
-    mpfr
-    expat
-    libipt
-    zlib
     dejagnu
-    sourceHighlight
-    python3
     elfutils
-    guile
-    glibc
-  ];
-
-  buildInputs = [
-    autoPatchelfHook
-    lzma
-    ncurses5
-    readline
-    gmp
-    mpfr
     expat
-    libipt
-    zlib
-    dejagnu
-    sourceHighlight
-    python3
-    elfutils
-    guile
     glibc
-  ];
-
-  propagatedBuildInputs = [
-    autoPatchelfHook
-    lzma
-    ncurses5
-    readline
     gmp
-    mpfr
-    expat
-    libipt
-    zlib
-    dejagnu
-    sourceHighlight
-    python3
-    elfutils
     guile
-    glibc
+    libipt
+    lzma
+    mpfr
+    ncurses5
+    python3
+    readline
+    sourceHighlight
+    zlib
   ];
 
   installPhase = ''
