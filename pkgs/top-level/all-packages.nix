@@ -7618,6 +7618,8 @@ with pkgs;
 
   jsubfinder = callPackage ../tools/security/jsubfinder { };
 
+  jtag-remote-server = callPackage ../development/embedded/jtag-remote-server { };
+
   jtc = callPackage ../development/tools/jtc { };
 
   jumpapp = callPackage ../tools/X11/jumpapp {};
