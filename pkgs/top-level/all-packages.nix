@@ -28727,6 +28727,8 @@ with pkgs;
 
   rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw { };
 
+  rofi-top = callPackage ../applications/misc/rofi-top { };
+
   rofi-vpn = callPackage ../applications/networking/rofi-vpn { };
 
   ympd = callPackage ../applications/audio/ympd { };
