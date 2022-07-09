@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "resampy";
-  version = "0.3.0";
+  version = "0.3.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "bmcfee";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-OVj5dQafIoKeA04yTGBKTinldMjEccxrdiuRFIvRzcE=";
+    hash = "sha256-kqRWW50VQO8H02vHgbdHo578c2jXX4fgF8AY6JuQOSI=";
   };
 
   propagatedBuildInputs = [

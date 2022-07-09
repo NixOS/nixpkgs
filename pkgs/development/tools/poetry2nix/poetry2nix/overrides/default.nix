@@ -11,7 +11,28 @@ let
     , extraAttrs ? [ ]
     }:
     let
-      buildSystem = if attr == "cython" then self.python.pythonForBuild.pkgs.cython else self.${attr};
+      buildSystem =
+        if builtins.isAttrs attr then
+          let
+            fromIsValid =
+              if builtins.hasAttr "from" attr then
+                lib.versionAtLeast drv.version attr.from
+              else
+                true;
+            untilIsValid =
+              if builtins.hasAttr "until" attr then
+                lib.versionOlder drv.version attr.until
+              else
+                true;
+            intendedBuildSystem =
+              if attr.buildSystem == "cython" then
+                self.python.pythonForBuild.cython
+              else
+                self.${attr.buildSystem};
+          in
+          if fromIsValid && untilIsValid then intendedBuildSystem else null
+        else
+          if attr == "cython" then self.python.pythonForBuild.pkgs.cython else self.${attr};
     in
     (
       # Flit only works on Python3
@@ -24,7 +45,10 @@ let
             { }
           else
             {
-              nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.${attr} ] ++ map (a: self.${a}) extraAttrs;
+              nativeBuildInputs =
+                (old.nativeBuildInputs or [ ])
+                ++ lib.optionals (!(builtins.isNull buildSystem)) [ buildSystem ]
+                ++ map (a: self.${a}) extraAttrs;
             }
         )
     );
@@ -301,7 +325,10 @@ lib.composeManyExtensions [
             "36.0.1" = "sha256-kozYXkqt1Wpqyo9GYCwN08J+zV92ZWFJY/f+rulxmeQ=";
             "36.0.2" = "1a0ni1a3dbv2dvh6gx2i54z8v5j9m6asqg97kkv7gqb1ivihsbp8";
             "37.0.2" = "sha256-qvrxvneoBXjP96AnUPyrtfmCnZo+IriHR5HbtWQ5Gk8=";
-          }.${version} or null;
+            "37.0.4" = "sha256-f8r6QclTwkgK20CNe9i65ZOqvSUeDc4Emv6BFBhh1hI";
+          }.${version} or (
+            lib.warn "Unknown cryptography version: '${version}'. Please update getCargoHash." lib.fakeHash
+          );
           sha256 = getCargoHash super.cryptography.version;
           scrypto =
             if lib.versionAtLeast super.cryptography.version "35" && sha256 == null then
@@ -501,6 +528,12 @@ lib.composeManyExtensions [
         preConfigure = ''
           ${old.preConfigure or ""}
           sed -i '/eth-hash/d' setup.py
+        '';
+      });
+
+      evdev = super.evdev.overridePythonAttrs (old: {
+        preConfigure = ''
+          substituteInPlace setup.py --replace /usr/include/linux ${pkgs.linuxHeaders}/include/linux
         '';
       });
 
@@ -853,6 +886,16 @@ lib.composeManyExtensions [
         propagatedBuildInputs = [ pkgs.libvirt ];
       });
 
+      lightgbm = super.lightgbm.overridePythonAttrs (
+        old: {
+          nativeBuildInputs = [ pkgs.cmake ] ++ old.nativeBuildInputs;
+          dontUseCmakeConfigure = true;
+          postConfigure = ''
+            export HOME=$(mktemp -d)
+          '';
+        }
+      );
+
       llvmlite = super.llvmlite.overridePythonAttrs (
         old:
         let
@@ -1112,8 +1155,8 @@ lib.composeManyExtensions [
             })
           ] ++ lib.optionals (lib.strings.versionAtLeast old.version "0.960") [
             (pkgs.fetchpatch {
-              url = "https://github.com/python/mypy/compare/a6166b2f..5b3c9888.patch";
-              sha256 = "sha256-3QY99ctkIv9PoNfcTKF9TZFBwAIVOqPLKBVP6rDQ9FU=";
+              url = "https://github.com/python/mypy/commit/2004ae023b9d3628d9f09886cbbc20868aee8554.patch";
+              sha256 = "sha256-y+tXvgyiECO5+66YLvaje8Bz5iPvfWNIBJcsnZ2nOdI=";
             })
           ];
         }
@@ -1217,6 +1260,7 @@ lib.composeManyExtensions [
           getCargoHash = version: {
             "3.6.7" = "sha256-sz2k9podPB6QSptkyOu7+BoVTrKhefizRtYU+MICPt4=";
             "3.6.8" = "sha256-vpfceVtYkU09xszNIihY1xbqGWieqDquxwsAmDH8jd4=";
+            "3.7.2" = "sha256-2U37IhftNYjH7sV7Nh51YpR/WjmPmmzX/aGuHsFgwf4=";
           }.${version} or null;
         in
         super.orjson.overridePythonAttrs (old: {
@@ -1554,6 +1598,14 @@ lib.composeManyExtensions [
           '';
         }
       );
+
+      pynput = super.pynput.overridePythonAttrs (old: {
+        nativeBuildInputs = (old.nativeBuildInputs or [ ])
+          ++ [ self.sphinx ];
+
+        propagatedBuildInputs = (old.propagatedBuildInputs or [ ])
+          ++ [ self.setuptools-lint ];
+      });
 
       pymssql = super.pymssql.overridePythonAttrs (old: {
         buildInputs = (old.buildInputs or [ ])
@@ -1898,7 +1950,8 @@ lib.composeManyExtensions [
         # Local setuptools versions like "x.y.post0" confuse an internal check
         postPatch = ''
           substituteInPlace setup.py \
-            --replace 'setuptools_version.' '"${self.setuptools.version}".'
+            --replace 'setuptools_version.' '"${self.setuptools.version}".' \
+            --replace 'pytest-runner==' 'pytest-runner>='
         '';
       });
 
@@ -2369,6 +2422,16 @@ lib.composeManyExtensions [
         buildInputs = (old.buildInputs or [ ]) ++ [ self.Babel ];
       });
 
+      nbconvert = super.nbconvert.overridePythonAttrs (_: {
+        postPatch = lib.optionalString (lib.versionAtLeast self.nbconvert.version "6.5.0") ''
+          substituteInPlace \
+            ./nbconvert/exporters/templateexporter.py \
+            --replace \
+            'root_dirs.extend(jupyter_path())' \
+            'root_dirs.extend(jupyter_path() + [os.path.join("@out@", "share", "jupyter")])' \
+            --subst-var out
+        '';
+      });
     }
   )
 
