@@ -43,6 +43,7 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = let
     relaxedConstraints = [
+      "cython"
       "gruut"
       "librosa"
       "mecab-python3"
