@@ -11856,6 +11856,8 @@ with pkgs;
 
   xfstests = callPackage ../tools/misc/xfstests { };
 
+  xprompt = callPackage ../tools/X11/xprompt { };
+
   xprintidle = callPackage ../tools/X11/xprintidle {};
 
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng {};
@@ -34016,6 +34018,8 @@ with pkgs;
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
+
+  nvc = callPackage ../applications/science/electronics/nvc { };
 
   openems = callPackage ../applications/science/electronics/openems {
     qcsxcad = libsForQt5.qcsxcad;
