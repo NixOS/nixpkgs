@@ -8789,6 +8789,8 @@ in {
 
   pyinfra = callPackage ../development/python-modules/pyinfra { };
 
+  pymodes = callPackage ../development/python-modules/pymodes { };
+
   pytibber = callPackage ../development/python-modules/pytibber { };
 
   pytile = callPackage ../development/python-modules/pytile { };
