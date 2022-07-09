@@ -57,12 +57,14 @@ buildPythonPackage rec {
 
   checkInputs = [
     pytestCheckHook
-  ] ++ lib.concatLists (lib.attrVals [
+  ] ++ lib.concatLists (lib.attrVals ([
     "woff"
     "interpolatable"
-    "pathops"
+  ] ++ lib.optionals (!skia-pathops.meta.broken) [
+    "pathops" # broken
+  ] ++ [
     "repacker"
-  ] passthru.optional-dependencies);
+  ]) passthru.optional-dependencies);
 
   pythonImportsCheck = [ "fontTools" ];
 
