@@ -5,6 +5,7 @@
 , enableSSL3 ? false
 , enableKTLS ? stdenv.isLinux
 , disableDeprecated ? false
+, disableTests ? false
 , static ? stdenv.hostPlatform.isStatic
 # Used to avoid cross compiling perl, for example, in darwin bootstrap tools.
 # This will cause c_rehash to refer to perl via the environment, but otherwise
@@ -138,6 +139,8 @@ let
       # KTLS should work on FreeBSD 13+ as well, so we could enable it if someone tests it.
       ++ lib.optional (lib.versionAtLeast version "3.0.0" && enableKTLS) "enable-ktls"
       ++ lib.optional (lib.versionAtLeast version "1.1.1" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+      ++ lib.optional disableDeprecated "no-deprecated"
+      ++ lib.optional disableTests "no-tests"
       # OpenSSL needs a specific `no-shared` configure flag.
       # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
       # for a comprehensive list of configuration options.
@@ -147,7 +150,6 @@ let
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
       ++ lib.optional withZlib "zlib"
-      ++ lib.optional disableDeprecated "no-deprecated"
       ;
 
     makeFlags = [
