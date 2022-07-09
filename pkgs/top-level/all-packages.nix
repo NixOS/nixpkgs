@@ -38808,6 +38808,8 @@ with pkgs;
 
   xtris = callPackage ../games/xtris { };
 
+  xu4 = callPackage ../games/xu4 { };
+
   inherit (callPackage ../games/quake2/yquake2 {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenAL;
   })
