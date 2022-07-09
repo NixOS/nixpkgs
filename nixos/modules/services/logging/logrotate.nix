@@ -167,22 +167,23 @@ let
       sed -e "s/\bsu\s.*/su $user $group/" \
           -e "s/\b\(create\s\+[0-9]*\s*\|createolddir\s\+[0-9]*\s\+\).*/\1$user $group/" \
           -e "1imissingok" -e "s/\bnomissingok\b//" \
-          $out > /tmp/logrotate.conf
+          $out > logrotate.conf
       # Since this makes for very verbose builds only show real error.
       # There is no way to control log level, but logrotate hardcodes
       # 'error:' at common log level, so we can use grep, taking care
       # to keep error codes
       set -o pipefail
-      if ! ${pkgs.buildPackages.logrotate}/sbin/logrotate --debug /tmp/logrotate.conf 2>&1 \
-          | ( ! grep "error:" ) > /tmp/logrotate-error; then
+      if ! ${pkgs.buildPackages.logrotate}/sbin/logrotate -s logrotate.status \
+                      --debug logrotate.conf 2>&1 \
+                  | ( ! grep "error:" ) > logrotate-error; then
               echo "Logrotate configuration check failed."
               echo "The failing configuration (after adjustments to pass tests in sandbox) was:"
               printf "%s\n" "-------"
-              cat /tmp/logrotate.conf
+              cat logrotate.conf
               printf "%s\n" "-------"
               echo "The error reported by logrotate was as follow:"
               printf "%s\n" "-------"
-              cat /tmp/logrotate-error
+              cat logrotate-error
               printf "%s\n" "-------"
               echo "You can disable this check with services.logrotate.checkConfig = false,"
               echo "but if you think it should work please report this failure along with"
