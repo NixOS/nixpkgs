@@ -771,6 +771,8 @@ in {
 
   atomicwrites = callPackage ../development/python-modules/atomicwrites { };
 
+  atomicwrites-homeassistant = callPackage ../development/python-modules/atomicwrites-homeassistant { };
+
   atomman = callPackage ../development/python-modules/atomman { };
 
   atpublic = callPackage ../development/python-modules/atpublic { };

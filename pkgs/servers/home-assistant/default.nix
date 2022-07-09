@@ -190,7 +190,7 @@ let
   extraPackagesFile = writeText "home-assistant-packages" (lib.concatMapStringsSep "\n" (pkg: pkg.pname) extraBuildInputs);
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "2022.7.0";
+  hassVersion = "2022.7.2";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -208,7 +208,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = version;
-    hash = "sha256-DDRut+3wJutXcQVOf2KU+XuHs5XuKkd5R7dQIXwOIrU=";
+    hash = "sha256-POOt5SjDa9jnBqxhD0LUopfAmZ9lpnb7mj7SSVoqTr0=";
   };
 
   # leave this in, so users don't have to constantly update their downstream patch handling
@@ -245,7 +245,7 @@ in python.pkgs.buildPythonApplication rec {
     aiohttp
     astral
     async-timeout
-    atomicwrites
+    atomicwrites-homeassistant
     attrs
     awesomeversion
     bcrypt

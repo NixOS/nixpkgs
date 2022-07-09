@@ -6707,7 +6707,7 @@
   };
   kilimnik = {
     email = "mail@kilimnik.de";
-    github = "killercup";
+    github = "kilimnik";
     githubId = 5883283;
     name = "Daniel Kilimnik";
   };
