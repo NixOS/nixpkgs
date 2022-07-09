@@ -22,11 +22,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "hqplayerd";
-  version = "4.31.0-89";
+  version = "4.32.2-92";
 
   src = fetchurl {
     url = "https://www.signalyst.eu/bins/${pname}/fc35/${pname}-${version}.fc35.x86_64.rpm";
-    hash = "sha256-L9S3MIbvvBViKSxu0x/GkE/pa61NETtw4vA8xM4rJEg=";
+    hash = "sha256-chgzu5r35VTSc1xOVTPCWCRrjABOy+vs57SsKOSzvkM=";
   };
 
   unpackPhase = ''
