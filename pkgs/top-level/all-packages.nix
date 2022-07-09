@@ -16740,6 +16740,8 @@ with pkgs;
     readline = readline81;
   };
 
+  gf = callPackage ../development/tools/misc/gf { };
+
   java-language-server = callPackage ../development/tools/java/java-language-server { };
 
   jprofiler = callPackage ../development/tools/java/jprofiler {
