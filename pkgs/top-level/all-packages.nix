@@ -11856,6 +11856,8 @@ with pkgs;
 
   xfstests = callPackage ../tools/misc/xfstests { };
 
+  xprompt = callPackage ../tools/X11/xprompt { };
+
   xprintidle = callPackage ../tools/X11/xprintidle {};
 
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng {};
