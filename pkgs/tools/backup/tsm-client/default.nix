@@ -107,10 +107,10 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
-    version = "8.1.14.0";
+    version = "8.1.15.0";
     src = fetchurl {
       url = mkSrcUrl version;
-      sha256 = "1iczc4w8rwzqnw01r89kwxcdr7pnwh3nqr3a0q8ncrxrhsy3qwn0";
+      hash = "sha512-K98irjGvN2QejwbOoRhnHkYdFX3ZQ8hv+v2Gb2/pnr9AE1uj6h0lEXQu2cOEHbk7jMtGwpglzofCF7yUyT/tcw==";
     };
     inherit meta passthru;
 
@@ -159,6 +159,16 @@ let
         fi
         ln --symbolic --force --no-target-directory "$out/$(cut -b 7- <<< "$target")" "$link"
       done
+    '';
+
+    # since 7b9fd5d1c9802131ca0a01ff08a3ff64379d2df4
+    # autopatchelf misses to add $out/lib to rpath;
+    # we have to call autopatchelf manually as it would
+    # run too late and overwrite our rpath otherwise
+    dontAutoPatchelf = true;
+    postFixup = ''
+      autoPatchelf $out
+      patchelf --add-rpath $out/lib $out/lib/*
     '';
   };
 

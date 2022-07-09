@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "re2";
-  version = "2022-04-01";
+  version = "2022-06-01";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "re2";
     rev = version;
-    sha256 = "sha256-ywmXIAyVWYMKBOsAndcq7dFYpn9ZgNz5YWTPjylXxsk=";
+    sha256 = "sha256-UontAjOXpnPcOgoFHjf+1WSbCR7h58/U7nn4meT200Y=";
   };
 
   preConfigure = ''
@@ -33,11 +33,6 @@ stdenv.mkDerivation rec {
   buildFlags = lib.optionals stdenv.hostPlatform.isStatic [ "static" ];
 
   enableParallelBuilding = true;
-  # Broken when shared/static are tested in parallel:
-  #   cp: cannot create regular file 'obj/testinstall.cc': File exists
-  #   make: *** [Makefile:334: static-testinstall] Error 1
-  # Will be fixed by https://code-review.googlesource.com/c/re2/+/59830
-  enableParallelChecking = false;
 
   preCheck = "patchShebangs runtests";
   doCheck = true;
