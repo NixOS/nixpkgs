@@ -1,23 +1,21 @@
 { lib
 , buildPythonPackage
-, colorama
 , docutils
 , fetchFromGitHub
 , importlib-metadata
+, mock
 , poetry-core
 , pydantic
+, pytest-mock
 , pytestCheckHook
 , pythonOlder
-, rstcheck-core
-, shellingham
-, typer
 , types-docutils
 , typing-extensions
 }:
 
 buildPythonPackage rec {
-  pname = "rstcheck";
-  version = "6.0.0.post1";
+  pname = "rstcheck-core";
+  version = "1.0.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +24,7 @@ buildPythonPackage rec {
     owner = "rstcheck";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Ljg1cciT9qKL9xtBxQ8OLygDpV/1yR5XiJOzHrLr6xw=";
+    hash = "sha256-XNr+prK9VDP66ZaFvh3Qrx+eJs6mnVO8lvoMC/qrCLs=";
   };
 
   nativeBuildInputs = [
@@ -34,20 +32,16 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    colorama
     docutils
-    rstcheck-core
-    shellingham
+    importlib-metadata
+    pydantic
     types-docutils
     typing-extensions
-    pydantic
-    typer
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    typing-extensions
-    importlib-metadata
   ];
 
   checkInputs = [
+    mock
+    pytest-mock
     pytestCheckHook
   ];
 
@@ -57,18 +51,13 @@ buildPythonPackage rec {
   '';
 
   pythonImportsCheck = [
-    "rstcheck"
+    "rstcheck_core"
   ];
 
-  preCheck = ''
-    # The tests need to find and call the rstcheck executable
-    export PATH="$PATH:$out/bin";
-  '';
-
   meta = with lib; {
-    description = "Checks syntax of reStructuredText and code blocks nested within it";
-    homepage = "https://github.com/myint/rstcheck";
+    description = "Library for checking syntax of reStructuredText";
+    homepage = "https://github.com/rstcheck/rstcheck-core";
     license = licenses.mit;
-    maintainers = with maintainers; [ staccato ];
+    maintainers = with maintainers; [ fab ];
   };
 }
