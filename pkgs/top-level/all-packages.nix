@@ -2044,7 +2044,9 @@ with pkgs;
 
   betterdiscord-installer = callPackage ../tools/misc/betterdiscord-installer { };
 
-  binocle = callPackage ../applications/misc/binocle { };
+  binocle = callPackage ../applications/misc/binocle {
+    inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation CoreGraphics CoreVideo Foundation Metal QuartzCore;
+  };
 
   bitwise = callPackage ../tools/misc/bitwise { };
 
