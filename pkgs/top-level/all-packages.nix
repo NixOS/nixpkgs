@@ -2964,7 +2964,7 @@ with pkgs;
 
   bpb = callPackage ../tools/security/bpb { inherit (darwin.apple_sdk.frameworks) Security; };
 
-  bpytop = callPackage ../tools/system/bpytop { };
+  bpytop = darwin.apple_sdk_11_0.callPackage ../tools/system/bpytop { };
 
   brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
 
