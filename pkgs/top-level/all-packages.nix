@@ -23485,7 +23485,7 @@ with pkgs;
   htop-vim = callPackage ../tools/system/htop/htop-vim.nix { };
 
   btop = callPackage ../tools/system/btop {
-    stdenv = gcc11Stdenv;
+    stdenv = darwin.apple_sdk_11_0.gcc11Stdenv;
   };
 
   nmon = callPackage ../os-specific/linux/nmon { };
