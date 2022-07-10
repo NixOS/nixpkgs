@@ -422,29 +422,29 @@ rec {
       else if (elemAt l 1) == "elf"
         then { cpu = elemAt l 0; vendor = "unknown";  kernel = "none";     abi = elemAt l 1; }
       else   { cpu = elemAt l 0;                      kernel = elemAt l 1;                   };
-    "3" = # Awkward hacks, beware!
-      if elemAt l 1 == "apple"
-        then { cpu = elemAt l 0; vendor = "apple";    kernel = elemAt l 2;                   }
-      else if (elemAt l 1 == "linux") || (elemAt l 2 == "gnu")
-        then { cpu = elemAt l 0;                      kernel = elemAt l 1; abi = elemAt l 2; }
-      else if (elemAt l 2 == "mingw32") # autotools breaks on -gnu for window
-        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "windows";                    }
-      else if (elemAt l 2 == "wasi")
-        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "wasi";                       }
-      else if (elemAt l 2 == "redox")
-        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "redox";                      }
-      else if (elemAt l 2 == "mmixware")
-        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = "mmixware";                   }
-      else if hasPrefix "freebsd" (elemAt l 2)
-        then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
-      else if hasPrefix "netbsd" (elemAt l 2)
-        then { cpu = elemAt l 0; vendor = elemAt l 1;    kernel = elemAt l 2;                }
-      else if (elem (elemAt l 2) ["eabi" "eabihf" "elf"])
-        then { cpu = elemAt l 0; vendor = "unknown"; kernel = elemAt l 1; abi = elemAt l 2; }
-      else if (elemAt l 2 == "ghcjs")
-        then { cpu = elemAt l 0; vendor = "unknown"; kernel = elemAt l 2; }
-      else if hasPrefix "genode" (elemAt l 2)
-        then { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; }
+    "3" =
+      # cpu-kernel-environment
+      if elemAt l 1 == "linux" ||
+         elem (elemAt l 2) ["eabi" "eabihf" "elf" "gnu"]
+      then {
+        cpu    = elemAt l 0;
+        kernel = elemAt l 1;
+        abi    = elemAt l 2;
+        vendor = "unknown";
+      }
+      # cpu-vendor-os
+      else if elemAt l 1 == "apple" ||
+              elem (elemAt l 2) [ "wasi" "redox" "mmixware" "ghcjs" "mingw32" ] ||
+              hasPrefix "freebsd" (elemAt l 2) ||
+              hasPrefix "netbsd" (elemAt l 2) ||
+              hasPrefix "genode" (elemAt l 2)
+      then {
+        cpu    = elemAt l 0;
+        vendor = elemAt l 1;
+        kernel = if elemAt l 2 == "mingw32"
+                 then "windows"  # autotools breaks on -gnu for window
+                 else elemAt l 2;
+      }
       else throw "Target specification with 3 components is ambiguous";
     "4" =    { cpu = elemAt l 0; vendor = elemAt l 1; kernel = elemAt l 2; abi = elemAt l 3; };
   }.${toString (length l)}
