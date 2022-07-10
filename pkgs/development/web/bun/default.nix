@@ -47,7 +47,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://bun.sh";
     changelog = "https://github.com/Jarred-Sumner/bun/releases/tag/bun-v${version}";
     description = "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     longDescription = ''
       All in one fast & easy-to-use tool. Instead of 1,000 node_modules for development, you only need bun.
     '';
