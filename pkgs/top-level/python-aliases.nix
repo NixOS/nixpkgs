@@ -79,6 +79,7 @@ mapAliases ({
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
   google_api_python_client = google-api-python-client; # added 2021-03-19
   googleapis_common_protos = googleapis-common-protos; # added 2021-03-19
+  graphite_api = throw "graphite_api was removed, because it is no longer maintained"; # added 2022-07-10
   graphite_beacon = throw "graphite_beacon was removed, because it is no longer maintained"; # added 2022-07-09
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06

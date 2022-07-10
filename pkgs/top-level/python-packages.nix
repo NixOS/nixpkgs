@@ -3753,8 +3753,6 @@ in {
 
   grapheme = callPackage ../development/python-modules/grapheme { };
 
-  graphite_api = callPackage ../development/python-modules/graphite-api { };
-
   graphite-web = callPackage ../development/python-modules/graphite-web { };
 
   graphene = callPackage ../development/python-modules/graphene { };
