@@ -5,6 +5,7 @@
 , setuptools-scm, scikit-build
 , cmake
 , antlr4_9
+, libxml2
 , pytestCheckHook
 # Enables some expensive tests, useful for verifying an update
 , runAllTests ? false
@@ -13,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "afdko";
-  version = "3.8.3";
+  version = "3.9.0";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mplyla4zcai3qld7is7bl5wn2kzhp87w87yi13wpqnw06i6ij4b";
+    sha256 = "1fjsaz6bp028fbmry6fzfcih78mdzycqmky1wsz5y0bg4kfk4shh";
   };
 
   format = "pyproject";
@@ -32,6 +33,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     antlr4_9.runtime.cpp
+    libxml2.dev
   ];
 
   patches = [
@@ -40,6 +42,8 @@ buildPythonPackage rec {
 
     # Use antlr4 runtime from nixpkgs and link it dynamically
     ./use-dynamic-system-antlr4-runtime.patch
+
+    ./libxml2-cmake-find-package.patch
   ];
 
   # setup.py will always (re-)execute cmake in buildPhase
