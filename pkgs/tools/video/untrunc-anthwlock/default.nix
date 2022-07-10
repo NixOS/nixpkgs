@@ -11,11 +11,13 @@ stdenv.mkDerivation {
     sha256 = "14i2lq68q990hnm2kkfamlsi67bcml85zl8yjsyxc5h8ncc2f3dp";
   };
 
-
   buildInputs = [ ffmpeg libui ];
 
-  postBuild = ''
-    make untrunc-gui
+  buildPhase = ''
+    runHook preBuild
+    make IS_RELEASE=1 untrunc
+    make IS_RELEASE=1 untrunc-gui
+    runHook postBuild
   '';
 
   installPhase = ''
