@@ -24,7 +24,7 @@ let
   primeEnabled = syncCfg.enable || offloadCfg.enable;
   nvidiaPersistencedEnabled =  cfg.nvidiaPersistenced;
   nvidiaSettings = cfg.nvidiaSettings;
-  busIDType = types.strMatching "([[:print:]]+\:[0-9]{1,3}\:[0-9]{1,2}\:[0-9])?";
+  busIDType = types.strMatching "([[:print:]]+[\:\@][0-9]{1,3}\:[0-9]{1,2}\:[0-9])?";
 in
 
 {
