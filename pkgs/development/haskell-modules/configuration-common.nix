@@ -2614,4 +2614,7 @@ in {
   purescript-ast = purescriptStOverride super.purescript-ast;
 
   purenix = purescriptStOverride super.purenix;
+
+  # tests use doctest-parallel which produces some errors during testing
+  clash-prelude = dontCheck super.clash-prelude;
 })

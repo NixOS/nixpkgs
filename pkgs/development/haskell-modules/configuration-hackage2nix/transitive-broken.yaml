@@ -957,8 +957,6 @@ dont-distribute-packages:
  - clash-lib
  - clash-lib-hedgehog
  - clash-multisignal
- - clash-prelude
- - clash-prelude-hedgehog
  - clash-prelude-quickcheck
  - clash-shake
  - clash-systemverilog
