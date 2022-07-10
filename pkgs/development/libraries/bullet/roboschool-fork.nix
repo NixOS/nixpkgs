@@ -21,7 +21,12 @@ stdenv.mkDerivation {
   buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL freeglut ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
 
-  patches = [ ./gwen-narrowing.patch ];
+  patches = [
+    ./gwen-narrowing.patch
+    # Fixes `error: argument value 10880 is outside the valid range [0, 255] [-Wargument-outside-range]` on Darwin.
+    # Adapted from the fork’s upstream since the fork itself has not been updated.
+    ./argument-outside-range.patch
+  ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt
@@ -51,8 +56,5 @@ stdenv.mkDerivation {
     homepage = "http://bulletphysics.org";
     license = licenses.zlib;
     platforms = platforms.unix;
-    # /tmp/nix-build-bullet-2019-03-27.drv-0/source/src/Bullet3Common/b3Vector3.h:297:7: error: argument value 10880 is outside the valid range [0, 255] [-Wargument-outside-range]
-    #                 y = b3_splat_ps(y, 0x80);
-    broken = (stdenv.isDarwin && stdenv.isx86_64);
   };
 }
