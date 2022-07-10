@@ -33735,7 +33735,7 @@ with pkgs;
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {};
 
   aspino = callPackage ../applications/science/logic/aspino {
-    stdenv = gcc10StdenvCompat;
+    stdenv = darwin.apple_sdk_11_0.gcc10StdenvCompat;
   };
 
   beluga = callPackage ../applications/science/logic/beluga {};
