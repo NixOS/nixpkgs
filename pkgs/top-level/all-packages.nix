@@ -12567,7 +12567,7 @@ with pkgs;
 
   beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
 
-  bigloo = callPackage ../development/compilers/bigloo { };
+  bigloo = darwin.apple_sdk_11_0.callPackage ../development/compilers/bigloo { };
 
   binaryen = callPackage ../development/compilers/binaryen {
     nodejs = nodejs-slim;
