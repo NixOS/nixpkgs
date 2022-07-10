@@ -189,7 +189,6 @@ in
 
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
-        apply = list: list ++ [ pkgs.gnome.gnome-shell pkgs.gnome.gnome-shell-extensions ];
       };
 
       favoriteAppsOverride = mkOption {
@@ -367,6 +366,10 @@ in
       services.upower.enable = config.powerManagement.enable;
       services.xserver.libinput.enable = mkDefault true; # for controlling touchpad settings via gnome control center
 
+      # Explicitly enabled since GNOME will be severely broken without these.
+      xdg.mime.enable = true;
+      xdg.icons.enable = true;
+
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
         pkgs.xdg-desktop-portal-gnome
@@ -400,6 +403,18 @@ in
     })
 
     (mkIf serviceCfg.core-shell.enable {
+      services.xserver.desktopManager.gnome.sessionPath =
+        let
+          mandatoryPackages = [
+            pkgs.gnome.gnome-shell
+          ];
+          optionalPackages = [
+            pkgs.gnome.gnome-shell-extensions
+          ];
+        in
+        mandatoryPackages
+        ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
+
       services.colord.enable = mkDefault true;
       services.gnome.chrome-gnome-shell.enable = mkDefault true;
       services.gnome.glib-networking.enable = true;
@@ -452,26 +467,31 @@ in
       ];
 
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-shell.bst
-      environment.systemPackages = with pkgs.gnome; [
-        adwaita-icon-theme
-        nixos-background-info
-        gnome-backgrounds
-        gnome-bluetooth
-        gnome-color-manager
-        gnome-control-center
-        gnome-shell
-        gnome-shell-extensions
-        gnome-themes-extra
-        pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
-        pkgs.gnome-user-docs
-        pkgs.orca
-        pkgs.glib # for gsettings
-        pkgs.gnome-menus
-        pkgs.gtk3.out # for gtk-launch
-        pkgs.hicolor-icon-theme
-        pkgs.shared-mime-info # for update-mime-database
-        pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
-      ];
+      environment.systemPackages =
+        let
+          mandatoryPackages = with pkgs.gnome; [
+            gnome-shell
+          ];
+          optionalPackages = with pkgs.gnome; [
+            adwaita-icon-theme
+            nixos-background-info
+            gnome-backgrounds
+            gnome-bluetooth
+            gnome-color-manager
+            gnome-control-center
+            gnome-shell-extensions
+            gnome-themes-extra
+            pkgs.gnome-tour # GNOME Shell detects the .desktop file on first log-in.
+            pkgs.gnome-user-docs
+            pkgs.orca
+            pkgs.glib # for gsettings program
+            pkgs.gnome-menus
+            pkgs.gtk3.out # for gtk-launch program
+            pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+          ];
+        in
+        mandatoryPackages
+        ++ utils.removePackagesByName optionalPackages config.environment.gnome.excludePackages;
     })
 
     # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-38/elements/core/meta-gnome-core-utilities.bst
