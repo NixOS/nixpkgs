@@ -1,4 +1,15 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk3, breeze-icons, gnome-icon-theme, numix-icon-theme, numix-icon-theme-circle, hicolor-icon-theme, jdupes }:
+{ lib
+, stdenvNoCC
+, fetchFromGitHub
+, gtk3
+, breeze-icons
+, gnome-icon-theme
+, numix-icon-theme
+, numix-icon-theme-circle
+, hicolor-icon-theme
+, jdupes
+, gitUpdater
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "zafiro-icons";
@@ -45,6 +56,8 @@ stdenvNoCC.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { inherit pname version; };
 
   meta = with lib; {
     description = "Icon pack flat with light colors";
