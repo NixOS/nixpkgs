@@ -215,7 +215,7 @@ in
         # dhcpcd.  So do a "systemctl restart" instead.
         stopIfChanged = false;
 
-        path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
+        path = [ dhcpcd pkgs.nettools config.networking.resolvconf.package ];
 
         unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 

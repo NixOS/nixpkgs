@@ -273,7 +273,7 @@ let
         after = [ "network.target" "network-online.target" ];
         wantedBy = optional values.autostart "multi-user.target";
         environment.DEVICE = name;
-        path = [ pkgs.kmod pkgs.wireguard-tools ];
+        path = [ pkgs.kmod pkgs.wireguard-tools config.networking.resolvconf.package ];
 
         serviceConfig = {
           Type = "oneshot";
@@ -332,5 +332,11 @@ in {
     # breaks the wg-quick routing because wireguard packets leave with a fwmark from wireguard.
     networking.firewall.checkReversePath = false;
     systemd.services = mapAttrs' generateUnit cfg.interfaces;
+
+    # Prevent networkd from clearing the rules set by wg-quick when restarted (e.g. when waking up from suspend).
+    systemd.network.config.networkConfig.ManageForeignRoutingPolicyRules = mkDefault false;
+
+    # WireGuard interfaces should be ignored in determining whether the network is online.
+    systemd.network.wait-online.ignoredInterfaces = builtins.attrNames cfg.interfaces;
   };
 }
