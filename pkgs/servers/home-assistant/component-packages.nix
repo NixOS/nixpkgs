@@ -61,7 +61,8 @@
       aioairzone
     ];
     "aladdin_connect" = ps: with ps; [
-    ]; # missing inputs: AIOAladdinConnect
+      aioaladdinconnect
+    ];
     "alarm_control_panel" = ps: with ps; [
     ];
     "alarmdecoder" = ps: with ps; [
@@ -3231,6 +3232,7 @@
     "airtouch4"
     "airvisual"
     "airzone"
+    "aladdin_connect"
     "alarm_control_panel"
     "alarmdecoder"
     "alert"
