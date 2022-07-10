@@ -8609,7 +8609,7 @@ with pkgs;
 
   mkcue = callPackage ../tools/cd-dvd/mkcue { stdenv = gcc10StdenvCompat; };
 
-  mkp224o = callPackage ../tools/security/mkp224o { };
+  mkp224o = darwin.apple_sdk_11_0.callPackage ../tools/security/mkp224o { };
 
   mkpasswd = hiPrio (callPackage ../tools/security/mkpasswd { });
 
