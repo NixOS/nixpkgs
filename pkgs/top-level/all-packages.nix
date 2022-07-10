@@ -31776,6 +31776,8 @@ with pkgs;
 
   zcash = callPackage ../applications/blockchains/zcash { };
 
+  zecwallet-lite = callPackage ../applications/blockchains/zecwallet-lite { };
+
   lightwalletd = callPackage ../applications/blockchains/lightwalletd { };
 
   openethereum = callPackage ../applications/blockchains/openethereum { };
