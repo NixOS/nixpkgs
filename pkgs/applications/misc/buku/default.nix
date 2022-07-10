@@ -28,7 +28,7 @@ let
     flask-bootstrap
     flask-paginate
     flask-reverse-proxy-fix
-    flask_wtf
+    flask-wtf
     arrow
     werkzeug
     click

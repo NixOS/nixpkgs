@@ -181,7 +181,7 @@ with lib;
       };
 
       verbose = mkOption {
-        default = true;
+        default = false;
         type = bool;
         description = ''
           Print verbose information.

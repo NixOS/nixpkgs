@@ -11,9 +11,6 @@ let
     callLibs = file: import file { lib = self; };
   in {
 
-    # interacting with flakes
-    flakes = callLibs ./flakes.nix;
-
     # often used, or depending on very little
     trivial = callLibs ./trivial.nix;
     fixedPoints = callLibs ./fixed-points.nix;
@@ -39,6 +36,7 @@ let
 
     # constants
     licenses = callLibs ./licenses.nix;
+    sourceTypes = callLibs ./source-types.nix;
     systems = callLibs ./systems;
 
     # serialization
@@ -62,7 +60,6 @@ let
     # linux kernel configuration
     kernel = callLibs ./kernel.nix;
 
-    inherit (self.flakes) callLocklessFlake;
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isString length
@@ -74,7 +71,7 @@ let
       info showWarnings nixpkgsVersion version isInOldestRelease
       mod compare splitByAndCompare
       functionArgs setFunctionArgs isFunction toFunction
-      toHexString toBaseDigits;
+      toHexString toBaseDigits inPureEvalMode;
     inherit (self.fixedPoints) fix fix' converge extends composeExtensions
       composeManyExtensions makeExtensible makeExtensibleWithCustomName;
     inherit (self.attrsets) attrByPath hasAttrByPath setAttrByPath
@@ -134,7 +131,9 @@ let
       getValues getFiles
       optionAttrSetToDocList optionAttrSetToDocList'
       scrubOptionValue literalExpression literalExample literalDocBook
-      showOption showFiles unknownModule mkOption mkPackageOption;
+      showOption showOptionWithDefLocs showFiles
+      unknownModule mkOption mkPackageOption
+      mdDoc literalMD;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor
       isOptionType mkOptionType;
     inherit (self.asserts)

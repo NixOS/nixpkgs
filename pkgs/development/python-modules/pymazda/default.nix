@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pymazda";
-  version = "0.3.3";
+  version = "0.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jvDjitS8r0oyANxUGbYksX7O7dbEqZeWEpYc9gABb78=";
+    sha256 = "sha256-Xq+DXrZp1NrsCgUnjaMWUoM+SDfnXK+YDX2Gcr7FKvQ=";
   };
 
   propagatedBuildInputs = [

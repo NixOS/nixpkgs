@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "conftest";
-  version = "0.31.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     rev = "v${version}";
-    sha256 = "sha256-p3EzJLq+LH8G8P7x6+47XWn8ckFeW2O7xhQGoRQDOOQ=";
+    sha256 = "sha256-0MS2Ra+3RhBLE3qWfoMihc1PvyK4wzsoeFIKPucjlJQ=";
   };
-  vendorSha256 = "sha256-WFR0DtOz4dteRWWaqjTIiyTpBTnH6qKivH9t+gRWsvg=";
+  vendorSha256 = "sha256-oYAU2YuIAxwy/uOkOEgCKazSJlttKdHV+KUYV0WXOn8=";
 
   ldflags = [
     "-s"
@@ -21,7 +21,7 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   preCheck = ''
-    export HOME="$TMPDIR"
+    export HOME="$(mktemp -d)"
   '';
 
   postInstall = ''
@@ -33,7 +33,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    export HOME="$TMPDIR"
+    export HOME="$(mktemp -d)"
     $out/bin/conftest --version | grep ${version} > /dev/null
   '';
 

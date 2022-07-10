@@ -2,18 +2,18 @@
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
-  version = "2022.04.18-00.59.32";
+  version = "2022.06.29-19.32.13";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-14EsJIKYl8TWbDqM9PyVrbs/4EssqXp0EK70RrFz+RE=";
+    sha256 = "sha256-skU1p0rEO+9JMxaOepULZhG/xG56KuGNLEUiQ945Pv0=";
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp-standalone.jar";
-    sha256 = "d78094b015bd9e671eea2eb89ca0bb3ec58d39802ad1bfdf875b50e1cdd4995e";
+    sha256 = "97446cacf42966e6096570b9f9c48c653a81903a33e98987cba4b855b417c76f";
   };
 
   extraNativeImageBuildArgs = [
@@ -58,6 +58,7 @@ buildGraalvmNativeImage rec {
   meta = with lib; {
     description = "Language Server Protocol (LSP) for Clojure";
     homepage = "https://github.com/clojure-lsp/clojure-lsp";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo babariviere ];
   };

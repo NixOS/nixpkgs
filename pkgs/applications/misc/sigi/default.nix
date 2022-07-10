@@ -2,14 +2,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sigi";
-  version = "3.2.1";
+  version = "3.4.2";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-1eZ6i0CvjNyYlWb7c0OPlGtvVSFpi8hiOl/7qeeE9wA=";
+    sha256 = "sha256-YlTawz09i7k5QxaybKSo4IhECs6UdDSNV+ylIJgKPt4=";
   };
 
-  cargoSha256 = "sha256-Tyrcu/BYt9k4igiEIiZ2I7VIGiBZ3D2i6XfT/XGlU+U=";
+  cargoSha256 = "sha256-L4eIGxQTM+sZWXWZDGtSwsCT54CWLbyPQ9b+Jf6s94U=";
   nativeBuildInputs = [ installShellFiles ];
 
   # In case anything goes wrong.

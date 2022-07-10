@@ -57,6 +57,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   meta = {
+    broken = stdenv.isDarwin;
     homepage = "http://maude.cs.illinois.edu/";
     description = "High-level specification language";
     license = lib.licenses.gpl2Plus;

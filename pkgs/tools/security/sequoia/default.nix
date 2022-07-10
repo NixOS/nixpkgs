@@ -95,5 +95,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://sequoia-pgp.org/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ minijackson doronbehar ];
+    mainProgram = "sq";
   };
 }

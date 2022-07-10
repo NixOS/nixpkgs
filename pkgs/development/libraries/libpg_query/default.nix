@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libpg_query";
-  version = "13-2.1.0";
+  version = "13-2.1.2";
 
   src = fetchFromGitHub {
     owner = "pganalyze";
     repo = "libpg_query";
     rev = version;
-    sha256 = "sha256-DpvPmBvpx5pWDlx6T3Kp82ALi6FjOO549Exd8tWXDIk=";
+    sha256 = "sha256-Y0oIcpZ0CPbFvyTC6YrSjcs14jk/K5pIyJjTo5vV5sQ=";
   };
 
   nativeBuildInputs = [ which ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "C library for accessing the PostgreSQL parser outside of the server environment";
     changelog = "https://github.com/pganalyze/libpg_query/raw/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    platforms = platforms.x86_64;
+    platforms = platforms.unix;
     maintainers = [ maintainers.marsam ];
   };
 }

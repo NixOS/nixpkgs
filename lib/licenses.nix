@@ -55,6 +55,12 @@ in mkLicense lset) ({
     fullName = "GNU Affero General Public License v3.0 or later";
   };
 
+  aladdin = {
+    spdxId = "Aladdin";
+    fullName = "Aladdin Free Public License";
+    free = false;
+  };
+
   amazonsl = {
     fullName = "Amazon Software License";
     url = "https://aws.amazon.com/asl/";
@@ -283,6 +289,11 @@ in mkLicense lset) ({
   doc = {
     spdxId = "DOC";
     fullName = "DOC License";
+  };
+
+  drl10 = {
+    spdxId = "DRL-1.0";
+    fullName = "Detection Rule License 1.0";
   };
 
   eapl = {

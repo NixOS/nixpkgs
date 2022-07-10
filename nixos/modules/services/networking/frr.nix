@@ -106,6 +106,14 @@ let
           TCP Port to bind to for the VTY interface.
         '';
       };
+
+      extraOptions = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Extra options for the daemon.
+        '';
+      };
     };
 
 in
@@ -196,7 +204,8 @@ in
                 PIDFile = "frr/${daemon}.pid";
                 ExecStart = "${pkgs.frr}/libexec/frr/${daemon} -f /etc/frr/${service}.conf"
                   + optionalString (scfg.vtyListenAddress != "") " -A ${scfg.vtyListenAddress}"
-                  + optionalString (scfg.vtyListenPort != null) " -P ${toString scfg.vtyListenPort}";
+                  + optionalString (scfg.vtyListenPort != null) " -P ${toString scfg.vtyListenPort}"
+                  + " " + (concatStringsSep " " scfg.extraOptions);
                 ExecReload = "${pkgs.python3.interpreter} ${pkgs.frr}/libexec/frr/frr-reload.py --reload --daemon ${daemonName service} --bindir ${pkgs.frr}/bin --rundir /run/frr /etc/frr/${service}.conf";
                 Restart = "on-abnormal";
               };

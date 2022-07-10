@@ -18,7 +18,6 @@ let
           six
           requests
           websocket-client
-          ipaddress
           docker_pycreds
           uptime
         ] ++ lib.optionals (self.pythonOlder "3.7") [ backports_ssl_match_hostname ];

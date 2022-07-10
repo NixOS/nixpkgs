@@ -10,9 +10,11 @@
 , enableAzure ? true
 , enableConsul ? true
 , enableDigitalOcean ? true
+, enableDNS ? true
 , enableEureka ? true
 , enableGCE ? true
 , enableHetzner ? true
+, enableIONOS ? true
 , enableKubernetes ? true
 , enableLinode ? true
 , enableMarathon ? true
@@ -22,15 +24,16 @@
 , enableScaleway ? true
 , enableTriton ? true
 , enableUyuni ? true
+, enableVultr ? true
 , enableXDS ? true
 , enableZookeeper ? true
 }:
 
 let
-  version = "2.35.0";
+  version = "2.36.0";
   webUiStatic = fetchurl {
     url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
-    sha256 = "sha256-66zWOjFTYwmspiKeklt3NAAT1uJJrZqeyQvWWsCN9fQ=";
+    sha256 = "sha256-C+Np2mqAYQ1RUqYmql0eudPD/SpWmxdMQLe85SenIA4=";
   };
 in
 buildGoModule rec {
@@ -41,10 +44,10 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "sha256-h0uBs3xMKpRH3A1VG5xrhjXVAT7GL5L3UZWb3HJ2Fz4=";
+    sha256 = "sha256-FJXNCGIVj1OVWXwbXY6k65lXJCe1MqiqK7tw8nGWrEg=";
   };
 
-  vendorSha256 = "sha256-0I6hmjhdfB41rWOQ9FM9CMq5w5437ka/jLuFXcBQBlM=";
+  vendorSha256 = "sha256-kmAQGRFmGRJ3LuGLMcSc0bJuwMsKhYVUIqQ9vDSH0Cc=";
 
   excludedPackages = [ "documentation/prometheus-mixin" ];
 
@@ -55,6 +58,7 @@ buildGoModule rec {
 
     # Enable only select service discovery to shrink binaries.
     (
+      true  # prevent bash syntax error when all plugins are disabled
     ${lib.optionalString (enableAWS)
       "echo - github.com/prometheus/prometheus/discovery/aws"}
     ${lib.optionalString (enableAzure)
@@ -63,12 +67,16 @@ buildGoModule rec {
       "echo - github.com/prometheus/prometheus/discovery/consul"}
     ${lib.optionalString (enableDigitalOcean)
       "echo - github.com/prometheus/prometheus/discovery/digitalocean"}
+    ${lib.optionalString (enableDNS)
+      "echo - github.com/prometheus/prometheus/discovery/dns"}
     ${lib.optionalString (enableEureka)
       "echo - github.com/prometheus/prometheus/discovery/eureka"}
     ${lib.optionalString (enableGCE)
       "echo - github.com/prometheus/prometheus/discovery/gce"}
     ${lib.optionalString (enableHetzner)
       "echo - github.com/prometheus/prometheus/discovery/hetzner"}
+    ${lib.optionalString (enableIONOS)
+      "echo - github.com/prometheus/prometheus/discovery/ionos"}
     ${lib.optionalString (enableKubernetes)
       "echo - github.com/prometheus/prometheus/discovery/kubernetes"}
     ${lib.optionalString (enableLinode)
@@ -87,6 +95,8 @@ buildGoModule rec {
       "echo - github.com/prometheus/prometheus/discovery/triton"}
     ${lib.optionalString (enableUyuni)
       "echo - github.com/prometheus/prometheus/discovery/uyuni"}
+    ${lib.optionalString (enableVultr)
+      "echo - github.com/prometheus/prometheus/discovery/vultr"}
     ${lib.optionalString (enableXDS)
       "echo - github.com/prometheus/prometheus/discovery/xds"}
     ${lib.optionalString (enableZookeeper)

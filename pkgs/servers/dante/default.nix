@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-e+qF8lB5tkiA7RlJ+tX5O6KxQrQp33RSPdP1TxU961Y=";
     }) ];
 
+  postPatch = ''
+    substituteInPlace include/redefgen.sh --replace 'PATH=/bin:/usr/bin:/sbin:/usr/sbin' ""
+  '';
+
   meta = with lib; {
     description = "A circuit-level SOCKS client/server that can be used to provide convenient and secure network connectivity";
     homepage    = "https://www.inet.no/dante/";

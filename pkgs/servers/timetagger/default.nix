@@ -1,6 +1,5 @@
 { lib
-, pkgs
-, python3Packages
+, python3
 , fetchFromGitHub
 
 , addr ? "127.0.0.1"
@@ -13,24 +12,18 @@
 # timetagger.
 #
 
-let
-  tt = python3Packages.timetagger;
-in
-python3Packages.buildPythonPackage rec {
-  pname = tt.name;
-  version = tt.version;
-  src = tt.src;
-  meta = tt.meta;
+python3.pkgs.buildPythonApplication {
+  inherit (python3.pkgs.timetagger) pname version src meta;
 
-  propagatedBuildInputs = [ tt ]
-    ++ (with python3Packages; [
-      setuptools
-    ]);
+  propagatedBuildInputs = with python3.pkgs; [
+    setuptools
+    timetagger
+  ];
 
   format = "custom";
   installPhase = ''
     mkdir -p $out/bin
-    echo "#!${pkgs.python3}/bin/python3" >> $out/bin/timetagger
+    echo "#!${python3.interpreter}" >> $out/bin/timetagger
     cat run.py >> $out/bin/timetagger
     sed -Ei 's,0\.0\.0\.0:80,${addr}:${toString port},' $out/bin/timetagger
     chmod +x $out/bin/timetagger

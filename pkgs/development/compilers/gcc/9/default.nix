@@ -58,22 +58,12 @@ with lib;
 with builtins;
 
 let majorVersion = "9";
-    /*
-      If you update, please build on aarch64-linux
-      and check braces adjacent to `cplusplus` lines in file
-      ./result/lib/gcc/aarch64-unknown-linux-gnu/9.*.0/include/arm_acle.h
-    */
-    version = "${majorVersion}.3.0";
+    version = "${majorVersion}.5.0";
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-      # Fix ICE: Max. number of generated reload insns per insn is achieved (90)
-      #
-      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=96796
-      #
-      # This patch can most likely be removed by a post 9.3.0-release.
-      [ ./avoid-cycling-subreg-reloads.patch ./gcc9-asan-glibc-2.34.patch ]
+      [ ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional targetPlatform.isNetBSD ../libstdc++-netbsd-ctypes.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
@@ -83,19 +73,13 @@ let majorVersion = "9";
         sha256 = ""; # TODO: uncomment and check hash when available.
       }) */
       ++ optional langAda ../gnat-cflags.patch
-      ++ optional langAda (fetchpatch {
-        name = "gnat-glibc-234.diff";
-        url = "https://github.com/gcc-mirror/gcc/commit/331763de7d4850702a0f67298f36017c73cdb103.diff";
-        sha256 = "eS4B7vJasnv2N+5v5yB8/iDpKPX8CJDAy2xabWWj+aU=";
-      })
       ++ optional langD ../libphobos.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ optional (targetPlatform.libc == "musl" && targetPlatform.isPower) ../ppc-musl.patch
 
       # Obtain latest patch with ../update-mcfgthread-patches.sh
       ++ optional (!crossStageStatic && targetPlatform.isMinGW) ./Added-mcf-thread-model-support-from-mcfgthread.patch
-
-      ++ [ ../libsanitizer-no-cyclades-9.patch ];
+      ;
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
@@ -112,7 +96,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "1la2yy27ziasyf0jvzk58y1i5b5bq2h176qil550bxhifs39gqbi";
+    sha256 = "13ygjmd938m0wmy946pxdhz9i1wq7z4w10l6pvidak0xxxj9yxi7";
   };
 
   inherit patches;

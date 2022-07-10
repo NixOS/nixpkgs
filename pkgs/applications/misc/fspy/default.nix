@@ -12,7 +12,7 @@ in appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mv $out/bin/${pname}-v${version} $out/bin/${pname}
+    mv $out/bin/${pname}-${version} $out/bin/${pname}
   '';
 
   meta = with lib; {

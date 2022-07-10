@@ -30,19 +30,19 @@
 
 let
   pname = "vector";
-  version = "0.21.1";
+  version = "0.22.3";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
 
   src = fetchFromGitHub {
-    owner = "timberio";
+    owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eskm+H0D+SB3PB76T6Z+iL5jjyy51lOXy88QXsn/Azs=";
+    sha256 = "sha256-62oPttkdahTeMsd9lpd9/tc95kluVJuWxzP94i+gWhA=";
   };
 
-  cargoSha256 = "sha256-fN6o8Fcqdhs5c3RID+ok1Xo5g6nF9m3f8EWIJ47dn/k=";
+  cargoSha256 = "sha256-WWX47pbva7ZmPR6hBstJ5VqOwu3mkhhsHK3LHHqQjDE=";
   nativeBuildInputs = [ pkg-config cmake perl ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage {
   buildFeatures = features;
 
   # TODO investigate compilation failure for tests
-  # there are about 100 tests failing (out of 1100) for version 0.21.1
+  # there are about 100 tests failing (out of 1100) for version 0.22.0
   doCheck = false;
 
   checkFlags = [

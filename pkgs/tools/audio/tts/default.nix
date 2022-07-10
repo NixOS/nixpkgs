@@ -31,18 +31,19 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.6.1";
+  version = "0.7.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "v${version}";
-    sha256 = "sha256-YzMR/Tl1UvjdSqV/h4lYR6DuarEqEIM7RReqYznFU4Q=";
+    sha256 = "sha256-ch+711soRfZj1egyaF0+6NrUJtf7JqfZuxQ4eDf1zas=";
   };
 
   postPatch = let
     relaxedConstraints = [
+      "cython"
       "gruut"
       "librosa"
       "mecab-python3"
@@ -50,6 +51,7 @@ python.pkgs.buildPythonApplication rec {
       "numpy"
       "umap-learn"
       "unidic-lite"
+      "pyworld"
     ];
   in ''
     sed -r -i \
@@ -129,9 +131,14 @@ python.pkgs.buildPythonApplication rec {
     "test_text_to_ids_phonemes_with_eos_bos_and_blank"
     # Takes too long
     "test_parametrized_wavernn_dataset"
+
+    # requires network
+    "test_voice_conversion"
   ];
 
   disabledTestPaths = [
+    # Requires network acccess to download models
+    "tests/aux_tests/test_remove_silence_vad_script.py"
     # phonemes mismatch between espeak-ng and gruuts phonemizer
     "tests/text_tests/test_phonemizer.py"
     # no training, it takes too long
@@ -146,7 +153,6 @@ python.pkgs.buildPythonApplication rec {
     "tests/tts_tests/test_tacotron2_d-vectors_train.py"
     "tests/tts_tests/test_tacotron2_speaker_emb_train.py"
     "tests/tts_tests/test_tacotron2_train.py"
-    "tests/tts_tests/test_tacotron2_train_fsspec_path.py"
     "tests/tts_tests/test_tacotron_train.py"
     "tests/tts_tests/test_vits_d-vectors_train.py"
     "tests/tts_tests/test_vits_multilingual_speaker_emb_train.py"

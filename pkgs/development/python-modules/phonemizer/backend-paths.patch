@@ -1,42 +1,18 @@
-diff --git a/phonemizer/backend/espeak.py b/phonemizer/backend/espeak.py
-index b4712bf..5628fd5 100644
---- a/phonemizer/backend/espeak.py
-+++ b/phonemizer/backend/espeak.py
-@@ -82,10 +82,7 @@ class BaseEspeakBackend(BaseBackend):
-         if _ESPEAK_DEFAULT_PATH:
-             return _ESPEAK_DEFAULT_PATH
+diff --git a/phonemizer/backend/espeak/wrapper.py b/phonemizer/backend/espeak/wrapper.py
+index 84a79f5..8abcae1 100644
+--- a/phonemizer/backend/espeak/wrapper.py
++++ b/phonemizer/backend/espeak/wrapper.py
+@@ -143,12 +143,7 @@ class EspeakWrapper:
+                     f'is not a readable file')
+             return library.resolve()
  
--        espeak = distutils.spawn.find_executable('espeak-ng')
--        if not espeak:  # pragma: nocover
--            espeak = distutils.spawn.find_executable('espeak')
--        return espeak
-+        return "@espeak@"
+-        library = (
+-                ctypes.util.find_library('espeak-ng') or
+-                ctypes.util.find_library('espeak'))
+-        if not library:  # pragma: nocover
+-            raise RuntimeError(
+-                'failed to find espeak library')
++        library = '@libespeak@'
+         return library
  
-     @classmethod
-     def is_available(cls):
-diff --git a/phonemizer/backend/festival.py b/phonemizer/backend/festival.py
-index 3037be5..684ffff 100644
---- a/phonemizer/backend/festival.py
-+++ b/phonemizer/backend/festival.py
-@@ -80,7 +80,7 @@ class FestivalBackend(BaseBackend):
-         if _FESTIVAL_DEFAULT_PATH:
-             return _FESTIVAL_DEFAULT_PATH
- 
--        return distutils.spawn.find_executable('festival')
-+        return "@festival@"
- 
-     @classmethod
-     def is_available(cls):
-diff --git a/test/test_punctuation.py b/test/test_punctuation.py
-index 6ed642a..08060df 100644
---- a/test/test_punctuation.py
-+++ b/test/test_punctuation.py
-@@ -28,7 +28,7 @@ ESPEAK_143 = (EspeakBackend.version(as_tuple=True) >= (1, 49, 3))
- ESPEAK_150 = (EspeakBackend.version(as_tuple=True) >= (1, 50))
- 
- # True if we are using festival>=2.5
--FESTIVAL_25 = (FestivalBackend.version(as_tuple=True) >= (2, 5))
-+FESTIVAL_25 = False
- 
- 
- @pytest.mark.parametrize(
+     def _fetch_version_and_path(self):

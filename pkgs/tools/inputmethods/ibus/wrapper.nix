@@ -1,26 +1,38 @@
-{ lib, runCommand, makeWrapper, lndir
-, dconf, hicolor-icon-theme, ibus, librsvg, plugins ? []
+{ lib
+, buildEnv
+, makeWrapper
+, dconf
+, hicolor-icon-theme
+, ibus
+, librsvg
+, plugins ? [ ]
 }:
 
-let
+buildEnv {
   name = "ibus-with-plugins-" + lib.getVersion ibus;
-  env = {
-    buildInputs = [ ibus ] ++ plugins;
-    nativeBuildInputs = [ lndir makeWrapper ];
-    propagatedUserEnvPackages = [ hicolor-icon-theme ];
-    paths = [ ibus ] ++ plugins;
-    inherit (ibus) meta;
-  };
-  command = ''
-    for dir in bin etc lib libexec share; do
-        mkdir -p "$out/$dir"
-        for pkg in $paths; do
-            if [ -d "$pkg/$dir" ]; then
-                lndir -silent "$pkg/$dir" "$out/$dir"
-            fi
-        done
-    done
 
+  paths = [ ibus ] ++ plugins;
+
+  pathsToLink = [
+    "/bin"
+    "/etc"
+    "/lib"
+    "/libexec"
+    "/share"
+    # Need to link contents so that the directories are writeable.
+    "/lib/systemd"
+    "/share/dbus-1/services"
+    "/share/systemd/user"
+    "/share/systemd/user/gnome-session.target.wants"
+  ];
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
+  buildInputs = [ ibus ] ++ plugins;
+
+  postBuild = ''
     for prog in ibus; do
         wrapProgram "$out/bin/$prog" \
           --set GDK_PIXBUF_MODULE_FILE ${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
@@ -59,6 +71,45 @@ let
           --suffix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
           --add-flags "--cache=refresh"
     done
+
+    ibusPackage="${ibus}"
+
+    # Update services.
+    for service in \
+        "share/dbus-1/services/org.freedesktop.IBus.service" \
+        "share/systemd/user/org.freedesktop.IBus.session.generic.service" \
+        "share/systemd/user/org.freedesktop.IBus.session.GNOME.service"
+    do
+        unlink "$out/$service"
+        substitute "$ibusPackage/$service" "$out/$service" --replace "$ibusPackage/bin" "$out/bin"
+    done
+
+    # Re-create relative symbolic links.
+    for link in \
+        "$out/share/systemd/user/gnome-session.target.wants/"*
+    do
+        target="$link"
+        until [[ "''${target:0:1}" != "/" ]]; do
+            target="$(readlink "$target")"
+        done
+        unlink "$link"
+        ln -s "$target" "$link"
+    done
+
+    # Update absolute symbolic links.
+    for link in \
+        "$out/lib/systemd/user"
+    do
+        target="$(readlink -f "$link")"
+        relativeTarget="''${target#$ibusPackage/}"
+        if [[ "$ibusPackage/$relativeTarget" != "$target" ]]; then
+            >&2 echo "File $link does not point to to a file in $ibusPackage"
+            exit 1
+        fi
+        unlink "$link"
+        ln -s "$out/$relativeTarget" "$link"
+    done
   '';
-in
-  runCommand name env command
+
+  inherit (ibus) meta;
+}

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
-  version = "0.7.0";
+  version = "0.8.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0h6dclz4q4lvmapzpslh8kb0aihdjddbkxc4zc981glbip89li5w";
+    sha256 = "sha256-sGwZL2AOCEWO9xl3HPHBGEFQ5NVk6CeuX9lt8ez8MFE=";
   };
 
   propagatedBuildInputs = [
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
-  ]  ++ lib.optionals (pythonOlder "3.8") [
+  ] ++ lib.optionals (pythonOlder "3.8") [
     asynctest
   ];
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Python library for zigpy which communicates with TI ZNP radios";
+    description = "Library for zigpy which communicates with TI ZNP radios";
     homepage = "https://github.com/zigpy/zigpy-znp";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ mvnetbiz ];

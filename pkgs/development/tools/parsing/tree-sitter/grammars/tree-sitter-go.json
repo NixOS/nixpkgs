@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-go",
-  "rev": "c8fed1f0847a65a04a4b8cb7655f5f416e0742ca",
-  "date": "2022-03-29T10:06:48+02:00",
-  "path": "/nix/store/f9vy5q9p3rf2dcp7zdw9708j138ibi36-tree-sitter-go",
-  "sha256": "0yi8h1q39hsdxp9053by9xkl53wn229fhwjrrzml7k8y95qgnsyd",
+  "rev": "aeb2f33b366fd78d5789ff104956ce23508b85db",
+  "date": "2022-05-30T11:35:02-07:00",
+  "path": "/nix/store/iww8iz50gqp58p89f2rk3y9ck5hannaj-tree-sitter-go",
+  "sha256": "1008r5y8h2vpjjcx4cvi9qa02cmfaskc97y2zahjfrv3lm1gkqp7",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

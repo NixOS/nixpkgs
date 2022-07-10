@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "An implementation of RFC 6570 URI Templates";
     homepage = "https://github.com/plinss/uri_template/";
     license = licenses.mit;
-    maintainers = [ maintainers.kvark ];
+    maintainers = [];
   };
 }

@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
     cp makefiles/makefile.defs.linux.pulse makefile.defs
   '';
 
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ];
+
   installPhase = ''
     install -Dt $out/bin praat
   '';

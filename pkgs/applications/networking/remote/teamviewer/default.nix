@@ -6,11 +6,13 @@
 
 mkDerivation rec {
   pname = "teamviewer";
-  version = "15.26.4";
+  # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
+  outputs = [ "out" "dev" ];
+  version = "15.29.4";
 
   src = fetchurl {
     url = "https://dl.tvcdn.de/download/linux/version_15x/teamviewer_${version}_amd64.deb";
-    sha256 = "sha256-2CprtdKHHTLxS8jA4bRVoHvj/8zyVUV0aGPzU7mNxM8=";
+    sha256 = "sha256-jkFqOtU+D62S7QmNPvz58Z8wJ79lkN11pWQrtNdD+Uk=";
   };
 
   unpackPhase = ''
@@ -30,7 +32,7 @@ mkDerivation rec {
       $out/share/teamviewer/config \
       $out/share/teamviewer/tv_bin/RTlib \
       $out/share/teamviewer/tv_bin/xdg-utils \
-      $out/share/teamviewer/tv_bin/script/{teamviewer_setup,teamviewerd.sysv,teamviewerd.service,teamviewerd.*.conf,libdepend,tv-delayed-start.sh}
+      $out/share/teamviewer/tv_bin/script/{teamviewer_setup,teamviewerd.sysv,teamviewerd.service,teamviewerd.*.conf,tv-delayed-start.sh}
 
     ln -s $out/share/teamviewer/tv_bin/script/teamviewer $out/bin
     ln -s $out/share/teamviewer/tv_bin/teamviewerd $out/bin
@@ -94,9 +96,10 @@ mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.teamviewer.com";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jagajaga dasuxullebt jraygauthier ];
+    maintainers = with maintainers; [ jagajaga jraygauthier ];
   };
 }

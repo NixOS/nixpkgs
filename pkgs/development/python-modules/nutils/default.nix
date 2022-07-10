@@ -1,15 +1,27 @@
-{ lib, python, buildPythonPackage, fetchPypi, numpy, treelog, stringly, coverage }:
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, numpy
+, treelog
+, stringly
+, pytestCheckHook
+, pythonOlder
+}:
 
 buildPythonPackage rec {
   pname = "nutils";
   version = "7.0";
+  format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1sw310l2yb8wbcv2qhik8s928zjh2syzz2qxisglbzski9qdw2x6";
+  disabled = pythonOlder "3.7";
+
+  src = fetchFromGitHub {
+    owner = "evalf";
+    repo = "nutils";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-V7lSMhwzc9+36uXMCy5uF241XwJ62Pdf59RUulOt4i8=";
   };
-
-  pythonImportChecks = [ "nutils" ];
 
   propagatedBuildInputs = [
     numpy
@@ -17,16 +29,24 @@ buildPythonPackage rec {
     stringly
   ];
 
-  checkInputs = [ coverage ];
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
+  pythonImportsCheck = [
+    "nutils"
+  ];
+
+  disabledTestPaths = [
+    # AttributeError: type object 'setup' has no attribute '__code__'
+    "tests/test_cli.py"
+  ];
 
   meta = with lib; {
     description = "Numerical Utilities for Finite Element Analysis";
     homepage = "https://www.nutils.org/";
     license = licenses.mit;
-    maintainers = [ maintainers.Scriptkiddi ];
+    broken = stdenv.hostPlatform.isAarch64;
+    maintainers = with maintainers; [ Scriptkiddi ];
   };
 }

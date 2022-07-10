@@ -1,33 +1,32 @@
 { lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
 , anyio
+, buildPythonPackage
 , certifi
+, fetchFromGitHub
 , h11
 , h2
 , pproxy
 , pytest-asyncio
-, pytestCheckHook
-, pytest-cov
 , pytest-httpbin
+, pytest-trio
+, pytestCheckHook
+, pythonOlder
 , sniffio
 , socksio
-, trio
-, trustme
-, uvicorn
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
-  version = "0.14.7";
-  disabled = pythonOlder "3.6";
+  version = "0.15.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = pname;
     rev = version;
-    sha256 = "sha256-h+3MfP1p/ifN0mF/xxrOKPTjD4Q7WzRh94YO4DYSuXE=";
+    hash = "sha256-FF3Yzac9nkVcA5bHVOz2ymvOelSfJ0K6oU8UWpBDcmo=";
   };
 
   postPatch = ''
@@ -39,23 +38,34 @@ buildPythonPackage rec {
     anyio
     certifi
     h11
-    h2
     sniffio
-    socksio
   ];
+
+  passthru.optional-dependencies = {
+    http2 = [
+      h2
+    ];
+    socks = [
+      socksio
+    ];
+  };
 
   checkInputs = [
     pproxy
     pytest-asyncio
-    pytestCheckHook
-    pytest-cov
     pytest-httpbin
-    trio
-    trustme
-    uvicorn
+    pytest-trio
+    pytestCheckHook
+  ] ++ passthru.optional-dependencies.http2
+    ++ passthru.optional-dependencies.socks;
+
+  pythonImportsCheck = [
+    "httpcore"
   ];
 
-  pythonImportsCheck = [ "httpcore" ];
+  pytestFlagsArray = [
+    "--asyncio-mode=strict"
+  ];
 
   meta = with lib; {
     description = "A minimal low-level HTTP client";

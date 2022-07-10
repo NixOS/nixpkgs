@@ -146,6 +146,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
     description = "Is a multi-purpose emulation framework";
     homepage = "https://www.mamedev.org/";
     license = with licenses; [ bsd3 gpl2Plus ];

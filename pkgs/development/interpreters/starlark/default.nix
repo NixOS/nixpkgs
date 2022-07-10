@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, fetchpatch }:
 buildGoModule rec {
   pname = "starlark";
   version = "unstable-2022-03-02";
@@ -11,6 +11,15 @@ buildGoModule rec {
   };
 
   vendorSha256 = "sha256-lgL5o3MQfZekZ++BNESwV0LeoTxwEZfziQAe99zm4RY=";
+
+  patches = [
+    # Fix floating point imprecision issue in the test suite.
+    # https://github.com/google/starlark-go/pull/409
+    (fetchpatch {
+      url = "https://github.com/google/starlark-go/commit/be6ed3bfcc376e5bf6fe2257ae89ddfb00d14e2c.patch";
+      sha256 = "sha256-A0tHPso6SfFn73kICcA9/5n3JHd7hMdQMGty+4L6T4k=";
+    })
+  ];
 
   ldflags = [ "-s" "-w" ];
 

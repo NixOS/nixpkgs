@@ -1,21 +1,36 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, ocm }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, stdenv, testers, ocm }:
 
 buildGoModule rec {
   pname = "ocm";
-  version = "0.1.62";
+  version = "0.1.64";
 
   src = fetchFromGitHub {
     owner = "openshift-online";
     repo = "ocm-cli";
     rev = "v${version}";
-    sha256 = "0kv0zcx6wdlyid37ygzg05xyyk77ybd2qcdgbswjv6crcjh1xdrd";
+    sha256 = "sha256-RMXiEXgf8tAdp2d97kaOzXgFCFVkaMhkJF8AHXIEJm8=";
   };
 
-  vendorSha256 = "sha256-nXUrbF9mcHy8G7c+ktQixBmmf6x066gpuaZ0eUsJQwc=";
+  vendorSha256 = "sha256-4m5Ej2Ql9+wGqrzvXQkY8fL2I9tYE6Tm6s9+qcZBHQI=";
+
+  # Strip the final binary.
+  ldflags = [ "-s" "-w" ];
+
+  nativeBuildInputs = [ installShellFiles ];
 
   # Tests expect the binary to be located in the root directory.
   preCheck = ''
     ln -s $GOPATH/bin/ocm ocm
+  '';
+
+  # Tests fail in Darwin sandbox.
+  doCheck = !stdenv.isDarwin;
+
+  postInstall = ''
+    installShellCompletion --cmd ocm \
+      --bash <($out/bin/ocm completion bash) \
+      --fish <($out/bin/ocm completion fish) \
+      --zsh <($out/bin/ocm completion zsh)
   '';
 
   passthru.tests.version = testers.testVersion {
@@ -28,5 +43,6 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://github.com/openshift-online/ocm-cli";
     maintainers = with maintainers; [ stehessel ];
+    platforms = platforms.all;
   };
 }

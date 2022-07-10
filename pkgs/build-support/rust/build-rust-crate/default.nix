@@ -346,6 +346,9 @@ crate_: lib.makeOverridable
       outputs = if buildTests then [ "out" ] else [ "out" "lib" ];
       outputDev = if buildTests then [ "out" ] else [ "lib" ];
 
+      meta = {
+        mainProgram = crateName;
+      };
     } // extraDerivationAttrs
     )
   )

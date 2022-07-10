@@ -12,6 +12,7 @@
 , jsonref
 , jsonschema
 , matplotlib
+, nbclient
 , nbformat
 , pandas
 , pathtools
@@ -24,6 +25,7 @@
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
+, pytorch
 , pyyaml
 , requests
 , scikit-learn
@@ -31,12 +33,13 @@
 , setproctitle
 , setuptools
 , shortuuid
+, substituteAll
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.12.15";
+  version = "0.12.20";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -44,9 +47,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = "client";
-    rev = "v${version}";
-    hash = "sha256-Fq+JwUEZP1QDFKYVyiR8DUU0GQV6fK50FW78qaWh+Mo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zS3DA06uLfUApe0kDAbqPA+2is70bnb9EifgFWqcuRg=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./hardcode-git-path.patch;
+      git = "${lib.getBin git}/bin/git";
+    })
+  ];
 
   # setuptools is necessary since pkg_resources is required at runtime.
   propagatedBuildInputs = [
@@ -66,6 +76,10 @@ buildPythonPackage rec {
     shortuuid
   ];
 
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
   checkInputs = [
     azure-core
     bokeh
@@ -73,28 +87,22 @@ buildPythonPackage rec {
     jsonref
     jsonschema
     matplotlib
+    nbclient
     nbformat
     pandas
     pydantic
     pytest-mock
     pytest-xdist
     pytestCheckHook
+    pytorch
     scikit-learn
     tqdm
   ];
 
-  # wandb expects git to be in PATH. See https://gist.github.com/samuela/57aeee710e41ab2bf361b7ed8fbbeabf
-  # for the error message, and an example usage here: https://github.com/wandb/client/blob/d5f655b7ca7e3eac2f3a67a84bc5c2a664a31baf/wandb/sdk/internal/meta.py#L128.
-  # See https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621 as to
-  # why we don't put it in propagatedBuildInputs. Note that this is difficult to
-  # test offline due to https://github.com/wandb/client/issues/3519.
-  postInstall = ''
-    mkdir -p $out/bin
-    ln -s ${git}/bin/git $out/bin/git
-  '';
-
   disabledTestPaths = [
     # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
+    "tests/integrations/test_keras.py"
+    "tests/integrations/test_torch.py"
     "tests/test_cli.py"
     "tests/test_data_types.py"
     "tests/test_file_stream.py"
@@ -107,6 +115,7 @@ buildPythonPackage rec {
     "tests/test_metric_full.py"
     "tests/test_metric_internal.py"
     "tests/test_mode_disabled.py"
+    "tests/test_model_workflows.py"
     "tests/test_mp_full.py"
     "tests/test_public_api.py"
     "tests/test_redir.py"
@@ -115,14 +124,18 @@ buildPythonPackage rec {
     "tests/test_start_method.py"
     "tests/test_tb_watcher.py"
     "tests/test_telemetry_full.py"
+    "tests/test_util.py"
     "tests/wandb_agent_test.py"
     "tests/wandb_artifacts_test.py"
     "tests/wandb_integration_test.py"
     "tests/wandb_run_test.py"
     "tests/wandb_settings_test.py"
     "tests/wandb_sweep_test.py"
+    "tests/wandb_tensorflow_test.py"
     "tests/wandb_verify_test.py"
-    "tests/test_model_workflows.py"
+
+    # Requires metaflow, which is not yet packaged.
+    "tests/integrations/test_metaflow.py"
 
     # Fails and borks the pytest runner as well.
     "tests/wandb_test.py"

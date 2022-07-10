@@ -1,10 +1,10 @@
-{ lib, fetchurl, makeDesktopItem, appimageTools, gtk3 }:
+{ lib, fetchurl, makeDesktopItem, appimageTools }:
 let
   name = "saleae-logic-2";
-  version = "2.3.51";
+  version = "2.3.55";
   src = fetchurl {
     url = "https://downloads.saleae.com/logic2/Logic-${version}-master.AppImage";
-    sha256 = "sha256-Z5GPA1cJbQJOjntWXe1uF26e7nJ99+ANoCP57Y/OO5A=";
+    sha256 = "sha256-fL72KZzOh9pWrjSaXDCMz0ijqRj1Vc5Ym37onv4E7aI=";
   };
   desktopItem = makeDesktopItem {
     inherit name;
@@ -30,10 +30,6 @@ appimageTools.wrapType2 {
         ln -s ${desktopItem}/share/applications $out/share/
         cp ${appimageContents}/usr/share/icons/hicolor/256x256/apps/Logic.png $out/share/pixmaps/Logic.png
       '';
-
-  profile = ''
-    export XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}''${XDG_DATA_DIRS:+:"''$XDG_DATA_DIRS"}"
-  '';
 
   extraPkgs = pkgs: with pkgs; [
     wget

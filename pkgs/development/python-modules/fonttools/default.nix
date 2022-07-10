@@ -1,23 +1,30 @@
 { lib
+, stdenv
 , buildPythonPackage
-, fetchFromGitHub
 , pythonOlder
-, brotlipy
-, zopfli
+, isPyPy
+, fetchFromGitHub
+, setuptools-scm
+, fs
 , lxml
+, brotli
+, brotlicffi
+, zopfli
+, unicodedata2
+, lz4
 , scipy
 , munkres
-, unicodedata2
+, matplotlib
 , sympy
-, reportlab
-, sphinx
+, xattr
+, skia-pathops
+, uharfbuzz
 , pytestCheckHook
-, glibcLocales
 }:
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.30.0";
+  version = "4.33.3";
 
   disabled = pythonOlder "3.7";
 
@@ -25,31 +32,41 @@ buildPythonPackage rec {
     owner  = pname;
     repo   = pname;
     rev    = version;
-    sha256 = "1y9f071bdl66rsx42j16j5v53h85xra5qlg860rz3m054s2rmin9";
+    sha256 = "MUIZGnYwlfTat9655AOYgK5r6AvHj/xXghUvOZR8HIM=";
   };
 
-  # all dependencies are optional, but
-  # we run the checks with them
+  nativeBuildInputs = [ setuptools-scm ];
+
+  passthru.optional-dependencies = let
+    extras = {
+      ufo = [ fs ];
+      lxml = [ lxml ];
+      woff = [ (if isPyPy then brotlicffi else brotli) zopfli ];
+      unicode = lib.optional (pythonOlder "3.11") unicodedata2;
+      graphite = [ lz4 ];
+      interpolatable = [ (if isPyPy then munkres else scipy) ];
+      plot = [ matplotlib ];
+      symfont = [ sympy ];
+      type1 = lib.optional stdenv.isDarwin xattr;
+      pathops = [ skia-pathops ];
+      repacker = [ uharfbuzz ];
+    };
+  in extras // {
+    all = lib.concatLists (lib.attrValues extras);
+  };
 
   checkInputs = [
     pytestCheckHook
-    # etree extra
-    lxml
-    # woff extra
-    brotlipy
-    zopfli
-    # interpolatable extra
-    scipy
-    munkres
-    # symfont
-    sympy
-    # pens
-    reportlab
-    sphinx
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    # unicode extra
-    unicodedata2
-  ];
+  ] ++ lib.concatLists (lib.attrVals ([
+    "woff"
+    "interpolatable"
+  ] ++ lib.optionals (!skia-pathops.meta.broken) [
+    "pathops" # broken
+  ] ++ [
+    "repacker"
+  ]) passthru.optional-dependencies);
+
+  pythonImportsCheck = [ "fontTools" ];
 
   preCheck = ''
     # tests want to execute the "fonttools" executable from $PATH
@@ -71,7 +88,6 @@ buildPythonPackage rec {
     "Tests/pens"
     "Tests/ufoLib"
   ];
-
 
   meta = with lib; {
     homepage = "https://github.com/fonttools/fonttools";

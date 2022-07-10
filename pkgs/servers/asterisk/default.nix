@@ -4,6 +4,7 @@
   lua, speex, libopus, opusfile, libogg,
   srtp, wget, curl, iksemel, pkg-config,
   autoconf, libtool, automake,
+  python39, writeScript,
   withOpus ? true,
 }:
 
@@ -92,9 +93,9 @@ let
     };
   };
 
-  pjproject_2_10 = fetchurl {
-    url = "https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.10/pjproject-2.10.tar.bz2";
-    sha256 = "14qmddinm4bv51rl0wwg5133r64x5bd6inwbx27ahb2n0151m2if";
+  pjproject_2_12 = fetchurl {
+    url = "https://raw.githubusercontent.com/asterisk/third-party/master/pjproject/2.12/pjproject-2.12.tar.bz2";
+    hash = "sha256-T3q4r/4WCAZCNGnULxMnNKH9wEK7gkseV/sV8IPasHQ=";
   };
 
   mp3-202 = fetchsvn {
@@ -115,10 +116,16 @@ let
   versions = lib.mapAttrs (_: {version, sha256}: common {
     inherit version sha256;
     externals = {
-      "externals_cache/pjproject-2.10.tar.bz2" = pjproject_2_10;
+      "externals_cache/pjproject-2.12.tar.bz2" = pjproject_2_12;
       "addons/mp3" = mp3-202;
     };
   }) (lib.importJSON ./versions.json);
+
+  updateScript_python = python39.withPackages (p: with p; [ packaging beautifulsoup4 requests ]);
+  updateScript = writeScript "asterisk-update" ''
+    #!/usr/bin/env bash
+    exec ${updateScript_python}/bin/python ${toString ./update.py}
+  '';
 
 in {
   # Supported releases (as of 2022-04-05).
@@ -131,6 +138,8 @@ in {
   # 19.x    Standard   2021-11-02  2022-11-02  2023-11-02
   asterisk-lts = versions.asterisk_18;
   asterisk-stable = versions.asterisk_19;
-  asterisk = versions.asterisk_19;
+  asterisk = versions.asterisk_19.overrideAttrs (o: {
+    passthru = (o.passthru or {}) // { inherit updateScript; };
+  });
 
 } // versions

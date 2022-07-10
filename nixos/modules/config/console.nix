@@ -46,9 +46,9 @@ in
       type = with types; either str path;
       default = "Lat2-Terminus16";
       example = "LatArCyrHeb-16";
-      description = ''
+      description = mdDoc ''
         The font used for the virtual consoles.  Leave empty to use
-        whatever the <command>setfont</command> program considers the
+        whatever the {command}`setfont` program considers the
         default font.
         Can be either a font name or a path to a PSF font file.
       '';

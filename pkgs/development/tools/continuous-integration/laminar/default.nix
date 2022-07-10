@@ -26,6 +26,7 @@ let
 in stdenv.mkDerivation rec {
   pname = "laminar";
   version = "1.2";
+  outputs = [ "out" "doc" ];
   src = fetchFromGitHub {
     owner = "ohwgiles";
     repo = "laminar";

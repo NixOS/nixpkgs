@@ -1,35 +1,32 @@
-{ lib, fetchFromGitHub, buildPythonPackage, pythonOlder, pytest }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, pytestCheckHook
+}:
 
 buildPythonPackage rec {
   pname = "eth-typing";
-  version = "3.0.0";
+  version = "3.1.0";
+  disabled = pythonOlder "3.6";
 
-  # Tests are missing from the PyPI source tarball so let's use GitHub
-  # https://github.com/ethereum/eth-typing/issues/8
   src = fetchFromGitHub {
     owner = "ethereum";
-    repo = pname;
+    repo = "eth-typing";
     rev = "v${version}";
-    sha256 = "sha256-9rrnDFPWAmrUkr2mVTVi/8DTJdg4hzGaU0UbpwG5mtY=";
+    sha256 = "sha256-Xk/IfW1zuNbGdYAxXTNL9kL+ZW1bWruZ21KFV9+lv/E=";
   };
 
-  # setuptools-markdown uses pypandoc which is broken at the moment
-  preConfigure = ''
-    substituteInPlace setup.py --replace \'setuptools-markdown\' ""
-  '';
+  checkInputs = [
+    pytestCheckHook
+  ];
 
-  disabled = pythonOlder "3.5";
-
-  checkInputs = [ pytest ];
-
-  checkPhase = ''
-    pytest .
-  '';
+  pythonImportsCheck = [ "eth_typing" ];
 
   meta = {
     description = "Common type annotations for Ethereum Python packages";
     homepage = "https://github.com/ethereum/eth-typing";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jluttine ];
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

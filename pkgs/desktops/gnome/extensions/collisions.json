@@ -32,6 +32,10 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
+    "somafm-internet-radio": [
+      "SomaFm-Radio@alireza6677.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com"
+    ],
     "transparent-window": [
       "transparent-window@pbxqdown.github.com",
       "transparentwindows.mdirshad07"
@@ -79,6 +83,10 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
+    "somafm-internet-radio": [
+      "SomaFm-Radio@alireza6677.gmail.com",
+      "SomaFm-Radio@cajhne.gmail.com"
+    ],
     "fuzzy-clock": [
       "fuzzy-clock@keepawayfromfire.co.uk",
       "FuzzyClock@johngoetz"
@@ -86,10 +94,6 @@
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
-    ],
-    "fullscreen-hot-corner": [
-      "fullscreen-hot-corner@sorrow.about.alice.pm.me",
-      "fullscreen-hot-corner@richardblaha.cz"
     ],
     "disable-unredirect-fullscreen-windows": [
       "unredirect@vaina.lt",
@@ -133,9 +137,9 @@
       "fuzzy-clock@keepawayfromfire.co.uk",
       "FuzzyClock@johngoetz"
     ],
-    "fullscreen-hot-corner": [
-      "fullscreen-hot-corner@sorrow.about.alice.pm.me",
-      "fullscreen-hot-corner@richardblaha.cz"
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
     ],
     "disable-unredirect-fullscreen-windows": [
       "unredirect@vaina.lt",
@@ -167,9 +171,9 @@
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
     ],
-    "fullscreen-hot-corner": [
-      "fullscreen-hot-corner@sorrow.about.alice.pm.me",
-      "fullscreen-hot-corner@richardblaha.cz"
+    "panel-date-format": [
+      "panel-date-format@keiii.github.com",
+      "panel-date-format@atareao.es"
     ],
     "wireguard-indicator": [
       "wireguard-indicator@gregos.me",

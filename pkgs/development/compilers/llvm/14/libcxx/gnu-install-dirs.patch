@@ -1,85 +1,21 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index b0569a4a54ca..7d665f5a3258 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -10,6 +10,8 @@ endif()
- #===============================================================================
- cmake_minimum_required(VERSION 3.13.4)
- 
-+include(GNUInstallDirs)
-+
- set(LLVM_COMMON_CMAKE_UTILS "${CMAKE_CURRENT_SOURCE_DIR}/../cmake")
- 
- # Add path for custom modules
-@@ -415,13 +417,13 @@ if(LLVM_ENABLE_PER_TARGET_RUNTIME_DIR AND NOT APPLE)
+@@ -436,7 +436,7 @@ if(LLVM_ENABLE_PER_TARGET_RUNTIME_DIR AND NOT APPLE)
    set(LIBCXX_LIBRARY_DIR ${LLVM_LIBRARY_OUTPUT_INTDIR}/${LLVM_DEFAULT_TARGET_TRIPLE})
    set(LIBCXX_GENERATED_INCLUDE_DIR "${LLVM_BINARY_DIR}/include/c++/v1")
    set(LIBCXX_GENERATED_INCLUDE_TARGET_DIR "${LLVM_BINARY_DIR}/include/${LLVM_DEFAULT_TARGET_TRIPLE}/c++/v1")
 -  set(LIBCXX_INSTALL_LIBRARY_DIR lib${LLVM_LIBDIR_SUFFIX}/${LLVM_DEFAULT_TARGET_TRIPLE} CACHE PATH
 +  set(LIBCXX_INSTALL_LIBRARY_DIR "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}/${LLVM_DEFAULT_TARGET_TRIPLE}" CACHE PATH
        "Path where built libc++ libraries should be installed.")
--  set(LIBCXX_INSTALL_RUNTIME_DIR bin CACHE PATH
-+  set(LIBCXX_INSTALL_RUNTIME_DIR "${CMAKE_INSTALL_BINDIR}" CACHE PATH
-       "Path where built libc++ runtime libraries should be installed.")
--  set(LIBCXX_INSTALL_INCLUDE_DIR "include/c++/v1" CACHE PATH
-+  set(LIBCXX_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}/c++/v1" CACHE PATH
-       "Path where target-agnostic libc++ headers should be installed.")
--  set(LIBCXX_INSTALL_INCLUDE_TARGET_DIR "include/${LLVM_DEFAULT_TARGET_TRIPLE}/c++/v1" CACHE PATH
-+  set(LIBCXX_INSTALL_INCLUDE_TARGET_DIR "${CMAKE_INSTALL_INCLUDEDIR}/${LLVM_DEFAULT_TARGET_TRIPLE}/c++/v1" CACHE PATH
+   set(LIBCXX_INSTALL_INCLUDE_TARGET_DIR "${CMAKE_INSTALL_INCLUDEDIR}/${LLVM_DEFAULT_TARGET_TRIPLE}/c++/v1" CACHE PATH
        "Path where target-specific libc++ headers should be installed.")
-   if(LIBCXX_LIBDIR_SUBDIR)
-     string(APPEND LIBCXX_LIBRARY_DIR /${LIBCXX_LIBDIR_SUBDIR})
-@@ -431,11 +433,11 @@ elseif(LLVM_LIBRARY_OUTPUT_INTDIR)
-   set(LIBCXX_LIBRARY_DIR ${LLVM_LIBRARY_OUTPUT_INTDIR})
-   set(LIBCXX_GENERATED_INCLUDE_DIR "${LLVM_BINARY_DIR}/include/c++/v1")
+@@ -453,7 +453,7 @@ else()
+     set(LIBCXX_GENERATED_INCLUDE_DIR "${CMAKE_BINARY_DIR}/include/c++/v1")
+   endif()
    set(LIBCXX_GENERATED_INCLUDE_TARGET_DIR "${LIBCXX_GENERATED_INCLUDE_DIR}")
 -  set(LIBCXX_INSTALL_LIBRARY_DIR lib${LIBCXX_LIBDIR_SUFFIX} CACHE PATH
-+  set(LIBCXX_INSTALL_LIBRARY_DIR ${CMAKE_INSTALL_LIBDIR}${LIBCXX_LIBDIR_SUFFIX} CACHE PATH
++  set(LIBCXX_INSTALL_LIBRARY_DIR "${CMAKE_INSTALL_LIBDIR}${LLVM_LIBDIR_SUFFIX}" CACHE PATH
        "Path where built libc++ libraries should be installed.")
--  set(LIBCXX_INSTALL_RUNTIME_DIR bin CACHE PATH
-+  set(LIBCXX_INSTALL_RUNTIME_DIR "${CMAKE_INSTALL_BINDIR}/c++/v1" CACHE PATH
-       "Path where built libc++ runtime libraries should be installed.")
--  set(LIBCXX_INSTALL_INCLUDE_DIR "include/c++/v1" CACHE PATH
-+  set(LIBCXX_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}/c++/v1" CACHE PATH
-       "Path where target-agnostic libc++ headers should be installed.")
    set(LIBCXX_INSTALL_INCLUDE_TARGET_DIR "${LIBCXX_INSTALL_INCLUDE_DIR}" CACHE PATH
        "Path where target-specific libc++ headers should be installed.")
-@@ -443,11 +445,11 @@ else()
-   set(LIBCXX_LIBRARY_DIR ${CMAKE_BINARY_DIR}/lib${LIBCXX_LIBDIR_SUFFIX})
-   set(LIBCXX_GENERATED_INCLUDE_DIR "${CMAKE_BINARY_DIR}/include/c++/v1")
-   set(LIBCXX_GENERATED_INCLUDE_TARGET_DIR "${LIBCXX_GENERATED_INCLUDE_DIR}")
--  set(LIBCXX_INSTALL_LIBRARY_DIR lib${LIBCXX_LIBDIR_SUFFIX} CACHE PATH
-+  set(LIBCXX_INSTALL_LIBRARY_DIR ${CMAKE_INSTALL_LIBDIR}${LIBCXX_LIBDIR_SUFFIX} CACHE PATH
-       "Path where built libc++ libraries should be installed.")
--  set(LIBCXX_INSTALL_RUNTIME_DIR bin CACHE PATH
-+  set(LIBCXX_INSTALL_RUNTIME_DIR "${CMAKE_INSTALL_BINDIR}" CACHE PATH
-       "Path where built libc++ runtime libraries should be installed.")
--  set(LIBCXX_INSTALL_INCLUDE_DIR "include/c++/v1" CACHE PATH
-+  set(LIBCXX_INSTALL_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}/c++/v1" CACHE PATH
-       "Path where target-agnostic libc++ headers should be installed.")
-   set(LIBCXX_INSTALL_INCLUDE_TARGET_DIR "${LIBCXX_INSTALL_INCLUDE_DIR}" CACHE PATH
-       "Path where target-specific libc++ headers should be installed.")
-diff --git a/cmake/Modules/HandleLibCXXABI.cmake b/cmake/Modules/HandleLibCXXABI.cmake
-index 5a8a4a270a1a..d69405ddeeac 100644
---- a/cmake/Modules/HandleLibCXXABI.cmake
-+++ b/cmake/Modules/HandleLibCXXABI.cmake
-@@ -1,8 +1,9 @@
--
- #===============================================================================
- # Add an ABI library if appropriate
- #===============================================================================
- 
-+include(GNUInstallDirs)
-+
- #
- # _setup_abi: Set up the build to use an ABI library
- #
-@@ -63,7 +64,7 @@ macro(setup_abi_lib abidefines abishared abistatic abifiles abidirs)
- 
-         if (LIBCXX_INSTALL_HEADERS)
-           install(FILES "${LIBCXX_BINARY_INCLUDE_DIR}/${fpath}"
--            DESTINATION include/c++/v1/${dstdir}
-+            DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/c++/v1/${dstdir}"
-             COMPONENT cxx-headers
-             PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ WORLD_READ
-             )

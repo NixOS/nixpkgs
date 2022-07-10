@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -17,6 +18,7 @@
 , matplotlib
 , numpy
 , snuggs
+, setuptools
 
 # tests
 , hypothesis
@@ -55,6 +57,7 @@ buildPythonPackage rec {
     matplotlib
     numpy
     snuggs
+    setuptools # needs pkg_resources at runtime
   ];
 
   preCheck = ''
@@ -73,9 +76,18 @@ buildPythonPackage rec {
     "-m 'not network'"
   ];
 
+  disabledTests = lib.optionals stdenv.isDarwin [
+    "test_reproject_error_propagation"
+  ];
+
   pythonImportsCheck = [
     "rasterio"
   ];
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/rio --version | grep ${version} > /dev/null
+  '';
 
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";

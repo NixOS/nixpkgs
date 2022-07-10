@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -30,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "cirq-core";
-  version = "0.13.1";
+  version = "0.15.0";
 
   disabled = pythonOlder "3.6";
 
@@ -38,32 +39,17 @@ buildPythonPackage rec {
     owner = "quantumlib";
     repo = "cirq";
     rev = "v${version}";
-    sha256 = "sha256-MVfJ8iEeW8gFvCNTqrWfYpNNYuDAufHgcjd7Nh3qp8U=";
+    sha256 = "sha256-E36zXpv+9WBNYvv/shItS7Q34gYqUyADlqWd+m4Jpps=";
   };
 
   sourceRoot = "source/${pname}";
-
-  patches = [
-    # present in upstream master - remove after 0.13.1
-    (fetchpatch {
-      name = "fix-test-tolerances.part-1.patch";
-      url = "https://github.com/quantumlib/Cirq/commit/eb1d9031e55d3c8801ea44abbb6a4132b2fc5126.patch";
-      sha256 = "0ka24v6dfxnap9p07ni32z9zccbmw0lbrp5mcknmpsl12hza98xm";
-      stripLen = 1;
-    })
-    (fetchpatch {
-      name = "fix-test-tolerances.part-2.patch";
-      url = "https://github.com/quantumlib/Cirq/commit/a28d601b2bcfc393336375c53e5915fd16455395.patch";
-      sha256 = "0k2dqsm4ydn6556d40kc8j04jgjn59z4wqqg1jn1r916a7yxw493";
-      stripLen = 1;
-    })
-  ];
 
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "matplotlib~=3.0" "matplotlib" \
       --replace "networkx~=2.4" "networkx" \
-      --replace "numpy~=1.16" "numpy"
+      --replace "numpy~=1.16" "numpy" \
+      --replace "sympy<1.10" "sympy"
   '';
 
   propagatedBuildInputs = [
@@ -93,9 +79,9 @@ buildPythonPackage rec {
     freezegun
   ];
 
-  pytestFlagsArray = lib.optionals (!withContribRequires) [
+  disabledTestPaths = lib.optionals (!withContribRequires) [
     # requires external (unpackaged) libraries, so untested.
-    "--ignore=cirq/contrib/"
+    "cirq/contrib/"
   ];
   disabledTests = [
     "test_metadata_search_path" # tries to import flynt, which isn't in Nixpkgs
@@ -103,6 +89,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Framework for creating, editing, and invoking Noisy Intermediate Scale Quantum (NISQ) circuits";
     homepage = "https://github.com/quantumlib/cirq";
     changelog = "https://github.com/quantumlib/Cirq/releases/tag/v${version}";

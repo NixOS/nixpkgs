@@ -1,48 +1,60 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, isPy27
-, pyutilib
-, appdirs
+, parameterized
 , ply
-, six
-, nose
-, glpk
+, pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyomo";
-  version = "6.3.0";
-  disabled = isPy27; # unable to import pyutilib.th
+  version = "6.4.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     repo = "pyomo";
     owner = "pyomo";
-    rev = version;
-    sha256 = "sha256-xyjiB5fDRf5y9Av5Cr+8wtU4pHzMHsM45mcmJEOaTWs=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-LwlUib/CeVCCmgpTHtYHcFyxk9Esx1zhZ3yGHeGpugY=";
   };
 
-  checkInputs = [ nose glpk ];
   propagatedBuildInputs = [
-    pyutilib
-    appdirs
     ply
-    six
   ];
 
-  checkPhase = ''
-    rm pyomo/bilevel/tests/test_blp.py \
-       pyomo/version/tests/test_installer.py \
-       pyomo/common/tests/test_download.py \
-       pyomo/core/tests/examples/test_pyomo.py
-    export HOME=$TMPDIR
-    nosetests
+  checkInputs = [
+    parameterized
+    pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "pyomo"
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
+  disabledTestPaths = [
+    # Don't test the documentation and the examples
+    "doc/"
+    "examples/"
+    # Tests don't work properly in the sandbox
+    "pyomo/environ/tests/test_environ.py"
+  ];
+
+  disabledTests = [
+    # Test requires lsb_release
+    "test_get_os_version"
+  ];
+
   meta = with lib; {
-    description = "Pyomo: Python Optimization Modeling Objects";
+    description = "Python Optimization Modeling Objects";
     homepage = "http://pyomo.org";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

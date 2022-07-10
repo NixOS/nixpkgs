@@ -2,7 +2,6 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
-, fetchpatch
 , jsonrpc-base
 , pytest-aiohttp
 , pytestCheckHook
@@ -11,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "jsonrpc-async";
-  version = "2.1.0";
+  version = "2.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     owner = "emlove";
     repo = pname;
     rev = version;
-    hash = "sha256-Lr8gvQR0Q46b/e1K/XyvqtJo18nBpHjlDdNq4vjCMyU=";
+    hash = "sha256-HhesXzxVjhWJkubiBi6sMoXi/zicqn99dqT5bilycS8=";
   };
 
   propagatedBuildInputs = [
@@ -31,15 +30,6 @@ buildPythonPackage rec {
   checkInputs = [
     pytest-aiohttp
     pytestCheckHook
-  ];
-
-  patches = [
-    # Fix tests with later pytest-aiohttp, https://github.com/emlove/jsonrpc-async/pull/9
-    (fetchpatch {
-      name = "support-later-pytest-aiohttp.patch";
-      url = "https://github.com/emlove/jsonrpc-async/commit/8b790f23af0d898df90460029d5ba3bcfb0423ed.patch";
-      sha256 = "sha256-rthHRF90hywMIbvIHo3Do/uzXKe+STPOoZIa80H4b/g=";
-    })
   ];
 
   pytestFlagsArray = [

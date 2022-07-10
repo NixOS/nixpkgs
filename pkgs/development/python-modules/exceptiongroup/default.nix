@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
-  version = "1.0.0rc2";
+  version = "1.0.0rc8";
   format = "flit";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TSVLBSMb7R1DB5vc/g8dZsCrR4Pmd3oyk1X5t43jrYM=";
+    hash = "sha256-aZDCTwa40zyAZc/kPl6KS/o4TgNYvgNq+cxgtjIb0Ro=";
   };
 
   nativeBuildInputs = [

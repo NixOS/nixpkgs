@@ -124,19 +124,19 @@ with pkgs;
       sourceVersion = {
         major = "3";
         minor = "9";
-        patch = "12";
+        patch = "13";
         suffix = "";
       };
-      sha256 = "sha256-LNlLIGcOQVnG2atX+R2/JVuX2MGhRR0cNfTsGWit+XE=";
+      sha256 = "sha256-ElsMWY8eFdKqZUBug/eS330XHN84wWgDsUmZQxajCA8=";
     };
     python310 = {
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "4";
+        patch = "5";
         suffix = "";
       };
-      sha256 = "sha256-gL+SX1cdpDazUhCIbPefbrX6XWxXExa3NWg0NFH3ehk=";
+      sha256 = "sha256-hDfv1bEG7wp1qr+/I9iAYlEgpzqGoireTS4uaNe3RIY=";
     };
   };
 
@@ -199,9 +199,9 @@ in {
       major = "3";
       minor = "11";
       patch = "0";
-      suffix = "a7";
+      suffix = "b3";
     };
-    sha256 = "sha256-t8Vt10wvRy1Ja1qNNWvWrZ75sD8mKIwyN9P/aYqwPXQ=";
+    sha256 = "sha256-ybmfUxXqMPjp/LzmgHo3Oeh1SA0pEk5tmUD2+ry3yQI=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -230,11 +230,10 @@ in {
     enableOptimizations = false;
     enableLTO = false;
     mimetypesSupport = false;
-  } // sources.python39)).overrideAttrs(old: {
+  } // sources.python310)).overrideAttrs(old: {
+    # TODO(@Artturin): Add this to the main cpython expr
+    strictDeps = true;
     pname = "python3-minimal";
-    meta = old.meta // {
-      maintainers = [];
-    };
   });
 
   pypy27 = callPackage ./pypy {

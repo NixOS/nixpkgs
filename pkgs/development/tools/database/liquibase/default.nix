@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       ${lib.concatStringsSep "\n" (map (p: addJars "${p}/share/java") extraJars)}
 
       ${lib.getBin jre}/bin/java -cp "\$CP" \$JAVA_OPTS \
-        liquibase.integration.commandline.Main \''${1+"\$@"}
+        liquibase.integration.commandline.LiquibaseCommandLine \''${1+"\$@"}
       EOF
       chmod +x $out/bin/liquibase
     '';
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
     description = "Version Control for your database";
     homepage = "https://www.liquibase.org/";
     changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${version}/changelog.txt";
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
     platforms = with platforms; unix;

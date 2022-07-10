@@ -11,6 +11,7 @@
 , yajl
 , nixosTests
 , criu
+, fetchpatch
 }:
 
 let
@@ -48,6 +49,15 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Should dropped in next release after 1.4.5
+    (fetchpatch {
+      name = "usrbin-paths.patch";
+      url = "https://github.com/containers/crun/commit/dd29f7f7f713c49784ac30f7cdca33b2ef94d5b8.patch";
+      sha256 = "sha256-kHHix8CUL+c8HbOe5qx4PeF1P19113U4bRZyleMUjqk=";
+    })
+  ];
+
   nativeBuildInputs = [ autoreconfHook go-md2man pkg-config python3 ];
 
   buildInputs = [ libcap libseccomp systemd yajl ]
@@ -55,6 +65,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (lib.elem stdenv.hostPlatform.system criu.meta.platforms) criu;
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   # we need this before autoreconfHook does its thing in order to initialize
   # config.h with the correct values

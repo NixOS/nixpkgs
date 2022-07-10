@@ -31,13 +31,13 @@ mkCoqDerivation {
   release."2.9".sha256 = "sha256:1adwzbl1pprrrwrm7cm493098fizxanxpv7nyfbvwdhgbhcnv6qf";
   release."2.8".sha256 = "sha256-cyK88uzorRfjapNQ6XgQEmlbWnDsiyLve5po1VG52q0=";
   releaseRev = v: "v${v}";
-  extraBuildInputs = [ ITree ];
+  buildInputs = [ ITree ];
   propagatedBuildInputs = [ compcert ];
 
   preConfigure = ''
     patchShebangs util
     substituteInPlace Makefile \
-      --replace 'COQVERSION= ' 'COQVERSION= 8.15.1 or-else '\
+      --replace 'COQVERSION= ' 'COQVERSION= 8.15.2 or-else 8.15.1 or-else '\
       --replace 'FLOYD_FILES=' 'FLOYD_FILES= ${toString extra_floyd_files}'
   '';
 

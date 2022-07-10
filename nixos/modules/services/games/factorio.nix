@@ -87,6 +87,18 @@ in
           a new map with default settings will be generated before starting the service.
         '';
       };
+      loadLatestSave = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Load the latest savegame on startup. This overrides saveName, in that the latest
+          save will always be used even if a saved game of the given name exists. It still
+          controls the 'canonical' name of the savegame.
+
+          Set this to true to have the server automatically reload a recent autosave after
+          a crash or desync.
+        '';
+      };
       # TODO Add more individual settings as nixos-options?
       # TODO XXX The server tries to copy a newly created config file over the old one
       #   on shutdown, but fails, because it's in the nix store. When is this needed?
@@ -250,8 +262,9 @@ in
           "--config=${cfg.configFile}"
           "--port=${toString cfg.port}"
           "--bind=${cfg.bind}"
-          "--start-server=${mkSavePath cfg.saveName}"
+          (optionalString (!cfg.loadLatestSave) "--start-server=${mkSavePath cfg.saveName}")
           "--server-settings=${serverSettingsFile}"
+          (optionalString cfg.loadLatestSave "--start-server-load-latest")
           (optionalString (cfg.mods != []) "--mod-directory=${modDir}")
           (optionalString (cfg.admins != []) "--server-adminlist=${serverAdminsFile}")
         ];

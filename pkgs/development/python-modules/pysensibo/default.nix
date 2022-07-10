@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "pysensibo";
-  version = "1.0.14";
+  version = "1.0.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "andrey-git";
     repo = pname;
-    rev = version;
-    hash = "sha256-r2YIQ6JPyRWzfXprj3tFwrsAR0NtmVLncWZAsLkAzSA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-sFEeN72+h6yFQFluhOQfxoVJPB5lCpFnlJfLnRxVjFg=";
   };
 
   propagatedBuildInputs = [

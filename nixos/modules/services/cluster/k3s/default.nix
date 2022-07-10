@@ -3,8 +3,14 @@
 with lib;
 let
   cfg = config.services.k3s;
+  removeOption = config: instruction:
+    lib.mkRemovedOptionModule ([ "services" "k3s" ] ++ config) instruction;
 in
 {
+  imports = [
+    (removeOption [ "docker" ] "k3s docker option is no longer supported.")
+  ];
+
   # interface
   options.services.k3s = {
     enable = mkEnableOption "k3s";
@@ -48,12 +54,6 @@ in
       default = null;
     };
 
-    docker = mkOption {
-      type = types.bool;
-      default = false;
-      description = "Use docker to run containers rather than the built-in containerd.";
-    };
-
     extraFlags = mkOption {
       description = "Extra flags to pass to the k3s command.";
       type = types.str;
@@ -88,14 +88,11 @@ in
       }
     ];
 
-    virtualisation.docker = mkIf cfg.docker {
-      enable = mkDefault true;
-    };
     environment.systemPackages = [ config.services.k3s.package ];
 
     systemd.services.k3s = {
       description = "k3s service";
-      after = [ "network.service" "firewall.service" ] ++ (optional cfg.docker "docker.service");
+      after = [ "network.service" "firewall.service" ];
       wants = [ "network.service" "firewall.service" ];
       wantedBy = [ "multi-user.target" ];
       path = optional config.boot.zfs.enabled config.boot.zfs.package;
@@ -113,8 +110,8 @@ in
         ExecStart = concatStringsSep " \\\n " (
           [
             "${cfg.package}/bin/k3s ${cfg.role}"
-          ] ++ (optional cfg.docker "--docker")
-          ++ (optional (cfg.docker && config.systemd.enableUnifiedCgroupHierarchy) "--kubelet-arg=cgroup-driver=systemd")
+          ]
+          ++ (optional (config.systemd.enableUnifiedCgroupHierarchy) "--kubelet-arg=cgroup-driver=systemd")
           ++ (optional cfg.disableAgent "--disable-agent")
           ++ (optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")
           ++ (optional (cfg.token != "") "--token ${cfg.token}")

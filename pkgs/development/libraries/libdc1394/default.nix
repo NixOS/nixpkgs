@@ -15,10 +15,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isDarwin CoreServices;
 
   meta = with lib; {
-    homepage = "https://sourceforge.net/projects/libdc1394/";
     description = "Capture and control API for IIDC compliant cameras";
+    homepage = "https://sourceforge.net/projects/libdc1394/";
     license = licenses.lgpl21Plus;
     maintainers = [ maintainers.viric ];
+    mainProgram = "dc1394_reset_bus";
     platforms = platforms.unix;
   };
 }

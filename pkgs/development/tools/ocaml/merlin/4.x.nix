@@ -15,12 +15,13 @@
 }:
 
 let
-  merlinVersion = "4.4";
+  merlinVersion = "4.5";
 
   hashes = {
-    "4.4-411" = "sha256:0chx28098mmnjbnaz5wgzsn82rh1w9dhzqmsykb412cq13msl1q4";
-    "4.4-412" = "sha256:18xjpsiz7xbgjdnsxfc52l7yfh22harj0birlph4xm42d14pkn0n";
-    "4.4-413" = "sha256:1ilmh2gqpwgr51w2ba8r0s5zkj75h00wkw4az61ssvivn9jxr7k0";
+    "4.5-411" = "sha256:05nz6y7r91rh0lj8b6xdv3s3yknmvjc7y60v17kszgqnr887bvpn";
+    "4.5-412" = "sha256:0i5c3rfzinmwdjya7gv94zyknsm32qx9dlg472xpfqivwvnnhf1z";
+    "4.5-413" = "sha256:1sphq9anfg1qzrvj7hdcqflj6cmc1qiyfkljhng9fxnnr0i7550s";
+    "4.5-414" = "sha256:13h588kwih05zd9p3p7q528q4zc0d1l983kkvbmkxgay5d17nn1i";
   };
 
   ocamlVersionShorthand = lib.concatStrings
@@ -54,8 +55,6 @@ buildDunePackage {
     # Fixed in 4.4 for OCaml ≥ 4.12
     ./test.patch
   ;
-
-  useDune2 = true;
 
   strictDeps = true;
 

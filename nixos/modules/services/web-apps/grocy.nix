@@ -115,9 +115,9 @@ in {
       user = "grocy";
       group = "nginx";
 
-      # PHP 7.4 is the only version which is supported/tested by upstream:
-      # https://github.com/grocy/grocy/blob/v3.0.0/README.md#how-to-install
-      phpPackage = pkgs.php74;
+      # PHP 8.0 is the only version which is supported/tested by upstream:
+      # https://github.com/grocy/grocy/blob/v3.3.0/README.md#how-to-install
+      phpPackage = pkgs.php80;
 
       inherit (cfg.phpfpm) settings;
 

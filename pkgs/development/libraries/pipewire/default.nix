@@ -7,7 +7,9 @@
 , python3
 , meson
 , ninja
+, eudev
 , systemd
+, enableSystemd ? true
 , pkg-config
 , docutils
 , doxygen
@@ -68,7 +70,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.49";
+    version = "0.3.52";
 
     outputs = [
       "out"
@@ -86,7 +88,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-8heX/9BsPguIOzHOuqEQdt6MS3eS4HxR4A+FUZKNpdo=";
+      sha256 = "sha256-JWmO36+OF2O9sLB+Z0znwm3TH+O+pEv3cXnuwP6Wy1E=";
     };
 
     patches = [
@@ -102,11 +104,11 @@ let
       ./0090-pipewire-config-template-paths.patch
       # Place SPA data files in lib output to avoid dependency cycles
       ./0095-spa-data-dir.patch
-      # Fixes missing function declarations in pipewire headers
-      # Should be removed after the next release
+      # Remove 44.1KHz from allowed rates (multiple regressions reported)
+      # To be removed when 0.3.53 is released
       (fetchpatch {
-        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/a2e98e28c1e6fb58b273ef582398d8bee4d2b769.patch";
-        sha256 = "sha256-tqiiAW2fTEp23HT59XR2D/G08pVENJtpxUI7UVufj/A=";
+        url = "https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/16a7c274989f47b0c0d8ba192a30316b545bd26a.patch";
+        sha256 = "sha256-VZ7ChjcR/PGfmH2DmLxfIhd3mj9668l9zLO4k2KBoqg=";
       })
     ];
 
@@ -134,8 +136,8 @@ let
       vulkan-headers
       vulkan-loader
       webrtc-audio-processing
-      systemd
-    ] ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
+    ] ++ (if enableSystemd then [ systemd ] else [ eudev ])
+    ++ lib.optionals gstreamerSupport [ gst_all_1.gst-plugins-base gst_all_1.gstreamer ]
     ++ lib.optionals libcameraSupport [ libcamera libdrm ]
     ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optionals bluezSupport [ bluez libfreeaptx ldacbt sbc fdk_aac ]
@@ -160,13 +162,16 @@ let
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
       "-Davahi=${mesonEnableFeature zeroconfSupport}"
       "-Dgstreamer=${mesonEnableFeature gstreamerSupport}"
-      "-Dsystemd-system-service=enabled"
+      "-Dsystemd-system-service=${mesonEnableFeature enableSystemd}"
+      "-Dudev=${mesonEnableFeature (!enableSystemd)}"
+      "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
       "-Dffmpeg=${mesonEnableFeature ffmpegSupport}"
       "-Dbluez5=${mesonEnableFeature bluezSupport}"
       "-Dbluez5-backend-hsp-native=${mesonEnableFeature nativeHspSupport}"
       "-Dbluez5-backend-hfp-native=${mesonEnableFeature nativeHfpSupport}"
       "-Dbluez5-backend-ofono=${mesonEnableFeature ofonoSupport}"
       "-Dbluez5-backend-hsphfpd=${mesonEnableFeature hsphfpdSupport}"
+      "-Dbluez5-codec-lc3plus=disabled"
       "-Dsysconfdir=/etc"
       "-Dpipewire_confdata_dir=${placeholder "lib"}/share/pipewire"
       "-Draop=${mesonEnableFeature raopSupport}"
@@ -200,8 +205,11 @@ let
         cp ${buildPackages.pipewire}/nix-support/*.json "$out/nix-support"
       ''}
 
-      moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
-      moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
+      ${lib.optionalString enableSystemd ''
+        moveToOutput "share/systemd/user/pipewire-pulse.*" "$pulse"
+        moveToOutput "lib/systemd/user/pipewire-pulse.*" "$pulse"
+      ''}
+
       moveToOutput "bin/pipewire-pulse" "$pulse"
 
       moveToOutput "bin/pw-jack" "$jack"

@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Eclipse-based LDAP browser and directory client";
     homepage = "https://directory.apache.org/studio/";
+    sourceProvenance = with sourceTypes; [
+      binaryBytecode
+      binaryNativeCode
+    ];
     license = licenses.asl20;
     # Upstream supports macOS and Windows too.
     platforms = platforms.linux;

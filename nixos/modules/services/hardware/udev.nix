@@ -8,6 +8,24 @@ let
 
   cfg = config.services.udev;
 
+  initrdUdevRules = pkgs.runCommand "initrd-udev-rules" {} ''
+    mkdir -p $out/etc/udev/rules.d
+    for f in 60-cdrom_id 60-persistent-storage 75-net-description 80-drivers 80-net-setup-link; do
+      ln -s ${config.boot.initrd.systemd.package}/lib/udev/rules.d/$f.rules $out/etc/udev/rules.d
+    done
+  '';
+
+
+  # networkd link files are used early by udev to set up interfaces early.
+  # This must be done in stage 1 to avoid race conditions between udev and
+  # network daemons.
+  # TODO move this into the initrd-network module when it exists
+  initrdLinkUnits = pkgs.runCommand "initrd-link-units" {} ''
+    mkdir -p $out
+    ln -s ${udev}/lib/systemd/network/*.link $out/
+    ${lib.concatMapStringsSep "\n" (file: "ln -s ${file} $out/") (lib.mapAttrsToList (n: v: "${v.unit}/${n}") (lib.filterAttrs (n: _: hasSuffix ".link" n) config.systemd.network.units))}
+  '';
+
   extraUdevRules = pkgs.writeTextFile {
     name = "extra-udev-rules";
     text = cfg.extraRules;
@@ -153,6 +171,11 @@ let
       mv etc/udev/hwdb.bin $out
     '';
 
+  compressFirmware = if config.boot.kernelPackages.kernelAtLeast "5.3" then
+    pkgs.compressFirmwareXz
+  else
+    id;
+
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.
   udevPath = pkgs.buildEnv {
@@ -249,7 +272,7 @@ in
       '';
       apply = list: pkgs.buildEnv {
         name = "firmware";
-        paths = list;
+        paths = map compressFirmware list;
         pathsToLink = [ "/lib/firmware" ];
         ignoreCollisions = true;
       };
@@ -350,7 +373,10 @@ in
     ];
     boot.initrd.systemd.storePaths = [
       "${config.boot.initrd.systemd.package}/lib/systemd/systemd-udevd"
-      "${config.boot.initrd.systemd.package}/lib/udev"
+      "${config.boot.initrd.systemd.package}/lib/udev/ata_id"
+      "${config.boot.initrd.systemd.package}/lib/udev/cdrom_id"
+      "${config.boot.initrd.systemd.package}/lib/udev/scsi_id"
+      "${config.boot.initrd.systemd.package}/lib/udev/rules.d"
     ] ++ map (x: "${x}/bin") config.boot.initrd.services.udev.binPackages;
 
     # Generate the udev rules for the initrd
@@ -364,13 +390,17 @@ in
         systemd = config.boot.initrd.systemd.package;
         binPackages = config.boot.initrd.services.udev.binPackages ++ [ config.boot.initrd.systemd.contents."/bin".source ];
       };
+      "/etc/systemd/network".source = initrdLinkUnits;
     };
-    # Insert custom rules
-    boot.initrd.services.udev.packages = mkIf (config.boot.initrd.services.udev.rules != "") (pkgs.writeTextFile {
-      name = "initrd-udev-rules";
-      destination = "/etc/udev/rules.d/99-local.rules";
-      text = config.boot.initrd.services.udev.rules;
-    });
+    # Insert initrd rules
+    boot.initrd.services.udev.packages = [
+      initrdUdevRules
+      (mkIf (config.boot.initrd.services.udev.rules != "") (pkgs.writeTextFile {
+        name = "initrd-udev-rules";
+        destination = "/etc/udev/rules.d/99-local.rules";
+        text = config.boot.initrd.services.udev.rules;
+      }))
+    ];
 
     environment.etc =
       {

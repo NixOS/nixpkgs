@@ -6,13 +6,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "3.9.5";
+  version = "3.9.6";
 
   src = fetchFromGitHub {
     owner = "spotDL";
     repo = "spotify-downloader";
-    rev = "v${version}";
-    hash = "sha256-Zdm+OVcFgOO8kbJDNQSVDLnIHzhvm9EPbcG95mNrnTk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JoeNVMuEslz7A7G4ZvikimZrG75YrH5Mx3Oamtfy4cM=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

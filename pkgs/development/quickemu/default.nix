@@ -11,7 +11,7 @@
 , cdrtools
 , usbutils
 , util-linux
-, spicy
+, spice-gtk
 , swtpm
 , wget
 , xdg-user-dirs
@@ -32,7 +32,7 @@ let
     cdrtools
     usbutils
     util-linux
-    spicy
+    spice-gtk
     swtpm
     wget
     xdg-user-dirs

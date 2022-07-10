@@ -257,7 +257,7 @@ in
       '' + optionalString cfg.autoMigrate ''
         ${pkgs.ipfs-migrator}/bin/fs-repo-migrations -to '${cfg.package.repoVersion}' -y
       '' + ''
-          ipfs --offline config profile apply ${profile}
+          ipfs --offline config profile apply ${profile} >/dev/null
         fi
       '' + optionalString cfg.autoMount ''
         ipfs --offline config Mounts.FuseAllowOther --json true
@@ -283,7 +283,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = "";
-        ReadWritePaths = [ "" cfg.dataDir ];
+        ReadWritePaths = optionals (!cfg.autoMount) [ "" cfg.dataDir ];
       } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     } // optionalAttrs (!cfg.startWhenNeeded) {
       wantedBy = [ "default.target" ];

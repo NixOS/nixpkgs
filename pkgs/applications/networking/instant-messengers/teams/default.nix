@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, runtimeShell
 , fetchurl
 , autoPatchelfHook
 , wrapGAppsHook
@@ -27,6 +28,7 @@ let
     description = "Microsoft Teams";
     homepage = "https://teams.microsoft.com";
     downloadPage = "https://teams.microsoft.com/downloads";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ liff tricktron ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
@@ -56,9 +58,12 @@ let
     ];
 
     preFixup = ''
-      gappsWrapperArgs+=(--prefix PATH : "${coreutils}/bin:${gawk}/bin")
-      gappsWrapperArgs+=(--add-flags --disable-namespace-sandbox)
-      gappsWrapperArgs+=(--add-flags --disable-setuid-sandbox)
+      gappsWrapperArgs+=(
+        --prefix PATH : "${coreutils}/bin:${gawk}/bin"
+
+        # fix for https://docs.microsoft.com/en-us/answers/questions/298724/open-teams-meeting-link-on-linux-doens39t-work.html?childToView=309406#comment-309406
+        --append-flags '--disable-namespace-sandbox --disable-setuid-sandbox'
+      )
     '';
 
 
@@ -119,11 +124,6 @@ let
         echo "Adding runtime dependencies to RPATH of Node module $mod"
         patchelf --set-rpath "$runtime_rpath:$mod_rpath" "$mod"
       done;
-
-      # fix for https://docs.microsoft.com/en-us/answers/questions/298724/open-teams-meeting-link-on-linux-doens39t-work.html?childToView=309406#comment-309406
-      # while we create the wrapper ourselves, gappsWrapperArgs leads to the same issue
-      # another option would be to introduce gappsWrapperAppendedArgs, to allow control of positioning
-      substituteInPlace "$out/bin/teams" --replace '.teams-wrapped"  --disable-namespace-sandbox --disable-setuid-sandbox "$@"' '.teams-wrapped" "$@" --disable-namespace-sandbox --disable-setuid-sandbox'
     '';
   };
 
@@ -134,7 +134,7 @@ let
 
     src = fetchurl {
       url = "https://statics.teams.cdn.office.net/production-osx/${version}/Teams_osx.pkg";
-      sha256 = "1mg6a3b3954w4xy5rlcrwxczymygl61dv2rxqp45sjcsh3hp39q0";
+      hash = "sha256-vLUEvOSBUyAJIWHOAIkTqTW/W6TkgmeyRzQbquZP810=";
     };
 
     buildInputs = [ xar cpio makeWrapper ];

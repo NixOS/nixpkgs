@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , jsonschema
@@ -6,7 +7,7 @@
 , requests
 , pytestCheckHook
 , pyjson5
-, Babel
+, babel
 , jupyter_server
 , openapi-core
 , pytest-tornasync
@@ -32,7 +33,7 @@ buildPythonPackage rec {
     rm -r tests/translations/
   '';
 
-  propagatedBuildInputs = [ requests jsonschema pyjson5 Babel jupyter_server ];
+  propagatedBuildInputs = [ requests jsonschema pyjson5 babel jupyter_server ];
 
   checkInputs = [
     openapi-core
@@ -44,6 +45,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
+    broken = stdenv.isDarwin;
     description = "JupyterLab Server";
     homepage = "https://jupyter.org";
     license = licenses.bsdOriginal;

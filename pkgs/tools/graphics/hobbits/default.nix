@@ -1,16 +1,16 @@
 { lib, stdenv, mkDerivation, fetchFromGitHub
-, cmake, pkg-config, fftw, libpcap, libusb1, python3
+, cmake, pkg-config, pffft, libpcap, libusb1, python3
 }:
 
 mkDerivation rec {
   pname = "hobbits";
-  version = "0.52.0";
+  version = "0.53.1";
 
   src = fetchFromGitHub {
     owner = "Mahlet-Inc";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GZHBkBRt1ySItV+h5rdvey7KwdUWh5+rgztXh6HW3Js=";
+    sha256 = "sha256-dMFsv2M96+65JxTOq0CG+vm7a75GkD7N7PmbsyZ2Fog=";
   };
 
   postPatch = ''
@@ -20,9 +20,11 @@ mkDerivation rec {
       --replace "[Mystery Build]" "${version}"
   '';
 
-  buildInputs = [ fftw libpcap libusb1 python3 ];
+  buildInputs = [ pffft libpcap libusb1 python3 ];
 
   nativeBuildInputs = [ cmake pkg-config ];
+
+  NIX_CFLAGS_COMPILE = lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
 
   meta = with lib; {
     description = "A multi-platform GUI for bit-based analysis, processing, and visualization";

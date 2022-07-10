@@ -1,28 +1,28 @@
 { lib
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
+, mock
 , pyserial
 , pyserial-asyncio
 , pyusb
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
-, zigpy }:
+, zigpy
+}:
 
 buildPythonPackage rec {
   pname = "zigpy-zigate";
-  version = "0.8.0";
-  # https://github.com/Martiusweb/asynctest/issues/152
-  # broken by upstream python bug with asynctest and
-  # is used exclusively by home-assistant with python 3.8
+  version = "0.9.0";
+  format = "setuptools";
+
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-zigate";
-    rev = version;
-    sha256 = "sha256-rFmcgfn87XS1fvbSdJG6pItXRMkeogp4faKMe7pCxkM=";
+    rev = "v${version}";
+    hash = "sha256-rFmcgfn87XS1fvbSdJG6pItXRMkeogp4faKMe7pCxkM=";
   };
 
   propagatedBuildInputs = [
@@ -33,13 +33,22 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
-    asynctest
+    mock
     pytest-asyncio
     pytestCheckHook
   ];
 
+  pythonImportsCheck = [
+    "zigpy_zigate"
+  ];
+
+  disabledTestPaths = [
+    # Fails in sandbox
+    "tests/test_application.py "
+  ];
+
   meta = with lib; {
-    description = "A library which communicates with ZiGate radios for zigpy";
+    description = "Library which communicates with ZiGate radios for zigpy";
     homepage = "https://github.com/zigpy/zigpy-zigate";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ etu mvnetbiz ];

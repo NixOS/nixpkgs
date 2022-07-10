@@ -11,14 +11,14 @@
 
 buildPythonApplication rec {
   pname = "cmake-language-server";
-  version = "0.1.3";
+  version = "0.1.4";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "regen100";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-eZBnygEYjLzk29tvLGg1JdhCECc5x2MewHRSChMuCjo=";
+    sha256 = "sha256-FOyyXSgoFpX4mOHFyZtVW618M1Xs7k+IioJzm1sdkKY=";
   };
 
   patches = [

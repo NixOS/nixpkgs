@@ -19,6 +19,13 @@ in with lib; {
   options.services.zeronet = {
     enable = mkEnableOption "zeronet";
 
+    package = mkOption {
+      type = types.package;
+      default = pkgs.zeronet;
+      defaultText = literalExpression "pkgs.zeronet";
+      description = "ZeroNet package to use";
+    };
+
     settings = mkOption {
       type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
       default = {};
@@ -72,7 +79,7 @@ in with lib; {
 
     systemd.services.zeronet = {
       description = "zeronet";
-      after = [ "network.target" (optionalString cfg.tor "tor.service") ];
+      after = [ "network.target" ] ++ optional cfg.tor "tor.service";
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
@@ -80,7 +87,7 @@ in with lib; {
         DynamicUser = true;
         StateDirectory = "zeronet";
         SupplementaryGroups = mkIf cfg.tor [ "tor" ];
-        ExecStart = "${pkgs.zeronet}/bin/zeronet --config_file ${configFile}";
+        ExecStart = "${cfg.package}/bin/zeronet --config_file ${configFile}";
       };
     };
   };

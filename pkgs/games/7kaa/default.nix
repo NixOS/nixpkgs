@@ -15,17 +15,15 @@
 }:
 
 let
+  pname = "7kaa";
+  version = "2.15.4p1";
 
-  name = "7kaa";
-  versionMajor = "2.15";
-  versionMinor = "4p1";
-
-  music = stdenv.mkDerivation rec {
-    pname = "${name}-music";
-    version = "${versionMajor}";
+  music = stdenv.mkDerivation {
+    pname = "7kaa-music";
+    version = lib.versions.majorMinor version;
 
     src = fetchurl {
-      url = "https://www.7kfans.com/downloads/${name}-music-${versionMajor}.tar.bz2";
+      url = "https://www.7kfans.com/downloads/7kaa-music-${lib.versions.majorMinor version}.tar.bz2";
       sha256 = "sha256-sNdntuJXGaFPXzSpN0SoAi17wkr2YnW+5U38eIaVwcM=";
     };
 
@@ -41,8 +39,7 @@ let
 in
 
 gccStdenv.mkDerivation rec {
-  pname = "${name}";
-  version = "v${versionMajor}.${versionMinor}";
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "the3dfxdude";

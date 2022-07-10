@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config asciidoc libxslt docbook_xsl ];
   buildInputs = [ xlibsWrapper libev libXi libXfixes ];
 
+  prePatch = ''
+    substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
+  '';
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installFlags = [ "PREFIX=$(out)" ];

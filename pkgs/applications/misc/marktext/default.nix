@@ -1,4 +1,4 @@
-{ appimageTools, fetchurl, lib, gsettings-desktop-schemas, gtk3 }:
+{ appimageTools, fetchurl, lib }:
 
 let
   pname = "marktext";
@@ -18,12 +18,6 @@ appimageTools.wrapType2 rec {
 
   profile = ''
     export LC_ALL=C.UTF-8
-  ''
-  # Fixes file open dialog error
-  #     GLib-GIO-ERROR **: 20:36:48.243: No GSettings schemas are installed on the system
-  # See https://github.com/NixOS/nixpkgs/pull/83701#issuecomment-608034097
-  + ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
   '';
 
   multiPkgs = null; # no 32bit needed

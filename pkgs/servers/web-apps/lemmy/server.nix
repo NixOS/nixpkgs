@@ -7,6 +7,7 @@
 , libiconv
 , Security
 , protobuf
+, rustfmt
 }:
 let
   pinData = lib.importJSON ./pin.json;
@@ -21,6 +22,7 @@ rustPlatform.buildRustPackage rec {
     repo = "lemmy";
     rev = version;
     sha256 = pinData.serverSha256;
+    fetchSubmodules = true;
   };
 
   cargoSha256 = pinData.serverCargoSha256;
@@ -37,7 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
-  nativeBuildInputs = [ protobuf ];
+  nativeBuildInputs = [ protobuf rustfmt ];
 
   passthru.updateScript = ./update.sh;
 
@@ -46,5 +48,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ happysalada ];
+    mainProgram = "lemmy_server";
   };
 }

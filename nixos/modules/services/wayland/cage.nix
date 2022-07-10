@@ -88,7 +88,7 @@ in {
       account required pam_unix.so
       session required pam_unix.so
       session required pam_env.so conffile=/etc/pam/environment readenv=0
-      session required ${pkgs.systemd}/lib/security/pam_systemd.so
+      session required ${config.systemd.package}/lib/security/pam_systemd.so
     '';
 
     hardware.opengl.enable = mkDefault true;

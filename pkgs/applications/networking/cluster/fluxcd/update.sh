@@ -35,7 +35,7 @@ if [ ! "$OLD_VERSION" = "$LATEST_VERSION" ]; then
     fi
 
     # `git` flag here is to be used by local maintainers to speed up the bump process
-    if [ "$1" = "git" ]; then
+    if [ $# -eq 1 ] && [ "$1" = "git" ]; then
         git switch -c "package-fluxcd-${LATEST_VERSION}"
         git add "$FLUXCD_PATH"/default.nix
         git commit -m "fluxcd: ${OLD_VERSION} -> ${LATEST_VERSION}"

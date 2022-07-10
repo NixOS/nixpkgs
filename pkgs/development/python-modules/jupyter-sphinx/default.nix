@@ -5,6 +5,7 @@
 , sphinx
 , ipywidgets
 , pythonOlder
+, nbconvert
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "37fc9408385c45326ac79ca0452fbd7ae2bf0e97842d626d2844d4830e30aaf2";
   };
 
-  propagatedBuildInputs = [ nbformat sphinx ipywidgets ];
+  propagatedBuildInputs = [ nbconvert nbformat sphinx ipywidgets ];
 
   doCheck = false;
 

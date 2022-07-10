@@ -27,9 +27,10 @@ stdenv.mkDerivation {
   dontFixup = true;
 
   meta = with lib; {
-    homepage = "https://www.gnu.org/software/gnulib/";
     description = "Central location for code to be shared among GNU packages";
+    homepage = "https://www.gnu.org/software/gnulib/";
     license = licenses.gpl3Plus;
+    mainProgram = "gnulib-tool";
     platforms = platforms.unix;
   };
 }

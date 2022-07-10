@@ -134,7 +134,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.4.1";
+    version = "3.5.0";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -144,7 +144,7 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-tvI7OEOwTbawqQ/qH28NDkDMAntKcyCYIAhj8oZKlOo=";
+      sha256 = "sha256-KR5Ox8bD/qVNwa7QV849QrNW+m9whlYnssffzsrv0hA=";
     };
 
     # Fix FHS paths in tests
@@ -180,12 +180,14 @@ let
       rm tests/pexpects/exit.py
       rm tests/pexpects/job_summary.py
       rm tests/pexpects/signals.py
-    '' + lib.optionalString (stdenv.isLinux && stdenv.isAarch64) ''
-      # pexpect tests are flaky on aarch64-linux
+    '' + lib.optionalString stdenv.isLinux ''
+      # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
       # See https://github.com/fish-shell/fish-shell/issues/8789
       rm tests/pexpects/exit_handlers.py
     '';
 
+    outputs = [ "out" "doc" ];
+    strictDeps = true;
     nativeBuildInputs = [
       cmake
       gettext
@@ -198,7 +200,7 @@ let
     ];
 
     cmakeFlags = [
-      "-DCMAKE_INSTALL_DOCDIR=${placeholder "out"}/share/doc/fish"
+      "-DCMAKE_INSTALL_DOCDIR=${placeholder "doc"}/share/doc/fish"
     ] ++ lib.optionals stdenv.isDarwin [
       "-DMAC_CODESIGN_ID=OFF"
     ];

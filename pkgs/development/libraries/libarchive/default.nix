@@ -40,18 +40,21 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile.am --replace '/bin/pwd' "$(type -P pwd)"
 
-    declare -a skip_tests=(
+    declare -a skip_test_paths=(
       # test won't work in nix sandbox
-      'test_write_disk_perms'
+      'libarchive/test/test_write_disk_perms.c'
       # can't be sure builder will have sparse-capable fs
-      'test_sparse_basic'
+      'libarchive/test/test_sparse_basic.c'
       # can't even be sure builder will have hardlink-capable fs
-      'test_write_disk_hardlink'
+      'libarchive/test/test_write_disk_hardlink.c'
+      # access-time-related tests flakey on some systems
+      'cpio/test/test_option_a.c'
+      'cpio/test/test_option_t.c'
     )
 
-    for test_name in "''${skip_tests[@]}" ; do
-      sed -i "/$test_name/d" Makefile.am
-      rm "libarchive/test/$test_name.c"
+    for test_path in "''${skip_test_paths[@]}" ; do
+      substituteInPlace Makefile.am --replace "$test_path" ""
+      rm "$test_path"
     done
   '';
 

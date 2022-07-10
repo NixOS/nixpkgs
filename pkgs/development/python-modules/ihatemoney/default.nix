@@ -5,12 +5,12 @@
 , fetchPypi
 , alembic
 , aniso8601
-, Babel
+, babel
 , blinker
 , cachetools
 , click
 , dnspython
-, email_validator
+, email-validator
 , flask
 , flask-babel
 , flask-cors
@@ -19,7 +19,7 @@
 , flask-restful
 , flask_sqlalchemy
 , flask-talisman
-, flask_wtf
+, flask-wtf
 , debts
 , idna
 , itsdangerous
@@ -54,17 +54,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aniso8601
-    Babel
+    babel
     blinker
     cachetools
     click
     debts
     dnspython
-    email_validator
+    email-validator
     flask
     flask_mail
     flask_migrate
-    flask_wtf
+    flask-wtf
     flask-babel
     flask-cors
     flask-restful

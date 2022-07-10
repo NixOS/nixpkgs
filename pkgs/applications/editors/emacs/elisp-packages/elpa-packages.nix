@@ -104,6 +104,21 @@ self: let
           maintainers = [ lib.maintainers.sternenseemann ];
         };
       });
+
+      plz = super.plz.overrideAttrs (
+        old: {
+          dontUnpack = false;
+          postPatch = old.postPatch or "" + ''
+            substituteInPlace ./plz.el \
+              --replace 'plz-curl-program "curl"' 'plz-curl-program "${pkgs.curl}/bin/curl"'
+          '';
+          preInstall = ''
+            tar -cf "$pname-$version.tar" --transform "s,^,$pname-$version/," * .[!.]*
+            src="$pname-$version.tar"
+          '';
+        }
+      );
+
     };
 
     elpaPackages = super // overrides;

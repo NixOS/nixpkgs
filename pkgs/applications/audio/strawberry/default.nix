@@ -37,14 +37,20 @@
 
 mkDerivation rec {
   pname = "strawberry";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wa7r6maHAgCTD/TFjqtMuoRt1BqQ38T8KpbMUOoS2ZE=";
+    hash = "sha256-6d7oB54IPI+G5Mhkj+PdQQY93r1SBE2R06qSGIacj8Q=";
   };
+
+  # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
+  postPatch = ''
+    substituteInPlace src/context/contextalbum.cpp \
+      --replace pictures/strawberry.png pictures/strawberry-grey.png
+  '';
 
   buildInputs = [
     alsa-lib

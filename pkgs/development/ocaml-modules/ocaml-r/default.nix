@@ -37,6 +37,8 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
 
   meta = {
+    # This has been broken by the update to R 4.2.0 (#171597)
+    broken = true;
     description = "OCaml bindings for the R interpreter";
     inherit (src.meta) homepage;
     license = lib.licenses.gpl3;

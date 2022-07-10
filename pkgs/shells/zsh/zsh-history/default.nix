@@ -25,10 +25,11 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A CLI to provide enhanced history for your ZSH shell";
-    license = licenses.mit;
     homepage = "https://github.com/b4b4r07/history";
-    platforms = platforms.unix;
+    license = licenses.mit;
     maintainers = with maintainers; [ ];
+    mainProgram = "history";
+    platforms = platforms.unix;
   };
 
   passthru.tests = {

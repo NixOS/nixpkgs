@@ -10,12 +10,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://www.mirbsd.org/MirOS/dist/mir/mksh/${pname}-R${version}.tgz"
+      "http://www.mirbsd.org/MirOS/dist/mir/mksh/${pname}-R${version}.tgz"
       "http://pub.allbsd.org/MirOS/dist/mir/mksh/${pname}-R${version}.tgz"
     ];
     hash = "sha256-d64WZaM38cSMYda5Yds+UhGbOOWIhNHIloSvMfh7xQY=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     installShellFiles
   ];
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    homepage = "http://www.mirbsd.org/mksh.htm";
     description = "MirBSD Korn Shell";
     longDescription = ''
       The MirBSD Korn Shell is a DFSG-free and OSD-compliant (and OSI
@@ -45,7 +47,6 @@ stdenv.mkDerivation rec {
       also to be readily available under other UNIX(R)-like operating
       systems.
     '';
-    homepage = "https://www.mirbsd.org/mksh.htm";
     license = with licenses; [ miros isc unicode-dfs-2016 ];
     maintainers = with maintainers; [ AndersonTorres joachifm ];
     platforms = platforms.unix;

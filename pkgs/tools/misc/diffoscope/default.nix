@@ -11,11 +11,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "210";
+  version = "218";
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "sha256-KaECH995scVdBbxQ4YhZUFmm04ptgi4yx14oDFX+zSw=";
+    sha256 = "sha256-W4adsal6l1TdlUhITNGnNUmYUIpEsOZRro2/SEdzV2Y=";
   };
 
   outputs = [ "out" "man" ];
@@ -46,18 +46,18 @@ python3Packages.buildPythonApplication rec {
   pythonPath = [
       binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
       e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
+      libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
       xz zip zstd
     ]
     ++ (with python3Packages; [
       argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python_magic progressbar33 pypdf2 rpm tlsh
+      python-magic progressbar33 pypdf2 rpm tlsh
     ])
     ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit dtc ]
     ++ lib.optionals enableBloat ([
       abootimg apksigner apktool cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
-      hdf5 imagemagick llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
-    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer ]));
+      hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
+    ] ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer-six ]));
 
   checkInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 
@@ -76,6 +76,9 @@ python3Packages.buildPythonApplication rec {
 
     # fails because it fails to determine llvm version
     "test_item3_deflate_llvm_bitcode"
+
+    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character: b'/build/pytest-of-nixbld/pytest-0/\xf0(\x8c('
+    "test_non_unicode_filename"
 
     # disable formatting tests because they can break on black updates
     "test_code_is_black_clean"
@@ -122,7 +125,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://diffoscope.org/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg ma27 danielfullmer ];
+    maintainers = with maintainers; [ dezgeg danielfullmer ];
     platforms = platforms.unix;
   };
 }

@@ -31,10 +31,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://www.coherentpdf.com/";
-    platforms = ocaml.meta.platforms or [];
     description = "PDF Command Line Tools";
+    homepage = "https://www.coherentpdf.com/";
     license = licenses.unfree;
     maintainers = [ maintainers.vbgl ];
+    mainProgram = "cpdf";
+    inherit (ocaml.meta) platforms;
   };
 }

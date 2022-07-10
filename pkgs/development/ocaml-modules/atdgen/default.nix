@@ -1,4 +1,6 @@
-{ buildDunePackage, alcotest, atd, atdgen-codec-runtime, atdgen-runtime, biniou, re, yojson }:
+{ buildDunePackage, alcotest, atd, atdgen-codec-runtime, atdgen-runtime, biniou, re, yojson
+, python3
+}:
 
 buildDunePackage {
   pname = "atdgen";
@@ -9,9 +11,11 @@ buildDunePackage {
   propagatedBuildInputs = [ atdgen-runtime ];
 
   doCheck = true;
-  checkInputs = [ alcotest atdgen-codec-runtime ];
+  checkInputs = [ alcotest atdgen-codec-runtime
+    (python3.withPackages (ps: [ ps.jsonschema ]))
+  ];
 
-  meta = atd.meta // {
+  meta = (builtins.removeAttrs atd.meta [ "mainProgram" ]) // {
     description = "Generates efficient JSON serializers, deserializers and validators";
   };
 }

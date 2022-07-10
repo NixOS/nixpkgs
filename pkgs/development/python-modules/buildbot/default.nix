@@ -1,8 +1,9 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k
-, python, twisted, jinja2, zope_interface, sqlalchemy, alembic, python-dateutil
-, txaio, autobahn, pyjwt, pyyaml, unidiff, treq, txrequests, pypugjs, boto3
-, moto, mock, lz4, setuptoolsTrial, isort, pylint, flake8, buildbot-worker
-, buildbot-pkg, buildbot-plugins, parameterized, git, openssh, glibcLocales
+{ stdenv, lib, buildPythonPackage, fetchpatch, fetchPypi, makeWrapper, isPy3k
+, python, twisted, jinja2, msgpack, zope_interface, sqlalchemy, alembic
+, python-dateutil, txaio, autobahn, pyjwt, pyyaml, treq, txrequests, pypugjs
+, boto3, moto, mock, lz4, setuptoolsTrial
+, buildbot-worker, buildbot-pkg, buildbot-plugins, parameterized, git, openssh
+, glibcLocales
 , nixosTests
 }:
 
@@ -42,6 +43,7 @@ let
       # core
       twisted
       jinja2
+      msgpack
       zope_interface
       sqlalchemy
       alembic
@@ -50,10 +52,9 @@ let
       autobahn
       pyjwt
       pyyaml
-      unidiff
     ]
       # tls
-      ++ twisted.extras.tls;
+      ++ twisted.optional-dependencies.tls;
 
     checkInputs = [
       treq
@@ -64,9 +65,6 @@ let
       mock
       lz4
       setuptoolsTrial
-      isort
-      pylint
-      flake8
       buildbot-worker
       buildbot-pkg
       buildbot-plugins.www
@@ -80,6 +78,11 @@ let
       # This patch disables the test that tries to read /etc/os-release which
       # is not accessible in sandboxed builds.
       ./skip_test_linux_distro.patch
+      (fetchpatch{
+        url = "https://github.com/buildbot/buildbot/commit/54b8f62902122b0091319a96d0f9edd4195ab4c6.patch";
+        stripLen = 1;
+        sha256 = "sha256-OqW3ZQK0bfqPG3YlrBbrSEEKsM/XqY2NO862ZD/DgHs=";
+      })
     ];
 
     postPatch = ''
@@ -106,6 +109,7 @@ let
     };
 
     meta = with lib; {
+      broken = stdenv.isDarwin;
       homepage = "https://buildbot.net/";
       description = "An open-source continuous integration framework for automating software build, test, and release processes";
       maintainers = with maintainers; [ ryansydnor lopsided98 ];

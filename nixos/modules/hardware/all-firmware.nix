@@ -72,7 +72,7 @@ in {
     })
     (mkIf cfg.enableAllFirmware {
       assertions = [{
-        assertion = !cfg.enableAllFirmware || (config.nixpkgs.config.allowUnfree or false);
+        assertion = !cfg.enableAllFirmware || config.nixpkgs.config.allowUnfree;
         message = ''
           the list of hardware.enableAllFirmware contains non-redistributable licensed firmware files.
             This requires nixpkgs.config.allowUnfree to be true.
@@ -83,7 +83,6 @@ in {
         broadcom-bt-firmware
         b43Firmware_5_1_138
         b43Firmware_6_30_163_46
-        b43FirmwareCutter
         xow_dongle-firmware
       ] ++ optionals pkgs.stdenv.hostPlatform.isx86 [
         facetimehd-calibration

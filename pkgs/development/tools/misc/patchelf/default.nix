@@ -14,7 +14,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uaRvKYkyLrifpPYjfiCDbFe0VapDoyVF6gk7Qx2YL1w=";
   };
 
+  strictDeps = true;
+
+  patches =
+    # This patch fixes a MIPS-specific bug in patchelf; we want Hydra
+    # to generate a bootstrap-files tarball for MIPS that includes
+    # this fix.  The patches below can be dropped on the next version bump.
+    lib.optionals stdenv.targetPlatform.isMips [
+      # https://github.com/NixOS/patchelf/pull/380
+      ./patches/380.patch
+    ];
+
   setupHook = [ ./setup-hook.sh ];
+
+  enableParallelBuilding = true;
 
   # fails 8 out of 24 tests, problems when loading libc.so.6
   doCheck = stdenv.name == "stdenv-linux";

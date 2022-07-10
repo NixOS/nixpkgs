@@ -32,8 +32,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "An OCaml module for normalizing Unicode text";
     homepage = webpage;
-    inherit (ocaml.meta) platforms;
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
+    mainProgram = "unftrip";
+    inherit (ocaml.meta) platforms;
   };
 }

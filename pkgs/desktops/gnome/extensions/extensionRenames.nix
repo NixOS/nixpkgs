@@ -9,11 +9,11 @@
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
 
-  "fullscreen-hot-corner@sorrow.about.alice.pm.me" = "fullscreen-hot-corner";
-  "fullscreen-hot-corner@richardblaha.cz" = "fullscreen-hot-corner-2";
-
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
+
+  "panel-date-format@keiii.github.com" = "panel-date-format";
+  "panel-date-format@atareao.es" = "panel-date-format-2";
 
   "volume_scroller@trflynn89.pm.me" = "volume-scroller";
   "volume_scroller@noskoski" = "volume-scroller-2";
@@ -57,8 +57,8 @@
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
 
-  "panel-date-format@keiii.github.com" = "panel-date-format";
-  "panel-date-format@atareao.es" = "panel-date-format-2";
+  "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
+  "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";
 
   "extension-list@tu.berry" = "extension-list";
   "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug

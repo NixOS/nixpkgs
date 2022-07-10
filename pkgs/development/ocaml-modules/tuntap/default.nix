@@ -23,7 +23,8 @@ buildDunePackage rec {
 
   meta = {
     description = "Bindings to the UNIX tuntap facility";
-    license = lib.licenses.isc;
     homepage = "https://github.com/mirage/ocaml-tuntap";
+    license = lib.licenses.isc;
+    mainProgram = "otunctl";
   };
 }

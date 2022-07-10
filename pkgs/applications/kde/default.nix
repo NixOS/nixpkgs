@@ -122,6 +122,11 @@ let
       kdenlive = callPackage ./kdenlive {};
       kdepim-runtime = callPackage ./kdepim-runtime {};
       kdepim-addons = callPackage ./kdepim-addons.nix {};
+      kdevelop-pg-qt = callPackage ./kdevelop/kdevelop-pg-qt.nix {};
+      kdevelop-unwrapped = callPackage ./kdevelop/kdevelop.nix {};
+      kdev-php = callPackage ./kdevelop/kdev-php.nix {};
+      kdev-python = callPackage ./kdevelop/kdev-python.nix {};
+      kdevelop = callPackage ./kdevelop/wrapper.nix {};
       kdf = callPackage ./kdf.nix {};
       kdialog = callPackage ./kdialog.nix {};
       kdiamond = callPackage ./kdiamond.nix {};

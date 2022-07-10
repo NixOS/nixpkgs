@@ -4,7 +4,7 @@
   https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
 
   To debug this expression you can use `hydra-eval-jobs` from
-  `pkgs.hydra-unstable` which prints the jobset description
+  `pkgs.hydra_unstable` which prints the jobset description
   to `stdout`:
 
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
@@ -52,7 +52,7 @@ let
     ghc884
     ghc8107
     ghc902
-    ghc922
+    ghc923
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -144,7 +144,14 @@ let
 
       tests.haskell = packagePlatforms pkgs.tests.haskell;
 
-      nixosTests.agda = (packagePlatforms pkgs.nixosTests).agda;
+      nixosTests = {
+        inherit (packagePlatforms pkgs.nixosTests)
+          agda
+          xmonad
+          xmonad-xdg-autostart
+        ;
+      };
+
       agdaPackages = packagePlatforms pkgs.agdaPackages;
 
       # top-level packages that depend on haskellPackages
@@ -203,6 +210,7 @@ let
         koka
         krank
         lambdabot
+        lhs2tex
         madlang
         matterhorn
         mueval
@@ -317,16 +325,18 @@ let
                 random
                 QuickCheck
                 cabal2nix
+                xhtml # isn't bundled for cross
               ;
             };
 
-            haskell.packages.native-bignum.ghc922 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc922)
+            haskell.packages.native-bignum.ghc923 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc923)
                 hello
                 lens
                 random
                 QuickCheck
                 cabal2nix
+                xhtml # isn't bundled for cross
               ;
             };
           };
@@ -364,6 +374,17 @@ let
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
       spectacle = [
+        compilerNames.ghc8107
+      ];
+      weeder = [
+        compilerNames.ghc8107
+        compilerNames.ghc902
+        compilerNames.ghc923
+      ];
+      purescript-cst = [
+        compilerNames.ghc8107
+      ];
+      purescript-ast = [
         compilerNames.ghc8107
       ];
     })
@@ -432,11 +453,11 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc884
           jobs.pkgsMusl.haskell.compiler.ghc8107
           jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc922
+          jobs.pkgsMusl.haskell.compiler.ghc923
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc922
+          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc923
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
@@ -452,7 +473,7 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc922
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc923
         ];
       };
     }

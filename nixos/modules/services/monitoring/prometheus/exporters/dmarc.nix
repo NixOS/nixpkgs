@@ -108,7 +108,7 @@ in {
           -i ${pkgs.writeText "dmarc-exporter.json.template" json} \
           -o ''${STATE_DIRECTORY}/dmarc-exporter.json
 
-        exec ${pkgs.prometheus-dmarc-exporter}/bin/prometheus-dmarc-exporter \
+        exec ${pkgs.dmarc-metrics-exporter}/bin/dmarc-metrics-exporter \
           --configuration /var/lib/prometheus-dmarc-exporter/dmarc-exporter.json \
           ${optionalString cfg.debug "--debug"}
       ''}";

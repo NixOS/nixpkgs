@@ -44,7 +44,7 @@ in {
         ];
       };
 
-      path = [pkgs.util-linux pkgs.makeInitrdNGTool pkgs.glibc pkgs.patchelf];
+      path = [pkgs.util-linux pkgs.makeInitrdNGTool];
       serviceConfig.Type = "oneshot";
       script = ''
         mkdir -p /run/initramfs

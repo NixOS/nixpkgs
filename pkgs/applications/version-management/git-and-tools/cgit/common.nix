@@ -68,6 +68,8 @@ stdenv.mkDerivation {
 
   stripDebugList = [ "cgit" ];
 
+  enableParallelBuilding = true;
+
   meta = {
     inherit homepage description;
     license = lib.licenses.gpl2;

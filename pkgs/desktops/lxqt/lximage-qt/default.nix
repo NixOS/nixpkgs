@@ -7,6 +7,7 @@
 , qttools
 , qtx11extras
 , qtsvg
+, qtimageformats
 , xorg
 , lxqt-build-tools
 , libfm-qt
@@ -36,6 +37,7 @@ mkDerivation rec {
     qttools
     qtx11extras
     qtsvg
+    qtimageformats # add-on module to support more image file formats
     libfm-qt
     xorg.libpthreadstubs
     xorg.libXdmcp

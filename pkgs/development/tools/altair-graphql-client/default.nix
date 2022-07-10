@@ -1,4 +1,4 @@
-{ lib, appimageTools, fetchurl, gsettings-desktop-schemas, gtk3 }:
+{ lib, appimageTools, fetchurl }:
 
 let
   pname = "altair";
@@ -13,10 +13,6 @@ let
 in
 appimageTools.wrapType2 {
   inherit src pname version;
-
-  profile = ''
-    export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS
-  '';
 
   extraInstallCommands = ''
     mv $out/bin/${pname}-${version} $out/bin/${pname}

@@ -128,15 +128,6 @@ stdenv.mkDerivation rec {
     rm Arc/backends/backend-sdl/libs/linux64/libsdl-arc*.so
   '' + cleanupMindustrySrc;
 
-  # Propagate glew to prevent it from being cleaned up.
-  # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
-  # and will assume that it's not actually needed.
-  # This can cause issues.
-  # See https://github.com/NixOS/nixpkgs/issues/109798.
-  propagatedBuildInputs = lib.optionals enableClient [
-    glew.out
-  ];
-
   buildInputs = lib.optionals enableClient [
     SDL2
     glew
@@ -183,6 +174,17 @@ stdenv.mkDerivation rec {
     makeWrapper ${jdk}/bin/java $out/bin/mindustry \
       --add-flags "-jar $out/share/mindustry.jar" \
       --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/
+
+    # Retain runtime depends to prevent them from being cleaned up.
+    # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
+    # and will assume that it's not actually needed.
+    # This can cause issues.
+    # See https://github.com/NixOS/nixpkgs/issues/109798.
+    echo "# Retained runtime dependencies: " >> $out/bin/mindustry
+    for dep in ${SDL2.out} ${alsa-lib.out} ${glew.out}; do
+      echo "# $dep" >> $out/bin/mindustry
+    done
+
     install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
   '' + optionalString enableServer ''
     install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
@@ -197,8 +199,12 @@ stdenv.mkDerivation rec {
     homepage = "https://mindustrygame.github.io/";
     downloadPage = "https://github.com/Anuken/Mindustry/releases";
     description = "A sandbox tower defense game";
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryBytecode  # deps
+    ];
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz petabyteboy ];
+    maintainers = with maintainers; [ fgaz ];
     platforms = platforms.x86_64;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293

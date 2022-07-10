@@ -12,15 +12,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bat";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-U+EHOZntZsHfvLapLpbiIKXSm8Qc1BRqCTR/AFe6yfQ=";
+    sha256 = "sha256-eCk0oOHGZNqgqz+JJfIhjWdLgBTpBig+mggi1c3EUDk=";
   };
-  cargoSha256 = "sha256-eSBcrKjgCz8mApLJnpNyWVC8pQVUX8dPiYJDIK470U8=";
+  cargoSha256 = "sha256-kYZxtiK9hnHBOMvRoHZK5kyXO9cg/gHBYuaITqKUpbE=";
 
   nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
 

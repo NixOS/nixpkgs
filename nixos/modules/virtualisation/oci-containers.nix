@@ -338,11 +338,7 @@ in {
 
     backend = mkOption {
       type = types.enum [ "podman" "docker" ];
-      default =
-        # TODO: Once https://github.com/NixOS/nixpkgs/issues/77925 is resolved default to podman
-        # if versionAtLeast config.system.stateVersion "20.09" then "podman"
-        # else "docker";
-        "docker";
+      default = if versionAtLeast config.system.stateVersion "22.05" then "podman" else "docker";
       description = "The underlying Docker implementation to use.";
     };
 

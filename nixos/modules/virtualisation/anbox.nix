@@ -73,9 +73,6 @@ in
 
     environment.systemPackages = with pkgs; [ anbox ];
 
-    boot.kernelModules = [ "ashmem_linux" "binder_linux" ];
-    boot.extraModulePackages = [ kernelPackages.anbox ];
-
     services.udev.extraRules = ''
       KERNEL=="ashmem", NAME="%k", MODE="0666"
       KERNEL=="binder*", NAME="%k", MODE="0666"

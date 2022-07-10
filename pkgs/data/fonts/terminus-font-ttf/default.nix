@@ -28,6 +28,6 @@ in fetchzip {
     '';
     homepage = "https://files.ax86.net/terminus-ttf";
     license = licenses.ofl;
-    maintainers = with maintainers; [ okasu ];
+    maintainers = with maintainers; [ ];
   };
 }

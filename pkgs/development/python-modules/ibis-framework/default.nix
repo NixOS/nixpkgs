@@ -1,41 +1,50 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+, fetchpatch
 , pythonOlder
 , pytestCheckHook
 , atpublic
 , cached-property
-, clickhouse-driver
 , click
+, clickhouse-cityhash
+, clickhouse-driver
 , dask
 , datafusion
 , duckdb
 , duckdb-engine
-, graphviz
+, geoalchemy2
+, geopandas
+, graphviz-nox
 , importlib-metadata
+, lz4
 , multipledispatch
 , numpy
+, packaging
 , pandas
 , parsy
 , poetry-core
 , poetry-dynamic-versioning
+, psycopg2
 , pyarrow
 , pydantic
+, pymysql
+, pyspark
 , pytest-benchmark
+, pytest-randomly
 , pytest-mock
 , pytest-xdist
 , python
 , pytz
 , regex
-, requests
+, shapely
 , sqlalchemy
 , sqlite
 , tabulate
 , toolz
 }:
 let
-  # ignore tests for which dependencies are not available
-  backends = [
+  testBackends = [
     "dask"
     "datafusion"
     "duckdb"
@@ -65,29 +74,29 @@ buildPythonPackage rec {
     hash = "sha256-7ywDMAHQAl39kiHfxVkq7voUEKqbb9Zq8qlaug7+ukI=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/ibis-project/ibis/commit/a6f64c6c32b49098d39bb205952cbce4bdfea657.patch";
+      sha256 = "sha256-puVMjiJXWk8C9yhuXPD9HKrgUBYcYmUPacQz5YO5xYQ=";
+      includes = [ "pyproject.toml" ];
+    })
+  ];
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     atpublic
     cached-property
-    clickhouse-driver
-    dask
-    datafusion
-    duckdb
-    duckdb-engine
-    graphviz
     importlib-metadata
     multipledispatch
     numpy
+    packaging
     pandas
     parsy
     poetry-dynamic-versioning
-    pyarrow
     pydantic
     pytz
     regex
-    requests
-    sqlalchemy
     tabulate
     toolz
   ];
@@ -97,9 +106,9 @@ buildPythonPackage rec {
     click
     pytest-benchmark
     pytest-mock
+    pytest-randomly
     pytest-xdist
-    sqlite
-  ];
+  ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
 
   preBuild = ''
     # setup.py exists only for developer convenience and is automatically generated
@@ -109,7 +118,7 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     "--dist=loadgroup"
     "-m"
-    "'${lib.concatStringsSep " or " backends} or core'"
+    "'${lib.concatStringsSep " or " testBackends} or core'"
   ];
 
   preCheck = ''
@@ -125,7 +134,7 @@ buildPythonPackage rec {
     find "$IBIS_TEST_DATA_DIRECTORY" -type f -exec chmod u+rw {} +
 
     # load data
-    for backend in ${lib.concatStringsSep " " backends}; do
+    for backend in ${lib.concatStringsSep " " testBackends}; do
       ${python.interpreter} ci/datamgr.py load "$backend"
     done
   '';
@@ -136,7 +145,23 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "ibis"
-  ] ++ (map (backend: "ibis.backends.${backend}") backends);
+  ] ++ map (backend: "ibis.backends.${backend}") testBackends;
+
+  passthru = {
+    optional-dependencies = {
+      clickhouse = [ clickhouse-cityhash clickhouse-driver lz4 ];
+      dask = [ dask pyarrow ];
+      datafusion = [ datafusion ];
+      duckdb = [ duckdb duckdb-engine sqlalchemy ];
+      geospatial = [ geoalchemy2 geopandas shapely ];
+      mysql = [ pymysql sqlalchemy ];
+      pandas = [ ];
+      postgres = [ psycopg2 sqlalchemy ];
+      pyspark = [ pyarrow pyspark ];
+      sqlite = [ sqlalchemy sqlite ];
+      visualization = [ graphviz-nox ];
+    };
+  };
 
   meta = with lib; {
     description = "Productivity-centric Python Big Data Framework";

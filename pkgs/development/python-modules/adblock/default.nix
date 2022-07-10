@@ -75,7 +75,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for Brave's adblocking library";
     homepage = "https://github.com/ArniDagur/python-adblock/";
-    maintainers = with maintainers; [ petabyteboy dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
     license = with licenses; [ asl20 /* or */ mit ];
   };
 }

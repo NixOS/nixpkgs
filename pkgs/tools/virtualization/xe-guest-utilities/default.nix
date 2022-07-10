@@ -20,6 +20,11 @@ stdenv.mkDerivation (rec {
     tar xf "$NIX_BUILD_TOP/$name/xenstore-sources.tar.bz2"
   '';
 
+  # Workaround build failure on -fno-common toolchains:
+  #   ld: utils.o:xenstore/utils.h:27:
+  #     multiple definition of `xprintf'; xenstored_core.o:xenstore/utils.h:27: first defined here
+  NIX_CFLAGS_COMPILE = "-fcommon";
+
   buildPhase = ''
     export CC=gcc
     export CFLAGS='-Wall -Wstrict-prototypes -Wno-unused-local-typedefs -Wno-sizeof-pointer-memaccess'

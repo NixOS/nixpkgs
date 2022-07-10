@@ -294,7 +294,7 @@ in {
         port = lib.mkOption {
           description = "Redis port.";
           type = lib.types.port;
-          default = 6379;
+          default = 31637;
         };
       };
 
@@ -605,8 +605,10 @@ in {
       enable = true;
       hostname = lib.mkDefault "${cfg.localDomain}";
     };
-    services.redis = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") {
+    services.redis.servers.mastodon = lib.mkIf (cfg.redis.createLocally && cfg.redis.host == "127.0.0.1") {
       enable = true;
+      port = cfg.redis.port;
+      bind = "127.0.0.1";
     };
     services.postgresql = lib.mkIf databaseActuallyCreateLocally {
       enable = true;

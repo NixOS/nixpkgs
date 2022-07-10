@@ -32,8 +32,9 @@ buildDunePackage rec {
 
   meta = {
     description = "A library to normalize an ISO-8859 input to Unicode code-point";
-    license = lib.licenses.mit;
     homepage = "https://github.com/mirage/uuuu";
-    maintainers = with lib.maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    mainProgram = "uuuu.generate";
   };
 }

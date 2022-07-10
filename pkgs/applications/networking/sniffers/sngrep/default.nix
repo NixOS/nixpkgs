@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sngrep";
-  version = "1.4.10";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "irontec";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-P618QLk85W0oPisAGiRfpCgHCddKutUkGjwdfgsV4Es=";
+    sha256 = "sha256-GxC9+O72GHE8Tc6FReO7EdpZTSaqn9mBpZCYaKybJls=";
   };
 
   nativeBuildInputs = [

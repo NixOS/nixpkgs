@@ -277,7 +277,7 @@ in
           Add settings here to override NixOS module generated settings.
 
           Check the official repository for the available settings:
-          https://github.com/zedeus/nitter/blob/master/nitter.conf
+          https://github.com/zedeus/nitter/blob/master/nitter.example.conf
         '';
       };
 

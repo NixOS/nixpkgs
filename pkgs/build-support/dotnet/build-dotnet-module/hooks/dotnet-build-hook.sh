@@ -28,8 +28,8 @@ dotnetBuildHook() {
                 --configuration "@buildType@" \
                 --no-restore \
                 ${versionFlag-} \
-                "${dotnetBuildFlags[@]}"  \
-                "${dotnetFlags[@]}"
+                ${dotnetBuildFlags[@]}  \
+                ${dotnetFlags[@]}
     done
 
     runHook postBuild

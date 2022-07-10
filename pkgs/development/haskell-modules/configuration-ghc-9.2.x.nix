@@ -44,7 +44,9 @@ self: super: {
   time = null;
   transformers = null;
   unix = null;
-  xhtml = null;
+  # GHC only bundles the xhtml library if haddock is enabled, check if this is
+  # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
 
   # Tests fail because of typechecking changes
   conduit = dontCheck super.conduit;
@@ -90,7 +92,7 @@ self: super: {
     # causing the build-depends to be skipped. Since the dependency
     # list hasn't changed much since 0.6.4, we can just reuse the
     # normal expression.
-    inherit (self.ghc-exactprint_1_4_1) src version;
+    inherit (self.ghc-exactprint_1_5_0) src version;
     revision = null; editedCabalFile = null;
     libraryHaskellDepends = [
       self.fail
@@ -98,9 +100,9 @@ self: super: {
       self.data-default
     ] ++ drv.libraryHaskellDepends or [];
   }) super.ghc-exactprint;
-  ghc-lib = self.ghc-lib_9_2_2_20220307;
-  ghc-lib-parser = self.ghc-lib-parser_9_2_2_20220307;
-  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_0_3;
+  ghc-lib = self.ghc-lib_9_2_3_20220527;
+  ghc-lib-parser = self.ghc-lib-parser_9_2_3_20220527;
+  ghc-lib-parser-ex = self.ghc-lib-parser-ex_9_2_1_0;
   hackage-security = doJailbreak super.hackage-security;
   hashable = super.hashable_1_4_0_2;
   hashable-time = doJailbreak super.hashable-time;
@@ -113,7 +115,7 @@ self: super: {
   lifted-async = doJailbreak super.lifted-async;
   lukko = doJailbreak super.lukko;
   lzma-conduit = doJailbreak super.lzma-conduit;
-  ormolu = self.ormolu_0_4_0_0;
+  ormolu = self.ormolu_0_5_0_0;
   parallel = doJailbreak super.parallel;
   path = doJailbreak super.path;
   polyparse = overrideCabal (drv: { postPatch = "sed -i -e 's, <0.11, <0.12,' polyparse.cabal"; }) (doJailbreak super.polyparse);
@@ -144,7 +146,7 @@ self: super: {
   shelly = doJailbreak super.shelly;
   splitmix = doJailbreak super.splitmix;
   tasty-hspec = doJailbreak super.tasty-hspec;
-  th-desugar = self.th-desugar_1_13;
+  th-desugar = self.th-desugar_1_13_1;
   time-compat = doJailbreak super.time-compat;
   tomland = doJailbreak super.tomland;
   type-equality = doJailbreak super.type-equality;
@@ -171,7 +173,7 @@ self: super: {
   ];
 
   # lens >= 5.1 supports 9.2.1
-  lens = doDistribute self.lens_5_1;
+  lens = doDistribute self.lens_5_1_1;
 
   # Syntax error in tests fixed in https://github.com/simonmar/alex/commit/84b29475e057ef744f32a94bc0d3954b84160760
   alex = dontCheck super.alex;
@@ -195,17 +197,7 @@ self: super: {
   } super.memory);
 
   # Use hlint from git for GHC 9.2.1 support
-  hlint = doDistribute (
-    overrideSrc {
-      version = "unstable-2021-12-12";
-      src = pkgs.fetchFromGitHub {
-        owner = "ndmitchell";
-        repo = "hlint";
-        rev = "77a9702e10b772a7695c08682cd4f450fd0e9e46";
-        sha256 = "0hpp3iw7m7w2abr8vb86gdz3x6c8lj119zxln933k90ia7bmk8jc";
-      };
-    } super.hlint
-  );
+  hlint = self.hlint_3_4;
 
   # https://github.com/sjakobi/bsb-http-chunked/issues/38
   bsb-http-chunked = dontCheck super.bsb-http-chunked;
@@ -214,9 +206,14 @@ self: super: {
   regex-rure = doDistribute (markUnbroken super.regex-rure);
   jacinda = doDistribute super.jacinda;
   some = doJailbreak super.some;
+
+  # 2022-06-05: this is not the latest version of fourmolu because
+  # hls-fourmolu-plugin 1.0.3.0 doesn‘t support a newer one.
   fourmolu = super.fourmolu_0_6_0_0;
   # hls-fourmolu-plugin in this version has a to strict upper bound of fourmolu <= 0.5.0.0
-  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.2.0"; doJailbreak super.hls-fourmolu-plugin;
+  hls-fourmolu-plugin = assert super.hls-fourmolu-plugin.version == "1.0.3.0"; doJailbreak super.hls-fourmolu-plugin;
+
+  hls-ormolu-plugin = assert super.hls-ormolu-plugin.version == "1.0.2.1"; doJailbreak super.hls-ormolu-plugin;
   implicit-hie-cradle = doJailbreak super.implicit-hie-cradle;
   # 1.3 introduced support for GHC 9.2.x, so when this assert fails, the jailbreak can be removed
   hashtables = assert super.hashtables.version == "1.2.4.2"; doJailbreak super.hashtables;
@@ -226,18 +223,11 @@ self: super: {
   # Compare: https://haskell-language-server.readthedocs.io/en/latest/supported-versions.html
   haskell-language-server = overrideCabal (old: {libraryHaskellDepends = builtins.filter (x: x != super.hls-tactics-plugin) old.libraryHaskellDepends;})
     (appendConfigureFlags [
-    "-f-alternateNumberFormat"
-    "-f-class"
-    "-f-eval"
     "-f-haddockComments"
-    "-f-hlint"
     "-f-retrie"
     "-f-splice"
     "-f-tactics"
   ] (super.haskell-language-server.override {
-    hls-alternate-number-format-plugin = null;
-    hls-class-plugin = null;
-    hls-eval-plugin = null;
     hls-haddock-comments-plugin = null;
     hls-hlint-plugin = null;
     hls-retrie-plugin = null;

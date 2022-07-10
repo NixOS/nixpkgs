@@ -30,7 +30,7 @@ buildPythonPackage rec {
     chmod +w -R source/tests
   '';
 
-  nativeBuildInputs = [
+  checkInputs = [
     cmake
   ];
 
@@ -46,8 +46,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "EditorConfig File Locator and Interpreter for Python";
-    homepage = "https://editorconfig.org";
+    homepage = "https://github.com/editorconfig/editorconfig-core-py";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

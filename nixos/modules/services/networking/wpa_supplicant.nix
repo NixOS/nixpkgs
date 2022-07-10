@@ -114,7 +114,7 @@ let
 
       script =
       ''
-        ${optionalString configIsGenerated ''
+        ${optionalString (configIsGenerated && !cfg.allowAuxiliaryImperativeNetworks) ''
           if [ -f /etc/wpa_supplicant.conf ]; then
             echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
           fi

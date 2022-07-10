@@ -20,5 +20,6 @@ buildGoModule rec {
     homepage = "https://github.com/swaggo/swag";
     license = licenses.mit;
     maintainers = with maintainers; [ stephenwithph ];
+    mainProgram = "swag";
   };
 }

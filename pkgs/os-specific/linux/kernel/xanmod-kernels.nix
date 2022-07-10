@@ -2,15 +2,15 @@
 
 let
   stableVariant = {
-    version = "5.15.34";
+    version = "5.15.43";
     suffix = "xanmod1";
-    hash = "sha256-sfrcaFhrdvupygXvajGyl6ruuBu+vFsAKjLyINyV3pw=";
+    hash = "sha256-MeH9RUPDiuN22eAZ18v+N3aIT18dQ3FnTkcQV0MjB4k=";
   };
 
   edgeVariant = {
-    version = "5.17.2";
+    version = "5.18.1";
     suffix = "xanmod1";
-    hash = "sha256-DK6yFZewqmr/BXFW5tqKXtWb1OLfqokZRQLOQxvBg6Q=";
+    hash = "sha256-dqvB4F2S7cklSJ7XTUNvWVKTsZGLevOXME5lvhmfyis=";
   };
 
   xanmodKernelFor = { version, suffix, hash }: buildLinux (args // rec {
@@ -24,52 +24,58 @@ let
       inherit hash;
     };
 
-    structuredExtraConfig = with lib.kernel; {
-      # removed options
-      CFS_BANDWIDTH = lib.mkForce (option no);
-      RT_GROUP_SCHED = lib.mkForce (option no);
-      SCHED_AUTOGROUP = lib.mkForce (option no);
+    structuredExtraConfig =
+      with lib.kernel;
+      with (lib.kernel.whenHelpers version);
+      {
+        # TODO: remove this once https://github.com/NixOS/nixpkgs/pull/175433 is in master
+        WERROR = no;
 
-      # AMD P-state driver
-      X86_AMD_PSTATE = yes;
+        # removed options
+        CFS_BANDWIDTH = lib.mkForce (option no);
+        RT_GROUP_SCHED = lib.mkForce (option no);
+        SCHED_AUTOGROUP = lib.mkForce (option no);
 
-      # Linux RNG framework
-      LRNG = yes;
+        # AMD P-state driver
+        X86_AMD_PSTATE = yes;
 
-      # Paragon's NTFS3 driver
-      NTFS3_FS = module;
-      NTFS3_LZX_XPRESS = yes;
-      NTFS3_FS_POSIX_ACL = yes;
+        # Linux RNG framework
+        LRNG = whenOlder "5.18" yes;
 
-      # Preemptive Full Tickless Kernel at 500Hz
-      SCHED_CORE = lib.mkForce (option no);
-      PREEMPT_VOLUNTARY = lib.mkForce no;
-      PREEMPT = lib.mkForce yes;
-      NO_HZ_FULL = yes;
-      HZ_500 = yes;
+        # Paragon's NTFS3 driver
+        NTFS3_FS = module;
+        NTFS3_LZX_XPRESS = yes;
+        NTFS3_FS_POSIX_ACL = yes;
 
-      # Google's BBRv2 TCP congestion Control
-      TCP_CONG_BBR2 = yes;
-      DEFAULT_BBR2 = yes;
+        # Preemptive Full Tickless Kernel at 500Hz
+        SCHED_CORE = lib.mkForce (option no);
+        PREEMPT_VOLUNTARY = lib.mkForce no;
+        PREEMPT = lib.mkForce yes;
+        NO_HZ_FULL = yes;
+        HZ_500 = yes;
 
-      # FQ-PIE Packet Scheduling
-      NET_SCH_DEFAULT = yes;
-      DEFAULT_FQ_PIE = yes;
+        # Google's BBRv2 TCP congestion Control
+        TCP_CONG_BBR2 = yes;
+        DEFAULT_BBR2 = yes;
 
-      # Graysky's additional CPU optimizations
-      CC_OPTIMIZE_FOR_PERFORMANCE_O3 = yes;
+        # FQ-PIE Packet Scheduling
+        NET_SCH_DEFAULT = yes;
+        DEFAULT_FQ_PIE = yes;
 
-      # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
-      FUTEX = yes;
-      FUTEX_PI = yes;
+        # Graysky's additional CPU optimizations
+        CC_OPTIMIZE_FOR_PERFORMANCE_O3 = yes;
 
-      # WineSync driver for fast kernel-backed Wine
-      WINESYNC = module;
-    };
+        # Futex WAIT_MULTIPLE implementation for Wine / Proton Fsync.
+        FUTEX = yes;
+        FUTEX_PI = yes;
+
+        # WineSync driver for fast kernel-backed Wine
+        WINESYNC = module;
+      };
 
     extraMeta = {
       branch = lib.versions.majorMinor version;
-      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault ];
+      maintainers = with lib.maintainers; [ fortuneteller2k lovesegfault atemu ];
       description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
       broken = stdenv.isAarch64;
     };

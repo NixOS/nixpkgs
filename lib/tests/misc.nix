@@ -22,16 +22,6 @@ in
 
 runTests {
 
-# FLAKES
-
-  testCallLocklessFlake = {
-    expr = callLocklessFlake {
-      path = ./flakes/subflakeTest;
-      inputs = { subflake = ./flakes/subflakeTest/subflake; inherit callLocklessFlake; };
-    };
-    expected = { x = 1; outPath = ./flakes/subflakeTest; };
-  };
-
 # TRIVIAL
 
   testId = {
@@ -269,6 +259,15 @@ runTests {
           strings
           possibly newlines
         '';
+        drv = {
+          outPath = "/drv";
+          foo = "ignored attribute";
+        };
+        path = /path;
+        stringable = {
+          __toString = _: "hello toString";
+          bar = "ignored attribute";
+        };
       }}
     '';
     expected = ''
@@ -277,6 +276,9 @@ runTests {
       declare -A assoc=(['with some']='strings
       possibly newlines
       ')
+      drv='/drv'
+      path='/path'
+      stringable='hello toString'
     '';
   };
 
@@ -670,6 +672,21 @@ runTests {
       expr = (builtins.tryEval
         (generators.toPretty { } (generators.withRecursion { depthLimit = 2; } a))).success;
       expected = false;
+    };
+
+  testWithRecursionDealsWithFunctors =
+    let
+      functor = {
+        __functor = self: { a, b, }: null;
+      };
+      a = {
+        value = "1234";
+        b = functor;
+        c.d = functor;
+      };
+    in {
+      expr = generators.toPretty { } (generators.withRecursion { depthLimit = 1; throwOnDepthLimit = false; } a);
+      expected = "{\n  b = <function, args: {a, b}>;\n  c = {\n    d = \"<unevaluated>\";\n  };\n  value = \"<unevaluated>\";\n}";
     };
 
   testToPrettyMultiline = {

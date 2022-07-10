@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2022.4.7";
+  version = "2022.7.2";
   components = {
     "abode" = ps: with ps; [
       abodepy
@@ -61,8 +61,7 @@
       aioairzone
     ];
     "aladdin_connect" = ps: with ps; [
-      aladdin-connect
-    ];
+    ]; # missing inputs: AIOAladdinConnect
     "alarm_control_panel" = ps: with ps; [
     ];
     "alarmdecoder" = ps: with ps; [
@@ -118,9 +117,9 @@
       androidtv
       pure-python-adb
     ]
-    ++ adb-shell.extras-require.async
-    ++ androidtv.extras-require.async
-    ++ pure-python-adb.extras-require.async;
+    ++ adb-shell.optional-dependencies.async
+    ++ androidtv.optional-dependencies.async
+    ++ pure-python-adb.optional-dependencies.async;
     "anel_pwrctrl" = ps: with ps; [
     ]; # missing inputs: anel_pwrctrl-homeassistant
     "anthemav" = ps: with ps; [
@@ -140,6 +139,9 @@
       pyatv
       zeroconf
     ];
+    "application_credentials" = ps: with ps; [
+      aiohttp-cors
+    ];
     "apprise" = ps: with ps; [
       apprise
     ];
@@ -156,10 +158,6 @@
       arcam-fmj
     ];
     "arest" = ps: with ps; [
-    ];
-    "arlo" = ps: with ps; [
-      ha-ffmpeg
-      pyarlo
     ];
     "arris_tg2492lg" = ps: with ps; [
       arris-tg2492lg
@@ -240,6 +238,8 @@
       aiohttp-cors
       securetar
     ];
+    "baf" = ps: with ps; [
+    ]; # missing inputs: aiobafi6
     "baidu" = ps: with ps; [
     ]; # missing inputs: baidu-aip
     "balboa" = ps: with ps; [
@@ -283,7 +283,7 @@
     "bluetooth_le_tracker" = ps: with ps; [
       pygatt
     ]
-    ++ pygatt.extras-require.GATTTOOL;
+    ++ pygatt.optional-dependencies.GATTTOOL;
     "bluetooth_tracker" = ps: with ps; [
       bt-proximity
       pybluez
@@ -292,7 +292,7 @@
       bimmer-connected
     ];
     "bond" = ps: with ps; [
-      bond-api
+      bond-async
     ];
     "bosch_shc" = ps: with ps; [
       aiohttp-cors
@@ -315,7 +315,8 @@
     "browser" = ps: with ps; [
     ];
     "brunt" = ps: with ps; [
-    ]; # missing inputs: brunt
+      brunt
+    ];
     "bsblan" = ps: with ps; [
       bsblan
     ];
@@ -554,8 +555,6 @@
     "digital_ocean" = ps: with ps; [
       digital-ocean
     ];
-    "digitalloggers" = ps: with ps; [
-    ]; # missing inputs: dlipower
     "directv" = ps: with ps; [
       directv
     ];
@@ -801,6 +800,7 @@
       pyfido
     ];
     "file" = ps: with ps; [
+      file-read-backwards
     ];
     "filesize" = ps: with ps; [
     ];
@@ -957,6 +957,10 @@
     "geo_rss_events" = ps: with ps; [
       georss-generic-client
     ];
+    "geocaching" = ps: with ps; [
+      aiohttp-cors
+      geocachingapi
+    ];
     "geofency" = ps: with ps; [
       aiohttp-cors
     ];
@@ -993,8 +997,7 @@
     ];
     "google" = ps: with ps; [
       aiohttp-cors
-      google-api-python-client
-      httplib2
+      gcal-sync
       oauth2client
     ];
     "google_assistant" = ps: with ps; [
@@ -1032,7 +1035,8 @@
       greeclimate
     ];
     "greeneye_monitor" = ps: with ps; [
-    ]; # missing inputs: greeneye_monitor
+      greeneye-monitor
+    ];
     "greenwave" = ps: with ps; [
     ]; # missing inputs: greenwavereality
     "group" = ps: with ps; [
@@ -1053,6 +1057,16 @@
     ];
     "hangouts" = ps: with ps; [
       hangups
+    ];
+    "hardkernel" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
+    "hardware" = ps: with ps; [
     ];
     "harman_kardon_avr" = ps: with ps; [
       hkavr
@@ -1120,6 +1134,14 @@
     ];
     "homeassistant" = ps: with ps; [
     ];
+    "homeassistant_yellow" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
+    ];
     "homekit" = ps: with ps; [
       hap-python
       pyqrcode
@@ -1144,7 +1166,7 @@
       homematicip
     ];
     "homewizard" = ps: with ps; [
-      aiohwenergy
+      python-homewizard-energy
     ];
     "homeworks" = ps: with ps; [
       pyhomeworks
@@ -1248,9 +1270,15 @@
     ];
     "insteon" = ps: with ps; [
       aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      insteon-frontend-home-assistant
+      lru-dict
+      pillow
       pyinsteon
       pyserial
       pyudev
+      sqlalchemy
     ];
     "integration" = ps: with ps; [
     ];
@@ -1363,7 +1391,8 @@
       pykulersky
     ];
     "kwb" = ps: with ps; [
-    ]; # missing inputs: pykwb
+      pykwb
+    ];
     "lacrosse" = ps: with ps; [
       pylacrosse
     ];
@@ -1378,6 +1407,9 @@
     "launch_library" = ps: with ps; [
       pylaunches
     ];
+    "laundrify" = ps: with ps; [
+      laundrify-aio
+    ];
     "lcn" = ps: with ps; [
       pypck
     ];
@@ -1391,8 +1423,10 @@
       life360
     ];
     "lifx" = ps: with ps; [
+      aiohttp-cors
       aiolifx
       aiolifx-effects
+      ifaddr
     ];
     "lifx_cloud" = ps: with ps; [
     ];
@@ -1447,7 +1481,8 @@
     "logi_circle" = ps: with ps; [
       aiohttp-cors
       ha-ffmpeg
-    ]; # missing inputs: logi_circle
+      logi-circle
+    ];
     "london_air" = ps: with ps; [
     ];
     "london_underground" = ps: with ps; [
@@ -1485,7 +1520,8 @@
     ];
     "mailgun" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: pymailgunner
+      pymailgunner
+    ];
     "manual" = ps: with ps; [
     ];
     "manual_mqtt" = ps: with ps; [
@@ -1514,6 +1550,9 @@
     "mazda" = ps: with ps; [
       pymazda
     ];
+    "meater" = ps: with ps; [
+      meater-python
+    ];
     "media_extractor" = ps: with ps; [
       aiohttp-cors
       youtube-dl-light
@@ -1536,7 +1575,8 @@
       aiohttp-cors
     ];
     "message_bird" = ps: with ps; [
-    ]; # missing inputs: messagebird
+      messagebird
+    ];
     "met" = ps: with ps; [
       pymetno
     ];
@@ -1553,7 +1593,8 @@
       pymeteoclimatic
     ];
     "metoffice" = ps: with ps; [
-    ]; # missing inputs: datapoint
+      datapoint
+    ];
     "mfi" = ps: with ps; [
     ]; # missing inputs: mficlient
     "microsoft" = ps: with ps; [
@@ -1748,7 +1789,8 @@
       nexia
     ];
     "nextbus" = ps: with ps; [
-    ]; # missing inputs: py_nextbusnext
+      py-nextbusnext
+    ];
     "nextcloud" = ps: with ps; [
       nextcloudmonitor
     ];
@@ -1787,7 +1829,8 @@
     "notify" = ps: with ps; [
     ];
     "notify_events" = ps: with ps; [
-    ]; # missing inputs: notify-events
+      notify-events
+    ];
     "notion" = ps: with ps; [
       aionotion
     ];
@@ -1853,7 +1896,6 @@
       ondilo
     ];
     "onewire" = ps: with ps; [
-      pi1wire
       pyownet
     ];
     "onkyo" = ps: with ps; [
@@ -1940,7 +1982,8 @@
       panacotta
     ];
     "panasonic_viera" = ps: with ps; [
-    ]; # missing inputs: panasonic_viera
+      panasonic-viera
+    ];
     "pandora" = ps: with ps; [
       pexpect
     ];
@@ -2015,7 +2058,8 @@
     "plum_lightpad" = ps: with ps; [
     ]; # missing inputs: plumlightpad
     "pocketcasts" = ps: with ps; [
-    ]; # missing inputs: pycketcasts
+      pycketcasts
+    ];
     "point" = ps: with ps; [
       aiohttp-cors
       pypoint
@@ -2024,7 +2068,8 @@
       poolsense
     ];
     "powerwall" = ps: with ps; [
-    ]; # missing inputs: tesla-powerwall
+      tesla-powerwall
+    ];
     "profiler" = ps: with ps; [
       guppy3
       objgraph
@@ -2087,7 +2132,11 @@
       georss-qld-bushfire-alert-client
     ];
     "qnap" = ps: with ps; [
-    ]; # missing inputs: qnapstats
+      qnapstats
+    ];
+    "qnap_qsw" = ps: with ps; [
+      aioqsw
+    ];
     "qrcode" = ps: with ps; [
       pillow
       pyzbar
@@ -2115,17 +2164,27 @@
       radiotherm
     ];
     "rainbird" = ps: with ps; [
-    ]; # missing inputs: pyrainbird
+      pyrainbird
+    ];
     "raincloud" = ps: with ps; [
-    ]; # missing inputs: raincloudy
+      raincloudy
+    ];
     "rainforest_eagle" = ps: with ps; [
       aioeagle
-      ueagle
+      eagle100
     ];
     "rainmachine" = ps: with ps; [
       regenmaschine
     ];
     "random" = ps: with ps; [
+    ];
+    "raspberry_pi" = ps: with ps; [
+      aiohttp-cors
+      fnvhash
+      home-assistant-frontend
+      lru-dict
+      pillow
+      sqlalchemy
     ];
     "raspyrfm" = ps: with ps; [
     ]; # missing inputs: raspyrfm-client
@@ -2209,8 +2268,6 @@
     ];
     "rpi_camera" = ps: with ps; [
     ];
-    "rpi_gpio" = ps: with ps; [
-    ]; # missing inputs: RPi.GPIO
     "rpi_power" = ps: with ps; [
       rpi-bad-power
     ];
@@ -2232,11 +2289,8 @@
     "russound_rnet" = ps: with ps; [
     ]; # missing inputs: russound
     "sabnzbd" = ps: with ps; [
-      aiohttp-cors
-      ifaddr
-      netdisco
-      zeroconf
-    ]; # missing inputs: pysabnzbd
+      pysabnzbd
+    ];
     "safe_mode" = ps: with ps; [
       pyturbojpeg
       aiohttp-cors
@@ -2260,9 +2314,9 @@
       wakeonlan
       zeroconf
     ]
-    ++ samsungctl.extras-require.websocket
-    ++ samsungtvws.extras-require.async
-    ++ samsungtvws.extras-require.encrypted;
+    ++ samsungctl.optional-dependencies.websocket
+    ++ samsungtvws.optional-dependencies.async
+    ++ samsungtvws.optional-dependencies.encrypted;
     "satel_integra" = ps: with ps; [
     ]; # missing inputs: satel_integra
     "scene" = ps: with ps; [
@@ -2272,6 +2326,7 @@
     "scrape" = ps: with ps; [
       beautifulsoup4
       jsonpath
+      lxml
       xmltodict
     ];
     "screenlogic" = ps: with ps; [
@@ -2309,6 +2364,10 @@
     "sentry" = ps: with ps; [
       sentry-sdk
     ];
+    "senz" = ps: with ps; [
+      aiohttp-cors
+      aiosenz
+    ];
     "serial" = ps: with ps; [
       pyserial-asyncio
     ];
@@ -2324,7 +2383,8 @@
       py17track
     ];
     "sharkiq" = ps: with ps; [
-    ]; # missing inputs: sharkiq
+      sharkiq
+    ];
     "shell_command" = ps: with ps; [
     ];
     "shelly" = ps: with ps; [
@@ -2370,9 +2430,10 @@
     "skybeacon" = ps: with ps; [
       pygatt
     ]
-    ++ pygatt.extras-require.GATTTOOL;
+    ++ pygatt.optional-dependencies.GATTTOOL;
     "skybell" = ps: with ps; [
-      skybellpy
+      aioskybell
+      ha-ffmpeg
     ];
     "slack" = ps: with ps; [
       slackclient
@@ -2382,6 +2443,10 @@
     ];
     "slide" = ps: with ps; [
     ]; # missing inputs: goslide-api
+    "slimproto" = ps: with ps; [
+      aiohttp-cors
+      aioslimproto
+    ];
     "sma" = ps: with ps; [
       pysma
     ];
@@ -2420,7 +2485,7 @@
       paho-mqtt
     ];
     "snmp" = ps: with ps; [
-      pysnmp
+      pysnmplib
     ];
     "solaredge" = ps: with ps; [
       solaredge
@@ -2436,10 +2501,6 @@
     ];
     "soma" = ps: with ps; [
       pysoma
-    ];
-    "somfy" = ps: with ps; [
-      aiohttp-cors
-      pymfy
     ];
     "somfy_mylink" = ps: with ps; [
       somfy-mylink-synergy
@@ -2520,7 +2581,8 @@
       statsd
     ];
     "steam_online" = ps: with ps; [
-    ]; # missing inputs: steamodd
+      steamodd
+    ];
     "steamist" = ps: with ps; [
       aiohttp-cors
       aiosteamist
@@ -2597,9 +2659,8 @@
     "system_bridge" = ps: with ps; [
       aiohttp-cors
       ifaddr
-      systembridge
       zeroconf
-    ];
+    ]; # missing inputs: systembridgeconnector
     "system_health" = ps: with ps; [
       aiohttp-cors
     ];
@@ -2746,7 +2807,10 @@
     "tradfri" = ps: with ps; [
       pytradfri
     ]
-    ++ pytradfri.extras-require.async;
+    ++ pytradfri.optional-dependencies.async;
+    "trafikverket_ferry" = ps: with ps; [
+      pytrafikverket
+    ];
     "trafikverket_train" = ps: with ps; [
       pytrafikverket
     ];
@@ -2803,6 +2867,9 @@
     ];
     "uk_transport" = ps: with ps; [
     ];
+    "ukraine_alarm" = ps: with ps; [
+      uasiren
+    ];
     "unifi" = ps: with ps; [
       aiounifi
     ];
@@ -2814,7 +2881,9 @@
     ];
     "unifiprotect" = ps: with ps; [
       aiohttp-cors
-    ]; # missing inputs: pyunifiprotect unifi-discovery
+      pyunifiprotect
+      unifi-discovery
+    ];
     "universal" = ps: with ps; [
     ];
     "upb" = ps: with ps; [
@@ -2828,11 +2897,10 @@
     ];
     "update" = ps: with ps; [
     ];
-    "updater" = ps: with ps; [
-    ];
     "upnp" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
+      getmac
       ifaddr
       zeroconf
     ];
@@ -2849,8 +2917,7 @@
     "uscis" = ps: with ps; [
     ]; # missing inputs: uscisstatus
     "usgs_earthquakes_feed" = ps: with ps; [
-      geojson-client
-    ];
+    ]; # missing inputs: aio_geojson_usgs_earthquakes
     "utility_meter" = ps: with ps; [
       croniter
     ];
@@ -2860,7 +2927,8 @@
     "vacuum" = ps: with ps; [
     ];
     "vallox" = ps: with ps; [
-    ]; # missing inputs: vallox-websocket-api
+      vallox-websocket-api
+    ];
     "vasttrafik" = ps: with ps; [
     ]; # missing inputs: vtjp
     "velbus" = ps: with ps; [
@@ -3004,6 +3072,9 @@
     ];
     "worxlandroid" = ps: with ps; [
     ];
+    "ws66i" = ps: with ps; [
+      pyws66i
+    ];
     "wsdot" = ps: with ps; [
     ];
     "x10" = ps: with ps; [
@@ -3072,6 +3143,10 @@
       aioftp
       ha-ffmpeg
     ];
+    "yolink" = ps: with ps; [
+      aiohttp-cors
+      yolink-api
+    ];
     "youless" = ps: with ps; [
       youless-api
     ];
@@ -3097,10 +3172,15 @@
     "zha" = ps: with ps; [
       aiohttp-cors
       bellows
+      fnvhash
+      home-assistant-frontend
       ifaddr
+      lru-dict
+      pillow
       pyserial-asyncio
       pyserial
       pyudev
+      sqlalchemy
       zeroconf
       zha-quirks
       zigpy-deconz
@@ -3165,10 +3245,10 @@
     "apache_kafka"
     "api"
     "apple_tv"
+    "application_credentials"
     "apprise"
     "aprs"
     "arcam_fmj"
-    "arlo"
     "aseko_pool_live"
     "asuswrt"
     "atag"
@@ -3198,6 +3278,7 @@
     "braviatv"
     "broadlink"
     "brother"
+    "brunt"
     "bsblan"
     "buienradar"
     "button"
@@ -3261,6 +3342,7 @@
     "ecobee"
     "econet"
     "efergy"
+    "eight_sleep"
     "elgato"
     "elkm1"
     "elmax"
@@ -3322,6 +3404,7 @@
     "geo_json_events"
     "geo_location"
     "geo_rss_events"
+    "geocaching"
     "geofency"
     "geonetnz_quakes"
     "geonetnz_volcano"
@@ -3341,11 +3424,14 @@
     "gpslogger"
     "graphite"
     "gree"
+    "greeneye_monitor"
     "group"
     "growatt_server"
     "guardian"
     "habitica"
     "hangouts"
+    "hardkernel"
+    "hardware"
     "harmony"
     "hassio"
     "hddtemp"
@@ -3359,6 +3445,7 @@
     "home_connect"
     "home_plus_control"
     "homeassistant"
+    "homeassistant_yellow"
     "homekit"
     "homekit_controller"
     "homematic"
@@ -3415,7 +3502,10 @@
     "kulersky"
     "lastfm"
     "launch_library"
+    "laundrify"
     "lcn"
+    "lg_soundbar"
+    "life360"
     "light"
     "litterrobot"
     "local_file"
@@ -3425,6 +3515,7 @@
     "logbook"
     "logentries"
     "logger"
+    "logi_circle"
     "london_air"
     "lookin"
     "lovelace"
@@ -3432,10 +3523,12 @@
     "lutron_caseta"
     "lyric"
     "mailbox"
+    "mailgun"
     "manual"
     "manual_mqtt"
     "maxcube"
     "mazda"
+    "meater"
     "media_player"
     "media_source"
     "melcloud"
@@ -3444,6 +3537,7 @@
     "met_eireann"
     "meteo_france"
     "meteoclimatic"
+    "metoffice"
     "microsoft_face"
     "microsoft_face_detect"
     "microsoft_face_identify"
@@ -3482,10 +3576,12 @@
     "netgear"
     "network"
     "nexia"
+    "nextbus"
     "nightscout"
     "nina"
     "no_ip"
     "notify"
+    "notify_events"
     "notion"
     "nsw_rural_fire_service_feed"
     "nuki"
@@ -3514,6 +3610,7 @@
     "ovo_energy"
     "owntracks"
     "p1_monitor"
+    "panasonic_viera"
     "panel_custom"
     "panel_iframe"
     "peco"
@@ -3529,6 +3626,7 @@
     "plugwise"
     "point"
     "poolsense"
+    "powerwall"
     "profiler"
     "prometheus"
     "prosegur"
@@ -3540,12 +3638,15 @@
     "pvpc_hourly_pricing"
     "python_script"
     "qld_bushfire"
+    "qnap_qsw"
     "rachio"
     "radarr"
     "radio_browser"
+    "radiotherm"
     "rainforest_eagle"
     "rainmachine"
     "random"
+    "raspberry_pi"
     "rdw"
     "recollect_waste"
     "recorder"
@@ -3568,6 +3669,7 @@
     "rss_feed_template"
     "rtsp_to_webrtc"
     "ruckus_unleashed"
+    "sabnzbd"
     "safe_mode"
     "samsungtv"
     "scene"
@@ -3582,7 +3684,9 @@
     "sensibo"
     "sensor"
     "sentry"
+    "senz"
     "seventeentrack"
+    "sharkiq"
     "shell_command"
     "shelly"
     "shopping_list"
@@ -3593,8 +3697,10 @@
     "simplisafe"
     "simulated"
     "siren"
+    "skybell"
     "slack"
     "sleepiq"
+    "slimproto"
     "sma"
     "smappee"
     "smart_meter_texas"
@@ -3603,11 +3709,11 @@
     "smhi"
     "smtp"
     "snips"
+    "snmp"
     "solaredge"
     "solarlog"
     "solax"
     "soma"
-    "somfy"
     "somfy_mylink"
     "sonarr"
     "songpal"
@@ -3626,6 +3732,7 @@
     "startca"
     "statistics"
     "statsd"
+    "steam_online"
     "steamist"
     "stookalert"
     "stream"
@@ -3640,7 +3747,6 @@
     "syncthing"
     "syncthru"
     "synology_dsm"
-    "system_bridge"
     "system_health"
     "system_log"
     "tado"
@@ -3648,6 +3754,7 @@
     "tailscale"
     "tankerkoenig"
     "tasmota"
+    "tautulli"
     "tcp"
     "telegram"
     "telegram_bot"
@@ -3671,6 +3778,7 @@
     "trace"
     "tractive"
     "tradfri"
+    "trafikverket_ferry"
     "trafikverket_train"
     "trafikverket_weatherstation"
     "transmission"
@@ -3683,21 +3791,22 @@
     "twinkly"
     "twitch"
     "uk_transport"
+    "ukraine_alarm"
     "unifi"
     "unifi_direct"
+    "unifiprotect"
     "universal"
     "upb"
     "upcloud"
     "update"
-    "updater"
     "upnp"
     "uptime"
     "uptimerobot"
     "usb"
-    "usgs_earthquakes_feed"
     "utility_meter"
     "uvc"
     "vacuum"
+    "vallox"
     "velbus"
     "venstar"
     "vera"
@@ -3730,6 +3839,7 @@
     "wled"
     "workday"
     "worldclock"
+    "ws66i"
     "wsdot"
     "xbox"
     "xiaomi"
@@ -3741,6 +3851,7 @@
     "yandex_transport"
     "yandextts"
     "yeelight"
+    "yolink"
     "youless"
     "zeroconf"
     "zerproc"

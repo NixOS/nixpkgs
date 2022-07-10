@@ -5,7 +5,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 nixpkgs=../../../../../../
 node_packages="$nixpkgs/pkgs/development/node-packages"
-owner=rust-analyzer
+owner=rust-lang
 repo=rust-analyzer
 ver=$(
     curl -s "https://api.github.com/repos/$owner/$repo/releases" |
@@ -22,7 +22,7 @@ if [[ "$(nix-instantiate --eval --strict -E "(builtins.compareVersions \"$req_vs
     exit 1
 fi
 
-extension_ver=$(curl "https://github.com/rust-analyzer/rust-analyzer/releases/download/$ver/rust-analyzer-linux-x64.vsix" -L |
+extension_ver=$(curl "https://github.com/$owner/$repo/releases/download/$ver/rust-analyzer-linux-x64.vsix" -L |
     bsdtar -xf - --to-stdout extension/package.json | # Use bsdtar to extract vsix(zip).
     jq --raw-output '.version')
 echo "Extension version: $extension_ver"
@@ -47,3 +47,5 @@ else
 
     ./"$node_packages"/generate.sh
 fi
+
+echo "Remember to also update the revisionTag and hash in default.nix!"

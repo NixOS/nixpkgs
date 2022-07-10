@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook
+{ lib, stdenv, fetchurl, wrapGAppsHook, makeWrapper
 , dpkg
 , alsa-lib
 , at-spi2-atk
@@ -49,6 +49,9 @@
 , pulseSupport ? stdenv.isLinux
 , libpulseaudio
 
+# For GPU acceleration support on Wayland (without the lib it doesn't seem to work)
+, libGL
+
 # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder,VaapiVideoEncoder)
 , libvaSupport ? stdenv.isLinux
 , libva
@@ -66,7 +69,7 @@ let
 
   deps = [
     alsa-lib at-spi2-atk at-spi2-core atk cairo cups dbus expat
-    fontconfig freetype gdk-pixbuf glib gtk3 libdrm libX11
+    fontconfig freetype gdk-pixbuf glib gtk3 libdrm libX11 libGL
     libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
     libXtst libuuid mesa nspr nss pango pipewire udev wayland
@@ -87,11 +90,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.38.109";
+  version = "1.39.122";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "sha256-w/Wm8msW4etF6E1UDujLfixhxmKBcnB+uw/CMcj4jGI=";
+    sha256 = "sha256-UJtVFvcVzfpdDbCkXs9UetS/1IUIn1mxUy7TcaXL5Jo=";
   };
 
   dontConfigure = true;
@@ -99,7 +102,10 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   doInstallCheck = true;
 
-  nativeBuildInputs = [ dpkg wrapGAppsHook ];
+  nativeBuildInputs = [
+    dpkg
+    (wrapGAppsHook.override { inherit makeWrapper; })
+  ];
 
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
@@ -128,9 +134,9 @@ stdenv.mkDerivation rec {
       ln -sf $BINARYWRAPPER $out/bin/brave
 
       for exe in $out/opt/brave.com/brave/{brave,chrome_crashpad_handler}; do
-      patchelf \
-          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${rpath}" $exe
+          patchelf \
+              --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+              --set-rpath "${rpath}" $exe
       done
 
       # Fix paths
@@ -170,10 +176,10 @@ stdenv.mkDerivation rec {
       ${optionalString (disableFeatures != []) ''
       --add-flags "--disable-features=${strings.concatStringsSep "," disableFeatures}"
       ''}
-      --add-flags ${escapeShellArg commandLineArgs}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}"
       ${optionalString vulkanSupport ''
       --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
+      --add-flags ${escapeShellArg commandLineArgs}
       ''}
     )
   '';
@@ -194,6 +200,7 @@ stdenv.mkDerivation rec {
       chew up your bandwidth, and invade your privacy. Brave lets you
       contribute to your favorite creators automatically.
     '';
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with maintainers; [ uskudnik rht jefflabonte nasirhm ];
     platforms = [ "x86_64-linux" ];

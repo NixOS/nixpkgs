@@ -4,6 +4,7 @@
 , fetchPypi
 , pytestCheckHook
 , cachetools
+, cryptography
 , flask
 , freezegun
 , mock
@@ -13,32 +14,26 @@
 , pytest-localserver
 , responses
 , rsa
-, pyopenssl
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.6.2";
+  version = "2.6.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-YNRJ+BQsdC23YPTAvjkSG8jZvoVVVdeEwlLerKHO0/U=";
+    sha256 = "sha256-G6STjgMrc961HlnEZWoA4JOc8LERJXUJnxNrq7RWMxI=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "cachetools>=2.0.0,<5.0" "cachetools"
-  '';
 
   propagatedBuildInputs = [
     cachetools
     pyasn1-modules
     rsa
-    pyopenssl
     pyu2f
   ];
 
   checkInputs = [
+    cryptography
     flask
     freezegun
     mock
@@ -53,21 +48,11 @@ buildPythonPackage rec {
     "google.oauth2"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
-    "test_request_with_timeout_success"
-    "test_request_with_timeout_failure"
-    "test_request_headers"
-    "test_request_error"
-    "test_request_basic"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # E MemoryError: Cannot allocate write+execute memory for ffi.callback().
-    # You might be running on a system that prevents this.
-    # For more information, see https://cffi.readthedocs.io/en/latest/using.html#callbacks
-    "test_configure_mtls_channel_with_callback"
-    "test_configure_mtls_channel_with_metadata"
-    "TestDecryptPrivateKey"
-    "TestMakeMutualTlsHttp"
-    "TestMutualTlsAdapter"
+  disabledTestPaths = [
+    # Disable tests related to pyopenssl
+    "tests/transport/test__mtls_helper.py"
+    "tests/transport/test_requests.py"
+    "tests/transport/test_urllib3.py"
   ];
 
   meta = with lib; {

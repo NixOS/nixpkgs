@@ -136,7 +136,7 @@ in
 
               ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
             '' + optionalString (cfg.options.calibreLibrary != null) ''
-              test -f ${cfg.options.calibreLibrary}/metadata.db || { echo "Invalid Calibre library"; exit 1; }
+              test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
             ''
           );
 

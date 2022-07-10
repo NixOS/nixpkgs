@@ -1,4 +1,4 @@
-{ lib, which, autoconf, automake,
+{ lib, bash, autoconf, automake,
   mkCoqDerivation, coq, version ? null }:
 
 with lib; mkCoqDerivation {
@@ -16,7 +16,7 @@ with lib; mkCoqDerivation {
   release."2.6.1".sha256 = "0q5a038ww5dn72yvwn5298d3ridkcngb1dik8hdyr3xh7gr5qibj";
   releaseRev = v: "flocq-${v}";
 
-  nativeBuildInputs = [ which autoconf ];
+  nativeBuildInputs = [ bash autoconf ];
   mlPlugin = true;
   useMelquiondRemake.logpath = "Flocq";
 

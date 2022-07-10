@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.4.1";
+  version = "0.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Vkau8Nk2ssdhoQOT8DhO5rXH/guz5c1xCxcTTKHZnP8=";
+    sha256 = "sha256-uCYcbAFS3XNHi1upa6Z35daUjHFcMQ98kQefMR9i7AM=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +53,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "typer" ];
 
   meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Python library for building CLI applications";
     homepage = "https://typer.tiangolo.com/";
     license = licenses.mit;

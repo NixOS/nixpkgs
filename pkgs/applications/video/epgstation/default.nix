@@ -23,18 +23,6 @@ let
     sha256 = "K1cAvmqWEfS6EY4MKAtjXb388XLYHtouxNM70PWgFig=";
   };
 
-  workaround-opencollective-buildfailures = stdenv.mkDerivation {
-    # FIXME: This should be removed when a complete fix is available
-    # https://github.com/svanderburg/node2nix/issues/145
-    name = "workaround-opencollective-buildfailures";
-    dontUnpack = true;
-    installPhase = ''
-      mkdir -p $out/bin
-      touch $out/bin/opencollective-postinstall
-      chmod +x $out/bin/opencollective-postinstall
-    '';
-  };
-
   client = nodePackages.epgstation-client.override (drv: {
     # FIXME: remove this option if possible
     #
@@ -49,21 +37,14 @@ let
   server = nodePackages.epgstation.override (drv: {
     inherit src;
 
-    bypassCache = false;
-
     # This is set to false to keep devDependencies at build time. Build time
     # dependencies are pruned afterwards.
     production = false;
 
-    buildInputs = [ bash ];
-    nativeBuildInputs = [
-      nodejs
-      workaround-opencollective-buildfailures
+    buildInputs = (drv.buildInputs or [ ]) ++ [ bash ];
+    nativeBuildInputs = (drv.nativeBuildInputs or [ ]) ++ [
       makeWrapper
-    ] ++ (with nodePackages; [
-      node-pre-gyp
-      node-gyp-build
-    ]);
+    ];
 
     preRebuild = ''
       # Fix for not being able to connect to mysql using domain sockets.

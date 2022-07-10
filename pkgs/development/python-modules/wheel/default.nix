@@ -16,7 +16,7 @@ buildPythonPackage rec {
     rev = version;
     sha256 = "sha256-JlTmUPY3yo/uROyd3nW1dJa23zbLhgQTwcmqZkPOrHs=";
     name = "${pname}-${version}-source";
-    extraPostFetch = ''
+    postFetch = ''
       cd $out
       mv tests/testdata/unicode.dist/unicodedist/åäö_日本語.py \
         tests/testdata/unicode.dist/unicodedist/æɐø_日本價.py

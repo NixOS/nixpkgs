@@ -1,9 +1,9 @@
 {
   "url": "https://github.com/MDeiml/tree-sitter-markdown",
-  "rev": "d24196f9b3e5af6fcb2ec2a0b6cbc5c06f58b85e",
-  "date": "2022-03-30T11:47:57+02:00",
-  "path": "/nix/store/rdac46kl274bdd18bdrdh33s71sin7xd-tree-sitter-markdown",
-  "sha256": "07i3zwjla74s61w39fqfmb5a61dw6xlgfagh70p1rpvyrpxsywds",
+  "rev": "6d112e7a9c1694504bb78ee0b92dcd509625e0df",
+  "date": "2022-04-26T12:23:01+02:00",
+  "path": "/nix/store/598nrwznzg37r9pskrmzwnhrw3f4knnw-tree-sitter-markdown",
+  "sha256": "03d601dp65p30c88p0r6rx13wlkbg1q3ch11wfn4sa2rhba8zpyk",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,

@@ -94,7 +94,7 @@ let
           The new IDE extends the IntelliJ platform with the coding assistance
           and tool integrations specific for the Go language
         '';
-        maintainers = [ maintainers.miltador ];
+        maintainers = [ ];
       };
     }).overrideAttrs (attrs: {
       postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
@@ -137,6 +137,7 @@ let
       inherit pname version src wmClass jdk product;
       productShort = "MPS";
       meta = with lib; {
+        broken = (stdenv.isLinux && stdenv.isAarch64);
         homepage = "https://www.jetbrains.com/mps/";
         inherit license description platforms;
         longDescription = ''
@@ -161,7 +162,7 @@ let
           with on-the-fly code analysis, error prevention and
           automated refactorings for PHP and JavaScript code.
         '';
-        maintainers = with maintainers; [ schristo ma27 ];
+        maintainers = with maintainers; [ ];
       };
     });
 
@@ -170,6 +171,7 @@ let
       inherit pname version src wmClass jdk product;
       productShort = "PyCharm";
       meta = with lib; {
+        broken = (stdenv.isLinux && stdenv.isAarch64);
         homepage = "https://www.jetbrains.com/pycharm/";
         inherit description license platforms;
         longDescription = ''
@@ -204,7 +206,7 @@ let
           apps, services and libraries, Unity games, ASP.NET and
           ASP.NET Core web applications.
         '';
-        maintainers = [ maintainers.miltador ];
+        maintainers = [ ];
       };
     }).overrideAttrs (attrs: {
       postPatch = lib.optionalString (!stdenv.isDarwin) (attrs.postPatch + ''

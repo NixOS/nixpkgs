@@ -5,13 +5,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pur";
-  version = "6.1.0";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "alanhamlett";
     repo = "pip-update-requirements";
-    rev = version;
-    hash = "sha256-EcyDEXDgjicCRThXC+co/PwTjAxkRXVG1++JZtsSjZo=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-JAjz9A9r1H6MJX7MSq7UvQKfULhB9UuPP3tI6Cggx9I=";
   };
 
   propagatedBuildInputs = [

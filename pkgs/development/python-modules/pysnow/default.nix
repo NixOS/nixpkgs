@@ -6,7 +6,7 @@
 , httpretty
 , ijson
 , poetry-core
-, python_magic
+, python-magic
 , pytz
 , pytestCheckHook
 , requests-oauthlib
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     brotli
     ijson
-    python_magic
+    python-magic
     pytz
     requests-oauthlib
   ];

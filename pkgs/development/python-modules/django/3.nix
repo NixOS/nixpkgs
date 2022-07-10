@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , substituteAll
@@ -26,8 +27,8 @@ buildPythonPackage rec {
   patches = lib.optional withGdal
     (substituteAll {
       src = ./django_3_set_geos_gdal_lib.patch;
-      geos = geos;
-      gdal = gdal;
+      inherit geos;
+      inherit gdal;
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
     });
 
@@ -39,6 +40,8 @@ buildPythonPackage rec {
 
   # too complicated to setup
   doCheck = false;
+
+  pythonImportsCheck = [ "django" ];
 
   meta = with lib; {
     description = "A high-level Python Web framework";

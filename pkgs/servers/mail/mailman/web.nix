@@ -1,6 +1,8 @@
-{ buildPythonPackage, lib, fetchPypi, pythonOlder
-, sassc, hyperkitty, postorius, whoosh, setuptools-scm
+{ lib, python3
+, sassc, hyperkitty, postorius
 }:
+
+with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman-web";

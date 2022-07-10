@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "durden";
-  version = "0.6.1+date=2022-03-11";
+  version = "0.6.1+date=2022-05-23";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = pname;
-    rev = "fec2a1051500df28becce188d932645743091efa";
-    hash = "sha256-uZ7oTnkWG3P/4ETgn6MQ9v47mRAJnvyzglQS7jlabPA=";
+    rev = "9284182bd8b3b976387cd6494c5f605633a559fc";
+    hash = "sha256-K1MjgNyX6qlaHya6Grej0cagORihS35BWECWn2HcRCk=";
   };
 
   dontConfigure = true;

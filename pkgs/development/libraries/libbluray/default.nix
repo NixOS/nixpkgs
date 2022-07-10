@@ -1,18 +1,12 @@
 { lib, stdenv, fetchurl, pkg-config, fontconfig, autoreconfHook, DiskArbitration
-, withJava ? false, jdk ? null, ant ? null
-, withAACS ? false, libaacs ? null
-, withBDplus ? false, libbdplus ? null
-, withMetadata ? true, libxml2 ? null
-, withFonts ? true, freetype ? null
+, withJava ? false, jdk, ant
+, withAACS ? false, libaacs
+, withBDplus ? false, libbdplus
+, withMetadata ? true, libxml2
+, withFonts ? true, freetype
 }:
 
 with lib;
-
-assert withJava -> jdk != null && ant != null;
-assert withAACS -> libaacs != null;
-assert withBDplus -> libbdplus != null;
-assert withMetadata -> libxml2 != null;
-assert withFonts -> freetype != null;
 
 # Info on how to use:
 # https://wiki.archlinux.org/index.php/BluRay

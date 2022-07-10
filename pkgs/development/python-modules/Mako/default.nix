@@ -8,7 +8,7 @@
 , markupsafe
 
 # extras: Babel
-, Babel
+, babel
 
 # tests
 , mock
@@ -30,16 +30,16 @@ buildPythonPackage rec {
     markupsafe
   ];
 
-  passthru.extras-require = {
+  passthru.optional-dependencies = {
     babel = [
-      Babel
+      babel
     ];
   };
 
   checkInputs = [
     pytestCheckHook
     mock
-  ] ++ passthru.extras-require.babel;
+  ] ++ passthru.optional-dependencies.babel;
 
   disabledTests = lib.optionals isPyPy [
     # https://github.com/sqlalchemy/mako/issues/315

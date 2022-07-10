@@ -47,7 +47,7 @@ buildGoModule rec {
       --set PUFFER_PANEL_EMAIL_TEMPLATES $out/share/pufferpanel/templates/emails.json \
       --set GIN_MODE release \
       --set PUFFER_PANEL_WEB_FILES $out/share/pufferpanel/www \
-      --prefix PATH : ${lib.makeBinPath pathDeps}
+      --prefix PATH : ${lib.escapeShellArg (lib.makeBinPath pathDeps)}
   '';
 
   meta = with lib; {

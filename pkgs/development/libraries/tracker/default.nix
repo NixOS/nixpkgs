@@ -29,14 +29,22 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "3.3.0";
+  version = "3.3.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "Bwb5b+f5XfQqzsgSwd57RZOg1kgyHKg1BqnXHiJBe9o=";
+    sha256 = "Wtb1vJd4Hr9V7NaUfNSuf/QZJRZYDRC9g4Dx3UcZbtI=";
   };
+
+  patches = [
+    ./fix-test-order.patch
+  ];
+
+  postPatch = ''
+    patchShebangs utils/data-generators/cc/generate
+  '';
 
   nativeBuildInputs = [
     meson
@@ -77,14 +85,6 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-
-  postPatch = ''
-    patchShebangs utils/g-ir-merge/g-ir-merge
-    patchShebangs utils/data-generators/cc/generate
-    patchShebangs tests/functional-tests/test-runner.sh.in
-    patchShebangs tests/functional-tests/*.py
-    patchShebangs examples/python/endpoint.py
-  '';
 
   preCheck = ''
     # (tracker-store:6194): Tracker-CRITICAL **: 09:34:07.722: Cannot initialize database: Could not open sqlite3 database:'/homeless-shelter/.cache/tracker/meta.db': unable to open database file

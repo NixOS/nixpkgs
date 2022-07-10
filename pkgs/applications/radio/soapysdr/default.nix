@@ -42,7 +42,7 @@ in stdenv.mkDerivation {
     done
     # Needed for at least the remote plugin server
     for file in $out/bin/*; do
-        wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${extraPackagesSearchPath}
+        wrapProgram "$file" --prefix SOAPY_SDR_PLUGIN_PATH : ${lib.escapeShellArg extraPackagesSearchPath}
     done
   '';
 
@@ -51,6 +51,7 @@ in stdenv.mkDerivation {
     description = "Vendor and platform neutral SDR support library";
     license = licenses.boost;
     maintainers = with maintainers; [ markuskowa ];
+    mainProgram = "SoapySDRUtil";
     platforms = platforms.unix;
   };
 }
