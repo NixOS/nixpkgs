@@ -2742,6 +2742,16 @@
     githubId = 16895361;
     name = "Deniz Alp Durmaz";
   };
+  DAlperin = {
+    email = "git@dov.dev";
+    github = "DAlperin";
+    githubId = 16063713;
+    name = "Dov Alperin";
+    keys = [{
+      longkeyid = "rsa3072/0x7F2C07B91B52BB61";
+      fingerprint = "4EED 5096 B925 86FA 1101  6673 7F2C 07B9 1B52 BB61";
+    }];
+  };
   DamienCassou = {
     email = "damien@cassou.me";
     github = "DamienCassou";
