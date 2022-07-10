@@ -44,6 +44,8 @@ in
       ];
       # The timex collector needs to access clock APIs
       ProtectClock = any (collector: collector == "timex") cfg.disabledCollectors;
+      # Allow space monitoring under /home
+      ProtectHome = true;
     };
   };
 }
