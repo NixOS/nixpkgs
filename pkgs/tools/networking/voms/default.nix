@@ -60,7 +60,7 @@ stdenv.mkDerivation rec{
   ];
 
   meta = with lib; {
-    description = "The VOMS native service and APIs";
+    description = "The C/C++ VOMS server, client and APIs v2.x";
     homepage = "https://italiangrid.github.io/voms/";
     changelog = "https://github.com/italiangrid/voms/blob/master/ChangeLog";
     license = licenses.asl20;
