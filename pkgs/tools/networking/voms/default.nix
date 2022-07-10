@@ -11,6 +11,10 @@
 , gsoap
 , openssl
 , zlib
+  # Configuration overridable with .override
+  # If not null, the builder will
+  # move "$out/etc" to "$out/etc.orig" and symlink "$out/etc" to externalEtc.
+, externalEtc ? "/etc"
 }:
 
 stdenv.mkDerivation rec{
@@ -22,6 +26,10 @@ stdenv.mkDerivation rec{
     repo = "voms";
     rev = "8e99bb96baaf197f0f557836e2829084bb1bb00e"; # develop branch
     hash = "sha256-FG4fHO2lsQ3t/ZaKT9xY+xqdQHfdtzi5ULtxLhdPnss=";
+  };
+
+  passthru = {
+    inherit externalEtc;
   };
 
   nativeBuildInputs = [
@@ -58,6 +66,13 @@ stdenv.mkDerivation rec{
   configureFlags = [
     "--with-gsoap-wsdl2h=${gsoap}/bin/wsdl2h"
   ];
+
+  postFixup = ''
+    ${lib.optionalString (externalEtc != null) ''
+      mv "$out"/etc{,.orig}
+      ln -s ${lib.escapeShellArg externalEtc} "$out/etc"
+    ''}
+  '';
 
   meta = with lib; {
     description = "The C/C++ VOMS server, client and APIs v2.x";
