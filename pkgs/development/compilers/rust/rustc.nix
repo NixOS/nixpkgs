@@ -100,7 +100,7 @@ in stdenv.mkDerivation rec {
     "${setHost}.musl-root=${pkgsBuildHost.targetPackages.stdenv.cc.libc}"
   ] ++ optionals stdenv.targetPlatform.isMusl [
     "${setTarget}.musl-root=${pkgsBuildTarget.targetPackages.stdenv.cc.libc}"
-  ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ optionals (stdenv.isDarwin && stdenv.isx86_64 && (lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0")) [
     # https://github.com/rust-lang/rust/issues/92173
     "--set rust.jemalloc"
   ];
