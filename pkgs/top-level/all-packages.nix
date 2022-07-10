@@ -11239,7 +11239,9 @@ with pkgs;
 
   trackma-curses = trackma.override { withCurses = true; };
 
-  trackma-gtk = trackma.override { withGtk = true; };
+  trackma-gtk = trackma.override { withGTK = true; };
+
+  trackma-qt = trackma.override { withQT = true; };
 
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
@@ -13893,7 +13895,7 @@ with pkgs;
   inherit (callPackage ../development/tools/ocaml/ocamlformat { })
     ocamlformat # latest version
     ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0
-    ocamlformat_0_22_4;
+    ocamlformat_0_22_4 ocamlformat_0_23_0;
 
   orc = callPackage ../development/compilers/orc { };
 

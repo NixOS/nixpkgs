@@ -69,6 +69,9 @@ let majorVersion = "12";
         ../gnat-cflags-11.patch
         ../gcc-12-gfortran-driving.patch
         ../ppc-musl.patch
+        # Backports. Should be removed with 12.2.0 release:
+        ./PR106102-musl-poison-cpp.patch
+        ./PR106102-musl-poison-jit.patch
       ] ++ optional (stdenv.isDarwin && stdenv.isAarch64) (fetchpatch {
         url = "https://github.com/fxcoudert/gcc/compare/releases/gcc-11.1.0...gcc-11.1.0-arm-20210504.diff";
         sha256 = "sha256-JqCGJAfbOxSmkNyq49aFHteK/RFsCSLQrL9mzUCnaD0=";
