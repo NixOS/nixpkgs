@@ -1,7 +1,10 @@
 {
-  gwenhywfar.version = "5.6.0";
-  gwenhywfar.sha256 = "1isbj4a7vdgagp3kkvx2pjcjy8lba6kzjr11fmr06aci1694dbsp";
-  gwenhywfar.releaseId = "364";
+  # https://www.aquamaniac.de/rdm/projects/gwenhywfar/files
+  gwenhywfar = {
+    version = "5.9.0";
+    hash = "sha256-6Ix9M4Ojy75Gyzsimfcd+55vpWX1oWaLQpc5HIdLDhI=";
+    releaseId = "415";
+  };
 
   # https://www.aquamaniac.de/rdm/projects/libchipcard/files
   libchipcard = {
