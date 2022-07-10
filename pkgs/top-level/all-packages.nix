@@ -34465,9 +34465,7 @@ with pkgs;
 
   faust1 = callPackage ../applications/audio/faust/faust1.nix { };
 
-  faust2 = callPackage ../applications/audio/faust/faust2.nix {
-    llvm = llvm_10;
-  };
+  faust2 = callPackage ../applications/audio/faust/faust2.nix { };
 
   faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };
 
