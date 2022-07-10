@@ -11,9 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vFq9NvQboqGVzwiH2KPhT6jsdY5i2oKIgEaZKfBsb/o=";
   };
 
-  # Remove when Apple SDK is >= 10.13
-  patches = lib.optional (stdenv.system == "x86_64-darwin") ./apple-sdk-missing-utimensat.patch;
-
   buildInputs = [ openssl sqlite ];
   buildFlags = [
     "-Wall"
