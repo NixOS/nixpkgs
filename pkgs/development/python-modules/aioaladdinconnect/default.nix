@@ -1,22 +1,21 @@
 { lib
 , aiohttp
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "aioaladdinconnect";
-  version = "0.1.20";
+  version = "0.1.21";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchFromGitHub {
-    owner = "mkmer";
-    repo = "AIOAladdinConnect";
-    rev = version;
-    hash = "sha256-JHGAJx1Hb/NKWZ+y1ACmVUiesYj1VVHnYCcP+XZGADs=";
+  src = fetchPypi {
+    pname = "AIOAladdinConnect";
+    inherit version;
+    hash = "sha256-Zr9QLiQNmphPpAVnFVpoOlVbuWUVtWXIacYKAnth+E4=";
   };
 
   propagatedBuildInputs = [
