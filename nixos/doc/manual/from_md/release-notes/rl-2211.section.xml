@@ -253,8 +253,9 @@
       <listitem>
         <para>
           The <literal>services.graphite.beacon</literal> NixOS option,
-          and the <literal>python3.pkgs.graphite_beacon</literal>
-          package, has been removed due to lack of upstream maintenance.
+          and the <literal>python3.pkgs.graphite_beacon</literal> and
+          <literal>python3.pkgs.influxgraph</literal> packages, have
+          been removed due to lack of upstream maintenance.
         </para>
       </listitem>
       <listitem>
