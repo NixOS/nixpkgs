@@ -1,4 +1,5 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , buildPythonPackage
 , fetchFromGitHub
 , gcc10
@@ -7,14 +8,17 @@
 , icu
 , swig
 , pcre
+, gmp
+, mpfr
 , opencascade-occt
 , opencollada
 , libxml2
+, cgal
 }:
 
 buildPythonPackage rec {
   pname = "ifcopenshell";
-  version = "210410";
+  version = "220707";
   format = "other";
 
   src = fetchFromGitHub {
@@ -22,16 +26,20 @@ buildPythonPackage rec {
     repo   = "IfcOpenShell";
     rev    = "blenderbim-${version}";
     fetchSubmodules = true;
-    sha256 = "1g52asxrqcfj01iqvf03k3bb6rg3v04hh1wc3nmn329a2lwjbxpw";
+    sha256 = "sha256-CtxcXU6FawpjMy5QXuhSsN+Dusk9t15uw0rAc9Bljac=";
   };
 
-  nativeBuildInputs = [ gcc10 cmake ];
+  nativeBuildInputs = [
+    gcc10
+    cmake
+  ];
 
   buildInputs = [
     boost17x
     icu
     pcre
     libxml2
+    cgal
   ];
 
   preConfigure = ''
@@ -48,6 +56,10 @@ buildPythonPackage rec {
     "-DSWIG_EXECUTABLE=${swig}/bin/swig"
     "-DLIBXML2_INCLUDE_DIR=${libxml2.dev}/include/libxml2"
     "-DLIBXML2_LIBRARIES=${libxml2.out}/lib/libxml2${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DGMP_INCLUDE_DIR=${gmp}/include"
+    "-DGMP_LIBRARY_DIR=${gmp}/lib"
+    "-DMPFR_INCLUDE_DIR=${mpfr}/include"
+    "-DMPFR_LIBRARY_DIR=${mpfr}/lib"
   ];
 
   meta = with lib; {
