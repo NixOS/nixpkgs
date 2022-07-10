@@ -46,5 +46,6 @@ buildPythonPackage rec {
     homepage = "https://skia.org/dev/present/pathops";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.BarinovMaxim ];
+    broken = stdenv.isDarwin && stdenv.isAarch64; # clang-11: error: the clang compiler does not support '-march=armv7-a'
   };
 }

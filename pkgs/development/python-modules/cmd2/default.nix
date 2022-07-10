@@ -12,7 +12,6 @@
 , pythonOlder
 , setuptools-scm
 , typing-extensions
-, vim
 , wcwidth
 }:
 
@@ -47,7 +46,12 @@ buildPythonPackage rec {
     pytestCheckHook
     glibcLocales
     pytest-mock
-    vim
+  ];
+
+  disabledTests = [
+    # don't require vim for tests, it causes lots of rebuilds
+    "test_find_editor_not_specified"
+    "test_transcript"
   ];
 
   postPatch = ''
