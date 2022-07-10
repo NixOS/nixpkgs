@@ -2917,7 +2917,8 @@
     "uscis" = ps: with ps; [
     ]; # missing inputs: uscisstatus
     "usgs_earthquakes_feed" = ps: with ps; [
-    ]; # missing inputs: aio_geojson_usgs_earthquakes
+      aio-geojson-usgs-earthquakes
+    ];
     "utility_meter" = ps: with ps; [
       croniter
     ];
@@ -3803,6 +3804,7 @@
     "uptime"
     "uptimerobot"
     "usb"
+    "usgs_earthquakes_feed"
     "utility_meter"
     "uvc"
     "vacuum"
