@@ -25859,7 +25859,7 @@ with pkgs;
 
   bgpq4 = callPackage ../tools/networking/bgpq4 { };
 
-  blackbox = callPackage ../applications/version-management/blackbox { };
+  blackbox = darwin.apple_sdk_11_0.callPackage ../applications/version-management/blackbox { };
 
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
