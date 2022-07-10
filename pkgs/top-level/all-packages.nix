@@ -2172,6 +2172,8 @@ with pkgs;
 
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
 
+  bolliedelayxt-lv2 = callPackage ../applications/audio/bolliedelayxt.lv2 { };
+
   bonnmotion = callPackage ../development/tools/misc/bonnmotion { };
 
   bonnie = callPackage ../tools/filesystems/bonnie {
