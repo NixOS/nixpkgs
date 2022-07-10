@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zafiro-icons";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "zayronxio";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Awc5Sw4X25pXEd4Ob0u6A6Uu0e8FYfwp0fEl90vrsUE=";
+    sha256 = "sha256-IbFnlUOSADYMNMfvRuRPndxcQbnV12BqMDb9bJRjnoU=";
   };
 
   nativeBuildInputs = [
@@ -44,13 +44,20 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    # remove copy file, as it is there clearly by mistake
-    rm "apps/scalable/android-sdk (copia 1).svg"
+    mkdir -p $out/share/icons
 
-    mkdir -p $out/share/icons/Zafiro-icons
-    cp -a * $out/share/icons/Zafiro-icons
+    for theme in Dark Light; do
+      cp -a $theme $out/share/icons/Zafiro-icons-$theme
 
-    gtk-update-icon-cache $out/share/icons/Zafiro-icons
+      # remove unneeded files
+      rm $out/share/icons/Zafiro-icons-$theme/_config.yml
+
+      # remove files with non-ascii characters in name
+      # https://github.com/zayronxio/Zafiro-icons/issues/111
+      rm $out/share/icons/Zafiro-icons-$theme/apps/scalable/βTORRENT.svg
+
+      gtk-update-icon-cache $out/share/icons/Zafiro-icons-$theme
+    done
 
     jdupes --link-soft --recurse $out/share
 
