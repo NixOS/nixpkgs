@@ -174,6 +174,9 @@
   "boltztrap2": [
     "cython"
   ],
+  "bracex": [
+    "hatchling"
+  ],
   "bsblan": [
     "poetry-core"
   ],
@@ -564,6 +567,9 @@
   "ipwhl": [
     "flitBuildHook"
   ],
+  "ipykernel": [
+    "hatchling"
+  ],
   "iso8601": [
     "poetry-core"
   ],
@@ -590,6 +596,13 @@
   ],
   "json-schema-for-humans": [
     "poetry-core"
+  ],
+  "jsonschema": [
+    { "buildSystem": "hatchling", "from": "4.6.0" },
+    { "buildSystem": "hatch-vcs", "from": "4.6.0" }
+  ],
+  "jupyter-client": [
+    "hatchling"
   ],
   "jupyter-server": [
     "jupyter-packaging"
@@ -641,6 +654,9 @@
   ],
   "linecache2": [
     "pbr"
+  ],
+  "linz-logger": [
+    "poetry-core"
   ],
   "llfuse": [
     "cython"
@@ -1421,6 +1437,9 @@
   "rtmixer": [
     "cython"
   ],
+  "sane-python": [
+    "poetry-core"
+  ],
   "sanic": [
     "poetry-core"
   ],
@@ -1613,6 +1632,9 @@
   "terminaltables": [
     "poetry"
   ],
+  "terminado": [
+    "hatchling"
+  ],
   "tern": [
     "pbr"
   ],
@@ -1690,7 +1712,8 @@
     "pbr"
   ],
   "traitlets": [
-    "flit-core"
+    { "buildSystem": "flit-core", "until": "5.2.1" },
+    { "buildSystem": "hatchling", "from": "5.2.1" }
   ],
   "transmission-rpc": [
     "poetry-core"
@@ -1739,6 +1762,9 @@
   ],
   "wakeonlan": [
     "poetry-core"
+  ],
+  "wcmatch": [
+    "hatchling"
   ],
   "weasyprint": [
     "flit-core"

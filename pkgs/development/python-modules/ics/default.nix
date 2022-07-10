@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ics";
-  version = "0.7.1";
+  version = "0.7.2";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ics-py";
     repo = "ics-py";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-scT8TKZb88HYFN8Y1rGgoJLfSxD0jjbvZYpXsCXw9uo=";
+    sha256 = "sha256-hdtnET7YfSb85+TGwpwzoxOfxPT7VSj9eKSiV6AXUS8=";
   };
 
   propagatedBuildInputs = [
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "http://icspy.readthedocs.org/en/stable/";
     changelog = "https://github.com/ics-py/ics-py/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ ];
   };
 }

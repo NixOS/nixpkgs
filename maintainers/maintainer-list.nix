@@ -85,6 +85,12 @@
     githubId = 56617252;
     matrix = "@oxc45:matrix.org";
   };
+  _0xd61 = {
+    email = "dgl@degit.co";
+    name = "Daniel Glinka";
+    github = "0xd61";
+    githubId = 8351869;
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
@@ -2767,6 +2773,15 @@
     github = "dalpd";
     githubId = 16895361;
     name = "Deniz Alp Durmaz";
+  };
+  DAlperin = {
+    email = "git@dov.dev";
+    github = "DAlperin";
+    githubId = 16063713;
+    name = "Dov Alperin";
+    keys = [{
+      fingerprint = "4EED 5096 B925 86FA 1101  6673 7F2C 07B9 1B52 BB61";
+    }];
   };
   DamienCassou = {
     email = "damien@cassou.me";
@@ -6707,7 +6722,7 @@
   };
   kilimnik = {
     email = "mail@kilimnik.de";
-    github = "killercup";
+    github = "kilimnik";
     githubId = 5883283;
     name = "Daniel Kilimnik";
   };

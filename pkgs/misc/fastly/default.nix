@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "fastly";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-Su4ZwiuI+pMoLAGhc3dWcwgcfwe5cZGTg8kEnpM4JbA=";
+    sha256 = "sha256-mUWGvFyei5Ep3xRDVVZoa6tMiqfV89hn82/Uai+Gh8Y=";
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -23,7 +23,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/fastly" ];
 
-  vendorSha256 = "sha256-5MvJS10f7YLvO+wCmUJleU27hCJbsNrOIfUZnniGw+E=";
+  vendorSha256 = "sha256-glztVmAAdkEccJEFIHGWjNzz/+MjExSX18GDX66sdxA=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -771,6 +771,8 @@ in {
 
   atomicwrites = callPackage ../development/python-modules/atomicwrites { };
 
+  atomicwrites-homeassistant = callPackage ../development/python-modules/atomicwrites-homeassistant { };
+
   atomman = callPackage ../development/python-modules/atomman { };
 
   atpublic = callPackage ../development/python-modules/atpublic { };
@@ -9416,6 +9418,8 @@ in {
   rst2ansi = callPackage ../development/python-modules/rst2ansi { };
 
   rstcheck = callPackage ../development/python-modules/rstcheck { };
+
+  rstcheck-core = callPackage ../development/python-modules/rstcheck-core { };
 
   rtmidi-python = callPackage ../development/python-modules/rtmidi-python {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices;
