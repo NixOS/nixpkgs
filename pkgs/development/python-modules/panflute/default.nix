@@ -7,14 +7,14 @@
 }:
 
 buildPythonPackage rec{
-  version = "2.1.3";
+  version = "2.1.5";
   pname = "panflute";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "y5QkT+dmiTuy8XLruCfsPe12G4//qE5MhLZ4ufip/5U=";
+    sha256 = "sha256-7xHcWVoZh51PlonvmoOCBKJGNMpjT7z8jkoO1B65EqE=";
   };
 
   propagatedBuildInputs = [
