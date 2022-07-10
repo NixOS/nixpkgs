@@ -162,7 +162,7 @@ checkConfigError 'A definition for option .* is not.*string or signed integer co
 # Check coerced value with unsound coercion
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
 checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
-checkConfigError 'Could not convert .* to int' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
+checkConfigError 'toInt: Could not convert .* to int' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
 
 # Check mkAliasOptionModule.
 checkConfigOutput '^true$' config.enable ./alias-with-priority.nix

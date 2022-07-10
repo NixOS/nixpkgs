@@ -784,7 +784,7 @@ rec {
       false;
 
   /* Parse a string as an int. Does not support parsing of integers with preceding zero due to
-  ambiguity between zero-padded and octal numbers.
+  ambiguity between zero-padded and octal numbers. See toIntBase10.
 
      Type: string -> int
 
@@ -805,25 +805,35 @@ rec {
        toInt "3.14"
        => error: floating point JSON numbers are not supported
   */
-  # Obviously, it is a bit hacky to use fromJSON this way.
   toInt = str:
     let
       # RegEx: Match any leading whitespace, then any digits, and finally match any trailing
       # whitespace.
       strippedInput = match "[[:space:]]*([[:digit:]]+)[[:space:]]*" str;
 
-      # RegEx: Match any leading whitespace, then a leading '0', then at least one digit following
-      # after, and finally match any trailing whitespace.
-      isLeadingZero = match "[[:space:]]*0[[:digit:]]+[[:space:]]*" str == [];
+      # RegEx: Match a leading '0' then one or more digits.
+      isLeadingZero = match "0[[:digit:]]+" (head strippedInput) == [];
 
       # Attempt to parse input
-      parsedInput = fromJSON (elemAt strippedInput 0);
+      parsedInput = fromJSON (head strippedInput);
+
+      generalError = "toInt: Could not convert ${escapeNixString str} to int.";
+
+      octalAmbigError = "toInt: Ambiguity in interpretation of ${escapeNixString str}"
+      + " between octal and zero padded integer.";
+
     in
-      if isLeadingZero
-      then throw "Ambiguity in interpretation of ${str} between octal and zero padded integer."
-      else if strippedInput != null && isInt parsedInput
-      then parsedInput
-      else throw "Could not convert ${str} to int.";
+      # Error on presence of non digit characters.
+      if strippedInput == null
+      then throw generalError
+      # Error on presence of leading zero/octal ambiguity.
+      else if isLeadingZero
+      then throw octalAmbigError
+      # Error if parse function fails.
+      else if !isInt parsedInput
+      then throw generalError
+      # Return result.
+      else parsedInput;
 
 
   /* Parse a string as a base 10 int. This supports parsing of zero-padded integers.
@@ -846,26 +856,32 @@ rec {
        toIntBase10 "3.14"
        => error: floating point JSON numbers are not supported
   */
-  # Obviously, it is a bit hacky to use fromJSON this way.
   toIntBase10 = str:
     let
       # RegEx: Match any leading whitespace, then match any zero padding, capture any remaining
       # digits after that, and finally match any trailing whitespace.
       strippedInput = match "[[:space:]]*0*([[:digit:]]+)[[:space:]]*" str;
 
-      # RegEx: Match any leading whitespace, at least one '0', and any trailing whitespace.
-      isZero = match "[[:space:]]*0+[[:space:]]*" str == [];
+      # RegEx: Match at least one '0'.
+      isZero = match "0+" (head strippedInput) == [];
 
       # Attempt to parse input
-      parsedInput = fromJSON (elemAt strippedInput 0);
+      parsedInput = fromJSON (head strippedInput);
+
+      generalError = "toIntBase10: Could not convert ${escapeNixString str} to int.";
+
     in
-      # Value is zero
-      if isZero
+      # Error on presence of non digit characters.
+      if strippedInput == null
+      then throw generalError
+      # In the special case zero-padded zero (00000), return early.
+      else if isZero
       then 0
-      else
-      if strippedInput != null && isInt parsedInput
-      then parsedInput
-      else throw "Could not convert ${str} to int.";
+      # Error if parse function fails.
+      else if !isInt parsedInput
+      then throw generalError
+      # Return result.
+      else parsedInput;
 
   /* Read a list of paths from `file`, relative to the `rootPath`.
      Lines beginning with `#` are treated as comments and ignored.
