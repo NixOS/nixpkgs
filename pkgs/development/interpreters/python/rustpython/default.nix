@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , SystemConfiguration
 , python3
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,6 +17,15 @@ rustPlatform.buildRustPackage rec {
     rev = "db3b3127df34ff5dd569301aa36ed71ae5624e4e";
     sha256 = "sha256-YwGfXs3A5L/18mHnnWubPU3Y8EI9uU3keJ2HJnnTwv0=";
   };
+
+  patches = [
+    # Patched needed because this version does not build with recent versions of Rust.
+    # See: https://github.com/RustPython/RustPython/issues/3614
+    (fetchpatch {
+      url = "https://github.com/RustPython/RustPython/commit/61f7d241c0d7acca626a8e932b71e8ac5871362d.patch";
+      hash = "sha256-+2xlu+/etzCxkP/6Z1n+FwsAM6m+uPCriOoYuEI1j1U=";
+    })
+  ];
 
   cargoHash = "sha256-T85kiPG80oZ4mwpb8Ag40wDHKx2Aens+gM7NGXan5lM=";
 
@@ -31,14 +41,5 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://rustpython.github.io";
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
-
-    # TODO: Remove once nixpkgs uses newer SDKs that supports '*at' functions.
-    # Probably macOS SDK 10.13 or later. Check the current version in
-    # .../os-specific/darwin/apple-sdk/default.nix
-    #
-    # From the build logs:
-    #
-    # > Undefined symbols for architecture x86_64: "_utimensat"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
   };
 }
