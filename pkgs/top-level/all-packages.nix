@@ -14027,8 +14027,8 @@ with pkgs;
   cargo-deadlinks = callPackage ../development/tools/rust/cargo-deadlinks {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-deb = callPackage ../development/tools/rust/cargo-deb {
-    inherit (darwin.apple_sdk.frameworks) Security;
+  cargo-deb = darwin.apple_sdk_11_0.callPackage ../development/tools/rust/cargo-deb {
+    inherit (darwin.apple_sdk_11_0.frameworks) Security;
   };
   cargo-deps = callPackage ../development/tools/rust/cargo-deps { };
   cargo-download = callPackage ../development/tools/rust/cargo-download { };
