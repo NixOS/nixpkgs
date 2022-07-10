@@ -2,7 +2,7 @@ name: "Update terraform-providers"
 
 on:
   schedule:
-    - cron: "14 3 * * 1"
+    - cron: "14 3 * * 0"
   workflow_dispatch:
 
 permissions:
